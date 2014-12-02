@@ -1,0 +1,1171 @@
+\chapter{形状表現} \label{sec:shape} ~
+
+この章では fk\_Shape と言われる形状を司るクラスと、それから派生した
+クラスの使用法を述べる。これらのクラスは形状をなんらかの形で定義
+する手段を提供している。しかし、これらの形状はのちの fk\_Model に
+代入が行われない限り描画されない。
+つまり、FK システムでは形状とオブジェクトの存在は別々に定義されている
+必要がある。たとえば、車を 3 台表示したければ、まず車の形状を
+定義し、次にモデルを 3 つ作成し、それらに車の形状を代入すればよい。
+このようなケースで、モデル1つずつに対して形状を改めて作成するのは
+非効率といえる。こういったことは、\ref{sec:model} 章で詳しく述べる。
+
+FK システムにおいて、形状は表\ref{tbl:fkShape1}のようなものを
+定義することができる。
+
+\begin{table}[H]
+\caption{形状の種類}
+\label{tbl:fkShape1}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+形状 & クラス名 & 必要な引数 \\ \hline \hline
+点 & fk\_Point & 位置ベクトル \\ \hline
+線分 & fk\_Line & 両端点の位置ベクトル \\ \hline
+ポリライン & fk\_Polyline & 各頂点の位置ベクトル \\ \hline
+閉じたポリライン & fk\_Closedline & 各頂点の位置ベクトル \\ \hline
+多角形平面 & fk\_Polygon & 各頂点の位置ベクトル \\ \hline
+円 & fk\_Circle & 分割数、半径 \\ \hline
+直方体 & fk\_Block & 縦、横、高さ \\ \hline
+球 & fk\_Sphere & 分割数、半径 \\ \hline
+正多角柱・円柱 & fk\_Prism & 上面半径、底面半径、高さ \\ \hline
+正多角錐・円錐 & fk\_Cone & 底面半径、高さ \\ \hline
+インデックスフェースセット & fk\_IndexFaceSet & ファイル名等 \\ \hline
+ソリッドモデル & fk\_Solid & ファイル名等 \\ \hline
+矩形テクスチャ & fk\_RectTexture & 画像ファイル名 \\ \hline
+三角形テクスチャ & fk\_TriTexture & 画像ファイル名 \\ \hline
+メッシュテクスチャ & fk\_MeshTexture & 画像ファイル名 \\ \hline
+IFSテクスチャ & fk\_IFSTexture & 画像ファイル名 \\ \hline
+文字列板 & fk\_TextImage & 文字列またはテキストファイル \\ \hline
+パーティクル & fk\_ParticleSet & 様々な設定 \\ \hline
+光源 & fk\_Light & タイプ \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+次節から、これらの詳細な使用法をひとつずつ述べ、最後にそれらを
+統括的に扱う方法を述べる。
+\section{ポリライン (fk\_Polyline)}
+ポリラインとは、いわば折れ線のことである。線分が複数つながったものと
+考えてもよい。構成される線の数は任意でよい。
+
+定義方法は、普通に変数を準備すればよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Polyline poly;
+\end{verbatim}
+\end{screen}
+~ \\
+pushVertex() 関数を使えば1個ずつ頂点を代入していくことができる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Vector pos;
+        fk_Polyline poly;
+        int i;
+
+        for(i = 0; i < 10; i++) {
+                pos.set(double(i*i), double(i), 0.0);
+                poly.pushVertex(pos);
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+このように、順番に位置ベクトルを代入していけばよい。
+この場合は、9 本の線分によって構成されたポリラインが生成される。
+もし途中で頂点位置を変更したい場合は、setVertex 関数を用いるとよい。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Vector pos;
+        fk_Polyline poly;
+        int i;
+
+        for(int i = 0; i < 10; i++) {
+                pos.set(double(i*i), double(i), 0.0);
+                poly.pushVertex(pos);
+        }
+        pos.set(5.0, 5.0, 5.0);
+        poly.setVertex(5, pos);
+\end{verbatim}
+\end{breakbox}
+~ \\
+上記のプログラムソースの最後の行で、ポリラインの 6 番目の頂点の位置を
+変えている。すべてを生成し直すよりも、この方が高速かつ手軽に処理できる。
+
+なお、設定した全ての頂点情報を削除したい場合は、次のように
+allClear() メンバ関数を用いれば実現できる。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Polyline     Poly;
+                :
+                :
+        Poly.allClear();
+\end{verbatim}
+\end{screen}
+\section{閉じたポリライン (fk\_Closedline)}
+fk\_Closedline クラスは、基本的には使用法は fk\_Polyline クラスと変わりはない。
+唯一異なる点は、fk\_Closedline は閉じたポリライン --- つまり、始点と終点の
+間にも線分が存在することを意味する。したがって、多角形を線分で表現したい
+場合に適している。
+\section{点 (fk\_Point)}
+「点」というのは、ここでは画面上に表示させる 1 ピクセル分の存在を指す。
+例えば、これらの集合を流動的に動かすことによって、空間中での流れを
+表現することができる\footnote{実際にこのような機能を実装する場合は、
+\ref{subsec:particle} 節にあるパーティクル用クラスの採用も検討するとよい。}。
+点は、それ自体が大きさを持たないことや、
+描画することが高速なことから、とても扱いやすい対象である。
+
+fk\_Point クラスの利用法は、fk\_Polyline クラスとまったく同一である。
+つまり、「pushVertex」関数で点を生成し、「setVertex」によって
+移動させることができる。fk\_Polyline と異なる点は、ポリラインが
+表示されるか、複数の点が表示されるかということのみである。
+
+なお、設定された頂点の全削除は fk\_Polyline と同様に allClear() を
+用いれば実現可能である。
+\section{線分 (fk\_Line)}
+「線分」は、画面上に線分を表示させる。fk\_Line は、もちろん1本の
+線分を表現することが可能だが、複数の線分を1つのオブジェクトで
+表現できる。
+
+定義には特に特別な引数は必要としない。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Line ln;
+\end{verbatim}
+\end{screen}
+~ \\
+ただし、この場合には両端点の位置がともに原点になってしまうので、
+位置ベクトルをなんらかの形で代入する必要がある。1つの手段として、
+両端点の位置ベクトルが並んだ fk\_Vector 型の配列を用意しておき、それを
+setVertex() 関数を用いて代入することである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Vector vec[2];
+        fk_Line ln;
+
+        vec[0].set(1.0, 1.0, 1.0);
+        vec[1].set(-1.0, 1.0, 1.0);
+
+        ln.setVertex(vec);
+\end{verbatim}
+\end{breakbox}
+~ \\
+このような記述で、ln は (1, 1, 1) と (-1, 1, 1) を結ぶ線分を
+表現することになる。
+値の代入をしなおすことも可能である。
+それにはやはり setVertex メンバ関数を使用すればよい。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Line ln;
+        fk_Vector a, b;
+
+        a.set(1.0, 1.0, 1.0);
+        b.set(-1.0, 1.0, 1.0);
+
+        ln.setVertex(0, a);
+        ln.setVertex(1, b);
+\end{verbatim}
+\end{breakbox}
+~ \\
+この場合での setVertex() 関数の最初の引数は、0 なら始点を、1 なら終点を
+代入することを意味する。2つめの引数には fk\_Vector 型の変数を代入すればよい。
+
+また、fk\_Line クラスのオブジェクトは複数の線分を持つことが可能である。
+新たに線分を追加したい場合は、pushLine() メンバ関数を使用する。
+次のようにすればよい。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Line         ln;
+       fk_Vector       vec1, vec2, vecArray[2];
+
+        vec1.set(0.0, 1.0, 0.0);
+        vec2.set(1.0, 0.0, 0.0);
+        ln.pushLine(vec1, vec2);        // 2つの fk_Vector を使う方法
+
+        vecArray[0].set(0.0, 0.0, 1.0);
+        vecArray[1].set(0.0, 0.0, -1.0);
+        ln.pushLine(vecArray);          // fk_Vector の配列を使う方法
+\end{verbatim}
+\end{breakbox}
+~ \\
+これにより、fk\_Line 中の線分が次々と追加されていく。
+
+fk\_Line における線分情報の全削除は、fk\_Polyline と同様に allClear() に
+よって実現可能である。
+\section{多角形平面 (fk\_Polygon)}
+この fk\_Polygon クラスは、fk\_Polyline クラスや fk\_Closedline クラスと
+使用法は同様である。ただし、このクラスで定義されたオブジェクトは、
+平面として存在する。つまり、厚さのない1枚の板として存在することになる。
+
+fk\_Polyline や fk\_Closedline と唯一異なる点は、fk\_Polygon は
+面の向き、すなわち法線ベクトルを保持するという点である。これは、
+FK システムの中で自動的に計算が行われる。与えられている頂点が
+同一平面上にない場合、近似的な法線ベクトルが与えられる。
+
+なお、頂点情報の全削除は fk\_Polyline と同様に allClear() を用いればよい。
+\section{円 (fk\_Circle)}
+fk\_Circle クラスは、ステータスとして半径と分割数を持つ。
+fk\_Circle クラスのオブジェクトは、実際には多角形の集合
+によって構成されている。具体的に述べると、中心から放射状に伸びた三角形
+によって構成される。したがって、円は実際には正多角形の形をしていることになる。
+ここで問題になるのは、いくつの三角形によって円を疑似するかということである。
+当然、円により近くするには多くの三角形に分割した方がよい。しかし、多くの
+三角形が存在するということは、処理そのものも時間がかかるということである。
+特に多くのオブジェクトを操作するときや、あまりパフォーマンスのよくない
+マシンで扱う場合にはこの問題は切実となる。
+そこで、fk\_Circle には分割数を指定するメンバ関数を持っている。ある条件
+によって、分割数を変更することができるのである。
+
+実際の使用法を述べる。まず、定義はやはり通常どおり行えばよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Circle circ;
+\end{verbatim}
+\end{screen}
+~ \\
+fk\_Circle クラスでは、初期値として分割数と半径を指定することができる。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Circle circ(4, 100.0);
+\end{verbatim}
+\end{screen}
+~ \\
+これによって、分割数 4、半径 100 の円が生成される\footnote{ここで
+いう分割数とは、円の\(\frac{1}{4}\)を三角形に分割する数を指定するもので
+ある。したがって、分割数が 4 ならばその円は 16 個の三角形によって構成
+されることになる。}。なお。この円は半径を \(r\) とすると
+\( (r\cos \theta , r\sin \theta , 0)\) 上に境界線が存在し、面の
+法線ベクトルは必ず \((0, 0, -1)\) となっている。
+
+また、setRadius メンバ関数で半径を動的に制御することが可能である。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Circle circ(4, 5.0);
+
+        circ.setRadius(10.0);
+\end{verbatim}
+\end{screen}
+~ \\
+半径を変更する方法として、他にも setScale 関数がある。
+これは、半径を実数倍するものである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Circle circ(4, 10.0);
+        double scale = 4.0;
+
+        circ.setScale(scale);
+\end{verbatim}
+\end{breakbox}
+~ \\
+他に、動的に分割数を変更する方法として setDivide 関数がある。
+引数として分割数を与えることができる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Circle circ;
+
+        circ.setDivide(10);
+\end{verbatim}
+\end{breakbox}
+\section{直方体 (fk\_Block)}
+直方体は、\(x\), \(y\), \(z\) 軸にそれぞれ垂直な
+6 つの面で構成された立体である。
+この立体は横幅、高さ、奥行きのステータスを持ち、それぞれ \(x\) 方向、
+\(y\) 方向、\(z\) 方向の大きさと対応している。
+
+定義は、通常通り行えばよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Block block;
+\end{verbatim}
+\end{screen}
+~ \\
+このとき、初期値としてすべての辺の長さが 1 である立方体が与えられる。
+初期値を設定することも可能である。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Block block(10.0, 1.0, 40.0);
+\end{verbatim}
+\end{screen}
+~ \\
+メンバ関数 setSize は、大きさを動的に制御できる。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Block block;
+
+        block.setSize(10.0, 40.0, 50.0);
+\end{verbatim}
+\end{screen}
+~ \\
+setSize は多重定義されており、次のようにひとつの要素だけを制御
+することもできる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Block block
+
+        block.setSize(10.0, fk_X);
+        block.setSize(40.0, fk_Y);
+        block.setSize(50.0, fk_Z);
+\end{verbatim}
+\end{breakbox}
+~ \\
+ここで注意しなければならないのは、この直方体の中心が原点の設定されている
+ことである。つまり、直方体の 8 つの頂点の位置ベクトルは、
+\begin{eqnarray*}
+        (x/2, y/2, z/2), & \qquad & (-x/2, y/2, z/2), \\
+        (x/2, -y/2, z/2), & \qquad & (-x/2, -y/2, z/2), \\
+        (x/2, y/2, -z/2), & \qquad & (-x/2, y/2, -z/2), \\
+        (x/2, -y/2, -z/2), & \qquad & (-x/2, -y/2, -z/2).
+\end{eqnarray*}
+ということになる。たとえば、yz 平面を地面にみたてて直方体を配置する
+場合、直方体を代入されたモデルの移動量は x 方向に \(x/2\) 移動
+すればよい。
+
+setScale メンバ関数は、直方体を現状から実数倍するものである。
+この関数も 3 種類の多重定義がされている。大きさそのものを単純に
+実数倍する場合、次のように実数ひとつを引数に代入すればよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Block block(10.0, 10.0, 10.0);
+
+        block.setScale(2.0);
+\end{verbatim}
+\end{screen}
+~ \\
+また、ある軸方向だけ実数倍したい場合は、2つ目の引数に軸要素を代入
+すればよい。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Block block(10.0, 10.0, 10.0);
+
+        block.setScale(2.0, fk_X);
+        block.setScale(3.0, fk_Y);
+        block.setScale(4.0, fk_X);
+\end{verbatim}
+\end{breakbox}
+~ \\
+x, y, z軸の倍率を1度に指定することも可能である。次のプログラムは、
+上記のプログラムと同じ挙動をする。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Block block(10.0, 10.0, 10.0);
+
+        block.setScale(2.0, 3.0, 4.0);
+\end{verbatim}
+\end{screen}
+\section{球 (fk\_Sphere)}
+球は、円の場合と同様に半径と分割数を要素の持つ。基本的には、
+円と使用法はほとんど変わりがない。例えば、分割数 4、半径 10 の
+球を生成するには、以下のようにして fk\_Sphere 型の変数を
+宣言すればよい。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Sphere sphere(4, 10.0);
+\end{verbatim}
+\end{breakbox}
+~ \\
+初期設定や setRadius()、
+setDivide()、setScale() といったメンバ関数の利用方法は全て
+fk\_Circle クラスと同様なので、そちらのマニュアルを参照してほしい。
+
+円と異なる点をあげていくと、分割数によって生成される三角形個数が異なる
+\footnote{分割数を \(d\) とおくと、円では\(4d\) 個であったが球では
+\(8d(d-1)\) 個である。このことからもわかるように、球は大変多くの
+多角形から成り立つので扱いには注意が必要である。}
+ことと、(当然ながら)法線ベクトルの値が一定ではないことなどがあげられる。
+
+\section{正多角柱・円柱 (fk\_Prism)}
+正多角柱、円柱を生成するには、fk\_Prism クラスを用いることによって容易に
+生成できる。fk\_Prism では、初期値として角数、上面半径、底面半径、高さを
+それぞれ指定する。生成時は上面が \(-z\) 方向を、底面が \(+z\) 方向を
+向くように生成される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Prism prism(5, 20.0, 30.0, 40.0);
+\end{verbatim}
+\end{screen}
+~ \\
+ここで、上面と底面の「半径」とは、面を構成する多角形の外接円半径
+(下図の \(r\)) のことを指す。
+
+\myfig{fig:prism}{./Fig/Prism.eps}{scale=1.0,clip}
+	{正多角形と外接円半径}{-5mm}
+
+円柱を生成するには、多角形の角数をある程度大きくすればよい。大体
+正 20 角形くらいでかなり円柱らしくなる。あとは、リアリティとパフォーマンスに
+よって各自で調整してほしい。
+
+次に述べる関数で、fk\_Prism クラスの形状をいつでも動的に変形できる。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{void setTopRadius(double r)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		上面半径を r に変更する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setBottomRadius(double r)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		底面半径を r に変更する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setHeight(double h)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		高さを h に変更する。
+	\end{tabular}
+\end{tabbing}
+
+\section{正多角錐・円錐 (fk\_Cone)}
+fk\_Cone は正多角錐や円錐を生成するためのクラスである。
+このクラスでは、初期値として角数、底面半径、高さを指定する。
+なお、このクラスも fk\_Prism と同様に底面は \(+z\) 方向を向く。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Cone cone(5, 20.0, 40.0);
+\end{verbatim}
+\end{screen}
+~ \\
+「半径」に関しては前節の fk\_Prism 中の解説を参照してほしい。
+円錐を生成するには、やはり初期値の角数を大きくすればよいが、あまり大きな
+値を指定すると表示速度が遅くなるので注意が必要である。
+
+なお、以下のメンバ関数によって形状をいつでも動的に変形することが可能である。
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{void setRadius(double r)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		底面半径を r に変更する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setHeight(double h)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		高さを h に変更する。
+	\end{tabular}
+\end{tabbing}
+
+\section{インデックスフェースセット (fk\_IndexFaceSet)}
+インデックスフェースセットは、これまでに述べたような球や角錐のような
+典型的な形状ではない、一般的な形状を表現したいときに用いる。
+利用方法として、別のモデリングソフトウェアによって出力した
+ファイルを取り込む方法と、形状情報をプログラム中で生成して
+与える方法がある。ここでは主にファイル入力による形状生成に
+ついて解説する。プログラムによる形状生成方法は
+\ref{sec:easygen} 章にまとめて解説してあるので、そちらを参照してほしい。
+
+\subsection{VRML ファイルの取り込み}
+FK システムでは、形状モデラで作成した立体を取り込みたい場合の
+手段として VRML 2.0 形式で出力したファイルを読み込む機能が提供されている。
+
+VRML 2.0 形式のファイルを読み込む方法は、以下のようにファイル名を
+引数にとればよい。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。もしファイル読み込みに失敗した場合、
+エラーメッセージが出力される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet   ifs;
+        if(ifs.readVRMLFile("sample.wrl", true) == true) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+~ \\
+この場合、立体のマテリアルは VRML に記されているマテリアルを採用し、
+fk\_Model での変更を受け付けなくなる。もし VRML 中に記述されている
+マテリアルを無視し、fk\_Model でマテリアル制御を行いたい場合は
+次のように2番目の引数を false にすればよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        if(ifs.readVRMLFile("sample.wrl", false) == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{STL ファイルの取り込み}
+STL は、様々な CAD や3次元関連のソフトウェアで多く使われている
+フォーマットである。FK では、STL ファイルを読み込む機能も提供されている。
+STL ファイルを読み込むには、次に示すように fk\_IndexFaceSet で
+readSTLFile 関数を使用すればよい。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。もしファイル読み込みに失敗した場合、
+エラーメッセージが出力される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet     ifs;
+        if(ifs.readSTLFile("sample.stl") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{SMF ファイルの取り込み}
+SMF は、主に CG 関連で普及したフォーマットであり、プレーンな
+テキストファイルや簡単なデータ構造を特徴とするため、
+実際にエディタで記述するのが容易であるという利点も持っている。
+FK では、VRML や STL と同様に SMF を読み込む機能を持つ。
+使用法は次の通りである。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。もしファイル読み込みに失敗した場合、
+エラーメッセージが出力される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        if(ifs.readSMFFile("sample.smf") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{HRC ファイルの取り込み}
+HRC は、SoftImage 等で使用できるフォーマットである。SoftImage で
+作成したモデルは、この HRC ファイルに出力することによって FK で
+読み込むことが可能となる。使用法は次の通りである。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。もしファイル読み込みに失敗した場合、
+エラーメッセージが出力される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet   ifs;
+        if(ifs.readHRCFile("sample.hrc") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{RDS ファイルの取り込み}
+RDS は、Ray Dream Studio 形式の略で、多くの 3D モデリングソフトで
+出力が用意されている。使用法は次の通りである。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。もしファイル読み込みに失敗した場合、
+エラーメッセージが出力される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet   ifs;
+        if(ifs.readRDSFile("sample.rds") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{DXF ファイルの取り込み}
+DXF は、Autodesk 社が提唱している形状データ変換用フォーマットで、
+ほどんどの 3D モデリングソフトで入出力機能が用意されている。
+このフォーマットのファイルを読み込むには、次のように記述する。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。もしファイル読み込みに失敗した場合、
+エラーメッセージが出力される。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        if(ifs.readDXFFile("sample.dxf") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{MQO ファイルの取り込み} \label{subsec:mqoread}
+MQO は、Metasequoia LE というフリーのモデラーの標準ファイルである。
+このフォーマットのファイルを読み込むには、
+readMQOFile() というメンバ関数を利用する。
+この関数は多重定義されており、二種類の引数構成がある。
+構成は以下の通りである。
+\\
+\begin{screen}
+\begin{small}
+\begin{verbatim}
+readMQOFile(string fileName, string objName, bool solidFlg, bool contFlg, bool matFlg);
+readMQOFile(string fileName, string objName, int matID, bool solidFlg, bool contFlg, bool matFlg);
+\end{verbatim}
+\end{small}
+\end{screen}
+~ \\
+「fileName」はファイル名文字列、「objName」はファイル中のオブジェクト名文字列を
+指定する。下段の定義中の「matID」は、特定のマテリアルID部分だけを抽出したい場合に、
+そのIDを入力する。
+
+これ以降の引数に関してはデフォルト値が設定されており、省略可能である。
+「solidFlg」は、false の場合全てのポリゴンを独立ポリゴンとして読み込む。
+デフォルト引数では「true」となっている。
+「contFlg」は、テクスチャ断絶操作の有無を指定するためのもので、
+ここに関しては \ref{subsubsec:ifstexture} 節で詳しく説明する。
+デフォルトでは「true」となっている。
+最後の「matFlg」は、MQOファイルからマテリアル情報を読み込むかどうかを設定するもので、
+デフォルトでは「false」になっている。
+
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。
+以下のプログラムは、ファイル名「sample.mqo」、オブジェクト名「obj1」
+という指定でデータを読み込む例である。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        if(ifs.readMQOFile("sample.mqo", "obj1") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen} ~
+
+また、MQOファイル内で特定のマテリアル番号が指定されている面のみ
+入力したい場合には、以下のように記述すればよい。
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        if(ifs.readMQOFile("sample.mqo", "obj1", 1) == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen} ~
+
+3番目の引数を「-1」にしたとき、
+3番目の引数がない場合と同様に全ての面を入力する。
+
+なお、Metasequoia 中でテクスチャを設定し、
+テクスチャも読み込みたい場合は、fk\_IndexFaceSet ではなく
+\ref{subsubsec:ifstexture} 節の fk\_IFSTexture を用いる必要がある。
+
+\subsection{MQO データの取り込み} \label{subsec:mqodata}
+MQOファイルデータは、\ref{subsec:mqoread} 節ではファイルからの
+読み込み方法を述べたが、このファイル中のデータを全て展開した配列データからも
+読み込むことが可能である。
+関数は readMQOData() というもので、ファイル名を示す文字列のかわりに
+unsigned char 型配列の先頭アドレスを示すポインタを渡す以外は、
+readMQOFile() 関数と同じである。
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        unsigned char      *buffer;
+
+        if(ifs.readMQOFile(buffer, "obj1", 1) == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen} ~
+
+\subsection{DirectX (D3DX) ファイルの取り込み} \label{subsec:d3dxread}
+DirectX 形式(X 形式と呼ばれることもある)のフォーマット
+(以下「D3DX形式」)を持つファイルを読み込むには、
+readD3DXFile() というメンバ関数を利用する。
+
+MQOファイルの場合と同様に、
+1番目の引数にファイル名文字列、
+2番目の引数にファイル中のオブジェクト名文字列を指定する。
+ただし、X形式のファイルではオブジェクト名がファイル中に指定されていない
+場合もある。その場合は2番目の引数に空文字列「\verb+""+」を入れる。
+ファイル読み込みに成功した場合 true を、
+失敗した場合 false を返す。
+以下のプログラムは、ファイル名「sample.x」、オブジェクト名「obj1」
+という指定でデータを読み込む例である。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_IndexFaceSet    ifs;
+        if(ifs.readD3DXFile("sample.x", "obj1") == false) {
+            fl_alert("File Read Error!");
+        }
+\end{verbatim}
+\end{screen} ~
+
+readD3DXFile() 関数は、readMQOFile() 関数と同様に 3 番目の引数として
+マテリアル番号を指定することができる。また、マテリアル番号として -1 を
+指定した場合に全ての面を入力する点も同様である。
+
+なお、D3DXファイルに設定してある
+テクスチャも読み込みたい場合は、\ref{subsubsec:ifstexture} 節の
+fk\_IFSTexture を利用することで可能である。
+
+\subsection{形状情報の取得と、頂点座標の移動}
+fk\_IndexFaceSet クラスは、他の形状を表すクラスと違って
+ファイルから情報を読み取ることも多いので、入力後に頂点や面の
+情報を取得する場面が考えられる。そこで、fk\_IndexFaceSet クラスでは
+以下に示す4種類の情報取得メンバ関数が用意されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{int getPosSize(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		形状の頂点数を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{int getFaceSize(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		形状の面数を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Vector getPosVec(int vID)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		インデックスが vID である頂点の位置ベクトルを返す。
+		頂点のインデックスは 0 から順番に始まるもので、
+		頂点数を vNum とすると 0 から (vNum-1) まで
+		の頂点が存在することになる。もし vID に対応する
+		頂点が存在しなかった場合、零ベクトルが返される。
+	\end{tabular} \\ \\
+
+\> \textbf{vector\(<\)int\(>\) getFaceData(int fID)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		インデックスが fID である面の頂点インデックス情報を返す。
+		面のインデックスは 0 から順番に始まるもので、
+		面数を fNum とすると 0 から (fNum-1) まで
+		の面が存在することになる。また、返り値の
+		vector\(<\)int\(>\) は STL と呼ばれる C++ の機能によるもので、
+		詳細は第 \ref{sec:easygen} 章を参照してほしい。
+		この中に、参照した面を構成する頂点のインデックスが
+		入力されて返される。もし fID に対応する面が存在しない場合、
+		中身が空状態のオブジェクトが返される。
+	\end{tabular}
+\end{tabbing}
+また、以下の3種類の方法で各頂点を移動することも可能である。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{bool moveVPosition(int vID, fk\_Vector pos)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		インデックスが vID である頂点の位置ベクトルを、
+		pos に変更し、true を返す。
+		もし vID に対応する頂点が存在しなかった場合、false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool moveVPosition(int vID, double x, double y, double z)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		インデックスが vID である頂点の位置ベクトルを、
+		\((x, y, z)\) に変更し、true を返す。もし vID に対応する
+		頂点が存在しなかった場合、false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool moveVPosition(int vID, double *p)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		インデックスが vID である頂点の位置ベクトルを、
+		\verb+(p[0], p[1], p[2])+ に変更する。
+		もし vID に対応する頂点が存在しなかった場合、false を返す。
+	\end{tabular}
+\end{tabbing}
+
+\subsection{形状データの各種ファイルへの出力}
+fk\_IndexFaceSet クラスでは、形状データをファイルに出力することが可能である。
+現在サポートされている形式は VRML、STL、DXF、MQO の 4 種類である。
+それぞれの出力関数の仕様は以下の通りである。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{bool writeVRMLFile(string fileName)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		形状データを VRML 2.0 形式で出力する。
+		「fileName」は出力ファイル名を指定する。
+		成功すれば true、失敗した場合は false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool writeSTLFile(string fileName)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		形状データを STL 形式で出力する。
+		「fileName」は出力ファイル名を指定する。
+		成功すれば true、失敗した場合は false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool writeDXFFile(string fileName)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		形状データを DXF 形式で出力する。
+		「fileName」は出力ファイル名を指定する。
+		成功すれば true、失敗した場合は false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool writeMQOFile(string fileName)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		形状データを MQO 形式で出力する。
+		「fileName」は出力ファイル名を指定する。
+		成功すれば true、失敗した場合は false を返す。
+		なお、オブジェクト名は「obj1」が自動的に付与される。		
+	\end{tabular}
+\end{tabbing}
+
+\section{光源 (fk\_Light)}
+この光源クラスのみ、他の fk\_Shape の派生クラスとは性質が異なる。その他の
+クラスがなんらかの形状を表現するのに用いられるのに対し、このクラスは
+空間中の光源を設定するのに利用される。光源には、平行光源、点光源、
+スポットライトの 3 種類がある。これらの方向やその他のステータスは、
+基本的には fk\_Model に代入を行ってから操作するものであり、fk\_Light
+クラスのオブジェクトとして定義されるときは光源の種類を設定する
+のみである。
+
+平行光源とは、空間中のあらゆる場所に同一方向から照らされる光の光源を
+いう。地球における太陽光のようなものと考えればよい。もっとも
+扱いやすいので、光を利用した特別な効果を用いないのであればこれで
+十分である。平行光源は属性として方向のみを持つ。
+
+点光源は、空間中のある1点から光を放射する光源である。宇宙空間での恒星や、
+部屋の中での灯りなどは点光源を利用するとよい。点光源は、属性として
+位置と減衰係数を持つ。減衰係数とは、光源からの距離と照射される
+明るさとをどのような関係にするかを定義するもので、これはさらに
+一定減衰係数、線形減衰係数、2次減衰係数の 3 つの係数がある。
+通常はデフォルトのままでよいだろう。
+詳細はリファレンスマニュアルを参照してほしい。
+
+スポットライトは点光源の特殊な場合で、ある1定方向を特別に強く照射する
+働きを持ち、文字通りスポットライトとしての機能を持つ。そのため、
+スポットライトは属性として位置と方向の両方を持つが、さらに3つの属性も
+持っている。第1の属性は点光源と同じく減衰係数である。
+第2の属性はカットオフ係数で、これはスポットライトの照射角度のことである。
+この値が大きければ、スポットライトによって照らされる領域が広くなる。
+第3の属性は「スポットライト指数」と呼ばれるもので、この値が大きいと
+照射点の中心に近いほど明るくなる効果が強くなる。この値を 0 にすると、
+スポットライトの中心であろうが外側付近であろうが明るさは変わらない。
+このスポットライト指数も扱いが難しいパラメータなので、減衰係数と
+同じく通常は 0 でよい。
+
+光源の定義時に、初期値として光源の種類を指定する。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Light parallel(FK_PARALLEL_LIGHT);
+        fk_Light point(FK_POINT_LIGHT);
+        fk_Light spot(FK_SPOT_LIGHT);
+\end{verbatim}
+\end{screen}
+~ \\
+parallel は平行光源、point は点光源、spot はスポットライトとして
+定義される。指定のなかった場合は、平行光源として定義される。
+
+平行光源以外であれば、減衰係数を設定できる。減衰係数の設定には
+setAttenuation() メンバ関数を使用する。
+\\
+\begin{screen}
+\begin{verbatim}
+        point.setAttenuation(0.0, 0.01, 1.0);
+        spot.setAttenuation(0.01, 0.0, 1.0);
+\end{verbatim}
+\end{screen}
+~ \\
+引数はそれぞれ左から順番に線形減衰係数 \(k_l\)、
+2次減衰係数 \(k_q\)、一定減衰係数 \(k_c\) を意味し、
+以下のような式で減衰関数 \(f(d)\) は表される。
+\[
+	f(d) = \frac{1}{k_ld + k_qd^2 + k_c}
+\]
+ただし、\(d\) は光源からの距離を表す。
+デフォルトでは線形減衰係数、2次減衰係数が 0, 一定減衰係数が 1 に設定されており、
+これは距離による減衰がまったくないことを意味している。
+
+スポットライトのカットオフ係数とスポットライト指数は、それぞれ
+setSpotCutOff() と setSpotExponent() というメンバ関数で設定する。
+\\
+\begin{screen}
+\begin{verbatim}
+        spot.setSpotCutOff(FK_PI/6.0);
+        spot.setSpotExponent(0.00001);
+\end{verbatim}
+\end{screen}
+~ \\
+setSpotCutOff() の引数は弧度法による角度を入力する。FK\_PI は
+円周率を表すので、例の場合は \(\pi/6 = 30^{\circ}\) となる。
+
+なお、ここまで触れなかったが光源の大事な要素として色がある。
+色に関しては他の fk\_Shape クラスと同じく要素として持つことはなく、
+fk\_Model の属性として設定されていることに注意しなければならない。
+
+本節で現れる用語は非常に難解で効果がわかりずらいものが多いと思われる。
+これらに関する詳しい解説や具体的な効果を(数学的に)知りたい場合は、
+fk\_Light のリファレンスマニュアルを参照してほしい。
+
+\section{パーティクル用クラス} \label{subsec:particle}
+FK では、パーティクルアニメーションをサポートするためのクラスとして
+fk\_Particle 及び fk\_ParticleSet が用意されている。厳密には、これらは
+fk\_Shape クラスの派生クラスではなく、形状を直接表すものではないのだが、
+本質的に役割が似ていることから本章にて解説する。ここでは機能紹介に
+とどめるが、具体的な利用例に関しては
+\ref{sec:sample} 章にある「パーティクルアニメーション」サンプルを
+参照してほしい。
+
+\subsection{fk\_Particle クラス}
+fk\_Particle クラスは、パーティクル単体を表すクラスで、
+次のようなメンバ関数が用意されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{void init(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルを初期化する。
+	\end{tabular} \\ \\
+
+\> \textbf{int getID(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの ID を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{unsigned int getCount(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの年齢を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Vector getPosition(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの現在位置を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setPosition(fk\_Vector pos)} \\
+\> \textbf{void setPosition(double x, double y, double z)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの位置を pos または (x,y,z) に設定する。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Vector getVelocity(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの速度ベクトルを取得する。この値が有効なのは、
+		setVelocity() 関数か setAccel() 関数を利用したときのみである。
+	\end{tabular} \\ \\
+
+\> \textbf{void setVelocity(fk\_Vector vel)} \\
+\> \textbf{void setVelocity(double x, double y, double y)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの速度ベクトルを vel または (x,y,z) に設定する。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Vector getAccel(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの加速度ベクトルを取得する。この値が有効なのは、
+		setAccel() 関数を利用したときのみである。
+	\end{tabular} \\ \\
+
+\> \textbf{void setAccel(fk\_Vector acc)} \\
+\> \textbf{void setAccel(double x, double y, double z)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの加速度ベクトルを
+		acc または (x,y,z) に設定する。
+	\end{tabular} \\ \\
+
+\> \textbf{int getColorID(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの色 ID を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setColorID(int)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの色 ID を設定する。
+	\end{tabular} \\ \\
+
+\> \textbf{bool getDrawMode(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		現在の描画状態を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setDrawMode(bool flag)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		描画状態を設定する。true ならば描画有効、
+		false ならば無効となる。
+	\end{tabular}
+\end{tabbing}
+\subsection{fk\_ParticleSet クラス} 
+fk\_ParticleSet クラスは、パーティクルの集合を表すクラスである。
+このクラスは、他のクラスの様に直接利用するものではなく、このクラスを
+継承させて仮想関数を上書きする形で利用する。まず、上書きすることになる
+仮想関数を紹介する。
+\subsubsection{fk\_ParticleSet クラスの仮想関数}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{void genMethod(fk\_Particle *p)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの生成時に、パーティクルに対して
+		行う処理を記述する。p には、新たに生成された
+		パーティクルオブジェクトが入っている。
+	\end{tabular} \\ \\
+
+\> \textbf{void allMethod(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		毎ループ時に行う全体処理を記述する。
+	\end{tabular} \\ \\
+
+\> \textbf{void indivMethod(fk\_Particle *p)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		毎ループ時の各パーティクルに個別に行う処理を記述する。
+		p には、操作対象となるパーティクルオブジェクトが入っている。
+	\end{tabular}
+\end{tabbing}
+\subsubsection{fk\_ParticleSet クラスの通常のメンバ関数}
+また、fk\_ParticleSet クラスは他にも以下のようなメンバ関数を持っている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{void setAllMode(bool flag)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		allMethod() 関数による処理の有効化/無効化を設定する。
+	\end{tabular} \\ \\
+
+\> \textbf{void setIndivMode(bool flag)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		indivMethod() 関数による処理の有効化/無効化を設定する。
+	\end{tabular} \\ \\
+
+\> \textbf{void handle(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		実際に処理を 1 ステップ実行する。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Shape * getShape(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルを表す fk\_Shape オブジェクトを返す。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Particle * newParticle(void)} \\
+\> \textbf{fk\_Particle * newParticle(fk\_Vector pos)} \\
+\> \textbf{fk\_Particle * newParticle(double x, double y, double z)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルを新たに生成する。初期位置を引数で設定することも
+		可能である。新たに生成されたパーティクルオブジェクトを返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool removeParticle(fk\_Particle *p)} \\
+\> \textbf{bool removeParticle(int)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルを消去する。引数として、パーティクルオブジェクト
+		そのものと ID の2種類がある。通常は true を返すが、
+		対象となるパーティクルが存在しなかった場合や、
+		すでに消去されたパーティクルだった場合は false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{unsigned int getCount(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクル集合の年齢を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{unsigned int getParticleNum(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		現状でのパーティクル個数を取得する。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Particle * getParticle(int)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		ID を入力し、その ID を持つパーティクルを取得する。
+		ID に相当するパーティクルが存在していない場合は NULL を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{fk\_Particle * getNextParticle(fk\_Particle *)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		allMethod 中で全パーティクルを取得する際に利用する。
+		引数の種類によって、以下のようにパーティクルを返す。
+		\begin{enumerate}
+		 \item 引数が NULL の場合は、
+			ID が最も小さなパーティクルを返す。
+		 \item 引数が最大の ID を持つパーティクルの場合は、
+			NULL を返す。
+		 \item 引数がそれ以外の場合は、入力パーティクル ID よりも
+			大きな ID を持つものの中で最も小さな ID を持つ
+			パーティクルを返す。
+		\end{enumerate}
+		例えば、allMethod 中で全てのパーティクルの平均座標ベクトルを
+		求めるには、
+		以下のように記述すればよい。(fk\_ParticleSet クラスの
+		派生クラス名を「MyParticle」とする。)
+	\end{tabular} \\
+	\> \> \begin{tabular}{p{15cm}}
+		\begin{screen}
+		\begin{verbatim}
+		        void MyParticle::allMethod(void)
+		        {
+		            fk_Particle   *p;
+		            fk_Vector     vec(0.0, 0.0, 0.0);
+
+		            p = getNextParticle((fk_Particle *)NULL);
+		            while(p != (fk_Particle *)NULL) {
+		                vec += p->getPosition();
+		                p = getNextParticle(p);
+		            }
+		            vec /= double(getParticleNum());
+		        }
+		\end{verbatim}
+		\end{screen}
+	\end{tabular} \\ \\
+
+\> \textbf{void setMaxSize(unsigned int)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		パーティクルの最大個数を設定する。パーティクル個数が設定した
+		最大値に達した場合、newParticle() を呼んでも新たに
+		生成されない。
+	\end{tabular} \\ \\
+
+\> \textbf{void setColorPalette(int ID, double r, double g, double b)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		色パレットに色を設定する。
+	\end{tabular}
+\end{tabbing}
+
+\section{D3DX形式中のアニメーション動作} \label{subsubsec:d3dxanimation}
+fk\_IndexFaceSet クラスや、
+第 \ref{subsubsec:ifstexture} 節で後述する
+fk\_IFSTexture で D3DX 形式のファイルを
+入力したとき、ファイル中にアニメーションデータがある場合は、
+動的にアニメーション変形を行うことができる。
+アニメーションを実現するには、setAnimationTime() 関数を用いる。
+引数として、時間を表わす数値を double 型で入力する。
+以下のプログラムは、アニメーション動作を表示するサンプルである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_IndexFaceSet     ifs;
+        double              timeCount;
+        
+        timeCount = 0.0;
+        while(true) {
+                :
+                :  // 描画処理
+                :
+            ifs.setAnimationTime(timeCount);
+            timeCount += 10.0;
+        }
+\end{verbatim}
+\end{breakbox} ~
+
+上記では、1回の描画につきアニメーション時間を 10 ずつ増加させている。
+fk\_IndexFaceSet を例にしているが、fk\_IFSTexture の場合でも
+まったく同様の方法でアニメーション動作ができる。
+
+\section{BVH形式のモーション再生} \label{subsubsec:bvhmotion}
+前節で述べた D3DX 形式のアニメーションデータの代わりに、
+BVH 形式で記述されたモーションデータを利用することができる。
+D3DX 形式の形状データにはボーン情報が記述されており、
+そのボーン名とBVH 形式のデータ側のボーン名を合わせておくことによって、
+対応したボーンの動きが制御できるようになっている。
+\\
+BVH 形式のデータを利用する際には fk\_BVHMotion というクラスを用いる。
+まず、fk\_BVHMotion クラスの変数を用意し、その変数に利用したい BVH 形式の
+データを入力する。その変数を、D3DX 形式を入力した fk\_IndexFaceSet か、
+fk\_IFSTexture の変数に対して setBVHMotion() 関数を用いて割り当てる、
+という流れで利用する。以下にその利用例を示す。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_IndexFaceSet     ifs;
+        fk_BVHMotion        bvh;
+        
+        // 先に D3DX 形式の形状データを読み込んでおく
+        if(ifs.readD3DXFile("sample.x", "obj1") == false) {
+            fl_alert("D3DX File Read Error!");
+        }
+        // BVH 形式のモーションデータを読み込む
+        if(bvh.readBVHFile("sample.bvh") == false) {
+            fl_alert("BVH File Read Error!");
+        }
+        // 形状データ側にモーションデータをセットする
+        ifs.setBVHMotion(&bvh);
+\end{verbatim}
+\end{breakbox} ~
+
+モーションデータをセットした後は、D3DX 形式のアニメーションと同様に、
+setAnimationTime() 関数でアニメーション再生を制御できる。
+複数の BVH データをあらかじめ読み込んでおき、setBVHMotion() 関数で
+再生したいモーションを切り替える、といった利用方法が可能である。

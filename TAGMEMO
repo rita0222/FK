@@ -1,0 +1,1686 @@
+		--- FK toolkit TAG 別更新履歴リスト ---
+
+	- システム内部に関する修正 (ユーザレベルでは影響なし)
+	= システム内部に関する修正 (ユーザレベルで影響あり)
+	+ 新たな機能追加 (ユーザレベルでは関連しない)
+	* 新たな機能追加 (ユーザレベルで使用可能)
+	% ユーザプログラムで非互換性を生ずる修正
+	# その他、一般的な修正
+
+============================================================================
+VER2_9_2:
+	- システムヘッダファイルを、Cスタイル(<**.h>)からC++(<c**>)スタイルに移行
+
+	= FK.h から Capsule.h を include していない不具合を修正。
+
+	* fk_OpenCL クラス追加。
+
+	# サンプルプログラムに「opencl.cxx」追加。
+
+	* fk_Window クラスの getKeyStatus(), getSpecialKeyStatus(), getMouseStatus() で
+		引数仕様が (key, fk_SwitchStatus, bool) のタイプの関数を追加。
+
+	* fk_AppWindow クラスの getKeyStatus(), getSpecialKeyStatus(), getMouseStatus() で
+		引数仕様が (key, fk_SwitchStatus, bool) のタイプの関数を追加。
+
+	- ファイル入出力処理の大部分を FILE ベースから fstream ベースに変更。
+		(ただし、外部ライブラリ依存や API 提供のため一部 FILE ベース残存)
+
+============================================================================
+VER2_9_1:
+	- 文字コード変換用ライブラリを imdkcv から iconv に移行。
+
+	* fk_Capsule クラス追加。
+
+	* fk_IndexFaceSet クラスに makeCapsule(), setCapsuleSize() 関数追加。
+
+	* fk_Model::getInhScale() 関数追加。
+
+	= fk_MatrixAdmin::glVec() 等を呼んだときに、アップベクトルが更新されない不具合を修正。
+
+	* fk_Shape::getRealShapeType() 関数追加。
+
+	* fk_HVector に全成分を double で設定するコンストラクタを追加。
+
+	- fk_SubDivision クラス作成。
+
+	* fk_Modify::subdivShape() 追加。
+
+	= fk_Solid で、削除位相要素がある状態で cloneShape() するとデータに
+		不整合が生じる不具合を修正。
+
+	- fk_SphereBoundary, fk_AABBBoundary, fk_OBBBounrady, fk_CapsuleBoundary
+		各クラス追加。
+
+	* 境界ボリューム制御用クラス fk_Boundary 追加。
+
+	* fk_Model に境界ボリューム自動設定用関数である以下の関数追加。
+		adjustSphere(), adjustAABB(), adjustOBB(), adjustCapsule()
+
+	* fk_Model に干渉判定・衝突判定関連の以下の関数追加。
+		isInter(), isCollision(), setInterMode(),
+		getInterMode(), getInterStatus(), resetInter()
+
+	- C++14文法に対応。
+
+	+ fk_DataAccess クラスに getVertexList(), getHalfList(),
+		getEdgeList(), getLoopList() 各関数追加。
+
+	= MQOファイル入力で、オブジェクト名の先頭や末尾に空白が入っていた場合に
+		入力できなくなる不具合を修正。
+
+	= 干渉停止自動モードをサポートするため、
+		fk_MatrixAdmin 中の移動が発生する関数をアンダーバー付きの関数名に改め、
+		移動系メンバ関数は fk_Model に移行。
+		(fk_MatrixAdminの関数を直接用いることにより、従来以上の高速な処理が可能。)
+
+	* fk_Modelに干渉停止自動モード用の以下の関数追加。
+		setInterStopMode(), getInterStopMode(),
+		entryInterModel(), deleteInterModel(), clearInterModel()
+
+	# サンプルプログラム「car.cxx」を若干修正。
+
+	# サポートプラットフォームに「Mac OS X gcc」を追加。
+
+============================================================================
+VER2_9_0: (5/6, '14)
+
+	= MacOSX 上で、fk_System クラスの get_cwd() および setcwd() が
+		Finder 上から選択した場合でも正常に動作するように修正。
+
+	= Windows 上で、fk_System クラスの get_cwd() の挙動を本来の意図通りに修正。
+	
+	= fk_Image クラスの newImage() において、
+		不必要なバッファの解放と再生成を行わないように修正。
+	
+	* fk_Solid, fk_IndexFaceSet クラスの writeMQOFile() において、面ごとに
+		マテリアルを設定している場合はその情報も出力するように処理を追加。
+	
+	= fk_Image クラスの writePNG() において、メモリリークが生じていたのを修正。
+	
+	* fk_Window クラスに preDrawLeft(), postDrawLeft(),
+		preDrawRight(), postDrawRight() 関数追加。
+
+	= fk_Vector クラスのコンストラクタが暗黙的に呼び出されないように修正。
+
+	= fk_Model クラスのコンストラクタに対して形状を引数で渡した場合に、
+		挙動が不安定になる現象を修正。
+
+	= fk_Tree クラスの cloneBranch() によってツリーの複製を行った場合に、
+		複製したノードが無効なものと判定されて挙動が不安定になる現象を修正。
+
+	- ソース構成を変更。
+
+	# サポートから MinGW+Direct3D、Borland C++ 5.5, Cygwin を除外。
+
+	* FKUT 関連を本体にマージ。
+
+	- doxygen 関連の構成を変更。
+
+============================================================================
+VER2_8_10: (12/5, '11)
+
+	+ fk_BezSurface, fk_BSplSurface クラス追加。
+
+	* fk_ShapeViewer クラスに setBlendStatus(), getBlendStatus() 関数追加。
+
+	* fk_ShapeViewer クラスに setAxisMode(), getAxisMode() 関数追加。
+
+	= fk_DrawMode に FK_TEXTUREMODE を追加。
+
+	= fk_Model にて、setDrawMode() の設定がテクスチャにも有効となるように
+		仕様を追加修正。
+
+	- fk_MaterialMode の FK_NONE_MODE を 3 から 0 に変更。
+
+	# fk_Image 中の概要で、透明度の記述の間違いを修正。
+
+	# gcc Ver.4 系列に対応するため、STL のヘッダを
+		インクルードする順番を修正。
+
+	= fk_Window::getKeyStatus() などの入力取得系関数において、
+		ウィンドウからマウスカーソルが外れた場合の挙動が
+		正しくなかった点を修正。
+
+	= fk_Window::clearTextureMemory() の挙動を本来の意図通りに修正。
+
+	* fk_Window クラスに getUsingTextureMemory() 関数追加。
+
+	* fk_DisplayLink クラスに setStereoOverlayMode(), 
+		getStereoOverlayMode() 関数追加。
+
+	= fk_GraphicsEngine にて、fk_PickData にピック時の深度情報を
+		格納するように追加修正。
+
+	* fk_PickData クラスに getFarDepth(), getNearDepth() 関数追加。
+
+	# Mac での実行ターゲットを 64bit 環境に移行。
+		(FLTK が 1.3系列で Cocoa に対応したため。)
+
+	* fk_Loop::getVNum() 追加。
+
+	* fk_OrthoMatrix クラスに setRow(), setCol(),
+		getRow(), getCol() 関数追加。
+
+	* fk_MassProperty クラス追加。
+
+	* fk_Math::calcCrossLineAndTri() 追加。
+
+	- 幾つかのクラスのデストラクタに virtual キーワード追加。
+
+	= fk_Model でモデル数が増加したときに親子関係操作が遅くなる
+		不具合を修正。
+
+	- fk_TreeBaseObject クラスのデストラクタを virtual に修正。
+
+	= D3DX 入力について、FrameTransformMatrix が設定されていないデータでも
+		正常に読み込めるように修正。
+
+	= D3DX 入力について、テクスチャデータを入力していないデータに対し
+		位相最適化を行うと落ちる不具合を修正。
+
+	# サンプルプログラムのパラメータを、60FPSで最適となるよう調整。
+
+	- キャスティングのスタイルを C 言語流から C++ 流に変更。
+
+	# ユーザーズガイドを改訂。
+
+============================================================================
+VER2_8_9: (4/23, '10)
+
+	* fk_System クラスと fk_System::setcwd() 関数追加。
+
+	* fk_SRFParser クラス追加。
+
+	* fk_Solid::readSRFFile() 追加。
+
+	= fk_MQOOut のコンストラクタの初期化不具合を修正。
+
+	* fk_Math クラスに clamp() 関数追加。
+
+	* fk_Math クラスに calcClosestPtSegToSeg() 関数追加。
+
+	* fk_Math クラスに calcClosestPtPtToSeg() 関数追加。
+
+	* fk_Window クラスに setOGLStereoMode(), getOGLStereoMode() 関数追加。
+
+	* fk_DisplayLink クラスに立体視画像サポート関連の関数追加。
+		・entryStereoCamera() 関数
+			：両眼視点を表すカメラモデルの設定
+		・setStereoProjection() 関数
+			：両眼視点における投影情報の設定
+		・getStereoCamera()
+			：両眼視点を表すカメラモデルの取得
+		・getStereoProjection()
+			：両眼視点における投影情報の取得
+		・clearStereo()
+			：立体視に関する設定の初期化
+
+	- fk_GraphicsEngine クラスに立体視画像サポート関連の内部処理関数追加。
+
+	= fk_Image で、奇数ピクセル幅画像を WinBMP 形式で出力する際の
+		不具合を修正。
+
+============================================================================
+VER2_8_8: (9/26, '09)
+
+	# Doxygen によるリファレンスマニュアル作成をサポート。
+		そのため、ドキュメントの大幅な追加。
+
+	- Doxygen 対応のため、内部用クラスのヘッダファイル拡張子は
+		.h から .H に変更。
+
+	- fk_Attribute.h から fk_Attribute_Data を AttributeData.H に分割。
+
+	- Doxygen 対応に伴い、以下のクラスを先頭文字を大文字に変更
+		・fk_ParserBase::bSwap → BSwap
+		・fk_ParserBase::bRead → BRead
+		・fk_ParserBase::bWrite → BWrite
+		・fk_ParserBase::pushOneLineCommentSep → PushOneLineCommentSep
+
+	* デフォルトマテリアルの初期化関数について、これまでの fk_InitMaterial() を
+		非推奨とし、fk_Material::initDefault() として同機能を提供。
+		(互換性のため fk_InitMaterial() 自体は存続。)
+
+	- 未実装だった fk_Shell 関連を削除。
+
+	- fk_Palette の setObjMaterial() と getObjMaterial() を削除。
+			(関連のファイル入出力関係は場しのぎ状態)
+
+	* fk_Q_Inter_* の機能を fk_Math のメンバ関数に移行。
+		(互換性のためグローバル関数自体は存続。)
+
+	* fk_Light の減衰係数に、一定減衰率要素を追加。
+
+	= fk_Quaternion::init() でスカラー部が 0 になる不具合を修正。
+
+	* fk_Texture::readJPG() 追加。
+
+	= fk_MatrixAdmin::glRotate() で逆変換が施される不具合を修正。
+
+	* fk_MatrixAdmin::getUpVec() を getUpvec() に名称変更。
+		(互換性維持のため、getUpVec() 自体も存続。)
+
+	* fk_Model::getInhUpVec() を getInhUpvec() に名称変更。
+		(互換性維持のため、getInhUpVec() 自体も存続。)
+
+	- fk_Solid::refineTopology() 削除。
+
+	* fk_Particle の基底クラスとして fk_Attribute を追加。
+
+	* fk_Frustum クラス追加。それに伴い Engine.cxx 修正。
+
+	= fk_Shape::setMaterialData() をユーザが利用しないように前提を変更。
+		これに伴い、関数名を SetMaterialData() とし、
+		マニュアルからは削除。(後方互換性のため、関数そのものは存続。)
+
+	* fk_ShapeViewer クラスに getBGColor() 関数追加。
+
+	* fk_ShapeViewer クラスに getSkipFrame() 関数追加。
+
+	* fk_ShapeViewer クラスの snapImage() 関数を、
+		fk_Window の引数に合わせるように変更。
+
+	- fk_UnitMatrix クラスの名称を fk_OrthoMatrix に変更。
+
+	* fk_UniStr クラスに printf() 関数追加。
+
+============================================================================
+VER2_8_7: (4/1, '09)
+
+	* fk_BVHMotion クラス追加。
+
+	- fk_ParserBase で入力する一行の最大文字数を 511 から 65535 文字に変更。
+
+	# 文字コードを EUC から UTF-8 に変更。(LaTeXソースを除く)
+
+	# TAGMEMO の体裁を変更。
+
+	* fk_Solid クラスに writeMQOFile() 関数追加。
+
+	- gcc系列のコンパイルオプションを若干変更。
+
+	- ヘッダから名前空間が std 決め打ちになっている設定を削除。
+
+	- 名前空間に std を使わないコンパイルオプション(NO_STD_NAMESPACE)追加。
+
+	- エラー処理系の出力先を iostream 系から stdio.h 系に変更。
+
+	* fk_IndexFaceSet クラスに writeMQOFile() 関数追加。
+
+	= fk_IndexFaceSet 中で関数のみで処理がなかった writeSTLFile(),
+		writeDXFFile() を実装。
+
+	= fk_SMFParser で三角形をこれまでと反転して読み込むように仕様変更。
+
+	# マニュアルに各種ファイル入出力に関する記述を追加。
+
+	- Makefile のオプション構成を若干変更。
+
+============================================================================
+VER2_8_6: (12/4, '08)
+
+	= fk_Image::copyImage() で、画像サイズが適切に設定されない不具合を修正。
+
+	= fk_TextImage の getLineStartXPos(), getLineStartYPos() の不具合を修正。
+
+	* fk_DisplayLink クラスに entryOverlayModel(),
+		removeOverlayModel(), clearOverlayModel() 関数を追加。
+
+	- fk_Image クラスのソースを Image.cxx と ImageIO.cxx に分離。
+
+	* fk_Image クラスで writePNG(), readJPG(), writeJPG() 関数追加。
+
+	- fk_Image クラスで ClearUpdateArea(), SetUpdateArea(),
+		GetUpdateArea() 関数追加。
+
+	* fk_Window::snapImage() 関数で、画像形式と取得先デバイスを
+		指定できるように修正。
+
+	* fk_Window クラスに getMouseWheelStatus() 関数追加。
+
+	* fk_DisplayLink クラスに entryOverlayModel(),
+		removeOverlayModel(), clearOverlayModel() 関数追加。
+
+	# Windows 環境でリンクするライブラリの設定を変更。
+
+	# MacOSX 上で CUDA 用プラットフォーム追加。
+
+	# マニュアルの章構成に関して、形状関係からテクスチャと画像を独立。
+
+	# MacOSX (Xcode) のセットアップマニュアル追加。
+
+============================================================================
+VER2_8_5: (9/27, '08)
+
+	* fk_IndexFaceSet, fk_Solid, fk_MeshTexture, fk_IFSTexture の
+		MQOファイル入力の際に、テクスチャ接続の連続性を考慮するかどうかを
+		判断する設定をできるように、関数の引数を追加。
+
+	* fk_IndexFaceSet, fk_Solid の MQOファイル入力の際に、
+		MQOファイル中に設定されている面ごとのマテリアル情報を
+		反映ができるように、関数の引数を追加。
+
+	* fk_Model クラスに snapShot(), restore() 関数追加。
+
+	- fk_DrawCache のデータ構造を vector から list に変更。
+
+	= fk_Image の GetBufPointer() 関数を getBufPointer() に名称変更し、
+		private から public に変更。
+
+	= fk_Texture の GetImageBuf() 関数を getImageBuf() に名称変更し、
+		private から public に変更。
+
+	= fk_IndexFaceSet と fk_IFSTexture の readD3DXFile() において、
+		アニメーションの入力に失敗することがある不具合を修正。
+
+	# MinGW 環境上での Direct3D 版をサポート。
+
+============================================================================
+VER2_8_4: (12/26, '07)
+
+	= fk_Image において、横幅、縦幅いずれかが 64 未満だった場合に
+		表示されない不具合を修正。
+
+	= fk_TextImage において、影付き効果が有効な場合に setSpaceLineSkip()
+		の設定が反映されない不具合を修正。
+
+	* マニュアル中には存在した fk_Point::allClear() が実際には実装されて
+		いなかった不具合に対し、実装を追加。
+
+	* fk_TextImage に clear(), finish(), setBoldStrength(),
+		getBoldStrength(), setCacheMode(), getCacheMode(),
+		clearCache() の各メンバ関数追加。
+
+============================================================================
+VER2_8_3: (11/18, '07)
+
+	* fk_Image に subImage() メンバ関数追加。
+
+	- ヘッダファイルの依存関係を全面的に見直し。
+
+	* fk_Image に、画像の一部分に対して別画像を上書きする
+		copyImage() の多重定義関数を追加。
+
+	- fk_TextImage で、内部データを文字ごとに持つように変更。
+
+	* fk_TextImage に setSendingMode(), getSendingMode(), send(),
+		getLineCharNum(), getAllCharNum() メンバ関数追加。
+
+	- fk_TextureDraw 中で、サイズが異なる場合のテクスチャ変更で、
+		テクスチャオブジェクトの管理が適切に行われていなかった
+		不具合を修正。
+
+	* fk_TextImage の setSmoothFlg(), getSmoothFlg() をそれぞれ
+		setSmoothMode(), getSmoothMode() に名称変更。
+		(互換性のため両関数とも利用は可能。)
+
+	* fk_TextImage に、影付き文字用のメンバ関数として
+		setShadowMode(), setShadowOffset(), setShadowColor(),
+		getShadowMode(), getShadowOffset(), getShadowColor() を追加。
+
+	* fk_IndexFaceSet および fk_IFSTexture クラスに
+		readMQOData() を追加。(実際は前バージョンより利用可能だったが、
+		本バージョンより正式サポート)
+
+	= fk_Image の LoadBmpFile() 関数中のカラーマップ設定に関する
+		不具合を修正。
+
+	# 各種設定ファイルを MacOSX 10.5 に対応。
+
+============================================================================
+VER2_8_2: (10/11, '07)
+
+	= fk_ShapeViewer で、形状として fk_Line と fk_Block を setShape で
+		指定しても描画に反映されない不具合を修正。
+
+	= fk_Model インスタンスの動的な new, delete 操作に対し、
+		親子関係が適切されなくなる不具合を修正。
+
+	= fk_Solid のループに対し、描画用の多角形分割機能を追加。
+
+	+ fk_Math クラス追加。(まだ非公開)
+
+	* fk_TextImage クラスに以下のメンバ関数を追加。
+		setSpaceLineSkip(), getSpaceLineSkip(), setMinLineWidth(),
+		getMinLineWidth(), getMaxLineWidth(), getMaxLineHeight(),
+		getLineNum(), getLineHeight(), getLineWidth(),
+		getLineStartXPos(), getLineStartYPos()
+
+	* fk_TextImage で、initFont() を呼ぶ前に loadUniStr() を呼ぶと
+		落ちる不具合を修正。
+
+	= fk_PointDraw で適切に描画されない不具合を修正。
+
+	- fk_Image 中の imageBuf を STL の vector に変更。
+
+	- fk_TextureDraw で前と同じテクスチャオブジェクトを描画する場合は、
+		glEnagle(GL_TEXTURE_2D) および
+		glBindTexture() を省略する機能を追加。
+		(fk_Window::setTextureBindMode() 関数で ON/OFF の
+		切り替えが可能。)
+
+	* fk_Window に setTextureBindMode() 関数を追加。
+		(デフォルトでは false つまり OFF)
+
+	- fk_TextureDraw でウィンドウごとに管理していたテクスチャ ID を、
+		全ウィンドウで共通となるように仕様変更。
+
+	* fk_RectTexture に setTextureCoord() および getTextureCoord()
+		関数追加。それに伴い、fk_TextureDraw の中を若干変更。
+
+	= fk_TextImage の setAlign() 関数で、FK_ALIGN_RIGHT を指定した場合に
+		適切に処理されない不具合を修正。
+
+	* fk_Window および fk_ShapeViewer に setPutStrMode(),
+		getPutStrMode(), setPutFile(),
+		putString(), printf(), clearBrowser() メンバ関数追加。
+
+============================================================================
+VER2_8_1: (8/10, '07)
+
+	= fk_Window がフレームモードを初期化していない不具合を修正。
+
+	* fk_IndexFaceSet, fk_IFSTexture クラスに setAnimationTime() 関数追加。
+
+	- D3DX入力用のソースを大幅追加。
+
+	# Mac の設定をユニバーサルバイナリ対応に変更。
+
+	* fk_Image クラスに fillColor() 関数追加。
+
+	* fk_Image, fk_Texture 両クラスに readPNG() 関数追加。
+
+	* fk_Model に entryChild(), deleteChild(), deleteChildren(),
+		foreachChild() メンバ関数追加。
+
+	* fk_Model の setParent(), deleteParent() メンバ関数で、
+		座標系を固定したまま登録するかどうか選択できる機能を追加。
+
+	# PNG読み込みに付随し、各プラットフォームで libpng と zlib
+		(または libfltk_png と libfltk_z) をリンクライブラリに
+		追加。
+
+	- fk_HVector のコンストラクタを改変。
+
+============================================================================
+VER2_8_0: (7/19, '07)
+
+	= fk_Plane で、calcCrossLineParam 関数での不具合を修正。
+
+	= ヘッダファイルを整理し、ユーザプログラムで imdkcv や
+		freetype のヘッダが必要なくなるように修正。
+
+	- fk_Tree, fk_TreeData クラス追加。
+
+	- fk_D3DXParser クラス追加。
+
+	* fk_Solid, fk_IndexFaceSet, fk_IFSTexture で D3DX 形式が読める
+		機能を追加。
+
+	- fk_IFSTexture の内部構造変更。
+
+	= OpenGL の頂点配列を積極的に利用し、描画を高速化。
+
+	= fk_Image の格納可能サイズを 2048 から 65536 に変更。
+
+	- fk_Window の描画処理を fk_GraphicsEngine クラスに委譲。
+		さらに、内部での描画処理を fk_PointDraw, fk_LineDraw,
+		fk_FaceDraw, fk_TextureDraw の各クラスに分離。
+
+	# GUI ライブラリに依存しない部分を libFK2_base とし、
+		FLTK に依存する部分を libFK2_fltk としてライブラリを分離。
+
+	# Qt版 FK のキャンバスクラスとなる QtWidget クラス追加。
+
+	= fk_Model::getInhVec() および fk_Model::getInhUpVec() の不具合を修正。
+
+	# ライブラリをベース部分(libFK2_base),
+		エラー処理(libFK2_fltkErr, libFK2_QtError),
+		ウィンドウ(libFK2_fltkWin, libFK2_QtWin) に分離。
+
+	# ソースファイルのディレクトリ構成を各ライブラリ毎に分割。
+
+============================================================================
+VER2_7_13: (11/17, '06)
+
+	* fk_IndexFaceSet クラスに VRML, STL, DXF ファイル出力機能用
+		関数を追加。
+
+	- 上記に伴い、クラス構成を変更。
+
+	= fk_ShapeViewer で、VRML 出力時に落ちる不具合を修正。
+
+	# マニュアルのクラス構成図から、主流以外のクラスは削除。
+
+	- NO_GL_POINTER コンパイルオプションを追加。
+
+	* fk_Quaternion クラス追加。
+
+	= fk_ShapeViewer で、メニューからの SMF ファイルと RDS ファイルの
+		入力項目を削除。
+
+	* fk_IFSTexture クラス追加。それに伴い、マニュアル中から
+		fk_MeshTexture に関する記述を削除。
+		(互換性のため、クラスそのものは存続)
+
+	* fk_UnitMatrix クラスに makeEuler(fk_Angle) メンバ関数追加。
+
+	# マニュアルの第2章を大幅改訂。
+	
+	= fk_Solid で、特定の状況の際に法線ベクトルの計算時に落ちる
+		不具合を修正。
+
+	= fk_Plane で、setPosNorm 関数で適切な設定がなされない不具合を修正。
+
+============================================================================
+VER2_7_12: (1/6, '06)
+
+	= fk_Solid の separateEdge の際に、片側のループが未定義状態だった
+		場合に落ちる不具合を修正。
+
+	= fk_Image の readBMP で、一定数のファイル以上がボーランド環境で
+		読み込みに失敗する不具合を修正。
+
+	* fk_TextImage に setOffset 関数追加。
+
+	= fk_TextImage の loadUniStr で、一度利用した fk_UniStr 型引数が
+		再利用できるように仕様変更。
+
+	- fk_History にて、Undo した後に前と異なるコマンドを入力した場合に
+		起こる不具合を修正。
+
+	- MeshTexture.cxx, MQOParser.h, MQOParser.cxx ファイル追加。
+
+	* fk_Solid, fk_IndexFaceSet に readMQOFile() メンバ関数追加。
+
+	* fk_MeshTexture で、readMQOFile() による読み込み機能追加。
+
+============================================================================
+VER2_7_11: (8/30, '05)
+
+	= FK 独自データ形式で保存する際に、線の太さや点の大きさの情報も
+		保管されるように修正。(旧形式を読み込む際には、
+		fk_Solid::readData で sizeMode フラグに false を代入する
+		必要がある。)
+
+	- FK 独自データ形式が、PPC MacOS X と x86 系で互換が取れるように修正。
+
+============================================================================
+VER2_7_10: (7/14, '05)
+
+	= fk_GenMatrix クラスの、逆行列演算関連の不具合を修正。
+
+	# Borland C++ プラットフォームに対応。
+
+	- ソース全体に渡って、意味のなかった inline 展開を削除。
+
+	- Image.cxx で、画像ファイル読み込み失敗時の不具合を修正。
+
+============================================================================
+VER2_7_9: (6/7, '05)
+
+	+ fk_GenVector, fk_GenMatrix クラス追加。
+
+	* fk_Model に preShader(), postShader() メンバ関数追加。
+
+	* fk_Window に preInit(), postInit(), preDraw(), postDraw(),
+		openGLInit() メンバ関数追加。
+
+	# Windows, Mac OS X にて CG 言語によるシェーダープログラムに対応。
+
+	# サンプルプログラム「genmat」追加。
+
+	# サンプルプログラム「shader」追加。(だたし通常未コンパイル)
+
+============================================================================
+VER2_7_8: (5/2, '05)
+
+	* fk_Solid に writeSTLFile() 関数追加。
+
+	* fk_Solid に writeDXFFile() 関数追加。
+
+	= fk_Scene で透過処理を ON にした時点で線と点が
+		アンチエイリアシング表示されるように仕様変更。
+
+============================================================================
+VER2_7_7: (12/16, '04)
+
+	- fk_FileInput および fk_FileOutput 中で、形状データとパレットデータを
+		別々に保存、入力できるように仕様変更。(for TinyFK)
+
+	- fk_History において、double 型の実数と string 型の文字列が新たに
+		保管できるように機能追加。
+
+	* fk_ShapeViewer に setUpvec() 関数追加。
+
+	= fk_Solid において、makeIFSet や形状データ読み込み時に
+		描画キャッシュがクリアされない不具合を修正。
+
+============================================================================
+VER2_7_6: (10/11, '04)
+
+	= fk_Solid の allClear() で描画キャッシュがクリアされず、
+		再読み込みでおかしくなる不具合を修正。
+
+	# サンプルプログラム「textimage」追加。
+
+	* fk_ShapeViewer のメニューから Shininess を設定可能となるように修正。
+
+	= fk_ShapeViewer の光源色を、Ambient, Diffuse, Specular の全てが
+		(1, 1, 1) のものに変更。
+
+	* fk_Texture クラスに setTexRendMode(), getTexRendMode() 関数追加。
+
+	# ドキュメントに変更を反映。
+
+============================================================================
+VER2_7_5: (7/21, '04) 
+
+	- fk_Image の透明度の扱いに関する不具合を修正。
+
+	- fk_Modify のメンバ関数の幾つかの関数に関し、返り型を
+		void から新たに生成した位相要素に変更。
+
+	* fk_Solid のデータファイルの保存や読込で、FILE 型の
+		ポインタによるストリームを与える機能を追加。
+
+	- fk_DrawCache クラス追加。それに伴い fk_Solid の
+		描画ルーチンを変更。
+
+	* fk_Model に setReverseDrawMode() メンバ関数追加。
+
+	= fk_Image で WindowsBitmap 形式読み込み時に、
+		透明度を反転させてしまう不具合を修正。
+
+	= fk_Image の writeBMP() メンバ関数で出力される Windows Bitmap
+		に関し、ヘッダに誤りがあった不具合を修正。
+
+	* fk_Image の writeBMP() メンバ関数によって、
+		透過情報を付加したファイルを出力できるように機能拡張。
+
+	* fk_Window クラスに clearTextureMemory() メンバ関数追加。
+
+============================================================================
+VER2_7_4: (5/22, '04)
+
+	= ShapeViewer.h の中の、FLTK 関連のヘッダファイルを幾つか
+		ShapeViewer.cxx に移行。これにより、ユーザプログラムで
+		新たなヘッダファイルを include する必要が生ずる
+		可能性がある。
+
+	= fk_Palette クラスを追加。
+
+	* fk_Shape に、マテリアルパレットを異なる形状オブジェクトの間で
+		共有するためのメンバ関数 setPaletteData(), getPaletteData()
+		を追加。
+
+	% fk_Shape の継承クラスや fk_Model からマテリアル情報を得る
+		関数の名称を、getPalette から getMaterialVector に変更。
+
+	- strPrintf() 関数を fk_StrPrintf() 関数に名称変更。
+
+	- fk_Printf() 関数を追加。
+
+	- fk_ErrorMode に FK_ERR_BROWSER_INTERACTIVE モードと、
+		FK_ERR_BROWSER_QUEUE モードを追加。
+
+	* fk_Image クラスに writeBMP() メンバ関数追加。
+
+	* fk_Window クラスに snapImage() メンバ関数追加。
+
+	* fk_ShapeViewer クラスに snapImage() メンバ関数を追加し、
+		メニューからも画像を保存できるように修正。
+
+	= fk_ShapeViewer のメニューから、HRC ファイルを開く項目を削除。
+
+	# ドキュメントに更新を反映するとともに、ファイル構成を一新。
+
+============================================================================
+VER2_7_3: (3/12, '04)
+
+	- fk_ParserBase クラスの不具合を修正。
+
+	* fk_Vertex クラスに setDrawSize(), getDrawSize() メンバ関数追加。
+
+	* fk_Edge クラスに setDrawWidth(), getDrawWidth() メンバ関数追加。
+
+	= fk_Vertex, fk_Edge クラスで設定された大きさや太さが、
+		描画時に反映されるように fk_Window 中の描画処理を修正。
+
+	- マテリアルパレットで、確保されていない領域へのアクセスが
+		行われないように修正。
+
+	= fk_Solid::allClear() 関数に、マテリアルパレットの初期化を
+		制御する bool 型引数が与えられるように仕様変更。
+		(true で初期化を行う。デフォルトは true。)
+
+	* fk_Vector や fk_HVector の set() メンバ関数で、
+		z 座標を省略可能となるように変更。
+		(その場合 z には 0 が代入される。)
+
+	# 履歴管理システムを、CVS から subversion に移行。
+
+	# ドキュメントで、PDF 変換時にしおりとハイパーリンクが
+		追加されるよう hyperref を採用。
+
+============================================================================
+VER2_7_2: (1/26, '04)
+
+	= Poser が出力する VRML ファイルに対応。
+
+	* fk_PickData に getType() メンバ関数追加。
+
+	# ドキュメントにピック選択制御に関する節を追加。
+
+============================================================================
+VER2_7_1: (11/26, '03)
+
+	- Shape.cxx と Window.cxx をそれぞれ複数のファイルに分割化。
+
+	- fk_Window クラスの内部メンバ関数の名称を若干変更。
+
+	* fk_ShapeViewer クラスに各形状毎に描画モードを設定する
+		setDrawMode(int, fk_DrawMode) メンバ関数追加。
+
+	* fk_ShapeViewer クラスに setLineWidth(), setPointSize(),
+		getLineWidth(), getPointSize() メンバ関数追加。
+
+	* fk_Window::getSkipCount() 追加。
+
+	- fk_Array テンプレート追加。
+
+	* fk_MeshTexture クラスに putIndexFaceSet() メンバ関数追加。
+
+	* fk_Surface クラス追加。
+
+	* fk_Loop に setSurfGeometry(), getSurfGeometry()
+		メンバ関数追加。
+
+	* ループに曲面情報がある場合に描画に反映されるように
+		fk_Window クラスの内部を修正。
+
+	# ドキュメントに変更を反映
+
+============================================================================
+VER2_7_0: (9/22, '03)
+
+	- クラス構成を大幅に変更。具体的な内容は次の通り。
+		・fk_ParserData クラス追加。
+		・fk_ParserData を基底クラスとする fk_IndexFaceSet クラス追加。
+		・fk_SolidBase クラスの基底クラスを fk_ParserData のみに変更。
+		・fk_Block、fk_Circle、fk_Sphere、fk_Cone、fk_Prism クラスの
+			基底クラスを fk_IndexFaceSet に変更。
+		・fk_DXFParser、fk_HRCParser、fk_RDSParser、fk_SMFParser、
+			fk_STLParser、fk_VRMLParser の基底クラスを
+			fk_ParserBase のみに変更。
+
+	- Window.cxx 内部の描画処理を、fk_Solid の場合と fk_IndexFaceSet の
+		場合の二種類に分離。
+
+	= 面描画の際に、個別にマテリアルが設定していある場合スムーズモードでは
+		描画されないように仕様変更。
+
+	* 曲線用の純粋仮想クラス fk_Curve および、Bezier 曲線を表す
+		fk_BezCurve クラス、B-Spline 曲線を表す
+		fk_BSplCurve クラスを追加。
+
+	* fk_Edge クラスに setCurveGeometry()、getCurveGeometry()
+		メンバ関数追加。
+
+	+ fk_Edge に曲線幾何情報が付加されている場合、描画に反映されるように
+		Window.cxx を修正。
+
+	* fk_Image に setColor(), getColor() メンバ関数追加。
+
+============================================================================
+VER2_6_8: (7/30, '03)
+
+	- fk_ShapeViewer で、マテリアルデータが全モデルで共通だったのに
+		対し、別々に持つように変更。
+
+	* fk_ShapeViewer に setMaterial(), getMaterial() の各メンバ関数追加。
+
+	* fk_Vertex に setNormal() メンバ関数追加。
+
+	* fk_Curve, fk_BezCurve, fk_BSplCurve クラス追加。
+
+	* fk_Vector に proj(), perp() メンバ関数追加。
+
+	* fk_Plane クラス追加。
+
+	* fk_Window に getProjectPosition(), getWindowPosition() の
+		各メンバ関数追加。
+
+	% fk_Window クラス中の、大文字で始まる古いメンバ関数を廃止。
+
+	# fk_Vector, fk_ShapeViewer, fk_Plane, fk_Window に関する更新情報を
+		マニュアルに反映。
+
+============================================================================
+VER2_6_7_a: (3/31, '03)
+
+	# fk_Prism, fk_Cone の形状がデフォルトで面が描画されない
+		不具合を修正。
+
+============================================================================
+VER2_6_7: (3/17, '03)
+
+	# FLTK 1.1.3 に対応。
+
+	- fk_IDAdmin, fk_History 中の vector<bool> 型データを
+		vector<char> 型に変更。
+
+	+ fk_ShapeViewer に、ファイル入力時の仮想関数 shapeProcess() を追加。
+
+	= fk_ShapeViewer で、ファイル入力時の描画モードが不適切になる
+		不具合を修正。
+
+	- fk_IFSetHandle で、半稜線情報が中途半端だったために、幾つかの
+		参照系関数で落ちる不具合を修正。
+
+	* fk_Prism, fk_Cone 各クラスを追加。
+
+	% fk_MatAdmin メンバ関数で、大文字で始まる Gl 系関数と
+		Lo 系関数を廃止。
+
+	* fk_ShapeViewer に setPosition(), setAngle(), setVec() の
+		各メンバ関数追加。
+
+	# gui.cxx で、古い fl_file_chooser 関数を利用していた部分を
+		Fl_File_Chooser クラスを用いたスタイルに修正。
+
+	- fk_HeapVector クラスを廃止し、代わりにテンプレート fk_HeapBase を
+		追加。
+
+	# ドキュメントに変更点を反映。
+
+============================================================================
+VER2_6_6: (11/22, '02)
+
+	# FreeBSD でのコンパイラを gcc 3.2 に変更。
+
+	# FLTK 1.1.1 に対応。
+
+	# FreeType 2.1.2 に対応。
+
+	- fk_IndexFaceSet クラスの名称を fk_IFSetHandle に変更。
+
+	= fk_DisplayLink::setProjection() が正常に動作しない不具合を修正。
+
+============================================================================
+VER2_6_5: (7/31, '02)
+
+	# FLTK 1.1.0RC5 に対応。
+
+	# ターゲット OS のうち FreeBSD の「fb3」と「fb」を「fb」に統合。
+
+	# サンプルプログラムを最近の PC のパフォーマンスに合わせて変更。
+		それに伴い、ドキュメント中のサンプルも修正。
+
+	* fk_Solid クラスに readData() 及び writeData() メンバ関数追加。
+
+	* fk_Window クラスに setFrameMode(), getFrameMode(),
+		setFrameInterval(), getFrameInterval() メンバ関数追加。
+
+	# ドキュメントに変更点と校正を反映。
+
+============================================================================
+VER2_6_4: (5/23, '02)
+
+	- fk_SolidBase::MakeMesh を void から bool に変更。
+
+	- fk_IndexFaceSet での形状生成時に、隣接関係を定義しないモードの
+		アルゴリズムを変更し、より高確率で形状入力に成功するように
+		修正。
+
+	- fk_TextImage で、UTF16 以外の文字列ファイルを読み込んだときに
+		最終行のみしか表示されない不具合を修正。
+
+	= fk_ShapeViewer で頂点描画操作が反映されない不具合を修正。
+
+============================================================================
+VER2_6_3: (3/14, '02)
+
+	* fk_ErrorMode に FK_ERR_FILE を追加。また、エラー出力ファイル
+		設定用関数として fk_SetErrorFile() 関数を追加。
+
+	- strPrintf() 関数追加。
+
+	- 内部のエラー出力を strPrintf() を積極的に利用し、char による
+		文字列の利用は最小限になるように修正。
+
+	- 位相要素の Print() でストリームを引数に取る方式を削除。
+
+	* fk_DataAccess::printTopology() 関数追加。
+
+	# ドキュメントに変更を反映。
+
+	# ドキュメントの第 6 章を大幅改訂。
+
+	# 新たなサンプル「particle」追加。
+
+============================================================================
+VER2_6_2: (2/28, '02)
+
+	= 利用ライブラリに libimdkcv を追加。
+
+	* 漢字コード変換機能を拡張し、fk_UniStr クラス及び fk_TextImage
+		クラスに各種コードによる入力機能追加。
+
+	= fk_Line::changeLine() 関数の不具合を修正。
+
+============================================================================
+VER2_6_1: (2/20, '02)
+
+	= fk_Modify::pushPolygonVertex() の不具合を修正。
+
+	- fk_Attribute のメモリを動的確保にし、各位相要素を軽量化。
+
+	- fk_DataBase に対し、頻繁な削除と生成に対応する最適化。
+
+	- fk_Material の各関数のデフォルト値設定を削除。
+
+	* fk_Particle クラス追加。
+
+============================================================================
+VER2_6_0_a: (2/1, '02)
+
+	- fk_History::SetMark() 関数で何も履歴が保存されていない場合に
+		落ちる不具合を修正。
+
+============================================================================
+VER2_6_0: (1/31, '02)
+
+	% 形状データベースにアクセスするためのクラスとして fk_DataAccess を
+		新設し、fk_DataBase オブジェクトはユーザが直接扱わないクラス
+		となるように仕様変更。
+
+	% fk_Operation のオイラー操作を全面改訂。
+
+	* fk_History と fk_Operation によるオイラー操作の Undo, Redo 機能追加。
+
+	* fk_Reference* に getENumOnV()、getAllNeighborVOnV() メンバ関数追加。
+
+	* fk_Window::resizeWindow() 関数追加。
+
+	- fk_Vector, fk_Matrix, fk_Angle を fk_BaseObject クラスからの
+		派生クラスから独立系クラスへと変更。
+
+	% fk_Model::setGeom() 関数を廃止。
+
+	- fltk のバグ(仕様?)を回避するため、fk_Window::IsInsideWindow() で
+		マウスがウィンドウ内にあるかどうかを検知するように修正。
+
+	# 新たなサンプル「resize」追加。
+
+============================================================================
+VER2_5_2: (1/13, '02)
+	- fk_Topology クラスの継承関係を変更し、軽量化。
+
+	- fk_Attribute クラスを軽量化。
+
+	- fk_MatrixAdmin クラスを軽量化(ただし、逆行列は毎回計算)。
+
+	# FLTK 1.1.0b10 及び freetype-2.0.6 に対応。
+
+	# ドキュメントを若干修正。
+
+============================================================================
+VER2_5_1: (1/4, '02)
+
+	- ソースコードの TAB サイズを 8 から 4 に変更。
+
+	+ エラー出力モードに FK_OUT_CONSOLE_INTERACTIVE と
+		FK_OUT_CONSOLE_QUEUE を追加。こちらでは stderr ではなく
+		stdout 側に文字列を出力する。
+
+	- 新規行列クラスとして fk_UnitMatrix を作成し、fk_Matrix は
+		fk_UnitMatrix クラスの派生クラスに変更。
+
+	= FLTK の対応プラットフォームを 1.0 系列から 1.1 系列に変更。
+		それに伴い、ESPWS の利用を廃止。
+
+	# MacOS X 10.1.1 に対応。
+
+	= FLTK 1.1.0 でのキーボードフォーカスの扱い方の変更に伴い、
+		fk_ShapeViewer での拡大縮小キーを上下矢印からスペースと
+		シフトを用いたものに変更。
+
+	* fk_Window での getKeyStatus(), getMousePosition(),
+		getMouseStatus() の各メンバ関数において、fk_Window 内での
+		マウスポインタの有無を条件に入れる選択ができるように変更。
+
+	+ fk_RectTexture クラスにリピートモード追加。制御用メンバ関数として
+		setRepeatMode(), getRepeatMode(), setRepeatParam(),
+		getRepeatParam() 関数追加。
+
+	# ドキュメントに変更を反映。
+
+============================================================================
+VER2_5_0: (11/11, '01)
+
+	* fk_UniStr, fk_TextImage クラス追加。また、コンパイル時に FreeType
+		ライブラリをリンクするように Makefile.plane を変更。
+
+	= fk_Image の setRGB 関数で透明度が逆に設定されてしまう不具合を修正。
+
+	= fk_Texture::readBMP() 関数によって、他の fk_Texture オブジェクトの
+		画像が変更されてしまう不具合を修正。
+
+	- fk_Texture でのメモリ解放部分を改善。
+
+	= fk_Model の MaterialType のデフォルトを FK_PARENT_MODE から
+		FK_CHILD_MODE に変更。
+
+	= fk_SolidBase クラスから文字列解析部分を fk_ParserBase クラスに分離。
+
+	* 利用できる特殊キーに FK_F1 ? FK_F12 追加。
+
+	* fk_DisplayLink を継承した fk_Scene 作成。今後、シーン管理は
+		fk_Scene を利用していくことを前提とする。
+
+	* fk_Scene の基底クラスに fk_Fog を追加し、シーン中での霧の効果を
+		サポート。
+
+	= 全体のメンバ関数名称を、公開関数が小文字、非公開関数が大文字で
+		始まるように変更。ただし、既存の関数名については互換性のため
+		しばらくは残す。
+
+	% fk_Window クラスの SetBackGround() 及び SetBlendStatus() を廃止し、
+		新たに作成された fk_Scene に機能を移動。
+
+	- fk_Color や fk_Material のメンバ関数の引数で float が存在したものに
+		関し、double 版を多重定義。
+
+	* fk_ShapeViewer::setBGColor() メンバ関数追加。
+
+	* fk_ShapeViewer クラスで形状を複数持たせられるように拡張。それに付随
+		して fk_ShapeViewer::setShape() メンバ関数で形状に対して
+		ID を付けられるように変更。
+
+	# ドキュメントを、現状を踏まえてかなり大幅に修正加筆。
+
+============================================================================
+VER2_4_5: (7/4, '01)
+
+	= fk_Texture::setImage() を実装。
+
+	- fk_Image そのものがテクスチャオブジェクトとして扱え、setImage と
+		getImage を利用してインスタンスが作成できるように修正。
+
+	= fk_Image で、透過度が完全に逆転する不具合を修正。
+
+============================================================================
+VER2_4_4: (6/25, '01)
+
+	* fk_Solid に DXF ファイル入力追加。
+
+	- STL, RDS, VRML, DXF 各ファイル入力時で、同一頂点判断に
+		Heap を利用することによって位相構造生成を高速化。
+
+	- fk_MeshTexture で、設定以上の三角形 ID が与えられた場合に、
+		自動的に領域を広げるように変更。
+
+	= fk_RectTexture で、サイズが適切に設定されない不具合を修正。
+
+	= fk_Image が 24,32 bit 画像を正常に読み込めない不具合を修正。
+
+	= テクスチャと通常の形状を同時に描画したときに、テクスチャの表示が
+		暗くなる不具合を修正。
+
+	* fk_Modify::pushPolygon() 関数追加。
+
+	# Document を若干修正。
+
+============================================================================
+VER2_4_3: (6/6, '01)
+
+	- Ver2.4.2 の変更によるテクスチャ定義時に落ちる不具合を修正。
+
+	- いくつかのファイルフォーマットでファイルを close し忘れる
+		不具合を修正。
+
+============================================================================
+VER2_4_2: (5/22, '01)
+
+	- fk_ShapeBase, fk_SolidBase, fk_SMFParser, fk_STLParser,
+		fk_HRCParser, fk_RDSParser, fk_VRMLParser, fk_VRMLOut の
+		各クラスを追加し、上位層のクラス構成を大幅に変更。
+		(ただし、ユーザプログラムには影響なし。)
+
+	- fk_Solid 中にあったプリミティブ生成用関数を fk_Modify に移行。
+
+============================================================================
+VER2_4_1: (5/21, '01)
+
+	* fk_DisplayLink クラスに clearDisplay() と clearModel() メンバ関数
+		追加。
+
+	* fk_Window::DrawWindow() で、実際に再描画するかどうかの引数を
+		取れるように修正。(ただし、イベントは必ず取得する。)
+
+	= fk_Model::getInhAngle() を実装。
+
+	- fk_ShapeViewer のファイル入出力でハングするバグを修正。
+
+	= fk_ShapeViewer のファイルダイアログに ESPWS の FileChooser を採用。
+
+	= fk_ShapeViewer の VRML 出力時で、上書き保存の場合は確認の
+		ダイアログが表示されるように変更。
+
+	* fk_Solid::isEmpty() 関数追加。
+
+	- sprintf を snprintf に、strcpy を strncpy に全て変更。
+
+	- fk_ErrorDataBase クラスを新規に作成し、エラー制御を柔軟に
+		行えるように改変。
+
+	= fk_ShapeViewer で、座標軸の表示・非表示および大きさの設定が
+		可能な機能を追加。
+
+	= fk_ShapeViewer で、Edge および Vertex のモデルに対しても
+		色設定ができる機能を追加。
+
+	+ fk_Solid::setLinePos(int, int, fk_Vector) を追加。
+
+	* 複数の線分を持つ fk_Line オブジェクトに対して、特定の
+		頂点を移動できる fk_Line::setVertex(int, int, fk_Vector)
+		関数を追加。
+
+	= VRML 入力機能のうち、単語検索で復帰コードを空白として認識しない
+		バグを修正。
+
+	- Cygwin の sscanf のバグを回避するため、sscanf を全て独自
+		文字列処理ルーチンに変更。
+
+	= fk_ShapeViewer で、STL および HRC ファイル入力機能追加。
+
+============================================================================
+VER2_4_0: (3/6, '01)
+
+	# ソースツリーを FK, src, samples に分割。
+
+	# C++ ソースの拡張子を .cc から .cxx に変更。(for VC++)
+
+	# VC++ 6.0 に対応。
+
+	* fk_Model::setDrawMode に追加できるモードに、裏面表示の
+		FK_BACK_POLYMODE と 両面表示の FK_FRONTBACK_POLYMODE を追加。
+
+	* fk_ShapeViewer クラス追加。
+
+	* fk_Solid クラスに makeIFSet() と moveVPosition() メンバ関数追加。
+
+	- 複数のウィンドウでディスプレイリストを共有した場合にビューポートが
+		初期化されないバグを修正。
+
+	= fk_Window::GetSpecialKeyStatus() において、fk_Window 内での
+		マウスポインタの有無を条件に入れる選択ができるように変更。
+
+============================================================================
+VER2_3_9: (2/26, '01)
+
+	# Cygwin と Mingw の統合を踏まえ、Windows 上の環境を
+		Mingw から Cygwin に変更。
+
+	- できるだけ全てのクラスが fk_BaseObject の派生クラスになるように変更。
+
+	- 新 Cygwin で feof が正常に動作しないのに対応。
+
+	# 全てのサンプルで、ウィンドウを最小化してから最大化できない
+		バグを修正。
+
+	- VRML 入力で、キーワード検索部分の不具合を修正。これにより、
+		Texture が定義されたファイルを正常に読み込めるようになった。
+
+	- friend キーワードを使って、全体的に不要な public 関数を削除。
+
+	- コンストラクタ、デストラクタ中の無駄な処理を削除。
+
+	* テクスチャマッピング用のクラス fk_RectTexture, fk_TriTexture,
+		fk_MeshTexture 追加。
+
+============================================================================
+VER2_3_8: (12/6, '00)
+
+	# マテリアルの継承関係部分の変更に伴い、viewer.cc のモデルに
+		FK_PARENT_MODE 属性を追加するように修正。
+
+	# Windows 上のみ、FLTK の日本語パッチに対応
+
+============================================================================
+VER2_3_7: (10/25, '00)
+
+	* VRML 出力で、四角形を三角形に分割して出力する機能を追加。
+
+	= fk_Polyline や fk_Point 等の Shape 系クラスで、作成し忘れていた
+		メンバ関数 (fk_Polyline::pushVertex 等) を作成。
+
+	% マテリアル属性関連の仕様を変更。詳細はマニュアルを参照。
+
+	* fk_Line::changeLine() 関数追加。
+
+	= fk_DivideVec() 関数を三次元版に修正。(前のものは正常動作
+		しなかった。)
+
+	= fk_InitMaterial() 関数で、完全には初期化されないバグを修正。
+
+	- fk_Window にて、NO_GLU_LIBRARY フラグを追加。これにより、
+		glu ライブラリがサポートされていない環境でもコンパイル可能に。
+
+	# ターゲットの FreeBSD を、FreeBSD 3.x と FreeBSD 4.x に分割。
+		(正確には、XFree86 3.x と XFree86 4.x に分割という意味。)
+
+	* fk_Solid::writeVRMLFile で、CoordinateInterpolator に対応。
+
+============================================================================
+VER2_3_6: (7/28, '00)
+
+	* fk_Solid::readRDSFile() 関数追加。
+
+	* fk_Solid::writeVRMLFile() 関数追加。
+
+	= fk_Solid::readVRMLFile() 中で、DESIGNBASE からの出力ファイルで
+		落ちる問題やマテリアルが反映されないバグを修正。
+
+	* fk_Model::setMaterialMode() 関数追加。それに伴い、Window.cc を
+		若干修正。これにより、fk_Model から個別マテリアルの使用を
+		制御できるようになった。
+
+	+ fk_DataBase::AllPrint() を、AllPrint(string) で出力ファイル名を
+		与えられるように修正。引数を省略した場合や、空文字列が
+		与えられた場合はこれまで通り標準出力に出力される。
+		これに伴い、各位相要素の print() 関数の仕様を若干変更。
+
+	* fk_Modify::CheckContract(fk_Edge *) 関数追加。また、
+		fk_Modify::ContractEdge(fk_Edge *) 関数は、この
+		CheckContract() で false が返る場合には、処理せずに
+		false を返すように修正。
+
+	= fk_Solid::readRDSFile() で、メタセコイアが出力する妙な
+		IndexFaceSet を Refine して完全な位相を作成できるように修正。
+
+	- fk_IndexFaceSet 中を、より非多様体への厳密なチェックが
+		行えるように改良。(具体的には、三枚以上の面と接する稜線が
+		出る場合への対処。)
+
+	+ fk_IndexFaceSet::getEdgeCountNum() 関数追加。
+
+	= VRML 書き出しのバグ修正。
+
+============================================================================
+VER2_3_5: (6/13, '00)
+
+	* fk_Attribute::deleteAttr*() 関数群を追加。これに伴い、
+		属性関係の実装を若干変更。
+
+	= fk_Solid::readVRMLFile() のバグを修正。
+
+	- 位相要素の描画モードを変更した場合に、マテリアル ID が初期化
+		されていたものをされないように変更。
+
+	= fk_ReferenceL2::getAllHOnL() のバグを修正。(by halim)	
+
+	# Ver2.3.5 での変更点を Document に反映。
+
+============================================================================
+VER2_3_4: (5/15, '00)
+
+	# コンパイラを gcc-2.95 から gcc-2.95.2 に変更。
+
+	# ターゲットから FreeBSD2.2.8, SunOS4.1.4, NetBSD, SGI を削除し、
+		Linux, Cygwin (Mingw32) を追加。
+
+	- fk_Operation クラスの MakeWingedEdge() および
+		DeleteWingedEdge() を、それぞれ MakeStickEdge()、
+		DeleteStickEdge() に名称変更。
+
+	# Ver2.3.2 ? 2.3.4 までの変更を Document に反映。
+
+============================================================================
+VER2_3_3: (8/21, '99)
+
+	= fk_Operation::DeleteWingedEdge() のバグを修正。
+
+	- fk_Modify::RemoveVertexInLoop() を、独立頂点やウィング稜線の
+		端点に対しても対応。
+
+	- fk_Matrix::init() の引数を int から fk_MatrixInitType に変更。
+
+	* fk_HVector の w 要素も含む内積二項演算子追加。
+
+	- fk_Matrix::inverse() の返り値を、自身から結果判定に変更。
+
+	- fk_Reference クラスの前メンバ関数において、引数が NULL が
+		来た場合のエラー処理を追加。
+
+	- fk_IDAdmin クラスライブラリを最適化。
+
+============================================================================
+VER2_3_2: (8/11, '99)
+
+	# コンパイラを egcs-1.1.2 から gcc-2.95 に変更。それに伴い、
+		Matrix.cc を若干修正。
+
+	= スケーリングがおかしなバグを修正。
+
+	- 描画ルーチンを最適化。
+
+	- fk_Attribute のコンテナを map ベースから vector ベースに変更。
+		(Solaris + gcc-2.95 ではなぜかコンパイルが通らないため。)
+
+	* fk_Operation クラス中に、MakeWingedEdge() メンバ関数と
+		DeleteWingedEdge() メンバ関数追加。それに伴い、
+		DeleteDefEdge() メンバ関数ではウィング稜線を削除
+		できないように変更。
+
+	- fk_DataBase::exist 系メンバ関数群追加。
+
+	- fk_DataBase::delete 系メンバ関数群を若干修正。
+
+	# Document の「はじめに」を若干修正。
+
+============================================================================
+VER2_3_1: (7/21, '99)
+
+	* fk_Solid::allClear() メンバ関数追加。
+
+	# Document に新たに位相要素に対するマテリアル設定と属性設定の
+		節を設け、さらに全体の誤植や誤りを多数修正。
+
+============================================================================
+VER2_3_0: (7/19, '99)
+
+	- fk_MaterialType 中から FK_ID_MODE を廃止し、
+		FK_PARENT_MODE および FK_CHILD_MODE を追加。
+		Material.cc、Window.cc でそれを踏まえ修正。
+		これにより、任意の位相要素に対して描画の有無の
+		制御に対応。
+
+	# サポート OS から FreeBSD 3.1 を削除。
+
+	# コンパイラを gcc-2.8.1 から egcs-1.1.2 に変更。
+
+	* fk_DisplayLink::setProjection() メンバ関数を追加し、
+		ディスプレイリストに対する投影法の設定に対応。
+		また、それに伴って Window.cc を修正。
+
+	* fk_PickData クラス追加。
+
+	* fk_Window::GetPickData() メンバ関数追加。それに伴って
+		Window.cc を大幅修正。
+
+	+ fk_DataBase::get?Num() メンバ関数追加。
+
+	+ fk_DataBase::getLast?() メンバ関数追加。
+
+	# Makefile の depend ソースリストにサンプルのコードを追加。
+
+	= fk_Shape の派生クラスである fk_Polygon, fk_Line, fk_Polyline,
+		fk_Closedline, fk_Point, fk_Block, fk_Circle, fk_Sphere
+		の各クラスに関して、これまで独自に内部データを保持して
+		いたのをやめ、すべて fk_Solid の派生クラスとし、実体は
+		fk_Solid であることに変更。それを踏まえ、Shape 関連と
+		Window 描画関連を大幅に修正。
+
+	* 上の修正を踏まえ、次の public メンバ関数群を fk_Solid に追加。
+		makePolygon, pushPolygonVertex, makePolyline,
+		pushPolylineVertex, makePoint, pushPointVertex,
+		makeLines, pushLines, setLinePos, makeBlock,
+		setBlockSize, setBlockScale, makeCircle, setCircleRadius,
+		setCircleDivide, setCircleScale, makeSphere,
+		setSphereRadius, setSphereDivide, setSphereScale
+
+	- fk_Shape から virtual メンバ関数だった getVertexPos,
+		getVertexNorm, getElementNum を廃止。
+
+	% fk_Solid::setSmoothMode() メンバ関数追加。前 Version までは
+		fk_Sphere ではスムースシェーディングを行っていたが、
+		今 Version からはこの関数を明示的に呼ばなければ
+		スムースシェーディングは行わない。これを踏まえ、
+		fk_Vertex に getNormal() 及び getNormalP メンバ関数を
+		追加し、fk_Operation の全オペレーション及び
+		fk_Window の描画ルーチンを修正。
+
+	* fk_Line::pushLine() メンバ関数追加。
+
+	- fk_Solid::readVRMLFile() 内で、SGI の VRML1.0 → 2.0 コンバータが
+		出力するファイルに対応。
+
+	# Document に変更を反映するとともに、新たに形状の参照と操作の
+		章を追加。
+
+============================================================================
+VER2_2_10: (7/13, '99)
+
+	* fk_Solid::readHRCFile() メンバ関数追加。
+
+	= fk_ReferenceL2 クラス中の getAllVOnL() メンバ関数と
+		getAllHOnL() メンバ関数のバグを修正。
+
+	= fk_Solid::readSMFData() メンバ関数において、Face 情報に
+		マテリアル情報が付加されてないデータに対応。
+
+	# Document に変更を反映するとともに、若干改訂増筆。
+
+============================================================================
+VER2_2_9: (7/10, '99)
+
+	+ fk_MaterialAdmin::setPalette() メンバ関数追加。
+
+	- fk_MaterialAdmin::setElemMaterail において、ID 配列の大きさを
+		自動的に確保するように修正。
+
+	- fk_MaterialAdmin の各メンバを protected から private に変更。
+		それに伴い、Shape.cc 及び Solid.cc を修正。
+
+	- MatPal.h にて、extern が MatPal.cc 中のみについてしまうのを
+		逆になるように修正。
+
+	- fk_MaterialAdmin::setObjMaterialID() メンバ関数中のバグを修正。
+
+	= fk_Model 中で、DrawSize 及び DrawWidth が初期化されない
+		バグを修正。
+
+	- fk_MaterialAdmin::setMaterialMode() メンバ関数追加。
+
+	- fk_MaterialType 中に FK_SINGLE_DATA を付加。また、
+		Material.cc、Solid.cc、Window.cc でそれを踏まえ修正。
+
+	* fk_Operation::MoveVertex() メンバ関数追加。
+		fk_Vertex::setPosition を直接使用した場合、ループの
+		法線ベクトル情報が更新されないため、頂点移動はこちらを
+		使用しなければならない。また、これを踏まえて
+		Operation.cc と Vertex.cc を若干修正。
+
+	= fk_Solid::readSMFFile() メンバ関数において、三角形でない
+		多角形情報の読み込みをサポート。
+
+============================================================================
+VER2_2_8: (7/6, '99)
+
+	* fk_Model::setSize() と fk_Model::setWidth() 追加。
+
+	= fk_Solid オブジェクトの描画において、ID 保持モードが
+		点描画や線描画でも使用できるように修正。
+
+	= マテリアル定義にて、setAlpha() メンバ関数 (透明度の制御)
+		が描画に反映されるように修正。
+
+	* fk_Window::SetBlendStatus() 及び fk_Window::GetBlendStatus()
+		メンバ関数追加。
+
+	# Makefile.plane のソースの順番を変更。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_2_7: (6/24, '99)
+
+	# Makefile を FreeBSD3.1 と 3.2 の両方に対応。
+
+	* fk_Solid クラスにて、readSTLFile() メンバ関数追加。
+
+============================================================================
+VER2_2_6: (6/3, '99)
+
+	* fk_Model::setDrawMode() メンバ関数および getDrawMode()
+		メンバ関数追加。これに対応するため、Window.cc 中の
+		描画ルーチンを大幅追加。
+
+	# 新たなサンプル「car」を追加。
+
+	# Ver2.2.4 ? 2.2.6 までの変更を Document に反映。
+
+============================================================================
+VER2_2_5: (6/1, '99)
+
+	= MatAdmin.cc 中で、Lo* 系と Gl* 系の整合性が合っていなかった
+		バグを修正。Window.cc 中の描画ルーチンも若干修正。
+
+	- fk_Matrix::makeEuler のヘディング角の正負が逆転していた
+		バグを修正。
+
+	+ fk_Angle::print() メンバ関数追加。
+
+	* fk_MatAdmin::GlVec() メンバ関数追加。
+
+	= fk_Polygon の法線設定を描画に反映させるよう Window.cc を修正。
+
+============================================================================
+VER2_2_4: (5/27, '99)
+
+	- 投影法を定義する fk_ProjectBase、fk_Perspective、fk_Ortho
+		クラスを定義。ただし、本体にはまだ反映していない。
+
+	= Window.cc 中で、モデル中で Shape が定義されていない場合に
+		落ちるバグを修正。
+
+============================================================================
+VER2_2_3: (5/21, '99)
+
+	= fk_Solid において、読み込んだポリゴンファイルが結果的に
+		非多様体を構成する場合にソリッドとしての整合性が
+		とれなくなるのを回避するため、オリジナルの
+		IndexFaceSet をそのまま使うモードを作成。その際は
+		(変形操作を前提にしないため) 半定義稜線の
+		接続関係を構築することを(時間がかかりすぎるため)回避。
+		この変更に伴い、fk_IndexFaceSet クラスの構成も
+		若干変更。
+
+	- fk_IndexFaceSet 中のバグを修正。
+
+	* fk_MaterialAdmin::setElemMaterial での変更が fk_Block において
+		実際に描画時に有効になるように修正。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_2_2: (5/19, '99)
+
+	- fk_MaterialAdmin クラスにおいて、データ保持モードと
+		ID 保持モードによって保存法の区別ができるように
+		修正。これにより、各位相要素自身がマテリアルの ID を
+		保持することが可能となったので、位相変化に対応
+		できるようになった。また、メンバ関数やメンバの
+		名称を若干修正。(「Mat」という略称が Material と
+		Matrix の両方を表すので紛らわしいため。)
+
+	* fk_Solid クラスにて、readVRMLFile() メンバ関数追加。
+
+	# サンプル「viewer」での入力ファイル形式を SMF から VRML に変更。
+
+	- Makefile の構成を若干変更し、サンプル「test」を「box」に変更。
+		また、TARGET=test とすることで test プログラムの
+		コンパイルが可能となった。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_2_1: (5/11, '99)
+
+	* fk_Window クラスに SetBackGround() メンバ関数を追加。
+
+	* fk_Window クラスに GetKeyStatus(), GetSpecialKeyStatus(),
+		GetLastKey(), GetMousePosition(), GetMouseStatus() の
+		各イベント関連メンバ関数追加。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_2_0: (5/6, '99)
+
+	% これまで扱っていた「Geometry」を「Shape」に変更。ただし、
+		fk_Model::setGeom() だけは互換性のため存続。
+
+	- ソリッドカーネル部において、fk_IndexFaceSet クラスの中身を
+		改良。これにより、立体データが不完全ソリッドであっても
+		二次元多様体であれば Half Edge 構造を構築することが
+		可能となった。
+
+	- fk_Attribute クラスの派生クラスを fk_Topology から
+		fk_Shape に変更し、さらに fk_Topology は fk_Shape の
+		派生クラスに変更。また、これに伴って
+		fk_Topology の各派生クラスの内容を若干修正。
+
+	- fk_MaterialAdmin クラスを追加し、fk_Shape クラス中の
+		マテリアル管理関連のメンバとメンバ関数をこちらに
+		移動。
+
+	* fk_Loop クラスに getNormal() メンバ関数を追加。また、
+		これに伴って modifyLoop() メンバ関数を追加し、
+		fk_Operation の各メンバ関数及び fk_Vertex::setPosition()
+		にループの修正情報を modifyLoop() を使って
+		fk_Loop オブジェクトに伝えるように修正。
+
+	= fk_Model で、スケーリングが描画に反映されないバグを修正。
+
+	* fk_Solid クラスを fk_Shape クラスの派生クラスとし、
+		他の fk_Shape 派生クラス群と同様に fk_Model::setShape()
+		で形状として定義し、fk_Window 中に描画できる機能を
+		追加。(ただし、まだ fk_Vertex, fk_Half, fk_Edge, fk_Loop
+		には未対応。)
+
+	# 新たなサンプル「viewer」を追加。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_1_1: (5/3, '99)
+
+	= fk_Window::LoadModelMatrix() の不具合のため、親子関係が
+		子モデルの位置に反映されないバグを修正。
+
+	* 点光源、スポットライトの使用を可能に。また、fk_Light の
+		メンバ及び関数を若干修正。
+
+	# 新たなサンプル「ball」を追加。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_1_0: (5/1, '99)
+
+	% fk_Window クラスを Fl_Gl_Window クラスの派生クラスに変更。
+		これにより、ウィンドウの初期化はコンストラクタ内で
+		行われることになるので EasyInit() 関数は廃止。
+		また、描画ルーチン内で OpenGL のディスプレイリストを
+		利用していたのをやめる。
+
+	= fk_Window::RecalcModelView と fk_Window::LoadModelMatrix を、
+		glMultMatrixd ではなく glTranslated, glRotated, glScaled
+		を使用するように変更。これにより、立体が時々ピカピカ
+		光るバグを回避。(ただし、fk_MatAdmin::getInhPosition()
+		などの存続のため fk_MatAdmin の行列演算部分は存続。)
+
+	* fk_Model::getParent() 追加。
+
+	* fk_MatAdmin::getScaleMode() 追加。
+
+	# Document に変更を反映。
+
+============================================================================
+VER2_0_0: (4/30, '99)
+	# OpenGL対応版 FK システム初期 Version。
+

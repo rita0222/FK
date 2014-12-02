@@ -1,0 +1,270 @@
+\documentclass[a4j]{jarticle}
+
+\usepackage{ascmac}
+
+\textwidth=500pt
+\textheight=750pt
+\topmargin=0pt
+\headheight=-35pt
+\headsep=3pt
+\oddsidemargin=-30pt
+\evensidemargin=-30pt
+
+\begin{document}
+\begin{center}
+{\LARGE Fine Kernel ToolKit システム (MinGW 版) \\
+	セットアップマニュアル} \\ ~ \\
+{\Large FineKernel Project} \\
+(2014 年 10/6 版)
+\end{center}
+
+※注: 本書の「\verb+\+」(バックスラッシュ)記号は、
+フォントやキーボードによって「¥」と表示されるので、適宜読み替えること。
+
+\section{アカウント権限設定}
+利用を想定するアカウントの種類が「標準ユーザー」であった場合、
+セットアップ時は種類を「管理者」にしておく必要がある。
+以下のような手順を実行しておくこと。
+\subsection{Windows 7 の場合}
+\begin{enumerate}
+ \item コントロールパネルを開く。
+ \item 「ユーザーアカウントと家族のための安全設定」の項目にある
+	「ユーザーアカウントの追加または削除」を選択する。
+ \item 利用を想定するアカウント名を選択する。
+ \item 左側のリストから「アカウントの種類の変更」を選択する。
+ \item 「管理者」を選択し、「アカウントの種類の変更」ボタンを押す。
+\end{enumerate}
+
+\subsection{Windows 8/8.1 の場合}
+\begin{enumerate}
+ \item コントロールパネルを開く。
+ \item 「ユーザーアカウントとファミリーセーフティ」の下にある
+	「アカウントの種類の変更」を選択する。
+ \item 利用を想定するアカウント名を選択する。
+ \item 左側のリストから「アカウントの種類の変更」を選択する。
+ \item 「管理者」を選択し、「アカウントの種類の変更」ボタンを押す。
+\end{enumerate}
+
+\section{MinGW のセットアップ}
+ここでは、フリーの開発環境である MinGW の
+セットアップを行う。まず、以下の手順で MinGW のインストーラを取得する。
+現在 MinGW の本家で配布されているパッケージは
+マルチスレッドに対応していないので、
+「MinGW-w64」という派生プロジェクトの配布物を利用する。
+
+\begin{enumerate}
+ \item Webブラウザで
+	「\verb+http://sourceforge.net/projects/mingw-w64/files/+」にアクセスする。
+
+ \item 表示されるリストを、以下の順番でリンクをたどっていく。
+ \begin{enumerate}
+	\item Toolchains targetting Win32
+	\item Personal Builds
+	\item mingw-builds
+	\item Installer
+	\item mingw-w64-install.exe
+ \end{enumerate}
+
+ \item ダウンロードした「mingw-w64-install.exe」を実行する。
+\end{enumerate}
+
+次に、ダウンロードしたインストーラを起動し、以下の手順を実行する。
+なお、アカウントの選択画面が表示された場合は、
+利用を想定するアカウントを選択しておくこと。
+\begin{enumerate}
+ \item 「Next \(>\)」を押す。
+ \item 次に表示されるダイアログで、各項目を以下のように選択しておく。	
+	\begin{center}
+	\begin{tabular}{|l|l|}
+		\hline
+		項目名 & 選択 \\ \hline
+		Version &  4.9.1 \\ \hline
+		Architecture & x86\_64 \\ \hline
+		Threads & posix \\ \hline
+		Exception & seh \\ \hline
+		Build revision & 1 \\ \hline
+	\end{tabular}
+	\end{center}
+ \item 「Next \(>\)」を押す。
+ \item 「Destination folder」に、MinGWをインストールする場所を指定する。
+	デフォルトの状態は冗長で、後の設定が面倒となるので、
+	ここでは「\verb+C:\MinGW+」と入力することを薦める。
+ \item 「Create shortcuts in Start Menu」の項目のチェックを外しておく。
+ \item 「Next \(>\)」を押す。
+ \item ダウンロードとインストールが行われるので、しばらく待つ。
+ \item インストールが終わったら「Next \(>\)」を押す。
+ \item 「Finish」を押す。
+\end{enumerate}
+
+\subsection*{補足}
+もしインストールの最中に「ERROR res」というダイアログが出てしまう場合は、
+以下の手順により同様の状態にすることができる。
+\begin{enumerate}
+ \item Webブラウザで
+	「\verb+http://sourceforge.net/projects/mingw-w64/files/+」にアクセスする。
+
+ \item 表示されるリストを、以下の順番でリンクをたどっていく。
+ \begin{enumerate}
+	\item Toolchains targetting Win64
+	\item Personal Builds
+	\item mingw-builds
+	\item 4.9.1
+	\item threads-posix
+	\item seh
+	\item x86\_64-4.9.1-release-posix-seh-rt\_v3-rev1.7z
+ \end{enumerate}
+
+ \item ダウンロードした「x86\_64-4.9.1-release-posix-seh-rt\_v3-rev1.7z」を、
+	7z 形式が展開できる解凍ソフト (PeaZip等) で解凍する。
+
+ \item Cドライブのトップに「MinGW」フォルダを作成し、
+	そこに解凍した「mingw64」フォルダを移動する。
+\end{enumerate}
+
+\section{FK (MinGW 版)のインストールとセットアップ}
+次に Fine Kernel ToolKit システム(以下「FK」)のセットアップを
+以下の手順で行う。
+
+\begin{enumerate}
+\item 以下の URL から、「MinGW 用インストーラ」項目にある
+	インストーラをダウンロードする。
+	\begin{center}
+	\begin{tabular}{c}
+	\verb+http://sourceforge.jp/projects/fktoolkit/releases/+
+	\end{tabular}
+	\end{center}
+
+\item インストーラを起動し、指示に従ってインストールする。
+	
+\item もし FK を \verb+C:\FK_Ming+ 以外にインストールした場合は、
+	FK\_Ming フォルダの中の bin フォルダの中にある、
+	fkming.bat というファイルをテキストエディタで開き、3 行目の
+	「\verb+SET FKPATH=+」
+	の後に FK\_Ming を展開した場所を指定する。
+\end{enumerate}
+
+\section{実行パスの設定}
+次に、MinGW と FK の実行環境を実行パスに追加する。
+設定方法は以下の通りである。(Win7,Win8/8.1 共通)
+\begin{enumerate}
+ \item コントロールパネルを開き、
+	「システムとセキュリティ」を選択する。
+ \item 「システム」を選択する。
+ \item 左側に出るリスト中から「システムの詳細設定」を選択する。
+ \item もしこの時点で管理者パスワードを求めるダイアログがでてきたら、
+	開発時に用いるアカウントを選択してパスワードを入力する。
+ \item ダイアログ中の「詳細設定」タブを選択し、「環境変数」ボタンを押す。
+ \item アカウント選択のダイアログが表示された場合、
+	利用を想定するアカウントを選択しパスワードを入力する。
+ \item 上下にある表のうち、上のリストを参照する。
+ 	もし変数項目に「PATH」というものがなかったら「新規」ボタンを、
+ 	あったら「PATH」項目を選択して「編集」ボタンを押す。
+ \item 「変数名」に「PATH」を、「値」に
+	「\verb+C:\MinGW\mingw64\bin;C:\FK_Ming\bin+」
+	を入力する。もし既に値が設定されている場合、
+	その行末にセミコロンを入力し、
+	その後に「\verb+C:\MinGW\mingw64\bin;C:\FK_Ming\bin+」と入力する。
+	もし MinGW および FK\_Ming を C ドライブの直下以外に
+	インストールした場合は、上記を適宜読み替えること。
+ \item 「OK」を押す。
+ \item 「OK」を押す。
+ \item 「OK」を押す。
+\end{enumerate}
+この時点で管理者権限は必要としなくなるので、
+アカウントを標準ユーザーに戻したい場合は第1章の手順でアカウントの種類を
+変更しておくとよい。
+
+\appendix
+
+\section{TextPad のセットアップ}
+TextPad はシェアウェアのエディタで、
+「\verb+http://japan.textpad.com/+」からダウンロードして利用することができる。
+TextPad は、任意のコマンドを登録しメニューから呼び出す機能があり、
+これを利用するとコマンドプロンプトを用いずに開発することができる。
+
+以下の手順を実行することによって TextPad 中で
+メニューによるコンパイルや実行が可能となる。
+\begin{enumerate}
+\item TextPad を起動する。
+
+\item メニュー中の「設定」→「環境設定」を選択する。
+
+\item 出てきたダイアログの左側に表示されているツリーメニュー中の
+	「ツールマネージャー」という文字を選択する。
+
+\item 右上にある「追加」ボタンを押し、
+	出てくるメニューで「DOS コマンド」を選択する。
+
+\item 新たに現れたダイアログに「FK コンパイル」と入力して「OK」を押す。
+
+\item 再び「追加」ボタンで「DOS コマンド」を選択し、今度は「FK 実行」と入力して
+	「OK」を押す。
+
+\item 「適用」ボタンを押す。
+
+\item 左側のツリーメニューの「ツールマネージャー」の左側にある
+	+ 文字をクリックし、ツリーを展開する。すると、
+	「FK コンパイル」や「FK 実行」がツリーメニュー中に表示される。
+
+\item ツリーメニュー中の「FK コンパイル」を選択する。
+
+\item  右上にある「引数」というテキストボックスの中を、
+	「\verb+fkming $File -o $BaseName+」という内容に変更する。
+
+\item  「適用」ボタンを押す。
+
+\item  同様に、ツリーメニューから「FK 実行」を選択し、
+	「引数」テキストボックスの
+	内容を「\verb+$BaseName+」に変更して「適用」を押す。
+
+\item 「OK」を押す。
+\end{enumerate}
+
+\section{TeraPadのセットアップ}
+TeraPad はフリーのエディタで、
+「窓の杜」のサイト等からダウンロードして利用することができる。
+TeraPad も、TextPad と同様に任意のコマンドを登録しメニューから呼び出す機能があり、
+これを利用するとコマンドプロンプトを用いずに開発することができる。
+
+以下の手順を実行することによって、
+TeraPad 中でメニューによるコンパイルや実行が可能となる。
+
+\begin{enumerate}
+
+\item TeraPad を起動する。
+
+\item メニュー中の「ツール」→「ツールの設定」を選択する。
+
+\item 出てきたダイアログの「追加」ボタンを押す。
+
+\item 「名前」に「FKコンパイル」と入力する。
+
+\item 「実行ファイル」に「\verb+C:\FK_Ming\bin\fkming_p.bat+」と入力する。
+
+\item 「コマンドラインパラメータ」に「\verb+%d/%n -o %d/%b+」と入力する。
+
+\item 「ファイルの上書き保存」は「上書き保存する」を選択しておく。
+
+\item 「キー」にカーソールを置き、Ctrlキーを押しながら「1」を押す。
+
+\item 「OK」を押す。
+
+\item 「追加」を押す。
+
+\item 「名前」に「FK実行」と入力する。
+
+\item 「実行ファイル」は空欄のままにしておく。
+
+\item 「コマンドラインパラメータ」に「\verb+%d/%b+」と入力する。
+
+\item 「ファイルの上書き保存」は「上書き保存しない」を選択しておく。
+
+\item 「キー」にカーソールを置き、Ctrlキーを押しながら「2」を押す。
+
+\item 「OK」を押す。
+
+\item 「OK」を押す。
+\end{enumerate}
+この手順により、Ctrl-1 でコンパイル、Ctrl-2 で実行を行うことができる。
+
+\end{document}

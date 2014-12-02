@@ -1,0 +1,266 @@
+﻿\chapter{条件分岐とアニメーション}
+\section{アニメーション} \label{sec:03-anim}
+\begin{itembox}[l]{アニメーション}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        block(10.0, 10.0, 10.0);
+ 7:     fk_Model        model;
+ 8: 
+ 9:     model.setShape(&block);
+10:     model.setMaterial(Yellow);
+11:     window.entry(&model);
+12:     window.setSize(800, 600);
+13:     window.setBGColor(0.3, 0.6, 0.8);
+14:     window.open();
+15: 
+16:     while(window.update() == true) {
+17:         model.glTranslate(0.1, 0.0, 0.0);
+18:     }
+19: 
+20:     return 0;
+21: }
+\end{verbatim}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item 16行目の while についての解説はこれまで割愛していましたが、
+	これは for 文と同様に繰り返しを実現するための文法です。\\ ~ \\
+	\begin{shadebox}
+	\begin{verbatim}
+	while(繰り返し条件) {
+	        実行文1;
+	        実行文2;
+	           :
+	}
+	\end{verbatim}
+	\end{shadebox} \\ ~ \\
+	つまり、while は for に対して「初期処理」と「繰り返し処理」
+	を省いたものと同一です。実際、16行目は
+	\begin{screen}
+	\begin{verbatim}
+	    for(;window.update() == true;) {
+	\end{verbatim}
+	\end{screen}
+	と記述しても、まったく同様に動作します。
+
+ \item whileの中身の「\verb+window.update() == true+」の意味ですが、
+	ここでは2つの事が同時に行われています。
+	\begin{enumerate}
+	 \item 現在のモデルの状況に合わせて画面を更新する。
+	 \item ウィンドウが開かれているかどうかチェックする。
+	\end{enumerate}
+	whileの中では、ウィンドウが開かれている場合に繰り返すように
+	なっています。ウィンドウが閉じられた場合(ウィンドウ右上の
+	×印を押す、ESCキーが押されるなど)に、whileの条件文が
+	満たされなくなり、while文の外に出ます。
+	22行目にある「\verb+return 0;+」というのは、
+	C++プログラムの実行を終了することを意味するもので、
+	これによってアプリケーションが終了します。
+
+ \item 17行目の「glTranslate()」関数は、モデルを平行移動するものです。
+	今回は直方体を \((0.1, 0, 0)\) だけ移動させています。
+	これはわずかな移動量ですが、繰り返しで何度も移動することによって、
+	パラパラ漫画の要領でスムースに移動するアニメーションとして
+	表現されているわけです。
+
+ \item 17行目の内容を単に10行連続で記述すると、10コマ分のアニメーションに
+	なると考えがちですが、実際には\((1, 0, 0)\)という移動量で
+	一回だけ移動が行われるだけになります。
+	なぜなら、画面更新は「\verb+window.update()+」を通った
+	タイミングで行われるからです。アニメーションプログラムは、
+	\begin{enumerate}
+	 \item 次の瞬間のモデルの状態(移動や変形など)を設定しておく。
+	 \item 画面を再描画する。
+	\end{enumerate}
+	の繰り返しになります。
+	そのため、多くのモデルを同時に変更させていく必要があるため、
+	プログラムはとても複雑になっていきます。
+\end{itemize}
+
+\section{キー入力とif文} \label{sec:03-key}
+\begin{itembox}[l]{キー入力とif文}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        block(10.0, 10.0, 10.0);
+ 7:     fk_Model        model;
+ 8: 
+ 9:     model.setShape(&block);
+10:     model.setMaterial(Yellow);
+11:     window.entry(&model);
+12:     window.setSize(800, 600);
+13:     window.setBGColor(0.3, 0.6, 0.8);
+14:     window.open();
+15: 
+16:     while(window.update() == true) {
+17:         if(window.getKeyStatus('R') == FK_SW_PRESS) {
+18:             model.glTranslate(0.1, 0.0, 0.0);
+19:         }
+20:         if(window.getKeyStatus('L') == FK_SW_PRESS) {
+21:             model.glTranslate(-0.1, 0.0, 0.0);
+22:         } 
+23:     }
+24: 
+25:     return 0;
+26: }
+\end{verbatim}
+\end{itembox}
+
+\subsection*{解説}
+\begin{itemize}
+ \item ここでは、「\textbf{if文}」という新しい文法が出てきます。
+	if文は、ある条件によって処理内容を変えていくときに使います。
+	17行目の記述は「現在 R キーが押されているかどうか」を
+	判定しています。括弧の中のシングルクォーテーションで囲まれている
+	文字が、調査対象キーを意味します。
+
+ \item if文の文法は、以下の様にできています。\\ ~ \\
+	\begin{shadebox}
+	\begin{verbatim}
+	if(条件1) {
+	    // 条件1が正しい場合
+	    実行文1;
+	} else if(条件2) {
+	    // 条件1が正しくなくて、
+	    // 条件2が正しい場合
+	    実行文2;
+	} else {
+	    // 条件1,条件2が共に正しくない場合
+	    実行文3;
+	}
+	\end{verbatim}
+	\end{shadebox} \\ ~ \\
+	このように、ある条件が成り立たない場合は、
+	「else」以下にさらに処理を記述することが可能です。
+	else 以下の部分は(今回の例のように)省略することもできます。
+\end{itemize}
+
+\section{複雑な制御} \label{sec:03-nest}
+\begin{itembox}[l]{if文の入れ子} \label{sec:03-pos}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        block(10.0, 10.0, 10.0);
+ 7:     fk_Model        model;
+ 8:     fk_Vector       pos;
+ 9:     int             flag;
+10: 
+11:     model.setShape(&block);
+12:     model.setMaterial(Yellow);
+13:     window.entry(&model);
+14:     window.setSize(800, 600);
+15:     window.setBGColor(0.3, 0.6, 0.8);
+16:     window.open();
+17: 
+18:     flag = 1;
+19:     while(window.update() == true) {
+20:         if(flag == 1) {
+21:             model.glTranslate(0.1, 0.0, 0.0);
+22:         } else if(flag == 2) {
+23:             model.glTranslate(-0.1, 0.0, 0.0);
+24:         }
+25: 
+26:         pos = model.getPosition();
+27:         if(flag == 1) {
+28:             if(pos.x > 20.0) {
+29:                 flag = 2;
+30:             }
+31:         }
+32:     }
+33: 
+34:     return 0;
+35: }
+\end{verbatim}
+\end{itembox}
+
+\subsection*{解説}
+\begin{itemize}
+ \item プログラムの解説に入る前に、これまであまり明確にしてこなかった
+	「条件の書き方」を述べておきます。forやwhileの終了条件や、
+	if文での条件部分は、基本的に「2つの値の比較」によって行われます。
+	これは、以下の様な種類があります。
+	\begin{center}
+	\begin{tabular}{|c|l|l|}
+	\hline
+	記述法 & 意味 & 使い方例 \\ \hline \hline
+	\verb+x == y+ & x と y が等しい & \verb-a == (b + 10)- \\ \hline
+	\verb+x != y+ & x と y が等しくない & \verb+(a % 2) != 0+ \\ \hline
+	\verb+x > y+ & x が y より大きい & \verb+(a - b) > 10+ \\ \hline
+	\verb+x < y+ & x が y 未満 & \verb+a < (2 * b)+ \\ \hline
+	\verb+x >= y+ & x が y 以上 & \verb+a >= (b - c)+ \\ \hline
+	\verb+x <= y+ & x が y 以下 & \verb-a <= ((b+c) * i)- \\ \hline
+	\end{tabular}
+	\end{center}
+
+	さらに、条件は2つ以上の条件を並べることも可能です。
+	\begin{center}
+	\begin{tabular}{|c|p{3cm}|l|}
+	\hline
+	記述法 & 意味 & 使い方例 \\ \hline \hline
+	\verb+A && B+ & A と B の両方が成り立つ場合 &
+		\verb-x < y && y < z- \\ \hline
+	\verb+A || B+ & A と B がいずれかが成り立つ場合 &
+		\verb-x > y || x == 0- \\ \hline
+	\end{tabular}
+	\end{center}
+
+ \item 26行目は、モデルの現在位置を求めるための機能で、
+	8行目で宣言した「fk\_Vector型」の変数「pos」に
+	その位置が保存されます。
+	この型は、「変数名.x」や「変数名.y」という形式で
+	ベクトルの\(x,y,z\)各成分(座標)を参照することができます。
+	今回は、28行目でモデルの\(x\)座標を参照しています。
+
+ \item 27〜31行目は、if文が2重に使われています。
+	このように、if文を何重にも囲って使っていくことを
+	「if文の入れ子」と言います。for文やwhile文も入れ子にすることが
+	可能で、例えば \\
+	\begin{screen}
+	\begin{verbatim}
+	for(i = 1; i <= 9; i++) {
+	    for(j = 1; j <= 9; j++) {
+	        cout << i*j << endl;
+	    }
+	}
+	\end{verbatim}
+	\end{screen} ~ \\
+	というプログラムは、九九の答えを順番に表示していくことになります。
+	今回は、「flag が 1 のときで、モデル位置の\(x\)座標が
+	20 を超えたとき、flag を 2 に変更する」
+	という処理をしています。その結果、次の繰り返しからは
+	21行目ではなく23行目が実行されるようになり、
+	モデルが左に移動し始めるという仕組みになっています。
+
+\end{itemize}
+
+\newpage
+\section{練習課題} \label{sec:03-q}
+\begin{description}
+ \myitem \ref{sec:03-key}節のプログラムを改変し、
+	「U」キーで上昇、「D」キーで下降、「F」キーで前進(\(-z\)方向)、
+	「B」キーで後退(\(+z\)方向)に進む機能を追加せよ。
+
+ \myitem \ref{sec:03-pos}節のプログラムの29,30行目では2つの
+	if文の入れ子になっているが、これを条件式を並べる記法を使って
+	修正し、1つのif文だけで同じ機能を実現せよ。
+
+ \myitem 直方体がウィンドウの右側と左側を交互に行き来するプログラムを
+	作成せよ。
+
+ \myitem 直方体が、長方形状の軌跡を時計回りに周回するようなプログラムを
+	作成せよ。
+
+ \myitem 直方体が放物運動を描くアニメーションプログラムを作成せよ。
+	(glMoveToを利用してもよい。glTranslateだけでも実現できるが、やや難！)
+
+\end{description}

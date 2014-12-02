@@ -1,0 +1,105 @@
+\documentclass[a4j]{jarticle}
+
+\usepackage{ascmac}
+
+\textwidth=500pt
+\textheight=750pt
+\topmargin=0pt
+\headheight=-35pt
+\headsep=3pt
+\oddsidemargin=-30pt
+\evensidemargin=-30pt
+
+\begin{document}
+\begin{center}
+{\LARGE Fine Kernel ToolKit システム (MacOS X 版) \\
+	セットアップマニュアル} \\ ~ \\
+{\Large FineKernel Project} \\
+(2014 年 10/17 版)
+\end{center}
+
+\section{対応する Mac OS X のバージョン}
+Fine Kernel ToolKit システム(以下「FK」) の Mac 版は、
+現在 OS のバージョンが 10.9.5 (Mavericks)
+にて動作確認を行っている。これよりも古いバージョンの Mac OS X については
+動作の保証はしないものとする。
+
+MacOSX 上で FK を利用するためには、Xcode が必要になるので、
+事前にインストールしておくこと。
+また、「Command Line Tools」というシステムも必要となるので、
+これも予めインストールしておくこと。
+
+\section{UNIX の知識について}
+本マニュアルでは、開発に「ターミナル」を用いた UNIX コマンドを
+用いていく。そのため、ファイルやディレクトリのコピーや消去といった、
+基本的な UNIX コマンドによる操作の知識を前提とする。
+
+\section{FKのダウンロードとインストール}
+次に、FK のセットアップを以下の手順で行う。
+\begin{enumerate}
+\item 以下の URL から、「MacOS X 用インストーラ」の項目にある
+	インストーラをダウンロードする。
+	\begin{center}
+	\begin{tabular}{c}
+	\verb+http://sourceforge.jp/projects/fktoolkit/releases/+
+	\end{tabular}
+	\end{center}
+
+\item インストーラを起動し、指示に従ってインストールする。
+\end{enumerate}
+
+\section{コンパイル手順}
+編集したソースコードをコンパイルし実行するには、以下のような手順を取る。
+\begin{enumerate}
+ \item \verb+/Library/FK_Lib/etc/Makefile.std+ ファイルを
+	作業ディレクトリにコピーし、Makefile という名称に変更する。
+ \item シェル上で「make」と入力するとコンパイルが始まる。
+	エラーメッセージが出た場合は修正後、改めて「make」を入力する。
+ \item コンパイルに成功すると「fk\_prog.app」というディレクトリが
+	生成され、そこに実行アプリケーションが格納される。
+ \item シェル上で「open fk\_prog.app」と入力するか、
+	Finder でダブルクリックすれば実行される。
+\end{enumerate}
+なお、ソースファイルとして認識される拡張子は「cpp」か「cxx」のいずれかである。
+複数のソースファイルがある場合は、全体をコンパイル後に全てをリンクして
+一つのアプリケーションを生成する。もし main 関数を持っているソースが
+複数あった場合はリンクの段階で失敗してしまうので、
+一つのアプリケーションには各々の作業ディレクトリを用意しておくこと。
+
+\section{コンパイル環境のカスタマイズ}
+コピーした Makefile をテキストエディタで編集することで、
+様々な設定を行うことができる。
+代表的なものを以下に挙げる。
+\subsubsection*{実行アプリケーション名の変更}
+最初が「PROGRAM」で始まる行の「fk\_prog」の名称を変更する。
+ちなみに、生成後にシェル上で名称を変更しても問題はない。
+\subsubsection*{コンパイル時のオプションを追加する}
+「EXTRA\_CFLAGS」で始まる行のイコール記号の右にオプション記述を追加する。
+デバッグ用のオプションや、コンパイルの時点での警告制御などは、
+ここに適切なオプションを記述しておく。
+\subsubsection*{リンク時のオプションを追加する}
+「EXTRA\_LFLAGS」で始まる行のイコール記号の右にオプション記述を追加する。
+リンクするライブラリやフレームワークの追加などは、
+ここの適切なオプションを記述しておく。
+\subsubsection*{アプリケーションを置くディレクトリの変更}
+作業ディレクトリ以外にアプリケーションを置きたい場合は、
+まず「TARGET\_DIR」という項目の右側に移動先のディレクトリを記述する。
+相対パスや絶対パスも利用できる。make によってアプリケーションを
+生成した後、「make move」と入力することでアプリケーションを
+そのディレクトリに移動させることができる。
+移動先ディレクトリが存在していなかった場合は、自動的に生成も行う。
+
+\section{FKからのデータファイル参照}
+FK では、画像ファイルなど様々なデータをプログラムから
+参照することができるが、このようなプログラムを MacOS X 上で
+適切に動作させるには、以下のような記述をプログラム中の、
+実際にデータを読み込む前の部分に記述しておく必要がある。\\ ~ \\
+\begin{screen}
+\begin{verbatim}
+    #ifdef _MACOSX_
+        fk_System::setcwd();
+    #endif
+\end{verbatim}
+\end{screen}
+
+\end{document}

@@ -1,0 +1,192 @@
+﻿\chapter{親子関係と運動}
+\section{モデルの親子関係} \label{sec:07-parent}
+\begin{itembox}[l]{親子関係}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        bodyShape(1.0, 0.2, 2.0);
+ 7:     fk_Prism        tireShape(20, 0.2, 0.2, 0.2);
+ 8:     fk_Model        body, tire[4];
+ 9:     fk_Vector       origin(0.0, 0.0, 0.0);
+10:     int             i;
+11: 
+12:     body.setShape(&bodyShape);
+13:     body.setMaterial(Red);
+14:     window.entry(&body);
+15: 
+16:     tire[0].glMoveTo(0.5, 0.0, 0.6);
+17:     tire[0].glVec(1.0, 0.0, 0.0);
+18:     tire[1].glMoveTo(0.5, 0.0, -0.6);
+19:     tire[1].glVec(1.0, 0.0, 0.0);
+20:     tire[2].glMoveTo(-0.5, 0.0, 0.6);
+21:     tire[2].glVec(-1.0, 0.0, 0.0);
+22:     tire[3].glMoveTo(-0.5, 0.0, -0.6);
+23:     tire[3].glVec(-1.0, 0.0, 0.0);
+24: 
+25:     for(i = 0; i < 4; i++) {
+26:         tire[i].setMaterial(MatBlack);
+27:         tire[i].setShape(&tireShape);
+28:         tire[i].setParent(&body);
+29:         window.entry(&tire[i]);
+30:     }
+31: 
+32:     window.setCameraPos(0.0, 10.0, 30.0);
+33:     window.setCameraFocus(0.0, 0.0, 0.0);
+34:     window.setSize(800, 600);
+35:     window.setBGColor(0.6, 0.7, 0.8);
+36:     window.open();
+37:     window.showGuide(FK_GRID_XZ);
+38: 
+39:     body.glMoveTo(10.0, 0.1, 0.0);
+40: 
+41:     while(window.update() == true) {
+42:         body.glRotateWithVec(origin, fk_Y, FK_PI/180.0);
+43:     }
+44:     return 0;
+45: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item Word や PowerPoint などのアプリケーションでは、複数の図形を
+	一つのグループとしてまとめて扱う「グループ化」という機能が
+	あります。FK の fk\_Model にも同様の機能があり、
+	これを「親子関係」と呼んでいます。
+	モデル A をモデル B の親モデルとして設定した場合、
+	A を動かすと同じように B も追従して動きます。
+	今回の例は、直方体と円柱を使って簡易的な車モデルを
+	作成しています。直方体を「body」という親モデルとし、
+	円柱を「tire」という子モデルにすることで、
+	車体とタイヤを一括して操作しています。
+
+ \item 親子関係を設定しているのは 28 行目の「setParent()」関数です。
+	これにより、各\verb+tire[i]+モデルは body モデルの
+	子モデルとして設定されることになります。
+	なお、29 行目でタイヤモデルも window に登録していますが、
+	親子関係は(原則として)位置や方向を制御するものであり、
+	色や描画属性には関与しないものなので、
+	マテリアル設定やウィンドウへの登録は別途行う必要があります。
+
+ \item 前回、カメラモデルの制御を行いましたが、
+	カメラを固定して設定する場合はわざわざ fk\_Model 型の
+	カメラ用変数を用意しなくても、32,33 行目にあるように
+	直接位置と方向を指定することが可能です。
+	33 行目の setCameraFocus() 関数は方向ベクトルを指定する
+	ものではなく、カメラの注視点を指定するものです。
+
+ \item 42行目では body モデルしか制御していませんが、
+	実際にプログラムを実行してみるとタイヤも追従していることがわかります。
+	もちろん、回転だけではなく平行移動や方向指定でも同様に追従します。
+
+\end{itemize}
+\section{運動と速度} \label{sec:07-fall}
+\begin{itembox}[l]{落下運動}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Prism        bodyShape(20, 0.5, 0.5, 2.0);
+ 7:     fk_Sphere       headShape(10, 0.5);
+ 8:     fk_Model        body, head;
+ 9:     fk_Vector       pos, speed;
+10: 
+11:     body.setShape(&bodyShape);
+12:     body.setMaterial(Yellow);
+13:     window.entry(&body);
+14: 
+15:     head.setShape(&headShape);
+16:     head.setMaterial(Yellow);
+17:     head.glMoveTo(0.0, 0.0, -2.5);
+18:     head.setParent(&body);
+19:     window.entry(&head);
+20: 
+21:     body.glVec(0.0, 1.0, 0.0);
+22:     body.glMoveTo(-15.0, 0.0, 0.0);
+23: 
+24:     window.setCameraPos(0.0, 10.0, 50.0);
+25:     window.setCameraFocus(0.0, 0.0, 0.0);
+26:     window.setSize(800, 600);
+27:     window.setBGColor(0.6, 0.7, 0.8);
+28:     window.showGuide(FK_GRID_XZ);
+29:     window.open();
+30: 
+31:     speed.set(0.05, 0.1, 0.0);
+32: 
+33:     while(window.update() == true) {
+34:         pos = body.getPosition();
+35:         if(pos.y >= 0.0) {
+36:             speed.y -= 0.001;
+37:         } else {
+38:             speed.y = 0.0;
+39:         }
+40:         body.glTranslate(speed);
+41:     }
+42:     return 0;
+43: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item ゲームの中で頻繁に用いられる「ジャンプ」ですが、
+	これをプログラムで実装するには少し数学や物理を知る必要があります。
+	一般的に、落下運動は「放物線」という2次関数を描くことが
+	知られていますが、このことだけでプログラムを記述するのは
+	結構大変です。そこで、「速度」に着目します。
+
+ \item 物体が動いているのであれば、それはその物体の\textbf{速度}が
+	\underline{0 ではない}ことを意味します。
+	もっと数学的に言えば
+	\begin{center}
+	「速度ベクトルがゼロベクトルではない」
+	\end{center}
+	ということです。この速度ベクトルを、今回のプログラム中では
+	「speed」という名前の変数として用意しています。
+	そして、「速度」とは「単位時間あたりの移動量」を指します。
+	今回は単位時間を「1回描画が行われるまでの時間」としておきます。
+	すると、FKの場合はそれを glTranslate() 関数で指定することで
+	平行移動を実現できますから、40 行目にあるように
+	glTranslate() 関数に速度ベクトルを指定するだけで
+	物理運動アニメーションが実現できることになります。
+
+ \item 次に速度の制御です。重力が働いている空間では、
+	下方向に「加速度」が働きます。これの意味するところは、
+	「単位時間あたりに下向き(\(-y\)方向)に速度ベクトルが追加される」
+	という意味です。つまり、今の速度に対して一定量 \(y\) 成分が
+	減少することになります。36 行目で y 成分を減らしています。
+
+ \item そのままだと永久に落下してしまうので、現在位置の高さが
+	正の場合は落下し、負の場合は \(y\) 方向の速度は 0 としておきます。
+	これにより、某配管工主人公ゲームのような動きが
+	実現できるというわけです。
+
+ \item このように、ゲームでは「位置」ではなく「速度」や「加速度」の方を
+	調整する方が簡単にプログラムが組めることが多くあります。
+	
+\end{itemize}
+
+\section{練習課題} \label{sec:07-q}
+\begin{description}
+ \myitem \ref{sec:07-parent} 節のサンプルプログラムの車に対し、
+	さらに椅子や人などのオブジェクトを追加せよ。
+
+ \myitem 問題 7-1 のプログラムに対してさらに、
+	上下矢印キーで前後に進み、左右矢印キーでその場で回転するように
+	プログラムを修正せよ。
+
+ \myitem \ref{sec:07-fall} 節のプログラムに対し、
+	「地上にいる間にスペースキーを押すと再びジャンプする」
+	という機能を追加せよ。
+
+ \myitem 問題 7-2 のプログラムと 7-3 のプログラムを統合し、
+	車がジャンプ機能を持ち自在に移動できるプログラムを作成せよ。
+
+\end{description}

@@ -1,0 +1,273 @@
+\chapter{サウンドの再生}
+\section{音関係のセットアップ} \label{sec:10-setup}
+\subsection{事前のセットアップ}
+\verb+C:\FK_VC13\redist+ にある「oalinst.exe」という名前の
+	インストーラを実行してください。これは1回やっておけば
+	Windowsを再インストールしない限りは今後する必要はありません。
+\subsection{プロジェクト毎のセットアップ}
+音を利用するプロジェクトを作成した際には、
+ビルド後の \verb+_exe+ フォルダに対し、
+\verb+C:\FK_VC13\bin+ にある以下のファイルをコピーしてください。
+\begin{itemize}
+ \item libogg.dll
+ \item libvorbis.dll
+ \item libvorbisfile.dll
+\end{itemize}
+
+\section{BGMの再生} \label{sec:10-ogg}
+\begin{itembox}[l]{Oggファイルの再生}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: #include <FK/Audio.h>
+ 3: 
+ 4: int main(int, char **)
+ 5: {
+ 6:     fk_AppWindow    window;
+ 7:     fk_Block        block(1.0, 1.0, 1.0);
+ 8:     fk_Model        blockModel;
+ 9:     fk_Vector       origin(0.0, 0.0, 0.0);
+10:     fk_AudioStream  bgm;
+11:     double          volume;
+12: 
+13:     if(bgm.open("epoq.ogg") == false) {
+14:         fl_alert("BGM Open Error");
+15:     }
+16:     bgm.setLoopMode(true);
+17: 
+18:     blockModel.setShape(&block);
+19:     blockModel.glMoveTo(3.0, 3.0, 0.0);
+20:     blockModel.setMaterial(Yellow);
+21:     window.entry(&blockModel);
+22: 
+23:     window.setCameraPos(0.0, 1.0, 20.0);
+24:     window.setCameraFocus(0.0, 1.0, 0.0);
+25: 
+26:     window.setSize(800, 600);
+27:     window.setBGColor(0.6, 0.7, 0.8);
+28:     window.open();
+29:     window.showGuide(FK_GRID_XZ);
+30: 
+31:     volume = 0.5;
+32:     while(window.update() == true) {
+33:         blockModel.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+34: 
+35:         if(window.getKeyStatus('Z') == FK_SW_DOWN && volume < 1.0) {
+36:             volume += 0.1;
+37:         }
+38:         if(window.getKeyStatus('X') == FK_SW_DOWN && volume > 0.0) {
+39:             volume -= 0.1;
+40:         }
+41: 
+42:         bgm.setGain(volume);
+43:         bgm.play();
+44:     }
+45:     return 0;
+46: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item FKでは音を出力するための入力として「wav形式」と「ogg形式」を
+	サポートしています。wav形式はほとんどの音を扱うソフトウェアで
+	利用可能な形式ですが、サイズが大きいという欠点があります。
+	ogg形式は mp3 や aac 等と同じくファイルサイズが小さな形式です。
+	サポートされているソフトウェアが多いとは言えませんが、
+	ライセンスや特許に縛られずに利用できるという利点があり、
+	フリーのプログラムでは広く利用されています。
+	ogg 形式で音声を作成できるソフトウェアとしては、
+	多機能なものとして
+	「XRECODE\footnote{http://www.xrecode.com/}」、
+	国産として
+	「SoundEngine\footnote{
+	http://soundengine.jp/software/soundengine/}」
+	などがあります。
+
+ \item 音を使うプログラムでは、先に記述したセットアップの他に、
+	2行目にあるように\\
+	\verb+#include <FK/Audio.h>+
+	という記述を追加しておいて下さい。
+
+ \item 10行目にあるのが、BGMの読み込みや再生を行うための変数です。
+	基本的に BGM は wav ファイルですと巨大になりますので、
+	ogg ファイルのみを用います。
+
+ \item 13行目に ogg ファイルを指定することで再生の準備を行います。
+	ファイルがない場合や、正常に入力できなかった場合は
+	エラー用のダイアログを 14 行目で開くようにしています。
+
+ \item 16行目は、リピート再生を行うための設定です。
+	このように「setLoopMode()」関数で true を引数として
+	入力しておくと、曲の終端に来てから最初に戻って
+	再生しなおします。false にすると、終端で再生を停止します。
+	デフォルトでは false になっています。
+
+ \item 31行目で音量を制御するための変数「volume」の値を
+	0.5 に設定していますが、この値はZ,Xキーを押すことで
+	上下できるようなプログラムになっています。
+	35 行目で「getKeyStatus()」関数を用いてキーの状態を
+	取得していますが、これまでの
+	「FK\_SW\_PRESS」ではなく「FK\_SW\_DOWN」となっています。
+	これは、「押された瞬間」を意味します。
+	「FK\_SW\_PRESS」の場合、押されている間はずっと true となります。
+	そのため、volume の値はわずかな時間で大きく変動してしまいます。
+	「FK\_SW\_DOWN」の場合、押された瞬間しか検知しないため、
+	いわゆる「押さえっぱなし」の状況のときは false となります。
+
+ \item 42行目の「setGain()」関数は音量を設定するための関数です。
+	1 で最大、0 で無音となります。
+
+ \item 43 行目の「play()」関数ですが、これによって再生が行われます。
+	これがゲーム中でサウンドを扱う特殊な面なのですが、
+	この「play()」関数は再生している間、何度も呼ぶ必要があります。
+	以下、少し詳しく説明します。
+	(理解しなくても利用には差し支えありません。)
+
+	音データは全てを読み込んでしまうと膨大なメモリを消費します。
+	そのため、音データを「チャンク」と呼ばれる細かなデータに分け、
+	チャンクを少しずつファイルから読み込み、システムに流すという方法で
+	内部では再生を行っています。この「play()」という関数は、
+	内部ではチャンクをファイルから取り出し、システムの状況を検査して
+	チャンクを新たに受け付けられる状況であれば流すという処理を
+	行っているのです。そのため、かなり頻繁にこの関数を呼ばないと
+	途中で再生が止まってしまうのです。
+
+\end{itemize}
+\section{サウンドエフェクト(SE)の制御} \label{sec:10-wav}
+\begin{itembox}[l]{WAVファイルの入力}
+\begin{footnotesize}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: #include <FK/Audio.h>
+ 3: 
+ 4: int main(int, char **)
+ 5: {
+ 6:     fk_AppWindow        window;
+ 7:     fk_Block            block(1.0, 1.0, 1.0);
+ 8:     fk_Model            blockModel;
+ 9:     fk_Vector           origin(0.0, 0.0, 0.0);
+10:     fk_AudioWavBuffer   se[2];
+11:     bool                seFlag[2];
+12:     int                 i;
+13: 
+14:     if(se[0].open("MIDTOM2.wav") == false) {
+15:         fl_alert("Sound(BD) Open Error");
+16:     }
+17:     if(se[1].open("SDCRKRM.wav") == false) {
+18:         fl_alert("Sound(SD) Open Error");
+19:     }
+20: 
+21:     blockModel.setShape(&block);
+22:     blockModel.glMoveTo(3.0, 3.0, 0.0);
+23:     blockModel.setMaterial(Yellow);
+24:     window.entry(&blockModel);
+25: 
+26:     window.setCameraPos(0.0, 1.0, 20.0);
+27:     window.setCameraFocus(0.0, 1.0, 0.0);
+28: 
+29:     window.setSize(800, 600);
+30:     window.setBGColor(0.6, 0.7, 0.8);
+31:     window.open();
+32:     window.showGuide(FK_GRID_XZ);
+33: 
+34:     for(i = 0; i < 2; i++) {
+35:         seFlag[i] = false;
+36:         se[i].setGain(1.0);
+37:     }
+38: 
+39:     while(window.update() == true) {
+40:         blockModel.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+41: 
+42:         if(window.getKeyStatus('Z') == FK_SW_DOWN) {
+43:             seFlag[0] = true;
+44:             se[0].seek(0.0);
+45:         }
+46: 
+47:         if(window.getKeyStatus('X') == FK_SW_DOWN) {
+48:             seFlag[1] = true;
+49:             se[1].seek(0.0);
+50:         }
+51: 
+52:         for(i = 0; i < 2; i++) {
+53:             if(seFlag[i] == true) {
+54:                 seFlag[i] = se[i].play();
+55:             }
+56:         }
+57:     }
+58:     return 0;
+59: }
+\end{verbatim}
+\end{footnotesize}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item このプログラムは、先ほどの BGM 再生よりもやや高度な処理として
+	サウンドエフェクト(SE)を制御してみます。
+	SEは、打撃音やジャンプの音など、瞬間的〜数秒程度で再生が終わる
+	音素材のことです。SEはBGMと違って特定条件下で何度も再生を
+	行うことが多いので、やや扱いが複雑となります。
+
+ \item 10行目の「fk\_AudioWavBuffer」は SE 用の音素材の読み込みや
+	再生を行うための型で、wav形式に対応しています。
+	もし ogg形式のファイルを読み込みたい場合は
+	「fk\_AudioOggBuffer」を使用して下さい。
+	型名(クラス名)が異なる以外は、使い方は同じです。
+
+	なお、前節の「fk\_AudioStream」との違いですが、\\
+	fk\_AudioStream ではチャンクに分けて読み込みを行うのに対し、
+	こちらの「fk\_AudioWavBuffer」はファイルのデータを全て
+	メモリ上に読み込んでしまいます。
+	メモリを多く利用しますが、高速な動作に対応できます。
+
+ \item 14〜19行目でそれぞれ個別に SE 素材となる音ファイルを入力しておきます。
+
+ \item 35行目は、bool 型という「true」か「false」しか格納できない変数
+	(の配列)です。36行目は前節のプログラムと同様、音量設定です。
+
+ \item 先に52〜56行目を説明します。54行目にあるように、
+	「play()」関数で音を再生します。今回はリピート再生を無効として
+	いますので、終端で再生が終わります。「play()」関数は
+	音が終端にきた場合には「false」を返すようになっています。
+	結果として、while でのループのたびに play() が実行され、
+	再生が終わってない場合は\verb+seFlag[i]+ に true が入っているため
+	次回のループでも再生され、再生が終わったら
+	\verb+seFlag[i]+ に false が入るので、54 行目は実行されずに
+	再生もなされないという仕組みです。
+
+ \item 44,49行目にある「seek()」という関数は、再生箇所を変更する関数で、
+	単位は「秒」になっています。今回は「0」を指定することで、
+	最初まで巻き戻しを行っていることになります。
+	このとき、もし \verb+seFlag[0]+ や \verb+seFlag[1]+ が
+	false になっていた場合、true に変更して再び再生が
+	行われるようにしています。
+
+	この「seek()」関数による指定ですが、経験則上やや不正確です。
+	実際に指定した箇所からピンポイントに再生を行いたい場合は、
+	数値をプログラム上で微調整して試行錯誤を行う必要があります。
+
+\end{itemize}
+
+\section{音制御クラスの色々な機能}
+これまでにサンプルプログラム中で紹介した機能の他に、
+fk\_AudioStream, fk\_AudioWavBuffer, fk\_AudioOggBuffer には
+制御を行う関数があります。ここではそれを紹介しておきます。
+
+\begin{description}
+ \item[pause()]~ \\
+	BGMやSEの再生を停止します。その後 play() を実行すると、
+	止めた箇所から再び再生が始まります。
+
+ \item[tell()]~ \\
+	現時点での再生位置を取得しますが、やや不正確です。
+	以下の様な記述をします。
+	\begin{screen}
+	\begin{verbatim}
+	fk_AudioStream    bgm;
+	double            playTime;
+	              :
+	              :
+	playTime = bgm.tell();
+	\end{verbatim}
+	\end{screen}
+\end{description}

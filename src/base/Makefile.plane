@@ -1,0 +1,501 @@
+SHELL = /bin/sh
+
+.SUFFIXES : .cxx .o
+.SUFFIXES : .c .o
+
+CC		= c++
+LINKCC		= c++
+RM		= rm -f
+MV		= mv
+TOUCH		= touch
+AR		= ar
+AROPS		= cq
+LODER		= $(AR) $(AROPS)
+OPTOPT		= -O
+GRAMOPT		= -pedantic -std=c++1y
+WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
+			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
+EXTOPT		= -Werror
+OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
+POSTLINK	= :
+#
+
+LIBHEADERS = \
+		Angle.h \
+		Array.H \
+		Attribute.h \
+		AttributeData.H \
+		BSplBase.H \
+		BSplCurve.h \
+		BSplSurface.h \
+		BVHMotion.h \
+		Base.h \
+		BezCurve.h \
+		BezSurface.h \
+		Block.h \
+		Boundary.h \
+		BoundaryElem.H \
+		Capsule.h \
+		Circle.h \
+		Command.H \
+		Cone.h \
+		Curve.h \
+		D3DXAnimation.H \
+		D3DXData.H \
+		D3DXParser.H \
+		D3DXShapeParser.H \
+		DList.h \
+		DXFOut.H \
+		DXFParser.H \
+		DataAccess.h \
+		DataBase.H \
+		DrawCache.H \
+		Edge.h \
+		Engine.H \
+		Error.H \
+		FK.h \
+		FaceDraw.H \
+		FileBase.h \
+		FileInput.H \
+		FileOutput.H \
+		Fog.h \
+		FrameController.H \
+		GenMatrix.h \
+		GenVector.h \
+		HRCParser.H \
+		Half.h \
+		HeapBase.h \
+		History.H \
+		IDAdmin.h \
+		IFSTexture.h \
+		IFSetHandle.H \
+		Image.h \
+		IndexFace.h \
+		LIAdmin.H \
+		Light.h \
+		Line.h \
+		LineDraw.H \
+		Loop.h \
+		MQOOut.H \
+		MQOParser.H \
+		MassProperty.h \
+		MatAdmin.h \
+		MatExample.h \
+		Material.h \
+		Math.h \
+		Matrix.h \
+		Model.h \
+		Modify.h \
+		OpenGL.H \
+		Operation.h \
+		Palette.h \
+		ParserBase.H \
+		ParserData.H \
+		Particle.h \
+		PickData.h \
+		Plane.h \
+		Point.h \
+		PointDraw.H \
+		Polygon.h \
+		Prism.h \
+		Projection.h \
+		QtWidget.h \
+		Quaternion.h \
+		RDSParser.H \
+		Reference.h \
+		SMFParser.H \
+		SRFParser.H \
+		STLOut.H \
+		STLParser.H \
+		Scene.h \
+		Shape.h \
+		ShapeViewer.h \
+		Solid.h \
+		SolidBase.h \
+		Sphere.h \
+		SubDivision.H \
+		Surface.h \
+		System.h \
+		TextImage.h \
+		Texture.h \
+		TextureDraw.H \
+		Topology.h \
+		Tree.h \
+		UniCode.h \
+		VRMLOut.H \
+		VRMLParser.H \
+		Vector.h \
+		Vertex.h \
+		Window.h
+
+LIBSRCS = \
+		Attribute.cxx \
+		AttributeData.cxx \
+		BSplBase.cxx \
+		BSplCurve.cxx \
+		BSplSurface.cxx \
+		BVHMotion.cxx \
+		Base.cxx \
+		BezCurve.cxx \
+		BezSurface.cxx \
+		Block.cxx \
+		Boundary.cxx \
+		BoundaryElem.cxx \
+		Capsule.cxx \
+		Circle.cxx \
+		Command.cxx \
+		Cone.cxx \
+		Curve.cxx \
+		D3DXAnimation.cxx \
+		D3DXData.cxx \
+		D3DXParser.cxx \
+		D3DXShapeParser.cxx \
+		DList.cxx \
+		DXFOut.cxx \
+		DXFParser.cxx \
+		DataAccess.cxx \
+		DataBase.cxx \
+		DrawCache.cxx \
+		Edge.cxx \
+		Engine.cxx \
+		Error.cxx \
+		FaceDraw.cxx \
+		FileInput.cxx \
+		FileOutput.cxx \
+		Fog.cxx \
+		FrameController.cxx \
+		GenMatrix.cxx \
+		GenVector.cxx \
+		HRCParser.cxx \
+		Half.cxx \
+		History.cxx \
+		IDAdmin.cxx \
+		IFSTexture.cxx \
+		IFSetHandle.cxx \
+		Image.cxx \
+		ImageIO.cxx \
+		IndexFace.cxx \
+		Light.cxx \
+		Line.cxx \
+		LineDraw.cxx \
+		Loop.cxx \
+		MQOOut.cxx \
+		MQOParser.cxx \
+		MassProperty.cxx \
+		MatAdmin.cxx \
+		MatExample.cxx \
+		Material.cxx \
+		Math.cxx \
+		Matrix.cxx \
+		MeshTexture.cxx \
+		Model.cxx \
+		ModelTree.cxx \
+		Modify.cxx \
+		Operation.cxx \
+		Palette.cxx \
+		ParserBase.cxx \
+		Particle.cxx \
+		PickData.cxx \
+		Plane.cxx \
+		Point.cxx \
+		PointDraw.cxx \
+		Polygon.cxx \
+		Prism.cxx \
+		Projection.cxx \
+		Quaternion.cxx \
+		RDSParser.cxx \
+		Reference1.cxx \
+		Reference2.cxx \
+		Reference3.cxx \
+		SMFParser.cxx \
+		STLOut.cxx \
+		STLParser.cxx \
+		SRFParser.cxx \
+		Scene.cxx \
+		Shape.cxx \
+		Solid.cxx \
+		SolidBase.cxx \
+		Sphere.cxx \
+		SubDivision.cxx \
+		Surface.cxx \
+		System.cxx \
+		TextImage.cxx \
+		Texture.cxx \
+		TextureDraw.cxx \
+		Topology.cxx \
+		Tree.cxx \
+		UniCode.cxx \
+		VRMLOut.cxx \
+		VRMLParser.cxx \
+		Vector.cxx \
+		Vertex.cxx
+
+LIBOBJS = $(LIBSRCS:cxx=o)
+LIBBCCOBJS = $(LIBSRCS:cxx=obj)
+
+FTESTSRC = ftest.cxx
+FTESTOBJ = $(FTESTSRC:cxx=o)
+CTESTSRC = ctest.cxx
+CTESTOBJ = $(CTESTSRC:cxx=o)
+
+ALLSRCS = $(LIBSRCS)
+ALLHEADERS = $(LIBHEADERS)
+
+###################
+
+FKTOP		= ../..
+LIBRARY		= $(FKTOP)/lib/libFK2_base.a
+LIBRARY_G	= $(FKTOP)/lib/libFK2_base_g.a
+FTEST		= ftest
+CTEST		= ctest
+TARGET		= target
+LOCAL		= /usr/local
+OPTLOCAL	= /opt/local
+MVLIB		= :
+
+LINK		= \
+			-lFK2_util \
+			-lFK2_audio \
+			-lFK2_fltkWin \
+			-lFK2_base \
+			-lFK2_fltkErr \
+			$(SYSLIBS)
+
+LINK_G		= \
+			-lFK2_util_g \
+			-lFK2_audio_g \
+			-lFK2_fltkWin_g \
+			-lFK2_base_g \
+			-lFK2_fltkErr_g \
+			$(SYSLIBS)
+
+all:
+	@echo "	FreeBSD:		make fb"
+	@echo "	FreeBSD Debug:		make fb-g"
+	@echo "	MinGW:			make ming"
+	@echo "	MinGW Debug:		make ming-g"
+	@echo "	MacOS X:		make mac"
+	@echo "	MacOS X Debug:		make mac-g"
+	@echo "	MacOS X gcc:		make mac-gcc"
+	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
+
+fb:
+	$(MAKE) $(TARGET) \
+	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
+	"DEPENDDIRS = " \
+	"GRAMOPT = " \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
+	"SYSLIBS = -liconv \
+			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
+			-lfltk -lpng -lz -lbz2 \
+			-lfreetype -lGL \
+			-lXft -lfontconfig -lXinerama -lpthread \
+			-lXext -lX11 -lm" \
+	"RANLIB = ranlib"
+
+fb-g:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -g" \
+	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
+	"DEPENDDIRS = -I$(LOCAL)/include" \
+	"GRAMOPT = " \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
+	"SYSLIBS = -liconv \
+			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
+			-lfltk -lpng -lz \
+			-lfreetype -lGL \
+			-lXft -lfontconfig -lXinerama -lpthread \
+			-lXext -lX11 -lm" \
+	"RANLIB = ranlib" \
+	"LIBRARY = $(LIBRARY_G)" \
+	"LINK = $(LINK_G)"
+
+ming:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = " \
+	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
+	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MingPack/lib" \
+	"DEPENDDIRS = " \
+	"SYSLIBS = -lfltk -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
+		-lfltk_forms -lfltk_z \
+		-lfreetype -liconv \
+		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
+		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
+	"RANLIB = ranlib"
+
+ming-g:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -g" \
+	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
+	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MingPack/lib" \
+	"DEPENDDIRS = " \
+	"SYSLIBS = -lfltk -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
+		-lfltk_forms -lfltk_z \
+		-lfreetype -liconv \
+		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
+		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
+	"RANLIB = ranlib" \
+	"LIBRARY = $(LIBRARY_G)" \
+	"LINK = $(LINK_G)"
+
+mac:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"SYSLIBS = -liconv -lfltk_gl \
+		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa \
+		-framework ApplicationServices \
+		-framework Foundation \
+		-framework AudioToolBox" \
+	"RANLIB = ranlib" \
+	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+
+mac-c:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"LINK = \
+		-lFK2_OpenCL \
+		-lFK2_util \
+		-lFK2_audio \
+		-lFK2_fltkWin \
+		-lFK2_base \
+		-lFK2_fltkErr \
+		$(SYSLIBS)" \
+	"SYSLIBS = -liconv -lfltk_gl \
+		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa \
+		-framework ApplicationServices \
+		-framework Foundation \
+		-framework OpenCL \
+		-framework AudioToolBox" \
+	"RANLIB = ranlib" \
+	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+
+mac-g:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -g" \
+	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"SYSLIBS = -liconv -lfltk_gl \
+		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa \
+		-framework ApplicationServices \
+		-framework Foundation \
+		-framework AudioToolBox" \
+	"RANLIB = ranlib" \
+	"LIBRARY = $(LIBRARY_G)" \
+	"LINK = $(LINK_G)" \
+	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+
+mac-gcc:
+	$(MAKE) $(TARGET) \
+	"CC = g++-mp-4.9" \
+	"LINKCC = g++-mp-4.9" \
+	"OPTOPT = -O -pipe" \
+	"GRAMOPT = -std=c++1y" \
+	"SYSOPS = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"SYSLIBS = -liconv -lfltk_gl \
+		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa \
+		-framework ApplicationServices \
+		-framework Foundation \
+		-framework AudioToolBox" \
+	"RANLIB = ranlib" \
+	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+
+mac-gcc-g:
+	$(MAKE) $(TARGET) \
+	"CC = g++-mp-4.9" \
+	"LINKCC = g++-mp-4.9" \
+	"OPTOPT = -g" \
+	"GRAMOPT = -std=c++1y" \
+	"SYSOPS = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+		-I$(OPTLOCAL)/include" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"SYSLIBS = -liconv -lfltk_gl \
+		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa \
+		-framework ApplicationServices \
+		-framework Foundation \
+		-framework AudioToolBox" \
+	"RANLIB = ranlib" \
+	"LIBRARY = $(LIBRARY_G)" \
+	"LINK = $(LINK_G)" \
+	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+
+CFLAGS 		= $(OPS) $(SYSOPS) $(INCLDIRS)
+DEPENDCFLAGS	= $(CFLAGS)
+
+target : $(LIBRARY)
+
+$(LIBRARY) : $(LIBOBJS)
+	$(RM) $(LIBRARY)
+	$(LODER) $(LIBRARY) $(LIBOBJS)
+	$(RANLIB) $(LIBRARY)
+	$(MVLIB)
+
+depend:: $(ALLSRCS)
+	makedepend -s "# DO NOT DELETE!!!" \
+		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS)
+
+clean:
+	touch dummy~
+	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) $(FTEST) $(CTEST) \
+		Makefile.bak fk2_base.bak *.out core *.core *~ #*# *.exe *.obj
+
+$(FTEST): $(FTESTSRC) $(LIBRARY)
+	$(CC) $(CFLAGS) $(LFLAGS) -o $(FTEST) $(FTESTSRC) $(LINK) $(SYSLIBS)
+	$(POSTLINK) $(FTEST)
+
+$(CTEST): $(CTESTSRC) $(LIBRARY)
+	$(CC) -c $(CFLAGS) $(CTESTSRC) -o $(CTESTOBJ)
+	$(LINKCC) $(CFLAGS) $(LFLAGS) $(CTESTOBJ) $(LINK) $(SYSLIBS) -o $(CTEST)
+
+###
+%.o : %.cxx
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.obj : %.cxx
+	$(CC) $(CFLAGS) $<
+
+####################

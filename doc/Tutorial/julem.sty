@@ -1,0 +1,97 @@
+﻿% julem.sty		v1.0 (June  6, 1995)
+%
+%	Copyright (C) 1995-1997 by Hiroshi Nakashima
+%				   (nakasima@tutics.tut.ac.jp)
+%	These macros my be freely transmitted, reproduced, or modified
+%	provided that this notice is left intact.
+%
+% \juline{<Japanese text>} は <Japanese text> にアンダーラインを施すマクロで，
+% <Japanese text> の中での行分割に対応します。同名のマクロは磯崎氏により NTT
+% jTeX のために作られ juline.sty として配布されています。juline.sty では 
+% ASCII 日本語 TeX についても一定の配慮がなされていますが，以下の問題があり
+% ます。
+%
+% (a) 文字の natural width と等しい下線をひくため，句読点など natural width 
+%     が小さく stretch が大きい文字では多くの場合下線が短くなる。
+% (b) 漢字間や漢字／英数字間の glue の stretch を無視しているため，glue に対
+%     する下線が短くなることがある。
+% 
+% ここで提供する \juline はこれらを解決するもので，マクロ名と使用法以外は磯
+% 崎氏のものとは全く異なったものです。使用上の注意事項は磯崎氏のものと同様で，
+% 日本語以外の要素（英単語，数式，他のマクロ呼び出しなど）は行分割対象となら
+% ないように `{' と `}' で囲む必要があります。
+%
+% マクロの基本的なアルゴリズムについては \endinput 以下にありますので，興味
+% のある方は参照して下さい。
+%
+\makeatletter
+\newdimen\wd@uline
+
+\def\ul@setpm#1 #2 #3 #4 #5\@nil{\def\ul@plus{#2}\def\ul@minus{#4}}
+\skip0=1pt plus 2pt minus 3pt
+\edef\@tempa{\the\skip0}
+\expandafter\ul@setpm\@tempa\@nil
+
+\def\juline#1{{\leavevmode \ul@getkskip\kanjiskip\ul@kanjiskip
+	\ul@getkskip\xkanjiskip\ul@xkanjiskip
+	\ul@getbadness
+	\def\endul@@one{\endul@one}\def\@tempb{}\ul@one#1\endul@one}}
+
+\def\ul@getkskip#1#2{\edef\@tempa{\the#1 @ @ @ @ }%
+	\expandafter\ul@igetkskip\@tempa\@nil \edef#2{\@tempb}}
+\def\ul@igetkskip#1 #2 #3 #4 #5 #6\@nil{\def\@tempb{{#1}}\def\@tempa{#2}%
+	\ifx\@tempa\ul@plus \edef\@tempb{\@tempb{#3}}\def\@tempa{#4}%
+		\ifx\@tempa\ul@minus \edef\@tempb{\@tempb{#5}}\else
+			\edef\@tempb{\@tempb{0pt}}\fi
+	\else\edef\@tempb{\@tempb{0pt}}%
+		\ifx\@tempa\ul@minus \edef\@tempb{\@tempb{#3}}\else
+			\edef\@tempb{\@tempb{0pt}}\fi\fi}
+
+\newcount\ul@badness
+\def\ul@getbadness{\ul@badness\@ne
+	\ifnum\hbadness>100 \advance\ul@badness\@ne\fi
+	\ifnum\hbadness>800 \advance\ul@badness\@ne\fi
+	\ifnum\hbadness>2700 \advance\ul@badness\@ne\fi
+	\ifnum\hbadness>6400 \advance\ul@badness\@ne\fi}
+
+\def\ul@one#1{\def\@tempa{#1}%
+\ifx\@tempa\endul@@one
+ \let\u@line\relax
+\else
+ \ul@putbox\let\u@line\ul@one
+\fi
+\u@line}
+
+\def\ul@putbox{\settowidth\@tempdima\@tempa \settowidth\@tempdimb\@tempb
+	\settowidth\wd@uline{\@tempb\@tempa}%
+	\advance\wd@uline-\@tempdima \advance\wd@uline-\@tempdimb
+	\ifx\@tempb\empty\else
+	\ifdim\wd@uline=\kanjiskip \expandafter\ul@leaders\ul@kanjiskip
+	\else \ifdim\wd@uline=\xkanjiskip \expandafter\ul@leaders\ul@xkanjiskip
+	\else \ul@leaders{\the\wd@uline}{0pt}{\the\wd@uline}\fi\fi\fi
+	\hbox{\@tempa}\kern-\@tempdima \ul@linebox\@tempdima
+	\let\@tempb\@tempa}
+\def\ul@leaders#1#2#3{\@tempdimb#2\relax \multiply\@tempdimb\ul@badness
+	\advance\@tempdimb#1\relax	
+	\xleaders\hbox{\ul@linebox\@tempdimb}\hskip\@tempdimb
+	\hskip-\@tempdimb \hskip#1 plus #2 minus #3\relax}
+\def\ul@linebox#1{\lower0.33em\hbox{\vrule width#1 height0.05em}}
+
+\endinput
+%
+% \juline のアルゴリズム概説
+%
+% (1) 引数中の連続する要素を a, b とする。
+% (2) n = width(ab) - (width(a) + width(b)) とし，n を a, b 間の glue の 
+%     natural width と推定する。
+% (3) n = width(\kanjiskip) または n = width(\xkanjiskip) であれば，glue は 
+%     \kanjiskip または \xkanjiskip であると推定し，p と m をそれらの 
+%     stretch/shrink とする。そうでなければ p = 0, m = n と推定する。
+% (4) b を \hbadness/100 の３乗根の整数部とする。
+% (5) glue に対応する下線として，幅 n + p*b 線を \xleaders でひき，続いて 
+%     -(n + p*b) の \hskip で戻した後，n plus p minus m の glue を挿入する。
+%
+% 問題点
+% (a) 上記 (3) の推定が誤ることがある（例えば `」' と英数字が続く場合）。
+% (b) glue の下線は両側と重なるため，稀に行末に下線がはみ出すことがある。
+% (c) 禁則処理のためのペナルティが消去される。

@@ -1,0 +1,164 @@
+\chapter{様々な形状とメッセージ出力機能}
+\section{形状クラス紹介}
+この節では、これまで扱ってきた直方体(fk\_Block)や
+球(fk\_Sphere)以外の形状の作成方法を記述します。
+基本的には、fk\_Block や fk\_Sphere と同様に変数宣言時に
+寸法を指定し、fk\_Model に対して setShape() 関数で登録して利用します。
+
+\subsection{円}
+円の生成には、「fk\_Circle」という型で変数を宣言します。\\
+\begin{screen}
+\begin{verbatim}
+fk_Circle    circle(8, 5.0);
+\end{verbatim}
+\end{screen}
+~ \\
+宣言時の引数は、最初の数字が分割数を表すもので、
+実際のはこの数値の4倍の角数を持った正多角形が表示されます。
+上記の場合は32角形が表示されることになります。この分割数が
+大きければ大きいほど滑らかな円が表示されますが、
+多数のモデルを表示する場合に速度が低下する場合があります。
+2番目の引数は円の半径です。
+
+なお、この円は裏側から見た場合は\underline{表示されません}。
+表面の向きは、\ref{sec:01-vec}節で紹介した glVec() 関数を使って制御します。
+
+\subsection{正多角柱・円柱}
+正多角柱や円柱の生成は、「fk\_Prism」という型で変数を宣言します。\\
+\begin{screen}
+\begin{verbatim}
+fk_Prism     prism(3, 4.0, 3.0, 5.0);
+\end{verbatim}
+\end{screen}
+~ \\
+最初の引数は角数を表すもので、例の場合は三角柱を作成することになります。
+円柱は、角数の多い正多角柱として生成します。分割数が32を超える程度で
+ほとんど円柱と見分けがつかなくなります。
+
+2番目,3番目の引数はそれぞれ底面の外接円半径となります。
+この数値は普通は同一にしますが、台形型のように上面と底面を
+変えることも可能です。
+
+4番目の引数は、角柱(円柱)の高さを表します。
+
+初期配置は、底面の中心が原点となり、上面が\(-z\)方向、底面が\(+z\)となります。
+\subsection{正多角錐・円錐}
+正多角錐や円錐の生成は、「fk\_Cone」という型で変数を宣言します。\\
+\begin{screen}
+\begin{verbatim}
+fk_Cone      cone(3, 4.0, 5.0);
+\end{verbatim}
+\end{screen}
+~ \\
+最初の引数は角数を表すもので、例の場合は三角錐を作成することになります。
+円錐も円柱のときと同様に、角数の多い(32程度以上の)角錐として生成します。
+
+2番目の引数は底面の外接円半径となります。3番目の引数は、
+角錐(円錐)の高さを表します。
+
+初期配置は、底面の中心が原点となり、頂点が\(-z\)方向、
+底面が\(+z\)方向となります。
+\section{キー操作捕捉} \label{sec:05-specialkey}
+\ref{sec:03-key} 節で文字キーの状態取得を解説しましたが、
+矢印キーやエンターキーなどの特殊キーについての状態取得は
+述べていませんでした。これらの特殊キーの状態を検知するには、
+fk\_Window クラスの「getSpecialKeyStatus()」という関数を
+利用します。\\
+\begin{screen}
+\begin{verbatim}
+fk_AppWindow    win;
+        :
+        :
+if(win.getSpecialKeyStatus(FK_UP) == FK_SW_PRESS) {
+        :
+        :
+}
+\end{verbatim}
+\end{screen}
+~ \\
+使い方自体は getKeyStatus() 関数と同様です。
+引数の「FK\_UP」は、上矢印キーの状態を取得する場合になります。
+ここに、検知したいキーに合う値を引数にして下さい。
+以下に、値とキーの対応を記します。
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+値 & キー \\ \hline \hline
+FK\_SHIFT\_R & 右シフトキー \\ \hline
+FK\_SHIFT\_L & 左シフトキー \\ \hline
+FK\_CTRL\_R & 右コントロールキー \\ \hline
+FK\_CTRL\_L & 左コントロールキー \\ \hline
+FK\_ALT\_R & 右オルトキー \\ \hline
+FK\_ALT\_L & 左オルトキー \\ \hline
+FK\_ENTER & エンター(改行、リターン)キー \\ \hline
+FK\_BACKSPACE & バックスペース(後退)キー \\ \hline
+FK\_DELETE & デリート(削除)キー \\ \hline
+FK\_CAPS\_LOCK & キャップスロックキー \\ \hline
+FK\_TAB & タブキー \\ \hline
+FK\_PAGE\_UP & ページアップキー \\ \hline
+FK\_PAGE\_DOWN & ページダウンキー \\ \hline
+FK\_HOME & ホームキー \\ \hline
+FK\_END & エンドキー \\ \hline
+FK\_INSERT & インサートキー \\ \hline
+FK\_LEFT & 左矢印キー \\ \hline
+FK\_RIGHT & 右矢印キー \\ \hline
+FK\_UP & 上矢印キー \\ \hline
+FK\_DOWN & 下矢印キー \\ \hline
+FK\_F1 〜 FK\_F12 & F1〜F12 ファンクションキー \\ \hline
+\end{tabular}
+\end{center}
+\section{メッセージ出力}
+プログラミングをしていると、現在の変数の値がどうなっているのかを
+参照したいことがよくあります。この方法は様々なものがあるのですが、
+FKのプログラムでは\\
+「\verb+fk_Window::printf()+」という関数を使うのが
+最も簡単です。この関数を用いると、メッセージを出力するための
+ウィンドウが別途現れ、そこに指定した文字列が表示されます。\\
+\begin{screen}
+\begin{verbatim}
+fk_Window::printf("This is Sample.");
+\end{verbatim}
+\end{screen}
+~ \\
+変数の値を表示したい場合は、整数(int型)の場合は「\%d」、
+実数(double型)の場合は「\%f」を用います。\\
+\begin{screen}
+\begin{verbatim}
+int    a, b;
+
+a = 10;
+b = a + 5;
+fk_Window::printf("a = %d, b = %d", a, b);
+\end{verbatim}
+\end{screen}
+~ \\
+上記のプログラムは、メッセージウィンドウに
+「a = 10, b = 15」と表示されます。
+このように、printf は最初の引数に
+出力したい文字列の書式を入れ、変数の値を
+表示したい箇所に「\%d」や「\%f」を入れておきます。
+その後の引数に、それぞれ表示したい変数(や計算式)を
+記述しておきます。
+
+fk\_Vector のようなベクトル値を表示したい場合は、
+以下の様にするとよいでしょう。\\
+\begin{screen}
+\begin{verbatim}
+fk_Vector    vec;
+
+fk_Window::printf("vec = (%f, %f, %f)", vec.x, vec.y, vec.z);
+\end{verbatim}
+\end{screen}
+~ \\
+printf 関数は、小数点以下の桁数を指定するなど、
+細かな書式を指定することも可能です。この書式は、
+一般的な C++ 言語の「printf()」関数に準じていますので、
+詳しいことは参考書やWebによる情報を閲覧して下さい。
+
+\section{練習課題} \label{sec:05-q}
+\begin{description}
+ \myitem 円、多角柱、多角錐を実際に表示するプログラムを作成せよ。
+
+ \myitem 「問題 4-1」で作成したプログラムに対し、
+	球の中心同士の距離が常に表示されるようにプログラムを変更せよ。
+\end{description}

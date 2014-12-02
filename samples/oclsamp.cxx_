@@ -1,0 +1,56 @@
+#include <FK/FK.h>
+#include <FK/OpenCL.h>
+
+int main(int, char **)
+{
+	const size_t	SIZE = 100000;
+	fk_AppWindow	win;
+	fk_OpenCL		opencl;
+	vector<float>	a(SIZE), b(SIZE*3);
+	size_t			i;
+	int				count;
+	
+	fk_System::setcwd();
+
+	// 初期化。カーネルファイル名とカーネル関数名。
+	// デバッグモードにしたければ第3引数にtrueを追加。
+
+	//fk_SetErrorMode(FK_ERR_BROWSER_INTERACTIVE);
+	if(opencl.deviceInit("oclsamp.cl", "fk_OpenCL", false) == false) {
+		fl_alert("Dev Init Error.");
+	}
+
+	// デバイス(GPU)内にデータバッファ作成。
+	// (引数番号, データサイズ, CPU側からGPUにデータを転送するならtrue)
+	opencl.createData(0, sizeof(float)*SIZE, false);
+	opencl.createData(1, sizeof(float)*SIZE*3, true);
+
+	// 3次元座標配列を適当に設定
+	for(i = 0; i < SIZE*3; i++) b[i] = float(sin(i));
+
+	win.setSize(300, 300);
+	win.open();
+
+	count = 0;
+	while(win.update() == true) {
+
+		// CPUからGPUにデータ転送
+		// (引数番号, データサイズ, データポインタ)
+		opencl.sendData(1, sizeof(float)*SIZE*3, &b[0]);
+
+		// 実行。引数は配列データ数
+		opencl.run(SIZE);
+
+		// 処理後、GPUからCPUにデータ転送。
+		// (引数番号, データサイズ, データポインタ)
+		opencl.getData(0, sizeof(float)*SIZE, &a[0]);
+
+		if(count % 100 == 0) {
+			for(i = 0; i < SIZE; i += 10000) {
+				fk_Window::printf("%d, %f", count, a[i]);
+			}
+		}
+		count++;
+	}
+	return 0;
+}

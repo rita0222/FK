@@ -1,0 +1,159 @@
+﻿\chapter{配列と繰り返し}
+\section{配列の作成と利用} \label{sec:02-array}
+\begin{itembox}[l]{配列}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        block(10.0, 10.0, 10.0);
+ 7:     fk_Model        model[2];
+ 8: 
+ 9:     model[0].setShape(&block);
+10:     model[0].setMaterial(Yellow);
+11:     model[0].glMoveTo(-20.0, -20.0, 0.0);
+12:     window.entry(&model[0]);
+13: 
+14:     model[1].setShape(&block);
+15:     model[1].setMaterial(Red);
+16:     model[1].glMoveTo(20.0, 20.0, 0.0);
+17:     window.entry(&model[1]);
+18: 
+19:     window.setSize(800, 600);
+20:     window.setBGColor(0.3, 0.6, 0.8);
+21:     window.open();
+22: 
+23:     while(window.update() == true) {
+24:     }
+25: 
+26:     return 0;
+27: }
+\end{verbatim}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item 7行目で、これまでの変数の準備(これを「変数の\textbf{宣言}」といいます)
+	の際に、カギ括弧で 2 という数字を挟んでいます。
+	このように、変数宣言の際にカギ括弧で数字を挟んでいる形式の
+	変数を「\textbf{配列}」と言います。
+	配列は、沢山の変数をひとまとまりで準備することができます。
+	今回のように「\verb+model[2]+」とした場合は、
+	「\verb+model[0]+」と「\verb+model[1]+」という変数を
+	準備したことと同じ意味となります。このように、
+	「\verb+配列名[n]+」と宣言した場合、
+	\verb+配列名[0]+から\verb+配列名[n-1]+ の n 個の変数が
+	利用できるようになります。
+
+ \item 9行目と14行目では、同じ block を異なるモデルに設定しています。
+	このように、FK では異なるモデルに同じ形状を設定することが可能です。
+	例えば、カーレースゲームでは同じ形状のモデルに対して
+	色を替えた車を複数同時に扱いたいものです。
+	このようなとき、FK では各車のモデルを用意し、
+	それぞれのモデルに同じ形状を設定するということができます。
+	モデルはそれぞれ固有の色や位置を持つことができます。
+	今回も、色や位置が二つのモデルで異なっていることがわかります。
+
+\end{itemize}
+
+\section{for文によるループ} \label{sec:02-for}
+\begin{itembox}[l]{for文}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        block(1.0, 1.0, 1.0);
+ 7:     fk_Model        model[10];
+ 8:     int             i;
+ 9: 
+10:     for(i = 0; i < 10; i++) {
+11:         model[i].setShape(&block);
+12:         model[i].setMaterial(Yellow);
+13:         model[i].glMoveTo(i*5, 0.0, 0.0);
+14:         window.entry(&model[i]);
+15:     }
+16: 
+17:     window.setSize(800, 600);
+18:     window.setBGColor(0.3, 0.6, 0.8);
+19:     window.open();
+20: 
+21:     while(window.update() == true) {
+22:     }
+23: 
+24:     return 0;
+25: }
+\end{verbatim}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item 8行目、int という型の「\verb+i+」という変数が宣言されています。
+	この変数については、これまでの変数と違って
+	「情報を格納する」という目的で変数を利用していきます。
+	int 型は、整数の値を1個だけ格納することができます。
+
+ \item 10行目の「for」というのは変数ではなく、
+	C++の中で「ループ」を扱うための機能です。
+	書式は以下の様になっています。\\ ~ \\
+	\begin{shadebox}
+	\begin{verbatim}
+	for(初期処理; 繰り返し条件; 繰り返し処理) {
+	        実行文1;
+	        実行文2;
+	           :
+	}
+	\end{verbatim}
+	\end{shadebox} \\ ~ \\
+	for文では、以下の様な処理が行われます。
+	\begin{enumerate}
+	\item まず、「初期処理」を実行する。今回の場合は
+		i に 0 が代入される。
+	\item 次に、「繰り返し条件」で条件判定が行われる。ここでは、
+		i が 10 未満かどうかを判定する。もしこの判定に
+		合格した場合、「\verb+{+」と「\verb+}+」で囲まれた
+		「実行文」が逐次実行されていく。
+	\item 全ての実行文が実行された時点で、「繰り返し処理」
+		が実行される。今回の場合は「\verb-i++;-」と
+		書いてあるが、これは「i に 1 を足す」という意味である。
+		例えば、i に 0 が入っていたときは 1 に、
+		3 が入っていたときは 4 になる。
+	\item 後は、ステップ 2 に戻って同様のことが行われていく。
+		もし判定に合格しなかった場合は、「\verb+}+」の
+		外を実行していく。(MyLoop.java の場合、\verb+}+ の
+		外には特に記述がないので、実行を終了する。)
+	\end{enumerate}
+	結果として、この for 文の中身は 10 回実行され、
+	また実行の度に i が 1 ずつ足されていくということになっています。
+
+ \item 11〜13行目では、model 配列のカギ括弧の中の数字
+	(これを\textbf{添字}と言います)が、直接の数値指定ではなく
+	変数 i を用いています。このように、
+	添字には変数や変数の計算結果(例えば\verb-i+3- や \verb+i*2+ など)
+	を入れることが可能です。
+
+ \item 13行目の glMoveTo 関数では、第一引数として i に 5 倍した数値を
+	入力しています。結果的に、最初の箱は \((0, 0, 0)\)、
+	二個目の箱は \((5, 0, 0)\)、三個目の箱は \((10, 0, 0)\)
+	というように、それぞれ別の場所に移動することになります。
+
+\end{itemize}
+\newpage
+\section{練習課題} \label{sec:02-q}
+\begin{description}
+ \myitem \ref{sec:02-for}節のサンプルプログラムに対し、
+	10個の箱がウィンドウの真ん中を中心に並ぶように修正せよ。
+
+ \myitem 10個の箱が斜めに並ぶように配置せよ。
+
+ \myitem 100個の箱が \(10\times10\) のマス目状に並ぶように配置せよ。
+
+ \myitem マス目状に並んでいる100個の箱に対し、
+	箱の色が赤と黄色で市松模様(チェック模様)になるようにせよ。
+	ただし、if文はまだ用いないこと。
+	(ヒント: 配列は複数宣言することが可能)
+\end{description}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{./Fig/Fig02-01.eps}
+\end{figure}

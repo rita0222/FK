@@ -1,0 +1,31 @@
+#! /usr/bin/env perl
+
+use Getopt::Std;
+
+%opts = ();
+
+getopts ("ir", \%opts);
+
+foreach $svgName (@ARGV) {
+	next if $svgName !~ /.svg$/;
+	$pngName = $svgName;
+	$pngName =~ s/.svg$/.png/;
+
+	if($opts{"r"} == 1) {
+	    $com = "rsvg-convert ";
+	    $com .= $svgName;
+	    $com .= " -z 0.8 --format=png -o ";
+	    $com .= $pngName;
+	} else {
+	    $com = "inkscape --export-area-drawing --file=";
+	    $com .= $svgName;
+	    $com .= " --export-png=";
+	    $com .= $pngName;
+	}
+	if(!(-f $pngName)) {
+		system($com);
+	}	
+}
+
+0;
+

@@ -1,0 +1,263 @@
+\chapter{3Dデータの表示}
+\section{形状データの読み込み} \label{sec:09-metaseq}
+\begin{itembox}[l]{メタセコイアデータの読み込み}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_IFSTexture   ifsTex[2];
+ 7:     fk_Model        model[2], parent;
+ 8:     fk_Vector       origin(0.0, 0.0, 0.0);
+ 9:     int             i;
+10: 
+11:     for(i = 0; i < 2; i++) {
+12:         if(ifsTex[i].readJPG("violin.jpg") == false) {
+13:             fl_alert("Image read error");
+14:         }
+15:         model[i].setShape(&ifsTex[i]);
+16:         model[i].setMaterial(White);
+17:         model[i].setParent(&parent);
+18:         window.entry(&model[i]);
+19:     }
+20: 
+21:     if(ifsTex[0].readMQOFile("violin.mqo", "nomal") == false) {
+22:         fl_alert("Shape read error");
+23:     }
+24:     if(ifsTex[1].readMQOFile("violin.mqo", "mirror_z") == false) {
+25:         fl_alert("Shape read error");
+26:     }
+27: 
+28:     parent.setScale(0.1);
+29: 
+30:     window.setCameraPos(0.0, 50.0, 50.0);
+31:     window.setCameraFocus(0.0, 0.0, 0.0);
+32:     window.setSize(800, 600);
+33:     window.setBGColor(0.6, 0.7, 0.8);
+34:     window.open();
+35:     window.showGuide(FK_GRID_XZ);
+36: 
+37:     while(window.update() == true) {
+38:         parent.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+39:     }
+40:     return 0;
+41: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item FKでは、「メタセコイア」というモデラー(3D形状を作成するためのソフトウェア)
+	の入力をサポートしています。メタセコイア自体は有料のソフトウェアですが、
+	機能を制限した無料版もあります。FKで入力して用いる分には、
+	無料版でも十分ですので、興味がある人は使ってみて下さい。
+	現在 Ver.4 がリリースされていますが、
+	まだ Ver.4 によるデータがFKで利用できるかどうか十分に検証がなされて
+	いませんので、Ver.3 系列の「メタセコイアLE R3.0」の利用を推奨します。
+	URLは\verb+http://metaseq.net/+です。
+
+
+ \item 6行目にある「fk\_IFSTexture」という型が、形状の入力や表示を
+	おこなうためのものです。今回は2つの異なるオブジェクトを
+	入力するために配列にしています。
+	メタセコイア内では、一つのファイルに対して複数の
+	「オブジェクト」を生成することが可能です。
+	データの中ではそれぞれ分離した形状として扱われていますので、
+	FKで入力する場合にはそれぞれ別個に読み込む必要があります。
+
+ \item この例ではテクスチャマッピングを行った形状の表示を行っていますが、
+	テクスチャを使っていない形状の表示は「fk\_IndexFaceSet」という型を用います。
+	テクスチャ画像の入力を行わない点以外は、利用方法は fk\_IFSTexture と同じです。
+
+ \item 12行目でまずはテクスチャ画像となるファイルを読み込みます。
+	ここでは JPEG 形式の画像となっているので「readJPG」という
+	関数を用いていますが、PNG 形式の場合は関数名を「readPNG」、
+	BMP 形式の場合は関数名を「readBMP」として下さい。
+	なお、fk\_IFSTexture では画像を入力する前に形状データを
+	入力するとプログラムが不正終了してしまうことがありますので、
+	注意して下さい。
+
+ \item 13行目では「fl\_alert」という関数が出てきます。
+	これは、エラーメッセージを出力するダイアログを出すための関数で、
+	今回のようにファイル読み込みに失敗したときなど、
+	プログラムでなんらかのエラー状態となったときに用います。
+	この関数が呼ばれると、ダイアログを閉じられるまでプログラムは
+	一旦停止します。
+
+ \item 17行目で「parent」というモデルを親モデルとして登録しています。
+	これにより、異なるオブジェクトに対し「parent」を操作するだけで
+	両方を同時に動かすことが可能となります。
+
+ \item 21,25行目にある「readMQOFile」という関数がメタセコイアの形状データである
+	MQOファイルを入力する関数です。この関数は2つの文字列による引数を
+	取ります。最初の引数はMQOファイル名です。次の引数は
+	オブジェクト名となります。この結果が false で合った場合、
+	入力に失敗したことになります。
+	今回のサンプルである violin.mqo ファイルには、
+	「nomal」、「mirror\_z」という2つのオブジェクトがあり、
+	それぞれを別の fk\_IFSTexture 型変数に読み込んでいます。
+
+ \item 30行目の「setScale」関数は fk\_Model 型の変数にある機能の一つで、
+	全体の拡大縮小を行います。今回のように、親モデルとなっているときに
+	setScale を行うと、子モデル全体に対しても適用されます。
+\end{itemize}
+\section{FK Performerからの読み込み} \label{sec:09-performer}
+\begin{itembox}[l]{Performerデータの読み込み}
+\begin{scriptsize}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Performer    chara;
+ 7:     fk_Vector       origin(0.0, 0.0, 0.0);
+ 8:     int             motionID;
+ 9: 
+10:     // 形状読み込み
+11:     if(chara.loadObjectData("girl.mqo") == false) {
+12:         fl_alert("Object read error");
+13:     }
+14: 
+15:     // 設定読み込み
+16:     if(chara.loadJointData("girl_setup.fkc") == false) {
+17:         fl_alert("Joint read error");
+18:     }
+19: 
+20:     // 歩きモーション読み込み
+21:     if(chara.loadMotionData("walk.fkm") == false) {
+22:         fl_alert("Walk motion read error");
+23:     }
+24: 
+25:     // パンチ1読み込み
+26:     if(chara.loadMotionData("punch1.fkm") == false) {
+27:         fl_alert("Punch motion read error");
+28:     }
+29: 
+30:     window.entry(&chara);
+31:     window.setCameraPos(0.0, 25.0, 100.0);
+32:     window.setCameraFocus(0.0, 25.0, 0.0);
+33:     window.setSize(800, 600);
+34:     window.setBGColor(0.6, 0.7, 0.8);
+35:     window.open();
+36: 
+37:     motionID = -1;
+38:     while(window.update() == true) {
+39: 
+40:         if(window.getSpecialKeyStatus(FK_RIGHT) == FK_SW_PRESS) {
+41:             chara.getBaseModel()->glRotateWithVec(origin, fk_Y, FK_PI/180.0);
+42:         }
+43: 
+44:         if(window.getSpecialKeyStatus(FK_LEFT) == FK_SW_PRESS) {
+45:             chara.getBaseModel()->glRotateWithVec(origin, fk_Y, -FK_PI/180.0);
+46:         }
+47: 
+48:         // モーション選択
+49:         if(window.getKeyStatus('1') == true) {
+50:             motionID = 0;
+51:         } else if(window.getKeyStatus('2') == true) {
+52:             motionID = 1;
+53:         } else if(window.getKeyStatus(' ') == true) {
+54:             motionID = -1;
+55:         }
+56: 
+57:         if(motionID == 0) {
+58:             // 歩きモーションはリピート再生
+59:             chara.playMotion(0);
+60:         } else if(motionID == 1) {
+61:             // パンチは、終了しているかどうかを判定
+62:             if(chara.isMotionFinished(motionID) == true) {
+63:                 // 終了していたら巻き戻し
+64:                 chara.setNowFrame(motionID, 0);
+65:                 motionID = -1;
+66:             } else {
+67:                 // 終了していなかったら再生
+68:                 chara.playMotion(motionID);
+69:             }
+70:         }
+71: 
+72: 
+73:     }
+74:     return 0;
+75: }
+\end{verbatim}
+\end{scriptsize}
+\end{itembox}
+\newpage
+\subsection*{解説}
+\begin{itemize}
+ \item 前の例では形状の動作(モーション)がありませんでしたが、
+	キャラクターモデル等はモーションを付加したい場合が多々あります。
+	そのような場合、FK では「FK Performer」というアプリケーションを使って
+	モーションを作成します。Performer は\\
+	\verb+http://gamescience.jp/~rita/FKP/+ からダウンロードできます。
+	このページに使い方も載っていますので、利用を検討している人は
+	このページを参照して下さい。
+
+ \item Performer を使う場合、プログラム中では\\
+	「fk\_Performer」という型を
+	用います。6行目がそれにあたります。今回は変数を1個しか用意して
+	いませんが、もちろん複数の変数や配列を用いることも可能です。
+
+ \item fk\_Performer では、3種類のファイルを入力します。
+	まず形状データそのものである MQO ファイルを入力するには
+	11 行目にあるように「loadObjectData」関数を用います。
+	ただし、fk\_IFSTexture と違ってテクスチャ画像を事前に入力する
+	必要はなく、オブジェクト名も指定する必要はありません。
+
+ \item 次に、16行目にあるように「FKCファイル」を読み込みます。
+	これは、Performer による全体設定のためのファイルです。
+
+ \item 次に、モーションを表すデータを入力します。
+	モーションは一つのキャラクタに対して複数のものを使うことが想定されるため、
+	Performer 側では個別のモーションを別々のファイルに保存しておきます。
+	21,26行目の「loadMotionData」関数がモーションを FK 側で入力する
+	関数となりますが、今回は歩きとパンチの2種類のモーションを入力してみます。
+	なお、入力したモーションはそれぞれに ID が付与され、
+	最初に読み込んだものが 0 番、次が 1 番\(\cdots\)となります。
+
+ \item 30行目では、fk\_Model と同様に fk\_AppWindow に登録しています。
+
+ \item 入力した形状データに対する位置や向きの制御ですが、
+	これは41,45行目にあるように
+	\begin{screen}
+	\begin{verbatim}
+	    変数.getBaseModel()->関数()
+	\end{verbatim}
+	\end{screen}
+	という記述で行います。関数は fk\_Model 型で用いることのできた関数、
+	他に「glTranslate」や「setScale」等を用いることが可能です。
+	詳しい説明、特に「\verb+->+」という部分の
+	解説はやや高度になるのでここでは触れません。
+
+ \item モーションの再生を行うには 59 行目や 68 行目にあるように
+	「playMotion」関数を用います。引数にはモーションのIDを入れます。
+	「モーションの再生」と書きましたが、厳密には
+	形状のアニメーションを1コマ進めるという意味になります。
+
+ \item モーションは、一回の再生で終わらせたい場合と、繰り返し再生したい場合があります。
+	今回の場合、歩きのモーションは繰り返したいものであり、
+	パンチのモーションは一回の再生で終わらせたいものと想定しています。
+	繰り返したい場合は、59行目にあるようにひたすら playMotion 関数を使います。
+	最後まで再生された場合に最初に巻き戻し、改めて再生を行っていきます。
+
+ \item 一方、パンチのように一回で終わらせたい場合は、あるモーションが既に
+	再生が最後まで来ているかどうかを判断する必要があります。
+	それを行っているのが 62 行目の「isMotionFinished」関数です。
+	モーションIDを引数として関数を呼ぶと、もし再生が終了していた場合に
+	true が、そうでない場合 false が返されます。
+	今回のサンプルの場合、終了と判定された場合に64 行目に進むことになります。
+
+ \item 64行目の「setNowFrame」関数は、モーションの経過コマを指定するものです。
+	1番目の引数がモーションID、2番目がコマの指定です。コマを0にするというのは、
+	つまり最初に巻き戻すことになります。
+	また、65行目にあるように motionID に -1 を代入しておくことによって、
+	あらためてこのモーションが再生されるのを防いでいます。
+\end{itemize}
+\section{練習課題} \label{sec:09-q}
+\begin{description}
+ \myitem 様々なモーションデータをプログラム中で再生せよ。
+ \myitem FK Performer を使って自分でモーションを作って、それを再生せよ。
+\end{description}

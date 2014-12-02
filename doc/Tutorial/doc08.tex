@@ -1,0 +1,203 @@
+\chapter{テクスチャマッピングと画面上への文字表示}
+\section{テクスチャマッピング} \label{sec:08-texture}
+\begin{itembox}[l]{テクスチャ画像表示}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_RectTexture  texture;
+ 7:     fk_Block        block(1.0, 1.0, 1.0);
+ 8:     fk_Model        texModel, blockModel;
+ 9:     fk_Vector       origin(0.0, 0.0, 0.0);
+10: 
+11:     texture.readPNG("Chinmi.png");
+12:     texture.setTextureSize(7.0, 5.0);
+13:     texModel.setShape(&texture);
+14:     texModel.setMaterial(White);
+15:     texModel.glMoveTo(0.0, 5.0, 0.0);
+16:     window.entry(&texModel);
+17: 
+18:     blockModel.setShape(&block);
+19:     blockModel.glMoveTo(2.0, 6.0, 0.0);
+20:     blockModel.setMaterial(Yellow);
+21:     window.entry(&blockModel);
+22: 
+23:     window.setCameraPos(0.0, 5.0, 20.0);
+24:     window.setCameraFocus(0.0, 5.0, 0.0);
+25:     window.setSize(800, 600);
+26:     window.setBGColor(0.6, 0.7, 0.8);
+27:     window.open();
+28:     window.showGuide(FK_GRID_XZ);
+29: 
+30:     while(window.update() == true) {
+31:         texModel.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+32:     }
+33:     return 0;
+34: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item 3Dグラフィックスの重要な技術に「\textbf{テクスチャマッピング}」
+	というものがあります。これは画像の全体または一部分を3次元空間内に
+	表示するもので、リアルタイムグラフィックス技術の中でも
+	最重要と言えるものです。このサンプルプログラムは、
+	その最も基本的な利用方法として1枚の画像を空間上に配置しています。
+	表示用の画像をあらかじめ授業用ページからダウンロードしておいて下さい。
+
+ \item FKにも、テクスチャマッピングを行う方法は様々なものが用途に合わせて
+	準備されていますが、今回使う「fk\_RectTexture」という型は、
+	画像をそのまま一枚の長方形状に扱うためのものです。
+	6行目にあるように、まずは変数を宣言しておきます。
+
+ \item 11行目で画像を読み込んでおきます。この画像ファイルは、
+	exe ファイルがあるフォルダと同じ場所に置いておく必要があります。
+	今回は PNG 形式の画像を入力していますが、
+	他に「readJPEG()」という関数で JPEG 形式を入力することや、
+	「readBMP()」という関数で BMP 形式の画像を入力することもできます。
+
+ \item 12行目の setTextureSize 関数は、FK 内での画像テクスチャの
+	横幅と縦幅をそれぞれ設定します。縦横比(アスペクト比)は、
+	必ずしも元画像の縦横比と一致している必要はありません。
+
+ \item 14行目でマテリアルを設定しています。テクスチャ画像の元の色を
+	ほぼそのまま再現したい場合は、ここで白に近いマテリアルを設定しておく
+	必要があります。
+
+ \item 31行目でテクスチャ画像を回転させていますが、裏側から見ている場合は
+	見ることができません。
+\end{itemize}
+\section{文字列の画面内表示} \label{sec:08-sprite}
+\begin{itembox}[l]{スプライト表示}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: #include <sstream>
+ 3: 
+ 4: string IntToString(int argI)
+ 5: {
+ 6:     stringstream ss;
+ 7:     ss << argI;
+ 8:     return ss.str();
+ 9: }
+10: 
+11: int main(int, char **)
+12: {
+13:     fk_AppWindow    window;
+14:     fk_SpriteModel  sprite;
+15:     fk_Block        block(1.0, 1.0, 1.0);
+16:     fk_Model        model;
+17:     fk_Vector       origin(0.0, 0.0, 0.0);
+18:     int             count;
+19:     std::string     str;
+20: 
+21:     if(sprite.initFont("rounded-mplus-1m-bold.ttf") == false) {
+22:         fl_alert("Font Read Error");
+23:     }
+24:     sprite.setPositionLT(-280.0, 230.0);
+25:     window.entry(&sprite);
+26: 
+27:     model.setShape(&block);
+28:     model.glMoveTo(0.0, 6.0, 0.0);
+29:     model.setMaterial(Yellow);
+30:     window.entry(&model);
+31: 
+32:     window.setCameraPos(0.0, 5.0, 20.0);
+33:     window.setCameraFocus(0.0, 5.0, 0.0);
+34:     window.setSize(800, 600);
+35:     window.setBGColor(0.6, 0.7, 0.8);
+36:     window.open();
+37:     window.showGuide(FK_GRID_XZ);
+38: 
+39:     count = 0;
+40:     while(window.update() == true) {
+41:         str = "count = " + IntToString(count);
+42:         sprite.drawText(str, true);
+43:         model.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+44:         count++;
+45:     }
+46:     return 0;
+47: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item ここでは「スプライト表示」と呼ばれる手法について紹介します。
+	これは簡単に言ってしまうと、3次元空間上ではなく
+	スクリーンに直接画像を投影することです。
+	先ほど、テクスチャマッピングを使って3D上に画像を配置する
+	技術を紹介しました。しかし、これを使って字幕などを表示した場合、
+	ある物体がその字幕の手前に配置された場合、字幕を遮ってしまいます。
+	そこで、他の物体がどんなに近くにあっても画面上に表示される
+	画像というのが必要となります。それを「スプライト表示」と言います。
+
+	「スプライト」は本来は旧世代のゲーム機やハードウェアなどで
+	ビデオ情報に直接画素値を書き込む技術のことを言いましたが、
+	現在はこのような技術はもう用いられていません。
+	しかし、今でもそのときの名残で画面に常に表示される画像を
+	「スプライト」と呼ぶ慣習があります。
+
+	スプライト表示の中でもとりわけ需要が高いものに「メッセージ表示」
+	があります。たとえばゲームでの現在の得点などがそれに当たります。
+	今回は、それを行う仕組みを紹介します。
+
+ \item 4〜9行目の解説はまだ現時点でのこの授業の範疇を超えますが、
+	これを書いておくことによって「IntToString()」という自作の関数を
+	作っており、これによって数値を文字列に変換することができるものです。
+
+ \item 14行目にスプライト専用の型である「fk\_SpriteModel」型の
+	変数が宣言されています。
+
+ \item 19行目の「string」型は、C++で標準の文字列を格納するための型です。
+
+ \item 21行目で、スプライトで表示する文字のフォント用ファイルを
+	読み込んでいます。今回は「Rounded M+」というフリーのフォントを
+	使用します。このフォント用ファイルも授業用ページから
+	ダウンロードしておき、exe と同じフォルダにおいて下さい。
+	Windows にもフォントファイルは多く搭載されており、
+	それを表示に使用することも可能です\footnote{ただし、そのファイルを
+	他のPCにコピーすることはライセンス違反となることがあります。}。
+	
+ \item 24行目は画面上のどこにスプライトを表示するかを指定します。
+	これはFKの標準的な座標系ではなく、画面内のピクセル単位で指定します。
+	原点は画面の真ん中になります。
+
+ \item 41行目ですが、これは「count =」という文字列と、
+	count の値を文字列に変換したものを合わせています。
+	たとえば count の値が 500 だった場合は、str の中は
+	「count = 500」という文字列が入ります。
+
+ \item 42行目で実際にスプライトの内容を書き換えます。
+	第二引数を false にした場合、既に表示されていた文字列を消去せず、
+	その後ろに続けて表示していくようになります。
+
+\end{itemize}
+\newpage
+\section{練習課題} \label{sec:08-q}
+\begin{description}
+ \myitem 自分で画像を用意し、それをテクスチャマッピング表示せよ。
+
+ \myitem 6枚のテクスチャを使って立方体(サイコロ形状)を作成し、
+	X,Y,Zキーでそれぞれ\(x,y,z\)軸を中心に回転するプログラムを作成せよ。
+
+ \myitem 前回の問題7-4のプログラム(7-4が完成できなかった場合は7-2でもよい)
+	に対し、現在の車の3次元空間中の位置をスプライト表示するような
+	機能を作成せよ。double型の実数を string に変換するには、
+	以下のような関数を main 関数の前に追加しておくとよい。
+	\begin{screen}
+	\begin{verbatim}
+	string DoubleToString(double argD)
+	{
+	    stringstream ss;
+	    ss << argD;
+	    return ss.str();
+	}
+	\end{verbatim}
+	\end{screen}
+
+\end{description}

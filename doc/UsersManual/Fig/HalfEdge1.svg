@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="body"
+   width="8in"
+   height="8in"
+   viewBox="0 0 1 1"
+   preserveAspectRatio="none"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="HalfEdge1.svg">
+  <metadata
+     id="metadata11060">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs11058" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1243"
+     inkscape:window-height="882"
+     id="namedview11056"
+     showgrid="false"
+     inkscape:zoom="1.3111111"
+     inkscape:cx="360"
+     inkscape:cy="360"
+     inkscape:window-x="169"
+     inkscape:window-y="156"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="body" />
+  <title
+     id="title10974">SVG drawing</title>
+  <desc
+     id="desc10976">This was produced by version 4.4 of GNU libplot, a free library for exporting 2-D vector graphics.</desc>
+  <g
+     id="content"
+     transform="matrix(0.0017361,0,0,-0.0017361,0.17213983,1.5858051)"
+     xml:space="preserve"
+     stroke-miterlimit="10.433"
+     font-style="normal"
+     font-variant="normal"
+     font-weight="normal"
+     font-stretch="normal"
+     font-size-adjust="none"
+     letter-spacing="normal"
+     word-spacing="normal"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0">
+<polygon
+   points="216,770.04 72,554.04 360,554.04 "
+   id="polygon10980"
+   style="stroke-width:1.6875" />
+<path
+   d="m 220.5,770.04 -0.01,-0.23 -0.01,-0.23 -0.03,-0.23 -0.04,-0.22 -0.05,-0.22 -0.06,-0.21 -0.07,-0.21 -0.08,-0.2 -0.09,-0.2 -0.1,-0.2 -0.11,-0.18 -0.12,-0.19 -0.12,-0.17 -0.14,-0.17 -0.14,-0.17 -0.15,-0.15 -0.15,-0.15 -0.17,-0.14 -0.17,-0.14 -0.17,-0.12 -0.19,-0.12 -0.19,-0.11 -0.19,-0.1 -0.2,-0.09 -0.2,-0.08 -0.21,-0.07 -0.22,-0.06 -0.21,-0.05 -0.22,-0.04 -0.23,-0.03 -0.23,-0.02 -0.23,0 c -2.48,0 -4.5,2.01 -4.5,4.5 0,2.48 2.02,4.5 4.5,4.5 2.48,0 4.5,-2.02 4.5,-4.5 z"
+   id="path10982"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<path
+   d="m 220.5,770.04 -0.01,-0.23 -0.01,-0.23 -0.03,-0.23 -0.04,-0.22 -0.05,-0.22 -0.06,-0.21 -0.07,-0.21 -0.08,-0.2 -0.09,-0.2 -0.1,-0.2 -0.11,-0.18 -0.12,-0.19 -0.12,-0.17 -0.14,-0.17 -0.14,-0.17 -0.15,-0.15 -0.15,-0.15 -0.17,-0.14 -0.17,-0.14 -0.17,-0.12 -0.19,-0.12 -0.19,-0.11 -0.19,-0.1 -0.2,-0.09 -0.2,-0.08 -0.21,-0.07 -0.22,-0.06 -0.21,-0.05 -0.22,-0.04 -0.23,-0.03 -0.23,-0.02 -0.23,0 c -2.48,0 -4.5,2.01 -4.5,4.5 0,2.48 2.02,4.5 4.5,4.5 2.48,0 4.5,-2.02 4.5,-4.5 z"
+   id="path10984"
+   inkscape:connector-curvature="0"
+   style="stroke-width:0.5625" />
+<path
+   d="m 76.5,554.04 -0.006,-0.23 -0.017,-0.23 -0.029,-0.23 -0.039,-0.22 -0.051,-0.22 -0.06,-0.21 -0.071,-0.21 -0.081,-0.2 -0.09,-0.2 -0.099,-0.2 -0.109,-0.18 -0.117,-0.19 -0.125,-0.17 -0.134,-0.17 -0.141,-0.17 -0.149,-0.15 -0.157,-0.15 -0.163,-0.14 -0.17,-0.14 -0.176,-0.12 -0.183,-0.12 -0.188,-0.11 -0.194,-0.1 -0.2,-0.09 -0.204,-0.08 -0.209,-0.07 -0.214,-0.06 -0.217,-0.05 -0.222,-0.04 -0.225,-0.03 -0.229,-0.02 -0.231,0 c -2.484,0 -4.5,2.01 -4.5,4.5 0,2.48 2.016,4.5 4.5,4.5 2.484,0 4.5,-2.02 4.5,-4.5 z"
+   id="path10986"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<path
+   d="m 76.5,554.04 -0.006,-0.23 -0.017,-0.23 -0.029,-0.23 -0.039,-0.22 -0.051,-0.22 -0.06,-0.21 -0.071,-0.21 -0.081,-0.2 -0.09,-0.2 -0.099,-0.2 -0.109,-0.18 -0.117,-0.19 -0.125,-0.17 -0.134,-0.17 -0.141,-0.17 -0.149,-0.15 -0.157,-0.15 -0.163,-0.14 -0.17,-0.14 -0.176,-0.12 -0.183,-0.12 -0.188,-0.11 -0.194,-0.1 -0.2,-0.09 -0.204,-0.08 -0.209,-0.07 -0.214,-0.06 -0.217,-0.05 -0.222,-0.04 -0.225,-0.03 -0.229,-0.02 -0.231,0 c -2.484,0 -4.5,2.01 -4.5,4.5 0,2.48 2.016,4.5 4.5,4.5 2.484,0 4.5,-2.02 4.5,-4.5 z"
+   id="path10988"
+   inkscape:connector-curvature="0"
+   style="stroke-width:0.5625" />
+<path
+   d="m 364.5,554.04 -0.01,-0.23 -0.01,-0.23 -0.03,-0.23 -0.04,-0.22 -0.05,-0.22 -0.06,-0.21 -0.07,-0.21 -0.08,-0.2 -0.09,-0.2 -0.1,-0.2 -0.11,-0.18 -0.12,-0.19 -0.12,-0.17 -0.14,-0.17 -0.14,-0.17 -0.15,-0.15 -0.15,-0.15 -0.17,-0.14 -0.17,-0.14 -0.17,-0.12 -0.19,-0.12 -0.19,-0.11 -0.19,-0.1 -0.2,-0.09 -0.2,-0.08 -0.21,-0.07 -0.22,-0.06 -0.21,-0.05 -0.22,-0.04 -0.23,-0.03 -0.23,-0.02 -0.23,0 c -2.48,0 -4.5,2.01 -4.5,4.5 0,2.48 2.02,4.5 4.5,4.5 2.48,0 4.5,-2.02 4.5,-4.5 z"
+   id="path10990"
+   inkscape:connector-curvature="0"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<path
+   d="m 364.5,554.04 -0.01,-0.23 -0.01,-0.23 -0.03,-0.23 -0.04,-0.22 -0.05,-0.22 -0.06,-0.21 -0.07,-0.21 -0.08,-0.2 -0.09,-0.2 -0.1,-0.2 -0.11,-0.18 -0.12,-0.19 -0.12,-0.17 -0.14,-0.17 -0.14,-0.17 -0.15,-0.15 -0.15,-0.15 -0.17,-0.14 -0.17,-0.14 -0.17,-0.12 -0.19,-0.12 -0.19,-0.11 -0.19,-0.1 -0.2,-0.09 -0.2,-0.08 -0.21,-0.07 -0.22,-0.06 -0.21,-0.05 -0.22,-0.04 -0.23,-0.03 -0.23,-0.02 -0.23,0 c -2.48,0 -4.5,2.01 -4.5,4.5 0,2.48 2.02,4.5 4.5,4.5 2.48,0 4.5,-2.02 4.5,-4.5 z"
+   id="path10992"
+   inkscape:connector-curvature="0"
+   style="stroke-width:0.5625" />
+<line
+   x1="193.5"
+   y1="716.03998"
+   x2="164.41"
+   y2="670.34003"
+   id="line10994"
+   style="stroke-width:0.5625" />
+<polygon
+   points="162,666.54 162.99,671.24 165.84,669.43 "
+   id="polygon10996"
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#ffffff;stroke-width:0" />
+<polygon
+   points="162,666.54 162.99,671.24 165.84,669.43 "
+   id="polygon10998"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<line
+   x1="144"
+   y1="567.53998"
+   x2="211.5"
+   y2="567.53998"
+   id="line11000"
+   style="stroke-width:0.5625" />
+<polygon
+   points="216,567.54 211.5,565.85 211.5,569.23 "
+   id="polygon11002"
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#ffffff;stroke-width:0" />
+<polygon
+   points="216,567.54 211.5,565.85 211.5,569.23 "
+   id="polygon11004"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<line
+   x1="315"
+   y1="599.03998"
+   x2="281.64999"
+   y2="644.90002"
+   id="line11006"
+   style="stroke-width:0.5625" />
+<polygon
+   points="279,648.54 283.01,645.9 280.28,643.91 "
+   id="polygon11008"
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#ffffff;stroke-width:0" />
+<polygon
+   points="279,648.54 283.01,645.9 280.28,643.91 "
+   id="polygon11010"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<line
+   x1="148.5"
+   y1="540.53998"
+   x2="216"
+   y2="540.53998"
+   id="line11012"
+   style="stroke-width:0.5625" />
+<polygon
+   points="144,540.54 148.5,542.23 148.5,538.85 "
+   id="polygon11014"
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#ffffff;stroke-width:0" />
+<polygon
+   points="144,540.54 148.5,542.23 148.5,538.85 "
+   id="polygon11016"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<line
+   x1="168.59"
+   y1="725.73999"
+   x2="139.5"
+   y2="680.03998"
+   id="line11018"
+   style="stroke-width:0.5625" />
+<polygon
+   points="171,729.54 170.01,724.84 167.16,726.65 "
+   id="polygon11020"
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#ffffff;stroke-width:0" />
+<polygon
+   points="171,729.54 170.01,724.84 167.16,726.65 "
+   id="polygon11022"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<line
+   x1="334.85001"
+   y1="616.17999"
+   x2="301.5"
+   y2="662.03998"
+   id="line11024"
+   style="stroke-width:0.5625" />
+<polygon
+   points="337.5,612.54 333.49,615.19 336.22,617.17 "
+   id="polygon11026"
+   style="fill:#ffffff;fill-rule:nonzero;stroke:#ffffff;stroke-width:0" />
+<polygon
+   points="337.5,612.54 333.49,615.19 336.22,617.17 "
+   id="polygon11028"
+   style="fill:#000000;fill-rule:nonzero;stroke-width:0" />
+<text
+   transform="matrix(0.675,0,0,-0.675,211.5,779.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11030"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">v1</text>
+
+<text
+   transform="matrix(0.675,0,0,-0.675,54,545.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11032"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">v2</text>
+
+<text
+   transform="matrix(0.675,0,0,-0.675,369,545.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11034"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">v3</text>
+
+<text
+   transform="matrix(0.50625,0,0,-0.50625,184.5,684.54)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11036"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">h1</text>
+
+<text
+   transform="matrix(0.50625,0,0,-0.50625,135,711.54)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11038"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">h2</text>
+
+<text
+   transform="matrix(0.50625,0,0,-0.50625,175.5,581.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11040"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">h3</text>
+
+<text
+   transform="matrix(0.50625,0,0,-0.50625,171,531.54)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11042"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">h4</text>
+
+<text
+   transform="matrix(0.50625,0,0,-0.50625,279,617.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11044"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">h5</text>
+
+<text
+   transform="matrix(0.50625,0,0,-0.50625,319.5,644.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11046"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">h6</text>
+
+<text
+   transform="matrix(0.675,0,0,-0.675,103.5,621.54)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11048"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">e1</text>
+
+<text
+   transform="matrix(0.675,0,0,-0.675,261,540.54)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11050"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">e2</text>
+
+<text
+   transform="matrix(0.675,0,0,-0.675,270,698.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11052"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">e3</text>
+
+<text
+   transform="matrix(0.675,0,0,-0.675,211.5,635.04)"
+   font-style="italic"
+   font-weight="bold"
+   font-size="20px"
+   id="text11054"
+   style="font-size:20px;font-style:italic;font-weight:bold;fill:#000000;stroke:none;font-family:'Times-BoldItalic,Times,serif'">L1</text>
+
+</g></svg>

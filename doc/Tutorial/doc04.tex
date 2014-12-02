@@ -1,0 +1,199 @@
+﻿\chapter{物体の消去と干渉判定}
+\section{カウンターとモデル消去} \label{sec:04-count}
+\begin{itembox}[l]{カウンターとモデル消去}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Block        block(10.0, 10.0, 10.0);
+ 7:     fk_Sphere       sphere(8, 5.0);
+ 8:     fk_Model        modelA, modelB;
+ 9:     int             count, div;
+10: 
+11:     
+12:     modelA.setShape(&sphere);
+13:     modelA.setMaterial(Green);
+14:     modelA.glMoveTo(-20.0, 0.0, 0.0);
+15:     window.entry(&modelA);
+16: 
+17:     modelB.setShape(&block);
+18:     modelB.setMaterial(Yellow);
+19:     modelB.glMoveTo(20.0, 0.0, 0.0);
+20:     window.entry(&modelB);
+21: 
+22:     window.setSize(800, 600);
+23:     window.setBGColor(0.6, 0.7, 0.8);
+24:     window.open();
+25: 
+26:     for(count = 0; window.update() == true; count++) {
+27: 
+28:         div = count/100;
+29:         if(div % 2 == 0) {
+30:             window.entry(&modelA);
+31:             modelB.setMaterial(Yellow);
+32:         } else {
+33:             window.remove(modelA);
+34:             modelB.setMaterial(Red);
+35:         }
+36:     }
+37: 
+38:     return 0;
+39: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+\subsection*{解説}
+\begin{itemize}
+ \item 26行目では、アニメーションループで while ではなく for 文を
+	用いています。これにより、count という変数が最初は 0 に初期化され、
+	ループが1回まわる度に1ずつ増加していきます。このようにしておくことで、
+	現在のループが何回目なのかが count に入ることになります。
+
+	このように、なんらかの回数を数えておく変数を「\textbf{カウンター}」と
+	呼ぶことがあり、前回紹介した「フラグ」と共によく利用されます。
+
+ \item 28行目は割り算の値を div に代入していますが、\\
+	\verb+count/100+ は数学的には整数ではない数値もありえます。
+	しかし、div は int 型ですので中に格納される値は整数値となります。
+	このように、実際の計算結果が実数であるにも関わらず、
+	無理矢理整数型に値を代入することを「\textbf{丸め演算}」と呼びます。
+	int 型の丸め演算では、
+	小数点以下は基本的に\underline{切り捨て}となります。
+	ですので、
+	\begin{screen}
+	\begin{verbatim}
+	    int a = 59;
+	    int b = a/10;
+	\end{verbatim}
+	\end{screen}
+	というプログラムは、b には(四捨五入した6ではなく)5が入ります。
+
+ \item 29行目の、パーセント記号は「割った余り」を求めるための記号(演算子)です。
+	「\verb+if(div % 2 == 0)+」というのは、div を 2 で割った
+	余りが 0、つまり div が偶数のときということになります。
+	結果として、count の百の位が偶数ならこの if の条件が真となり、
+	奇数なら偽となります。
+
+ \item 33行目の remove 関数は、一度 window に登録したモデルを
+	表示要素から外すための関数です。従って、
+	div が奇数の場合は球が表示されなくなります。
+	再び表示させるには、34 行目にあるように改めて表示したモデルを
+	entry することで可能です。
+	既に entry されているモデルに対して entry した場合は、
+	内部的には二重に表示されるわけではなく、
+	実際には特に動作に変化はありません。
+	remove を何度も行う場合も同様です。
+\end{itemize}
+
+\section{干渉判定} \label{sec:04-col}
+\begin{itembox}[l]{球同士の干渉判定}
+\begin{small}
+\begin{verbatim}
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: int main(int, char **)
+ 4: {
+ 5:     fk_AppWindow    window;
+ 6:     fk_Sphere       sphere(8, 5.0);
+ 7:     fk_Model        modelA, modelB;
+ 8:     fk_Vector       posA, posB, vec;
+ 9:     double          distance;
+10: 
+11:     modelA.setShape(&sphere);
+12:     modelA.setMaterial(Green);
+13:     modelA.glMoveTo(-20.0, 2.0, 0.0);
+14:     window.entry(&modelA);
+15: 
+16:     modelB.setShape(&sphere);
+17:     modelB.setMaterial(Yellow);
+18:     modelB.glMoveTo(0.0, -2.0, 0.0);
+19:     window.entry(&modelB);
+20: 
+21:     window.setSize(800, 600);
+22:     window.setBGColor(0.6, 0.7, 0.8);
+23:     window.open();
+24: 
+25:     while(window.update() == true) {
+26:         modelA.glTranslate(0.05, 0.0, 0.0);
+27: 
+28:         posA = modelA.getPosition();
+29:         posB = modelB.getPosition();
+30:         vec = posB - posA; // vec = ベクトルAB
+31:         distance = vec.dist(); // vec の長さ
+32: 
+33:         if(distance < 10.0) {
+34:             modelA.setMaterial(Red);
+35:         } else {
+36:             modelA.setMaterial(Green);
+37:         }
+38:     }
+39: 
+40:     return 0;
+41: }
+\end{verbatim}
+\end{small}
+\end{itembox}
+
+\subsection*{解説}
+\begin{itemize}
+ \item ここでは「\textbf{干渉判定}」を扱います。干渉判定とは、2つの物体に
+	重なっている部分(干渉部分)があるかどうかを調べる処理のことです。
+	一般的な形状同士の干渉判定はとても高度な理論ですが、
+	今回は最も単純な「2個の球体同士の干渉判定」を扱います。
+
+ \item 2個の球 A, B が干渉しているかどうかの判定は以下のようにして
+	求めます。球の中心位置同士の距離を \(L\),
+	それぞれの半径を \(r_a, r_b\) としたとき、
+	\begin{equation}
+		L \leqq r_a + r_b
+	\end{equation}
+	となった場合、2つの球は干渉しています。
+
+ \item 球の中心同士の距離を求めるには、ベクトルを用います。
+	2個の球の中心位置ベクトルをそれぞれ \(\bA, \bB\) としたとき、
+	その距離は
+	\begin{equation}
+	|\lvec{\bA\bB}| = |\bB - \bA|
+	\end{equation}
+	となります。これは実際には
+	\begin{equation}
+	|\bB - \bA| = \sqrt{(B_x - A_x)^2 + (B_y - A_y)^2 + (B_z - A_z)^2}
+	\end{equation}
+	となるのですが、このような複雑な式をプログラムで記述しなくても、
+	fk\_Vector 型には「dist()」という便利な関数があり、
+	そのベクトルの距離を得ることができます。
+	31行目が実際に dist 関数を利用している様子です。
+
+ \item 9行目にある「double」というのは、実数を保管しておくための型です。
+	int型変数は整数値しか保管できませんでしたが、
+	double型の変数は小数点以下についても保管が可能です。
+	31行目は、かなり正確な数値が保管されます。
+
+ \item 30行目で fk\_Vector型の変数で引き算を行っていますが、
+	これは数値の引き算ではなくベクトルの引き算になります。
+	fk\_Vector型は、ベクトル同士の加減算や実数との積を
+	通常の数式と同様に記述することができます。
+
+\end{itemize}
+
+\section{練習課題} \label{sec:04-q}
+\begin{description}
+ \myitem 2個の球を離して配置し、片方を適当なキーで移動操作できるようにする。
+	2つの球が干渉したら、止まっている方の球が消去されるような
+	プログラムを作成せよ。
+
+ \myitem 2個の球のうち一つをキー操作で移動でき、もう一つを前回の
+	問題3-4の動きをするようにする。干渉したら自動的に移動している側の
+	球の色が変わるようなプログラムを作成せよ。
+
+ \myitem 小さな球を 横に10個配置し、やや大きめの球を
+	キー操作で移動できるようにする。干渉した小球が消去されるような
+	プログラムを作成せよ。
+
+ \myitem 小さな球を格子状に\(10\times10 = 100\)個配置し、やや大きめの球を
+	キー操作で移動できるようにする。干渉した小球が消去されるような
+	プログラムを作成せよ。
+\end{description}

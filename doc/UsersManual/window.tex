@@ -1,0 +1,1032 @@
+\chapter{ウインドウとイベント処理} \label{sec:window} ~
+
+FK システムでは、ウィンドウを制御するクラスとして fk\_Window クラスを
+提供している。FK システムは内部的に FLTK と呼ばれるツールキットを
+用いており、まず FLTK のメインウィンドウを開き、その中に
+FK システム用の描画ウィンドウを生成する。
+
+\section{ウィンドウの生成}
+ウィンドウは、一般的なウィンドウシステムにおいて描画を
+するための画面単位である。FK システムでは、fk\_Window クラスの
+オブジェクトを作成することによって1つのウィンドウを生成できる。
+手順としては、まず FLTK 用のウィンドウオブジェクトである
+Fl\_Window クラスのオブジェクトを生成し、その後に fk\_Window
+クラスのオブジェクトを定義する。
+\\
+\begin{screen}
+\begin{verbatim}
+        Fl_Window       mainWin(320, 320, "FK Test");
+        fk_Window       window(10, 10, 300, 300);
+
+        MainWin.end();
+\end{verbatim}
+\end{screen}
+~ \\
+ここで、Fl\_Window オブジェクトの引数はそれぞれ幅、高さ、
+タイトルバーに表示する文字列を表す。fk\_Window オブジェクトの
+引数は \((x, y, w, h)\) とすると \((x, y)\) はメインウィンドウとの
+相対位置を、\((w, h)\) は fk\_Window 自体の大きさを表す。
+mainWin.end() は、全ての fk\_Window オブジェクトを定義し終わった
+後に呼ぶ関数である。したがって、fk\_Window オブジェクトを2つ
+利用してマルチウィンドウなプログラムを作りたい場合には、
+\\
+\begin{breakbox}
+\begin{verbatim}
+        Fl_Window       mainWin(640, 320, "Multi Win Test");
+        fk_Window       window1(10, 10, 300, 300);
+        fk_Window       window2(330, 10, 300, 300);
+
+        MainWin.end();
+\end{verbatim}
+\end{breakbox}
+~ \\
+というようにすればよい。また、ウィンドウを実際に開く関数は show() 関数で
+ある。具体的には、
+\\
+\begin{screen}
+\begin{verbatim}
+        mainWindow.show();
+        window.show();
+\end{verbatim}
+\end{screen}
+~ \\
+というように、ウィンドウを実際に開きたい部分で show() 関数を
+呼び出せばよい。
+
+作成した fk\_Window クラスのウィンドウに対し、次のように
+setScene() 関数を用いることによって
+fk\_Scene クラス内のシーンをウィンドウ中に表示することが
+できる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        Fl_Window       mainWin
+        fk_Window       window;
+        fk_Scene        scene;
+
+        mainWin.end();
+                :
+                :
+        window.setScene(&scene);
+\end{verbatim}
+\end{breakbox}
+\section{ウィンドウの描画}
+ウィンドウの描画は、drawWindow() 関数を用いて行う。
+\\
+\begin{screen}
+\begin{verbatim}
+        window.drawWindow();
+\end{verbatim}
+\end{screen}
+~ \\
+この関数が呼ばれた時点で、リンクされているシーンに登録されている物体が
+描画される。ただし、この関数はウィンドウが実際にまだ開いていないときにも
+描画されてしまうため、そのまま使用した場合は誤動作を起こす場合がある。
+そこで、ウィンドウが実際に開いているかどうかを判定する関数として
+winOpenStatus() 関数が用意されている。これは true か false かを
+返し、ウィンドウが開いている場合には true を返す。
+また、FLTK が提供しているチェック関数もここで呼んでおかなければ
+ならない。これは、Fl\_Window クラスの visible() 関数と、
+Fl::check() を用いる。
+
+これを踏まえ、実際の描画ループは次のようになる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        Fl_Window       mainWindow(320, 320, "FK TEST");
+        fk_Window       window(10, 10, 300, 300);
+
+        mainWindow.end();
+        mainWindow.show();      
+        window.show();
+        while(true) {
+                // メインウィンドウが開いているかどうかのチェック
+                if(mainWindow.visible() == 0) {
+                        // 開いていなかった (最小化の状態の) 場合
+                        if(Fl::wait() == 0) {
+                                // 終了命令がでた場合
+                                break;
+                        } else {
+                                // そのままループの最初に戻る
+                                continue;
+                        }
+                }
+                // 描画処理
+                if(window.drawWindow() == 0) break;
+
+                // FLTK から重大なエラーの報告がないかをチェック
+                if(Fl::check() == 0) break;
+
+                // fk_Window が描画できる状態になっているかをチェック
+                if(window.winOpenStatus() == false) continue;
+                        :
+                        :       // モデルの制御
+                        :
+        }       
+\end{verbatim}
+\end{breakbox}
+~ \\
+drawWindow() 関数は、もし window 上で ESC キーが押された場合には
+0 は返ってくるようになっている。従って、例のプログラムの場合は
+ESC が押されると終了するようになっている。
+
+\section{ウィンドウ表示状態の画像情報取り込み}
+fk\_Window に表示されている状態を、画像ファイルや画像データに取り込みたい
+場合は、snapImage() というメンバ関数を利用する。
+仕様は以下の通りである。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{bool snapImage(string fileName,
+	fk\_ImageType type, fk\_SnapProcMode mode)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		現在ウィンドウに表示されている画像を、
+		指定した画像形式で fileName にあるファイル名で保存する。
+		type は以下の3種類のうちいずれかを指定する。
+		\begin{itemize}
+		 \item FK\_IMAGE\_BMP (Windows Bitmap 形式)
+		 \item FK\_IMAGE\_PNG (PNG 形式)
+		 \item FK\_IMAGE\_JPG (JPEG 形式)
+		\end{itemize}
+		また、mode はどの画像バッファから情報を取得するかを指定する物で、
+		以下の 3 種類のいずれかを指定する。
+		\begin{itemize}
+		 \item FK\_SNAP\_GL\_FRONT (OpenGL フロントバッファ)
+		 \item FK\_SNAP\_GL\_BACK (OpenGL バックバッファ)
+		 \item FK\_SNAP\_WIN32\_GDI
+		 (Windows GDI バッファ、Windows 上でのみ有効)
+		 \item FK\_SNAP\_D3D\_WINDOW
+		(Direct3D バッファ、Direct3D版のみ有効)
+		\end{itemize}
+
+		type と mode はデフォルト引数が設定されており、
+		省略可能である。省略した場合、type は FK\_IMAGE\_BMP、
+		mode は FK\_SNAP\_GL\_FRONT となる。
+
+		出力に成功すれば true を、失敗すれば false を返す。
+
+	\end{tabular} \\ \\
+\> \textbf{bool snapImage(fk\_Image *image, fk\_SnapProcMode mode)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		現在ウィンドウに表示されている画像を、
+		fk\_Image 型の変数に格納する。mode に関しては
+		上記のファイル出力の場合と同様である。
+		また、mode はデフォルト引数が設定されており、
+		省略可能である。省略した場合 mode は FK\_SNAP\_GL\_FRONT となる。
+
+		出力に成功すれば true を、失敗すれば false を返す。
+	\end{tabular} \\ \\
+\end{tabbing}
+
+引数としてファイル名を取る物と fk\_Image 型(のポインタ)変数を取るものがある。
+前者は、指定されたファイル名で指定した形式で保存するものである。
+後者は、fk\_Image 型の変数に画像情報を格納する。
+以下のプログラムは、「image.bmp」というファイルと「image」変数にそれぞれ
+表示画像を格納するものである。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win(0, 0, 300, 300);
+        fk_Image        image;
+
+        win.snapImage("image.bmp", FK_IMAGE_BMP, FK_SNAP_GL_BACK);
+        win.image(&image, FK_SNAP_GL_BACK);
+\end{verbatim}
+\end{screen}
+
+\section{ウィンドウのサイズ変更}
+fk\_Window で生成したウィンドウ領域を途中で変更したい場合には、
+resizeWindow() というメンバ関数を利用する。この関数は、引数として
+生成時と同様に4つの数値を取る。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win(0, 0, 300, 300);
+
+        win.resizeWindow(0, 0, 200, 200);
+\end{verbatim}
+\end{screen}
+~ \\
+この関数は、元の Fl\_Window の大きさ変更に追随する機能を持たせる時に
+利用することができる。次のプログラムは、ウィンドウの大きさ変更を可能とする
+典型的なサンプルである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    Fl_Window   mainWin(300, 300, "Resize Test");
+    fk_Window   fkWin(0, 0, 300, 300);
+
+    mainWin.end();
+
+    // 全体の大きさの最小値を (100, 100) にセット。
+    mainWin.size_range(100, 100);
+
+    mainWin.show();
+    fkWin.show();
+
+    while(true) {
+        // ウィンドウの大きさを mainWin と同一に合わせる。        
+        fkWin.resizeWindow(0, 0, mainWin.w(), mainWin.h());
+
+        // 後は通常と共通
+        if(mainWin.visible() == 0) {
+            if(Fl::wait() == 0) {
+                break;
+            } else {
+                continue;
+            }
+        }
+
+        if(fkWin.drawWindow() == 0) break;
+        if(Fl::check() == 0) break;
+        if(fkWin.winOpenStatus() == false) continue;
+
+            :
+            :
+    }
+\end{verbatim}
+\end{breakbox}
+\section{ウィンドウでのイベント}
+fk\_Window 上でのマウスやキーボードの状態を調べるため、fk\_Window クラスは
+様々なメンバ関数を提供している。ここでは、それらの使用法を説明する。
+\subsection*{getKeyStatus() メンバ関数}
+この関数は、キーボード上の文字キーが現在押されているか
+どうかを調べるための関数である。たとえば、'g' というキーが押されているか
+どうかを調べたければ、
+\\
+\begin{screen}
+\begin{verbatim}
+        if(window.getKeyStatus('g', true) == true) {
+                :       // キーが押された時の処理を行う。
+        }
+\end{verbatim}
+\end{screen}
+~ \\
+といったような記述を行う。この関数は、1番目の引数にキーを表す文字を代入する。
+2番目の引数には、マウスポインタの位置が fk\_Window 上にあるかどうかの
+条件を付加するフラグで、これを true にした場合は fk\_Window 上に
+マウスポインタがなかった場合は常に false が返る。逆に、2番目の引数に
+false を代入したとき、マウスポインタがどこにあってもキーが押されていれば
+true が、押されていなければ false が返る。
+
+\subsection*{getSpecialKeyStatus() 関数}
+この関数は、文字ではない特殊キーが押されているか
+どうかを調べるための関数である。たとえば、左シフトキーが押されているか
+どうかを調べたければ、
+\\
+\begin{screen}
+\begin{verbatim}
+        if(window.getSpecialKeyStatus(FK_SHIFT_L, true) == true) {
+                :       // キーが押された時の処理を行う。
+        }
+\end{verbatim}
+\end{screen}
+~ \\
+といったような記述を行う。特殊キーと関数の引数の対応は以下の
+表 \ref{tbl:fkSpecialKey} のとおりである。
+
+\begin{table}[H]
+\caption{特殊キーと引数値の対応}
+\label{tbl:fkSpecialKey}
+\begin{center}
+\begin{tabular}{|p{3cm}|p{3cm}||p{3cm}|p{3cm}|}
+\hline
+引数名 & 対応特殊キー & 引数名 & 対応特殊キー \\ \hline \hline
+FK\_SHIFT\_R	& 右シフトキー &
+	FK\_CAPS\_LOCK	& Caps Lock キー \\ \hline
+FK\_SHIFT\_L	& 左シフトキー &
+	FK\_PAGE\_UP	& Page Up キー \\ \hline
+FK\_CTRL\_R	& 右コントロールキー &
+	FK\_PAGE\_DOWN	& Page Down キー \\ \hline
+FK\_CTRL\_L	& 左コントロールキー &
+	FK\_HOME	& Home キー \\ \hline
+FK\_ALT\_R	& 右 ALT キー &
+	FK\_END		& End キー \\ \hline
+FK\_ALT\_L	& 左 ALT キー &
+	FK\_INSERT	& Insert キー \\ \hline
+FK\_ENTER	& 改行キー &
+	FK\_RIGHT	& 右矢印キー \\ \hline
+FK\_BACKSPACE	& Back Space キー &
+	FK\_LEFT	& 左矢印キー \\ \hline
+FK\_DELETE	& Del キー &
+	FK\_UP		& 上矢印キー \\ \hline
+FK\_TAB		& Tab キー &
+	FK\_DOWN	& 下矢印キー \\ \hline
+FK\_F1 〜 FK\_F12 & F1 〜 F12 キー &
+		& \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+また、2番目の引数は前述の getKeyStatus() 関数と同様にマウスポインタが
+fk\_Window 上にあるかどうかを条件に加えるフラグである。
+\subsection*{getLastKey() 関数}
+この関数は、fk\_Window 上で最後に押されたキーが返ってくる。たとえば、
+\\
+\begin{breakbox}
+\begin{verbatim}
+        char            c;
+        fk_Window       window;
+                :
+                :
+        c = window.getLastKey();
+\end{verbatim}
+\end{breakbox}
+~ \\
+といった使い方をする。あらかじめ押されるキーが特定できる場合は
+getKeyStatus を、何が押されるのか特定できない場合は getLastKey を
+それぞれ使い分ける必要がある。
+\subsection*{getMousePosition() 関数}
+この関数は、現在のマウスポインタの位置を調べる時に使用する。使い方は、
+\\
+\begin{breakbox}
+\begin{verbatim}
+        int             x, y;
+        fk_Window       window;
+                :
+                :
+        window.getMousePosition(&x, &y, true);
+\end{verbatim}
+\end{breakbox}
+~ \\
+というように、int 型の変数 x と y をそれぞれアドレス渡しにすることによって、
+左上を \((0, 0)\) としたウィンドウ座標がそれぞれに代入される。
+3番目の引数は、前述の getKeyStatus() や getSpecialKeyStatus() と同様に、
+マウスポインタが fk\_Window 上にあるかどうかの条件を付加するフラグである。
+これが true の場合、マウスポインタが fk\_Window 上に無い場合は \((-1, -1)\)
+が代入される。一方、3番目の引数に false を代入した場合、fk\_Window の
+左上を \((0, 0)\) とした相対的な位置が返る。従って、fk\_Window よりも
+左側にマウスポインタが存在した場合、\(x\) の値はマイナスとなることになる。
+
+\subsection*{getMouseStatus() 関数}
+この関数は、現在マウスボタンが押されているかどうかを調べる時に使用する。
+引数値として左ボタンが FK\_MOUSE1、中ボタンが FK\_MOUSE2、右ボタンが
+FK\_MOUSE3 に対応しており、
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Window       window;
+
+        if(window.getMouseStatus(FK_MOUSE1, true) == true) {
+                :       // 左ボタンが押されている。
+                :
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+といった様にして現在のボタン状態を調べることができる。この関数も他と
+同様に、fk\_Window 上にマウスポインタがない場合は常に false が
+返ってくる。この関数も前述の getMousePosition() 等と同様に、2番目の
+引数はマウスポインタが fk\_Window 上にあるかどうかの条件を付加する
+フラグである。
+
+\subsection*{getMouseWheelStatus() 関数}
+この関数は、マウスホイールの回転量を取得するときに使用する。
+返り値は int 型となっており、負の場合は奥側、正の場合は手前側に回転していることを意味する。
+数値の単位は、テキストをスクロールさせた場合の「行数」に相当するものである。
+
+この関数の回転量とは、この関数が以前に呼び出してからのホイール回転量を意味する。
+また、一度この関数で回転量を取得した後、drawWindow() による再描画を行わない限りは
+常に 0 を返す仕様となっている。
+
+\section{ウィンドウ座標と3次元座標の相互変換}
+3D のアプリケーションを構築する際、ウィンドウ中のある場所が、
+3次元空間ではどのような座標になるのかを知りたいということが
+しばしば見受けられる。あるいは逆に、3次元空間中の点が実際にウィンドウの
+どの位置に表示されるのかをプログラム中で参照したいということも
+よくある。FK でこれを実現する方法としてh、fk\_Window クラスに
+getWindowPosition(), getProjectPosition() というメンバ関数が
+準備されている。以下に、3次元からウィンドウへの変換、
+ウィンドウから3次元への変換を述べる。
+
+\subsection{3次元座標からウィンドウ座標への変換}
+fk\_Scene による3次元空間中のある座標は、fk\_Window クラスの
+getWindowPosition() というメンバ関数を用いることで、ウィンドウ中で
+実際に表示される位置を知ることができる。引数として入力、出力を
+表す fk\_Vector 型の変数を取る。以下に例を示す。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Vector       in, out;
+        fk_Window       window;
+                :
+                :
+        win.getWindowPosition(in, &out);
+\end{verbatim}
+\end{breakbox}
+~ \\
+ここで、in には元となる3次元空間の座標を設定しておく。
+出力となる2番目の引数は getMousePosition() の場合と同様に
+アドレス渡しをする必要がある。
+これにより、
+out の \(x\) 成分、\(y\) 成分にそれぞれウィンドウ座標が設定される。
+なお、この場合の out の \(z\) 成分には 0 から 1 までのある値が入るように
+なっており、カメラから遠いほど高い値が設定される。
+
+\subsection{ウィンドウ座標から3次元座標への変換}
+3次元→ウィンドウの場合と比べて、ウィンドウ座標から3次元座標への
+変換はやや複雑である。というのも、3次元座標からウィンドウ座標へ
+変換する場合は、結果が一意に定まるのであるが、
+その逆の場合は単にウィンドウ座標だけでは
+3次元空間中の位置が決定しないからである。もう少し具体的に述べると、
+本来得たい空間中の位置とカメラ位置を結ぶ直線
+(以下これを「指定直線」と呼ぶ)が求まるが、
+その直線上のどこなのかを特定するには
+もう1つの基準を与えておく必要がある。FK ではこの基準として
+\begin{itemize}
+ \item カメラからの距離
+ \item 任意平面
+\end{itemize}
+の2種類を用意している。
+
+まずカメラからの距離によって指定する方法を紹介する。
+3次元空間上の座標を取得するには getProjectPosition() メンバ関数を
+利用する。引数は以下の通りである。
+\\
+\begin{screen}
+\begin{verbatim}
+        getProjectPosition(ウィンドウx座標, ウィンドウy座標, 距離、出力変数);
+\end{verbatim}
+\end{screen}
+~ \\
+例えば、以下の例は現在のマウスが指す3次元空間の座標を得るプログラムである。
+このプログラム中ではカメラからの距離を 500 としている。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Vector       out;
+        fk_Window       window;
+        int             winX, winY;
+                :
+                :
+        win.getMousePosition(&x, &y, true);
+        win.getProjectPosition(double(x), double(y), 500.0, &out);
+\end{verbatim}
+\end{breakbox}
+~ \\
+もう1つの方法として、平面を指定する方法がある。前述の指定直線と
+与えた平面が平行でないならば、その交点を出力することになる。これは、
+例えば \(xy\) 平面上の点や部屋の壁のようなものを想定するような場合に
+便利である。
+
+まずは平面を作成する必要があるが、これは fk\_Plane というクラスの変数を
+利用する。平面指定の方法として、
+\begin{itemize}
+ \item 平面上の任意の1点と平面の法線ベクトルを指定する。
+ \item 平面上の(同一直線上にない)任意の3点を指定する。
+ \item 平面上の任意の1点と、平面上の互いに
+	平行ではない2つのベクトルを指定する。
+\end{itemize}
+の3種類があり、以下のように指定する。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Plane    plane;  // 平面を表す変数
+            :
+            :
+        // 1点 + 法線ベクトルのパターン
+        //   pos ... 平面上の任意の1点で、fk_Vector 型
+        //   norm .. 平面の法線ベクトルで、fk_Vector 型
+        plane.setPosNormal(pos, norm);
+
+        // 3点のパターン (3点は同一直線上にあってはならない)
+        //   pos1 〜 pos3 ... 平面上の任意の点で、全て fk_Vector 型
+        plane.set3Pos(pos1, pos2, pos3);
+
+        // 1点 + 2つのベクトルのパターン
+        //   pos ... 平面上の任意の1点で、fk_Vector 型
+        //   uVec .. 平面に平行なベクトル (fk_Vector型)
+        //   vVec .. 平面に平行なベクトルで、uVec に平行でないもの (fk_Vector 型)
+        plane.setPosUVVec(pos, uVec, vVec);
+\end{verbatim}
+\end{breakbox}
+~ \\
+これにより、平面が生成できたら、以下の形式で3次元空間中の座標を取得
+することができる。
+\\
+\begin{screen}
+\begin{verbatim}
+        getProjectPosition(ウィンドウx座標成分, ウィンドウy座標成分, 平面、出力変数);
+\end{verbatim}
+\end{screen}
+~ \\
+ちなみに、平面と出力変数はアドレス渡しにしておく必要がある。以下の例は、
+マウス位置が指している場所の \(xy\) 平面上の座標を得るサンプルである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Vector       outPos;                 // 出力用変数
+        fk_Window       win;                    // ウィンドウ変数
+        int             x, y;                   // マウス座標用変数
+        fk_Plane        plane;                  // 平面を表す変数
+        fk_Vector       planePos, planeNorm;    // 平面生成用変数
+                :
+                :
+
+        // 平面の任意点と法線ベクトルを設定する。
+        planePos.set(0.0, 0.0, 0.0);
+        planeNorm.set(0.0, 0.0, 1.0);
+
+        // 情報を平面に設定
+        plane.setPosNormal(planePos, planeNorm);
+
+        // ウィンドウからマウス座標を得る。
+        win.getMousePosition(&x, &y, true);
+
+        // ウィンドウ座標と平面から、3次元空間中の座標を得る。
+        win.getProjectPosition(double(x), double(y), &plane, &outPos);
+\end{verbatim}
+\end{breakbox}
+
+\section{ピックによる形状要素の選択}
+\subsection{ピック選択の利用法} \label{sec:pickexam}
+FK システムでは、ピックによるオブジェクト及びその中の要素の取得が可能である。
+この機能を利用するには、fk\_Window の getPickModel() メンバ関数と
+fk\_PickData クラスを用いる。実際の仕様を述べる前に、次の実装例を
+参照してほしい。この例は、選択されたモデルのマテリアルを
+赤に設定し、さらにピックされた位相要素の ID を表示するプログラムである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Model        models[100];
+        fk_Window       window;
+        fk_PickData     pickData;
+        int             i;
+
+        for(i = 0; i < 100; i++) models[i].setPickMode(true);
+                :
+                :
+                :
+        window.getPickModel(&pickData, 5);
+        for(i = 0; i < pickData.getSize(); i++) {
+                pickData.getModel(i)->setMaterial(Red);
+                fl_alert("GET ID = %d", pickData.getID(i));
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+最初の setPickMode() 関数は、モデルに対してピックによる選択候補に
+するかどうかを設定するための関数であり、true によって選択候補となる
+\footnote{第 \ref{sec:model} 章の「ピックモード」の節を参照。}。
+そして、fk\_Window::getPickModel() が呼び出された時点で
+アプリケーションはマウスによる入力待ち状態に入る。ここで、fk\_Window 内の
+オブジェクトをクリックすると pickData 中にクリックされたオブジェクトの
+情報が格納される。getPickModel の2個目の引数はピックによる判定基準の
+広さで、例の場合はクリックした場所から 5 ピクセル分離れたところまでに
+オブジェクトがあるかどうかを判定している。
+
+次に、fk\_PickData の getSize() メンバ関数を用いて実際に取得された
+データの個数を調べる。getModel() 関数は選択されたオブジェクトの
+モデルポインタを返している。getID() 関数は、選択されたオブジェクトの
+位相要素の ID を返している。稜線が密集している箇所や、ループ同士の
+境界付近をピックした場合には、複数の位相要素がピックによって選択
+された候補になり得る。そのような場合、2個以上の取得情報が
+fk\_PickData 中に格納されることになる。getSize() は、まさに
+その個数を示し、getID() の引数には格納されている順番の番号
+(配列で言うところの添字)を入れることによって実際の ID を
+得る。もし選択すべき位相要素が1個でなければならないので
+あれば、ユーザがなんらかの方法で取得候補から実際に選択する
+位相要素を選べるような仕組みを準備する必要があるだろう。
+
+ところで、fk\_PickData で得られる位相情報は ID であり、
+実際の位相要素オブジェクトではない。そこで、例えばピックされた
+頂点の位置を変更したい場合には fk\_Solid から ID に対応する
+頂点オブジェクトを得なければならない。これを実際に記述すると
+次のようになる。この中に出てくる getType() 関数については、
+第 \ref{sec:picktype} 節で詳しく述べる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Model        model;
+        fk_Solid        solid;
+        fk_Vertex       *vertex;
+        fk_Window       window;
+        fk_PickData     pickData;
+        int             i;
+        fk_Vector       moveVec(10.0, 0.0, 0.0);
+
+        model.setShape(&solid);
+        model.setPickMode(true);
+                :
+                :
+        window.getPickModel(&pickData, 5);
+        for(i = 0; i < pickData.getSize(); i++) {
+                if(pickData.getType(i) == FK_VERTEX) {
+                        vertex = solid.getVData(pickData.getID(i));
+                        solid.moveVertex(vertex, moveVec);
+                }
+        }
+\end{verbatim}
+\end{breakbox}
+\subsection{待ち制御と随時処理の選択}
+前節では、ピックによる選択時に画面描画が静止していることを
+前提とした例及び利用法を述べた。CAD や CG 作成のためのアプリケーションでは、
+このような処理が頻繁に利用されることが予測できる。しかし、ピック選択は
+必ずしも画面が静止した状態のみで扱われるとは限らない。例えば、ゲームの
+ようなインタラクティブなアプリケーションでこの機能を利用する場合は、
+常に画面が更新されている状態でピック選択を行いたい場面もありえる。
+FK システムでは、そのような需要に対応できるように getPickModel() に
+2種類の機能を持っている。第1の機能は前節で紹介した待ち制御による
+ピック選択である。第2の機能として、ここで紹介する随時処理のピック選択
+がある。
+
+前節で紹介した getPickModel() メンバ関数は、まとめると
+次のような機能を持っていることになる。
+\begin{enumerate}
+ \item マウスによるピックが行われるまで、画面の更新を静止する。
+ \item ピックされた時点で、そのマウス座標を取得する。
+ \item マウス座標を元にして、選択されたモデル及び位相要素を算出する。
+ \item fk\_PickData 中に得られた情報を格納する。
+\end{enumerate}
+従って、随時処理を実現するには上の機能のうち1番目と2番目を省略すれば
+よいことになる。それには、getPickModel() に対してあらかじめマウス座標を
+入力する必要がある。これに対応するため、getPickModel() メンバ関数は
+次のように多重定義されている。
+\begin{description}
+ \item[\hspace*{1cm}getPickModel(fk\_PickData *, int)]
+ \item[\hspace*{1cm}getPickModel(fk\_PickData *, int, int, int)]
+\end{description}
+後者の定義において、3番目と4番目にはマウス座標である。後者の
+getPickModel() 関数は次のような機能を持っている。
+\begin{enumerate}
+ \item 入力されたマウス座標を元にして、選択されたモデル及び位相要素を算出する。
+ \item fk\_PickData 中に得られた情報を格納する。
+\end{enumerate}
+つまり、システム中で(計算時間以外には)待ち状態は存在しないため、
+インタラクティブなアプリケーションに対応することができる。次の例は、
+やはりピックしたモデルを赤くするプログラムであるが、今度は随時処理で
+それを行っている。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Model        models[100];
+        fk_Window       window;
+        fk_PickData     pickData;
+        int             i;
+        int             mouseX, mouseY;
+
+        for(i = 0; i < 100; i++) models[i].setPickMode(true);
+                :
+        while(window.drawWindow() != 0) {
+                        :
+                if(window.getMouseStatus(FK_MOUSE1) == true) {
+                        window.getMousePosition(&mouseX, &mouseY);
+                        window.getPickModel(&pickData, 5, mouseX, mouseY);
+                        for(i = 0; i < pickData.getSize(); i++) {
+                                pickData.getModel(i)->setMaterial(Red);
+                        }
+                }
+        }
+\end{verbatim}
+\end{breakbox}
+
+\subsection{ピック対象位相の選択と制御} \label{sec:picktype}
+これまで述べてきたピック選択の対象となる位相要素は、
+面 (Loop)、線 (Edge)、点 (Vertex) のいずれかである。
+どれが選択の対象となるのかは、実際に描画されているか否かに依存する。
+例えば、面と線が描画されている状態であれば、面や線がピック選択の
+対象になるが、点は含まれないことになる。
+
+しかし、特定の位相要素のみを対象にしたい場合や、描画されていない位相要素も
+ピック選択の対象にしたいというケースは十分考えられる。この節では、
+このような機能を実現する方法を述べる。
+
+まず最初に紹介するのが fk\_Model クラスの setDrawMode() メンバ関数である。
+本来この関数は、モデルのどの位相要素を描画するか、いわゆる描画モードを
+制御するための関数であるが、ここで設定した値はそのまま
+ピック選択にも適用される。このことから、
+描画要素とピック選択要素は必ず一致しているように思えるかもしれない。
+しかし、実際には描画要素とピック選択要素を変更することは可能である。
+なぜならば、描画のタイミングとピック選択のタイミングは\bou{同時ではない}
+からである。次のプログラムは、ピック選択のタイミングだけ描画モードを
+変更し、実際に描画されている以外の位相要素を選択対象にしている例である。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Window       fk_win;
+        fk_Model        model;
+        fk_DrawMode     drawMode; // 描画モード保存用変数
+        fk_PickData     pickData;
+
+        // 面と線を描画
+        model.setDrawMode(FK_POLYMODE | FK_LINEMODE);
+        while(true) {
+                        :
+                        :
+                // 描画のタイミング
+                if(win.drawWindow() == 0) break;
+                if(Fl::check() == 0) break;
+
+                // 描画モードの保存
+                drawMode = model.getDrawMode();
+
+                // 描画モードの再設定
+                // ここでは、線と点をピック選択対象とする。
+                model.setDrawMode(FK_LINEMODE | FK_POINTMODE);
+
+                // ピック選択のタイミング
+                fk_win.getPickModel(&pickData, 5);
+
+                // 描画モードを、元に戻す。
+                model.setDrawMode(drawMode);
+                        :
+                        :
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+ここでは待ち制御による例を挙げたが、もちろん随時処理でも同様の方法が
+利用可能である。
+
+上記の方法を用いることで、ある程度位相の選択は可能となるが、
+2種以上の位相要素を選択対象としたい場合には、ピック選択後に
+どの位相要素なのかを判定する必要がある。そのような場合は、
+fk\_PickData の getType() メンバ関数を用いればよい。
+この関数は、getID() と同様にインデックスを表す整数値を引数にとり、
+そのインデックスが示す位相要素のタイプを fk\_ObjectType 型で返す。
+返り値の対応は以下の表 \ref{tbl:picktype} のとおりである。
+
+\begin{table}[H]
+\caption{ピック選択の位相と返り値の対応}
+\label{tbl:picktype}
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+タイプ & 返り値 \\ \hline \hline
+点 & FK\_VERTEX \\ \hline
+線 & FK\_EDGE \\ \hline
+面 & FK\_LOOP \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+具体的な利用方法は、既に \ref{sec:pickexam} 節の最後にある
+サンプル例のとおりなので、そちらを参照してほしい。
+
+\section{ウィンドウ描画のフレームレート制御}
+\subsection{フレームレートとは?}
+フレームレートとは、1秒間に何回画面の描画が行われたかを示す数値で、
+単位は fps (frame per second) で表す。例えば、1秒間に 30 回画面の
+画像が切り替わる場合は 30 fps ということになる。
+fk\_Window では、ウィンドウに実際に画像を描画するには drawWindow()
+関数を用いるので、30 fps の場合は drawWindow() 関数が1秒間に30回
+実行されていることになる。
+
+フレームレートは、同一のアプリケーションを実行した場合であっても、
+コンピュータの性能によって上下する。高性能なコンピュータを使用した場合、
+フレームレートは高い数値を示し、逆にそれほど性能が高くないコンピュータを
+用いて実行した場合、フレームレートは下がる。アプリケーションによっては、
+この速度差が非常に問題になる場合がある。そこで、コンピュータの性能差を
+埋めるため、フレームレートを制御するための機能が用意されている。
+
+フレームレートの制御には、大きく次の2種類が存在する。
+\begin{itemize}
+ \item ある一定以上のフレームレートが出ないように制御する。
+ \item フレームレートに従って描画のスキップを自動的に行う。
+\end{itemize}
+以下に、それぞれの解説と方法を述べる。
+
+\subsection{高速処理に対する制御} \label{sec:waitframe}
+フレームレートが想定よりも高すぎるという場合、以下のようにして制御することが
+できる。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win;
+                :
+                :
+        win.setFrameMode(FK_WAIT_FRAME);
+        win.setFrameInterval(100);
+\end{verbatim}
+\end{screen}
+~ \\
+まず、fk\_Window クラスの setFrameMode() 関数によって待ち制御を ON に
+する。次に、フレーム間時間を setFrameInterval 関数でミリ秒単位で設定する。
+フレーム間時間は、フレームレートを \(f\) としたとき、
+\(\dfrac{1000}{f}\) という式で算出することができる。たとえば、
+フレームレートを 20 に設定したい場合は、フレーム間時間は
+\(\dfrac{1000}{20} = 50\) ということになる。これにより、
+フレームレートが上がりすぎるという問題を避けることができる。ただし、
+これはあくまで高速な処理に対する制御であり、低速なコンピュータによる
+フレームレートの低下に対応するには次の節に解説する。
+
+\subsection{低速処理に対する制御} \label{sec:skipframe}
+コンピュータの性能が低く、想定するフレームレートが得られない場合がある。
+そのような場合、描画そのものを「スキップ」することで対処することがある。
+たとえば、次のようなプログラムを考える。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Model    model;
+    fk_Window   win;
+            :
+            :
+    while(true) {
+            :
+        if(win.drawWindow() == 0) break;
+        model.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/15.0);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+このプログラムは、1回の描画毎にモデルを \(\frac{\pi}{15} = 12^\circ\)
+回転させているが、形状が1回転するには 30 回実行される必要がある。
+従って、フレームレートが 30 である場合は1秒間で1回転するが、
+フレームレートが 5 である場合は六秒かかることになる。もし、
+「1秒間で1回転する」ということを実現するには、フレームレートに合わせて
+回転角度も変えなければならないことになるが、これはかなり手間のかかる処理で
+ある。
+
+そこで、fk\_Window ではフレームレートが低速な場合に描画を\bou{スキップ}して
+つじつまを合わせる機能を持っている。例えば今回の例のモデル回転の場合、
+drawWindow() を 5 回に 1 回しか実際に描画処理を行わないように制御できる。
+これにより、描画は結局 \(\dfrac{pi}{3} = 60^\circ\) 回転する度に描画される
+こととなり、1秒間で1回転することになる。
+
+この機能を利用するには、前節と同様に fk\_Window クラスの setFrameMode() 関数を
+用いる。ただし、引数には FK\_SKIP\_FRAME を入力する。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win;
+                :
+                :
+        win.setFrameMode(FK_SKIP_FRAME);
+        win.setFrameInterval(100);
+\end{verbatim}
+\end{screen}
+~ \\
+このように記述することで、フレームレートが 10 を下回った場合に
+描画を\bou{スキップ}する。例えば、実際のフレームレートが 5 であれば
+1回おきに描画命令 (drawWindow() 関数)を無視することになる。
+
+このモードの使用時に、実際にスキップしたフレーム数を知りたい場合は、
+getSkipFrame() 関数を利用する。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win;
+        int             skip;
+                :
+                :
+        if(win.drawWindow() == 0) break;
+        skip = win.getSkipFrame();
+\end{verbatim}
+\end{screen}
+~ \\
+この関数は、drawWindow() で実際に描画処理が行われてから呼ばれた時点までの
+間に、何回描画がスキップされているかを返す関数である。例えば、
+直前の drawWindow() によって実際に描画がなされている場合は 0 が返り、
+5 回前の drawWindow() 以来実際には描画がスキップされている場合は 4 が
+返ることになる。
+
+\subsection{フレームレート制御に関する補足}
+この節では、フレームレート制御に関する補足を記述する。
+
+\subsubsection*{実時間との誤差}
+フレームレート制御は、できるだけコンピュータへの負荷を増加させないように
+実現されているため、実際には実時間と誤差が出る。具体的には、フレーム間時間は
+与えた数値に比べて若干長くなる。例えば、フレーム間時間として 0.1 秒を
+入力した場合、実際には 0.1 秒よりもわずかに長い時間となる
+\footnote{この増加時間はコンピュータの性能が高いほど短くなる。}。
+そこで、フレーム間時間は実際に実現したい時間よりも若干短めに入力するとよい。
+
+\subsubsection*{両モードの併用}
+\ref{sec:waitframe} 節で FK\_WAIT\_FRAME モードを、
+\ref{sec:skipframe} 節で FK\_SKIP\_FRAME モードを解説したが、
+この両モードは併用することができる。次のように記述することで
+同時に2つのモードが ON となる。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win;
+                :
+        win.setFrameMode(FK_WAIT_FRAME | FK_SKIP_FRAME);
+\end{verbatim}
+\end{screen}
+
+\subsubsection*{制御のタイミング}
+setFrameMode() 関数を利用するタイミングは、プログラムの起動時である
+必要はない。どのタイミングであっても setFrameMode() 関数が実行された
+時点で制御モードが変化する。描画制御をなくした通常状態に戻りたい場合は、
+setFrameMode() で引数に FK\_DEFAULT\_FRAME を入力すればよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Window       win;
+                :
+        win.setFrameMode(FK_DEFAULT_FRAME);
+\end{verbatim}
+\end{screen}
+
+\subsubsection*{マルチウィンドウとフレームレート制御}
+ウィンドウを複数用いたアプリケーションを実行した場合、
+フレームレート制御による効果には注意が必要である。
+現状の実装では、FK\_WAIT\_FRAME モードにした場合、全てのウィンドウの
+フレーム間時間が設定値以上となる。
+一方、FK\_SKIP\_FRAME モードの場合は設定対象ウィンドウ以外への
+影響はない。この仕様は将来の version では修正される可能性がある。
+
+\section{テクスチャメモリの解放}
+テクスチャマッピングを行う際、何度も画像の切り替えを行っていると
+アプリケーションが利用するメモリ量が非常に増加することがある。
+これは、テクスチャの画像情報をシステムが保持し続けることが原因である。
+そこで、これらのメモリをクリアする \textbf{clearTextureMemory(void)} 関数を
+利用することで、一旦システムが保持したメモリを解放することができる。
+
+ただし、この関数によってメモリを解放した後は、
+テクスチャの画像情報を再度読み込み直すことになるので、処理時間が
+増える可能性もある。適宜タイミングを調整してほしい。
+
+\section{メッセージ出力} \label{sec:winmessage}
+fk\_Window には、メッセージを出力する機能として以下のようなメンバ関数が
+提供されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> \textbf{void setPutStrMode(fk\_PutStrMode mode)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		メッセージを出力する際の、出力方法を指定する。
+		引数として選択できるものは、以下のとおり。
+		\begin{center}
+		\begin{tabular}{|c|p{8cm}|}
+		\hline
+		値 & 意味 \\ \hline
+		FK\_PUTSTR\_BROWSER &
+			メッセージ出力用ブラウザに出力する。
+			デフォルトはこの値となっている。\\ \hline
+		FK\_PUTSTR\_CONSOLE &
+			標準出力に出力する。\\ \hline
+		FK\_PUTSTR\_ERR\_CONSOLE &
+			エラー出力に出力する。\\ \hline
+		FK\_PUTSTR\_FILE &
+			setPutFile() 関数で指定したファイルに出力する。\\ \hline
+		FK\_PUTSTR\_NONE &
+			出力を行わない。\\ \hline
+		\end{tabular}
+		\end{center}
+	\end{tabular} \\ \\
+\> \textbf{fk\_PutStrMode getPutStrMode(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		現在のメッセージ出力モードを返す。
+	\end{tabular} \\ \\
+
+\> \textbf{bool setPutFile(string fileName)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		メッセージ出力のモードとして「FK\_PUTSTR\_FILE」を指定した
+		場合の出力先となるファイル名を指定する。
+		この関数が呼ばれた時点で、
+		指定したファイルが存在していなかった場合は新規に
+		空ファイルが作成される。既に存在していた場合は、
+		その中身を消去せずに最後部分から後にメッセージを出力する。
+		ファイル書き込みの準備に成功した場合 true を、
+		失敗した場合に false を返す。
+	\end{tabular} \\ \\
+
+\> \textbf{void putString(string message)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		message の内容を出力する。
+	\end{tabular} \\ \\
+
+\> \textbf{void printf(char *format, ...)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		標準のprintf関数に準拠した書式指定に従って
+		文字列を出力する。
+	\end{tabular} \\ \\
+
+\> \textbf{void clearBrowser(void)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		メッセージ出力用ブラウザの内容を消去する。
+	\end{tabular}
+\end{tabbing}
+デフォルトの出力ブラウザを利用してメッセージを出力する場合は、
+単に putString() 関数あるいは printf() 関数を利用すればよい。
+以下のプログラムは、printf() を用いたサンプルである。\\ ~
+\begin{screen}
+\begin{verbatim}
+        fk_Window       window(10, 10, 300, 300);
+        int             counter;
+                :
+                :
+        counter = 0;
+        while(true) {
+                :
+                :
+                counter++;
+                window.printf("counter = %d", counter);
+        }
+\end{verbatim}
+\end{screen} ~ \\
+また、ここで紹介した関数群は fk\_Window のメンバ関数ではあるが、
+fk\_Window 型の変数がなくても関数名の前に「\verb+fk_Window::+」
+を付加することによって、どこでも利用ができる\footnote{これは、
+これらの関数が static 宣言をしているためである。}。
+以下にサンプルを示す。\\ ~
+\begin{screen}
+\begin{verbatim}
+        string  outString;
+        int     value;
+                :
+                :
+        fk_Window::putString(outString);
+        fk_Window::printf("value = %d", value);
+\end{verbatim}
+\end{screen}

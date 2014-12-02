@@ -1,0 +1,138 @@
+﻿\documentclass[a4j]{jreport}
+\usepackage{amsmath, amssymb}
+\usepackage[dvips]{graphicx}
+\usepackage{here}
+\usepackage{ascmac}
+\usepackage{julem}
+\usepackage{eclbkbox}
+\usepackage{fancybox}
+\usepackage{longtable}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{
+	bookmarksnumbered=true,
+	bookmarkstype=toc}
+
+\pagestyle{plain}
+\textwidth=480pt
+\textheight=660pt
+\oddsidemargin=-10pt
+\evensidemargin=-10pt
+\newcounter{mychap}
+\setcounter{mychap}{0}
+\newcounter{myqnum}
+\setcounter{myqnum}{0}
+
+\renewcommand{\thesection}{
+	\arabic{mychap}.\arabic{section}
+}
+
+\renewcommand{\thesubsection}{
+	\arabic{mychap}.\arabic{section}.\arabic{subsection}
+}
+
+\renewcommand{\theequation}{
+	\arabic{mychap} - \arabic{equation}
+}
+
+\newcommand{\myinclude}[1]{
+	\addtocounter{mychap}{1}
+	\setcounter{section}{0}
+	\setcounter{equation}{0}
+	\setcounter{myqnum}{0}
+	\include{#1}
+}
+
+\newcommand{\myfig}[5]{
+	\begin{figure}[H]
+	\begin{center}
+	\includegraphics[#3]{#2}
+	\end{center}
+	\vspace{#5}
+	\caption[#4]{#4} \label{#1}
+	\end{figure}
+}
+
+\newcommand{\bA}{{\mathbf{A}}}
+\newcommand{\bB}{{\mathbf{B}}}
+\newcommand{\bC}{{\mathbf{C}}}
+\newcommand{\bD}{{\mathbf{D}}}
+\newcommand{\bE}{{\mathbf{E}}}
+\newcommand{\bF}{{\mathbf{F}}}
+\newcommand{\bG}{{\mathbf{G}}}
+\newcommand{\bI}{{\mathbf{I}}}
+\newcommand{\bL}{{\mathbf{L}}}
+\newcommand{\bM}{{\mathbf{M}}}
+\newcommand{\bN}{{\mathbf{N}}}
+\newcommand{\bO}{{\mathbf{O}}}
+\newcommand{\bP}{{\mathbf{P}}}
+\newcommand{\bQ}{{\mathbf{Q}}}
+\newcommand{\bR}{{\mathbf{R}}}
+\newcommand{\bS}{{\mathbf{S}}}
+\newcommand{\bT}{{\mathbf{T}}}
+\newcommand{\bV}{{\mathbf{V}}}
+\newcommand{\bX}{{\mathbf{X}}}
+\newcommand{\bY}{{\mathbf{Y}}}
+\newcommand{\bZ}{{\mathbf{Z}}}
+\newcommand{\bfe}{{\mathbf{e}}}
+\newcommand{\bfq}{{\mathbf{q}}}
+\newcommand{\bfv}{{\mathbf{v}}}
+
+\newcommand{\rA}{{\mathrm{A}}}
+\newcommand{\rB}{{\mathrm{B}}}
+\newcommand{\rC}{{\mathrm{C}}}
+\newcommand{\rD}{{\mathrm{D}}}
+\newcommand{\rE}{{\mathrm{E}}}
+\newcommand{\rO}{{\mathrm{O}}}
+\newcommand{\rP}{{\mathrm{P}}}
+\newcommand{\rQ}{{\mathrm{Q}}}
+\newcommand{\rR}{{\mathrm{R}}}
+\newcommand{\rV}{{\mathrm{V}}}
+
+\newcommand{\bez}{{B\'ezier}}
+
+\newcommand{\cosec}{\mathrm{cosec}\;}
+\newcommand{\mycircle}[1]{\ooalign{
+	\hfil\hbox{\(\bigcirc\)}\hfil\crcr
+	\hfil\hbox{#1}\hfil}}
+\newcommand{\cpr}{\mycircle{c} \quad }
+
+\def\boutenchar{.}
+\def\bou#1{{\getlength#1\end}}
+\def\getlength#1{\ifx#1\end \let\next=\relax
+	\else\dot#1\let\next=\getlength\fi \next}
+\def\dot#1{{\ooalign{\hfill\raise1zh
+	\hbox{\boutenchar}\hfill\crcr#1}}}
+\newcommand{\lvec}{\overrightarrow}
+
+\newcommand{\dps}{\displaystyle}
+\fboxsep=2.5mm
+\newcommand{\mybox}[1]{\framebox[#1][1]{}}
+\newcommand{\myboxB}[1]{\doublebox{\bf #1}}
+\newcommand{\bigbox}[1]{\begin{LARGE} \fbox{{\bf #1}} \end{LARGE}}
+\newcommand{\myCirc}[1]{{
+	\ooalign{\hfil\hbox{\(\bigcirc\)}\hfil\crcr\hfil\hbox{#1}\hfil}}}
+\newcommand{\ov}{\overrightarrow}
+\newcommand{\myitem}{
+	\addtocounter{myqnum}{1}
+	\item[問題 \arabic{mychap}-\arabic{myqnum}] ~ \\
+}
+
+\begin{document}
+\pagestyle{empty}
+\include{title}
+\pagestyle{plain}
+\setcounter{page}{1}
+\setcounter{chapter}{0}
+\renewcommand{\thepage}{\arabic{page}}
+\myinclude{doc01}
+\myinclude{doc02}
+\myinclude{doc03}
+\myinclude{doc04}
+\myinclude{doc05}
+\myinclude{doc06}
+\myinclude{doc07}
+\myinclude{doc08}
+\myinclude{doc09}
+\myinclude{doc10}
+\end{document}
