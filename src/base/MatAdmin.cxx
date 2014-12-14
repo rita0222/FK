@@ -88,37 +88,6 @@ inline bool AlmostEqual(double x, double y)
 	return(AlmostZero(x - y));
 }
 
-fk_Angle::fk_Angle(double argH, double argP, double argB)
-{
-	h = argH;
-	p = argP;
-	b = argB;
-	return;
-}
-
-void fk_Angle::set(double argH, double argP, double argB)
-{
-	h = argH;
-	p = argP;
-	b = argB;
-	return;
-}
-
-void fk_Angle::Print(void)
-{
-	fk_PutError("fk_Angle", "Print", 1,
-				fk_StrPrintf("Angle = (%g, %g, %g)", h, p, b));
-	return;
-}
-
-void fk_Angle::Print(string str)
-{
-	fk_PutError("fk_Angle", "Print", 2,
-				fk_StrPrintf("Angle(%s) = (%f, %f, %f)\n",
-							 str.c_str(), h, p, b));
-	return;
-}
-
 fk_MatrixAdmin::fk_MatrixAdmin(fk_ObjectType argType)
 	: fk_BaseObject(argType)
 {

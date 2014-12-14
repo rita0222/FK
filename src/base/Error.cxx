@@ -477,7 +477,7 @@ void fk_Printf(const char *argFormat, ...)
 	va_list			ap;
 	string			buffer;
 
-	buffer.resize(8192);
+	buffer.resize(8192, 0);
 	va_start(ap, argFormat);
 	vsnprintf(&buffer[0], 8191, argFormat, ap);
 	va_end(ap);
@@ -490,7 +490,7 @@ string fk_StrPrintf(const char *argFormat, ...)
 	va_list		ap;
 	string		buffer;
 
-	buffer.resize(8192);
+	buffer.resize(8192, 0);
 	va_start(ap, argFormat);
 	vsnprintf(&buffer[0], 8191, argFormat, ap);
 	va_end(ap);

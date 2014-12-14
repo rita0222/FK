@@ -956,3 +956,34 @@ fk_Vector fk_DivideVec(const fk_Vector &orgVec,
 	retVec = mat * orgVec;
 	return retVec;
 }
+
+fk_Angle::fk_Angle(double argH, double argP, double argB)
+{
+	h = argH;
+	p = argP;
+	b = argB;
+	return;
+}
+
+void fk_Angle::set(double argH, double argP, double argB)
+{
+	h = argH;
+	p = argP;
+	b = argB;
+	return;
+}
+
+void fk_Angle::Print(void)
+{
+	fk_PutError("fk_Angle", "Print", 1,
+				fk_StrPrintf("Angle = (%g, %g, %g)", h, p, b));
+	return;
+}
+
+void fk_Angle::Print(string str)
+{
+	fk_PutError("fk_Angle", "Print", 2,
+				fk_StrPrintf("Angle(%s) = (%f, %f, %f)\n",
+							 str.c_str(), h, p, b));
+	return;
+}
