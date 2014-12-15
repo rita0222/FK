@@ -740,6 +740,33 @@ fk_Matrix fk_Matrix::operator !(void) const
 	return ret;
 }
 
+// 比較演算子 
+bool fk_Matrix::operator ==(const fk_Matrix &Mat) const
+{
+	int		i, j;
+
+	for(i = 0; i < 4; i++) {
+		for(j = 0; j < 4; j++) {
+			if(AlmostEqual(m[i][j], Mat.m[i][j]) == false) return false;
+		}
+	}
+
+	return true;
+}
+
+bool fk_Matrix::operator !=(const fk_Matrix &Mat) const
+{
+	int		i, j;
+
+	for(i = 0; i < 4; i++) {
+		for(j = 0; j < 4; j++) {
+			if(AlmostEqual(m[i][j], Mat.m[i][j]) == false) return true;
+		}
+	}
+
+	return false;
+}
+
 // 代入演算子 
 fk_Matrix & fk_Matrix::operator =(const fk_Matrix &ArgMat)
 {
