@@ -363,14 +363,14 @@ bool fk_Performer::EnumObjectName(const string &argFileName)
 // MQO ファイルから形状とテクスチャを読み込む
 bool fk_Performer::loadObjectData(const string &argFileName)
 {
-	string		texPath;
+	string		texPath, putStr;
 	fk_Image	alphaChannel;
 
 	init();
 
 	// オブジェクトの読み込み
 	if(!EnumObjectName(argFileName)) {
-		fk_Printf("Enum Object Error.");
+		fk_PutError("Enum Object Error.");
 		init();
 		return false;
 	}
@@ -402,7 +402,8 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 			   texName[i].rfind(".PNG") != string::npos ||
 			   texName[i].rfind(".Png") != string::npos) {
 				if(!texImage[i]->readPNG(texPath+texName[i])) {
-					fk_Printf("Texture File(%s) Read Error.", string(texPath+texName[i]).c_str());
+					putStr = "Texture File(" + texPath + texName[i] + ") Read Error.";
+					fk_PutError(putStr);
 					init();
 					return false;
 				}
@@ -413,7 +414,8 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 					  texName[i].rfind(".JPEG") != string::npos ||
 					  texName[i].rfind(".Jpeg") != string::npos) {
 				if(!texImage[i]->readJPG(texPath+texName[i])) {
-					fk_Printf("Texture File(%s) Read Error.", string(texPath+texName[i]).c_str());
+					putStr = "Texture File(" + texPath + texName[i] + ") Read Error.";
+					fk_PutError(putStr);
 					init();
 					return false;
 				}
@@ -426,7 +428,8 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 					}
 				}
 			} else {
-				fk_Printf("Texture File(%s) Read Error.", string(texPath+texName[i]).c_str());
+				putStr = "Texture File(" + texPath + texName[i] + ") Read Error.";
+				fk_PutError(putStr);
 				init();
 				return false;
 			}
@@ -448,14 +451,14 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 					((fk_IFSTexture *)mesh[i-1])->setTexRendMode(FK_TEX_REND_SMOOTH);
 
 					if(!((fk_IFSTexture *)mesh[i-1])->readMQOFile(argFileName, objName[i])) {
-						fk_Printf("MQO File Read Error.");
+						fk_PutError("MQO File Read Error.");
 						init();
 						return false;
 					}
 				} else {
 					mesh[i-1] = new fk_IndexFaceSet;
 					if(!((fk_IndexFaceSet *)mesh[i-1])->readMQOFile(argFileName, objName[i])) {
-						fk_Printf("MQO File Read Error.");
+						fk_PutError("MQO File Read Error.");
 						init();
 						return false;
 					}
@@ -644,24 +647,24 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 
 	// オープン正否判定
 	if(!in_file.is_open()) {
-		fk_Printf("ファイルが開けません。");
+		fk_PutError("ファイルが開けません。");
 		return false;
 	}
 
 	// ヘッダチェック
 	if(!getline(in_file, lineStr)) {
-		fk_Printf("ファイルが途中で終わっています。");
+		fk_PutError("ファイルが途中で終わっています。");
 		return false;
 	}
 	if(lineStr.find("FKM_HEADER_0.3") == string::npos) {
-		fk_Printf("違う種類のファイルを読み込もうとしました。");
+		fk_PutError("違う種類のファイルを読み込もうとしました。");
 		return false;
 	}
 
 	// 親オブジェクトキーフレームブロック探索
 	do {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 	} while(lineStr.find("[PARENT OBJECT KEYFRAME DATA BEGIN]") == string::npos);
@@ -670,13 +673,13 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 	tmpMotionArray[0].init();
 	while(true) {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 		if(lineStr.find("[PARENT OBJECT KEYFRAME DATA END]") != string::npos) break;
 		arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 8) {
-			fk_Printf("データの形式が想定と異なります。");
+			fk_PutError("データの形式が想定と異なります。");
 			return false;
 		}
 		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
@@ -690,7 +693,7 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 	// 子オブジェクトキーフレームブロック探索
 	do {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 	} while(lineStr.find("[CHILD OBJECT KEYFRAME DATA BEGIN]") == string::npos);
@@ -698,7 +701,7 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 	// 子オブジェクトキーフレーム読み込み
 	while(true) {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 		if(lineStr.find("[CHILD OBJECT KEYFRAME DATA END]") != string::npos) break;
@@ -712,7 +715,7 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 		}
 		arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 8) {
-			fk_Printf("データの形式が想定と異なります。");
+			fk_PutError("データの形式が想定と異なります。");
 			return false;
 		}
 		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
@@ -755,24 +758,24 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 
 	// オープン正否判定
 	if(!in_file.is_open()) {
-		fk_Printf("ファイルが開けません。");
+		fk_PutError("ファイルが開けません。");
 		return false;
 	}
 
 	// ヘッダチェック
 	if(!getline(in_file, lineStr)) {
-		fk_Printf("ファイルが途中で終わっています。");
+		fk_PutError("ファイルが途中で終わっています。");
 		return false;
 	}
 	if(lineStr.find("FKM_HEADER_0.31") == string::npos) {
-		fk_Printf("違う種類のファイルを読み込もうとしました。");
+		fk_PutError("違う種類のファイルを読み込もうとしました。");
 		return false;
 	}
 
 	// 親オブジェクトキーフレームブロック探索
 	do {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 	} while(lineStr.find("[PARENT OBJECT KEYFRAME DATA BEGIN]") == string::npos);
@@ -781,13 +784,13 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 	tmpMotionArray[0].init();
 	while(true) {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 		if(lineStr.find("[PARENT OBJECT KEYFRAME DATA END]") != string::npos) break;
 		arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 11) {
-			fk_Printf("データの形式が想定と異なります。");
+			fk_PutError("データの形式が想定と異なります。");
 			return false;
 		}
 		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
@@ -802,7 +805,7 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 	// 子オブジェクトキーフレームブロック探索
 	do {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 	} while(lineStr.find("[CHILD OBJECT KEYFRAME DATA BEGIN]") == string::npos);
@@ -810,7 +813,7 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 	// 子オブジェクトキーフレーム読み込み
 	while(true) {
 		if(!getline(in_file, lineStr)) {
-			fk_Printf("ファイルが途中で終わっています。");
+			fk_PutError("ファイルが途中で終わっています。");
 			return false;
 		}
 		if(lineStr.find("[CHILD OBJECT KEYFRAME DATA END]") != string::npos) break;
@@ -824,7 +827,7 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 		}
 		arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 11) {
-			fk_Printf("データの形式が想定と異なります。");
+			fk_PutError("データの形式が想定と異なります。");
 			return false;
 		}
 		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));

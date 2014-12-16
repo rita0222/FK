@@ -1024,6 +1024,7 @@ class fk_ShapeViewer : public fk_BaseObject {
 	 */
 	void	putString(const std::string &str);
 
+#ifndef FK_CLI_CODE
 	//! メッセージ出力書式付き設定関数
 	/*!
 	 *	実質的に、 fk_Window::printf() とまったく同じ動作となります。
@@ -1032,6 +1033,7 @@ class fk_ShapeViewer : public fk_BaseObject {
 	 *	\sa fk_Window::printf()
 	 */
 	void	printf(const char *format, ...);
+#endif
 
 	//! メッセージ出力用ブラウザ初期化関数
 	/*!

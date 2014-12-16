@@ -86,7 +86,7 @@ using namespace std;
 Fl_Window *			fk_Window::putWin = NULL;
 Fl_Multi_Browser *	fk_Window::browser = NULL;
 fk_PutStrMode		fk_Window::putStrMode = FK_PUTSTR_BROWSER;
-FILE *				fk_Window::putStrFP = NULL;
+ofstream			fk_Window::putStrOFS;
 int					fk_Window::winNum = 0;
 
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
@@ -118,7 +118,6 @@ fk_Window::~fk_Window()
 		delete putWin;
 		putWin = NULL;
 		browser = NULL;
-		if(putStrFP != NULL) fclose(putStrFP);
 	}
 
 	return;
@@ -369,14 +368,13 @@ fk_PutStrMode fk_Window::getPutStrMode(void)
 
 bool fk_Window::setPutFile(const string &argFileName)
 {
-	if(putStrFP != NULL) {
-		fclose(putStrFP);
-	}
-
-	if((putStrFP = fopen(argFileName.c_str(), "a")) == NULL) return false;
+	if(putStrOFS.is_open() == true) putStrOFS.close();
+	putStrOFS.open(argFileName);
+	if(putStrOFS.fail()) return false;
 	return true;
 }
 
+#ifndef FK_CLI_CODE
 void fk_Window::printf(const char *argFormat, ...)
 {
 	va_list		ap;
@@ -388,6 +386,7 @@ void fk_Window::printf(const char *argFormat, ...)
 	putString(buffer);
 	return;
 }
+#endif
 
 void fk_Window::putString(const string &argStr)
 {
@@ -405,8 +404,8 @@ void fk_Window::putString(const string &argStr)
 		return;
 
 	  case FK_PUTSTR_FILE:
-		if(putStrFP != NULL) {
-			fprintf(putStrFP, "%s\n", argStr.c_str());
+		if(putStrOFS.is_open() == true) {
+			putStrOFS << argStr << endl;
 		}
 		return;
 

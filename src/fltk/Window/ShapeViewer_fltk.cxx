@@ -86,6 +86,7 @@
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/fl_ask.H>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <sstream>
 
 using namespace std;
 
@@ -708,7 +709,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 	fk_IndexFaceSet	*ifset;
 	ifstream	  	ifs;
 	const char		*str;
-
+	stringstream	ss;
 
 	switch(globalMenuStatus) {
 
@@ -909,9 +910,10 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 	  case FK_SV_GUI_SHININESS:
 
+		ss.clear();
 		shininess = polyMaterial[0]->getShininess();
-		str = fl_input("Please input Shininess Value.",
-					   fk_StrPrintf("%lf", shininess).c_str());
+		ss << shininess;
+		str = fl_input("Please input Shininess Value.", ss.str().c_str());
 		if(str == NULL) break;
 		shininess = atof(str);
 		if(shininess >= 1.0 && shininess <= 128.0) {

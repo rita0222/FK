@@ -232,7 +232,7 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	static Fl_Window		*putWin;
 	static Fl_Multi_Browser	*browser;
 	static fk_PutStrMode	putStrMode;
-	static FILE				*putStrFP;
+	static std::ofstream	putStrOFS;
 	static int				winNum;
 
 	void					SetPickViewPort(int &, int &);
@@ -1011,6 +1011,7 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 */
 	static void				putString(const std::string &str);
 
+#ifndef FK_CLI_CODE
 	//! メッセージ出力書式付き設定関数
 	/*!
 	 *	この関数は、与えられたフォーマットに従ってメッセージとして出力します。
@@ -1027,6 +1028,7 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *	\sa setPutStrMode(), setPutFile(), putString(), clearBrowser()
 	 */
 	static void				printf(const char *format, ...);
+#endif
 
 	//! メッセージ出力用ブラウザ初期化関数
 	/*!
