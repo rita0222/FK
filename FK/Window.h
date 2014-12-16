@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
  *
@@ -205,8 +205,6 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 
  private:
 
-	fk_GraphicsEngine		engine;
-
 	fk_Image				snapBuffer;
 
 	bool					winOpenFlag;
@@ -252,6 +250,7 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 #endif
 
  protected:
+	fk_GraphicsEngine		engine;
 
 	void					drawScene(void);
 	void					drawSceneLeft(void);

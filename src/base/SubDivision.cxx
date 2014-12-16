@@ -1,4 +1,4 @@
-#include <FK/SubDivision.H>
+﻿#include <FK/SubDivision.H>
 #include <FK/Modify.h>
 #include <FK/Loop.h>
 #include <FK/Edge.h>

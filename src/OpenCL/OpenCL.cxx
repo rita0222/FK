@@ -1,4 +1,4 @@
-#include <FK/OpenCL.h>
+﻿#include <FK/OpenCL.h>
 #include <FK/Error.H>
 
 // FK以外で利用する場合、ここに printf 互換の適当な関数名を書く

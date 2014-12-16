@@ -1,4 +1,4 @@
-#ifndef __FK_SUBDIVISION_H__
+﻿#ifndef __FK_SUBDIVISION_H__
 #define __FK_SUBDIVISION_H__
  
 #include <FK/Modify.h>
