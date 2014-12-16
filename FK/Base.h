@@ -105,10 +105,15 @@ const int FK_SUBMINOR_VERSION = 10;
 
 #endif	// !WIN32 || _CYGWIN_GCC_
 
-const int FK_UNDEFINED = -1;
 
-const double FK_EPS = 1.0e-8;	//!< 数値演算用誤差値
-const double FK_PI = 3.1415926535897932;	//!< 円周率
+#define _FK_UNDEFINED_DEFINE_ -1
+#define _FK_EPS_DEFINE_ 1.0e-8;
+#define _FK_PI_DEFINE_ 3.1415926535897932
+
+
+const int FK_UNDEFINED = _FK_UNDEFINED_DEFINE_;
+const double FK_EPS = _FK_EPS_DEFINE_;	//!< 数値演算用誤差値
+const double FK_PI = _FK_PI_DEFINE_;	//!< 円周率
 
 //! オブジェクトインスタンスのタイプを表す列挙型
 enum fk_ObjectType {
