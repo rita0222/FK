@@ -72,6 +72,7 @@
 #define __FK_ERROR_CODE__
 #include <FK/Error.H>
 #include <list>
+#include <sstream>
 
 using namespace std;
 
@@ -375,7 +376,7 @@ bool fk_ErrorDataBase::Print(void)
 {
 	fk_ErrorData	*data;
 	string			outStr;
-	char			str[64];
+	stringstream	ss;
 
 	if(mode == FK_ERR_NONE) return false;
 	if(IsEmpty() == true) return false;
@@ -387,8 +388,8 @@ bool fk_ErrorDataBase::Print(void)
 
 	if(data->GetMode() == true) {
 		outStr = data->GetClassName() + "::" + data->GetFuncName();
-		snprintf(str, 63, " -- ErrorCode %d\n", data->GetErrCode());
-		outStr += str;
+		ss << " -- ErrorCode " << data->GetErrCode() << endl;
+		outStr += ss.str();
 	}
 
 	outStr += data->GetErrMessage();
@@ -472,6 +473,7 @@ bool fk_SetErrorFile(string argFileName)
 	return getErrorDB()->SetFileName(argFileName);
 }
 
+#ifndef FK_CLI_CODE
 void fk_Printf(const char *argFormat, ...)
 {
 	va_list			ap;
@@ -496,4 +498,4 @@ string fk_StrPrintf(const char *argFormat, ...)
 	va_end(ap);
 	return buffer;
 }
-
+#endif

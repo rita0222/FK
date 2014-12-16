@@ -79,6 +79,7 @@
 #include <FK/Edge.h>
 #include <FK/Loop.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -157,10 +158,10 @@ void fk_FileOutput::PutHeader(fk_DataFormatMode argMode, ofstream &argOFS)
 	switch(argMode) {
 	  case FK_TEXT_FILE:
 		argOFS << "$FK_DATA_FILE$" << endl;
-		argOFS << fk_StrPrintf("$VER: %d %d %d $",
-								FK_FILE_CURRENT_MAJOR_VERSION,
-								FK_FILE_CURRENT_MINOR_VERSION,
-								FK_FILE_CURRENT_SUBMINOR_VERSION) << endl;
+		argOFS << "$VER: ";
+		argOFS << FK_FILE_CURRENT_MAJOR_VERSION << " ";
+		argOFS << FK_FILE_CURRENT_MINOR_VERSION << " ";
+		argOFS << FK_FILE_CURRENT_SUBMINOR_VERSION << " $" << endl;
 		return;
 
 	  case FK_BINARY_FILE:
@@ -196,8 +197,11 @@ bool fk_FileOutput::PutShapeData_(fk_DataFormatMode argMode, ofstream &argOFS)
 	setSize[4] = 0;
 
 	switch(argMode) {
-		argOFS << fk_StrPrintf("num\t%d\t%d\t%d\t%d",
-								setSize[0], setSize[1], setSize[2], setSize[3]) << endl;
+		argOFS << "num\t";
+		argOFS << setSize[0] << "\t";
+		argOFS << setSize[1] << "\t";
+		argOFS << setSize[2] << "\t";
+		argOFS << setSize[3] << endl;
 		break;
 
 	  case FK_BINARY_FILE:
@@ -262,11 +266,16 @@ void fk_FileOutput::PutVertexData(fk_DataFormatMode argMode,
 
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argOFS << fk_StrPrintf("\tv\t%d\t%d\t%d\t%d\t%g %g %g",
-								argV->getID(), IDSet[0], IDSet[1], IDSet[2],
-								pos[0], pos[1], pos[2]);
+		argOFS << "\tv\t";
+		argOFS << argV->getID() << "\t";
+		argOFS << IDSet[0] << "\t";
+		argOFS << IDSet[1] << "\t";
+		argOFS << IDSet[2] << "\t";
+		argOFS << pos[0] << " ";
+		argOFS << pos[1] << " ";
+		argOFS << pos[2];
 		if(sizeMode == true) {
-			argOFS << fk_StrPrintf(" %g", size);
+			argOFS << " " << size;
 		}
 		argOFS << endl;
 		break;
@@ -321,8 +330,12 @@ void fk_FileOutput::PutHalfData(fk_DataFormatMode argMode,
 
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argOFS << fk_StrPrintf("\th\t%d\t%d\t%d\t%d\t%d",
-								argH->getID(), IDSet[0], IDSet[1], IDSet[2], IDSet[3]) << endl;
+		argOFS << "\th\t";
+		argOFS << argH->getID() << "\t";
+		argOFS << IDSet[0] << "\t";
+		argOFS << IDSet[1] << "\t";
+		argOFS << IDSet[2] << "\t";
+		argOFS << IDSet[3] << endl;
 		break;
 		
 	  case FK_BINARY_FILE:		
@@ -355,10 +368,14 @@ void fk_FileOutput::PutEdgeData(fk_DataFormatMode argMode,
 
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argOFS << fk_StrPrintf("\te\t%d\t%d\t%d\t%d\t%d",
-								argE->getID(), IDSet[0], IDSet[1], IDSet[2], IDSet[3]);
+		argOFS << "\te\t";
+		argOFS << argE->getID() << "\t";
+		argOFS << IDSet[0] << "\t";
+		argOFS << IDSet[1] << "\t";
+		argOFS << IDSet[2] << "\t";
+		argOFS << IDSet[3];
 		if(sizeMode == true) {
-			argOFS << fk_StrPrintf(" %g", width);
+			argOFS << " " << width;
 		}
 		argOFS << endl;
 		break;
@@ -396,8 +413,11 @@ void fk_FileOutput::PutLoopData(fk_DataFormatMode argMode,
 
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argOFS << fk_StrPrintf("\tl\t%d\t%d\t%d\t%d",
-								argL->getID(), IDSet[0], IDSet[1], IDSet[2]) << endl;
+		argOFS << "\tl\t";
+		argOFS << argL->getID() << "\t";
+		argOFS << IDSet[0] << "\t";
+		argOFS << IDSet[1] << "\t";
+		argOFS << IDSet[2] << endl;
 		break;
 		
 	  case FK_BINARY_FILE:
@@ -453,7 +473,7 @@ void fk_FileOutput::PutAdminHeader(fk_DataFormatMode argMode,
 	switch(argMode) {
 	  case FK_TEXT_FILE:
 		argOFS << argTag << endl;
-		argOFS << fk_StrPrintf("\t%d\t%d", sizeSet[0], sizeSet[1]) << endl;
+		argOFS << "\t" << sizeSet[0] << "\t" << sizeSet[1] << endl;
 		break;
 		
 	  case FK_BINARY_FILE:
@@ -476,7 +496,7 @@ void fk_FileOutput::PutAdminEraseList(fk_DataFormatMode argMode, ofstream &argOF
 	switch(argMode) {
 	  case FK_TEXT_FILE:
 		for(i = 0; i < argSize; i++) {
-			argOFS << fk_StrPrintf("\t\t%d", argArray[i]) << endl;
+			argOFS << "\t\t" << argArray[i] << endl;
 		}
 		break;
 		
@@ -505,9 +525,8 @@ bool fk_FileOutput::PutPaletteData_(fk_DataFormatMode argMode, ofstream &argOFS)
 
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argOFS << fk_StrPrintf("mat\t%d\t%d",
-								palette->getObjMaterialID(),
-								int(matVec->size())) << endl;
+		argOFS << "mat\t" << palette->getObjMaterialID();
+		argOFS << "\t" << matVec->size() << endl;
 
 		if(PutMaterialData(FK_TEXT_FILE, argOFS, &dummyMat) == false) {
 			return false;
@@ -557,25 +576,33 @@ bool fk_FileOutput::PutMaterialData(fk_DataFormatMode argMode, ofstream &argOFS,
 
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argOFS << fk_StrPrintf("\talpha\t%g", argMat->getAlpha()) << endl;
+		argOFS << "\talpha\t" << argMat->getAlpha() << endl;
 
 		col = argMat->getAmbient();
-		argOFS << fk_StrPrintf("\tamb\t%g\t%g\t%g",
-								col->col[0], col->col[1], col->col[2]) << endl;
+		argOFS << "\tamb\t";
+		argOFS << col->col[0] << "\t";
+		argOFS << col->col[1] << "\t";
+		argOFS << col->col[2] << endl;
 
 		col = argMat->getDiffuse();
-		argOFS << fk_StrPrintf("\tdiff\t%g\t%g\t%g",
-								col->col[0], col->col[1], col->col[2]) << endl;
+		argOFS << "\tdiff\t";
+		argOFS << col->col[0] << "\t";
+		argOFS << col->col[1] << "\t";
+		argOFS << col->col[2] << endl;
 
 		col = argMat->getSpecular();
-		argOFS << fk_StrPrintf("\tspec\t%g\t%g\t%g",
-								col->col[0], col->col[1], col->col[2]) << endl;
+		argOFS << "\tspec\t";
+		argOFS << col->col[0] << "\t";
+		argOFS << col->col[1] << "\t";
+		argOFS << col->col[2] << endl;
 
 		col = argMat->getEmission();
-		argOFS << fk_StrPrintf("\temis\t%g\t%g\t%g",
-								col->col[0], col->col[1], col->col[2]) << endl;
+		argOFS << "\temis\t";
+		argOFS << col->col[0] << "\t";
+		argOFS << col->col[1] << "\t";
+		argOFS << col->col[2] << endl;
 
-		argOFS << fk_StrPrintf("\tshini\t%g", argMat->getShininess()) << endl;
+		argOFS << "\tshini\t" << argMat->getShininess() << endl;
 
 		break;
 

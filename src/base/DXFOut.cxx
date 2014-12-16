@@ -148,21 +148,21 @@ bool fk_DXFOut::WriteDXFShape_Solid(ofstream &argOFS, bool argTriFlg)
 
 		for(i = 0; i < vArray.size(); i++) {
 			pos = vArray[i]->getPosition();
-			argOFS << fk_StrPrintf(" 1%d", static_cast<int>(i)) << endl;
-			argOFS << fk_StrPrintf("%f", pos.x) << endl;
-			argOFS << fk_StrPrintf(" 2%d", static_cast<int>(i)) << endl;
-			argOFS << fk_StrPrintf("%f", pos.y) << endl;
-			argOFS << fk_StrPrintf(" 3%d", static_cast<int>(i)) << endl;
-			argOFS << fk_StrPrintf("%f", pos.z) << endl;
+			argOFS << " 1" << i << endl;
+			argOFS << pos.x << endl;
+			argOFS << " 2" << i << endl;
+			argOFS << pos.y << endl;
+			argOFS << " 3" << i << endl;
+			argOFS << pos.z << endl;
 		}
 
 		if(vArray.size() == 3 && argTriFlg == false) {
 			argOFS << " 13" << endl;
-			argOFS << fk_StrPrintf("%f", pos.x) << endl;
+			argOFS << pos.x << endl;
 			argOFS << " 23" << endl;
-			argOFS << fk_StrPrintf("%f", pos.y) << endl;
+			argOFS << pos.y << endl;
 			argOFS << " 33" << endl;
-			argOFS << fk_StrPrintf("%f", pos.z) << endl;
+			argOFS << pos.z << endl;
 		}
 
 	}
@@ -198,21 +198,21 @@ bool fk_DXFOut::WriteDXFShape_IFS(ofstream &argOFS, bool argTriFlg)
 
 		for(j = 0; j < static_cast<int>(fData.size()); j++) {
 			pos = ifs->getPosVec(fData[static_cast<_st>(j)]);
-			argOFS << fk_StrPrintf(" 1%d", static_cast<int>(i)) << endl;
-			argOFS << fk_StrPrintf("%f", pos.x) << endl;
-			argOFS << fk_StrPrintf(" 2%d", static_cast<int>(i)) << endl;
-			argOFS << fk_StrPrintf("%f", pos.y) << endl;
-			argOFS << fk_StrPrintf(" 3%d", static_cast<int>(i)) << endl;
-			argOFS << fk_StrPrintf("%f", pos.z) << endl;
+			argOFS << " 1" << i << endl;
+			argOFS << pos.x << endl;
+			argOFS << " 2" << i << endl;
+			argOFS << pos.y << endl;
+			argOFS << " 3" << i << endl;
+			argOFS << pos.z << endl;
 		}
 
 		if(fData.size() == 3 && argTriFlg == false) {
 			argOFS << " 13" << endl;
-			argOFS << fk_StrPrintf("%f", pos.x) << endl;
+			argOFS << pos.x << endl;
 			argOFS << " 23" << endl;
-			argOFS << fk_StrPrintf("%f", pos.y) << endl;
+			argOFS << pos.y << endl;
 			argOFS << " 33" << endl;
-			argOFS << fk_StrPrintf("%f", pos.z) << endl;
+			argOFS << pos.z << endl;
 		}
 	}
 

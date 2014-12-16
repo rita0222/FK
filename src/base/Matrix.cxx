@@ -71,6 +71,7 @@
  ****************************************************************************/
 #include <FK/Matrix.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -555,19 +556,23 @@ void fk_OrthoMatrix::makeEuler(const fk_Angle &argAngle)
 	return;
 }
 
-void fk_OrthoMatrix::Print(string str) const
+void fk_OrthoMatrix::Print(string argStr) const
 {
-	int		i;
+	int				i, j;
+	stringstream	ss;
 
-	if(str.size() == 0) {
+	if(argStr.size() == 0) {
 		fk_PutError("Matrix = ");
 	} else {
-		fk_PutError("Matrix[" + str + "] = ");
+		fk_PutError("Matrix[" + argStr + "] = ");
 	}
 
 	for(i = 0; i < 4; i++) {
-		fk_Printf("\t| %10.6f %10.6f %10.6f %10.6f |",
-				  m[i][0], m[i][1], m[i][2], m[i][3]);
+		ss.clear();
+		ss << "t| ";
+		for(j = 0; j < 4; j++) ss << m[i][j] << " ";
+		ss << "|";
+		fk_PutError(ss.str());
 	}
 	return;
 }
@@ -1002,15 +1007,20 @@ void fk_Angle::set(double argH, double argP, double argB)
 
 void fk_Angle::Print(void)
 {
-	fk_PutError("fk_Angle", "Print", 1,
-				fk_StrPrintf("Angle = (%g, %g, %g)", h, p, b));
+	stringstream	ss;
+
+	ss << "Angle = (" << h << ", " << p << ", " << b << ")";
+	fk_PutError("fk_Angle", "Print", 1, ss.str());
+
 	return;
 }
 
-void fk_Angle::Print(string str)
+void fk_Angle::Print(string argStr)
 {
-	fk_PutError("fk_Angle", "Print", 2,
-				fk_StrPrintf("Angle(%s) = (%f, %f, %f)\n",
-							 str.c_str(), h, p, b));
+	stringstream	ss;
+	
+	ss << "Angle(" << argStr << ") = (" << h << ", " << p << ", " << b << ")";
+	fk_PutError("fk_Angle", "Print", 2, ss.str());
+
 	return;
 }

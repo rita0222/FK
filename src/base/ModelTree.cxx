@@ -72,6 +72,7 @@
 #include <FK/Model.h>
 #include <FK/Error.H>
 #include <FK/Tree.h>
+#include <sstream>
 
 using namespace std;
 
@@ -133,14 +134,15 @@ fk_Model * fk_ModelTreeObject::GetModel(void)
 void fk_Model::EntryTree(void)
 {
 	fk_ModelTreeObject		*thisObject;
-
+	stringstream			ss;
+	
 	if(treeFlag == true) return;
 
 	treeFlag = true;
 
 	thisObject = new fk_ModelTreeObject();
-	treeData = _modelTree()->addNewChild(_modelTree()->getRoot(),
-										fk_StrPrintf("m%u", _modelID));
+	ss << "m" << _modelID;
+	treeData = _modelTree()->addNewChild(_modelTree()->getRoot(), ss.str());
 	thisObject->SetModel(this);
 	treeData->setObject(thisObject);
 	parent = NULL;

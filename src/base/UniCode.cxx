@@ -76,6 +76,7 @@
 #include <FK/UniCode.h>
 #include <FK/Error.H>
 #include <iconv.h>
+#include <sstream>
 
 #ifdef _FREEBSD_
 typedef const char **	iconvpp;
@@ -433,6 +434,7 @@ int fk_UniStr::getCode(int argID) const
 	return uniStr[static_cast<_st>(argID)];
 }
 
+#ifndef FK_CLI_CODE
 void fk_UniStr::printf(fk_StringCode argCode, const char *argFormat, ...)
 {
 	va_list		ap;
@@ -446,6 +448,7 @@ void fk_UniStr::printf(fk_StringCode argCode, const char *argFormat, ...)
 	convert(buffer, argCode);
 	return;
 }
+#endif
 
 int fk_UniStr::find(int argStart, int argCode)
 {
@@ -516,9 +519,10 @@ void fk_UniStr::copyStr(fk_UniStr *argStr)
 
 void fk_UniStr::Print(string argStr)
 {
-	string	prefix;
-	int		i;
-
+	string			prefix;
+	int				i;
+	stringstream	ss;
+	
 	if(argStr.length() == 0) {
 		prefix = "str";
 	} else {
@@ -526,7 +530,9 @@ void fk_UniStr::Print(string argStr)
 	}
 
 	for(i = 0; i < getLength(); i++) {
-		fk_Printf("%s[%d] = %d\n", prefix.c_str(), i, getCode(i));
+		ss.clear();
+		ss << prefix << "[" << i << "] = " << getCode(i) << endl;
+		fk_PutError(ss.str());
 	}
 	return;
 }

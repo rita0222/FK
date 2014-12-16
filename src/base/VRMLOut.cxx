@@ -78,6 +78,7 @@
 #include <FK/IndexFace.h>
 #include <FK/Material.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -219,40 +220,48 @@ void fk_VRMLOut::WriteVRMLNaviInfo(ofstream &argOFS)
 
 void fk_VRMLOut::WriteVRMLMaterial(ofstream &argOFS, fk_Material *argMaterial)
 {
-	fk_Color	*curColor;
+	fk_Color		*curColor;
+	stringstream	ss;
 
 	if(argMaterial == NULL) return;
 
-	argOFS << "\t\t\tappearance Appearance {" << endl;
-	argOFS << "\t\t\t\tmaterial Material {" << endl;
+	ss << "\t\t\tappearance Appearance {" << endl;
+	ss << "\t\t\t\tmaterial Material {" << endl;
 
 	// Ambient
 	curColor = argMaterial->getAmbient();
-	argOFS << fk_StrPrintf("\t\t\t\t\tambientIntensity\t%f",
-						   (curColor->getR() + curColor->getG() + curColor->getB())/3.0) << endl;
+	ss << "\t\t\t\t\tambientIntensity\t";
+	ss << (curColor->getR() + curColor->getG() + curColor->getB())/3.0 << endl;
 
 	// Diffuse
 	curColor = argMaterial->getDiffuse();
-	argOFS << fk_StrPrintf("\t\t\t\t\tdiffuseColor\t%f %f %f",
-						   curColor->getR(), curColor->getG(), curColor->getB()) << endl;
+	ss << "\t\t\t\t\tdiffuseColor\t";
+	ss << curColor->getR() << " ";
+	ss << curColor->getG() << " ";
+	ss << curColor->getB() << endl;
 
 	// Specular
 	curColor = argMaterial->getSpecular();
-	argOFS << fk_StrPrintf("\t\t\t\t\tspecularColor\t%f %f %f",
-						   curColor->getR(), curColor->getG(), curColor->getB()) << endl;
+	ss << "\t\t\t\t\tspecularColor\t";
+	ss << curColor->getR() << " ";
+	ss << curColor->getG() << " ";
+	ss << curColor->getB() << endl;
 
 	// Emission
 	curColor = argMaterial->getEmission();
-	argOFS << fk_StrPrintf("\t\t\t\t\temissiveColor\t%f %f %f",
-						   curColor->getR(), curColor->getG(), curColor->getB()) << endl;
+	ss << "\t\t\t\t\temissiveColor\t";
+	ss << curColor->getR() << " ";
+	ss << curColor->getG() << " ";
+	ss << curColor->getB() << endl;
 
 	// Shininess
-	argOFS << fk_StrPrintf("\t\t\t\t\tshininess\t%f",
-						   argMaterial->getShininess()/128.0) << endl;
+	ss << "\t\t\t\t\tshininess\t";
+	ss << argMaterial->getShininess()/128.0 << endl;
 
-	argOFS << "\t\t\t\t}" << endl;
-	argOFS << "\t\t\t}" << endl;
+	ss << "\t\t\t\t}" << endl;
+	ss << "\t\t\t}" << endl;
 
+	argOFS << ss.str();
 	return;
 }
 
@@ -261,24 +270,27 @@ void fk_VRMLOut::WriteVRMLPointData_Solid(ofstream &argOFS)
 {
 	fk_Vertex		*curV;
 	fk_Vector		pos;
-
+	stringstream	ss;
+	
 	curV = solid->getNextV(NULL);
 
-	argOFS << "\t\t\tgeometry IndexedFaceSet {" << endl;
+    argOFS << "\t\t\tgeometry IndexedFaceSet {" << endl;
 	argOFS << "\t\t\t\tcoord DEF C Coordinate {" << endl;
 	argOFS << "\t\t\t\t\tpoint [" << endl;
 
 	while(curV != NULL) {
-
 		pos = curV->getPosition();
 		argOFS << "\t\t\t\t\t\t";
-		argOFS << fk_StrPrintf("%f %f %f", pos.x, pos.y, pos.z);
+		argOFS << pos.x << " " << pos.y << " " << pos.z;
 
 		curV = solid->getNextV(curV);
+
 		if(curV != NULL) {
 			argOFS << ",";
 		}
+
 		argOFS << endl;
+		argOFS << ss.str();
 	}
 
 	argOFS << "\t\t\t\t\t]" << endl;
@@ -291,7 +303,7 @@ void fk_VRMLOut::WriteVRMLPointData_IFS(ofstream &argOFS)
 {
 	fk_Vector		pos;
 	int				i, pSize;
-
+	
 	argOFS << "\t\t\tgeometry IndexedFaceSet {" << endl;
 	argOFS << "\t\t\t\tcoord DEF C Coordinate {" << endl;
 	argOFS << "\t\t\t\t\tpoint [" << endl;
@@ -301,7 +313,7 @@ void fk_VRMLOut::WriteVRMLPointData_IFS(ofstream &argOFS)
 		
 		pos = ifset->getPosVec(i);
 		argOFS << "\t\t\t\t\t\t";
-		argOFS << fk_StrPrintf("%f %f %f", pos.x, pos.y, pos.z);
+		argOFS << pos.x << " " << pos.y << " " << pos.z;
 
 		if(i != pSize - 1) argOFS << ",";
 
@@ -348,25 +360,25 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 
 			argOFS << "\t\t\t\t\t\t";
 			tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[0]->getID())]);
-			argOFS << fk_StrPrintf("%d, ", tmpI);
+			argOFS << tmpI << ", ";
 								   
 			tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[1]->getID())]);
-			argOFS << fk_StrPrintf("%d, ", tmpI);
+			argOFS << tmpI << ", ";
 
 			tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[3]->getID())]);
-			argOFS << fk_StrPrintf("%d, ", tmpI);
+			argOFS << tmpI << ", ";
 					
 			argOFS << "-1," << endl;
 			argOFS << "\t\t\t\t\t\t";
 
 			tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[3]->getID())]);
-			argOFS << fk_StrPrintf("%d, ", tmpI);
+			argOFS << tmpI << ", ";
 					
 			tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[1]->getID())]);
-			argOFS << fk_StrPrintf("%d, ", tmpI);
+			argOFS << tmpI << ", ";
 
 			tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[2]->getID())]);
-			argOFS << fk_StrPrintf("%d, ", tmpI);
+			argOFS << tmpI << ", ";
 			argOFS << "-1";
 
 		} else {
@@ -375,7 +387,7 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 			argOFS << "\t\t\t\t\t\t";
 			for(i = 0; i < vArray.size(); i++) {
 				tmpI = static_cast<int>(vMap[static_cast<_st>(vArray[i]->getID())]);
-				argOFS << fk_StrPrintf("%d, ", tmpI);
+				argOFS << tmpI << ", ";
 			}
 			argOFS << "-1";
 		}
@@ -406,7 +418,7 @@ void fk_VRMLOut::WriteVRMLIFData_IFS(ofstream &argOFS, bool)
 		argOFS << "\t\t\t\t\t\t";
 		fData = ifset->getFaceData(static_cast<int>(i));
 		for(j = 0; j < fData.size(); j++) {
-			argOFS << fk_StrPrintf("%d, ", fData[j]);
+			argOFS << fData[j] << ", ";
 		}
 		argOFS << "-1";
 		if(i != fSize - 1) {
@@ -451,13 +463,13 @@ void fk_VRMLOut::WriteVRMLCoordInterp(ofstream &argOFS,
 									  vector<double> *argTime,
 									  vector<fk_Vector> *argPos)
 {
-	_st			i;
-	string		baseTab = "\t\t";
-	string		tab;
-	string		buf;
-	string		tmpStr;
-	fk_Vector	tmpPos;
-
+	_st				i;
+	string			baseTab = "\t\t";
+	string			tab;
+	string			buf;
+	fk_Vector		tmpPos;
+	stringstream	ss;
+	
 	tab = baseTab;
 	buf = tab + "DEF CI CoordinateInterpolator {\n";
 
@@ -467,8 +479,9 @@ void fk_VRMLOut::WriteVRMLCoordInterp(ofstream &argOFS,
 
 	tab = baseTab + "\t\t";
 	for(i = 0; i < argTime->size(); i++) {
-		tmpStr = fk_StrPrintf("%f", (*argTime)[i]);
-		buf = tab + tmpStr;
+		ss.clear();
+		ss << (*argTime)[i];
+		buf = tab + ss.str();
 		if(i != argTime->size() - 1) {
 			buf += ",";
 		}
@@ -483,9 +496,10 @@ void fk_VRMLOut::WriteVRMLCoordInterp(ofstream &argOFS,
 
 	tab = baseTab + "\t\t";
 	for(i = 0; i < argPos->size(); i++) {
+		ss.clear();
 		tmpPos = (*argPos)[i];
-		tmpStr = fk_StrPrintf("%f %f %f", tmpPos.x, tmpPos.y, tmpPos.z);
-		buf = tab + tmpStr;
+		ss << tmpPos.x << " " << tmpPos.y << " " << tmpPos.z;
+		buf = tab + ss.str();
 		if(i != argPos->size() - 1) {
 			buf += ",";
 		}

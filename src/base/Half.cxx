@@ -74,6 +74,7 @@
 #include <FK/Edge.h>
 #include <FK/Loop.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -198,28 +199,44 @@ fk_Loop *fk_Half::SetParentLoop(fk_Loop *argLp)
 
 void fk_Half::Print(void) const
 {
-	fk_Printf("Half[%d] = {", getID());
-	fk_Printf("\tv = %d", vertex->getID());
+	stringstream	ss;
+
+
+	ss << "Half[" << getID() << "] = {";
+	fk_PutError(ss.str());
+	ss.clear();
+	
+	ss << "\tv = " << vertex->getID();
+	fk_PutError(ss.str());
+	ss.clear();
 
 	if(nextHalf == NULL) {
-		fk_Printf("\tnH = NULL");
+		ss << "\tnH = NULL";
 	} else {
-		fk_Printf("\tnH = %d", nextHalf->getID());
+		ss << "\tnH = " << nextHalf->getID();
 	}
+	fk_PutError(ss.str());
+	ss.clear();
 
 	if(prevHalf == NULL) {
-		fk_Printf("\tpH = NULL");
+		ss << "\tpH = NULL";
 	} else {
-		fk_Printf("\tpH = %d", prevHalf->getID());
+		ss << "\tpH = " << prevHalf->getID();
 	}
+	fk_PutError(ss.str());
+	ss.clear();
 
-	fk_Printf("\tpE = %d", parentEdge->getID());
+	ss << "\tpE = " << parentEdge->getID();
+	fk_PutError(ss.str());
+	ss.clear();
 
 	if(parentLoop == NULL) {
-		fk_Printf("\tpL = NULL");
+		ss << "\tpL = NULL";
 	} else {
-		fk_Printf("\tpL = %d", parentLoop->getID());
+		ss << "\tpL = " << parentLoop->getID();
 	}
+	fk_PutError(ss.str());
+	ss.clear();
 
 	fk_PutError("}");
 
@@ -228,23 +245,23 @@ void fk_Half::Print(void) const
 
 bool fk_Half::Check(void) const
 {
-	bool	retBool = true;
-	string	outStr;
-
+	bool			retBool = true;
+	stringstream	ss;
+	
 	if(nextHalf != NULL) {
 		if(nextHalf->getPrevHalf() != this) {
-			outStr = fk_StrPrintf("Half[%d] ... next[%d] ERROR!!",
-								  getID(), nextHalf->getID());
-			fk_PutError("fk_Half", "Check", 1, outStr);
+			ss << "Half[" << getID() << "] ... next[";
+			ss << nextHalf->getID() << "] ERROR!!";
+			fk_PutError("fk_Half", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
 
 	if(prevHalf != NULL) {
 		if(prevHalf->getNextHalf() != this) {
-			outStr = fk_StrPrintf("Half[%d] ... prev[%d] ERROR!!",
-								  getID(), prevHalf->getID());
-			fk_PutError("fk_Half", "Check", 2, outStr);
+			ss << "Half[" << getID() << "] ... prev[";
+			ss << prevHalf->getID() << "] ERROR!!";
+			fk_PutError("fk_Half", "Check", 2, ss.str());
 			retBool = false;
 		}
 	}

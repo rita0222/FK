@@ -76,6 +76,7 @@
 #include <FK/Loop.h>
 #include <FK/Edge.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -255,36 +256,40 @@ void fk_Vertex::setDrawSize(double argSize)
 
 void fk_Vertex::Print(void) const
 {
-	fk_Printf("Vertex[%d] = {", getID());
-	fk_Printf("\tpos = (%g, %g, %g)",
-			  position.x, position.y, position.z);
+	stringstream	ss;
 
+	ss << "Vertex[" << getID() << "] = {";
+	ss << "\tpos = ";
+	ss << "(" << position.x << ", " << position.y << ", " << position.z << ")";
+	
 	if(normCalcFlag == true && normal != NULL) {
-		fk_Printf("\tnorm = (%g, %g, %g)",
-				  normal->x, normal->y, normal->z);
+		ss << "\tnorm = (";
+		ss << normal->x << ", " << normal->y << ", " << normal->z << ")";
 	} else {
-		fk_Printf("\tnorm = (NULL)");
+		ss << "\tnorm = (NULL)";
 	}
 
 	if(oneHalf == NULL) {
-		fk_Printf("\toneH = NULL");
+		ss << "\toneH = NULL";
 	} else {
-		fk_Printf("\tpH = %d", oneHalf->getID());
+		ss << "\tpH = " << oneHalf->getID();
 	}
-	fk_PutError("}");
+	ss << "}";
+	fk_PutError(ss.str());
 
 	return;
 }
 
 bool fk_Vertex::Check(void) const
 {
-	string	outStr;
+	stringstream	ss;
 
 	if(oneHalf != NULL) {
 		if(oneHalf->getVertex() != this) {
-			outStr = fk_StrPrintf("Vertex[%d] ... Half[%d] ERROR",
-								  getID(), oneHalf->getID());
-			fk_PutError("fk_Vertex", "Check", 1, outStr);
+			ss << "Vertex[" << getID();
+			ss << "] ... Half[" << oneHalf->getID();
+			ss << "] ERROR";
+			fk_PutError("fk_Vertex", "Check", 1, ss.str());
 			return false;
 		}
 	}

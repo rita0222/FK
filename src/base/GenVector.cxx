@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/GenVector.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -460,35 +461,35 @@ fk_GenVector fk_GenVector::div(int argID, int argNum)
 
 void fk_GenVector::Print(void) const
 {
-	_st			i;
-	string		outStr;
+	_st				i;
+	stringstream	ss;
 
-	outStr = "Vector = (";
+	ss << "Vector = (";
 	for(i = 0; i < static_cast<_st>(size()); i++) {
-		outStr += fk_StrPrintf("%g", v[i]);
-		if(i != static_cast<_st>(size())-1) outStr += ", ";
+		ss << v[i];
+		if(i != static_cast<_st>(size())-1) ss << ", ";
 	}
-	outStr += ")";
+	ss << ")";
 
-	fk_PutError(outStr);
+	fk_PutError(ss.str());
 	return;
 }
 
 void fk_GenVector::Print(string argStr) const
 {
-	_st			i;
-	string		outStr;
+	_st				i;
+	stringstream	ss;
 
-	outStr = "Vector[";
-	outStr += argStr;
-	outStr += "] = (";
+	ss << "Vector[";
+	ss << argStr;
+	ss << "] = (";
 	for(i = 0; i < static_cast<_st>(size()); i++) {
-		outStr += fk_StrPrintf("%g", v[i]);
-		if(i != static_cast<_st>(size())-1) outStr += ", ";
+		ss << v[i];
+		if(i != static_cast<_st>(size())-1) ss << ", ";
 	}
-	outStr += ")";
+	ss << ")";
 
-	fk_PutError(outStr);
+	fk_PutError(ss.str());
 	return;
 }
 

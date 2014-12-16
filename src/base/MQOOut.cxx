@@ -78,6 +78,7 @@
 #include <FK/Loop.h>
 #include <FK/Error.H>
 #include <FK/IndexFace.h>
+#include <sstream>
 
 using namespace std;
 
@@ -105,7 +106,8 @@ bool fk_MQOOut::Convert_Solid(void)
 	vector<int>				*tesseIDArray;
 	_st						i;
 	int						curMate = -1;
-
+	stringstream			ss;
+	
 	if(solid->checkDB() == false) return false;
 
 	MakeMaterialPalette(FK_SOLID);
@@ -131,15 +133,23 @@ bool fk_MQOOut::Convert_Solid(void)
 
 		switch(tmpFaceArray.size()) {
 		  case 3:
-			fBuf.push_back(fk_StrPrintf("3 V(%d %d %d) M(%d)",
-										tmpFaceArray[2], tmpFaceArray[1],
-										tmpFaceArray[0], curMate));
+			ss.clear();
+			ss << "3 V(" << tmpFaceArray[2];
+			ss << " " << tmpFaceArray[1];
+			ss << " " << tmpFaceArray[0];
+			ss << ") M(" << curMate << ")";
+			fBuf.push_back(ss.str());
+
 			break;
 
 		  case 4:
-			fBuf.push_back(fk_StrPrintf("4 V(%d %d %d %d) M(%d)",
-										tmpFaceArray[3], tmpFaceArray[2],
-										tmpFaceArray[1], tmpFaceArray[0], curMate));
+			ss.clear();
+			ss << "4 V(" << tmpFaceArray[3];
+			ss << " " << tmpFaceArray[2];
+			ss << " " << tmpFaceArray[1];
+			ss << " " << tmpFaceArray[0];
+			ss << ") M(" << curMate << ")";
+			fBuf.push_back(ss.str());
 			break;
 
 		  default:
@@ -157,10 +167,12 @@ bool fk_MQOOut::Convert_Solid(void)
 			}
 
 			for(i = 0; i < tesseIDArray->size(); i += 3) {
-				fBuf.push_back(fk_StrPrintf("3 V(%d %d %d) M(%d)",
-											tmpFaceArray[i+2],
-											tmpFaceArray[i+1],
-											tmpFaceArray[i], curMate));
+				ss.clear();
+				ss << "3 V(" << tmpFaceArray[i+2];
+				ss << " " << tmpFaceArray[i+1];
+				ss << " " << tmpFaceArray[i];
+				ss << ") M(" << curMate << ")";
+				fBuf.push_back(ss.str());
 			}
 
 			curL->setTesselateMode(tesseMode);
@@ -175,16 +187,18 @@ bool fk_MQOOut::Convert_Solid(void)
 
 void fk_MQOOut::MakeVertexIDMap_Solid(void)
 {
-	int			id = 0;
-	fk_Vertex	*v;
-	fk_Vector	*p;
-
+	int				id = 0;
+	fk_Vertex		*v;
+	fk_Vector		*p;
+	stringstream	ss;
 	vBuf.clear();
 	vertIDMap.clear();
 	for(v = solid->getNextV(NULL); v != NULL; v = solid->getNextV(v)) {
 		vertIDMap[v] = id;
 		p = v->GetPositionP();
-		vBuf.push_back(fk_StrPrintf("%.4f %.4f %.4f", p->x, p->y, p->z));
+		ss.clear();
+		ss << p->x << " " << p->y << " " << p->z;
+		vBuf.push_back(ss.str());
 		id++;
 	}
 
@@ -196,6 +210,7 @@ bool fk_MQOOut::Convert_IFS(void)
 	int				i;
 	vector<int>		fData;
 	int				curMate = -1;
+	stringstream	ss;
 
 	MakeMaterialPalette(FK_INDEXFACESET);
 	MakeVertexIDMap_IFS();
@@ -209,15 +224,22 @@ bool fk_MQOOut::Convert_IFS(void)
 
 		switch(fData.size()) {
 		  case 3:
-			fBuf.push_back(fk_StrPrintf("3 V(%d %d %d) M(%d)",
-										fData[2], fData[1],
-										fData[0], curMate));
+			ss.clear();
+			ss << "3 V(" << fData[2];
+			ss << " " << fData[1];
+			ss << " " << fData[0];
+			ss << ") M(" << curMate << ")";
+			fBuf.push_back(ss.str());
 			break;
 
 		  case 4:
-			fBuf.push_back(fk_StrPrintf("4 V(%d %d %d %d) M(%d)",
-										fData[3], fData[2],
-										fData[1], fData[0], curMate));
+			ss.clear();
+			ss << "4 V(" << fData[3];
+			ss << " " << fData[2];
+			ss << " " << fData[1];
+			ss << " " << fData[0];
+			ss << ") M(" << curMate << ")";
+			fBuf.push_back(ss.str());
 			break;
 
 		  default:
@@ -230,14 +252,15 @@ bool fk_MQOOut::Convert_IFS(void)
 
 void fk_MQOOut::MakeVertexIDMap_IFS(void)
 {
-	int			i;
-	fk_Vector	pos;
-
+	int				i;
+	fk_Vector		pos;
+	stringstream	ss;
 	vBuf.clear();
 	for(i = 0; i < ifs->getPosSize(); i++) {
 		pos = ifs->getPosVec(i);
-		vBuf.push_back(fk_StrPrintf("%.4f %.4f %.4f",
-									pos.x, pos.y, pos.z));
+		ss.clear();
+		ss << pos.x << " " << pos.y << " " << pos.z;
+		vBuf.push_back(ss.str());
 	}
 
 	return;
@@ -254,11 +277,12 @@ float fk_MQOOut::CalcMonotoneLuminance(fk_Color *col)
 
 void fk_MQOOut::MakeMaterialPalette(int argType)
 {
-	int			i, j, mateNum;
-	fk_Material	*tmpMate;
-	fk_Color	baseCol;
-	float		tmpDif, tmpAmb, tmpEmi, tmpSpe;
-
+	int				i, j, mateNum;
+	fk_Material		*tmpMate;
+	fk_Color		baseCol;
+	float			tmpDif, tmpAmb, tmpEmi, tmpSpe;
+	stringstream	ss;
+	
 	mBuf.clear();
 	if(argType == FK_SOLID) {
 		mateNum = solid->getPaletteSize();
@@ -291,11 +315,20 @@ void fk_MQOOut::MakeMaterialPalette(int argType)
 			baseCol.set(1.0f, 1.0f, 1.0f);
 		}
 
-		mBuf.push_back(
-			fk_StrPrintf("\"mate%d\" col(%.3f %.3f %.3f %.3f) dif(%.3f) amb(%.3f) emi(%.3f) spc(%.3f) power(%.2f)",
-			i, baseCol.getR(), baseCol.getG(), baseCol.getB(), tmpMate->getAlpha(),
-			tmpDif, tmpAmb, tmpEmi, tmpSpe, tmpMate->getShininess())
-		);
+		ss.clear();
+		ss << "\"mate" << i << "\" col(";
+		ss << baseCol.getR() << " ";
+		ss << baseCol.getG() << " ";
+		ss << baseCol.getB() << " ";
+		ss << tmpMate->getAlpha();
+		ss << ") dif(" << tmpDif;
+		ss << ") amb(" << tmpAmb;
+		ss << ") emi(" << tmpEmi;
+		ss << ") spc(" << tmpSpe;
+		ss << ") power(" << tmpMate->getShininess() << ")";
+
+		mBuf.push_back(ss.str());
+
 	}
 
 	return;
@@ -372,25 +405,25 @@ bool fk_MQOOut::WriteMQOFile(string argFName)
 	ofs << "Format Text Ver 1.0" << endl << endl;
 
 	if(mBuf.empty() == false) {
-		ofs << fk_StrPrintf("Material %d {", static_cast<int>(mBuf.size())) << endl;
+		ofs << "Material " << mBuf.size() << " {" << endl;
 		for(i = 0; i < mBuf.size(); ++i) {
-			ofs << fk_StrPrintf("\t%s", mBuf[i].c_str()) << endl;
+			ofs << "\t" << mBuf[i] << endl;
 		}
 		ofs << "}" << endl;
 	}
 
 	ofs << "Object \"obj1\" {" << endl;
-	ofs << fk_StrPrintf("\tvertex %d {", static_cast<int>(vBuf.size())) << endl;
+	ofs << "\tvertex " << vBuf.size() << " {" << endl;
 
 	for(i = 0; i < vBuf.size(); i++) {
-		ofs << fk_StrPrintf("\t\t%s", vBuf.at(i).c_str()) << endl;
+		ofs << "\t\t" << vBuf.at(i) << endl;
 	}
 
 	ofs << "\t}" << endl;
-	ofs << fk_StrPrintf("\tface %d {", static_cast<int>(fBuf.size())) << endl;
+	ofs << "\tface " << fBuf.size() << " {" << endl;
 
 	for(i = 0; i < fBuf.size(); i++) {
-		ofs << fk_StrPrintf("\t\t%s", fBuf.at(i).c_str()) << endl;
+		ofs << "\t\t" << fBuf.at(i) << endl;
 	}
 
 	ofs << "\t}" << endl;

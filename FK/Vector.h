@@ -409,8 +409,9 @@ class fk_Vector {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	virtual void	Print(void) const;
-	virtual void	Print(std::string) const;
+	virtual std::string	OutStr(void) const;
+	virtual void		Print(void) const;
+	virtual void		Print(std::string) const;
 
 #endif
 
@@ -730,8 +731,9 @@ class fk_HVector: public fk_Vector {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	void		Print(void) const;
-	void		Print(std::string) const;
+	std::string		OutStr(void) const;
+	void			Print(void) const;
+	void			Print(std::string) const;
 
 #endif
 

@@ -74,6 +74,7 @@
 #include <FK/Half.h>
 #include <FK/Curve.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -153,33 +154,44 @@ void fk_Edge::setDrawWidth(double argWidth)
 
 void fk_Edge::Print(void) const
 {
-	fk_Printf("Edge[%d] = {", getID());
-	fk_Printf("\tlH = %d", leftHalf->getID());
-	fk_Printf("\trH = %d", rightHalf->getID());
-	fk_Printf("}");
+	stringstream	ss;
+
+	ss << "Edge[" << getID() << "] = {";
+	fk_PutError(ss.str());
+	ss.clear();
+	
+	ss << "\tlH = " << leftHalf->getID();
+	fk_PutError(ss.str());
+	ss.clear();
+
+	ss << "\trH = " << rightHalf->getID();
+	fk_PutError(ss.str());
+	ss.clear();
+
+	fk_PutError("}");
 
 	return;
 }
 
 bool fk_Edge::Check(void) const
 {
-	bool	retBool = true;
-	string	outStr;
+	bool			retBool = true;
+	stringstream	ss;
 
 	if(leftHalf != NULL) {
 		if(leftHalf->getParentEdge() != this) {
-			outStr = fk_StrPrintf("Edge[%d] ... leftH[%d] ERROR!!",
-								  getID(), leftHalf->getID());
-			fk_PutError("fk_Edge", "Check", 1, outStr);
+			ss << "Edge[" << getID() << "] ... leftH[";
+			ss << leftHalf->getID() << "] ERROR!!";
+			fk_PutError("fk_Edge", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
 
 	if(rightHalf != NULL) {
 		if(rightHalf->getParentEdge() != this) {
-			outStr = fk_StrPrintf("Edge[%d] ... rightH[%d] ERROR!!",
-								  getID(), rightHalf->getID());
-			fk_PutError("fk_Edge", "Check", 2, outStr);
+			ss << "Edge[" << getID() << "] ... rightH[";
+			ss << rightHalf->getID() << "] ERROR!!";
+			fk_PutError("fk_Edge", "Check", 2, ss.str());
 			retBool = false;
 		}
 	}

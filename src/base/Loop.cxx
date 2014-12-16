@@ -78,6 +78,7 @@
 #include <FK/Error.H>
 #include <list>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -312,14 +313,18 @@ void fk_Loop::ModifyLoop(void)
 
 void fk_Loop::Print(void) const
 {
-	fk_Printf("Loop[%d] = {", getID());
+	stringstream	ss;
 
+	ss << "Loop[" << getID() << "] = {";
+	fk_PutError(ss.str());
+
+	ss.clear();
 	if(oneHalf != NULL) {
-		fk_Printf("\t1H = %d", oneHalf->getID());
+		ss << "\t1H = " << oneHalf->getID();
 	} else {
-		fk_Printf("\t1H = NULL");
+		ss << "\t1H = NULL";
 	}
-
+	fk_PutError(ss.str());
 	fk_PutError("}");
 
 	return;
@@ -327,14 +332,15 @@ void fk_Loop::Print(void) const
 
 bool fk_Loop::Check(void) const
 {
-	fk_Half	*curH, *prevH;
-	string	outStr;
+	fk_Half			*curH, *prevH;
+	stringstream	ss;
 
 
 	if(oneHalf->getParentLoop() != this) {
-		outStr = fk_StrPrintf("Loop[%d] ... Half[%d] ERROR",
-							  getID(), oneHalf->getID());
-		fk_PutError("fk_Loop", "Check", 1, outStr);
+		ss << "Loop[" << getID() << "] ... Half[";
+		ss << oneHalf->getID() << "] ERROR";
+
+		fk_PutError("fk_Loop", "Check", 1, ss.str());
 		return false;
 	}
 
@@ -342,18 +348,19 @@ bool fk_Loop::Check(void) const
 	prevH = oneHalf;
 
 	if(curH->getPrevHalf() != prevH) {
-		outStr = fk_StrPrintf("Loop[%d] ... Half[%d] ERROR",
-							  getID(), curH->getID());
-		fk_PutError("fk_Loop", "Check", 2, outStr);
+		ss << "Loop[" << getID() << "] ... Half[";
+		ss << curH->getID() << "] ERROR";
+
+		fk_PutError("fk_Loop", "Check", 2, ss.str());
 		return false;
 	}
 
 	while(curH != oneHalf) {
 
 		if(curH->getParentLoop() != this) {
-			outStr = fk_StrPrintf("Loop[%d] ... Half[%d] ERROR",
-								  getID(), curH->getID());
-			fk_PutError("fk_Loop", "Check", 3, outStr);
+			ss << "Loop[" << getID() << "] ... Half[";
+			ss << curH->getID() << "] ERROR";
+			fk_PutError("fk_Loop", "Check", 3, ss.str());
 			return false;
 		}
 
@@ -361,9 +368,9 @@ bool fk_Loop::Check(void) const
 		curH = curH->getNextHalf();
 
 		if(curH->getPrevHalf() != prevH) {
-			outStr = fk_StrPrintf("Loop[%d] ... Half[%d] ERROR",
-								  getID(), curH->getID());
-			fk_PutError("fk_Loop", "Check", 4, outStr);
+			ss << "Loop[" << getID() << "] ... Half[";
+			ss << curH->getID() << "] ERROR";
+			fk_PutError("fk_Loop", "Check", 4, ss.str());
 			return false;
 		}
 	}

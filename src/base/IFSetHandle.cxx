@@ -77,8 +77,8 @@
 #include <FK/Loop.h>
 #include <FK/DataBase.H>
 #include <FK/Reference.h>
-
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -267,12 +267,12 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 								 vector<fk_Half *> *HalfStock2,
 								 bool argSolidFlag)
 {
-	fk_Edge		*existE;
-	fk_Half		*newH, *mateH;
-	fk_Vector	tmpVec;
-	fk_Vertex	*tmpRV, *tmpLV;
-	string		outStr;
-
+	fk_Edge			*existE;
+	fk_Half			*newH, *mateH;
+	fk_Vector		tmpVec;
+	fk_Vertex		*tmpRV, *tmpLV;
+	stringstream	ss;
+	
 	// 頂点が存在するかどうかの判定 
 	if(DB->ExistVertex(vID1) == false ||
 	   DB->ExistVertex(vID2) == false) {
@@ -309,22 +309,21 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 		edgeCount[existE]++;
 
 		if(edgeCount[existE] > 2) {
-			outStr = fk_StrPrintf("Edge ID ... %d\n", existE->getID());
+			ss << "Edge ID ... " << existE->getID() << endl;
 
 			tmpRV = existE->getRightHalf()->getVertex();
 			tmpLV = existE->getLeftHalf()->getVertex();
-			outStr += fk_StrPrintf("VID ... %d, %d\n",
-								   tmpRV->getID(), tmpLV->getID());
+			ss << "VID ... " << tmpRV->getID() << ", " << tmpLV->getID() << endl;
 
 			tmpVec = tmpRV->getPosition();
-			outStr += fk_StrPrintf("RPosition ... (%g, %g, %g), ",
-								   tmpVec.x, tmpVec.y, tmpVec.z);
+			ss << "RPosition ... (";
+			ss << tmpVec.x << ", " << tmpVec.y << ", " << tmpVec.z << "), ";
 
 			tmpVec = tmpLV->getPosition();
-			outStr += fk_StrPrintf("LPosition ... (%g, %g, %g), ",
-								   tmpVec.x, tmpVec.y, tmpVec.z);
+			ss << "LPosition ... (";
+			ss << tmpVec.x << ", " << tmpVec.y << ", " << tmpVec.z << ")" << endl;
 			
-			fk_PutError("fk_IFSetHandle", "DefineNewEH", 2, outStr);
+			fk_PutError("fk_IFSetHandle", "DefineNewEH", 2, ss.str());
 			return false;
 		}
 	}

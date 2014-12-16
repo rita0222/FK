@@ -173,7 +173,7 @@ bool fk_SRFParser::ReadSRFPolygonData(ifstream *argIFS, int argMaxID,
 				faceFlg = true;
 				continue;
 			} else {
-				fk_Printf("Error Code 1");
+				fk_PutError("Error Code 1");
 				return false;
 			}
 		}

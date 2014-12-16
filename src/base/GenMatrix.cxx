@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/GenMatrix.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -513,8 +514,8 @@ fk_GenMatrix & fk_GenMatrix::operator -=(const fk_GenMatrix &argMat)
 
 void fk_GenMatrix::Print(string argStr) const
 {
-	_st		i, j;
-	string	line;
+	_st				i, j;
+	stringstream	ss;
 
 	if(argStr.size() == 0) {
 		fk_PutError("Matrix = ");
@@ -523,12 +524,13 @@ void fk_GenMatrix::Print(string argStr) const
 	}
 
 	for(i = 0; i < deg; i++) {
-		line = "\t| ";
+		ss.clear();
+		ss << "\t| ";
 		for(j = 0; j < deg; j++) {
-			line += fk_StrPrintf("%10.6f ", m[i*deg + j]);
+			ss << m[i*deg + j] << " ";
 		}
-		line+= "|";
-		fk_PutError(line);
+		ss << "|";
+		fk_PutError(ss.str());
 	}
 
 	return;

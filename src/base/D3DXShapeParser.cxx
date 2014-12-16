@@ -76,6 +76,7 @@
 #include <FK/IFSTexture.h>
 #include <FK/Error.H>
 #include <deque>
+#include <sstream>
 
 using namespace std;
 
@@ -413,37 +414,55 @@ int fk_D3DXShapeParser::GetOrgVSize(void)
 
 void fk_D3DXShapeParser::Print(void)
 {
-	_st		i, j;
-	string	outStr;
+	_st				i, j;
+	stringstream	ss;
 
-	fk_Printf("vsize = %d", optVData.size());
+	ss << "vsize = " << optVData.size();
+	fk_PutError(ss.str());
+	ss.clear();
+	
 	for(i = 0; i < optVData.size(); i++) {
-		fk_Printf("v[%d]\t= (%f, %f, %f)",
-				  i, optVData[i].x, optVData[i].y, optVData[i].z);
+		ss << "v[" << i << "]\t= " << optVData[i].OutStr();
+		fk_PutError(ss.str());
+		ss.clear();
 	}
 
-	fk_Printf("fSize = %d", optFData.size());
+	ss << "fSize = " <<  optFData.size();
+	fk_PutError(ss.str());
+	ss.clear();
+	
 	for(i = 0; i < optFData.size(); i++) {
-		outStr = fk_StrPrintf("f[%d]\t= (", i);
+		ss << "f[" << i << "]\t= (";
 		for(j = 0; j < optFData[i].size(); j++) {
-			outStr += fk_StrPrintf("%d", optFData[i][j]);
+			ss << optFData[i][j];
 			if(j == optFData[i].size()-1) {
-				outStr += ")";
+				ss << ")";
 			} else {
-				outStr += ", ";
+				ss << ", ";
 			}
 		}
-		fk_PutError(outStr);
+		fk_PutError(ss.str());
+		ss.clear();
 	}
 
-	fk_Printf("tSize = %d", optTData.size());
+	ss << "tSize = " << optTData.size();
+	fk_PutError(ss.str());
+	ss.clear();
+
 	for(i = 0; i < optTData.size(); i++) {
-		fk_Printf("t[%d]\t= (%f, %f)", i, optTData[i].x, optTData[i].y);
+		ss << "t[" << i << "]\t= (" << optTData[i].x << ", " << optTData[i].y << ")";
+		fk_PutError(ss.str());
+		ss.clear();
 	}
 
-	fk_Printf("mSize = %d", mData.size());
+	ss << "mSize = " << mData.size();
+	fk_PutError(ss.str());
+	ss.clear();
+
 	for(i = 0; i < mData.size(); i++) {
-		fk_Printf("m[%d]\t = %d", i, mData[i]);
+		ss << "m[" << i << "]\t = " <<  mData[i];
+		fk_PutError(ss.str());
+		ss.clear();
 	}
 
 	return;

@@ -89,6 +89,7 @@
 #include <FK/MQOOut.H>
 #include <FK/IFSetHandle.H>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -1870,11 +1871,14 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 
 void fk_IndexFaceSet::PosPrint(string argStr)
 {
-	_st		i;
-
+	_st				i;
+	stringstream	ss;
+	
 	for(i = 0; i < pos.size(); i++) {
-		fk_Printf("%s[%d] = (%f, %f, %f)", argStr.c_str(), i,
-				  pos[i].x, pos[i].y, pos[i].z);
+		ss.clear();
+		ss << argStr << "[" << i << "] = (";
+		ss << pos[i].x << ", " << pos[i].y << ", " << pos[i].z << ")";
+		fk_PutError(ss.str());
 	}
 	return;
 }

@@ -72,6 +72,7 @@
 #include <FK/Tree.h>
 #include <FK/Error.H>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -205,15 +206,16 @@ void fk_TreeData::_clearChild(fk_TreeData *argChild)
 
 void fk_TreeData::Print(void)
 {
-	list_ite	ite;
-	string		str, tmpLine;
+	list_ite		ite;
+	stringstream	ss;
+	
 
-	str.clear();
 	for(int i = 0; i < depth; i++) {
-		str += "\t";
+		ss << "\t";
 	}
-	str += fk_StrPrintf("(%s, %d)", name.c_str(), maxDepth);
-	fk_PutError(str);
+
+	ss << "(" << name << ", " << maxDepth << ")";
+	fk_PutError(ss.str());
 
 	for(ite = children.begin(); ite != children.end(); ++ite) {
 		(*ite)->Print();

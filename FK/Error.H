@@ -123,9 +123,12 @@ FK_EXTERN void				fk_PutError(const std::string,
 FK_EXTERN void				fk_PutError(const std::string, const std::string,
 										const int, const std::string);
 FK_EXTERN void				fk_PutError(const std::string);
-FK_EXTERN void				fk_Printf(const char *, ...);
 FK_EXTERN bool				fk_ErrorPrint(void);
 FK_EXTERN bool				fk_SetErrorFile(std::string);
+
+#ifndef FK_CLI_CODE
+FK_EXTERN void				fk_Printf(const char *, ...);
 FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
+#endif
 
 #endif // !__FK_ERROR_HEADER__

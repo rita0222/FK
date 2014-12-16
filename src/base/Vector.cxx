@@ -71,6 +71,7 @@
  ****************************************************************************/
 #include <FK/Vector.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -382,15 +383,23 @@ fk_Vector fk_Vector::perp(const fk_Vector &argV) const
 	return ((*this) - proj(argV));
 }
 
+string fk_Vector::OutStr(void) const
+{
+	stringstream		ss;
+
+	ss << "(" << x << ", " << y << ", " << z << ")";
+	return ss.str();
+}
+
 void fk_Vector::Print(void) const
 {
-	fk_Printf("Vector = (%g, %g, %g)", x, y, z);
+	fk_PutError("Vector = " + OutStr());
 	return;
 }
 
 void fk_Vector::Print(string argStr) const
 {
-	fk_Printf("Vector[%s] = (%g, %g, %g)", argStr.c_str(), x, y, z);
+	fk_PutError("Vector[" + argStr + "] = " + OutStr());
 	return;
 }
 
@@ -526,16 +535,22 @@ void fk_HVector::init(void)
 	w = 1.0;
 }
 
-void fk_HVector::Print(void) const
+string fk_HVector::OutStr(void) const
 {
-	fk_Printf("HVector = (%g, %g, %g, %g)", x, y, z, w);
-	return;
+	stringstream		ss;
+
+	ss << "(" << x << ", " << y << ", " << z << ", " << w << ")";
+	return ss.str();
 }
 
-void fk_HVector::Print(string str) const
+void fk_HVector::Print(void) const
 {
-	fk_Printf("HVector(%s) = (%g, %g, %g, %g)",
-				str.c_str(), x, y, z, w);
+	fk_PutError("HVector = " + OutStr());
+}
+
+void fk_HVector::Print(string argStr) const
+{
+	fk_PutError("HVector[" + argStr + "] = " + OutStr());
 	return;
 }
 

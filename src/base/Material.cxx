@@ -72,6 +72,7 @@
 #include <FK/Material.h>
 #include <FK/MatExample.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -402,9 +403,10 @@ void fk_Material::initDefault(void)
 
 void fk_Material::Print(int argTabSize, string argTag)
 {
-	string		tab;
-	int			i;
-
+	string			tab;
+	int				i;
+	stringstream	ss;
+	
 	tab.erase();
 	for(i = 0; i < argTabSize; i++) tab += '\t';
 
@@ -414,24 +416,48 @@ void fk_Material::Print(int argTabSize, string argTag)
 		fk_PutError(tab + "Mat[" + argTag + "] = {");
 	}
 
-	fk_PutError(tab + fk_StrPrintf("\talpha = %g;", alpha));
-	fk_PutError(tab + fk_StrPrintf("\tamb = (%g, %g, %g, %g);",
-								   ambient.col[0], ambient.col[1],
-								   ambient.col[2], ambient.col[3]));
+	ss << "\talpha = " << alpha << ";";
+	fk_PutError(tab + ss.str());
+	ss.clear();
 
-	fk_PutError(tab + fk_StrPrintf("\tdiff = (%g, %g, %g, %g);",
-								   diffuse.col[0], diffuse.col[1],
-								   diffuse.col[2], diffuse.col[3]));
+	ss << "\tamb = (";
+	for(i = 0; i < 4; i++) {
+		ss << ambient.col[i];
+		if(i != 3) ss << ", ";
+	}
+	ss << ");";
+	fk_PutError(tab + ss.str());
+	ss.clear();
 
-	fk_PutError(tab + fk_StrPrintf("\tspec = (%g, %g, %g, %g);",
-								   specular.col[0], specular.col[1],
-								   specular.col[2], specular.col[3]));
+	ss << "\tdiff = (";
+	for(i = 0; i < 4; i++) {
+		ss << diffuse.col[i];
+		if(i != 3) ss << ", ";
+	}
+	ss << ");";
+	fk_PutError(tab + ss.str());
+	ss.clear();
 
-	fk_PutError(tab + fk_StrPrintf("\temis = (%g, %g, %g, %g);",
-								   emission.col[0], emission.col[1],
-								   emission.col[2], emission.col[3]));
+	ss << "\tspec = (";
+	for(i = 0; i < 4; i++) {
+		ss << specular.col[i];
+		if(i != 3) ss << ", ";
+	}
+	ss << ");";
+	fk_PutError(tab + ss.str());
+	ss.clear();
 
-	fk_PutError(tab + fk_StrPrintf("\tshini = %g;", shininess));
+	ss << "\temis = (";
+	for(i = 0; i < 4; i++) {
+		ss << emission.col[i];
+		if(i != 3) ss << ", ";
+	}
+	ss << ");";
+	fk_PutError(tab + ss.str());
+	ss.clear();
+
+	ss << "\tshini = " << shininess << ";";
+	fk_PutError(tab + ss.str());
 
 	fk_PutError(tab + "}");
 	

@@ -134,7 +134,7 @@ bool fk_STLOut::WriteSTLShape_Solid(ofstream *argOFS)
 	for(curL = solid->getNextL(NULL); curL != NULL; curL = solid->getNextL(curL)) {
 		norm = curL->getNormal();
 		if(norm != NULL) {
-			*argOFS << fk_StrPrintf(" facet normal %e %e %e", norm->x, norm->y, norm->z) << endl;
+			*argOFS << " facet normal " << norm->x << " " << norm->y << " " << norm->z << endl;
 			*argOFS << "  outer loop" << endl;
 		} else {
 			return false;
@@ -144,7 +144,7 @@ bool fk_STLOut::WriteSTLShape_Solid(ofstream *argOFS)
 
 		for(i = 0; i < vArray.size(); i++) {
 			pos = vArray[i]->getPosition();
-			*argOFS << fk_StrPrintf("   vertex %e %e %e\n", pos.x, pos.y, pos.z) << endl;
+			*argOFS << "   vertex " << pos.x << " " << pos.y << " " << pos.z << endl;
 		}
 
 		*argOFS << "  endloop" << endl;
@@ -172,11 +172,11 @@ bool fk_STLOut::WriteSTLShape_IFS(ofstream *argOFS)
 		}
 		norm = (pos[1] - pos[0]) ^ (pos[2] - pos[1]);
 		norm.normalize();
-		*argOFS << fk_StrPrintf(" facet normal %e %e %e", norm.x, norm.y, norm.z) << endl;
+		*argOFS << " facet normal " << norm.x << " " << norm.y << " " << norm.z << endl;
 		*argOFS << "  outer loop" << endl;
 
 		for(j = 0; j < fData.size(); j++) {
-			*argOFS << fk_StrPrintf("   vertex %e %e %e\n", pos[j].x, pos[j].y, pos[j].z) << endl;
+			*argOFS << "   vertex " << pos[j].x << " " << pos[j].y << " " << pos[j].z << endl;
 		}
 
 		*argOFS << "  endloop" << endl;

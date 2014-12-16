@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/Palette.h>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -168,9 +169,10 @@ void fk_Palette::Resize(int argSize)
 
 void fk_Palette::Print(int argTabSize, string argTag)
 {
-	string		tab;
-	_st			i;
-
+	string			tab;
+	_st				i;
+	stringstream	ss;
+	
 	tab.erase();
 	for(i = 0; i < static_cast<_st>(argTabSize); i++) tab += '\t';
 
@@ -180,9 +182,14 @@ void fk_Palette::Print(int argTabSize, string argTag)
 		fk_PutError(tab + "MatAdmin[" + argTag + "] = {");
 	}
 
-	fk_PutError(tab + fk_StrPrintf("\tthisColorID = %d;", thisColorID));
+
+	ss << "\tthisColorID = " << thisColorID << ";";
+	fk_PutError(tab + ss.str());
+	
 	for(i = 0; i < paletteStack.size(); i++) {
-		paletteStack[i].Print(argTabSize + 1, fk_StrPrintf("PAL%d", i));
+		ss.clear();
+		ss << "PAL" << i;
+		paletteStack[i].Print(argTabSize + 1, ss.str());
 	}
 	fk_PutError(tab + "\tColID = {");
 	fk_PutError(tab + "\t}");

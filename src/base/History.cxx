@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/History.H>
 #include <FK/Error.H>
+#include <sstream>
 
 using namespace std;
 
@@ -413,11 +414,13 @@ bool fk_History::Redo(unsigned int argTimes)
 
 void fk_History::Print(void)
 {
-	_st			i, j;
-	string		str;
-	fk_Command	com1, com2;
-
+	_st				i, j;
+	fk_Command		com1, com2;
+	stringstream	ss;
+	
 	for(i = 0; i <= (unsigned int)(curIndex); i++) {
+		ss.clear();
+
 		com1 = comStack[i];
 		if(i == comStack.size() - 1) {
 			com2.SetBoolIndex(static_cast<unsigned int>(boolStack.size()));
@@ -429,64 +432,69 @@ void fk_History::Print(void)
 			com2 = comStack[i+1];
 		}
 
-		fk_Printf("Com[%d] (%d) = ", i, com1.GetCommandID());
-
-		str = "\tBool = (";
+		ss << "Com[" << i << "] (" << com1.GetCommandID() << ") = ";
+		fk_PutError(ss.str());
+		ss.clear();
+		
+		ss << "\tBool = (";
 		for(j = com1.GetBoolIndex(); j < com2.GetBoolIndex(); j++) {
 			if(boolStack[j] == char(1)) {
-				str += "t";
+				ss << "t";
 			} else {
-				str += "f";
+				ss << "f";
 			}
 
 			if(j != com2.GetBoolIndex()-1) {
-				str += ", ";
+				ss << ", ";
 			}
 		}
-		str += ")";
-		fk_PutError(str);
-
-		str = "\tInt = (";
+		ss << ")";
+		fk_PutError(ss.str());
+		ss.clear();
+		
+		ss << "\tInt = (";
 		for(j = com1.GetIntIndex(); j < com2.GetIntIndex(); j++) {
-			str += fk_StrPrintf("%d", intStack[j]);
+			ss << intStack[j];
 
 			if(j != com2.GetIntIndex()-1) {
-				str += ", ";
+				ss << ", ";
 			}
 		}
-		str += ")";
-		fk_PutError(str);
-
-		str = "\tVec = (";
+		ss << ")";
+		fk_PutError(ss.str());
+		ss.clear();
+		
+		ss << "\tVec = (";
 		for(j = com1.GetVecIndex(); j < com2.GetVecIndex(); j++) {
-			str += fk_StrPrintf("(%g, %g, %g)",
-								vecStack[j].x, vecStack[j].y, vecStack[j].z);
+			ss << vecStack[j].OutStr();
 			if(j != com2.GetVecIndex()-1) {
-				str += ", ";
+				ss << ", ";
 			}
 		}
-		str += ");";
-		fk_PutError(str);
-
-		str = "\tdouble = (";
+		ss << ");";
+		fk_PutError(ss.str());
+		ss.clear();
+		
+		ss << "\tdouble = (";
 		for(j = com1.GetDoubleIndex(); j < com2.GetDoubleIndex(); j++) {
-			str += fk_StrPrintf("%f", doubleStack[j]);
+			ss << doubleStack[j];
 			if(j != com2.GetDoubleIndex()-1) {
-				str += ", ";
+				ss << ", ";
 			}
 		}
-		str += ");";
-		fk_PutError(str);
+		ss << ");";
+		fk_PutError(ss.str());
+		ss.clear();
 
-		str = "\tString = (";
+		ss << "\tString = (";
 		for(j = com1.GetStrIndex(); j < com2.GetStrIndex(); j++) {
-			str += strStack[j];
+			ss << strStack[j];
 			if(j != com2.GetStrIndex()-1) {
-				str += ", ";
+				ss << ", ";
 			}
 		}
-		str += ");";
-		fk_PutError(str);
+		ss << ");";
+		fk_PutError(ss.str());
 	}
 
 	return;
@@ -494,10 +502,22 @@ void fk_History::Print(void)
 
 void fk_History::PrintSize(void)
 {
-	fk_Printf("ComSize = %d", comStack.size());
-	fk_Printf("boolSize = %d", boolStack.size());
-	fk_Printf("intSize = %d", intStack.size());
-	fk_Printf("vecSize = %d", vecStack.size());
+	stringstream	ss;
+
+	ss << "ComSize = " << comStack.size();
+	fk_PutError(ss.str());
+	ss.clear();
+	
+	ss << "boolSize = " << boolStack.size();
+	fk_PutError(ss.str());
+	ss.clear();
+	
+	ss << "intSize = " << intStack.size();
+	fk_PutError(ss.str());
+	ss.clear();
+
+	ss << "vecSize = " << vecStack.size();
+	fk_PutError(ss.str());
 
 	return;
 }
