@@ -381,7 +381,7 @@ fk_Color * fk_Material::getEmission(void) { return &emission; }
 fk_Color * fk_Material::getSpecular(void) { return &specular; }
 float fk_Material::getShininess(void) { return shininess; }
 
-int operator ==(fk_Material a, fk_Material b)
+bool operator ==(fk_Material a, fk_Material b)
 {
 	float al, sh;
 

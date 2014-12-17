@@ -332,7 +332,7 @@ class fk_Material : public fk_BaseObject {
 	 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
 	 *	等しいと判断します。
 	 */
-	friend int operator==(fk_Material left, fk_Material right);
+	friend bool operator==(fk_Material left, fk_Material right);
 
 	//! コピーコンストラクタ
 	fk_Material(const fk_Material &arg);
