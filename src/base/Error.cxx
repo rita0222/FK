@@ -110,7 +110,7 @@ class fk_ErrorDataBase {
 	list<fk_ErrorData *>	DataBase;
 	fk_ErrorMode			mode;
 	bool					fileMode;
-	std::ofstream			ofs;
+	ofstream				ofs;
 	fk_ErrorBrowser			errorBrowser;
 
  public:
@@ -473,7 +473,32 @@ bool fk_SetErrorFile(string argFileName)
 	return getErrorDB()->SetFileName(argFileName);
 }
 
-#ifndef FK_CLI_CODE
+#ifdef FK_CLI_CODE
+
+fk_ErrorBrowser::fk_ErrorBrowser(void)
+{
+	return;
+}
+
+fk_ErrorBrowser::~fk_ErrorBrowser()
+{
+	return;
+}
+
+void fk_ErrorBrowser::PutBrowser(const string &argStr)
+{
+	cout << argStr;
+	return;
+}
+
+void fk_ErrorBrowser::PutAlert(const string &argStr)
+{
+	cerr << argStr;
+	return;
+}
+
+#else // if(!FK_CLI_CODE)
+
 void fk_Printf(const char *argFormat, ...)
 {
 	va_list			ap;
@@ -498,4 +523,6 @@ string fk_StrPrintf(const char *argFormat, ...)
 	va_end(ap);
 	return buffer;
 }
-#endif
+
+#endif // if(FK_CLI_CODE)
+

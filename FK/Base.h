@@ -107,7 +107,7 @@ const int FK_SUBMINOR_VERSION = 10;
 
 
 #define _FK_UNDEFINED_DEFINE_ -1
-#define _FK_EPS_DEFINE_ 1.0e-8;
+#define _FK_EPS_DEFINE_ 1.0e-8
 #define _FK_PI_DEFINE_ 3.1415926535897932
 
 
