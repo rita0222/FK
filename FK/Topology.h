@@ -94,7 +94,7 @@ const fk_TopologyType	FK_UNDEFINED_TYPE = -1;
  *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Loop, fk_TopologyMaterial
  */
 
-class fk_Topology : public fk_Attribute, public fk_BaseObject {
+class fk_Topology : public fk_Attribute {
 
  private:
 	int					ID;

@@ -121,7 +121,7 @@ class fk_Shape;
  *	\sa fk_ParticleSet, fk_Attribute, fk_Point
  */
 
-class fk_Particle: public fk_BaseObject, public fk_Attribute {
+class fk_Particle: public fk_Attribute {
 
  private:
 	int				id;			// 頂点 ID 

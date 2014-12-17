@@ -93,7 +93,7 @@ enum fk_RealShapeType {
  *	\sa fk_Material, fk_Palette
  */
 
-class fk_Shape: public fk_Attribute, public fk_BaseObject {
+class fk_Shape: public fk_Attribute {
 
  private:
 	fk_Palette			*palette;

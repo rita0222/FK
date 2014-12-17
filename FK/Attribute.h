@@ -72,7 +72,7 @@
 #ifndef __FK_ATTIRIBUTE_HEADER__
 #define __FK_ATTIRIBUTE_HEADER__
 
-#include <vector>
+#include <FK/Base.h>
 
 class fk_Attribute_Data;
 
@@ -84,7 +84,7 @@ class fk_Attribute_Data;
  *	値として int、double、string の 3 種を使用することができます。
  */
 
-class fk_Attribute {
+class fk_Attribute : public fk_BaseObject {
  private:
 	fk_Attribute_Data		*attr_data;
 
