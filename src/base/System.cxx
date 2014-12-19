@@ -163,7 +163,7 @@ bool fk_System::setcwd(void)
 }
 
 #else
-#if defined(WIN32)
+#if defined(WIN32) && !defined(FK_CLI_CODE)
 
 #include <Windows.h>
 
