@@ -265,14 +265,16 @@ void fk_FileInput::GetElemNum(fk_DataFormatMode argMode, ifstream &argIFS,
 							  int *argVSize, int *argHSize,
 							  int *argESize, int *argLSize)
 {
-	string	buffer;
-	char	tag[32];
+	string	buffer, tag;
 	int		sizeList[5];
 
 	if(argMode == FK_TEXT_FILE) {
 		getline(argIFS, buffer);
-		sscanf(buffer.c_str(), "%s%d%d%d%d", tag,
-			   argVSize, argHSize, argESize, argLSize);
+		tag = PopWord(&buffer);
+		*argVSize = Str2Int(PopWord(&buffer));		
+		*argHSize = Str2Int(PopWord(&buffer));		
+		*argESize = Str2Int(PopWord(&buffer));		
+		*argLSize = Str2Int(PopWord(&buffer));		
 	} else {
 		BRead(sizeList, 5, argIFS);
 
@@ -372,15 +374,18 @@ bool fk_FileInput::GetVertexData(fk_DataFormatMode argMode,
 	  case FK_TEXT_FILE:
 		if(GetLineTagStatus(argIFS, &line, "v") == false) return false;
 
+		id = Str2Int(PopWord(&line));
+		IDSet[0] = Str2Int(PopWord(&line));
+		IDSet[1] = Str2Int(PopWord(&line));
+		IDSet[2] = Str2Int(PopWord(&line));
+		pos[0] = Str2Double(PopWord(&line));
+		pos[1] = Str2Double(PopWord(&line));
+		pos[2] = Str2Double(PopWord(&line));
+
 		if(sizeMode == true) {
-			sscanf(line.c_str(), "%d%d%d%d%lf%lf%lf%lf",
-				   &id, &IDSet[0], &IDSet[1], &IDSet[2],
-				   &pos[0], &pos[1], &pos[2], &size);
-		} else {
-			sscanf(line.c_str(), "%d%d%d%d%lf%lf%lf",
-				   &id, &IDSet[0], &IDSet[1], &IDSet[2],
-				   &pos[0], &pos[1], &pos[2]);
+			size = Str2Double(PopWord(&line));
 		}
+
 		if(id != argID && id != FK_UNDEFINED) return false;
 		break;
 
@@ -416,8 +421,12 @@ bool fk_FileInput::GetHalfData(fk_DataFormatMode argMode,
 	  case FK_TEXT_FILE:
 		if(GetLineTagStatus(argIFS, &line, "h") == false) return false;
 
-		sscanf(line.c_str(), "%d%d%d%d%d",
-			   &id, &IDSet[0], &IDSet[1], &IDSet[2], &IDSet[3]);
+		id = Str2Int(PopWord(&line));
+		IDSet[0] = Str2Int(PopWord(&line));
+		IDSet[1] = Str2Int(PopWord(&line));
+		IDSet[2] = Str2Int(PopWord(&line));
+		IDSet[3] = Str2Int(PopWord(&line));
+
 		if(id != argID && id != FK_UNDEFINED) return false;
 		break;
 
@@ -443,13 +452,16 @@ bool fk_FileInput::GetEdgeData(fk_DataFormatMode argMode,
 	  case FK_TEXT_FILE:
 		if(GetLineTagStatus(argIFS, &line, "e") == false) return false;
 
+		id = Str2Int(PopWord(&line));
+		IDSet[0] = Str2Int(PopWord(&line));
+		IDSet[1] = Str2Int(PopWord(&line));
+		IDSet[2] = Str2Int(PopWord(&line));
+		IDSet[3] = Str2Int(PopWord(&line));
+		
 		if(sizeMode == true) {
-			sscanf(line.c_str(), "%d%d%d%d%d%lf",
-				   &id, &IDSet[0], &IDSet[1], &IDSet[2], &IDSet[3], &width);
-		} else {
-			sscanf(line.c_str(), "%d%d%d%d%d",
-				   &id, &IDSet[0], &IDSet[1], &IDSet[2], &IDSet[3]);
+			width = Str2Double(PopWord(&line));
 		}
+
 		if(id != argID && id != FK_UNDEFINED) return false;
 		break;
 
@@ -478,8 +490,11 @@ bool fk_FileInput::GetLoopData(fk_DataFormatMode argMode,
 	  case FK_TEXT_FILE:
 		if(GetLineTagStatus(argIFS, &line, "l") == false) return false;
 
-		sscanf(line.c_str(), "%d%d%d%d",
-			   &id, &IDSet[0], &IDSet[1], &IDSet[2]);
+		id = Str2Int(PopWord(&line));
+		IDSet[0] = Str2Int(PopWord(&line));
+		IDSet[1] = Str2Int(PopWord(&line));
+		IDSet[2] = Str2Int(PopWord(&line));
+
 		if(id != argID && id != FK_UNDEFINED) return false;
 		break;
 
@@ -555,7 +570,8 @@ bool fk_FileInput::GetAdminHeader(fk_DataFormatMode argMode, ifstream &argIFS,
 	  case FK_TEXT_FILE:
 		getline(argIFS, buffer);
 		if(argIFS.fail()) return false;
-		sscanf(buffer.c_str(), "%d%d", argListSize, argFlagSize);
+		*argListSize = Str2Int(PopWord(&buffer));
+		*argFlagSize = Str2Int(PopWord(&buffer));
 		break;
 
 	  case FK_BINARY_FILE:
@@ -586,7 +602,7 @@ bool fk_FileInput::GetAdminEraseList(fk_DataFormatMode argMode, ifstream &argIFS
 				argAdmin->Init(1);
 				return false;
 			}
-			sscanf(buffer.c_str(), "%d", &listID);
+			listID = Str2Int(PopWord(&buffer));
 			argAdmin->eraseIDSet->push_back(listID);
 		}
 		break;
@@ -749,7 +765,6 @@ bool fk_FileInput::GetPaletteData_(fk_DataFormatMode argMode, ifstream &argIFS,
 
 bool fk_FileInput::GetMainMaterialData(fk_DataFormatMode argMode, ifstream &argIFS)
 {
-	char					tag[256];
 	string					buffer, tagStr;
 	int						valSet[2];
 	fk_Material				localMat;
@@ -758,9 +773,10 @@ bool fk_FileInput::GetMainMaterialData(fk_DataFormatMode argMode, ifstream &argI
 	switch(argMode) {
 	  case FK_TEXT_FILE:
 		getline(argIFS, buffer);
-		sscanf(buffer.c_str(), "%s%d%d", tag,
-			   &valSet[0], &valSet[1]);
-		tagStr = tag;
+		tagStr = PopWord(&buffer);
+		valSet[0] = Str2Int(PopWord(&buffer));
+		valSet[1] = Str2Int(PopWord(&buffer));
+
 		if(tagStr != "mat" || valSet[1] < 0) return false;
 		break;
 
@@ -803,33 +819,47 @@ bool fk_FileInput::GetSubMaterialData(fk_DataFormatMode argMode, ifstream &argIF
 bool fk_FileInput::GetMaterialData(fk_DataFormatMode argMode,
 								   ifstream &argIFS, fk_Material *argMat)
 {
-	char		buffer[256], tag[256];
+	string		buffer, tag;
 	float		r, g, b, a, shininess, val[12];
 	
 	switch(argMode) {
 	  case FK_TEXT_FILE:
-		argIFS.getline(buffer, 255);
-		sscanf(buffer, "%s%f", tag, &a);
+		getline(argIFS, buffer);
+		tag = PopWord(&buffer);
+		a = Str2Float(PopWord(&buffer));
 		argMat->setAlpha(a);
 
-		argIFS.getline(buffer, 255);
-		sscanf(buffer, "%s%f%f%f", tag, &r, &g, &b);
+		getline(argIFS, buffer);
+		tag = PopWord(&buffer);
+		r = Str2Float(PopWord(&buffer));
+		g = Str2Float(PopWord(&buffer));
+		b = Str2Float(PopWord(&buffer));
 		argMat->setAmbient(r, g, b);
 
-		argIFS.getline(buffer, 255);
-		sscanf(buffer, "%s%f%f%f", tag, &r, &g, &b);
+		getline(argIFS, buffer);
+		tag = PopWord(&buffer);
+		r = Str2Float(PopWord(&buffer));
+		g = Str2Float(PopWord(&buffer));
+		b = Str2Float(PopWord(&buffer));
 		argMat->setDiffuse(r, g, b);
 
-		argIFS.getline(buffer, 255);
-		sscanf(buffer, "%s%f%f%f", tag, &r, &g, &b);
+		getline(argIFS, buffer);
+		tag = PopWord(&buffer);
+		r = Str2Float(PopWord(&buffer));
+		g = Str2Float(PopWord(&buffer));
+		b = Str2Float(PopWord(&buffer));
 		argMat->setSpecular(r, g, b);
 
-		argIFS.getline(buffer, 255);
-		sscanf(buffer, "%s%f%f%f", tag, &r, &g, &b);
+		getline(argIFS, buffer);
+		tag = PopWord(&buffer);
+		r = Str2Float(PopWord(&buffer));
+		g = Str2Float(PopWord(&buffer));
+		b = Str2Float(PopWord(&buffer));
 		argMat->setEmission(r, g, b);
 
-		argIFS.getline(buffer, 255);
-		sscanf(buffer, "%s%f", tag, &shininess);
+		getline(argIFS, buffer);
+		tag = PopWord(&buffer);
+		shininess = Str2Float(PopWord(&buffer));
 		argMat->setShininess(shininess);
 
 		break;
