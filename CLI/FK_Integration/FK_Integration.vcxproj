@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}</ProjectGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Keyword>ManagedCProj</Keyword>
+    <RootNamespace>FK_Integration</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>.\base\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\home\earth\src\CLI\FK_Integration\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>.\base\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;FK_CLI_CODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;opengl32.lib;imm32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;FK_CLI_CODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;opengl32.lib;imm32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4098,4248,4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="base\Attribute.cxx" />
+    <ClCompile Include="base\AttributeData.cxx" />
+    <ClCompile Include="base\Base.cxx" />
+    <ClCompile Include="base\BezCurve.cxx" />
+    <ClCompile Include="base\BezSurface.cxx" />
+    <ClCompile Include="base\Block.cxx" />
+    <ClCompile Include="base\Boundary.cxx" />
+    <ClCompile Include="base\BoundaryElem.cxx" />
+    <ClCompile Include="base\BSplBase.cxx" />
+    <ClCompile Include="base\BSplCurve.cxx" />
+    <ClCompile Include="base\BSplSurface.cxx" />
+    <ClCompile Include="base\BVHMotion.cxx" />
+    <ClCompile Include="base\Capsule.cxx" />
+    <ClCompile Include="base\Circle.cxx" />
+    <ClCompile Include="base\Command.cxx" />
+    <ClCompile Include="base\Cone.cxx" />
+    <ClCompile Include="base\Curve.cxx" />
+    <ClCompile Include="base\D3DXAnimation.cxx" />
+    <ClCompile Include="base\D3DXData.cxx" />
+    <ClCompile Include="base\D3DXParser.cxx" />
+    <ClCompile Include="base\D3DXShapeParser.cxx" />
+    <ClCompile Include="base\DataAccess.cxx" />
+    <ClCompile Include="base\DataBase.cxx" />
+    <ClCompile Include="base\DList.cxx" />
+    <ClCompile Include="base\DrawCache.cxx" />
+    <ClCompile Include="base\DXFOut.cxx" />
+    <ClCompile Include="base\DXFParser.cxx" />
+    <ClCompile Include="base\Edge.cxx" />
+    <ClCompile Include="base\Engine.cxx" />
+    <ClCompile Include="base\Error.cxx" />
+    <ClCompile Include="base\FaceDraw.cxx" />
+    <ClCompile Include="base\FileInput.cxx" />
+    <ClCompile Include="base\FileOutput.cxx" />
+    <ClCompile Include="base\Fog.cxx" />
+    <ClCompile Include="base\FrameController.cxx" />
+    <ClCompile Include="base\GenMatrix.cxx" />
+    <ClCompile Include="base\GenVector.cxx" />
+    <ClCompile Include="base\Half.cxx" />
+    <ClCompile Include="base\History.cxx" />
+    <ClCompile Include="base\HRCParser.cxx" />
+    <ClCompile Include="base\IDAdmin.cxx" />
+    <ClCompile Include="base\IFSetHandle.cxx" />
+    <ClCompile Include="base\IFSTexture.cxx" />
+    <ClCompile Include="base\Image.cxx" />
+    <ClCompile Include="base\ImageIO.cxx" />
+    <ClCompile Include="base\IndexFace.cxx" />
+    <ClCompile Include="base\Light.cxx" />
+    <ClCompile Include="base\Line.cxx" />
+    <ClCompile Include="base\LineDraw.cxx" />
+    <ClCompile Include="base\Loop.cxx" />
+    <ClCompile Include="base\MassProperty.cxx" />
+    <ClCompile Include="base\MatAdmin.cxx" />
+    <ClCompile Include="base\Material.cxx" />
+    <ClCompile Include="base\MatExample.cxx" />
+    <ClCompile Include="base\Math.cxx" />
+    <ClCompile Include="base\Matrix.cxx" />
+    <ClCompile Include="base\MeshTexture.cxx" />
+    <ClCompile Include="base\Model.cxx" />
+    <ClCompile Include="base\ModelTree.cxx" />
+    <ClCompile Include="base\Modify.cxx" />
+    <ClCompile Include="base\MQOOut.cxx" />
+    <ClCompile Include="base\MQOParser.cxx" />
+    <ClCompile Include="base\Operation.cxx" />
+    <ClCompile Include="base\Palette.cxx" />
+    <ClCompile Include="base\ParserBase.cxx" />
+    <ClCompile Include="base\Particle.cxx" />
+    <ClCompile Include="base\PickData.cxx" />
+    <ClCompile Include="base\Plane.cxx" />
+    <ClCompile Include="base\Point.cxx" />
+    <ClCompile Include="base\PointDraw.cxx" />
+    <ClCompile Include="base\Polygon.cxx" />
+    <ClCompile Include="base\Prism.cxx" />
+    <ClCompile Include="base\Projection.cxx" />
+    <ClCompile Include="base\Quaternion.cxx" />
+    <ClCompile Include="base\RDSParser.cxx" />
+    <ClCompile Include="base\Reference1.cxx" />
+    <ClCompile Include="base\Reference2.cxx" />
+    <ClCompile Include="base\Reference3.cxx" />
+    <ClCompile Include="base\Scene.cxx" />
+    <ClCompile Include="base\Shape.cxx" />
+    <ClCompile Include="base\SMFParser.cxx" />
+    <ClCompile Include="base\Solid.cxx" />
+    <ClCompile Include="base\SolidBase.cxx" />
+    <ClCompile Include="base\Sphere.cxx" />
+    <ClCompile Include="base\SRFParser.cxx" />
+    <ClCompile Include="base\STLOut.cxx" />
+    <ClCompile Include="base\STLParser.cxx" />
+    <ClCompile Include="base\SubDivision.cxx" />
+    <ClCompile Include="base\Surface.cxx" />
+    <ClCompile Include="base\System.cxx" />
+    <ClCompile Include="base\TextImage.cxx" />
+    <ClCompile Include="base\Texture.cxx" />
+    <ClCompile Include="base\TextureDraw.cxx" />
+    <ClCompile Include="base\Topology.cxx" />
+    <ClCompile Include="base\Tree.cxx" />
+    <ClCompile Include="base\UniCode.cxx" />
+    <ClCompile Include="base\Vector.cxx" />
+    <ClCompile Include="base\Vertex.cxx" />
+    <ClCompile Include="base\VRMLOut.cxx" />
+    <ClCompile Include="base\VRMLParser.cxx" />
+    <ClCompile Include="CLI\cpp\AssemblyInfo.cpp" />
+    <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Base_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Block_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\IndexFace_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Material_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Matrix_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Vector_CLI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="base\include\FK\Angle.h" />
+    <ClInclude Include="base\include\FK\Array.H" />
+    <ClInclude Include="base\include\FK\Attribute.h" />
+    <ClInclude Include="base\include\FK\AttributeData.H" />
+    <ClInclude Include="base\include\FK\Audio.h" />
+    <ClInclude Include="base\include\FK\Base.h" />
+    <ClInclude Include="base\include\FK\BezCurve.h" />
+    <ClInclude Include="base\include\FK\BezSurface.h" />
+    <ClInclude Include="base\include\FK\Block.h" />
+    <ClInclude Include="base\include\FK\Boundary.h" />
+    <ClInclude Include="base\include\FK\BoundaryElem.H" />
+    <ClInclude Include="base\include\FK\BSplBase.H" />
+    <ClInclude Include="base\include\FK\BSplCurve.h" />
+    <ClInclude Include="base\include\FK\BSplSurface.h" />
+    <ClInclude Include="base\include\FK\BVHMotion.h" />
+    <ClInclude Include="base\include\FK\Capsule.h" />
+    <ClInclude Include="base\include\FK\Circle.h" />
+    <ClInclude Include="base\include\FK\Command.H" />
+    <ClInclude Include="base\include\FK\Cone.h" />
+    <ClInclude Include="base\include\FK\Curve.h" />
+    <ClInclude Include="base\include\FK\D3DXAnimation.H" />
+    <ClInclude Include="base\include\FK\D3DXData.H" />
+    <ClInclude Include="base\include\FK\D3DXParser.H" />
+    <ClInclude Include="base\include\FK\D3DXShapeParser.H" />
+    <ClInclude Include="base\include\FK\DataAccess.h" />
+    <ClInclude Include="base\include\FK\DataBase.H" />
+    <ClInclude Include="base\include\FK\DList.h" />
+    <ClInclude Include="base\include\FK\DrawCache.h" />
+    <ClInclude Include="base\include\FK\DXFOut.H" />
+    <ClInclude Include="base\include\FK\DXFParser.H" />
+    <ClInclude Include="base\include\FK\Edge.h" />
+    <ClInclude Include="base\include\FK\Engine.H" />
+    <ClInclude Include="base\include\FK\Error.H" />
+    <ClInclude Include="base\include\FK\FaceDraw.H" />
+    <ClInclude Include="base\include\FK\FileBase.h" />
+    <ClInclude Include="base\include\FK\FileInput.H" />
+    <ClInclude Include="base\include\FK\FileOutput.H" />
+    <ClInclude Include="base\include\FK\FK.h" />
+    <ClInclude Include="base\include\FK\FKUT.h" />
+    <ClInclude Include="base\include\FK\Fog.h" />
+    <ClInclude Include="base\include\FK\FrameController.H" />
+    <ClInclude Include="base\include\FK\Fullscreen.h" />
+    <ClInclude Include="base\include\FK\GenMatrix.h" />
+    <ClInclude Include="base\include\FK\GenVector.h" />
+    <ClInclude Include="base\include\FK\GuideObject.h" />
+    <ClInclude Include="base\include\FK\Half.h" />
+    <ClInclude Include="base\include\FK\HeapBase.h" />
+    <ClInclude Include="base\include\FK\History.H" />
+    <ClInclude Include="base\include\FK\HRCParser.H" />
+    <ClInclude Include="base\include\FK\IDAdmin.H" />
+    <ClInclude Include="base\include\FK\IFSetHandle.H" />
+    <ClInclude Include="base\include\FK\IFSTexture.h" />
+    <ClInclude Include="base\include\FK\Image.h" />
+    <ClInclude Include="base\include\FK\IndexFace.h" />
+    <ClInclude Include="base\include\FK\Input.h" />
+    <ClInclude Include="base\include\FK\LIAdmin.H" />
+    <ClInclude Include="base\include\FK\Light.h" />
+    <ClInclude Include="base\include\FK\Line.h" />
+    <ClInclude Include="base\include\FK\LineDraw.H" />
+    <ClInclude Include="base\include\FK\Loop.h" />
+    <ClInclude Include="base\include\FK\MassProperty.h" />
+    <ClInclude Include="base\include\FK\MatAdmin.h" />
+    <ClInclude Include="base\include\FK\Material.h" />
+    <ClInclude Include="base\include\FK\MatExample.h" />
+    <ClInclude Include="base\include\FK\Math.h" />
+    <ClInclude Include="base\include\FK\Matrix.h" />
+    <ClInclude Include="base\include\FK\Misc.h" />
+    <ClInclude Include="base\include\FK\Model.h" />
+    <ClInclude Include="base\include\FK\Modify.h" />
+    <ClInclude Include="base\include\FK\MotionCharactor.h" />
+    <ClInclude Include="base\include\FK\MotionData.H" />
+    <ClInclude Include="base\include\FK\MQOOut.H" />
+    <ClInclude Include="base\include\FK\MQOParser.H" />
+    <ClInclude Include="base\include\FK\OpenCL.h" />
+    <ClInclude Include="base\include\FK\OpenGL.H" />
+    <ClInclude Include="base\include\FK\Operation.h" />
+    <ClInclude Include="base\include\FK\Palette.h" />
+    <ClInclude Include="base\include\FK\ParserBase.H" />
+    <ClInclude Include="base\include\FK\ParserData.h" />
+    <ClInclude Include="base\include\FK\Particle.h" />
+    <ClInclude Include="base\include\FK\PickData.h" />
+    <ClInclude Include="base\include\FK\Plane.h" />
+    <ClInclude Include="base\include\FK\Point.h" />
+    <ClInclude Include="base\include\FK\PointDraw.H" />
+    <ClInclude Include="base\include\FK\Polygon.h" />
+    <ClInclude Include="base\include\FK\Prism.h" />
+    <ClInclude Include="base\include\FK\Projection.h" />
+    <ClInclude Include="base\include\FK\QtWidget.h" />
+    <ClInclude Include="base\include\FK\Quaternion.h" />
+    <ClInclude Include="base\include\FK\RDSParser.H" />
+    <ClInclude Include="base\include\FK\Reference.h" />
+    <ClInclude Include="base\include\FK\Scene.h" />
+    <ClInclude Include="base\include\FK\Shape.h" />
+    <ClInclude Include="base\include\FK\ShapeViewer.h" />
+    <ClInclude Include="base\include\FK\SimpleWindow.h" />
+    <ClInclude Include="base\include\FK\SMFParser.H" />
+    <ClInclude Include="base\include\FK\Solid.h" />
+    <ClInclude Include="base\include\FK\SolidBase.h" />
+    <ClInclude Include="base\include\FK\Sphere.h" />
+    <ClInclude Include="base\include\FK\SpriteModel.h" />
+    <ClInclude Include="base\include\FK\SRFParser.H" />
+    <ClInclude Include="base\include\FK\STLOut.H" />
+    <ClInclude Include="base\include\FK\STLParser.H" />
+    <ClInclude Include="base\include\FK\SubDivision.H" />
+    <ClInclude Include="base\include\FK\Surface.h" />
+    <ClInclude Include="base\include\FK\System.h" />
+    <ClInclude Include="base\include\FK\TextImage.h" />
+    <ClInclude Include="base\include\FK\Texture.h" />
+    <ClInclude Include="base\include\FK\TextureDraw.H" />
+    <ClInclude Include="base\include\FK\Topology.h" />
+    <ClInclude Include="base\include\FK\TrackBall.h" />
+    <ClInclude Include="base\include\FK\Tree.h" />
+    <ClInclude Include="base\include\FK\UniCode.h" />
+    <ClInclude Include="base\include\FK\Vector.h" />
+    <ClInclude Include="base\include\FK\Vertex.h" />
+    <ClInclude Include="base\include\FK\VRMLOut.H" />
+    <ClInclude Include="base\include\FK\VRMLParser.H" />
+    <ClInclude Include="base\include\FK\Window.h" />
+    <ClInclude Include="CLI\Attribute_CLI.h" />
+    <ClInclude Include="CLI\Base_CLI.h" />
+    <ClInclude Include="CLI\Block_CLI.h" />
+    <ClInclude Include="CLI\IndexFace_CLI.h" />
+    <ClInclude Include="CLI\Material_CLI.h" />
+    <ClInclude Include="CLI\Matrix_CLI.h" />
+    <ClInclude Include="CLI\Palette_CLI.h" />
+    <ClInclude Include="CLI\Shape_CLI.h" />
+    <ClInclude Include="CLI\Vector_CLI.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
