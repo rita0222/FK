@@ -12,6 +12,12 @@ using namespace System;
 namespace FK_CLI
 {
 	public ref class fk_Block : fk_IndexFaceSet {
+	internal:
+		::fk_Block * GetP(void)
+		{
+			return reinterpret_cast<::fk_Block *>(this->pBase);
+		}
+
 	public:
 		fk_Block::fk_Block() : fk_IndexFaceSet(false)
 		{
@@ -46,33 +52,27 @@ namespace FK_CLI
 
 		void setSize(double argX, double argY, double argZ)
 		{
-			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-			p->setSize(argX, argY, argZ);
+			GetP()->setSize(argX, argY, argZ);
 		}
 
 		void setSize(double argLength, FK_CLI::fk_Axis argAxis)
 		{
-			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-			p->setSize(argLength, GetAxis(argAxis));
+			GetP()->setSize(argLength, GetAxis(argAxis));
 		}
 						 
 		void setScale(double argScale)
 		{
-			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-			p->setScale(argScale);
+			GetP()->setScale(argScale);
 		}
 
 		void setScale(double argScale, fk_Axis argAxis)
 		{
-			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-			p->setScale(argScale, GetAxis(argAxis));
+			GetP()->setScale(argScale, GetAxis(argAxis));
 		}
 		
 		void setScale(double argX, double argY, double argZ)
 		{
-			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-
-			p->setScale(argX, argY, argZ);
+			GetP()->setScale(argX, argY, argZ);
 		}
 	};
 }

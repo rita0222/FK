@@ -22,6 +22,12 @@ namespace FK_CLI
 	};
 
 	public ref class fk_Shape : fk_Attribute {
+	internal:
+		::fk_Shape * GetP(void)
+		{
+			return reinterpret_cast<::fk_Shape *>(this->pBase);
+		}
+
 	public:
 		fk_Shape::fk_Shape(bool argNewFlg) : fk_Attribute(false)
 		{
@@ -45,9 +51,8 @@ namespace FK_CLI
 		fk_RealShapeType^ getRealShapeType(void)
 		{
 			fk_RealShapeType^ type = gcnew fk_RealShapeType();
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
 
-			switch(p->getRealShapeType()) {
+			switch(GetP()->getRealShapeType()) {
 			  case FK_SHAPE_IFS:
 				type = FK_CLI::fk_RealShapeType::FK_SHAPE_IFS;
 				break;
@@ -80,8 +85,7 @@ namespace FK_CLI
 			
 		fk_Palette^ getPaletteData(void)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-			::fk_Palette *pP = p->getPaletteData();
+			::fk_Palette *pP = GetP()->getPaletteData();
 			if(pP == NULL) return nullptr;
 
 			fk_Palette^ pal = gcnew fk_Palette();
@@ -92,56 +96,48 @@ namespace FK_CLI
 
 		void clearMaterial(void)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-			p->clearMaterial();
+			GetP()->clearMaterial();
 		}
 		
 		void setObjMaterialID(int argID)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-			p->setObjMaterialID(argID);
+			GetP()->setObjMaterialID(argID);
 		}
 		
 		void pushPalette(fk_Material^ argMat)
 		{
 			if(!argMat) return;
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
 			::fk_Material *pM = reinterpret_cast<::fk_Material *>(argMat->pBase);
-			p->pushPalette(*pM);
+			GetP()->pushPalette(*pM);
 		}
 
 		void setPalette(fk_Material^ argMat, int argID)
 		{
 			if(!argMat) return;
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
 			::fk_Material *pM = reinterpret_cast<::fk_Material *>(argMat->pBase);
-			p->setPalette(*pM, argID);
+			GetP()->setPalette(*pM, argID);
 		}
 
 		void setMaterialMode(FK_CLI::fk_MaterialMode argMode)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-
 			switch(argMode) {
 			  case FK_CLI::fk_MaterialMode::FK_CHILD_MODE:
-				p->setMaterialMode(FK_CHILD_MODE);
+				GetP()->setMaterialMode(FK_CHILD_MODE);
 				break;
 
 			  case FK_CLI::fk_MaterialMode::FK_PARENT_MODE:
-				p->setMaterialMode(FK_PARENT_MODE);
+				GetP()->setMaterialMode(FK_PARENT_MODE);
 				break;
 
 			  default:
-				p->setMaterialMode(FK_NONE_MODE);
+				GetP()->setMaterialMode(FK_NONE_MODE);
 				break;
 			}
 		}
 
 		FK_CLI::fk_MaterialMode getMaterialMode(void)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-
-			switch(p->getMaterialMode()) {
+			switch(GetP()->getMaterialMode()) {
 			  case FK_CHILD_MODE:
 				return FK_CLI::fk_MaterialMode::FK_CHILD_MODE;
 
@@ -157,21 +153,18 @@ namespace FK_CLI
 
 		int getObjMaterialID(void)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-			return p->getObjMaterialID();
+			return GetP()->getObjMaterialID();
 		}
 
 		int getPaletteSize(void)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
-			return p->getPaletteSize();
+			return GetP()->getPaletteSize();
 		}
 		
 		fk_Material^ getMaterial(int argID)
 		{
-			::fk_Shape *p = reinterpret_cast<::fk_Shape *>(pBase);
 			fk_Material^ mat = gcnew fk_Material();
-			*mat->pBase = *(p->getMaterial(argID));
+			*mat->pBase = *(GetP()->getMaterial(argID));
 			return mat;
 		}
 

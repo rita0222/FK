@@ -14,6 +14,12 @@ using namespace System;
 namespace FK_CLI
 {
 	public ref class fk_Model : fk_BaseObject {
+	internal:
+		::fk_Model * GetP(void)
+		{
+			return (reinterpret_cast<::fk_Model *>(this->pBase));
+		}
+
 	public:
 		fk_Model::fk_Model(bool argNewFlg) : fk_BaseObject(false)
 		{
@@ -36,127 +42,113 @@ namespace FK_CLI
 
 		fk_Vector^ getPosition(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Vector^ V = gcnew fk_Vector();
-			
-			*V->pVec = p->getPosition();
+			*V->pVec = GetP()->getPosition();
 			return V;
 		}
 
 		fk_Vector^ getVec(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Vector^ V = gcnew fk_Vector();
-			
-			*V->pVec = p->getVec();
+			*V->pVec = GetP()->getVec();
 			return V;
 		}
 
 		fk_Vector^ getUpvec(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Vector^ V = gcnew fk_Vector();
-			
-			*V->pVec = p->getUpvec();
+			*V->pVec = GetP()->getUpvec();
 			return V;
 		}
 
 		fk_Angle^ getAngle(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Angle^ A = gcnew fk_Angle();
-			
-			*A->pAngle = p->getAngle();
+			*A->pAngle = GetP()->getAngle();
 			return A;
 		}
 
 		fk_Matrix^ getMatrix(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Matrix^ M = gcnew fk_Matrix();
-			
-			*M->pMatrix = p->getMatrix();
+			*M->pMatrix = GetP()->getMatrix();
 			return M;
 		}
 			
 		fk_Matrix^ getInvMatrix(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Matrix^ M = gcnew fk_Matrix();
-			
-			*M->pMatrix = p->getInvMatrix();
+			*M->pMatrix = GetP()->getInvMatrix();
 			return M;
 		}
 
 		fk_Matrix^ getBaseMatrix(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Matrix^ M = gcnew fk_Matrix();
-			
-			*M->pMatrix = p->getBaseMatrix();
+			*M->pMatrix = GetP()->getBaseMatrix();
 			return M;
 		}
 
 		fk_Matrix^ getInvBaseMatrix(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
 			fk_Matrix^ M = gcnew fk_Matrix();
-			
-			*M->pMatrix = p->getInvBaseMatrix();
+			*M->pMatrix = GetP()->getInvBaseMatrix();
 			return M;
 		}
 
 		bool setScale(double argScale)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->setScale(argScale);
+			return GetP()->setScale(argScale);
 		}
 
 		bool setScale(double argScale, fk_Axis argAxis)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->setScale(argScale, GetAxis(argAxis));
+			return GetP()->setScale(argScale, GetAxis(argAxis));
 		}
 
 		bool setScale(double argX, double argY, double argZ)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->setScale(argX, argY, argZ);
+			return GetP()->setScale(argX, argY, argZ);
 		}
 		bool prdScale(double argScale)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->prdScale(argScale);
+			return GetP()->prdScale(argScale);
 		}
 
 		bool prdScale(double argScale, fk_Axis argAxis)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->prdScale(argScale, GetAxis(argAxis));
+			return GetP()->prdScale(argScale, GetAxis(argAxis));
 		}
 
 		bool prdScale(double argX, double argY, double argZ)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->prdScale(argX, argY, argZ);
+			return GetP()->prdScale(argX, argY, argZ);
 		}
 
 		double getScale(void)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->getScale();
+			return GetP()->getScale();
 		}
 
 		double getScale(fk_Axis argAxis)
 		{
-			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
-			return p->getScale(GetAxis(argAxis));
+			return GetP()->getScale(GetAxis(argAxis));
 		}
 
+		bool getScaleMode(void)
+		{
+			return GetP()->getScaleMode();
+		}
+		
+		bool glFocus(fk_Vector^ argV)
+		{
+			if(!argV) return false;
+			return GetP()->glFocus(*argV->pVec);
+		}
 		/*
-		bool			getScaleMode(void);
-		bool			glFocus(fk_Vector p);
-		bool			glFocus(double x, double y, double z);
+		bool glFocus(double x, double y, double z)
+		{
+			
 		bool			loFocus(fk_Vector p);
 		bool			loFocus(double x, double y, double z);
 		bool			glVec(fk_Vector v);

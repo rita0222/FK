@@ -12,6 +12,12 @@ using namespace System;
 namespace FK_CLI
 {
 	public ref class fk_Sphere : fk_IndexFaceSet {
+	internal:
+		::fk_Sphere * GetP(void)
+		{
+			return reinterpret_cast<::fk_Sphere *>(this->pBase);
+		}
+
 	public:
 		fk_Sphere::fk_Sphere() : fk_IndexFaceSet(false)
 		{
@@ -46,20 +52,17 @@ namespace FK_CLI
 
 		void setDivide(int argDiv)
 		{
-			::fk_Sphere *p = reinterpret_cast<::fk_Sphere *>(pBase);
-			p->setDivide(argDiv);
+			GetP()->setDivide(argDiv);
 		}
 
 		void setRadius(double argRad)
 		{
-			::fk_Sphere *p = reinterpret_cast<::fk_Sphere *>(pBase);
-			p->setRadius(argRad);
+			GetP()->setRadius(argRad);
 		}
 
 		void setScale(double argScale)
 		{
-			::fk_Sphere *p = reinterpret_cast<::fk_Sphere *>(pBase);
-			p->setScale(argScale);
+			GetP()->setScale(argScale);
 		}
 	};
 }

@@ -11,6 +11,12 @@ using namespace System;
 namespace FK_CLI
 {
 	public ref class fk_Color : fk_BaseObject {
+	internal:
+		::fk_Color * GetP(void)
+		{
+			return reinterpret_cast<::fk_Color *>(this->pBase);
+		}
+
 	public:
 		fk_Color::fk_Color() : fk_BaseObject(false)
 		{
@@ -40,13 +46,11 @@ namespace FK_CLI
 		property float col[int]
 		{
 			float get(int argI) {
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				return p->col[argI];
+				return GetP()->col[argI];
 			}
 			void set(int argI, float argC)
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				p->col[argI] = argC;
+				GetP()->col[argI] = argC;
 			}
 		}
 
@@ -54,14 +58,12 @@ namespace FK_CLI
 		{
 			float get()
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				return p->col[0];
+				return GetP()->col[0];
 			}
 
 			void set(float argF)
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				p->col[0] = argF;
+				GetP()->col[0] = argF;
 			}
 		}
 
@@ -69,14 +71,12 @@ namespace FK_CLI
 		{
 			float get()
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				return p->col[1];
+				return GetP()->col[1];
 			}
 
 			void set(float argF)
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				p->col[1] = argF;
+				GetP()->col[1] = argF;
 			}
 		}
 
@@ -84,14 +84,12 @@ namespace FK_CLI
 		{
 			float get()
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				return p->col[2];
+				return GetP()->col[2];
 			}
 
 			void set(float argF)
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				p->col[2] = argF;
+				GetP()->col[2] = argF;
 			}
 		}
 
@@ -99,25 +97,22 @@ namespace FK_CLI
 		{
 			float get()
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				return p->col[3];
+				return GetP()->col[3];
 			}
 
 			void set(float argF)
 			{
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				p->col[3] = argF;
+				GetP()->col[3] = argF;
 			}
 		}
 
 		String^ fk_Color::ToString() override
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
 			std::string tmpBuf;
 
 			tmpBuf = "C: ";
 			for(int i = 0; i < 4; i++) {
-				tmpBuf += to_string(p->col[i]);
+				tmpBuf += to_string(GetP()->col[i]);
 				if(i != 3) {
 					tmpBuf += ", ";
 				} else {
@@ -130,9 +125,7 @@ namespace FK_CLI
 		bool Equals(fk_Color^ argC)
 		{
 			if(!argC) false;
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			::fk_Color *p2 = reinterpret_cast<::fk_Color *>(argC->pBase);
-			return (*p == *p2);
+			return (*GetP() == *argC->GetP());
 		}
 
 		virtual bool Equals(Object^ argObj) override
@@ -141,76 +134,70 @@ namespace FK_CLI
 			if(this == argObj) return true;
 			if(GetType() == argObj->GetType()) {
 				fk_Color^ C = static_cast<fk_Color^>(argObj);
-				::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-				::fk_Color *p2 = reinterpret_cast<::fk_Color *>(C->pBase);
-				return (*p == *p2);
+				return (*GetP() == *C->GetP());
 			}
 			return false;
 		}
 
 		void init(void)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->init();
+			GetP()->init();
 		}
 
 
 		void init(float argR, float argG, float argB)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(this->pBase);
-			p->init(argR, argG, argB, 1.0f);
+			GetP()->init(argR, argG, argB, 1.0f);
 		}
 
 		void init(float argR, float argG, float argB, float argA)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->init(argR, argG, argB, argA);
+			GetP()->init(argR, argG, argB, argA);
 		}
 
 		void init(double argR, double argG, double argB)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->init(argR, argG, argB, 1.0);
+			GetP()->init(argR, argG, argB, 1.0);
 		}
 
 		void init(double argR, double argG, double argB, double argA)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->init(argR, argG, argB, argA);
+			GetP()->init(argR, argG, argB, argA);
 		}
 
 		void set(float argR, float argG, float argB)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->set(argR, argG, argB, 1.0f);
+			GetP()->set(argR, argG, argB, 1.0f);
 		}
 
 		void set(float argR, float argG, float argB, float argA)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->set(argR, argG, argB, argA);
+			GetP()->set(argR, argG, argB, argA);
 		}
 
 		void set(double argR, double argG, double argB)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->set(argR, argG, argB, 1.0);
+			GetP()->set(argR, argG, argB, 1.0);
 		}
 
 		void set(double argR, double argG, double argB, double argA)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->set(argR, argG, argB, argA);
+			GetP()->set(argR, argG, argB, argA);
 		}
 
 		void setHSV(double argH, double argS, double argV)
 		{
-			::fk_Color *p = reinterpret_cast<::fk_Color *>(pBase);
-			p->setHSV(argH, argS, argV);
+			GetP()->setHSV(argH, argS, argV);
 		}
 	};
 
 	public ref class fk_Material : fk_BaseObject {
+	internal:
+		::fk_Material * GetP(void)
+		{
+			return reinterpret_cast<::fk_Material *>(this->pBase);
+		}
+
 	public:
 		fk_Material::fk_Material() : fk_BaseObject(false)
 		{
@@ -240,9 +227,7 @@ namespace FK_CLI
 		bool Equals(fk_Material^ argM)
 		{
 			if(!argM) false;
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			::fk_Material *p2 = reinterpret_cast<::fk_Material *>(argM->pBase);
-			return (*p == *p2);
+			return (*GetP() == *argM->GetP());
 		}
 
 		virtual bool Equals(Object^ argObj) override
@@ -251,9 +236,7 @@ namespace FK_CLI
 			if(this == argObj) return true;
 			if(GetType() == argObj->GetType()) {
 				fk_Material^ M = static_cast<fk_Material^>(argObj);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				::fk_Material *p2 = reinterpret_cast<::fk_Material *>(M->pBase);
-				return (*p == *p2);
+				return (*GetP() == *M->GetP());
 			}
 			return false;
 		}
@@ -262,14 +245,12 @@ namespace FK_CLI
 		{
 			float get()
 			{
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				return p->getAlpha();
+				return GetP()->getAlpha();
 			}
 
 			void set(float argF)
 			{
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				p->setAlpha(argF);
+				GetP()->setAlpha(argF);
 			}
 		}
 
@@ -277,20 +258,17 @@ namespace FK_CLI
 		{
 			fk_Color^ get()
 			{
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
 				fk_Color^ C = gcnew fk_Color();
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				*pC = *(p->getAmbient());
+				*pC = *(GetP()->getAmbient());
 				return C;
 			}
 
 			void set(fk_Color^ argC)
 			{
 				if(!argC) return;
-														 
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				p->setAmbient(*pC);
+				GetP()->setAmbient(*pC);
 			}
 		}
 
@@ -300,8 +278,7 @@ namespace FK_CLI
 			{
 				fk_Color^ C = gcnew fk_Color();
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				*pC = *(p->getDiffuse());
+				*pC = *(GetP()->getDiffuse());
 				return C;
 			}
 
@@ -309,8 +286,7 @@ namespace FK_CLI
 			{
 				if(!argC) return;
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				p->setDiffuse(*pC);
+				GetP()->setDiffuse(*pC);
 			}
 		}
 
@@ -320,8 +296,7 @@ namespace FK_CLI
 			{
 				fk_Color^ C = gcnew fk_Color();
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				*pC = *(p->getSpecular());
+				*pC = *(GetP()->getSpecular());
 				return C;
 			}
 
@@ -329,8 +304,7 @@ namespace FK_CLI
 			{
 				if(!argC) return;
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				p->setSpecular(*pC);
+				GetP()->setSpecular(*pC);
 			}
 		}
 
@@ -340,8 +314,7 @@ namespace FK_CLI
 			{
 				fk_Color^ C = gcnew fk_Color();
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				*pC = *(p->getEmission());
+				*pC = *(GetP()->getEmission());
 				return C;
 			}
 
@@ -349,82 +322,69 @@ namespace FK_CLI
 			{
 				if(!argC) return;
 				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-				p->setEmission(*pC);
+				GetP()->setEmission(*pC);
 			}
 		}
 
 		void init(void)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->init();
+			GetP()->init();
 		}
 
 		void setAmbient(float argR, float argG, float argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setAmbient(argR, argG, argB);
+			GetP()->setAmbient(argR, argG, argB);
 		}
 
 		void setAmbient(double argR, double argG, double argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setAmbient(argR, argG, argB);
+			GetP()->setAmbient(argR, argG, argB);
 		}
 
 		void setDiffuse(float argR, float argG, float argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setDiffuse(argR, argG, argB);
+			GetP()->setDiffuse(argR, argG, argB);
 		}
 
 		void setDiffuse(double argR, double argG, double argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setDiffuse(argR, argG, argB);
+			GetP()->setDiffuse(argR, argG, argB);
 		}
 
 		void setSpecular(float argR, float argG, float argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setSpecular(argR, argG, argB);
+			GetP()->setSpecular(argR, argG, argB);
 		}
 
 		void setSpecular(double argR, double argG, double argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setSpecular(argR, argG, argB);
+			GetP()->setSpecular(argR, argG, argB);
 		}
 
 		void setEmission(float argR, float argG, float argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setEmission(argR, argG, argB);
+			GetP()->setEmission(argR, argG, argB);
 		}
 
 		void setEmission(double argR, double argG, double argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setEmission(argR, argG, argB);
+			GetP()->setEmission(argR, argG, argB);
 		}
 
 		void setAmbDiff(float argR, float argG, float argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setAmbDiff(argR, argG, argB);
+			GetP()->setAmbDiff(argR, argG, argB);
 		}
 
 		void setAmbDiff(double argR, double argG, double argB)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
-			p->setAmbDiff(argR, argG, argB);
+			GetP()->setAmbDiff(argR, argG, argB);
 		}
 
 		void setAmbDiff(fk_Color^ argC)
 		{
-			::fk_Material *p = reinterpret_cast<::fk_Material *>(pBase);
 			::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-			p->setAmbDiff(*pC);
+			GetP()->setAmbDiff(*pC);
 		}
 
 		static void	initDefault(void)

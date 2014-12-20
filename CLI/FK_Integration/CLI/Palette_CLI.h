@@ -17,6 +17,12 @@ namespace FK_CLI
 	};
 
 	public ref class fk_Palette : fk_BaseObject {
+	internal:
+		::fk_Palette * GetP(void)
+		{
+			return reinterpret_cast<::fk_Palette *>(this->pBase);
+		}
+
 	public:
 		fk_Palette::fk_Palette() : fk_BaseObject(false)
 		{
@@ -45,59 +51,51 @@ namespace FK_CLI
 
 		void clearMaterial(void)
 		{
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
-			p->clearMaterial();
+			GetP()->clearMaterial();
 		}
 
 		void setObjMaterialID(int argID)
 		{
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
-			p->setObjMaterialID(argID);
+			GetP()->setObjMaterialID(argID);
 		}
 
 		void pushPalette(fk_Material^ argMat)
 		{
 			if(!argMat) return;
 
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
 			::fk_Material *pM = reinterpret_cast<::fk_Material *>(argMat->pBase);
-			p->pushPalette(pM);
+			GetP()->pushPalette(pM);
 		}
 
 		void setPalette(fk_Material^ argMat, int argID)
 		{
 			if(!argMat) return;
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
 			::fk_Material *pM = reinterpret_cast<::fk_Material *>(argMat->pBase);
-			p->setPalette(pM, argID);
+			GetP()->setPalette(pM, argID);
 		}
 
 		int getObjMaterialID(void)
 		{
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
-			return p->getObjMaterialID();
+			return GetP()->getObjMaterialID();
 		}
 
 		int getPaletteSize(void)
 		{
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
-			return p->getPaletteSize();
+			return GetP()->getPaletteSize();
 		}
 
 		fk_Material^ getMaterial(int argID)
 		{
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
 			fk_Material^ M = gcnew fk_Material();
 			::fk_Material *pM = reinterpret_cast<::fk_Material *>(M->pBase);
-			*pM = *(p->getMaterial(argID));
+			*pM = *(GetP()->getMaterial(argID));
 			return M;
 		}
 
 		array<fk_Material^>^ getMaterialVector(void)
 		{
-			::fk_Palette *p = reinterpret_cast<::fk_Palette *>(pBase);
 			int i;
-			int size = p->getPaletteSize();
+			int size = GetP()->getPaletteSize();
 			array<fk_Material^>^ matArray = gcnew array<fk_Material^>(size);
 
 			for(i = 0; i < size; i++) {
@@ -106,6 +104,5 @@ namespace FK_CLI
 
 			return matArray;
 		}
-
-	   };
+	};
 }

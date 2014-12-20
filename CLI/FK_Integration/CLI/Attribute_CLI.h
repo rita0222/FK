@@ -13,6 +13,12 @@ namespace FK_CLI
 {
 	public ref class fk_Attribute : FK_CLI::fk_BaseObject
 	{
+	internal:
+		::fk_Attribute * GetP(void)
+		{
+			return reinterpret_cast<::fk_Attribute *>(this->pBase);
+		}
+
 	public:
 		fk_Attribute::fk_Attribute(bool argNewFlg) : fk_BaseObject(false)
 		{
@@ -35,149 +41,123 @@ namespace FK_CLI
 
 		bool setAttrII(int argKey, int argValue)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->setAttrII(argKey, argValue);
+			return GetP()->setAttrII(argKey, argValue);
 		}
 
 		bool setAttrID(int argKey, double argValue)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->setAttrID(argKey, argValue);
+			return GetP()->setAttrID(argKey, argValue);
 		}
 
 		bool setAttrIS(int argKey, String^ argValue)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->setAttrIS(argKey, marshal_as<string>(argValue));
+			return GetP()->setAttrIS(argKey, marshal_as<string>(argValue));
 		}
 
 		bool setAttrSI(String^ argKey, int argValue)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->setAttrSI(marshal_as<string>(argKey), argValue);
+			return GetP()->setAttrSI(marshal_as<string>(argKey), argValue);
 		}
 
 		bool setAttrSD(String^ argKey, double argValue)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->setAttrSD(marshal_as<string>(argKey), argValue);
+			return GetP()->setAttrSD(marshal_as<string>(argKey), argValue);
 		}
 
 		bool setAttrSS(String ^argKey, String^ argValue)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->setAttrSS(marshal_as<string>(argKey),
-										  marshal_as<string>(argValue));
+			return GetP()->setAttrSS(marshal_as<string>(argKey), marshal_as<string>(argValue));
 		}
 
 		int getAttrII(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->getAttrII(argKey);
+			return GetP()->getAttrII(argKey);
 		}
 
 		double getAttrID(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->getAttrID(argKey);
+			return GetP()->getAttrID(argKey);
 		}
 
 		String^ getAttrIS(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return marshal_as<String^>(p->getAttrIS(argKey));
+			return marshal_as<String^>(GetP()->getAttrIS(argKey));
 		}
 
 		int getAttrSI(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->getAttrSI(marshal_as<string>(argKey));
+			return GetP()->getAttrSI(marshal_as<string>(argKey));
 		}
 
 		double getAttrSD(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->getAttrSD(marshal_as<string>(argKey));
+			return GetP()->getAttrSD(marshal_as<string>(argKey));
 		}
 
 		String^ getAttrSS(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			string	str = p->getAttrSS(marshal_as<string>(argKey));
+			string	str = GetP()->getAttrSS(marshal_as<string>(argKey));
 			return marshal_as<String^>(str);
 		}
 
 		bool existAttrII(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->existAttrII(argKey);
+			return GetP()->existAttrII(argKey);
 		}
 
 		bool existAttrID(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->existAttrID(argKey);
+			return GetP()->existAttrID(argKey);
 		}
 
 		bool existAttrIS(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->existAttrIS(argKey);
+			return GetP()->existAttrIS(argKey);
 		}
 
 		bool existAttrSI(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->existAttrSI(marshal_as<string>(argKey));
+			return GetP()->existAttrSI(marshal_as<string>(argKey));
 		}
 
 		bool existAttrSD(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->existAttrSD(marshal_as<string>(argKey));
+			return GetP()->existAttrSD(marshal_as<string>(argKey));
 		}
 
 		bool existAttrSS(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->existAttrSS(marshal_as<string>(argKey));
+			return GetP()->existAttrSS(marshal_as<string>(argKey));
 		}
 
 		bool deleteAttrII(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->deleteAttrII(argKey);
+			return GetP()->deleteAttrII(argKey);
 		}
 
 		bool deleteAttrID(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->deleteAttrID(argKey);
+			return GetP()->deleteAttrID(argKey);
 		}
 
 		bool deleteAttrIS(int argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->deleteAttrIS(argKey);
+			return GetP()->deleteAttrIS(argKey);
 		}
 
 		bool deleteAttrSI(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->deleteAttrSI(marshal_as<string>(argKey));
+			return GetP()->deleteAttrSI(marshal_as<string>(argKey));
 		}
 
 		bool deleteAttrSD(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->deleteAttrSD(marshal_as<string>(argKey));
+			return GetP()->deleteAttrSD(marshal_as<string>(argKey));
 		}
 
 		bool deleteAttrSS(String^ argKey)
 		{
-			::fk_Attribute *p = reinterpret_cast<::fk_Attribute *>(this->pBase);
-			return p->deleteAttrSS(marshal_as<string>(argKey));
+			return GetP()->deleteAttrSS(marshal_as<string>(argKey));
 		}
-
 	};
 }
