@@ -205,6 +205,7 @@
     <ClCompile Include="CLI\cpp\Model_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Sphere_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Vector_CLI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +336,7 @@
     <ClInclude Include="CLI\Model_CLI.h" />
     <ClInclude Include="CLI\Palette_CLI.h" />
     <ClInclude Include="CLI\Shape_CLI.h" />
+    <ClInclude Include="CLI\Sphere_CLI.h" />
     <ClInclude Include="CLI\Vector_CLI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -121,11 +121,11 @@ namespace FK_CLI
 		void setMaterialMode(FK_CLI::fk_MaterialMode argMode)
 		{
 			switch(argMode) {
-			  case FK_CLI::fk_MaterialMode::FK_CHILD_MODE:
+			  case FK_CLI::fk_MaterialMode::CHILD:
 				GetP()->setMaterialMode(FK_CHILD_MODE);
 				break;
 
-			  case FK_CLI::fk_MaterialMode::FK_PARENT_MODE:
+			  case FK_CLI::fk_MaterialMode::PARENT:
 				GetP()->setMaterialMode(FK_PARENT_MODE);
 				break;
 
@@ -139,16 +139,16 @@ namespace FK_CLI
 		{
 			switch(GetP()->getMaterialMode()) {
 			  case FK_CHILD_MODE:
-				return FK_CLI::fk_MaterialMode::FK_CHILD_MODE;
+				return FK_CLI::fk_MaterialMode::CHILD;
 
 			  case FK_PARENT_MODE:
-				return FK_CLI::fk_MaterialMode::FK_PARENT_MODE;
+				return FK_CLI::fk_MaterialMode::PARENT;
 
 			  default:
 				break;
 			}
 
-			return FK_CLI::fk_MaterialMode::FK_NONE_MODE;
+			return FK_CLI::fk_MaterialMode::NONE;
 		}
 
 		int getObjMaterialID(void)

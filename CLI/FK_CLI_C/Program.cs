@@ -16,6 +16,10 @@ namespace FK_CLI_C
 			Console.WriteLine(num);
 			var pos = obj.getPosVec(100);
 			Console.WriteLine(pos);
+
+			var model = new fk_Model();
+			model.setShape(obj);
+			Console.WriteLine(model);
 		}
 	}
 }

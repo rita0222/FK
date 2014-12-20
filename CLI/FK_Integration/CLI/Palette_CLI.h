@@ -11,9 +11,9 @@ using namespace System;
 namespace FK_CLI
 {
 	public enum class fk_MaterialMode : int {
-		FK_NONE_MODE = 0,
-		FK_CHILD_MODE = 1,
-		FK_PARENT_MODE = 2
+		NONE = 0,
+		CHILD = 1,
+		PARENT = 2
 	};
 
 	public ref class fk_Palette : fk_BaseObject {
