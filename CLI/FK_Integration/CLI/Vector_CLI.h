@@ -28,6 +28,11 @@ namespace FK_CLI
 			this->pVec = new ::fk_Vector();
 		}
 
+		fk_Vector::fk_Vector(double argX, double argY, double argZ)
+		{
+			this->pVec = new ::fk_Vector(argX, argY, argZ);
+		}
+
 		// デストラクタ
 		fk_Vector::~fk_Vector()
 		{
