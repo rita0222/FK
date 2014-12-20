@@ -84,6 +84,11 @@
 #endif
 #endif
 
+#if defined(WIN32) && !defined(_MINGW_)
+#pragma warning ( disable : 4793 )
+#pragma warning ( disable : 4996 )
+#endif
+
 using namespace std;
 
 extern "C" {

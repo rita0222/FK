@@ -370,6 +370,9 @@
     <ClCompile Include="..\..\src\base\VRMLParser.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\Sphere_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLI\Vector_CLI.h">
@@ -752,6 +755,9 @@
     </ClInclude>
     <ClInclude Include="..\..\FK\Window.h">
       <Filter>ヘッダー ファイル\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\Sphere_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

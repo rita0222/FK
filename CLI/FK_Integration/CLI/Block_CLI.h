@@ -8,7 +8,6 @@
 
 using namespace std;
 using namespace System;
-using namespace msclr::interop;
 
 namespace FK_CLI
 {
@@ -22,12 +21,16 @@ namespace FK_CLI
 
 		fk_Block::fk_Block(bool argNewFlg) : fk_IndexFaceSet(false)
 		{
-			if(argNewFlg == true) this->pBase = new ::fk_Block();
+			if(argNewFlg == true) {
+				::fk_Block *p = new ::fk_Block();
+				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			}
 		}
 
 		fk_Block::fk_Block(double argX, double argY, double argZ) : fk_IndexFaceSet(false)
 		{
-			this->pBase = new ::fk_Block(argX, argY, argZ);
+			::fk_Block *p = new ::fk_Block(argX, argY, argZ);
+			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
 		}
 
 		fk_Block::~fk_Block()

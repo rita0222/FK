@@ -11,10 +11,11 @@ namespace FK_CLI_C
 	{
 		static void Main(string[] args)
 		{
-			var obj = new fk_Block();
+			var obj = new fk_Sphere(8, 10.0);
 			int num = obj.getFaceSize();
 			Console.WriteLine(num);
-
+			var pos = obj.getPosVec(100);
+			Console.WriteLine(pos);
 		}
 	}
 }
