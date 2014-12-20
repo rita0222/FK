@@ -3,7 +3,10 @@
 #pragma once
 
 #include <FK/Model.h>
-#include "Base_CLI.h"
+#include "Shape_CLI.h"
+#include "Vector_CLI.h"
+#include "Matrix_CLI.h"
+#include "Material_CLI.h"
 
 using namespace std;
 using namespace System;
@@ -30,24 +33,128 @@ namespace FK_CLI
 			delete this->pBase;
 			this->pBase = NULL;
 		}
+
+		fk_Vector^ getPosition(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Vector^ V = gcnew fk_Vector();
+			
+			*V->pVec = p->getPosition();
+			return V;
+		}
+
+		fk_Vector^ getVec(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Vector^ V = gcnew fk_Vector();
+			
+			*V->pVec = p->getVec();
+			return V;
+		}
+
+		fk_Vector^ getUpvec(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Vector^ V = gcnew fk_Vector();
+			
+			*V->pVec = p->getUpvec();
+			return V;
+		}
+
+		fk_Angle^ getAngle(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Angle^ A = gcnew fk_Angle();
+			
+			*A->pAngle = p->getAngle();
+			return A;
+		}
+
+		fk_Matrix^ getMatrix(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Matrix^ M = gcnew fk_Matrix();
+			
+			*M->pMatrix = p->getMatrix();
+			return M;
+		}
+			
+		fk_Matrix^ getInvMatrix(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Matrix^ M = gcnew fk_Matrix();
+			
+			*M->pMatrix = p->getInvMatrix();
+			return M;
+		}
+
+		fk_Matrix^ getBaseMatrix(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Matrix^ M = gcnew fk_Matrix();
+			
+			*M->pMatrix = p->getBaseMatrix();
+			return M;
+		}
+
+		fk_Matrix^ getInvBaseMatrix(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			fk_Matrix^ M = gcnew fk_Matrix();
+			
+			*M->pMatrix = p->getInvBaseMatrix();
+			return M;
+		}
+
+		bool setScale(double argScale)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->setScale(argScale);
+		}
+
+		bool setScale(double argScale, fk_Axis argAxis)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->setScale(argScale, GetAxis(argAxis));
+		}
+
+		bool setScale(double argX, double argY, double argZ)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->setScale(argX, argY, argZ);
+		}
+		bool prdScale(double argScale)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->prdScale(argScale);
+		}
+
+		bool prdScale(double argScale, fk_Axis argAxis)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->prdScale(argScale, GetAxis(argAxis));
+		}
+
+		bool prdScale(double argX, double argY, double argZ)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->prdScale(argX, argY, argZ);
+		}
+
+		double getScale(void)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->getScale();
+		}
+
+		double getScale(fk_Axis argAxis)
+		{
+			::fk_Model *p = reinterpret_cast<::fk_Model *>(this->pBase);
+			return p->getScale(GetAxis(argAxis));
+		}
+
 		/*
-		fk_Vector		getPosition(void) const;
-		fk_Vector		getVec(void) const;
-		fk_Vector		getUpvec(void) const;
-		fk_Angle		getAngle(void) const;
-		fk_Matrix		getMatrix(void) const;
-		fk_Matrix		getInvMatrix(void) const;
-		fk_Matrix	getBaseMatrix(void) const;
-		fk_Matrix	getInvBaseMatrix(void) const;
-		bool			setScale(const double scale);
-		bool			setScale(const double scale, fk_Axis axis);
-		bool			setScale(const double x, const double y, const double z);
-		bool			prdScale(const double scale);
-		bool			prdScale(const double scale, fk_Axis axis);
-		bool			prdScale(const double x, const double y, const double z);
-		double			getScale(void) const;
-		double			getScale(fk_Axis axis) const;
-		bool			getScaleMode(void) const;
+		bool			getScaleMode(void);
 		bool			glFocus(fk_Vector p);
 		bool			glFocus(double x, double y, double z);
 		bool			loFocus(fk_Vector p);
@@ -111,10 +218,10 @@ namespace FK_CLI
 		fk_Color *	getBIntLineColor(void);
 		void		setBLineWidth(double width);
 		double		getBLineWidth(void);
-		unsigned int	getID(void) const;
+		unsigned int	getID(void);
 		void	setShape(fk_Shape *shape);
-		fk_Shape *	getShape(void) const;
-		void	setMaterial(const fk_Material &mat);
+		fk_Shape *	getShape(void);
+		void	setMaterial(fk_Material &mat);
 		void	setPointColor(fk_Color *col);
 		void	setPointColor(float r, float g, float b);
 		void	setLineColor(fk_Color *col);
@@ -128,32 +235,32 @@ namespace FK_CLI
 		fk_Color *	getInhPointColor(void);
 		fk_Color *	getLineColor(void);
 		fk_Color *	getInhLineColor(void);
-		void	setSize(const double size);
-		void	setWidth(const double width);
-		double	getSize(void) const;
-		double	getWidth(void) const;
-		void	setDrawMode(const fk_DrawMode mode);
-		fk_DrawMode		getDrawMode(void) const;
-		void	setMaterialMode(const fk_MaterialMode mode);
-		fk_MaterialMode		getMaterialMode(void) const;
-		void	setPickMode(const bool mode);
-		bool	getPickMode(void) const;
-		void	setSmoothMode(const bool mode);
-		bool	getSmoothMode(void) const;
-		void	setReverseDrawMode(const bool mode);
-		bool	getReverseDrawMode(void) const;
-		fk_Matrix	getInhMatrix(void) const;
-		fk_Matrix	getInhInvMatrix(void) const;
-		fk_OrthoMatrix	getInhBaseMatrix(void) const;
-		fk_OrthoMatrix	getInhInvBaseMatrix(void) const;
-		fk_Vector	getInhPosition(void) const;
-		fk_Vector	getInhVec(void) const;
-		fk_Vector	getInhUpvec(void) const;
-		fk_Angle	getInhAngle(void) const;
-		double	getInhScale(void) const;
+		void	setSize(double size);
+		void	setWidth(double width);
+		double	getSize(void);
+		double	getWidth(void);
+		void	setDrawMode(fk_DrawMode mode);
+		fk_DrawMode		getDrawMode(void);
+		void	setMaterialMode(fk_MaterialMode mode);
+		fk_MaterialMode		getMaterialMode(void);
+		void	setPickMode(bool mode);
+		bool	getPickMode(void);
+		void	setSmoothMode(bool mode);
+		bool	getSmoothMode(void);
+		void	setReverseDrawMode(bool mode);
+		bool	getReverseDrawMode(void);
+		fk_Matrix	getInhMatrix(void);
+		fk_Matrix	getInhInvMatrix(void);
+		fk_OrthoMatrix	getInhBaseMatrix(void);
+		fk_OrthoMatrix	getInhInvBaseMatrix(void);
+		fk_Vector	getInhPosition(void);
+		fk_Vector	getInhVec(void);
+		fk_Vector	getInhUpvec(void);
+		fk_Angle	getInhAngle(void);
+		double	getInhScale(void);
 		bool	setParent(fk_Model *model, bool setMode = false);
 		void	deleteParent(bool setMode = false);
-		fk_Model *	getParent(void) const;
+		fk_Model *	getParent(void);
 		bool	entryChild(fk_Model *model, bool setMode = false);
 		bool	deleteChild(fk_Model *model, bool setMode = false);
 		void	deleteChildren(bool setMode = false);

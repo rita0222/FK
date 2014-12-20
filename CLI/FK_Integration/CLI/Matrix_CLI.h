@@ -265,25 +265,7 @@ namespace FK_CLI {
 
 		void makeRot(double argR, fk_Axis argAxis)
 		{
-			::fk_Axis tmpAxis;
-
-			switch(argAxis) {
-			case fk_Axis::X:
-				tmpAxis	= fk_X;
-				break;
-				
-			case fk_Axis::Y:
-				tmpAxis = fk_Y;
-				break;
-
-			case fk_Axis::Z:
-				tmpAxis = fk_Z;
-				break;
-
-			default:
-				return;
-			}
-			this->pMatrix->makeRot(argR, tmpAxis);
+			this->pMatrix->makeRot(argR, GetAxis(argAxis));
 		}
 
 		void makeTrans(fk_Vector^ argV)

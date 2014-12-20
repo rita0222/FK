@@ -50,23 +50,7 @@ namespace FK_CLI
 		void setSize(double argLength, FK_CLI::fk_Axis argAxis)
 		{
 			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-
-			switch(argAxis) {
-			  case FK_CLI::fk_Axis::X:
-				p->setSize(argLength, fk_X);
-				break;
-
-			  case FK_CLI::fk_Axis::Y:
-				p->setSize(argLength, fk_Y);
-				break;
-
-			  case FK_CLI::fk_Axis::Z:
-				p->setSize(argLength, fk_Z);
-				break;
-
-			  default:
-				break;
-			}
+			p->setSize(argLength, GetAxis(argAxis));
 		}
 						 
 		void setScale(double argScale)
@@ -78,23 +62,7 @@ namespace FK_CLI
 		void setScale(double argScale, fk_Axis argAxis)
 		{
 			::fk_Block *p = reinterpret_cast<::fk_Block *>(pBase);
-
-			switch(argAxis) {
-			  case FK_CLI::fk_Axis::X:
-				p->setScale(argScale, fk_X);
-				break;
-
-			  case FK_CLI::fk_Axis::Y:
-				p->setScale(argScale, fk_Y);
-				break;
-
-			  case FK_CLI::fk_Axis::Z:
-				p->setScale(argScale, fk_Z);
-				break;
-
-			  default:
-				break;
-			}
+			p->setScale(argScale, GetAxis(argAxis));
 		}
 		
 		void setScale(double argX, double argY, double argZ)

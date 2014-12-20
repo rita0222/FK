@@ -563,25 +563,10 @@ namespace FK_CLI
 			p->setBlockSize(argX, argY, argZ);
 		}
 		
-		void setBlockSize(double argLength, FK_CLI::fk_Axis argAxis)
+		void setBlockSize(double argLength, fk_Axis argAxis)
 		{
 			::fk_IndexFaceSet *p = reinterpret_cast<::fk_IndexFaceSet *>(pBase);
-			switch(argAxis) {
-			  case FK_CLI::fk_Axis::X:
-				p->setBlockSize(argLength, fk_X);
-				break;
-
-			  case FK_CLI::fk_Axis::Y:
-				p->setBlockSize(argLength, fk_Y);
-				break;
-
-			  case FK_CLI::fk_Axis::Z:
-				p->setBlockSize(argLength, fk_Z);
-				break;
-
-			  default:
-				break;
-			}
+			p->setBlockSize(argLength, GetAxis(argAxis));
 		}
 
 		void setBlockScale(double argScale)
@@ -593,22 +578,7 @@ namespace FK_CLI
 		void setBlockScale(double argScale, fk_Axis argAxis)
 		{
 			::fk_IndexFaceSet *p = reinterpret_cast<::fk_IndexFaceSet *>(pBase);
-			switch(argAxis) {
-			  case FK_CLI::fk_Axis::X:
-				p->setBlockScale(argScale, fk_X);
-				break;
-
-			  case FK_CLI::fk_Axis::Y:
-				p->setBlockScale(argScale, fk_Y);
-				break;
-
-			  case FK_CLI::fk_Axis::Z:
-				p->setBlockScale(argScale, fk_Z);
-				break;
-
-			  default:
-				break;
-			}
+			p->setBlockScale(argScale, GetAxis(argAxis));
 		}			
 
 		void setBlockScale(double argX, double argY, double argZ)
