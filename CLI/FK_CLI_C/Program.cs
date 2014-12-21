@@ -24,7 +24,7 @@ namespace FK_CLI_C
 			model1.entryChild(model2);
 			model1.glTranslate(0.0, 1.0, 0.0);
 			var org = new fk_Vector(0.0, 0.0, 0.0);
-			//model1.glRotateWithVec(org, fk_Axis.Z, FK.PI / 24.0);
+			model1.glRotateWithVec(org, fk_Axis.Z, FK.PI / 24.0);
 			pos = model2.getInhPosition();
 			Console.WriteLine(pos);
 		}
