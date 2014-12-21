@@ -17,7 +17,7 @@ namespace FK_CLI
 		Z
 	};
 	
-	::fk_Axis GetAxis(FK_CLI::fk_Axis argAxis);
+	::fk_Axis GetAxis(FK_CLI::fk_Axis);
 
 	public ref class fk_Vector {
 	internal:

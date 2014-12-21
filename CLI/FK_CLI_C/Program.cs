@@ -27,6 +27,12 @@ namespace FK_CLI_C
 			model1.glRotateWithVec(org, fk_Axis.Z, FK.PI / 24.0);
 			pos = model2.getInhPosition();
 			Console.WriteLine(pos);
+
+			fk_Scene scene = new fk_Scene();
+
+			scene.entryModel(model1);
+			scene.entryModel(model2);
+			
 		}
 	}
 }

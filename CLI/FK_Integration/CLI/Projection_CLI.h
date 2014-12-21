@@ -104,15 +104,40 @@ namespace FK_CLI
 			this->pBase = NULL;
 		}
 
-		/*
-		void			setFovy(double fovy);
-		void			setNear(double near);
-		void			setFar(double far);
-		void			setAll(double fovy, double near, double far);
-		double			getFovy(void) const;
-		double			getNear(void) const;
-		double			getFar(void) const;
-		*/
+		void setFovy(double argFovy)
+		{
+			GetP()->setFovy(argFovy);
+		}			
+
+		void setNear(double argNear)
+		{
+			GetP()->setNear(argNear);
+		}
+
+		void setFar(double argFar)
+		{
+			GetP()->setFar(argFar);
+		}
+
+		void setAll(double argFovy, double argNear, double argFar)
+		{
+			GetP()->setAll(argFovy, argNear, argFar);
+		}
+
+		double getFovy(void)
+		{
+			return GetP()->getFovy();
+		}
+
+		double getNear(void)
+		{
+			return GetP()->getNear();
+		}
+
+		double getFar(void)
+		{
+			return GetP()->getFar();
+		}
 	};
 
 	public ref class fk_Frustum : fk_ProjectBase {
@@ -156,26 +181,72 @@ namespace FK_CLI
 			this->pBase = NULL;
 		}
 
-		/*
-		void		setLeft(double left);
-		void		setRight(double right);
-		void		setBottom(double bottom);
-		void		setTop(double top);
-		void			setNear(double near);
-		void			setFar(double far);
-		void			setAll(double left,
-							   double right,
-							   double bottom,
-							   double top,
-							   double near,
-							   double far);
-		double			getLeft(void) const;
-		double			getRight(void) const;
-		double			getBottom(void) const;
-		double			getTop(void) const;
-		double			getNear(void) const;
-		double			getFar(void) const;
-		*/
+		void setLeft(double argLeft)
+		{
+			GetP()->setLeft(argLeft);
+		}
+
+		void setRight(double argRight)
+		{
+			GetP()->setRight(argRight);
+		}
+
+		void setBottom(double argBottom)
+		{
+			GetP()->setBottom(argBottom);
+		}
+
+		void setTop(double argTop)
+		{
+			GetP()->setTop(argTop);
+		}
+
+		void setNear(double argNear)
+		{
+			GetP()->setNear(argNear);
+		}
+		
+		void setFar(double argFar)
+		{
+			GetP()->setFar(argFar);
+		}
+		
+		void setAll(double argLeft, double argRight,
+					double argBottom, double argTop,
+					double argNear, double argFar)
+		{
+			GetP()->setAll(argLeft, argRight, argBottom, argTop, argNear, argFar);
+		}
+
+		double getLeft(void)
+		{
+			return GetP()->getLeft();
+		}
+
+		double getRight(void)
+		{
+			return GetP()->getRight();
+		}
+
+		double getBottom(void)
+		{
+			return GetP()->getBottom();
+		}
+
+		double getTop(void)
+		{
+			return GetP()->getTop();
+		}
+
+		double getNear(void)
+		{
+			return GetP()->getNear();
+		}
+
+		double getFar(void)
+		{
+			return GetP()->getFar();
+		}
 	};
 
 	public ref class fk_Ortho : fk_ProjectBase {
@@ -219,22 +290,71 @@ namespace FK_CLI
 			this->pBase = NULL;
 		}
 
-		/*
-		void			setLeft(double left);
-		void			setRight(double right);
-		void			setBottom(double bottom);
-		void			setTop(double top);
-		void			setNear(double near);
-		void			setFar(double far);
-		void			setAll(double left, double right,
-							   double bottom, double top,
-							   double near, double far);
-		double			getLeft(void) const;
-		double			getRight(void) const;
-		double			getBottom(void) const;
-		double			getTop(void) const;
-		double			getNear(void) const;
-		double			getFar(void) const;
-		*/
+		void setLeft(double argLeft)
+		{
+			GetP()->setLeft(argLeft);
+		}
+
+		void setRight(double argRight)
+		{
+			GetP()->setRight(argRight);
+		}
+
+		void setBottom(double argBottom)
+		{
+			GetP()->setBottom(argBottom);
+		}
+
+		void setTop(double argTop)
+		{
+			GetP()->setTop(argTop);
+		}
+
+		void setNear(double argNear)
+		{
+			GetP()->setNear(argNear);
+		}
+		
+		void setFar(double argFar)
+		{
+			GetP()->setFar(argFar);
+		}
+		
+		void setAll(double argLeft, double argRight,
+					double argBottom, double argTop,
+					double argNear, double argFar)
+		{
+			GetP()->setAll(argLeft, argRight, argBottom, argTop, argNear, argFar);
+		}
+
+		double getLeft(void)
+		{
+			return GetP()->getLeft();
+		}
+
+		double getRight(void)
+		{
+			return GetP()->getRight();
+		}
+
+		double getBottom(void)
+		{
+			return GetP()->getBottom();
+		}
+
+		double getTop(void)
+		{
+			return GetP()->getTop();
+		}
+
+		double getNear(void)
+		{
+			return GetP()->getNear();
+		}
+
+		double getFar(void)
+		{
+			return GetP()->getFar();
+		}
 	};
 }

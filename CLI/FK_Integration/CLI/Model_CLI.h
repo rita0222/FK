@@ -824,7 +824,7 @@ namespace FK_CLI
 			::fk_Model *model = reinterpret_cast<::fk_Model *>(argM->pBase);
 			if(GetP()->setParent(model, argMode) == true) {
 				parent = argM;
-				argM->childList->Add(this);
+				if(argM->childList->Contains(this) == false) argM->childList->Add(this);
 				return true;
 			}
 			return false;
