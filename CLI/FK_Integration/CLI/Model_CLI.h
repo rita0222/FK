@@ -73,7 +73,7 @@ namespace FK_CLI
 
 		fk_Model::!fk_Model()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

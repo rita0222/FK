@@ -14,10 +14,10 @@ namespace FK_CLI
 {
 	public enum class fk_IFType
 	{
-		FK_IF_NONE,
-		FK_IF_TRIANGLES,
-		FK_IF_QUADS,
-		FK_IF_POLYGON
+		NONE,
+		TRIANGLES,
+		QUADS,
+		POLYGON
 	};
 			
 	public ref class fk_IndexFaceSet : fk_Shape {
@@ -49,7 +49,7 @@ namespace FK_CLI
 
 		fk_IndexFaceSet::!fk_IndexFaceSet()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
@@ -368,20 +368,20 @@ namespace FK_CLI
 
 			switch(GetP()->getFaceType()) {
 			  case FK_IF_TRIANGLES:
-				type = FK_CLI::fk_IFType::FK_IF_NONE;
+				type = FK_CLI::fk_IFType::NONE;
 				break;
 
 			  case FK_IF_QUADS:
-				type = FK_CLI::fk_IFType::FK_IF_NONE;
+				type = FK_CLI::fk_IFType::NONE;
 				break;
 
 			  case FK_IF_POLYGON:
-				type = FK_CLI::fk_IFType::FK_IF_NONE;
+				type = FK_CLI::fk_IFType::NONE;
 				break;
 
 			  case FK_IF_NONE:
 			  default:
-				type = FK_CLI::fk_IFType::FK_IF_NONE;
+				type = FK_CLI::fk_IFType::NONE;
 				break;
 			}
 			return type;

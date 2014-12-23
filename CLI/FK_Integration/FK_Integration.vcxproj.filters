@@ -382,6 +382,51 @@
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Error\Error_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Window\Window_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Window\WindowEvent_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Window\ShapeViewer_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\GuideObject.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\SimpleWindow.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Fullscreen.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Input.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Misc.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\MotionCharactor.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\MotionData.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\SpriteModel.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\TrackBall.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLI\Vector_CLI.h">
@@ -775,6 +820,12 @@
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\Scene_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\AppWindow_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\GuideObject_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>

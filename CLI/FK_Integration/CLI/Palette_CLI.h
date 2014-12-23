@@ -45,7 +45,7 @@ namespace FK_CLI
 
 		fk_Palette::!fk_Palette()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

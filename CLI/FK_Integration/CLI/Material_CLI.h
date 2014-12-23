@@ -39,7 +39,7 @@ namespace FK_CLI
 
 		fk_Color::!fk_Color()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
@@ -220,7 +220,7 @@ namespace FK_CLI
 
 		fk_Material::!fk_Material()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

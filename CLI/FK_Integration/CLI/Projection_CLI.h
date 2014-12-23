@@ -41,7 +41,7 @@ namespace FK_CLI
 
 		fk_ProjectBase::!fk_ProjectBase()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
@@ -100,7 +100,7 @@ namespace FK_CLI
 
 		fk_Perspective::!fk_Perspective()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
@@ -177,7 +177,7 @@ namespace FK_CLI
 
 		fk_Frustum::!fk_Frustum()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
@@ -286,7 +286,7 @@ namespace FK_CLI
 
 		fk_Ortho::!fk_Ortho()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

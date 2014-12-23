@@ -35,7 +35,7 @@ namespace FK_CLI
 
 		fk_Attribute::!fk_Attribute()
 		{
-			if(this->pBase != NULL) delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

@@ -40,13 +40,6 @@ namespace FK_CLI
 	public ref class fk_Scene : fk_BaseObject
 	{
 	internal:
-		List<fk_Model^>^	modelList;
-		List<fk_Model^>^	overlayList;
-		fk_Model^			defCamera;
-		fk_Model^		   	camera;
-		fk_Model^			leftCamera;
-		fk_Model^			rightCamera;
-		
 		::fk_Scene * GetP(void)
 		{
 			return reinterpret_cast<::fk_Scene *>(this->pBase);
@@ -58,26 +51,13 @@ namespace FK_CLI
 			if(argNewFlg == true) {
 				::fk_Scene *p = new ::fk_Scene();
 				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-				modelList = gcnew List<fk_Model^>();
-				overlayList = gcnew List<fk_Model^>();
-				defCamera = gcnew fk_Model();
-				p->entryCamera(defCamera->GetP());
-				camera = defCamera;
 			}
 		}
 
 		fk_Scene::fk_Scene() : fk_BaseObject(false)
 		{
-			Console::WriteLine("OK0");
 			::fk_Scene *p = new ::fk_Scene();
-			Console::WriteLine("OK1");
 			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			modelList = gcnew List<fk_Model^>();
-			overlayList = gcnew List<fk_Model^>();
-			defCamera = gcnew fk_Model();
-			p->entryCamera(defCamera->GetP());
-			camera = defCamera;
-			Console::WriteLine("OK2");
 		}
 
 		fk_Scene::~fk_Scene()
@@ -87,7 +67,7 @@ namespace FK_CLI
 
 		fk_Scene::!fk_Scene()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
@@ -96,62 +76,50 @@ namespace FK_CLI
 		void clearDisplay(void)
 		{
 			GetP()->clearDisplay();
-			modelList->Clear();
-			overlayList->Clear();
-			camera = defCamera;
 		}
 
 		void entryModel(fk_Model ^argM)
 		{
-			removeModel(argM);
-			modelList->Add(argM);
 			GetP()->entryModel(argM->GetP());
 		}			
 
 		void removeModel(fk_Model ^argM)
 		{
-			while(modelList->Contains(argM) == true) {
-				modelList->Remove(argM);
-			}
 			GetP()->removeModel(argM->GetP());
 		}
 
 		void clearModel(void)
 		{
-			modelList->Clear();
 			GetP()->clearModel();
 		}
 
 		void entryOverlayModel(fk_Model ^argM)
 		{
-			removeOverlayModel(argM);
-			overlayList->Add(argM);
 			GetP()->entryOverlayModel(argM->GetP());
 		}
 		
 		void removeOverlayModel(fk_Model^ argM)
 		{
-			while(overlayList->Contains(argM) == true) {
-				overlayList->Remove(argM);
-			}
 			GetP()->removeOverlayModel(argM->GetP());
 		}
 			
 		void clearOverlayModel(void)
 		{
-			overlayList->Clear();
 			GetP()->clearOverlayModel();
 		}
 
 		void entryCamera(fk_Model ^argM)
 		{
-			camera = argM;
 			GetP()->entryCamera(argM->GetP());
 		}
 
 		fk_Model^ getCamera(void)
 		{
-			return camera;
+			fk_Model^ M = gcnew fk_Model();
+			::fk_Model *pM = const_cast<::fk_Model *>(GetP()->getCamera());
+			M->pBase = reinterpret_cast<::fk_BaseObject *>(pM);
+			M->dFlg = false;
+			return M;
 		}
 				
 		void setProjection(fk_ProjectBase ^argP)

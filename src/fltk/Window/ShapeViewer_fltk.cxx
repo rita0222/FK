@@ -1581,6 +1581,7 @@ void fk_ShapeViewer::putString(const string &argStr)
 	return;
 }
 
+#ifndef FK_CLI_CODE
 void fk_ShapeViewer::printf(const char *argFormat, ...)
 {
 	va_list		ap;
@@ -1592,6 +1593,7 @@ void fk_ShapeViewer::printf(const char *argFormat, ...)
 	fk_Window::putString(buffer);
 	return;
 }
+#endif
 
 void fk_ShapeViewer::clearBrowser(void)
 {

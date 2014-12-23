@@ -46,7 +46,7 @@ namespace FK_CLI
 
 		fk_Block::!fk_Block()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

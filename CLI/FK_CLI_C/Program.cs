@@ -11,28 +11,20 @@ namespace FK_CLI_C
 	{
 		static void Main(string[] args)
 		{
-			var obj = new fk_Sphere(8, 10.0);
-			int num = obj.getFaceSize();
-			Console.WriteLine(num);
-			var pos = obj.getPosVec(100);
-			Console.WriteLine(pos);
-
-			var model1 = new fk_Model();
-			var model2 = new fk_Model();
-			model2.setShape(obj);
-			model2.glMoveTo(10.0, 0.0, 0.0);
-			model1.entryChild(model2);
-			model1.glTranslate(0.0, 1.0, 0.0);
-			var org = new fk_Vector(0.0, 0.0, 0.0);
-			model1.glRotateWithVec(org, fk_Axis.Z, FK.PI / 24.0);
-			pos = model2.getInhPosition();
-			Console.WriteLine(pos);
-
-			fk_Scene scene = new fk_Scene();
-
-			scene.entryModel(model1);
-			scene.entryModel(model2);
-			
+			fk_AppWindow win = new fk_AppWindow();
+			fk_Block block = new fk_Block(20.0, 20.0, 20.0);
+			fk_Model model = new fk_Model();
+			fk_Material mat = new fk_Material();
+			fk_Vector origin = new fk_Vector();
+			mat.setAmbDiff(0.9, 0.7, 0.4);
+			model.setShape(block);
+			model.setMaterial(mat);
+			win.entry(model);
+			win.open();
+			while (win.update() == true)
+			{
+				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI / 360.0);
+			}
 		}
 	}
 }

@@ -76,9 +76,10 @@ namespace FK_CLI
 	public ref class fk_BaseObject
 	{
 	public:
+		bool dFlg;
 		::fk_BaseObject *pBase;
 
-		fk_BaseObject::fk_BaseObject(bool argNewFlg)
+		fk_BaseObject::fk_BaseObject(bool argNewFlg) : dFlg(true)
 		{
 			if(argNewFlg == true) this->pBase = new ::fk_BaseObject();
 		}
@@ -90,7 +91,7 @@ namespace FK_CLI
 
 		fk_BaseObject::!fk_BaseObject()
 		{
-			if(this->pBase != NULL) delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 

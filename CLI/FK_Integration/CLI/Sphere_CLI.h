@@ -46,7 +46,7 @@ namespace FK_CLI
 
 		fk_Sphere::!fk_Sphere()
 		{
-			delete this->pBase;
+			if(dFlg == true) delete this->pBase;
 			this->pBase = NULL;
 		}
 
