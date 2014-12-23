@@ -21,8 +21,7 @@ namespace FK_CLI_C
 			model.setMaterial(mat);
 			win.entry(model);
 			win.open();
-			while (win.update() == true)
-			{
+			while (win.update() == true) {
 				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI / 360.0);
 			}
 		}
