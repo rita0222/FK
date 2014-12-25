@@ -13,13 +13,21 @@ namespace FK_CLI_C
 		{
 			fk_AppWindow win = new fk_AppWindow();
 			fk_Block block = new fk_Block(20.0, 20.0, 20.0);
+			fk_Sphere sphere = new fk_Sphere(8, 10.0);
 			fk_Model model = new fk_Model();
+			fk_Model child = new fk_Model();
 			fk_Material mat = new fk_Material();
 			fk_Vector origin = new fk_Vector();
 			mat.setAmbDiff(0.9, 0.7, 0.4);
 			model.setShape(block);
 			model.setMaterial(mat);
 			win.entry(model);
+
+			child.setShape(sphere);
+			child.setMaterial(mat);
+			child.setParent(model);
+			child.glMoveTo(15.0, 15.0, 15.0);
+			win.entry(child);
 			win.open();
 			while (win.update() == true) {
 				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI / 360.0);
