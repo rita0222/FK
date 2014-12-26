@@ -21,9 +21,7 @@ namespace FK_CLI_C
 			// 光源生成
 			var light = new fk_Light();
 			var lightModel = new fk_Model();
-			var white = new fk_Material();
-			white.setAmbDiff(1.0f, 1.0f, 1.0f);
-			lightModel.setMaterial(white);
+			lightModel.setMaterial(fk_Material.TrueWhite);
 			lightModel.glMoveTo(0.0, 0.0, 0.0);
 			lightModel.glFocus(-1.0, -1.0, -1.0);
 			win.entry(lightModel);

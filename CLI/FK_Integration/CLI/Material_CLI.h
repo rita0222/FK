@@ -418,6 +418,7 @@ namespace FK_CLI
 		static fk_Material^ Gray2;
 		static fk_Material^ GlossBlack;
 		static fk_Material^ MatBlack;
+		static fk_Material^ TrueWhite;
 
 		static void initDefault(void)
 		{
@@ -542,6 +543,9 @@ namespace FK_CLI
 
 			MatBlack = gcnew fk_Material();
 			*MatBlack->pMat = ::MatBlack;
+
+			TrueWhite = gcnew fk_Material();
+			*TrueWhite->pMat = ::TrueWhite;
 		}
 	};
 }
