@@ -3,6 +3,7 @@
 #pragma once
 
 #include <FK/Material.h>
+#include <FK/MatExample.h>
 #include "Base_CLI.h"
 
 namespace FK_CLI
@@ -377,9 +378,170 @@ namespace FK_CLI
 			GetP()->setAmbDiff(*argC->pCol);
 		}
 
-		static void	initDefault(void)
+		static fk_Material^ LightCyan;
+		static fk_Material^ AshGray;
+		static fk_Material^ BurntTitan;
+		static fk_Material^ IridescentGreen;
+		static fk_Material^ UltraMarine;
+		static fk_Material^ Ivory;
+		static fk_Material^ BambooGreen;
+		static fk_Material^ PearWhite;
+		static fk_Material^ Lilac;
+		static fk_Material^ HolidaySkyBlue;
+		static fk_Material^ DimYellow;
+		static fk_Material^ LavaRed;
+		static fk_Material^ GrassGreen;
+		static fk_Material^ Red;
+		static fk_Material^ Pink;
+		static fk_Material^ DarkRed;
+		static fk_Material^ Orange;
+		static fk_Material^ Flesh;
+		static fk_Material^ Brown;
+		static fk_Material^ Yellow;
+		static fk_Material^ Cream;
+		static fk_Material^ DarkYellow;
+		static fk_Material^ Green;
+		static fk_Material^ LightGreen;
+		static fk_Material^ Cyan;
+		static fk_Material^ PaleBlue;
+		static fk_Material^ Blue;
+		static fk_Material^ LightBlue;
+		static fk_Material^ DarkGreen;
+		static fk_Material^ DarkBlue;
+		static fk_Material^ DarkPurple;
+		static fk_Material^ Violet;
+		static fk_Material^ Purple;
+		static fk_Material^ LightViolet;
+		static fk_Material^ Coral;
+		static fk_Material^ White;
+		static fk_Material^ Gray1;
+		static fk_Material^ Gray2;
+		static fk_Material^ GlossBlack;
+		static fk_Material^ MatBlack;
+
+		static void initDefault(void)
 		{
 			::fk_Material::initDefault();
+
+			LightCyan = gcnew fk_Material();
+			*LightCyan->pMat = ::LightCyan;
+
+			AshGray = gcnew fk_Material();
+			*AshGray->pMat = ::AshGray;
+
+			BurntTitan = gcnew fk_Material();
+			*BurntTitan->pMat = ::BurntTitan;
+
+			IridescentGreen = gcnew fk_Material();
+			*IridescentGreen->pMat = ::IridescentGreen;
+
+			UltraMarine = gcnew fk_Material();
+			*UltraMarine->pMat = ::UltraMarine;
+
+			Ivory = gcnew fk_Material();
+			*Ivory->pMat = ::Ivory;
+
+			BambooGreen = gcnew fk_Material();
+			*BambooGreen->pMat = ::BambooGreen;
+
+			PearWhite = gcnew fk_Material();
+			*PearWhite->pMat = ::PearWhite;
+
+			Lilac = gcnew fk_Material();
+			*Lilac->pMat = ::Lilac;
+
+			HolidaySkyBlue = gcnew fk_Material();
+			*HolidaySkyBlue->pMat = ::HolidaySkyBlue;
+
+			DimYellow = gcnew fk_Material();
+			*DimYellow->pMat = ::DimYellow;
+
+			LavaRed = gcnew fk_Material();
+			*LavaRed->pMat = ::LavaRed;
+
+			GrassGreen = gcnew fk_Material();
+			*GrassGreen->pMat = ::GrassGreen;
+
+			Red = gcnew fk_Material();
+			*Red->pMat = ::Red;
+
+			Pink = gcnew fk_Material();
+			*Pink->pMat = ::Pink;
+
+			DarkRed = gcnew fk_Material();
+			*DarkRed->pMat = ::DarkRed;
+
+			Orange = gcnew fk_Material();
+			*Orange->pMat = ::Orange;
+
+			Flesh = gcnew fk_Material();
+			*Flesh->pMat = ::Flesh;
+
+			Brown = gcnew fk_Material();
+			*Brown->pMat = ::Brown;
+
+			Yellow = gcnew fk_Material();
+			*Yellow->pMat = ::Yellow;
+
+			Cream = gcnew fk_Material();
+			*Cream->pMat = ::Cream;
+
+			DarkYellow = gcnew fk_Material();
+			*DarkYellow->pMat = ::DarkYellow;
+
+			Green = gcnew fk_Material();
+			*Green->pMat = ::Green;
+
+			LightGreen = gcnew fk_Material();
+			*LightGreen->pMat = ::LightGreen;
+
+			Cyan = gcnew fk_Material();
+			*Cyan->pMat = ::Cyan;
+
+			PaleBlue = gcnew fk_Material();
+			*PaleBlue->pMat = ::PaleBlue;
+
+			Blue = gcnew fk_Material();
+			*Blue->pMat = ::Blue;
+
+			LightBlue = gcnew fk_Material();
+			*LightBlue->pMat = ::LightBlue;
+
+			DarkGreen = gcnew fk_Material();
+			*DarkGreen->pMat = ::DarkGreen;
+
+			DarkBlue = gcnew fk_Material();
+			*DarkBlue->pMat = ::DarkBlue;
+
+			DarkPurple = gcnew fk_Material();
+			*DarkPurple->pMat = ::DarkPurple;
+
+			Violet = gcnew fk_Material();
+			*Violet->pMat = ::Violet;
+
+			Purple = gcnew fk_Material();
+			*Purple->pMat = ::Purple;
+
+			LightViolet = gcnew fk_Material();
+			*LightViolet->pMat = ::LightViolet;
+
+			Coral = gcnew fk_Material();
+			*Coral->pMat = ::Coral;
+
+			White = gcnew fk_Material();
+			*White->pMat = ::White;
+
+			Gray1 = gcnew fk_Material();
+			*Gray1->pMat = ::Gray1;
+
+			Gray2 = gcnew fk_Material();
+			*Gray2->pMat = ::Gray2;
+
+			GlossBlack = gcnew fk_Material();
+			*GlossBlack->pMat = ::GlossBlack;
+
+			MatBlack = gcnew fk_Material();
+			*MatBlack->pMat = ::MatBlack;
 		}
 	};
 }

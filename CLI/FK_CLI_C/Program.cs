@@ -16,6 +16,7 @@ namespace FK_CLI_C
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
+			fk_Material.initDefault();
 
 			// 光源生成
 			var light = new fk_Light();
@@ -31,9 +32,7 @@ namespace FK_CLI_C
 			var blockModel = new fk_Model();
 			var block = new fk_Block(50.0, 70.0, 40.0);
 			blockModel.setShape(block);
-			fk_Material mat = new fk_Material();
-			mat.setDiffuse(0.5, 0.3, 0.2);
-			blockModel.setMaterial(mat);
+			blockModel.setMaterial(fk_Material.Yellow);
 			win.entry(blockModel);
 
 			// 線分モデル生成
