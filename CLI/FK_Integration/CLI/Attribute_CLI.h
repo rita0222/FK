@@ -5,12 +5,12 @@
 #include <FK/Attribute.h>
 #include "Base_CLI.h"
 
-using namespace std;
-using namespace System;
-using namespace msclr::interop;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+	using namespace msclr::interop;
+
 	public ref class fk_Attribute : FK_CLI::fk_BaseObject
 	{
 	internal:

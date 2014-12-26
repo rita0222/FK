@@ -7,13 +7,13 @@
 #include "Model_CLI.h"
 #include "Projection_CLI.h"
 
-using namespace std;
-using namespace System;
-using namespace System::Collections;
-using namespace System::Collections::Generic;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+	using namespace System::Collections;
+	using namespace System::Collections::Generic;
+
 	public enum class fk_StereoChannel
 	{
 		STEREO_LEFT,

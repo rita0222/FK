@@ -6,11 +6,11 @@
 #include "Attribute_CLI.h"
 #include "Palette_CLI.h"
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public enum class fk_RealShapeType
 	{
 		FK_SHAPE_IFS,

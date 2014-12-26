@@ -7,10 +7,10 @@
 #include "Model_CLI.h"
 #include "Scene_CLI.h"
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI {
+	using namespace std;
+	using namespace System;
+
 	public enum class fk_GuideMode : int {
 		NO_GUIDE = 0x0000,
 		AXIS_X   = 0x0001,

@@ -5,12 +5,12 @@
 #include <FK/SimpleWindow.h>
 #include "GuideObject_CLI.h"
 
-using namespace std;
-using namespace System;
-using namespace msclr::interop;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+	using namespace msclr::interop;
+
 	public enum class fk_SpecialKey {
 		SHIFT_R,
 		SHIFT_L,

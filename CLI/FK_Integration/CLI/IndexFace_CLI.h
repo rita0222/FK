@@ -6,12 +6,12 @@
 #include "Shape_CLI.h"
 #include "Vector_CLI.h"
 
-using namespace std;
-using namespace System;
-using namespace msclr::interop;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+	using namespace msclr::interop;
+
 	public enum class fk_IFType
 	{
 		NONE,

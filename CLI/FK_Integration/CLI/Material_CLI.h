@@ -5,11 +5,11 @@
 #include <FK/Material.h>
 #include "Base_CLI.h"
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public ref class fk_Color : fk_BaseObject {
 	internal:
 		::fk_Color * GetP(void)

@@ -5,12 +5,12 @@
 #include <FK/Base.h>
 #include <msclr/marshal_cppstd.h>
 
-using namespace std;
-using namespace System;
-
 
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public ref class FK
 	{
 	public:

@@ -5,11 +5,11 @@
 #include <FK/Palette.h>
 #include "Material_CLI.h"
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public enum class fk_MaterialMode : int {
 		NONE = 0,
 		CHILD = 1,

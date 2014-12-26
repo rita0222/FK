@@ -5,11 +5,11 @@
 #include <string>
 #include <FK/Vector.h>
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public enum	class fk_Axis
 	{
 		X,

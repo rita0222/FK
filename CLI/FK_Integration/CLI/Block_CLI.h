@@ -6,11 +6,11 @@
 #include "IndexFace_CLI.h"
 #include "Vector_CLI.h"
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public ref class fk_Block : fk_IndexFaceSet {
 	internal:
 		::fk_Block * GetP(void)

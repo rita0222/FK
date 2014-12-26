@@ -6,10 +6,10 @@
 #include "Vector_CLI.h"
 #include <FK/Matrix.h>
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI {
+	using namespace std;
+	using namespace System;
+
 	public ref class fk_Angle {
 	internal:
 	    ::fk_Angle *pAngle;

@@ -5,11 +5,11 @@
 #include <FK/Projection.h>
 #include "Base_CLI.h"
 
-using namespace std;
-using namespace System;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public enum class fk_ProjectMode
 	{
 		NONE_PROJ_MODE,

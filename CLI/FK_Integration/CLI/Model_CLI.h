@@ -9,13 +9,11 @@
 #include "Matrix_CLI.h"
 #include "Material_CLI.h"
 
-using namespace std;
-using namespace System;
-using namespace System::Collections;
-using namespace System::Collections::Generic;
-
 namespace FK_CLI
 {
+	using namespace std;
+	using namespace System;
+
 	public enum class fk_BoundaryMode
 	{
 		SPHERE,
@@ -38,32 +36,25 @@ namespace FK_CLI
 
 	public ref class fk_Model : fk_BaseObject {
 	internal:
-		fk_Shape^					shape;
-		fk_Model^					parent;
-		List<fk_Model^>^			childList;
-		
+
 		::fk_Model * GetP(void)
 		{
 			return (reinterpret_cast<::fk_Model *>(this->pBase));
 		}
 
 	public:
-		fk_Model::fk_Model()
-			: fk_BaseObject(false), shape(nullptr), parent(nullptr)
+		fk_Model::fk_Model() : fk_BaseObject(false)
 		{
 			::fk_Model *p = new ::fk_Model();
 			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			childList = gcnew List<fk_Model^>();
 		}
 
-		fk_Model::fk_Model(bool argNewFlg)
-			: fk_BaseObject(false), shape(nullptr), parent(nullptr)
+		fk_Model::fk_Model(bool argNewFlg) : fk_BaseObject(false)
 		{
 			if(argNewFlg == true) {
 				::fk_Model *p = new ::fk_Model();
 				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
 			}
-			childList = gcnew List<fk_Model^>();
 		}
 
 		fk_Model::~fk_Model()
@@ -562,11 +553,13 @@ namespace FK_CLI
 			if(!argShape) return;
 			::fk_Shape *pS = reinterpret_cast<::fk_Shape *>(argShape->pBase);
 			GetP()->setShape(pS);
-			shape = argShape;
 		}
 
 		fk_Shape^ getShape(void)
 		{
+			if(GetP()->getShape() == NULL) return nullptr;
+			fk_Shape^ shape = gcnew fk_Shape(false);
+			shape->pBase = reinterpret_cast<::fk_BaseObject *>(GetP()->getShape());
 			return shape;
 		}
 				
@@ -817,17 +810,10 @@ namespace FK_CLI
 
 		bool setParent(fk_Model^ argM, bool argMode)
 		{
-			if(!argM) {
-				parent = nullptr;
-				return true;
-			}
+			if(!argM) return false;
+
 			::fk_Model *model = reinterpret_cast<::fk_Model *>(argM->pBase);
-			if(GetP()->setParent(model, argMode) == true) {
-				parent = argM;
-				if(argM->childList->Contains(this) == false) argM->childList->Add(this);
-				return true;
-			}
-			return false;
+			return GetP()->setParent(model, argMode);
 		}
 			
 		bool setParent(fk_Model^ argM)
@@ -837,10 +823,6 @@ namespace FK_CLI
 
 		void deleteParent(bool argMode)
 		{
-			if(!parent) {
-				parent->childList->Remove(this);
-				parent = nullptr;
-			}
 			GetP()->deleteParent(argMode);
 		}
 			
@@ -851,18 +833,16 @@ namespace FK_CLI
 
 		fk_Model^ getParent(void)
 		{
-			return parent;
+			if(GetP()->getParent() == NULL) return nullptr;
+			fk_Model^ M = gcnew fk_Model(false);
+			M->pBase = reinterpret_cast<::fk_Model *>(GetP()->getParent());
+			return M;
 		}
 
 		bool entryChild(fk_Model^ argModel, bool argMode)
 		{
 			if(!argModel) return false;
-			if(GetP()->entryChild(argModel->GetP(), argMode) == true) {
-				argModel->parent = this;
-				if(childList->Contains(argModel) == false) childList->Add(argModel);
-				return true;
-			}
-			return false;
+			return GetP()->entryChild(argModel->GetP(), argMode);
 		}
 		
 		bool entryChild(fk_Model^ argModel)
@@ -873,14 +853,7 @@ namespace FK_CLI
 		bool deleteChild(fk_Model^ argModel, bool argMode)
 		{
 			if(!argModel) return false;
-			if(GetP()->deleteChild(argModel->GetP(), argMode) == true) {
-				argModel->parent = nullptr;
-				while(childList->Contains(argModel) == true) {
-					childList->Remove(argModel);
-				}
-				return true;
-			}
-			return false;
+			return GetP()->deleteChild(argModel->GetP(), argMode);
 		}
 
 		bool deleteChild(fk_Model^ argModel)
@@ -890,20 +863,12 @@ namespace FK_CLI
 
 		void deleteChildren(bool argMode)
 		{
-			while(childList->Count != 0) {
-				fk_Model^ m = childList[childList->Count-1];
-				deleteChild(m, argMode);
-			}
+			GetP()->deleteChildren(argMode);
 		}
 
 		void deleteChildren(void)
 		{
 			deleteChildren(false);
-		}
-
-		List<fk_Model^>^ getChildren(void)
-		{
-			return childList;
 		}
 
 		void snapShot(void)
