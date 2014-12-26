@@ -246,5 +246,9 @@ void fk_InitMaterial(void)
 	MatBlack.setDiffuse(0.0f, 0.0f, 0.0f);
 	MatBlack.setSpecular(0.0f, 0.0f, 0.0f);
 
+	TrueWhite.init();
+	TrueWhite.setAmbDiff(1.0f, 1.0f, 1.0f);
+	TrueWhite.setSpecular(0.0f, 0.0f, 0.0f);
+	
 	return;
 }

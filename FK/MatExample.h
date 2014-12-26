@@ -133,6 +133,7 @@ FK_EXTERN fk_Material Gray1;
 FK_EXTERN fk_Material Gray2;
 FK_EXTERN fk_Material GlossBlack;
 FK_EXTERN fk_Material MatBlack;
+FK_EXTERN fk_Material TrueWhite;
 
 #undef FK_EXTERN
 
