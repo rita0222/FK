@@ -20,26 +20,23 @@ namespace FK_CLI
 		POLYGON
 	};
 			
-	public ref class fk_IndexFaceSet : fk_Shape {
+	public ref class fk_IndexFaceSet : FK_CLI::fk_Shape {
 	internal:
 		::fk_IndexFaceSet * GetP(void)
 		{
-			return reinterpret_cast<::fk_IndexFaceSet *>(this->pBase);
+			return (::fk_IndexFaceSet *)(this->pBase);
 		}
 
 	public:
 		fk_IndexFaceSet::fk_IndexFaceSet() : fk_Shape(false)
 		{
-			::fk_IndexFaceSet *p = new ::fk_IndexFaceSet();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			this->pBase = new ::fk_IndexFaceSet();
 		}
 
 		fk_IndexFaceSet::fk_IndexFaceSet(bool argNewFlg) : fk_Shape(false)
 		{
-			if(argNewFlg == true) {
-				::fk_IndexFaceSet *p = new ::fk_IndexFaceSet();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) this->pBase = new ::fk_IndexFaceSet();
+
 		}
 
 		fk_IndexFaceSet::~fk_IndexFaceSet()
@@ -56,7 +53,7 @@ namespace FK_CLI
 		void cloneShape(fk_IndexFaceSet^ argIFS)
 		{
 			if(!argIFS) return;
-			GetP()->cloneShape(reinterpret_cast<::fk_IndexFaceSet *>(argIFS->pBase));
+			GetP()->cloneShape((::fk_IndexFaceSet *)(argIFS->pBase));
 		}
 
 		bool readSMFFile(String^ argName)
@@ -262,7 +259,7 @@ namespace FK_CLI
 		{
 			::fk_Material *pM;
 
-			pM = (!argMat) ? NULL : reinterpret_cast<::fk_Material *>(argMat->pBase);
+			pM = (!argMat) ? NULL : argMat->pMat;
 			return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, argTriFlg);
 		}			
 
@@ -270,7 +267,7 @@ namespace FK_CLI
 		{
 			::fk_Material *pM;
 
-			pM = (!argMat) ? NULL : reinterpret_cast<::fk_Material *>(argMat->pBase);
+			pM = (!argMat) ? NULL : argMat->pMat;
 			return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, false);
 		}			
 		bool writeVRMLFile(String^ argFileName)
@@ -284,7 +281,7 @@ namespace FK_CLI
 			::fk_Material *pM;
 
 			if(!argFileName || !argTime || !argPos) return false;
-			pM = (!argMat) ? NULL : reinterpret_cast<::fk_Material *>(argMat->pBase);
+			pM = (!argMat) ? NULL : argMat->pMat;
 
 			int i;
 			int timeSize = argTime->Length;
@@ -434,7 +431,7 @@ namespace FK_CLI
 
 		bool moveVPosition(int argVID, double x, double y, double z)
 		{
-			::fk_IndexFaceSet *p = reinterpret_cast<::fk_IndexFaceSet *>(pBase);
+			::fk_IndexFaceSet *p = (::fk_IndexFaceSet *)(pBase);
 			return GetP()->moveVPosition(argVID, x, y, z, 0);
 		}
 

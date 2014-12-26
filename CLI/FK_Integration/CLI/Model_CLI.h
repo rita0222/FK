@@ -34,27 +34,27 @@ namespace FK_CLI
 		TEXTUREMODE			= 0x0020
 	};
 
-	public ref class fk_Model : fk_BaseObject {
+	public ref class fk_Model {
 	internal:
+
+		bool dFlg;
+		::fk_Model *pModel;
+
 
 		::fk_Model * GetP(void)
 		{
-			return (reinterpret_cast<::fk_Model *>(this->pBase));
+			return pModel;
 		}
 
 	public:
-		fk_Model::fk_Model() : fk_BaseObject(false)
+		fk_Model::fk_Model()
 		{
-			::fk_Model *p = new ::fk_Model();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			this->pModel = new ::fk_Model();
 		}
 
-		fk_Model::fk_Model(bool argNewFlg) : fk_BaseObject(false)
+		fk_Model::fk_Model(bool argNewFlg)
 		{
-			if(argNewFlg == true) {
-				::fk_Model *p = new ::fk_Model();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) this->pModel = new ::fk_Model();
 		}
 
 		fk_Model::~fk_Model()
@@ -64,8 +64,8 @@ namespace FK_CLI
 
 		fk_Model::!fk_Model()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete this->pModel;
+			this->pModel = NULL;
 		}
 
 		fk_Vector^ getPosition(void)
@@ -508,28 +508,25 @@ namespace FK_CLI
 		void setBLineColor(fk_Color^ argC)
 		{
 			if(!argC) return;
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-			GetP()->setBLineColor(*pC);
+			GetP()->setBLineColor(*argC->pCol);
 		}
 
 		fk_Color^ getBLineColor(void)
 		{
 			fk_Color^ C = gcnew fk_Color();
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-			*pC = *GetP()->getBLineColor();
+			*C->pCol = *GetP()->getBLineColor();
 			return C;
 		}
 
 		void setBIntLineColor(fk_Color^ argC)
 		{
-			GetP()->setBIntLineColor(*(reinterpret_cast<::fk_Color *>(argC->pBase)));
+			GetP()->setBIntLineColor(*argC->pCol);
 		}
 			  
 		fk_Color^ getBIntLineColor(void)
 		{
 			fk_Color^ C = gcnew fk_Color();
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-			*pC = *GetP()->getBIntLineColor();
+			*C->pCol = *GetP()->getBIntLineColor();
 			return C;
 		}
 
@@ -551,7 +548,7 @@ namespace FK_CLI
 		void setShape(fk_Shape^ argShape)
 		{
 			if(!argShape) return;
-			::fk_Shape *pS = reinterpret_cast<::fk_Shape *>(argShape->pBase);
+			::fk_Shape *pS = (::fk_Shape *)(argShape->pBase);
 			GetP()->setShape(pS);
 		}
 
@@ -559,22 +556,20 @@ namespace FK_CLI
 		{
 			if(GetP()->getShape() == NULL) return nullptr;
 			fk_Shape^ shape = gcnew fk_Shape(false);
-			shape->pBase = reinterpret_cast<::fk_BaseObject *>(GetP()->getShape());
+			shape->pBase = GetP()->getShape();
 			return shape;
 		}
 				
 		void setMaterial(fk_Material^ argM)
 		{
 			if(!argM) return;
-			::fk_Material *pM = reinterpret_cast<::fk_Material *>(argM->pBase);
-			GetP()->setMaterial(*pM);
+			GetP()->setMaterial(*argM->pMat);
 		}
 
 		void setPointColor(fk_Color^ argC)
 		{
 			if(!argC) return;
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-			GetP()->setPointColor(pC);
+			GetP()->setPointColor(argC->pCol);
 		}
 
 		void setPointColor(float argR, float argG, float argB)
@@ -585,8 +580,7 @@ namespace FK_CLI
 		void setLineColor(fk_Color^ argC)
 		{
 			if(!argC) return;
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-			GetP()->setLineColor(pC);
+			GetP()->setLineColor(argC->pCol);
 		}
 
 		void setLineColor(float argR, float argG, float argB)
@@ -612,32 +606,28 @@ namespace FK_CLI
 		fk_Material^ getMaterial(void)
 		{
 			fk_Material^ M = gcnew fk_Material();
-			::fk_Material *pM = reinterpret_cast<::fk_Material *>(M->pBase);
-			*pM = *GetP()->getMaterial();
+			*M->pMat = *GetP()->getMaterial();
 			return M;
 		}
 
 		fk_Material^ getInhMaterial(void)
 		{
 			fk_Material^ M = gcnew fk_Material();
-			::fk_Material *pM = reinterpret_cast<::fk_Material *>(M->pBase);
-			*pM = *GetP()->getInhMaterial();
+			*M->pMat = *GetP()->getInhMaterial();
 			return M;
 		}
 
 		fk_Color^ getPointColor(void)
 		{
 			fk_Color^ C = gcnew fk_Color();
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-			*pC = *GetP()->getPointColor();
+			*C->pCol = *GetP()->getPointColor();
 			return C;
 		}
 
 		fk_Color^ getInhPointColor(void)
 		{
 			fk_Color^ C = gcnew fk_Color();
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-			*pC = *GetP()->getInhPointColor();
+			*C->pCol = *GetP()->getInhPointColor();
 			return C;
 		}
 
@@ -645,16 +635,14 @@ namespace FK_CLI
 		fk_Color^ getLineColor(void)
 		{
 			fk_Color^ C = gcnew fk_Color();
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-			*pC = *GetP()->getLineColor();
+			*C->pCol = *GetP()->getLineColor();
 			return C;
 		}
 
 		fk_Color^ getInhLineColor(void)
 		{
 			fk_Color^ C = gcnew fk_Color();
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-			*pC = *GetP()->getInhLineColor();
+			*C->pCol = *GetP()->getInhLineColor();
 			return C;
 		}
 
@@ -812,8 +800,7 @@ namespace FK_CLI
 		{
 			if(!argM) return false;
 
-			::fk_Model *model = reinterpret_cast<::fk_Model *>(argM->pBase);
-			return GetP()->setParent(model, argMode);
+			return GetP()->setParent(argM->pModel, argMode);
 		}
 			
 		bool setParent(fk_Model^ argM)
@@ -835,7 +822,7 @@ namespace FK_CLI
 		{
 			if(GetP()->getParent() == NULL) return nullptr;
 			fk_Model^ M = gcnew fk_Model(false);
-			M->pBase = reinterpret_cast<::fk_Model *>(GetP()->getParent());
+			M->pModel = GetP()->getParent();
 			return M;
 		}
 

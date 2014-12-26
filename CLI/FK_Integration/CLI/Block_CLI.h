@@ -11,32 +11,30 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public ref class fk_Block : fk_IndexFaceSet {
+	public ref class fk_Block : FK_CLI::fk_IndexFaceSet {
 	internal:
 		::fk_Block * GetP(void)
 		{
-			return reinterpret_cast<::fk_Block *>(this->pBase);
+			return (::fk_Block *)(pBase);
 		}
 
 	public:
 		fk_Block::fk_Block() : fk_IndexFaceSet(false)
 		{
-			::fk_Block *p = new ::fk_Block();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pBase = new ::fk_Block();
 		}
 
 		fk_Block::fk_Block(bool argNewFlg) : fk_IndexFaceSet(false)
 		{
 			if(argNewFlg == true) {
-				::fk_Block *p = new ::fk_Block();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+				pBase = new ::fk_Block();
 			}
+				
 		}
 
 		fk_Block::fk_Block(double argX, double argY, double argZ) : fk_IndexFaceSet(false)
 		{
-			::fk_Block *p = new ::fk_Block(argX, argY, argZ);
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pBase = new ::fk_Block(argX, argY, argZ);
 		}
 
 		fk_Block::~fk_Block()
@@ -46,8 +44,8 @@ namespace FK_CLI
 
 		fk_Block::!fk_Block()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pBase;
+			pBase = NULL;
 		}
 
 		void setSize(double argX, double argY, double argZ)

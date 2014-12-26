@@ -10,26 +10,25 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public ref class fk_Color : fk_BaseObject {
+	public ref class fk_Color {
 	internal:
+		bool dFlg;
+		::fk_Color *pCol;
+
 		::fk_Color * GetP(void)
 		{
-			return reinterpret_cast<::fk_Color *>(this->pBase);
+			return pCol;
 		}
 
 	public:
-		fk_Color::fk_Color() : fk_BaseObject(false)
+		fk_Color::fk_Color() : dFlg(true)
 		{
-			::fk_Color *p = new ::fk_Color();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pCol = new ::fk_Color();
 		}
 
-		fk_Color::fk_Color(bool argNewFlg) : fk_BaseObject(false)
+		fk_Color::fk_Color(bool argNewFlg) : dFlg(argNewFlg)
 		{
-			if(argNewFlg == true) {
-				::fk_Color *p = new ::fk_Color();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pCol = new ::fk_Color();
 		}
 
 		fk_Color::~fk_Color()
@@ -39,8 +38,8 @@ namespace FK_CLI
 
 		fk_Color::!fk_Color()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pCol;
+			pCol = NULL;
 		}
 
 		property float col[int]
@@ -191,26 +190,25 @@ namespace FK_CLI
 		}
 	};
 
-	public ref class fk_Material : fk_BaseObject {
+	public ref class fk_Material {
 	internal:
+		bool dFlg;
+		::fk_Material *pMat;
+
 		::fk_Material * GetP(void)
 		{
-			return reinterpret_cast<::fk_Material *>(this->pBase);
+			return pMat;
 		}
 
 	public:
-		fk_Material::fk_Material() : fk_BaseObject(false)
+		fk_Material::fk_Material() : dFlg(true)
 		{
-			::fk_Material *p = new ::fk_Material();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pMat = new ::fk_Material();
 		}
 
-		fk_Material::fk_Material(bool argNewFlg) : fk_BaseObject(false)
+		fk_Material::fk_Material(bool argNewFlg) : dFlg(argNewFlg)
 		{
-			if(argNewFlg == true) {
-				::fk_Material *p = new ::fk_Material();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pMat = new ::fk_Material();
 		}
 
 		fk_Material::~fk_Material()
@@ -220,8 +218,8 @@ namespace FK_CLI
 
 		fk_Material::!fk_Material()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pMat;
+			pMat = NULL;
 		}
 
 		bool Equals(fk_Material^ argM)
@@ -259,16 +257,14 @@ namespace FK_CLI
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				*pC = *(GetP()->getAmbient());
+				*C->pCol = *(GetP()->getAmbient());
 				return C;
 			}
 
 			void set(fk_Color^ argC)
 			{
 				if(!argC) return;
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				GetP()->setAmbient(*pC);
+				GetP()->setAmbient(*argC->pCol);
 			}
 		}
 
@@ -277,16 +273,14 @@ namespace FK_CLI
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				*pC = *(GetP()->getDiffuse());
+				*C->pCol = *(GetP()->getDiffuse());
 				return C;
 			}
 
 			void set(fk_Color^ argC)
 			{
 				if(!argC) return;
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				GetP()->setDiffuse(*pC);
+				GetP()->setDiffuse(*argC->pCol);
 			}
 		}
 
@@ -295,16 +289,14 @@ namespace FK_CLI
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				*pC = *(GetP()->getSpecular());
+				*C->pCol = *(GetP()->getSpecular());				
 				return C;
 			}
 
 			void set(fk_Color^ argC)
 			{
 				if(!argC) return;
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				GetP()->setSpecular(*pC);
+				GetP()->setSpecular(*argC->pCol);
 			}
 		}
 
@@ -313,16 +305,14 @@ namespace FK_CLI
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(C->pBase);
-				*pC = *(GetP()->getEmission());
+				*C->pCol = *(GetP()->getEmission());
 				return C;
 			}
 
 			void set(fk_Color^ argC)
 			{
 				if(!argC) return;
-				::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-				GetP()->setEmission(*pC);
+				GetP()->setEmission(*argC->pCol);
 			}
 		}
 
@@ -383,8 +373,8 @@ namespace FK_CLI
 
 		void setAmbDiff(fk_Color^ argC)
 		{
-			::fk_Color *pC = reinterpret_cast<::fk_Color *>(argC->pBase);
-			GetP()->setAmbDiff(*pC);
+			if(!argC) return;
+			GetP()->setAmbDiff(*argC->pCol);
 		}
 
 		static void	initDefault(void)

@@ -10,28 +10,23 @@ namespace FK_CLI
 {
 	using namespace std;
 	using namespace System;
-	using namespace msclr::interop;
 
-	public ref class fk_Line : fk_Shape {
+	public ref class fk_Line : FK_CLI::fk_Shape {
 	internal:
 		::fk_Line * GetP(void)
 		{
-			return reinterpret_cast<::fk_Line *>(this->pBase);
+			return (::fk_Line *)(this->pBase);
 		}
 
 	public:
 		fk_Line::fk_Line() : fk_Shape(false)
 		{
-			::fk_Line *p = new ::fk_Line();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			this->pBase = new ::fk_Line();
 		}
 
 		fk_Line::fk_Line(bool argNewFlg) : fk_Shape(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Line *p = new ::fk_Line();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) this->pBase = new ::fk_Line();
 		}
 
 		fk_Line::~fk_Line()

@@ -22,26 +22,27 @@ namespace FK_CLI {
 		ALL_GUIDE = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ | FK_GRID_XY | FK_GRID_YZ
 	};
 		
-	public ref class fk_GuideObject : fk_BaseObject {
+	public ref class fk_GuideObject {
 	internal:
+		bool dFlg;
+		::fk_GuideObject *pGuide;
+
 		::fk_GuideObject * GetP(void)
 		{
-			return reinterpret_cast<::fk_GuideObject *>(this->pBase);
+			return pGuide;
 		}
 		
 	public:
-		fk_GuideObject::fk_GuideObject() : fk_BaseObject(false)
+		fk_GuideObject::fk_GuideObject()
 		{
-			::fk_GuideObject *p = new ::fk_GuideObject();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pGuide = new ::fk_GuideObject();
+			dFlg = true;
 		}
 
-		fk_GuideObject::fk_GuideObject(bool argNewFlg) : fk_BaseObject(false)
+		fk_GuideObject::fk_GuideObject(bool argNewFlg)
 		{
-			if(argNewFlg == true) {
-				::fk_GuideObject *p = new ::fk_GuideObject();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pGuide = new ::fk_GuideObject();
+			dFlg = argNewFlg;
 		}
 
 		fk_GuideObject::~fk_GuideObject()
@@ -51,8 +52,8 @@ namespace FK_CLI {
 
 		fk_GuideObject::!fk_GuideObject()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pGuide;
+			pGuide = NULL;
 		}
 
 		void setAxisWidth(double argWidth)

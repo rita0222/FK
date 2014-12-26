@@ -18,20 +18,20 @@ namespace FK_CLI
 		ORTHO_MODE
 	};
 
-	public ref class fk_ProjectBase : fk_BaseObject {
+	public ref class fk_ProjectBase {
 	internal:
+		bool dFlg;
+		::fk_ProjectBase *pProj;
+
 		::fk_ProjectBase * GetP(void)
 		{
-			return reinterpret_cast<::fk_ProjectBase *>(this->pBase);
+			return pProj;
 		}
 
 	public:
-		fk_ProjectBase::fk_ProjectBase(bool argNewFlg) : fk_BaseObject(false)
+		fk_ProjectBase::fk_ProjectBase(bool argNewFlg) : dFlg(argNewFlg)
 		{
-			if(argNewFlg == true) {
-				::fk_ProjectBase *p = new ::fk_ProjectBase();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pProj = new ::fk_ProjectBase();
 		}
 
 		fk_ProjectBase::~fk_ProjectBase()
@@ -41,8 +41,8 @@ namespace FK_CLI
 
 		fk_ProjectBase::!fk_ProjectBase()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pProj;
+			pProj = NULL;
 		}
 
 		fk_ProjectMode getMode(void)
@@ -68,29 +68,24 @@ namespace FK_CLI
 	internal:
 		::fk_Perspective * GetP(void)
 		{
-			return reinterpret_cast<::fk_Perspective *>(this->pBase);
+			return (::fk_Perspective *)(pProj);
 		}
 
 	public:
 		fk_Perspective::fk_Perspective(bool argNewFlg) : fk_ProjectBase(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Perspective *p = new ::fk_Perspective();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pProj = new ::fk_Perspective();
 		}
 
 		fk_Perspective::fk_Perspective() : fk_ProjectBase(false)
 		{
-			::fk_Perspective *p = new ::fk_Perspective();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pProj = new ::fk_Perspective();
 		}
 
 		fk_Perspective::fk_Perspective(double argFovy, double argNear, double argFar)
 			: fk_ProjectBase(false)
 		{
-			::fk_Perspective *p = new ::fk_Perspective(argFovy, argNear, argFar);
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pProj = new ::fk_Perspective(argFovy, argNear, argFar);
 		}
 
 		fk_Perspective::~fk_Perspective()
@@ -100,8 +95,8 @@ namespace FK_CLI
 
 		fk_Perspective::!fk_Perspective()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pProj;
+			pProj = NULL;
 		}
 
 		void setFovy(double argFovy)
@@ -144,30 +139,25 @@ namespace FK_CLI
 	internal:
 		::fk_Frustum * GetP(void)
 		{
-			return reinterpret_cast<::fk_Frustum *>(this->pBase);
+			return (::fk_Frustum *)(pProj);
 		}
 
 	public:
 		fk_Frustum::fk_Frustum(bool argNewFlg) : fk_ProjectBase(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Frustum *p = new ::fk_Frustum();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pProj = new ::fk_Frustum();
 		}
 
 		fk_Frustum::fk_Frustum() : fk_ProjectBase(false)
 		{
-			::fk_Frustum *p = new ::fk_Frustum();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pProj = new ::fk_Frustum();
 		}
 
 		fk_Frustum::fk_Frustum(double argL, double argR,
 							   double argB, double argT,
 							   double argN, double argF) : fk_ProjectBase(false)
 		{
-			::fk_Frustum *p = new ::fk_Frustum(argL, argR, argB, argT, argN, argF);
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pProj = new ::fk_Frustum(argL, argR, argB, argT, argN, argF);
 		}
 
 		fk_Frustum::~fk_Frustum()
@@ -177,8 +167,8 @@ namespace FK_CLI
 
 		fk_Frustum::!fk_Frustum()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pProj;
+			pProj = NULL;
 		}
 
 		void setLeft(double argLeft)
@@ -253,30 +243,25 @@ namespace FK_CLI
 	internal:
 		::fk_Ortho * GetP(void)
 		{
-			return reinterpret_cast<::fk_Ortho *>(this->pBase);
+			return (::fk_Ortho *)(pProj);
 		}
 
 	public:
 		fk_Ortho::fk_Ortho(bool argNewFlg) : fk_ProjectBase(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Ortho *p = new ::fk_Ortho();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pProj = new ::fk_Ortho();
 		}
 
 		fk_Ortho::fk_Ortho() : fk_ProjectBase(false)
 		{
-			::fk_Ortho *p = new ::fk_Ortho();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pProj = new ::fk_Ortho();
 		}
 
 		fk_Ortho::fk_Ortho(double argL, double argR,
 						   double argB, double argT,
 						   double argN, double argF) : fk_ProjectBase(false)
 		{
-			::fk_Ortho *p = new ::fk_Ortho();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pProj = new ::fk_Ortho(argL, argR, argB, argT, argN, argF);
 		}
 
 		fk_Ortho::~fk_Ortho()
@@ -286,8 +271,8 @@ namespace FK_CLI
 
 		fk_Ortho::!fk_Ortho()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pProj;
+			pProj = NULL;
 		}
 
 		void setLeft(double argLeft)

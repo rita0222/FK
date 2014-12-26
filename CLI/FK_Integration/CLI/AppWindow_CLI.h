@@ -59,12 +59,14 @@ namespace FK_CLI
 		PRESS
 	};
 
-	public ref class fk_AppWindow : fk_BaseObject
+	public ref class fk_AppWindow
 	{
 	internal:
+		::fk_AppWindow *pWin;
+
 		::fk_AppWindow * GetP(void)
 		{
-			return reinterpret_cast<::fk_AppWindow *>(this->pBase);
+			return pWin;
 		}
 
 		::fk_SpecialKey GetSK(fk_SpecialKey argK)
@@ -194,18 +196,9 @@ namespace FK_CLI
 		}
 		
 	public:
-		fk_AppWindow::fk_AppWindow(bool argNewFlg) : fk_BaseObject(false)
+		fk_AppWindow::fk_AppWindow()
 		{
-			if(argNewFlg == true) {
-				::fk_AppWindow *p = new ::fk_AppWindow();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
-		}
-
-		fk_AppWindow::fk_AppWindow() : fk_BaseObject(false)
-		{
-			::fk_AppWindow *p = new ::fk_AppWindow();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pWin = new ::fk_AppWindow();
 		}
 
 		fk_AppWindow::~fk_AppWindow()
@@ -215,8 +208,8 @@ namespace FK_CLI
 
 		fk_AppWindow::!fk_AppWindow()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			delete pWin;
+			pWin = NULL;
 		}
 
 		void setWindowName(String^ argName)
@@ -332,7 +325,7 @@ namespace FK_CLI
 		fk_Model^ getCameraModel(void)
 		{
 			fk_Model^ M = gcnew fk_Model(false);
-			M->pBase = reinterpret_cast<::fk_Model *>(GetP()->getCameraModel());
+			M->pModel = (::fk_Model *)(GetP()->getCameraModel());
 			M->dFlg = false;
 			return M;
 		}
@@ -355,8 +348,7 @@ namespace FK_CLI
 		fk_Scene ^getScene(void)
 		{
 			fk_Scene ^S = gcnew fk_Scene(false);
-			S->pBase = reinterpret_cast<::fk_BaseObject *>(GetP()->getScene());
-			S->dFlg = false;
+			S->pScene = GetP()->getScene();
 			return S;
 		}
 		

@@ -16,16 +16,13 @@ namespace FK_CLI
 	internal:
 		::fk_Attribute * GetP(void)
 		{
-			return reinterpret_cast<::fk_Attribute *>(this->pBase);
+			return (::fk_Attribute *)(pBase);
 		}
 
 	public:
 		fk_Attribute::fk_Attribute(bool argNewFlg) : fk_BaseObject(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Attribute *p = new ::fk_Attribute();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pBase = new ::fk_Attribute();
 		}
 
 		fk_Attribute::~fk_Attribute()
@@ -35,8 +32,8 @@ namespace FK_CLI
 
 		fk_Attribute::!fk_Attribute()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pBase;
+			pBase = NULL;
 		}
 
 		bool setAttrII(int argKey, int argValue)

@@ -18,26 +18,22 @@ namespace FK_CLI
 		SPOT
 	};
 
-	public ref class fk_Light : fk_Shape {
+	public ref class fk_Light : FK_CLI::fk_Shape {
 	internal:
 		::fk_Light * GetP(void)
 		{
-			return reinterpret_cast<::fk_Light *>(this->pBase);
+			return (::fk_Light *)(this->pBase);
 		}
 
 	public:
 		fk_Light::fk_Light() : fk_Shape(false)
 		{
-			::fk_Light *p = new ::fk_Light();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			this->pBase = new ::fk_Light();
 		}
 
 		fk_Light::fk_Light(bool argNewFlg) : fk_Shape(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Light *p = new ::fk_Light();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) this->pBase = new ::fk_Light();
 		}
 
 		fk_Light::~fk_Light()

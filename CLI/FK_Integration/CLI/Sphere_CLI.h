@@ -11,32 +11,27 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public ref class fk_Sphere : fk_IndexFaceSet {
+	public ref class fk_Sphere : FK_CLI::fk_IndexFaceSet {
 	internal:
 		::fk_Sphere * GetP(void)
 		{
-			return reinterpret_cast<::fk_Sphere *>(this->pBase);
+			return (::fk_Sphere *)(pBase);
 		}
 
 	public:
 		fk_Sphere::fk_Sphere() : fk_IndexFaceSet(false)
 		{
-			::fk_Sphere *p = new ::fk_Sphere();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pBase = new ::fk_Sphere();
 		}
 
 		fk_Sphere::fk_Sphere(bool argNewFlg) : fk_IndexFaceSet(false)
 		{
-			if(argNewFlg == true) {
-				::fk_Sphere *p = new ::fk_Sphere();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pBase = new ::fk_Sphere();
 		}
 
 		fk_Sphere::fk_Sphere(int argDiv, double argRad) : fk_IndexFaceSet(false)
 		{
-			::fk_Sphere *p = new ::fk_Sphere(argDiv, argRad);
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pBase = new ::fk_Sphere(argDiv, argRad);
 		}
 
 		fk_Sphere::~fk_Sphere()
@@ -46,8 +41,8 @@ namespace FK_CLI
 
 		fk_Sphere::!fk_Sphere()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pBase;
+			pBase = NULL;
 		}
 
 		void setDivide(int argDiv)

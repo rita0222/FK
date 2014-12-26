@@ -522,7 +522,6 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	bool						lightFlag;
 
 	if(curDLink == NULL) return;
-	
 	lightFlag = DefineLight();
 
 	if(argPickFlg == true) modelArray.clear();

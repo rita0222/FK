@@ -72,8 +72,8 @@
 #include <FK/Light.h>
 
 fk_Light::fk_Light(fk_LightType argType)
-	: fk_Shape(FK_LIGHT)
 {
+	SetObjectType(FK_LIGHT);
 	setLightType(argType);
 	attenuation[0] = attenuation[1] = 0.0;
 	attenuation[2] = 1.0;

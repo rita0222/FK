@@ -37,27 +37,26 @@ namespace FK_CLI
 
 	::fk_StereoChannel GetStereo(FK_CLI::fk_StereoChannel);
 	
-	public ref class fk_Scene : fk_BaseObject
+	public ref class fk_Scene
 	{
 	internal:
+		bool dFlg;
+		::fk_Scene *pScene;
+
 		::fk_Scene * GetP(void)
 		{
-			return reinterpret_cast<::fk_Scene *>(this->pBase);
+			return pScene;
 		}
 
 	public:
-		fk_Scene::fk_Scene(bool argNewFlg) : fk_BaseObject(false)
+		fk_Scene::fk_Scene(bool argNewFlg) : dFlg(argNewFlg)
 		{
-			if(argNewFlg == true) {
-				::fk_Scene *p = new ::fk_Scene();
-				this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
-			}
+			if(argNewFlg == true) pScene = new ::fk_Scene();
 		}
 
-		fk_Scene::fk_Scene() : fk_BaseObject(false)
+		fk_Scene::fk_Scene() : dFlg(true)
 		{
-			::fk_Scene *p = new ::fk_Scene();
-			this->pBase = reinterpret_cast<::fk_BaseObject *>(p);
+			pScene = new ::fk_Scene();
 		}
 
 		fk_Scene::~fk_Scene()
@@ -67,8 +66,8 @@ namespace FK_CLI
 
 		fk_Scene::!fk_Scene()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(dFlg == true) delete pScene;
+			pScene = NULL;
 		}
 
 		// from fk_DisplayLink
@@ -115,9 +114,8 @@ namespace FK_CLI
 
 		fk_Model^ getCamera(void)
 		{
-			fk_Model^ M = gcnew fk_Model();
-			::fk_Model *pM = const_cast<::fk_Model *>(GetP()->getCamera());
-			M->pBase = reinterpret_cast<::fk_BaseObject *>(pM);
+			fk_Model^ M = gcnew fk_Model(false);
+			M->pModel = const_cast<::fk_Model *>(GetP()->getCamera());
 			M->dFlg = false;
 			return M;
 		}
