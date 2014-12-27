@@ -4,7 +4,6 @@
 
 #include <FK/Capsule.h>
 #include "IndexFace_CLI.h"
-#include "Vector_CLI.h"
 
 namespace FK_CLI
 {
