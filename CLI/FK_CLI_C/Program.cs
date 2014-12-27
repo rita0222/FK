@@ -11,7 +11,6 @@ namespace FK_CLI_C
 	{
 		static void Main(string[] args)
 		{
-
 			int i;
 
 			// ウィンドウ生成
@@ -41,10 +40,9 @@ namespace FK_CLI_C
 			pos[3] = -pos[1];
 			fk_Line[] line = new fk_Line[2];
 			fk_Model[] lineModel = new fk_Model[2];
-			for (i = 0; i < 2; i++)
-			{
+			for(i = 0; i < 2; i++) {
 				line[i] = new fk_Line();
-				line[i].pushLine(pos[2 * i], pos[2 * i + 1]);
+				line[i].pushLine(pos[2*i], pos[2*i + 1]);
 				lineModel[i] = new fk_Model();
 				lineModel[i].setShape(line[i]);
 				lineModel[i].setParent(blockModel);
@@ -64,15 +62,13 @@ namespace FK_CLI_C
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
-			for (i = 0; win.update() == true; i++)
-			{
+			for(i = 0; win.update() == true; i++) {
 				camera.glTranslate(0.0, 0.0, -1.0);
-				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
+				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
 				var cPos = camera.getPosition();
-				if (cPos.z < -FK.EPS) camera.glFocus(origin);
-				if (i >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
+				if(cPos.z < -FK.EPS) camera.glFocus(origin);
+				if(i >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
 			}
-
 		}
 	}
 }
