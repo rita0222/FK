@@ -213,6 +213,7 @@
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Base_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Block_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp" />
     <ClCompile Include="CLI\cpp\IndexFace_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Light_CLI.cpp" />
@@ -351,6 +352,7 @@
     <ClInclude Include="CLI\Attribute_CLI.h" />
     <ClInclude Include="CLI\Base_CLI.h" />
     <ClInclude Include="CLI\Block_CLI.h" />
+    <ClInclude Include="CLI\Capsule_CLI.h" />
     <ClInclude Include="CLI\GuideObject_CLI.h" />
     <ClInclude Include="CLI\IndexFace_CLI.h" />
     <ClInclude Include="CLI\Light_CLI.h" />
