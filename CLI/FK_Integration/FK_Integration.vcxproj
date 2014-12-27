@@ -221,6 +221,7 @@
     <ClCompile Include="CLI\cpp\Matrix_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Model_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Projection_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="CLI\Matrix_CLI.h" />
     <ClInclude Include="CLI\Model_CLI.h" />
     <ClInclude Include="CLI\Palette_CLI.h" />
+    <ClInclude Include="CLI\Point_CLI.h" />
     <ClInclude Include="CLI\Projection_CLI.h" />
     <ClInclude Include="CLI\Scene_CLI.h" />
     <ClInclude Include="CLI\Shape_CLI.h" />
