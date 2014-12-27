@@ -25,12 +25,12 @@ namespace FK_CLI
 	public:
 		fk_Vector::fk_Vector()
 		{
-			this->pVec = new ::fk_Vector();
+			pVec = new ::fk_Vector();
 		}
 
 		fk_Vector::fk_Vector(double argX, double argY, double argZ)
 		{
-			this->pVec = new ::fk_Vector(argX, argY, argZ);
+			pVec = new ::fk_Vector(argX, argY, argZ);
 		}
 
 		// デストラクタ
@@ -42,7 +42,7 @@ namespace FK_CLI
 		// ファイナライザ
 		fk_Vector::!fk_Vector()
 		{
-			delete this->pVec;
+			delete pVec;
 		}
 
 		property double	x
@@ -86,9 +86,9 @@ namespace FK_CLI
 		String^	fk_Vector::ToString() override
 		{
 			std::string	tmpBuf;
-			tmpBuf = "V: " + to_string(this->pVec->x) + ", ";
-			tmpBuf += to_string(this->pVec->y) + ", ";
-			tmpBuf += to_string(this->pVec->z);
+			tmpBuf = "V: " + to_string(pVec->x) + ", ";
+			tmpBuf += to_string(pVec->y) + ", ";
+			tmpBuf += to_string(pVec->z);
 			return gcnew String(tmpBuf.c_str());
 		}
 
@@ -96,7 +96,7 @@ namespace FK_CLI
 		bool Equals(fk_Vector^ argV)
 		{
 			if(!argV) false;
-			return (*argV->pVec == *this->pVec);
+			return (*argV->pVec == *pVec);
 		}
 
 		virtual bool Equals(Object^ argObj) override
@@ -105,7 +105,7 @@ namespace FK_CLI
 			if(this == argObj) return true;
 			if(GetType() == argObj->GetType()) {
 				fk_Vector^ V = static_cast<fk_Vector^>(argObj);
-				return (*V->pVec == *this->pVec);
+				return (*V->pVec == *pVec);
 			}
 			return false;
 		}
@@ -204,39 +204,39 @@ namespace FK_CLI
 		//////////////////// メンバ関数群
 		void set(double argX, double argY, double argZ)
 		{
-			this->pVec->set(argX, argY, argZ);
+			pVec->set(argX, argY, argZ);
 		}
 
 		void set(double argX, double argY)
 		{
-			this->pVec->set(argX, argY, 0.0);
+			pVec->set(argX, argY, 0.0);
 		}
 
 		double dist()
 		{
-			return this->pVec->dist();
+			return pVec->dist();
 		}
 		
 		double dist2()
 		{
-			return this->pVec->dist2();
+			return pVec->dist2();
 		}
 
 		bool normalize()
 		{
-			return this->pVec->normalize();
+			return pVec->normalize();
 		}
 
 		bool isZero()
 		{
-			return this->pVec->isZero();
+			return pVec->isZero();
 		}
 
 		fk_Vector^ proj(fk_Vector^ argV)
 		{
 			if(!argV) return nullptr;
 			fk_Vector^ V = gcnew fk_Vector();
-			*V->pVec = this->pVec->proj(*argV->pVec);
+			*V->pVec = pVec->proj(*argV->pVec);
 			return V;
 		}
 
@@ -244,7 +244,7 @@ namespace FK_CLI
 		{
 			if(!argV) return nullptr;
 			fk_Vector^ V = gcnew fk_Vector();
-			*V->pVec = this->pVec->perp(*argV->pVec);
+			*V->pVec = pVec->perp(*argV->pVec);
 			return V;
 		}
 	};
@@ -257,21 +257,21 @@ namespace FK_CLI
 		// コンストラクタ
 		fk_HVector()
 		{
-			this->pHVec = new ::fk_HVector();
+			pHVec = new ::fk_HVector();
 		}
 
 		fk_HVector(fk_Vector^ argV)
 		{
 			if(!argV) return;
-			this->pHVec = new ::fk_HVector();
-			this->pHVec->set(*argV->pVec, 1.0);
+			pHVec = new ::fk_HVector();
+			pHVec->set(*argV->pVec, 1.0);
 		}
 
 		fk_HVector(fk_Vector^ argV, double argW)
 		{
-			this->pHVec = new ::fk_HVector();
+			pHVec = new ::fk_HVector();
 			if(!argV) return;
-			this->pHVec->set(*argV->pVec, argW);
+			pHVec->set(*argV->pVec, argW);
 		}
 
 		// デストラクタ
@@ -283,17 +283,17 @@ namespace FK_CLI
 		// ファイナライザ
 		!fk_HVector()
 		{
-			delete this->pHVec;
+			delete pHVec;
 		}
 
 		// ToString追加
 		System::String^ ToString() override
 		{
 			std::string tmpBuf;
-			tmpBuf = "H: " + to_string(this->pHVec->x) + ", ";
-			tmpBuf += to_string(this->pHVec->y) + ", ";
-			tmpBuf += to_string(this->pHVec->z) + ", ";
-			tmpBuf += to_string(this->pHVec->w);
+			tmpBuf = "H: " + to_string(pHVec->x) + ", ";
+			tmpBuf += to_string(pHVec->y) + ", ";
+			tmpBuf += to_string(pHVec->z) + ", ";
+			tmpBuf += to_string(pHVec->w);
 			return gcnew System::String(tmpBuf.c_str());
 		}
 
@@ -377,7 +377,7 @@ namespace FK_CLI
 		bool Equals(fk_HVector^ argH)
 		{
 			if(argH == nullptr) false;
-			return (*argH->pHVec == *this->pHVec);
+			return (*argH->pHVec == *pHVec);
 		}
 		
 		virtual bool Equals(Object^ argObj) override
@@ -386,7 +386,7 @@ namespace FK_CLI
 			if(this == argObj) return true;
 			if(GetType() == argObj->GetType()) {
 				fk_HVector^ V = static_cast<fk_HVector^>(argObj);
-				return (*V->pHVec == *this->pHVec);
+				return (*V->pHVec == *pHVec);
 			}
 			return false;
 		}
@@ -394,50 +394,50 @@ namespace FK_CLI
 		void set(fk_Vector^ argV, double argW)
 		{
 			if(!argV) return;
-			this->pHVec->set(*(argV->pVec), argW);
+			pHVec->set(*(argV->pVec), argW);
 		}
 
 		void set(double argX, double argY, double argZ, double argW)
 		{
-			this->pHVec->set(argX, argY, argZ, argW);
+			pHVec->set(argX, argY, argZ, argW);
 		}
 
 		void set(double argX, double argY, double argZ)
 		{
-			this->pHVec->set(argX, argY, argZ, 1.0);
+			pHVec->set(argX, argY, argZ, 1.0);
 		}
 
 		void set(double argX, double argY)
 		{
-			this->pHVec->set(argX, argY, 0.0, 1.0);
+			pHVec->set(argX, argY, 0.0, 1.0);
 		}
 
 		void set(fk_Vector^ argV)
 		{
 			if(!argV) return;
-			this->pHVec->set(*argV->pVec);
+			pHVec->set(*argV->pVec);
 		}
 
 		fk_Vector^ getV(void)
 		{
 			fk_Vector^ V = gcnew fk_Vector();
-			V->pVec->set(this->pHVec->x, this->pHVec->y, this->pHVec->z);
+			V->pVec->set(pHVec->x, pHVec->y, pHVec->z);
 			return V;
 		}
 
 		void ispos(void)
 		{
-			this->pHVec->ispos();
+			pHVec->ispos();
 		}
 
 		void isvec(void)
 		{
-			this->pHVec->isvec();
+			pHVec->isvec();
 		}
 
 		void init(void)
 		{
-			this->pHVec->init();
+			pHVec->init();
 		}
 	};
 
@@ -447,7 +447,7 @@ namespace FK_CLI
 	public:
 		fk_FVector()
 		{
-			this->pFVec = new ::fk_FVector();
+			pFVec = new ::fk_FVector();
 		}
 
 		~fk_FVector()
@@ -457,7 +457,7 @@ namespace FK_CLI
 
 		!fk_FVector()
 		{
-			delete this->pFVec;
+			delete pFVec;
 		}
 
 		static operator fk_Vector^(fk_FVector^ argF)
@@ -477,9 +477,9 @@ namespace FK_CLI
 		System::String^ ToString() override
 		{
 			std::string tmpBuf;
-			tmpBuf = "F: " + to_string(this->pFVec->x) + ", ";
-			tmpBuf += to_string(this->pFVec->y) + ", ";
-			tmpBuf += to_string(this->pFVec->z);
+			tmpBuf = "F: " + to_string(pFVec->x) + ", ";
+			tmpBuf += to_string(pFVec->y) + ", ";
+			tmpBuf += to_string(pFVec->z);
 			return gcnew System::String(tmpBuf.c_str());
 		}
 	};
