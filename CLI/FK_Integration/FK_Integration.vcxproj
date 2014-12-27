@@ -225,6 +225,7 @@
     <ClCompile Include="CLI\cpp\Model_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Prism_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Projection_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp" />
@@ -367,6 +368,7 @@
     <ClInclude Include="CLI\Model_CLI.h" />
     <ClInclude Include="CLI\Palette_CLI.h" />
     <ClInclude Include="CLI\Point_CLI.h" />
+    <ClInclude Include="CLI\Polygon_CLI.h" />
     <ClInclude Include="CLI\Prism_CLI.h" />
     <ClInclude Include="CLI\Projection_CLI.h" />
     <ClInclude Include="CLI\Scene_CLI.h" />
