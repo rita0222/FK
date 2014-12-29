@@ -8,9 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_TriTexture : FK_CLI::fk_Texture {
 	internal:
 		::fk_TriTexture * GetP(void)
@@ -51,45 +48,12 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void init(void)
-		{
-			GetP()->init();
-		}
-
-		bool setTextureCoord(int argID, double argX, double argY)
-		{
-			return GetP()->setTextureCoord(argID, argX, argY);
-		}
-
-		bool setTextureCoord(int argID, fk_TexCoord^ argC)
-		{
-			if(!argC) return false;
-			return GetP()->setTextureCoord(argID, *argC->pTex);
-		}
-
-		fk_TexCoord^ getTextureCoord(int argID)
-		{
-			fk_TexCoord^ T = gcnew fk_TexCoord();
-			*T->pTex = GetP()->getTextureCoord(argID);
-			return T;
-		}
-
-		bool setVertexPos(int argID, double argX, double argY, double argZ)
-		{
-			return GetP()->setVertexPos(argID, argX, argY, argZ);
-		}
-		
-		bool setVertexPos(int argID, fk_Vector^ argP)
-		{
-			if(!argP) return false;
-			return GetP()->setVertexPos(argID, *argP->pVec);
-		}
-
-		fk_Vector^ getVertexPos(int argID)
-		{
-			fk_Vector^ V = gcnew fk_Vector();
-			*V->pVec = GetP()->getVertexPos(argID);
-			return V;
-		}
+		void init(void);
+		bool setTextureCoord(int ID, double x, double y);
+		bool setTextureCoord(int ID, fk_TexCoord^ color);
+		fk_TexCoord^ getTextureCoord(int ID);
+		bool setVertexPos(int ID, double x, double y, double z);
+		bool setVertexPos(int ID, fk_Vector^ pos);
+		fk_Vector^ getVertexPos(int ID);
 	};
 }

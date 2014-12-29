@@ -8,9 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Sphere : FK_CLI::fk_IndexFaceSet {
 	internal:
 		::fk_Sphere * GetP(void)
@@ -45,19 +42,8 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void setDivide(int argDiv)
-		{
-			GetP()->setDivide(argDiv);
-		}
-
-		void setRadius(double argRad)
-		{
-			GetP()->setRadius(argRad);
-		}
-
-		void setScale(double argScale)
-		{
-			GetP()->setScale(argScale);
-		}
+		void setDivide(int div);
+		void setRadius(double radius);
+		void setScale(double scale);
 	};
 }

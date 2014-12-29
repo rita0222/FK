@@ -8,10 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-	using namespace msclr::interop;
-
 	public enum class fk_TexMode {
 		MODULATE,
 		REPLACE,
@@ -122,135 +118,19 @@ namespace FK_CLI
 		{
 		}
 
-		void setImage(fk_Image^ argImage)
-		{
-			if(!argImage) return;
-			GetP()->setImage(argImage->GetP());
-		}
-
-		fk_Image^ getImage(void)
-		{
-			fk_Image^ I = gcnew fk_Image(false);
-			I->pBase = GetP()->getImage();
-			I->dFlg = false;
-			return I;
-		}
-
-		bool readBMP(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->readBMP(marshal_as<string>(argFileName));
-		}
-
-		bool readPNG(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->readPNG(marshal_as<string>(argFileName));
-		}
-
-		bool readJPG(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->readJPG(marshal_as<string>(argFileName));
-		}
-
-		fk_Dimension^ getImageSize(void)
-		{
-			fk_Dimension^ D = gcnew fk_Dimension();
-			*D->pDim = *GetP()->getImageSize();
-			return D;
-		}
-				
-		fk_Dimension^ getBufferSize(void)
-		{
-			fk_Dimension^ D = gcnew fk_Dimension();
-			*D->pDim = *GetP()->getBufferSize();
-			return D;
-		}
-			
-		void setTextureMode(fk_TexMode argMode)
-		{
-			switch(argMode) {
-			  case fk_TexMode::MODULATE:
-				GetP()->setTextureMode(FK_TEX_MODULATE);
-				break;
-
-			  case fk_TexMode::REPLACE:
-				GetP()->setTextureMode(FK_TEX_REPLACE);
-				break;
-				
-			  case fk_TexMode::DECAL:
-				GetP()->setTextureMode(FK_TEX_DECAL);
-				break;
-
-			  default:
-				break;
-			}
-		}
-				
-		fk_TexMode getTextureMode(void)
-		{
-			switch(GetP()->getTextureMode()) {
-			  case FK_TEX_MODULATE:
-				return fk_TexMode::MODULATE;
-
-			  case FK_TEX_REPLACE:
-				return fk_TexMode::REPLACE;
-
-			  case FK_TEX_DECAL:
-				return fk_TexMode::DECAL;
-
-			  default:
-				break;
-			}
-			return fk_TexMode::MODULATE;
-		}
-				
-		void setTexRendMode(fk_TexRendMode argMode)
-		{
-			switch(argMode) {
-			  case fk_TexRendMode::NORMAL:
-				GetP()->setTexRendMode(FK_TEX_REND_NORMAL);
-				break;
-
-			  case fk_TexRendMode::SMOOTH:
-				GetP()->setTexRendMode(FK_TEX_REND_SMOOTH);
-				break;
-
-			  default:
-				break;
-			}
-		}
-					
-		fk_TexRendMode getTexRendMode(void)
-		{
-			switch(GetP()->getTexRendMode()) {
-			  case FK_TEX_REND_NORMAL:
-				return fk_TexRendMode::NORMAL;
-
-			  case FK_TEX_REND_SMOOTH:
-				return fk_TexRendMode::SMOOTH;
-
-			  default:
-				break;
-			}
-			return fk_TexRendMode::NORMAL;
-		}
-
-		void fillColor(fk_Color^ argC)
-		{
-			if(!argC) return;
-			GetP()->fillColor(*argC->pCol);
-		}
-
-		void fillColor(int argR, int argG, int argB, int argA)
-		{
-			GetP()->fillColor(argR, argG, argB, argA);
-		}
-
-		void fillColor(int argR, int argG, int argB)
-		{
-			GetP()->fillColor(argR, argG, argB);
-		}
+		void setImage(fk_Image^ image);
+		fk_Image^ getImage(void);
+		bool readBMP(String^ fileName);
+		bool readPNG(String^ fileName);
+		bool readJPG(String^ fileName);
+		fk_Dimension^ getImageSize(void);
+		fk_Dimension^ getBufferSize(void);
+		void setTextureMode(fk_TexMode mode);
+		fk_TexMode getTextureMode(void);
+		void setTexRendMode(fk_TexRendMode mode);
+		fk_TexRendMode getTexRendMode(void);
+		void fillColor(fk_Color^ color);
+		void fillColor(int r, int g, int b, int a);
+		void fillColor(int r, int g, int b);
 	};
 }

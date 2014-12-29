@@ -7,9 +7,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_RectTexture : FK_CLI::fk_Texture {
 	internal:
 		::fk_RectTexture * GetP(void)
@@ -50,61 +47,15 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 		
-		void init(void)
-		{
-			GetP()->init();
-		}
-
-		bool setTextureSize(double argW, double argH)
-		{
-			return GetP()->setTextureSize(argW, argH);
-		}
-
-		fk_TexCoord^ getTextureSize(void)
-		{
-			fk_TexCoord^ T = gcnew fk_TexCoord();
-			*T->pTex = GetP()->getTextureSize();
-			return T;
-		}
-
-		void setRepeatMode(bool argMode)
-		{
-			GetP()->setRepeatMode(argMode);
-		}
-
-		bool getRepeatMode(void)
-		{
-			return GetP()->getRepeatMode();
-		}
-
-		void setRepeatParam(double argW, double argH)
-		{
-			GetP()->setRepeatParam(argW, argH);
-		}
-
-		fk_TexCoord^ getRepeatParam(void)
-		{
-			fk_TexCoord^ T = gcnew fk_TexCoord();
-			*T->pTex = GetP()->getRepeatParam();
-			return T;
-		}
-			
-		void setTextureCoord(double argSX, double argSY, double argEX, double argEY)
-		{
-			GetP()->setTextureCoord(argSX, argSY, argEX, argEY);
-		}
-
-		void setTextureCoord(fk_TexCoord^ argS, fk_TexCoord^ argE)
-		{
-			if(!argS || !argE) return;
-			GetP()->setTextureCoord(*argS->pTex, *argE->pTex);
-		}
-
-		fk_TexCoord^ getTextureCoord(int argID)
-		{
-			fk_TexCoord^ T = gcnew fk_TexCoord();
-			*T->pTex = GetP()->getTextureCoord(argID);
-			return T;
-		}
+		void init(void);
+		bool setTextureSize(double w, double h);
+		fk_TexCoord^ getTextureSize(void);
+		void setRepeatMode(bool mode);
+		bool getRepeatMode(void);
+		void setRepeatParam(double w, double h);
+		fk_TexCoord^ getRepeatParam(void);
+		void setTextureCoord(double startX, double startY, double endX, double endY);
+		void setTextureCoord(fk_TexCoord^ startT, fk_TexCoord^ endT);
+		fk_TexCoord^ getTextureCoord(int ID);
 	};
 }

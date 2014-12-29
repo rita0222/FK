@@ -8,9 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Line : FK_CLI::fk_Shape {
 	internal:
 		::fk_Line * GetP(void)
@@ -40,48 +37,11 @@ namespace FK_CLI
 			this->pBase = NULL;
 		}
 
-		void pushLine(array<fk_Vector^>^ argArray)
-		{
-			if(!argArray) return;
-			vector<::fk_Vector> vArray(argArray->Length);
-			for(int i = 0; i < argArray->Length; i++) {
-				vArray[i] = *(argArray[i]->pVec);
-			}
-			GetP()->pushLine(&vArray[0]);
-		}
-
-		void pushLine(fk_Vector^ argS, fk_Vector^ argE)
-		{
-			if(!argS || !argE) return;
-			GetP()->pushLine(*argS->pVec, *argE->pVec);
-		}
-
-		bool changeLine(int argLineID, fk_Vector^ argS, fk_Vector^ argE)
-		{
-			if(!argS || !argE) return false;
-			return GetP()->changeLine(argLineID, *argS->pVec, *argE->pVec);
-		}
-
-		bool setVertex(int argVID, fk_Vector^ argPos)
-		{
-			if(!argPos) return false;
-			return GetP()->setVertex(argVID, *argPos->pVec);
-		}
-
-		bool setVertex(int argLID, int argVID, fk_Vector^ argPos)
-		{
-			if(!argPos) return false;
-			return GetP()->setVertex(argLID, argVID, *argPos->pVec);
-		}
-
-		void setVertex(array<fk_Vector^>^ argArray)
-		{
-			if(!argArray) return;
-			vector<::fk_Vector> vArray(argArray->Length);
-			for(int i = 0; i < argArray->Length; i++) {
-				vArray[i] = *argArray[i]->pVec;
-			}
-			GetP()->setVertex(&vArray);
-		}
+		void pushLine(array<fk_Vector^>^ array);
+		void pushLine(fk_Vector^ startPos, fk_Vector^ endPos);
+		bool changeLine(int lineID, fk_Vector^ startPos, fk_Vector^ endPos);
+		bool setVertex(int vertexID, fk_Vector^ pos);
+		bool setVertex(int lineID, int vertexID, fk_Vector^ pos);
+		void setVertex(array<fk_Vector^>^ array);
 	};
 }

@@ -9,9 +9,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	ref class fk_Vertex;
 	ref class fk_Edge;
 	ref class fk_Loop;

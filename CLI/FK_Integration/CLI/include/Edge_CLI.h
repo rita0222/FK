@@ -7,9 +7,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	ref class fk_Half;
 	
 	public ref class fk_Edge : FK_CLI::fk_TopologyMaterial {

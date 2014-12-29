@@ -7,9 +7,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Prism : FK_CLI::fk_IndexFaceSet {
 	internal:
 		::fk_Prism * GetP(void)
@@ -48,24 +45,9 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void setDivide(int argDiv)
-		{
-			GetP()->setDivide(argDiv);
-		}
-
-		void setTopRadius(double argRad)
-		{
-			GetP()->setTopRadius(argRad);
-		}
-
-		void setBottomRadius(double argRad)
-		{
-			GetP()->setBottomRadius(argRad);
-		}
-		
-		void setHeight(double argHeight)
-		{
-			GetP()->setHeight(argHeight);
-		}			
+		void setDivide(int div);
+		void setTopRadius(double radius);
+		void setBottomRadius(double radius);
+		void setHeight(double height);
 	};
 }

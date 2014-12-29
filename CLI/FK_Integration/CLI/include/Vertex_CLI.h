@@ -7,8 +7,6 @@
 #include "Vector_CLI.h"
 
 namespace FK_CLI {
-	using namespace std;
-	using namespace System;
 
 	ref class fk_Half;
 

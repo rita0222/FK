@@ -8,9 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Polygon : FK_CLI::fk_Shape {
 	internal:
 		::fk_Polygon * GetP(void)
@@ -49,27 +46,9 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void pushVertex(fk_Vector^ argPos)
-		{
-			if(!argPos) return;
-			GetP()->pushVertex(*argPos->pVec);
-		}
-
-		void setVertex(int argID, fk_Vector^ argPos)
-		{
-			if(!argPos) return;
-			GetP()->setVertex(argID, *argPos->pVec);
-		}
-
-		void setVertex(array<fk_Vector^>^ argArray)
-		{
-			if(!argArray) return;
-			vector<::fk_Vector> vArray(argArray->Length);
-			for(int i = 0; i < argArray->Length; i++) {
-				vArray[i] = *(argArray[i]->pVec);
-			}
-			GetP()->setVertex(&vArray);
-		}
+		void pushVertex(fk_Vector^ pos);
+		void setVertex(int ID, fk_Vector^ pos);
+		void setVertex(array<fk_Vector^>^ array);
 	};
 
 	public ref class fk_Polyline : FK_CLI::fk_Shape {
@@ -109,29 +88,10 @@ namespace FK_CLI
 			if(dFlg == true) delete pBase;
 			pBase = NULL;
 		}
-
 	
-		void pushVertex(fk_Vector^ argPos)
-		{
-			if(!argPos) return;
-			GetP()->pushVertex(*argPos->pVec);
-		}
-
-		void setVertex(int argID, fk_Vector^ argPos)
-		{
-			if(!argPos) return;
-			GetP()->setVertex(argID, *argPos->pVec);
-		}
-
-		void setVertex(array<fk_Vector^>^ argArray)
-		{
-			if(!argArray) return;
-			vector<::fk_Vector> vArray(argArray->Length);
-			for(int i = 0; i < argArray->Length; i++) {
-				vArray[i] = *(argArray[i]->pVec);
-			}
-			GetP()->setVertex(&vArray);
-		}
+		void pushVertex(fk_Vector^ pos);
+		void setVertex(int argID, fk_Vector^ pos);
+		void setVertex(array<fk_Vector^>^ array);
 	};
 
 	public ref class fk_Closedline : FK_CLI::fk_Polygon {

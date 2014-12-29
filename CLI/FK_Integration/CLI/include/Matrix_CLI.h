@@ -2,14 +2,10 @@
 
 #pragma once
 
-#include <string>
-#include "Vector_CLI.h"
 #include <FK/Matrix.h>
+#include "Vector_CLI.h"
 
 namespace FK_CLI {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Angle {
 	internal:
 	    ::fk_Angle *pAngle;
@@ -101,22 +97,6 @@ namespace FK_CLI {
 			}
 		}
 
-		String^	fk_Matrix::ToString() override
-		{
-			std::string	tmpBuf;
-			int i, j;
-
-			tmpBuf = "M: \n";
-			for(i = 0; i < 4; i++) {
-				for(j = 0; j < 3; j++) {
-					tmpBuf += to_string((*pMatrix)[i][j]) + ", ";
-				}
-				tmpBuf += to_string((*pMatrix)[i][3]) + "\n";
-			}
-
-			return gcnew String(tmpBuf.c_str());
-		}
-
 		//////////////////// 比較演算子		
 		bool Equals(fk_Matrix^ argM)
 		{
@@ -137,50 +117,50 @@ namespace FK_CLI {
 
 		static fk_HVector^ operator*(fk_Matrix^ argM, fk_HVector^ argV)
 		{
-			if(!argM || !argV) return nullptr;
-			fk_HVector^ V = gcnew fk_HVector();
-			*V->pHVec = *argM->pMatrix * *argV->pHVec;
-			return V;
+				if(!argM || !argV) return nullptr;
+				fk_HVector^ V = gcnew fk_HVector();
+				*V->pHVec = *argM->pMatrix * *argV->pHVec;
+				return V;
 		}
 
 		static fk_Matrix^ operator*(fk_Matrix^ argM1, fk_Matrix^ argM2)
 		{
-			if(!argM1 || !argM2) return nullptr;
-			fk_Matrix^ M = gcnew fk_Matrix();
-			*M->pMatrix = (*argM1->pMatrix) * (*argM2->pMatrix);
-			return M;
+				if(!argM1 || !argM2) return nullptr;
+				fk_Matrix^ M = gcnew fk_Matrix();
+				*M->pMatrix = (*argM1->pMatrix) * (*argM2->pMatrix);
+				return M;
 		}
 
 		static fk_Matrix^ operator*(double argD, fk_Matrix^ argM)
 		{
-			if(!argM) return nullptr;
-			fk_Matrix^ M = gcnew fk_Matrix();
-			*M->pMatrix = argD * (*argM->pMatrix);
-			return M;
+				if(!argM) return nullptr;
+				fk_Matrix^ M = gcnew fk_Matrix();
+				*M->pMatrix = argD * (*argM->pMatrix);
+				return M;
 		}
 
 		static fk_Matrix^ operator*(fk_Matrix^ argM, double argD)
 		{
-			if(!argM) return nullptr;
-			fk_Matrix^ M = gcnew fk_Matrix();
-			*M->pMatrix = (*argM->pMatrix) * argD;
-			return M;
+				if(!argM) return nullptr;
+				fk_Matrix^ M = gcnew fk_Matrix();
+				*M->pMatrix = (*argM->pMatrix) * argD;
+				return M;
 		}
 
 		static fk_Matrix^ operator-(fk_Matrix^ argM1, fk_Matrix^ argM2)
 		{
-			if(!argM1 || !argM2) return nullptr;
-			fk_Matrix^ M = gcnew fk_Matrix();
-			*M->pMatrix = (*argM1->pMatrix) - (*argM2->pMatrix);
-			return M;
+				if(!argM1 || !argM2) return nullptr;
+				fk_Matrix^ M = gcnew fk_Matrix();
+				*M->pMatrix = (*argM1->pMatrix) - (*argM2->pMatrix);
+				return M;
 		}
 
 		static fk_Matrix^ operator+(fk_Matrix^ argM1, fk_Matrix^ argM2)
 		{
-			if(!argM1 || !argM2) return nullptr;
-			fk_Matrix^ M = gcnew fk_Matrix();
-			*M->pMatrix = (*argM1->pMatrix) + (*argM2->pMatrix);
-			return M;
+				if(!argM1 || !argM2) return nullptr;
+				fk_Matrix^ M = gcnew fk_Matrix();
+				*M->pMatrix = (*argM1->pMatrix) + (*argM2->pMatrix);
+				return M;
 		}
 
 		static void operator +=(fk_Matrix^ argM1, fk_Matrix^ argM2)
@@ -201,105 +181,25 @@ namespace FK_CLI {
 			*argM1->pMatrix *= *argM2->pMatrix;
 		}
 
-		void init()
-		{
-			this->pMatrix->init();
-		}
+		String^	fk_Matrix::ToString() override;
 
-		void set(int argRow, int argCol, double argValue)
-		{
-			this->pMatrix->set(argRow, argCol, argValue);
-		}
-
-		void setRow(int argRow, fk_Vector^ argV)
-		{
-			if(!argV) return;
-			this->pMatrix->setRow(argRow, *argV->pVec);
-		}
-
-		void setRow(int argRow, fk_HVector^ argV)
-		{
-			if(!argV) return;
-			this->pMatrix->setRow(argRow, *argV->pHVec);
-		}
-		
-		void setCol(int argCol, fk_Vector^ argV)
-		{
-			if(!argV) return;
-			this->pMatrix->setCol(argCol, *argV->pVec);
-		}
-
-		void setCol(int argCol, fk_HVector^ argV)
-		{
-			if(!argV) return;
-			this->pMatrix->setCol(argCol, *argV->pHVec);
-		}
-
-		fk_HVector^ getRow(int argRow)
-		{
-			fk_HVector^ V = gcnew fk_HVector();
-			*V->pHVec = this->pMatrix->getRow(argRow);
-			return V;
-		}
-
-		fk_HVector^ getCol(int argCol)
-		{
-			fk_HVector^ V = gcnew fk_HVector();
-			*V->pHVec = this->pMatrix->getCol(argCol);
-			return V;
-		}
-
-		bool inverse()
-		{
-			return this->pMatrix->inverse();
-		}
-
-		void negate()
-		{
-			this->pMatrix->negate();
-		}
-
-		void makeRot(double argR, fk_Axis argAxis)
-		{
-			this->pMatrix->makeRot(argR, GetAxis(argAxis));
-		}
-
-		void makeTrans(fk_Vector^ argV)
-		{
-			if(!argV) return;
-			this->pMatrix->makeTrans(*argV->pVec);
-		}
-
-		void makeEuler(double argH, double argP, double argB)
-		{
-			this->pMatrix->makeEuler(argH, argP, argB);
-		}
-
-		void makeEuler(fk_Angle^ argA)
-		{
-			if(!argA) return;
-			this->pMatrix->makeEuler(*argA->pAngle);
-		}
-
-		bool isRegular()
-		{
-			return this->pMatrix->isRegular();
-		}
-
-		bool isSingular()
-		{
-			return this->pMatrix->isSingular();
-		}
-
-		void makeScale(double argX, double argY, double argZ)
-		{
-			this->pMatrix->makeScale(argX, argY, argZ);
-		}
-
-		void makeScale(fk_Vector^ argV)
-		{
-			if(!argV) return;
-			this->pMatrix->makeScale(*argV->pVec);
-		}
+		void init();
+		void set(int row, int col, double value);
+		void setRow(int row, fk_Vector^ vec);
+		void setRow(int row, fk_HVector^ vec);
+		void setCol(int col, fk_Vector^ vec);
+		void setCol(int col, fk_HVector^ vec);
+		fk_HVector^ getRow(int row);
+		fk_HVector^ getCol(int col);
+		bool inverse();
+		void negate();
+		void makeRot(double theta, fk_Axis axis);
+		void makeTrans(fk_Vector^ vec);
+		void makeEuler(double head, double pitch, double bank);
+		void makeEuler(fk_Angle^ angle);
+		bool isRegular();
+		bool isSingular();
+		void makeScale(double x, double y, double z);
+		void makeScale(fk_Vector^ scaleVec);
 	};
 }

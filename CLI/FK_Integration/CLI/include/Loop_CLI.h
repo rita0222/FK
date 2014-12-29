@@ -8,9 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	ref class fk_Half;
 	
 	public ref class fk_Loop : FK_CLI::fk_TopologyMaterial {

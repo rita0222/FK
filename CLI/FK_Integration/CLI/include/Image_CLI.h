@@ -8,10 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-	using namespace msclr::interop;
-	
 	public enum class fk_ImageStatus {
 		OK,
 		OPENERROR,
@@ -105,18 +101,8 @@ namespace FK_CLI
 			}
 		}
 
-		String^	ToString() override
-		{
-			std::string	tmpBuf;
-			tmpBuf = "DIM: " + to_string(pDim->w) + ", ";
-			tmpBuf += to_string(pDim->h);
-			return gcnew String(tmpBuf.c_str());
-		}
-
-		void set(int argW, int argH)
-		{
-			GetP()->set(argW, argH);
-		}
+		String^	ToString() override;
+		void set(int w, int g);
 	};
 
 	public ref class fk_Rect {
@@ -199,38 +185,11 @@ namespace FK_CLI
 			}
 		}
 
-		String^	ToString() override
-		{
-			std::string	tmpBuf;
-			tmpBuf = "RECT: ";
-			tmpBuf += to_string(pRect->x) + ", ";
-			tmpBuf += to_string(pRect->y) + ", ";
-			tmpBuf += to_string(pRect->w) + ", ";
-			tmpBuf += to_string(pRect->h);
-			return gcnew String(tmpBuf.c_str());
-		}
-
-		void set(int argX, int argY, int argW, int argH)
-		{
-			GetP()->set(argX, argY, argW, argH);
-		}
-
-		void setPos(int argX, int argY)
-		{
-			GetP()->setPos(argX, argY);
-		}
-
-		void setSize(int argW, int argH)
-		{
-			GetP()->setSize(argW, argH);
-		}
-
-		fk_Dimension^ getSize(void)
-		{
-			fk_Dimension^ D = gcnew fk_Dimension();
-			*D->pDim = GetP()->getSize();
-			return D;
-		}
+		String^	ToString() override;
+		void set(int argX, int argY, int argW, int argH);
+		void setPos(int argX, int argY);
+		void setSize(int argW, int argH);
+		fk_Dimension^ getSize(void);
 	};
 
 	public ref class fk_Image : FK_CLI::fk_BaseObject {
@@ -269,193 +228,39 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void init(void)
-		{
-			GetP()->init();
-		}
-
-		bool readBMP(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->readBMP(marshal_as<string>(argFileName));
-		}
-
-		bool readPNG(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->readPNG(marshal_as<string>(argFileName));
-		}
-
-		bool readJPG(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->readJPG(marshal_as<string>(argFileName));
-		}
-
-		bool writeBMP(String^ argFileName, bool argTransFlg)
-		{
-			if(!argFileName) return false;
-			return GetP()->writeBMP(marshal_as<string>(argFileName), argTransFlg);
-		}
-
-		bool writeBMP(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->writeBMP(marshal_as<string>(argFileName), false);
-		}
-
-		bool writePNG(String^ argFileName, bool argTransFlg)
-		{
-			if(!argFileName) return false;
-			return GetP()->writePNG(marshal_as<string>(argFileName), argTransFlg);
-		}
-
-		bool writePNG(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->writePNG(marshal_as<string>(argFileName), true);
-		}
-
-		bool writeJPG(String^ argFileName, int argQuality)
-		{
-			if(!argFileName) return false;
-			return GetP()->writeJPG(marshal_as<string>(argFileName), argQuality);
-		}
-
-		bool writeJPG(String^ argFileName)
-		{
-			if(!argFileName) return false;
-			return GetP()->writeJPG(marshal_as<string>(argFileName), 80);
-		}
-
-		void newImage(int argW, int argH, bool argInitFlg)
-		{
-			GetP()->newImage(argW, argH, argInitFlg);
-		}
-
-		void newImage(int argW, int argH)
-		{
-			GetP()->newImage(argW, argH, true);
-		}
-
-		void copyImage(fk_Image^ argImage)
-		{
-			if(!argImage) return;
-			GetP()->copyImage(argImage->GetP());
-		}
-
-		void copyImage(fk_Image^ argImage, int argX, int argY)
-		{
-			if(!argImage) return;
-			GetP()->copyImage(argImage->GetP(), argX, argY);
-		}
-
-		bool subImage(fk_Image^ argImage, int argX, int argY, int argW, int argH)
-		{
-			if(!argImage) return false;
-			return GetP()->subImage(argImage->GetP(), argX, argY, argW, argH);
-		}
-		
-		int	getWidth(void)
-		{
-			return GetP()->getWidth();
-		}
-
-		int getHeight(void)
-		{
-			return GetP()->getHeight();
-		}
-		
-		fk_Dimension^ getImageSize(void)
-		{
-			fk_Dimension^ D = gcnew fk_Dimension();
-			*D->pDim = *(GetP()->getImageSize());
-			return D;
-		}
-				
-		fk_Dimension^ getBufferSize(void)
-		{
-			fk_Dimension^ D = gcnew fk_Dimension();
-			*D->pDim = *(GetP()->getBufferSize());
-			return D;
-		}
-				
-		int	getR(int argX, int argY)
-		{
-			return GetP()->getR(argX, argY);
-		}
-
-		int getG(int argX, int argY)
-		{
-			return GetP()->getG(argX, argY);
-		}
-
-		int getB(int argX, int argY)
-		{
-			return GetP()->getB(argX, argY);
-		}
-		int getA(int argX, int argY)
-		{
-			return GetP()->getA(argX, argY);
-		}
-
-		fk_Color^ getColor(int argX, int argY)
-		{
-			fk_Color^ C = gcnew fk_Color();
-			*C->pCol = GetP()->getColor(argX, argY);
-			return C;
-		}
-
-		bool setRGBA(int argX, int argY, int argR, int argG, int argB, int argA)
-		{
-			return GetP()->setRGBA(argX, argY, argR, argG, argB, argA);
-		}
-
-		bool setRGB(int argX, int argY, int argR, int argG, int argB)
-		{
-			return GetP()->setRGB(argX, argY, argR, argG, argB);
-		}
-
-		bool setR(int argX, int argY, int argR)
-		{
-			return GetP()->setR(argX, argY, argR);
-		}
-
-		bool setG(int argX, int argY, int argG)
-		{
-			return GetP()->setG(argX, argY, argG);
-		}
-
-		bool setB(int argX, int argY, int argB)
-		{
-			return GetP()->setB(argX, argY, argB);
-		}
-
-		bool setA(int argX, int argY, int argA)
-		{
-			return GetP()->setA(argX, argY, argA);
-		}
-
-		bool setColor(int argX, int argY, fk_Color^ argC)
-		{
-			if(!argC) return false;
-			return GetP()->setColor(argX, argY, *(argC->pCol));
-		}
-
-		void fillColor(fk_Color^ argC)
-		{
-			if(!argC) return;
-			GetP()->fillColor(*argC->pCol);
-		}
-
-		void fillColor(int argR, int argG, int argB, int argA)
-		{
-			GetP()->fillColor(argR, argG, argB, argA);
-		}
-		
-		void fillColor(int argR, int argG, int argB)
-		{
-			GetP()->fillColor(argR, argG, argB);
-		}
+		void init(void);
+		bool readBMP(String^ fileName);
+		bool readPNG(String^ fileName);
+		bool readJPG(String^ fileName);
+		bool writeBMP(String^ fileName, bool transFlg);
+		bool writeBMP(String^ fileName);
+		bool writePNG(String^ fileName, bool transFlg);
+		bool writePNG(String^ fileName);
+		bool writeJPG(String^ fileName, int quality);
+		bool writeJPG(String^ fileName);
+		void newImage(int w, int h, bool InitFlg);
+		void newImage(int w, int h);
+		void copyImage(fk_Image^ Image);
+		void copyImage(fk_Image^ Image, int x, int y);
+		bool subImage(fk_Image^ Image, int x, int y, int w, int h);
+		int	getWidth(void);
+		int getHeight(void);
+		fk_Dimension^ getImageSize(void);
+		fk_Dimension^ getBufferSize(void);
+		int	getR(int x, int y);
+		int getG(int x, int y);
+		int getB(int x, int y);
+		int getA(int x, int y);
+		fk_Color^ getColor(int x, int y);
+		bool setRGBA(int x, int y, int r, int g, int b, int a);
+		bool setRGB(int x, int y, int r, int g, int b);
+		bool setR(int x, int y, int r);
+		bool setG(int x, int y, int g);
+		bool setB(int x, int y, int b);
+		bool setA(int x, int y, int a);
+		bool setColor(int x, int y, fk_Color^ color);
+		void fillColor(fk_Color^ color);
+		void fillColor(int r, int g, int b, int a);
+		void fillColor(int r, int g, int b);
 	};
 }

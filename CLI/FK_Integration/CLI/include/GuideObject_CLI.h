@@ -8,9 +8,6 @@
 #include "Scene_CLI.h"
 
 namespace FK_CLI {
-	using namespace std;
-	using namespace System;
-
 	public enum class fk_GuideMode : int {
 		NO_GUIDE = 0x0000,
 		AXIS_X   = 0x0001,
@@ -57,34 +54,11 @@ namespace FK_CLI {
 			pGuide = NULL;
 		}
 
-		void setAxisWidth(double argWidth)
-		{
-			GetP()->setAxisWidth(argWidth);
-		}
-
-		void setGridWidth(double argWidth)
-		{
-			GetP()->setGridWidth(argWidth);
-		}
-
-		void setScale(double argScale)
-		{
-			GetP()->setScale(argScale);
-		}
-
-		void setNum(int argNum)
-		{
-			GetP()->setNum(argNum);
-		}
-		
-		void entryScene(fk_Scene ^argS, fk_GuideMode argMode)
-		{
-			GetP()->entryScene(argS->GetP(), int(argMode));
-		}
-		
-		void removeScene(fk_Scene ^argS)
-		{	
-			GetP()->removeScene(argS->GetP());
-		}
+		void setAxisWidth(double width);
+		void setGridWidth(double width);
+		void setScale(double scale);
+		void setNum(int num);
+		void entryScene(fk_Scene^ scene, fk_GuideMode mode);
+		void removeScene(fk_Scene^ scene);
 	};
 }

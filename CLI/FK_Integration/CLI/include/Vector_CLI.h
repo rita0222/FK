@@ -7,7 +7,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
 	using namespace System;
 
 	public enum	class fk_Axis {
@@ -78,15 +77,6 @@ namespace FK_CLI
 			{
 				pVec->z = value;
 			}
-		}
-
-		String^	fk_Vector::ToString() override
-		{
-			std::string	tmpBuf;
-			tmpBuf = "V: " + to_string(pVec->x) + ", ";
-			tmpBuf += to_string(pVec->y) + ", ";
-			tmpBuf += to_string(pVec->z);
-			return gcnew String(tmpBuf.c_str());
 		}
 
 		//////////////////// 比較演算子		
@@ -199,51 +189,15 @@ namespace FK_CLI
 
 
 		//////////////////// メンバ関数群
-		void set(double argX, double argY, double argZ)
-		{
-			pVec->set(argX, argY, argZ);
-		}
-
-		void set(double argX, double argY)
-		{
-			pVec->set(argX, argY, 0.0);
-		}
-
-		double dist()
-		{
-			return pVec->dist();
-		}
-		
-		double dist2()
-		{
-			return pVec->dist2();
-		}
-
-		bool normalize()
-		{
-			return pVec->normalize();
-		}
-
-		bool isZero()
-		{
-			return pVec->isZero();
-		}
-
-		fk_Vector^ proj(fk_Vector^ argV)
-		{
-			if(!argV) return nullptr;
-			fk_Vector^ V = gcnew fk_Vector();
-			*V->pVec = pVec->proj(*argV->pVec);
-			return V;
-		}
-
-		fk_Vector^ perp(fk_Vector^ argV)
-		{
-			if(!argV) return nullptr;
-			fk_Vector^ V = gcnew fk_Vector();
-			*V->pVec = pVec->perp(*argV->pVec);
-			return V;
-		}
+		String^	fk_Vector::ToString() override;
+		void set(double x, double y, double z);
+		void set(double x, double y);
+		double dist();
+		double dist2();
+		bool normalize();
+		bool isZero();
+		fk_Vector^ proj(fk_Vector^ V);
+		fk_Vector^ perp(fk_Vector^ V);
 	};
 
 	public ref class fk_HVector {
@@ -281,17 +235,6 @@ namespace FK_CLI
 		!fk_HVector()
 		{
 			delete pHVec;
-		}
-
-		// ToString追加
-		System::String^ ToString() override
-		{
-			std::string tmpBuf;
-			tmpBuf = "H: " + to_string(pHVec->x) + ", ";
-			tmpBuf += to_string(pHVec->y) + ", ";
-			tmpBuf += to_string(pHVec->z) + ", ";
-			tmpBuf += to_string(pHVec->w);
-			return gcnew System::String(tmpBuf.c_str());
 		}
 
 		// プロパティ一覧
@@ -384,54 +327,17 @@ namespace FK_CLI
 			return false;
 		}
 
-		void set(fk_Vector^ argV, double argW)
-		{
-			if(!argV) return;
-			pHVec->set(*(argV->pVec), argW);
-		}
+		String^ ToString() override;
 
-		void set(double argX, double argY, double argZ, double argW)
-		{
-			pHVec->set(argX, argY, argZ, argW);
-		}
-
-		void set(double argX, double argY, double argZ)
-		{
-			pHVec->set(argX, argY, argZ, 1.0);
-		}
-
-		void set(double argX, double argY)
-		{
-			pHVec->set(argX, argY, 0.0, 1.0);
-		}
-
-		void set(fk_Vector^ argV)
-		{
-			if(!argV) return;
-			pHVec->set(*argV->pVec);
-		}
-
-		fk_Vector^ getV(void)
-		{
-			fk_Vector^ V = gcnew fk_Vector();
-			V->pVec->set(pHVec->x, pHVec->y, pHVec->z);
-			return V;
-		}
-
-		void ispos(void)
-		{
-			pHVec->ispos();
-		}
-
-		void isvec(void)
-		{
-			pHVec->isvec();
-		}
-
-		void init(void)
-		{
-			pHVec->init();
-		}
+		void set(fk_Vector^ V, double w);
+		void set(double x, double y, double z, double w);
+		void set(double x, double y, double z);
+		void set(double x, double y);
+		void set(fk_Vector^ V);
+		fk_Vector^ getV(void);
+		void ispos(void);
+		void isvec(void);
+		void init(void);
 	};
 
 	public ref class fk_FVector {
@@ -465,15 +371,6 @@ namespace FK_CLI
 			fk_FVector^ F = gcnew fk_FVector();
 			*(F->pFVec) = *(argV->pVec);
 			return F;
-		}
-
-		System::String^ ToString() override
-		{
-			std::string tmpBuf;
-			tmpBuf = "F: " + to_string(pFVec->x) + ", ";
-			tmpBuf += to_string(pFVec->y) + ", ";
-			tmpBuf += to_string(pFVec->z);
-			return gcnew System::String(tmpBuf.c_str());
 		}
 
 		property float x {
@@ -511,5 +408,6 @@ namespace FK_CLI
 				pFVec->z = argZ;
 			}
 		}
+		String^ ToString() override;
 	};
 }

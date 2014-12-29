@@ -7,9 +7,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Cone : FK_CLI::fk_IndexFaceSet {
 	internal:
 		::fk_Cone * GetP(void)
@@ -48,19 +45,8 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void setDivide(int argDiv)
-		{
-			GetP()->setDivide(argDiv);
-		}
-
-		void setRadius(double argRad)
-		{
-			GetP()->setRadius(argRad);
-		}
-
-		void setHeight(double argHeight)
-		{
-			GetP()->setHeight(argHeight);
-		}
+		void setDivide(int dniv);
+		void setRadius(double radius);
+		void setHeight(double height);
 	};
 }

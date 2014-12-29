@@ -8,9 +8,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public ref class fk_Block : FK_CLI::fk_IndexFaceSet {
 	internal:
 		::fk_Block * GetP(void)
@@ -48,29 +45,10 @@ namespace FK_CLI
 			pBase = NULL;
 		}
 
-		void setSize(double argX, double argY, double argZ)
-		{
-			GetP()->setSize(argX, argY, argZ);
-		}
-
-		void setSize(double argLength, FK_CLI::fk_Axis argAxis)
-		{
-			GetP()->setSize(argLength, GetAxis(argAxis));
-		}
-						 
-		void setScale(double argScale)
-		{
-			GetP()->setScale(argScale);
-		}
-
-		void setScale(double argScale, fk_Axis argAxis)
-		{
-			GetP()->setScale(argScale, GetAxis(argAxis));
-		}
-		
-		void setScale(double argX, double argY, double argZ)
-		{
-			GetP()->setScale(argX, argY, argZ);
-		}
+		void setSize(double x, double y, double z);
+		void setSize(double length, fk_Axis axis);
+		void setScale(double scale);
+		void setScale(double scale, fk_Axis axis);
+		void setScale(double x, double y, double z);
 	};
 }

@@ -3,11 +3,8 @@
 #pragma once
 
 #include <FK/Base.h>
-#include <msclr/marshal_cppstd.h>
-
 
 namespace FK_CLI {
-	using namespace std;
 	using namespace System;
 
 	public ref class FK {
@@ -80,7 +77,6 @@ namespace FK_CLI {
 			if(argNewFlg == true) pBase = NULL;
 		}
 		
-
 		fk_BaseObject::~fk_BaseObject()
 		{
 			this->!fk_BaseObject();

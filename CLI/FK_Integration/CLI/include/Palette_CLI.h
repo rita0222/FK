@@ -7,9 +7,6 @@
 
 namespace FK_CLI
 {
-	using namespace std;
-	using namespace System;
-
 	public enum class fk_MaterialMode : int {
 		NONE = 0,
 		CHILD = 1,
@@ -48,57 +45,13 @@ namespace FK_CLI
 			pPalette = NULL;
 		}
 
-		void clearMaterial(void)
-		{
-			GetP()->clearMaterial();
-		}
-
-		void setObjMaterialID(int argID)
-		{
-			GetP()->setObjMaterialID(argID);
-		}
-
-		void pushPalette(fk_Material^ argMat)
-		{
-			if(!argMat) return;
-
-			GetP()->pushPalette(argMat->pMat);
-		}
-
-		void setPalette(fk_Material^ argMat, int argID)
-		{
-			if(!argMat) return;
-			GetP()->setPalette(argMat->pMat, argID);
-		}
-
-		int getObjMaterialID(void)
-		{
-			return GetP()->getObjMaterialID();
-		}
-
-		int getPaletteSize(void)
-		{
-			return GetP()->getPaletteSize();
-		}
-
-		fk_Material^ getMaterial(int argID)
-		{
-			fk_Material^ M = gcnew fk_Material();
-			*M->pMat = *(GetP()->getMaterial(argID));
-			return M;
-		}
-
-		array<fk_Material^>^ getMaterialVector(void)
-		{
-			int i;
-			int size = GetP()->getPaletteSize();
-			array<fk_Material^>^ matArray = gcnew array<fk_Material^>(size);
-
-			for(i = 0; i < size; i++) {
-				matArray[i] = getMaterial(i);
-			}
-
-			return matArray;
-		}
+		void clearMaterial(void);
+		void setObjMaterialID(int ID);
+		void pushPalette(fk_Material^ material);
+		void setPalette(fk_Material^ material, int ID);
+		int getObjMaterialID(void);
+		int getPaletteSize(void);
+		fk_Material^ getMaterial(int ID);
+		array<fk_Material^>^ getMaterialVector(void);
 	};
 }
