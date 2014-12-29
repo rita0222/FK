@@ -217,6 +217,7 @@
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\IFSTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Image_CLI.cpp" />
     <ClCompile Include="CLI\cpp\IndexFace_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Light_CLI.cpp" />
@@ -365,6 +366,7 @@
     <ClInclude Include="CLI\Circle_CLI.h" />
     <ClInclude Include="CLI\Cone_CLI.h" />
     <ClInclude Include="CLI\GuideObject_CLI.h" />
+    <ClInclude Include="CLI\IFSTexture_CLI.h" />
     <ClInclude Include="CLI\Image_CLI.h" />
     <ClInclude Include="CLI\IndexFace_CLI.h" />
     <ClInclude Include="CLI\Light_CLI.h" />

@@ -466,6 +466,9 @@
     <ClCompile Include="CLI\cpp\MeshTexture_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\IFSTexture_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLI\Vector_CLI.h">
@@ -904,6 +907,9 @@
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\MeshTexture_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\IFSTexture_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>
