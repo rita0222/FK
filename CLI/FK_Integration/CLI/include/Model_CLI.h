@@ -3,21 +3,11 @@
 #pragma once
 
 #include <FK/Model.h>
+#include "Boundary_CLI.h"
 #include "Shape_CLI.h"
-#include "Vector_CLI.h"
-#include "Matrix_CLI.h"
-#include "Material_CLI.h"
 
 namespace FK_CLI
 {
-	public enum class fk_BoundaryMode {
-		SPHERE,
-		AABB,
-		OBB,
-		CAPSULE,
-		NONE
-	};
-
 	public enum class fk_DrawMode : unsigned int {
 		NONEMODE			= 0x0000,
 		POINTMODE			= 0x0001,
@@ -28,27 +18,22 @@ namespace FK_CLI
 		TEXTUREMODE			= 0x0020
 	};
 
-	public ref class fk_Model {
+	public ref class fk_Model : fk_Boundary {
 	internal:
-
-		bool dFlg;
-		::fk_Model *pModel;
-
-
 		::fk_Model * GetP(void)
 		{
-			return pModel;
+			return (::fk_Model *)(pBase);
 		}
 
 	public:
-		fk_Model::fk_Model()
+		fk_Model::fk_Model() : fk_Boundary(false)
 		{
-			this->pModel = new ::fk_Model();
+			pBase = new ::fk_Model();
 		}
 
-		fk_Model::fk_Model(bool argNewFlg)
+		fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false)
 		{
-			if(argNewFlg == true) this->pModel = new ::fk_Model();
+			if(argNewFlg == true) pBase = new ::fk_Model();
 		}
 
 		fk_Model::~fk_Model()
@@ -58,41 +43,10 @@ namespace FK_CLI
 
 		fk_Model::!fk_Model()
 		{
-			if(dFlg == true) delete this->pModel;
-			this->pModel = NULL;
+			if(dFlg == true) delete this->pBase;
+			this->pBase = NULL;
 		}
 
-		fk_Vector^ getPosition(void);
-		fk_Vector^ getVec(void);
-		fk_Vector^ getUpvec(void);
-		fk_Angle^ getAngle(void);
-		fk_Matrix^ getMatrix(void);
-		fk_Matrix^ getInvMatrix(void);
-		fk_Matrix^ getBaseMatrix(void);
-		fk_Matrix^ getInvBaseMatrix(void);
-		bool setScale(double scale);
-		bool setScale(double scale, fk_Axis axis);
-		bool setScale(double x, double y, double z);
-		bool prdScale(double scale);
-		bool prdScale(double scale, fk_Axis axis);
-		bool prdScale(double x, double y, double z);
-		double getScale(void);
-		double getScale(fk_Axis axis);
-		bool getScaleMode(void);
-		bool glFocus(fk_Vector^ V);
-		bool glFocus(double x, double y, double z);
-		bool loFocus(fk_Vector^ V);
-		bool loFocus(double x, double y, double z);
-		bool glVec(fk_Vector^ V);
-		bool glVec(double x, double y, double z);
-		bool glUpvec(fk_Vector^ V);
-		bool glUpvec(double x, double y, double z);
-		bool loUpvec(fk_Vector^ V);
-		bool loUpvec(double x, double y, double z);
-		bool glAngle(fk_Angle^ angle);
-		bool glAngle(double head, double pitch, double bank);
-		bool loAngle(fk_Angle^ angle);
-		bool loAngle(double head, double pitch, double bank);
 		bool glRotate(fk_Vector^ origin, fk_Axis axis, double theta);
 		bool glRotate(double x, double y, double z, fk_Axis axis, double theta);
 		bool glRotate(fk_Vector^ A, fk_Vector^ B, double theta);
@@ -119,29 +73,7 @@ namespace FK_CLI
 		bool loTranslate(double x, double y, double z);
 		bool glMoveTo(fk_Vector^ V);
 		bool glMoveTo(double x, double y, double z);
-		void setBMode(fk_BoundaryMode mode);
-		fk_BoundaryMode getBMode(void);
-		void setSphere(double radius);
-		double getSphere(void);
-		void setAABBSize(double x, double y, double z);
-		void setAABBSize(fk_Vector^ argSize);
-		fk_Vector^ getAABBSize(void);
-		void setOBBSize(double x, double y, double z);
-		void setOBBSize(fk_Vector^ sizeV);
-		fk_Vector^ getOBBSize(void);
-		void setCapsule(fk_Vector^ startPos, fk_Vector^ endPos, double radius);
-		double getCapsuleRadius(void);
-		double getCapsuleLength(void);
-		fk_Vector^ getCapsuleStartPos(void);
-		fk_Vector^ getCapsuleEndPos(void);
-		void setBDrawToggle(bool mode);
-		bool getBDrawToggle(void);
-		void setBLineColor(fk_Color^ color);
-		fk_Color^ getBLineColor(void);
-		void setBIntLineColor(fk_Color^ color);
-		fk_Color^ getBIntLineColor(void);
-		void setBLineWidth(double width);
-		double getBLineWidth(void);
+
 		unsigned int getID(void);
 		void setShape(fk_Shape^ argShape);
 		fk_Shape^ getShape(void);

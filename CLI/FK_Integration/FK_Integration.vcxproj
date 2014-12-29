@@ -213,11 +213,14 @@
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Base_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Block_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Boundary_CLI.cpp" />
     <ClCompile Include="CLI\cpp\BVHMotion_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\DList_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Edeg_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Fog_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Half_CLI.cpp" />
     <ClCompile Include="CLI\cpp\IFSTexture_CLI.cpp" />
@@ -226,6 +229,7 @@
     <ClCompile Include="CLI\cpp\Light_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Line_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Loop_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\MatAdmin_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Material_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Matrix_CLI.cpp" />
     <ClCompile Include="CLI\cpp\MeshTexture_CLI.cpp" />
@@ -368,11 +372,14 @@
     <ClInclude Include="CLI\include\Attribute_CLI.h" />
     <ClInclude Include="CLI\include\Base_CLI.h" />
     <ClInclude Include="CLI\include\Block_CLI.h" />
+    <ClInclude Include="CLI\include\Boundary_CLI.h" />
     <ClInclude Include="CLI\include\BVHMotion_CLI.h" />
     <ClInclude Include="CLI\include\Capsule_CLI.h" />
     <ClInclude Include="CLI\include\Circle_CLI.h" />
     <ClInclude Include="CLI\include\Cone_CLI.h" />
+    <ClInclude Include="CLI\include\DList_CLI.h" />
     <ClInclude Include="CLI\include\Edge_CLI.h" />
+    <ClInclude Include="CLI\include\Fog_CLI.h" />
     <ClInclude Include="CLI\include\GuideObject_CLI.h" />
     <ClInclude Include="CLI\include\Half_CLI.h" />
     <ClInclude Include="CLI\include\IFSTexture_CLI.h" />
@@ -381,6 +388,7 @@
     <ClInclude Include="CLI\include\Light_CLI.h" />
     <ClInclude Include="CLI\include\Line_CLI.h" />
     <ClInclude Include="CLI\include\Loop_CLI.h" />
+    <ClInclude Include="CLI\include\MatAdmin_CLI.h" />
     <ClInclude Include="CLI\include\Material_CLI.h" />
     <ClInclude Include="CLI\include\Matrix_CLI.h" />
     <ClInclude Include="CLI\include\MeshTexture_CLI.h" />

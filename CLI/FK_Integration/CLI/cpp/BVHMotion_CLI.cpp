@@ -34,7 +34,7 @@ namespace FK_CLI {
 		if(pM == NULL) return nullptr;
 
 		fk_Model^ M = gcnew fk_Model(false);
-		M->pModel = pM;
+		M->pBase = pM;
 		M->dFlg = false;
 		return M;
 	}
@@ -46,7 +46,7 @@ namespace FK_CLI {
 		if(pM == NULL) return nullptr;
 
 		fk_Model^ M = gcnew fk_Model(false);
-		M->pModel = pM;
+		M->pBase = pM;
 		M->dFlg = false;
 		return M;
 	}

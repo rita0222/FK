@@ -244,7 +244,7 @@ namespace FK_CLI {
 	fk_Model^ fk_AppWindow::getCameraModel(void)
 	{
 		fk_Model^ M = gcnew fk_Model(false);
-		M->pModel = (::fk_Model *)(GetP()->getCameraModel());
+		M->pBase = (::fk_Model *)(GetP()->getCameraModel());
 		M->dFlg = false;
 		return M;
 	}
@@ -267,7 +267,9 @@ namespace FK_CLI {
 	fk_Scene^ fk_AppWindow::getScene(void)
 	{
 		fk_Scene ^S = gcnew fk_Scene(false);
-		S->pScene = GetP()->getScene();
+		S->pBase = GetP()->getScene();
+		S->dFlg = false;
+
 		return S;
 	}
 		
