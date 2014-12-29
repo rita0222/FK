@@ -1,1 +1,1 @@
-﻿#include "../Palette_CLI.h"
+﻿#include "Palette_CLI.h"

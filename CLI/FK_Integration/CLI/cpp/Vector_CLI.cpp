@@ -1,5 +1,4 @@
-﻿#include "../Vector_CLI.h"
-
+﻿#include "Vector_CLI.h"
 
 namespace FK_CLI {
 	::fk_Axis GetAxis(FK_CLI::fk_Axis argAxis)

@@ -1,4 +1,4 @@
-﻿#include "../Scene_CLI.h"
+﻿#include "Scene_CLI.h"
 
 namespace FK_CLI {
 	::fk_StereoChannel GetStereo(FK_CLI::fk_StereoChannel argC)

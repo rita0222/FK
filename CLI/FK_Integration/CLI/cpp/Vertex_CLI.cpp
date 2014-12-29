@@ -1,5 +1,5 @@
-﻿#include "../Vertex_CLI.h"
-#include "../Half_CLI.h"
+﻿#include "Vertex_CLI.h"
+#include "Half_CLI.h"
 
 namespace FK_CLI {
 	fk_Vector^ fk_Vertex::getPosition(void)

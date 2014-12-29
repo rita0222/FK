@@ -1,5 +1,5 @@
-﻿#include "../Edge_CLI.h"
-#include "../Half_CLI.h"
+﻿#include "Edge_CLI.h"
+#include "Half_CLI.h"
 
 namespace FK_CLI {
 	fk_Half^ fk_Edge::getLeftHalf(void)

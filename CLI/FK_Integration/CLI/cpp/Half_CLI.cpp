@@ -1,7 +1,7 @@
-﻿#include "../Half_CLI.h"
-#include "../Vertex_CLI.h"
-#include "../Edge_CLI.h"
-#include "../Loop_CLI.h"
+﻿#include "Half_CLI.h"
+#include "Vertex_CLI.h"
+#include "Edge_CLI.h"
+#include "Loop_CLI.h"
 
 namespace FK_CLI {
 	fk_Vertex^ fk_Half::getVertex(void)

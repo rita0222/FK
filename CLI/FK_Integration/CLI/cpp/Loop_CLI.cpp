@@ -1,5 +1,5 @@
-﻿#include "../Loop_CLI.h"
-#include "../Half_CLI.h"
+﻿#include "Loop_CLI.h"
+#include "Half_CLI.h"
 
 namespace FK_CLI {
 

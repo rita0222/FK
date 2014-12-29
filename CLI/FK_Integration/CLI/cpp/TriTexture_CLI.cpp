@@ -1,1 +1,1 @@
-﻿#include "../TriTexture_CLI.h"
+﻿#include "TriTexture_CLI.h"

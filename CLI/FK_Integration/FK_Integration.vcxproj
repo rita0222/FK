@@ -48,7 +48,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>include;..\..;$(IncludePath)</IncludePath>
+    <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -364,41 +364,41 @@
     <ClInclude Include="..\..\FK\VRMLOut.H" />
     <ClInclude Include="..\..\FK\VRMLParser.H" />
     <ClInclude Include="..\..\FK\Window.h" />
-    <ClInclude Include="CLI\AppWindow_CLI.h" />
-    <ClInclude Include="CLI\Attribute_CLI.h" />
-    <ClInclude Include="CLI\Base_CLI.h" />
-    <ClInclude Include="CLI\Block_CLI.h" />
-    <ClInclude Include="CLI\BVHMotion_CLI.h" />
-    <ClInclude Include="CLI\Capsule_CLI.h" />
-    <ClInclude Include="CLI\Circle_CLI.h" />
-    <ClInclude Include="CLI\Cone_CLI.h" />
-    <ClInclude Include="CLI\Edge_CLI.h" />
-    <ClInclude Include="CLI\GuideObject_CLI.h" />
-    <ClInclude Include="CLI\Half_CLI.h" />
-    <ClInclude Include="CLI\IFSTexture_CLI.h" />
-    <ClInclude Include="CLI\Image_CLI.h" />
-    <ClInclude Include="CLI\IndexFace_CLI.h" />
-    <ClInclude Include="CLI\Light_CLI.h" />
-    <ClInclude Include="CLI\Line_CLI.h" />
-    <ClInclude Include="CLI\Loop_CLI.h" />
-    <ClInclude Include="CLI\Material_CLI.h" />
-    <ClInclude Include="CLI\Matrix_CLI.h" />
-    <ClInclude Include="CLI\MeshTexture_CLI.h" />
-    <ClInclude Include="CLI\Model_CLI.h" />
-    <ClInclude Include="CLI\Palette_CLI.h" />
-    <ClInclude Include="CLI\Point_CLI.h" />
-    <ClInclude Include="CLI\Polygon_CLI.h" />
-    <ClInclude Include="CLI\Prism_CLI.h" />
-    <ClInclude Include="CLI\Projection_CLI.h" />
-    <ClInclude Include="CLI\RectTexture_CLI.h" />
-    <ClInclude Include="CLI\Scene_CLI.h" />
-    <ClInclude Include="CLI\Shape_CLI.h" />
-    <ClInclude Include="CLI\Sphere_CLI.h" />
-    <ClInclude Include="CLI\Texture_CLI.h" />
-    <ClInclude Include="CLI\Topology_CLI.h" />
-    <ClInclude Include="CLI\TriTexture_CLI.h" />
-    <ClInclude Include="CLI\Vector_CLI.h" />
-    <ClInclude Include="CLI\Vertex_CLI.h" />
+    <ClInclude Include="CLI\include\AppWindow_CLI.h" />
+    <ClInclude Include="CLI\include\Attribute_CLI.h" />
+    <ClInclude Include="CLI\include\Base_CLI.h" />
+    <ClInclude Include="CLI\include\Block_CLI.h" />
+    <ClInclude Include="CLI\include\BVHMotion_CLI.h" />
+    <ClInclude Include="CLI\include\Capsule_CLI.h" />
+    <ClInclude Include="CLI\include\Circle_CLI.h" />
+    <ClInclude Include="CLI\include\Cone_CLI.h" />
+    <ClInclude Include="CLI\include\Edge_CLI.h" />
+    <ClInclude Include="CLI\include\GuideObject_CLI.h" />
+    <ClInclude Include="CLI\include\Half_CLI.h" />
+    <ClInclude Include="CLI\include\IFSTexture_CLI.h" />
+    <ClInclude Include="CLI\include\Image_CLI.h" />
+    <ClInclude Include="CLI\include\IndexFace_CLI.h" />
+    <ClInclude Include="CLI\include\Light_CLI.h" />
+    <ClInclude Include="CLI\include\Line_CLI.h" />
+    <ClInclude Include="CLI\include\Loop_CLI.h" />
+    <ClInclude Include="CLI\include\Material_CLI.h" />
+    <ClInclude Include="CLI\include\Matrix_CLI.h" />
+    <ClInclude Include="CLI\include\MeshTexture_CLI.h" />
+    <ClInclude Include="CLI\include\Model_CLI.h" />
+    <ClInclude Include="CLI\include\Palette_CLI.h" />
+    <ClInclude Include="CLI\include\Point_CLI.h" />
+    <ClInclude Include="CLI\include\Polygon_CLI.h" />
+    <ClInclude Include="CLI\include\Prism_CLI.h" />
+    <ClInclude Include="CLI\include\Projection_CLI.h" />
+    <ClInclude Include="CLI\include\RectTexture_CLI.h" />
+    <ClInclude Include="CLI\include\Scene_CLI.h" />
+    <ClInclude Include="CLI\include\Shape_CLI.h" />
+    <ClInclude Include="CLI\include\Sphere_CLI.h" />
+    <ClInclude Include="CLI\include\Texture_CLI.h" />
+    <ClInclude Include="CLI\include\Topology_CLI.h" />
+    <ClInclude Include="CLI\include\TriTexture_CLI.h" />
+    <ClInclude Include="CLI\include\Vector_CLI.h" />
+    <ClInclude Include="CLI\include\Vertex_CLI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

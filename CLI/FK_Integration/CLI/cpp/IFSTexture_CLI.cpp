@@ -1,1 +1,1 @@
-﻿#include "../IFSTexture_CLI.h"
+﻿#include "IFSTexture_CLI.h"
