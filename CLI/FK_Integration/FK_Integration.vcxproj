@@ -223,6 +223,7 @@
     <ClCompile Include="CLI\cpp\Line_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Material_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Matrix_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\MeshTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Model_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
@@ -370,6 +371,7 @@
     <ClInclude Include="CLI\Line_CLI.h" />
     <ClInclude Include="CLI\Material_CLI.h" />
     <ClInclude Include="CLI\Matrix_CLI.h" />
+    <ClInclude Include="CLI\MeshTexture_CLI.h" />
     <ClInclude Include="CLI\Model_CLI.h" />
     <ClInclude Include="CLI\Palette_CLI.h" />
     <ClInclude Include="CLI\Point_CLI.h" />
