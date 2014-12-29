@@ -217,12 +217,15 @@
     <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Edeg_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Half_CLI.cpp" />
     <ClCompile Include="CLI\cpp\IFSTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Image_CLI.cpp" />
     <ClCompile Include="CLI\cpp\IndexFace_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Light_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Line_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Loop_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Material_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Matrix_CLI.cpp" />
     <ClCompile Include="CLI\cpp\MeshTexture_CLI.cpp" />
@@ -240,6 +243,7 @@
     <ClCompile Include="CLI\cpp\Topology_CLI.cpp" />
     <ClCompile Include="CLI\cpp\TriTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Vector_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Vertex_CLI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h" />
@@ -368,12 +372,15 @@
     <ClInclude Include="CLI\Capsule_CLI.h" />
     <ClInclude Include="CLI\Circle_CLI.h" />
     <ClInclude Include="CLI\Cone_CLI.h" />
+    <ClInclude Include="CLI\Edge_CLI.h" />
     <ClInclude Include="CLI\GuideObject_CLI.h" />
+    <ClInclude Include="CLI\Half_CLI.h" />
     <ClInclude Include="CLI\IFSTexture_CLI.h" />
     <ClInclude Include="CLI\Image_CLI.h" />
     <ClInclude Include="CLI\IndexFace_CLI.h" />
     <ClInclude Include="CLI\Light_CLI.h" />
     <ClInclude Include="CLI\Line_CLI.h" />
+    <ClInclude Include="CLI\Loop_CLI.h" />
     <ClInclude Include="CLI\Material_CLI.h" />
     <ClInclude Include="CLI\Matrix_CLI.h" />
     <ClInclude Include="CLI\MeshTexture_CLI.h" />
@@ -391,6 +398,7 @@
     <ClInclude Include="CLI\Topology_CLI.h" />
     <ClInclude Include="CLI\TriTexture_CLI.h" />
     <ClInclude Include="CLI\Vector_CLI.h" />
+    <ClInclude Include="CLI\Vertex_CLI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
