@@ -213,6 +213,7 @@
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Base_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Block_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\BVHMotion_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
@@ -236,6 +237,7 @@
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Sphere_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Texture_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Topology_CLI.cpp" />
     <ClCompile Include="CLI\cpp\TriTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Vector_CLI.cpp" />
   </ItemGroup>
@@ -362,6 +364,7 @@
     <ClInclude Include="CLI\Attribute_CLI.h" />
     <ClInclude Include="CLI\Base_CLI.h" />
     <ClInclude Include="CLI\Block_CLI.h" />
+    <ClInclude Include="CLI\BVHMotion_CLI.h" />
     <ClInclude Include="CLI\Capsule_CLI.h" />
     <ClInclude Include="CLI\Circle_CLI.h" />
     <ClInclude Include="CLI\Cone_CLI.h" />
@@ -385,6 +388,7 @@
     <ClInclude Include="CLI\Shape_CLI.h" />
     <ClInclude Include="CLI\Sphere_CLI.h" />
     <ClInclude Include="CLI\Texture_CLI.h" />
+    <ClInclude Include="CLI\Topology_CLI.h" />
     <ClInclude Include="CLI\TriTexture_CLI.h" />
     <ClInclude Include="CLI\Vector_CLI.h" />
   </ItemGroup>

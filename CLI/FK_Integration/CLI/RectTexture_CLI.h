@@ -1,4 +1,4 @@
-﻿// Texture_CLI.h
+﻿// RectTexture_CLI.h
 
 #pragma once
 

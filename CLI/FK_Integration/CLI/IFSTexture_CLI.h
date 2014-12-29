@@ -1,4 +1,4 @@
-﻿// Texture_CLI.h
+﻿// IFSTexture_CLI.h
 
 #pragma once
 
@@ -159,6 +159,10 @@ namespace FK_CLI
 			GetP()->setAnimationTime(argT);
 		}
 
-		//void setBVHMotion(fk_BVHMotion^ argBVH);
+		void setBVHMotion(fk_BVHMotion^ argBVH)
+		{
+			if(!argBVH) return;
+			GetP()->setBVHMotion(argBVH->pMotion);
+		}
 	};
 }

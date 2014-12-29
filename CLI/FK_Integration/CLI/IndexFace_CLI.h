@@ -5,6 +5,7 @@
 #include <FK/IndexFace.h>
 #include "Shape_CLI.h"
 #include "Vector_CLI.h"
+#include "BVHMotion_CLI.h"
 
 namespace FK_CLI
 {
@@ -27,7 +28,7 @@ namespace FK_CLI
 		}
 
 	public:
-		fk_IndexFaceSet::fk_IndexFaceSet() : fk_Shape(false)
+		fk_IndexFaceSet::fk_IndexFaceSet(): fk_Shape(false)
 		{
 			this->pBase = new ::fk_IndexFaceSet();
 		}
@@ -241,7 +242,7 @@ namespace FK_CLI
 			return GetP()->readD3DXFile(marshal_as<string>(argFileName),
 										marshal_as<string>(argObjName), true);
 		}
-		
+
 		bool readD3DXFile(String^ argFileName, String^ argObjName, int argM, bool argS)
 		{
 			return GetP()->readD3DXFile(marshal_as<string>(argFileName),
@@ -260,7 +261,7 @@ namespace FK_CLI
 
 			pM = (!argMat) ? NULL : argMat->pMat;
 			return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, argTriFlg);
-		}			
+		}
 
 		bool writeVRMLFile(String^ argFileName, fk_Material^ argMat)
 		{
@@ -268,11 +269,11 @@ namespace FK_CLI
 
 			pM = (!argMat) ? NULL : argMat->pMat;
 			return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, false);
-		}			
+		}
 		bool writeVRMLFile(String^ argFileName)
 		{
 			return GetP()->writeVRMLFile(marshal_as<string>(argFileName), NULL, false);
-		}			
+		}
 
 		bool writeVRMLFile(String^ argFileName, array<double>^ argTime,
 						   array<fk_Vector^>^ argPos, fk_Material^ argMat, bool argTriFlg)
@@ -306,7 +307,7 @@ namespace FK_CLI
 		{
 			return writeVRMLFile(argFileName, argTime, argPos, nullptr, false);
 		}
-		
+
 		bool writeSTLFile(String ^argFileName)
 		{
 			return GetP()->writeSTLFile(marshal_as<string>(argFileName));
@@ -363,22 +364,22 @@ namespace FK_CLI
 			fk_IFType^ type = gcnew fk_IFType();
 
 			switch(GetP()->getFaceType()) {
-			  case FK_IF_TRIANGLES:
-				type = FK_CLI::fk_IFType::NONE;
-				break;
+				case FK_IF_TRIANGLES:
+					type = FK_CLI::fk_IFType::NONE;
+					break;
 
-			  case FK_IF_QUADS:
-				type = FK_CLI::fk_IFType::NONE;
-				break;
+				case FK_IF_QUADS:
+					type = FK_CLI::fk_IFType::NONE;
+					break;
 
-			  case FK_IF_POLYGON:
-				type = FK_CLI::fk_IFType::NONE;
-				break;
+				case FK_IF_POLYGON:
+					type = FK_CLI::fk_IFType::NONE;
+					break;
 
-			  case FK_IF_NONE:
-			  default:
-				type = FK_CLI::fk_IFType::NONE;
-				break;
+				case FK_IF_NONE:
+				default:
+					type = FK_CLI::fk_IFType::NONE;
+					break;
 			}
 			return type;
 		}
@@ -459,7 +460,7 @@ namespace FK_CLI
 			}
 			GetP()->makeIFSet(argFNum, argPNum, pIF, argVNum, &tmpV[0], argOrder);
 		}
-		
+
 		void makeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
 					   int argVNum, array<fk_Vector^>^ argPosArray)
 		{
@@ -509,7 +510,7 @@ namespace FK_CLI
 		{
 			GetP()->setBlockSize(argX, argY, argZ);
 		}
-		
+
 		void setBlockSize(double argLength, fk_Axis argAxis)
 		{
 			GetP()->setBlockSize(argLength, GetAxis(argAxis));
@@ -523,7 +524,7 @@ namespace FK_CLI
 		void setBlockScale(double argScale, fk_Axis argAxis)
 		{
 			GetP()->setBlockScale(argScale, GetAxis(argAxis));
-		}			
+		}
 
 		void setBlockScale(double argX, double argY, double argZ)
 		{
@@ -549,7 +550,7 @@ namespace FK_CLI
 		{
 			GetP()->setCircleScale(argScale);
 		}
-		
+
 		void makeSphere(int argDiv, double argRad)
 		{
 			GetP()->makeSphere(argDiv, argRad);
@@ -579,7 +580,7 @@ namespace FK_CLI
 		{
 			GetP()->setPrismDivide(argDiv);
 		}
-			
+
 		void setPrismTopRadius(double argTop)
 		{
 			GetP()->setPrismTopRadius(argTop);
@@ -599,12 +600,12 @@ namespace FK_CLI
 		{
 			GetP()->makeCone(argDiv, argRad, argHeight);
 		}
-			
+
 		void setConeDivide(int argDiv)
 		{
 			GetP()->setConeDivide(argDiv);
 		}
-		
+
 		void setConeRadius(double argRad)
 		{
 			GetP()->setConeRadius(argRad);
@@ -625,8 +626,17 @@ namespace FK_CLI
 			GetP()->setCapsuleSize(argLen, argRad);
 		}
 
+		void setBVHMotion(fk_BVHMotion^ argBVH)
+		{
+			if(!argBVH) return;
+			GetP()->setBVHMotion(argBVH->pMotion);
+		}
+
+		void setAnimationTime(double argTime)
+		{
+			GetP()->setAnimationTime(argTime);
+		}
+
 		//void putSolid(fk_Solid *solid);
-		//void setBVHMotion(fk_BVHMotion *bvh);
-		//void setAnimationTime(double argTime)
 	};
 }

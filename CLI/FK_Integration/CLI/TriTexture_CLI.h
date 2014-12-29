@@ -1,4 +1,4 @@
-﻿// Texture_CLI.h
+﻿// TriTexture_CLI.h
 
 #pragma once
 
