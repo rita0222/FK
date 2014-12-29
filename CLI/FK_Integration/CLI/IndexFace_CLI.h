@@ -12,8 +12,7 @@ namespace FK_CLI
 	using namespace System;
 	using namespace msclr::interop;
 
-	public enum class fk_IFType
-	{
+	public enum class fk_IFType {
 		NONE,
 		TRIANGLES,
 		QUADS,

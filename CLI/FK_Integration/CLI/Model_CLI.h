@@ -14,8 +14,7 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public enum class fk_BoundaryMode
-	{
+	public enum class fk_BoundaryMode {
 		SPHERE,
 		AABB,
 		OBB,
@@ -23,8 +22,7 @@ namespace FK_CLI
 		NONE
 	};
 
-	public enum class fk_DrawMode : unsigned int
-	{
+	public enum class fk_DrawMode : unsigned int {
 		NONEMODE			= 0x0000,
 		POINTMODE			= 0x0001,
 		LINEMODE			= 0x0002,

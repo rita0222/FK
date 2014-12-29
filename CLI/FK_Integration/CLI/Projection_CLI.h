@@ -10,8 +10,7 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public enum class fk_ProjectMode
-	{
+	public enum class fk_ProjectMode {
 		NONE_PROJ_MODE,
 		PERSPECTIVE_MODE,
 		FRUSTUM_MODE,

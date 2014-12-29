@@ -11,8 +11,7 @@ namespace FK_CLI
 	using namespace System;
 	using namespace msclr::interop;
 
-	public ref class fk_Attribute : FK_CLI::fk_BaseObject
-	{
+	public ref class fk_Attribute : FK_CLI::fk_BaseObject {
 	internal:
 		::fk_Attribute * GetP(void)
 		{

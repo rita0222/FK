@@ -30,8 +30,7 @@ namespace FK_CLI {
 			delete this->pAngle;
 		}
 
-		property double h
-		{
+		property double h {
 			double get()
 			{
 				return pAngle->h;
@@ -42,8 +41,7 @@ namespace FK_CLI {
 				pAngle->h = value;
 			}
 		}
-		property double p
-		{
+		property double p {
 			double get()
 			{
 				return pAngle->p;
@@ -54,8 +52,7 @@ namespace FK_CLI {
 				pAngle->p = value;
 			}
 		}
-		property double b
-		{
+		property double b {
 			double get()
 			{
 				return pAngle->b;
@@ -92,8 +89,7 @@ namespace FK_CLI {
 			delete this->pMatrix;
 		}
 
- 		property double default[int,int]
-		{
+ 		property double default[int,int] {
 			double get(int argI1, int argI2)
 			{
 				return (*pMatrix)[argI1][argI2];

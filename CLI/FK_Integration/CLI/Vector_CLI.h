@@ -10,8 +10,7 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public enum	class fk_Axis
-	{
+	public enum	class fk_Axis {
 		X,
 		Y,
 		Z
@@ -45,8 +44,7 @@ namespace FK_CLI
 			delete pVec;
 		}
 
-		property double	x
-		{
+		property double	x {
 			double get()
 			{
 				return pVec->x;
@@ -58,8 +56,7 @@ namespace FK_CLI
 			}
 		}
 
-		property double y
-		{
+		property double y {
 			double get()
 			{
 				return pVec->y;
@@ -71,8 +68,7 @@ namespace FK_CLI
 			}
 		}
 
-		property double z
-		{
+		property double z {
 			double get()
 			{
 				return pVec->z;
@@ -83,6 +79,7 @@ namespace FK_CLI
 				pVec->z = value;
 			}
 		}
+
 		String^	fk_Vector::ToString() override
 		{
 			std::string	tmpBuf;
@@ -298,8 +295,7 @@ namespace FK_CLI
 		}
 
 		// プロパティ一覧
-		property double x
-		{
+		property double x {
 			double get()
 			{
 				return pHVec->x;
@@ -311,8 +307,7 @@ namespace FK_CLI
 			}
 		}
 
-		property double y
-		{
+		property double y {
 			double get()
 			{
 				return pHVec->y;
@@ -324,8 +319,7 @@ namespace FK_CLI
 			}
 		}
 
-		property double z
-		{
+		property double z {
 			double get()
 			{
 				return pHVec->z;
@@ -337,8 +331,7 @@ namespace FK_CLI
 			}
 		}
 
-		property double w
-		{
+		property double w {
 			double get()
 			{
 				return pHVec->w;
@@ -481,6 +474,42 @@ namespace FK_CLI
 			tmpBuf += to_string(pFVec->y) + ", ";
 			tmpBuf += to_string(pFVec->z);
 			return gcnew System::String(tmpBuf.c_str());
+		}
+
+		property float x {
+			float get()
+			{
+				return pFVec->x;
+			}
+			
+			void set(float argX)
+			{
+				pFVec->x = argX;
+			}
+		}
+
+		property float y {
+			float get()
+			{
+				return pFVec->y;
+			}
+			
+			void set(float argY)
+			{
+				pFVec->y = argY;
+			}
+		}
+
+		property float z {
+			float get()
+			{
+				return pFVec->z;
+			}
+			
+			void set(float argZ)
+			{
+				pFVec->z = argZ;
+			}
 		}
 	};
 }

@@ -11,8 +11,7 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public enum class fk_RealShapeType
-	{
+	public enum class fk_RealShapeType {
 		FK_SHAPE_IFS,
 		FK_SHAPE_SOLID,
 		FK_SHAPE_TEXTURE,

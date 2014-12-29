@@ -10,15 +10,13 @@ namespace FK_CLI
 	using namespace std;
 	using namespace System;
 
-	public enum class fk_TexMode
-	{
+	public enum class fk_TexMode {
 		MODULATE,
 		REPLACE,
 		DECAL
 	};
 
-	public enum class fk_TexRendMode
-	{
+	public enum class fk_TexRendMode {
 		FK_TEX_REND_NORMAL,
 		FK_TEX_REND_SMOOTH
 	};
@@ -53,8 +51,7 @@ namespace FK_CLI
 			delete pTex;
 		}
 
-		property double x
-		{
+		property double x {
 			double get()
 			{
 				return double(pTex->x);
@@ -66,8 +63,7 @@ namespace FK_CLI
 			}
 		}
 		
-		property double y
-		{
+		property double y {
 			double get()
 			{
 				return double(pTex->y);

@@ -11,8 +11,7 @@ namespace FK_CLI
 	using namespace System;
 	using namespace msclr::interop;
 
-	public enum class fk_LightType
-	{
+	public enum class fk_LightType {
 		PARALLEL,
 		POINT,
 		SPOT

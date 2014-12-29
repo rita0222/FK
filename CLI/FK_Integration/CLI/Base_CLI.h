@@ -6,20 +6,17 @@
 #include <msclr/marshal_cppstd.h>
 
 
-namespace FK_CLI
-{
+namespace FK_CLI {
 	using namespace std;
 	using namespace System;
 
-	public ref class FK
-	{
+	public ref class FK {
 	public:
 		literal double PI = _FK_PI_DEFINE_;
 		literal double EPS = _FK_EPS_DEFINE_;
 	};
 
-	public enum class fk_ObjectType
-	{
+	public enum class fk_ObjectType {
 		BASEOBJECT,
 		MATRIXADMIN,
 		MODEL,
@@ -73,8 +70,7 @@ namespace FK_CLI
 		PARTICLESET
 	};
 
-	public ref class fk_BaseObject
-	{
+	public ref class fk_BaseObject {
 	public:
 		bool dFlg;
 		::fk_BaseObject *pBase;

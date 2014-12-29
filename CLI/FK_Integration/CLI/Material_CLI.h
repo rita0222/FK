@@ -43,9 +43,9 @@ namespace FK_CLI
 			pCol = NULL;
 		}
 
-		property float col[int]
-		{
-			float get(int argI) {
+		property float col[int] {
+			float get(int argI)
+			{
 				return GetP()->col[argI];
 			}
 			void set(int argI, float argC)
@@ -54,8 +54,7 @@ namespace FK_CLI
 			}
 		}
 
-		property float r
-		{
+		property float r {
 			float get()
 			{
 				return GetP()->col[0];
@@ -67,8 +66,7 @@ namespace FK_CLI
 			}
 		}
 
-		property float g
-		{
+		property float g {
 			float get()
 			{
 				return GetP()->col[1];
@@ -80,8 +78,7 @@ namespace FK_CLI
 			}
 		}
 
-		property float b
-		{
+		property float b {
 			float get()
 			{
 				return GetP()->col[2];
@@ -93,8 +90,7 @@ namespace FK_CLI
 			}
 		}
 
-		property float a
-		{
+		property float a {
 			float get()
 			{
 				return GetP()->col[3];
@@ -240,8 +236,7 @@ namespace FK_CLI
 			return false;
 		}
 
-		property float alpha
-		{
+		property float alpha {
 			float get()
 			{
 				return GetP()->getAlpha();
@@ -253,8 +248,7 @@ namespace FK_CLI
 			}
 		}
 
-		property fk_Color^ ambient
-		{
+		property fk_Color^ ambient {
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
@@ -269,8 +263,7 @@ namespace FK_CLI
 			}
 		}
 
-		property fk_Color^ diffuse
-		{
+		property fk_Color^ diffuse {
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
@@ -285,8 +278,7 @@ namespace FK_CLI
 			}
 		}
 
-		property fk_Color^ specular
-		{
+		property fk_Color^ specular {
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();
@@ -301,8 +293,7 @@ namespace FK_CLI
 			}
 		}
 
-		property fk_Color^ emission
-		{
+		property fk_Color^ emission {
 			fk_Color^ get()
 			{
 				fk_Color^ C = gcnew fk_Color();

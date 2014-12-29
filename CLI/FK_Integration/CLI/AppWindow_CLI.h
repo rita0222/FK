@@ -59,8 +59,7 @@ namespace FK_CLI
 		PRESS
 	};
 
-	public ref class fk_AppWindow
-	{
+	public ref class fk_AppWindow {
 	internal:
 		::fk_AppWindow *pWin;
 

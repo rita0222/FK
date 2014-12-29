@@ -14,22 +14,19 @@ namespace FK_CLI
 	using namespace System::Collections;
 	using namespace System::Collections::Generic;
 
-	public enum class fk_StereoChannel
-	{
+	public enum class fk_StereoChannel {
 		STEREO_LEFT,
 		STEREO_RIGHT
 	};
 
-	public enum class fk_FogMode
-	{
+	public enum class fk_FogMode {
 		LINEAR_FOG,
 		EXP_FOG,
 		EXP2_FOG,
 		NONE_FOG
 	};
 
-	public enum class fk_FogOption
-	{
+	public enum class fk_FogOption {
 		FASTEST_FOG,
 		NICEST_FOG,
 		NOOPTION_FOG
@@ -37,8 +34,7 @@ namespace FK_CLI
 
 	::fk_StereoChannel GetStereo(FK_CLI::fk_StereoChannel);
 	
-	public ref class fk_Scene
-	{
+	public ref class fk_Scene {
 	internal:
 		bool dFlg;
 		::fk_Scene *pScene;

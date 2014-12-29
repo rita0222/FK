@@ -19,7 +19,8 @@ namespace FK_CLI {
 		GRID_XZ  = 0x0008,
 		GRID_XY  = 0x0010,
 		GRID_YZ  = 0x0020,
-		ALL_GUIDE = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ | FK_GRID_XY | FK_GRID_YZ
+		ALL_GUIDE = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z |
+					FK_GRID_XZ | FK_GRID_XY | FK_GRID_YZ
 	};
 		
 	public ref class fk_GuideObject {
