@@ -229,10 +229,12 @@
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Prism_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Projection_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\RectTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Sphere_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Texture_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\TriTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Vector_CLI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -374,10 +376,12 @@
     <ClInclude Include="CLI\Polygon_CLI.h" />
     <ClInclude Include="CLI\Prism_CLI.h" />
     <ClInclude Include="CLI\Projection_CLI.h" />
+    <ClInclude Include="CLI\RectTexture_CLI.h" />
     <ClInclude Include="CLI\Scene_CLI.h" />
     <ClInclude Include="CLI\Shape_CLI.h" />
     <ClInclude Include="CLI\Sphere_CLI.h" />
     <ClInclude Include="CLI\Texture_CLI.h" />
+    <ClInclude Include="CLI\TriTexture_CLI.h" />
     <ClInclude Include="CLI\Vector_CLI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

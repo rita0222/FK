@@ -457,6 +457,12 @@
     <ClCompile Include="CLI\cpp\Image_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\RectTexture_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\TriTexture_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLI\Vector_CLI.h">
@@ -886,6 +892,12 @@
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\Image_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\RectTexture_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\TriTexture_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>
