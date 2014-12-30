@@ -9,6 +9,13 @@ namespace FK_CLI
 {
 	ref class fk_Half;
 	
+	public enum class fk_EdgeStatus {
+		NONE_EDGE,
+		UNDEF_EDGE,
+		HALFDEF_EDGE,
+		BOTHDEF_EDGE
+	};
+
 	public ref class fk_Edge : FK_CLI::fk_TopologyMaterial {
 	internal:
 		::fk_Edge * GetP(void)
