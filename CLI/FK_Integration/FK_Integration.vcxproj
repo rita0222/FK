@@ -218,6 +218,7 @@
     <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\DataAccess_CLI.cpp" />
     <ClCompile Include="CLI\cpp\DList_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Edeg_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Fog_CLI.cpp" />
@@ -378,6 +379,7 @@
     <ClInclude Include="CLI\include\Capsule_CLI.h" />
     <ClInclude Include="CLI\include\Circle_CLI.h" />
     <ClInclude Include="CLI\include\Cone_CLI.h" />
+    <ClInclude Include="CLI\include\DataAccess_CLI.h" />
     <ClInclude Include="CLI\include\DList_CLI.h" />
     <ClInclude Include="CLI\include\Edge_CLI.h" />
     <ClInclude Include="CLI\include\Fog_CLI.h" />
