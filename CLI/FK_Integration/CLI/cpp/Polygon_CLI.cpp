@@ -20,7 +20,7 @@ namespace FK_CLI {
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; i++) {
+		for(int i = 0; i < argArray->Length; ++i) {
 			vArray[i] = *(argArray[i]->pVec);
 		}
 		GetP()->setVertex(&vArray);
@@ -42,7 +42,7 @@ namespace FK_CLI {
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; i++) {
+		for(int i = 0; i < argArray->Length; ++i) {
 			vArray[i] = *(argArray[i]->pVec);
 		}
 		GetP()->setVertex(&vArray);

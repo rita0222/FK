@@ -49,7 +49,7 @@ namespace FK_CLI {
 		int size = GetP()->getPaletteSize();
 		array<fk_Material^>^ matArray = gcnew array<fk_Material^>(size);
 
-		for(i = 0; i < size; i++) {
+		for(i = 0; i < size; ++i) {
 			matArray[i] = getMaterial(i);
 		}
 

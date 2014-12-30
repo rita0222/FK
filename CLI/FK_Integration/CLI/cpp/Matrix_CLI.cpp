@@ -10,8 +10,8 @@ namespace FK_CLI {
 		int i, j;
 
 		tmpBuf = "M: \n";
-		for(i = 0; i < 4; i++) {
-			for(j = 0; j < 3; j++) {
+		for(i = 0; i < 4; ++i) {
+			for(j = 0; j < 3; ++j) {
 				tmpBuf += to_string((*pMatrix)[i][j]) + ", ";
 			}
 			tmpBuf += to_string((*pMatrix)[i][3]) + "\n";

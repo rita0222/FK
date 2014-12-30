@@ -8,7 +8,7 @@ namespace FK_CLI {
 		string tmpBuf;
 
 		tmpBuf = "C: ";
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 4; ++i) {
 			tmpBuf += to_string(GetP()->col[i]);
 			if(i != 3) {
 				tmpBuf += ", ";

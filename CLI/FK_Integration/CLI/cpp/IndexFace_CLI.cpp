@@ -246,11 +246,11 @@ namespace FK_CLI {
 		int i;
 		int timeSize = argTime->Length;
 		vector<double> timeArray(timeSize);
-		for(i = 0; i < timeSize; i++) timeArray[i] = argTime[i];
+		for(i = 0; i < timeSize; ++i) timeArray[i] = argTime[i];
 
 		int posSize = argPos->Length;
 		vector<::fk_Vector> posArray(posSize);
-		for(i = 0; i < posSize; i++) posArray[i] = *(argPos[i]->pVec);
+		for(i = 0; i < posSize; ++i) posArray[i] = *(argPos[i]->pVec);
 
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName),
 									 &timeArray, &posArray, pM, argTriFlg);
@@ -310,7 +310,7 @@ namespace FK_CLI {
 		int i;
 		vector<int>	tmpA = GetP()->getFaceData(argFID);
 		array<int>^ retA = gcnew array<int>(tmpA.size());
-		for(i = 0; i < int(tmpA.size()); i++) retA[i] = tmpA[i];
+		for(i = 0; i < int(tmpA.size()); ++i) retA[i] = tmpA[i];
 		return retA;
 	}
 
