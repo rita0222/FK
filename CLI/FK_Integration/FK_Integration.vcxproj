@@ -235,6 +235,7 @@
     <ClCompile Include="CLI\cpp\Matrix_CLI.cpp" />
     <ClCompile Include="CLI\cpp\MeshTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Model_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Operation_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
@@ -396,6 +397,7 @@
     <ClInclude Include="CLI\include\Matrix_CLI.h" />
     <ClInclude Include="CLI\include\MeshTexture_CLI.h" />
     <ClInclude Include="CLI\include\Model_CLI.h" />
+    <ClInclude Include="CLI\include\Operation_CLI.h" />
     <ClInclude Include="CLI\include\Palette_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
