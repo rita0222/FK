@@ -5,12 +5,12 @@ namespace FK_CLI {
 	bool fk_Model::glRotate(fk_Vector^ argOrigin, fk_Axis argAxis, double argTheta)
 	{
 		if(!argOrigin) return false;
-		return GetP()->glRotate(*argOrigin->pVec, GetAxis(argAxis), argTheta);
+		return GetP()->glRotate(*argOrigin->pVec, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::glRotate(double argX, double argY, double argZ, fk_Axis argAxis, double argTheta)
 	{
-		return GetP()->glRotate(argX, argY, argZ, GetAxis(argAxis), argTheta);
+		return GetP()->glRotate(argX, argY, argZ, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::glRotate(fk_Vector^ argA, fk_Vector^ argB, double argTheta)
@@ -28,12 +28,12 @@ namespace FK_CLI {
 	bool fk_Model::loRotate(fk_Vector^ argOrigin, fk_Axis argAxis, double argTheta)
 	{
 		if(!argOrigin) return false;
-		return GetP()->loRotate(*argOrigin->pVec, GetAxis(argAxis), argTheta);
+		return GetP()->loRotate(*argOrigin->pVec, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::loRotate(double argX, double argY, double argZ, fk_Axis argAxis, double argTheta)
 	{
-		return GetP()->loRotate(argX, argY, argZ, GetAxis(argAxis), argTheta);
+		return GetP()->loRotate(argX, argY, argZ, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::loRotate(fk_Vector^ argA, fk_Vector^ argB, double argTheta)
@@ -51,13 +51,13 @@ namespace FK_CLI {
 	bool fk_Model::glRotateWithVec(fk_Vector^ argOrigin, fk_Axis argAxis, double argTheta)
 	{
 		if(!argOrigin) return false;
-		return GetP()->glRotateWithVec(*argOrigin->pVec, GetAxis(argAxis), argTheta);
+		return GetP()->glRotateWithVec(*argOrigin->pVec, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::glRotateWithVec(double argX, double argY, double argZ,
 								   fk_Axis argAxis, double argTheta)
 	{
-		return GetP()->glRotateWithVec(argX, argY, argZ, GetAxis(argAxis), argTheta);
+		return GetP()->glRotateWithVec(argX, argY, argZ, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::glRotateWithVec(fk_Vector^ argA, fk_Vector^ argB, double argTheta)
@@ -75,13 +75,13 @@ namespace FK_CLI {
 	bool fk_Model::loRotateWithVec(fk_Vector^ argOrigin, fk_Axis argAxis, double argTheta)
 	{
 		if(!argOrigin) return false;
-		return GetP()->loRotateWithVec(*argOrigin->pVec, GetAxis(argAxis), argTheta);
+		return GetP()->loRotateWithVec(*argOrigin->pVec, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::loRotateWithVec(double argX, double argY, double argZ,
 								   fk_Axis argAxis, double argTheta)
 	{
-		return GetP()->loRotateWithVec(argX, argY, argZ, GetAxis(argAxis), argTheta);
+		return GetP()->loRotateWithVec(argX, argY, argZ, fk_Vector::GetAxis(argAxis), argTheta);
 	}
 
 	bool fk_Model::loRotateWithVec(fk_Vector^ argA, fk_Vector^ argB, double argTheta)

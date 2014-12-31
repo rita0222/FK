@@ -65,7 +65,7 @@ namespace FK_CLI {
 
 	bool fk_MatrixAdmin::setScale(double argScale, fk_Axis argAxis)
 	{
-		return GetP()->setScale(argScale, GetAxis(argAxis));
+		return GetP()->setScale(argScale, fk_Vector::GetAxis(argAxis));
 	}
 
 	bool fk_MatrixAdmin::setScale(double argX, double argY, double argZ)
@@ -79,7 +79,7 @@ namespace FK_CLI {
 
 	bool fk_MatrixAdmin::prdScale(double argScale, fk_Axis argAxis)
 	{
-		return GetP()->prdScale(argScale, GetAxis(argAxis));
+		return GetP()->prdScale(argScale, fk_Vector::GetAxis(argAxis));
 	}
 
 	bool fk_MatrixAdmin::prdScale(double argX, double argY, double argZ)
@@ -94,7 +94,7 @@ namespace FK_CLI {
 
 	double fk_MatrixAdmin::getScale(fk_Axis argAxis)
 	{
-		return GetP()->getScale(GetAxis(argAxis));
+		return GetP()->getScale(fk_Vector::GetAxis(argAxis));
 	}
 
 	bool fk_MatrixAdmin::getScaleMode(void)

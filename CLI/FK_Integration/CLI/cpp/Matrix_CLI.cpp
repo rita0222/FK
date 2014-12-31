@@ -80,7 +80,7 @@ namespace FK_CLI {
 
 	void fk_Matrix::makeRot(double argR, fk_Axis argAxis)
 	{
-		this->pMatrix->makeRot(argR, GetAxis(argAxis));
+		this->pMatrix->makeRot(argR, fk_Vector::GetAxis(argAxis));
 	}
 
 	void fk_Matrix::makeTrans(fk_Vector^ argV)

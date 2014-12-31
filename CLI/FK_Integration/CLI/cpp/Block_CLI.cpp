@@ -9,7 +9,7 @@ namespace FK_CLI {
 
 	void fk_Block::setSize(double argLength, FK_CLI::fk_Axis argAxis)
 	{
-		GetP()->setSize(argLength, GetAxis(argAxis));
+		GetP()->setSize(argLength, fk_Vector::GetAxis(argAxis));
 	}
 						 
 	void fk_Block::setScale(double argScale)
@@ -19,7 +19,7 @@ namespace FK_CLI {
 
 	void fk_Block::setScale(double argScale, fk_Axis argAxis)
 	{
-		GetP()->setScale(argScale, GetAxis(argAxis));
+		GetP()->setScale(argScale, fk_Vector::GetAxis(argAxis));
 	}
 		
 	void fk_Block::setScale(double argX, double argY, double argZ)

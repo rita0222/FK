@@ -473,7 +473,7 @@ namespace FK_CLI {
 
 	void fk_IndexFaceSet::setBlockSize(double argLength, fk_Axis argAxis)
 	{
-		GetP()->setBlockSize(argLength, GetAxis(argAxis));
+		GetP()->setBlockSize(argLength, fk_Vector::GetAxis(argAxis));
 	}
 
 	void fk_IndexFaceSet::setBlockScale(double argScale)
@@ -483,7 +483,7 @@ namespace FK_CLI {
 
 	void fk_IndexFaceSet::setBlockScale(double argScale, fk_Axis argAxis)
 	{
-		GetP()->setBlockScale(argScale, GetAxis(argAxis));
+		GetP()->setBlockScale(argScale, fk_Vector::GetAxis(argAxis));
 	}
 
 	void fk_IndexFaceSet::setBlockScale(double argX, double argY, double argZ)

@@ -15,11 +15,11 @@ namespace FK_CLI
 		Z
 	};
 	
-	::fk_Axis GetAxis(FK_CLI::fk_Axis);
-
 	public ref class fk_Vector {
 	internal:
 		::fk_Vector *pVec;
+		static ::fk_Axis GetAxis(fk_Axis);
+
 	public:
 		fk_Vector::fk_Vector()
 		{

@@ -4,7 +4,7 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	::fk_Axis GetAxis(FK_CLI::fk_Axis argAxis)
+	::fk_Axis fk_Vector::GetAxis(FK_CLI::fk_Axis argAxis)
 	{
 		::fk_Axis tmpAxis;
 
