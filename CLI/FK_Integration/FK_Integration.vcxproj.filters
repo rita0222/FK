@@ -514,6 +514,9 @@
     <ClCompile Include="CLI\cpp\SolidBase_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\Solid_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h">
@@ -1000,6 +1003,9 @@
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\include\SolidBase_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\Solid_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>
