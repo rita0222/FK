@@ -1,4 +1,5 @@
 ﻿#include "IndexFace_CLI.h"
+#include "Solid_CLI.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace FK_CLI {
@@ -596,5 +597,11 @@ namespace FK_CLI {
 	void fk_IndexFaceSet::setAnimationTime(double argTime)
 	{
 		GetP()->setAnimationTime(argTime);
+	}
+
+	void fk_IndexFaceSet::putSolid(fk_Solid^ argSolid)
+	{
+		if(!argSolid) return;
+		GetP()->putSolid(argSolid->GetP());
 	}
 }

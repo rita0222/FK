@@ -517,6 +517,12 @@
     <ClCompile Include="CLI\cpp\Solid_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\UniCode_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\TextImage_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h">
@@ -1006,6 +1012,12 @@
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\include\Solid_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\UniCode_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\TextImage_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>

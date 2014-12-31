@@ -9,6 +9,9 @@
 
 namespace FK_CLI
 {
+
+	ref class fk_Solid;
+
 	public enum class fk_IFType {
 		NONE,
 		TRIANGLES,
@@ -153,6 +156,6 @@ namespace FK_CLI
 		void setCapsuleSize(double length, double rad);
 		void setBVHMotion(fk_BVHMotion^ BVH);
 		void setAnimationTime(double time);
-		//void putSolid(fk_Solid *solid);
+		void putSolid(fk_Solid^ solid);
 	};
 }
