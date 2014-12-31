@@ -3,12 +3,11 @@
 #pragma once
 
 #include <FK/Polygon.h>
-#include "Vector_CLI.h"
-#include "Shape_CLI.h"
+#include "Solid_CLI.h"
 
 namespace FK_CLI
 {
-	public ref class fk_Polygon : FK_CLI::fk_Shape {
+	public ref class fk_Polygon : FK_CLI::fk_Solid {
 	internal:
 		::fk_Polygon * GetP(void)
 		{
@@ -16,18 +15,18 @@ namespace FK_CLI
 		}
 
 	public:
-		fk_Polygon::fk_Polygon() : fk_Shape(false)
+		fk_Polygon::fk_Polygon() : fk_Solid(false)
 		{
 			pBase = new ::fk_Polygon();
 		}
 
-		fk_Polygon::fk_Polygon(array<fk_Vector^>^ argArray) : fk_Shape(false)
+		fk_Polygon::fk_Polygon(array<fk_Vector^>^ argArray) : fk_Solid(false)
 		{
 			pBase = new ::fk_Polygon();
 			setVertex(argArray);
 		}
 
-		fk_Polygon::fk_Polygon(bool argNewFlg) : fk_Shape(false)
+		fk_Polygon::fk_Polygon(bool argNewFlg) : fk_Solid(false)
 		{
 			if(argNewFlg == true) {
 				pBase = new ::fk_Polygon();
@@ -51,7 +50,7 @@ namespace FK_CLI
 		void setVertex(array<fk_Vector^>^ array);
 	};
 
-	public ref class fk_Polyline : FK_CLI::fk_Shape {
+	public ref class fk_Polyline : FK_CLI::fk_Solid {
 	internal:
 		::fk_Polyline * GetP(void)
 		{
@@ -59,18 +58,18 @@ namespace FK_CLI
 		}
 
 	public:
-		fk_Polyline::fk_Polyline() : fk_Shape(false)
+		fk_Polyline::fk_Polyline() : fk_Solid(false)
 		{
 			pBase = new ::fk_Polyline();
 		}
 
-		fk_Polyline::fk_Polyline(array<fk_Vector^>^ argArray) : fk_Shape(false)
+		fk_Polyline::fk_Polyline(array<fk_Vector^>^ argArray) : fk_Solid(false)
 		{
 			pBase = new ::fk_Polyline();
 			setVertex(argArray);
 		}
 
-		fk_Polyline::fk_Polyline(bool argNewFlg) : fk_Shape(false)
+		fk_Polyline::fk_Polyline(bool argNewFlg) : fk_Solid(false)
 		{
 			if(argNewFlg == true) {
 				pBase = new ::fk_Polyline();

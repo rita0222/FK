@@ -3,12 +3,11 @@
 #pragma once
 
 #include <FK/Line.h>
-#include "Vector_CLI.h"
-#include "Shape_CLI.h"
+#include "Solid_CLI.h"
 
 namespace FK_CLI
 {
-	public ref class fk_Line : FK_CLI::fk_Shape {
+	public ref class fk_Line : fk_Solid {
 	internal:
 		::fk_Line * GetP(void)
 		{
@@ -16,12 +15,12 @@ namespace FK_CLI
 		}
 
 	public:
-		fk_Line::fk_Line() : fk_Shape(false)
+		fk_Line::fk_Line() : fk_Solid(false)
 		{
 			this->pBase = new ::fk_Line();
 		}
 
-		fk_Line::fk_Line(bool argNewFlg) : fk_Shape(false)
+		fk_Line::fk_Line(bool argNewFlg) : fk_Solid(false)
 		{
 			if(argNewFlg == true) this->pBase = new ::fk_Line();
 		}
