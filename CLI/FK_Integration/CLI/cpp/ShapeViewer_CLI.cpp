@@ -114,9 +114,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_ShapeViewer::getCenter(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getCenter();
-		return V;
+		return gcnew fk_Vector(GetP()->getCenter());
 	}
 
 	void fk_ShapeViewer::setDrawMode(int argID, fk_DrawMode argMode)

@@ -238,6 +238,8 @@
     <ClCompile Include="CLI\cpp\Modify_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Operation_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ParticleSet_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Particle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Performer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
@@ -408,6 +410,8 @@
     <ClInclude Include="CLI\include\Modify_CLI.h" />
     <ClInclude Include="CLI\include\Operation_CLI.h" />
     <ClInclude Include="CLI\include\Palette_CLI.h" />
+    <ClInclude Include="CLI\include\ParticleSet_CLI.h" />
+    <ClInclude Include="CLI\include\Particle_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
     <ClInclude Include="CLI\include\Prism_CLI.h" />

@@ -322,7 +322,42 @@ class fk_ParticleSet: public fk_BaseObject {
 	bool						allMode, indivMode;
 	unsigned int				maxNum;
 
- protected:
+ public:
+	//! コンストラクタ
+	/*!
+	 *	初期値として、パーティクル最大個数をとります。
+	 *
+	 *	\param[in]	max		パーティクル最大個数
+	 */
+	fk_ParticleSet(unsigned int max = 0);
+
+	//! デストラクタ
+	virtual ~fk_ParticleSet();
+
+	//! 実行関数
+	/*!
+	 *	パーティクル集合および各パーティクルに対し、時間経過処理を実行します。
+	 *	具体的には、以下の処理が行われます。
+	 *	- 各パーティクルの fk_Particle::handle() 実行。
+	 *	- パーティクル集合および各パーティクルの年齢に 1 を追加。
+	 */
+	void			handle(void);
+
+	//! モデル設定用関数
+	/*!
+	 *	モデルに形状を設定するための関数です。
+	 *
+	 *	\return		形状インスタンス
+	 *
+	 *	\note
+	 *		現時点では、この形状インスタンスの型は fk_Point になっています。
+	 *		しかし、将来においてはこの型が変更となる可能性があります。
+	 *		この関数で得られるインスタンスが
+	 *		fk_Point であることを前提とするような記述を行った場合、
+	 *		将来のバージョンにおいて問題が生じる可能性があります。
+	 */
+	fk_Shape *		getShape(void) const;
+
 	//! パーティクル生成関数1
 	/*!
 	 *	パーティクルを原点上に新たに生成します。
@@ -596,42 +631,6 @@ class fk_ParticleSet: public fk_BaseObject {
 	 *		false の場合は行いません。
 	 */
 	bool			getIndivMode(void) const;
-
- public:
-	//! コンストラクタ
-	/*!
-	 *	初期値として、パーティクル最大個数をとります。
-	 *
-	 *	\param[in]	max		パーティクル最大個数
-	 */
-	fk_ParticleSet(unsigned int max = 0);
-
-	//! デストラクタ
-	virtual ~fk_ParticleSet();
-
-	//! 実行関数
-	/*!
-	 *	パーティクル集合および各パーティクルに対し、時間経過処理を実行します。
-	 *	具体的には、以下の処理が行われます。
-	 *	- 各パーティクルの fk_Particle::handle() 実行。
-	 *	- パーティクル集合および各パーティクルの年齢に 1 を追加。
-	 */
-	void			handle(void);
-
-	//! モデル設定用関数
-	/*!
-	 *	モデルに形状を設定するための関数です。
-	 *
-	 *	\return		形状インスタンス
-	 *
-	 *	\note
-	 *		現時点では、この形状インスタンスの型は fk_Point になっています。
-	 *		しかし、将来においてはこの型が変更となる可能性があります。
-	 *		この関数で得られるインスタンスが
-	 *		fk_Point であることを前提とするような記述を行った場合、
-	 *		将来のバージョンにおいて問題が生じる可能性があります。
-	 */
-	fk_Shape *		getShape(void) const;
 };
 
 #endif // !__FK_PARTICLE_HEADER__

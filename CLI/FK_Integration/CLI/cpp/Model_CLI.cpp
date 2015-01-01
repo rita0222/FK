@@ -354,23 +354,17 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Model::getInhPosition(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getInhPosition();
-		return V;
+		return gcnew fk_Vector(GetP()->getInhPosition());
 	}
 
 	fk_Vector^ fk_Model::getInhVec(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getInhVec();
-		return V;
+		return gcnew fk_Vector(GetP()->getInhVec());
 	}
 
 	fk_Vector^ fk_Model::getInhUpvec(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getInhUpvec();
-		return V;
+		return gcnew fk_Vector(GetP()->getInhUpvec());
 	}
 
 	fk_Angle^ fk_Model::getInhAngle(void)

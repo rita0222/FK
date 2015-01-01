@@ -72,9 +72,7 @@ namespace FK_CLI {
 				
 	fk_Vector^ fk_MeshTexture::getVertexPos(int argTID, int argVID)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getVertexPos(argTID, argVID);
-		return V;
+		return gcnew fk_Vector(GetP()->getVertexPos(argTID, argVID));
 	}
 				
 	void fk_MeshTexture::putIndexFaceSet(fk_IndexFaceSet^ argIFS)

@@ -38,8 +38,6 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_TriTexture::getVertexPos(int argID)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getVertexPos(argID);
-		return V;
+		return gcnew fk_Vector(GetP()->getVertexPos(argID));
 	}
 }

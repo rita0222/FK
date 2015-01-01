@@ -13,9 +13,7 @@ namespace FK_CLI {
 		   
 	fk_Vector^ fk_Loop::getNormal(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *GetP()->getNormal();
-		return V;
+		return gcnew fk_Vector(GetP()->getNormal());
 	}
 
 	int fk_Loop::getVNum(void)

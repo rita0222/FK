@@ -34,8 +34,7 @@ namespace FK_CLI {
 	fk_Vector^ fk_Point::getVertex(int argID)
 	{
 		::fk_FVector *fV = GetP()->getVertex(argID);
-		fk_Vector^ V = gcnew fk_Vector(double(fV->x), double(fV->y), double(fV->z));
-		return V;
+		return gcnew fk_Vector(double(fV->x), double(fV->y), double(fV->z));
 	}
 				
 	int fk_Point::getSize(void)

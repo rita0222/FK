@@ -4,9 +4,7 @@
 namespace FK_CLI {
 	fk_Vector^ fk_Vertex::getPosition(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getPosition();
-		return V;
+		return gcnew fk_Vector(GetP()->getPosition());
 	}
 
 	fk_Half^ fk_Vertex::getOneHalf(void)
@@ -19,9 +17,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Vertex::getNormal(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getNormal();
-		return V;
+		return gcnew fk_Vector(GetP()->getNormal());
 	}
 				
 	double fk_Vertex::getDrawSize(void)

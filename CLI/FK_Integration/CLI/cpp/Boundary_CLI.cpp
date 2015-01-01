@@ -73,9 +73,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Boundary::getAABBSize(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getAABBSize();
-		return V;
+		return gcnew fk_Vector(GetP()->getAABBSize());
 	}
 
 	void fk_Boundary::setOBBSize(double argX, double argY, double argZ)
@@ -90,9 +88,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Boundary::getOBBSize(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getOBBSize();
-		return V;
+		return gcnew fk_Vector(GetP()->getOBBSize());
 	}
 
 	void fk_Boundary::setCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)

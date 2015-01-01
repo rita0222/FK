@@ -4,23 +4,17 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_MatrixAdmin::getPosition(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getPosition();
-		return V;
+		return gcnew fk_Vector(GetP()->getPosition());
 	}
 
 	fk_Vector^ fk_MatrixAdmin::getVec(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getVec();
-		return V;
+		return gcnew fk_Vector(GetP()->getVec());
 	}
 
 	fk_Vector^ fk_MatrixAdmin::getUpvec(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getUpvec();
-		return V;
+		return gcnew fk_Vector(GetP()->getUpvec());
 	}
 
 	fk_Angle^ fk_MatrixAdmin::getAngle(void)

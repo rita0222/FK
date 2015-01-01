@@ -72,17 +72,13 @@ namespace FK_CLI {
 	fk_Vector^ fk_Vector::proj(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = pVec->proj(*argV->pVec);
-		return V;
+		return gcnew fk_Vector(pVec->proj(*argV->pVec));
 	}
 
 	fk_Vector^ fk_Vector::perp(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = pVec->perp(*argV->pVec);
-		return V;
+		return gcnew fk_Vector(pVec->perp(*argV->pVec));
 	}
 
 	////////////////////////////////////////////////////////////////////

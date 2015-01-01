@@ -373,9 +373,7 @@ namespace FK_CLI {
 				
 	fk_Vector^ fk_AppWindow::getMousePosition(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getMousePosition();
-		return V;
+		return gcnew fk_Vector(GetP()->getMousePosition());
 	}
 				
 	void fk_AppWindow::setCursorState(bool argVisible, bool argCenter)

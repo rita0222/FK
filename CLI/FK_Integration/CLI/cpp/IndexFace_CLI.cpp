@@ -301,9 +301,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_IndexFaceSet::getPosVec(int argVID)
 	{
-		fk_Vector^ v = gcnew fk_Vector();
-		*(v->pVec) = GetP()->getPosVec(argVID);
-		return v;
+		return gcnew fk_Vector(GetP()->getPosVec(argVID));
 	}
 
 	array<int>^ fk_IndexFaceSet::getFaceData(int argFID)
@@ -347,9 +345,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_IndexFaceSet::getPNorm(int argFID, int argOrder)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*(V->pVec) = GetP()->getPNorm(argFID, argOrder);
-		return V;
+		return gcnew fk_Vector(GetP()->getPNorm(argFID, argOrder));
 	}
 
 	fk_Vector^ fk_IndexFaceSet::getPNorm(int argFID)
@@ -359,9 +355,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_IndexFaceSet::getVNorm(int argVID, int argOrder)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*(V->pVec) = GetP()->getVNorm(argVID, argOrder);
-		return V;
+		return gcnew fk_Vector(GetP()->getVNorm(argVID, argOrder));
 	}
 
 	fk_Vector^ fk_IndexFaceSet::getVNorm(int argVID)

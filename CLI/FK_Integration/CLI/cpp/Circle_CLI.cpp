@@ -1,6 +1,7 @@
 ﻿#include "Circle_CLI.h"
 
 namespace FK_CLI {
+
 	void fk_Circle::setDivide(int argDiv)
 	{
 		GetP()->setDivide(argDiv);
