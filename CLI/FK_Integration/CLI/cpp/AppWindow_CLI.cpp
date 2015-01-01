@@ -151,7 +151,7 @@ namespace FK_CLI {
 		GetP()->setBGColor(argR, argG, argB);
 	}
 
-	void fk_AppWindow::setBGColor(fk_Color ^argC)
+	void fk_AppWindow::setBGColor(fk_Color^ argC)
 	{
 		GetP()->setBGColor(*argC->GetP());
 	}
@@ -221,7 +221,7 @@ namespace FK_CLI {
 		GetP()->setCameraPos(argX, argY, argZ);
 	}
 
-	void fk_AppWindow::setCameraPos(fk_Vector ^argV)
+	void fk_AppWindow::setCameraPos(fk_Vector^ argV)
 	{
 		GetP()->setCameraPos(*argV->pVec);
 	}
@@ -231,12 +231,12 @@ namespace FK_CLI {
 		GetP()->setCameraFocus(argX, argY, argZ);
 	}
 
-	void fk_AppWindow::setCameraFocus(fk_Vector ^argV)
+	void fk_AppWindow::setCameraFocus(fk_Vector^ argV)
 	{
 		GetP()->setCameraFocus(*argV->pVec);
 	}
 
-	void fk_AppWindow::setCameraModel(fk_Model ^argM)
+	void fk_AppWindow::setCameraModel(fk_Model^ argM)
 	{
 		GetP()->setCameraModel(argM->GetP());
 	}
@@ -266,7 +266,7 @@ namespace FK_CLI {
 			
 	fk_Scene^ fk_AppWindow::getScene(void)
 	{
-		fk_Scene ^S = gcnew fk_Scene(false);
+		fk_Scene^ S = gcnew fk_Scene(false);
 		S->pBase = GetP()->getScene();
 		S->dFlg = false;
 
@@ -278,17 +278,22 @@ namespace FK_CLI {
 		GetP()->setSceneDefault();
 	}
 			
-	void fk_AppWindow::entry(fk_Model ^argModel)
+	void fk_AppWindow::entry(fk_Model^ argModel)
 	{
 		GetP()->entry(argModel->GetP());
 	}
 
-	void fk_AppWindow::entry(fk_Model ^argM, fk_GuideObject^ argGuide)
+	void fk_AppWindow::entry(fk_Model^ argM, fk_GuideObject^ argGuide)
 	{
 		GetP()->entry(argM->GetP(), argGuide->GetP());
 	}
 
-	void fk_AppWindow::remove(fk_Model ^argM)
+	void fk_AppWindow::entry(fk_SpriteModel^ argM)
+	{
+		GetP()->entry(argM->GetP());
+	}
+
+	void fk_AppWindow::remove(fk_Model^ argM)
 	{
 		GetP()->remove(argM->GetP());
 	}
@@ -296,6 +301,11 @@ namespace FK_CLI {
 	void fk_AppWindow::remove(fk_Model^ argM, fk_GuideObject^ argGuide)
 	{
 		GetP()->remove(argM->GetP(), argGuide->GetP());
+	}
+
+	void fk_AppWindow::remove(fk_SpriteModel^ argM)
+	{
+		GetP()->remove(argM->GetP());
 	}
 
 	void fk_AppWindow::clearModel(bool argCL)
@@ -368,17 +378,17 @@ namespace FK_CLI {
 		GetP()->setTrackBallMode(argMode);
 	}
 
-	bool fk_AppWindow::isModelPicked(fk_Model ^argM, int argP, int argX, int argY)
+	bool fk_AppWindow::isModelPicked(fk_Model^ argM, int argP, int argX, int argY)
 	{
 		return GetP()->isModelPicked(argM->GetP(), argP, argX, argY);
 	}
 
-	bool fk_AppWindow::isModelPicked(fk_Model ^argM, int argP)
+	bool fk_AppWindow::isModelPicked(fk_Model^ argM, int argP)
 	{
 		return GetP()->isModelPicked(argM->GetP(), argP);
 	}
 
-	bool fk_AppWindow::isModelPicked(fk_Model ^argM)
+	bool fk_AppWindow::isModelPicked(fk_Model^ argM)
 	{
 		return GetP()->isModelPicked(argM->GetP());
 	}

@@ -249,6 +249,7 @@
     <ClCompile Include="CLI\cpp\SolidBase_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Solid_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Sphere_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\SpriteModel_CLI.cpp" />
     <ClCompile Include="CLI\cpp\TextImage_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Texture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Topology_CLI.cpp" />
@@ -416,6 +417,7 @@
     <ClInclude Include="CLI\include\SolidBase_CLI.h" />
     <ClInclude Include="CLI\include\Solid_CLI.h" />
     <ClInclude Include="CLI\include\Sphere_CLI.h" />
+    <ClInclude Include="CLI\include\SpriteModel_CLI.h" />
     <ClInclude Include="CLI\include\TextImage_CLI.h" />
     <ClInclude Include="CLI\include\Texture_CLI.h" />
     <ClInclude Include="CLI\include\Topology_CLI.h" />
