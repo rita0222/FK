@@ -293,6 +293,11 @@ namespace FK_CLI {
 		GetP()->entry(argM->GetP());
 	}
 
+	void fk_AppWindow::entry(fk_Performer^ argP)
+	{
+		GetP()->entry(argP->GetP());
+	}
+
 	void fk_AppWindow::remove(fk_Model^ argM)
 	{
 		GetP()->remove(argM->GetP());
@@ -306,6 +311,11 @@ namespace FK_CLI {
 	void fk_AppWindow::remove(fk_SpriteModel^ argM)
 	{
 		GetP()->remove(argM->GetP());
+	}
+
+	void fk_AppWindow::remove(fk_Performer^ argP)
+	{
+		GetP()->remove(argP->GetP());
 	}
 
 	void fk_AppWindow::clearModel(bool argCL)

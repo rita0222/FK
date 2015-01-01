@@ -35,7 +35,6 @@ namespace FK_CLI
 		fk_IndexFaceSet::fk_IndexFaceSet(bool argNewFlg) : fk_Shape(false)
 		{
 			if(argNewFlg == true) this->pBase = new ::fk_IndexFaceSet();
-
 		}
 
 		fk_IndexFaceSet::~fk_IndexFaceSet()

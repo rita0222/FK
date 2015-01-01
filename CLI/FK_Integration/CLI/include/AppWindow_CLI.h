@@ -5,6 +5,7 @@
 #include <FK/SimpleWindow.h>
 #include "GuideObject_CLI.h"
 #include "SpriteModel_CLI.h"
+#include "Performer_CLI.h"
 
 namespace FK_CLI
 {
@@ -116,13 +117,11 @@ namespace FK_CLI
 		void entry(fk_Model^ model);
 		void entry(fk_Model^ model, fk_GuideObject^ guide);
 		void entry(fk_SpriteModel^ model);
-		//void entry(fk_Performer *chara);
-		//void entry(fk_Performer &chara);
+		void entry(fk_Performer^ chara);
 		void remove(fk_Model^ model);
 		void remove(fk_Model^ model, fk_GuideObject^ guide);
 		void remove(fk_SpriteModel^ model);
-		//void remove(fk_Performer *chara);
-		//void remove(fk_Performer &chara);
+		void remove(fk_Performer^ chara);
 		void clearModel(bool defCameraAndLight);
 		void clearModel(void);
 		bool getKeyStatus(char key, fk_SwitchStatus status);
