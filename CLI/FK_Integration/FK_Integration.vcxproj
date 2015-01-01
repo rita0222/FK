@@ -238,6 +238,7 @@
     <ClCompile Include="CLI\cpp\Modify_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Operation_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Performer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Prism_CLI.cpp" />
