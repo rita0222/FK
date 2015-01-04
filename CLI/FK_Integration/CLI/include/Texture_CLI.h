@@ -5,6 +5,7 @@
 #include <FK/Texture.h>
 #include "Shape_CLI.h"
 #include "Image_CLI.h"
+#include <string>
 
 namespace FK_CLI
 {
@@ -95,6 +96,8 @@ namespace FK_CLI
 		{
 			GetP()->set(argX, argY);
 		}
+
+		String^ fk_TexCoord::ToString() override;
 	};
 
 	public ref class fk_Texture : FK_CLI::fk_Shape {

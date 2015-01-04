@@ -5,6 +5,13 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
+	String^ fk_TexCoord::ToString()
+	{
+		string tmpBuf;
+		tmpBuf = "TxC: " + to_string(pTex->x) + ", ";
+		tmpBuf += to_string(pTex->y);
+		return gcnew String(tmpBuf.c_str());
+	}
 	void fk_Texture::setImage(fk_Image^ argImage)
 	{
 		if(!argImage) return;
