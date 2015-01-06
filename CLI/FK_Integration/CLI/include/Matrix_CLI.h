@@ -197,6 +197,7 @@ namespace FK_CLI {
 		fk_HVector^ getRow(int row);
 		fk_HVector^ getCol(int col);
 		bool inverse();
+		fk_Matrix^ getInverse();
 		void negate();
 		void makeRot(double theta, fk_Axis axis);
 		void makeTrans(fk_Vector^ vec);

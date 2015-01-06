@@ -73,6 +73,13 @@ namespace FK_CLI {
 		return this->pMatrix->inverse();
 	}
 
+	fk_Matrix^ fk_Matrix::getInverse()
+	{
+		fk_Matrix^ M = gcnew fk_Matrix();
+		*M->pMatrix = !(*pMatrix);
+		return M;
+	}
+
 	void fk_Matrix::negate()
 	{
 		this->pMatrix->negate();

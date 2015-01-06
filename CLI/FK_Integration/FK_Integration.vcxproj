@@ -222,6 +222,8 @@
     <ClCompile Include="CLI\cpp\DList_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Edeg_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Fog_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\GenMatrix_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\GenVector_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Half_CLI.cpp" />
     <ClCompile Include="CLI\cpp\IFSTexture_CLI.cpp" />
@@ -396,6 +398,7 @@
     <ClInclude Include="CLI\include\DList_CLI.h" />
     <ClInclude Include="CLI\include\Edge_CLI.h" />
     <ClInclude Include="CLI\include\Fog_CLI.h" />
+    <ClInclude Include="CLI\include\GenMatrix_CLI.h" />
     <ClInclude Include="CLI\include\GuideObject_CLI.h" />
     <ClInclude Include="CLI\include\Half_CLI.h" />
     <ClInclude Include="CLI\include\IFSTexture_CLI.h" />
