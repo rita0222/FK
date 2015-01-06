@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include <string>
 #include <FK/Vector.h>
 
 namespace FK_CLI
