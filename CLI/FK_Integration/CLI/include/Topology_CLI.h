@@ -17,7 +17,7 @@ namespace FK_CLI
 		UNDEFINED
 	};
 
-	public ref class fk_Topology : FK_CLI::fk_Attribute {
+	public ref class fk_Topology : fk_Attribute {
 	internal:
 		::fk_Topology * GetP(void)
 		{
@@ -42,7 +42,7 @@ namespace FK_CLI
 		fk_TopologyType getType(void);
 	};
 
-	public ref class fk_TopologyMaterial : FK_CLI::fk_Topology {
+	public ref class fk_TopologyMaterial : fk_Topology {
 	internal:
 		::fk_TopologyMaterial * GetP(void)
 		{

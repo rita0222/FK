@@ -550,6 +550,15 @@
     <ClCompile Include="CLI\cpp\GenMatrix_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\Audio_Stream.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h">
@@ -562,9 +571,6 @@
       <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\AttributeData.H">
-      <Filter>ヘッダー ファイル\CPP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Audio.h">
       <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Base.h">
@@ -1067,6 +1073,9 @@
     </ClInclude>
     <ClInclude Include="CLI\include\GenMatrix_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Audio.h">
+      <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

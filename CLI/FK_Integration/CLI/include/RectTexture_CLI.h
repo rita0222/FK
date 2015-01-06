@@ -7,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_RectTexture : FK_CLI::fk_Texture {
+	public ref class fk_RectTexture : fk_Texture {
 	internal:
 		::fk_RectTexture * GetP(void)
 		{

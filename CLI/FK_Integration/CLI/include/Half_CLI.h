@@ -13,7 +13,7 @@ namespace FK_CLI
 	ref class fk_Edge;
 	ref class fk_Loop;
 
-	public ref class fk_Half : FK_CLI::fk_Topology {
+	public ref class fk_Half : fk_Topology {
 	internal:
 		::fk_Half * GetP(void)
 		{

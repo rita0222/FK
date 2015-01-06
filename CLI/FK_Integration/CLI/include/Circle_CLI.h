@@ -7,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Circle : FK_CLI::fk_IndexFaceSet {
+	public ref class fk_Circle : fk_IndexFaceSet {
 	internal:
 		::fk_Circle * GetP(void)
 		{

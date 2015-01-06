@@ -7,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Attribute : FK_CLI::fk_BaseObject {
+	public ref class fk_Attribute : fk_BaseObject {
 	internal:
 		::fk_Attribute * GetP(void)
 		{

@@ -8,7 +8,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_IFSTexture : FK_CLI::fk_Texture {
+	public ref class fk_IFSTexture : fk_Texture {
 	internal:
 		::fk_IFSTexture * GetP(void)
 		{

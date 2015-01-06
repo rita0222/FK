@@ -8,7 +8,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_TriTexture : FK_CLI::fk_Texture {
+	public ref class fk_TriTexture : fk_Texture {
 	internal:
 		::fk_TriTexture * GetP(void)
 		{

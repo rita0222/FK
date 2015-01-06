@@ -17,7 +17,7 @@ namespace FK_CLI
 		FK_SHAPE_OTHER
 	};
 
-	public ref class fk_Shape : FK_CLI::fk_Attribute {
+	public ref class fk_Shape : fk_Attribute {
 	internal:
 		::fk_Shape * GetP(void)
 		{

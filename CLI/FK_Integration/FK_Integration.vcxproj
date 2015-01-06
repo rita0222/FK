@@ -95,6 +95,9 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\audio\Audio_Base.cxx" />
+    <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
+    <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />
     <ClCompile Include="..\..\src\base\Attribute.cxx" />
     <ClCompile Include="..\..\src\base\AttributeData.cxx" />
     <ClCompile Include="..\..\src\base\Base.cxx" />

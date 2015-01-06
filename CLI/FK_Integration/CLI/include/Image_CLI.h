@@ -192,7 +192,7 @@ namespace FK_CLI
 		fk_Dimension^ getSize(void);
 	};
 
-	public ref class fk_Image : FK_CLI::fk_BaseObject {
+	public ref class fk_Image : fk_BaseObject {
 	internal:
 		::fk_Image * GetP(void)
 		{

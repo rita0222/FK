@@ -8,7 +8,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Sphere : FK_CLI::fk_IndexFaceSet {
+	public ref class fk_Sphere : fk_IndexFaceSet {
 	internal:
 		::fk_Sphere * GetP(void)
 		{

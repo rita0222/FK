@@ -8,7 +8,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Point : FK_CLI::fk_Shape {
+	public ref class fk_Point : fk_Shape {
 	internal:
 		::fk_Point * GetP(void)
 		{

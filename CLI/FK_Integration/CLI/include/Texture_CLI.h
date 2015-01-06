@@ -100,7 +100,7 @@ namespace FK_CLI
 		String^ fk_TexCoord::ToString() override;
 	};
 
-	public ref class fk_Texture : FK_CLI::fk_Shape {
+	public ref class fk_Texture : fk_Shape {
 	internal:
 		::fk_Texture * GetP(void)
 		{

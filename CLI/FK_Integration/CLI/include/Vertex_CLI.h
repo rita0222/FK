@@ -10,7 +10,7 @@ namespace FK_CLI {
 
 	ref class fk_Half;
 
-	public ref class fk_Vertex : FK_CLI::fk_TopologyMaterial {
+	public ref class fk_Vertex : fk_TopologyMaterial {
 	internal:
 		::fk_Vertex * GetP(void)
 		{

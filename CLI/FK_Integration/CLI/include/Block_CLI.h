@@ -8,7 +8,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Block : FK_CLI::fk_IndexFaceSet {
+	public ref class fk_Block : fk_IndexFaceSet {
 	internal:
 		::fk_Block * GetP(void)
 		{

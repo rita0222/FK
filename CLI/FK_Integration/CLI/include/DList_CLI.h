@@ -21,7 +21,7 @@ namespace FK_CLI
 			return (::fk_DisplayLink *)(pBase);
 		}
 
-		::fk_StereoChannel GetStereo(FK_CLI::fk_StereoChannel);
+		::fk_StereoChannel GetStereo(fk_StereoChannel);
 	
 	public:
 		fk_DisplayLink::fk_DisplayLink(bool argNewFlg) : fk_BaseObject(false)

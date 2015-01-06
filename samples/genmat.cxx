@@ -116,8 +116,8 @@ int main(int, char *[])
 
 		if(largeV[0] != largeV[2]) diff++;
 	}
-
-	fk_Printf("Diff Count = %d", diff);
+	fk_Window::setPutStrMode(FK_PUTSTR_CONSOLE);
+	fk_Window::putString("Diff Count = " + to_string(diff));
 
 	return 0;
 }

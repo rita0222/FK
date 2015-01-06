@@ -9,7 +9,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_MeshTexture : FK_CLI::fk_Texture {
+	public ref class fk_MeshTexture : fk_Texture {
 	internal:
 		::fk_MeshTexture * GetP(void)
 		{

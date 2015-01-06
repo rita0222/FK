@@ -7,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Prism : FK_CLI::fk_IndexFaceSet {
+	public ref class fk_Prism : fk_IndexFaceSet {
 	internal:
 		::fk_Prism * GetP(void)
 		{

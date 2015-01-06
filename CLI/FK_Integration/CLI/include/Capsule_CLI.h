@@ -7,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Capsule : FK_CLI::fk_IndexFaceSet {
+	public ref class fk_Capsule : fk_IndexFaceSet {
 	internal:
 		::fk_Capsule * GetP(void)
 		{

@@ -13,7 +13,7 @@ namespace FK_CLI
 		SPOT
 	};
 
-	public ref class fk_Light : FK_CLI::fk_Shape {
+	public ref class fk_Light : fk_Shape {
 	internal:
 		::fk_Light * GetP(void)
 		{

@@ -10,7 +10,7 @@ namespace FK_CLI
 {
 	ref class fk_Half;
 	
-	public ref class fk_Loop : FK_CLI::fk_TopologyMaterial {
+	public ref class fk_Loop : fk_TopologyMaterial {
 	internal:
 		::fk_Loop * GetP(void)
 		{

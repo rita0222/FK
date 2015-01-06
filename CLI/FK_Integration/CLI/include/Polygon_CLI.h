@@ -7,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Polygon : FK_CLI::fk_Solid {
+	public ref class fk_Polygon : fk_Solid {
 	internal:
 		::fk_Polygon * GetP(void)
 		{
@@ -50,7 +50,7 @@ namespace FK_CLI
 		void setVertex(array<fk_Vector^>^ array);
 	};
 
-	public ref class fk_Polyline : FK_CLI::fk_Solid {
+	public ref class fk_Polyline : fk_Solid {
 	internal:
 		::fk_Polyline * GetP(void)
 		{
@@ -93,7 +93,7 @@ namespace FK_CLI
 		void setVertex(array<fk_Vector^>^ array);
 	};
 
-	public ref class fk_Closedline : FK_CLI::fk_Polygon {
+	public ref class fk_Closedline : fk_Polygon {
 	internal:
 		::fk_Closedline * GetP(void)
 		{

@@ -19,7 +19,7 @@ namespace FK_CLI
 		POLYGON
 	};
 			
-	public ref class fk_IndexFaceSet : FK_CLI::fk_Shape {
+	public ref class fk_IndexFaceSet : fk_Shape {
 	internal:
 		::fk_IndexFaceSet * GetP(void)
 		{

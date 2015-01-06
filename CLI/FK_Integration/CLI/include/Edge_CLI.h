@@ -16,7 +16,7 @@ namespace FK_CLI
 		BOTHDEF_EDGE
 	};
 
-	public ref class fk_Edge : FK_CLI::fk_TopologyMaterial {
+	public ref class fk_Edge : fk_TopologyMaterial {
 	internal:
 		::fk_Edge * GetP(void)
 		{
