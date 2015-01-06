@@ -166,6 +166,11 @@ namespace FK_CLI {
 		GetP()->setPointColor(argR, argG, argB);
 	}
 
+	void fk_Model::setPointColor(double argR, double argG, double argB)
+	{
+		GetP()->setPointColor(float(argR), float(argG), float(argB));
+	}
+
 	void fk_Model::setLineColor(fk_Color^ argC)
 	{
 		if(!argC) return;
@@ -175,6 +180,11 @@ namespace FK_CLI {
 	void fk_Model::setLineColor(float argR, float argG, float argB)
 	{
 		GetP()->setLineColor(argR, argG, argB);
+	}
+
+	void fk_Model::setLineColor(double argR, double argG, double argB)
+	{
+		GetP()->setLineColor(float(argR), float(argG), float(argB));
 	}
 
 	void fk_Model::deleteMaterial(void)

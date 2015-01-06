@@ -13,7 +13,12 @@ namespace FK_CLI {
 	public:
 		fk_Angle::fk_Angle()
 		{
-			this->pAngle = new ::fk_Angle();
+			pAngle = new ::fk_Angle();
+		}
+
+		fk_Angle::fk_Angle(double argH, double argP, double argB)
+		{
+			pAngle = new ::fk_Angle(argH, argP, argB);
 		}
 
 		fk_Angle::~fk_Angle()
@@ -23,7 +28,7 @@ namespace FK_CLI {
 
 		fk_Angle::!fk_Angle()
 		{
-			delete this->pAngle;
+			delete pAngle;
 		}
 
 		property double h {
@@ -62,7 +67,7 @@ namespace FK_CLI {
 
 		void set(double argH, double argP, double argB)
 		{
-			this->pAngle->set(argH, argP, argB);
+			pAngle->set(argH, argP, argB);
 		}
 	};
 
@@ -72,7 +77,7 @@ namespace FK_CLI {
 	public:
 		fk_Matrix::fk_Matrix()
 		{
-			this->pMatrix = new ::fk_Matrix();
+			pMatrix = new ::fk_Matrix();
 		}
 
 		fk_Matrix::~fk_Matrix()
@@ -82,7 +87,7 @@ namespace FK_CLI {
 
 		fk_Matrix::!fk_Matrix()
 		{
-			delete this->pMatrix;
+			delete pMatrix;
 		}
 
  		property double default[int,int] {
@@ -101,7 +106,7 @@ namespace FK_CLI {
 		bool Equals(fk_Matrix^ argM)
 		{
 			if(!argM) false;
-			return (*argM->pMatrix == *this->pMatrix);
+			return (*argM->pMatrix == *pMatrix);
 		}
 
 		virtual bool Equals(Object^ argObj) override
@@ -110,7 +115,7 @@ namespace FK_CLI {
 			if(this == argObj) return true;
 			if(GetType() == argObj->GetType()) {
 				fk_Matrix^ M = static_cast<fk_Matrix^>(argObj);
-				return (*M->pMatrix == *this->pMatrix);
+				return (*M->pMatrix == *pMatrix);
 			}
 			return false;
 		}

@@ -80,8 +80,10 @@ namespace FK_CLI
 		void setMaterial(fk_Material^ material);
 		void setPointColor(fk_Color^ color);
 		void setPointColor(float r, float g, float b);
+		void setPointColor(double r, double g, double b);
 		void setLineColor(fk_Color^ color);
 		void setLineColor(float r, float g, float b);
+		void setLineColor(double r, double g, double b);
 		void deleteMaterial(void);
 		void deletePointColor(void);
 		void deleteLineColor(void);
