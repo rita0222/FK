@@ -346,7 +346,7 @@ void fk_ParserBase::BSwap(double *argP)
 bool fk_ParserBase::BRead(int *argP, size_t argSize, ifstream &argIFS)
 {
 	
-	argIFS.read(reinterpret_cast<char *>(argP),
+	argIFS.read((char *)(argP),
 				 static_cast<streamsize>(sizeof(int)*argSize));
 	if(argIFS.bad()) return false;
 	
@@ -360,7 +360,7 @@ bool fk_ParserBase::BRead(int *argP, size_t argSize, ifstream &argIFS)
 bool fk_ParserBase::BRead(float *argP, size_t argSize, ifstream &argIFS)
 {
 	
-	argIFS.read(reinterpret_cast<char *>(argP),
+	argIFS.read((char *)(argP),
 				 static_cast<streamsize>(sizeof(float)*argSize));
 	if(argIFS.bad()) return false;
 	
@@ -373,7 +373,7 @@ bool fk_ParserBase::BRead(float *argP, size_t argSize, ifstream &argIFS)
 
 bool fk_ParserBase::BRead(double *argP, size_t argSize, ifstream &argIFS)
 {
-	argIFS.read(reinterpret_cast<char *>(argP),
+	argIFS.read((char *)(argP),
 				 static_cast<streamsize>(sizeof(double)*argSize));
 	if(argIFS.bad()) return false;
 	
@@ -393,7 +393,7 @@ bool fk_ParserBase::BWrite(int *argP, size_t argSize, ofstream &argOFS)
 	}
 #endif
 	
-	argOFS.write(reinterpret_cast<char *>(argP),
+	argOFS.write((char *)(argP),
 				  static_cast<streamsize>(sizeof(int)*argSize));
 	if(argOFS.bad()) return false;
 	return true;
@@ -407,7 +407,7 @@ bool fk_ParserBase::BWrite(float *argP, size_t argSize, ofstream &argOFS)
 		BSwap(&argP[i]);
 	}
 #endif
-	argOFS.write(reinterpret_cast<char *>(argP),
+	argOFS.write((char *)(argP),
 				  static_cast<streamsize>(sizeof(int)*argSize));
 	if(argOFS.bad()) return false;
 	return true;
@@ -421,7 +421,7 @@ bool fk_ParserBase::BWrite(double *argP, size_t argSize, ofstream &argOFS)
 		BSwap(&argP[i]);
 	}
 #endif
-	argOFS.write(reinterpret_cast<char *>(argP),
+	argOFS.write((char *)(argP),
 				  static_cast<streamsize>(sizeof(int)*argSize));
 	if(argOFS.bad()) return false;
 	return true;

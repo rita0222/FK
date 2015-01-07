@@ -38,8 +38,9 @@ namespace FK_CLI
 
 		fk_Light::!fk_Light()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
+			pBase = NULL;
 		}
 
 		void setLightType(fk_LightType type);

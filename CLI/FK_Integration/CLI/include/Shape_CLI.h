@@ -37,6 +37,7 @@ namespace FK_CLI
 
 		fk_Shape::!fk_Shape()
 		{
+			if(pBase == NULL) return;
 			if(dFlg == true) delete pBase;
 			pBase = NULL;
 		}

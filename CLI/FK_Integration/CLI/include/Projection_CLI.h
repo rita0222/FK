@@ -38,7 +38,8 @@ namespace FK_CLI
 
 		fk_ProjectBase::!fk_ProjectBase()
 		{
-			if(dFlg == true) delete pProj;
+			if(pProj == NULL) return;
+			if(dFlg == true) delete GetP();
 			pProj = NULL;
 		}
 

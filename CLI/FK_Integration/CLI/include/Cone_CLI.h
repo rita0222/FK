@@ -41,7 +41,8 @@ namespace FK_CLI
 
 		fk_Cone::!fk_Cone()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 

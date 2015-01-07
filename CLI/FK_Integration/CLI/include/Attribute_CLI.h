@@ -27,7 +27,8 @@ namespace FK_CLI
 
 		fk_Attribute::!fk_Attribute()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 

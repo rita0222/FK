@@ -559,6 +559,18 @@
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\AudioBase_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\AudioOggBuffer_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\AudioStream_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\AudioWavBuffer_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h">
@@ -1076,6 +1088,18 @@
     </ClInclude>
     <ClInclude Include="..\..\FK\Audio.h">
       <Filter>ヘッダー ファイル\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\AudioBase_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\AudioOggBuffer_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\AudioStream_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\AudioWavBuffer_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

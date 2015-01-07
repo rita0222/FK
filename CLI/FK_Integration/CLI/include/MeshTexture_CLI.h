@@ -45,7 +45,8 @@ namespace FK_CLI
 
 		fk_MeshTexture::!fk_MeshTexture()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 

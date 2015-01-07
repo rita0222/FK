@@ -24,12 +24,12 @@ namespace FK_CLI
 
 		fk_ShapeViewer::fk_ShapeViewer(bool argNewFlg) : fk_BaseObject(false)
 		{
-			if(argNewFlg == true) this->pBase = new ::fk_ShapeViewer();
+			if(argNewFlg == true) pBase = new ::fk_ShapeViewer();
 		}
 
 		fk_ShapeViewer::fk_ShapeViewer(int argW, int argH) : fk_BaseObject(false)
 		{
-			this->pBase = new ::fk_ShapeViewer(argW, argH);
+			pBase = new ::fk_ShapeViewer(argW, argH);
 		}
 
 		fk_ShapeViewer::~fk_ShapeViewer()
@@ -39,8 +39,9 @@ namespace FK_CLI
 
 		fk_ShapeViewer::!fk_ShapeViewer()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
+			pBase = NULL;
 		}
 
 		bool draw(void);

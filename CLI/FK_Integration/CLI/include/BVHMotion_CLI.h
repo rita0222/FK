@@ -29,6 +29,7 @@ namespace FK_CLI
 
 		fk_BVHMotion::!fk_BVHMotion()
 		{
+			if(pMotion == NULL) return;
 			delete pMotion;
 			pMotion = NULL;
 		}

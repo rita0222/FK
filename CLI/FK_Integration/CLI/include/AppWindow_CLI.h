@@ -124,8 +124,8 @@ namespace FK_CLI
 		void remove(fk_Performer^ chara);
 		void clearModel(bool defCameraAndLight);
 		void clearModel(void);
-		bool getKeyStatus(char key, fk_SwitchStatus status);
-		bool getKeyStatus(char key, fk_SwitchStatus status, bool insideFlg);
+		bool getKeyStatus(wchar_t key, fk_SwitchStatus status);
+		bool getKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlg);
 		bool getSpecialKeyStatus(fk_SpecialKey keyCode,
 								 fk_SwitchStatus status, bool insideFlg);
 		bool getSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);

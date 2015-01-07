@@ -208,48 +208,48 @@ int fk_AudioWavBuffer::ReadHeaderWav(ifstream &argIFS, int *channel, int *bit,
 	long			dataPos = -1;
 	int				flag = 0;
 	
-	argIFS.read(reinterpret_cast<char *>(&res32), 4);
+	argIFS.read((char *)(&res32), 4);
 	if(res32 != 0x46464952) {	//"RIFF"
 		return 1;	//error 1
 	}
 
 	//データサイズ = ファイルサイズ - 8 byte の取得
-	argIFS.read(reinterpret_cast<char *>(&dataSize), 4);
+	argIFS.read((char *)(&dataSize), 4);
 	
 	//WAVEヘッダーの読み
-	argIFS.read(reinterpret_cast<char *>(&res32), 4);
+	argIFS.read((char *)(&res32), 4);
 	if(res32 != 0x45564157) {	//"WAVE"
 		return 2;	//error 2
 	}
 
 	while(flag != 3) {
 		//チャンクの読み
-		argIFS.read(reinterpret_cast<char *>(&res32), 4);
-		argIFS.read(reinterpret_cast<char *>(&tmpChunkSize), 4);
+		argIFS.read((char *)(&res32), 4);
+		argIFS.read((char *)(&tmpChunkSize), 4);
 		
 		switch(res32) {
 		  case 0x20746d66:	//"fmt "
 			//format 読み込み
 			//PCM種類の取得
-			argIFS.read(reinterpret_cast<char *>(&res16), 2);
+			argIFS.read((char *)(&res16), 2);
 			if(res16 != 1) {
 				//非対応フォーマット
 				return 4;
 			}
 			//モノラル(1)orステレオ(2)
-			argIFS.read(reinterpret_cast<char *>(&channelCnt), 2);
+			argIFS.read((char *)(&channelCnt), 2);
 			if(res16 > 2) {
 				//チャンネル数間違い
 				return 5;
 			}
 			//サンプリングレート
-			argIFS.read(reinterpret_cast<char *>(&samplingRate), 4);
+			argIFS.read((char *)(&samplingRate), 4);
 			//データ速度(byte/sec)=サンプリングレート*ブロックサイズ
-			argIFS.read(reinterpret_cast<char *>(&byteParSec), 4);
+			argIFS.read((char *)(&byteParSec), 4);
 			//ブロックサイズ(byte/sample)=チャンネル数*サンプルあたりのバイト数
-			argIFS.read(reinterpret_cast<char *>(&blockSize), 2);
+			argIFS.read((char *)(&blockSize), 2);
 			//サンプルあたりのbit数(bit/sample)：8 or 16
-			argIFS.read(reinterpret_cast<char *>(&bitParSample), 2);
+			argIFS.read((char *)(&bitParSample), 2);
 			
 			*channel = static_cast<int>(channelCnt);
 			*bit = static_cast<int>(bitParSample);
@@ -345,7 +345,7 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 	adjust = static_cast<ALsizei>(argSize % FK_OV_BUFSIZE);
 
 	buffer.resize(argSize);
-	argIFS.read(reinterpret_cast<char *>(&buffer[0]), sizeof(char) * argSize);
+	argIFS.read((char *)(&buffer[0]), sizeof(char) * argSize);
 	if(argIFS.bad()) {
 		fk_PutError("fk_AudioWavBuffer", "ReadBuffer", 1, "Read Error");
 		buffer.clear();

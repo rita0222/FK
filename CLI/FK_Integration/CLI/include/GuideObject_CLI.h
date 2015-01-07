@@ -50,6 +50,7 @@ namespace FK_CLI {
 
 		fk_GuideObject::!fk_GuideObject()
 		{
+			if(pGuide == NULL) return;
 			if(dFlg == true) delete pGuide;
 			pGuide = NULL;
 		}

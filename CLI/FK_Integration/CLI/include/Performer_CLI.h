@@ -35,8 +35,9 @@ namespace FK_CLI
 
 		fk_Performer::!fk_Performer()
 		{
-			if(dFlg == true) delete this->pMotion;
-			this->pMotion = NULL;
+			if(pMotion == NULL) return;
+			if(dFlg == true) delete GetP();
+			pMotion = NULL;
 		}
 
 		bool cloneCharactor(fk_Performer^ perf);

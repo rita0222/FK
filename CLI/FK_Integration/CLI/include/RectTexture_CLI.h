@@ -43,7 +43,8 @@ namespace FK_CLI
 
 		fk_RectTexture::!fk_RectTexture()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 		

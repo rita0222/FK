@@ -328,13 +328,28 @@ namespace FK_CLI {
 		GetP()->clearModel(false);
 	}
 
-	bool fk_AppWindow::getKeyStatus(char argK, fk_SwitchStatus argStatus)
+	bool fk_AppWindow::getKeyStatus(wchar_t argK, fk_SwitchStatus argStatus)
 	{
-		return GetP()->getKeyStatus(argK, GetSS(argStatus), false);
+		wchar_t tmpWBuf[2];
+		char tmpBuf[2];
+		size_t ret;
+
+		tmpWBuf[0] = argK;
+		tmpWBuf[1] = 0;
+		wcstombs_s(&ret, tmpBuf, 2, tmpWBuf, 1);
+		return GetP()->getKeyStatus(tmpBuf[0], GetSS(argStatus));
 	}
-	bool fk_AppWindow::getKeyStatus(char argK, fk_SwitchStatus argStatus, bool argInFlg)
+
+	bool fk_AppWindow::getKeyStatus(wchar_t argK, fk_SwitchStatus argStatus, bool argInFlg)
 	{
-		return GetP()->getKeyStatus(argK, GetSS(argStatus), argInFlg);
+		wchar_t tmpWBuf[2];
+		char tmpBuf[2];
+		size_t ret;
+
+		tmpWBuf[0] = argK;
+		tmpWBuf[1] = 0;
+		wcstombs_s(&ret, tmpBuf, 2, tmpWBuf, 1);
+		return GetP()->getKeyStatus(tmpBuf[0], GetSS(argStatus), argInFlg);
 	}
 
 	bool fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey keyCode,

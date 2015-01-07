@@ -41,7 +41,8 @@ namespace FK_CLI
 
 		fk_Palette::!fk_Palette()
 		{
-			if(dFlg == true) delete pPalette;
+			if(pPalette == NULL) return;
+			if(dFlg == true) delete GetP();
 			pPalette = NULL;
 		}
 

@@ -33,7 +33,8 @@ namespace FK_CLI
 
 		fk_SpriteModel::!fk_SpriteModel()
 		{
-			if(dFlg == true) delete this->pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			this->pBase = NULL;
 		}
 

@@ -38,7 +38,8 @@ namespace FK_CLI
 
 		fk_Sphere::!fk_Sphere()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 

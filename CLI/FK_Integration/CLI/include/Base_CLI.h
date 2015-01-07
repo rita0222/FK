@@ -84,7 +84,9 @@ namespace FK_CLI {
 
 		fk_BaseObject::!fk_BaseObject()
 		{
+			if(pBase == NULL) return;
 			if(dFlg == true) delete pBase;
+			pBase = NULL;
 		}
 	};
 }

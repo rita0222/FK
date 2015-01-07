@@ -27,7 +27,8 @@ namespace FK_CLI
 
 		fk_AudioWavBuffer::!fk_AudioWavBuffer()
 		{
-			if(dFlg == true) delete pAudio;
+			if(pAudio == NULL) return;
+			if(dFlg == true) delete GetP();
 			pAudio = NULL;
 		}
 

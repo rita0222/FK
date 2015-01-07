@@ -11,18 +11,18 @@ namespace FK_CLI
 	internal:
 		::fk_Line * GetP(void)
 		{
-			return (::fk_Line *)(this->pBase);
+			return (::fk_Line *)(pBase);
 		}
 
 	public:
 		fk_Line::fk_Line() : fk_Solid(false)
 		{
-			this->pBase = new ::fk_Line();
+			pBase = new ::fk_Line();
 		}
 
 		fk_Line::fk_Line(bool argNewFlg) : fk_Solid(false)
 		{
-			if(argNewFlg == true) this->pBase = new ::fk_Line();
+			if(argNewFlg == true) pBase = new ::fk_Line();
 		}
 
 		fk_Line::~fk_Line()
@@ -32,8 +32,9 @@ namespace FK_CLI
 
 		fk_Line::!fk_Line()
 		{
-			if(dFlg == true) delete this->pBase;
-			this->pBase = NULL;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
+			pBase = NULL;
 		}
 
 		void pushLine(array<fk_Vector^>^ array);

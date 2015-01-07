@@ -214,6 +214,10 @@
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp" />
     <ClCompile Include="CLI\cpp\AssemblyInfo.cpp" />
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\AudioBase_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\AudioOggBuffer_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\AudioStream_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\AudioWavBuffer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Base_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Block_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Boundary_CLI.cpp" />
@@ -390,6 +394,10 @@
     <ClInclude Include="..\..\FK\Window.h" />
     <ClInclude Include="CLI\include\AppWindow_CLI.h" />
     <ClInclude Include="CLI\include\Attribute_CLI.h" />
+    <ClInclude Include="CLI\include\AudioBase_CLI.h" />
+    <ClInclude Include="CLI\include\AudioOggBuffer_CLI.h" />
+    <ClInclude Include="CLI\include\AudioStream_CLI.h" />
+    <ClInclude Include="CLI\include\AudioWavBuffer_CLI.h" />
     <ClInclude Include="CLI\include\Base_CLI.h" />
     <ClInclude Include="CLI\include\Block_CLI.h" />
     <ClInclude Include="CLI\include\Boundary_CLI.h" />

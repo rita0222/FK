@@ -47,7 +47,8 @@ namespace FK_CLI
 
 		fk_UniChar::!fk_UniChar()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 

@@ -36,7 +36,8 @@ namespace FK_CLI
 
 		fk_Color::!fk_Color()
 		{
-			if(dFlg == true) delete pCol;
+			if(pCol == NULL) return;
+			if(dFlg == true) delete GetP();
 			pCol = NULL;
 		}
 

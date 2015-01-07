@@ -40,7 +40,8 @@ namespace FK_CLI
 
 		fk_Circle::!fk_Circle()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 
