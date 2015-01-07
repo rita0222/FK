@@ -3,10 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using FK_CLI;
 
 namespace FK_CLI_Audio
 {
+	class MyBGM
+	{
+		public bool endFlg;
+		private fk_AudioStream bgm;
+
+		public MyBGM()
+		{
+			endFlg = false;
+			bgm = new fk_AudioStream();
+			if(bgm.open("epoq.ogg") == false) {
+				Console.WriteLine("Audio File Open Error.");
+			}
+		}
+
+		public void start()
+		{
+			bgm.setLoopMode(true);
+			bgm.setGain(0.5);
+			while(endFlg == false) {
+				bgm.play();
+				Thread.Sleep(100);
+			}
+		}
+
+		public void setGain(double argVolume)
+		{
+			bgm.setGain(argVolume);
+		}
+	}
+
+
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -15,15 +48,9 @@ namespace FK_CLI_Audio
 			var block = new fk_Block(1.0, 1.0, 1.0);
 			var blockModel = new fk_Model();
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
+			var audio = new MyBGM();
 
-			var bgm = new fk_AudioStream();
 			double volume = 0.5;
-
-			if(bgm.open("epoq.ogg") == false) {
-				Console.WriteLine("Audio File Open Error");
-			}
-			bgm.setLoopMode(true);
-			bgm.setGain(volume);
 
 			fk_Material.initDefault();			
 			blockModel.setShape(block);
@@ -37,6 +64,9 @@ namespace FK_CLI_Audio
 			win.open();
 			win.showGuide(fk_GuideMode.GRID_XZ);
 
+			var bgmTask = new Task(audio.start);
+			bgmTask.Start();
+
 			while(win.update()) {
 				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 
@@ -47,9 +77,10 @@ namespace FK_CLI_Audio
 					volume -= 0.1;
 				}
 
-				bgm.setGain(volume);
-				bgm.play();
+				audio.setGain(volume);
 			}
+			audio.endFlg = true;
+			Task.WaitAll(new[] { bgmTask });
 		}
 	}
 }
