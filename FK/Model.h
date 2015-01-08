@@ -78,6 +78,7 @@
 #include <FK/IndexFace.h>
 #include <FK/Boundary.h>
 #include <FK/Tree.h>
+#include <memory>
 
 class fk_Material;
 class fk_Shape;
@@ -185,7 +186,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	void				PreMove(void);
 	void				PostMove(void);
 
-	static fk_Tree		_modelTree;
+	static std::unique_ptr<fk_Tree>	_modelTree;
 	
  public:
 
@@ -1979,7 +1980,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	virtual void	connectShader(unsigned int) {};
 
 	void	TreePrint(void);
-	fk_Tree * GetModelTree(void);
 #endif
 };
 
