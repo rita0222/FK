@@ -76,7 +76,7 @@
 
 using namespace std;
 
-fk_Tree fk_Model::_modelTree("modelTree");
+unique_ptr<fk_Tree> fk_Model::_modelTree(new fk_Tree("modelTree"));
 
 class fk_ModelTreeObject : public fk_TreeBaseObject {
 private:
@@ -112,8 +112,8 @@ fk_TreeData * fk_Model::GetTreeData(fk_Model *argModel)
 	fk_TreeData				*curData;
 	fk_ModelTreeObject		*object;
 
-	for(curData = GetModelTree()->foreachData(NULL);
-		curData != NULL; curData = GetModelTree()->foreachData(curData)) {
+	for(curData = _modelTree->foreachData(NULL);
+		curData != NULL; curData = _modelTree->foreachData(curData)) {
 		object = static_cast<fk_ModelTreeObject *>(curData->getObject());
 		if(object == NULL) continue;
 		if(object->GetModel() == argModel) return curData;
@@ -127,11 +127,6 @@ fk_Model * fk_ModelTreeObject::GetModel(void)
 	return model;
 }
 
-fk_Tree * fk_Model::GetModelTree(void)
-{
-	return &_modelTree;
-}
-
 void fk_Model::EntryTree(void)
 {
 	fk_ModelTreeObject		*thisObject;
@@ -143,7 +138,7 @@ void fk_Model::EntryTree(void)
 
 	thisObject = new fk_ModelTreeObject();
 	ss << "m" << _modelID;
-	treeData = GetModelTree()->addNewChild(GetModelTree()->getRoot(), ss.str());
+	treeData = _modelTree->addNewChild(_modelTree->getRoot(), ss.str());
 	thisObject->SetModel(this);
 	treeData->setObject(thisObject);
 	parent = NULL;
@@ -157,7 +152,7 @@ void fk_Model::DeleteTree(void)
 	deleteChildren();
 	deleteParent();
 	if(treeData == NULL) return;
-	GetModelTree()->deleteBranch(treeData);
+	_modelTree->deleteBranch(treeData);
 	treeData = NULL;
 	return;
 }
@@ -182,7 +177,7 @@ bool fk_Model::setParent(fk_Model *argModel, bool argBindFlg)
 
 	if((parentData = argModel->treeData) == NULL) return false;
 	if(treeData == NULL) return false;
-	if(GetModelTree()->moveBranch(parentData, treeData) == false) return false;
+	if(_modelTree->moveBranch(parentData, treeData) == false) return false;
 
 	parent = argModel;
 
@@ -210,7 +205,7 @@ void fk_Model::deleteParent(bool argBindFlg)
 	if(treeFlag == false) return;
 	if(treeData == NULL) return;
 
-	GetModelTree()->moveBranch(GetModelTree()->getRoot(), treeData);
+	_modelTree->moveBranch(_modelTree->getRoot(), treeData);
 
 	if(argBindFlg == true) {
 		tmpPos.set(0.0, 0.0, 0.0, 1.0);
@@ -313,6 +308,6 @@ fk_Model * fk_Model::foreachChild(fk_Model *argModel)
 
 void fk_Model::TreePrint(void)
 {
-	GetModelTree()->Print();
+	_modelTree->Print();
 	return;
 }
