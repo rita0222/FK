@@ -20,7 +20,7 @@ namespace FK_CLI_TextImage
 			var str = new fk_UniStr();
 			var strModel = new fk_Model();
 
-			str.convert("FK 日本語");
+			str.convert("FK日本語");
 			texture.setImage(textImage);
 			if(textImage.initFont("mona.ttf") == false) {
 				System.Console.WriteLine("Font Error");
@@ -37,7 +37,7 @@ namespace FK_CLI_TextImage
 
 			strModel.setShape(texture);
 			strModel.glVec(0.0, 0.0, -1.0);
-			win.entry(strModel);
+			win.entry(strModel); 
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
 			win.open();
 			win.setCameraPos(0.0, 0.0, 100.0);

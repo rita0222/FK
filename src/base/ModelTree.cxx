@@ -152,10 +152,13 @@ void fk_Model::EntryTree(void)
 void fk_Model::DeleteTree(void)
 {
 	if(treeFlag == false) return;
+
+#ifndef FK_CLI_CODE
 	deleteChildren();
 	deleteParent();
 	if(treeData == NULL) return;
 	_modelTree->deleteBranch(treeData);
+#endif
 	treeData = NULL;
 	return;
 }
@@ -267,14 +270,6 @@ void fk_Model::deleteChildren(bool argBindFlg)
 
 	if(treeFlag == false) return;
 	if(treeData == NULL) return;
-
-#ifdef FK_CLI_CODE
-	int size = treeData->getChildrenSize();
-	if(size < 0 || size > 100000) {
-		treeData = NULL;
-		return;
-	}
-#endif
 
 	for(curChild = treeData->getChild(NULL);
 		curChild != NULL; curChild = treeData->getChild(curChild)) {
