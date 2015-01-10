@@ -12,6 +12,7 @@ namespace FK_CLI_TextImage
 		static void Main(string[] args)
 		{
 			// ウィンドウ生成
+
 			var win = new fk_AppWindow();
 			fk_Material.initDefault();
 
@@ -37,8 +38,8 @@ namespace FK_CLI_TextImage
 
 			strModel.setShape(texture);
 			strModel.glVec(0.0, 0.0, -1.0);
-			win.entry(strModel); 
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
+			win.entry(strModel); 
 			win.open();
 			win.setCameraPos(0.0, 0.0, 100.0);
 			win.setCameraFocus(0.0, 0.0, 0.0);

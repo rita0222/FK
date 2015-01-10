@@ -88,7 +88,8 @@ namespace FK_CLI
 
 		fk_UniStr::!fk_UniStr()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 

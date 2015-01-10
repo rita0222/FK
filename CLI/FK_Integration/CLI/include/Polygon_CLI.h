@@ -85,7 +85,8 @@ namespace FK_CLI
 
 		fk_Polyline::!fk_Polyline()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 	
@@ -127,7 +128,8 @@ namespace FK_CLI
 
 		fk_Closedline::!fk_Closedline()
 		{
-			if(dFlg == true) delete pBase;
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
 			pBase = NULL;
 		}
 	};		

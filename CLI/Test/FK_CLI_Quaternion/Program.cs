@@ -11,6 +11,7 @@ namespace FK_CLI_Quaternion
 	{
 		static void Main(string[] args)
 		{
+
 			var win = new fk_AppWindow();
 			win.setSize(500, 500);
 			var model = new fk_Model();
@@ -18,16 +19,17 @@ namespace FK_CLI_Quaternion
 			var cone = new fk_Cone(3, 4.0, 15.0);
 			var pos = new fk_Vector(0.0, 0.0, -15.0);
 
+
 			var angle1 = new fk_Angle(0.0, 0.0, 0.0);
 			var angle2 = new fk_Angle(FK.PI/2.0, FK.PI/2.0 - 0.01, 0.0);
 
 			var q1 = new fk_Quaternion();
 			var q2 = new fk_Quaternion();
 			fk_Quaternion q;
-
 			var poly = new fk_Polyline();
 
 			fk_Material.initDefault();
+
 			model.setShape(cone);
 			model.setMaterial(fk_Material.Yellow);
 			model.glAngle(angle1);
@@ -41,11 +43,11 @@ namespace FK_CLI_Quaternion
 			win.setTrackBallMode(true);
 			win.showGuide();
 			win.open();
-
 			q1.makeEuler(angle1);
 			q2.makeEuler(angle2);
 
 			double t = 0.0;
+
 			while(win.update() == true) {
 				q = fk_Math.quatInterSphere(q1, q2, t);
 				model.glAngle(q.getEuler());
