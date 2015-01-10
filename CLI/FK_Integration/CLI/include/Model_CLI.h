@@ -8,6 +8,8 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	public enum class fk_DrawMode : unsigned int {
 		NONEMODE			= 0x0000,
 		POINTMODE			= 0x0001,
@@ -20,20 +22,25 @@ namespace FK_CLI
 
 	public ref class fk_Model : fk_Boundary {
 	internal:
+
+		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
+		
 		::fk_Model * GetP(void)
 		{
 			return (::fk_Model *)(pBase);
 		}
-
+		
 	public:
 		fk_Model::fk_Model() : fk_Boundary(false)
 		{
 			pBase = new ::fk_Model();
+			modelList->Add(this);
 		}
 
 		fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false)
 		{
 			if(argNewFlg == true) pBase = new ::fk_Model();
+			modelList->Add(this);
 		}
 
 		fk_Model::~fk_Model()
@@ -41,6 +48,7 @@ namespace FK_CLI
 			if(pBase == NULL) return;
 			if(dFlg == true) delete GetP();
 			pBase = NULL;
+			modelList->Remove(this);
 		}
 
 		fk_Model::!fk_Model()
@@ -51,6 +59,7 @@ namespace FK_CLI
 				delete GetP();
 			}
 			pBase = NULL;
+			modelList->Remove(this);
 		}
 
 		bool glRotate(fk_Vector^ origin, fk_Axis axis, double theta);

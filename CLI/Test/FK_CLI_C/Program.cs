@@ -11,7 +11,7 @@ namespace FK_CLI_C
 	{
 		static void Main(string[] args)
 		{
-			samp3();			
+			samp1();			
 		}
 
 		static void samp1()
@@ -69,7 +69,6 @@ namespace FK_CLI_C
 
 			for(i = 0; win.update() == true; i++) {
 				camera.glTranslate(0.0, 0.0, -1.0);
-				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
 				var cPos = camera.getPosition();
 				if(cPos.z < -FK.EPS) camera.glFocus(origin);
 				if(i >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
