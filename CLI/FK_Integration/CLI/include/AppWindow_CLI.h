@@ -77,11 +77,13 @@ namespace FK_CLI
 
 		fk_AppWindow::~fk_AppWindow()
 		{
-			this->!fk_AppWindow();
+			delete pWin;
+			pWin = NULL;
 		}
 
 		fk_AppWindow::!fk_AppWindow()
 		{
+			pWin->SetFinalizeMode();
 			delete pWin;
 			pWin = NULL;
 		}

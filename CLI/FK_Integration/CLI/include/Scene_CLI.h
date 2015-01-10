@@ -28,13 +28,18 @@ namespace FK_CLI
 
 		fk_Scene::~fk_Scene()
 		{
-			this->!fk_Scene();
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
+			pBase = NULL;
 		}
 
 		fk_Scene::!fk_Scene()
 		{
 			if(pBase == NULL) return;
-			if(dFlg == true) delete GetP();
+			if(dFlg == true) {
+				GetP()->SetFinalizeMode();
+				delete GetP();
+			}
 			pBase = NULL;
 		}
 

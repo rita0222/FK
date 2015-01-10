@@ -988,6 +988,9 @@ public:
 					   double spinY, bool lockSW);
 	//@}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+	void		SetFinalizeMode(void);
+#endif
 };
 
 typedef fk_AppWindow fkut_SimpleWindow;

@@ -1044,6 +1044,10 @@ class fk_ShapeViewer : public fk_BaseObject {
 	 */
 	void	clearBrowser(void);
 	//@}
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+	void	SetFinalizeMode(void);
+#endif
 };
 
 #endif // !__FK_SHAPE_VIEWER_HEADER__

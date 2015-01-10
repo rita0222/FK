@@ -289,3 +289,10 @@ void fk_SpriteModel::setPositionLT(double x, double y)
 	fk_TexCoord	size = getSpriteSize();
 	glMoveTo(x + size.x/2.0, y - size.y/2.0, 0.0);
 }
+
+void fk_SpriteModel::SetFinalizeMode(void)
+{
+	pixelBase.SetTreeDelMode(false);
+	SetTreeDelMode(false);
+}
+

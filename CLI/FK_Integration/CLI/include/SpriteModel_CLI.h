@@ -28,13 +28,18 @@ namespace FK_CLI
 
 		fk_SpriteModel::~fk_SpriteModel()
 		{
-			this->!fk_SpriteModel();
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
+			this->pBase = NULL;
 		}
 
 		fk_SpriteModel::!fk_SpriteModel()
 		{
 			if(pBase == NULL) return;
-			if(dFlg == true) delete GetP();
+			if(dFlg == true) {
+				GetP()->SetFinalizeMode();
+				delete GetP();
+			}
 			this->pBase = NULL;
 		}
 

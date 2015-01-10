@@ -30,13 +30,18 @@ namespace FK_CLI
 
 		fk_Performer::~fk_Performer()
 		{
-			this->!fk_Performer();
+			if(pMotion == NULL) return;
+			if(dFlg == true) delete GetP();
+			pMotion = NULL;
 		}
 
 		fk_Performer::!fk_Performer()
 		{
 			if(pMotion == NULL) return;
-			if(dFlg == true) delete GetP();
+			if(dFlg == true) {
+				GetP()->SetFinalizeMode();
+				delete GetP();
+			}
 			pMotion = NULL;
 		}
 

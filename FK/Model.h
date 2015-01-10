@@ -162,6 +162,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	bool				reverseFlag;
 	bool				treeFlag;
 	unsigned int		_modelID;
+	bool			   	treeDelMode;
 
 	fk_HVector			*snapPos;
 	fk_HVector			*snapInhPos;
@@ -1979,6 +1980,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	// カスタムテクスチャ描画用エントリポイント
 	virtual void	connectShader(unsigned int) {};
 
+	void	SetTreeDelMode(bool);
 	void	TreePrint(void);
 #endif
 };

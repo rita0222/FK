@@ -282,6 +282,7 @@ fk_ShapeViewer::fk_ShapeViewer(int argW, int argH)
 	AxisInit();
 	ViewInit();
 	clearModel();
+
 	setWindowSize(argW, argH);
 	ModelInit(0, &localSolid);
 
@@ -513,7 +514,7 @@ void fk_ShapeViewer::ViewInit(void)
 
 void fk_ShapeViewer::clearModel(void)
 {
-	unsigned int	i;
+	_st		i;
 
 	for(i = 0; i < modelArray.size(); i++) {
 		scene.removeModel(modelArray[i]);
@@ -535,7 +536,7 @@ void fk_ShapeViewer::clearModel(void)
 
 void fk_ShapeViewer::SetAllMaterial(void)
 {
-	unsigned int	i;
+	_st		i;
 
 	for(i = 0; i < modelArray.size(); i++) {
 		modelArray[i]->setMaterial(*polyMaterial[i]);
@@ -1598,5 +1599,19 @@ void fk_ShapeViewer::printf(const char *argFormat, ...)
 void fk_ShapeViewer::clearBrowser(void)
 {
 	fk_Window::clearBrowser();
+	return;
+}
+
+void fk_ShapeViewer::SetFinalizeMode(void)
+{
+	parentModel.SetTreeDelMode(false);
+	for(_st i = 0; i < modelArray.size(); i++) {
+		modelArray[i]->SetTreeDelMode(false);
+	}
+	lightModel[0].SetTreeDelMode(false);
+	lightModel[1].SetTreeDelMode(false);
+	camera.SetTreeDelMode(false);
+	axisModel.SetTreeDelMode(false);
+
 	return;
 }

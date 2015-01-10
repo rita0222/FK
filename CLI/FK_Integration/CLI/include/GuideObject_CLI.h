@@ -45,13 +45,18 @@ namespace FK_CLI {
 
 		fk_GuideObject::~fk_GuideObject()
 		{
-			this->!fk_GuideObject();
+			if(pGuide == NULL) return;
+			if(dFlg == true) delete pGuide;
+			pGuide = NULL;
 		}
 
 		fk_GuideObject::!fk_GuideObject()
 		{
 			if(pGuide == NULL) return;
-			if(dFlg == true) delete pGuide;
+			if(dFlg == true) {
+				pGuide->SetFinalizeMode();
+				delete pGuide;
+			}
 			pGuide = NULL;
 		}
 

@@ -124,10 +124,15 @@ fk_TreeData * fk_Model::GetTreeData(fk_Model *argModel)
 	return NULL;
 }
 
-
 fk_Model * fk_ModelTreeObject::GetModel(void)
 {
 	return model;
+}
+
+void fk_Model::SetTreeDelMode(bool argMode)
+{
+	treeDelMode = argMode;
+	return;
 }
 
 void fk_Model::EntryTree(void)
@@ -153,12 +158,12 @@ void fk_Model::DeleteTree(void)
 {
 	if(treeFlag == false) return;
 
-#ifndef FK_CLI_CODE
-	deleteChildren();
-	deleteParent();
-	if(treeData == NULL) return;
-	_modelTree->deleteBranch(treeData);
-#endif
+	if(treeDelMode == true) {
+		deleteChildren();
+		deleteParent();
+		if(treeData == NULL) return;
+		_modelTree->deleteBranch(treeData);
+	}
 	treeData = NULL;
 	return;
 }

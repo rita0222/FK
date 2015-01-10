@@ -394,6 +394,8 @@ public:
 	void setAsCamera(fk_Scene *);
 	void setDrawMode(bool);
 	void setMarkerShape(fk_Shape *);
+
+	void SetFinalizeMode(void);
 #endif
 };
 

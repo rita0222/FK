@@ -106,6 +106,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	_globalModelID++;
 
 	treeFlag = false;
+	treeDelMode = true;
 	smoothFlag = false;
 
 	snapPos = NULL;

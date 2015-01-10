@@ -38,13 +38,18 @@ namespace FK_CLI
 
 		fk_Model::~fk_Model()
 		{
-			this->!fk_Model();
+			if(pBase == NULL) return;
+			if(dFlg == true) delete GetP();
+			pBase = NULL;
 		}
 
 		fk_Model::!fk_Model()
 		{
 			if(pBase == NULL) return;
-			if(dFlg == true) delete GetP();
+			if(dFlg == true) {
+				GetP()->SetTreeDelMode(false);
+				delete GetP();
+			}
 			pBase = NULL;
 		}
 
