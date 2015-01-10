@@ -60,6 +60,7 @@
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,6 +74,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
