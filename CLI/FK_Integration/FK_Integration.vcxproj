@@ -260,6 +260,7 @@
     <ClCompile Include="CLI\cpp\Quaternion_CLI.cpp" />
     <ClCompile Include="CLI\cpp\RectTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Reference_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Renderer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp" />
     <ClCompile Include="CLI\cpp\ShapeViewer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
@@ -438,6 +439,7 @@
     <ClInclude Include="CLI\include\Quaternion_CLI.h" />
     <ClInclude Include="CLI\include\RectTexture_CLI.h" />
     <ClInclude Include="CLI\include\Reference_CLI.h" />
+    <ClInclude Include="CLI\include\Renderer_CLI.h" />
     <ClInclude Include="CLI\include\Scene_CLI.h" />
     <ClInclude Include="CLI\include\ShapeViewer_CLI.h" />
     <ClInclude Include="CLI\include\Shape_CLI.h" />
