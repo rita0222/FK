@@ -84,6 +84,11 @@
 #endif
 #endif
 
+#if defined(WIN32) && !defined(_MINGW_)
+#pragma warning ( disable : 4793 )
+#pragma warning ( disable : 4996 )
+#endif
+
 using namespace std;
 
 extern "C" {
@@ -109,7 +114,7 @@ bool fk_Image::IsBmpFile(const string argFName) const
 
 	if(ifs.fail()) return false;
 
-	ifs.read(reinterpret_cast<char *>(buf), sizeof(fk_ImType)*2);
+	ifs.read((char *)(buf), sizeof(fk_ImType)*2);
 	if(ifs.bad()) {
 		ifs.close();
 		return false;
@@ -131,7 +136,7 @@ bool fk_Image::GetBmpFileHeader(ifstream &argIFS, fk_ImType *argHeader)
 {
 	size_t	imSize = sizeof(fk_ImType);
 
-	argIFS.read(reinterpret_cast<char *>(argHeader), static_cast<streamsize>(imSize * 14));
+	argIFS.read((char *)(argHeader), static_cast<streamsize>(imSize * 14));
 	if(argIFS.bad()) return false;
 
 	return true;
@@ -141,7 +146,7 @@ bool fk_Image::GetBmpInfoHeader(ifstream &argIFS, fk_ImType *argHeader)
 {
 	size_t	imSize = sizeof(fk_ImType);
 
-	argIFS.read(reinterpret_cast<char *>(argHeader), static_cast<streamsize>(imSize * 40));
+	argIFS.read((char *)(argHeader), static_cast<streamsize>(imSize * 40));
 	if(argIFS.bad()) return false;
 
 	return true;
@@ -192,7 +197,7 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 
 	if(bmpType <= 8) {
 		rgbQuad.resize(paletteSize);
-		ifs.read(reinterpret_cast<char *>(&rgbQuad[0]),
+		ifs.read((char *)(&rgbQuad[0]),
 				 static_cast<streamsize>(sizeof(fk_ImType) * paletteSize));
 		if(ifs.bad()) {
 			rgbQuad.clear();
@@ -209,7 +214,7 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 
 	for(y = bmpSize.h - 1; y >= 0; y--) {
 
-		ifs.read(reinterpret_cast<char *>(&tmpBuffer[0]),
+		ifs.read((char *)(&tmpBuffer[0]),
 				 static_cast<streamsize>(sizeof(fk_ImType) * static_cast<size_t>(tmpSize)));
 
 		if(ifs.bad()) {
@@ -384,15 +389,15 @@ fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 	bmpBuffer.resize(bmpBufSize);
 	for(x = 0; x < bmpBufSize; x++) bmpBuffer[x] = 0;
 
-	ofs.write(reinterpret_cast<char *>(&bmpFileHeader[0]),
+	ofs.write((char *)(&bmpFileHeader[0]),
 			  static_cast<streamsize>(sizeof(fk_ImType) * bmpFileHeader.size()));
 
-	ofs.write(reinterpret_cast<char *>(&bmpInfoHeader[0]),
+	ofs.write((char *)(&bmpInfoHeader[0]),
 			  static_cast<streamsize>(sizeof(fk_ImType) * bmpInfoHeader.size()));
 
 	for(y = hSize-1; y >= 0; y--) {
 		MakeBmpBuffer(y, wSize, argTransFlg, &bmpBuffer[0]);
-		ofs.write(reinterpret_cast<char *>(&bmpBuffer[0]),
+		ofs.write((char *)(&bmpBuffer[0]),
 				  static_cast<streamsize>(sizeof(fk_ImType) * bmpBufSize));
 	}
 
@@ -540,7 +545,7 @@ bool fk_Image::IsPngFile(const string argFName) const
 	if(ifs.fail()) return false;
 
 	// ヘッダの読込(4バイト)
-	ifs.read(reinterpret_cast<char *>(sig), 4);
+	ifs.read((char *)(sig), 4);
 
 	if(ifs.bad()) {
 		ifs.close();

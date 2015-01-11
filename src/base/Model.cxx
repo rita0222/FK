@@ -85,11 +85,10 @@ static unsigned int		_globalModelID = 1;
 fk_Model::fk_Model(fk_Shape *argShape)
 	: fk_MatrixAdmin(FK_MODEL)
 {
-	material = new fk_Material;
-
 	setDrawMode(FK_NONEMODE);
 	setMaterialMode(FK_CHILD_MODE);
 
+	material = new fk_Material();
 	parent = NULL;
 	treeData = NULL;
 	shape = NULL;
@@ -107,6 +106,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	_globalModelID++;
 
 	treeFlag = false;
+	treeDelMode = true;
 	smoothFlag = false;
 
 	snapPos = NULL;
@@ -128,7 +128,6 @@ fk_Model::~fk_Model()
 	DeleteTree();
 
 	delete material;
-
 	delete snapPos;
 	delete snapInhPos;
 	delete snapAngle;
@@ -153,8 +152,9 @@ void fk_Model::setShape(fk_Shape *argShape)
 		drawModeFlag = false;
 	}
 
+	fk_ObjectType type = argShape->getObjectType();
 	if(drawModeFlag == true) {
-		switch(argShape->getObjectType()) {
+		switch(type) {
 		  case FK_POINT:
 			drawMode = FK_POINTMODE;
 			break;
@@ -164,7 +164,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case FK_CLOSEDLINE:
 			drawMode = FK_LINEMODE;
 			break;
-
+			 
 		  case FK_POLYGON:
 		  case FK_BLOCK:
 		  case FK_CIRCLE:
@@ -189,7 +189,6 @@ void fk_Model::setShape(fk_Shape *argShape)
 			break;
 		}
 	}
-
 	shape = argShape;
 
 	return;

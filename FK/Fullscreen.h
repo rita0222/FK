@@ -95,7 +95,7 @@
 class fk_FullscreenController {
 private:
 
-#if defined(WIN32) && !defined(_MINGW_)
+#if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 
 	////////// ウインドウ保存関係 //////////
 	#define MAX_NAMELENGTH		512
@@ -156,7 +156,7 @@ public:
 	void	changeToWindow(void);
 };
 
-#if defined(WIN32) && !defined(_MINGW_)
+#if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 //! ウインドウ状態を保持する構造体

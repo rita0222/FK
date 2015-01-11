@@ -207,3 +207,11 @@ void fk_GuideObject::removeScene(fk_Scene *scene, fk_GuideMode mode)
 		scene->removeModel(&gridModel[2]);
 	}
 }
+
+void fk_GuideObject::SetFinalizeMode(void)
+{
+	for(int i = 0; i < 3; i++) {
+		axisModel[i].SetTreeDelMode(false);
+		gridModel[i].SetTreeDelMode(false);
+	}
+}

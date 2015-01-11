@@ -74,7 +74,10 @@
 #include <FK/Tree.h>
 #include <sstream>
 
+#include <msclr/marshal_cppstd.h>
+
 using namespace std;
+using namespace msclr::interop;
 
 unique_ptr<fk_Tree> fk_Model::_modelTree(new fk_Tree("modelTree"));
 
@@ -121,10 +124,15 @@ fk_TreeData * fk_Model::GetTreeData(fk_Model *argModel)
 	return NULL;
 }
 
-
 fk_Model * fk_ModelTreeObject::GetModel(void)
 {
 	return model;
+}
+
+void fk_Model::SetTreeDelMode(bool argMode)
+{
+	treeDelMode = argMode;
+	return;
 }
 
 void fk_Model::EntryTree(void)
@@ -149,10 +157,12 @@ void fk_Model::EntryTree(void)
 void fk_Model::DeleteTree(void)
 {
 	if(treeFlag == false) return;
-	deleteChildren();
-	deleteParent();
 	if(treeData == NULL) return;
-	_modelTree->deleteBranch(treeData);
+	if(treeDelMode == true) {
+		deleteChildren();
+		deleteParent();
+		_modelTree->deleteBranch(treeData);
+	}
 	treeData = NULL;
 	return;
 }

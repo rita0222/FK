@@ -217,6 +217,11 @@ public:
 	 *	\sa entryScene()
 	 */
 	void	removeScene(fk_Scene *scene, fk_GuideMode mode = FK_NO_GUIDE);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+	void	SetFinalizeMode(void);
+#endif
+
 };
 
 #endif //!__FK_GUIDE_OBJECT_HEADER__

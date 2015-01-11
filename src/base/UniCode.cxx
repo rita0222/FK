@@ -385,7 +385,7 @@ bool fk_UniStr::fgetLine_UTF16(ifstream *argIFS)
 
 	if(argIFS == NULL) return false;
 
-	argIFS->read(reinterpret_cast<char *>(&buffer[0]), sizeof(unsigned char) * 2);
+	argIFS->read((char *)(&buffer[0]), sizeof(unsigned char) * 2);
 	do {
 		if(argIFS->bad()) return false;
 		uniChar.setBuffer(buffer[0], buffer[1]);
@@ -403,7 +403,7 @@ bool fk_UniStr::fgetLine_UTF16(ifstream *argIFS)
 			push_back(uniChar.getCode());
 		}
 
-	} while(argIFS->read(reinterpret_cast<char *>(&buffer[0]), sizeof(unsigned char) * 2));
+	} while(argIFS->read((char *)(&buffer[0]), sizeof(unsigned char) * 2));
 
 	return true;
 }

@@ -347,6 +347,10 @@ class fk_DisplayLink : public fk_BaseObject {
 	bool	getStereoOverlayMode(void);
 	//@}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+	void	SetFinalizeMode(void);
+#endif
+
 };
 
 #endif // !__FK_DISPLAYLIST_HEADER__

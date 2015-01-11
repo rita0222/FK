@@ -74,7 +74,7 @@
 
 #include <FK/Fullscreen.h>
 
-#if defined(WIN32) && !defined(_MINGW_)
+#if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 
 /*
 #include <d3d9.h>

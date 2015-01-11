@@ -350,3 +350,10 @@ bool fk_DisplayLink::getStereoOverlayMode(void)
 {
 	return stereoOverlayMode;
 }
+
+void fk_DisplayLink::SetFinalizeMode(void)
+{
+	localCamera.SetTreeDelMode(false);
+	return;
+}
+

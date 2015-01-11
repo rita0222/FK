@@ -767,3 +767,10 @@ void fk_AppWindow::toWindow(void)
 {
 	if(fsc.isFullscreen()) fsc.changeToWindow();
 }
+
+void fk_AppWindow::SetFinalizeMode(void)
+{
+	camera.SetTreeDelMode(false);
+	light.SetTreeDelMode(false);
+}
+

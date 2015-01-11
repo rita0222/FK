@@ -69,6 +69,7 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
 #include <FK/MotionCharactor.h>
 #include <FK/Error.H>
 
@@ -1068,3 +1069,19 @@ void fk_Performer::setAsCamera(fk_Scene *argScn)
 
 	return;
 }
+
+void fk_Performer::SetFinalizeMode(void)
+{
+	_st i;
+
+	for(i = 0; i < jointModel.size(); i++) {
+		jointModel[i]->SetTreeDelMode(false);
+	}
+
+	for(i = 0; i < objModel.size(); i++) {
+		objModel[i]->SetTreeDelMode(false);
+	}
+
+	absParent.SetTreeDelMode(false);
+}
+

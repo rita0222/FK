@@ -449,6 +449,12 @@ double fk_AudioBase::getReferenceDist(void)
 	return refDist;
 }
 
+void fk_AudioBase::setSurroundMode(bool argMode)
+{
+	surround = argMode;
+	return;
+}
+
 bool fk_AudioBase::getSurroundMode(void)
 {
 	return surround;

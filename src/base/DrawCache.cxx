@@ -425,6 +425,6 @@ bool fk_DrawCache::DeleteLoopObj(int argID)
 
 void fk_DrawCache::PrintCache(void)
 {
-	fk_Printf("(vSize, lSize) = %d, %d", vertexArray.size(), ifsArray.size());
+	//fk_Printf("(vSize, lSize) = %d, %d", vertexArray.size(), ifsArray.size());
 	return;
 }
