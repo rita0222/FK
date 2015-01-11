@@ -79,6 +79,8 @@ namespace FK_CLI_Particle
 					particle.handle(); // パーティクルを 1 ステップ実行する。
 				}
 			}
+
+			
 		}
 	}
 }

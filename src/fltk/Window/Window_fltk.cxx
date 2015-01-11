@@ -332,7 +332,7 @@ bool fk_Window::SnapImageGDI(fk_Image *argImage)
 	HDC hdcScreen = GetDC(NULL);
 	HDC _hdcShot = CreateCompatibleDC(hdcScreen);
 	HBITMAP _bmpShot = CreateDIBSection(NULL, &bi, DIB_RGB_COLORS,
-										reinterpret_cast<void **>(&buf), NULL, 0);
+										(void **)(&buf), NULL, 0);
 	HBITMAP _bmpOld = (HBITMAP)SelectObject(_hdcShot, _bmpShot);
 	BitBlt(_hdcShot, 0, 0, iWidth, iHeight, hdcScreen, rect.left, rect.top, SRCCOPY);
 	ReleaseDC(NULL, hdcScreen);

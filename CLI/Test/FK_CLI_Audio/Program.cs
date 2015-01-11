@@ -10,7 +10,7 @@ namespace FK_CLI_Audio
 {
 	class MyBGM
 	{
-		public bool endFlg;
+		public bool endFlg { get; set; }
 		private fk_AudioStream bgm;
 
 		public MyBGM()
