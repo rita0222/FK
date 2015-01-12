@@ -129,6 +129,7 @@ namespace PlugInTestApp
         {
             var loc = this.panel1.Size;
             renderer.Resize(loc.Width, loc.Height);
+            renderer.Draw();
         }
 
         private void Form1_Load(object sender, EventArgs e)
