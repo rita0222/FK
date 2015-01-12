@@ -74,10 +74,7 @@
 #include <FK/Tree.h>
 #include <sstream>
 
-#include <msclr/marshal_cppstd.h>
-
 using namespace std;
-using namespace msclr::interop;
 
 unique_ptr<fk_Tree> fk_Model::_modelTree(new fk_Tree("modelTree"));
 
