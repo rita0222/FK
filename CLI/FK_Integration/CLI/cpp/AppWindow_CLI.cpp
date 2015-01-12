@@ -261,16 +261,14 @@ namespace FK_CLI {
 		
 	void fk_AppWindow::setScene(fk_Scene^ argScene)
 	{
+		if(!argScene) return;
 		GetP()->setScene(argScene->GetP(), false);
+		scene = argScene;
 	}
 			
 	fk_Scene^ fk_AppWindow::getScene(void)
 	{
-		fk_Scene^ S = gcnew fk_Scene(false);
-		S->pBase = GetP()->getScene();
-		S->dFlg = false;
-
-		return S;
+		return scene;
 	}
 		
 	void fk_AppWindow::setSceneDefault(void)

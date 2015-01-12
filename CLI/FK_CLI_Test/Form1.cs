@@ -102,7 +102,7 @@ namespace PlugInTestApp
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
-            this.timer1.Interval = 16;
+            this.timer1.Interval = 8;
             this.timer1.Enabled = true;
             this.timer1.Tick += (s, e) =>
             {
@@ -112,6 +112,7 @@ namespace PlugInTestApp
                 if (cPos.z < -FK.EPS) camera.glFocus(origin);
                 if (count >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
                 ++count;
+				this.textBox1.Text = camera.getPosition().ToString();
             };
         }
 

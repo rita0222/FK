@@ -432,6 +432,7 @@
     <ClInclude Include="CLI\include\Palette_CLI.h" />
     <ClInclude Include="CLI\include\ParticleSet_CLI.h" />
     <ClInclude Include="CLI\include\Particle_CLI.h" />
+    <ClInclude Include="CLI\include\Performer_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
     <ClInclude Include="CLI\include\Prism_CLI.h" />

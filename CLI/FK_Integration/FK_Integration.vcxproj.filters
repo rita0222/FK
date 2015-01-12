@@ -1107,5 +1107,8 @@
     <ClInclude Include="CLI\include\Renderer_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="CLI\include\Performer_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

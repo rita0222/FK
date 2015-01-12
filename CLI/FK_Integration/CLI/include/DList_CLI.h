@@ -9,6 +9,8 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	public enum class fk_StereoChannel {
 		STEREO_LEFT,
 		STEREO_RIGHT
@@ -16,15 +18,36 @@ namespace FK_CLI
 
 	public ref class fk_DisplayLink : fk_BaseObject {
 	internal:
+		List<fk_Model^>^ modelList;
+		List<fk_Model^>^ overlayList;
+		fk_Model^ camera;
+		fk_Model^ rCamera;
+		fk_Model^ lCamera;
+		fk_ProjectBase^ proj;
+		fk_ProjectBase^ rProj;
+		fk_ProjectBase^ lProj;
+
 		::fk_DisplayLink * GetP(void)
 		{
 			return (::fk_DisplayLink *)(pBase);
 		}
 
+		void CameraUpdate(void)
+		{
+			camera = gcnew fk_Model(false);
+			camera->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
+			camera->dFlg = false;
+		}
+
 		::fk_StereoChannel GetStereo(fk_StereoChannel);
 	
 	public:
-		fk_DisplayLink::fk_DisplayLink(bool argNewFlg) : fk_BaseObject(false)
+		fk_DisplayLink::fk_DisplayLink(bool argNewFlg)
+			: fk_BaseObject(false),
+			modelList(gcnew List<fk_Model^>()),
+			overlayList(gcnew List<fk_Model^>()),
+			rCamera(nullptr), lCamera(nullptr),
+			proj(nullptr), rProj(nullptr), lProj(nullptr)
 		{
 		}
 

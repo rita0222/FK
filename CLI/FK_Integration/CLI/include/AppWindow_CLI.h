@@ -60,6 +60,7 @@ namespace FK_CLI
 	public ref class fk_AppWindow {
 	internal:
 		::fk_AppWindow *pWin;
+		fk_Scene^ scene;
 
 		::fk_AppWindow * GetP(void)
 		{
@@ -73,6 +74,9 @@ namespace FK_CLI
 		fk_AppWindow::fk_AppWindow()
 		{
 			pWin = new ::fk_AppWindow();
+			scene = gcnew fk_Scene(false);
+			scene->pBase = GetP()->getScene();
+			scene->dFlg = false;
 		}
 
 		fk_AppWindow::~fk_AppWindow()

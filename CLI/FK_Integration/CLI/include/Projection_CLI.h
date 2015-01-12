@@ -31,6 +31,11 @@ namespace FK_CLI
 			if(argNewFlg == true) pProj = new ::fk_ProjectBase();
 		}
 
+		fk_ProjectBase::fk_ProjectBase() : dFlg(true)
+		{
+			pProj = new ::fk_ProjectBase();
+		}
+
 		fk_ProjectBase::~fk_ProjectBase()
 		{
 			this->!fk_ProjectBase();

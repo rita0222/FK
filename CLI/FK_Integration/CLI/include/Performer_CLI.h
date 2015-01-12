@@ -11,10 +11,12 @@ namespace FK_CLI
 	internal:
 		::fk_Performer *pMotion;
 		bool dFlg;
+		fk_Model^ baseModel;
 
 		::fk_Performer * GetP(void)
 		{
 			return pMotion;
+			baseModel = getBaseModel();
 		}
 
 	public:
@@ -26,6 +28,7 @@ namespace FK_CLI
 		fk_Performer::fk_Performer(bool argNewFlg)
 		{
 			if(argNewFlg == true) pMotion = new ::fk_Performer();
+			baseModel = getBaseModel();
 		}
 
 		fk_Performer::~fk_Performer()

@@ -24,6 +24,7 @@ namespace FK_CLI
 	internal:
 
 		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
+		fk_Shape^ shape;
 		
 		::fk_Model * GetP(void)
 		{
@@ -31,13 +32,13 @@ namespace FK_CLI
 		}
 		
 	public:
-		fk_Model::fk_Model() : fk_Boundary(false)
+		fk_Model::fk_Model(): fk_Boundary(false), shape(nullptr)
 		{
 			pBase = new ::fk_Model();
 			modelList->Add(this);
 		}
 
-		fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false)
+		fk_Model::fk_Model(bool argNewFlg): fk_Boundary(false), shape(nullptr)
 		{
 			if(argNewFlg == true) pBase = new ::fk_Model();
 			modelList->Add(this);
@@ -45,6 +46,7 @@ namespace FK_CLI
 
 		fk_Model::~fk_Model()
 		{
+			shape = nullptr;
 			if(pBase == NULL) return;
 			if(dFlg == true) delete GetP();
 			pBase = NULL;
@@ -53,6 +55,7 @@ namespace FK_CLI
 
 		fk_Model::!fk_Model()
 		{
+			shape = nullptr;
 			if(pBase == NULL) return;
 			if(dFlg == true) {
 				GetP()->SetTreeDelMode(false);

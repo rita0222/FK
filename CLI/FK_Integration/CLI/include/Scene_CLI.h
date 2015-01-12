@@ -19,11 +19,13 @@ namespace FK_CLI
 		fk_Scene::fk_Scene(bool argNewFlg) : fk_Fog(false)
 		{
 			if(argNewFlg == true) pBase = new ::fk_Scene();
+			CameraUpdate();
 		}
 
 		fk_Scene::fk_Scene() : fk_Fog(false)
 		{
 			pBase = new ::fk_Scene();
+			CameraUpdate();
 		}
 
 		fk_Scene::~fk_Scene()

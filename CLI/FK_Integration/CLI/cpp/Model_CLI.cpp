@@ -136,6 +136,7 @@ namespace FK_CLI {
 
 	void fk_Model::setShape(fk_Shape^ argShape)
 	{
+		shape = argShape;
 		if(!argShape) return;
 		::fk_Shape *pS = (::fk_Shape *)(argShape->pBase);
 		GetP()->setShape(pS);
@@ -143,9 +144,6 @@ namespace FK_CLI {
 
 	fk_Shape^ fk_Model::getShape(void)
 	{
-		if(GetP()->getShape() == NULL) return nullptr;
-		fk_Shape^ shape = gcnew fk_Shape(false);
-		shape->pBase = GetP()->getShape();
 		return shape;
 	}
 
