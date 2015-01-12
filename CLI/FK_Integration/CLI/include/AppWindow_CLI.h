@@ -77,6 +77,7 @@ namespace FK_CLI
 			scene = gcnew fk_Scene(false);
 			scene->pBase = GetP()->getScene();
 			scene->dFlg = false;
+			scene->CameraUpdate();
 		}
 
 		fk_AppWindow::~fk_AppWindow()
