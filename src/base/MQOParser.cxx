@@ -450,6 +450,7 @@ bool fk_MQOParser::PushFaceData(string *argLine, int argMateID)
 	vector<int>				vIDArray;
 	vector<fk_TexCoord>		texArray;
 	fk_TexCoord				tmpCoord;
+	double					tmpX, tmpY;
 
 	sep = "()[]{}";
 	word = PopWord(argLine, sep);
@@ -488,10 +489,17 @@ bool fk_MQOParser::PushFaceData(string *argLine, int argMateID)
 			for(i = 0; i < vNum; i++) {
 				word = PopWord(argLine, sep);
 				if(IsNumeric(word) == false) return false;
-				tmpCoord.x = static_cast<float>(Str2Double(word));
+				tmpX = Str2Double(word);
 				word = PopWord(argLine, sep);
 				if(IsNumeric(word) == false) return false;
-				tmpCoord.y = static_cast<float>(1.0 - Str2Double(word));
+				tmpY = 1.0 - Str2Double(word);
+
+				while(tmpX < 0.0) tmpX += 1.0;
+				while(tmpX > 1.0) tmpX -= 1.0;
+				while(tmpY < 0.0) tmpY += 1.0;
+				while(tmpY > 1.0) tmpY -= 1.0;
+				tmpCoord.x = static_cast<float>(tmpX);
+				tmpCoord.y = static_cast<float>(tmpY);
 				texArray.push_back(tmpCoord);
 			}
 			tmpCoord = texArray[0];

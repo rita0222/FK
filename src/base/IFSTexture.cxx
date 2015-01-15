@@ -108,22 +108,30 @@ void fk_IFSTexture::init(void)
 
 fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 {
-	fk_TexCoord	dummy(0.0, 0.0);
+	fk_TexCoord	coord(0.0, 0.0);
 	int			index;
+	double		wScale, hScale;
 
 	if(ifs->getFaceType() != FK_IF_TRIANGLES &&
 	   ifs->getFaceType() != FK_IF_QUADS) {
-		return dummy;
+		return coord;
 	}
 
 	index = ifs->getFaceData(argTID, argVID);
 	if(index < 0) {
 		fk_PutError("fk_IFSTexture", "getTextureCoord", 1,
 					"Face ID Error.");
-		return dummy;
+		return coord;
 	}
 
-	return coordArray[static_cast<_st>(index)];
+	coord = coordArray[static_cast<_st>(index)];
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+	wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+	hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+	coord.x /= static_cast<float>(wScale);
+	coord.y /= static_cast<float>(hScale);
+	return coord;
 }
 
 fk_IndexFaceSet * fk_IFSTexture::getIFS(void)
