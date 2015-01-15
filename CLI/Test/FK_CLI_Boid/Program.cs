@@ -55,7 +55,7 @@ namespace FK_CLI_Boid
 			}
 		}
 
-		public void forward()
+		public void forward(bool argGMode)
 		{
 			int i, j;
 			var gVec = new fk_Vector();
@@ -86,16 +86,19 @@ namespace FK_CLI_Boid
 						vec += paramB * vArray[j];
 					}
 				}
-				vec += paramC * (gVec - pArray[i]);
+
+				if(argGMode == true) {
+					vec += paramC * (gVec - pArray[i]);
+				}
 
 				if((pArray[i].x > AREASIZE && vArray[i].x > 0.0) ||
 					(pArray[i].x < -AREASIZE && vArray[i].x < 0.0)) {
-					vec.x -= vec.x * 0.1;
+					vec.x -= vec.x * 0.2;
 				}
 
 				if((pArray[i].y > AREASIZE && vArray[i].y > 0.0) ||
 					(pArray[i].y < -AREASIZE && vArray[i].y < 0.0)) {
-					vec.y -= vec.y * 0.1;
+					vec.y -= vec.y * 0.2;
 				}
 
 				vec.z = 0.0;
@@ -123,7 +126,7 @@ namespace FK_CLI_Boid
 			win.open();
 
 			while(win.update() == true) {
-				boid.forward();
+				boid.forward(win.getKeyStatus(' ', fk_SwitchStatus.RELEASE));
 			}
 
 		}
