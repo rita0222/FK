@@ -104,6 +104,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FK_CSharpHelper\FK_CSharpHelper.csproj">
+      <Project>{E4A2C2DA-D590-4B71-8219-33A6D074FDC7}</Project>
+      <Name>FK_CSharpHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FK_Integration\FK_Integration.vcxproj">
       <Project>{df7dd30e-bb32-4c17-a0de-32b447c37bce}</Project>
       <Name>FK_Integration</Name>

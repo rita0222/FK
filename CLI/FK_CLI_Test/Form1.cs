@@ -9,19 +9,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FK_CLI;
+using FK_CSharpHelper;
 
 namespace PlugInTestApp
 {
     public partial class Form1 : Form
     {
-        private fk_Renderer renderer = null;
-        private fk_Scene scene = new fk_Scene();
+        private fk_Viewport viewport = null;
+        private fk_Scene scene = null;
 
         public Form1()
         {
             InitializeComponent();
+            
+            #region MathTest
 
-			var	mat	= new fk_Matrix();
+            var	mat	= new fk_Matrix();
             var vec = new fk_Vector();
             vec.x = 1.0;
             vec.y = 0.0;
@@ -50,7 +53,13 @@ namespace PlugInTestApp
 			fk_HVector vecH2 = vecD;
             this.textBox3.Text = vecH2.ToString();
 
+            #endregion
+
             // ここからアプリケーションロジック
+
+            scene = new fk_Scene();
+            viewport = new fk_Viewport(panel1);
+            viewport.Scene = scene;
 
             fk_Material.initDefault();
 
@@ -102,9 +111,7 @@ namespace PlugInTestApp
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
-            this.timer1.Interval = 8;
-            this.timer1.Enabled = true;
-            this.timer1.Tick += (s, e) =>
+            viewport.PreDraw += (s, e) =>
             {
                 camera.glTranslate(0.0, 0.0, -1.0);
                 blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
@@ -114,31 +121,6 @@ namespace PlugInTestApp
                 ++count;
 				this.textBox1.Text = camera.getPosition().ToString();
             };
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            renderer.Draw();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            renderer.Draw();
-        }
-
-        private void panel1_Resize(object sender, EventArgs e)
-        {
-            var loc = this.panel1.Size;
-            renderer.Resize(loc.Width, loc.Height);
-            renderer.Draw();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            var loc = this.panel1.Size;
-            renderer = new fk_Renderer();
-            renderer.Initialize(this.panel1.Handle, loc.Width, loc.Height);
-            renderer.SetScene(scene);
         }
     }
 }
