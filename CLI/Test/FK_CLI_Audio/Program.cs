@@ -12,18 +12,21 @@ namespace FK_CLI_Audio
 	{
 		public bool endFlg { get; set; }
 		private fk_AudioStream bgm;
+		private bool openFlg;
 
-		public MyBGM()
+		public MyBGM(string argFileName)
 		{
 			endFlg = false;
 			bgm = new fk_AudioStream();
-			if(bgm.open("epoq.ogg") == false) {
+			openFlg = bgm.open(argFileName);
+			if(openFlg == false) {
 				Console.WriteLine("Audio File Open Error.");
 			}
 		}
 
 		public void start()
 		{
+			if(openFlg == false) return;
 			bgm.setLoopMode(true);
 			bgm.setGain(0.5);
 			while(endFlg == false) {
@@ -48,7 +51,7 @@ namespace FK_CLI_Audio
 			var block = new fk_Block(1.0, 1.0, 1.0);
 			var blockModel = new fk_Model();
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
-			var audio = new MyBGM();
+			var audio = new MyBGM("epoq.ogg");
 
 			double volume = 0.5;
 

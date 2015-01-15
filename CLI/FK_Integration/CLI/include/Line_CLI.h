@@ -32,9 +32,9 @@ namespace FK_CLI
 
 		fk_Line::!fk_Line()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void pushLine(array<fk_Vector^>^ array);

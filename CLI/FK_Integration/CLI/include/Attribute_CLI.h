@@ -27,9 +27,9 @@ namespace FK_CLI
 
 		fk_Attribute::!fk_Attribute()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		bool setAttrII(int key, int value);

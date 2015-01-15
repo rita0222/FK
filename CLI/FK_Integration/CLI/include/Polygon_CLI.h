@@ -41,9 +41,9 @@ namespace FK_CLI
 
 		fk_Polygon::!fk_Polygon()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void pushVertex(fk_Vector^ pos);
@@ -85,9 +85,9 @@ namespace FK_CLI
 
 		fk_Polyline::!fk_Polyline()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 	
 		void pushVertex(fk_Vector^ pos);
@@ -128,9 +128,9 @@ namespace FK_CLI
 
 		fk_Closedline::!fk_Closedline()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 	};		
 }

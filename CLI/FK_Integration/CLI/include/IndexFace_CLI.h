@@ -44,9 +44,9 @@ namespace FK_CLI
 
 		fk_IndexFaceSet::!fk_IndexFaceSet()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void cloneShape(fk_IndexFaceSet^ IFS);

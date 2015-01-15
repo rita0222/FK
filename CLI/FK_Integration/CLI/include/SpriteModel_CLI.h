@@ -28,19 +28,19 @@ namespace FK_CLI
 
 		fk_SpriteModel::~fk_SpriteModel()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			this->pBase = NULL;
+			this->pBase = nullptr;
 		}
 
 		fk_SpriteModel::!fk_SpriteModel()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) {
 				GetP()->SetFinalizeMode();
 				delete GetP();
 			}
-			this->pBase = NULL;
+			this->pBase = nullptr;
 		}
 
 		bool readBMP(String^ filename);

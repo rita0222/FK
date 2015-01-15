@@ -123,7 +123,7 @@ namespace FK_CLI {
 	fk_Model^ fk_AudioBase::getListenerModel(void)
 	{
 		::fk_Model *pM = ::fk_AudioBase::getListenerModel();
-		if(pM == NULL) return nullptr;
+		if(pM == nullptr) return nullptr;
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = ::fk_AudioBase::getListenerModel();
 		M->dFlg = false;

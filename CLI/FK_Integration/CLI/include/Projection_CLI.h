@@ -43,9 +43,9 @@ namespace FK_CLI
 
 		fk_ProjectBase::!fk_ProjectBase()
 		{
-			if(pProj == NULL) return;
+			if(pProj == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pProj = NULL;
+			pProj = nullptr;
 		}
 
 		fk_ProjectMode getMode(void);
@@ -83,7 +83,7 @@ namespace FK_CLI
 		fk_Perspective::!fk_Perspective()
 		{
 			if(dFlg == true) delete pProj;
-			pProj = NULL;
+			pProj = nullptr;
 		}
 
 		void setFovy(double fovy);
@@ -128,7 +128,7 @@ namespace FK_CLI
 		fk_Frustum::!fk_Frustum()
 		{
 			if(dFlg == true) delete pProj;
-			pProj = NULL;
+			pProj = nullptr;
 		}
 
 		void setLeft(double left);
@@ -180,7 +180,7 @@ namespace FK_CLI
 		fk_Ortho::!fk_Ortho()
 		{
 			if(dFlg == true) delete pProj;
-			pProj = NULL;
+			pProj = nullptr;
 		}
 
 		void setLeft(double left);

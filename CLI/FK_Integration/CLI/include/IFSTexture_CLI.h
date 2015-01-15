@@ -44,9 +44,9 @@ namespace FK_CLI
 
 		fk_IFSTexture::!fk_IFSTexture()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void init(void);

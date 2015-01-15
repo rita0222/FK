@@ -38,9 +38,9 @@ namespace FK_CLI
 
 		fk_Sphere::!fk_Sphere()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void setDivide(int div);

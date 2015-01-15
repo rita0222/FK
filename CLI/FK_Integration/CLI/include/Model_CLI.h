@@ -47,21 +47,21 @@ namespace FK_CLI
 		fk_Model::~fk_Model()
 		{
 			shape = nullptr;
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 			modelList->Remove(this);
 		}
 
 		fk_Model::!fk_Model()
 		{
 			shape = nullptr;
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) {
 				GetP()->SetTreeDelMode(false);
 				delete GetP();
 			}
-			pBase = NULL;
+			pBase = nullptr;
 			modelList->Remove(this);
 		}
 

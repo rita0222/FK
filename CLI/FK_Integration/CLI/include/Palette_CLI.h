@@ -41,9 +41,9 @@ namespace FK_CLI
 
 		fk_Palette::!fk_Palette()
 		{
-			if(pPalette == NULL) return;
+			if(pPalette == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pPalette = NULL;
+			pPalette = nullptr;
 		}
 
 		void clearMaterial(void);

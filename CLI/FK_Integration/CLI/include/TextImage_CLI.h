@@ -47,9 +47,9 @@ namespace FK_CLI {
 
 		fk_TextImage::!fk_TextImage()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		bool initFont(String^ fontFileName);

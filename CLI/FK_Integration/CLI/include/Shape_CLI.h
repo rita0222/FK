@@ -37,9 +37,9 @@ namespace FK_CLI
 
 		fk_Shape::!fk_Shape()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		fk_RealShapeType^ getRealShapeType(void);

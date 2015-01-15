@@ -219,7 +219,7 @@ namespace FK_CLI {
 	{
 		::fk_Material *pM;
 
-		pM = (!argMat) ? NULL : argMat->pMat;
+		pM = (!argMat) ? nullptr : argMat->pMat;
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, argTriFlg);
 	}
 
@@ -227,12 +227,12 @@ namespace FK_CLI {
 	{
 		::fk_Material *pM;
 
-		pM = (!argMat) ? NULL : argMat->pMat;
+		pM = (!argMat) ? nullptr : argMat->pMat;
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, false);
 	}
 	bool fk_IndexFaceSet::writeVRMLFile(String^ argFileName)
 	{
-		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), NULL, false);
+		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), nullptr, false);
 	}
 
 	bool fk_IndexFaceSet::writeVRMLFile(String^ argFileName, array<double>^ argTime,
@@ -242,7 +242,7 @@ namespace FK_CLI {
 		::fk_Material *pM;
 
 		if(!argFileName || !argTime || !argPos) return false;
-		pM = (!argMat) ? NULL : argMat->pMat;
+		pM = (!argMat) ? nullptr : argMat->pMat;
 
 		int i;
 		int timeSize = argTime->Length;

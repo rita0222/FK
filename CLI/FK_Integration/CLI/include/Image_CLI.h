@@ -224,9 +224,9 @@ namespace FK_CLI
 
 		fk_Image::!fk_Image()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void init(void);

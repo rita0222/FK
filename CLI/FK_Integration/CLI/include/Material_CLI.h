@@ -36,9 +36,9 @@ namespace FK_CLI
 
 		fk_Color::!fk_Color()
 		{
-			if(pCol == NULL) return;
+			if(pCol == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pCol = NULL;
+			pCol = nullptr;
 		}
 
 		property float col[int] {
@@ -160,7 +160,7 @@ namespace FK_CLI
 		fk_Material::!fk_Material()
 		{
 			if(dFlg == true) delete pMat;
-			pMat = NULL;
+			pMat = nullptr;
 		}
 
 		bool Equals(fk_Material^ argM)

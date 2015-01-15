@@ -31,7 +31,7 @@ namespace FK_CLI
 		fk_AudioBase::!fk_AudioBase()
 		{
 			if(dFlg == true) delete pAudio;
-			pAudio = NULL;
+			pAudio = nullptr;
 		}
 
 		virtual bool open(String^ name) abstract;

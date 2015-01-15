@@ -32,19 +32,19 @@ namespace FK_CLI
 
 		fk_Scene::~fk_Scene()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		fk_Scene::!fk_Scene()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) {
 				GetP()->SetFinalizeMode();
 				delete GetP();
 			}
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void setBGColor(fk_Color^ color);

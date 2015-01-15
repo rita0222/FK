@@ -37,9 +37,9 @@ namespace FK_CLI
 
 		fk_ParticleSet::!fk_ParticleSet()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void handle(void);

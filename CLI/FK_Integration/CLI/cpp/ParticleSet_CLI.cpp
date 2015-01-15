@@ -57,9 +57,9 @@ namespace FK_CLI
 
 	fk_Particle^ fk_ParticleSet::getNextParticle(fk_Particle^ argP)
 	{
-		::fk_Particle *pP = (!argP) ? NULL : argP->GetP();
+		::fk_Particle *pP = (!argP) ? nullptr : argP->GetP();
 		pP = GetP()->getNextParticle(pP);
-		if(pP == NULL) return nullptr;
+		if(pP == nullptr) return nullptr;
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = pP;
 		P->dFlg = false;

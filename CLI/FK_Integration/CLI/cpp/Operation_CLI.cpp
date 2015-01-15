@@ -32,7 +32,7 @@ namespace FK_CLI {
 		::fk_Edge *pE = GetP()->makeEdge(argV1->GetP(), argV2->GetP(),
 										 argH11->GetP(), argH12->GetP(),
 										 argH21->GetP(), argH22->GetP());
-		if(pE == NULL) return nullptr;
+		if(pE == nullptr) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
 		E->pBase = pE;
 		E->dFlg = false;
@@ -45,7 +45,7 @@ namespace FK_CLI {
 
 		::fk_Edge *pE = GetP()->makeEdge(argV1->GetP(), argV2->GetP());
 
-		if(pE == NULL) return nullptr;
+		if(pE == nullptr) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
 		E->pBase = pE;
 		E->dFlg = false;
@@ -62,7 +62,7 @@ namespace FK_CLI {
 	{
 		if(!argH) return nullptr;
 		::fk_Loop *pL = GetP()->makeLoop(argH->GetP());
-		if(pL == NULL) return nullptr;
+		if(pL == nullptr) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = pL;
 		L->dFlg = false;
@@ -79,7 +79,7 @@ namespace FK_CLI {
 	{
 		if(!argH1 || !argH2) return nullptr;
 		::fk_Edge *pE = GetP()->separateLoop(argH1->GetP(), argH2->GetP());
-		if(pE == NULL) return nullptr;
+		if(pE == nullptr) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
 		E->pBase = pE;
 		E->dFlg = false;
@@ -96,7 +96,7 @@ namespace FK_CLI {
 	{
 		if(!argE) return nullptr;
 		::fk_Vertex *pV = GetP()->separateEdge(argE->GetP());
-		if(pV == NULL) return nullptr;
+		if(pV == nullptr) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
 		V->pBase = pV;
 		V->dFlg = false;

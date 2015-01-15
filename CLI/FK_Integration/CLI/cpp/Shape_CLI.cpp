@@ -40,7 +40,7 @@ namespace FK_CLI {
 	fk_Palette^ fk_Shape::getPaletteData(void)
 	{
 		::fk_Palette *pP = GetP()->getPaletteData();
-		if(pP == NULL) return nullptr;
+		if(pP == nullptr) return nullptr;
 
 		fk_Palette^ pal = gcnew fk_Palette();
 		::fk_Palette *pP2 = pal->GetP();

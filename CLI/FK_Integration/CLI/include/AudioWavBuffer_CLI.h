@@ -27,9 +27,9 @@ namespace FK_CLI
 
 		fk_AudioWavBuffer::!fk_AudioWavBuffer()
 		{
-			if(pAudio == NULL) return;
+			if(pAudio == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pAudio = NULL;
+			pAudio = nullptr;
 		}
 
 		virtual bool open(String^ name) override;

@@ -74,7 +74,7 @@ namespace FK_CLI {
 
 		fk_BaseObject::fk_BaseObject(bool argNewFlg) : dFlg(true)
 		{
-			if(argNewFlg == true) pBase = NULL;
+			if(argNewFlg == true) pBase = nullptr;
 		}
 		
 		fk_BaseObject::~fk_BaseObject()
@@ -84,9 +84,9 @@ namespace FK_CLI {
 
 		fk_BaseObject::!fk_BaseObject()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete pBase;
-			pBase = NULL;
+			pBase = nullptr;
 		}
 	};
 }

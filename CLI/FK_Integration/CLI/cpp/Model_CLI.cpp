@@ -411,7 +411,7 @@ namespace FK_CLI {
 
 	fk_Model^ fk_Model::getParent(void)
 	{
-		if(GetP()->getParent() == NULL) return nullptr;
+		if(GetP()->getParent() == nullptr) return nullptr;
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = GetP()->getParent();
 		return M;

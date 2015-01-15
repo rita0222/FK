@@ -33,19 +33,19 @@ namespace FK_CLI
 
 		fk_Performer::~fk_Performer()
 		{
-			if(pMotion == NULL) return;
+			if(pMotion == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pMotion = NULL;
+			pMotion = nullptr;
 		}
 
 		fk_Performer::!fk_Performer()
 		{
-			if(pMotion == NULL) return;
+			if(pMotion == nullptr) return;
 			if(dFlg == true) {
 				GetP()->SetFinalizeMode();
 				delete GetP();
 			}
-			pMotion = NULL;
+			pMotion = nullptr;
 		}
 
 		bool cloneCharactor(fk_Performer^ perf);

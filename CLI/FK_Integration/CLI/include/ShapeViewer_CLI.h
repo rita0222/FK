@@ -34,19 +34,19 @@ namespace FK_CLI
 
 		fk_ShapeViewer::~fk_ShapeViewer()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		fk_ShapeViewer::!fk_ShapeViewer()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) {
 				GetP()->SetFinalizeMode();
 				delete GetP();
 			}
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		bool draw(void);

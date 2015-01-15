@@ -32,9 +32,9 @@ namespace FK_CLI
 
 		fk_Solid::!fk_Solid()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void allClear(bool matFlg);

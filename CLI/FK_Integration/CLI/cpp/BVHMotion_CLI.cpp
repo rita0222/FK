@@ -31,7 +31,7 @@ namespace FK_CLI {
 	fk_Model^ fk_BVHMotion::getNodeModel(int argIndex)
 	{
 		::fk_Model *pM = GetP()->getNodeModel(argIndex);
-		if(pM == NULL) return nullptr;
+		if(pM == nullptr) return nullptr;
 
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = pM;
@@ -43,7 +43,7 @@ namespace FK_CLI {
 	{
 		if(!argNodeName) return nullptr;
 		::fk_Model *pM = GetP()->getNodeModel(marshal_as<string>(argNodeName));
-		if(pM == NULL) return nullptr;
+		if(pM == nullptr) return nullptr;
 
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = pM;

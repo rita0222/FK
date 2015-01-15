@@ -41,9 +41,9 @@ namespace FK_CLI
 
 		fk_Point::!fk_Point()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		int pushVertex(fk_Vector^ pos);

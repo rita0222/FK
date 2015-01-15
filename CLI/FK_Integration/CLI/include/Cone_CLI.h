@@ -41,9 +41,9 @@ namespace FK_CLI
 
 		fk_Cone::!fk_Cone()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void setDivide(int dniv);

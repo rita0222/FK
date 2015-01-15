@@ -27,9 +27,9 @@ namespace FK_CLI
 
 		fk_AudioStream::!fk_AudioStream()
 		{
-			if(pAudio == NULL) return;
+			if(pAudio == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pAudio = NULL;
+			pAudio = nullptr;
 		}
 
 		virtual bool open(String^ name) override;

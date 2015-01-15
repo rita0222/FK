@@ -41,9 +41,9 @@ namespace FK_CLI
 
 		fk_Block::!fk_Block()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void setSize(double x, double y, double z);

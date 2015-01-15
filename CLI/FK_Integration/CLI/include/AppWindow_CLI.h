@@ -83,14 +83,14 @@ namespace FK_CLI
 		fk_AppWindow::~fk_AppWindow()
 		{
 			delete pWin;
-			pWin = NULL;
+			pWin = nullptr;
 		}
 
 		fk_AppWindow::!fk_AppWindow()
 		{
 			pWin->SetFinalizeMode();
 			delete pWin;
-			pWin = NULL;
+			pWin = nullptr;
 		}
 
 		void setWindowName(String^ name);

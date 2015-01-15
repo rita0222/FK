@@ -45,19 +45,19 @@ namespace FK_CLI {
 
 		fk_GuideObject::~fk_GuideObject()
 		{
-			if(pGuide == NULL) return;
+			if(pGuide == nullptr) return;
 			if(dFlg == true) delete pGuide;
-			pGuide = NULL;
+			pGuide = nullptr;
 		}
 
 		fk_GuideObject::!fk_GuideObject()
 		{
-			if(pGuide == NULL) return;
+			if(pGuide == nullptr) return;
 			if(dFlg == true) {
 				pGuide->SetFinalizeMode();
 				delete pGuide;
 			}
-			pGuide = NULL;
+			pGuide = nullptr;
 		}
 
 		void setAxisWidth(double width);

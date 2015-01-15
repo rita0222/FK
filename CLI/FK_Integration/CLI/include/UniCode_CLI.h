@@ -47,9 +47,9 @@ namespace FK_CLI
 
 		fk_UniChar::!fk_UniChar()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void setBuffer(unsigned char c1, unsigned char c2);
@@ -88,9 +88,9 @@ namespace FK_CLI
 
 		fk_UniStr::!fk_UniStr()
 		{
-			if(pBase == NULL) return;
+			if(pBase == nullptr) return;
 			if(dFlg == true) delete GetP();
-			pBase = NULL;
+			pBase = nullptr;
 		}
 
 		void clear(void);
