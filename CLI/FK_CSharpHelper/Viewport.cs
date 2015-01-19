@@ -8,7 +8,7 @@ using FK_CLI;
 
 namespace FK_CSharpHelper
 {
-    public class fk_Viewport
+    public class fk_Viewport : IDisposable
     {
         private fk_Renderer renderer = new fk_Renderer();
         private Timer timerWinForm = new Timer();
@@ -65,6 +65,11 @@ namespace FK_CSharpHelper
 
         public event EventHandler PreDraw;
         public event EventHandler PostDraw;
+
+        public void Dispose()
+        {
+            renderer.Dispose();
+        }
 
         public void Draw()
         {
