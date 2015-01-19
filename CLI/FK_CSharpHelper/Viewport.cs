@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using FK_CLI;
 
 namespace FK_CSharpHelper
