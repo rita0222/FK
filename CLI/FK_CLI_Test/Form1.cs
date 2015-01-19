@@ -121,6 +121,11 @@ namespace PlugInTestApp
                 ++count;
 				this.textBox1.Text = camera.getPosition().ToString();
             };
+
+            button1.Click += (s, e) =>
+            {
+                viewport.IsDrawing = !viewport.IsDrawing;
+            };
         }
     }
 }

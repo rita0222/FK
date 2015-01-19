@@ -23,9 +23,7 @@ namespace FK_WPF_Test
     /// </summary>
     public partial class MainWindow : Window
     {
-        private System.Windows.Forms.Panel panel = null;
-        private DispatcherTimer timer = null;
-        private fk_Viewport viewport = null;
+        private fk_WpfViewport viewport = null;
         private fk_Scene scene = null;
 
         public MainWindow()
@@ -35,16 +33,11 @@ namespace FK_WPF_Test
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            panel = new System.Windows.Forms.Panel();
-            PanelHoster.Child = panel;
+            viewport = new fk_WpfViewport();
+            PanelHoster.Child = viewport.Panel;
 
-            viewport = new fk_Viewport(panel);
             scene = new fk_Scene();
             viewport.Scene = scene;
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(16);
-            timer.Tick += (s, ee) => viewport.Draw();
-            timer.IsEnabled = true;
 
             fk_Material.initDefault();
 
@@ -105,6 +98,11 @@ namespace FK_WPF_Test
                 if (count >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
                 ++count;
                 this.TextBox1.Text = camera.getPosition().ToString();
+            };
+
+            Button1.Click += (s, ee) =>
+            {
+                viewport.IsDrawing = !viewport.IsDrawing;
             };
         }
     }

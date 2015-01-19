@@ -5,6 +5,7 @@
         Loaded="Window_Loaded">
     <Grid>
         <WindowsFormsHost x:Name="PanelHoster" Margin="10,10,10,38"/>
-        <TextBox x:Name="TextBox1" Margin="10,0,10,10" TextWrapping="Wrap" Text="TextBox" Height="23" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="TextBox1" Margin="10,0,90,10" TextWrapping="Wrap" Text="TextBox" Height="23" VerticalAlignment="Bottom"/>
+        <Button x:Name="Button1" Content="Button" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

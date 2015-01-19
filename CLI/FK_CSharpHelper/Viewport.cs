@@ -20,7 +20,6 @@ namespace FK_CSharpHelper
             Setup(argPanel);
             timerWinForm.Interval = 16;
             timerWinForm.Tick += (s, e) => Draw();
-            timerWinForm.Enabled = false;
         }
 
         public fk_Scene Scene
@@ -37,30 +36,21 @@ namespace FK_CSharpHelper
             }
         }
 
-        public bool IsDrawing
+        public virtual bool IsDrawing
         {
-            get 
-            {
-                return timerWinForm.Enabled;
-            }
-
-            set
-            {
-                timerWinForm.Enabled = value;
-            }
+            get { return timerWinForm.Enabled; }
+            set { timerWinForm.Enabled = value; }
         }
 
-        public int DrawInterval
+        public virtual int DrawInterval
         {
-            get
-            {
-                return timerWinForm.Interval;
-            }
+            get { return timerWinForm.Interval; }
+            set { timerWinForm.Interval = value; }
+        }
 
-            set
-            {
-                timerWinForm.Interval = value;
-            }
+        public Panel Panel
+        {
+            get { return panel; }
         }
 
         public event EventHandler PreDraw;
