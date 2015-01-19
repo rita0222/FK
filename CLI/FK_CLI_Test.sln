@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CSharpHelper", "FK_CShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Boid", "Test\FK_CLI_Boid\FK_CLI_Boid.csproj", "{BB99C09A-E1EA-4B65-BF56-6A0F891D6687}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_WPF_Test", "FK_WPF_Test\FK_WPF_Test.csproj", "{99D32EFD-2347-43B5-A1D2-79E5C79D376A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -281,6 +283,18 @@ Global
 		{BB99C09A-E1EA-4B65-BF56-6A0F891D6687}.Release|Win32.Build.0 = Release|x86
 		{BB99C09A-E1EA-4B65-BF56-6A0F891D6687}.Release|x86.ActiveCfg = Release|x86
 		{BB99C09A-E1EA-4B65-BF56-6A0F891D6687}.Release|x86.Build.0 = Release|x86
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
