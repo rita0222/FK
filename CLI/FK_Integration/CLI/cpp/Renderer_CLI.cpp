@@ -3,6 +3,12 @@
 #include <GL/gl.h>
 #include <stdlib.h>
 
+std::vector<HGLRC>* GetRcArray(void)
+{
+	static std::vector<HGLRC> rcArray;
+	return &rcArray;
+}
+
 namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
@@ -41,11 +47,12 @@ namespace FK_CLI {
 			return false;
 		}
 
-		////rcArray.push_back(hRC);
-		////if (rcArray.size() > 1)
-		////{
-		////	wglShareLists(rcArray[0], hRC);
-		////}
+		std::vector<HGLRC> *rcArray = GetRcArray();
+		rcArray->push_back(hRC);
+		if (rcArray->size() > 1)
+		{
+			wglShareLists(rcArray->at(0), hRC);
+		}
 
 		wglMakeCurrent(hDC, hRC);
 		pEngine->Init(argW, argH);

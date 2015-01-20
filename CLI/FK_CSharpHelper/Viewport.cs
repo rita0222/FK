@@ -72,16 +72,16 @@ namespace FK_CSharpHelper
         {
             panel = argPanel;
 
-            if (panel.Visible)
+            if (panel.Handle != null)
             {
-                // 既に表示されているパネルに対しては即初期化
-                InitializeRenderer();
+                InitializeRenderer(null, null);
             }
             else
             {
-                // まだ表示されていないパネルに対してはレイアウトイベントで初期化
-                panel.Layout += (s, e) => this.InitializeRenderer();
+                panel.HandleCreated += InitializeRenderer;
             }
+
+            panel.HandleDestroyed += (s, e) => Dispose();
 
             panel.Paint += (s, e) => renderer.Draw();
             panel.Resize += (s, e) =>
@@ -91,11 +91,12 @@ namespace FK_CSharpHelper
             };
         }
 
-        private void InitializeRenderer()
+        private void InitializeRenderer(object sender, EventArgs args)
         {
             renderer.Initialize(panel.Handle, panel.Width, panel.Height);
             if (scene != null) renderer.SetScene(scene);
             IsDrawing = true;
+            panel.HandleCreated -= InitializeRenderer;
         }
     }
 }

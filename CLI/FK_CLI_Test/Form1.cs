@@ -16,6 +16,7 @@ namespace PlugInTestApp
     public partial class Form1 : Form
     {
         private fk_Viewport viewport = null;
+        private fk_Viewport viewport2 = null;
         private fk_Scene scene = null;
 
         public Form1()
@@ -60,6 +61,9 @@ namespace PlugInTestApp
             scene = new fk_Scene();
             viewport = new fk_Viewport(panel1);
             viewport.Scene = scene;
+
+            viewport2 = new fk_Viewport(panel2);
+            viewport2.Scene = scene;
 
             fk_Material.initDefault();
 
