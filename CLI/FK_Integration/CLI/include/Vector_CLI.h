@@ -199,14 +199,14 @@ namespace FK_CLI
 
 		//////////////////// メンバ関数群
 		String^	fk_Vector::ToString() override;
-		void set(double x, double y, double z);
-		void set(double x, double y);
-		double dist();
-		double dist2();
-		bool normalize();
-		bool isZero();
-		fk_Vector^ proj(fk_Vector^ V);
-		fk_Vector^ perp(fk_Vector^ V);
+		void Set(double x, double y, double z);
+		void Set(double x, double y);
+		double Dist();
+		double Dist2();
+		bool Normalize();
+		bool IsZero();
+		fk_Vector^ Proj(fk_Vector^ V);
+		fk_Vector^ Perp(fk_Vector^ V);
 	};
 
 	public ref class fk_HVector {
@@ -338,15 +338,15 @@ namespace FK_CLI
 
 		String^ ToString() override;
 
-		void set(fk_Vector^ V, double w);
-		void set(double x, double y, double z, double w);
-		void set(double x, double y, double z);
-		void set(double x, double y);
-		void set(fk_Vector^ V);
-		fk_Vector^ getV(void);
-		void ispos(void);
-		void isvec(void);
-		void init(void);
+		void Set(fk_Vector^ V, double w);
+		void Set(double x, double y, double z, double w);
+		void Set(double x, double y, double z);
+		void Set(double x, double y);
+		void Set(fk_Vector^ V);
+		fk_Vector^ GetV(void);
+		void IsPos(void);
+		void IsVec(void);
+		void Init(void);
 	};
 
 	public ref class fk_FVector {

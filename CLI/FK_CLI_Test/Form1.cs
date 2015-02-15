@@ -30,10 +30,10 @@ namespace PlugInTestApp
             vec.x = 1.0;
             vec.y = 0.0;
             vec.z = 0.0;
-            vec.normalize();
+            vec.Normalize();
             this.textBox1.Text = vec.ToString();
 
-			mat.makeRot(FK.PI/6.0, fk_Axis.Z);
+			mat.MakeRot(FK.PI/6.0, fk_Axis.Z);
 			fk_Vector vec2 = mat * vec;			
 
 			this.textBox2.Text = vec2.ToString();			

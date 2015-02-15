@@ -64,7 +64,7 @@ namespace FK_CLI_Ball
 
 		public void lod(fk_Vector pos)
 		{
-			double	Distance = (ball_model.getPosition() - pos).dist();
+			double	Distance = (ball_model.getPosition() - pos).Dist();
 			switch(view_mode) {
 				case HIGH_MODE:
 					if(Distance < LOD4_HIGH) {

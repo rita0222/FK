@@ -77,7 +77,7 @@ namespace FK_CLI_Boid
 					if(i == j) continue;
 
 					diff = pArray[i] - pArray[j];
-					double dist = diff.dist();
+					double dist = diff.Dist();
 					if(dist < paramLA) {
 						vec += paramA * diff / (dist*dist);
 					}

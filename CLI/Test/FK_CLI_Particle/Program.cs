@@ -45,7 +45,7 @@ namespace FK_CLI_Particle
 
 			pos = P.getPosition();
 			pos.z = 0.0;
-			r = pos.dist();
+			r = pos.Dist();
 			
 			tmp1 = water/(r*r*r);
 			tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;

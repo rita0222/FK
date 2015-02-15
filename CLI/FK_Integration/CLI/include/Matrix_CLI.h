@@ -65,7 +65,7 @@ namespace FK_CLI {
 			}
 		}
 
-		void set(double argH, double argP, double argB)
+		void Set(double argH, double argP, double argB)
 		{
 			pAngle->set(argH, argP, argB);
 		}
@@ -188,24 +188,24 @@ namespace FK_CLI {
 
 		String^	fk_Matrix::ToString() override;
 
-		void init();
-		void set(int row, int col, double value);
-		void setRow(int row, fk_Vector^ vec);
-		void setRow(int row, fk_HVector^ vec);
-		void setCol(int col, fk_Vector^ vec);
-		void setCol(int col, fk_HVector^ vec);
-		fk_HVector^ getRow(int row);
-		fk_HVector^ getCol(int col);
-		bool inverse();
-		fk_Matrix^ getInverse();
-		void negate();
-		void makeRot(double theta, fk_Axis axis);
-		void makeTrans(fk_Vector^ vec);
-		void makeEuler(double head, double pitch, double bank);
-		void makeEuler(fk_Angle^ angle);
-		bool isRegular();
-		bool isSingular();
-		void makeScale(double x, double y, double z);
-		void makeScale(fk_Vector^ scaleVec);
+		void Init();
+		void Set(int row, int col, double value);
+		void SetRow(int row, fk_Vector^ vec);
+		void SetRow(int row, fk_HVector^ vec);
+		void SetCol(int col, fk_Vector^ vec);
+		void SetCol(int col, fk_HVector^ vec);
+		fk_HVector^ GetRow(int row);
+		fk_HVector^ GetCol(int col);
+		bool Inverse();
+		fk_Matrix^ GetInverse();
+		void Negate();
+		void MakeRot(double theta, fk_Axis axis);
+		void MakeTrans(fk_Vector^ vec);
+		void MakeEuler(double head, double pitch, double bank);
+		void MakeEuler(fk_Angle^ angle);
+		bool IsRegular();
+		bool IsSingular();
+		void MakeScale(double x, double y, double z);
+		void MakeScale(fk_Vector^ scaleVec);
 	};
 }

@@ -39,43 +39,43 @@ namespace FK_CLI {
 		return gcnew String(tmpBuf.c_str());
 	}
 
-	void fk_Vector::set(double argX, double argY, double argZ)
+	void fk_Vector::Set(double argX, double argY, double argZ)
 	{
 		pVec->set(argX, argY, argZ);
 	}
 
-	void fk_Vector::set(double argX, double argY)
+	void fk_Vector::Set(double argX, double argY)
 	{
 		pVec->set(argX, argY, 0.0);
 	}
 
-	double fk_Vector::dist()
+	double fk_Vector::Dist()
 	{
 		return pVec->dist();
 	}
 		
-	double fk_Vector::dist2()
+	double fk_Vector::Dist2()
 	{
 		return pVec->dist2();
 	}
 
-	bool fk_Vector::normalize()
+	bool fk_Vector::Normalize()
 	{
 		return pVec->normalize();
 	}
 
-	bool fk_Vector::isZero()
+	bool fk_Vector::IsZero()
 	{
 		return pVec->isZero();
 	}
 
-	fk_Vector^ fk_Vector::proj(fk_Vector^ argV)
+	fk_Vector^ fk_Vector::Proj(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
 		return gcnew fk_Vector(pVec->proj(*argV->pVec));
 	}
 
-	fk_Vector^ fk_Vector::perp(fk_Vector^ argV)
+	fk_Vector^ fk_Vector::Perp(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
 		return gcnew fk_Vector(pVec->perp(*argV->pVec));
@@ -93,51 +93,51 @@ namespace FK_CLI {
 		return gcnew System::String(tmpBuf.c_str());
 	}
 
-	void fk_HVector::set(fk_Vector^ argV, double argW)
+	void fk_HVector::Set(fk_Vector^ argV, double argW)
 	{
 		if(!argV) return;
 		pHVec->set(*(argV->pVec), argW);
 	}
 
-	void fk_HVector::set(double argX, double argY, double argZ, double argW)
+	void fk_HVector::Set(double argX, double argY, double argZ, double argW)
 	{
 		pHVec->set(argX, argY, argZ, argW);
 	}
 
-	void fk_HVector::set(double argX, double argY, double argZ)
+	void fk_HVector::Set(double argX, double argY, double argZ)
 	{
 		pHVec->set(argX, argY, argZ, 1.0);
 	}
 
-	void fk_HVector::set(double argX, double argY)
+	void fk_HVector::Set(double argX, double argY)
 	{
 		pHVec->set(argX, argY, 0.0, 1.0);
 	}
 
-	void fk_HVector::set(fk_Vector^ argV)
+	void fk_HVector::Set(fk_Vector^ argV)
 	{
 		if(!argV) return;
 		pHVec->set(*argV->pVec);
 	}
 
-	fk_Vector^ fk_HVector::getV(void)
+	fk_Vector^ fk_HVector::GetV(void)
 	{
 		fk_Vector^ V = gcnew fk_Vector();
 		V->pVec->set(pHVec->x, pHVec->y, pHVec->z);
 		return V;
 	}
 
-	void fk_HVector::ispos(void)
+	void fk_HVector::IsPos(void)
 	{
 		pHVec->ispos();
 	}
 
-	void fk_HVector::isvec(void)
+	void fk_HVector::IsVec(void)
 	{
 		pHVec->isvec();
 	}
 
-	void fk_HVector::init(void)
+	void fk_HVector::Init(void)
 	{
 		pHVec->init();
 	}
@@ -152,4 +152,3 @@ namespace FK_CLI {
 		return gcnew System::String(tmpBuf.c_str());
 	}
 }
-
