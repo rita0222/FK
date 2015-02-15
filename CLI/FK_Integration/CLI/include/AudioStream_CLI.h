@@ -32,12 +32,12 @@ namespace FK_CLI
 			pAudio = nullptr;
 		}
 
-		virtual bool open(String^ name) override;
-		virtual bool ready(void) override;
-		virtual bool play(void) override;
-		virtual double tell(void) override;
-		virtual void seek(double time) override;
-		virtual void stop(void) override;
-		virtual void end(void) override;
+		virtual bool Open(String^ name) override;
+		virtual bool Ready(void) override;
+		virtual bool Play(void) override;
+		virtual double Tell(void) override;
+		virtual void Seek(double time) override;
+		virtual void Stop(void) override;
+		virtual void End(void) override;
 	};
 }

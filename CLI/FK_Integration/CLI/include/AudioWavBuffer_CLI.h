@@ -32,6 +32,6 @@ namespace FK_CLI
 			pAudio = nullptr;
 		}
 
-		virtual bool open(String^ name) override;
+		virtual bool Open(String^ name) override;
 	};
 }

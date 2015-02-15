@@ -2,21 +2,21 @@
 
 namespace FK_CLI {
 
-	void fk_AudioBase::pause(void)
+	void fk_AudioBase::Pause(void)
 	{
 		GetP()->pause();
 	}
-	
+	/*	
 	void fk_AudioBase::setGain(double argGain)
 	{
 		GetP()->setGain(argGain);
 	}
-	
+
 	double fk_AudioBase::getGain(void)
 	{
 		return GetP()->getGain();
 	}
-	
+
 	void fk_AudioBase::setQueueSize(int argSize)
 	{
 		GetP()->setQueueSize(argSize);
@@ -36,22 +36,7 @@ namespace FK_CLI {
 	{
 		return GetP()->getLoopMode();
 	}
-	
-	void fk_AudioBase::setLoopArea(double argStart, double argEnd)
-	{
-		GetP()->setLoopArea(argStart, argEnd);
-	}
-	
-	double fk_AudioBase::getLoopStartTime(void)
-	{
-		return GetP()->getLoopStartTime();
-	}
-	
-	double fk_AudioBase::getLoopEndTime(void)
-	{
-		return GetP()->getLoopEndTime();
-	}
-	
+
 	void fk_AudioBase::setPosition(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
@@ -98,29 +83,44 @@ namespace FK_CLI {
 	{
 		return GetP()->getSurroundMode();
 	}
+	*/		
+	void fk_AudioBase::SetLoopArea(double argStart, double argEnd)
+	{
+		GetP()->setLoopArea(argStart, argEnd);
+	}
 	
-	bool fk_AudioBase::init(void)
+	double fk_AudioBase::GetLoopStartTime(void)
+	{
+		return GetP()->getLoopStartTime();
+	}
+	
+	double fk_AudioBase::GetLoopEndTime(void)
+	{
+		return GetP()->getLoopEndTime();
+	}
+	
+	bool fk_AudioBase::Init(void)
 	{
 		return ::fk_AudioBase::init();
 	}
 	
-	bool fk_AudioBase::getInit(void)
+	bool fk_AudioBase::GetInit(void)
 	{
 		return ::fk_AudioBase::getInit();
 	}
 	
-	void fk_AudioBase::sleep(double argTime)
+	void fk_AudioBase::Sleep(double argTime)
 	{
 		::fk_AudioBase::sleep(argTime);
 	}
 	
-	void fk_AudioBase::setListenerModel(fk_Model^ argModel)
+	void fk_AudioBase::SetListenerModel(fk_Model^ argModel)
 	{
 		if(!argModel) return;
 		::fk_AudioBase::setListenerModel(argModel->GetP());
 	}
 	
-	fk_Model^ fk_AudioBase::getListenerModel(void)
+	fk_Model^ fk_AudioBase::GetListenerModel(void)
 	{
 		::fk_Model *pM = ::fk_AudioBase::getListenerModel();
 		if(pM == nullptr) return nullptr;

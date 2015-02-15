@@ -18,7 +18,7 @@ namespace FK_CLI_Audio
 		{
 			endFlg = false;
 			bgm = new fk_AudioStream();
-			openFlg = bgm.open(argFileName);
+			openFlg = bgm.Open(argFileName);
 			if(openFlg == false) {
 				Console.WriteLine("Audio File Open Error.");
 			}
@@ -27,17 +27,17 @@ namespace FK_CLI_Audio
 		public void start()
 		{
 			if(openFlg == false) return;
-			bgm.setLoopMode(true);
-			bgm.setGain(0.5);
+			bgm.loopMode = true;
+			bgm.gain = 0.5;
 			while(endFlg == false) {
-				bgm.play();
+				bgm.Play();
 				Thread.Sleep(100);
 			}
 		}
 
 		public void setGain(double argVolume)
 		{
-			bgm.setGain(argVolume);
+			bgm.gain = argVolume;
 		}
 	}
 
