@@ -142,8 +142,8 @@ namespace FK_CLI_Ball
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			win.setSize(600, 600);
-			win.clearModel(false); // デフォルト光源消去
+			win.SetSize(600, 600);
+			win.ClearModel(false); // デフォルト光源消去
 
 			int view_mode = Ball.HIGH_MODE;
 	
@@ -191,15 +191,15 @@ namespace FK_CLI_Ball
 			ball.getModel().setSmoothMode(true);
 	
 			// ### Model Entry ###
-			win.setCameraModel(viewModel);
-			win.entry(lightModel);
-			win.entry(ball.getModel());
-			win.entry(groundModel);
-			win.entry(blockModel); 
+			win.SetCameraModel(viewModel);
+			win.Entry(lightModel);
+			win.Entry(ball.getModel());
+			win.Entry(groundModel);
+			win.Entry(blockModel); 
 
-			win.open();
+			win.Open();
 
-			while(win.update() == true) {
+			while(win.Update() == true) {
 
 				// ボールを弾ませて, カメラの状態を取得。
 				view_mode = ball.draw(viewModel.getPosition());

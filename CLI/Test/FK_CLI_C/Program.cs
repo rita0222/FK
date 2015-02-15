@@ -28,14 +28,14 @@ namespace FK_CLI_C
 			lightModel.setMaterial(fk_Material.TrueWhite);
 			lightModel.glMoveTo(0.0, 0.0, 0.0);
 			lightModel.glFocus(-1.0, -1.0, -1.0);
-			win.entry(lightModel);
+			win.Entry(lightModel);
 
 			// 直方体モデル生成
 			var blockModel = new fk_Model();
 			var block = new fk_Block(50.0, 70.0, 40.0);
 			blockModel.setShape(block);
 			blockModel.setMaterial(fk_Material.Yellow);
-			win.entry(blockModel);
+			win.Entry(blockModel);
 
 			// 線分モデル生成
 			fk_Vector[] pos = new fk_Vector[4];
@@ -51,7 +51,7 @@ namespace FK_CLI_C
 				lineModel[i] = new fk_Model();
 				lineModel[i].setShape(line[i]);
 				lineModel[i].setParent(blockModel);
-				win.entry(lineModel[i]);
+				win.Entry(lineModel[i]);
 			}
 
 			lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
@@ -62,12 +62,12 @@ namespace FK_CLI_C
 			camera.glMoveTo(0.0, 0.0, 2000.0);
 			camera.glFocus(0.0, 0.0, 0.0);
 			camera.glUpvec(0.0, 1.0, 0.0);
-			win.setCameraModel(camera);
-			win.open();
+			win.SetCameraModel(camera);
+			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
-			for(i = 0; win.update() == true; i++) {
+			for(i = 0; win.Update() == true; i++) {
 				camera.glTranslate(0.0, 0.0, -1.0);
 				var cPos = camera.getPosition();
 				if(cPos.z < -FK.EPS) camera.glFocus(origin);
@@ -103,12 +103,12 @@ namespace FK_CLI_C
 
 			strModel.setShape(texture);
 			strModel.glVec(0.0, 0.0, -1.0);
-			win.entry(strModel);
+			win.Entry(strModel);
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
-			win.open();
-			win.setCameraPos(0.0, 0.0, 100.0);
-			win.setCameraFocus(0.0, 0.0, 0.0);
-			while(win.update() == true) {
+			win.Open();
+			win.SetCameraPos(0.0, 0.0, 100.0);
+			win.SetCameraFocus(0.0, 0.0, 0.0);
+			while(win.Update() == true) {
 				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}
 		}
@@ -129,22 +129,22 @@ namespace FK_CLI_C
 			}
 
 			sprite.setPositionLT(-280.0, 230.0);
-			window.entry(sprite);
+			window.Entry(sprite);
  
 			model.setShape(block);
 			model.glMoveTo(0.0, 6.0, 0.0);
 			model.setMaterial(fk_Material.Yellow);
-			window.entry(model);
+			window.Entry(model);
  
-			window.setCameraPos(0.0, 5.0, 20.0);
-			window.setCameraFocus(0.0, 5.0, 0.0);
-			window.setSize(800, 600);
-			window.setBGColor(0.6, 0.7, 0.8);
-			window.open();
-			window.showGuide(fk_GuideMode.GRID_XZ);
+			window.SetCameraPos(0.0, 5.0, 20.0);
+			window.SetCameraFocus(0.0, 5.0, 0.0);
+			window.SetSize(800, 600);
+			window.SetBGColor(0.6, 0.7, 0.8);
+			window.Open();
+			window.ShowGuide(fk_GuideMode.GRID_XZ);
  
 			count = 0;
-			while(window.update() == true) {
+			while(window.Update() == true) {
 				str = "count = " + count.ToString();
 				sprite.drawText(str, true);
 				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);

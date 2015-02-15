@@ -131,117 +131,117 @@ namespace FK_CLI {
 		return FK_SW_RELEASE;
 	}
 
-	void fk_AppWindow::setWindowName(String^ argName)
+	void fk_AppWindow::SetWindowName(String^ argName)
 	{
 		GetP()->setWindowName(marshal_as<string>(argName));
 	}
 
-	void fk_AppWindow::setSize(int argW, int argH)
+	void fk_AppWindow::SetSize(int argW, int argH)
 	{
 		GetP()->setSize(argW, argH);
 	}
 
-	void fk_AppWindow::setInnerSize(int argX, int argY, int argW, int argH)
+	void fk_AppWindow::SetInnerSize(int argX, int argY, int argW, int argH)
 	{
 		GetP()->setInnerSize(argX, argY, argW, argH);
 	}
 
-	void fk_AppWindow::setBGColor(double argR, double argG, double argB)
+	void fk_AppWindow::SetBGColor(double argR, double argG, double argB)
 	{
 		GetP()->setBGColor(argR, argG, argB);
 	}
 
-	void fk_AppWindow::setBGColor(fk_Color^ argC)
+	void fk_AppWindow::SetBGColor(fk_Color^ argC)
 	{
 		GetP()->setBGColor(*argC->GetP());
 	}
 
-	void fk_AppWindow::open(void)
+	void fk_AppWindow::Open(void)
 	{
 		GetP()->open();
 	}
 		
-	void fk_AppWindow::close(void)
+	void fk_AppWindow::Close(void)
 	{
 		GetP()->close();
 	}
 		
-	bool fk_AppWindow::update(bool argForceFlg)
+	bool fk_AppWindow::Update(bool argForceFlg)
 	{
 		return GetP()->update(argForceFlg);
 	}
 
-	bool fk_AppWindow::update(void)
+	bool fk_AppWindow::Update(void)
 	{
 		return GetP()->update(false);
 	}
 		
-	void fk_AppWindow::setFPS(int argFPS)
+	void fk_AppWindow::SetFPS(int argFPS)
 	{
 		GetP()->setFPS(argFPS);
 	}
 
-	void fk_AppWindow::showGuide(void)
+	void fk_AppWindow::ShowGuide(void)
 	{
 		GetP()->showGuide(FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
 	}
 		
-	void fk_AppWindow::showGuide(fk_GuideMode argMode)
+	void fk_AppWindow::ShowGuide(fk_GuideMode argMode)
 	{
 		GetP()->showGuide(int(argMode));
 	}
 
-	void fk_AppWindow::hideGuide(void)
+	void fk_AppWindow::HideGuide(void)
 	{
 		GetP()->hideGuide();
 	}
 
-	void fk_AppWindow::setGuideAxisWidth(double argWidth)
+	void fk_AppWindow::SetGuideAxisWidth(double argWidth)
 	{
 		GetP()->setGuideAxisWidth(argWidth);
 	}
 
-	void fk_AppWindow::setGuideGridWidth(double argWidth)
+	void fk_AppWindow::SetGuideGridWidth(double argWidth)
 	{
 		GetP()->setGuideGridWidth(argWidth);
 	}
 
-	void fk_AppWindow::setGuideScale(double argScale)
+	void fk_AppWindow::SetGuideScale(double argScale)
 	{
 		GetP()->setGuideScale(argScale);
 	}
 
-	void fk_AppWindow::setGuideNum(int argNum)
+	void fk_AppWindow::SetGuideNum(int argNum)
 	{
 		GetP()->setGuideNum(argNum);
 	}
 
-	void fk_AppWindow::setCameraPos(double argX, double argY, double argZ)
+	void fk_AppWindow::SetCameraPos(double argX, double argY, double argZ)
 	{
 		GetP()->setCameraPos(argX, argY, argZ);
 	}
 
-	void fk_AppWindow::setCameraPos(fk_Vector^ argV)
+	void fk_AppWindow::SetCameraPos(fk_Vector^ argV)
 	{
 		GetP()->setCameraPos(*argV->pVec);
 	}
 
-	void fk_AppWindow::setCameraFocus(double argX, double argY, double argZ)
+	void fk_AppWindow::SetCameraFocus(double argX, double argY, double argZ)
 	{
 		GetP()->setCameraFocus(argX, argY, argZ);
 	}
 
-	void fk_AppWindow::setCameraFocus(fk_Vector^ argV)
+	void fk_AppWindow::SetCameraFocus(fk_Vector^ argV)
 	{
 		GetP()->setCameraFocus(*argV->pVec);
 	}
 
-	void fk_AppWindow::setCameraModel(fk_Model^ argM)
+	void fk_AppWindow::SetCameraModel(fk_Model^ argM)
 	{
 		GetP()->setCameraModel(argM->GetP());
 	}
 			
-	fk_Model^ fk_AppWindow::getCameraModel(void)
+	fk_Model^ fk_AppWindow::GetCameraModel(void)
 	{
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = (::fk_Model *)(GetP()->getCameraModel());
@@ -249,84 +249,84 @@ namespace FK_CLI {
 		return M;
 	}
 
-	void fk_AppWindow::setCameraDefault(void)
+	void fk_AppWindow::SetCameraDefault(void)
 	{
 		GetP()->setCameraDefault();
 	}
 
-	void fk_AppWindow::setScene(fk_Scene^ argScene, bool argCL)
+	void fk_AppWindow::SetScene(fk_Scene^ argScene, bool argCL)
 	{
 		GetP()->setScene(argScene->GetP(), argCL);
 	}
 		
-	void fk_AppWindow::setScene(fk_Scene^ argScene)
+	void fk_AppWindow::SetScene(fk_Scene^ argScene)
 	{
 		if(!argScene) return;
 		GetP()->setScene(argScene->GetP(), false);
 		scene = argScene;
 	}
 			
-	fk_Scene^ fk_AppWindow::getScene(void)
+	fk_Scene^ fk_AppWindow::GetScene(void)
 	{
 		return scene;
 	}
 		
-	void fk_AppWindow::setSceneDefault(void)
+	void fk_AppWindow::SetSceneDefault(void)
 	{
 		GetP()->setSceneDefault();
 	}
 			
-	void fk_AppWindow::entry(fk_Model^ argModel)
+	void fk_AppWindow::Entry(fk_Model^ argModel)
 	{
 		GetP()->entry(argModel->GetP());
 	}
 
-	void fk_AppWindow::entry(fk_Model^ argM, fk_GuideObject^ argGuide)
+	void fk_AppWindow::Entry(fk_Model^ argM, fk_GuideObject^ argGuide)
 	{
 		GetP()->entry(argM->GetP(), argGuide->GetP());
 	}
 
-	void fk_AppWindow::entry(fk_SpriteModel^ argM)
+	void fk_AppWindow::Entry(fk_SpriteModel^ argM)
 	{
 		GetP()->entry(argM->GetP());
 	}
 
-	void fk_AppWindow::entry(fk_Performer^ argP)
+	void fk_AppWindow::Entry(fk_Performer^ argP)
 	{
 		GetP()->entry(argP->GetP());
 	}
 
-	void fk_AppWindow::remove(fk_Model^ argM)
+	void fk_AppWindow::Remove(fk_Model^ argM)
 	{
 		GetP()->remove(argM->GetP());
 	}
 
-	void fk_AppWindow::remove(fk_Model^ argM, fk_GuideObject^ argGuide)
+	void fk_AppWindow::Remove(fk_Model^ argM, fk_GuideObject^ argGuide)
 	{
 		GetP()->remove(argM->GetP(), argGuide->GetP());
 	}
 
-	void fk_AppWindow::remove(fk_SpriteModel^ argM)
+	void fk_AppWindow::Remove(fk_SpriteModel^ argM)
 	{
 		GetP()->remove(argM->GetP());
 	}
 
-	void fk_AppWindow::remove(fk_Performer^ argP)
+	void fk_AppWindow::Remove(fk_Performer^ argP)
 	{
 		GetP()->remove(argP->GetP());
 	}
 
-	void fk_AppWindow::clearModel(bool argCL)
+	void fk_AppWindow::ClearModel(bool argCL)
 	{
 		GetP()->clearModel(argCL);
 	}
 
-	void fk_AppWindow::clearModel(void)
+	void fk_AppWindow::ClearModel(void)
 	{
 		GetP()->clearModel(false);
 	}
 
-	bool fk_AppWindow::getKeyStatus(wchar_t argK, fk_SwitchStatus argStatus)
+	bool fk_AppWindow::GetKeyStatus(wchar_t argK, fk_SwitchStatus argStatus)
 	{
 		wchar_t tmpWBuf[2];
 		char tmpBuf[2];
@@ -338,7 +338,7 @@ namespace FK_CLI {
 		return GetP()->getKeyStatus(tmpBuf[0], GetSS(argStatus));
 	}
 
-	bool fk_AppWindow::getKeyStatus(wchar_t argK, fk_SwitchStatus argStatus, bool argInFlg)
+	bool fk_AppWindow::GetKeyStatus(wchar_t argK, fk_SwitchStatus argStatus, bool argInFlg)
 	{
 		wchar_t tmpWBuf[2];
 		char tmpBuf[2];
@@ -350,18 +350,18 @@ namespace FK_CLI {
 		return GetP()->getKeyStatus(tmpBuf[0], GetSS(argStatus), argInFlg);
 	}
 
-	bool fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey keyCode,
+	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode,
 										   fk_SwitchStatus argStatus, bool argInFlg)
 	{
 		return GetP()->getSpecialKeyStatus(GetSK(keyCode), GetSS(argStatus), argInFlg);
 	}
 		
-	bool fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus argStatus)
+	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus argStatus)
 	{
 		return GetP()->getSpecialKeyStatus(GetSK(keyCode), GetSS(argStatus), false);
 	}
 			
-	bool fk_AppWindow::getMouseStatus(fk_MouseButton argB, fk_SwitchStatus argSS, bool argInFlg)
+	bool fk_AppWindow::GetMouseStatus(fk_MouseButton argB, fk_SwitchStatus argSS, bool argInFlg)
 	{
 		::fk_MouseButton	b;
 		switch(argB) {
@@ -384,37 +384,37 @@ namespace FK_CLI {
 		return GetP()->getMouseStatus(b, GetSS(argSS), argInFlg);
 	}
 				
-	fk_Vector^ fk_AppWindow::getMousePosition(void)
+	fk_Vector^ fk_AppWindow::GetMousePosition(void)
 	{
 		return gcnew fk_Vector(GetP()->getMousePosition());
 	}
 				
-	void fk_AppWindow::setCursorState(bool argVisible, bool argCenter)
+	void fk_AppWindow::SetCursorState(bool argVisible, bool argCenter)
 	{
 		GetP()->setCursorState(argVisible, argCenter);
 	}
 
-	void fk_AppWindow::setTrackBallMode(bool argMode)
+	void fk_AppWindow::SetTrackBallMode(bool argMode)
 	{
 		GetP()->setTrackBallMode(argMode);
 	}
 
-	bool fk_AppWindow::isModelPicked(fk_Model^ argM, int argP, int argX, int argY)
+	bool fk_AppWindow::IsModelPicked(fk_Model^ argM, int argP, int argX, int argY)
 	{
 		return GetP()->isModelPicked(argM->GetP(), argP, argX, argY);
 	}
 
-	bool fk_AppWindow::isModelPicked(fk_Model^ argM, int argP)
+	bool fk_AppWindow::IsModelPicked(fk_Model^ argM, int argP)
 	{
 		return GetP()->isModelPicked(argM->GetP(), argP);
 	}
 
-	bool fk_AppWindow::isModelPicked(fk_Model^ argM)
+	bool fk_AppWindow::IsModelPicked(fk_Model^ argM)
 	{
 		return GetP()->isModelPicked(argM->GetP());
 	}
 
-	void fk_AppWindow::procMouseView(fk_Model^ argCamera, double argX, double argY, bool argLockSW)
+	void fk_AppWindow::ProcMouseView(fk_Model^ argCamera, double argX, double argY, bool argLockSW)
 	{
 		GetP()->procMouseView(argCamera->GetP(), argX, argY, argLockSW);
 	}

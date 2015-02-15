@@ -59,24 +59,24 @@ namespace FK_CLI_Audio
 			blockModel.setShape(block);
 			blockModel.glMoveTo(3.0, 3.0, 0.0);
 			blockModel.setMaterial(fk_Material.Yellow);
-			win.entry(blockModel);
-			win.setCameraPos(0.0, 1.0, 20.0);
-			win.setCameraFocus(0.0, 1.0, 0.0);
-			win.setSize(800, 600);
-			win.setBGColor(0.6, 0.7, 0.8);
-			win.open();
-			win.showGuide(fk_GuideMode.GRID_XZ);
+			win.Entry(blockModel);
+			win.SetCameraPos(0.0, 1.0, 20.0);
+			win.SetCameraFocus(0.0, 1.0, 0.0);
+			win.SetSize(800, 600);
+			win.SetBGColor(0.6, 0.7, 0.8);
+			win.Open();
+			win.ShowGuide(fk_GuideMode.GRID_XZ);
 
 			var bgmTask = new Task(audio.start);
 			bgmTask.Start();
 
-			while(win.update()) {
+			while(win.Update()) {
 				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 
-				if(win.getKeyStatus('Z', fk_SwitchStatus.DOWN) == true && volume < 1.0) {
+				if(win.GetKeyStatus('Z', fk_SwitchStatus.DOWN) == true && volume < 1.0) {
 					volume += 0.1;
 				}
-				if(win.getKeyStatus('X', fk_SwitchStatus.DOWN) == true && volume > 0.0) {
+				if(win.GetKeyStatus('X', fk_SwitchStatus.DOWN) == true && volume > 0.0) {
 					volume -= 0.1;
 				}
 

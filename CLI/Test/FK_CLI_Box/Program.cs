@@ -23,14 +23,14 @@ namespace FK_CLI_Box
 			lightModel.setMaterial(fk_Material.TrueWhite);
 			lightModel.glMoveTo(0.0, 0.0, 0.0);
 			lightModel.glFocus(-1.0, -1.0, -1.0);
-			win.entry(lightModel);
+			win.Entry(lightModel);
 
 			// 直方体モデル生成
 			var blockModel = new fk_Model();
 			var block = new fk_Block(50.0, 70.0, 40.0);
 			blockModel.setShape(block);
 			blockModel.setMaterial(fk_Material.Yellow);
-			win.entry(blockModel);
+			win.Entry(blockModel);
 
 			// 線分モデル生成
 			fk_Vector[] pos = new fk_Vector[4];
@@ -46,7 +46,7 @@ namespace FK_CLI_Box
 				lineModel[i] = new fk_Model();
 				lineModel[i].setShape(line[i]);
 				lineModel[i].setParent(blockModel);
-				win.entry(lineModel[i]);
+				win.Entry(lineModel[i]);
 			}
 
 			lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
@@ -57,12 +57,12 @@ namespace FK_CLI_Box
 			camera.glMoveTo(0.0, 0.0, 2000.0);
 			camera.glFocus(0.0, 0.0, 0.0);
 			camera.glUpvec(0.0, 1.0, 0.0);
-			win.setCameraModel(camera);
-			win.open();
+			win.SetCameraModel(camera);
+			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
-			for(i = 0; win.update() == true; i++) {
+			for(i = 0; win.Update() == true; i++) {
 				camera.glTranslate(0.0, 0.0, -1.0);
 				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
 				var cPos = camera.getPosition();

@@ -13,7 +13,7 @@ namespace FK_CLI_Quaternion
 		{
 
 			var win = new fk_AppWindow();
-			win.setSize(500, 500);
+			win.SetSize(500, 500);
 			var model = new fk_Model();
 			var pointM = new fk_Model();
 			var cone = new fk_Cone(3, 4.0, 15.0);
@@ -37,18 +37,18 @@ namespace FK_CLI_Quaternion
 			pointM.setShape(poly);
 			pointM.setLineColor(1.0, 0.0, 0.0);
 
-			win.setBGColor(0.3, 0.4, 0.5);
-			win.entry(model);
-			win.entry(pointM);
-			win.setTrackBallMode(true);
-			win.showGuide();
-			win.open();
+			win.SetBGColor(0.3, 0.4, 0.5);
+			win.Entry(model);
+			win.Entry(pointM);
+			win.SetTrackBallMode(true);
+			win.ShowGuide();
+			win.Open();
 			q1.makeEuler(angle1);
 			q2.makeEuler(angle2);
 
 			double t = 0.0;
 
-			while(win.update() == true) {
+			while(win.Update() == true) {
 				q = fk_Math.quatInterSphere(q1, q2, t);
 				model.glAngle(q.getEuler());
 				if(t < 1.0) {

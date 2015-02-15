@@ -51,7 +51,7 @@ namespace FK_CLI_Boid
 		public void setWindow(fk_AppWindow argWin)
 		{
 			for(int i = 0; i < agent.Length; ++i) {
-				argWin.entry(agent[i]);
+				argWin.Entry(agent[i]);
 			}
 		}
 
@@ -117,16 +117,16 @@ namespace FK_CLI_Boid
 
 			boid.setWindow(win);
 
-			win.setSize(600, 600);
-			win.setBGColor(0.6, 0.7, 0.8);
-			win.showGuide(fk_GuideMode.GRID_XY);
-			win.setCameraPos(0.0, 0.0, 80.0);
-			win.setCameraFocus(0.0, 0.0, 0.0);
+			win.SetSize(600, 600);
+			win.SetBGColor(0.6, 0.7, 0.8);
+			win.ShowGuide(fk_GuideMode.GRID_XY);
+			win.SetCameraPos(0.0, 0.0, 80.0);
+			win.SetCameraFocus(0.0, 0.0, 0.0);
 
-			win.open();
+			win.Open();
 
-			while(win.update() == true) {
-				boid.forward(win.getKeyStatus(' ', fk_SwitchStatus.RELEASE));
+			while(win.Update() == true) {
+				boid.forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE));
 			}
 
 		}

@@ -39,11 +39,11 @@ namespace FK_CLI_TextImage
 			strModel.setShape(texture);
 			strModel.glVec(0.0, 0.0, -1.0);
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
-			win.entry(strModel); 
-			win.open();
-			win.setCameraPos(0.0, 0.0, 100.0);
-			win.setCameraFocus(0.0, 0.0, 0.0);
-			while(win.update() == true) {
+			win.Entry(strModel); 
+			win.Open();
+			win.SetCameraPos(0.0, 0.0, 100.0);
+			win.SetCameraFocus(0.0, 0.0, 0.0);
+			while(win.Update() == true) {
 				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}
 		}

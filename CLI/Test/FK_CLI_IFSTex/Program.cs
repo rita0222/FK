@@ -12,8 +12,8 @@ namespace FK_CLI_IFSTex
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			win.setSize(960, 544);
-			win.clearModel(true);
+			win.SetSize(960, 544);
+			win.ClearModel(true);
 
 			var lightModel = new fk_Model();
 
@@ -37,25 +37,25 @@ namespace FK_CLI_IFSTex
 			}
 			ifsShape.setTexRendMode(fk_TexRendMode.SMOOTH);
 
-			win.setBGColor(0.5, 0.5, 0.5);
-			win.entry(lightModel);
-			win.showGuide(fk_GuideMode.GRID_XZ);
-			win.setTrackBallMode(true);
+			win.SetBGColor(0.5, 0.5, 0.5);
+			win.Entry(lightModel);
+			win.ShowGuide(fk_GuideMode.GRID_XZ);
+			win.SetTrackBallMode(true);
 
 			spModel.setShape(sph);
 			spModel.setMaterial(fk_Material.Yellow);
 			spModel.setSmoothMode(true);
 			spModel.glMoveTo(-20.0, 0.0, 0.0);
-			win.entry(spModel);
+			win.Entry(spModel);
 
 			ifsModel.setShape(ifsShape);
 			ifsModel.setMaterial(fk_Material.White);
 			ifsModel.setSmoothMode(true);
 			ifsModel.glMoveTo(20.0, 0.0, 0.0);
-			win.entry(ifsModel);
+			win.Entry(ifsModel);
 
-			win.open();
-			while(win.update() == true) {
+			win.Open();
+			while(win.Update() == true) {
 				lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.01);
 			}
 		}

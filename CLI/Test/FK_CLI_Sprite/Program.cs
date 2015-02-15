@@ -26,22 +26,21 @@ namespace FK_CLI_Sprite
 			}
 
 			sprite.setPositionLT(-280.0, 230.0);
-			window.entry(sprite);
+			window.Entry(sprite);
  
 			model.setShape(block);
 			model.glMoveTo(0.0, 6.0, 0.0);
 			model.setMaterial(fk_Material.Yellow);
-			window.entry(model);
- 
-			window.setCameraPos(0.0, 5.0, 20.0);
-			window.setCameraFocus(0.0, 5.0, 0.0);
-			window.setSize(800, 600);
-			window.setBGColor(0.6, 0.7, 0.8);
-			window.open();
-			window.showGuide(fk_GuideMode.GRID_XZ);
+			window.Entry(model);
+			window.SetCameraPos(0.0, 5.0, 20.0);
+			window.SetCameraFocus(0.0, 5.0, 0.0);
+			window.SetSize(800, 600);
+			window.SetBGColor(0.6, 0.7, 0.8);
+			window.Open();
+			window.ShowGuide(fk_GuideMode.GRID_XZ);
  
 			count = 0;
-			while(window.update() == true) {
+			while(window.Update() == true) {
 				str = "count = " + count.ToString();
 				sprite.drawText(str, true);
 				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
