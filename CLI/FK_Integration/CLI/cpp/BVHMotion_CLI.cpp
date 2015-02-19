@@ -6,29 +6,29 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	void fk_BVHMotion::init(void)
+	void fk_BVHMotion::Init(void)
 	{
 		GetP()->init();
 	}
 
-	bool fk_BVHMotion::readBVHFile(String^ argFileName)
+	bool fk_BVHMotion::ReadBVHFile(String^ argFileName)
 	{
 		if(!argFileName) return false;
 		return GetP()->readBVHFile(marshal_as<string>(argFileName));
 	}
 
-	int fk_BVHMotion::getNodeNum(void)
+	int fk_BVHMotion::GetNodeNum(void)
 	{
 		return GetP()->getNodeNum();
 	}
 
-	String^ fk_BVHMotion::getNodeName(int argIndex)
+	String^ fk_BVHMotion::GetNodeName(int argIndex)
 	{
 		String^ S = marshal_as<String^>(GetP()->getNodeName(argIndex));
 		return S;
 	}
 
-	fk_Model^ fk_BVHMotion::getNodeModel(int argIndex)
+	fk_Model^ fk_BVHMotion::GetNodeModel(int argIndex)
 	{
 		::fk_Model *pM = GetP()->getNodeModel(argIndex);
 		if(pM == nullptr) return nullptr;
@@ -39,7 +39,7 @@ namespace FK_CLI {
 		return M;
 	}
 
-	fk_Model^ fk_BVHMotion::getNodeModel(String^ argNodeName)
+	fk_Model^ fk_BVHMotion::GetNodeModel(String^ argNodeName)
 	{
 		if(!argNodeName) return nullptr;
 		::fk_Model *pM = GetP()->getNodeModel(marshal_as<string>(argNodeName));
@@ -51,34 +51,33 @@ namespace FK_CLI {
 		return M;
 	}
 
-	int fk_BVHMotion::nextFrame(void)
+	int fk_BVHMotion::NextFrame(void)
 	{
 		return GetP()->nextFrame();
 	}
 
-	void fk_BVHMotion::setFrameCount(int argFrame)
+	void fk_BVHMotion::SetFrameCount(int argFrame)
 	{
 		GetP()->setFrameCount(argFrame);
 	}
 
-	void fk_BVHMotion::setAnimationTime(double argT)
+	void fk_BVHMotion::SetAnimationTime(double argT)
 	{
 		GetP()->setAnimationTime(argT);
 	}
 
-	int fk_BVHMotion::getNowFrameCount(void)
+	int fk_BVHMotion::GetNowFrameCount(void)
 	{
 		return GetP()->getNowFrameCount();
 	}
 
-	int fk_BVHMotion::getFrameLength(void)
+	int fk_BVHMotion::GetFrameLength(void)
 	{
 		return GetP()->getFrameLength();
 	}
 		
-	double fk_BVHMotion::getOneFrameTime(void)
+	double fk_BVHMotion::GetOneFrameTime(void)
 	{
 		return GetP()->getOneFrameTime();
 	}
 }
-	

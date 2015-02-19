@@ -46,10 +46,10 @@ namespace FK_CLI
 			pBase = nullptr;
 		}
 
-		void setSize(double x, double y, double z);
-		void setSize(double length, fk_Axis axis);
-		void setScale(double scale);
-		void setScale(double scale, fk_Axis axis);
-		void setScale(double x, double y, double z);
+		void SetSize(double x, double y, double z);
+		void SetSize(double length, fk_Axis axis);
+		void SetScale(double scale);
+		void SetScale(double scale, fk_Axis axis);
+		void SetScale(double x, double y, double z);
 	};
 }

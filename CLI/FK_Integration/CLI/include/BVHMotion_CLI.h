@@ -34,17 +34,17 @@ namespace FK_CLI
 			pMotion = nullptr;
 		}
 
-		void init(void);
-		bool readBVHFile(String^ fileName);
-		int getNodeNum(void);
-		String^ getNodeName(int index);
-		fk_Model^ getNodeModel(int index);
-		fk_Model^ getNodeModel(String^ nodeName);
-		int nextFrame(void);
-		void setFrameCount(int frame);
-		void setAnimationTime(double t);
-		int getNowFrameCount(void);
-		int getFrameLength(void);
-		double getOneFrameTime(void);
+		void Init(void);
+		bool ReadBVHFile(String^ fileName);
+		int GetNodeNum(void);
+		String^ GetNodeName(int index);
+		fk_Model^ GetNodeModel(int index);
+		fk_Model^ GetNodeModel(String^ nodeName);
+		int NextFrame(void);
+		void SetFrameCount(int frame);
+		void SetAnimationTime(double t);
+		int GetNowFrameCount(void);
+		int GetFrameLength(void);
+		double GetOneFrameTime(void);
 	};
 }
