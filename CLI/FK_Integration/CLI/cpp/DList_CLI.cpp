@@ -9,7 +9,7 @@ namespace FK_CLI {
 		return FK_STEREO_RIGHT;
 	}
 
-	void fk_DisplayLink::clearDisplay(void)
+	void fk_DisplayLink::ClearDisplay(void)
 	{
 		GetP()->clearDisplay();
 		modelList->Clear();
@@ -17,14 +17,14 @@ namespace FK_CLI {
 		CameraUpdate();
 	}
 
-	void fk_DisplayLink::entryModel(fk_Model ^argM)
+	void fk_DisplayLink::EntryModel(fk_Model ^argM)
 	{
 		if(!argM) return;
 		GetP()->entryModel(argM->GetP());
 		if(modelList->Contains(argM) == false) modelList->Add(argM);
 	}			
 
-	void fk_DisplayLink::removeModel(fk_Model ^argM)
+	void fk_DisplayLink::RemoveModel(fk_Model ^argM)
 	{
 		if(!argM) return;
 		GetP()->removeModel(argM->GetP());
@@ -33,20 +33,20 @@ namespace FK_CLI {
 		}
  	}
 
-	void fk_DisplayLink::clearModel(void)
+	void fk_DisplayLink::ClearModel(void)
 	{
 		GetP()->clearModel();
 		modelList->Clear();
 	}
 
-	void fk_DisplayLink::entryOverlayModel(fk_Model ^argM)
+	void fk_DisplayLink::EntryOverlayModel(fk_Model ^argM)
 	{
 		if(!argM) return;
 		GetP()->entryOverlayModel(argM->GetP());
 		if(overlayList->Contains(argM) == false) overlayList->Add(argM);
 	}
 		
-	void fk_DisplayLink::removeOverlayModel(fk_Model^ argM)
+	void fk_DisplayLink::RemoveOverlayModel(fk_Model^ argM)
 	{
 		if(!argM) return;
 		GetP()->removeOverlayModel(argM->GetP());
@@ -55,61 +55,31 @@ namespace FK_CLI {
 		}
 	}
 			
-	void fk_DisplayLink::clearOverlayModel(void)
+	void fk_DisplayLink::ClearOverlayModel(void)
 	{
 		GetP()->clearOverlayModel();
 		overlayList->Clear();
 	}
-
-	void fk_DisplayLink::entryCamera(fk_Model ^argM)
-	{
-		GetP()->entryCamera(argM->GetP());
-		camera = argM;
-	}
-
-	fk_Model^ fk_DisplayLink::getCamera(void)
-	{
-		CameraUpdate();
-		return camera;
-	}
 				
-	void fk_DisplayLink::setProjection(fk_ProjectBase ^argP)
+	void fk_DisplayLink::SetProjection(fk_ProjectBase ^argP)
 	{
 		if(!argP) return;
 		GetP()->setProjection(argP->GetP());
-		proj = argP;
+		_proj = argP;
 	}
 
-	void fk_DisplayLink::entryStereoCamera(fk_StereoChannel argChannel, fk_Model^ argM)
-	{
-		if(!argM) return;
-		GetP()->entryStereoCamera(GetStereo(argChannel), argM->GetP());
-		switch(argChannel) {
-			case fk_StereoChannel::STEREO_RIGHT:
-				rCamera = argM;
-				break;
-
-			case fk_StereoChannel::STEREO_LEFT:
-				lCamera = argM;
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	void fk_DisplayLink::setStereoProjection(fk_StereoChannel argChannel,
+	void fk_DisplayLink::SetStereoProjection(fk_StereoChannel argChannel,
 											 fk_ProjectBase ^argP)
 	{
 		if(!argP) return;
 		GetP()->setStereoProjection(GetStereo(argChannel), argP->GetP());
 		switch(argChannel) {
 			case fk_StereoChannel::STEREO_RIGHT:
-				rProj = argP;
+				_rProj = argP;
 				break;
 
 			case fk_StereoChannel::STEREO_LEFT:
-				lProj = argP;
+				_lProj = argP;
 				break;
 
 			default:
@@ -117,17 +87,17 @@ namespace FK_CLI {
 		}
 	}
 
-	void fk_DisplayLink::clearStereo(void)
+	void fk_DisplayLink::ClearStereo(void)
 	{
 		GetP()->clearStereo();
 	}
 
-	void fk_DisplayLink::setStereoOverlayMode(bool argMode)
+	void fk_DisplayLink::SetStereoOverlayMode(bool argMode)
 	{
 		GetP()->setStereoOverlayMode(argMode);
 	}
 
-	bool fk_DisplayLink::getStereoOverlayMode(void)
+	bool fk_DisplayLink::GetStereoOverlayMode(void)
 	{
 		return GetP()->getStereoOverlayMode();
 	}

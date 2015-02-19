@@ -48,14 +48,14 @@ namespace FK_WPF_Test
             lightModel.setMaterial(fk_Material.TrueWhite);
             lightModel.glMoveTo(0.0, 0.0, 0.0);
             lightModel.glFocus(-1.0, -1.0, -1.0);
-            scene.entryModel(lightModel);
+            scene.EntryModel(lightModel);
 
             // 直方体モデル生成
             var blockModel = new fk_Model();
             var block = new fk_Block(50.0, 70.0, 40.0);
             blockModel.setShape(block);
             blockModel.setMaterial(fk_Material.Yellow);
-            scene.entryModel(blockModel);
+            scene.EntryModel(blockModel);
 
             // 線分モデル生成
             fk_Vector[] pos = new fk_Vector[4];
@@ -72,7 +72,7 @@ namespace FK_WPF_Test
                 lineModel[i] = new fk_Model();
                 lineModel[i].setShape(line[i]);
                 lineModel[i].setParent(blockModel);
-                scene.entryModel(lineModel[i]);
+                scene.EntryModel(lineModel[i]);
             }
 
             lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
@@ -83,7 +83,7 @@ namespace FK_WPF_Test
             camera.glMoveTo(0.0, 0.0, 2000.0);
             camera.glFocus(0.0, 0.0, 0.0);
             camera.glUpvec(0.0, 1.0, 0.0);
-            scene.entryCamera(camera);
+            scene.camera = camera;
 
             scene.setBGColor(0.5f, 0.5f, 0.5f);
 

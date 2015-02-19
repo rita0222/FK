@@ -45,8 +45,8 @@ namespace FK_CLI
 			pBase = nullptr;
 		}
 
-		void setDivide(int div);
-		void setRadius(double radius);
-		void setScale(double scale);
+		void SetDivide(int div);
+		void SetRadius(double radius);
+		void SetScale(double scale);
 	};
 }

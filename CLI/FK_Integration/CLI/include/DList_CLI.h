@@ -20,12 +20,12 @@ namespace FK_CLI
 	internal:
 		List<fk_Model^>^ modelList;
 		List<fk_Model^>^ overlayList;
-		fk_Model^ camera;
-		fk_Model^ rCamera;
-		fk_Model^ lCamera;
-		fk_ProjectBase^ proj;
-		fk_ProjectBase^ rProj;
-		fk_ProjectBase^ lProj;
+		fk_Model^ _camera;
+		fk_Model^ _rCamera;
+		fk_Model^ _lCamera;
+		fk_ProjectBase^ _proj;
+		fk_ProjectBase^ _rProj;
+		fk_ProjectBase^ _lProj;
 
 		::fk_DisplayLink * GetP(void)
 		{
@@ -34,9 +34,9 @@ namespace FK_CLI
 
 		void CameraUpdate(void)
 		{
-			camera = gcnew fk_Model(false);
-			camera->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
-			camera->dFlg = false;
+			_camera = gcnew fk_Model(false);
+			_camera->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
+			_camera->dFlg = false;
 		}
 
 		::fk_StereoChannel GetStereo(fk_StereoChannel);
@@ -46,8 +46,8 @@ namespace FK_CLI
 			: fk_BaseObject(false),
 			modelList(gcnew List<fk_Model^>()),
 			overlayList(gcnew List<fk_Model^>()),
-			rCamera(nullptr), lCamera(nullptr),
-			proj(nullptr), rProj(nullptr), lProj(nullptr)
+			_camera(nullptr), _rCamera(nullptr), _lCamera(nullptr),
+			_proj(nullptr), _rProj(nullptr), _lProj(nullptr)
 		{
 		}
 
@@ -60,20 +60,60 @@ namespace FK_CLI
 		{
 		}
 
-		void clearDisplay(void);
-		void entryModel(fk_Model ^model);
-		void removeModel(fk_Model ^model);
-		void clearModel(void);
-		void entryOverlayModel(fk_Model ^model);
-		void removeOverlayModel(fk_Model^ model);
-		void clearOverlayModel(void);
-		void entryCamera(fk_Model ^model);
-		fk_Model^ getCamera(void);
-		void setProjection(fk_ProjectBase ^argP);
-		void entryStereoCamera(fk_StereoChannel channel, fk_Model^ model);
-		void setStereoProjection(fk_StereoChannel channel, fk_ProjectBase ^projection);
-		void clearStereo(void);
-		void setStereoOverlayMode(bool mode);
-		bool getStereoOverlayMode(void);
+		property fk_Model^ camera {
+			fk_Model^ get()
+			{
+				CameraUpdate();
+				return _camera;
+			}
+
+			void set(fk_Model^ argM)
+			{
+				if(!argM) return;
+				GetP()->entryCamera(argM->GetP());
+				_camera = argM;
+			}
+		}			
+
+		property fk_Model^ rCamera {
+			fk_Model^ get()
+			{
+				return _rCamera;
+			}
+
+			void set(fk_Model^ argM)
+			{
+				if(!argM) return;
+				GetP()->entryStereoCamera(FK_STEREO_RIGHT, argM->GetP());
+				_rCamera = argM;
+			}
+		}
+		
+		property fk_Model^ lCamera {
+			fk_Model^ get()
+			{
+				return _lCamera;
+			}
+
+			void set(fk_Model^ argM)
+			{
+				if(!argM) return;
+				GetP()->entryStereoCamera(FK_STEREO_LEFT, argM->GetP());
+				_lCamera = argM;
+			}
+		}
+
+		void SetProjection(fk_ProjectBase^ argP);
+		void SetStereoProjection(fk_StereoChannel channel, fk_ProjectBase ^projection);
+		void ClearStereo(void);
+		void SetStereoOverlayMode(bool mode);
+		bool GetStereoOverlayMode(void);
+		void ClearDisplay(void);
+		void EntryModel(fk_Model ^model);
+		void RemoveModel(fk_Model ^model);
+		void ClearModel(void);
+		void EntryOverlayModel(fk_Model ^model);
+		void RemoveOverlayModel(fk_Model^ model);
+		void ClearOverlayModel(void);
 	};
 }
