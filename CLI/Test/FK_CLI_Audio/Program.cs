@@ -27,8 +27,8 @@ namespace FK_CLI_Audio
 		public void start()
 		{
 			if(openFlg == false) return;
-			bgm.loopMode = true;
-			bgm.gain = 0.5;
+			bgm.LoopMode = true;
+			bgm.Gain = 0.5;
 			while(endFlg == false) {
 				bgm.Play();
 				Thread.Sleep(100);
@@ -37,7 +37,7 @@ namespace FK_CLI_Audio
 
 		public void setGain(double argVolume)
 		{
-			bgm.gain = argVolume;
+			bgm.Gain = argVolume;
 		}
 	}
 

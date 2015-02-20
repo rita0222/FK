@@ -53,39 +53,18 @@ namespace FK_CLI
 		}
 
 		property double	x {
-			double get()
-			{
-				return pVec->x;
-			}
-
-			void set(double value)
-			{
-				pVec->x = value;
-			}
+			double get();
+			void set(double);
 		}
 
 		property double y {
-			double get()
-			{
-				return pVec->y;
-			}
-
-			void set(double value)
-			{
-				pVec->y = value;
-			}
+			double get();
+			void set(double);
 		}
 
 		property double z {
-			double get()
-			{
-				return pVec->z;
-			}
-
-			void set(double value)
-			{
-				pVec->z = value;
-			}
+			double get();
+			void set(double);
 		}
 
 		//////////////////// 比較演算子		

@@ -34,15 +34,7 @@ namespace FK_CLI
 			pAudio = nullptr;
 		}
 
-		virtual bool Open(String^ name) abstract;
-		virtual bool Ready(void) abstract;
-		virtual bool Play(void) abstract;
-		virtual double Tell(void) abstract;
-		virtual void Seek(double time) abstract;
-		virtual void Stop(void) abstract;
-		virtual void End(void) abstract;
-
-		property double gain {
+		property double Gain {
 			double get()
 			{
 				return GetP()->getGain();
@@ -54,7 +46,7 @@ namespace FK_CLI
 			}
 		}
 
-		property int queueSize {
+		property int QueueSize {
 			int get()
 			{
 				return GetP()->getQueueSize();
@@ -66,7 +58,7 @@ namespace FK_CLI
 			}
 		}
 
-		property bool loopMode {
+		property bool LoopMode {
 			bool get()
 			{
 				return GetP()->getLoopMode();
@@ -78,7 +70,7 @@ namespace FK_CLI
 			}
 		}
 
-		property fk_Vector^ position {
+		property fk_Vector^ Position {
 			fk_Vector^ get()
 			{
 				fk_Vector^ V = gcnew fk_Vector();
@@ -92,7 +84,7 @@ namespace FK_CLI
 			}
 		}
 					
-		property fk_Model^ model {
+		property fk_Model^ Model {
 			fk_Model^ get()
 			{
 				fk_Model^ M = gcnew fk_Model(false);
@@ -108,7 +100,7 @@ namespace FK_CLI
 			}
 		}
 
-		property double dist {
+		property double Dist {
 			double get()
 			{
 				return GetP()->getReferenceDist();
@@ -120,7 +112,7 @@ namespace FK_CLI
 			}
 		}
 
-		property bool surroundMode {
+		property bool SurroundMode {
 			bool get()
 			{
 				return GetP()->getSurroundMode();
@@ -132,10 +124,19 @@ namespace FK_CLI
 			}
 		}					
 
+		virtual bool Open(String^ name) abstract;
+		virtual bool Ready(void) abstract;
+		virtual bool Play(void) abstract;
+		virtual double Tell(void) abstract;
+		virtual void Seek(double time) abstract;
+		virtual void Stop(void) abstract;
+		virtual void End(void) abstract;
+
 		void SetLoopArea(double start, double end);
 		double GetLoopStartTime(void);
 		double GetLoopEndTime(void);
 		void Pause(void);
+
 		static bool Init(void);
 		static bool GetInit(void);
 		static void Sleep(double time);

@@ -60,45 +60,9 @@ namespace FK_CLI {
 		GetP()->clearOverlayModel();
 		overlayList->Clear();
 	}
-				
-	void fk_DisplayLink::SetProjection(fk_ProjectBase ^argP)
-	{
-		if(!argP) return;
-		GetP()->setProjection(argP->GetP());
-		_proj = argP;
-	}
-
-	void fk_DisplayLink::SetStereoProjection(fk_StereoChannel argChannel,
-											 fk_ProjectBase ^argP)
-	{
-		if(!argP) return;
-		GetP()->setStereoProjection(GetStereo(argChannel), argP->GetP());
-		switch(argChannel) {
-			case fk_StereoChannel::STEREO_RIGHT:
-				_rProj = argP;
-				break;
-
-			case fk_StereoChannel::STEREO_LEFT:
-				_lProj = argP;
-				break;
-
-			default:
-				break;
-		}
-	}
 
 	void fk_DisplayLink::ClearStereo(void)
 	{
 		GetP()->clearStereo();
-	}
-
-	void fk_DisplayLink::SetStereoOverlayMode(bool argMode)
-	{
-		GetP()->setStereoOverlayMode(argMode);
-	}
-
-	bool fk_DisplayLink::GetStereoOverlayMode(void)
-	{
-		return GetP()->getStereoOverlayMode();
 	}
 }

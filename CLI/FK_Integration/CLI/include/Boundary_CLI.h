@@ -88,7 +88,7 @@ namespace FK_CLI
 			}
 		}			   
 
-		property double sphereRad {
+		property double SphereRad {
 			double get()
 			{
 				return GetP()->getSphere();

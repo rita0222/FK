@@ -65,19 +65,4 @@ namespace FK_CLI {
 	{
 		GetP()->setAnimationTime(argT);
 	}
-
-	int fk_BVHMotion::GetNowFrameCount(void)
-	{
-		return GetP()->getNowFrameCount();
-	}
-
-	int fk_BVHMotion::GetFrameLength(void)
-	{
-		return GetP()->getFrameLength();
-	}
-		
-	double fk_BVHMotion::GetOneFrameTime(void)
-	{
-		return GetP()->getOneFrameTime();
-	}
 }

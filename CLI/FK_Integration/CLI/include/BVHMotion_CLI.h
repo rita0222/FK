@@ -34,6 +34,27 @@ namespace FK_CLI
 			pMotion = nullptr;
 		}
 
+		property int NowFrameCount {
+			int get()
+			{
+				return GetP()->getNowFrameCount();
+			}
+		}
+
+		property int FrameLength {
+			int get()
+			{
+				return GetP()->getFrameLength();
+			}
+		}
+
+		property double OneFrameTime {
+			double get()
+			{
+				return GetP()->getOneFrameTime();
+			}
+		}
+
 		void Init(void);
 		bool ReadBVHFile(String^ fileName);
 		int GetNodeNum(void);
@@ -43,8 +64,5 @@ namespace FK_CLI
 		int NextFrame(void);
 		void SetFrameCount(int frame);
 		void SetAnimationTime(double t);
-		int GetNowFrameCount(void);
-		int GetFrameLength(void);
-		double GetOneFrameTime(void);
 	};
 }

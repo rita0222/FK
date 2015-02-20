@@ -2,7 +2,7 @@
 #include "Half_CLI.h"
 
 namespace FK_CLI {
-	fk_Half^ fk_Edge::getLeftHalf(void)
+	fk_Half^ fk_Edge::LeftHalf::get()
 	{
 		fk_Half^ H = gcnew fk_Half(false);
 		H->pBase = GetP()->getLeftHalf();
@@ -10,7 +10,7 @@ namespace FK_CLI {
 		return H;
 	}
   
-	fk_Half^ fk_Edge::getRightHalf(void)
+	fk_Half^ fk_Edge::RightHalf::get()
 	{
 		fk_Half^ H = gcnew fk_Half(false);
 		H->pBase = GetP()->getRightHalf();
@@ -18,12 +18,12 @@ namespace FK_CLI {
 		return H;
 	}
 
-	double fk_Edge::getDrawWidth(void)
+	double fk_Edge::DrawWidth::get()
 	{
 		return GetP()->getDrawWidth();
 	}
 
-	void fk_Edge::setDrawWidth(double argW)
+	void fk_Edge::DrawWidth::set(double argW)
 	{
 		GetP()->setDrawWidth(argW);
 	}

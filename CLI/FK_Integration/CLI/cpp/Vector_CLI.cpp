@@ -39,6 +39,36 @@ namespace FK_CLI {
 		return gcnew String(tmpBuf.c_str());
 	}
 
+	double fk_Vector::x::get()
+	{
+		return pVec->x;
+	}
+
+	void fk_Vector::x::set(double value)
+	{
+		pVec->x = value;
+	}
+
+	double fk_Vector::y::get()
+	{
+		return pVec->y;
+	}
+
+	void fk_Vector::y::set(double value)
+	{
+		pVec->y = value;
+	}
+
+	double fk_Vector::z::get()
+	{
+		return pVec->z;
+	}
+
+	void fk_Vector::z::set(double value)
+	{
+		pVec->z = value;
+	}
+	
 	void fk_Vector::Set(double argX, double argY, double argZ)
 	{
 		pVec->set(argX, argY, argZ);

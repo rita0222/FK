@@ -109,7 +109,7 @@ namespace PlugInTestApp
             camera.glMoveTo(0.0, 0.0, 2000.0);
             camera.glFocus(0.0, 0.0, 0.0);
             camera.glUpvec(0.0, 1.0, 0.0);
-            scene.camera = camera;
+            scene.Camera = camera;
 
             scene.setBGColor(0.5f, 0.5f, 0.5f);
 

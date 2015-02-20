@@ -37,9 +37,17 @@ namespace FK_CLI
 		{
 		}
 
-		fk_Half^ getLeftHalf(void);
-		fk_Half^ getRightHalf(void);
-		double getDrawWidth(void);
-		void setDrawWidth(double);
+		property fk_Half^ LeftHalf {
+			fk_Half^ get();
+		}
+
+		property fk_Half^ RightHalf {
+			fk_Half^ get();
+		}
+
+		property double DrawWidth {
+			double get();
+			void set(double argW);
+		}
 	};
 }
