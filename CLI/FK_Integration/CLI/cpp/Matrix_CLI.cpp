@@ -3,7 +3,107 @@
 namespace FK_CLI {
 
 	using namespace std;
+
+	fk_Angle::fk_Angle()
+	{
+		pAngle = new ::fk_Angle();
+	}
+
+	fk_Angle::fk_Angle(double argH, double argP, double argB)
+	{
+		pAngle = new ::fk_Angle(argH, argP, argB);
+	}
+
+	fk_Angle::~fk_Angle()
+	{
+		this->!fk_Angle();
+	}
+
+	fk_Angle::!fk_Angle()
+	{
+		delete pAngle;
+	}
+
+	double fk_Angle::h::get()
+	{
+		return pAngle->h;
+	}
 	
+	void fk_Angle::h::set(double value)
+	{
+		pAngle->h = value;
+	}
+
+	double fk_Angle::p::get()
+	{
+		return pAngle->p;
+	}
+	
+	void fk_Angle::p::set(double value)
+	{
+		pAngle->p = value;
+	}
+	
+	double fk_Angle::b::get()
+	{
+		return pAngle->b;
+	}
+	
+	void fk_Angle::b::set(double value)
+	{
+		pAngle->b = value;
+	}
+
+	void fk_Angle::Set(double argH, double argP, double argB)
+	{
+		pAngle->set(argH, argP, argB);
+	}
+
+	////////////////////////////////////////////////////////////////////
+	
+	fk_Matrix::fk_Matrix()
+	{
+		pMatrix = new ::fk_Matrix();
+	}
+
+	fk_Matrix::~fk_Matrix()
+	{
+		this->!fk_Matrix();
+	}
+
+	fk_Matrix::!fk_Matrix()
+	{
+		delete pMatrix;
+	}
+
+	double fk_Matrix::default::get(int argI1, int argI2)
+	{
+		return (*pMatrix)[argI1][argI2];
+	}
+
+	void fk_Matrix::default::set(int argI1, int argI2, double argD)
+	{
+		(*pMatrix)[argI1][argI2] = argD;
+	}
+
+
+	bool fk_Matrix::Equals(fk_Matrix^ argM)
+	{
+		if(!argM) false;
+		return (*argM->pMatrix == *pMatrix);
+	}
+
+	bool fk_Matrix::Equals(Object^ argObj)
+	{
+		if(!argObj) return false;
+		if(this == argObj) return true;
+		if(GetType() == argObj->GetType()) {
+			fk_Matrix^ M = static_cast<fk_Matrix^>(argObj);
+			return (*M->pMatrix == *pMatrix);
+		}
+		return false;
+	}
+
 	String^	fk_Matrix::ToString()
 	{
 		std::string	tmpBuf;
@@ -19,6 +119,73 @@ namespace FK_CLI {
 
 		return gcnew String(tmpBuf.c_str());
 	}
+
+	fk_HVector^ fk_Matrix::operator*(fk_Matrix^ argM, fk_HVector^ argV)
+	{
+		if(!argM || !argV) return nullptr;
+		fk_HVector^ V = gcnew fk_HVector();
+		*V->pHVec = *argM->pMatrix * *argV->pHVec;
+		return V;
+	}
+
+	fk_Matrix^ fk_Matrix::operator*(fk_Matrix^ argM1, fk_Matrix^ argM2)
+	{
+		if(!argM1 || !argM2) return nullptr;
+		fk_Matrix^ M = gcnew fk_Matrix();
+		*M->pMatrix = (*argM1->pMatrix) * (*argM2->pMatrix);
+		return M;
+	}
+
+	fk_Matrix^ fk_Matrix::operator*(double argD, fk_Matrix^ argM)
+	{
+		if(!argM) return nullptr;
+		fk_Matrix^ M = gcnew fk_Matrix();
+		*M->pMatrix = argD * (*argM->pMatrix);
+		return M;
+	}
+
+	fk_Matrix^ fk_Matrix::operator*(fk_Matrix^ argM, double argD)
+	{
+		if(!argM) return nullptr;
+		fk_Matrix^ M = gcnew fk_Matrix();
+		*M->pMatrix = (*argM->pMatrix) * argD;
+		return M;
+	}
+
+	fk_Matrix^ fk_Matrix::operator-(fk_Matrix^ argM1, fk_Matrix^ argM2)
+	{
+		if(!argM1 || !argM2) return nullptr;
+		fk_Matrix^ M = gcnew fk_Matrix();
+		*M->pMatrix = (*argM1->pMatrix) - (*argM2->pMatrix);
+		return M;
+	}
+
+	fk_Matrix^ fk_Matrix::operator+(fk_Matrix^ argM1, fk_Matrix^ argM2)
+	{
+		if(!argM1 || !argM2) return nullptr;
+		fk_Matrix^ M = gcnew fk_Matrix();
+		*M->pMatrix = (*argM1->pMatrix) + (*argM2->pMatrix);
+		return M;
+	}
+
+	void fk_Matrix::operator +=(fk_Matrix^ argM1, fk_Matrix^ argM2)
+	{
+		if(!argM1 || !argM2) return;
+		*argM1->pMatrix += *argM2->pMatrix;
+	}
+
+	void fk_Matrix::operator -=(fk_Matrix^ argM1, fk_Matrix^ argM2)
+	{
+		if(!argM1 || !argM2) return;
+		*argM1->pMatrix -= *argM2->pMatrix;
+	}
+
+	void fk_Matrix::operator *=(fk_Matrix^ argM1, fk_Matrix^ argM2)
+	{
+		if(!argM1 || !argM2) return;
+		*argM1->pMatrix *= *argM2->pMatrix;
+	}
+
 
 	void fk_Matrix::Init()
 	{
