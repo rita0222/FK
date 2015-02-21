@@ -9,41 +9,14 @@ namespace FK_CLI
 {
 	public ref class fk_Circle : fk_IndexFaceSet {
 	internal:
-		::fk_Circle * GetP(void)
-		{
-			return (::fk_Circle *)(pBase);
-		}
+		::fk_Circle * GetP(void);
 
 	public:
-		fk_Circle::fk_Circle() : fk_IndexFaceSet(false)
-		{
-			pBase = new ::fk_Circle();
-		}
-
-		fk_Circle::fk_Circle(bool argNewFlg) : fk_IndexFaceSet(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_Circle();
-			}
-				
-		}
-
-		fk_Circle::fk_Circle(int argDiv, double argRad) : fk_IndexFaceSet(false)
-		{
-			pBase = new ::fk_Circle(argDiv, argRad);
-		}
-
-		fk_Circle::~fk_Circle()
-		{
-			this->!fk_Circle();
-		}
-
-		fk_Circle::!fk_Circle()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
+		fk_Circle();
+		fk_Circle(bool argNewFlg);
+		fk_Circle(int argDiv, double argRad);
+		~fk_Circle();
+		!fk_Circle();
 
 		void SetDivide(int div);
 		void SetRadius(double radius);

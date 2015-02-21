@@ -2,88 +2,108 @@
 
 namespace FK_CLI {
 
-	void fk_AudioBase::Pause(void)
+	::fk_AudioBase * fk_AudioBase::GetP(void)
 	{
-		GetP()->pause();
-	}
-	/*	
-	void fk_AudioBase::setGain(double argGain)
-	{
-		GetP()->setGain(argGain);
+		return pAudio;
 	}
 
-	double fk_AudioBase::getGain(void)
+	fk_AudioBase::fk_AudioBase()
+	{
+		dFlg = true;
+	}
+
+	fk_AudioBase::~fk_AudioBase()
+	{
+		this->!fk_AudioBase();
+	}
+
+	fk_AudioBase::!fk_AudioBase()
+	{
+		if(dFlg == true) delete pAudio;
+		pAudio = nullptr;
+	}
+
+	double fk_AudioBase::Gain::get()
 	{
 		return GetP()->getGain();
 	}
 
-	void fk_AudioBase::setQueueSize(int argSize)
+	void fk_AudioBase::Gain::set(double v)
 	{
-		GetP()->setQueueSize(argSize);
+		GetP()->setGain(v);
 	}
-	
-	int fk_AudioBase::getQueueSize(void)
+
+	int fk_AudioBase::QueueSize::get()
 	{
 		return GetP()->getQueueSize();
 	}
-	
-	void fk_AudioBase::setLoopMode(bool argMode)
+
+	void fk_AudioBase::QueueSize::set(int v)
 	{
-		GetP()->setLoopMode(argMode);
+		GetP()->setQueueSize(v);
 	}
-		
-	bool fk_AudioBase::getLoopMode(void)
+
+	bool fk_AudioBase::LoopMode::get()
 	{
 		return GetP()->getLoopMode();
 	}
 
-	void fk_AudioBase::setPosition(fk_Vector^ argPos)
+	void fk_AudioBase::LoopMode::set(bool mode)
 	{
-		if(!argPos) return;
-		GetP()->setPosition(*argPos->pVec);
+		GetP()->setLoopMode(mode);
 	}
-	
-	fk_Vector^ fk_AudioBase::getPosition(void)
+
+	fk_Vector^ fk_AudioBase::Position::get()
 	{
 		fk_Vector^ V = gcnew fk_Vector();
 		*V->pVec = GetP()->getPosition();
 		return V;
 	}
-	
-	void fk_AudioBase::setModel(fk_Model^ argModel)
+
+	void fk_AudioBase::Position::set(fk_Vector^ argP)
 	{
-		if(!argModel) return;
-		GetP()->setModel(argModel->GetP());
+		GetP()->setPosition(*argP->pVec);
 	}
-	
-	fk_Model^ fk_AudioBase::getModel(void)
+
+	fk_Model^ fk_AudioBase::Model::get()	
 	{
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = GetP()->getModel();
 		M->dFlg = false;
 		return M;
 	}
-	
-	void fk_AudioBase::setReferenceDist(double argDist)
+
+	void fk_AudioBase::Model::set(fk_Model^ argM)
 	{
-		GetP()->setReferenceDist(argDist);
+		if(!argM) return;
+		GetP()->setModel(argM->GetP());
 	}
-	
-	double fk_AudioBase::getReferenceDist(void)
+
+	double fk_AudioBase::Distance::get()
 	{
 		return GetP()->getReferenceDist();
 	}
-	
-	void fk_AudioBase::setSurroundMode(bool argMode)
+
+	void fk_AudioBase::Distance::set(double d)
+	{
+		GetP()->setReferenceDist(d);
+	}
+
+	bool fk_AudioBase::SurroundMode::get()
+	{
+		return GetP()->getSurroundMode();
+	}
+
+	void fk_AudioBase::SurroundMode::set(bool argMode)
 	{
 		GetP()->setSurroundMode(argMode);
 	}
 	
-	bool fk_AudioBase::getSurroundMode(void)
+	void fk_AudioBase::Pause(void)
 	{
-		return GetP()->getSurroundMode();
+		GetP()->pause();
 	}
-	*/		
+
 	void fk_AudioBase::SetLoopArea(double argStart, double argEnd)
 	{
 		GetP()->setLoopArea(argStart, argEnd);

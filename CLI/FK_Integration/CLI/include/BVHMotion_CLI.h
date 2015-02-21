@@ -11,48 +11,23 @@ namespace FK_CLI
 	internal:
 		::fk_BVHMotion *pMotion;
 
-		::fk_BVHMotion * GetP(void)
-		{
-			return pMotion;
-		}
+		::fk_BVHMotion * GetP(void);
 
 	public:
-		fk_BVHMotion::fk_BVHMotion()
-		{
-			pMotion = new ::fk_BVHMotion();
-		}
-
-		fk_BVHMotion::~fk_BVHMotion()
-		{
-			this->!fk_BVHMotion();
-		}
-
-		fk_BVHMotion::!fk_BVHMotion()
-		{
-			if(pMotion == nullptr) return;
-			delete pMotion;
-			pMotion = nullptr;
-		}
+		fk_BVHMotion();
+		~fk_BVHMotion();
+		!fk_BVHMotion();
 
 		property int NowFrameCount {
-			int get()
-			{
-				return GetP()->getNowFrameCount();
-			}
+			int get();
 		}
 
 		property int FrameLength {
-			int get()
-			{
-				return GetP()->getFrameLength();
-			}
+			int get();
 		}
 
 		property double OneFrameTime {
-			double get()
-			{
-				return GetP()->getOneFrameTime();
-			}
+			double get();
 		}
 
 		void Init(void);

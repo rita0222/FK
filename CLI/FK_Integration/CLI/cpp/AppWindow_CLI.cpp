@@ -4,6 +4,11 @@
 namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
+
+	::fk_AppWindow * fk_AppWindow::GetP(void)
+	{
+		return pWin;
+	}
 	
 	::fk_SpecialKey fk_AppWindow::GetSK(fk_SpecialKey argK)
 	{
@@ -131,7 +136,29 @@ namespace FK_CLI {
 		return FK_SW_RELEASE;
 	}
 
-	void fk_AppWindow::SetWindowName(String^ argName)
+	fk_AppWindow::fk_AppWindow()
+	{
+		pWin = new ::fk_AppWindow();
+		scene = gcnew fk_Scene(false);
+		scene->pBase = GetP()->getScene();
+		scene->dFlg = false;
+		scene->CameraUpdate();
+	}
+
+	fk_AppWindow::~fk_AppWindow()
+	{
+		delete pWin;
+		pWin = nullptr;
+	}
+
+	fk_AppWindow::!fk_AppWindow()
+	{
+		pWin->SetFinalizeMode();
+		delete pWin;
+		pWin = nullptr;
+	}
+
+	void fk_AppWindow::WindowName::set(String^ argName)
 	{
 		GetP()->setWindowName(marshal_as<string>(argName));
 	}

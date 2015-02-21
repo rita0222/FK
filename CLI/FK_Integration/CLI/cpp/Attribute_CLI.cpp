@@ -5,6 +5,28 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
+	::fk_Attribute * fk_Attribute::GetP(void)
+	{
+		return (::fk_Attribute *)(pBase);
+	}
+
+	fk_Attribute::fk_Attribute(bool argNewFlg) : fk_BaseObject(false)
+	{
+		if(argNewFlg == true) pBase = new ::fk_Attribute();
+	}
+
+	fk_Attribute::~fk_Attribute()
+	{
+		this->!fk_Attribute();
+	}
+
+	fk_Attribute::!fk_Attribute()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+	
 	bool fk_Attribute::SetAttrII(int argKey, int argValue)
 	{
 		return GetP()->setAttrII(argKey, argValue);

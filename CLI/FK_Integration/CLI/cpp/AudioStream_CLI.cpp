@@ -6,6 +6,28 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 	
+	::fk_AudioStream * fk_AudioStream::GetP(void)
+	{
+		return (::fk_AudioStream *)(pAudio);
+	}
+
+	fk_AudioStream::fk_AudioStream()
+	{
+		pAudio = new ::fk_AudioStream();
+	}
+
+	fk_AudioStream::~fk_AudioStream()
+	{
+		this->!fk_AudioStream();
+	}
+
+	fk_AudioStream::!fk_AudioStream()
+	{
+		if(pAudio == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pAudio = nullptr;
+	}
+
 	bool fk_AudioStream::Open(String^ argName)
 	{
 		if(!argName) return false;

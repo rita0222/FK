@@ -6,6 +6,28 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 	
+	fk_AudioOggBuffer::fk_AudioOggBuffer()
+	{
+		pAudio = new ::fk_AudioOggBuffer();
+	}
+
+	fk_AudioOggBuffer::~fk_AudioOggBuffer()
+	{
+		this->!fk_AudioOggBuffer();
+	}
+
+	fk_AudioOggBuffer::!fk_AudioOggBuffer()
+	{
+		if(pAudio == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pAudio = nullptr;
+	}
+
+	::fk_AudioOggBuffer * fk_AudioOggBuffer::GetP(void)
+	{
+		return (::fk_AudioOggBuffer *)(pAudio);
+	}
+
 	bool fk_AudioOggBuffer::Open(String^ argName)
 	{
 		if(!argName) return false;

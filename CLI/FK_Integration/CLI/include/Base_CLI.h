@@ -72,21 +72,8 @@ namespace FK_CLI {
 		bool dFlg;
 		::fk_BaseObject *pBase;
 
-		fk_BaseObject::fk_BaseObject(bool argNewFlg) : dFlg(true)
-		{
-			if(argNewFlg == true) pBase = nullptr;
-		}
-		
-		fk_BaseObject::~fk_BaseObject()
-		{
-			this->!fk_BaseObject();
-		}
-
-		fk_BaseObject::!fk_BaseObject()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete pBase;
-			pBase = nullptr;
-		}
+		fk_BaseObject(bool);
+		~fk_BaseObject();
+		!fk_BaseObject();
 	};
 }

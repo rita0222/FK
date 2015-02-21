@@ -12,116 +12,46 @@ namespace FK_CLI
 		::fk_AudioBase *pAudio;
 		bool dFlg;
 
-		::fk_AudioBase * GetP(void)
-		{
-			return pAudio;
-		}
+		::fk_AudioBase * GetP(void);
 
 	public:
-		fk_AudioBase::fk_AudioBase()
-		{
-			dFlg = true;
-		}
-
-		fk_AudioBase::~fk_AudioBase()
-		{
-			this->!fk_AudioBase();
-		}
-
-		fk_AudioBase::!fk_AudioBase()
-		{
-			if(dFlg == true) delete pAudio;
-			pAudio = nullptr;
-		}
+		fk_AudioBase();
+		~fk_AudioBase();
+		!fk_AudioBase();
 
 		property double Gain {
-			double get()
-			{
-				return GetP()->getGain();
-			}
-
-			void set(double v)
-			{
-				GetP()->setGain(v);
-			}
+			double get();
+			void set(double);
 		}
 
 		property int QueueSize {
-			int get()
-			{
-				return GetP()->getQueueSize();
-			}
-
-			void set(int v)
-			{
-				GetP()->setQueueSize(v);
-			}
+			int get();
+			void set(int);
 		}
 
 		property bool LoopMode {
-			bool get()
-			{
-				return GetP()->getLoopMode();
-			}
-
-			void set(bool mode)
-			{
-				GetP()->setLoopMode(mode);
-			}
+			bool get();
+			void set(bool);
 		}
 
 		property fk_Vector^ Position {
-			fk_Vector^ get()
-			{
-				fk_Vector^ V = gcnew fk_Vector();
-				*V->pVec = GetP()->getPosition();
-				return V;
-			}
-
-			void set(fk_Vector^ argP)
-			{
-				GetP()->setPosition(*argP->pVec);
-			}
+			fk_Vector^ get();
+			void set(fk_Vector^);
 		}
 					
 		property fk_Model^ Model {
-			fk_Model^ get()
-			{
-				fk_Model^ M = gcnew fk_Model(false);
-				M->pBase = GetP()->getModel();
-				M->dFlg = false;
-				return M;
-			}
-
-			void set(fk_Model^ argM)
-			{
-				if(!argM) return;
-				GetP()->setModel(argM->GetP());
-			}
+			fk_Model^ get();
+			void set(fk_Model^);
 		}
 
-		property double Dist {
-			double get()
-			{
-				return GetP()->getReferenceDist();
-			}
-
-			void set(double d)
-			{
-				GetP()->setReferenceDist(d);
-			}
+		property double Distance {
+			double get();
+			void set(double);
 		}
 
 		property bool SurroundMode {
-			bool get()
-			{
-				return GetP()->getSurroundMode();
-			}
-
-			void set(bool argMode)
-			{
-				GetP()->setSurroundMode(argMode);
-			}
+			bool get();
+			void set(bool);
 		}					
 
 		virtual bool Open(String^ name) abstract;

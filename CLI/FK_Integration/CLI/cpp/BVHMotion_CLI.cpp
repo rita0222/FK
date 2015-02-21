@@ -6,6 +6,43 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
+	::fk_BVHMotion * fk_BVHMotion::GetP(void)
+	{
+		return pMotion;
+	}
+
+	fk_BVHMotion::fk_BVHMotion()
+	{
+		pMotion = new ::fk_BVHMotion();
+	}
+
+	fk_BVHMotion::~fk_BVHMotion()
+	{
+		this->!fk_BVHMotion();
+	}
+
+	fk_BVHMotion::!fk_BVHMotion()
+	{
+		if(pMotion == nullptr) return;
+		delete pMotion;
+		pMotion = nullptr;
+	}
+
+	int fk_BVHMotion::NowFrameCount::get()
+	{
+		return GetP()->getNowFrameCount();
+	}
+
+	int fk_BVHMotion::FrameLength::get()
+	{
+		return GetP()->getFrameLength();
+	}
+
+	double fk_BVHMotion::OneFrameTime::get()
+	{
+		return GetP()->getOneFrameTime();
+	}
+
 	void fk_BVHMotion::Init(void)
 	{
 		GetP()->init();

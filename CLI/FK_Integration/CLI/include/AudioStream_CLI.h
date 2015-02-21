@@ -9,28 +9,12 @@ namespace FK_CLI
 {
 	public ref class fk_AudioStream : fk_AudioBase {
 	internal:
-		::fk_AudioStream * GetP(void)
-		{
-			return (::fk_AudioStream *)(pAudio);
-		}
+		::fk_AudioStream * GetP(void);
 
 	public:
-		fk_AudioStream::fk_AudioStream()
-		{
-			pAudio = new ::fk_AudioStream();
-		}
-
-		fk_AudioStream::~fk_AudioStream()
-		{
-			this->!fk_AudioStream();
-		}
-
-		fk_AudioStream::!fk_AudioStream()
-		{
-			if(pAudio == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pAudio = nullptr;
-		}
+		fk_AudioStream();
+		~fk_AudioStream();
+		!fk_AudioStream();
 
 		virtual bool Open(String^ name) override;
 		virtual bool Ready(void) override;

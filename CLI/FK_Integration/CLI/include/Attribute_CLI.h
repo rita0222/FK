@@ -9,28 +9,12 @@ namespace FK_CLI
 {
 	public ref class fk_Attribute : fk_BaseObject {
 	internal:
-		::fk_Attribute * GetP(void)
-		{
-			return (::fk_Attribute *)(pBase);
-		}
+		::fk_Attribute * GetP(void);
 
 	public:
-		fk_Attribute::fk_Attribute(bool argNewFlg) : fk_BaseObject(false)
-		{
-			if(argNewFlg == true) pBase = new ::fk_Attribute();
-		}
-
-		fk_Attribute::~fk_Attribute()
-		{
-			this->!fk_Attribute();
-		}
-
-		fk_Attribute::!fk_Attribute()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
+		fk_Attribute(bool argNewFlg);
+		~fk_Attribute();
+		!fk_Attribute();
 
 		bool SetAttrII(int key, int value);
 		bool SetAttrID(int key, double value);

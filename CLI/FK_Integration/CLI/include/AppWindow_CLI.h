@@ -62,38 +62,19 @@ namespace FK_CLI
 		::fk_AppWindow *pWin;
 		fk_Scene^ scene;
 
-		::fk_AppWindow * GetP(void)
-		{
-			return pWin;
-		}
-
+		::fk_AppWindow * GetP(void);
 		::fk_SpecialKey GetSK(fk_SpecialKey);
 		::fk_SwitchStatus GetSS(fk_SwitchStatus);
 
 	public:
-		fk_AppWindow::fk_AppWindow()
-		{
-			pWin = new ::fk_AppWindow();
-			scene = gcnew fk_Scene(false);
-			scene->pBase = GetP()->getScene();
-			scene->dFlg = false;
-			scene->CameraUpdate();
+		fk_AppWindow();
+		~fk_AppWindow();
+		!fk_AppWindow();
+
+		property String^ WindowName {
+			void set(String^);
 		}
 
-		fk_AppWindow::~fk_AppWindow()
-		{
-			delete pWin;
-			pWin = nullptr;
-		}
-
-		fk_AppWindow::!fk_AppWindow()
-		{
-			pWin->SetFinalizeMode();
-			delete pWin;
-			pWin = nullptr;
-		}
-
-		void SetWindowName(String^ name);
 		void SetSize(int w, int h);
 		void SetInnerSize(int x, int y, int w, int h);
 		void SetBGColor(double r, double g, double b);

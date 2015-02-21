@@ -2,6 +2,25 @@
 #include "Half_CLI.h"
 
 namespace FK_CLI {
+
+	::fk_Edge * fk_Edge::GetP(void)
+	{
+		return (::fk_Edge *)(pBase);
+	}
+
+	fk_Edge::fk_Edge(bool argNewFlg) : fk_TopologyMaterial(false)
+	{
+	}
+
+	fk_Edge::~fk_Edge()
+	{
+		this->!fk_Edge();
+	}
+
+	fk_Edge::!fk_Edge()
+	{
+	}
+
 	fk_Half^ fk_Edge::LeftHalf::get()
 	{
 		fk_Half^ H = gcnew fk_Half(false);

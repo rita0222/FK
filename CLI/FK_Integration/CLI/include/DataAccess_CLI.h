@@ -9,51 +9,27 @@ namespace FK_CLI
 {
 	public ref class fk_DataAccess : fk_Reference {
 	internal:
-		::fk_DataAccess * GetP(void)
-		{
-			return (::fk_DataAccess *)(pBase);
-		}
+		::fk_DataAccess * GetP(void);
 
 	public:
-		fk_DataAccess::fk_DataAccess(bool argNewFlg) : fk_Reference(false)
-		{
-		}
-
-		fk_DataAccess::~fk_DataAccess()
-		{
-			this->!fk_DataAccess();
-		}
-
-		fk_DataAccess::!fk_DataAccess()
-		{
-		}
+		fk_DataAccess(bool argNewFlg);
+		~fk_DataAccess();
+		!fk_DataAccess();
 
 		property int VNum {
-			int get()
-			{
-				return GetP()->getVNum();
-			}
+			int get();
 		}
 
 		property int HNum {
-			int get()
-			{
-				return GetP()->getHNum();
-			}
+			int get();
 		}
 
 		property int ENum {
-			int get()
-			{
-				return GetP()->getENum();
-			}
+			int get();
 		}
 
 		property int LNum {
-			int get()
-			{
-				return GetP()->getLNum();
-			}
+			int get();
 		}
 		
 		bool CheckDB(void);

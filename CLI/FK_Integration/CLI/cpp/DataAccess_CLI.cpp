@@ -5,6 +5,45 @@ namespace FK_CLI {
 
 	using namespace std;
 
+	::fk_DataAccess * fk_DataAccess::GetP(void)
+	{
+		return (::fk_DataAccess *)(pBase);
+	}
+
+	fk_DataAccess::fk_DataAccess(bool argNewFlg) : fk_Reference(false)
+	{
+	}
+
+	fk_DataAccess::~fk_DataAccess()
+	{
+		this->!fk_DataAccess();
+	}
+
+	fk_DataAccess::!fk_DataAccess()
+	{
+	}
+
+	int fk_DataAccess::VNum::get()
+	{
+		return GetP()->getVNum();
+	}
+
+
+	int fk_DataAccess::HNum::get()
+	{
+		return GetP()->getHNum();
+	}
+
+	int fk_DataAccess::ENum::get()
+	{
+		return GetP()->getENum();
+	}
+
+	int fk_DataAccess::LNum::get()
+	{
+		return GetP()->getLNum();
+	}
+
 	bool fk_DataAccess::CheckDB(void)
 	{
 		return GetP()->checkDB();

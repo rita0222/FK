@@ -27,203 +27,50 @@ namespace FK_CLI
 		fk_ProjectBase^ _lProj;
 		fk_ProjectBase^ _rProj;
 
-		::fk_DisplayLink * GetP(void)
-		{
-			return (::fk_DisplayLink *)(pBase);
-		}
-
-		void CameraUpdate(void)
-		{
-			_camera = gcnew fk_Model(false);
-			_camera->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
-			_camera->dFlg = false;
-		}
-
+		::fk_DisplayLink * GetP(void);
+		void CameraUpdate(void);
 		::fk_StereoChannel GetStereo(fk_StereoChannel);
 	
 	public:
-		fk_DisplayLink::fk_DisplayLink(bool argNewFlg)
-			: fk_BaseObject(false),
-			modelList(gcnew List<fk_Model^>()),
-			overlayList(gcnew List<fk_Model^>()),
-			_camera(nullptr), _rCamera(nullptr), _lCamera(nullptr),
-			_proj(nullptr), _rProj(nullptr), _lProj(nullptr)
-		{
-		}
-
-		fk_DisplayLink::~fk_DisplayLink()
-		{
-			this->!fk_DisplayLink();
-		}
-
-		fk_DisplayLink::!fk_DisplayLink()
-		{
-		}
+		fk_DisplayLink(bool argNewFlg);
+		~fk_DisplayLink();
+		!fk_DisplayLink();
 
 		property fk_Model^ Camera {
-			fk_Model^ get()
-			{
-				CameraUpdate();
-				return _camera;
-			}
-
-			void set(fk_Model^ argM)
-			{
-				if(!argM) return;
-				GetP()->entryCamera(argM->GetP());
-				_camera = argM;
-			}
+			fk_Model^ get();
+			void set(fk_Model^ argM);
 		}			
 
 		property fk_Model^ LeftCamera {
-			fk_Model^ get()
-			{
-				return _lCamera;
-			}
-
-			void set(fk_Model^ argM)
-			{
-				if(!argM) return;
-				GetP()->entryStereoCamera(FK_STEREO_LEFT, argM->GetP());
-				_lCamera = argM;
-			}
+			fk_Model^ get();
+			void set(fk_Model^ argM);
 		}
 
 		property fk_Model^ RightCamera {
-			fk_Model^ get()
-			{
-				return _rCamera;
-			}
-
-			void set(fk_Model^ argM)
-			{
-				if(!argM) return;
-				GetP()->entryStereoCamera(FK_STEREO_RIGHT, argM->GetP());
-				_rCamera = argM;
-			}
+			fk_Model^ get();
+			void set(fk_Model^ argM);
 		}
 		
 		property fk_ProjectBase^ Projection {
-			fk_ProjectBase^ get()
-			{
-				if(!_proj) {
-					const ::fk_ProjectBase *cP = GetP()->getProjection();
-					::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
-
-					switch(proj->getMode()) {
-					  case FK_PERSPECTIVE_MODE:
-						_proj = gcnew fk_Perspective(false);
-						break;
-
-					  case FK_FRUSTUM_MODE:
-						_proj = gcnew fk_Frustum(false);
-						break;
-
-					  case FK_ORTHO_MODE:
-						_proj = gcnew fk_Ortho(false);
-						break;
-						
-					  default:
-						return nullptr;
-					}
-					_proj->pProj = proj;
-				}
-				return _proj;
-			}
-
-			void set(fk_ProjectBase^ argP)
-			{
-				if(!argP) return;
-				GetP()->setProjection(argP->GetP());
-				_proj = argP;
-			}
+			fk_ProjectBase^ get();
+			void set(fk_ProjectBase^ argP);
 		}			
 
 		property fk_ProjectBase^ LeftProjection {
-			fk_ProjectBase^ get()
-			{
-				if(!_lProj) {
-					const ::fk_ProjectBase *cP = GetP()->getStereoProjection(FK_STEREO_LEFT);
-					::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
-
-					switch(proj->getMode()) {
-					  case FK_PERSPECTIVE_MODE:
-						_lProj = gcnew fk_Perspective(false);
-						break;
-
-					  case FK_FRUSTUM_MODE:
-						_lProj = gcnew fk_Frustum(false);
-						break;
-
-					  case FK_ORTHO_MODE:
-						_lProj = gcnew fk_Ortho(false);
-						break;
-						
-					  default:
-						return nullptr;
-					}
-					_lProj->pProj = proj;
-				}
-				return _lProj;
-			}
-
-			void set(fk_ProjectBase^ argP)
-			{
-				if(!argP) return;
-				GetP()->setStereoProjection(FK_STEREO_LEFT, argP->GetP());
-				_lProj = argP;
-			}
+			fk_ProjectBase^ get();
+			void set(fk_ProjectBase^ argP);
 		}
 		
 		property fk_ProjectBase^ RightProjection {
-			fk_ProjectBase^ get()
-			{
-				if(!_rProj) {
-					const ::fk_ProjectBase *cP = GetP()->getStereoProjection(FK_STEREO_RIGHT);
-					::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
-
-					switch(proj->getMode()) {
-					  case FK_PERSPECTIVE_MODE:
-						_rProj = gcnew fk_Perspective(false);
-						break;
-
-					  case FK_FRUSTUM_MODE:
-						_rProj = gcnew fk_Frustum(false);
-						break;
-
-					  case FK_ORTHO_MODE:
-						_rProj = gcnew fk_Ortho(false);
-						break;
-						
-					  default:
-						return nullptr;
-					}
-					_rProj->pProj = proj;
-				}
-				return _rProj;
-			}
-
-			void set(fk_ProjectBase^ argP)
-			{
-				if(!argP) return;
-				GetP()->setStereoProjection(FK_STEREO_RIGHT, argP->GetP());
-				_rProj = argP;
-			}
+			fk_ProjectBase^ get();
+			void set(fk_ProjectBase^ argP);
 		}
 
 		property bool StereoOverlayMode {
-			bool get()
-			{
-				return GetP()->getStereoOverlayMode();
-			}
-
-			void set(bool argMode)
-			{
-				GetP()->setStereoOverlayMode(argMode);
-			}
+			bool get();
+			void set(bool argMode);
 		}
 		
-
 		void ClearStereo(void);
 		void ClearDisplay(void);
 		void EntryModel(fk_Model ^model);

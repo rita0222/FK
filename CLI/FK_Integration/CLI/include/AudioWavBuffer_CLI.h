@@ -9,29 +9,12 @@ namespace FK_CLI
 {
 	public ref class fk_AudioWavBuffer : fk_AudioOggBuffer {
 	internal:
-		::fk_AudioWavBuffer * GetP(void)
-		{
-			return (::fk_AudioWavBuffer *)(pAudio);
-		}
+		::fk_AudioWavBuffer * GetP(void);
 
 	public:
-		fk_AudioWavBuffer::fk_AudioWavBuffer()
-		{
-			pAudio = new ::fk_AudioWavBuffer();
-		}
-
-		fk_AudioWavBuffer::~fk_AudioWavBuffer()
-		{
-			this->!fk_AudioWavBuffer();
-		}
-
-		fk_AudioWavBuffer::!fk_AudioWavBuffer()
-		{
-			if(pAudio == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pAudio = nullptr;
-		}
-
+		fk_AudioWavBuffer();
+		~fk_AudioWavBuffer();
+		!fk_AudioWavBuffer();
 		virtual bool Open(String^ name) override;
 	};
 }

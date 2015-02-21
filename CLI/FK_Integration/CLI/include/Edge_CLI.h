@@ -18,24 +18,12 @@ namespace FK_CLI
 
 	public ref class fk_Edge : fk_TopologyMaterial {
 	internal:
-		::fk_Edge * GetP(void)
-		{
-			return (::fk_Edge *)(pBase);
-		}
+		::fk_Edge * GetP(void);
 
 	public:
-		fk_Edge::fk_Edge(bool argNewFlg) : fk_TopologyMaterial(false)
-		{
-		}
-
-		fk_Edge::~fk_Edge()
-		{
-			this->!fk_Edge();
-		}
-
-		fk_Edge::!fk_Edge()
-		{
-		}
+		fk_Edge(bool argNewFlg);
+		~fk_Edge();
+		!fk_Edge();
 
 		property fk_Half^ LeftHalf {
 			fk_Half^ get();

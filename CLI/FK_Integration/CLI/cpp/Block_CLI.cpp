@@ -2,6 +2,41 @@
 
 namespace FK_CLI {
 
+	::fk_Block * fk_Block::GetP(void)
+	{
+		return (::fk_Block *)(pBase);
+	}
+
+	fk_Block::fk_Block() : fk_IndexFaceSet(false)
+	{
+		pBase = new ::fk_Block();
+	}
+
+	fk_Block::fk_Block(bool argNewFlg) : fk_IndexFaceSet(false)
+	{
+		if(argNewFlg == true) {
+			pBase = new ::fk_Block();
+		}
+				
+	}
+
+	fk_Block::fk_Block(double argX, double argY, double argZ) : fk_IndexFaceSet(false)
+	{
+		pBase = new ::fk_Block(argX, argY, argZ);
+	}
+
+	fk_Block::~fk_Block()
+	{
+		this->!fk_Block();
+	}
+
+	fk_Block::!fk_Block()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
 	void fk_Block::SetSize(double argX, double argY, double argZ)
 	{
 		GetP()->setSize(argX, argY, argZ);
