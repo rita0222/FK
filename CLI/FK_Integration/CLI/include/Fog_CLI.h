@@ -22,37 +22,44 @@ namespace FK_CLI
 
 	public ref class fk_Fog : fk_DisplayLink {
 	internal:
-		::fk_Fog * GetP(void)
-		{
-			return (::fk_Fog *)(pBase);
-		}
+		::fk_Fog * GetP(void);
 
 	public:
-		fk_Fog::fk_Fog(bool argNewFlg) : fk_DisplayLink(false)
-		{
+		fk_Fog(bool argNewFlg);
+		~fk_Fog();
+		!fk_Fog();
+
+		property fk_FogMode FogMode {
+			void set(fk_FogMode);
+			fk_FogMode get();
 		}
 
-		fk_Fog::~fk_Fog()
-		{
-			this->!fk_Fog();
+		property fk_FogOption FogOption {
+			void set(fk_FogOption);
+			fk_FogOption get();
 		}
 
-		fk_Fog::!fk_Fog()
-		{
+		property double FogDensity {
+			void set(double);
+			double get(void);
 		}
 
-		void setFogMode(fk_FogMode mode);
-		void setFogOption(fk_FogOption opt);
-		void setFogDensity(double density);
-		void setFogLinearMap(double start, double end);
-		void setFogColor(fk_Color^ color);
+		property double FogLinearStart {
+			void set(double);
+			double get(void);
+		}
+
+		property double FogLinearEnd {
+			void set(double);
+			double get(void);
+		}
+
+		property fk_Color^ FogColor {
+			void set(fk_Color^);
+			fk_Color^ get();
+		}
+
 		void setFogColor(float r, float g, float b, float a);
 		void setFogColor(double r, double g, double b, double a);
-		fk_FogMode getFogMode(void);
-		fk_FogOption getFogOption(void);
-		double getFogDensity(void);
-		double getFogLinearStart(void);
-		double getFogLinearEnd(void);
-		fk_Color^ getFogColor(void);
 	};
 }
