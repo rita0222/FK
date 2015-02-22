@@ -16,7 +16,7 @@ namespace FK_CLI {
 	{
 		fk_Color^ C = gcnew fk_Color();
 		::fk_Color tmpC = GetP()->getBGColor();
-		C->set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
+		C->Set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
 		return C;
 	}
 

@@ -142,7 +142,7 @@ namespace FK_CLI_Ball
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			win.SetSize(600, 600);
+			win.Size = new fk_Dimension(600, 600);
 			win.ClearModel(false); // デフォルト光源消去
 
 			int view_mode = Ball.HIGH_MODE;
@@ -159,7 +159,7 @@ namespace FK_CLI_Ball
 			var block = new fk_Block(10.0, 10.0, 10.0);
 
 
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			// ### VIEW POINT ###
 			// 上の方から見た視点
@@ -168,8 +168,8 @@ namespace FK_CLI_Ball
 			viewModel.glUpvec(0.0, 1.0, 0.0);
 
 			// ### LIGHT ###
-			light.setLightType(fk_LightType.POINT);
-			light.setAttenuation(0.0, 0.0);
+			light.Type = fk_LightType.POINT;
+			light.SetAttenuation(0.0, 0.0);
 			lightModel.setShape(light);
 			lightModel.setMaterial(fk_Material.White);
 			lightModel.glTranslate(-60.0, 60.0, 0.0);
@@ -191,7 +191,7 @@ namespace FK_CLI_Ball
 			ball.getModel().setSmoothMode(true);
 	
 			// ### Model Entry ###
-			win.SetCameraModel(viewModel);
+			win.CameraModel = viewModel;
 			win.Entry(lightModel);
 			win.Entry(ball.getModel());
 			win.Entry(groundModel);

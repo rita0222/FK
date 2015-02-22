@@ -1,7 +1,35 @@
 ﻿#include "Light_CLI.h"
 
 namespace FK_CLI {
-	void fk_Light::setLightType(fk_LightType argType)
+
+	::fk_Light * fk_Light::GetP(void)
+	{
+		return (::fk_Light *)(this->pBase);
+	}
+
+	fk_Light::fk_Light() : fk_Shape(false)
+	{
+		this->pBase = new ::fk_Light();
+	}
+
+	fk_Light::fk_Light(bool argNewFlg) : fk_Shape(false)
+	{
+		if(argNewFlg == true) this->pBase = new ::fk_Light();
+	}
+
+	fk_Light::~fk_Light()
+	{
+		this->!fk_Light();
+	}
+
+	fk_Light::!fk_Light()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	void fk_Light::Type::set(fk_LightType argType)
 	{
 		switch(argType) {
 		  case fk_LightType::PARALLEL:
@@ -18,7 +46,7 @@ namespace FK_CLI {
 		}
 	}
 
-	fk_LightType fk_Light::getLightType(void)
+	fk_LightType fk_Light::Type::get(void)
 	{
 		switch(GetP()->getLightType()) {
 		  case ::fk_LightType::FK_PARALLEL_LIGHT:
@@ -33,38 +61,39 @@ namespace FK_CLI {
 		return fk_LightType::PARALLEL;
 	}
 
-	void fk_Light::setAttenuation(double arg_kl, double arg_kq, double arg_kc)
-	{
-		GetP()->setAttenuation(arg_kl, arg_kq, arg_kc);
-	}
 
-	void fk_Light::setAttenuation(double arg_kl, double arg_kq)
-	{
-		GetP()->setAttenuation(arg_kl, arg_kq, 1.0);
-	}
-
-	void fk_Light::setSpotCutOff(double argTheta)
+	void fk_Light::SpotCutOff::set(double argTheta)
 	{
 		GetP()->setSpotCutOff(argTheta);
 	}
 
-	void fk_Light::setSpotExponent(double argAlpha)
-	{
-		GetP()->setSpotExponent(argAlpha);
-	}
-
-	double fk_Light::getAttenuation(int argNum)
-	{
-		return GetP()->getAttenuation(argNum);
-	}
-
-	double fk_Light::getSpotCutOff(void)
+	double fk_Light::SpotCutOff::get(void)
 	{
 		return GetP()->getSpotCutOff();
 	}
 
-	double fk_Light::getSpotExponent(void)
+	void fk_Light::SpotExponent::set(double argAlpha)
+	{
+		GetP()->setSpotExponent(argAlpha);
+	}
+
+	double fk_Light::SpotExponent::get(void)
 	{
 		return GetP()->getSpotExponent();
+	}
+
+	void fk_Light::SetAttenuation(double arg_kl, double arg_kq, double arg_kc)
+	{
+		GetP()->setAttenuation(arg_kl, arg_kq, arg_kc);
+	}
+
+	void fk_Light::SetAttenuation(double arg_kl, double arg_kq)
+	{
+		GetP()->setAttenuation(arg_kl, arg_kq, 1.0);
+	}
+
+	double fk_Light::GetAttenuation(int argNum)
+	{
+		return GetP()->getAttenuation(argNum);
 	}
 }

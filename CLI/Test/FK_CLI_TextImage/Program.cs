@@ -14,7 +14,7 @@ namespace FK_CLI_TextImage
 			// ウィンドウ生成
 
 			var win = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			var textImage = new fk_TextImage();
 			var texture = new fk_RectTexture();
@@ -41,8 +41,8 @@ namespace FK_CLI_TextImage
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
 			win.Entry(strModel); 
 			win.Open();
-			win.SetCameraPos(0.0, 0.0, 100.0);
-			win.SetCameraFocus(0.0, 0.0, 0.0);
+			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
+			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			while(win.Update() == true) {
 				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}

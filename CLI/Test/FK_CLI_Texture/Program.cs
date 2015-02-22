@@ -51,7 +51,7 @@ namespace FK_CLI_Texture
 			tex.setTextureCoord(3, 1, 0.5, 1.0);
 			tex.setTextureCoord(3, 2, 1.0, 0.5);
 
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 			var viewer = new fk_ShapeViewer(600, 600);
 			viewer.setShape(tex);
 			viewer.setMaterial(0, fk_Material.TrueWhite);

@@ -20,7 +20,7 @@ namespace FK_CLI_C
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			// 光源生成
 			var light = new fk_Light();
@@ -47,7 +47,7 @@ namespace FK_CLI_C
 			fk_Model[] lineModel = new fk_Model[2];
 			for(i = 0; i < 2; i++) {
 				line[i] = new fk_Line();
-				line[i].pushLine(pos[2*i], pos[2*i + 1]);
+				line[i].PushLine(pos[2*i], pos[2*i + 1]);
 				lineModel[i] = new fk_Model();
 				lineModel[i].setShape(line[i]);
 				lineModel[i].setParent(blockModel);
@@ -62,7 +62,7 @@ namespace FK_CLI_C
 			camera.glMoveTo(0.0, 0.0, 2000.0);
 			camera.glFocus(0.0, 0.0, 0.0);
 			camera.glUpvec(0.0, 1.0, 0.0);
-			win.SetCameraModel(camera);
+			win.CameraModel = camera;
 			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
@@ -79,7 +79,7 @@ namespace FK_CLI_C
 		{
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			var textImage = new fk_TextImage();
 			var texture = new fk_RectTexture();
@@ -106,8 +106,8 @@ namespace FK_CLI_C
 			win.Entry(strModel);
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
 			win.Open();
-			win.SetCameraPos(0.0, 0.0, 100.0);
-			win.SetCameraFocus(0.0, 0.0, 0.0);
+			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
+			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			while(win.Update() == true) {
 				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}
@@ -115,7 +115,7 @@ namespace FK_CLI_C
 		static void samp3()
 		{
 			var window = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 			
 			var sprite = new fk_SpriteModel();
 			var block = new fk_Block(1.0, 1.0, 1.0);
@@ -136,10 +136,10 @@ namespace FK_CLI_C
 			model.setMaterial(fk_Material.Yellow);
 			window.Entry(model);
  
-			window.SetCameraPos(0.0, 5.0, 20.0);
-			window.SetCameraFocus(0.0, 5.0, 0.0);
-			window.SetSize(800, 600);
-			window.SetBGColor(0.6, 0.7, 0.8);
+			window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
+			window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
+			window.Size = new fk_Dimension(800, 600);
+			window.BGColor= new fk_Color(0.6, 0.7, 0.8);
 			window.Open();
 			window.ShowGuide(fk_GuideMode.GRID_XZ);
  

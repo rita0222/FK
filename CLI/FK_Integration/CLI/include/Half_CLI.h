@@ -15,31 +15,34 @@ namespace FK_CLI
 
 	public ref class fk_Half : fk_Topology {
 	internal:
-		::fk_Half * GetP(void)
-		{
-			return (::fk_Half *)(pBase);
-		}
+		::fk_Half * GetP(void);
 
 	public:
-		fk_Half::fk_Half(bool argNewFlg) : fk_Topology(false)
-		{
+		fk_Half(bool argNewFlg);
+		~fk_Half();
+		!fk_Half();
+
+		property fk_Vertex^ Vertex {
+			fk_Vertex^ get();
 		}
 
-		fk_Half::~fk_Half()
-		{
-			this->!fk_Half();
+		property fk_Half^ NextHalf {
+			fk_Half^ get();
+		}
+		
+		property fk_Half^ PrevHalf {
+			fk_Half^ get();
 		}
 
-		fk_Half::!fk_Half()
-		{
+		property fk_Edge^ ParentEdge {
+			fk_Edge^ get();
+		}
+		
+		property fk_Loop^ ParentLoop {
+			fk_Loop^ get();
 		}
 
-		fk_Vertex^ getVertex(void);
-		fk_Half^ getNextHalf(void);
-		fk_Half^ getPrevHalf(void);
-		fk_Edge^ getParentEdge(void);
-		fk_Loop^ getParentLoop(void);
-		bool isLeft(void);
-		bool isRight(void);
+		bool IsLeft(void);
+		bool IsRight(void);
 	};
 }

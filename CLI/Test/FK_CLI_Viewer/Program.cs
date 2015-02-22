@@ -37,7 +37,7 @@ namespace FK_CLI_Viewer
 				}
 			}
 
-			shape.makeIFSet(100, 4, IFSet, 121, pos);
+			shape.MakeIFSet(100, 4, IFSet, 121, pos);
 			viewer.setShape(0, shape);
 			viewer.setDrawMode((uint)(fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE));
 			viewer.setScale(10.0);
@@ -47,7 +47,7 @@ namespace FK_CLI_Viewer
 					for(j = 0; j <= 10; j++) {
 						moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/FK.PI));
 						movePos = moveVec + pos[i*11+j];
-						shape.moveVPosition(i*11+j, movePos);
+						shape.MoveVPosition(i*11+j, movePos);
 					}
 				}
 			}

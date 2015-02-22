@@ -31,7 +31,7 @@ namespace FK_CLI_GenMatrix
 				}
 
 				largeV[1] = largeM[0] * largeV[0];
-				largeM[1] = largeM[0].getInverse();
+				largeM[1] = largeM[0].GetInverse();
 				largeV[2] = largeM[1] * largeV[1];
 
 				if(!largeV[0].Equals(largeV[2])) diff++;

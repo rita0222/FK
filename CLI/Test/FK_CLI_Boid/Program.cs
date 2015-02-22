@@ -17,7 +17,7 @@ namespace FK_CLI_Boid
 
 		public Boid(int argNum)
 		{
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 			cone = new fk_Cone(16, 0.4, 1.0);
 			if(argNum < 0) return;
 			agent = new fk_Model[argNum];
@@ -117,11 +117,11 @@ namespace FK_CLI_Boid
 
 			boid.setWindow(win);
 
-			win.SetSize(600, 600);
-			win.SetBGColor(0.6, 0.7, 0.8);
+			win.Size = new fk_Dimension(600, 600);
+			win.BGColor = new fk_Color(0.6, 0.7, 0.8);
 			win.ShowGuide(fk_GuideMode.GRID_XY);
-			win.SetCameraPos(0.0, 0.0, 80.0);
-			win.SetCameraFocus(0.0, 0.0, 0.0);
+			win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
+			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 
 			win.Open();
 

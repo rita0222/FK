@@ -39,7 +39,7 @@ namespace FK_WPF_Test
             scene = new fk_Scene();
             viewport.Scene = scene;
 
-            fk_Material.initDefault();
+            fk_Material.InitDefault();
 
             // 光源生成
             var light = new fk_Light();
@@ -68,7 +68,7 @@ namespace FK_WPF_Test
             for (int i = 0; i < 2; i++)
             {
                 line[i] = new fk_Line();
-                line[i].pushLine(pos[2 * i], pos[2 * i + 1]);
+                line[i].PushLine(pos[2 * i], pos[2 * i + 1]);
                 lineModel[i] = new fk_Model();
                 lineModel[i].setShape(line[i]);
                 lineModel[i].setParent(blockModel);

@@ -15,7 +15,7 @@ namespace FK_CLI_Box
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			// 光源生成
 			var light = new fk_Light();
@@ -42,7 +42,7 @@ namespace FK_CLI_Box
 			fk_Model[] lineModel = new fk_Model[2];
 			for(i = 0; i < 2; i++) {
 				line[i] = new fk_Line();
-				line[i].pushLine(pos[2*i], pos[2*i + 1]);
+				line[i].PushLine(pos[2*i], pos[2*i + 1]);
 				lineModel[i] = new fk_Model();
 				lineModel[i].setShape(line[i]);
 				lineModel[i].setParent(blockModel);
@@ -57,7 +57,7 @@ namespace FK_CLI_Box
 			camera.glMoveTo(0.0, 0.0, 2000.0);
 			camera.glFocus(0.0, 0.0, 0.0);
 			camera.glUpvec(0.0, 1.0, 0.0);
-			win.SetCameraModel(camera);
+			win.CameraModel = camera;
 			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);

@@ -13,7 +13,7 @@ namespace FK_CLI_Quaternion
 		{
 
 			var win = new fk_AppWindow();
-			win.SetSize(500, 500);
+			win.Size = new fk_Dimension(500, 500);
 			var model = new fk_Model();
 			var pointM = new fk_Model();
 			var cone = new fk_Cone(3, 4.0, 15.0);
@@ -28,7 +28,7 @@ namespace FK_CLI_Quaternion
 			fk_Quaternion q;
 			var poly = new fk_Polyline();
 
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			model.setShape(cone);
 			model.setMaterial(fk_Material.Yellow);
@@ -37,7 +37,7 @@ namespace FK_CLI_Quaternion
 			pointM.setShape(poly);
 			pointM.setLineColor(1.0, 0.0, 0.0);
 
-			win.SetBGColor(0.3, 0.4, 0.5);
+			win.BGColor = new fk_Color(0.3, 0.4, 0.5);
 			win.Entry(model);
 			win.Entry(pointM);
 			win.SetTrackBallMode(true);

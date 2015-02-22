@@ -55,15 +55,15 @@ namespace FK_CLI_Audio
 
 			double volume = 0.5;
 
-			fk_Material.initDefault();			
+			fk_Material.InitDefault();			
 			blockModel.setShape(block);
 			blockModel.glMoveTo(3.0, 3.0, 0.0);
 			blockModel.setMaterial(fk_Material.Yellow);
 			win.Entry(blockModel);
-			win.SetCameraPos(0.0, 1.0, 20.0);
-			win.SetCameraFocus(0.0, 1.0, 0.0);
-			win.SetSize(800, 600);
-			win.SetBGColor(0.6, 0.7, 0.8);
+			win.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
+			win.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
+			win.Size = new fk_Dimension(800, 600);
+			win.BGColor = new fk_Color(0.6, 0.7, 0.8);
 			win.Open();
 			win.ShowGuide(fk_GuideMode.GRID_XZ);
 

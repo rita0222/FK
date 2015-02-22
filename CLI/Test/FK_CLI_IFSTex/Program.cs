@@ -12,7 +12,7 @@ namespace FK_CLI_IFSTex
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			win.SetSize(960, 544);
+			win.Size = new fk_Dimension(960, 544);
 			win.ClearModel(true);
 
 			var lightModel = new fk_Model();
@@ -23,7 +23,7 @@ namespace FK_CLI_IFSTex
 			var spModel = new fk_Model();
 			var ifsModel = new fk_Model();
 
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 			lightModel.setShape(new fk_Light());
 			lightModel.setMaterial(fk_Material.TrueWhite);
 			lightModel.glMoveTo(0.0, 0.0, 0.0);
@@ -32,12 +32,12 @@ namespace FK_CLI_IFSTex
 			if(!ifsShape.readPNG("mqo/00tex_master.png")) {
 				Console.WriteLine("Tex Load Error.");
 			}
-			if(!ifsShape.readMQOFile("mqo/meka.mqo", "body01")) {
+			if(!ifsShape.ReadMQOFile("mqo/meka.mqo", "body01")) {
 				Console.WriteLine("IFS Load Error.");
 			}
 			ifsShape.setTexRendMode(fk_TexRendMode.SMOOTH);
 
-			win.SetBGColor(0.5, 0.5, 0.5);
+			win.BGColor = new fk_Color(0.5, 0.5, 0.5);
 			win.Entry(lightModel);
 			win.ShowGuide(fk_GuideMode.GRID_XZ);
 			win.SetTrackBallMode(true);
