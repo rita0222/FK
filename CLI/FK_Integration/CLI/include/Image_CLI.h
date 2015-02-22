@@ -49,219 +49,130 @@ namespace FK_CLI
 	internal:
 		::fk_Dimension	*pDim;
 
-		::fk_Dimension * GetP(void)
-		{
-			return pDim;
-		}
+		::fk_Dimension * GetP(void);
 
 	public:
-		fk_Dimension::fk_Dimension()
-		{
-			pDim = new ::fk_Dimension();
-		}
-
-		fk_Dimension::fk_Dimension(int argW, int argH)
-		{
-			pDim = new ::fk_Dimension(argW, argH);
-		}
-
-		// デストラクタ
-		fk_Dimension::~fk_Dimension()
-		{
-			this->!fk_Dimension();
-		}
-
-		// ファイナライザ
-		fk_Dimension::!fk_Dimension()
-		{
-			delete pDim;
-		}
+		fk_Dimension();
+		fk_Dimension(int argW, int argH);
+		~fk_Dimension();
+		!fk_Dimension();
 
 		property int w {
-			int get()
-			{
-				return pDim->w;
-			}
-
-			void set(int value)
-			{
-				pDim->w = value;
-			}
+			int get();
+			void set(int value);
 		}
 
 		property int h {
-			int get()
-			{
-				return pDim->h;
-			}
+			int get();
+			void set(int value);
+		}
 
-			void set(int value)
-			{
-				pDim->h = value;
-			}
+		property int x {
+			int get();
+			void set(int value);
+		}
+
+		property int y {
+			int get();
+			void set(int value);
 		}
 
 		String^	ToString() override;
-		void set(int w, int g);
+		void Set(int w, int g);
 	};
 
 	public ref class fk_Rect {
 	internal:
 		::fk_Rect	*pRect;
 
-		::fk_Rect * GetP(void)
-		{
-			return pRect;
-		}
+		::fk_Rect * GetP(void);
 
 	public:
-		fk_Rect::fk_Rect()
-		{
-			pRect = new ::fk_Rect();
-		}
-
-		fk_Rect::fk_Rect(int argX, int argY, int argW, int argH)
-		{
-			pRect = new ::fk_Rect(argX, argY, argW, argH);
-		}
-
-		// デストラクタ
-		fk_Rect::~fk_Rect()
-		{
-			this->!fk_Rect();
-		}
-
-		// ファイナライザ
-		fk_Rect::!fk_Rect()
-		{
-			delete pRect;
-		}
+		fk_Rect();
+		fk_Rect(int argX, int argY, int argW, int argH);
+		~fk_Rect();
+		!fk_Rect();
 
 		property int x {
-			int get()
-			{
-				return pRect->x;
-			}
-
-			void set(int value)
-			{
-				pRect->x = value;
-			}
+			int get();
+			void set(int value);
 		}
 
 		property int y {
-			int get()
-			{
-				return pRect->y;
-			}
-
-			void set(int value)
-			{
-				pRect->y = value;
-			}
+			int get();
+			void set(int value);
 		}
 
 		property int w {
-			int get()
-			{
-				return pRect->w;
-			}
-
-			void set(int value)
-			{
-				pRect->w = value;
-			}
+			int get();
+			void set(int value);
 		}
 
 		property int h {
-			int get()
-			{
-				return pRect->h;
-			}
-
-			void set(int value)
-			{
-				pRect->h = value;
-			}
+			int get();
+			void set(int value);
 		}
 
 		String^	ToString() override;
-		void set(int argX, int argY, int argW, int argH);
-		void setPos(int argX, int argY);
-		void setSize(int argW, int argH);
-		fk_Dimension^ getSize(void);
+		void Set(int argX, int argY, int argW, int argH);
+		void SetPos(int argX, int argY);
+		void SetSize(int argW, int argH);
+		fk_Dimension^ GetSize(void);
 	};
 
 	public ref class fk_Image : fk_BaseObject {
 	internal:
-		::fk_Image * GetP(void)
-		{
-			return (::fk_Image *)(pBase);
-		}
+		::fk_Image * GetP(void);
 
 	public:
-		fk_Image::fk_Image() : fk_BaseObject(false)
-		{
-			pBase = new ::fk_Image();
+		fk_Image();
+		fk_Image(bool argNewFlg);
+		fk_Image(int argW, int argH);
+		~fk_Image();
+		!fk_Image();
+
+		property fk_Color^ default[int, int] {
+			fk_Color^ get(int, int);
+			void set(int, int, fk_Color^);
 		}
 
-		fk_Image::fk_Image(bool argNewFlg) : fk_BaseObject(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_Image();
-			}
+		property fk_Dimension^ Size {
+			fk_Dimension^ get();
 		}
 
-		fk_Image::fk_Image(int argW, int argH) : fk_BaseObject(false)
-		{
-			pBase = new ::fk_Image(argW, argH);
+		property fk_Dimension^ BufferSize {
+			fk_Dimension^ get();
 		}
 
-		fk_Image::~fk_Image()
-		{
-			this->!fk_Image();
-		}
+		void Init(void);
+		void NewImage(int w, int h, bool InitFlg);
+		void NewImage(int w, int h);
+		void CopyImage(fk_Image^ Image);
+		void CopyImage(fk_Image^ Image, int x, int y);
+		bool SubImage(fk_Image^ Image, int x, int y, int w, int h);
 
-		fk_Image::!fk_Image()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
+		int	GetR(int x, int y);
+		int GetG(int x, int y);
+		int GetB(int x, int y);
+		int GetA(int x, int y);
+		bool SetRGBA(int x, int y, int r, int g, int b, int a);
+		bool SetRGB(int x, int y, int r, int g, int b);
+		bool SetR(int x, int y, int r);
+		bool SetG(int x, int y, int g);
+		bool SetB(int x, int y, int b);
+		bool SetA(int x, int y, int a);
+		void FillColor(fk_Color^ color);
+		void FillColor(int r, int g, int b, int a);
+		void FillColor(int r, int g, int b);
 
-		void init(void);
-		bool readBMP(String^ fileName);
-		bool readPNG(String^ fileName);
-		bool readJPG(String^ fileName);
-		bool writeBMP(String^ fileName, bool transFlg);
-		bool writeBMP(String^ fileName);
-		bool writePNG(String^ fileName, bool transFlg);
-		bool writePNG(String^ fileName);
-		bool writeJPG(String^ fileName, int quality);
-		bool writeJPG(String^ fileName);
-		void newImage(int w, int h, bool InitFlg);
-		void newImage(int w, int h);
-		void copyImage(fk_Image^ Image);
-		void copyImage(fk_Image^ Image, int x, int y);
-		bool subImage(fk_Image^ Image, int x, int y, int w, int h);
-		int	getWidth(void);
-		int getHeight(void);
-		fk_Dimension^ getImageSize(void);
-		fk_Dimension^ getBufferSize(void);
-		int	getR(int x, int y);
-		int getG(int x, int y);
-		int getB(int x, int y);
-		int getA(int x, int y);
-		fk_Color^ getColor(int x, int y);
-		bool setRGBA(int x, int y, int r, int g, int b, int a);
-		bool setRGB(int x, int y, int r, int g, int b);
-		bool setR(int x, int y, int r);
-		bool setG(int x, int y, int g);
-		bool setB(int x, int y, int b);
-		bool setA(int x, int y, int a);
-		bool setColor(int x, int y, fk_Color^ color);
-		void fillColor(fk_Color^ color);
-		void fillColor(int r, int g, int b, int a);
-		void fillColor(int r, int g, int b);
+		bool ReadBMP(String^ fileName);
+		bool ReadPNG(String^ fileName);
+		bool ReadJPG(String^ fileName);
+		bool WriteBMP(String^ fileName, bool transFlg);
+		bool WriteBMP(String^ fileName);
+		bool WritePNG(String^ fileName, bool transFlg);
+		bool WritePNG(String^ fileName);
+		bool WriteJPG(String^ fileName, int quality);
+		bool WriteJPG(String^ fileName);
 	};
 }

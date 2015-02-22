@@ -163,24 +163,87 @@ namespace FK_CLI {
 		GetP()->setWindowName(marshal_as<string>(argName));
 	}
 
-	void fk_AppWindow::SetSize(int argW, int argH)
+	void fk_AppWindow::Size::set(fk_Dimension^ argD)
 	{
-		GetP()->setSize(argW, argH);
+		if(!argD) return;
+		GetP()->setSize(argD->pDim->w, argD->pDim->h);
 	}
 
-	void fk_AppWindow::SetInnerSize(int argX, int argY, int argW, int argH)
+	void fk_AppWindow::InnerSize::set(fk_Rect^ argR)
 	{
-		GetP()->setInnerSize(argX, argY, argW, argH);
+		GetP()->setInnerSize(argR->pRect->x, argR->pRect->y,
+							 argR->pRect->w, argR->pRect->h);
 	}
 
-	void fk_AppWindow::SetBGColor(double argR, double argG, double argB)
-	{
-		GetP()->setBGColor(argR, argG, argB);
-	}
-
-	void fk_AppWindow::SetBGColor(fk_Color^ argC)
+	void fk_AppWindow::BGColor::set(fk_Color^ argC)
 	{
 		GetP()->setBGColor(*argC->GetP());
+	}
+
+	void fk_AppWindow::FPS::set(int argFPS)
+	{
+		GetP()->setFPS(argFPS);
+	}
+
+	void fk_AppWindow::AxisWidth::set(double argWidth)
+	{
+		GetP()->setGuideAxisWidth(argWidth);
+	}
+
+	void fk_AppWindow::GridWidth::set(double argWidth)
+	{
+		GetP()->setGuideGridWidth(argWidth);
+	}
+
+	void fk_AppWindow::GuideScale::set(double argScale)
+	{
+		GetP()->setGuideScale(argScale);
+	}
+
+	void fk_AppWindow::GuideNum::set(int argNum)
+	{
+		GetP()->setGuideNum(argNum);
+	}
+
+	void fk_AppWindow::CameraPos::set(fk_Vector^ argV)
+	{
+		GetP()->setCameraPos(*argV->pVec);
+	}
+
+	fk_Vector^ fk_AppWindow::CameraPos::get(void)
+	{
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getCameraModel()->getPosition());
+		return V;
+	}
+
+	void fk_AppWindow::CameraFocus::set(fk_Vector^ argV)
+	{
+		GetP()->setCameraFocus(*argV->pVec);
+	}
+
+	void fk_AppWindow::CameraModel::set(fk_Model^ argM)
+	{
+		GetP()->setCameraModel(argM->GetP());
+	}
+			
+	fk_Model^ fk_AppWindow::CameraModel::get(void)
+	{
+		fk_Model^ M = gcnew fk_Model(false);
+		M->pBase = (::fk_Model *)(GetP()->getCameraModel());
+		M->dFlg = false;
+		return M;
+	}
+
+	void fk_AppWindow::Scene::set(fk_Scene^ argScene)
+	{
+		if(!argScene) return;
+		GetP()->setScene(argScene->GetP(), false);
+		scene = argScene;
+	}
+			
+	fk_Scene^ fk_AppWindow::Scene::get(void)
+	{
+		return scene;
 	}
 
 	void fk_AppWindow::Open(void)
@@ -203,11 +266,6 @@ namespace FK_CLI {
 		return GetP()->update(false);
 	}
 		
-	void fk_AppWindow::SetFPS(int argFPS)
-	{
-		GetP()->setFPS(argFPS);
-	}
-
 	void fk_AppWindow::ShowGuide(void)
 	{
 		GetP()->showGuide(FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
@@ -223,59 +281,6 @@ namespace FK_CLI {
 		GetP()->hideGuide();
 	}
 
-	void fk_AppWindow::SetGuideAxisWidth(double argWidth)
-	{
-		GetP()->setGuideAxisWidth(argWidth);
-	}
-
-	void fk_AppWindow::SetGuideGridWidth(double argWidth)
-	{
-		GetP()->setGuideGridWidth(argWidth);
-	}
-
-	void fk_AppWindow::SetGuideScale(double argScale)
-	{
-		GetP()->setGuideScale(argScale);
-	}
-
-	void fk_AppWindow::SetGuideNum(int argNum)
-	{
-		GetP()->setGuideNum(argNum);
-	}
-
-	void fk_AppWindow::SetCameraPos(double argX, double argY, double argZ)
-	{
-		GetP()->setCameraPos(argX, argY, argZ);
-	}
-
-	void fk_AppWindow::SetCameraPos(fk_Vector^ argV)
-	{
-		GetP()->setCameraPos(*argV->pVec);
-	}
-
-	void fk_AppWindow::SetCameraFocus(double argX, double argY, double argZ)
-	{
-		GetP()->setCameraFocus(argX, argY, argZ);
-	}
-
-	void fk_AppWindow::SetCameraFocus(fk_Vector^ argV)
-	{
-		GetP()->setCameraFocus(*argV->pVec);
-	}
-
-	void fk_AppWindow::SetCameraModel(fk_Model^ argM)
-	{
-		GetP()->setCameraModel(argM->GetP());
-	}
-			
-	fk_Model^ fk_AppWindow::GetCameraModel(void)
-	{
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = (::fk_Model *)(GetP()->getCameraModel());
-		M->dFlg = false;
-		return M;
-	}
-
 	void fk_AppWindow::SetCameraDefault(void)
 	{
 		GetP()->setCameraDefault();
@@ -284,18 +289,6 @@ namespace FK_CLI {
 	void fk_AppWindow::SetScene(fk_Scene^ argScene, bool argCL)
 	{
 		GetP()->setScene(argScene->GetP(), argCL);
-	}
-		
-	void fk_AppWindow::SetScene(fk_Scene^ argScene)
-	{
-		if(!argScene) return;
-		GetP()->setScene(argScene->GetP(), false);
-		scene = argScene;
-	}
-			
-	fk_Scene^ fk_AppWindow::GetScene(void)
-	{
-		return scene;
 	}
 		
 	void fk_AppWindow::SetSceneDefault(void)

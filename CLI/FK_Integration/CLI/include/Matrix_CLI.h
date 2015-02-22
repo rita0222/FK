@@ -42,7 +42,7 @@ namespace FK_CLI {
 		fk_Matrix::~fk_Matrix();
 		fk_Matrix::!fk_Matrix();
 
- 		property double default[int,int] {
+ 		property double default[int, int] {
 			double get(int, int);
 			void set(int, int, double);
 		}

@@ -75,33 +75,69 @@ namespace FK_CLI
 			void set(String^);
 		}
 
-		void SetSize(int w, int h);
-		void SetInnerSize(int x, int y, int w, int h);
-		void SetBGColor(double r, double g, double b);
-		void SetBGColor(fk_Color^ color);
+		property fk_Dimension^ Size {
+			void set(fk_Dimension^);
+		}
+
+		property fk_Rect^ InnerSize {
+			void set(fk_Rect^);
+		}
+
+		property fk_Color^ BGColor {
+			void set(fk_Color^);
+		}
+
+		property int FPS {
+			void set(int);
+		}
+
+		property double AxisWidth {
+			void set(double);
+		}
+
+		property double GridWidth {
+			void set(double);
+		}
+
+		property double GuideScale {
+			void set(double);
+		}
+
+		property int GuideNum {
+			void set(int);
+		}
+
+		property fk_Vector^ CameraPos {
+			void set(fk_Vector^);
+			fk_Vector^ get();
+		}
+
+		property fk_Vector^ CameraFocus {
+			void set(fk_Vector^);
+		}
+
+		property fk_Model^ CameraModel {
+			void set(fk_Model^);
+			fk_Model^ get();
+		}
+		
+		property fk_Scene^ Scene {
+			void set(fk_Scene^);
+			fk_Scene^ get();
+		}
+
+		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
+		void SetCameraDefault(void);
+
 		void Open(void);
 		void Close(void);
 		bool Update(bool forceFlg);
 		bool Update(void);
-		void SetFPS(int FPS);
+		void SetSceneDefault(void);
 		void ShowGuide(void);
 		void ShowGuide(fk_GuideMode mode);
 		void HideGuide(void);
-		void SetGuideAxisWidth(double width);
-		void SetGuideGridWidth(double width);
-		void SetGuideScale(double scale);
-		void SetGuideNum(int num);
-		void SetCameraPos(double x, double y, double z);
-		void SetCameraPos(fk_Vector^ pos);
-		void SetCameraFocus(double x, double y, double z);
-		void SetCameraFocus(fk_Vector^ pos);
-		void SetCameraModel(fk_Model^ model);
-		fk_Model^ GetCameraModel(void);
-		void SetCameraDefault(void);
-		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
-		void SetScene(fk_Scene^ scene);
-		fk_Scene^ GetScene(void);
-		void SetSceneDefault(void);
+
 		void Entry(fk_Model^ model);
 		void Entry(fk_Model^ model, fk_GuideObject^ guide);
 		void Entry(fk_SpriteModel^ model);
