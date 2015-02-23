@@ -4,7 +4,25 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	fk_Loop^ fk_Modify::removeVertexInLoop(fk_Vertex ^argV)
+	::fk_Modify * fk_Modify::GetP(void)
+	{
+		return (::fk_Modify *)(pBase);
+	}
+
+	fk_Modify::fk_Modify(bool argNewFlg) : fk_Operation(false)
+	{
+	}
+
+	fk_Modify::~fk_Modify()
+	{
+		this->!fk_Modify();
+	}
+
+	fk_Modify::!fk_Modify()
+	{
+	}
+
+	fk_Loop^ fk_Modify::RemoveVertexInLoop(fk_Vertex ^argV)
 	{
 		if(!argV) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -13,37 +31,37 @@ namespace FK_CLI {
 		return L;
 	}
 
-	bool fk_Modify::contractEdge(fk_Edge ^argE, bool argR)
+	bool fk_Modify::ContractEdge(fk_Edge ^argE, bool argR)
 	{
 		if(!argE) return false;
 		return GetP()->contractEdge(argE->GetP(), argR);
 	}
 
-	bool fk_Modify::contractEdge(fk_Edge ^argE)
+	bool fk_Modify::ContractEdge(fk_Edge ^argE)
 	{
 		if(!argE) return false;
 		return GetP()->contractEdge(argE->GetP());
 	}
 		
-	bool fk_Modify::contractEdge(fk_Edge ^argE, fk_Vector ^argP, bool argR)
+	bool fk_Modify::ContractEdge(fk_Edge ^argE, fk_Vector ^argP, bool argR)
 	{
 		if(!argE) return false;
 		return GetP()->contractEdge(argE->GetP(), *argP->pVec, argR);
 	}
 
-	bool fk_Modify::contractEdge(fk_Edge ^argE, fk_Vector ^argP)
+	bool fk_Modify::ContractEdge(fk_Edge ^argE, fk_Vector ^argP)
 	{
 		if(!argE) return false;
 		return GetP()->contractEdge(argE->GetP(), *argP->pVec);
 	}
 
-	bool fk_Modify::checkContract(fk_Edge ^argE)
+	bool fk_Modify::CheckContract(fk_Edge ^argE)
 	{
 		if(!argE) return false;
 		return GetP()->checkContract(argE->GetP());
 	}
 
-	fk_Loop^ fk_Modify::makePolygon(array<fk_Vector^>^ argArray, bool argOpenFlg, bool argInitFlg)
+	fk_Loop^ fk_Modify::MakePolygon(array<fk_Vector^>^ argArray, bool argOpenFlg, bool argInitFlg)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -56,7 +74,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Modify::makePolygon(array<fk_Vector^>^ argArray, bool argOpenFlg)
+	fk_Loop^ fk_Modify::MakePolygon(array<fk_Vector^>^ argArray, bool argOpenFlg)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -69,7 +87,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Modify::pushPolygon(array<fk_Vector^>^ argArray, bool argOpenFlg)
+	fk_Loop^ fk_Modify::PushPolygon(array<fk_Vector^>^ argArray, bool argOpenFlg)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -82,7 +100,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Modify::pushPolygon(array<fk_Vector^>^ argArray)
+	fk_Loop^ fk_Modify::PushPolygon(array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -95,13 +113,13 @@ namespace FK_CLI {
 		return L;
 	}
 
-	void fk_Modify::pushPolygonVertex(fk_Vector ^argPos, bool argOpenFlg)
+	void fk_Modify::PushPolygonVertex(fk_Vector ^argPos, bool argOpenFlg)
 	{
 		if(!argPos) return;
 		GetP()->pushPolygonVertex(*argPos->pVec, argOpenFlg);
 	}
 
-	void fk_Modify::makePoint(array<fk_Vector^>^ argArray)
+	void fk_Modify::MakePoint(array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -111,7 +129,7 @@ namespace FK_CLI {
 		GetP()->makePoint(&vArray);
 	}
 
-	fk_Vertex^ fk_Modify::pushPointVertex(fk_Vector ^argPos)
+	fk_Vertex^ fk_Modify::PushPointVertex(fk_Vector ^argPos)
 	{
 		if(!argPos) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -120,7 +138,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	void fk_Modify::makeLines(array<fk_Vector^>^ argArray)
+	void fk_Modify::MakeLines(array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -130,7 +148,7 @@ namespace FK_CLI {
 		GetP()->makeLines(&vArray);
 	}
 
-	fk_Edge^ fk_Modify::pushLines(fk_Vector ^argP1, fk_Vector ^argP2)
+	fk_Edge^ fk_Modify::PushLines(fk_Vector ^argP1, fk_Vector ^argP2)
 	{
 		if(!argP1 || !argP2) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
@@ -139,162 +157,162 @@ namespace FK_CLI {
 		return E;
 	}
 
-	bool fk_Modify::setLinePos(int argID, fk_Vector ^argP)
+	bool fk_Modify::SetLinePos(int argID, fk_Vector ^argP)
 	{
 		if(!argP) return false;
 		return GetP()->setLinePos(argID, *argP->pVec);
 	}
 
-	bool fk_Modify::setLinePos(int argEID, int argVID, fk_Vector^ argP)
+	bool fk_Modify::SetLinePos(int argEID, int argVID, fk_Vector^ argP)
 	{
 		if(!argP) return false;
 		return GetP()->setLinePos(argEID, argVID, *argP->pVec);
 	}
 
-	bool fk_Modify::changeLine(int argEID, fk_Vector^ argP1, fk_Vector^ argP2)
+	bool fk_Modify::ChangeLine(int argEID, fk_Vector^ argP1, fk_Vector^ argP2)
 	{
 		if(!argP1 || !argP2) return false;
 		return GetP()->changeLine(argEID, *argP1->pVec, *argP2->pVec);
 	}
 
-	void fk_Modify::makeBlock(double argX, double argY, double argZ)
+	void fk_Modify::MakeBlock(double argX, double argY, double argZ)
 	{
 		GetP()->makeBlock(argX, argY, argZ);
 	}
 
-	void fk_Modify::setBlockSize(double argX, double argY, double argZ)
+	void fk_Modify::SetBlockSize(double argX, double argY, double argZ)
 	{
 		GetP()->setBlockSize(argX, argY, argZ);
 	}
 
-	void fk_Modify::setBlockSize(double argLength, fk_Axis argAxis)
+	void fk_Modify::SetBlockSize(double argLength, fk_Axis argAxis)
 	{
 		GetP()->setBlockSize(argLength, fk_Vector::GetAxis(argAxis));
 	}
 
-	void fk_Modify::setBlockScale(double argScale)
+	void fk_Modify::SetBlockScale(double argScale)
 	{
 		GetP()->setBlockScale(argScale);
 	}
 
-	void fk_Modify::setBlockScale(double argScale, fk_Axis argAxis)
+	void fk_Modify::SetBlockScale(double argScale, fk_Axis argAxis)
 	{
 		GetP()->setBlockScale(argScale, fk_Vector::GetAxis(argAxis));
 	}
 
-	void fk_Modify::setBlockScale(double argX, double argY, double argZ)
+	void fk_Modify::SetBlockScale(double argX, double argY, double argZ)
 	{
 		GetP()->setBlockScale(argX, argY, argZ);
 	}
 
-	void fk_Modify::makeCircle(int argDiv, double argRad)
+	void fk_Modify::MakeCircle(int argDiv, double argRad)
 	{
 		GetP()->makeCircle(argDiv, argRad);
 	}
 
-	void fk_Modify::setCircleRadius(double argRad)
+	void fk_Modify::SetCircleRadius(double argRad)
 	{
 		GetP()->setCircleRadius(argRad);
 	}
 
-	void fk_Modify::setCircleDivide(int argDiv)
+	void fk_Modify::SetCircleDivide(int argDiv)
 	{
 		GetP()->setCircleDivide(argDiv);
 	}
 
-	void fk_Modify::setCircleScale(double argScale)
+	void fk_Modify::SetCircleScale(double argScale)
 	{
 		GetP()->setCircleScale(argScale);
 	}
 
-	void fk_Modify::makeSphere(int argDiv, double argRad)
+	void fk_Modify::MakeSphere(int argDiv, double argRad)
 	{
 		GetP()->makeSphere(argDiv, argRad);
 	}
 
-	void fk_Modify::setSphereRadius(double argRad)
+	void fk_Modify::SetSphereRadius(double argRad)
 	{
 		GetP()->setSphereRadius(argRad);
 	}
 
-	void fk_Modify::setSphereDivide(int argDiv)
+	void fk_Modify::SetSphereDivide(int argDiv)
 	{
 		GetP()->setSphereDivide(argDiv);
 	}
 
-	void fk_Modify::setSphereScale(double argScale)
+	void fk_Modify::SetSphereScale(double argScale)
 	{
 		GetP()->setSphereScale(argScale);
 	}
 
-	void fk_Modify::makePrism(int argDiv, double argT, double argB, double argH)
+	void fk_Modify::MakePrism(int argDiv, double argT, double argB, double argH)
 	{
 		GetP()->makePrism(argDiv, argT, argB, argH);
 	}
 
-	void fk_Modify::setPrismDivide(int argDiv)
+	void fk_Modify::SetPrismDivide(int argDiv)
 	{
 		GetP()->setPrismDivide(argDiv);
 	}
 
-	void fk_Modify::setPrismTopRadius(double argT)
+	void fk_Modify::SetPrismTopRadius(double argT)
 	{
 		GetP()->setPrismTopRadius(argT);
 	}
 
-	void fk_Modify::setPrismBottomRadius(double argB)
+	void fk_Modify::SetPrismBottomRadius(double argB)
 	{
 		GetP()->setPrismBottomRadius(argB);
 	}
 
-	void fk_Modify::setPrismHeight(double argH)
+	void fk_Modify::SetPrismHeight(double argH)
 	{
 		GetP()->setPrismHeight(argH);
 	}
 
-	void fk_Modify::makeCone(int argDiv, double argRad, double argH)
+	void fk_Modify::MakeCone(int argDiv, double argRad, double argH)
 	{
 		GetP()->makeCone(argDiv, argRad, argH);
 	}
 
-	void fk_Modify::setConeDivide(int argDiv)
+	void fk_Modify::SetConeDivide(int argDiv)
 	{
 		GetP()->setConeDivide(argDiv);
 	}
 
-	void fk_Modify::setConeRadius(double argRad)
+	void fk_Modify::SetConeRadius(double argRad)
 	{
 		GetP()->setConeRadius(argRad);
 	}
 
-	void fk_Modify::setConeHeight(double argH)
+	void fk_Modify::SetConeHeight(double argH)
 	{
 		GetP()->setConeHeight(argH);
 	}
 
-	bool fk_Modify::moveVPosition(int argVID, fk_Vector ^argP, int argOrder)
+	bool fk_Modify::MoveVPosition(int argVID, fk_Vector ^argP, int argOrder)
 	{
 		if(!argP) return false;
 		return GetP()->moveVPosition(argVID, *argP->pVec, argOrder);
 	}
 
-	bool fk_Modify::moveVPosition(int argVID, fk_Vector ^argP)
+	bool fk_Modify::MoveVPosition(int argVID, fk_Vector ^argP)
 	{
 		if(!argP) return false;
 		return GetP()->moveVPosition(argVID, *argP->pVec);
 	}
 
-	bool fk_Modify::moveVPosition(int argVID, double argX, double argY, double argZ, int argOrder)
+	bool fk_Modify::MoveVPosition(int argVID, double argX, double argY, double argZ, int argOrder)
 	{
 		return GetP()->moveVPosition(argVID, argX, argY, argZ, argOrder);
 	}
 
-	bool fk_Modify::moveVPosition(int argVID, double argX, double argY, double argZ)
+	bool fk_Modify::MoveVPosition(int argVID, double argX, double argY, double argZ)
 	{
 		return GetP()->moveVPosition(argVID, argX, argY, argZ);
 	}
 
-	void fk_Modify::subdivShape(int argCount)
+	void fk_Modify::SubDivShape(int argCount)
 	{
 		GetP()->subdivShape(argCount);
 	}

@@ -2,7 +2,45 @@
 
 namespace FK_CLI {
 
-	fk_Vertex^ fk_Operation::makeVertex(fk_Vector^ argP)
+	::fk_Operation * fk_Operation::GetP(void)
+	{
+		return (::fk_Operation *)(pBase);
+	}
+
+	fk_Operation::fk_Operation(bool argNewFlg) : fk_DataAccess(false)
+	{
+	}
+
+	fk_Operation::~fk_Operation()
+	{
+		this->!fk_Operation();
+	}
+
+	fk_Operation::!fk_Operation()
+	{
+	}
+
+	void fk_Operation::HistoryMode::set(bool argMode)
+	{
+		GetP()->setHistoryMode(argMode);
+	}
+
+	bool fk_Operation::HistoryMode::get(void)
+	{
+		return GetP()->getHistoryMode();
+	}
+
+	void fk_Operation::TesselateMode::set(bool argMode)
+	{
+		GetP()->setTesselateMode(argMode);
+	}
+
+	bool fk_Operation::TesselateMode::get(void)
+	{
+		return GetP()->getTesselateMode();
+	}
+
+	fk_Vertex^ fk_Operation::MakeVertex(fk_Vector^ argP)
 	{
 		if(!argP) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -11,19 +49,19 @@ namespace FK_CLI {
 		return V;
 	}
 
-	bool fk_Operation::deleteVertex(fk_Vertex^ argV)
+	bool fk_Operation::DeleteVertex(fk_Vertex^ argV)
 	{
 		if(!argV) return false;
 		return GetP()->deleteVertex(argV->GetP());
 	}
 
-	bool fk_Operation::moveVertex(fk_Vertex^ argV, fk_Vector^ argP)
+	bool fk_Operation::MoveVertex(fk_Vertex^ argV, fk_Vector^ argP)
 	{
 		if(!argV || !argP) return false;
 		return GetP()->moveVertex(argV->GetP(), *argP->pVec);
 	}
 
-	fk_Edge^ fk_Operation::makeEdge(fk_Vertex^ argV1, fk_Vertex^ argV2,
+	fk_Edge^ fk_Operation::MakeEdge(fk_Vertex^ argV1, fk_Vertex^ argV2,
 									fk_Half^ argH11, fk_Half^ argH12,
 									fk_Half^ argH21, fk_Half^ argH22)
 	{
@@ -39,7 +77,7 @@ namespace FK_CLI {
 		return E;
 	}
 
-	fk_Edge^ fk_Operation::makeEdge(fk_Vertex^ argV1, fk_Vertex^ argV2)
+	fk_Edge^ fk_Operation::MakeEdge(fk_Vertex^ argV1, fk_Vertex^ argV2)
 	{
 		if(!argV1 || !argV2) return nullptr;
 
@@ -52,13 +90,13 @@ namespace FK_CLI {
 		return E;
 	}
 
-	bool fk_Operation::deleteEdge(fk_Edge^ argE)
+	bool fk_Operation::DeleteEdge(fk_Edge^ argE)
 	{
 		if(!argE) return false;
 		return GetP()->deleteEdge(argE->GetP());
 	}
 
-	fk_Loop^ fk_Operation::makeLoop(fk_Half^ argH)
+	fk_Loop^ fk_Operation::MakeLoop(fk_Half^ argH)
 	{
 		if(!argH) return nullptr;
 		::fk_Loop *pL = GetP()->makeLoop(argH->GetP());
@@ -69,13 +107,13 @@ namespace FK_CLI {
 		return L;
 	}
 
-	bool fk_Operation::deleteLoop(fk_Loop^ argL)
+	bool fk_Operation::DeleteLoop(fk_Loop^ argL)
 	{
 		if(!argL) return false;
 		return GetP()->deleteLoop(argL->GetP());
 	}
 
-	fk_Edge^ fk_Operation::separateLoop(fk_Half^ argH1, fk_Half^ argH2)
+	fk_Edge^ fk_Operation::SeparateLoop(fk_Half^ argH1, fk_Half^ argH2)
 	{
 		if(!argH1 || !argH2) return nullptr;
 		::fk_Edge *pE = GetP()->separateLoop(argH1->GetP(), argH2->GetP());
@@ -86,13 +124,13 @@ namespace FK_CLI {
 		return E;
 	}
 
-	bool fk_Operation::uniteLoop(fk_Edge^ argE)
+	bool fk_Operation::UniteLoop(fk_Edge^ argE)
 	{
 		if(!argE) return false;
 		return GetP()->uniteLoop(argE->GetP());
 	}
 
-	fk_Vertex^ fk_Operation::separateEdge(fk_Edge^ argE)
+	fk_Vertex^ fk_Operation::SeparateEdge(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		::fk_Vertex *pV = GetP()->separateEdge(argE->GetP());
@@ -103,49 +141,29 @@ namespace FK_CLI {
 		return V;
 	}
 			
-	bool fk_Operation::uniteEdge(fk_Vertex^ argV)
+	bool fk_Operation::UniteEdge(fk_Vertex^ argV)
 	{
 		if(!argV) return false;
 		return GetP()->uniteEdge(argV->GetP());
 	}
 
-	void fk_Operation::negateBody(void)
+	void fk_Operation::NegateBody(void)
 	{
 		GetP()->negateBody();
 	}
 
-	void fk_Operation::setHistoryMode(bool argMode)
-	{
-		GetP()->setHistoryMode(argMode);
-	}
-
-	bool fk_Operation::getHistoryMode(void)
-	{
-		return GetP()->getHistoryMode();
-	}
-
-	void fk_Operation::setHistoryMark(void)
+	void fk_Operation::SetHistoryMark(void)
 	{
 		GetP()->setHistoryMark();
 	}
 
-	bool fk_Operation::undoHistory(void)
+	bool fk_Operation::UndoHistory(void)
 	{
 		return GetP()->undoHistory();
 	}
 
-	bool fk_Operation::redoHistory(void)
+	bool fk_Operation::RedoHistory(void)
 	{
 		return GetP()->redoHistory();
-	}
-
-	void fk_Operation::setTesselateMode(bool argMode)
-	{
-		GetP()->setTesselateMode(argMode);
-	}
-
-	bool fk_Operation::getTesselateMode(void)
-	{
-		return GetP()->getTesselateMode();
 	}
 }

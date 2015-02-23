@@ -124,7 +124,7 @@ namespace FK_CLI {
 	{
 		fk_Palette^	pal = getPaletteData();
 		if(!pal) return nullptr;
-		return pal->getMaterialVector();
+		return pal->MaterialVector;
 	}
 }
 

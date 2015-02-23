@@ -12,48 +12,48 @@ namespace FK_CLI_Particle
 
 		public MyParticle()
 		{
-			setMaxSize(1000);
-			setIndivMode(true);
-			setAllMode(true);
-			setColorPalette(1, 0.0, 1.0, 0.6);
+			MaxSize = 1000;
+			IndivMode = true;
+			AllMode = true;
+			SetColorPalette(1, 0.0, 1.0, 0.6);
 			rand = new Random();
 		}
 		
-		public override void genMethod(fk_Particle P)
+		public override void GenMethod(fk_Particle P)
 		{
 			double y = rand.NextDouble()*50.0 - 25.0;
 			double z = rand.NextDouble()*50.0 - 25.0;
-			P.setPosition(50.0, y, z);
-			P.setColorID(1);
+			P.Position = new fk_Vector(50.0, y, z);
+			P.ColorID = 1;
 		}
 
-		public override void allMethod()
+		public override void AllMethod()
 		{
 			for(int i = 0; i < 5; i++) {
 				if(rand.NextDouble() < 0.3) {
-					newParticle();
+					NewParticle();
 				}
 			}
 		}
 		
-		public override void indivMethod(fk_Particle P)
+		public override void IndivMethod(fk_Particle P)
 		{
 			fk_Vector pos, vec, tmp1, tmp2;
 			var water = new fk_Vector(-0.2, 0.0, 0.0);
 			double R = 15.0;
 			double r;
 
-			pos = P.getPosition();
+			pos = P.Position;
 			pos.z = 0.0;
 			r = pos.Dist();
 			
 			tmp1 = water/(r*r*r);
 			tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
 			vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
-			P.setVelocity(vec);
+			P.Velocity = vec;
 
 			if(pos.x < -50.0) {
-				removeParticle(P);
+				RemoveParticle(P);
 			}
 		} 
 	}			
@@ -70,13 +70,13 @@ namespace FK_CLI_Particle
 			viewer.setShape(3, prism);
 			viewer.setPosition(3, 0.0, 0.0, 25.0);
 			viewer.setDrawMode(3, (uint)(fk_DrawMode.POLYMODE));
-			viewer.setShape(2, particle.getShape());
+			viewer.setShape(2, particle.Shape);
 			viewer.setDrawMode(2, (uint)(fk_DrawMode.POINTMODE));
 			viewer.setScale(10.0);
  
 			while(viewer.draw() == true) {
 				for(int i = 0; i < 3; ++i) { // 3倍速再生
-					particle.handle(); // パーティクルを 1 ステップ実行する。
+					particle.Handle(); // パーティクルを 1 ステップ実行する。
 				}
 			}
 
