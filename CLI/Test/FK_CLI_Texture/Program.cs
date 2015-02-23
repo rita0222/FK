@@ -13,7 +13,7 @@ namespace FK_CLI_Texture
 		{
 			var tex = new fk_MeshTexture();
 
-			if(tex.readPNG("samp.png") == false) {
+			if(tex.ReadPNG("samp.png") == false) {
 				Console.WriteLine("Image File Read Error.");
 				return;
 			}

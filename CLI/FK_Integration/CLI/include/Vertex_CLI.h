@@ -12,29 +12,28 @@ namespace FK_CLI {
 
 	public ref class fk_Vertex : fk_TopologyMaterial {
 	internal:
-		::fk_Vertex * GetP(void)
-		{
-			return (::fk_Vertex *)(pBase);
-		}
+		::fk_Vertex * GetP(void);
 
 	public:
-		fk_Vertex::fk_Vertex(bool argNewFlg) : fk_TopologyMaterial(false)
-		{
+		fk_Vertex(bool argNewFlg);
+		~fk_Vertex();
+		!fk_Vertex();
+
+		property fk_Vector^ Position {
+			fk_Vector^ get();
 		}
 
-		fk_Vertex::~fk_Vertex()
-		{
-			this->!fk_Vertex();
+		property fk_Vector^ Normal {
+			fk_Vector^ get();
 		}
 
-		fk_Vertex::!fk_Vertex()
-		{
+		property fk_Half^ OneHalf {
+			fk_Half^ get();
 		}
-
-		fk_Vector^ getPosition(void);
-		fk_Half^ getOneHalf(void);
-		fk_Vector^ getNormal(void);
-		double getDrawSize(void);
-		void setDrawSize(double argSize);
+		
+		property double DrawSize {
+			double get();
+			void set(double);
+		}
 	};
 }

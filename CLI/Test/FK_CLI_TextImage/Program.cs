@@ -21,18 +21,18 @@ namespace FK_CLI_TextImage
 			var str = new fk_UniStr();
 			var strModel = new fk_Model();
 
-			str.convert("FK日本語");
-			texture.setImage(textImage);
-			if(textImage.initFont("mona.ttf") == false) {
+			str.Convert("FK日本語");
+			texture.Image = textImage;
+			if(textImage.InitFont("mona.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
-			textImage.setDPI(96);
-			textImage.setPTSize(96);
-			textImage.setLineSkip(30);
-			textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
-			textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
-			textImage.setAlign(fk_TextAlign.CENTER);
-			textImage.loadUniStr(str);
+			textImage.DPI = 96;
+			textImage.PTSize = 96;
+			textImage.LineSkip = 30;
+			textImage.ForeColor = new fk_Color(0.5, 1.0, 0.8, 1.0);
+			textImage.BackColor = new fk_Color(0.2, 0.7, 0.8, 0.0);
+			textImage.Align = fk_TextAlign.CENTER;
+			textImage.LoadUniStr(str);
 			texture.TextureSize = new fk_TexCoord(40.0, 10.0);
 			strModel.Material = fk_Material.TrueWhite;
 

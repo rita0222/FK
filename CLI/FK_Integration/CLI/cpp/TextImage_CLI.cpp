@@ -5,197 +5,169 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 	
-	bool fk_TextImage::initFont(String^ argFontFileName)
+	::fk_TextImage * fk_TextImage::GetP(void)
 	{
-		return GetP()->initFont(marshal_as<string>(argFontFileName));
+		return (::fk_TextImage *)(pBase);
 	}
-		
-	void fk_TextImage::setDPI(int argDPI)
+
+	fk_TextImage::fk_TextImage() : fk_Image(false)
+	{
+		pBase = new ::fk_TextImage();
+	}
+
+	fk_TextImage::fk_TextImage(bool argNewFlg) : fk_Image(false)
+	{
+		if(argNewFlg == true) {
+			pBase = new ::fk_TextImage();
+		}
+	}
+
+	fk_TextImage::~fk_TextImage()
+	{
+		this->!fk_TextImage();
+	}
+
+	fk_TextImage::!fk_TextImage()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	//////////////////////////////////////////////////////////////////////
+
+	void fk_TextImage::DPI::set(int argDPI)
 	{
 		GetP()->setDPI(argDPI);
 	}
 
-	int fk_TextImage::getDPI(void)
+	int fk_TextImage::DPI::get(void)
 	{
 		return GetP()->getDPI();
 	}
 
-	void fk_TextImage::setPTSize(int argSize)
+	void fk_TextImage::PTSize::set(int argSize)
 	{
 		GetP()->setPTSize(argSize);
 	}
 
-	int fk_TextImage::getPTSize(void)
+	int fk_TextImage::PTSize::get(void)
 	{
 		return GetP()->getPTSize();
 	}
 
-	void fk_TextImage::setBoldStrength(int argStr)
+	void fk_TextImage::BoldStrength::set(int argStr)
 	{
 		GetP()->setBoldStrength(argStr);
 	}
 
-	int fk_TextImage::getBoldStrength(void)
+	int fk_TextImage::BoldStrength::get(void)
 	{
 		return GetP()->getBoldStrength();
 	}
 
-	void fk_TextImage::setShadowMode(bool argMode)
+	void fk_TextImage::ShadowMode::set(bool argMode)
 	{
 		GetP()->setShadowMode(argMode);
 	}
 
-	bool fk_TextImage::getShadowMode(void)
+	bool fk_TextImage::ShadowMode::get(void)
 	{
 		return GetP()->getShadowMode();
 	}
 
-	void fk_TextImage::setShadowOffset(int argX, int argY)
+	void fk_TextImage::ShadowOffset::set(fk_Dimension^ argD)
 	{
-		GetP()->setShadowOffset(argX, argY);
+		if(!argD) return;
+		GetP()->setShadowOffset(argD->pDim->w, argD->pDim->h);
 	}
 
-	fk_Dimension^ fk_TextImage::getShadowOffset(void)
+	fk_Dimension^ fk_TextImage::ShadowOffset::get(void)
 	{
 		fk_Dimension^ D = gcnew fk_Dimension();
 		*D->pDim = GetP()->getShadowOffset();
 		return D;
 	}
 
-	void fk_TextImage::setShadowColor(fk_Color^ argCol)
+	void fk_TextImage::ShadowColor::set(fk_Color^ argCol)
 	{
 		GetP()->setShadowColor(*argCol->pCol);
 	}
 
-	void fk_TextImage::setShadowColor(float argR, float argG, float argB, float argA)
-	{
-		GetP()->setShadowColor(argR, argG, argB, argA);
-	}
-
-	void fk_TextImage::setShadowColor(double argR, double argG, double argB, double argA)
-	{
-		GetP()->setShadowColor(argR, argG, argB, argA);
-	}
-
-	fk_Color^ fk_TextImage::getShadowColor(void)
+	fk_Color^ fk_TextImage::ShadowColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = GetP()->getShadowColor();
 		return C;
 	}
 
-	void fk_TextImage::setForeColor(fk_Color^ argCol)
+	void fk_TextImage::ForeColor::set(fk_Color^ argCol)
 	{
 		if(!argCol) return;
 		GetP()->setForeColor(*argCol->pCol);
 	}
 
-	void fk_TextImage::setForeColor(float argR, float argG, float argB, float argA)
-	{
-		GetP()->setForeColor(argR, argG, argB, argA);
-	}
-
-	void fk_TextImage::setForeColor(double argR, double argG, double argB, double argA)
-	{
-		GetP()->setForeColor(argR, argG, argB, argA);
-	}
-
-	fk_Color^ fk_TextImage::getForeColor(void)
+	fk_Color^ fk_TextImage::ForeColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = GetP()->getForeColor();
 		return C;
 	}
 
-	void fk_TextImage::setBackColor(fk_Color^ argCol)
+	void fk_TextImage::BackColor::set(fk_Color^ argCol)
 	{
 		if(!argCol) return;
 		GetP()->setBackColor(*argCol->pCol);
 	}
 
-	void fk_TextImage::setBackColor(float argR, float argG, float argB, float argA)
-	{
-		GetP()->setBackColor(argR, argG, argB, argA);
-	}
-
-	void fk_TextImage::setBackColor(double argR, double argG, double argB, double argA)
-	{
-		GetP()->setBackColor(argR, argG, argB, argA);
-	}
-
-	fk_Color^ fk_TextImage::getBackColor(void)
+	fk_Color^ fk_TextImage::BackColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = GetP()->getBackColor();
 		return C;
 	}
 
-	void fk_TextImage::setSmoothMode(bool argMode)
+	void fk_TextImage::SmoothMode::set(bool argMode)
 	{
 		GetP()->setSmoothMode(argMode);
 	}
 
-	bool fk_TextImage::getSmoothMode(void)
+	bool fk_TextImage::SmoothMode::get(void)
 	{
 		return GetP()->getSmoothMode();
 	}
 
-	void fk_TextImage::setCharSkip(int argSkip)
+	void fk_TextImage::CharSkip::set(int argSkip)
 	{
 		GetP()->setCharSkip(argSkip);
 	}
 
-	int fk_TextImage::getCharSkip(void)
+	int fk_TextImage::CharSkip::get(void)
 	{
 		return GetP()->getCharSkip();
 	}
 
-	void fk_TextImage::setLineSkip(int argSkip)
+	void fk_TextImage::LineSkip::set(int argSkip)
 	{
 		GetP()->setLineSkip(argSkip);
 	}
 
-	int fk_TextImage::getLineSkip(void)
+	int fk_TextImage::LineSkip::get(void)
 	{
 		return GetP()->getLineSkip();
 	}
 
-	void fk_TextImage::setSpaceLineSkip(int argSkip)
+	void fk_TextImage::SpaceLineSkip::set(int argSkip)
 	{
 		GetP()->setSpaceLineSkip(argSkip);
 	}
 		
-	int fk_TextImage::getSpaceLineSkip(void)
+	int fk_TextImage::SpaceLineSkip::get(void)
 	{
 		return GetP()->getSpaceLineSkip();
 	}
 
-	void fk_TextImage::setOffset(int argU, int argD, int argL, int argR)
-	{
-		GetP()->setOffset(argU, argD, argL, argR);
-	}
-
-	int fk_TextImage::getUpOffset(void)
-	{
-		return GetP()->getUpOffset();
-	}
-
-	int fk_TextImage::getDownOffset(void)
-	{
-		return GetP()->getDownOffset();
-	}
-
-	int fk_TextImage::getLeftOffset(void)
-	{
-		return GetP()->getLeftOffset();
-	}
-
-	int fk_TextImage::getRightOffset(void)
-	{
-		return GetP()->getRightOffset();
-	}
-
-	void fk_TextImage::setAlign(fk_TextAlign argAlign)
+	void fk_TextImage::Align::set(fk_TextAlign argAlign)
 	{
 		switch(argAlign) {
 		  case fk_TextAlign::LEFT:
@@ -215,7 +187,7 @@ namespace FK_CLI {
 		}
 	}
 
-	fk_TextAlign fk_TextImage::getAlign(void)
+	fk_TextAlign fk_TextImage::Align::get(void)
 	{
 		switch(GetP()->getAlign()) {
 		  case FK_ALIGN_LEFT:
@@ -233,81 +205,38 @@ namespace FK_CLI {
 		return fk_TextAlign::CENTER;
 	}
 
-	void fk_TextImage::setMinLineWidth(int argWidth)
+	void fk_TextImage::MinLineWidth::set(int argWidth)
 	{
 		GetP()->setMinLineWidth(argWidth);
 	}
 
-	int fk_TextImage::getMinLineWidth(void)
+	int fk_TextImage::MinLineWidth::get(void)
 	{
 		return GetP()->getMinLineWidth();
 	}
 
-	bool fk_TextImage::loadUniStr(fk_UniStr^ argStr)
-	{
-		if(!argStr) return false;
-		return GetP()->loadUniStr(argStr->GetP());
-	}
-
-	bool fk_TextImage::loadStrFile(String^ argFileName, fk_StringCode argCode)
-	{
-		if(!argFileName) return false;
-		return GetP()->loadStrFile(marshal_as<string>(argFileName),
-								   fk_UniStr::GetCode(argCode));
-	}
-
-	bool fk_TextImage::loadStrFile(String^ argFileName)
-	{
-		if(!argFileName) return false;
-		return GetP()->loadStrFile(marshal_as<string>(argFileName), FK_STR_UTF8);
-	}
-
-	int fk_TextImage::getLineNum(void)
+	int fk_TextImage::LineNum::get(void)
 	{
 		return GetP()->getLineNum();
 	}
 
-	int fk_TextImage::getLineCharNum(int argNum)
-	{
-		return GetP()->getLineCharNum(argNum);
-	}
-
-	int fk_TextImage::getAllCharNum(void)
+	int fk_TextImage::AllCharNum::get(void)
 	{
 		return GetP()->getAllCharNum();
 	}
 
-	int fk_TextImage::getMaxLineWidth(void)
+	int fk_TextImage::MaxLineWidth::get(void)
 	{
 		return GetP()->getMaxLineWidth();
 	}
 
-	int fk_TextImage::getMaxLineHeight(void)
+	int fk_TextImage::MaxLineHeight::get(void)
 	{
 		return GetP()->getMaxLineHeight();
 	}
 
-	int fk_TextImage::getLineWidth(int argNum)
-	{
-		return GetP()->getLineWidth(argNum);
-	}
 
-	int fk_TextImage::getLineHeight(int argNum)
-	{
-		return GetP()->getLineHeight(argNum);
-	}
-
-	int fk_TextImage::getLineStartXPos(int argNum)
-	{
-		return GetP()->getLineStartXPos(argNum);
-	}
-
-	int fk_TextImage::getLineStartYPos(int argNum)
-	{
-		return GetP()->getLineStartYPos(argNum);
-	}
-
-	void fk_TextImage::setSendingMode(fk_TextSendingMode argMode)
+	void fk_TextImage::SendingMode::set(fk_TextSendingMode argMode)
 	{
 		switch(argMode) {
 		  case fk_TextSendingMode::ALL:
@@ -327,7 +256,7 @@ namespace FK_CLI {
 		}
 	}
 
-	fk_TextSendingMode fk_TextImage::getSendingMode(void)
+	fk_TextSendingMode fk_TextImage::SendingMode::get(void)
 	{
 		switch(GetP()->getSendingMode()) {
 		  case FK_SENDING_ALL:
@@ -345,32 +274,108 @@ namespace FK_CLI {
 		return fk_TextSendingMode::ALL;
 	}
 
-	bool fk_TextImage::send(void)
-	{
-		return GetP()->send();
-	}
-
-	bool fk_TextImage::finish(void)
-	{
-		return GetP()->finish();
-	}
-
-	bool fk_TextImage::clear(void)
-	{
-		return GetP()->clear();
-	}
-
-	void fk_TextImage::setCacheMode(bool argMode)
+	void fk_TextImage::CacheMode::set(bool argMode)
 	{
 		::fk_TextImage::setCacheMode(argMode);
 	}
 
-	bool fk_TextImage::getCacheMode(void)
+	bool fk_TextImage::CacheMode::get(void)
 	{
 		return ::fk_TextImage::getCacheMode();
 	}
 
-	void fk_TextImage::clearCache(void)
+	//////////////////////////////////////////////////////////////////////
+
+	bool fk_TextImage::InitFont(String^ argFontFileName)
+	{
+		return GetP()->initFont(marshal_as<string>(argFontFileName));
+	}
+
+	void fk_TextImage::SetOffset(int argU, int argD, int argL, int argR)
+	{
+		GetP()->setOffset(argU, argD, argL, argR);
+	}
+
+	int fk_TextImage::GetUpOffset(void)
+	{
+		return GetP()->getUpOffset();
+	}
+
+	int fk_TextImage::GetDownOffset(void)
+	{
+		return GetP()->getDownOffset();
+	}
+
+	int fk_TextImage::GetLeftOffset(void)
+	{
+		return GetP()->getLeftOffset();
+	}
+
+	int fk_TextImage::GetRightOffset(void)
+	{
+		return GetP()->getRightOffset();
+	}
+
+	bool fk_TextImage::LoadUniStr(fk_UniStr^ argStr)
+	{
+		if(!argStr) return false;
+		return GetP()->loadUniStr(argStr->GetP());
+	}
+
+	bool fk_TextImage::LoadStrFile(String^ argFileName, fk_StringCode argCode)
+	{
+		if(!argFileName) return false;
+		return GetP()->loadStrFile(marshal_as<string>(argFileName),
+								   fk_UniStr::GetCode(argCode));
+	}
+
+	bool fk_TextImage::LoadStrFile(String^ argFileName)
+	{
+		if(!argFileName) return false;
+		return GetP()->loadStrFile(marshal_as<string>(argFileName), FK_STR_UTF8);
+	}
+
+	int fk_TextImage::GetLineCharNum(int argNum)
+	{
+		return GetP()->getLineCharNum(argNum);
+	}
+
+	int fk_TextImage::GetLineWidth(int argNum)
+	{
+		return GetP()->getLineWidth(argNum);
+	}
+
+	int fk_TextImage::GetLineHeight(int argNum)
+	{
+		return GetP()->getLineHeight(argNum);
+	}
+
+	int fk_TextImage::GetLineStartXPos(int argNum)
+	{
+		return GetP()->getLineStartXPos(argNum);
+	}
+
+	int fk_TextImage::GetLineStartYPos(int argNum)
+	{
+		return GetP()->getLineStartYPos(argNum);
+	}
+
+	bool fk_TextImage::Send(void)
+	{
+		return GetP()->send();
+	}
+
+	bool fk_TextImage::Finish(void)
+	{
+		return GetP()->finish();
+	}
+
+	bool fk_TextImage::Clear(void)
+	{
+		return GetP()->clear();
+	}
+
+	void fk_TextImage::ClearCache(void)
 	{
 		::fk_TextImage::clearCache();
 	}

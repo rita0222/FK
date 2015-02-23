@@ -19,7 +19,9 @@ namespace FK_CLI
 		fk_Color();
 		fk_Color(bool argNewFlg);
 		fk_Color(double, double, double);
+		fk_Color(double, double, double, double);
 		fk_Color(float, float, float);
+		fk_Color(float, float, float, float);
 		~fk_Color();
 		!fk_Color();
 

@@ -21,11 +21,11 @@ namespace FK_CLI_Sprite
 			int count;
 			string str;
  
-			if(sprite.initFont("mona.ttf") == false) {
+			if(sprite.InitFont("mona.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
 
-			sprite.setPositionLT(-280.0, 230.0);
+			sprite.SetPositionLT(-280.0, 230.0);
 			window.Entry(sprite);
  
 			model.Shape = block;
@@ -42,7 +42,7 @@ namespace FK_CLI_Sprite
 			count = 0;
 			while(window.Update() == true) {
 				str = "count = " + count.ToString();
-				sprite.drawText(str, true);
+				sprite.DrawText(str, true);
 				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 				count++;
 			}

@@ -22,95 +22,127 @@ namespace FK_CLI {
 
 	public ref class fk_TextImage : fk_Image {
 	internal:
-		::fk_TextImage * GetP(void)
-		{
-			return (::fk_TextImage *)(pBase);
-		}
+		::fk_TextImage * GetP(void);
 
 	public:
-		fk_TextImage::fk_TextImage() : fk_Image(false)
-		{
-			pBase = new ::fk_TextImage();
+		fk_TextImage();
+		fk_TextImage(bool argNewFlg);
+		~fk_TextImage();
+		!fk_TextImage();
+
+		property int DPI {
+			int get();
+			void set(int);
 		}
 
-		fk_TextImage::fk_TextImage(bool argNewFlg) : fk_Image(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_TextImage();
-			}
+		property int PTSize {
+			int get();
+			void set(int);
 		}
 
-		fk_TextImage::~fk_TextImage()
-		{
-			this->!fk_TextImage();
+		property int BoldStrength {
+			int get();
+			void set(int);
 		}
 
-		fk_TextImage::!fk_TextImage()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
+		property bool ShadowMode {
+			bool get();
+			void set(bool);
 		}
 
-		bool initFont(String^ fontFileName);
-		void setDPI(int dpi);
-		int getDPI(void);
-		void setPTSize(int size);
-		int getPTSize(void);
-		void setBoldStrength(int str);
-		int getBoldStrength(void);
-		void setShadowMode(bool mode);
-		bool getShadowMode(void);
-		void setShadowOffset(int x, int y);
-		fk_Dimension^ getShadowOffset(void);
-		void setShadowColor(fk_Color^ col);
-		void setShadowColor(float r, float g, float b, float a);
-		void setShadowColor(double r, double g, double b, double a);
-		fk_Color^ getShadowColor(void);
-		void setForeColor(fk_Color^ col);
-		void setForeColor(float r, float g, float b, float a);
-		void setForeColor(double r, double g, double b, double a);
-		fk_Color^ getForeColor(void);
-		void setBackColor(fk_Color^ col);
-		void setBackColor(float r, float g, float b, float a);
-		void setBackColor(double r, double g, double b, double a);
-		fk_Color^ getBackColor(void);
-		void setSmoothMode(bool mode);
-		bool getSmoothMode(void);
-		void setCharSkip(int skip);
-		int getCharSkip(void);
-		void setLineSkip(int skip);
-		int getLineSkip(void);
-		void setSpaceLineSkip(int skip);
-		int getSpaceLineSkip(void);
-		void setOffset(int up, int down, int left, int right);
-		int getUpOffset(void);
-		int getDownOffset(void);
-		int getLeftOffset(void);
-		int getRightOffset(void);
-		void setAlign(fk_TextAlign align);
-		fk_TextAlign getAlign(void);
-		void setMinLineWidth(int width);
-		int getMinLineWidth(void);
-		bool loadUniStr(fk_UniStr^ str);
-		bool loadStrFile(String^ fileName, fk_StringCode code);
-		bool loadStrFile(String^ fileName);
-		int getLineNum(void);
-		int getLineCharNum(int num);
-		int getAllCharNum(void);
-		int getMaxLineWidth(void);
-		int getMaxLineHeight(void);
-		int getLineWidth(int num);
-		int getLineHeight(int num);
-		int getLineStartXPos(int num);
-		int getLineStartYPos(int num);
-		void setSendingMode(fk_TextSendingMode mode);
-		fk_TextSendingMode getSendingMode(void);
-		bool send(void);
-		bool finish(void);
-		bool clear(void);
-		static void setCacheMode(bool mode);
-		static bool getCacheMode(void);
-		static void clearCache(void);
+		property fk_Dimension^ ShadowOffset {
+			fk_Dimension^ get();
+			void set(fk_Dimension^);
+		}
+
+		property fk_Color^ ShadowColor {
+			fk_Color^ get();
+			void set(fk_Color^);
+		}
+
+		property fk_Color^ ForeColor {
+			fk_Color^ get();
+			void set(fk_Color^);
+		}
+
+		property fk_Color^ BackColor {
+			fk_Color^ get();
+			void set(fk_Color^);
+		}
+
+		property bool SmoothMode {
+			bool get();
+			void set(bool);
+		}
+
+		property int CharSkip {
+			int get();
+			void set(int);
+		}
+		
+		property int LineSkip {
+			int get();
+			void set(int);
+		}
+
+		property int SpaceLineSkip {
+			int get();
+			void set(int);
+		}
+
+		property fk_TextAlign Align {
+			fk_TextAlign get();
+			void set(fk_TextAlign);
+		}
+
+		property int MinLineWidth {
+			int get();
+			void set(int);
+		}
+
+		property int LineNum {
+			int get();
+		}
+		
+		property int AllCharNum {
+			int get();
+		}
+
+		property int MaxLineWidth {
+			int get();
+		}
+
+		property int MaxLineHeight {
+			int get();
+		}
+
+		property fk_TextSendingMode SendingMode {
+			fk_TextSendingMode get();
+			void set(fk_TextSendingMode);
+		}
+
+		static property bool CacheMode {
+			bool get();
+			void set(bool);
+		}
+		
+		bool	InitFont(String^ fontFileName);
+		void	SetOffset(int up, int down, int left, int right);
+		int		GetUpOffset(void);
+		int		GetDownOffset(void);
+		int		GetLeftOffset(void);
+		int		GetRightOffset(void);
+		bool	LoadUniStr(fk_UniStr^ str);
+		bool	LoadStrFile(String^ fileName, fk_StringCode code);
+		bool	LoadStrFile(String^ fileName);
+		int		GetLineCharNum(int num);
+		int		GetLineWidth(int num);
+		int		GetLineHeight(int num);
+		int		GetLineStartXPos(int num);
+		int		GetLineStartYPos(int num);
+		bool	Send(void);
+		bool	Finish(void);
+		bool	Clear(void);
+		static void	ClearCache(void);
 	};
 }

@@ -29,13 +29,13 @@ namespace FK_CLI_IFSTex
 			lightModel.GlMoveTo(0.0, 0.0, 0.0);
 			lightModel.GlFocus(-1.0, -1.0, -1.0);
 
-			if(!ifsShape.readPNG("mqo/00tex_master.png")) {
+			if(!ifsShape.ReadPNG("mqo/00tex_master.png")) {
 				Console.WriteLine("Tex Load Error.");
 			}
 			if(!ifsShape.ReadMQOFile("mqo/meka.mqo", "body01")) {
 				Console.WriteLine("IFS Load Error.");
 			}
-			ifsShape.setTexRendMode(fk_TexRendMode.SMOOTH);
+			ifsShape.RendMode = fk_TexRendMode.SMOOTH;
 
 			win.BGColor = new fk_Color(0.5, 0.5, 0.5);
 			win.Entry(lightModel);
