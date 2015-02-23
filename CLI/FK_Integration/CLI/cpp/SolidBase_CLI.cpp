@@ -4,7 +4,25 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	void fk_SolidBase::makeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
+	::fk_SolidBase * fk_SolidBase::GetP(void)
+	{
+		return (::fk_SolidBase *)(pBase);
+	}
+
+	fk_SolidBase::fk_SolidBase(bool argNewFlg) : fk_Modify(false)
+	{
+	}
+
+	fk_SolidBase::~fk_SolidBase()
+	{
+		this->!fk_SolidBase();
+	}
+
+	fk_SolidBase::!fk_SolidBase()
+	{
+	}
+
+	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
 								 int argVNum, array<fk_Vector^>^ argArray, int argOrder)
 	{
 		if(!argIFSet || !argArray) return;
@@ -16,7 +34,7 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0], argOrder);
 	}
 
-	void fk_SolidBase::makeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
+	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
 								 int argVNum, array<fk_Vector^>^ argPos)
 	{
 		if(!argIFSet || !argPos) return;
@@ -28,7 +46,7 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0]);
 	}
 
-	void fk_SolidBase::makeIFSet(array< array<int>^ >^ argIF, array<fk_Vector^>^ argPos, int argOrder)
+	void fk_SolidBase::MakeIFSet(array< array<int>^ >^ argIF, array<fk_Vector^>^ argPos, int argOrder)
 	{
 		int i, j;
 
@@ -54,7 +72,7 @@ namespace FK_CLI {
 		GetP()->makeIFSet(&IFSet, &vArray, argOrder);
 	}
 
-	void fk_SolidBase::makeIFSet(array< array<int>^ >^ argIF, array<fk_Vector^>^ argPos)
+	void fk_SolidBase::MakeIFSet(array< array<int>^ >^ argIF, array<fk_Vector^>^ argPos)
 	{
 		int i, j;
 

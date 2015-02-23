@@ -9,78 +9,58 @@ namespace FK_CLI
 {
 	public ref class fk_Solid : fk_SolidBase {
 	internal:
-		::fk_Solid * GetP(void)
-		{
-			return (::fk_Solid *)(pBase);
-		}
+		::fk_Solid * GetP(void);
 
 	public:
-		fk_Solid::fk_Solid() : fk_SolidBase(false)
-		{
-			pBase = new ::fk_Solid();
-		}
+		fk_Solid();
+		fk_Solid(bool argNewFlg);
+		~fk_Solid();
+		!fk_Solid();
 
-		fk_Solid::fk_Solid(bool argNewFlg) : fk_SolidBase(false)
-		{
-			if(argNewFlg == true) pBase = new ::fk_Solid();
-		}
-
-		fk_Solid::~fk_Solid()
-		{
-			this->!fk_Solid();
-		}
-
-		fk_Solid::!fk_Solid()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
-
-		void allClear(bool matFlg);
-		void allClear(void);
-		bool isEmpty(void);
-		void cloneShape(fk_Solid^ solid);
-		bool compareShape(fk_Solid^ solid);
-		bool readSMFFile(String^ fileName);
-		bool readSRFFile(String^ fileName);
-		bool readVRMLFile(String^ fileName, bool materialFlg, bool solidFlg);
-		bool readVRMLFile(String^ fileName, bool materialFlg);
-		bool readVRMLFile(String^ fileName);
-		bool readSTLFile(String^ fileName, bool solidFlg, double tolerance);
-		bool readSTLFile(String^ fileName, bool solidFlg);
-		bool readSTLFile(String^ fileName);
-		bool readHRCFile(String^ fileName);
-		bool readRDSFile(String^ fileName, bool solidFlg);
-		bool readRDSFile(String^ fileName);
-		bool readDXFFile(String^ fileName, bool solidFlg);
-		bool readDXFFile(String^ fileName);
-		bool readMQOFile(String^ fileName, String^ objName,
+		void AllClear(bool matFlg);
+		void AllClear(void);
+		bool IsEmpty(void);
+		void CloneShape(fk_Solid^ solid);
+		bool CompareShape(fk_Solid^ solid);
+		bool ReadSMFFile(String^ fileName);
+		bool ReadSRFFile(String^ fileName);
+		bool ReadVRMLFile(String^ fileName, bool materialFlg, bool solidFlg);
+		bool ReadVRMLFile(String^ fileName, bool materialFlg);
+		bool ReadVRMLFile(String^ fileName);
+		bool ReadSTLFile(String^ fileName, bool solidFlg, double tolerance);
+		bool ReadSTLFile(String^ fileName, bool solidFlg);
+		bool ReadSTLFile(String^ fileName);
+		bool ReadHRCFile(String^ fileName);
+		bool ReadRDSFile(String^ fileName, bool solidFlg);
+		bool ReadRDSFile(String^ fileName);
+		bool ReadDXFFile(String^ fileName, bool solidFlg);
+		bool ReadDXFFile(String^ fileName);
+		bool ReadMQOFile(String^ fileName, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
-		bool readMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
-		bool readMQOFile(String^ fileName, String^ objName, bool solidFlg);
-		bool readMQOFile(String^ fileName, String^ objName);
-		bool readMQOFile(String^ fileName, String^ objName, int materialID,
+		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
+		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg);
+		bool ReadMQOFile(String^ fileName, String^ objName);
+		bool ReadMQOFile(String^ fileName, String^ objName, int materialID,
 						 bool solidFlg, bool contFlg, bool materialFlg);
-		bool readMQOFile(String^ fileName, String^ objName, int materialID,
+		bool ReadMQOFile(String^ fileName, String^ objName, int materialID,
 						 bool solidFlg, bool contFlg);
-		bool readMQOFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
-		bool readMQOFile(String^ fileName, String^ objName, int materialID);
-		bool readD3DXFile(String^ fileName, String^ objName, bool solidFlg);
-		bool readD3DXFile(String^ fileName, String^ objName);
-		bool readD3DXFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
-		bool readD3DXFile(String^ fileName, String^ objName, int materialID);
-		bool writeVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
-		bool writeVRMLFile(String^ fileName, fk_Material^ material);
-		bool writeVRMLFile(String^ fileName);
-		bool writeVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
+		bool ReadMQOFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
+		bool ReadMQOFile(String^ fileName, String^ objName, int materialID);
+		bool ReadD3DXFile(String^ fileName, String^ objName, bool solidFlg);
+		bool ReadD3DXFile(String^ fileName, String^ objName);
+		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
+		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID);
+		bool WriteVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
+		bool WriteVRMLFile(String^ fileName, fk_Material^ material);
+		bool WriteVRMLFile(String^ fileName);
+		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
 						   fk_Material^ material, bool triFlg);
-		bool writeVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
+		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
 						   fk_Material^ material);
-		bool writeVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos);
-		bool writeSTLFile(String^ fileName);
-		bool writeDXFFile(String^ fileName, bool triFlg);
-		bool writeDXFFile(String^ fileName);
-		bool writeMQOFile(String^ fileName);
+		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos);
+		bool WriteSTLFile(String^ fileName);
+		bool WriteDXFFile(String^ fileName, bool triFlg);
+		bool WriteDXFFile(String^ fileName);
+		bool WriteMQOFile(String^ fileName);
 	};
 }

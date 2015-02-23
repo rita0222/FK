@@ -38,11 +38,11 @@ namespace FK_CLI_Viewer
 			}
 
 			shape.MakeIFSet(100, 4, IFSet, 121, pos);
-			viewer.setShape(0, shape);
-			viewer.setDrawMode((uint)(fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE));
-			viewer.setScale(10.0);
+			viewer.Shape = shape;
+			viewer.DrawMode = (uint)(fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE);
+			viewer.Scale = 10.0;
 
-			for(int counter = 0; viewer.draw() == true; counter += 10) {
+			for(int counter = 0; viewer.Draw() == true; counter += 10) {
 				for(i = 0; i <= 10; i++) {
 					for(j = 0; j <= 10; j++) {
 						moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/FK.PI));

@@ -53,10 +53,10 @@ namespace FK_CLI_Texture
 
 			fk_Material.InitDefault();
 			var viewer = new fk_ShapeViewer(600, 600);
-			viewer.setShape(tex);
-			viewer.setMaterial(0, fk_Material.TrueWhite);
+			viewer.Shape = tex;
+			viewer.SetMaterial(0, fk_Material.TrueWhite);
 
-			while(viewer.draw() == true) { }
+			while(viewer.Draw() == true) { }
 		}
 	}
 }

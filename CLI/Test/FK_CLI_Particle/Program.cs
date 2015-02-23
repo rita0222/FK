@@ -67,14 +67,14 @@ namespace FK_CLI_Particle
 			MyParticle particle = new MyParticle();
 			fk_Prism prism = new fk_Prism(40, 15.0, 15.0, 50.0);
 
-			viewer.setShape(3, prism);
-			viewer.setPosition(3, 0.0, 0.0, 25.0);
-			viewer.setDrawMode(3, (uint)(fk_DrawMode.POLYMODE));
-			viewer.setShape(2, particle.Shape);
-			viewer.setDrawMode(2, (uint)(fk_DrawMode.POINTMODE));
-			viewer.setScale(10.0);
+			viewer.SetShape(3, prism);
+			viewer.SetPosition(3, 0.0, 0.0, 25.0);
+			viewer.SetDrawMode(3, (uint)(fk_DrawMode.POLYMODE));
+			viewer.SetShape(2, particle.Shape);
+			viewer.SetDrawMode(2, (uint)(fk_DrawMode.POINTMODE));
+			viewer.Scale = 10.0;
  
-			while(viewer.draw() == true) {
+			while(viewer.Draw() == true) {
 				for(int i = 0; i < 3; ++i) { // 3倍速再生
 					particle.Handle(); // パーティクルを 1 ステップ実行する。
 				}
