@@ -40,7 +40,7 @@ namespace FK_CLI_IFSTex
 			win.BGColor = new fk_Color(0.5, 0.5, 0.5);
 			win.Entry(lightModel);
 			win.ShowGuide(fk_GuideMode.GRID_XZ);
-			win.SetTrackBallMode(true);
+			win.TrackBallMode = true;
 
 			spModel.Shape = sph;
 			spModel.Material = fk_Material.Yellow;

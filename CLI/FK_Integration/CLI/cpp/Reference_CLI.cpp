@@ -4,7 +4,25 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	fk_Half^ fk_Reference::getOneHOnV(fk_Vertex^ argV)
+	::fk_ReferenceL3 * fk_Reference::GetP(void)
+	{
+		return (::fk_ReferenceL3 *)(pBase);
+	}
+
+	fk_Reference::fk_Reference(bool argNewFlg) : fk_Shape(false)
+	{
+	}
+
+	fk_Reference::~fk_Reference()
+	{
+		this->!fk_Reference();
+	}
+
+	fk_Reference::!fk_Reference()
+	{
+	}
+
+	fk_Half^ fk_Reference::GetOneHOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
@@ -13,7 +31,7 @@ namespace FK_CLI {
 		return H;
 	}
 
-	fk_Edge^ fk_Reference::getOneEOnV(fk_Vertex^ argV)
+	fk_Edge^ fk_Reference::GetOneEOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
@@ -22,7 +40,7 @@ namespace FK_CLI {
 		return E;
 	}
 
-	fk_Vertex^ fk_Reference::getVOnH(fk_Half^ argH)
+	fk_Vertex^ fk_Reference::GetVOnH(fk_Half^ argH)
 	{
 		if(!argH) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -31,7 +49,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	fk_Half^ fk_Reference::getMateHOnH(fk_Half^ argH)
+	fk_Half^ fk_Reference::GetMateHOnH(fk_Half^ argH)
 	{
 		if(!argH) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
@@ -40,7 +58,7 @@ namespace FK_CLI {
 		return H;
 	}
 
-	fk_Edge^ fk_Reference::getParentEOnH(fk_Half^ argH)
+	fk_Edge^ fk_Reference::GetParentEOnH(fk_Half^ argH)
 	{
 		if(!argH) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
@@ -49,7 +67,7 @@ namespace FK_CLI {
 		return E;
 	}
 
-	fk_Loop^ fk_Reference::getParentLOnH(fk_Half^ argH)
+	fk_Loop^ fk_Reference::GetParentLOnH(fk_Half^ argH)
 	{
 		if(!argH) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -58,7 +76,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Vertex^ fk_Reference::getRightVOnE(fk_Edge^ argE)
+	fk_Vertex^ fk_Reference::GetRightVOnE(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -67,7 +85,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	fk_Vertex^ fk_Reference::getLeftVOnE(fk_Edge^ argE)
+	fk_Vertex^ fk_Reference::GetLeftVOnE(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -76,7 +94,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	fk_Half^ fk_Reference::getRightHOnE(fk_Edge^ argE)
+	fk_Half^ fk_Reference::GetRightHOnE(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
@@ -85,7 +103,7 @@ namespace FK_CLI {
 		return H;
 	}
 
-	fk_Half^ fk_Reference::getLeftHOnE(fk_Edge^ argE)
+	fk_Half^ fk_Reference::GetLeftHOnE(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
@@ -94,7 +112,7 @@ namespace FK_CLI {
 		return H;
 	}
 
-	fk_Loop^ fk_Reference::getRightLOnE(fk_Edge^ argE)
+	fk_Loop^ fk_Reference::GetRightLOnE(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -104,7 +122,7 @@ namespace FK_CLI {
 
 	}
 
-	fk_Loop^ fk_Reference::getLeftLOnE(fk_Edge^ argE)
+	fk_Loop^ fk_Reference::GetLeftLOnE(fk_Edge^ argE)
 	{
 		if(!argE) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -114,7 +132,7 @@ namespace FK_CLI {
 
 	}
 
-	fk_EdgeStatus fk_Reference::getEdgeStatus(fk_Edge^ argE)
+	fk_EdgeStatus fk_Reference::GetEdgeStatus(fk_Edge^ argE)
 	{
 		if(!argE) return fk_EdgeStatus::NONE_EDGE;
 		switch(GetP()->getEdgeStatus(argE->GetP())) {
@@ -133,7 +151,7 @@ namespace FK_CLI {
 		return fk_EdgeStatus::NONE_EDGE;
 	}
 
-	fk_Vertex^ fk_Reference::getOneVOnL(fk_Loop^ argL)
+	fk_Vertex^ fk_Reference::GetOneVOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -142,7 +160,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	fk_Half^ fk_Reference::getOneHOnL(fk_Loop^ argL)
+	fk_Half^ fk_Reference::GetOneHOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
@@ -151,7 +169,7 @@ namespace FK_CLI {
 		return H;
 	}
 
-	fk_Edge^ fk_Reference::getOneEOnL(fk_Loop^ argL)
+	fk_Edge^ fk_Reference::GetOneEOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
@@ -162,7 +180,7 @@ namespace FK_CLI {
 
 
 	// from ReferenceL2
-	fk_Vertex^ fk_Reference::getOneNeighborVOnV(fk_Vertex^ argV)
+	fk_Vertex^ fk_Reference::GetOneNeighborVOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
@@ -171,7 +189,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	array<fk_Half^>^ fk_Reference::getAllHOnV(fk_Vertex^ argV)
+	array<fk_Half^>^ fk_Reference::GetAllHOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		vector<::fk_Half *> hA = GetP()->getAllHOnV(argV->GetP());
@@ -184,7 +202,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Edge^>^ fk_Reference::getAllEOnV(fk_Vertex^ argV)
+	array<fk_Edge^>^ fk_Reference::GetAllEOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		vector<::fk_Edge *> eA = GetP()->getAllEOnV(argV->GetP());
@@ -197,7 +215,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Loop^>^ fk_Reference::getAllLOnV(fk_Vertex^ argV)
+	array<fk_Loop^>^ fk_Reference::GetAllLOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		vector<::fk_Loop *> lA = GetP()->getAllLOnV(argV->GetP());
@@ -210,13 +228,13 @@ namespace FK_CLI {
 		return A;
 	}
 
-	int fk_Reference::getENumOnV(fk_Vertex^ argV)
+	int fk_Reference::GetENumOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return 0;
 		return GetP()->getENumOnV(argV->GetP());
 	}
 
-	array<fk_Vertex^>^ fk_Reference::getAllVOnL(fk_Loop^ argL)
+	array<fk_Vertex^>^ fk_Reference::GetAllVOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		vector<::fk_Vertex *> vA = GetP()->getAllVOnL(argL->GetP());
@@ -229,7 +247,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Half^>^ fk_Reference::getAllHOnL(fk_Loop^ argL)
+	array<fk_Half^>^ fk_Reference::GetAllHOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		vector<::fk_Half *> hA = GetP()->getAllHOnL(argL->GetP());
@@ -242,7 +260,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Edge^>^ fk_Reference::getAllEOnL(fk_Loop^ argL)
+	array<fk_Edge^>^ fk_Reference::GetAllEOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		vector<::fk_Edge *> eA = GetP()->getAllEOnL(argL->GetP());
@@ -255,7 +273,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	fk_Loop^ fk_Reference::getOneNeighborLOnL(fk_Loop^ argL)
+	fk_Loop^ fk_Reference::GetOneNeighborLOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -264,7 +282,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Reference::getNeighborLOnLH(fk_Loop^ argL, fk_Half^ argH)
+	fk_Loop^ fk_Reference::GetNeighborLOnLH(fk_Loop^ argL, fk_Half^ argH)
 	{
 		if(!argL || !argH) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -273,14 +291,14 @@ namespace FK_CLI {
 		return L;
 	}
 
-	int fk_Reference::getVNumOnL(fk_Loop^ argL)
+	int fk_Reference::GetVNumOnL(fk_Loop^ argL)
 	{
 		if(!argL) return 0;
 		return GetP()->getVNumOnL(argL->GetP());
 	}
 
 	// from ReferenceL3
-	array<fk_Vertex^>^ fk_Reference::getAllNeighborVOnV(fk_Vertex^ argV)
+	array<fk_Vertex^>^ fk_Reference::GetAllNeighborVOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		vector<::fk_Vertex *> vA = GetP()->getAllNeighborVOnV(argV->GetP());
@@ -293,7 +311,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Edge^>^ fk_Reference::getEOnVV(fk_Vertex^ argV1, fk_Vertex^ argV2)
+	array<fk_Edge^>^ fk_Reference::GetEOnVV(fk_Vertex^ argV1, fk_Vertex^ argV2)
 	{
 		if(!argV1 || !argV2) nullptr;
 		vector<::fk_Edge *> eA = GetP()->getEOnVV(argV1->GetP(), argV2->GetP());
@@ -306,7 +324,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	fk_Loop^ fk_Reference::getOneLOnV(fk_Vertex^ argV)
+	fk_Loop^ fk_Reference::GetOneLOnV(fk_Vertex^ argV)
 	{
 		if(!argV) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -315,7 +333,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Reference::getNeighborLOnLE(fk_Loop^ argL, fk_Edge^ argE)
+	fk_Loop^ fk_Reference::GetNeighborLOnLE(fk_Loop^ argL, fk_Edge^ argE)
 	{
 		if(!argL || !argE) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
@@ -324,7 +342,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	array<fk_Loop^>^ fk_Reference::getAllNeighborLOnL(fk_Loop^ argL)
+	array<fk_Loop^>^ fk_Reference::GetAllNeighborLOnL(fk_Loop^ argL)
 	{
 		if(!argL) return nullptr;
 		vector<::fk_Loop *> lA = GetP()->getAllNeighborLOnL(argL->GetP());

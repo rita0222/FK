@@ -126,6 +126,14 @@ namespace FK_CLI
 			fk_Scene^ get();
 		}
 
+		property fk_Vector^ MousePosition {
+			fk_Vector^ get();
+		}
+
+		property bool TrackBallMode {
+			void set(bool);
+		}
+		
 		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
 		void SetCameraDefault(void);
 
@@ -154,9 +162,7 @@ namespace FK_CLI
 								 fk_SwitchStatus status, bool insideFlg);
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
 		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlg);
-		fk_Vector^ GetMousePosition(void);
 		void SetCursorState(bool visible, bool center);
-		void SetTrackBallMode(bool mode);
 		bool IsModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
 		bool IsModelPicked(fk_Model^ model, int pixel);
 		bool IsModelPicked(fk_Model^ model);

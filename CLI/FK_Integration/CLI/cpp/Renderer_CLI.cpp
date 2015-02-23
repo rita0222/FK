@@ -13,6 +13,25 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
+	fk_Renderer::fk_Renderer(void) : hWnd(nullptr), hDC(nullptr), hRC(nullptr)
+	{
+		pEngine = new ::fk_GraphicsEngine();
+	}
+
+	fk_Renderer::~fk_Renderer()
+	{
+		if (pEngine != nullptr) Shutdown();
+		delete pEngine;
+		pEngine = nullptr;
+	}
+
+	fk_Renderer::!fk_Renderer()
+	{
+		if (pEngine != nullptr) Shutdown();
+		delete pEngine;
+		pEngine = nullptr;
+	}
+
 	bool fk_Renderer::Initialize(System::IntPtr argPwnd, int argW, int argH)
 	{
 		hWnd = (HWND)argPwnd.ToPointer();

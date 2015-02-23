@@ -40,19 +40,19 @@ namespace FK_CLI_Quaternion
 			win.BGColor = new fk_Color(0.3, 0.4, 0.5);
 			win.Entry(model);
 			win.Entry(pointM);
-			win.SetTrackBallMode(true);
+			win.TrackBallMode = true;
 			win.ShowGuide();
 			win.Open();
-			q1.makeEuler(angle1);
-			q2.makeEuler(angle2);
+			q1.Euler = angle1;
+			q2.Euler = angle2;
 
 			double t = 0.0;
 
 			while(win.Update() == true) {
 				q = fk_Math.QuatInterSphere(q1, q2, t);
-				model.GlAngle(q.getEuler());
+				model.GlAngle(q.Euler);
 				if(t < 1.0) {
-					poly.pushVertex(model.Matrix * pos);
+					poly.PushVertex(model.Matrix * pos);
 					t += 0.005;
 				}
 			}

@@ -246,6 +246,16 @@ namespace FK_CLI {
 		return scene;
 	}
 
+	void fk_AppWindow::TrackBallMode::set(bool argMode)
+	{
+		GetP()->setTrackBallMode(argMode);
+	}
+
+	fk_Vector^ fk_AppWindow::MousePosition::get(void)
+	{
+		return gcnew fk_Vector(GetP()->getMousePosition());
+	}
+				
 	void fk_AppWindow::Open(void)
 	{
 		GetP()->open();
@@ -404,19 +414,9 @@ namespace FK_CLI {
 		return GetP()->getMouseStatus(b, GetSS(argSS), argInFlg);
 	}
 				
-	fk_Vector^ fk_AppWindow::GetMousePosition(void)
-	{
-		return gcnew fk_Vector(GetP()->getMousePosition());
-	}
-				
 	void fk_AppWindow::SetCursorState(bool argVisible, bool argCenter)
 	{
 		GetP()->setCursorState(argVisible, argCenter);
-	}
-
-	void fk_AppWindow::SetTrackBallMode(bool argMode)
-	{
-		GetP()->setTrackBallMode(argMode);
 	}
 
 	bool fk_AppWindow::IsModelPicked(fk_Model^ argM, int argP, int argX, int argY)

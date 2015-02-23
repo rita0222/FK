@@ -85,7 +85,7 @@ namespace FK_WPF_Test
             camera.GlUpvec(0.0, 1.0, 0.0);
             scene.Camera = camera;
 
-            scene.setBGColor(0.5f, 0.5f, 0.5f);
+            scene.BGColor = new fk_Color(0.5, 0.5, 0.5);
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;

@@ -98,7 +98,7 @@ namespace FK_CLI_C
 			textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
 			textImage.setAlign(fk_TextAlign.CENTER);
 			textImage.loadUniStr(str);
-			texture.setTextureSize(40.0, 10.0);
+			texture.TextureSize = new fk_TexCoord(40.0, 10.0);
 			strModel.Material = fk_Material.TrueWhite;
 
 			strModel.Shape = texture;

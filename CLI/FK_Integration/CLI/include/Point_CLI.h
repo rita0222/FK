@@ -10,55 +10,35 @@ namespace FK_CLI
 {
 	public ref class fk_Point : fk_Shape {
 	internal:
-		::fk_Point * GetP(void)
-		{
-			return (::fk_Point *)(pBase);
-		}
+		::fk_Point * GetP(void);
 
 	public:
-		fk_Point::fk_Point() : fk_Shape(false)
-		{
-			pBase = new ::fk_Point();
+		fk_Point();
+		fk_Point(array<fk_Vector^>^ argArray);
+		fk_Point(bool argNewFlg);
+		~fk_Point();
+		!fk_Point();
+
+		property int Num {
+			int get();
 		}
 
-		fk_Point::fk_Point(array<fk_Vector^>^ argArray) : fk_Shape(false)
-		{
-			pBase = new ::fk_Point();
-			setVertex(argArray);
+		property bool ColorCount {
+			bool get();
 		}
+		
+		int			PushVertex(fk_Vector^ pos);
+		bool		SetVertex(int ID, fk_Vector^ pos);
+		bool		SetVertex(array<fk_Vector^>^ array);
+		bool		RemoveVertex(int ID);
+		fk_Vector^	GetVertex(int ID);
+		void		SetDrawMode(int ID, bool mode);
+		bool		GetDrawMode(void);
+		bool		GetDrawMode(int ID);
+		void		SetColorID(int vertexID, int colorID);
+		int			GetColorID(int vertexID);
 
-		fk_Point::fk_Point(bool argNewFlg) : fk_Shape(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_Point();
-			}
-		}
-
-		fk_Point::~fk_Point()
-		{
-			this->!fk_Point();
-		}
-
-		fk_Point::!fk_Point()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
-
-		int pushVertex(fk_Vector^ pos);
-		bool setVertex(int ID, fk_Vector^ pos);
-		bool setVertex(array<fk_Vector^>^ array);
-		bool removeVertex(int ID);
-		fk_Vector^ getVertex(int ID);
-		int getSize(void);
-		void setDrawMode(int ID, bool mode);
-		bool getDrawMode(void);
-		bool getDrawMode(int ID);
-		void setColorID(int vertexID, int colorID);
-		bool getColorCount(void);
-		int getColorID(int vertexID);
-		void allClear(bool materialFlag);
-		void allClear(void);
+		void		AllClear(bool materialFlag);
+		void		AllClear(void);
 	};
 }

@@ -9,128 +9,45 @@ namespace FK_CLI
 {
 	public ref class fk_Polygon : fk_Solid {
 	internal:
-		::fk_Polygon * GetP(void)
-		{
-			return (::fk_Polygon *)(pBase);
-		}
+		::fk_Polygon * GetP(void);
 
 	public:
-		fk_Polygon::fk_Polygon() : fk_Solid(false)
-		{
-			pBase = new ::fk_Polygon();
-		}
+		fk_Polygon();
+		fk_Polygon(array<fk_Vector^>^ argArray);
+		fk_Polygon(bool argNewFlg);
+		~fk_Polygon();
+		!fk_Polygon();
 
-		fk_Polygon::fk_Polygon(array<fk_Vector^>^ argArray) : fk_Solid(false)
-		{
-			pBase = new ::fk_Polygon();
-			setVertex(argArray);
-		}
-
-		fk_Polygon::fk_Polygon(bool argNewFlg) : fk_Solid(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_Polygon();
-			}
-				
-		}
-
-		fk_Polygon::~fk_Polygon()
-		{
-			this->!fk_Polygon();
-		}
-
-		fk_Polygon::!fk_Polygon()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
-
-		void pushVertex(fk_Vector^ pos);
-		void setVertex(int ID, fk_Vector^ pos);
-		void setVertex(array<fk_Vector^>^ array);
+		void PushVertex(fk_Vector^ pos);
+		void SetVertex(int ID, fk_Vector^ pos);
+		void SetVertex(array<fk_Vector^>^ array);
 	};
 
 	public ref class fk_Polyline : fk_Solid {
 	internal:
-		::fk_Polyline * GetP(void)
-		{
-			return (::fk_Polyline *)(pBase);
-		}
+		::fk_Polyline * GetP(void);
 
 	public:
-		fk_Polyline::fk_Polyline() : fk_Solid(false)
-		{
-			pBase = new ::fk_Polyline();
-		}
-
-		fk_Polyline::fk_Polyline(array<fk_Vector^>^ argArray) : fk_Solid(false)
-		{
-			pBase = new ::fk_Polyline();
-			setVertex(argArray);
-		}
-
-		fk_Polyline::fk_Polyline(bool argNewFlg) : fk_Solid(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_Polyline();
-			}
-				
-		}
-
-		fk_Polyline::~fk_Polyline()
-		{
-			this->!fk_Polyline();
-		}
-
-		fk_Polyline::!fk_Polyline()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
+		fk_Polyline();
+		fk_Polyline(array<fk_Vector^>^ argArray);
+		fk_Polyline(bool argNewFlg);
+		~fk_Polyline();
+		!fk_Polyline();
 	
-		void pushVertex(fk_Vector^ pos);
-		void setVertex(int argID, fk_Vector^ pos);
-		void setVertex(array<fk_Vector^>^ array);
+		void PushVertex(fk_Vector^ pos);
+		void SetVertex(int argID, fk_Vector^ pos);
+		void SetVertex(array<fk_Vector^>^ array);
 	};
 
 	public ref class fk_Closedline : fk_Polygon {
 	internal:
-		::fk_Closedline * GetP(void)
-		{
-			return (::fk_Closedline *)(pBase);
-		}
+		::fk_Closedline * GetP(void);
 
 	public:
-		fk_Closedline::fk_Closedline() : fk_Polygon(false)
-		{
-			pBase = new ::fk_Closedline();
-		}
-
-		fk_Closedline::fk_Closedline(array<fk_Vector^>^ argArray) : fk_Polygon(false)
-		{
-			pBase = new ::fk_Closedline();
-			setVertex(argArray);
-		}
-
-		fk_Closedline::fk_Closedline(bool argNewFlg) : fk_Polygon(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_Closedline();
-			}
-		}
-
-		fk_Closedline::~fk_Closedline()
-		{
-			this->!fk_Closedline();
-		}
-
-		fk_Closedline::!fk_Closedline()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
+		fk_Closedline();
+		fk_Closedline(array<fk_Vector^>^ argArray);
+		fk_Closedline(bool argNewFlg);
+		~fk_Closedline();
+		!fk_Closedline();
 	};		
 }
