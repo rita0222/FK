@@ -56,9 +56,9 @@ namespace FK_CLI_Audio
 			double volume = 0.5;
 
 			fk_Material.InitDefault();			
-			blockModel.setShape(block);
-			blockModel.glMoveTo(3.0, 3.0, 0.0);
-			blockModel.setMaterial(fk_Material.Yellow);
+			blockModel.Shape = block;
+			blockModel.GlMoveTo(3.0, 3.0, 0.0);
+			blockModel.Material = fk_Material.Yellow;
 			win.Entry(blockModel);
 			win.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
 			win.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
@@ -71,7 +71,7 @@ namespace FK_CLI_Audio
 			bgmTask.Start();
 
 			while(win.Update()) {
-				blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 
 				if(win.GetKeyStatus('Z', fk_SwitchStatus.DOWN) == true && volume < 1.0) {
 					volume += 0.1;

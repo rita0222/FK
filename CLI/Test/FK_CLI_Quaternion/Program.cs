@@ -30,12 +30,12 @@ namespace FK_CLI_Quaternion
 
 			fk_Material.InitDefault();
 
-			model.setShape(cone);
-			model.setMaterial(fk_Material.Yellow);
-			model.glAngle(angle1);
+			model.Shape = cone;
+			model.Material = fk_Material.Yellow;
+			model.GlAngle(angle1);
 
-			pointM.setShape(poly);
-			pointM.setLineColor(1.0, 0.0, 0.0);
+			pointM.Shape = poly;
+			pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
 
 			win.BGColor = new fk_Color(0.3, 0.4, 0.5);
 			win.Entry(model);
@@ -49,10 +49,10 @@ namespace FK_CLI_Quaternion
 			double t = 0.0;
 
 			while(win.Update() == true) {
-				q = fk_Math.quatInterSphere(q1, q2, t);
-				model.glAngle(q.getEuler());
+				q = fk_Math.QuatInterSphere(q1, q2, t);
+				model.GlAngle(q.getEuler());
 				if(t < 1.0) {
-					poly.pushVertex(model.getMatrix() * pos);
+					poly.pushVertex(model.Matrix * pos);
 					t += 0.005;
 				}
 			}

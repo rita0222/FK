@@ -11,58 +11,31 @@ namespace FK_CLI
 {
 	public ref class fk_MeshTexture : fk_Texture {
 	internal:
-		::fk_MeshTexture * GetP(void)
-		{
-			return (::fk_MeshTexture *)(pBase);
-		}
+		::fk_MeshTexture * GetP(void);
 
 	public:
-		fk_MeshTexture::fk_MeshTexture() : fk_Texture(false)
-		{
-			pBase = new ::fk_MeshTexture();
+		fk_MeshTexture();
+		fk_MeshTexture(bool argNewFlg);
+		fk_MeshTexture(fk_Image^ argImage);
+		~fk_MeshTexture();
+		!fk_MeshTexture();
+
+		property int TriNum {
+			void set(int);
+			int get();
 		}
 
-		fk_MeshTexture::fk_MeshTexture(bool argNewFlg) : fk_Texture(false)
-		{
-			if(argNewFlg == true) {
-				pBase = new ::fk_MeshTexture();
-			}
-		}
-
-		fk_MeshTexture::fk_MeshTexture(fk_Image^ argImage) : fk_Texture(false)
-		{
-			if(!argImage) {
-				pBase = new ::fk_MeshTexture();
-			} else {
-				pBase = new ::fk_MeshTexture(argImage->GetP());
-			}
-		}
-
-		fk_MeshTexture::~fk_MeshTexture()
-		{
-			this->!fk_MeshTexture();
-		}
-
-		fk_MeshTexture::!fk_MeshTexture()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
-		}
-
-		void init(void);
-		bool setTriNum(int num);
-		int getTriNum(void);
-		bool setTextureCoord(int triID, int vertexID, double x, double y);
-		bool setTextureCoord(int triID, int vertexID, fk_TexCoord^ color);
-		bool setTriTextureCoord(int triID, array<fk_TexCoord^>^ array);
-		fk_TexCoord^ getTextureCoord(int triID, int vertexID);
-		bool setVertexPos(int triID, int vertexID, double x, double y, double z);
-		bool setVertexPos(int triID, int vertexID, fk_Vector^ pos);
-		bool setTriPos(int triID, array<fk_Vector^>^ array);
-		fk_Vector^ getVertexPos(int triID, int vertexID);
-		void putIndexFaceSet(fk_IndexFaceSet^ IFS);
-		bool readMQOFile(String^ fileName, String^ objName, bool contFlg);
-		bool readMQOFile(String^ fileName, String^ objName);
+		void Init(void);
+		bool SetTextureCoord(int triID, int vertexID, double x, double y);
+		bool SetTextureCoord(int triID, int vertexID, fk_TexCoord^ color);
+		bool SetTriTextureCoord(int triID, array<fk_TexCoord^>^ array);
+		fk_TexCoord^ GetTextureCoord(int triID, int vertexID);
+		bool SetVertexPos(int triID, int vertexID, double x, double y, double z);
+		bool SetVertexPos(int triID, int vertexID, fk_Vector^ pos);
+		bool SetTriPos(int triID, array<fk_Vector^>^ array);
+		fk_Vector^ GetVertexPos(int triID, int vertexID);
+		void PutIndexFaceSet(fk_IndexFaceSet^ IFS);
+		bool ReadMQOFile(String^ fileName, String^ objName, bool contFlg);
+		bool ReadMQOFile(String^ fileName, String^ objName);
 	};
 }

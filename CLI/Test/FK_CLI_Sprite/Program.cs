@@ -28,9 +28,9 @@ namespace FK_CLI_Sprite
 			sprite.setPositionLT(-280.0, 230.0);
 			window.Entry(sprite);
  
-			model.setShape(block);
-			model.glMoveTo(0.0, 6.0, 0.0);
-			model.setMaterial(fk_Material.Yellow);
+			model.Shape = block;
+			model.GlMoveTo(0.0, 6.0, 0.0);
+			model.Material = fk_Material.Yellow;
 			window.Entry(model);
 			window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
 			window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
@@ -43,7 +43,7 @@ namespace FK_CLI_Sprite
 			while(window.Update() == true) {
 				str = "count = " + count.ToString();
 				sprite.drawText(str, true);
-				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 				count++;
 			}
 		}

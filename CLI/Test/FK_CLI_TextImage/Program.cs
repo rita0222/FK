@@ -34,17 +34,17 @@ namespace FK_CLI_TextImage
 			textImage.setAlign(fk_TextAlign.CENTER);
 			textImage.loadUniStr(str);
 			texture.setTextureSize(40.0, 10.0);
-			strModel.setMaterial(fk_Material.TrueWhite);			
+			strModel.Material = fk_Material.TrueWhite;
 
-			strModel.setShape(texture);
-			strModel.glVec(0.0, 0.0, -1.0);
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
+			strModel.Shape = texture;
+			strModel.GlVec(0.0, 0.0, -1.0);
+			strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
 			win.Entry(strModel); 
 			win.Open();
 			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			while(win.Update() == true) {
-				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
+				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}
 		}
 	}

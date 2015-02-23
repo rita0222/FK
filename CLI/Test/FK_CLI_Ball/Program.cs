@@ -48,8 +48,8 @@ namespace FK_CLI_Ball
 			y_trs		= 0.1;
 			view_mode	= HIGH_MODE;
 			bound_count	= 1;
-			ball_model.glMoveTo(0.0, TOP_BALL_POS, 0.0);
-			ball_model.setShape(BALL2);
+			ball_model.GlMoveTo(0.0, TOP_BALL_POS, 0.0);
+			ball_model.Shape = BALL2;
 		}
 
 		public fk_Model getModel()
@@ -59,30 +59,30 @@ namespace FK_CLI_Ball
 
 		public fk_Vector getPosition()
 		{
-			return ball_model.getPosition();
+			return ball_model.Position;
 		}
 
 		public void lod(fk_Vector pos)
 		{
-			double	Distance = (ball_model.getPosition() - pos).Dist();
+			double	Distance = (ball_model.Position - pos).Dist();
 			switch(view_mode) {
 				case HIGH_MODE:
 					if(Distance < LOD4_HIGH) {
-						ball_model.setShape(BALL4);
+						ball_model.Shape = BALL4;
 					} else if(Distance < LOD3_HIGH) {
-						ball_model.setShape(BALL3);
+						ball_model.Shape = BALL3;
 					} else {
-						ball_model.setShape(BALL2);
+						ball_model.Shape = BALL2;
 					}
 					break;
 
 				case LOW_MODE:
 					if(Distance < LOD4_LOW) {
-						ball_model.setShape(BALL4);
+						ball_model.Shape = BALL4;
 					} else if(Distance < LOD3_LOW) {
-						ball_model.setShape(BALL3);
+						ball_model.Shape = BALL3;
 					} else {
-						ball_model.setShape(BALL2);
+						ball_model.Shape = BALL2;
 					}
 					break;
 
@@ -96,12 +96,12 @@ namespace FK_CLI_Ball
 			switch(direction) {
 				case DOWN_MODE:
 					y_trs *= DOWN_ACCEL;
-					ball_model.glTranslate(0.0, -y_trs, 0.0);
+					ball_model.GlTranslate(0.0, -y_trs, 0.0);
 					break;
 
 				case RISE_MODE:
 					y_trs /= RISE_ACCEL;
-					ball_model.glTranslate(0.0, y_trs, 0.0);
+					ball_model.GlTranslate(0.0, y_trs, 0.0);
 					break;
 
 				default:
@@ -111,7 +111,7 @@ namespace FK_CLI_Ball
 
 		public void bound()
 		{
-			if(ball_model.getPosition().y < BTM_BALL_POS) {
+			if(ball_model.Position.y < BTM_BALL_POS) {
 				direction = RISE_MODE;
 			} else if(y_trs < 0.01) {
 				if(direction == RISE_MODE) {
@@ -163,32 +163,32 @@ namespace FK_CLI_Ball
 
 			// ### VIEW POINT ###
 			// 上の方から見た視点
-			viewModel.glMoveTo(0.0, 400.0, 80.0);
-			viewModel.glFocus(0.0, 30.0, 0.0);
-			viewModel.glUpvec(0.0, 1.0, 0.0);
+			viewModel.GlMoveTo(0.0, 400.0, 80.0);
+			viewModel.GlFocus(0.0, 30.0, 0.0);
+			viewModel.GlUpvec(0.0, 1.0, 0.0);
 
 			// ### LIGHT ###
 			light.Type = fk_LightType.POINT;
 			light.SetAttenuation(0.0, 0.0);
-			lightModel.setShape(light);
-			lightModel.setMaterial(fk_Material.White);
-			lightModel.glTranslate(-60.0, 60.0, 0.0);
+			lightModel.Shape = light;
+			lightModel.Material = fk_Material.White;
+			lightModel.GlTranslate(-60.0, 60.0, 0.0);
 
 			// ### GROUND ###
-			groundModel.setShape(ground);
-			groundModel.setMaterial(fk_Material.LightGreen);
-			groundModel.setSmoothMode(true);
-			groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/2.0);
+			groundModel.Shape = ground;
+			groundModel.Material = fk_Material.LightGreen;
+			groundModel.SmoothMode = true;
+			groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/2.0);
 
 			// ### VIEW BLOCK ###
-			blockModel.setShape(block);
-			blockModel.setMaterial(fk_Material.Blue);
-			blockModel.glMoveTo(60.0, 30.0, 0.0);
-			blockModel.setParent(groundModel);
+			blockModel.Shape = block;
+			blockModel.Material = fk_Material.Blue;
+			blockModel.GlMoveTo(60.0, 30.0, 0.0);
+			blockModel.Parent = groundModel;
 
 			// ### BALL ###
-			ball.getModel().setMaterial(fk_Material.Red);
-			ball.getModel().setSmoothMode(true);
+			ball.getModel().Material = fk_Material.Red;
+			ball.getModel().SmoothMode = true;
 	
 			// ### Model Entry ###
 			win.CameraModel = viewModel;
@@ -202,25 +202,25 @@ namespace FK_CLI_Ball
 			while(win.Update() == true) {
 
 				// ボールを弾ませて, カメラの状態を取得。
-				view_mode = ball.draw(viewModel.getPosition());
+				view_mode = ball.draw(viewModel.Position);
 
 				if(view_mode == Ball.HIGH_MODE) {
 					// カメラを上からの視点にする。
-					viewModel.glMoveTo(0.0, 400.0, 80.0);
-					viewModel.glFocus(0.0, 30.0, 0.0);
-					viewModel.glUpvec(0.0, 1.0, 0.0);
+					viewModel.GlMoveTo(0.0, 400.0, 80.0);
+					viewModel.GlFocus(0.0, 30.0, 0.0);
+					viewModel.GlUpvec(0.0, 1.0, 0.0);
 					//win.entry(blockModel);
 				} else {
 					// カメラをブロックからの視点にする。
-					viewModel.glMoveTo(blockModel.getInhPosition());
-					viewModel.glTranslate(0.0, 10.0, 0.0);
-					viewModel.glFocus(ball.getPosition());
-					viewModel.glUpvec(0.0, 1.0, 0.0);
+					viewModel.GlMoveTo(blockModel.InhPosition);
+					viewModel.GlTranslate(0.0, 10.0, 0.0);
+					viewModel.GlFocus(ball.getPosition());
+					viewModel.GlUpvec(0.0, 1.0, 0.0);
 					//win.remove(blockModel);
 				}
 
 				// 地面をくるくる回転させましょう。
-				groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
+				groundModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
 			}
 		}
 	}

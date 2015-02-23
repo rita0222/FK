@@ -25,16 +25,16 @@ namespace FK_CLI_C
 			// 光源生成
 			var light = new fk_Light();
 			var lightModel = new fk_Model();
-			lightModel.setMaterial(fk_Material.TrueWhite);
-			lightModel.glMoveTo(0.0, 0.0, 0.0);
-			lightModel.glFocus(-1.0, -1.0, -1.0);
+			lightModel.Material = fk_Material.TrueWhite;
+			lightModel.GlMoveTo(0.0, 0.0, 0.0);
+			lightModel.GlFocus(-1.0, -1.0, -1.0);
 			win.Entry(lightModel);
 
 			// 直方体モデル生成
 			var blockModel = new fk_Model();
 			var block = new fk_Block(50.0, 70.0, 40.0);
-			blockModel.setShape(block);
-			blockModel.setMaterial(fk_Material.Yellow);
+			blockModel.Shape = block;
+			blockModel.Material = fk_Material.Yellow;
 			win.Entry(blockModel);
 
 			// 線分モデル生成
@@ -49,29 +49,29 @@ namespace FK_CLI_C
 				line[i] = new fk_Line();
 				line[i].PushLine(pos[2*i], pos[2*i + 1]);
 				lineModel[i] = new fk_Model();
-				lineModel[i].setShape(line[i]);
-				lineModel[i].setParent(blockModel);
+				lineModel[i].Shape = line[i];
+				lineModel[i].Parent = blockModel;
 				win.Entry(lineModel[i]);
 			}
 
-			lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
-			lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
+			lineModel[0].LineColor = new fk_Color(1.0, 0.0, 0.0);
+			lineModel[1].LineColor = new fk_Color(0.0, 1.0, 0.0);
 
 			// カメラモデル生成
 			var camera = new fk_Model();
-			camera.glMoveTo(0.0, 0.0, 2000.0);
-			camera.glFocus(0.0, 0.0, 0.0);
-			camera.glUpvec(0.0, 1.0, 0.0);
+			camera.GlMoveTo(0.0, 0.0, 2000.0);
+			camera.GlFocus(0.0, 0.0, 0.0);
+			camera.GlUpvec(0.0, 1.0, 0.0);
 			win.CameraModel = camera;
 			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
 			for(i = 0; win.Update() == true; i++) {
-				camera.glTranslate(0.0, 0.0, -1.0);
-				var cPos = camera.getPosition();
-				if(cPos.z < -FK.EPS) camera.glFocus(origin);
-				if(i >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+				camera.GlTranslate(0.0, 0.0, -1.0);
+				var cPos = camera.Position;
+				if(cPos.z < -FK.EPS) camera.GlFocus(origin);
+				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
 			}
 		}
 
@@ -99,17 +99,17 @@ namespace FK_CLI_C
 			textImage.setAlign(fk_TextAlign.CENTER);
 			textImage.loadUniStr(str);
 			texture.setTextureSize(40.0, 10.0);
-			strModel.setMaterial(fk_Material.TrueWhite);			
+			strModel.Material = fk_Material.TrueWhite;
 
-			strModel.setShape(texture);
-			strModel.glVec(0.0, 0.0, -1.0);
+			strModel.Shape = texture;
+			strModel.GlVec(0.0, 0.0, -1.0);
 			win.Entry(strModel);
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
+			strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
 			win.Open();
 			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			while(win.Update() == true) {
-				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
+				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}
 		}
 		static void samp3()
@@ -131,9 +131,9 @@ namespace FK_CLI_C
 			sprite.setPositionLT(-280.0, 230.0);
 			window.Entry(sprite);
  
-			model.setShape(block);
-			model.glMoveTo(0.0, 6.0, 0.0);
-			model.setMaterial(fk_Material.Yellow);
+			model.Shape = block;
+			model.GlMoveTo(0.0, 6.0, 0.0);
+			model.Material = fk_Material.Yellow;
 			window.Entry(model);
  
 			window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
@@ -147,7 +147,7 @@ namespace FK_CLI_C
 			while(window.Update() == true) {
 				str = "count = " + count.ToString();
 				sprite.drawText(str, true);
-				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 				count++;
 			}
 		}

@@ -24,11 +24,11 @@ namespace FK_CLI_Boid
 			var rand = new Random();
 			for(int i = 0; i < argNum; ++i) {
 				agent[i] = new fk_Model();
-				agent[i].setShape(cone);
-				agent[i].setMaterial(fk_Material.Red);
-				agent[i].glVec(rand.NextDouble()*2.0 - 1.0,
+				agent[i].Shape = cone;
+				agent[i].Material = fk_Material.Red;
+				agent[i].GlVec(rand.NextDouble()*2.0 - 1.0,
 					rand.NextDouble()*2.0 - 1.0, 0.0);
-				agent[i].glMoveTo(rand.NextDouble() * AREASIZE * 2.0 - AREASIZE,
+				agent[i].GlMoveTo(rand.NextDouble() * AREASIZE * 2.0 - AREASIZE,
 					rand.NextDouble() * AREASIZE * 2.0 - AREASIZE, 0.0);
 			}
 			paramA = 0.2;
@@ -64,15 +64,15 @@ namespace FK_CLI_Boid
 			fk_Vector diff;
 			
 			for(i = 0; i < agent.Length; ++i) {
-				pArray[i] = agent[i].getPosition();
-				vArray[i] = agent[i].getVec();
+				pArray[i] = agent[i].Position;
+				vArray[i] = agent[i].Vec;
 				gVec += pArray[i];
 			}
 
 			gVec /= (double)(agent.Length);
 
 			for(i = 0; i < agent.Length; ++i) {
-				var vec = agent[i].getVec();
+				var vec = agent[i].Vec;
 				for(j = 0; j < agent.Length; ++j) {
 					if(i == j) continue;
 
@@ -103,8 +103,8 @@ namespace FK_CLI_Boid
 
 				vec.z = 0.0;
 
-				agent[i].glVec(vec);
-				agent[i].loTranslate(0.0, 0.0, -0.05);
+				agent[i].GlVec(vec);
+				agent[i].LoTranslate(0.0, 0.0, -0.05);
 			}
 		}
 	}

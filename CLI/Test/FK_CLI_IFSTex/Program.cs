@@ -24,10 +24,10 @@ namespace FK_CLI_IFSTex
 			var ifsModel = new fk_Model();
 
 			fk_Material.InitDefault();
-			lightModel.setShape(new fk_Light());
-			lightModel.setMaterial(fk_Material.TrueWhite);
-			lightModel.glMoveTo(0.0, 0.0, 0.0);
-			lightModel.glFocus(-1.0, -1.0, -1.0);
+			lightModel.Shape = new fk_Light();
+			lightModel.Material = fk_Material.TrueWhite;
+			lightModel.GlMoveTo(0.0, 0.0, 0.0);
+			lightModel.GlFocus(-1.0, -1.0, -1.0);
 
 			if(!ifsShape.readPNG("mqo/00tex_master.png")) {
 				Console.WriteLine("Tex Load Error.");
@@ -42,21 +42,21 @@ namespace FK_CLI_IFSTex
 			win.ShowGuide(fk_GuideMode.GRID_XZ);
 			win.SetTrackBallMode(true);
 
-			spModel.setShape(sph);
-			spModel.setMaterial(fk_Material.Yellow);
-			spModel.setSmoothMode(true);
-			spModel.glMoveTo(-20.0, 0.0, 0.0);
+			spModel.Shape = sph;
+			spModel.Material = fk_Material.Yellow;
+			spModel.SmoothMode = true;
+			spModel.GlMoveTo(-20.0, 0.0, 0.0);
 			win.Entry(spModel);
 
-			ifsModel.setShape(ifsShape);
-			ifsModel.setMaterial(fk_Material.White);
-			ifsModel.setSmoothMode(true);
-			ifsModel.glMoveTo(20.0, 0.0, 0.0);
+			ifsModel.Shape = ifsShape;
+			ifsModel.Material = fk_Material.White;
+			ifsModel.SmoothMode = true;
+			ifsModel.GlMoveTo(20.0, 0.0, 0.0);
 			win.Entry(ifsModel);
 
 			win.Open();
 			while(win.Update() == true) {
-				lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.01);
+				lightModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.01);
 			}
 		}
 	}
