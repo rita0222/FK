@@ -93,12 +93,12 @@ namespace FK_CLI_Boid
 
 				if((pArray[i].x > AREASIZE && vArray[i].x > 0.0) ||
 					(pArray[i].x < -AREASIZE && vArray[i].x < 0.0)) {
-					vec.x -= vec.x * 0.2;
+					vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
 				}
 
 				if((pArray[i].y > AREASIZE && vArray[i].y > 0.0) ||
 					(pArray[i].y < -AREASIZE && vArray[i].y < 0.0)) {
-					vec.y -= vec.y * 0.2;
+					vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
 				}
 
 				vec.z = 0.0;
