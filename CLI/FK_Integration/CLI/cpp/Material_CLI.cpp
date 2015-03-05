@@ -3,6 +3,123 @@
 namespace FK_CLI {
 	using namespace std;
 	
+	::fk_Color * fk_Color::GetP(void)
+	{
+		return pCol;
+	}
+
+	fk_Color::fk_Color() : dFlg(true)
+	{
+		pCol = new ::fk_Color();
+	}
+
+	fk_Color::fk_Color(bool argNewFlg) : dFlg(argNewFlg)
+	{
+		if(argNewFlg == true) pCol = new ::fk_Color();
+	}
+
+	fk_Color::fk_Color(double argR, double argB, double argG) : dFlg(true)
+	{
+		pCol = new ::fk_Color(argR, argG, argB);
+	}
+
+	fk_Color::fk_Color(double argR, double argB, double argG, double argA) : dFlg(true)
+	{
+		pCol = new ::fk_Color();
+		pCol->init(argR, argG, argB, argA);
+	}
+
+	fk_Color::fk_Color(float argR, float argB, float argG) : dFlg(true)
+	{
+		pCol = new ::fk_Color(argR, argG, argB);
+	}
+
+	fk_Color::fk_Color(float argR, float argB, float argG, float argA) : dFlg(true)
+	{
+		pCol = new ::fk_Color();
+		pCol->init(argR, argG, argB, argA);
+	}
+
+	fk_Color::~fk_Color()
+	{
+		this->!fk_Color();
+	}
+
+	fk_Color::!fk_Color()
+	{
+		if(pCol == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pCol = nullptr;
+	}
+
+	float fk_Color::col::get(int argI)
+	{
+		return GetP()->col[argI];
+	}
+
+	void fk_Color::col::set(int argI, float argC)
+	{
+		GetP()->col[argI] = argC;
+	}
+
+	float fk_Color::r::get()
+	{
+		return GetP()->col[0];
+	}
+
+	void fk_Color::r::set(float argF)
+	{
+		GetP()->col[0] = argF;
+	}
+
+	
+	float fk_Color::g::get()
+	{
+		return GetP()->col[1];
+	}
+
+	void fk_Color::g::set(float argF)
+	{
+		GetP()->col[1] = argF;
+	}
+
+	float fk_Color::b::get()
+	{
+		return GetP()->col[2];
+	}
+
+	void fk_Color::b::set(float argF)
+	{
+		GetP()->col[2] = argF;
+	}
+
+	float fk_Color::a::get()
+	{
+		return GetP()->col[3];
+	}
+
+	void fk_Color::a::set(float argF)
+	{
+		GetP()->col[3] = argF;
+	}
+
+	bool fk_Color::Equals(fk_Color^ argC)
+	{
+		if(!argC) false;
+		return (*GetP() == *argC->GetP());
+	}
+
+	bool fk_Color::Equals(Object^ argObj)
+	{
+		if(!argObj) return false;
+		if(this == argObj) return true;
+		if(GetType() == argObj->GetType()) {
+			fk_Color^ C = static_cast<fk_Color^>(argObj);
+			return (*GetP() == *C->GetP());
+		}
+		return false;
+	}
+
 	String^ fk_Color::ToString()
 	{
 		string tmpBuf;
@@ -19,121 +136,170 @@ namespace FK_CLI {
 		return gcnew String(tmpBuf.c_str());
 	}
 
-	void fk_Color::init(void)
+	void fk_Color::Init(void)
 	{
 		GetP()->init();
 	}
 
 
-	void fk_Color::init(float argR, float argG, float argB)
+	void fk_Color::Init(float argR, float argG, float argB)
 	{
 		GetP()->init(argR, argG, argB, 1.0f);
 	}
 
-	void fk_Color::init(float argR, float argG, float argB, float argA)
+	void fk_Color::Init(float argR, float argG, float argB, float argA)
 	{
 		GetP()->init(argR, argG, argB, argA);
 	}
 
-	void fk_Color::init(double argR, double argG, double argB)
+	void fk_Color::Init(double argR, double argG, double argB)
 	{
 		GetP()->init(argR, argG, argB, 1.0);
 	}
 
-	void fk_Color::init(double argR, double argG, double argB, double argA)
+	void fk_Color::Init(double argR, double argG, double argB, double argA)
 	{
 		GetP()->init(argR, argG, argB, argA);
 	}
 
-	void fk_Color::set(float argR, float argG, float argB)
+	void fk_Color::Set(float argR, float argG, float argB)
 	{
 		GetP()->set(argR, argG, argB, 1.0f);
 	}
 
-	void fk_Color::set(float argR, float argG, float argB, float argA)
+	void fk_Color::Set(float argR, float argG, float argB, float argA)
 	{
 		GetP()->set(argR, argG, argB, argA);
 	}
 
-	void fk_Color::set(double argR, double argG, double argB)
+	void fk_Color::Set(double argR, double argG, double argB)
 	{
 		GetP()->set(argR, argG, argB, 1.0);
 	}
 
-	void fk_Color::set(double argR, double argG, double argB, double argA)
+	void fk_Color::Set(double argR, double argG, double argB, double argA)
 	{
 		GetP()->set(argR, argG, argB, argA);
 	}
 
-	void fk_Color::setHSV(double argH, double argS, double argV)
+	void fk_Color::SetHSV(double argH, double argS, double argV)
 	{
 		GetP()->setHSV(argH, argS, argV);
 	}
 
 	///////////////////////////////////////////////////////////////////
 
-	void fk_Material::init(void)
+	::fk_Material * fk_Material::GetP(void)
+	{
+		return pMat;
+	}
+
+	fk_Material::fk_Material() : dFlg(true)
+	{
+		pMat = new ::fk_Material();
+	}
+
+	fk_Material::fk_Material(bool argNewFlg) : dFlg(argNewFlg)
+	{
+		if(argNewFlg == true) pMat = new ::fk_Material();
+	}
+
+	fk_Material::~fk_Material()
+	{
+		this->!fk_Material();
+	}
+
+	fk_Material::!fk_Material()
+	{
+		if(dFlg == true) delete pMat;
+		pMat = nullptr;
+	}
+
+	bool fk_Material::Equals(fk_Material^ argM)
+	{
+		if(!argM) false;
+		return (*GetP() == *argM->GetP());
+	}
+
+	bool fk_Material::Equals(Object^ argObj)
+	{
+		if(!argObj) return false;
+		if(this == argObj) return true;
+		if(GetType() == argObj->GetType()) {
+			fk_Material^ M = static_cast<fk_Material^>(argObj);
+			return (*GetP() == *M->GetP());
+		}
+		return false;
+	}
+
+	float fk_Material::Alpha::get()
+	{
+		return GetP()->getAlpha();
+	}
+
+	void fk_Material::Alpha::set(float argF)
+	{
+		GetP()->setAlpha(argF);
+	}
+
+	fk_Color^ fk_Material::Ambient::get()
+	{
+		fk_Color^ C = gcnew fk_Color();
+		*C->pCol = *(GetP()->getAmbient());
+		return C;
+	}
+
+	void fk_Material::Ambient::set(fk_Color^ argC)
+	{
+		if(!argC) return;
+		GetP()->setAmbient(*argC->pCol);
+	}
+
+	fk_Color^ fk_Material::Diffuse::get()
+	{
+		fk_Color^ C = gcnew fk_Color();
+		*C->pCol = *(GetP()->getDiffuse());
+		return C;
+	}
+
+	void fk_Material::Diffuse::set(fk_Color^ argC)
+	{
+		if(!argC) return;
+		GetP()->setDiffuse(*argC->pCol);
+	}
+
+	fk_Color^ fk_Material::Specular::get()
+	{
+		fk_Color^ C = gcnew fk_Color();
+		*C->pCol = *(GetP()->getSpecular());				
+		return C;
+	}
+
+	void fk_Material::Specular::set(fk_Color^ argC)
+	{
+		if(!argC) return;
+		GetP()->setSpecular(*argC->pCol);
+	}
+
+	fk_Color^ fk_Material::Emission::get()
+	{
+		fk_Color^ C = gcnew fk_Color();
+		*C->pCol = *(GetP()->getEmission());
+		return C;
+	}
+
+	void fk_Material::Emission::set(fk_Color^ argC)
+	{
+		if(!argC) return;
+		GetP()->setEmission(*argC->pCol);
+	}
+
+	void fk_Material::Init(void)
 	{
 		GetP()->init();
 	}
 
-	void fk_Material::setAmbient(float argR, float argG, float argB)
-	{
-		GetP()->setAmbient(argR, argG, argB);
-	}
-
-	void fk_Material::setAmbient(double argR, double argG, double argB)
-	{
-		GetP()->setAmbient(argR, argG, argB);
-	}
-
-	void fk_Material::setDiffuse(float argR, float argG, float argB)
-	{
-		GetP()->setDiffuse(argR, argG, argB);
-	}
-
-	void fk_Material::setDiffuse(double argR, double argG, double argB)
-	{
-		GetP()->setDiffuse(argR, argG, argB);
-	}
-
-	void fk_Material::setSpecular(float argR, float argG, float argB)
-	{
-		GetP()->setSpecular(argR, argG, argB);
-	}
-
-	void fk_Material::setSpecular(double argR, double argG, double argB)
-	{
-		GetP()->setSpecular(argR, argG, argB);
-	}
-
-	void fk_Material::setEmission(float argR, float argG, float argB)
-	{
-		GetP()->setEmission(argR, argG, argB);
-	}
-
-	void fk_Material::setEmission(double argR, double argG, double argB)
-	{
-		GetP()->setEmission(argR, argG, argB);
-	}
-
-	void fk_Material::setAmbDiff(float argR, float argG, float argB)
-	{
-		GetP()->setAmbDiff(argR, argG, argB);
-	}
-
-	void fk_Material::setAmbDiff(double argR, double argG, double argB)
-	{
-		GetP()->setAmbDiff(argR, argG, argB);
-	}
-
-	void fk_Material::setAmbDiff(fk_Color^ argC)
-	{
-		if(!argC) return;
-		GetP()->setAmbDiff(*argC->pCol);
-	}
-
-	void fk_Material::initDefault(void)
+	void fk_Material::InitDefault(void)
 	{
 		::fk_Material::initDefault();
 

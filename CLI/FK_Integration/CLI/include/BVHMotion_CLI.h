@@ -11,40 +11,33 @@ namespace FK_CLI
 	internal:
 		::fk_BVHMotion *pMotion;
 
-		::fk_BVHMotion * GetP(void)
-		{
-			return pMotion;
-		}
+		::fk_BVHMotion * GetP(void);
 
 	public:
-		fk_BVHMotion::fk_BVHMotion()
-		{
-			pMotion = new ::fk_BVHMotion();
+		fk_BVHMotion();
+		~fk_BVHMotion();
+		!fk_BVHMotion();
+
+		property int NowFrameCount {
+			int get();
 		}
 
-		fk_BVHMotion::~fk_BVHMotion()
-		{
-			this->!fk_BVHMotion();
+		property int FrameLength {
+			int get();
 		}
 
-		fk_BVHMotion::!fk_BVHMotion()
-		{
-			if(pMotion == NULL) return;
-			delete pMotion;
-			pMotion = NULL;
+		property double OneFrameTime {
+			double get();
 		}
 
-		void init(void);
-		bool readBVHFile(String^ fileName);
-		int getNodeNum(void);
-		String^ getNodeName(int index);
-		fk_Model^ getNodeModel(int index);
-		fk_Model^ getNodeModel(String^ nodeName);
-		int nextFrame(void);
-		void setFrameCount(int frame);
-		void setAnimationTime(double t);
-		int getNowFrameCount(void);
-		int getFrameLength(void);
-		double getOneFrameTime(void);
+		void Init(void);
+		bool ReadBVHFile(String^ fileName);
+		int GetNodeNum(void);
+		String^ GetNodeName(int index);
+		fk_Model^ GetNodeModel(int index);
+		fk_Model^ GetNodeModel(String^ nodeName);
+		int NextFrame(void);
+		void SetFrameCount(int frame);
+		void SetAnimationTime(double t);
 	};
 }

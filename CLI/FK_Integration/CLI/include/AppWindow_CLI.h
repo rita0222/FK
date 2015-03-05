@@ -60,84 +60,112 @@ namespace FK_CLI
 	public ref class fk_AppWindow {
 	internal:
 		::fk_AppWindow *pWin;
+		fk_Scene^ scene;
 
-		::fk_AppWindow * GetP(void)
-		{
-			return pWin;
-		}
-
+		::fk_AppWindow * GetP(void);
 		::fk_SpecialKey GetSK(fk_SpecialKey);
 		::fk_SwitchStatus GetSS(fk_SwitchStatus);
 
 	public:
-		fk_AppWindow::fk_AppWindow()
-		{
-			pWin = new ::fk_AppWindow();
+		fk_AppWindow();
+		~fk_AppWindow();
+		!fk_AppWindow();
+
+		property String^ WindowName {
+			void set(String^);
 		}
 
-		fk_AppWindow::~fk_AppWindow()
-		{
-			delete pWin;
-			pWin = NULL;
+		property fk_Dimension^ Size {
+			void set(fk_Dimension^);
 		}
 
-		fk_AppWindow::!fk_AppWindow()
-		{
-			pWin->SetFinalizeMode();
-			delete pWin;
-			pWin = NULL;
+		property fk_Rect^ InnerSize {
+			void set(fk_Rect^);
 		}
 
-		void setWindowName(String^ name);
-		void setSize(int w, int h);
-		void setInnerSize(int x, int y, int w, int h);
-		void setBGColor(double r, double g, double b);
-		void setBGColor(fk_Color^ color);
-		void open(void);
-		void close(void);
-		bool update(bool forceFlg);
-		bool update(void);
-		void setFPS(int FPS);
-		void showGuide(void);
-		void showGuide(fk_GuideMode mode);
-		void hideGuide(void);
-		void setGuideAxisWidth(double width);
-		void setGuideGridWidth(double width);
-		void setGuideScale(double scale);
-		void setGuideNum(int num);
-		void setCameraPos(double x, double y, double z);
-		void setCameraPos(fk_Vector^ pos);
-		void setCameraFocus(double x, double y, double z);
-		void setCameraFocus(fk_Vector^ pos);
-		void setCameraModel(fk_Model^ model);
-		fk_Model^ getCameraModel(void);
-		void setCameraDefault(void);
-		void setScene(fk_Scene^ scene, bool defCameraAndLight);
-		void setScene(fk_Scene^ scene);
-		fk_Scene^ getScene(void);
-		void setSceneDefault(void);
-		void entry(fk_Model^ model);
-		void entry(fk_Model^ model, fk_GuideObject^ guide);
-		void entry(fk_SpriteModel^ model);
-		void entry(fk_Performer^ chara);
-		void remove(fk_Model^ model);
-		void remove(fk_Model^ model, fk_GuideObject^ guide);
-		void remove(fk_SpriteModel^ model);
-		void remove(fk_Performer^ chara);
-		void clearModel(bool defCameraAndLight);
-		void clearModel(void);
-		bool getKeyStatus(wchar_t key, fk_SwitchStatus status);
-		bool getKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlg);
-		bool getSpecialKeyStatus(fk_SpecialKey keyCode,
+		property fk_Color^ BGColor {
+			void set(fk_Color^);
+		}
+
+		property int FPS {
+			void set(int);
+		}
+
+		property double AxisWidth {
+			void set(double);
+		}
+
+		property double GridWidth {
+			void set(double);
+		}
+
+		property double GuideScale {
+			void set(double);
+		}
+
+		property int GuideNum {
+			void set(int);
+		}
+
+		property fk_Vector^ CameraPos {
+			void set(fk_Vector^);
+			fk_Vector^ get();
+		}
+
+		property fk_Vector^ CameraFocus {
+			void set(fk_Vector^);
+		}
+
+		property fk_Model^ CameraModel {
+			void set(fk_Model^);
+			fk_Model^ get();
+		}
+		
+		property fk_Scene^ Scene {
+			void set(fk_Scene^);
+			fk_Scene^ get();
+		}
+
+		property fk_Vector^ MousePosition {
+			fk_Vector^ get();
+		}
+
+		property bool TrackBallMode {
+			void set(bool);
+		}
+		
+		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
+		void SetCameraDefault(void);
+
+		void Open(void);
+		void Close(void);
+		bool Update(bool forceFlg);
+		bool Update(void);
+		void SetSceneDefault(void);
+		void ShowGuide(void);
+		void ShowGuide(fk_GuideMode mode);
+		void HideGuide(void);
+
+		void Entry(fk_Model^ model);
+		void Entry(fk_Model^ model, fk_GuideObject^ guide);
+		void Entry(fk_SpriteModel^ model);
+		void Entry(fk_Performer^ chara);
+		void Remove(fk_Model^ model);
+		void Remove(fk_Model^ model, fk_GuideObject^ guide);
+		void Remove(fk_SpriteModel^ model);
+		void Remove(fk_Performer^ chara);
+		void ClearModel(bool defCameraAndLight);
+		void ClearModel(void);
+		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status);
+		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlg);
+		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
 								 fk_SwitchStatus status, bool insideFlg);
-		bool getSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
-		bool getMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlg);
-		fk_Vector^ getMousePosition(void);
-		void setCursorState(bool visible, bool center);
-		void setTrackBallMode(bool mode);
-		bool isModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
-		bool isModelPicked(fk_Model^ model, int pixel);
-		bool isModelPicked(fk_Model^ model);
-		void procMouseView(fk_Model^ camera, double x, double y, bool lockSW);
+		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
+		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlg);
+		void SetCursorState(bool visible, bool center);
+		bool IsModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
+		bool IsModelPicked(fk_Model^ model, int pixel);
+		bool IsModelPicked(fk_Model^ model);
+		void ProcMouseView(fk_Model^ camera, double x, double y, bool lockSW);
 	};
 }

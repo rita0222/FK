@@ -10,55 +10,74 @@ namespace FK_CLI
 {
 	public ref class fk_MatrixAdmin : fk_BaseObject {
 	internal:
-		::fk_MatrixAdmin * GetP(void)
-		{
-			return (::fk_MatrixAdmin *)(pBase);
-		}
+		::fk_MatrixAdmin * GetP(void);
 
 	public:
-		fk_MatrixAdmin::fk_MatrixAdmin(bool argNewFlg) : fk_BaseObject(false)
-		{
+		fk_MatrixAdmin::fk_MatrixAdmin(bool argNewFlg);
+		fk_MatrixAdmin::~fk_MatrixAdmin();
+		fk_MatrixAdmin::!fk_MatrixAdmin();
+
+		property fk_Vector^ Position {
+			fk_Vector^ get();
 		}
 
-		fk_MatrixAdmin::~fk_MatrixAdmin()
-		{
-			this->!fk_MatrixAdmin();
+		property fk_Vector^ Vec {
+			fk_Vector^ get();
 		}
 
-		fk_MatrixAdmin::!fk_MatrixAdmin()
-		{
+		property fk_Vector^ Upvec {
+			fk_Vector^ get();
 		}
 
-		fk_Vector^ getPosition(void);
-		fk_Vector^ getVec(void);
-		fk_Vector^ getUpvec(void);
-		fk_Angle^ getAngle(void);
-		fk_Matrix^ getMatrix(void);
-		fk_Matrix^ getInvMatrix(void);
-		fk_Matrix^ getBaseMatrix(void);
-		fk_Matrix^ getInvBaseMatrix(void);
-		bool setScale(double scale);
-		bool setScale(double scale, fk_Axis axis);
-		bool setScale(double x, double y, double z);
-		bool prdScale(double scale);
-		bool prdScale(double scale, fk_Axis axis);
-		bool prdScale(double x, double y, double z);
-		double getScale(void);
-		double getScale(fk_Axis axis);
-		bool getScaleMode(void);
-		bool glFocus(fk_Vector^ V);
-		bool glFocus(double x, double y, double z);
-		bool loFocus(fk_Vector^ V);
-		bool loFocus(double x, double y, double z);
-		bool glVec(fk_Vector^ V);
-		bool glVec(double x, double y, double z);
-		bool glUpvec(fk_Vector^ V);
-		bool glUpvec(double x, double y, double z);
-		bool loUpvec(fk_Vector^ V);
-		bool loUpvec(double x, double y, double z);
-		bool glAngle(fk_Angle^ angle);
-		bool glAngle(double head, double pitch, double bank);
-		bool loAngle(fk_Angle^ angle);
-		bool loAngle(double head, double pitch, double bank);
+		property fk_Angle^ Angle {
+			fk_Angle^ get();
+		}
+
+		property fk_Matrix^ Matrix {
+			fk_Matrix^ get();
+		}
+
+		property fk_Matrix^ InvMatrix {
+			fk_Matrix^ get();
+		}
+
+		property fk_Matrix^ BaseMatrix {
+			fk_Matrix^ get();
+		}
+
+		property fk_Matrix^ InvBaseMatrix {
+			fk_Matrix^ get();
+		}
+
+		property bool ScaleMode {
+			bool get();
+		}
+
+		property double Scale {
+			double get();
+			void set(double);
+		}
+		
+		bool SetScale(double scale, fk_Axis axis);
+		bool SetScale(double x, double y, double z);
+		bool PrdScale(double scale);
+		bool PrdScale(double scale, fk_Axis axis);
+		bool PrdScale(double x, double y, double z);
+		double GetScale(fk_Axis axis);
+
+		bool GlFocus(fk_Vector^ V);
+		bool GlFocus(double x, double y, double z);
+		bool LoFocus(fk_Vector^ V);
+		bool LoFocus(double x, double y, double z);
+		bool GlVec(fk_Vector^ V);
+		bool GlVec(double x, double y, double z);
+		bool GlUpvec(fk_Vector^ V);
+		bool GlUpvec(double x, double y, double z);
+		bool LoUpvec(fk_Vector^ V);
+		bool LoUpvec(double x, double y, double z);
+		bool GlAngle(fk_Angle^ angle);
+		bool GlAngle(double head, double pitch, double bank);
+		bool LoAngle(fk_Angle^ angle);
+		bool LoAngle(double head, double pitch, double bank);
 	};
 }

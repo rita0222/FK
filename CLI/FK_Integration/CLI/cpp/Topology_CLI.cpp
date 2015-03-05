@@ -2,12 +2,30 @@
 
 namespace FK_CLI {
 
-	int fk_Topology::getID(void)
+	::fk_Topology * fk_Topology::GetP(void)
+	{
+		return (::fk_Topology *)(pBase);
+	}
+
+	fk_Topology::fk_Topology(bool argNewFlg) : fk_Attribute(false)
+	{
+	}
+
+	fk_Topology::~fk_Topology()
+	{
+		this->!fk_Topology();
+	}
+
+	fk_Topology::!fk_Topology()
+	{
+	}
+
+	int fk_Topology::ID::get(void)
 	{
 		return GetP()->getID();
 	}
 
-	fk_TopologyType fk_Topology::getType(void)
+	fk_TopologyType fk_Topology::Type::get(void)
 	{
 		switch(GetP()->getType()) {
 		  case ::FK_VERTEX_TYPE:
@@ -31,7 +49,27 @@ namespace FK_CLI {
 		return fk_TopologyType::UNDEFINED;
 	}
 
-	void fk_TopologyMaterial::setElemMaterialMode(fk_MaterialMode argMode)
+	///////////////////////////////////////////////////////////////////////
+	
+	::fk_TopologyMaterial * fk_TopologyMaterial::GetP(void)
+	{
+		return (::fk_TopologyMaterial *)(pBase);
+	}
+
+	fk_TopologyMaterial::fk_TopologyMaterial(bool argNewFlg) : fk_Topology(false)
+	{
+	}
+
+	fk_TopologyMaterial::~fk_TopologyMaterial()
+	{
+		this->!fk_TopologyMaterial();
+	}
+
+	fk_TopologyMaterial::!fk_TopologyMaterial()
+	{
+	}
+
+	void fk_TopologyMaterial::MaterialMode::set(fk_MaterialMode argMode)
 	{
 		switch(argMode) {
 		  case fk_MaterialMode::PARENT:
@@ -48,12 +86,7 @@ namespace FK_CLI {
 		}
 	}
 
-	void fk_TopologyMaterial::setElemMaterialID(int argID)
-	{
-		GetP()->setElemMaterialID(argID);
-	}
-
-	fk_MaterialMode fk_TopologyMaterial::getElemMaterialMode(void)
+	fk_MaterialMode fk_TopologyMaterial::MaterialMode::get(void)
 	{
 		switch(GetP()->getElemMaterialMode()) {
 		  case FK_PARENT_MODE:
@@ -67,8 +100,13 @@ namespace FK_CLI {
 		}
 		return fk_MaterialMode::PARENT;
 	}
+
+	void fk_TopologyMaterial::MaterialID::set(int argID)
+	{
+		GetP()->setElemMaterialID(argID);
+	}
 				
-	int fk_TopologyMaterial::getElemMaterialID(void)
+	int fk_TopologyMaterial::MaterialID::get(void)
 	{
 		return GetP()->getElemMaterialID();
 	}

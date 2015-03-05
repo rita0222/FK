@@ -24,141 +24,202 @@ namespace FK_CLI
 	internal:
 
 		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
+		fk_Shape^ shape;
 		
-		::fk_Model * GetP(void)
-		{
-			return (::fk_Model *)(pBase);
-		}
+		::fk_Model * GetP(void);
 		
 	public:
-		fk_Model::fk_Model() : fk_Boundary(false)
-		{
-			pBase = new ::fk_Model();
-			modelList->Add(this);
+		fk_Model::fk_Model();
+		fk_Model::fk_Model(bool argNewFlg);
+		fk_Model::~fk_Model();
+		fk_Model::!fk_Model();
+
+		property unsigned int ID {
+			unsigned int get();
 		}
 
-		fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false)
-		{
-			if(argNewFlg == true) pBase = new ::fk_Model();
-			modelList->Add(this);
+		property fk_Shape^ Shape {
+			fk_Shape^ get();
+			void set(fk_Shape^);
 		}
 
-		fk_Model::~fk_Model()
-		{
-			if(pBase == NULL) return;
-			if(dFlg == true) delete GetP();
-			pBase = NULL;
-			modelList->Remove(this);
+		property fk_Material^ Material {
+			void set(fk_Material^);
+			fk_Material^ get();
 		}
 
-		fk_Model::!fk_Model()
-		{
-			if(pBase == NULL) return;
-			if(dFlg == true) {
-				GetP()->SetTreeDelMode(false);
-				delete GetP();
-			}
-			pBase = NULL;
-			modelList->Remove(this);
+		property fk_Material^ InhMaterial {
+			fk_Material^ get();
 		}
 
-		bool glRotate(fk_Vector^ origin, fk_Axis axis, double theta);
-		bool glRotate(double x, double y, double z, fk_Axis axis, double theta);
-		bool glRotate(fk_Vector^ A, fk_Vector^ B, double theta);
-		bool glRotate(double Ax, double Ay, double Az,
+		property fk_Color^ PointColor {
+			fk_Color^ get();
+			void set(fk_Color^);
+		}
+
+		property fk_Color^ InhPointColor {
+			fk_Color^ get();
+		}
+
+		property fk_Color^ LineColor {
+			fk_Color^ get();
+			void set(fk_Color^);
+		}
+
+		property fk_Color^ InhLineColor {
+			fk_Color^ get();
+		}
+
+		property double PointSize {
+			void set(double);
+			double get();
+		}
+		
+		property double LineWidth {
+			void set(double);
+			double get();
+		}
+
+		property fk_DrawMode DrawMode {
+			void set(fk_DrawMode);
+			fk_DrawMode get();
+		}
+
+		property fk_MaterialMode MaterialMode {
+			void set(fk_MaterialMode);
+			fk_MaterialMode get();
+		}
+
+		property bool PickMode {
+			void set(bool);
+			bool get(void);
+		}
+
+		property bool SmoothMode {
+			void set(bool);
+			bool get(void);
+		}
+			
+		property bool ReverseDrawMode {
+			void set(bool);
+			bool get(void);
+		}
+
+		property fk_Matrix^ InhMatrix {
+			fk_Matrix^ get();
+		}
+
+		property fk_Matrix^ InhInvMatrix {
+			fk_Matrix^ get();
+		}
+
+		property fk_Matrix^ InhBaseMatrix {
+			fk_Matrix^ get();
+		}
+
+		property fk_Matrix^ InhInvBaseMatrix {
+			fk_Matrix^ get();
+		}
+		
+		property fk_Vector^ InhPosition {
+			fk_Vector^ get();
+		}
+
+		property fk_Vector^ InhVec {
+			fk_Vector^ get();
+		}
+
+		property fk_Vector^ InhUpvec {
+			fk_Vector^ get();
+		}
+
+		property fk_Angle^ InhAngle {
+			fk_Angle^ get();
+		}
+
+		property double InhScale {
+			double get();
+		}
+
+		property fk_Model^ Parent {
+			void set(fk_Model^);
+			fk_Model^ get();
+		}
+
+		property bool InterMode {
+			void set(bool);
+			bool get();
+		}
+		
+		property bool InterStatus {
+			bool get();
+		}
+
+		property bool InterStopMode {
+			void set(bool);
+			bool get();
+		}
+
+		//////////////////////////////////////////////////////////////
+		void DeleteMaterial(void);
+		void DeletePointColor(void);
+		void DeleteLineColor(void);
+
+		bool SetParent(fk_Model^ model, bool mode);
+		bool SetParent(fk_Model^ model);
+		void DeleteParent(bool mode);
+		void DeleteParent(void);
+
+		bool EntryChild(fk_Model^ model, bool mode);
+		bool EntryChild(fk_Model^ model);
+		bool DeleteChild(fk_Model^ model, bool mode);
+		bool DeleteChild(fk_Model^ model);
+		void DeleteChildren(bool mode);
+		void DeleteChildren(void);
+
+		void SnapShot(void);
+		bool Restore(void);
+		bool Restore(double time);
+
+		void AdjustSphere(void);
+		void AdjustAABB(void);
+		void AdjustOBB(void);
+		void AdjustCapsule(fk_Vector^ startPos, fk_Vector^ endPos);
+
+		bool IsInter(fk_Model^ model);
+		bool IsCollision(fk_Model^ model, double %time);
+		void ResetInter(void);
+
+		void EntryInterModel(fk_Model^ model);
+		void DeleteInterModel(fk_Model^ model);
+		void ClearInterModel(void);
+
+		//////////////////////////////////////////////////////////////
+		bool GlRotate(fk_Vector^ origin, fk_Axis axis, double theta);
+		bool GlRotate(double x, double y, double z, fk_Axis axis, double theta);
+		bool GlRotate(fk_Vector^ A, fk_Vector^ B, double theta);
+		bool GlRotate(double Ax, double Ay, double Az,
 					  double Bx, double By, double Bz, double theta);
-		bool loRotate(fk_Vector^ origin, fk_Axis axis, double theta);
-		bool loRotate(double x, double y, double z, fk_Axis axis, double theta);
-		bool loRotate(fk_Vector^ A, fk_Vector^ B, double theta);
-		bool loRotate(double Ax, double Ay, double Az,
+		bool LoRotate(fk_Vector^ origin, fk_Axis axis, double theta);
+		bool LoRotate(double x, double y, double z, fk_Axis axis, double theta);
+		bool LoRotate(fk_Vector^ A, fk_Vector^ B, double theta);
+		bool LoRotate(double Ax, double Ay, double Az,
 					  double Bx, double By, double Bz, double theta);
-		bool glRotateWithVec(fk_Vector^ origin, fk_Axis axis, double theta);
-		bool glRotateWithVec(double x, double y, double z, fk_Axis axis, double theta);
-		bool glRotateWithVec(fk_Vector^ A, fk_Vector^ B, double theta);
-		bool glRotateWithVec(double Ax, double Ay, double Az,
+		bool GlRotateWithVec(fk_Vector^ origin, fk_Axis axis, double theta);
+		bool GlRotateWithVec(double x, double y, double z, fk_Axis axis, double theta);
+		bool GlRotateWithVec(fk_Vector^ A, fk_Vector^ B, double theta);
+		bool GlRotateWithVec(double Ax, double Ay, double Az,
 							 double Bx, double By, double Bz, double theta);
-		bool loRotateWithVec(fk_Vector^ origin, fk_Axis axis, double theta);
-		bool loRotateWithVec(double x, double y, double z, fk_Axis axis, double theta);
-		bool loRotateWithVec(fk_Vector^ A, fk_Vector^ B, double theta);
-		bool loRotateWithVec(double Ax, double Ay, double Az,
+		bool LoRotateWithVec(fk_Vector^ origin, fk_Axis axis, double theta);
+		bool LoRotateWithVec(double x, double y, double z, fk_Axis axis, double theta);
+		bool LoRotateWithVec(fk_Vector^ A, fk_Vector^ B, double theta);
+		bool LoRotateWithVec(double Ax, double Ay, double Az,
 							 double Bx, double By, double Bz, double theta);
-		bool glTranslate(fk_Vector^ V);
-		bool glTranslate(double x, double y, double z);
-		bool loTranslate(fk_Vector^ V);
-		bool loTranslate(double x, double y, double z);
-		bool glMoveTo(fk_Vector^ V);
-		bool glMoveTo(double x, double y, double z);
-
-		unsigned int getID(void);
-		void setShape(fk_Shape^ argShape);
-		fk_Shape^ getShape(void);
-		void setMaterial(fk_Material^ material);
-		void setPointColor(fk_Color^ color);
-		void setPointColor(float r, float g, float b);
-		void setPointColor(double r, double g, double b);
-		void setLineColor(fk_Color^ color);
-		void setLineColor(float r, float g, float b);
-		void setLineColor(double r, double g, double b);
-		void deleteMaterial(void);
-		void deletePointColor(void);
-		void deleteLineColor(void);
-		fk_Material^ getMaterial(void);
-		fk_Material^ getInhMaterial(void);
-		fk_Color^ getPointColor(void);
-		fk_Color^ getInhPointColor(void);
-		fk_Color^ getLineColor(void);
-		fk_Color^ getInhLineColor(void);
-		void setSize(double size);
-		void setWidth(double width);
-		double getSize(void);
-		double getWidth(void);
-		void setDrawMode(fk_DrawMode mode);
-		fk_DrawMode getDrawMode(void);
-		void setMaterialMode(fk_MaterialMode mode);
-		fk_MaterialMode getMaterialMode(void);
-		void setPickMode(bool mode);
-		bool getPickMode(void);
-		void setSmoothMode(bool mode);
-		bool getSmoothMode(void);
-		void setReverseDrawMode(bool mode);
-		bool getReverseDrawMode(void);
-		fk_Matrix^ getInhMatrix(void);
-		fk_Matrix^ getInhInvMatrix(void);
-		fk_Matrix^ getInhBaseMatrix(void);
-		fk_Matrix^ getInhInvBaseMatrix(void);
-		fk_Vector^ getInhPosition(void);
-		fk_Vector^ getInhVec(void);
-		fk_Vector^ getInhUpvec(void);
-		fk_Angle^ getInhAngle(void);
-		double getInhScale(void);
-		bool setParent(fk_Model^ model, bool mode);
-		bool setParent(fk_Model^ model);
-		void deleteParent(bool mode);
-		void deleteParent(void);
-		fk_Model^ getParent(void);
-		bool entryChild(fk_Model^ model, bool mode);
-		bool entryChild(fk_Model^ model);
-		bool deleteChild(fk_Model^ model, bool mode);
-		bool deleteChild(fk_Model^ model);
-		void deleteChildren(bool mode);
-		void deleteChildren(void);
-		void snapShot(void);
-		bool restore(void);
-		bool restore(double time);
-		void adjustSphere(void);
-		void adjustAABB(void);
-		void adjustOBB(void);
-		void adjustCapsule(fk_Vector^ startPos, fk_Vector^ endPos);
-		bool isInter(fk_Model^ model);
-		bool isCollision(fk_Model^ model, double %time);
-		void setInterMode(bool mode);
-		bool getInterMode(void);
-		bool getInterStatus(void);
-		void resetInter(void);
-		void setInterStopMode(bool mode);
-		bool getInterStopMode(void);
-		void entryInterModel(fk_Model^ model);
-		void deleteInterModel(fk_Model^ model);
-		void clearInterModel(void);
+		bool GlTranslate(fk_Vector^ V);
+		bool GlTranslate(double x, double y, double z);
+		bool LoTranslate(fk_Vector^ V);
+		bool LoTranslate(double x, double y, double z);
+		bool GlMoveTo(fk_Vector^ V);
+		bool GlMoveTo(double x, double y, double z);
 	};
 }

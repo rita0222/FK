@@ -2,7 +2,25 @@
 
 namespace FK_CLI {
 
-	void fk_Fog::setFogMode(fk_FogMode argMode)
+	::fk_Fog * fk_Fog::GetP(void)
+	{
+		return (::fk_Fog *)(pBase);
+	}
+
+	fk_Fog::fk_Fog(bool argNewFlg) : fk_DisplayLink(false)
+	{
+	}
+
+	fk_Fog::~fk_Fog()
+	{
+		this->!fk_Fog();
+	}
+
+	fk_Fog::!fk_Fog()
+	{
+	}
+
+	void fk_Fog::FogMode::set(fk_FogMode argMode)
 	{
 		switch(argMode) {
 		  case fk_FogMode::LINEAR_FOG:
@@ -22,50 +40,8 @@ namespace FK_CLI {
 			break;
 		}
 	}
-			   
-	void fk_Fog::setFogOption(fk_FogOption argOpt)
-	{
-		switch(argOpt) {
-		  case fk_FogOption::FASTEST_FOG:
-			GetP()->setFogOption(FK_FASTEST_FOG);
-			break;
 
-		  case fk_FogOption::NICEST_FOG:
-			GetP()->setFogOption(FK_NICEST_FOG);
-			break;
-
-		  default:
-			GetP()->setFogOption(FK_NOOPTION_FOG);
-			break;
-		}
-	}
-
-	void fk_Fog::setFogDensity(double argD)
-	{
-		GetP()->setFogDensity(argD);
-	}
-
-	void fk_Fog::setFogLinearMap(double argS, double argE)
-	{
-		GetP()->setFogLinearMap(argS, argE);
-	}
-
-	void fk_Fog::setFogColor(fk_Color^ argCol)
-	{
-		GetP()->setFogColor(*argCol->GetP());
-	}
-
-	void fk_Fog::setFogColor(float argR, float argG, float argB, float argA)
-	{
-		GetP()->setFogColor(argR, argG, argB, argA);
-	}
-									
-	void fk_Fog::setFogColor(double argR, double argG, double argB, double argA)
-	{
-		GetP()->setFogColor(argR, argG, argB, argA);
-	}
-
-	fk_FogMode fk_Fog::getFogMode(void)
+	fk_FogMode fk_Fog::FogMode::get(void)
 	{
 		switch(GetP()->getFogMode()) {
 		  case FK_LINEAR_FOG:
@@ -82,8 +58,25 @@ namespace FK_CLI {
 		}
 		return fk_FogMode::NONE_FOG;
 	}
-		
-	fk_FogOption fk_Fog::getFogOption(void)
+			   
+	void fk_Fog::FogOption::set(fk_FogOption argOpt)
+	{
+		switch(argOpt) {
+		  case fk_FogOption::FASTEST_FOG:
+			GetP()->setFogOption(FK_FASTEST_FOG);
+			break;
+
+		  case fk_FogOption::NICEST_FOG:
+			GetP()->setFogOption(FK_NICEST_FOG);
+			break;
+
+		  default:
+			GetP()->setFogOption(FK_NOOPTION_FOG);
+			break;
+		}
+	}
+
+	fk_FogOption fk_Fog::FogOption::get(void)
 	{
 		switch(GetP()->getFogOption()) {
 		  case FK_FASTEST_FOG:
@@ -98,26 +91,57 @@ namespace FK_CLI {
 		return fk_FogOption::NOOPTION_FOG;
 	}
 
-	double fk_Fog::getFogDensity(void)
+	void fk_Fog::FogDensity::set(double argD)
+	{
+		GetP()->setFogDensity(argD);
+	}
+
+	double fk_Fog::FogDensity::get(void)
 	{
 		return GetP()->getFogDensity();
 	}
 
-	double fk_Fog::getFogLinearStart(void)
+	void fk_Fog::FogLinearStart::set(double argS)
+	{
+		GetP()->setFogLinearMap(argS, GetP()->getFogLinearEnd());
+	}
+
+	double fk_Fog::FogLinearStart::get(void)
 	{
 		return GetP()->getFogLinearStart();
 	}
+
+	void fk_Fog::FogLinearEnd::set(double argE)
+	{
+		GetP()->setFogLinearMap(GetP()->getFogLinearStart(), argE);
+	}
 		
-	double fk_Fog::getFogLinearEnd(void)
+	double fk_Fog::FogLinearEnd::get(void)
 	{
 		return GetP()->getFogLinearEnd();
 	}
-		
-	fk_Color^ fk_Fog::getFogColor(void)
+
+	void fk_Fog::FogColor::set(fk_Color^ argCol)
+	{
+		if(!argCol) return;
+		GetP()->setFogColor(*argCol->GetP());
+	}
+
+	fk_Color^ fk_Fog::FogColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
 		::fk_Color tmpC = GetP()->getFogColor();
-		C->set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
+		C->Set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
 		return C;
+	}
+
+	void fk_Fog::setFogColor(float argR, float argG, float argB, float argA)
+	{
+		GetP()->setFogColor(argR, argG, argB, argA);
+	}
+									
+	void fk_Fog::setFogColor(double argR, double argG, double argB, double argA)
+	{
+		GetP()->setFogColor(argR, argG, argB, argA);
 	}
 }

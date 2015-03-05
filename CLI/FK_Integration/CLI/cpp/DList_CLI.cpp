@@ -1,6 +1,19 @@
 ﻿#include "DList_CLI.h"
 
 namespace FK_CLI {
+
+	::fk_DisplayLink * fk_DisplayLink::GetP(void)
+	{
+		return (::fk_DisplayLink *)(pBase);
+	}
+
+	void fk_DisplayLink::CameraUpdate(void)
+	{
+		_camera = gcnew fk_Model(false);
+		_camera->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
+		_camera->dFlg = false;
+	}
+
 	::fk_StereoChannel fk_DisplayLink::GetStereo(FK_CLI::fk_StereoChannel argC)
 	{
 		if(argC == fk_StereoChannel::STEREO_LEFT) {
@@ -9,81 +22,228 @@ namespace FK_CLI {
 		return FK_STEREO_RIGHT;
 	}
 
-	void fk_DisplayLink::clearDisplay(void)
+	fk_DisplayLink::fk_DisplayLink(bool argNewFlg)
+		: fk_BaseObject(false), modelList(gcnew List<fk_Model^>()),
+		  overlayList(gcnew List<fk_Model^>()),
+		  _camera(nullptr), _rCamera(nullptr), _lCamera(nullptr),
+		  _proj(nullptr), _rProj(nullptr), _lProj(nullptr)
 	{
-		GetP()->clearDisplay();
 	}
 
-	void fk_DisplayLink::entryModel(fk_Model ^argM)
+	fk_DisplayLink::~fk_DisplayLink()
 	{
-		GetP()->entryModel(argM->GetP());
-	}			
-
-	void fk_DisplayLink::removeModel(fk_Model ^argM)
-	{
-		GetP()->removeModel(argM->GetP());
+		this->!fk_DisplayLink();
 	}
 
-	void fk_DisplayLink::clearModel(void)
+	fk_DisplayLink::!fk_DisplayLink()
 	{
-		GetP()->clearModel();
 	}
 
-	void fk_DisplayLink::entryOverlayModel(fk_Model ^argM)
+	fk_Model^ fk_DisplayLink::Camera::get()
 	{
-		GetP()->entryOverlayModel(argM->GetP());
+		CameraUpdate();
+		return _camera;
+	}
+
+	void fk_DisplayLink::Camera::set(fk_Model^ argM)
+	{
+		if(!argM) return;
+		GetP()->entryCamera(argM->GetP());
+		_camera = argM;
+	}
+
+	fk_Model^ fk_DisplayLink::LeftCamera::get()
+	{
+		return _lCamera;
+	}
+
+	void fk_DisplayLink::LeftCamera::set(fk_Model^ argM)
+	{
+		if(!argM) return;
+		GetP()->entryStereoCamera(FK_STEREO_LEFT, argM->GetP());
+		_lCamera = argM;
+	}
+
+	fk_Model^ fk_DisplayLink::RightCamera::get()
+	{
+		return _rCamera;
+	}
+
+	void fk_DisplayLink::RightCamera::set(fk_Model^ argM)
+	{
+		if(!argM) return;
+		GetP()->entryStereoCamera(FK_STEREO_RIGHT, argM->GetP());
+		_rCamera = argM;
 	}
 		
-	void fk_DisplayLink::removeOverlayModel(fk_Model^ argM)
+	fk_ProjectBase^ fk_DisplayLink::Projection::get()
 	{
-		GetP()->removeOverlayModel(argM->GetP());
-	}
-			
-	void fk_DisplayLink::clearOverlayModel(void)
-	{
-		GetP()->clearOverlayModel();
+		if(!_proj) {
+			const ::fk_ProjectBase *cP = GetP()->getProjection();
+			::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
+
+			switch(proj->getMode()) {
+			  case FK_PERSPECTIVE_MODE:
+				_proj = gcnew fk_Perspective(false);
+				break;
+
+			  case FK_FRUSTUM_MODE:
+				_proj = gcnew fk_Frustum(false);
+				break;
+
+			  case FK_ORTHO_MODE:
+				_proj = gcnew fk_Ortho(false);
+				break;
+						
+			  default:
+				return nullptr;
+			}
+			_proj->pProj = proj;
+		}
+		return _proj;
 	}
 
-	void fk_DisplayLink::entryCamera(fk_Model ^argM)
+	void fk_DisplayLink::Projection::set(fk_ProjectBase^ argP)
 	{
-		GetP()->entryCamera(argM->GetP());
-	}
-
-	fk_Model^ fk_DisplayLink::getCamera(void)
-	{
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
-		M->dFlg = false;
-		return M;
-	}
-				
-	void fk_DisplayLink::setProjection(fk_ProjectBase ^argP)
-	{
+		if(!argP) return;
 		GetP()->setProjection(argP->GetP());
+		_proj = argP;
 	}
 
-	void fk_DisplayLink::entryStereoCamera(fk_StereoChannel argChannel, fk_Model^ argM)
+
+	fk_ProjectBase^ fk_DisplayLink::LeftProjection::get()
 	{
-		GetP()->entryStereoCamera(GetStereo(argChannel), argM->GetP());
+		if(!_lProj) {
+			const ::fk_ProjectBase *cP = GetP()->getStereoProjection(FK_STEREO_LEFT);
+			::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
+
+			switch(proj->getMode()) {
+			  case FK_PERSPECTIVE_MODE:
+				_lProj = gcnew fk_Perspective(false);
+				break;
+
+			  case FK_FRUSTUM_MODE:
+				_lProj = gcnew fk_Frustum(false);
+				break;
+
+			  case FK_ORTHO_MODE:
+				_lProj = gcnew fk_Ortho(false);
+				break;
+						
+			  default:
+				return nullptr;
+			}
+			_lProj->pProj = proj;
+		}
+		return _lProj;
 	}
 
-	void fk_DisplayLink::setStereoProjection(fk_StereoChannel argChannel, fk_ProjectBase ^argP)
+	void fk_DisplayLink::LeftProjection::set(fk_ProjectBase^ argP)
 	{
-		GetP()->setStereoProjection(GetStereo(argChannel), argP->GetP());
+		if(!argP) return;
+		GetP()->setStereoProjection(FK_STEREO_LEFT, argP->GetP());
+		_lProj = argP;
 	}
-
-	void fk_DisplayLink::clearStereo(void)
+		
+	fk_ProjectBase^ fk_DisplayLink::RightProjection::get()
 	{
-		GetP()->clearStereo();
+		if(!_rProj) {
+			const ::fk_ProjectBase *cP = GetP()->getStereoProjection(FK_STEREO_RIGHT);
+			::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
+
+			switch(proj->getMode()) {
+			  case FK_PERSPECTIVE_MODE:
+				_rProj = gcnew fk_Perspective(false);
+				break;
+
+			  case FK_FRUSTUM_MODE:
+				_rProj = gcnew fk_Frustum(false);
+				break;
+
+			  case FK_ORTHO_MODE:
+				_rProj = gcnew fk_Ortho(false);
+				break;
+						
+			  default:
+				return nullptr;
+			}
+			_rProj->pProj = proj;
+		}
+		return _rProj;
 	}
 
-	void fk_DisplayLink::setStereoOverlayMode(bool argMode)
+	void fk_DisplayLink::RightProjection::set(fk_ProjectBase^ argP)
+	{
+		if(!argP) return;
+		GetP()->setStereoProjection(FK_STEREO_RIGHT, argP->GetP());
+		_rProj = argP;
+	}
+
+
+	bool fk_DisplayLink::StereoOverlayMode::get()
+	{
+		return GetP()->getStereoOverlayMode();
+	}
+
+	void fk_DisplayLink::StereoOverlayMode::set(bool argMode)
 	{
 		GetP()->setStereoOverlayMode(argMode);
 	}
 
-	bool fk_DisplayLink::getStereoOverlayMode(void)
+	void fk_DisplayLink::ClearDisplay(void)
 	{
-		return GetP()->getStereoOverlayMode();
+		GetP()->clearDisplay();
+		modelList->Clear();
+		overlayList->Clear();
+		CameraUpdate();
+	}
+
+	void fk_DisplayLink::EntryModel(fk_Model ^argM)
+	{
+		if(!argM) return;
+		GetP()->entryModel(argM->GetP());
+		if(modelList->Contains(argM) == false) modelList->Add(argM);
+	}			
+
+	void fk_DisplayLink::RemoveModel(fk_Model ^argM)
+	{
+		if(!argM) return;
+		GetP()->removeModel(argM->GetP());
+		while(modelList->Contains(argM) == true) {
+			modelList->Remove(argM);
+		}
+ 	}
+
+	void fk_DisplayLink::ClearModel(void)
+	{
+		GetP()->clearModel();
+		modelList->Clear();
+	}
+
+	void fk_DisplayLink::EntryOverlayModel(fk_Model ^argM)
+	{
+		if(!argM) return;
+		GetP()->entryOverlayModel(argM->GetP());
+		if(overlayList->Contains(argM) == false) overlayList->Add(argM);
+	}
+		
+	void fk_DisplayLink::RemoveOverlayModel(fk_Model^ argM)
+	{
+		if(!argM) return;
+		GetP()->removeOverlayModel(argM->GetP());
+		while(overlayList->Contains(argM) == true) {
+			overlayList->Remove(argM);
+		}
+	}
+			
+	void fk_DisplayLink::ClearOverlayModel(void)
+	{
+		GetP()->clearOverlayModel();
+		overlayList->Clear();
+	}
+
+	void fk_DisplayLink::ClearStereo(void)
+	{
+		GetP()->clearStereo();
 	}
 }

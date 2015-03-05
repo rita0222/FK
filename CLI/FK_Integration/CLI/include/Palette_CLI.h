@@ -18,41 +18,30 @@ namespace FK_CLI
 		::fk_Palette *pPalette;
 		bool dFlg;
 		
-		::fk_Palette * GetP(void)
-		{
-			return pPalette;
-		}
+		::fk_Palette * GetP(void);
 
 	public:
-		fk_Palette::fk_Palette() : dFlg(true)
-		{
-			pPalette = new ::fk_Palette();
+		fk_Palette();
+		fk_Palette(bool argNewFlg);
+		~fk_Palette();
+		!fk_Palette();
+
+		property int MaterialID {
+			void set(int);
+			int get();
 		}
 
-		fk_Palette::fk_Palette(bool argNewFlg) : dFlg(argNewFlg)
-		{
-			if(argNewFlg == true) pPalette = new ::fk_Palette();
+		property int Size {
+			int get();
 		}
 
-		fk_Palette::~fk_Palette()
-		{
-			this->!fk_Palette();
-		}
+		property array<fk_Material^>^ MaterialVector {
+			array<fk_Material^>^ get();
 
-		fk_Palette::!fk_Palette()
-		{
-			if(pPalette == NULL) return;
-			if(dFlg == true) delete GetP();
-			pPalette = NULL;
 		}
-
-		void clearMaterial(void);
-		void setObjMaterialID(int ID);
-		void pushPalette(fk_Material^ material);
-		void setPalette(fk_Material^ material, int ID);
-		int getObjMaterialID(void);
-		int getPaletteSize(void);
-		fk_Material^ getMaterial(int ID);
-		array<fk_Material^>^ getMaterialVector(void);
+		void ClearMaterial(void);
+		void PushPalette(fk_Material^ material);
+		void SetPalette(fk_Material^ material, int ID);
+		fk_Material^ GetMaterial(int ID);
 	};
 }

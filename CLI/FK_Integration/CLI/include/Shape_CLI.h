@@ -19,40 +19,42 @@ namespace FK_CLI
 
 	public ref class fk_Shape : fk_Attribute {
 	internal:
-		::fk_Shape * GetP(void)
-		{
-			return (::fk_Shape *)(pBase);
-		}
+		::fk_Shape * GetP(void);
 
 	public:
-		fk_Shape::fk_Shape(bool argNewFlg) : fk_Attribute(false)
-		{
-			if(argNewFlg == true) pBase = new ::fk_Shape();
+		fk_Shape(bool argNewFlg);
+		~fk_Shape();
+		!fk_Shape();
+
+		property fk_RealShapeType^ RealShapeType {
+			fk_RealShapeType^ get();
 		}
 
-		fk_Shape::~fk_Shape()
-		{
-			this->!fk_Shape();
+		property fk_Palette^ Palette {
+			fk_Palette^ get();
 		}
 
-		fk_Shape::!fk_Shape()
-		{
-			if(pBase == NULL) return;
-			if(dFlg == true) delete GetP();
-			pBase = NULL;
+		property fk_MaterialMode MaterialMode {
+			fk_MaterialMode get();
+			void set(fk_MaterialMode);
 		}
 
-		fk_RealShapeType^ getRealShapeType(void);
-		fk_Palette^ getPaletteData(void);
-		void clearMaterial(void);
-		void setObjMaterialID(int ID);
-		void pushPalette(fk_Material^ material);
-		void setPalette(fk_Material^ material, int ID);
-		void setMaterialMode(fk_MaterialMode mode);
-		fk_MaterialMode getMaterialMode(void);
-		int getObjMaterialID(void);
-		int getPaletteSize(void);
-		fk_Material^ getMaterial(int ID);
-		array<fk_Material^>^ getMaterialVector(void);
+		property int MaterialID {
+			int get();
+			void set(int);
+		}
+
+		property int PaletteSize {
+			int get();
+		}
+
+		property array<fk_Material^>^ MaterialVector {
+			array<fk_Material^>^ get();
+		}
+		
+		void			ClearMaterial(void);
+		void			PushPalette(fk_Material^ material);
+		void			SetPalette(fk_Material^ material, int ID);
+		fk_Material^	GetMaterial(int ID);
 	};
 }

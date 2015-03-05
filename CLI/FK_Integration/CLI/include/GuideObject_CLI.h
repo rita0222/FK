@@ -24,47 +24,31 @@ namespace FK_CLI {
 	internal:
 		bool dFlg;
 		::fk_GuideObject *pGuide;
-
-		::fk_GuideObject * GetP(void)
-		{
-			return pGuide;
-		}
+		::fk_GuideObject * GetP(void);
 		
 	public:
-		fk_GuideObject::fk_GuideObject()
-		{
-			pGuide = new ::fk_GuideObject();
-			dFlg = true;
+		fk_GuideObject();
+		fk_GuideObject(bool argNewFlg);
+		~fk_GuideObject();
+		!fk_GuideObject();
+
+		property double AxisWidth {
+			void set(double);
 		}
 
-		fk_GuideObject::fk_GuideObject(bool argNewFlg)
-		{
-			if(argNewFlg == true) pGuide = new ::fk_GuideObject();
-			dFlg = argNewFlg;
+		property double GridWidth {
+			void set(double);
 		}
 
-		fk_GuideObject::~fk_GuideObject()
-		{
-			if(pGuide == NULL) return;
-			if(dFlg == true) delete pGuide;
-			pGuide = NULL;
+		property double Scale {
+			void set(double);
 		}
 
-		fk_GuideObject::!fk_GuideObject()
-		{
-			if(pGuide == NULL) return;
-			if(dFlg == true) {
-				pGuide->SetFinalizeMode();
-				delete pGuide;
-			}
-			pGuide = NULL;
+		property int Num {
+			void set(int);
 		}
 
-		void setAxisWidth(double width);
-		void setGridWidth(double width);
-		void setScale(double scale);
-		void setNum(int num);
-		void entryScene(fk_Scene^ scene, fk_GuideMode mode);
-		void removeScene(fk_Scene^ scene);
+		void EntryScene(fk_Scene^ scene, fk_GuideMode mode);
+		void RemoveScene(fk_Scene^ scene);
 	};
 }

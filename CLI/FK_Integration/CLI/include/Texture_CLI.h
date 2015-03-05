@@ -24,116 +24,67 @@ namespace FK_CLI
 	internal:
 		::fk_TexCoord *pTex;
 
-		::fk_TexCoord * GetP(void)
-		{
-			return pTex;
-		}
+		::fk_TexCoord * GetP(void);
 
 	public:
-		fk_TexCoord::fk_TexCoord()
-		{
-			pTex = new ::fk_TexCoord();
-		}
-
-		fk_TexCoord::fk_TexCoord(double argX, double argY)
-		{
-			pTex = new ::fk_TexCoord(argX, argY);
-		}
-
-		fk_TexCoord::~fk_TexCoord()
-		{
-			this->!fk_TexCoord();
-		}
-
-		fk_TexCoord::!fk_TexCoord()
-		{
-			delete pTex;
-		}
+		fk_TexCoord();
+		fk_TexCoord(double argX, double argY);
+		~fk_TexCoord();
+		!fk_TexCoord();
 
 		property double x {
-			double get()
-			{
-				return double(pTex->x);
-			}
-
-			void set(double v)
-			{
-				pTex->x = float(v);
-			}
+			double get();
+			void set(double v);
 		}
 		
 		property double y {
-			double get()
-			{
-				return double(pTex->y);
-			}
-
-			void set(double v)
-			{
-				pTex->y = float(v);
-			}
+			double get();
+			void set(double v);
 		}
 
 		//////////////////// 比較演算子		
-		bool Equals(fk_TexCoord^ argT)
-		{
-			if(!argT) false;
-			return (*argT->pTex == *pTex);
-		}
+		bool Equals(fk_TexCoord^ argT);
+		virtual bool Equals(Object^ argObj) override;
 
-		virtual bool Equals(Object^ argObj) override
-		{
-			if(!argObj) return false;
-			if(this == argObj) return true;
-			if(GetType() == argObj->GetType()) {
-				fk_TexCoord^ T = static_cast<fk_TexCoord^>(argObj);
-				return (*T->pTex == *pTex);
-			}
-			return false;
-		}
-
-		void set(double argX, double argY)
-		{
-			GetP()->set(argX, argY);
-		}
-
+		void Set(double argX, double argY);
 		String^ fk_TexCoord::ToString() override;
 	};
 
 	public ref class fk_Texture : fk_Shape {
 	internal:
-		::fk_Texture * GetP(void)
-		{
-			return (::fk_Texture *)(pBase);
-		}
+		::fk_Texture * GetP(void);
 
 	public:
-		fk_Texture::fk_Texture(bool argNewFlg) : fk_Shape(false)
-		{
+		fk_Texture(bool argNewFlg);
+		~fk_Texture();
+		!fk_Texture();
+
+		property fk_Image^ Image {
+			fk_Image^ get();
+			void set(fk_Image^);
 		}
 
-		fk_Texture::~fk_Texture()
-		{
-			this->!fk_Texture();
+		property fk_Dimension^ ImageSize {
+			fk_Dimension^ get();
 		}
 
-		fk_Texture::!fk_Texture()
-		{
+		property fk_Dimension^ BufferSize {
+			fk_Dimension^ get();
 		}
 
-		void setImage(fk_Image^ image);
-		fk_Image^ getImage(void);
-		bool readBMP(String^ fileName);
-		bool readPNG(String^ fileName);
-		bool readJPG(String^ fileName);
-		fk_Dimension^ getImageSize(void);
-		fk_Dimension^ getBufferSize(void);
-		void setTextureMode(fk_TexMode mode);
-		fk_TexMode getTextureMode(void);
-		void setTexRendMode(fk_TexRendMode mode);
-		fk_TexRendMode getTexRendMode(void);
-		void fillColor(fk_Color^ color);
-		void fillColor(int r, int g, int b, int a);
-		void fillColor(int r, int g, int b);
+		property fk_TexMode TextureMode {
+			fk_TexMode get();
+			void set(fk_TexMode);
+		}
+
+		property fk_TexRendMode RendMode {
+			fk_TexRendMode get();
+			void set(fk_TexRendMode);
+		}
+		
+		bool	ReadBMP(String^ fileName);
+		bool	ReadPNG(String^ fileName);
+		bool	ReadJPG(String^ fileName);
+		void	FillColor(fk_Color^ color);
 	};
 }

@@ -9,6 +9,8 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	public enum class fk_StereoChannel {
 		STEREO_LEFT,
 		STEREO_RIGHT
@@ -16,41 +18,66 @@ namespace FK_CLI
 
 	public ref class fk_DisplayLink : fk_BaseObject {
 	internal:
-		::fk_DisplayLink * GetP(void)
-		{
-			return (::fk_DisplayLink *)(pBase);
-		}
+		List<fk_Model^>^ modelList;
+		List<fk_Model^>^ overlayList;
+		fk_Model^ _camera;
+		fk_Model^ _lCamera;
+		fk_Model^ _rCamera;
+		fk_ProjectBase^ _proj;
+		fk_ProjectBase^ _lProj;
+		fk_ProjectBase^ _rProj;
 
+		::fk_DisplayLink * GetP(void);
+		void CameraUpdate(void);
 		::fk_StereoChannel GetStereo(fk_StereoChannel);
 	
 	public:
-		fk_DisplayLink::fk_DisplayLink(bool argNewFlg) : fk_BaseObject(false)
-		{
+		fk_DisplayLink(bool argNewFlg);
+		~fk_DisplayLink();
+		!fk_DisplayLink();
+
+		property fk_Model^ Camera {
+			fk_Model^ get();
+			void set(fk_Model^ argM);
+		}			
+
+		property fk_Model^ LeftCamera {
+			fk_Model^ get();
+			void set(fk_Model^ argM);
 		}
 
-		fk_DisplayLink::~fk_DisplayLink()
-		{
-			this->!fk_DisplayLink();
+		property fk_Model^ RightCamera {
+			fk_Model^ get();
+			void set(fk_Model^ argM);
+		}
+		
+		property fk_ProjectBase^ Projection {
+			fk_ProjectBase^ get();
+			void set(fk_ProjectBase^ argP);
+		}			
+
+		property fk_ProjectBase^ LeftProjection {
+			fk_ProjectBase^ get();
+			void set(fk_ProjectBase^ argP);
+		}
+		
+		property fk_ProjectBase^ RightProjection {
+			fk_ProjectBase^ get();
+			void set(fk_ProjectBase^ argP);
 		}
 
-		fk_DisplayLink::!fk_DisplayLink()
-		{
+		property bool StereoOverlayMode {
+			bool get();
+			void set(bool argMode);
 		}
-
-		void clearDisplay(void);
-		void entryModel(fk_Model ^model);
-		void removeModel(fk_Model ^model);
-		void clearModel(void);
-		void entryOverlayModel(fk_Model ^model);
-		void removeOverlayModel(fk_Model^ model);
-		void clearOverlayModel(void);
-		void entryCamera(fk_Model ^model);
-		fk_Model^ getCamera(void);
-		void setProjection(fk_ProjectBase ^argP);
-		void entryStereoCamera(fk_StereoChannel channel, fk_Model^ model);
-		void setStereoProjection(fk_StereoChannel channel, fk_ProjectBase ^projection);
-		void clearStereo(void);
-		void setStereoOverlayMode(bool mode);
-		bool getStereoOverlayMode(void);
+		
+		void ClearStereo(void);
+		void ClearDisplay(void);
+		void EntryModel(fk_Model ^model);
+		void RemoveModel(fk_Model ^model);
+		void ClearModel(void);
+		void EntryOverlayModel(fk_Model ^model);
+		void RemoveOverlayModel(fk_Model^ model);
+		void ClearOverlayModel(void);
 	};
 }

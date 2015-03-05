@@ -9,52 +9,36 @@ namespace FK_CLI
 {
 	public ref class fk_Attribute : fk_BaseObject {
 	internal:
-		::fk_Attribute * GetP(void)
-		{
-			return (::fk_Attribute *)(pBase);
-		}
+		::fk_Attribute * GetP(void);
 
 	public:
-		fk_Attribute::fk_Attribute(bool argNewFlg) : fk_BaseObject(false)
-		{
-			if(argNewFlg == true) pBase = new ::fk_Attribute();
-		}
+		fk_Attribute(bool argNewFlg);
+		~fk_Attribute();
+		!fk_Attribute();
 
-		fk_Attribute::~fk_Attribute()
-		{
-			this->!fk_Attribute();
-		}
-
-		fk_Attribute::!fk_Attribute()
-		{
-			if(pBase == NULL) return;
-			if(dFlg == true) delete GetP();
-			pBase = NULL;
-		}
-
-		bool setAttrII(int key, int value);
-		bool setAttrID(int key, double value);
-		bool setAttrIS(int key, String^ value);
-		bool setAttrSI(String^ key, int value);
-		bool setAttrSD(String^ key, double value);
-		bool setAttrSS(String ^key, String^ value);
-		int getAttrII(int key);
-		double getAttrID(int key);
-		String^ getAttrIS(int key);
-		int getAttrSI(String^ key);
-		double getAttrSD(String^ key);
-		String^ getAttrSS(String^ key);
-		bool existAttrII(int key);
-		bool existAttrID(int key);
-		bool existAttrIS(int key);
-		bool existAttrSI(String^ key);
-		bool existAttrSD(String^ key);
-		bool existAttrSS(String^ key);
-		bool deleteAttrII(int key);
-		bool deleteAttrID(int key);
-		bool deleteAttrIS(int key);
-		bool deleteAttrSI(String^ key);
-		bool deleteAttrSD(String^ key);
-		bool deleteAttrSS(String^ key);
+		bool SetAttrII(int key, int value);
+		bool SetAttrID(int key, double value);
+		bool SetAttrIS(int key, String^ value);
+		bool SetAttrSI(String^ key, int value);
+		bool SetAttrSD(String^ key, double value);
+		bool SetAttrSS(String ^key, String^ value);
+		int GetAttrII(int key);
+		double GetAttrID(int key);
+		String^ GetAttrIS(int key);
+		int GetAttrSI(String^ key);
+		double GetAttrSD(String^ key);
+		String^ GetAttrSS(String^ key);
+		bool ExistAttrII(int key);
+		bool ExistAttrID(int key);
+		bool ExistAttrIS(int key);
+		bool ExistAttrSI(String^ key);
+		bool ExistAttrSD(String^ key);
+		bool ExistAttrSS(String^ key);
+		bool DeleteAttrII(int key);
+		bool DeleteAttrID(int key);
+		bool DeleteAttrIS(int key);
+		bool DeleteAttrSI(String^ key);
+		bool DeleteAttrSD(String^ key);
+		bool DeleteAttrSS(String^ key);
 	};
 }

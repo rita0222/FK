@@ -13,7 +13,7 @@ namespace FK_CLI_Quaternion
 		{
 
 			var win = new fk_AppWindow();
-			win.setSize(500, 500);
+			win.Size = new fk_Dimension(500, 500);
 			var model = new fk_Model();
 			var pointM = new fk_Model();
 			var cone = new fk_Cone(3, 4.0, 15.0);
@@ -28,31 +28,31 @@ namespace FK_CLI_Quaternion
 			fk_Quaternion q;
 			var poly = new fk_Polyline();
 
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
-			model.setShape(cone);
-			model.setMaterial(fk_Material.Yellow);
-			model.glAngle(angle1);
+			model.Shape = cone;
+			model.Material = fk_Material.Yellow;
+			model.GlAngle(angle1);
 
-			pointM.setShape(poly);
-			pointM.setLineColor(1.0, 0.0, 0.0);
+			pointM.Shape = poly;
+			pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
 
-			win.setBGColor(0.3, 0.4, 0.5);
-			win.entry(model);
-			win.entry(pointM);
-			win.setTrackBallMode(true);
-			win.showGuide();
-			win.open();
-			q1.makeEuler(angle1);
-			q2.makeEuler(angle2);
+			win.BGColor = new fk_Color(0.3, 0.4, 0.5);
+			win.Entry(model);
+			win.Entry(pointM);
+			win.TrackBallMode = true;
+			win.ShowGuide();
+			win.Open();
+			q1.Euler = angle1;
+			q2.Euler = angle2;
 
 			double t = 0.0;
 
-			while(win.update() == true) {
-				q = fk_Math.quatInterSphere(q1, q2, t);
-				model.glAngle(q.getEuler());
+			while(win.Update() == true) {
+				q = fk_Math.QuatInterSphere(q1, q2, t);
+				model.GlAngle(q.Euler);
 				if(t < 1.0) {
-					poly.pushVertex(model.getMatrix() * pos);
+					poly.PushVertex(model.Matrix * pos);
 					t += 0.005;
 				}
 			}
