@@ -22,15 +22,18 @@ namespace FK_CLI_Boid
 			if(argNum < 0) return;
 			agent = new fk_Model[argNum];
 			var rand = new Random();
+
 			for(int i = 0; i < argNum; ++i) {
 				agent[i] = new fk_Model();
-				agent[i].Shape = cone;
-				agent[i].Material = fk_Material.Red;
-				agent[i].GlVec(rand.NextDouble()*2.0 - 1.0,
-					rand.NextDouble()*2.0 - 1.0, 0.0);
-				agent[i].GlMoveTo(rand.NextDouble() * AREASIZE * 2.0 - AREASIZE,
+			}
+			foreach(fk_Model model in agent) {
+				model.Shape = cone;
+				model.Material = fk_Material.Red;
+				model.GlVec(rand.NextDouble()*2.0 - 1.0, rand.NextDouble()*2.0 - 1.0, 0.0);
+				model.GlMoveTo(rand.NextDouble() * AREASIZE * 2.0 - AREASIZE,
 					rand.NextDouble() * AREASIZE * 2.0 - AREASIZE, 0.0);
 			}
+
 			paramA = 0.2;
 			paramB = 0.02;
 			paramC = 0.01;
@@ -113,7 +116,7 @@ namespace FK_CLI_Boid
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			var boid = new Boid(50);
+			var boid = new Boid(100);
 
 			boid.setWindow(win);
 
