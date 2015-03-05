@@ -1,4 +1,4 @@
-#include "AudioOggBuffer_CLI.h"
+﻿#include "AudioOggBuffer_CLI.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace FK_CLI {

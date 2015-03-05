@@ -1,4 +1,4 @@
-#include "Renderer_CLI.h"
+ï»¿#include "Renderer_CLI.h"
 #include <msclr/marshal_cppstd.h>
 #include <GL/gl.h>
 #include <stdlib.h>
@@ -36,7 +36,7 @@ namespace FK_CLI {
 	{
 		hWnd = (HWND)argPwnd.ToPointer();
 
-		// OpenGL ‚Ì‰Šú‰»
+		// OpenGL ã®åˆæœŸåŒ–
 		GLuint PixelFormat;
 
 		PIXELFORMATDESCRIPTOR pfd;

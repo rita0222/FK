@@ -30,16 +30,25 @@ namespace FK_CLI
 		// ファイナライザ
 		fk_Vector::!fk_Vector();
 		
+
+		//! x成分
+		/*!
+		 *	x成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		V.x = 0.0;
+		 */
 		property double	x {
 			double get();
 			void set(double);
 		}
 
+		
 		property double y {
 			double get();
 			void set(double);
 		}
 
+		
 		property double z {
 			double get();
 			void set(double);
