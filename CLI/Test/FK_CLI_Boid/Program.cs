@@ -7,8 +7,61 @@ using FK_CLI;
 
 namespace FK_CLI_Boid
 {
+	class Agent
+	{
+		private fk_Model model;
+		private fk_Vector newVec;
+
+		public Agent(double argSize, Random argRand)
+		{
+			model = new fk_Model();
+			model.Material = fk_Material.Red;
+			model.GlVec(argRand.NextDouble()*2.0 - 1.0, argRand.NextDouble()*2.0 - 1.0, 0.0);
+			model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize, argRand.NextDouble() * argSize * 2.0 - argSize, 0.0);
+		}
+
+		public fk_Vector Pos
+		{
+			get
+			{
+				return model.Position;
+			}
+		}
+
+		public fk_Vector Vec
+		{
+			set
+			{
+				newVec = value;
+			}
+			get
+			{
+				return model.Vec;
+			}
+		}
+
+		public fk_Shape Shape
+		{
+			set
+			{
+				model.Shape = value;
+			}
+		}
+
+		public void Entry(fk_AppWindow argWin)
+		{
+			argWin.Entry(model);
+		}
+
+		public void Forward()
+		{
+			model.GlVec(newVec);
+			model.LoTranslate(0.0, 0.0, -0.05);
+		}
+	}
+
 	class Boid {
-		private fk_Model [] agent;
+		private Agent [] agent;
 		private fk_Cone cone;
 		private const int IAREA = 15;
 		private const double AREASIZE = (double)(IAREA);
@@ -17,21 +70,16 @@ namespace FK_CLI_Boid
 
 		public Boid(int argNum)
 		{
+			var rand = new Random();
+
 			fk_Material.InitDefault();
 			cone = new fk_Cone(16, 0.4, 1.0);
 			if(argNum < 0) return;
-			agent = new fk_Model[argNum];
-			var rand = new Random();
+			agent = new Agent[argNum];
 
 			for(int i = 0; i < argNum; ++i) {
-				agent[i] = new fk_Model();
-			}
-			foreach(fk_Model model in agent) {
-				model.Shape = cone;
-				model.Material = fk_Material.Red;
-				model.GlVec(rand.NextDouble()*2.0 - 1.0, rand.NextDouble()*2.0 - 1.0, 0.0);
-				model.GlMoveTo(rand.NextDouble() * AREASIZE * 2.0 - AREASIZE,
-					rand.NextDouble() * AREASIZE * 2.0 - AREASIZE, 0.0);
+				agent[i] = new Agent(AREASIZE, rand);
+				agent[i].Shape = cone;
 			}
 
 			paramA = 0.2;
@@ -41,8 +89,7 @@ namespace FK_CLI_Boid
 			paramLB = 5.0;
 		}
 
-		public void setParam(double argA, double argB, double argC,
-			double argLA, double argLB)
+		public void SetParam(double argA, double argB, double argC, double argLA, double argLB)
 		{
 			paramA = argA;
 			paramB = argB;
@@ -51,63 +98,59 @@ namespace FK_CLI_Boid
 			paramLB = argLB;
 		}
 
-		public void setWindow(fk_AppWindow argWin)
+		public void SetWindow(fk_AppWindow argWin)
 		{
-			for(int i = 0; i < agent.Length; ++i) {
-				argWin.Entry(agent[i]);
+			foreach(Agent M in agent) {
+				M.Entry(argWin);
 			}
 		}
 
-		public void forward(bool argGMode)
+		public void Forward(bool argGMode)
 		{
 			int i, j;
 			var gVec = new fk_Vector();
-			var pArray = new fk_Vector[agent.Length];
-			var vArray = new fk_Vector[agent.Length];
 			fk_Vector diff;
-			
-			for(i = 0; i < agent.Length; ++i) {
-				pArray[i] = agent[i].Position;
-				vArray[i] = agent[i].Vec;
-				gVec += pArray[i];
+
+			foreach(Agent M in agent) {
+				gVec += M.Pos;
 			}
 
 			gVec /= (double)(agent.Length);
 
-			for(i = 0; i < agent.Length; ++i) {
-				var vec = agent[i].Vec;
-				for(j = 0; j < agent.Length; ++j) {
-					if(i == j) continue;
+			foreach(Agent A in agent) {
+				var vec = A.Vec;
+				foreach(Agent B in agent) {
+					if(A == B) continue;
 
-					diff = pArray[i] - pArray[j];
+					diff = A.Pos - B.Pos;
 					double dist = diff.Dist();
 					if(dist < paramLA) {
 						vec += paramA * diff / (dist*dist);
 					}
 
 					if(dist < paramLB) {
-						vec += paramB * vArray[j];
+						vec += paramB * B.Vec;
 					}
 				}
 
 				if(argGMode == true) {
-					vec += paramC * (gVec - pArray[i]);
+					vec += paramC * (gVec - A.Pos);
 				}
 
-				if((pArray[i].x > AREASIZE && vArray[i].x > 0.0) ||
-					(pArray[i].x < -AREASIZE && vArray[i].x < 0.0)) {
-					vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
+				if(Math.Abs(A.Pos.x) > AREASIZE && A.Pos.x * A.Vec.x > 0.0) {
+					vec.x -= vec.x * (Math.Abs(A.Pos.x) - AREASIZE)*0.2;
 				}
 
-				if((pArray[i].y > AREASIZE && vArray[i].y > 0.0) ||
-					(pArray[i].y < -AREASIZE && vArray[i].y < 0.0)) {
-					vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
+				if(Math.Abs(A.Pos.y) > AREASIZE && A.Pos.y * A.Vec.y > 0.0) {
+					vec.y -= vec.y * (Math.Abs(A.Pos.y) - AREASIZE)*0.2;
 				}
 
 				vec.z = 0.0;
+				A.Vec = vec;
+			}
 
-				agent[i].GlVec(vec);
-				agent[i].LoTranslate(0.0, 0.0, -0.05);
+			foreach(Agent M in agent) {
+				M.Forward();
 			}
 		}
 	}
@@ -116,9 +159,9 @@ namespace FK_CLI_Boid
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			var boid = new Boid(100);
+			var boid = new Boid(50);
 
-			boid.setWindow(win);
+			boid.SetWindow(win);
 
 			win.Size = new fk_Dimension(600, 600);
 			win.BGColor = new fk_Color(0.6, 0.7, 0.8);
@@ -129,7 +172,7 @@ namespace FK_CLI_Boid
 			win.Open();
 
 			while(win.Update() == true) {
-				boid.forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE));
+				boid.Forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE));
 			}
 
 		}
