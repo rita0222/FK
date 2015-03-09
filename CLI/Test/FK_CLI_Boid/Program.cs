@@ -107,46 +107,48 @@ namespace FK_CLI_Boid
 
 		public void Forward(bool argGMode)
 		{
-			int i, j;
 			var gVec = new fk_Vector();
 			fk_Vector diff;
+			fk_Vector [] pArray = new fk_Vector[agent.Length];
+			fk_Vector [] vArray = new fk_Vector[agent.Length];
 
-			foreach(Agent M in agent) {
-				gVec += M.Pos;
+			for(int i = 0; i < agent.Length; i++) {
+				pArray[i] = agent[i].Pos;
+				vArray[i] = agent[i].Vec;
+				gVec += pArray[i];
 			}
 
 			gVec /= (double)(agent.Length);
 
-			foreach(Agent A in agent) {
-				var vec = A.Vec;
-				foreach(Agent B in agent) {
-					if(A == B) continue;
-
-					diff = A.Pos - B.Pos;
+			for(int i = 0; i < agent.Length; i++) {
+				var vec = vArray[i];
+				for(int j = 0; j < agent.Length; j++) {
+					if(i == j) continue;
+					diff = pArray[i] - pArray[j];
 					double dist = diff.Dist();
 					if(dist < paramLA) {
 						vec += paramA * diff / (dist*dist);
 					}
 
 					if(dist < paramLB) {
-						vec += paramB * B.Vec;
+						vec += paramB * vArray[j];
 					}
 				}
 
 				if(argGMode == true) {
-					vec += paramC * (gVec - A.Pos);
+					vec += paramC * (gVec - pArray[i]);
 				}
 
-				if(Math.Abs(A.Pos.x) > AREASIZE && A.Pos.x * A.Vec.x > 0.0) {
-					vec.x -= vec.x * (Math.Abs(A.Pos.x) - AREASIZE)*0.2;
+				if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
+					vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
 				}
 
-				if(Math.Abs(A.Pos.y) > AREASIZE && A.Pos.y * A.Vec.y > 0.0) {
-					vec.y -= vec.y * (Math.Abs(A.Pos.y) - AREASIZE)*0.2;
+				if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
+					vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
 				}
 
 				vec.z = 0.0;
-				A.Vec = vec;
+				agent[i].Vec = vec;
 			}
 
 			foreach(Agent M in agent) {
@@ -159,7 +161,7 @@ namespace FK_CLI_Boid
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			var boid = new Boid(50);
+			var boid = new Boid(100);
 
 			boid.SetWindow(win);
 
@@ -168,6 +170,7 @@ namespace FK_CLI_Boid
 			win.ShowGuide(fk_GuideMode.GRID_XY);
 			win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+			win.FPS = 0;
 
 			win.Open();
 
