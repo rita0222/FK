@@ -41,6 +41,11 @@ namespace FK_CLI {
 		pVec = new ::fk_Vector(argX, argY, argZ);
 	}
 
+	fk_Vector::fk_Vector(fk_Vector^ argV)
+	{
+		pVec = new ::fk_Vector(argV->pVec->x, argV->pVec->y, argV->pVec->z);
+	}
+
 	fk_Vector::fk_Vector(::fk_Vector *argV)
 	{
 		pVec = new ::fk_Vector(argV->x, argV->y, argV->z);
@@ -269,6 +274,13 @@ namespace FK_CLI {
 		pHVec->set(*argV->pVec, argW);
 	}
 
+	fk_HVector::fk_HVector(fk_HVector^ argHV)
+	{
+		if(!argHV) return;
+		pHVec = new ::fk_HVector();
+		pHVec->set(*argHV->pHVec);
+	}
+
 	// デストラクタ
 	fk_HVector::~fk_HVector()
 	{
@@ -425,6 +437,11 @@ namespace FK_CLI {
 	fk_FVector::fk_FVector()
 	{
 		pFVec = new ::fk_FVector();
+	}
+
+	fk_FVector::fk_FVector(fk_FVector^ argFV)
+	{
+		pFVec = new ::fk_FVector(*(argFV->pFVec));
 	}
 
 	fk_FVector::~fk_FVector()

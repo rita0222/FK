@@ -121,7 +121,7 @@ namespace FK_CLI_Boid
 			gVec /= (double)(agent.Length);
 
 			for(int i = 0; i < agent.Length; i++) {
-				var vec = vArray[i];
+				fk_Vector vec = new fk_Vector(vArray[i]);
 				for(int j = 0; j < agent.Length; j++) {
 					if(i == j) continue;
 					diff = pArray[i] - pArray[j];

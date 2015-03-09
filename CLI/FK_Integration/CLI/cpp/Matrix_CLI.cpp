@@ -14,6 +14,11 @@ namespace FK_CLI {
 		pAngle = new ::fk_Angle(argH, argP, argB);
 	}
 
+	fk_Angle::fk_Angle(fk_Angle^ argA)
+	{
+		pAngle = new ::fk_Angle(*(argA->pAngle));
+	}
+
 	fk_Angle::~fk_Angle()
 	{
 		this->!fk_Angle();
@@ -64,6 +69,11 @@ namespace FK_CLI {
 	fk_Matrix::fk_Matrix()
 	{
 		pMatrix = new ::fk_Matrix();
+	}
+
+	fk_Matrix::fk_Matrix(fk_Matrix^ argM)
+	{
+		pMatrix = new ::fk_Matrix(*(argM->pMatrix));
 	}
 
 	fk_Matrix::~fk_Matrix()

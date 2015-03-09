@@ -17,6 +17,7 @@ namespace FK_CLI
 		fk_Quaternion();
 		fk_Quaternion(double argS, double argX, double argY, double argZ);
 		fk_Quaternion(double argS, fk_Vector^ argV);
+		fk_Quaternion(fk_Quaternion^ argQ);
 		fk_Quaternion(::fk_Quaternion *argQ);
 		fk_Quaternion(::fk_Quaternion argQ);
 		~fk_Quaternion();

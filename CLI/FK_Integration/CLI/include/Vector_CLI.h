@@ -41,19 +41,27 @@ namespace FK_CLI
 
 	public:
 
-		//! コンストラクタ
+		//! コンストラクタ1
 		/*!
 		 *	初期値として \f$ (0, 0, 0) \f$ が代入されます。
 		 */
 		fk_Vector::fk_Vector();
 
-		//! コンストラクタ
+		//! コンストラクタ2
 		/*!
 		 *	\param[in]	x	x成分
 		 *	\param[in]	y	y成分
 		 *	\param[in]	z	z成分
 		 */
 		fk_Vector::fk_Vector(double x, double y, double z);
+
+		//! コンストラクタ3
+		/*!
+		 *	引数で与えられたベクトルの値をコピーし、新たにインスタンスを生成します。
+		 *
+		 *	\param[in]	V	別のインスタンス。
+		 */
+		fk_Vector::fk_Vector(fk_Vector^ V);
 
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Vector::fk_Vector(::fk_Vector *);
@@ -420,6 +428,7 @@ namespace FK_CLI
 		fk_HVector();
 		fk_HVector(fk_Vector^);
 		fk_HVector(fk_Vector^, double);
+		fk_HVector(fk_HVector^);
 
 		// デストラクタ
 		~fk_HVector();
@@ -475,6 +484,7 @@ namespace FK_CLI
 		::fk_FVector *pFVec;
 	public:
 		fk_FVector();
+		fk_FVector(fk_FVector^);
 		~fk_FVector();
 		!fk_FVector();
 

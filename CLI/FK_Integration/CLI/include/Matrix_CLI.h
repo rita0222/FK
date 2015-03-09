@@ -13,6 +13,7 @@ namespace FK_CLI {
 	public:
 		fk_Angle::fk_Angle();
 		fk_Angle::fk_Angle(double, double, double);
+		fk_Angle::fk_Angle(fk_Angle^);
 		fk_Angle::~fk_Angle();
 		fk_Angle::!fk_Angle();
 
@@ -39,6 +40,7 @@ namespace FK_CLI {
 		::fk_Matrix *pMatrix;
 	public:
 		fk_Matrix::fk_Matrix();
+		fk_Matrix::fk_Matrix(fk_Matrix^);
 		fk_Matrix::~fk_Matrix();
 		fk_Matrix::!fk_Matrix();
 
