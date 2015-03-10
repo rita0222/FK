@@ -39,10 +39,10 @@ namespace FK_CLI_Ball
 			BALL3 = new fk_Sphere(8, BALL_SIZE);
 			BALL4 = new fk_Sphere(10, BALL_SIZE);
 			ball_model = new fk_Model();
-			init();
+			Init();
 		}
 
-		public void init()
+		public void Init()
 		{
 			direction	= DOWN_MODE;
 			y_trs		= 0.1;
@@ -52,19 +52,25 @@ namespace FK_CLI_Ball
 			ball_model.Shape = BALL2;
 		}
 
-		public fk_Model getModel()
+		public fk_Model Model
 		{
-			return ball_model;
+			get
+			{
+				return ball_model;
+			}
 		}
 
-		public fk_Vector getPosition()
+		public fk_Vector Pos
 		{
-			return ball_model.Position;
+			get
+			{
+				return ball_model.Position;
+			}
 		}
 
-		public void lod(fk_Vector pos)
+		public void LOD(fk_Vector argPos)
 		{
-			double	Distance = (ball_model.Position - pos).Dist();
+			double	Distance = (ball_model.Position - argPos).Dist();
 			switch(view_mode) {
 				case HIGH_MODE:
 					if(Distance < LOD4_HIGH) {
@@ -91,7 +97,7 @@ namespace FK_CLI_Ball
 			}
 		}
 
-		public void accel()
+		public void Accel()
 		{
 			switch(direction) {
 				case DOWN_MODE:
@@ -109,7 +115,7 @@ namespace FK_CLI_Ball
 			}
 		}
 
-		public void bound()
+		public void Bound()
 		{
 			if(ball_model.Position.y < BTM_BALL_POS) {
 				direction = RISE_MODE;
@@ -126,13 +132,13 @@ namespace FK_CLI_Ball
 			}
 		}
 
-		public int draw(fk_Vector pos)
+		public int Draw(fk_Vector argPos)
 		{
-			lod(pos);
-			bound();
-			accel();
+			LOD(argPos);
+			Bound();
+			Accel();
 			//４回跳ね返ると初期化
-			if(bound_count > 4) init();
+			if(bound_count > 4) Init();
 			return view_mode;
 		}
 	}
@@ -187,13 +193,13 @@ namespace FK_CLI_Ball
 			blockModel.Parent = groundModel;
 
 			// ### BALL ###
-			ball.getModel().Material = fk_Material.Red;
-			ball.getModel().SmoothMode = true;
+			ball.Model.Material = fk_Material.Red;
+			ball.Model.SmoothMode = true;
 	
 			// ### Model Entry ###
 			win.CameraModel = viewModel;
 			win.Entry(lightModel);
-			win.Entry(ball.getModel());
+			win.Entry(ball.Model);
 			win.Entry(groundModel);
 			win.Entry(blockModel); 
 
@@ -202,7 +208,7 @@ namespace FK_CLI_Ball
 			while(win.Update() == true) {
 
 				// ボールを弾ませて, カメラの状態を取得。
-				view_mode = ball.draw(viewModel.Position);
+				view_mode = ball.Draw(viewModel.Position);
 
 				if(view_mode == Ball.HIGH_MODE) {
 					// カメラを上からの視点にする。
@@ -214,7 +220,7 @@ namespace FK_CLI_Ball
 					// カメラをブロックからの視点にする。
 					viewModel.GlMoveTo(blockModel.InhPosition);
 					viewModel.GlTranslate(0.0, 10.0, 0.0);
-					viewModel.GlFocus(ball.getPosition());
+					viewModel.GlFocus(ball.Pos);
 					viewModel.GlUpvec(0.0, 1.0, 0.0);
 					//win.remove(blockModel);
 				}

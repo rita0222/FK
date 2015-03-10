@@ -24,7 +24,7 @@ namespace FK_CLI_Audio
 			}
 		}
 
-		public void start()
+		public void Start()
 		{
 			if(openFlg == false) return;
 			bgm.LoopMode = true;
@@ -35,13 +35,14 @@ namespace FK_CLI_Audio
 			}
 		}
 
-		public void setGain(double argVolume)
+		public double Gain
 		{
-			bgm.Gain = argVolume;
+			set
+			{
+				bgm.Gain = value;
+			}
 		}
 	}
-
-
 
 	class Program
 	{
@@ -67,7 +68,7 @@ namespace FK_CLI_Audio
 			win.Open();
 			win.ShowGuide(fk_GuideMode.GRID_XZ);
 
-			var bgmTask = new Task(audio.start);
+			var bgmTask = new Task(audio.Start);
 			bgmTask.Start();
 
 			while(win.Update()) {
@@ -80,7 +81,7 @@ namespace FK_CLI_Audio
 					volume -= 0.1;
 				}
 
-				audio.setGain(volume);
+				audio.Gain = volume;
 			}
 			audio.endFlg = true;
 			Task.WaitAll(new[] { bgmTask });
