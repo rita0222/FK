@@ -80,7 +80,8 @@
 #define __FK_WINDOW_HEADER__
 
 #include <stdarg.h>
-#include <map>
+//#include <map>
+#include <unordered_map>
 
 // for Graphics Header.
 #include <FL/Fl_Gl_Window.H>
@@ -214,9 +215,9 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	int						GLWinYPosition;
 	char					lastKey;
 
-	std::map<char, bool>			keyStatus;
-	std::map<fk_SpecialKey, bool>	specialKeyStatus;
-	std::map<fk_MouseButton, bool>	mouseStatus;
+	std::unordered_map<char, bool>				keyStatus;
+	std::unordered_map<fk_SpecialKey, bool>		specialKeyStatus;
+	std::unordered_map<fk_MouseButton, bool>	mouseStatus;
 	
 	fk_FrameMode			frameMode;
 	unsigned long			frameTime, prevTime;
