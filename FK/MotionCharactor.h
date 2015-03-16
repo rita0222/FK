@@ -76,8 +76,7 @@
 #include <FK/IFSTexture.h>
 #include <FK/Scene.h>
 #include <FK/MotionData.H>
-//#include <map>
-#include <unordered_map>
+#include <map>
 #include <deque>
 
 //! FK Performer キャラクターランタイムクラス
@@ -126,7 +125,7 @@ private:
 	std::string						mqoName;
 	int								objNum;
 	std::vector<std::string>		objName;
-	std::unordered_map<int, int>	parentTable;
+	std::map<int, int>				parentTable;
 	bool							parentConnect;
 
 	std::vector<std::vector<fk_PerformerMotion> >	keyFrameData;
@@ -139,8 +138,6 @@ private:
 
 	fk_Model	absParent;
 
-	typedef std::unordered_map<int, int>::iterator parentIte;
-
 	void init(void);
 	bool EnumObjectName(const std::string &);
 
@@ -149,10 +146,10 @@ private:
 	// スケール対応版
 	bool LoadMotionDataEulerScale(const std::string &);
 
-	static std::unordered_map<std::string, fk_Shape *>		shapeCache;
-	static std::unordered_map<std::string, fk_Image *>		imageCache;
-	static std::unordered_map<fk_BaseObject *, int>			countCache;
-	static std::unordered_map<fk_BaseObject *, std::string>	reverseCache;
+	static std::map<std::string, fk_Shape *>		shapeCache;
+	static std::map<std::string, fk_Image *>		imageCache;
+	static std::map<fk_BaseObject *, int>			countCache;
+	static std::map<fk_BaseObject *, std::string>	reverseCache;
 
 public:
 	//! コンストラクタ

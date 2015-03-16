@@ -75,8 +75,7 @@
 
 #include <string>
 #include <vector>
-//#include <map>
-#include <unordered_map>
+#include <map>
 //using namespace std;
 
 class fk_Solid;
@@ -89,9 +88,9 @@ class fk_MQOOut {
 
  private:
 
-	fk_Solid								*solid;
-	fk_IndexFaceSet							*ifs;
-	std::unordered_map<fk_Vertex *, int>	vertIDMap;
+	fk_Solid					*solid;
+	fk_IndexFaceSet				*ifs;
+	std::map<fk_Vertex *, int>	vertIDMap;
 
 	std::vector<std::string>	mBuf;
 	std::vector<std::string>	vBuf;

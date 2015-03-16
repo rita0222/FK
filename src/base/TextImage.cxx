@@ -72,7 +72,6 @@
 
 #define FK_DEF_SIZETYPE
 #include <map>
-#include <unordered_map>
 #include <algorithm>
 #include <FK/TextImage.h>
 #include <FK/Error.H>
@@ -126,8 +125,8 @@ class fk_FTGlyph {
 
 class fk_FontServer {
  private:
-	FT_Library						library;
-	unordered_map<string, FT_Face>	faceArray;
+	FT_Library				library;
+	map<string, FT_Face>	faceArray;
 
  public:
 	fk_FontServer(void);

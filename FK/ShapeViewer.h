@@ -79,8 +79,7 @@
 #include <FK/Model.h>
 #include <FK/Light.h>
 #include <FK/Scene.h>
-//#include <map>
-#include <unordered_map>
+#include <map>
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -177,7 +176,7 @@ class fk_ShapeViewer : public fk_BaseObject {
 	// FK Object
 	fk_Model						parentModel;
 	std::vector<fk_Model *>			modelArray;
-	std::unordered_map<int, int>	IDMap;
+	std::map<int, int>				IDMap;
 	fk_Model						lightModel[2], camera, axisModel;
 	fk_Solid						localSolid;
 	fk_Line							axisLine;

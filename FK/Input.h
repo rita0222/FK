@@ -102,8 +102,7 @@ typedef int* HWND;
 #endif // !FK_DOXYGEN_USER_PROCESS
 #endif // WIN32 && !_MINGW_
 
-//#include <map>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include "Misc.h"
 
@@ -271,7 +270,7 @@ private:
 	struct AxisParam {
 		int pos, neg, border;
 	};
-	std::unordered_map<int, AxisParam>	axisParams[INPUT_DEVICE_NUM];
+	std::map<int, AxisParam>	axisParams[INPUT_DEVICE_NUM];
 
 	//キーボードのメンバー変数
 	bool m_Key[KEY_NUM];

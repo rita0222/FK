@@ -72,8 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 
-//#include <map>
-#include <unordered_map>
+#include <map>
 #include <FK/UniCode.h>
 #include <FK/Error.H>
 #include <iconv.h>
@@ -133,9 +132,9 @@ static fk_StrConverter * getStrConverter(void)
 	return &sc;
 }
 
-static unordered_map<string, _st> * getStrMap(void)
+static map<string, _st> * getStrMap(void)
 {
-	static unordered_map<string, _st>		strMap;
+	static map<string, _st>		strMap;
 	return &strMap;
 }
 

@@ -74,7 +74,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include <unordered_map>
+#include <map>
 
 //using namespace std;
 
@@ -85,16 +85,16 @@ class fk_Loop;
 class fk_DataBase;
 class fk_Vector;
 
-typedef std::unordered_multimap<int, fk_Edge *>	fk_IFS_EdgeSet;
-typedef fk_IFS_EdgeSet::value_type				fk_IFS_Entry;
+typedef std::multimap<int, fk_Edge *>	fk_IFS_EdgeSet;
+typedef fk_IFS_EdgeSet::value_type		fk_IFS_Entry;
 
 class fk_IFSetHandle {
 
 	friend class			fk_Modify;
 
  private:
-	fk_DataBase *						DB;
-	std::unordered_map<fk_Edge *, int>	edgeCount;
+	fk_DataBase *				DB;
+	std::map<fk_Edge *, int>	edgeCount;
 
 	bool		DB_Check(void);
 	fk_Edge *	CheckExistEdge(int, int, fk_IFS_EdgeSet *);

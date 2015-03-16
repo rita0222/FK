@@ -401,9 +401,9 @@ bool fk_IFSetHandle::DB_Check(void)
 
 int fk_IFSetHandle::GetEdgeCountNum(fk_Edge *argEdge)
 {
-	unordered_map<fk_Edge *, int>::iterator	p;
+	auto p = edgeCount.find(argEdge);
 
-	if((p = edgeCount.find(argEdge)) == edgeCount.end()) {
+	if(p == edgeCount.end()) {
 		return 0;
 	}
 

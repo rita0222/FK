@@ -75,10 +75,10 @@
 
 using namespace std;
 
-unordered_map<string, fk_Shape *>		fk_Performer::shapeCache;
-unordered_map<string, fk_Image *>		fk_Performer::imageCache;
-unordered_map<fk_BaseObject *, int>		fk_Performer::countCache;
-unordered_map<fk_BaseObject *, string>	fk_Performer::reverseCache;
+map<string, fk_Shape *>			fk_Performer::shapeCache;
+map<string, fk_Image *>			fk_Performer::imageCache;
+map<fk_BaseObject *, int>		fk_Performer::countCache;
+map<fk_BaseObject *, string>	fk_Performer::reverseCache;
 
 typedef string::size_type st;
 
@@ -163,7 +163,7 @@ bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 								argOrg->jointModel[i]->getScale(fk_Z));
 	}
 	if(parentConnect) {
-		for(parentIte ite = parentTable.begin(); ite != parentTable.end(); ite++) {
+		for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
 			jointModel[st(ite->first)]->setParent(jointModel[st(ite->second)], false);
 		}
 		for(st i = 0; i < st(objNum); i++) {
@@ -920,7 +920,7 @@ void fk_Performer::jointToPoser(void)
 	if(parentConnect) return;
 	if(objNum == 0) return;
 
-	for(parentIte ite = parentTable.begin(); ite != parentTable.end(); ite++) {
+	for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
 		jointModel[st(ite->first)]->setParent(jointModel[st(ite->second)], true);
 	}
 
