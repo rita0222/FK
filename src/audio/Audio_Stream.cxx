@@ -161,8 +161,15 @@ bool fk_AudioStream::play(void)
 		if(ready() == false) return false;
 	}
 
-	if(PlayStream() == true) return true;
-	else if(endStatus & loopMode) {
+	if(PlayStream() == true) {
+		if(loopEndTime >= 0.0) {
+			if(tell() > loopEndTime) {
+				seek(loopStartTime);
+				return PlayStream();
+			}
+		}
+		return true;
+	} else if(endStatus & loopMode) {
 		seek(loopStartTime);
 		return PlayStream();
 	}

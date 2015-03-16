@@ -317,8 +317,11 @@ bool fk_AudioBase::getLoopMode(void)
 
 void fk_AudioBase::setLoopArea(double argST, double argED)
 {
-	loopStartTime = argST;
+	if(argST < -FK_EPS || argST > argED) return;
+	loopStartTime = (argST < 0.0) ? 0.0 : argST;
 	loopEndTime = argED;
+	seek(argST);
+
 	return;
 }
 

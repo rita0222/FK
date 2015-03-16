@@ -74,7 +74,8 @@
 
 #include <FK/ParserBase.H>
 #include <FK/Model.h>
-#include <map>
+//#include <map>
+#include <unordered_map>
 
 //! BVH 形式のモーションデータを読み込み、保持するクラス
 /*!
@@ -101,7 +102,7 @@ private:
 	std::vector< std::vector<fk_Vector> >	posArray;
 	std::vector< std::vector<fk_Angle> >	rotArray;
 
-	std::map<std::string, fk_Model *>		nameToNodeMap;
+	std::unordered_map<std::string, fk_Model *>		nameToNodeMap;
 
 	std::vector< std::pair<std::vector<int>::size_type, int> >	frameFormat;
 

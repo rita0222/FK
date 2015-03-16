@@ -79,7 +79,8 @@
 #include <FK/Model.h>
 #include <FK/Light.h>
 #include <FK/Scene.h>
-#include <map>
+//#include <map>
+#include <unordered_map>
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -174,17 +175,17 @@ class fk_ShapeViewer : public fk_BaseObject {
 	bool				axisFlag;
 
 	// FK Object
-	fk_Model					parentModel;
-	std::vector<fk_Model *>		modelArray;
-	std::map<int, int>			IDMap;
-	fk_Model					lightModel[2], camera, axisModel;
-	fk_Solid					localSolid;
-	fk_Line						axisLine;
-	fk_Light					light;
-	fk_Scene					scene;
-	std::vector<fk_Material *>	polyMaterial;
-	std::vector<fk_Color *>		edgeColor;
-	std::vector<fk_Color *>		vertexColor;
+	fk_Model						parentModel;
+	std::vector<fk_Model *>			modelArray;
+	std::unordered_map<int, int>	IDMap;
+	fk_Model						lightModel[2], camera, axisModel;
+	fk_Solid						localSolid;
+	fk_Line							axisLine;
+	fk_Light						light;
+	fk_Scene						scene;
+	std::vector<fk_Material *>		polyMaterial;
+	std::vector<fk_Color *>			edgeColor;
+	std::vector<fk_Color *>			vertexColor;
 
 	void				InitValue(void);
 	void				InitFlag(void);

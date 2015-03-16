@@ -75,10 +75,10 @@
 
 using namespace std;
 
-map<string, fk_Shape *>			fk_Performer::shapeCache;
-map<string, fk_Image *>			fk_Performer::imageCache;
-map<fk_BaseObject *, int>		fk_Performer::countCache;
-map<fk_BaseObject *, string>	fk_Performer::reverseCache;
+unordered_map<string, fk_Shape *>		fk_Performer::shapeCache;
+unordered_map<string, fk_Image *>		fk_Performer::imageCache;
+unordered_map<fk_BaseObject *, int>		fk_Performer::countCache;
+unordered_map<fk_BaseObject *, string>	fk_Performer::reverseCache;
 
 typedef string::size_type st;
 
