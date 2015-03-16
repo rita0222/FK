@@ -141,18 +141,16 @@ bool fk_IFSetHandle::SetIndexFaceSet(vector<fk_Vector> *vData,
 fk_Edge * fk_IFSetHandle::CheckExistEdge(int vID1, int vID2,
 										 fk_IFS_EdgeSet *VPair)
 {
-	fk_IFS_EdgeSet::iterator	curV, lastV;
-	int							tmpID1, tmpID2, mateID;
-
-	lastV = VPair->upper_bound(vID1);
+	int		tmpID1, tmpID2, mateID;
+	auto	range = VPair->equal_range(vID1);
 
 	// 既に稜線が Vt1 と Vt2 の間にあるかどうかの判定 
-	for(curV = VPair->lower_bound(vID1); curV != lastV; ++curV) {
-		tmpID1 = curV->second->getRightHalf()->getVertex()->getID();
-		tmpID2 = curV->second->getLeftHalf()->getVertex()->getID();
+	for(auto ite = range.first; ite != range.second; ite++) {
+		tmpID1 = ite->second->getRightHalf()->getVertex()->getID();
+		tmpID2 = ite->second->getLeftHalf()->getVertex()->getID();
 		mateID = (tmpID1 == vID1) ? tmpID2 : tmpID1;
 		if(mateID == vID2) {
-			return curV->second;
+			return ite->second;
 		}
 	}
 
@@ -403,7 +401,7 @@ bool fk_IFSetHandle::DB_Check(void)
 
 int fk_IFSetHandle::GetEdgeCountNum(fk_Edge *argEdge)
 {
-	map<fk_Edge *, int>::iterator	p;
+	unordered_map<fk_Edge *, int>::iterator	p;
 
 	if((p = edgeCount.find(argEdge)) == edgeCount.end()) {
 		return 0;
