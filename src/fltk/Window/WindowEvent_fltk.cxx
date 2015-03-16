@@ -85,19 +85,15 @@ using namespace std;
 
 void fk_Window::PushPrevStatus(void)
 {
-	unordered_map<char, bool>::iterator				ite1;
-	unordered_map<fk_SpecialKey, bool>::iterator	ite2;
-	unordered_map<fk_MouseButton, bool>::iterator	ite3;
-	
-	for(ite1 = keyStatus.begin(); ite1 != keyStatus.end(); ++ite1) {
+	for(auto ite1 = keyStatus.begin(); ite1 != keyStatus.end(); ++ite1) {
 		ite1->second = getKeyStatus(ite1->first, false);
 	}
 
-	for(ite2 = specialKeyStatus.begin(); ite2 != specialKeyStatus.end(); ++ite2) {
+	for(auto ite2 = specialKeyStatus.begin(); ite2 != specialKeyStatus.end(); ++ite2) {
 		ite2->second = getSpecialKeyStatus(ite2->first, false);
 	}
 
-	for(ite3 = mouseStatus.begin(); ite3 != mouseStatus.end(); ++ite3) {
+	for(auto ite3 = mouseStatus.begin(); ite3 != mouseStatus.end(); ++ite3) {
 		ite3->second = getMouseStatus(ite3->first, false);
 	}
 	return;

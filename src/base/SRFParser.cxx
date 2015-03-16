@@ -91,7 +91,7 @@ bool fk_SRFParser::ReadSRFFile(string argFileName)
 	vector<fk_Vector>		vData;
 	vector< vector<int> >	lIndex;
 
-	if(meshData == NULL) return false;
+	if(meshData == nullptr) return false;
 
 	meshData->Init();
 

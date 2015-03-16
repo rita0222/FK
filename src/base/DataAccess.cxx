@@ -81,7 +81,7 @@ using namespace std;
 
 fk_DataAccess::fk_DataAccess(void)
 {
-	SetDataBase(NULL);
+	SetDataBase(nullptr);
 
 	return;
 }
@@ -99,7 +99,7 @@ void fk_DataAccess::SetDataBase(fk_DataBase *argOp)
 
 bool fk_DataAccess::checkDB(void) const
 {
-	if(ope_DB == NULL) return false;
+	if(ope_DB == nullptr) return false;
 	else return true;
 }
 
@@ -121,49 +121,49 @@ fk_DataBase * fk_DataAccess::GetDB(void)
 
 fk_Vertex *	fk_DataAccess::GetNewVertexObj_(void)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewVertex();
 }
 
 fk_Vertex * fk_DataAccess::GetNewVertexObj_(int argID)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewVertex(argID);
 }
 
 fk_Half * fk_DataAccess::GetNewHalfObj_(void)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewHalf();
 }
 
 fk_Half * fk_DataAccess::GetNewHalfObj_(int argID)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewHalf(argID);
 }
 
 fk_Edge * fk_DataAccess::GetNewEdgeObj_(void)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewEdge();
 }
 
 fk_Edge * fk_DataAccess::GetNewEdgeObj_(int argID)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewEdge(argID);
 }
 
 fk_Loop * fk_DataAccess::GetNewLoopObj_(void)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewLoop();
 }
 
 fk_Loop * fk_DataAccess::GetNewLoopObj_(int argID)
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNewLoop(argID);
 }
 
@@ -249,73 +249,73 @@ bool fk_DataAccess::existLoop(int argID) const
 
 fk_Vertex * fk_DataAccess::getVData(int argID) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetVData(argID);
 }
 
 fk_Half * fk_DataAccess::getHData(int argID) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetHData(argID);
 }
 
 fk_Edge * fk_DataAccess::getEData(int argID) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetEData(argID);
 }
 
 fk_Loop * fk_DataAccess::getLData(int argID) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetLData(argID);
 }
 
 fk_Vertex * fk_DataAccess::getNextV(fk_Vertex *argV) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNextV(argV);
 }
 
 fk_Half * fk_DataAccess::getNextH(fk_Half *argH) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNextH(argH);
 }
 
 fk_Edge * fk_DataAccess::getNextE(fk_Edge *argE) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNextE(argE);
 }
 
 fk_Loop * fk_DataAccess::getNextL(fk_Loop *argL) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetNextL(argL);
 }
 
 fk_Vertex * fk_DataAccess::getLastV(void) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetLastV();
 }
 	
 fk_Half * fk_DataAccess::getLastH(void) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetLastH();
 }
 
 fk_Edge * fk_DataAccess::getLastE(void) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetLastE();
 }
 
 fk_Loop * fk_DataAccess::getLastL(void) const
 {
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	return ope_DB->GetLastL();
 }
 
@@ -347,10 +347,10 @@ void fk_DataAccess::getVertexList(list<fk_Vertex *> *argList)
 {
 	fk_Vertex		*v;
 
-	if(argList == NULL) return;
+	if(argList == nullptr) return;
 	argList->clear();
 
-	for(v = getNextV(NULL); v != NULL; v = getNextV(v)) {
+	for(v = getNextV(nullptr); v != nullptr; v = getNextV(v)) {
 		argList->push_back(v);
 	}
 	return;
@@ -360,10 +360,10 @@ void fk_DataAccess::getHalfList(list<fk_Half *> *argList)
 {
 	fk_Half		*h;
 
-	if(argList == NULL) return;
+	if(argList == nullptr) return;
 	argList->clear();
 
-	for(h = getNextH(NULL); h != NULL; h = getNextH(h)) {
+	for(h = getNextH(nullptr); h != nullptr; h = getNextH(h)) {
 		argList->push_back(h);
 	}
 	return;
@@ -373,10 +373,10 @@ void fk_DataAccess::getEdgeList(list<fk_Edge *> *argList)
 {
 	fk_Edge		*e;
 
-	if(argList == NULL) return;
+	if(argList == nullptr) return;
 	argList->clear();
 
-	for(e = getNextE(NULL); e != NULL; e = getNextE(e)) {
+	for(e = getNextE(nullptr); e != nullptr; e = getNextE(e)) {
 		argList->push_back(e);
 	}
 	return;
@@ -386,10 +386,10 @@ void fk_DataAccess::getLoopList(list<fk_Loop *> *argList)
 {
 	fk_Loop		*l;
 
-	if(argList == NULL) return;
+	if(argList == nullptr) return;
 	argList->clear();
 
-	for(l = getNextL(NULL); l != NULL; l = getNextL(l)) {
+	for(l = getNextL(nullptr); l != nullptr; l = getNextL(l)) {
 		argList->push_back(l);
 	}
 	return;

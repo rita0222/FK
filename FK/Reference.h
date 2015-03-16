@@ -148,22 +148,22 @@ class fk_ReferenceL1 {
 	//! 頂点接続半稜線参照関数
 	/*!
 	 *	頂点 V に接続する半稜線のうちの1つを返します。
-	 *	V が独立頂点であった場合は NULL を返します。
+	 *	V が独立頂点であった場合は nullptr を返します。
 	 *
 	 *	\param[in]	V		頂点位相
 	 *
-	 *	\return		接続半稜線のうちの1つ。ない場合は NULL を返します。
+	 *	\return		接続半稜線のうちの1つ。ない場合は nullptr を返します。
 	 */
 	fk_Half *		getOneHOnV(fk_Vertex *V) const;
 
 	//! 頂点接続稜線参照関数
 	/*!
 	 *	頂点 V に接続する稜線のうちの1つを返します。
-	 *	V が独立頂点であった場合は NULL を返します。
+	 *	V が独立頂点であった場合は nullptr を返します。
 	 *
 	 *	\param[in]	V		頂点位相
 	 *
-	 *	\return		接続稜線のうちの1つ。ない場合は NULL を返します。
+	 *	\return		接続稜線のうちの1つ。ない場合は nullptr を返します。
 	 */
 	fk_Edge *		getOneEOnV(fk_Vertex *V) const;
 	//@}
@@ -204,11 +204,11 @@ class fk_ReferenceL1 {
 	//! 親ループ参照関数
 	/*!
 	 *	半稜線 H が所属しているループを返します。
-	 *	もし H がどのループにも所属していない場合は NULL を返します。
+	 *	もし H がどのループにも所属していない場合は nullptr を返します。
 	 *
 	 *	\param[in]	H		半稜線位相
 	 *
-	 *	\return		親ループ。ない場合は NULL を返します。
+	 *	\return		親ループ。ない場合は nullptr を返します。
 	 */
 	fk_Loop *		getParentLOnH(fk_Half *H) const;
 	//@}
@@ -259,22 +259,22 @@ class fk_ReferenceL1 {
 	//! 右側ループ参照関数
 	/*!
 	 *	稜線 E において、右側にあるループを返します。
-	 *	もし右側にループがなければ NULL を返します。
+	 *	もし右側にループがなければ nullptr を返します。
 	 *
 	 *	\param[in]	E		稜線位相
 	 *
-	 *	\return		右側ループ。ない場合は NULL を返します。
+	 *	\return		右側ループ。ない場合は nullptr を返します。
 	 */
 	fk_Loop *		getRightLOnE(fk_Edge *E) const;
 
 	//! 左側ループ参照関数
 	/*!
 	 *	稜線 E において、左側にあるループを返します。
-	 *	もし左側にループがなければ NULL を返します。
+	 *	もし左側にループがなければ nullptr を返します。
 	 *
 	 *	\param[in]	E		稜線位相
 	 *
-	 *	\return		左側ループ。ない場合は NULL を返します。
+	 *	\return		左側ループ。ない場合は nullptr を返します。
 	 */
 	fk_Loop *		getLeftLOnE(fk_Edge *E) const;
 
@@ -355,11 +355,11 @@ class fk_ReferenceL2 : public fk_ReferenceL1 {
 	//! 隣接頂点参照関数
 	/*!
 	 *	頂点 V に隣接している頂点のうちの1つを返します。
-	 *	V が独立頂点であった場合は NULL を返します。
+	 *	V が独立頂点であった場合は nullptr を返します。
 	 *
 	 *	\param[in]	V		頂点位相
 	 *
-	 *	\return		隣接頂点のうちの1つ。ない場合は NULL を返します。
+	 *	\return		隣接頂点のうちの1つ。ない場合は nullptr を返します。
 	 */
 	fk_Vertex *					getOneNeighborVOnV(fk_Vertex *V) const;
 
@@ -447,11 +447,11 @@ class fk_ReferenceL2 : public fk_ReferenceL1 {
 	//! 隣接ループ参照関数
 	/*!
 	 *	ループ L と隣接しているループのうちの1つを返します。
-	 *	隣接するループが存在しないときは NULL を返します。
+	 *	隣接するループが存在しないときは nullptr を返します。
 	 *
 	 *	\param[in]	L		ループ位相
 	 *
-	 *	\return		隣接ループのうちの1つ。ない場合は NULL を返します。
+	 *	\return		隣接ループのうちの1つ。ない場合は nullptr を返します。
 	 */
 	fk_Loop *					getOneNeighborLOnL(fk_Loop *L) const;
 
@@ -461,12 +461,12 @@ class fk_ReferenceL2 : public fk_ReferenceL1 {
 	 *	半稜線 H の親稜線を共有しているループを返します。
 	 *	この共有関係が成り立たないような状態の場合
 	 *	(H が L 上にない、H の反対側にループが存在しないなど)
-	 *	は、NULL を返します。
+	 *	は、nullptr を返します。
 	 *
 	 *	\param[in]	L		ループ位相
 	 *	\param[in]	H		半稜線位相
 	 *
-	 *	\return		H を挟んだ隣接ループ。存在しない場合は NULL を返します。
+	 *	\return		H を挟んだ隣接ループ。存在しない場合は nullptr を返します。
 	 */
 	fk_Loop *					getNeighborLOnLH(fk_Loop *L,
 												 fk_Half *H) const;
@@ -528,11 +528,11 @@ class fk_ReferenceL3 : public fk_ReferenceL2 {
 	//! 頂点接続ループ参照関数
 	/*!
 	 *	頂点 V に接続しているループのうちの1つを返します。
-	 *	V に接続するループが存在しない場合は、NULL を返します。
+	 *	V に接続するループが存在しない場合は、nullptr を返します。
 	 *
 	 *	\param[in]	V		頂点位相
 	 *
-	 *	\return		接続ループのうちの1つ。ない場合は NULL を返します。
+	 *	\return		接続ループのうちの1つ。ない場合は nullptr を返します。
 	 */
 	fk_Loop *					getOneLOnV(fk_Vertex *V) const;
 
@@ -542,12 +542,12 @@ class fk_ReferenceL3 : public fk_ReferenceL2 {
 	 *	稜線 E を共有しているループを返します。
 	 *	この共有関係が成り立たない状態の場合
 	 *	(E が L 上にない、E の反対側にループが存在しないなど)
-	 *	は、NULL を返します。
+	 *	は、nullptr を返します。
 	 *
 	 *	\param[in]	L		ループ位相
 	 *	\param[in]	E		稜線位相
 	 *
-	 *	\return		E を挟んだ隣接ループ。存在しない場合は NULL を返します。
+	 *	\return		E を挟んだ隣接ループ。存在しない場合は nullptr を返します。
 	 */
 	fk_Loop *					getNeighborLOnLE(fk_Loop *L, fk_Edge *E) const;
 

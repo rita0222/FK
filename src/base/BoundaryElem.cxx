@@ -158,7 +158,7 @@ double fk_SphereBoundary::GetAdjustSolid(fk_Solid *argSolid)
 	fk_Vertex	*v;
 	double		len, lMax = 0.0;
 	
-	for(v = argSolid->getNextV(NULL); v != NULL; v = argSolid->getNextV(v)) {
+	for(v = argSolid->getNextV(nullptr); v != nullptr; v = argSolid->getNextV(v)) {
 		len = v->getPosition().dist();
 		if(lMax < len) lMax = len;
 	}
@@ -309,7 +309,7 @@ fk_Vector fk_AABBBoundary::GetAdjustSolid(fk_Solid *argSolid,
 	fk_Vertex	*v;
 	fk_Vector	p, pMax;
 
-	for(v = argSolid->getNextV(NULL); v != NULL; v = argSolid->getNextV(v)) {
+	for(v = argSolid->getNextV(nullptr); v != nullptr; v = argSolid->getNextV(v)) {
 		p = v->getPosition();
 		AdjustVec(&pMax, p, argX, argY, argZ);
 	}
@@ -487,7 +487,7 @@ fk_Vector fk_OBBBoundary::GetAdjustSolid(fk_Solid *argSolid)
 	fk_Vertex	*v;
 	fk_Vector	p, pMax;
 
-	for(v = argSolid->getNextV(NULL); v != NULL; v = argSolid->getNextV(v)) {
+	for(v = argSolid->getNextV(nullptr); v != nullptr; v = argSolid->getNextV(v)) {
 		p = v->getPosition();
 		AdjustVec(&pMax, p);
 	}
@@ -633,7 +633,7 @@ double fk_CapsuleBoundary::GetAdjustSolid(fk_Solid *argSolid,
 	double		len, lMax = 0.0;
 	fk_Vector	p;
 	
-	for(v = argSolid->getNextV(NULL); v != NULL; v = argSolid->getNextV(v)) {
+	for(v = argSolid->getNextV(nullptr); v != nullptr; v = argSolid->getNextV(v)) {
 		p = v->getPosition();
 		len = CalcLen(p, argS, argE);
 		if(lMax < len) lMax = len;

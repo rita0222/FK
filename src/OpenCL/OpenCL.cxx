@@ -8,10 +8,10 @@ using namespace std;
 
 fk_OpenCL::fk_OpenCL(void)
 {
-	command_queue = NULL;
-	context = NULL;
-	kernel = NULL;
-	program = NULL;
+	command_queue = nullptr;
+	context = nullptr;
+	kernel = nullptr;
+	program = nullptr;
 	initFlg = false;
 	
 	return;
@@ -41,8 +41,8 @@ bool fk_OpenCL::ReadKernel(string argFileName)
 bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDebugMode)
 {
 	cl_int				ciErrNum = 0;	// エラーチェック用変数
-	cl_platform_id		testID = NULL;
-	cl_device_id		testdevid = NULL;
+	cl_platform_id		testID = nullptr;
+	cl_device_id		testdevid = nullptr;
 	cl_uint				devicenum = 0;
 	
 	ciErrNum = GetPlatformID(&testID, argDebugMode);
@@ -52,8 +52,8 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 		return false;
 	}
 
-	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, 0, NULL, &devicenum);
-	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, devicenum, &testdevid, NULL);
+	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, 0, nullptr, &devicenum);
+	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, devicenum, &testdevid, nullptr);
 	
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clGetDeviceIDs()");
@@ -61,7 +61,7 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 	}
 
 	if(argDebugMode == true) PrintDevInfo(testdevid);
-	context = clCreateContext(NULL, devicenum, &testdevid, NULL, NULL, &ciErrNum);
+	context = clCreateContext(nullptr, devicenum, &testdevid, nullptr, nullptr, &ciErrNum);
 
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clCreateContext()");
@@ -69,7 +69,7 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 	}
 	
 	//-- command_queueの作成
-	command_queue = clCreateCommandQueue(context, testdevid, 0, NULL);
+	command_queue = clCreateCommandQueue(context, testdevid, 0, nullptr);
 	
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clCreateCmmandQueue()");
@@ -92,14 +92,14 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 		return false;
 	}
 		
-	if(clBuildProgram(program, devicenum, &testdevid, NULL, NULL, NULL) != CL_SUCCESS) {
+	if(clBuildProgram(program, devicenum, &testdevid, nullptr, nullptr, nullptr) != CL_SUCCESS) {
 		ErrOut("Error in clBuildProgram()");
 		char	*log;
 		size_t	length;
 
-		clGetProgramBuildInfo(program, testdevid, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
+		clGetProgramBuildInfo(program, testdevid, CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
 		log = new char [length];
-		clGetProgramBuildInfo(program, testdevid, CL_PROGRAM_BUILD_LOG, length, log, NULL);
+		clGetProgramBuildInfo(program, testdevid, CL_PROGRAM_BUILD_LOG, length, log, nullptr);
 		ErrOut(log);
 		delete [] log;
 		
@@ -139,9 +139,9 @@ void fk_OpenCL::createData(int argID, size_t argSize, bool argWriteFlg)
 	if(devFlg[id] == true) clReleaseMemObject(devData[id]);
 	
 	if(argWriteFlg == true) {
-		devData[id] = clCreateBuffer(context, CL_MEM_READ_WRITE, argSize, NULL, &ciErrNum);
+		devData[id] = clCreateBuffer(context, CL_MEM_READ_WRITE, argSize, nullptr, &ciErrNum);
 	} else {
-		devData[id] = clCreateBuffer(context, CL_MEM_READ_ONLY, argSize, NULL, &ciErrNum);
+		devData[id] = clCreateBuffer(context, CL_MEM_READ_ONLY, argSize, nullptr, &ciErrNum);
 	}
 	if(ciErrNum != CL_SUCCESS) PrintError(ciErrNum);
 	devFlg[id] = true;
@@ -156,7 +156,7 @@ bool fk_OpenCL::sendData(int argID, size_t argSize, const void *argPtr)
 	if(devFlg[id] == false) return false;
 
 	cl_int ciErrNum = clEnqueueWriteBuffer(command_queue, devData[id], CL_TRUE,
-										   0, argSize, argPtr, 0, NULL, NULL);
+										   0, argSize, argPtr, 0, nullptr, nullptr);
 
 	if (ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in clEnqueueWriteBuffer()");
@@ -176,7 +176,7 @@ bool fk_OpenCL::getData(int argID, size_t argSize, void *argPtr)
 	if(devFlg[id] == false) return false;
 
 	cl_int ciErrNum = clEnqueueReadBuffer(command_queue, devData[id], CL_TRUE,
-										  0, argSize, argPtr, 0, NULL, NULL);
+										  0, argSize, argPtr, 0, nullptr, nullptr);
 	
 	if (ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in setReadBuffer");
@@ -201,8 +201,8 @@ bool fk_OpenCL::run(size_t argSize)
 		}
 	}
 
-	ciErrNum = clEnqueueNDRangeKernel(command_queue, kernel, 1, NULL,
-									  &argSize, NULL, 0, NULL, NULL);
+	ciErrNum = clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr,
+									  &argSize, nullptr, 0, nullptr, nullptr);
 
 	if (ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in RUN");
@@ -236,11 +236,11 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 	cl_platform_id	*clPlatformIDs;			// プラットフォームの数が不定なので、最初はアドレスのみ
 	cl_int			ciErrNum;				// OpenCL関数実行時のエラーチェック用int
 	
-	*argID = NULL;
+	*argID = nullptr;
  
 	//-- OpenCLのプラットフォーム数取得
 	//-- プラットフォームの数だけを取得。num_platformsに数が入る
-	ciErrNum = clGetPlatformIDs(0, NULL, &num_platforms);
+	ciErrNum = clGetPlatformIDs(0, nullptr, &num_platforms);
 	
 	//-- clGetGPlatformIDs()が失敗した場合
 	if(ciErrNum != CL_SUCCESS){
@@ -258,7 +258,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 
 			clPlatformIDs = new cl_platform_id[num_platforms];
 			//-- メモリ足りなきゃエラーです
-			if(clPlatformIDs == NULL){
+			if(clPlatformIDs == nullptr){
 				ErrOut("I failed to allocate memory for cl_platformID's. Give me a memory");
 				return -30;
 			}
@@ -268,8 +268,8 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 			ErrOut("number of platform(s) : %d", num_platforms);
  
 			//-- platformIDの取得
-			//-- 既に数は取得しているので、最後の引数はNULL
-			ciErrNum = clGetPlatformIDs(num_platforms, clPlatformIDs, NULL);
+			//-- 既に数は取得しているので、最後の引数はnullptr
+			ciErrNum = clGetPlatformIDs(num_platforms, clPlatformIDs, nullptr);
  
 			//-- 取得したplatformIDから、様々なID情報を取得し、表示
 			for (cl_uint i = 0; i < num_platforms; ++i) {
@@ -279,7 +279,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 				//-- 取得したい情報の種類：プロファイル
 			
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_PROFILE,
-											 chBufsize, &chBuffer, NULL);
+											 chBufsize, &chBuffer, nullptr);
 				/*
 				if(ciErrNum == CL_SUCCESS){
 					ErrOut("PLATFORM_PROLILE : %s", chBuffer);
@@ -287,25 +287,25 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 				*/
 				//-- 取得したい情報の種類：バージョン
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_VERSION,
-											 chBufsize, &chBuffer, NULL);
+											 chBufsize, &chBuffer, nullptr);
 				if(ciErrNum == CL_SUCCESS){
 					ErrOut("PLATFORM_VERSOIN : %s", chBuffer);
 				}
 				//-- 取得したい情報の種類：名前
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_NAME,
-											 chBufsize, &chBuffer, NULL);
+											 chBufsize, &chBuffer, nullptr);
 				if (ciErrNum == CL_SUCCESS) {
 					ErrOut("PLATFORM_NAME : %s", chBuffer);
 				}
 				//-- 取得したい情報の種類：VENDER
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_VENDOR,
-											 chBufsize, &chBuffer, NULL);
+											 chBufsize, &chBuffer, nullptr);
 				if(ciErrNum == CL_SUCCESS){
 					ErrOut("PLATFORM_VENDOR : %s", chBuffer);
 				}
 				//-- 取得したい情報の種類：機能拡張
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_EXTENSIONS,
-											 chBufsize, &chBuffer, NULL);
+											 chBufsize, &chBuffer, nullptr);
 				if(ciErrNum == CL_SUCCESS){
 					ErrOut("PLATFORM_EXTENSIONS : %s", chBuffer);
 				}
@@ -338,31 +338,31 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	char device_string[chBufsize];
 	cl_int		ciErrNum;
  
-	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_NAME, chBufsize, &device_string, NULL);
+	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_NAME, chBufsize, &device_string, nullptr);
 	if(ciErrNum == CL_SUCCESS) ErrOut("DEVICE_NAME : %s", device_string);
 	else ErrOut("Error in CL_DEVICE_NAME");
  
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_VENDOR,
-							   sizeof(device_string), &device_string, NULL);
+							   sizeof(device_string), &device_string, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) ErrOut("DEVICE_VENDER : %s", device_string);
 	else ErrOut("Error in CL_DEVICE_VENDER");
  
 
 	ciErrNum = clGetDeviceInfo(argDev, CL_DRIVER_VERSION,
-							   sizeof(device_string), &device_string, NULL);
+							   sizeof(device_string), &device_string, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) ErrOut("DRIVER_VERSION : %s", device_string);
 	else ErrOut("Error in CL_DRIVER_VERSION");
  
 
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_VERSION,
-							   sizeof(device_string), &device_string, NULL);
+							   sizeof(device_string), &device_string, nullptr);
 	if(ciErrNum == CL_SUCCESS) ErrOut("DEVICE_VERSION : %s", device_string);
 	else ErrOut("Error in CL_DEVICE_VERSION");
  
 	cl_device_type type;
-	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_TYPE, sizeof(type), &type, NULL);
+	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_TYPE, sizeof(type), &type, nullptr);
 	if(ciErrNum == CL_SUCCESS){
 		if( type & CL_DEVICE_TYPE_CPU ){
 			ErrOut("CL_DEVICE_TYPE_CPU");
@@ -377,19 +377,19 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	cl_uint compute_units;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_COMPUTE_UNITS,
-							   sizeof(compute_units),&compute_units,NULL);
+							   sizeof(compute_units),&compute_units,nullptr);
 	if(ciErrNum == CL_SUCCESS) ErrOut("CL_DEVICE_MAX_COMPUTE_UNITS : %u", compute_units);
 	else ErrOut("Error in CL_DEVICE_MAX_COMPUTE_UNITS");
  
 	cl_uint workitem_dims;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS,
-							   sizeof(cl_uint), &workitem_dims, NULL);
+							   sizeof(cl_uint), &workitem_dims, nullptr);
 	if(ciErrNum == CL_SUCCESS) ErrOut("CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS : %u", workitem_dims);
 	else ErrOut("Error in CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS");
  
 	size_t workitem_size[3];	
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_WORK_ITEM_SIZES,
-							   sizeof(workitem_size), &workitem_size, NULL);
+							   sizeof(workitem_size), &workitem_size, nullptr);
 	if(ciErrNum == CL_SUCCESS) {
 		tmpStr = "CL_DEVICE_MAX_WORK_ITEM_SIZE : " + zu + ", " + zu + ", " + zu;
 		ErrOut(tmpStr.c_str(),
@@ -400,7 +400,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	size_t workgroup_size;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_WORK_GROUP_SIZE,
-							   sizeof(workgroup_size), &workgroup_size, NULL);
+							   sizeof(workgroup_size), &workgroup_size, nullptr);
 	if(ciErrNum == CL_SUCCESS) {
 		tmpStr = "CL_DEVICE_MAX_WORK_GROUP_SIZE : " + zu;
 		ErrOut(tmpStr.c_str(), workgroup_size);
@@ -410,13 +410,13 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	cl_uint addr_bits;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_ADDRESS_BITS,
-							   sizeof(addr_bits), &addr_bits, NULL);
+							   sizeof(addr_bits), &addr_bits, nullptr);
 	if(ciErrNum == CL_SUCCESS) ErrOut("CL_DEVICE_ADDRESS_BITS : %u", addr_bits);
 	else ErrOut("Error in CL_DEVICE_ADDRESS_BITS");
  
 	cl_ulong max_mem_alloc_size;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_MEM_ALLOC_SIZE,
-							   sizeof(max_mem_alloc_size), &max_mem_alloc_size, NULL);
+							   sizeof(max_mem_alloc_size), &max_mem_alloc_size, nullptr);
 	if (ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_MAX_MEM_ALLOC_SIZE : %u MByte",
 				  (unsigned int)(max_mem_alloc_size / (1024 * 1024)));
@@ -427,7 +427,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	cl_ulong mem_size;
 	ciErrNum =  clGetDeviceInfo(argDev, CL_DEVICE_GLOBAL_MEM_SIZE,
-								sizeof(mem_size), &mem_size, NULL);
+								sizeof(mem_size), &mem_size, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_GLOBAL_MEM_SIZE : %u MByte",
@@ -439,7 +439,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	cl_bool error_correction_support;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_ERROR_CORRECTION_SUPPORT,
-							   sizeof(error_correction_support), &error_correction_support, NULL);
+							   sizeof(error_correction_support), &error_correction_support, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_ERROR_CORRECTION_SUPPORT : %s",
@@ -450,7 +450,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	cl_device_local_mem_type local_mem_type;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_LOCAL_MEM_TYPE,
-							   sizeof(local_mem_type), &local_mem_type, NULL);
+							   sizeof(local_mem_type), &local_mem_type, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_LOCAL_MEM_TYPE : %s", local_mem_type == 1 ? "local" : "global");
@@ -459,7 +459,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	}
  
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_LOCAL_MEM_SIZE,
-							   sizeof(mem_size), &mem_size, NULL);
+							   sizeof(mem_size), &mem_size, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_LOCAL_MEM_SIZE : %u KByte", (unsigned int)(mem_size / 1024));
@@ -468,7 +468,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	}
  
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE,
-							   sizeof(mem_size), &mem_size, NULL);
+							   sizeof(mem_size), &mem_size, nullptr);
 	
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE : %u KByte",
@@ -479,7 +479,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
 	cl_command_queue_properties queue_properties;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_QUEUE_PROPERTIES,
-							   sizeof(queue_properties), &queue_properties, NULL);
+							   sizeof(queue_properties), &queue_properties, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		if(queue_properties & CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE) {
@@ -494,7 +494,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
     cl_bool image_support;
 	ciErrNum =  clGetDeviceInfo(argDev, CL_DEVICE_IMAGE_SUPPORT,
-								sizeof(image_support), &image_support, NULL);
+								sizeof(image_support), &image_support, nullptr);
 	
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_IMAGE_SUPPORT : %s", image_support == 1 ? "TRUE" : "FALSE");
@@ -504,7 +504,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
  
     cl_uint max_read_image_args;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_READ_IMAGE_ARGS,
-							   sizeof(max_read_image_args), &max_read_image_args, NULL);
+							   sizeof(max_read_image_args), &max_read_image_args, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_MAX_READ_IMAGE_ARGS : %u", max_read_image_args);
@@ -514,7 +514,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 
     cl_uint max_write_image_args;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_MAX_WRITE_IMAGE_ARGS,
-							   sizeof(max_write_image_args), &max_write_image_args, NULL);
+							   sizeof(max_write_image_args), &max_write_image_args, nullptr);
 	
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_MAX_WRITE_IMAGE_ARGS : %u", max_write_image_args);
@@ -524,7 +524,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	
     cl_device_fp_config fp_config;
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_SINGLE_FP_CONFIG,
-							   sizeof(cl_device_fp_config), &fp_config, NULL);
+							   sizeof(cl_device_fp_config), &fp_config, nullptr);
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_SINGLE_FP_CONFIG : %s%s%s%s%s%s", 
@@ -543,28 +543,28 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	ErrOut("CL_DEVICE_IMAGE <dim>");
 	
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_IMAGE2D_MAX_WIDTH,
-							   sizeof(size_t), &szMaxDims[0], NULL);
+							   sizeof(size_t), &szMaxDims[0], nullptr);
 	tmpStr = "2D_MAX_WIDTH " + zu;
 	ErrOut(tmpStr.c_str(), szMaxDims[0]);
 
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_IMAGE2D_MAX_HEIGHT,
-							   sizeof(size_t), &szMaxDims[1], NULL);
+							   sizeof(size_t), &szMaxDims[1], nullptr);
 	tmpStr = "2D_MAX_HEIGHT " + zu;
 	ErrOut(tmpStr.c_str(), szMaxDims[1]);
 
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_IMAGE3D_MAX_WIDTH,
-							   sizeof(size_t), &szMaxDims[2], NULL);
+							   sizeof(size_t), &szMaxDims[2], nullptr);
 	tmpStr = "3D_MAX_WIDHT " + zu;
 	ErrOut(tmpStr.c_str(), szMaxDims[2]);
 
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_IMAGE3D_MAX_HEIGHT,
-							   sizeof(size_t), &szMaxDims[3], NULL);
+							   sizeof(size_t), &szMaxDims[3], nullptr);
 	tmpStr = "3D_MAX_HEIGHT " + zu;
 
 	ErrOut(tmpStr.c_str(), szMaxDims[3]);
 
 	ciErrNum = clGetDeviceInfo(argDev, CL_DEVICE_IMAGE3D_MAX_DEPTH,
-							   sizeof(size_t), &szMaxDims[4], NULL);
+							   sizeof(size_t), &szMaxDims[4], nullptr);
 	tmpStr = "3D_MAX_DEPTH " + zu;
 	ErrOut(tmpStr.c_str(), szMaxDims[4]);
  
@@ -573,17 +573,17 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	ErrOut("CL_DEVICE_PREFERRED_VECTOR_WIDTH_<t>\t");
 	cl_uint vec_width [6];
 	clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR,
-					sizeof(cl_uint), &vec_width[0], NULL);
+					sizeof(cl_uint), &vec_width[0], nullptr);
     clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT,
-					sizeof(cl_uint), &vec_width[1], NULL);
+					sizeof(cl_uint), &vec_width[1], nullptr);
     clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT,
-					sizeof(cl_uint), &vec_width[2], NULL);
+					sizeof(cl_uint), &vec_width[2], nullptr);
     clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG,
-					sizeof(cl_uint), &vec_width[3], NULL);
+					sizeof(cl_uint), &vec_width[3], nullptr);
     clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT,
-					sizeof(cl_uint), &vec_width[4], NULL);
+					sizeof(cl_uint), &vec_width[4], nullptr);
     clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE,
-					sizeof(cl_uint), &vec_width[5], NULL);
+					sizeof(cl_uint), &vec_width[5], nullptr);
 	ErrOut("CHAR %u, SHORT %u, INT %u, LONG %u, FLOAT %u, DOUBLE %u",
 			  vec_width[0], vec_width[1], vec_width[2],
 			  vec_width[3], vec_width[4], vec_width[5]);

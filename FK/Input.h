@@ -102,7 +102,8 @@ typedef int* HWND;
 #endif // !FK_DOXYGEN_USER_PROCESS
 #endif // WIN32 && !_MINGW_
 
-#include <map>
+//#include <map>
+#include <unordered_map>
 #include <vector>
 #include "Misc.h"
 
@@ -270,7 +271,7 @@ private:
 	struct AxisParam {
 		int pos, neg, border;
 	};
-	std::map<int, AxisParam>	axisParams[INPUT_DEVICE_NUM];
+	std::unordered_map<int, AxisParam>	axisParams[INPUT_DEVICE_NUM];
 
 	//キーボードのメンバー変数
 	bool m_Key[KEY_NUM];
@@ -417,7 +418,7 @@ public:
 	 *
 	 *	\return
 	 *		デバイス状況が格納された fk_InputInfo 型のポインタ。
-	 *		引数で無効なデバイス番号が指定された場合は NULL を返します。
+	 *		引数で無効なデバイス番号が指定された場合は nullptr を返します。
 	 *
 	 *	\note
 	 *		setButtonSwap() や setAxisToButton() によってボタンや軸を入れ替えていた場合、

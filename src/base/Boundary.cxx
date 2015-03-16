@@ -76,21 +76,21 @@ fk_Boundary::fk_Boundary(void)
 	bMode = FK_B_NONE;
 	bDrawToggle = false;
 	bLineWidth = 1.0;
-	bLineColor = NULL;
-	bIntLineColor = NULL;
+	bLineColor = nullptr;
+	bIntLineColor = nullptr;
 
 	bSphereRad = 0.0;
-	bAABBSize = NULL;
-	bOBBSize = NULL;
-	bCapSPos = NULL;
-	bCapEPos = NULL;
+	bAABBSize = nullptr;
+	bOBBSize = nullptr;
+	bCapSPos = nullptr;
+	bCapEPos = nullptr;
 	bCapRad = 0.0;
 
-	bSphere = NULL;
-	bAABB = NULL;
-	bOBB = NULL;
-	bCapsule = NULL;
-	bCapModel = NULL;
+	bSphere = nullptr;
+	bAABB = nullptr;
+	bOBB = nullptr;
+	bCapsule = nullptr;
+	bCapModel = nullptr;
 
 	return;
 }
@@ -122,7 +122,7 @@ void fk_Boundary::setSphere(double argRadius)
 		bSphereRad = argRadius;
 	}
 
-	if(bSphere == NULL) {
+	if(bSphere == nullptr) {
 		bSphere = new fk_IndexFaceSet;
 		bSphere->makeSphere(4, bSphereRad);
 	} else {
@@ -139,10 +139,10 @@ double fk_Boundary::getSphere(void)
 
 void fk_Boundary::setAABBSize(double argX, double argY, double argZ)
 {
-	if(bAABBSize == NULL) bAABBSize = new fk_Vector;
+	if(bAABBSize == nullptr) bAABBSize = new fk_Vector;
 	bAABBSize->set(argX, argY, argZ);
 
-	if(bAABB == NULL) {
+	if(bAABB == nullptr) {
 		bAABB = new fk_IndexFaceSet;
 		bAABB->makeBlock(argX, argY, argZ);
 	} else {
@@ -160,16 +160,16 @@ void fk_Boundary::setAABBSize(fk_Vector argV)
 
 fk_Vector fk_Boundary::getAABBSize(void)
 {
-	if(bAABBSize == NULL) return fk_Vector(0.0, 0.0, 0.0);
+	if(bAABBSize == nullptr) return fk_Vector(0.0, 0.0, 0.0);
 	return (*bAABBSize);
 }
 
 void fk_Boundary::setOBBSize(double argX, double argY, double argZ)
 {
-	if(bOBBSize == NULL) bOBBSize = new fk_Vector;
+	if(bOBBSize == nullptr) bOBBSize = new fk_Vector;
 	bOBBSize->set(argX, argY, argZ);
 
-	if(bOBB == NULL) {
+	if(bOBB == nullptr) {
 		bOBB = new fk_IndexFaceSet;
 		bOBB->makeBlock(argX, argY, argZ);
 	} else {
@@ -187,7 +187,7 @@ void fk_Boundary::setOBBSize(fk_Vector argV)
 
 fk_Vector fk_Boundary::getOBBSize(void)
 {
-	if(bOBBSize == NULL) return fk_Vector(0.0, 0.0, 0.0);
+	if(bOBBSize == nullptr) return fk_Vector(0.0, 0.0, 0.0);
 	return (*bOBBSize);
 }
 
@@ -195,15 +195,15 @@ void fk_Boundary::setCapsule(fk_Vector argS, fk_Vector argE, double argRad)
 {
 	fk_Vector	pos, vec;
 
-	if(bCapSPos == NULL) bCapSPos = new fk_Vector;
-	if(bCapEPos == NULL) bCapEPos = new fk_Vector;
+	if(bCapSPos == nullptr) bCapSPos = new fk_Vector;
+	if(bCapEPos == nullptr) bCapEPos = new fk_Vector;
 	if(argRad < 0.0) return;
 	if(argS == argE) return;
 	*bCapSPos = argS;
 	*bCapEPos = argE;
 	bCapRad = argRad;
 
-	if(bCapModel == NULL) bCapModel = new fk_Model;
+	if(bCapModel == nullptr) bCapModel = new fk_Model;
 
 	pos = (argS + argE)/2.0;
 	vec = argE - argS;
@@ -211,7 +211,7 @@ void fk_Boundary::setCapsule(fk_Vector argS, fk_Vector argE, double argRad)
 	bCapModel->glMoveTo(pos);
 	bCapModel->glVec(vec);
 
-	if(bCapsule == NULL) {
+	if(bCapsule == nullptr) {
 		bCapsule = new fk_IndexFaceSet;
 		bCapsule->makeCapsule(4, vec.dist(), bCapRad);
 	} else {
@@ -226,19 +226,19 @@ double fk_Boundary::getCapsuleRadius(void)
 
 double fk_Boundary::getCapsuleLength(void)
 {
-	if(bCapSPos == NULL || bCapEPos == NULL) return 0.0;
+	if(bCapSPos == nullptr || bCapEPos == nullptr) return 0.0;
 	return ((*bCapSPos) - (*bCapEPos)).dist();
 }
 
 fk_Vector fk_Boundary::getCapsuleStartPos(void)
 {
-	if(bCapSPos == NULL) return fk_Vector(0.0, 0.0, 0.0);
+	if(bCapSPos == nullptr) return fk_Vector(0.0, 0.0, 0.0);
 	return (*bCapSPos);
 }
 
 fk_Vector fk_Boundary::getCapsuleEndPos(void)
 {
-	if(bCapEPos == NULL) return fk_Vector(0.0, 0.0, 0.0);
+	if(bCapEPos == nullptr) return fk_Vector(0.0, 0.0, 0.0);
 	return (*bCapEPos);
 }
 
@@ -264,25 +264,25 @@ bool fk_Boundary::getBDrawToggle(void)
 
 void fk_Boundary::setBLineColor(fk_Color argCol)
 {
-	if(bLineColor == NULL) bLineColor = new fk_Color;
+	if(bLineColor == nullptr) bLineColor = new fk_Color;
 	*bLineColor = argCol;
 }
 
 fk_Color * fk_Boundary::getBLineColor(void)
 {
-	if(bLineColor == NULL) bLineColor = new fk_Color;
+	if(bLineColor == nullptr) bLineColor = new fk_Color;
 	return bLineColor;
 }
 
 void fk_Boundary::setBIntLineColor(fk_Color argCol)
 {
-	if(bIntLineColor == NULL) bIntLineColor = new fk_Color;
+	if(bIntLineColor == nullptr) bIntLineColor = new fk_Color;
 	*bIntLineColor = argCol;
 }
 
 fk_Color * fk_Boundary::getBIntLineColor(void)
 {
-	if(bIntLineColor == NULL) bIntLineColor = new fk_Color;
+	if(bIntLineColor == nullptr) bIntLineColor = new fk_Color;
 	return bIntLineColor;
 }
 
@@ -315,12 +315,12 @@ fk_IndexFaceSet * fk_Boundary::GetBShape(void)
 	  default:
 		break;
 	}
-	return NULL;
+	return nullptr;
 }
 
 fk_Model * fk_Boundary::GetCapsuleModel(void)
 {
-	if(bCapModel == NULL) bCapModel = new fk_Model;
+	if(bCapModel == nullptr) bCapModel = new fk_Model;
 	return bCapModel;
 }
 

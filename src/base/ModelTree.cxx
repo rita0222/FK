@@ -92,7 +92,7 @@ public:
 
 fk_ModelTreeObject::fk_ModelTreeObject(void)
 {
-	model = NULL;
+	model = nullptr;
 	return;
 }
 
@@ -112,13 +112,13 @@ fk_TreeData * fk_Model::GetTreeData(fk_Model *argModel)
 	fk_TreeData				*curData;
 	fk_ModelTreeObject		*object;
 
-	for(curData = _modelTree->foreachData(NULL);
-		curData != NULL; curData = _modelTree->foreachData(curData)) {
+	for(curData = _modelTree->foreachData(nullptr);
+		curData != nullptr; curData = _modelTree->foreachData(curData)) {
 		object = static_cast<fk_ModelTreeObject *>(curData->getObject());
-		if(object == NULL) continue;
+		if(object == nullptr) continue;
 		if(object->GetModel() == argModel) return curData;
 	}
-	return NULL;
+	return nullptr;
 }
 
 fk_Model * fk_ModelTreeObject::GetModel(void)
@@ -146,7 +146,7 @@ void fk_Model::EntryTree(void)
 	treeData = _modelTree->addNewChild(_modelTree->getRoot(), ss.str());
 	thisObject->SetModel(this);
 	treeData->setObject(thisObject);
-	parent = NULL;
+	parent = nullptr;
 
 	return;
 }
@@ -154,13 +154,13 @@ void fk_Model::EntryTree(void)
 void fk_Model::DeleteTree(void)
 {
 	if(treeFlag == false) return;
-	if(treeData == NULL) return;
+	if(treeData == nullptr) return;
 	if(treeDelMode == true) {
 		deleteChildren();
 		deleteParent();
 		_modelTree->deleteBranch(treeData);
 	}
-	treeData = NULL;
+	treeData = nullptr;
 	return;
 }
 	
@@ -173,17 +173,17 @@ bool fk_Model::setParent(fk_Model *argModel, bool argBindFlg)
 
 	EntryTree();
 
-	if(argModel == NULL) {
+	if(argModel == nullptr) {
 		deleteParent(argBindFlg);
 		return true;
 	}
 
-	if(parent != NULL) deleteParent(argBindFlg);
+	if(parent != nullptr) deleteParent(argBindFlg);
 
 	argModel->EntryTree();
 
-	if((parentData = argModel->treeData) == NULL) return false;
-	if(treeData == NULL) return false;
+	if((parentData = argModel->treeData) == nullptr) return false;
+	if(treeData == nullptr) return false;
 	if(_modelTree->moveBranch(parentData, treeData) == false) return false;
 
 	parent = argModel;
@@ -208,9 +208,9 @@ void fk_Model::deleteParent(bool argBindFlg)
 
 	EntryTree();
 
-	if(parent == NULL) return;
+	if(parent == nullptr) return;
 	if(treeFlag == false) return;
-	if(treeData == NULL) return;
+	if(treeData == nullptr) return;
 
 	_modelTree->moveBranch(_modelTree->getRoot(), treeData);
 
@@ -224,7 +224,7 @@ void fk_Model::deleteParent(bool argBindFlg)
 		glUpvec(tmpMat * tmpUpVec);
 	}
 
-	parent = NULL;
+	parent = nullptr;
 	return;
 }
 
@@ -235,7 +235,7 @@ fk_Model * fk_Model::getParent(void) const
 
 bool fk_Model::entryChild(fk_Model *argModel, bool argBindFlg)
 {
-	if(argModel == NULL) return true;
+	if(argModel == nullptr) return true;
 	return (argModel->setParent(this, argBindFlg));
 }
 
@@ -245,16 +245,16 @@ bool fk_Model::deleteChild(fk_Model *argModel, bool argBindFlg)
 	fk_ModelTreeObject		*modelObject;
 	fk_Model				*childModel;
 
-	if(argModel == NULL) return false;
+	if(argModel == nullptr) return false;
 	if(argModel->parent != this) return false;
 
-	if((childData = argModel->treeData) == NULL) return false;
+	if((childData = argModel->treeData) == nullptr) return false;
 
 	modelObject = static_cast<fk_ModelTreeObject *>(childData->getObject());
-	if(modelObject == NULL) return false;
+	if(modelObject == nullptr) return false;
 
 	childModel = modelObject->GetModel();
-	if(childModel == NULL) return false;
+	if(childModel == nullptr) return false;
 
 	childModel->deleteParent(argBindFlg);
 
@@ -270,19 +270,19 @@ void fk_Model::deleteChildren(bool argBindFlg)
 	unsigned int			i;
 
 	if(treeFlag == false) return;
-	if(treeData == NULL) return;
+	if(treeData == nullptr) return;
 
-	for(curChild = treeData->getChild(NULL);
-		curChild != NULL; curChild = treeData->getChild(curChild)) {
+	for(curChild = treeData->getChild(nullptr);
+		curChild != nullptr; curChild = treeData->getChild(curChild)) {
 		childrenArray.push_back(curChild);
 	}
 
 	for(i = 0; i < childrenArray.size(); i++) {
 		modelObject = static_cast<fk_ModelTreeObject *>(childrenArray[i]->getObject());
-		if(modelObject == NULL) return;
+		if(modelObject == nullptr) return;
 
 		childModel = modelObject->GetModel();
-		if(childModel == NULL) return;
+		if(childModel == nullptr) return;
 
 		childModel->deleteParent(argBindFlg);
 	}
@@ -295,19 +295,19 @@ fk_Model * fk_Model::foreachChild(fk_Model *argModel)
 	fk_TreeData				*argChild, *nextChild;
 	fk_ModelTreeObject		*childObject;
 
-	if(treeFlag == false) return NULL;
-	if(treeData == NULL) return NULL;
+	if(treeFlag == false) return nullptr;
+	if(treeData == nullptr) return nullptr;
 
-	if(argModel == NULL) {
-		nextChild = treeData->getChild(NULL);
+	if(argModel == nullptr) {
+		nextChild = treeData->getChild(nullptr);
 	} else {
-		if((argChild = argModel->treeData) == NULL) return NULL;
+		if((argChild = argModel->treeData) == nullptr) return nullptr;
 		nextChild = argChild->getNext();
 	}
 
-	if(nextChild == NULL) return NULL;
+	if(nextChild == nullptr) return nullptr;
 	childObject = static_cast<fk_ModelTreeObject *>(nextChild->getObject());
-	if(childObject == NULL) return NULL;
+	if(childObject == nullptr) return nullptr;
 
 	return childObject->GetModel();
 }

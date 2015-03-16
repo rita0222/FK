@@ -95,7 +95,7 @@ bool fk_VRMLParser::ReadVRMLFile(string argFileName,
 	vector< vector<int> >	IndexFaceSet;
 	vector<int>				ColIDArray;
 
-	if(meshData == NULL) return false;
+	if(meshData == nullptr) return false;
 
 	if(ifs.fail()) return false;
 

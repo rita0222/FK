@@ -277,7 +277,7 @@ public:
 	 *
 	 *	\return
 	 *		関節番号に対応するオブジェクトモデルインスタンスのポインタ。
-	 *		無効な関節番号を指定した場合は NULL が返ります。
+	 *		無効な関節番号を指定した場合は nullptr が返ります。
 	 *
 	 *	\sa getBaseModel(), getJointModel()
 	 */
@@ -297,7 +297,7 @@ public:
 	 *
 	 *	\return
 	 *		関節番号に対応するジョイントモデルインスタンスのポインタ。
-	 *		無効な関節番号を指定した場合は NULL が返ります。
+	 *		無効な関節番号を指定した場合は nullptr が返ります。
 	 *
 	 *	\sa getBaseModel(), getObjectModel()
 	 */

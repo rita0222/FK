@@ -147,7 +147,7 @@ fk_Model * fk_PickData::getModel(int argIndex)
 	_st		index = static_cast<_st>(argIndex);
 
 	if(argIndex < 0 || index >= ModelArray.size()) {
-		return NULL;
+		return nullptr;
 	}
 
 	return ModelArray[index];

@@ -82,9 +82,9 @@ fk_Vertex * fk_ReferenceL2::getOneNeighborVOnV(fk_Vertex *argV) const
 {
 	fk_Half	*tmpH;
 
-	if(argV == NULL) return NULL;
+	if(argV == nullptr) return nullptr;
 	tmpH = argV->getOneHalf();
-	if(tmpH == NULL) return NULL;
+	if(tmpH == nullptr) return nullptr;
 	return getMateHOnH(tmpH)->getVertex();
 }
 
@@ -94,10 +94,10 @@ vector<fk_Half *> fk_ReferenceL2::getAllHOnV(fk_Vertex *argV) const
 	fk_Half				*startH, *countH;
 
 	retVec.clear();
-	if(argV == NULL) return retVec;
-	countH = NULL;
+	if(argV == nullptr) return retVec;
+	countH = nullptr;
 	startH = argV->getOneHalf();
-	if(startH == NULL) return retVec;
+	if(startH == nullptr) return retVec;
 
 	retVec.push_back(startH);	 
 
@@ -117,10 +117,10 @@ vector<fk_Edge *> fk_ReferenceL2::getAllEOnV(fk_Vertex *argV) const
 	fk_Half				*startH, *countH;
 
 	retVec.clear();
-	if(argV == NULL) return retVec;
-	countH = NULL;
+	if(argV == nullptr) return retVec;
+	countH = nullptr;
 	startH = argV->getOneHalf();
-	if(startH == NULL) return retVec;
+	if(startH == nullptr) return retVec;
 
 	retVec.push_back(startH->getParentEdge());	  
 
@@ -140,10 +140,10 @@ int fk_ReferenceL2::getENumOnV(fk_Vertex *argV) const
 	fk_Half			*startH, *countH;
 
 	retNum = 1;
-	if(argV == NULL) return 0;
-	countH = NULL;
+	if(argV == nullptr) return 0;
+	countH = nullptr;
 	startH = argV->getOneHalf();
-	if(startH == NULL) return 0;
+	if(startH == nullptr) return 0;
 
 	countH = getMateHOnH(startH)->getNextHalf();
 
@@ -162,19 +162,19 @@ vector<fk_Loop *> fk_ReferenceL2::getAllLOnV(fk_Vertex *argV) const
 	fk_Loop				*tmpL;
 
 	retVec.clear();
-	if(argV == NULL) return retVec;
-	countH = NULL;
+	if(argV == nullptr) return retVec;
+	countH = nullptr;
 	startH = argV->getOneHalf();
-	if(startH == NULL) return retVec;
+	if(startH == nullptr) return retVec;
 
 	tmpL = startH->getParentLoop();
 
-	if(tmpL != NULL) retVec.push_back(tmpL);
+	if(tmpL != nullptr) retVec.push_back(tmpL);
 	countH = getMateHOnH(startH)->getNextHalf();
 
 	while(countH != startH) {
 		tmpL = countH->getParentLoop();
-		if(tmpL != NULL) retVec.push_back(tmpL);
+		if(tmpL != nullptr) retVec.push_back(tmpL);
 		countH = getMateHOnH(countH)->getNextHalf();
 	}
 
@@ -187,7 +187,7 @@ vector<fk_Vertex *> fk_ReferenceL2::getAllVOnL(fk_Loop *argL) const
 	fk_Half					*startH, *countH;
 
 	retVec.clear();
-	if(argL == NULL) return retVec;
+	if(argL == nullptr) return retVec;
 	startH = argL->getOneHalf();
 	retVec.push_back(startH->getVertex());
 	
@@ -206,7 +206,7 @@ int fk_ReferenceL2::getVNumOnL(fk_Loop *argL) const
 
 	retNum = 1;
 
-	if(argL == NULL) return 0;
+	if(argL == nullptr) return 0;
 	startH = argL->getOneHalf();
 	
 	for(countH = startH->getNextHalf();
@@ -223,7 +223,7 @@ vector<fk_Half *> fk_ReferenceL2::getAllHOnL(fk_Loop *argL) const
 	fk_Half				*startH, *countH;
 
 	retVec.clear();
-	if(argL == NULL) return retVec;
+	if(argL == nullptr) return retVec;
 	startH = argL->getOneHalf();
 	retVec.push_back(startH);
 	
@@ -242,7 +242,7 @@ vector<fk_Edge *> fk_ReferenceL2::getAllEOnL(fk_Loop *argL) const
 	fk_Half				*startH, *countH;
 
 	retVec.clear();
-	if(argL == NULL) return retVec;
+	if(argL == nullptr) return retVec;
 	startH = argL->getOneHalf();
 	retVec.push_back(startH->getParentEdge());
 	
@@ -259,15 +259,15 @@ fk_Loop * fk_ReferenceL2::getOneNeighborLOnL(fk_Loop *argL) const
 	fk_Half		*startH, *tmpH;
 	fk_Loop		*retL;
 
-	if(argL == NULL) return NULL;
+	if(argL == nullptr) return nullptr;
 	startH = tmpH = argL->getOneHalf();
 	do {
 		retL = getMateHOnH(tmpH)->getParentLoop();
-		if(retL != NULL && retL != argL) break;
+		if(retL != nullptr && retL != argL) break;
 		tmpH = tmpH->getNextHalf();
 	} while(startH != tmpH);
 
-	if(startH == tmpH) return NULL;
+	if(startH == tmpH) return nullptr;
 	else return retL;
 }
 
@@ -275,11 +275,11 @@ fk_Loop * fk_ReferenceL2::getNeighborLOnLH(fk_Loop *argL, fk_Half *argH) const
 {
 	fk_Loop		*retL;
 
-	if(argL == NULL || argH == NULL) {
-		return NULL;
+	if(argL == nullptr || argH == nullptr) {
+		return nullptr;
 	}
-	if(argH->getParentLoop() != argL) return NULL;
+	if(argH->getParentLoop() != argL) return nullptr;
 	retL = getMateHOnH(argH)->getParentLoop();
-	if(retL == NULL || retL == argL) return NULL;
+	if(retL == nullptr || retL == argL) return nullptr;
 	else return retL;
 }

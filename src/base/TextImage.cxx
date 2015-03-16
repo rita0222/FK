@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <FK/TextImage.h>
 #include <FK/Error.H>
@@ -125,8 +126,8 @@ class fk_FTGlyph {
 
 class fk_FontServer {
  private:
-	FT_Library				library;
-	map<string, FT_Face>	faceArray;
+	FT_Library						library;
+	unordered_map<string, FT_Face>	faceArray;
 
  public:
 	fk_FontServer(void);
@@ -247,7 +248,7 @@ fk_GlyphStatus & fk_GlyphStatus::operator =(const fk_GlyphStatus &argStatus)
 
 void fk_GlyphStatus::Init(void)
 {
-	Set(NULL, 0, 0, 0, 1);
+	Set(nullptr, 0, 0, 0, 1);
 	return;
 }
 
@@ -304,9 +305,7 @@ fk_FontServer::fk_FontServer(void)
 
 fk_FontServer::~fk_FontServer()
 {
-	map<string, FT_Face>::iterator	p;
-
-	for(p = faceArray.begin(); p != faceArray.end(); ++p) {
+	for(auto p = faceArray.begin(); p != faceArray.end(); ++p) {
 		FT_Done_Face(p->second);
 	}
 	FT_Done_FreeType(library);
@@ -315,15 +314,15 @@ fk_FontServer::~fk_FontServer()
 
 FT_Face fk_FontServer::GetFace(string argName)
 {
-	map<string, FT_Face>::iterator	p;
-	FT_Face							face;
-	FT_Error						error;
+	FT_Face		face;
+	FT_Error	error;
 
-	if((p = faceArray.find(argName)) == faceArray.end()) {
+	auto p = faceArray.find(argName);
+	if(p == faceArray.end()) {
 		error = FT_New_Face(library, argName.c_str(), 0, &face);
 
 		if(error) {
-			return NULL;
+			return nullptr;
 		}
 
 		faceArray[argName] = face;
@@ -335,7 +334,7 @@ FT_Face fk_FontServer::GetFace(string argName)
 
 fk_FTFace::fk_FTFace(void)
 {
-	face = NULL;
+	face = nullptr;
 	return;
 }
 
@@ -357,10 +356,9 @@ fk_GlyphServer::~fk_GlyphServer()
 
 void fk_GlyphServer::Clear(void)
 {
-	map<fk_GlyphStatus, fk_GlyphCache *>::iterator		p;
-	fk_GlyphCache										*tmpCache;
+	fk_GlyphCache	*tmpCache;
 
-	for(p = glyphArray.begin(); p != glyphArray.end(); ++p) {
+	for(auto p = glyphArray.begin(); p != glyphArray.end(); ++p) {
 		tmpCache = p->second;
 		delete tmpCache->buffer;
 		delete tmpCache;
@@ -385,13 +383,13 @@ void fk_GlyphServer::MakeCache(const fk_GlyphStatus &argStatus,
 
 fk_GlyphBuffer * fk_GlyphServer::GetBuffer(const fk_GlyphStatus &argStatus)
 {
-	if(IsArive(argStatus) == false) return NULL;
+	if(IsArive(argStatus) == false) return nullptr;
 	return glyphArray[argStatus]->buffer;
 }
 
 FT_BBox * fk_GlyphServer::GetBBox(const fk_GlyphStatus &argStatus)
 {
-	if(IsArive(argStatus) == false) return NULL;
+	if(IsArive(argStatus) == false) return nullptr;
 	return &(glyphArray[argStatus]->bbox);
 }
 
@@ -594,7 +592,7 @@ int fk_TextImage::getMaxLineHeight(void) const
 bool fk_TextImage::initFont(const string fontName)
 {
 	face->face = getFTServer()->GetFace(fontName);
-	if(face->face == NULL) {
+	if(face->face == nullptr) {
 		return false;
 	}
 	return true;
@@ -672,7 +670,7 @@ bool fk_TextImage::clear(void)
 	if(sendPos == 0) return false;
 	InitTextImage();
 	sendPos = 0;
-	if(charImages.empty() == true) loadUniStr(NULL);
+	if(charImages.empty() == true) loadUniStr(nullptr);
 	return true;
 }
 
@@ -696,12 +694,12 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	fk_UniStr				tmpStr, line;
 	int						fbScale[1024], sbScale[1024];
 
-	if(face->face == NULL) {
+	if(face->face == nullptr) {
 		fk_PutError("fk_TextImage", "loadUniStr", 1);
 		return false;
 	}
 
-	if(argStr != NULL) strData.copyStr(argStr);
+	if(argStr != nullptr) strData.copyStr(argStr);
 	tmpStr.copyStr(&strData);
 
 	FreeGlyph(&glyphArray);

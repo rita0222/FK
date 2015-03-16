@@ -109,7 +109,7 @@ class fk_IFSetHandle {
 	int			GetEdgeCountNum(fk_Edge *);
 
  public:
-	fk_IFSetHandle(fk_DataBase * = NULL);
+	fk_IFSetHandle(fk_DataBase * = nullptr);
 	virtual ~fk_IFSetHandle() {};
 
 	void			Init(void);

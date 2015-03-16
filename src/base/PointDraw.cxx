@@ -160,7 +160,7 @@ void fk_PointDraw::DrawSolidPointPick(fk_Model *argObj)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextV(NULL) == NULL) return;
+	if(solidP->getNextV(nullptr) == nullptr) return;
 
 	if(solidP->GetVCacheStatus() == false) {
 		solidP->MakeVCache();
@@ -279,7 +279,7 @@ void fk_PointDraw::DrawSolidPointMaterial(fk_Model *argObj)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextV(NULL) == NULL) return;
+	if(solidP->getNextV(nullptr) == nullptr) return;
 
 	if(solidP->GetVCacheStatus() == false) {
 		solidP->MakeVCache();
@@ -289,7 +289,7 @@ void fk_PointDraw::DrawSolidPointMaterial(fk_Model *argObj)
 
 	modelColor = argObj->getInhPointColor();
 
-	if(modelColor == NULL) {
+	if(modelColor == nullptr) {
 		modelColor = argObj->getInhMaterial()->getAmbient();
 	}
 
@@ -384,7 +384,7 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 
 	modelColor = argObj->getInhPointColor();
 
-	if(modelColor == NULL) {
+	if(modelColor == nullptr) {
 		modelColor = argObj->getInhMaterial()->getAmbient();
 	}
 
@@ -457,7 +457,7 @@ void fk_PointDraw::DrawSolidPointNormal(fk_Model *argObj, bool argFlg)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextV(NULL) == NULL) return;
+	if(solidP->getNextV(nullptr) == nullptr) return;
 
 	if(solidP->GetVCacheStatus() == false) {
 		solidP->MakeVCache();
@@ -467,7 +467,7 @@ void fk_PointDraw::DrawSolidPointNormal(fk_Model *argObj, bool argFlg)
 
 	if(argFlg == true) {
 		ModelColor = argObj->getInhPointColor();
-		if(ModelColor == NULL) {
+		if(ModelColor == nullptr) {
 			ModelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {
@@ -518,7 +518,7 @@ void fk_PointDraw::DrawIFSPointNormal(fk_Model *argObj, bool argFlag)
 
 	if(argFlag == true) {
 		modelColor = argObj->getInhPointColor();
-		if(modelColor == NULL) {
+		if(modelColor == nullptr) {
 			modelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {
@@ -552,7 +552,7 @@ void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 
 	if(argFlag == true) {
 		modelColor = argObj->getInhPointColor();
-		if(modelColor == NULL) {
+		if(modelColor == nullptr) {
 			modelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {

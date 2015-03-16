@@ -83,7 +83,7 @@ using namespace std;
 fk_STLOut::fk_STLOut(fk_Solid *argSolid)
 {
 	solid = argSolid;
-	ifset = NULL;
+	ifset = nullptr;
 
 	return;
 }
@@ -91,7 +91,7 @@ fk_STLOut::fk_STLOut(fk_Solid *argSolid)
 fk_STLOut::fk_STLOut(fk_IndexFaceSet *argIFSet)
 {
 	ifset = argIFSet;
-	solid = NULL;
+	solid = nullptr;
 
 	return;
 }
@@ -106,11 +106,11 @@ bool fk_STLOut::WriteSTLFile(string argFileName)
 	ofstream	ofs(argFileName);
 	bool		retFlg;
 
-	if(solid == NULL && ifset == NULL) return false;
+	if(solid == nullptr && ifset == nullptr) return false;
 
 	if(ofs.fail()) return false;
 
-	if(solid != NULL) {
+	if(solid != nullptr) {
 		retFlg = WriteSTLShape_Solid(&ofs);
 	} else {
 		retFlg = WriteSTLShape_IFS(&ofs);
@@ -131,9 +131,9 @@ bool fk_STLOut::WriteSTLShape_Solid(ofstream *argOFS)
 
 	*argOFS << "solid design" << endl;
 
-	for(curL = solid->getNextL(NULL); curL != NULL; curL = solid->getNextL(curL)) {
+	for(curL = solid->getNextL(nullptr); curL != nullptr; curL = solid->getNextL(curL)) {
 		norm = curL->getNormal();
-		if(norm != NULL) {
+		if(norm != nullptr) {
 			*argOFS << " facet normal " << norm->x << " " << norm->y << " " << norm->z << endl;
 			*argOFS << "  outer loop" << endl;
 		} else {

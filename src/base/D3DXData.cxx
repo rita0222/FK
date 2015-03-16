@@ -421,13 +421,13 @@ fk_Matrix fk_D3DXSkinData::GetOffsetMatrix(void)
 fk_D3DXFrame::fk_D3DXFrame(void)
 {
 	name.clear();
-	skin = NULL;
-	anim = NULL;
+	skin = nullptr;
+	anim = nullptr;
 
 	offsetMatrix.init();
 	curMatrix.init();
 	totalMatrix.init();
-	parentMatrix = NULL;
+	parentMatrix = nullptr;
 
 	return;
 }
@@ -472,7 +472,7 @@ fk_D3DXFrameAnimation * fk_D3DXFrame::GetAnimation(void)
 
 void fk_D3DXFrame::SetParentFrame(fk_D3DXFrame *argParent)
 {
-	if(argParent == NULL) return;
+	if(argParent == nullptr) return;
 	parentMatrix = &(argParent->curMatrix);
 	return;
 }
@@ -485,13 +485,13 @@ void fk_D3DXFrame::SetInitMatrix(const fk_Matrix *argMat)
 
 void fk_D3DXFrame::SetUpMatrix(void)
 {
-	if(skin != NULL) {
+	if(skin != nullptr) {
 		offsetMatrix = skin->GetOffsetMatrix();
 	} else {
 		offsetMatrix.init();
 	}
 
-	if(parentMatrix != NULL) {
+	if(parentMatrix != nullptr) {
 		curMatrix = *parentMatrix * initMatrix;
 	} else {
 		curMatrix = initMatrix;
@@ -506,7 +506,7 @@ void fk_D3DXFrame::SetTime(double argTime)
 {
 	double			startTime;
 
-	if(anim == NULL) return;
+	if(anim == nullptr) return;
 
 	startTime = anim->GetStartTime();
 	if(startTime < -FK_EPS || argTime < startTime - FK_EPS) {
@@ -516,7 +516,7 @@ void fk_D3DXFrame::SetTime(double argTime)
 
 	anim->SetTime(argTime);
 
-	if(parentMatrix != NULL) {
+	if(parentMatrix != nullptr) {
 		curMatrix = *parentMatrix * anim->GetFrameMatrix();
 	} else {
 		curMatrix = anim->GetFrameMatrix();
@@ -538,7 +538,7 @@ fk_D3DXPropertyList::fk_D3DXPropertyList(void)
 	frameMatrix.init();
 	property.clear();
 	data.clear();
-	frame = NULL;
+	frame = nullptr;
 }
 
 fk_D3DXPropertyList::~fk_D3DXPropertyList()

@@ -80,7 +80,7 @@ fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet,
 
 	allClear();
 
-	if(argVertexSet != NULL) {
+	if(argVertexSet != nullptr) {
 		makePolygon(argVertexSet, false);
 	}
 
@@ -104,7 +104,7 @@ void fk_Polygon::setVertex(int argID, fk_Vector argPos)
 	fk_Vertex		*curV;
 
 	curV = getVData(argID+1);
-	if(curV == NULL) {
+	if(curV == nullptr) {
 		pushPolygonVertex(argPos, false);
 	} else {
 		moveVertex(curV, argPos);
@@ -151,7 +151,7 @@ void fk_Polyline::setVertex(int argID, fk_Vector argPos)
 	fk_Vertex		*curV;
 
 	curV = getVData(argID + 1);
-	if(curV == NULL) {
+	if(curV == nullptr) {
 		pushPolygonVertex(argPos, true);
 	} else {
 		moveVertex(curV, argPos);

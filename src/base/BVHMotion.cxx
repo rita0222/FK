@@ -512,14 +512,14 @@ string fk_BVHMotion::getNodeName(int argID)
 fk_Model * fk_BVHMotion::getNodeModel(int argID)
 {
 	if(argID < 0 || static_cast<_st>(argID) >= nodeArray.size()) {
-		return NULL;
+		return nullptr;
 	}
 	return nodeArray[static_cast<_st>(argID)];
 }
 
 fk_Model * fk_BVHMotion::getNodeModel(string argName)
 {
-	if(nameToNodeMap.find(argName) == nameToNodeMap.end()) return NULL;
+	if(nameToNodeMap.find(argName) == nameToNodeMap.end()) return nullptr;
 	return nameToNodeMap[argName];
 }
 

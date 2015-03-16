@@ -278,7 +278,7 @@ unsigned long fk_FrameController::getNow(void)
 	//getrusage(RUSAGE_SELF, &tmp_t);
 	//tv = tmp_t.ru_utime;
 
-	gettimeofday(&tv, NULL);
+	gettimeofday(&tv, nullptr);
 	retVal = static_cast<unsigned long>((tv.tv_sec % 16777216) * 1000);
 	retVal += static_cast<unsigned long>(tv.tv_usec/1000);
 

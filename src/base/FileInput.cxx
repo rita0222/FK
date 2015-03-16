@@ -82,8 +82,8 @@ using namespace std;
 
 fk_FileInput::fk_FileInput(void)
 {
-	DB = NULL;
-	palette = NULL;
+	DB = nullptr;
+	palette = nullptr;
 	sizeMode = true;
 
 	return;
@@ -636,15 +636,15 @@ bool fk_FileInput::SetVertexData(int argVID, int argMateID, int argMateMode,
 								 double argZ, double argSize)
 {
 	fk_Vertex		*v;
-	fk_Half			*h = NULL;
+	fk_Half			*h = nullptr;
 	fk_Vector		pos(argX, argY, argZ);
 
 	v = DB->GetVData(argVID);
-	if(v == NULL) return false;
+	if(v == nullptr) return false;
 	if(argHID != FK_UNDEFINED) {
 		h = DB->GetHData(argHID);
 	} else {
-		h = NULL;
+		h = nullptr;
 	}
 
 	v->SetOneHalf(h);
@@ -667,13 +667,13 @@ bool fk_FileInput::SetHalfData(int argHID, int argVID,
 
 	h = DB->GetHData(argHID);
 
-	if(h == NULL) return false;
+	if(h == nullptr) return false;
 
 	if(argVID == FK_UNDEFINED) {
-		v = NULL;
+		v = nullptr;
 	} else {
 		v = DB->GetVData(argVID);
-		if(v == NULL) return false;
+		if(v == nullptr) return false;
 	}
 
 	nH = DB->GetHData(argNID);
@@ -698,26 +698,26 @@ bool fk_FileInput::SetEdgeData(int argEID, int argMateID, int argMateMode,
 	if(argLeftID == FK_UNDEFINED) return true;
 
 	e = DB->GetEData(argEID);
-	if(e == NULL) return false;
+	if(e == nullptr) return false;
 
 	if(argLeftID == FK_UNDEFINED) {
-		lH = NULL;
+		lH = nullptr;
 	} else {
 		lH = DB->GetHData(argLeftID);
-		if(lH == NULL) return false;
+		if(lH == nullptr) return false;
 	}
 
 	if(argRightID == FK_UNDEFINED) {
-		rH = NULL;
+		rH = nullptr;
 	} else {
 		rH = DB->GetHData(argRightID);
-		if(rH == NULL) return false;
+		if(rH == nullptr) return false;
 	}
 
 	e->SetLeftHalf(lH);
 	e->SetRightHalf(rH);
-	if(lH != NULL) lH->SetParentEdge(e);
-	if(rH != NULL) rH->SetParentEdge(e);
+	if(lH != nullptr) lH->SetParentEdge(e);
+	if(rH != nullptr) rH->SetParentEdge(e);
 
 	e->setElemMaterialID(argMateID);
 	e->setElemMaterialMode(fk_MaterialMode(argMateMode));
@@ -735,10 +735,10 @@ bool fk_FileInput::SetLoopData(int argLID, int argMateID, int argMateMode,
 
 	l = DB->GetLData(argLID);
 	if(argHID == FK_UNDEFINED) {
-		h = NULL;
+		h = nullptr;
 	} else {
 		h = DB->GetHData(argHID);
-		if(h == NULL) return false;
+		if(h == nullptr) return false;
 	}
 
 	l->SetOneHalf(h);

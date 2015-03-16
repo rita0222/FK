@@ -77,23 +77,23 @@ using namespace std;
 
 fk_Attribute_Data::fk_Attribute_Data(void)
 {
-	ItoIIndex = NULL;
-	ItoIValue = NULL;
+	ItoIIndex = nullptr;
+	ItoIValue = nullptr;
 
-	ItoDIndex = NULL;
-	ItoDValue = NULL;
+	ItoDIndex = nullptr;
+	ItoDValue = nullptr;
 
-	ItoSIndex = NULL;
-	ItoSValue = NULL;
+	ItoSIndex = nullptr;
+	ItoSValue = nullptr;
 
-	StoIIndex = NULL;
-	StoIValue = NULL;
+	StoIIndex = nullptr;
+	StoIValue = nullptr;
 
-	StoDIndex = NULL;
-	StoDValue = NULL;
+	StoDIndex = nullptr;
+	StoDValue = nullptr;
 
-	StoSIndex = NULL;
-	StoSValue = NULL;
+	StoSIndex = nullptr;
+	StoSValue = nullptr;
 
 	return;
 }
@@ -124,23 +124,23 @@ void fk_Attribute_Data::AttrInit(void)
 	delete StoSIndex;
 	delete StoSValue;
 
-	ItoIIndex = NULL;
-	ItoIValue = NULL;
+	ItoIIndex = nullptr;
+	ItoIValue = nullptr;
 
-	ItoDIndex = NULL;
-	ItoDValue = NULL;
+	ItoDIndex = nullptr;
+	ItoDValue = nullptr;
 
-	ItoSIndex = NULL;
-	ItoSValue = NULL;
+	ItoSIndex = nullptr;
+	ItoSValue = nullptr;
 
-	StoIIndex = NULL;
-	StoIValue = NULL;
+	StoIIndex = nullptr;
+	StoIValue = nullptr;
 
-	StoDIndex = NULL;
-	StoDValue = NULL;
+	StoDIndex = nullptr;
+	StoDValue = nullptr;
 
-	StoSIndex = NULL;
-	StoSValue = NULL;
+	StoSIndex = nullptr;
+	StoSValue = nullptr;
 
 	return;
 }
@@ -179,7 +179,7 @@ int fk_Attribute_Data::GetIndexAttrII(const int Key) const
 {
 	_st		i, size;
 
-	if(ItoIIndex == NULL) {
+	if(ItoIIndex == nullptr) {
 		return FK_UNDEFINED;
 	}
 
@@ -195,7 +195,7 @@ int fk_Attribute_Data::GetIndexAttrID(const int Key) const
 {
 	_st		i, size;
 
-	if(ItoDIndex == NULL) {
+	if(ItoDIndex == nullptr) {
 		return FK_UNDEFINED;
 	}
 
@@ -211,7 +211,7 @@ int fk_Attribute_Data::GetIndexAttrIS(const int Key) const
 {
 	_st		i, size;
 
-	if(ItoSIndex == NULL) {
+	if(ItoSIndex == nullptr) {
 		return FK_UNDEFINED;
 	}
 
@@ -227,7 +227,7 @@ int fk_Attribute_Data::GetIndexAttrSI(const string Key) const
 {
 	_st		i, size;
 
-	if(StoIIndex == NULL) {
+	if(StoIIndex == nullptr) {
 		return FK_UNDEFINED;
 	}
 
@@ -243,7 +243,7 @@ int fk_Attribute_Data::GetIndexAttrSD(const string Key) const
 {
 	_st		i, size;
 
-	if(StoDIndex == NULL) {
+	if(StoDIndex == nullptr) {
 		return FK_UNDEFINED;
 	}
 
@@ -259,7 +259,7 @@ int fk_Attribute_Data::GetIndexAttrSS(const string Key) const
 {
 	_st		i, size;
 
-	if(StoSIndex == NULL) {
+	if(StoSIndex == nullptr) {
 		return FK_UNDEFINED;
 	}
 
@@ -320,7 +320,7 @@ bool fk_Attribute_Data::SetAttrII(const int Key, const int Value)
 	Index = GetIndexAttrII(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(ItoIIndex == NULL) {
+		if(ItoIIndex == nullptr) {
 			ItoIIndex = new vector<int>;
 			ItoIValue = new vector<int>;
 		}
@@ -353,7 +353,7 @@ bool fk_Attribute_Data::SetAttrID(const int Key, const double Value)
 	Index = GetIndexAttrID(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(ItoDIndex == NULL) {
+		if(ItoDIndex == nullptr) {
 			ItoDIndex = new vector<int>;
 			ItoDValue = new vector<double>;
 		}
@@ -386,7 +386,7 @@ bool fk_Attribute_Data::SetAttrIS(const int Key, const string Value)
 	Index = GetIndexAttrIS(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(ItoSIndex == NULL) {
+		if(ItoSIndex == nullptr) {
 			ItoSIndex = new vector<int>;
 			ItoSValue = new vector<string>;
 		}
@@ -419,7 +419,7 @@ bool fk_Attribute_Data::SetAttrSI(const string Key, const int Value)
 	Index = GetIndexAttrSI(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(StoIIndex == NULL) {
+		if(StoIIndex == nullptr) {
 			StoIIndex = new vector<string>;
 			StoIValue = new vector<int>;
 		}
@@ -452,7 +452,7 @@ bool fk_Attribute_Data::SetAttrSD(const string Key, const double Value)
 	Index = GetIndexAttrSD(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(StoDIndex == NULL) {
+		if(StoDIndex == nullptr) {
 			StoDIndex = new vector<string>;
 			StoDValue = new vector<double>;
 		}
@@ -485,7 +485,7 @@ bool fk_Attribute_Data::SetAttrSS(const string Key, const string Value)
 	Index = GetIndexAttrSS(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(StoSIndex == NULL) {
+		if(StoSIndex == nullptr) {
 			StoSIndex = new vector<string>;
 			StoSValue = new vector<string>;
 		}

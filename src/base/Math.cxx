@@ -354,7 +354,7 @@ bool fk_Math::calcCrossLineAndTri(const fk_Vector &argP,
 	
 	R = mat * D;
 
-	if(argR != NULL) argR->set(R.x, R.y, R.z);
+	if(argR != nullptr) argR->set(R.x, R.y, R.z);
 
 	if(R.x <= -FK_EPS || R.y <= -FK_EPS || R.x + R.y >= 1.0 + FK_EPS ||
 	   R.z <= -FK_EPS || R.z >= 1.0 + FK_EPS) {

@@ -101,9 +101,9 @@ class fk_Line: public fk_Solid {
 	 *		端点位置ベクトルの配列。
 	 *		線分 ID が i となる線分の端点が、
 	 *		array[2*i] と array[2*i+1] となるように配置してください。
-	 *		線分の端点配列。NULL が代入された場合、線分を生成しません。
+	 *		線分の端点配列。nullptr が代入された場合、線分を生成しません。
 	 */
-	fk_Line(std::vector<fk_Vector> *array = NULL);
+	fk_Line(std::vector<fk_Vector> *array = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Line();

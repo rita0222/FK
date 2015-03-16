@@ -330,7 +330,7 @@ class fk_ShapeViewer : public fk_BaseObject {
 	 *
 	 *	\return
 	 *		形状インスタンスを返します。
-	 *		指定した ID の形状インスタンスが存在しない場合は、NULL を返します。
+	 *		指定した ID の形状インスタンスが存在しない場合は、nullptr を返します。
 	 */
 	fk_Shape *	getShape(int ID = 0);
 

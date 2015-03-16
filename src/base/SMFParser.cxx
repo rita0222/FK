@@ -92,7 +92,7 @@ bool fk_SMFParser::ReadSMFFile(string argFileName)
 	vector<fk_Vector>		VData;
 	vector< vector<int> >	LIndex;
 
-	if(meshData == NULL) return false;
+	if(meshData == nullptr) return false;
 
 	meshData->Init();
 

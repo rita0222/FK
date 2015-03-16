@@ -96,7 +96,7 @@ class fk_Polygon: public fk_Solid {
 	 *	引数はシステム内部制御のために利用されるものです。
 	 *	ユーザは引数を省略して定義を行って下さい。
 	 */
-	fk_Polygon(std::vector<fk_Vector> *array = NULL,
+	fk_Polygon(std::vector<fk_Vector> *array = nullptr,
 			   fk_ObjectType = FK_POLYGON);
 
 	//! デストラクタ
@@ -146,10 +146,10 @@ class fk_Polyline: public fk_Solid {
 	//! コンストラクタ
 	/*!
 	 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
-	 *	省略した場合や NULL が入力された場合は、
+	 *	省略した場合や nullptr が入力された場合は、
 	 *	初期状態として頂点が存在しない状態となります。
 	 */
-	fk_Polyline(std::vector<fk_Vector> *array = NULL);
+	fk_Polyline(std::vector<fk_Vector> *array = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Polyline();
@@ -201,10 +201,10 @@ class fk_Closedline: public fk_Polygon {
 	//! コンストラクタ
 	/*!
 	 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
-	 *	省略した場合や NULL が入力された場合は、
+	 *	省略した場合や nullptr が入力された場合は、
 	 *	初期状態として頂点が存在しない状態となります。
 	 */
-	fk_Closedline(std::vector<fk_Vector> *array = NULL);
+	fk_Closedline(std::vector<fk_Vector> *array = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Closedline();

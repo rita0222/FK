@@ -159,9 +159,9 @@ class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
 	 *	適切な法線ベクトルを取得します。
 	 *	ループが曲面である場合は、面全体の平均法線ベクトルを返します。
 	 *	返り値が実体ではなくポインタであることに注意して下さい。
-	 *	特に、NULL を返すケースがありえることは重要です。
+	 *	特に、nullptr を返すケースがありえることは重要です。
 	 *
-	 *	\return 法線ベクトルのアドレス。算出できなかった場合は NULL を返します。
+	 *	\return 法線ベクトルのアドレス。算出できなかった場合は nullptr を返します。
 	 */
 	fk_Vector *					getNormal(void);
 
@@ -235,7 +235,7 @@ class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
 	 * 	ループに設定されている自由曲面を取得します。
 	 *
 	 *	\return 自由曲面インスタンスのアドレス。
-	 *	設定されていなかった場合は NULL を返します。
+	 *	設定されていなかった場合は nullptr を返します。
 	 */
 	fk_Surface *				getSurfGeometry(void);
 
@@ -252,7 +252,7 @@ class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
 
 	fk_LoopCrossStatus			IsCross(const fk_Vector &,
 										const fk_Vector &,
-										fk_Vector * = NULL);
+										fk_Vector * = nullptr);
 
 #endif
 

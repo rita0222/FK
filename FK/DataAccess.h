@@ -242,7 +242,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	\param[in] ID 頂点位相要素のID
 	 *
 	 *	\return 存在すれば位相要素のポインタを返します。
-	 *	存在しなかった場合は NULL を返します。
+	 *	存在しなかった場合は nullptr を返します。
 	 */
 	fk_Vertex *			getVData(int ID) const;
 
@@ -253,7 +253,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	\param[in] ID 半稜線位相要素のID
 	 *
 	 *	\return 存在すれば位相要素のポインタを返します。
-	 *	存在しなかった場合は NULL を返します。
+	 *	存在しなかった場合は nullptr を返します。
 	 */
 	fk_Half *			getHData(int ID) const;
 
@@ -264,7 +264,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	\param[in] ID 稜線位相要素のID
 	 *
 	 *	\return 存在すれば位相要素のポインタを返します。
-	 *	存在しなかった場合は NULL を返します。
+	 *	存在しなかった場合は nullptr を返します。
 	 */
 	fk_Edge *			getEData(int ID) const;
 
@@ -275,7 +275,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	\param[in] ID ループ位相要素のID
 	 *
 	 *	\return 存在すれば位相要素のポインタを返します。
-	 *	存在しなかった場合は NULL を返します。
+	 *	存在しなかった場合は nullptr を返します。
 	 */
 	fk_Loop *			getLData(int ID) const;
 
@@ -286,12 +286,12 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	位相要素を返します。
 	 *
 	 *	\param[in] vertex 頂点位相要素。
-	 *	ここに NULL を代入した場合、
+	 *	ここに nullptr を代入した場合、
 	 *	形状中で最も ID が小さな位相要素を返します。
 	 *	これは、必ずしも最初に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return vertex の次に大きな ID を持つ位相要素を返します。
-	 *	以下のいずれかを満たしている場合、NULL を返します。
+	 *	以下のいずれかを満たしている場合、nullptr を返します。
 	 *	- vertex が形状内頂点の中で最大の ID であった場合。
 	 *	- 形状中に頂点が存在しない場合。
 	 *	- vertex が形状中に存在する頂点位相要素ではなかった場合。
@@ -305,12 +305,12 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	位相要素を返します。
 	 *
 	 *	\param[in] half 半稜線位相要素。
-	 *	ここに NULL を代入した場合、
+	 *	ここに nullptr を代入した場合、
 	 *	形状中で最も ID が小さな位相要素を返します。
 	 *	これは、必ずしも最初に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return half の次に大きな ID を持つ位相要素を返します。
-	 *	以下のいずれかを満たしている場合、NULL を返します。
+	 *	以下のいずれかを満たしている場合、nullptr を返します。
 	 *	- half が形状内半稜線の中で最大の ID であった場合。
 	 *	- 形状中に半稜線が存在しない場合。
 	 *	- half が形状中に存在する半稜線位相要素ではなかった場合。
@@ -324,12 +324,12 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	位相要素を返します。
 	 *
 	 *	\param[in] edge 稜線位相要素。
-	 *	ここに NULL を代入した場合、
+	 *	ここに nullptr を代入した場合、
 	 *	形状中で最も ID が小さな位相要素を返します。
 	 *	これは、必ずしも最初に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return edge の次に大きな ID を持つ位相要素を返します。
-	 *	以下のいずれかを満たしている場合、NULL を返します。
+	 *	以下のいずれかを満たしている場合、nullptr を返します。
 	 *	- edge が形状内稜線の中で最大の ID であった場合。
 	 *	- 形状中に稜線が存在しない場合。
 	 *	- edge が形状中に存在する稜線位相要素ではなかった場合。
@@ -343,12 +343,12 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	位相要素を返します。
 	 *
 	 *	\param[in] loop ループ位相要素。
-	 *	ここに NULL を代入した場合、
+	 *	ここに nullptr を代入した場合、
 	 *	形状中で最も ID が小さな位相要素を返します。
 	 *	これは、必ずしも最初に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return loop の次に大きな ID を持つ位相要素を返します。
-	 *	以下のいずれかを満たしている場合、NULL を返します。
+	 *	以下のいずれかを満たしている場合、nullptr を返します。
 	 *	- loop が形状内ループの中で最大の ID であった場合。
 	 *	- 形状中にループが存在しない場合。
 	 *	- loop が形状中に存在するループ位相要素ではなかった場合。
@@ -362,7 +362,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	これは、必ずしも最後に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return 最もIDが大きな位相要素。
-	 *	形状中に頂点が存在しなかった場合は、NULL を返します。
+	 *	形状中に頂点が存在しなかった場合は、nullptr を返します。
 	 */
 	fk_Vertex *			getLastV(void) const;
 
@@ -373,7 +373,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	これは、必ずしも最後に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return 最もIDが大きな位相要素。
-	 *	形状中に半稜線が存在しなかった場合は、NULL を返します。
+	 *	形状中に半稜線が存在しなかった場合は、nullptr を返します。
 	 */
 	fk_Half *			getLastH(void) const;
 
@@ -384,7 +384,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	これは、必ずしも最後に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return 最もIDが大きな位相要素。
-	 *	形状中に稜線が存在しなかった場合は、NULL を返します。
+	 *	形状中に稜線が存在しなかった場合は、nullptr を返します。
 	 */
 	fk_Edge *			getLastE(void) const;
 
@@ -395,7 +395,7 @@ class fk_DataAccess : public fk_ReferenceL3 {
 	 *	これは、必ずしも最後に生成した位相要素とは限らないことに注意して下さい。
 	 *
 	 *	\return 最もIDが大きな位相要素。
-	 *	形状中にループが存在しなかった場合は、NULL を返します。
+	 *	形状中にループが存在しなかった場合は、nullptr を返します。
 	 */
 	fk_Loop *			getLastL(void) const;
 	//@}

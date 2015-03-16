@@ -89,7 +89,7 @@ vector<fk_Edge *> fk_ReferenceL3::getEOnVV(fk_Vertex *argV1,
 	fk_Vertex			*rV, *lV;
 
 	retSet.clear();
-	if(argV1 == NULL || argV2 == NULL) {
+	if(argV1 == nullptr || argV2 == nullptr) {
 		return retSet;
 	}
 
@@ -111,9 +111,9 @@ fk_Loop * fk_ReferenceL3::getOneLOnV(fk_Vertex *argV) const
 {
 	vector<fk_Loop *>	loopSet;
 
-	if(argV == NULL) return NULL;
+	if(argV == nullptr) return nullptr;
 	loopSet = getAllLOnV(argV);
-	if(loopSet.empty() == true) return NULL;
+	if(loopSet.empty() == true) return nullptr;
 	else return loopSet[0];
 }
 
@@ -121,12 +121,12 @@ fk_Loop * fk_ReferenceL3::getNeighborLOnLE(fk_Loop *argL, fk_Edge *argE) const
 {
 	fk_Half		*tmpH;
 
-	if(argL == NULL || argE == NULL) {
-		return NULL;
+	if(argL == nullptr || argE == nullptr) {
+		return nullptr;
 	}
 	if(getRightLOnE(argE) == argL) tmpH = getRightHOnE(argE);
 	else if(getLeftLOnE(argE) == argL) tmpH = getLeftHOnE(argE);
-	else return NULL;
+	else return nullptr;
 
 	return getNeighborLOnLH(argL, tmpH);
 }
@@ -141,12 +141,12 @@ vector<fk_Loop *> fk_ReferenceL3::getAllNeighborLOnL(fk_Loop *argL) const
 
 
 	retVec.clear();
-	if(argL == NULL) return retVec;
+	if(argL == nullptr) return retVec;
 	halfSet = getAllHOnL(argL);
 
 	for(i = 0; i < halfSet.size(); i++) {
 		tmpL = getNeighborLOnLH(argL, halfSet[i]);
-		if(tmpL != NULL && tmpL != argL) {
+		if(tmpL != nullptr && tmpL != argL) {
 			ite = find(retVec.begin(), retVec.end(), tmpL);
 			if(ite == retVec.end()) retVec.push_back(tmpL);
 		}

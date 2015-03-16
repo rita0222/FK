@@ -582,21 +582,21 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	if(png_sig_cmp(argBuffer, 0, 4)) return FK_IMAGE_DATAERROR;
 
 	// PNG構造体の初期化
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
-	if(png_ptr == NULL) {
+	if(png_ptr == nullptr) {
 		return FK_IMAGE_DATAERROR;
 	}
 
 	// PNG情報構造体の初期化
 	info_ptr = png_create_info_struct(png_ptr);
-	if(info_ptr == NULL) {
-		png_destroy_read_struct(&png_ptr, NULL, NULL);
+	if(info_ptr == nullptr) {
+		png_destroy_read_struct(&png_ptr, nullptr, nullptr);
 		return FK_IMAGE_DATAERROR;
 	}
 
 	if(setjmp(png_jmpbuf(png_ptr))) {
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		return FK_IMAGE_DATAERROR;
 	}
 
@@ -618,7 +618,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 
 	// 16bit-depthのPNGは除外
 	if(depth == 16){
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		return FK_IMAGE_DATAERROR;
 	}
 
@@ -631,19 +631,19 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 				 static_cast<int>(trueY));
 
 	// テンポラリイメージデータのメモリを取得
-	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == NULL) {
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == nullptr) {
+		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		return FK_IMAGE_READERROR;
 	}
 	for(png_uint_32 i = 0; i < trueY; i++) {
 		// 1 ラインのテンポラリメモリを取得
 		tmpBuffer[i] = static_cast<png_bytep>(malloc(png_get_rowbytes(png_ptr, info_ptr)));
-		if (tmpBuffer[i] == NULL) {
+		if (tmpBuffer[i] == nullptr) {
 			for (png_uint_32 j = 0; j < i; j++) {
 				free(tmpBuffer[j]);
 			}
 			free(tmpBuffer);
-			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+			png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 			return FK_IMAGE_READERROR;
 		}
 	}
@@ -754,7 +754,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	free(tmpBuffer);
 
 	// PNGメモリの解放
-	png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 
 	return result;
 }
@@ -769,7 +769,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	png_bytepp		tmpBuffer;
 
 	// ファイルの読込
-	if((fp = fopen(argFName.c_str(), "rb")) == NULL) {
+	if((fp = fopen(argFName.c_str(), "rb")) == nullptr) {
 		return FK_IMAGE_OPENERROR;
 	}
 
@@ -786,22 +786,22 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	}
 
 	// PNG構造体の初期化
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if(png_ptr == NULL) {
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	if(png_ptr == nullptr) {
 		fclose(fp);
 		return FK_IMAGE_DATAERROR;
 	}
 
 	// PNG情報構造体の初期化
 	info_ptr = png_create_info_struct(png_ptr);
-	if(info_ptr == NULL) {
-		png_destroy_read_struct(&png_ptr, NULL, NULL);
+	if(info_ptr == nullptr) {
+		png_destroy_read_struct(&png_ptr, nullptr, nullptr);
 		fclose(fp);
 		return FK_IMAGE_DATAERROR;
 	}
 
 	if(setjmp(png_jmpbuf(png_ptr))) {
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		fclose(fp);
 		return FK_IMAGE_DATAERROR;
 	}
@@ -826,7 +826,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 
 	// 16bit-depthのPNGは除外
 	if(depth == 16){
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		fclose(fp);
 		return FK_IMAGE_DATAERROR;
 	}
@@ -840,20 +840,20 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 				 static_cast<int>(trueY));
 
 	// テンポラリイメージデータのメモリを取得
-	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == NULL) {
-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == nullptr) {
+		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		fclose(fp);
 		return FK_IMAGE_READERROR;
 	}
 	for(png_uint_32 i = 0; i < trueY; i++) {
 		// 1 ラインのテンポラリメモリを取得
 		tmpBuffer[i] = static_cast<png_bytep>(malloc(png_get_rowbytes(png_ptr, info_ptr)));
-		if (tmpBuffer[i] == NULL) {
+		if (tmpBuffer[i] == nullptr) {
 			for (png_uint_32 j = 0; j < i; j++) {
 				free(tmpBuffer[j]);
 			}
 			free(tmpBuffer);
-			png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+			png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 			fclose(fp);
 			return FK_IMAGE_READERROR;
 		}
@@ -968,7 +968,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	free(tmpBuffer);
 
 	// PNGメモリの解放
-	png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+	png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 
 	return result;
 }
@@ -1001,19 +1001,19 @@ bool fk_Image::writePNG(const string fileName, const bool argTransFlg)
 
 	// バイナリ書き込みモードでファイルをオープン
 	fp = fopen(fileName.c_str(), "wb");
-	if(fp == NULL) return false;
+	if(fp == nullptr) return false;
 
 	// 書き込み用構造体を作成
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if(png_ptr == NULL) {
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	if(png_ptr == nullptr) {
 		fclose(fp);
 		return false;
 	}
 
 	// PNG 情報構造体を作成
 	info_ptr = png_create_info_struct(png_ptr);
-	if(info_ptr == NULL) {
-	   png_destroy_write_struct(&png_ptr, NULL);
+	if(info_ptr == nullptr) {
+	   png_destroy_write_struct(&png_ptr, nullptr);
 	   fclose(fp);
 	   return false;
 	}
@@ -1043,7 +1043,7 @@ bool fk_Image::writePNG(const string fileName, const bool argTransFlg)
 	lineSize = static_cast<unsigned int>(png_get_rowbytes(png_ptr, info_ptr));
 
 	// テンポラリイメージデータのメモリを取得
-	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == NULL) {
+	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == nullptr) {
 		png_destroy_write_struct(&png_ptr, &info_ptr);
 		fclose(fp);
 		return false;
@@ -1051,7 +1051,7 @@ bool fk_Image::writePNG(const string fileName, const bool argTransFlg)
 	for(png_uint_32 i = 0; i < trueY; i++) {
 		// 1 ラインのテンポラリメモリを取得
 		tmpBuffer[i] = static_cast<png_bytep>(malloc(lineSize));
-		if(tmpBuffer[i] == NULL) {
+		if(tmpBuffer[i] == nullptr) {
 			for(png_uint_32 j = 0; j < i; j++) {
 				free(tmpBuffer[j]);
 			}
@@ -1106,7 +1106,7 @@ bool fk_Image::readJPG(const string fileName)
 	FILE							*infile;
 
 	// ファイルを開く
-	if((infile = fopen(fileName.c_str(), "rb")) == NULL) {
+	if((infile = fopen(fileName.c_str(), "rb")) == nullptr) {
 		return false;
 	}
 
@@ -1115,8 +1115,8 @@ bool fk_Image::readJPG(const string fileName)
 
 	// 独自のエラーハンドラを設定
 	cinfo.client_data   = const_cast<char *>("fk_Image JPEG Proc");
-	jerr.error_exit     = NULL;
-	jerr.output_message = NULL;
+	jerr.error_exit     = nullptr;
+	jerr.output_message = nullptr;
 
 	jpeg_create_decompress(&cinfo);
 
@@ -1200,7 +1200,7 @@ bool fk_Image::writeJPG(const string fileName, int quality)
 	}
 
 	// ファイルを開く
-	if((outfile = fopen(fileName.c_str(), "wb")) == NULL) {
+	if((outfile = fopen(fileName.c_str(), "wb")) == nullptr) {
 		return false;
 	}
 
@@ -1225,8 +1225,8 @@ bool fk_Image::writeJPG(const string fileName, int quality)
 
 	// 独自のエラーハンドラを設定
 	cinfo.client_data   = const_cast<char *>("fk_Image JPEG Proc");
-	jerr.error_exit     = NULL;
-	jerr.output_message = NULL;
+	jerr.error_exit     = nullptr;
+	jerr.output_message = nullptr;
 	
 	jpeg_create_compress(&cinfo);
 

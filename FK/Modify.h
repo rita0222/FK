@@ -111,7 +111,7 @@ class fk_Modify : public fk_Operation {
 
  public:
 	//! コンストラクタ
-	fk_Modify(fk_DataBase * = (fk_DataBase *)NULL);
+	fk_Modify(fk_DataBase * = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Modify();
@@ -140,7 +140,7 @@ class fk_Modify : public fk_Operation {
 	 *
 	 *	\return		削除に成功した場合は、
 	 *				新たに生成されたループの位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 */
 	fk_Loop *	removeVertexInLoop(fk_Vertex *V);
 
@@ -224,7 +224,7 @@ class fk_Modify : public fk_Operation {
 	 *							pushPolygon() と機能的に同一となります。
 	 *
 	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 *
 	 *	\sa pushPolygon(std::vector<fk_Vector> *, bool)
 	 */
@@ -248,7 +248,7 @@ class fk_Modify : public fk_Operation {
 	 *							pushPolygon() と機能的に同一となります。
 	 *
 	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 *
 	 *	\sa pushPolygon(int, fk_Vector *, bool)
 	 */
@@ -270,7 +270,7 @@ class fk_Modify : public fk_Operation {
 	 *							つまり、始点と終点の間に稜線を生成します。
 	 *
 	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 *
 	 *	\sa makePolygon(std::vector<fk_Vector> *, bool, bool)
 	 */
@@ -292,7 +292,7 @@ class fk_Modify : public fk_Operation {
 	 *							つまり、始点と終点の間に稜線を生成します。
 	 *
 	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 *
 	 *	\sa makePolygon(int, fk_Vector *, bool, bool)
 	 */

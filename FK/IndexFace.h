@@ -618,14 +618,14 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	\param[in]	fileName		ファイル名
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
-	 *		NULL を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
 	bool				writeVRMLFile(std::string fileName,
-									  fk_Material *material = NULL,
+									  fk_Material *material = nullptr,
 									  bool triFlg = false);
 
 	//! VRML ファイル出力関数2
@@ -642,7 +642,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
-	 *		NULL を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
@@ -651,7 +651,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	bool				writeVRMLFile(std::string fileName,
 									  std::vector<double> *time,
 									  std::vector<fk_Vector> *pos,
-									  fk_Material *material = NULL,
+									  fk_Material *material = nullptr,
 									  bool triFlg = false);
 
 	//! STL ファイル出力関数
@@ -1447,7 +1447,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 
 	bool				MakeMesh(std::vector<fk_Vector> *,
 								 std::vector< std::vector<int> > *,
-								 std::vector<int> * = NULL,
+								 std::vector<int> * = nullptr,
 								 bool = true);
 
 	fk_D3DXAnimation *	GetAnimation(void);

@@ -98,7 +98,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	textureDraw = new fk_TextureDraw;
 
 	winID = 0;
-	curDLink = NULL;
+	curDLink = nullptr;
 	dLinkStatus = 0;
 	dLinkID = 0;
 	wSize = 0;
@@ -126,7 +126,7 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 {
 	winID = generalID;
 	generalID++;
-	curDLink = NULL;
+	curDLink = nullptr;
 	dLinkStatus = FK_UNDEFINED;
 	dLinkID = FK_UNDEFINED;
 	wSize = argW;
@@ -172,7 +172,7 @@ void fk_GraphicsEngine::SetViewPort(void)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	if(curDLink == NULL) {
+	if(curDLink == nullptr) {
 		SetDefaultProjection();
 	} else {
 		SetProjection(curDLink->getProjection());
@@ -205,7 +205,7 @@ void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
 				  GLdouble(argPixSize),
 				  ViewPort);
 
-	if(curDLink == NULL) {
+	if(curDLink == nullptr) {
 		SetDefaultProjection();
 	} else {
 		SetProjection(curDLink->getProjection());
@@ -304,7 +304,7 @@ void fk_GraphicsEngine::SetStereoViewPort(fk_StereoChannel argChannel)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	if(curDLink == NULL) {
+	if(curDLink == nullptr) {
 		SetDefaultProjection();
 	} else {
 		SetProjection(curDLink->getStereoProjection(argChannel));
@@ -319,9 +319,9 @@ void fk_GraphicsEngine::SetStereoViewPort(fk_StereoChannel argChannel)
 
 void fk_GraphicsEngine::RecalcStereoModelView(fk_StereoChannel argChannel)
 {
-	if(curDLink != NULL) {
+	if(curDLink != nullptr) {
 		const fk_Model	*camera = curDLink->getStereoCamera(argChannel);
-		if(camera == NULL) {
+		if(camera == nullptr) {
 			RecalcInhModelView(curDLink->getCamera());
 		} else {
 			RecalcInhModelView(camera);
@@ -375,7 +375,7 @@ void fk_GraphicsEngine::DrawStereoObjs(bool argPickFlg)
 	list<fk_Model *>			*overlayList;
 	bool						lightFlag;
 
-	if(curDLink == NULL) return;
+	if(curDLink == nullptr) return;
 	
 	lightFlag = DefineLight();
 
@@ -413,9 +413,9 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 	fk_Scene		*scene;
 	fk_Color		bgColor;
 
-	scene = NULL;
+	scene = nullptr;
 
-	if(curDLink != NULL) {
+	if(curDLink != nullptr) {
 		if(dLinkID != curDLink->GetID() ||
 		   dLinkStatus != curDLink->GetProjChangeStatus()) {
 			dLinkID = curDLink->GetID();
@@ -436,7 +436,7 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 		}
 	}
 
-	if(scene != NULL) {
+	if(scene != nullptr) {
 
 		if(scene->getBlendStatus() == true) {
 			glEnable(GL_BLEND);
@@ -486,7 +486,7 @@ void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 
 void fk_GraphicsEngine::RecalcModelView(void)
 {
-	if(curDLink != NULL) {
+	if(curDLink != nullptr) {
 		RecalcInhModelView(curDLink->getCamera());
 	}
 
@@ -498,7 +498,7 @@ void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
 	fk_Angle	MAngle(0.0, 0.0, 0.0);
 	fk_Vector	MPos(0.0, 0.0, 0.0);
 
-	if(argModel == NULL) return;
+	if(argModel == nullptr) return;
 
 	MAngle = argModel->getAngle();
 	MPos = argModel->getPosition();
@@ -508,7 +508,7 @@ void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
 	glRotated(180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
 	glTranslated(-MPos.x, -MPos.y, -MPos.z);
 
-	if(argModel->getParent() != NULL) {
+	if(argModel->getParent() != nullptr) {
 		RecalcInhModelView(argModel->getParent());
 	}
 
@@ -521,7 +521,7 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	list<fk_Model *>			*overlayList;
 	bool						lightFlag;
 
-	if(curDLink == NULL) return;
+	if(curDLink == nullptr) return;
 	lightFlag = DefineLight();
 
 	if(argPickFlg == true) modelArray.clear();
@@ -560,7 +560,7 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	}
 
 	modelShape = argModel->getShape();
-	if(modelShape == NULL) return;
+	if(modelShape == nullptr) return;
 
 	glPushMatrix();
 		
@@ -776,7 +776,7 @@ void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
 	MAngle = argModel->getAngle();
 	MPos = argModel->getPosition();
 
-	if(argModel->getParent() != NULL) {
+	if(argModel->getParent() != nullptr) {
 		LoadModelMatrix(argModel->getParent());
 	}
 
@@ -922,7 +922,7 @@ bool fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
 {
 	fk_Vector		sVec, eVec;
 
-	if(curDLink == NULL) return false;
+	if(curDLink == nullptr) return false;
 
 	if(generalID > 2) SetViewPort();
 
@@ -936,14 +936,14 @@ bool fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
 	fk_Vector		sVec, eVec, eyeVec, cameraPos;
 	const fk_Model	*tmpCamera;
 
-	if(curDLink == NULL) return false;
+	if(curDLink == nullptr) return false;
 	tmpCamera = curDLink->getCamera();
 	if(generalID > 2) SetViewPort();
 
 	GetViewLinePos(argX, argY, &sVec, &eVec);
 	eyeVec = eVec - sVec;
 	eyeVec.normalize();
-	if(tmpCamera == NULL) {
+	if(tmpCamera == nullptr) {
 		cameraPos.set(0.0, 0.0, 0.0);
 	} else {
 		cameraPos = tmpCamera->getInhPosition();
@@ -1007,7 +1007,7 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 	int		wCount, hCount;
 	_st		index;
 
-	if(argImage == NULL) return false;
+	if(argImage == nullptr) return false;
 
 	if(argImage->getWidth() != wSize || argImage->getHeight() != hSize) {
 		argImage->newImage(wSize, hSize);
@@ -1046,7 +1046,7 @@ void fk_GraphicsEngine::GetPickData(fk_PickData *argPickData,
 	fk_ObjectType	elemType = FK_BASEOBJECT;
 	double			farDepth, nearDepth;
 
-	if(argPickData == NULL) return;
+	if(argPickData == nullptr) return;
 
 	SetPickViewPort(argPixSize, argMouseX, argMouseY);
 	RecalcModelView();
