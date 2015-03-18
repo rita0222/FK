@@ -87,8 +87,6 @@ using namespace std;
 const unsigned int SP_1BYTE = 0x0020;
 const unsigned int SP_2BYTE = 0x3000;
 
-typedef vector<unsigned char>	fk_GlyphBuffer;
-
 class fk_GlyphStatus {
 private:
 	FT_Face		face;
@@ -421,6 +419,8 @@ fk_TextImage::fk_TextImage(void)
 	setLineSkip(0);
 	setSpaceLineSkip(0);
 	setSmoothMode(true);
+	setMonospaceMode(false);
+	setMonospaceSize(0);
 	setOffset(0, 0, 0, 0);
 	maxHeight = maxWidth = 0;
 	setMinLineWidth(0);
@@ -848,17 +848,21 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 
 		fkGlyph->xOffset = image_w;
 
-		// rita: 空白挿入処理＆通常のシフト処理
-		switch(fkGlyph->status.GetCode()) {
-		  case SP_1BYTE:
-			image_w += pixelSp/2 + charSkip;
-			break;
-		  case SP_2BYTE:
-			image_w += pixelSp + charSkip;
-			break;
-		  default:
-			image_w += pBBox->xMax - pBBox->xMin + charSkip;
-			break;
+		if(monospaceMode == true) {
+			image_w += monospaceSize + charSkip;
+		} else {
+			// rita: 空白挿入処理＆通常のシフト処理
+			switch(fkGlyph->status.GetCode()) {
+			  case SP_1BYTE:
+				image_w += pixelSp/2 + charSkip;
+				break;
+			  case SP_2BYTE:
+				image_w += pixelSp + charSkip;
+				break;
+			  default:
+				image_w += pBBox->xMax - pBBox->xMin + charSkip;
+				break;
+			}
 		}
 
 		if(shadowMode == true && image_w != 0) image_w += abs(shadowOffset.w);
@@ -880,12 +884,13 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 								 int *argSBScale,
 								 vector<fk_FTGlyph *> *argGlyphArray)
 {
-	_st				i, j, k;
+	_st				i;
+	int				j, k;
 	fk_GlyphBuffer	*localImageBuf;
 	FT_BBox			*pBBox;
 	_st				pixel, setVal;
 	fk_FTGlyph		*glyph;
-	fk_Rect			charRect;
+	fk_Rect			charRect, imageRect;
 	fk_Image		*charImage;
 	fk_Dimension	orgImageSize;
 	fk_Dimension	posOffset;
@@ -900,15 +905,21 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 		orgImageSize.w = static_cast<int>(pBBox->xMax - pBBox->xMin);
 		orgImageSize.h = static_cast<int>(pBBox->yMax - pBBox->yMin);
 
-		if(shadowMode == true) {
-			charRect.w = orgImageSize.w + abs(shadowOffset.w);
-			charRect.h = orgImageSize.h + abs(shadowOffset.h);
+		if(monospaceMode == true) {
+			charRect.w = monospaceSize;
 		} else {
 			charRect.w = orgImageSize.w;
-			charRect.h = orgImageSize.h;
 		}
+		charRect.h = orgImageSize.h;
 
-		charImage = new fk_Image(charRect.w, charRect.h);
+		imageRect = charRect;
+
+		if(shadowMode == true) {
+			imageRect.w += abs(shadowOffset.w);
+			imageRect.h += abs(shadowOffset.h);
+		}
+		
+		charImage = new fk_Image(imageRect.w, imageRect.h);
 		charImage->fillColor(argFBScale[0], argFBScale[1],
 							 argFBScale[2], argFBScale[3]);
 
@@ -916,9 +927,10 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 			posOffset.w = (shadowOffset.w < 0) ? 0 : shadowOffset.w;
 			posOffset.h = (shadowOffset.h < 0) ? 0 : shadowOffset.h;
 
-			for(j = 0; j < static_cast<_st>(orgImageSize.h); j++) {
-				for(k = 0; k < static_cast<_st>(orgImageSize.w); k++) {
-					pixel = localImageBuf->at(j * static_cast<_st>(orgImageSize.w) + k);
+			for(j = 0; j < charRect.h; j++) {
+				for(k = 0; k < charRect.w; k++) {
+					pixel = static_cast<_st>(GetPixel(localImageBuf, charRect.w,
+													  orgImageSize.w, j, k));
 					if(smoothFlg == true) {
 						setVal = (pixel > 255) ? 255 : pixel;
 					} else {
@@ -941,9 +953,30 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 			posOffset.set(0, 0);
 		}
 
-		for(j = 0; j < static_cast<_st>(orgImageSize.h); j++) {
-			for(k = 0; k < static_cast<_st>(orgImageSize.w); k++) {
-				pixel = localImageBuf->at(j * static_cast<_st>(orgImageSize.w) + k);
+		for(j = 0; j < charRect.h; j++) {
+			for(k = 0; k < charRect.w; k++) {
+				/*
+				_st tmpW = static_cast<_st>(orgImageSize.w);
+				if(monospaceMode == true) {
+					_st w = (k * tmpW)/static_cast<_st>(charRect.w);
+					_st index = j * tmpW + w;
+					if(tmpW >= w) {
+						pixel = localImageBuf->at(index);
+					} else {
+						_st pixel1 = localImageBuf->at(index);
+						_st pixel2 = localImageBuf->at(index+1);
+						double t = (double(tmpW)/double(charRect.w)) * double(k) - double(w);
+						pixel = (_st)((1.0 - t)*double(pixel1) + t * double(pixel2));
+					}
+				} else {
+					_st index = j * tmpW + k;
+					pixel = localImageBuf->at(index);
+				}
+				*/
+
+				pixel = static_cast<_st>(GetPixel(localImageBuf, charRect.w,
+												  orgImageSize.w, j, k));
+
 				if(smoothFlg == true) {
 					setVal = (pixel > 255) ? 255 : pixel;
 				} else {
@@ -967,6 +1000,29 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 	return;
 }
 
+int fk_TextImage::GetPixel(fk_GlyphBuffer *argBuffer, int argCW, int argIW, int argJ, int argK)
+{
+	_st pixel, index;
+
+	if(monospaceMode == true) {
+		int w = (argK * argIW)/argCW;
+		index = static_cast<_st>(argJ * argIW + w);
+		if(argIW >= w) {
+			pixel = argBuffer->at(index);
+		} else {
+			_st pixel1 = argBuffer->at(index);
+			_st pixel2 = argBuffer->at(index+1);
+			double t = (double(argIW)/double(argCW)) * double(argK) - double(w);
+			pixel = static_cast<_st>((1.0 - t)*double(pixel1) + t * double(pixel2));
+		}
+	} else {
+		index = static_cast<_st>(argJ * argIW + argK);
+		pixel = argBuffer->at(index);
+	}
+	return static_cast<int>(pixel);
+}
+	
+
 void fk_TextImage::setSmoothFlg(bool argFlg)
 {
 	setSmoothMode(argFlg);
@@ -987,6 +1043,28 @@ bool fk_TextImage::getSmoothFlg(void) const
 bool fk_TextImage::getSmoothMode(void) const
 {
 	return smoothFlg;
+}
+
+void fk_TextImage::setMonospaceMode(bool argMode)
+{
+	monospaceMode = argMode;
+	return;
+}
+
+bool fk_TextImage::getMonospaceMode(void) const
+{
+	return monospaceMode;
+}
+
+void fk_TextImage::setMonospaceSize(int argSize)
+{
+	if(argSize >= 0) monospaceSize = argSize;
+	return;
+}
+
+int fk_TextImage::getMonospaceSize(void) const
+{
+	return monospaceSize;
 }
 
 void fk_TextImage::setForeColor(fk_Color argColor)

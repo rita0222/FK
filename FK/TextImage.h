@@ -133,6 +133,10 @@ enum fk_TextSendingMode {
  *	\sa fk_Image, fk_UniStr, fk_RectTexture, fk_Scene, fk_SpriteModel
  */
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+typedef std::vector<unsigned char>	fk_GlyphBuffer;
+#endif
+
 class fk_TextImage : public fk_Image {
  private:
 
@@ -155,7 +159,9 @@ class fk_TextImage : public fk_Image {
 	bool					shadowMode;
 	fk_Dimension			shadowOffset;
 	fk_UniStr				strData;
-
+	bool					monospaceMode;
+	int						monospaceSize;
+	
 	int						LayoutGlyphs(std::vector<fk_FTGlyph *> *);
 	void					DumpRasterMap(int, int *, int *,
 										  std::vector<fk_FTGlyph *> *);
@@ -166,9 +172,9 @@ class fk_TextImage : public fk_Image {
 	void					InitTextImage(void);
 	void					CopyCharImage(int);
 	void					ClearCharImages(void);
-	void					MakeColorScale(const fk_Color &,
-										   const fk_Color &,
-										   int *);
+	void					MakeColorScale(const fk_Color &, const fk_Color &, int *);
+	int						GetPixel(fk_GlyphBuffer *, int, int, int, int);
+	
  public:
 	//! コンストラクタ
 	fk_TextImage(void);
@@ -511,9 +517,63 @@ class fk_TextImage : public fk_Image {
 	bool	getSmoothFlg(void) const;
 #endif
 
+	
 	//@}
 
 	//! \name 文字配置事前設定関連関数
+
+	//! 等幅表示設定関数
+	/*!
+	 * 	文字の等幅表示設定を行います。
+	 *	設定を有効とした場合、半角全角問わず全ての文字を等幅で表示します。
+	 *	デフォルトでは無効となっています。
+	 *	なお、 setCharSkip() によって設定する文字間幅は等幅においても有効となります。
+	 *
+	 *	\param[in]	mode
+	 *		true の場合有効、false の場合無効となります。
+	 *
+	 *	\note
+	 *		setMonospaceSize() によって文字幅を設定しないと、
+	 *		文字幅が 0 として表示されてしまうため、何も表示されていない状況となります。
+	 *
+	 *	\sa getMonospaceMode(), setMonospaceSize(), setCharSkip()
+	 */
+	void	setMonospaceMode(bool mode);
+
+	//! 等幅表示設定参照関数
+	/*!
+	 *	等幅表示設定の有無を取得します。
+	 *
+	 *	\return		有効である場合 true を、無効である場合 false を返します。
+	 *
+	 *	\sa setMonospaceMode()
+	 */
+	bool	getMonospaceMode(void) const;
+
+	//! 等幅表示文字幅設定関数
+	/*!
+	 *	等幅表示の際の文字幅を設定します。単位はピクセルとなります。
+	 *	デフォルトでは 0 が設定されています。
+	 *
+	 *	\param[in]	size	文字幅
+	 *
+	 *	\note
+	 *		等幅表示は、 setMonospaceMode()
+	 *		で設定を有効としなければ等幅表示とはなりません。
+	 *
+	 *	\sa setMonospaceMode(), getMonospaceSize()
+	 */
+	void	setMonospaceSize(int size);
+
+	//! 等幅表示文字幅参照関数
+	/*!
+	 *	等幅表示の際の文字幅を参照します。単位はピクセルとなります。
+	 *
+	 *	\return		文字幅
+	 *
+	 *	\sa setMonospaceSize()
+	 */
+	int		getMonospaceSize(void) const;
 
 	//! 文字間幅設定関数
 	/*!
@@ -530,7 +590,7 @@ class fk_TextImage : public fk_Image {
 	 *	\param[in]	skip		空白幅
 	 *
 	 *	\sa setLineSkip(), setSpaceLineSkip(), setOffset(),
-	 *		setDPI(), setPTSize()
+	 *		setDPI(), setPTSize(), setMonospaceMode(), setMonospaceSize()
 	 */
 	void	setCharSkip(int skip);
 
