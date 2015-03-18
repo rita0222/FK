@@ -151,6 +151,7 @@ namespace FK_CLI_Boid
 				agent[i].Vec = vec;
 			}
 
+
 			foreach(Agent M in agent) {
 				M.Forward();
 			}
