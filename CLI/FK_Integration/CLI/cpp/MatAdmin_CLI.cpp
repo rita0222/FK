@@ -117,7 +117,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::GlFocus(fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return GetP()->glFocus(*argV->pVec);
+		return GetP()->glFocus(argV->x_, argV->y_, argV->z_);
 	}
 
 	bool fk_MatrixAdmin::GlFocus(double argX, double argY, double argZ)
@@ -128,7 +128,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::LoFocus(fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return GetP()->loFocus(*argV->pVec);
+		return GetP()->loFocus(argV->x_, argV->y_, argV->z_);
 	}
 
 	bool fk_MatrixAdmin::LoFocus(double argX, double argY, double argZ)
@@ -139,7 +139,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::GlVec(fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return GetP()->glVec(*argV->pVec);
+		return GetP()->glVec(argV->x_, argV->y_, argV->z_);
 	}
 
 	bool fk_MatrixAdmin::GlVec(double argX, double argY, double argZ)
@@ -150,7 +150,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::GlUpvec(fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return GetP()->glUpvec(*argV->pVec);
+		return GetP()->glUpvec(argV->x_, argV->y_, argV->z_);
 	}
 
 	bool fk_MatrixAdmin::GlUpvec(double argX, double argY, double argZ)
@@ -161,7 +161,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::LoUpvec(fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return GetP()->loUpvec(*argV->pVec);
+		return GetP()->loUpvec(argV->x_, argV->y_, argV->z_);
 	}
 
 	bool fk_MatrixAdmin::LoUpvec(double argX, double argY, double argZ)

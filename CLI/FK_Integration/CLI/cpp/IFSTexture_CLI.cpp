@@ -138,13 +138,13 @@ namespace FK_CLI {
 	bool fk_IFSTexture::MoveVPosition(int argVID, const fk_Vector^ argP, int argOrder)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec, argOrder);
+		return GetP()->moveVPosition(argVID, ::fk_Vector(argP->x_, argP->y_, argP->z_), argOrder);
 	}
 				
 	bool fk_IFSTexture::MoveVPosition(int argVID, const fk_Vector^ argP)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec);
+		return GetP()->moveVPosition(argVID, ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	bool fk_IFSTexture::MoveVPosition(int argVID, double argX, double argY, double argZ,

@@ -52,13 +52,13 @@ namespace FK_CLI {
 	int fk_Point::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return -1;
-		return GetP()->pushVertex(*argPos->pVec);
+		return GetP()->pushVertex(::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
 	}
 
 	bool fk_Point::SetVertex(int argID, fk_Vector^ argPos)
 	{
 		if(!argPos) return false;
-		return GetP()->setVertex(argID, *argPos->pVec);
+		return GetP()->setVertex(argID, ::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
 	}
 
 	bool fk_Point::SetVertex(array<fk_Vector^>^ argArray)
@@ -66,7 +66,7 @@ namespace FK_CLI {
 		if(!argArray) return false;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *(argArray[i]->pVec);
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		return GetP()->setVertex(&vArray);
 	}

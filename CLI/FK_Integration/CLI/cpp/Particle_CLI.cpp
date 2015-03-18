@@ -44,7 +44,7 @@ namespace FK_CLI {
 	void fk_Particle::Position::set(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setPosition(*argPos->pVec);
+		GetP()->setPosition(::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
 	}
 
 	fk_Vector^ fk_Particle::Velocity::get(void)
@@ -55,7 +55,7 @@ namespace FK_CLI {
 	void fk_Particle::Velocity::set(fk_Vector^ argVel)
 	{
 		if(!argVel) return;
-		GetP()->setVelocity(*argVel->pVec);
+		GetP()->setVelocity(::fk_Vector(argVel->x_, argVel->y_, argVel->z_));
 	}
 
 	fk_Vector^ fk_Particle::Accel::get(void)
@@ -66,7 +66,7 @@ namespace FK_CLI {
 	void fk_Particle::Accel::set(fk_Vector^ argAcc)
 	{
 		if(!argAcc) return;
-		GetP()->setAccel(*argAcc->pVec);
+		GetP()->setAccel(::fk_Vector(argAcc->x_, argAcc->y_, argAcc->z_));
 	}
 
 	int fk_Particle::ColorID::get(void)

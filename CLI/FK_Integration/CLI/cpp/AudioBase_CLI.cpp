@@ -61,7 +61,7 @@ namespace FK_CLI {
 
 	void fk_AudioBase::Position::set(fk_Vector^ argP)
 	{
-		GetP()->setPosition(*argP->pVec);
+		GetP()->setPosition(::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	fk_Model^ fk_AudioBase::Model::get()	

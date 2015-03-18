@@ -46,13 +46,13 @@ namespace FK_CLI {
 	bool fk_Modify::ContractEdge(fk_Edge ^argE, fk_Vector ^argP, bool argR)
 	{
 		if(!argE) return false;
-		return GetP()->contractEdge(argE->GetP(), *argP->pVec, argR);
+		return GetP()->contractEdge(argE->GetP(), ::fk_Vector(argP->x_, argP->y_, argP->z_), argR);
 	}
 
 	bool fk_Modify::ContractEdge(fk_Edge ^argE, fk_Vector ^argP)
 	{
 		if(!argE) return false;
-		return GetP()->contractEdge(argE->GetP(), *argP->pVec);
+		return GetP()->contractEdge(argE->GetP(), ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	bool fk_Modify::CheckContract(fk_Edge ^argE)
@@ -66,7 +66,7 @@ namespace FK_CLI {
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = GetP()->makePolygon(&vArray, argOpenFlg, argInitFlg);
@@ -79,7 +79,7 @@ namespace FK_CLI {
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = GetP()->makePolygon(&vArray, argOpenFlg);
@@ -92,7 +92,7 @@ namespace FK_CLI {
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = GetP()->pushPolygon(&vArray, argOpenFlg);
@@ -105,7 +105,7 @@ namespace FK_CLI {
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = GetP()->pushPolygon(&vArray);
@@ -113,10 +113,10 @@ namespace FK_CLI {
 		return L;
 	}
 
-	void fk_Modify::PushPolygonVertex(fk_Vector ^argPos, bool argOpenFlg)
+	void fk_Modify::PushPolygonVertex(fk_Vector ^argP, bool argOpenFlg)
 	{
-		if(!argPos) return;
-		GetP()->pushPolygonVertex(*argPos->pVec, argOpenFlg);
+		if(!argP) return;
+		GetP()->pushPolygonVertex(::fk_Vector(argP->x_, argP->y_, argP->z_), argOpenFlg);
 	}
 
 	void fk_Modify::MakePoint(array<fk_Vector^>^ argArray)
@@ -124,16 +124,16 @@ namespace FK_CLI {
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		GetP()->makePoint(&vArray);
 	}
 
-	fk_Vertex^ fk_Modify::PushPointVertex(fk_Vector ^argPos)
+	fk_Vertex^ fk_Modify::PushPointVertex(fk_Vector ^argP)
 	{
-		if(!argPos) return nullptr;
+		if(!argP) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
-		V->pBase = GetP()->pushPointVertex(*argPos->pVec);
+		V->pBase = GetP()->pushPointVertex(::fk_Vector(argP->x_, argP->y_, argP->z_));
 		V->dFlg = false;
 		return V;
 	}
@@ -143,7 +143,7 @@ namespace FK_CLI {
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
 		}
 		GetP()->makeLines(&vArray);
 	}
@@ -152,7 +152,8 @@ namespace FK_CLI {
 	{
 		if(!argP1 || !argP2) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
-		E->pBase = GetP()->pushLines(*argP1->pVec, *argP2->pVec);
+		E->pBase = GetP()->pushLines(::fk_Vector(argP1->x_, argP1->y_, argP1->z_),
+									 ::fk_Vector(argP2->x_, argP2->y_, argP2->z_));
 		E->dFlg = false;
 		return E;
 	}
@@ -160,19 +161,21 @@ namespace FK_CLI {
 	bool fk_Modify::SetLinePos(int argID, fk_Vector ^argP)
 	{
 		if(!argP) return false;
-		return GetP()->setLinePos(argID, *argP->pVec);
+		return GetP()->setLinePos(argID, ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	bool fk_Modify::SetLinePos(int argEID, int argVID, fk_Vector^ argP)
 	{
 		if(!argP) return false;
-		return GetP()->setLinePos(argEID, argVID, *argP->pVec);
+		return GetP()->setLinePos(argEID, argVID, ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	bool fk_Modify::ChangeLine(int argEID, fk_Vector^ argP1, fk_Vector^ argP2)
 	{
 		if(!argP1 || !argP2) return false;
-		return GetP()->changeLine(argEID, *argP1->pVec, *argP2->pVec);
+		return GetP()->changeLine(argEID,
+								  ::fk_Vector(argP1->x_, argP1->y_, argP1->z_),
+								  ::fk_Vector(argP2->x_, argP2->y_, argP2->z_));
 	}
 
 	void fk_Modify::MakeBlock(double argX, double argY, double argZ)
@@ -293,13 +296,13 @@ namespace FK_CLI {
 	bool fk_Modify::MoveVPosition(int argVID, fk_Vector ^argP, int argOrder)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec, argOrder);
+		return GetP()->moveVPosition(argVID, ::fk_Vector(argP->x_, argP->y_, argP->z_), argOrder);
 	}
 
 	bool fk_Modify::MoveVPosition(int argVID, fk_Vector ^argP)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec);
+		return GetP()->moveVPosition(argVID, ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	bool fk_Modify::MoveVPosition(int argVID, double argX, double argY, double argZ, int argOrder)

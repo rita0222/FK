@@ -44,7 +44,7 @@ namespace FK_CLI {
 	{
 		if(!argP) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
-		V->pBase = GetP()->makeVertex(*argP->pVec);
+		V->pBase = GetP()->makeVertex(::fk_Vector(argP->x_, argP->y_, argP->z_));
 		V->dFlg = false;
 		return V;
 	}
@@ -58,7 +58,7 @@ namespace FK_CLI {
 	bool fk_Operation::MoveVertex(fk_Vertex^ argV, fk_Vector^ argP)
 	{
 		if(!argV || !argP) return false;
-		return GetP()->moveVertex(argV->GetP(), *argP->pVec);
+		return GetP()->moveVertex(argV->GetP(), ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	fk_Edge^ fk_Operation::MakeEdge(fk_Vertex^ argV1, fk_Vertex^ argV2,

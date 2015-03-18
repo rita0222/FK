@@ -207,7 +207,7 @@ namespace FK_CLI {
 
 	void fk_AppWindow::CameraPos::set(fk_Vector^ argV)
 	{
-		GetP()->setCameraPos(*argV->pVec);
+		GetP()->setCameraPos(argV->x_, argV->y_, argV->z_);
 	}
 
 	fk_Vector^ fk_AppWindow::CameraPos::get(void)
@@ -218,7 +218,7 @@ namespace FK_CLI {
 
 	void fk_AppWindow::CameraFocus::set(fk_Vector^ argV)
 	{
-		GetP()->setCameraFocus(*argV->pVec);
+		GetP()->setCameraFocus(argV->x_, argV->y_, argV->z_);
 	}
 
 	void fk_AppWindow::CameraModel::set(fk_Model^ argM)

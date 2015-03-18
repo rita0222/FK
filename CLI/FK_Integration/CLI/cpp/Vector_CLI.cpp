@@ -121,146 +121,166 @@ namespace FK_CLI {
 	fk_Vector^ fk_Vector::operator+(fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argV1->pVec + *argV2->pVec;
+		fk_Vector^ V = gcnew fk_Vector(argV1->x_ + argV2->x_,
+									   argV1->y_ + argV2->y_,
+									   argV1->z_ + argV2->z_);
 		return V;
 	}
 
 	fk_Vector^ fk_Vector::operator-(fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argV1->pVec - *argV2->pVec;
+		fk_Vector^ V = gcnew fk_Vector(argV1->x_ - argV2->x_,
+									   argV1->y_ - argV2->y_,
+									   argV1->z_ - argV2->z_);
 		return V;
 	}
 			
 	fk_Vector^ fk_Vector::operator*(fk_Vector^ argV, double argD)
 	{
 		if(!argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argV->pVec * argD;
+		fk_Vector^ V = gcnew fk_Vector(argV->x_ * argD, argV->y_ * argD, argV->z_ * argD);
 		return V;
 	}
 
 	fk_Vector^ fk_Vector::operator*(double argD, fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argV->pVec * argD;
+		fk_Vector^ V = gcnew fk_Vector(argV->x_ * argD, argV->y_ * argD, argV->z_ * argD);
 		return V;
 	}
 
 	fk_Vector^ fk_Vector::operator/(fk_Vector^ argV, double argD)
 	{
 		if(!argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argV->pVec / argD;
+		fk_Vector^ V = gcnew fk_Vector(argV->x_ / argD, argV->y_ / argD, argV->z_ / argD);
 		return V;
 	}
 
 	fk_Vector^ fk_Vector::operator^(fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argV1->pVec ^ *argV2->pVec;
+		::fk_Vector V1(argV1->x_, argV1->y_, argV1->z_);
+		::fk_Vector V2(argV2->x_, argV2->y_, argV2->z_);
+		fk_Vector^ V = gcnew fk_Vector(V1 ^ V2);
 		return V;
 	}
 
 	void fk_Vector::operator *= (fk_Vector^ argV1, double argD)
 	{
 		if(!argV1) return;
-		*argV1->pVec *= argD;
+		argV1->x_ *= argD;
+		argV1->y_ *= argD;
+		argV1->z_ *= argD;
 	}
 
 	void fk_Vector::operator /= (fk_Vector^ argV, double argD)
 	{
 		if(!argV) return;
-		*argV->pVec /= argD;
+		argV->x_ /= argD;
+		argV->y_ /= argD;
+		argV->z_ /= argD;
 	}
 
 
 	void fk_Vector::operator += (fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return;
-		*argV1->pVec += *argV2->pVec;
+		argV1->x_ += argV2->x_;
+		argV1->y_ += argV2->y_;
+		argV1->z_ += argV2->z_;
 	}
 
 	void fk_Vector::operator -= (fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return;
-		*argV1->pVec -= *argV2->pVec;
+		argV1->x_ -= argV2->x_;
+		argV1->y_ -= argV2->y_;
+		argV1->z_ -= argV2->z_;
 	}
 
 	double fk_Vector::x::get()
 	{
-		return pVec->x;
+		return x_;
 	}
 
 	void fk_Vector::x::set(double value)
 	{
-		pVec->x = value;
+		x_ = value;
 	}
 
 	double fk_Vector::y::get()
 	{
-		return pVec->y;
+		return y_;
 	}
 
 	void fk_Vector::y::set(double value)
 	{
-		pVec->y = value;
+		y_ = value;
 	}
 
 	double fk_Vector::z::get()
 	{
-		return pVec->z;
+		return z_;
 	}
 
 	void fk_Vector::z::set(double value)
 	{
-		pVec->z = value;
+		z_ = value;
 	}
 	
 	void fk_Vector::Set(double argX, double argY, double argZ)
 	{
-		pVec->set(argX, argY, argZ);
+		x_ = argX;
+		y_ = argY;
+		z_ = argZ;
 	}
 
 	void fk_Vector::Set(double argX, double argY)
 	{
-		pVec->set(argX, argY, 0.0);
+		x_ = argX;
+		y_ = argY;
+		z_ = 0.0;
 	}
 
 	double fk_Vector::Dist()
 	{
-		return pVec->dist();
+		::fk_Vector V(x_, y_, z_);
+		return V.dist();
 	}
 		
 	double fk_Vector::Dist2()
 	{
-		return pVec->dist2();
+		::fk_Vector V(x_, y_, z_);
+		return V.dist2();
 	}
 
 	bool fk_Vector::Normalize()
 	{
-		return pVec->normalize();
+		::fk_Vector V(x_, y_, z_);
+		if(V.normalize() == false) return false;
+		Set(V.x, V.y, V.z);
+		return true;
 	}
 
 	bool fk_Vector::IsZero()
 	{
-		return pVec->isZero();
+		::fk_Vector V(x_, y_, z_);
+		return V.isZero();
 	}
 
 	fk_Vector^ fk_Vector::Proj(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		return gcnew fk_Vector(pVec->proj(*argV->pVec));
+		::fk_Vector V(x_, y_, z_);
+		return gcnew fk_Vector(V.proj(::fk_Vector(argV->x_, argV->y_, argV->z_)));
 	}
 
 	fk_Vector^ fk_Vector::Perp(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		return gcnew fk_Vector(pVec->perp(*argV->pVec));
+		::fk_Vector V(x_, y_, z_);
+		return gcnew fk_Vector(V.perp(::fk_Vector(argV->x_, argV->y_, argV->z_)));
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -274,14 +294,14 @@ namespace FK_CLI {
 	{
 		if(!argV) return;
 		pHVec = new ::fk_HVector();
-		pHVec->set(*argV->pVec, 1.0);
+		pHVec->set(argV->x_, argV->y_, argV->z_, 1.0);
 	}
 
 	fk_HVector::fk_HVector(fk_Vector^ argV, double argW)
 	{
 		pHVec = new ::fk_HVector();
 		if(!argV) return;
-		pHVec->set(*argV->pVec, argW);
+		pHVec->set(argV->x_, argV->y_, argV->z_, argW);
 	}
 
 	fk_HVector::fk_HVector(fk_HVector^ argHV)
@@ -361,9 +381,7 @@ namespace FK_CLI {
 	fk_HVector::operator fk_Vector^ (fk_HVector^ argH)
 	{
 		if(argH == nullptr) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = *argH->pHVec;
-		return V;
+		return gcnew fk_Vector(*argH->pHVec);
 	}
 
 	bool fk_HVector::Equals(fk_HVector^ argH)
@@ -396,7 +414,7 @@ namespace FK_CLI {
 	void fk_HVector::Set(fk_Vector^ argV, double argW)
 	{
 		if(!argV) return;
-		pHVec->set(*(argV->pVec), argW);
+		pHVec->set(argV->x_, argV->y_, argV->z_, argW);
 	}
 
 	void fk_HVector::Set(double argX, double argY, double argZ, double argW)
@@ -417,14 +435,12 @@ namespace FK_CLI {
 	void fk_HVector::Set(fk_Vector^ argV)
 	{
 		if(!argV) return;
-		pHVec->set(*argV->pVec);
+		pHVec->set(argV->x_, argV->y_, argV->z_);
 	}
 
 	fk_Vector^ fk_HVector::GetV(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		V->pVec->set(pHVec->x, pHVec->y, pHVec->z);
-		return V;
+		return gcnew fk_Vector(pHVec->x, pHVec->y, pHVec->z);
 	}
 
 	void fk_HVector::IsPos(void)
@@ -466,15 +482,15 @@ namespace FK_CLI {
 	
 	fk_FVector::operator fk_Vector^(fk_FVector^ argF)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*(V->pVec) = *(argF->pFVec);
-		return V;
+		return gcnew fk_Vector(*argF->pFVec);
 	}
 
 	fk_FVector::operator fk_FVector ^ (fk_Vector^ argV)
 	{
 		fk_FVector^ F = gcnew fk_FVector();
-		*(F->pFVec) = *(argV->pVec);
+		F->pFVec->x = static_cast<float>(argV->x_);
+		F->pFVec->y = static_cast<float>(argV->y_);
+		F->pFVec->z = static_cast<float>(argV->z_);
 		return F;
 	}
 

@@ -210,7 +210,7 @@ namespace FK_CLI {
 	void fk_Matrix::SetRow(int argRow, fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->setRow(argRow, *argV->pVec);
+		this->pMatrix->setRow(argRow, ::fk_Vector(argV->x_, argV->y_, argV->z_));
 	}
 
 	void fk_Matrix::SetRow(int argRow, fk_HVector^ argV)
@@ -222,7 +222,7 @@ namespace FK_CLI {
 	void fk_Matrix::SetCol(int argCol, fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->setCol(argCol, *argV->pVec);
+		this->pMatrix->setCol(argCol, ::fk_Vector(argV->x_, argV->y_, argV->z_));
 	}
 
 	void fk_Matrix::SetCol(int argCol, fk_HVector^ argV)
@@ -270,7 +270,7 @@ namespace FK_CLI {
 	void fk_Matrix::MakeTrans(fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->makeTrans(*argV->pVec);
+		this->pMatrix->makeTrans(argV->x_, argV->y_, argV->z_);
 	}
 
 	void fk_Matrix::MakeEuler(double argH, double argP, double argB)
@@ -302,6 +302,6 @@ namespace FK_CLI {
 	void fk_Matrix::MakeScale(fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->makeScale(*argV->pVec);
+		this->pMatrix->makeScale(argV->x_, argV->y_, argV->z_);
 	}
 }

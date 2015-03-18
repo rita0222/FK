@@ -324,7 +324,7 @@ namespace FK_CLI {
 
 		int posSize = argPos->Length;
 		vector<::fk_Vector> posArray(posSize);
-		for(i = 0; i < posSize; ++i) posArray[i] = *(argPos[i]->pVec);
+		for(i = 0; i < posSize; ++i) posArray[i].set(argPos[i]->x_, argPos[i]->y_, argPos[i]->z_);
 
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName),
 									 &timeArray, &posArray, pM, argTriFlg);
@@ -409,7 +409,7 @@ namespace FK_CLI {
 	bool fk_IndexFaceSet::MoveVPosition(int argVID, fk_Vector^ argP, int argOrder)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec, argOrder);
+		return GetP()->moveVPosition(argVID, ::fk_Vector(argP->x_, argP->y_, argP->z_), argOrder);
 	}
 
 	bool fk_IndexFaceSet::MoveVPosition(int argVID, fk_Vector^ argP)
@@ -449,7 +449,7 @@ namespace FK_CLI {
 		int vSize = argPosArray->Length;
 		vector<::fk_Vector> tmpV(vSize);
 		for(int i = 0; i < vSize; i++) {
-			tmpV[i] = *(argPosArray[i]->pVec);
+			tmpV[i].set(argPosArray[i]->x_, argPosArray[i]->y_, argPosArray[i]->z_);
 		}
 		GetP()->makeIFSet(argFNum, argPNum, pIF, argVNum, &tmpV[0], argOrder);
 	}
@@ -463,25 +463,25 @@ namespace FK_CLI {
 	bool fk_IndexFaceSet::SetPNorm(int argFID, fk_Vector^ argN, int argOrder)
 	{
 		if(!argN) return false;
-		return GetP()->setPNorm(argFID, *argN->pVec, argOrder);
+		return GetP()->setPNorm(argFID, ::fk_Vector(argN->x_, argN->y_, argN->z_), argOrder);
 	}
 
 	bool fk_IndexFaceSet::SetPNorm(int argFID, fk_Vector^ argN)
 	{
 		if(!argN) return false;
-		return GetP()->setPNorm(argFID, *argN->pVec, 0);
+		return GetP()->setPNorm(argFID, ::fk_Vector(argN->x_, argN->y_, argN->z_), 0);
 	}
 
 	bool fk_IndexFaceSet::SetVNorm(int argVID, fk_Vector^ argN, int argOrder)
 	{
 		if(!argN) return false;
-		return GetP()->setVNorm(argVID, *argN->pVec, argOrder);
+		return GetP()->setVNorm(argVID, ::fk_Vector(argN->x_, argN->y_, argN->z_), argOrder);
 	}
 
 	bool fk_IndexFaceSet::SetVNorm(int argVID, fk_Vector^ argN)
 	{
 		if(!argN) return false;
-		return GetP()->setVNorm(argVID, *argN->pVec, 0);
+		return GetP()->setVNorm(argVID, ::fk_Vector(argN->x_, argN->y_, argN->z_), 0);
 	}
 
 	bool fk_IndexFaceSet::SetElemMaterialID(int argFID, int argMID)

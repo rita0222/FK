@@ -246,7 +246,7 @@ namespace FK_CLI {
 	void fk_ShapeViewer::SetPosition(int argID, fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setPosition(argID, *argPos->pVec);
+		GetP()->setPosition(argID, ::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
 	}
 
 	void fk_ShapeViewer::SetPosition(int argID, double argX, double argY, double argZ)
@@ -268,7 +268,7 @@ namespace FK_CLI {
 	void fk_ShapeViewer::SetVec(int argID, fk_Vector^ argVec)
 	{
 		if(!argVec) return;
-		GetP()->setVec(argID, *argVec->pVec);
+		GetP()->setVec(argID, ::fk_Vector(argVec->x_, argVec->y_, argVec->z_));
 	}
 
 	void fk_ShapeViewer::SetVec(int argID, double argX, double argY, double argZ)
@@ -279,7 +279,7 @@ namespace FK_CLI {
 	void fk_ShapeViewer::SetUpvec(int argID, fk_Vector^ argVec)
 	{
 		if(!argVec) return;
-		GetP()->setUpvec(argID, *argVec->pVec);
+		GetP()->setUpvec(argID, ::fk_Vector(argVec->x_, argVec->y_, argVec->z_));
 	}
 
 	void fk_ShapeViewer::SetUpvec(int argID, double argX, double argY, double argZ)

@@ -19,7 +19,7 @@ namespace FK_CLI {
 		if(!argV) {
 			pQuat = new ::fk_Quaternion(argS, 0.0, 0.0, 0.0);
 		} else {
-			pQuat = new ::fk_Quaternion(argS, *argV->pVec);
+			pQuat = new ::fk_Quaternion(argS, argV->x_, argV->y_, argV->z_);
 		}
 	}
 
@@ -98,7 +98,7 @@ namespace FK_CLI {
 	void fk_Quaternion::v::set(fk_Vector^ argV)
 	{
 		if(!argV) return;
-		pQuat->v = *argV->pVec;
+		pQuat->v = ::fk_Vector(argV->x_, argV->y_, argV->z_);
 	}
 
 	void fk_Quaternion::Euler::set(fk_Angle^ argA)
@@ -199,8 +199,7 @@ namespace FK_CLI {
 	fk_Vector^ fk_Quaternion::operator*(fk_Quaternion^ argQ, fk_Vector^ argV)
 	{
 		if(!argQ || !argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = (*argQ->pQuat) * (*argV->pVec);
+		fk_Vector^ V = gcnew fk_Vector((*argQ->pQuat) * ::fk_Vector(argV->x_, argV->y_, argV->z_));
 		return V;
 	}
 		
@@ -283,7 +282,7 @@ namespace FK_CLI {
 	void fk_Quaternion::Set(double argS, fk_Vector^ argV)
 	{
 		if(!argV) return;
-		pQuat->set(argS, *argV->pVec);
+		pQuat->set(argS, ::fk_Vector(argV->x_, argV->y_, argV->z_));
 	}
 	
 	void fk_Quaternion::SetRotate(double argT, double argX, double argY, double argZ)
@@ -294,7 +293,7 @@ namespace FK_CLI {
 	void fk_Quaternion::SetRotate(double argT, fk_Vector^ argV)
 	{
 		if(!argV) return;
-		pQuat->setRotate(argT, *argV->pVec);
+		pQuat->setRotate(argT, ::fk_Vector(argV->x_, argV->y_, argV->z_));
 	}
 
 	bool fk_Quaternion::Normalize(void)

@@ -71,7 +71,7 @@ namespace FK_CLI {
 	bool fk_TriTexture::SetVertexPos(int argID, fk_Vector^ argP)
 	{
 		if(!argP) return false;
-		return GetP()->setVertexPos(argID, *argP->pVec);
+		return GetP()->setVertexPos(argID, ::fk_Vector(argP->x_, argP->y_, argP->z_));
 	}
 
 	fk_Vector^ fk_TriTexture::GetVertexPos(int argID)
