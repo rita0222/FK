@@ -55,8 +55,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_AudioBase::Position::get()
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getPosition();
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getPosition());
 		return V;
 	}
 

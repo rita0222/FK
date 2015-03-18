@@ -30,7 +30,8 @@ namespace FK_CLI {
 		if(!argV) {
 			pGVec = new ::fk_GenVector();
 		} else {
-			pGVec = new ::fk_GenVector(*argV->pVec);
+			::fk_Vector V(argV->x_, argV->y_, argV->z_);
+			pGVec = new ::fk_GenVector(V);
 		}
 	}
 
@@ -240,7 +241,8 @@ namespace FK_CLI {
 	bool fk_GenVector::Replace(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->replace(argS, *argV->pVec);
+		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		return pGVec->replace(argS, V);
 	}
 
 	bool fk_GenVector::Replace(int argS, fk_HVector^ argV)
@@ -258,7 +260,8 @@ namespace FK_CLI {
 	bool fk_GenVector::Add(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->add(argS, *argV->pVec);
+		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		return pGVec->add(argS, V);
 	}
 
 	bool fk_GenVector::Add(int argS, fk_HVector^ argV)
@@ -276,7 +279,8 @@ namespace FK_CLI {
 	bool fk_GenVector::Sub(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->sub(argS, *argV->pVec);
+		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		return pGVec->sub(argS, V);
 	}
 
 	bool fk_GenVector::Sub(int argS, fk_HVector^ argV)

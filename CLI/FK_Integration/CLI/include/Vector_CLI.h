@@ -35,7 +35,9 @@ namespace FK_CLI
 
 #ifndef FK_DOXYGEN_USER_PROCESS		
 	internal:
-		::fk_Vector *pVec;
+		//::fk_Vector *pVec;
+		double	x_, y_, z_;
+
 		static ::fk_Axis GetAxis(fk_Axis);
 #endif
 

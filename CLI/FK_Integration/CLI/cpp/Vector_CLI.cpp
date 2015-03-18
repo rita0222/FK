@@ -33,27 +33,35 @@ namespace FK_CLI {
 
 	fk_Vector::fk_Vector()
 	{
-		pVec = new ::fk_Vector();
+		x_ = y_ = z_ = 0.0;
 	}
 
 	fk_Vector::fk_Vector(double argX, double argY, double argZ)
 	{
-		pVec = new ::fk_Vector(argX, argY, argZ);
+		x_ = argX;
+		y_ = argY;
+		z_ = argZ;
 	}
 
 	fk_Vector::fk_Vector(fk_Vector^ argV)
 	{
-		pVec = new ::fk_Vector(argV->pVec->x, argV->pVec->y, argV->pVec->z);
+		x_ = argV->x_;
+		y_ = argV->y_;
+		z_ = argV->z_;
 	}
 
 	fk_Vector::fk_Vector(::fk_Vector *argV)
 	{
-		pVec = new ::fk_Vector(argV->x, argV->y, argV->z);
+		x_ = argV->x;
+		y_ = argV->y;
+		z_ = argV->z;
 	}
 
 	fk_Vector::fk_Vector(::fk_Vector argV)
 	{
-		pVec = new ::fk_Vector(argV.x, argV.y, argV.z);
+		x_ = argV.x;
+		y_ = argV.y;
+		z_ = argV.z;
 	}
 
 	// デストラクタ
@@ -65,13 +73,14 @@ namespace FK_CLI {
 	// ファイナライザ
 	fk_Vector::!fk_Vector()
 	{
-		delete pVec;
 	}
 	
 	bool fk_Vector::Equals(fk_Vector^ argV)
 	{
 		if(!argV) false;
-		return (*argV->pVec == *pVec);
+		::fk_Vector tmpA(x_, y_, z_);
+		::fk_Vector tmpB(argV->x_, argV->y_, argV->z_);
+		return (tmpA == tmpB);
 	}
 
 	bool fk_Vector::Equals(Object^ argObj)
@@ -80,7 +89,9 @@ namespace FK_CLI {
 		if(this == argObj) return true;
 		if(GetType() == argObj->GetType()) {
 			fk_Vector^ V = static_cast<fk_Vector^>(argObj);
-			return (*V->pVec == *pVec);
+			::fk_Vector tmpA(x_, y_, z_);
+			::fk_Vector tmpB(V->x_, V->y_, V->z_);
+			return (tmpA == tmpB);
 		}
 		return false;
 	}
@@ -88,24 +99,23 @@ namespace FK_CLI {
 	String^	fk_Vector::ToString()
 	{
 		std::string	tmpBuf;
-		tmpBuf = "V: " + to_string(pVec->x) + ", ";
-		tmpBuf += to_string(pVec->y) + ", ";
-		tmpBuf += to_string(pVec->z);
+		tmpBuf = "V: " + to_string(x_) + ", ";
+		tmpBuf += to_string(y_) + ", ";
+		tmpBuf += to_string(z_);
 		return gcnew String(tmpBuf.c_str());
 	}
 
 	fk_Vector^ fk_Vector::operator-(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = -(*argV->pVec);
+		fk_Vector^ V = gcnew fk_Vector(-argV->x_, -argV->y_, -argV->z_);
 		return V;
 	}
 	
 	double fk_Vector::operator*(fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return 0.0;
-		return (*argV1->pVec) * (*argV2->pVec);
+		return (argV1->x_ * argV2->x_ + argV1->y_ * argV2->y_ + argV1->z_ * argV2->z_);
 	}
 		
 	fk_Vector^ fk_Vector::operator+(fk_Vector^ argV1, fk_Vector^ argV2)

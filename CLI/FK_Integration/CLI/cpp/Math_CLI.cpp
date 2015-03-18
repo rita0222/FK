@@ -12,26 +12,39 @@ namespace FK_CLI {
 	bool fk_Math::IsOnLine(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argP)
 	{
 		if(!argA || !argB || !argP) return false;
-		return ::fk_Math::isOnLine(*argA->pVec, *argB->pVec, *argP->pVec);
+		::fk_Vector A(argA->x_, argA->y_, argA->z_);
+		::fk_Vector B(argB->x_, argB->y_, argB->z_);
+		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		return ::fk_Math::isOnLine(A, B, P);
 	}
 
 	bool fk_Math::IsOnLineSegment(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argP, bool openFlg)
 	{
 		if(!argA || !argB || !argP) return false;
-		return ::fk_Math::isOnLineSegment(*argA->pVec, *argB->pVec, *argP->pVec, openFlg);
+		::fk_Vector A(argA->x_, argA->y_, argA->z_);
+		::fk_Vector B(argB->x_, argB->y_, argB->z_);
+		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		return ::fk_Math::isOnLineSegment(A, B, P, openFlg);
 	}
 
 	bool fk_Math::IsOnLineSegment(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argP)
 	{
 		if(!argA || !argB || !argP) return false;
-		return ::fk_Math::isOnLineSegment(*argA->pVec, *argB->pVec, *argP->pVec);
+		::fk_Vector A(argA->x_, argA->y_, argA->z_);
+		::fk_Vector B(argB->x_, argB->y_, argB->z_);
+		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		return ::fk_Math::isOnLineSegment(A, B, P);
 	}
 
 	bool fk_Math::IsCrossLine(fk_Vector^ argA, fk_Vector^ argB,
 							  fk_Vector^ argC, fk_Vector^ argD)
 	{
 		if(!argA || !argB || !argC || !argD) return false;
-		return ::fk_Math::isCrossLine(*argA->pVec, *argB->pVec, *argC->pVec, *argD->pVec);
+		::fk_Vector A(argA->x_, argA->y_, argA->z_);
+		::fk_Vector B(argB->x_, argB->y_, argB->z_);
+		::fk_Vector C(argC->x_, argC->y_, argC->z_);
+		::fk_Vector D(argD->x_, argD->y_, argD->z_);
+		return ::fk_Math::isCrossLine(A, B, C, D);
 	}
 
 	bool fk_Math::IsCrossLineSegment(fk_Vector^ argA, fk_Vector^ argB,

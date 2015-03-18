@@ -108,7 +108,7 @@ namespace FK_CLI_Boid
 		public void Forward(bool argGMode)
 		{
 			var gVec = new fk_Vector();
-			fk_Vector diff;
+			fk_Vector diff = new fk_Vector();
 			fk_Vector [] pArray = new fk_Vector[agent.Length];
 			fk_Vector [] vArray = new fk_Vector[agent.Length];
 
@@ -120,36 +120,40 @@ namespace FK_CLI_Boid
 
 			gVec /= (double)(agent.Length);
 
-			for(int i = 0; i < agent.Length; i++) {
-				fk_Vector vec = new fk_Vector(vArray[i]);
-				for(int j = 0; j < agent.Length; j++) {
-					if(i == j) continue;
-					diff = pArray[i] - pArray[j];
-					double dist = diff.Dist();
-					if(dist < paramLA) {
-						vec += paramA * diff / (dist*dist);
+			Parallel.For(0, 8, th => {
+				for(int i = th; i < agent.Length; i += 8) {
+					fk_Vector vec = new fk_Vector(vArray[i]);
+
+					for(int j = 0; j < agent.Length; j++) {
+						if(i == j) continue;
+						diff = pArray[i] - pArray[j];
+						double dist = diff.Dist();
+						if(dist < paramLA) {
+							vec += paramA * diff / (dist*dist);
+						}
+
+						if(dist < paramLB) {
+							vec += paramB * vArray[j];
+						}
 					}
 
-					if(dist < paramLB) {
-						vec += paramB * vArray[j];
+
+					if(argGMode == true) {
+						vec += paramC * (gVec - pArray[i]);
 					}
-				}
 
-				if(argGMode == true) {
-					vec += paramC * (gVec - pArray[i]);
-				}
+					if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
+						vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
+					}
 
-				if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
-					vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
-				}
+					if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
+						vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
+					}
 
-				if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
-					vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
+					vec.z = 0.0;
+					agent[i].Vec = vec;
 				}
-
-				vec.z = 0.0;
-				agent[i].Vec = vec;
-			}
+			});
 
 
 			foreach(Agent M in agent) {
@@ -162,7 +166,7 @@ namespace FK_CLI_Boid
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			var boid = new Boid(100);
+			var boid = new Boid(200);
 
 			boid.SetWindow(win);
 
