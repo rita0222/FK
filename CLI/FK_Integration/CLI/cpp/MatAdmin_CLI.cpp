@@ -37,9 +37,7 @@ namespace FK_CLI {
 
 	fk_Angle^ fk_MatrixAdmin::Angle::get(void)
 	{
-		fk_Angle^ A = gcnew fk_Angle();
-		*A->pAngle = GetP()->getAngle();
-		return A;
+		return gcnew fk_Angle(GetP()->getAngle());
 	}
 
 	fk_Matrix^ fk_MatrixAdmin::Matrix::get(void)
@@ -172,7 +170,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::GlAngle(fk_Angle^ argAngle)
 	{
 		if(!argAngle) return false;
-		return GetP()->glAngle(*argAngle->pAngle);
+		return GetP()->glAngle(argAngle);
 	}
 
 	bool fk_MatrixAdmin::GlAngle(double argH, double argP, double argB)
@@ -183,7 +181,7 @@ namespace FK_CLI {
 	bool fk_MatrixAdmin::LoAngle(fk_Angle^ argAngle)
 	{
 		if(!argAngle) return false;
-		return GetP()->loAngle(*argAngle->pAngle);
+		return GetP()->loAngle(argAngle);
 	}
 
 	bool fk_MatrixAdmin::LoAngle(double argH, double argP, double argB)

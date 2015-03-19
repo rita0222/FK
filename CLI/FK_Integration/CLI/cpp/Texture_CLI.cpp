@@ -5,55 +5,67 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_TexCoord * fk_TexCoord::GetP(void)
+	fk_TexCoord::operator ::fk_TexCoord (fk_TexCoord^ argC)
 	{
-		return pTex;
+		::fk_TexCoord C(argC->x_, argC->y_);
+		return C;
 	}
-
+	
 	fk_TexCoord::fk_TexCoord()
+		: x_(0.0), y_(0.0)
 	{
-		pTex = new ::fk_TexCoord();
+		return;
 	}
 
 	fk_TexCoord::fk_TexCoord(double argX, double argY)
+		: x_(argX), y_(argY)
 	{
-		pTex = new ::fk_TexCoord(argX, argY);
+		return;
 	}
 
+	fk_TexCoord::fk_TexCoord(::fk_TexCoord argT)
+		: x_(argT.x), y_(argT.y)
+	{
+		return;
+	}
+		
 	fk_TexCoord::~fk_TexCoord()
 	{
 		this->!fk_TexCoord();
+		return;
 	}
 
 	fk_TexCoord::!fk_TexCoord()
 	{
-		delete pTex;
+		return;
 	}
 
 	double fk_TexCoord::x::get()
 	{
-		return double(pTex->x);
+		return x_;
 	}
 
 	void fk_TexCoord::x::set(double v)
 	{
-		pTex->x = float(v);
+		x_ = v;
 	}
 
 	double fk_TexCoord::y::get()
 	{
-		return double(pTex->y);
+		return y_;
 	}
 
 	void fk_TexCoord::y::set(double v)
 	{
-		pTex->y = float(v);
+		y_ = v;
 	}
 
 	bool fk_TexCoord::Equals(fk_TexCoord^ argT)
 	{
 		if(!argT) false;
-		return (*argT->pTex == *pTex);
+		::fk_TexCoord T1(x_, y_);
+		::fk_TexCoord T2(argT->x_, argT->y_);
+		return (T1 == T2);
 	}
 
 	bool fk_TexCoord::Equals(Object^ argObj)
@@ -62,21 +74,24 @@ namespace FK_CLI {
 		if(this == argObj) return true;
 		if(GetType() == argObj->GetType()) {
 			fk_TexCoord^ T = static_cast<fk_TexCoord^>(argObj);
-			return (*T->pTex == *pTex);
+			::fk_TexCoord T1(x_, y_);
+			::fk_TexCoord T2(T->x_, T->y_);
+			return (T1 == T2);
 		}
 		return false;
 	}
 
 	void fk_TexCoord::Set(double argX, double argY)
 	{
-		GetP()->set(argX, argY);
+		x_ = argX;
+		y_ = argY;
 	}
 
 	String^ fk_TexCoord::ToString()
 	{
 		string tmpBuf;
-		tmpBuf = "TxC: " + to_string(pTex->x) + ", ";
-		tmpBuf += to_string(pTex->y);
+		tmpBuf = "TxC: " + to_string(x_) + ", ";
+		tmpBuf += to_string(y_);
 		return gcnew String(tmpBuf.c_str());
 	}
 

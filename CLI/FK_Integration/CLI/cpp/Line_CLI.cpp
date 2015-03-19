@@ -36,7 +36,7 @@ namespace FK_CLI {
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
+			vArray[i] = argArray[i];
 		}
 		GetP()->pushLine(&vArray[0]);
 	}
@@ -44,28 +44,25 @@ namespace FK_CLI {
 	void fk_Line::PushLine(fk_Vector^ argS, fk_Vector^ argE)
 	{
 		if(!argS || !argE) return;
-		GetP()->pushLine(::fk_Vector(argS->x_, argS->y_, argS->z_),
-						 ::fk_Vector(argE->x_, argE->y_, argE->z_));
+		GetP()->pushLine(argS, argE);
 	}
 
 	bool fk_Line::ChangeLine(int argLineID, fk_Vector^ argS, fk_Vector^ argE)
 	{
 		if(!argS || !argE) return false;
-		return GetP()->changeLine(argLineID,
-								  ::fk_Vector(argS->x_, argS->y_, argS->z_),
-								  ::fk_Vector(argE->x_, argE->y_, argE->z_));
+		return GetP()->changeLine(argLineID, argS, argE);
 	}
 
 	bool fk_Line::SetVertex(int argVID, fk_Vector^ argPos)
 	{
 		if(!argPos) return false;
-		return GetP()->setVertex(argVID, ::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
+		return GetP()->setVertex(argVID, argPos);
 	}
 
 	bool fk_Line::SetVertex(int argLID, int argVID, fk_Vector^ argPos)
 	{
 		if(!argPos) return false;
-		return GetP()->setVertex(argLID, argVID, ::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
+		return GetP()->setVertex(argLID, argVID, argPos);
 	}
 
 	void fk_Line::SetVertex(array<fk_Vector^>^ argArray)
@@ -73,7 +70,7 @@ namespace FK_CLI {
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
+			vArray[i] = argArray[i];
 		}
 		GetP()->setVertex(&vArray);
 	}

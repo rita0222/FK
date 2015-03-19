@@ -52,13 +52,13 @@ namespace FK_CLI {
 	int fk_Point::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return -1;
-		return GetP()->pushVertex(::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
+		return GetP()->pushVertex(argPos);
 	}
 
 	bool fk_Point::SetVertex(int argID, fk_Vector^ argPos)
 	{
 		if(!argPos) return false;
-		return GetP()->setVertex(argID, ::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
+		return GetP()->setVertex(argID, argPos);
 	}
 
 	bool fk_Point::SetVertex(array<fk_Vector^>^ argArray)
@@ -66,7 +66,7 @@ namespace FK_CLI {
 		if(!argArray) return false;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i].set(argArray[i]->x_, argArray[i]->y_, argArray[i]->z_);
+			vArray[i] = argArray[i];
 		}
 		return GetP()->setVertex(&vArray);
 	}
@@ -79,7 +79,9 @@ namespace FK_CLI {
 	fk_Vector^ fk_Point::GetVertex(int argID)
 	{
 		::fk_FVector *fV = GetP()->getVertex(argID);
-		return gcnew fk_Vector(double(fV->x), double(fV->y), double(fV->z));
+		return gcnew fk_Vector(static_cast<double>(fV->x),
+							   static_cast<double>(fV->y),
+							   static_cast<double>(fV->z));
 	}
 				
 	void fk_Point::SetDrawMode(int argID, bool argMode)

@@ -89,7 +89,7 @@ namespace FK_CLI {
 	void fk_Boundary::AABB::set(fk_Vector^ argSize)
 	{
 		if(!argSize) return;
-		GetP()->setAABBSize(::fk_Vector(argSize->x_, argSize->y_, argSize->z_));
+		GetP()->setAABBSize(argSize);
 	}
 
 	fk_Vector^ fk_Boundary::OBB::get()
@@ -100,7 +100,7 @@ namespace FK_CLI {
 	void fk_Boundary::OBB::set(fk_Vector^ argSize)
 	{
 		if(!argSize) return;
-		GetP()->setOBBSize(::fk_Vector(argSize->x_, argSize->y_, argSize->z_));
+		GetP()->setOBBSize(argSize);
 	}
 
 	bool fk_Boundary::BDraw::get()
@@ -162,8 +162,7 @@ namespace FK_CLI {
 	void fk_Boundary::SetCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)
 	{
 		if(!argS || !argE) return;
-		GetP()->setCapsule(::fk_Vector(argS->x_, argS->y_, argS->z_),
-						   ::fk_Vector(argE->x_, argE->y_, argE->z_), argR);
+		GetP()->setCapsule(argS, argE, argR);
 	}
 
 	double fk_Boundary::GetCapsuleRadius(void)

@@ -120,6 +120,7 @@ namespace FK_CLI_Boid
 
 			gVec /= (double)(agent.Length);
 
+
 			for(int i = 0; i < agent.Length; i++) {
 				fk_Vector vec = new fk_Vector(vArray[i]);
 				for(int j = 0; j < agent.Length; j++) {
@@ -134,7 +135,7 @@ namespace FK_CLI_Boid
 						vec += paramB * vArray[j];
 					}
 				}
-				
+
 				if(argGMode == true) {
 					vec += paramC * (gVec - pArray[i]);
 				}
@@ -150,7 +151,6 @@ namespace FK_CLI_Boid
 				vec.z = 0.0;
 				agent[i].Vec = vec;
 			}
-
 
 			foreach(Agent M in agent) {
 				M.Forward();

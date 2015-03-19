@@ -265,7 +265,7 @@ namespace FK_CLI {
 			time[i] = argTime[i];
 		}
 		for(i = 0; i < argPos->Length; ++i) {
-			pos[i].set(argPos[i]->x_, argPos[i]->y_, argPos[i]->z_);
+			pos[i] = argPos[i];
 		}
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName),
 									 &time, &pos, argMat->GetP(), triFlg);
@@ -284,7 +284,7 @@ namespace FK_CLI {
 			time[i] = argTime[i];
 		}
 		for(i = 0; i < argPos->Length; ++i) {
-			pos[i].set(argPos[i]->x_, argPos[i]->y_, argPos[i]->z_);
+			pos[i] = argPos[i];
 		}
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName),
 									 &time, &pos, argMat->GetP());
@@ -302,7 +302,7 @@ namespace FK_CLI {
 			time[i] = argTime[i];
 		}
 		for(i = 0; i < argPos->Length; ++i) {
-			pos[i].set(argPos[i]->x_, argPos[i]->y_, argPos[i]->z_);
+			pos[i] = argPos[i];
 		}
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName), &time, &pos);
 	}

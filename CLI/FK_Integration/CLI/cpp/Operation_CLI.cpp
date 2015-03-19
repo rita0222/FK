@@ -9,6 +9,7 @@ namespace FK_CLI {
 
 	fk_Operation::fk_Operation(bool argNewFlg) : fk_DataAccess(false)
 	{
+		return;
 	}
 
 	fk_Operation::~fk_Operation()
@@ -18,6 +19,7 @@ namespace FK_CLI {
 
 	fk_Operation::!fk_Operation()
 	{
+		return;
 	}
 
 	void fk_Operation::HistoryMode::set(bool argMode)
@@ -44,7 +46,7 @@ namespace FK_CLI {
 	{
 		if(!argP) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
-		V->pBase = GetP()->makeVertex(::fk_Vector(argP->x_, argP->y_, argP->z_));
+		V->pBase = GetP()->makeVertex(argP);
 		V->dFlg = false;
 		return V;
 	}
@@ -58,7 +60,7 @@ namespace FK_CLI {
 	bool fk_Operation::MoveVertex(fk_Vertex^ argV, fk_Vector^ argP)
 	{
 		if(!argV || !argP) return false;
-		return GetP()->moveVertex(argV->GetP(), ::fk_Vector(argP->x_, argP->y_, argP->z_));
+		return GetP()->moveVertex(argV->GetP(), argP);
 	}
 
 	fk_Edge^ fk_Operation::MakeEdge(fk_Vertex^ argV1, fk_Vertex^ argV2,

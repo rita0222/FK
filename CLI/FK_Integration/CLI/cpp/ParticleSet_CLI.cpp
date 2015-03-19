@@ -94,7 +94,7 @@ namespace FK_CLI
 	{
 		if(!argPos) return nullptr;
 		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->newParticle(::fk_Vector(argPos->x_, argPos->y_, argPos->z_));
+		P->pBase = GetP()->newParticle(argPos);
 		P->dFlg = false;
 		GenMethod(P);
 		return P;
