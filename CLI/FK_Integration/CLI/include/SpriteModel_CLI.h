@@ -5,6 +5,7 @@
 #include <FK/SpriteModel.h>
 #include "Model_CLI.h"
 #include "Texture_CLI.h"
+#include "TextImage_CLI.h"
 
 namespace FK_CLI
 {
@@ -17,6 +18,10 @@ namespace FK_CLI
 		fk_SpriteModel(bool argNewFlg);
 		~fk_SpriteModel();
 		!fk_SpriteModel();
+
+		property fk_TextImage^ Text {
+			fk_TextImage^ get();
+		}
 
 		property fk_Image^ Image {
 			fk_Image^ get();

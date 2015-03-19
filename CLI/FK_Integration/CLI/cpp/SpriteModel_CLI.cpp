@@ -38,6 +38,14 @@ namespace FK_CLI {
 		this->pBase = nullptr;
 	}
 
+	fk_TextImage^ fk_SpriteModel::Text::get(void)
+	{
+		fk_TextImage^ TI = gcnew fk_TextImage();
+		TI->pBase = &(GetP()->text);
+		TI->dFlg = false;
+		return TI;
+	}
+		
 	void fk_SpriteModel::Image::set(fk_Image^ argImage)
 	{
 		if(!argImage) return;

@@ -75,6 +75,16 @@ namespace FK_CLI {
 			void set(bool);
 		}
 
+		property bool MonospaceMode {
+			bool get();
+			void set(bool);
+		}
+
+		property int MonospaceSize {
+			int get();
+			void set(int);
+		}
+
 		property int CharSkip {
 			int get();
 			void set(int);

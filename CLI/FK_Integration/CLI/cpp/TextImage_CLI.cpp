@@ -137,6 +137,26 @@ namespace FK_CLI {
 		return GetP()->getSmoothMode();
 	}
 
+	void fk_TextImage::MonospaceMode::set(bool argMode)
+	{
+		GetP()->setMonospaceMode(argMode);
+	}
+
+	bool fk_TextImage::MonospaceMode::get(void)
+	{
+		return GetP()->getMonospaceMode();
+	}
+
+	void fk_TextImage::MonospaceSize::set(int argSize)
+	{
+		GetP()->setMonospaceSize(argSize);
+	}
+
+	int fk_TextImage::MonospaceSize::get(void)
+	{
+		return GetP()->getMonospaceSize();
+	}
+	
 	void fk_TextImage::CharSkip::set(int argSkip)
 	{
 		GetP()->setCharSkip(argSkip);
