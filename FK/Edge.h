@@ -187,7 +187,7 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	/*!
 	 * 	稜線に設定されている自由曲線を取得します。
 	 *	\return 自由曲線インスタンスのアドレス。
-	 *	設定されていなかった場合は NULL を返します。
+	 *	設定されていなかった場合は nullptr を返します。
 	 */
 	fk_Curve *	getCurveGeometry(void);
 

@@ -161,7 +161,7 @@ class fk_Half : public fk_Topology {
 	/*!
 	 *	この半稜線が属しているループ位相を取得します。
 	 *	\return ループ位相を表す fk_Loop 型インスタンスのアドレス。
-	 *	半稜線がループに属していない場合は NULL を返します。
+	 *	半稜線がループに属していない場合は nullptr を返します。
 	 */
 	fk_Loop *	getParentLoop(void) const;
 

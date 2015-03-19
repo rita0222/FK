@@ -183,7 +183,7 @@ void fk_DrawCache::ClearLCache(void)
 
 bool fk_DrawCache::GetVCacheStatus(void)
 {
-	if(vertexCache.empty() == true && getNextV(NULL) != NULL) {
+	if(vertexCache.empty() == true && getNextV(nullptr) != nullptr) {
 		return false;
 	}
 	return true;
@@ -191,7 +191,7 @@ bool fk_DrawCache::GetVCacheStatus(void)
 
 bool fk_DrawCache::GetECacheStatus(void)
 {
-	if(edgeCache.empty() == true && getNextE(NULL) != NULL) {
+	if(edgeCache.empty() == true && getNextE(nullptr) != nullptr) {
 		return false;
 	}
 	return true;
@@ -199,7 +199,7 @@ bool fk_DrawCache::GetECacheStatus(void)
 
 bool fk_DrawCache::GetLCacheStatus(void)
 {
-	if(loopCache.empty() == true && getNextL(NULL) != NULL) {
+	if(loopCache.empty() == true && getNextL(nullptr) != nullptr) {
 		return false;
 	}
 
@@ -212,8 +212,8 @@ void fk_DrawCache::MakeVCache(void)
 	_st			vID;
 
 	vertexCache.clear();
-	curV = getNextV(NULL);
-	while(curV != NULL) {
+	curV = getNextV(nullptr);
+	while(curV != nullptr) {
 		vertexCache.push_back(curV);
 		vID = static_cast<_st>(curV->getID() - 1);
 		if(vID >= vertexArray.size()) vertexArray.resize(vID+1);
@@ -228,8 +228,8 @@ void fk_DrawCache::MakeECache(void)
 	fk_Edge			*curE;
 
 	edgeCache.clear();
-	curE = getNextE(NULL);
-	while(curE != NULL) {
+	curE = getNextE(nullptr);
+	while(curE != nullptr) {
 		edgeCache.push_back(curE);
 		curE = getNextE(curE);
 	}
@@ -241,8 +241,8 @@ void fk_DrawCache::MakeLCache(void)
 	fk_Loop			*curL;
 
 	loopCache.clear();
-	curL = getNextL(NULL);
-	while(curL != NULL) {
+	curL = getNextL(nullptr);
+	while(curL != nullptr) {
 		loopCache.push_back(curL);
 		curL = getNextL(curL);
 	}

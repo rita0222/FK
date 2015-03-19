@@ -108,8 +108,8 @@ bool _fk_MQO_IDSet::operator ==(const _fk_MQO_IDSet &i) const
 
 fk_MQOParser::fk_MQOParser(void)
 {
-	meshTexture = NULL;
-	ifsTexture = NULL;
+	meshTexture = nullptr;
+	ifsTexture = nullptr;
 	tree = new fk_Tree;
 	tree->clear("_MQOParser_root");
 	contFlg = true;
@@ -128,13 +128,13 @@ bool fk_MQOParser::ReadMQOFile(const string &argFileName,
 							   const string &argObjName,
 							   int argMateID, bool argSolidFlg)
 {
-	if(meshData == NULL && meshTexture == NULL) {
+	if(meshData == nullptr && meshTexture == nullptr) {
 		return false;
 	}
 
 	if(CheckFile(argFileName) == false) return false;
 
-	return MakeData(argFileName, NULL, argObjName,
+	return MakeData(argFileName, nullptr, argObjName,
 					argMateID, argSolidFlg);
 }
 
@@ -142,7 +142,7 @@ bool fk_MQOParser::ReadMQOData(unsigned char *argBuffer,
 							   const string &argObjName,
 							   int argMateID, bool argSolidFlg)
 {
-	if(meshData == NULL && meshTexture == NULL) {
+	if(meshData == nullptr && meshTexture == nullptr) {
 		return false;
 	}
 
@@ -154,8 +154,8 @@ bool fk_MQOParser::ReadMQOData(unsigned char *argBuffer,
 void fk_MQOParser::SetMeshTexture(fk_MeshTexture *argTexture)
 {
 	meshTexture = argTexture;
-	meshData = NULL;
-	ifsTexture = NULL;
+	meshData = nullptr;
+	ifsTexture = nullptr;
 	return;
 }
 
@@ -163,7 +163,7 @@ void fk_MQOParser::SetIFSTexture(fk_IFSTexture *argTexture)
 {
 	ifsTexture = argTexture;
 	SetMeshData(argTexture->getIFS());
-	meshTexture = NULL;
+	meshTexture = nullptr;
 	return;
 }
 
@@ -245,16 +245,16 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 	fk_TreeData				*data;
 	_fk_MQOPropertyList		*propList;
 
-	if(meshTexture != NULL && ifsTexture != NULL) return false;
+	if(meshTexture != nullptr && ifsTexture != nullptr) return false;
 
-	if(argBuffer == NULL) {
+	if(argBuffer == nullptr) {
 		if(ifs.fail()) {
 			return false;
 		} else {
 			ifsP = &ifs;
 		}
 	} else {
-		ifsP = NULL;
+		ifsP = nullptr;
 	}
 
 	data = tree->getRoot();
@@ -319,33 +319,33 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 
 		if(vMode == true) {
 			if(PushVertexData(&line) == false) {
-				if(argBuffer == NULL) ifs.close();
+				if(argBuffer == nullptr) ifs.close();
 				return false;
 			}
 		}
 
 		if(fMode == true) {
 			if(PushFaceData(&line, argMateID) == false) {
-				if(argBuffer == NULL) ifs.close();
+				if(argBuffer == nullptr) ifs.close();
 				return false;
 			}
 		}
 
 		if(mMode == true) {
 			if(PushMaterialData(&line) == false) {
-				if(argBuffer == NULL) ifs.close();
+				if(argBuffer == nullptr) ifs.close();
 				return false;
 			}
 		}
 	}
 
-	if(argBuffer == NULL) ifs.close();
+	if(argBuffer == nullptr) ifs.close();
 
 	if(CheckIFData(vNum) == false) {
 		return false;
 	}
 
-	if(meshData != NULL) {
+	if(meshData != nullptr) {
 		meshData->clearMaterial();
 		for(unsigned int i = 0; i < mData.size(); i++) {
 			meshData->pushPalette(mData[i]);
@@ -368,11 +368,11 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 		}
 	}
 
-	if(meshTexture != NULL) {
+	if(meshTexture != nullptr) {
 		SetMeshTexCoord();
 	}
 
-	if(ifsTexture != NULL) {
+	if(ifsTexture != nullptr) {
 		SetIFSTexCoord();
 	}
 
@@ -388,7 +388,7 @@ bool fk_MQOParser::ReadLine(ifstream *argIFS,
 
 	startFlg = false;
 	lineFlg = false;
-	if(argBuffer == NULL) {
+	if(argBuffer == nullptr) {
 		if(!getline(*argIFS, *argOutStr)) {
 			return false;
 		}
@@ -669,7 +669,7 @@ bool fk_MQOParser::CheckIFData(int argVNum)
 
 	if(contFlg == true) MakeUniqueVertex4Texture();
 
-	if(meshTexture != NULL) {
+	if(meshTexture != nullptr) {
 		meshTexture->setTriNum(static_cast<int>(fNum));
 	}
 
@@ -758,7 +758,7 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 		}
 	}
 
-	if(ifsTexture != NULL) {
+	if(ifsTexture != nullptr) {
 		commonList = &(ifsTexture->commonList);
 		commonList->resize(listSet.size());
 		for(i = 0; i < listSet.size(); i++) {
@@ -777,7 +777,7 @@ void fk_MQOParser::SetMeshTexCoord(void)
 	fk_Vector	triPos[3];
 	fk_TexCoord	triCoord[3];
 
-	if(meshTexture == NULL) return;
+	if(meshTexture == nullptr) return;
 	for(i = 0; i < fData.size(); i++) {
 		for(j = 0; j < 3; j++) {
 			triPos[j] = optVData[static_cast<_st>(fData[i][j]-1)];

@@ -90,7 +90,7 @@ class fk_ParserData : public fk_Shape {
 
 	virtual bool	MakeMesh(std::vector<fk_Vector> *,
 							 std::vector< std::vector<int> > *,
-							 std::vector<int> * = NULL,
+							 std::vector<int> * = nullptr,
 							 bool = true) = 0;
 
 	virtual void	Init(void) = 0;
@@ -106,13 +106,13 @@ class fk_ParserData : public fk_Shape {
 								bool = true, bool = false) = 0;
 
 	virtual bool	writeVRMLFile(std::string,
-								  fk_Material * = NULL,
+								  fk_Material * = nullptr,
 								  bool = false) = 0;
 
 	virtual bool	writeVRMLFile(std::string,
 								  std::vector<double> *,
 								  std::vector<fk_Vector> *,
-								  fk_Material * = NULL,
+								  fk_Material * = nullptr,
 								  bool = false) = 0;
 
 	virtual bool	writeSTLFile(std::string) = 0;

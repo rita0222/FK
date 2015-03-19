@@ -9,6 +9,8 @@
 
 ============================================================================
 VER2_9_2:
+	- C++11 に対応。
+
 	- システムヘッダファイルを、Cスタイル(<**.h>)からC++(<c**>)スタイルに移行
 
 	= FK.h から Capsule.h を include していない不具合を修正。
@@ -39,6 +41,11 @@ VER2_9_2:
 	= fk_IFSTexture の MQO 入力にて、テクスチャ座標が 0〜1 でないデータに対応。
 
 	= fk_IFSTexture::getTextureCoord() で正規化後のデータが出力されてしまう不具合を修正。
+
+	- NULL を nullptr に変更。
+
+	* fk_TextImage クラスに等幅表示用の関数 setMonospaceMode(), getMonospaceMode(),
+		setMonospaceSize(), getMonospaceSize() 追加。
 
 ============================================================================
 VER2_9_1:

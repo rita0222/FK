@@ -122,11 +122,11 @@ private:
 	std::vector<std::string>		texName;
 	std::vector<int>				texTable;
 
-	std::string					mqoName;
-	int							objNum;
-	std::vector<std::string>	objName;
-	std::map<int, int>			parentTable;
-	bool						parentConnect;
+	std::string						mqoName;
+	int								objNum;
+	std::vector<std::string>		objName;
+	std::map<int, int>				parentTable;
+	bool							parentConnect;
 
 	std::vector<std::vector<fk_PerformerMotion> >	keyFrameData;
 	std::vector<int>								nowFrame, maxFrame;
@@ -137,8 +137,6 @@ private:
 	int			prevPlayMotionID, loopCnt;
 
 	fk_Model	absParent;
-
-	typedef std::map<int, int>::iterator parentIte;
 
 	void init(void);
 	bool EnumObjectName(const std::string &);
@@ -276,7 +274,7 @@ public:
 	 *
 	 *	\return
 	 *		関節番号に対応するオブジェクトモデルインスタンスのポインタ。
-	 *		無効な関節番号を指定した場合は NULL が返ります。
+	 *		無効な関節番号を指定した場合は nullptr が返ります。
 	 *
 	 *	\sa getBaseModel(), getJointModel()
 	 */
@@ -296,7 +294,7 @@ public:
 	 *
 	 *	\return
 	 *		関節番号に対応するジョイントモデルインスタンスのポインタ。
-	 *		無効な関節番号を指定した場合は NULL が返ります。
+	 *		無効な関節番号を指定した場合は nullptr が返ります。
 	 *
 	 *	\sa getBaseModel(), getObjectModel()
 	 */

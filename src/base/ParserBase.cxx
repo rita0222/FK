@@ -76,7 +76,7 @@ using namespace std;
 
 fk_ParserBase::fk_ParserBase(void)
 {
-	meshData = NULL;
+	meshData = nullptr;
 	commentStack.clear();
 
 	return;
@@ -232,7 +232,7 @@ void fk_ParserBase::StringToLower(string *argStr)
 {
 	string::size_type	i, size;
 
-	if(argStr == NULL) return;
+	if(argStr == nullptr) return;
 	size = argStr->size();
 
 	for(i = 0; i < size; i++) {
@@ -246,7 +246,7 @@ void fk_ParserBase::StringToLower(string *argStr)
 
 void fk_ParserBase::TrimString(string *argStr)
 {
-	if(argStr == NULL) return;
+	if(argStr == nullptr) return;
 	if(argStr->size() == 0) return;
 	if(argStr->find_first_of(" \t\n\r") == 0) {
 		argStr->erase(0, argStr->find_first_not_of(" \t\n\r"));

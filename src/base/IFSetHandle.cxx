@@ -84,7 +84,7 @@ using namespace std;
 
 void fk_IFSetHandle::Init(void)
 {
-	SetDataBase(NULL);
+	SetDataBase(nullptr);
 	return;
 }
 
@@ -141,22 +141,20 @@ bool fk_IFSetHandle::SetIndexFaceSet(vector<fk_Vector> *vData,
 fk_Edge * fk_IFSetHandle::CheckExistEdge(int vID1, int vID2,
 										 fk_IFS_EdgeSet *VPair)
 {
-	fk_IFS_EdgeSet::iterator	curV, lastV;
-	int							tmpID1, tmpID2, mateID;
-
-	lastV = VPair->upper_bound(vID1);
+	int		tmpID1, tmpID2, mateID;
+	auto	range = VPair->equal_range(vID1);
 
 	// 既に稜線が Vt1 と Vt2 の間にあるかどうかの判定 
-	for(curV = VPair->lower_bound(vID1); curV != lastV; ++curV) {
-		tmpID1 = curV->second->getRightHalf()->getVertex()->getID();
-		tmpID2 = curV->second->getLeftHalf()->getVertex()->getID();
+	for(auto ite = range.first; ite != range.second; ite++) {
+		tmpID1 = ite->second->getRightHalf()->getVertex()->getID();
+		tmpID2 = ite->second->getLeftHalf()->getVertex()->getID();
 		mateID = (tmpID1 == vID1) ? tmpID2 : tmpID1;
 		if(mateID == vID2) {
-			return curV->second;
+			return ite->second;
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 					  
 fk_Half * fk_IFSetHandle::MakeNewEdge(int vID1, int vID2,
@@ -197,12 +195,12 @@ void fk_IFSetHandle::MakeNewLoop(vector<fk_Half *> *HalfSet, bool argFlg)
 	fk_Half							*startH, *curH, *prevH, *lastH;
 	fk_Loop							*newL;
 
-	lastH = NULL;
+	lastH = nullptr;
 	// 新位相要素の生成 
 	if(argFlg == true) {
 		newL = DB->GetNewLoop();
 	} else {
-		newL = NULL;
+		newL = nullptr;
 	}
 
 	startH = *(HalfSet->begin());
@@ -285,10 +283,10 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 	if(argSolidFlag == true) {
 		existE = CheckExistEdge(vID1, vID2, VPair);
 	} else {
-		existE = NULL;
+		existE = nullptr;
 	}
 
-	if(existE == NULL) {
+	if(existE == nullptr) {
 		// 新しい稜線の生成 
 		newH = MakeNewEdge(vID1, vID2, VPair);
 		HalfStock1->push_back(newH);
@@ -337,9 +335,9 @@ bool fk_IFSetHandle::RefineTopology(void)
 
 	if(DB_Check() == false) return false;
 
-	for(CurHalf = DB->GetNextH(NULL);
-		CurHalf != NULL; CurHalf = DB->GetNextH(CurHalf)) {
-		if(CurHalf->getNextHalf() == NULL) {
+	for(CurHalf = DB->GetNextH(nullptr);
+		CurHalf != nullptr; CurHalf = DB->GetNextH(CurHalf)) {
+		if(CurHalf->getNextHalf() == nullptr) {
 			if(SearchUndefLoop(CurHalf) == false) return false;
 		}
 	}
@@ -356,7 +354,7 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 	int			halfCount;
 
 	startH = curH = argHalf;
-	nextH = NULL;
+	nextH = nullptr;
 	while(nextH != startH) {
 		parentEdge = curH->getParentEdge();
 		mateHalf = (parentEdge->getRightHalf() == curH) ?
@@ -365,10 +363,10 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 	
 		halfCount = 0;
 
-		for(tmpH = DB->GetNextH(NULL);
-			tmpH != NULL; tmpH = DB->GetNextH(tmpH)) {
+		for(tmpH = DB->GetNextH(nullptr);
+			tmpH != nullptr; tmpH = DB->GetNextH(tmpH)) {
 			if(tmpH->getVertex() == mateVertex &&
-			   tmpH->getPrevHalf() == NULL) {
+			   tmpH->getPrevHalf() == nullptr) {
 				nextH = tmpH;
 				halfCount++;
 			}
@@ -397,15 +395,15 @@ fk_IFSetHandle::fk_IFSetHandle(fk_DataBase *argDB)
 
 bool fk_IFSetHandle::DB_Check(void)
 {
-	if(DB == NULL) return false;
+	if(DB == nullptr) return false;
 	else return true;
 }
 
 int fk_IFSetHandle::GetEdgeCountNum(fk_Edge *argEdge)
 {
-	map<fk_Edge *, int>::iterator	p;
+	auto p = edgeCount.find(argEdge);
 
-	if((p = edgeCount.find(argEdge)) == edgeCount.end()) {
+	if(p == edgeCount.end()) {
 		return 0;
 	}
 

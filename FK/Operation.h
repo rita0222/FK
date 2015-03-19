@@ -140,7 +140,7 @@ class fk_Operation : public fk_DrawCache {
 	bool			tesselateMode;
 
 	fk_Loop *		SetLoop(fk_Half *, bool,
-							fk_Loop * = NULL, int = FK_UNDEFINED);
+							fk_Loop * = nullptr, int = FK_UNDEFINED);
 	void			UndefVNorm(fk_Vertex *);
 
 	fk_Vertex *		MakeVertex(const fk_Vector, int);
@@ -195,7 +195,7 @@ class fk_Operation : public fk_DrawCache {
 	void			DeleteAllTesselateData(void);
  public:
 	//! コンストラクタ
-	fk_Operation(fk_DataBase * = (fk_DataBase *)NULL);
+	fk_Operation(fk_DataBase * = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Operation();
@@ -258,7 +258,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	以下の3通りの処理を行います。
 	 *
 	 *	-# V_1 と V_2 が共に独立頂点の場合。 \n
-	 *		この場合は、H_11, H_12, H_21, H_22 のいずれも NULL を代入します。
+	 *		この場合は、H_11, H_12, H_21, H_22 のいずれも nullptr を代入します。
 	 *		引数自体を省略しても構いません。\n \n
 	 *	-# V_1 が接続頂点で、V_2 が独立頂点の場合。 \n
 	 *		新たに生成される稜線の半稜線を H1, H2 とし、
@@ -266,7 +266,7 @@ class fk_Operation : public fk_DrawCache {
 	 *		このとき、H_11 には接続後に H1 の前となる半稜線を代入します。
 	 *		H_12 には、H2 の後となる半稜線を代入します。
 	 *		このとき、H_11 および H_12 は未定義半稜線である必要があります。
-	 *		H_21 と H_22 には NULL を代入します。
+	 *		H_21 と H_22 には nullptr を代入します。
 	 *		H_21 と H_22 の引数は省略しても構いません。\n \n
 	 *	-# V_1, V_2 のいずれも接続頂点の場合。 \n
 	 *		新たに生成される稜線の半稜線を H1, H2 とし、
@@ -291,13 +291,13 @@ class fk_Operation : public fk_DrawCache {
 	 *	\param[in]	H_22	半稜線位相インスタンス。詳細は上記参照のこと。
 	 *
 	 *	\return		新稜線の生成に成功した場合、その位相インスタンスを返します。
-	 *		失敗した場合は NULL を返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Edge *		makeEdge(fk_Vertex *V_1, fk_Vertex *V_2,
-							 fk_Half *H_11 = (fk_Half *)NULL,
-							 fk_Half *H_12 = (fk_Half *)NULL,
-							 fk_Half *H_21 = (fk_Half *)NULL,
-							 fk_Half *H_22 = (fk_Half *)NULL);
+							 fk_Half *H_11 = nullptr,
+							 fk_Half *H_12 = nullptr,
+							 fk_Half *H_21 = nullptr,
+							 fk_Half *H_22 = nullptr);
 
 	//! 稜線削除関数
 	/*!
@@ -330,7 +330,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	\param[in]	H	未定義半稜線位相インスタンス
 	 *
 	 *	\return		生成に成功した場合、そのループ位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 */
 	fk_Loop *		makeLoop(fk_Half *H);
 
@@ -372,7 +372,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	\param[in]	H2		半稜線位相インスタンス
 	 *
 	 *	\return		成功した場合、新規稜線の位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 */	
 	fk_Edge *		separateLoop(fk_Half *H1, fk_Half *H2);
 
@@ -406,7 +406,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	\param[in]	E		稜線位相インスタンス
 	 *
 	 *	\return		成功すれば新規に生成された頂点位相インスタンスを返します。
-	 *				失敗した場合は NULL を返します。
+	 *				失敗した場合は nullptr を返します。
 	 */
 	fk_Vertex *		separateEdge(fk_Edge *E);
 

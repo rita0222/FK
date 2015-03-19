@@ -127,9 +127,9 @@ void fk_DisplayLink::clearDisplay(void)
 
 void fk_DisplayLink::entryModel(fk_Model *argModel)
 {
-	if(argModel == NULL) return;
+	if(argModel == nullptr) return;
 
-	if(argModel->getShape() != NULL) {
+	if(argModel->getShape() != nullptr) {
 		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
 			lightList.remove(argModel);
 			lightList.push_back(argModel);
@@ -161,9 +161,9 @@ void fk_DisplayLink::clearModel(void)
 
 void fk_DisplayLink::entryOverlayModel(fk_Model *argModel)
 {
-	if(argModel == NULL) return;
+	if(argModel == nullptr) return;
 
-	if(argModel->getShape() != NULL) {
+	if(argModel->getShape() != nullptr) {
 		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
 			return;
 		}
@@ -191,7 +191,7 @@ void fk_DisplayLink::clearOverlayModel(void)
 
 void fk_DisplayLink::entryCamera(fk_Model *argModel)
 {
-	if(argModel == NULL) {
+	if(argModel == nullptr) {
 		camera = &localCamera;
 	} else {
 		camera = argModel;
@@ -226,7 +226,7 @@ int fk_DisplayLink::GetID(void) const
 
 void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 {
-	if(argProj == NULL) return;
+	if(argProj == nullptr) return;
 
 	switch(argProj->getMode()) {
 	  case FK_PERSPECTIVE_MODE:
@@ -286,7 +286,7 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 		return;
 	}
 
-	if(argProj == NULL) {
+	if(argProj == nullptr) {
 		stereoProj[index] = proj;
 		return;
 	}
@@ -319,7 +319,7 @@ const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel channel)
 	} else if(channel == FK_STEREO_RIGHT) {
 		return stereoCamera[1];
 	}
-	return NULL;
+	return nullptr;
 }
 
 const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel channel)
@@ -329,13 +329,13 @@ const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel chan
 	} else if(channel == FK_STEREO_RIGHT) {
 		return stereoProj[1];
 	}
-	return NULL;
+	return nullptr;
 }
 
 void fk_DisplayLink::clearStereo(void)
 {
-	stereoCamera[0] = NULL;
-	stereoCamera[1] = NULL;
+	stereoCamera[0] = nullptr;
+	stereoCamera[1] = nullptr;
 	stereoProj[0] = proj;
 	stereoProj[1] = proj;
 }

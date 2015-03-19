@@ -93,9 +93,9 @@ fk_Edge::~fk_Edge()
 void fk_Edge::Init(int argID)
 {
 	InitTopology(argID, FK_EDGE_TYPE);
-	leftHalf = NULL;
-	rightHalf = NULL;
-	curv = NULL;
+	leftHalf = nullptr;
+	rightHalf = nullptr;
+	curv = nullptr;
 	width = -1.0;
 
 	return;
@@ -178,7 +178,7 @@ bool fk_Edge::Check(void) const
 	bool			retBool = true;
 	stringstream	ss;
 
-	if(leftHalf != NULL) {
+	if(leftHalf != nullptr) {
 		if(leftHalf->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... leftH[";
 			ss << leftHalf->getID() << "] ERROR!!";
@@ -187,7 +187,7 @@ bool fk_Edge::Check(void) const
 		}
 	}
 
-	if(rightHalf != NULL) {
+	if(rightHalf != nullptr) {
 		if(rightHalf->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... rightH[";
 			ss << rightHalf->getID() << "] ERROR!!";
@@ -201,7 +201,7 @@ bool fk_Edge::Check(void) const
 
 bool fk_Edge::Compare(fk_Edge *argE) const
 {
-	if(argE == NULL) return false;
+	if(argE == nullptr) return false;
 	if(argE == this) return true;
 	if(getID() != argE->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;

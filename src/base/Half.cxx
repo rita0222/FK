@@ -101,11 +101,11 @@ fk_Half::fk_Half(const fk_Half &argHf)
 void fk_Half::Init(int argID)
 {
 	InitTopology(argID, FK_HALF_TYPE);
-	vertex = NULL;
-	parentEdge = NULL;
-	nextHalf = NULL;
-	prevHalf = NULL;
-	parentLoop = NULL;
+	vertex = nullptr;
+	parentEdge = nullptr;
+	nextHalf = nullptr;
+	prevHalf = nullptr;
+	parentLoop = nullptr;
 
 	return;
 }
@@ -137,7 +137,7 @@ fk_Loop *fk_Half::getParentLoop(void) const
 
 bool fk_Half::isLeft(void) const
 {
-	if(parentEdge != NULL) {
+	if(parentEdge != nullptr) {
 		if(parentEdge->getLeftHalf() == this) {
 			return true;
 		}
@@ -148,7 +148,7 @@ bool fk_Half::isLeft(void) const
 
 bool fk_Half::isRight(void) const
 {
-	if(parentEdge != NULL) {
+	if(parentEdge != nullptr) {
 		if(parentEdge->getRightHalf() == this) {
 			return true;
 		}
@@ -210,16 +210,16 @@ void fk_Half::Print(void) const
 	fk_PutError(ss.str());
 	ss.clear();
 
-	if(nextHalf == NULL) {
-		ss << "\tnH = NULL";
+	if(nextHalf == nullptr) {
+		ss << "\tnH = nullptr";
 	} else {
 		ss << "\tnH = " << nextHalf->getID();
 	}
 	fk_PutError(ss.str());
 	ss.clear();
 
-	if(prevHalf == NULL) {
-		ss << "\tpH = NULL";
+	if(prevHalf == nullptr) {
+		ss << "\tpH = nullptr";
 	} else {
 		ss << "\tpH = " << prevHalf->getID();
 	}
@@ -230,8 +230,8 @@ void fk_Half::Print(void) const
 	fk_PutError(ss.str());
 	ss.clear();
 
-	if(parentLoop == NULL) {
-		ss << "\tpL = NULL";
+	if(parentLoop == nullptr) {
+		ss << "\tpL = nullptr";
 	} else {
 		ss << "\tpL = " << parentLoop->getID();
 	}
@@ -248,7 +248,7 @@ bool fk_Half::Check(void) const
 	bool			retBool = true;
 	stringstream	ss;
 	
-	if(nextHalf != NULL) {
+	if(nextHalf != nullptr) {
 		if(nextHalf->getPrevHalf() != this) {
 			ss << "Half[" << getID() << "] ... next[";
 			ss << nextHalf->getID() << "] ERROR!!";
@@ -257,7 +257,7 @@ bool fk_Half::Check(void) const
 		}
 	}
 
-	if(prevHalf != NULL) {
+	if(prevHalf != nullptr) {
 		if(prevHalf->getNextHalf() != this) {
 			ss << "Half[" << getID() << "] ... prev[";
 			ss << prevHalf->getID() << "] ERROR!!";
@@ -271,7 +271,7 @@ bool fk_Half::Check(void) const
 
 bool fk_Half::Compare(fk_Half *argH) const
 {
-	if(argH == NULL) return false;
+	if(argH == nullptr) return false;
 	if(argH == this) return true;
 	if(getID() != argH->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;
@@ -281,9 +281,9 @@ bool fk_Half::Compare(fk_Half *argH) const
 	if(prevHalf->getID() != argH->prevHalf->getID()) return false;
 	if(parentEdge->getID() != argH->parentEdge->getID()) return false;
 
-	if(parentLoop == NULL && argH->parentLoop == NULL) {
+	if(parentLoop == nullptr && argH->parentLoop == nullptr) {
 		return true;
-	} else if(parentLoop == NULL || argH->parentLoop == NULL) {
+	} else if(parentLoop == nullptr || argH->parentLoop == nullptr) {
 		return false;
 	}
 	if(parentLoop->getID() == argH->parentLoop->getID()) return true;

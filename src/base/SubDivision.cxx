@@ -50,9 +50,9 @@ void fk_SubDivision::createState(fk_Modify *s)
 	this->_half = new fk_Half *[fNum];
 
 	uint i;
-	fk_Loop *l = s->getNextL(NULL);
+	fk_Loop *l = s->getNextL(nullptr);
 	i = 0;
-	while(l != NULL)
+	while(l != nullptr)
 	{
 		faces[i] = l;
 
@@ -62,9 +62,9 @@ void fk_SubDivision::createState(fk_Modify *s)
 		i++;
 	}
 
-	fk_Vertex *v = s->getNextV(NULL);
+	fk_Vertex *v = s->getNextV(nullptr);
 	i = 0;
-	while(v != NULL)
+	while(v != nullptr)
 	{
 		verts[i] = v;
 
@@ -74,9 +74,9 @@ void fk_SubDivision::createState(fk_Modify *s)
 		i++;
 	}
 
-	fk_Edge *e = s->getNextE(NULL);
+	fk_Edge *e = s->getNextE(nullptr);
 	i = 0;
-	while(e != NULL)
+	while(e != nullptr)
 	{
 		edges[i] = e;
 
@@ -251,9 +251,9 @@ fk_Vector fk_SubDivision::calcEdgeVertexPosition(fk_Modify *s, fk_Edge *e)
 	l2 = e->getRightHalf()->getParentLoop();
 
 	fk_Vector f1, f2;
-	if(l1 != NULL)
+	if(l1 != nullptr)
 		f1 = this->calcVertexAverage(s->getAllVOnL(l1));
-	if(l2 != NULL)
+	if(l2 != nullptr)
 		f2 = this->calcVertexAverage(s->getAllVOnL(l2));
 
 	v1 = e->getLeftHalf()->getVertex();

@@ -82,7 +82,6 @@ fb:
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
 	"DEPENDDIRS = \
 		-I$(LOCAL)/include" \
-	"GRAMOPT = " \
 	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
 	"SYSLIBS = -limdkcv \
 			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
@@ -99,7 +98,6 @@ fb-g:
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
 	"DEPENDDIRS = -I$(LOCAL)/include" \
-	"GRAMOPT = " \
 	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
 	"SYSLIBS = -limdkcv \
 			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \

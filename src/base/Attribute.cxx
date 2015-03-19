@@ -76,7 +76,7 @@ using namespace std;
 
 fk_Attribute::fk_Attribute(void)
 {
-	attr_data = NULL;
+	attr_data = nullptr;
 	return;
 }
 
@@ -88,7 +88,7 @@ fk_Attribute::~fk_Attribute()
 
 bool fk_Attribute::IsExistData(void) const
 {
-	if(attr_data == NULL) {
+	if(attr_data == nullptr) {
 		return false;
 	}
 

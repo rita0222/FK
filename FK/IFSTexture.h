@@ -129,9 +129,9 @@ class fk_IFSTexture : public fk_Texture {
 	/*!
 	 *	引数によってテクスチャ画像を設定することが可能です。
 	 *	\param[in]	image		テクスチャデータ。
-	 *	省略されるか、NULL が代入された場合はテクスチャデータを空の状態として生成します。
+	 *	省略されるか、nullptr が代入された場合はテクスチャデータを空の状態として生成します。
 	 */
-	fk_IFSTexture(fk_Image *image = (fk_Image *)NULL);
+	fk_IFSTexture(fk_Image *image = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_IFSTexture();

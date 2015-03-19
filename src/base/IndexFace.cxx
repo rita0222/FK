@@ -103,9 +103,9 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	type = FK_IF_NONE;
 	modifyFlg = true;
 	colorFlg = false;
-	anim = NULL;
+	anim = nullptr;
 	cloneFlg = false;
-	orgIFS = NULL;
+	orgIFS = nullptr;
 
 	pos.clear();
 	timeOrgPos.clear();
@@ -139,9 +139,9 @@ void fk_IndexFaceSet::DeleteCloneLink(fk_IndexFaceSet *argIFS)
 {
 	list<fk_IndexFaceSet *>::iterator	ite;
 
-	argIFS->anim = NULL;
+	argIFS->anim = nullptr;
 	argIFS->cloneFlg = false;
-	argIFS->orgIFS = NULL;
+	argIFS->orgIFS = nullptr;
 
 	for(ite = argIFS->cloneList.begin();
 		ite != argIFS->cloneList.end(); ++ite) {
@@ -216,7 +216,7 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 	_st				i, j, pNum;
 	vector<int>		tmpP;
 
-	if(vData == NULL || lIndex == NULL) {
+	if(vData == nullptr || lIndex == nullptr) {
 		return false;
 	}
 
@@ -254,7 +254,7 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 	MakeEdgeSet();
 	ModifyVNorm();
 
-	if(mateIDSet == NULL) return true;
+	if(mateIDSet == nullptr) return true;
 	if(mateIDSet->size() != lIndex->size()) return true;
 
 	for(i = 0; i < mateIDSet->size(); i++) {
@@ -978,7 +978,7 @@ bool fk_IndexFaceSet::readD3DXFile(string argFileName, string argObjName,
 	fk_D3DXParser	*d3dxParser = new fk_D3DXParser();
 	bool			retFlg, animFlg;
 
-	if(anim == NULL || cloneFlg == true) {
+	if(anim == nullptr || cloneFlg == true) {
 		anim = new fk_D3DXAnimation;
 	}
 	d3dxParser->SetMeshData(this);
@@ -1775,7 +1775,7 @@ void fk_IndexFaceSet::putSolid(fk_Solid *argSolid)
 	fk_Vector	*vArray;
 	int			tmpPNum = 0;
 
-	if(argSolid == NULL) return;
+	if(argSolid == nullptr) return;
 
 	switch(type) {
 	  case FK_IF_TRIANGLES:
@@ -1801,7 +1801,7 @@ void fk_IndexFaceSet::putSolid(fk_Solid *argSolid)
 
 fk_D3DXAnimation * fk_IndexFaceSet::GetAnimation(void)
 {
-	if(anim == NULL) anim = new fk_D3DXAnimation;
+	if(anim == nullptr) anim = new fk_D3DXAnimation;
 	return anim;
 }
 
@@ -1810,7 +1810,7 @@ void fk_IndexFaceSet::setAnimationTime(double argTime)
 	_st		i;
 	int		j;
 
-	if(anim == NULL) return;
+	if(anim == nullptr) return;
 
 	if(pos.size() != timeOrgPos.size()) {
 		timeOrgPos = pos;
@@ -1828,7 +1828,7 @@ void fk_IndexFaceSet::setAnimationTime(double argTime)
 
 void fk_IndexFaceSet::setBVHMotion(fk_BVHMotion *argBVH)
 {
-	if(anim == NULL || cloneFlg == true) {
+	if(anim == nullptr || cloneFlg == true) {
 		anim = new fk_D3DXAnimation;
 		cloneFlg = false;
 	}
@@ -1839,7 +1839,7 @@ void fk_IndexFaceSet::setBVHMotion(fk_BVHMotion *argBVH)
 void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 {
 	if(this == argIFS) return;
-	if(argIFS == NULL) return;
+	if(argIFS == nullptr) return;
 
 	localPalette = argIFS->localPalette;
 	pos = argIFS->pos;

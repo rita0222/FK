@@ -78,7 +78,7 @@
 
 fk_Half * fk_ReferenceL1::getOneHOnV(fk_Vertex *argV) const
 {
-	if(argV == NULL) return NULL;
+	if(argV == nullptr) return nullptr;
 	return argV->getOneHalf();
 }
 
@@ -86,15 +86,15 @@ fk_Edge * fk_ReferenceL1::getOneEOnV(fk_Vertex *argV) const
 {
 	fk_Half *tmpH;
 
-	if(argV == NULL) return NULL;
+	if(argV == nullptr) return nullptr;
 	tmpH = argV->getOneHalf();
-	if(tmpH == NULL) return NULL;
+	if(tmpH == nullptr) return nullptr;
 	return tmpH->getParentEdge();
 }
 
 fk_Vertex * fk_ReferenceL1::getVOnH(fk_Half *argH) const
 {
-	if(argH == NULL) return NULL;
+	if(argH == nullptr) return nullptr;
 	return argH->getVertex();
 }
 
@@ -103,7 +103,7 @@ fk_Half * fk_ReferenceL1::getMateHOnH(fk_Half *argH) const
 	fk_Edge *pE;
 	fk_Half *retH, *rH, *lH;
 
-	if(argH == NULL) return NULL;
+	if(argH == nullptr) return nullptr;
 	pE = argH->getParentEdge();
 	rH = pE->getRightHalf();
 	lH = pE->getLeftHalf();
@@ -114,49 +114,49 @@ fk_Half * fk_ReferenceL1::getMateHOnH(fk_Half *argH) const
 
 fk_Edge * fk_ReferenceL1::getParentEOnH(fk_Half *argH) const
 {
-	if(argH == NULL) return NULL;
+	if(argH == nullptr) return nullptr;
 	return argH->getParentEdge();
 }
 
 fk_Loop * fk_ReferenceL1::getParentLOnH(fk_Half *argH) const
 {
-	if(argH == NULL) return NULL;
+	if(argH == nullptr) return nullptr;
 	return argH->getParentLoop();
 }
 
 fk_Vertex * fk_ReferenceL1::getRightVOnE(fk_Edge *argE) const
 {
-	if(argE == NULL) return NULL;
+	if(argE == nullptr) return nullptr;
 	return argE->getRightHalf()->getVertex();
 }
 
 fk_Vertex * fk_ReferenceL1::getLeftVOnE(fk_Edge *argE) const
 {
-	if(argE == NULL) return NULL;
+	if(argE == nullptr) return nullptr;
 	return argE->getLeftHalf()->getVertex();
 }
 
 fk_Half * fk_ReferenceL1::getRightHOnE(fk_Edge *argE) const
 {
-	if(argE == NULL) return NULL;
+	if(argE == nullptr) return nullptr;
 	return argE->getRightHalf();
 }
 
 fk_Half * fk_ReferenceL1::getLeftHOnE(fk_Edge *argE) const
 {
-	if(argE == NULL) return NULL;
+	if(argE == nullptr) return nullptr;
 	return argE->getLeftHalf();
 }
 
 fk_Loop * fk_ReferenceL1::getRightLOnE(fk_Edge *argE) const
 {
-	if(argE == NULL) return NULL;
+	if(argE == nullptr) return nullptr;
 	return argE->getRightHalf()->getParentLoop();
 }
 
 fk_Loop * fk_ReferenceL1::getLeftLOnE(fk_Edge *argE) const
 {
-	if(argE == NULL) return NULL;
+	if(argE == nullptr) return nullptr;
 	return argE->getLeftHalf()->getParentLoop();
 }
 
@@ -164,15 +164,15 @@ fk_EdgeStatus fk_ReferenceL1::getEdgeStatus(fk_Edge *argE) const
 {
 	fk_Loop *rL, *lL;
 
-	if(argE == NULL) return FK_NONE_EDGE;
+	if(argE == nullptr) return FK_NONE_EDGE;
 	rL = argE->getRightHalf()->getParentLoop();
 	lL = argE->getLeftHalf()->getParentLoop();
 
-	if(rL == NULL && lL == NULL) {
+	if(rL == nullptr && lL == nullptr) {
 		return FK_UNDEF_EDGE;
 	}
 
-	if(rL != NULL && lL != NULL) {
+	if(rL != nullptr && lL != nullptr) {
 		return FK_BOTHDEF_EDGE;
 	}
 
@@ -181,18 +181,18 @@ fk_EdgeStatus fk_ReferenceL1::getEdgeStatus(fk_Edge *argE) const
 
 fk_Vertex * fk_ReferenceL1::getOneVOnL(fk_Loop *argL) const
 {
-	if(argL == NULL) return NULL;
+	if(argL == nullptr) return nullptr;
 	return argL->getOneHalf()->getVertex();
 }
 
 fk_Half * fk_ReferenceL1::getOneHOnL(fk_Loop *argL) const
 {
-	if(argL == NULL) return NULL;
+	if(argL == nullptr) return nullptr;
 	return argL->getOneHalf();
 }
 
 fk_Edge * fk_ReferenceL1::getOneEOnL(fk_Loop *argL) const
 {
-	if(argL == NULL) return NULL;
+	if(argL == nullptr) return nullptr;
 	return argL->getOneHalf()->getParentEdge();
 }

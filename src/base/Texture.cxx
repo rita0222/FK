@@ -111,7 +111,7 @@ fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(FK_TEXTURE)
 {
 	SetPaletteData(&localPal);
-	image = NULL;
+	image = nullptr;
 	BaseInit();
 	setImage(argImage);
 
@@ -127,7 +127,7 @@ fk_Texture::~fk_Texture()
 
 void fk_Texture::BaseInit(void)
 {
-	setImage(NULL);
+	setImage(nullptr);
 	clearMaterial();
 	AttrInit();
 	setTextureMode(FK_TEX_MODULATE);
@@ -180,10 +180,10 @@ bool fk_Texture::readJPG(string argFileName)
 
 const fk_ImType * fk_Texture::getImageBuf(void)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		return image->getBufPointer();
 	}
-	return NULL;
+	return nullptr;
 }
 
 void fk_Texture::setImage(fk_Image *argImage)
@@ -203,25 +203,25 @@ fk_Image * fk_Texture::getImage(void)
 
 const fk_Dimension * fk_Texture::getImageSize(void)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		return image->getImageSize();
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 const fk_Dimension * fk_Texture::getBufferSize(void)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		return image->getBufferSize();
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool fk_Texture::GetInitFlag(void)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		return image->GetInitFlag();
 	}
 
@@ -230,7 +230,7 @@ bool fk_Texture::GetInitFlag(void)
 
 void fk_Texture::SetInitFlag(bool argFlg)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		image->SetInitFlag(argFlg);
 	}
 
@@ -239,7 +239,7 @@ void fk_Texture::SetInitFlag(bool argFlg)
 
 fk_TexID fk_Texture::GetTexID(void)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		return image->GetTexID();
 	}
 
@@ -248,7 +248,7 @@ fk_TexID fk_Texture::GetTexID(void)
 
 void fk_Texture::SetTexID(fk_TexID argID)
 {
-	if(image != NULL) {
+	if(image != nullptr) {
 		image->SetTexID(argID);
 	}
 
@@ -257,7 +257,7 @@ void fk_Texture::SetTexID(fk_TexID argID)
 
 void fk_Texture::ClearTexState(fk_Image *argImage)
 {
-	if(argImage == NULL) return;
+	if(argImage == nullptr) return;
 
 	argImage->SetInitFlag(false);
 	argImage->SetTexID(0);
@@ -289,7 +289,7 @@ fk_TexRendMode fk_Texture::getTexRendMode(void)
 
 void fk_Texture::fillColor(const fk_Color &argCol)
 {
-	if(image == NULL) return;
+	if(image == nullptr) return;
 
 	image->fillColor(argCol);
 	return;
@@ -297,7 +297,7 @@ void fk_Texture::fillColor(const fk_Color &argCol)
 
 void fk_Texture::fillColor(int argR, int argG, int argB, int argA)
 {
-	if(image == NULL) return;
+	if(image == nullptr) return;
 
 	image->fillColor(argR, argG, argB, argA);
 	return;

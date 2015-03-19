@@ -163,7 +163,7 @@ void fk_IFSTexture::setTextureCoord(int argFID, int argVID,
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);

@@ -90,13 +90,13 @@ static char *getcwd_logical(void)
 
 	pwd = getenv("PWD");
 
-	if(pwd == NULL) {
-		return NULL;
+	if(pwd == nullptr) {
+		return nullptr;
 	}
 
 	if (*pwd == '/') {
 		if (stat(pwd, &lg) == -1 || stat(".", &phy) == -1) {
-			return NULL;
+			return nullptr;
 		}
 
 		if (lg.st_dev == phy.st_dev && lg.st_ino == phy.st_ino) {
@@ -113,9 +113,9 @@ string fk_System::get_cwd(void)
 	string	retStr;
 
 	path = getcwd_logical();
-	if(path == NULL) {
-		path = getcwd(NULL, 0);
-		if(path == NULL) {
+	if(path == nullptr) {
+		path = getcwd(nullptr, 0);
+		if(path == nullptr) {
 			return retStr;
 		}
 	}
@@ -172,7 +172,7 @@ static std::string GetModulePath(void)
 	TCHAR		exePath[MAX_PATH];
 	std::string	dirPath;
 
-	if(GetModuleFileName(NULL, exePath, MAX_PATH) == 0) return "";
+	if(GetModuleFileName(nullptr, exePath, MAX_PATH) == 0) return "";
 	dirPath = exePath;
 	dirPath = dirPath.substr(0, dirPath.find_last_of("\\"));
 

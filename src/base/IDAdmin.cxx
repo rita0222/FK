@@ -78,7 +78,7 @@ using namespace std;
 
 fk_IDAdmin::fk_IDAdmin(int argOrder)
 {
-	eraseIDSet = NULL;
+	eraseIDSet = nullptr;
 	Init(argOrder);
 
 	return;
@@ -144,7 +144,7 @@ int fk_IDAdmin::CreateID(void)
 	int 	retID;
 	_st		index;
 
-	if(eraseIDSet == NULL) {
+	if(eraseIDSet == nullptr) {
 		eraseIDSet = new list<int>;
 	}
 
@@ -230,7 +230,7 @@ int fk_IDAdmin::GetNext(int argID) const
 	// 最初の要素を返す
 	if(argID > validMaxID) return order;
 
-	// NULL 相当を返す
+	// nullptr 相当を返す
 	if(argID == validMaxID) return order-1;
 
 	// 検索候補
@@ -247,7 +247,7 @@ int fk_IDAdmin::GetNext(int argID) const
 		tmpID++;
 	}
 
-	// NULL 相当を返す
+	// nullptr 相当を返す
 	if(tmpID == validMaxID + 1) return order-1;
 
 	// 検索結果

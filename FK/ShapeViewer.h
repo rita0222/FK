@@ -174,17 +174,17 @@ class fk_ShapeViewer : public fk_BaseObject {
 	bool				axisFlag;
 
 	// FK Object
-	fk_Model					parentModel;
-	std::vector<fk_Model *>		modelArray;
-	std::map<int, int>			IDMap;
-	fk_Model					lightModel[2], camera, axisModel;
-	fk_Solid					localSolid;
-	fk_Line						axisLine;
-	fk_Light					light;
-	fk_Scene					scene;
-	std::vector<fk_Material *>	polyMaterial;
-	std::vector<fk_Color *>		edgeColor;
-	std::vector<fk_Color *>		vertexColor;
+	fk_Model						parentModel;
+	std::vector<fk_Model *>			modelArray;
+	std::map<int, int>				IDMap;
+	fk_Model						lightModel[2], camera, axisModel;
+	fk_Solid						localSolid;
+	fk_Line							axisLine;
+	fk_Light						light;
+	fk_Scene						scene;
+	std::vector<fk_Material *>		polyMaterial;
+	std::vector<fk_Color *>			edgeColor;
+	std::vector<fk_Color *>			vertexColor;
 
 	void				InitValue(void);
 	void				InitFlag(void);
@@ -329,7 +329,7 @@ class fk_ShapeViewer : public fk_BaseObject {
 	 *
 	 *	\return
 	 *		形状インスタンスを返します。
-	 *		指定した ID の形状インスタンスが存在しない場合は、NULL を返します。
+	 *		指定した ID の形状インスタンスが存在しない場合は、nullptr を返します。
 	 */
 	fk_Shape *	getShape(int ID = 0);
 

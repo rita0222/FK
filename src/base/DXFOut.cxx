@@ -84,7 +84,7 @@ using namespace std;
 fk_DXFOut::fk_DXFOut(fk_Solid *argSolid)
 {
 	solid = argSolid;
-	ifs = NULL;
+	ifs = nullptr;
 
 	return;
 }
@@ -92,7 +92,7 @@ fk_DXFOut::fk_DXFOut(fk_Solid *argSolid)
 fk_DXFOut::fk_DXFOut(fk_IndexFaceSet *argIFS)
 {
 	ifs = argIFS;
-	solid = NULL;
+	solid = nullptr;
 
 	return;
 }
@@ -107,10 +107,10 @@ bool fk_DXFOut::WriteDXFFile(string argFileName, bool argTriFlg)
 	ofstream	ofs(argFileName);
 	bool		retFlg;
 
-	if(solid == NULL && ifs == NULL) return false;
+	if(solid == nullptr && ifs == nullptr) return false;
 	if(ofs.fail()) return false;
 
-	if(solid != NULL) {
+	if(solid != nullptr) {
 		retFlg = WriteDXFShape_Solid(ofs, argTriFlg);
 	} else {
 		retFlg = WriteDXFShape_IFS(ofs, argTriFlg);
@@ -135,8 +135,8 @@ bool fk_DXFOut::WriteDXFShape_Solid(ofstream &argOFS, bool argTriFlg)
 	argOFS << " 999" << endl;
 	argOFS << "Created By FineKernel ToolKit" << endl;
 
-	for(curL = solid->getNextL(NULL);
-		curL != NULL; curL = solid->getNextL(curL)) {
+	for(curL = solid->getNextL(nullptr);
+		curL != nullptr; curL = solid->getNextL(curL)) {
 
 		vArray = solid->getAllVOnL(curL);
 		if(vArray.size() != 3 && vArray.size() != 4) return false;

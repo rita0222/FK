@@ -89,9 +89,9 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	setMaterialMode(FK_CHILD_MODE);
 
 	material = new fk_Material();
-	parent = NULL;
-	treeData = NULL;
-	shape = NULL;
+	parent = nullptr;
+	treeData = nullptr;
+	shape = nullptr;
 	setShape(argShape);
 	deleteMaterial();
 	setSize(1.0);
@@ -99,8 +99,8 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	setPickMode(false);
 	setReverseDrawMode(false);
 
-	pointColor = NULL;
-	lineColor = NULL;
+	pointColor = nullptr;
+	lineColor = nullptr;
 
 	_modelID = _globalModelID;
 	_globalModelID++;
@@ -109,9 +109,9 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	treeDelMode = true;
 	smoothFlag = false;
 
-	snapPos = NULL;
-	snapInhPos = NULL;
-	snapAngle = NULL;
+	snapPos = nullptr;
+	snapInhPos = nullptr;
+	snapAngle = nullptr;
 	snapFlag = false;
 
 	interMode = false;
@@ -139,12 +139,12 @@ void fk_Model::setShape(fk_Shape *argShape)
 {
 	bool	drawModeFlag;
 
-	if(argShape == NULL) {
-		shape = NULL;
+	if(argShape == nullptr) {
+		shape = nullptr;
 		return;
 	}
 
-	if(shape == NULL) {
+	if(shape == nullptr) {
 		drawModeFlag = true;
 	} else if(shape->getObjectType() != argShape->getObjectType()) {
 		drawModeFlag = true;
@@ -203,7 +203,7 @@ void fk_Model::setMaterial(const fk_Material &argMate)
 
 void fk_Model::setPointColor(fk_Color *argColor)
 {
-	if(argColor == NULL) {
+	if(argColor == nullptr) {
 		return;
 	}
 
@@ -213,7 +213,7 @@ void fk_Model::setPointColor(fk_Color *argColor)
 
 void fk_Model::setPointColor(float argR, float argG, float argB)
 {
-	if(pointColor == NULL) {
+	if(pointColor == nullptr) {
 		pointColor = new fk_Color();
 	}
 
@@ -223,7 +223,7 @@ void fk_Model::setPointColor(float argR, float argG, float argB)
 
 void fk_Model::setLineColor(fk_Color *argColor)
 {
-	if(argColor == NULL) {
+	if(argColor == nullptr) {
 		return;
 	}
 
@@ -233,7 +233,7 @@ void fk_Model::setLineColor(fk_Color *argColor)
 
 void fk_Model::setLineColor(float argR, float argG, float argB)
 {
-	if(lineColor == NULL) {
+	if(lineColor == nullptr) {
 		lineColor = new fk_Color();
 	}
 
@@ -253,7 +253,7 @@ fk_Material * fk_Model::getMaterial(void)
 
 fk_Material * fk_Model::getInhMaterial(void)
 {
-	if(parent != NULL) {
+	if(parent != nullptr) {
 		if(materialFlag == false) {
 			return parent->getInhMaterial();
 		} else {
@@ -270,8 +270,8 @@ fk_Color * fk_Model::getPointColor(void)
 
 fk_Color * fk_Model::getInhPointColor(void)
 {
-	if(parent != NULL) {
-		if(pointColor == NULL) {
+	if(parent != nullptr) {
+		if(pointColor == nullptr) {
 			return parent->getInhPointColor();
 		} else {
 			return pointColor;
@@ -287,8 +287,8 @@ fk_Color * fk_Model::getLineColor(void)
 
 fk_Color * fk_Model::getInhLineColor(void)
 {
-	if(parent != NULL) {
-		if(lineColor == NULL) {
+	if(parent != nullptr) {
+		if(lineColor == nullptr) {
 			return parent->getInhLineColor();
 		} else {
 			return lineColor;
@@ -306,14 +306,14 @@ void fk_Model::deleteMaterial(void)
 void fk_Model::deletePointColor(void)
 {
 	delete pointColor;
-	pointColor = NULL;
+	pointColor = nullptr;
 	return;
 }
 
 void fk_Model::deleteLineColor(void)
 {
 	delete lineColor;
-	lineColor = NULL;
+	lineColor = nullptr;
 	return;
 }
 
@@ -341,19 +341,19 @@ fk_MaterialMode fk_Model::getMaterialMode(void) const
 
 fk_Matrix fk_Model::getInhMatrix(void) const
 {
-	if(parent == NULL) return getMatrix();
+	if(parent == nullptr) return getMatrix();
 	return (parent->getInhMatrix() * getMatrix());
 }
 
 fk_Matrix fk_Model::getInhInvMatrix(void) const
 {
-	if(parent == NULL) return getInvMatrix();
+	if(parent == nullptr) return getInvMatrix();
 	return (getInvMatrix() * parent->getInhInvMatrix());
 }
 
 fk_OrthoMatrix fk_Model::getInhBaseMatrix(void) const
 {
-	if(parent == NULL) return OrthoMatrix;
+	if(parent == nullptr) return OrthoMatrix;
 	return (parent->getInhBaseMatrix() * OrthoMatrix);
 }
 
@@ -361,7 +361,7 @@ fk_OrthoMatrix fk_Model::getInhInvBaseMatrix(void) const
 {
 	fk_OrthoMatrix	RetMat = OrthoMatrix;
 	RetMat.inverse();
-	if(parent == NULL) return RetMat;
+	if(parent == nullptr) return RetMat;
 	return (parent->getInhInvBaseMatrix() * RetMat);
 }
 
@@ -369,7 +369,7 @@ fk_Vector fk_Model::getInhPosition(void) const
 {
 	fk_Vector retVec;
 
-	if(parent == NULL) {
+	if(parent == nullptr) {
 		retVec = Position;
 	} else {
 		retVec = parent->getInhMatrix() * Position;
@@ -381,7 +381,7 @@ fk_Vector fk_Model::getInhVec(void) const
 {
 	fk_HVector	hvec(Vec);
 
-	if(parent == NULL) return Vec;
+	if(parent == nullptr) return Vec;
 
 	hvec.isvec();
 	return (parent->getInhMatrix() * hvec);
@@ -391,7 +391,7 @@ fk_Vector fk_Model::getInhUpvec(void) const
 {
 	fk_HVector	hvec(UpVec);
 
-	if(parent == NULL) return UpVec;
+	if(parent == nullptr) return UpVec;
 	
 	hvec.isvec();
 	return (parent->getInhMatrix() * hvec);
@@ -407,7 +407,7 @@ fk_Angle fk_Model::getInhAngle(void) const
 	fk_Angle		retAngle;
 	fk_Vector		vec, upvec;
 
-	if(parent == NULL) return Angle;
+	if(parent == nullptr) return Angle;
 	vec = getInhVec();
 	upvec = getInhUpVec();
 	VectorToAngle(&retAngle, &vec, &upvec);
@@ -416,7 +416,7 @@ fk_Angle fk_Model::getInhAngle(void) const
 
 double fk_Model::getInhScale(void) const
 {
-	if(parent == NULL) {
+	if(parent == nullptr) {
 		return Scale;
 	}
 	return (parent->getInhScale() * Scale);
@@ -499,13 +499,13 @@ unsigned int fk_Model::getID(void) const
 
 void fk_Model::snapShot(void)
 {
-	if(snapPos == NULL) snapPos = new fk_HVector;
+	if(snapPos == nullptr) snapPos = new fk_HVector;
 	*snapPos = Position;
 
-	if(snapInhPos == NULL) snapInhPos = new fk_HVector;
+	if(snapInhPos == nullptr) snapInhPos = new fk_HVector;
 	*snapInhPos = getInhPosition();
 
-	if(snapAngle == NULL) snapAngle = new fk_Angle;
+	if(snapAngle == nullptr) snapAngle = new fk_Angle;
 	*snapAngle = Angle;
 
 	snapFlag = true;
@@ -545,28 +545,28 @@ bool fk_Model::restore(double argT)
 
 void fk_Model::adjustSphere(void)
 {
-	if(shape == NULL) return;
+	if(shape == nullptr) return;
 	setSphere(fk_SphereBoundary::getAdjustRadius(shape));
 	return;
 }
 
 void fk_Model::adjustAABB(void)
 {
-	if(shape == NULL) return;
+	if(shape == nullptr) return;
 	setAABBSize(fk_AABBBoundary::getAdjustSize(shape, getInhInvMatrix()));
 	return;
 }
 
 void fk_Model::adjustOBB(void)
 {
-	if(shape == NULL) return;
+	if(shape == nullptr) return;
 	setOBBSize(fk_OBBBoundary::getAdjustSize(shape));
 	return;
 }
 
 void fk_Model::adjustCapsule(fk_Vector argS, fk_Vector argE)
 {
-	if(shape == NULL) return;
+	if(shape == nullptr) return;
 	setCapsule(argS, argE, fk_CapsuleBoundary::getAdjustRadius(shape, argS, argE));
 }
 
@@ -574,7 +574,7 @@ bool fk_Model::isInter(fk_Model *argModel)
 {
 	bool		retStatus = false;
 
-	if(argModel == NULL) return false;
+	if(argModel == nullptr) return false;
 
 	switch(getBMode()) {
 	  case FK_B_SPHERE:
@@ -671,10 +671,10 @@ bool fk_Model::IsCapsuleInter(fk_Model *argModel)
 
 bool fk_Model::isCollision(fk_Model *argModel, double *argTime)
 {
-	if(argModel == NULL) return false;
+	if(argModel == nullptr) return false;
 	if(snapFlag == false || argModel->snapFlag == false) return false;
-	if(snapInhPos == NULL) return false;
-	if(argModel->snapInhPos == NULL) return false;
+	if(snapInhPos == nullptr) return false;
+	if(argModel->snapInhPos == nullptr) return false;
 
 	return fk_SphereBoundary::isCollision(*snapInhPos,
 										  getInhPosition(),

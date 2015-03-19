@@ -292,7 +292,7 @@ class fk_Math {
 	 *		R の x 成分と y 成分、
 	 *		直線パラメータ \f$ t \f$ が R の z 成分に代入されます。
 	 *		なお、パラメータ出力を必要としない場合は、
-	 *		本引数を省略するか NULL を代入しても構いません。
+	 *		本引数を省略するか nullptr を代入しても構いません。
 	 *
 	 *	\return		交差していれば true を、していなければ false を返します。
 	 */
@@ -301,7 +301,7 @@ class fk_Math {
 									const fk_Vector &A,
 									const fk_Vector &B,
 									const fk_Vector &C,
-									fk_Vector *R = NULL);
+									fk_Vector *R = nullptr);
 
 	//! 余弦値算出関数
 	/*!

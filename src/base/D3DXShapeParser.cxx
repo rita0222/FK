@@ -127,13 +127,13 @@ bool fk_D3DXShapeParser::SetFrameMatrix(fk_TreeData *argData)
 	fk_TreeData				*parent = argData->getParent();
 	fk_D3DXPropertyList		*prop;
 
-	if(parent == NULL) {
+	if(parent == nullptr) {
 		fk_PutError("fk_D3DXShapeParser", "SetFrameMatrix", 1);
 		return false;
 	}
 
 	prop = static_cast<fk_D3DXPropertyList *>(parent->getObject());
-	if(prop != NULL) {
+	if(prop != nullptr) {
 		frameMatrix = *(prop->GetFrameMatrix());
 	}
 
@@ -391,7 +391,7 @@ bool fk_D3DXShapeParser::MakeMesh(fk_ParserData *argMesh,
 								  bool argSolidFlg)
 {
 	argMesh->Init();
-	return argMesh->MakeMesh(&optVData, &optFData, NULL, argSolidFlg);
+	return argMesh->MakeMesh(&optVData, &optFData, nullptr, argSolidFlg);
 }
 
 int fk_D3DXShapeParser::GetVMap(int argIndex)

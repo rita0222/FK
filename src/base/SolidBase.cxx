@@ -118,12 +118,12 @@ bool fk_SolidBase::MakeMesh(vector<fk_Vector> *vData,
 	delete IFSet;
 
 	AllCacheMake();
-	if(MaterialIDSet == NULL) return true;
+	if(MaterialIDSet == nullptr) return true;
 	if(getPaletteSize() == 0) return true;
 
 	for(i = 0; i < MaterialIDSet->size(); i++) {
 		Loop = getLData(static_cast<int>(i+1));
-		if(Loop != NULL) {
+		if(Loop != nullptr) {
 			Loop->setElemMaterialID((*MaterialIDSet)[i]);
 		}
 	}

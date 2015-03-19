@@ -193,11 +193,11 @@ fk_Loop::~fk_Loop()
 void fk_Loop::Init(int argID)
 {
 	InitTopology(argID, FK_LOOP_TYPE);
-	oneHalf = NULL;
+	oneHalf = nullptr;
 	norm.set(0.0, 0.0, 0.0);
 	normFlag = errorFlag = tesselateFlag = false;
 	tesselateMode = true;
-	surf = NULL;
+	surf = nullptr;
 	tesselateIndex.clear();
 	tesselateVertex.clear();
 	ifsID = -1;
@@ -227,11 +227,11 @@ bool fk_Loop::SetNormal(void)
 
 	posArray.clear();
 	normArray.clear();
-	if(oneHalf == NULL) return false;
+	if(oneHalf == nullptr) return false;
 	curH = oneHalf;
 	
 	do {
-		if(curH == NULL) {
+		if(curH == nullptr) {
 			posArray.clear();
 			return false;
 		}
@@ -271,14 +271,14 @@ bool fk_Loop::SetNormal(void)
 
 fk_Vector * fk_Loop::getNormal(void)
 {
-	if(errorFlag == true) return NULL;
+	if(errorFlag == true) return nullptr;
 
 	if(normFlag == false) {
 		if(SetNormal() == false) {
 			fk_PutError("fk_Loop", "getNormal", 1,
 						"Normal Vector Error.");
 			errorFlag = true;
-			return NULL;
+			return nullptr;
 		}
 	}
 
@@ -289,10 +289,10 @@ fk_Vector * fk_Loop::getNormal(void)
 int fk_Loop::getVNum(void) const
 {
 	int			retNum = 1;
-	fk_Half		*countH = NULL;
+	fk_Half		*countH = nullptr;
 
 	if(errorFlag == true) return -1;
-	if(oneHalf == NULL) return -1;
+	if(oneHalf == nullptr) return -1;
 
 	for(countH = oneHalf->getNextHalf();
 		countH != oneHalf;
@@ -319,10 +319,10 @@ void fk_Loop::Print(void) const
 	fk_PutError(ss.str());
 
 	ss.clear();
-	if(oneHalf != NULL) {
+	if(oneHalf != nullptr) {
 		ss << "\t1H = " << oneHalf->getID();
 	} else {
-		ss << "\t1H = NULL";
+		ss << "\t1H = nullptr";
 	}
 	fk_PutError(ss.str());
 	fk_PutError("}");
@@ -380,14 +380,14 @@ bool fk_Loop::Check(void) const
 
 bool fk_Loop::Compare(fk_Loop *argL) const
 {
-	if(argL == NULL) return false;
+	if(argL == nullptr) return false;
 	if(argL == this) return true;
 	if(getID() != argL->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;
 
-	if(oneHalf == NULL && argL->oneHalf == NULL) {
+	if(oneHalf == nullptr && argL->oneHalf == nullptr) {
 		return true;
-	} else if(oneHalf == NULL || argL->oneHalf == NULL) {
+	} else if(oneHalf == nullptr || argL->oneHalf == nullptr) {
 		return false;
 	}
 
@@ -438,15 +438,15 @@ void fk_Loop::MakeTesselateData(void)
 	fk_Vector			tmpVec[5], tmpPos[2], curV, prevV, prev2V, nextV;
 
 	if(tesselateMode == false) return;
-	if(getNormal() == NULL) return;
+	if(getNormal() == nullptr) return;
 
 	tesselateIndex.clear();
 	tesselateVertex.clear();
 
-	if(oneHalf == NULL) return;
+	if(oneHalf == nullptr) return;
 	curH = oneHalf;
 	do {
-		if(curH == NULL) {
+		if(curH == nullptr) {
 			tesselateIndex.clear();
 			tesselateVertex.clear();
 			return;
@@ -556,7 +556,7 @@ fk_LoopCrossStatus fk_Loop::IsCross(const fk_Vector &argS,
 	if(getVNum() != 3) return FK_LOOP_ERROR_CROSS;
 	curH = oneHalf;
 	for(int i = 0; i < 3; i++) {
-		if(curH == NULL) return FK_LOOP_ERROR_CROSS;
+		if(curH == nullptr) return FK_LOOP_ERROR_CROSS;
 		V[i] = curH->getVertex()->getPosition();
 		curH = curH->getNextHalf();
 	}
@@ -566,7 +566,7 @@ fk_LoopCrossStatus fk_Loop::IsCross(const fk_Vector &argS,
 		return FK_LOOP_NO_CROSS;
 	}
 
-	if(retR != NULL) retR->set(R.x, R.y, R.z);
+	if(retR != nullptr) retR->set(R.x, R.y, R.z);
 
 	if(R.x <= FK_EPS) return FK_LOOP_ONEDGE_CROSS;
 	if(R.y <= FK_EPS) return FK_LOOP_ONEDGE_CROSS;

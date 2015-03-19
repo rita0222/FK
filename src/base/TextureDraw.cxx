@@ -124,7 +124,7 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 
 	texObj = static_cast<fk_Texture *>(argObj->getShape());
 
-	if(texObj->getBufferSize() == NULL) return;
+	if(texObj->getBufferSize() == nullptr) return;
 
 	// ピックモードが ON の場合
 	if(argPickFlag == true) {
@@ -231,7 +231,7 @@ void fk_TextureDraw::DrawRectTextureObj(fk_RectTexture *argTexObj)
 	const fk_Dimension *imageSize = argTexObj->getImageSize();
 	const fk_Dimension *bufSize = argTexObj->getBufferSize();
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	if(argTexObj->getRepeatMode() == true) {
@@ -281,7 +281,7 @@ void fk_TextureDraw::DrawTriTextureObj(fk_TriTexture *argTexObj)
 	const fk_Dimension *imageSize = argTexObj->getImageSize();
 	const fk_Dimension *bufSize = argTexObj->getBufferSize();
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
@@ -329,7 +329,7 @@ void fk_TextureDraw::DrawMeshTextureObj(fk_MeshTexture *argTexObj)
 	triNum = argTexObj->getTriNum();
 	if(triNum <= 0) return;
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
@@ -369,7 +369,7 @@ void fk_TextureDraw::DrawIFSTextureObj(fk_IFSTexture *argTexObj)
 
 	const fk_Dimension *bufSize = argTexObj->getBufferSize();
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	ifsP = argTexObj->getIFS();
@@ -518,7 +518,7 @@ void fk_TextureDraw::ClearTextureMemory(void)
 	if(texNameArray.empty() == false) {
 		glDeleteTextures(static_cast<GLsizei>(texNameArray.size()), &texNameArray[0]);
 		for(_st i = 0; i < texImageArray.size(); i++) {
-			if(texImageArray[i] == NULL) continue;
+			if(texImageArray[i] == nullptr) continue;
 			fk_Texture::ClearTexState(texImageArray[i]);
 		}
 		texNameArray.clear();
@@ -542,7 +542,7 @@ void fk_TextureDraw::ReleaseTexture(fk_Image *argImage)
 			glDeleteTextures(1, &texNameArray[i]);
 			fk_Texture::ClearTexState(argImage);
 			texNameArray[i] = 0;
-			texImageArray[i] = NULL;
+			texImageArray[i] = nullptr;
 			texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
 			break;
 		}
@@ -605,7 +605,7 @@ void fk_TextureDraw::DrawRectTexturePick(fk_RectTexture *argTexObj)
 
 	const fk_Dimension *bufSize = argTexObj->getBufferSize();
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	texSize = argTexObj->getTextureSize();
@@ -633,7 +633,7 @@ void fk_TextureDraw::DrawTriTexturePick(fk_TriTexture *argTexObj)
 
 	const fk_Dimension *bufSize = argTexObj->getBufferSize();
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	pos = argTexObj->getPos();
@@ -665,7 +665,7 @@ void fk_TextureDraw::DrawMeshTexturePick(fk_MeshTexture *argTexObj)
 	triNum = argTexObj->getTriNum();
 	if(triNum <= 0) return;
 
-	if(bufSize == NULL) return;
+	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	posArray = &(argTexObj->getPos()->at(0));

@@ -484,14 +484,14 @@ class fk_Solid : public fk_SolidBase {
 	 *	\param[in]	fileName		ファイル名
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
-	 *		NULL を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
 	bool				writeVRMLFile(std::string fileName,
-									  fk_Material *material = NULL,
+									  fk_Material *material = nullptr,
 									  bool triFlg = false);
 
 	//! VRML ファイル出力関数2
@@ -508,7 +508,7 @@ class fk_Solid : public fk_SolidBase {
 	 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
-	 *		NULL を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
@@ -517,7 +517,7 @@ class fk_Solid : public fk_SolidBase {
 	bool				writeVRMLFile(std::string fileName,
 									  std::vector<double> *time,
 									  std::vector<fk_Vector> *pos,
-									  fk_Material *material = NULL,
+									  fk_Material *material = nullptr,
 									  bool triFlg = false);
 
 	//! STL ファイル出力関数

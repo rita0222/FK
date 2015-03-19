@@ -170,9 +170,9 @@ class fk_QtWidget : public QGLWidget
 	 *	\param[in]	h		ウィジェットの縦幅。ピクセル値で指定します。
 	 *	\param[in]	parent
 	 *		本ウィジェットの親ウィジェットインスタンスを指定します。
-	 *		親ウィジェットを指定しない場合は NULL を代入します。
+	 *		親ウィジェットを指定しない場合は nullptr を代入します。
 	 */
-	fk_QtWidget(int w, int h, QWidget *parent = (QWidget *)NULL);
+	fk_QtWidget(int w, int h, QWidget *parent = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_QtWidget();

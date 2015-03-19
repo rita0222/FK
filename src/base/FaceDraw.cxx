@@ -189,7 +189,7 @@ void fk_FaceDraw::DrawSolidFacePick(fk_Model *argObj)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(NULL) == NULL) return;
+	if(solidP->getNextL(nullptr) == nullptr) return;
 
 	if(solidP->GetLCacheStatus() == false) {
 		solidP->MakeLCache();
@@ -325,7 +325,7 @@ void fk_FaceDraw::DrawSolidFaceMaterial(fk_Model *argObj, bool lightFlag)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(NULL) == NULL) return;
+	if(solidP->getNextL(nullptr) == nullptr) return;
 
 	if(solidP->GetLCacheStatus() == false) {
 		solidP->MakeLCache();
@@ -396,10 +396,10 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 		}
 	}
 
-	if((surf = argL->getSurfGeometry()) != NULL) {
+	if((surf = argL->getSurfGeometry()) != nullptr) {
 		DrawSurface(surf);
 	} else if(argL->isTesselated() == true) {
-		if((tmpNormP = argL->getNormal()) == NULL) {
+		if((tmpNormP = argL->getNormal()) == nullptr) {
 			return retMateID;
 		}
 
@@ -415,7 +415,7 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 		}
 		glEnd();
 	} else {
-		if((tmpNormP = argL->getNormal()) == NULL) {
+		if((tmpNormP = argL->getNormal()) == nullptr) {
 			return retMateID;
 		}
 		startH = curH = argL->getOneHalf();
@@ -536,7 +536,7 @@ void fk_FaceDraw::DrawSolidFaceSmooth(fk_Model *argObj,
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(NULL) == NULL) return;
+	if(solidP->getNextL(nullptr) == nullptr) return;
 
 	if(solidP->GetLCacheStatus() == false) {
 		solidP->MakeLCache();
@@ -569,7 +569,7 @@ void fk_FaceDraw::DrawSolidFaceSmoothElem(fk_Loop *argL)
 	fk_Surface			*surf;
 
 
-	if((surf = argL->getSurfGeometry()) != NULL) {
+	if((surf = argL->getSurfGeometry()) != nullptr) {
 		DrawSurface(surf);
 	} else {
 		glBegin(GL_POLYGON);
@@ -579,7 +579,7 @@ void fk_FaceDraw::DrawSolidFaceSmoothElem(fk_Loop *argL)
 			curV = curH->getVertex();
 			tmpNorm = curV->GetNormalP();
 			tmpPos = curV->GetPositionP(); 
-			if(tmpNorm == NULL || tmpPos == NULL) continue;
+			if(tmpNorm == nullptr || tmpPos == nullptr) continue;
 			glNormal3dv(static_cast<GLdouble *>(&(tmpNorm->x)));
 			glVertex3dv(static_cast<GLdouble *>(&(tmpPos->x)));
 			curH = curH->getNextHalf();
@@ -678,7 +678,7 @@ void fk_FaceDraw::DrawSolidFaceNormal(fk_Model *argObj,
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(NULL) == NULL) return;
+	if(solidP->getNextL(nullptr) == nullptr) return;
 
 	if(solidP->GetLCacheStatus() == false) {
 		solidP->MakeLCache();
@@ -712,10 +712,10 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 	vector<int>			*tesseIDArray;
 	fk_Surface			*surf;
 
-	if((surf = argL->getSurfGeometry()) != NULL) {
+	if((surf = argL->getSurfGeometry()) != nullptr) {
 		DrawSurface(surf);
 	} else if(argL->isTesselated() == true) {
-		if((tmpNormP = argL->getNormal()) == NULL) return;
+		if((tmpNormP = argL->getNormal()) == nullptr) return;
 		tesseVertexArray = argL->GetTesselateVertex();
 		tesseIDArray = argL->GetTesselateIndex();
 		glBegin(GL_TRIANGLES);
@@ -728,7 +728,7 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 		glEnd();
 
 	} else {
-		if((tmpNormP = argL->getNormal()) == NULL) return;
+		if((tmpNormP = argL->getNormal()) == nullptr) return;
 		startH = curH = argL->getOneHalf();
 		glBegin(GL_POLYGON);
 		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
@@ -806,7 +806,7 @@ void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 
 	shapeP = argObj->getShape();
 
-	if(matFlag == true || shapeP == NULL) {
+	if(matFlag == true || shapeP == nullptr) {
 		curMat = argObj->getInhMaterial();
 	} else {
 		curMat = &(*shapeP->getMaterialVector())[0];

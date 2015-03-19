@@ -366,7 +366,7 @@ class fk_ParticleSet: public fk_BaseObject {
 	 *
 	 *	\return
 	 *		生成した場合、新たなパーティクルのインスタンスを返します。
-	 *		失敗した場合は NULL を返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Particle *	newParticle(void);
 
@@ -380,7 +380,7 @@ class fk_ParticleSet: public fk_BaseObject {
 	 *
 	 *	\return
 	 *		生成した場合、新たなパーティクルのインスタンスを返します。
-	 *		失敗した場合は NULL を返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Particle *	newParticle(const fk_Vector &pos);
 
@@ -396,7 +396,7 @@ class fk_ParticleSet: public fk_BaseObject {
 	 *
 	 *	\return
 	 *		生成した場合、新たなパーティクルのインスタンスを返します。
-	 *		失敗した場合は NULL を返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Particle *	newParticle(double x, double y, double z);
 
@@ -440,7 +440,7 @@ class fk_ParticleSet: public fk_BaseObject {
 	 *
 	 *	\param[in]	ID	パーティクルID
 	 *
-	 *	\return 存在した場合はインスタンスを、存在しない場合は NULL を返します。
+	 *	\return 存在した場合はインスタンスを、存在しない場合は nullptr を返します。
 	 */
 	fk_Particle *	getParticle(int ID) const;
 
@@ -448,7 +448,7 @@ class fk_ParticleSet: public fk_BaseObject {
 	/*!
 	 *	存在しているパーティクルを順次取得するのに利用していきます。
 	 *	引数と返値は、以下のような関係を持ちます。
-	 *	- 引数が NULL の場合は、IDが最も小さなパーティクルを返します。
+	 *	- 引数が nullptr の場合は、IDが最も小さなパーティクルを返します。
 	 *	- 引数のパーティクルに対し、次の大きな ID を持つパーティクルを返します。
 	 *	- もし引数のパーティクルの ID が最大のものであった場合は、
 	 *		MILL を返します。
@@ -462,8 +462,8 @@ class fk_ParticleSet: public fk_BaseObject {
 	 *			fk_Particle  *p;
 	 *			fk_Vector    vec(0.0, 0.0, 0.0);
 	 *			
-	 *			p = getNextParticle(NULL);
-	 *			while(p != NULL) {
+	 *			p = getNextParticle(nullptr);
+	 *			while(p != nullptr) {
 	 *				vec += p->getPosition();
 	 *				p = getNextParticle(p);
 	 *			}

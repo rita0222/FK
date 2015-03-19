@@ -121,9 +121,9 @@ class fk_Point: public fk_Shape {
 	 *	最初から点群を生成することができます。
 	 *
 	 *	\param[in]	array
-	 *		点群位置ベクトル配列。NULL の場合は何も生成しません。
+	 *		点群位置ベクトル配列。nullptr の場合は何も生成しません。
 	 */
-	fk_Point(std::vector<fk_Vector> *array = NULL);
+	fk_Point(std::vector<fk_Vector> *array = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Point();
@@ -192,7 +192,7 @@ class fk_Point: public fk_Shape {
 	 *
 	 *	\return
 	 *		頂点の位置ベクトルインスタンスへのポインタ。
-	 *		指定した頂点が存在しない場合は NULL を返します。
+	 *		指定した頂点が存在しない場合は nullptr を返します。
 	 */
 	fk_FVector *	getVertex(int ID);
 

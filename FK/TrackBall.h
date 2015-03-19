@@ -96,7 +96,7 @@ private:
 
 public:
 	//! コンストラクタ
-	fk_TrackBall(fk_Window*, fk_Model* = NULL);
+	fk_TrackBall(fk_Window*, fk_Model* = nullptr);
 
 	//! 操作に使用するマウスボタン
 	fk_MouseButton	lookButton, distButton[2], moveButton;

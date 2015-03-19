@@ -164,7 +164,7 @@ public:
 	 *	\param[in] index ノードのインデックス。0 からノード数-1 までの値をとります。
 	 *
 	 *	\return ノードを表す fk_Model のポインタ。
-	 *	インデックスが無効な値の場合は、NULL を返します。
+	 *	インデックスが無効な値の場合は、nullptr を返します。
 	 */
 	fk_Model *	getNodeModel(int index);
 
@@ -176,7 +176,7 @@ public:
 	 *	\param[in] nodeName ノードの名称。
 	 *
 	 *	\return ノードを表す fk_Model のポインタ。
-	 *	存在しないノード名を指定した場合は、NULL を返します。
+	 *	存在しないノード名を指定した場合は、nullptr を返します。
 	 */
 	fk_Model *	getNodeModel(std::string nodeName);
 

@@ -618,7 +618,7 @@ HRESULT fk_Input::UpdateJoy()
 			}
 		}
 
-		for(std::map<int, AxisParam>::iterator it = axisParams[i].begin(); it != axisParams[i].end(); it++) {
+		for(auto it = axisParams[i].begin(); it != axisParams[i].end(); it++) {
 			switch(it->first) {
 			case AXIS1_X:
 				if(joyButton.x[0] >= it->second.border) {
