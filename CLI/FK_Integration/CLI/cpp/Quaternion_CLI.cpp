@@ -23,6 +23,11 @@ namespace FK_CLI {
 		}
 	}
 
+	fk_Quaternion::fk_Quaternion(fk_Quaternion^ argQ)
+	{
+		pQuat = new ::fk_Quaternion(*(argQ->pQuat));
+	}
+
 	fk_Quaternion::fk_Quaternion(::fk_Quaternion *argQ)
 	{
 		pQuat = new ::fk_Quaternion(argQ->s, argQ->v);

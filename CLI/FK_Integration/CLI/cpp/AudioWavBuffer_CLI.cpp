@@ -1,4 +1,4 @@
-#include "AudioWavBuffer_CLI.h"
+﻿#include "AudioWavBuffer_CLI.h"
 #include <msclr/marshal_cppstd.h>
 
 namespace FK_CLI {
