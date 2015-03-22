@@ -37,10 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Boid", "Test\FK_CLI_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_WPF_Test", "FK_WPF_Test\FK_WPF_Test.csproj", "{99D32EFD-2347-43B5-A1D2-79E5C79D376A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FK_CLI_FS", "FK_CLI_FS\FK_CLI_FS.fsproj", "{2A187788-B3E6-45A6-BDDB-DA7630594357}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
-	EndProjectSection
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FK_CLI_FS", "Test\FK_CLI_FS\FK_CLI_FS.fsproj", "{2A187788-B3E6-45A6-BDDB-DA7630594357}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -306,16 +303,18 @@ Global
 		{99D32EFD-2347-43B5-A1D2-79E5C79D376A}.Release|x86.Build.0 = Release|x86
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Win32.ActiveCfg = Debug|x86
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|Win32.Build.0 = Debug|x86
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|x86.ActiveCfg = Debug|x86
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Debug|x86.Build.0 = Debug|x86
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Win32.ActiveCfg = Release|x86
+		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|Win32.Build.0 = Release|x86
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|x86.ActiveCfg = Release|x86
 		{2A187788-B3E6-45A6-BDDB-DA7630594357}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
