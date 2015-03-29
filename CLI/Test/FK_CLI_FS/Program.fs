@@ -8,7 +8,7 @@ module FK_Box =
     let light = new fk_Light()
     let lightModel = new fk_Model()
     lightModel.Material <- fk_Material.TrueWhite
-    lightModel.GlMoveTo(0.0, 0.0, 0.0) |> ignore
+    lightModel.GlMoveTo(0.0, 0.0, 0.0)  |> ignore
     lightModel.GlFocus(-1.0, -1.0, -1.0) |> ignore
     win.Entry(lightModel)
 
@@ -21,8 +21,8 @@ module FK_Box =
     let pos : fk_Vector array = Array.init 4 (fun index -> new fk_Vector())
     pos.[0].Set(0.0, 100.0, 0.0)
     pos.[1].Set(100.0, 0.0, 0.0)
-    Array.set pos 2 -pos.[0]
-    Array.set pos 3 -pos.[1]
+    pos.[2] <- -pos.[0]
+    pos.[3] <- -pos.[1]
 
     let line : fk_Line array = Array.init 2 (fun index -> new fk_Line())
     let lineModel : fk_Model array = Array.init 2 (fun index -> new fk_Model())
