@@ -50,9 +50,5 @@ module FK_Box =
         incr i
         camera.GlTranslate(0.0, 0.0, -1.0) |> ignore
         blockModel.GlRotateWithVec(org, fk_Axis.Y, FK.PI/300.0) |> ignore
-        let cPos = camera.Position
-        if cPos.z < 0.0 then
-            camera.GlFocus(org) |> ignore
-
-        if !i >= 1000 then
-            camera.LoRotateWithVec(org, fk_Axis.Z, FK.PI/500.0) |> ignore
+        if camera.Position.z < 0.0 then camera.GlFocus(org) |> ignore
+        if !i >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, FK.PI/500.0) |> ignore
