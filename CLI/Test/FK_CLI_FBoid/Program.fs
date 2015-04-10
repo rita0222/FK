@@ -57,8 +57,8 @@ type Boid(argNum) = class
         let vArray = List.zip pA vA
         let gVec = List.fold (fun x y -> x + y/double(agent.Length)) (new fk_Vector()) pA
 
-        let calcG (p, v) =
-            v + paramB * (gVec - p)
+        let calcG (p, v) = v + paramB * (gVec - p)
+
         let newV = vArray |> List.map calcG
         let newAgent = List.zip agent newV
         newAgent |> List.iter (fun (a, v) -> (a.Vec <- v))
