@@ -25,7 +25,7 @@ type Agent() = class
     member this.Entry(argWin: fk_AppWindow) =
         argWin.Entry(model)
 
-    member this.Forwad() =
+    member this.Forward() =
         model.GlVec(newVec) |> ignore
         model.LoTranslate(0.0, 0.0, -0.05) |> ignore
 end;;
@@ -47,15 +47,40 @@ type Boid(argNum) = class
     do
         agent |> List.iter (fun a -> a.Init(AREASIZE, rand))
         agent |> List.iter (fun a -> a.Shape <- cone)
+
+    member this.SetWindow(argWin: fk_AppWindow) =
+        agent |> List.iter (fun a -> a.Entry(argWin))
+
+    member this.Forward(argGMode: bool) =
+        let pA = agent |> List.map (fun a -> a.Pos)
+        let vA = agent |> List.map (fun a -> a.Vec)
+        let vArray = List.zip pA vA
+        let gVec = List.fold (fun x y -> x + y/double(agent.Length)) (new fk_Vector()) pA
+
+        let calcG (p, v) =
+            v + paramB * (gVec - p)
+        let newV = vArray |> List.map calcG
+        let newAgent = List.zip agent newV
+        newAgent |> List.iter (fun (a, v) -> (a.Vec <- v))
+        agent |> List.iter (fun a -> a.Forward())
+
 end;;
 
 
 module FK_Boid =
     let win = new fk_AppWindow()
-    fk_Material.InitDefault()
+    let boid = new Boid(200)
+
+    boid.SetWindow(win)
+
+    win.Size <- new fk_Dimension(600, 600)
+    win.BGColor <- new fk_Color(0.6, 0.7, 0.8)
+    win.ShowGuide(fk_GuideMode.GRID_XY)
+    win.CameraPos <- new fk_Vector(0.0, 0.0, 80.0)
+    win.CameraFocus <- new fk_Vector(0.0, 0.0, 0.0)
+    win.FPS <- 0
 
     win.Open()
-    let i = ref 0
     while win.Update() = true do
-        incr i
+        boid.Forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE))
         
