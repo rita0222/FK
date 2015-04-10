@@ -18,14 +18,14 @@ module FK_Box =
     blockModel.Material <- fk_Material.Yellow
     win.Entry(blockModel)
 
-    let pos : fk_Vector array = Array.init 4 (fun index -> new fk_Vector())
+    let pos : fk_Vector array = Array.init 4 (fun i -> new fk_Vector())
     pos.[0].Set(0.0, 100.0, 0.0)
     pos.[1].Set(100.0, 0.0, 0.0)
     pos.[2] <- -pos.[0]
     pos.[3] <- -pos.[1]
 
-    let line : fk_Line array = Array.init 2 (fun index -> new fk_Line())
-    let lineModel : fk_Model array = Array.init 2 (fun index -> new fk_Model())
+    let line : fk_Line array = Array.init 2 (fun i -> new fk_Line())
+    let lineModel : fk_Model array = Array.init 2 (fun i -> new fk_Model())
 
     for i = 0 to 1 do
         line.[i].PushLine(pos.[2*i], pos.[2*i + 1])
