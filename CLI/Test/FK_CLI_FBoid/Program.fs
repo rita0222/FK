@@ -55,13 +55,44 @@ type Boid(argNum) = class
         let pA = agent |> List.map (fun a -> a.Pos)
         let vA = agent |> List.map (fun a -> a.Vec)
         let vArray = List.zip pA vA
-        let gVec = List.fold (fun x y -> x + y/double(agent.Length)) (new fk_Vector()) pA
 
+        // 分離ルール
+
+        // 重心計算
+        let gVec = List.reduce (fun x y -> x + y/(double agent.Length)) pA
+
+        // 結合ルール
         let calcG (p, v) = v + paramB * (gVec - p)
+        let newV1 = vArray |> List.map calcG
 
-        let newV = vArray |> List.map calcG
-        let newAgent = List.zip agent newV
+
+        // 外部判定
+        let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
+        let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
+
+        let vNegate (p:double, v:double) = v * (1.0 - (Math.Abs(p) - AREASIZE) * 1.0)
+        //let vNegate (p:double, v:double) = -v
+
+        let xNegate (p:fk_Vector, v:fk_Vector) =
+            if xOut (p, v) then
+                new fk_Vector(vNegate(p.x, v.x), v.y, 0.0)
+            else
+                v
+
+        let yNegate (p: fk_Vector, v:fk_Vector) =
+            if yOut (p, v) then
+                new fk_Vector(v.x, vNegate(p.y, v.y), 0.0)
+            else
+                v
+
+        let newV2 = List.zip pA newV1 |> List.map xNegate
+        let newV3 = List.zip pA newV2 |> List.map yNegate
+
+        // エージェントに新速度設定
+        let newAgent = List.zip agent newV3
         newAgent |> List.iter (fun (a, v) -> (a.Vec <- v))
+
+        // エージェント前進
         agent |> List.iter (fun a -> a.Forward())
 
 end;;
