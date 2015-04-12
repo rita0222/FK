@@ -35,7 +35,7 @@ type Boid(argNum) = class
         fk_Material.InitDefault()
 
     let rand = new Random()
-    let agent : Agent list = [for i in 0 .. argNum -> new Agent()]
+    let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent()|]
     let cone = new fk_Cone(16, 0.4, 1.0)
     let IAREA = 15
     let AREASIZE = double(IAREA)
@@ -45,33 +45,45 @@ type Boid(argNum) = class
     let paramLA = 3.0
     let paramLB = 5.0
     do
-        agent |> List.iter (fun a -> a.Init(AREASIZE, rand))
-        agent |> List.iter (fun a -> a.Shape <- cone)
+        agent |> Array.iter (fun a -> a.Init(AREASIZE, rand))
+        agent |> Array.iter (fun a -> a.Shape <- cone)
 
     member this.SetWindow(argWin: fk_AppWindow) =
-        agent |> List.iter (fun a -> a.Entry(argWin))
+        agent |> Array.iter (fun a -> a.Entry(argWin))
 
     member this.Forward(argGMode: bool) =
-        let pA = agent |> List.map (fun a -> a.Pos)
-        let vA = agent |> List.map (fun a -> a.Vec)
-        let vArray = List.zip pA vA
+        let pA = agent |> Array.map (fun a -> a.Pos)
+        let vA = agent |> Array.map (fun a -> a.Vec)
+        let vArray = Array.zip pA vA
 
         // 分離ルール
+        let newV0 = Array.copy vA
+
+        vArray |> Array.iteri (fun i (p1, v1) ->
+            vArray |> Array.iteri (fun j (p2, v2) ->
+                if i <> j then
+                    let diff = pA.[i] - pA.[j]
+                    let dist = diff.Dist()
+                    if dist < paramLA then
+                        newV0.[i] <- newV0.[i] + paramA * diff / (dist*dist)
+                    if dist < paramLB then
+                        newV0.[i] <- newV0.[i] + paramB * vA.[j]
+            )
+        )
 
         // 重心計算
-        let gVec = List.reduce (fun x y -> x + y/(double agent.Length)) pA
+        let gVec = (Array.reduce (fun x y -> x + y) pA) / (double pA.Length)
 
         // 結合ルール
         let calcG (p, v) = v + paramB * (gVec - p)
-        let newV1 = vArray |> List.map calcG
+        let newV1 = Array.zip pA newV0 |> Array.map calcG
 
 
         // 外部判定
         let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
         let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
 
-        let vNegate (p:double, v:double) = v * (1.0 - (Math.Abs(p) - AREASIZE) * 1.0)
-        //let vNegate (p:double, v:double) = -v
+        let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
 
         let xNegate (p:fk_Vector, v:fk_Vector) =
             if xOut (p, v) then
@@ -85,22 +97,22 @@ type Boid(argNum) = class
             else
                 v
 
-        let newV2 = List.zip pA newV1 |> List.map xNegate
-        let newV3 = List.zip pA newV2 |> List.map yNegate
+        let newV2 = Array.zip pA newV1 |> Array.map xNegate
+        let newV3 = Array.zip pA newV2 |> Array.map yNegate
 
         // エージェントに新速度設定
-        let newAgent = List.zip agent newV3
-        newAgent |> List.iter (fun (a, v) -> (a.Vec <- v))
+        let newAgent = Array.zip agent newV3
+        newAgent |> Array.iter (fun (a, v) -> (a.Vec <- v))
 
         // エージェント前進
-        agent |> List.iter (fun a -> a.Forward())
+        agent |> Array.iter (fun a -> a.Forward())
 
 end;;
 
 
 module FK_Boid =
     let win = new fk_AppWindow()
-    let boid = new Boid(200)
+    let boid = new Boid(150)
 
     boid.SetWindow(win)
 
