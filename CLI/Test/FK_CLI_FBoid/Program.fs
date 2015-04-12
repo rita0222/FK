@@ -1,13 +1,15 @@
 ﻿open System
 open FK_CLI
 
-type Agent() = class
+type Agent(argID:int) = class
     let model = new fk_Model()
     let newVec = new fk_Vector()
+    let id = argID
 
     do
         model.Material <- fk_Material.Red
 
+    member this.ID with get() = id
     member this.Pos with get() = model.Position
     member this.Vec with get() = model.Vec
                     and set(v:fk_Vector) = newVec.Set(v.x, v.y, v.z)
@@ -35,7 +37,7 @@ type Boid(argNum) = class
         fk_Material.InitDefault()
 
     let rand = new Random()
-    let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent()|]
+    let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
     let cone = new fk_Cone(16, 0.4, 1.0)
     let IAREA = 15
     let AREASIZE = double(IAREA)
@@ -54,21 +56,21 @@ type Boid(argNum) = class
     member this.Forward(argGMode: bool) =
         let pA = agent |> Array.map (fun a -> a.Pos)
         let vA = agent |> Array.map (fun a -> a.Vec)
-        let vArray = Array.zip pA vA
+        let iA = agent |> Array.map (fun a -> a.ID)
+        let vArray = Array.zip3 pA vA iA
 
         // 分離ルール
-        let newV0 = Array.copy vA
-
-        vArray |> Array.iteri (fun i (p1, v1) ->
-            vArray |> Array.iteri (fun j (p2, v2) ->
+        let newV0 = vArray |> Array.map (fun (p1, v1, i) ->
+            let mutable tmpV = v1
+            for j = 0 to vArray.Length - 1 do
                 if i <> j then
-                    let diff = pA.[i] - pA.[j]
+                    let diff = p1 - pA.[j]
                     let dist = diff.Dist()
                     if dist < paramLA then
-                        newV0.[i] <- newV0.[i] + paramA * diff / (dist*dist)
+                        tmpV <- tmpV + paramA * diff / (dist*dist)
                     if dist < paramLB then
-                        newV0.[i] <- newV0.[i] + paramB * vA.[j]
-            )
+                        tmpV <- tmpV + paramB * vA.[j]
+            tmpV
         )
 
         // 重心計算
