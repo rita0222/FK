@@ -30,6 +30,7 @@ type Agent(argID:int) = class
     member this.Forward() =
         model.GlVec(newVec) |> ignore
         model.LoTranslate(0.0, 0.0, -0.05) |> ignore
+        model.GlMoveTo(this.Pos.x, this.Pos.y, 0.0) |> ignore
 end;;
 
 type Boid(argNum) = class
@@ -78,7 +79,12 @@ type Boid(argNum) = class
 
         // 結合ルール
         let calcG (p, v) = v + paramB * (gVec - p)
-        let newV1 = Array.zip pA newV0 |> Array.map calcG
+        let newV1 =
+            if argGMode then
+                Array.zip pA newV0 |> Array.map calcG
+            else
+                Array.copy newV0
+            
 
 
         // 外部判定
