@@ -6,6 +6,20 @@
 #include "Vector_CLI.h"
 
 namespace FK_CLI {
+
+	//! オイラー角を表すクラス
+	/*!
+	 *	オイラー角は、3次元での姿勢を表す方法の一つで、
+	 *	空間中の全ての姿勢を表現することが可能です。
+	 *	FK におけるオイラー角は Z-X-Y 座標系を意味します。
+	 *	ヘディング角を h、ピッチ角を p、バンク角を b としたとき、
+	 *	このオイラー角は以下の回転変換と同意です。
+	 *	\f[
+	 *		R_y(-h) \cdot R_x(p) \cdot R_z(-b)
+	 *	\f]
+	 *	角度の単位はすべて弧度法(ラジアン)です。
+	 */
+
 	public ref class fk_Angle {
 	internal:
 		double h_, p_, b_;
@@ -20,22 +34,31 @@ namespace FK_CLI {
 		~fk_Angle();
 		!fk_Angle();
 
+		//! ヘディング角
 		property double h {
 			double get();
 			void set(double value);
 		}
 
+		//! ピッチ角
 		property double p {
 			double get();
 			void set(double value);
 		}
 
+		//! バンク角
 		property double b {
 			double get();
 			void set(double value);
 		}
 
-		void Set(double, double, double);
+		//! 設定用関数
+		/*!
+		 *	\param[in]	h	ヘディング角
+		 *	\param[in]	p	ピッチ角
+		 *	\param[in]	b	バンク角
+		 */
+		void Set(double h, double p, double b);
 	};
 
 	public ref class fk_Matrix {
