@@ -147,7 +147,7 @@ class fk_Math {
 	 *	\param[in]	P		判定対象位置ベクトル
 	 *	\param[in]	openFlg
 	 *		true の場合は、線分を閉区間として解釈します。
-	 *		つまり、両端点そのものも線分の一部とみまします。
+	 *		つまり、両端点そのものも線分の一部とみなします。
 	 *		false の場合は線分を開区間として解釈します。
 	 *		この場合は、両端点は線分には含まれないので、
 	 *		もし P が A や B と一致していた場合は false を返すことになります。
@@ -202,7 +202,7 @@ class fk_Math {
 	 *
 	 *	\param[in]	openFlg
 	 *		true の場合は、線分を閉区間として解釈します。
-	 *		つまり、両端点そのものも線分の一部とみまします。
+	 *		つまり、両端点そのものも線分の一部とみなします。
 	 *		false の場合は線分を開区間として解釈します。
 	 *		この場合は、両端点は線分には含まれないので、
 	 *		端点と線分が交差しているような場合は false を返すことになります。
@@ -244,7 +244,6 @@ class fk_Math {
 										const fk_Vector &C, const fk_Vector &D,
 										double *s, double *t, fk_Vector *P, fk_Vector *Q);
 
-
 	//! 点対線分・最近接点算出関数
 	/*!
 	 *	点Cに対する、点A,Bを端点とする線分上の最近接点を算出します。
@@ -258,7 +257,6 @@ class fk_Math {
 	 */
 	static void calcClosestPtPtToSeg(const fk_Vector &C, const fk_Vector &A, const fk_Vector &B,
 									 double *t, fk_Vector *P);
-
 
 	//! 三角形対線分交差判定関数
 	/*!
