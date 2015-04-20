@@ -29,7 +29,7 @@ namespace FK_CLI {
 		pin_ptr<int> pIFSet = &argIFSet[0];
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *argArray[i]->pVec;
+			vArray[i] = argArray[i];
 		}
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0], argOrder);
 	}
@@ -41,7 +41,7 @@ namespace FK_CLI {
 		pin_ptr<int> pIFSet = &argIFSet[0];
 		vector<::fk_Vector> vArray(argPos->Length);
 		for(int i = 0; i < argPos->Length; ++i) {
-			vArray[i] = *argPos[i]->pVec;
+			vArray[i] = argPos[i];
 		}
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0]);
 	}
@@ -66,7 +66,7 @@ namespace FK_CLI {
 
 		vector<::fk_Vector> vArray(argPos->Length);
 		for(i = 0; i < argPos->Length; ++i) {
-			vArray[i] = *argPos[i]->pVec;
+			vArray[i] = argPos[i];
 		}
 
 		GetP()->makeIFSet(&IFSet, &vArray, argOrder);
@@ -92,7 +92,7 @@ namespace FK_CLI {
 
 		vector<::fk_Vector> vArray(argPos->Length);
 		for(i = 0; i < argPos->Length; ++i) {
-			vArray[i] = *argPos[i]->pVec;
+			vArray[i] = argPos[i];
 		}
 
 		GetP()->makeIFSet(&IFSet, &vArray);

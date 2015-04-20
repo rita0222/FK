@@ -79,9 +79,7 @@ namespace FK_CLI {
 		
 	fk_TexCoord^ fk_IFSTexture::GetTextureCoord(int argTID, int argVID)
 	{
-		fk_TexCoord^ T = gcnew fk_TexCoord();
-		*T->pTex = GetP()->getTextureCoord(argTID, argVID);
-		return T;
+		return gcnew fk_TexCoord(GetP()->getTextureCoord(argTID, argVID));
 	}
 
 	void fk_IFSTexture::CloneShape(fk_IFSTexture^ argIT)
@@ -93,8 +91,8 @@ namespace FK_CLI {
 	void fk_IFSTexture::SetTextureCoord(int argTID, int argVID, fk_TexCoord^ argTex)
 	{
 		if(!argTex) return;
-
-		GetP()->setTextureCoord(argTID, argVID, *argTex->pTex);
+		::fk_TexCoord T(argTex->x_, argTex->y_);
+		GetP()->setTextureCoord(argTID, argVID, T);
 	}
 
 	bool fk_IFSTexture::ReadMQOFile(String^ argFileName, String^ argObjName,
@@ -138,13 +136,15 @@ namespace FK_CLI {
 	bool fk_IFSTexture::MoveVPosition(int argVID, const fk_Vector^ argP, int argOrder)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec, argOrder);
+		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		return GetP()->moveVPosition(argVID, P, argOrder);
 	}
 				
 	bool fk_IFSTexture::MoveVPosition(int argVID, const fk_Vector^ argP)
 	{
 		if(!argP) return false;
-		return GetP()->moveVPosition(argVID, *argP->pVec);
+		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		return GetP()->moveVPosition(argVID, P);
 	}
 
 	bool fk_IFSTexture::MoveVPosition(int argVID, double argX, double argY, double argZ,

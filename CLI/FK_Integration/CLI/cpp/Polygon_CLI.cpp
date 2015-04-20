@@ -42,13 +42,13 @@ namespace FK_CLI {
 	void fk_Polygon::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->pushVertex(*argPos->pVec);
+		GetP()->pushVertex(argPos);
 	}
 
 	void fk_Polygon::SetVertex(int argID, fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setVertex(argID, *argPos->pVec);
+		GetP()->setVertex(argID, argPos);
 	}
 
 	void fk_Polygon::SetVertex(array<fk_Vector^>^ argArray)
@@ -56,7 +56,7 @@ namespace FK_CLI {
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *(argArray[i]->pVec);
+			vArray[i] = argArray[i];
 		}
 		GetP()->setVertex(&vArray);
 	}
@@ -100,13 +100,13 @@ namespace FK_CLI {
 	void fk_Polyline::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->pushVertex(*argPos->pVec);
+		GetP()->pushVertex(argPos);
 	}
 
 	void fk_Polyline::SetVertex(int argID, fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setVertex(argID, *argPos->pVec);
+		GetP()->setVertex(argID, argPos);
 	}
 
 	void fk_Polyline::SetVertex(array<fk_Vector^>^ argArray)
@@ -114,7 +114,7 @@ namespace FK_CLI {
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
 		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = *(argArray[i]->pVec);
+			vArray[i] = argArray[i];
 		}
 		GetP()->setVertex(&vArray);
 	}

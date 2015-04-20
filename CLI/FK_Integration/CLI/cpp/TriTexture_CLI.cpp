@@ -53,14 +53,12 @@ namespace FK_CLI {
 	bool fk_TriTexture::SetTextureCoord(int argID, fk_TexCoord^ argC)
 	{
 		if(!argC) return false;
-		return GetP()->setTextureCoord(argID, *argC->pTex);
+		return GetP()->setTextureCoord(argID, argC);
 	}
 
 	fk_TexCoord^ fk_TriTexture::GetTextureCoord(int argID)
 	{
-		fk_TexCoord^ T = gcnew fk_TexCoord();
-		*T->pTex = GetP()->getTextureCoord(argID);
-		return T;
+		return gcnew fk_TexCoord(GetP()->getTextureCoord(argID));
 	}
 
 	bool fk_TriTexture::SetVertexPos(int argID, double argX, double argY, double argZ)
@@ -71,7 +69,7 @@ namespace FK_CLI {
 	bool fk_TriTexture::SetVertexPos(int argID, fk_Vector^ argP)
 	{
 		if(!argP) return false;
-		return GetP()->setVertexPos(argID, *argP->pVec);
+		return GetP()->setVertexPos(argID, argP);
 	}
 
 	fk_Vector^ fk_TriTexture::GetVertexPos(int argID)

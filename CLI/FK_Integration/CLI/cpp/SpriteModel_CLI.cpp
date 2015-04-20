@@ -38,6 +38,14 @@ namespace FK_CLI {
 		this->pBase = nullptr;
 	}
 
+	fk_TextImage^ fk_SpriteModel::Text::get(void)
+	{
+		fk_TextImage^ TI = gcnew fk_TextImage();
+		TI->pBase = &(GetP()->text);
+		TI->dFlg = false;
+		return TI;
+	}
+		
 	void fk_SpriteModel::Image::set(fk_Image^ argImage)
 	{
 		if(!argImage) return;
@@ -55,14 +63,12 @@ namespace FK_CLI {
 	void fk_SpriteModel::Size::set(fk_TexCoord^ argC)
 	{
 		if(!argC) return;
-		GetP()->setSpriteSize(argC->pTex->x, argC->pTex->y);
+		GetP()->setSpriteSize(argC->x_, argC->y_);
 	}
 
 	fk_TexCoord^ fk_SpriteModel::Size::get(void)
 	{
-		fk_TexCoord^ T = gcnew fk_TexCoord();
-		*T->pTex = GetP()->getSpriteSize();
-		return T;
+		return gcnew fk_TexCoord(GetP()->getSpriteSize());
 	}
 
 	void fk_SpriteModel::SmoothMode::set(bool argMode)

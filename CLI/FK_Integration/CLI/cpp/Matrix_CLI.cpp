@@ -4,19 +4,37 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	fk_Angle::fk_Angle()
+	fk_Angle::operator ::fk_Angle (fk_Angle^ argA)
 	{
-		pAngle = new ::fk_Angle();
+		::fk_Angle	A(argA->h_, argA->p_, argA->b_);
+		return A;
+	}
+
+	fk_Angle::fk_Angle()
+		: h_(0.0), p_(0.0), b_(0.0)
+	{
+		return;
 	}
 
 	fk_Angle::fk_Angle(double argH, double argP, double argB)
+		: h_(argH), p_(argP), b_(argB)
 	{
-		pAngle = new ::fk_Angle(argH, argP, argB);
+		return;
 	}
 
 	fk_Angle::fk_Angle(fk_Angle^ argA)
+		: h_(0.0), p_(0.0), b_(0.0)
 	{
-		pAngle = new ::fk_Angle(*(argA->pAngle));
+		if(!argA) return;
+		h_ = argA->h_;
+		p_ = argA->p_;
+		b_ = argA->b_;
+	}
+
+	fk_Angle::fk_Angle(::fk_Angle argA)
+		: h_(argA.h), p_(argA.p), b_(argA.b)
+	{
+		return;
 	}
 
 	fk_Angle::~fk_Angle()
@@ -26,42 +44,44 @@ namespace FK_CLI {
 
 	fk_Angle::!fk_Angle()
 	{
-		delete pAngle;
+		return;
 	}
 
 	double fk_Angle::h::get()
 	{
-		return pAngle->h;
+		return h_;
 	}
 	
 	void fk_Angle::h::set(double value)
 	{
-		pAngle->h = value;
+		h_ = value;
 	}
 
 	double fk_Angle::p::get()
 	{
-		return pAngle->p;
+		return p_;
 	}
 	
 	void fk_Angle::p::set(double value)
 	{
-		pAngle->p = value;
+		p_ = value;
 	}
 	
 	double fk_Angle::b::get()
 	{
-		return pAngle->b;
+		return b_;
 	}
 	
 	void fk_Angle::b::set(double value)
 	{
-		pAngle->b = value;
+		b_ = value;
 	}
 
 	void fk_Angle::Set(double argH, double argP, double argB)
 	{
-		pAngle->set(argH, argP, argB);
+		h_ = argH;
+		p_ = argP;
+		b_ = argB;
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -133,9 +153,8 @@ namespace FK_CLI {
 	fk_HVector^ fk_Matrix::operator*(fk_Matrix^ argM, fk_HVector^ argV)
 	{
 		if(!argM || !argV) return nullptr;
-		fk_HVector^ V = gcnew fk_HVector();
-		*V->pHVec = *argM->pMatrix * *argV->pHVec;
-		return V;
+		::fk_HVector H((*argM->pMatrix) * ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		return gcnew fk_HVector(H);
 	}
 
 	fk_Matrix^ fk_Matrix::operator*(fk_Matrix^ argM1, fk_Matrix^ argM2)
@@ -210,39 +229,36 @@ namespace FK_CLI {
 	void fk_Matrix::SetRow(int argRow, fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->setRow(argRow, *argV->pVec);
+		this->pMatrix->setRow(argRow, argV);
 	}
 
 	void fk_Matrix::SetRow(int argRow, fk_HVector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->setRow(argRow, *argV->pHVec);
+		this->pMatrix->setRow(argRow, argV);
 	}
 		
 	void fk_Matrix::SetCol(int argCol, fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->setCol(argCol, *argV->pVec);
+		this->pMatrix->setCol(argCol, argV);
 	}
 
 	void fk_Matrix::SetCol(int argCol, fk_HVector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->setCol(argCol, *argV->pHVec);
+		this->pMatrix->setCol(argCol, argV);
 	}
 
 	fk_HVector^ fk_Matrix::GetRow(int argRow)
 	{
-		fk_HVector^ V = gcnew fk_HVector();
-		*V->pHVec = this->pMatrix->getRow(argRow);
-		return V;
+		return gcnew fk_HVector(this->pMatrix->getRow(argRow));
+
 	}
 
 	fk_HVector^ fk_Matrix::GetCol(int argCol)
 	{
-		fk_HVector^ V = gcnew fk_HVector();
-		*V->pHVec = this->pMatrix->getCol(argCol);
-		return V;
+		return gcnew fk_HVector(this->pMatrix->getCol(argCol));
 	}
 
 	bool fk_Matrix::Inverse()
@@ -270,7 +286,7 @@ namespace FK_CLI {
 	void fk_Matrix::MakeTrans(fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->makeTrans(*argV->pVec);
+		this->pMatrix->makeTrans(argV);
 	}
 
 	void fk_Matrix::MakeEuler(double argH, double argP, double argB)
@@ -281,7 +297,7 @@ namespace FK_CLI {
 	void fk_Matrix::MakeEuler(fk_Angle^ argA)
 	{
 		if(!argA) return;
-		this->pMatrix->makeEuler(*argA->pAngle);
+		this->pMatrix->makeEuler(argA);
 	}
 
 	bool fk_Matrix::IsRegular()
@@ -302,6 +318,6 @@ namespace FK_CLI {
 	void fk_Matrix::MakeScale(fk_Vector^ argV)
 	{
 		if(!argV) return;
-		this->pMatrix->makeScale(*argV->pVec);
+		this->pMatrix->makeScale(argV);
 	}
 }

@@ -12,42 +12,41 @@ namespace FK_CLI {
 	bool fk_Math::IsOnLine(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argP)
 	{
 		if(!argA || !argB || !argP) return false;
-		return ::fk_Math::isOnLine(*argA->pVec, *argB->pVec, *argP->pVec);
+		return ::fk_Math::isOnLine(argA, argB, argP);
 	}
 
 	bool fk_Math::IsOnLineSegment(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argP, bool openFlg)
 	{
 		if(!argA || !argB || !argP) return false;
-		return ::fk_Math::isOnLineSegment(*argA->pVec, *argB->pVec, *argP->pVec, openFlg);
+		return ::fk_Math::isOnLineSegment(argA, argB, argP, openFlg);
 	}
 
 	bool fk_Math::IsOnLineSegment(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argP)
 	{
 		if(!argA || !argB || !argP) return false;
-		return ::fk_Math::isOnLineSegment(*argA->pVec, *argB->pVec, *argP->pVec);
+		return ::fk_Math::isOnLineSegment(argA, argB, argP);
 	}
 
 	bool fk_Math::IsCrossLine(fk_Vector^ argA, fk_Vector^ argB,
 							  fk_Vector^ argC, fk_Vector^ argD)
 	{
 		if(!argA || !argB || !argC || !argD) return false;
-		return ::fk_Math::isCrossLine(*argA->pVec, *argB->pVec, *argC->pVec, *argD->pVec);
+		return ::fk_Math::isCrossLine(argA, argB, argC, argD);
 	}
 
 	bool fk_Math::IsCrossLineSegment(fk_Vector^ argA, fk_Vector^ argB,
 									 fk_Vector^ argC, fk_Vector^ argD, bool argFlg)
 	{
 		if(!argA || !argB || !argC || !argD) return false;
-		return ::fk_Math::isCrossLineSegment(*argA->pVec, *argB->pVec,
-											 *argC->pVec, *argD->pVec, argFlg);
+		return ::fk_Math::isCrossLineSegment(argA, argB, argC, argD, argFlg);
 	}
 	
 	bool fk_Math::IsCrossLineSegment(fk_Vector^ argA, fk_Vector^ argB,
 									 fk_Vector^ argC, fk_Vector^ argD)
 	{
 		if(!argA || !argB || !argC || !argD) return false;
-		return ::fk_Math::isCrossLineSegment(*argA->pVec, *argB->pVec,
-											 *argC->pVec, *argD->pVec);
+		return ::fk_Math::isCrossLineSegment(argA, argB, argC, argD);
+
 	}
 
 	double fk_Math::CalcClosestPtSegToSeg(fk_Vector^ argA, fk_Vector^ argB,
@@ -59,22 +58,32 @@ namespace FK_CLI {
 		if(!argP) argP = gcnew fk_Vector();
 		if(!argQ) argQ = gcnew fk_Vector();
 		double s, t, ret;
-		ret = ::fk_Math::calcClosestPtSegToSeg(*argA->pVec, *argB->pVec,
-											   *argC->pVec, *argD->pVec,
-											   &s, &t, argP->pVec, argQ->pVec);
+
+		::fk_Vector P, Q;
+
+		ret = ::fk_Math::calcClosestPtSegToSeg(argA, argB, argC, argD, &s, &t, &P, &Q);
 		argS = s;
 		argT = t;
+		argP->Set(P.x, P.y, P.z);
+		argQ->Set(Q.x, Q.y, Q.z);
 		return ret;
 	}
+
 
 	void fk_Math::CalcClosestPtPtToSeg(fk_Vector^ argC, fk_Vector^ argA, fk_Vector^ argB,
 									   double %argT, fk_Vector^ argP)
 	{
 		if(!argC || !argA || !argB) return;
 		if(!argP) argP = gcnew fk_Vector();
+
 		double t;
-		::fk_Math::calcClosestPtPtToSeg(*argC->pVec, *argA->pVec, *argB->pVec, &t, argP->pVec);
+		::fk_Vector P;
+
+		::fk_Math::calcClosestPtPtToSeg(argC, argA, argB, &t, &P);
+
+		argP->Set(P.x, P.y, P.z);
 		argT = t;
+		return;
 	}
 	
 	bool fk_Math::CalcCrossLineAndTri(fk_Vector^ argP, fk_Vector^ argQ,
@@ -83,32 +92,37 @@ namespace FK_CLI {
 	{
 		if(!argP || !argQ || !argA || !argB || !argC) return false;
 		if(!argR) argR = gcnew fk_Vector();
-		return ::fk_Math::calcCrossLineAndTri(*argP->pVec, *argQ->pVec,
-											  *argA->pVec, *argB->pVec,
-											  *argC->pVec, argR->pVec);
+
+		::fk_Vector R;
+
+		bool retVal = ::fk_Math::calcCrossLineAndTri(argP, argQ, argA, argB, argC, &R);
+		argR->Set(R.x, R.y, R.z);
+		return retVal;
 	}
 	
 	bool fk_Math::CalcCrossLineAndTri(fk_Vector^ argP, fk_Vector^ argQ,
 									  fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argC)
 	{
 		if(!argP || !argQ || !argA || !argB || !argC) return false;
-		return ::fk_Math::calcCrossLineAndTri(*argP->pVec, *argQ->pVec,
-											  *argA->pVec, *argB->pVec, *argC->pVec);
+
+		return ::fk_Math::calcCrossLineAndTri(argP, argQ, argA, argB, argC);
 	}		
 
 	double fk_Math::CalcCosine(fk_Vector^ argA, fk_Vector^ argB)
 	{
 		if(!argA || !argB) return 0.0;
-		return ::fk_Math::calcCosine(*argA->pVec, *argB->pVec);
+
+		return ::fk_Math::calcCosine(argA, argB);
 	}
 	
 	fk_Vector^ fk_Math::DivideVec(fk_Vector^ argV, fk_Vector^ argA,
 								  fk_Vector^ argB, fk_Vector^ argC)
 	{
 		if(!argV || !argA || !argB || !argC) return nullptr;
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = ::fk_Math::divideVec(*argV->pVec, *argA->pVec, *argB->pVec, *argC->pVec);
-		return V;
+		::fk_Vector R_;
+
+		R_ = ::fk_Math::divideVec(argV, argA, argB, argC);
+		return gcnew fk_Vector(R_);
 	}
 	
 	fk_Quaternion^ fk_Math::QuatInterLinear(fk_Quaternion^ argQ1,

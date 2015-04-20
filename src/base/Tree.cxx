@@ -275,7 +275,7 @@ fk_TreeData * fk_Tree::makeNewData(fk_Tree *argTree, string argName,
 
 void fk_Tree::_makeRoot(const string argName)
 {
-	if(this == nullptr) return;
+	//if(this == nullptr) return;
 	_root = makeNewData(this, argName, nullptr);
 	_treeData.clear();
 	if(_root != nullptr) {

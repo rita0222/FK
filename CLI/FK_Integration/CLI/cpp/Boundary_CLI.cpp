@@ -89,7 +89,7 @@ namespace FK_CLI {
 	void fk_Boundary::AABB::set(fk_Vector^ argSize)
 	{
 		if(!argSize) return;
-		GetP()->setAABBSize(*argSize->pVec);
+		GetP()->setAABBSize(argSize);
 	}
 
 	fk_Vector^ fk_Boundary::OBB::get()
@@ -100,7 +100,7 @@ namespace FK_CLI {
 	void fk_Boundary::OBB::set(fk_Vector^ argSize)
 	{
 		if(!argSize) return;
-		GetP()->setOBBSize(*argSize->pVec);
+		GetP()->setOBBSize(argSize);
 	}
 
 	bool fk_Boundary::BDraw::get()
@@ -162,7 +162,7 @@ namespace FK_CLI {
 	void fk_Boundary::SetCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)
 	{
 		if(!argS || !argE) return;
-		GetP()->setCapsule(*argS->pVec, *argE->pVec, argR);
+		GetP()->setCapsule(argS, argE, argR);
 	}
 
 	double fk_Boundary::GetCapsuleRadius(void)
@@ -177,15 +177,13 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Boundary::GetCapsuleStartPos(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getCapsuleStartPos();
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getCapsuleStartPos());
 		return V;
 	}
 
 	fk_Vector^ fk_Boundary::GetCapsuleEndPos(void)
 	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getCapsuleEndPos();
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getCapsuleEndPos());
 		return V;
 	}
 }

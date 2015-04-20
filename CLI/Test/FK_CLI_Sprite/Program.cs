@@ -19,13 +19,16 @@ namespace FK_CLI_Sprite
 			var model = new fk_Model();
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 			int count;
-			string str;
+			string str, space;
  
 			if(sprite.InitFont("mona.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
 
-			sprite.SetPositionLT(-280.0, 230.0);
+			sprite.SetPositionLT(-240.0, 230.0);
+
+			sprite.Text.MonospaceMode = true;
+			sprite.Text.MonospaceSize = 12;
 			window.Entry(sprite);
  
 			model.Shape = block;
@@ -41,7 +44,11 @@ namespace FK_CLI_Sprite
  
 			count = 0;
 			while(window.Update() == true) {
-				str = "count = " + count.ToString();
+				if(count < 10) space = "   ";
+				else if(count < 100) space = "  ";
+				else if(count < 1000) space = " ";
+				else space = "";
+				str = "count = " + space + count.ToString();
 				sprite.DrawText(str, true);
 				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 				count++;

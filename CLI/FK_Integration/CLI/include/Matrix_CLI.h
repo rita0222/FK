@@ -8,14 +8,17 @@
 namespace FK_CLI {
 	public ref class fk_Angle {
 	internal:
-	    ::fk_Angle *pAngle;
+		double h_, p_, b_;
+
+		static operator ::fk_Angle (fk_Angle^);
 
 	public:
-		fk_Angle::fk_Angle();
-		fk_Angle::fk_Angle(double, double, double);
-		fk_Angle::fk_Angle(fk_Angle^);
-		fk_Angle::~fk_Angle();
-		fk_Angle::!fk_Angle();
+		fk_Angle();
+		fk_Angle(double, double, double);
+		fk_Angle(fk_Angle^);
+		fk_Angle(::fk_Angle);
+		~fk_Angle();
+		!fk_Angle();
 
 		property double h {
 			double get();
@@ -39,10 +42,10 @@ namespace FK_CLI {
 	internal:
 		::fk_Matrix *pMatrix;
 	public:
-		fk_Matrix::fk_Matrix();
-		fk_Matrix::fk_Matrix(fk_Matrix^);
-		fk_Matrix::~fk_Matrix();
-		fk_Matrix::!fk_Matrix();
+		fk_Matrix();
+		fk_Matrix(fk_Matrix^);
+		~fk_Matrix();
+		!fk_Matrix();
 
  		property double default[int, int] {
 			double get(int, int);

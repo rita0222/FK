@@ -22,15 +22,18 @@ namespace FK_CLI
 
 	public ref class fk_TexCoord {
 	internal:
-		::fk_TexCoord *pTex;
-
-		::fk_TexCoord * GetP(void);
+		double x_, y_;
+		static operator ::fk_TexCoord (fk_TexCoord^);
 
 	public:
 		fk_TexCoord();
 		fk_TexCoord(double argX, double argY);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_TexCoord(::fk_TexCoord);
 		~fk_TexCoord();
 		!fk_TexCoord();
+#endif
 
 		property double x {
 			double get();

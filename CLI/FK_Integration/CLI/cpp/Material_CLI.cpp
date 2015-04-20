@@ -18,23 +18,23 @@ namespace FK_CLI {
 		if(argNewFlg == true) pCol = new ::fk_Color();
 	}
 
-	fk_Color::fk_Color(double argR, double argB, double argG) : dFlg(true)
+	fk_Color::fk_Color(double argR, double argG, double argB) : dFlg(true)
 	{
 		pCol = new ::fk_Color(argR, argG, argB);
 	}
 
-	fk_Color::fk_Color(double argR, double argB, double argG, double argA) : dFlg(true)
+	fk_Color::fk_Color(double argR, double argG, double argB, double argA) : dFlg(true)
 	{
 		pCol = new ::fk_Color();
 		pCol->init(argR, argG, argB, argA);
 	}
 
-	fk_Color::fk_Color(float argR, float argB, float argG) : dFlg(true)
+	fk_Color::fk_Color(float argR, float argG, float argB) : dFlg(true)
 	{
 		pCol = new ::fk_Color(argR, argG, argB);
 	}
 
-	fk_Color::fk_Color(float argR, float argB, float argG, float argA) : dFlg(true)
+	fk_Color::fk_Color(float argR, float argG, float argB, float argA) : dFlg(true)
 	{
 		pCol = new ::fk_Color();
 		pCol->init(argR, argG, argB, argA);

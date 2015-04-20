@@ -68,6 +68,7 @@ namespace FK_CLI_C
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
 			for(i = 0; win.Update() == true; i++) {
+				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
 				camera.GlTranslate(0.0, 0.0, -1.0);
 				var cPos = camera.Position;
 				if(cPos.z < -FK.EPS) camera.GlFocus(origin);

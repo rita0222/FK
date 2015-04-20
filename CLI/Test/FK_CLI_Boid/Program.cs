@@ -108,7 +108,7 @@ namespace FK_CLI_Boid
 		public void Forward(bool argGMode)
 		{
 			var gVec = new fk_Vector();
-			fk_Vector diff;
+			fk_Vector diff = new fk_Vector();
 			fk_Vector [] pArray = new fk_Vector[agent.Length];
 			fk_Vector [] vArray = new fk_Vector[agent.Length];
 
@@ -119,6 +119,7 @@ namespace FK_CLI_Boid
 			}
 
 			gVec /= (double)(agent.Length);
+
 
 			for(int i = 0; i < agent.Length; i++) {
 				fk_Vector vec = new fk_Vector(vArray[i]);
@@ -161,7 +162,7 @@ namespace FK_CLI_Boid
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
-			var boid = new Boid(100);
+			var boid = new Boid(200);
 
 			boid.SetWindow(win);
 

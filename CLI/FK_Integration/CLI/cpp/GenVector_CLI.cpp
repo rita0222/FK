@@ -30,7 +30,8 @@ namespace FK_CLI {
 		if(!argV) {
 			pGVec = new ::fk_GenVector();
 		} else {
-			pGVec = new ::fk_GenVector(*argV->pVec);
+			::fk_Vector V(argV->x_, argV->y_, argV->z_);
+			pGVec = new ::fk_GenVector(V);
 		}
 	}
 
@@ -39,7 +40,7 @@ namespace FK_CLI {
 		if(!argH) {
 			pGVec = new ::fk_GenVector();
 		} else {
-			pGVec = new ::fk_GenVector(*argH->pHVec);
+			pGVec = new ::fk_GenVector(::fk_HVector(argH->x_, argH->y_, argH->z_, argH->w_));
 		}
 	}
 		
@@ -240,13 +241,14 @@ namespace FK_CLI {
 	bool fk_GenVector::Replace(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->replace(argS, *argV->pVec);
+		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		return pGVec->replace(argS, V);
 	}
 
 	bool fk_GenVector::Replace(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->replace(argS, *argV->pHVec);
+		return pGVec->replace(argS, ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 	}
 
 	bool fk_GenVector::Add(int argS, fk_GenVector^ argV)
@@ -258,13 +260,14 @@ namespace FK_CLI {
 	bool fk_GenVector::Add(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->add(argS, *argV->pVec);
+		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		return pGVec->add(argS, V);
 	}
 
 	bool fk_GenVector::Add(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->add(argS, *argV->pHVec);
+		return pGVec->add(argS, ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 	}
 
 	bool fk_GenVector::Sub(int argS, fk_GenVector^ argV)
@@ -276,13 +279,14 @@ namespace FK_CLI {
 	bool fk_GenVector::Sub(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->sub(argS, *argV->pVec);
+		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		return pGVec->sub(argS, V);
 	}
 
 	bool fk_GenVector::Sub(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->sub(argS, *argV->pHVec);
+		return pGVec->sub(argS, ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 	}
 
 	fk_GenVector^ fk_GenVector::Div(int argS, int argE)
