@@ -305,16 +305,119 @@ namespace FK_CLI
 		static bool CalcCrossLineAndTri(fk_Vector^ P, fk_Vector^ Q,
 										fk_Vector^ A, fk_Vector^ B, fk_Vector^ C);
 
-
+		//! 余弦値算出関数
+		/*!
+		 *	方向ベクトル \f$ \mathbf{A}, \mathbf{B} \f$
+		 *	のなす角を \f$ \theta \f$ としたとき、
+		 *	\f$ \cos\theta \f$ を返します。
+		 *	\f$ \mathbf{A}, \mathbf{B} \f$ は正規化してある必要はありません。
+		 *	なお、\f$ \mathbf{A}, \mathbf{B} \f$ のいずれかが
+		 *	零ベクトルである場合は 0 を返します。
+		 *
+		 *	\param[in]	A	方向ベクトル
+		 *	\param[in]	B	方向ベクトル
+		 *	\return			余弦値。
+		 */
 		static double CalcCosine(fk_Vector^ A, fk_Vector^ B);
 
 
+		//! ベクトル分離係数算出関数
+		/*!
+		 *	任意のベクトル \f$\mathbf{V}\f$ と、
+		 *	それぞれが一次独立であるベクトル
+		 *	\f$\mathbf{A}, \mathbf{B}, \mathbf{C}\f$ について、
+		 *	\f[
+		 *		\mathbf{V} =
+		 *			\alpha\mathbf{A} +
+		 *			\beta\mathbf{B} +
+		 *			\gamma\mathbf{C}
+		 *	\f]
+		 *	を満たすような実数列 \f$(\alpha, \beta, \gamma)\f$ を求めます。
+		 *	\f$\mathbf{A}, \mathbf{B}, \mathbf{C}\f$ が一次独立でなかった場合、
+		 *	\f$(\alpha, \beta, \gamma)\f$ はすべて 0 として出力します。
+		 *
+		 *	\param[in]	V		分離対象ベクトル
+		 *	\param[in]	A		分離要素ベクトル
+		 *	\param[in]	B		分離要素ベクトル
+		 *	\param[in]	C		分離要素ベクトル
+		 *
+		 *	\return
+		 *		\f$(\alpha, \beta, \gamma)\f$ をそれぞれ
+		 *		x 成分、y 成分、z 成分とする fk_Vector 型の変数を返します。
+		 */
 		static fk_Vector^ DivideVec(fk_Vector^ V, fk_Vector^ A, fk_Vector^ B, fk_Vector^ C);
+		//@}
 
+		//! \name 四元数補間関数
+		//@{
 
+		//! 四元数単純線形補間関数
+		/*!
+		 *	2つの四元数 \f$ \mathbf{q}_1, \mathbf{q}_2 \f$ に対し、
+		 *	パラメータ \f$ t \f$ で単純線形補間した四元数を返します。
+		 *	補間式は以下のとおりです。
+		 *	\f[
+		 *		\mathbf{q}(t) =
+		 *		\frac{(1-t)\mathbf{q}_1 + t\mathbf{q}_2}
+		 *		{|(1-t)\mathbf{q}_1 + t\mathbf{q}_2|}
+		 *	\f]
+		 *
+		 *	単純線形補間は、
+		 *	quatInterSphere() による球面線形補間と比べて高速です。
+		 *	しかし、回転速度が一定でない、
+		 *	正反対に近い姿勢の補間で誤差が生じやすいといった問題が生じることがあります。
+		 *	速度面がそれほど切実でないのであれば、
+		 *	quatInterSphere() による球面線形補間を推奨します。
+		 *
+		 *	\param[in]	Q1		補間の始点となる四元数
+		 *	\param[in]	Q2		補間の終点となる四元数
+		 *	\param[in]	t
+		 *		補間パラメータ。0 で始点、1 で終点となります。
+		 *		通常の補間域は \f$ 0 \leq t \leq 1 \f$ となりますが、
+		 *		範囲外も算出は可能です。
+		 *
+		 *	\return
+		 *		補間四元数。常に正規化されています。
+		 *
+		 *	\sa fk_Quaternion, quatInterSphere()
+		 */
 		static fk_Quaternion^ QuatInterLinear(fk_Quaternion^ Q1, fk_Quaternion^ Q2, double t);
 
-
-		static fk_Quaternion^ QuatInterSphere(fk_Quaternion^ Q1, fk_Quaternion^ Q2, double t);
+		//! 四元数球面線形補間関数
+		/*!
+		 *	2つの四元数 \f$ \mathbf{q}_1, \mathbf{q}_2 \f$ に対し、
+		 *	パラメータ \f$ t \f$ で球面線形補間した四元数を返します。
+		 *	補間式は以下のとおりです。
+		 *	\f[
+		 *		\mathbf{q}(t) =
+		 *			\frac{\sin((1-t)\theta)}{\sin\theta}\mathbf{q}_1 +
+		 *			\frac{\sin(t\theta)}{\sin\theta}\mathbf{q}_2
+		 *			\qquad (\theta = \cos^{-1}(\mathbf{q}_1\cdot\mathbf{q}_2))
+		 *	\f]
+		 *
+		 *	球面線形補間は、
+		 *	quatInterLinear() による単純線形補間と比べて計算速度はやや劣りますが、
+		 *	回転速度が一定であることや、
+		 *	正反対に近い姿勢の補間で誤差が生じにくいといった長所があります。
+		 *	速度面がそれほど切実でないのであれば、
+		 *	quatInterLinear() による単純線形補間よりも
+		 *	本関数による球面線形補間を推奨します。
+		 *
+		 *	\param[in]	Q1		補間の始点となる四元数
+		 *	\param[in]	Q2		補間の終点となる四元数
+		 *	\param[in]	t
+		 *		補間パラメータ。0 で始点、1 で終点となります。
+		 *		通常の補間域は \f$ 0 \leq t \leq 1 \f$ となりますが、
+		 *		範囲外も算出は可能です。
+		 *
+		 *	\return
+		 *		補間四元数。常に正規化されています。
+		 *
+		 *	\sa fk_Quaternion, quatInterLinear()
+		 */
+		static fk_Quaternion QuatInterSphere(const fk_Quaternion &Q1,
+											 const fk_Quaternion &Q2,
+											 double t);
+		//@}
 	};
 }
