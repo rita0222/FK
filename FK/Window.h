@@ -150,6 +150,7 @@ enum fk_PutStrMode {
 	FK_PUTSTR_FILE			//!< ファイル出力
 };
 
+//! ボタン系デバイス状態を表す列挙型
 enum fk_SwitchStatus {
 	FK_SW_RELEASE,		//!< 離しっぱなしの状態
 	FK_SW_UP,			//!< 離した瞬間

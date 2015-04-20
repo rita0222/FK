@@ -344,7 +344,7 @@ public:
 	 *
 	 *	\param[in]		width		軸線の太さ
 	 *
-	 *	\sa showGuide(), showGuideGridWidth()
+	 *	\sa showGuide(), setGuideGridWidth()
 	 */
 	void setGuideAxisWidth(double width);
 
@@ -355,7 +355,7 @@ public:
 	 *
 	 *	\param[in]		width		グリッド線の太さ
 	 *
-	 *	\sa showGuide(), showGuideAxisWidth(), setGridNum()
+	 *	\sa showGuide(), setGuideAxisWidth(), setGuideNum()
 	 */
 	void setGuideGridWidth(double width);
 
@@ -366,7 +366,7 @@ public:
 	 *
 	 *	\param[in]		scale		グリッドの1辺の長さ
 	 *
-	 *	\sa showGuide(), showGuideGridWidth(), setGridNum()
+	 *	\sa showGuide(), setGuideGridWidth(), setGuideNum()
 	 */
 	void setGuideScale(double scale);
 
@@ -377,7 +377,7 @@ public:
 	 *
 	 *	\param[in]		num		軸方向あたりのグリッド個数
 	 *
-	 *	\sa showGuide(), showGridWidth(), showGuideScale()
+	 *	\sa showGuide(), setGuideGridWidth(), setGuideScale()
 	 */
 	void setGuideNum(int num);
 	//@}
