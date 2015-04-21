@@ -208,55 +208,282 @@ namespace FK_CLI
 			void set(int);
 		}
 
+		//! カメラ位置設定・取得プロパティ
+		/*!
+		 *	現在ウィンドウが制御しているカメラの位置を設定できます。
+		 *	また、このプロパティでは位置の取得も可能です。
+		 *
+		 *		Window.CameraPos = new fk_Vector(0.0, 0.0, 0.0);
+		 *		fk_Vector pos = Window.CameraPos;
+		 *
+		 *	\sa CameraFocus, CameraModel
+		 */
 		property fk_Vector^ CameraPos {
 			void set(fk_Vector^);
 			fk_Vector^ get();
 		}
 
+		//!	カメラ注視点設定プロパティ
+		/*!
+		 *	現在ウィンドウが制御しているカメラの向きを、
+		 *	指定した座標に向くよう姿勢変更します。
+		 *
+		 *		Window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+		 *
+		 *	\sa CameraPos, CameraModel
+		 */
 		property fk_Vector^ CameraFocus {
 			void set(fk_Vector^);
 		}
 
+		//! カメラモデル設定プロパティ
+		/*!
+		 *	ウィンドウに対して、
+		 *	別の fk_Model (及びその派生クラス)のオブジェクトをカメラとして
+		 *	セットします。
+		 *	この関数でセットしたモデルを操作すれば、
+		 *	fk_AppWindow のメンバ関数を介さずカメラ制御が可能です。
+		 *
+		 *		fk_Model model = new fk_Model;
+		 *		Window.CameraModel = model;
+		 *
+		 *	\sa CameraPos, CameraFocus, fk_Model
+		 */
 		property fk_Model^ CameraModel {
 			void set(fk_Model^);
 			fk_Model^ get();
 		}
 		
+		//! シーン設定プロパティ
+		/*!
+		 *	ウィンドウに対して、別の fk_Scene のオブジェクトをセットします。
+		 *	アプリの画面ごとにモデルを登録した fk_Scene オブジェクトを、
+		 *	この関数でセットして切り替えることで、
+		 *	モデルを個別に登録や解除を行う手間が省けます。
+		 *	ある程度以上の規模を持つアプリを開発する場合は便利です。
+		 *	また、現時点のシーンを取得することも可能です。
+		 *
+		 *		fk_Scene scene = new fk_Scene();
+		 *		Window.Scene = scene;
+		 *
+		 *		fk_Scene s = Window.Scene;
+		 *	
+		 * \sa SetScene(), fk_Scene
+		 */
 		property fk_Scene^ Scene {
 			void set(fk_Scene^);
 			fk_Scene^ get();
 		}
 
+		//! マウスポインタ位置取得プロパティ
+		/*!
+		 *	マウスのカーソル位置を検出します。
+		 *	本プロパティは fk_Vector 型であり、
+		 *	x 成分と y 成分にそれぞれウィンドウ投影座標系の値が入ります。
+		 *	ウィンドウの外にはみ出したかどうかは、
+		 *	値がウィンドウサイズを超過しているか否かで判断できます。
+		 *
+		 *		fk_Vector mousePos = Window.MousePosition;
+		 *
+		 *	\sa GetMouseStatus()
+		 */
 		property fk_Vector^ MousePosition {
 			fk_Vector^ get();
 		}
 
+		//! トラックボールモード制御プロパティ
+		/*!
+		 *	マウスの右ドラッグとホイール操作で、
+		 *	カメラを自由に操作できるモードをON(true)/OFF(false)します。
+		 *	デフォルトはOFF(false)です。
+		 *
+		 *		Window.TrackBallMode = true;
+		 */
 		property bool TrackBallMode {
 			void set(bool);
 		}
 		
-		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
+		//! \name カメラ制御関数
+		//@{
+
+		//! カメラ初期化関数
+		/*!
+		 *	ウィンドウが制御するカメラを、
+		 *	デフォルトで内部に保持している fk_Model のインスタンスに戻します。
+		 *
+		 *	\sa		CameraModel
+		 */
 		void SetCameraDefault(void);
+		//@}
+
+		//! \name シーン制御関数
+		//@{
+		//! シーン設定関数
+		/*!
+		 *	ウィンドウに対して、別の fk_Scene のオブジェクトをセットします。
+		 *	アプリの画面ごとにモデルを登録した fk_Scene オブジェクトを、
+		 *	この関数でセットして切り替えることで、
+		 *	モデルを個別に登録や解除を行う手間が省けます。
+		 *	ある程度以上の規模を持つアプリを開発する場合は便利です。
+		 *	Scene プロパティによる設定との違いは、第 2 引数にあります。
+		 *	第 2 引数に true を設定すると、新たにセットするシーンに対して、
+		 *	fk_AppWindow 内部のカメラとライトオブジェクトを
+		 *	引き継いでセットすることができますが、
+		 *	構造がややこしくなるのでできるだけ自前で用意することを推奨します。
+		 *	省略した場合と false を設定した場合はシーンの切り替えのみを行います。
+		 *
+		 *	\param[in]		scene				シーンインスタンス
+		 *	\param[in]		defCameraAndLight
+		 *		true である場合、
+		 *		カメラ・光源設定についてシーン設定前のものを用います。
+		 *		false である場合は第一引数の scene
+		 *		に設定されている情報に切り替えます。
+		 *
+		 *	\sa Scene, SetSceneDefault(), fk_Scene
+		 */
+		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
+
+		//! シーン設定初期化関数
+		/*!
+		 *	ウィンドウが制御するシーンを、
+		 *	デフォルトで内部に保持している fk_Scene のインスタンスに戻します。
+		 *
+		 *	\sa Scene, SetScene(fk_Scene^, bool), fk_Scene
+		 */
+		void SetSceneDefault(void);
+
+		//! 通常モデル表示登録関数
+		/*!
+		 *	ウィンドウに対してモデルを登録し、表示するようにします。
+		 *	既に登録済みのモデルに対して行った場合、登録順が最後尾となります。
+		 *
+		 *	\note
+		 *		FKでは、半透明な物体AとBがあり、
+		 *		配置関係で「Aが前、Bが後」となっていた場合、
+		 *		登録順が B, A の順番であれば適切に描画されますが、
+		 *		A, B の登録順となっていた場合には A が半透明であっても
+		 *		B が透けて見えなくなります。
+		 *		このような場合、「前に配置される物体ほど後に登録する」
+		 *		ように登録することで半透明描画が適切となります。
+		 *
+		 *	\param[in]		model		登録モデル
+		 *
+		 *	\sa Remove(fk_Model^), ClearModel()
+		 */
+		void Entry(fk_Model^ model);
+
+		//! 座標軸付きモデル表示登録関数
+		/*!
+		 *	ウィンドウに対してモデルを登録し、表示するようにします。
+		 *	既に登録済みのモデルに対して行った場合、登録順が最後尾となります。
+		 *	半透明物体の描画については、 Entry(fk_Model^) の説明を参照して下さい。
+		 *	登録の際、モデルのローカル座標系に基づく座標軸を同時に登録します。
+		 *
+		 *	\param[in]		model		登録モデル
+		 *	\param[in]		guide		座標軸
+		 *
+		 *	\sa Remove(fk_Model^, fk_GuideObject^), ClearModel(), fk_GuideObject
+		 */
+		void Entry(fk_Model^ model, fk_GuideObject^ guide);
+
+		//! スプライトモデル登録関数
+		/*!
+		 *	ウィンドウに対してスプライトモデルを登録し、表示するようにします。
+		 *
+		 *	\param[in]		model		登録モデル
+		 *
+		 *	\sa Remove(fk_SpriteModel^), ClearModel(), fk_SpriteModel
+		 */
+		void Entry(fk_SpriteModel^ model);
+
+		//! fk_Performer モデル登録関数
+		/*!
+		 *	ウィンドウに対して fk_Performer 型のモデルを登録し、
+		 *	表示するようにします。
+		 *
+		 *	\param[in]		chara		登録モデル
+		 *
+		 *	\sa Remove(fk_Performer^), ClearModel(), fk_Performer
+		 */
+		void Entry(fk_Performer^ chara);
+
+		//! 通常モデル表示解除関数
+		/*!
+		 *	ウィンドウからモデルの登録を解除し、表示されないようにします。
+		 *	登録していないモデルを指定した場合は何も起きません。
+		 *
+		 *	\param[in]		model		登録解除モデル
+		 *
+		 *	\sa Entry(fk_Model^), ClearModel(), fk_Model
+		 */
+		void Remove(fk_Model^ model);
+
+		//! 座標軸付きモデル表示解除関数
+		/*!
+		 *	ウィンドウから、座標軸付きモデルの登録を解除し、
+		 *	表示されないようにします。
+		 *	登録していないモデルを指定した場合は何も起きません。
+		 *
+		 *	\param[in]		model		登録解除モデル
+		 *	\param[in]		guide		登録解除座標軸
+		 *
+		 *	\sa Entry(fk_Model^, fk_GuideObject^), ClearModel()
+		 */
+		void Remove(fk_Model^ model, fk_GuideObject^ guide);
+
+		//! スプライトモデル表示解除関数
+		/*!
+		 *	ウィンドウから、スプライトモデルの登録を解除し、
+		 *	表示されないようにします。
+		 *	登録していないモデルを指定した場合は何も起きません。
+		 *
+		 *	\param[in]		model		登録解除モデル
+		 *
+		 *	\sa Entry(fk_SpriteModel^), ClearModel()
+		 */
+		void Remove(fk_SpriteModel^ model);
+
+		//! fk_Performer モデル表示解除関数
+		/*!
+		 *	ウィンドウから、fk_Performer 型モデルの登録を解除し、
+		 *	表示されないようにします。
+		 *	登録していないモデルを指定した場合は何も起きません。
+		 *
+		 *	\param[in]		chara		登録解除モデル
+		 *
+		 *	\sa Entry(fk_Performer^), ClearModel()
+		 */
+		void Remove(fk_Performer^ chara);
+
+		//! 全モデル登録解除関数1
+		/*!
+		 *	現在のシーンから全てのモデルの表示登録を解除します。
+		 *
+		 *	\param[in]	defCameraAndLight
+		 *		ウィンドウ内部で保持しているライトとカメラのモデルを残したい場合は、
+		 *		true を指定します。
+		 *		false を渡した場合は、完全なクリアとなります。
+		 */
+		void ClearModel(bool defCameraAndLight);
+
+		//! 全モデル登録解除関数2
+		/*!
+		 *	現在のシーンから全てのモデルの表示登録を解除します。
+		 *	ウィンドウ内部で保持しているライトとカメラのモデルは全てクリアとなります。
+		 *
+		 *	\sa ClearModel(bool)
+		 */
+		void ClearModel(void);
+		//@}
 
 		void Open(void);
 		void Close(void);
 		bool Update(bool forceFlg);
 		bool Update(void);
-		void SetSceneDefault(void);
 		void ShowGuide(void);
 		void ShowGuide(fk_GuideMode mode);
 		void HideGuide(void);
 
-		void Entry(fk_Model^ model);
-		void Entry(fk_Model^ model, fk_GuideObject^ guide);
-		void Entry(fk_SpriteModel^ model);
-		void Entry(fk_Performer^ chara);
-		void Remove(fk_Model^ model);
-		void Remove(fk_Model^ model, fk_GuideObject^ guide);
-		void Remove(fk_SpriteModel^ model);
-		void Remove(fk_Performer^ chara);
-		void ClearModel(bool defCameraAndLight);
-		void ClearModel(void);
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status);
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlg);
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
