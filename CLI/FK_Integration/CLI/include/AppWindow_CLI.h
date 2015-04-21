@@ -18,7 +18,7 @@ namespace FK_CLI
 		ALT_L,		//!< 左オルトキー
 		ENTER,		//!< エンター(改行、リターン)キー
 		BACKSPACE,	//!< バックスペース(後退)キー
-		DELETE,		//!< デリート(削除)キー
+		DELETEKEY,	//!< デリート(削除)キー
 		CAPS_LOCK,	//!< キャップスロックキー
 		TAB,		//!< タブキー
 		PAGE_UP,	//!< ページアップキー

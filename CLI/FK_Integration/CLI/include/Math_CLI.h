@@ -381,7 +381,9 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_Quaternion, quatInterSphere()
 		 */
-		static fk_Quaternion^ QuatInterLinear(fk_Quaternion^ Q1, fk_Quaternion^ Q2, double t);
+		static fk_Quaternion^ QuatInterLinear(fk_Quaternion^ Q1,
+											  fk_Quaternion^ Q2,
+											  double t);
 
 		//! 四元数球面線形補間関数
 		/*!
@@ -415,8 +417,8 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_Quaternion, quatInterLinear()
 		 */
-		static fk_Quaternion QuatInterSphere(const fk_Quaternion &Q1,
-											 const fk_Quaternion &Q2,
+		static fk_Quaternion^ QuatInterSphere(fk_Quaternion^ Q1,
+											 fk_Quaternion^ Q2,
 											 double t);
 		//@}
 	};
