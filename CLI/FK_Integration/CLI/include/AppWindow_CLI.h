@@ -476,24 +476,119 @@ namespace FK_CLI
 		void ClearModel(void);
 		//@}
 
+		//! \name 描画制御関数
+		//@{
+		//! ウィンドウ生成関数
+		/*!
+		 *	ウィンドウを開いて表示します。
+		 *
+		 *	\sa Close(), Update()
+		 */
 		void Open(void);
+
+		//! ウィンドウ破棄関数
+		/*!
+		 *	ウィンドウを閉じます。
+		 *	ウィンドウが表示されている状態でプログラムが終了した場合は
+		 *	自動的に閉じられるので、
+		 *	本関数を明示的に呼ぶ必要はありません。
+		 *	プログラム自体は動作し続けるが、ウィンドウを閉じたい場合や、
+		 *	改めてウィンドウを再生成したい場合に本関数を利用して下さい。
+		 *
+		 *	\sa Open(), Update()
+		 */
 		void Close(void);
+
+		//! シーン描画関数1
+		/*!
+		 *	シーン画面を描画し、さらに各種入力デバイスの状態を更新します。
+		 *	基本的にメインループ内でコールすることになります。
+		 *	その際、 FPS プロパティの数値基づいて時間調整が入ります。
+		 *	FPS 制御を無視して強制的に描画処理を呼び出したい場合は引数に
+		 *	true を渡します。
+		 *
+		 *	\param[in]	forceFlg
+		 *		true の場合、FPS制御を無視して強制的に再描画を行います。
+		 * 		false の場合は FPS制御により描画タイミングを制御し、
+		 *		描画が行われるまでは関数は終了しなくなります。
+		 *		デフォルトは false です。
+		 *
+		 *	\sa Open(), Close(), FPS
+		 */
 		bool Update(bool forceFlg);
+
+		//! シーン描画関数2
+		/*!
+		 *	シーン画面を描画し、さらに各種入力デバイスの状態を更新します。
+		 *	基本的にメインループ内でコールすることになります。
+		 *	その際、 FPS プロパティの数値基づいて時間調整が入ります。
+		 *	本関数は、 Update(bool) において引数に false を与えた場合と同様の挙動となります。
+		 *
+		 *	\sa Open(), Close(), FPS
+		 */
 		bool Update(void);
-		void ShowGuide(void);
+		//@}
+
+		//! \name グリッド・座標軸表示設定関数
+		//@{
+
+		//! グリッド・軸設定関数1
+		/*!
+		 *	画面内の座標系を表すグリッドと軸を指定します。
+		 *	引数は、 AXIS_X, AXIS_Y, AXIS_Z がそれぞれの軸を、
+		 *	GRID_XZ, GRID_XY, GRID_YZ がそれぞれの平面を表すグリッドに対応します。
+		 *	複数の要素を指定したい場合は | (ビットOR演算子)で区切って指定できます。
+		 *	NO_GUIDE で全て非表示に、 ALL_GUIDE で全ての軸・グリッドを表示します。
+		 *	引数を省略した場合は、xyz の各軸と xz 平面のグリッドを表示します。
+		 *	デフォルトでは全て非表示(NO_GUIDE)です。
+		 *
+		 *	\param[in]		mode
+		 *		表示するグリッド・軸の指定。複数を表示する場合は、
+		 *		ビットOR演算を利用して並べて指定できます。
+		 *
+		 *	\sa HideGuide(), AxisWidth, GridWidth, GuideScale, GuideNum, fk_GuideMode
+		 */
 		void ShowGuide(fk_GuideMode mode);
+
+		//! グリッド・軸設定関数2
+		/*!
+		 *	画面内の座標系を表すグリッドと軸を指定します。
+		 *	本関数では、3次元座標軸と xz 平面のグリッドを表示します。
+		 *	表示する座標軸およびグリッド面を細かく指定したい場合は、
+		 *	ShowGuide(bool) を利用してください。
+		 *
+		 *	\sa HideGuide(), AxisWidth, GridWidth, GuideScale, GuideNum, fk_GuideMode
+		 */
+		void ShowGuide(void);
+
+		//! グリッド・軸消去関数
+		/*!
+		 *	ShowGuide() で表示した軸とグリッドを消去します。
+		 *	ShowGuide( fk_GuideMode.NO_GUIDE ) と等価です。
+		 *
+		 *	\sa ShowGuide()
+		 */
 		void HideGuide(void);
 
+		//@}
+
+		//! \name キーボード状態取得関数
+		//@{
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status);
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlg);
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
 								 fk_SwitchStatus status, bool insideFlg);
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
+		//@}
+
+		//! \name マウス状態取得関数
+		//@{
 		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlg);
 		void SetCursorState(bool visible, bool center);
 		bool IsModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
 		bool IsModelPicked(fk_Model^ model, int pixel);
 		bool IsModelPicked(fk_Model^ model);
 		void ProcMouseView(fk_Model^ camera, double x, double y, bool lockSW);
+		//@}
 	};
 }

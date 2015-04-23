@@ -766,6 +766,10 @@ public:
 	//! \name キーボード状態取得関数
 	//@{
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+	fk_SwitchStatus		getKeyStatus(char keyChar);
+#endif
+	
 	//! 通常キー状態取得関数
 	/*!
 	 *	通常キーの入力状態を検出します。
@@ -775,21 +779,20 @@ public:
 	 *	入力できない特殊キーには getSpecialKeyStatus() を使います。
 	 *
 	 *	\param[in]	keyChar
-	 *		状態を取得したいキー文字。大文字や数字、各種記号キーを設定できます。
+	 *		状態を取得したいキー文字。大文字や数字、各種記号キーを設定します。
 	 *		スペースキーの状態を取得したい場合は「' '」と入力します。
 	 *
-	 *	\return
-	 *		キーの状態を返します。種類については
-	 *		::fk_SwitchStatus を参照して下さい。
-	 *		瞬間かどうかの判定は、
-	 *		直前に update() を呼んだ時点とその前に update()
-	 *		を呼んだ時点での入力状態によって決定しています。
+	 *	\param[in]	status
+	 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+	 *
+	 *	\param[in]	insideFlg
+	 *		true だった場合、
+	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
+	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
 	 *
 	 *	\sa getSpecialKeyStatus(), update()
 	 */
-	fk_SwitchStatus		getKeyStatus(char keyChar);
-	bool				getKeyStatus(char keyChar,
-									 fk_SwitchStatus status, bool insideFlg = false);
+	bool	getKeyStatus(char keyChar, fk_SwitchStatus status, bool insideFlg = false);
 
 	//! 特殊キー状態取得関数
 	/*!
