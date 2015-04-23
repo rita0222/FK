@@ -766,10 +766,6 @@ public:
 	//! \name キーボード状態取得関数
 	//@{
 
-#ifndef FK_DOXYGEN_USER_PROCESS
-	fk_SwitchStatus		getKeyStatus(char keyChar);
-#endif
-	
 	//! 通常キー状態取得関数
 	/*!
 	 *	通常キーの入力状態を検出します。
@@ -790,6 +786,10 @@ public:
 	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
 	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
 	 *
+	 *	\return
+	 *		キーが status で指定した状態を満たしていれば true を、
+	 *		そうでなければ false を返します。
+	 *
 	 *	\sa getSpecialKeyStatus(), update()
 	 */
 	bool	getKeyStatus(char keyChar, fk_SwitchStatus status, bool insideFlg = false);
@@ -797,31 +797,37 @@ public:
 	//! 特殊キー状態取得関数
 	/*!
 	 *	特殊キーの入力状態を検出します。
-	 *	引数として、検出したいキーに対応した
-	 *	::fk_SpecialKey 型の値を入力します。
+	 *	引数として、検出したいキーに対応した ::fk_SpecialKey 型の値を入力します。
 	 *	例えば、上矢印キーの状態を取得したい場合には「FK_UP」を入力します。
 	 *	通常キーの状態取得は getKeyStatus() を使います。
 	 *
 	 *	\param[in]	keyCode
 	 *		状態を取得したいキーに対応した値。
 	 *
+	 *	\param[in]	status
+	 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+	 *
+	 *	\param[in]	insideFlg
+	 *		true だった場合、
+	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
+	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
+	 *
 	 *	\return
-	 *		キーの状態を返します。種類については
-	 *		::fk_SwitchStatus を参照して下さい。
-	 *		瞬間かどうかの判定は、
-	 *		直前に update() を呼んだ時点とその前に update()
-	 *		を呼んだ時点での入力状態によって決定しています。
+	 *		キーが status で指定した状態を満たしていれば true を、
+	 *		そうでなければ false を返します。
 	 *
 	 *	\note
 	 *		スペースキーの状態取得は、本関数ではなく getKeyStatus() を用います。
 	 *
 	 *	\sa getKeyStatus(), update()
 	 */
+	bool	getSpecialKeyStatus(fk_SpecialKey keyCode,
+								fk_SwitchStatus status, bool insideFlg = false);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 	fk_SwitchStatus	getSpecialKeyStatus(fk_SpecialKey keyCode);
-
-	bool			getSpecialKeyStatus(fk_SpecialKey keyCode,
-										fk_SwitchStatus status, bool insideFlg = false);
-
+	fk_SwitchStatus	getKeyStatus(char keyChar);
+#endif
 	//@}
 
 	//! \name マウス状態取得関数
@@ -834,16 +840,25 @@ public:
 	 *
 	 *	\param[in]		buttonCode		マウスボタンの種類
 	 *
+	 *	\param[in]	status
+	 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+	 *
+	 *	\param[in]	insideFlag
+	 *		true だった場合、
+	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
+	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
+	 *
 	 *	\return
-	 *		ボタンの状態を返します。種類については
-	 *		::fk_SwitchStatus を参照して下さい。
-	 *		瞬間かどうかの判定は、直前に update() を呼んだ時点とその前に
-	 *		update() を呼んだ時点での入力状態によって決定しています。
+	 *		ボタンが status で指定した状態を満たしていれば true を、
+	 *		そうでなければ false を返します。
 	 */
+	bool	getMouseStatus(fk_MouseButton buttonCode,
+						   fk_SwitchStatus status, bool insideFlag);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 	fk_SwitchStatus		getMouseStatus(fk_MouseButton buttonCode);
-	bool				getMouseStatus(fk_MouseButton buttonCode,
-									   fk_SwitchStatus status, bool insideFlg);
-	
+#endif	
+
 	//! マウスポインタ位置取得関数
 	/*!
 	 *	マウスのカーソル位置を検出します。

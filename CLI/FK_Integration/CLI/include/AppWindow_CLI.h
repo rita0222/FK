@@ -569,21 +569,152 @@ namespace FK_CLI
 		 *	\sa ShowGuide()
 		 */
 		void HideGuide(void);
-
 		//@}
 
 		//! \name キーボード状態取得関数
 		//@{
+
+		//! 通常キー状態取得関数1
+		/*!
+		 *	通常キーの入力状態を検出します。
+		 *	引数として、
+		 *	検出したい文字をシングルクォーテーションで囲って指定します。
+		 *	'A' や 'X' などとします。
+		 *	入力できない特殊キーには getSpecialKeyStatus() を使います。
+		 *
+		 *	以下のコードは、「A」キーが推されているかどうかを検出します。
+		 *
+		 *		if(Window.GetKeyStatus('a', fk_SwitchStatus.PRESS, false) == true) {
+		 *			// 押されている場合の処理
+		 *		}
+		 *
+		 *	\param[in]	key
+		 *		状態を取得したいキー文字。大文字や数字、各種記号キーを設定します。
+		 *		スペースキーの状態を取得したい場合は「' '」と入力します。
+		 *
+		 *	\param[in]	status
+		 *		取得したい状態を指定します。
+		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *
+		 *	\param[in]	insideFlag
+		 *		true だった場合、
+		 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
+		 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
+		 *
+		 *	\return
+		 *		キーが status で指定した状態を満たしていれば true を、
+		 *		そうでなければ false を返します。
+		 *
+		 *	\sa GetSpecialKeyStatus(), Update()
+		 */
+		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlag);
+
+		//! 通常キー状態取得関数2
+		/*!
+		 *	通常キーの入力状態を検出します。
+		 *	引数として、
+		 *	検出したい文字をシングルクォーテーションで囲って指定します。
+		 *	'A' や 'X' などとします。
+		 *	入力できない特殊キーには getSpecialKeyStatus() を使います。
+		 *	なお、本関数は GetKeyStatus(wchar_t, fk_SwitchStatus, bool) にて
+		 *	第三引数に false を入力した場合と挙動は同一です。
+		 *
+		 *	以下のコードは、「A」キーが推されているかどうかを検出します。
+		 *
+		 *		if(Window.GetKeyStatus('a', fk_SwitchStatus.PRESS) == true) {
+		 *			// 押されている場合の処理
+		 *		}
+		 *
+		 *	\param[in]	key
+		 *		状態を取得したいキー文字。大文字や数字、各種記号キーを設定します。
+		 *		スペースキーの状態を取得したい場合は「' '」と入力します。
+		 *
+		 *	\param[in]	status
+		 *		取得したい状態を指定します。
+		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *
+		 *	\return
+		 *		キーが status で指定した状態を満たしていれば true を、
+		 *		そうでなければ false を返します。
+		 *
+		 *	\sa GetSpecialKeyStatus(), Update()
+		 */
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status);
-		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlg);
+
+		//! 特殊キー状態取得関数1
+		/*!
+		 *	特殊キーの入力状態を検出します。
+		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
+		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
+		 *	通常キーの状態取得は GetKeyStatus() を使います。
+		 *
+		 *	以下のコードは、「F1」キーが推されているかどうかを検出します。
+		 *
+		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_SwitchStatus.PRESS, false) == true) {
+		 *			// 押されている場合の処理
+		 *		}
+		 *
+		 *	\param[in]	keyCode
+		 *		状態を取得したいキーに対応した値。
+		 *
+		 *	\param[in]	status
+		 *		取得したい状態を指定します。
+		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *
+		 *	\param[in]	insideFlag
+		 *		true だった場合、
+		 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
+		 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
+		 *
+		 *	\return
+		 *		キーが status で指定した状態を満たしていれば true を、
+		 *		そうでなければ false を返します。
+		 *
+		 *	\note
+		 *		スペースキーの状態取得は、本関数ではなく GetKeyStatus() を用います。
+		 *
+		 *	\sa GetKeyStatus(), Update()
+		 */
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
-								 fk_SwitchStatus status, bool insideFlg);
+								 fk_SwitchStatus status, bool insideFlag);
+		
+		//! 特殊キー状態取得関数2
+		/*!
+		 *	特殊キーの入力状態を検出します。
+		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
+		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
+		 *	通常キーの状態取得は GetKeyStatus() を使います。
+		 *	なお、本関数は GetSpecialKeyStatus(fk_SpecialKey, fk_SwitchStatus, bool) にて
+		 *	第三引数に false を入力した場合と挙動は同一です。
+		 *
+		 *	以下のコードは、「F1」キーが推されているかどうかを検出します。
+		 *
+		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_SwitchStatus.PRESS) == true) {
+		 *			// 押されている場合の処理
+		 *		}
+		 *
+		 *	\param[in]	keyCode
+		 *		状態を取得したいキーに対応した値。
+		 *
+		 *	\param[in]	status
+		 *		取得したい状態を指定します。
+		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *
+		 *	\return
+		 *		キーが status で指定した状態を満たしていれば true を、
+		 *		そうでなければ false を返します。
+		 *
+		 *	\note
+		 *		スペースキーの状態取得は、本関数ではなく GetKeyStatus() を用います。
+		 *
+		 *	\sa GetKeyStatus(), Update()
+		 */
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
 		//@}
 
 		//! \name マウス状態取得関数
 		//@{
-		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlg);
+		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlag);
 		void SetCursorState(bool visible, bool center);
 		bool IsModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
 		bool IsModelPicked(fk_Model^ model, int pixel);
