@@ -582,7 +582,7 @@ namespace FK_CLI
 		 *	'A' や 'X' などとします。
 		 *	入力できない特殊キーには getSpecialKeyStatus() を使います。
 		 *
-		 *	以下のコードは、「A」キーが推されているかどうかを検出します。
+		 *	以下のコードは、「A」キーが押されているかどうかを検出します。
 		 *
 		 *		if(Window.GetKeyStatus('a', fk_SwitchStatus.PRESS, false) == true) {
 		 *			// 押されている場合の処理
@@ -619,7 +619,7 @@ namespace FK_CLI
 		 *	なお、本関数は GetKeyStatus(wchar_t, fk_SwitchStatus, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
-		 *	以下のコードは、「A」キーが推されているかどうかを検出します。
+		 *	以下のコードは、「A」キーが押されているかどうかを検出します。
 		 *
 		 *		if(Window.GetKeyStatus('a', fk_SwitchStatus.PRESS) == true) {
 		 *			// 押されている場合の処理
@@ -648,7 +648,7 @@ namespace FK_CLI
 		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
 		 *	通常キーの状態取得は GetKeyStatus() を使います。
 		 *
-		 *	以下のコードは、「F1」キーが推されているかどうかを検出します。
+		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
 		 *
 		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_SwitchStatus.PRESS, false) == true) {
 		 *			// 押されている場合の処理
@@ -687,7 +687,7 @@ namespace FK_CLI
 		 *	なお、本関数は GetSpecialKeyStatus(fk_SpecialKey, fk_SwitchStatus, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
-		 *	以下のコードは、「F1」キーが推されているかどうかを検出します。
+		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
 		 *
 		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_SwitchStatus.PRESS) == true) {
 		 *			// 押されている場合の処理
@@ -714,11 +714,126 @@ namespace FK_CLI
 
 		//! \name マウス状態取得関数
 		//@{
+
+		//! マウスボタン状態取得関数
+		/*!
+		 *	マウスボタンのクリック状態を検出します。
+		 *	マウスボタンの種類については、 FK_CLI::fk_MouseButton の項目を参照して下さい。
+		 *
+		 *	以下のコードは、マウス左ボタンが押されているかどうかを検出します。
+		 *
+		 *		if(Window.GetMouseStatus(fk_MouseButton.MOUSE1, fk_SwitchStatus.PRESS, false) == true) {
+		 *			// 押されている場合の処理
+		 *		}
+		 *	\param[in]		buttonCode		マウスボタンの種類
+		 *
+		 *	\param[in]	status
+		 *		取得したい状態を指定します。
+		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *
+		 *	\param[in]	insideFlag
+		 *		true だった場合、
+		 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
+		 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
+		 *
+		 *	\return
+		 *		ボタンが status で指定した状態を満たしていれば true を、
+		 *		そうでなければ false を返します。
+		 */
 		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlag);
+		
+		//! マウスカーソル表示制御関数
+		/*!
+		 *	マウスカーソルの表示・非表示と、
+		 *	カーソルを画面の中心に移動するか否かを指定します。
+		 *	初期状態では、マウスカーソルは表示し、中心移動は無効としています。
+		 *
+		 *	\param[in]		visible
+		 *		true の場合、マウスカーソルを表示します。false の場合は消去します。
+		 *
+		 *	\param[in]		center
+		 *		true の場合、マウスカーソルを画面中心に移動します。
+		 *		false の場合は何も行いません。
+		 */
 		void SetCursorState(bool visible, bool center);
+
+
+		//! モデルクリック判定関数1
+		/*!
+		 *	マウスでモデルをクリックしているかどうかを判定します。
+		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
+		 *	(モデル, 誤差を許容するピクセル数, X 座標, Y 座標)
+		 *	の形式で引数を渡します。
+		 *	カーソルがモデルに重なっている場合は true、
+		 *	いない場合は false を返します。
+		 *
+		 *	\param[in]	model	判定対象モデル。
+		 *
+		 *	\param[in]	pixel	誤差許容ピクセル数。
+		 *
+		 *	\param[in]	mouseX
+		 *		判定対象クリック位置のx座標。
+		 *		-1 を指定した場合は、
+		 *		現在のマウスポインタ位置の x 座標が対象となります。
+		 *
+		 *	\param[in]	mouseY
+		 *		判定対象クリック位置のy座標。
+		 *		-1 を指定した場合や省略した場合は、
+		 *		現在のマウスポインタ位置の y 座標が対象となります。
+		 *
+		 *	\return
+		 *		カーソルがモデルに重なっている場合は true、
+		 *		いない場合は false を返します。
+		 */
 		bool IsModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
+
+		//! モデルクリック判定関数2
+		/*!
+		 *	マウスでモデルをクリックしているかどうかを判定します。
+		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
+		 *	現在のカーソル位置を基準に判定します。
+		 *	カーソルがモデルに重なっている場合は true、
+		 *	いない場合は false を返します。
+		 *
+		 *	\param[in]	model	判定対象モデル。
+		 *
+		 *	\param[in]	pixel	誤差許容ピクセル数。
+		 *
+		 *	\return
+		 *		カーソルがモデルに重なっている場合は true、
+		 *		いない場合は false を返します。
+		 */
 		bool IsModelPicked(fk_Model^ model, int pixel);
+
+		//! モデルクリック判定関数3
+		/*!
+		 *	マウスでモデルをクリックしているかどうかを判定します。
+		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
+		 *	現在のカーソル位置を基準に判定します。
+		 *	カーソルがモデルに重なっている場合は true、
+		 *	いない場合は false を返します。
+		 *	本関数は、 IsModelPicked(fk_Model^, int) において
+		 *	第二引数に 1 を指定した場合と同一の挙動となります。
+		 *
+		 *	\param[in]	model	判定対象モデル。
+		 *
+		 *	\return
+		 *		カーソルがモデルに重なっている場合は true、
+		 *		いない場合は false を返します。
+		 */
 		bool IsModelPicked(fk_Model^ model);
+		
+		//! FPS視点的カメラ制御関数
+		/*!
+		 *	FPS 視点のゲーム特有の、マウス移動による視点操作処理を行います。
+		 *
+		 *	\param[in]	camera		カメラモデル。
+		 *	\param[in]	x			横方向の移動に対する回転角度。
+		 *	\param[in]	y			縦方向の移動に対する回転角度。
+		 *	\param[in]	lockSW
+		 *		true の場合、カーソルの中心を固定します。
+		 *		false の場合は固定しません。
+		 */
 		void ProcMouseView(fk_Model^ camera, double x, double y, bool lockSW);
 		//@}
 	};
