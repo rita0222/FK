@@ -627,7 +627,9 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-		if(iconv(argIV, const_cast<iconvpp>(&inBuf),
+		//		if(iconv(argIV, const_cast<iconvpp>(&inBuf),
+		//				 &inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
+		if(iconv(argIV, (char **)(&inBuf),
 				 &inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
 		}
@@ -661,7 +663,7 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-		if(iconv(argIV, const_cast<iconvpp>(&inBuf),
+		if(iconv(argIV, (char **)(&inBuf),
 				 &inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
 		}
