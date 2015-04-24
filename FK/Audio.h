@@ -755,7 +755,7 @@ public:
  *	なお、本クラスは fk_AudioBase クラスの派生クラスであり、
  *	音量やループ再生の制御、サラウンド効果の使用といった機能の利用については
  *	fk_AudioBase のメンバ関数を用いて行います。
-
+ *
  *	\sa fk_AudioBase, fk_AudioWavBuffer, fk_AudioStream
  */
 class fk_AudioOggBuffer : public fk_AudioBase {
@@ -894,7 +894,7 @@ public:
  *	音量やループ再生の制御、サラウンド効果の使用といった機能の利用については
  *	fk_AudioBase のメンバ関数を用いて行います。
  *
- *	\sa fk_AudioBase, fk_AudioWavBuffer, fk_AudioStream
+ *	\sa fk_AudioBase, fk_AudioOggBuffer, fk_AudioStream
  */
 
 class fk_AudioWavBuffer : public fk_AudioOggBuffer {
