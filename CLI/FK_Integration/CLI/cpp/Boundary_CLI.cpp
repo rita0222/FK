@@ -149,16 +149,6 @@ namespace FK_CLI {
 		GetP()->setBLineWidth(argW);
 	}
 	
-	void fk_Boundary::SetAABBSize(double argX, double argY, double argZ)
-	{
-		GetP()->setAABBSize(argX, argY, argZ);
-	}
-
-	void fk_Boundary::SetOBBSize(double argX, double argY, double argZ)
-	{
-		GetP()->setOBBSize(argX, argY, argZ);
-	}
-
 	void fk_Boundary::SetCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)
 	{
 		if(!argS || !argE) return;
