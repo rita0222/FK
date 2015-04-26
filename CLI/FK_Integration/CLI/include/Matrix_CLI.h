@@ -27,11 +27,39 @@ namespace FK_CLI {
 		static operator ::fk_Angle (fk_Angle^);
 
 	public:
-		fk_Angle();
-		fk_Angle(double, double, double);
-		fk_Angle(fk_Angle^);
+#ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Angle(::fk_Angle);
+#endif
+
+		//! コンストラクタ1
+		/*!
+		 *	ヘディング角、ピッチ角、バンク角全て 0 のオイラー角を生成します。
+		 */
+		fk_Angle();
+
+		//! コンストラクタ2
+		/*!
+		 *	引数としてヘディング角、ピッチ角、バンク角を入力します。
+		 *	単位は弧度法(ラジアン)です。
+		 *
+		 *	\param[in]	h	ヘディング角
+		 *	\param[in]	p	ピッチ角
+		 *	\param[in]	b	バンク角
+		 */
+		fk_Angle(double h, double p, double b);
+
+		//! コンストラクタ3
+		/*!
+		 *	引数として別のオイラー角を入力し、その値をコピーします。
+		 *
+		 *	\param[in]	angle	オイラー角インスタンス
+		 */
+		fk_Angle(fk_Angle^ angle);
+
+		//! デストラクタ
 		~fk_Angle();
+
+		//! ファイナライザ
 		!fk_Angle();
 
 		//! ヘディング角

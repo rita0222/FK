@@ -64,15 +64,11 @@ namespace FK_CLI
 		::fk_Boundary * GetP(void);
 
 	public:
-		//! コンストラクタ
+#ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Boundary(bool);
-
-		//! デストラクタ
 		~fk_Boundary();
-
-		//! ファイナライザ
 		!fk_Boundary();
-		
+#endif		
 		//! 境界ボリューム選択プロパティ
 		/*!
 		 *	このプロパティは、

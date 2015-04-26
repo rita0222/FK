@@ -26,7 +26,6 @@ namespace FK_CLI {
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		bool dFlg;
 		::fk_BaseObject *pBase;
-#endif
 		//! コンストラクタ
 		fk_BaseObject(bool);
 
@@ -35,6 +34,7 @@ namespace FK_CLI {
 
 		//! ファイナライザ
 		!fk_BaseObject();
+#endif
 	};
 }
 
