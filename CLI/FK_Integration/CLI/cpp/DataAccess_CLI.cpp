@@ -218,7 +218,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	array<fk_Vertex^>^ fk_DataAccess::GetVertexList(void)
+	array<fk_Vertex^>^ fk_DataAccess::GetVertexArray(void)
 	{
 		list<::fk_Vertex *> vList;
 		GetP()->getVertexList(&vList);
@@ -232,7 +232,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Half^>^ fk_DataAccess::GetHalfList(void)
+	array<fk_Half^>^ fk_DataAccess::GetHalfArray(void)
 	{
 		list<::fk_Half *> hList;
 		GetP()->getHalfList(&hList);
@@ -246,7 +246,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Edge^>^ fk_DataAccess::GetEdgeList(void)
+	array<fk_Edge^>^ fk_DataAccess::GetEdgeArray(void)
 	{
 		list<::fk_Edge *> eList;
 		GetP()->getEdgeList(&eList);
@@ -260,7 +260,7 @@ namespace FK_CLI {
 		return A;
 	}
 
-	array<fk_Loop^>^ fk_DataAccess::GetLoopList(void)
+	array<fk_Loop^>^ fk_DataAccess::GetLoopArray(void)
 	{
 		list<::fk_Loop *> lList;
 		GetP()->getLoopList(&lList);
