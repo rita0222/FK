@@ -539,9 +539,9 @@ namespace FK_CLI
 		 static fk_Material^ HolidaySkyBlue;
 
 		 /*!
-		  *Ir, (0.04, 0.11, 0.07), (0.09, 0.39, 0.18), (0.08, 0.67, 0.1), (14.0)
+		  * (0.04, 0.11, 0.07), (0.09, 0.39, 0.18), (0.08, 0.67, 0.1), (14.0)
 		  */
-		 static fk_Material^ idescentGreen;
+		 static fk_Material^ IridescentGreen;
 
 		 /*!
 		  * (0.36, 0.28, 0.18), (0.56, 0.52, 0.29), (0.72, 0.45, 0.4), (33.0)
@@ -589,9 +589,9 @@ namespace FK_CLI
 		 static fk_Material^ Orange;
 
 		 /*!
-		  *Pa, (0.0, 0.0, 0.0), (0.5, 0.7, 0.7), (0.0, 0.0, 0.0), (0.0)
+		  * (0.0, 0.0, 0.0), (0.5, 0.7, 0.7), (0.0, 0.0, 0.0), (0.0)
 		  */
-		 static fk_Material^ leBlue;
+		 static fk_Material^ PaleBlue;
 
 		 /*!
 		  * (0.32, 0.29, 0.18), (0.64, 0.61, 0.5), (0.4, 0.29, 0.17), (15.0)
@@ -614,6 +614,11 @@ namespace FK_CLI
 		 static fk_Material^ Red;
 
 		 /*!
+		  * (1.0, 1.0, 1.0), (1.0, 1.0, 1.0), (0.0, 0.0, 0.0), (0.0)
+		  */
+		 static fk_Material^ TrueWhite;
+
+		 /*!
 		  * (0.01, 0.03, 0.21), (0.07, 0.12, 0.49), (0.53, 0.52, 0.91), (11.0)
 		  */
 		 static fk_Material^ UltraMarine;
@@ -633,5 +638,6 @@ namespace FK_CLI
 		  */
 		 static fk_Material^ Yellow;
 
-	 };
+
+	};
 }
