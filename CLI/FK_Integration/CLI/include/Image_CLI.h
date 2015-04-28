@@ -39,11 +39,11 @@ namespace FK_CLI
 	};
 
 	public enum class fk_SnapProcMode {
-		GL_FRONT,
-		GL_BACK,
-		WIN32_GDI,
-		D3D_WINDOW,
-		D3D_FULL
+		FK_GL_FRONT,
+		FK_GL_BACK,
+		FK_WIN32_GDI,
+		FK_D3D_WINDOW,
+		FK_D3D_FULL
 	};
 
 	//! 画像サイズを表すクラス
@@ -271,11 +271,8 @@ namespace FK_CLI
 		 *	各画素色値の設定や参照を行います。
 		 *
 		 *		image[100, 100] = new fk_Color(0.3, 0.4, 0.5);
-		 *
-		 *	\param[in]	x	ピクセルの x 座標
-		 *	\param[in]	y	ピクセルの y 座標
 		 */
-		property fk_Color^ default[int x, int y] {
+		property fk_Color^ default[int, int] {
 			fk_Color^ get(int, int);
 			void set(int, int, fk_Color^);
 		}
