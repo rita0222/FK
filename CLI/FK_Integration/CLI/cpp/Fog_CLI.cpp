@@ -134,14 +134,4 @@ namespace FK_CLI {
 		C->Set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
 		return C;
 	}
-
-	void fk_Fog::setFogColor(float argR, float argG, float argB, float argA)
-	{
-		GetP()->setFogColor(argR, argG, argB, argA);
-	}
-									
-	void fk_Fog::setFogColor(double argR, double argG, double argB, double argA)
-	{
-		GetP()->setFogColor(argR, argG, argB, argA);
-	}
 }
