@@ -8,10 +8,11 @@ namespace FK_CLI
 {
 	using namespace System;
 
-	public enum	class fk_Axis {
-		X,
-		Y,
-		Z
+	//! 座標軸を表す列挙型
+	public enum class fk_Axis {
+		X,	//!<	x軸
+		Y,	//!<	x軸
+		Z	//!<	x軸
 	};
 	
 	//! 3次元ベクトルを管理するクラス
@@ -31,16 +32,15 @@ namespace FK_CLI
 	 *	任意次元のベクトルを扱う場合は fk_GenVector を参照して下さい。
 	 *	\sa fk_Matrix, fk_HVector, fk_FVector, fk_GenVector
 	 */
+	 
 	public ref class fk_Vector {
 
-#ifndef FK_DOXYGEN_USER_PROCESS		
 	internal:
 		//::fk_Vector *pVec;
 		double	x_, y_, z_;
 
 		static ::fk_Axis GetAxis(fk_Axis);
 		static operator ::fk_Vector (fk_Vector^);
-#endif
 
 	public:
 
@@ -69,12 +69,12 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Vector(::fk_Vector *);
 		fk_Vector(::fk_Vector);
+#endif
 		
 		// デストラクタ
 		~fk_Vector();
 		// ファイナライザ
 		!fk_Vector();
-#endif
 		
 		//! ベクトルのx成分
 		/*!
@@ -216,10 +216,11 @@ namespace FK_CLI
 		 *		\f$\mathbf{R}\f$ は零ベクトルとなる。
 		 *	- \f$ (\mathbf{P} \times \mathbf{Q}) = -(\mathbf{Q} \times \mathbf{P}) \f$
 		 *		である。
+		 *
 		 *	\note
-		 *	ここで演算子として採用されている「^」は、
-		 *	C++ の仕様上あまり演算子としての優先度が高くありません。
-		 *	そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
+		 *		ここで演算子として採用されている「^」は、
+		 *		あまり演算子としての優先度が高くありません。
+		 *		そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
 		 */
 		static fk_Vector^ operator^(fk_Vector^, fk_Vector^);
 
@@ -282,12 +283,9 @@ namespace FK_CLI
 
 		//@}
 
-		//! \name 同値比較関数
-		//@{
-
 		//! 同値比較関数1
 		/*!
-		 *	二つのベクトルの値が同値かどうかを判定します。
+		 *	2つのベクトルの値が同値かどうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
 		 *	異なるインスタンスで同値かどうかを判定する場合はこのメソッドを利用して下さい。
 		 *
@@ -299,7 +297,7 @@ namespace FK_CLI
 
 		//! 同値比較関数2
 		/*!
-		 *	二つのベクトルの値が同値かどうかを判定します。
+		 *	2つのベクトルの値が同値かどうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
 		 *	異なるインスタンスで同値かどうかを判定する場合はこのメソッドを利用して下さい。
 		 *
@@ -308,11 +306,6 @@ namespace FK_CLI
 		 *	\return		同値であれば true を、そうでなければ false を返します。
 		 */
 		virtual bool Equals(Object^ V) override;
-
-		//@}
-
-		//! \name メンバ関数
-		//@{
 
 		//! 文字列出力関数
 		/*!
@@ -325,6 +318,7 @@ namespace FK_CLI
 		//! 成分設定関数1
 		/*!
 		 *	各成分を設定します。
+		 *
 		 *	\param[in]	x	x成分の値
 		 *	\param[in]	y	y成分の値
 		 *	\param[in]	z	z成分の値
@@ -334,6 +328,7 @@ namespace FK_CLI
 		//! 成分設定関数2
 		/*!
 		 *	各成分を設定します。z 成分には自動的に 0 が代入されます。
+		 *
 		 *	\param[in]	x	x成分の値
 		 *	\param[in]	y	y成分の値
 		 */
@@ -360,6 +355,7 @@ namespace FK_CLI
 		 *	\f]
 		 *
 		 *	平方根演算がない分、 dist() と比べて若干高速です。
+		 *
 		 *	\return ベクトルの長さの平方
 		 */
 		double Dist2();
@@ -399,8 +395,11 @@ namespace FK_CLI
 		 *	\f]
 		 *
 		 *	図による解説は、ユーザーズマニュアルの「ベクトルの射影」項目を参照して下さい。
+		 *
 		 *	\param[in]	Q	射影基準ベクトル
+		 *
 		 *	\return			射影ベクトル
+		 *
 		 *	\sa Perp(), Dist(), Dist2()
 		 */
 		fk_Vector^ Proj(fk_Vector^ Q);
@@ -413,100 +412,369 @@ namespace FK_CLI
 		 *	図による解説は、ユーザーズマニュアルの「ベクトルの射影」項目を参照して下さい。
 		 *
 		 *	\param[in]	Q	射影基準ベクトル
+		 *
 		 *	\return			射影垂直成分ベクトル
 		 *
 		 *	\sa Proj()
 		 */
 		fk_Vector^ Perp(fk_Vector^ Q);
-
-		//@}
 	};
 
+	//! 4次元ベクトルを管理するクラス
+	/*!
+	 *	このクラスは、4次元ベクトルの様々な機能を提供します。
+	 *	成分は double 型によって格納されています。
+	 *	fk_HVector は fk_Vector クラスの派生クラスとなっており、
+	 *	継承した成分である x, y, z については通常の3次元成分と同様です。
+	 *	4つめの成分である w は、多くの場合は同次座標成分を表し、
+	 *	4元正方行列との演算のために存在します。
+	 *
+	 *	\sa fk_Vector, fk_Matrix, fk_FVector, fk_GenVector
+	 *
+	 */
 	public ref class fk_HVector {
 	internal:
 		double x_, y_, z_, w_;
 		static operator ::fk_HVector (fk_HVector^);
 
 	public:
-		// コンストラクタ
-		fk_HVector();
-		fk_HVector(fk_Vector^);
-		fk_HVector(fk_Vector^, double);
-		fk_HVector(fk_HVector^);
+#ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_HVector(::fk_HVector);
+#endif
 
-		// デストラクタ
+		//! コンストラクタ1
+		/*!
+		 *	(0, 0, 0, 1) となる4次元ベクトルを生成します。
+		 */
+		fk_HVector();
+
+		//! コンストラクタ2
+		/*!
+		 *	3次元ベクトルを入力とし、w を 1 とする4次元ベクトルを生成します。
+		 *
+		 *	param[in]	V	3次元ベクトル
+		 */
+		fk_HVector(fk_Vector^ V);
+
+		//! コンストラクタ3
+		/*!
+		 *	3次元ベクトル V と実数 w を入力とし、
+		 *	\f$ (V_x, V_y, V_z, w) \f$ となる4次元ベクトルを生成します。
+		 *
+		 *	\param[in]	V	3次元ベクトル
+		 *	\param[in]	w	同次座標値
+		 */
+		fk_HVector(fk_Vector^ V, double w);
+
+		//! コンストラクタ4
+		/*!
+		 *	引数で与えられた4次元ベクトルの値をコピーし、新たにインスタンスを生成します。
+		 *
+		 *	\param[in]	H	別のインスタンス。
+		 */
+		fk_HVector(fk_HVector^ H);
+
+		//! デストラクタ
 		~fk_HVector();
 
-		// ファイナライザ
+		//! ファイナライザ
 		!fk_HVector();
 
-		// プロパティ一覧
+		//! ベクトルのx成分
+		/*!
+		 *	x成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		V.x = 0.0;
+		 */
 		property double x {
 			double get();
 			void set(double);
 		}
 
+		//! ベクトルのy成分
+		/*!
+		 *	y成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		V.y = 0.0;
+		 */
 		property double y {
 			double get();
 			void set(double);
 		}
 
+		//! ベクトルのz成分
+		/*!
+		 *	z成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		V.z = 0.0;
+		 */
 		property double z {
 			double get();
 			void set(double);
 		}
 
+		//! ベクトルの同次座標成分
+		/*!
+		 *	同次座標成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		V.w = 1.0;
+		 */
 		property double w {
 			double get();
 			void set(double);
 		}
 
+		//! 内積二項演算子
+		/*!
+		 *	4次元ベクトル \f$ \mathbf{P} \f$ と \f$ \mathbf{Q} \f$
+		 *	の内積値(スカラー積)は、以下のように定義されます。
+		 *
+		 *	\f[
+		 *		\mathbf{P}\cdot\mathbf{Q} = P_xQ_x + P_yQ_y + P_zQ_z + P_wQ_w
+		 *	\f]
+		 *
+		 *	これを得るには、以下のように記述します。
+		 *	P, Q はともに fk_HVector 型の変数で、d は double 型の変数です。
+		 *
+		 *		d = P * Q;
+		 *
+		 *	なお、内積は交換法則が成り立ちます。
+		 */
 		static double operator* (fk_HVector^, fk_HVector^);
 
-		// fk_Vectorとの変換
-		static operator fk_HVector^ (fk_Vector^);
-		static operator fk_Vector^ (fk_HVector^);
+		//! fk_Vector 型からの変換演算子
+		/*!
+		 *	以下のようなコードにより、
+		 *	fk_Vector 型の変数 V は fk_HVector 型の変数 H に自動的に変換されます。
+		 *
+		 *		H = V;
+		 *
+		 *	この際、同次座標は 1 となります。
+		 *
+		 *	\param[in]	V	3次元ベクトル
+		 *
+		 *	\return		4次元ベクトル
+		 */
+		static operator fk_HVector^ (fk_Vector^ V);
 
-		//////////////////// 比較演算子		
-		bool Equals(fk_HVector^);
-		virtual bool Equals(Object^) override;
+		//! fk_Vector 型への変換演算子
+		/*!
+		 *	以下のようなコードにより、
+		 *	fk_HVector 型の変数 H は fk_Vector 型の変数 V に自動的に変換されます。
+		 *
+		 *		V = H;
+		 *
+		 *	\param[in]	H	4次元ベクトル
+		 *
+		 *	\return		3次元ベクトル
+		 */
+		static operator fk_Vector^ (fk_HVector^ H);
+
+		//! 同値比較関数1
+		/*!
+		 *	2つのベクトルの値が同値かどうかを判定します。
+		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
+		 *	異なるインスタンスで同値かどうかを判定する場合はこのメソッドを利用して下さい。
+		 *
+		 *	\param[in]	H	同値かどうかを判定するベクトル
+		 *
+		 *	\return		同値であれば true を、そうでなければ false を返します。
+		 */
+		bool Equals(fk_HVector^ H);
+
+		//! 同値比較関数2
+		/*!
+		 *	2つのベクトルの値が同値かどうかを判定します。
+		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
+		 *	異なるインスタンスで同値かどうかを判定する場合はこのメソッドを利用して下さい。
+		 *
+		 *	\param[in]	H	同値かどうかを判定するベクトル
+		 *
+		 *	\return		同値であれば true を、そうでなければ false を返します。
+		 */
+		virtual bool Equals(Object^ H) override;
+
+		//! 文字列出力関数
+		/*!
+		 *	現在のベクトル成分値を文字列として出力します。
+		 *
+		 *	\return		成分値の文字列
+		 */
 		String^ ToString() override;
 
-		void Set(fk_Vector^, double);
-		void Set(double, double, double, double);
-		void Set(double, double, double);
-		void Set(double, double);
-		void Set(fk_Vector^);
+		//! 成分設定関数1
+		/*!
+		 *	各成分を設定します。
+		 *
+		 *	\param[in]	V	(x,y,z)各成分となる3次元ベクトル
+		 *	\param[in]	w	同次座標成分値
+		 */
+		void Set(fk_Vector^ V, double w);
+
+		//! 成分設定関数3
+		/*!
+		 *	各成分を設定します。
+		 *
+		 *	\param[in]	x	x成分の値
+		 *	\param[in]	y	y成分の値
+		 *	\param[in]	z	z成分の値
+		 *	\param[in]	w	同次座標成分の値
+		 */
+		void Set(double x, double y, double z, double w);
+
+		//! 成分設定関数4
+		/*!
+		 *	(x,y,z)各成分を設定します。同次座標は現状を維持します。
+		 *
+		 *	\param[in]	x	x成分の値
+		 *	\param[in]	y	y成分の値
+		 *	\param[in]	z	z成分の値
+		 */
+		void Set(double x, double y, double z);
+
+		//! 成分設定関数5
+		/*!
+		 *	(x,y)各成分を設定します。z成分と同次座標成分は現状を維持します。
+		 *
+		 *	\param[in]	x	x成分の値
+		 *	\param[in]	y	y成分の値
+		 */
+		void Set(double x, double y);
+
+		//! 成分設定関数6
+		/*!
+		 *	(x,y,z)各成分を設定します。同次座標は現状を維持します。
+		 *
+		 *	\param[in]	V	(x,y,z)各成分となる3次元ベクトル
+		 */
+		void Set(fk_Vector^ V);
+
+		//! 3次元ベクトル抽出関数
+		/*!
+		 *	(x,y,z)の成分を持つ3次元ベクトルを取得します。
+		 *
+		 *	\return		3次元ベクトル
+		 */
 		fk_Vector^ GetV(void);
+
+		//! 位置ベクトル設定関数
+		/*!
+		 *	このベクトルを、位置ベクトルとして扱えるようにします。
+		 *	この関数は、同次座標に 1 を設定することと同義です。
+		 */
 		void IsPos(void);
+
+		//! 方向ベクトル設定関数
+		/*!
+		 *	このベクトルを、方向ベクトルとして扱えるようにします。
+		 *	この関数は、同次座標に 0 を設定することと同義です。
+		 */
 		void IsVec(void);
+
+		//! 初期化関数
+		/*!
+		 *	4次元ベクトルを (0, 0, 0, 1) に設定します。
+		 */
 		void Init(void);
 	};
 
+	//! 単精度浮動小数点型3次元ベクトルを管理するクラス
+	/*!
+	 *	このクラスは、3次元ベクトルの各成分を float 型で格納するためのものです。
+	 *	このクラス自体は、ベクトルに必要な様々な演算機能を保持していません。
+	 *	ベクトル演算を使用するには fk_Vector を利用して下さい。
+	 *
+	 *	このクラスの存在意義は、記憶量の削減にあります。
+	 *	3次元形状を扱う場合、3次元ベクトルの記憶量が膨大になることがあります。
+	 *	そのような場合で、精度がそれほど高くなくても差し支えない場合は、
+	 *	double を基本とするデータを float を基本とするデータにすることで、
+	 *	記憶量を半分に削減することができます。
+	 *	fk_FVector は、そのような場合に配列データとして格納しておくことを想定しています。
+	 *
+	 *	\sa fk_Vector, fk_HVector, fk_GenVector
+	 */
 	public ref class fk_FVector {
 	internal:
 		float x_, y_, z_;
 	public:
+
+		//! コンストラクタ1
+		/*!
+		 *	初期値として \f$ (0, 0, 0) \f$ が代入されます。
+		 */
 		fk_FVector();
-		fk_FVector(float, float, float);
-		fk_FVector(fk_FVector^);
+
+		//! コンストラクタ2
+		/*!
+		 *	\param[in]	x	x成分
+		 *	\param[in]	y	y成分
+		 *	\param[in]	z	z成分
+		 */
+		fk_FVector(float x, float y, float z);
+
+		//! コンストラクタ3
+		/*!
+		 *	引数で与えられたベクトルの値をコピーし、新たにインスタンスを生成します。
+		 *
+		 *	\param[in]	F	別のインスタンス。
+		 */
+		fk_FVector(fk_FVector^ F);
+
+		//! デストラクタ
 		~fk_FVector();
+
+		//! ファイナライザ
 		!fk_FVector();
 
-		static operator fk_FVector ^ (fk_Vector^);
+		//! fk_Vector 型からの変換演算子
+		/*!
+		 *	以下のようなコードにより、
+		 *	fk_Vector 型の変数 V は fk_FVector 型の変数 F に自動的に変換されます。
+		 *
+		 *		F = V;
+		 *
+		 *	\param[in]	V	3次元ベクトル
+		 *
+		 *	\return		fk_FVector 型ベクトル
+		 */
+		static operator fk_FVector ^ (fk_Vector^ V);
+		
+		//! 文字列出力関数
+		/*!
+		 *	現在のベクトル成分値を文字列として出力します。
+		 *
+		 *	\return		成分値の文字列
+		 */
 		String^ ToString() override;
 
+		//! ベクトルのx成分
+		/*!
+		 *	x成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		F.x = 0.0;
+		 */
   		property float x {
 			float get();
 			void set(float);
 		}
 
+		//! ベクトルのy成分
+		/*!
+		 *	y成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		F.y = 0.0;
+		 */
 		property float y {
 			float get();
 			void set(float);
 		}
 
+		//! ベクトルのz成分
+		/*!
+		 *	z成分を表すプロパティです。以下のようなコードで利用できます。
+		 *
+		 *		F.z = 0.0;
+		 */
 		property float z {
 			float get();
 			void set(float);
