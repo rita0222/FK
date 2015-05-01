@@ -131,7 +131,7 @@ void fk_DataBase::AllClear(void)
 
 void fk_DataBase::CloneData(fk_DataBase *argDB)
 {
-	if(argDB == this) return;
+	if(argDB == this || argDB == nullptr) return;
 
 	ResizeData(argDB);
 

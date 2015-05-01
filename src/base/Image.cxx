@@ -391,7 +391,7 @@ void fk_Image::newImage(int argW, int argH, bool argInitFlg)
 
 void fk_Image::copyImage(const fk_Image *argImage)
 {
-	if(argImage == this) return;
+	if(argImage == this || argImage == nullptr) return;
 
 	init();
 

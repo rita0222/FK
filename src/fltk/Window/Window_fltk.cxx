@@ -83,8 +83,8 @@
 
 using namespace std;
 
-Fl_Window *			fk_Window::putWin = NULL;
-Fl_Multi_Browser *	fk_Window::browser = NULL;
+Fl_Window *			fk_Window::putWin = nullptr;
+Fl_Multi_Browser *	fk_Window::browser = nullptr;
 fk_PutStrMode		fk_Window::putStrMode = FK_PUTSTR_BROWSER;
 ofstream			fk_Window::putStrOFS;
 int					fk_Window::winNum = 0;
@@ -116,8 +116,8 @@ fk_Window::~fk_Window()
 	winNum--;
 	if(winNum == 0) {
 		delete putWin;
-		putWin = NULL;
-		browser = NULL;
+		putWin = nullptr;
+		browser = nullptr;
 	}
 
 	return;
@@ -130,13 +130,14 @@ void fk_Window::clearTextureMemory(void)
 }
 
 unsigned long fk_Window::getUsingTextureMemory(void)
-{
+{	
 	return engine.GetUsingTextureMemory();
 }
 
 void fk_Window::SetPickViewPort(int &argX, int &argY)
 {
-	int		mouseX, mouseY;
+	int		mouseX = 0;
+	int		mouseY = 0;
 
 	while(getMouseStatus(FK_MOUSE1) == false &&
 		  getMouseStatus(FK_MOUSE2) == false &&
@@ -245,7 +246,7 @@ void fk_Window::setOGLStereoMode(bool argFlg)
 	if(argFlg == true) {
 		GLboolean	val = GL_FALSE;
 		Fl_Window	*pWin = dynamic_cast<Fl_Window *>(GetInhParentWindow());
-		if(pWin == NULL) return;
+		if(pWin == nullptr) return;
 
 		pWin->show();
 		mode(mode() | FL_STEREO);
@@ -315,9 +316,9 @@ bool fk_Window::SnapImageGDI(fk_Image *argImage)
 	int				iWidth = this->w(), iHeight = this->h();
 	BITMAPINFO		bi;
 	RECT			rect;
-	unsigned char	*buf = NULL;
+	unsigned char	*buf = nullptr;
 
-	if(argImage == NULL) return false;
+	if(argImage == nullptr) return false;
 
 	ZeroMemory(&bi, sizeof(bi));
 
@@ -329,13 +330,15 @@ bool fk_Window::SnapImageGDI(fk_Image *argImage)
 
 	GetWindowRect(fl_xid(this), &rect);
 
-	HDC hdcScreen = GetDC(NULL);
+	HDC hdcScreen = GetDC(nullptr);
 	HDC _hdcShot = CreateCompatibleDC(hdcScreen);
-	HBITMAP _bmpShot = CreateDIBSection(NULL, &bi, DIB_RGB_COLORS,
-										(void **)(&buf), NULL, 0);
+	HBITMAP _bmpShot = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS,
+										(void **)(&buf), nullptr, 0);
+	if(_bmpShot == 0) return false;
+	if(buf == nullptr) return false;
 	HBITMAP _bmpOld = (HBITMAP)SelectObject(_hdcShot, _bmpShot);
 	BitBlt(_hdcShot, 0, 0, iWidth, iHeight, hdcScreen, rect.left, rect.top, SRCCOPY);
-	ReleaseDC(NULL, hdcScreen);
+	ReleaseDC(nullptr, hdcScreen);
 
 	argImage->newImage(iWidth, iHeight);
 
@@ -423,7 +426,7 @@ void fk_Window::PutBrowser(const string &argStr)
 	string					outStr, tmpStr;
 	string::size_type		index, old;
 
-	if(putWin == NULL) {
+	if(putWin == nullptr) {
 		putWin = new Fl_Window(320, 520, "FK PutStr Window");
 		browser = new Fl_Multi_Browser(10, 10, 300, 500);
 		putWin->size_range(320, 520);
@@ -457,7 +460,7 @@ void fk_Window::PutBrowser(const string &argStr)
 
 void fk_Window::clearBrowser(void)
 {
-	if(putWin != NULL) browser->clear();
+	if(putWin != nullptr) browser->clear();
 	return;
 }
 

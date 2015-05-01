@@ -162,7 +162,7 @@ fk_Vector fk_BezCurve::pos(double t)
 		break;
 
 	  default:
-		break;
+		return vec;
 	}	
 
 	for(_st i = 0; i <= static_cast<_st>(deg); i++) {
@@ -197,7 +197,7 @@ fk_Vector fk_BezCurve::diff(double t)
 		break;
 
 	  default:
-		break;
+		return vec;
 	}	
 
 	for(_st i = 0; i < static_cast<_st>(deg); i++) {

@@ -1135,6 +1135,11 @@ bool fk_Image::readJPG(const string fileName)
 
 	// イメージを保持するメモリ領域の確保と初期化
 	JSAMPARRAY img = static_cast<JSAMPARRAY>(malloc(sizeof(JSAMPROW) * hgt));
+	if(img == nullptr) {
+		fclose(infile);
+		return false;
+	}
+
 	for(unsigned int i = 0; i < hgt; i++) {
 		img[i] = static_cast<JSAMPROW>(calloc(sizeof(JSAMPLE), 3 * wid));
 	}
@@ -1210,6 +1215,11 @@ bool fk_Image::writeJPG(const string fileName, int quality)
 
 	// イメージを保持するメモリ領域の確保と初期化
 	img = static_cast<JSAMPARRAY>(malloc(sizeof(JSAMPROW) * hgt));
+	if(img == nullptr) {
+		fclose(outfile);	
+		return false;
+	}
+
 	for(int j = 0; j < static_cast<int>(hgt); j++) {
 		img[j] = (JSAMPROW)malloc(sizeof(JSAMPLE) * 3 * wid);
 		for(int i = 0; i < static_cast<int>(wid); i++) {

@@ -436,27 +436,15 @@ bool fk_FileOutput::PutAdminDataFile(fk_DataFormatMode argMode,
 									 ofstream &argOFS, fk_IDAdmin *argAdmin,
 									 const string &argTag)
 {
-	_st						eraseIDSize;
-	int						*listArray = nullptr;
-	int						i;
-	list<int>::iterator		listP;
+	vector<int>		listArray;
 
-	eraseIDSize = argAdmin->eraseIDSet->size();
-	if(eraseIDSize > 0) {
-		listArray = new int [eraseIDSize];
-	}
-
-	i = 0;
-	for(listP = argAdmin->eraseIDSet->begin();
-		listP != argAdmin->eraseIDSet->end(); ++listP) {
-		listArray[i] = *listP;
-		i++;
+	for(auto listP : *(argAdmin->eraseIDSet)) {
+		listArray.push_back(listP);
 	}
 
 	PutAdminHeader(argMode, argOFS, argAdmin, argTag);
-	PutAdminEraseList(argMode, argOFS, listArray, int(eraseIDSize));
-
-	delete [] listArray;
+	PutAdminEraseList(argMode, argOFS, &(listArray[0]),
+					  int(argAdmin->eraseIDSet->size()));
 
 	return true;
 }
