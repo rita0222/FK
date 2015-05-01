@@ -1140,8 +1140,14 @@ bool fk_Image::readJPG(const string fileName)
 		return false;
 	}
 
-	for(unsigned int i = 0; i < hgt; i++) {
+	for(int i = 0; i < int(hgt); i++) {
 		img[i] = static_cast<JSAMPROW>(calloc(sizeof(JSAMPLE), 3 * wid));
+		if(img[i] == nullptr) {
+			for(int j = i-1; j >= 0; j--) free(img[j]);
+			free(img);
+			fclose(infile);
+			return false;
+		}
 	}
 
 	// 全イメージデータを取得	
@@ -1222,6 +1228,13 @@ bool fk_Image::writeJPG(const string fileName, int quality)
 
 	for(int j = 0; j < static_cast<int>(hgt); j++) {
 		img[j] = (JSAMPROW)malloc(sizeof(JSAMPLE) * 3 * wid);
+		if(img[j] == nullptr) {
+			for(int k = j-1; k >= 0; j--) free(img[k]);
+			free(img);
+			fclose(outfile);
+			return false;
+		}
+		
 		for(int i = 0; i < static_cast<int>(wid); i++) {
 			offset = static_cast<_st>(GetOffset(i, j));
 			img[j][i * 3 + 0] = imageBuf[offset + 0];

@@ -546,7 +546,8 @@ HRESULT fk_Input::UpdateJoy()
 		m_JoyStciDevice[i]->GetDeviceData(sizeof(DIDEVICEOBJECTDATA),m_DeviceObject,&dwItems, 0);
 		m_JoyStciDevice[i]->GetDeviceState(sizeof(DIJOYSTATE), &dijs);
 	
-	
+
+		if(m_JoyButton == nullptr) continue;
 		//-------------------------------------------------------------------------
 		//以降ボタンの更新
 		//-------------------------------------------------------------------------
