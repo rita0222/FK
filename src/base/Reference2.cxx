@@ -125,7 +125,8 @@ vector<fk_Edge *> fk_ReferenceL2::getAllEOnV(fk_Vertex *argV) const
 	retVec.push_back(startH->getParentEdge());	  
 
 	countH = getMateHOnH(startH)->getNextHalf();
-
+	if(countH == NULL) return retVec;
+	
 	while(countH != startH) {
 		retVec.push_back(countH->getParentEdge());
 		countH = getMateHOnH(countH)->getNextHalf();
@@ -171,6 +172,7 @@ vector<fk_Loop *> fk_ReferenceL2::getAllLOnV(fk_Vertex *argV) const
 
 	if(tmpL != nullptr) retVec.push_back(tmpL);
 	countH = getMateHOnH(startH)->getNextHalf();
+	if(countH == nullptr) return retVec;
 
 	while(countH != startH) {
 		tmpL = countH->getParentLoop();
