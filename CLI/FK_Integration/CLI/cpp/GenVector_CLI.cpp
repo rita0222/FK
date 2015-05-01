@@ -65,7 +65,7 @@ namespace FK_CLI {
 
 	bool fk_GenVector::Equals(fk_GenVector^ argGV)
 	{
-		if(!argGV) false;
+		if(!argGV) return false;
 		return (*argGV->pGVec == *pGVec);
 	}
 
