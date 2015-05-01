@@ -638,7 +638,7 @@ fk_SwitchStatus fk_AppWindow::getPadButtonStatus(int padID, int buttonID)
 fk_Vector fk_AppWindow::getPadDirection(int padID, int axisID)
 {
 	fk_Vector	retVec;
-	if(padID > inputCount || axisID > 3) return retVec;
+	if(padID > inputCount || axisID >= 3) return retVec;
 
 	retVec.x = nowInput[padID].x[axisID] * 0.001;
 	retVec.y = nowInput[padID].y[axisID] * 0.001;
