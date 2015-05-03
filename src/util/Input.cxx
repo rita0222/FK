@@ -758,7 +758,7 @@ BOOL CALLBACK fk_Input::EnumJoysticksCallback(const DIDEVICEINSTANCE* lpddi, LPV
 bool fk_Input::GetMouseButton(DWORD key)
 {
 	if(key >= MOUSE_BUTTON_MAX) {
-		return nullptr;
+		return false;
 	}
 	return m_Button[key];
 }
@@ -766,7 +766,7 @@ bool fk_Input::GetMouseButton(DWORD key)
 bool fk_Input::GetLastMouseButton(DWORD key)
 {
 	if(key >= MOUSE_BUTTON_MAX) {
-		return nullptr;
+		return false;
 	}
 	return m_LastButton[key];
 }
