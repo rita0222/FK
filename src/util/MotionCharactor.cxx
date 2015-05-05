@@ -163,7 +163,7 @@ bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 								argOrg->jointModel[i]->getScale(fk_Z));
 	}
 	if(parentConnect) {
-		for(parentIte ite = parentTable.begin(); ite != parentTable.end(); ite++) {
+		for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
 			jointModel[st(ite->first)]->setParent(jointModel[st(ite->second)], false);
 		}
 		for(st i = 0; i < st(objNum); i++) {
@@ -920,7 +920,7 @@ void fk_Performer::jointToPoser(void)
 	if(parentConnect) return;
 	if(objNum == 0) return;
 
-	for(parentIte ite = parentTable.begin(); ite != parentTable.end(); ite++) {
+	for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
 		jointModel[st(ite->first)]->setParent(jointModel[st(ite->second)], true);
 	}
 

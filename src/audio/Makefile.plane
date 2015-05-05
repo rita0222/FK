@@ -51,6 +51,22 @@ LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 MVLIB		= :
 
+LINK		= \
+			-lFK2_util \
+			-lFK2_audio \
+			-lFK2_fltkWin \
+			-lFK2_base \
+			-lFK2_fltkErr \
+			$(SYSLIBS)
+
+LINK_G		= \
+			-lFK2_util_g \
+			-lFK2_audio_g \
+			-lFK2_fltkWin_g \
+			-lFK2_base_g \
+			-lFK2_fltkErr_g \
+			$(SYSLIBS)
+
 all:
 	@echo "	FreeBSD:		make fb"
 	@echo "	FreeBSD Debug:		make fb-g"
@@ -68,7 +84,6 @@ fb:
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
 	"DEPENDDIRS = \
 		-I$(LOCAL)/include" \
-	"GRAMOPT = " \
 	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
 	"SYSLIBS = -limdkcv \
 			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
@@ -85,7 +100,6 @@ fb-g:
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
 	"DEPENDDIRS = -I$(LOCAL)/include" \
-	"GRAMOPT = " \
 	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
 	"SYSLIBS = -limdkcv \
 			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
@@ -138,11 +152,13 @@ mac:
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -limdkcv -lfltk_gl \
-		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
+	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+		-lvorbisfile -lvorbis -logg \
+		-lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework AGL -framework OpenGL \
-		-framework Cocoa \
+		-framework Cocoa -framework OpenAL \
 		-framework ApplicationServices \
+		-framework OpenCL \
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \

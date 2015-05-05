@@ -84,7 +84,7 @@ template<class TYPE> class fk_Array {
  public:
 
 	fk_Array(void) {
-		array = (TYPE *)NULL;
+		array = nullptr;
 		bufClear();
 	}
 
@@ -94,7 +94,7 @@ template<class TYPE> class fk_Array {
 
 	void bufClear(void) {
 		delete [] array;
-		array = (TYPE *)NULL;
+		array = nullptr;
 		bufSize = 0;
 		IDAdmin.Init(0);
 	}

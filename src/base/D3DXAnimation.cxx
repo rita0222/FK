@@ -81,7 +81,7 @@ using namespace std;
 
 fk_D3DXSkinMap::fk_D3DXSkinMap(void)
 {
-	frame = NULL;
+	frame = nullptr;
 	weight = -1.0;
 	return;
 }
@@ -126,7 +126,7 @@ fk_D3DXAnimation::fk_D3DXAnimation(void)
 	animData.clear();
 	mapData.clear();
 
-	tree = NULL;
+	tree = nullptr;
 	return;
 }
 
@@ -410,13 +410,13 @@ void fk_D3DXAnimation::MakeAnimationData(void)
 	_st						i;
 	fk_D3DXFrame			*frame;
 
-	if(tree == NULL) return;
+	if(tree == nullptr) return;
 
-	for(treeData = tree->foreachData(NULL); treeData != NULL;
+	for(treeData = tree->foreachData(nullptr); treeData != nullptr;
 		treeData = tree->foreachData(treeData)) {
 
 		propList = (fk_D3DXPropertyList *)treeData->getObject();
-		if(propList == NULL) continue;
+		if(propList == nullptr) continue;
 
 		if(propList->GetProperty() == "Frame") {
 			frame = MakeNewFrame(treeData);
@@ -460,13 +460,13 @@ fk_D3DXFrame * fk_D3DXAnimation::MakeNewFrame(fk_TreeData *argData)
 	frame->SetInitMatrix(prop->GetFrameMatrix());
 
 	parentData = argData->getParent();
-	if(parentData == NULL) return frame;
+	if(parentData == nullptr) return frame;
 
 	parentProp = (fk_D3DXPropertyList *)(parentData->getObject());
-	if(parentProp == NULL) return frame;
+	if(parentProp == nullptr) return frame;
 
 	parentFrame = parentProp->GetFrame();
-	if(parentFrame == NULL) return frame;
+	if(parentFrame == nullptr) return frame;
 
 	frame->SetParentFrame(parentFrame);
 	return frame;
@@ -484,7 +484,7 @@ void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 
 	for(i = 0; i < frameData.size(); i++) {
 		tmpSkinData = frameData[i]->GetSkin();
-		if(tmpSkinData == NULL) continue;
+		if(tmpSkinData == nullptr) continue;
 
 		for(j = 0; j < static_cast<_st>(tmpSkinData->GetNum()); j++) {
 			vID = argShape->GetVMap(tmpSkinData->GetVID(static_cast<int>(j)));
@@ -515,9 +515,9 @@ void fk_D3DXAnimation::MakeDummySkinWeights(fk_TreeData *argData, int argVNum)
 	fk_Matrix				offsetMatrix;
 
 	prop = static_cast<fk_D3DXPropertyList *>(argData->getObject());
-	if(prop == NULL) return;
+	if(prop == nullptr) return;
 	frame = prop->GetFrame();
-	if(frame == NULL) return;
+	if(frame == nullptr) return;
 
 	curSkin = new fk_D3DXSkinData();
 	skinData.push_back(curSkin);
@@ -579,10 +579,10 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHMotion *argBVH)
 	double					timeD;
 	int						fTime;
 
-	if(argBVH == NULL) return;
+	if(argBVH == nullptr) return;
 
 	for(i = 0; i < frameData.size(); i++) {
-		frameData.at(i)->SetAnimation(NULL);
+		frameData.at(i)->SetAnimation(nullptr);
 	}
 	for(i = 0; i < animData.size(); i++) {
 		delete animData.at(i);

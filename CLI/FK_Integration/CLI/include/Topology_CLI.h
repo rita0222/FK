@@ -19,53 +19,39 @@ namespace FK_CLI
 
 	public ref class fk_Topology : fk_Attribute {
 	internal:
-		::fk_Topology * GetP(void)
-		{
-			return (::fk_Topology *)(pBase);
-		}
+		::fk_Topology * GetP(void);
 
 	public:
-		fk_Topology::fk_Topology(bool argNewFlg) : fk_Attribute(false)
-		{
+		fk_Topology(bool argNewFlg);
+		~fk_Topology();
+		!fk_Topology();
+
+		property int ID {
+			int get();
 		}
 
-		fk_Topology::~fk_Topology()
-		{
-			this->!fk_Topology();
+		property fk_TopologyType Type {
+			fk_TopologyType get();
 		}
-
-		fk_Topology::!fk_Topology()
-		{
-		}
-
-		int getID(void);
-		fk_TopologyType getType(void);
 	};
 
 	public ref class fk_TopologyMaterial : fk_Topology {
 	internal:
-		::fk_TopologyMaterial * GetP(void)
-		{
-			return (::fk_TopologyMaterial *)(pBase);
-		}
+		::fk_TopologyMaterial * GetP(void);
 
 	public:
-		fk_TopologyMaterial::fk_TopologyMaterial(bool argNewFlg) : fk_Topology(false)
-		{
+		fk_TopologyMaterial(bool argNewFlg);
+		~fk_TopologyMaterial();
+		!fk_TopologyMaterial();
+
+		property fk_MaterialMode MaterialMode {
+			fk_MaterialMode get();
+			void set(fk_MaterialMode);
 		}
 
-		fk_TopologyMaterial::~fk_TopologyMaterial()
-		{
-			this->!fk_TopologyMaterial();
+		property int MaterialID {
+			int get();
+			void set(int);
 		}
-
-		fk_TopologyMaterial::!fk_TopologyMaterial()
-		{
-		}
-
-		void setElemMaterialMode(fk_MaterialMode mode);
-		void setElemMaterialID(int ID);
-		fk_MaterialMode getElemMaterialMode(void);
-		int getElemMaterialID(void);
 	};		
 }

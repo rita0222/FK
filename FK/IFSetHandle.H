@@ -93,8 +93,8 @@ class fk_IFSetHandle {
 	friend class			fk_Modify;
 
  private:
-	fk_DataBase *					DB;
-	std::map<fk_Edge *, int>		edgeCount;
+	fk_DataBase *				DB;
+	std::map<fk_Edge *, int>	edgeCount;
 
 	bool		DB_Check(void);
 	fk_Edge *	CheckExistEdge(int, int, fk_IFS_EdgeSet *);
@@ -109,7 +109,7 @@ class fk_IFSetHandle {
 	int			GetEdgeCountNum(fk_Edge *);
 
  public:
-	fk_IFSetHandle(fk_DataBase * = NULL);
+	fk_IFSetHandle(fk_DataBase * = nullptr);
 	virtual ~fk_IFSetHandle() {};
 
 	void			Init(void);

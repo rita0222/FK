@@ -27,7 +27,7 @@ int main(int, char *[])
 	window.setSize(800, 600);
 	window.setBGColor(0.6, 0.7, 0.8);
 	window.open();
-	window.showGuide(FKUT_GRID_XZ);
+	window.showGuide(FK_GRID_XZ);
 
 	volume = 0.5;
 	endFlg = false;
@@ -67,7 +67,6 @@ void bgmPlay(double &argVolume, bool &argFlg)
 		bgm.setGain(argVolume);
 		bgm.play();
 		this_thread::sleep_for(ns);
-		fk_Window::printf("v = %f", argVolume);
 	}
 	return;
 }

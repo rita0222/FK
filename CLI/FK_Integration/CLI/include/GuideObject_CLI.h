@@ -16,55 +16,38 @@ namespace FK_CLI {
 		GRID_XZ  = 0x0008,
 		GRID_XY  = 0x0010,
 		GRID_YZ  = 0x0020,
-		ALL_GUIDE = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z |
-					FK_GRID_XZ | FK_GRID_XY | FK_GRID_YZ
+		ALL_GUIDE = AXIS_X | AXIS_Y | AXIS_Z | GRID_XZ | GRID_XY | GRID_YZ
 	};
 		
 	public ref class fk_GuideObject {
 	internal:
 		bool dFlg;
 		::fk_GuideObject *pGuide;
-
-		::fk_GuideObject * GetP(void)
-		{
-			return pGuide;
-		}
+		::fk_GuideObject * GetP(void);
 		
 	public:
-		fk_GuideObject::fk_GuideObject()
-		{
-			pGuide = new ::fk_GuideObject();
-			dFlg = true;
+		fk_GuideObject();
+		fk_GuideObject(bool argNewFlg);
+		~fk_GuideObject();
+		!fk_GuideObject();
+
+		property double AxisWidth {
+			void set(double);
 		}
 
-		fk_GuideObject::fk_GuideObject(bool argNewFlg)
-		{
-			if(argNewFlg == true) pGuide = new ::fk_GuideObject();
-			dFlg = argNewFlg;
+		property double GridWidth {
+			void set(double);
 		}
 
-		fk_GuideObject::~fk_GuideObject()
-		{
-			if(pGuide == nullptr) return;
-			if(dFlg == true) delete pGuide;
-			pGuide = nullptr;
+		property double Scale {
+			void set(double);
 		}
 
-		fk_GuideObject::!fk_GuideObject()
-		{
-			if(pGuide == nullptr) return;
-			if(dFlg == true) {
-				pGuide->SetFinalizeMode();
-				delete pGuide;
-			}
-			pGuide = nullptr;
+		property int Num {
+			void set(int);
 		}
 
-		void setAxisWidth(double width);
-		void setGridWidth(double width);
-		void setScale(double scale);
-		void setNum(int num);
-		void entryScene(fk_Scene^ scene, fk_GuideMode mode);
-		void removeScene(fk_Scene^ scene);
+		void EntryScene(fk_Scene^ scene, fk_GuideMode mode);
+		void RemoveScene(fk_Scene^ scene);
 	};
 }

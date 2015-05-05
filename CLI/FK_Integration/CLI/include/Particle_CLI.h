@@ -10,45 +10,48 @@ namespace FK_CLI
 {
 	public ref class fk_Particle : fk_Attribute {
 	internal:
-		::fk_Particle * GetP(void)
-		{
-			return (::fk_Particle *)(pBase);
-		}
+		::fk_Particle * GetP(void);
 
 	public:
-		fk_Particle::fk_Particle(bool argNewFlg) : fk_Attribute(false)
-		{
+		fk_Particle(bool argNewFlg);
+		fk_Particle();
+		~fk_Particle();
+		!fk_Particle();
+
+		property int ID {
+			int get();
 		}
 
-		fk_Particle::fk_Particle() : fk_Attribute(false)
-		{
+		property unsigned int Count {
+			unsigned int get();
 		}
 
-		fk_Particle::~fk_Particle()
-		{
-			this->!fk_Particle();
+		property fk_Vector^ Position {
+			fk_Vector^ get();
+			void set(fk_Vector^);
 		}
 
-		fk_Particle::!fk_Particle()
-		{
+		property fk_Vector^ Velocity {
+			fk_Vector^ get();
+			void set(fk_Vector^);
 		}
 
-		void init(void);
-		int getID(void);
-		unsigned int getCount(void);
-		fk_Vector^ getPosition(void);
-		void setPosition(fk_Vector^ pos);
-		void setPosition(double x, double y, double z);
-		fk_Vector^ getVelocity(void);
-		void setVelocity(fk_Vector^ vel);
-		void setVelocity(double x, double y, double z);
-		fk_Vector^ getAccel(void);
-		void setAccel(fk_Vector^ acc);
-		void setAccel(double x, double y, double z);
-		int getColorID(void);
-		void setColorID(int ID);
-		bool getDrawMode(void);
-		void setDrawMode(bool mode);
-		void handle(void);
+		property fk_Vector^ Accel {
+			fk_Vector^ get();
+			void set(fk_Vector^);
+		}
+
+		property int ColorID {
+			int get();
+			void set(int);
+		}
+
+		property bool DrawMode {
+			bool get();
+			void set(bool);
+		}
+		
+		void Init(void);
+		void Handle(void);
 	};
 }

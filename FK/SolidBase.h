@@ -104,7 +104,7 @@ class fk_SolidBase : public fk_Modify, public fk_ParserData {
 
 	bool		MakeMesh(std::vector<fk_Vector> *,
 						 std::vector< std::vector<int> > *,
-						 std::vector<int> * = NULL,
+						 std::vector<int> * = nullptr,
 						 bool = true);
 
 	void		Init(void);

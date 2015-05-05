@@ -417,7 +417,7 @@ public:
 	 *
 	 *	\return
 	 *		デバイス状況が格納された fk_InputInfo 型のポインタ。
-	 *		引数で無効なデバイス番号が指定された場合は NULL を返します。
+	 *		引数で無効なデバイス番号が指定された場合は nullptr を返します。
 	 *
 	 *	\note
 	 *		setButtonSwap() や setAxisToButton() によってボタンや軸を入れ替えていた場合、

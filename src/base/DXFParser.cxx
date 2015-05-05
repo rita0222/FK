@@ -90,7 +90,7 @@ bool fk_DXFParser::ReadDXFFile(string argFileName, bool argSolidFlg)
 	vector<fk_Vector>		vecSet;
 	vector< vector<int> >	IFSet;
 
-	if(meshData == NULL) return false;
+	if(meshData == nullptr) return false;
 
 	if(ifs.fail()) return false;
 	
@@ -110,7 +110,7 @@ bool fk_DXFParser::ReadDXFFile(string argFileName, bool argSolidFlg)
 
 	meshData->Init();
 
-	return meshData->MakeMesh(&vecSet, &IFSet, NULL, argSolidFlg);
+	return meshData->MakeMesh(&vecSet, &IFSet, nullptr, argSolidFlg);
 }
 
 bool fk_DXFParser::CheckDXFFile(ifstream &argIFS)

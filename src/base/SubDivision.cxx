@@ -14,7 +14,7 @@ fk_SubDivision::fk_SubDivision()
 
 fk_SubDivision::~fk_SubDivision()
 {
-	return;
+	deleteState();
 }
 
 // 分割回数を指定すると、その分だけ分割する
@@ -29,58 +29,52 @@ void fk_SubDivision::calcCatmull(int count, fk_Modify *solid)
 void fk_SubDivision::createState(fk_Modify *s)
 {
 	uint vNum, eNum, fNum;
-	fk_Vector *vPos, *ePos, *fPos;
 
 	vNum = this->_vNum = static_cast<uint>(s->getVNum());
 	eNum = this->_eNum = static_cast<uint>(s->getENum());
 	fNum = this->_fNum = static_cast<uint>(s->getLNum());
 
-	vPos = this->_vPos = new fk_Vector[vNum];
-	ePos = this->_ePos = new fk_Vector[eNum];
-	fPos = this->_fPos = new fk_Vector[fNum];
+	_vPos.resize(vNum);
+	_ePos.resize(eNum);
+	_fPos.resize(fNum);
 
-	fk_Vertex **verts;
-	fk_Edge **edges;
-	fk_Loop **faces;
-
-	verts = this->_verts = new fk_Vertex *[vNum];
-	edges = this->_edges = new fk_Edge *[eNum];
-	faces = this->_faces = new fk_Loop *[fNum];
-
-	this->_half = new fk_Half *[fNum];
+	_verts.resize(vNum);
+	_edges.resize(eNum);
+	_faces.resize(fNum);
+	_half.resize(fNum);
 
 	uint i;
-	fk_Loop *l = s->getNextL(NULL);
+	fk_Loop *l = s->getNextL(nullptr);
 	i = 0;
-	while(l != NULL)
+	while(l != nullptr)
 	{
-		faces[i] = l;
+		_faces[i] = l;
 
-		fPos[i] = this->calcVertexAverage(s->getAllVOnL(l));
+		_fPos[i] = this->calcVertexAverage(s->getAllVOnL(l));
 
 		l = s->getNextL(l);
 		i++;
 	}
 
-	fk_Vertex *v = s->getNextV(NULL);
+	fk_Vertex *v = s->getNextV(nullptr);
 	i = 0;
-	while(v != NULL)
+	while(v != nullptr)
 	{
-		verts[i] = v;
+		_verts[i] = v;
 
-		vPos[i] = this->calcSourceVertexPosition(s, v);
+		_vPos[i] = this->calcSourceVertexPosition(s, v);
 
 		v = s->getNextV(v);
 		i++;
 	}
 
-	fk_Edge *e = s->getNextE(NULL);
+	fk_Edge *e = s->getNextE(nullptr);
 	i = 0;
-	while(e != NULL)
+	while(e != nullptr)
 	{
-		edges[i] = e;
+		_edges[i] = e;
 
-		ePos[i] = this->calcEdgeVertexPosition(s, e);
+		_ePos[i] = this->calcEdgeVertexPosition(s, e);
 
 		e = s->getNextE(e);
 		i++;
@@ -91,25 +85,14 @@ void fk_SubDivision::createState(fk_Modify *s)
 
 void fk_SubDivision::deleteState(void)
 {
-	delete [] this->_vPos;
-	delete [] this->_ePos;
-	delete [] this->_fPos;
+	_vPos.clear();
+	_ePos.clear();
+	_fPos.clear();
 
-	delete [] this->_verts;
-	delete [] this->_edges;
-	delete [] this->_faces;
-
-	delete [] this->_half;
-
-	this->_vPos = 0;
-	this->_ePos = 0;
-	this->_fPos = 0;
-
-	this->_verts = 0;
-	this->_edges = 0;
-	this->_faces = 0;
-
-	this->_half = 0;
+	_verts.clear();
+	_edges.clear();
+	_faces.clear();
+	_half.clear();
 	return;
 }
 
@@ -119,14 +102,8 @@ void fk_SubDivision::Catmull_Clark(fk_Modify *s)
 {
 	this->createState(s);
 
-	uint size = this->_vNum;
-	fk_Vertex **v = this->_verts;
-	fk_Vector *vPos = this->_vPos;
-	for(uint i=0; i<size; ++i)
-		s->moveVertex(v[i], vPos[i]);
-
+	for(uint i = 0; i < _vNum; ++i) s->moveVertex(_verts[i], _vPos[i]);
 	this->division(s);
-
 	this->deleteState();
 
 	return;
@@ -136,30 +113,31 @@ void fk_SubDivision::division(fk_Modify *s)
 {
 	//uint eNum = static_cast<uint>(s->getENum());
 	//uint fNum = static_cast<uint>(s->getLNum());
-	fk_Vector *ePos = this->_ePos;
-	fk_Vector *fPos = this->_fPos;
-	fk_Edge **edges = this->_edges;
+	//fk_Vector *ePos = this->_ePos;
+	//fk_Vector *fPos = this->_fPos;
+	//fk_Edge **edges = this->_edges;
 	uint size = this->_eNum;
-	fk_Half **h = this->_half;
-	fk_Loop *l, **faces = this->_faces;
+	//fk_Half **h = this->_half;
+	fk_Loop *l;
+	//**faces = this->_faces;
 
-	for(uint i=0; i<size; ++i) s->moveVertex(s->separateEdge(edges[i]), ePos[i]);
+	for(uint i = 0; i < size; ++i) s->moveVertex(s->separateEdge(_edges[i]), _ePos[i]);
 
 	size = this->_fNum;
 
-	for(uint i=0; i<size; ++i)
-		h[i] = this->findStarthalf(s, faces[i]);
+	for(uint i = 0; i < size; ++i)
+		_half[i] = this->findStarthalf(s, _faces[i]);
 
-	for(uint i=0; i<size; ++i)
+	for(uint i = 0; i < size; ++i)
 	{
-		l = faces[i];
+		l = _faces[i];
 		switch(l->getVNum())
 		{
 			case 6:
-				s->moveVertex(this->divideTriangle(s, h[i]), fPos[i]);
+				s->moveVertex(this->divideTriangle(s, _half[i]), _fPos[i]);
 				break;
 			case 8:
-				s->moveVertex(this->divideQuad(s, h[i]), fPos[i]);
+				s->moveVertex(this->divideQuad(s, _half[i]), _fPos[i]);
 				break;
 		}
 	}
@@ -251,9 +229,9 @@ fk_Vector fk_SubDivision::calcEdgeVertexPosition(fk_Modify *s, fk_Edge *e)
 	l2 = e->getRightHalf()->getParentLoop();
 
 	fk_Vector f1, f2;
-	if(l1 != NULL)
+	if(l1 != nullptr)
 		f1 = this->calcVertexAverage(s->getAllVOnL(l1));
-	if(l2 != NULL)
+	if(l2 != nullptr)
 		f2 = this->calcVertexAverage(s->getAllVOnL(l2));
 
 	v1 = e->getLeftHalf()->getVertex();

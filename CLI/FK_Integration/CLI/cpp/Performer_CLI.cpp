@@ -5,48 +5,87 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	bool fk_Performer::cloneCharactor(fk_Performer^ argP)
+	::fk_Performer * fk_Performer::GetP(void)
 	{
-		if(!argP) return false;
-		return GetP()->cloneCharactor(argP->GetP());
+		return pMotion;
+		baseModel = GetBaseModel();
 	}
 
-	bool fk_Performer::loadObjectData(String^ argFileName)
+	fk_Performer::fk_Performer()
 	{
-		if(!argFileName) return false;
-		return GetP()->loadObjectData(marshal_as<string>(argFileName));
+		pMotion = new ::fk_Performer();
 	}
 
-	bool fk_Performer::loadJointData(String^ argFileName)
+	fk_Performer::fk_Performer(bool argNewFlg)
 	{
-		if(!argFileName) return false;
-		return GetP()->loadJointData(marshal_as<string>(argFileName));
+		if(argNewFlg == true) pMotion = new ::fk_Performer();
+		baseModel = GetBaseModel();
 	}
 
-	bool fk_Performer::loadMotionData(String^ argFileName)
+	fk_Performer::~fk_Performer()
 	{
-		if(!argFileName) return false;
-		return GetP()->loadMotionData(marshal_as<string>(argFileName));
+		if(pMotion == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pMotion = nullptr;
 	}
 
-	void fk_Performer::entryScene(fk_Scene^ argScene)
+	fk_Performer::!fk_Performer()
+	{
+		if(pMotion == nullptr) return;
+		if(dFlg == true) {
+			GetP()->SetFinalizeMode();
+			delete GetP();
+		}
+		pMotion = nullptr;
+	}
+
+	int fk_Performer::ObjectNum::get(void)
+	{
+		return GetP()->getObjectNum();
+	}
+
+	int fk_Performer::LoopCount::get(void)
+	{
+		return GetP()->getLoopCount();
+	}
+
+	void fk_Performer::Scene::set(fk_Scene^ argScene)
 	{
 		if(!argScene) return;
 		GetP()->entryScene(argScene->GetP());
 	}
 
-	void fk_Performer::removeScene(fk_Scene^ argScene)
+	bool fk_Performer::CloneCharactor(fk_Performer^ argP)
+	{
+		if(!argP) return false;
+		return GetP()->cloneCharactor(argP->GetP());
+	}
+
+	bool fk_Performer::LoadObjectData(String^ argFileName)
+	{
+		if(!argFileName) return false;
+		return GetP()->loadObjectData(marshal_as<string>(argFileName));
+	}
+
+	bool fk_Performer::LoadJointData(String^ argFileName)
+	{
+		if(!argFileName) return false;
+		return GetP()->loadJointData(marshal_as<string>(argFileName));
+	}
+
+	bool fk_Performer::LoadMotionData(String^ argFileName)
+	{
+		if(!argFileName) return false;
+		return GetP()->loadMotionData(marshal_as<string>(argFileName));
+	}
+
+	void fk_Performer::RemoveScene(fk_Scene^ argScene)
 	{
 		if(!argScene) return;
 		GetP()->removeScene(argScene->GetP());
 	}
 
-	int fk_Performer::getObjectNum(void)
-	{
-		return GetP()->getObjectNum();
-	}
-
-	fk_Model^ fk_Performer::getBaseModel(void)
+	fk_Model^ fk_Performer::GetBaseModel(void)
 	{
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = GetP()->getBaseModel();
@@ -54,7 +93,7 @@ namespace FK_CLI {
 		return M;
 	}
 
-	fk_Model^ fk_Performer::getObjectModel(int argID)
+	fk_Model^ fk_Performer::GetObjectModel(int argID)
 	{
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = GetP()->getObjectModel(argID);
@@ -62,7 +101,7 @@ namespace FK_CLI {
 		return M;
 	}
 
-	fk_Model^ fk_Performer::getJointModel(int argID)
+	fk_Model^ fk_Performer::GetJointModel(int argID)
 	{
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = GetP()->getJointModel(argID);
@@ -70,38 +109,33 @@ namespace FK_CLI {
 		return M;
 
 	}
-	int fk_Performer::getNowFrame(int argID)
+	int fk_Performer::GetNowFrame(int argID)
 	{
 		return GetP()->getNowFrame(argID);
 	}
 
-	int fk_Performer::getTotalFrame(int argID)
+	int fk_Performer::GetTotalFrame(int argID)
 	{
 		return GetP()->getTotalFrame(argID);
 	}
 
-	bool fk_Performer::playMotion(int argID)
+	bool fk_Performer::PlayMotion(int argID)
 	{
 		return GetP()->playMotion(argID);
 	}
 
-	void fk_Performer::stillMotion(int argMotionID, int argFrameID)
+	void fk_Performer::StillMotion(int argMotionID, int argFrameID)
 	{
 		GetP()->stillMotion(argMotionID, argFrameID);
 	}
 
-	void fk_Performer::setNowFrame(int argMotionID, int argFrameID)
+	void fk_Performer::SetNowFrame(int argMotionID, int argFrameID)
 	{
 		GetP()->setNowFrame(argMotionID, argFrameID);
 	}
 
-	bool fk_Performer::isMotionFinished(int argID)
+	bool fk_Performer::IsMotionFinished(int argID)
 	{
 		return GetP()->isMotionFinished(argID);
-	}
-
-	int fk_Performer::getLoopCount(void)
-	{
-		return GetP()->getLoopCount();
 	}
 }

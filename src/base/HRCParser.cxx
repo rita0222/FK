@@ -89,7 +89,7 @@ bool fk_HRCParser::ReadHRCFile(string argFileName)
 	vector<fk_Vector>		VData;
 	vector< vector<int> >	LIndex;
 
-	if(meshData == NULL) return false;
+	if(meshData == nullptr) return false;
 
 	if(ifs.fail()) return false;
 	

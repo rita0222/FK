@@ -2,167 +2,178 @@
 
 namespace FK_CLI {
 
-	void fk_Boundary::setBMode(fk_BoundaryMode argMode)
+	::fk_Boundary * fk_Boundary::GetP(void)
 	{
-		switch(argMode) {
-			case FK_CLI::fk_BoundaryMode::SPHERE:
-				GetP()->setBMode(FK_B_SPHERE);
-				break;
-
-			case FK_CLI::fk_BoundaryMode::AABB:
-				GetP()->setBMode(FK_B_AABB);
-				break;
-
-			case FK_CLI::fk_BoundaryMode::OBB:
-				GetP()->setBMode(FK_B_OBB);
-				break;
-
-			case FK_CLI::fk_BoundaryMode::CAPSULE:
-				GetP()->setBMode(FK_B_CAPSULE);
-				break;
-
-			case FK_CLI::fk_BoundaryMode::NONE:
-				GetP()->setBMode(FK_B_NONE);
-				break;
-
-			default:
-				break;
-		}
+		return (::fk_Boundary *)(pBase);
 	}
 
-	fk_BoundaryMode fk_Boundary::getBMode(void)
+	fk_Boundary::fk_Boundary(bool argNewFlg) : fk_MatrixAdmin(false)
+	{
+	}
+
+	fk_Boundary::~fk_Boundary()
+	{
+		this->!fk_Boundary();
+	}
+
+	fk_Boundary::!fk_Boundary()
+	{
+	}
+		
+	fk_BoundaryMode fk_Boundary::BMode::get()
 	{
 		switch(GetP()->getBMode()) {
-			case FK_B_SPHERE:
-				return FK_CLI::fk_BoundaryMode::SPHERE;
+		  case FK_B_SPHERE:
+			return FK_CLI::fk_BoundaryMode::SPHERE;
 
-			case FK_B_AABB:
-				return FK_CLI::fk_BoundaryMode::AABB;
+		  case FK_B_AABB:
+			return FK_CLI::fk_BoundaryMode::AABB;
 
-			case FK_B_OBB:
-				return FK_CLI::fk_BoundaryMode::OBB;
+		  case FK_B_OBB:
+			return FK_CLI::fk_BoundaryMode::OBB;
 
-			case FK_B_CAPSULE:
-				return FK_CLI::fk_BoundaryMode::CAPSULE;
+		  case FK_B_CAPSULE:
+			return FK_CLI::fk_BoundaryMode::CAPSULE;
 
-			default:
-				break;
+		  default:
+			break;
 		}
 		return FK_CLI::fk_BoundaryMode::NONE;
 	}
 
-	void fk_Boundary::setSphere(double argR)
+	void fk_Boundary::BMode::set(fk_BoundaryMode argMode)
 	{
-		GetP()->setSphere(argR);
+		switch(argMode) {
+		  case FK_CLI::fk_BoundaryMode::SPHERE:
+			GetP()->setBMode(FK_B_SPHERE);
+			break;
+
+		  case FK_CLI::fk_BoundaryMode::AABB:
+			GetP()->setBMode(FK_B_AABB);
+			break;
+
+		  case FK_CLI::fk_BoundaryMode::OBB:
+			GetP()->setBMode(FK_B_OBB);
+			break;
+
+		  case FK_CLI::fk_BoundaryMode::CAPSULE:
+			GetP()->setBMode(FK_B_CAPSULE);
+			break;
+
+		  case FK_CLI::fk_BoundaryMode::NONE:
+			GetP()->setBMode(FK_B_NONE);
+			break;
+
+		  default:
+			break;
+		}
 	}
 
-	double fk_Boundary::getSphere(void)
+	double fk_Boundary::SphereRadius::get()
 	{
 		return GetP()->getSphere();
 	}
 
-	void fk_Boundary::setAABBSize(double argX, double argY, double argZ)
+	void fk_Boundary::SphereRadius::set(double argRad)
 	{
-		GetP()->setAABBSize(argX, argY, argZ);
+		GetP()->setSphere(argRad);
 	}
 
-	void fk_Boundary::setAABBSize(fk_Vector^ argSize)
-	{
-		GetP()->setAABBSize(*argSize->pVec);
-	}
 
-	fk_Vector^ fk_Boundary::getAABBSize(void)
+
+	fk_Vector^ fk_Boundary::AABB::get()
 	{
 		return gcnew fk_Vector(GetP()->getAABBSize());
 	}
 
-	void fk_Boundary::setOBBSize(double argX, double argY, double argZ)
+	void fk_Boundary::AABB::set(fk_Vector^ argSize)
 	{
-		GetP()->setOBBSize(argX, argY, argZ);
+		if(!argSize) return;
+		GetP()->setAABBSize(argSize);
 	}
 
-	void fk_Boundary::setOBBSize(fk_Vector^ argSize)
-	{
-		GetP()->setOBBSize(*argSize->pVec);
-	}
-
-	fk_Vector^ fk_Boundary::getOBBSize(void)
+	fk_Vector^ fk_Boundary::OBB::get()
 	{
 		return gcnew fk_Vector(GetP()->getOBBSize());
 	}
 
-	void fk_Boundary::setCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)
+	void fk_Boundary::OBB::set(fk_Vector^ argSize)
 	{
-		if(!argS || !argE) return;
-		GetP()->setCapsule(*argS->pVec, *argE->pVec, argR);
+		if(!argSize) return;
+		GetP()->setOBBSize(argSize);
 	}
 
-	double fk_Boundary::getCapsuleRadius(void)
-	{
-		return GetP()->getCapsuleRadius();
-	}
-
-	double fk_Boundary::getCapsuleLength(void)
-	{
-		return GetP()->getCapsuleLength();
-	}
-
-	fk_Vector^ fk_Boundary::getCapsuleStartPos(void)
-	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getCapsuleStartPos();
-		return V;
-	}
-
-	fk_Vector^ fk_Boundary::getCapsuleEndPos(void)
-	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getCapsuleEndPos();
-		return V;
-	}
-
-	void fk_Boundary::setBDrawToggle(bool argMode)
-	{
-		GetP()->setBDrawToggle(argMode);
-	}
-
-	bool fk_Boundary::getBDrawToggle(void)
+	bool fk_Boundary::BDraw::get()
 	{
 		return GetP()->getBDrawToggle();
 	}
 
-	void fk_Boundary::setBLineColor(fk_Color^ argC)
+	void fk_Boundary::BDraw::set(bool argMode)
 	{
-		if(!argC) return;
-		GetP()->setBLineColor(*argC->pCol);
+		GetP()->setBDrawToggle(argMode);
 	}
 
-	fk_Color^ fk_Boundary::getBLineColor(void)
+	fk_Color^ fk_Boundary::BLineColor::get()
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = *GetP()->getBLineColor();
 		return C;
 	}
 
-	void fk_Boundary::setBIntLineColor(fk_Color^ argC)
+	void fk_Boundary::BLineColor::set(fk_Color^ argC)
 	{
-		GetP()->setBIntLineColor(*argC->pCol);
+		if(!argC) return;
+		GetP()->setBLineColor(*argC->pCol);
 	}
 
-	fk_Color^ fk_Boundary::getBIntLineColor(void)
+	fk_Color^ fk_Boundary::BIntLineColor::get()
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = *GetP()->getBIntLineColor();
 		return C;
 	}
 
-	void fk_Boundary::setBLineWidth(double argWidth)
+	void fk_Boundary::BIntLineColor::set(fk_Color^ argC)
 	{
-		GetP()->setBLineWidth(argWidth);
+		if(!argC) return;
+		GetP()->setBIntLineColor(*argC->pCol);
 	}
 
-	double fk_Boundary::getBLineWidth(void)
+	double fk_Boundary::BLineWidth::get()
 	{
 		return GetP()->getBLineWidth();
+	}
+
+	void fk_Boundary::BLineWidth::set(double argW)
+	{
+		GetP()->setBLineWidth(argW);
+	}
+	
+	void fk_Boundary::SetCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)
+	{
+		if(!argS || !argE) return;
+		GetP()->setCapsule(argS, argE, argR);
+	}
+
+	double fk_Boundary::GetCapsuleRadius(void)
+	{
+		return GetP()->getCapsuleRadius();
+	}
+
+	double fk_Boundary::GetCapsuleLength(void)
+	{
+		return GetP()->getCapsuleLength();
+	}
+
+	fk_Vector^ fk_Boundary::GetCapsuleStartPos(void)
+	{
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getCapsuleStartPos());
+		return V;
+	}
+
+	fk_Vector^ fk_Boundary::GetCapsuleEndPos(void)
+	{
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getCapsuleEndPos());
+		return V;
 	}
 }

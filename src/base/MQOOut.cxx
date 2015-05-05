@@ -87,9 +87,9 @@ typedef list<fk_Loop *>::iterator	loopIte;
 
 bool fk_MQOOut::Convert(void)
 {
-	if(solid != NULL) {
+	if(solid != nullptr) {
 		return Convert_Solid();
-	} else if(ifs != NULL) {
+	} else if(ifs != nullptr) {
 		return Convert_IFS();
 	}
 	return false;
@@ -114,8 +114,8 @@ bool fk_MQOOut::Convert_Solid(void)
 	MakeVertexIDMap_Solid();
 	fBuf.clear();
 
-	for(curL = solid->getNextL(NULL);
-		curL != NULL;
+	for(curL = solid->getNextL(nullptr);
+		curL != nullptr;
 		curL = solid->getNextL(curL)) {
 
 		if(mBuf.empty() == false) {
@@ -193,7 +193,7 @@ void fk_MQOOut::MakeVertexIDMap_Solid(void)
 	stringstream	ss;
 	vBuf.clear();
 	vertIDMap.clear();
-	for(v = solid->getNextV(NULL); v != NULL; v = solid->getNextV(v)) {
+	for(v = solid->getNextV(nullptr); v != nullptr; v = solid->getNextV(v)) {
 		vertIDMap[v] = id;
 		p = v->GetPositionP();
 		ss.clear();
@@ -347,8 +347,8 @@ void fk_MQOOut::Init(void)
 fk_MQOOut::fk_MQOOut(void)
 {
 	Init();
-	SetSolid(NULL);
-	SetIndexFaceSet(NULL);
+	SetSolid(nullptr);
+	SetIndexFaceSet(nullptr);
 
 	return;
 }
@@ -377,14 +377,14 @@ fk_MQOOut::~fk_MQOOut(void)
 void fk_MQOOut::SetSolid(fk_Solid *argSolid)
 {
 	solid = argSolid;
-	ifs = NULL;
+	ifs = nullptr;
 	return;
 }
 
 void fk_MQOOut::SetIndexFaceSet(fk_IndexFaceSet *argIFS)
 {
 	ifs = argIFS;
-	solid = NULL;
+	solid = nullptr;
 	return;
 }
 

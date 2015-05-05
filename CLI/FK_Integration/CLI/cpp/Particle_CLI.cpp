@@ -4,90 +4,97 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	void fk_Particle::init(void)
+	::fk_Particle * fk_Particle::GetP(void)
 	{
-		GetP()->init();
+		return (::fk_Particle *)(pBase);
 	}
 
-	int fk_Particle::getID(void)
+	fk_Particle::fk_Particle(bool argNewFlg) : fk_Attribute(false)
+	{
+	}
+
+	fk_Particle::fk_Particle() : fk_Attribute(false)
+	{
+	}
+
+	fk_Particle::~fk_Particle()
+	{
+		this->!fk_Particle();
+	}
+
+	fk_Particle::!fk_Particle()
+	{
+	}
+
+	int fk_Particle::ID::get(void)
 	{
 		return GetP()->getID();
 	}
 
-	unsigned int fk_Particle::getCount(void)
+	unsigned int fk_Particle::Count::get(void)
 	{
 		return GetP()->getCount();
 	}
 
-	fk_Vector^ fk_Particle::getPosition(void)
+	fk_Vector^ fk_Particle::Position::get(void)
 	{
 		return gcnew fk_Vector(GetP()->getPosition());
 	}
 
-	void fk_Particle::setPosition(fk_Vector^ argPos)
+	void fk_Particle::Position::set(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setPosition(*argPos->pVec);
+		GetP()->setPosition(argPos);
 	}
 
-	void fk_Particle::setPosition(double x, double y, double z)
-	{
-		GetP()->setPosition(x, y, z);
-	}
-
-	fk_Vector^ fk_Particle::getVelocity(void)
+	fk_Vector^ fk_Particle::Velocity::get(void)
 	{
 		return gcnew fk_Vector(GetP()->getVelocity());
 	}
 
-	void fk_Particle::setVelocity(fk_Vector^ argVel)
+	void fk_Particle::Velocity::set(fk_Vector^ argVel)
 	{
 		if(!argVel) return;
-		GetP()->setVelocity(*argVel->pVec);
+		GetP()->setVelocity(argVel);
 	}
 
-	void fk_Particle::setVelocity(double argX, double argY, double argZ)
-	{
-		GetP()->setVelocity(argX, argY, argZ);
-	}
-
-	fk_Vector^ fk_Particle::getAccel(void)
+	fk_Vector^ fk_Particle::Accel::get(void)
 	{
 		return gcnew fk_Vector(GetP()->getAccel());
 	}
 
-	void fk_Particle::setAccel(fk_Vector^ argAcc)
+	void fk_Particle::Accel::set(fk_Vector^ argAcc)
 	{
 		if(!argAcc) return;
-		GetP()->setAccel(*argAcc->pVec);
+		GetP()->setAccel(argAcc);
 	}
 
-	void fk_Particle::setAccel(double argX, double argY, double argZ)
-	{
-		GetP()->setAccel(argX, argY, argZ);
-	}
-
-	int fk_Particle::getColorID(void)
+	int fk_Particle::ColorID::get(void)
 	{
 		return GetP()->getColorID();
 	}
 
-	void fk_Particle::setColorID(int argID)
+	void fk_Particle::ColorID::set(int argID)
 	{
 		GetP()->setColorID(argID);
 	}
 
-	bool fk_Particle::getDrawMode(void)
+	bool fk_Particle::DrawMode::get(void)
 	{
 		return GetP()->getDrawMode();
 	}
 									  
-	void fk_Particle::setDrawMode(bool argMode)
+	void fk_Particle::DrawMode::set(bool argMode)
 	{
 		GetP()->setDrawMode(argMode);
 	}
 
-	void fk_Particle::handle(void)
+	void fk_Particle::Init(void)
+	{
+		GetP()->init();
+	}
+
+	void fk_Particle::Handle(void)
 	{
 		GetP()->handle();
 	}

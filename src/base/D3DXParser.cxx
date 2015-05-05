@@ -82,11 +82,11 @@ using namespace std;
 
 fk_D3DXParser::fk_D3DXParser(void)
 {
-	ifsTexture = NULL;
+	ifsTexture = nullptr;
 	tree = new fk_Tree;
 	shape = new fk_D3DXShapeParser;
 	tree->clear("_D3DXParser_root");
-	anim = NULL;
+	anim = nullptr;
 
 	return;
 }
@@ -188,7 +188,7 @@ bool fk_D3DXParser::CheckMeshProperty(fk_TreeData *argData,
 	fk_TreeData				*tmpData;
 
 	list = static_cast<fk_D3DXPropertyList *>(argData->getObject());
-	if(list == NULL) return false;
+	if(list == nullptr) return false;
 
 	prop = list->GetProperty();
 	StringToLower(&prop);
@@ -197,9 +197,9 @@ bool fk_D3DXParser::CheckMeshProperty(fk_TreeData *argData,
 
 	if(argObjName.size() == 0) return true;
 
-	for(tmpData = argData; tmpData != NULL; tmpData = tmpData->getParent()) {
+	for(tmpData = argData; tmpData != nullptr; tmpData = tmpData->getParent()) {
 		list = static_cast<fk_D3DXPropertyList *>(tmpData->getObject());
-		if(list == NULL) continue;
+		if(list == nullptr) continue;
 		if(list->GetData() == argObjName) return true;
 	}
 	return false;
@@ -212,7 +212,7 @@ bool fk_D3DXParser::CheckProperty(fk_TreeData *argData,
 	string					prop, tmpName;
 
 	list = static_cast<fk_D3DXPropertyList *>(argData->getObject());
-	if(list == NULL) return false;
+	if(list == nullptr) return false;
 
 	prop = list->GetProperty();
 	StringToLower(&prop);
@@ -230,9 +230,9 @@ bool fk_D3DXParser::ReadFrameMatrix(fk_TreeData *argData, ifstream &argIFS)
 	fk_TreeData			*parent = argData->getParent();
 	fk_D3DXPropertyList	*prop;
 
-	if(parent == NULL) return false;
+	if(parent == nullptr) return false;
 	prop = static_cast<fk_D3DXPropertyList *>(parent->getObject());
-	if(prop == NULL) return false;
+	if(prop == nullptr) return false;
 
 	word.clear();
 	lineList.clear();
@@ -270,12 +270,12 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 
 	data = tree->getRoot();
 	readFlg = meshModeFlg = skinWeightsFlg = false;
-	meshTreeData = animSetTreeData = NULL;
+	meshTreeData = animSetTreeData = nullptr;
 
 	while(getline(ifs, line)) {
 		line += "\n";
 		if(CheckOneLineProperty(&line) == true) {
-			if(*argAnimFlg == true && anim != NULL) {
+			if(*argAnimFlg == true && anim != nullptr) {
 				anim->SetAnimationName(&line);
 			}
 			continue;
@@ -314,7 +314,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 						return false;
 					}
 				} else if(CheckProperty(data, "SkinWeights") == true) {
-					if(anim != NULL) {
+					if(anim != nullptr) {
 						if(anim->ReadSkinData(ifs) == false) {
 							ifs.close();
 							fk_PutError("fk_D3DXParser", "ReadData", 5);
@@ -327,10 +327,10 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 				*argAnimFlg = true;
 				animSetTreeData = data;
 			} else if(*argAnimFlg == true) {
-				if(CheckProperty(data, "Animation") == true && anim != NULL) {
+				if(CheckProperty(data, "Animation") == true && anim != nullptr) {
 					anim->MakeNewAnimation();
 				} else if(CheckProperty(data, "AnimationKey") == true &&
-						  anim != NULL) {
+						  anim != nullptr) {
 					if(anim->ReadAnimationKey(ifs) == false) {
 						ifs.close();
 						fk_PutError("fk_D3DXParser", "ReadData", 6);
@@ -348,7 +348,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 			}
 
 			data = data->getParent();
-			if(data == NULL) {
+			if(data == nullptr) {
 				ifs.close();
 				fk_PutError("fk_D3DXParser", "ReadData", 7);
 				return false;
@@ -364,7 +364,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 		return false;
 	}
 
-	if(anim != NULL) {
+	if(anim != nullptr) {
 		anim->MakeAnimationData();
 	}
 
@@ -380,15 +380,15 @@ bool fk_D3DXParser::MakeData(int argMateID, bool argSolidFlg)
 {
 	shape->OptimizeData(argMateID);
 
-	if(meshData != NULL) {
+	if(meshData != nullptr) {
 		if(shape->MakeMesh(meshData, argSolidFlg) == false) return false;
 	}
 
-	if(ifsTexture != NULL) {
+	if(ifsTexture != nullptr) {
 		shape->SetIFSTexCoord(ifsTexture);
 	}
 	
-	if(anim != NULL) {
+	if(anim != nullptr) {
 		anim->MakeSkinMap(shape);
 	}
 

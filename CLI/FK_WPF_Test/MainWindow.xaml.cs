@@ -39,23 +39,23 @@ namespace FK_WPF_Test
             scene = new fk_Scene();
             viewport.Scene = scene;
 
-            fk_Material.initDefault();
+            fk_Material.InitDefault();
 
             // 光源生成
             var light = new fk_Light();
             var lightModel = new fk_Model();
-            lightModel.setShape(light);
-            lightModel.setMaterial(fk_Material.TrueWhite);
-            lightModel.glMoveTo(0.0, 0.0, 0.0);
-            lightModel.glFocus(-1.0, -1.0, -1.0);
-            scene.entryModel(lightModel);
+            lightModel.Shape = light;
+            lightModel.Material = fk_Material.TrueWhite;
+            lightModel.GlMoveTo(0.0, 0.0, 0.0);
+            lightModel.GlFocus(-1.0, -1.0, -1.0);
+            scene.EntryModel(lightModel);
 
             // 直方体モデル生成
             var blockModel = new fk_Model();
             var block = new fk_Block(50.0, 70.0, 40.0);
-            blockModel.setShape(block);
-            blockModel.setMaterial(fk_Material.Yellow);
-            scene.entryModel(blockModel);
+            blockModel.Shape = block;
+            blockModel.Material = fk_Material.Yellow;
+            scene.EntryModel(blockModel);
 
             // 線分モデル生成
             fk_Vector[] pos = new fk_Vector[4];
@@ -68,36 +68,36 @@ namespace FK_WPF_Test
             for (int i = 0; i < 2; i++)
             {
                 line[i] = new fk_Line();
-                line[i].pushLine(pos[2 * i], pos[2 * i + 1]);
+                line[i].PushLine(pos[2 * i], pos[2 * i + 1]);
                 lineModel[i] = new fk_Model();
-                lineModel[i].setShape(line[i]);
-                lineModel[i].setParent(blockModel);
-                scene.entryModel(lineModel[i]);
+                lineModel[i].Shape = line[i];
+                lineModel[i].Parent = blockModel;
+                scene.EntryModel(lineModel[i]);
             }
 
-            lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
-            lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
+            lineModel[0].LineColor = new fk_Color(1.0, 0.0, 0.0);
+            lineModel[1].LineColor = new fk_Color(0.0, 1.0, 0.0);
 
             // カメラモデル生成
             var camera = new fk_Model();
-            camera.glMoveTo(0.0, 0.0, 2000.0);
-            camera.glFocus(0.0, 0.0, 0.0);
-            camera.glUpvec(0.0, 1.0, 0.0);
-            scene.entryCamera(camera);
+            camera.GlMoveTo(0.0, 0.0, 2000.0);
+            camera.GlFocus(0.0, 0.0, 0.0);
+            camera.GlUpvec(0.0, 1.0, 0.0);
+            scene.Camera = camera;
 
-            scene.setBGColor(0.5f, 0.5f, 0.5f);
+            scene.BGColor = new fk_Color(0.5, 0.5, 0.5);
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
             viewport.PreDraw += (s, ee) =>
             {
-                camera.glTranslate(0.0, 0.0, -1.0);
-                blockModel.glRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
-                var cPos = camera.getPosition();
-                if (cPos.z < -FK.EPS) camera.glFocus(origin);
-                if (count >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
+                camera.GlTranslate(0.0, 0.0, -1.0);
+                blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
+                var cPos = camera.Position;
+                if (cPos.z < -FK.EPS) camera.GlFocus(origin);
+                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
                 ++count;
-                this.TextBox1.Text = camera.getPosition().ToString();
+                this.TextBox1.Text = camera.Position.ToString();
             };
 
             Button1.Click += (s, ee) =>

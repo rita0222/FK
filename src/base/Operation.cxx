@@ -103,7 +103,7 @@ void fk_Operation::UndefVNorm(fk_Vertex *argV)
 	vector<fk_Vertex *>		VertexArray;
 
 
-	if(argV == NULL) return;
+	if(argV == nullptr) return;
 	LoopArray = getAllLOnV(argV);
 
 	for(i = 0; i < LoopArray.size(); i++) {
@@ -126,16 +126,16 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 	unsigned int		i;
 
 
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 
-	if(nullFlg == true && argH->getParentLoop() != NULL) {
+	if(nullFlg == true && argH->getParentLoop() != nullptr) {
 		fk_PutError("fk_Operation", "SetLoop", 1,
 					"Loop Definition Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	loopH = argH->getNextHalf();
-	if(nullFlg == false && argL != NULL) {
+	if(nullFlg == false && argL != nullptr) {
 		newL = argL;
 	} else {
 		newL = (argLID == FK_UNDEFINED) ?
@@ -146,14 +146,14 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 	while(loopH != argH) {
 		mateH = getMateHOnH(loopH);
 		if(nullFlg == true &&
-		   loopH->getParentLoop() != NULL) {
+		   loopH->getParentLoop() != nullptr) {
 			for(i = 0; i < halfStack.size(); i++) {
 				halfStack[i]->SetParentLoop(loopStack[i]);
 			}
 			DeleteLoopObj(newL);
 			fk_PutError("fk_Operation", "SetLoop", 2,
 						"Loop Definition Error.");
-			return NULL;
+			return nullptr;
 		}
 
 		if(mateH->getParentLoop() == newL) {
@@ -163,7 +163,7 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 			if(nullFlg == true) {
 				DeleteLoopObj(newL);
 			}
-			return NULL;
+			return nullptr;
 		}
 
 		loopStack.push_back(loopH->getParentLoop());
@@ -179,7 +179,7 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 			}
 			fk_PutError("fk_Operation", "SetLoop", 3,
 						"Half Edge Connection Error.");
-			return NULL;
+			return nullptr;
 		}
 		loopH = nextH;
 	}
@@ -201,7 +201,7 @@ fk_Vertex * fk_Operation::MakeVertex(const fk_Vector argPos, int argID)
 {
 	fk_Vertex *newV;
 
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 
 	if(argID == FK_UNDEFINED) {
 		newV = GetNewVertexObj();
@@ -209,7 +209,7 @@ fk_Vertex * fk_Operation::MakeVertex(const fk_Vector argPos, int argID)
 		newV = GetNewVertexObj(argID);
 	}
 
-	if(newV == NULL) return NULL;
+	if(newV == nullptr) return nullptr;
 
 	newV->SetPosition(argPos);
 
@@ -234,8 +234,8 @@ bool fk_Operation::DeleteVertex(fk_Vertex *argV)
 	fk_Vector	pos;
 
 	if(checkDB() == false) return false;
-	if(argV == NULL) return false;
-	if(argV->getOneHalf() != NULL) {
+	if(argV == nullptr) return false;
+	if(argV->getOneHalf() != nullptr) {
 		fk_PutError("fk_Operation", "DeleteVertex", 1,
 					"Vertex Connection Error.");
 		return false;
@@ -270,7 +270,7 @@ bool fk_Operation::MoveVertex(fk_Vertex *argV, fk_Vector argVec)
 	vector<fk_Loop *>::iterator		lIterator;
 	fk_Vector						orgPos;
 
-	if(argV == NULL) return false;
+	if(argV == nullptr) return false;
 
 	if(historyMode == true) {
 		orgPos = argV->getPosition();
@@ -302,18 +302,18 @@ fk_Edge * fk_Operation::makeEdge(fk_Vertex *argV1, fk_Vertex *argV2,
 {
 	fk_Edge			*newE;
 
-	newE = NULL;
-	if(checkDB() == false) return NULL;
+	newE = nullptr;
+	if(checkDB() == false) return nullptr;
 
-	if(argV1 == NULL || argV2 == NULL) {
-		return NULL;
+	if(argV1 == nullptr || argV2 == nullptr) {
+		return nullptr;
 	}
 
-	if(argH1_1 == NULL && argH1_2 == NULL &&
-	   argH2_1 == NULL && argH2_2 == NULL) {
+	if(argH1_1 == nullptr && argH1_2 == nullptr &&
+	   argH2_1 == nullptr && argH2_2 == nullptr) {
 		newE = MakeEdge1(argV1, argV2);
 
-	} else if(argH2_1 == NULL && argH2_2 == NULL) {
+	} else if(argH2_1 == nullptr && argH2_2 == nullptr) {
 		newE = MakeEdge2(argV1, argV2, argH1_1, argH1_2, true, false);
 	} else {
 		newE = MakeEdge3(argV1, argV2, argH1_1, argH1_2, argH2_1, argH2_2,
@@ -330,10 +330,10 @@ fk_Edge * fk_Operation::MakeEdge1(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half			*newH1, *newH2;
 
 	// 両方が独立頂点かどうかのチェック 
-	if(argV1->getOneHalf() != NULL || argV2->getOneHalf() != NULL) {
+	if(argV1->getOneHalf() != nullptr || argV2->getOneHalf() != nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge1", 1,
 					"Vertex Topology Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// 新要素の生成 
@@ -383,18 +383,18 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half			*newH1, *newH2;
 
 	// v1 が接続頂点、v2 が独立頂点になっているかどうかのチェック 
-	if(argV1->getOneHalf() == NULL ||
-	   argV2->getOneHalf() != NULL) {
+	if(argV1->getOneHalf() == nullptr ||
+	   argV2->getOneHalf() != nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge2", 1,
 					"Vertex Topology Error.");
-		return NULL;
+		return nullptr;
 	}
 
-	// 半稜線の NULL ポインタチェック 
-	if(argH1 == NULL || argH2 == NULL) {
+	// 半稜線の nullptr ポインタチェック 
+	if(argH1 == nullptr || argH2 == nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge2", 2,
 					"Half Edge Null Pointer Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// v1, h1, h2 の接続関係のチェック 
@@ -402,15 +402,15 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 	   argH2->getVertex() != argV1) {
 		fk_PutError("fk_Operation", "MakeEdge2", 3,
 					"Half Edge Topology Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// h1, h2 が未定義半稜線かどうかのチェック 
-	if(argH1->getParentLoop() != NULL ||
-	   argH2->getParentLoop() != NULL) {
+	if(argH1->getParentLoop() != nullptr ||
+	   argH2->getParentLoop() != nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge2", 4,
 					"Half Edge Has Loop Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// 新要素の生成 
@@ -477,19 +477,19 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half		*newH1, *newH2;
 
 	// v1, v2 が接続頂点かどうかのチェック 
-	if(argV1->getOneHalf() == NULL ||
-	   argV2->getOneHalf() == NULL) {
+	if(argV1->getOneHalf() == nullptr ||
+	   argV2->getOneHalf() == nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge3", 1,
 					"Vertex Topology Error.");
-		return NULL;
+		return nullptr;
 	}
 
-	// 半稜線の NULL ポインタチェック 
-	if(argH1_1 == NULL || argH1_2 == NULL ||
-	   argH2_1 == NULL || argH2_2 == NULL) {
+	// 半稜線の nullptr ポインタチェック 
+	if(argH1_1 == nullptr || argH1_2 == nullptr ||
+	   argH2_1 == nullptr || argH2_2 == nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge3", 2,
 					"Half Edge Null Pointer Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// v1,v2 まわりの位相チェック 
@@ -501,17 +501,17 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 	   argH2_2->getVertex() != argV2) {
 		fk_PutError("fk_Operation", "MakeEdge3", 3,
 					"Half Edge Topology Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// 全半稜線が未定義半稜線かどうかのチェック 
-	if(argH1_1->getParentLoop() != NULL ||
-	   argH1_2->getParentLoop() != NULL ||
-	   argH2_1->getParentLoop() != NULL ||
-	   argH2_2->getParentLoop() != NULL) {
+	if(argH1_1->getParentLoop() != nullptr ||
+	   argH1_2->getParentLoop() != nullptr ||
+	   argH2_1->getParentLoop() != nullptr ||
+	   argH2_2->getParentLoop() != nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge3", 4,
 					"Half Edge Has Loop Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// 新要素の生成 
@@ -607,8 +607,8 @@ bool fk_Operation::DeleteEdge1(fk_Edge *argE)
 	lV = lH->getVertex();
 	rV = rH->getVertex();
 
-	lV->SetOneHalf(NULL);
-	rV->SetOneHalf(NULL);
+	lV->SetOneHalf(nullptr);
+	rV->SetOneHalf(nullptr);
 
 	eID = argE->getID();
 	lHID = lH->getID();
@@ -658,7 +658,7 @@ bool fk_Operation::DeleteEdge2(fk_Half *argH)
 		lrFlag = false;
 	}
 
-	aloneV->SetOneHalf(NULL);
+	aloneV->SetOneHalf(nullptr);
 	prevH->SetNextHalf(nextH);
 	nextH->SetPrevHalf(prevH);
 	if(conV->getOneHalf() == argH) {
@@ -773,8 +773,8 @@ fk_Loop * fk_Operation::MakeLoop(fk_Half *argH, int argLID)
 	fk_Loop		*newL;
 	fk_Half		*loopH;
 
-	if((newL = SetLoop(argH, true, NULL, argLID)) == NULL) {
-		return NULL;
+	if((newL = SetLoop(argH, true, nullptr, argLID)) == nullptr) {
+		return nullptr;
 	}
 
 	loopH = argH;
@@ -815,7 +815,7 @@ bool fk_Operation::DeleteLoop(fk_Loop *argL)
 			return false;
 		}
 
-		loopH->SetParentLoop(NULL);
+		loopH->SetParentLoop(nullptr);
 		loopH->getVertex()->UndefNormal();
 		loopH = loopH->getNextHalf();
 	}
@@ -825,7 +825,7 @@ bool fk_Operation::DeleteLoop(fk_Loop *argL)
 					"Parent Loop Error.");
 		return false;
 	} else {
-		oneH->SetParentLoop(NULL);
+		oneH->SetParentLoop(nullptr);
 	}
 
 	loopID = argL->getID();
@@ -847,7 +847,7 @@ bool fk_Operation::DeleteLoop(fk_Loop *argL)
 
 fk_Edge * fk_Operation::separateLoop(fk_Half *argPrevH, fk_Half *argNextH)
 {
-	return SeparateLoop(argPrevH, argNextH, NULL, NULL,
+	return SeparateLoop(argPrevH, argNextH, nullptr, nullptr,
 						false, false);
 }
 
@@ -868,22 +868,22 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 	*/
 	int			uniRLOneHID;
 
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 
 	curL = argPrevH->getParentLoop();
 
 	// argPrevH と argNextH が異なるループに属す場合のエラー処理 
-	if(curL == NULL || curL != argNextH->getParentLoop()) {
+	if(curL == nullptr || curL != argNextH->getParentLoop()) {
 		fk_PutError("fk_Operation", "separateLoop", 1,
 					"Illegal Loop Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	// argPrevH の次の半稜線が argNextH だった場合のエラー処理 
 	if(argPrevH->getNextHalf() == argNextH) {
 		fk_PutError("fk_Operation", "separateLoop", 2,
 					"Illegal Connection Error.");
-		return NULL;
+		return nullptr;
 	}
 
 	oldNextH = argPrevH->getNextHalf();
@@ -932,7 +932,7 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 
 	// 旧ループが保持する半稜線情報を再設定 
 	uniRLOneHID = curL->getOneHalf()->getID();
-	if(rLOneH == NULL) {
+	if(rLOneH == nullptr) {
 		curL->SetOneHalf(newRH);
 	} else {
 		curL->SetOneHalf(rLOneH);
@@ -941,13 +941,13 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 	curL->ModifyLoop();
 
 	// 新ループ側の半稜線へ、ループ情報を設定 
-	if((newL = SetLoop(newLH, false, NULL, argLID)) == NULL) {
+	if((newL = SetLoop(newLH, false, nullptr, argLID)) == nullptr) {
 		fk_PutError("fk_Operation", "separateLoop", 3,
 					"Set Loop Error.");
-		return NULL;
+		return nullptr;
 	}
 
-	if(lLOneH != NULL) {
+	if(lLOneH != nullptr) {
 		newL->SetOneHalf(lLOneH);
 	}
 
@@ -961,8 +961,8 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 		int newEID = newE->getID();
 		int newLHID = newLH->getID();
 		int newRHID = newRH->getID();
-		int lLOneHID = (lLOneH != NULL) ? lLOneH->getID() : FK_UNDEFINED;
-		int rLOneHID = (rLOneH != NULL) ? rLOneH->getID() : FK_UNDEFINED;
+		int lLOneHID = (lLOneH != nullptr) ? lLOneH->getID() : FK_UNDEFINED;
+		int rLOneHID = (rLOneH != nullptr) ? rLOneH->getID() : FK_UNDEFINED;
 
 		history.Open(SEPL);
 		history.PushInt(pHID);
@@ -985,7 +985,7 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 
 bool fk_Operation::uniteLoop(fk_Edge *argE)
 {
-	return UniteLoop(argE, NULL);
+	return UniteLoop(argE, nullptr);
 }
 
 bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
@@ -1005,7 +1005,7 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 	lL = lH->getParentLoop();
 	rL = rH->getParentLoop();
 
-	if(lL == NULL || rL == NULL) {
+	if(lL == nullptr || rL == nullptr) {
 		fk_PutError("fk_Operation", "uniteLoop", 1,
 					"No BothDefEdge Error.");
 		return false;
@@ -1068,7 +1068,7 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 		SetLoop(rL->getOneHalf(), false, rL);
 	}
 
-	if(argNewRL1H != NULL) {
+	if(argNewRL1H != nullptr) {
 		rL->SetOneHalf(argNewRL1H);
 		uniRLOneHID = argNewRL1H->getID();
 	} else {
@@ -1106,7 +1106,7 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 
 fk_Vertex * fk_Operation::separateEdge(fk_Edge *argE)
 {
-	return SeparateEdge(argE, false, false, false, false, NULL);
+	return SeparateEdge(argE, false, false, false, false, nullptr);
 }
 
 fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
@@ -1123,7 +1123,7 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	fk_Vertex	*v1, *v2, *newV;		// argE の両端点と新頂点 
 	fk_Loop		*l1, *l2;				// argE の属するループ 
 
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 
 	// 各データの取得 
 	if(argOrgEFlag == true) {
@@ -1184,7 +1184,7 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	orgH1->SetVertex(newV);
 
 	// 新頂点情報の設定 
-	if(argPos != NULL) {
+	if(argPos != nullptr) {
 		newV->SetPosition(*argPos);
 	} else {
 		newV->SetPosition((v1->getPosition() + v2->getPosition())/2.0);
@@ -1196,16 +1196,16 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	v1->UndefNormal();
 	v2->UndefNormal();
 
-	if(argL1PFlag == true && l1 != NULL) {
+	if(argL1PFlag == true && l1 != nullptr) {
 		l1->SetOneHalf(newH1);
 	}
 
-	if(argL2PFlag == true && l2 != NULL) {
+	if(argL2PFlag == true && l2 != nullptr) {
 		l2->SetOneHalf(newH2);
 	}
 
-	if(l1 != NULL) l1->ModifyLoop();
-	if(l2 != NULL) l2->ModifyLoop();
+	if(l1 != nullptr) l1->ModifyLoop();
+	if(l2 != nullptr) l2->ModifyLoop();
 
 	if(historyMode == true) {
 		history.Open(SEPE);
@@ -1347,8 +1347,8 @@ void fk_Operation::NegateBody(void)
 	_st					i;
 
 	if(checkDB() == false) return;
-	for(curE = getNextE(NULL);
-		curE != NULL;
+	for(curE = getNextE(nullptr);
+		curE != nullptr;
 		curE = getNextE(curE)) {
 		rNext.push_back(getMateHOnH(curE->getLeftHalf()->getPrevHalf()));
 		rPrev.push_back(getMateHOnH(curE->getLeftHalf()->getNextHalf()));
@@ -1357,8 +1357,8 @@ void fk_Operation::NegateBody(void)
 	}
 
 	i = 0;
-	for(curE = getNextE(NULL);
-		curE != NULL;
+	for(curE = getNextE(nullptr);
+		curE != nullptr;
 		curE = getNextE(curE)) {
 		curE->getRightHalf()->SetNextHalf(rNext[i]);
 		curE->getRightHalf()->SetPrevHalf(rPrev[i]);
@@ -1367,8 +1367,8 @@ void fk_Operation::NegateBody(void)
 		i++;
 	}
 
-	for(curL = getNextL(NULL);
-		curL != NULL;
+	for(curL = getNextL(nullptr);
+		curL != nullptr;
 		curL = getNextL(curL)) {
 		curL->SetOneHalf(getMateHOnH(curL->getOneHalf()));
 	}
@@ -1531,9 +1531,9 @@ void fk_Operation::UndoCom(fk_Command *argCom)
 		tmpH1 = getHData(history.GetInt(intI));
 		tmpH2 = getHData(history.GetInt(intI+1));
 		tmpH3 = (history.GetInt(intI+6) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+6)) : NULL;
+			getHData(history.GetInt(intI+6)) : nullptr;
 		tmpH4 = (history.GetInt(intI+7) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+7)) : NULL;
+			getHData(history.GetInt(intI+7)) : nullptr;
 
 		SeparateLoop(tmpH1, tmpH2, tmpH3, tmpH4,
 					 history.GetBool(boolI),
@@ -1658,9 +1658,9 @@ void fk_Operation::RedoCom(fk_Command *argCom)
 		tmpH1 = getHData(history.GetInt(intI));
 		tmpH2 = getHData(history.GetInt(intI+1));
 		tmpH3 = (history.GetInt(intI+6) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+6)) : NULL;
+			getHData(history.GetInt(intI+6)) : nullptr;
 		tmpH4 = (history.GetInt(intI+7) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+7)) : NULL;
+			getHData(history.GetInt(intI+7)) : nullptr;
 
 		SeparateLoop(tmpH1, tmpH2, tmpH3, tmpH4,
 					 history.GetBool(boolI),
@@ -1719,7 +1719,7 @@ void fk_Operation::setTesselateMode(bool argMode)
 	tesselateMode = argMode;
 
 	if(tesselateMode == true) {
-		for(curL = getNextL(NULL); curL != NULL; curL = getNextL(curL)) {
+		for(curL = getNextL(nullptr); curL != nullptr; curL = getNextL(curL)) {
 			curL->setTesselateMode(true);
 			curL->isTesselated();
 		}
@@ -1739,7 +1739,7 @@ void fk_Operation::DeleteAllTesselateData(void)
 {
 	fk_Loop			*curL;
 
-	for(curL = getNextL(NULL); curL != NULL; curL = getNextL(curL)) {
+	for(curL = getNextL(nullptr); curL != nullptr; curL = getNextL(curL)) {
 		curL->setTesselateMode(false);
 	}
 	return;

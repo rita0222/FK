@@ -195,10 +195,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	/*!
 	 *	\param[in]	shape
 	 *		形状インスタンスのポインタ。
-	 *		NULL を代入した場合や引数を省略した場合は、
+	 *		nullptr を代入した場合や引数を省略した場合は、
 	 *		初期形状が無い状態になります。
 	 */
-	fk_Model(fk_Shape *shape = NULL);
+	fk_Model(fk_Shape *shape = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_Model();
@@ -941,7 +941,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 形状参照関数
 	/*!
 	 *	現在設定されている形状を取得します。
-	 *	形状が設定されていない場合は NULL を返します。
+	 *	形状が設定されていない場合は nullptr を返します。
 	 *
 	 *	\return		形状インスタンスのポインタ
 	 */
@@ -1049,7 +1049,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! マテリアル参照関数
 	/*!
 	 *	現在モデルに設定されている基本マテリアルを参照します。
-	 *	モデルにマテリアルが設定されていない場合は NULL を返します。
+	 *	モデルにマテリアルが設定されていない場合は nullptr を返します。
 	 *
 	 *	\return		基本マテリアルのポインタ
 	 *
@@ -1072,7 +1072,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 頂点色参照関数
 	/*!
 	 *	現在モデルに設定されている頂点色を参照します。
-	 *	モデルに頂点色が設定されていない場合は NULL を返します。
+	 *	モデルに頂点色が設定されていない場合は nullptr を返します。
 	 *
 	 *	\return		頂点色のポインタ
 	 *
@@ -1095,7 +1095,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 稜線色参照関数
 	/*!
 	 *	現在モデルに設定されている稜線色を参照します。
-	 *	モデルに稜線色が設定されていない場合は NULL を返します。
+	 *	モデルに稜線色が設定されていない場合は nullptr を返します。
 	 *
 	 *	\return		稜線色のポインタ
 	 *
@@ -1485,7 +1485,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	親モデルを取得します。
 	 *
 	 *	\return		親モデルインスタンスのポインタ。
-	 *		親モデルが設定されていない場合は NULL を返します。
+	 *		親モデルが設定されていない場合は nullptr を返します。
 	 *
 	 *	\sa setParent(), deleteParent()
 	 */
@@ -1550,20 +1550,20 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 子モデル逐次参照関数
 	/*!
 	 *	当モデルに設定されている子モデルを順番に帰します。
-	 *	まず、引数に NULL を渡したとき、1番目の子モデルを返します。
-	 *	子モデルが存在しない場合は、その時点で NULL を返します。
+	 *	まず、引数に nullptr を渡したとき、1番目の子モデルを返します。
+	 *	子モデルが存在しない場合は、その時点で nullptr を返します。
 	 *	次に、1番目に帰ってきたモデルを引数として渡したとき、
 	 *	2番目の子モデルを返します。
 	 *	このように、設定されている子モデルを順番に参照することができます。
-	 *	最後の子モデルが引数として渡されたとき、NULL を返します。
+	 *	最後の子モデルが引数として渡されたとき、nullptr を返します。
 	 *
 	 *	以下のコードは、「parent」の全ての子モデルに対し、
 	 *	描画モードを FK_LINEMODE に設定する例です。
 	 *
 	 *		fk_Model	parentModel, *childModel;
 	 *		
-	 *		for(childModel = parentModel.foreachChild(NULL);
-	 *			childModel != NULL;
+	 *		for(childModel = parentModel.foreachChild(nullptr);
+	 *			childModel != nullptr;
 	 *			childModel = parentModel.foreachChild(childModel)) {
 	 *		
 	 *			childModel->setDrawMode(FK_LINEMODE);
@@ -1572,7 +1572,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		model		順番に渡す子モデルインスタンスのポインタ
 	 *
 	 *	\return		次にあたる子モデルインスタンスのポインタ。
-	 *		引数に最後の子モデルが渡された場合、NULL を返します。
+	 *		引数に最後の子モデルが渡された場合、nullptr を返します。
 	 *
 	 *	\sa entryChild(), deleteChild(), deleteChildren()
 	 */

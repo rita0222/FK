@@ -4,50 +4,122 @@ namespace FK_CLI
 {
 	using namespace std;
 
-	fk_Particle^ fk_ParticleSet::newParticle(void)
+	::fk_ParticleSet * fk_ParticleSet::GetP(void)
 	{
-		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->newParticle();
-		P->dFlg = false;
-		genMethod(P);
-		return P;
+		return (::fk_ParticleSet *)(pBase);
 	}
 
-	fk_Particle^ fk_ParticleSet::newParticle(fk_Vector^ argPos)
+	fk_ParticleSet::fk_ParticleSet() : fk_BaseObject(false)
 	{
-		if(!argPos) return nullptr;
-		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->newParticle(*argPos->pVec);
-		P->dFlg = false;
-		genMethod(P);
-		return P;
+		pBase = new ::fk_ParticleSet();
 	}
 
-	fk_Particle^ fk_ParticleSet::newParticle(double argX, double argY, double argZ)
+	fk_ParticleSet::fk_ParticleSet(bool argNewFlg) : fk_BaseObject(false)
 	{
-		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->newParticle(argX, argY, argZ);
-		P->dFlg = false;
-		genMethod(P);
-		return P;
+		if(argNewFlg == true) {
+			pBase = new ::fk_ParticleSet();
+		}
 	}
 
-	bool fk_ParticleSet::removeParticle(fk_Particle ^argP)
+	fk_ParticleSet::~fk_ParticleSet()
 	{
-		return GetP()->removeParticle(argP->GetP());
+		this->!fk_ParticleSet();
 	}
 
-	bool fk_ParticleSet::removeParticle(int argID)
+	fk_ParticleSet::!fk_ParticleSet()
 	{
-		return GetP()->removeParticle(argID);
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
 	}
 
-	unsigned int fk_ParticleSet::getCount(void)
+	fk_Shape^ fk_ParticleSet::Shape::get(void)
+	{
+		fk_Shape^ S = gcnew fk_Shape(false);
+		S->pBase = GetP()->getShape();
+		S->dFlg = false;
+		return S;
+	}
+
+	unsigned int fk_ParticleSet::Count::get(void)
 	{
 		return GetP()->getCount();
 	}
 
-	fk_Particle^ fk_ParticleSet::getParticle(int argID)
+	unsigned int fk_ParticleSet::ParticleNum::get(void)
+	{
+		return GetP()->getParticleNum();
+	}
+
+	void fk_ParticleSet::MaxSize::set(unsigned int argMax)
+	{
+		GetP()->setMaxSize(argMax);
+	}
+
+	unsigned int fk_ParticleSet::MaxSize::get(void)
+	{
+		return GetP()->getMaxSize();
+	}
+
+	void fk_ParticleSet::AllMode::set(bool argMode)
+	{
+		GetP()->setAllMode(argMode);
+	}
+
+	bool fk_ParticleSet::AllMode::get(void)
+	{
+		return GetP()->getAllMode();
+	}
+
+	void fk_ParticleSet::IndivMode::set(bool argMode)
+	{
+		GetP()->setIndivMode(argMode);
+	}
+
+	bool fk_ParticleSet::IndivMode::get(void)
+	{
+		return GetP()->getIndivMode();
+	}
+
+	fk_Particle^ fk_ParticleSet::NewParticle(void)
+	{
+		fk_Particle^ P = gcnew fk_Particle();
+		P->pBase = GetP()->newParticle();
+		P->dFlg = false;
+		GenMethod(P);
+		return P;
+	}
+
+	fk_Particle^ fk_ParticleSet::NewParticle(fk_Vector^ argPos)
+	{
+		if(!argPos) return nullptr;
+		fk_Particle^ P = gcnew fk_Particle();
+		P->pBase = GetP()->newParticle(argPos);
+		P->dFlg = false;
+		GenMethod(P);
+		return P;
+	}
+
+	fk_Particle^ fk_ParticleSet::NewParticle(double argX, double argY, double argZ)
+	{
+		fk_Particle^ P = gcnew fk_Particle();
+		P->pBase = GetP()->newParticle(argX, argY, argZ);
+		P->dFlg = false;
+		GenMethod(P);
+		return P;
+	}
+
+	bool fk_ParticleSet::RemoveParticle(fk_Particle ^argP)
+	{
+		return GetP()->removeParticle(argP->GetP());
+	}
+
+	bool fk_ParticleSet::RemoveParticle(int argID)
+	{
+		return GetP()->removeParticle(argID);
+	}
+
+	fk_Particle^ fk_ParticleSet::GetParticle(int argID)
 	{
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = GetP()->getParticle(argID);
@@ -55,7 +127,7 @@ namespace FK_CLI
 		return P;
 	}
 
-	fk_Particle^ fk_ParticleSet::getNextParticle(fk_Particle^ argP)
+	fk_Particle^ fk_ParticleSet::GetNextParticle(fk_Particle^ argP)
 	{
 		::fk_Particle *pP = (!argP) ? nullptr : argP->GetP();
 		pP = GetP()->getNextParticle(pP);
@@ -66,94 +138,52 @@ namespace FK_CLI
 		return P;
 	}
 
-	unsigned int fk_ParticleSet::getParticleNum(void)
-	{
-		return GetP()->getParticleNum();
-	}
-
-	void fk_ParticleSet::setMaxSize(unsigned int argMax)
-	{
-		GetP()->setMaxSize(argMax);
-	}
-
-	unsigned int fk_ParticleSet::getMaxSize(void)
-	{
-		return GetP()->getMaxSize();
-	}
-
-	void fk_ParticleSet::setColorPalette(int argID, fk_Color^ argCol)
+	void fk_ParticleSet::SetColorPalette(int argID, fk_Color^ argCol)
 	{
 		if(!argCol) return;
 		GetP()->setColorPalette(argID, *argCol->pCol);
 	}
 
-	void fk_ParticleSet::setColorPalette(int argID, float argR, float argG, float argB)
+	void fk_ParticleSet::SetColorPalette(int argID, float argR, float argG, float argB)
 	{
 		GetP()->setColorPalette(argID, argR, argG, argB);
 	}
 
-	void fk_ParticleSet::setColorPalette(int argID, double argR, double argG, double argB)
+	void fk_ParticleSet::SetColorPalette(int argID, double argR, double argG, double argB)
 	{
 		GetP()->setColorPalette(argID, argR, argG, argB);
 	}
 
-	void fk_ParticleSet::genMethod(fk_Particle^)
+	void fk_ParticleSet::Handle(void)
 	{
-		return;
-	}
-
-	void fk_ParticleSet::allMethod(void)
-	{
-		return;
-	}
-
-	void fk_ParticleSet::indivMethod(fk_Particle^)
-	{
-		return;
-	}
-
-	void fk_ParticleSet::setAllMode(bool argMode)
-	{
-		GetP()->setAllMode(argMode);
-	}
-
-	bool fk_ParticleSet::getAllMode(void)
-	{
-		return GetP()->getAllMode();
-	}
-
-	void fk_ParticleSet::setIndivMode(bool argMode)
-	{
-		GetP()->setIndivMode(argMode);
-	}
-
-	bool fk_ParticleSet::getIndivMode(void)
-	{
-		return GetP()->getIndivMode();
-	}
-
-	void fk_ParticleSet::handle(void)
-	{
-		if(getAllMode() == true) {
-			allMethod();
+		if(AllMode == true) {
+			AllMethod();
 		}
 
-		if(getIndivMode() == true) {
+		if(IndivMode == true) {
 			fk_Particle^ P;
 
-			for(P = getNextParticle(nullptr); P != nullptr; P = getNextParticle(P)) {
-				indivMethod(P);
+			for(P = GetNextParticle(nullptr); P != nullptr; P = GetNextParticle(P)) {
+				IndivMethod(P);
 			}
 		}
 
 		GetP()->handle();
 	}
 
-	fk_Shape^ fk_ParticleSet::getShape(void)
+	void fk_ParticleSet::GenMethod(fk_Particle^)
 	{
-		fk_Shape^ S = gcnew fk_Shape(false);
-		S->pBase = GetP()->getShape();
-		S->dFlg = false;
-		return S;
+		return;
 	}
+
+	void fk_ParticleSet::AllMethod(void)
+	{
+		return;
+	}
+
+	void fk_ParticleSet::IndivMethod(fk_Particle^)
+	{
+		return;
+	}
+
 }

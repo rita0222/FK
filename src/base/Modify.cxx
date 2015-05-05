@@ -102,12 +102,12 @@ fk_Loop * fk_Modify::removeVertexInLoop(fk_Vertex *argVx)
 	fk_Half				*remainH;
 	fk_Loop				*retL;
 
-	if(checkDB() == false) return NULL;
-	if(existVertex(argVx) == false) return NULL;
+	if(checkDB() == false) return nullptr;
+	if(existVertex(argVx) == false) return nullptr;
 
 	neighborV = getAllNeighborVOnV(argVx);
 	for(i = 0; i < neighborV.size(); i++) {
-		if(getENumOnV(neighborV[i]) < 3) return NULL;
+		if(getENumOnV(neighborV[i]) < 3) return nullptr;
 	}
 
 	connectE = getAllEOnV(argVx);
@@ -116,15 +116,15 @@ fk_Loop * fk_Modify::removeVertexInLoop(fk_Vertex *argVx)
 
 	for(i = 0; i < connectL.size(); i++) {
 		if(deleteLoop(connectL[i]) == false) {
-			return NULL;
+			return nullptr;
 		}
 	}
 
 	for(i = 0; i < connectE.size(); i++) {
-		if(deleteEdge(connectE[i]) == false) return NULL;
+		if(deleteEdge(connectE[i]) == false) return nullptr;
 	}
 
-	if(deleteVertex(argVx) == false) return NULL;
+	if(deleteVertex(argVx) == false) return nullptr;
 
 	retL = makeLoop(remainH);
 	return retL;
@@ -154,10 +154,10 @@ bool fk_Modify::contractEdge(fk_Edge *argEd, fk_Vector argPos, bool rightFlg)
 	fk_Vertex				*remainV, *deleteV;
 	fk_Vertex				*NeighborV[2];
 	fk_Half					*newArgFirstH, *curH;
-	fk_Half					*newArgH1 = NULL;
-	fk_Half					*newArgH2 = NULL;
+	fk_Half					*newArgH1 = nullptr;
+	fk_Half					*newArgH2 = nullptr;
 	fk_Loop					*remainL;
-	fk_Edge					*newE = NULL;
+	fk_Edge					*newE = nullptr;
 	vector<fk_Vertex *>		OldConnectV;
 	vector<fk_Half *>		NewConnectH;
 	_st						i;
@@ -170,8 +170,8 @@ bool fk_Modify::contractEdge(fk_Edge *argEd, fk_Vector argPos, bool rightFlg)
 	if(existEdge(argEd) == false) return false;
 
 	// 稜線が定義稜線でない 
-	if(argEd->getRightHalf()->getParentLoop() == NULL ||
-	   argEd->getLeftHalf()->getParentLoop() == NULL) {
+	if(argEd->getRightHalf()->getParentLoop() == nullptr ||
+	   argEd->getLeftHalf()->getParentLoop() == nullptr) {
 		return false;
 	}
 
@@ -241,7 +241,7 @@ bool fk_Modify::contractEdge(fk_Edge *argEd, fk_Vector argPos, bool rightFlg)
 				getRightHOnE(newE) : getLeftHOnE(newE);
 		}
 		newE = separateLoop(newArgH1, newArgH2);
-		if(newE == NULL) return false;
+		if(newE == nullptr) return false;
 	}
 
 	// remainV を移動 
@@ -256,7 +256,7 @@ bool fk_Modify::checkContract(fk_Edge *argEd)
 	fk_Half		*rH, *lH;
 	fk_Vertex	*rV, *lV;
 
-	if(argEd == NULL) return false;
+	if(argEd == nullptr) return false;
 	rH = argEd->getRightHalf();
 	lH = argEd->getLeftHalf();
 
@@ -266,11 +266,11 @@ bool fk_Modify::checkContract(fk_Edge *argEd)
 	rV = rH->getVertex();
 	lV = lH->getVertex();
 
-	if(rL != NULL) {
+	if(rL != nullptr) {
 		if(CheckLoop4Cont(rH) == false) return false;
 	}
 
-	if(lL != NULL) {
+	if(lL != nullptr) {
 		if(CheckLoop4Cont(lH) == false) return false;
 	}
 
@@ -286,8 +286,8 @@ bool fk_Modify::CheckLoop4Cont(fk_Half *argHf)
 	fk_Half	*nextH, *prevH;
 	fk_Half	*nMateH, *pMateH;
 
-	// argHf が NULL の場合 
-	if(argHf == NULL) return false;
+	// argHf が nullptr の場合 
+	if(argHf == nullptr) return false;
 
 	nextH = argHf->getNextHalf();
 	prevH = argHf->getPrevHalf();
@@ -317,9 +317,9 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 	vector<fk_Vertex *>		VertexArray;
 	fk_Edge					*prevE;
 	fk_Half					*nextH, *prevH, *lH, *rH, *nextH2, *prevH2;
-	fk_Loop					*retL = NULL;
+	fk_Loop					*retL = nullptr;
 
-	if(argVec == NULL) return retL;
+	if(argVec == nullptr) return retL;
 	if(argVec->size() < 3) return retL;
 	VertexArray.clear();
 
@@ -334,7 +334,7 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 		VertexArray.push_back(curV);
 	}
 
-	if((prevE = makeEdge(VertexArray[1], VertexArray[0])) == NULL) {
+	if((prevE = makeEdge(VertexArray[1], VertexArray[0])) == nullptr) {
 		fk_PutError("fk_Modify", "makePolygon", 1, "Make Edge Error.");
 		AllClear_();
 		return retL;
@@ -352,7 +352,7 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 		}
 
 		if((prevE = makeEdge(VertexArray[i-1], VertexArray[i],
-							 prevH, nextH)) == NULL) {
+							 prevH, nextH)) == nullptr) {
 			fk_PutError("fk_Modify", "makePolygon", 2, "Make Edge Error.");
 			AllClear_();
 			return retL;
@@ -367,12 +367,12 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 		prevH2 = getMateHOnH(nextH2);
 
 		if(makeEdge(VertexArray.back(), VertexArray[0],
-					prevH, nextH, prevH2, nextH2) == NULL) {
+					prevH, nextH, prevH2, nextH2) == nullptr) {
 			fk_PutError("fk_Modify", "makePolygon", 3, "Make Edge Error.");
 			AllClear_();
 			return retL;
 		}
-		if((retL = makeLoop(prevH)) == NULL) {
+		if((retL = makeLoop(prevH)) == nullptr) {
 			fk_PutError("fk_Modify", "makePolygon", 4, "Make Loop Error.");
 			AllClear_();
 			return retL;
@@ -410,7 +410,7 @@ void fk_Modify::pushPolygonVertex(fk_Vector argVec, bool argOpenFlg)
 		break;
 
 	  case 1:
-		startV = getNextV(NULL);
+		startV = getNextV(nullptr);
 		curV = makeVertex(argVec);
 		makeEdge(curV, startV);
 		break;
@@ -427,8 +427,8 @@ void fk_Modify::pushPolygonVertex(fk_Vector argVec, bool argOpenFlg)
 			makeEdge(startV, curV, prevH, nextH);
 		} else {
 
-			curV = getNextV(NULL);
-			while(curV != NULL) {
+			curV = getNextV(nullptr);
+			while(curV != nullptr) {
 				VecArray.push_back(curV->getPosition());
 				curV = getNextV(curV);
 			}
@@ -467,7 +467,7 @@ void fk_Modify::makePoint(vector<fk_Vector> *argVec)
 {
 	_st		i;
 
-	if(argVec == NULL) return;
+	if(argVec == nullptr) return;
 	if(checkDB() == false) return;
 	AllClear_();
 
@@ -502,7 +502,7 @@ void fk_Modify::makeLines(vector<fk_Vector> *argVec)
 	_st			i;
 	fk_Vertex	*v1, *v2;
 
-	if(argVec == NULL) return;
+	if(argVec == nullptr) return;
 	if(checkDB() == false) return;
 	AllClear_();
 
@@ -520,7 +520,7 @@ void fk_Modify::makeLines(int argNum, fk_Vector *argVec)
 	int			i;
 	fk_Vertex		*v1, *v2;
 
-	if(argVec == NULL) return;
+	if(argVec == nullptr) return;
 	if(checkDB() == false) return;
 	AllClear_();
 
@@ -537,7 +537,7 @@ fk_Edge * fk_Modify::pushLines(fk_Vector argVec1, fk_Vector argVec2)
 {
 	fk_Vertex		*v1, *v2;
 	
-	if(checkDB() == false) return NULL;
+	if(checkDB() == false) return nullptr;
 	v1 = makeVertex(argVec1);
 	v2 = makeVertex(argVec2);
 	return makeEdge(v1, v2);
@@ -549,8 +549,8 @@ bool fk_Modify::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
 
 	if(checkDB() == false) return false;
 
-	if((v1 = getVData(2*argID + 1)) == NULL ||
-	   (v2 = getVData(2*argID + 2)) == NULL) {
+	if((v1 = getVData(2*argID + 1)) == nullptr ||
+	   (v2 = getVData(2*argID + 2)) == nullptr) {
 		return false;
 	}
 
@@ -565,7 +565,7 @@ bool fk_Modify::setLinePos(int argEID, int argVID, fk_Vector argPos)
 
 	if(checkDB() == false) return false;
 
-	if((tmpV = getVData(2*argEID + argVID + 1)) == NULL) {
+	if((tmpV = getVData(2*argEID + argVID + 1)) == nullptr) {
 		return false;
 	}
 
@@ -641,13 +641,13 @@ void fk_Modify::setBlockSize(double argX, double argY, double argZ)
 	if(checkDB() == false) return;
 	if(getVNum() != 8 || getLNum() != 6) return;
 
-	curV = getNextV(NULL);
+	curV = getNextV(nullptr);
 	basePos = curV->getPosition();
 	scaleX = argX/(basePos.x * 2.0);
 	scaleY = argY/(basePos.y * 2.0);
 	scaleZ = argZ/(basePos.z * 2.0);
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		curPos = curV->getPosition();
 		newPos.set(curPos.x*scaleX, curPos.y*scaleY, curPos.z*scaleZ);
 		moveVertex(curV, newPos);
@@ -667,7 +667,7 @@ void fk_Modify::setBlockSize(double argSize, fk_Axis argAxis)
 
 	if(getVNum() != 8 || getLNum() != 6) return;
 	
-	curV = getNextV(NULL);
+	curV = getNextV(nullptr);
 	basePos = curV->getPosition();
 	scaleX = scaleY = scaleZ = 1.0;
 
@@ -685,7 +685,7 @@ void fk_Modify::setBlockSize(double argSize, fk_Axis argAxis)
 		break;
 	}
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		curPos = curV->getPosition();
 		newPos.set(curPos.x*scaleX, curPos.y*scaleY, curPos.z*scaleZ);
 		moveVertex(curV, newPos);
@@ -710,7 +710,7 @@ void fk_Modify::setBlockScale(double argScale, fk_Axis argAxis)
 
 	if(getVNum() != 8 || getLNum() != 6) return;
 	
-	curV = getNextV(NULL);
+	curV = getNextV(nullptr);
 
 	scaleX = scaleY = scaleZ = 1.0;
 
@@ -728,7 +728,7 @@ void fk_Modify::setBlockScale(double argScale, fk_Axis argAxis)
 		break;
 	}
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		curPos = curV->getPosition();
 		newPos.set(curPos.x*scaleX, curPos.y*scaleY, curPos.z*scaleZ);
 		moveVertex(curV, newPos);
@@ -747,9 +747,9 @@ void fk_Modify::setBlockScale(double argX, double argY, double argZ)
 
 	if(getVNum() != 8 || getLNum() != 6) return;
 
-	curV = getNextV(NULL);
+	curV = getNextV(nullptr);
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		curPos = curV->getPosition();
 		newPos.set(curPos.x*argX, curPos.y*argY, curPos.z*argZ);
 		moveVertex(curV, newPos);
@@ -809,7 +809,7 @@ void fk_Modify::setCircleDivide(int argDiv)
 	if(checkDB() == false) return;
 	if(getLNum() == argDiv * 4) return;
 
-	if((curV = getNextV(getNextV(NULL))) == NULL) {
+	if((curV = getNextV(getNextV(nullptr))) == nullptr) {
 		return;
 	}
 
@@ -826,14 +826,14 @@ void fk_Modify::setCircleRadius(double argRadius)
 
 	if(checkDB() == false) return;
 
-	curV = getNextV(NULL);
+	curV = getNextV(nullptr);
 	curV = getNextV(curV);
-	if(curV == NULL) return;
+	if(curV == nullptr) return;
 
 	basePos = curV->getPosition();
 	scale = argRadius/basePos.x;
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		basePos = curV->getPosition();
 		curPos.set(basePos.x * scale, basePos.y * scale, 0.0);
 		moveVertex(curV, curPos);
@@ -850,11 +850,11 @@ void fk_Modify::setCircleScale(double argScale)
 
 	if(checkDB() == false) return;
 
-	if((curV = getNextV(getNextV(NULL))) == NULL) {
+	if((curV = getNextV(getNextV(nullptr))) == nullptr) {
 		return;
 	}
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		basePos = curV->getPosition();
 		curPos.set(basePos.x * argScale, basePos.y * argScale, 0.0);
 		moveVertex(curV, curPos);
@@ -961,7 +961,7 @@ void fk_Modify::setSphereDivide(int argDiv)
 
 	if(checkDB() == false) return;
 
-	if((curV = getNextV(NULL)) == NULL) {
+	if((curV = getNextV(nullptr)) == nullptr) {
 		return;
 	}
 	makeSphere(argDiv, curV->getPosition().y);
@@ -976,13 +976,13 @@ void fk_Modify::setSphereRadius(double argRadius)
 
 	if(checkDB() == false) return;
 
-	curV = getNextV(NULL);
-	if(curV == NULL) return;
+	curV = getNextV(nullptr);
+	if(curV == nullptr) return;
 
 	basePos = curV->getPosition();
 	scale = argRadius/basePos.y;
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		basePos = curV->getPosition();
 		curPos.set(basePos.x * scale, basePos.y * scale, basePos.z * scale);
 		moveVertex(curV, curPos);
@@ -999,10 +999,10 @@ void fk_Modify::setSphereScale(double argScale)
 
 	if(checkDB() == false) return;
 
-	curV = getNextV(NULL);
-	if(curV == NULL) return;
+	curV = getNextV(nullptr);
+	if(curV == nullptr) return;
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		basePos = curV->getPosition();
 		curPos.set(basePos.x * argScale,
 				   basePos.y * argScale, basePos.z * argScale);

@@ -82,7 +82,7 @@
 #include <iostream>
 
 #ifndef RELEASE
-#define RELEASE(x)	{if(x){(x)->Release();(x)=NULL;}}
+#define RELEASE(x)	{if(x){(x)->Release();(x)=nullptr;}}
 #endif
 
 #pragma warning(disable:4800)
@@ -94,7 +94,7 @@ using namespace std;
 //==================================================
 fk_Input::fk_Input()
 {
-	m_hwnd = NULL;
+	m_hwnd = nullptr;
 
 	m_MouseWorldPos.x = 0;
 	m_MouseWorldPos.y = 0;
@@ -105,11 +105,11 @@ fk_Input::fk_Input()
 	memset(m_LastButton, 0, sizeof(bool) * MOUSE_BUTTON_MAX);
 
 	m_JoyCount = 0;
-	m_Input = NULL;
-	m_KeyBoardDevice = NULL;
-	m_MouseDevice = NULL;
+	m_Input = nullptr;
+	m_KeyBoardDevice = nullptr;
+	m_MouseDevice = nullptr;
 	for(DWORD i = 0; i < INPUT_DEVICE_NUM; i++) {
-		m_JoyStciDevice[i] = NULL;
+		m_JoyStciDevice[i] = nullptr;
 		
 		for(int j = 0; j < BUTTON_NUM; j++) {
 			buttonSwap[i][j] = j;
@@ -125,7 +125,7 @@ fk_Input::fk_Input()
 		setAxisSwap(i, AXIS3_X, AXIS_RX_POS);
 		setAxisSwap(i, AXIS3_Y, AXIS_RY_POS);
 	}
-	m_JoyButton = NULL;
+	m_JoyButton = nullptr;
 
 	setAxisAssign(0, DIK_UP, DIK_DOWN, DIK_LEFT, DIK_RIGHT);
 	setAxisAssign(1, 0, 0, 0, 0);
@@ -155,14 +155,14 @@ HRESULT fk_Input::init(HINSTANCE hinst, HWND hwnd)
 	HRESULT hr;
 
 	// DirectInput の作成
-	hr = DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&m_Input, NULL);
+	hr = DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&m_Input, nullptr);
 	if(FAILED(hr)) return hr;
 
 	//==============================
 	//	キーボード
 	//==============================
 	// キーボードデバイスの作成
-	hr = m_Input->CreateDevice(GUID_SysKeyboard, &m_KeyBoardDevice, NULL); 
+	hr = m_Input->CreateDevice(GUID_SysKeyboard, &m_KeyBoardDevice, nullptr); 
 	if(FAILED(hr)) return hr;
 
 	// 取得データフォーマットの設定
@@ -191,7 +191,7 @@ HRESULT fk_Input::init(HINSTANCE hinst, HWND hwnd)
 	//==============================
 	//マウス
 	//==============================
-	hr = m_Input->CreateDevice(GUID_SysMouse, &m_MouseDevice, NULL); 
+	hr = m_Input->CreateDevice(GUID_SysMouse, &m_MouseDevice, nullptr); 
 	if(FAILED(hr)) return hr;
 	
 	// データ形式を設定
@@ -322,7 +322,7 @@ HRESULT fk_Input::uninit()
 	//============================
 	//キーボード
 	//============================
-	if(m_KeyBoardDevice != NULL) {
+	if(m_KeyBoardDevice != nullptr) {
 		m_KeyBoardDevice->Unacquire();
 		RELEASE(m_KeyBoardDevice);
 	}
@@ -330,7 +330,7 @@ HRESULT fk_Input::uninit()
 	//============================
 	//マウス
 	//============================
-	if(m_MouseDevice != NULL) {
+	if(m_MouseDevice != nullptr) {
 		m_MouseDevice->Unacquire();
 		RELEASE(m_MouseDevice);
 	}
@@ -345,9 +345,9 @@ HRESULT fk_Input::uninit()
 		}
 	}
 	
-	if(m_JoyButton != NULL) {
+	if(m_JoyButton != nullptr) {
 		delete []m_JoyButton;
-		m_JoyButton = NULL;
+		m_JoyButton = nullptr;
 	}
 
 	//================================
@@ -391,7 +391,7 @@ HRESULT fk_Input::UpdateKey()
 	DWORD	elements;
 	HRESULT	hr;
 
-    if(NULL == m_KeyBoardDevice) {
+    if(nullptr == m_KeyBoardDevice) {
         return S_OK;
 	}
     elements = DIMGR_BUFFER_SIZE;
@@ -424,7 +424,7 @@ HRESULT fk_Input::UpdateMouse()
 	m_MouseWheel = 0;
 	DWORD dwItems = DIMGR_BUFFER_SIZE;
 
-	if(NULL == m_MouseDevice) {
+	if(nullptr == m_MouseDevice) {
         return S_OK;
 	}
 	
@@ -519,7 +519,7 @@ void fk_Input::SetAxisParam(int id, int rawAxis, short param)
 //====================================
 HRESULT fk_Input::UpdateJoy()
 {
-	if(NULL == m_JoyStciDevice[0]) {
+	if(nullptr == m_JoyStciDevice[0]) {
         return S_OK;
 	}
 
@@ -546,7 +546,8 @@ HRESULT fk_Input::UpdateJoy()
 		m_JoyStciDevice[i]->GetDeviceData(sizeof(DIDEVICEOBJECTDATA),m_DeviceObject,&dwItems, 0);
 		m_JoyStciDevice[i]->GetDeviceState(sizeof(DIJOYSTATE), &dijs);
 	
-	
+
+		if(m_JoyButton == nullptr) continue;
 		//-------------------------------------------------------------------------
 		//以降ボタンの更新
 		//-------------------------------------------------------------------------
@@ -618,7 +619,7 @@ HRESULT fk_Input::UpdateJoy()
 			}
 		}
 
-		for(std::map<int, AxisParam>::iterator it = axisParams[i].begin(); it != axisParams[i].end(); it++) {
+		for(auto it = axisParams[i].begin(); it != axisParams[i].end(); it++) {
 			switch(it->first) {
 			case AXIS1_X:
 				if(joyButton.x[0] >= it->second.border) {
@@ -737,7 +738,7 @@ BOOL CALLBACK fk_Input::EnumJoysticksCallback(const DIDEVICEINSTANCE* lpddi, LPV
 	//--------------------------------------------------------------------------
 	fk_Input* joyStick = (fk_Input*)lpContext;	
 	joyStick->m_DevCaps.dwSize = sizeof(DIDEVCAPS);
-	joyStick->m_Input->CreateDevice(lpddi->guidInstance, &joyStick->m_JoyStciDevice[joyStick->m_JoyCount],NULL);
+	joyStick->m_Input->CreateDevice(lpddi->guidInstance, &joyStick->m_JoyStciDevice[joyStick->m_JoyCount],nullptr);
 	joyStick->m_JoyStciDevice[joyStick->getJoyCount()]->GetCapabilities(&joyStick->m_DevCaps);
 	//--------------------------------------------------------------------------
 	//ジョイスティック数が最大になってたら強制的にストップさせる
@@ -757,7 +758,7 @@ BOOL CALLBACK fk_Input::EnumJoysticksCallback(const DIDEVICEINSTANCE* lpddi, LPV
 bool fk_Input::GetMouseButton(DWORD key)
 {
 	if(key >= MOUSE_BUTTON_MAX) {
-		return NULL;
+		return false;
 	}
 	return m_Button[key];
 }
@@ -765,7 +766,7 @@ bool fk_Input::GetMouseButton(DWORD key)
 bool fk_Input::GetLastMouseButton(DWORD key)
 {
 	if(key >= MOUSE_BUTTON_MAX) {
-		return NULL;
+		return false;
 	}
 	return m_LastButton[key];
 }
@@ -776,7 +777,7 @@ bool fk_Input::GetLastMouseButton(DWORD key)
 fk_InputInfo* fk_Input::getJoyStick(DWORD dwNum)
 {
 	if(dwNum >= m_JoyCount) {
-		return NULL;
+		return nullptr;
 	}
 	return &m_JoyButton[dwNum];
 }
@@ -895,7 +896,7 @@ fk_InputInfo fk_Input::getInputStatus(int index)
 
 	fk_InputInfo *joy_in = getJoyStick(index);
 
-	if(joy_in != NULL) {
+	if(joy_in != nullptr) {
 		retVal = *joy_in;
 	} else if(index == 0) {
 		// 軸1
@@ -998,7 +999,7 @@ DWORD fk_Input::getJoyCount(void)
 
 fk_InputInfo*	fk_Input::getJoyStick(DWORD)
 {
-	return NULL;
+	return nullptr;
 }
 
 void			fk_Input::setBorder(int, int, int) {}

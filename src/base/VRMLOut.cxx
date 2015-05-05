@@ -86,7 +86,7 @@ using namespace std;
 fk_VRMLOut::fk_VRMLOut(fk_Solid *argSolid)
 {
 	solid = argSolid;
-	ifset = NULL;
+	ifset = nullptr;
 
 	return;
 }
@@ -94,7 +94,7 @@ fk_VRMLOut::fk_VRMLOut(fk_Solid *argSolid)
 fk_VRMLOut::fk_VRMLOut(fk_IndexFaceSet *argIFSet)
 {
 	ifset = argIFSet;
-	solid = NULL;
+	solid = nullptr;
 
 	return;
 }
@@ -109,14 +109,14 @@ bool fk_VRMLOut::WriteVRMLFile(string argFileName, fk_Material *argMaterial,
 {
 	ofstream	ofs(argFileName);
 
-	if(solid == NULL && ifset == NULL) {
+	if(solid == nullptr && ifset == nullptr) {
 		return false;
 	}
 
 	if(ofs.fail()) return false;
 
 	WriteVRMLHeader(ofs);
-	WriteVRMLShape(ofs, argMaterial, triFlag, NULL, NULL);
+	WriteVRMLShape(ofs, argMaterial, triFlag, nullptr, nullptr);
 	WriteVRMLFooter(ofs, FK_VRML_NONE);
 
 	ofs.close();
@@ -160,14 +160,14 @@ void fk_VRMLOut::WriteVRMLShape(ofstream &argOFS,
 	WriteVRMLLightInfo(argOFS);
 	WriteVRMLNaviInfo(argOFS);
 
-	if(argTime != NULL && argPos != NULL) {
+	if(argTime != nullptr && argPos != nullptr) {
 		WriteVRMLCoordInterp(argOFS, argTime, argPos);
 	}
 
 	argOFS << "\t\tShape {" << endl;
 
 	WriteVRMLMaterial(argOFS, argMaterial);
-	if(solid != NULL) {
+	if(solid != nullptr) {
 		WriteVRMLPointData_Solid(argOFS);
 		WriteVRMLIFData_Solid(argOFS, triFlag);
 	} else {
@@ -223,7 +223,7 @@ void fk_VRMLOut::WriteVRMLMaterial(ofstream &argOFS, fk_Material *argMaterial)
 	fk_Color		*curColor;
 	stringstream	ss;
 
-	if(argMaterial == NULL) return;
+	if(argMaterial == nullptr) return;
 
 	ss << "\t\t\tappearance Appearance {" << endl;
 	ss << "\t\t\t\tmaterial Material {" << endl;
@@ -272,20 +272,20 @@ void fk_VRMLOut::WriteVRMLPointData_Solid(ofstream &argOFS)
 	fk_Vector		pos;
 	stringstream	ss;
 	
-	curV = solid->getNextV(NULL);
+	curV = solid->getNextV(nullptr);
 
     argOFS << "\t\t\tgeometry IndexedFaceSet {" << endl;
 	argOFS << "\t\t\t\tcoord DEF C Coordinate {" << endl;
 	argOFS << "\t\t\t\t\tpoint [" << endl;
 
-	while(curV != NULL) {
+	while(curV != nullptr) {
 		pos = curV->getPosition();
 		argOFS << "\t\t\t\t\t\t";
 		argOFS << pos.x << " " << pos.y << " " << pos.z;
 
 		curV = solid->getNextV(curV);
 
-		if(curV != NULL) {
+		if(curV != nullptr) {
 			argOFS << ",";
 		}
 
@@ -337,7 +337,7 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 
 	vMap.clear();
 	tmpV = solid->getLastV();
-	if(tmpV == NULL) return;
+	if(tmpV == nullptr) return;
 	maxID = static_cast<_st>(tmpV->getID());
 	vMap.resize(maxID+1);
 	mapID = 0;
@@ -348,11 +348,11 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 		}
 	}
 
-	curL = solid->getNextL(NULL);
+	curL = solid->getNextL(nullptr);
 
 	argOFS << "\t\t\t\tcoordIndex [" << endl;
 
-	while(curL != NULL) {
+	while(curL != nullptr) {
 		vArray = solid->getAllVOnL(curL);
 
 		if(triFlag == true && vArray.size() == 4) {
@@ -393,7 +393,7 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 		}
 
 		curL = solid->getNextL(curL);
-		if(curL != NULL) {
+		if(curL != nullptr) {
 			argOFS << ",";
 		}
 		argOFS << endl;

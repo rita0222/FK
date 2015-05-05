@@ -1,4 +1,4 @@
-// Renderer_CLI.h
+﻿// Renderer_CLI.h
 
 #pragma once
 
@@ -17,24 +17,9 @@ namespace FK_CLI
 		::fk_GraphicsEngine *pEngine;
 
 	public:
-		fk_Renderer::fk_Renderer(void) : hWnd(nullptr), hDC(nullptr), hRC(nullptr)
-		{
-			pEngine = new ::fk_GraphicsEngine();
-		}
-
-		fk_Renderer::~fk_Renderer()
-		{
-			if (pEngine != nullptr) Shutdown();
-			delete pEngine;
-			pEngine = nullptr;
-		}
-
-		fk_Renderer::!fk_Renderer()
-		{
-			if (pEngine != nullptr) Shutdown();
-			delete pEngine;
-			pEngine = nullptr;
-		}
+		fk_Renderer::fk_Renderer(void);
+		fk_Renderer::~fk_Renderer();
+		fk_Renderer::!fk_Renderer();
 
 		bool Initialize(System::IntPtr pWnd, int w, int h);
 		void Shutdown(void);

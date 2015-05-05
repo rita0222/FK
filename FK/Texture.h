@@ -188,7 +188,7 @@ class fk_Texture: public fk_Shape {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	fk_Texture(fk_Image * = (fk_Image *)NULL);
+	fk_Texture(fk_Image * = nullptr);
 	virtual ~fk_Texture();
 	virtual void			init(void) = 0;
 
@@ -418,7 +418,7 @@ class fk_Texture: public fk_Shape {
 	 *	上記の2点の理由から、この関数の利用は推奨しません。
 	 *
 	 *	\return 画像データ配列の先頭アドレス。
-	 *	テクスチャ画像が生成、設定されていない場合は NULL を返します。
+	 *	テクスチャ画像が生成、設定されていない場合は nullptr を返します。
 	 *
 	 *	\sa fk_Image::getBufPointer()
 	 */
@@ -461,10 +461,10 @@ class fk_RectTexture : public fk_Texture {
 	//! コンストラクタ
 	/*!
 	 *	\param[in]	image
-	 *		テクスチャ画像。省略するか NULL を代入した場合は、
+	 *		テクスチャ画像。省略するか nullptr を代入した場合は、
 	 *	   	テクスチャ画像を初期状態では生成しません。
 	 */
-	fk_RectTexture(fk_Image *image = (fk_Image *)NULL);
+	fk_RectTexture(fk_Image *image = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_RectTexture();
@@ -634,10 +634,10 @@ class fk_TriTexture : public fk_Texture {
 	//! コンストラクタ
 	/*!
 	 *	\param[in]	image
-	 *		テクスチャ画像。省略するか NULL を代入した場合は、
+	 *		テクスチャ画像。省略するか nullptr を代入した場合は、
 	 *	   	テクスチャ画像を初期状態では生成しません。
 	 */
-	fk_TriTexture(fk_Image *image = (fk_Image *)NULL);
+	fk_TriTexture(fk_Image *image = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_TriTexture();
@@ -793,10 +793,10 @@ class fk_MeshTexture : public fk_Texture {
 	//! コンストラクタ
 	/*!
 	 *	\param[in]	image
-	 *		テクスチャ画像。省略するか NULL を代入した場合は、
+	 *		テクスチャ画像。省略するか nullptr を代入した場合は、
 	 *	   	テクスチャ画像を初期状態では生成しません。
 	 */
-	fk_MeshTexture(fk_Image *image = (fk_Image *)NULL);
+	fk_MeshTexture(fk_Image *image = nullptr);
 
 	//! デストラクタ
 	virtual ~fk_MeshTexture();

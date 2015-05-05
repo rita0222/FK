@@ -85,8 +85,8 @@ using namespace std;
 
 fk_FileOutput::fk_FileOutput(void)
 {
-	DB = NULL;
-	palette = NULL;
+	DB = nullptr;
+	palette = nullptr;
 	sizeMode = true;
 	return;
 }
@@ -252,7 +252,7 @@ void fk_FileOutput::PutVertexData(fk_DataFormatMode argMode,
 	IDSet[0] = argV->getElemMaterialID();
 	IDSet[1] = argV->getElemMaterialMode();
 
-	if(argV->getOneHalf() != NULL) {
+	if(argV->getOneHalf() != nullptr) {
 		IDSet[2] = argV->getOneHalf()->getID();
 	} else {
 		IDSet[2] = FK_UNDEFINED;
@@ -313,13 +313,13 @@ void fk_FileOutput::PutHalfData(fk_DataFormatMode argMode,
 	pL = argH->getParentLoop();
 	v = argH->getVertex();
 
-	if(nH != NULL) {
+	if(nH != nullptr) {
 		nHID = nH->getID();
 	}
-	if(pH != NULL) {
+	if(pH != nullptr) {
 		pHID = pH->getID();
 	}
-	if(pL != NULL) {
+	if(pL != nullptr) {
 		pLID = pL->getID();
 	}
 
@@ -403,7 +403,7 @@ void fk_FileOutput::PutLoopData(fk_DataFormatMode argMode,
 	int			IDSet[3];
 
 	h = argL->getOneHalf();
-	if(h != NULL) {
+	if(h != nullptr) {
 		oneHID = h->getID();
 	}
 
@@ -436,27 +436,15 @@ bool fk_FileOutput::PutAdminDataFile(fk_DataFormatMode argMode,
 									 ofstream &argOFS, fk_IDAdmin *argAdmin,
 									 const string &argTag)
 {
-	_st						eraseIDSize;
-	int						*listArray = NULL;
-	int						i;
-	list<int>::iterator		listP;
+	vector<int>		listArray;
 
-	eraseIDSize = argAdmin->eraseIDSet->size();
-	if(eraseIDSize > 0) {
-		listArray = new int [eraseIDSize];
-	}
-
-	i = 0;
-	for(listP = argAdmin->eraseIDSet->begin();
-		listP != argAdmin->eraseIDSet->end(); ++listP) {
-		listArray[i] = *listP;
-		i++;
+	for(auto listP : *(argAdmin->eraseIDSet)) {
+		listArray.push_back(listP);
 	}
 
 	PutAdminHeader(argMode, argOFS, argAdmin, argTag);
-	PutAdminEraseList(argMode, argOFS, listArray, int(eraseIDSize));
-
-	delete [] listArray;
+	PutAdminEraseList(argMode, argOFS, &(listArray[0]),
+					  int(argAdmin->eraseIDSet->size()));
 
 	return true;
 }

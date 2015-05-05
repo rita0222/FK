@@ -147,7 +147,7 @@ public:
 	 *
 	 *	\sa fk_Window, fk_Scene, fk_Model
 	 */
-	bool		entryFirst(fk_Window *win, fk_Scene *scene, fk_Model *camera = NULL);
+	bool		entryFirst(fk_Window *win, fk_Scene *scene, fk_Model *camera = nullptr);
 
 	//! Windows Bitmap (BMP)画像読み込み関数
 	/*!

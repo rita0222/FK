@@ -21,141 +21,137 @@ namespace FK_CLI
 			
 	public ref class fk_IndexFaceSet : fk_Shape {
 	internal:
-		::fk_IndexFaceSet * GetP(void)
-		{
-			return (::fk_IndexFaceSet *)(this->pBase);
-		}
+		::fk_IndexFaceSet * GetP(void);
 
 	public:
-		fk_IndexFaceSet::fk_IndexFaceSet(): fk_Shape(false)
-		{
-			this->pBase = new ::fk_IndexFaceSet();
+		fk_IndexFaceSet();
+		fk_IndexFaceSet(bool argNewFlg);
+		~fk_IndexFaceSet();
+		!fk_IndexFaceSet();
+
+		property int PosSize {
+			int get();
 		}
 
-		fk_IndexFaceSet::fk_IndexFaceSet(bool argNewFlg) : fk_Shape(false)
-		{
-			if(argNewFlg == true) this->pBase = new ::fk_IndexFaceSet();
+		property int FaceSize {
+			int get();
 		}
 
-		fk_IndexFaceSet::~fk_IndexFaceSet()
-		{
-			this->!fk_IndexFaceSet();
+		property fk_IFType^ FaceType {
+			fk_IFType^ get();
 		}
 
-		fk_IndexFaceSet::!fk_IndexFaceSet()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			pBase = nullptr;
+		property double AnimationTime {
+			void set(double);
+		}
+		
+		property fk_BVHMotion^ BVHMotion {
+			void set(fk_BVHMotion^);
 		}
 
-		void cloneShape(fk_IndexFaceSet^ IFS);
-		bool readSMFFile(String^ name);
-		bool readVRMLFile(String^ name, bool materialFlg, bool solidFlg);
-		bool readVRMLFile(String^ name, bool materialFlg);
-		bool readVRMLFile(String^ name);
-		bool readSTLFile(String^ name, bool solidFlg, double tolerance);
-		bool readSTLFile(String^ name, bool solidFlg);
-		bool readSTLFile(String^ name);
-		bool readHRCFile(String^ name);
-		bool readRDSFile(String^ name, bool solidFlg);
-		bool readRDSFile(String^ name);
-		bool readDXFFile(String^ name, bool solidFlg);
-		bool readDXFFile(String^ name);
-		bool readMQOFile(String^ fileName, String^ objName,
+		void CloneShape(fk_IndexFaceSet^ IFS);
+		bool ReadSMFFile(String^ name);
+		bool ReadVRMLFile(String^ name, bool materialFlg, bool solidFlg);
+		bool ReadVRMLFile(String^ name, bool materialFlg);
+		bool ReadVRMLFile(String^ name);
+		bool ReadSTLFile(String^ name, bool solidFlg, double tolerance);
+		bool ReadSTLFile(String^ name, bool solidFlg);
+		bool ReadSTLFile(String^ name);
+		bool ReadHRCFile(String^ name);
+		bool ReadRDSFile(String^ name, bool solidFlg);
+		bool ReadRDSFile(String^ name);
+		bool ReadDXFFile(String^ name, bool solidFlg);
+		bool ReadDXFFile(String^ name);
+		bool ReadMQOFile(String^ fileName, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
-		bool readMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
-		bool readMQOFile(String^ fileName, String^ objName, bool solidFlg);
-		bool readMQOFile(String^ fileName, String^ objName);
-		bool readMQOFile(String^ fileName, String^ objName,
+		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
+		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg);
+		bool ReadMQOFile(String^ fileName, String^ objName);
+		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg, bool materialFlg);
-		bool readMQOFile(String^ fileName, String^ objName,
+		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg);
-		bool readMQOFile(String^ fileName, String^ objName,
+		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg);
-		bool readMQOFile(String^ fileName, String^ objName, int materialID);
-		bool readMQOData(array<Byte>^ buffer, String^ objName,
+		bool ReadMQOFile(String^ fileName, String^ objName, int materialID);
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
-		bool readMQOData(array<Byte>^ buffer, String^ objName, bool solidFlg, bool contFlg);
-		bool readMQOData(array<Byte>^ buffer, String^ objName, bool solidFlg);
-		bool readMQOData(array<Byte>^ buffer, String^ objName);
-		bool readMQOData(array<Byte>^ buffer, String^ objName,
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName, bool solidFlg, bool contFlg);
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName, bool solidFlg);
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName);
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName,
 						 int MID, bool solidFlg, bool contFlg, bool materialFlg);
-		bool readMQOData(array<Byte>^ buffer, String^ objName,
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName,
 						 int MID, bool solidFlg, bool contFlg);
-		bool readMQOData(array<Byte>^ buffer, String^ objName, int materialID, bool solidFlg);
-		bool readMQOData(array<Byte>^ buffer, String^ objName, int materialID);
-		bool readD3DXFile(String^ fileName, String^ objName, bool solidFlg);
-		bool readD3DXFile(String^ fileName, String^ objName);
-		bool readD3DXFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
-		bool readD3DXFile(String^ fileName, String^ objName, int materialID);
-		bool writeVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
-		bool writeVRMLFile(String^ fileName, fk_Material^ material);
-		bool writeVRMLFile(String^ fileName);
-		bool writeVRMLFile(String^ fileName, array<double>^ time,
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName, int materialID, bool solidFlg);
+		bool ReadMQOData(array<Byte>^ buffer, String^ objName, int materialID);
+		bool ReadD3DXFile(String^ fileName, String^ objName, bool solidFlg);
+		bool ReadD3DXFile(String^ fileName, String^ objName);
+		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
+		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID);
+		bool WriteVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
+		bool WriteVRMLFile(String^ fileName, fk_Material^ material);
+		bool WriteVRMLFile(String^ fileName);
+		bool WriteVRMLFile(String^ fileName, array<double>^ time,
 						   array<fk_Vector^>^ Pos, fk_Material^ material, bool triFlg);
-		bool writeVRMLFile(String^ fileName, array<double>^ time,
+		bool WriteVRMLFile(String^ fileName, array<double>^ time,
 						   array<fk_Vector^>^ Pos, fk_Material^ material);
-		bool writeVRMLFile(String^ fileName, array<double>^ time,
+		bool WriteVRMLFile(String^ fileName, array<double>^ time,
 						   array<fk_Vector^>^ pos);
-		bool writeSTLFile(String ^fileName);
-		bool writeDXFFile(String ^fileName, bool triFlg);
-		bool writeDXFFile(String ^fileName);
-		bool writeMQOFile(String^ fileName);
-		int getPosSize(void);
-		int getFaceSize(void);
-		fk_Vector^ getPosVec(int vertexID);
-		array<int>^ getFaceData(int faceID);
-		int	getFaceData(int faceID, int vertexNum);
-		fk_IFType^ getFaceType(void);
-		fk_Vector^ getPNorm(int faceID, int order);
-		fk_Vector^ getPNorm(int faceID);
-		fk_Vector^ getVNorm(int vertexID, int order);
-		fk_Vector^ getVNorm(int vertexID);
-		int getElemMaterialID(int faceID);
-		bool moveVPosition(int vertexID, fk_Vector^ pos, int order);
-		bool moveVPosition(int vertexID, fk_Vector^ pos);
-		bool moveVPosition(int vertexID, double x, double y, double z, int order);
-		bool moveVPosition(int vertexID, double x, double y, double z);
-		bool moveVPosition(int vertexID, array<double>^ array, int order);
-		bool moveVPosition(int vertexID, array<double>^ array);
-		void makeIFSet(int faceNum, int polyNum, array<int>^ IFSet,
+		bool WriteSTLFile(String ^fileName);
+		bool WriteDXFFile(String ^fileName, bool triFlg);
+		bool WriteDXFFile(String ^fileName);
+		bool WriteMQOFile(String^ fileName);
+
+		fk_Vector^ GetPosVec(int vertexID);
+		array<int>^ GetFaceData(int faceID);
+		int	GetFaceData(int faceID, int vertexNum);
+		fk_Vector^ GetPNorm(int faceID, int order);
+		fk_Vector^ GetPNorm(int faceID);
+		fk_Vector^ GetVNorm(int vertexID, int order);
+		fk_Vector^ GetVNorm(int vertexID);
+		int GetElemMaterialID(int faceID);
+		bool MoveVPosition(int vertexID, fk_Vector^ pos, int order);
+		bool MoveVPosition(int vertexID, fk_Vector^ pos);
+		bool MoveVPosition(int vertexID, double x, double y, double z, int order);
+		bool MoveVPosition(int vertexID, double x, double y, double z);
+		bool MoveVPosition(int vertexID, array<double>^ array, int order);
+		bool MoveVPosition(int vertexID, array<double>^ array);
+		void MakeIFSet(int faceNum, int polyNum, array<int>^ IFSet,
 					   int vertexNum, array<fk_Vector^>^ posArray, int order);
-		void makeIFSet(int faceNum, int polyNum, array<int>^ IFSet,
+		void MakeIFSet(int faceNum, int polyNum, array<int>^ IFSet,
 					   int vertexNum, array<fk_Vector^>^ posArray);
-		bool setPNorm(int faceID, fk_Vector^ N, int order);
-		bool setPNorm(int faceID, fk_Vector^ N);
-		bool setVNorm(int vertexID, fk_Vector^ N, int order);
-		bool setVNorm(int vertexID, fk_Vector^ N);
-		bool setElemMaterialID(int faceID, int materialID);
-		void flush(void);
-		void makeBlock(double x, double y, double z);
-		void setBlockSize(double x, double y, double z);
-		void setBlockSize(double length, fk_Axis axis);
-		void setBlockScale(double scale);
-		void setBlockScale(double scale, fk_Axis axis);
-		void setBlockScale(double x, double y, double z);
-		void makeCircle(int div, double rad);
-		void setCircleRadius(double rad);
-		void setCircleDivide(int div);
-		void setCircleScale(double scale);
-		void makeSphere(int div, double rad);
-		void setSphereRadius(double rad);
-		void setSphereDivide(int div);
-		void setSphereScale(double scale);
-		void makePrism(int div, double top, double bottom, double height);
-		void setPrismDivide(int div);
-		void setPrismTopRadius(double top);
-		void setPrismBottomRadius(double bottom);
-		void setPrismHeight(double height);
-		void makeCone(int div, double rad, double height);
-		void setConeDivide(int div);
-		void setConeRadius(double rad);
-		void setConeHeight(double height);
-		void makeCapsule(int div, double length, double rad);
-		void setCapsuleSize(double length, double rad);
-		void setBVHMotion(fk_BVHMotion^ BVH);
-		void setAnimationTime(double time);
-		void putSolid(fk_Solid^ solid);
+		bool SetPNorm(int faceID, fk_Vector^ N, int order);
+		bool SetPNorm(int faceID, fk_Vector^ N);
+		bool SetVNorm(int vertexID, fk_Vector^ N, int order);
+		bool SetVNorm(int vertexID, fk_Vector^ N);
+		bool SetElemMaterialID(int faceID, int materialID);
+		void Flush(void);
+		void MakeBlock(double x, double y, double z);
+		void SetBlockSize(double x, double y, double z);
+		void SetBlockSize(double length, fk_Axis axis);
+		void SetBlockScale(double scale);
+		void SetBlockScale(double scale, fk_Axis axis);
+		void SetBlockScale(double x, double y, double z);
+		void MakeCircle(int div, double rad);
+		void SetCircleRadius(double rad);
+		void SetCircleDivide(int div);
+		void SetCircleScale(double scale);
+		void MakeSphere(int div, double rad);
+		void SetSphereRadius(double rad);
+		void SetSphereDivide(int div);
+		void SetSphereScale(double scale);
+		void MakePrism(int div, double top, double bottom, double height);
+		void SetPrismDivide(int div);
+		void SetPrismTopRadius(double top);
+		void SetPrismBottomRadius(double bottom);
+		void SetPrismHeight(double height);
+		void MakeCone(int div, double rad, double height);
+		void SetConeDivide(int div);
+		void SetConeRadius(double rad);
+		void SetConeHeight(double height);
+		void MakeCapsule(int div, double length, double rad);
+		void SetCapsuleSize(double length, double rad);
+		void PutSolid(fk_Solid^ solid);
 	};
 }

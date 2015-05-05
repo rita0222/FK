@@ -1,126 +1,145 @@
-#include "AudioBase_CLI.h"
+﻿#include "AudioBase_CLI.h"
 
 namespace FK_CLI {
 
-	void fk_AudioBase::pause(void)
+	::fk_AudioBase * fk_AudioBase::GetP(void)
 	{
-		GetP()->pause();
+		return pAudio;
 	}
-	
-	void fk_AudioBase::setGain(double argGain)
+
+	fk_AudioBase::fk_AudioBase()
 	{
-		GetP()->setGain(argGain);
+		dFlg = true;
 	}
-	
-	double fk_AudioBase::getGain(void)
+
+	fk_AudioBase::~fk_AudioBase()
+	{
+		this->!fk_AudioBase();
+	}
+
+	fk_AudioBase::!fk_AudioBase()
+	{
+		if(dFlg == true) delete pAudio;
+		pAudio = nullptr;
+	}
+
+	double fk_AudioBase::Gain::get()
 	{
 		return GetP()->getGain();
 	}
-	
-	void fk_AudioBase::setQueueSize(int argSize)
+
+	void fk_AudioBase::Gain::set(double v)
 	{
-		GetP()->setQueueSize(argSize);
+		GetP()->setGain(v);
 	}
-	
-	int fk_AudioBase::getQueueSize(void)
+
+	int fk_AudioBase::QueueSize::get()
 	{
 		return GetP()->getQueueSize();
 	}
-	
-	void fk_AudioBase::setLoopMode(bool argMode)
+
+	void fk_AudioBase::QueueSize::set(int v)
 	{
-		GetP()->setLoopMode(argMode);
+		GetP()->setQueueSize(v);
 	}
-		
-	bool fk_AudioBase::getLoopMode(void)
+
+	bool fk_AudioBase::LoopMode::get()
 	{
 		return GetP()->getLoopMode();
 	}
-	
-	void fk_AudioBase::setLoopArea(double argStart, double argEnd)
+
+	void fk_AudioBase::LoopMode::set(bool mode)
 	{
-		GetP()->setLoopArea(argStart, argEnd);
+		GetP()->setLoopMode(mode);
 	}
-	
-	double fk_AudioBase::getLoopStartTime(void)
+
+	fk_Vector^ fk_AudioBase::Position::get()
 	{
-		return GetP()->getLoopStartTime();
-	}
-	
-	double fk_AudioBase::getLoopEndTime(void)
-	{
-		return GetP()->getLoopEndTime();
-	}
-	
-	void fk_AudioBase::setPosition(fk_Vector^ argPos)
-	{
-		if(!argPos) return;
-		GetP()->setPosition(*argPos->pVec);
-	}
-	
-	fk_Vector^ fk_AudioBase::getPosition(void)
-	{
-		fk_Vector^ V = gcnew fk_Vector();
-		*V->pVec = GetP()->getPosition();
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getPosition());
 		return V;
 	}
-	
-	void fk_AudioBase::setModel(fk_Model^ argModel)
+
+	void fk_AudioBase::Position::set(fk_Vector^ argP)
 	{
-		if(!argModel) return;
-		GetP()->setModel(argModel->GetP());
+		GetP()->setPosition(argP);
 	}
-	
-	fk_Model^ fk_AudioBase::getModel(void)
+
+	fk_Model^ fk_AudioBase::Model::get()	
 	{
 		fk_Model^ M = gcnew fk_Model(false);
 		M->pBase = GetP()->getModel();
 		M->dFlg = false;
 		return M;
 	}
-	
-	void fk_AudioBase::setReferenceDist(double argDist)
+
+	void fk_AudioBase::Model::set(fk_Model^ argM)
 	{
-		GetP()->setReferenceDist(argDist);
+		if(!argM) return;
+		GetP()->setModel(argM->GetP());
 	}
-	
-	double fk_AudioBase::getReferenceDist(void)
+
+	double fk_AudioBase::Distance::get()
 	{
 		return GetP()->getReferenceDist();
 	}
-	
-	void fk_AudioBase::setSurroundMode(bool argMode)
+
+	void fk_AudioBase::Distance::set(double d)
+	{
+		GetP()->setReferenceDist(d);
+	}
+
+	bool fk_AudioBase::SurroundMode::get()
+	{
+		return GetP()->getSurroundMode();
+	}
+
+	void fk_AudioBase::SurroundMode::set(bool argMode)
 	{
 		GetP()->setSurroundMode(argMode);
 	}
 	
-	bool fk_AudioBase::getSurroundMode(void)
+	void fk_AudioBase::Pause(void)
 	{
-		return GetP()->getSurroundMode();
+		GetP()->pause();
+	}
+
+	void fk_AudioBase::SetLoopArea(double argStart, double argEnd)
+	{
+		GetP()->setLoopArea(argStart, argEnd);
 	}
 	
-	bool fk_AudioBase::init(void)
+	double fk_AudioBase::GetLoopStartTime(void)
+	{
+		return GetP()->getLoopStartTime();
+	}
+	
+	double fk_AudioBase::GetLoopEndTime(void)
+	{
+		return GetP()->getLoopEndTime();
+	}
+	
+	bool fk_AudioBase::Init(void)
 	{
 		return ::fk_AudioBase::init();
 	}
 	
-	bool fk_AudioBase::getInit(void)
+	bool fk_AudioBase::GetInit(void)
 	{
 		return ::fk_AudioBase::getInit();
 	}
 	
-	void fk_AudioBase::sleep(double argTime)
+	void fk_AudioBase::Sleep(double argTime)
 	{
 		::fk_AudioBase::sleep(argTime);
 	}
 	
-	void fk_AudioBase::setListenerModel(fk_Model^ argModel)
+	void fk_AudioBase::SetListenerModel(fk_Model^ argModel)
 	{
 		if(!argModel) return;
 		::fk_AudioBase::setListenerModel(argModel->GetP());
 	}
 	
-	fk_Model^ fk_AudioBase::getListenerModel(void)
+	fk_Model^ fk_AudioBase::GetListenerModel(void)
 	{
 		::fk_Model *pM = ::fk_AudioBase::getListenerModel();
 		if(pM == nullptr) return nullptr;

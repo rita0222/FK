@@ -5,37 +5,58 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	bool fk_ShapeViewer::draw(void)
+	::fk_ShapeViewer * fk_ShapeViewer::GetP(void)
 	{
-		return GetP()->draw();
+		return (::fk_ShapeViewer *)(pBase);
 	}
 
-	void fk_ShapeViewer::setWindowSize(int argW, int argH)
+	fk_ShapeViewer::fk_ShapeViewer() : fk_BaseObject(false)
 	{
-		GetP()->setWindowSize(argW, argH);
+		pBase = new ::fk_ShapeViewer();
 	}
 
-	void fk_ShapeViewer::setShape(fk_Shape^ argShape)
+	fk_ShapeViewer::fk_ShapeViewer(bool argNewFlg) : fk_BaseObject(false)
+	{
+		if(argNewFlg == true) pBase = new ::fk_ShapeViewer();
+	}
+
+	fk_ShapeViewer::fk_ShapeViewer(int argW, int argH) : fk_BaseObject(false)
+	{
+		pBase = new ::fk_ShapeViewer(argW, argH);
+	}
+
+	fk_ShapeViewer::~fk_ShapeViewer()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	fk_ShapeViewer::!fk_ShapeViewer()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) {
+			GetP()->SetFinalizeMode();
+			delete GetP();
+		}
+		pBase = nullptr;
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	
+	void fk_ShapeViewer::WindowSize::set(fk_Dimension^ argD)
+	{
+		if(!argD) return;
+		GetP()->setWindowSize(argD->pDim->w, argD->pDim->h);
+	}
+
+	void fk_ShapeViewer::Shape::set(fk_Shape^ argShape)
 	{
 		if(!argShape) return;
 		GetP()->setShape(argShape->GetP());
 	}
 
-	void fk_ShapeViewer::setShape(int argID, fk_Shape^ argShape)
-	{
-		if(!argShape) return;
-		GetP()->setShape(argID, argShape->GetP());
-	}
-
-	fk_Shape^ fk_ShapeViewer::getShape(int argID)
-	{
-		fk_Shape^ S = gcnew fk_Shape(false);
-		S->pBase = GetP()->getShape(argID);
-		S->dFlg = false;
-		return S;
-	}
-
-	fk_Shape^ fk_ShapeViewer::getShape(void)
+	fk_Shape^ fk_ShapeViewer::Shape::get()
 	{
 		fk_Shape^ S = gcnew fk_Shape(false);
 		S->pBase = GetP()->getShape();
@@ -43,214 +64,230 @@ namespace FK_CLI {
 		return S;
 	}
 
-	int fk_ShapeViewer::getModelNum(void)
+	int fk_ShapeViewer::ModelNum::get(void)
 	{
 		return GetP()->getModelNum();
 	}
 
-	void fk_ShapeViewer::clearModel(void)
-	{
-		GetP()->clearModel();
-	}
-
-	void fk_ShapeViewer::setDrawMode(fk_DrawMode argMode)
+	void fk_ShapeViewer::DrawMode::set(fk_DrawMode argMode)
 	{
 		unsigned int mode = static_cast<unsigned int>(argMode);
 		GetP()->setDrawMode(mode);
 	}
 
-	fk_DrawMode fk_ShapeViewer::getDrawMode(void)
+	fk_DrawMode fk_ShapeViewer::DrawMode::get(void)
 	{
 		return static_cast<fk_DrawMode>(GetP()->getDrawMode());
 	}
 
-	void fk_ShapeViewer::setBlendStatus(bool argMode)
+	void fk_ShapeViewer::BlendStatus::set(bool argMode)
 	{
 		GetP()->setBlendStatus(argMode);
 	}
 
-	bool fk_ShapeViewer::getBlendStatus(void)
+	bool fk_ShapeViewer::BlendStatus::get(void)
 	{
 		return GetP()->getBlendStatus();
 	}
 
-	void fk_ShapeViewer::setBGColor(fk_Color^ argCol)
+	void fk_ShapeViewer::BGColor::set(fk_Color^ argCol)
 	{
 		if(!argCol) return;
 		GetP()->setBGColor(*argCol->pCol);
 	}
 
-	void fk_ShapeViewer::setBGColor(float argR, float argG, float argB)
-	{
-		GetP()->setBGColor(argR, argG, argB);
-	}
-
-	fk_Color^ fk_ShapeViewer::getBGColor(void)
+	fk_Color^ fk_ShapeViewer::BGColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = GetP()->getBGColor();
 		return C;
 	}
 
-	void fk_ShapeViewer::setAxisMode(bool argMode)
+	void fk_ShapeViewer::AxisMode::set(bool argMode)
 	{
 		GetP()->setAxisMode(argMode);
 	}
 
-	bool fk_ShapeViewer::getAxisMode(void)
+	bool fk_ShapeViewer::AxisMode::get(void)
 	{
 		return GetP()->getAxisMode();
 	}
 
-	void fk_ShapeViewer::setAxisScale(double argScale)
+	void fk_ShapeViewer::AxisScale::set(double argScale)
 	{
 		GetP()->setAxisScale(argScale);
 	}
 
-	double fk_ShapeViewer::getAxisScale(void)
+	double fk_ShapeViewer::AxisScale::get(void)
 	{
 		return GetP()->getAxisScale();
 	}
 
-	fk_Vector^ fk_ShapeViewer::getCenter(void)
+	fk_Vector^ fk_ShapeViewer::Center::get(void)
 	{
 		return gcnew fk_Vector(GetP()->getCenter());
 	}
 
-	void fk_ShapeViewer::setDrawMode(int argID, fk_DrawMode argMode)
+	void fk_ShapeViewer::Head::set(double argAngle)
+	{
+		GetP()->setHead(argAngle);
+	}
+
+	double fk_ShapeViewer::Head::get(void)
+	{
+		return GetP()->getHead();
+	}
+
+	void fk_ShapeViewer::Pitch::set(double argAngle)
+	{
+		GetP()->setPitch(argAngle);
+	}
+
+	double fk_ShapeViewer::Pitch::get(void)
+	{
+		return GetP()->getPitch();
+	}
+
+	void fk_ShapeViewer::Bank::set(double argAngle)
+	{
+		return GetP()->setBank(argAngle);
+	}
+
+	double fk_ShapeViewer::Bank::get(void)
+	{
+		return GetP()->getBank();
+	}
+
+	void fk_ShapeViewer::Scale::set(double argScale)
+	{
+		GetP()->setScale(argScale);
+	}
+
+	double fk_ShapeViewer::Scale::get(void)
+	{
+		return GetP()->getScale();
+	}
+
+	//////////////////////////////////////////////////////////////////////
+
+	bool fk_ShapeViewer::Draw(void)
+	{
+		return GetP()->draw();
+	}
+
+	void fk_ShapeViewer::SetShape(int argID, fk_Shape^ argShape)
+	{
+		if(!argShape) return;
+		GetP()->setShape(argID, argShape->GetP());
+	}
+
+	fk_Shape^ fk_ShapeViewer::GetShape(int argID)
+	{
+		fk_Shape^ S = gcnew fk_Shape(false);
+		S->pBase = GetP()->getShape(argID);
+		S->dFlg = false;
+		return S;
+	}
+
+	void fk_ShapeViewer::ClearModel(void)
+	{
+		GetP()->clearModel();
+	}
+
+	void fk_ShapeViewer::SetDrawMode(int argID, fk_DrawMode argMode)
 	{
 		unsigned int mode = static_cast<unsigned int>(argMode);
 		GetP()->setDrawMode(argID, mode);
 	}
 
-	fk_DrawMode fk_ShapeViewer::getDrawMode(int argID)
+	fk_DrawMode fk_ShapeViewer::GetDrawMode(int argID)
 	{
 		return static_cast<fk_DrawMode>(GetP()->getDrawMode(argID));
 	}
 
-	void fk_ShapeViewer::setLineWidth(int argID, double argWidth)
+	void fk_ShapeViewer::SetLineWidth(int argID, double argWidth)
 	{
 		GetP()->setLineWidth(argID, argWidth);
 	}
 
-	double fk_ShapeViewer::getLineWidth(int argID)
+	double fk_ShapeViewer::GetLineWidth(int argID)
 	{
 		return GetP()->getLineWidth(argID);
 	}
 
-	void fk_ShapeViewer::setPointSize(int argID, double argSize)
+	void fk_ShapeViewer::SetPointSize(int argID, double argSize)
 	{
 		GetP()->setPointSize(argID, argSize);
 	}
 
-	double fk_ShapeViewer::getPointSize(int argID)
+	double fk_ShapeViewer::GetPointSize(int argID)
 	{
 		return GetP()->getPointSize(argID);
 	}
 
-	void fk_ShapeViewer::setMaterial(int argID, fk_Material^ argMat)
+	void fk_ShapeViewer::SetMaterial(int argID, fk_Material^ argMat)
 	{
 		if(!argMat) return;
 		GetP()->setMaterial(argID, *argMat->pMat);
 	}
 
-	void fk_ShapeViewer::setEdgeColor(int argID, fk_Color^ argCol)
+	void fk_ShapeViewer::SetEdgeColor(int argID, fk_Color^ argCol)
 	{
 		if(!argCol) return;
 		GetP()->setEdgeColor(argID, *argCol->pCol);
 	}
 
-	void fk_ShapeViewer::setVertexColor(int argID, fk_Color^ argCol)
+	void fk_ShapeViewer::SetVertexColor(int argID, fk_Color^ argCol)
 	{
 		if(!argCol) return;
 		GetP()->setVertexColor(argID, *argCol->pCol);
 	}
 
-	void fk_ShapeViewer::setHead(double argAngle)
-	{
-		GetP()->setHead(argAngle);
-	}
-
-	double fk_ShapeViewer::getHead(void)
-	{
-		return GetP()->getHead();
-	}
-
-	void fk_ShapeViewer::setPitch(double argAngle)
-	{
-		GetP()->setPitch(argAngle);
-	}
-
-	double fk_ShapeViewer::getPitch(void)
-	{
-		return GetP()->getPitch();
-	}
-
-	void fk_ShapeViewer::setBank(double argAngle)
-	{
-		return GetP()->setBank(argAngle);
-	}
-
-	double fk_ShapeViewer::getBank(void)
-	{
-		return GetP()->getBank();
-	}
-
-	void fk_ShapeViewer::setScale(double argScale)
-	{
-		GetP()->setScale(argScale);
-	}
-
-	double fk_ShapeViewer::getScale(void)
-	{
-		return GetP()->getScale();
-	}
-
-	void fk_ShapeViewer::setPosition(int argID, fk_Vector^ argPos)
+	void fk_ShapeViewer::SetPosition(int argID, fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setPosition(argID, *argPos->pVec);
+		GetP()->setPosition(argID, argPos);
 	}
 
-	void fk_ShapeViewer::setPosition(int argID, double argX, double argY, double argZ)
+	void fk_ShapeViewer::SetPosition(int argID, double argX, double argY, double argZ)
 	{
 		GetP()->setPosition(argID, argX, argY, argZ);
 	}
 
-	void fk_ShapeViewer::setAngle(int argID, fk_Angle^ argAngle)
+	void fk_ShapeViewer::SetAngle(int argID, fk_Angle^ argAngle)
 	{
 		if(!argAngle) return;
-		GetP()->setAngle(argID, *argAngle->pAngle);
+		GetP()->setAngle(argID, argAngle);
 	}
 
-	void fk_ShapeViewer::setAngle(int argID, double argH, double argP, double argB)
+	void fk_ShapeViewer::SetAngle(int argID, double argH, double argP, double argB)
 	{
 		GetP()->setAngle(argID, argH, argP, argB);
 	}
 
-	void fk_ShapeViewer::setVec(int argID, fk_Vector^ argVec)
+	void fk_ShapeViewer::SetVec(int argID, fk_Vector^ argVec)
 	{
 		if(!argVec) return;
-		GetP()->setVec(argID, *argVec->pVec);
+		GetP()->setVec(argID, argVec);
 	}
 
-	void fk_ShapeViewer::setVec(int argID, double argX, double argY, double argZ)
+	void fk_ShapeViewer::SetVec(int argID, double argX, double argY, double argZ)
 	{
 		GetP()->setVec(argID, argX, argY, argZ);
 	}
 
-	void fk_ShapeViewer::setUpvec(int argID, fk_Vector^ argVec)
+	void fk_ShapeViewer::SetUpvec(int argID, fk_Vector^ argVec)
 	{
 		if(!argVec) return;
-		GetP()->setUpvec(argID, *argVec->pVec);
+		GetP()->setUpvec(argID, argVec);
 	}
 
-	void fk_ShapeViewer::setUpvec(int argID, double argX, double argY, double argZ)
+	void fk_ShapeViewer::SetUpvec(int argID, double argX, double argY, double argZ)
 	{
 		GetP()->setUpvec(argID, argX, argY, argZ);
 	}
 
-	bool fk_ShapeViewer::snapImage(String^ argFileName, fk_ImageType argFormat)
+	bool fk_ShapeViewer::SnapImage(String^ argFileName, fk_ImageType argFormat)
 	{
 		string fileName = marshal_as<string>(argFileName);
 		switch(argFormat) {
@@ -269,7 +306,7 @@ namespace FK_CLI {
 		return false;
 	}
 
-	bool fk_ShapeViewer::snapImage(fk_Image^ argImage)
+	bool fk_ShapeViewer::SnapImage(fk_Image^ argImage)
 	{
 		if(!argImage) return false;
 		return GetP()->snapImage(argImage->GetP());

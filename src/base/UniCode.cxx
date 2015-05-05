@@ -172,7 +172,7 @@ bool fk_UniChar::readFile(FILE *argFP)
 {
 	unsigned char	buffer[3];
 
-	if(argFP == NULL) return false;
+	if(argFP == nullptr) return false;
 	if(fread(buffer, sizeof(unsigned char), 2, argFP) !=
 	   2*sizeof(unsigned char)) {
 		return false;
@@ -269,14 +269,14 @@ bool fk_UniStr::fgetLine(FILE *argFP, fk_StringCode argCode)
 {
 	char		buffer[512];
 
-	if(argFP == NULL) return false;
+	if(argFP == nullptr) return false;
 	if(feof(argFP) != 0) return false;
 
 	if(argCode == FK_STR_UTF16) {
 		return fgetLine_UTF16(argFP);
 	}
 
-	if(fgets(buffer, 511, argFP) == NULL) {
+	if(fgets(buffer, 511, argFP) == nullptr) {
 		return false;
 	}
 
@@ -290,7 +290,7 @@ bool fk_UniStr::fgetLine(ifstream *argIFS, fk_StringCode argCode)
 {
 	string		buffer;
 
-	if(argIFS == NULL) return false;
+	if(argIFS == nullptr) return false;
 	if(argIFS->eof() == true) return false;
 
 	if(argCode == FK_STR_UTF16) {
@@ -348,7 +348,7 @@ bool fk_UniStr::fgetLine_UTF16(FILE *argFP)
 	unsigned char	buffer[3];
 	fk_UniChar		uniChar;
 
-	if(argFP == NULL) return false;
+	if(argFP == nullptr) return false;
 
 	if(fread(static_cast<unsigned char *>(&buffer[0]),
 			 sizeof(unsigned char), 2, argFP) != 2) {
@@ -383,7 +383,7 @@ bool fk_UniStr::fgetLine_UTF16(ifstream *argIFS)
 	unsigned char	buffer[3];
 	fk_UniChar		uniChar;
 
-	if(argIFS == NULL) return false;
+	if(argIFS == nullptr) return false;
 
 	argIFS->read((char *)(&buffer[0]), sizeof(unsigned char) * 2);
 	do {
@@ -485,7 +485,7 @@ void fk_UniStr::pop_back(void)
 
 void fk_UniStr::push_back(fk_UniChar *argUC)
 {
-	if(argUC == NULL) return;
+	if(argUC == nullptr) return;
 
 	uniStr.push_back(argUC->getCode());
 	return;
@@ -507,7 +507,7 @@ void fk_UniStr::copyStr(fk_UniStr *argStr)
 {
 	_st		i;
 
-	if(argStr == NULL) return;
+	if(argStr == nullptr) return;
 
 	clear();
 	for(i = 0; i < argStr->uniStr.size(); i++) {
@@ -547,7 +547,7 @@ bool fk_UniStr::getLine(fk_UniStr *argStr)
 {
 	if(mark == getLength()) return false;
 
-	if(argStr == NULL) return false;
+	if(argStr == nullptr) return false;
 
 	argStr->clear();
 
@@ -627,13 +627,14 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-		if(iconv(argIV, const_cast<iconvpp>(&inBuf),
+		if(iconv(argIV, (char **)(&inBuf),
 				 &inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
 		}
 	}
 
 	for(i = 0; i < orgSize - outSize; i += 2) {
+		if(int(i) > _size) break;
 		uniChar.setBuffer(static_cast<unsigned char>(_buffer[i]),
 						  static_cast<unsigned char>(_buffer[i+1]));
 		outStr->push_back(&uniChar);
@@ -661,7 +662,7 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-		if(iconv(argIV, const_cast<iconvpp>(&inBuf),
+		if(iconv(argIV, (char **)(&inBuf),
 				 &inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
 		}
@@ -854,7 +855,7 @@ void fk_StrConverter::ConvertUTF16_UTF8(const string &argStr, string *outStr)
 
 void fk_StrConverter::convert_UTF8(const string &argStr, string *outStr, fk_StringCode argCode)
 {
-	if(outStr == NULL) return;
+	if(outStr == nullptr) return;
 
 	switch(argCode) {
 	  case FK_STR_JIS:
@@ -926,7 +927,7 @@ void fk_StrConverter::ConvertUTF16_SJIS(const string &argStr, string *outStr)
 
 void fk_StrConverter::convert_SJIS(const string &argStr, string *outStr, fk_StringCode argCode)
 {
-	if(outStr == NULL) return;
+	if(outStr == nullptr) return;
 
 	switch(argCode) {
 	  case FK_STR_JIS:

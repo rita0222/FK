@@ -472,3 +472,32 @@ bool fk_SetErrorFile(string argFileName)
 {
 	return getErrorDB()->SetFileName(argFileName);
 }
+
+#ifndef FK_CLI_CODE
+
+void fk_Printf(const char *argFormat, ...)
+{
+	va_list			ap;
+	string			buffer;
+
+	buffer.resize(8192, 0);
+	va_start(ap, argFormat);
+	vsnprintf(&buffer[0], 8191, argFormat, ap);
+	va_end(ap);
+	getErrorDB()->PutError(buffer);
+	return;
+}
+
+string fk_StrPrintf(const char *argFormat, ...)
+{
+	va_list		ap;
+	string		buffer;
+
+	buffer.resize(8192, 0);
+	va_start(ap, argFormat);
+	vsnprintf(&buffer[0], 8191, argFormat, ap);
+	va_end(ap);
+	return buffer;
+}
+
+#endif // !FK_CLI_CODE

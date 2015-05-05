@@ -246,7 +246,7 @@ fk_Particle * fk_ParticleSet::newParticle(const fk_Vector &argPos)
 	fk_Particle		*p;
 
 	if(maxNum <= static_cast<unsigned int>(pAdmin->GetIDNum())) {
-		return NULL;
+		return nullptr;
 	}
 
 	pID = static_cast<_st>(pAdmin->CreateID());
@@ -263,7 +263,7 @@ fk_Particle * fk_ParticleSet::newParticle(const fk_Vector &argPos)
 
 bool fk_ParticleSet::removeParticle(fk_Particle *argP)
 {
-	if(argP == NULL) return false;
+	if(argP == nullptr) return false;
 	return removeParticle(argP->getID());
 }
 
@@ -282,7 +282,7 @@ unsigned int fk_ParticleSet::getCount(void) const
 fk_Particle * fk_ParticleSet::getParticle(int argID) const
 {
 	if(pAdmin->ExistID(argID) == false) {
-		return NULL;
+		return nullptr;
 	}
 
 	return pSet[static_cast<_st>(argID)];
@@ -290,7 +290,7 @@ fk_Particle * fk_ParticleSet::getParticle(int argID) const
 
 fk_Particle * fk_ParticleSet::getNextParticle(fk_Particle *argP) const
 {
-	if(argP == NULL) {
+	if(argP == nullptr) {
 		return getParticle(pAdmin->GetNext(-1));
 	}
 	return getParticle(pAdmin->GetNext(argP->getID()));
@@ -381,12 +381,12 @@ void fk_ParticleSet::handle(void)
 	}
 
 	if(indivMode == true) {
-		for(p = getNextParticle(NULL); p != NULL; p = getNextParticle(p)) {
+		for(p = getNextParticle(nullptr); p != nullptr; p = getNextParticle(p)) {
 			indivMethod(p);
 		}
 	}
 
-	for(p = getNextParticle(NULL); p != NULL; p = getNextParticle(p)) {
+	for(p = getNextParticle(nullptr); p != nullptr; p = getNextParticle(p)) {
 		p->handle();
 	}
 

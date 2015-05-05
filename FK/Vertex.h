@@ -142,7 +142,7 @@ class fk_Vertex : public fk_Topology, public fk_TopologyMaterial {
 	 *	条件を満たす全ての半稜線を得たい場合は、
 	 *	fk_ReferenceL2::getAllHOnV() 関数を用いて下さい。
 	 *	\return この頂点を始点とする半稜線を表す fk_Half 型インスタンスのアドレス。
-	 *	対象となる半稜線が存在しない場合は NULL を返します。
+	 *	対象となる半稜線が存在しない場合は nullptr を返します。
 	 */
 	fk_Half *	getOneHalf(void) const;
 

@@ -5,58 +5,47 @@
 #include <FK/SpriteModel.h>
 #include "Model_CLI.h"
 #include "Texture_CLI.h"
+#include "TextImage_CLI.h"
 
 namespace FK_CLI
 {
 	public ref class fk_SpriteModel : fk_Model {
 	internal:
-		::fk_SpriteModel * GetP(void)
-		{
-			return (::fk_SpriteModel *)(pBase);
-		}
+		::fk_SpriteModel * GetP(void);
 
 	public:
-		fk_SpriteModel::fk_SpriteModel() : fk_Model(false)
-		{
-			pBase = new ::fk_SpriteModel();
+		fk_SpriteModel();
+		fk_SpriteModel(bool argNewFlg);
+		~fk_SpriteModel();
+		!fk_SpriteModel();
+
+		property fk_TextImage^ Text {
+			fk_TextImage^ get();
 		}
 
-		fk_SpriteModel::fk_SpriteModel(bool argNewFlg) : fk_Model(false)
-		{
-			if(argNewFlg == true) pBase = new ::fk_SpriteModel();
+		property fk_Image^ Image {
+			fk_Image^ get();
+			void set(fk_Image^);
 		}
 
-		fk_SpriteModel::~fk_SpriteModel()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete GetP();
-			this->pBase = nullptr;
+		property fk_TexCoord^ Size {
+			fk_TexCoord^ get();
+			void set(fk_TexCoord^);
 		}
 
-		fk_SpriteModel::!fk_SpriteModel()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) {
-				GetP()->SetFinalizeMode();
-				delete GetP();
-			}
-			this->pBase = nullptr;
+		property bool SmoothMode {
+			bool get();
+			void set(bool);
 		}
 
-		bool readBMP(String^ filename);
-		bool readPNG(String^ filename);
-		bool readJPG(String^ filename);
-		void setImage(fk_Image^ image);
-		fk_Image^ getImage(void);
-		void setPositionLT(double x, double y);
-		void setSpriteArea(double x, double y, double w, double h);
-		void setSpriteSize(double width, double height);
-		fk_TexCoord^ getSpriteSize(void);
-		void setSpriteSmoothMode(bool mode);
-		bool getSpriteSmoothMode(void);
-		bool initFont(String^ fontFileName);
-		void drawText(String^ str);
-		void drawText(String^ str, bool mode);
-		void clearText(void);
+		bool			ReadBMP(String^ filename);
+		bool			ReadPNG(String^ filename);
+		bool			ReadJPG(String^ filename);
+		void			SetPositionLT(double x, double y);
+		void			SetSpriteArea(double x, double y, double w, double h);
+		bool			InitFont(String^ fontFileName);
+		void			DrawText(String^ str);
+		void			DrawText(String^ str, bool mode);
+		void			ClearText(void);
 	};
 }

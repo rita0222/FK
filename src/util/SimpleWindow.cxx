@@ -615,7 +615,8 @@ int fk_AppWindow::getPadCount(void)
 
 fk_SwitchStatus fk_AppWindow::getPadButtonStatus(int padID, int buttonID)
 {
-	if(padID > inputCount || buttonID > 32+4) return FK_SW_RELEASE;
+	//	if(padID > inputCount || buttonID > 32+4) return FK_SW_RELEASE;
+	if(padID > inputCount) return FK_SW_RELEASE;
 
 	switch(buttonID) {
 	case FK_PAD_UP:
@@ -627,15 +628,17 @@ fk_SwitchStatus fk_AppWindow::getPadButtonStatus(int padID, int buttonID)
 	case FK_PAD_RIGHT:
 		return GetSwitchStatus(nowInput[padID].right, prevInput[padID].right);
 	default:
-		return GetSwitchStatus(nowInput[padID].button[buttonID],
-								prevInput[padID].button[buttonID]);
+	  break;	
 	}
+	if(buttonID > 32) return FK_SW_RELEASE;
+	return GetSwitchStatus(nowInput[padID].button[buttonID],
+						   prevInput[padID].button[buttonID]);
 }
 
 fk_Vector fk_AppWindow::getPadDirection(int padID, int axisID)
 {
 	fk_Vector	retVec;
-	if(padID > inputCount || axisID > 3) return retVec;
+	if(padID > inputCount || axisID >= 3) return retVec;
 
 	retVec.x = nowInput[padID].x[axisID] * 0.001;
 	retVec.y = nowInput[padID].y[axisID] * 0.001;

@@ -2,7 +2,29 @@
 
 namespace FK_CLI {
 
-	fk_RealShapeType^ fk_Shape::getRealShapeType(void)
+	::fk_Shape * fk_Shape::GetP(void)
+	{
+		return (::fk_Shape *)(pBase);
+	}
+
+	fk_Shape::fk_Shape(bool argNewFlg) : fk_Attribute(false)
+	{
+		if(argNewFlg == true) pBase = new ::fk_Shape();
+	}
+
+	fk_Shape::~fk_Shape()
+	{
+		this->!fk_Shape();
+	}
+
+	fk_Shape::!fk_Shape()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	fk_RealShapeType^ fk_Shape::RealShapeType::get(void)
 	{
 		fk_RealShapeType^ type = gcnew fk_RealShapeType();
 
@@ -37,7 +59,8 @@ namespace FK_CLI {
 		return type;
 	}
 			
-	fk_Palette^ fk_Shape::getPaletteData(void)
+
+	fk_Palette^ fk_Shape::Palette::get(void)
 	{
 		::fk_Palette *pP = GetP()->getPaletteData();
 		if(pP == nullptr) return nullptr;
@@ -48,29 +71,7 @@ namespace FK_CLI {
 		return pal;
 	}
 
-	void fk_Shape::clearMaterial(void)
-	{
-		GetP()->clearMaterial();
-	}
-		
-	void fk_Shape::setObjMaterialID(int argID)
-	{
-		GetP()->setObjMaterialID(argID);
-	}
-		
-	void fk_Shape::pushPalette(fk_Material^ argMat)
-	{
-		if(!argMat) return;
-		GetP()->pushPalette(*argMat->pMat);
-	}
-
-	void fk_Shape::setPalette(fk_Material^ argMat, int argID)
-	{
-		if(!argMat) return;
-		GetP()->setPalette(*argMat->pMat, argID);
-	}
-
-	void fk_Shape::setMaterialMode(fk_MaterialMode argMode)
+	void fk_Shape::MaterialMode::set(fk_MaterialMode argMode)
 	{
 		switch(argMode) {
 		  case fk_MaterialMode::CHILD:
@@ -87,7 +88,7 @@ namespace FK_CLI {
 		}
 	}
 
-	fk_MaterialMode fk_Shape::getMaterialMode(void)
+	fk_MaterialMode fk_Shape::MaterialMode::get(void)
 	{
 		switch(GetP()->getMaterialMode()) {
 		  case FK_CHILD_MODE:
@@ -103,28 +104,50 @@ namespace FK_CLI {
 		return fk_MaterialMode::NONE;
 	}
 
-	int fk_Shape::getObjMaterialID(void)
+	void fk_Shape::MaterialID::set(int argID)
+	{
+		GetP()->setObjMaterialID(argID);
+	}
+		
+	int fk_Shape::MaterialID::get(void)
 	{
 		return GetP()->getObjMaterialID();
 	}
 
-	int fk_Shape::getPaletteSize(void)
+	int fk_Shape::PaletteSize::get(void)
 	{
 		return GetP()->getPaletteSize();
 	}
 		
-	fk_Material^ fk_Shape::getMaterial(int argID)
+	array<fk_Material^>^ fk_Shape::MaterialVector::get(void)
+	{
+		fk_Palette^	pal = Palette::get();
+		if(!pal) return nullptr;
+		return pal->MaterialVector;
+	}
+
+	void fk_Shape::ClearMaterial(void)
+	{
+		GetP()->clearMaterial();
+	}
+		
+	void fk_Shape::PushPalette(fk_Material^ argMat)
+	{
+		if(!argMat) return;
+		GetP()->pushPalette(*argMat->pMat);
+	}
+
+	void fk_Shape::SetPalette(fk_Material^ argMat, int argID)
+	{
+		if(!argMat) return;
+		GetP()->setPalette(*argMat->pMat, argID);
+	}
+
+	fk_Material^ fk_Shape::GetMaterial(int argID)
 	{
 		fk_Material^ mat = gcnew fk_Material();
 		*mat->pMat = *(GetP()->getMaterial(argID));
 		return mat;
 	}
 
-	array<fk_Material^>^ fk_Shape::getMaterialVector(void)
-	{
-		fk_Palette^	pal = getPaletteData();
-		if(!pal) return nullptr;
-		return pal->getMaterialVector();
-	}
 }
-

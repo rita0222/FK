@@ -20,22 +20,22 @@ namespace FK_CLI_C
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			// 光源生成
 			var light = new fk_Light();
 			var lightModel = new fk_Model();
-			lightModel.setMaterial(fk_Material.TrueWhite);
-			lightModel.glMoveTo(0.0, 0.0, 0.0);
-			lightModel.glFocus(-1.0, -1.0, -1.0);
-			win.entry(lightModel);
+			lightModel.Material = fk_Material.TrueWhite;
+			lightModel.GlMoveTo(0.0, 0.0, 0.0);
+			lightModel.GlFocus(-1.0, -1.0, -1.0);
+			win.Entry(lightModel);
 
 			// 直方体モデル生成
 			var blockModel = new fk_Model();
 			var block = new fk_Block(50.0, 70.0, 40.0);
-			blockModel.setShape(block);
-			blockModel.setMaterial(fk_Material.Yellow);
-			win.entry(blockModel);
+			blockModel.Shape = block;
+			blockModel.Material = fk_Material.Yellow;
+			win.Entry(blockModel);
 
 			// 線分モデル生成
 			fk_Vector[] pos = new fk_Vector[4];
@@ -47,31 +47,32 @@ namespace FK_CLI_C
 			fk_Model[] lineModel = new fk_Model[2];
 			for(i = 0; i < 2; i++) {
 				line[i] = new fk_Line();
-				line[i].pushLine(pos[2*i], pos[2*i + 1]);
+				line[i].PushLine(pos[2*i], pos[2*i + 1]);
 				lineModel[i] = new fk_Model();
-				lineModel[i].setShape(line[i]);
-				lineModel[i].setParent(blockModel);
-				win.entry(lineModel[i]);
+				lineModel[i].Shape = line[i];
+				lineModel[i].Parent = blockModel;
+				win.Entry(lineModel[i]);
 			}
 
-			lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
-			lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
+			lineModel[0].LineColor = new fk_Color(1.0, 0.0, 0.0);
+			lineModel[1].LineColor = new fk_Color(0.0, 1.0, 0.0);
 
 			// カメラモデル生成
 			var camera = new fk_Model();
-			camera.glMoveTo(0.0, 0.0, 2000.0);
-			camera.glFocus(0.0, 0.0, 0.0);
-			camera.glUpvec(0.0, 1.0, 0.0);
-			win.setCameraModel(camera);
-			win.open();
+			camera.GlMoveTo(0.0, 0.0, 2000.0);
+			camera.GlFocus(0.0, 0.0, 0.0);
+			camera.GlUpvec(0.0, 1.0, 0.0);
+			win.CameraModel = camera;
+			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
-			for(i = 0; win.update() == true; i++) {
-				camera.glTranslate(0.0, 0.0, -1.0);
-				var cPos = camera.getPosition();
-				if(cPos.z < -FK.EPS) camera.glFocus(origin);
-				if(i >= 1000) camera.loRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+			for(i = 0; win.Update() == true; i++) {
+				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
+				camera.GlTranslate(0.0, 0.0, -1.0);
+				var cPos = camera.Position;
+				if(cPos.z < -FK.EPS) camera.GlFocus(origin);
+				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
 			}
 		}
 
@@ -79,43 +80,43 @@ namespace FK_CLI_C
 		{
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 
 			var textImage = new fk_TextImage();
 			var texture = new fk_RectTexture();
 			var str = new fk_UniStr();
 			var strModel = new fk_Model();
 
-			str.convert("FK 日本語");
-			texture.setImage(textImage);
-			if(textImage.initFont("mona.ttf") == false) {
+			str.Convert("FK 日本語");
+			texture.Image = textImage;
+			if(textImage.InitFont("mona.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
-			textImage.setDPI(96);
-			textImage.setPTSize(96);
-			textImage.setLineSkip(30);
-			textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
-			textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
-			textImage.setAlign(fk_TextAlign.CENTER);
-			textImage.loadUniStr(str);
-			texture.setTextureSize(40.0, 10.0);
-			strModel.setMaterial(fk_Material.TrueWhite);			
+			textImage.DPI = 96;
+			textImage.PTSize = 96;
+			textImage.LineSkip = 30;
+			textImage.ForeColor = new fk_Color(0.5, 1.0, 0.8, 1.0);
+			textImage.BackColor = new fk_Color(0.2, 0.7, 0.8, 0.0);
+			textImage.Align = fk_TextAlign.CENTER;
+			textImage.LoadUniStr(str);
+			texture.TextureSize = new fk_TexCoord(40.0, 10.0);
+			strModel.Material = fk_Material.TrueWhite;
 
-			strModel.setShape(texture);
-			strModel.glVec(0.0, 0.0, -1.0);
-			win.entry(strModel);
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
-			win.open();
-			win.setCameraPos(0.0, 0.0, 100.0);
-			win.setCameraFocus(0.0, 0.0, 0.0);
-			while(win.update() == true) {
-				strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
+			strModel.Shape = texture;
+			strModel.GlVec(0.0, 0.0, -1.0);
+			win.Entry(strModel);
+			strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
+			win.Open();
+			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
+			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+			while(win.Update() == true) {
+				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
 			}
 		}
 		static void samp3()
 		{
 			var window = new fk_AppWindow();
-			fk_Material.initDefault();
+			fk_Material.InitDefault();
 			
 			var sprite = new fk_SpriteModel();
 			var block = new fk_Block(1.0, 1.0, 1.0);
@@ -124,30 +125,30 @@ namespace FK_CLI_C
 			int count;
 			string str;
  
-			if(sprite.initFont("mona.ttf") == false) {
+			if(sprite.InitFont("mona.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
 
-			sprite.setPositionLT(-280.0, 230.0);
-			window.entry(sprite);
+			sprite.SetPositionLT(-280.0, 230.0);
+			window.Entry(sprite);
  
-			model.setShape(block);
-			model.glMoveTo(0.0, 6.0, 0.0);
-			model.setMaterial(fk_Material.Yellow);
-			window.entry(model);
+			model.Shape = block;
+			model.GlMoveTo(0.0, 6.0, 0.0);
+			model.Material = fk_Material.Yellow;
+			window.Entry(model);
  
-			window.setCameraPos(0.0, 5.0, 20.0);
-			window.setCameraFocus(0.0, 5.0, 0.0);
-			window.setSize(800, 600);
-			window.setBGColor(0.6, 0.7, 0.8);
-			window.open();
-			window.showGuide(fk_GuideMode.GRID_XZ);
+			window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
+			window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
+			window.Size = new fk_Dimension(800, 600);
+			window.BGColor= new fk_Color(0.6, 0.7, 0.8);
+			window.Open();
+			window.ShowGuide(fk_GuideMode.GRID_XZ);
  
 			count = 0;
-			while(window.update() == true) {
+			while(window.Update() == true) {
 				str = "count = " + count.ToString();
-				sprite.drawText(str, true);
-				model.glRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+				sprite.DrawText(str, true);
+				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 				count++;
 			}
 		}

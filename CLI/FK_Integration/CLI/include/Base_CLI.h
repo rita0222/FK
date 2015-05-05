@@ -7,86 +7,35 @@
 namespace FK_CLI {
 	using namespace System;
 
+	//! リテラル管理クラス
+	/*!
+	 *	このクラスは、FK 内で用いるリテラル(固定値)を管理します。
+	 */
 	public ref class FK {
 	public:
-		literal double PI = _FK_PI_DEFINE_;
-		literal double EPS = _FK_EPS_DEFINE_;
+		literal double PI = _FK_PI_DEFINE_;		//!< 円周率
+		literal double EPS = _FK_EPS_DEFINE_;	//!< 数値演算用誤差値
 	};
 
-	public enum class fk_ObjectType {
-		BASEOBJECT,
-		MATRIXADMIN,
-		MODEL,
-		DISPLAYLINK,
-		SCENE,
-		SHAPE,
-		POLYGON,
-		LINE,
-		POLYLINE,
-		POINT,
-		CIRCLE,
-		SPHERE,
-		BLOCK,
-		CLOSEDLINE,
-		PRISM,
-		CAPSULE,
-		CONE,
-		INDEXFACESET,
-		LIGHT,
-		BEZCURVE,
-		BSPLCURVE,
-		BEZSURFACE,
-		BSPLSURFACE,
-		IMAGE,
-		TEXCOORD,
-		TEXTURE,
-		RECTTEXTURE,
-		TRITEXTURE,
-		MESHTEXTURE,
-		IFSTEXTURE,
-		UNICHAR,
-		UNISTR,
-		TEXTIMAGE,
-		COLOR,
-		MATERIAL,
-		PALETTE,
-		PLANE,
-		WINDOW,
-		PICKDATA,
-		PROJECTBASE,
-		PERSPECTIVE,
-		FRUSTUM,
-		ORTHO,
-		VERTEX,
-		HALF,
-		EDGE,
-		LOOP,
-		SOLID,
-		SHAPEVIEWER,
-		PARTICLE,
-		PARTICLESET
-	};
-
+	//! FK の各クラスの基盤となる基本クラス
+	/*!
+	 *	このクラスは、FKのユーザが利用する大半のクラスの基底クラスとなっています。
+	 */
 	public ref class fk_BaseObject {
 	public:
+#ifndef FK_DOXYGEN_USER_PROCESS		
 		bool dFlg;
 		::fk_BaseObject *pBase;
+		//! コンストラクタ
+		fk_BaseObject(bool);
 
-		fk_BaseObject::fk_BaseObject(bool argNewFlg) : dFlg(true)
-		{
-			if(argNewFlg == true) pBase = nullptr;
-		}
-		
-		fk_BaseObject::~fk_BaseObject()
-		{
-			this->!fk_BaseObject();
-		}
+		//! デストラクタ
+		~fk_BaseObject();
 
-		fk_BaseObject::!fk_BaseObject()
-		{
-			if(pBase == nullptr) return;
-			if(dFlg == true) delete pBase;
-			pBase = nullptr;
-		}
+		//! ファイナライザ
+		!fk_BaseObject();
+#endif
 	};
 }
+
+

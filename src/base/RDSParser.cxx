@@ -92,7 +92,7 @@ bool fk_RDSParser::ReadRDSFile(string argFileName, bool argSolidFlg)
 	vector<int>				vMap;
 	vector< vector<int> >	lIndex;
 
-	if(meshData == NULL) return false;
+	if(meshData == nullptr) return false;
 
 	if(ifs.fail()) return false;
 
@@ -117,7 +117,7 @@ bool fk_RDSParser::ReadRDSFile(string argFileName, bool argSolidFlg)
 
 	meshData->Init();
 
-	return meshData->MakeMesh(&vData, &lIndex, NULL, argSolidFlg);
+	return meshData->MakeMesh(&vData, &lIndex, nullptr, argSolidFlg);
 }
 
 bool fk_RDSParser::CheckRDSFile(ifstream &argIFS)

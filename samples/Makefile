@@ -62,7 +62,6 @@ all:
 
 fb:
 	$(MAKE) $(TARGET) \
-	"GRAMOPT = -std=c++1y" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I../../include -I$(LOCAL)/include" \
 	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \
@@ -78,7 +77,6 @@ fb:
 fb-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
-	"GRAMOPT = -std=c++1y" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I../../include -I$(LOCAL)/include" \
 	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \

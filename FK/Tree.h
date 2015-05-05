@@ -186,19 +186,19 @@ class fk_TreeData {
 	/*!
 	 *	このノードの子ノードを逐次的に参照します。
 	 *	引数に代入したノードインスタンスによる、以下のような動作を行います。
-	 *	- 引数に NULL を入力した場合、最も前にある子ノードを返します。
-	 *		(子ノードが存在しなかった場合は、NULL を返します。)
+	 *	- 引数に nullptr を入力した場合、最も前にある子ノードを返します。
+	 *		(子ノードが存在しなかった場合は、nullptr を返します。)
 	 *	- その後、子ノードのインスタンスを入力すると、
 	 *		その1つ後の子ノードを返します。
-	 *	- 最下位のノードを入力した場合は、NULL を返します。
-	 *	- 子ノードでないインスタンスを入力した場合は、NULL を返します。
+	 *	- 最下位のノードを入力した場合は、nullptr を返します。
+	 *	- 子ノードでないインスタンスを入力した場合は、nullptr を返します。
 	 *	.
 	 *	以下のコードは、子ノードを順番に参照するものです。
 	 *
 	 *		fk_TreeData		*parent, *child;
 	 *
-	 *		for(child = parent->getChild(NULL);
-	 *			child != NULL;
+	 *		for(child = parent->getChild(nullptr);
+	 *			child != nullptr;
 	 *			child = parent->getChild(child)) {
 	 *			// child に子ノードが順番に入ります。
 	 *		}
@@ -207,7 +207,7 @@ class fk_TreeData {
 	 *
 	 *	\return
 	 *		引数の次の順位の子ノードインスタンスを返します。
-	 *		該当するノードが存在しない場合は NULL を返します。
+	 *		該当するノードが存在しない場合は nullptr を返します。
 	 *
 	 *	\sa getParent(), getPrev(), getNext(), getChildrenSize()
 	 */
@@ -216,7 +216,7 @@ class fk_TreeData {
 	//! 親ノード参照関数
 	/*!
 	 *	このノードの親ノードインスタンスを返します。
-	 *	もし根ノードにおいてこの関数を呼んだ場合は、NULL を返します。
+	 *	もし根ノードにおいてこの関数を呼んだ場合は、nullptr を返します。
 	 *
 	 *	\return		親ノードインスタンス
 	 *
@@ -228,9 +228,9 @@ class fk_TreeData {
 	/*!
 	 *	このノードを構成する兄弟ノードのうち、
 	 *	順位が1つ後のノードインスタンスを返します。
-	 *	そのようなノードが存在しない場合は NULL を返します。
+	 *	そのようなノードが存在しない場合は nullptr を返します。
 	 *
-	 *	\return		後ノードインスタンス。存在しない場合は NULL を返します。
+	 *	\return		後ノードインスタンス。存在しない場合は nullptr を返します。
 	 *
 	 *	\sa getChild(), getParent(), getPrev(), getOrder(), getChildrenSize()
 	 */
@@ -240,9 +240,9 @@ class fk_TreeData {
 	/*!
 	 *	このノードを構成する兄弟ノードのうち、
 	 *	順位が1つ前のノードインスタンスを返します。
-	 *	そのようなノードが存在しない場合は NULL を返します。
+	 *	そのようなノードが存在しない場合は nullptr を返します。
 	 *
-	 *	\return		前ノードインスタンス。存在しない場合は NULL を返します。
+	 *	\return		前ノードインスタンス。存在しない場合は nullptr を返します。
 	 *
 	 *	\sa getChild(), getParent(), getNext(), getOrder(), getChildrenSize()
 	 */
@@ -312,7 +312,7 @@ class fk_TreeData {
 	//! ユーザデータ参照関数
 	/*!
 	 *	setObject() によって設定されていたユーザデータを取得します。
-	 *	ユーザデータが設定されていなかった場合は NULL を返します。
+	 *	ユーザデータが設定されていなかった場合は nullptr を返します。
 	 *
 	 *	\return		ユーザ定義インスタンス
 	 *
@@ -547,7 +547,7 @@ class fk_Tree {
 	 *
 	 *	\return
 	 *		成功した場合、新たに生成されたノードインスタンスを返します。
-	 *		失敗した場合は NULL を返します。
+	 *		失敗した場合は nullptr を返します。
 	 *
 	 *	\sa cloneBranch(), moveBranch()
 	 */
@@ -575,7 +575,7 @@ class fk_Tree {
 	 *
 	 *	\return
 	 *		成功した場合、新たに生成されたノードインスタンスを返します。
-	 *		失敗した場合は NULL を返します。
+	 *		失敗した場合は nullptr を返します。
 	 *
 	 *	\sa cloneOneData(), moveBranch()
 	 */
@@ -669,7 +669,7 @@ class fk_Tree {
 	 *
 	 *	\return
 	 *		見つかれば、そのインスタンスを返します。
-	 *		データ内に存在していなかった場合は NULL を返します。
+	 *		データ内に存在していなかった場合は nullptr を返します。
 	 */
 	fk_TreeData *	findData(const std::string name);
 
@@ -677,18 +677,18 @@ class fk_Tree {
 	/*!
 	 *	データ内の各ノードを、逐次的に参照していきます。
 	 *	引数に代入したノードインスタンスにより、以下のような動作を行います。
-	 *	- 引数に NULL を代入した場合、根ノードを返します。
+	 *	- 引数に nullptr を代入した場合、根ノードを返します。
 	 *	- 任意のノードを引数に代入したときは、
 	 *		そのノードの次に生成されたノードを返します。
-	 *	- 最後に生成したノードを代入したときは、NULL を返します。
+	 *	- 最後に生成したノードを代入したときは、nullptr を返します。
 	 *	.
 	 *	以下のコードは、データ内の全てのノードを参照するものです。
 	 *
 	 *		fk_Tree			tree;
 	 *		fk_TreeData		*node;
 	 *
-	 *		for(node = tree.foreachData(NULL);
-	 *			node != NULL;
+	 *		for(node = tree.foreachData(nullptr);
+	 *			node != nullptr;
 	 *			node = tree.foreachData(node)) {
 	 *			// node 変数にノードが入っています。
 	 *		}
@@ -697,7 +697,7 @@ class fk_Tree {
 	 *
 	 *	\return
 	 *		引数の次に生成されたノードインスタンスを返します。
-	 *		引数のノードが最後に生成されたインスタンスであった場合は NULL を返します。
+	 *		引数のノードが最後に生成されたインスタンスであった場合は nullptr を返します。
 	 */
 	fk_TreeData *	foreachData(fk_TreeData *node);
 

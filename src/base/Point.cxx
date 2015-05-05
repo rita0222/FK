@@ -95,7 +95,7 @@ bool fk_Point::MakePoint(int argNum, fk_Vector *argP)
 	fk_FVector	tmp;
 
 	if(argNum < 0) return false;
-	if(argP == NULL) return true;
+	if(argP == nullptr) return true;
 
 	vec.clear();
 
@@ -128,7 +128,7 @@ bool fk_Point::MakePoint(vector<fk_Vector> *argP)
 	colorID.clear();
 	colorCount = 0;
 
-	if(argP == NULL) return true;
+	if(argP == nullptr) return true;
 	for(i = 0; i < argP->size(); i++) {
 		tmp = (*argP)[i];
 		vec.push(tmp);
@@ -188,7 +188,7 @@ bool fk_Point::removeVertex(int argID)
 
 fk_FVector * fk_Point::getVertex(int argID)
 {
-	if(vec.isAlive(argID) == false) return NULL;
+	if(vec.isAlive(argID) == false) return nullptr;
 	return vec.at(argID);
 }
 

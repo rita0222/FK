@@ -164,7 +164,7 @@ void fk_Image::init(void)
 	bufSize.w = 0;
 	bufSize.h = 0;
 	imageBuf.clear();
-	bufPointer = NULL;
+	bufPointer = nullptr;
 	SetInitFlag(true);
 	fk_TextureDraw::ReleaseTexture(this);
 
@@ -244,7 +244,7 @@ fk_ImageStatus fk_Image::CreateImg(fk_ImType *argBuffer)
 {
 	init();
 
-	if(argBuffer == NULL) {
+	if(argBuffer == nullptr) {
 		imageSize.w = imageSize.h = 0;
 		return FK_IMAGE_OK;
 	}
@@ -296,7 +296,7 @@ void fk_Image::CreateBuffer(int argW, int argH, bool argInitFlg)
 	imageSize.set(argW, argH);
 	bufSize.set(tmpBufSizeW, tmpBufSizeH);
 
-	if(bufPointer == NULL) {
+	if(bufPointer == nullptr) {
 		bSize = static_cast<_st>(bufSize.w * bufSize.h * 4);
 		imageBuf.resize(bSize);
 		bufPointer = &imageBuf[0];
@@ -391,7 +391,7 @@ void fk_Image::newImage(int argW, int argH, bool argInitFlg)
 
 void fk_Image::copyImage(const fk_Image *argImage)
 {
-	if(argImage == this) return;
+	if(argImage == this || argImage == nullptr) return;
 
 	init();
 
@@ -436,7 +436,7 @@ bool fk_Image::subImage(const fk_Image *argImage,
 	int		orgW, orgH, i;
 	_st		index1, index2;
 
-	if(argImage == NULL) return false;
+	if(argImage == nullptr) return false;
 	if(argImage == this) return false;
 
 	if(argX < 0 || argY < 0 || argW <= 0 || argH <= 0) return false;

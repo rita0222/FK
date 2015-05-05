@@ -150,6 +150,7 @@ enum fk_PutStrMode {
 	FK_PUTSTR_FILE			//!< ファイル出力
 };
 
+//! ボタン系デバイス状態を表す列挙型
 enum fk_SwitchStatus {
 	FK_SW_RELEASE,		//!< 離しっぱなしの状態
 	FK_SW_UP,			//!< 離した瞬間
@@ -336,7 +337,7 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *
 	 *		fk_Window		win;
 	 *
-	 *		if(win.getKeyStatus('a', true) == true) {
+	 *		if(win.getKeyStatus('a', FK_SW_PRESS, true) == true) {
 	 *			// 押されている場合の処理
 	 *		}
 	 *
@@ -345,13 +346,17 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *	\param[in]	key
 	 *		キーを表す文字。ここには、スペース(' ') や数字 ('1') なども含みます。
 	 *
+	 *	\param[in]	status
+	 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+	 *
 	 *	\param[in]	insideFlag
 	 *		true だった場合、
 	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
 	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
 	 *
 	 *	\return
-	 *		押されている場合は true を、押されていない場合は false を返します。
+	 *		キーが status で指定した状態を満たしていれば true を、
+	 *		そうでなければ false を返します。
 	 *
 	 *	\note
 	 *		(特殊キーを含む)多くのキーが同時に押さえられている場合、
@@ -360,7 +365,6 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *
 	 *	\sa getSpecialKeyStatus()
 	 */
-	bool	getKeyStatus(char key, bool insideFlag = true);
 	bool	getKeyStatus(char key, fk_SwitchStatus status, bool insideFlag = true);
 	
 	//! 特殊キー状態取得関数
@@ -382,13 +386,17 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *	\param[in]	key
 	 *		キーを表す文字。
 	 *
+	 *	\param[in]	status
+	 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+	 *
 	 *	\param[in]	insideFlag
 	 *		true だった場合、
 	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
 	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
 	 *
 	 *	\return
-	 *		押されている場合は true を、押されていない場合は false を返します。
+	 *		キーが status で指定した状態を満たしていれば true を、
+	 *		そうでなければ false を返します。
 	 *
 	 *	\note
 	 *		(標準キーを含む)多くのキーが同時に押さえられている場合、
@@ -397,9 +405,13 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *
 	 *	\sa getKeyStatus()
 	 */
-	bool	getSpecialKeyStatus(fk_SpecialKey key, bool insideFlag = true);
 	bool	getSpecialKeyStatus(fk_SpecialKey key,
 								fk_SwitchStatus status, bool insideFlag = true);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+	bool	getKeyStatus(char key, bool insideFlag = true);
+	bool	getSpecialKeyStatus(fk_SpecialKey key, bool insideFlag = true);
+#endif
 
 	//! 最終押下キー取得関数
 	/*!
@@ -460,25 +472,32 @@ class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
 	 *
 	 *		fk_Window		win;
 	 *
-	 *		if(win.getMouseStatus(FK_MOUSE1, true) == true) {
+	 *		if(win.getMouseStatus(FK_MOUSE1, FK_SW_PRESS) == true) {
 	 *			// 押されている場合の処理
 	 *		}
 	 *
 	 *	マウスボタンの種類については、 ::fk_MouseButton の項目を参照して下さい。
 	 *
 	 *	\param[in]	button		マウスボタンの種類
+	 *
+	 *	\param[in]	status
+	 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+	 *
 	 *	\param[in]	insideFlag
 	 *		true だった場合、
 	 *		マウスポインタが描画領域の外にあった場合は無条件に false を返します。
 	 *		false だった場合は、マウスポインタの位置に関わらず押下状態を返します。
 	 *
 	 *	\return
-	 *		押されている場合は true を、押されていない場合は false を返します。
+	 *		キーが status で指定した状態を満たしていれば true を、
+	 *		そうでなければ false を返します。
 	 */
-	bool	getMouseStatus(fk_MouseButton button, bool insideFlag = true);
 	bool	getMouseStatus(fk_MouseButton button, fk_SwitchStatus status,
 						   bool insideFlag = true);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+	bool	getMouseStatus(fk_MouseButton button, bool insideFlag = true);
+#endif
 	//! マウスホイール回転量取得関数
 	/*!
 	 *	この関数は、ウスホイールの回転量を取得するときに使用します。

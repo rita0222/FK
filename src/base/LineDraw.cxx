@@ -139,7 +139,7 @@ void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
 		modelColor = argObj->getBLineColor();
 	}
 
-	if(ifsetP == NULL) return;
+	if(ifsetP == nullptr) return;
 	glDisable(GL_LIGHTING);
 	glLineWidth(static_cast<GLfloat>(argObj->getBLineWidth()));
 	glColor4fv(&modelColor->col[0]);	
@@ -178,7 +178,7 @@ void fk_LineDraw::DrawSolidLinePick(fk_Model *argObj)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextE(NULL) == NULL) return;
+	if(solidP->getNextE(nullptr) == nullptr) return;
 
 	if(solidP->GetECacheStatus() == false) {
 		solidP->MakeECache();
@@ -275,7 +275,7 @@ void fk_LineDraw::DrawSolidLineMaterial(fk_Model *argObj)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextE(NULL) == NULL) return;
+	if(solidP->getNextE(nullptr) == nullptr) return;
 
 	if(solidP->GetECacheStatus() == false) {
 		solidP->MakeECache();
@@ -284,7 +284,7 @@ void fk_LineDraw::DrawSolidLineMaterial(fk_Model *argObj)
 	edgeStack = solidP->GetECache();
 
 	modelColor = argObj->getInhLineColor();
-	if(modelColor == NULL) {
+	if(modelColor == nullptr) {
 		modelColor = argObj->getInhMaterial()->getAmbient();
 	}
 
@@ -396,7 +396,7 @@ void fk_LineDraw::DrawSolidLineNormal(fk_Model *argObj, bool argFlg)
 
 	solidP = static_cast<fk_Solid *>(argObj->getShape());
 	if(solidP->checkDB() == false) return;
-	if(solidP->getNextE(NULL) == NULL) return;
+	if(solidP->getNextE(nullptr) == nullptr) return;
 
 	if(solidP->GetECacheStatus() == false) {
 		solidP->MakeECache();
@@ -406,7 +406,7 @@ void fk_LineDraw::DrawSolidLineNormal(fk_Model *argObj, bool argFlg)
 
 	if(argFlg == true) {
 		ModelColor = argObj->getInhLineColor();
-		if(ModelColor == NULL) {
+		if(ModelColor == nullptr) {
 			ModelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {
@@ -458,7 +458,7 @@ void fk_LineDraw::DrawIFSLineNormal(fk_Model *argObj, bool argFlag)
 
 	if(argFlag == true) {
 		modelColor = argObj->getInhLineColor();
-		if(modelColor == NULL) {
+		if(modelColor == nullptr) {
 			modelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {
@@ -507,7 +507,7 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 	fk_Half				*lH, *rH;
 	fk_Vertex			*lV, *rV;
 
-	if((curv = argE->getCurveGeometry()) != NULL) {
+	if((curv = argE->getCurveGeometry()) != nullptr) {
 		curv->makeCache();
 		int div = curv->getDiv();
 		vArray = curv->getPosCache();
@@ -531,10 +531,10 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 
 		rH = argE->getRightHalf();
 		lH = argE->getLeftHalf();
-		if(rH == NULL || lH == NULL) return;
+		if(rH == nullptr || lH == nullptr) return;
 		lV = lH->getVertex();
 		rV = rH->getVertex();
-		if(lV == NULL || rV == NULL) return;
+		if(lV == nullptr || rV == nullptr) return;
 
 		if(argMode == true) {
 			glBegin(GL_LINES);

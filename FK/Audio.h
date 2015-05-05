@@ -408,7 +408,7 @@ class fk_AudioBase {
 	 *
 	 *	\param[in]	model
 	 *		音源と同期するモデルインスタンスのポインタ。
-	 *		同期を解除したい場合は NULL を代入します。
+	 *		同期を解除したい場合は nullptr を代入します。
 	 *
 	 *	\sa setPosition(), getPosition(), getModel(),
 	 *		setListenerModel(fk_Model *), setListenerModel(fk_Model &)
@@ -435,7 +435,7 @@ class fk_AudioBase {
 	 *
 	 *	\return
 	 *		音源位置同期モデルのポインタ。
-	 *		同期モデルが設定されていなかった場合は NULL を返します。
+	 *		同期モデルが設定されていなかった場合は nullptr を返します。
 	 */
 	fk_Model *		getModel(void);
 
@@ -755,7 +755,7 @@ public:
  *	なお、本クラスは fk_AudioBase クラスの派生クラスであり、
  *	音量やループ再生の制御、サラウンド効果の使用といった機能の利用については
  *	fk_AudioBase のメンバ関数を用いて行います。
-
+ *
  *	\sa fk_AudioBase, fk_AudioWavBuffer, fk_AudioStream
  */
 class fk_AudioOggBuffer : public fk_AudioBase {
@@ -894,7 +894,7 @@ public:
  *	音量やループ再生の制御、サラウンド効果の使用といった機能の利用については
  *	fk_AudioBase のメンバ関数を用いて行います。
  *
- *	\sa fk_AudioBase, fk_AudioWavBuffer, fk_AudioStream
+ *	\sa fk_AudioBase, fk_AudioOggBuffer, fk_AudioStream
  */
 
 class fk_AudioWavBuffer : public fk_AudioOggBuffer {
