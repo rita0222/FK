@@ -14,6 +14,9 @@ namespace FK_CLI
 		Z
 	};
 	
+	/// <summary>
+	/// ベクトル型
+	/// </summary>
 	public ref class fk_Vector {
 	internal:
 		::fk_Vector *pVec;
