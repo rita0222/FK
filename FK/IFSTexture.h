@@ -128,8 +128,10 @@ class fk_IFSTexture : public fk_Texture {
 	//! コンストラクタ
 	/*!
 	 *	引数によってテクスチャ画像を設定することが可能です。
-	 *	\param[in]	image		テクスチャデータ。
-	 *	省略されるか、nullptr が代入された場合はテクスチャデータを空の状態として生成します。
+	 *
+	 *	\param[in]	image
+	 *		テクスチャデータ。
+	 *		省略されるか、nullptr が代入された場合はテクスチャデータを空の状態として生成します。
 	 */
 	fk_IFSTexture(fk_Image *image = nullptr);
 
@@ -146,8 +148,10 @@ class fk_IFSTexture : public fk_Texture {
 	//! テクスチャ座標参照関数
 	/*!
 	 *	テクスチャ座標を参照します。
+	 *
 	 *	\param[in]	tID		三角形ID
 	 *	\param[in]	vID		頂点ID
+	 *
 	 *	\return		テクスチャ座標
 	 */
 	fk_TexCoord				getTextureCoord(int tID, int vID);
@@ -175,11 +179,13 @@ class fk_IFSTexture : public fk_Texture {
 	//! テクスチャ座標設定関数
 	/*!
 	 *	テクスチャ座標を設定します。
+	 *
 	 *	\param[in]	tID		三角形ID
 	 *	\param[in]	vID		頂点ID
+	 *
 	 *	\param[in]	coord	テクスチャ座標
 	 */
-	void					setTextureCoord(int tID, int vID,
+ 	void					setTextureCoord(int tID, int vID,
 											fk_TexCoord &coord);
 
 	//! MQOファイル入力関数
@@ -378,6 +384,7 @@ class fk_IFSTexture : public fk_Texture {
 	/*!
 	 *	入力した形状データに対し、
 	 *	fk_BVHMotion によるのモーションデータを設定します。
+	 *
 	 *	\param[in]	bvh		モーションデータ
 	 */
 	void					setBVHMotion(fk_BVHMotion *bvh);
