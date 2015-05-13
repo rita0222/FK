@@ -249,19 +249,18 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 *
 	 *	\note
-	 *	VRML形式は、1994年に策定された通称「VRML1.0」と、
-	 *	1997年に策定された「VRML97」の2種類があり、
-	 *	VRML97は「VRML2.0」とも呼ばれます。
-	 *	本関数では入力フォーマットとして VRML2.0 を想定しています。
+	 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
+	 *		1997年に策定された「VRML97」の2種類があり、
+	 *		VRML97は「VRML2.0」とも呼ばれます。
+	 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+	 *
 	 *	\note
-	 *	VRMLは文法解釈、
-	 *	特にセパレータの扱い方についてはあまり厳密になっておらず、
-	 *	様々なデータによって異なる解釈がなされているようです。
-	 *	そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
+	 *		VRMLは文法解釈、
+	 *		特にセパレータの扱い方についてはあまり厳密になっておらず、
+	 *		様々なデータによって異なる解釈がなされているようです。
+	 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
 	 */
-	bool				readVRMLFile(std::string fileName,
-									 bool materialFlg = true,
-									 bool solidFlg = true);
+	bool	readVRMLFile(std::string fileName, bool materialFlg = true, bool solidFlg = true);
 
 	//! STL ファイル入力関数
 	/*!
@@ -287,9 +286,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
-	bool				readSTLFile(std::string fileName,
-									bool solidFlg = true,
-									double tolerance = 1.0e-08);
+	bool	readSTLFile(std::string fileName, bool solidFlg = true, double tolerance = 1.0e-08);
 
 	//! HRCファイル入力関数
 	/*!
@@ -299,7 +296,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
-	bool				readHRCFile(std::string fileName);
+	bool	readHRCFile(std::string fileName);
 
 	//! RDSファイル入力関数
 	/*!
@@ -315,8 +312,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
-	bool				readRDSFile(std::string fileName,
-									bool solidFlg = true);
+	bool	readRDSFile(std::string fileName, bool solidFlg = true);
 
 	//! DXFファイル入力関数
 	/*!
@@ -331,8 +327,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
-	bool				readDXFFile(std::string fileName,
-									bool solidFlg = true);
+	bool	readDXFFile(std::string fileName, bool solidFlg = true);
 
 	//! MQOファイル入力関数1
 	/*!
@@ -370,11 +365,11 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa readMQOData(), fk_IFSTexture::readMQOFile()
 	 */
-	bool				readMQOFile(std::string fileName,
-									std::string objName,
-									bool solidFlg = true,
-									bool contFlg = true,
-									bool materialFlg = false);
+	bool	readMQOFile(std::string fileName,
+						std::string objName,
+						bool solidFlg = true,
+						bool contFlg = true,
+						bool materialFlg = false);
 
 	//! MQOファイル入力関数2
 	/*!
@@ -422,12 +417,12 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa readMQOData(), fk_IFSTexture::readMQOFile()
 	 */
-	bool				readMQOFile(std::string fileName,
-									std::string objName,
-									int materialID,
-									bool solidFlg = true,
-									bool contFlg = true,
-									bool materialFlg = false);
+	bool	readMQOFile(std::string fileName,
+						std::string objName,
+						int materialID,
+						bool solidFlg = true,
+						bool contFlg = true,
+						bool materialFlg = false);
 
 	//! MQOデータ入力関数1
 	/*!
@@ -472,11 +467,11 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa readMQOFile(), fk_IFSTexture::readMQOData()
 	 */
-	bool				readMQOData(unsigned char *buffer,
-									std::string objName,
-									bool solidFlg = true,
-									bool contFlg = true,
-									bool materialFlg = false);
+	bool	readMQOData(unsigned char *buffer,
+						std::string objName,
+						bool solidFlg = true,
+						bool contFlg = true,
+						bool materialFlg = false);
 
 	//! MQOデータ入力関数2
 	/*!
@@ -527,12 +522,12 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa readMQOFile(), fk_IFSTexture::readMQOData()
 	 */
-	bool				readMQOData(unsigned char *buffer,
-									std::string objName,
-									int materialID,
-									bool solidFlg = true,
-									bool contFlg = true,
-									bool materialFlg = false);
+	bool	readMQOData(unsigned char *buffer,
+						std::string objName,
+						int materialID,
+						bool solidFlg = true,
+						bool contFlg = true,
+						bool materialFlg = false);
 
 	//! DirectX (D3DX) ファイル入力関数1
 	/*!
@@ -602,10 +597,10 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_IFSTexture::readD3DXFile()
 	 */
-	bool				readD3DXFile(std::string fileName,
-									 std::string objName,
-									 int materialID,
-									 bool solidFlg = true);
+	bool	readD3DXFile(std::string fileName,
+						 std::string objName,
+						 int materialID,
+						 bool solidFlg = true);
 
 	//@}
 
@@ -624,9 +619,9 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
-	bool				writeVRMLFile(std::string fileName,
-									  fk_Material *material = nullptr,
-									  bool triFlg = false);
+	bool	writeVRMLFile(std::string fileName,
+						  fk_Material *material = nullptr,
+						  bool triFlg = false);
 
 	//! VRML ファイル出力関数2
 	/*!
@@ -648,11 +643,11 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
-	bool				writeVRMLFile(std::string fileName,
-									  std::vector<double> *time,
-									  std::vector<fk_Vector> *pos,
-									  fk_Material *material = nullptr,
-									  bool triFlg = false);
+	bool	writeVRMLFile(std::string fileName,
+						  std::vector<double> *time,
+						  std::vector<fk_Vector> *pos,
+						  fk_Material *material = nullptr,
+						  bool triFlg = false);
 
 	//! STL ファイル出力関数
 	/*!
@@ -662,7 +657,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
-	bool				writeSTLFile(std::string fileName);
+	bool	writeSTLFile(std::string fileName);
 
 	//! DXF ファイル出力関数
 	/*!
@@ -675,8 +670,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
-	bool				writeDXFFile(std::string fileName,
-									 bool triFlg = false);
+	bool	writeDXFFile(std::string fileName, bool triFlg = false);
 
 	//! MQO ファイル出力関数
 	/*!
@@ -686,7 +680,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 	 */
-	bool				writeMQOFile(std::string fileName);
+	bool	writeMQOFile(std::string fileName);
 	//@}
 
 	//! \name 形状情報参照関数
@@ -698,7 +692,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		頂点数
 	 */
-	int					getPosSize(void);
+	int		getPosSize(void);
 
 	//! 面数参照関数
 	/*!
@@ -706,7 +700,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		面数
 	 */
-	int					getFaceSize(void);
+	int		getFaceSize(void);
 
 	//! 頂点位置ベクトル参照関数
 	/*!
@@ -720,7 +714,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa moveVPosition()
 	 */
-	fk_Vector			getPosVec(int vertexID);
+	fk_Vector	getPosVec(int vertexID);
 
 	//! 頂点 ID 配列参照関数
 	/*!
@@ -749,7 +743,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		頂点 ID
 	 */
-	int					getFaceData(int faceID, int vertexNum);
+	int		getFaceData(int faceID, int vertexNum);
 
 	//! 面タイプ取得関数
 	/*!
@@ -757,7 +751,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\return		面タイプ
 	 */
-	fk_IFType			getFaceType(void);
+	fk_IFType	getFaceType(void);
 
 	//! 面法線ベクトル取得関数
 	/*!
@@ -771,7 +765,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa setPNorm(), getVNorm()
 	 */
-	fk_Vector			getPNorm(int faceID, int order = 0);
+	fk_Vector	getPNorm(int faceID, int order = 0);
 
 	//! 頂点法線ベクトル取得関数
 	/*!
@@ -785,7 +779,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa setVNorm(), getPNorm()
 	 */
-	fk_Vector			getVNorm(int vertexID, int order = 0);
+	fk_Vector	getVNorm(int vertexID, int order = 0);
 
 	//! マテリアルID取得関数
 	/*!
@@ -800,7 +794,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa setElemMaterialID(), fk_Shape
 	 */
-	int					getElemMaterialID(int faceID);
+	int		getElemMaterialID(int faceID);
 	//@}
 
 	//! \name 汎用形状操作関数
@@ -822,9 +816,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getPosVec()
 	 */
-	bool				moveVPosition(int vertexID,
-									  const fk_Vector &pos,
-									  int order = 0);
+	bool	moveVPosition(int vertexID, const fk_Vector &pos, int order = 0);
 
 	//! 頂点移動関数2
 	/*!
@@ -844,9 +836,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getPosVec()
 	 */
-	bool				moveVPosition(int vertexID,
-									  double x, double y, double z,
-									  int order = 0);
+	bool	moveVPosition(int vertexID, double x, double y, double z, int order = 0);
 
 	//! 頂点移動関数3
 	/*!
@@ -865,9 +855,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getPosVec()
 	 */
-	bool				moveVPosition(int vertexID,
-									  double *array,
-									  int order = 0);
+	bool	moveVPosition(int vertexID, double *array, int order = 0);
 
 	//! 任意形状生成関数
 	/*!
@@ -892,12 +880,12 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Solid
 	 */
-	void				makeIFSet(int faceNum,
-								  int polyNum,
-								  int *IFSet,
-								  int vertexNum,
-								  fk_Vector *posArray,
-								  int order = 0);
+	void	makeIFSet(int faceNum,
+					  int polyNum,
+					  int *IFSet,
+					  int vertexNum,
+					  fk_Vector *posArray,
+					  int order = 0);
 
 	//! 面法線ベクトル設定関数
 	/*!
@@ -923,9 +911,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getPNorm(), setVNorm()
 	 */
-	bool				setPNorm(int faceID,
-								 const fk_Vector &norm,
-								 int order = 0);
+	bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
 
 	//! 頂点法線ベクトル設定関数
 	/*!
@@ -951,9 +937,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getVNorm(), setPNorm()
 	 */
-	bool				setVNorm(int vertexID,
-								 const fk_Vector &norm,
-								 int order = 0);
+	bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
 	//! マテリアルID設定関数
 	/*!
@@ -969,8 +953,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getElemMaterialID, fk_Shape
 	 */
-	bool				setElemMaterialID(int faceID,
-										  int materialID);
+	bool	setElemMaterialID(int faceID, int materialID);
 
 	//! 法線ベクトル強制計算関数 
 	/*!
@@ -988,7 +971,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa getPNorm(), getVNorm(), setPNorm(), setVNorm()
 	 */
-	void				flush(void);
+	void	flush(void);
 
 	//@}
 
@@ -1018,7 +1001,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Block
 	 */
-	void				makeBlock(double x, double y, double z);
+	void	makeBlock(double x, double y, double z);
 
 	//! 直方体辺長変更関数
 	/*!
@@ -1033,7 +1016,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeBlock(), fk_Block
 	 */
-	void				setBlockSize(double x, double y, double z);
+	void	setBlockSize(double x, double y, double z);
 
 	//! 直方体個別辺長設定関数
 	/*!
@@ -1050,7 +1033,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeBlock(), fk_Block
 	 */
-	void				setBlockSize(double length, fk_Axis axis);
+	void	setBlockSize(double length, fk_Axis axis);
 
 	//! 直方体全体拡大縮小関数
 	/*!
@@ -1063,7 +1046,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeBlock(), fk_Block
 	 */
-	void				setBlockScale(double scale);
+	void	setBlockScale(double scale);
 
 	//! 直方体軸方向拡大縮小関数
 	/*!
@@ -1080,7 +1063,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeBlock(), fk_Block
 	 */
-	void				setBlockScale(double scale, fk_Axis axis);
+	void	setBlockScale(double scale, fk_Axis axis);
 
 	//! 直方体軸方向個別拡大縮小関数
 	/*!
@@ -1095,7 +1078,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeBlock(), fk_Block
 	 */
-	void				setBlockScale(double x, double y, double z);
+	void	setBlockScale(double x, double y, double z);
 	//@}
 
 	//! \name 円形状制御関数
@@ -1120,7 +1103,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Circle
 	 */
-	void				makeCircle(int div, double rad);
+	void	makeCircle(int div, double rad);
 
 	//! 円形状半径設定関数
 	/*!
@@ -1133,7 +1116,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCircle(), fk_Circle
 	 */
-	void				setCircleRadius(double rad);
+	void	setCircleRadius(double rad);
 
 	//! 円形状分割数設定関数
 	/*!
@@ -1146,7 +1129,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCircle(), fk_Circle
 	 */
-	void				setCircleDivide(int div);
+	void	setCircleDivide(int div);
 
 	//! 円形状拡大縮小関数
 	/*!
@@ -1159,7 +1142,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCircle(), fk_Circle
 	 */
-	void				setCircleScale(double scale);
+	void	setCircleScale(double scale);
 	//@}
 
 	//! \name 球形状制御関数
@@ -1183,7 +1166,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Sphere
 	 */
-	void				makeSphere(int div, double rad);
+	void	makeSphere(int div, double rad);
 
 	//! 球形状半径設定関数
 	/*!
@@ -1196,7 +1179,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeSphere(), fk_Sphere
 	 */
-	void				setSphereRadius(double rad);
+	void	setSphereRadius(double rad);
 
 	//! 球形状分割数設定関数
 	/*!
@@ -1209,7 +1192,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeSphere(), fk_Sphere
 	 */
-	void				setSphereDivide(int div);
+	void	setSphereDivide(int div);
 
 	//! 球形状拡大縮小関数
 	/*!
@@ -1222,7 +1205,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeSphere(), fk_Sphere
 	 */
-	void				setSphereScale(double scale);
+	void	setSphereScale(double scale);
 	//@}
 
 	//! \name 正多角柱(円柱)形状制御関数
@@ -1248,8 +1231,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Prism
 	 */
-	void				makePrism(int div, double top,
-								  double bottom, double height);
+	void	makePrism(int div, double top, double bottom, double height);
 
 	//! 正多角柱(円柱)角数設定関数
 	/*!
@@ -1262,7 +1244,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makePrism(), fk_Prism
 	 */
-	void				setPrismDivide(int div);
+	void	setPrismDivide(int div);
 
 	//! 正多角柱(円柱)上面半径設定関数
 	/*!
@@ -1275,7 +1257,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makePrism(), fk_Prism
 	 */
-	void				setPrismTopRadius(double top);
+	void	setPrismTopRadius(double top);
 
 	//! 正多角柱(円柱)角数設定関数
 	/*!
@@ -1288,7 +1270,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makePrism(), fk_Prism
 	 */
-	void				setPrismBottomRadius(double bottom);
+	void	setPrismBottomRadius(double bottom);
 
 	//! 正多角柱(円柱)高さ設定関数
 	/*!
@@ -1301,7 +1283,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makePrism(), fk_Prism
 	 */
-	void				setPrismHeight(double height);
+	void	setPrismHeight(double height);
 	//@}
 
 	//! \name 正多角錐(円錐)形状制御関数
@@ -1326,7 +1308,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Cone
 	 */
-	void				makeCone(int div, double rad, double height);
+	void	makeCone(int div, double rad, double height);
 
 	//! 正多角錐(円錐)角数設定関数
 	/*!
@@ -1339,7 +1321,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCone(), fk_Cone
 	 */
-	void				setConeDivide(int div);
+	void	setConeDivide(int div);
 
 	//! 正多角錐(円錐)底面半径設定関数
 	/*!
@@ -1352,7 +1334,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCone(), fk_Cone
 	 */
-	void				setConeRadius(double rad);
+	void	setConeRadius(double rad);
 
 	//! 正多角錐(円錐)高さ設定関数
 	/*!
@@ -1365,7 +1347,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCone(), fk_Cone
 	 */
-	void				setConeHeight(double height);
+	void	setConeHeight(double height);
 	//@}
 
 	//! \name カプセル型形状制御関数
@@ -1388,7 +1370,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Capsule
 	 */
-	void				makeCapsule(int div, double len, double rad);
+	void	makeCapsule(int div, double len, double rad);
 
 	//! カプセル型形状寸法設定関数
 	/*!
@@ -1402,7 +1384,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa makeCapsule(), fk_Capsule
 	 */
-	void				setCapsuleSize(double len, double rad);
+	void	setCapsuleSize(double len, double rad);
 	//@}
 
 	//! \name その他
@@ -1419,7 +1401,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa fk_Solid
 	 */
-	void				putSolid(fk_Solid *solid);
+	void	putSolid(fk_Solid *solid);
 
 	//! アニメーション時間設定関数
 	/*!
@@ -1431,7 +1413,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa readD3DXFile(), setBVHMotion(), fk_BVHMotion
 	 */
-	void				setAnimationTime(double time);
+	void	setAnimationTime(double time);
 
 	//! BVHデータ設定関数
 	/*!
@@ -1441,7 +1423,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *
 	 *	\sa setAnimationTime(), readD3DXFile(), fk_BVHMotion
 	 */
-	void				setBVHMotion(fk_BVHMotion *bvh);
+	void	setBVHMotion(fk_BVHMotion *bvh);
 	//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS

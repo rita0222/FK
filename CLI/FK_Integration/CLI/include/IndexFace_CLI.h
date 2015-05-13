@@ -138,30 +138,593 @@ namespace FK_CLI
 
 		//! \name ファイル入出力関数
 		//@{
+
+		//! SMFファイル入力関数
+		/*!
+		 *	SMF形式のファイルからデータを入力します。
+		 *
+		 *	\param[in]	name	ファイル名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadSMFFile(String^ name);
+
+		//! VRML ファイル入力関数1
+		/*!
+		 *	VRML形式のファイルからデータを入力します。
+		 *	VRMLでは、形状を表す様々なノードがありますが、
+		 *	本関数が対応しているのは「IndexedFaceSet」
+		 *	ノードに記述された形状のみです。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\param[in]	materialFlg
+		 *		true の場合、
+		 *		VRMLファイル中で設定されているマテリアル情報を入力します。
+		 *		false の場合は、マテリアル情報を無視します。
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		入力データのままインデックスフェースセットを構築します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\note
+		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
+		 *		1997年に策定された「VRML97」の2種類があり、
+		 *		VRML97は「VRML2.0」とも呼ばれます。
+		 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+		 *
+		 *	\note
+		 *		VRMLは文法解釈、
+		 *		特にセパレータの扱い方についてはあまり厳密になっておらず、
+		 *		様々なデータによって異なる解釈がなされているようです。
+		 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
+		 */
 		bool ReadVRMLFile(String^ name, bool materialFlg, bool solidFlg);
+
+		//! VRML ファイル入力関数2
+		/*!
+		 *	VRML形式のファイルからデータを入力します。
+		 *	VRMLでは、形状を表す様々なノードがありますが、
+		 *	本関数が対応しているのは「IndexedFaceSet」
+		 *	ノードに記述された形状のみです。
+		 *
+		 *	なお、本関数は ReadVRMLFile(String^, bool, bool) において、
+		 *	第3引数に true を入力した場合と同義となります。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\param[in]	materialFlg
+		 *		true の場合、
+		 *		VRMLファイル中で設定されているマテリアル情報を入力します。
+		 *		false の場合は、マテリアル情報を無視します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\note
+		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
+		 *		1997年に策定された「VRML97」の2種類があり、
+		 *		VRML97は「VRML2.0」とも呼ばれます。
+		 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+		 *
+		 *	\note
+		 *		VRMLは文法解釈、
+		 *		特にセパレータの扱い方についてはあまり厳密になっておらず、
+		 *		様々なデータによって異なる解釈がなされているようです。
+		 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
+		 */
 		bool ReadVRMLFile(String^ name, bool materialFlg);
+
+		//! VRML ファイル入力関数3
+		/*!
+		 *	VRML形式のファイルからデータを入力します。
+		 *	VRMLでは、形状を表す様々なノードがありますが、
+		 *	本関数が対応しているのは「IndexedFaceSet」
+		 *	ノードに記述された形状のみです。
+		 *
+		 *	なお、本関数は ReadVRMLFile(String^, bool, bool) において、
+		 *	第2引数と第3引数で共に true を入力した場合と同義となります。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\note
+		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
+		 *		1997年に策定された「VRML97」の2種類があり、
+		 *		VRML97は「VRML2.0」とも呼ばれます。
+		 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+		 *
+		 *	\note
+		 *		VRMLは文法解釈、
+		 *		特にセパレータの扱い方についてはあまり厳密になっておらず、
+		 *		様々なデータによって異なる解釈がなされているようです。
+		 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
+		 */
 		bool ReadVRMLFile(String^ name);
+
+		//! STL ファイル入力関数1
+		/*!
+		 *	STL形式のファイルからデータを入力します。
+		 *	対応しているのは面データのみです。
+		 *	また、以下の条件に当てはまるデータは
+		 *	fk_IndexFaceSet では入力できません。
+		 *	- 5以上の角数である面が存在する。
+		 *	- 3角形面と4角形面が混在している。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\param[in]	tolerance
+		 *		solidFlg で true を指定した場合、
+		 *		頂点同士が同一かどうかを判断するための距離許容誤差を指定します。
+		 *		solidFlg が false であった場合、この値は無視されます。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadSTLFile(String^ name, bool solidFlg, double tolerance);
+
+		//! STL ファイル入力関数2
+		/*!
+		 *	STL形式のファイルからデータを入力します。
+		 *	対応しているのは面データのみです。
+		 *	また、以下の条件に当てはまるデータは
+		 *	fk_IndexFaceSet では入力できません。
+		 *	- 5以上の角数である面が存在する。
+		 *	- 3角形面と4角形面が混在している。
+		 *
+		 *	なお、本関数は ReadSTLFile(String^, bool, double) において、
+		 *	第3引数に 1.0e-0.8 を入力した場合と同義となります。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadSTLFile(String^ name, bool solidFlg);
+
+		//! STL ファイル入力関数3
+		/*!
+		 *	STL形式のファイルからデータを入力します。
+		 *	対応しているのは面データのみです。
+		 *	また、以下の条件に当てはまるデータは
+		 *	fk_IndexFaceSet では入力できません。
+		 *	- 5以上の角数である面が存在する。
+		 *	- 3角形面と4角形面が混在している。
+		 *
+		 *	なお、本関数は ReadSTLFile(String^, bool, double) において、
+		 *	第2引数に true、第3引数に 1.0e-0.8 を入力した場合と同義となります。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadSTLFile(String^ name);
+
+
+		//! HRCファイル入力関数
+		/*!
+		 *	HRC形式のファイルからデータを入力します。
+		 *
+		 *	\param[in]	name	ファイル名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadHRCFile(String^ name);
+
+		//! RDSファイル入力関数1
+		/*!
+		 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadRDSFile(String^ name, bool solidFlg);
+
+		//! RDSファイル入力関数2
+		/*!
+		 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
+		 *	本関数は、 ReadRDSFile(String^, bool) において、
+		 *	第2引数に true を入力した場合と同義となります。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadRDSFile(String^ name);
+
+		//! DXFファイル入力関数1
+		/*!
+		 *	DXF 形式のファイルからデータを入力します。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadDXFFile(String^ name, bool solidFlg);
+
+		
+		//! DXFファイル入力関数1
+		/*!
+		 *	DXF 形式のファイルからデータを入力します。
+		 *	本関数は、 ReadDXFFile(String^, bool) において、
+		 *	第2引数に true を入力した場合と同義となります。
+		 *
+		 *	\param[in]	name		ファイル名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 */
 		bool ReadDXFFile(String^ name);
+
+		//! MQOファイル入力関数1-1
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\param[in]	contFlg
+		 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
+		 *		形状の位相を断絶する操作を行うためのものです。
+		 *		これを true にした場合は断裂操作が行われ、
+		 *		テクスチャ座標が不連続な箇所が幾何的にも不連続となるように表示されます。
+		 *		ほとんどの場合は、断裂操作を行った方が良好な描画結果となります。
+		 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
+		 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
+		 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+		 *
+		 *	\param[in]	materialFlg
+		 *		true の場合、MQOファイル中で設定されているマテリアル情報を入力します。
+		 *		false の場合は、マテリアル情報を無視します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
+
+		//! MQOファイル入力関数1-2
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	第5引数に false を入力した場合と同義となります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\param[in]	contFlg
+		 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
+		 *		形状の位相を断絶する操作を行うためのものです。
+		 *		これを true にした場合は断裂操作が行われ、
+		 *		テクスチャ座標が不連続な箇所が幾何的にも不連続となるように表示されます。
+		 *		ほとんどの場合は、断裂操作を行った方が良好な描画結果となります。
+		 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
+		 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
+		 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
+
+		//! MQOファイル入力関数1-3
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	第4引数に true を、第5引数に false を入力した場合と同義となります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *	\param[in]	objName		オブジェクト名
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg);
+
+		//! MQOファイル入力関数1-4
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	第3引数に true を、第4引数に true を、第5引数に false を入力した場合と同義となります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName);
+
+		//! MQOファイル入力関数2-1
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	materialID
+		 *		MQOデータではマテリアルを複数設定することができ、
+		 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
+		 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
+		 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\param[in]	contFlg
+		 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
+		 *		形状の位相を断絶する操作を行うためのものです。
+		 *		これを true にした場合は断裂操作が行われ、
+		 *		テクスチャ座標が不連続な箇所が幾何的にも不連続となるように表示されます。
+		 *		ほとんどの場合は、断裂操作を行った方が良好な描画結果となります。
+		 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
+		 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
+		 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+		 *
+		 *	\param[in]	materialFlg
+		 *		true の場合、MQOファイル中で設定されているマテリアル情報を入力します。
+		 *		false の場合は、マテリアル情報を無視します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg, bool materialFlg);
+
+		//! MQOファイル入力関数2-2
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	第6引数に false を入力している場合と同義となります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	materialID
+		 *		MQOデータではマテリアルを複数設定することができ、
+		 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
+		 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
+		 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\param[in]	contFlg
+		 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
+		 *		形状の位相を断絶する操作を行うためのものです。
+		 *		これを true にした場合は断裂操作が行われ、
+		 *		テクスチャ座標が不連続な箇所が幾何的にも不連続となるように表示されます。
+		 *		ほとんどの場合は、断裂操作を行った方が良好な描画結果となります。
+		 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
+		 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
+		 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg);
+
+		//! MQOファイル入力関数2-3
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	第5引数に true を、第6引数に false を入力している場合と同義となります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	materialID
+		 *		MQOデータではマテリアルを複数設定することができ、
+		 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
+		 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
+		 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg);
+
+		//! MQOファイル入力関数2-4
+		/*!
+		 *	MQO 形式のファイルからデータを入力します。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	第4引数に true を、第5引数に true を、第6引数に false を入力している場合と同義となります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	materialID
+		 *		MQOデータではマテリアルを複数設定することができ、
+		 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
+		 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
+		 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOData(), fk_IFSTexture::ReadMQOFile()
+		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, int materialID);
+
+		//! MQOデータ入力関数1-1
+		/*!
+		 *	MQO形式のデータを入力します。
+		 *	この関数では、MQO形式のデータが既に
+		 *	Byte 型の配列中に入力されていると仮定し、
+		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *
+		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	テクスチャデータも併せて表示を行いたい場合は、
+		 *	fk_IFSTexture クラスを利用して下さい。
+		 *
+		 *	MQOデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	\param[in]	buffer		データが格納されているバッファ
+		 *
+		 *	\param[in]	objName		オブジェクト名
+		 *
+		 *	\param[in]	solidFlg
+		 *		true の場合、位相の隣接関係を最適化します。
+		 *		ただし、結果として入力に失敗する場合があります。
+		 *		false の場合は隣接関係を最適化せず、
+		 *		すべての面が独立した状態として形状を構築します。
+		 *
+		 *	\param[in]	contFlg
+		 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
+		 *		形状の位相を断絶する操作を行うためのものです。
+		 *		これを true にした場合は断裂操作が行われ、
+		 *		テクスチャ座標が不連続な箇所が幾何的にも不連続となるように表示されます。
+		 *		ほとんどの場合は、断裂操作を行った方が良好な描画結果となります。
+		 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
+		 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
+		 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+		 *
+		 *	\param[in]	materialFlg
+		 *		true の場合、MQOデータ中で設定されているマテリアル情報を入力します。
+		 *		false の場合は、マテリアル情報を無視します。
+		 *
+		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa ReadMQOFile(), fk_IFSTexture::ReadMQOData()
+		 */
 		bool ReadMQOData(array<Byte>^ buffer, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
 		bool ReadMQOData(array<Byte>^ buffer, String^ objName, bool solidFlg, bool contFlg);
@@ -186,9 +749,9 @@ namespace FK_CLI
 						   array<fk_Vector^>^ Pos, fk_Material^ material);
 		bool WriteVRMLFile(String^ fileName, array<double>^ time,
 						   array<fk_Vector^>^ pos);
-		bool WriteSTLFile(String ^fileName);
-		bool WriteDXFFile(String ^fileName, bool triFlg);
-		bool WriteDXFFile(String ^fileName);
+		bool WriteSTLFile(String^ fileName);
+		bool WriteDXFFile(String^ fileName, bool triFlg);
+		bool WriteDXFFile(String^ fileName);
 		bool WriteMQOFile(String^ fileName);
 		//@}
 
