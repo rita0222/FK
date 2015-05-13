@@ -128,6 +128,7 @@ public:
 	//! 初期化関数
 	/*!
 	 *	フルスクリーン化したい Fl_Window と fk_Window を指定して初期化を行います。
+	 *
 	 *	\param[in] fl_win	Fl_Window のポインタ
 	 *	\param[in] fk_win	fk_Window のポインタ
 	 */
