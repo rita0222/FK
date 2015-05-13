@@ -8,6 +8,7 @@
 
 namespace FK_CLI
 {
+	/*	
 	public enum class fk_ImageStatus {
 		OK,
 		OPENERROR,
@@ -31,19 +32,20 @@ namespace FK_CLI
 		FIX_65536
 	};
 
-	//! 画像フォーマットを表す列挙型
-	public enum class fk_ImageType {
-		BMP,	//!< Windows Bitmap (BMP) 形式
-		PNG,	//!< PNG 形式
-		JPG		//!< JPEG 形式
-	};
-
 	public enum class fk_SnapProcMode {
 		FK_GL_FRONT,
 		FK_GL_BACK,
 		FK_WIN32_GDI,
 		FK_D3D_WINDOW,
 		FK_D3D_FULL
+	};
+	*/
+	
+	//! 画像フォーマットを表す列挙型
+	public enum class fk_ImageType {
+		BMP,	//!< Windows Bitmap (BMP) 形式
+		PNG,	//!< PNG 形式
+		JPG		//!< JPEG 形式
 	};
 
 	//! 画像サイズを表すクラス
@@ -129,6 +131,7 @@ namespace FK_CLI
 	 *	このクラスは、画像中の矩形領域を表します。
 	 *	このクラスの座標系は、画像の左上を原点とし、
 	 *	x の正方向は右、y の正方向は下となります。
+	 *
 	 *	\sa fk_Dimension, fk_Image
 	 */
 	public ref class fk_Rect {
@@ -402,8 +405,9 @@ namespace FK_CLI
 		 *	\param[in] x	ピクセルの x 座標
 		 *	\param[in] y	ピクセルの y 座標
 		 *
-		 *	\return ピクセルのG(緑)要素値。
-		 *	指定した座標が画像内にない場合は、-1 を返します。
+		 *	\return
+		 *		ピクセルのG(緑)要素値。
+		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
 		int GetG(int x, int y);
 
@@ -415,8 +419,9 @@ namespace FK_CLI
 		 *	\param[in] x	ピクセルの x 座標
 		 *	\param[in] y	ピクセルの y 座標
 		 *
-		 *	\return ピクセルのB(青)要素値。
-		 *	指定した座標が画像内にない場合は、-1 を返します。
+		 *	\return
+		 *		ピクセルのB(青)要素値。
+		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
 		int GetB(int x, int y);
 
@@ -428,8 +433,9 @@ namespace FK_CLI
 		 *	\param[in] x	ピクセルの x 座標
 		 *	\param[in] y	ピクセルの y 座標
 		 *
-		 *	\return ピクセルのA(透過度)要素値。
-		 *	指定した座標が画像内にない場合は、-1 を返します。
+		 *	\return
+		 *		ピクセルのA(透過度)要素値。
+		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
 		int GetA(int x, int y);
 

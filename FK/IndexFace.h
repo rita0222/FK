@@ -754,6 +754,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	//! 面タイプ取得関数
 	/*!
 	 *	形状データの面タイプを取得します。
+	 *
 	 *	\return		面タイプ
 	 */
 	fk_IFType			getFaceType(void);

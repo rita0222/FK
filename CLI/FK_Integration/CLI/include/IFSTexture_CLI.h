@@ -244,16 +244,108 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName);
 
+		//! DirectX (D3DX) ファイル入力関数1
+		/*!
+		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
+		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
+		 *	この関数で入力できるのは形状、テクスチャ座標データ、
+		 *	そしてアニメーションデータです。
+		 *	テクスチャ画像データは fk_Texture のメンバ関数によって、
+		 *	別途入力する必要があります。
+		 *
+		 *	D3DXデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *	\param[in]	objName		オブジェクト名。
+		 *		D3DX 形式では、オブジェクト名を省略することが許容されています。
+		 *		そのような場合は、この引数に空文字列 ( "" ) を入れてください。
+		 *		この場合、ファイル中で最初に存在するオブジェクトのデータを入力します。
+		 *	\param[in]	materialID
+		 *		D3DXデータではマテリアルを複数設定することができ、
+		 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
+		 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
+		 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+		 *	
+		 *	\return ファイルの入力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID);
 
+		//! DirectX (D3DX) ファイル入力関数1
+		/*!
+		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
+		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
+		 *	この関数で入力できるのは形状、テクスチャ座標データ、
+		 *	そしてアニメーションデータです。
+		 *	テクスチャ画像データは fk_Texture のメンバ関数によって、
+		 *	別途入力する必要があります。
+		 *
+		 *	D3DXデータには「オブジェクト」という概念があり、
+		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
+		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *
+		 *	なお、この関数は ReadD3DXFile(String^, String^, int) において、
+		 *	最後の引数を -1 にした場合と同義になります。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 *	\param[in]	objName		オブジェクト名。
+		 *		D3DX 形式では、オブジェクト名を省略することが許容されています。
+		 *		そのような場合は、この引数に空文字列 ( "" ) を入れてください。
+		 *		この場合、ファイル中で最初に存在するオブジェクトのデータを入力します。
+		 *	
+		 *	\return ファイルの入力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName);
 
-		bool MoveVPosition(int vertexID, const fk_Vector^ pos, int order);
+		//! 頂点移動関数1
+		/*!
+		 *	形状の頂点を移動します。 order は通常は 0 を入力してください。
+		 *
+		 *	\param[in]	vID		頂点ID
+		 *	\param[in]	pos		移動位置ベクトル
+		 *	\param[in]	order	全頂点ID のうち、もっとも最小の ID 番号
+		 *
+		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
+		 */
+		bool MoveVPosition(int vID, const fk_Vector^ pos, int order);
 
-		bool MoveVPosition(int vertexID, const fk_Vector^ pos);
+		//! 頂点移動関数2
+		/*!
+		 *	形状の頂点を移動します。
+		 *
+		 *	\param[in]	vID		頂点ID
+		 *	\param[in]	pos		移動位置ベクトル
+		 *
+		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
+		 */
+		bool MoveVPosition(int vID, const fk_Vector^ pos);
 
-		bool MoveVPosition(int vertexID, double x, double y, double z, int order);
+		//! 頂点移動関数3
+		/*!
+		 *	形状の頂点を移動します。 order は通常は 0 を入力してください。
+		 *
+		 *	\param[in]	vID		頂点ID
+		 *	\param[in]	x		移動位置ベクトルの x 成分
+		 *	\param[in]	y		移動位置ベクトルの y 成分
+		 *	\param[in]	z		移動位置ベクトルの z 成分
+		 *	\param[in]	order	全頂点ID のうち、もっとも最小の ID 番号
+		 *
+		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
+		 */
+		bool MoveVPosition(int vID, double x, double y, double z, int order);
 
-		bool MoveVPosition(int vertexID, double x, double y, double z);
+		//! 頂点移動関数4
+		/*!
+		 *	形状の頂点を移動します。
+		 *
+		 *	\param[in]	vID		頂点ID
+		 *	\param[in]	x		移動位置ベクトルの x 成分
+		 *	\param[in]	y		移動位置ベクトルの y 成分
+		 *	\param[in]	z		移動位置ベクトルの z 成分
+		 *
+		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
+		 */
+		bool MoveVPosition(int vID, double x, double y, double z);
 	};
 }

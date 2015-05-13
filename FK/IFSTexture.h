@@ -335,6 +335,7 @@ class fk_IFSTexture : public fk_Texture {
 	 *	\param[in]	vID		頂点ID
 	 *	\param[in]	pos		移動位置ベクトル
 	 *	\param[in]	order	全頂点ID のうち、もっとも最小の ID 番号
+	 *
 	 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
 	 */
 	bool					moveVPosition(int vID,
@@ -350,6 +351,7 @@ class fk_IFSTexture : public fk_Texture {
 	 *	\param[in]	y		移動位置ベクトルの y 成分
 	 *	\param[in]	z		移動位置ベクトルの z 成分
 	 *	\param[in]	order	全頂点ID のうち、もっとも最小の ID 番号
+	 *
 	 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
 	 */
 	bool					moveVPosition(int vID,
