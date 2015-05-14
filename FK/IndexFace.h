@@ -581,17 +581,17 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *		そのような場合は、この引数に空文字列 ( "" ) を入れてください。
 	 *		この場合、ファイル中で最初に存在するオブジェクトのデータを入力します。
 	 *
-	 *	\param[in]	solidFlg
-	 *		true の場合、位相の隣接関係を最適化します。
-	 *		ただし、結果として入力に失敗する場合があります。
-	 *		false の場合は隣接関係を最適化せず、
-	 *		すべての面が独立した状態として形状を構築します。
-	 *
 	 *	\param[in]	materialID
 	 *		D3DXデータではマテリアルを複数設定することができ、
 	 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
 	 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
 	 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+	 *
+	 *	\param[in]	solidFlg
+	 *		true の場合、位相の隣接関係を最適化します。
+	 *		ただし、結果として入力に失敗する場合があります。
+	 *		false の場合は隣接関係を最適化せず、
+	 *		すべての面が独立した状態として形状を構築します。
 	 *
 	 *	\return ファイルの入力に成功した場合 true を、失敗した場合 false を返します。
 	 *
@@ -611,9 +611,11 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	VRML (VRML2.0) 形式で形状データを出力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
 	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
@@ -631,13 +633,17 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	アニメーションデータを出力することが可能です。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	time
 	 *		CoordinateInterpolator における時間配列 (key) を入力します。
+	 *
 	 *	\param[in]	pos
 	 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
+	 *
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
 	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
@@ -664,6 +670,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	DXF 形式で形状データを出力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	triFlg
 	 *		面情報を3角形として出力したい場合は、true を代入します。
 	 *		false の場合、3角形面を2点が重複している4角形面として出力します。
@@ -735,6 +742,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	\param[in]	faceID
 	 *		面 ID。一番最初の面IDは 0 になります。
 	 *		最後の ID は面数から 1 を引いたものとなります。
+	 *
 	 *	\param[in]	vertexNum
 	 *		面の中での頂点番号。
 	 *		3角形であれば 0 から 2、
@@ -758,6 +766,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	面の法線ベクトルを取得します。
 	 *
 	 *	\param[in]	faceID		面ID
+	 *
 	 *	\param[in]	order
 	 *		最初の面IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -772,6 +781,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	頂点の法線ベクトルを取得します。
 	 *
 	 *	\param[in]	vertexID		頂点ID
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -808,7 +818,9 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	この関数によって破棄されます。
 	 *
 	 *	\param[in]	vertexID		頂点ID
+	 *
 	 *	\param[in]	pos				移動先の位置ベクトル
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -829,6 +841,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	\param[in]	x				移動先位置ベクトルの x 成分
 	 *	\param[in]	y				移動先位置ベクトルの y 成分
 	 *	\param[in]	z				移動先位置ベクトルの z 成分
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -846,8 +859,10 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	この関数によって破棄されます。
 	 *
 	 *	\param[in]	vertexID		頂点ID
+	 *
 	 *	\param[in]	array
 	 *		移動先位置ベクトルの各成分が入った double 型配列。
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -862,8 +877,10 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	与えられたインデックスフェースセット情報から、形状を生成します。
 	 *
 	 *	\param[in]	faceNum		面数
+	 *
 	 *	\param[in]	polyNum
 	 *		面の角数。現在、ここに入力できる数値は 3 か 4 のみです。
+	 *
 	 *	\param[in]	IFSet
 	 *		インデックスフェースセット配列。
 	 *		この配列は、各面を構成する頂点 ID を並べたものになります。
@@ -872,9 +889,12 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *		int 型の配列に対して [0, 1, 2, 2, 1, 3] という数値を入力しておきます。
 	 *		4角形の場合も同様です。
 	 *		結果的に、この配列の長さは面数と角数を掛けたもの以上である必要があります。
+	 *
 	 *	\param[in]	vertexNum	頂点数
+	 *
 	 *	\param[in]	posArray
 	 *		頂点位置ベクトルの配列。配列の長さは頂点数以上である必要があります。
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -900,10 +920,12 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	設定した法線ベクトルは破棄されます。
 	 *
 	 *	\param[in]	faceID		面ID
+	 *
 	 *	\param[in]	norm
 	 *		法線ベクトル。あらかじめ正規化しておく必要があります。
 	 *		正規化されていない放線ベクトルを入力した場合、
 	 *		動作が異常となる場合があります。
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -926,10 +948,12 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	設定した法線ベクトルは破棄されます。
 	 *
 	 *	\param[in]	vertexID		頂点ID
+	 *
 	 *	\param[in]	norm
 	 *		法線ベクトル。あらかじめ正規化しておく必要があります。
 	 *		正規化されていない放線ベクトルを入力した場合、
 	 *		動作が異常となる場合があります。
+	 *
 	 *	\param[in]	order
 	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 *
@@ -947,6 +971,7 @@ class fk_IndexFaceSet : public fk_ParserData {
 	 *	fk_Shape::setPalette() を参照して下さい。
 	 *
 	 *	\param[in]	faceID		面ID
+	 *
 	 *	\param[in]	materialID	マテリアルID
 	 *
 	 *	\return		設定に成功すれば true を、失敗すれば false を返します。
