@@ -88,6 +88,7 @@ class fk_Vertex;
  *	派生クラスのうち、ID 管理については fk_Topology,
  *	個別マテリアル設定については fk_TopologyMaterial,
  *	属性設定については fk_Attribute を参照して下さい。
+ *
  *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
  */
 
@@ -139,6 +140,7 @@ class fk_Half : public fk_Topology {
 	//! 後半稜線位相取得関数
 	/*!
 	 *	半稜線の接続関係において、この半稜線の後にあたる半稜線を取得します。
+	 *
 	 *	\return 後の半稜線位相を表す fk_Half 型インスタンスのアドレス
 	 */
 	fk_Half *	getNextHalf(void) const;
@@ -146,6 +148,7 @@ class fk_Half : public fk_Topology {
 	//! 前半稜線位相取得関数
 	/*!
 	 *	半稜線の接続関係において、この半稜線の前にあたる半稜線を取得します。
+	 *
 	 *	\return 前の半稜線位相を表す fk_Half 型インスタンスのアドレス
 	 */
 	fk_Half *	getPrevHalf(void) const;
@@ -153,6 +156,7 @@ class fk_Half : public fk_Topology {
 	//! 稜線位相取得関数
 	/*!
 	 *	この半稜線が属している稜線位相を取得します。
+	 *
 	 *	\return 稜線位相を表す fk_Edge 型インスタンスのアドレス
 	 */
 	fk_Edge *	getParentEdge(void) const;
@@ -160,14 +164,17 @@ class fk_Half : public fk_Topology {
 	//! ループ位相取得関数
 	/*!
 	 *	この半稜線が属しているループ位相を取得します。
-	 *	\return ループ位相を表す fk_Loop 型インスタンスのアドレス。
-	 *	半稜線がループに属していない場合は nullptr を返します。
+	 *
+	 *	\return
+	 *		ループ位相を表す fk_Loop 型インスタンスのアドレス。
+	 *		半稜線がループに属していない場合は nullptr を返します。
 	 */
 	fk_Loop *	getParentLoop(void) const;
 
 	//! 左側判定関数
 	/*!
 	 *	この半稜線が、属している稜線の「左側」かどうかを判定する関数です。
+	 *
 	 *	\return 「左側」である場合 true を、「右側」である場合 false を返します。
 	 */
 	bool		isLeft(void) const;
@@ -175,6 +182,7 @@ class fk_Half : public fk_Topology {
 	//! 右側判定関数
 	/*!
 	 *	この半稜線が、属している稜線の「右側」かどうかを判定する関数です。
+	 *
 	 *	\return 「右側」である場合 true を、「左側」である場合 false を返します。
 	 */
 	bool		isRight(void) const;
