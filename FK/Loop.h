@@ -108,7 +108,8 @@ enum fk_LoopCrossStatus {
  *
  *	ループに対して、幾何形状として曲面データを設定することができます。
  *	詳細は fk_Surface を参照して下さい。
- *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Topology, fk_TopologyMaterial, fk_Attribute, fk_Surface
+ *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Topology,
+ *		fk_TopologyMaterial, fk_Attribute, fk_Surface
  */
 
 class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
@@ -187,9 +188,9 @@ class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
 	 *	形状中の全てのループに対して、テセレーションの有無効を設定するには、
 	 *	fk_Operation::setTesselateMode() を利用して下さい。
 	 *
-	 *	\param[in] mode	true の場合、
-	 *	4角以上のループに対してテセレーション処理を施すようになります。
-	 *	false の場合はテセレーション処理を行いません。
+	 *	\param[in] mode
+	 *		true の場合、4角以上のループに対してテセレーション処理を施すようになります。
+	 *		false の場合はテセレーション処理を行いません。
 	 *
 	 *	\sa fk_Operation::setTesselateMode()
 	 */
@@ -213,8 +214,9 @@ class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
 	 *	実際にテセレーション処理を行ったかどうかを知るには、
 	 *	この関数を用いる必要があります。
 	 *
-	 *	\return true であれば、ループに対しテセレーション処理が行われています。
-	 *	false であれば行われていません。
+	 *	\return
+	 *		true であれば、ループに対しテセレーション処理が行われています。
+	 *		false であれば行われていません。
 	 *
 	 *	\sa getTesselateMode()
 	 */
@@ -234,8 +236,9 @@ class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
 	/*!
 	 * 	ループに設定されている自由曲面を取得します。
 	 *
-	 *	\return 自由曲面インスタンスのアドレス。
-	 *	設定されていなかった場合は nullptr を返します。
+	 *	\return
+	 *		自由曲面インスタンスのアドレス。
+	 *		設定されていなかった場合は nullptr を返します。
 	 */
 	fk_Surface *				getSurfGeometry(void);
 

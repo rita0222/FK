@@ -121,7 +121,8 @@ class fk_Line: public fk_Solid {
 	 *	\param[in]	vertexID	端点ID。(線分が1本のときのみ有効)
 	 *	\param[in]	pos			端点の位置ベクトル
 	 *
-	 *	\return	なんらかの形で端点位置の設定がなされれば true、
+	 *	\return
+	 *		なんらかの形で端点位置の設定がなされれば true、
 	 *		そうでない場合は false を返します。
 	 */
 	bool	setVertex(int vertexID, fk_Vector pos);
@@ -134,12 +135,15 @@ class fk_Line: public fk_Solid {
 	 *		制御する線分ID。線分IDは、最初に生成したものが0で、
 	 *		以降生成順に 1 ずつ増加したものになります。
 	 *		存在しない線分 ID を指定した場合は何も起こりません。
+	 *
 	 *	\param[in]		vertexID
 	 *		始点の場合 0、終点の場合 1 を入力します。
 	 *		その他の値を指定した場合は何も起こりません。
+	 *
 	 *	\param[in]		pos		端点の位置ベクトル
 	 *
-	 *	\return		端点位置の設定がなされれば true、
+	 *	\return
+	 *		端点位置の設定がなされれば true、
 	 *		そうでない場合は false を返します。
 	 */
 	bool	setVertex(int lineID, int vertexID, fk_Vector pos);
@@ -194,10 +198,12 @@ class fk_Line: public fk_Solid {
 	 *		制御する線分ID。線分IDは、最初に生成したものが0で、
 	 *		以降生成順に 1 ずつ増加したものになります。
 	 *		存在しない線分 ID を指定した場合は何も起こりません。
+	 *
 	 *	\param[in]	startPos		始点位置ベクトル
 	 *	\param[in]	endPos			終点位置ベクトル
 	 *
-	 *	\return		端点位置の設定がなされれば true、
+	 *	\return
+	 *		端点位置の設定がなされれば true、
 	 *		そうでない場合は false を返します。
 	 */
 	bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
