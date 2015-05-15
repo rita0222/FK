@@ -67,6 +67,9 @@ namespace FK_CLI
 		 *	グローバル座標系での正確な位置ベクトルを取得したい場合は、
 		 *	fk_Model::InhPosition を利用して下さい。
 		 *
+		 *	本プロパティは設定を行うことはできません。
+		 *	位置指定は fk_Model::GlMoveTo() を利用してください。
+		 *
 		 *	\sa Vec, Upvec, Angle, fk_Model::InhPosition
 		 */
 		property fk_Vector^ Position {
@@ -80,6 +83,9 @@ namespace FK_CLI
 		 *	親モデルの座標系からの相対的な方向ベクトルとなります。
 		 *	グローバル座標系での正確な方向ベクトルを取得したい場合は、
 		 *	fk_Model::InhVec を利用して下さい。
+		 *
+		 *	本プロパティは設定を行うことはできません。
+		 *	方向指定は GlVec() を利用してください。
 		 *
 		 *	\sa Position, Upvec, Angle, fk_Model::InhVec
 		 */
