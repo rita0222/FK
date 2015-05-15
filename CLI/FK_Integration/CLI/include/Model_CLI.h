@@ -554,38 +554,354 @@ namespace FK_CLI
 		}
 
 		//////////////////////////////////////////////////////////////
+		//! \name マテリアル属性除去関数
+		//@{
+
+		//! 基本マテリアル削除関数
+		/*!
+		 *	基本マテリアル設定を削除します。
+		 *	これにより、親モデルが存在する場合は親モデルの基本マテリアルを継承します。
+		 *	親モデルが存在しない場合は、システムのデフォルトマテリアルが採用されます。
+		 *
+		 *	\sa Material, InhMaterial
+		 */
 		void DeleteMaterial(void);
+
+		//! 頂点色削除関数
+		/*!
+		 *	頂点色設定を削除します。
+		 *	これにより、親モデルが存在する場合は親モデルの頂点色を継承します。
+		 *	親モデルが存在しない場合は、システムのデフォルト頂点色が採用されます。
+		 *
+		 *	\sa PointColor, InhPointColor
+		 */
 		void DeletePointColor(void);
+
+		//! 稜線色削除関数
+		/*!
+		 *	稜線色設定を削除します。
+		 *	これにより、親モデルが存在する場合は親モデルの稜線色を継承します。
+		 *	親モデルが存在しない場合は、システムのデフォルト稜線色が採用されます。
+		 *
+		 *	\sa LineColor, InhLineColor
+		 */
 		void DeleteLineColor(void);
 
+		//! \name 親子関係制御関数
+		//@{
+
+		//! 親モデル設定関数1
+		/*!
+		 *	親モデルを設定します。
+		 *	親モデルは 1 個しか設定できません。
+		 *	前に設定されていた場合は、前のモデル設定は破棄されます。
+		 *
+		 *	\param[in]		model		親モデルインスタンスのポインタ
+		 *
+		 *	\param[in]		mode
+		 *		true の場合、現在のグローバル座標系の位置と姿勢を、
+		 *		親モデル設定後も保持します。
+		 *		false の場合は、当モデルでの位置と姿勢を親モデルからの
+		 *		相対的な位置、姿勢として扱います。
+		 *		そのため、設定後にグローバル座標系での位置や姿勢は変化することになります。
+		 *		この引数を省略した場合は false と同様の挙動となります。
+		 *
+		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa Parent, DeleteParent(), EntryChild()
+		 */
 		bool SetParent(fk_Model^ model, bool mode);
+
+		//! 親モデル設定関数2
+		/*!
+		 *	親モデルを設定します。
+		 *	親モデルは 1 個しか設定できません。
+		 *	前に設定されていた場合は、前のモデル設定は破棄されます。
+		 *
+		 *	なお本関数は、 SetParent(fk_Model^, bool) において、
+		 *	第2引数に false を入力した場合と同義となります。
+		 *	また、 Parent プロパティに model を代入することとも同義です。
+		 *
+		 *	\param[in]		model		親モデルインスタンスのポインタ
+		 *
+		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa Parent, DeleteParent(), EntryChild()
+		 */
 		bool SetParent(fk_Model^ model);
+
+		//! 親モデル解除関数1
+		/*!
+		 *	親モデルの設定を解除します。
+		 *
+		 *	\param[in]		mode
+		 *		true の場合、現在のグローバル座標系の位置と姿勢を、
+		 *		親モデル解除後も保持します。
+		 *		false の場合は、親モデルからの相対的な位置と姿勢を、
+		 *		解除後のグローバル座標系に設定します。
+		 *
+		 *	\sa SetParent(fk_Model^, bool), Parent, DeleteChild()
+		 */
 		void DeleteParent(bool mode);
+
+		//! 親モデル解除関数2
+		/*!
+		 *	親モデルの設定を解除します。
+		 *	本関数は、 DeleteParent(bool) において、
+		 *	引数に false を入力した場合と同義となります。
+		 *
+		 *	\sa SetParent(fk_Model^, bool), DeleteParent(bool), Parent, DeleteChild()
+		 */
 		void DeleteParent(void);
 
+		//! 子モデル設定関数1
+		/*!
+		 *	子モデルを設定します。
+		 *	子モデルは複数持つことが可能なので、
+		 *	既に子モデルが登録されている場合でも、その設定は破棄されません。
+		 *
+		 *	\param[in]		model		子モデルインスタンスのポインタ
+		 *
+		 *	\param[in]		mode
+		 *		true の場合、子モデルの現在のグローバル座標系の位置と姿勢を、
+		 *		設定後も保持します。
+		 *		false の場合は、子モデルでの位置と姿勢を当モデルからの
+		 *		相対的な位置、姿勢として扱います。
+		 *		そのため、設定後にグローバル座標系での位置や姿勢は変化することになります。
+		 *		この引数を省略した場合は false と同様の挙動となります。
+		 *
+		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa Parent, SetParent(), DeleteChild(), DeleteChildren()
+		 */
 		bool EntryChild(fk_Model^ model, bool mode);
+
+		//! 子モデル設定関数2
+		/*!
+		 *	子モデルを設定します。
+		 *	子モデルは複数持つことが可能なので、
+		 *	既に子モデルが登録されている場合でも、その設定は破棄されません。
+		 *
+		 *	なお、本関数は EntryChild(fk_Model^, bool) において、
+		 *	第2引数に false を入力した場合と同義となります。
+		 *
+		 *	\param[in]		model		子モデルインスタンスのポインタ
+		 *
+		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa Parent, SetParent(), DeleteChild(), DeleteChildren()
+		 */
 		bool EntryChild(fk_Model^ model);
+		
+		//! 子モデル解除関数1
+		/*!
+		 *	子モデルの設定を解除します。
+		 *
+		 *	\param[in]		model
+		 *		子モデルインスタンスのポインタ。
+		 *		もし model が子モデルの中に存在しない場合は、false を返します。
+		 *
+		 *	\param[in]		mode
+		 *		true の場合、子モデルのグローバル座標系の位置と姿勢を、
+		 *		解除後も保持します。
+		 *		false の場合は、親モデルからの相対的な位置と姿勢を、
+		 *		解除後のグローバル座標系に設定します。
+		 *		この引数を省略した場合は false と同様の挙動となります。
+		 *
+		 *	\return		解除に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa EntryChild(), DeleteChildren()
+		 */
 		bool DeleteChild(fk_Model^ model, bool mode);
+
+		//! 子モデル解除関数2
+		/*!
+		 *	子モデルの設定を解除します。
+		 *
+		 *	なお、本関数は DeleteChild(fk_Model^, bool) において、
+		 *	第2引数に false を入力した場合と同義となります。
+		 *
+		 *	\param[in]		model
+		 *		子モデルインスタンスのポインタ。
+		 *		もし model が子モデルの中に存在しない場合は、false を返します。
+		 *
+		 *	\return		解除に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa EntryChild(), DeleteChildren()
+		 */
 		bool DeleteChild(fk_Model^ model);
+
+		//! 全子モデル解除関数1
+		/*!
+		 *	当モデルの全ての子モデルの設定を解除します。
+		 *
+		 *	\param[in]		mode
+		 *		true の場合、子モデルのグローバル座標系の位置と姿勢を、
+		 *		解除後も保持します。
+		 *		false の場合は、親モデルからの相対的な位置と姿勢を、
+		 *		解除後のグローバル座標系に設定します。
+		 *		この引数を省略した場合は false と同様の挙動となります。
+		 *
+		 *	\sa EntryChild(), DeleteChild()
+		 */
 		void DeleteChildren(bool mode);
+
+		//! 全子モデル解除関数2
+		/*!
+		 *	当モデルの全ての子モデルの設定を解除します。
+		 *	本関数は、 DeleteChildren(bool) において、
+		 *	引数に false を入力した場合と同義となります。
+		 *
+		 *	\sa EntryChild(), DeleteChild()
+		 */
 		void DeleteChildren(void);
+		//@}
 
+		//! \name 状態保存制御関数
+		//@{
+
+		//! 位置・姿勢保存関数
+		/*!
+		 *	現時点でのモデルの位置と姿勢を保存します。
+		 *	Restore() 関数を用いることで復元します。
+		 *
+		 *	\sa Restore(void), Restore(double), InterStopMode
+		 */
 		void SnapShot(void);
+
+		//! 位置・姿勢復元関数
+		/*!
+		 *	SnapShot() 関数によって保存した位置・姿勢を復元します。
+		 *
+		 *	\return		復元に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa	Restore(double), SnapShot(), InterStopMode
+		 */
 		bool Restore(void);
-		bool Restore(double time);
 
+		//! 位置・姿勢途中復元関数
+		/*!
+		 *	SnapShot() 関数によって保存した位置・姿勢に対し、
+		 *	現在の位置・姿勢と線形補間した状態にします。
+		 *
+		 *	\param[in]	t
+		 *		線形補間パラメータ。
+		 *		0 を SnapShot() 関数による保存時、
+		 *		1 を現時点とし、
+		 *		与えられた実数によって線形補間した位置と姿勢に設定します。
+		 *
+		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa	SnapShot(), Restore(void), IsCollision()
+		 */
+		bool Restore(double t);
+		//@}
+
+		//! \name 境界ボリューム自動設定関数
+		//@{
+
+		//! 境界球自動設定関数
+		/*!
+		 *	この関数は、
+		 *	境界ボリュームである境界球の半径を自動的に設定するものです。
+		 *	具体的には、モデルの中心から形状の最遠点となる点と中心との距離を半径とします。
+		 *	その結果、すべての形状上の点は境界球の内側に入ることになります。
+		 *	境界球に関する詳細は fk_Boundary クラスを参照して下さい。
+		 *
+		 *	\note
+		 *		fk_Model::Shape プロパティに別形状を設定した場合や、設定した形状を
+		 *		fk_IndexFaceSet::MoveVPosition() などの関数によって変形した場合でも、
+		 *		境界球半径は自動的に変化しません。
+		 *		形状の全ての部分が境界球内部に入ることを保証するためには、
+		 *		形状変化後に本関数を呼ぶ必要があります。
+		 *
+		 *	\sa AdjustAABB(), AdjustOBB(), AdjustCapsule(), IsInter(), IsCollision(),
+		 *		fk_Boundary::BMode, fk_Boundary::SphereRadius
+		 *
+		 */
 		void AdjustSphere(void);
-		void AdjustAABB(void);
-		void AdjustOBB(void);
-		void AdjustCapsule(fk_Vector^ startPos, fk_Vector^ endPos);
 
+		//! AABB 自動設定関数
+		/*!
+		 *	この関数は、
+		 *	境界ボリュームである AABB (軸平行境界ボックス) の大きさを自動的に設定するものです。
+		 *	すべての頂点が AABB の内部と入る条件を満たす最小の大きさが設定されます。
+		 *	AABB に関する詳細は fk_Boundary クラスを参照して下さい。
+		 *
+		 *	\note
+		 *		fk_Model::Shape プロパティに別形状を設定した場合や、設定した形状を
+		 *		fk_IndexFaceSet::MoveVPosition() などの関数によって変形した場合でも、
+		 *		AABB の大きさは自動的に変化しません。
+		 *		形状の全ての部分が AABB 内部に入ることを保証するためには、
+		 *		形状変化後に本関数を呼ぶ必要があります。
+		 *		また、AABB はその性質上、
+		 *		モデルが回転した場合には形状が AABB の外側にはみ出る可能性がありますので、
+		 *		モデルが回転した後も形状が AABB 内部にあることを保証するには、
+		 *		回転した後に本関数を呼ぶ必要があります。
+		 *
+		 *	\sa AdjustSphere(), AdjustOBB(), AdjustCapsule(), IsInter(), IsCollision(),
+		 *		fk_Boundary::BMode, fk_Boundary:AABB
+		 */
+		void AdjustAABB(void);
+
+		//! OBB 自動設定関数
+		/*!
+		 *	この関数は、
+		 *	境界ボリュームである OBB (有向境界ボックス) の大きさを自動的に設定するものです。
+		 *	すべての頂点が OBB の内部と入る条件を満たす最小の大きさが設定されます。
+		 *	OBB に関する詳細は fk_Boundary クラスを参照して下さい。
+		 *
+		 *	\note
+		 *		fk_Model::Shape プロパティに別形状を設定した場合や、設定した形状を
+		 *		fk_IndexFaceSet::MoveVPosition() などの関数によって変形した場合でも、
+		 *		OBB の大きさは自動的に変化しません。
+		 *		形状の全ての部分が OBB 内部に入ることを保証するためには、
+		 *		形状変化後に本関数を呼ぶ必要があります。
+		 *
+		 *	\sa AdjustSphere(), AdjustAABB(), AdjustCapsule(), IsInter(), IsCollision(),
+		 *		fk_Boundary::BMode, fk_Boundary::OBB
+		 */
+		void AdjustOBB(void);
+
+		//! 境界カプセル自動設定関数
+		/*!
+		 *	この関数は、
+		 *	境界ボリュームである境界カプセルの大きさを自動的に設定するものです。
+		 *	すべての頂点が境界カプセルの内部と入る条件を満たす最小の大きさが設定されます。
+		 *	境界カプセルに関する詳細は fk_Boundary クラスを参照して下さい。
+		 *
+		 * \note
+		 *		fk_Model::Shape プロパティに別形状を設定した場合や、設定した形状を
+		 *		fk_IndexFaceSet::MoveVPosition() などの関数によって変形した場合でも、
+		 *		境界カプセルの大きさは自動的に変化しません。
+		 *		形状の全ての部分が境界カプセル内部に入ることを保証するためには、
+		 *		形状変化後に本関数を呼ぶ必要があります。
+		 *
+		 * \param[in]	S	中心軸始点位置ベクトル
+		 * \param[in]	E	中心軸終点位置ベクトル
+		 *
+		 * \sa AdjustSphere(), AdjustAABB(), AdjustOBB(), IsInter(), IsCollision(),
+		 *		fk_Boundary::BMode,
+		 *		fk_Boundary::SetCapsule(), fk_Boundary::GetCapsuleRadius(),
+		 *		fk_Boundary::GetCapsuleLength(), fk_Boundary::GetCapsuleStartPos(),
+		 *		fk_Boundary::GetCapsuleEndPos()
+		 */
+		void AdjustCapsule(fk_Vector^ S, fk_Vector^ E);
+		//@}
+
+		//! \name 干渉判定・衝突判定関数
+		//@{
 		bool IsInter(fk_Model^ model);
 		bool IsCollision(fk_Model^ model, double %time);
 		void ResetInter(void);
+		//@}
 
+		//! \name 干渉自動停止制御関数
+		//@{
 		void EntryInterModel(fk_Model^ model);
 		void DeleteInterModel(fk_Model^ model);
 		void ClearInterModel(void);
+		//@}
 
 		//////////////////////////////////////////////////////////////
 		bool GlRotate(fk_Vector^ origin, fk_Axis axis, double theta);

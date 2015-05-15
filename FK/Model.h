@@ -235,8 +235,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		origin
 	 *		グローバル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta
 	 *		回転角度(ラジアン)
 	 *
@@ -268,8 +270,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		グローバル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		グローバル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		グローバル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -367,9 +371,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		origin
 	 *		ローカル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta
 	 *		回転角度(ラジアン)
 	 *
@@ -401,9 +407,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		ローカル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		ローカル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		ローカル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -432,8 +440,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		A
 	 *		ローカル座標系における回転軸上の1点。B と一致してはいけません。
+	 *
 	 *	\param[in]		B
 	 *		ローカル座標系における回転軸上の1点。A と一致してはいけません。
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -466,16 +476,22 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		Ax
 	 *		ローカル座標系における回転軸上の1点 A の x 成分
+	 *
 	 *	\param[in]		Ay
 	 *		ローカル座標系における回転軸上の1点 A の y 成分
+	 *
 	 *	\param[in]		Az
 	 *		ローカル座標系における回転軸上の1点 A の z 成分
+	 *
 	 *	\param[in]		Bx
 	 *		ローカル座標系における回転軸上の1点 B の x 成分
+	 *
 	 *	\param[in]		By
 	 *		ローカル座標系における回転軸上の1点 B の y 成分
+	 *
 	 *	\param[in]		Bz
 	 *		ローカル座標系における回転軸上の1点 B の z 成分
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -509,8 +525,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *		を用いた方が、処理がわずかに速くなります。
 	 *
 	 *	\param[in]		origin		グローバル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -543,8 +561,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		グローバル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		グローバル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		グローバル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -644,9 +664,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *		を用いた方が、処理がわずかに速くなります。
 	 *
 	 *	\param[in]		origin		ローカル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -678,9 +700,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		ローカル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		ローカル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		ローカル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -710,8 +734,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		A
 	 *		ローカル座標系における回転軸上の1点。B と一致してはいけません。
+	 *
 	 *	\param[in]		B
 	 *		ローカル座標系における回転軸上の1点。A と一致してはいけません。
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -745,16 +771,22 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		Ax
 	 *		ローカル座標系における回転軸上の1点 A の x 成分
+	 *
 	 *	\param[in]		Ay
 	 *		ローカル座標系における回転軸上の1点 A の y 成分
+	 *
 	 *	\param[in]		Az
 	 *		ローカル座標系における回転軸上の1点 A の z 成分
+	 *
 	 *	\param[in]		Bx
 	 *		ローカル座標系における回転軸上の1点 B の x 成分
+	 *
 	 *	\param[in]		By
 	 *		ローカル座標系における回転軸上の1点 B の y 成分
+	 *
 	 *	\param[in]		Bz
 	 *		ローカル座標系における回転軸上の1点 B の z 成分
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -1451,6 +1483,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	前に設定されていた場合は、前のモデル設定は破棄されます。
 	 *
 	 *	\param[in]		model		親モデルインスタンスのポインタ
+	 *
 	 *	\param[in]		setMode
 	 *		true の場合、現在のグローバル座標系の位置と姿勢を、
 	 *		親モデル設定後も保持します。
@@ -1498,6 +1531,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	既に子モデルが登録されている場合でも、その設定は破棄されません。
 	 *
 	 *	\param[in]		model		子モデルインスタンスのポインタ
+	 *
 	 *	\param[in]		setMode
 	 *		true の場合、子モデルの現在のグローバル座標系の位置と姿勢を、
 	 *		設定後も保持します。
@@ -1519,6 +1553,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		model
 	 *		子モデルインスタンスのポインタ。
 	 *		もし model が子モデルの中に存在しない場合は、false を返します。
+	 *
 	 *	\param[in]		setMode
 	 *		true の場合、子モデルのグローバル座標系の位置と姿勢を、
 	 *		解除後も保持します。
@@ -1676,8 +1711,8 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *		形状変化後に本関数を呼ぶ必要があります。
 	 *
 	 *	\sa adjustAABB(), adjustOBB(), adjustCapsule(), isInter(), isCollision(),
-	 *		fk_Collision::setBMode(),
-	 *		fk_Collision::setSphere(), fk_Collision::getSphere()
+	 *		fk_Boundary::setBMode(),
+	 *		fk_Boundary::setSphere(), fk_Boundary::getSphere()
 	 */
 	void	adjustSphere(void);
 
