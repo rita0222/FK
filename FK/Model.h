@@ -934,7 +934,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	もし解放された場合、プログラムが誤動作を起こします。
 	 *
 	 *	\param[in]	shape		形状インスタンスのポインタ
-
 	 */
 	void	setShape(fk_Shape *shape);
 
@@ -1088,7 +1087,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\return		頂点色のポインタ
 	 *
-	 *	\sa fk_Color, setPintColor(), getPointColor()
+	 *	\sa fk_Color, setPointColor(), getPointColor()
 	 */
 	fk_Color *	getInhPointColor(void);
 
@@ -1384,7 +1383,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承位置ベクトル参照関数
 	/*!
 	 *	モデルの位置ベクトルを取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系の位置ベクトルを返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の位置ベクトルを返します。
 	 *
 	 *	\return		グローバル座標系での位置ベクトル
 	 *
@@ -1395,7 +1394,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承方向ベクトル参照関数
 	/*!
 	 *	モデルの方向ベクトルを取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系の方向ベクトルを返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の方向ベクトルを返します。
 	 *
 	 *	\return		グローバル座標系での方向ベクトル
 	 *
@@ -1406,7 +1405,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承アップベクトル参照関数
 	/*!
 	 *	モデルのアップベクトルを取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系のアップベクトルを返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のアップベクトルを返します。
 	 *
 	 *	\return		グローバル座標系でのアップベクトル
 	 *
@@ -1421,7 +1420,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承オイラー角参照関数
 	/*!
 	 *	モデルのオイラー角を取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系のオイラー角を返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のオイラー角を返します。
 	 *	オイラー角の詳細については、 fk_Angle の説明を参照して下さい。
 	 *
 	 *	\return		
@@ -1433,6 +1432,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承全体倍率取得関数
 	/*!
 	 *	モデルの全体拡大・縮小倍率を取得します。
+	 *	親子関係の小モデルの場合、親モデルでの倍率も反映されます。
 	 *
 	 *	\return		継承全体拡大・縮小倍率
 	 *
