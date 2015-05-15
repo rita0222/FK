@@ -914,7 +914,6 @@ class fk_MeshTexture : public fk_Texture {
 	 */
 	bool			setTriTextureCoord(int tID,
 									   fk_TexCoord *array);
-
 	//! テクスチャ座標参照関数
 	/*!
 	 *	設定されているテクスチャ座標を取得します。
