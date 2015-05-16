@@ -351,7 +351,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	bool	glRotate(double Ax, double Ay, double Az,
 					 double Bx, double By, double Bz, double theta);
 
-
 	//! ローカル座標系座標軸回転関数1
 	/*!
 	 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
@@ -643,7 +642,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 */
 	bool	glRotateWithVec(double Ax, double Ay, double Az,
 							double Bx, double By, double Bz, double theta);
-
 
 	//! ローカル座標系座標軸回転(姿勢付き)関数1
 	/*!

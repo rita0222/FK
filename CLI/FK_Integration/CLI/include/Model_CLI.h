@@ -100,6 +100,9 @@ namespace FK_CLI
 		//! ファイナライザ
 		fk_Model::!fk_Model();
 
+		//! \name 基本情報プロパティ
+		//@{
+
 		//! ID プロパティ
 		/*!
 		 *	モデルの固有IDを参照します。
@@ -123,6 +126,44 @@ namespace FK_CLI
 			void set(fk_Shape^);
 		}
 
+		//! ピックモードプロパティ
+		/*!
+		 *	モデルのピックモードの参照・設定を行います。
+		 *	true の場合有効、false の場合無効となります。
+		 *	ピックモードとは、
+		 *	モデルをピックによる取得操作の対象とするかどうかを制御するものです。
+		 *	ピックモードが有効である場合、モデルはピック取得の候補となります。
+		 *	デフォルトでは無効となっています。
+		 *
+		 *	\sa fk_AppWindow::IsModelPicked()
+		 */
+		property bool PickMode {
+			void set(bool);
+			bool get(void);
+		}
+
+		//! 親モデルプロパティ
+		/*!
+		 *	親モデルの参照・設定を行います。
+		 *	親モデルは 1 個しか設定できません。
+		 *	設定の際に既に親モデルが設定されていた場合は、前のモデル設定は破棄されます。
+		 *	親モデルが設定されていない場合は null となります。
+		 *
+		 *	なお、このプロパティの設定は、 SetParent(fk_Model^, bool) において、
+		 *	第2引数に false を入力した場合と同義となります。
+		 *
+		 *	\sa SetParent(fk_Model^, bool), DeleteParent(), EntryChild()
+		 */
+		property fk_Model^ Parent {
+			void set(fk_Model^);
+			fk_Model^ get();
+		}
+
+		//@}
+
+		//! \name 色・マテリアル関連プロパティ
+		//@{
+		
 		//! マテリアルプロパティ
 		/*!
 		 *	モデルの基本マテリアルの参照・設定を行います。
@@ -228,6 +269,12 @@ namespace FK_CLI
 			double get();
 		}
 
+
+		//@}
+
+		//! \name 描画制御関連プロパティ
+		//@{
+
 		//! 描画モードプロパティ
 		/*!
 		 *	モデルの描画モードを設定します。
@@ -288,22 +335,6 @@ namespace FK_CLI
 			fk_MaterialMode get();
 		}
 
-		//! ピックモードプロパティ
-		/*!
-		 *	モデルのピックモードの参照・設定を行います。
-		 *	true の場合有効、false の場合無効となります。
-		 *	ピックモードとは、
-		 *	モデルをピックによる取得操作の対象とするかどうかを制御するものです。
-		 *	ピックモードが有効である場合、モデルはピック取得の候補となります。
-		 *	デフォルトでは無効となっています。
-		 *
-		 *	\sa fk_AppWindow::IsModelPicked()
-		 */
-		property bool PickMode {
-			void set(bool);
-			bool get(void);
-		}
-
 		//! スムースモードプロパティ
 		/*!
 		 *	モデルのスムースモードの参照・設定を行います。
@@ -327,6 +358,68 @@ namespace FK_CLI
 		property bool ReverseDrawMode {
 			void set(bool);
 			bool get(void);
+		}
+
+		//@}
+
+		//! \name 位置・姿勢・行列関連プロパティ
+
+		//! 継承位置ベクトルプロパティ
+		/*!
+		 *	モデルの位置ベクトルを参照します。
+		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の位置ベクトルを返します。
+		 *
+		 *	\sa InhVec, InhUpvec, InhAngle, fk_MatrixAdmin::Position
+		 */
+		property fk_Vector^ InhPosition {
+			fk_Vector^ get();
+		}
+
+		//! 継承方向ベクトルプロパティ
+		/*!
+		 *	モデルの方向ベクトルを取得します。
+		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の方向ベクトルを返します。
+		 *
+		 *	\sa InhPosition, InhUpvec, InhAngle, fk_MatrixAdmin::Vec
+		 */
+		property fk_Vector^ InhVec {
+			fk_Vector^ get();
+		}
+
+		//! 継承アップベクトルプロパティ
+		/*!
+		 *	モデルのアップベクトルを取得します。
+		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のアップベクトルを返します。
+		 *
+		 *	\sa InhPosition, InhVec, InhAngle, fk_MatrixAdmin::Upvec
+		 */
+		property fk_Vector^ InhUpvec {
+			fk_Vector^ get();
+		}
+
+		//! 継承オイラー角参照関数
+		/*!
+		 *	モデルのオイラー角を取得します。
+		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のオイラー角を返します。
+		 *	オイラー角の詳細については、 fk_Angle の説明を参照して下さい。
+		 *
+		 *	\return		
+		 *
+		 *	\sa InhPosition, InhVec, InhUpvec, fk_MatrixAdmin::Angle, fk_Angle
+		 */
+		property fk_Angle^ InhAngle {
+			fk_Angle^ get();
+		}
+
+		//! 継承全体倍率プロパティ
+		/*!
+		 *	モデルの全体拡大・縮小倍率を参照します。
+		 *	親子関係の小モデルの場合、親モデルでの倍率も反映されます。
+		 *
+		 *	\sa InhPosition, InhVec, InhUpvec, InhAngle, fk_MatrixAdmin::Scale
+		 */
+		property double InhScale {
+			double get();
 		}
 
 		//! 継承変換行列プロパティ
@@ -397,81 +490,11 @@ namespace FK_CLI
 		property fk_Matrix^ InhInvBaseMatrix {
 			fk_Matrix^ get();
 		}
-		
-		//! 継承位置ベクトルプロパティ
-		/*!
-		 *	モデルの位置ベクトルを参照します。
-		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の位置ベクトルを返します。
-		 *
-		 *	\sa InhVec, InhUpvec, InhAngle, fk_MatrixAdmin::Position
-		 */
-		property fk_Vector^ InhPosition {
-			fk_Vector^ get();
-		}
 
-		//! 継承方向ベクトルプロパティ
-		/*!
-		 *	モデルの方向ベクトルを取得します。
-		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の方向ベクトルを返します。
-		 *
-		 *	\sa InhPosition, InhUpvec, InhAngle, fk_MatrixAdmin::Vec
-		 */
-		property fk_Vector^ InhVec {
-			fk_Vector^ get();
-		}
+		//@}
 
-		//! 継承アップベクトルプロパティ
-		/*!
-		 *	モデルのアップベクトルを取得します。
-		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のアップベクトルを返します。
-		 *
-		 *	\sa InhPosition, InhVec, InhAngle, fk_MatrixAdmin::Upvec
-		 */
-		property fk_Vector^ InhUpvec {
-			fk_Vector^ get();
-		}
-
-		//! 継承オイラー角参照関数
-		/*!
-		 *	モデルのオイラー角を取得します。
-		 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のオイラー角を返します。
-		 *	オイラー角の詳細については、 fk_Angle の説明を参照して下さい。
-		 *
-		 *	\return		
-		 *
-		 *	\sa InhPosition, InhVec, InhUpvec, fk_MatrixAdmin::Angle, fk_Angle
-		 */
-		property fk_Angle^ InhAngle {
-			fk_Angle^ get();
-		}
-
-		//! 継承全体倍率プロパティ
-		/*!
-		 *	モデルの全体拡大・縮小倍率を参照します。
-		 *	親子関係の小モデルの場合、親モデルでの倍率も反映されます。
-		 *
-		 *	\sa InhPosition, InhVec, InhUpvec, InhAngle, fk_MatrixAdmin::Scale
-		 */
-		property double InhScale {
-			double get();
-		}
-
-		//! 親モデルプロパティ
-		/*!
-		 *	親モデルの参照・設定を行います。
-		 *	親モデルは 1 個しか設定できません。
-		 *	設定の際に既に親モデルが設定されていた場合は、前のモデル設定は破棄されます。
-		 *	親モデルが設定されていない場合は null となります。
-		 *
-		 *	なお、このプロパティの設定は、 SetParent(fk_Model^, bool) において、
-		 *	第2引数に false を入力した場合と同義となります。
-		 *
-		 *	\sa SetParent(fk_Model^, bool), DeleteParent(), EntryChild()
-		 */
-		property fk_Model^ Parent {
-			void set(fk_Model^);
-			fk_Model^ get();
-		}
+		//! \name 干渉・衝突判定関連プロパティ
+		//@{
 
 		//! 干渉継続モード設定関数
 		/*!
@@ -552,6 +575,9 @@ namespace FK_CLI
 			void set(bool);
 			bool get();
 		}
+
+		//@}
+
 
 		//////////////////////////////////////////////////////////////
 		//! \name マテリアル属性除去関数
@@ -891,44 +917,718 @@ namespace FK_CLI
 
 		//! \name 干渉判定・衝突判定関数
 		//@{
+
+		//! モデル間干渉判定関数
+		/*!
+		 *	この関数は、別モデルとの干渉判定を行います。
+		 *	干渉判定に用いられる境界ボリュームの種類は、
+		 *	fk_Boundary::BMode に設定されているものが用いられます。
+		 *	相手モデル側で別の種類が設定されていた場合でも、
+		 *	この関数を呼び出しているインスタンス側の設定が優先されます。
+		 *	従って、相手モデル側の境界ボリュームも適切に設定しておく必要があります。
+		 *
+		 * \note
+		 *		「干渉判定」と「衝突判定」の違いに関しては、
+		 *		本クラスの概要を参照して下さい。
+		 *
+		 * \param[in]	model
+		 *		干渉判定を行うモデル
+		 *
+		 * \return		干渉している場合 true を、していない場合 false を返します。
+		 *
+		 * \sa AdjustSphere(), AdjustAABB(), AdjustOBB(), AdjustCapsule(), IsCollision(),
+		 *		SnapShot(), Restore(void), InterStopMode, EntryInterModel(),
+		 *		fk_Boundary::BMode,
+		 *		fk_Boundary::SetCapsule(), fk_Boundary::GetCapsuleRadius(),
+		 *		fk_Boundary::GetCapsuleLength(), fk_Boundary::GetCapsuleStartPos(),
+		 *		fk_Boundary::GetCapsuleEndPos()
+		 */
 		bool IsInter(fk_Model^ model);
+
+		//! モデル間衝突判定関数
+		/*!
+		 *	この関数は、別モデルとの衝突判定を行います。
+		 *	衝突判定を行うには、まずそれぞれのモデルにおいて
+		 *	SnapShot() 関数によって衝突判定を行う初期状態を設定しておく必要があります。
+		 *	その状態から現在の位置まで、両モデルが等速度直線運動していると想定し、
+		 *	その間に衝突が発生したかどうかを検出します。
+		 *
+		 *	なお、本関数を利用する際には事前に境界球の半径を適切に設定しておく必要があります。
+		 *	現在この関数は境界球による判定のみが有効となります。
+		 *	fk_Boundary::BMode によって境界ボリュームが別の種類に設定されていた場合でも、
+		 *	境界球の情報のみが用いられます。
+		 *
+		 *	なお、衝突判定は SnapShot() を呼ぶ以前や現時点以降を含めての検出となるので、
+		 *	SnapShot() を呼んだ時点から現時点までの間に衝突が起こったかどうかを判定するには、
+		 * 	第二引数の衝突時間を考慮する必要があります。
+		 *
+		 * \note
+		 *		「干渉判定」と「衝突判定」の違いに関しては、
+		 *		本クラスの概要を参照して下さい。
+		 *
+		 * \param[in]	model
+		 *		衝突判定を行うモデル
+		 *
+		 * \param[out]	time
+		 *		SnapShot() が呼ばれた時刻を 0、
+		 *		現時点の時刻を 1 とした場合の、衝突時間を検出します。
+		 *		本関数の返値が true であった場合でも、
+		 *		この値が 0 から 1 の間にないときは、
+		 *		衝突が起こっていないことになりますので、注意して下さい。
+		 *
+		 * \return
+		 *		両モデルが等速度直線運動をすると想定した場合に、
+		 *		いずれかの時刻で衝突が起きる場合 true を、衝突しない場合は false を返します。
+		 *		ただし、第二引数の値が 0 から 1 の間にない場合は、
+		 *		SnapShot() を呼んだ時点から現時点までの間においては衝突が起こっていないことになります。
+		 *
+		 * \sa AdjustSphere(), AdjustAABB(), AdjustOBB(), AdjustCapsule(), IsInter(),
+		 *		SnapShot(), Restore(double),
+		 *		fk_Boundary::BMode,
+		 *		fk_Boundary::SetCapsule(), fk_Boundary::GetCapsuleRadius(),
+		 *		fk_Boundary::GetCapsuleLength(), fk_Boundary::GetCapsuleStartPos(),
+		 *		fk_Boundary::GetCapsuleEndPos()
+		 */
 		bool IsCollision(fk_Model^ model, double %time);
+
+		//! 干渉継続状態初期化関数
+		/*!
+		 *	干渉継続モードによる干渉検出状態を初期化します。
+		 *	干渉継続モードについては
+		 *	fk_Model::InterMode プロパティの解説を参照して下さい。
+		 *	この関数が呼ばれた以降、再び IsInter() による干渉が検出されるまでは、
+		 *	InterStatus プロパティは false のままとなります。
+		 *	
+		 * \sa IsInter(), InterMode, InterStatus
+		 */
 		void ResetInter(void);
 		//@}
 
 		//! \name 干渉自動停止制御関数
 		//@{
+
+		//! 干渉自動停止モデル登録関数
+		/*!
+		 *	干渉自動停止モードの対象となるモデルを登録します。
+		 *	干渉自動停止モードについては、
+		 *	fk_Model::InterStopMode の解説を参照して下さい。
+		 *
+		 *	\note
+		 *		本関数で登録したモデルのインスタンスを、
+		 *		DeleteInterModel() や ClearInterModel() で解除する前に消去した場合、
+		 *		動作は保証されません。
+		 *
+		 *	\param[in]	model		登録モデルインスタンス
+		 *
+		 *	\sa InterStopMode, DeleteInterModel(), ClearInterModel()
+		 */
 		void EntryInterModel(fk_Model^ model);
+
+		//! 干渉自動停止モデル解除関数
+		/*!
+		 *	干渉自動停止モードの対象となっていたモデルの解除を行います。
+		 *	干渉自動停止モードについては、
+		 *	fk_Model::InterStopMode の解説を参照して下さい。
+		 *	もし入力モデルが登録されていなかった場合は、なにも起こりません。
+		 *
+		 *	\param[in]	model		解除モデルインスタンス
+		 *
+		 *	\sa	InterStopMode, EntryInterModel(), ClearInterModel()
+		 */
 		void DeleteInterModel(fk_Model^ model);
+
+		//! 干渉自動停止モデル初期化関数
+		/*!
+		 *	干渉自動停止モード用に登録されていた全てのモデルを解除します。
+		 *
+		 *	\sa	InterStopMode, EntryInterModel(), DeleteInterModel()
+		 */
 		void ClearInterModel(void);
 		//@}
 
 		//////////////////////////////////////////////////////////////
+		//! \name 回転制御関数
+		//@{
+
+		//! グローバル座標系座標軸回転関数1
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、origin を通り、
+		 *	axis で指定した座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は GlRotateWithVec() を利用して下さい。
+		 *	ローカル座標系で回転移動を行いたい場合は LoRotate() を利用して下さい。
+		 *
+		 *	\param[in]		origin
+		 *		グローバル座標系での回転軸上の点
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行な軸。 fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta
+		 *		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlRotateWithVec(fk_Vector^, fk_Axis, double),
+		 *		LoRotate(fk_Vector^, fk_Axis, double)
+		 */
 		bool GlRotate(fk_Vector^ origin, fk_Axis axis, double theta);
+
+		//! グローバル座標系座標軸回転関数2
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、(x, y, z) を通り、
+		 *	axis で指定した座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は GlRotateWithVec() を利用して下さい。
+		 *	ローカル座標系で回転移動を行いたい場合は LoRotate() を利用して下さい。
+		 *
+		 *	\param[in]		x		グローバル座標系での回転軸上の点のx成分
+		 *	\param[in]		y		グローバル座標系での回転軸上の点のy成分
+		 *	\param[in]		z		グローバル座標系での回転軸上の点のz成分
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行な軸。 fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlRotateWithVec(double, double, double, fk_Axis, double),
+		 *		LoRotate(double, double, double, fk_Axis, double)
+		 */
 		bool GlRotate(double x, double y, double z, fk_Axis axis, double theta);
+
+		//! グローバル座標系任意軸回転関数1
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、A と B を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は GlRotateWithVec() を利用して下さい。
+		 *	ローカル座標系で回転移動を行いたい場合は LoRotate() を利用して下さい。
+		 *
+		 *	\param[in]		A		回転軸上の1点。B と一致してはいけません。
+		 *	\param[in]		B		回転軸上の1点。A と一致してはいけません。
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotateWithVec(fk_Vector^, fk_Vector^, double),
+		 *		LoRotate(fk_Vector^, fk_Vector^, double)
+		 */
 		bool GlRotate(fk_Vector^ A, fk_Vector^ B, double theta);
+
+		//! グローバル座標系任意軸回転関数2
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、(Ax, Ay, Az) と (Bx, By, Bz) を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は GlRotateWithVec() を利用して下さい。
+		 *	ローカル座標系で回転移動を行いたい場合は LoRotate() を利用して下さい。
+		 *
+		 *	\param[in]		Ax		回転軸上の1点 A の x 成分
+		 *	\param[in]		Ay		回転軸上の1点 A の y 成分
+		 *	\param[in]		Az		回転軸上の1点 A の z 成分
+		 *	\param[in]		Bx		回転軸上の1点 B の x 成分
+		 *	\param[in]		By		回転軸上の1点 B の y 成分
+		 *	\param[in]		Bz		回転軸上の1点 B の z 成分
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotateWithVec(double, double, double, double, double, double, double),
+		 *		LoRotate(double, double, double, double, double, double, double)
+		 */
 		bool GlRotate(double Ax, double Ay, double Az,
 					  double Bx, double By, double Bz, double theta);
+
+		//! ローカル座標系座標軸回転関数1
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は(ローカル座標系における) origin を通り、
+		 *	axis で指定した (ローカル座標系における) 座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は LoRotateWithVec() を利用して下さい。
+		 *	グローバル座標系で回転移動を行いたい場合は GlRotate() を利用して下さい。
+		 *
+		 *	\param[in]		origin
+		 *		ローカル座標系での回転軸上の点
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行なローカル座標系上の軸。
+		 *		fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta
+		 *		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlRotate(fk_Vector^, fk_Axis, double),
+		 *		LoRotateWithVec(fk_Vector^, fk_Axis, double)
+		 */
 		bool LoRotate(fk_Vector^ origin, fk_Axis axis, double theta);
+
+		//! ローカル座標系座標軸回転関数2
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は(ローカル座標系における) (x, y, z) を通り、
+		 *	axis で指定した (ローカル座標系における) 座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は LoRotateWithVec() を利用して下さい。
+		 *	グローバル座標系で回転移動を行いたい場合は GlRotate() を利用して下さい。
+		 *
+		 *	\param[in]		x		ローカル座標系での回転軸上の点のx成分
+		 *	\param[in]		y		ローカル座標系での回転軸上の点のy成分
+		 *	\param[in]		z		ローカル座標系での回転軸上の点のz成分
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行なローカル座標系上の軸。
+		 *		fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlRotate(double, double, double, fk_Axis, double),
+		 *		LoRotateWithVec(double, double, double, fk_Axis, double)
+		 */
 		bool LoRotate(double x, double y, double z, fk_Axis axis, double theta);
+
+		//! ローカル座標系任意軸回転関数1
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は、(ローカル座標系における) A と B を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は LoRotateWithVec() を利用して下さい。
+		 *	グローバル座標系で回転移動を行いたい場合は GlRotate() を利用して下さい。
+		 *
+		 *	\param[in]		A
+		 *		ローカル座標系における回転軸上の1点。B と一致してはいけません。
+		 *
+		 *	\param[in]		B
+		 *		ローカル座標系における回転軸上の1点。A と一致してはいけません。
+		 *
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotateWithVec(fk_Vector^, fk_Vector^, double),
+		 *		LoRotate(fk_Vector^, fk_Vector^, double)
+		 */
 		bool LoRotate(fk_Vector^ A, fk_Vector^ B, double theta);
+
+		//! ローカル座標系任意軸回転関数2
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は、(ローカル座標系における)
+		 *	(Ax, Ay, Az) と (Bx, By, Bz) を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は位置のみを回転させるもので、姿勢は回転しません。
+		 *	姿勢の回転も伴いたい場合は LoRotateWithVec() を利用して下さい。
+		 *	グローバル座標系で回転移動を行いたい場合は GlRotate() を利用して下さい。
+		 *
+		 *	\param[in]		Ax
+		 *		ローカル座標系における回転軸上の1点 A の x 成分
+		 *
+		 *	\param[in]		Ay
+		 *		ローカル座標系における回転軸上の1点 A の y 成分
+		 *
+		 *	\param[in]		Az
+		 *		ローカル座標系における回転軸上の1点 A の z 成分
+		 *
+		 *	\param[in]		Bx
+		 *		ローカル座標系における回転軸上の1点 B の x 成分
+		 *
+		 *	\param[in]		By
+		 *		ローカル座標系における回転軸上の1点 B の y 成分
+		 *
+		 *	\param[in]		Bz
+		 *		ローカル座標系における回転軸上の1点 B の z 成分
+		 *
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotateWithVec(double, double, double, double, double, double, double),
+		 *		LoRotate(double, double, double, double, double, double, double)
+		 */
 		bool LoRotate(double Ax, double Ay, double Az,
 					  double Bx, double By, double Bz, double theta);
+
+		//! グローバル座標系座標軸回転(姿勢付き)関数1
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、origin を通り、
+		 *	axis で指定した座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は GlRotate() を利用して下さい。
+		 *	ローカル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	LoRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		origin		グローバル座標系での回転軸上の点
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行な軸。 fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlRotate(fk_Vector^, fk_Axis, double),
+		 *		LoRotateWithVec(fk_Vector^, fk_Axis, double)
+		 */
 		bool GlRotateWithVec(fk_Vector^ origin, fk_Axis axis, double theta);
+
+		//! グローバル座標系座標軸回転(姿勢付き)関数2
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、(x, y, z) を通り、
+		 *	axis で指定した座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は GlRotate() を利用して下さい。
+		 *	ローカル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	LoRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		x		グローバル座標系での回転軸上の点のx成分
+		 *	\param[in]		y		グローバル座標系での回転軸上の点のy成分
+		 *	\param[in]		z		グローバル座標系での回転軸上の点のz成分
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行な軸。 fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlRotate(double, double, double, fk_Axis, double),
+		 *		LoRotateWithVec(double, double, double, fk_Axis, double)
+		 */
 		bool GlRotateWithVec(double x, double y, double z, fk_Axis axis, double theta);
+
+		//! グローバル座標系任意軸回転(姿勢付き)関数1
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、A と B を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は GlRotate() を利用して下さい。
+		 *	ローカル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	LoRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		A		回転軸上の1点。B と一致してはいけません。
+		 *	\param[in]		B		回転軸上の1点。A と一致してはいけません。
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotate(fk_Vector^, fk_Vector^, double),
+		 *		LoRotateWithVec(fk_Vector^, fk_Vector^, double)
+		 */
 		bool GlRotateWithVec(fk_Vector^ A, fk_Vector^ B, double theta);
+
+		//! グローバル座標系任意軸回転(姿勢付き)関数2
+		/*!
+		 *	モデルの位置を、グローバル座標系によって回転した場所に移動します。
+		 *	回転軸は、(Ax, Ay, Az) と (Bx, By, Bz) を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は GlRotate() を利用して下さい。
+		 *	ローカル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	LoRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		Ax		回転軸上の1点 A の x 成分
+		 *	\param[in]		Ay		回転軸上の1点 A の y 成分
+		 *	\param[in]		Az		回転軸上の1点 A の z 成分
+		 *	\param[in]		Bx		回転軸上の1点 B の x 成分
+		 *	\param[in]		By		回転軸上の1点 B の y 成分
+		 *	\param[in]		Bz		回転軸上の1点 B の z 成分
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotate(double, double, double, double, double, double, double),
+		 *		LoRotateWithVec(double, double, double, double, double, double, double)
+		 */
 		bool GlRotateWithVec(double Ax, double Ay, double Az,
 							 double Bx, double By, double Bz, double theta);
+
+		//! ローカル座標系座標軸回転(姿勢付き)関数1
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は(ローカル座標系における) origin を通り、
+		 *	axis で指定した (ローカル座標系における) 座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は LoRotate() を利用して下さい。
+		 *	グローバル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	GlRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		origin		ローカル座標系での回転軸上の点
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行なローカル座標系上の軸。
+		 *		fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa LoRotate(fk_Vector^, fk_Axis, double),
+		 *		GlRotateWithVec(fk_Vector^, fk_Axis, double)
+		 */
 		bool LoRotateWithVec(fk_Vector^ origin, fk_Axis axis, double theta);
+
+		//! ローカル座標系座標軸回転(姿勢付き)関数2
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は(ローカル座標系における) (x, y, z) を通り、
+		 *	axis で指定した (ローカル座標系における) 座標軸に平行な直線となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は LoRotate() を利用して下さい。
+		 *	グローバル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	GlRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		x		ローカル座標系での回転軸上の点のx成分
+		 *	\param[in]		y		ローカル座標系での回転軸上の点のy成分
+		 *	\param[in]		z		ローカル座標系での回転軸上の点のz成分
+		 *
+		 *	\param[in]		axis
+		 *		回転軸に平行なローカル座標系上の軸。
+		 *		fk_Axis.X, fk_Axis.Y, fk_Axis.Z のいずれかになります。
+		 *
+		 *	\param[in]		theta		回転角度(ラジアン)
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa LoRotate(double, double, double, fk_Axis, double),
+		 *		GlRotateWithVec(double, double, double, fk_Axis, double)
+		 */
 		bool LoRotateWithVec(double x, double y, double z, fk_Axis axis, double theta);
+
+		//! ローカル座標系任意軸回転(姿勢付き)関数1
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は、(ローカル座標系における) A と B を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は LoRotate() を利用して下さい。
+		 *	グローバル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	GlRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		A
+		 *		ローカル座標系における回転軸上の1点。B と一致してはいけません。
+		 *
+		 *	\param[in]		B
+		 *		ローカル座標系における回転軸上の1点。A と一致してはいけません。
+		 *
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotateWithVec(fk_Vector^, fk_Vector^, double)
+		 *		LoRotate(fk_Vector^, fk_Vector^, double)
+		 */
 		bool LoRotateWithVec(fk_Vector^ A, fk_Vector^ B, double theta);
+
+		//! ローカル座標系任意軸回転(姿勢付き)関数2
+		/*!
+		 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
+		 *	回転軸は、(ローカル座標系における)
+		 *	(Ax, Ay, Az) と (Bx, By, Bz) を通る軸となります。
+		 *	回転角度は theta となります。単位は弧度法(ラジアン)です。
+		 *
+		 *	この関数は、回転の際に姿勢も回転していきます。
+		 *	位置のみの回転を行いたい場合は LoRotate() を利用して下さい。
+		 *	グローバル座標系で回転移動(姿勢付き)を行いたい場合は、
+		 *	GlRotateWithVec() を利用して下さい。
+		 *
+		 *	\param[in]		Ax
+		 *		ローカル座標系における回転軸上の1点 A の x 成分
+		 *
+		 *	\param[in]		Ay
+		 *		ローカル座標系における回転軸上の1点 A の y 成分
+		 *
+		 *	\param[in]		Az
+		 *		ローカル座標系における回転軸上の1点 A の z 成分
+		 *
+		 *	\param[in]		Bx
+		 *		ローカル座標系における回転軸上の1点 B の x 成分
+		 *
+		 *	\param[in]		By
+		 *		ローカル座標系における回転軸上の1点 B の y 成分
+		 *
+		 *	\param[in]		Bz
+		 *		ローカル座標系における回転軸上の1点 B の z 成分
+		 *
+		 *	\param[in]		theta	回転角度(ラジアン)
+		 *
+		 *	\return
+		 *		回転が成功した場合 true を返します。
+		 *		A と B が同一位置ベクトルであった場合、
+		 *		回転せずに false を返します。
+		 *
+		 *	\sa GlRotateWithVec(double, double, double, double, double, double, double),
+		 *		LoRotate(double, double, double, double, double, double, double)
+		 */
 		bool LoRotateWithVec(double Ax, double Ay, double Az,
 							 double Bx, double By, double Bz, double theta);
-		bool GlTranslate(fk_Vector^ V);
+		//@}
+
+		//! \name 位置制御関数
+		//@{
+
+		//! グローバル座標系平行移動関数1
+		/*!
+		 *	モデルを、クローバル座標系によって平行移動した位置に移動します。
+		 *	平行移動量はベクトルで指定します。
+		 *
+		 *	ローカル座標系による平行移動量の指定を行いたい場合は、
+		 *	LoTranslate() を利用して下さい。
+		 *
+		 *	\param[in]		v		平行移動量ベクトル
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa LoTranslate(fk_Vector^)
+		 */
+		bool GlTranslate(fk_Vector^ v);
+
+		//! グローバル座標系平行移動関数2
+		/*!
+		 *	モデルを、クローバル座標系によって平行移動した位置に移動します。
+		 *	平行移動量はベクトルの成分を意味する3個の実数で指定します。
+		 *
+		 *	ローカル座標系による平行移動量の指定を行いたい場合は、
+		 *	LoTranslate() を利用して下さい。
+		 *
+		 *	\param[in]		x		平行移動量ベクトルのx成分
+		 *	\param[in]		y		平行移動量ベクトルのy成分
+		 *	\param[in]		z		平行移動量ベクトルのz成分
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa LoTranslate(double, double, double)
+		 */
 		bool GlTranslate(double x, double y, double z);
-		bool LoTranslate(fk_Vector^ V);
+
+		//! ローカル座標系平行移動関数1
+		/*!
+		 *	モデルを、ローカル座標系によって平行移動した位置に移動します。
+		 *	平行移動量はベクトルで指定します。
+		 *
+		 *	グローバル座標系による平行移動量の指定を行いたい場合は、
+		 *	GlTranslate() を利用して下さい。
+		 *
+		 *	\param[in]		v		平行移動量ベクトル
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlTranslate(fk_Vector^), GlMoveTo(fk_Vector^)
+		 */
+		bool LoTranslate(fk_Vector^ v);
+
+		//! ローカル座標系平行移動関数2
+		/*!
+		 *	モデルを、ローカル座標系によって平行移動した位置に移動します。
+		 *	平行移動量はベクトルの成分を意味する3個の実数で指定します。
+		 *
+		 *	グローバル座標系による平行移動量の指定を行いたい場合は、
+		 *	GlTranslate() を利用して下さい。
+		 *
+		 *	\param[in]		x		平行移動量ベクトルのx成分
+		 *	\param[in]		y		平行移動量ベクトルのy成分
+		 *	\param[in]		z		平行移動量ベクトルのz成分
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlTranslate(double, double, double), GlMoveTo(double, double, double)
+		 */
 		bool LoTranslate(double x, double y, double z);
-		bool GlMoveTo(fk_Vector^ V);
+
+		//! グローバル座標系位置指定関数1
+		/*!
+		 *	モデルの位置を、指定した位置ベクトルに移動します。
+		 *	位置はベクトルで指定します。
+		 *
+		 *	GlMoveTo() 関数に対応するローカル座標系関数
+		 *	「LoMoveTo()」関数は存在しません。
+		 *	これは、LoMoveTo() 関数はその意味的に
+		 *	LoTranslate() とまったく同一の挙動となるためです。
+		 *
+		 *	\param[in]		p		移動先位置ベクトル
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlTranslate(fk_Vector^), LoTranslate(fk_Vector^)
+		 */
+		bool GlMoveTo(fk_Vector^ p);
+
+		//! グローバル座標系位置指定関数2
+		/*!
+		 *	モデルの位置を、指定した位置ベクトルに移動します。
+		 *	位置はベクトルの成分を意味する3個の実数で指定します。
+		 *
+		 *	GlMoveTo() 関数に対応するローカル座標系関数
+		 *	「LoMoveTo()」関数は存在しません。
+		 *	これは、LoMoveTo() 関数はその意味的に
+		 *	LoTranslate() とまったく同一の挙動となるためです。
+		 *
+		 *	\param[in]		x		移動先位置ベクトルのx成分
+		 *	\param[in]		y		移動先位置ベクトルのy成分
+		 *	\param[in]		z		移動先位置ベクトルのz成分
+		 *
+		 *	\return			この関数は常に true を返します。
+		 *
+		 *	\sa GlTranslate(double, double, double), LoTranslate(double, double, double)
+		 */
 		bool GlMoveTo(double x, double y, double z);
+		//@}
 	};
 }
