@@ -65,8 +65,8 @@ namespace FK_CLI
 		 *	事前に fk_Reference::GetAllEOnV() 関数や
 		 *	fk_Reference::GetAllLOnV() 関数等によって参照しておく必要があります。
 		 *
-		 *	\image html Euler07.png "removeVertexInLoop"
-		 *	\image latex Euler07.eps "removeVertexInLoop" width=10cm
+		 *	\image html Euler07.png "RemoveVertexInLoop"
+		 *	\image latex Euler07.eps "RemoveVertexInLoop" width=10cm
 		 *
 		 *	\param[in]	V	削除する頂点位相インスタンス
 		 *
