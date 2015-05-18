@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="テンプレート ファイル">
+      <UniqueIdentifier>{8d2979ee-9c36-43e6-bab8-74d21f06f368}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
+    <Filter Include="HTML ファイル">
+      <UniqueIdentifier>{de6508f1-8772-4b0c-816d-fd77b3877b4d}</UniqueIdentifier>
+      <Extensions>htm</Extensions>
+    </Filter>
+    <Filter Include="イメージ ファイル">
+      <UniqueIdentifier>{1bfe6de5-b61b-49ac-b853-a73bb688efab}</UniqueIdentifier>
+      <Extensions>bmp</Extensions>
+    </Filter>
+    <Filter Include="スクリプト ファイル">
+      <UniqueIdentifier>{068007e2-75a3-4f76-873a-31b9c62f7cf0}</UniqueIdentifier>
+      <Extensions>js</Extensions>
+    </Filter>
+    <Filter Include="その他のファイル">
+      <UniqueIdentifier>{0d1a4602-b188-4839-8251-a5e520de4e57}</UniqueIdentifier>
+      <Extensions>vsz;vsdir;ico;vcproj;csproj;css;inf</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FK_ProjectWizard\Templates\1041\main.cpp">
+      <Filter>テンプレート ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FK_ProjectWizard\HTML\1041\default.htm">
+      <Filter>HTML ファイル</Filter>
+    </None>
+    <None Include="FK_ProjectWizard\Scripts\1041\default.js">
+      <Filter>スクリプト ファイル</Filter>
+    </None>
+    <None Include="FK_ProjectWizard\default.vcproj">
+      <Filter>その他のファイル</Filter>
+    </None>
+    <None Include="FK\FK_ProjectWizard.vsdir">
+      <Filter>その他のファイル</Filter>
+    </None>
+    <None Include="FK_ProjectWizard.vsz">
+      <Filter>その他のファイル</Filter>
+    </None>
+    <None Include="FK_ProjectWizard\1041\NewStyles.css">
+      <Filter>その他のファイル</Filter>
+    </None>
+    <None Include="FK_ProjectWizard\Templates\1041\Templates.inf">
+      <Filter>その他のファイル</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="FK_ProjectWizard\1041\Images\DottedHori.gif">
+      <Filter>イメージ ファイル</Filter>
+    </Image>
+    <Image Include="FK_ProjectWizard\1041\Images\DottedVert.gif">
+      <Filter>イメージ ファイル</Filter>
+    </Image>
+    <Image Include="FK_ProjectWizard\Images\FK_ProjectWizard.gif">
+      <Filter>イメージ ファイル</Filter>
+    </Image>
+    <Image Include="FK_ProjectWizard\Images\FK_ProjectWizard_Background.gif">
+      <Filter>イメージ ファイル</Filter>
+    </Image>
+    <Image Include="FK_ProjectWizard\1041\Images\spacer.gif">
+      <Filter>イメージ ファイル</Filter>
+    </Image>
+    <Image Include="FK_ProjectWizard.ico">
+      <Filter>その他のファイル</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
