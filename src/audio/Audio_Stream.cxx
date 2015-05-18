@@ -244,7 +244,7 @@ bool fk_AudioStream::PlayStream(void)
 			continue;
 		}
 
-		int length = static_cast<int>(FK_OV_BUFSIZE*sizeof(char));
+		ogg_int64_t length = static_cast<ogg_int64_t>(FK_OV_BUFSIZE*sizeof(char));
 		nowTime = ov_time_tell(vf);
 		bool need_rewind = false;
 		if (loopMode && loopEndTime > 0.0)
@@ -266,7 +266,7 @@ bool fk_AudioStream::PlayStream(void)
 		}
 
 		// ファイル読み込み
-		size = static_cast<ALsizei>(ov_read(vf, &buffer[0], length, _ENDIAN, 2, 1, &current));
+		size = static_cast<ALsizei>(ov_read(vf, &buffer[0], static_cast<int>(length), _ENDIAN, 2, 1, &current));
 		if (need_rewind)
 		{
 			ov_time_seek_lap(vf, loopStartTime);
