@@ -46,7 +46,7 @@ namespace FK_CLI
 		 *	\param[in]	bottom	底面半径
 		 *	\param[in]	height	高さ
 		 */
-		fk_Prism(int argDiv, double argTop, double argBottom, double argHeight);
+		fk_Prism(int div, double top, double bottom, double height);
 
 		//! デストラクタ
 		~fk_Prism();
