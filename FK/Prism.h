@@ -87,6 +87,7 @@
  *
  *	このクラスは、実質的には fk_IndexFaceSet クラスの派生クラスであり、
  *	生成後に fk_IndexFaceSet クラスの機能によって頂点を移動することが可能です。
+ *
  *	\sa fk_IndexFaceSet, fk_Shape, fk_Model, fk_Cone
  */
 
