@@ -162,7 +162,9 @@ class fk_Palette : public fk_BaseObject {
 	//! オブジェクトマテリアル ID 取得関数
 	/*!
 	 *	現在設定されているオブジェクトマテリアルの ID を取得します。
+	 *
 	 *	\return オブジェクトマテリアルの ID
+	 *
 	 *	\sa setObjMaterialID()
 	 */
 	int							getObjMaterialID(void);
@@ -190,7 +192,7 @@ class fk_Palette : public fk_BaseObject {
 	 *
 	 *	\sa pushPalette(), setPalette(), getPaletteSize()
 	 */
-	fk_Material *				getMaterial(int id);
+	fk_Material *				getMaterial(int ID);
 
 	//! マテリアル配列取得関数
 	/*!
