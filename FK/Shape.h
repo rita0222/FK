@@ -90,6 +90,7 @@ enum fk_RealShapeType {
 /*!
  *	このクラスは、形状を表すクラスの基底クラスです。
  *	クラス自体の主な機能は、マテリアルやパレットの管理です。
+ *
  *	\sa fk_Material, fk_Palette
  */
 
@@ -112,7 +113,6 @@ class fk_Shape: public fk_Attribute {
 	 *
 	 *	\return		格納データ構造
 	 */
-
 	fk_RealShapeType				getRealShapeType(void);
 
 	//! パレット取得関数
@@ -156,8 +156,10 @@ class fk_Shape: public fk_Attribute {
 	/*!
 	 *	パレットに対し、対応する ID でマテリアルを設定します。
 	 *	詳細な仕様は fk_Palette::setPalette() を参照して下さい。
+	 *
 	 *	\param[in]	mat		設定するマテリアル
 	 *	\param[in]	ID		マテリアルID
+	 *
 	 *	\sa fk_Palette::setPalette(), pushPalette()
 	 */
 	void							setPalette(fk_Material &mat, int ID);
