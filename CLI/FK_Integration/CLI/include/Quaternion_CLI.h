@@ -43,7 +43,7 @@ namespace FK_CLI
 		::fk_Quaternion *pQuat;
 
 	public:
-##ifndef FK_DOXYGEN_USER_PROCESS
+#ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Quaternion(::fk_Quaternion *argQ);
 		fk_Quaternion(::fk_Quaternion argQ);
 #endif
