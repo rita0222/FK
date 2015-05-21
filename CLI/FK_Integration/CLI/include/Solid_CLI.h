@@ -411,7 +411,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, bool, bool contFlg, bool) において、
+		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -776,17 +776,169 @@ namespace FK_CLI
 		 *	\sa fk_IFSTexture::ReadD3DXFile()
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID);
+
+		//! VRML ファイル出力関数1-1
+		/*!
+		 *	VRML (VRML2.0) 形式で形状データを出力します。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\param[in]	material
+		 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
+		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+		 *
+		 *	\param[in]	triFlg
+		 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
+
+		//! VRML ファイル出力関数1-2
+		/*!
+		 *	VRML (VRML2.0) 形式で形状データを出力します。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\param[in]	material
+		 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
+		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteVRMLFile(String^ fileName, fk_Material^ material);
+
+		//! VRML ファイル出力関数1-3
+		/*!
+		 *	VRML (VRML2.0) 形式で形状データを出力します。
+		 *
+		 *	本関数は、 WriteVRMLFile(String^, fk_Material^) において、
+		 *	第2引数に null を入力した場合と同義となります。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteVRMLFile(String^ fileName);
+
+		//! VRML ファイル出力関数2-1
+		/*!
+		 *	VRML (VRML2.0) 形式で形状データを出力します。
+		 *	この引数形式の場合は、
+		 *	CoordinateInterpolator ノードを用いた
+		 *	アニメーションデータを出力することが可能です。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\param[in]	time
+		 *		CoordinateInterpolator における時間配列 (key) を入力します。
+		 *
+		 *	\param[in]	pos
+		 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
+		 *
+		 *	\param[in]	material
+		 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
+		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+		 *
+		 *	\param[in]	triFlg
+		 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
 						   fk_Material^ material, bool triFlg);
+
+		//! VRML ファイル出力関数2-2
+		/*!
+		 *	VRML (VRML2.0) 形式で形状データを出力します。
+		 *	この引数形式の場合は、
+		 *	CoordinateInterpolator ノードを用いた
+		 *	アニメーションデータを出力することが可能です。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\param[in]	time
+		 *		CoordinateInterpolator における時間配列 (key) を入力します。
+		 *
+		 *	\param[in]	pos
+		 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
+		 *
+		 *	\param[in]	material
+		 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
+		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
 						   fk_Material^ material);
+
+		//! VRML ファイル出力関数2-3
+		/*!
+		 *	VRML (VRML2.0) 形式で形状データを出力します。
+		 *	この引数形式の場合は、
+		 *	CoordinateInterpolator ノードを用いた
+		 *	アニメーションデータを出力することが可能です。
+		 *
+		 *	本関数は、
+		 *	WriteVRMLFile(String^, array<double>^, array<fk_Vector^>^, fk_Material^) において、
+		 *	第4引数に null を入力した場合と同義となります。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\param[in]	time
+		 *		CoordinateInterpolator における時間配列 (key) を入力します。
+		 *
+		 *	\param[in]	pos
+		 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos);
+
+		//! STL ファイル出力関数
+		/*!
+		 *	STL 形式で形状データを出力します。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteSTLFile(String^ fileName);
+
+		//! DXF ファイル出力関数1
+		/*!
+		 *	DXF 形式で形状データを出力します。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\param[in]	triFlg
+		 *		面情報を3角形として出力したい場合は、true を代入します。
+		 *		false の場合、3角形面を2点が重複している4角形面として出力します。
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteDXFFile(String^ fileName, bool triFlg);
+
+		//! DXF ファイル出力関数2
+		/*!
+		 *	DXF 形式で形状データを出力します。
+		 *	本関数は、 WriteDXFFile(String^, bool) において、
+		 *	第2引数に false を入力した場合と同義となります。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteDXFFile(String^ fileName);
+
+		//! MQO ファイル出力関数
+		/*!
+		 *	MQO 形式で形状データを出力します。
+		 *
+		 *	\param[in]	fileName		ファイル名
+		 *
+		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
+		 */
 		bool WriteMQOFile(String^ fileName);
 	};
 }

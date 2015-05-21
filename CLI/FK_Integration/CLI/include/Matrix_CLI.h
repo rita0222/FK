@@ -62,19 +62,19 @@ namespace FK_CLI {
 		//! ファイナライザ
 		!fk_Angle();
 
-		//! ヘディング角
+		//! ヘディング角プロパティ
 		property double h {
 			double get();
 			void set(double value);
 		}
 
-		//! ピッチ角
+		//! ピッチ角プロパティ
 		property double p {
 			double get();
 			void set(double value);
 		}
 
-		//! バンク角
+		//! バンク角プロパティ
 		property double b {
 			double get();
 			void set(double value);
