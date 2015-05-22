@@ -160,21 +160,8 @@ bool fk_AudioStream::play(void)
 	if(startStatus == false) {
 		if(ready() == false) return false;
 	}
-
-	if(PlayStream() == true) {
-		if(loopEndTime >= 0.0) {
-			if(tell() > loopEndTime) {
-				seek(loopStartTime);
-				return PlayStream();
-			}
-		}
-		return true;
-	} else if(endStatus & loopMode) {
-		seek(loopStartTime);
-		return PlayStream();
-	}
-
-	return false;
+	
+	return PlayStream();
 }
 
 void fk_AudioStream::StartQueue(bool argInitFlg)
@@ -257,16 +244,47 @@ bool fk_AudioStream::PlayStream(void)
 			continue;
 		}
 
-		// ファイル読み込み
+		int length = static_cast<int>(FK_OV_BUFSIZE*sizeof(char));
 		nowTime = ov_time_tell(vf);
-		size = static_cast<ALsizei>(ov_read(vf, &buffer[0],
-											static_cast<int>(FK_OV_BUFSIZE*sizeof(char)),
-											_ENDIAN, 2, 1, &current));
+		bool need_rewind = false;
+		if (loopMode && loopEndTime > 0.0)
+		{
+			ogg_int64_t now_pcm = ov_pcm_tell(vf);
+			ov_time_seek(vf, loopEndTime);
+			ogg_int64_t end_pcm = ov_pcm_tell(vf);
+			ov_pcm_seek(vf, now_pcm);
+			if (now_pcm > end_pcm)
+			{
+				length = 0;
+				need_rewind = true;
+			}
+			else if (length > end_pcm - now_pcm)
+			{
+				length = static_cast<int>(end_pcm - now_pcm);
+				need_rewind = true;
+			}
+		}
 
-		if(size == 0) {
+		// ファイル読み込み
+		size = static_cast<ALsizei>(ov_read(vf, &buffer[0], length, _ENDIAN, 2, 1, &current));
+		if (need_rewind)
+		{
+			ov_time_seek_lap(vf, loopStartTime);
+		}
+
+		if(size == 0)
+		{
 			// 終端
-			endStatus = true;
-			alDeleteBuffers(1, &bufferID);
+			if (!loopMode)
+			{
+				endStatus = true;
+				alDeleteBuffers(1, &bufferID);
+			}
+			else
+			{
+				ov_time_seek(vf, loopStartTime);
+			}
+
 			continue;
 		}
 
@@ -329,7 +347,7 @@ void fk_AudioStream::seek(double argTime)
 	if(ovOpenStatus == false) return;
 
 	stop();
-	ov_time_seek_page_lap(vf, argTime);
+	ov_time_seek_lap(vf, argTime);
 	endStatus = false;
 	StartQueue(!startStatus);
 
