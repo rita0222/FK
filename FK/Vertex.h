@@ -89,6 +89,7 @@ class fk_Loop;
  *	派生クラスのうち、ID 管理については fk_Topology,
  *	個別マテリアル設定については fk_TopologyMaterial,
  *	属性設定については fk_Attribute を参照して下さい。
+ *
  *	\sa fk_Solid, fk_Half, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
  */
 
@@ -132,6 +133,7 @@ class fk_Vertex : public fk_Topology, public fk_TopologyMaterial {
 	 *	頂点位相の位置ベクトルを取得します。
 	 *	この関数による位置ベクトルは、
 	 *	fk_Model での配置や姿勢制御がまったく反映されないことに注意して下さい。
+	 *
 	 *	\return 位置ベクトル
 	 */
 	fk_Vector	getPosition(void) const;
@@ -141,14 +143,17 @@ class fk_Vertex : public fk_Topology, public fk_TopologyMaterial {
 	 *	この頂点を始点とする半稜線のうちの1つを取得します。
 	 *	条件を満たす全ての半稜線を得たい場合は、
 	 *	fk_ReferenceL2::getAllHOnV() 関数を用いて下さい。
-	 *	\return この頂点を始点とする半稜線を表す fk_Half 型インスタンスのアドレス。
-	 *	対象となる半稜線が存在しない場合は nullptr を返します。
+	 *
+	 *	\return
+	 *		この頂点を始点とする半稜線を表す fk_Half 型インスタンスのアドレス。
+	 *		対象となる半稜線が存在しない場合は nullptr を返します。
 	 */
 	fk_Half *	getOneHalf(void) const;
 
 	//! 法線ベクトル取得関数
 	/*!
 	 *	頂点が2次元多様体上にある条件下のもと、適切な法線ベクトルを取得します。
+	 *
 	 *	\return 法線ベクトル。算出できなかった場合は零ベクトルを返します。
 	 */
 	fk_Vector	getNormal(void);
@@ -156,6 +161,7 @@ class fk_Vertex : public fk_Topology, public fk_TopologyMaterial {
 	//! 描画サイズ取得関数
 	/*!
 	 *	頂点が描画される際のサイズを返します。
+	 *
 	 *	\return 描画サイズ
 	 */
 	double		getDrawSize(void) const;
@@ -167,6 +173,7 @@ class fk_Vertex : public fk_Topology, public fk_TopologyMaterial {
 	 *	カメラからの距離に関係なく、同一の大きさで描画されます。
 	 *	また、設定したサイズで実際に描画されるかどうかは
 	 *	グラフィックスハードウェアの機能に依存します。
+	 *
 	 *	\param[in] size	描画サイズ
 	 */
 	void		setDrawSize(double size);
