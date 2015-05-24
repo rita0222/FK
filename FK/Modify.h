@@ -138,9 +138,10 @@ class fk_Modify : public fk_Operation {
 	 *
 	 *	\param[in]	V	削除する頂点位相インスタンス
 	 *
-	 *	\return		削除に成功した場合は、
-	 *				新たに生成されたループの位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\return
+	 *		削除に成功した場合は、
+	 *		新たに生成されたループの位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Loop *	removeVertexInLoop(fk_Vertex *V);
 
@@ -168,8 +169,10 @@ class fk_Modify : public fk_Operation {
 	 *	fk_ReferenceL2::getAllEOnV() 関数等によって参照しておく必要があります。
 	 *
 	 *	\param[in]	E	削除する稜線位相院寸タンス
-	 *	\param[in]	R	true の場合、右側半稜線の始点側頂点が残ります。
-	 *					false の場合はその反対が残ります。
+	 *
+	 *	\param[in]	R
+	 *		true の場合、右側半稜線の始点側頂点が残ります。
+	 *		false の場合はその反対が残ります。
 	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 *
@@ -185,8 +188,10 @@ class fk_Modify : public fk_Operation {
 	 *
 	 *	\param[in]	E	削除する稜線位相院寸タンス
 	 *	\param[in]	P	結合した頂点の位置ベクトル
-	 *	\param[in]	R	true の場合、右側半稜線の始点側頂点が残ります。
-	 *					false の場合はその反対が残ります。
+	 *
+	 *	\param[in]	R
+	 *		true の場合、右側半稜線の始点側頂点が残ります。
+	 *		false の場合はその反対が残ります。
 	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 *
@@ -207,24 +212,29 @@ class fk_Modify : public fk_Operation {
 
 	//! \name 多角形生成関数
 	//@{
+
 	//! 多角形生成関数1
 	/*!
 	 *	新たに多角形を生成します。
 	 *
-	 *	\param[in]	array		頂点の位置ベクトル配列。
-	 *							要素数が 3 以上である必要があります。
-	 *							多角形頂点は、この配列の順番に繫がります。
-	 *	\param[in]	openFlg		true の場合、開いた多角形を生成します。
-	 *							この場合は、頂点の始点と終点の間に線分を生成しません。
-	 *							false の場合は閉じた多角形を生成します。
-	 *							つまり、始点と終点の間に稜線を生成します。
-	 *	\param[in]	initFlg		true の場合、既にあった形状を全て消去します。
-	 *							false の場合は消去しません。
-	 *							false の場合、実質的に
-	 *							pushPolygon() と機能的に同一となります。
+	 *	\param[in]	array
+	 *		頂点の位置ベクトル配列。
+	 *		要素数が 3 以上である必要があります。
+	 *		多角形頂点は、この配列の順番に繫がります。
 	 *
-	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\param[in]	openFlg
+	 *		true の場合、開いた多角形を生成します。
+	 *		この場合は、頂点の始点と終点の間に線分を生成しません。
+	 *		false の場合は閉じた多角形を生成します。
+	 *		つまり、始点と終点の間に稜線を生成します。
+	 *
+	 *	\param[in]	initFlg
+	 *		true の場合、既にあった形状を全て消去します。false の場合は消去しません。
+	 *		false の場合、実質的に pushPolygon() と機能的に同一となります。
+	 *
+	 *	\return
+	 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 *
 	 *	\sa pushPolygon(std::vector<fk_Vector> *, bool)
 	 */
@@ -235,20 +245,28 @@ class fk_Modify : public fk_Operation {
 	/*!
 	 *	新たに多角形を生成します。
 	 *
-	 *	\param[in]	num			頂点数。3以上である必要があります。
-	 *	\param[in]	array		頂点の位置ベクトル配列。
-	 *							多角形頂点は、この配列の順番に繫がります。
-	 *	\param[in]	openFlg		true の場合、開いた多角形を生成します。
-	 *							この場合は、頂点の始点と終点の間に線分を生成しません。
-	 *							false の場合は閉じた多角形を生成します。
-	 *							つまり、始点と終点の間に稜線を生成します。
-	 *	\param[in]	initFlg		true の場合、既にあった形状を全て消去します。
-	 *							false の場合は消去しません。
-	 *							false の場合、実質的に
-	 *							pushPolygon() と機能的に同一となります。
+	 *	\param[in]	num
+	 *		頂点数。3以上である必要があります。
 	 *
-	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\param[in]	array
+	 *		頂点の位置ベクトル配列。
+	 *		多角形頂点は、この配列の順番に繫がります。
+	 *
+	 *	\param[in]	openFlg
+	 *		true の場合、開いた多角形を生成します。
+	 *		この場合は、頂点の始点と終点の間に線分を生成しません。
+	 *		false の場合は閉じた多角形を生成します。
+	 *		つまり、始点と終点の間に稜線を生成します。
+	 *
+	 *	\param[in]	initFlg
+	 *		true の場合、既にあった形状を全て消去します。
+	 *		false の場合は消去しません。
+	 *		false の場合、実質的に
+	 *		pushPolygon() と機能的に同一となります。
+	 *
+	 *	\return
+	 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 *
 	 *	\sa pushPolygon(int, fk_Vector *, bool)
 	 */
@@ -261,16 +279,20 @@ class fk_Modify : public fk_Operation {
 	 *	makePolygon(std::vector<fk_Vector> *, bool, bool)
 	 *	関数で initFlg を false にした場合と機能的に同一となります。
 	 *
-	 *	\param[in]	array		頂点の位置ベクトル配列。
-	 *							要素数が 3 以上である必要があります。
-	 *							多角形頂点は、この配列の順番に繫がります。
-	 *	\param[in]	openFlg		true の場合、開いた多角形を生成します。
-	 *							この場合は、頂点の始点と終点の間に線分を生成しません。
-	 *							false の場合は閉じた多角形を生成します。
-	 *							つまり、始点と終点の間に稜線を生成します。
+	 *	\param[in]	array
+	 *		頂点の位置ベクトル配列。
+	 *		要素数が 3 以上である必要があります。
+	 *		多角形頂点は、この配列の順番に繫がります。
 	 *
-	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\param[in]	openFlg
+	 *		true の場合、開いた多角形を生成します。
+	 *		この場合は、頂点の始点と終点の間に線分を生成しません。
+	 *		false の場合は閉じた多角形を生成します。
+	 *		つまり、始点と終点の間に稜線を生成します。
+	 *
+	 *	\return
+	 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 *
 	 *	\sa makePolygon(std::vector<fk_Vector> *, bool, bool)
 	 */
@@ -284,15 +306,20 @@ class fk_Modify : public fk_Operation {
 	 *	関数で initFlg を false にした場合と機能的に同一となります。
 	 *
 	 *	\param[in]	num			頂点数。3以上である必要があります。
-	 *	\param[in]	array		頂点の位置ベクトル配列。
-	 *							多角形頂点は、この配列の順番に繫がります。
-	 *	\param[in]	openFlg		true の場合、開いた多角形を生成します。
-	 *							この場合は、頂点の始点と終点の間に線分を生成しません。
-	 *							false の場合は閉じた多角形を生成します。
-	 *							つまり、始点と終点の間に稜線を生成します。
 	 *
-	 *	\return		生成に成功すれば、生成されたループ位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\param[in]	array
+	 *		頂点の位置ベクトル配列。
+	 *		多角形頂点は、この配列の順番に繫がります。
+	 *
+	 *	\param[in]	openFlg
+	 *		true の場合、開いた多角形を生成します。
+	 *		この場合は、頂点の始点と終点の間に線分を生成しません。
+	 *		false の場合は閉じた多角形を生成します。
+	 *		つまり、始点と終点の間に稜線を生成します。
+	 *
+	 *	\return
+	 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 *
 	 *	\sa makePolygon(int, fk_Vector *, bool, bool)
 	 */
@@ -306,12 +333,13 @@ class fk_Modify : public fk_Operation {
 	 *	makePolygon() 関数によって 1 つだけ多角形が生成された状況でなければなりません。
 	 *	その条件が満たされていない場合の動作は保証されません。
 	 *
-	 *	\param[in]	pos			追加頂点の位置ベクトル
-	 *	\param[in]	openFlg		true の場合、開いた多角形を生成します。
-	 *							この場合は、
-	 *							多角形の始点と新規追加点の間に線分を生成しません。
-	 *							false の場合は閉じた多角形を生成します。
-	 *							つまり、多角形の始点と新規追加点の間に稜線を生成します。
+	 *	\param[in]	pos		追加頂点の位置ベクトル
+	 *
+	 *	\param[in]	openFlg
+	 *		true の場合、開いた多角形を生成します。
+	 *		この場合は、多角形の始点と新規追加点の間に線分を生成しません。
+	 *		false の場合は閉じた多角形を生成します。
+	 *		つまり、多角形の始点と新規追加点の間に稜線を生成します。
 	 */
 	void		pushPolygonVertex(fk_Vector pos, bool openFlg);
 	//@}
@@ -369,9 +397,10 @@ class fk_Modify : public fk_Operation {
 	 *	この関数を呼ぶ前に存在していた形状データは全て消去されます。
 	 *
 	 *	\param[in]	num			線分数。
-	 *	\param[in]	array		線分の両端点を表す頂点位置ベクトル配列。
-	 *							配列の長さは、
-	 *							線分数の2倍よりも大きくなければなりません。
+	 *		
+	 *	\param[in]	array
+	 *		線分の両端点を表す頂点位置ベクトル配列。
+	 *		配列の長さは、線分数の2倍よりも大きくなければなりません。
 	 */
 	void		makeLines(int num, fk_Vector *array);
 
@@ -393,8 +422,10 @@ class fk_Modify : public fk_Operation {
 	 *	makeLines() によって 1 本だけ線分が生成された状況でなければなりません。
 	 *	その状況が満たされていない場合の動作は保証されません。
 	 *
-	 *	\param[in]	ID		0 であれば始点を、1 であれば終点を移動対象とします。
-	 *						その他の ID が与えられた場合はエラーとなります。
+	 *	\param[in]	ID
+	 *		0 であれば始点を、1 であれば終点を移動対象とします。
+	 *		その他の ID が与えられた場合はエラーとなります。
+	 *
 	 *	\param[in]	pos		移動先の位置ベクトル
 	 *
 	 *	\return		移動に成功すれば true を、失敗すれば false を返します。
@@ -409,10 +440,13 @@ class fk_Modify : public fk_Operation {
 	 *	複数の線分が生成された状況でなければなりません。
 	 *	その条件が満たされていない場合の動作は保証されません。
 	 *
-	 *	\param[in]	edgeID		線分の ID。
-	 *							ID は生成した順に 0, 1, 2... となります。
-	 *	\param[in]	vertexID	0 であれば始点を、1 であれば終点を移動対象とします。
-	 *							その他の ID が与えられた場合はエラーとなります。
+	 *	\param[in]	edgeID
+	 *		線分の ID。ID は生成した順に 0, 1, 2... となります。
+	 *
+	 *	\param[in]	vertexID
+	 *		0 であれば始点を、1 であれば終点を移動対象とします。
+	 *		その他の ID が与えられた場合はエラーとなります。
+	 *
 	 *	\param[in]	pos			移動先の位置ベクトル
 	 *
 	 *	\return		移動に成功すれば true を、失敗すれば false を返します。
@@ -427,8 +461,7 @@ class fk_Modify : public fk_Operation {
 	 *	複数の線分が生成された状況でなければなりません。
 	 *	その条件が満たされていない場合の動作は保証されません。
 	 *
-	 *	\param[in]	edgeID		線分の ID。
-	 *							ID は生成した順に 0, 1, 2... となります。
+	 *	\param[in]	edgeID		線分の ID。ID は生成した順に 0, 1, 2... となります。
 	 *	\param[in]	pos1		始点の移動先位置ベクトル
 	 *	\param[in]	pos2		終点の移動先位置ベクトル
 	 *
@@ -820,8 +853,8 @@ class fk_Modify : public fk_Operation {
 	 *
 	 *	\param[in]	vertexID		頂点ID。
 	 *	\param[in]	pos				移動先の位置ベクトル
-	 *	\param[in]	order			最初の頂点IDを補正するオーダー。
-	 *								通常は省略して問題ありません。
+	 *	\param[in]	order			最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
+	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
 	bool		moveVPosition(int vertexID, fk_Vector pos, int order = 0);
@@ -834,8 +867,8 @@ class fk_Modify : public fk_Operation {
 	 *	\param[in]	x				移動先位置ベクトルの x 成分
 	 *	\param[in]	y				移動先位置ベクトルの y 成分
 	 *	\param[in]	z				移動先位置ベクトルの z 成分
-	 *	\param[in]	order			最初の頂点IDを補正するオーダー。
-	 *								通常は省略して問題ありません。
+	 *	\param[in]	order			最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
+	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
 	bool		moveVPosition(int vertexID, double x, double y, double z,
@@ -846,10 +879,9 @@ class fk_Modify : public fk_Operation {
 	 *	指定された頂点を移動します。
 	 *
 	 *	\param[in]	vertexID		頂点ID。
-	 *	\param[in]	array			移動先位置ベクトルの各成分が入った
-	 *								double 型配列。
-	 *	\param[in]	order			最初の頂点IDを補正するオーダー。
-	 *								通常は省略して問題ありません。
+	 *	\param[in]	array			移動先位置ベクトルの各成分が入った double 型配列。
+	 *	\param[in]	order			最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
+	 *								
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
 	bool		moveVPosition(int vertexID, double *array, int order = 0);

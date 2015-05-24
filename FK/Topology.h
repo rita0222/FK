@@ -197,6 +197,7 @@ class fk_TopologyMaterial {
 	 *	位相要素の個別マテリアルを、パレットの ID によって設定します。
 	 *	パレットに関する解説は
 	 *	fk_Shape::setPalette() や fk_Shape::pushPalette() を参照して下さい。
+	 *
 	 *	\param[in] ID	マテリアルの ID
 	 */
 	void				setElemMaterialID(int ID);
@@ -204,6 +205,7 @@ class fk_TopologyMaterial {
 	//! マテリアルモード参照関数
 	/*!
 	 *	現在のマテリアルモードを参照します。
+	 *
 	 *	\return マテリアルモード
 	 */
 	fk_MaterialMode		getElemMaterialMode(void);
@@ -211,6 +213,7 @@ class fk_TopologyMaterial {
 	//! マテリアル ID 参照関数
 	/*!
 	 *	現在のマテリアル ID を参照します。
+	 *
 	 *	\return マテリアル ID
 	 */
 	int					getElemMaterialID(void);

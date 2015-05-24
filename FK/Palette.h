@@ -114,7 +114,9 @@ class fk_Palette : public fk_BaseObject {
 	//! オブジェクトマテリアル ID 設定関数
 	/*!
 	 *	オブジェクトマテリアルの ID を設定します。
+	 *
 	 *	\param[in]	ID		オブジェクトマテリアルの ID。
+	 *
 	 *	\sa getObjMaterialID()
 	 */
 	void						setObjMaterialID(int ID);
@@ -134,6 +136,7 @@ class fk_Palette : public fk_BaseObject {
 	 *		pal.pushPalette(&mat);
 	 *
 	 *	\param[in]	mat		追加するマテリアル変数のアドレス
+	 *
 	 *	\sa setPalette()
 	 */
 	void						pushPalette(fk_Material *mat);
@@ -148,8 +151,10 @@ class fk_Palette : public fk_BaseObject {
 	 *	- もし ID が新規のものであった場合、
 	 *		その ID で新たに登録します。
 	 *	.
+	 *
 	 *	\param[in]	mat		設定するマテリアル
 	 *	\param[in]	ID		マテリアルID
+	 *
 	 *	\sa pushPalette()
 	 */
 	void						setPalette(fk_Material *mat, int ID);
@@ -157,7 +162,9 @@ class fk_Palette : public fk_BaseObject {
 	//! オブジェクトマテリアル ID 取得関数
 	/*!
 	 *	現在設定されているオブジェクトマテリアルの ID を取得します。
+	 *
 	 *	\return オブジェクトマテリアルの ID
+	 *
 	 *	\sa setObjMaterialID()
 	 */
 	int							getObjMaterialID(void);
@@ -165,26 +172,35 @@ class fk_Palette : public fk_BaseObject {
 	//! パレット中のマテリアル格納数取得関数
 	/*!
 	 *	現在パレットに格納されているマテリアルの数を返します。
+	 *
 	 *	\return マテリアル数
+	 *
 	 *	\sa pushPalette(), setPalette(), getMaterial()
 	 */
 	int							getPaletteSize(void);
 
 	//! マテリアル取得関数
 	/*!
-	 *	指定された id に対応するマテリアルのポインタを返します。
-	 *	id に対応するマテリアルがパレット中にない場合は、
-	 * 	デフォルト状態のマテリアルインスタンスへのポインタを返します。
-	 *	\return マテリアルのポインタ
+	 *	指定された ID に対応するマテリアルのポインタを返します。
+	 *	
+	 *	\param[in]	ID		マテリアルID
+	 *
+	 *	\return
+	 *		対象マテリアルのポインタ。
+	 *		ID に対応するマテリアルがパレット中にない場合は、
+	 *		デフォルト状態のマテリアルインスタンスへのポインタを返します。
+	 *
 	 *	\sa pushPalette(), setPalette(), getPaletteSize()
 	 */
-	fk_Material *				getMaterial(int id);
+	fk_Material *				getMaterial(int ID);
 
 	//! マテリアル配列取得関数
 	/*!
 	 *	パレットに格納されているマテリアルを、
 	 *	STL の vector 配列へのポインタとして返します。
+	 *
 	 *	\return マテリアル配列
+	 *
 	 *	\sa getMaterial()
 	 */
 	std::vector<fk_Material> *	getMaterialVector(void);

@@ -46,7 +46,7 @@ namespace FK_CLI {
 
 	bool fk_GenMatrix::Equals(fk_GenMatrix^ argM)
 	{
-		if(!argM) false;
+		if(!argM) return false;
 		return (*argM->pGMat == *pGMat);
 	}
 

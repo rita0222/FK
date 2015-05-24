@@ -8,7 +8,7 @@ using FK_CLI;
 
 namespace FK_CLI_Audio
 {
-	class MyBGM
+	class MyBGM : IDisposable
 	{
 		public bool endFlg { get; set; }
 		private fk_AudioStream bgm;
@@ -41,6 +41,11 @@ namespace FK_CLI_Audio
 			{
 				bgm.Gain = value;
 			}
+		}
+
+		public void Dispose()
+		{
+			bgm.Dispose();
 		}
 	}
 

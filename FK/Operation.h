@@ -209,6 +209,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	既にその位置に頂点が存在していたとしても、同じ場所に生成します。
 	 *
 	 *	なお、この操作の逆操作は deleteVertex() 関数となります。
+	 *
 	 *	\image html Euler01.png "makeVertex と deleteVertex"
 	 *	\image latex Euler01.eps "makeVertex と deleteVertex" width=10cm
 	 *
@@ -225,6 +226,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	形状中に存在していなかった場合は変形操作を行いません。
 	 *
 	 *	なお、この操作の逆操作は makeVertex() 関数となります。
+	 *
 	 *	\image html Euler01.png "makeVertex と deleteVertex"
 	 *	\image latex Euler01.eps "makeVertex と deleteVertex" width=10cm
 	 *
@@ -241,6 +243,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	形状中に存在していなかった場合は変形操作を行いません。
 	 *
 	 *	この操作の逆操作はこの関数自身となります。
+	 *
 	 *	\image html Euler02.png "moveVertex"
 	 *	\image latex Euler02.eps "moveVertex" width=10cm
 	 *
@@ -280,6 +283,7 @@ class fk_Operation : public fk_DrawCache {
 	 *		上記のいずれの半稜線も未定義稜線でなければなりません。
 	 *	.
 	 *	なお、この操作の逆操作は deleteEdge() 関数となります。
+	 *
 	 *	\image html Euler03.png "makeEdge と deleteEdge"
 	 *	\image latex Euler03.eps "makeEdge と deleteEdge" width=10cm
 	 *
@@ -290,7 +294,8 @@ class fk_Operation : public fk_DrawCache {
 	 *	\param[in]	H_21	半稜線位相インスタンス。詳細は上記参照のこと。
 	 *	\param[in]	H_22	半稜線位相インスタンス。詳細は上記参照のこと。
 	 *
-	 *	\return		新稜線の生成に成功した場合、その位相インスタンスを返します。
+	 *	\return
+	 *		新稜線の生成に成功した場合、その位相インスタンスを返します。
 	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Edge *		makeEdge(fk_Vertex *V_1, fk_Vertex *V_2,
@@ -306,6 +311,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	形状中に存在していなかった場合は変形操作を行いません。
 	 *
 	 *	なお、この操作の逆操作は makeEdge() 関数となります。
+	 *
 	 *	\image html Euler03.png "makeEdge と deleteEdge"
 	 *	\image latex Euler03.eps "makeEdge と deleteEdge" width=10cm
 	 *
@@ -324,13 +330,15 @@ class fk_Operation : public fk_DrawCache {
 	 *	H が定義半稜線である場合は、生成に失敗することになります。
 	 *
 	 *	なお、この操作の逆操作は deleteLoop() 関数となります。
+	 *
 	 *	\image html Euler04.png "makeLoop と deleteLoop"
 	 *	\image latex Euler04.eps "makeLoop と deleteLoop" width=10cm
 	 *
 	 *	\param[in]	H	未定義半稜線位相インスタンス
 	 *
-	 *	\return		生成に成功した場合、そのループ位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\return
+	 *		生成に成功した場合、そのループ位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Loop *		makeLoop(fk_Half *H);
 
@@ -342,6 +350,7 @@ class fk_Operation : public fk_DrawCache {
 	 *	全て未定義半稜線となります。
 	 *
 	 *	なお、この操作の逆操作は makeLoop() 関数となります。
+	 *
 	 *	\image html Euler04.png "makeLoop と deleteLoop"
 	 *	\image latex Euler04.eps "makeLoop と deleteLoop" width=10cm
 	 *
@@ -365,14 +374,16 @@ class fk_Operation : public fk_DrawCache {
 	 *	H1 や H2 の親ループを参照して下さい。
 	 *
 	 *	なお、この操作の逆操作は uniteLoop() 関数となります。
+	 *
 	 *	\image html Euler05.png "separateLoop と uniteLoop"
 	 *	\image latex Euler05.eps "separateLoop と uniteLoop" width=10cm
 	 *
 	 *	\param[in]	H1		半稜線位相インスタンス
 	 *	\param[in]	H2		半稜線位相インスタンス
 	 *
-	 *	\return		成功した場合、新規稜線の位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\return
+	 *		成功した場合、新規稜線の位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 */	
 	fk_Edge *		separateLoop(fk_Half *H1, fk_Half *H2);
 
@@ -405,8 +416,9 @@ class fk_Operation : public fk_DrawCache {
 	 *
 	 *	\param[in]	E		稜線位相インスタンス
 	 *
-	 *	\return		成功すれば新規に生成された頂点位相インスタンスを返します。
-	 *				失敗した場合は nullptr を返します。
+	 *	\return
+	 *		成功すれば新規に生成された頂点位相インスタンスを返します。
+	 *		失敗した場合は nullptr を返します。
 	 */
 	fk_Vertex *		separateEdge(fk_Edge *E);
 
@@ -462,8 +474,9 @@ class fk_Operation : public fk_DrawCache {
 	 *	また、モードが有効となっている状態から無効に設定しなおしたとき、
 	 *	有効時に保存されていた履歴は全て破棄されます。
 	 *
-	 *	\param[in]	mode	true の場合、履歴保存モードを有効とします。
-	 *						false の場合は無効とします。
+	 *	\param[in]	mode
+	 *		true の場合、履歴保存モードを有効とします。
+	 *		false の場合は無効とします。
 	 *
 	 *	\sa getHistoryMode(), setHistoryMark()
 	 */
@@ -569,8 +582,9 @@ class fk_Operation : public fk_DrawCache {
 	 *	テセレーションについての詳細は、
 	 *	fk_Loop::setTesselateMode() 関数の解説を参照して下さい。
 	 *
-	 *	\param[in]	mode	true の場合、全てのループのテセレーションを有効とします。
-	 *						false の場合は無効とします。
+	 *	\param[in]	mode
+	 *		true の場合、全てのループのテセレーションを有効とします。
+	 *		false の場合は無効とします。
 	 *
 	 *	\sa fk_Loop::setTesselateMode()
 	 */

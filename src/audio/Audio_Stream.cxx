@@ -260,7 +260,7 @@ bool fk_AudioStream::PlayStream(void)
 			}
 			else if (length > end_pcm - now_pcm)
 			{
-				length = end_pcm - now_pcm;
+				length = static_cast<int>(end_pcm - now_pcm);
 				need_rewind = true;
 			}
 		}

@@ -1110,10 +1110,10 @@ class fk_MatrixAdmin : public fk_BaseObject {
 	 *	glUpvec() などと併用しなければなりません。
 	 *
 	 *	\note
-	 *	glVec() 関数に対応するローカル座標系関数
-	 *	「loVec()」関数は存在しません。
-	 *	これは、loVec() 関数はその意味的に
-	 *	loFocus() とまったく同一の挙動となるためです。
+	 *		glVec() 関数に対応するローカル座標系関数
+	 *		「loVec()」関数は存在しません。
+	 *		これは、loVec() 関数はその意味的に
+	 *		loFocus() とまったく同一の挙動となるためです。
 	 *
 	 *	\param[in]		v		方向ベクトル
 	 *
@@ -1136,10 +1136,10 @@ class fk_MatrixAdmin : public fk_BaseObject {
 	 *	glUpvec() などと併用しなければなりません。
 	 *
 	 *	\note
-	 *	glVec() 関数に対応するローカル座標系関数
-	 *	「loVec()」関数は存在しません。
-	 *	これは、loVec() 関数はその意味的に
-	 *	loFocus() とまったく同一の挙動となるためです。
+	 *		glVec() 関数に対応するローカル座標系関数
+	 *		「loVec()」関数は存在しません。
+	 *		これは、loVec() 関数はその意味的に
+	 *		loFocus() とまったく同一の挙動となるためです。
 	 *
 	 *	\param[in]		x		方向ベクトルのx成分
 	 *	\param[in]		y		方向ベクトルのx成分

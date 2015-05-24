@@ -217,9 +217,11 @@ class fk_Solid : public fk_SolidBase {
 	 *	本関数が対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	materialFlg
 	 *		true の場合、VRMLファイル中で設定されているマテリアル情報を入力します。
 	 *		false の場合は、マテリアル情報を無視します。
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
@@ -229,14 +231,15 @@ class fk_Solid : public fk_SolidBase {
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 *
 	 *	\note
-	 *	VRML形式は、1994年に策定された通称「VRML1.0」と、
-	 *	1997年に策定された「VRML97」の2種類があり、
-	 *	VRML97は「VRML2.0」とも呼ばれます。
-	 *	本関数では入力フォーマットとして VRML97 を想定しています。
+	 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
+	 *		1997年に策定された「VRML97」の2種類があり、
+	 *		VRML97は「VRML2.0」とも呼ばれます。
+	 *		本関数では入力フォーマットとして VRML97 を想定しています。
+	 *
 	 *	\note
-	 *	VRMLは文法解釈、特にセパレータの扱い方についてはあまり厳密になっておらず、
-	 *	様々なデータによって異なる解釈がなされているようです。
-	 *	そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
+	 *		VRMLは文法解釈、特にセパレータの扱い方についてはあまり厳密になっておらず、
+	 *		様々なデータによって異なる解釈がなされているようです。
+	 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
 	 */
 	bool				readVRMLFile(std::string fileName,
 									 bool materialFlg = true,
@@ -248,15 +251,18 @@ class fk_Solid : public fk_SolidBase {
 	 *	対応しているのは面データのみです。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
 	 *		false の場合は隣接関係を最適化せず、
 	 *		すべての面が独立した状態として形状を構築します。
+	 *
 	 *	\param[in]	tolerance
 	 *		solidFlg で true を指定した場合、
 	 *		頂点同士が同一かどうかを判断するための距離許容誤差を指定します。
 	 *		solidFlg が false であった場合、この値は無視されます。
+	 *
 	 *	\return		成功すれば true を、失敗すれば false を返します。
 	 */
 	bool				readSTLFile(std::string fileName,
@@ -278,6 +284,7 @@ class fk_Solid : public fk_SolidBase {
 	 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
@@ -294,6 +301,7 @@ class fk_Solid : public fk_SolidBase {
 	 *	DXF 形式のファイルからデータを入力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
@@ -318,12 +326,15 @@ class fk_Solid : public fk_SolidBase {
 	 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 	 *
 	 *	\param[in]	fileName	ファイル名
+	 *
 	 *	\param[in]	objName		オブジェクト名
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
 	 *		false の場合は隣接関係を最適化せず、
 	 *		すべての面が独立した状態として形状を構築します。
+	 *
 	 *	\param[in]	contFlg
 	 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
 	 *		形状の位相を断絶する操作を行うためのものです。
@@ -333,6 +344,7 @@ class fk_Solid : public fk_SolidBase {
 	 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
 	 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
 	 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+	 *
 	 *	\param[in]	materialFlg
 	 *		true の場合、VRMLファイル中で設定されているマテリアル情報を入力します。
 	 *		false の場合は、マテリアル情報を無視します。
@@ -359,17 +371,21 @@ class fk_Solid : public fk_SolidBase {
 	 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 	 *
 	 *	\param[in]	fileName	ファイル名
+	 *
 	 *	\param[in]	objName		オブジェクト名
+	 *
 	 *	\param[in]	materialID
 	 *		MQOデータではマテリアルを複数設定することができ、
 	 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
 	 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
 	 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
 	 *		false の場合は隣接関係を最適化せず、
 	 *		すべての面が独立した状態として形状を構築します。
+	 *
 	 *	\param[in]	contFlg
 	 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
 	 *		形状の位相を断絶する操作を行うためのものです。
@@ -379,6 +395,7 @@ class fk_Solid : public fk_SolidBase {
 	 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
 	 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
 	 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
+	 *
 	 *	\param[in]	materialFlg
 	 *		true の場合、VRMLファイル中で設定されているマテリアル情報を入力します。
 	 *		false の場合は、マテリアル情報を無視します。
@@ -405,10 +422,12 @@ class fk_Solid : public fk_SolidBase {
 	 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 	 *
 	 *	\param[in]	fileName	ファイル名
+	 *
 	 *	\param[in]	objName		オブジェクト名。
 	 *		D3DX 形式では、オブジェクト名を省略することが許容されています。
 	 *		そのような場合は、この引数に空文字列 ( "" ) を入れてください。
 	 *		この場合、ファイル中で最初に存在するオブジェクトのデータを入力します。
+	 *
 	 *	\param[in]	solidFlg
 	 *		true の場合、位相の隣接関係を最適化します。
 	 *		ただし、結果として入力に失敗する場合があります。
@@ -436,20 +455,23 @@ class fk_Solid : public fk_SolidBase {
 	 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 	 *
 	 *	\param[in]	fileName	ファイル名
+	 *
 	 *	\param[in]	objName		オブジェクト名。
 	 *		D3DX 形式では、オブジェクト名を省略することが許容されています。
 	 *		そのような場合は、この引数に空文字列 ( "" ) を入れてください。
 	 *		この場合、ファイル中で最初に存在するオブジェクトのデータを入力します。
-	 *	\param[in]	solidFlg
-	 *		true の場合、位相の隣接関係を最適化します。
-	 *		ただし、結果として入力に失敗する場合があります。
-	 *		false の場合は隣接関係を最適化せず、
-	 *		すべての面が独立した状態として形状を構築します。
+	 *
 	 *	\param[in]	materialID
 	 *		D3DXデータではマテリアルを複数設定することができ、
 	 *		各ポリゴンに対してどのマテリアルを割り振るかのIDが設定されています。
 	 *		この引数にマテリアルIDを指定すると、そのIDを持つポリゴンのみを読み込みます。
 	 *		materialID に -1 を入力した場合は、すべてのポリゴンを読み込みます。
+	 *
+	 *	\param[in]	solidFlg
+	 *		true の場合、位相の隣接関係を最適化します。
+	 *		ただし、結果として入力に失敗する場合があります。
+	 *		false の場合は隣接関係を最適化せず、
+	 *		すべての面が独立した状態として形状を構築します。
 	 *
 	 *	\return ファイルの入力に成功した場合 true を、失敗した場合 false を返します。
 	 *
@@ -465,6 +487,7 @@ class fk_Solid : public fk_SolidBase {
 	 *	独自形式のファイルからデータを入力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	sizeMode
 	 *		旧バージョンとの互換性のために存在する引数です。
 	 *		通常は true とするか、省略して下さい。
@@ -477,14 +500,17 @@ class fk_Solid : public fk_SolidBase {
 
 	//! \name ファイル出力関数
 	//@{
+
 	//! VRML ファイル出力関数1
 	/*!
 	 *	VRML (VRML2.0) 形式で形状データを出力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
 	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
@@ -502,13 +528,17 @@ class fk_Solid : public fk_SolidBase {
 	 *	アニメーションデータを出力することが可能です。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	time
 	 *		CoordinateInterpolator における時間配列 (key) を入力します。
+	 *
 	 *	\param[in]	pos
 	 *		CoordinateInterpolator における位置ベクトル配列 (keyValue) を入力します。
+	 *
 	 *	\param[in]	material
 	 *		VRMLファイル中に「Material」ノードとしてマテリアル情報を保存します。
 	 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
+	 *
 	 *	\param[in]	triFlg
 	 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
 	 *
@@ -535,6 +565,7 @@ class fk_Solid : public fk_SolidBase {
 	 *	DXF 形式で形状データを出力します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	triFlg
 	 *		面情報を3角形として出力したい場合は、true を代入します。
 	 *		false の場合、3角形面を2点が重複している4角形面として出力します。

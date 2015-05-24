@@ -18,6 +18,9 @@
                 components.Dispose();
             }
             base.Dispose(disposing);
+			viewport.Dispose();
+			viewport2.Dispose();
+			scene.Dispose();
         }
 
         #region Windows フォーム デザイナーで生成されたコード

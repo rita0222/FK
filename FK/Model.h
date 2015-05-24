@@ -235,8 +235,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		origin
 	 *		グローバル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta
 	 *		回転角度(ラジアン)
 	 *
@@ -268,8 +270,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		グローバル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		グローバル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		グローバル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -347,7 +351,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	bool	glRotate(double Ax, double Ay, double Az,
 					 double Bx, double By, double Bz, double theta);
 
-
 	//! ローカル座標系座標軸回転関数1
 	/*!
 	 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
@@ -367,9 +370,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		origin
 	 *		ローカル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta
 	 *		回転角度(ラジアン)
 	 *
@@ -401,9 +406,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		ローカル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		ローカル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		ローカル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -432,8 +439,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		A
 	 *		ローカル座標系における回転軸上の1点。B と一致してはいけません。
+	 *
 	 *	\param[in]		B
 	 *		ローカル座標系における回転軸上の1点。A と一致してはいけません。
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -466,16 +475,22 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		Ax
 	 *		ローカル座標系における回転軸上の1点 A の x 成分
+	 *
 	 *	\param[in]		Ay
 	 *		ローカル座標系における回転軸上の1点 A の y 成分
+	 *
 	 *	\param[in]		Az
 	 *		ローカル座標系における回転軸上の1点 A の z 成分
+	 *
 	 *	\param[in]		Bx
 	 *		ローカル座標系における回転軸上の1点 B の x 成分
+	 *
 	 *	\param[in]		By
 	 *		ローカル座標系における回転軸上の1点 B の y 成分
+	 *
 	 *	\param[in]		Bz
 	 *		ローカル座標系における回転軸上の1点 B の z 成分
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -509,8 +524,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *		を用いた方が、処理がわずかに速くなります。
 	 *
 	 *	\param[in]		origin		グローバル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -543,8 +560,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		グローバル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		グローバル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		グローバル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行な軸。fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -624,7 +643,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	bool	glRotateWithVec(double Ax, double Ay, double Az,
 							double Bx, double By, double Bz, double theta);
 
-
 	//! ローカル座標系座標軸回転(姿勢付き)関数1
 	/*!
 	 *	モデルの位置を、ローカル座標系によって回転した場所に移動します。
@@ -644,9 +662,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *		を用いた方が、処理がわずかに速くなります。
 	 *
 	 *	\param[in]		origin		ローカル座標系での回転軸上の点
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -678,9 +698,11 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		orgX		ローカル座標系での回転軸上の点のx成分
 	 *	\param[in]		orgY		ローカル座標系での回転軸上の点のy成分
 	 *	\param[in]		orgZ		ローカル座標系での回転軸上の点のz成分
+	 *
 	 *	\param[in]		axis
 	 *		回転軸に平行なローカル座標系上の軸。
 	 *		fk_X, fk_Y, fk_Z のいずれかになります。
+	 *
 	 *	\param[in]		theta		回転角度(ラジアン)
 	 *
 	 *	\return			この関数は常に true を返します。
@@ -710,8 +732,10 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		A
 	 *		ローカル座標系における回転軸上の1点。B と一致してはいけません。
+	 *
 	 *	\param[in]		B
 	 *		ローカル座標系における回転軸上の1点。A と一致してはいけません。
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -745,16 +769,22 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\param[in]		Ax
 	 *		ローカル座標系における回転軸上の1点 A の x 成分
+	 *
 	 *	\param[in]		Ay
 	 *		ローカル座標系における回転軸上の1点 A の y 成分
+	 *
 	 *	\param[in]		Az
 	 *		ローカル座標系における回転軸上の1点 A の z 成分
+	 *
 	 *	\param[in]		Bx
 	 *		ローカル座標系における回転軸上の1点 B の x 成分
+	 *
 	 *	\param[in]		By
 	 *		ローカル座標系における回転軸上の1点 B の y 成分
+	 *
 	 *	\param[in]		Bz
 	 *		ローカル座標系における回転軸上の1点 B の z 成分
+	 *
 	 *	\param[in]		theta	回転角度(ラジアン)
 	 *
 	 *	\return
@@ -934,7 +964,6 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	もし解放された場合、プログラムが誤動作を起こします。
 	 *
 	 *	\param[in]	shape		形状インスタンスのポインタ
-
 	 */
 	void	setShape(fk_Shape *shape);
 
@@ -1088,7 +1117,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *
 	 *	\return		頂点色のポインタ
 	 *
-	 *	\sa fk_Color, setPintColor(), getPointColor()
+	 *	\sa fk_Color, setPointColor(), getPointColor()
 	 */
 	fk_Color *	getInhPointColor(void);
 
@@ -1384,7 +1413,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承位置ベクトル参照関数
 	/*!
 	 *	モデルの位置ベクトルを取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系の位置ベクトルを返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の位置ベクトルを返します。
 	 *
 	 *	\return		グローバル座標系での位置ベクトル
 	 *
@@ -1395,7 +1424,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承方向ベクトル参照関数
 	/*!
 	 *	モデルの方向ベクトルを取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系の方向ベクトルを返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際の方向ベクトルを返します。
 	 *
 	 *	\return		グローバル座標系での方向ベクトル
 	 *
@@ -1406,7 +1435,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承アップベクトル参照関数
 	/*!
 	 *	モデルのアップベクトルを取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系のアップベクトルを返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のアップベクトルを返します。
 	 *
 	 *	\return		グローバル座標系でのアップベクトル
 	 *
@@ -1421,7 +1450,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承オイラー角参照関数
 	/*!
 	 *	モデルのオイラー角を取得します。
-	 *	本関数は、親モデルの有無にかかわらずグローバル座標系のオイラー角を返します。
+	 *	本関数は、親モデルの有無にかかわらず、グローバル座標系での実際のオイラー角を返します。
 	 *	オイラー角の詳細については、 fk_Angle の説明を参照して下さい。
 	 *
 	 *	\return		
@@ -1433,6 +1462,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	//! 継承全体倍率取得関数
 	/*!
 	 *	モデルの全体拡大・縮小倍率を取得します。
+	 *	親子関係の小モデルの場合、親モデルでの倍率も反映されます。
 	 *
 	 *	\return		継承全体拡大・縮小倍率
 	 *
@@ -1451,6 +1481,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	前に設定されていた場合は、前のモデル設定は破棄されます。
 	 *
 	 *	\param[in]		model		親モデルインスタンスのポインタ
+	 *
 	 *	\param[in]		setMode
 	 *		true の場合、現在のグローバル座標系の位置と姿勢を、
 	 *		親モデル設定後も保持します。
@@ -1498,6 +1529,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	既に子モデルが登録されている場合でも、その設定は破棄されません。
 	 *
 	 *	\param[in]		model		子モデルインスタンスのポインタ
+	 *
 	 *	\param[in]		setMode
 	 *		true の場合、子モデルの現在のグローバル座標系の位置と姿勢を、
 	 *		設定後も保持します。
@@ -1519,6 +1551,7 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *	\param[in]		model
 	 *		子モデルインスタンスのポインタ。
 	 *		もし model が子モデルの中に存在しない場合は、false を返します。
+	 *
 	 *	\param[in]		setMode
 	 *		true の場合、子モデルのグローバル座標系の位置と姿勢を、
 	 *		解除後も保持します。
@@ -1676,8 +1709,8 @@ class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
 	 *		形状変化後に本関数を呼ぶ必要があります。
 	 *
 	 *	\sa adjustAABB(), adjustOBB(), adjustCapsule(), isInter(), isCollision(),
-	 *		fk_Collision::setBMode(),
-	 *		fk_Collision::setSphere(), fk_Collision::getSphere()
+	 *		fk_Boundary::setBMode(),
+	 *		fk_Boundary::setSphere(), fk_Boundary::getSphere()
 	 */
 	void	adjustSphere(void);
 

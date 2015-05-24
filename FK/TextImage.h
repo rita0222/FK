@@ -522,6 +522,7 @@ class fk_TextImage : public fk_Image {
 
 	//! \name 文字配置事前設定関連関数
 
+	//@{
 	//! 等幅表示設定関数
 	/*!
 	 * 	文字の等幅表示設定を行います。
@@ -561,7 +562,7 @@ class fk_TextImage : public fk_Image {
 	 *		等幅表示は、 setMonospaceMode()
 	 *		で設定を有効としなければ等幅表示とはなりません。
 	 *
-	 *	\sa setMonospaceMode(), getMonospaceSize()
+	 *	\sa setMonospaceMode(), getMonospaceSize(), setCharSkip()
 	 */
 	void	setMonospaceSize(int size);
 
@@ -571,7 +572,7 @@ class fk_TextImage : public fk_Image {
 	 *
 	 *	\return		文字幅
 	 *
-	 *	\sa setMonospaceSize()
+	 *	\sa setMonospaceSize(), getCharSkip()
 	 */
 	int		getMonospaceSize(void) const;
 
@@ -829,6 +830,7 @@ class fk_TextImage : public fk_Image {
 	 *	その場合は、新たな文字列と設定に基づき、文字列板画像を再構築します。
 	 *
 	 *	\param[in]	fileName		ファイル名
+	 *
 	 *	\param[in]	code
 	 *		入力する文字列の想定日本語コード。
 	 *		サポートしているのは JISコード、SJISコード、EUC、UTF-16 です。
@@ -845,7 +847,7 @@ class fk_TextImage : public fk_Image {
 
 	//! 行数参照関数
 	/*!
-	 *	入力した文字列の凝集を取得します。
+	 *	入力した文字列の行数を取得します。
 	 *
 	 *	\return		行数
 	 *

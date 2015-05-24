@@ -275,6 +275,7 @@ class fk_UniStr : public fk_BaseObject {
 	 *	\param[in]	fp
 	 *		FILE型ファイルポインタ。
 	 *		事前に fopen() 関数を用いて自前でファイルを開いておく必要があります。
+	 *
 	 *	\param[in]	code
 	 *		入力する文字列の想定日本語コード。
 	 *		サポートしているのは JISコード、SJISコード、EUC、UTF-16 です。
@@ -303,6 +304,7 @@ class fk_UniStr : public fk_BaseObject {
 	 *	\param[in]	ifs
 	 *		std::ifstream型ポインタ。
 	 *		事前にファイルを開いておく必要があります。
+	 *
 	 *	\param[in]	code
 	 *		入力する文字列の想定日本語コード。
 	 *		サポートしているのは JISコード、SJISコード、EUC、UTF-16 です。
@@ -325,6 +327,7 @@ class fk_UniStr : public fk_BaseObject {
 	 *	一行ずつ読み込みたい場合は fgetLine() を利用して下さい。
 	 *
 	 *	\param[in]	fileName	テキストファイルのファイル名
+	 *
 	 *	\param[in]	code
 	 *		入力する文字列の想定日本語コード。
 	 *		サポートしているのは JISコード、SJISコード、EUC、UTF-16 です。
@@ -361,6 +364,7 @@ class fk_UniStr : public fk_BaseObject {
 	 *	printf 形式の書式付きで生成したい場合は、 printf() を利用して下さい。
 	 *
 	 *	\param[in]	str		格納したい文字列
+	 *
 	 *	\param[in]	code
 	 *		入力する文字列の想定日本語コード。
 	 *		サポートしているのは JISコード、SJISコード、EUC、UTF-16 です。
@@ -435,7 +439,9 @@ class fk_UniStr : public fk_BaseObject {
 	 *	\param[in]	start
 	 *		検索開始場所。最初から検索する場合は 0 を指定してください。
 	 *		ここで指定した文字そのものも検索対象に入ります。
+	 *
 	 *	\param[in]	c1	検索対象文字の UTF-16 前半8bit部
+	 *
 	 *	\param[in]	c2	検索対象文字の UTF-16 後半8bit部
 	 *
 	 *	\return
@@ -477,8 +483,6 @@ class fk_UniStr : public fk_BaseObject {
 	//! 後部文字追加関数3
 	/*!
 	 *	格納されている文字列に対し、最後尾に文字を追加します。
-	 *	引数がポインタになっていますが、
-	 *	追加されるのは指定アドレスにある最初の1文字のみです。
 	 *
 	 *	\param[in]	code	文字の UTF-16 に基づくコード
 	 */
