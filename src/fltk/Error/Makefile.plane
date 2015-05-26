@@ -112,8 +112,8 @@ mac-g:
 
 mac-gcc:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-4.9" \
-	"LINKCC = g++-mp-4.9" \
+	"CC = g++-mp-5" \
+	"LINKCC = g++-mp-5" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -std=c++1y -D_MACOSX_" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
@@ -125,8 +125,8 @@ mac-gcc:
 
 mac-gcc-g:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-4.9" \
-	"LINKCC = g++-mp-4.9" \
+	"CC = g++-mp-5" \
+	"LINKCC = g++-mp-5" \
 	"OPTOPT = -g" \
 	"SYSOPS = -std=c++1y -D_MACOSX_" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
