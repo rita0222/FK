@@ -282,7 +282,7 @@ bool fk_AudioWavBuffer::open(const std::string &argFileName)
 	bool			res;
 	int				bit, channel, freq;
 	unsigned int	size;
-	ifstream		ifs(argFileName);
+	ifstream		ifs(argFileName, ios::binary);
 
 	if(getInit() == false) init();
 

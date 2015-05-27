@@ -109,7 +109,7 @@ extern "C" {
 
 bool fk_Image::IsBmpFile(const string argFName) const
 {
-	ifstream	ifs(argFName);
+	ifstream	ifs(argFName, ios::binary);
 	fk_ImType	buf[2];
 
 	if(ifs.fail()) return false;
@@ -164,7 +164,7 @@ fk_Dimension fk_Image::GetBmpSize(fk_ImType *argHeader)
 
 fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 {
-	ifstream			ifs(argFName);
+	ifstream			ifs(argFName, ios::binary);
 	int					tmpSize;
 	unsigned int		bmpType;
 	fk_ImType			bmpFileHeader[14];
@@ -357,7 +357,7 @@ void fk_Image::SetRGBA4Bmp(int argX, int argY,
 
 fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 {
-	ofstream			ofs(argFName);
+	ofstream			ofs(argFName, ios::binary);
 	int					wSize, hSize;
 	vector<fk_ImType>	bmpFileHeader;
 	vector<fk_ImType>	bmpInfoHeader;
@@ -539,7 +539,7 @@ bool fk_Image::writeBMP(const string argFName, const bool argTransFlg)
 
 bool fk_Image::IsPngFile(const string argFName) const
 {
-	ifstream		ifs(argFName);
+	ifstream		ifs(argFName, ios::binary);
 	unsigned char	sig[4];
 
 	if(ifs.fail()) return false;
