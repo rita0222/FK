@@ -494,7 +494,6 @@ string fk_StrPrintf(const char *argFormat, ...)
 	char		*buffer = new char [8192];
 	string		str;
 
-	buffer.resize(8192, 0);
 	va_start(ap, argFormat);
 	vsnprintf(&buffer[0], 8191, argFormat, ap);
 	va_end(ap);
