@@ -125,8 +125,8 @@ mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
+	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -145,8 +145,8 @@ mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
+	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -167,8 +167,8 @@ mac-gcc:
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
+	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -188,8 +188,8 @@ mac-gcc-g:
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
+	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \

@@ -91,9 +91,9 @@ mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -std=c++1y -D_MACOSX_" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"RANLIB = ranlib"
@@ -102,9 +102,9 @@ mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
 	"SYSOPS = -std=c++1y -D_MACOSX_" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"RANLIB = ranlib" \
@@ -116,9 +116,9 @@ mac-gcc:
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -std=c++1y -D_MACOSX_" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"RANLIB = ranlib"
@@ -129,9 +129,9 @@ mac-gcc-g:
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -g" \
 	"SYSOPS = -std=c++1y -D_MACOSX_" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"RANLIB = ranlib" \

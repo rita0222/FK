@@ -146,12 +146,12 @@ mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -168,12 +168,12 @@ mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
 	"SYSOPS = -std=c++1y -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -limdkcv -lfltk_gl \
 		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework AGL -framework OpenGL \
@@ -192,12 +192,12 @@ mac-gcc:
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -std=c++1y -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -limdkcv -lfltk_gl \
 		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework AGL -framework OpenGL \
@@ -214,12 +214,12 @@ mac-gcc-g:
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -g" \
 	"SYSOPS = -std=c++1y -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -limdkcv -lfltk_gl \
 		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework AGL -framework OpenGL \
