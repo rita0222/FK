@@ -175,11 +175,10 @@ mac-gcc:
 		-framework AGL -framework OpenGL \
 		-framework Cocoa -framework OpenAL \
 		-framework ApplicationServices \
-		-framework OpenCL \
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK2_OpenCL $(FKLIB)" \
+	"FKLINK = $(FKLIB)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -197,11 +196,10 @@ mac-gcc-g:
 		-framework AGL -framework OpenGL \
 		-framework Cocoa -framework OpenAL \
 		-framework ApplicationServices \
-		-framework OpenCL \
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK2_OpenCL_g $(FKLIB_G)" \
+	"FKLINK = $(FKLIB_G)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
