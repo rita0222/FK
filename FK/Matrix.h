@@ -182,18 +182,19 @@ class fk_OrthoMatrix {
 	 *		\end{array} \right)
 	 *	\f]
 	 *
-	 *	\note 厳密には、行全体が double 型の配列として存在しており、
-	 *	例えば M[1] というのは上から 2 行目の配列ポインタを指します。
-	 *	また、16個の成分要素全体がメモリとして全て整列していることは保証されています。
+	 *	\note
+	 *		厳密には、行全体が double 型の配列として存在しており、
+	 *		例えば M[1] というのは上から 2 行目の配列ポインタを指します。
+	 *		また、16個の成分要素全体がメモリとして全て整列していることは保証されています。
 	 *
 	 *	\warning
-	 *	(この警告は、 fk_Matrix 型のインスタンスで利用する場合には関係ありません。)
-	 *	fk_OrthoMatrix 型の変数では注意が必要です。
-	 *	この機能を用いて成分を直接書き換えた場合、
-	 *	数学的には行列が直交行列の条件を満たさなくなる設定も可能となります。
-	 *	その場合の挙動は保証できません。
-	 *	直交行列であることが保証できない操作を行う場合は、
-	 *	fk_OrthoMatrix ではなく fk_Matrix を用いてください。
+	 *		(この警告は、 fk_Matrix 型のインスタンスで利用する場合には関係ありません。)
+	 *		fk_OrthoMatrix 型の変数では注意が必要です。
+	 *		この機能を用いて成分を直接書き換えた場合、
+	 *		数学的には行列が直交行列の条件を満たさなくなる設定も可能となります。
+	 *		その場合の挙動は保証できません。
+	 *		直交行列であることが保証できない操作を行う場合は、
+	 *		fk_OrthoMatrix ではなく fk_Matrix を用いてください。
 	 */
 	double *		operator [](int);
 
@@ -251,9 +252,9 @@ class fk_OrthoMatrix {
 	 *		M1 = M1 * M2;
 	 *
 	 *	\note
-	 *	行列積は交換法則が成り立たないため、
-	 *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ を
-	 *	\f$ \mathbf{M}_1 \f$ に代入したいときには、この演算子は利用できません。
+	 *		行列積は交換法則が成り立たないため、
+	 *		\f$ \mathbf{M}_2\mathbf{M}_1 \f$ を
+	 *		\f$ \mathbf{M}_1 \f$ に代入したいときには、この演算子は利用できません。
 	 */
 	fk_OrthoMatrix &		operator *=(const fk_OrthoMatrix &);
 
@@ -271,23 +272,25 @@ class fk_OrthoMatrix {
 	/*!
 	 *	行番号 row、列番号 col に対応する成分を value に設定します。
 	 *	row, col はそれぞれ最初が 0、最後が 3 になります。
+	 *
 	 *	\param[in]	row		行番号
 	 *	\param[in]	col		列番号
 	 *	\param[in]	value	設定する成分の値
+	 *
 	 *	\warning
-	 *	(この警告は、 fk_Matrix 型のインスタンスで利用する場合には関係ありません。)
-	 *	fk_OrthoMatrix 型の変数では注意が必要です。
-	 *	この機能を用いて成分を直接書き換えた場合、
-	 *	数学的には行列が直交行列の条件を満たさなくなる設定も可能となります。
-	 *	その場合の挙動は保証できません。
-	 *	直交行列であることが保証できない操作を行う場合は、
-	 *	fk_OrthoMatrix ではなく fk_Matrix を用いてください。
+	 *		(この警告は、 fk_Matrix 型のインスタンスで利用する場合には関係ありません。)
+	 *		fk_OrthoMatrix 型の変数では注意が必要です。
+	 *		この機能を用いて成分を直接書き換えた場合、
+	 *		数学的には行列が直交行列の条件を満たさなくなる設定も可能となります。
+	 *		その場合の挙動は保証できません。
+	 *		直交行列であることが保証できない操作を行う場合は、
+	 *		fk_OrthoMatrix ではなく fk_Matrix を用いてください。
 	 */
 	void			set(int row, int col, double value);
 
 	//! 行ベクトル成分設定関数1
 	/*!
-	 *	行列中の、行番号が row である行ベクトルを vec に設定します。
+	 *	行列中の、行番号が row である行ベクトルを設定します。
 	 *	row は最初が 0、最後が 3 となります。この関数の場合、
 	 *	行ベクトルの最後の成分については値は変更しません。
 	 *
@@ -300,12 +303,15 @@ class fk_OrthoMatrix {
 	 *		M[row][0] = vec.x;
 	 *		M[row][1] = vec.y;
 	 *		M[row][2] = vec.z;
+	 *
+	 *	\param[in]	row		行番号
+	 *	\param[in]	V		行ベクトル
 	 */
-	void			setRow(int row, const fk_Vector &vec);
+	void			setRow(int row, const fk_Vector &V);
 
 	//! 行ベクトル成分設定関数2
 	/*!
-	 *	行列中の、行番号が row である行ベクトルを vec に設定します。
+	 *	行列中の、行番号が row である行ベクトルを設定します。
 	 *	row は最初が 0、最後が 3 となります。
 	 *
 	 * 	次のコード
@@ -318,12 +324,15 @@ class fk_OrthoMatrix {
 	 *		M[row][1] = vec.y;
 	 *		M[row][2] = vec.z;
 	 *		M[row][3] = vec.w;
+	 *
+	 *	\param[in]	row		行番号
+	 *	\param[in]	V		行ベクトル
 	 */
-	void			setRow(int row, const fk_HVector &vec);
+	void			setRow(int row, const fk_HVector &V);
 
 	//! 列ベクトル成分設定関数1
 	/*!
-	 *	行列中の、列番号が col である列ベクトルを vec に設定します。
+	 *	行列中の、列番号が col である列ベクトルを設定します。
 	 *	col は最初が 0、最後が 3 となります。この関数の場合、
 	 *	列ベクトルの最後の成分については値は変更しません。
 	 *
@@ -336,12 +345,15 @@ class fk_OrthoMatrix {
 	 *		M[0][col] = vec.x;
 	 *		M[1][col] = vec.y;
 	 *		M[2][col] = vec.z;
+	 *
+	 *	\param[in]	col		行番号
+	 *	\param[in]	V		行ベクトル
 	 */
-	void			setCol(int col, const fk_Vector &vec);
+	void			setCol(int col, const fk_Vector &V);
 	
 	//! 列ベクトル成分設定関数2
 	/*!
-	 *	行列中の、列番号が col である列ベクトルを vec に設定します。
+	 *	行列中の、列番号が col である列ベクトルを設定します。
 	 *	col は最初が 0、最後が 3 となります。
 	 *
 	 * 	次のコード
@@ -354,13 +366,18 @@ class fk_OrthoMatrix {
 	 *		M[1][col] = vec.y;
 	 *		M[2][col] = vec.z;
 	 *		M[3][col] = vec.w;
+	 *
+	 *	\param[in]	col		行番号
+	 *	\param[in]	V		行ベクトル
 	 */
-	void			setCol(int col, const fk_HVector &vec);
+	void			setCol(int col, const fk_HVector &V);
 
 	//! 行ベクトル成分取得関数
 	/*!
 	 *	行列中の、行番号が row である行ベクトルを返します。
 	 *	row は最初が 0、最後が 3 となります。
+	 *
+	 *	\param[in]	row		行番号
 	 *
 	 *	\return 行ベクトル
 	 */
@@ -371,6 +388,8 @@ class fk_OrthoMatrix {
 	 *	行列中の、列番号が col である列ベクトルを返します。
 	 *	col は最初が 0、最後が 3 となります。
 	 *
+	 *	\param[in]	col		列番号
+	 *
 	 *	\return 列ベクトル
 	 */
 	fk_HVector		getCol(int col);
@@ -378,24 +397,29 @@ class fk_OrthoMatrix {
 	//! 逆行列化関数
 	/*!
 	 *	現在設定されている行列に対し、自身を逆行列化します。
-	 *	\return 成功すれば true を、失敗すれば false を返します。
-	 *	通常、直交行列であれば結果は必ず成功となります。
-	 *	\note 直交行列の場合、この関数は negate() でもまったく同様に動作します。
-	 *	negate() と異なる唯一の点は、返り値の有無です。
+	 *
+	 *	\return
+	 *		成功すれば true を、失敗すれば false を返します。
+	 *		通常、直交行列であれば結果は必ず成功となります。
+	 *
+	 *	\note
+	 *		直交行列の場合、この関数は negate() でもまったく同様に動作します。
 	 */
 	bool			inverse(void);
 
 	//! 転置化関数
 	/*!
 	 *	現在設定されている行列に対し、自身を転置化します。
-	 *	\note 直交行列の場合、この関数は inverse() でもまったく同様に動作します。
-	 *	inverse() と異なる唯一の点は、返り値の有無です。
+	 *
+	 *	\note
+	 *		直交行列の場合、この関数は inverse() でもまったく同様に動作します。
 	 */
 	void			negate(void);
 
 	//! 座標軸回転行列生成関数
 	/*!
 	 *	座標軸回転変換を表す行列を生成します。
+	 *
 	 *	\param[in]	rad		回転角。単位は弧度法(ラジアン)です。
 	 *	\param[in]	axis	座標軸。 fk_X, fk_Y, fk_Z のいずれかになります。
 	 */
@@ -404,6 +428,7 @@ class fk_OrthoMatrix {
 	//! 平行移動行列生成関数1
 	/*!
 	 *	平行移動変換を表す行列を生成します。
+	 *
 	 *	\param[in]	x	移動ベクトルの x 成分
 	 *	\param[in]	y	移動ベクトルの y 成分
 	 *	\param[in]	z	移動ベクトルの z 成分
@@ -413,24 +438,27 @@ class fk_OrthoMatrix {
 	//! 平行移動行列生成関数2
 	/*!
 	 *	平行移動変換を表す行列を生成します。
-	 *	\param[in]	v	移動ベクトル
+	 *
+	 *	\param[in]	V	移動ベクトル
 	 */
-	void			makeTrans(const fk_Vector &v);
+	void			makeTrans(const fk_Vector &V);
 
 	//! オイラー角回転行列生成関数1
 	/*!
 	 *	オイラー角による合成回転変換を表す行列を生成します。
 	 *	オイラー角については、 fk_Angle を参照して下さい。
+	 *
 	 *	\param[in]	h	ヘディング角
 	 *	\param[in]	p	ピッチ角
 	 *	\param[in]	b	バンク角
 	 */
 	void			makeEuler(double h, double p, double b);
 
-	//! オイラー角回転行列生成関数1
+	//! オイラー角回転行列生成関数2
 	/*!
 	 *	オイラー角による合成回転変換を表す行列を生成します。
 	 *	オイラー角については、 fk_Angle を参照して下さい。
+	 *
 	 *	\param[in]	angle	オイラー角
 	 */
 	void			makeEuler(const fk_Angle &angle);
@@ -577,6 +605,17 @@ fk_Matrix	operator -(const fk_OrthoMatrix &, const fk_Matrix &);
  *	このクラスは、 fk_OrthoMatrix クラスから派生しており、
  *	多くの重要な機能は fk_OrthoMatrix から継承していますので、
  *	そちらの解説も合わせて参照して下さい。
+ *
+ *	行列同士の演算の他、ベクトルとの積演算(一次変換)も
+ *	fk_Vector や fk_HVector クラスを用いて行えます。
+ *	FKでは行列は MV 行列系を採用しています。
+ *	従って、行列とベクトルの積演算においては行列が左側、ベクトルは右側となり、
+ *	ベクトルは列ベクトルとして扱われます。
+ *	また、行列積による合成変換を生成した場合、
+ *	変換は右側の行列から行われることになります。
+ *
+ *	行列とベクトルの積に fk_Vector 型を用いた場合、
+ *	同次座標が 1 である fk_HVector 型として扱われます。
  *
  *	直交行列のみを扱う場合は fk_OrthoMatrix を利用して下さい。
  *	任意元の正方行列を扱う場合は fk_GenMatrix を利用して下さい。
@@ -741,7 +780,9 @@ class fk_Matrix : public fk_OrthoMatrix {
 	 *	行列が特異であるかどうかを判定します。
 	 *	特異行列とは、逆行列が存在しない行列のことです。
 	 *	これは「非正則行列」と同義になります。
+	 *
 	 *	\return 特異であれば true を、そうでなければ false を返します。
+	 *
 	 *	\sa inverse(), isRegular()
 	 */
 	bool			isSingular(void) const;
@@ -750,8 +791,11 @@ class fk_Matrix : public fk_OrthoMatrix {
 	/*!
 	 *	現在設定されている行列に対し、正則行列であれば自身を逆行列化します。
 	 *	特異(非正則)行列である場合は「失敗」とし、成分値を変更しません。
-	 *	\return 行列が正則である場合、逆行列化して true を返します。
-	 *	特異行列であった場合は、成分値を変更せずに false を返します。
+	 *
+	 *	\return
+	 *		行列が正則である場合、逆行列化して true を返します。
+	 *		特異行列であった場合は、成分値を変更せずに false を返します。
+	 *
 	 *	\sa isRegular(), isSingular()
 	 */
 	bool			inverse(void);
@@ -759,6 +803,7 @@ class fk_Matrix : public fk_OrthoMatrix {
 	//! 拡大縮小行列生成関数1
 	/*!
 	 *	各座標軸方向への拡大縮小率を個別に設定した行列を生成します。
+	 *
 	 *	\param[in]	x	x方向の拡大縮小率
 	 *	\param[in]	y	y方向の拡大縮小率
 	 *	\param[in]	z	z方向の拡大縮小率
@@ -769,9 +814,10 @@ class fk_Matrix : public fk_OrthoMatrix {
 	/*!
 	 *	各座標軸方向への拡大縮小率を個別に設定した行列を生成します。
 	 *	引数のベクトルの各成分が、軸方向の拡大縮小率と対応します。
-	 *	\param[in]	v	拡大縮小率ベクトル
+	 *
+	 *	\param[in]	V	拡大縮小率ベクトル
 	 */
-	void			makeScale(const fk_Vector &v);
+	void			makeScale(const fk_Vector &V);
 
 	//@}
 
@@ -808,9 +854,9 @@ fk_HVector	operator *(const fk_Matrix &, const fk_HVector &);
  *		M3 = M1 * M2;
  *
  *	\note
- *	行列積は交換法則が成り立たないため、
- *	\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
- *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
+ *		行列積は交換法則が成り立たないため、
+ *		\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
+ *		\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
  */
 fk_Matrix	operator *(const fk_Matrix &, const fk_Matrix &);
 
@@ -845,7 +891,7 @@ fk_Matrix	operator *(const fk_Matrix &, double);
  *		M3 = M1 + M2;
  *
  *	\note
- *	行列和は交換法則が成り立ちます。
+ *		行列和は交換法則が成り立ちます。
  */
 fk_Matrix	operator +(const fk_Matrix &, const fk_Matrix &);
 
@@ -858,7 +904,7 @@ fk_Matrix	operator +(const fk_Matrix &, const fk_Matrix &);
  *		M3 = M1 - M2;
  *
  *	\note
- *	行列差は交換法則が成り立ちません。
+ *		行列差は交換法則が成り立ちません。
  */
 fk_Matrix	operator -(const fk_Matrix &, const fk_Matrix &);
 

@@ -103,6 +103,7 @@ class fk_GenMatrix {
 	//! コンストラクタ
 	/*!
 	 *	引数で与えられた次元数の単位正方行列を生成します。
+	 *
 	 *	\param[in]	deg		次元数
 	 */
 	fk_GenMatrix(int deg = 0);
@@ -209,11 +210,11 @@ class fk_GenMatrix {
 	 *		M1 = M1 * M2;
 	 *
 	 *	\note
-	 *	行列積は交換法則が成り立たないため、
-	 *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ を
-	 *	\f$ \mathbf{M}_1 \f$ に代入したいときには、この演算子は利用できません。
+	 *		行列積は交換法則が成り立たないため、
+	 *		\f$ \mathbf{M}_2\mathbf{M}_1 \f$ を
+	 *		\f$ \mathbf{M}_1 \f$ に代入したいときには、この演算子は利用できません。
 	 *
-	 *	M1 と M2 の次元数が異なる場合は、M1 は変化しません。
+	 *		M1 と M2 の次元数が異なる場合は、M1 は変化しません。
 	 */
 	fk_GenMatrix &		operator *=(const fk_GenMatrix &);
 	//@}
@@ -224,8 +225,10 @@ class fk_GenMatrix {
 	/*!
 	 *	行列を、引数の値に従って初期化を行います。
 	 *	次元数は変化しません。
-	 *	\param[in]	initFlg		true の場合、単位行列として初期化します。
-	 *	false の場合、零行列として初期化します。
+	 *
+	 *	\param[in]	initFlg
+	 *		true の場合、単位行列として初期化します。
+	 *		false の場合、零行列として初期化します。
 	 */
 	void			init(bool initFlg = true);
 
@@ -234,6 +237,7 @@ class fk_GenMatrix {
 	/*!
 	 *	行列の次元数を設定します。
 	 *	各成分の値は可能な限り引き継がれます。
+	 *
 	 *	\param[in]	deg		次元数
 	 */
 	void			setDeg(int deg);
@@ -241,6 +245,7 @@ class fk_GenMatrix {
 	//! 次元数取得関数
 	/*!
 	 *	次元数を取得します。
+	 *
 	 *	\return	次元数
 	 */
 	int				getDeg(void) const;
@@ -248,6 +253,7 @@ class fk_GenMatrix {
 	//! 成分値設定関数
 	/*!
 	 *	引数に対応する成分の値を設定します。
+	 *
 	 *	\param[in]	row		行番号。0から始まります。
 	 *	\param[in]	col		列番号。0から始まります。
 	 *	\param[in]	value	設定値。
@@ -257,6 +263,7 @@ class fk_GenMatrix {
 	//! 成分値取得関数
 	/*!
 	 *	引数に対応する成分を取得します。
+	 *
 	 *	\param[in]	row		行番号。0から始まります。
 	 *	\param[in]	col		列番号。0から始まります。
 	 *	\return		成分値
@@ -266,9 +273,12 @@ class fk_GenMatrix {
 	//! 逆行列化関数
 	/*!
 	 *	現在設定されている行列に対し、正則行列であれば自身を逆行列化します。
-	 *	特異(非正則)行列である場合は「失敗」とし、成分値を変更しません。
-	 *	\return 行列が正則である場合、逆行列化して true を返します。
-	 *	特異行列であった場合は、成分値を変更せずに false を返します。
+	 *	非正則行列(特異行列)である場合は「失敗」とし、成分値を変更しません。
+	 *
+	 *	\return
+	 *		行列が正則である場合、逆行列化して true を返します。
+	 *		非正則行列であった場合は、成分値を変更せずに false を返します。
+	 *
 	 *	\sa isRegular(), isSingular()
 	 */
 	bool			inverse(void);
@@ -284,17 +294,20 @@ class fk_GenMatrix {
 	/*!
 	 *	行列が正則であるかどうかを判定します。
 	 *	正則行列とは、逆行列が存在する行列のことです。
+	 *
 	 *	\return 正則であれば true を、そうでなければ false を返します。
+	 *
 	 *	\sa inverse(), isSingular()
 	 */
 	bool			isRegular(void) const;
 
-	//! 特異判定関数
+	//! 非正則(特異)判定関数
 	/*!
-	 *	行列が特異であるかどうかを判定します。
-	 *	特異行列とは、逆行列が存在しない行列のことです。
-	 *	これは「非正則行列」と同義になります。
-	 *	\return 特異であれば true を、そうでなければ false を返します。
+	 *	行列が非正則(特異)であるかどうかを判定します。
+	 *	非正則行列とは、逆行列が存在しない行列のことです。
+	 *
+	 *	\return 非正則であれば true を、そうでなければ false を返します。
+	 *
 	 *	\sa inverse(), isRegular()
 	 */
 	bool			isSingular(void) const;
@@ -341,9 +354,9 @@ fk_GenVector	operator *(const fk_GenMatrix &, const fk_GenVector &);
  *		M3 = M1 + M2;
  *
  *	\note
- *	行列和は交換法則が成り立ちます。
- *	なお、この演算では M1 と M2 の次元数が同一である必要があります。
- *	もし次元数が異なった場合は、次元が 0 の行列を返します。
+ *		行列和は交換法則が成り立ちます。
+ *		なお、この演算では M1 と M2 の次元数が同一である必要があります。
+ *		もし次元数が異なった場合は、次元が 0 の行列を返します。
  */
 fk_GenMatrix	operator +(const fk_GenMatrix &, const fk_GenMatrix &);
 
@@ -357,9 +370,9 @@ fk_GenMatrix	operator +(const fk_GenMatrix &, const fk_GenMatrix &);
  *		M3 = M1 - M2;
  *
  *	\note
- *	行列差は交換法則は成り立ちません。
- *	なお、この演算では M1 と M2 の次元数が同一である必要があります。
- *	もし次元数が異なった場合は、次元が 0 の行列を返します。
+ *		行列差は交換法則は成り立ちません。
+ *		なお、この演算では M1 と M2 の次元数が同一である必要があります。
+ *		もし次元数が異なった場合は、次元が 0 の行列を返します。
  */
 fk_GenMatrix	operator -(const fk_GenMatrix &, const fk_GenMatrix &);
 
@@ -372,11 +385,11 @@ fk_GenMatrix	operator -(const fk_GenMatrix &, const fk_GenMatrix &);
  *		M3 = M1 * M2;
  *
  *	\note
- *	行列積は交換法則が成り立たないため、
- *	\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
- *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
- *	なお、この演算では M1 と M2 の次元数が同一である必要があります。
- *	もし次元数が異なった場合は、次元が 0 の行列を返します。
+ *		行列積は交換法則が成り立たないため、
+ *		\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
+ *		\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
+ *		なお、この演算では M1 と M2 の次元数が同一である必要があります。
+ *		もし次元数が異なった場合は、次元が 0 の行列を返します。
  */
 fk_GenMatrix	operator *(const fk_GenMatrix &, const fk_GenMatrix &);
 

@@ -254,6 +254,7 @@ class fk_Light: public fk_Shape {
 	 *		-	1:			2次減衰係数を返します。
 	 *		-	2:			一定減衰係数を返します。
 	 *		-	それ以外:	常に 0 を返します。
+	 *
 	 *	\return	指定された減衰係数の値
 	 *
 	 *	\sa setAttenuation()
@@ -267,6 +268,7 @@ class fk_Light: public fk_Shape {
 	 *	単位は弧度法(ラジアン)となります。
 	 *
 	 *	\return	   	効果範囲角度
+	 *
 	 *	\sa setSpotCutOff()
 	 */
 	double				getSpotCutOff(void);
@@ -277,6 +279,7 @@ class fk_Light: public fk_Shape {
 	 *	光源方向からの減衰の度合い指数を参照します。
 	 *
 	 *	\return	減衰度合い指数
+	 *
 	 *	\sa setSpotExponent()
 	 */
 	double				getSpotExponent(void);

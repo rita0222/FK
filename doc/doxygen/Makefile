@@ -1,16 +1,24 @@
 SHELL	= /bin/sh
 
 RM		= rm -rf
-CONFFILE	= user_ref.conf
-REFDIR		= html_user
+BASECONFFILE	= user_ref.conf
+CLICONFFILE	= CLI_ref.conf
+BASEREFDIR	= html_user
+CLIREFDIR	= html_CLI
+BASECOPYDIR	= ../Output/FK_Ref_Base
+CLICOPYDIR	= ../Output/FK_Ref_CLI
 
 doc:
 	cd Fig; ../../com/svg2png *.svg; ../../com/svg2eps *.svg
-	doxygen $(CONFFILE)
-	cp -r $(REFDIR) ../Output/FK_Reference
+	doxygen $(BASECONFFILE)
+	doxygen $(CLICONFFILE)
+	rm -rf $(BASECOPYDIR)
+	rm -rf $(CLICOPYDIR)
+	cp -r $(BASEREFDIR) $(BASECOPYDIR)
+	cp -r $(CLIREFDIR) $(CLICOPYDIR)
 
 clean:
-	$(RM) $(REFDIR) *~
+	$(RM) $(BASEREFDIR) $(CLIREFDIR) *~
 	cd Fig; $(RM) *.eps *.png
 
 ####################

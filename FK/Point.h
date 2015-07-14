@@ -209,6 +209,7 @@ class fk_Point: public fk_Shape {
 	 *	個別の頂点に対し、描画の有無を設定します。
 	 *
 	 *	\param[in]	ID		頂点ID
+	 *
 	 *	\param[in]	mode
 	 *		true であれば描画を有効に、false であれば無効にします。
 	 */

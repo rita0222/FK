@@ -478,26 +478,28 @@ bool fk_SetErrorFile(string argFileName)
 void fk_Printf(const char *argFormat, ...)
 {
 	va_list			ap;
-	string			buffer;
+	char			*buffer = new char [8192];
 
-	buffer.resize(8192, 0);
 	va_start(ap, argFormat);
 	vsnprintf(&buffer[0], 8191, argFormat, ap);
 	va_end(ap);
 	getErrorDB()->PutError(buffer);
+	delete [] buffer;
 	return;
 }
 
 string fk_StrPrintf(const char *argFormat, ...)
 {
 	va_list		ap;
-	string		buffer;
+	char		*buffer = new char [8192];
+	string		str;
 
-	buffer.resize(8192, 0);
 	va_start(ap, argFormat);
 	vsnprintf(&buffer[0], 8191, argFormat, ap);
 	va_end(ap);
-	return buffer;
+	str = buffer;
+	delete [] buffer;
+	return str;
 }
 
 #endif // !FK_CLI_CODE

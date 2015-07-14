@@ -54,22 +54,24 @@ type Boid(argNum) = class
     member this.SetWindow(argWin: fk_AppWindow) =
         agent |> Array.iter (fun a -> a.Entry(argWin))
 
-    member this.Forward(argGMode: bool) =
+    member this.Forward(argSMode: bool, argAMode: bool, argCMode: bool) =
         let pA = agent |> Array.map (fun a -> a.Pos)
         let vA = agent |> Array.map (fun a -> a.Vec)
         let iA = agent |> Array.map (fun a -> a.ID)
         let vArray = Array.zip3 pA vA iA
 
-        // 分離ルール
         let newV0 = vArray |> Array.map (fun (p1, v1, i) ->
             let mutable tmpV = v1
             for j = 0 to vArray.Length - 1 do
                 if i <> j then
                     let diff = p1 - pA.[j]
                     let dist = diff.Dist()
-                    if dist < paramLA then
+                    // 分離ルール
+                    if dist < paramLA && argSMode then
                         tmpV <- tmpV + paramA * diff / (dist*dist)
-                    if dist < paramLB then
+
+                    // 整列ルール
+                    if dist < paramLB && argAMode then
                         tmpV <- tmpV + paramB * vA.[j]
             tmpV
         )
@@ -80,12 +82,10 @@ type Boid(argNum) = class
         // 結合ルール
         let calcG (p, v) = v + paramB * (gVec - p)
         let newV1 =
-            if argGMode then
+            if argCMode then
                 Array.zip pA newV0 |> Array.map calcG
             else
                 Array.copy newV0
-            
-
 
         // 外部判定
         let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
@@ -133,5 +133,8 @@ module FK_Boid =
 
     win.Open()
     while win.Update() = true do
-        boid.Forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE))
+        let sMode = win.GetKeyStatus('s', fk_SwitchStatus.RELEASE)
+        let aMode = win.GetKeyStatus('a', fk_SwitchStatus.RELEASE)
+        let cMode = win.GetKeyStatus('c', fk_SwitchStatus.RELEASE)
+        boid.Forward(sMode, aMode, cMode)
         

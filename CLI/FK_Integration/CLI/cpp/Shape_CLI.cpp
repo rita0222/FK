@@ -30,27 +30,27 @@ namespace FK_CLI {
 
 		switch(GetP()->getRealShapeType()) {
 		  case FK_SHAPE_IFS:
-			type = fk_RealShapeType::FK_SHAPE_IFS;
+			type = fk_RealShapeType::IFS;
 			break;
 				
 		  case FK_SHAPE_SOLID:
-			type = fk_RealShapeType::FK_SHAPE_SOLID;
+			type = fk_RealShapeType::SOLID;
 			break;
 				
 		  case FK_SHAPE_TEXTURE:
-			type = fk_RealShapeType::FK_SHAPE_TEXTURE;
+			type = fk_RealShapeType::TEXTURE;
 			break;
 				
 		  case FK_SHAPE_POINT:
-			type = fk_RealShapeType::FK_SHAPE_POINT;
+			type = fk_RealShapeType::POINT;
 			break;
 				
 		  case FK_SHAPE_LIGHT:
-			type = fk_RealShapeType::FK_SHAPE_LIGHT;
+			type = fk_RealShapeType::LIGHT;
 			break;
 				
 		  case FK_SHAPE_OTHER:
-			type = fk_RealShapeType::FK_SHAPE_OTHER;
+			type = fk_RealShapeType::OTHER;
 			break;
 				
 		  default:

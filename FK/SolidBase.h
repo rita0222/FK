@@ -127,23 +127,25 @@ class fk_SolidBase : public fk_Modify, public fk_ParserData {
 	 *	を利用して下さい。
 	 *
 	 *	\param[in]	faceNum		面数
-	 *	\param[in]	polyNum		面の角数。3以上の値を入力できます。
-	 *	\param[in]	IFSet		インデックスフェースセット配列。
-	 *							この配列は、各面を構成する頂点 ID
-	 *							を並べたものになります。
-	 *							たとえば、頂点 ID が
-	 *							[0, 1, 2] と [2, 1, 3] という構成を持つ
-	 *							2面からなる形状を生成する場合、
-	 *							int 型の配列に対して
-	 *							[0, 1, 2, 2, 1, 3] という数値を入力しておきます。
-	 *							結果的に、この配列の長さは面数と角数を
-	 *							掛けたもの以上である必要があります。
-	 *	\param[in]	vertexNum	頂点数
-	 *	\param[in]	posArray	頂点位置ベクトルの配列。
-	 *							配列の長さは頂点数以上である必要があります。
-	 *	\param[in]	order		最初の頂点IDを補正するオーダー。
-	 *							通常は省略して問題ありません。
 	 *
+	 *	\param[in]	polyNum		面の角数。3以上の値を入力できます。
+	 *
+	 *	\param[in]	IFSet
+	 *		インデックスフェースセット配列。
+	 *		この配列は、各面を構成する頂点 ID を並べたものになります。
+	 *		たとえば、頂点 ID が [0, 1, 2] と [2, 1, 3] という構成を持つ
+	 *		2面からなる形状を生成する場合、int 型の配列に対して
+	 *		[0, 1, 2, 2, 1, 3] という数値を入力しておきます。
+	 *		結果的に、この配列の長さは面数と角数を掛けたもの以上である必要があります。
+	 *		
+	 *	\param[in]	vertexNum	頂点数
+	 *
+	 *	\param[in]	posArray
+	 *		頂点位置ベクトルの配列。配列の長さは頂点数以上である必要があります。
+	 *		
+	 *	\param[in]	order
+	 *		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
+	 *		
 	 *	\sa fk_IndexFaceSet::makeIFSet()
 	 */
 
@@ -154,26 +156,25 @@ class fk_SolidBase : public fk_Modify, public fk_ParserData {
 						  fk_Vector *posArray,
 						  int order = 0);
 
-
 	//! 任意形状生成関数2
 	/*!
 	 *	与えられたIFSデータから、形状を生成します。
 	 *
-	 *	\param[in]	faceArray	面データ配列。
-	 *							IFSet を vector< vector<int> > 型、
-	 *							polygon を vector<int> 型としたとき、
-	 *							以下のようにして面データを生成していきます。
+	 *	\param[in]	faceArray
+	 *		面データ配列。
+	 *		IFSet を vector< vector<int> > 型、
+	 *		polygon を vector<int> 型としたとき、
+	 *		以下のようにして面データを生成していきます。
 	 *
-	 *		polygon.clear();
-	 *		polygon.push_back(頂点ID1);
-	 *		polygon.push_back(頂点ID2);
-	 *			:
-	 *		polygon.push_back(頂点IDn);
-	 *		IFSet.push_back(polygon);
+	 *			polygon.clear();
+	 *			polygon.push_back(頂点ID1);
+	 *			polygon.push_back(頂点ID2);
+	 *				:
+	 *			polygon.push_back(頂点IDn);
+	 *			IFSet.push_back(polygon);
 	 *
 	 *	\param[in]	posArray	頂点位置ベクトルデータ配列
-	 *	\param[in]	order		最初の頂点IDを補正するオーダー。
-	 *							通常は省略して問題ありません。
+	 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 	 */
 	void		makeIFSet(std::vector< std::vector<int> > *faceArray,
 						  std::vector<fk_Vector> *posArray,

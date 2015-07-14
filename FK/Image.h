@@ -166,6 +166,7 @@ class fk_Dimension {
  *	このクラスは、画像中の矩形領域を表します。
  *	このクラスの座標系は、画像の左上を原点とし、
  *	x の正方向は右、y の正方向は下となります。
+ *
  *	\sa fk_Dimension, fk_Image
  */
 class fk_Rect {
@@ -310,7 +311,7 @@ class fk_Image : public fk_BaseObject {
 	 *	画像データを初期化します。
 	 *	画像サイズも (0, 0) となります。
 	 */
-	void					init();
+	void	init();
 
 	//! BMP ファイル入力関数
 	/*!
@@ -320,7 +321,7 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\return 入力に成功すれば true、失敗すれば false を返します。
 	 */
-	bool					readBMP(const std::string fileName);
+	bool	readBMP(const std::string fileName);
 
 	//! BMP バッファ入力関数
 	/*!
@@ -332,7 +333,7 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\return 入力に成功すれば true、失敗すれば false を返します。
 	 */
-	bool					readBMPData(fk_ImType *buf);
+	bool	readBMPData(fk_ImType *buf);
 
 	//! PNG ファイル入力関数
 	/*!
@@ -342,7 +343,7 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\return 入力に成功すれば true、失敗すれば false を返します。
 	 */
-	bool					readPNG(const std::string fileName);
+	bool	readPNG(const std::string fileName);
 
 	//! PNG データ入力用関数
 	/*!
@@ -354,45 +355,47 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\return 入力に成功すれば true、失敗すれば false を返します。
 	 */
-	bool					readPNGData(fk_ImType *buf);
+	bool	readPNGData(fk_ImType *buf);
 
 	//! JPEG ファイル入力関数
 	/*!
 	 *	JPEG 形式のファイルからデータを読み込みます。
+	 *
 	 *	\param[in] fileName	ファイル名
+	 *
 	 *	\return 入力に成功すれば true、失敗すれば false を返します。
 	 */
-	bool					readJPG(const std::string fileName);
+	bool	readJPG(const std::string fileName);
 
 	//! BMP ファイル出力関数
 	/*!
 	 *	画像データを BMP (Windows Bitmap) 形式でファイルに保存します。
 	 *
 	 *	\param[in] fileName	ファイル名
-	 *	\param[in] transFlg true の場合、透過色要素をファイル中に書き出します。
-	 *	透過色要素は本来 BMP 形式では標準でサポートされておらず、
-	 *	FK によって利用する画像ファイルの独自拡張となっています。
-	 *	ただし、透過色要素を埋め込んだ画像ファイルは一般のアプリケーションでも
-	 *	(透過色が追加されていないデータとして)読み込むことは可能です。
-	 *	false の場合は、データ中の透過色要素をファイルには出力しません。
+	 *	\param[in] transFlg
+	 *		true の場合、透過色要素をファイル中に書き出します。
+	 *		透過色要素は本来 BMP 形式では標準でサポートされておらず、
+	 *		FK によって利用する画像ファイルの独自拡張となっています。
+	 *		ただし、透過色要素を埋め込んだ画像ファイルは一般のアプリケーションでも
+	 *		(透過色が追加されていないデータとして)読み込むことは可能です。
+	 *		false の場合は、データ中の透過色要素をファイルには出力しません。
 	 *
 	 *	\return 書き出しに成功すれば true、失敗すれば false を返します。
 	 */
-	bool					writeBMP(const std::string fileName,
-									 const bool transFlg = false);
+	bool	writeBMP(const std::string fileName, const bool transFlg = false);
 
 	//! PNG ファイル出力関数
 	/*!
 	 *	画像データを PNG 形式でファイルに保存します。
 	 *
 	 *	\param[in] fileName	ファイル名
-	 *	\param[in] transFlg true の場合、透過色要素をファイル中に書き出します。
-	 *	false の場合は、データ中の透過色要素をファイルには出力しません。
+	 *	\param[in] transFlg
+	 *		true の場合、透過色要素をファイル中に書き出します。
+	 *		false の場合は、データ中の透過色要素をファイルには出力しません。
 	 *
 	 *	\return 書き出しに成功すれば true、失敗すれば false を返します。
 	 */
-	bool					writePNG(const std::string fileName,
-									 const bool transFlg = true);
+	bool	writePNG(const std::string fileName, const bool transFlg = true);
 
 	//! JPEG ファイル出力関数
 	/*!
@@ -401,15 +404,15 @@ class fk_Image : public fk_BaseObject {
 	 *	画像中に透過色データを出力することはできません。
 	 *
 	 *	\param[in] fileName	ファイル名
-	 *	\param[in] quality 画像の品質を設定します。
-	 *	品質が高いほどファイルのサイズは大きくなります。
-	 *	100 が最高品質、0 が最低品質となります。範囲外の数値が入力された場合、
-	 *	上下限に丸められます。
+	 *	\param[in] quality
+	 *		画像の品質を設定します。
+	 *		品質が高いほどファイルのサイズは大きくなります。
+	 *		100 が最高品質、0 が最低品質となります。範囲外の数値が入力された場合、
+	 *		上下限に丸められます。
 	 *
 	 *	\return 書き出しに成功すれば true、失敗すれば false を返します。
 	 */
-	bool					writeJPG(const std::string fileName,
-									 int quality = 80);
+	bool	writeJPG(const std::string fileName, int quality = 80);
 
 	//! 画像領域生成関数
 	/*!
@@ -417,13 +420,13 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\param[in] w	画像の横幅
 	 *	\param[in] h	画像の縦幅
-	 *	\param[in] initFlg	true の場合は、
-	 *	データ全体を (0, 0, 0, 0) で初期化します。
-	 *	false の場合は初期化を行いませんが、
-	 *	その場合でも横幅が変更されたときは
-	 *	各ピクセルの縦横関係が崩れてしまう可能性があります。
+	 *	\param[in] initFlg
+	 *		true の場合は、データ全体を (0, 0, 0, 0) で初期化します。
+	 *		false の場合は初期化を行いませんが、
+	 *		その場合でも横幅が変更されたときは
+	 *		各ピクセルの縦横関係が崩れてしまう可能性があります。
 	 */
-	void					newImage(int w, int h, bool initFlg = true);
+	void	newImage(int w, int h, bool initFlg = true);
 
 	//! 画像データコピー関数1
 	/*!
@@ -432,7 +435,7 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\param[in] image	元画像データのアドレス
 	 */
-	void					copyImage(const fk_Image *image);
+	void	copyImage(const fk_Image *image);
 
 	//! 画像データコピー関数2
 	/*!
@@ -446,7 +449,7 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] x		書き換え領域左上の x 座標
 	 *	\param[in] y		書き換え領域左上の y 座標
 	 */
-	void					copyImage(const fk_Image *image, int x, int y);
+	void	copyImage(const fk_Image *image, int x, int y);
 
 	//! 画像データ部分抽出関数
 	/*!
@@ -460,20 +463,19 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] w		抽出矩形領域の横幅
 	 *	\param[in] h		抽出矩形領域の縦幅
 	 */
-	bool					subImage(const fk_Image *image,
-									 int x, int y, int w, int h);
+	bool	subImage(const fk_Image *image, int x, int y, int w, int h);
 
 	//! 画像横幅取得関数
 	/*!
 	 *	\return 横幅
 	 */
-	int						getWidth(void) const;
+	int		getWidth(void) const;
 
 	//! 画像縦幅取得関数
 	/*!
 	 *	\return 縦幅
 	 */
-	int						getHeight(void) const;
+	int		getHeight(void) const;
 
 	//! 画像サイズ取得関数
 	/*!
@@ -489,18 +491,18 @@ class fk_Image : public fk_BaseObject {
 	 *	fk_Dimension 型で返すものです。
 	 *
 	 *	\note
-	 *	fk_Image のデータ格納がこのような仕様になっている理由は、
-	 *	古い OpenGL の仕様に基づきます。
-	 *	ver 2.0 以前の OpenGL では、
-	 *	テクスチャ画像として与えられるデータ領域について、
-	 *	横幅と縦幅は \f$ 2^n \f$ で表される
-	 *	整数値でなければならないという制約がありました。
-	 *	(縦幅と横幅は同一である必要はありません。)
-	 *	また、OpenGL の 2.0 以降をサポートしたハードウェアであっても、
-	 *	\f$ 2^n \f$ 以外の幅であった場合に
-	 *	描画速度が著しく低下する場合があるという報告もあります。
-	 *	このような理由から、
-	 *	fk_Image では内部データで幅を \f$ 2^n \f$ となるように補正しています。
+	 *		fk_Image のデータ格納がこのような仕様になっている理由は、
+	 *		古い OpenGL の仕様に基づきます。
+	 *		ver 2.0 以前の OpenGL では、
+	 *		テクスチャ画像として与えられるデータ領域について、
+	 *		横幅と縦幅は \f$ 2^n \f$ で表される
+	 *		整数値でなければならないという制約がありました。
+	 *		(縦幅と横幅は同一である必要はありません。)
+	 *		また、OpenGL の 2.0 以降をサポートしたハードウェアであっても、
+	 *		\f$ 2^n \f$ 以外の幅であった場合に
+	 *		描画速度が著しく低下する場合があるという報告もあります。
+	 *		このような理由から、
+	 *		fk_Image では内部データで幅を \f$ 2^n \f$ となるように補正しています。
 	 *
 	 *	\return データサイズのポインタ
 	 */
@@ -514,10 +516,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] x	ピクセルの x 座標
 	 *	\param[in] y	ピクセルの y 座標
 	 *
-	 *	\return ピクセルのR(赤)要素値。
-	 *	指定した座標が画像内にない場合は、-1 を返します。
+	 *	\return
+	 *		ピクセルのR(赤)要素値。
+	 *		指定した座標が画像内にない場合は、-1 を返します。
 	 */
-	int						getR(int x, int y) const;
+	int		getR(int x, int y) const;
 
 	//! ピクセルG要素取得関数
 	/*!
@@ -527,10 +530,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] x	ピクセルの x 座標
 	 *	\param[in] y	ピクセルの y 座標
 	 *
-	 *	\return ピクセルのG(緑)要素値。
-	 *	指定した座標が画像内にない場合は、-1 を返します。
+	 *	\return
+	 *		ピクセルのG(緑)要素値。
+	 *		指定した座標が画像内にない場合は、-1 を返します。
 	 */
-	int						getG(int x, int y) const;
+	int		getG(int x, int y) const;
 
 	//! ピクセルB要素取得関数
 	/*!
@@ -540,10 +544,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] x	ピクセルの x 座標
 	 *	\param[in] y	ピクセルの y 座標
 	 *
-	 *	\return ピクセルのB(青)要素値。
-	 *	指定した座標が画像内にない場合は、-1 を返します。
+	 *	\return
+	 *		ピクセルのB(青)要素値。
+	 *		指定した座標が画像内にない場合は、-1 を返します。
 	 */
-	int						getB(int x, int y) const;
+	int		getB(int x, int y) const;
 
 	//! ピクセルA要素取得関数
 	/*!
@@ -553,10 +558,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] x	ピクセルの x 座標
 	 *	\param[in] y	ピクセルの y 座標
 	 *
-	 *	\return ピクセルのA(透過度)要素値。
-	 *	指定した座標が画像内にない場合は、-1 を返します。
+	 *	\return
+	 *		ピクセルのA(透過度)要素値。
+	 *		指定した座標が画像内にない場合は、-1 を返します。
 	 */
-	int						getA(int x, int y) const;
+	int		getA(int x, int y) const;
 
 	//! ピクセル色要素取得関数
 	/*!
@@ -566,10 +572,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] x	ピクセルの x 座標
 	 *	\param[in] y	ピクセルの y 座標
 	 *
-	 *	\return ピクセルの色要素値。
-	 *	指定した座標が画像内にない場合は、(0, 0, 0, 1) の値を返します。
+	 *	\return
+	 *		ピクセルの色要素値。
+	 *		指定した座標が画像内にない場合は、(0, 0, 0, 1) の値を返します。
 	 */
-	fk_Color				getColor(int x, int y) const;
+	fk_Color	getColor(int x, int y) const;
 
 	//! ピクセル RGBA 値設定関数
 	/*!
@@ -586,10 +593,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] b	B(赤)要素値
 	 *	\param[in] a	A(赤)要素値
 	 *
-	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
-	 *	値の丸めが入った場合については、失敗とはみなしません。
+	 *	\return
+	 *		更新に成功した場合 true を、失敗した場合 false を返します。
+	 *		値の丸めが入った場合については、失敗とはみなしません。
 	 */
-	bool					setRGBA(int x, int y, int r, int g, int b, int a);
+	bool	setRGBA(int x, int y, int r, int g, int b, int a);
 
 	//! ピクセル RGB 値設定関数
 	/*!
@@ -605,10 +613,11 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] g	G(赤)要素値
 	 *	\param[in] b	B(赤)要素値
 	 *
-	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
-	 *	値の丸めが入った場合については、失敗とはみなしません。
+	 *	\return
+	 *		更新に成功した場合 true を、失敗した場合 false を返します。
+	 *		値の丸めが入った場合については、失敗とはみなしません。
 	 */
-	bool					setRGB(int x, int y, int r, int g, int b);
+	bool	setRGB(int x, int y, int r, int g, int b);
 
 	//! ピクセル R 値設定関数
 	/*!
@@ -625,7 +634,7 @@ class fk_Image : public fk_BaseObject {
 	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 	 *	値の丸めが入った場合については、失敗とはみなしません。
 	 */
-	bool					setR(int x, int y, int r);
+	bool	setR(int x, int y, int r);
 
 	//! ピクセル G 値設定関数
 	/*!
@@ -642,7 +651,7 @@ class fk_Image : public fk_BaseObject {
 	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 	 *	値の丸めが入った場合については、失敗とはみなしません。
 	 */
-	bool					setG(int x, int y, int g);
+	bool	setG(int x, int y, int g);
 
 	//! ピクセル B 値設定関数
 	/*!
@@ -659,7 +668,7 @@ class fk_Image : public fk_BaseObject {
 	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 	 *	値の丸めが入った場合については、失敗とはみなしません。
 	 */
-	bool					setB(int x, int y, int b);
+	bool	setB(int x, int y, int b);
 
 	//! ピクセル A 値設定関数
 	/*!
@@ -676,7 +685,7 @@ class fk_Image : public fk_BaseObject {
 	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 	 *	値の丸めが入った場合については、失敗とはみなしません。
 	 */
-	bool					setA(int x, int y, int a);
+	bool	setA(int x, int y, int a);
 
 	//! ピクセル色値設定関数
 	/*!
@@ -690,7 +699,7 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 	 */
-	bool					setColor(int x, int y, const fk_Color &col);
+	bool	setColor(int x, int y, const fk_Color &col);
 
 	//! バッファ全体初期化関数1
 	/*!
@@ -700,7 +709,7 @@ class fk_Image : public fk_BaseObject {
 	 *
 	 *	\param[in] col	色要素値
 	 */
-	void					fillColor(const fk_Color &col);
+	void	fillColor(const fk_Color &col);
 
 	//! バッファ全体初期化関数2
 	/*!
@@ -713,7 +722,7 @@ class fk_Image : public fk_BaseObject {
 	 *	\param[in] b	B(赤)要素値
 	 *	\param[in] a	A(赤)要素値
 	 */
-	void					fillColor(int r, int g, int b, int a = 0);
+	void	fillColor(int r, int g, int b, int a = 0);
 
 	//! 画像データ配列先頭アドレス取得関数	
 	/*!
@@ -733,11 +742,11 @@ class fk_Image : public fk_BaseObject {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	fk_TexID				GetTexID(void);
-	void					ClearUpdateArea(void);
-	void					SetUpdateArea(void);
-	void					SetUpdateArea(int, int, int, int);
-	fk_Rect					GetUpdateArea(void);
+	fk_TexID	GetTexID(void);
+	void		ClearUpdateArea(void);
+	void		SetUpdateArea(void);
+	void		SetUpdateArea(int, int, int, int);
+	fk_Rect		GetUpdateArea(void);
 
 #endif
 

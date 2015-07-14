@@ -104,7 +104,8 @@ enum fk_CurveType {
  *
  *	稜線に対して、幾何形状として曲線データを設定することができます。
  *	詳細は fk_Curve, fk_BezCurve, fk_BSplCurve を参照して下さい。
- *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute, fk_Curve, fk_BezCurve, fk_BSplCurve
+ *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Loop, fk_Topology,
+ *		fk_TopologyMaterial, fk_Attribute, fk_Curve, fk_BezCurve, fk_BSplCurve
  */
 
 class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
@@ -143,6 +144,7 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	//! 左側半稜線取得関数
 	/*!
 	 *	この稜線に属する「左側」にあたる半稜線を取得します。
+	 *
 	 *	\return 「左側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
 	 */
 	fk_Half *	getLeftHalf(void) const;
@@ -150,6 +152,7 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	//! 右側半稜線取得関数
 	/*!
 	 *	この稜線に属する「右側」にあたる半稜線を取得します。
+	 *
 	 *	\return 「右側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
 	 */
 	fk_Half *	getRightHalf(void) const;
@@ -157,6 +160,7 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	//! 描画線幅取得関数
 	/*!
 	 *	稜線が描画される際の線幅を返します。
+	 *
 	 *	\return 描画線幅
 	 */
 	double		getDrawWidth(void) const;
@@ -168,6 +172,7 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	 *	カメラからの距離に関係なく、同一の幅で描画されます。
 	 *	また、設定した幅で実際に描画されるかどうかは
 	 *	グラフィックスハードウェアの機能に依存します。
+	 *
 	 *	\param[in] width	描画線幅
 	 */
 	void		setDrawWidth(double width);
@@ -179,6 +184,7 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	 * 	B-Spline 曲線 (fk_BSplCurve) が標準で実装されていますが、
 	 *	fk_Curve の条件を満たせばユーザによる自作クラスも設定することができます。
 	 *	条件については fk_Curve を参照して下さい。
+	 *
 	 *	\param[in] curve	幾何曲線インスタンスのアドレス
 	 */
 	void		setCurveGeometry(fk_Curve *curve);
@@ -186,8 +192,10 @@ class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
 	//! 幾何曲線形状取得関数
 	/*!
 	 * 	稜線に設定されている自由曲線を取得します。
-	 *	\return 自由曲線インスタンスのアドレス。
-	 *	設定されていなかった場合は nullptr を返します。
+	 *
+	 *	\return
+	 *		自由曲線インスタンスのアドレス。
+	 *		設定されていなかった場合は nullptr を返します。
 	 */
 	fk_Curve *	getCurveGeometry(void);
 

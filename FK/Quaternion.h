@@ -134,6 +134,7 @@ class fk_Quaternion {
 	 *	\param[in]	x	ベクトル部 x 成分設定値
 	 *	\param[in]	y	ベクトル部 y 成分設定値
 	 *	\param[in]	z	ベクトル部 z 成分設定値
+	 *
 	 *	\sa set(), setRotate()
 	 */
 	fk_Quaternion(double s, double x, double y, double z);
@@ -148,6 +149,7 @@ class fk_Quaternion {
 	 *
 	 *	\param[in]	s	スカラー部設定値
 	 *	\param[in]	v	ベクトル部設定値
+	 *
 	 *	\sa set(), setRotate()
 	 */
 	fk_Quaternion(const double s, const fk_Vector &v);
@@ -167,7 +169,11 @@ class fk_Quaternion {
 	 *	として符号は定義されます。以下のコードは、q2 に -q1 を代入します。
 	 *
 	 *		q2 = -q1;
-	 *	
+	 *
+	 *	\note
+	 *		回転変換を表す四元数 \f$\mathbf{q}\f$ において、
+	 *		\f$-\mathbf{q}\f$ による変換もまったく同じ回転となります。
+	 *		逆回転変換を行う四元数を求めたい場合は、共役を利用して下さい。
 	 */
 	fk_Quaternion &		operator -(void) const;
 
@@ -181,6 +187,10 @@ class fk_Quaternion {
 	 *	以下のコードは、q2 に q1 の共役を代入します。
 	 *
 	 *		q2 = ~q1;
+	 *
+	 *	正規化された四元数 \f$\mathbf{q}\f$ が回転を現すとき、
+	 *	共役四元数 \f$\overline{\mathbf{q}}\f$ は
+	 *	\f$\mathbf{q}\f$ の逆回転を表します。
 	 *
 	 *	\sa conj()
 	 */
@@ -260,9 +270,9 @@ class fk_Quaternion {
 	 *		q1 = q1 * q2;
 	 *
 	 *	\note
-	 *	四元数の積は交換法則が成り立たないため、
-	 *	\f$ \mathbf{q}_2\mathbf{q}_1 \f$ を
-	 *	\f$ \mathbf{q}_1 \f$ に代入したいときは、この演算子は利用できません。
+	 *		四元数の積は交換法則が成り立たないため、
+	 *		\f$ \mathbf{q}_2\mathbf{q}_1 \f$ を
+	 *		\f$ \mathbf{q}_1 \f$ に代入したいときは、この演算子は利用できません。
 	 */
 	fk_Quaternion &		operator *=(const fk_Quaternion &);
 
@@ -342,6 +352,7 @@ class fk_Quaternion {
 	 *	\param[in]	x	ベクトル部 x 成分設定値
 	 *	\param[in]	y	ベクトル部 y 成分設定値
 	 *	\param[in]	z	ベクトル部 z 成分設定値
+	 *
 	 *	\sa setRotate()
 	 */
 	void		set(double s, double x, double y, double z);
@@ -358,6 +369,7 @@ class fk_Quaternion {
 	 *
 	 *	\param[in]	s	スカラー部設定値
 	 *	\param[in]	v	ベクトル部設定値
+	 *
 	 *	\sa setRotate()
 	 */
 	void		set(double s, const fk_Vector &v);
@@ -380,6 +392,7 @@ class fk_Quaternion {
 	 *	\param[in]	x		回転軸の x 成分
 	 *	\param[in]	y		回転軸の y 成分
 	 *	\param[in]	z		回転軸の z 成分
+	 *
 	 *	\sa set()
 	 */
 	void		setRotate(double theta, double x, double y, double z);
@@ -400,6 +413,7 @@ class fk_Quaternion {
 	 *
 	 *	\param[in]	theta	回転角
 	 *	\param[in]	V		回転軸ベクトル
+	 *
 	 *	\sa set()
 	 */
 	void		setRotate(double theta, const fk_Vector &V);
@@ -422,6 +436,7 @@ class fk_Quaternion {
 	 *	オイラー角 (0, 0, 0) から
 	 *	angle が表すオイラー角の状態に回転する変換を表す四元数を設定します。
 	 *	オイラー角についての解説は、 fk_Angle を参照して下さい。
+	 *
 	 *	\param[in]	angle	オイラー角
 	 */
 	void		makeEuler(const fk_Angle &angle);
@@ -432,6 +447,7 @@ class fk_Quaternion {
 	 *	オイラー角 (0, 0, 0) の状態の物体が回転したときの
 	 *	姿勢状態を示すオイラー角を返します。
 	 *	オイラー角についての解説は、 fk_Angle を参照して下さい。
+	 *
 	 *	\return	オイラー角
 	 */
 	fk_Angle &	getEuler(void) const;
@@ -444,6 +460,7 @@ class fk_Quaternion {
 	 *	\f[
 	 *		|\mathbf{q}|^2 = s^2 + x^2 + y^2 + z^2
 	 *	\f]
+	 *
 	 *	\return	ノルム値
 	 */
 	double		norm(void) const;
@@ -456,6 +473,7 @@ class fk_Quaternion {
 	 *	\f[
 	 *		|\mathbf{q}| = \sqrt{s^2 + x^2 + y^2 + z^2}
 	 *	\f]
+	 *
 	 *	\return	絶対値
 	 */
 	double		abs(void) const;
@@ -465,6 +483,7 @@ class fk_Quaternion {
 	 *	四元数を正規化します。正規化とは、元の四元数の成分を絶対値で割ることで、
 	 * 	絶対値が 1 である四元数を求めることです。
 	 *	全ての成分が 0 である場合のみ、正規化できません。
+	 *
 	 *	\return	成功すれば true を、失敗すれば false を返します。
 	 */
 	bool		normalize(void);
@@ -478,6 +497,9 @@ class fk_Quaternion {
 	 *		\overline{\mathbf{q}} = s-xi-yj-zk
 	 *	\f]
 	 *	として共役 \f$\overline{\mathbf{q}}\f$は定義されます。
+	 *	正規化された四元数 \f$\mathbf{q}\f$ が回転を現すとき、
+	 *	共役四元数 \f$\overline{\mathbf{q}}\f$ は
+	 *	\f$\mathbf{q}\f$ の逆回転を表します。
 	 */
 	void		conj(void);				// 共役化
 
@@ -495,8 +517,11 @@ class fk_Quaternion {
 	 *	四元数が正規である(つまり、ノルムが1である)場合、
 	 *	四元数の逆元と共役は等しくなります。
 	 *	また、四元数によるベクトル変換を考えたとき、逆元は逆変換を表します。
-	 *	\return 成功すれば true を返し、失敗すれば false を返します。
-	 *	失敗は、全ての成分が 0 である場合に起こります。
+	 *
+	 *	\return
+	 *		成功すれば true を返し、失敗すれば false を返します。
+	 *		失敗は、全ての成分が 0 である場合に起こります。
+	 *
 	 *	\sa norm(), conj()
 	 */
 	bool		inverse(void);			// 逆元化
@@ -504,6 +529,7 @@ class fk_Quaternion {
 	//! 行列変換関数
 	/*!
 	 *	四元数を回転変換と考えたときの、同じ回転変換を意味する行列を返します。
+	 *
 	 *	\return 回転変換行列
 	 */
 	fk_Matrix &	conv(void) const;
@@ -648,16 +674,18 @@ fk_Vector		operator *(const fk_Quaternion &, const fk_Vector &);
  *	なお、四元数の内積は交換法則が成り立ちます。
  *
  *	\note
- *	ここで演算子として採用されている「^」は、
- *	C++ の仕様上あまり演算子としての優先度が高くありません。
- *	そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
+ *		ここで演算子として採用されている「^」は、
+ *		C++ の仕様上あまり演算子としての優先度が高くありません。
+ *		そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
  */
 double			operator ^(const fk_Quaternion &, const fk_Quaternion &);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
 fk_Quaternion fk_Q_Inter_Linear(const fk_Quaternion &,
 								const fk_Quaternion &, double);
 
 fk_Quaternion fk_Q_Inter_Sphere(const fk_Quaternion &,
 								const fk_Quaternion &, double);
+#endif
 
 #endif // !__FK_QUATERNION_HEADER__
