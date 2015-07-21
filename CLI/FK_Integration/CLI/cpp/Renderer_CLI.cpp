@@ -3,11 +3,7 @@
 #include <GL/gl.h>
 #include <stdlib.h>
 
-std::vector<HGLRC>* GetRcArray(void)
-{
-	static std::vector<HGLRC> rcArray;
-	return &rcArray;
-}
+static HGLRC firstRC = nullptr;
 
 namespace FK_CLI {
 	using namespace std;
@@ -66,21 +62,26 @@ namespace FK_CLI {
 			return false;
 		}
 
-		std::vector<HGLRC> *rcArray = GetRcArray();
-		rcArray->push_back(hRC);
-		if (rcArray->size() > 1)
+		if (firstRC != nullptr)
 		{
-			wglShareLists(rcArray->at(0), hRC);
+			wglShareLists(firstRC, hRC);
+		}
+		else
+		{
+			firstRC = hRC;
 		}
 
 		wglMakeCurrent(hDC, hRC);
 		pEngine->Init(argW, argH);
 		pEngine->OpenGLInit();
+
 		return true;
 	}
 
 	void fk_Renderer::Shutdown(void)
 	{
+		if (firstRC != nullptr) firstRC = nullptr;
+
 		if (hRC != nullptr)
 		{
 			if (wglGetCurrentContext() == hRC) wglMakeCurrent(nullptr, nullptr);
