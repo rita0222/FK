@@ -32,18 +32,34 @@ ALLSRCS = $(SAMPLESRCS)
 ###################
 
 FKLIB		= \
-			-lFK2_audio \
-			-lFK2_util \
-			-lFK2_fltkWin \
-			-lFK2_base \
-			-lFK2_fltkErr
+			-lFK3_audio \
+			-lFK3_util \
+			-lFK3_fltkWin \
+			-lFK3_graphics \
+			-lFK3_scene \
+			-lFK3_model \
+			-lFK3_solid \
+			-lFK3_shape \
+			-lFK3_parser \
+			-lFK3_material \
+			-lFK3_math \
+			-lFK3_base \
+			-lFK3_fltkErr
 
 FKLIB_G		= \
-			-lFK2_audio_g \
-			-lFK2_util_g \
-			-lFK2_fltkWin_g \
-			-lFK2_base_g \
-			-lFK2_fltkErr_g
+			-lFK3_audio_g \
+			-lFK3_util_g \
+			-lFK3_fltkWin_g \
+			-lFK3_graphics_g \
+			-lFK3_scene_g \
+			-lFK3_model_g \
+			-lFK3_solid_g \
+			-lFK3_shape_g \
+			-lFK3_parser_g \
+			-lFK3_material_g \
+			-lFK3_math_g \
+			-lFK3_base_g \
+			-lFK3_fltkErr_g
 
 FKLINK		= $(FKLIB)
 LINK		= $(FKLINK) $(SYSLIBS)
@@ -137,7 +153,7 @@ mac:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK2_OpenCL $(FKLIB)" \
+	"FKLINK = -lFK3_OpenCL $(FKLIB)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -157,7 +173,7 @@ mac-g:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK2_OpenCL_g $(FKLIB_G)" \
+	"FKLINK = -lFK3_OpenCL_g $(FKLIB_G)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 

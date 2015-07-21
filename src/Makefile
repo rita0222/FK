@@ -2,7 +2,7 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
-BASE		= base math material parser shape solid model scene graphics
+BASE		= base math material parser shape solid model scene graphics util
 AUDIO		= audio
 OPENCL		= OpenCL
 
@@ -33,40 +33,31 @@ fb:
 	cd fltk; $(MAKE) fb
 
 fb-g:
-	cd base; $(CP) Makefile.plane Makefile
-	cd base; $(MAKE) fb-g TARGET=depend; $(MAKE) fb-g
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) fb-g TARGET=depend; $(MAKE) fb-g
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) fb-g TARGET=depend; $(MAKE) fb-g
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) fb-g TARGET=depend ; \
+		$(MAKE) fb-g ; \
+		cd .. ; done
 	cd fltk; $(MAKE) fb-g
-	cd OpenCL; $(CP) Makefile.plane Makefile
-	cd OpenCL; $(MAKE) fb-g TARGET=depend; $(MAKE) fb-g
-
-cw-gcc:
-	cd base; $(CP) Makefile.plane Makefile;
-	cd base; $(MAKE) cw-gcc
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) cw-gcc
-	cd fltk; $(MAKE) cw-gcc
 
 ming:
-	cd base; $(CP) Makefile.plane Makefile;
-	cd base; $(MAKE) ming MAKE=make
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) ming MAKE=make
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) ming TARGET=depend; $(MAKE) ming
-	cd fltk; $(MAKE) ming MAKE=make
+	for sd in $(BASE) $(AUDIO) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) ming TARGET=depend ; \
+		$(MAKE) ming ; \
+		cd .. ; done
+	cd fltk; $(MAKE) ming
 
 ming-g:
-	cd base; $(CP) Makefile.plane Makefile;
-	cd base; $(MAKE) ming-g MAKE=make
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) ming-g MAKE=make
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) ming TARGET=depend; $(MAKE) ming-g
-	cd fltk; $(MAKE) ming-g MAKE=make
+	for sd in $(BASE) $(AUDIO) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) ming-g TARGET=depend ; \
+		$(MAKE) ming-g ; \
+		cd .. ; done
+	cd fltk; $(MAKE) ming-g
 
 mac:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
@@ -78,37 +69,31 @@ mac:
 	cd fltk; $(MAKE) mac
 
 mac-g:
-	cd base; $(CP) Makefile.plane Makefile;
-	cd base; $(MAKE) mac-g TARGET=depend; $(MAKE) mac-g
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) mac-g TARGET=depend; $(MAKE) mac-g
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) mac-g TARGET=depend; $(MAKE) mac-g
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) mac-g TARGET=depend ; \
+		$(MAKE) mac-g ; \
+		cd .. ; done
 	cd fltk; $(MAKE) mac-g
-	cd OpenCL; $(CP) Makefile.plane Makefile
-	cd OpenCL; $(MAKE) mac TARGET=depend; $(MAKE) mac-g
 
 mac-gcc:
-	cd base; $(CP) Makefile.plane Makefile
-	cd base; $(MAKE) mac-gcc TARGET=depend; $(MAKE) mac-gcc
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) mac-gcc TARGET=depend; $(MAKE) mac-gcc
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) mac-gcc TARGET=depend; $(MAKE) mac-gcc
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) mac-gcc TARGET=depend ; \
+		$(MAKE) mac-gcc ; \
+		cd .. ; done
 	cd fltk; $(MAKE) mac-gcc
-	cd OpenCL; $(CP) Makefile.plane Makefile
-	cd OpenCL; $(MAKE) mac TARGET=depend; $(MAKE) mac-gcc
 
 mac-gcc-g:
-	cd base; $(CP) Makefile.plane Makefile;
-	cd base; $(MAKE) mac-gcc-g TARGET=depend; $(MAKE) mac-gcc-g
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) mac-gcc-g TARGET=depend; $(MAKE) mac-gcc-g
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) mac-gcc-g TARGET=depend; $(MAKE) mac-gcc-g
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) mac-gcc-g TARGET=depend ; \
+		$(MAKE) mac-gcc-g ; \
+		cd .. ; done
 	cd fltk; $(MAKE) mac-gcc-g
-	cd OpenCL; $(CP) Makefile.plane Makefile
-	cd OpenCL; $(MAKE) mac TARGET=depend; $(MAKE) mac-gcc-g
 
 qt:
 	cd qt; $(MAKE) release MAKE=$(MAKE)
