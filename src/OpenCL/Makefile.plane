@@ -4,7 +4,6 @@ SHELL = /bin/sh
 .SUFFIXES : .c .o
 
 CC		= c++
-LINKCC		= c++
 RM		= rm -f
 MV		= mv
 TOUCH		= touch
@@ -20,52 +19,24 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 POSTLINK	= :
 #
 
-LIBHEADERS = \
-	OpenCL.h
-
 LIBSRCS = \
 	OpenCL.cxx
 
 LIBOBJS = $(LIBSRCS:cxx=o)
 LIBBCCOBJS = $(LIBSRCS:cxx=obj)
-
-FTESTSRC = ftest.cxx
-FTESTOBJ = $(FTESTSRC:cxx=o)
-CTESTSRC = ctest.cxx
-CTESTOBJ = $(CTESTSRC:cxx=o)
-
 ALLSRCS = $(LIBSRCS)
-ALLHEADERS = $(LIBHEADERS)
 
 ###################
 
 FKTOP		= ../..
-LIBRARY		= $(FKTOP)/lib/libFK2_OpenCL.a
-LIBRARY_G	= $(FKTOP)/lib/libFK2_OpenCL_g.a
+LIBRARY		= $(FKTOP)/lib/libFK3_OpenCL.a
+LIBRARY_G	= $(FKTOP)/lib/libFK3_OpenCL_g.a
 FTEST		= ftest
 CTEST		= ctest
 TARGET		= target
 LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 MVLIB		= :
-
-LINK		= \
-			-lFK2_OpenCL \
-			-lFK2_util \
-			-lFK2_audio \
-			-lFK2_fltkWin \
-			-lFK2_base \
-			-lFK2_fltkErr \
-			$(SYSLIBS)
-
-LINK_G		= \
-			-lFK2_OpenCL_g \
-			-lFK2_util_g \
-			-lFK2_audio_g \
-			-lFK2_fltkWin_g \
-			-lFK2_base_g \
-			-lFK2_fltkErr_g \
-			$(SYSLIBS)
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -85,13 +56,6 @@ fb:
 	"DEPENDDIRS = \
 		-I$(LOCAL)/include" \
 	"GRAMOPT = " \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv \
-			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
-			-lfltk -lpng -lz -lbz2 \
-			-lfreetype -lGL \
-			-lXft -lfontconfig -lXinerama -lpthread \
-			-lXext -lX11 -lm" \
 	"RANLIB = ranlib"
 
 fb-g:
@@ -102,29 +66,15 @@ fb-g:
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
 	"DEPENDDIRS = -I$(LOCAL)/include" \
 	"GRAMOPT = " \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv \
-			-lfltk_images -lfltk_forms -lfltk_gl -lfltk_jpeg \
-			-lfltk -lpng -lz \
-			-lfreetype -lGL \
-			-lXft -lfontconfig -lXinerama -lpthread \
-			-lXext -lX11 -lm" \
 	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)" \
-	"LINK = $(LINK_G)"
+	"LIBRARY = $(LIBRARY_G)"
 
 ming:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = " \
 	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
 	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MingPack/lib" \
 	"DEPENDDIRS = " \
-	"SYSLIBS = -lfltk -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
-		-lfltk_forms -lfltk_z \
-		-lfreetype -liconv \
-		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
-		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
 	"RANLIB = ranlib"
 
 ming-g:
@@ -133,16 +83,9 @@ ming-g:
 	"OPTOPT = -g" \
 	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
 	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MingPack/lib" \
 	"DEPENDDIRS = " \
-	"SYSLIBS = -lfltk -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
-		-lfltk_forms -lfltk_z \
-		-lfreetype -liconv \
-		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
-		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
 	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)" \
-	"LINK = $(LINK_G)"
+	"LIBRARY = $(LIBRARY_G)"
 
 mac:
 	$(MAKE) $(TARGET) \
@@ -153,17 +96,7 @@ mac:
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -liconv -lfltk_gl \
-		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework OpenCL \
-		-framework Cocoa \
-		-framework ApplicationServices \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"RANLIB = ranlib" \
-	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+	"RANLIB = ranlib"
 
 mac-g:
 	$(MAKE) $(TARGET) \
@@ -174,19 +107,8 @@ mac-g:
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -liconv -lfltk_gl \
-		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework OpenCL \
-		-framework Cocoa \
-		-framework ApplicationServices \
-		-framework Foundation \
-		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)" \
-	"LINK = $(LINK_G)" \
-	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+	"LIBRARY = $(LIBRARY_G)"
 
 mac-gcc:
 	$(MAKE) $(TARGET) \
@@ -199,17 +121,7 @@ mac-gcc:
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -liconv -lfltk_gl \
-		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework OpenCL \
-		-framework Cocoa \
-		-framework ApplicationServices \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"RANLIB = ranlib" \
-	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+	"RANLIB = ranlib"
 
 mac-gcc-g:
 	$(MAKE) $(TARGET) \
@@ -222,19 +134,8 @@ mac-gcc-g:
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LFLAGS = -L$(FKTOP)/lib -L$(FKTOP)/../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -liconv -lfltk_gl \
-		-lfltk -lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework OpenCL \
-		-framework Cocoa \
-		-framework ApplicationServices \
-		-framework Foundation \
-		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)" \
-	"LINK = $(LINK_G)" \
-	"POSTLINK = $(FKTOP)/FK/appmake.pl"
+	"LIBRARY = $(LIBRARY_G)"
 
 CFLAGS 		= $(OPS) $(SYSOPS) $(INCLDIRS)
 DEPENDCFLAGS	= $(CFLAGS)
@@ -249,20 +150,12 @@ $(LIBRARY) : $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
-		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS)
+		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) >& /dev/null
 
 clean:
 	touch dummy~
 	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) $(FTEST) $(CTEST) \
 		Makefile.bak fk2_base.bak *.out core *.core *~ #*# *.exe *.obj
-
-$(FTEST): $(FTESTSRC) $(LIBRARY)
-	$(CC) $(CFLAGS) $(LFLAGS) -o $(FTEST) $(FTESTSRC) $(LINK)
-	$(POSTLINK) $(FTEST)
-
-$(CTEST): $(CTESTSRC) $(LIBRARY)
-	$(CC) -c $(CFLAGS) $(CTESTSRC) -o $(CTESTOBJ)
-	$(LINKCC) $(CFLAGS) $(LFLAGS) $(CTESTOBJ) $(LINK) -o $(CTEST)
 
 ###
 %.o : %.cxx

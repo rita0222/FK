@@ -2,6 +2,9 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
+BASE		= base math material parser shape solid model scene graphics
+AUDIO		= audio
+OPENCL		= OpenCL
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -21,15 +24,13 @@ all:
 	@echo "	Qt-Mac-Clean:		make clean-mac"
 
 fb:
-	cd base; $(CP) Makefile.plane Makefile
-	cd base; $(MAKE) fb TARGET=depend; $(MAKE) fb
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) fb TARGET=depend; $(MAKE) fb
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) fb TARGET=depend; $(MAKE) fb
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) fb TARGET=depend ; \
+		$(MAKE) fb ; \
+		cd .. ; done
 	cd fltk; $(MAKE) fb
-	cd OpenCL; $(CP) Makefile.plane Makefile
-	cd OpenCL; $(MAKE) fb TARGET=depend; $(MAKE) fb
 
 fb-g:
 	cd base; $(CP) Makefile.plane Makefile
@@ -68,15 +69,13 @@ ming-g:
 	cd fltk; $(MAKE) ming-g MAKE=make
 
 mac:
-	cd base; $(CP) Makefile.plane Makefile
-	cd base; $(MAKE) mac TARGET=depend; $(MAKE) mac
-	cd util; $(CP) Makefile.plane Makefile
-	cd util; $(MAKE) mac TARGET=depend; $(MAKE) mac
-	cd audio; $(CP) Makefile.plane Makefile
-	cd audio; $(MAKE) mac TARGET=depend; $(MAKE) mac
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) mac TARGET=depend ; \
+		$(MAKE) mac ; \
+		cd .. ; done
 	cd fltk; $(MAKE) mac
-	cd OpenCL; $(CP) Makefile.plane Makefile
-	cd OpenCL; $(MAKE) mac TARGET=depend; $(MAKE) mac
 
 mac-g:
 	cd base; $(CP) Makefile.plane Makefile;
@@ -124,9 +123,11 @@ mac-qt-g:
 	cd qt; $(MAKE) mac-qt-g MAKE=$(MAKE)
 
 clean:
-	cd base; $(MAKE) clean -f Makefile.plane; $(RM) Makefile
-	cd util; $(MAKE) clean -f Makefile.plane; $(RM) Makefile
-	cd audio; $(MAKE) clean -f Makefile.plane; $(RM) Makefile
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(MAKE) clean -f Makefile.plane ; \
+		$(RM) Makefile ; \
+		cd .. ; done
 	cd fltk; $(MAKE) clean
 
 clean-qt:
