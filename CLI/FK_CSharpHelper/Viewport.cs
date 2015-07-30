@@ -8,6 +8,9 @@ using FK_CLI;
 
 namespace FK_CSharpHelper
 {
+    /// <summary>
+    /// ビューポート
+    /// </summary>
     public class fk_Viewport : IDisposable
     {
         private fk_Renderer renderer = new fk_Renderer();
