@@ -1,4 +1,4 @@
-//
+﻿//
 // "$Id: Fl_PostScript.H 10308 2014-09-13 17:51:20Z manolo $"
 //
 // Support for graphics output to PostScript file for the Fast Light Tool Kit (FLTK).

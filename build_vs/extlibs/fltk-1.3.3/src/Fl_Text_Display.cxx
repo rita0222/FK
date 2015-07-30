@@ -1,4 +1,4 @@
-//
+﻿//
 // "$Id: Fl_Text_Display.cxx 10416 2014-10-30 12:35:36Z AlbrechtS $"
 //
 // Copyright 2001-2014 by Bill Spitzak and others.
