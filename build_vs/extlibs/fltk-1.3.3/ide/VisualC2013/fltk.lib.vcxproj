@@ -466,7 +466,10 @@
     <ClInclude Include="..\..\FL\Fl_XPM_Image.H" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\xutf8\case.c" />
+    <ClCompile Include="..\..\src\xutf8\case.c">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\filename_absolute.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -496,6 +499,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\filename_expand.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -526,6 +531,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\filename_ext.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -556,6 +563,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\filename_isdir.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -586,6 +595,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\filename_list.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -616,6 +627,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\filename_match.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -646,6 +659,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\filename_setext.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -676,6 +691,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -706,6 +723,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_abort.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -736,6 +755,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_add_idle.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -766,6 +787,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Adjuster.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -796,6 +819,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_arc.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -826,6 +851,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_arci.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -856,6 +883,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_arg.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -886,6 +915,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_ask.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -916,6 +947,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Bitmap.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -946,6 +979,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Box.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -976,6 +1011,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_boxtype.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1006,6 +1043,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Browser.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1036,6 +1075,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Browser_.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1066,6 +1107,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Browser_load.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1096,6 +1139,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1126,8 +1171,13 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\cairo\Fl_Cairo.cxx" />
+    <ClCompile Include="..\..\cairo\Fl_Cairo.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\fl_call_main.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -1157,6 +1207,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Chart.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1187,6 +1239,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Check_Browser.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1217,6 +1271,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Check_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1247,6 +1303,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Choice.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1277,6 +1335,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Clock.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1307,6 +1367,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_color.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1337,6 +1399,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Color_Chooser.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1367,6 +1431,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_compose.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1397,6 +1463,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Copy_Surface.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1427,6 +1495,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Counter.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1457,6 +1527,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_cursor.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1487,6 +1559,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_curve.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1517,8 +1591,13 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\Fl_Device.cxx" />
+    <ClCompile Include="..\..\src\Fl_Device.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\Fl_Dial.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -1548,6 +1627,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_diamond_box.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1578,6 +1659,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_display.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1608,6 +1691,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_dnd.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1638,6 +1723,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Double_Window.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1668,6 +1755,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_draw.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1698,6 +1787,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_draw_image.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1728,6 +1819,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_draw_pixmap.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1758,6 +1851,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_engraved_label.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1788,6 +1883,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_File_Browser.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1818,6 +1915,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_File_Chooser.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1848,6 +1947,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_File_Chooser2.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1878,6 +1979,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_file_dir.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1908,6 +2011,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_File_Icon.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1938,6 +2043,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_File_Input.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1968,6 +2075,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_font.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -1998,6 +2107,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_get_key.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2028,6 +2139,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_get_system_colors.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2058,6 +2171,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_grab.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2088,6 +2203,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Group.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2118,9 +2235,17 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\fl_gtk.cxx" />
-    <ClCompile Include="..\..\src\fl_gleam.cxx" />
+    <ClCompile Include="..\..\src\fl_gtk.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fl_gleam.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\Fl_Help_View.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -2150,6 +2275,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Image.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2180,6 +2307,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Image_Surface.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2210,6 +2339,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Input.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2240,6 +2371,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Input_.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2270,6 +2403,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_labeltype.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2300,6 +2435,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Light_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2330,6 +2467,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_line_style.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2360,6 +2499,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_lock.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2390,6 +2531,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2420,6 +2563,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu_.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2450,6 +2595,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu_add.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2480,6 +2627,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu_Bar.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2510,6 +2659,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2540,6 +2691,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu_global.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2570,6 +2723,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Menu_Window.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2600,6 +2755,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Multi_Label.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2630,9 +2787,17 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\Fl_Native_File_Chooser.cxx" />
-    <ClCompile Include="..\..\src\fl_open_uri.cxx" />
+    <ClCompile Include="..\..\src\Fl_Native_File_Chooser.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fl_open_uri.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\fl_oval_box.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -2662,6 +2827,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_overlay.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2692,6 +2859,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_overlay_visual.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2722,6 +2891,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Overlay_Window.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2752,6 +2923,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_own_colormap.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2782,6 +2955,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Pack.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2812,6 +2987,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Paged_Device.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2842,6 +3019,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Pixmap.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2872,6 +3051,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_plastic.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2902,6 +3083,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Positioner.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2932,6 +3115,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_PostScript.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2962,6 +3147,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Preferences.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -2992,8 +3179,13 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\Fl_Printer.cxx" />
+    <ClCompile Include="..\..\src\Fl_Printer.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\Fl_Progress.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -3023,8 +3215,13 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\fl_read_image.cxx" />
+    <ClCompile Include="..\..\src\fl_read_image.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\fl_rect.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -3054,6 +3251,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Repeat_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3084,6 +3283,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Return_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3114,6 +3315,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Roller.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3144,6 +3347,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_round_box.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3174,6 +3379,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Round_Button.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3204,6 +3411,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_rounded_box.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3234,6 +3443,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Scroll.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3264,6 +3475,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_scroll_area.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3294,6 +3507,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Scrollbar.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3324,6 +3539,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_set_font.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3354,6 +3571,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_set_fonts.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3384,6 +3603,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_shadow_box.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3414,6 +3635,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Shared_Image.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3444,6 +3667,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_shortcut.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3474,6 +3699,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_show_colormap.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3504,6 +3731,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Single_Window.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3534,6 +3763,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Slider.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3564,6 +3795,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_symbols.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3594,6 +3827,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Table.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3624,6 +3859,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Table_Row.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3654,6 +3891,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tabs.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3684,6 +3923,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Text_Buffer.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3714,6 +3955,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Text_Display.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3744,6 +3987,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Text_Editor.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3774,6 +4019,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tile.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3804,6 +4051,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tiled_Image.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3834,6 +4083,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tooltip.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3864,6 +4115,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tree.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3894,6 +4147,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tree_Item.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3924,6 +4179,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tree_Item_Array.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3954,6 +4211,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Tree_Prefs.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -3984,9 +4243,17 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\fl_utf.c" />
-    <ClCompile Include="..\..\src\fl_utf8.cxx" />
+    <ClCompile Include="..\..\src\fl_utf.c">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fl_utf8.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\Fl_Valuator.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -4016,6 +4283,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Value_Input.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4046,6 +4315,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Value_Output.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4076,6 +4347,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Value_Slider.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4106,6 +4379,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\fl_vertex.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4136,6 +4411,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_visual.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4166,6 +4443,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Widget.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4196,6 +4475,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Window.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4226,6 +4507,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Window_fullscreen.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4256,6 +4539,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Window_hotspot.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4286,6 +4571,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Window_iconize.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4316,6 +4603,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Window_shape.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4346,6 +4635,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_Wizard.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4376,6 +4667,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_x.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4406,6 +4699,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_XBM_Image.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4436,6 +4731,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\Fl_XPM_Image.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4466,6 +4763,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\flstring.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4496,9 +4795,17 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\xutf8\is_right2left.c" />
-    <ClCompile Include="..\..\src\xutf8\is_spacing.c" />
+    <ClCompile Include="..\..\src\xutf8\is_right2left.c">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xutf8\is_spacing.c">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\numericsort.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -4528,8 +4835,13 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\..\src\ps_image.cxx" />
+    <ClCompile Include="..\..\src\ps_image.cxx">
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
     <ClCompile Include="..\..\src\scandir.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">Disabled</Optimization>
@@ -4559,6 +4871,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\screen_xywh.cxx">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4589,6 +4903,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="..\..\src\vsnprintf.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">Disabled</Optimization>
@@ -4619,6 +4935,8 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug Cairo|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
