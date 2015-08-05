@@ -29,8 +29,8 @@ set VS12_DEVENV_PATH=%VS120COMNTOOLS%..\IDE\devenv
 "%VS12_DEVENV_PATH%" ..\extlibs\libiconv\LibIconv_2013.sln /Clean "ReleaseStatic|x64"
 
 :: ogg
-"%VS12_DEVENV_PATH%" ..\extlibs\libogg-1.3.2\win32\VS2013\libogg_static.sln /Clean "Release|Win32"
-"%VS12_DEVENV_PATH%" ..\extlibs\libogg-1.3.2\win32\VS2013\libogg_static.sln /Clean "Release|x64"
+"%VS12_DEVENV_PATH%" ..\extlibs\libogg-1.3.2\win32\VS2013\libogg_static.sln /Clean "Debug|Win32"
+"%VS12_DEVENV_PATH%" ..\extlibs\libogg-1.3.2\win32\VS2013\libogg_static.sln /Clean "Debug|x64"
 "%VS12_DEVENV_PATH%" ..\extlibs\libogg-1.3.2\win32\VS2013\libogg_static.sln /Clean "Release|Win32"
 "%VS12_DEVENV_PATH%" ..\extlibs\libogg-1.3.2\win32\VS2013\libogg_static.sln /Clean "Release|x64"
 
