@@ -21,14 +21,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -49,24 +49,24 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)_exe\</OutDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(FK_VC13_DIR)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(FK_VC13_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(FK_VC15_DIR)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(FK_VC15_DIR)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(FK_VC13_DIR)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(FK_VC13_DIR)\lib_x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(FK_VC15_DIR)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(FK_VC15_DIR)\lib_x64;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)_exe\</OutDir>
-    <IncludePath>$(FK_VC13_DIR)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(FK_VC13_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(FK_VC15_DIR)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(FK_VC15_DIR)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(FK_VC13_DIR)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(FK_VC13_DIR)\lib_x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(FK_VC15_DIR)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(FK_VC15_DIR)\lib_x64;$(LibraryPath)</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
 

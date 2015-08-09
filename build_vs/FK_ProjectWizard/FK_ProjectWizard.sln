@@ -1,10 +1,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_ProjectWizard", "FK_ProjectWizard.vcxproj", "{096F86F4-3227-4ABD-94F1-0CC8A79CCF34}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WizReg13", "WizReg13.vcxproj", "{7EBF7EFA-FDD5-4A47-B4CF-ED40B8189792}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WizReg15", "WizReg15.vcxproj", "{E5D83D7D-2893-4D62-ADFF-328F673A0A75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{7EBF7EFA-FDD5-4A47-B4CF-ED40B8189792}.Debug|Win32.Build.0 = Debug|Win32
 		{7EBF7EFA-FDD5-4A47-B4CF-ED40B8189792}.Release|Win32.ActiveCfg = Release|Win32
 		{7EBF7EFA-FDD5-4A47-B4CF-ED40B8189792}.Release|Win32.Build.0 = Release|Win32
+		{E5D83D7D-2893-4D62-ADFF-328F673A0A75}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E5D83D7D-2893-4D62-ADFF-328F673A0A75}.Debug|Win32.Build.0 = Debug|Win32
+		{E5D83D7D-2893-4D62-ADFF-328F673A0A75}.Release|Win32.ActiveCfg = Release|Win32
+		{E5D83D7D-2893-4D62-ADFF-328F673A0A75}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
