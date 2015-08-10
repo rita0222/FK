@@ -79,17 +79,17 @@ function AddFilters(proj)
 {
 	try
 	{
-		// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã«ãƒ•ã‚©ãƒ«ãƒ€ã‚’è¿½åŠ ã™ã‚‹
+		// ƒvƒƒWƒFƒNƒg‚ÉƒtƒHƒ‹ƒ_‚ğ’Ç‰Á‚·‚é
 		var strSrcFilter = wizard.FindSymbol('SOURCE_FILTER');
-		var srcGroup = proj.Object.AddFilter('ã‚½ãƒ¼ã‚¹ ãƒ•ã‚¡ã‚¤ãƒ«');
+		var srcGroup = proj.Object.AddFilter('ƒ\[ƒX ƒtƒ@ƒCƒ‹');
 		srcGroup.Filter = strSrcFilter;
 
 		var strHeadFilter = wizard.FindSymbol('HEADER_FILTER');
-		var headGroup = proj.Object.AddFilter('ãƒ˜ãƒƒãƒ€ãƒ¼ ãƒ•ã‚¡ã‚¤ãƒ«');
+		var headGroup = proj.Object.AddFilter('ƒwƒbƒ_[ ƒtƒ@ƒCƒ‹');
 		headGroup.Filter = strHeadFilter;
 
 		var rcFilter = wizard.FindSymbol('RESOURCE_FILTER');
-		var rcGroup = proj.Object.AddFilter('ãƒªã‚½ãƒ¼ã‚¹ ãƒ•ã‚¡ã‚¤ãƒ«');
+		var rcGroup = proj.Object.AddFilter('ƒŠƒ\[ƒX ƒtƒ@ƒCƒ‹');
 		rcGroup.Filter = rcFilter;
 	}
 	catch(e)
@@ -105,7 +105,7 @@ function AddConfig(proj, strProjectName)
 		config = proj.Object.Configurations('Release');
 
 		var CLTool = config.Tools('VCCLCompilerTool');
-		// TODO: ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©è¨­å®šã‚’è¿½åŠ ã™ã‚‹
+		// TODO: ƒRƒ“ƒpƒCƒ‰İ’è‚ğ’Ç‰Á‚·‚é
 		if(wizard.FindSymbol('CONSOLE_CHECKBOX') == true) {
 			CLTool.PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE";
 		} else {
@@ -113,7 +113,7 @@ function AddConfig(proj, strProjectName)
 		}
 
 		var LinkTool = config.Tools('VCLinkerTool');
-		// TODO: ãƒªãƒ³ã‚«è¨­å®šã‚’è¿½åŠ ã™ã‚‹
+		// TODO: ƒŠƒ“ƒJİ’è‚ğ’Ç‰Á‚·‚é
 		if(wizard.FindSymbol('CONSOLE_CHECKBOX') == true) {
 			LinkTool.SubSystem = "1";
 		} else {
@@ -128,7 +128,7 @@ function AddConfig(proj, strProjectName)
 
 function PchSettings(proj)
 {
-	// TODO: pch è¨­å®šã‚’æŒ‡å®šã™ã‚‹
+	// TODO: pch İ’è‚ğw’è‚·‚é
 }
 
 function DelFile(fso, strWizTempFile)
@@ -177,7 +177,7 @@ function GetTargetName(strName, strProjectName)
 {
 	try
 	{
-		// TODO: ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ«åã‚’åŸºã«æå‡ºã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰ã‚’è¨­å®šã™ã‚‹
+		// TODO: ƒeƒ“ƒvƒŒ[ƒg ƒtƒ@ƒCƒ‹–¼‚ğŠî‚É’ño‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì–¼‘O‚ğİ’è‚·‚é
 		var strTarget = strName;
 
 		return strTarget;
@@ -210,7 +210,7 @@ function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 				var strTemplate = strTemplatePath + '\\' + strTpl;
 				var strFile = strProjectPath + '\\' + strTarget;
 
-				var bCopyOnly = false;  //"true" ã¯ã€ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã«æå‡º/è¿½åŠ ã™ã‚‹ã“ã¨ãªã—ã«ã€addingstrTemplate ã‹ã‚‰ strTarget ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã€‚
+				var bCopyOnly = false;  //"true" ‚ÍAƒtƒ@ƒCƒ‹‚ğƒvƒƒWƒFƒNƒg‚É’ño/’Ç‰Á‚·‚é‚±‚Æ‚È‚µ‚ÉAaddingstrTemplate ‚©‚ç strTarget ‚Éƒtƒ@ƒCƒ‹‚ğƒRƒs[‚µ‚Ü‚·B
 				var strExt = strName.substr(strName.lastIndexOf("."));
 				if(strExt==".bmp" || strExt==".ico" || strExt==".gif" || strExt==".rtf" || strExt==".css")
 					bCopyOnly = true;
