@@ -12,13 +12,13 @@ fltk.lib
 fltkz.lib
 freetype2MT.lib
 libiconv.lib
-glu32.lib
-opengl32.lib
-imm32.lib
 libvorbisfile.lib
 libvorbis.lib
 libogg.lib
 OpenAL32.lib
+glu32.lib
+opengl32.lib
+imm32.lib
 winmm.lib
 wsock32.lib
 comctl32.lib
