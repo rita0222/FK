@@ -9,11 +9,10 @@
 
 ============================================================================
 VER3_0_0:
-	base ライブラリを base, graphics, material, math,
-	model, parser, scene, shape, solid に分離。
-
-VER2_9_2:
 	- C++11 に対応。
+
+	= base ライブラリを base, graphics, material, math,
+		model, parser, scene, shape, solid に分離。
 
 	- システムヘッダファイルを、Cスタイル(<**.h>)からC++(<c**>)スタイルに移行
 
@@ -50,6 +49,8 @@ VER2_9_2:
 
 	* fk_TextImage クラスに等幅表示用の関数 setMonospaceMode(), getMonospaceMode(),
 		setMonospaceSize(), getMonospaceSize() 追加。
+
+	* fk_Color のコンストラクタで透過要素も設定できるように変更。
 
 ============================================================================
 VER2_9_1:
