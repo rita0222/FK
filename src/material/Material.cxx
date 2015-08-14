@@ -123,6 +123,22 @@ void fk_Color::set(double argR, double argG, double argB, double argA)
 	init(argR, argG, argB, argA);
 }
 
+float fk_Color::clamp(float argX)
+{
+	if(argX > 0.0f) {
+		return (argX < 1.0f) ? argX : 1.0f;
+	}
+	return 0.0f;
+}
+
+double fk_Color::clamp(double argX)
+{
+	if(argX > 0.0) {
+		return (argX < 1.0) ? argX : 1.0;
+	}
+	return 0.0;
+}
+
 fk_Color::fk_Color(const fk_Color &argColor)
 	: fk_BaseObject(FK_COLOR)
 {
@@ -132,6 +148,59 @@ fk_Color::fk_Color(const fk_Color &argColor)
 fk_Color & fk_Color::operator =(const fk_Color &argColor)
 {
 	init(argColor.col[0], argColor.col[1], argColor.col[2], argColor.col[3]);
+
+	return *this;
+}
+
+bool operator ==(fk_Color argA, fk_Color argB)
+{
+	float r, g, b, a;
+
+	r = argA.col[0] - argB.col[0];
+	g = argA.col[1] - argB.col[1];
+	b = argA.col[2] - argB.col[2];
+	a = argA.col[3] - argB.col[3];
+
+	return(fabs((float)r) < FK_COLOR_EPS &&
+		   fabs((float)g) < FK_COLOR_EPS &&
+		   fabs((float)b) < FK_COLOR_EPS &&
+		   fabs((float)a) < FK_COLOR_EPS);
+}
+
+fk_Color & fk_Color::operator *=(double argD)
+{
+	for(int i = 0; i < 3; i++) {
+		col[i] = clamp(col[i] * float(argD));
+	}
+
+	return *this;
+}
+
+fk_Color & fk_Color::operator /=(double argD)
+{
+	if(fabs(argD) < FK_COLOR_EPS) return *this;
+
+	for(int i = 0; i < 3; i++) {
+		col[i] = clamp(col[i] / float(argD));
+	}
+
+	return *this;
+}
+
+fk_Color & fk_Color::operator +=(const fk_Color &argC)
+{
+	for(int i = 0; i < 3; i++) {
+		col[i] = clamp(col[i] + argC.col[i]);
+	}
+
+	return *this;
+}
+
+fk_Color & fk_Color::operator -=(const fk_Color &argC)
+{
+	for(int i = 0; i < 3; i++) {
+		col[i] = clamp(col[i] - argC.col[i]);
+	}
 
 	return *this;
 }
@@ -151,20 +220,6 @@ float fk_Color::getG(void) const { return col[1]; }
 float fk_Color::getB(void) const { return col[2]; }
 float fk_Color::getA(void) const { return col[3]; }
 
-bool operator ==(fk_Color argA, fk_Color argB)
-{
-	float r, g, b, a;
-
-	r = argA.col[0] - argB.col[0];
-	g = argA.col[1] - argB.col[1];
-	b = argA.col[2] - argB.col[2];
-	a = argA.col[3] - argB.col[3];
-
-	return(fabs((float)r) < FK_COLOR_EPS &&
-		   fabs((float)g) < FK_COLOR_EPS &&
-		   fabs((float)b) < FK_COLOR_EPS &&
-		   fabs((float)a) < FK_COLOR_EPS);
-}
 
 void fk_Color::setHSV(double argH, double argS, double argV)
 {
@@ -210,6 +265,60 @@ void fk_Color::setHSV(double argH, double argS, double argV)
 	}
 
 	return;
+}
+
+// friend 宣言による外部関数化した二項演算子
+
+fk_Color operator +(const fk_Color &argA, const fk_Color &argB)
+{
+	fk_Color	tmp(fk_Color::clamp(argA.col[0] + argB.col[0]),
+					fk_Color::clamp(argA.col[1] + argB.col[1]),
+					fk_Color::clamp(argA.col[2] + argB.col[2]),
+					fk_Color::clamp(argA.col[3] + argB.col[3]));
+
+	return tmp;
+}
+					
+fk_Color operator -(const fk_Color &argA, const fk_Color &argB)
+{
+	fk_Color	tmp(fk_Color::clamp(argA.col[0] - argB.col[0]),
+					fk_Color::clamp(argA.col[1] - argB.col[1]),
+					fk_Color::clamp(argA.col[2] - argB.col[2]),
+					fk_Color::clamp(argA.col[3] - argB.col[3]));
+
+	return tmp;
+}
+
+fk_Color operator *(const fk_Color &argC, double argD)
+{
+	fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
+					fk_Color::clamp(argC.col[1] * float(argD)),
+					fk_Color::clamp(argC.col[2] * float(argD)),
+					fk_Color::clamp(argC.col[3] * float(argD)));
+
+	return tmp;
+}
+					
+fk_Color operator *(double argD, const fk_Color &argC)
+{
+	fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
+					fk_Color::clamp(argC.col[1] * float(argD)),
+					fk_Color::clamp(argC.col[2] * float(argD)),
+					fk_Color::clamp(argC.col[3] * float(argD)));
+
+	return tmp;
+}
+					
+fk_Color	operator /(const fk_Color &argC, double argD)
+{
+	if(fabs(argD) < FK_COLOR_EPS) return argC;
+
+	fk_Color	tmp(fk_Color::clamp(argC.col[0] / float(argD)),
+					fk_Color::clamp(argC.col[1] / float(argD)),
+					fk_Color::clamp(argC.col[2] / float(argD)),
+					fk_Color::clamp(argC.col[3] / float(argD)));
+
+	return tmp;
 }
 
 fk_Material::fk_Material()

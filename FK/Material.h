@@ -106,7 +106,7 @@ class fk_Color : public fk_BaseObject {
 	 *	\param[in] b B要素の値
 	 *	\param[in] a 透過要素の値
 	 */
-	fk_Color(float r = 0.2f, float g = 0.2f, float b = 0.2f, float a = 1.0);
+	fk_Color(float r = 0.2f, float g = 0.2f, float b = 0.2f, float a = 1.0f);
 
 	//! コンストラクタ2
 	/*!
@@ -135,6 +135,69 @@ class fk_Color : public fk_BaseObject {
 
 	//! 代入演算子
 	fk_Color & operator =(const fk_Color &col);
+
+	//! 実数積代入演算子
+	/*!
+	 *	以下のコードは、C の各成分を d 倍します。
+	 *	C は fk_Color 型の変数、d は double 型の変数です。
+	 *
+	 *		C *= d;
+	 *
+	 *	d は変数でなく数値でも構いません。
+	 *
+	 *		C *= 2.0;
+	 *
+	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+	 *	1 を超える場合はその成分を 1 とします。
+	 */
+	fk_Color &			operator *=(double);
+
+	//! 実数商代入演算子
+	/*!
+	 *	以下のコードは、C の各成分を 1/d 倍します。
+	 *	C は fk_Color 型の変数、d は double 型の変数です。
+	 *
+	 *		C /= d;
+	 *
+	 *	d は変数でなく数値でも構いません。
+	 *
+	 *		C /= 2.0;
+	 *
+	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+	 *	1 を超える場合はその成分を 1 とします。
+	 *	また、d が 0 であった場合は C の値を変更しません。
+	 */
+	fk_Color &			operator /=(double);
+
+	//! 単項和代入演算子
+	/*!
+	 *	以下のコードは、C1 に C2 を追加します。
+	 *	C1、C2 はいずれも fk_Color 型の変数です。
+	 *
+	 *		C1 += C2;
+	 *
+	 *	上記コードは、以下のコードと同義です。
+	 *
+	 *		C1 = C1 + C2;
+	 *
+	 *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
+	 */
+	fk_Color &			operator +=(const fk_Color &);
+
+	//! 単項差代入演算子
+	/*!
+	 *	以下のコードは、C1 から C2 を引きます。
+	 *	C1、C2 はいずれも fk_Color 型の変数です。
+	 *
+	 *		C1 -= C2;
+	 *
+	 *	上記コードは、以下のコードと同義です。
+	 *
+	 *		C1 = C1 - C2;
+	 *
+	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
+	 */
+	fk_Color &			operator -=(const fk_Color &);
 
 	//! 初期化関数1
 	/*!
@@ -269,7 +332,102 @@ class fk_Color : public fk_BaseObject {
 	 *	\return A要素値
 	 */
 	float		getA(void) const;
+
+	//! 
+
+	//! 色成分範囲補正関数1
+	/*!
+	 *	入力した成分値に対し、0 未満である場合 0 を、
+	 *	1 以上である場合 1 を、それ以外の場合は入力値自身を返します。
+	 *
+	 *	\param[in]	x	入力値
+	 *
+	 *	\return		補正値
+	 */
+	static double	clamp(double x);
+
+	//! 色成分範囲補正関数2
+	/*!
+	 *	入力した成分値に対し、0 未満である場合 0 を、
+	 *	1 以上である場合 1 を、それ以外の場合は入力値自身を返します。
+	 *
+	 *	\param[in]	x	入力値
+	 *
+	 *	\return		補正値
+	 */
+	static float	clamp(float x);
+
+	//! \name 二項演算子
+	//@{
+	friend fk_Color	operator +(const fk_Color &, const fk_Color &);
+	friend fk_Color	operator -(const fk_Color &, const fk_Color &);
+	friend fk_Color	operator *(const fk_Color &, double);
+	friend fk_Color	operator *(double, const fk_Color &);
+	friend fk_Color	operator /(const fk_Color &, double);
+	//@}
+
 };
+
+//! 色要素和二項演算子
+/*!
+ *	色値 C1 と C2 の和を得るには、以下のように記述します。
+ *	C1, C2, C3 はいずれも fk_Color 型の変数です。
+ *
+ *		C3 = C1 + C2;
+ *
+ *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
+ */
+fk_Color	operator +(const fk_Color &, const fk_Color &);
+
+//! 色要素差二項演算子
+/*!
+ *	色値 C1 と C2 の差を得るには、以下のように記述します。
+ *	C1, C2, C3 はいずれも fk_Color 型の変数です。
+ *
+ *		C3 = C1 - C2;
+ *
+ *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
+ */
+fk_Color	operator -(const fk_Color &, const fk_Color &);
+
+//! 実数倍二項演算子1
+/*!
+ *	ベクトル C1 のスカラー倍色値を得るには、以下のように記述します。
+ *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
+ *
+ *		C2 = C1 * d;
+ *
+ *	色値と実数の順番は逆でも構いません。
+ *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+ *	1 を超える場合はその成分を 1 とします。
+ */
+fk_Color	operator *(const fk_Color &, double);
+
+//! 実数倍二項演算子2
+/*!
+ *	ベクトル C1 のスカラー倍色値を得るには、以下のように記述します。
+ *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
+ *
+ *		C2 = d * C1;
+ *
+ *	色値と実数の順番は逆でも構いません。
+ *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+ *	1 を超える場合はその成分を 1 とします。
+ */
+fk_Color	operator *(double, const fk_Color &);
+
+//! 実数商二項演算子
+/*!
+ *	ベクトル C1 のスカラー商色値を得るには、以下のように記述します。
+ *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
+ *
+ *		C2 = C1/d;
+ *
+ *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+ *	1 を超える場合はその成分を 1 とします。
+ */
+fk_Color	operator /(const fk_Color &, double);
+
 
 //! マテリアル(質感)を管理するクラス
 /*!
@@ -338,6 +496,8 @@ class fk_Material : public fk_BaseObject {
 
 	//! 代入演算子
 	fk_Material & operator =(const fk_Material &arg);
+
+
 
 	//! 初期化関数
 	/*!
