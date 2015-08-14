@@ -76,40 +76,40 @@
 
 using namespace std;
 
-fk_Color::fk_Color(float r, float g, float b)
+fk_Color::fk_Color(float argR, float argG, float argB, float argA)
 	: fk_BaseObject(FK_COLOR)
 {
-	init(r, g, b, 1.0f);
+	init(argR, argG, argB, argA);
 }
 
 
-fk_Color::fk_Color(double r, double g, double b)
+fk_Color::fk_Color(double argR, double argG, double argB, double argA)
 	: fk_BaseObject(FK_COLOR)
 {
-	init(r, g, b, 1.0);
+	init(argR, argG, argB, argA);
 }
 
 void fk_Color::init(void) { init(0.0f, 0.0f, 0.0f, 1.0f); }
 
-void fk_Color::init(float r, float g, float b, float a)
+void fk_Color::init(float argR, float argG, float argB, float argA)
 {
-	if(r < -FK_COLOR_EPS || r > 1.0f + FK_COLOR_EPS ||
-	   g < -FK_COLOR_EPS || g > 1.0f + FK_COLOR_EPS ||
-	   b < -FK_COLOR_EPS || b > 1.0f + FK_COLOR_EPS ||
-	   a < -FK_COLOR_EPS || a > 1.0f + FK_COLOR_EPS) {
+	if(argR < -FK_COLOR_EPS || argR > 1.0f + FK_COLOR_EPS ||
+	   argG < -FK_COLOR_EPS || argG > 1.0f + FK_COLOR_EPS ||
+	   argB < -FK_COLOR_EPS || argB > 1.0f + FK_COLOR_EPS ||
+	   argA < -FK_COLOR_EPS || argA > 1.0f + FK_COLOR_EPS) {
 		fk_PutError("fk_Color", "init", 1, "Color Value Error,");
 		return;
 	}
-	col[0] = r;
-	col[1] = g;
-	col[2] = b;
-	col[3] = a;
+	col[0] = argR;
+	col[1] = argG;
+	col[2] = argB;
+	col[3] = argA;
 	return;
 }
 
-void fk_Color::init(double r, double g, double b, double a)
+void fk_Color::init(double argR, double argG, double argB, double argA)
 {
-	init(float(r), float(g), float(b), float(a));
+	init(float(argR), float(argG), float(argB), float(argA));
 	return;
 }
 
@@ -136,29 +136,29 @@ fk_Color & fk_Color::operator =(const fk_Color &argColor)
 	return *this;
 }
 
-void fk_Color::setR(float r) { init(r, col[1], col[2], col[3]);	}
-void fk_Color::setG(float g) { init(col[0], g, col[2], col[3]);	}
-void fk_Color::setB(float b) { init(col[0], col[1], b, col[3]);	}
-void fk_Color::setA(float a) { init(col[0], col[1], col[2], a);	}
+void fk_Color::setR(float argR) { init(argR, col[1], col[2], col[3]);	}
+void fk_Color::setG(float argG) { init(col[0], argG, col[2], col[3]);	}
+void fk_Color::setB(float argB) { init(col[0], col[1], argB, col[3]);	}
+void fk_Color::setA(float argA) { init(col[0], col[1], col[2], argA);	}
 
-void fk_Color::setR(double r) { init(float(r), col[1], col[2], col[3]);	}
-void fk_Color::setG(double g) { init(col[0], float(g), col[2], col[3]);	}
-void fk_Color::setB(double b) { init(col[0], col[1], float(b), col[3]);	}
-void fk_Color::setA(double a) { init(col[0], col[1], col[2], float(a));	}
+void fk_Color::setR(double argR) { init(float(argR), col[1], col[2], col[3]);	}
+void fk_Color::setG(double argG) { init(col[0], float(argG), col[2], col[3]);	}
+void fk_Color::setB(double argB) { init(col[0], col[1], float(argB), col[3]);	}
+void fk_Color::setA(double argA) { init(col[0], col[1], col[2], float(argA));	}
 
 float fk_Color::getR(void) const { return col[0]; }
 float fk_Color::getG(void) const { return col[1]; }
 float fk_Color::getB(void) const { return col[2]; }
 float fk_Color::getA(void) const { return col[3]; }
 
-bool operator ==(fk_Color A, fk_Color B)
+bool operator ==(fk_Color argA, fk_Color argB)
 {
 	float r, g, b, a;
 
-	r = A.col[0] - B.col[0];
-	g = A.col[1] - B.col[1];
-	b = A.col[2] - B.col[2];
-	a = A.col[3] - B.col[3];
+	r = argA.col[0] - argB.col[0];
+	g = argA.col[1] - argB.col[1];
+	b = argA.col[2] - argB.col[2];
+	a = argA.col[3] - argB.col[3];
 
 	return(fabs((float)r) < FK_COLOR_EPS &&
 		   fabs((float)g) < FK_COLOR_EPS &&
@@ -251,126 +251,124 @@ fk_Material & fk_Material::operator =(const fk_Material &argMat)
 	return *this;
 }
 
-void fk_Material::setAlpha(float al)
+void fk_Material::setAlpha(float argA)
 {
-	if(al < -FK_COLOR_EPS || al > 1.0f + FK_COLOR_EPS) {
+	if(argA < -FK_COLOR_EPS || argA > 1.0f + FK_COLOR_EPS) {
 		fk_PutError("fk_Material", "setAlpha", 1,
 					"Alpha Value Error.");
 		return;
 	}
-	alpha = al;
+	alpha = argA;
 
-	ambient.setA(al);
-	diffuse.setA(al);
-	emission.setA(al);
-	specular.setA(al);
+	ambient.setA(argA);
+	diffuse.setA(argA);
+	emission.setA(argA);
+	specular.setA(argA);
 }
 
-void fk_Material::setAlpha(double al)
+void fk_Material::setAlpha(double argA)
 {
-	setAlpha(float(al));
+	setAlpha(float(argA));
 	return;
 }
 
-void fk_Material::setAmbient(fk_Color am)
+void fk_Material::setAmbient(fk_Color argC)
 {
-	ambient = am;
+	ambient = argC;
 	ambient.setA(alpha);
 }
 
-void fk_Material::setDiffuse(fk_Color di)
+void fk_Material::setDiffuse(fk_Color argC)
 {
-	diffuse = di;
+	diffuse = argC;
 	diffuse.setA(alpha);
 }
 
-void fk_Material::setEmission(fk_Color em)
+void fk_Material::setEmission(fk_Color argC)
 {
-	emission = em;
+	emission = argC;
 	emission.setA(alpha);
 }
 
-void fk_Material::setSpecular(fk_Color sp)
+void fk_Material::setSpecular(fk_Color argC)
 {
-	specular = sp;
+	specular = argC;
 	specular.setA(alpha);
 }
 
-void fk_Material::setAmbDiff(fk_Color ad)
+void fk_Material::setAmbDiff(fk_Color argC)
 {
-	diffuse = ad;
-	diffuse.setA(alpha);
-	ambient = ad;
-	ambient.setA(alpha);
+	setAmbient(argC);
+	setDiffuse(argC);
 }
 
-void fk_Material::setAmbient(float r, float g, float b)
+void fk_Material::setAmbient(float argR, float argG, float argB)
 {
-	ambient.init(r, g, b, alpha);
+	ambient.init(argR, argG, argB, alpha);
 }
 
-void fk_Material::setDiffuse(float r, float g, float b)
+void fk_Material::setDiffuse(float argR, float argG, float argB)
 {
-	diffuse.init(r, g, b, alpha);
+	diffuse.init(argR, argG, argB, alpha);
 }
 
-void fk_Material::setEmission(float r, float g, float b)
+void fk_Material::setEmission(float argR, float argG, float argB)
 {
-	emission.init(r, g, b, alpha);
-
-}
-
-void fk_Material::setSpecular(float r, float g, float b)
-{
-	specular.init(r, g, b, alpha);
-}
-
-void fk_Material::setAmbDiff(float r, float g, float b)
-{
-	ambient.init(r, g, b, alpha);  
-	diffuse.init(r, g, b, alpha);
-}
-
-void fk_Material::setAmbient(double r, double g, double b)
-{
-	ambient.init(float(r), float(g), float(b), alpha);
-}
-
-void fk_Material::setDiffuse(double r, double g, double b)
-{
-	diffuse.init(float(r), float(g), float(b), alpha);
-}
-
-void fk_Material::setEmission(double r, double g, double b)
-{
-	emission.init(float(r), float(g), float(b), alpha);
+	emission.init(argR, argG, argB, alpha);
 
 }
 
-void fk_Material::setSpecular(double r, double g, double b)
+void fk_Material::setSpecular(float argR, float argG, float argB)
 {
-	specular.init(float(r), float(g), float(b), alpha);
+	specular.init(argR, argG, argB, alpha);
 }
 
-void fk_Material::setAmbDiff(double r, double g, double b)
+void fk_Material::setAmbDiff(float argR, float argG, float argB)
 {
-	ambient.init(float(r), float(g), float(b), alpha);	
-	diffuse.init(float(r), float(g), float(b), alpha);
+	ambient.init(argR, argG, argB, alpha);  
+	diffuse.init(argR, argG, argB, alpha);
 }
 
-void fk_Material::setShininess(float sh)
+void fk_Material::setAmbient(double argR, double argG, double argB)
 {
-	if(sh < -FK_COLOR_EPS || sh > 128.0f + FK_COLOR_EPS) {
+	ambient.init(float(argR), float(argG), float(argB), alpha);
+}
+
+void fk_Material::setDiffuse(double argR, double argG, double argB)
+{
+	diffuse.init(float(argR), float(argG), float(argB), alpha);
+}
+
+void fk_Material::setEmission(double argR, double argG, double argB)
+{
+	emission.init(float(argR), float(argG), float(argB), alpha);
+
+}
+
+void fk_Material::setSpecular(double argR, double argG, double argB)
+{
+	specular.init(float(argR), float(argG), float(argB), alpha);
+}
+
+void fk_Material::setAmbDiff(double argR, double argG, double argB)
+{
+	ambient.init(float(argR), float(argG), float(argB), alpha);	
+	diffuse.init(float(argR), float(argG), float(argB), alpha);
+}
+
+void fk_Material::setShininess(float argS)
+{
+	if(argS < -FK_COLOR_EPS || argS > 128.0f + FK_COLOR_EPS) {
 		fk_PutError("fk_Material", "setShininess", 1,
 					"Shininess Value Error.");
 		return;
 	}
-	shininess = sh;
+	shininess = argS;
 }
 
-void fk_Material::setShininess(double sh)
+void fk_Material::setShininess(double argS)
 {
-	setShininess(float(sh));
+	setShininess(float(argS));
 	return;
 }
 
@@ -381,18 +379,18 @@ fk_Color * fk_Material::getEmission(void) { return &emission; }
 fk_Color * fk_Material::getSpecular(void) { return &specular; }
 float fk_Material::getShininess(void) { return shininess; }
 
-bool operator ==(fk_Material a, fk_Material b)
+bool operator ==(fk_Material argA, fk_Material argB)
 {
 	float al, sh;
 
-	al = a.alpha - b.alpha;
-	sh = a.shininess - b.shininess;
+	al = argA.alpha - argB.alpha;
+	sh = argA.shininess - argB.shininess;
 	return(fabs((float)al) < FK_COLOR_EPS &&
 		   fabs((float)sh) < FK_COLOR_EPS &&
-		   a.ambient == b.ambient &&
-		   a.diffuse == b.diffuse &&
-		   a.emission == b.emission &&
-		   a.specular == b.specular);
+		   argA.ambient == argB.ambient &&
+		   argA.diffuse == argB.diffuse &&
+		   argA.emission == argB.emission &&
+		   argA.specular == argB.specular);
 }
 
 void fk_Material::initDefault(void)

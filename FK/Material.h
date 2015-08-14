@@ -101,14 +101,12 @@ class fk_Color : public fk_BaseObject {
 
 	//! コンストラクタ1
 	/*!
-	 *	透過色要素は初期値では 1 になります。
-	 *	他の要素は引数で指定可能です。
-	 *
 	 *	\param[in] r R要素の値
 	 *	\param[in] g G要素の値
 	 *	\param[in] b B要素の値
+	 *	\param[in] a 透過要素の値
 	 */
-	fk_Color(float r = 0.2f, float g = 0.2f, float b = 0.2f);
+	fk_Color(float r = 0.2f, float g = 0.2f, float b = 0.2f, float a = 1.0);
 
 	//! コンストラクタ2
 	/*!
@@ -117,8 +115,9 @@ class fk_Color : public fk_BaseObject {
 	 *	\param[in] r R要素の値
 	 *	\param[in] g G要素の値
 	 *	\param[in] b B要素の値
+	 *	\param[in] a 透過要素の値
 	 */
-	fk_Color(double r, double g, double b);
+	fk_Color(double r, double g, double b, double a);
 
 	//! デストラクタ
 	virtual ~fk_Color() {}
