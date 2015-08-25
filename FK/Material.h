@@ -117,7 +117,7 @@ class fk_Color : public fk_BaseObject {
 	 *	\param[in] b B要素の値
 	 *	\param[in] a 透過要素の値
 	 */
-	fk_Color(double r, double g, double b, double a);
+	fk_Color(double r, double g, double b, double a = 1.0);
 
 	//! デストラクタ
 	virtual ~fk_Color() {}
