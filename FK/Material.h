@@ -133,7 +133,7 @@ class fk_Color : public fk_BaseObject {
 	//! コピーコンストラクタ
 	fk_Color(const fk_Color &col);
 
-	//! 代入演算子
+	//! 単純代入演算子
 	fk_Color & operator =(const fk_Color &col);
 
 	//! 実数積代入演算子

@@ -59,7 +59,7 @@ namespace FK_CLI {
 
 	void fk_Color::col::set(int argI, float argC)
 	{
-		GetP()->col[argI] = argC;
+		GetP()->col[argI] = ::fk_Color::clamp(argC);
 	}
 
 	float fk_Color::r::get()
@@ -69,9 +69,8 @@ namespace FK_CLI {
 
 	void fk_Color::r::set(float argF)
 	{
-		GetP()->col[0] = argF;
+		GetP()->col[0] = ::fk_Color::clamp(argF);
 	}
-
 	
 	float fk_Color::g::get()
 	{
@@ -80,7 +79,7 @@ namespace FK_CLI {
 
 	void fk_Color::g::set(float argF)
 	{
-		GetP()->col[1] = argF;
+		GetP()->col[1] = ::fk_Color::clamp(argF);
 	}
 
 	float fk_Color::b::get()
@@ -90,7 +89,7 @@ namespace FK_CLI {
 
 	void fk_Color::b::set(float argF)
 	{
-		GetP()->col[2] = argF;
+		GetP()->col[2] = ::fk_Color::clamp(argF);
 	}
 
 	float fk_Color::a::get()
@@ -100,7 +99,7 @@ namespace FK_CLI {
 
 	void fk_Color::a::set(float argF)
 	{
-		GetP()->col[3] = argF;
+		GetP()->col[3] = ::fk_Color::clamp(argF);
 	}
 
 	bool fk_Color::Equals(fk_Color^ argC)
@@ -136,55 +135,155 @@ namespace FK_CLI {
 		return gcnew String(tmpBuf.c_str());
 	}
 
+	fk_Color^ fk_Color::operator+(fk_Color^ argC1, fk_Color^ argC2)
+	{
+		if(!argC1 || !argC2) return nullptr;
+		fk_Color^ C = gcnew fk_Color(argC1->GetP()->col[0] + argC2->GetP()->col[0],
+									 argC1->GetP()->col[1] + argC2->GetP()->col[1],
+									 argC1->GetP()->col[2] + argC2->GetP()->col[2],
+									 argC1->GetP()->col[3] + argC2->GetP()->col[3]);
+		return C;
+	}
+
+	fk_Color^ fk_Color::operator-(fk_Color^ argC1, fk_Color^ argC2)
+	{
+		if(!argC1 || !argC2) return nullptr;
+		fk_Color^ C = gcnew fk_Color(argC1->GetP()->col[0] - argC2->GetP()->col[0],
+									 argC1->GetP()->col[1] - argC2->GetP()->col[1],
+									 argC1->GetP()->col[2] - argC2->GetP()->col[2],
+									 argC1->GetP()->col[3] - argC2->GetP()->col[3]);
+		return C;
+	}
+
+	fk_Color^ fk_Color::operator*(fk_Color^ argC, double argD)
+	{
+		if(!argC) return nullptr;
+		fk_Color^ C = gcnew fk_Color(argC->GetP()->col[0] * float(argD),
+									 argC->GetP()->col[1] * float(argD),
+									 argC->GetP()->col[2] * float(argD),
+									 argC->GetP()->col[3] * float(argD));
+		return C;
+	}
+	
+	fk_Color^ fk_Color::operator*(double argD, fk_Color^ argC)
+	{
+		if(!argC) return nullptr;
+		fk_Color^ C = gcnew fk_Color(argC->GetP()->col[0] * float(argD),
+									 argC->GetP()->col[1] * float(argD),
+									 argC->GetP()->col[2] * float(argD),
+									 argC->GetP()->col[3] * float(argD));
+		return C;
+	}
+
+	fk_Color^ fk_Color::operator/(fk_Color^ argC, double argD)
+	{
+		if(!argC) return nullptr;
+		fk_Color^ C = gcnew fk_Color(argC->GetP()->col[0] / float(argD),
+									 argC->GetP()->col[1] / float(argD),
+									 argC->GetP()->col[2] / float(argD),
+									 argC->GetP()->col[3] / float(argD));
+		return C;
+	}
+
+	void fk_Color::operator *= (fk_Color^ argC, double argD)
+	{
+		if(!argC) return;
+		argC->Set(argC->r * float(argD),
+				  argC->g * float(argD),
+				  argC->b * float(argD),
+				  argC->a * float(argD));
+		return;
+	}
+	
+	void fk_Color::operator /= (fk_Color^ argC, double argD)
+	{
+		if(!argC) return;
+		argC->Set(argC->r / float(argD),
+				  argC->g / float(argD),
+				  argC->b / float(argD),
+				  argC->a / float(argD));
+		return;
+	}
+	
+	void fk_Color::operator += (fk_Color^ argC1, fk_Color^ argC2)
+	{
+		if(!argC1 || !argC2) return;
+		argC1->Set(argC1->r + argC2->r,
+				   argC1->g + argC2->g,
+				   argC1->b + argC2->b,
+				   argC1->a + argC2->a);
+		return;
+	}
+
+	void fk_Color::operator -= (fk_Color^ argC1, fk_Color^ argC2)
+	{
+		if(!argC1 || !argC2) return;
+		argC1->Set(argC1->r - argC2->r,
+				   argC1->g - argC2->g,
+				   argC1->b - argC2->b,
+				   argC1->a - argC2->a);
+		return;
+	}
+
 	void fk_Color::Init(void)
 	{
 		GetP()->init();
+		return;
 	}
 
 
 	void fk_Color::Init(float argR, float argG, float argB)
 	{
 		GetP()->init(argR, argG, argB, 1.0f);
+		return;
 	}
 
 	void fk_Color::Init(float argR, float argG, float argB, float argA)
 	{
 		GetP()->init(argR, argG, argB, argA);
+		return;
 	}
 
 	void fk_Color::Init(double argR, double argG, double argB)
 	{
 		GetP()->init(argR, argG, argB, 1.0);
+		return;
 	}
 
 	void fk_Color::Init(double argR, double argG, double argB, double argA)
 	{
 		GetP()->init(argR, argG, argB, argA);
+		return;
 	}
 
 	void fk_Color::Set(float argR, float argG, float argB)
 	{
 		GetP()->set(argR, argG, argB, 1.0f);
+		return;
 	}
 
 	void fk_Color::Set(float argR, float argG, float argB, float argA)
 	{
 		GetP()->set(argR, argG, argB, argA);
+		return;
 	}
 
 	void fk_Color::Set(double argR, double argG, double argB)
 	{
 		GetP()->set(argR, argG, argB, 1.0);
+		return;
 	}
 
 	void fk_Color::Set(double argR, double argG, double argB, double argA)
 	{
 		GetP()->set(argR, argG, argB, argA);
+		return;
 	}
 
 	void fk_Color::SetHSV(double argH, double argS, double argV)
 	{
 		GetP()->setHSV(argH, argS, argV);
+		return;
 	}
 
 	///////////////////////////////////////////////////////////////////

@@ -93,17 +93,10 @@ void fk_Color::init(void) { init(0.0f, 0.0f, 0.0f, 1.0f); }
 
 void fk_Color::init(float argR, float argG, float argB, float argA)
 {
-	if(argR < -FK_COLOR_EPS || argR > 1.0f + FK_COLOR_EPS ||
-	   argG < -FK_COLOR_EPS || argG > 1.0f + FK_COLOR_EPS ||
-	   argB < -FK_COLOR_EPS || argB > 1.0f + FK_COLOR_EPS ||
-	   argA < -FK_COLOR_EPS || argA > 1.0f + FK_COLOR_EPS) {
-		fk_PutError("fk_Color", "init", 1, "Color Value Error,");
-		return;
-	}
-	col[0] = argR;
-	col[1] = argG;
-	col[2] = argB;
-	col[3] = argA;
+	col[0] = clamp(argR);
+	col[1] = clamp(argG);
+	col[2] = clamp(argB);
+	col[3] = clamp(argA);
 	return;
 }
 
@@ -205,15 +198,15 @@ fk_Color & fk_Color::operator -=(const fk_Color &argC)
 	return *this;
 }
 
-void fk_Color::setR(float argR) { init(argR, col[1], col[2], col[3]);	}
-void fk_Color::setG(float argG) { init(col[0], argG, col[2], col[3]);	}
-void fk_Color::setB(float argB) { init(col[0], col[1], argB, col[3]);	}
-void fk_Color::setA(float argA) { init(col[0], col[1], col[2], argA);	}
+void fk_Color::setR(float argR) { col[0] = clamp(argR); }
+void fk_Color::setG(float argG) { col[1] = clamp(argG); }
+void fk_Color::setB(float argB) { col[2] = clamp(argB); }
+void fk_Color::setA(float argA) { col[3] = clamp(argA); }
 
-void fk_Color::setR(double argR) { init(float(argR), col[1], col[2], col[3]);	}
-void fk_Color::setG(double argG) { init(col[0], float(argG), col[2], col[3]);	}
-void fk_Color::setB(double argB) { init(col[0], col[1], float(argB), col[3]);	}
-void fk_Color::setA(double argA) { init(col[0], col[1], col[2], float(argA));	}
+void fk_Color::setR(double argR) { col[0] = clamp(float(argR)); }
+void fk_Color::setG(double argG) { col[1] = clamp(float(argG)); }
+void fk_Color::setB(double argB) { col[2] = clamp(float(argB)); }
+void fk_Color::setA(double argA) { col[3] = clamp(float(argA)); }
 
 float fk_Color::getR(void) const { return col[0]; }
 float fk_Color::getG(void) const { return col[1]; }
