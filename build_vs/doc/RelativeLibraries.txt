@@ -1,16 +1,16 @@
 This library package bundles the enumerated libraries as follows.
 
 [static link]
-FLTK ver.1.3.2
+FLTK ver.1.3.3
   zlib ver.1.2.5
   libpng ver.1.5.10
   libjpeg ver.8c
-FreeType ver.2.5.3
+FreeType ver.2.6
 libiconv ver.1.14
 
 [dynamic link(optionals)]
-GLEW ver.1.7.0
+GLEW ver.1.12.0
 OpenAL ver.1.1
-libogg ver.1.2.2
-libvorbis/libvorbisfile ver.1.3.2
+libogg ver.1.3.2
+libvorbis/libvorbisfile ver.1.3.5
 DirectInput8

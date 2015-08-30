@@ -1,2 +1,2 @@
-FK ToolKit for Microsoft Visual Studio 2013(Visual C++ 12.0)
-Version 2.9.1.0(r1778)
+FK ToolKit for Microsoft Visual Studio 2013/2015(Visual C++ 12.0/14.0)
+Version 3.0.0.0
