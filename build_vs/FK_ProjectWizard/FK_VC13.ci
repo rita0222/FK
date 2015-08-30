@@ -1,7 +1,7 @@
 <*project
       version = 4 civer = "Free v4.14.5" winver = "2.8/6.1.7601" > 
-   <output> C:\DevHome\YEK_NET\Release</>
-   <exename> FK_VC13_2_9_1_0.exe</>
+   <output> ..\ReleasePackages</>
+   <exename> FK_VC13_3_0_0_0.exe</>
    <digitsign> </>
    <appname> Fine Kernel ToolKit (VS2013”Å)</>
    <password> </>
@@ -26,8 +26,7 @@
    <dao> </>
    <background> 0</>
    <dlgwelcome> 1</>
-   <dlgreadme> C:\DevHome\YEK_NET\FK_ProjectWizard\Attention13.txt</>
-   <dlglic> C:\DevHome\YEK_NET\FK_ProjectWizard\License.txt</>
+   <dlglic> .\License.txt</>
    <dlgcustpath> C:\FK_VC13</>
    <dlgenfpath> 0</>
    <dlgsavepath> 1</>
@@ -35,7 +34,7 @@
    <dlgfinish> 1</>
    <comptype> defnorm</>
    <solid> 1</>
-   <srcfolder> C:\DevHome\YEK_NET\FK_VC13</>
+   <srcfolder> ..\FK_VC13</>
    <ifexist> asknewer</>
    <runafter> </>
    <runconfirm> 0</>
