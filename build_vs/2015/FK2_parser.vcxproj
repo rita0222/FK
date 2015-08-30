@@ -19,14 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\parser\D3DXAnimation.cxx" />
+    <ClCompile Include="..\..\src\parser\D3DXData.cxx" />
+    <ClCompile Include="..\..\src\parser\D3DXParser.cxx" />
+    <ClCompile Include="..\..\src\parser\D3DXShapeParser.cxx" />
+    <ClCompile Include="..\..\src\parser\DXFOut.cxx" />
+    <ClCompile Include="..\..\src\parser\DXFParser.cxx" />
+    <ClCompile Include="..\..\src\parser\HRCParser.cxx" />
+    <ClCompile Include="..\..\src\parser\MQOOut.cxx" />
+    <ClCompile Include="..\..\src\parser\MQOParser.cxx" />
+    <ClCompile Include="..\..\src\parser\ParserBase.cxx" />
+    <ClCompile Include="..\..\src\parser\RDSParser.cxx" />
+    <ClCompile Include="..\..\src\parser\SMFParser.cxx" />
+    <ClCompile Include="..\..\src\parser\SRFParser.cxx" />
+    <ClCompile Include="..\..\src\parser\STLOut.cxx" />
+    <ClCompile Include="..\..\src\parser\STLParser.cxx" />
+    <ClCompile Include="..\..\src\parser\VRMLOut.cxx" />
+    <ClCompile Include="..\..\src\parser\VRMLParser.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
+    <ProjectGuid>{89B0ECFB-38C6-457A-BB00-D89DB3889F0F}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
   </PropertyGroup>

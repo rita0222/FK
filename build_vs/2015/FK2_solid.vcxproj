@@ -19,14 +19,43 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\solid\Attribute.cxx" />
+    <ClCompile Include="..\..\src\solid\AttributeData.cxx" />
+    <ClCompile Include="..\..\src\solid\BezCurve.cxx" />
+    <ClCompile Include="..\..\src\solid\BezSurface.cxx" />
+    <ClCompile Include="..\..\src\solid\BSplBase.cxx" />
+    <ClCompile Include="..\..\src\solid\BSplCurve.cxx" />
+    <ClCompile Include="..\..\src\solid\BSplSurface.cxx" />
+    <ClCompile Include="..\..\src\solid\Command.cxx" />
+    <ClCompile Include="..\..\src\solid\Curve.cxx" />
+    <ClCompile Include="..\..\src\solid\DataAccess.cxx" />
+    <ClCompile Include="..\..\src\solid\DataBase.cxx" />
+    <ClCompile Include="..\..\src\solid\DrawCache.cxx" />
+    <ClCompile Include="..\..\src\solid\Edge.cxx" />
+    <ClCompile Include="..\..\src\solid\FileInput.cxx" />
+    <ClCompile Include="..\..\src\solid\FileOutput.cxx" />
+    <ClCompile Include="..\..\src\solid\Half.cxx" />
+    <ClCompile Include="..\..\src\solid\History.cxx" />
+    <ClCompile Include="..\..\src\solid\IFSetHandle.cxx" />
+    <ClCompile Include="..\..\src\solid\Line.cxx" />
+    <ClCompile Include="..\..\src\solid\Loop.cxx" />
+    <ClCompile Include="..\..\src\solid\MassProperty.cxx" />
+    <ClCompile Include="..\..\src\solid\Modify.cxx" />
+    <ClCompile Include="..\..\src\solid\Operation.cxx" />
+    <ClCompile Include="..\..\src\solid\PickData.cxx" />
+    <ClCompile Include="..\..\src\solid\Polygon.cxx" />
+    <ClCompile Include="..\..\src\solid\Reference1.cxx" />
+    <ClCompile Include="..\..\src\solid\Reference2.cxx" />
+    <ClCompile Include="..\..\src\solid\Reference3.cxx" />
+    <ClCompile Include="..\..\src\solid\Solid.cxx" />
+    <ClCompile Include="..\..\src\solid\SolidBase.cxx" />
+    <ClCompile Include="..\..\src\solid\SubDivision.cxx" />
+    <ClCompile Include="..\..\src\solid\Surface.cxx" />
+    <ClCompile Include="..\..\src\solid\Topology.cxx" />
+    <ClCompile Include="..\..\src\solid\Vertex.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
+    <ProjectGuid>{80D09435-C1F9-44B4-90D0-5E13B586CA08}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
   </PropertyGroup>

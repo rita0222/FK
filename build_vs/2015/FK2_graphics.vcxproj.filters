@@ -15,19 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx">
+    <ClCompile Include="..\..\src\graphics\Engine.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\Error.cxx">
+    <ClCompile Include="..\..\src\graphics\FaceDraw.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx">
+    <ClCompile Include="..\..\src\graphics\FrameController.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\System.cxx">
+    <ClCompile Include="..\..\src\graphics\LineDraw.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\Tree.cxx">
+    <ClCompile Include="..\..\src\graphics\PointDraw.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\TextureDraw.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,14 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\shape\Block.cxx" />
+    <ClCompile Include="..\..\src\shape\BVHMotion.cxx" />
+    <ClCompile Include="..\..\src\shape\Capsule.cxx" />
+    <ClCompile Include="..\..\src\shape\Circle.cxx" />
+    <ClCompile Include="..\..\src\shape\Cone.cxx" />
+    <ClCompile Include="..\..\src\shape\IFSTexture.cxx" />
+    <ClCompile Include="..\..\src\shape\Image.cxx" />
+    <ClCompile Include="..\..\src\shape\ImageIO.cxx" />
+    <ClCompile Include="..\..\src\shape\IndexFace.cxx" />
+    <ClCompile Include="..\..\src\shape\Light.cxx" />
+    <ClCompile Include="..\..\src\shape\MeshTexture.cxx" />
+    <ClCompile Include="..\..\src\shape\Particle.cxx" />
+    <ClCompile Include="..\..\src\shape\Point.cxx" />
+    <ClCompile Include="..\..\src\shape\Prism.cxx" />
+    <ClCompile Include="..\..\src\shape\Shape.cxx" />
+    <ClCompile Include="..\..\src\shape\Sphere.cxx" />
+    <ClCompile Include="..\..\src\shape\TextImage.cxx" />
+    <ClCompile Include="..\..\src\shape\Texture.cxx" />
+    <ClCompile Include="..\..\src\shape\UniCode.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
+    <ProjectGuid>{2A1ADCCD-29F6-479E-B41D-9307C8B36737}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
   </PropertyGroup>

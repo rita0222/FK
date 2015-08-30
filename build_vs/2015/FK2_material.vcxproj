@@ -19,14 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\material\Material.cxx" />
+    <ClCompile Include="..\..\src\material\MatExample.cxx" />
+    <ClCompile Include="..\..\src\material\Palette.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
+    <ProjectGuid>{9190A403-11DA-4EF9-8BC2-DD0F13E6FA59}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
   </PropertyGroup>

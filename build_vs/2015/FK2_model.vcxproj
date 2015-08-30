@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\model\Boundary.cxx" />
+    <ClCompile Include="..\..\src\model\BoundaryElem.cxx" />
+    <ClCompile Include="..\..\src\model\MatAdmin.cxx" />
+    <ClCompile Include="..\..\src\model\Model.cxx" />
+    <ClCompile Include="..\..\src\model\ModelTree.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
+    <ProjectGuid>{68729992-08E3-44C7-8592-BF26975E0BF3}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
   </PropertyGroup>

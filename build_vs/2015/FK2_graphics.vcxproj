@@ -19,14 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\graphics\Engine.cxx" />
+    <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
+    <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
+    <ProjectGuid>{541B0751-8E82-4FA9-98D7-AC7E67C9E844}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
   </PropertyGroup>
