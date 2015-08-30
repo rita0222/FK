@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,106 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Attribute.cxx" />
-    <ClCompile Include="..\..\src\base\AttributeData.cxx" />
     <ClCompile Include="..\..\src\base\Base.cxx" />
-    <ClCompile Include="..\..\src\base\BezCurve.cxx" />
-    <ClCompile Include="..\..\src\base\BezSurface.cxx" />
-    <ClCompile Include="..\..\src\base\Block.cxx" />
-    <ClCompile Include="..\..\src\base\Boundary.cxx" />
-    <ClCompile Include="..\..\src\base\BoundaryElem.cxx" />
-    <ClCompile Include="..\..\src\base\BSplBase.cxx" />
-    <ClCompile Include="..\..\src\base\BSplCurve.cxx" />
-    <ClCompile Include="..\..\src\base\BSplSurface.cxx" />
-    <ClCompile Include="..\..\src\base\BVHMotion.cxx" />
-    <ClCompile Include="..\..\src\base\Capsule.cxx" />
-    <ClCompile Include="..\..\src\base\Circle.cxx" />
-    <ClCompile Include="..\..\src\base\Command.cxx" />
-    <ClCompile Include="..\..\src\base\Cone.cxx" />
-    <ClCompile Include="..\..\src\base\Curve.cxx" />
-    <ClCompile Include="..\..\src\base\D3DXAnimation.cxx" />
-    <ClCompile Include="..\..\src\base\D3DXData.cxx" />
-    <ClCompile Include="..\..\src\base\D3DXParser.cxx" />
-    <ClCompile Include="..\..\src\base\D3DXShapeParser.cxx" />
-    <ClCompile Include="..\..\src\base\DataAccess.cxx" />
-    <ClCompile Include="..\..\src\base\DataBase.cxx" />
-    <ClCompile Include="..\..\src\base\DList.cxx" />
-    <ClCompile Include="..\..\src\base\DrawCache.cxx" />
-    <ClCompile Include="..\..\src\base\DXFOut.cxx" />
-    <ClCompile Include="..\..\src\base\DXFParser.cxx" />
-    <ClCompile Include="..\..\src\base\Edge.cxx" />
-    <ClCompile Include="..\..\src\base\Engine.cxx" />
     <ClCompile Include="..\..\src\base\Error.cxx" />
-    <ClCompile Include="..\..\src\base\FaceDraw.cxx" />
-    <ClCompile Include="..\..\src\base\FileInput.cxx" />
-    <ClCompile Include="..\..\src\base\FileOutput.cxx" />
-    <ClCompile Include="..\..\src\base\Fog.cxx" />
-    <ClCompile Include="..\..\src\base\FrameController.cxx" />
-    <ClCompile Include="..\..\src\base\GenMatrix.cxx" />
-    <ClCompile Include="..\..\src\base\GenVector.cxx" />
-    <ClCompile Include="..\..\src\base\Half.cxx" />
-    <ClCompile Include="..\..\src\base\History.cxx" />
-    <ClCompile Include="..\..\src\base\HRCParser.cxx" />
     <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\IFSetHandle.cxx" />
-    <ClCompile Include="..\..\src\base\IFSTexture.cxx" />
-    <ClCompile Include="..\..\src\base\Image.cxx" />
-    <ClCompile Include="..\..\src\base\ImageIO.cxx" />
-    <ClCompile Include="..\..\src\base\IndexFace.cxx" />
-    <ClCompile Include="..\..\src\base\Light.cxx" />
-    <ClCompile Include="..\..\src\base\Line.cxx" />
-    <ClCompile Include="..\..\src\base\LineDraw.cxx" />
-    <ClCompile Include="..\..\src\base\Loop.cxx" />
-    <ClCompile Include="..\..\src\base\MassProperty.cxx" />
-    <ClCompile Include="..\..\src\base\MatAdmin.cxx" />
-    <ClCompile Include="..\..\src\base\Material.cxx" />
-    <ClCompile Include="..\..\src\base\MatExample.cxx" />
-    <ClCompile Include="..\..\src\base\Math.cxx" />
-    <ClCompile Include="..\..\src\base\Matrix.cxx" />
-    <ClCompile Include="..\..\src\base\MeshTexture.cxx" />
-    <ClCompile Include="..\..\src\base\Model.cxx" />
-    <ClCompile Include="..\..\src\base\ModelTree.cxx" />
-    <ClCompile Include="..\..\src\base\Modify.cxx" />
-    <ClCompile Include="..\..\src\base\MQOOut.cxx" />
-    <ClCompile Include="..\..\src\base\MQOParser.cxx" />
-    <ClCompile Include="..\..\src\base\Operation.cxx" />
-    <ClCompile Include="..\..\src\base\Palette.cxx" />
-    <ClCompile Include="..\..\src\base\ParserBase.cxx" />
-    <ClCompile Include="..\..\src\base\Particle.cxx" />
-    <ClCompile Include="..\..\src\base\PickData.cxx" />
-    <ClCompile Include="..\..\src\base\Plane.cxx" />
-    <ClCompile Include="..\..\src\base\Point.cxx" />
-    <ClCompile Include="..\..\src\base\PointDraw.cxx" />
-    <ClCompile Include="..\..\src\base\Polygon.cxx" />
-    <ClCompile Include="..\..\src\base\Prism.cxx" />
-    <ClCompile Include="..\..\src\base\Projection.cxx" />
-    <ClCompile Include="..\..\src\base\Quaternion.cxx" />
-    <ClCompile Include="..\..\src\base\RDSParser.cxx" />
-    <ClCompile Include="..\..\src\base\Reference1.cxx" />
-    <ClCompile Include="..\..\src\base\Reference2.cxx" />
-    <ClCompile Include="..\..\src\base\Reference3.cxx" />
-    <ClCompile Include="..\..\src\base\Scene.cxx" />
-    <ClCompile Include="..\..\src\base\Shape.cxx" />
-    <ClCompile Include="..\..\src\base\SMFParser.cxx" />
-    <ClCompile Include="..\..\src\base\Solid.cxx" />
-    <ClCompile Include="..\..\src\base\SolidBase.cxx" />
-    <ClCompile Include="..\..\src\base\Sphere.cxx" />
-    <ClCompile Include="..\..\src\base\SRFParser.cxx" />
-    <ClCompile Include="..\..\src\base\STLOut.cxx" />
-    <ClCompile Include="..\..\src\base\STLParser.cxx" />
-    <ClCompile Include="..\..\src\base\SubDivision.cxx" />
-    <ClCompile Include="..\..\src\base\Surface.cxx" />
     <ClCompile Include="..\..\src\base\System.cxx" />
-    <ClCompile Include="..\..\src\base\TextImage.cxx" />
-    <ClCompile Include="..\..\src\base\Texture.cxx" />
-    <ClCompile Include="..\..\src\base\TextureDraw.cxx" />
-    <ClCompile Include="..\..\src\base\Topology.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
-    <ClCompile Include="..\..\src\base\UniCode.cxx" />
-    <ClCompile Include="..\..\src\base\Vector.cxx" />
-    <ClCompile Include="..\..\src\base\Vertex.cxx" />
-    <ClCompile Include="..\..\src\base\VRMLOut.cxx" />
-    <ClCompile Include="..\..\src\base\VRMLParser.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>

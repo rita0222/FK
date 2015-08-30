@@ -15,19 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\base\Base.cxx">
+    <ClCompile Include="..\..\src\math\GenMatrix.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\Error.cxx">
+    <ClCompile Include="..\..\src\math\GenVector.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx">
+    <ClCompile Include="..\..\src\math\Math.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\System.cxx">
+    <ClCompile Include="..\..\src\math\Matrix.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\Tree.cxx">
+    <ClCompile Include="..\..\src\math\Plane.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Quaternion.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
