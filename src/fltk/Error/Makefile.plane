@@ -21,24 +21,19 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 
 #
 
-LIBSRCS	= Error_fltk.cxx
+LIBSRCS	= \
+		Error_fltk.cxx
 
 LIBOBJS = $(LIBSRCS:cxx=o)
 LIBBCCOBJS = $(LIBSRCS:cxx=obj)
 
-TESTHEADERS =
-TESTSRCS = ftest.cxx
-TESTOBJS = $(TESTSRCS:cxx=o)
-
 ALLSRCS = $(LIBSRCS)
-ALLHEADERS = $(LIBHEADERS)
 
 ###################
 
 FKTOP		= ../../..
-LIBRARY		= $(FKTOP)/lib/libFK2_fltkErr.a
-LIBRARY_G	= $(FKTOP)/lib/libFK2_fltkErr_g.a
-LIBRARY_CUDA	= $(FKTOP)/lib/libFK2_fltkErr_c.a
+LIBRARY		= $(FKTOP)/lib/libFK3_fltkErr.a
+LIBRARY_G	= $(FKTOP)/lib/libFK3_fltkErr_g.a
 TARGET		= target
 MVLIB		= :
 
@@ -150,12 +145,12 @@ $(LIBRARY) : $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
-		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS)
+		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) >& /dev/null
 
 clean:
 	touch dummy~
 	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) $(TEST) \
-		Makefile.bak fk2_fltk.bak *.out core *.core *~ #*# *.exe *.obj
+		Makefile.bak *.out core *.core *~ #*# *.exe *.obj
 
 ###
 %.o : %.cxx

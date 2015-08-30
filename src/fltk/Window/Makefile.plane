@@ -20,23 +20,21 @@ EXTOPT		= -Werror
 OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 #
 
-LIBSRCS	= Window_fltk.cxx WindowEvent_fltk.cxx ShapeViewer_fltk.cxx
+LIBSRCS	= \
+		Window_fltk.cxx \
+		WindowEvent_fltk.cxx \
+		ShapeViewer_fltk.cxx
 
 LIBOBJS = $(LIBSRCS:cxx=o)
 LIBBCCOBJS = $(LIBSRCS:cxx=obj)
 
-TESTHEADERS =
-TESTSRCS = ftest.cxx
-TESTOBJS = $(TESTSRCS:cxx=o)
-
 ALLSRCS = $(LIBSRCS)
-ALLHEADERS = $(LIBHEADERS)
 
 ###################
 
 FKTOP		= ../../..
-LIBRARY		= $(FKTOP)/lib/libFK2_fltkWin.a
-LIBRARY_G	= $(FKTOP)/lib/libFK2_fltkWin_g.a
+LIBRARY		= $(FKTOP)/lib/libFK3_fltkWin.a
+LIBRARY_G	= $(FKTOP)/lib/libFK3_fltkWin_g.a
 TARGET		= target
 MVLIB		= :
 
@@ -149,7 +147,7 @@ $(LIBRARY) : $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
-		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS)
+		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) >& /dev/null
 
 clean:
 	touch dummy~
