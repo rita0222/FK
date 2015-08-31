@@ -28,7 +28,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>FK2_util_d.lib;FK2_audio_d.lib;FK2_base_d.lib;FK2_graphics_d.lib;FK2_material_d.lib;FK2_math_d.lib;FK2_model_d.lib;FK2_parser_d.lib;FK2_scene_d.lib;FK2_shape_d.lib;FK2_solid_d.lib;FK2_fltkWin_d.lib;FK2_fltkErr_d.lib;fltkgl_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkimages_d.lib;fltkforms_d.lib;fltk_d.lib;fltkz_d.lib;freetype2MT_d.lib;libiconv_d.lib;libvorbisfile_d.lib;libvorbis_d.lib;libogg_d.lib;OpenAL32.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FK3_util_d.lib;FK3_audio_d.lib;FK3_base_d.lib;FK3_graphics_d.lib;FK3_material_d.lib;FK3_math_d.lib;FK3_model_d.lib;FK3_parser_d.lib;FK3_scene_d.lib;FK3_shape_d.lib;FK3_solid_d.lib;FK3_fltkWin_d.lib;FK3_fltkErr_d.lib;fltkgl_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkimages_d.lib;fltkforms_d.lib;fltk_d.lib;fltkz_d.lib;freetype2MT_d.lib;libiconv_d.lib;libvorbisfile_d.lib;libvorbis_d.lib;libogg_d.lib;OpenAL32.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -39,7 +39,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>FK2_util.lib;FK2_audio.lib;FK2_base.lib;FK2_graphics.lib;FK2_material.lib;FK2_math.lib;FK2_model.lib;FK2_parser.lib;FK2_scene.lib;FK2_shape.lib;FK2_solid.lib;FK2_fltkWin.lib;FK2_fltkErr.lib;fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FK3_util.lib;FK3_audio.lib;FK3_base.lib;FK3_graphics.lib;FK3_material.lib;FK3_math.lib;FK3_model.lib;FK3_parser.lib;FK3_scene.lib;FK3_shape.lib;FK3_solid.lib;FK3_fltkWin.lib;FK3_fltkErr.lib;fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
