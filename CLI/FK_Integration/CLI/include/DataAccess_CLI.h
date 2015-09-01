@@ -346,7 +346,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetNextV(), VNum
 		 */
-		array<fk_Vertex^>^ GetVertexArray(void);
+		cli::array<fk_Vertex^>^ GetVertexArray(void);
 
 		//! 半稜線コンテナ取得関数
 		/*!
@@ -362,7 +362,7 @@ namespace FK_CLI
 		 *		
 		 *	\sa GetNextH(), HNum
 		 */
-		array<fk_Half^>^ GetHalfArray(void);
+		cli::array<fk_Half^>^ GetHalfArray(void);
 
 		//! 稜線コンテナ取得関数
 		/*!
@@ -378,7 +378,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetNextE(), ENum
 		 */
-		array<fk_Edge^>^ GetEdgeArray(void);
+		cli::array<fk_Edge^>^ GetEdgeArray(void);
 
 		//! ループコンテナ取得関数
 		/*!
@@ -394,7 +394,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetNextL(), LNum
 		 */
-		array<fk_Loop^>^ GetLoopArray(void);
+		cli::array<fk_Loop^>^ GetLoopArray(void);
 		//@}
 	};
 	}

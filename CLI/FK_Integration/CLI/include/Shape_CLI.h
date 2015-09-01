@@ -114,8 +114,8 @@ namespace FK_CLI
 		 *
 		 *	\sa GetMaterial()
 		 */
-		property array<fk_Material^>^ MaterialVector {
-			array<fk_Material^>^ get();
+		property cli::array<fk_Material^>^ MaterialVector {
+			cli::array<fk_Material^>^ get();
 		}
 		
 		//! パレット初期化関数

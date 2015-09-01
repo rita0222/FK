@@ -845,7 +845,7 @@ namespace FK_CLI
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
+		bool WriteVRMLFile(String^ fileName, cli::array<double>^ time, cli::array<fk_Vector^>^ pos,
 						   fk_Material^ material, bool triFlg);
 
 		//! VRML ファイル出力関数2-2
@@ -869,7 +869,7 @@ namespace FK_CLI
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos,
+		bool WriteVRMLFile(String^ fileName, cli::array<double>^ time, cli::array<fk_Vector^>^ pos,
 						   fk_Material^ material);
 
 		//! VRML ファイル出力関数2-3
@@ -880,7 +880,7 @@ namespace FK_CLI
 		 *	アニメーションデータを出力することが可能です。
 		 *
 		 *	本関数は、
-		 *	WriteVRMLFile(String^, array<double>^, array<fk_Vector^>^, fk_Material^) において、
+		 *	WriteVRMLFile(String^, cli::array<double>^, cli::array<fk_Vector^>^, fk_Material^) において、
 		 *	第4引数に null を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -893,7 +893,7 @@ namespace FK_CLI
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool WriteVRMLFile(String^ fileName, array<double>^ time, array<fk_Vector^>^ pos);
+		bool WriteVRMLFile(String^ fileName, cli::array<double>^ time, cli::array<fk_Vector^>^ pos);
 
 		//! STL ファイル出力関数
 		/*!

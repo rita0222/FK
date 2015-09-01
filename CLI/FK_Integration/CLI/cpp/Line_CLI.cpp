@@ -31,7 +31,7 @@ namespace FK_CLI {
 		pBase = nullptr;
 	}
 
-	void fk_Line::PushLine(array<fk_Vector^>^ argArray)
+	void fk_Line::PushLine(cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -65,7 +65,7 @@ namespace FK_CLI {
 		return GetP()->setVertex(argLID, argVID, argPos);
 	}
 
-	void fk_Line::SetVertex(array<fk_Vector^>^ argArray)
+	void fk_Line::SetVertex(cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);

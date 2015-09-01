@@ -76,7 +76,7 @@ namespace FK_CLI
 		 *
 		 *	\return		V を元頂点とする半稜線の配列
 		 */
-		array<fk_Half^>^	GetAllHOnV(fk_Vertex^ V);
+		cli::array<fk_Half^>^	GetAllHOnV(fk_Vertex^ V);
 
 		//! 頂点接続全稜線参照関数
 		/*!
@@ -86,7 +86,7 @@ namespace FK_CLI
 		 *
 		 *	\return		V に接続する稜線の配列
 		 */
-		array<fk_Edge^>^	GetAllEOnV(fk_Vertex^ V);
+		cli::array<fk_Edge^>^	GetAllEOnV(fk_Vertex^ V);
 
 		//! 頂点接続全ループ参照関数
 		/*!
@@ -96,7 +96,7 @@ namespace FK_CLI
 		 *
 		 *	\return		V に接続するループの配列
 		 */
-		array<fk_Loop^>^	GetAllLOnV(fk_Vertex^ V);
+		cli::array<fk_Loop^>^	GetAllLOnV(fk_Vertex^ V);
 
 		//! 頂点接続稜線数参照関数
 		/*!
@@ -116,7 +116,7 @@ namespace FK_CLI
 		 *
 		 *	\return		V に隣接する頂点の配列
 		 */
-		array<fk_Vertex^>^	GetAllNeighborVOnV(fk_Vertex^ V);
+		cli::array<fk_Vertex^>^	GetAllNeighborVOnV(fk_Vertex^ V);
 
 		//! 頂点間稜線参照関数
 		/*!
@@ -127,7 +127,7 @@ namespace FK_CLI
 		 *
 		 *	\return		V1とV2に接続する稜線の配列
 		 */
-		array<fk_Edge^>^	GetEOnVV(fk_Vertex^ V1, fk_Vertex^ V2);
+		cli::array<fk_Edge^>^	GetEOnVV(fk_Vertex^ V1, fk_Vertex^ V2);
 
 		//! 頂点接続ループ参照関数
 		/*!
@@ -312,7 +312,7 @@ namespace FK_CLI
 		 *
 		 *	\return		L に所属する頂点の配列
 		 */
-		array<fk_Vertex^>^	GetAllVOnL(fk_Loop^ L);
+		cli::array<fk_Vertex^>^	GetAllVOnL(fk_Loop^ L);
 
 		//! ループ所属全半稜線参照関数
 		/*!
@@ -322,7 +322,7 @@ namespace FK_CLI
 		 *
 		 *	\return		L に所属する半稜線の配列
 		 */
-		array<fk_Half^>^	GetAllHOnL(fk_Loop^ L);
+		cli::array<fk_Half^>^	GetAllHOnL(fk_Loop^ L);
 
 		//! ループ所属全稜線参照関数
 		/*!
@@ -332,7 +332,7 @@ namespace FK_CLI
 		 *
 		 *	\return		L に所属する稜線の配列
 		 */
-		array<fk_Edge^>^	GetAllEOnL(fk_Loop^ L);
+		cli::array<fk_Edge^>^	GetAllEOnL(fk_Loop^ L);
 
 		//! 隣接ループ参照関数
 		/*!
@@ -393,7 +393,7 @@ namespace FK_CLI
 		 *
 		 *	\return		L に隣接するループの配列
 		 */
-		array<fk_Loop^>^	GetAllNeighborLOnL(fk_Loop^ L);
+		cli::array<fk_Loop^>^	GetAllNeighborLOnL(fk_Loop^ L);
 		//@}
 	};
 }
