@@ -69,7 +69,7 @@ namespace FK_CLI {
 		return GetP()->setTextureCoord(argTID, argVID, argC);
 	}
 
-	bool fk_MeshTexture::SetTriTextureCoord(int argTID, array<fk_TexCoord^>^ argArray)
+	bool fk_MeshTexture::SetTriTextureCoord(int argTID, cli::array<fk_TexCoord^>^ argArray)
 	{
 		if(!argArray) return false;
 			
@@ -96,7 +96,7 @@ namespace FK_CLI {
 		return GetP()->setVertexPos(argTID, argVID, argP);
 	}
 
-	bool fk_MeshTexture::SetTriPos(int argTID, array<fk_Vector^>^ argArray)
+	bool fk_MeshTexture::SetTriPos(int argTID, cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return false;
 		vector<::fk_Vector> A(argArray->Length);

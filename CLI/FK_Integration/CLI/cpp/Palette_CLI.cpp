@@ -44,11 +44,11 @@ namespace FK_CLI {
 		return GetP()->getPaletteSize();
 	}
 
-	array<fk_Material^>^ fk_Palette::MaterialVector::get(void)
+	cli::array<fk_Material^>^ fk_Palette::MaterialVector::get(void)
 	{
 		int i;
 		int size = GetP()->getPaletteSize();
-		array<fk_Material^>^ matArray = gcnew array<fk_Material^>(size);
+		cli::array<fk_Material^>^ matArray = gcnew cli::array<fk_Material^>(size);
 
 		for(i = 0; i < size; ++i) {
 			matArray[i] = GetMaterial(i);

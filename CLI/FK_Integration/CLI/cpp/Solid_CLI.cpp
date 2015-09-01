@@ -251,8 +251,8 @@ namespace FK_CLI {
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName));
 	}
 
-	bool fk_Solid::WriteVRMLFile(String^ argFName, array<double>^ argTime,
-								 array<fk_Vector^>^ argPos,
+	bool fk_Solid::WriteVRMLFile(String^ argFName, cli::array<double>^ argTime,
+								 cli::array<fk_Vector^>^ argPos,
 								 fk_Material^ argMat, bool triFlg)
 	{
 		int i;
@@ -271,8 +271,8 @@ namespace FK_CLI {
 									 &time, &pos, argMat->GetP(), triFlg);
 	}
 
-	bool fk_Solid::WriteVRMLFile(String^ argFName, array<double>^ argTime,
-								 array<fk_Vector^>^ argPos, fk_Material^ argMat)
+	bool fk_Solid::WriteVRMLFile(String^ argFName, cli::array<double>^ argTime,
+								 cli::array<fk_Vector^>^ argPos, fk_Material^ argMat)
 	{
 		int i;
 
@@ -290,7 +290,7 @@ namespace FK_CLI {
 									 &time, &pos, argMat->GetP());
 	}
 
-	bool fk_Solid::WriteVRMLFile(String^ argFName, array<double>^ argTime, array<fk_Vector^>^ argPos)
+	bool fk_Solid::WriteVRMLFile(String^ argFName, cli::array<double>^ argTime, cli::array<fk_Vector^>^ argPos)
 	{
 		int i;
 

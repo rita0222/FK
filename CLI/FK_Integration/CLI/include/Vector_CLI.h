@@ -123,6 +123,9 @@ namespace FK_CLI
 
 		//@}
 
+		//! \name 二項演算子
+		//@{
+		
 		//! 内積二項演算子
 		/*!
 		 *	3次元ベクトル \f$ \mathbf{P} \f$ と \f$ \mathbf{Q} \f$
@@ -225,6 +228,8 @@ namespace FK_CLI
 		 */
 		static fk_Vector^ operator^(fk_Vector^, fk_Vector^);
 
+		//@}
+		
 		//! \name 代入演算子 
 		//@{
 

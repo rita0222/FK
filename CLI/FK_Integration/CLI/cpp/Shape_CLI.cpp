@@ -119,7 +119,7 @@ namespace FK_CLI {
 		return GetP()->getPaletteSize();
 	}
 		
-	array<fk_Material^>^ fk_Shape::MaterialVector::get(void)
+	cli::array<fk_Material^>^ fk_Shape::MaterialVector::get(void)
 	{
 		fk_Palette^	pal = Palette::get();
 		if(!pal) return nullptr;

@@ -22,8 +22,8 @@ namespace FK_CLI {
 	{
 	}
 
-	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
-								 int argVNum, array<fk_Vector^>^ argArray, int argOrder)
+	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, cli::array<int>^ argIFSet,
+								 int argVNum, cli::array<fk_Vector^>^ argArray, int argOrder)
 	{
 		if(!argIFSet || !argArray) return;
 		pin_ptr<int> pIFSet = &argIFSet[0];
@@ -34,8 +34,8 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0], argOrder);
 	}
 
-	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
-								 int argVNum, array<fk_Vector^>^ argPos)
+	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, cli::array<int>^ argIFSet,
+								 int argVNum, cli::array<fk_Vector^>^ argPos)
 	{
 		if(!argIFSet || !argPos) return;
 		pin_ptr<int> pIFSet = &argIFSet[0];
@@ -46,7 +46,7 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0]);
 	}
 
-	void fk_SolidBase::MakeIFSet(array< array<int>^ >^ argIF, array<fk_Vector^>^ argPos, int argOrder)
+	void fk_SolidBase::MakeIFSet(cli::array< cli::array<int>^ >^ argIF, cli::array<fk_Vector^>^ argPos, int argOrder)
 	{
 		int i, j;
 
@@ -56,7 +56,7 @@ namespace FK_CLI {
 		vector<int> fSet;
 
 		for(i = 0; i < argIF->Length; ++i) {
-			array<int>^ fArray = argIF[i];
+			cli::array<int>^ fArray = argIF[i];
 			fSet.clear();
 			for(j = 0; j < fArray->Length; ++j) {
 				fSet.push_back(fArray[j]);
@@ -72,7 +72,7 @@ namespace FK_CLI {
 		GetP()->makeIFSet(&IFSet, &vArray, argOrder);
 	}
 
-	void fk_SolidBase::MakeIFSet(array< array<int>^ >^ argIF, array<fk_Vector^>^ argPos)
+	void fk_SolidBase::MakeIFSet(cli::array< cli::array<int>^ >^ argIF, cli::array<fk_Vector^>^ argPos)
 	{
 		int i, j;
 
@@ -82,7 +82,7 @@ namespace FK_CLI {
 		vector<int> fSet;
 
 		for(i = 0; i < argIF->Length; ++i) {
-			array<int>^ fArray = argIF[i];
+			cli::array<int>^ fArray = argIF[i];
 			fSet.clear();
 			for(j = 0; j < fArray->Length; ++j) {
 				fSet.push_back(fArray[j]);

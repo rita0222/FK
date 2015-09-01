@@ -146,7 +146,7 @@ namespace FK_CLI
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool SetTriTextureCoord(int tID, array<fk_TexCoord^>^ array);
+		bool SetTriTextureCoord(int tID, cli::array<fk_TexCoord^>^ array);
 
 		//! テクスチャ座標参照関数
 		/*!
@@ -220,7 +220,7 @@ namespace FK_CLI
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool SetTriPos(int tID, array<fk_Vector^>^ array);
+		bool SetTriPos(int tID, cli::array<fk_Vector^>^ array);
 
 		//! 頂点位置ベクトル参照関数
 		/*!

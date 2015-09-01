@@ -206,33 +206,33 @@ namespace FK_CLI {
 								   argMID, true, true, false);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName,
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName,
 									  bool argS, bool argC, bool argM)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
 		return GetP()->readMQOData(bP, marshal_as<string>(argObjName), argS, argC, argM);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName,
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName,
 									  bool argS, bool argC)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
 		return GetP()->readMQOData(bP, marshal_as<string>(argObjName), argS, argC, false);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName, bool argS)
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName, bool argS)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
 		return GetP()->readMQOData(bP, marshal_as<string>(argObjName), argS, true, false);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName)
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
 		return GetP()->readMQOData(bP, marshal_as<string>(argObjName), true, true, false);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName,
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName,
 									  int argMID, bool argS, bool argC, bool argM)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
@@ -240,7 +240,7 @@ namespace FK_CLI {
 								   argMID, argS, argC, argM);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName,
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName,
 									  int argMID, bool argS, bool argC)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
@@ -248,7 +248,7 @@ namespace FK_CLI {
 								   argMID, argS, argC, false);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName,
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName,
 									  int argMID, bool argS)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
@@ -256,7 +256,7 @@ namespace FK_CLI {
 								   argMID, argS, true, false);
 	}
 
-	bool fk_IndexFaceSet::ReadMQOData(array<Byte>^ argBuffer, String^ argObjName, int argMID)
+	bool fk_IndexFaceSet::ReadMQOData(cli::array<Byte>^ argBuffer, String^ argObjName, int argMID)
 	{
 		pin_ptr<unsigned char> bP = &argBuffer[0];
 		return GetP()->readMQOData(bP, marshal_as<string>(argObjName),
@@ -308,8 +308,8 @@ namespace FK_CLI {
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), nullptr, false);
 	}
 
-	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, array<double>^ argTime,
-										array<fk_Vector^>^ argPos, fk_Material^ argMat,
+	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, cli::array<double>^ argTime,
+										cli::array<fk_Vector^>^ argPos, fk_Material^ argMat,
 										bool argTriFlg)
 	{
 		::fk_Material *pM;
@@ -330,14 +330,14 @@ namespace FK_CLI {
 									 &timeArray, &posArray, pM, argTriFlg);
 	}
 
-	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, array<double>^ argTime,
-										array<fk_Vector^>^ argPos, fk_Material^ argMat)
+	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, cli::array<double>^ argTime,
+										cli::array<fk_Vector^>^ argPos, fk_Material^ argMat)
 	{
 		return WriteVRMLFile(argFileName, argTime, argPos, argMat, false);
 	}
 
-	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, array<double>^ argTime,
-										array<fk_Vector^>^ argPos)
+	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, cli::array<double>^ argTime,
+										cli::array<fk_Vector^>^ argPos)
 	{
 		return WriteVRMLFile(argFileName, argTime, argPos, nullptr, false);
 	}
@@ -367,11 +367,11 @@ namespace FK_CLI {
 		return gcnew fk_Vector(GetP()->getPosVec(argVID));
 	}
 
-	array<int>^ fk_IndexFaceSet::GetFaceData(int argFID)
+	cli::array<int>^ fk_IndexFaceSet::GetFaceData(int argFID)
 	{
 		int i;
 		vector<int>	tmpA = GetP()->getFaceData(argFID);
-		array<int>^ retA = gcnew array<int>(tmpA.size());
+		cli::array<int>^ retA = gcnew cli::array<int>(tmpA.size());
 		for(i = 0; i < int(tmpA.size()); ++i) retA[i] = tmpA[i];
 		return retA;
 	}
@@ -428,20 +428,20 @@ namespace FK_CLI {
 		return GetP()->moveVPosition(argVID, x, y, z, 0);
 	}
 
-	bool fk_IndexFaceSet::MoveVPosition(int argVID, array<double>^ argArray, int argOrder)
+	bool fk_IndexFaceSet::MoveVPosition(int argVID, cli::array<double>^ argArray, int argOrder)
 	{
 		if(!argArray) return false;
 		pin_ptr<double> pD = &argArray[0];
 		return GetP()->moveVPosition(argVID, pD, argOrder);
 	}
 
-	bool fk_IndexFaceSet::MoveVPosition(int argVID, array<double>^ argArray)
+	bool fk_IndexFaceSet::MoveVPosition(int argVID, cli::array<double>^ argArray)
 	{
 		return MoveVPosition(argVID, argArray, 0);
 	}
 
-	void fk_IndexFaceSet::MakeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
-				   int argVNum, array<fk_Vector^>^ argPosArray, int argOrder)
+	void fk_IndexFaceSet::MakeIFSet(int argFNum, int argPNum, cli::array<int>^ argIFSet,
+				   int argVNum, cli::array<fk_Vector^>^ argPosArray, int argOrder)
 	{
 		if(!argIFSet || !argPosArray) return;
 
@@ -454,8 +454,8 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIF, argVNum, &tmpV[0], argOrder);
 	}
 
-	void fk_IndexFaceSet::MakeIFSet(int argFNum, int argPNum, array<int>^ argIFSet,
-									int argVNum, array<fk_Vector^>^ argPosArray)
+	void fk_IndexFaceSet::MakeIFSet(int argFNum, int argPNum, cli::array<int>^ argIFSet,
+									int argVNum, cli::array<fk_Vector^>^ argPosArray)
 	{
 		MakeIFSet(argFNum, argPNum, argIFSet, argVNum, argPosArray, 0);
 	}

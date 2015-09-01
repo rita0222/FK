@@ -9,14 +9,22 @@ namespace FK_CLI_Particle
 {
 	class MyParticle : fk_ParticleSet {
 		private Random rand;
+		private fk_Color red, blue;
+		private double maxSpeed, minSpeed;
 
 		public MyParticle()
 		{
 			MaxSize = 1000;
 			IndivMode = true;
 			AllMode = true;
-			SetColorPalette(1, 0.0, 1.0, 0.6);
+			for(int i = 0; i < MaxSize; i++) {
+				SetColorPalette(i, 0.0, 1.0, 0.6);
+			}
 			rand = new Random();
+			red = new fk_Color(1.0, 0.0, 0.0);
+			blue = new fk_Color(0.0, 0.0, 0.5);
+			maxSpeed = 0.3;
+			minSpeed = 0.1;
 		}
 		
 		public override void GenMethod(fk_Particle P)
@@ -24,9 +32,8 @@ namespace FK_CLI_Particle
 			double y = rand.NextDouble()*50.0 - 25.0;
 			double z = rand.NextDouble()*50.0 - 25.0;
 			P.Position = new fk_Vector(50.0, y, z);
-			P.ColorID = 1;
+			P.ColorID = P.ID;
 		}
-
 		public override void AllMethod()
 		{
 			for(int i = 0; i < 5; i++) {
@@ -51,6 +58,12 @@ namespace FK_CLI_Particle
 			tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
 			vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
 			P.Velocity = vec;
+			double speed = vec.Dist();
+			double t = (speed - minSpeed)/(maxSpeed - minSpeed);
+			if(t > 1.0) t = 1.0;
+			if(t < 0.0) t = 0.0;
+			fk_Color newCol = (1.0 - t)*blue + t*red;
+			SetColorPalette(P.ID, newCol);
 
 			if(pos.x < -50.0) {
 				RemoveParticle(P);
