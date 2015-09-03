@@ -79,7 +79,7 @@
 #ifdef _MACOSX_
 #include <freetype2/ft2build.h>
 #else
-#include <ft2build.h>
+#include <freetype/ft2build.h>
 #endif
 
 using namespace std;

@@ -90,7 +90,9 @@ ming:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = " \
 	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
+	"INCLDIRS = -I$(FKTOP) \
+		-I$(FKTOP)/../FK_MingPack/include \
+		-I$(FKTOP)/../FK_MingPack/include/freetype" \
 	"DEPENDDIRS = " \
 	"RANLIB = ranlib"
 
@@ -98,7 +100,9 @@ ming-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
 	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
+	"INCLDIRS = -I$(FKTOP) \
+		-I$(FKTOP)/../FK_MingPack/include \
+		-I$(FKTOP)/../FK_MingPack/include/freetype" \
 	"DEPENDDIRS = " \
 	"RANLIB = ranlib" \
 	"LIBRARY = $(LIBRARY_G)"
