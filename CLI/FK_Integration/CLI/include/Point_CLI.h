@@ -49,7 +49,7 @@ namespace FK_CLI
 		 *	\param[in]	array
 		 *		点群位置ベクトル配列。null の場合は何も生成しません。
 		 */
-		fk_Point(array<fk_Vector^>^ array);
+		fk_Point(cli::array<fk_Vector^>^ array);
 
 		//! デストラクタ
 		~fk_Point();
@@ -105,7 +105,7 @@ namespace FK_CLI
 		 *
 		 *	\return		生成に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		SetVertex(array<fk_Vector^>^ array);
+		bool		SetVertex(cli::array<fk_Vector^>^ array);
 
 		//! 頂点削除関数
 		/*

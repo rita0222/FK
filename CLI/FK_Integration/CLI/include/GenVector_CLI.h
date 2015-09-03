@@ -49,7 +49,7 @@ namespace FK_CLI {
 		 *
 		 *	\param[in]	array	成分値配列
 		 */
-		fk_GenVector(array<double>^ array);
+		fk_GenVector(cli::array<double>^ array);
 
 		//! fk_Vector からのコピーコンストラクタ
 		fk_GenVector(fk_Vector^ V);

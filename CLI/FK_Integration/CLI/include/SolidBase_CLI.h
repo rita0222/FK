@@ -43,7 +43,7 @@ namespace FK_CLI
 		 *	与えられたIFSデータから、形状を生成します。
 		 *	この関数形式の場合、全ての面が同じ角数である必要があります。
 		 *	角数の異なる面が混在する形状を作成したい場合は、
-		 *	MakeIFSet(array< array<int>^ >^, array<fk_Vector^>^, int)
+		 *	MakeIFSet(cli::array< cli::array<int>^ >^, cli::array<fk_Vector^>^, int)
 		 *	を利用して下さい。
 		 *
 		 *	\param[in]	faceNum		面数
@@ -68,19 +68,19 @@ namespace FK_CLI
 		 *		
 		 *	\sa fk_IndexFaceSet::MakeIFSet()
 		 */
-		void MakeIFSet(int faceNum, int polyNum, array<int>^ IFSet,
-					   int vertexNum, array<fk_Vector^>^ posArray, int order);
+		void MakeIFSet(int faceNum, int polyNum, cli::array<int>^ IFSet,
+					   int vertexNum, cli::array<fk_Vector^>^ posArray, int order);
 
 		//! 任意形状生成関数1-2
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
 		 *	この関数形式の場合、全ての面が同じ角数である必要があります。
 		 *	角数の異なる面が混在する形状を作成したい場合は、
-		 *	MakeIFSet(array< array<int>^ >^, array<fk_Vector^>^, int)
+		 *	MakeIFSet(cli::array< cli::array<int>^ >^, cli::array<fk_Vector^>^, int)
 		 *	を利用して下さい。
 		 *
 		 *	本関数は、
-		 *	MakeIFSet(int, int, array<int>^, int, array<fk_Vector^>^, int) において、
+		 *	MakeIFSet(int, int, cli::array<int>^, int, cli::array<fk_Vector^>^, int) において、
 		 *	第6引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceNum		面数
@@ -102,8 +102,8 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_IndexFaceSet::MakeIFSet()
 		 */
-		void MakeIFSet(int faceNum, int polyNum, array<int>^ IFSet,
-					   int vertexNum, array<fk_Vector^>^ posArray);
+		void MakeIFSet(int faceNum, int polyNum, cli::array<int>^ IFSet,
+					   int vertexNum, cli::array<fk_Vector^>^ posArray);
 
 		//! 任意形状生成関数2-1
 		/*!
@@ -118,13 +118,13 @@ namespace FK_CLI
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 		 */
-		void MakeIFSet(array< array<int>^ >^ faceArray,
-					   array<fk_Vector^>^ posArray, int order);
+		void MakeIFSet(cli::array< cli::array<int>^ >^ faceArray,
+					   cli::array<fk_Vector^>^ posArray, int order);
 
 		//! 任意形状生成関数2-2
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
-		 *	本関数は、 MakeIFSet(array< array<int>^ >^, array<fk_Vector^>^, int) において、
+		 *	本関数は、 MakeIFSet(cli::array< cli::array<int>^ >^, cli::array<fk_Vector^>^, int) において、
 		 *	第3引数の 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceArray
@@ -135,7 +135,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 */
-		void MakeIFSet(array< array<int>^ >^ faceArray,
-					   array<fk_Vector^>^ posArray);
+		void MakeIFSet(cli::array< cli::array<int>^ >^ faceArray,
+					   cli::array<fk_Vector^>^ posArray);
 	};
 }

@@ -61,7 +61,7 @@ namespace FK_CLI {
 		return GetP()->checkContract(argE->GetP());
 	}
 
-	fk_Loop^ fk_Modify::MakePolygon(array<fk_Vector^>^ argArray, bool argOpenFlg, bool argInitFlg)
+	fk_Loop^ fk_Modify::MakePolygon(cli::array<fk_Vector^>^ argArray, bool argOpenFlg, bool argInitFlg)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -74,7 +74,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Modify::MakePolygon(array<fk_Vector^>^ argArray, bool argOpenFlg)
+	fk_Loop^ fk_Modify::MakePolygon(cli::array<fk_Vector^>^ argArray, bool argOpenFlg)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -87,7 +87,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Modify::PushPolygon(array<fk_Vector^>^ argArray, bool argOpenFlg)
+	fk_Loop^ fk_Modify::PushPolygon(cli::array<fk_Vector^>^ argArray, bool argOpenFlg)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -100,7 +100,7 @@ namespace FK_CLI {
 		return L;
 	}
 
-	fk_Loop^ fk_Modify::PushPolygon(array<fk_Vector^>^ argArray)
+	fk_Loop^ fk_Modify::PushPolygon(cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return nullptr;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -119,7 +119,7 @@ namespace FK_CLI {
 		GetP()->pushPolygonVertex(argP, argOpenFlg);
 	}
 
-	void fk_Modify::MakePoint(array<fk_Vector^>^ argArray)
+	void fk_Modify::MakePoint(cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);
@@ -138,7 +138,7 @@ namespace FK_CLI {
 		return V;
 	}
 
-	void fk_Modify::MakeLines(array<fk_Vector^>^ argArray)
+	void fk_Modify::MakeLines(cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
 		vector<::fk_Vector> vArray(argArray->Length);

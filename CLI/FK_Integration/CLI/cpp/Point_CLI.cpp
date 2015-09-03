@@ -14,7 +14,7 @@ namespace FK_CLI {
 		pBase = new ::fk_Point();
 	}
 
-	fk_Point::fk_Point(array<fk_Vector^>^ argArray) : fk_Shape(false)
+	fk_Point::fk_Point(cli::array<fk_Vector^>^ argArray) : fk_Shape(false)
 	{
 		pBase = new ::fk_Point();
 		SetVertex(argArray);
@@ -61,7 +61,7 @@ namespace FK_CLI {
 		return GetP()->setVertex(argID, argPos);
 	}
 
-	bool fk_Point::SetVertex(array<fk_Vector^>^ argArray)
+	bool fk_Point::SetVertex(cli::array<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return false;
 		vector<::fk_Vector> vArray(argArray->Length);

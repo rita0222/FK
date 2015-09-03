@@ -19,7 +19,7 @@ namespace FK_CLI {
 		pGVec = new ::fk_GenVector(*argV);
 	}
 
-	fk_GenVector::fk_GenVector(array<double>^ argArray)
+	fk_GenVector::fk_GenVector(cli::array<double>^ argArray)
 	{
 		pin_ptr<double> pD = &argArray[0];
 		pGVec = new ::fk_GenVector(argArray->Length, pD);

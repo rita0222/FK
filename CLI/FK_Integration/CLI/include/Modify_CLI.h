@@ -221,14 +221,14 @@ namespace FK_CLI
 		 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 *
-		 *	\sa PushPolygon(array<fk_Vector^>^, bool)
+		 *	\sa PushPolygon(cli::array<fk_Vector^>^, bool)
 		 */
-		fk_Loop^ MakePolygon(array<fk_Vector^>^ array, bool openFlg, bool initFlg);
+		fk_Loop^ MakePolygon(cli::array<fk_Vector^>^ array, bool openFlg, bool initFlg);
 
 		//! 多角形生成関数2
 		/*!
 		 *	新たに多角形を生成します。
-		 *	本関数は、 MakePolygon(array<fk_Vector^>^, bool, bool) において、
+		 *	本関数は、 MakePolygon(cli::array<fk_Vector^>^, bool, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	array
@@ -246,14 +246,14 @@ namespace FK_CLI
 		 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 *
-		 *	\sa PushPolygon(array<fk_Vector^>^, bool)
+		 *	\sa PushPolygon(cli::array<fk_Vector^>^, bool)
 		 */
-		fk_Loop^ MakePolygon(array<fk_Vector^>^ array, bool openFlg);
+		fk_Loop^ MakePolygon(cli::array<fk_Vector^>^ array, bool openFlg);
 
 		//! 多角形追加関数1
 		/*!
 		 *	多角形を追加します。
-		 *	本関数は、実質的に MakePolygon(array<fk_Vector^>^, bool, bool) 関数で、
+		 *	本関数は、実質的に MakePolygon(cli::array<fk_Vector^>^, bool, bool) 関数で、
 		 *	initFlg を false にした場合と機能的に同一となります。
 		 *
 		 *	\param[in]	array
@@ -271,14 +271,14 @@ namespace FK_CLI
 		 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 *
-		 *	\sa MakePolygon(array<fk_Vector^>^, bool, bool)
+		 *	\sa MakePolygon(cli::array<fk_Vector^>^, bool, bool)
 		 */
-		fk_Loop^ PushPolygon(array<fk_Vector^>^ array, bool openFlg);
+		fk_Loop^ PushPolygon(cli::array<fk_Vector^>^ array, bool openFlg);
 
 		//! 多角形追加関数2
 		/*!
 		 *	多角形を追加します。
-		 *	本関数は、 PushPolygon(array<fk_Vector^>^, bool) において、
+		 *	本関数は、 PushPolygon(cli::array<fk_Vector^>^, bool) において、
 		 *	第2引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	array
@@ -290,9 +290,9 @@ namespace FK_CLI
 		 *		生成に成功すれば、生成されたループ位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 *
-		 *	\sa MakePolygon(array<fk_Vector^>^, bool, bool)
+		 *	\sa MakePolygon(cli::array<fk_Vector^>^, bool, bool)
 		 */
-		fk_Loop^ PushPolygon(array<fk_Vector^>^ array);
+		fk_Loop^ PushPolygon(cli::array<fk_Vector^>^ array);
 
 		//! 多角形頂点追加関数
 		/*!
@@ -322,7 +322,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	array		頂点群の位置ベクトル配列
 		 */
-		void MakePoint(array<fk_Vector^>^ array);
+		void MakePoint(cli::array<fk_Vector^>^ array);
 
 		//! 頂点追加関数
 		/*!
@@ -348,7 +348,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	array		線分の両端点を表す頂点位置ベクトル配列
 		 */
-		void MakeLines(array<fk_Vector^>^ array);
+		void MakeLines(cli::array<fk_Vector^>^ array);
 
 		//! 線分追加関数
 		/*!
