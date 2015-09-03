@@ -75,7 +75,12 @@
 #include <algorithm>
 #include <FK/TextImage.h>
 #include <FK/Error.H>
+
+#ifdef _MACOSX_
+#include <freetype2/ft2build.h>
+#else
 #include <ft2build.h>
+#endif
 
 using namespace std;
 
