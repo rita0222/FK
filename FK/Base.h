@@ -1,9 +1,9 @@
 ﻿#ifndef __FK_BASE_HEADER__
 #define __FK_BASE_HEADER__
 
-const int FK_MAJOR_VERSION = 2;
-const int FK_MINOR_VERSION = 8;
-const int FK_SUBMINOR_VERSION = 10;
+const int FK_MAJOR_VERSION = 3;
+const int FK_MINOR_VERSION = 0;
+const int FK_SUBMINOR_VERSION = 0;
 
 #if defined(_MINGW_)
 #ifdef hypot
