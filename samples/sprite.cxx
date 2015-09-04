@@ -21,6 +21,8 @@ int main(int, char *[])
 	fk_System::setcwd();
 
 	sprite.initFont("mona.ttf");
+	sprite.text.setMonospaceMode(true);
+	sprite.text.setMonospaceSize(10);
 	sprite.setPositionLT(-280.0, 230.0);
 	window.entry(sprite);
 

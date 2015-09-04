@@ -424,8 +424,8 @@ fk_TextImage::fk_TextImage(void)
 	setLineSkip(0);
 	setSpaceLineSkip(0);
 	setSmoothMode(true);
-	setMonospaceMode(false);
-	setMonospaceSize(0);
+	setMonospaceMode(true);
+	setMonospaceSize(10);
 	setOffset(0, 0, 0, 0);
 	maxHeight = maxWidth = 0;
 	setMinLineWidth(0);
