@@ -343,11 +343,11 @@ int main(int, char *[])
 
 	Car				carObj;
 	World			worldObj;
-	Fl_Window		mainWindow(940, 320, "FK TEST");
+	Fl_Window		mainWindow(1240, 420, "FK TEST");
 	fk_Scene		carViewScene, buildViewScene, birdViewScene;
-	fk_Window		carViewWindow(10, 10, 300, 300);
-	fk_Window		buildViewWindow(320, 10, 300, 300);
-	fk_Window		birdViewWindow(630, 10, 300, 300);
+	fk_Window		carViewWindow(10, 10, 400, 400);
+	fk_Window		buildViewWindow(420, 10, 400, 400);
+	fk_Window		birdViewWindow(830, 10, 400, 400);
 	fk_Color		bgColor(0.2, 0.7, 1.0);
 
 	fk_Model		buildViewModel, birdViewModel;

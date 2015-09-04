@@ -73,14 +73,14 @@
 
 int main(int, char *[])
 {
-	Fl_Window		mainWindow(620, 620, "FK TEST");
+	Fl_Window		mainWindow(820, 820, "FK TEST");
 	fk_Model		camera, blockModel, lightModel, lineModel[2];
 	fk_Vector		pos[4];
 	fk_Line			line[2];
 	fk_Light		light;
 	fk_Block		block(50.0, 70.0, 40.0);
 	fk_Scene		scene;
-	fk_Window		window(10, 10, 600, 600);
+	fk_Window		window(10, 10, 800, 800);
 	int				i = 0;
 
 	mainWindow.end();

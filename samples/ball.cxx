@@ -245,8 +245,8 @@ int main(int, char *[])
 
 
 	// ### WINDOW ###
-	Fl_Window		mainWin(620, 620, "BALL TEST");
-	fk_Window		win(10, 10, 600, 600);
+	Fl_Window		mainWin(820, 820, "BALL TEST");
+	fk_Window		win(10, 10, 800, 800);
 	mainWin.end();
 	fk_Material::initDefault();
 

@@ -73,8 +73,8 @@
 
 int main (int, char *[])
 {
-	Fl_Window		mainWin(512, 128, "TextImage Demo");
-	fk_Window		fkWin(0, 0, 512, 128);
+	Fl_Window		mainWin(1024, 256, "TextImage Demo");
+	fk_Window		fkWin(0, 0, 1024, 256);
 
 	fk_TextImage	textImage[2];
 	fk_RectTexture	texture[2];
@@ -91,18 +91,19 @@ int main (int, char *[])
 	mainWin.end();
 	fk_Material::initDefault();
 
-	str[0].convert("3D", FK_STR_EUC);
-	str[1].convert("Graphics", FK_STR_EUC);
+	str[0].convert("3D", FK_STR_UTF8);
+	str[1].convert("Graphics", FK_STR_UTF8);
 
 	for(int i = 0; i < 2; i++) {
 		texture[i].setImage(&textImage[i]);
-		if(textImage[i].initFont("mona.ttf") == false) {
+		if(textImage[i].initFont("rm1b.ttf") == false) {
 			fl_alert("Font Init Error.");
 			exit(1);
 		}
 		textImage[i].setDPI(96);
 		textImage[i].setPTSize(96);
 		textImage[i].setLineSkip(30);
+		textImage[i].setMonospaceSize(32);
 		textImage[i].setForeColor(0.5, 1.0, 0.8, 1.0);
 		textImage[i].setBackColor(0.2, 0.7, 0.8, 0.0);
 		textImage[i].setAlign(FK_ALIGN_CENTER);
@@ -158,7 +159,7 @@ int main (int, char *[])
 		if(Fl::check() == 0) break;
 		if(fkWin.winOpenStatus() == false) continue;
 
-		strBase.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/500.0);
+		strBase.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/200.0);
 	}
 	return 0;
 }

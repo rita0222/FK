@@ -149,7 +149,7 @@ int main(int, char *[])
 	tex.setTextureCoord(3, 1, 0.5, 1.0);
 	tex.setTextureCoord(3, 2, 1.0, 0.5);
 
-	fk_ShapeViewer	viewer(300, 400);
+	fk_ShapeViewer	viewer(800, 600);
 
 	mat.setAmbDiff(1.0, 1.0, 1.0);
 	viewer.setShape(&tex);
