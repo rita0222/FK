@@ -69,9 +69,9 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
 #ifndef __FK_BASE_HEADER__
 #define __FK_BASE_HEADER__
-
 
 const int FK_MAJOR_VERSION = 2;
 const int FK_MINOR_VERSION = 8;
