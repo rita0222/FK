@@ -57,8 +57,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;FK_CLI_CODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4635;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -72,8 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;FK_CLI_CODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4635;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
@@ -263,6 +261,7 @@
     <ClCompile Include="CLI\cpp\Reference_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Renderer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ShapeViewer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
     <ClCompile Include="CLI\cpp\SolidBase_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Solid_CLI.cpp" />
