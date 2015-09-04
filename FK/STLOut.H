@@ -1,4 +1,32 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_STL_OUT_HEADER__
+#define __FK_STL_OUT_HEADER__
+
+#include <FK/Base.h>
+
+class fk_Solid;
+class fk_IndexFaceSet;
+
+class fk_STLOut {
+
+ private:
+
+	fk_Solid		*solid;
+	fk_IndexFaceSet	*ifset;
+	bool			WriteSTLShape_Solid(std::ofstream *);
+	bool			WriteSTLShape_IFS(std::ofstream *);
+
+ public:
+
+	fk_STLOut(fk_Solid *);
+	fk_STLOut(fk_IndexFaceSet *);
+	virtual ~fk_STLOut();
+
+	bool	WriteSTLFile(std::string);
+};
+
+#endif // !__FK_STL_OUT_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,30 +97,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_STL_OUT_HEADER__
-#define __FK_STL_OUT_HEADER__
-
-#include <FK/Base.h>
-
-class fk_Solid;
-class fk_IndexFaceSet;
-
-class fk_STLOut {
-
- private:
-
-	fk_Solid		*solid;
-	fk_IndexFaceSet	*ifset;
-	bool			WriteSTLShape_Solid(std::ofstream *);
-	bool			WriteSTLShape_IFS(std::ofstream *);
-
- public:
-
-	fk_STLOut(fk_Solid *);
-	fk_STLOut(fk_IndexFaceSet *);
-	virtual ~fk_STLOut();
-
-	bool	WriteSTLFile(std::string);
-};
-
-#endif // !__FK_STL_OUT_HEADER__

@@ -1,4 +1,58 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_MOTIONDATA_HEADER__
+#define __FK_MOTIONDATA_HEADER__
+
+#include <FK/Quaternion.h>
+#include <FK/Model.h>
+#include <FK/Math.h>
+
+enum fk_MotionInterType {
+	LINEAR,
+	SPHERE,
+	POWER,
+	REV_POWER,
+	FREEZE,
+	HIDE	// <----------------------------------------------------オブジェクトのすげ替え対応のため追加
+};
+
+class fk_PerformerMotion {
+	friend class fk_Performer;
+
+private:
+	std::vector<fk_Quaternion>		qArray;
+	std::vector<int>				frameArray;
+	std::vector<fk_MotionInterType>	interTypeArray;
+
+	std::vector<fk_Vector>			basePosArray;
+	std::vector<fk_Vector>			scaleArray;
+
+	fk_Vector		getInterVec(const fk_Vector &, const fk_Vector &, double, fk_MotionInterType = LINEAR);
+	fk_Quaternion	getInterQ(const fk_Quaternion &, const fk_Quaternion &, double, fk_MotionInterType = LINEAR);
+
+public:
+	fk_PerformerMotion();
+	~fk_PerformerMotion();
+
+	void init(void);
+
+	void pushKeyFrame(const fk_Quaternion &, const fk_Vector &, int, fk_MotionInterType, int = -1);			// キー追加(子)
+	void pushKeyFrame(const fk_Quaternion &, const fk_Vector &, const fk_Vector &, int, fk_MotionInterType, int = -1);	// キー追加(親)
+	bool changeKeyFrame(int, const fk_Quaternion &, const fk_Vector &, int, fk_MotionInterType);				// キー修正(子)
+	bool changeKeyFrame(int, const fk_Quaternion &, const fk_Vector &, const fk_Vector &, int, fk_MotionInterType);	// キー修正(親)
+	bool deleteKeyFrame(int);
+
+	bool isBaseMotion(void);					// basePosArray に値がスタックされていたら true を返す
+
+	int getTotalKeyNum(void);					// この関節が持つキーフレーム数を返す(配列のサイズ)
+	int getTotalFrameNum(int = -1);				// この関節が持つモーションのトータルフレーム数を返す、数値指定で指定したキーのラストまでのフレーム数
+	bool getFrameToKeyID(int, int *, int *);	// 与えられたフレームが指すこの関節のキーフレーム ID とその中で何フレーム目かを返す
+
+	int setFrameState(int, fk_Model *);	// 与えられたフレーム数を基に補間モーションを生成する、返値はこの関節の表示ON/OFF
+
+};
+
+#endif //!__FK_MOTIONDATA_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,56 +123,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_MOTIONDATA_HEADER__
-#define __FK_MOTIONDATA_HEADER__
-
-#include <FK/Quaternion.h>
-#include <FK/Model.h>
-#include <FK/Math.h>
-
-enum fk_MotionInterType {
-	LINEAR,
-	SPHERE,
-	POWER,
-	REV_POWER,
-	FREEZE,
-	HIDE	// <----------------------------------------------------オブジェクトのすげ替え対応のため追加
-};
-
-class fk_PerformerMotion {
-	friend class fk_Performer;
-
-private:
-	std::vector<fk_Quaternion>		qArray;
-	std::vector<int>				frameArray;
-	std::vector<fk_MotionInterType>	interTypeArray;
-
-	std::vector<fk_Vector>			basePosArray;
-	std::vector<fk_Vector>			scaleArray;
-
-	fk_Vector		getInterVec(const fk_Vector &, const fk_Vector &, double, fk_MotionInterType = LINEAR);
-	fk_Quaternion	getInterQ(const fk_Quaternion &, const fk_Quaternion &, double, fk_MotionInterType = LINEAR);
-
-public:
-	fk_PerformerMotion();
-	~fk_PerformerMotion();
-
-	void init(void);
-
-	void pushKeyFrame(const fk_Quaternion &, const fk_Vector &, int, fk_MotionInterType, int = -1);			// キー追加(子)
-	void pushKeyFrame(const fk_Quaternion &, const fk_Vector &, const fk_Vector &, int, fk_MotionInterType, int = -1);	// キー追加(親)
-	bool changeKeyFrame(int, const fk_Quaternion &, const fk_Vector &, int, fk_MotionInterType);				// キー修正(子)
-	bool changeKeyFrame(int, const fk_Quaternion &, const fk_Vector &, const fk_Vector &, int, fk_MotionInterType);	// キー修正(親)
-	bool deleteKeyFrame(int);
-
-	bool isBaseMotion(void);					// basePosArray に値がスタックされていたら true を返す
-
-	int getTotalKeyNum(void);					// この関節が持つキーフレーム数を返す(配列のサイズ)
-	int getTotalFrameNum(int = -1);				// この関節が持つモーションのトータルフレーム数を返す、数値指定で指定したキーのラストまでのフレーム数
-	bool getFrameToKeyID(int, int *, int *);	// 与えられたフレームが指すこの関節のキーフレーム ID とその中で何フレーム目かを返す
-
-	int setFrameState(int, fk_Model *);	// 与えられたフレーム数を基に補間モーションを生成する、返値はこの関節の表示ON/OFF
-
-};
-
-#endif //!__FK_MOTIONDATA_HEADER__

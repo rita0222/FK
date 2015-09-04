@@ -1,4 +1,62 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_D3DX_SHAPE_PARSER_HEADER__
+#define __FK_D3DX_SHAPE_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+#include <FK/Tree.h>
+#include <FK/Matrix.h>
+#include <FK/Texture.h>
+
+class fk_IFSTexture;
+
+enum fk_D3DX_VecMode {
+	FK_D3DX_V_MODE,
+	FK_D3DX_T_MODE
+};
+
+class fk_D3DXShapeParser : public fk_ParserBase {
+
+ private:
+
+	std::vector<fk_Vector>				vData, optVData;
+	std::vector< std::vector<int> >		fData, optFData;
+	std::vector<fk_TexCoord>			tData, optTData;
+	std::vector<int>					mData;
+	std::vector<int>					vMapData;
+	fk_Matrix							frameMatrix;
+
+ public:
+	fk_D3DXShapeParser(void);
+	virtual ~fk_D3DXShapeParser();
+
+	bool			SetFrameMatrix(fk_TreeData *);
+	bool			ReadMeshData(fk_TreeData *, std::ifstream &);
+	bool			ReadVectorData(std::ifstream &, fk_D3DX_VecMode);
+	bool			ReadMaterialData(std::ifstream &);
+	bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
+	bool			GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
+	bool			ReadFaceData(std::ifstream &);
+	bool			ReadTextureData(std::ifstream &);
+
+	void			SetIFSTexCoord(fk_IFSTexture *);
+	void			SetQuadFace(int);
+	void			OptimizeData(int);
+	bool			MakeMesh(fk_ParserData *, bool);
+
+	int				GetOrgVSize(void);
+	int				GetOptVSize(void);
+	int				GetVMap(int);
+
+	void			Clear(void);
+	void			Print(void);
+};
+
+
+
+
+
+#endif // !__FK_D3DX_SHAPE_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,60 +127,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_D3DX_SHAPE_PARSER_HEADER__
-#define __FK_D3DX_SHAPE_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-#include <FK/Tree.h>
-#include <FK/Matrix.h>
-#include <FK/Texture.h>
-
-class fk_IFSTexture;
-
-enum fk_D3DX_VecMode {
-	FK_D3DX_V_MODE,
-	FK_D3DX_T_MODE
-};
-
-class fk_D3DXShapeParser : public fk_ParserBase {
-
- private:
-
-	std::vector<fk_Vector>				vData, optVData;
-	std::vector< std::vector<int> >		fData, optFData;
-	std::vector<fk_TexCoord>			tData, optTData;
-	std::vector<int>					mData;
-	std::vector<int>					vMapData;
-	fk_Matrix							frameMatrix;
-
- public:
-	fk_D3DXShapeParser(void);
-	virtual ~fk_D3DXShapeParser();
-
-	bool			SetFrameMatrix(fk_TreeData *);
-	bool			ReadMeshData(fk_TreeData *, std::ifstream &);
-	bool			ReadVectorData(std::ifstream &, fk_D3DX_VecMode);
-	bool			ReadMaterialData(std::ifstream &);
-	bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
-	bool			GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
-	bool			ReadFaceData(std::ifstream &);
-	bool			ReadTextureData(std::ifstream &);
-
-	void			SetIFSTexCoord(fk_IFSTexture *);
-	void			SetQuadFace(int);
-	void			OptimizeData(int);
-	bool			MakeMesh(fk_ParserData *, bool);
-
-	int				GetOrgVSize(void);
-	int				GetOptVSize(void);
-	int				GetVMap(int);
-
-	void			Clear(void);
-	void			Print(void);
-};
-
-
-
-
-
-#endif // !__FK_D3DX_SHAPE_PARSER_HEADER__

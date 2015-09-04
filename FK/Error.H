@@ -1,4 +1,68 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_ERROR_HEADER__
+#define __FK_ERROR_HEADER__
+
+#include <FK/Base.h>
+
+#if !defined(WIN32) || defined(_CYGWIN_GCC_)
+#include <stdio.h>
+//#include <iostream>
+#else
+#include <stdio.h>
+#endif
+
+#include <stdarg.h>
+#include <string>
+
+#ifdef FK_EXTERN
+#undef FK_EXTERN
+#endif
+
+#ifdef __FK_ERROR_CODE__
+#define FK_EXTERN
+#else
+#define FK_EXTERN extern
+#endif
+
+enum fk_ErrorMode {
+	FK_ERR_NONE,
+	FK_ERR_INTERACTIVE,
+	FK_ERR_QUEUE,
+	FK_ERR_CONSOLE_INTERACTIVE,
+	FK_ERR_CONSOLE_QUEUE,
+	FK_ERR_OUT_CONSOLE_INTERACTIVE,
+	FK_ERR_OUT_CONSOLE_QUEUE,
+	FK_ERR_BROWSER_INTERACTIVE,
+	FK_ERR_BROWSER_QUEUE,
+	FK_ERR_FILE
+};
+
+class fk_ErrorBrowser {
+public:
+	fk_ErrorBrowser(void);
+	virtual ~fk_ErrorBrowser();
+
+	void		PutBrowser(const std::string &);
+	void		PutAlert(const std::string &);
+};
+
+FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
+FK_EXTERN fk_ErrorMode		fk_GetErrorMode(void);
+FK_EXTERN void				fk_PutError(const std::string,
+										const std::string, const int);
+FK_EXTERN void				fk_PutError(const std::string, const std::string,
+										const int, const std::string);
+FK_EXTERN void				fk_PutError(const std::string);
+FK_EXTERN bool				fk_ErrorPrint(void);
+FK_EXTERN bool				fk_SetErrorFile(std::string);
+
+#ifndef FK_CLI_CODE
+FK_EXTERN void				fk_Printf(const char *, ...);
+FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
+#endif
+
+#endif // !__FK_ERROR_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,66 +133,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_ERROR_HEADER__
-#define __FK_ERROR_HEADER__
-
-#include <FK/Base.h>
-
-#if !defined(WIN32) || defined(_CYGWIN_GCC_)
-#include <stdio.h>
-//#include <iostream>
-#else
-#include <stdio.h>
-#endif
-
-#include <stdarg.h>
-#include <string>
-
-#ifdef FK_EXTERN
-#undef FK_EXTERN
-#endif
-
-#ifdef __FK_ERROR_CODE__
-#define FK_EXTERN
-#else
-#define FK_EXTERN extern
-#endif
-
-enum fk_ErrorMode {
-	FK_ERR_NONE,
-	FK_ERR_INTERACTIVE,
-	FK_ERR_QUEUE,
-	FK_ERR_CONSOLE_INTERACTIVE,
-	FK_ERR_CONSOLE_QUEUE,
-	FK_ERR_OUT_CONSOLE_INTERACTIVE,
-	FK_ERR_OUT_CONSOLE_QUEUE,
-	FK_ERR_BROWSER_INTERACTIVE,
-	FK_ERR_BROWSER_QUEUE,
-	FK_ERR_FILE
-};
-
-class fk_ErrorBrowser {
-public:
-	fk_ErrorBrowser(void);
-	virtual ~fk_ErrorBrowser();
-
-	void		PutBrowser(const std::string &);
-	void		PutAlert(const std::string &);
-};
-
-FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
-FK_EXTERN fk_ErrorMode		fk_GetErrorMode(void);
-FK_EXTERN void				fk_PutError(const std::string,
-										const std::string, const int);
-FK_EXTERN void				fk_PutError(const std::string, const std::string,
-										const int, const std::string);
-FK_EXTERN void				fk_PutError(const std::string);
-FK_EXTERN bool				fk_ErrorPrint(void);
-FK_EXTERN bool				fk_SetErrorFile(std::string);
-
-#ifndef FK_CLI_CODE
-FK_EXTERN void				fk_Printf(const char *, ...);
-FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
-#endif
-
-#endif // !__FK_ERROR_HEADER__

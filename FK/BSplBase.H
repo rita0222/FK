@@ -1,4 +1,22 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_BSPLBASE_HEADER__
+#define __FK_BSPLBASE_HEADER__
+
+#include <vector>
+
+namespace fk_BSplBase {
+
+	bool			IsSame(double, double);
+	bool			IsBig(double, double);
+	bool			UpdateKnot(int, int, std::vector<double> &);
+	double			PosBasis(int, int, double,
+							 const std::vector<double> &);
+	double			DiffBasis(int, int, double,
+							  const std::vector<double> &);
+}
+
+#endif	// __FK_BSPLBASE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,20 +87,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_BSPLBASE_HEADER__
-#define __FK_BSPLBASE_HEADER__
-
-#include <vector>
-
-namespace fk_BSplBase {
-
-	bool			IsSame(double, double);
-	bool			IsBig(double, double);
-	bool			UpdateKnot(int, int, std::vector<double> &);
-	double			PosBasis(int, int, double,
-							 const std::vector<double> &);
-	double			DiffBasis(int, int, double,
-							  const std::vector<double> &);
-}
-
-#endif	// __FK_BSPLBASE_HEADER__

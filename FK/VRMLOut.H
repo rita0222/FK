@@ -1,4 +1,55 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_VRML_OUT_HEADER__
+#define __FK_VRML_OUT_HEADER__
+
+#include <FK/Base.h>
+#include <FK/Vector.h>
+#include <vector>
+
+class fk_Solid;
+class fk_IndexFaceSet;
+class fk_Material;
+
+class fk_VRMLOut {
+ private:
+
+	enum fk_VRMLOutMode {
+		FK_VRML_NONE,
+		FK_VRML_INTR
+	};
+
+	fk_Solid		*solid;
+	fk_IndexFaceSet	*ifset;
+
+	void			WriteVRMLHeader(std::ofstream &);
+	void			WriteVRMLShape(std::ofstream &, fk_Material *, bool,
+								   std::vector<double> *,
+								   std::vector<fk_Vector> *);
+	void			WriteVRMLMaterial(std::ofstream &, fk_Material *);
+	void			WriteVRMLPointData_Solid(std::ofstream &);
+	void			WriteVRMLIFData_Solid(std::ofstream &, bool);
+	void			WriteVRMLPointData_IFS(std::ofstream &);
+	void			WriteVRMLIFData_IFS(std::ofstream &, bool);
+	void			WriteVRMLLightInfo(std::ofstream &);
+	void			WriteVRMLNaviInfo(std::ofstream &);
+	void			WriteVRMLFooter(std::ofstream &, fk_VRMLOutMode);
+	void			WriteVRMLCoordInterp(std::ofstream &, std::vector<double> *,
+										 std::vector<fk_Vector> *);
+
+ public:
+
+	fk_VRMLOut(fk_Solid *);
+	fk_VRMLOut(fk_IndexFaceSet *);
+	virtual ~fk_VRMLOut();
+
+	bool	WriteVRMLFile(std::string, fk_Material *, bool);
+	bool	WriteVRMLFile(std::string, std::vector<double> *,
+						  std::vector<fk_Vector> *,
+						  fk_Material *, bool);
+};
+
+#endif // !__FK_VRML_OUT_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,53 +120,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_VRML_OUT_HEADER__
-#define __FK_VRML_OUT_HEADER__
-
-#include <FK/Base.h>
-#include <FK/Vector.h>
-#include <vector>
-
-class fk_Solid;
-class fk_IndexFaceSet;
-class fk_Material;
-
-class fk_VRMLOut {
- private:
-
-	enum fk_VRMLOutMode {
-		FK_VRML_NONE,
-		FK_VRML_INTR
-	};
-
-	fk_Solid		*solid;
-	fk_IndexFaceSet	*ifset;
-
-	void			WriteVRMLHeader(std::ofstream &);
-	void			WriteVRMLShape(std::ofstream &, fk_Material *, bool,
-								   std::vector<double> *,
-								   std::vector<fk_Vector> *);
-	void			WriteVRMLMaterial(std::ofstream &, fk_Material *);
-	void			WriteVRMLPointData_Solid(std::ofstream &);
-	void			WriteVRMLIFData_Solid(std::ofstream &, bool);
-	void			WriteVRMLPointData_IFS(std::ofstream &);
-	void			WriteVRMLIFData_IFS(std::ofstream &, bool);
-	void			WriteVRMLLightInfo(std::ofstream &);
-	void			WriteVRMLNaviInfo(std::ofstream &);
-	void			WriteVRMLFooter(std::ofstream &, fk_VRMLOutMode);
-	void			WriteVRMLCoordInterp(std::ofstream &, std::vector<double> *,
-										 std::vector<fk_Vector> *);
-
- public:
-
-	fk_VRMLOut(fk_Solid *);
-	fk_VRMLOut(fk_IndexFaceSet *);
-	virtual ~fk_VRMLOut();
-
-	bool	WriteVRMLFile(std::string, fk_Material *, bool);
-	bool	WriteVRMLFile(std::string, std::vector<double> *,
-						  std::vector<fk_Vector> *,
-						  fk_Material *, bool);
-};
-
-#endif // !__FK_VRML_OUT_HEADER__

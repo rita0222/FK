@@ -1,4 +1,56 @@
-﻿/****************************************************************************
+﻿#ifdef FK_D3D
+#include "./D3D/FaceDraw.h"
+#else
+
+#ifndef __FK_FACE_DRAW_HEADER__
+#define __FK_FACE_DRAW_HEADER__
+
+#include <FK/Model.h>
+
+class fk_Surface;
+class fk_Loop;
+
+class fk_FaceDraw {
+ private:
+	bool	arrayState;
+
+	void	DrawShapeFacePick(fk_Model *);
+	void	DrawSolidFacePick(fk_Model *);
+	void	DrawSolidFacePickElem(fk_Loop *);
+	void	DrawIFSFacePick(fk_Model *);
+	void	DrawShapeFaceMaterial(fk_Model *, bool);
+	void	DrawSolidFaceMaterial(fk_Model *, bool);
+	int		DrawSolidFaceMaterialElem(fk_Model *, fk_Loop *, int, int,
+									  std::vector<fk_Material> *, bool);
+	void	DrawIFSFaceMaterial(fk_Model *, bool);
+	void	DrawShapeFaceNormal(fk_Model *, bool, bool);
+	void	DrawSolidFaceNormal(fk_Model *, bool, bool);
+	void	DrawSolidFaceNormalElem(fk_Loop *);
+	void	DrawIFSFaceNormal(fk_Model *, bool, bool);
+	void	DrawShapeFaceSmooth(fk_Model *, bool, bool);
+	void	DrawSolidFaceSmooth(fk_Model *, bool, bool);
+	void	DrawSolidFaceSmoothElem(fk_Loop *);
+	void	DrawIFSFaceSmooth(fk_Model *, bool, bool);
+	void	DrawSurface(fk_Surface *);
+
+ public:
+	fk_FaceDraw(void);
+	virtual ~fk_FaceDraw();
+
+	void		SetArrayState(bool);
+	void		DrawShapeFace(fk_Model *, bool, fk_DrawMode, bool);
+
+	static void	CommonMateSet(fk_Model *, bool, bool);
+	static void	LocalMateSet(fk_Material *, bool);
+
+};
+
+
+#endif /* !__FK_WINDOW_HEADER__ */
+
+#endif /* !D3D_BRANCH */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,54 +121,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "./D3D/FaceDraw.h"
-#else
-
-#ifndef __FK_FACE_DRAW_HEADER__
-#define __FK_FACE_DRAW_HEADER__
-
-#include <FK/Model.h>
-
-class fk_Surface;
-class fk_Loop;
-
-class fk_FaceDraw {
- private:
-	bool	arrayState;
-
-	void	DrawShapeFacePick(fk_Model *);
-	void	DrawSolidFacePick(fk_Model *);
-	void	DrawSolidFacePickElem(fk_Loop *);
-	void	DrawIFSFacePick(fk_Model *);
-	void	DrawShapeFaceMaterial(fk_Model *, bool);
-	void	DrawSolidFaceMaterial(fk_Model *, bool);
-	int		DrawSolidFaceMaterialElem(fk_Model *, fk_Loop *, int, int,
-									  std::vector<fk_Material> *, bool);
-	void	DrawIFSFaceMaterial(fk_Model *, bool);
-	void	DrawShapeFaceNormal(fk_Model *, bool, bool);
-	void	DrawSolidFaceNormal(fk_Model *, bool, bool);
-	void	DrawSolidFaceNormalElem(fk_Loop *);
-	void	DrawIFSFaceNormal(fk_Model *, bool, bool);
-	void	DrawShapeFaceSmooth(fk_Model *, bool, bool);
-	void	DrawSolidFaceSmooth(fk_Model *, bool, bool);
-	void	DrawSolidFaceSmoothElem(fk_Loop *);
-	void	DrawIFSFaceSmooth(fk_Model *, bool, bool);
-	void	DrawSurface(fk_Surface *);
-
- public:
-	fk_FaceDraw(void);
-	virtual ~fk_FaceDraw();
-
-	void		SetArrayState(bool);
-	void		DrawShapeFace(fk_Model *, bool, fk_DrawMode, bool);
-
-	static void	CommonMateSet(fk_Model *, bool, bool);
-	static void	LocalMateSet(fk_Material *, bool);
-
-};
-
-
-#endif /* !__FK_WINDOW_HEADER__ */
-
-#endif /* !D3D_BRANCH */

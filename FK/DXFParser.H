@@ -1,4 +1,31 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_DXF_PARSER_HEADER__
+#define __FK_DXF_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+#include <FK/HeapBase.h>
+
+class fk_DXFParser : public fk_ParserBase {
+ private:
+	bool	CheckDXFFile(std::ifstream &);
+	bool	MakeDXFIFSet(std::ifstream &, std::vector<fk_Vector> *,
+						 std::vector< std::vector<int> > *, bool);
+
+	bool	SetPosVal(fk_Vector *, std::string *, std::string *);
+	int		GetLoopSize(fk_Vector *, bool);
+	void	MakeLoop(std::vector<fk_Vector> *,
+					 std::vector< std::vector<int> > *,
+					 bool, fk_Vector *, bool, fk_HeapBase<fk_Vector> *);
+
+ public:
+	fk_DXFParser(void);
+	virtual ~fk_DXFParser();
+
+	bool	ReadDXFFile(std::string, bool);
+};
+
+#endif // !__FK_DXF_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,29 +96,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_DXF_PARSER_HEADER__
-#define __FK_DXF_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-#include <FK/HeapBase.h>
-
-class fk_DXFParser : public fk_ParserBase {
- private:
-	bool	CheckDXFFile(std::ifstream &);
-	bool	MakeDXFIFSet(std::ifstream &, std::vector<fk_Vector> *,
-						 std::vector< std::vector<int> > *, bool);
-
-	bool	SetPosVal(fk_Vector *, std::string *, std::string *);
-	int		GetLoopSize(fk_Vector *, bool);
-	void	MakeLoop(std::vector<fk_Vector> *,
-					 std::vector< std::vector<int> > *,
-					 bool, fk_Vector *, bool, fk_HeapBase<fk_Vector> *);
-
- public:
-	fk_DXFParser(void);
-	virtual ~fk_DXFParser();
-
-	bool	ReadDXFFile(std::string, bool);
-};
-
-#endif // !__FK_DXF_PARSER_HEADER__

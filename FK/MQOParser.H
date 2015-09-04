@@ -1,4 +1,66 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_MQO_PARSER_HEADER__
+#define __FK_MQO_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+#include <FK/Texture.h>
+
+class fk_Tree;
+class fk_TreeData;
+class fk_IFSTexture;
+
+class fk_MQOParser : public fk_ParserBase {
+
+ private:
+
+	fk_MeshTexture								*meshTexture;
+	fk_IFSTexture								*ifsTexture;
+	fk_Tree										*tree;
+	std::vector<fk_Vector>						vData, optVData;
+	std::vector< std::vector<int> >				fData;
+	std::vector< std::vector<fk_TexCoord> >		tData;
+	std::vector<fk_Material>					mData;
+	std::vector<int>							cIDData;
+	bool										contFlg;
+	bool										matFlg;
+
+	bool	ReadLine(std::ifstream *, unsigned char *, unsigned int *, std::string *);
+	bool	CheckFile(const std::string &);
+	bool	CheckData(unsigned char *);
+	bool	MakeData(const std::string &, unsigned char *,
+					 const std::string &, int, bool);
+	bool	PushVertexData(std::string *);
+	bool	PushFaceData(std::string *, int);
+	bool	PushMaterialData(std::string *);
+
+	bool	CheckIFData(int);
+	void	SetMeshTexCoord(void);
+	void	SetIFSTexCoord(void);
+	void	OptimizeData(void);
+	void	MakeUniqueVertex4Texture(void);
+
+	void	SetQuadFace(std::vector< std::vector<int> > *,
+						std::vector< std::vector<fk_TexCoord> > *,
+						std::vector<int> *,
+						std::vector<fk_TexCoord> *);
+
+	fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
+
+
+ public:
+	fk_MQOParser(void);
+	virtual ~fk_MQOParser();
+
+	bool	ReadMQOFile(const std::string &, const std::string &, int, bool);
+	bool	ReadMQOData(unsigned char *, const std::string &, int, bool);
+	void	SetMeshTexture(fk_MeshTexture *);
+	void	SetIFSTexture(fk_IFSTexture *);
+	void	SetContMode(bool);
+	void	SetMaterialMode(bool);
+};
+
+#endif // !__FK_MQO_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,64 +131,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_MQO_PARSER_HEADER__
-#define __FK_MQO_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-#include <FK/Texture.h>
-
-class fk_Tree;
-class fk_TreeData;
-class fk_IFSTexture;
-
-class fk_MQOParser : public fk_ParserBase {
-
- private:
-
-	fk_MeshTexture								*meshTexture;
-	fk_IFSTexture								*ifsTexture;
-	fk_Tree										*tree;
-	std::vector<fk_Vector>						vData, optVData;
-	std::vector< std::vector<int> >				fData;
-	std::vector< std::vector<fk_TexCoord> >		tData;
-	std::vector<fk_Material>					mData;
-	std::vector<int>							cIDData;
-	bool										contFlg;
-	bool										matFlg;
-
-	bool	ReadLine(std::ifstream *, unsigned char *, unsigned int *, std::string *);
-	bool	CheckFile(const std::string &);
-	bool	CheckData(unsigned char *);
-	bool	MakeData(const std::string &, unsigned char *,
-					 const std::string &, int, bool);
-	bool	PushVertexData(std::string *);
-	bool	PushFaceData(std::string *, int);
-	bool	PushMaterialData(std::string *);
-
-	bool	CheckIFData(int);
-	void	SetMeshTexCoord(void);
-	void	SetIFSTexCoord(void);
-	void	OptimizeData(void);
-	void	MakeUniqueVertex4Texture(void);
-
-	void	SetQuadFace(std::vector< std::vector<int> > *,
-						std::vector< std::vector<fk_TexCoord> > *,
-						std::vector<int> *,
-						std::vector<fk_TexCoord> *);
-
-	fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
-
-
- public:
-	fk_MQOParser(void);
-	virtual ~fk_MQOParser();
-
-	bool	ReadMQOFile(const std::string &, const std::string &, int, bool);
-	bool	ReadMQOData(unsigned char *, const std::string &, int, bool);
-	void	SetMeshTexture(fk_MeshTexture *);
-	void	SetIFSTexture(fk_IFSTexture *);
-	void	SetContMode(bool);
-	void	SetMaterialMode(bool);
-};
-
-#endif // !__FK_MQO_PARSER_HEADER__

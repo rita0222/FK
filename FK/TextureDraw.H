@@ -1,4 +1,62 @@
-﻿/****************************************************************************
+﻿#ifdef FK_D3D
+#include "./D3D/TextureDraw.h"
+#else
+
+#ifndef __FK_TEXTURE_DRAW_HEADER__
+#define __FK_TEXTURE_DRAW_HEADER__
+
+#include <FK/OpenGL.H>
+#include <FK/Texture.h>
+#include <vector>
+
+class fk_IFSTexture;
+class fk_Model;
+
+class fk_TextureDraw {
+
+ private:
+	bool							arrayState;
+	bool							bindMode;
+	fk_TexID						oldTexID;
+	static std::vector<GLuint>		texNameArray;
+	static unsigned long			texLoadedSize;
+	static std::vector<fk_Image *>	texImageArray;
+
+	void	DrawRectTextureObj(fk_RectTexture *);
+	void	DrawTriTextureObj(fk_TriTexture *);
+	void	DrawMeshTextureObj(fk_MeshTexture *);
+	void	DrawIFSTextureObj(fk_IFSTexture *);
+	void	GenTextureObj(fk_Texture *);
+	void	ReplaceTextureObj(fk_Texture *);
+	void	InitTextureEnv(fk_Texture *);
+
+	void	DrawRectTexturePick(fk_RectTexture *);
+	void	DrawTriTexturePick(fk_TriTexture *);
+	void	DrawMeshTexturePick(fk_MeshTexture *);
+	void	DrawIFSTexturePick(fk_IFSTexture *);
+
+ public:
+
+	fk_TextureDraw(void);
+	virtual ~fk_TextureDraw();
+
+	void	StartUp(void);
+	void	SetArrayState(bool);
+	void	DrawTextureObj(fk_Model *, bool, bool = false);
+	void	ClearTextureMemory(void);
+	void	SetBindMode(bool);
+	bool	GetBindMode(void);
+
+	unsigned long GetUsingTextureMemory(void);
+	static void	ReleaseTexture(fk_Image *);
+};
+
+
+#endif /* !__FK_TEXTURE_DRAW_HEADER__ */
+
+#endif /* !D3D_BRANCH */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,60 +127,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "./D3D/TextureDraw.h"
-#else
-
-#ifndef __FK_TEXTURE_DRAW_HEADER__
-#define __FK_TEXTURE_DRAW_HEADER__
-
-#include <FK/OpenGL.H>
-#include <FK/Texture.h>
-#include <vector>
-
-class fk_IFSTexture;
-class fk_Model;
-
-class fk_TextureDraw {
-
- private:
-	bool							arrayState;
-	bool							bindMode;
-	fk_TexID						oldTexID;
-	static std::vector<GLuint>		texNameArray;
-	static unsigned long			texLoadedSize;
-	static std::vector<fk_Image *>	texImageArray;
-
-	void	DrawRectTextureObj(fk_RectTexture *);
-	void	DrawTriTextureObj(fk_TriTexture *);
-	void	DrawMeshTextureObj(fk_MeshTexture *);
-	void	DrawIFSTextureObj(fk_IFSTexture *);
-	void	GenTextureObj(fk_Texture *);
-	void	ReplaceTextureObj(fk_Texture *);
-	void	InitTextureEnv(fk_Texture *);
-
-	void	DrawRectTexturePick(fk_RectTexture *);
-	void	DrawTriTexturePick(fk_TriTexture *);
-	void	DrawMeshTexturePick(fk_MeshTexture *);
-	void	DrawIFSTexturePick(fk_IFSTexture *);
-
- public:
-
-	fk_TextureDraw(void);
-	virtual ~fk_TextureDraw();
-
-	void	StartUp(void);
-	void	SetArrayState(bool);
-	void	DrawTextureObj(fk_Model *, bool, bool = false);
-	void	ClearTextureMemory(void);
-	void	SetBindMode(bool);
-	bool	GetBindMode(void);
-
-	unsigned long GetUsingTextureMemory(void);
-	static void	ReleaseTexture(fk_Image *);
-};
-
-
-#endif /* !__FK_TEXTURE_DRAW_HEADER__ */
-
-#endif /* !D3D_BRANCH */

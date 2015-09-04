@@ -1,4 +1,50 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_OPENCL_HEADER__
+#define __FK_OPENCL_HEADER__
+
+#ifndef CL_USE_DEPRECATED_OPENCL_2_0_APIS
+#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
+#endif
+
+#ifdef _MACOSX_
+#include <OpenCL/opencl.h>
+#else
+#include <CL/cl.h>
+#endif // __APPLE__
+
+#include <vector>
+#include <string>
+
+class fk_OpenCL {
+ private:
+	std::string				kernelStr;
+	std::vector<cl_mem>		devData;
+	std::vector<bool>		devFlg;
+	cl_command_queue		command_queue;
+	cl_context				context;
+	cl_kernel				kernel;
+	cl_program				program;
+	bool					initFlg;
+	
+	bool	ReadKernel(std::string);
+	cl_int	GetPlatformID(cl_platform_id *, bool);
+	void	PrintError(cl_int);
+	void	PrintDevInfo(cl_device_id);
+
+ public:
+	fk_OpenCL(void);
+	~fk_OpenCL();
+
+	bool	deviceInit(std::string, std::string, bool = false);
+	void	createData(int, size_t, bool);
+	bool	sendData(int, size_t, const void *);
+	bool	run(size_t);
+	bool	getData(int, size_t, void *);
+	void	release(void);
+};
+
+#endif // !__FK_OPENCL_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,48 +115,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_OPENCL_HEADER__
-#define __FK_OPENCL_HEADER__
-
-#ifndef CL_USE_DEPRECATED_OPENCL_2_0_APIS
-#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
-#endif
-
-#ifdef _MACOSX_
-#include <OpenCL/opencl.h>
-#else
-#include <CL/cl.h>
-#endif // __APPLE__
-
-#include <vector>
-#include <string>
-
-class fk_OpenCL {
- private:
-	std::string				kernelStr;
-	std::vector<cl_mem>		devData;
-	std::vector<bool>		devFlg;
-	cl_command_queue		command_queue;
-	cl_context				context;
-	cl_kernel				kernel;
-	cl_program				program;
-	bool					initFlg;
-	
-	bool	ReadKernel(std::string);
-	cl_int	GetPlatformID(cl_platform_id *, bool);
-	void	PrintError(cl_int);
-	void	PrintDevInfo(cl_device_id);
-
- public:
-	fk_OpenCL(void);
-	~fk_OpenCL();
-
-	bool	deviceInit(std::string, std::string, bool = false);
-	void	createData(int, size_t, bool);
-	bool	sendData(int, size_t, const void *);
-	bool	run(size_t);
-	bool	getData(int, size_t, void *);
-	void	release(void);
-};
-
-#endif // !__FK_OPENCL_HEADER__

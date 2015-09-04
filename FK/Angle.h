@@ -1,4 +1,55 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_ANGLE_HEADER__
+#define __FK_ANGLE_HEADER__
+
+//! オイラー角を表すクラス
+/*!
+ *	オイラー角は、3次元での姿勢を表す方法の一つで、
+ *	空間中の全ての姿勢を表現することが可能です。
+ *	FK におけるオイラー角は Z-X-Y 座標系を意味します。
+ *	ヘディング角を h、ピッチ角を p、バンク角を b としたとき、
+ *	このオイラー角は以下の回転変換と同意です。
+ *	\f[
+ *		R_y(-h) \cdot R_x(p) \cdot R_z(-b)
+ *	\f]
+ *	角度の単位はすべて弧度法(ラジアン)です。
+ */
+
+class fk_Angle {
+ public:
+
+	double h; //!< ヘディング角
+	double p; //!< ピッチ角
+	double b; //!< バンク角
+
+	//! コンストラクタ
+	/*!
+	 *	引数としてヘディング角、ピッチ角、バンク角を入力します。
+	 *	単位は弧度法(ラジアン)です。
+	 *
+	 *	\param[in]	h	ヘディング角
+	 *	\param[in]	p	ピッチ角
+	 *	\param[in]	b	バンク角
+	 */
+	fk_Angle(double h = 0.0, double p = 0.0, double b = 0.0);
+
+	//! 設定用関数
+	/*!
+	 *	\param[in]	h	ヘディング角
+	 *	\param[in]	p	ピッチ角
+	 *	\param[in]	b	バンク角
+	 */
+	void set(double h, double p, double b);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+	void Print(void);
+	void Print(std::string);
+#endif
+
+};
+
+#endif // !__FK_ANGLE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,55 +120,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-#ifndef __FK_ANGLE_HEADER__
-#define __FK_ANGLE_HEADER__
-
-
-//! オイラー角を表すクラス
-/*!
- *	オイラー角は、3次元での姿勢を表す方法の一つで、
- *	空間中の全ての姿勢を表現することが可能です。
- *	FK におけるオイラー角は Z-X-Y 座標系を意味します。
- *	ヘディング角を h、ピッチ角を p、バンク角を b としたとき、
- *	このオイラー角は以下の回転変換と同意です。
- *	\f[
- *		R_y(-h) \cdot R_x(p) \cdot R_z(-b)
- *	\f]
- *	角度の単位はすべて弧度法(ラジアン)です。
- */
-
-class fk_Angle {
- public:
-
-	double h; //!< ヘディング角
-	double p; //!< ピッチ角
-	double b; //!< バンク角
-
-	//! コンストラクタ
-	/*!
-	 *	引数としてヘディング角、ピッチ角、バンク角を入力します。
-	 *	単位は弧度法(ラジアン)です。
-	 *
-	 *	\param[in]	h	ヘディング角
-	 *	\param[in]	p	ピッチ角
-	 *	\param[in]	b	バンク角
-	 */
-	fk_Angle(double h = 0.0, double p = 0.0, double b = 0.0);
-
-	//! 設定用関数
-	/*!
-	 *	\param[in]	h	ヘディング角
-	 *	\param[in]	p	ピッチ角
-	 *	\param[in]	b	バンク角
-	 */
-	void set(double h, double p, double b);
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-	void Print(void);
-	void Print(std::string);
-#endif
-
-};
-
-#endif // !__FK_ANGLE_HEADER__

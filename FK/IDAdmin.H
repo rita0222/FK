@@ -1,4 +1,41 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_IDADMIN_HEADER__
+#define __FK_IDADMIN_HEADER__
+
+#include <vector>
+#include <list>
+
+class fk_IDAdmin {
+
+	friend class	fk_FileInput;
+	friend class	fk_FileOutput;
+
+ private:
+	int					order;
+	int					MaxID;
+	std::list<int>		*eraseIDSet;
+	std::vector<char>	existFlagSet;
+
+ public:
+	fk_IDAdmin(int = 1);
+	virtual ~fk_IDAdmin();
+
+	void	CloneData(fk_IDAdmin *);
+	void	Init(int = 1);
+	void	Resize(int);
+	int		NewID(void) const;
+	int		CreateID(void);
+	bool	CreateID(int);
+	bool	EraseID(int);
+	bool	ExistID(int) const;
+	int		GetMaxID(void) const;
+	int		GetIDNum(void) const;
+	int		GetNext(int) const;
+	int		GetOrder(void) const;
+};
+
+#endif // !__FK_IDADMIN_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,39 +106,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_IDADMIN_HEADER__
-#define __FK_IDADMIN_HEADER__
-
-#include <vector>
-#include <list>
-
-class fk_IDAdmin {
-
-	friend class	fk_FileInput;
-	friend class	fk_FileOutput;
-
- private:
-	int					order;
-	int					MaxID;
-	std::list<int>		*eraseIDSet;
-	std::vector<char>	existFlagSet;
-
- public:
-	fk_IDAdmin(int = 1);
-	virtual ~fk_IDAdmin();
-
-	void	CloneData(fk_IDAdmin *);
-	void	Init(int = 1);
-	void	Resize(int);
-	int		NewID(void) const;
-	int		CreateID(void);
-	bool	CreateID(int);
-	bool	EraseID(int);
-	bool	ExistID(int) const;
-	int		GetMaxID(void) const;
-	int		GetIDNum(void) const;
-	int		GetNext(int) const;
-	int		GetOrder(void) const;
-};
-
-#endif // !__FK_IDADMIN_HEADER__

@@ -1,4 +1,51 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_D3DX_PARSER_HEADER__
+#define __FK_D3DX_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+
+class fk_IFSTexture;
+class fk_TexCoord;
+class fk_D3DXAnimation;
+class fk_D3DXShapeParser;
+class fk_Tree;
+class fk_TreeData;
+
+class fk_D3DXParser : public fk_ParserBase {
+
+ private:
+
+	fk_Tree						*tree;
+	fk_D3DXShapeParser			*shape;
+
+	fk_IFSTexture				*ifsTexture;
+	fk_D3DXAnimation			*anim;
+
+	bool			CheckFile(const std::string &);
+	bool			ReadData(const std::string &,
+							 const std::string &, int, bool, bool *);
+
+	bool			CheckOneLineProperty(const std::string *);
+	fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
+	bool			CheckMeshProperty(fk_TreeData *, const std::string &);
+	bool			CheckProperty(fk_TreeData *, const std::string &);
+	bool			ReadFrameMatrix(fk_TreeData *, std::ifstream &);
+
+	bool			MakeData(int, bool);
+
+ public:
+	fk_D3DXParser(void);
+	virtual ~fk_D3DXParser();
+
+	bool	ReadD3DXFile(const std::string &, const std::string &,
+						 int, bool, bool *);
+	void	SetIFSTexture(fk_IFSTexture *);
+	void	SetAnimation(fk_D3DXAnimation *);
+	void	print(void);
+};
+
+#endif
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,49 +116,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_D3DX_PARSER_HEADER__
-#define __FK_D3DX_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-
-class fk_IFSTexture;
-class fk_TexCoord;
-class fk_D3DXAnimation;
-class fk_D3DXShapeParser;
-class fk_Tree;
-class fk_TreeData;
-
-class fk_D3DXParser : public fk_ParserBase {
-
- private:
-
-	fk_Tree						*tree;
-	fk_D3DXShapeParser			*shape;
-
-	fk_IFSTexture				*ifsTexture;
-	fk_D3DXAnimation			*anim;
-
-	bool			CheckFile(const std::string &);
-	bool			ReadData(const std::string &,
-							 const std::string &, int, bool, bool *);
-
-	bool			CheckOneLineProperty(const std::string *);
-	fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
-	bool			CheckMeshProperty(fk_TreeData *, const std::string &);
-	bool			CheckProperty(fk_TreeData *, const std::string &);
-	bool			ReadFrameMatrix(fk_TreeData *, std::ifstream &);
-
-	bool			MakeData(int, bool);
-
- public:
-	fk_D3DXParser(void);
-	virtual ~fk_D3DXParser();
-
-	bool	ReadD3DXFile(const std::string &, const std::string &,
-						 int, bool, bool *);
-	void	SetIFSTexture(fk_IFSTexture *);
-	void	SetAnimation(fk_D3DXAnimation *);
-	void	print(void);
-};
-
-#endif

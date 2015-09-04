@@ -1,4 +1,48 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_VRML_PARSER_HEADER__
+#define __FK_VRML_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+#include <FK/HeapBase.h>
+
+class fk_VRMLParser : public fk_ParserBase {
+ private:
+
+	bool				CheckVRMLFile(std::ifstream &);
+	void				ReadVRMLShapeData(std::ifstream &, std::string *);
+	void				MakeVRMLIFSet(std::string *,
+									  std::vector<fk_Vector> *,
+									  std::vector< std::vector<int> > *,
+									  std::vector<int> *, bool);
+
+	std::string::size_type	SearchVRMLShapeLast(std::string *, 
+												std::string::size_type);
+	bool				GetVRMLShapeMaterial(std::string *, fk_Material *,
+											 std::string::size_type,
+											 std::string::size_type);
+	
+	void				GetVRMLVertexInfo(std::string *,
+										  std::vector<fk_Vector> *,
+										  fk_HeapBase<fk_Vector> *,
+										  std::vector<int> *,
+										  std::string::size_type,
+										  std::string::size_type, bool);
+
+	int					GetVRMLIndexFSetInfo(std::string *,
+											 std::vector<int> *,
+											 std::vector< std::vector<int> > *,
+											 std::string::size_type,
+											 std::string::size_type);
+
+ public:
+	fk_VRMLParser(void);
+	virtual ~fk_VRMLParser();
+
+	bool		ReadVRMLFile(std::string, bool = true, bool = true);
+};
+
+#endif // !__FK_VRML_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
@@ -69,46 +113,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_VRML_PARSER_HEADER__
-#define __FK_VRML_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-#include <FK/HeapBase.h>
-
-class fk_VRMLParser : public fk_ParserBase {
- private:
-
-	bool				CheckVRMLFile(std::ifstream &);
-	void				ReadVRMLShapeData(std::ifstream &, std::string *);
-	void				MakeVRMLIFSet(std::string *,
-									  std::vector<fk_Vector> *,
-									  std::vector< std::vector<int> > *,
-									  std::vector<int> *, bool);
-
-	std::string::size_type	SearchVRMLShapeLast(std::string *, 
-												std::string::size_type);
-	bool				GetVRMLShapeMaterial(std::string *, fk_Material *,
-											 std::string::size_type,
-											 std::string::size_type);
-	
-	void				GetVRMLVertexInfo(std::string *,
-										  std::vector<fk_Vector> *,
-										  fk_HeapBase<fk_Vector> *,
-										  std::vector<int> *,
-										  std::string::size_type,
-										  std::string::size_type, bool);
-
-	int					GetVRMLIndexFSetInfo(std::string *,
-											 std::vector<int> *,
-											 std::vector< std::vector<int> > *,
-											 std::string::size_type,
-											 std::string::size_type);
-
- public:
-	fk_VRMLParser(void);
-	virtual ~fk_VRMLParser();
-
-	bool		ReadVRMLFile(std::string, bool = true, bool = true);
-};
-
-#endif // !__FK_VRML_PARSER_HEADER__
