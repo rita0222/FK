@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FK_WPF_Test
+namespace FK_CLI_WpfAppTest
 {
     /// <summary>
     /// App.xaml の相互作用ロジック

@@ -70,306 +70,6 @@
     <ClCompile Include="CLI\cpp\IndexFace_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\base\Attribute.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\AttributeData.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Base.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BezCurve.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BezSurface.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Block.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Boundary.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BoundaryElem.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BSplBase.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BSplCurve.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BSplSurface.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\BVHMotion.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Capsule.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Circle.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Command.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Cone.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Curve.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\D3DXAnimation.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\D3DXData.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\D3DXParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\D3DXShapeParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\DataAccess.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\DataBase.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\DList.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\DrawCache.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\DXFOut.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\DXFParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Edge.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Engine.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Error.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\FaceDraw.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\FileInput.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\FileOutput.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Fog.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\FrameController.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\GenMatrix.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\GenVector.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Half.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\History.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\HRCParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\IDAdmin.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\IFSetHandle.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\IFSTexture.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Image.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\ImageIO.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\IndexFace.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Light.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Line.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\LineDraw.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Loop.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\MassProperty.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\MatAdmin.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Material.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\MatExample.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Math.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Matrix.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\MeshTexture.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Model.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\ModelTree.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Modify.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\MQOOut.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\MQOParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Operation.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Palette.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\ParserBase.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Particle.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\PickData.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Plane.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Point.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\PointDraw.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Polygon.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Prism.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Projection.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Quaternion.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\RDSParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Reference1.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Reference2.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Reference3.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Scene.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Shape.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\SMFParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Solid.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\SolidBase.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Sphere.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\SRFParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\STLOut.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\STLParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\SubDivision.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Surface.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\System.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\TextImage.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Texture.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\TextureDraw.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Topology.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Tree.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\UniCode.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Vector.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\Vertex.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\VRMLOut.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\base\VRMLParser.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
     <ClCompile Include="CLI\cpp\Model_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
@@ -381,45 +81,6 @@
     </ClCompile>
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\fltk\Error\Error_fltk.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\fltk\Window\Window_fltk.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\fltk\Window\WindowEvent_fltk.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\fltk\Window\ShapeViewer_fltk.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\GuideObject.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\SimpleWindow.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\Fullscreen.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\Input.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\Misc.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\MotionCharactor.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\MotionData.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\SpriteModel.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\TrackBall.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
@@ -529,9 +190,6 @@
     <ClCompile Include="CLI\cpp\Performer_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="CLI\cpp\ShapeViewer_CLI.cpp">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
     <ClCompile Include="CLI\cpp\Particle_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
@@ -550,15 +208,6 @@
     <ClCompile Include="CLI\cpp\GenMatrix_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\audio\Audio_Stream.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
     <ClCompile Include="CLI\cpp\AudioBase_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
@@ -572,6 +221,357 @@
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
     <ClCompile Include="CLI\cpp\Renderer_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\Audio_Stream.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Base.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Error.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\IDAdmin.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\System.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Tree.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Error\Error_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Window\ShapeViewer_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Window\WindowEvent_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\fltk\Window\Window_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Engine.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\FaceDraw.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\FrameController.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\LineDraw.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\PointDraw.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\TextureDraw.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\material\Material.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\material\MatExample.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\material\Palette.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\GenMatrix.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\GenVector.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Math.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Plane.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Quaternion.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\Boundary.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\BoundaryElem.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\MatAdmin.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\Model.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\ModelTree.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\D3DXAnimation.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\D3DXData.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\D3DXParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\D3DXShapeParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\DXFOut.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\DXFParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\HRCParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\MQOOut.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\MQOParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\ParserBase.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\RDSParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\SMFParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\SRFParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\STLOut.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\STLParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\VRMLOut.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\VRMLParser.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\scene\DList.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\scene\Fog.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\scene\Projection.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\scene\Scene.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Block.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\BVHMotion.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Capsule.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Circle.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Cone.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\IFSTexture.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Image.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\ImageIO.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\IndexFace.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Light.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\MeshTexture.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Particle.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Point.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Prism.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Shape.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Sphere.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\TextImage.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\Texture.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\UniCode.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Attribute.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\AttributeData.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\BezCurve.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\BezSurface.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\BSplBase.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\BSplCurve.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\BSplSurface.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Command.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Curve.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DataAccess.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DataBase.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DrawCache.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Edge.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\FileInput.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\FileOutput.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Half.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\History.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\IFSetHandle.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Line.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Loop.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\MassProperty.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Modify.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Operation.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\PickData.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Polygon.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Reference1.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Reference2.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Reference3.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Solid.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\SolidBase.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\SubDivision.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Surface.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Topology.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Vertex.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Fullscreen.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\GuideObject.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Input.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Misc.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\MotionCharactor.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\MotionData.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\SimpleWindow.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\SpriteModel.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\TrackBall.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\ShapeViewer_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Test", "FK_CLI_Test\FK_CLI_Test.csproj", "{3A891CD6-2F77-45E5-97E3-3F10B10BECA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_WinFormAppTest", "FK_CLI_Test\FK_CLI_WinFormAppTest.csproj", "{3A891CD6-2F77-45E5-97E3-3F10B10BECA1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Integration", "FK_Integration\FK_Integration.vcxproj", "{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}"
 EndProject
@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CSharpHelper", "FK_CShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Boid", "Test\FK_CLI_Boid\FK_CLI_Boid.csproj", "{BB99C09A-E1EA-4B65-BF56-6A0F891D6687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_WPF_Test", "FK_WPF_Test\FK_WPF_Test.csproj", "{99D32EFD-2347-43B5-A1D2-79E5C79D376A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_WpfAppTest", "FK_WPF_Test\FK_CLI_WpfAppTest.csproj", "{99D32EFD-2347-43B5-A1D2-79E5C79D376A}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FK_CLI_FS", "Test\FK_CLI_FS\FK_CLI_FS.fsproj", "{2A187788-B3E6-45A6-BDDB-DA7630594357}"
 EndProject

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using FK_CLI;
 using FK_CSharpHelper;
 
-namespace PlugInTestApp
+namespace FK_CLI_WinFormAppTest
 {
     public partial class Form1 : Form
     {

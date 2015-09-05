@@ -16,7 +16,7 @@ using FK_CLI;
 using FK_CSharpHelper;
 using System.Windows.Threading;
 
-namespace FK_WPF_Test
+namespace FK_CLI_WpfAppTest
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック

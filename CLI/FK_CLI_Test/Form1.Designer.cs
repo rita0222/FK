@@ -1,4 +1,4 @@
-﻿namespace PlugInTestApp
+﻿namespace FK_CLI_WinFormAppTest
 {
     partial class Form1
     {
