@@ -29,7 +29,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>FK3_util_d.lib;FK3_audio_d.lib;FK3_base_d.lib;FK3_graphics_d.lib;FK3_material_d.lib;FK3_math_d.lib;FK3_model_d.lib;FK3_parser_d.lib;FK3_scene_d.lib;FK3_shape_d.lib;FK3_solid_d.lib;FK3_fltkWin_d.lib;FK3_fltkErr_d.lib;fltkgl_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkimages_d.lib;fltkforms_d.lib;fltk_d.lib;fltkz_d.lib;freetype2MT_d.lib;libiconv_d.lib;libvorbisfile_d.lib;libvorbis_d.lib;libogg_d.lib;OpenAL32.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>LIBCMTD</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
