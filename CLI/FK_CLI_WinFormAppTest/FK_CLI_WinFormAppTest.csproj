@@ -61,6 +61,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FK_CLI">
+      <HintPath>..\FK_CLI_DLL\Release\FK_CLI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -109,12 +112,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FK_CSharpHelper\FK_CSharpHelper.csproj">
-      <Project>{E4A2C2DA-D590-4B71-8219-33A6D074FDC7}</Project>
+      <Project>{e4a2c2da-d590-4b71-8219-33a6d074fdc7}</Project>
       <Name>FK_CSharpHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FK_Integration\FK_Integration.vcxproj">
-      <Project>{df7dd30e-bb32-4c17-a0de-32b447c37bce}</Project>
-      <Name>FK_Integration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

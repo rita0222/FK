@@ -4,42 +4,96 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_WinFormAppTest", "FK_CLI_WinFormAppTest\FK_CLI_WinFormAppTest.csproj", "{3A891CD6-2F77-45E5-97E3-3F10B10BECA1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Integration", "FK_Integration\FK_Integration_2015.vcxproj", "{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_CLI_2015", "FK_CLI\FK_CLI_2015.vcxproj", "{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_C", "Test\FK_CLI_C\FK_CLI_C.csproj", "{F628931E-4F56-44FE-A503-04E5950E5DAB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Box", "Test\FK_CLI_Box\FK_CLI_Box.csproj", "{87506FCF-784F-4D04-82AC-389792F21BF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Sprite", "Test\FK_CLI_Sprite\FK_CLI_Sprite.csproj", "{AE35B544-9BAD-4873-A9E3-86E71D96B26C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_TextImage", "Test\FK_CLI_TextImage\FK_CLI_TextImage.csproj", "{E07EAC90-5680-41AF-AD3A-A78C2237A62D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Viewer", "Test\FK_CLI_Viewer\FK_CLI_Viewer.csproj", "{0D899803-03E1-4B9E-B54E-FE0612212FE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Particle", "Test\FK_CLI_Particle\FK_CLI_Particle.csproj", "{98C9645E-48B5-40F0-8515-B96179A59F70}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Ball", "Test\FK_CLI_Ball\FK_CLI_Ball.csproj", "{0142C4CE-DE67-4406-AEFA-BCEA620FBC76}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Texture", "Test\FK_CLI_Texture\FK_CLI_Texture.csproj", "{8D7BFB9E-E15F-4B1F-8BC3-01FE500631D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Quaternion", "Test\FK_CLI_Quaternion\FK_CLI_Quaternion.csproj", "{44D08AC5-D096-4CB2-80B2-893D64565E28}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_GenMatrix", "Test\FK_CLI_GenMatrix\FK_CLI_GenMatrix.csproj", "{AF0CB41C-4A5F-4245-914E-6AC3EC9DA33C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Audio", "Test\FK_CLI_Audio\FK_CLI_Audio.csproj", "{CEE4000E-0B52-4377-AFFD-FA13C523041E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_IFSTex", "Test\FK_CLI_IFSTex\FK_CLI_IFSTex.csproj", "{AFA32159-FBF0-4FAF-A509-FA8B6FC37E4C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CSharpHelper", "FK_CSharpHelper\FK_CSharpHelper.csproj", "{E4A2C2DA-D590-4B71-8219-33A6D074FDC7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Boid", "Test\FK_CLI_Boid\FK_CLI_Boid.csproj", "{BB99C09A-E1EA-4B65-BF56-6A0F891D6687}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_WpfAppTest", "FK_CLI_WpfAppTest\FK_CLI_WpfAppTest.csproj", "{99D32EFD-2347-43B5-A1D2-79E5C79D376A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FK_CLI_FS", "Test\FK_CLI_FS\FK_CLI_FS.fsproj", "{2A187788-B3E6-45A6-BDDB-DA7630594357}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FK_CLI_FBoid", "Test\FK_CLI_FBoid\FK_CLI_FBoid.fsproj", "{AF574854-578E-40BC-8420-A5CDDD26EF50}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE} = {DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{9B8D1536-FC3B-454D-95FC-ECC75C0A8E76}"
 EndProject
@@ -71,8 +125,8 @@ Global
 		{3A891CD6-2F77-45E5-97E3-3F10B10BECA1}.Release|x86.Build.0 = Release|x86
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Any CPU.Build.0 = Debug|Win32
-		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Mixed Platforms.ActiveCfg = Release|Win32
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Mixed Platforms.Build.0 = Release|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Win32.Build.0 = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|x86.ActiveCfg = Debug|Win32

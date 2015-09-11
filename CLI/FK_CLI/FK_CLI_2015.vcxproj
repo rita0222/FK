@@ -14,7 +14,8 @@
     <ProjectGuid>{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}</ProjectGuid>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
-    <RootNamespace>FK_Integration</RootNamespace>
+    <RootNamespace>FK_CLI</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -45,11 +46,17 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib_2015;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>FK_CLI</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib_2015;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>FK_CLI</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -67,6 +67,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FK_CLI">
+      <HintPath>..\..\FK_CLI_DLL\Release\FK_CLI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -81,12 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\FK_Integration\FK_Integration.vcxproj">
-      <Project>{df7dd30e-bb32-4c17-a0de-32b447c37bce}</Project>
-      <Name>FK_Integration</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
