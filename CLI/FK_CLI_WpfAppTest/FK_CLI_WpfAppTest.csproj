@@ -121,7 +121,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FK_CSharpHelper\FK_FormHelper.csproj">
+    <ProjectReference Include="..\FK_FormHelper\FK_FormHelper.csproj">
       <Project>{e4a2c2da-d590-4b71-8219-33a6d074fdc7}</Project>
       <Name>FK_FormHelper</Name>
     </ProjectReference>
