@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace FK_CSharpHelper
+namespace FK_FormHelper
 {
     public class fk_WpfViewport : fk_Viewport
     {

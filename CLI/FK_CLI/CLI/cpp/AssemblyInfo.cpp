@@ -9,12 +9,12 @@ using namespace System::Security::Permissions;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 //
-[assembly:AssemblyTitleAttribute(L"FK_CS")];
+[assembly:AssemblyTitleAttribute(L"FK_CLI")];
 [assembly:AssemblyDescriptionAttribute(L"")];
 [assembly:AssemblyConfigurationAttribute(L"")];
 [assembly:AssemblyCompanyAttribute(L"")];
-[assembly:AssemblyProductAttribute(L"FK_CS")];
-[assembly:AssemblyCopyrightAttribute(L"Copyright (c)  2014")];
+[assembly:AssemblyProductAttribute(L"FK_CLI")];
+[assembly:AssemblyCopyrightAttribute(L"Copyright (c) 2015 Fine Kernel Project")];
 [assembly:AssemblyTrademarkAttribute(L"")];
 [assembly:AssemblyCultureAttribute(L"")];
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FK_CLI;
 
-namespace FK_CSharpHelper
+namespace FK_FormHelper
 {
     /// <summary>
     /// ビューポート

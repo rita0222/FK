@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FK_CLI;
-using FK_CSharpHelper;
+using FK_FormHelper;
 using System.Windows.Threading;
 
 namespace FK_CLI_WpfAppTest
