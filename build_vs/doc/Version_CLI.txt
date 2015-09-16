@@ -1,0 +1,2 @@
+FK ToolKit for Microsoft Visual Studio 2013/2015(.NET Framework 4.5+)
+Version 3.0.0.0

@@ -72,7 +72,10 @@ cp -r vs_wizard ../FK_VC13/vs_wizard
 
 rm -rf ../FK_CLI
 mkdir ../FK_CLI
-mkdir ../FK_CLI/Debug
-mkdir ../FK_CLI/Release
-cp ../../CLI/FK_CLI_DLL/Debug/*.* ../FK_CLI/Debug
-cp ../../CLI/FK_CLI_DLL/Release/*.dll ../FK_CLI/Release
+mkdir ../FK_CLI/bin
+mkdir ../FK_CLI/doc
+mkdir ../FK_CLI/redist
+cp ../../CLI/FK_CLI_DLL/Release/*.dll ../FK_CLI/bin
+cp ../doc/License.txt ../FK_CLI/doc
+cp ../doc/Version_CLI.txt ../FK_CLI/doc
+cp ../extlibs/OpenAL/redist/*.exe ../FK_CLI/redist
