@@ -10,5 +10,6 @@ copy ..\..\CLI\FK_CLI_DLL\Release\*.dll ..\FK_CLI\bin
 copy ..\doc\License.txt ..\FK_CLI\doc
 copy ..\doc\Version_CLI.txt ..\FK_CLI\doc\Version.txt
 copy ..\extlibs\OpenAL\redist\*.exe ..\FK_CLI\redist
+copy "%VS120COMNTOOLS%..\..\VC\redist\1041\vcredist_x86.exe" ..\FK_CLI\redist
 
 echo Done!

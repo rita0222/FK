@@ -69,13 +69,3 @@ mkdir ../FK_VC13/doc/glew
 cp ../extlibs/glew-1.12.0/LICENSE.txt ../FK_VC13/doc/glew
 cp -r ../doc ../FK_VC13/doc
 cp -r vs_wizard ../FK_VC13/vs_wizard
-
-rm -rf ../FK_CLI
-mkdir ../FK_CLI
-mkdir ../FK_CLI/bin
-mkdir ../FK_CLI/doc
-mkdir ../FK_CLI/redist
-cp ../../CLI/FK_CLI_DLL/Release/*.dll ../FK_CLI/bin
-cp ../doc/License.txt ../FK_CLI/doc
-cp ../doc/Version_CLI.txt ../FK_CLI/doc
-cp ../extlibs/OpenAL/redist/*.exe ../FK_CLI/redist

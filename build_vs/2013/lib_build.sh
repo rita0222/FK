@@ -38,6 +38,3 @@ export VS12_DEVENV_PATH=$VS120COMNTOOLS/../IDE/devenv
 "%VS12_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2013\\vorbis_static.sln /Build "Debug|x64"
 "%VS12_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2013\\vorbis_static.sln /Build "Release|Win32"
 "%VS12_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2013\\vorbis_static.sln /Build "Release|x64"
-
-# cli
-"%VS12_DEVENV_PATH%" ..\\..\\CLI\\FK_CLI_Build.sln /Build "Release|Mixed Platforms"
