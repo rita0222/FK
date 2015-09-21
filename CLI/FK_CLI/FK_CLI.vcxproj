@@ -81,7 +81,7 @@
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
