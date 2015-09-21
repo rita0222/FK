@@ -70,14 +70,4 @@ copy ..\extlibs\glew-1.12.0\LICENSE.txt ..\FK_VC13\doc\glew
 xcopy /s /e ..\doc ..\FK_VC13\doc
 xcopy /s /e vs_wizard ..\FK_VC13\vs_wizard
 
-rd /s /q ..\FK_CLI
-md ..\FK_CLI
-md ..\FK_CLI\bin
-md ..\FK_CLI\doc
-md ..\FK_CLI\redist
-copy ..\..\CLI\FK_CLI_DLL\Release\*.dll ..\FK_CLI\bin
-copy ..\doc\License.txt ..\FK_CLI\doc
-copy ..\doc\Version_CLI.txt ..\FK_CLI\doc
-copy ..\extlibs\OpenAL\redist\*.exe ..\FK_CLI\redist
-
 echo Done!
