@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -343,11 +343,11 @@ int main(int, char *[])
 
 	Car				carObj;
 	World			worldObj;
-	Fl_Window		mainWindow(940, 320, "FK TEST");
+	Fl_Window		mainWindow(1240, 420, "FK TEST");
 	fk_Scene		carViewScene, buildViewScene, birdViewScene;
-	fk_Window		carViewWindow(10, 10, 300, 300);
-	fk_Window		buildViewWindow(320, 10, 300, 300);
-	fk_Window		birdViewWindow(630, 10, 300, 300);
+	fk_Window		carViewWindow(10, 10, 400, 400);
+	fk_Window		buildViewWindow(420, 10, 400, 400);
+	fk_Window		birdViewWindow(830, 10, 400, 400);
 	fk_Color		bgColor(0.2, 0.7, 1.0);
 
 	fk_Model		buildViewModel, birdViewModel;

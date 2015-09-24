@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -73,14 +73,14 @@
 
 int main(int, char *[])
 {
-	Fl_Window		mainWindow(620, 620, "FK TEST");
+	Fl_Window		mainWindow(820, 820, "FK TEST");
 	fk_Model		camera, blockModel, lightModel, lineModel[2];
 	fk_Vector		pos[4];
 	fk_Line			line[2];
 	fk_Light		light;
 	fk_Block		block(50.0, 70.0, 40.0);
 	fk_Scene		scene;
-	fk_Window		window(10, 10, 600, 600);
+	fk_Window		window(10, 10, 800, 800);
 	int				i = 0;
 
 	mainWindow.end();

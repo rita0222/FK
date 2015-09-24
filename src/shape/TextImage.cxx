@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -75,7 +75,12 @@
 #include <algorithm>
 #include <FK/TextImage.h>
 #include <FK/Error.H>
-#include <ft2build.h>
+
+#ifdef _MACOSX_
+#include <freetype2/ft2build.h>
+#else
+#include <freetype/ft2build.h>
+#endif
 
 using namespace std;
 
@@ -419,8 +424,8 @@ fk_TextImage::fk_TextImage(void)
 	setLineSkip(0);
 	setSpaceLineSkip(0);
 	setSmoothMode(true);
-	setMonospaceMode(false);
-	setMonospaceSize(0);
+	setMonospaceMode(true);
+	setMonospaceSize(10);
 	setOffset(0, 0, 0, 0);
 	maxHeight = maxWidth = 0;
 	setMinLineWidth(0);

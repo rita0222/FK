@@ -114,12 +114,13 @@ ming:
 	"LFLAGS = -L../lib -L../../FK_MingPack/lib \
 		-Wl,--enable-auto-import" \
 	"SYSLIBS = -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
-		-lfltk_forms -lfltk -lfltk_z \
+		-lfltk_forms -lfltk \
 		-lfreetype -liconv \
-		-lOpenAL32 -lvorbisfile -lvorbis -logg \
+		-lOpenAL32 -lvorbisfile -lvorbis -logg -lz \
 		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
 		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
-	"RANLIB = ranlib"
+	"RANLIB = ranlib" \
+	"FKLINK = $(FKLIB) $(FKLIB)"
 
 ming-g:
 	$(MAKE) $(TARGET) \

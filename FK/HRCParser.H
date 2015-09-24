@@ -1,6 +1,26 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_HRC_PARSER_HEADER__
+#define __FK_HRC_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+
+class fk_HRCParser : public fk_ParserBase {
+ private:
+	bool	CheckHRCFile(std::ifstream &);
+	bool	ReadHRCVertexData(std::ifstream &, std::vector<fk_Vector> *);
+	bool	ReadHRCPolygonData(std::ifstream &, std::vector< std::vector<int> > *);
+
+ public:
+	fk_HRCParser(void);
+	virtual ~fk_HRCParser();
+
+	bool	ReadHRCFile(std::string);
+};
+
+#endif // !__FK_HRC_PARSER_HEADER__
+
+/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +56,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,22 +89,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_HRC_PARSER_HEADER__
-#define __FK_HRC_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-
-class fk_HRCParser : public fk_ParserBase {
- private:
-	bool	CheckHRCFile(std::ifstream &);
-	bool	ReadHRCVertexData(std::ifstream &, std::vector<fk_Vector> *);
-	bool	ReadHRCPolygonData(std::ifstream &, std::vector< std::vector<int> > *);
-
- public:
-	fk_HRCParser(void);
-	virtual ~fk_HRCParser();
-
-	bool	ReadHRCFile(std::string);
-};
-
-#endif // !__FK_HRC_PARSER_HEADER__

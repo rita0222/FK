@@ -1,6 +1,27 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_LOOP_INDEX_ADMIN_HEADER__
+#define __FK_LOOP_INDEX_ADMIN_HEADER__
+
+#include <vector>
+
+class fk_LoopIndexAdmin {
+
+ private:
+	int									maxID;
+	std::vector< std::vector<int> >		IDAdmin;
+
+ public:
+	fk_LoopIndexAdmin(void);
+	virtual ~fk_LoopIndexAdmin();
+
+	void	PushRemoveID(int, int);
+	int		GetNewID(int);
+};
+
+#endif // !__FK_LOOP_INDEX_ADMIN_HEADER__
+
+/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +57,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,23 +90,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_LOOP_INDEX_ADMIN_HEADER__
-#define __FK_LOOP_INDEX_ADMIN_HEADER__
-
-#include <vector>
-
-class fk_LoopIndexAdmin {
-
- private:
-	int									maxID;
-	std::vector< std::vector<int> >		IDAdmin;
-
- public:
-	fk_LoopIndexAdmin(void);
-	virtual ~fk_LoopIndexAdmin();
-
-	void	PushRemoveID(int, int);
-	int		GetNewID(int);
-};
-
-#endif // !__FK_LOOP_INDEX_ADMIN_HEADER__

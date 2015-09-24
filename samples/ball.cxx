@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -245,8 +245,8 @@ int main(int, char *[])
 
 
 	// ### WINDOW ###
-	Fl_Window		mainWin(620, 620, "BALL TEST");
-	fk_Window		win(10, 10, 600, 600);
+	Fl_Window		mainWin(820, 820, "BALL TEST");
+	fk_Window		win(10, 10, 800, 800);
 	mainWin.end();
 	fk_Material::initDefault();
 

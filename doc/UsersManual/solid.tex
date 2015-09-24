@@ -172,8 +172,8 @@ fk\_Solid クラスを用いて生成した形状の各位相要素は、それ�
     int         ID;
 
     solid.readVRMLFile("sample.wrl", true, true);
-    curV = solid.getNextV((fk_Vertex *)NULL);
-    while(curV != (fk_Vertex *)NULL) {
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
         pos = curV->getPosition();
         ID = curV->getID();
         printf("ID[%d] = (%lf, %lf, %lf)\n", ID, pos.x, pos.y, pos.z);
@@ -187,14 +187,14 @@ fk\_Solid クラスを用いて生成した形状の各位相要素は、それ�
 getNextV() 関数である。while ループの外にある getNextV() と
 中にある getNextV() では与えている引数が異なっている。全ての
 頂点はユニークな ID を保持しており、
-\verb+getNextV((fk_Vertex *)NULL)+ という記述では現存する頂点
+\verb+getNextV(nullptr)+ という記述では現存する頂点
 のうち最も ID が小さな頂点を返す。従って、ループ外の getNextV() では
 curV に最小の ID を持つ頂点オブジェクト(のポインタ)が代入される。
 
 次にループ中の getNextV() であるが、引数が curV になっている。
 getNextV() は、引数にある頂点を代入すると、代入された頂点 ID の
 次に大きい頂点 ID を持つ頂点を返す。また、もし引数の頂点が
-最大の ID を所持していた場合には NULL が返される。従って、
+最大の ID を所持していた場合には nullptr が返される。従って、
 例のプログラムの場合にはループから抜けることになる。
 このように、getNextV() をループ中で用いることによって全ての
 頂点位置を表示することが可能となる。
@@ -209,8 +209,8 @@ getNextV() は、引数にある頂点を代入すると、代入された頂点
     fk_Solid   solid;
     fk_Half    *curH;
 
-    curH = solid.getNextH((fk_Half *)NULL);
-    while(curH != (fk_Half *)NULL) {
+    curH = solid.getNextH(nullptr);
+    while(curH != nullptr) {
         printf("Half ID = %d", curH->getID());
         curH = solid.getNextH(curH);
     }
@@ -262,7 +262,7 @@ getNextV() は、引数にある頂点を代入すると、代入された頂点
 	自身の法線ベクトルを返す。
  \item[\hspace*{0.6cm}fk\_Half * getOneHalf(void)] ~ \\
 	自身を始点とする半稜線のうちの1つを返す。もし自身の
-	頂点を始点とする半稜線がない場合は NULL が返る。
+	頂点を始点とする半稜線がない場合は nullptr が返る。
 \end{description}
 
 \subsection{fk\_Half で使用できる参照関数}
@@ -278,7 +278,7 @@ getNextV() は、引数にある頂点を代入すると、代入された頂点
 	自身が属する稜線(親稜線)を返す。
  \item[\hspace*{0.6cm}fk\_Loop * getParentLoop(void)] ~ \\
 	自身が属するループ(親ループ)を返す。親ループがない場合は
-	NULL が返る。
+	nullptr が返る。
 \end{description}
 
 \subsection{fk\_Edge で使用できる参照関数}
@@ -349,7 +349,7 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 \begin{description}
  \item[\hspace*{0.6cm}fk\_Half * getOneHOnV(fk\_Vertex *V1)] ~ \\
 	V1 に接続する半稜線のうちの1つを返す。V1 が
-	独立頂点の場合は NULL が返る。
+	独立頂点の場合は nullptr が返る。
 
  \item[\hspace*{0.6cm}vector\(<\)fk\_Half *\(>\)
 	getAllHOnV(fk\_Vertex *V1)] ~ \\
@@ -362,7 +362,7 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 
  \item[\hspace*{0.6cm}fk\_Edge * getOneEOnV(fk\_Vertex *V1)] ~ \\
 	V1 に接続している稜線のうちの1つを返す。V1 が
-	独立頂点の場合は NULL が返る。
+	独立頂点の場合は nullptr が返る。
 
  \item[\hspace*{0.6cm}int getENumOnV(fk\_Vertex *V1)] ~ \\
 	V1 に接続している稜線の本数を返す。
@@ -373,11 +373,11 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 
  \item[\hspace*{0.6cm}fk\_Loop *getOneLOnV(fk\_Vertex *V1)] ~ \\
 	V1 に接続しているループのうちの1つを返す。
-	ひとつのループとも接続していない場合は NULL を返す。
+	ひとつのループとも接続していない場合は nullptr を返す。
 
  \item[\hspace*{0.6cm}fk\_Vertex *getOneNeighborVOnV(fk\_Vertex *V1)] ~ \\
 	V1 に接続している頂点のうちの1つを返す。
-	ひとつの頂点とも接続していない場合は NULL を返す。
+	ひとつの頂点とも接続していない場合は nullptr を返す。
 
  \item[\hspace*{0.6cm}vector\(<\)fk\_Loop *\(>\)
 	getAllLOnV(fk\_Vertex *V1)] ~ \\
@@ -403,7 +403,7 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 
  \item[\hspace*{0.6cm}fk\_Loop * getParentLOnH(fk\_Half *H1)] ~ \\
 	H1 が所属しているループを返す。H1 がどのループにも
-	所属していない場合は NULL が返る。
+	所属していない場合は nullptr が返る。
 \end{description}
 \begin{center}
 {\large 稜線に関連する関数}
@@ -423,11 +423,11 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 
  \item[\hspace*{0.6cm}fk\_Loop * getRightLOnE(fk\_Edge *E1)] ~ \\
 	E1 の右側にあるループを返す。右側にループがなければ
-	NULL を返す。
+	nullptr を返す。
 
  \item[\hspace*{0.6cm}fk\_Loop * getLeftLOnE(fk\_Edge *E1)] ~ \\
 	E1 の左側にあるループを返す。右側にループがなければ
-	NULL を返す。
+	nullptr を返す。
 
  \item[\hspace*{0.6cm}fk\_EdgeStatus getEdgeStatus(fk\_Edge *E1)] ~ \\
 	E1 が現在どのような稜線かを返す。返す値と状態は次の通り。
@@ -471,7 +471,7 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 
  \item[\hspace*{0.6cm}fk\_Loop * getOneNeighorLOnL(fk\_Loop *L1)] ~ \\
 	L1 と隣接しているループのうちの1つを返す。
-	1つも隣接しているループがない場合は NULL が
+	1つも隣接しているループがない場合は nullptr が
 	返る。
 
  \item[\hspace*{0.6cm}vector\(<\)fk\_Loop *\(>\)
@@ -484,14 +484,14 @@ fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場�
 	L1 と隣接しているループのうち、H1 の親稜線を共有している
 	ループを返す。この共有関係が成り立たないような状態の
 	場合 (H1 が L1 上にない、H1 の反対側にループが存在
-	しないなど) は、NULL が返る。
+	しないなど) は、nullptr が返る。
 
  \item[\hspace*{0.6cm}fk\_Loop *
 	getNeighborLOnLE(fk\_Loop *L1, fk\_Edge *E1)] ~ \\
 	L1 と隣り合っているループのうち、E1 を共有している
 	ループを返す。この共有関係が成り立たないような状態の
 	場合 (E1 が L1 上にない、E1 の反対側にループが存在
-	しないなど) は、NULL が返る。
+	しないなど) は、nullptr が返る。
 \end{description}
 
 \section{形状の変形} \label{sec:ModifySolid}
@@ -526,7 +526,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 
 	\begin{enumerate}
 	 \item V1, V2 がともに独立頂点の場合: \\
-		H1\_1, H1\_2, H2\_1, H2\_2 にはいずれも NULL を代入する。
+		H1\_1, H1\_2, H2\_1, H2\_2 にはいずれも nullptr を代入する。
 		なお、H1\_1 以下の引数は省略可能である。
 
 	 \item V1 が接続頂点、V2 が独立頂点の場合: \\
@@ -534,7 +534,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 		このとき、H1\_1 は H1 の前となる半稜線を、H1\_2 には H2 の
 		後となる半稜線を代入する。このとき、
 		H1\_1 及び H1\_2 は未定義半稜線でなければならない。
-		H2\_1 及び H2\_2 には NULL を
+		H2\_1 及び H2\_2 には nullptr を
 		代入する。なお、H2\_1, H2\_2 は省略可能である。
 
 	 \item V1, V2 いずれも接続頂点の場合: \\
@@ -550,7 +550,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 		いずれも未定義半稜線でなければならない。
 	\end{enumerate}
 	返り値は新たに生成された稜線である。もし稜線生成に失敗した場合は
-	NULL を返す。
+	nullptr を返す。
 
  \subsubsection*{\hspace*{0.6cm}bool deleteEdge(fk\_Edge *E1)}
    	未定義稜線 E1 を削除する。成功すれば true を返す。
@@ -562,7 +562,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
  \subsubsection*{\hspace*{0.6cm}fk\_Loop * makeLoop(fk\_Half *H1)}
 	未定義半稜線 H1 が属するループを作成する。
 	成功すれば新たに生成されたループを返す。
-	H1 が定義半稜線であった場合は NULL が返って新たなループは生成されない。
+	H1 が定義半稜線であった場合は nullptr が返って新たなループは生成されない。
 
  \subsubsection*{\hspace*{0.6cm}bool deleteLoop(fk\_Loop *L1)}
 	ループ L1 を削除する。その結果として、L1 が存在した場所は
@@ -577,7 +577,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	単一ループ内に存在する H1 の終点にある頂点と H2 の始点にある
 	頂点の間に定義稜線を生成し、ループを分割する。
 	成功すれば新たに生成された稜線を返す。H1 と H2 が同一の
-	ループ内にない場合はエラーとなり NULL を返す。なお、
+	ループ内にない場合はエラーとなり nullptr を返す。なお、
 	H1 と H2 は分割後新ループ側に属するので、新たに生成された
 	ループを得たい場合は H1 や H2 の親ループを参照すればよい。
 
@@ -592,7 +592,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
  \subsubsection*{\hspace*{0.6cm}fk\_Vertex * separateEdge(fk\_Edge *E1)}
 	任意稜線 E1 を分割し、新たな頂点を稜線の両端点の
 	中点位置に生成する。成功した場合新たに生成された頂点を返し、
-	失敗した場合は NULL を返す。
+	失敗した場合は nullptr を返す。
 
  \subsubsection*{\hspace*{0.6cm}bool uniteEdge(fk\_Vertex *V1)}
 	2本の任意稜線に接続されている頂点 V1 を削除し、1本の
@@ -605,7 +605,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
  \subsubsection*{\hspace*{0.6cm}fk\_Loop * removeVertexInLoop(fk\_Vertex *V)}
 	頂点 V と V に接続している全ての稜線を削除し、1つの大きな
 	ループを生成する。成功すれば新たなループを返し、
-	失敗した場合は NULL を返す。
+	失敗した場合は nullptr を返す。
 
 \myfig{Fig:Euler07}{./Fig/Euler07.eps}{scale=0.6,clip}
 	{removeVertexInLoop}{-5mm}
@@ -713,8 +713,8 @@ setElemMaterialID() メンバ関数で引数にインデックスを入力すれ
     fk_Vertex   *curV;
             :
             :
-    curV = solid.getNextV((fk_Vertex *)NULL);
-    while(curV != (fk_Vertex *)NULL) {
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
         if(curV->getPosition().z < 0) {
             curV->setElemMaterialID(1);
         } else {
@@ -762,8 +762,8 @@ FK\_NONE\_MODE & 描画しない。\\ \hline
     fk_Vertex   *curV;
             :
             :
-    curV = solid.getNextV((fk_Vertex *)NULL);
-    while(curV != (fk_Vertex *)NULL) {
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
         if(curV->getPosition().z < 0) {
             curV->setElemMaterialMode(FK_NONE_MODE);
         } else {
@@ -835,8 +835,8 @@ setAttrSS(string, string) & string & string \\ \hline
     fk_Solid        solid;
     fk_Vertex       *curV;
 
-    curV = solid.getNextV((fk_Vertex *)NULL);
-    while(curV != (fk_Vertex *)NULL) {
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
         curV->setAttrSD("xPos", curV->getPosition().x);
         curV = solid.getNextV(curV);
     }
@@ -873,8 +873,8 @@ string getAttrSS(string)	& setAttrSS()	\\ \hline
     fk_Solid    solid;
     fk_Vertex   *curV;
 
-    curV = solid.getNextV((fk_Vertex *)NULL);
-    while(curV != (fk_Vertex *)NULL) {
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
         cout << "xPos = " << curV->getAttrSD("xPos") << "\n";
         curV = solid.getNextV(curV);
     }

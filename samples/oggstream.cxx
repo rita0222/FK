@@ -24,7 +24,7 @@ int main(int, char *[])
 	window.setCameraPos(0.0, 1.0, 20.0);
 	window.setCameraFocus(0.0, 1.0, 0.0);
 
-	window.setSize(800, 600);
+	window.setSize(1000, 800);
 	window.setBGColor(0.6, 0.7, 0.8);
 	window.open();
 	window.showGuide(FK_GRID_XZ);

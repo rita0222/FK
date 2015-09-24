@@ -1138,20 +1138,20 @@ xx \= xxxx \= \kill
 \> \textbf{fk\_Model * getParent(void)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		自身に設定されている親モデルを返す。
-		親モデルが設定されていない場合、NULLを返す。
+		親モデルが設定されていない場合、nullptrを返す。
 	\end{tabular} \\ \\
 
 \> \textbf{fk\_Model * foreachChild(fk\_Model *c)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		自身に設定されている子モデルを順番に返す。
-		まず c に NULL が入力されたとき、最初に設定された子モデル
+		まず c に nullptr が入力されたとき、最初に設定された子モデル
 		が返る。ただし、子モデルが登録されていなかった場合は
-		NULL が返ってくる。
+		nullptr が返ってくる。
 
 		次に、1番目に返ってきたモデルを引数として入力したとき、
 		2番目に設定された子モデルが返ってくる。このようにして、
 		設定されている子モデルを順番に参照することができる。
-		最後の子モデルが引数に入力されたとき、NULL が返る。
+		最後の子モデルが引数に入力されたとき、nullptr が返る。
 	\end{tabular}
 \end{tabbing}
 

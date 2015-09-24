@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -149,7 +149,7 @@ int main(int, char *[])
 	tex.setTextureCoord(3, 1, 0.5, 1.0);
 	tex.setTextureCoord(3, 2, 1.0, 0.5);
 
-	fk_ShapeViewer	viewer(300, 400);
+	fk_ShapeViewer	viewer(800, 600);
 
 	mat.setAmbDiff(1.0, 1.0, 1.0);
 	viewer.setShape(&tex);

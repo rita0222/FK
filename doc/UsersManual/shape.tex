@@ -1051,7 +1051,7 @@ xx \= xxxx \= \kill
 \> \textbf{fk\_Particle * getParticle(int)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		ID を入力し、その ID を持つパーティクルを取得する。
-		ID に相当するパーティクルが存在していない場合は NULL を返す。
+		ID に相当するパーティクルが存在していない場合は nullptr を返す。
 	\end{tabular} \\ \\
 
 \> \textbf{fk\_Particle * getNextParticle(fk\_Particle *)} \\
@@ -1059,10 +1059,10 @@ xx \= xxxx \= \kill
 		allMethod 中で全パーティクルを取得する際に利用する。
 		引数の種類によって、以下のようにパーティクルを返す。
 		\begin{enumerate}
-		 \item 引数が NULL の場合は、
+		 \item 引数が nullptr の場合は、
 			ID が最も小さなパーティクルを返す。
 		 \item 引数が最大の ID を持つパーティクルの場合は、
-			NULL を返す。
+			nullptr を返す。
 		 \item 引数がそれ以外の場合は、入力パーティクル ID よりも
 			大きな ID を持つものの中で最も小さな ID を持つ
 			パーティクルを返す。
@@ -1080,8 +1080,8 @@ xx \= xxxx \= \kill
 		            fk_Particle   *p;
 		            fk_Vector     vec(0.0, 0.0, 0.0);
 
-		            p = getNextParticle((fk_Particle *)NULL);
-		            while(p != (fk_Particle *)NULL) {
+		            p = getNextParticle(nullptr);
+		            while(p != nullptr) {
 		                vec += p->getPosition();
 		                p = getNextParticle(p);
 		            }

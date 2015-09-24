@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2014, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -73,7 +73,7 @@
 
 int main(int, char *[])
 {
-	Fl_Window		mainWin(520, 520, "Pick Test");
+	Fl_Window		mainWin(820, 820, "Pick Test");
 	int				mX, mY, i;
 	double			step;
 	fk_Solid		solid;
@@ -83,7 +83,7 @@ int main(int, char *[])
 	fk_DrawMode		curMode;
 	fk_PickData		pickData;
 	fk_Model		camera, shapeModel;
-	fk_Window		fkWin(10, 10, 500, 500);
+	fk_Window		fkWin(10, 10, 800, 800);
 
 
 	mainWin.end();
