@@ -72,12 +72,6 @@
 
 #define FK_DEF_SIZETYPE
 
-/*
-#ifdef _MACOSX_
-#define LIBICONV_PLUG
-#endif
-*/
-
 #include <map>
 #include <FK/UniCode.h>
 #include <FK/Error.H>
@@ -633,7 +627,7 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-#ifdef FK_CLI_CODE
+#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_)
 		if(iconv(argIV, const_cast<char **>(&inBuf),
 				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
@@ -675,7 +669,7 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-#ifdef FK_CLI_CODE
+#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_)
 		if(iconv(argIV, const_cast<char **>(&inBuf),
 				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
