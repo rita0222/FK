@@ -72,13 +72,19 @@
 
 #define FK_DEF_SIZETYPE
 
+/*
+#ifdef _MACOSX_
+#define LIBICONV_PLUG
+#endif
+*/
+
 #include <map>
 #include <FK/UniCode.h>
 #include <FK/Error.H>
 #include <iconv.h>
 #include <sstream>
 
-#ifdef _FREEBSD_
+#if defined(_FREEBSD_) || defined(_MACOSX_)
 typedef const char **	iconvpp;
 #else
 typedef char **			iconvpp;
