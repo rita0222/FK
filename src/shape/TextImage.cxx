@@ -78,6 +78,8 @@
 
 #ifdef _MACOSX_
 #include <freetype2/ft2build.h>
+#elif defined(_MSC_VER)
+#include <ft2build.h>
 #else
 #include <freetype/ft2build.h>
 #endif
