@@ -15,41 +15,41 @@
 に設定するかをうまく選択していけばよい。
 
 \section{モデルの登録}
-モデルの登録は、entryModel() というメンバ関数を用いる。これは次のように
+モデルの登録は、EntryModel() というメンバ関数を用いる。これは次のように
 使用される。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_Model model1, model2, model3;
-        fk_Scene scene;
+        var model1 = new fk_Model();
+        var model2 = new fk_Model();
+        var model3 = new fk_Model();
+        var scene = new fk_Scene();
 
-        scene.entryModel(&model1);
-        scene.entryModel(&model2);
-        scene.entryModel(&model3);
+        scene.EntryModel(model1);
+        scene.EntryModel(model2);
+        scene.EntryModel(model3);
 \end{verbatim}
 \end{breakbox}
 ~ \\
-モデルを登録する際、引数はポインタとして渡す。
-scene オブジェクトの中でこのポインタが参照される。
-登録したモデルをリストから削除したい場合は、removeModel() 関数を用いる。
-もし、シーン中に登録されていないモデルに対して removeModel() を用いた場合には、
+登録したモデルをリストから削除したい場合は、RemoveModel() 関数を用いる。
+もし、シーン中に登録されていないモデルに対して RemoveModel() を用いた場合には、
 特に何も起こらない。
 以下の例は、DrawModeFlag が true の場合はモデルをシーンに登録し、
 そうでない場合はモデルをシーンから削除する。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_Model model1;
-        fk_Scene disp;
+        var model1 = new fk_Model();
+        var scene = new fk_Scene();
         bool DrawModelFlag;
 
                 :
                 :
 
         if(DrawModelFlag == true) {
-                scene.entryModel(&model1);
+                scene.EntryModel(model1);
         } else {
-                scene.removeModel(&model1);
+                scene.RemoveModel(model1);
         }
 \end{verbatim}
 \end{breakbox}
