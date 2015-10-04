@@ -547,6 +547,15 @@ namespace FK_CLI
 			 void set(fk_Color^ argC);
 		 }
 
+		 //! 鏡面反射ハイライトプロパティ
+		 /*!
+		  *	鏡面反射ハイライトを設定します。引数は float 型です。
+		  */
+		 property float Shininess {
+			 float get();
+			 void set(float s);
+		 };
+
 		 //! 初期化関数
 		 /*!
 		  *	変数を初期状態に戻します。

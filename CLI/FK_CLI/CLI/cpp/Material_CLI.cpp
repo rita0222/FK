@@ -393,6 +393,16 @@ namespace FK_CLI {
 		GetP()->setEmission(*argC->pCol);
 	}
 
+	float fk_Material::Shininess::get()
+	{
+		return GetP()->getShininess();
+	}
+
+	void fk_Material::Shininess::set(float argF)
+	{
+		GetP()->setShininess(argF);
+	}
+
 	void fk_Material::Init(void)
 	{
 		GetP()->init();
