@@ -47,26 +47,26 @@ IF セットは、次の2つのデータから成り立っている。
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_IndexFaceSet     ifs;
-    fk_Vector           pos[4];
-    int                 IFSet[3*4];
+    var ifs = new fk_IndexFaceSet();
+    var pos = new fk_Vector[4];
+    var IFSet = new int[3 * 4];
 
-    pos[0].set(0.0, 10.0, 0.0);
-    pos[1].set(-10.0, -10.0, 10.0);
-    pos[2].set(10.0, -10.0, 10.0);
-    pos[3].set(0.0, -10.0, -10.0);
+    pos[0] = new fk_Vector(0.0, 10.0, 0.0);
+    pos[1] = new fk_Vector(-10.0, -10.0, 10.0);
+    pos[2] = new fk_Vector(10.0, -10.0, 10.0);
+    pos[3] = new fk_Vector(0.0, -10.0, -10.0);
 
-    IFSet[0] = 0;  IFSet[1] = 1;  IFSet[2] = 2;
-    IFSet[3] = 0;  IFSet[4] = 2;  IFSet[5] = 3;
-    IFSet[6] = 0;  IFSet[7] = 3;  IFSet[8] = 1;
-    IFSet[9] = 1;  IFSet[10] = 3; IFSet[11] = 2;
+    IFSet[0] = 0; IFSet[1] = 1; IFSet[2] = 2;
+    IFSet[3] = 0; IFSet[4] = 2; IFSet[5] = 3;
+    IFSet[6] = 0; IFSet[7] = 3; IFSet[8] = 1;
+    IFSet[9] = 1; IFSet[10] = 3; IFSet[11] = 2;
 
-    ifs.makeIFSet(4, 3, IFSet, 4, pos);
+    ifs.MakeIFSet(4, 3, IFSet, 4, pos);
 \end{verbatim}
 \end{breakbox}
 ~ \\
-最終的には、makeIFSet というメンバ関数を用いて fk\_IndexFaceSet 型に情報を
-与えることになる。makeIFSet は、次のような形式で用いることができる。
+最終的には、MakeIFSet というメンバ関数を用いて fk\_IndexFaceSet 型に情報を
+与えることになる。MakeIFSet は、次のような形式で用いることができる。
 \\
 \begin{screen}
 \begin{center}
@@ -113,50 +113,49 @@ IF セットは、次の2つのデータから成り立っている。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_Solid                    solid;
-        fk_Vector                   pos;
-        vector<fk_Vector>           posArray;
-        vector<int>                 polygon;
-        vector< vector<int> >       IFSet;
-    
-        pos.set(0.0, 10.0, 0.0);      posArray.push_back(pos);
-        pos.set(-10.0, -10.0, 10.0);  posArray.push_back(pos);
-        pos.set(10.0, -10.0, 10.0);   posArray.push_back(pos);
-        pos.set(10.0, -10.0, -10.0);  posArray.push_back(pos);
-        pos.set(-10.0, -10.0, -10.0); posArray.push_back(pos);
-        // 1 枚目
-        polygon.clear();
-        polygon.push_back(0);
-        polygon.push_back(1);
-        polygon.push_back(2);
-        IFSet.push_back(polygon);
-        // 2 枚目
-        polygon.clear();
-        polygon.push_back(0);
-        polygon.push_back(2);
-        polygon.push_back(3);
-        IFSet.push_back(polygon);
-        // 3 枚目
-        polygon.clear();
-        polygon.push_back(0);
-        polygon.push_back(3);
-        polygon.push_back(4);
-        IFSet.push_back(polygon);
-        // 4 枚目
-        polygon.clear();
-        polygon.push_back(0);
-        polygon.push_back(4);
-        polygon.push_back(1);
-        IFSet.push_back(polygon);
-        // 5 枚目
-        polygon.clear();
-        polygon.push_back(4);
-        polygon.push_back(3);
-        polygon.push_back(2);
-        polygon.push_back(1);
-        IFSet.push_back(polygon);
+        var solid = new fk_Solid();
+        var posArray = new List<fk_Vector>();
+        List<int> polygon;
+        var IFSet = new List<int[]>();
 
-        solid.makeIFSet(&IFSet, &posArray);
+        posArray.Add(new fk_Vector(0.0, 10.0, 0.0));
+        posArray.Add(new fk_Vector(-10.0, -10.0, 10.0));
+        posArray.Add(new fk_Vector(10.0, -10.0, 10.0));
+        posArray.Add(new fk_Vector(10.0, -10.0, -10.0));
+        posArray.Add(new fk_Vector(-10.0, -10.0, -10.0));
+        // 1 枚目
+        polygon = new List<int>();
+        polygon.Add(0);
+        polygon.Add(1);
+        polygon.Add(2);
+        IFSet.Add(polygon.ToArray());
+        // 2 枚目
+        polygon = new List<int>();
+        polygon.Add(0);
+        polygon.Add(2);
+        polygon.Add(3);
+        IFSet.Add(polygon.ToArray());
+        // 3 枚目
+        polygon = new List<int>();
+        polygon.Add(0);
+        polygon.Add(3);
+        polygon.Add(4);
+        IFSet.Add(polygon.ToArray());
+        // 4 枚目
+        polygon = new List<int>();
+        polygon.Add(0);
+        polygon.Add(4);
+        polygon.Add(1);
+        IFSet.Add(polygon.ToArray());
+        // 5 枚目
+        polygon = new List<int>();
+        polygon.Add(4);
+        polygon.Add(3);
+        polygon.Add(2);
+        polygon.Add(1);
+        IFSet.Add(polygon.ToArray());
+
+        solid.MakeIFSet(IFSet.ToArray(), posArray.ToArray());
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -174,25 +173,25 @@ fk\_Solid クラスは、fk\_IndexFaceSet クラスと比べて描画が遅い�
 メモリを余計に使うという欠点があるが、そのかわり非常に柔軟な
 形状の生成や制御が可能なクラスである。
 
-上記のプログラム中では、「\verb+vector<***>+」という形式で定義された
+上記のプログラム中では、「\verb+List<***>+」という形式で定義された
 変数が3個登場する。
-ここではこの形式 (STL と呼ばれる C++ の機能) の詳細は解説しないが、
+ここではこの形式 (コレクションと呼ばれる C# の機能) の詳細は解説しないが、
 これを用いて次のようにして形状を定義していくことができる。
 \begin{enumerate}
- \item まず、\verb+vector<fk_Vector>+ 型の変数 (例では posArray) に対し、
-	push\_back 関数で頂点の位置ベクトルを次々に与えていく。
+ \item まず、\verb+List<fk_Vector>+ 型の変数 (例では posArray) に対し、
+	Add 関数で頂点の位置ベクトルを次々に与えていく。
 
- \item polygon を \verb+vector<int>+ 型の変数、IFSet を
-	\verb+vector< vector<int> >+ 型の変数として、
+ \item polygon を \verb+List<int>+ 型の変数、IFSet を
+	\verb+List< int[] >+ 型の変数として、
 	次のような形式で面を定義していく。\\ ~ \\
 	\begin{screen}
 	\begin{verbatim}
-                polygon.clear();
-                polygon.push_back(頂点 ID);
-                polygon.push_back(頂点 ID);
+                polygon = new List<int>();    // ポリゴン1枚を構成する配列を都度都度作り直す
+                polygon.Add(頂点 ID);
+                polygon.Add(頂点 ID);
                         :
-                polygon.push_back(頂点 ID);
-                IFSet.push_back(polygon);
+                polygon.Add(頂点 ID);
+                IFSet.Add(polygon.ToArray()); // FKの関数に対しては.ToArray()を付けて渡す(今後改善予定)
 	\end{verbatim}
 	\end{screen}
 \end{enumerate}
@@ -207,13 +206,13 @@ ID が 3 である頂点を数値だけで \((1.5, 2.5, 3,5)\) へ移動させ�
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_IndexFaceSet shape;
-        fk_Vector       pos;
+        var shape = new fk_IndexFaceSet();
+        var pos = new fk_Vector();
                 :
                 :
-        pos.set(0.0, 1.0, 2.0);
-        shape.moveVPosition(2, pos);
-        shape.moveVPosition(3, 1.5, 2.5, 3.5);
+        pos.Set(0.0, 1.0, 2.0);
+        shape.MoveVPosition(2, pos);
+        shape.MoveVPosition(3, 1.5, 2.5, 3.5);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -238,18 +237,18 @@ ID が 3 である頂点を数値だけで \((1.5, 2.5, 3,5)\) へ移動させ�
 \subsection{パレットの設定} \label{subsubsec:ifs_palette}
 まず、各位相要素の個別の設定を行う前に、元となるパレットを設定
 する必要がある。パレットの設定法は、
-以下のように setPalette() 関数で設定することで行う。
+以下のように SetPalette() 関数で設定することで行う。
 これに関しては、\ref{sec:mat_palette} 節で詳しく述べているので、
 そちらを参照してほしい。
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_IndexFaceSet    shape;
+    var shape = new fk_IndexFaceSet();
 
-    fk_Material::initDefault();
-    shape.setPalette(Red, 0);
-    shape.setPalette(Blue, 1);
-    shape.setPalette(Green, 2);
+    fk_Material.InitDefault();
+    shape.SetPalette(fk_Material.Red, 0);
+    shape.SetPalette(fk_Material.Blue, 1);
+    shape.SetPalette(fk_Material.Green, 2);
 \end{verbatim}
 \end{breakbox}
 \subsection{マテリアルインデックスの設定} \label{subsubsec:ifs_matid}
@@ -260,25 +259,25 @@ fk\_Solid の設定方法は第 \ref{subsubsec:solid_matid} 節で述べてい�
 そちらを参照してほしい。
 
 さて、fk\_IndexFaceSet での個別の設定であるが、これは
-setElemMaterialID() というメンバ関数を用いる。以下が
+SetElemMaterialID() というメンバ関数を用いる。以下が
 利用方法である。
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_IndexFaceSet    shape;
+    var shape = new fk_IndexFaceSet();
 
-    fk_Material::initDefault();
-    shape.setPalette(Red, 0);
-    shape.setPalette(Blue, 1);
-    shape.setPalette(Green, 2);
+    fk_Material.InitDefault();
+    shape.SetPalette(fk_Material.Red, 0);
+    shape.SetPalette(fk_Material.Blue, 1);
+    shape.SetPalette(fk_Material.Green, 2);
 
-    shape.setElemMaterialID(0, 1);
-    shape.setElemMaterialID(1, 2);
-    shape.setElemMaterialID(3, 0);
+    shape.SetElemMaterialID(0, 1);
+    shape.SetElemMaterialID(1, 2);
+    shape.SetElemMaterialID(3, 0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
-このように、setElemMaterialID() 関数は2つの整数を引数に取る。
+このように、SetElemMaterialID() 関数は2つの整数を引数に取る。
 最初の引数は、形状中の面 ID を指定する。fk\_IndexFaceSet クラスで
 生成した形状では、それぞれ生成した順に \(0, 1, 2, \cdots\) という ID が
 面に対応づけられている。2番目の引数は、パレットで指定したマテリアルの
@@ -292,47 +291,41 @@ ID を指定する。従って、この例では最初の面に青色を、次�
 まず、マテリアルパレットの取得方法を述べる。この節の内容は、
 fk\_IndexFaceSet と fk\_Solid クラスの両方で用いることができる。
 
-パレットを得るためのメンバ関数は「getPalette()」というものである。
-この関数は、返り値として fk\_Palette のポインタ型を返す。
+形状が持つパレットは「Palette」プロパティから取得でき、
+パレットが持つマテリアルの配列は「MaterialVector」プロパティから取得できる。
 以下に利用方法を示す。
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_IndexFaceSet       shape;
-    fk_Palette            palette;
-    vector<fk_Material>   *matArray;
-    fk_Color              col[10], *tmpCol;
-    unsigned int          i, size;
+    var shape = new fk_IndexFaceSet();
+    var col = new fk_Color[10];
 
     // VRML ファイルの読み込み
-    shape.readVRMLFile("sample.wrl");
+    shape.ReadVRMLFile("sample.wrl");
 
     // マテリアル配列の取得
-    palette = shape.getPalette();
-    matArray = palette->getMaterialVector();
+    var matArray = shape.Palette.MaterialVector;
 
     // マテリアル配列から、マテリアル要素数を取得
-    size = matArray->size();
+    int size = matArray.Length;
 
     // col 配列にパレットの Diffuse 要素を格納
-    for(i = 0; i < size && i < 10; i++) {
-        tmpCol = (*matArray)[i].getDiffuse();
-        col[i] = *tmpCol;
+    for (int i = 0; i < size && i < 10; i++)
+    {
+        col[i] = matArray[i].Diffuse;
     }
 \end{verbatim}
 \end{breakbox}
 ~ \\
 このプログラムは、まず最初に「sample.wrl」という名称の VRML ファイルを
-入力している。その次に、「palette」という変数にパレット情報(のポインタ)
-を格納している。さらに、パレットから「matArray」という STL の
-vector 型配列を取得している。
-その次の行でパレットの要素数を得ている。この「size()」という
-メンバ関数は FK の機能ではなく STL の機能である。
-最後の for 文は、マテリアルの拡散反射計数 (diffuse) を col という配列に
-コピーしている。getDiffuse() 関数は fk\_Color のポインタ型を返すので、
-一旦 tmpCol という変数に格納してから col に対してコピーを行っている。
+入力している。その次に、形状データからパレット情報のプロパティを経由して、
+パレットのマテリアルの配列を「matArray」という名前で取得している。
+その次の行でパレットの要素数を得ている。この「Length」というプロパティは
+FK の機能ではなく C# の配列が持つ機能である。
+最後の for 文は、マテリアルの拡散反射計数 (Diffuse) を col という配列に
+コピーしている。
 
-このプログラムは、ポインタと STL に不馴れな人には見辛いものとなっているが、
+このプログラムは、プロパティやコレクションに不馴れな人には見辛いものとなっているが、
 本質的に難しいことを行っているわけではないので、ゆっくり分析してほしい。
 
 \subsection{各面のマテリアルインデックスの参照}
@@ -345,11 +338,11 @@ vector 型配列を取得している。
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_IndexFaceSet    shape;
-    int                id;
+    var shape = new fk_IndexFaceSet();
+    int id;
 
-    shape.readVRMLFile("sample.wrl");
-    id = shape.getElemMaterialID(0);
+    shape.ReadVRMLFile("sample.wrl");
+    id = shape.GetElemMaterialID(0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -375,35 +368,35 @@ fk\_Solid では、各種形状データフォーマットでの入出力が可�
 以下に、各入出力用関数を個別に紹介する。
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{bool readSMFFile(string fileName)} \\
+\> \textbf{bool ReadSMFFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		SMF形式のファイルから、形状データを入力する。
 		「fileName」は入力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readVRMLFile(string fileName)} \\
+\> \textbf{bool ReadVRMLFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		VRML2.0形式のファイルから、形状データを入力する。
 		「fileName」は入力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readSTLFile(string fileName)} \\
+\> \textbf{bool ReadSTLFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		STL形式のファイルから、形状データを入力する。
 		「fileName」は入力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readHRCFile(string fileName)} \\
+\> \textbf{bool ReadHRCFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		HRC形式のファイルから、形状データを入力する。
 		「fileName」は入力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readRDSFile(string fileName)} \\
+\> \textbf{bool ReadRDSFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		RDS(Ray Dream Studio)形式のファイルから、
 		形状データを入力する。
@@ -411,16 +404,16 @@ xx \= xxxx \= \kill
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readDXFFile(string fileName)} \\
+\> \textbf{bool ReadDXFFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		DXF形式のファイルから、形状データを入力する。
 		「fileName」は入力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> {\footnotesize \bf bool readMQOFile(string fileName,
+\> {\footnotesize \bf bool ReadMQOFile(string fileName,
 	string objName, bool solidFlg, bool contFlg, bool matFlg)} \\
-\> {\footnotesize \bf bool readMQOFile(string fileName,
+\> {\footnotesize \bf bool ReadMQOFile(string fileName,
 	string objName, int matID, bool solidFlg, bool contFlg, bool matFlg)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		MQO形式のファイルから、形状データを入力する。
@@ -428,28 +421,28 @@ xx \= xxxx \= \kill
 		\ref{subsec:mqoread}節を参照のこと。
 	\end{tabular} \\ \\
 
-\> \textbf{bool writeVRMLFile(string fileName)} \\
+\> \textbf{bool WriteVRMLFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		形状データを VRML 2.0 形式で出力する。
 		「fileName」は出力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool writeSTLFile(string fileName)} \\
+\> \textbf{bool WriteSTLFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		形状データを STL 形式で出力する。
 		「fileName」は出力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool writeDXFFile(string fileName)} \\
+\> \textbf{bool WriteDXFFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		形状データを DXF 形式で出力する。
 		「fileName」は出力ファイル名を指定する。
 		成功すれば true、失敗した場合は false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool writeMQOFile(string fileName)} \\
+\> \textbf{bool WriteMQOFile(string fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		形状データを MQO 形式で出力する。
 		「fileName」は出力ファイル名を指定する。

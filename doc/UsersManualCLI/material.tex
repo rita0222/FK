@@ -62,12 +62,12 @@ fk\_Material クラスは表\ref{tbl:fkMaterial1}のようなステータスを�
 \begin{tabular}{|c|c|c|}
 \hline
 ステータス名 & 値の型 & 意味 \\ \hline \hline
-alpha & float & 透明度 \\ \hline
-ambient & fk\_Color & 環境反射係数 \\ \hline
-diffuse & fk\_Color & 拡散反射係数 \\ \hline
-emission & fk\_Color & 放射光係数 \\ \hline
-specular & fk\_Color & 鏡面反射係数 \\ \hline
-shininess & float & 鏡面反射のハイライト \\ \hline
+Alpha & float & 透明度 \\ \hline
+Ambient & fk\_Color & 環境反射係数 \\ \hline
+Diffuse & fk\_Color & 拡散反射係数 \\ \hline
+Emission & fk\_Color & 放射光係数 \\ \hline
+Specular & fk\_Color & 鏡面反射係数 \\ \hline
+Shininess & float & 鏡面反射のハイライト \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -98,9 +98,9 @@ shininess & float & 鏡面反射のハイライト \\ \hline
 この色は、光源に対して垂直な角度になったときに最も明るく反映
 されるが、一旦面に照射されればすべての方向に均等に散乱するため、
 どの視点から見ても同じ明るさを示す。
-この値が高いと、物質の色が素直に現れる。この値が低く、ambient や
-diffuse や emission の値も低い場合は、その物体は墨のように黒い
-ものとなる。diffuse の値が低く、その他の値のうちの幾つかが
+この値が高いと、物質の色が素直に現れる。この値が低く、Ambient や
+Diffuse や Emission の値も低い場合は、その物体は墨のように黒い
+ものとなる。Diffuse の値が低く、その他の値のうちの幾つかが
 高い値を持つとき、変化に富んだ物質感が醸し出される。
 
 放射光係数は、文字通り自身が放射する光の係数を示す。つまり、
@@ -210,7 +210,7 @@ FK では、1つのモデルに対して単一のマテリアルを設定する�
 \end{verbatim}
 \end{screen}
 ~ \\
-パレットにマテリアルを登録するには、setPalette 関数を用いる。
+パレットにマテリアルを登録するには、SetPalette 関数を用いる。
 \\
 \begin{screen}
 \begin{verbatim}
