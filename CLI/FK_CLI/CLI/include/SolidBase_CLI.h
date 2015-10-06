@@ -118,8 +118,8 @@ namespace FK_CLI
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 		 */
-		void MakeIFSet(cli::array< cli::array<int>^ >^ faceArray,
-					   cli::array<fk_Vector^>^ posArray, int order);
+		void MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^ faceArray,
+					   System::Collections::Generic::IEnumerable<fk_Vector^>^ posArray, int order);
 
 		//! 任意形状生成関数2-2
 		/*!
@@ -135,8 +135,8 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 */
-		void MakeIFSet(cli::array< cli::array<int>^ >^ faceArray,
-					   cli::array<fk_Vector^>^ posArray);
+		void MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^ faceArray,
+					   System::Collections::Generic::IEnumerable<fk_Vector^>^ posArray);
 	};
 }
 

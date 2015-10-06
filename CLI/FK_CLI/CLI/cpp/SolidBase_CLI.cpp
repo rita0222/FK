@@ -3,6 +3,7 @@
 namespace FK_CLI {
 
 	using namespace std;
+	using namespace System::Collections::Generic;
 
 	::fk_SolidBase * fk_SolidBase::GetP(void)
 	{
@@ -46,53 +47,47 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0]);
 	}
 
-	void fk_SolidBase::MakeIFSet(cli::array< cli::array<int>^ >^ argIF, cli::array<fk_Vector^>^ argPos, int argOrder)
+	void fk_SolidBase::MakeIFSet(IEnumerable< IEnumerable<int>^ >^ argIF, IEnumerable<fk_Vector^>^ argPos, int argOrder)
 	{
-		int i, j;
-
-		if(!argIF || !argPos) return;
+		if (!argIF || !argPos) return;
 
 		vector< vector<int> >	IFSet;
 		vector<int> fSet;
 
-		for(i = 0; i < argIF->Length; ++i) {
-			cli::array<int>^ fArray = argIF[i];
+		for each (IEnumerable<int>^ fArray in argIF) {
 			fSet.clear();
-			for(j = 0; j < fArray->Length; ++j) {
-				fSet.push_back(fArray[j]);
+			for each (int id in fArray) {
+				fSet.push_back(id);
 			}
 			IFSet.push_back(fSet);
 		}
 
-		vector<::fk_Vector> vArray(argPos->Length);
-		for(i = 0; i < argPos->Length; ++i) {
-			vArray[i] = argPos[i];
+		vector<::fk_Vector> vArray;
+		for each (fk_Vector^ pos in argPos) {
+			vArray.push_back(pos);
 		}
 
 		GetP()->makeIFSet(&IFSet, &vArray, argOrder);
 	}
 
-	void fk_SolidBase::MakeIFSet(cli::array< cli::array<int>^ >^ argIF, cli::array<fk_Vector^>^ argPos)
+	void fk_SolidBase::MakeIFSet(IEnumerable< IEnumerable<int>^ >^ argIF, IEnumerable<fk_Vector^>^ argPos)
 	{
-		int i, j;
-
 		if(!argIF || !argPos) return;
 
 		vector< vector<int> >	IFSet;
 		vector<int> fSet;
 
-		for(i = 0; i < argIF->Length; ++i) {
-			cli::array<int>^ fArray = argIF[i];
+		for each (IEnumerable<int>^ fArray in argIF) {
 			fSet.clear();
-			for(j = 0; j < fArray->Length; ++j) {
-				fSet.push_back(fArray[j]);
+			for each (int id in fArray) {
+				fSet.push_back(id);
 			}
 			IFSet.push_back(fSet);
 		}
 
-		vector<::fk_Vector> vArray(argPos->Length);
-		for(i = 0; i < argPos->Length; ++i) {
-			vArray[i] = argPos[i];
+		vector<::fk_Vector> vArray;
+		for each (fk_Vector^ pos in argPos) {
+			vArray.push_back(pos);
 		}
 
 		GetP()->makeIFSet(&IFSet, &vArray);

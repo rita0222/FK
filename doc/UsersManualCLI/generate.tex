@@ -116,7 +116,7 @@ IF セットは、次の2つのデータから成り立っている。
         var solid = new fk_Solid();
         var posArray = new List<fk_Vector>();
         List<int> polygon;
-        var IFSet = new List<int[]>();
+        var IFSet = new List< List<int> >();
 
         posArray.Add(new fk_Vector(0.0, 10.0, 0.0));
         posArray.Add(new fk_Vector(-10.0, -10.0, 10.0));
@@ -128,34 +128,34 @@ IF セットは、次の2つのデータから成り立っている。
         polygon.Add(0);
         polygon.Add(1);
         polygon.Add(2);
-        IFSet.Add(polygon.ToArray());
+        IFSet.Add(polygon);
         // 2 枚目
         polygon = new List<int>();
         polygon.Add(0);
         polygon.Add(2);
         polygon.Add(3);
-        IFSet.Add(polygon.ToArray());
+        IFSet.Add(polygon);
         // 3 枚目
         polygon = new List<int>();
         polygon.Add(0);
         polygon.Add(3);
         polygon.Add(4);
-        IFSet.Add(polygon.ToArray());
+        IFSet.Add(polygon);
         // 4 枚目
         polygon = new List<int>();
         polygon.Add(0);
         polygon.Add(4);
         polygon.Add(1);
-        IFSet.Add(polygon.ToArray());
+        IFSet.Add(polygon);
         // 5 枚目
         polygon = new List<int>();
         polygon.Add(4);
         polygon.Add(3);
         polygon.Add(2);
         polygon.Add(1);
-        IFSet.Add(polygon.ToArray());
+        IFSet.Add(polygon);
 
-        solid.MakeIFSet(IFSet.ToArray(), posArray.ToArray());
+        solid.MakeIFSet(IFSet, posArray);
 \end{verbatim}
 \end{breakbox}
 ~ \\
