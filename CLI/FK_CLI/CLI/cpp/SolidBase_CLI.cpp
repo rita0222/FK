@@ -23,8 +23,8 @@ namespace FK_CLI {
 	{
 	}
 
-	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, cli::array<int>^ argIFSet,
-								 int argVNum, cli::array<fk_Vector^>^ argArray, int argOrder)
+	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, IEnumerable<int>^ argIFSet,
+								 int argVNum, IEnumerable<fk_Vector^>^ argArray, int argOrder)
 	{
 		if(!argIFSet || !argArray) return;
 		pin_ptr<int> pIFSet = &argIFSet[0];
@@ -35,8 +35,8 @@ namespace FK_CLI {
 		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0], argOrder);
 	}
 
-	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, cli::array<int>^ argIFSet,
-								 int argVNum, cli::array<fk_Vector^>^ argPos)
+	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, IEnumerable<int>^ argIFSet,
+								 int argVNum, IEnumerable<fk_Vector^>^ argPos)
 	{
 		if(!argIFSet || !argPos) return;
 		pin_ptr<int> pIFSet = &argIFSet[0];
