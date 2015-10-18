@@ -669,6 +669,21 @@ xx \= xxxx \= \kill
 		「精細度」と呼ぶ。
 	\end{tabular} \\ \\
 
+\> \textbf{void setMonospaceMode(bool flg)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		文字を等幅で表示するかどうかを設定する。
+		true で等幅、false で非等幅となる。
+		true の場合、元々のフォントが等幅でない場合でも
+		等幅に補正して表示する。
+		デフォルトでは true に設定されている。
+
+\> \textbf{void setMonospaceSize(int size)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		文字を等幅で表示する場合の、
+		文字幅を設定する。
+		デフォルトでは 0 に設定されているので、
+		この関数で幅を設定しないと表示自体が行われない。
+
 \> \textbf{void setBoldStrength(int strength)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		文字の太さを数値に応じて太くする。
@@ -839,33 +854,6 @@ xx \= xxxx \= \kill
 			\end{table}
 		デフォルトでは FK\_SENDING\_ALL に設定されている。
 	\end{tabular}
-\end{tabbing}
-
-\subsubsection{設定情報の取得に関する関数}
-これまで紹介した設定用の関数に対応するかたちで、以下のような関数が
-利用可能である。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{int getDPI(void)} \\
-\> \textbf{int getPTSize(void)} \\
-\> \textbf{int getBoldStrength(void)} \\
-\> \textbf{int getCharSkip(void)} \\
-\> \textbf{int getLineSkip(void)} \\
-\> \textbf{int getSpaceLineSkip(void)} \\
-\> \textbf{bool getSmoothMode(void)} \\
-\> \textbf{fk\_Color getForeColor(void)} \\
-\> \textbf{fk\_Color getBackColor(void)} \\
-\> \textbf{fk\_Color getShadowColor(void)} \\
-\> \textbf{fk\_TextAlign getAlign(void)} \\
-\> \textbf{int getUpOffset(void)} \\
-\> \textbf{int getDownOffset(void)} \\
-\> \textbf{int getLeftOffset(void)} \\
-\> \textbf{int getRightOffset(void)} \\
-\> \textbf{int getMinLineWidth(void)} \\
-\> \textbf{fk\_TextSendingMode getSendingMode(void)} \\
-\> \textbf{bool getShadowMode(void)} \\
-\> \textbf{fk\_Dimension getShadowOffset(void)} \\
-\> \textbf{bool getCacheMode(void)} \\
 \end{tabbing}
 
 \subsection{文字列の設定} \label{subsec:strDef}
@@ -1091,7 +1079,7 @@ str[] 配列中の次の文字列を読み込むというものである。
 
 \begin{breakbox}
 \begin{verbatim}
-        fk_Window       window;
+        fk_AppWindow    window;
         fk_TextImage    textImage;
         fk_UniStr       str[10];
         int             loopCount, strCount;

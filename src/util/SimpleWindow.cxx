@@ -777,3 +777,19 @@ void fk_AppWindow::SetFinalizeMode(void)
 	light.SetTreeDelMode(false);
 }
 
+bool fk_AppWindow::getProjectPosition(double argX, double argY,
+									  fk_Plane *argPlane, fk_Vector *argPos)
+{
+	return drawWin->getProjectPosition(argX, argY, argPlane, argPos);
+}
+	
+bool fk_AppWindow::getProjectPosition(double argX, double argY,
+									  double argDist, fk_Vector *argPos)
+{
+	return drawWin->getProjectPosition(argX, argY, argDist, argPos);
+}
+
+bool fk_AppWindow::getWindowPosition(fk_Vector argPos_3D, fk_Vector *argPos_2D)
+{
+	return drawWin->getWindowPosition(argPos_3D, argPos_2D);
+}
