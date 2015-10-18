@@ -3,7 +3,8 @@
 namespace FK_CLI {
 
 	using namespace std;
-	
+	using namespace System::Collections::Generic;	
+
 	::fk_Polygon * fk_Polygon::GetP(void)
 	{
 		return (::fk_Polygon *)(pBase);
@@ -14,7 +15,7 @@ namespace FK_CLI {
 		pBase = new ::fk_Polygon();
 	}
 
-	fk_Polygon::fk_Polygon(cli::array<fk_Vector^>^ argArray) : fk_Solid(false)
+	fk_Polygon::fk_Polygon(IEnumerable<fk_Vector^>^ argArray) : fk_Solid(false)
 	{
 		pBase = new ::fk_Polygon();
 		SetVertex(argArray);
@@ -51,13 +52,15 @@ namespace FK_CLI {
 		GetP()->setVertex(argID, argPos);
 	}
 
-	void fk_Polygon::SetVertex(cli::array<fk_Vector^>^ argArray)
+	void fk_Polygon::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = argArray[i];
+		vector<::fk_Vector> vArray;
+
+		for each (fk_Vector^ pos in argArray) {
+			vArray.push_back(pos);
 		}
+
 		GetP()->setVertex(&vArray);
 	}
 
@@ -71,7 +74,7 @@ namespace FK_CLI {
 		pBase = new ::fk_Polyline();
 	}
 
-	fk_Polyline::fk_Polyline(cli::array<fk_Vector^>^ argArray) : fk_Solid(false)
+	fk_Polyline::fk_Polyline(IEnumerable<fk_Vector^>^ argArray) : fk_Solid(false)
 	{
 		pBase = new ::fk_Polyline();
 		SetVertex(argArray);
@@ -109,12 +112,13 @@ namespace FK_CLI {
 		GetP()->setVertex(argID, argPos);
 	}
 
-	void fk_Polyline::SetVertex(cli::array<fk_Vector^>^ argArray)
+	void fk_Polyline::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = argArray[i];
+		vector<::fk_Vector> vArray;
+
+		for each (fk_Vector^ pos in argArray) {
+			vArray.push_back(pos);
 		}
 		GetP()->setVertex(&vArray);
 	}
@@ -129,7 +133,7 @@ namespace FK_CLI {
 		pBase = new ::fk_Closedline();
 	}
 
-	fk_Closedline::fk_Closedline(cli::array<fk_Vector^>^ argArray) : fk_Polygon(false)
+	fk_Closedline::fk_Closedline(IEnumerable<fk_Vector^>^ argArray) : fk_Polygon(false)
 	{
 		pBase = new ::fk_Closedline();
 		SetVertex(argArray);

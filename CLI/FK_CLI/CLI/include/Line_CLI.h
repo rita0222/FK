@@ -7,6 +7,8 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	//! 有向線分を生成、管理するクラス
 	/*!
 	 *	このクラスは、形状として有向線分を制御する機能を提供します。
@@ -46,7 +48,7 @@ namespace FK_CLI
 		 *		端点位置ベクトルの配列。
 		 *		array[0] に始点、array[1] に終点となるように配置してください。
 		 */
-		void PushLine(cli::array<fk_Vector^>^ array);
+		void PushLine(IEnumerable<fk_Vector^>^ array);
 
 		//! 単独線分追加関数2
 		/*!
@@ -124,7 +126,7 @@ namespace FK_CLI
 		 *	\param[in]	array
 		 *		fk_Vector 型の配列。array[0] が始点、array[1] が終点となります。
 		 */
-		void SetVertex(cli::array<fk_Vector^>^ array);
+		void SetVertex(IEnumerable<fk_Vector^>^ array);
 	};
 }
 

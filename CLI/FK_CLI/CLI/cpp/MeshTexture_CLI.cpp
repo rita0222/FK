@@ -69,15 +69,15 @@ namespace FK_CLI {
 		return GetP()->setTextureCoord(argTID, argVID, argC);
 	}
 
-	bool fk_MeshTexture::SetTriTextureCoord(int argTID, cli::array<fk_TexCoord^>^ argArray)
+	bool fk_MeshTexture::SetTriTextureCoord(int argTID, IEnumerable<fk_TexCoord^>^ argArray)
 	{
 		if(!argArray) return false;
-			
-		vector<::fk_TexCoord> A(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			A[i] = argArray[i];
+		vector<::fk_TexCoord> array;
+
+		for each (fk_TexCoord^ c in argArray) {
+			array.push_back(c);
 		}
-		return GetP()->setTriTextureCoord(argTID, &A);
+		return GetP()->setTriTextureCoord(argTID, &array);
 	}
 
 	fk_TexCoord^ fk_MeshTexture::GetTextureCoord(int argTID, int argVID)
@@ -96,14 +96,15 @@ namespace FK_CLI {
 		return GetP()->setVertexPos(argTID, argVID, argP);
 	}
 
-	bool fk_MeshTexture::SetTriPos(int argTID, cli::array<fk_Vector^>^ argArray)
+	bool fk_MeshTexture::SetTriPos(int argTID, IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return false;
-		vector<::fk_Vector> A(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			A[i] = argArray[i];
+		vector<::fk_Vector> array;
+		  
+		for each(fk_Vector^ pos in argArray) {
+			array.push_back(pos);
 		}
-		return GetP()->setTriPos(argTID, &A);
+		return GetP()->setTriPos(argTID, &array);
 	}
 				
 	fk_Vector^ fk_MeshTexture::GetVertexPos(int argTID, int argVID)

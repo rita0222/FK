@@ -7,6 +7,7 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
 	//! ソリッドモデル形状変換クラス
 	/*!
 	 *	このクラスは、 fk_Solid クラスのインスタンスにおいて、
@@ -44,8 +45,7 @@ namespace FK_CLI
 		 *	与えられたIFSデータから、形状を生成します。
 		 *	この関数形式の場合、全ての面が同じ角数である必要があります。
 		 *	角数の異なる面が混在する形状を作成したい場合は、
-		 *	MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^,
-		 *		System::Collections::Generic::IEnumerable<fk_Vector^>^, int);
+		 *	MakeIFSet(IEnumerable< IEnumerable<int>^ >^, IEnumerable<fk_Vector^>^, int);
 		 *	を利用して下さい。
 		 *
 		 *	\param[in]	faceNum		面数
@@ -70,21 +70,22 @@ namespace FK_CLI
 		 *		
 		 *	\sa fk_IndexFaceSet::MakeIFSet()
 		 */
-		void MakeIFSet(int faceNum, int polyNum, System::Collections::Generic::IEnumerable<int>^ IFSet,
-					   int vertexNum, System::Collections::Generic::IEnumerable<fk_Vector^>^ posArray, int order);
+		void MakeIFSet(int faceNum, int polyNum,
+					   IEnumerable<int>^ IFSet,
+					   int vertexNum,
+					   IEnumerable<fk_Vector^>^ posArray,
+					   int order);
 
 		//! 任意形状生成関数1-2
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
 		 *	この関数形式の場合、全ての面が同じ角数である必要があります。
 		 *	角数の異なる面が混在する形状を作成したい場合は、
-		 *	MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^,
-		 *		System::Collections::Generic::IEnumerable<fk_Vector^>^, int)
+		 *	MakeIFSet(IEnumerable< IEnumerable<int>^ >^, IEnumerable<fk_Vector^>^, int)
 		 *	を利用して下さい。
 		 *
 		 *	本関数は、
-		 *	MakeIFSet(int, int, System::Collections::Generic::IEnumerable<int>^,
-		 *		int, System::Collections::Generic::IEnumerable<fk_Vector^>^, int) において、
+		 *	MakeIFSet(int, int, IEnumerable<int>^, int, IEnumerable<fk_Vector^>^, int) において、
 		 *	第6引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceNum		面数
@@ -106,8 +107,10 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_IndexFaceSet::MakeIFSet()
 		 */
-		void MakeIFSet(int faceNum, int polyNum, System::Collections::Generic::IEnumerable<int>^ IFSet,
-					   int vertexNum, System::Collections::Generic::IEnumerable<fk_Vector^>^ posArray);
+		void MakeIFSet(int faceNum, int polyNum,
+					   IEnumerable<int>^ IFSet,
+					   int vertexNum,
+					   IEnumerable<fk_Vector^>^ posArray);
 
 		//! 任意形状生成関数2-1
 		/*!
@@ -122,15 +125,15 @@ namespace FK_CLI
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 		 */
-		void MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^ faceArray,
-					   System::Collections::Generic::IEnumerable<fk_Vector^>^ posArray, int order);
+		void MakeIFSet(IEnumerable< IEnumerable<int>^ >^ faceArray,
+					   IEnumerable<fk_Vector^>^ posArray,
+					   int order);
 
 		//! 任意形状生成関数2-2
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
 		 *	本関数は、
-		 *	MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^,
-		 *		System::Collections::Generic::IEnumerable<fk_Vector^>^, int) において、
+		 *	MakeIFSet(IEnumerable< IEnumerable<int>^ >^, IEnumerable<fk_Vector^>^, int) において、
 		 *	第3引数の 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceArray
@@ -141,8 +144,8 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 */
-		void MakeIFSet(System::Collections::Generic::IEnumerable< System::Collections::Generic::IEnumerable<int>^ >^ faceArray,
-					   System::Collections::Generic::IEnumerable<fk_Vector^>^ posArray);
+		void MakeIFSet(IEnumerable< IEnumerable<int>^ >^ faceArray,
+					   IEnumerable<fk_Vector^>^ posArray);
 	};
 }
 

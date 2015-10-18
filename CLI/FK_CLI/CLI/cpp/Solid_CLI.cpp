@@ -5,7 +5,8 @@ namespace FK_CLI {
 
 	using namespace std;
 	using namespace msclr::interop;
-
+	using namespace System::Collections::Generic;
+	
 	::fk_Solid * fk_Solid::GetP(void)
 	{
 		return (::fk_Solid *)(pBase);
@@ -251,60 +252,66 @@ namespace FK_CLI {
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName));
 	}
 
-	bool fk_Solid::WriteVRMLFile(String^ argFName, cli::array<double>^ argTime,
-								 cli::array<fk_Vector^>^ argPos,
+	bool fk_Solid::WriteVRMLFile(String^ argFName,
+								 IEnumerable<double>^ argTime,
+								 IEnumerable<fk_Vector^>^ argPos,
 								 fk_Material^ argMat, bool triFlg)
 	{
-		int i;
-
 		if(!argFName || !argTime || !argPos || !argMat) return false;
-		vector<double> time(argTime->Length);
-		vector<::fk_Vector> pos(argPos->Length);
 
-		for(i = 0; i < argTime->Length; ++i) {
-			time[i] = argTime[i];
+		vector<double> timeArray;
+		vector<::fk_Vector> posArray;
+
+		for each (double time in argTime) {
+			timeArray.push_back(time);
 		}
-		for(i = 0; i < argPos->Length; ++i) {
-			pos[i] = argPos[i];
+
+		for each (fk_Vector^ pos in argPos) {
+			posArray.push_back(pos);
 		}
+
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName),
-									 &time, &pos, argMat->GetP(), triFlg);
+									 &timeArray, &posArray, argMat->GetP(), triFlg);
 	}
 
-	bool fk_Solid::WriteVRMLFile(String^ argFName, cli::array<double>^ argTime,
-								 cli::array<fk_Vector^>^ argPos, fk_Material^ argMat)
+	bool fk_Solid::WriteVRMLFile(String^ argFName,
+								 IEnumerable<double>^ argTime,
+								 IEnumerable<fk_Vector^>^ argPos,
+								 fk_Material^ argMat)
 	{
-		int i;
-
 		if(!argFName || !argTime || !argPos || !argMat) return false;
-		vector<double> time(argTime->Length);
-		vector<::fk_Vector> pos(argPos->Length);
+		vector<double> timeArray;
+		vector<::fk_Vector> posArray;
 
-		for(i = 0; i < argTime->Length; ++i) {
-			time[i] = argTime[i];
+		for each (double time in argTime) {
+			timeArray.push_back(time);
 		}
-		for(i = 0; i < argPos->Length; ++i) {
-			pos[i] = argPos[i];
+
+		for each (fk_Vector^ pos in argPos) {
+			posArray.push_back(pos);
 		}
+
 		return GetP()->writeVRMLFile(marshal_as<string>(argFName),
-									 &time, &pos, argMat->GetP());
+									 &timeArray, &posArray, argMat->GetP());
 	}
 
-	bool fk_Solid::WriteVRMLFile(String^ argFName, cli::array<double>^ argTime, cli::array<fk_Vector^>^ argPos)
+	bool fk_Solid::WriteVRMLFile(String^ argFName,
+								 IEnumerable<double>^ argTime,
+								 IEnumerable<fk_Vector^>^ argPos)
 	{
-		int i;
-
 		if(!argFName || !argTime || !argPos) return false;
-		vector<double> time(argTime->Length);
-		vector<::fk_Vector> pos(argPos->Length);
+		vector<double> timeArray;
+		vector<::fk_Vector> posArray;
 
-		for(i = 0; i < argTime->Length; ++i) {
-			time[i] = argTime[i];
+		for each (double time in argTime) {
+			timeArray.push_back(time);
 		}
-		for(i = 0; i < argPos->Length; ++i) {
-			pos[i] = argPos[i];
+
+		for each (fk_Vector^ pos in argPos) {
+			posArray.push_back(pos);
 		}
-		return GetP()->writeVRMLFile(marshal_as<string>(argFName), &time, &pos);
+
+		return GetP()->writeVRMLFile(marshal_as<string>(argFName), &timeArray, &posArray);
 	}
 
 	bool fk_Solid::WriteSTLFile(String^ argFName)

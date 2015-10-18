@@ -9,6 +9,8 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	//! メッシュテクスチャを生成、管理するクラス
 	/*!
 	 *	このクラスは、複数の3角形テクスチャを制御する機能を提供します。
@@ -146,7 +148,7 @@ namespace FK_CLI
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool SetTriTextureCoord(int tID, cli::array<fk_TexCoord^>^ array);
+		bool SetTriTextureCoord(int tID, IEnumerable<fk_TexCoord^>^ array);
 
 		//! テクスチャ座標参照関数
 		/*!
@@ -220,7 +222,7 @@ namespace FK_CLI
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool SetTriPos(int tID, cli::array<fk_Vector^>^ array);
+		bool SetTriPos(int tID, IEnumerable<fk_Vector^>^ array);
 
 		//! 頂点位置ベクトル参照関数
 		/*!

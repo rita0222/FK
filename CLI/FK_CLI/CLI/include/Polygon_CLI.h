@@ -7,6 +7,8 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	//! 多角形を生成、管理するクラス
 	/*!
 	 *	このクラスは、形状として多角形を制御する機能を提供します。
@@ -41,7 +43,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	array		頂点配列。
 		 */
-		fk_Polygon(cli::array<fk_Vector^>^ array);
+		fk_Polygon(IEnumerable<fk_Vector^>^ array);
 
 		//! デストラクタ
 		~fk_Polygon();
@@ -74,7 +76,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in] array	array型による頂点位置配列
 		 */
-		void SetVertex(cli::array<fk_Vector^>^ array);
+		void SetVertex(IEnumerable<fk_Vector^>^ array);
 	};
 
 	//! ポリラインを生成、管理するクラス
@@ -104,7 +106,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	array		頂点配列。
 		 */
-		fk_Polyline(cli::array<fk_Vector^>^ array);
+		fk_Polyline(IEnumerable<fk_Vector^>^ array);
 
 		//! デストラクタ
 		~fk_Polyline();
@@ -137,7 +139,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in] array	array型による頂点位置配列
 		 */
-		void SetVertex(cli::array<fk_Vector^>^ array);
+		void SetVertex(IEnumerable<fk_Vector^>^ array);
 	};
 
 	//! 多角形(辺のみ)を生成、管理するクラス
@@ -169,7 +171,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	array		頂点配列。
 		 */
-		fk_Closedline(cli::array<fk_Vector^>^ array);
+		fk_Closedline(IEnumerable<fk_Vector^>^ array);
 
 		//! デストラクタ
 		~fk_Closedline();

@@ -9,9 +9,9 @@
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
 
 	ref class fk_Solid;
-
 	//! インデックスフェースセットの内部データタイプを表す列挙型
 	public enum class fk_IFType {
 		NONE,			//!<	未定義
@@ -725,7 +725,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName,
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
 
 		//! MQOデータ入力関数1-2
@@ -743,7 +743,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(cli::array<Byte>^, String^, bool, bool, bool) において、
+		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
 		 *	第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -770,7 +770,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName, bool solidFlg, bool contFlg);
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, bool solidFlg, bool contFlg);
 
 		//! MQOデータ入力関数1-3
 		/*!
@@ -787,7 +787,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(cli::array<Byte>^, String^, bool, bool, bool) において、
+		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
 		 *	第4引数に true を、第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -804,7 +804,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName, bool solidFlg);
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, bool solidFlg);
 
 		//! MQOデータ入力関数1-4
 		/*!
@@ -821,7 +821,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(cli::array<Byte>^, String^, bool, bool, bool) において、
+		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
 		 *	第3引数に true を、第4引数に true を、第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -832,7 +832,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName);
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName);
 
 		//! MQOデータ入力関数2-1
 		/*!
@@ -883,7 +883,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName,
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg, bool materialFlg);
 
 		//! MQOデータ入力関数2-2
@@ -901,7 +901,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(cli::array<Byte>^, String^, int, bool, bool, bool) において、
+		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
 		 *	第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -934,7 +934,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName,
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg);
 
 		//! MQOデータ入力関数2-3
@@ -952,7 +952,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(cli::array<Byte>^, String^, int, bool, bool, bool) において、
+		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
 		 *	第5引数に true を、第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -975,7 +975,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName, int materialID, bool solidFlg);
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, int materialID, bool solidFlg);
 
 		//! MQOデータ入力関数2-4
 		/*!
@@ -992,7 +992,7 @@ namespace FK_CLI
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
 		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(cli::array<Byte>^, String^, int, bool, bool, bool) において、
+		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
 		 *	第4引数に true を、第5引数に true を、第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -1009,7 +1009,7 @@ namespace FK_CLI
 		 *
 		 *	\sa ReadMQOFile()
 		 */
-		bool ReadMQOData(cli::array<Byte>^ buffer, String^ objName, int materialID);
+		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, int materialID);
 
 		//! DirectX (D3DX) ファイル入力関数1-1
 		/*!
@@ -1217,8 +1217,8 @@ namespace FK_CLI
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool WriteVRMLFile(String^ fileName, cli::array<double>^ time,
-						   cli::array<fk_Vector^>^ pos, fk_Material^ material, bool triFlg);
+		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time,
+						   IEnumerable<fk_Vector^>^ pos, fk_Material^ material, bool triFlg);
 
 		//! VRML ファイル出力関数2-2
 		/*!
@@ -1228,8 +1228,8 @@ namespace FK_CLI
 		 *	アニメーションデータを出力することが可能です。
 		 *
 		 *	なお、本関数は
-		 *	WriteVRMLFile(String^, cli::array<double>^,
-		 *	cli::array<fk_Vector^>^, fk_Material^, bool) において、
+		 *	WriteVRMLFile(String^, IEnumerable<double>^,
+		 *	IEnumerable<fk_Vector^>^, fk_Material^, bool) において、
 		 *	第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -1246,8 +1246,8 @@ namespace FK_CLI
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool WriteVRMLFile(String^ fileName, cli::array<double>^ time,
-						   cli::array<fk_Vector^>^ pos, fk_Material^ material);
+		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time,
+						   IEnumerable<fk_Vector^>^ pos, fk_Material^ material);
 
 		//! VRML ファイル出力関数2-3
 		/*!
@@ -1257,8 +1257,8 @@ namespace FK_CLI
 		 *	アニメーションデータを出力することが可能です。
 		 *
 		 *	なお、本関数は
-		 *	WriteVRMLFile(String^, cli::array<double>^,
-		 *	cli::array<fk_Vector^>^, fk_Material^, bool) において、
+		 *	WriteVRMLFile(String^, IEnumerable<double>^,
+		 *	IEnumerable<fk_Vector^>^, fk_Material^, bool) において、
 		 *	第4引数に null を、第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -1271,7 +1271,7 @@ namespace FK_CLI
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool WriteVRMLFile(String^ fileName, cli::array<double>^ time, cli::array<fk_Vector^>^ pos);
+		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time, IEnumerable<fk_Vector^>^ pos);
 
 		//! STL ファイル出力関数
 		/*!
@@ -1549,7 +1549,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetPosVec()
 		 */
-		bool MoveVPosition(int vertexID, cli::array<double>^ array, int order);
+		bool MoveVPosition(int vertexID, IEnumerable<double>^ array, int order);
 
 		//! 頂点移動関数3-2
 		/*!
@@ -1558,7 +1558,7 @@ namespace FK_CLI
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	本関数によって破棄されます。
 		 *
-		 *	なお、本関数は MoveVPosition(int, cli::array<double>^, int) において、
+		 *	なお、本関数は MoveVPosition(int, IEnumerable<double>^, int) において、
 		 *	第3引数に 0 を入力した場合と同義になります。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1570,7 +1570,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetPosVec()
 		 */
-		bool MoveVPosition(int vertexID, cli::array<double>^ array);
+		bool MoveVPosition(int vertexID, IEnumerable<double>^ array);
 
 		//! 任意形状生成関数1
 		/*!
@@ -1600,14 +1600,14 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_Solid
 		 */
-		void MakeIFSet(int faceNum, int polyNum, cli::array<int>^ IFSet,
-					   int vertexNum, cli::array<fk_Vector^>^ posArray, int order);
+		void MakeIFSet(int faceNum, int polyNum, IEnumerable<int>^ IFSet,
+					   int vertexNum, IEnumerable<fk_Vector^>^ posArray, int order);
 
 		//! 任意形状生成関数2
 		/*!
 		 *	与えられたインデックスフェースセット情報から、形状を生成します。
 		 *
-		 *	なお、本関数は MakeIFSet(int, int, cli::array<int>^, int, cli::array<fk_Vector^>^, int) において、
+		 *	なお、本関数は MakeIFSet(int, int, IEnumerable<int>^, int, IEnumerable<fk_Vector^>^, int) において、
 		 *	第6引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceNum		面数
@@ -1631,8 +1631,8 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_Solid
 		 */
-		void MakeIFSet(int faceNum, int polyNum, cli::array<int>^ IFSet,
-					   int vertexNum, cli::array<fk_Vector^>^ posArray);
+		void MakeIFSet(int faceNum, int polyNum, IEnumerable<int>^ IFSet,
+					   int vertexNum, IEnumerable<fk_Vector^>^ posArray);
 
 		//! 面法線ベクトル設定関数1
 		/*!

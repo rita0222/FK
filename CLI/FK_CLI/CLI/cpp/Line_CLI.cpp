@@ -3,6 +3,7 @@
 namespace FK_CLI {
 
 	using namespace std;
+	using namespace System::Collections::Generic;
 	
 	::fk_Line * fk_Line::GetP(void)
 	{
@@ -31,12 +32,13 @@ namespace FK_CLI {
 		pBase = nullptr;
 	}
 
-	void fk_Line::PushLine(cli::array<fk_Vector^>^ argArray)
+	void fk_Line::PushLine(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = argArray[i];
+		vector<::fk_Vector> vArray;
+
+		for each(fk_Vector^ pos in argArray) {
+			vArray.push_back(pos);
 		}
 		GetP()->pushLine(&vArray[0]);
 	}
@@ -65,12 +67,13 @@ namespace FK_CLI {
 		return GetP()->setVertex(argLID, argVID, argPos);
 	}
 
-	void fk_Line::SetVertex(cli::array<fk_Vector^>^ argArray)
+	void fk_Line::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = argArray[i];
+		vector<::fk_Vector> vArray;
+
+		for each (fk_Vector^ pos in argArray) {
+			vArray.push_back(pos);
 		}
 		GetP()->setVertex(&vArray);
 	}

@@ -7,7 +7,8 @@
 
 namespace FK_CLI {
 	using namespace System;
-
+	using namespace System::Collections::Generic;
+	
 	//! 任意次元ベクトルを管理するクラス
 	/*!
 	 * 	このクラスは、任意次元ベクトルの様々な機能を提供します。
@@ -49,7 +50,7 @@ namespace FK_CLI {
 		 *
 		 *	\param[in]	array	成分値配列
 		 */
-		fk_GenVector(cli::array<double>^ array);
+		fk_GenVector(IEnumerable<double>^ array);
 
 		//! fk_Vector からのコピーコンストラクタ
 		fk_GenVector(fk_Vector^ V);

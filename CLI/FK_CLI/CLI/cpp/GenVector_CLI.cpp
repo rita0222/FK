@@ -19,10 +19,16 @@ namespace FK_CLI {
 		pGVec = new ::fk_GenVector(*argV);
 	}
 
-	fk_GenVector::fk_GenVector(cli::array<double>^ argArray)
+	fk_GenVector::fk_GenVector(IEnumerable<double>^ argArray)
 	{
-		pin_ptr<double> pD = &argArray[0];
-		pGVec = new ::fk_GenVector(argArray->Length, pD);
+		vector<double>	pD;
+		int				count = 0;
+
+		for each (double d in argArray) {
+			pD.push_back(d);
+			count++;
+		}
+		pGVec = new ::fk_GenVector(count, &pD[0]);
 	}
 
 	fk_GenVector::fk_GenVector(fk_Vector^ argV)
