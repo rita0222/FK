@@ -41,16 +41,17 @@
 using namespace std;
 #endif
 
-/*!	\mainpage Fine Kernel ToolKit リファレンスマニュアル
+/*!
+ *	\mainpage Fine Kernel ToolKit C++版 リファレンスマニュアル
  *
  *	<b> Copyright 1999 - 2015 by Fine Kernel Project. </b> \n
- *	この文書は、「Fine Kernel ToolKit」のリファレンスマニュアルです。
+ *	この文書は、「Fine Kernel ToolKit」C++版 のリファレンスマニュアルです。
  *	システムに関する概略は、以下の URL を参照して下さい。
- *	- http://fktoolkit.sourceforge.jp/
+ *	- http://gamescience.jp/FK
  *	.
  *	インストールパッケージやユーザーズマニュアル等のダウンロードは、
  *	以下の URL を参照して下さい。
- *	- http://sourceforge.jp/projects/fktoolkit/releases/
+ *	- http://osdn.jp/projects/fktoolkit/releases/
  *	.
  *	<hr>
  *	本ソフトウェア、ソースコードおよび付属文書のライセンスは、基本的に
