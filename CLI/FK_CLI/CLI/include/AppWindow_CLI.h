@@ -6,6 +6,7 @@
 #include "GuideObject_CLI.h"
 #include "SpriteModel_CLI.h"
 #include "Performer_CLI.h"
+#include "Plane_CLI.h"
 
 namespace FK_CLI
 {
@@ -836,6 +837,68 @@ namespace FK_CLI
 		 */
 		void ProcMouseView(fk_Model^ camera, double x, double y, bool lockSW);
 		//@}
+
+		//! \name 投影座標・空間座標変換関数
+		//@{
+
+		//! 投影平面から任意平面への射影点算出関数
+		/*!
+		 *	この関数は、描画領域上の投影座標から、
+		 *	任意の平面への射影変換を行い、射影点を求めます。
+		 *	これは、投影面上の投影座標とカメラを結ぶ直線と、
+		 *	引数として入力された平面の交点を求めるということと同義です。
+		 *
+		 *	\param[in]	x		投影座標の x 成分
+		 *	\param[in]	y		投影座標の y 成分
+		 *	\param[in]	plane
+		 *		射影先の平面。平面情報の設定については fk_Plane の解説を参照して下さい。
+		 *	\param[out]	pos		算出した点の位置ベクトル
+		 *
+		 *	\return		算出に成功すれば true を、失敗すれば false を返します。
+		 *
+		 *	\sa GetProjectPosition(double, double, double, fk_Vector^),
+		 *		GetWindowPosition(), fk_Plane
+		 */
+		bool	GetProjectPosition(double x, double y,
+								   fk_Plane^ plane, fk_Vector^ pos);
+
+		//! 投影平面から任意距離での射影点算出関数
+		/*!
+		 *	この関数は、描画領域上の投影座標に対し、
+		 *	カメラから指定した距離となっている3D空間中の点を算出します。
+		 *	これは、投影面上の投影座標とカメラを結ぶ直線と、
+		 *	カメラを中心とし指定距離を半径とする球面の交点を求めることと同義です。
+		 *
+		 *	\param[in]	x		投影座標の x 成分
+		 *	\param[in]	y		投影座標の y 成分
+		 *	\param[in]	dist	カメラからの空間中の距離
+		 *	\param[out]	pos		算出した点の位置ベクトル
+		 *
+		 *	\return		算出に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool	GetProjectPosition(double x, double y,
+								   double dist, fk_Vector^ pos);
+
+		//! 空間座標から投影座標への射影点算出関数
+		/*!
+		 *	この関数は、空間座標から投影座標への射影点を算出します。
+		 *	これは、ある空間中の位置が画面上でどこに表示されるかを知ることと同義です。
+		 *	投影座標の詳細は fk_Window の概要を参照して下さい。
+		 *
+		 *	なお、射影点の z 成分は投影における Near 面上の場合 0、
+		 *	Far 面上の場合 1 となり、その間は線形補間した値となります。
+		 *	つまり、カメラに近いほど値が小さくなるということです。
+		 *
+		 *	\param[in]	pos_3D		空間座標位置ベクトル
+		 *	\param[out]	pos_2D		射影点となる投影座標の位置ベクトル
+		 *
+		 *	\sa GetProjectPosition(double, double, fk_Plane^, fk_Vector^),
+		 *		GetProjectPosition(double, double, double, fk_Vector^),
+		 *		fk_Perspective, fk_Ortho, fk_Frustum
+		 */
+		bool	GetWindowPosition(fk_Vector^ pos_3D, fk_Vector^ pos_2D);
+		//@}
+
 	};
 }
 

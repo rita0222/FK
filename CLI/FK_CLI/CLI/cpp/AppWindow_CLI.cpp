@@ -438,6 +438,42 @@ namespace FK_CLI {
 	{
 		GetP()->procMouseView(argCamera->GetP(), argX, argY, argLockSW);
 	}
+
+	
+	bool fk_AppWindow::GetProjectPosition(double argX, double argY,
+										  fk_Plane^ argPlane, fk_Vector^ argPos)
+	{
+		if(!argPlane || !argPos) return false;
+		::fk_Vector	retPos;
+		bool		ret;
+
+		ret = GetP()->getProjectPosition(argX, argY, argPlane->pPlane, &retPos);
+		argPos->Set(retPos.x, retPos.y, retPos.z);
+		return ret;
+	}
+
+	bool fk_AppWindow::GetProjectPosition(double argX, double argY,
+										  double argDist, fk_Vector^ argPos)
+	{
+		if(!argPos) return false;
+		::fk_Vector	retPos;
+		bool		ret;
+
+		ret = GetP()->getProjectPosition(argX, argY, argDist, &retPos);
+		argPos->Set(retPos.x, retPos.y, retPos.z);
+		return ret;
+	}
+
+	bool fk_AppWindow::GetWindowPosition(fk_Vector^ argPos_3D, fk_Vector^ argPos_2D)
+	{
+		if(!argPos_3D || !argPos_2D) return false;
+		::fk_Vector	retPos;
+		bool		ret;
+
+		ret = GetP()->getWindowPosition(argPos_3D, &retPos);
+		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
+		return ret;
+	}
 }
 
 /****************************************************************************
