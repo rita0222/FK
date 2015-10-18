@@ -27,27 +27,42 @@ namespace FK_CLI {
 								 int argVNum, IEnumerable<fk_Vector^>^ argArray, int argOrder)
 	{
 		if(!argIFSet || !argArray) return;
-		pin_ptr<int> pIFSet = &argIFSet[0];
-		vector<::fk_Vector> vArray(argArray->Length);
-		for(int i = 0; i < argArray->Length; ++i) {
-			vArray[i] = argArray[i];
+
+		vector<int>				IFSet;
+		vector<::fk_Vector>		vArray;
+
+		for each (int id in argIFSet) {
+			IFSet.push_back(id);
 		}
-		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0], argOrder);
+
+		for each (fk_Vector^ vec in argArray) {
+			vArray.push_back(vec);
+		}
+
+		GetP()->makeIFSet(argFNum, argPNum, &IFSet[0], argVNum, &vArray[0], argOrder);
 	}
 
 	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, IEnumerable<int>^ argIFSet,
 								 int argVNum, IEnumerable<fk_Vector^>^ argPos)
 	{
 		if(!argIFSet || !argPos) return;
-		pin_ptr<int> pIFSet = &argIFSet[0];
-		vector<::fk_Vector> vArray(argPos->Length);
-		for(int i = 0; i < argPos->Length; ++i) {
-			vArray[i] = argPos[i];
+
+		vector<int>				IFSet;
+		vector<::fk_Vector>		vArray;
+
+		for each (int id in argIFSet) {
+			IFSet.push_back(id);
 		}
-		GetP()->makeIFSet(argFNum, argPNum, pIFSet, argVNum, &vArray[0]);
+
+		for each (fk_Vector^ vec in argPos) {
+			vArray.push_back(vec);
+		}
+
+		GetP()->makeIFSet(argFNum, argPNum, &IFSet[0], argVNum, &vArray[0]);
 	}
 
-	void fk_SolidBase::MakeIFSet(IEnumerable< IEnumerable<int>^ >^ argIF, IEnumerable<fk_Vector^>^ argPos, int argOrder)
+	void fk_SolidBase::MakeIFSet(IEnumerable< IEnumerable<int>^ >^ argIF,
+								 IEnumerable<fk_Vector^>^ argPos, int argOrder)
 	{
 		if (!argIF || !argPos) return;
 
@@ -70,7 +85,8 @@ namespace FK_CLI {
 		GetP()->makeIFSet(&IFSet, &vArray, argOrder);
 	}
 
-	void fk_SolidBase::MakeIFSet(IEnumerable< IEnumerable<int>^ >^ argIF, IEnumerable<fk_Vector^>^ argPos)
+	void fk_SolidBase::MakeIFSet(IEnumerable< IEnumerable<int>^ >^ argIF,
+								 IEnumerable<fk_Vector^>^ argPos)
 	{
 		if(!argIF || !argPos) return;
 
