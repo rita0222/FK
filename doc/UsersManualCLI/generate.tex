@@ -191,7 +191,7 @@ fk\_Solid クラスは、fk\_IndexFaceSet クラスと比べて描画が遅い�
                 polygon.Add(頂点 ID);
                         :
                 polygon.Add(頂点 ID);
-                IFSet.Add(polygon.ToArray()); // FKの関数に対しては.ToArray()を付けて渡す(今後改善予定)
+                IFSet.Add(polygon);           // ポリゴンを構成する ID が格納された配列を渡す
 	\end{verbatim}
 	\end{screen}
 \end{enumerate}
