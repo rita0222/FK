@@ -424,6 +424,13 @@ namespace FK_CLI
 		 *	\sa Proj()
 		 */
 		fk_Vector^ Perp(fk_Vector^ Q);
+
+
+		//! 初期化関数
+		/*!
+		*	3次元ベクトルを (0, 0, 0) に設定します。
+		*/
+		void Init(void);
 	};
 
 	//! 4次元ベクトルを管理するクラス

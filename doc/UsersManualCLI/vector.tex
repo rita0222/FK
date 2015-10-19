@@ -16,12 +16,12 @@
 この節での真価は、\ref{sec:sample} 章のサンプルで様々な形で現われている。
 
 \subsection{ベクトルの生成・設定}
-ベクトルの生成はいたって単純に行われる。fk\_Vector 型の変数を
-定義すればよい。
+ベクトルの生成はいたって単純に行われる。fk\_Vector 型の変数を定義すればよい。
+ただし fk\_Vector 型はクラス型であるので、new を用いる必要がある。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector vec;
+        var vec = new fk_Vector();
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -30,7 +30,7 @@
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector vec(1.0, 1.0, -3.0);
+        var vec = new fk_Vector(1.0, 1.0, -3.0);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -40,14 +40,15 @@
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector vec1, vec2;
+        var vec1 = new fk_Vector();
+        var vec2 = new fk_Vector();
 
-        vec1.set(1.0, 1.0, -3.0);
-        vec2.set(5.0, -2.5);
+        vec1.Set(1.0, 1.0, -3.0);
+        vec2.Set(5.0, -2.5);
 \end{verbatim}
 \end{screen}
 ~ \\
-set メンバ関数が、vec1 や vec2 に値を代入してくれる。
+Set メンバ関数が、vec1 や vec2 に値を代入してくれる。
 vec2 のように引数が2個しか無い場合は、\(z\) 成分には自動的に
 \(0\) が代入されるため、結果的に vec2 に \((5, -2.5, 0)\) が
 代入されることになる。
@@ -56,7 +57,7 @@ vec2 のように引数が2個しか無い場合は、\(z\) 成分には自動�
 \\
 \begin{screen}
 \begin{verbatim}
-        vec.init();
+        vec.Init();
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -89,11 +90,12 @@ vec2 のように引数が2個しか無い場合は、\(z\) 成分には自動�
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector vec[10];
+        var vec = new fk_Vector[10];
 
         for(int i = 0; i < 10; i++) {
-                vec[i].x = double(i);
-                vec[i].y = double(-i);
+                vec[i] = new fk_Vector();
+                vec[i].x = (double)i;
+                vec[i].y = (double)-i;
                 vec[i].z = 1.0;
         }
 \end{verbatim}
@@ -145,36 +147,36 @@ fk\_Vector の二項演算子は多様であり、どれも実践的なもので
 \end{center}
 \end{table}
 
-\subsection{代入演算子}
-fk\_Vector 型は代入演算子 ` = ' を使用することができる。このとき、
-
-
-実際は中の値のコピーが行われるのであって、ポインタが代入
-されるわけではない。したがって、
+\subsection{代入と演算子}
+fk\_Vector 型はクラスであるため、代入処理ではコピーが行われず、
+左辺値が右辺値と同一のインスタンスを参照するようになる。したがって、
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector vec1;
-        fk_Vector vec2(1.0, 1.0, 1.0);
+        var vec1 = new fk_Vector();
+        var vec2 = new fk_Vector(1.0, 1.0, 1.0);
 
         vec1 = vec2;
         vec2.x = 3.0;
 \end{verbatim}
 \end{screen}
 ~ \\
-という記述は vec1.x の値を変更しない。もちろん、
+という記述を行った場合、vec1 と vec2 ともに \(3.0, 1.0, 1.0\) という値を指すことになる。
+fk\_Vector 型の値をコピーしたい時は、コピーコンストラクタによって明示的に指示する必要がある。
+例えば、
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector *pointer;
-        fk_Vector vec2(1.0, 1.0, 1.0);
+        var vec1 = new fk_Vector();
+        var vec2 = new fk_Vector(1.0, 1.0, 1.0);
 
-        pointer = &vec2;
-        pointer->x = 3.0;
+        vec1 = new fk_Vector(vec2);
+        vec2.x = 3.0;
 \end{verbatim}
 \end{screen}
 ~ \\
-といった記述は可能であり、この場合の vec2.x の値は 3.0 に変更される。
+このように記述した場合、vec1 は \(1.0, 1.0, 1.0\) という値のコピーを保持し、
+vec2 の値は x 成分への代入によって \(3.0, 1.0, 1.0\) に変更される。
 
 その他の代入演算子として、次のようなものが使用できる。効果は、
 表\ref{tbl:fkVec2}の右に掲載された式と同様の働きである。なお、
@@ -199,21 +201,21 @@ fk\_Vector 型は代入演算子 ` = ' を使用することができる。こ�
 \end{table}
 
 \subsection{ノルム(長さ)の算出}
-ベクトルのノルム(長さ)を出力する関数として dist() が、
-ノルムの2乗を指す dist2() があり、
+ベクトルのノルム(長さ)を出力する関数として Dist() が、
+ノルムの2乗を指す Dist2() があり、
 それぞれ double 型を返す。使用法は次のようなものである。
 \\
 \begin{screen}
 \begin{verbatim}
-        double l = vec1.dist();
-        double l2 = vec1.dist2();
-        printf("length = %lf\n", l);
-        printf("length^2 = %lf\n", l2);
+        double l = vec1.Dist();
+        double l2 = vec1.Dist2();
+        Console.WriteLine("length = {0}", l);
+        Console.WriteLine("length^2 = {0}", l2);
 \end{verbatim}
 \end{screen}
 ~ \\
-処理速度は、dist2() の方が dist() よりも高速である。従って、ただ単に
-ベクトルの長さを比較したいだけならば dist2() を利用した方が効率的である。
+処理速度は、Dist2() の方が Dist() よりも高速である。従って、ただ単に
+ベクトルの長さを比較したいだけならば Dist2() を利用した方が効率的である。
 
 \subsection{ベクトルの正規化}
 正規化とは、零ベクトルでない任意のベクトル \(\mathbf{V}\) に対し、
@@ -226,17 +228,17 @@ fk\_Vector 型は代入演算子 ` = ' を使用することができる。こ�
 用いることが多い。
 
 fk\_Vector 型の変数に対し、自身を正規化(Normalize)する関数として
-normalize() がある。
+Normalize() がある。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector vec1(5.0, 4.0, 3.0);
+        var vec1 = new fk_Vector(5.0, 4.0, 3.0);
 
-        vec1.normalize();
+        vec1.Normalize();
 \end{verbatim}
 \end{screen}
 ~ \\
-という記述は、vec1 を正規化する。ちなみに、normalize() 関数は
+という記述は、vec1 を正規化する。ちなみに、Normalize() 関数は
 bool 型を返し、true ならば正規化の成功、false ならば失敗を意味する。
 失敗するのは、ベクトルが零ベクトル(つまり長さが 0)の場合に限られる。
 
@@ -255,18 +257,18 @@ proj() メンバ関数を利用することができる。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector   P, Q, P_proj;
+        fk_Vector   P, Q, P_proj; // P, Qに関してはこの後 new して何らかの値が入るものとする
                 :
-        P_proj = P.proj(Q);
+        P_proj = P.Proj(Q);
 \end{verbatim}
 \end{screen}
 ~ \\	
 また、投影の際の垂直成分 (図 \ref{fig:vecproj} 中での \(\bP_{perp}\))
-を求めるときは、perp() というメンバ関数を利用する。
+を求めるときは、Perp() というメンバ関数を利用する。
 \\
 \begin{screen}
 \begin{verbatim}
-        P_perp = P.perp(Q);
+        P_perp = P.Perp(Q);
 \end{verbatim}
 \end{screen}
 \section{行列}

@@ -286,6 +286,13 @@ namespace FK_CLI {
 		return gcnew fk_Vector(V.perp(::fk_Vector(argV->x_, argV->y_, argV->z_)));
 	}
 
+	void fk_Vector::Init(void)
+	{
+		x_ = 0.0;
+		y_ = 0.0;
+		z_ = 0.0;
+	}
+
 	////////////////////////////////////////////////////////////////////
 
 	fk_HVector::operator ::fk_HVector (fk_HVector^ argV)
