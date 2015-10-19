@@ -2,79 +2,52 @@
 
 FK システムでは、ウィンドウを制御するクラスとして fk\_AppWindow クラスと
 fk\_Window クラスを提供している。fk\_AppWindow は簡易に様々な機能を
-実現できるものであり、
+実現できるものであり、実装を容易に行うことを優先したものとなっている。
+fk\_Window は fk\_AppWindow よりも利用方法はやや複雑であるが、
+多くの高度な機能を持っており、マルチウィンドウや GUI と組み合わせた
+プログラムを作成することができる。
 
-FK システムは内部的に FLTK と呼ばれるツールキットを
-用いており、まず FLTK のメインウィンドウを開き、その中に
-FK システム用の描画ウィンドウを生成する。
+本章では、まず fk\_AppWindow による機能を紹介し、
+その後に fk\_Window 固有の機能について解説を行う。
+
+% FK システムは内部的に FLTK と呼ばれるツールキットを
+% 用いており、まず FLTK のメインウィンドウを開き、その中に
+% FK システム用の描画ウィンドウを生成する。
 
 \section{ウィンドウの生成}
 ウィンドウは、一般的なウィンドウシステムにおいて描画を
-するための画面単位である。FK システムでは、fk\_Window クラスの
+するための画面単位である。FK システムでは、fk\_AppWindow クラスの
 オブジェクトを作成することによって1つのウィンドウを生成できる。
-手順としては、まず FLTK 用のウィンドウオブジェクトである
-Fl\_Window クラスのオブジェクトを生成し、その後に fk\_Window
-クラスのオブジェクトを定義する。
 \\
 \begin{screen}
 \begin{verbatim}
-        Fl_Window       mainWin(320, 320, "FK Test");
-        fk_Window       window(10, 10, 300, 300);
-
-        MainWin.end();
+    fk_AppWindow       window;
 \end{verbatim}
 \end{screen}
-~ \\
-ここで、Fl\_Window オブジェクトの引数はそれぞれ幅、高さ、
-タイトルバーに表示する文字列を表す。fk\_Window オブジェクトの
-引数は \((x, y, w, h)\) とすると \((x, y)\) はメインウィンドウとの
-相対位置を、\((w, h)\) は fk\_Window 自体の大きさを表す。
-mainWin.end() は、全ての fk\_Window オブジェクトを定義し終わった
-後に呼ぶ関数である。したがって、fk\_Window オブジェクトを2つ
-利用してマルチウィンドウなプログラムを作りたい場合には、
-\\
-\begin{breakbox}
-\begin{verbatim}
-        Fl_Window       mainWin(640, 320, "Multi Win Test");
-        fk_Window       window1(10, 10, 300, 300);
-        fk_Window       window2(330, 10, 300, 300);
+~
 
-        MainWin.end();
-\end{verbatim}
-\end{breakbox}
-~ \\
-というようにすればよい。また、ウィンドウを実際に開く関数は show() 関数で
-ある。具体的には、
+fk\_AppWindow に対して最低限必要な設定は大きさの設定である。
+以下のように、setSize() 関数を使ってピクセル単位で大きさを指定する。
 \\
 \begin{screen}
 \begin{verbatim}
-        mainWindow.show();
-        window.show();
+    window.setSize(600, 600);
+\end{verbatim}
+\end{screen}
+~
+
+また、背景色を設定するには setBGColor() を用いる。
+\\
+\begin{screen}
+\begin{verbatim}
+    window.setBGColor(0.3, 0.5, 0.2);
 \end{verbatim}
 \end{screen}
 ~ \\
-というように、ウィンドウを実際に開きたい部分で show() 関数を
-呼び出せばよい。
+setBGColor() は fk\_Color 型変数を引数に取ることもできる。
 
-作成した fk\_Window クラスのウィンドウに対し、次のように
-setScene() 関数を用いることによって
-fk\_Scene クラス内のシーンをウィンドウ中に表示することが
-できる。
-\\
-\begin{breakbox}
-\begin{verbatim}
-        Fl_Window       mainWin
-        fk_Window       window;
-        fk_Scene        scene;
-
-        mainWin.end();
-                :
-                :
-        window.setScene(&scene);
-\end{verbatim}
-\end{breakbox}
 \section{ウィンドウの描画}
-ウィンドウの描画は、drawWindow() 関数を用いて行う。
+ウィンドウの描画は、update() 関数を用いて行う。
 \\
 \begin{screen}
 \begin{verbatim}
