@@ -46,183 +46,165 @@ fk\_AppWindow に対して最低限必要な設定は大きさの設定である
 ~ \\
 setBGColor() は fk\_Color 型変数を引数に取ることもできる。
 
-\section{ウィンドウの描画}
-ウィンドウの描画は、update() 関数を用いて行う。
+これらの設定を行った後、open() 関数を呼ぶことで実際にウィンドウが画面に表示される。
 \\
 \begin{screen}
 \begin{verbatim}
-        window.drawWindow();
+    window.open();
+\end{verbatim}
+\end{screen}
+\section{ウィンドウの描画}
+ウィンドウの描画は、ウィンドウ用の変数(インスタンス)で update() 関数を呼び出すことで行われる。
+この関数が呼ばれた時点で、リンクされているシーンに登録されている物体が描画される。
+
+update() 関数は、ウィンドウが正常に描画された場合に true を、
+そうでない場合は false を返す。
+false を返すケースは、ウィンドウが閉じられた場合となる。
+そのため
+\\
+\begin{screen}
+\begin{verbatim}
+    while(window.update() == true) {
+                  :
+    }
 \end{verbatim}
 \end{screen}
 ~ \\
-この関数が呼ばれた時点で、リンクされているシーンに登録されている物体が
-描画される。ただし、この関数はウィンドウが実際にまだ開いていないときにも
-描画されてしまうため、そのまま使用した場合は誤動作を起こす場合がある。
-そこで、ウィンドウが実際に開いているかどうかを判定する関数として
-winOpenStatus() 関数が用意されている。これは true か false かを
-返し、ウィンドウが開いている場合には true を返す。
-また、FLTK が提供しているチェック関数もここで呼んでおかなければ
-ならない。これは、Fl\_Window クラスの visible() 関数と、
-Fl::check() を用いる。
-
+というコードでは、ウィンドウが閉じられると while ループを脱出するようになる。
 これを踏まえ、実際の描画ループは次のようになる。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        Fl_Window       mainWindow(320, 320, "FK TEST");
-        fk_Window       window(10, 10, 300, 300);
+        fk_AppWindow        window;
 
-        mainWindow.end();
-        mainWindow.show();      
-        window.show();
-        while(true) {
-                // メインウィンドウが開いているかどうかのチェック
-                if(mainWindow.visible() == 0) {
-                        // 開いていなかった (最小化の状態の) 場合
-                        if(Fl::wait() == 0) {
-                                // 終了命令がでた場合
-                                break;
-                        } else {
-                                // そのままループの最初に戻る
-                                continue;
-                        }
-                }
-                // 描画処理
-                if(window.drawWindow() == 0) break;
-
-                // FLTK から重大なエラーの報告がないかをチェック
-                if(Fl::check() == 0) break;
-
-                // fk_Window が描画できる状態になっているかをチェック
-                if(window.winOpenStatus() == false) continue;
-                        :
-                        :       // モデルの制御
-                        :
+        window.setSize(600, 600);
+        window.setBGColor(0.1, 0.2, 0.3);
+        window.open();
+        while(window.update() == true) {
+                    :
+                    :       // モデルの制御
+                    :
         }       
 \end{verbatim}
 \end{breakbox}
-~ \\
-drawWindow() 関数は、もし window 上で ESC キーが押された場合には
-0 は返ってくるようになっている。従って、例のプログラムの場合は
-ESC が押されると終了するようになっている。
 
-\section{ウィンドウ表示状態の画像情報取り込み}
-fk\_Window に表示されている状態を、画像ファイルや画像データに取り込みたい
-場合は、snapImage() というメンバ関数を利用する。
-仕様は以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{bool snapImage(string fileName,
-	fk\_ImageType type, fk\_SnapProcMode mode)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在ウィンドウに表示されている画像を、
-		指定した画像形式で fileName にあるファイル名で保存する。
-		type は以下の3種類のうちいずれかを指定する。
-		\begin{itemize}
-		 \item FK\_IMAGE\_BMP (Windows Bitmap 形式)
-		 \item FK\_IMAGE\_PNG (PNG 形式)
-		 \item FK\_IMAGE\_JPG (JPEG 形式)
-		\end{itemize}
-		また、mode はどの画像バッファから情報を取得するかを指定する物で、
-		以下の 3 種類のいずれかを指定する。
-		\begin{itemize}
-		 \item FK\_SNAP\_GL\_FRONT (OpenGL フロントバッファ)
-		 \item FK\_SNAP\_GL\_BACK (OpenGL バックバッファ)
-		 \item FK\_SNAP\_WIN32\_GDI
-		 (Windows GDI バッファ、Windows 上でのみ有効)
-		 \item FK\_SNAP\_D3D\_WINDOW
-		(Direct3D バッファ、Direct3D版のみ有効)
-		\end{itemize}
-
-		type と mode はデフォルト引数が設定されており、
-		省略可能である。省略した場合、type は FK\_IMAGE\_BMP、
-		mode は FK\_SNAP\_GL\_FRONT となる。
-
-		出力に成功すれば true を、失敗すれば false を返す。
-
-	\end{tabular} \\ \\
-\> \textbf{bool snapImage(fk\_Image *image, fk\_SnapProcMode mode)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在ウィンドウに表示されている画像を、
-		fk\_Image 型の変数に格納する。mode に関しては
-		上記のファイル出力の場合と同様である。
-		また、mode はデフォルト引数が設定されており、
-		省略可能である。省略した場合 mode は FK\_SNAP\_GL\_FRONT となる。
-
-		出力に成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
-\end{tabbing}
-
-引数としてファイル名を取る物と fk\_Image 型(のポインタ)変数を取るものがある。
-前者は、指定されたファイル名で指定した形式で保存するものである。
-後者は、fk\_Image 型の変数に画像情報を格納する。
-以下のプログラムは、「image.bmp」というファイルと「image」変数にそれぞれ
-表示画像を格納するものである。
-\\
-\begin{screen}
-\begin{verbatim}
-        fk_Window       win(0, 0, 300, 300);
-        fk_Image        image;
-
-        win.snapImage("image.bmp", FK_IMAGE_BMP, FK_SNAP_GL_BACK);
-        win.image(&image, FK_SNAP_GL_BACK);
-\end{verbatim}
-\end{screen}
-
-\section{ウィンドウのサイズ変更}
-fk\_Window で生成したウィンドウ領域を途中で変更したい場合には、
-resizeWindow() というメンバ関数を利用する。この関数は、引数として
-生成時と同様に4つの数値を取る。
-\\
-\begin{screen}
-\begin{verbatim}
-        fk_Window       win(0, 0, 300, 300);
-
-        win.resizeWindow(0, 0, 200, 200);
-\end{verbatim}
-\end{screen}
-~ \\
-この関数は、元の Fl\_Window の大きさ変更に追随する機能を持たせる時に
-利用することができる。次のプログラムは、ウィンドウの大きさ変更を可能とする
-典型的なサンプルである。
-\\
-\begin{breakbox}
-\begin{verbatim}
-    Fl_Window   mainWin(300, 300, "Resize Test");
-    fk_Window   fkWin(0, 0, 300, 300);
-
-    mainWin.end();
-
-    // 全体の大きさの最小値を (100, 100) にセット。
-    mainWin.size_range(100, 100);
-
-    mainWin.show();
-    fkWin.show();
-
-    while(true) {
-        // ウィンドウの大きさを mainWin と同一に合わせる。        
-        fkWin.resizeWindow(0, 0, mainWin.w(), mainWin.h());
-
-        // 後は通常と共通
-        if(mainWin.visible() == 0) {
-            if(Fl::wait() == 0) {
-                break;
-            } else {
-                continue;
-            }
-        }
-
-        if(fkWin.drawWindow() == 0) break;
-        if(Fl::check() == 0) break;
-        if(fkWin.winOpenStatus() == false) continue;
-
-            :
-            :
-    }
-\end{verbatim}
-\end{breakbox}
+% \section{ウィンドウ表示状態の画像情報取り込み}
+% fk\_Window に表示されている状態を、画像ファイルや画像データに取り込みたい
+% 場合は、snapImage() というメンバ関数を利用する。
+% 仕様は以下の通りである。
+% \begin{tabbing}
+% xx \= xxxx \= \kill
+% \> \textbf{bool snapImage(string fileName,
+% 	fk\_ImageType type, fk\_SnapProcMode mode)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		現在ウィンドウに表示されている画像を、
+% 		指定した画像形式で fileName にあるファイル名で保存する。
+% 		type は以下の3種類のうちいずれかを指定する。
+% 		\begin{itemize}
+% 		 \item FK\_IMAGE\_BMP (Windows Bitmap 形式)
+% 		 \item FK\_IMAGE\_PNG (PNG 形式)
+% 		 \item FK\_IMAGE\_JPG (JPEG 形式)
+% 		\end{itemize}
+% 		また、mode はどの画像バッファから情報を取得するかを指定する物で、
+% 		以下の 3 種類のいずれかを指定する。
+% 		\begin{itemize}
+% 		 \item FK\_SNAP\_GL\_FRONT (OpenGL フロントバッファ)
+% 		 \item FK\_SNAP\_GL\_BACK (OpenGL バックバッファ)
+% 		 \item FK\_SNAP\_WIN32\_GDI
+% 		 (Windows GDI バッファ、Windows 上でのみ有効)
+% 		 \item FK\_SNAP\_D3D\_WINDOW
+% 		(Direct3D バッファ、Direct3D版のみ有効)
+% 		\end{itemize}
+% 
+% 		type と mode はデフォルト引数が設定されており、
+% 		省略可能である。省略した場合、type は FK\_IMAGE\_BMP、
+% 		mode は FK\_SNAP\_GL\_FRONT となる。
+% 
+% 		出力に成功すれば true を、失敗すれば false を返す。
+% 
+% 	\end{tabular} \\ \\
+% \> \textbf{bool snapImage(fk\_Image *image, fk\_SnapProcMode mode)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		現在ウィンドウに表示されている画像を、
+% 		fk\_Image 型の変数に格納する。mode に関しては
+% 		上記のファイル出力の場合と同様である。
+% 		また、mode はデフォルト引数が設定されており、
+% 		省略可能である。省略した場合 mode は FK\_SNAP\_GL\_FRONT となる。
+% 
+% 		出力に成功すれば true を、失敗すれば false を返す。
+% 	\end{tabular} \\ \\
+% \end{tabbing}
+% 
+% 引数としてファイル名を取る物と fk\_Image 型(のポインタ)変数を取るものがある。
+% 前者は、指定されたファイル名で指定した形式で保存するものである。
+% 後者は、fk\_Image 型の変数に画像情報を格納する。
+% 以下のプログラムは、「image.bmp」というファイルと「image」変数にそれぞれ
+% 表示画像を格納するものである。
+% \\
+% \begin{screen}
+% \begin{verbatim}
+%         fk_Window       win(0, 0, 300, 300);
+%         fk_Image        image;
+% 
+%         win.snapImage("image.bmp", FK_IMAGE_BMP, FK_SNAP_GL_BACK);
+%         win.image(&image, FK_SNAP_GL_BACK);
+% \end{verbatim}
+% \end{screen}
+% 
+% \section{ウィンドウのサイズ変更}
+% fk\_Window で生成したウィンドウ領域を途中で変更したい場合には、
+% resizeWindow() というメンバ関数を利用する。この関数は、引数として
+% 生成時と同様に4つの数値を取る。
+% \\
+% \begin{screen}
+% \begin{verbatim}
+%         fk_Window       win(0, 0, 300, 300);
+% 
+%         win.resizeWindow(0, 0, 200, 200);
+% \end{verbatim}
+% \end{screen}
+% ~ \\
+% この関数は、元の Fl\_Window の大きさ変更に追随する機能を持たせる時に
+% 利用することができる。次のプログラムは、ウィンドウの大きさ変更を可能とする
+% 典型的なサンプルである。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%     Fl_Window   mainWin(300, 300, "Resize Test");
+%     fk_Window   fkWin(0, 0, 300, 300);
+% 
+%     mainWin.end();
+% 
+%     // 全体の大きさの最小値を (100, 100) にセット。
+%     mainWin.size_range(100, 100);
+% 
+%     mainWin.show();
+%     fkWin.show();
+% 
+%     while(true) {
+%         // ウィンドウの大きさを mainWin と同一に合わせる。        
+%         fkWin.resizeWindow(0, 0, mainWin.w(), mainWin.h());
+% 
+%         // 後は通常と共通
+%         if(mainWin.visible() == 0) {
+%             if(Fl::wait() == 0) {
+%                 break;
+%             } else {
+%                 continue;
+%             }
+%         }
+% 
+%         if(fkWin.drawWindow() == 0) break;
+%         if(Fl::check() == 0) break;
+%         if(fkWin.winOpenStatus() == false) continue;
+% 
+%             :
+%             :
+%     }
+% \end{verbatim}
+% \end{breakbox}
 \section{ウィンドウでのイベント}
-fk\_Window 上でのマウスやキーボードの状態を調べるため、fk\_Window クラスは
+fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、fk\_AppWindow クラスは
 様々なメンバ関数を提供している。ここでは、それらの使用法を説明する。
 \subsection*{getKeyStatus() メンバ関数}
 この関数は、キーボード上の文字キーが現在押されているか
@@ -231,18 +213,33 @@ fk\_Window 上でのマウスやキーボードの状態を調べるため、fk\
 \\
 \begin{screen}
 \begin{verbatim}
-        if(window.getKeyStatus('g', true) == true) {
+        if(window.getKeyStatus('g', FK_SW_PRESS) == true) {
                 :       // キーが押された時の処理を行う。
         }
 \end{verbatim}
 \end{screen}
 ~ \\
-といったような記述を行う。この関数は、1番目の引数にキーを表す文字を代入する。
-2番目の引数には、マウスポインタの位置が fk\_Window 上にあるかどうかの
-条件を付加するフラグで、これを true にした場合は fk\_Window 上に
-マウスポインタがなかった場合は常に false が返る。逆に、2番目の引数に
-false を代入したとき、マウスポインタがどこにあってもキーが押されていれば
-true が、押されていなければ false が返る。
+という記述を行う。この関数は、1番目の引数にキーを表す文字を代入する。
+2番目の引数はどのようなキーの状態を検知するかを設定するもので、
+以下のような種類がある。
+
+\begin{table}[H]
+\caption{キーの状態設定}
+\label{tbl:fkSwitchStatus}
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+FK\_SW\_RELEASE & 離しっぱなしの状態 \\ \hline
+FK\_SW\_UP & 離した瞬間 \\ \hline
+FK\_SW\_DOWN & 押した瞬間 \\ \hline
+FK\_SW\_PRESS & 押しっぱなしの状態 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+上記のサンプルプログラムは「押した状態にあるかどうか」を検知するものであるが、
+「押した瞬間」であるかどうかを検知する場合は「FK\_SW\_PRESS」のかわりに
+「FK\_SW\_DOWN」を第2引数に入力する。
 
 \subsection*{getSpecialKeyStatus() 関数}
 この関数は、文字ではない特殊キーが押されているか
@@ -251,8 +248,8 @@ true が、押されていなければ false が返る。
 \\
 \begin{screen}
 \begin{verbatim}
-        if(window.getSpecialKeyStatus(FK_SHIFT_L, true) == true) {
-                :       // キーが押された時の処理を行う。
+        if(window.getSpecialKeyStatus(FK_SHIFT_L, FK_SW_PRESS) == true) {
+                :       // キーが押されている時の処理を行う。
         }
 \end{verbatim}
 \end{screen}
@@ -294,44 +291,22 @@ FK\_F1 〜 FK\_F12 & F1 〜 F12 キー &
 \end{table}
 
 また、2番目の引数は前述の getKeyStatus() 関数と同様にマウスポインタが
-fk\_Window 上にあるかどうかを条件に加えるフラグである。
-\subsection*{getLastKey() 関数}
-この関数は、fk\_Window 上で最後に押されたキーが返ってくる。たとえば、
-\\
-\begin{breakbox}
-\begin{verbatim}
-        char            c;
-        fk_Window       window;
-                :
-                :
-        c = window.getLastKey();
-\end{verbatim}
-\end{breakbox}
-~ \\
-といった使い方をする。あらかじめ押されるキーが特定できる場合は
-getKeyStatus を、何が押されるのか特定できない場合は getLastKey を
-それぞれ使い分ける必要がある。
+fk\_AppWindow 上にあるかどうかを条件に加えるフラグである。
+
 \subsection*{getMousePosition() 関数}
 この関数は、現在のマウスポインタの位置を調べる時に使用する。使い方は、
 \\
 \begin{breakbox}
 \begin{verbatim}
-        int             x, y;
-        fk_Window       window;
+        fk_Vector       pos;
+        fk_AppWindow    window;
                 :
                 :
-        window.getMousePosition(&x, &y, true);
+        pos = window.getMousePosition();
 \end{verbatim}
 \end{breakbox}
 ~ \\
-というように、int 型の変数 x と y をそれぞれアドレス渡しにすることによって、
-左上を \((0, 0)\) としたウィンドウ座標がそれぞれに代入される。
-3番目の引数は、前述の getKeyStatus() や getSpecialKeyStatus() と同様に、
-マウスポインタが fk\_Window 上にあるかどうかの条件を付加するフラグである。
-これが true の場合、マウスポインタが fk\_Window 上に無い場合は \((-1, -1)\)
-が代入される。一方、3番目の引数に false を代入した場合、fk\_Window の
-左上を \((0, 0)\) とした相対的な位置が返る。従って、fk\_Window よりも
-左側にマウスポインタが存在した場合、\(x\) の値はマイナスとなることになる。
+というように、fk\_Vector 型の変数にマウスポインタのウィンドウ座標系による現在位置を得られる。
 
 \subsection*{getMouseStatus() 関数}
 この関数は、現在マウスボタンが押されているかどうかを調べる時に使用する。
