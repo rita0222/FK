@@ -27,7 +27,7 @@ FK システムでは特別なテクスチャマッピングとして、
 
 以下、各項目を個別に説明する。
 
-\subsection{変数の準備とフォントの読み込み}
+\subsection{変数の準備とフォントの読み込み} \label{subsec:initFont}
 まず、fk\_SpriteModel 型の変数を準備する。
 \\
 \begin{screen}
@@ -124,17 +124,78 @@ fk\_Scene に対して登録を行う場合は、fk\_SpriteModel 型の entryFir
         sprite.entryFirst(&window, &scene);
 \end{verbatim}
 \end{screen}
+
+\subsection{文字列設定}
+表示する文字列の設定は、drawText() 関数を用いて行う。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_SpriteModel     sprite;
+    
+        sprite.drawText("Sample");
+\end{verbatim}
+\end{screen}
 ~
 
+引数は std::string 型なので、
+結果として std::string 型となるものであればよい。
+例えば、int 型の score という変数の値を用いて「SCORE = 100」のような
+表示を行いたい場合は、以下のようにすればよい。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_SpriteModel     sprite;
+        int                score = 100;
+    
+        sprite.drawText("SCORE = " + std::to_string(score));
+\end{verbatim}
+\end{screen}
+~
 
+なお、drawText() を二回以上呼び出した場合、通常は以前の文字列に追加した形で表示される。
+例えば、
+\\
+\begin{screen}
+\begin{verbatim}
+        sprite.drawText("ABCD");
+        sprite.drawText("EFGH");
+\end{verbatim}
+\end{screen}
+~ \\
+とした場合、画面には「ABCDEFGH」と表示される。
+以前の「ABCD」を消去し「EFGH」と表示したい場合は、
+\\
+\begin{screen}
+\begin{verbatim}
+        sprite.drawText("ABCD");
+        sprite.drawText("EFGH", true);
+\end{verbatim}
+\end{screen}
+~ \\
+というように、第2引数に「true」を入れるとよい。
+
+また、表示した文字列を完全に消去したい場合は clearText() 関数を用いる。
 
 \section{高度な文字列表示} \label{sec:textimage}
 
-文字列板を生成するには、大体以下のようなステップを踏むことになる。
+fk\_SpriteModel にて簡単な文字列表示を実現できるが、
+より高度な文字列表示機能を提供するクラスとして「fk\_TextImage」がある。
+fk\_TextImage では、以下のような機能が実現できる。
+\begin{itemize}
+ \item 画面上でのスプライト表示ではなく、3D空間中の任意の位置に文字列テクスチャを表示する。
+ \item 文字列に対し、色、大きさ、文字間や行間の幅、影効果など様々な設定を行う。
+ \item 各文字を一文字ずつ順番に表示していくなどの文字送り機能を使う。
+\end{itemize}
+また、fk\_SpriteModel の text メンバは fk\_TextImage 型であり、
+この節で述べられている設定を施すことにより、fk\_SpriteModel による文字表示においても
+同様の細かな設定を行うことができる。
+
+fk\_TextImage による文字列テクスチャの表示を行うには、
+以下のようなステップを踏むことになる。
 \begin{enumerate}
  \item fk\_TextImage, fk\_RectTexture 型のオブジェクトを用意する。
  \item フォント情報を読み込む。
- \item 文字列板に対する各種設定を行う。
+ \item 文字列テクスチャに対する各種設定を行う。
  \item 文字列情報を読み込む。
  \item fk\_RectTexture 型のオブジェクトに fk\_TextImage 型のオブジェクトを
 	設定する。
@@ -142,11 +203,12 @@ fk\_Scene に対して登録を行う場合は、fk\_SpriteModel 型の entryFir
 あとは、普通の fk\_RectTexture 型と同様にして表示が可能となる。これらの
 項目は、次節以降でそれぞれを解説する。
 
-\subsection{文字列板オブジェクトの生成}
-文字列板を作成するには、最低でも fk\_TextImage 型のオブジェクトと
-fk\_RectTexture 型のオブジェクトが必要となる。従って、まずはそれぞれの
+\subsection{文字列テクスチャの生成}
+fk\_TextImage による文字列テクスチャを作成するには、
+最低でも fk\_TextImage 型のインスタンスと
+fk\_RectTexture 型のインスタンスが必要となる。従って、まずはそれぞれの
 変数を準備する。そして、fk\_RectTexture の setImage() メンバ関数を用いて
-文字列板(の画像イメージ)を fk\_RextTexture オブジェクトに設定しておく。
+文字列テクスチャ(の画像イメージ)を fk\_RextTexture インスタンスに設定しておく。
 \\
 \begin{screen}
 \begin{verbatim}
@@ -158,34 +220,14 @@ fk\_RectTexture 型のオブジェクトが必要となる。従って、まず�
 \end{screen}
 
 \subsection{フォント情報の読み込み}
-次に、フォント情報の読み込みを行う。fk\_TextImage オブジェクトは、
-TrueType 日本語フォントを読み込むことができるので、まずは TrueType
-日本語フォントを準備する。大抵の場合、拡張子が「ttf」または
-「ttc」となっているファイルである。
-TrueType フォントが格納されている場所は OS によって異なるが、
-検索することで容易に取得できると思われる\footnote{
-Windows 系 OS の場合、MS 明朝が「msmincho.ttf」、MS ゴシックが
-「msgothic.ttf」というファイル名で保存されている。}。
+次に、フォント情報の読み込みを行う。
+フォント情報は fk\_SpriteModel と同様に initFont() を用いて行う。
+詳細は \ref{subsec:initFont} 節を参照してほしい。
 
-TrueType フォントファイルが準備できたら、あとはそのファイル名を
-initFont() メンバ関数を使って設定する。
-この関数は、フォントファイルの読み込みに成功したときは true を、
-失敗したときは false を返す。プログラムは、以下のように記述しておくと
-フォント読み込みの成功失敗を判定することができる。
-(エラー表示には fl\_alert 関数を用いている。)
-\\
-\begin{screen}
-\begin{verbatim}
-        if(textImage.initFont("sample.ttf") == false) {
-            fl_alert("Font Init Error!");
-        }
-\end{verbatim}
-\end{screen}
-
-\subsection{文字列板の各種設定}
-次に、文字列板の各種設定を行う。設定できる項目として、以下のようなものが
+\subsection{文字列テクスチャの各種設定}
+次に、文字列テクスチャの各種設定を行う。設定できる項目として、以下のようなものが
 fk\_TextImage のメンバ関数として提供されている。
-なお、fk\_TextImage クラスは fk\_Image クラスの派生クラスなので、
+なお、fk\_TextImage クラスは fk\_Image クラスの派生クラスであり、
 以下のものに加えて第 \ref{sec:image} 節で述べた fk\_Image クラスの
 メンバ関数も全て利用することができる。
 
@@ -244,7 +286,7 @@ xx \= xxxx \= \kill
 \> \textbf{void setForeColor(float r, float g, float b, float a)} \\
 \> \textbf{void setForeColor(double r, double g, double b, double a)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列板の文字色を指定する。デフォルトでは
+		文字列テクスチャの文字色を指定する。デフォルトでは
 		\((1, 1, 1, 1)\) つまり無透明な白に設定されている。
 	\end{tabular} \\ \\
 
@@ -252,7 +294,7 @@ xx \= xxxx \= \kill
 \> \textbf{void setBackColor(float r, float g, float b, float a)} \\
 \> \textbf{void setBackColor(double r, double g, double b, double a)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列板の背景色を指定する。デフォルトでは
+		文字列テクスチャの背景色を指定する。デフォルトでは
 		\((0, 0, 0, 1)\) つまり無透明な黒に設定されている。
 	\end{tabular} \\ \\
 
@@ -321,7 +363,7 @@ xx \= xxxx \= \kill
 
 \> \textbf{void setOffset(int up, int down, int left, int right)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列板の、縁と文字のオフセット(幅)を指定する。
+		文字列テクスチャの、縁と文字のオフセット(幅)を指定する。
 		引数は順番に上幅、下幅、左幅、右幅となる。
 		デフォルトでは全て 0 に設定されている。
 		この値は、setCharSkip や setLineSkip と同様に、
@@ -452,9 +494,9 @@ fk\_TextImage に設定するには、loadUniStr() メンバ関数を用いる�
 \subsection{文字列情報の読み込み}
 文字列を設定する方法は、前述した fk\_UniStr 型を
 用いる方法の他に、テキストファイルを読み込むという方法もある。
-まず、文字列板に貼りたい文字列を事前に
+まず、文字列テクスチャに貼りたい文字列を事前に
 テキストファイルをどこか別のファイルに保存しておく。
-文字列を保存する際には、文字列板内で改行したい箇所と
+文字列を保存する際には、文字列テクスチャ内で改行したい箇所と
 テキストファイル内の改行は必ず合わせておく。あとは、そのファイル名を
 fk\_TextImage オブジェクトに loadStrFile() メンバ関数を用いて入力する。
 以下は、テキストファイル「str.txt」を入力する例である。
@@ -518,12 +560,12 @@ xx \= xxxx \= \kill
 	\end{tabular}
 \end{tabbing}
 
-\subsection{文字列板表示のサンプル}
+\subsection{文字列テクスチャ表示のサンプル}
 前節までで各項目の解説を述べたが、ここではこれまでの記述を踏まえて
 典型的なコード例を示す。以下のコードは次のような条件を満たすような
 コードである。
 \begin{itemize}
- \item TrueType フォント名は「msmincho.ttf」。
+ \item TrueType フォント名は「fontsample.ttf」。
  \item ソースコードの文字コードは ShiftJIS コード。
  \item 解像度、文字の大きさはそれぞれ 72, 72。
  \item 影付き効果を有効にする。
@@ -544,7 +586,7 @@ xx \= xxxx \= \kill
 
         texture.setImage(&textImage);
 
-        if(textImage.initFont("msmincho.ttf") == false) {
+        if(textImage.initFont("fontsample.ttf") == false) {
             fl_alert("Font Init Error!");
         }
         textImage.setDPI(72);
