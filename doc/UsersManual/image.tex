@@ -1,12 +1,12 @@
-\chapter{テクスチャマッピングと画像処理} \label{sec:imagetexture} ~
+\chapter{テクスチャマッピングと画像処理} \label{chap:imagetexture} ~
 
 この章では、画像を 3D 空間上に表示する「テクスチャマッピング」と呼ばれる
 技術の利用方法と、画像処理機能の使用方法を述べる。
-基本的に、テクスチャマッピングは \ref{sec:shape} 章で述べてきた
+基本的に、テクスチャマッピングは \ref{chap:shape} 章で述べてきた
 形状の一種であり、利用方法は他の形状クラスとあまりかわらない。
 しかし、画像情報を扱うため独特の機能を多く保持するため、独立した章で解説を行う。
 
-\section{テクスチャマッピング} \label{subsec:texture}
+\section{テクスチャマッピング} \label{sec:texture}
 テクスチャマッピングとは、2次元画像の全部及び一部を3次元空間上に
 配置して表示する技術である。テクスチャマッピングは、細かな質感を
 簡単に表現できることや、高速な表示機能が搭載されているハードウェアが
@@ -161,14 +161,14 @@ setVertexPos() 関数は、fk\_Vector 型の変数を引数に持たせること
 \end{verbatim}
 \end{screen}
 
-\subsection{IFSテクスチャ} \label{subsubsec:ifstexture}
+\subsection{IFSテクスチャ} \label{subsec:ifstexture}
 次に紹介する「IFSテクスチャ」は、多数の三角形テクスチャをひとまとめに
 扱うための機能を持つクラスで、クラス名は「fk\_IFSTexure」である。
 このクラスでは、Metasequoia によって作成したテクスチャ付きの MQO ファイルと、
 D3DX ファイルの 2 種類のデータからの入力が可能となっている。
 MQO ファイルは readMQOFile() 関数、D3DX ファイルは readD3DXFile() 関数で
 形状データを入力することができる。なお、アニメーションに関しての機能が
-\ref{subsubsec:d3dxanimation} 節に記述してあるので、
+\ref{sec:d3dxanimation} 節に記述してあるので、
 そちらも合わせて参照してほしい。
 
 readMQOFile() 関数の引数構成は、以下のようになっている。
@@ -219,7 +219,7 @@ MQO ファイル名が「sample.mqo」、
 \end{verbatim}
 \end{breakbox} ~
 
-ちなみに、ここで読み込んだ形状データは \ref{subsec:smooth} 節で
+ちなみに、ここで読み込んだ形状データは \ref{sec:smooth} 節で
 述べているスムースシェーディングの制御に対応している。
 
 fk\_IFSTexture クラスが持つその他のメンバ関数として、以下のようなものがある。
@@ -257,7 +257,7 @@ xx \= xxxx \= \kill
 最後に、「メッシュテクスチャ」を紹介する。メッシュテクスチャは、
 前述した三角形テクスチャを複数枚同時に定義できる機能を持っている。
 これは、「fk\_MeshTexture」というクラスを用いて実現できる。
-このクラスは、前述の \ref{subsubsec:ifstexture}節で述べた
+このクラスは、前述の \ref{subsec:ifstexture}節で述べた
 IFSテクスチャとよく似ているが、以下のような点が異なっている。
 これらの性質を踏まえて、両方を使い分けてほしい。
 
@@ -359,8 +359,8 @@ fk\_IndexFaceSet 型の形状として出力することが可能である。
 fk\_RectTexture, fk\_TriTexture, fk\_IFSTexture のいずれの型でも
 同様に利用できる。
 
-\section{画像処理用クラス} \label{subsec:image}
-第\ref{subsec:texture}節で述べたテクスチャは、画像をファイルから読み込むことを
+\section{画像処理用クラス} \label{sec:image}
+第\ref{sec:texture}節で述べたテクスチャは、画像をファイルから読み込むことを
 前提としていたが、用途によってはプログラム中で画像を生成し、
 それをテクスチャマッピングするという場合もある。そのような場合、
 fk\_Image というクラスを用いて画像を生成することが可能である。

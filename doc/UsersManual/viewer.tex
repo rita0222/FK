@@ -1,6 +1,6 @@
-\chapter{簡易形状表示システム} \label{sec:viewer} ~
+\chapter{簡易形状表示システム} \label{chap:viewer} ~
 
-\ref{sec:window} 章では、FK システムでの多彩なウィンドウやデバイス制御機能を
+\ref{chap:window} 章では、FK システムでの多彩なウィンドウやデバイス制御機能を
 紹介したが、中には FK システムで作成した形状を簡単に表示できればよいという
 利用者もいるであろう。そのようなユーザには、fk\_Window の機能はやや煩雑と
 いってもよい。そこで、FK システムではより簡単に形状を表示する手段として
@@ -16,7 +16,7 @@ fk\_ShapeViewer というクラスを提供している。
 \\ ~
 
 この時点で、多くの GUI が付加したウィンドウが生成される。形状は、
-\ref{sec:shape} 章で紹介したいずれの種類でも利用できるが、ここでは例として
+\ref{chap:shape} 章で紹介したいずれの種類でも利用できるが、ここでは例として
 fk\_Solid 型及び fk\_Sphere 型の変数を準備する。
 この変数が表す形状を表示するには、
 setShape() メンバ関数を用いる。setShape() メンバ関数は二つの引数を
@@ -50,7 +50,7 @@ ID を変えて入力していくことで実現できる。\\ ~ \\
 が行われた場合、draw() 関数は false を返すので、その時点で while ループを
 抜けることになる。形状変形の様子をアニメーション処理したい場合には、
 while 文の中に変形処理を記述すればよい。具体的な変形処理のやり方は、
-\ref{subsec:movevertex} 節及び \ref{sec:sampleviewer} 章に
+\ref{sec:movevertex} 節及び \ref{sec:sampleviewer} 節に
 解説が記述されている。
 
 \section{標準機能}
@@ -235,6 +235,6 @@ fk\_ShapeViewer クラスの具体的な利用法は、第 \ref{sec:sampleviewer
  \item[\hspace*{0.6cm}void printf(char *format, ...)]
  \item[\hspace*{0.6cm}void clearBrowser(void)] ~ \\
 	これらの関数は、fk\_Window クラスと同様にメッセージ出力機能を
-	利用するためのものである。詳細は \ref{sec:winmessage}節を参照のこと。
+	利用するためのものである。詳細は \ref{subsec:winmessage}節を参照のこと。
 
 \end{description}

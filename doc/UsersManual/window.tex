@@ -1,4 +1,4 @@
-\chapter{ウインドウとデバイス} \label{sec:window} ~
+\chapter{ウインドウとデバイス} \label{chap:window} ~
 
 FK システムでは、ウィンドウを制御するクラスとして fk\_AppWindow クラスと
 fk\_Window クラスを提供している。fk\_AppWindow は簡易に様々な機能を
@@ -692,8 +692,7 @@ resizeWindow() というメンバ関数を利用する。この関数は、引�
 \end{verbatim}
 \end{breakbox}
 
-\subsection{ピックによる形状要素の選択}
-\subsubsection{ピック選択の利用法} \label{sec:pickexam}
+\subsection{ピック選択の利用法} \label{subsec:pickexam}
 FK システムでは、ピックによるオブジェクト及びその中の要素の取得が可能である。
 この機能を利用するには、fk\_Window の getPickModel() メンバ関数と
 fk\_PickData クラスを用いる。実際の仕様を述べる前に、次の実装例を
@@ -721,7 +720,7 @@ fk\_PickData クラスを用いる。実際の仕様を述べる前に、次の�
 ~ \\
 最初の setPickMode() 関数は、モデルに対してピックによる選択候補に
 するかどうかを設定するための関数であり、true によって選択候補となる
-\footnote{第 \ref{sec:model} 章の「ピックモード」の節を参照。}。
+\footnote{第 \ref{chap:model} 章の「ピックモード」の節を参照。}。
 そして、fk\_Window::getPickModel() が呼び出された時点で
 アプリケーションはマウスによる入力待ち状態に入る。ここで、fk\_Window 内の
 オブジェクトをクリックすると pickData 中にクリックされたオブジェクトの
@@ -747,7 +746,7 @@ fk\_PickData 中に格納されることになる。getSize() は、まさに
 頂点の位置を変更したい場合には fk\_Solid から ID に対応する
 頂点オブジェクトを得なければならない。これを実際に記述すると
 次のようになる。この中に出てくる getType() 関数については、
-第 \ref{sec:picktype} 節で詳しく述べる。
+第 \ref{subsec:picktype} 節で詳しく述べる。
 \\
 \begin{breakbox}
 \begin{verbatim}
@@ -772,7 +771,8 @@ fk\_PickData 中に格納されることになる。getSize() は、まさに
         }
 \end{verbatim}
 \end{breakbox}
-\subsubsection{待ち制御と随時処理の選択}
+
+\subsection{待ち制御と随時処理の選択}
 前節では、ピックによる選択時に画面描画が静止していることを
 前提とした例及び利用法を述べた。CAD や CG 作成のためのアプリケーションでは、
 このような処理が頻繁に利用されることが予測できる。しかし、ピック選択は
@@ -834,7 +834,7 @@ getPickModel() 関数は次のような機能を持っている。
 \end{verbatim}
 \end{breakbox}
 
-\subsubsection{ピック対象位相の選択と制御} \label{sec:picktype}
+\subsection{ピック対象位相の選択と制御} \label{subsec:picktype}
 これまで述べてきたピック選択の対象となる位相要素は、
 面 (Loop)、線 (Edge)、点 (Vertex) のいずれかである。
 どれが選択の対象となるのかは、実際に描画されているか否かに依存する。
@@ -914,7 +914,7 @@ fk\_PickData の getType() メンバ関数を用いればよい。
 \end{center}
 \end{table}
 
-具体的な利用方法は、既に \ref{sec:pickexam} 節の最後にある
+具体的な利用方法は、既に \ref{subsec:pickexam} 節の最後にある
 サンプル例のとおりなので、そちらを参照してほしい。
 
 \subsection{テクスチャメモリの解放}
@@ -928,7 +928,7 @@ fk\_PickData の getType() メンバ関数を用いればよい。
 テクスチャの画像情報を再度読み込み直すことになるので、処理時間が
 増える可能性もある。適宜タイミングを調整してほしい。
 
-\subsection{メッセージ出力} \label{sec:winmessage}
+\subsection{メッセージ出力} \label{subsec:winmessage}
 fk\_Window には、メッセージを出力する機能として以下のようなメンバ関数が
 提供されている。
 \begin{tabbing}

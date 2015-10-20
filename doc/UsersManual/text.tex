@@ -1,7 +1,7 @@
-\chapter{文字列表示} \label{sec:stringimage}
-第\ref{subsec:texture}節でテクスチャマッピングを利用する方法を、
-第\ref{subsec:image}節で画像データを扱う方法を述べたが、
-FK システムでは文字列を画面上にテクスチャマッピング画像として表示するクラスが用意されている。
+\chapter{文字列表示} \label{chap:stringimage}
+第\ref{chap:imagetexture}章でテクスチャマッピングについての解説を述べたが、
+FK システムでは特別なテクスチャマッピングとして、
+文字列を画面上に表示するクラスが用意されている。
 
 文字列用テクスチャは 2 種類あり、容易に表示を実現する「fk\_SpriteModel」クラスと、
 高度な機能を持つ「fk\_TextImage」クラスである。
@@ -16,9 +16,119 @@ FK システムでは文字列を画面上にテクスチャマッピング画�
 しかし、画面上の文字列やアイコンの表示に当時スプライト技術が用いられていた慣例から、
 現在でも画面上に表示される文字やアイコンを「スプライト」と呼称することがある。}。
 
+スプライトモデルを使用した文字列表示は、以下のような手順を踏む。
+\begin{enumerate}
+ \item fk\_SpriteModel 型の変数を用意する。
+ \item フォント情報を読み込む。
+ \item サイズや表示位置などの各種設定を行っておく。
+ \item fk\_Scene または fk\_AppWindow に登録する。
+ \item drawText() によって文字列を設定する。
+\end{enumerate}
+
+以下、各項目を個別に説明する。
+
+\subsection{変数の準備とフォントの読み込み}
+まず、fk\_SpriteModel 型の変数を準備する。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_SpriteModel  sprite;
+\end{verbatim}
+\end{screen}
+~
+
+次に、フォント情報の読み込みを行う。fk\_SpriteModel オブジェクトは、
+TrueType 日本語フォントを読み込むことができるので、まずは TrueType
+日本語フォントを準備する。大抵の場合、拡張子が「ttf」または
+「ttc」となっているファイルである。
+TrueType フォントが格納されている場所は OS によって異なるが、
+容易に取得できるはずである\footnote{
+各 OS に搭載されているフォントデータは、他の PC にコピーすることが
+ライセンス上禁じられていることも多い。別の PC にコピーすることを
+前提とする場合は、フリーライセンスを持つフォントを用いる必要がある。}。
+
+TrueType フォントファイルが準備できたら、あとはそのファイル名を
+initFont() メンバ関数を使って設定する。
+この関数は、フォントファイルの読み込みに成功したときは true を、
+失敗したときは false を返す。プログラムは、以下のように記述しておくと
+フォント読み込みの成功失敗を判定することができる。
+(エラー表示には fl\_alert 関数を用いている。)
+\\
+\begin{screen}
+\begin{verbatim}
+        if(sprite.initFont("sample.ttf") == false) {
+            fl_alert("Font Init Error!");
+        }
+\end{verbatim}
+\end{screen}
+\subsection{各種設定}
+実際に表示を行う前に、必要な各種設定を行っておく。
+最低限必要な設定は表示位置の設定で、
+これは setPositionLT() を利用する。
+\\
+\begin{screen}
+\begin{verbatim}
+        sprite.setPositionLT(-280.0, 230.0);
+\end{verbatim}
+\end{screen}
+~
+
+指定する数値はウィンドウ(描画領域)を原点とし、\(x\)の正方向が右、\(y\)の正方向が上となる。
+また、単位は(本来の3D座標系とは違い)ピクセル単位となる。スプライトモデルは、
+空間中の 3D オブジェクトとして配置するものではなく、
+画面の特定位置に固定して表示されることを前提としているためである。
+
+その他、setSpriteSize() でスプライトを表す画像のサイズを設定しなおすなど、
+様々な設定項目があるが、これらについてはリファレンスマニュアルを参照してほしい。
+
+文字色など、文字表示に関する細かな設定は fk\_SpriteModel クラスには用意されていない。
+これらの設定は、fk\_SpriteModel 型の public メンバである「text」に対して行う。
+例えば、以下のコードは文字色を白、背景色を黒に設定している。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_SpriteModel     sprite;
+
+        sprite.text.setForeColor(1.0, 1.0, 1.0);
+        sprite.text.setBackColor(0.0, 0.0, 0.0);
+\end{verbatim}
+\end{screen}
+~ \\
+この「text」メンバは fk\_TextImage 型である。詳細は \ref{sec:textimage} 節を参照してほしい。
+
+\subsection{シーンやウィンドウへの登録}
+
+ウィンドウに fk\_AppWindow を用いている場合は、
+通常のモデルと同様に entry() 関数によってスプライトを登録する。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_AppWindow       window;
+        fk_SpriteModel     sprite;
+    
+        window.entry(&sprite);
+\end{verbatim}
+\end{screen}
+~
+
+fk\_Scene に対して登録を行う場合は、fk\_SpriteModel 型の entryFirst() 関数を用いる。
+引数には fk\_Scene 型のインスタンスだけでなく、
+表示を想定する fk\_Window 型のインスタンスも必要となる。
+\\
+\begin{screen}
+\begin{verbatim}
+        fk_Scene           scene;
+        fk_Window          window;
+        fk_SpriteModel     sprite;
+    
+        sprite.entryFirst(&window, &scene);
+\end{verbatim}
+\end{screen}
+~
 
 
-\section{高度な文字列表示}
+
+\section{高度な文字列表示} \label{sec:textimage}
 
 文字列板を生成するには、大体以下のようなステップを踏むことになる。
 \begin{enumerate}
@@ -76,7 +186,7 @@ initFont() メンバ関数を使って設定する。
 次に、文字列板の各種設定を行う。設定できる項目として、以下のようなものが
 fk\_TextImage のメンバ関数として提供されている。
 なお、fk\_TextImage クラスは fk\_Image クラスの派生クラスなので、
-以下のものに加えて第 \ref{subsec:image} 節で述べた fk\_Image クラスの
+以下のものに加えて第 \ref{sec:image} 節で述べた fk\_Image クラスの
 メンバ関数も全て利用することができる。
 
 \subsubsection{フォントに関する設定}
@@ -471,8 +581,7 @@ clear() & 全文字消去 \\ \hline
 \end{center}
 以下に、詳細を述べる。
 
-文字送りのモード設定に関しては、\ref{subsubsec:sendRef} 節で述べたように
-setSendingMode() 関数を用いる。ここで \\
+文字送りのモード設定に関しては前述した setSendingMode() 関数を用いる。ここで \\
 FK\_SENDING\_CHAR または
 FK\_SENDING\_LINE が設定されていた場合、loadUniStr() 関数や
 loadStrFile() 関数で文字列が入力された時点では文字は表示されない。
@@ -502,7 +611,7 @@ str[] 配列中の次の文字列を読み込むというものである。
 処理の高速化をはかるため、setCacheMode() でキャッシュを有効としている。
 また、「c」キーを押した場合は表示されていた文字列を一旦消去し、
 「f」キーを押した場合は現在表示途中の文字列を全て出力する。
-(ウィンドウやキー操作に関しては、\ref{sec:window} 章を参照のこと。) \\
+(ウィンドウやキー操作に関しては、\ref{chap:window} 章を参照のこと。) \\
 
 \begin{breakbox}
 \begin{verbatim}
