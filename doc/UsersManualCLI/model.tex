@@ -37,8 +37,8 @@
 \end{verbatim}
 \end{breakbox}
 ~ \\
-つまり前章で示した形状を持つオブジェクトのポインタを、setShape() メンバ
-関数の引数として与えてやればよい。この例では fk\_Line 型のオブジェクト
+つまり、形状インスタンスを Shape プロパティに代入すればよい。
+この例では fk\_Line 型のオブジェクト
 を用いたが、fk\_Shape クラスから派生したクラスのオブジェクトならば
 なんでもよい。
 
@@ -302,12 +302,12 @@ FK システムでは、独自の方法でこれを回避している。FK シ�
 互いに弱点を補間しあっており、あるステータスが不定になるような場合には
 他のステータスが適用されるようにできている。
 
-一方で、fk\_Model クラスではメンバ関数によってこれらの制御を行うので
+一方で、fk\_Model クラスではメソッドによってこれらの制御を行うので
 あるが、FK システムを用いた開発ではさきほど述べたようなわずらわしさからは
 一切解放される。これらはすべて内部的に行われ、ベクトル表現、オイラー角表現、
 行列表現のいずれもが常に整合性を保ち続けることを保証している。
 
-次節からは、モデルに対しての具体的な位置と姿勢の操作を行うためのメンバ関数
+次節からは、モデルに対しての具体的な位置と姿勢の操作を行うためのメソッド
 を、具体的な説明を交えながら述べていく。数は多いが、体系的なものなので
 理解はさほど難しくないだろう。
 \section{グローバル座標系とローカル座標系}
@@ -554,7 +554,7 @@ xxxxxxx \= \kill
 \> LoUpvec(double, double, double); \\
 \end{tabbing}
 \end{bf}
-このうち、多重定義されているメソッドは移動関数群と同じように fk\_Vector によるか、
+このうち、多重定義されているメソッドは移動メソッド群と同じように fk\_Vector によるか、
 3 次元ベクトルを表す 3 つの実数を代入するかの違いでしかないので、
 実質的には 4 種類となる。
 
@@ -587,7 +587,7 @@ GlFocus メソッドは簡単に述べてしまうと、任意の位置を代入
 直接指定するような処理を行いたい場合には、GlVec メソッドを用いればよい。
 \subsection{loFocus}
 LoFocus メソッドは、GlFocus のローカル座標系版である。Lo メソッド群に共通の、
-主観的な制御には好都合な関数である。例えば、
+主観的な制御には好都合なメソッドである。例えば、
 \\
 \begin{breakbox}
 \begin{verbatim}
@@ -635,7 +635,7 @@ LoFocus メソッドは、GlFocus のローカル座標系版である。Lo メ�
 \subsection{LoUpvec}
 このメソッドは GlUpvec のローカル座標系版である。このメソッドは
 アップベクトルが方向ベクトルと直交していなければならないという
-理由から、\(z\) 方向の値は意味を持たない。このメソッドは GlFocus 関数と
+理由から、\(z\) 方向の値は意味を持たない。このメソッドは GlFocus メソッドと
 比べてもさらに特殊な状況でしか扱われないであろう。ここでは紹介程度に
 とどめておく。
 
@@ -762,7 +762,7 @@ xxxxxxx \= \kill
 \> LoRotateWithVec(double, double, double, double, double, double, double); \\
 \end{tabbing}
 \end{bf}
-このメソッド群も、実質 8 種類の関数が
+このメソッド群も、実質 8 種類のメソッドが
 引数として fk\_Vector 型をとるものと 3 つの実数をとるもので
 多重定義がなされている。行間なく記されているもの同士が対応している。
 
@@ -815,7 +815,7 @@ GlRotateWithVec メソッドを用いるとよい。このメソッドは位置�
 \subsection{LoRotate と LoRotateWithVec}
 LoRotate メソッドと LoRotateWithVec メソッドは、ローカル座標系版である
 ことを除けば GlRotate や GlRotateWithVec となんら変わりはない。特に
-LoRotateWithVec は、LoAngle 関数と多くの機能が重複している。その例を
+LoRotateWithVec は、LoAngle メソッドと多くの機能が重複している。その例を
 表\ref{tbl:fkAngle1}に示す。ただし、origin は原点を、angle は回転角度を指す。
 
 \begin{table}[H]
@@ -909,7 +909,7 @@ fk\_Solid として読み込むのも1つの手である。しかしその他の
 な挙動を起こす。もう少し厳密に言うならば、子モデルは親モデルの
 ローカル座標を固定されているわけである。
 
-この機能は、fk\_Model の持つ setParent メンバ関数によって実現されている。
+この機能は、fk\_Model の持つ Parent プロパティによって実現されている。
 引数として親モデルのポインタを与える。このときに子モデルの持っていた
 グローバル座標系での位置と姿勢は、親モデルのローカル座標系でのそれとして
 扱われるようになる。具体的なプログラムをここに示す。
@@ -991,15 +991,15 @@ fk\_Model クラスは持っている。
 
 もしモデルが親を持っていたとき、
 表\ref{tbl:fkInh1}に示す
-関数群は親に対する相対的な値を返す。
+プロパティ群は親に対する相対的な値を返す。
 
 \begin{table}[H]
-\caption{相対的な値を返す関数群}
+\caption{相対的な値を返すプロパティ群}
 \label{tbl:fkInh1}
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-プロパティの型 & 関数名 \\ \hline \hline
+プロパティの型 & プロパティ名 \\ \hline \hline
 fk\_Vector & Position \\ \hline
 fk\_Vector & Vec \\ \hline
 fk\_Vector & Upvec \\ \hline
@@ -1009,15 +1009,15 @@ fk\_Matrix & Matrix \\ \hline
 \end{center}
 \end{table}
 
-それに対し、表\ref{tbl:fkInh2}の関数群は絶対的なグローバル座標を返す。
+それに対し、表\ref{tbl:fkInh2}のプロパティ群は絶対的なグローバル座標を返す。
 
 \begin{table}[H]
-\caption{絶対的な値を返す関数群}
+\caption{絶対的な値を返すプロパティ群}
 \label{tbl:fkInh2}
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-プロパティｎ型 & 関数名 \\ \hline \hline
+プロパティの型 & プロパティ名 \\ \hline \hline
 fk\_Vector & InhPosition \\ \hline
 fk\_Vector & InhVec \\ \hline
 fk\_Vector & InhUpvec \\ \hline
@@ -1055,7 +1055,7 @@ modelB は元の位置・姿勢を保つ。2番目の引数に「false」を指�
 または 2 番目の引数を省略した場合、元の位置や姿勢や modelA からの
 相対的なものとして扱われるため、結果的に modelB は移動することになる。
 
-\subsection{親子関係に関する関数} 
+\subsection{親子関係に関するメソッド} 
 以下に、親子関係に関する fk\_Model のメソッドを羅列する。
 \begin{tabbing}
 xx \= xxxx \= \kill
@@ -1072,27 +1072,27 @@ xx \= xxxx \= \kill
 	\> \> \begin{tabular}{p{15cm}}
 		設定してあった親モデルとの関係を解除する。
 		元々親モデルが設定されていなかった場合は何も起こらない。
-		flag に関しては、SetParent() 関数と同様。
+		flag に関しては、SetParent() メソッドと同様。
 	\end{tabular} \\ \\
 
 \> \textbf{EntryChild(fk\_Model m, bool flag)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		m を子モデルの1つとして設定する。
-		flag に関しては、SetParent() 関数と同様。
+		flag に関しては、SetParent() メソッドと同様。
 	\end{tabular} \\ \\
 
 \> \textbf{DeleteChild(fk\_Model m, bool flag)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		m が子モデルであった場合、親子関係を解除する。
 		m が子モデルではなかった場合は何も起こらない。
-		flag に関しては、SetParent() 関数と同様。
+		flag に関しては、SetParent() メソッドと同様。
 	\end{tabular} \\ \\
 
 \> \textbf{DeleteChildren(bool flag)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		自身に設定されている全ての子モデルに対し、
 		親子関係を解除する。
-		flag に関しては、SetParent() 関数と同様。
+		flag に関しては、SetParent() メソッドと同様。
 	\end{tabular} \\ \\
 
 \end{tabbing}
@@ -1230,7 +1230,7 @@ fk\_Boundary クラスのメソッドを利用することになるので、
 \end{verbatim}
 \end{breakbox}
 ~ \\
-あとは、他のモデルを引数として IsInter() 関数を用いれば干渉判定ができる。
+あとは、他のモデルを引数として IsInter() メソッドを用いれば干渉判定ができる。
 (もちろん、modelB の方も事前に上記の各種設定をしておく必要がある。)
 \\
 \begin{breakbox}
