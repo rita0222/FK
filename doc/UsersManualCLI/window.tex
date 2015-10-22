@@ -87,6 +87,109 @@ false を返すケースは、ウィンドウが閉じられた場合となる�
 なお、生成されたウィンドウは通常の OS によるウィンドウ消去の方法以外に、
 ESC キーを押すことで消去する機能がある。
 
+\section{表示モデルの登録と解除}
+fk\_AppWindow クラスでは、第 \ref{chap:scene} 章で説明した「シーン」が最初から
+デフォルトで登録されており、fk\_Scene 型の変数を用いなくても表示モデルを登録することが可能である。
+
+表示モデルの登録は、Entry() メソッドを用いる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        var window = new fk_AppWindow();
+        var model = new fk_Model();
+
+        window.Entry(model);
+\end{verbatim}
+\end{breakbox}
+~ \\
+Entry() メソッドは、fk\_Model の他に fk\_SpriteModel 型のインスタンスにも用いることができる。
+
+一度登録したモデルを描画対象から外したい場合は、Remove() メソッドを用いる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        var window = new fk_AppWindow();
+        var model = new fk_Model();
+
+        window.Remove(model);
+\end{verbatim}
+\end{breakbox}
+~ \\
+また、登録したモデルを全て解除したい場合は、ClearModel() というメソッドを用いる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        window.ClearModel(); // 全ての登録を解除
+\end{verbatim}
+\end{breakbox}
+~ \\
+
+\section{シーンの切り替え}
+描画対象をモデル単位ではなくシーン単位で切り替えたい場合は、
+まず第 \ref{chap:scene} 章で説明した fk\_Scene 型を用いてシーンを構築しておく。
+その後、「Scene」というプロパティに設定することで表示対象となるシーンが切り替わる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        var window = new fk_AppWindow();
+        var scene = new fk_Scene;
+
+        window.Scene = scene;
+\end{verbatim}
+\end{breakbox}
+~ \\
+また、表示シーンを fk\_AppWindow がデフォルトで保持しているシーンに切り替えたい場合は、
+SetSceneDefault() というメソッドを用いる。
+
+\section{カメラ制御}
+fk\_AppWindow でカメラを制御する方法は、大きく2種類ある。
+
+手っ取り早く制御する方法は、「CameraPos」というプロパティと「CameraFocus」というプロパティを
+用いるというものである。CameraPos プロパティは fk\_Vector 型で、カメラ位置の設定や取得ができる。
+また、CameraFocus プロパティもやはり fk\_Vector 型で、カメラが注目する位置 (注視点) を指定する。
+\\
+\begin{screen}
+\begin{verbatim}
+    window.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
+    window.CameraFocus = new fk_Vector(100.0, 0.0, 100.0);
+\end{verbatim}
+\end{screen}
+~ \\
+ただし、これらの方法だけでは柔軟な制御は困難である。
+
+第二の方法として、fk\_Model 型インスタンスを利用するというものである。
+まずは以下のような操作により、カメラ用の fk\_Model 型インスタンスを準備する。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        var win = new fk_AppWindow();
+        var camera = new fk_Model();
+
+        win.CameraModel = camera;
+\end{verbatim}
+\end{breakbox}
+~ \\
+この後、camera 変数に対して \ref{chap:model} 章で説明した fk\_Model クラスの各種メソッドを
+用いることで、多様な操作を実現することができる。
+例として、あるモデルを注視しながら周囲を回転する「オービットカメラ」という効果は、
+以下のようなコードによって実現できる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        var window = new fk_AppWindow();
+        var model = new fk_Model();
+        var camera = new fk_Model();
+        window.CameraModel = camera;
+
+        while(window.Update() == true)
+        {
+            camera.GlFocus(model.Position);
+            camera.GlRotateWithVec(model.Position, fk_Axis.Y, 0.01);
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+
 \section{座標軸やグリッドの表示}
 fk\_AppWindow には座標軸やグリッドを表示する機能が備わっている。
 座標軸とは、原点から座標軸方向に描画される線分のことである。
