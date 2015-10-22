@@ -100,15 +100,18 @@ vec2 のように引数が2個しか無い場合は、\(z\) 成分には自動�
         }
 \end{verbatim}
 \end{screen}
-\subsection{比較演算子}
-fk\_Vector 型は比較演算子として等しいかどうかを判定する `\verb+==+' と、
-その否定 `\verb+!=+' を利用することができる。これらは、
-通常の int 型の変数の場合と同様に if 文中で利用でき、
-演算結果が bool 型として返る点でも通常の比較演算と同様である。
-このとき注意しなければならないのは、この比較演算はある程度の
+\subsection{比較演算}
+fk\_Vector 型はインスタンス同士が持つ値が等しいかどうかを判定する 
+Equals() を利用することができる。通常の int 型の変数の場合は、
+(a == b)のようにして値を比較できるが、fk\_Vector 型はクラスであるため、
+== を利用した場合はインスタンスが同一であるかの判定になってしまう。
+このため、vecA と vecB が持つ値が等しいか否かを判定するには、
+(vecA.Equals(vecB))と記述する必要がある。
+判定結果が bool 型として返る点は、通常の比較演算と同様である。
+このとき注意しなければならないのは、この比較演算ではある程度の
 数値誤差を許していることである。具体的に述べると、もし vec1.y
 と vec2.y、vec1.z と vec2.z の値がともに等しいとして、vec1.x
-と vec2.x が \(10^{-14}\) 程度の差が存在しても、(vec1 == vec2)
+と vec2.x が \(10^{-14}\) 程度の差が存在しても、(vec1.Equals(vec2))
 は真(true)を返すのである。現在、この許容誤差は \(10^{-12}\) に設定されている。
 ちなみに、偽の場合は false を返す。
 \subsection{単項演算子}
@@ -313,45 +316,45 @@ fk\_Matrix は、fk\_Vector のように初期値設定の手段を持たない�
 \begin{tabular}{|c|c|c|}
 \hline
 メンバ関数名と引数 & 引数の意味 & 効果 \\ \hline \hline
-makeRot(double, fk\_Axis) & 角度数と軸 &
+MakeRot(double, fk\_Axis) & 角度数と軸 &
         回転行列の生成 \\ \hline
-makeTrans(double, double, double) &
+MakeTrans(double, double, double) &
         x, y, zに対応する実数値 & 平行移動行列の生成 \\ \hline
-makeTrans(fk\_Vector) & ベクトル & 上記に同じ \\ \hline
-makeScale(double, double, double) &
+MakeTrans(fk\_Vector) & ベクトル & 上記に同じ \\ \hline
+MakeScale(double, double, double) &
         x, y, zに対応する実数値 & 拡大縮小行列の生成 \\ \hline
-makeEuler(double, double, double) & オイラー角に相当する実数値 &
+MakeScale(fk\_Vector) & ベクトル & 上記に同じ \\ \hline
+MakeEuler(double, double, double) & オイラー角に相当する実数値 &
         オイラー回転行列の生成 \\ \hline
-makeEuler(fk\_Angle) & オイラー角 & 上記に同じ \\ \hline
+MakeEuler(fk\_Angle) & オイラー角 & 上記に同じ \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-makeRot 関数は、2つ目の引数に \(x\) 軸を表す fk\_X、
-\(y\) 軸を表す fk\_Y、\(z\) 軸を表す fk\_Z の
+MakeRot 関数は、2つ目の引数に \(x\) 軸を表す fk\_Axis.X、
+\(y\) 軸を表す fk\_Axis.Y、\(z\) 軸を表す fk\_Axis.Z の
 いずれかをとる。最初の引数である実数値は弧度法
 (rad ラジアン)として扱われる。\(180^\circ = \pi \: rad\) である。
-FK システムでは \(\pi\) を表す定義値として FK\_PI を提供している。
-したがって、たとえば 90 度は \verb+FK_PI/2.0+ と表せばよい。
+.NET 環境では \(\pi\) を表す定義値として Math.PI を提供している。
+したがって、たとえば 90 度は \verb+Math.PI/2.0+ と表せばよい。
 
-makeEuler 関数は引数にそれぞれ順に heading 角、pitch 角、bank 角を
-与える。単位は makeRot 関数と同様に弧度法である。fk\_Angle 型は、
+MakeEuler 関数は引数にそれぞれ順に heading 角、pitch 角、bank 角を
+与える。単位は MakeRot 関数と同様に弧度法である。fk\_Angle 型は、
 オイラー角を表わすクラスで、heading 角、pitch 角、bank 角にあたる
 メンバはそれぞれ h, p, b となっており、public アクセスが可能である。
-\subsection{比較演算子}
-fk\_Matrix 型も、fk\_Vector 型のような `\verb+==+' 演算子と `\verb+!=+'
-演算子を持ち合わせている。これらは、やはり許容誤差を持って判定
-される。
-\subsection{単行演算子}
-fk\_Matrix 型は、単項演算子 `!' を持っている。これは逆行列を
+\subsection{比較演算}
+fk\_Matrix 型も、fk\_Vector 型のような Equals() 関数を持ち合わせている。
+これらは、やはり許容誤差を持って判定される。
+\subsection{逆行列演算}
+fk\_Matrix 型は、GetInverse() 関数を持っている。これは逆行列を
 返すものであり、自身に変化は起こさない。
 以下のプログラムは、行列 A の逆行列を B に代入するものである。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Matrix   A, B;
+        fk_Matrix   A, B; // A にはこの後 new して何らかの値が入るものとする
                 :
-        B = !A;
+        B = A.GetInverse();
 \end{verbatim}
 \end{screen}
 \subsection{二項演算子}
@@ -372,9 +375,10 @@ fk\_Matrix 型の二項演算子は表\ref{tbl:fkMat2}の通りのものが用�
 \end{table}
 
 \subsection{代入演算子}
-fk\_Matrix 型の持つ代入演算子は、単純代入演算子として `=' を持っており、
-その挙動は fk\_Vector 型とまったく同様である。その他の代入演算子も
-用意されており、それは表\ref{tbl:fkMat3}のようなものである。
+fk\_Matrix 型においても、代入処理における挙動は fk\_Vector 型とまったく同様である。
+すなわち、変数同士の代入は参照先を同一にするのみで、
+明示的にコピーを行いたい場合はコピーコンストラクタを利用することとなる。
+その他の代入演算子も用意されており、それは表\ref{tbl:fkMat3}のようなものである。
 記述法は、表\ref{tbl:fkVec2}と同様である。
 
 \begin{table}[H]
@@ -393,57 +397,55 @@ fk\_Matrix 型の持つ代入演算子は、単純代入演算子として `=' �
 \end{table}
 \subsection{各成分へのアクセス}
 行列成分へのアクセスは、配列演算子を用いる。これは2次元で定義されて
-おり、1次元目が行を、2次元目が列を表している\footnote{
-正確に述べると、配列の1次元目は行列の各行の先頭のアドレスを返す。}。
-\\
+おり、1次元目が行を、2次元目が列を表している。行と列はカンマで区切って指定する。\\
 \begin{screen}
 \begin{verbatim}
-        fk_Matrix mat;
+        var mat = new fk_Matrix();
 
-        mat.makeEuler(FK_PI/2.0, FK_PI/4.0, FK_PI/6.0);
-        printf("mat[1][0] = %lf\n", mat[1][0]);
+        mat.MakeEuler(Math.PI/2.0, Math.PI/4.0, Math.PI/6.0);
+        Console.WriteLine("mat[1][0] = {0}", mat[1,0]);
 \end{verbatim}
 \end{screen}
 \subsection{その他のメンバ関数}
 以下に、fk\_Matrix で用いられる主要なメンバ関数を紹介する。
 
-\subsubsection*{void init(void)}
+\subsubsection*{void Init()}
 自身を単位行列にする。
 
-\subsubsection*{void set(int r, int c, double a)}
+\subsubsection*{void Set(int r, int c, double a)}
 行番号が r、列番号が c に対応する成分の値を a に設定する。
 
-\subsubsection*{void setRow(int r, fk\_Vector v)}
-\subsubsection*{void setRow(int r, fk\_HVector v)}
+\subsubsection*{void SetRow(int r, fk\_Vector v)}
+\subsubsection*{void SetRow(int r, fk\_HVector v)}
 行番号が r である行ベクトルを v の各成分値に設定する。
 
-\subsubsection*{void setCol(int c, fk\_Vector v)}
-\subsubsection*{void setCol(int c, fk\_HVector v)}
+\subsubsection*{void SetCol(int c, fk\_Vector v)}
+\subsubsection*{void SetCol(int c, fk\_HVector v)}
 列番号が c である列ベクトルを v に設定する。
 
-\subsubsection*{fk\_HVector getRow(int r)}
+\subsubsection*{fk\_HVector GetRow(int r)}
 行番号が r である行ベクトルを取得する。
 
-\subsubsection*{fk\_HVector getCol(int c)}
+\subsubsection*{fk\_HVector GetCol(int c)}
 列番号が c である列ベクトルを取得する。
 
-\subsubsection*{bool isSingular(void)}
+\subsubsection*{bool IsSingular(void)}
 自身が特異行列であるかどうかを判定する。
 特異行列とは、逆行列が存在しない行列のことである。
 特異行列である場合は true を、そうでない場合は false を返す。
 
-\subsubsection*{bool isRegular(void)}
+\subsubsection*{bool IsRegular(void)}
 自身が正則行列であるかどうかを判定する。
 正則行列とは、逆行列が存在する行列のことである。
 (つまり、「非正則行列」と「特異行列」はまったく同じ意味になる。)
 正則行列である場合は true を、そうでない場合は false を返す。
 
-\subsubsection*{bool inverse(void)}
+\subsubsection*{bool Inverse(void)}
 自身が正則行列であった場合、
 自身を逆行列と入れ替えて true を返す。
 特異行列であった場合は、false を返し自身は変化しない。
 
-\subsubsection*{void negate(void)}
+\subsubsection*{void Negate(void)}
 自身を転置する。転置とは、
 行列の行と列を入れ替える操作のことである。
 
@@ -488,8 +490,8 @@ fk\_HVector の存在を意識する必要はない。
 姿勢変換のみによる結果を得ることが可能となる。
 このような処理を実現するためには、単純に w メンバに 0 を代入するだけで
 可能であるが、一応専用のメンバ関数も準備されている。
-ispos() メンバ関数は同次座標を 1 に設定し、平行移動変換を有効とする。
-isvec() メンバ関数は同次座標を 0 に設定し、平行移動変換を無効とする。
+IsPos() メンバ関数は同次座標を 1 に設定し、平行移動変換を有効とする。
+IsVec() メンバ関数は同次座標を 0 に設定し、平行移動変換を無効とする。
 
 上記のような処理をプログラム中で実現したい場合は、fk\_HVector クラスを
 利用するとよいだろう。
@@ -548,10 +550,10 @@ fk\_Quaternion クラスは、デフォルトコンストラクタとして何�
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector       v(0.2, 0.5, 1.0);
+        var v = new fk_Vector(0.2, 0.5, 1.0);
 
-        fk_Quaternion   q1(0.3, 0.4, 2.0, -2.0);
-        fk_Quaternion   q2(0.5, v);
+        var q1 = new fk_Quaternion(0.3, 0.4, 2.0, -2.0);
+        var q2 = new fk_Quaternion(0.5, v);
 \end{verbatim}
 \end{screen}
 
