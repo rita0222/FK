@@ -1,4 +1,4 @@
-\chapter{形状表現} \label{sec:shape} ~
+\chapter{形状表現} \label{chap:shape} ~
 
 この章では fk\_Shape と言われる形状を司るクラスと、それから派生した
 クラスの使用法を述べる。これらのクラスは形状をなんらかの形で定義
@@ -8,7 +8,7 @@
 必要がある。たとえば、車を 3 台表示したければ、まず車の形状を
 定義し、次にモデルを 3 つ作成し、それらに車の形状を代入すればよい。
 このようなケースで、モデル1つずつに対して形状を改めて作成するのは
-非効率といえる。こういったことは、\ref{sec:model} 章で詳しく述べる。
+非効率といえる。こういったことは、\ref{chap:model} 章で詳しく述べる。
 
 FK システムにおいて、形状は表\ref{tbl:fkShape1}のようなものを
 定義することができる。
@@ -113,7 +113,7 @@ fk\_Closedline クラスは、基本的には使用法は fk\_Polyline クラス
 「点」というのは、ここでは画面上に表示させる 1 ピクセル分の存在を指す。
 例えば、これらの集合を流動的に動かすことによって、空間中での流れを
 表現することができる\footnote{実際にこのような機能を実装する場合は、
-\ref{subsec:particle} 節にあるパーティクル用クラスの採用も検討するとよい。}。
+\ref{sec:particle} 節にあるパーティクル用クラスの採用も検討するとよい。}。
 点は、それ自体が大きさを持たないことや、
 描画することが高速なことから、とても扱いやすい対象である。
 
@@ -470,7 +470,7 @@ xx \= xxxx \= \kill
 ファイルを取り込む方法と、形状情報をプログラム中で生成して
 与える方法がある。ここでは主にファイル入力による形状生成に
 ついて解説する。プログラムによる形状生成方法は
-\ref{sec:easygen} 章にまとめて解説してあるので、そちらを参照してほしい。
+\ref{chap:easygen} 章にまとめて解説してあるので、そちらを参照してほしい。
 
 \subsection{VRML ファイルの取り込み}
 FK システムでは、形状モデラで作成した立体を取り込みたい場合の
@@ -610,7 +610,7 @@ readMQOFile(string fileName, string objName, int matID, bool solidFlg, bool cont
 「solidFlg」は、false の場合全てのポリゴンを独立ポリゴンとして読み込む。
 デフォルト引数では「true」となっている。
 「contFlg」は、テクスチャ断絶操作の有無を指定するためのもので、
-ここに関しては \ref{subsubsec:ifstexture} 節で詳しく説明する。
+ここに関しては \ref{subsec:ifstexture} 節で詳しく説明する。
 デフォルトでは「true」となっている。
 最後の「matFlg」は、MQOファイルからマテリアル情報を読み込むかどうかを設定するもので、
 デフォルトでは「false」になっている。
@@ -645,7 +645,7 @@ readMQOFile(string fileName, string objName, int matID, bool solidFlg, bool cont
 
 なお、Metasequoia 中でテクスチャを設定し、
 テクスチャも読み込みたい場合は、fk\_IndexFaceSet ではなく
-\ref{subsubsec:ifstexture} 節の fk\_IFSTexture を用いる必要がある。
+\ref{subsec:ifstexture} 節の fk\_IFSTexture を用いる必要がある。
 
 \subsection{MQO データの取り込み} \label{subsec:mqodata}
 MQOファイルデータは、\ref{subsec:mqoread} 節ではファイルからの
@@ -694,7 +694,7 @@ readD3DXFile() 関数は、readMQOFile() 関数と同様に 3 番目の引数と
 指定した場合に全ての面を入力する点も同様である。
 
 なお、D3DXファイルに設定してある
-テクスチャも読み込みたい場合は、\ref{subsubsec:ifstexture} 節の
+テクスチャも読み込みたい場合は、\ref{subsec:ifstexture} 節の
 fk\_IFSTexture を利用することで可能である。
 
 \subsection{形状情報の取得と、頂点座標の移動}
@@ -730,7 +730,7 @@ xx \= xxxx \= \kill
 		面数を fNum とすると 0 から (fNum-1) まで
 		の面が存在することになる。また、返り値の
 		vector\(<\)int\(>\) は STL と呼ばれる C++ の機能によるもので、
-		詳細は第 \ref{sec:easygen} 章を参照してほしい。
+		詳細は第 \ref{chap:easygen} 章を参照してほしい。
 		この中に、参照した面を構成する頂点のインデックスが
 		入力されて返される。もし fID に対応する面が存在しない場合、
 		中身が空状態のオブジェクトが返される。
@@ -885,13 +885,13 @@ fk\_Model の属性として設定されていることに注意しなければ�
 これらに関する詳しい解説や具体的な効果を(数学的に)知りたい場合は、
 fk\_Light のリファレンスマニュアルを参照してほしい。
 
-\section{パーティクル用クラス} \label{subsec:particle}
+\section{パーティクル用クラス} \label{sec:particle}
 FK では、パーティクルアニメーションをサポートするためのクラスとして
 fk\_Particle 及び fk\_ParticleSet が用意されている。厳密には、これらは
 fk\_Shape クラスの派生クラスではなく、形状を直接表すものではないのだが、
 本質的に役割が似ていることから本章にて解説する。ここでは機能紹介に
 とどめるが、具体的な利用例に関しては
-\ref{sec:sample} 章にある「パーティクルアニメーション」サンプルを
+\ref{chap:sample} 章にある「パーティクルアニメーション」サンプルを
 参照してほしい。
 
 \subsection{fk\_Particle クラス}
@@ -1104,9 +1104,9 @@ xx \= xxxx \= \kill
 	\end{tabular}
 \end{tabbing}
 
-\section{D3DX形式中のアニメーション動作} \label{subsubsec:d3dxanimation}
+\section{D3DX形式中のアニメーション動作} \label{sec:d3dxanimation}
 fk\_IndexFaceSet クラスや、
-第 \ref{subsubsec:ifstexture} 節で後述する
+第 \ref{subsec:ifstexture} 節で後述する
 fk\_IFSTexture で D3DX 形式のファイルを
 入力したとき、ファイル中にアニメーションデータがある場合は、
 動的にアニメーション変形を行うことができる。
@@ -1134,7 +1134,7 @@ fk\_IFSTexture で D3DX 形式のファイルを
 fk\_IndexFaceSet を例にしているが、fk\_IFSTexture の場合でも
 まったく同様の方法でアニメーション動作ができる。
 
-\section{BVH形式のモーション再生} \label{subsubsec:bvhmotion}
+\section{BVH形式のモーション再生} \label{sec:bvhmotion}
 前節で述べた D3DX 形式のアニメーションデータの代わりに、
 BVH 形式で記述されたモーションデータを利用することができる。
 D3DX 形式の形状データにはボーン情報が記述されており、

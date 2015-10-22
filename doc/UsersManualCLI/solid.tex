@@ -1,7 +1,7 @@
-\chapter{形状に対する高度な操作} \label{sec:reference} ~
+\chapter{形状に対する高度な操作} \label{chap:solid} ~
 
-\ref{sec:shape} 章では汎用的な形状の生成法について述べ、
-\ref{sec:easygen} 章で任意形状の生成、変形に関して述べたが、
+\ref{chap:shape} 章では汎用的な形状の生成法について述べ、
+\ref{chap:easygen} 章で任意形状の生成、変形に関して述べたが、
 本章では fk\_Solid クラスを用いた高度な形状情報の参照と変形操作に
 ついて触れている。
 fk\_Solid クラスでは、形状のデータは \textbf{Half-Edge 構造} と呼ばれる
@@ -624,7 +624,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 
  \subsubsection{\hspace*{0.6cm}void allClear(bool flag)}
 	全ての形状データを破棄する。flag が true のとき、
-	\ref{subsubsec:solid_matid} で述べるマテリアルインデックスも
+	\ref{subsec:solid_matid} で述べるマテリアルインデックスも
 	同時に破棄するが、false のときにはマテリアルインデックスに関しては
 	保持する。
 
@@ -639,7 +639,7 @@ REDO 操作 (操作のやり直し) を制御できる。大まかに述べる�
  \item 履歴操作を行う。
 \end{enumerate}
 
-\subsection{履歴保存設定} \label{sec:shapehistory}
+\subsection{履歴保存設定} \label{subsec:shapehistory}
 通常、変形操作履歴は保存されない状態になっているが、ある fk\_Solid クラス	オブジェクト (およびその派生クラスオブジェクト) で履歴を保存するには、
 setHistoryMode() メンバ関数を用いる。引数に true を与えることで、
 履歴保存モードとなる。\\
@@ -686,20 +686,20 @@ redoHistory() 関数を用いる。\\
 \section{個別の位相要素へのマテリアル設定}
 fk\_Solid クラスでは、頂点、稜線、面の各位相要素に対して
 個別にマテリアルを設定することが可能である。その方法は、
-多くの部分で第 \ref{subsec:ifs_mat} 節と共通である。
+多くの部分で第 \ref{sec:ifs_mat} 節と共通である。
 ここでは、fk\_Solid クラスに特有の部分を中心に述べていく。
 なお、ここでの設定を実際に有効にするには、
 対象となる fk\_Solid (あるいは fk\_IndexFaceSet) 型の変数と、
 それを設定する fk\_Model 型の変数の両方で、
 \verb+setMaterialMode(FK_PARENT_MODE);+ を実行しておく必要がある。
 
-\subsection{パレットの設定} \label{subsubsec:solid_palette}
+\subsection{パレットの設定} \label{subsec:solid_palette}
 fk\_Solid で個別にマテリアルを設定するには、まず
 マテリアルパレットというものを設定する必要がある。
-これに関しては、第 \ref{subsubsec:ifs_palette} とまったく同一の方法なので、
+これに関しては、第 \ref{subsec:ifs_palette} とまったく同一の方法なので、
 ここでの解説は割愛する。
 
-\subsection{マテリアルインデックスの設定} \label{subsubsec:solid_matid}
+\subsection{マテリアルインデックスの設定} \label{subsec:solid_matid}
 各位相要素にマテリアルインデックスを設定するには、
 fk\_Vertex や fk\_Edge クラスなどの各位相要素を表すクラスの
 setElemMaterialID() メンバ関数で引数にインデックスを入力すればよい。
@@ -735,7 +735,7 @@ setElemMaterialID() メンバ関数で引数にインデックスを入力すれ
 なお、各位相要素には getElemMaterialID(void) というメンバ関数がある。
 これは、各位相要素のマテリアルインデックスを int 型で返す関数である。
 
-\subsection{各位相要素の描画モード設定}	\label{subsubsec:matmode}
+\subsection{各位相要素の描画モード設定}	\label{subsec:matmode}
 任意の位相要素に対して表示／非表示等を制御するために
 setElemMaterialMode という関数が用意されている。引数として
 モードを取るが、それには以下のような種類がある。
@@ -776,7 +776,7 @@ FK\_NONE\_MODE & 描画しない。\\ \hline
 \section{描画時の稜線幅や頂点の大きさの設定}
 \subsection{線幅の設定方法}
 FK システムでは、描画時の線幅を変更するには
-\ref{subsec:widthsize} 節で述べるような fk\_Model 中の
+\ref{sec:widthsize} 節で述べるような fk\_Model 中の
 setWidth() メンバ関数があるが、これはモデル中の全要素に対して
 行う設定である。それに対し、各稜線に個別に線幅を設定するには
 fk\_Edge の setDrawWidth() メンバ関数を利用することで可能となる。
@@ -976,5 +976,5 @@ bool deleteAttrSS(string)	& setAttrSS()	\\ \hline
 \end{verbatim}
 \end{breakbox}
 ~ \\
-なお、このデータには \ref{sec:shapehistory} 節で述べた変形履歴や、
+なお、このデータには \ref{subsec:shapehistory} 節で述べた変形履歴や、
 \ref{sec:userattr} 節で解説した属性値は保存されないので注意すること。

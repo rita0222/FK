@@ -1,10 +1,10 @@
-\chapter{動的な形状生成と形状変形} \label{sec:easygen} ~
+\chapter{動的な形状生成と形状変形} \label{chap:easygen} ~
 
 この章では、プログラム中で動的に形状を生成する手法を述べる。FK システムでは、
 形状に対する生成、参照、変形と言った操作の方法が数多く提供されているが、
 この章ではそれらの機能の中で比較的容易に扱える形状生成方法を解説する。
 
-\section{立体の作成方法 (1)} \label{subsec:solidGen1}
+\section{立体の作成方法 (1)} \label{sec:solidGen1}
 独立した頂点や線分ではなく、面を持つ立体を作成したい場合には、
 「\textbf{インデックスフェースセット (Index Face Set)}」
 (以下 IF セット) と呼ばれるデータを作成する必要がある。
@@ -78,7 +78,7 @@ IF セットは、次の2つのデータから成り立っている。
 今のところ、角数として用いることができるのは 3 か 4
 (つまり三角形か四角形)のいずれかのみに制限されている。
 
-\section{立体の作成方法 (2)} \label{subsec:solidGen2}
+\section{立体の作成方法 (2)} \label{sec:solidGen2}
 前節では、全ての面が同じ角数であることが前提となっているが、
 ここでは各面で角数が同一でない立体の作成方法を解説する。
 今回は、次のような四角錐 (ピラミッド型) を想定する。
@@ -196,8 +196,8 @@ fk\_Solid クラスは、fk\_IndexFaceSet クラスと比べて描画が遅い�
 	\end{screen}
 \end{enumerate}
 
-\section{頂点の移動} \label{subsec:movevertex}
-第 \ref{subsec:solidGen1} 節 〜 第 \ref{subsec:solidGen2} 節で
+\section{頂点の移動} \label{sec:movevertex}
+第 \ref{sec:solidGen1} 節 〜 第 \ref{sec:solidGen2} 節で
 述べた方法で作成した
 様々な形状に対し、頂点を移動することで変形操作を行うことができる。
 頂点移動をするには、moveVPosition() を用いる。以下のプログラムは、
@@ -220,8 +220,8 @@ ID が 3 である頂点を数値だけで \((1.5, 2.5, 3,5)\) へ移動させ�
 用いて生成した形状に対しても、まったく同様の方法で頂点を移動することが
 できる。
 
-\section{面へのマテリアル設定} \label{subsec:ifs_mat}
-第 \ref{sec:model} 章で述べるように、通常マテリアルはモデルに
+\section{面へのマテリアル設定} \label{sec:ifs_mat}
+第 \ref{chap:model} 章で述べるように、通常マテリアルはモデルに
 対して設定する。しかし、形状中の各面に個別にマテリアルを設定することも
 可能である。この機能を利用するには、次の2つの
 ステップを踏む必要がある。
@@ -231,10 +231,10 @@ ID が 3 である頂点を数値だけで \((1.5, 2.5, 3,5)\) へ移動させ�
  \item 各面に対してマテリアルのインデックスを設定する。
 	fk\_Solid の場合、線や頂点に対しても個別に設定できる。
 \end{enumerate}
-\ref{subsubsec:ifs_palette} 節で1番目の方法を、
-\ref{subsubsec:ifs_matid} 節で
+\ref{subsec:ifs_palette} 節で1番目の方法を、
+\ref{subsec:ifs_matid} 節で
 2番目の方法を説明する。
-\subsection{パレットの設定} \label{subsubsec:ifs_palette}
+\subsection{パレットの設定} \label{subsec:ifs_palette}
 まず、各位相要素の個別の設定を行う前に、元となるパレットを設定
 する必要がある。パレットの設定法は、
 以下のように SetPalette() 関数で設定することで行う。
@@ -251,11 +251,11 @@ ID が 3 である頂点を数値だけで \((1.5, 2.5, 3,5)\) へ移動させ�
     shape.SetPalette(fk_Material.Green, 2);
 \end{verbatim}
 \end{breakbox}
-\subsection{マテリアルインデックスの設定} \label{subsubsec:ifs_matid}
+\subsection{マテリアルインデックスの設定} \label{subsec:ifs_matid}
 次に、各面に対して個別のマテリアルに対応するインデックスを設定していく。
 なお、この部分は fk\_IndexFaceSet と fk\_Solid の場合ではやり方が
 異なる。ここでは fk\_IndexFaceSet に関する解説を行う。
-fk\_Solid の設定方法は第 \ref{subsubsec:solid_matid} 節で述べているので、
+fk\_Solid の設定方法は第 \ref{subsec:solid_matid} 節で述べているので、
 そちらを参照してほしい。
 
 さて、fk\_IndexFaceSet での個別の設定であるが、これは
@@ -331,7 +331,7 @@ FK の機能ではなく C\# の配列が持つ機能である。
 \subsection{各面のマテリアルインデックスの参照}
 ここでは、fk\_IndexFaceSet クラスでのマテリアルインデックスの参照方法を
 述べる。fk\_Solid の各位相要素に対する参照は、ここではなく
-第 \ref{subsubsec:solid_matid} 節で述べる。
+第 \ref{subsec:solid_matid} 節で述べる。
 
 各面のマテリアルインデックスの参照には、getElemMaterialID() という
 メンバ関数を用いる。以下が利用方法である。

@@ -1,4 +1,4 @@
-\chapter{シーン} \label{sec:scene} ~
+\chapter{シーン} \label{chap:scene} ~
 
 この章ではシーンと呼ばれる概念と、それを FK システム上で
 実現した fk\_Scene というクラスに関しての使用法を述べる。
@@ -126,10 +126,10 @@ ON にした場合、(実際に透明なモデルが存在するか否かに関�
 
 \section{霧の効果}
 FK システムでは、シーン全体に霧効果を出す機能がサポートされている。
-まず、霧効果の典型的な利用法を \ref{sec:scenefogintro} 節で解説し、
-霧効果の詳細な利用方法を \ref{sec:scenefogref} 節で述べる。
+まず、霧効果の典型的な利用法を \ref{subsec:scenefogintro} 節で解説し、
+霧効果の詳細な利用方法を \ref{subsec:scenefogref} 節で述べる。
 
-\subsection{霧効果の典型的な利用方法} \label{sec:scenefogintro}
+\subsection{霧効果の典型的な利用方法} \label{subsec:scenefogintro}
 霧効果は、次の 4 項目を設定することで利用できる。
 \begin{itemize}
  \item 減衰関数の設定。
@@ -153,7 +153,7 @@ FK システムでは、シーン全体に霧効果を出す機能がサポー�
 まず、setFogMode() によって減衰関数を指定する。通常は、例にあるように
 FK\_LINEAR\_FOG を指定すれば良い。
 
-次に、setFogOption() でオプションを指定する。これは \ref{sec:scenefogref} 節
+次に、setFogOption() でオプションを指定する。これは \ref{subsec:scenefogref} 節
 で述べるような3種類があるので、目的に応じて適切に設定する。
 
 次に、setFogLinearMap() によって霧効果の現れる領域を設定する。最初の数値が
@@ -164,7 +164,7 @@ FK\_LINEAR\_FOG を指定すれば良い。
 
 以上の項目を設定するだけで、シーンに霧効果を出すことが可能となる。
 より詳細な設定が必要な場合は、次節を参照すること。
-\subsection{霧効果の詳細な利用方法} \label{sec:scenefogref}
+\subsection{霧効果の詳細な利用方法} \label{subsec:scenefogref}
 霧効果に関連する機能として、
 次のような fk\_Scene のメンバ関数群が提供されている。
 \begin{bf}
