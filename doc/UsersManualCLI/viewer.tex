@@ -12,7 +12,7 @@ fk\_ShapeViewer というクラスを提供している。
 利用するには、まず fk\_ShapeViewer 型の変数を定義する。\\ ~ \\
 \begin{screen}
 \begin{verbatim}
-        fk_ShapeViewer  viewer;
+        var viewer = new fk_ShapeViewer(600, 600);
 \end{verbatim}
 \end{screen}
 \\ ~
@@ -21,27 +21,27 @@ fk\_ShapeViewer というクラスを提供している。
 \ref{chap:shape} 章で紹介したいずれの種類でも利用できるが、ここでは例として
 fk\_Solid 型及び fk\_Sphere 型の変数を準備する。
 この変数が表す形状を表示するには、
-setShape() メンバ関数を用いる。setShape() メンバ関数は二つの引数を
-取り。最初の引数は立体 ID を表す整数、後ろの引数には形状を表す
+SetShape() メソッドを用いる。SetShape() メソッドは二つの引数を
+取り、最初の引数は立体 ID を表す整数、後ろの引数には形状を表す
 変数(のアドレス)を入力する。複数の形状を一度に表示する場合は、
 ID を変えて入力していくことで実現できる。\\ ~ \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_ShapeViewer  viewer;
-        fk_Solid        solid;
-        fk_Sphere       sphere;
+        var viewer = new fk_ShapeViewer(600, 600);
+        var solid = new fk_Solid();
+        var sphere = new fk_Sphere();
 
-        viewer.setShape(0, &solid);
-        viewer.setShape(1, &sphere);
+        viewer.SetShape(0, solid);
+        viewer.SetShape(1, sphere);
 \end{verbatim}
 \end{breakbox}
 ~ \\
 
-あとは、draw() 関数を呼ぶことで形状が描画される。通常は、次のように
+あとは、Draw() メソッドを呼ぶことで形状が描画される。通常は、次のように
 繰り返し描画を行うことになる。\\ ~ \\
 \begin{breakbox}
 \begin{verbatim}
-        while(viewer.draw() == true) {
+        while(viewer.Draw() == true) {
                 // もし形状を変形するならば、ここに処理内容を記述する。
         }
 \end{verbatim}
@@ -49,7 +49,7 @@ ID を変えて入力していくことで実現できる。\\ ~ \\
 ~ \\
 
 もし終了処理 (ウィンドウが閉じられる、「Quit」がメニューで選択されるなど)
-が行われた場合、draw() 関数は false を返すので、その時点で while ループを
+が行われた場合、Draw() メソッドは false を返すので、その時点で while ループを
 抜けることになる。形状変形の様子をアニメーション処理したい場合には、
 while 文の中に変形処理を記述すればよい。具体的な変形処理のやり方は、
 \ref{sec:movevertex} 節及び \ref{sec:sampleviewer} 節に
@@ -74,170 +74,3 @@ GUI によって制御できる。これらの機能は、何もプログラム�
 	スペースキーを押すことで表示倍率縮小。
  \item マウスのドラッギングによる形状の平行移動。
 \end{itemize}
-
-\section{fk\_ShapeViewer のメンバ関数}
-fk\_ShapeViewer クラスの具体的な利用法は、第 \ref{sec:sampleviewer} 節に
-記述するが、ここでは fk\_ShapeViewer クラスのメンバ関数一覧を掲載する。
-\begin{description}
- \item[\hspace*{0.6cm}bool draw(void)] ~ \\
-	実際に描画を行う。
-
- \item[\hspace*{0.6cm}void setWindowSize(int w, int h)] ~ \\
-	描画領域の大きさを \((w, h)\) にする。形状やその他の
-	状態は保持される。
-
- \item[\hspace*{0.6cm}void setShape(int ID, fk\_Shape *shape)] ~ \\
-	形状を描画対象として設定する。ID には何か任意の整数値を入れる。
-	複数の形状を同時に描画したい場合、ID を変えることで実現できる。
-	逆に、前に設定した形状と描画対象を入れ替えたい場合は、
-	前に設定した際の ID をそのまま入力することで実現できる。
-
- \item[\hspace*{0.6cm}void setDrawMode(fk\_DrawMode mode)] ~ \\
-	形状の描画モードを選択する。mode に入力できる選択肢は、
-	\ref{sec:drawmode} 節で述べているものと同一のものが選択できる。
-
- \item[\hspace*{0.6cm}void setBGColor(fk\_Color color)]
- \item[\hspace*{0.6cm}void setBGColor(float r, float g, float b)] ~ \\
-	形状描画領域の背景色を設定する。
-
- \item[\hspace*{0.6cm}void setHead(double r)] ~ \\
-	カメラのヘッド角を r ラジアンに設定する。
-
- \item[\hspace*{0.6cm}void setPitch(double r)] ~ \\
-	カメラのピッチ角を r ラジアンに設定する。
-
- \item[\hspace*{0.6cm}void setBank(double r)] ~ \\
-	カメラのバンク角を r ラジアンに設定する。
-
- \item[\hspace*{0.6cm}void setScale(double s)] ~ \\
-	表示倍率を s に設定する。
-
- \item[\hspace*{0.6cm}void setAxisMode(bool mode)] ~ \\
-	座標軸について、
-	mode が true なら描画有り、false なら無しに設定する。
-
- \item[\hspace*{0.6cm}void setAxisScale(double l)] ~ \\
-	座標軸の長さを l に設定する。
-
- \item[\hspace*{0.6cm}void setCenter(fk\_Vector pos)]
- \item[\hspace*{0.6cm}void setCenter(double x, double y, double z)] ~ \\
-	カメラの注視点を pos または \((x, y, z)\) に設定する。
-
- \item[\hspace*{0.6cm}void setMaterial(int ID, fk\_Material mat)] ~ \\
-	ID が表す形状のマテリアルを mat が表すマテリアルに変更する。
-
- \item[\hspace*{0.6cm}void setEdgeColor(int ID, fk\_Color col)] ~ \\
-	ID が表す形状の稜線色を、col が表す色に変更する。
-
- \item[\hspace*{0.6cm}void setVertexColor(int ID, fk\_Color col)] ~ \\
-	ID が表す形状の頂点色を、col が表す色に変更する。
-
- \item[\hspace*{0.6cm}void setPosition(int ID, fk\_Vector pos)]
- \item[\hspace*{0.6cm}
-	void setPosition(int ID, double x, double y, double z)] ~ \\
-	ID が表す形状の位置を変更する。
-
- \item[\hspace*{0.6cm}void setAngle(int ID, fk\_Angle angle)]
- \item[\hspace*{0.6cm}
-	void setAngle(int ID, double h, double p, double b)] ~ \\
-	ID が表す形状の姿勢を変更する。h にはヘディング角を、
-	p にはピッチ角を、b にはバンク角を入力する。
-
- \item[\hspace*{0.6cm}void setVec(int ID, fk\_Vector vec)]
- \item[\hspace*{0.6cm} void setVec(int ID, double x, double y, double z)] ~ \\
-	ID が表す形状の方向ベクトルを変更する。
-
- \item[\hspace*{0.6cm}void setUpvec(int ID, fk\_Vector vec)]
- \item[\hspace*{0.6cm}void setUpvec(int ID, double x, double y, double z)] ~ \\
-	ID が表す形状のアップベクトルを変更する。
-
- \item[\hspace*{0.6cm}setBlendStatus(bool mode)] ~ \\
-	透過処理について、mode が true であれば有効、
-	false であれば無効に設定する。
-
- \item[\hspace*{0.6cm}void clearModel(void)] ~ \\
-	現在の描画登録を全てクリアする。
-
- \item[\hspace*{0.6cm}fk\_Solid * getShape(int ID)] ~ \\
-	ID に設定されている形状データ(のアドレス)を返す。
-
- \item[\hspace*{0.6cm}fk\_DrawMode getDrawMode(void)] ~ \\
-	現在の描画モードを返す。
-
- \item[\hspace*{0.6cm}double getHead(void)] ~ \\
-	現在設定されているカメラのヘッド角をラジアンで返す。
-
- \item[\hspace*{0.6cm}double getPitch(void)] ~ \\
-	現在設定されているカメラのピッチ角をラジアンで返す。
-
- \item[\hspace*{0.6cm}double getBank(void)] ~ \\
-	現在設定されているカメラのバンク角をラジアンで返す。
-
- \item[\hspace*{0.6cm}double getScale(void)] ~ \\
-	現在の表示倍率を返す。
-
- \item[\hspace*{0.6cm}bool getAxisMode(void)] ~ \\
-	現在の座標軸描画の有無を返す。
-
- \item[\hspace*{0.6cm}double getAxisScale(void)] ~ \\
-	現在の座標軸の長さを返す。
-
- \item[\hspace*{0.6cm}fk\_Vector getCenter(void)] ~ \\
-	現在のカメラの注視点を返す。
-
- \item[\hspace*{0.6cm}fk\_Color getBGColor(void)] ~ \\
-	背景色を返す。
-
- \item[\hspace*{0.6cm}bool getBlendStatus(void)] ~ \\
-	現在の透過処理状態を返す。
-
- \item[\hspace*{0.6cm}void shapeProcess(fk\_Solid *argSolid)] ~ \\
-	この関数は、他の関数と違い仮想関数として定義されており、
-	派生クラスにて上書きされることを前提としている。この関数は、
-	ファイルが入力された時点で必ず呼ばれるものであり、入力した
-	形状データが argSolid に引数として入力されるようになっている。
-	従って、ファイル入力時に形状データに対して修正や分析
-	などを行いたいときには、この関数の中に記述すればよい。
-
- \item[\hspace*{0.6cm}bool snapImage(const string fileName,
-			fk\_ImageType type,
-			fk\_SnapProcMode mode)] ~ \\
-	現在ウィンドウに表示されている画像を、
-	指定した画像形式で fileName にあるファイル名で保存する。
-	type は以下の3種類のうちいずれかを指定する。
-	\begin{itemize}
-	 \item FK\_IMAGE\_BMP (Windows Bitmap 形式)
-	 \item FK\_IMAGE\_PNG (PNG 形式)
-	 \item FK\_IMAGE\_JPG (JPEG 形式)
-	\end{itemize}
-	また、mode はどの画像バッファから情報を取得するかを指定する物で、
-	以下の 3 種類のいずれかを指定する。
-	\begin{itemize}
-	 \item FK\_SNAP\_GL\_FRONT (OpenGL フロントバッファ)
-	 \item FK\_SNAP\_GL\_BACK (OpenGL バックバッファ)
-	 \item FK\_SNAP\_WIN32\_GDI
-	 (Windows GDI バッファ、Windows 上でのみ有効)
-	 \item FK\_SNAP\_D3D\_WINDOW
-	(Direct3D バッファ、Direct3D版のみ有効)
-	\end{itemize}
-
- \item[\hspace*{0.6cm}bool snapImage(fk\_Image *image,
-				fk\_SnapProcMode mode)] ~ \\
-	現在ウィンドウに表示されている画像を、
-	fk\_Image 型の変数に格納する。mode に関しては
-	上記のファイル出力の場合と同様である。
-	また、mode はデフォルト引数が設定されており、
-	省略可能である。省略した場合 mode は FK\_SNAP\_GL\_FRONT となる。
-
-	出力に成功すれば true を、失敗すれば false を返す。
- \item[\hspace*{0.6cm}void setPutStrMode(fk\_PutStrMode mode)]
- \item[\hspace*{0.6cm}fk\_PutStrMode getPutStrMode(void)]
- \item[\hspace*{0.6cm}bool setPutFile(string fileName)]
- \item[\hspace*{0.6cm}void putString(string message)]
- \item[\hspace*{0.6cm}void printf(char *format, ...)]
- \item[\hspace*{0.6cm}void clearBrowser(void)] ~ \\
-	これらの関数は、fk\_Window クラスと同様にメッセージ出力機能を
-	利用するためのものである。
-% 詳細は \ref{subsec:winmessage}節を参照のこと。
-
-\end{description}

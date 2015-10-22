@@ -27,31 +27,30 @@ JPEG 形式の3種類である。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_RectTexture    texture;
+        var texture = new fk_RectTexture();
 \end{verbatim}
 \end{screen}
 ~ \\
-画像ファイルの入力は、Windows Bitmap 形式の場合 readBMP() 関数を用いる。
-この関数は、入力に
-成功した場合は true を、入力に失敗した場合は false を返す。
+画像ファイルの入力は、Windows Bitmap 形式の場合 ReadBMP() メソッドを用いる。
+このメソッドは、入力に成功した場合は true を、入力に失敗した場合は false を返す。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        if(texture.readBMP("samp.bmp") == false) {
-            fl_alert("Image File Read Error!");
+        if(texture.ReadBMP("samp.bmp") == false)
+        {
+            Console.WriteLine("File Read Error");
         }
 \end{verbatim}
 \end{breakbox}
 ~ \\
-PNG 形式の画像ファイルを読み込みたい場合は、上記の readBMP() を
-readPNG() 関数に置き換える。
+PNG 形式や JPEG 形式の画像ファイルを読み込みたい場合は、上記の ReadBMP() を
+ReadPNG(), ReadJPG() メソッドに置き換える。
 
-また、テクスチャの3次元空間上での大きさの指定には setTextureSize()
-関数を用いる。
+また、テクスチャの3次元空間上での大きさの指定には TextureSize プロパティを用いる。
 \\
 \begin{screen}
 \begin{verbatim}
-        texture.setTextureSize(50.0, 30.0);
+        texture.TextureSize = new fk_TexCoord(50.0, 30.0);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -69,13 +68,13 @@ fk\_RectTexture クラスでは、画像の一部分を切り出して表示す�
 \((0.7, 0.4)\) ということになる。
 
 切り出す部分は、切り出し部分の左下と右上のテクスチャ座標を設定することになる。
-指定には setTextureCoord() 関数を利用する。以下は、
+指定には SetTextureCoord() メソッドを利用する。以下は、
 左下のテクスチャ座標として \((0.2, 0.3)\)、右上のテクスチャ座標として
 \((0.5, 0.6)\) を指定するサンプルである。
 \\
 \begin{screen}
 \begin{verbatim}
-        texture.setTextureCoord(0.2, 0.3, 0.5, 0.6);
+        texture.SetTextureCoord(0.2, 0.3, 0.5, 0.6);
 \end{verbatim}
 \end{screen}
 
@@ -89,14 +88,14 @@ fk\_RectTexture クラスでは、画像の一部分を切り出して表示す�
 \\
 \begin{screen}
 \begin{verbatim}
-        texture.setTextureSize(100.0, 100.0);
-        texture.setRepeatMode(true);
-        texture.setRepeatParam(5.0, 10.0);
+        texture.TextureSize = new fk_TexCoord(100.0, 100.0);
+        texture.RepeatMode = true;
+        texture.RepeatParam = new fk_TexCoord(5.0, 10.0);
 \end{verbatim}
 \end{screen}
 ~ \\
-setRepeatMode 関数はリピートモードを用いるかどうかを設定するメンバ関数で、
-引数に true を代入するとリピートモードとなる。次の setRepeatParam メンバ関数は
+RepeatMode プロパティはリピートモードを用いるかどうかを設定するもので、
+true を代入するとリピートモードとなる。次の RepeatParam プロパティは
 並べる個数を設定するもので、例の場合は横方向に 5 枚、縦方向に 10 枚の合計
 50 枚を並べることになる。それら全体のサイズが 100x100 なので、1枚のサイズは
 20x10 ということになる。ただし、リピートモードを用いる場合には画像サイズに
@@ -117,47 +116,47 @@ setRepeatMode 関数はリピートモードを用いるかどうかを設定す
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_TriTexture    texture;
-        texture.readBMP("samp.bmp");
+        var texture = new fk_TriTexture();
+        texture.ReadBMP("samp.bmp");
 \end{verbatim}
 \end{screen}
 ~ \\
-fk\_TriTexture の場合も、fk\_RectTexture と同様に readBMP() を
-readPNG() に置き換えることで、PNG 形式の画像ファイルを入力できる。
+fk\_TriTexture の場合も、fk\_RectTexture と同様に ReadBMP() を
+ReadPNG() や ReadJPG() に置き換えることで、PNG 形式や JPEG 形式の画像ファイルを入力できる。
 
 次に、画像のどの部分を切り出すかを指定する。
 指定の方法は、前節で述べた「テクスチャ座標系」を
 利用する。切り出す部分は、このテクスチャ座標系を利用して
 3点それぞれを指定することになる。
-指定には setTextureCoord() 関数を利用する。
+指定には SetTextureCoord() メソッドを利用する。
 最初の引数は、各頂点の ID を表わし、0, 1, 2 の順番で反時計回りとなるように
 設定する。2番目、3番目の引数はテクスチャ座標の \(x, y\) 座標を入力する。
 \\
 \begin{screen}
 \begin{verbatim}
-        texture.setTextureCoord(0, 0.0, 0.0);
-        texture.setTextureCoord(1, 1.0, 0.0);
-        texture.setTextureCoord(2, 0.5, 0.5);
+        texture.SetTextureCoord(0, 0.0, 0.0);
+        texture.SetTextureCoord(1, 1.0, 0.0);
+        texture.SetTextureCoord(2, 0.5, 0.5);
 \end{verbatim}
 \end{screen}
 ~ \\
-次に、3点の3次元空間上での座標を設定する。設定には setVertexPos() 関数を
+次に、3点の3次元空間上での座標を設定する。設定には setVertexPos() メソッドを
 利用する。最初の引数が頂点 ID、2,3,4 番目の引数で 3 次元座標を指定する。
 \\
 \begin{screen}
 \begin{verbatim}
-        texture.setVertexPos(0, 0.0, 0.0, 0.0);
-        texture.setVertexPos(1, 50.0, 0.0, 0.0);
-        texture.setVertexPos(2, 20.0, 30.0, 0.0);
+        texture.SetVertexPos(0, 0.0, 0.0, 0.0);
+        texture.SetVertexPos(1, 50.0, 0.0, 0.0);
+        texture.SetVertexPos(2, 20.0, 30.0, 0.0);
 \end{verbatim}
 \end{screen}
 ~ \\
-setVertexPos() 関数は、fk\_Vector 型の変数を引数に持たせることも可能である。
+SetVertexPos() メソッドは、fk\_Vector 型の変数を引数に持たせることも可能である。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Vector    vec(100.0, 0.0, 0.0);
-        texture.setVertexPos(0, vec);
+        var vec = new fk_Vector(100.0, 0.0, 0.0);
+        texture.SetVertexPos(0, vec);
 \end{verbatim}
 \end{screen}
 
@@ -166,16 +165,16 @@ setVertexPos() 関数は、fk\_Vector 型の変数を引数に持たせること
 扱うための機能を持つクラスで、クラス名は「fk\_IFSTexure」である。
 このクラスでは、Metasequoia によって作成したテクスチャ付きの MQO ファイルと、
 D3DX ファイルの 2 種類のデータからの入力が可能となっている。
-MQO ファイルは readMQOFile() 関数、D3DX ファイルは readD3DXFile() 関数で
+MQO ファイルは ReadMQOFile() メソッド、D3DX ファイルは ReadD3DXFile() メソッドで
 形状データを入力することができる。なお、アニメーションに関しての機能が
 \ref{sec:d3dxanimation} 節に記述してあるので、
 そちらも合わせて参照してほしい。
 
-readMQOFile() 関数の引数構成は、以下のようになっている。
+ReadMQOFile() メソッドの引数構成は、以下のようになっている。
 \\
 \begin{screen}
 \begin{verbatim}
-  readMQOFile(string fileName, string objName, int matID, bool contFlg);
+  ReadMQOFile(String fileName, String objName, int matID, bool contFlg);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -194,11 +193,11 @@ MQOデータ中の位相構造とは異なる位相状態が内部で形成さ�
 なお、「matID」と「contFlg」はそれぞれ「-1」と「true」というデフォルト引数が
 設定されており、このままで良いのであれば省略可能である。
 
-readD3DXFile() 関数の仕様に関しては、\ref{subsec:d3dxread} 節での内容と同じであるので、
+ReadD3DXFile() メソッドの仕様に関しては、\ref{subsec:d3dxread} 節での内容と同じであるので、
 そちらを参照してほしい。
-また、\ref{subsec:mqodata} 節と同様の用途として、readMQOData() 関数も利用できる。
-引数の仕様は最初の引数が unsigned char のポインタ型になる以外は
-上記 readMQOFile() 関数とと同様である。
+また、\ref{subsec:mqodata} 節と同様の用途として、ReadMQOData() メソッドも利用できる。
+引数の仕様は最初の引数が Byte 型配列になる以外は
+上記 ReadMQOFile() メソッドとと同様である。
 
 以下の例は MQO ファイルからの読み込みのサンプルで、
 テクスチャ用画像ファイル名(Windows Bitmap 形式)が「sample.bmp」、
@@ -207,14 +206,16 @@ MQO ファイル名が「sample.mqo」、
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_IFSTexture  texture;
+        var texture = new fk_IFSTexture();
 
-        if(texture.readBMP("sample.bmp") == false) {
-            fl_alert("Image File Read Error!");
+        if(texture.ReadBMP("sample.bmp") == false)
+        {
+            Console.WriteLine("Image File Read Error");
         }
 
-        if(texture.readMQOFile("sample.mqo", "obj1") == false) {
-            fl_alert("Shape File Read Error!");
+        if(texture.ReadMQOFile("sample.mqo", "obj1") == false)
+        {
+            Console.WriteLine("Shape File Read Error");
         }
 \end{verbatim}
 \end{breakbox} ~
@@ -222,33 +223,33 @@ MQO ファイル名が「sample.mqo」、
 ちなみに、ここで読み込んだ形状データは \ref{sec:smooth} 節で
 述べているスムースシェーディングの制御に対応している。
 
-fk\_IFSTexture クラスが持つその他のメンバ関数として、以下のようなものがある。
+fk\_IFSTexture クラスが持つその他のメソッドとして、以下のようなものがある。
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{bool init(void)} \\
+\> \textbf{void Init()} \\
 	\> \> \begin{tabular}{p{15cm}}
-		テクスチャデータ及び形状データの初期化を行う。
+		テクスチャデータ及び形状データの初期化を行うメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{fk\_TexCoord getTextureCoord(int triID, int vID)} \\
+\> \textbf{fk\_TexCoord GetTextureCoord(int triID, int vID)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		三角形 ID が triID、頂点 ID が vID である頂点に
-		設定されているテクスチャ座標を返す。
+		設定されているテクスチャ座標を返すメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{void setTextureCoord(int triID, int vID, fk\_TexCoord coord)} \\
+\> \textbf{void SetTextureCoord(int triID, int vID, fk\_TexCoord coord)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		三角形 ID が triID、頂点 ID が vID である頂点に
 		coord をテクスチャ座標として設定する。
 	\end{tabular} \\ \\
 
-\> \textbf{fk\_IndexFaceSet * getIFS(void)} \\
+\> \textbf{fk\_IndexFaceSet IFS)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		fk\_IFSTexture クラスは、形状データとして
 		内部では fk\_IndexFaceSet クラスによる変数を保持しており、
-		その中に形状データを格納している。この関数は、
-		その変数へのポインタを返すものである。
-		これを利用すると、頂点の移動なども fk\_IndexFaceSet の
+		その中に形状データを格納している。このプロパティは、
+		そのインスタンスを取得するものである。
+		頂点の移動などは、このインスタンスを介して fk\_IndexFaceSet の
 		機能を用いて可能となる。
 	\end{tabular}
 \end{tabbing}
@@ -276,34 +277,34 @@ D3DX アニメーション & 対応 & 非対応 \\ \hline
 \end{center}
 \end{table}
 
-使い方は、まず生成する三角形テクスチャの枚数を setTriNum() 関数で指定する。
-その後、fk\_TriTexture と同様に setTextureCoord() 関数で各頂点の
-テクスチャ座標を、setVertexPos() で空間上の位置座標を入力していくが、
-それぞれの関数の引数の最初に三角形の ID を入力するところだけが異なっている。
+使い方は、まず生成する三角形テクスチャの枚数を TriNum プロパティに対して設定する。
+その後、fk\_TriTexture と同様に SetTextureCoord() メソッドで各頂点の
+テクスチャ座標を、SetVertexPos() で空間上の位置座標を入力していくが、
+それぞれのメソッドの引数の最初に三角形の ID を入力するところだけが異なっている。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_MeshTexture  texture;
+        var texture = new fk_MeshTexture();
 
-        texture.setTriNum(2);
-        texture.setTextureCoord(0, 0, 0.0, 0.0);
-        texture.setTextureCoord(0, 1, 1.0, 0.0);
-        texture.setTextureCoord(0, 2, 0.5, 0.5);
-        texture.setTextureCoord(1, 0, 0.0, 0.0);
-        texture.setTextureCoord(1, 1, 0.5, 0.5);
-        texture.setTextureCoord(1, 2, 0.0, 1.0);
-        texture.setVertexPos(0, 0, 0.0, 0.0, 0.0);
-        texture.setVertexPos(0, 1, 50.0, 0.0, 0.0);
-        texture.setVertexPos(0, 2, 20.0, 30.0, 0.0);
-        texture.setVertexPos(1, 0, 0.0, 0.0, 0.0);
-        texture.setVertexPos(1, 1, 20.0, 30.0, 0.0);
-        texture.setVertexPos(1, 2, 0.0, 50.0, 0.0);
+        texture.TriNum = 2;
+        texture.SetTextureCoord(0, 0, 0.0, 0.0);
+        texture.SetTextureCoord(0, 1, 1.0, 0.0);
+        texture.SetTextureCoord(0, 2, 0.5, 0.5);
+        texture.SetTextureCoord(1, 0, 0.0, 0.0);
+        texture.SetTextureCoord(1, 1, 0.5, 0.5);
+        texture.SetTextureCoord(1, 2, 0.0, 1.0);
+        texture.SetVertexPos(0, 0, 0.0, 0.0, 0.0);
+        texture.SetVertexPos(0, 1, 50.0, 0.0, 0.0);
+        texture.SetVertexPos(0, 2, 20.0, 30.0, 0.0);
+        texture.SetVertexPos(1, 0, 0.0, 0.0, 0.0);
+        texture.SetVertexPos(1, 1, 20.0, 30.0, 0.0);
+        texture.SetVertexPos(1, 2, 0.0, 50.0, 0.0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
 別の生成方法として、
 Metasequoia によって生成したテクスチャ付きの MQO ファイルを
-読み込むことも可能である。以下のように、readMQOFile() 関数を利用する。
+読み込むことも可能である。以下のように、ReadMQOFile() メソッドを利用する。
 例では、テクスチャ用画像ファイル名が「sample.bmp」、
 MQO ファイル名が「sample.mqo」、
 ファイル中のオブジェクト名が「obj1」と想定している。
@@ -312,48 +313,49 @@ MQO ファイル名が「sample.mqo」、
 \begin{verbatim}
         fk_MeshTexture  texture;
 
-        if(texture.readBMP("sample.bmp") == false) {
-            fl_alert("Image File Read Error!");
+        if(texture.ReadBMP("sample.bmp") == false)
+        {
+            Console.WriteLine("File Read Error");
         }
 
-        if(texture.readMQOFile("sample.mqo", "obj1") == false) {
-            fl_alert("Shape File Read Error!");
+        if(texture.ReadMQOFile("sample.mqo", "obj1") == false)
+        {
+            Console.WriteLine("File Read Error");
         }
 \end{verbatim}
 \end{breakbox}
 ~ \\
-また、
-fk\_MeshTexture クラスは複数のテクスチャ三角形平面によって構成されることに
-なるが、putIndexFaceSet 関数を用いることによりその形状を
+また、fk\_MeshTexture クラスは複数のテクスチャ三角形平面によって構成されることに
+なるが、PutIndexFaceSet メソッドを用いることによりその形状を
 fk\_IndexFaceSet 型の形状として出力することが可能である。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_MeshTexture  texture;
-        fk_IndexFaceSet ifset;
+        var texture = new fk_MeshTexture();
+        var ifset = new fk_IndexFaceSet();
 
-        texture.putIndexFaceSet(&ifset);
+        texture.PutIndexFaceSet(ifset);
 \end{verbatim}
 \end{breakbox}
 
 \subsection{テクスチャのレンダリング品質設定}
 矩形テクスチャ、三角形テクスチャ、IFSテクスチャ、メッシュテクスチャの全てにおいて、
 レンダリングの品質を設定することができる。やりかたは、
-以下のように setTexRendMode() 関数で設定を行えばよい。
+以下のように RendMode プロパティで設定を行えばよい。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_RectTexture  texture;
+        var texture = new fk_RectTexture();
                 :
                 :
-        texture.setTexRendMode(FK_TEX_REND_SMOOTH);
+        texture.RendMode = fk_TexRendMode.SMOOTH;
 \end{verbatim}
 \end{screen}
 ~ \\
-モードは、通常モードである「FK\_TEX\_REND\_NORMAL」と、
+モードは、通常モードである「fk\_TexRendMode.NORMAL」と、
 アンチエイリアシング処理で高品質なレンダリングを行う
-「FK\_TEX\_REND\_SMOOTH」が指定できる。デフォルトでは
-通常モード(FK\_TEX\_REND\_NORMAL)となっている。
+「fk\_TexRendMode.SMOOTH」が指定できる。デフォルトでは
+通常モード(fk\_TexRendMode.NORMAL)となっている。
 
 上記の例は矩形テクスチャで行っているが、
 fk\_RectTexture, fk\_TriTexture, fk\_IFSTexture のいずれの型でも
@@ -365,8 +367,8 @@ fk\_RectTexture, fk\_TriTexture, fk\_IFSTexture のいずれの型でも
 それをテクスチャマッピングするという場合もある。そのような場合、
 fk\_Image というクラスを用いて画像を生成することが可能である。
 fk\_RectTexture、fk\_TriTexture、fk\_IFSTexture、fk\_MeshTexture にはそれぞれ
-setImage() というメンバ関数が用意されており、fk\_Image クラスの
-変数をこのメンバ関数で入力することによって、それぞれのテクスチャに
+Image というプロパティが用意されており、fk\_Image クラスの
+変数をこのプロパティに設定することによって、それぞれのテクスチャに
 画像情報が反映されるようになっている。
 
 以下のプログラムは、赤から青へのグラデーションを表す画像を生成し、
@@ -374,89 +376,76 @@ fk\_RectTexture に画像情報を反映させるプログラムである。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        int             i, j;
-        fk_RectTexture  texture;
-        fk_Image        image;
+        var texture = new fk_RectTexture();
+        var image = new fk_Image();
 
         // 画像サイズを 256x256 に設定
-        image.newImage(256, 256);
+        image.NewImage(256, 256);
 
         // 各画素に色を設定
-        for(i = 0; i < 256; i++) {
-            for(j = 0; j < 256; j++) {
-                image.setRGB(256-j, 0, j);
+        for(int i = 0; i < 256; i++) {
+            for(int j = 0; j < 256; j++) {
+                Image.SetRGB(256-j, 0, j);
             }
         }
 
         // テクスチャに色を設定
-        texture.setImage(&image);
+        texture.Image = image;
 \end{verbatim}
 \end{breakbox}
 ~ \\
-fk\_Image クラスのメンバ関数を以下に羅列する。
+fk\_Image クラスの主要なメソッドやプロパティを以下に羅列する。
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{void init(void)} \\
+\> \textbf{void Init()} \\
 	\> \> \begin{tabular}{p{15cm}}
-		画像情報を初期化する。
+		画像情報を初期化するメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readBMP(const string fileName)} \\
+\> \textbf{bool ReadBMP(String fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		ファイル名が fileName である Windows Bitmap 形式の
-		画像ファイルを読み込む。成功すれば true を、
+		画像ファイルを読み込むメソッド。成功すれば true を、
 		失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readPNG(const string fileName)} \\
+\> \textbf{bool ReadPNG(String fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		ファイル名が fileName である PNG 形式の
-		画像ファイルを読み込む。成功すれば true を、
+		画像ファイルを読み込むメソッド。成功すれば true を、
 		失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readJPG(const string fileName)} \\
+\> \textbf{bool ReadJPG(String fileName)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		ファイル名が fileName である JPEG 形式の
-		画像ファイルを読み込む。成功すれば true を、
+		画像ファイルを読み込むメソッド。成功すれば true を、
 		失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool readBMPData(fk\_ImType *buffer)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		buffer に Windows Bitmap 形式のデータが格納されている
-		という仮定のもと、readBMP() 関数と同様の挙動を行う。
-	\end{tabular} \\ \\
-
-\> \textbf{bool readPNGData(fk\_ImType *buffer)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		buffer に PNG 形式のデータが格納されている
-		という仮定のもと、readPNG() 関数と同様の挙動を行う。
-	\end{tabular} \\ \\
-
-\> \textbf{bool writeBMP(const string fileName, bool transFlag)} \\
+\> \textbf{bool WriteBMP(String fileName, bool transFlag)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		現在格納されている画像情報を、Windows Bitmap 形式で
-		ファイル名が fileName であるファイルに書き出す。
+		ファイル名が fileName であるファイルに書き出すメソッド。
 		transFlag を true にすると、透過情報を付加した
 		32bit データとして出力し、false の場合通常の
 		フルカラー 24bit 形式で出力する。
 		書き出しに成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool writeBMP(const string fileName, bool transFlag)} \\
+\> \textbf{bool WritePNG(String fileName, bool transFlag)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		現在格納されている画像情報を、PNG 形式で
-		ファイル名が fileName であるファイルに書き出す。
+		ファイル名が fileName であるファイルに書き出すメソッド。
 		transFlag を true にすると、透過情報も合わせて出力する。
 		false の場合は透過情報を削除したファイルを生成する。
 		書き出しに成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool writeJPG(const string fileName, int quality)} \\
+\> \textbf{bool WriteJPG(String fileName, int quality)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		現在格納されている画像情報を、JPEG 形式で
-		ファイル名が fileName であるファイルに書き出す。
+		ファイル名が fileName であるファイルに書き出すメソッド。
 		quality は 0 から 100 までの整数値を入力し、
 		画像品質を設定する。
 		数値が低いほど圧縮率は高いが画像品質は低くなる。
@@ -464,126 +453,124 @@ xx \= xxxx \= \kill
 		書き出しに成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{void newImage(int w, int h)} \\
+\> \textbf{void NewImage(int w, int h)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		画像の大きさを横幅 w, 縦幅 h に設定する。これまでに
+		画像の大きさを横幅 w, 縦幅 h に設定するメソッド。これまでに
 		保存されていた画像情報は失われる。
 	\end{tabular} \\ \\
 
-\> \textbf{void copyImage(const fk\_Image *image)} \\
+\> \textbf{void CopyImage(const fk\_Image image)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		image の画像情報をコピーする。
+		image の画像情報をコピーするメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{void copyImage(const fk\_Image *image, int x, int y)} \\
+\> \textbf{void CopyImage(const fk\_Image image, int x, int y)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		現在の画像に対し、image の画像情報を
-		左上が \((x, y)\) となる位置に上書きを行う。
+		左上が \((x, y)\) となる位置に上書きを行うメソッド。
 		image はコピー先の中に完全に包含されている必要があり、
 		はみ出てしまう場合には上書きは行われない。
 	\end{tabular} \\ \\
 
-\> \textbf{void subImage(const fk\_Image *image, int x, int y, int w, int h)} \\
+\> \textbf{void SubImage(const fk\_Image image, int x, int y, int w, int h)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		元画像 image に対し、
 		左上が \((x, y)\)、横幅 w, 縦幅 h となるような
-		部分画像をコピーする。
+		部分画像をコピーするメソッド。
 		x, y, w, h に不適切な値が与えられた場合は、
 		コピーを行わない。
 	\end{tabular} \\ \\
 
-\> \textbf{int getWidth(void)} \\
+\> \textbf{fk\_Dimension Size)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		画像の横幅を int 型で返す。
+		画像の縦横幅を得るプロパティ。
 	\end{tabular} \\ \\
 
-\> \textbf{int getHeight(void)} \\
+\> \textbf{int GetR(int x, int y)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		画像の縦幅を int 型で返す。
+		(x, y) の位置にある画素の赤要素の値を int 型で返すメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{int getR(int x, int y)} \\
+\> \textbf{int GetG(int x, int y)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の赤要素の値を int 型で返す。
+		(x, y) の位置にある画素の緑要素の値を int 型で返すメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{int getG(int x, int y)} \\
+\> \textbf{int GetB(int x, int y)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の緑要素の値を int 型で返す。
+		(x, y) の位置にある画素の青要素の値を int 型で返すメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{int getB(int x, int y)} \\
+\> \textbf{int GetA(int x, int y)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の青要素の値を int 型で返す。
+		(x, y) の位置にある画素の透明度要素の値を int 型で返すメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{int getA(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の透明度要素の値を int 型で返す。
-	\end{tabular} \\ \\
-
-\> \textbf{fk\_Color getColor(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の色要素を fk\_Color 型で返す。
-	\end{tabular} \\ \\
-
-\> \textbf{bool setRGBA(int x, int y, int r, int g, int b, int a)} \\
+\> \textbf{bool SetRGBA(int x, int y, int r, int g, int b, int a)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		(x, y) の位置にある画素に対し、
-		赤、緑、青、透明度をそれぞれ r, g, b, a に設定する。
+		赤、緑、青、透明度をそれぞれ r, g, b, a に設定するメソッド。
 		成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool setRGB(int x, int y, int r, int g, int b)} \\
+\> \textbf{bool SetRGB(int x, int y, int r, int g, int b)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		(x, y) の位置にある画素に対し、
-		赤、緑、青をそれぞれ r, g, b に設定する。
+		赤、緑、青をそれぞれ r, g, b に設定するメソッド。
 		成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool setR(int x, int y, int r)} \\
+\> \textbf{bool SetR(int x, int y, int r)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		(x, y) の位置にある画素に対し、
-		赤要素を r に設定する。
+		赤要素を r に設定するメソッド。
 		成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool setG(int x, int y, int g)} \\
+\> \textbf{bool SetG(int x, int y, int g)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		(x, y) の位置にある画素に対し、
-		緑要素を g に設定する。
+		緑要素を g に設定するメソッド。
 		成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool setB(int x, int y, int b)} \\
+\> \textbf{bool SetB(int x, int y, int b)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		(x, y) の位置にある画素に対し、
-		青要素を b に設定する。
+		青要素を b に設定するメソッド。
 		成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool setA(int x, int y, int a)} \\
+\> \textbf{bool SetA(int x, int y, int a)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		(x, y) の位置にある画素に対し、
-		透明度要素を a に設定する。
+		透明度要素を a に設定するメソッド。
 		成功すれば true を、失敗すれば false を返す。
 	\end{tabular} \\ \\
 
-\> \textbf{bool setColor(int x, int y, const fk\_Color \&col)} \\
+\> \textbf{void FillColor(fk\_Color col)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		色要素を col が表す色に設定する。
-		成功すれば true を、失敗すれば false を返す。
+		画像中の全てのピクセルの色要素を col が表わす色に設定するメソッド。
 	\end{tabular} \\ \\
 
-\> \textbf{void fillColor(const fk\_Color \&col)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像中の全てのピクセルの色要素を col が表わす色に設定する。
-	\end{tabular} \\ \\
-
-\> \textbf{void fillColor(int r, int g, int b, int a)} \\
+\> \textbf{void FillColor(int r, int g, int b, int a)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		画像中の全てのピクセルの色要素を、r を赤、b を青、
-		b を緑、a を透明度として設定する。
+		b を緑、a を透明度として設定するメソッド。
 	\end{tabular}
 \end{tabbing}
+
+また、以下のようにすることで、
+fk\_Colol 型によって画素色値の参照や設定を行うことができる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        var image = new fk_Image();
+
+        // (x, y) = (100, 100) の画素色値を取得
+        var color = image[100, 100];
+
+        // (x, y) = (50, 70) の画素色値を取得
+        image[50, 70] = new fk_Color(0.4, 0.5, 0.3);
+\end{verbatim}
+\end{breakbox}

@@ -17,6 +17,7 @@ FK システムにおいて、形状は表\ref{tbl:fkShape1}のようなもの�
 \caption{形状の種類}
 \label{tbl:fkShape1}
 \begin{center}
+\begin{small}
 \begin{tabular}{|c|c|c|}
 \hline
 形状 & クラス名 & 必要な引数 \\ \hline \hline
@@ -40,6 +41,7 @@ IFSテクスチャ & fk\_IFSTexture & 画像ファイル名 \\ \hline
 パーティクル & fk\_ParticleSet & 様々な設定 \\ \hline
 光源 & fk\_Light & タイプ \\ \hline
 \end{tabular}
+\end{small}
 \end{center}
 \end{table}
 次節から、これらの詳細な使用法をひとつずつ述べ、最後にそれらを
@@ -81,7 +83,8 @@ PushVertex() メソッドを使えば1個ずつ頂点を代入していくこと
         var pos = new fk_Vector();
         var poly = new fk_Polyline();
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 10; i++)
+        {
             pos.Set((double)(i*i), (double)i, 0.0);
             poly.PushVertex(pos);
         }
@@ -489,7 +492,8 @@ VRML 2.0 形式のファイルを読み込む方法は、以下のようにフ�
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadVRMLFile("sample.wrl", true) == true) {
+        if(ifs.ReadVRMLFile("sample.wrl", true) == true)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -503,7 +507,8 @@ fk\_Model での変更を受け付けなくなる。もし VRML 中に記述さ�
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadVRMLFile("sample.wrl", false) == false) {
+        if(ifs.ReadVRMLFile("sample.wrl", false) == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -521,7 +526,8 @@ ReadSTLFile メソッドを使用すればよい。
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadSTLFile("sample.stl") == false) {
+        if(ifs.ReadSTLFile("sample.stl") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -540,7 +546,8 @@ FK では、VRML や STL と同様に SMF を読み込む機能を持つ。
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadSMFFile("sample.smf") == false) {
+        if(ifs.ReadSMFFile("sample.smf") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -557,7 +564,8 @@ HRC は、SoftImage 等で使用できるフォーマットである。SoftImage
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadHRCFile("sample.hrc") == false) {
+        if(ifs.ReadHRCFile("sample.hrc") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -573,7 +581,8 @@ RDS は、Ray Dream Studio 形式の略で、多くの 3D モデリングソフ�
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadRDSFile("sample.rds") == false) {
+        if(ifs.ReadRDSFile("sample.rds") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -590,7 +599,8 @@ DXF は、Autodesk 社が提唱している形状データ変換用フォーマ�
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadDXFFile("sample.dxf") == false) {
+        if(ifs.ReadDXFFile("sample.dxf") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -633,7 +643,8 @@ ReadMQOFile(String fileName, String objName, int matID, bool solidFlg, bool cont
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadMQOFile("sample.mqo", "obj1") == false) {
+        if(ifs.ReadMQOFile("sample.mqo", "obj1") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -644,7 +655,8 @@ ReadMQOFile(String fileName, String objName, int matID, bool solidFlg, bool cont
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadMQOFile("sample.mqo", "obj1", 1) == false) {
+        if(ifs.ReadMQOFile("sample.mqo", "obj1", 1) == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -669,7 +681,8 @@ ReadMQOFile() メソッドと同じである。
         var ifs = new fk_IndexFaceSet();
         var buffer = new Byte[1024];
 
-        if(ifs.ReadMQOFile(buffer, "obj1", 1) == false) {
+        if(ifs.ReadMQOFile(buffer, "obj1", 1) == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -693,7 +706,8 @@ MQOファイルの場合と同様に、
 \begin{screen}
 \begin{verbatim}
         var ifs = new fk_IndexFaceSet();
-        if(ifs.ReadD3DXFile("sample.x", "obj1") == false) {
+        if(ifs.ReadD3DXFile("sample.x", "obj1") == false)
+        {
             Console.WriteLine("File Read Error");
         }
 \end{verbatim}
@@ -1069,7 +1083,8 @@ xx \= xxxx \= \kill
 		            var vec = new fk_Vector();
 
 		            p = GetNextParticle(null);
-		            while(p != null) {
+		            while(p != null)
+                            {
 		                vec += p.Position;
 		                p = GetNextParticle(p);
 		            }
@@ -1107,7 +1122,8 @@ fk\_IFSTexture で D3DX 形式のファイルを
         var ifs = new fk_IndexFaceSet();
         ifs.AnimationTime = 0.0;
         
-        while(true) {
+        while(true)
+        {
                 :
                 :  // 描画処理
                 :
@@ -1139,11 +1155,13 @@ fk\_IFSTexture の変数に対して BVHMotion プロパティを用いて割り
         var bvh = new fk_BVHMotion();
         
         // 先に D3DX 形式の形状データを読み込んでおく
-        if(ifs.ReadD3DXFile("sample.x", "obj1") == false) {
+        if(ifs.ReadD3DXFile("sample.x", "obj1") == false)
+        {
             Console.WriteLine("D3DX File Read Error");
         }
         // BVH 形式のモーションデータを読み込む
-        if(bvh.ReadBVHFile("sample.bvh") == false) {
+        if(bvh.ReadBVHFile("sample.bvh") == false)
+        {
             Console.WriteLine("BVH File Read Error");
         }
         // 形状データ側にモーションデータをセットする
