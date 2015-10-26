@@ -22,7 +22,7 @@ FK システムでは特別なテクスチャマッピングとして、
  \item フォント情報を読み込む。
  \item サイズや表示位置などの各種設定を行っておく。
  \item fk\_Scene または fk\_AppWindow に登録する。
- \item drawText() によって文字列を設定する。
+ \item DrawText() によって文字列を設定する。
 \end{enumerate}
 
 以下、各項目を個別に説明する。
@@ -32,7 +32,7 @@ FK システムでは特別なテクスチャマッピングとして、
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_SpriteModel  sprite;
+        var sprite = new fk_SpriteModel();
 \end{verbatim}
 \end{screen}
 ~
@@ -48,27 +48,27 @@ TrueType フォントが格納されている場所は OS によって異なる�
 前提とする場合は、フリーライセンスを持つフォントを用いる必要がある。}。
 
 TrueType フォントファイルが準備できたら、あとはそのファイル名を
-initFont() メンバ関数を使って設定する。
-この関数は、フォントファイルの読み込みに成功したときは true を、
+InitFont() メソッドを使って設定する。
+このメソッドは、フォントファイルの読み込みに成功したときは true を、
 失敗したときは false を返す。プログラムは、以下のように記述しておくと
 フォント読み込みの成功失敗を判定することができる。
-(エラー表示には fl\_alert 関数を用いている。)
 \\
 \begin{screen}
 \begin{verbatim}
-        if(sprite.initFont("sample.ttf") == false) {
-            fl_alert("Font Init Error!");
+        if(sprite.InitFont("sample.ttf") == false)
+        {
+            Console.WriteLine("Font Init Error");
         }
 \end{verbatim}
 \end{screen}
 \subsection{各種設定}
 実際に表示を行う前に、必要な各種設定を行っておく。
 最低限必要な設定は表示位置の設定で、
-これは setPositionLT() を利用する。
+これは SetPositionLT() を利用する。
 \\
 \begin{screen}
 \begin{verbatim}
-        sprite.setPositionLT(-280.0, 230.0);
+        sprite.SetPositionLT(-280.0, 230.0);
 \end{verbatim}
 \end{screen}
 ~
@@ -78,87 +78,73 @@ initFont() メンバ関数を使って設定する。
 空間中の 3D オブジェクトとして配置するものではなく、
 画面の特定位置に固定して表示されることを前提としているためである。
 
-その他、setSpriteSize() でスプライトを表す画像のサイズを設定しなおすなど、
+その他、Size プロパティでスプライトを表す画像のサイズを設定しなおすなど、
 様々な設定項目があるが、これらについてはリファレンスマニュアルを参照してほしい。
 
 文字色など、文字表示に関する細かな設定は fk\_SpriteModel クラスには用意されていない。
-これらの設定は、fk\_SpriteModel 型の public メンバである「text」に対して行う。
+これらの設定は、fk\_SpriteModel 型の public フィールドである「Text」に対して行う。
 例えば、以下のコードは文字色を白、背景色を黒に設定している。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_SpriteModel     sprite;
+        var sprite = new fk_SpriteModel();
 
-        sprite.text.setForeColor(1.0, 1.0, 1.0);
-        sprite.text.setBackColor(0.0, 0.0, 0.0);
+        sprite.Text.ForeColor = new fk_Color(1.0, 1.0, 1.0);
+        sprite.Text.BackColor = new fk_Color(0.0, 0.0, 0.0);
 \end{verbatim}
 \end{screen}
 ~ \\
-この「text」メンバは fk\_TextImage 型である。詳細は \ref{sec:textimage} 節を参照してほしい。
+この「Text」フィールドは
+fk\_TextImage 型である。詳細は \ref{sec:textimage} 節を参照してほしい。
 
 \subsection{シーンやウィンドウへの登録}
 
 ウィンドウに fk\_AppWindow を用いている場合は、
-通常のモデルと同様に entry() 関数によってスプライトを登録する。
+通常のモデルと同様に Entry() メソッドによってスプライトを登録する。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_AppWindow       window;
-        fk_SpriteModel     sprite;
+        var window = new fk_AppWindow();
+        var sprite = new fk_SpriteModel();
     
-        window.entry(&sprite);
-\end{verbatim}
-\end{screen}
-~
-
-fk\_Scene に対して登録を行う場合は、fk\_SpriteModel 型の entryFirst() 関数を用いる。
-引数には fk\_Scene 型のインスタンスだけでなく、
-表示を想定する fk\_Window 型のインスタンスも必要となる。
-\\
-\begin{screen}
-\begin{verbatim}
-        fk_Scene           scene;
-        fk_Window          window;
-        fk_SpriteModel     sprite;
-    
-        sprite.entryFirst(&window, &scene);
+        window.Entry(sprite);
 \end{verbatim}
 \end{screen}
 
 \subsection{文字列設定}
-表示する文字列の設定は、drawText() 関数を用いて行う。
+表示する文字列の設定は、DrawText() メソッドを用いて行う。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_SpriteModel     sprite;
+        var sprite = new fk_SpriteModel();
     
-        sprite.drawText("Sample");
+        sprite.DrawText("Sample");
 \end{verbatim}
 \end{screen}
 ~
 
-引数は std::string 型なので、
-結果として std::string 型となるものであればよい。
+引数は String 型なので、
+結果として String 型となるものであればよい。
 例えば、int 型の score という変数の値を用いて「SCORE = 100」のような
 表示を行いたい場合は、以下のようにすればよい。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_SpriteModel     sprite;
-        int                score = 100;
+        var sprite = new fk_SpriteModel();
+        int score = 100;
     
-        sprite.drawText("SCORE = " + std::to_string(score));
+        sprite.drawText("SCORE = " + score.ToString());
 \end{verbatim}
 \end{screen}
 ~
 
-なお、drawText() を二回以上呼び出した場合、通常は以前の文字列に追加した形で表示される。
+なお、DrawText() を二回以上呼び出した場合、通常は以前の文字列に追加した形で表示される。
 例えば、
 \\
 \begin{screen}
 \begin{verbatim}
-        sprite.drawText("ABCD");
-        sprite.drawText("EFGH");
+        sprite.DrawText("ABCD");
+        sprite.DrawText("EFGH");
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -167,14 +153,14 @@ fk\_Scene に対して登録を行う場合は、fk\_SpriteModel 型の entryFir
 \\
 \begin{screen}
 \begin{verbatim}
-        sprite.drawText("ABCD");
-        sprite.drawText("EFGH", true);
+        sprite.DrawText("ABCD");
+        sprite.DrawText("EFGH", true);
 \end{verbatim}
 \end{screen}
 ~ \\
 というように、第2引数に「true」を入れるとよい。
 
-また、表示した文字列を完全に消去したい場合は clearText() 関数を用いる。
+また、表示した文字列を完全に消去したい場合は ClearText() メソッドを用いる。
 
 \section{高度な文字列表示} \label{sec:textimage}
 
@@ -186,7 +172,7 @@ fk\_TextImage では、以下のような機能が実現できる。
  \item 文字列に対し、色、大きさ、文字間や行間の幅、影効果など様々な設定を行う。
  \item 各文字を一文字ずつ順番に表示していくなどの文字送り機能を使う。
 \end{itemize}
-また、fk\_SpriteModel の text メンバは fk\_TextImage 型であり、
+また、fk\_SpriteModel の Text フィールドは fk\_TextImage 型であり、
 この節で述べられている設定を施すことにより、fk\_SpriteModel による文字表示においても
 同様の細かな設定を行うことができる。
 
@@ -207,38 +193,39 @@ fk\_TextImage による文字列テクスチャの表示を行うには、
 fk\_TextImage による文字列テクスチャを作成するには、
 最低でも fk\_TextImage 型のインスタンスと
 fk\_RectTexture 型のインスタンスが必要となる。従って、まずはそれぞれの
-変数を準備する。そして、fk\_RectTexture の setImage() メンバ関数を用いて
+変数を準備する。そして、fk\_RectTexture の Image プロパティを用いて
 文字列テクスチャ(の画像イメージ)を fk\_RextTexture インスタンスに設定しておく。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_TextImage    textImage;
-        fk_RectTexture  texture;
+        var textImage = new fk_TextImage();
+        var texture = new fk_RectTexture();
 
-        texture.setImage(&textImage);
+        texture.Image = textImage;
 \end{verbatim}
 \end{screen}
 
 \subsection{フォント情報の読み込み}
 次に、フォント情報の読み込みを行う。
-フォント情報は fk\_SpriteModel と同様に initFont() を用いて行う。
+フォント情報は fk\_SpriteModel と同様に InitFont() を用いて行う。
 詳細は \ref{subsec:initFont} 節を参照してほしい。
 
 \subsection{文字列テクスチャの各種設定}
 次に、文字列テクスチャの各種設定を行う。設定できる項目として、以下のようなものが
-fk\_TextImage のメンバ関数として提供されている。
+fk\_TextImage のプロパティやメソッドとして提供されている。
 なお、fk\_TextImage クラスは fk\_Image クラスの派生クラスであり、
 以下のものに加えて第 \ref{sec:image} 節で述べた fk\_Image クラスの
-メンバ関数も全て利用することができる。
+メソッドやプロパティも全て利用することができる。
 
 \subsubsection{フォントに関する設定}
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{void setDPI(int dpi)} \\
-\> \textbf{void setPTSize(int ptsize)} \\
+\> \textbf{int DPI} \\
+\> \textbf{int PTSize} \\
 	\> \> \begin{tabular}{p{15cm}}
-		setDPI は文字列の解像度を設定し、setPTSize は文字の大きさを
-		設定する。デフォルトは両方とも 48 である。
+		DPI は文字列の解像度を設定するプロパティで、
+		PTSize は文字の大きさを設定するプリパティである。
+		デフォルトは両方とも 48 である。
 		現状の FK システムでは
 		この2つには機能的な差異がなく、結果的に2つの数値の積が
 		文字の精細さを表すことになっている。以後、
@@ -246,77 +233,72 @@ xx \= xxxx \= \kill
 		「精細度」と呼ぶ。
 	\end{tabular} \\ \\
 
-\> \textbf{void setMonospaceMode(bool flg)} \\
+\> \textbf{bool MonospaceMode} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字を等幅で表示するかどうかを設定する。
+		文字を等幅で表示するかどうかを設定するプロパティ。
 		true で等幅、false で非等幅となる。
 		true の場合、元々のフォントが等幅でない場合でも
 		等幅に補正して表示する。
 		デフォルトでは true に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setMonospaceSize(int size)} \\
+\> \textbf{int MonospaceSize} \\
 	\> \> \begin{tabular}{p{15cm}}
 		文字を等幅で表示する場合の、
-		文字幅を設定する。
+		文字幅を設定するプロパティ。
 		デフォルトでは 0 に設定されているので、
-		この関数で幅を設定しないと表示自体が行われない。
+		このプロパティに幅を設定しないと表示自体が行われない。
 	\end{tabular} \\ \\
 
-\> \textbf{void setBoldStrength(int strength)} \\
+\> \textbf{int BoldStrength} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字の太さを数値に応じて太くする。
+		文字の太さを数値に応じて太くするプロパティ。
 		初期状態を 1 とし、高い値を与えるほど太くなる。
 		どの程度太くなるのかは精細度による。
 	\end{tabular} \\ \\
 
-\> \textbf{void setSmoothMode(bool flg)} \\
+\> \textbf{bool SmoothMode} \\
 	\> \> \begin{tabular}{p{15cm}}
 		出力される画像に対しアンチエイリアシング処理を
-		行うかどうかを設定する。デフォルトでは true に設定されている。
+		行うかどうかを設定するプロパティ。
+		デフォルトでは true に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setShadowMode(bool flg)} \\
+\> \textbf{bool ShadowMode} \\
 	\> \> \begin{tabular}{p{15cm}}
-		影付き効果を行うかどうかを設定する。
+		影付き効果を行うかどうかを設定するプロパティ。
 		デフォルトでは false に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setForeColor(fk\_Color col)} \\
-\> \textbf{void setForeColor(float r, float g, float b, float a)} \\
-\> \textbf{void setForeColor(double r, double g, double b, double a)} \\
+\> \textbf{fk\_Color ForeColor} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列テクスチャの文字色を指定する。デフォルトでは
-		\((1, 1, 1, 1)\) つまり無透明な白に設定されている。
+		文字列テクスチャの文字色を指定するプロパティ。
+		デフォルトでは \((1, 1, 1, 1)\) つまり無透明な白に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setBackColor(fk\_Color col)} \\
-\> \textbf{void setBackColor(float r, float g, float b, float a)} \\
-\> \textbf{void setBackColor(double r, double g, double b, double a)} \\
+\> \textbf{fk\_Color BackColor} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列テクスチャの背景色を指定する。デフォルトでは
-		\((0, 0, 0, 1)\) つまり無透明な黒に設定されている。
+		文字列テクスチャの背景色を指定するプロパティ。
+		デフォルトでは \((0, 0, 0, 1)\) つまり無透明な黒に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setShadowColor(fk\_Color col)} \\
-\> \textbf{void setShadowColor(float r, float g, float b, float a)} \\
-\> \textbf{void setShadowColor(double r, double g, double b, double a)} \\
+\> \textbf{fk\_Color ShadowColor} \\
 	\> \> \begin{tabular}{p{15cm}}
-		影付き効果の影の色を指定する。デフォルトでは
-		\((0, 0, 0, 1)\) つまり無透明な黒に設定されている。
+		影付き効果の影の色を指定するプロパティ。
+		デフォルトでは \((0, 0, 0, 1)\) つまり無透明な黒に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setShadowOffset(int x, int y)} \\
+\> \textbf{fk\_Dimension ShadowOffset} \\
 	\> \> \begin{tabular}{p{15cm}}
-		影付き効果の、影の相対位置を指定する。
+		影付き効果の、影の相対位置を指定するプロパティ。
 		x が正の場合右、負の場合左にずれる。
 		y が正の場合下、負の場合上にずれる。
 		デフォルトの値は、両方とも 0 に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setCacheMode(bool mode)} \\
+\> \textbf{bool CacheMode} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字画像のキャッシュを保持するかどうかを設定する。
+		文字画像のキャッシュを保持するかどうかを設定するプロパティ。
 		true の場合、一度読み込んだ文字のビットマップを
 		キャッシュとして保持するようになるため、再度その文字を
 		利用する際に処理が高速になる。ただし、キャッシュを
@@ -326,13 +308,13 @@ xx \= xxxx \= \kill
 		効くことになる。デフォルトでは false に設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void clearCache(void)} \\
+\> \textbf{void ClearCache()} \\
 	\> \> \begin{tabular}{p{15cm}}
-		setCacheMode でキャッシュモードが有効であった場合に、
-		保存されているキャッシュを全て解放する。
-		この関数は static 宣言されているため、
+		CacheMode でキャッシュモードが有効であった場合に、
+		保存されているキャッシュを全て解放するメソッド。
+		このメソッドは static 宣言されているため、
 		インスタンスがなくても
-		「\verb+fk_TextImage::clearCache();+」とすることで
+		「\verb+fk_TextImage::ClearCache();+」とすることで
 		利用可能である。
 	\end{tabular} \\ \\
 
@@ -341,9 +323,10 @@ xx \= xxxx \= \kill
 \subsubsection{文字列配置に関する設定}
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{void setAlign(fk\_TextAlign align)} \\
+\> \textbf{fk\_TextAlign Align} \\
 	\> \> \begin{tabular}{p{15cm}}
-		テキストのアライメントを設定する。設定できるアライメントには
+		テキストのアライメントを設定するプロパティ。
+		設定できるアライメントには
 		以下のようなものがある。
 			\begin{table}[H]
 			\caption{文字列坂テキストのアライメント}
@@ -351,87 +334,86 @@ xx \= xxxx \= \kill
 			\begin{center}
 			\begin{tabular}{|c|l|}
 			\hline
-			FK\_ALIGN\_LEFT & 文字列を左寄せに配置する。\\ \hline
-			FK\_ALIGN\_CENTER &
+			fk\_TextAlign.LEFT & 文字列を左寄せに配置する。\\ \hline
+			fk\_TextAlign.CENTER &
 			文字列をセンタリング(真ん中寄せ)に配置する。\\ \hline
-			FK\_ALIGN\_RIGHT & 文字列を右寄に配置する。\\ \hline
+			fk\_TextAlign.RIGHT & 文字列を右寄に配置する。\\ \hline
 			\end{tabular}
 			\end{center}
 			\end{table}
-		デフォルトでは FK\_ALIGN\_LEFT、つまり左寄せに設定されている。
+		デフォルトでは fk\_TextAlign.LEFT、つまり左寄せに設定されている。
 	\end{tabular} \\ \\
 
-\> \textbf{void setOffset(int up, int down, int left, int right)} \\
+\> \textbf{void SetOffset(int up, int down, int left, int right)} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列テクスチャの、縁と文字のオフセット(幅)を指定する。
+		文字列テクスチャの、縁と文字のオフセット(幅)を指定するメソッド。
 		引数は順番に上幅、下幅、左幅、右幅となる。
 		デフォルトでは全て 0 に設定されている。
-		この値は、setCharSkip や setLineSkip と同様に、
+		この値は、CharSkip や LineSkip と同様に、
 		精細度に依存するものである。
 	\end{tabular} \\ \\
 
-\> \textbf{void setCharSkip(int skip)} \\
+\> \textbf{int CharSkip} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字同士の横方向の間にある空白の幅を設定する。
+		文字同士の横方向の間にある空白の幅を設定するプロパティ。
 		デフォルトでは 0、つまり横方向の空間は「なし」に
 		設定されている。
-		この値は、前述した精細度に依存するもので、精細度が高い場合には
-		skip が表す数値の 1 あたりの幅は狭くなる。
+		この値は、前述した精細度に依存するもので、
+		精細度が高い場合には表す数値の 1 あたりの幅は狭くなる。
 		従って、精細度が高い場合には
 		この数値を高めに設定する必要がある。
 	\end{tabular} \\ \\
 
-\> \textbf{void setLineSkip(int skip)} \\
+\> \textbf{int LineSkip} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字同士の縦方向の間にある空白の高さを設定する。
+		文字同士の縦方向の間にある空白の高さを設定するプロパティ。
 		デフォルトでは 0、つまり縦方向の空間は「なし」に
 		設定されている。
 		この値も精細度に依存するので、
-		setCharSkip() と同様のことが言える。
+		CharSkip と同様のことが言える。
 	\end{tabular} \\ \\
 
-\> \textbf{void setSpaceLineSkip(int)} \\
+\> \textbf{int SpaceLineSkip} \\
 	\> \> \begin{tabular}{p{15cm}}
-		空行が入っていた場合、その空行の高さを指定する。
+		空行が入っていた場合、その空行の高さを指定するプロパティ。
 		デフォルトでは 0、つまり空行があった場合は
 		結果的に省略される状態に設定されている。
 		この値も精細度に依存するので、
-		setCharSkip() と同様のことが言える。
+		CharSkip と同様のことが言える。
 	\end{tabular} \\ \\
 
-\> \textbf{void setMinLineWidth(int width)} \\
+\> \textbf{int MinLineWidth} \\
 	\> \> \begin{tabular}{p{15cm}}
 		通常、画像の横幅はもっとも横幅が長い行と同一となる。
-		この関数は、生成される画像の横幅の最小値を width に設定する。
-		生成される画像の幅が width 以内であった場合、
-		強制的に width に補正される。
+		このプロパティは、生成される画像の横幅の最小値を設定する。
+		生成される画像の幅が MinLineWidth 以内であった場合、
+		強制的に MinLineWidth に補正される。
 	\end{tabular} \\ \\
 \end{tabbing}
 
 \subsubsection{文字送りに関する設定} \label{subsubsec:sendRef}
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{void setSendingMode(fk\_TextSendingMode mode)} \\
+\> \textbf{fk\_TextSendingMode SendingMode} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字送り(\ref{subsec:textSending}節を参照のこと)のモードを
-		設定する。設定できるモードには以下のようなものがある。
+		文字送り(\ref{subsec:textSending}節を参照のこと)のモードを設定するプロパティ。
+		設定できるモードには以下のようなものがある。
 			\begin{table}[H]
 			\caption{文字送りのモード}
 			\label{tbl:textSending}
 			\begin{center}
 			\begin{tabular}{|c|l|}
 			\hline
-			FK\_SENDING\_ALL &
-			文字送りを行わず、全ての文字を一度に表示する。
-			\\ \hline
-			FK\_SENDING\_CHAR &
+			fk\_TextSendingMode.ALL &
+			文字送りを行わず、全ての文字を一度に表示する。\\ \hline
+			fk\_TextSendingMode.CHAR &
 			一文字ずつ文字送りを行う。\\ \hline
-			FK\_SENIDNG\_LINE &
+			fk\_TextSendingMode.LINE &
 			一行ずつ文字送りを行う。\\ \hline
 			\end{tabular}
 			\end{center}
 			\end{table}
-		デフォルトでは FK\_SENDING\_ALL に設定されている。
+		デフォルトでは fk\_TextSendingMode.ALL に設定されている。
 	\end{tabular}
 \end{tabbing}
 
@@ -441,56 +423,28 @@ fk\_UniStr という型の変数を用いる。具体的には、次のような
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_UniStr       str;
+        var str = new fk_UniStr();
                 :
                 :
-        str.convert("サンプルの文字列です", FK_STR_SJIS);
+        str.Convert("サンプルの文字列です");
 \end{verbatim}
 \end{screen} \\ ~ \\
-このように、convert メンバ関数を用いて設定する。1番目の引数には文字列を、
-2番目の引数にプログラムコードの文字コードに対応して以下のように設定する。
-\begin{table}[H]
-\caption{文字コード対応表}
-\label{tbl:strCode}
-\begin{center}
-\begin{tabular}{|c|l|}
-\hline
-JIS コード & FK\_STR\_JIS \\ \hline
-ShiftJIS コード & FK\_STR\_SJIS \\ \hline
-EUC コード & FK\_STR\_EUC \\ \hline
-ユニコード (UTF16) & FK\_STR\_UTF16 \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-文字列設定は、convert 関数の他に printf 関数がある。
-これは、いわゆる標準の printf() 関数とほぼ同一の機能を持つ物で、
-変数の値や計算結果などを書式付きで文字列に設定することができる。
-ただし、第1引数に前述した文字コードが入る点だけが異なっている。
-以下のコードは、str[0]〜str[9]に「0です」〜「9です」という文字列を格納する。
-\begin{screen}
-\begin{verbatim}
-        fk_UniStr     str[10];
-
-        for(int i = 0; i < 10; i++) {
-            str[i].printf(FK_STR_SJIS, "%dです", i);
-        }
-\end{verbatim}
-\end{screen}
+このように、Convert メソッドを用いて設定する。
 
 fk\_UniStr 型変数に格納した文字列を
-fk\_TextImage に設定するには、loadUniStr() メンバ関数を用いる。
+fk\_TextImage に設定するには、LoadUniStr() メソッドを用いる。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_UniStr       str;
-        fk_TextImage    image;
+        var str = new fk_UniStr();
+        var image = new fk_TextImage();
                 :
                 :
-        str.convert("サンプルの文字列です", FK_STR_SJIS);
-        image.loadUniStr(&str);
+        str.Convert("サンプルの文字列です");
+        image.LoadUniStr(str);
 \end{verbatim}
 \end{screen}
+
 \subsection{文字列情報の読み込み}
 文字列を設定する方法は、前述した fk\_UniStr 型を
 用いる方法の他に、テキストファイルを読み込むという方法もある。
@@ -498,65 +452,80 @@ fk\_TextImage に設定するには、loadUniStr() メンバ関数を用いる�
 テキストファイルをどこか別のファイルに保存しておく。
 文字列を保存する際には、文字列テクスチャ内で改行したい箇所と
 テキストファイル内の改行は必ず合わせておく。あとは、そのファイル名を
-fk\_TextImage オブジェクトに loadStrFile() メンバ関数を用いて入力する。
+fk\_TextImage オブジェクトに LoadStrFile() メソッドを用いて入力する。
 以下は、テキストファイル「str.txt」を入力する例である。
 \\
 \begin{screen}
 \begin{verbatim}
-        textImage.loadStrFile("str.txt", FK_STR_SJIS);
+        textImage.LoadStrFile("str.txt", FK_STR_SJIS);
 \end{verbatim}
 \end{screen}
-loadStrFile() 関数の2番目の引数は、テキストの文字コードによって
-\ref{subsec:strDef} 節の表 \ref{tbl:strCode} に対応した値を入力する。
+loadStrFile() メソッドの2番目の引数は、テキストの文字コードによって
+以下の対応した値を入力する。
+
+\begin{table}[H]
+\caption{文字コード対応表}
+\label{tbl:stringCode}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+fk\_StringCode.UTF16 & Unicode (UTF-16) \\ \hline
+fk\_StringCode.UTF8 & Unicode (UTF-8) \\ \hline
+fk\_StringCode.JIS & ISO-2022-JIS (JISコード) \\ \hline
+fk\_StringCode.SJIS & Shift-JIS (SJISコード) \\ \hline
+fk\_StringCode.EUC & EUC \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
 
 \subsection{文字列読み込み後の情報取得}
-実際に文字列を読み込んだ後、様々な情報を得るためメンバ関数として
-以下のようなものが提供されている。
+実際に文字列を読み込んだ後、fk\_TextImage クラスには
+様々な情報を得るため以下のようなプロパティやメソッドが提供されている。
 
 \begin{tabbing}
 xx \= xxxx \= \kill
-\> \textbf{int getLineNum(void)} \\
+\> \textbf{int LineNum} \\
 	\> \> \begin{tabular}{p{15cm}}
-		読み込んだ文字列の行数を返す。
+		読み込んだ文字列の行数を取得するプロパティ。
 	\end{tabular} \\ \\
-\> \textbf{int getAllCharNum(void)} \\
+\> \textbf{int AllCharNum} \\
 	\> \> \begin{tabular}{p{15cm}}
-		文字列全体の文字数を返す。
+		文字列全体の文字数を取得するプロパティ。
 	\end{tabular} \\ \\
-\> \textbf{int getLineCharNum(int lineID)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		最初の行を 0 行目としたときの、
-		lineID 行目の文字数を返す。
-	\end{tabular} \\ \\
-\> \textbf{int getLineWidth(int lineID)} \\
+\> \textbf{int GetLineCharNum(int lineID)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		最初の行を 0 行目としたときの、
-		lineID 行目の行幅(単位ピクセル)を返す。
+		lineID 行目の文字数を返すメソッド。
 	\end{tabular} \\ \\
-\> \textbf{int getLineHeight(int lineID)} \\
+\> \textbf{int GetLineWidth(int lineID)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		最初の行を 0 行目としたときの、
-		lineID 行目の行の高さ(単位ピクセル)を返す。
+		lineID 行目の行幅(単位ピクセル)を返すメソッド。
 	\end{tabular} \\ \\
-\> \textbf{int getMaxLineWidth(void)} \\
+\> \textbf{int GetLineHeight(int lineID)} \\
+	\> \> \begin{tabular}{p{15cm}}
+		最初の行を 0 行目としたときの、
+		lineID 行目の行の高さ(単位ピクセル)を返すメソッド。
+	\end{tabular} \\ \\
+\> \textbf{int MaxLineWidth} \\
 	\> \> \begin{tabular}{p{15cm}}
 		生成された行のうち、
-		もっとも行幅(単位ピクセル)が大きかったものの行幅を返す。
+		もっとも行幅(単位ピクセル)が大きかったものの行幅を取得するプロパティ。
 	\end{tabular} \\ \\
-\> \textbf{int getMaxLineHeight(void)} \\
+\> \textbf{int MaxLineHeight} \\
 	\> \> \begin{tabular}{p{15cm}}
 		生成された各行のうち、
-		もっとも行の高さ(単位ピクセル)が大きかった行の高さを返す。
+		もっとも行の高さ(単位ピクセル)が大きかった行の高さを取得するプロパティ。
 	\end{tabular} \\ \\
-\> \textbf{int getLineStartXPos(int lineID)} \\
+\> \textbf{int GetLineStartXPos(int lineID)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		最初の行を 0 行目としたときの、
-		lineID 行目の行の左上を表わす画素の \(x\) 方向の位置を返す。
+		lineID 行目の行の左上を表わす画素の \(x\) 方向の位置を返すメソッド。
 	\end{tabular} \\ \\
-\> \textbf{int getLineStartYPos(int lineID)} \\
+\> \textbf{int GetLineStartYPos(int lineID)} \\
 	\> \> \begin{tabular}{p{15cm}}
 		最初の行を 0 行目としたときの、
-		lineID 行目の行の左上を表わす画素の \(y\) 方向の位置を返す。
+		lineID 行目の行の左上を表わす画素の \(y\) 方向の位置を返すメソッド。
 	\end{tabular}
 \end{tabbing}
 
@@ -566,7 +535,6 @@ xx \= xxxx \= \kill
 コードである。
 \begin{itemize}
  \item TrueType フォント名は「fontsample.ttf」。
- \item ソースコードの文字コードは ShiftJIS コード。
  \item 解像度、文字の大きさはそれぞれ 72, 72。
  \item 影付き効果を有効にする。
  \item 文字列の行間を「20」に設定。
@@ -579,108 +547,117 @@ xx \= xxxx \= \kill
 ~ \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_TextImage            textImage;
-        fk_RectTexture          texture;
-        fk_Model                model;
-        fk_UniStr               str;
+        var textImage = new fk_TextImage();
+        var texture = new fk_RectTexture();
+        var model = new fk_Model();
+        var str = new fk_UniStr();
 
-        texture.setImage(&textImage);
+        texture.Image = textImage;
 
-        if(textImage.initFont("fontsample.ttf") == false) {
-            fl_alert("Font Init Error!");
+        if(textImage.InitFont("fontsample.ttf") == false)
+        {
+            Console.WriteLine("Font Init Error");
         }
-        textImage.setDPI(72);
-        textImage.setPTSize(72);
-        textImage.setShadowMode(true);
-        textImage.setLineSkip(20);
-        textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
-        textImage.setBackColor(0.2, 0.7, 0.8, 0.3);
-        textImage.setShadowColor(0.0, 0.0, 0.0, 1.0);
-        textImage.setShadowOffset(5, 5);
-        textImage.setAlign(FK_ALIGN_CENTER);
 
-        str.convert("サンプルです。", FK_STR_SJIS);
-        textImage.loadUniStr(&str);
+        textImage.DPI = 72;
+        textImage.PTSize = 72;
+        textImage.ShadowMode = true;
+        textImage.LineSkip = 20;
+        textImage.ForeColor = new fk_Color(0.5, 1.0, 0.8, 1.0);
+        textImage.BackColor = new fk_Color(0.2, 0.7, 0.8, 0.3);
+        textImage.ShadowColor = new fk_Color(0.0, 0.0, 0.0, 1.0);
+        textImage.SetShadowOffset(5, 5);
+        textImage.Align = fk_TextAlign.CENTER);
 
-        model.setShape(&texture);
+        str.Convert("サンプルです。");
+        textImage.LoadUniStr(str);
+
+        model.Shape = texture;
 \end{verbatim}
 \end{breakbox}
 
 \subsection{文字送り} \label{subsec:textSending}
 「文字送り」とは、読み込んだ文字列を最初は表示せず、一文字ずつ、あるいは
 一行ずつ徐々に表示していく機能のことである。この制御のために
-利用する関数は、簡単にまとめると以下のとおりである。
+利用するメソッドは、簡単にまとめると以下のとおりである。
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline
-setSendingMode() & 文字送りモード設定 \\ \hline
-loadUniStr() & 新規文字列設定 \\ \hline
-loadStrFile() & 新規文字列をファイルから読み込み \\ \hline
-send() & 文字送り \\ \hline
-finish() & 全文字出力 \\ \hline
-clear() & 全文字消去 \\ \hline
+SendingMode プロパティ & 文字送りモード設定 \\ \hline
+LoadUniStr() メソッド & 新規文字列設定 \\ \hline
+LoadStrFile() メソッド & 新規文字列をファイルから読み込み \\ \hline
+Send() メソッド & 文字送り \\ \hline
+Finish() メソッド & 全文字出力 \\ \hline
+Clear() メソッド & 全文字消去 \\ \hline
 \end{tabular}
 \end{center}
 以下に、詳細を述べる。
 
-文字送りのモード設定に関しては前述した setSendingMode() 関数を用いる。ここで \\
-FK\_SENDING\_CHAR または
-FK\_SENDING\_LINE が設定されていた場合、loadUniStr() 関数や
-loadStrFile() 関数で文字列が入力された時点では文字は表示されない。
+文字送りのモード設定に関しては前述した SendingMode プロパティを用いる。ここで \\
+fk\_TextSendingMode.CHAR または
+fk\_TextSendingMode.LINE が設定されていた場合、LoadUniStr() メソッドや
+LoadStrFile() メソッドで文字列が入力された時点では文字は表示されない。
 
-send() は、文字送りモードに応じて一文字(FK\_SENDING\_CHAR)、
-一列(FK\_SENDING\_LINE)、あるいは文字列全体(FK\_SENDING\_ALL)を
+Send() は、文字送りモードに応じて一文字(fk\_TextSendingMode.CHAR)、
+一列(fk\_TextSendingMode.LINE)、あるいは文字列全体(fk\_TextSendingMode.ALL)を
 テクスチャ画像に出力する。
-既に読み込んだ文字を全て出力した状態で send() 関数を呼んだ場合、
+既に読み込んだ文字を全て出力した状態で Send() メソッドを呼んだ場合、
 特に何も起らずに false が返る。そうでない場合は一文字、一列、あるいは
 文字列全体をモードに従って出力を行い、true を返す。
-(つまり、最後の文字を send() で出力した時点では true が返り、
-その後にさらに send() を呼び出した場合は false() が返る。)
+(つまり、最後の文字を Send() で出力した時点では true が返り、
+その後にさらに Send() を呼び出した場合は false が返る。)
 
-finish() 関数は、文字送りモードに関わらずまだ表示されていない文字を
-全て一気に出力する。返り値は bool 型で、意味は send() と同様である。
+Finish() メソッドは、文字送りモードに関わらずまだ表示されていない文字を
+全て一気に出力する。返り値は bool 型で、意味は Send() と同様である。
 
-clear() 関数は、これまで表示していた文字を全て一旦消去し、
+Clear() メソッドは、これまで表示していた文字を全て一旦消去し、
 読み込んだ時点と同じ状態に戻す。いわゆる「巻き戻し」である。
-1文字以上表示されていた状態で clear() を呼んだ場合 true が返り、
-まだ1文字も表示されていない状態で clear() を呼んだ場合 false が返る。
+1文字以上表示されていた状態で Clear() を呼んだ場合 true が返り、
+まだ1文字も表示されていない状態で Clear() を呼んだ場合 false が返る。
 
 具体的なプログラムは、以下のようになる。
 このプログラムは、
 描画ループが10回まわる度に一文字を表示し、
 現在表示中の文字列で、文字が全て表示されていたら
 str[] 配列中の次の文字列を読み込むというものである。
-処理の高速化をはかるため、setCacheMode() でキャッシュを有効としている。
+処理の高速化をはかるため、CacheMode でキャッシュを有効としている。
 また、「c」キーを押した場合は表示されていた文字列を一旦消去し、
 「f」キーを押した場合は現在表示途中の文字列を全て出力する。
 (ウィンドウやキー操作に関しては、\ref{chap:window} 章を参照のこと。) \\
 
 \begin{breakbox}
 \begin{verbatim}
-        fk_AppWindow    window;
-        fk_TextImage    textImage;
-        fk_UniStr       str[10];
-        int             loopCount, strCount;
+        var window = new fk_AppWindow();
+        var textImage = new fk_TextImage();
+        var str = new fk_UniStr[10];
+        int loopCount, strCount;
                 :
                 :
-        textImage.setSendingMode(FK_SENDING_CHAR);
-        textImage.setCacheMode(true);
-        textImage.loadUniStr(&str[0]);
+        textImage.SendingMode = fk_TextSendingMode.CHAR;
+        textImage.CacheMode = true;
+        textImage.LoadUniStr(str[0]);
 
 
         loopCount = 1;
         strCount = 1;
-        while(true) {
+        while(true)
+        {
                         :
-            if(window.getKeyStatus('c') == true) {
+            if(window.GetKeyStatus('C', fk_SwitchStatus.UP) == true)
+            {
                 // 「c」キーを押した場合
-                textImage.clear();
-            } else if(window.getKeyStatus('f') == true) {
+                textImage.Clear();
+            }
+            else if(window.GetKeyStatus('F', fk_SwitchStatus.UP) == true)
+            {
                 // 「f」キーを押した場合
-                textImage.finish();
-            } else if(loopCount % 10 == 0) {
-                if(textImage.send() == false && strCount != 9) {
-                    textImage.loadUniStr(&str[strCount]);
+                textImage.Finish();
+            }
+            else if(loopCount % 10 == 0)
+            {
+                if(textImage.Send() == false && strCount != 9)
+                {
+                    textImage.LoadUniStr(str[strCount]);
                     strCount++;
                 }
             }

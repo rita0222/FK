@@ -48,7 +48,7 @@
 \end{verbatim}
 \end{screen}
 ~ \\
-Set メンバ関数が、vec1 や vec2 に値を代入してくれる。
+Set メソッドが、vec1 や vec2 に値を代入してくれる。
 vec2 のように引数が2個しか無い場合は、\(z\) 成分には自動的に
 \(0\) が代入されるため、結果的に vec2 に \((5, -2.5, 0)\) が
 代入されることになる。
@@ -204,7 +204,7 @@ vec2 の値は x 成分への代入によって \(3.0, 1.0, 1.0\) に変更さ�
 \end{table}
 
 \subsection{ノルム(長さ)の算出}
-ベクトルのノルム(長さ)を出力する関数として Dist() が、
+ベクトルのノルム(長さ)を出力するメソッドとして Dist() が、
 ノルムの2乗を指す Dist2() があり、
 それぞれ double 型を返す。使用法は次のようなものである。
 \\
@@ -230,7 +230,7 @@ vec2 の値は x 成分への代入によって \(3.0, 1.0, 1.0\) に変更さ�
 コンピュータグラフィックスの理論では、しばしば正規化されたベクトルを
 用いることが多い。
 
-fk\_Vector 型の変数に対し、自身を正規化(Normalize)する関数として
+fk\_Vector 型の変数に対し、自身を正規化(Normalize)するメソッドとして
 Normalize() がある。
 \\
 \begin{screen}
@@ -241,7 +241,7 @@ Normalize() がある。
 \end{verbatim}
 \end{screen}
 ~ \\
-という記述は、vec1 を正規化する。ちなみに、Normalize() 関数は
+という記述は、vec1 を正規化する。ちなみに、Normalize() メソッドは
 bool 型を返し、true ならば正規化の成功、false ならば失敗を意味する。
 失敗するのは、ベクトルが零ベクトル(つまり長さが 0)の場合に限られる。
 
@@ -256,7 +256,7 @@ bool 型を返し、true ならば正規化の成功、false ならば失敗を�
 	{ベクトルの射影}{-5mm}
 
 この射影ベクトルを求める方法として、fk\_Vector では
-proj() メンバ関数を利用することができる。
+Proj() メソッドを利用することができる。
 \\
 \begin{screen}
 \begin{verbatim}
@@ -267,7 +267,7 @@ proj() メンバ関数を利用することができる。
 \end{screen}
 ~ \\	
 また、投影の際の垂直成分 (図 \ref{fig:vecproj} 中での \(\bP_{perp}\))
-を求めるときは、Perp() というメンバ関数を利用する。
+を求めるときは、Perp() というメソッドを利用する。
 \\
 \begin{screen}
 \begin{verbatim}
@@ -310,12 +310,12 @@ fk\_Matrix は、fk\_Vector のように初期値設定の手段を持たない�
 ものである。
 
 \begin{table}[H]
-\caption{fk\_Matrix の初期値設定用メンバ関数}
+\caption{fk\_Matrix の初期値設定用メソッド}
 \label{tbl:fkMat1}
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
-メンバ関数名と引数 & 引数の意味 & 効果 \\ \hline \hline
+メソッド名と引数 & 引数の意味 & 効果 \\ \hline \hline
 MakeRot(double, fk\_Axis) & 角度数と軸 &
         回転行列の生成 \\ \hline
 MakeTrans(double, double, double) &
@@ -331,22 +331,22 @@ MakeEuler(fk\_Angle) & オイラー角 & 上記に同じ \\ \hline
 \end{center}
 \end{table}
 
-MakeRot 関数は、2つ目の引数に \(x\) 軸を表す fk\_Axis.X、
+MakeRot メソッドは、2つ目の引数に \(x\) 軸を表す fk\_Axis.X、
 \(y\) 軸を表す fk\_Axis.Y、\(z\) 軸を表す fk\_Axis.Z の
 いずれかをとる。最初の引数である実数値は弧度法
 (rad ラジアン)として扱われる。\(180^\circ = \pi \: rad\) である。
 .NET 環境では \(\pi\) を表す定義値として Math.PI を提供している。
 したがって、たとえば 90 度は \verb+Math.PI/2.0+ と表せばよい。
 
-MakeEuler 関数は引数にそれぞれ順に heading 角、pitch 角、bank 角を
-与える。単位は MakeRot 関数と同様に弧度法である。fk\_Angle 型は、
+MakeEuler メソッドは引数にそれぞれ順に heading 角、pitch 角、bank 角を
+与える。単位は MakeRot メソッドと同様に弧度法である。fk\_Angle 型は、
 オイラー角を表わすクラスで、heading 角、pitch 角、bank 角にあたる
 メンバはそれぞれ h, p, b となっており、public アクセスが可能である。
 \subsection{比較演算}
-fk\_Matrix 型も、fk\_Vector 型のような Equals() 関数を持ち合わせている。
+fk\_Matrix 型も、fk\_Vector 型のような Equals() メソッドを持ち合わせている。
 これらは、やはり許容誤差を持って判定される。
 \subsection{逆行列演算}
-fk\_Matrix 型は、GetInverse() 関数を持っている。これは逆行列を
+fk\_Matrix 型は、GetInverse() メソッドを持っている。これは逆行列を
 返すものであり、自身に変化は起こさない。
 以下のプログラムは、行列 A の逆行列を B に代入するものである。
 \\
@@ -406,8 +406,8 @@ fk\_Matrix 型においても、代入処理における挙動は fk\_Vector 型
         Console.WriteLine("mat[1][0] = {0}", mat[1,0]);
 \end{verbatim}
 \end{screen}
-\subsection{その他のメンバ関数}
-以下に、fk\_Matrix で用いられる主要なメンバ関数を紹介する。
+\subsection{その他のメソッド}
+以下に、fk\_Matrix で用いられる主要なメソッドを紹介する。
 
 \subsubsection*{void Init()}
 自身を単位行列にする。
@@ -489,9 +489,9 @@ fk\_HVector の存在を意識する必要はない。
 それにより、行列中の平行移動用成分(4列目)が結果に作用しなくなり、
 姿勢変換のみによる結果を得ることが可能となる。
 このような処理を実現するためには、単純に w メンバに 0 を代入するだけで
-可能であるが、一応専用のメンバ関数も準備されている。
-IsPos() メンバ関数は同次座標を 1 に設定し、平行移動変換を有効とする。
-IsVec() メンバ関数は同次座標を 0 に設定し、平行移動変換を無効とする。
+可能であるが、一応専用のメソッドも準備されている。
+IsPos() メソッドは同次座標を 1 に設定し、平行移動変換を有効とする。
+IsVec() メソッドは同次座標を 0 に設定し、平行移動変換を無効とする。
 
 上記のような処理をプログラム中で実現したい場合は、fk\_HVector クラスを
 利用するとよいだろう。
@@ -557,17 +557,17 @@ fk\_Quaternion クラスは、デフォルトコンストラクタとして何�
 \end{verbatim}
 \end{screen}
 
-設定用のメンバ関数としては、以下のようなものがある。
+設定用のメソッドとしては、以下のようなものがある。
 
 \subsubsection*{void init(void)}
-初期化のためのメンバ関数で、デフォルトコンストラクタと同様にスカラー部が 1、
+初期化のためのメソッドで、デフォルトコンストラクタと同様にスカラー部が 1、
 ベクトル部に零ベクトルが設定される。
 
 \subsubsection*{void set(double t, const fk\_Vector \&v)}
-設定のためのメンバ関数で、t がスカラー部、v がベクトル部に対応している。
+設定のためのメソッドで、t がスカラー部、v がベクトル部に対応している。
 
 \subsubsection*{void set(double s, double x, double y, double z)}
-設定のためのメンバ関数で、四元数の各成分が順に対応している。
+設定のためのメソッドで、四元数の各成分が順に対応している。
 
 \subsubsection*{void setRotate(double theta, const fk\_Vector \&v)}
 角度を theta、回転軸を v とするような回転変換を表わす四元数を生成する。
@@ -680,7 +680,7 @@ fk\_Quaternion 型の代入演算子 ` = ' は、fk\_Vector の場合と同様�
 \subsection{オイラー角との相互変換}
 四元数は任意軸による回転変換を表わすが、これはすなわちオイラー角と
 同義の情報を持つことを意味する。fk\_Quaternion には、fk\_Angle と
-相互変換を行うためのメンバ関数が用意されている。以下にその仕様を述べる。
+相互変換を行うためのメソッドが用意されている。以下にその仕様を述べる。
 
 \subsubsection*{void makeEuler(const fk\_Angle angle)}
 angle が示すオイラー角と同義の四元数を設定する。
@@ -692,8 +692,8 @@ h をヘディング角、p をピッチ角、b をバンク角とするオイ�
 \subsubsection*{fk\_Angle getEuler(void)}
 同義となるオイラー角を返す。
 
-\subsection{各種メンバ関数}
-fk\_Quaternion には、これまで挙げた他にも以下のようなメンバ関数がある。
+\subsection{各種メソッド}
+fk\_Quaternion には、これまで挙げた他にも以下のようなメソッドがある。
 なお、文中では四元数自身を \(\bq = s + xi + yj + zk\) と想定する。
 
 \subsubsection*{double norm(void)}
@@ -716,12 +716,12 @@ fk\_Quaternion には、これまで挙げた他にも以下のようなメン�
 \subsubsection*{fk\_Matrix conv(void)}
 自身が表わす回転変換と同義の行列を返す。
 
-\subsection{補間関数}
+\subsection{補間メソッド}
 四元数の最大の特徴は姿勢の補間である。あるオイラー角から別のオイラー角への
 変化をスムーズに実現することは、オイラー角や行列のみを用いる場合は
 難解であるが、四元数はこういった問題を解決するのに適している。
 
-補間四元数を求めるために、FK では以下の2種類の関数が用意されている。
+補間四元数を求めるために、FK では以下の2種類のメソッドが用意されている。
 
 \subsubsection*{fk\_Quaternion \quad fk\_Math::quatInterLinear(
 fk\_Quaternion q1, fk\_Quaternion q2, double t)}
