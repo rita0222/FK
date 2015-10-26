@@ -283,6 +283,11 @@ namespace FK_CLI {
 		this->pMatrix->makeRot(argR, fk_Vector::GetAxis(argAxis));
 	}
 
+	void fk_Matrix::MakeTrans(double argX, double argY, double argZ)
+	{
+		this->pMatrix->makeTrans(argX, argY, argZ);
+	}
+
 	void fk_Matrix::MakeTrans(fk_Vector^ argV)
 	{
 		if(!argV) return;

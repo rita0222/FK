@@ -514,8 +514,18 @@ namespace FK_CLI {
 		/*!
 		 *	平行移動変換を表す行列を生成します。
 		 *
-		 *	\param[in]	V	移動ベクトル
+		 *	\param[in]	x	x方向の移動量
+		 *	\param[in]	y	y方向の移動量
+		 *	\param[in]	z	z方向の移動量
 		 */
+		void MakeTrans(double x, double y, double z);
+
+		//! 平行移動行列生成関数2
+		/*!
+		*	平行移動変換を表す行列を生成します。
+		*
+		*	\param[in]	V	移動ベクトル
+		*/
 		void MakeTrans(fk_Vector^ V);
 
 		//! オイラー角回転行列生成関数1
@@ -538,7 +548,7 @@ namespace FK_CLI {
 		 */
 		void MakeEuler(fk_Angle^ angle);
 
-		//! 拡大縮小行列生成関数
+		//! 拡大縮小行列生成関数1
 		/*!
 		 *	各座標軸方向への拡大縮小率を個別に設定した行列を生成します。
 		 *
