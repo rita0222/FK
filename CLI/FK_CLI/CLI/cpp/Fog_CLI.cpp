@@ -1,10 +1,11 @@
-﻿#include "Fog_CLI.h"
+﻿#include <FK/Scene.h>
+#include "Fog_CLI.h"
 
 namespace FK_CLI {
 
-	::fk_Fog * fk_Fog::GetP(void)
+	::fk_Scene * fk_Fog::GetP(void)
 	{
-		return (::fk_Fog *)(pBase);
+		return (::fk_Scene *)(pBase);
 	}
 
 	fk_Fog::fk_Fog(bool argNewFlg) : fk_DisplayLink(false)

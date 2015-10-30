@@ -2,9 +2,9 @@
 
 namespace FK_CLI {
 
-	::fk_Boundary * fk_Boundary::GetP(void)
+	::fk_Model * fk_Boundary::GetP(void)
 	{
-		return (::fk_Boundary *)(pBase);
+		return (::fk_Model *)(pBase);
 	}
 
 	fk_Boundary::fk_Boundary(bool argNewFlg) : fk_MatrixAdmin(false)
