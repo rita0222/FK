@@ -90,8 +90,7 @@ ofstream			fk_Window::putStrOFS;
 int					fk_Window::winNum = 0;
 
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
-	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0]),
-	  fk_BaseObject(FK_WINDOW)
+	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0])
 {
 	engine.Init(argW, argH);
 	winOpenFlag = false;

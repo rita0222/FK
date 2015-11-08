@@ -1,7 +1,6 @@
 ﻿#ifndef __FK_SCENE_HEADER__
 #define __FK_SCENE_HEADER__
 
-#include <FK/DList.h>
 #include <FK/Fog.h>
 
 //! シーンを制御するクラス
@@ -35,7 +34,7 @@
  *	\sa fk_DisplayLink, fk_Fog, fk_Window
  */
 
-class fk_Scene : public fk_DisplayLink, public fk_Fog {
+class fk_Scene : public fk_Fog {
 
  private:
 

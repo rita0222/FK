@@ -1,11 +1,10 @@
 ﻿#ifndef __FK_MODEL_HEADER__
 #define __FK_MODEL_HEADER__
 
-#include <FK/MatAdmin.h>
+#include <FK/Boundary.h>
 #include <FK/Palette.h>
 #include <FK/Angle.h>
 #include <FK/IndexFace.h>
-#include <FK/Boundary.h>
 #include <FK/Tree.h>
 #include <memory>
 
@@ -72,7 +71,7 @@ class fk_Color;
  *	\sa fk_MatrixAdmin, fk_Boundary, fk_Shape, fk_Scene, fk_DisplayLink
  */
 
-class fk_Model : public fk_MatrixAdmin, public fk_Boundary {
+class fk_Model : public fk_Boundary {
 
  private:
 	fk_Material			*material;

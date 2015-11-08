@@ -2,6 +2,7 @@
 #define __FK_REFERENCE_HEADER__
 
 #include <FK/Edge.h>
+#include <FK/ParserData.h>
 
 class fk_Vertex;
 class fk_Half;
@@ -68,7 +69,7 @@ class fk_Loop;
  *	\sa fk_ReferenceL2, fk_ReferenceL3, fk_DataAccess, fk_Operation, fk_Modify, fk_Solid
  */
 
-class fk_ReferenceL1 {
+class fk_ReferenceL1 : public fk_ParserData {
   public:
 
 	//! \name 頂点に関連する関数

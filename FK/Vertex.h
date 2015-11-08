@@ -22,7 +22,7 @@ class fk_Loop;
  *	\sa fk_Solid, fk_Half, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
  */
 
-class fk_Vertex : public fk_Topology, public fk_TopologyMaterial {
+class fk_Vertex : public fk_TopologyMaterial {
 
 	friend class		fk_Operation;
 	friend class		fk_DataBase;
