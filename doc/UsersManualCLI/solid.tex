@@ -253,103 +253,155 @@ GetNextV() は、引数にある頂点を代入すると、代入された頂点
 とすればよい。
 \subsection{fk\_Vertex で使用できる参照プロパティ}
 頂点を表す fk\_Vertex では、次のような参照用プロパティが用意されている。
-\begin{description}
- \item[\hspace*{0.6cm}fk\_Vector Position] ~ \\
-	自身の位置ベクトルを参照する。
- \item[\hspace*{0.6cm}fk\_Vector Normal] ~ \\
-	自身の法線ベクトルを参照する。
- \item[\hspace*{0.6cm}fk\_Half OneHalf)] ~ \\
-	自身を始点とする半稜線のうちの1つを参照する。もし自身の
-	頂点を始点とする半稜線がない場合は null となる。
-\end{description}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Vector Position \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の位置ベクトルを参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Vector Normal \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の法線ベクトルを参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Half OneHalf \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身を始点とする半稜線のうちの1つを参照する。もし自身の
+		頂点を始点とする半稜線がない場合は null となる。
+	\end{tabular}
+\end{tabbing}
 
 \subsection{fk\_Half で使用できる参照プロパティ}
 半稜線を表す fk\_Half では、次のような参照用プロパティが用意されている。
-\begin{description}
- \item[\hspace*{0.6cm}fk\_Vertex Vertex] ~ \\
-	自身の始点である頂点を参照する。
- \item[\hspace*{0.6cm}fk\_Half NextHalf] ~ \\
-	自身の前にあたる半稜線を参照する。
- \item[\hspace*{0.6cm}fk\_Half PrevHalf] ~ \\
-	自身の後にあたる半稜線を参照する。
- \item[\hspace*{0.6cm}fk\_Edge ParentEdge] ~ \\
-	自身が属する稜線(親稜線)を参照する。
- \item[\hspace*{0.6cm}fk\_Loop ParentLoop] ~ \\
-	自身が属するループ(親ループ)を参照する。親ループがない場合は
-	null となる。
-\end{description}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Vertex Vertex \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の始点である頂点を参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Half NextHalf \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の前にあたる半稜線を参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Half PrevHalf \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の後にあたる半稜線を参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Edge ParentEdge \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身が属する稜線(親稜線)を参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Loop ParentLoop \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身が属するループ(親ループ)を参照する。親ループがない場合は null となる。
+	\end{tabular}
+\end{tabbing}
 
 \subsection{fk\_Edge で使用できる参照プロパティ}
 稜線を表す fk\_Edge では、次のような参照用プロパティが用意されている。
-\begin{description}
- \item[\hspace*{0.6cm}fk\_Half RightHalf] ~ \\
-	自身の右半稜線を参照する。
- \item[\hspace*{0.6cm}fk\_Half LeftHalf] ~ \\
-	自身の左半稜線を参照する。
-\end{description}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Half RightHalf \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の右半稜線を参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Half LeftHalf \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の左半稜線を参照する。
+	\end{tabular}
+\end{tabbing}
 
 \subsection{fk\_Loop で使用できる参照プロパティ}
 ループを表す fk\_Loop では、次のような参照用プロパティが用意されている。
-\begin{description}
- \item[\hspace*{0.6cm}fk\_Half OneHalf)] ~ \\
-	自身に属している半稜線のうちの1つを参照する。
- \item[\hspace*{0.6cm}fk\_Vector Normal] ~ \\
-	自身の法線ベクトルを参照する。
- \item[\hspace*{0.6cm}int VertexNum)] ~ \\
-	自身に属している頂点数を参照する。
-\end{description}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Half OneHalf \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身に属している半稜線のうちの1つを参照する。
+	\end{tabular} \\ \\
+
+\> fk\_Vector Normal \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身の法線ベクトルを参照する。
+	\end{tabular} \\ \\
+
+\> int VertexNum \\
+	\> \> \begin{tabular}{p{15cm}}
+		自身に属している頂点数を参照する。
+	\end{tabular}
+\end{tabbing}
 
 \subsection{fk\_Solid で使用できる参照用メソッド・プロパティ}
-これまで述べてきた以外に、fk\_Solid が持つ多くの参照用メソッドやプロパティ
-存在する。ここで用いる fk\_Solid インスタンスは、必ず引数として利用する
+これまで述べてきた以外に、fk\_Solid \footnote{厳密には、fk\_Solid の基底クラスの一つである
+fk\_Reference クラス。} が持つ多くの参照用メソッドやプロパティが存在する。
+ここで用いる fk\_Solid インスタンスは、必ず引数として利用する
 位相要素オブジェクトを含むものでなければならない。もし別の
 fk\_Solid 型のインスタンスに含まれる位相要素を代入した場合、
 致命的な障害が出る可能性がある。
 \begin{center}
 {\large 頂点に関連するメソッド}
 \end{center}
-\begin{description}
- \item[\hspace*{0.6cm}fk\_Half * getOneHOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続する半稜線のうちの1つを返す。V1 が
-	独立頂点の場合は nullptr が返る。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Half GetOneHOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続する半稜線のうちの1つを返す。
+		V が独立頂点の場合は null が返る。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}vector\(<\)fk\_Half *\(>\)
-	getAllHOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続する半稜線すべてを vector で返す。
+\> fk\_Half [ ] GetAllHOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続する半稜線すべてを配列で返す。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}vector\(<\)fk\_Edge *\(>\)
-	getEOnVV(fk\_Vertex *V1, fk\_Vertex *V2)] ~ \\
-	V1 と V2 の両方に接続している稜線すべてを
-	vector で返す。		
+\> fk\_Edge [ ] GetEOnVV(fk\_Vertex V1, fk\_Vertex V2) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V1 と V2 の両方に接続している稜線すべてを配列で返す。		
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}fk\_Edge * getOneEOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続している稜線のうちの1つを返す。V1 が
-	独立頂点の場合は nullptr が返る。
+\> fk\_Edge GetOneEOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続している稜線のうちの1つを返す。V が独立頂点の場合は null が返る。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}int getENumOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続している稜線の本数を返す。
+\> int GetENumOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V1 に接続している稜線の本数を返す。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}vector\(<\)fk\_Edge *\(>\)
-	getAllEOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続している稜線すべてを vector で返す。
+\> fk\_Edge [ ] GetAllEOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続している稜線すべてを配列で返す。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}fk\_Loop *getOneLOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続しているループのうちの1つを返す。
-	ひとつのループとも接続していない場合は nullptr を返す。
+\> fk\_Loop GetOneLOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続しているループのうちの1つを返す。
+		ひとつのループとも接続していない場合は null を返す。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}fk\_Vertex *getOneNeighborVOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続している頂点のうちの1つを返す。
-	ひとつの頂点とも接続していない場合は nullptr を返す。
+\> fk\_Vertex GetOneNeighborVOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続している頂点のうちの1つを返す。
+		ひとつの頂点とも接続していない場合は null を返す。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}vector\(<\)fk\_Loop *\(>\)
-	getAllLOnV(fk\_Vertex *V1)] ~ \\
-	V1 に接続しているループすべてを vector で返す。
+\> fk\_Loop [ ] GetAllLOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に接続しているループすべてを配列で返す。
+	\end{tabular} \\ \\
 
- \item[\hspace*{0.6cm}vector\(<\)fk\_Vertex *\(>\)
-	getAllNeighborVOnV(fk\_Vertex *V1)] ~ \\
-	V1 に隣接している頂点すべてを vector で返す。
-
-\end{description}
+\> fk\_Vertex [ ] GetAllNeighborVOnV(fk\_Vertex V) \\
+	\> \> \begin{tabular}{p{15cm}}
+		V に隣接している頂点すべてを配列で返す。
+	\end{tabular}
+\end{tabbing}
 \begin{center}
 {\large 半稜線に関連する関数}
 \end{center}
