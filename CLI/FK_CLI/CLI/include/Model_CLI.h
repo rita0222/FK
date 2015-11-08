@@ -578,6 +578,9 @@ namespace FK_CLI
 
 		//@}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool Equals(fk_Model^ argModel);
+#endif
 
 		//////////////////////////////////////////////////////////////
 		//! \name マテリアル属性除去関数

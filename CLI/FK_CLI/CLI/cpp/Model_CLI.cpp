@@ -302,6 +302,12 @@ namespace FK_CLI {
 
 	////////////////////////////////////////////////////////////////////////////////
 
+	bool fk_Model::Equals(fk_Model^ argModel)
+	{
+		if (!argModel) return false;
+		return ID == argModel->ID;
+	}
+
 	void fk_Model::DeleteMaterial(void)
 	{
 		GetP()->deleteMaterial();
