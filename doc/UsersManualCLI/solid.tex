@@ -299,50 +299,14 @@ GetNextV() は、引数にある頂点を代入すると、代入された頂点
 	自身に属している頂点数を参照する。
 \end{description}
 
-\subsection{fk\_Solid で使用できる参照関数}
-これまで述べてきた以外に、fk\_Solid が持つ多くのメンバ関数が
-存在する。この中には、vector\(<\)???\(>\) の形式を持つものが
-幾つかある。これは STL と呼ばれる汎用 C++ template クラスライブラリの
-うちの格納クラスの一種である。STL 自体の詳しい解説は、比較的新しい
-C++ の解説書を参照してほしい。ここでは、本節で必要と思われるであろう
-機能のみを簡単に紹介する。
-
-この、vector\(<\)???\(>\) で生成されるオブジェクトは、平たく言って
-しまえば \(<\) と \(>\) で囲まれた型による可変長な配列である。
-例えば、getAllEOnV 関数は返り値として
-vector\(<\)fk\_Edge *\(>\) 型を返すが、これは以下のように記述すれば
-よい。
-\\
-\begin{breakbox}
-\begin{verbatim}
-    fk_Solid            solid;
-    fk_Vertex           *v1;
-    vector<fk_Edge *>   edgeArray;
-            :
-            :
-    edgeArray = solid.getAllEOnV(v1);
-\end{verbatim}
-\end{breakbox}
-~ \\
-このとき、EdgeArray には V1 に接続している全ての稜線が格納される。
-EdgeArray に格納された稜線の本数を調べたい場合は、size() メンバ関数を
-用いればよい。また、各要素は配列演算子によってアクセスできる。従って、
-格納された稜線の ID を表示するプログラムは以下のようになる。
-\\
-\begin{breakbox}
-\begin{verbatim}
-    for(unsigned int i = 0; i < edgeArray.size(); i++) {
-        cout << "EDGE ID = " << edgeArray[i]->getID() << "\n";
-    }
-\end{verbatim}
-\end{breakbox}
-~ \\
-なお、ここで用いる fk\_Solid オブジェクトは、必ず引数として利用する
+\subsection{fk\_Solid で使用できる参照用メソッド・プロパティ}
+これまで述べてきた以外に、fk\_Solid が持つ多くの参照用メソッドやプロパティ
+存在する。ここで用いる fk\_Solid インスタンスは、必ず引数として利用する
 位相要素オブジェクトを含むものでなければならない。もし別の
-fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場合、
+fk\_Solid 型のインスタンスに含まれる位相要素を代入した場合、
 致命的な障害が出る可能性がある。
 \begin{center}
-{\large 頂点に関連する関数}
+{\large 頂点に関連するメソッド}
 \end{center}
 \begin{description}
  \item[\hspace*{0.6cm}fk\_Half * getOneHOnV(fk\_Vertex *V1)] ~ \\
