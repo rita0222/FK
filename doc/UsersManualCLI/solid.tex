@@ -166,79 +166,78 @@ fk\_Solid クラスを用いて生成した形状の各位相要素は、それ�
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_Solid    solid;
-    fk_Vertex   *curV;
-    fk_Vector   pos;
-    int         ID;
+    var solid = new fk_Solid();
+    fk_Vertex curV;
+    fk_Vector pos;
+    int ID;
 
-    solid.readVRMLFile("sample.wrl", true, true);
-    curV = solid.getNextV(nullptr);
-    while(curV != nullptr) {
-        pos = curV->getPosition();
-        ID = curV->getID();
-        printf("ID[%d] = (%lf, %lf, %lf)\n", ID, pos.x, pos.y, pos.z);
-        curV = solid.getNextV(curV);
+    solid.ReadVRMLFile("sample.wrl", true, true);
+    curV = solid.GetNextV(null);
+    while(curV != null) {
+        pos = curV.Position;
+        ID = curV.ID;
+        Console.WriteLine("ID[{0}] = {1}", ID, pos);
+        curV = solid.GetNextV(curV);
     }
 \end{verbatim}
 \end{breakbox}
 ~ \\
-このプログラムでは、getPosition() などまだ紹介していない関数も
-含まれているが、注目してほしいのは
-getNextV() 関数である。while ループの外にある getNextV() と
-中にある getNextV() では与えている引数が異なっている。全ての
+このプログラムで注目してほしいのは
+GetNextV() メソッドである。while ループの外にある GetNextV() と
+中にある GetNextV() では与えている引数が異なっている。全ての
 頂点はユニークな ID を保持しており、
-\verb+getNextV(nullptr)+ という記述では現存する頂点
-のうち最も ID が小さな頂点を返す。従って、ループ外の getNextV() では
-curV に最小の ID を持つ頂点オブジェクト(のポインタ)が代入される。
+\verb+GetNextV(null)+ という記述では現存する頂点
+のうち最も ID が小さな頂点を返す。従って、ループ外の GetNextV() では
+curV に最小の ID を持つ頂点インスタンスが代入される。
 
-次にループ中の getNextV() であるが、引数が curV になっている。
-getNextV() は、引数にある頂点を代入すると、代入された頂点 ID の
+次にループ中の GetNextV() であるが、引数が curV になっている。
+GetNextV() は、引数にある頂点を代入すると、代入された頂点 ID の
 次に大きい頂点 ID を持つ頂点を返す。また、もし引数の頂点が
-最大の ID を所持していた場合には nullptr が返される。従って、
+最大の ID を所持していた場合には null が返される。従って、
 例のプログラムの場合にはループから抜けることになる。
-このように、getNextV() をループ中で用いることによって全ての
+このように、GetNextV() をループ中で用いることによって全ての
 頂点位置を表示することが可能となる。
 
 以上が頂点の場合であるが、半稜線、稜線、ループの場合もほとんど
-変化はない。半稜線の場合は getNextV() の代わりに getNextH() を、
-稜線の場合は getNextE() を、ループの場合は getNextL() を使用すればよい。
+変化はない。半稜線の場合は GetNextV() の代わりに GetNextH() を、
+稜線の場合は GetNextE() を、ループの場合は GetNextL() を使用すればよい。
 以下に半稜線の場合を示す。
 \\
 \begin{breakbox}
 \begin{verbatim}
-    fk_Solid   solid;
-    fk_Half    *curH;
+    var solid = new fk_Solid();
+    fk_Half curH;
 
-    curH = solid.getNextH(nullptr);
-    while(curH != nullptr) {
-        printf("Half ID = %d", curH->getID());
-        curH = solid.getNextH(curH);
+    curH = solid.GetNextH(null);
+    while(curH != null) {
+        Console.WriteLine("Half ID = {0}", curH.ID);
+        curH = solid.GetNextH(curH);
     }
 \end{verbatim}
 \end{breakbox}
 \subsection{全ての位相要素に共通の参照関数}
-既に紹介済みなのだが、各要素の ID を得る手段として getID() メンバ関数が
-ある。例えば、ループの ID を調べたいときは以下のようになる。
+各要素の ID を得るには「ID」プロパティを参照する。
+例えば、ループの ID を調べたいときは以下のようになる。
 \\
 \begin{screen}
 \begin{verbatim}
-    fk_Loop     *Loop;
+    fk_Loop     loop;
     int         ID;
             :
             :
-    ID = Loop->getID();
+    ID = loop.ID;
 \end{verbatim}
 \end{screen}
 ~ \\
-その逆で、ID から位相要素オブジェクトを取得したい場合には、以下に
-羅列するメンバ関数を用いる。
+その逆で、ID から位相要素オブジェクトを取得したい場合には、
+以下のような各メソッドを用いる。
 \\
 \begin{screen}
 \begin{verbatim}
-    fk_Vertex   *getVData(int);
-    fk_Half     *getHData(int);
-    fk_Edge     *getEData(int);
-    fk_Loop     *getLData(int);
+    fk_Vertex   GetVData(int);
+    fk_Half     GetHData(int);
+    fk_Edge     GetEData(int);
+    fk_Loop     GetLData(int);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -246,59 +245,58 @@ getNextV() は、引数にある頂点を代入すると、代入された頂点
 \\
 \begin{screen}
 \begin{verbatim}
-    fk_Solid    solid;
-    fk_Vertex   *v = solid.getVData(5);
+    var solid = new fk_Solid();
+    var v = solid.GetVData(5);
 \end{verbatim}
 \end{screen}
 ~ \\
 とすればよい。
-\subsection{fk\_Vertex で使用できる参照関数}
-頂点を表す fk\_Vertex では、次のような参照用のメンバ関数が用意されて
-いる。
+\subsection{fk\_Vertex で使用できる参照プロパティ}
+頂点を表す fk\_Vertex では、次のような参照用プロパティが用意されている。
 \begin{description}
- \item[\hspace*{0.6cm}fk\_Vector getPosition(void)] ~ \\
-	自身の位置ベクトルを返す。
- \item[\hspace*{0.6cm}fk\_Vector getNormal(void)] ~ \\
-	自身の法線ベクトルを返す。
- \item[\hspace*{0.6cm}fk\_Half * getOneHalf(void)] ~ \\
-	自身を始点とする半稜線のうちの1つを返す。もし自身の
-	頂点を始点とする半稜線がない場合は nullptr が返る。
+ \item[\hspace*{0.6cm}fk\_Vector Position] ~ \\
+	自身の位置ベクトルを参照する。
+ \item[\hspace*{0.6cm}fk\_Vector Normal] ~ \\
+	自身の法線ベクトルを参照する。
+ \item[\hspace*{0.6cm}fk\_Half OneHalf)] ~ \\
+	自身を始点とする半稜線のうちの1つを参照する。もし自身の
+	頂点を始点とする半稜線がない場合は null となる。
 \end{description}
 
-\subsection{fk\_Half で使用できる参照関数}
-半稜線を表す fk\_Half では、次のような参照用のメンバ関数が用意されている。
+\subsection{fk\_Half で使用できる参照プロパティ}
+半稜線を表す fk\_Half では、次のような参照用プロパティが用意されている。
 \begin{description}
- \item[\hspace*{0.6cm}fk\_Vertex * getVertex(void)] ~ \\
-	自身の始点である頂点を返す。
- \item[\hspace*{0.6cm}fk\_Half * getNextHalf(void)] ~ \\
-	自身の前にあたる半稜線を返す。
- \item[\hspace*{0.6cm}fk\_Half * getPrevHalf(void)] ~ \\
-	自身の後にあたる半稜線を返す。
- \item[\hspace*{0.6cm}fk\_Edge * getParentEdge(void)] ~ \\
-	自身が属する稜線(親稜線)を返す。
- \item[\hspace*{0.6cm}fk\_Loop * getParentLoop(void)] ~ \\
-	自身が属するループ(親ループ)を返す。親ループがない場合は
-	nullptr が返る。
+ \item[\hspace*{0.6cm}fk\_Vertex Vertex] ~ \\
+	自身の始点である頂点を参照する。
+ \item[\hspace*{0.6cm}fk\_Half NextHalf] ~ \\
+	自身の前にあたる半稜線を参照する。
+ \item[\hspace*{0.6cm}fk\_Half PrevHalf] ~ \\
+	自身の後にあたる半稜線を参照する。
+ \item[\hspace*{0.6cm}fk\_Edge ParentEdge] ~ \\
+	自身が属する稜線(親稜線)を参照する。
+ \item[\hspace*{0.6cm}fk\_Loop ParentLoop] ~ \\
+	自身が属するループ(親ループ)を参照する。親ループがない場合は
+	null となる。
 \end{description}
 
-\subsection{fk\_Edge で使用できる参照関数}
-稜線を表す fk\_Edge では、次のような参照用メンバ関数が用意されている。
+\subsection{fk\_Edge で使用できる参照プロパティ}
+稜線を表す fk\_Edge では、次のような参照用プロパティが用意されている。
 \begin{description}
- \item[\hspace*{0.6cm}fk\_Half * getRightHalf(void)] ~ \\
-	自身の右半稜線を返す。
- \item[\hspace*{0.6cm}fk\_Half * getLeftHalf(void)] ~ \\
-	自身の左半稜線を返す。
+ \item[\hspace*{0.6cm}fk\_Half RightHalf] ~ \\
+	自身の右半稜線を参照する。
+ \item[\hspace*{0.6cm}fk\_Half LeftHalf] ~ \\
+	自身の左半稜線を参照する。
 \end{description}
 
-\subsection{fk\_Loop で使用できる参照関数}
-ループを表す fk\_Loop では、次のような参照用メンバ関数が用意されている。
+\subsection{fk\_Loop で使用できる参照プロパティ}
+ループを表す fk\_Loop では、次のような参照用プロパティが用意されている。
 \begin{description}
- \item[\hspace*{0.6cm}fk\_Half * getOneHalf(void)] ~ \\
-	自身に属している半稜線のうちの1つを返す。
- \item[\hspace*{0.6cm}fk\_Vector * getNormal(void)] ~ \\
-	自身の法線ベクトルを返す。
- \item[\hspace*{0.6cm}int getVNum(void)] ~ \\
-	自身に属している頂点数を返す。
+ \item[\hspace*{0.6cm}fk\_Half OneHalf)] ~ \\
+	自身に属している半稜線のうちの1つを参照する。
+ \item[\hspace*{0.6cm}fk\_Vector Normal] ~ \\
+	自身の法線ベクトルを参照する。
+ \item[\hspace*{0.6cm}int VertexNum)] ~ \\
+	自身に属している頂点数を参照する。
 \end{description}
 
 \subsection{fk\_Solid で使用できる参照関数}
