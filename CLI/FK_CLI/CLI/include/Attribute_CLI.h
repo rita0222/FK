@@ -58,9 +58,9 @@ namespace FK_CLI
 		 */
 		bool SetAttrID(int key, double value);
 
-		//! キーが int 型、値が std::string 型である属性設定関数
+		//! キーが int 型、値が String 型である属性設定関数
 		/*!
-		 *	キーを int 型、値を std::string 型とする属性を設定します。
+		 *	キーを int 型、値を String 型とする属性を設定します。
 		 *
 		 *	\param[in] key		キー。ただし、負数は受け付けません。
 		 *	\param[in] value 	値。
@@ -73,9 +73,9 @@ namespace FK_CLI
 		 */
 		bool SetAttrIS(int key, String^ value);
 
-		//! キーが std::string 型、値が int 型である属性設定関数
+		//! キーが String 型、値が int 型である属性設定関数
 		/*!
-		 *	キーを std::string 型、値を int 型とする属性を設定します。
+		 *	キーを String 型、値を int 型とする属性を設定します。
 		 *	
 		 *	\param[in] key		キー。
 		 *	\param[in] value 	値。
@@ -88,9 +88,9 @@ namespace FK_CLI
 		 */
 		bool SetAttrSI(String^ key, int value);
 
-		//! キーが std::string 型、値が double 型である属性設定関数
+		//! キーが String 型、値が double 型である属性設定関数
 		/*!
-		 *	キーを std::string 型、値を double 型とする属性を設定します。
+		 *	キーを String 型、値を double 型とする属性を設定します。
 		 *	
 		 *	\param[in] key		キー。
 		 *	\param[in] value 	値。
@@ -103,9 +103,9 @@ namespace FK_CLI
 		 */
 		bool SetAttrSD(String^ key, double value);
 
-		//! キーが std::string 型、値が std::string 型である属性設定関数
+		//! キーが String 型、値が String 型である属性設定関数
 		/*!
-		 *	キーを std::string 型、値を std::string 型とする属性を設定します。
+		 *	キーを String 型、値を String 型とする属性を設定します。
 		 *	
 		 *	\param[in] key		キー。
 		 *	\param[in] value 	値。
@@ -147,9 +147,9 @@ namespace FK_CLI
 		 */
 		double GetAttrID(int key);
 
-		//! キーが int 型、値が std::string 型である属性参照関数
+		//! キーが int 型、値が String 型である属性参照関数
 		/*!
-		 *	キーが int 型、値が std::string 型である属性を参照します。
+		 *	キーが int 型、値が String 型である属性を参照します。
 		 *
 		 *	\param[in] key キー
 		 *
@@ -159,9 +159,9 @@ namespace FK_CLI
 		 */
 		String^ GetAttrIS(int key);
 
-		//! キーが std::string 型、値が int 型である属性参照関数
+		//! キーが String 型、値が int 型である属性参照関数
 		/*!
-		 *	キーが std::string 型、値が int 型である属性を参照します。
+		 *	キーが String 型、値が int 型である属性を参照します。
 		 *
 		 *	\param[in] key キー
 		 *
@@ -171,9 +171,9 @@ namespace FK_CLI
 		 */
 		int GetAttrSI(String^ key);
 
-		//! キーが std::string 型、値が double 型である属性参照関数
+		//! キーが String 型、値が double 型である属性参照関数
 		/*!
-		 *	キーが std::string 型、値が double 型である属性を参照します。
+		 *	キーが String 型、値が double 型である属性を参照します。
 		 *
 		 *	\param[in] key キー
 		 *
@@ -183,9 +183,9 @@ namespace FK_CLI
 		 */
 		double GetAttrSD(String^ key);
 
-		//! キーが std::string 型、値が std::string 型である属性参照関数
+		//! キーが String 型、値が String 型である属性参照関数
 		/*!
-		 *	キーが std::string 型、値が std::string 型である属性を参照します。
+		 *	キーが String 型、値が String 型である属性を参照します。
 		 *
 		 *	\param[in] key キー
 		 *
@@ -228,9 +228,9 @@ namespace FK_CLI
 		 */
 		bool ExistAttrID(int key);
 
-		//! キーが int 型、値が std::string 型である属性存在参照関数
+		//! キーが int 型、値が String 型である属性存在参照関数
 		/*!
-		 *	キーが int 型、値が std::string 型である属性に対し、
+		 *	キーが int 型、値が String 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
 		 *
 		 *	\param[in] key キー
@@ -243,9 +243,9 @@ namespace FK_CLI
 		 */
 		bool ExistAttrIS(int key);
 
-		//! キーが std::string 型、値が int 型である属性存在参照関数
+		//! キーが String 型、値が int 型である属性存在参照関数
 		/*!
-		 *	キーが std::string 型、値が int 型である属性に対し、
+		 *	キーが String 型、値が int 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
 		 *
 		 *	\param[in] key キー
@@ -258,9 +258,9 @@ namespace FK_CLI
 		 */
 		bool ExistAttrSI(String^ key);
 
-		//! キーが std::string 型、値が double 型である属性存在参照関数
+		//! キーが String 型、値が double 型である属性存在参照関数
 		/*!
-		 *	キーが std::string 型、値が double 型である属性に対し、
+		 *	キーが String 型、値が double 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
 		 *
 		 *	\param[in] key キー
@@ -273,9 +273,9 @@ namespace FK_CLI
 		 */
 		bool ExistAttrSD(String^ key);
 
-		//! キーが std::string 型、値が std::string 型である属性存在参照関数
+		//! キーが String 型、値が String 型である属性存在参照関数
 		/*!
-		 *	キーが std::string 型、値が std::string 型である属性に対し、
+		 *	キーが String 型、値が String 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
 		 *
 		 *	\param[in] key キー
@@ -321,9 +321,9 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrID(int key);
 
-		//! キーが int 型、値が std::string 型である属性消去関数
+		//! キーが int 型、値が String 型である属性消去関数
 		/*!
-		 *	キーが int 型、値が std::string 型である属性に対し、
+		 *	キーが int 型、値が String 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
 		 *
 		 *	\param[in] key キー
@@ -336,9 +336,9 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrIS(int key);
 
-		//! キーが std::string 型、値が int 型である属性消去関数
+		//! キーが String 型、値が int 型である属性消去関数
 		/*!
-		 *	キーが std::string 型、値が int 型である属性に対し、
+		 *	キーが String 型、値が int 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
 		 *
 		 *	\param[in] key キー
@@ -351,9 +351,9 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrSI(String^ key);
 
-		//! キーが std::string 型、値が double 型である属性消去関数
+		//! キーが String 型、値が double 型である属性消去関数
 		/*!
-		 *	キーが std::string 型、値が double 型である属性に対し、
+		 *	キーが String 型、値が double 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
 		 *
 		 *	\param[in] key キー
@@ -366,9 +366,9 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrSD(String^ key);
 
-		//! キーが std::string 型、値が std::string 型である属性消去関数
+		//! キーが String 型、値が String 型である属性消去関数
 		/*!
-		 *	キーが std::string 型、値が std::string 型である属性に対し、
+		 *	キーが String 型、値が String 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
 		 *
 		 *	\param[in] key キー
