@@ -88,7 +88,7 @@ namespace FK_CLI
 		
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Model::fk_Model(bool argNewFlg);
+		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
 #endif
 
 		//! コンストラクタ

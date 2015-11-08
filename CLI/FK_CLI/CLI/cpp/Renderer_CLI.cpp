@@ -162,10 +162,7 @@ namespace FK_CLI {
 		cli::array<fk_PickData^>^ ret = gcnew cli::array<fk_PickData^>(size);
 		for (int i = 0; i < size; ++i)
 		{
-			fk_Model^ pickedModel = gcnew fk_Model(false);
-			pickedModel->pBase = pick.getModel(i);
-			pickedModel->dFlg = false;
-
+			fk_Model^ pickedModel = gcnew fk_Model(pick.getModel(i));
 			fk_PickedTopologyType^ pickedType;
 			switch (pick.getType(i))
 			{

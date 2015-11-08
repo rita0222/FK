@@ -66,10 +66,7 @@ namespace FK_CLI {
 
 	fk_Model^ fk_AudioBase::Model::get()	
 	{
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = GetP()->getModel();
-		M->dFlg = false;
-		return M;
+		return gcnew fk_Model(GetP()->getModel());
 	}
 
 	void fk_AudioBase::Model::set(fk_Model^ argM)
@@ -143,10 +140,7 @@ namespace FK_CLI {
 	{
 		::fk_Model *pM = ::fk_AudioBase::getListenerModel();
 		if(pM == nullptr) return nullptr;
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = ::fk_AudioBase::getListenerModel();
-		M->dFlg = false;
-		return M;
+		return gcnew fk_Model(pM);
 	}
 }
 

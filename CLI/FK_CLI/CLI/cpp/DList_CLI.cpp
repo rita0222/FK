@@ -9,9 +9,7 @@ namespace FK_CLI {
 
 	void fk_DisplayLink::CameraUpdate(void)
 	{
-		_camera = gcnew fk_Model(false);
-		_camera->pBase = const_cast<::fk_Model *>(GetP()->getCamera());
-		_camera->dFlg = false;
+		_camera = gcnew fk_Model(const_cast<::fk_Model *>(GetP()->getCamera()));
 	}
 
 	::fk_StereoChannel fk_DisplayLink::GetStereo(FK_CLI::fk_StereoChannel argC)

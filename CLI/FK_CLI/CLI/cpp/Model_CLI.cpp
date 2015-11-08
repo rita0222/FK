@@ -13,9 +13,15 @@ namespace FK_CLI {
 		modelList->Add(this);
 	}
 
-	fk_Model::fk_Model(bool argNewFlg): fk_Boundary(false), shape(nullptr)
+	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr): fk_Boundary(false), shape(nullptr)
 	{
-		if(argNewFlg == true) pBase = new ::fk_Model();
+		if (argUnmanagedPtr == nullptr) {
+			pBase = new ::fk_Model();
+		} else {
+			pBase = argUnmanagedPtr;
+			dFlg = false;
+		}
+
 		modelList->Add(this);
 	}
 
@@ -269,10 +275,9 @@ namespace FK_CLI {
 
 	fk_Model^ fk_Model::Parent::get(void)
 	{
-		if(GetP()->getParent() == nullptr) return nullptr;
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = GetP()->getParent();
-		return M;
+		::fk_Model *pM = GetP()->getParent();
+		if(pM == nullptr) return nullptr;
+		return gcnew fk_Model(pM);
 	}
 
 	void fk_Model::InterMode::set(bool argMode)

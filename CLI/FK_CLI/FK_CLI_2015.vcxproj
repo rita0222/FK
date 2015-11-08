@@ -261,6 +261,7 @@
     <ClCompile Include="CLI\cpp\ParticleSet_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Particle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Performer_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\PickData_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Plane_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
@@ -442,6 +443,7 @@
     <ClInclude Include="CLI\include\ParticleSet_CLI.h" />
     <ClInclude Include="CLI\include\Particle_CLI.h" />
     <ClInclude Include="CLI\include\Performer_CLI.h" />
+    <ClInclude Include="CLI\include\PickData_CLI.h" />
     <ClInclude Include="CLI\include\Plane_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
