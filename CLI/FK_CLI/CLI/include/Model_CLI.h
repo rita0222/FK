@@ -88,7 +88,7 @@ namespace FK_CLI
 		
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Model::fk_Model(bool argNewFlg);
+		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
 #endif
 
 		//! コンストラクタ
@@ -578,6 +578,9 @@ namespace FK_CLI
 
 		//@}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool Equals(fk_Model^ argModel);
+#endif
 
 		//////////////////////////////////////////////////////////////
 		//! \name マテリアル属性除去関数

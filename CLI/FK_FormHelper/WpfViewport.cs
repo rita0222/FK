@@ -7,26 +7,37 @@ using System.Windows.Threading;
 
 namespace FK_FormHelper
 {
+    /// <summary>
+    /// WPF用のビューポート
+    /// </summary>
     public class fk_WpfViewport : fk_Viewport
     {
-        private DispatcherTimer timerWpf = new DispatcherTimer();
-
-        public fk_WpfViewport() : base(new System.Windows.Forms.Panel())
-        {
-            timerWpf.Interval = TimeSpan.FromMilliseconds(16);
-            timerWpf.Tick += (s, ee) => Draw();
+        public fk_WpfViewport(System.Windows.Forms.Control argPanel) : base(argPanel)
+        {            
         }
 
-        public override bool IsDrawing
+        protected override ITimer MakeTimer()
         {
-            get { return timerWpf.IsEnabled; }
-            set { timerWpf.IsEnabled = value; }
+            return new WpfTimer();
         }
 
-        public override int DrawInterval
+        /// <summary>
+        /// WPF用のタイマーの実装です。
+        /// WinFormのタイマーとの差分を吸収しています。
+        /// </summary>
+        private class WpfTimer : DispatcherTimer, ITimer
         {
-            get { return timerWpf.Interval.Milliseconds; }
-            set { timerWpf.Interval = TimeSpan.FromMilliseconds(value); }
+            public bool Enabled
+            {
+                get { return base.IsEnabled; }
+                set { base.IsEnabled = value; }
+            }
+
+            public new int Interval
+            {
+                get { return base.Interval.Milliseconds; }
+                set { base.Interval = TimeSpan.FromMilliseconds(value); }
+            }
         }
     }
 }
