@@ -14,8 +14,8 @@ mkdir ../FK_VC13/vs_wizard
 
 cp lib_Win32/*.lib                                                                    ../FK_VC13/lib
 cp ../extlibs/fltk-1.3.3/ide/VisualC2013/bin/Win32/*.lib                              ../FK_VC13/lib
-mv ../FK_VC13/lib/fltkzlib.lib fltkz.lib
-mv ../FK_VC13/lib/fltkzlib_d.lib fltkz_d.lib
+mv ../FK_VC13/lib/fltkzlib.lib ../FK_VC13/lib/fltkz.lib
+mv ../FK_VC13/lib/fltkzlib_d.lib ../FK_VC13/lib/fltkz_d.lib
 cp ../extlibs/freetype-2.6/objs/vc2013/Win32/freetype26MT.lib                         ../FK_VC13/lib/freetype2MT.lib
 cp ../extlibs/freetype-2.6/objs/vc2013/Win32/freetype26MTd.lib                        ../FK_VC13/lib/freetype2MT_d.lib
 cp ../extlibs/libiconv/ReleaseStatic_Win32/libiconv_2013Static.lib                    ../FK_VC13/lib/libiconv.lib
@@ -33,8 +33,8 @@ cp ../extlibs/glew-1.12.0/bin/Release/Win32/*.*                                 
 
 cp lib_x64/*.lib                                                                      ../FK_VC13/lib_x64
 cp ../extlibs/fltk-1.3.3/ide/VisualC2013/bin/x64/*.lib                                ../FK_VC13/lib_x64
-mv ../FK_VC13/lib_x64/fltkzlib.lib fltkz.lib
-mv ../FK_VC13/lib_x64/fltkzlib_d.lib fltkz_d.lib
+mv ../FK_VC13/lib_x64/fltkzlib.lib ../FK_VC13/lib_x64/fltkz.lib
+mv ../FK_VC13/lib_x64/fltkzlib_d.lib ../FK_VC13/lib_x64/fltkz_d.lib
 cp ../extlibs/freetype-2.6/objs/vc2013/x64/freetype26MT.lib                           ../FK_VC13/lib_x64/freetype2MT.lib
 cp ../extlibs/freetype-2.6/objs/vc2013/x64/freetype26MTd.lib                          ../FK_VC13/lib_x64/freetype2MT_d.lib
 cp ../extlibs/libiconv/ReleaseStatic_x64/libiconv_2013Static.lib                      ../FK_VC13/lib_x64/libiconv.lib
@@ -68,4 +68,7 @@ cp ../extlibs/OpenAL/redist/*.exe ../FK_VC13/redist
 mkdir ../FK_VC13/doc/glew
 cp ../extlibs/glew-1.12.0/LICENSE.txt ../FK_VC13/doc/glew
 cp -r ../doc ../FK_VC13/doc
+rm ../FK_VC13/doc/Version_CLI.txt
+rm ../FK_VC13/doc/Version_2015.txt
+mv ../FK_VC13/doc/Version_2013.txt Version.txt
 cp -r vs_wizard ../FK_VC13/vs_wizard

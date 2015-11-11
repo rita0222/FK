@@ -68,6 +68,9 @@ copy ..\extlibs\OpenAL\redist\*.exe ..\FK_VC15\redist
 md ..\FK_VC15\doc\glew
 copy ..\extlibs\glew-1.12.0\LICENSE.txt ..\FK_VC15\doc\glew
 xcopy /s /e ..\doc ..\FK_VC15\doc
+del ..\FK_VC15\doc\Version_CLI.txt
+del ..\FK_VC15\doc\Version_2013.txt
+ren ..\FK_VC15\doc\Version_2015.txt Version.txt
 xcopy /s /e vs_wizard ..\FK_VC15\vs_wizard
 
 echo Done!
