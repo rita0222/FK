@@ -87,28 +87,19 @@ namespace FK_CLI {
 
 	fk_Model^ fk_Performer::GetBaseModel(void)
 	{
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = GetP()->getBaseModel();
-		M->dFlg = false;
-		return M;
+		return gcnew fk_Model(GetP()->getBaseModel());
 	}
 
 	fk_Model^ fk_Performer::GetObjectModel(int argID)
 	{
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = GetP()->getObjectModel(argID);
-		M->dFlg = false;
-		return M;
+		return gcnew fk_Model(GetP()->getObjectModel(argID));
 	}
 
 	fk_Model^ fk_Performer::GetJointModel(int argID)
 	{
-		fk_Model^ M = gcnew fk_Model(false);
-		M->pBase = GetP()->getJointModel(argID);
-		M->dFlg = false;
-		return M;
-
+		return gcnew fk_Model(GetP()->getJointModel(argID));
 	}
+
 	int fk_Performer::GetNowFrame(int argID)
 	{
 		return GetP()->getNowFrame(argID);

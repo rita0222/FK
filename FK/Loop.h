@@ -41,7 +41,7 @@ enum fk_LoopCrossStatus {
  *		fk_TopologyMaterial, fk_Attribute, fk_Surface
  */
 
-class fk_Loop : public fk_Topology, public fk_TopologyMaterial {
+class fk_Loop : public fk_TopologyMaterial {
 
 	friend class	fk_Operation;
 	friend class	fk_DataBase;

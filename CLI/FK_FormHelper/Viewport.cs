@@ -13,16 +13,19 @@ namespace FK_FormHelper
     /// </summary>
     public class fk_Viewport : IDisposable
     {
-        private fk_Renderer renderer = new fk_Renderer();
-        private Timer timerWinForm = new Timer();
-        private Panel panel = null;
-        private fk_Scene scene = null;
+        private Control panel;
+        private fk_Scene scene;
+        private readonly fk_Renderer renderer;
+        protected readonly ITimer timer;
 
-        public fk_Viewport(Panel argPanel)
+        public fk_Viewport(Control argPanel)
         {
+            renderer = new fk_Renderer();
+            timer = MakeTimer();
+            timer.Interval = 16;
+            timer.Tick += (s, e) => Draw();
+
             Setup(argPanel);
-            timerWinForm.Interval = 16;
-            timerWinForm.Tick += (s, e) => Draw();
         }
 
         public fk_Scene Scene
@@ -35,23 +38,23 @@ namespace FK_FormHelper
             set
             {
                 scene = value;
-                if (renderer != null) renderer.SetScene(scene);
+                renderer.SetScene(scene);
             }
         }
 
-        public virtual bool IsDrawing
+        public bool IsDrawing
         {
-            get { return timerWinForm.Enabled; }
-            set { timerWinForm.Enabled = value; }
+            get { return timer.Enabled; }
+            set { timer.Enabled = value; }
         }
 
-        public virtual int DrawInterval
+        public int DrawInterval
         {
-            get { return timerWinForm.Interval; }
-            set { timerWinForm.Interval = value; }
+            get { return timer.Interval; }
+            set { timer.Interval = value; }
         }
 
-        public Panel Panel
+        public Control Panel
         {
             get { return panel; }
         }
@@ -71,7 +74,40 @@ namespace FK_FormHelper
             if (PostDraw != null) PostDraw(null, null);
         }
 
-        private void Setup(Panel argPanel)
+        public bool GetProjectPosition(double argX, double argY, fk_Plane argPlane, out fk_Vector outPos)
+        {
+            var pos2d = new fk_Vector();
+            bool ret = renderer.GetProjectPosition(argX, argY, argPlane, pos2d);
+            outPos = pos2d;
+            return ret;
+        }
+
+        public bool GetProjectPosition(double argX, double argY, double argDist, out fk_Vector outPos)
+        {
+            var pos2d = new fk_Vector();
+            bool ret = renderer.GetProjectPosition(argX, argY, argDist, pos2d);
+            outPos = pos2d;
+            return ret;
+        }
+
+        public void GetWindowPosition(fk_Vector argPos, out fk_Vector outPos)
+        {
+            var pos2d = new fk_Vector();
+            renderer.GetWindowPosition(argPos, pos2d);
+            outPos = pos2d;
+        }
+
+        public fk_PickData[] GetPickData(int argX, int argY, int argPixel)
+        {
+            return renderer.GetPickData(argX, argY, argPixel);
+        }
+
+        protected virtual ITimer MakeTimer()
+        {
+            return new WinFormTimer();
+        }
+
+        private void Setup(Control argPanel)
         {
             panel = argPanel;
 
@@ -101,5 +137,21 @@ namespace FK_FormHelper
             IsDrawing = true;
             panel.HandleCreated -= InitializeRenderer;
         }
+
+        /// <summary>
+        /// タイマーAPIを共通化するためのインタフェースです。
+        /// </summary>
+        protected interface ITimer
+        {
+            bool Enabled { get; set; }
+            int Interval { get; set; }
+            event EventHandler Tick;
+        }
+
+        /// <summary>
+        /// WinFormのタイマーの実装です。
+        /// 既存の実装をインタフェースに当てはめるだけです。
+        /// </summary>
+        private class WinFormTimer : Timer, ITimer { }
     }
 }

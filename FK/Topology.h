@@ -83,7 +83,7 @@ class fk_Topology : public fk_Attribute {
  *
  *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_Shape, fk_Model
  */
-class fk_TopologyMaterial {
+class fk_TopologyMaterial : public fk_Topology {
 
 	friend class		fk_DataBase;
 

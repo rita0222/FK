@@ -37,7 +37,7 @@ enum fk_CurveType {
  *		fk_TopologyMaterial, fk_Attribute, fk_Curve, fk_BezCurve, fk_BSplCurve
  */
 
-class fk_Edge : public fk_Topology, public fk_TopologyMaterial {
+class fk_Edge : public fk_TopologyMaterial {
 
 	friend class		fk_Operation;
 	friend class		fk_DataBase;

@@ -70,7 +70,7 @@ copy ..\extlibs\glew-1.12.0\LICENSE.txt ..\FK_VC13\doc\glew
 copy ..\doc\JapaneseStringInFLTK.txt ..\FK_VC13\doc
 copy ..\doc\License.txt ..\FK_VC13\doc
 copy ..\doc\RelativeLibraries.txt ..\FK_VC13\doc
-copy ..\doc\Version.txt ..\FK_VC13\doc
+copy ..\doc\Version_2013.txt ..\FK_VC13\doc\Version.txt
 
 xcopy /s /e vs_wizard ..\FK_VC13\vs_wizard
 

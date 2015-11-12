@@ -2,6 +2,7 @@
 #define __FK_FOG_HEADER__
 
 #include <FK/Material.h>
+#include <FK/DList.h>
 
 //! 霧効果の減衰関数を表す列挙型
 enum fk_FogMode {
@@ -27,7 +28,7 @@ enum fk_FogOption {
  *	\sa fk_Scene, fk_DisplayLink, fk_Color
  */
 
-class fk_Fog {
+class fk_Fog : public fk_DisplayLink {
 
 	friend class	fk_Window;
 	friend class	fk_GraphicsEngine;

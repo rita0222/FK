@@ -71,7 +71,8 @@
  ****************************************************************************/
 #include <FK/Model.h>
 
-fk_Boundary::fk_Boundary(void)
+fk_Boundary::fk_Boundary(fk_ObjectType argType)
+	: fk_MatrixAdmin(argType)
 {
 	bMode = FK_B_NONE;
 	bDrawToggle = false;

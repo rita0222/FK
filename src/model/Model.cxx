@@ -83,7 +83,7 @@ typedef list<fk_Model *>::iterator	mi;
 static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_MatrixAdmin(FK_MODEL)
+	: fk_Boundary(FK_MODEL)
 {
 	setDrawMode(FK_NONEMODE);
 	setMaterialMode(FK_CHILD_MODE);

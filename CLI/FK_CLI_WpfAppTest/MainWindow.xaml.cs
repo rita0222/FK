@@ -33,8 +33,7 @@ namespace FK_CLI_WpfAppTest
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            viewport = new fk_WpfViewport();
-            PanelHoster.Child = viewport.Panel;
+            viewport = new fk_WpfViewport(this.ViewportPanel);
 
             scene = new fk_Scene();
             viewport.Scene = scene;
@@ -55,6 +54,7 @@ namespace FK_CLI_WpfAppTest
             var block = new fk_Block(50.0, 70.0, 40.0);
             blockModel.Shape = block;
             blockModel.Material = fk_Material.Yellow;
+            blockModel.PickMode = true;
             scene.EntryModel(blockModel);
 
             // 線分モデル生成
@@ -98,6 +98,18 @@ namespace FK_CLI_WpfAppTest
                 if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
                 ++count;
                 this.TextBox1.Text = camera.Position.ToString();
+            };
+
+            ViewportPanel.MouseDown += (s, ee) =>
+            {
+                var result = viewport.GetPickData(ee.X, ee.Y, 1);
+                if (result.Any())
+                {
+                    if (result[0].Model.Equals(blockModel))
+                    {
+                        result[0].Model.Material = fk_Material.Red;
+                    }
+                }
             };
 
             Button1.Click += (s, ee) =>

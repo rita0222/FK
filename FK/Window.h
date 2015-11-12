@@ -131,7 +131,7 @@ typedef fk_SwitchStatus fkut_SwitchStatus;
  *	\sa fk_Scene
  */
 
-class fk_Window : public Fl_Gl_Window, public fk_BaseObject {
+class fk_Window : public Fl_Gl_Window {
 
  private:
 

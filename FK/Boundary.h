@@ -1,10 +1,11 @@
 ﻿#ifndef __FK_BOUNDARY_HEADER__
 #define __FK_BOUNDARY_HEADER__
 
-#include <FK/Vector.h>
+#include <FK/MatAdmin.h>
 
 class fk_Model;
 class fk_Color;
+class fk_IndexFaceSet;
 
 //! 境界ボリュームのタイプを表す列挙型
 enum fk_BoundaryMode {
@@ -68,7 +69,7 @@ const fk_DrawMode	FK_TEXTUREMODE			= 0x002;
  *	\sa fk_Model
  */
 
-class fk_Boundary {
+class fk_Boundary : public fk_MatrixAdmin {
  private:
 	fk_BoundaryMode		bMode;
 	bool				bDrawToggle;
@@ -90,7 +91,7 @@ class fk_Boundary {
  public:
 
 	//! コンストラクタ
-	fk_Boundary(void);
+	fk_Boundary(fk_ObjectType);
 
 	//! デストラクタ
 	virtual ~fk_Boundary();

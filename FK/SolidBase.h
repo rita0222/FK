@@ -2,7 +2,7 @@
 #define __FK_SOLID_BASE_HEADER__
 
 #include <FK/Modify.h>
-#include <FK/ParserBase.H>
+//#include <FK/ParserBase.H>
 
 //! ソリッドモデル形状変換クラス
 /*!
@@ -25,7 +25,8 @@
  *	\sa fk_Solid, fk_IndexFaceSet
  */
 
-class fk_SolidBase : public fk_Modify, public fk_ParserData {
+//class fk_SolidBase : public fk_Modify, public fk_ParserData {
+class fk_SolidBase : public fk_Modify {
 
  protected:
 

@@ -118,6 +118,73 @@ namespace FK_CLI {
 
 		SwapBuffers(hDC);
 	}
+
+	bool fk_Renderer::GetProjectPosition(double argX, double argY,
+		fk_Plane^ argPlane, fk_Vector^ argPos)
+	{
+		if (!argPlane || !argPos) return false;
+		::fk_Vector	retPos;
+		bool		ret;
+
+		ret = pEngine->GetProjectPosition(argX, argY, argPlane->pPlane, &retPos);
+		argPos->Set(retPos.x, retPos.y, retPos.z);
+		return ret;
+	}
+
+	bool fk_Renderer::GetProjectPosition(double argX, double argY,
+		double argDist, fk_Vector^ argPos)
+	{
+		if (!argPos) return false;
+		::fk_Vector	retPos;
+		bool		ret;
+
+		ret = pEngine->GetProjectPosition(argX, argY, argDist, &retPos);
+		argPos->Set(retPos.x, retPos.y, retPos.z);
+		return ret;
+	}
+
+	bool fk_Renderer::GetWindowPosition(fk_Vector^ argPos_3D, fk_Vector^ argPos_2D)
+	{
+		if (!argPos_3D || !argPos_2D) return false;
+		::fk_Vector	retPos;
+		bool		ret;
+
+		ret = pEngine->GetWindowPosition(argPos_3D, &retPos);
+		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
+		return ret;
+	}
+
+	cli::array<fk_PickData^>^ fk_Renderer::GetPickData(int argX, int argY, int argPixel)
+	{
+		::fk_PickData pick;
+		pEngine->GetPickData(&pick, argPixel, argX, argY);
+		int size = pick.getSize();
+		cli::array<fk_PickData^>^ ret = gcnew cli::array<fk_PickData^>(size);
+		for (int i = 0; i < size; ++i)
+		{
+			fk_Model^ pickedModel = gcnew fk_Model(pick.getModel(i));
+			fk_PickedTopologyType^ pickedType;
+			switch (pick.getType(i))
+			{
+			case FK_VERTEX:
+				pickedType = fk_PickedTopologyType::VERTEX;
+				break;
+			case FK_EDGE:
+				pickedType = fk_PickedTopologyType::EDGE;
+				break;
+			case FK_LOOP:
+				pickedType = fk_PickedTopologyType::LOOP;
+				break;
+			default:
+				pickedType = fk_PickedTopologyType::NONE;
+				break;
+			}
+
+			ret[i] = gcnew fk_PickData(pickedModel, pickedType, pick.getID(i), pick.getFarDepth(i), pick.getNearDepth(i));
+		}
+
+		return ret;
+	}
 }
 /****************************************************************************
  *
