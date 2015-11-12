@@ -299,7 +299,7 @@ public:
 	void		clearText(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	void		MakePixelBase(fk_Window *argWin, fk_Scene *argScn);
+	void		MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *argScn);
 	void		SetFinalizeMode(void);
 #endif
 

@@ -13,7 +13,13 @@ namespace FK_CLI {
 		modelList->Add(this);
 	}
 
-	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr): fk_Boundary(false), shape(nullptr)
+	fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false), shape(nullptr)
+	{
+		if (argNewFlg) pBase = new ::fk_Model();
+		modelList->Add(this);
+	}
+
+	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
 	{
 		if (argUnmanagedPtr == nullptr) {
 			pBase = new ::fk_Model();

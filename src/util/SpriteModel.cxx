@@ -105,21 +105,21 @@ bool fk_SpriteModel::entryFirst(fk_Window *argWin, fk_Scene *argScn, fk_Model *a
 
 	if(argCam != NULL) argScn->entryCamera(argCam);
 
-	MakePixelBase(argWin, argScn);
+	MakePixelBase(fk_Dimension(argWin->x(), argWin->y()), argScn);
 	argScn->entryOverlayModel(this);
 
 	return true;
 }
 
-void fk_SpriteModel::MakePixelBase(fk_Window *argWin, fk_Scene *argScn)
+void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *argScn)
 {
 	fk_Perspective	*pers = NULL;
 	fk_Ortho		*orth = NULL;
 	fk_Frustum		*frus = NULL;
 	fk_ProjectBase	*proj = NULL;
 
-	double	dW = static_cast<double>(argWin->w());
-	double	dH = static_cast<double>(argWin->h());
+	double	dW = static_cast<double>(argWinSize.w);
+	double	dH = static_cast<double>(argWinSize.h);
 	double	trueD = (dW < dH) ? dW : dH;
 
 	if(argScn->getCamera() == NULL) return;
@@ -160,6 +160,7 @@ void fk_SpriteModel::MakePixelBase(fk_Window *argWin, fk_Scene *argScn)
 		pixelBase.glMoveTo((regR + regL)/2.0, (regT + regB)/2.0, -nearPut);
 		pixelBase.setScale((regR - regL)/dW, (regT - regB)/dH, 1.0);
 	}
+
 	pixelBase.glAngle(0.0, 0.0, 0.0);
 
 	return;

@@ -84,13 +84,14 @@ namespace FK_CLI
 		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
 		fk_Shape^ shape;
 		
-		::fk_Model * GetP(void);
-		
-	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
+		fk_Model::fk_Model(bool argNewFlg);
 		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
 #endif
 
+		::fk_Model * GetP(void);
+		
+	public:
 		//! コンストラクタ
 		fk_Model::fk_Model();
 

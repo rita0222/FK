@@ -389,7 +389,7 @@ void fk_AppWindow::remove(fk_Model &model, fk_GuideObject &argGuide)
 
 void fk_AppWindow::entry(fk_SpriteModel &model)
 {
-	model.MakePixelBase(drawWin, ref_scene);
+	model.MakePixelBase(fk_Dimension(drawWin->x(), drawWin->y()), ref_scene);
 	ref_scene->entryOverlayModel(&model);
 }
 
@@ -434,7 +434,7 @@ void fk_AppWindow::remove(fk_Model *model, fk_GuideObject *argGuide)
 
 void fk_AppWindow::entry(fk_SpriteModel *model)
 {
-	model->MakePixelBase(drawWin, ref_scene);
+	model->MakePixelBase(fk_Dimension(drawWin->x(), drawWin->y()), ref_scene);
 	ref_scene->entryOverlayModel(model);
 }
 

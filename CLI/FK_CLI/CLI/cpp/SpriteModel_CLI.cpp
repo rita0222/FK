@@ -131,6 +131,12 @@ namespace FK_CLI {
 	{
 		GetP()->clearText();
 	}
+
+	void fk_SpriteModel::MakePixelBase(fk_Dimension^ argWinSize, fk_Scene^ argScn)
+	{
+		if (!argWinSize || !argScn) return;
+		GetP()->MakePixelBase(*(argWinSize->GetP()), argScn->GetP());
+	}
 }
 /****************************************************************************
  *

@@ -6,6 +6,7 @@
 #include "Model_CLI.h"
 #include "Texture_CLI.h"
 #include "TextImage_CLI.h"
+#include "Scene_CLI.h"
 
 namespace FK_CLI
 {
@@ -246,6 +247,10 @@ namespace FK_CLI
 		 *	\sa DrawText(String^), DrawText(String^, bool)
 		 */
 		void			ClearText(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void			MakePixelBase(fk_Dimension^ argWinSize, fk_Scene^ argScn);
+#endif
 	};
 }
 
