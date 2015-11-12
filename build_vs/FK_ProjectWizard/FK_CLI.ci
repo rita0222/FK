@@ -56,8 +56,8 @@
       
    </files>
    <runx listview >
-      <_><type>app</><path>custom</><file>#setuppath#\redist\oalinst.exe</><cmdline></><wait>1</><workdir>custom</><custdir>#setuppath#\redist</><when>end</></>
-<_><type>app</><path>custom</><file>#setuppath#\redist\vcredist_x86.exe</><cmdline></><wait>1</><workdir>custom</><custdir>#setuppath#\redist</><when>end</></>
+      <_><type>app</><path>custom</><file>#setuppath#\redist\oalinst.exe</><cmdline>/silent</><wait>1</><workdir>custom</><custdir>#setuppath#\redist</><when>end</></>
+<_><type>app</><path>custom</><file>#setuppath#\redist\vcredist_x86.exe</><cmdline>/quiet</><wait>1</><workdir>custom</><custdir>#setuppath#\redist</><when>end</></>
 
    </runx>
    <registry listview >

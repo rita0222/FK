@@ -67,7 +67,11 @@ copy ..\extlibs\OpenAL\redist\*.exe ..\FK_VC13\redist
 
 md ..\FK_VC13\doc\glew
 copy ..\extlibs\glew-1.12.0\LICENSE.txt ..\FK_VC13\doc\glew
-xcopy /s /e ..\doc ..\FK_VC13\doc
+copy ..\doc\JapaneseStringInFLTK.txt ..\FK_VC13\doc
+copy ..\doc\License.txt ..\FK_VC13\doc
+copy ..\doc\RelativeLibraries.txt ..\FK_VC13\doc
+copy ..\doc\Version.txt ..\FK_VC13\doc
+
 xcopy /s /e vs_wizard ..\FK_VC13\vs_wizard
 
 echo Done!

@@ -67,5 +67,9 @@ cp ../extlibs/OpenAL/redist/*.exe ../FK_VC15/redist
 
 mkdir ../FK_VC15/doc/glew
 cp ../extlibs/glew-1.12.0/LICENSE.txt ../FK_VC15/doc/glew
-cp -r ../doc ../FK_VC15/doc
+cp ../doc/JapaneseStringInFLTK.txt ../FK_VC15/doc
+cp ../doc/License.txt ../FK_VC15/doc
+cp ../doc/RelativeLibraries.txt ../FK_VC15/doc
+cp ../doc/Version.txt ../FK_VC15/doc
+
 cp -r vs_wizard ../FK_VC15/vs_wizard
