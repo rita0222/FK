@@ -67,8 +67,9 @@ cp ../extlibs/OpenAL/redist/*.exe ../FK_VC13/redist
 
 mkdir ../FK_VC13/doc/glew
 cp ../extlibs/glew-1.12.0/LICENSE.txt ../FK_VC13/doc/glew
-cp -r ../doc ../FK_VC13/doc
-rm ../FK_VC13/doc/Version_CLI.txt
-rm ../FK_VC13/doc/Version_2015.txt
-mv ../FK_VC13/doc/Version_2013.txt Version.txt
+cp ../doc/JapaneseStringInFLTK.txt ../FK_VC13/doc
+cp ../doc/License.txt ../FK_VC13/doc
+cp ../doc/RelativeLibraries.txt ../FK_VC13/doc
+cp ../doc/Version_2013.txt ../FK_VC13/doc/Version.txt
+
 cp -r vs_wizard ../FK_VC13/vs_wizard

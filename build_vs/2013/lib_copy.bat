@@ -67,10 +67,11 @@ copy ..\extlibs\OpenAL\redist\*.exe ..\FK_VC13\redist
 
 md ..\FK_VC13\doc\glew
 copy ..\extlibs\glew-1.12.0\LICENSE.txt ..\FK_VC13\doc\glew
-xcopy /s /e ..\doc ..\FK_VC13\doc
-del ..\FK_VC13\doc\Version_CLI.txt
-del ..\FK_VC13\doc\Version_2015.txt
-ren ..\FK_VC13\doc\Version_2013.txt Version.txt
+copy ..\doc\JapaneseStringInFLTK.txt ..\FK_VC13\doc
+copy ..\doc\License.txt ..\FK_VC13\doc
+copy ..\doc\RelativeLibraries.txt ..\FK_VC13\doc
+copy ..\doc\Version_2013.txt ..\FK_VC13\doc\Version.txt
+
 xcopy /s /e vs_wizard ..\FK_VC13\vs_wizard
 
 echo Done!
