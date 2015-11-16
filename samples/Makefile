@@ -41,6 +41,8 @@ FKLIB		= \
 			-lFK3_solid \
 			-lFK3_shape \
 			-lFK3_parser \
+			-lFK3_shape \
+			-lFK3_solid \
 			-lFK3_material \
 			-lFK3_math \
 			-lFK3_base \
@@ -78,6 +80,7 @@ all:
 
 fb:
 	$(MAKE) $(TARGET) \
+	"GRAMOPT = -pedantic -std=c++1y" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I../../include -I$(LOCAL)/include" \
 	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \
@@ -92,6 +95,7 @@ fb:
 
 fb-g:
 	$(MAKE) $(TARGET) \
+	"GRAMOPT = -pedantic -std=c++1y" \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I../../include -I$(LOCAL)/include" \
