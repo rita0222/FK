@@ -12,7 +12,7 @@ AR		= ar
 AROPS		= cq
 LODER		= $(AR) $(AROPS)
 OPTOPT		= -O
-GRAMOPT		= -pedantic -std=c++1y
+GRAMOPT		= -pedantic -std=c++14
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
@@ -101,7 +101,7 @@ mac:
 mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
-	"SYSOPS = -std=c++1y -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
+	"SYSOPS = -std=c++14 -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -115,7 +115,7 @@ mac-gcc:
 	"CC = g++-mp-5" \
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -O -pipe" \
-	"SYSOPS = -std=c++1y -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
+	"SYSOPS = -std=c++14 -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -128,7 +128,7 @@ mac-gcc-g:
 	"CC = g++-mp-5" \
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -g" \
-	"SYSOPS = -std=c++1y -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
+	"SYSOPS = -std=c++14 -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \

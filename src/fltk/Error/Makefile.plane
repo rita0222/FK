@@ -13,7 +13,7 @@ LODER		= $(AR) $(AROPS)
 LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 OPTOPT		= -O
-GRAMOPT		= -pedantic -std=c++1y
+GRAMOPT		= -pedantic -std=c++14
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
@@ -85,7 +85,7 @@ ming-g:
 mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
-	"SYSOPS = -std=c++1y -D_MACOSX_" \
+	"SYSOPS = -std=c++14 -D_MACOSX_" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -96,7 +96,7 @@ mac:
 mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
-	"SYSOPS = -std=c++1y -D_MACOSX_" \
+	"SYSOPS = -std=c++14 -D_MACOSX_" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -110,7 +110,7 @@ mac-gcc:
 	"CC = g++-mp-5" \
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -O -pipe" \
-	"SYSOPS = -std=c++1y -D_MACOSX_" \
+	"SYSOPS = -std=c++14 -D_MACOSX_" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -123,7 +123,7 @@ mac-gcc-g:
 	"CC = g++-mp-5" \
 	"LINKCC = g++-mp-5" \
 	"OPTOPT = -g" \
-	"SYSOPS = -std=c++1y -D_MACOSX_" \
+	"SYSOPS = -std=c++14 -D_MACOSX_" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \

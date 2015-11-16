@@ -13,7 +13,7 @@ LODER		= $(AR) $(AROPS)
 LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 OPTOPT		= -O
-GRAMOPT		= -pedantic -std=c++1y
+GRAMOPT		= -pedantic -std=c++14
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
