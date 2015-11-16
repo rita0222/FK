@@ -6,6 +6,7 @@
 #include "Matrix_CLI.h"
 #include "Image_CLI.h"
 #include "Shape_CLI.h"
+#include "Model_CLI.h"
 
 namespace FK_CLI
 {
