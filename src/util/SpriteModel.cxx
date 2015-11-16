@@ -83,7 +83,7 @@ fk_SpriteModel::fk_SpriteModel(void) : fk_Model(), fontReady(false)
 	texShape.setTexRendMode(FK_TEX_REND_SMOOTH);
 	setShape(&texShape);
 
-	absMate.setAmbDiff(0.0, 0.0, 0.0);
+	absMate.setAmbDiff(1.0, 1.0, 1.0);
 	absMate.setEmission(1.0, 1.0, 1.0);
 	absMate.setAlpha(1.0);
 	setMaterial(absMate);
@@ -105,7 +105,7 @@ bool fk_SpriteModel::entryFirst(fk_Window *argWin, fk_Scene *argScn, fk_Model *a
 
 	if(argCam != NULL) argScn->entryCamera(argCam);
 
-	MakePixelBase(fk_Dimension(argWin->x(), argWin->y()), argScn);
+	MakePixelBase(fk_Dimension(argWin->w(), argWin->h()), argScn);
 	argScn->entryOverlayModel(this);
 
 	return true;
