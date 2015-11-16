@@ -33,8 +33,6 @@
 
 class fk_SpriteModel : public fk_Model {
 private:
-	friend class fk_AppWindow;
-
 	fk_RectTexture	texShape;
 	fk_Material		absMate;
 	fk_Model		pixelBase;
