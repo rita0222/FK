@@ -76,7 +76,7 @@
 #include <FK/TextImage.h>
 #include <FK/Error.H>
 
-#ifdef _MACOSX_
+#if defined(_MACOSX_) || defined(_FREEBSD_)
 #include <freetype2/ft2build.h>
 #elif defined(_MSC_VER)
 #include <ft2build.h>
