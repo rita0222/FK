@@ -58,9 +58,9 @@ fb:
 	$(MAKE) $(TARGET) \
 	"GRAMOPT = -pedantic -std=c++1y" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
-	"DEPENDDIRS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
+		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
+	"DEPENDDIRS = $(INCLDIRS)" \
 	"RANLIB = ranlib"
 
 fb-g:
@@ -68,9 +68,9 @@ fb-g:
 	"GRAMOPT = -pedantic -std=c++1y" \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
-	"DEPENDDIRS = -I$(LOCAL)/include" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
+		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
+	"DEPENDDIRS = $(INCLDIRS)" \
 	"RANLIB = ranlib" \
 	"LIBRARY = $(LIBRARY_G)"
 
@@ -156,7 +156,7 @@ $(LIBRARY) : $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
-		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) >& /dev/null
+		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) > /dev/null 2>&1
 
 clean:
 	touch dummy~
