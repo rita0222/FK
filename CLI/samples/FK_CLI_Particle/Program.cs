@@ -82,9 +82,9 @@ namespace FK_CLI_Particle
 
 			viewer.SetShape(3, prism);
 			viewer.SetPosition(3, 0.0, 0.0, 25.0);
-			viewer.SetDrawMode(3, (uint)(fk_DrawMode.POLYMODE));
+			viewer.SetDrawMode(3, fk_DrawMode.POLYMODE);
 			viewer.SetShape(2, particle.Shape);
-			viewer.SetDrawMode(2, (uint)(fk_DrawMode.POINTMODE));
+			viewer.SetDrawMode(2, fk_DrawMode.POINTMODE);
 			viewer.Scale = 10.0;
  
 			while(viewer.Draw() == true) {

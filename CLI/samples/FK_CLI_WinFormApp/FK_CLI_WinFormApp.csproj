@@ -62,10 +62,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FK_CLI">
-      <HintPath>..\..\bin\FK_CLI.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_CLI.dll</HintPath>
     </Reference>
     <Reference Include="FK_FormHelper">
-      <HintPath>..\..\bin\FK_FormHelper.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_FormHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
