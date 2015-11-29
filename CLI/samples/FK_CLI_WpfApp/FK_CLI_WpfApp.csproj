@@ -58,7 +58,7 @@
       <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_CLI.dll</HintPath>
     </Reference>
     <Reference Include="FK_FormHelper">
-      <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_FormHelper.dll</HintPath>
+      <HintPath>..\..\FK_CLI_DLL\Release\FK_FormHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
