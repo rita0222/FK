@@ -33,8 +33,7 @@ namespace FK_CLI_WpfAppTest
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            viewport = new fk_WpfViewport();
-            PanelHoster.Child = viewport.Panel;
+            viewport = new fk_WpfViewport(this.ViewportPanel);
 
             scene = new fk_Scene();
             viewport.Scene = scene;
