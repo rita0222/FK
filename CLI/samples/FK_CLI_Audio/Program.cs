@@ -21,7 +21,8 @@ namespace FK_CLI_Audio
 			EndStatus = false;
 			bgm = new fk_AudioStream();
 			openStatus = bgm.Open(argFileName);
-			if(openStatus == false) {
+			if(openStatus == false)
+			{
 				Console.WriteLine("Audio File Open Error.");
 			}
 		}
@@ -32,9 +33,10 @@ namespace FK_CLI_Audio
 			if(openStatus == false) return;
 			bgm.LoopMode = true;
 			bgm.Gain = 0.5;
-			while(EndStatus == false) {
+			while(EndStatus == false)
+			{
 				bgm.Play();
-				Thread.Sleep(100);
+				Thread.Sleep(50);
 			}
 		}
 
@@ -124,7 +126,7 @@ namespace FK_CLI_Audio
 						playStatus[i] = se[i].Play();
 					}
 				}
-				Thread.Sleep(50);
+				Thread.Sleep(10);
 			}
 		}
 
@@ -162,8 +164,8 @@ namespace FK_CLI_Audio
 			win.Entry(blockModel);
 
 			// BGMの各種設定
-			var audio = new MyBGM("epoq.ogg");
-			var bgmTask = new Task(audio.Start);
+			var bgm = new MyBGM("epoq.ogg");
+			var bgmTask = new Task(bgm.Start);
 			double volume = 0.5;
 			
 			// SEの各種設定
@@ -178,16 +180,19 @@ namespace FK_CLI_Audio
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
-			while(win.Update()) {
+			while(win.Update())
+			{
 				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 
 				// 上矢印キーで BGM 音量アップ
-				if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true && volume < 1.0) {
+				if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true && volume < 1.0)
+				{
 					volume += 0.1;
 				}
 
 				// 下矢印キーで BGM 音量ダウン
-				if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true && volume > 0.0) {
+				if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true && volume > 0.0)
+				{
 					volume -= 0.1;
 				}
 
@@ -203,11 +208,11 @@ namespace FK_CLI_Audio
 					se.StartSE(1);
 				}
 
-				audio.Gain = volume;
+				bgm.Gain = volume;
 			}
 
 			// BGM 変数と SE 変数に終了を指示
-			audio.EndStatus = true;
+			bgm.EndStatus = true;
 			se.EndStatus = true;
 
 			// BGM, SE 両スレッドが終了するまで待機
