@@ -1,12 +1,12 @@
 ﻿<Window x:Class="FK_CLI_WpfAppTest.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:fk="clr-namespace:FK_FormHelper;assembly=FK_FormHelper"
         Title="MainWindow" Height="350" Width="525"
         Loaded="Window_Loaded">
     <Grid>
         <WindowsFormsHost Margin="10,10,10,38">
-            <wf:Panel x:Name="ViewportPanel" />
+            <fk:FocusablePanel x:Name="ViewportPanel" />
         </WindowsFormsHost>
         <TextBox x:Name="TextBox1" Margin="10,0,90,10" TextWrapping="Wrap" Text="TextBox" Height="23" VerticalAlignment="Bottom"/>
         <Button x:Name="Button1" Content="Button" Margin="0,0,10,10" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom"/>

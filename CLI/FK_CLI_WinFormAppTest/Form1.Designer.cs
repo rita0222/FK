@@ -37,8 +37,8 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1 = new FK_FormHelper.FocusablePanel();
+            this.panel2 = new FK_FormHelper.FocusablePanel();
             this.SuspendLayout();
             // 
             // button1
@@ -144,8 +144,8 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private FK_FormHelper.FocusablePanel panel1;
+        private FK_FormHelper.FocusablePanel panel2;
     }
 }
 

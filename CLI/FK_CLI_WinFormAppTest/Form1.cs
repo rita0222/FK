@@ -130,6 +130,11 @@ namespace FK_CLI_WinFormAppTest
             {
                 viewport.IsDrawing = !viewport.IsDrawing;
             };
+
+            viewport.Panel.KeyDown += (s, e) =>
+            {
+                blockModel.Material = fk_Material.Blue;
+            };
         }
     }
 }

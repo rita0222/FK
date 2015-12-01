@@ -10,7 +10,10 @@ FK システムによる描画を併用することができる。
 まずは Windows フォームアプリケーションのプロジェクトを作成し、
 フォームデザイナでコントロールを配置する。
 利用するコントロールは何でも構わないが、画面上で占める領域を明示でき、
-処理が重くなるような副作用が少ないものとして、Panel コントロールを推奨する。
+処理が重くなるような副作用が少ないものとして、Panel コントロールが望ましい。
+
+FK\_FormHelper 名前空間では、通常の Panel に対してキー入力を扱うための修正を加えた 
+FocusablePanel コントロールを提供しており、通常はこれを利用することを推奨する。
 ここでは panel1 という名前で配置したものとして説明する。
 
 コンポーネントの初期化が済んだところで、fk\_Viewport クラスのインスタンスを生成する。
@@ -23,28 +26,26 @@ fk\_Viewport のコンストラクタには、ビューポート領域として�
 \end{screen}
 ~
 
-この時点で該当コントロール上での描画処理が行われるようになる。
-
 \subsection{WPF での利用}
 
 WPF で FK システムを利用する場合は、WindowsFormsHost によってフォームコントロールをホストし、
 その領域をビューポートとして用いるかたちになる。
 このため WPF アプリケーションプロジェクトの初期状態に対して、
-System.Windows.Forms と WindowsFormsIntegration アセンブリを参照に追加する必要がある。
+FK\_FormHelper に加えて WindowsFormsIntegration アセンブリも参照に追加する必要がある。
 
 ここでは WPF のメインウィンドウ上に FK システムのビューポートを表示する方法を解説する。
-次に示すのは、MainWindow.xaml に対して Panel コントロールを配置する変更を加えた Xaml である。
+次に示すのは、MainWindow.xaml に対して FocusablePanel コントロールを配置する変更を加えた Xaml である。
 \\
 \begin{screen}
 \begin{verbatim}
 <Window x:Class="FK_CLI_WpfApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:fk="clr-namespace:FK_FormHelper;assembly=FK_FormHelper"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <WindowsFormsHost>
-            <wf:Panel x:Name="ViewportPanel" />
+            <wf:FocusablePanel x:Name="ViewportPanel" />
         </WindowsFormsHost>
     </Grid>
 </Window>
@@ -56,22 +57,22 @@ System.Windows.Forms と WindowsFormsIntegration アセンブリを参照に追�
 \\
 \begin{screen}
 \begin{verbatim}
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:fk="clr-namespace:FK_FormHelper;assembly=FK_FormHelper"
 \end{verbatim}
 \end{screen}
 ~ \\
-System.Windows.Forms 名前空間のエイリアス定義と、Grid コントロール内に追加する
+FK_FormHelper 名前空間のエイリアス定義と、Grid コントロール内に追加する
 \\
 \begin{screen}
 \begin{verbatim}
         <WindowsFormsHost>
-            <wf:Panel x:Name="ViewportPanel" />
+            <wf:FocusablePanel x:Name="ViewportPanel" />
         </WindowsFormsHost>
 \end{verbatim}
 \end{screen}
 ~ \\
-WindowsFormsHost と、フォームコントロールである Panel を記述することである。
-Panel コントロールに x:Name 属性で指定した名前を用いて、
+WindowsFormsHost と、フォームコントロールである FocusablePanel を記述することである。
+FocusablePanel コントロールに x:Name 属性で指定した名前(ViewportPanel)を用いて、
 コードビハインドである MainWindow.xaml.cs からアクセスすることができる。
 WPF や Xaml の作法についての詳細は、別途書籍や資料を参照して欲しい。
 
@@ -138,38 +139,39 @@ fk\_Viewport は、デフォルトでは 16ms 間隔で描画処理を実行し�
 描画要素の更新があった時だけ明示的に描画を指示したいケースもある。
 そのような場合は IsDrawing プロパティに false を設定してタイマー描画を停止し、
 任意に Draw()メソッドを呼び出すことで描画を制御することもできる。
-ただし、コンストラクタで指定したコントロールが再描画されるたびに、
-ビューポートも再描画を行うのは抑制できない。
+ただし、ビューポートのリサイズや他のウィンドウが重なるなどで描画イベントが発生した場合は、
+IsDrawing の設定によらず自動的に再描画が行われる。
 
-\subsection{デバイス情報の取得について}
+\subsection{デバイス情報の取得}
 
 fk\_Viewport クラスはマウスやキーに関する機能を提供しないので、
-使用しているフレームワークが提供しているイベントハンドラを利用する。
-マウスイベントに関しては、Windows フォームも WPF も同じく、
-ビューポート領域として利用しているコントロールのハンドラを用いることができる。
-詳細は System.Windows.Forms.Panel クラスのリファレンスを参照すること。
+Windows フォームコントロールが提供しているイベントハンドラを利用することになる。
+WPF を利用している場合でも、フォームコントロールを介しているので同じハンドラが利用できる。
+次のコードはマウスクリックによってモデルのマテリアルを赤く変更するものである。
+\\
+\begin{screen}
+\begin{verbatim}
+    viewport.Panel.MouseDown += (s, e) =>
+    {
+        model.Material = fk_Material.Red;
+    };
+\end{verbatim}
+\end{screen}
+~
 
-キー入力に関してはフォーカスの扱いが異なるため、異なるアプローチが必要になる。
+キー入力に関しては、コントロールにフォーカスが当たっていないとイベントが発生しない。
+通常の Panel コントロールはフォーカスを受け取れないが、
+FK\_FormHelper 内の FocusablePanel に関しては、マウスクリックや TAB キーによって
+フォーカスが当てられるようになっている。
+Panel 型の変数経由だと、VS2013 では KeyDown, KeyUp などのイベントにアクセスできないので、
+上記のコードのように fk\_Viewport クラスの Panel プロパティ経由でアクセスするのが便利である。
 
-\subsubsection{Windows フォームの場合}
+その他のイベントハンドラの詳細は MSDN などのリファレンスを参照すること。
 
-Windows フォームのコントロールでキーイベントを受け取ることができるのは、
-ボタンやテキストボックスなどの明示的にキー入力を受け付けるものに限られる。
-しかし、それらのコントロールはカーソルやフォーカス枠の描画を伴うなど副作用が多く、
-ビューポートの下地には適さない。
+\subsubsection{マルチタッチ}
 
-このため、確実にキーイベントを受け取れるのは、フォームの KeyPreview を true に設定した上で、
-フォームに対する KeyDown, KeyUp イベントを処理するのが妥当であろう。
+※書きかけ
 
-※具体的なコードをここに示す
+\subsection{座標変換やピック処理}
 
-\subsubsection{WPFの場合}
-
-WPF を利用する場合は、WindowsFormsHost がフォーカスを受け取れるため、
-これに名前を付けて KeyDown, KeyUp などのイベントを利用するとよい。
-
-※具体的なコードをここに示す
-
-\subsection{座標変換やピック処理について}
-
-※具体的なコードをここに示す
+※書きかけ

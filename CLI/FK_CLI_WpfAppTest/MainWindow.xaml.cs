@@ -100,7 +100,7 @@ namespace FK_CLI_WpfAppTest
                 this.TextBox1.Text = camera.Position.ToString();
             };
 
-            ViewportPanel.MouseDown += (s, ee) =>
+            viewport.Panel.MouseDown += (s, ee) =>
             {
                 var result = viewport.GetPickData(ee.X, ee.Y, 1);
                 if (result.Any())
@@ -110,6 +110,11 @@ namespace FK_CLI_WpfAppTest
                         result[0].Model.Material = fk_Material.Red;
                     }
                 }
+            };
+
+            viewport.Panel.KeyDown += (s, ee) =>
+            {
+                blockModel.Material = fk_Material.Yellow;
             };
 
             Button1.Click += (s, ee) =>
