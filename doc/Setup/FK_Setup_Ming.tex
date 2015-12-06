@@ -1,4 +1,4 @@
-\documentclass[a4j]{jarticle}
+\documentclass[a4paper]{jsarticle}
 
 \usepackage{ascmac}
 
@@ -15,7 +15,7 @@
 {\LARGE Fine Kernel ToolKit システム (MinGW 版) \\
 	セットアップマニュアル} \\ ~ \\
 {\Large FineKernel Project} \\
-(2014 年 10/6 版)
+(2015 年 12/6 版)
 \end{center}
 
 ※注: 本書の「\verb+\+」(バックスラッシュ)記号は、
@@ -39,6 +39,16 @@
 \begin{enumerate}
  \item コントロールパネルを開く。
  \item 「ユーザーアカウントとファミリーセーフティ」の下にある
+	「アカウントの種類の変更」を選択する。
+ \item 利用を想定するアカウント名を選択する。
+ \item 左側のリストから「アカウントの種類の変更」を選択する。
+ \item 「管理者」を選択し、「アカウントの種類の変更」ボタンを押す。
+\end{enumerate}
+
+\subsection{Windows 10 の場合}
+\begin{enumerate}
+ \item コントロールパネルを開く。
+ \item 「ユーザーアカウント」の下にある
 	「アカウントの種類の変更」を選択する。
  \item 利用を想定するアカウント名を選択する。
  \item 左側のリストから「アカウントの種類の変更」を選択する。
@@ -78,7 +88,7 @@
 	\begin{tabular}{|l|l|}
 		\hline
 		項目名 & 選択 \\ \hline
-		Version &  4.9.1 \\ \hline
+		Version &  5.2.0 \\ \hline
 		Architecture & x86\_64 \\ \hline
 		Threads & posix \\ \hline
 		Exception & seh \\ \hline
@@ -111,10 +121,10 @@
 	\item 4.9.1
 	\item threads-posix
 	\item seh
-	\item x86\_64-4.9.1-release-posix-seh-rt\_v3-rev1.7z
+	\item x86\_64-5.2.0-release-posix-seh-rt\_v4-rev1.7z
  \end{enumerate}
 
- \item ダウンロードした「x86\_64-4.9.1-release-posix-seh-rt\_v3-rev1.7z」を、
+ \item ダウンロードした「x86\_64-5.2.0-release-posix-seh-rt\_v4-rev1.7z」を、
 	7z 形式が展開できる解凍ソフト (PeaZip等) で解凍する。
 
  \item Cドライブのトップに「MinGW」フォルダを作成し、
@@ -130,7 +140,7 @@
 	インストーラをダウンロードする。
 	\begin{center}
 	\begin{tabular}{c}
-	\verb+http://sourceforge.jp/projects/fktoolkit/releases/+
+	\verb+http://osdn.jp/projects/fktoolkit/releases/+
 	\end{tabular}
 	\end{center}
 
@@ -145,7 +155,7 @@
 
 \section{実行パスの設定}
 次に、MinGW と FK の実行環境を実行パスに追加する。
-設定方法は以下の通りである。(Win7,Win8/8.1 共通)
+設定方法は以下の通りである。
 \begin{enumerate}
  \item コントロールパネルを開き、
 	「システムとセキュリティ」を選択する。
