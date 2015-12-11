@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ./vsenv.sh
+
 # VS2015へのパスを設定
 export VS14_DEVENV_PATH=$VS140COMNTOOLS/../IDE/devenv
 

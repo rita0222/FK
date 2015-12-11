@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ./vsenv.sh
+
 # VS2015へのパスを設定
 export VS14_DEVENV_PATH=$VS140COMNTOOLS/../IDE/devenv
 
@@ -28,13 +30,13 @@ export VS14_DEVENV_PATH=$VS140COMNTOOLS/../IDE/devenv
 "$VS14_DEVENV_PATH" ..\\extlibs\\libiconv\\LibIconv_2015.sln /Build "ReleaseStatic|x64"
 
 # ogg
-"%VS14_DEVENV_PATH%" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Debug|Win32"
-"%VS14_DEVENV_PATH%" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Debug|x64"
-"%VS14_DEVENV_PATH%" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Release|Win32"
-"%VS14_DEVENV_PATH%" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Release|x64"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Debug|Win32"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Debug|x64"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Release|Win32"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libogg-1.3.2\\win32\\VS2015\\libogg_static.sln /Build "Release|x64"
 
 # vorbis
-"%VS14_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Debug|Win32"
-"%VS14_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Debug|x64"
-"%VS14_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Release|Win32"
-"%VS14_DEVENV_PATH%" ..\\extlibs\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Release|x64"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Debug|Win32"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Debug|x64"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Release|Win32"
+"$VS14_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.5\\win32\\VS2015\\vorbis_static.sln /Build "Release|x64"

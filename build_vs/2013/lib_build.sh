@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ./vsenv.sh
+
 # VS2013へのパスを設定
 export VS12_DEVENV_PATH=$VS120COMNTOOLS/../IDE/devenv
 
