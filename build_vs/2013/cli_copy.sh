@@ -4,8 +4,9 @@ echo "--- Copying built files ---"
 
 source ./vsenv.sh
 
-rm -rf ../FK_CLI
-mkdir ../FK_CLI
+rm -rf ../FK_CLI/bin
+rm -rf ../FK_CLI/doc
+rm -rf ../FK_CLI/redist
 mkdir ../FK_CLI/bin
 mkdir ../FK_CLI/doc
 mkdir ../FK_CLI/redist
