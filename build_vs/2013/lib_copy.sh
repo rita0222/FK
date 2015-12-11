@@ -50,7 +50,6 @@ cp ../extlibs/OpenAL/lib_x64/*.lib                                              
 cp ../extlibs/glew-1.12.0/lib/Release/x64/*.lib                                       ../FK_VC13/lib_x64
 cp ../extlibs/glew-1.12.0/bin/Release/x64/*.*                                         ../FK_VC13/bin_x64
 
-mkdir ../FK_VC13/include
 mkdir ../FK_VC13/include/FK
 cp ../../FK/*.h ../FK_VC13/include/FK
 
