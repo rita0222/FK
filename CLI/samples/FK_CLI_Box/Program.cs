@@ -27,13 +27,13 @@ namespace FK_CLI_Box
 			win.Entry(blockModel);
 
 			// 線分モデル生成
-			fk_Vector[] pos = new fk_Vector[4];
+			var pos = new fk_Vector[4];
 			pos[0] = new fk_Vector(0.0, 100.0, 0.0);
 			pos[1] = new fk_Vector(100.0, 0.0, 0.0);
 			pos[2] = -pos[0];
 			pos[3] = -pos[1];
-			fk_Line[] line = new fk_Line[2];
-			fk_Model[] lineModel = new fk_Model[2];
+			var line = new fk_Line[2];
+			var lineModel = new fk_Model[2];
 			for(i = 0; i < 2; i++) {
 				line[i] = new fk_Line();
 				line[i].PushLine(pos[2*i], pos[2*i + 1]);
