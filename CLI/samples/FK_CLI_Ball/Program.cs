@@ -9,8 +9,8 @@ namespace FK_CLI_Ball
 {
 	public class Ball
 	{
-		private const double	DOWN_ACCEL		= 1.0500;	// 降下時の加速度
-		private const double	RISE_ACCEL		= 1.0530;	// 上昇時の減速度
+		private const double	DOWN_ACCEL		= 0.05;	    // 降下時の加速度
+		private const double	RISE_ACCEL		= 0.053;	// 上昇時の減速度
 		private const int		DOWN_MODE		= 0;		// 降下モード
 		private const int		RISE_MODE		= 1;		// 上昇モード
 		private const int		LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
@@ -101,12 +101,12 @@ namespace FK_CLI_Ball
 		{
 			switch(direction) {
 				case DOWN_MODE:
-					y_trs *= DOWN_ACCEL;
+					y_trs += DOWN_ACCEL;
 					ball_model.GlTranslate(0.0, -y_trs, 0.0);
 					break;
 
 				case RISE_MODE:
-					y_trs /= RISE_ACCEL;
+					y_trs -= RISE_ACCEL;
 					ball_model.GlTranslate(0.0, y_trs, 0.0);
 					break;
 
@@ -215,14 +215,12 @@ namespace FK_CLI_Ball
 					viewModel.GlMoveTo(0.0, 400.0, 80.0);
 					viewModel.GlFocus(0.0, 30.0, 0.0);
 					viewModel.GlUpvec(0.0, 1.0, 0.0);
-					//win.entry(blockModel);
 				} else {
 					// カメラをブロックからの視点にする。
 					viewModel.GlMoveTo(blockModel.InhPosition);
 					viewModel.GlTranslate(0.0, 10.0, 0.0);
 					viewModel.GlFocus(ball.Pos);
 					viewModel.GlUpvec(0.0, 1.0, 0.0);
-					//win.remove(blockModel);
 				}
 
 				// 地面をくるくる回転させましょう。
