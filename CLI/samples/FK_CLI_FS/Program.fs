@@ -2,22 +2,21 @@
 open FK_CLI
 
 module FK_Box =
+
+    // ウィンドウ生成
     let win = new fk_AppWindow()
+
+    // マテリアル初期化
     fk_Material.InitDefault()
 
-    let light = new fk_Light()
-    let lightModel = new fk_Model()
-    lightModel.Material <- fk_Material.TrueWhite
-    lightModel.GlMoveTo(0.0, 0.0, 0.0)  |> ignore
-    lightModel.GlFocus(-1.0, -1.0, -1.0) |> ignore
-    win.Entry(lightModel)
-
+    // 直方体モデル生成
     let blockModel = new fk_Model()
     let block = new fk_Block(50.0, 70.0, 40.0)
     blockModel.Shape <- block
     blockModel.Material <- fk_Material.Yellow
     win.Entry(blockModel)
 
+    // 線分モデル生成
     let pos : fk_Vector array = Array.init 4 (fun i -> new fk_Vector())
     pos.[0].Set(0.0, 100.0, 0.0)
     pos.[1].Set(100.0, 0.0, 0.0)
@@ -36,12 +35,14 @@ module FK_Box =
     lineModel.[0].LineColor <- new fk_Color(1.0, 0.0, 0.0)
     lineModel.[1].LineColor <- new fk_Color(0.0, 1.0, 0.0)
 
+    // カメラモデル生成
     let camera = new fk_Model()
     camera.GlMoveTo(0.0, 0.0, 2000.0) |> ignore
     camera.GlFocus(0.0, 0.0, 0.0) |> ignore
     camera.GlUpvec(0.0, 1.0, 0.0) |> ignore
     win.CameraModel <- camera
 
+    // ウィンドウ生成
     win.Open()
 
     let org = new fk_Vector(0.0, 0.0, 0.0)

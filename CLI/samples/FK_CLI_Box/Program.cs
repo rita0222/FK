@@ -15,15 +15,9 @@ namespace FK_CLI_Box
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
-			fk_Material.InitDefault();
 
-			// 光源生成
-			var light = new fk_Light();
-			var lightModel = new fk_Model();
-			lightModel.Material = fk_Material.TrueWhite;
-			lightModel.GlMoveTo(0.0, 0.0, 0.0);
-			lightModel.GlFocus(-1.0, -1.0, -1.0);
-			win.Entry(lightModel);
+            // 組込マテリアル初期化
+            fk_Material.InitDefault();
 
 			// 直方体モデル生成
 			var blockModel = new fk_Model();
@@ -58,6 +52,8 @@ namespace FK_CLI_Box
 			camera.GlFocus(0.0, 0.0, 0.0);
 			camera.GlUpvec(0.0, 1.0, 0.0);
 			win.CameraModel = camera;
+
+            // ウィンドウ生成
 			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
