@@ -4,161 +4,214 @@
 表示するプログラムである。ただ表示するだけでは面白くないので、線分を
 直方体の子モデルにし、直方体を回転させると線分も一緒に回転することを
 試してみる。また、視点も最初は遠方に置いて段々近づけていき、ある程度まで
-接近したらひねりを加えてみる。
-
-\begin{itemize}
- \item 1 行目の include 文は、FK システムを使用する場合に必ず記述する。
- \item 5 行目において、メインウィンドウを生成している。
- \item 6 行目において、視点 (camera)、直方体 (blockModel)、
-	照明 (lightModel)、線分2本 (lineModel[2]) を定義している。
- \item 8 〜 10 行目で、それぞれのオブジェクトの形状情報を生成している。
- \item 11 行目でシーンを、12 行目で FK システムのウィンドウを
-	生成している。
- \item 15 行目で、fk\_Window のメインウィンドウへの登録を完了している。
- \item 16 行目で標準マテリアルの初期化を行っている。標準マテリアルを
-	使用したい場合は、プログラムの最初にこの
-	fk\_Material::initDefault() 関数を呼ぶ。
- \item 19 〜 22 行目まで、照明の設定を行っている。この場合は、
-	\((1000, 1000, 1000)\) から原点へ向けて平行光源が設定される。
- \item 25 行目で blockModel に block の形状情報をリンクしている。
- \item 29 〜 36 行目で、線分形状を生成し lineModel[] にリンクしている。
-	35 行目では \&pos[0] を代入することによって pos[0] と pos[1] が、
-	36 行目では \&pos[2] を代入することによって pos[2] と pos[3] が
-	それぞれ線分の端点となる。
- \item 39、40 行目で、線分に対して色設定を行っている。
-	どのような形状であっても、線に対して色を設定する場合は
-	setLineColor() を用いる。
- \item 43、44 行目で、線分を直方体の子モデルに設定している。これにより、
-	直方体を移動すると線分も追従して移動していくようになる。
- \item 47 〜 51 行目で、各モデルをシーンへ登録している。
- \item 54 行目で、シーンをウィンドウへ登録している。
-	これにより、window.drawWindow() によってシーンの
-	中身が描画されるようになる。
- \item 57 〜 59 行目で、視点の位置を設定している。この場合は、位置を
-	\((0, 0, 2000)\)、方向を原点に向け、ウィンドウの上方向が
-	\((0, 1, 0)\) になるように設定している。
- \item 62 行目でメインウィンドウを、63 行目で FK システムのウィンドウを
-	開いている。
- \item 67 〜 73 行目は、ウィンドウが開いているか閉じているか(アイコン化
-	されているか)を判定し、閉じている場合は描画処理を行わないように
-	なっている。
- \item 75 行目にて実際に描画を行っている。
- \item 75 〜 77 行目では、プログラムを終了するかどうかを判定している。
-	画面上で「ESC」ボタンが押されていたり、ウィンドウが強制的に
-	閉じられたかどうかの判定はここで行っている。
-	ここを含め、67 〜 77 行目の記述は、FK システムでは常套の手段として
-	用いられる記述である。
- \item 80 行目で、視点位置を \((0, 0, -1)\) 移動している。
- \item 83 行目で、直方体 (と子モデルである線分) を Y 軸中心に
-	回転させている。回転角度は、\(\pi/300 = 0.6 ^{\circ}\) である。
- \item 86 〜 88 行目で、もし視点が原点を越えてしまった場合に注視点を
-	原点に向かせるようにしている。
- \item 90 〜 94 行目で、描画カウント i が 1000 を超えた場合に
-	視点にひねりを加えている。
-\end{itemize}
+接近したらひねりを加えてみる。\\ ~
 
 \begin{breakbox}
 \begin{verbatim}
-  1: #include <FK/FK.h>
-  2: 
-  3: int main(int argc, char *argv[])
-  4: {
-  5:     Fl_Window       mainWindow(620, 620, "FK TEST");
-  6:     fk_Model        camera, blockModel, lightModel, lineModel[2];
-  7:     fk_Vector       pos[4];
-  8:     fk_Line         line[2];
-  9:     fk_Light        light;
- 10:     fk_Block        block(50.0, 70.0, 40.0);
- 11:     fk_Scene        scene;
- 12:     fk_Window       window(10, 10, 600, 600);
- 13:     int             i = 0;
- 14: 
- 15:     mainWindow.end();
- 16:     fk_Material::initDefault();
- 17: 
- 18:     // 照明の設定
- 19:     lightModel.setShape(&light);
- 20:     lightModel.setMaterial(White);
- 21:     lightModel.glMoveTo(0.0, 0.0, 0.0);
- 22:     lightModel.glFocus(-1.0, -1.0, -1.0);
- 23: 
- 24:     // 直方体の設定
- 25:     blockModel.setShape(&block);
- 26:     blockModel.setMaterial(Yellow);
- 27: 
- 28:     // 線分の設定
- 29:     pos[0].set(0.0, 100.0, 0.0);
- 30:     pos[1].set(100.0, 0.0, 0.0);
- 31:     pos[2] = -pos[0];
- 32:     pos[3] = -pos[1];
- 33:     line[0].setVertex(&pos[0]);
- 34:     line[1].setVertex(&pos[2]);
- 35:     lineModel[0].setShape(&line[0]);
- 36:     lineModel[1].setShape(&line[1]);
- 37: 
- 38:     // 線分の色設定
- 39:     lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
- 40:     lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
- 41: 
- 42:     // 直方体を線分の親モデルに設定
- 43:     lineModel[0].setParent(&blockModel);
- 44:     lineModel[1].setParent(&blockModel);
- 45: 
- 46:     // 各モデルをディスプレイリストに登録
- 47:     scene.entryCamera(&camera);
- 48:     scene.entryModel(&blockModel);
- 49:     scene.entryModel(&lightModel);
- 50:     scene.entryModel(&lineModel[0]);
- 51:     scene.entryModel(&lineModel[1]);
- 52: 
- 53:     // ウィンドウへディスプレイリストを登録
- 54:     window.setScene(&scene);
- 55: 
- 56:     // 視点の位置と姿勢を設定
- 57:     camera.glMoveTo(0.0, 0.0, 2000.0);
- 58:     camera.glFocus(0.0, 0.0, 0.0);
- 59:     camera.glUpvec(0.0, 1.0, 0.0);
- 60: 
- 61:     i = 0;
- 62:     mainWindow.show();
- 63:     window.show();
- 64: 
- 65:     while(true) {
- 66: 
- 67:         if(mainWindow.visible() == 0) {
- 68:             if(Fl::wait() == 0) {
- 69:                 break;
- 70:             } else {
- 71:                 continue;
- 72:             }
- 73:         }
- 74: 
- 75:         if(window.drawWindow() == 0) break;
- 76:         if(Fl::check() == 0) break;
- 77:         if(window.winOpenStatus() == false) continue;
- 78: 
- 79:         // 視点を原点に近づける
- 80:         camera.glTranslate(0.0, 0.0, -0.1);
- 81: 
- 82:         // 直方体(と子モデルの線分)を Y 軸中心に回転
- 83:         blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/300.0);
- 84: 
- 85:         // 視点が原点を越えたら、向きをもう1度原点に向かせる。
- 86:         if(camera.getPosition().z < -FK_EPS) {
- 87:             camera.glFocus(0.0, 0.0, 0.0);
- 88:         }
- 89: 
- 90:         if(i >= 1000) {
- 91:             // i が 1000 以上なら、視点をひねっていく
- 92:             camera.loRotateWithVec(0.0, 0.0, 0.0,
- 93:                                    fk_Z, FK_PI/500.0);
- 94:         }
- 95: 
- 96:         i++;
- 97:     }
- 98: 
- 99:     return 0;
-100: }
+ 1: using System;
+ 2: using System.Collections.Generic;
+ 3: using System.Linq;
+ 4: using System.Text;
+ 5: using System.Threading.Tasks;
+ 6: using FK_CLI;
+ 7: 
+ 8: namespace FK_CLI_Box
+ 9: {
+10:     class Program
+11:     {
+12:         static void Main(string[] args)
+13:         {
+14:             int i;
+15: 
+16:             // ウィンドウ生成
+17:             var win = new fk_AppWindow();
+18: 
+19:             // 組込マテリアル初期化
+20:             fk_Material.InitDefault();
+21: 
+22:             // 直方体モデル生成
+23:             var blockModel = new fk_Model();
+24:             var block = new fk_Block(50.0, 70.0, 40.0);
+25:             blockModel.Shape = block;
+26:             blockModel.Material = fk_Material.Yellow;
+27:             win.Entry(blockModel);
+28: 
+29:             // 線分モデル生成
+30:             var pos = new fk_Vector[4];
+31:             pos[0] = new fk_Vector(0.0, 100.0, 0.0);
+32:             pos[1] = new fk_Vector(100.0, 0.0, 0.0);
+33:             pos[2] = -pos[0];
+34:             pos[3] = -pos[1];
+35:             var line = new fk_Line[2];
+36:             var lineModel = new fk_Model[2];
+37:             for(i = 0; i < 2; i++) {
+38:                 line[i] = new fk_Line();
+39:                 line[i].PushLine(pos[2*i], pos[2*i + 1]);
+40:                 lineModel[i] = new fk_Model();
+41:                 lineModel[i].Shape = line[i];
+42:                 lineModel[i].Parent = blockModel;
+43:                 win.Entry(lineModel[i]);
+44:             }
+45: 
+46:             lineModel[0].LineColor = new fk_Color(1.0, 0.0, 0.0);
+47:             lineModel[1].LineColor = new fk_Color(0.0, 1.0, 0.0);
+48: 
+49:             // カメラモデル生成
+50:             var camera = new fk_Model();
+51:             camera.GlMoveTo(0.0, 0.0, 2000.0);
+52:             camera.GlFocus(0.0, 0.0, 0.0);
+53:             camera.GlUpvec(0.0, 1.0, 0.0);
+54:             win.CameraModel = camera;
+55: 
+56:             // ウィンドウ生成
+57:             win.Open();
+58: 
+59:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+60: 
+61:             for(i = 0; win.Update() == true; i++) {
+62:                 camera.GlTranslate(0.0, 0.0, -1.0);
+63:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
+64:                 var cPos = camera.Position;
+65:                 if(cPos.z < -FK.EPS) camera.GlFocus(origin);
+66:                 if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+67:             }
+68:         }
+69:     }
+70: }
+\end{verbatim}
+\end{breakbox}
+
+\begin{itemize}
+
+\item 6 行目の using 文は、FK システムを使用する場合に必ず記述する必要がある。
+
+\item 17 行目でウィンドウの生成を行っている。
+
+\item 20 行目で標準組込マテリアルの初期化を行っている。
+
+\item 23 行目では、直方体モデルの生成を行っている。
+
+\item 24 行目では直方体形状の生成を行い、25 行目でその形状情報を blockModel に登録している。
+
+\item 26 行目では、直方体モデルのマテリアルとして Yellow を設定している。
+
+\item 27 行目では、直方体モデルをウィンドウの表示対象として登録を行っている。
+
+\item 30 行目では、線分形状の端点となる各点の位置ベクトルを配列として生成している。
+	この時点では pos 内の各変数のインスタンスはまだ確保されていないため、
+	31,32 行目のように new によってインスタンスを生成する必要があることに注意する。
+	33,34 行目の「=」演算子は、新たなインスタンスが生成されて代入されるので、
+	事前に new をしておく必要はない。
+
+\item 35,36 行目ではそれぞれ線分形状と線分モデルを配列として生成している。
+	これも前述した pos と同様、38 行目や 40 行目にあるようにインスタンスを new で
+
+\item 42 行目では、lineModel[i] の親モデルを blockModel に設定している。
+	親子関係は、このように Parent プロパティに親モデルとなる fk\_Model 型インスタンスを
+	設定する方法がもっとも標準的なものである。
+	これにより、各線分モデルは直方体モデルの動きに追従するようになる。
+	しかし、親子関係は表示属性にはなんら影響はしないため、
+	各線分を表示するためには 43 行目にあるようにウィンドウへの登録が必要となる。
+	
+\item 46、47 行目で、線分に対して色設定を行っている。
+	どのような形状であっても、線に対して色を設定する場合は
+	LineColor プロパティを用いる。
+
+\item 43、44 行目で、線分を直方体の子モデルに設定している。これにより、
+	直方体を移動すると線分も追従して移動していくようになる。
+
+\item 47 〜 51 行目で、各モデルをシーンへ登録している。
+
+\item 50 〜 54 行目で、カメラ(視点)モデルの設定を行っている。
+	カメラモデルは通常の fk\_Model インスタンスを準備すればよく、
+	このサンプルの場合は位置を	\((0,0, 2000)\)、方向を原点に向け、
+	ウィンドウの上方向が \((0, 1, 0)\) になるように設定している。
+	ある fk\_Model 型インスタンスをカメラモデルとして設定するには、
+	54 行目にあるように fk\_AppWindow クラスの CameraModel プロパティに
+	設定を行えばよい。設定後にカメラモデルを動作させれば視点も動的に変化し、
+	任意のタイミングで別のインスタンスに変更することも可能である。
+	
+\item 57 行目は実際にウィンドウを表示するためのメソッドである。
+
+\item 61 行目の for 文中にある Update() メソッドは2つの働きがある。
+	まず、現在のモデル設定に従って画面の描画を更新する。
+	また、そのタイミングでウィンドウが消去されていないかをチェックし、
+	もし消去されていた場合は false を返し、正常な場合は true を返す。
+
+	ウィンドウは、画面上で「ESC」ボタンが押されていたり、
+	ウィンドウが OS 内の機能で強制的に閉じられた場合に消去される。
+
+ \item 62 行目で、視点位置を \((0, 0, -1)\) 移動している。
+ \item 63 行目で、直方体 (と子モデルである線分) を Y 軸中心に
+	回転させている。回転角度は、\(\pi/300 = 0.6 ^{\circ}\) である。
+	ここにある「FK.PI」は FK のプログラム上で円周率を用いる場合に利用するものであるが、
+	C\# の標準機能にある「Math.PI」を用いても問題はない。
+ \item 65 行目で、もし視点が原点を越えてしまった場合に注視点を
+	原点に向かせるようにしている。
+ \item 66 行目で、描画カウント i が 1000 を超えた場合に
+	視点にひねりを加えている。
+\end{itemize}
+
+また、以下のソースコードは、同様のプログラムを F\# で記述したものである。
+C\# 版のコードと比較することで大体の F\# の文法を把握できるだろう。\\ ~
+
+\begin{breakbox}
+\begin{verbatim}
+ 1: open System
+ 2: open FK_CLI
+ 3: 
+ 4: module FK_Box =
+ 5: 
+ 6:     // ウィンドウ生成
+ 7:     let win = new fk_AppWindow()
+ 8: 
+ 9:     // マテリアル初期化
+10:     fk_Material.InitDefault()
+11: 
+12:     // 直方体モデル生成
+13:     let blockModel = new fk_Model()
+14:     let block = new fk_Block(50.0, 70.0, 40.0)
+15:     blockModel.Shape <- block
+16:     blockModel.Material <- fk_Material.Yellow
+17:     win.Entry(blockModel)
+18: 
+19:     // 線分モデル生成
+20:     let pos : fk_Vector array = Array.init 4 (fun i -> new fk_Vector())
+21:     pos.[0].Set(0.0, 100.0, 0.0)
+22:     pos.[1].Set(100.0, 0.0, 0.0)
+23:     pos.[2] <- -pos.[0]
+24:     pos.[3] <- -pos.[1]
+25: 
+26:     let line : fk_Line array = Array.init 2 (fun i -> new fk_Line())
+27:     let lineModel : fk_Model array = Array.init 2 (fun i -> new fk_Model())
+28: 
+29:     for i = 0 to 1 do
+30:         line.[i].PushLine(pos.[2*i], pos.[2*i + 1])
+31:         lineModel.[i].Shape <- line.[i]
+32:         lineModel.[i].Parent <- blockModel
+33:         win.Entry(lineModel.[i])
+34: 
+35:     lineModel.[0].LineColor <- new fk_Color(1.0, 0.0, 0.0)
+36:     lineModel.[1].LineColor <- new fk_Color(0.0, 1.0, 0.0)
+37: 
+38:     // カメラモデル生成
+39:     let camera = new fk_Model()
+40:     camera.GlMoveTo(0.0, 0.0, 2000.0) |> ignore
+41:     camera.GlFocus(0.0, 0.0, 0.0) |> ignore
+42:     camera.GlUpvec(0.0, 1.0, 0.0) |> ignore
+43:     win.CameraModel <- camera
+44: 
+45:     // ウィンドウ生成
+46:     win.Open()
+47: 
+48:     let org = new fk_Vector(0.0, 0.0, 0.0)
+49:     let i = ref 0
+50:     while win.Update() = true do
+51:         incr i
+52:         camera.GlTranslate(0.0, 0.0, -1.0) |> ignore
+53:         blockModel.GlRotateWithVec(org, fk_Axis.Y, FK.PI/300.0) |> ignore
+54:         if camera.Position.z < 0.0 then camera.GlFocus(org) |> ignore
+55:         if !i >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, FK.PI/500.0) |> ignore
 \end{verbatim}
 \end{breakbox}
 
