@@ -12,60 +12,76 @@ namespace FK_CLI_Particle
 		private fk_Color red, blue;
 		private double maxSpeed, minSpeed;
 
-		public MyParticle()
+        // コンストラクタ。
+        // ここに様々な初期設定を記述しておく。
+        public MyParticle()
 		{
-			MaxSize = 1000;
-			IndivMode = true;
-			AllMode = true;
+            MaxSize = 1000;                      // パーティクルの最大数設定
+            IndivMode = true;                    // 個別処理 (IndivMethod) を有効にしておく。
+			AllMode = true;                      // 全体処理 (AllMethod) を有効にしておく。
 			for(int i = 0; i < MaxSize; i++) {
+                // 各パーティクルごとの初期色を設定
 				SetColorPalette(i, 0.0, 1.0, 0.6);
 			}
-			rand = new Random();
+            rand = new Random();                 // 乱数発生器の初期化
 			red = new fk_Color(1.0, 0.0, 0.0);
 			blue = new fk_Color(0.0, 0.0, 0.5);
-			maxSpeed = 0.3;
-			minSpeed = 0.1;
+			maxSpeed = 0.3;                      // これより速いパーティクルは全て赤
+			minSpeed = 0.1;                      // これより遅いパーティクルは全て青
 		}
 		
+        // ここにパーティクル生成時の処理を記述する。
+        // 引数 P には新たなパーティクルインスタンスが入る。
 		public override void GenMethod(fk_Particle P)
 		{
+            // 生成時の位置を(ランダムに)設定
 			double y = rand.NextDouble()*50.0 - 25.0;
 			double z = rand.NextDouble()*50.0 - 25.0;
-			P.Position = new fk_Vector(50.0, y, z);
-			P.ColorID = P.ID;
+            P.Position = new fk_Vector(50.0, y, z);
+
+            // パーティクルの色IDを設定
+            P.ColorID = P.ID;
 		}
-		public override void AllMethod()
+
+        // ここの毎ループ時の全体処理を記述する。
+        public override void AllMethod()
 		{
-			for(int i = 0; i < 5; i++) {
-				if(rand.NextDouble() < 0.3) {
-					NewParticle();
+            for(int i = 0; i < 5; i++) {
+				if(rand.NextDouble() < 0.3) {   // 発生確率は 30% (を5回)
+					NewParticle();              // パーティクル生成処理
 				}
 			}
 		}
-		
-		public override void IndivMethod(fk_Particle P)
+
+        // ここに毎ループ時のパーティクル個別処理を記述する。
+        public override void IndivMethod(fk_Particle P)
 		{
 			fk_Vector pos, vec, tmp1, tmp2;
 			var water = new fk_Vector(-0.2, 0.0, 0.0);
 			double R = 15.0;
 			double r;
 
-			pos = P.Position;
+            pos = P.Position;        // パーティクル位置取得。
 			pos.z = 0.0;
-			r = pos.Dist();
-			
-			tmp1 = water/(r*r*r);
+            r = pos.Dist();          // |p| を r に代入。
+
+            // パーティクルの速度ベクトルを計算
+            tmp1 = water/(r*r*r);
 			tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
 			vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
 			P.Velocity = vec;
-			double speed = vec.Dist();
+
+            // パーティクルの色を計算。パーティクル速度が
+            // minSpeed ～ maxSpeed の場合は青と赤をブレンドする。
+            double speed = vec.Dist();
 			double t = (speed - minSpeed)/(maxSpeed - minSpeed);
 			if(t > 1.0) t = 1.0;
 			if(t < 0.0) t = 0.0;
-			fk_Color newCol = (1.0 - t)*blue + t*red;
+			fk_Color newCol = (1.0 - t)*blue + t*red;  // 色値の線形補間
 			SetColorPalette(P.ID, newCol);
 
-			if(pos.x < -50.0) {
+            // パーティクルの x 成分が -50 以下になったら消去
+            if(pos.x < -50.0) {
 				RemoveParticle(P);
 			}
 		} 
@@ -93,7 +109,6 @@ namespace FK_CLI_Particle
 				}
 			}
 
-			
 		}
 	}
 }
