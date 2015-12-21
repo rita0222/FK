@@ -7,6 +7,7 @@
 接近したらひねりを加えてみる。\\ ~
 
 \begin{breakbox}
+\begin{small}
 \begin{verbatim}
  1: using System;
  2: using System.Collections.Generic;
@@ -79,8 +80,9 @@
 69:     }
 70: }
 \end{verbatim}
+\end{small}
 \end{breakbox}
-
+~
 \begin{itemize}
 
 \item 6 行目の using 文は、FK システムを使用する場合に必ず記述する必要がある。
@@ -156,6 +158,7 @@
 C\# 版のコードと比較することで大体の F\# の文法を把握できるだろう。\\ ~
 
 \begin{breakbox}
+\begin{small}
 \begin{verbatim}
  1: open System
  2: open FK_CLI
@@ -213,6 +216,7 @@ C\# 版のコードと比較することで大体の F\# の文法を把握で�
 54:         if camera.Position.z < 0.0 then camera.GlFocus(org) |> ignore
 55:         if !i >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, FK.PI/500.0) |> ignore
 \end{verbatim}
+\end{small}
 \end{breakbox}
 
 \section{LOD 処理とカメラ切り替え}
@@ -222,13 +226,15 @@ C\# 版のコードと比較することで大体の F\# の文法を把握で�
 自分で解析して頂きたいが、ここでは最初のサンプルにはなかった概念に
 関して説明する。
 
-まず、17 行目にて Ball クラスを定義し、この中で fk\_Model や fk\_Sphere の
-オブジェクトを持つようにしている。このようなプログラミングスタイルは、
-ややオブジェクト指向を意識したものと言えよう。
+まず、10 行目にて Ball クラスを定義し、この中で fk\_Model や fk\_Sphere の
+インスタンスを管理している。本マニュアルでは C\# の文法については触れないため、
+クラスの詳細については別の文献を参照して頂きたいが、自作のクラスを作成する際の
+参考となるであろう。
 
-25 〜 27 行目にて球を分割数を変えて 3 種類定義しているが、これは
-78 行目からの lod() メンバ関数内で Ball の実際の形状を動的に選択できるように
-するためである。78 行目から実現している LOD 処理とは、視点とオブジェクトの
+
+29 〜 31 行目にて球を分割数を変えて 3 種類定義しているが、これは
+71 行目からの LOD() メソッド内で Ball の実際の形状を動的に選択できるように
+するためである。「LOD (Level Of Detail) 処理」とは、視点とオブジェクトの
 距離によって形状の精密さを動的に変化させるテクニックである。たとえば、
 多くのポリゴンでできている形状は精密で迫力があるが、視点から
 とても遠くて非常に小さく表示されているような場合は無駄に処理されている
@@ -236,1011 +242,712 @@ C\# 版のコードと比較することで大体の F\# の文法を把握で�
 表示して処理の高速化を計るのが LOD 処理の目的である。このサンプルの
 LOD 処理はわかりやすくするために露骨に変化が見られるが、実際に
 プログラムを作成するときはわかりにくくなるように視点距離との関係を
-調整する。
+調整すべきである。
 \\
 \begin{breakbox}
+\begin{small}
 \begin{verbatim}
-  1: #include <FK/FK.h>
-  2: 
-  3: const double    DOWN_ACCEL      = 1.0500;   // 降下時の加速度
-  4: const double    RISE_ACCEL      = 1.0530;   // 上昇時の減速度
-  5: const int       DOWN_MODE       = 0;        // 降下モード
-  6: const int       RISE_MODE       = 1;        // 上昇モード
-  7: const int       LOW_MODE        = 0;        // ブロック視点モード
-  8: const int       HIGH_MODE       = 1;        // 鳥瞰モード
-  9: const int       LOD4_HIGH       = 200;      // 4分割距離 (鳥瞰)
- 10: const int       LOD3_HIGH       = 300;      // 3分割距離 (鳥瞰)
- 11: const int       LOD4_LOW        = 90;       // 4分割距離 (ブロック)
- 12: const int       LOD3_LOW        = 120;      // 3分割距離 (ブロック)
- 13: const double    TOP_BALL_POS    = 300.0;    // ボール始点高さ
- 14: const double    BTM_BALL_POS    = 18.0;     // ボール跳ね返り高さ
- 15: const double    BALL_SIZE       = 12.0;     // ボール半径
- 16: 
- 17: class Ball {
- 18: 
- 19: private:
- 20:     int         direction;      // ボールの状態(DOWN_MODE or RISE_MODE)
- 21:     int         view_mode;      // 視点モード
- 22:     int         bound_count;    // バウンド回数を数える変数
- 23:     double      y_trs;          // ボールのy座標移動量
- 24:     fk_Model    ball_model;     // ボールのモデル
- 25:     fk_Sphere   BALL2;          // 2分割形状
- 26:     fk_Sphere   BALL3;          // 3分割形状
- 27:     fk_Sphere   BALL4;          // 4分割形状
- 28: 
- 29: public:
- 30: 
- 31:     Ball(void);
- 32:     void        init(void);
- 33:     fk_Model *  getModel(void);
- 34:     fk_Vector   getPosition(void);
- 35:     void        lod(fk_Vector);
- 36:     void        accel(void);
- 37:     void        bound(void);
- 38:     int         draw(fk_Vector);
- 39: };
- 40: 
- 41: // コンストラクタ
- 42: Ball::Ball(void)
- 43: {
- 44:     init();
- 45: }
- 46: 
- 47: // 初期化
- 48: void Ball::init(void)
- 49: {
- 50:     direction    = DOWN_MODE;
- 51:     y_trs        = 0.1;
- 52:     view_mode    = HIGH_MODE;
- 53:     bound_count  = 1;
- 54:     BALL2.setRadius(BALL_SIZE);
- 55:     BALL2.setDivide(2);
- 56:     BALL3.setRadius(BALL_SIZE);
- 57:     BALL3.setDivide(3);
- 58:     BALL4.setRadius(BALL_SIZE);
- 59:     BALL4.setDivide(4);
- 60: 
- 61:     ball_model.glMoveTo(0.0, TOP_BALL_POS, 0.0);
- 62:     ball_model.setShape(&BALL2);
- 63: }
- 64: 
- 65: // fk_Model を返す関数
- 66: fk_Model * Ball::getModel(void)
- 67: {
- 68:     return &ball_model;
- 69: }
- 70: 
- 71: // ボールの現在位置を返す関数
- 72: fk_Vector Ball::getPosition(void)
- 73: {
- 74:     return ball_model.getPosition();
- 75: }
- 76: 
- 77: // 視点からの距離によってボールの分割数を変える関数 (Level Of Detail)
- 78: void Ball::lod(fk_Vector pos){
- 79:     double    distance;
- 80: 
- 81:     distance = (ball_model.getPosition() - pos).dist();
- 82: 
- 83:     switch(view_mode) {
- 84:       case HIGH_MODE:
- 85: 
- 86:         if(distance < LOD4_HIGH) {
- 87:             ball_model.setShape(&BALL4);
- 88:         } else if(distance < LOD3_HIGH) {
- 89:             ball_model.setShape(&BALL3);
- 90:         } else {
- 91:             ball_model.setShape(&BALL2);
- 92:         }
- 93:         break;
- 94: 
- 95:       case LOW_MODE:
- 96: 
- 97:         if(distance < LOD4_LOW) {
- 98:             ball_model.setShape(&BALL4);
- 99:         } else if(distance < LOD3_LOW) {
-100:             ball_model.setShape(&BALL3);
-101:         } else {
-102:             ball_model.setShape(&BALL2);
-103:         }
-104:         break;
-105: 
-106:       default:
-107:         fl_alert("Err!! View Mode is wrong.");
-108:         break;
-109:     }
-110: 
-111:     return;
-112: }
-113: 
-114: // ボールを加速させる関数
-115: void Ball::accel(void)
-116: {
-117:     switch(direction) {
-118:       case DOWN_MODE:
-119:         y_trs *= DOWN_ACCEL;
-120:         ball_model.glTranslate(0.0, -y_trs, 0.0);
-121:         break;
-122: 
-123:       case RISE_MODE:
-124:         y_trs /= RISE_ACCEL;
-125:         ball_model.glTranslate(0.0, y_trs,0.0);
-126:         break;
-127:         
-128:       default:
-129:         fl_alert("Err!! Direction Mode is wrong.");
-130:         break;
-131:     }
-132: }
-133: 
-134: // ボールの跳ね返り判定をする関数
-135: void Ball::bound(void)
-136: {
-137:     if(ball_model.getPosition().y < BTM_BALL_POS) {
-138:         direction = RISE_MODE;
-139:     } else if(y_trs < 0.01) {
-140:         if(direction == RISE_MODE) {
-141:             if(bound_count % 4 < 2) {
-142:                 view_mode = HIGH_MODE;
-143:             } else {
-144:                 view_mode = LOW_MODE;
-145:             }
-146:             bound_count++;
-147:         }
-148:         direction = DOWN_MODE;
-149:     }
-150: 
-151:     return;
-152: }
-153: 
-154: // ボールの運動に関する関数. 返り値は視点モード
-155: int Ball::draw(fk_Vector pos)
-156: {
-157:     lod(pos);
-158:     bound();
-159:     accel();
-160:     //４回跳ね返ると初期化
-161:     if(bound_count > 4) init();
-162:     return view_mode;
-163: }
-164: 
-165: int main(int argc, char *argv[])
-166: {
-167:     fk_Scene        scene;
-168:     int             view_mode = HIGH_MODE;
-169:     Ball            ball;
-170:     fk_Model        viewModel, lightModel, groundModel, blockModel;
-171:     fk_Light        light;
-172:     fk_Circle       ground(4, 100.0);
-173:     fk_Block        block(10.0, 10.0, 10.0);
-174: 
-175: 
-176:     // ### WINDOW ###
-177:     Fl_Window        mainWin(620, 620, "BALL TEST");
-178:     fk_Window        win(10, 10, 600, 600);
-179:     mainWin.end();
-180:     fk_Material::initDefault();
-181: 
-182:     // ### VIEW POINT ###
-183:     // 上の方から見た視点
-184:     viewModel.glMoveTo(0.0, 400.0, 80.0);
-185:     viewModel.glFocus(0.0, 30.0, 0.0);
-186:     viewModel.glUpvec(0.0, 1.0, 0.0);
-187: 
-188:     // ### LIGHT ###
-189:     light.setLightType(FK_POINT_LIGHT);
-190:     light.setAttenuation(0.0, 0.0);
-191:     lightModel.setShape(&light);
-192:     lightModel.setMaterial(White);
-193:     lightModel.glTranslate(-60.0, 60.0, 0.0);
-194: 
-195:     // ### GROUND ###
-196:     groundModel.setShape(&ground);
-197:     groundModel.setMaterial(LightGreen);
-198:     groundModel.setSmoothMode(true);
-199:     groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2.0);
-200: 
-201:     // ### VIEW BLOCK ###
-202:     blockModel.setShape(&block);
-203:     blockModel.setMaterial(Blue);
-204:     blockModel.glMoveTo(60.0, 30.0, 0.0);
-205:     blockModel.setParent(&groundModel);
-206: 
-207:     // ### BALL ###
-208:     ball.getModel()->setMaterial(Red);
-209:     ball.getModel()->setSmoothMode(true);
-210:     
-211:     // ### Model Entry ###
-212:     scene.entryCamera(&viewModel);
-213:     scene.entryModel(&lightModel);
-214:     scene.entryModel(ball.getModel());
-215:     scene.entryModel(&groundModel);
-216:     scene.entryModel(&blockModel); 
-217:     win.setScene(&scene);
-218: 
-219:     mainWin.show();
-220:     win.show();
-221: 
-222:     // ### MAIN LOOP ###
-223:     while(true) {
-224: 
-225:         if(mainWin.visible() == 0) {
-226:             if(Fl::wait() == 0) {
-227:                 break;
-228:             } else {
-229:                 continue;
-230:             }
-231:         }
-232:         if(win.drawWindow() == 0) break;
-233:         if(Fl::check() == 0) break;
-234:         if(win.winOpenStatus() == false) continue;
-235: 
-236:         // ボールを弾ませて, カメラの状態を取得。
-237:         view_mode = ball.draw(viewModel.getPosition());
-238: 
-239:         if(view_mode == HIGH_MODE) {
-240:             // カメラを上からの視点にする。
-241:             viewModel.glMoveTo(0.0, 400.0, 80.0);
-242:             viewModel.glFocus(0.0, 30.0, 0.0);
-243:             viewModel.glUpvec(0.0, 1.0, 0.0);
-244:             scene.entryModel(&blockModel);
-245:         } else {
-246:             // カメラをブロックからの視点にする。
-247:             viewModel.glMoveTo(blockModel.getInhPosition());
-248:             viewModel.glTranslate(0.0, 10.0, 0.0);
-249:             viewModel.glFocus(ball.getPosition());
-250:             viewModel.glUpvec(0.0, 1.0, 0.0);
-251:             scene.removeModel(&blockModel);
-252:         }
-253: 
-254:         // 地面をくるくる回転させましょう。
-255:         groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.02);
-256:     }
-257: 
-258:     return 0;
-259: }
-\end{verbatim}
-\end{breakbox}
-\section{FLTK を用いた GUI 構築}
-本節で説明するサンプルは、GUI (Graphical User Interface) を用いた
-立体ビューワーである。ウィンドウの章でも少し触れたが、FK システムは
-内部で FLTK と呼ばれる GUI ツールキットを用いている。ここでは、その
-FLTK を用いて GUI を作成し、FK システムと併用するサンプルを紹介する。
-なお、本書では FLTK の詳細な解説は掲載しないが、FLTK の解説は
-\verb+http://www.fltk.org/+ という URL に詳しく記載されている。
-
-ボールのサンプルと同じく、プログラム行のそれぞれの意味はコメントで
-記述しているので、全体の流れを通して幾つかわかりにくい部分を記述する。
-\begin{itemize}
-
- \item 最初に include するファイルが FK/FK だけでなく、FLTK 用の
-	様々なファイルが多くある。FLTK を用いる場合は、このように適宜
-	必要なファイルを include しなければならない。
-
- \item 10 行目から始まる GUISet クラスは、GUI の部品を管理するための
-	ものである。このクラスのコンストラクタ (41 〜 115 行目) 内で
-	様々な部品を作成するようにしてあるので、GUISet オブジェクトの
-	宣言 (264 行目) をするだけでコンストラクタが呼び出され、GUI が
-	作成されるようになっている。
-
- \item 122 行目からある getFileName メンバ関数は、Fl\_File\_Chooser クラスを
-	用いてファイル名を取得するための関数である。まず 128、129 行目で
-	ファイル取得用ダイアログを生成し、131 行目の while 文でダイアログが
-	終了されるまで処理を行う。もしダイアログ中でキャンセルされていた
-	場合は、135 行目の fCharP に nullptr が入るため、136 行目の if 文に
-	該当する。そうでない場合は、143 行目まで進んで文字列(ファイル名)を
-	返す。
-
- \item 161 行目では数学関数の pow を用いている。pow(a, b) は a の b 乗を
-	返す関数なので、scaleRoller の値が実際には
-	2 であれば \(100 (= 10^2)\) を、
-	3 であれば \(1000 (= 10^3)\) を、
-	-1 であれば \(0.1 (= 10^{-1})\) を返す。
-
- \item 314、315 行目では照明を Y 軸中心に少しだけ回転させている。
-	形状を回転させずに立体感を出す方法として、このように照明を回転
-	させることも有効な手段である。
-
- \item 318、319 行目で、GUI のスライダーやローラーで設定された
-	値を実際に反映させている。
-
- \item 325 行目にて、fl\_color\_chooser によってカラー設定ウィンドウを
-	呼び出している。この関数の 2 〜 4 番目の引数は実は参照呼び出しに
-	なっている。従って、colorR, colorG, colorB の3変数は色設定の
-	後に値がちゃんと反映されている。
-
-\end{itemize}
-\begin{breakbox}
-\begin{verbatim}
-  1: #include <FK/FK.h>
-  2: #include <FL/Fl_Value_Slider.h>
-  3: #include <FL/Fl_Roller.h>
-  4: #include <FL/Fl_Group.h>
-  5: #include <FL/Fl_Check_Button.h>
-  6: #include <FL/Fl_Color_Chooser.h>
-  7: #include <FL/Fl_File_Chooser.h>
-  8: #include <FL/fl_ask.h>
-  9: 
- 10: class GUISet {
- 11: private:
- 12: 
- 13:     Fl_Value_Slider *headSlider;             // ヘディング角用スライダー
- 14:     Fl_Value_Slider *pitchSlider;            // ピッチ各用スライダー
- 15:     Fl_Roller       *scaleRoller;            // スケーリング用ローラー
- 16: 
- 17:     Fl_Group        *materialGroup;          // ラジオボタンのグループ
- 18:     Fl_Check_Button *ambientButton;          // Ambient 用ボタン
- 19:     Fl_Check_Button *diffuseButton;          // Diffuse 用ボタン
- 20:     Fl_Check_Button *specularButton;         // Specular 用ボタン
- 21:     Fl_Check_Button *emissionButton;         // Emission 用ボタン
- 22:     Fl_Button       *colorChooser;           // カラー設定呼び出しボタン
+  1: using System;
+  2: using System.Collections.Generic;
+  3: using System.Linq;
+  4: using System.Text;
+  5: using System.Threading.Tasks;
+  6: using FK_CLI;
+  7: 
+  8: namespace FK_CLI_Ball
+  9: {
+ 10:     public class Ball
+ 11:     {
+ 12:         private const double    DOWN_ACCEL      = 0.05;     // 降下時の加速度
+ 13:         private const double    RISE_ACCEL      = 0.053;    // 上昇時の減速度
+ 14:         private const int       DOWN_MODE       = 0;        // 降下モード
+ 15:         private const int       RISE_MODE       = 1;        // 上昇モード
+ 16:         private const int       LOD4_HIGH       = 200;      // 四分割距離 (鳥瞰)
+ 17:         private const int       LOD3_HIGH       = 300;      // 三分割距離 (鳥瞰)
+ 18:         private const int       LOD4_LOW        = 90;       // 四分割距離 (ブロック)
+ 19:         private const int       LOD3_LOW        = 120;      // 三分割距離 (ブロック)
+ 20:         private const double    TOP_BALL_POS    = 300.0;    // ボール始点高さ
+ 21:         private const double    BTM_BALL_POS    = 18.0;     // ボール跳ね返り高さ
+ 22:         private const double    BALL_SIZE       = 12.0;     // ボール半径
  23: 
- 24:     Fl_Button       *fileOpenButton;         // ファイル選択呼び出しボタン
- 25:     Fl_Button       *exitButton;             // 終了ボタン
- 26: 
- 27: public:
- 28:     GUISet(void);                            // コンストラクタ
- 29:     ~GUISet();                               // デストラクタ
- 30: 
- 31:     string          getFileName(void);       // ファイル名取得
- 32:     double          getHead(void);           // ヘディング角取得
- 33:     double          getPitch(void);          // ピッチ角取得
- 34:     double          getScale(void);          // スケール取得
- 35:     int             materialSelect(void);    // マテリアル種類取得
- 36:     bool            toggleColorChooser(void);// カラー設定呼出判定
- 37:     bool            toggleFileOpen(void);    // ファイル取得呼出判定
- 38:     bool            toggleExit(void);        // 終了判定
- 39: };
- 40: 
- 41: GUISet::GUISet(void)
- 42: {
- 43:     // ヘディング角用スライダー各種設定
- 44:     headSlider = new Fl_Value_Slider(130, 330, 180, 20, "Head Angle");
- 45:     headSlider->type(FL_HOR_NICE_SLIDER);  // ナイスなスライダー
- 46:     headSlider->minimum(-FK_PI);           // 最小値は -3.14
- 47:     headSlider->maximum(FK_PI);            // 最高値は 3.14
- 48:     headSlider->value(0.0);                // 初期値は 0
- 49:     headSlider->labelsize(12);             // ラベル文字のサイズを 12pt に
- 50:     headSlider->textsize(12);              // カウンタのサイズも 12 に
- 51: 
- 52:     // ピッチ角用スライダー各種設定
- 53:     pitchSlider = new Fl_Value_Slider(130, 370, 180, 20, "Pitch Angle");
- 54:     pitchSlider->type(FL_HOR_NICE_SLIDER);
- 55:     pitchSlider->minimum(-FK_PI);
- 56:     pitchSlider->maximum(FK_PI);
- 57:     pitchSlider->value(0.0);
- 58:     pitchSlider->labelsize(12);
- 59:     pitchSlider->textsize(12);
- 60: 
- 61:     // スケーリング用ローラー各種設定
- 62:     scaleRoller = new Fl_Roller(160, 410, 120, 20, "Scale");
- 63:     scaleRoller->type(FL_HORIZONTAL);       // ローラーは横向き
- 64:     scaleRoller->minimum(-100.0);
- 65:     scaleRoller->maximum(100.0);
- 66:     scaleRoller->value(0.0);
- 67:     scaleRoller->labelsize(12);
- 68: 
- 69:     // 左側のマテリアル関係のボタンをグループ化しておく。
- 70:     materialGroup = new Fl_Group(10, 320, 100, 170);
- 71:     materialGroup->box(FL_THIN_UP_FRAME);   // ちょっと盛り上げる
- 72: 
- 73:     // Ambient 用ラジオボタン
- 74:     ambientButton = new Fl_Check_Button(10, 320, 100, 30, "Ambient");
- 75:     ambientButton->type(FL_RADIO_BUTTON);
- 76:     ambientButton->down_box(FL_DIAMOND_DOWN_BOX);
- 77: 
- 78:     // Diffuse 用ラジオボタン
- 79:     diffuseButton = new Fl_Check_Button(10, 350, 100, 30, "Diffuse");
- 80:     diffuseButton->type(FL_RADIO_BUTTON);
- 81:     diffuseButton->down_box(FL_DIAMOND_DOWN_BOX);
- 82: 
- 83:     // Specular 用ラジオボタン
- 84:     specularButton = new Fl_Check_Button(10, 380, 100, 30, "Specular");
- 85:     specularButton->type(FL_RADIO_BUTTON);
- 86:     specularButton->down_box(FL_DIAMOND_DOWN_BOX);
- 87: 
- 88:     // Emission 用ラジオボタン
- 89:     emissionButton = new Fl_Check_Button(10, 410, 100, 30, "Emission");
- 90:     emissionButton->type(FL_RADIO_BUTTON);
- 91:     emissionButton->down_box(FL_DIAMOND_DOWN_BOX);
- 92: 
- 93:     // カラー設定呼出ボタン
- 94:     colorChooser = new Fl_Button(20, 450, 80, 30, "ColorChange");
- 95:     colorChooser->type(0);        // 普通のボタンとして扱う
- 96:     colorChooser->labelsize(12);
- 97: 
- 98:     // MaterialGroup のグループの終了
- 99:     materialGroup->end();
-100: 
-101:     // とりあえず Ambient にチェックを入れる。
-102:     ambientButton->value(1);
-103: 
-104:     // ファイル取得呼出ボタン
-105:     fileOpenButton = new Fl_Button(120, 460, 90, 30, "File Open");
-106:     fileOpenButton->type(0);
-107:     fileOpenButton->labelsize(12);
-108: 
-109:     // 終了ボタン
-110:     exitButton = new Fl_Button(220, 460, 90, 30, "Exit");
-111:     exitButton->type(0);
-112:     exitButton->labelsize(12);
-113: 
-114:     return;
-115: }
-116: 
-117: GUISet::~GUISet()
-118: {
-119:     return;
-120: }
-121: 
-122: string GUISet::getFileName(void)
-123: {
-124:     Fl_File_Chooser       *fc;
-125:     const char            *fCharP;
-126:     string                fileName;
-127: 
-128:     fc = new Fl_File_Chooser(".", "*.wrl", Fl_File_Chooser::SINGLE,
-129:                              "VRML File Select");
-130:     fc->show();
-131:     while(fc->visible()) {
-132:         Fl::wait();
-133:     }
-134: 
-135:     fCharP = fc->value(1);
-136:     if(fCharP == nullptr) {
-137:         delete fc;
-138:         return fileName;
-139:     }
-140: 
-141:     fileName = fCharP;
-142:     delete fc;
-143:     return fileName;
-144: }
-145: 
-146: 
-147: double GUISet::getHead(void)
-148: {
-149:     return headSlider->value();
-150: }
-151: 
-152: double GUISet::getPitch(void)
-153: {
-154:     return pitchSlider->value();
-155: }
-156: 
-157: double GUISet::getScale(void)
-158: {
-159:     // 10 の (scaleRoller->value()) 乗 を返す。
-160: 
-161:     return pow(10.0, scaleRoller->value());
-162: }
-163: 
-164: int GUISet::materialSelect(void)
-165: {
-166:     // どのラジオボタンが選択されているかを取得
-167: 
-168:     if(ambientButton->value() == 1) return 1;
-169:     if(diffuseButton->value() == 1) return 2;
-170:     if(specularButton->value() == 1) return 3;
-171:     if(emissionButton->value() == 1) return 4;
-172: 
-173:     return -1;
-174: }
-175: 
-176: bool GUISet::toggleColorChooser(void)
-177: {
-178:     if(colorChooser->value() == 1) return true;
-179:     return false;
-180: }
-181: 
-182: bool GUISet::toggleFileOpen(void)
-183: {
-184:     if(fileOpenButton->value() == 1) {
-185:         fileOpenButton->value(0);
-186:         return true;
-187:     }
-188:     return false;
-189: }
-190: 
-191: bool GUISet::toggleExit(void)
-192: {
-193:     if(exitButton->value() == 1) return true;
-194:     return false;
-195: }
-196: 
-197: void getMaterial(int index, fk_Material *mat, double *r, double *g, double *b)
-198: {
-199:     // Index によってマテリアルの各種属性を (R, G, B) に代入
-200: 
-201:     switch(index) {
-202:       case 1:
-203:         *r = mat->getAmbient()->getR();
-204:         *g = mat->getAmbient()->getG();
-205:         *b = mat->getAmbient()->getB();
-206:         break;
-207:       case 2:
-208:         *r = mat->getDiffuse()->getR();
-209:         *g = mat->getDiffuse()->getG();
-210:         *b = mat->getDiffuse()->getB();
-211:         break;
-212:       case 3:
-213:         *r = mat->getSpecular()->getR();
-214:         *g = mat->getSpecular()->getG();
-215:         *b = mat->getSpecular()->getB();
-216:         break;
-217:       case 4:
-218:         *r = mat->getEmission()->getR();
-219:         *g = mat->getEmission()->getG();
-220:         *b = mat->getEmission()->getB();
-221:         break;
-222:       default:
-223:         break;
-224:     }
-225:     return;
-226: }
-227: 
-228: void setMaterial(int index, fk_Material *mat, double r, double g, double b)
-229: {
-230:     // Index によって (R, G, B) を各種マテリアルに設定
-231: 
-232:     switch(index) {
-233:       case 1:
-234:         mat->setAmbient(r, g, b);
-235:         break;
-236:       case 2:
-237:         mat->setDiffuse(r, g, b);
-238:         break;
-239:       case 3:
-240:         mat->setSpecular(r, g, b);
-241:         break;
-242:       case 4:
-243:         mat->setEmission(r, g, b);
-244:         break;
-245:       default:
-246:         break;
-247:     }
-248: 
-249:     return;
-250: }
-251: 
-252: int main(int argc, char *argv[])
-253: {
-254:     double          colorR, colorG, colorB;
-255:     fk_Material     material;
-256:     fk_IndexFaceSet shape;
-257:     fk_Light        light;
-258:     fk_Model        shapeModel, lightModel[2], camera;
-259:     fk_Scene        scene;
-260:     string          fileName;
-261: 
-262:     Fl_Window       mainWindow(320, 500, "VRML Viewer");
-263:     fk_Window       viewWin(10, 10, 300, 300);
-264:     GUISet          gui;
-265: 
-266:     mainWindow.end();
-267: 
-268:     fk_Material::initDefault();
-269: 
-270:     // 光源の設定。今回は2つの平行光源
-271:     lightModel[0].setShape(&light);
-272:     lightModel[1].setShape(&light);
-273:     lightModel[0].setMaterial(White);
-274:     lightModel[1].setMaterial(White);
-275:     lightModel[0].glFocus(-1.0, -1.0, 0.0);
-276:     lightModel[1].glFocus(1.0, -1.0, 0.0);
-277: 
-278:     // ソリッドモデルの初期マテリアルに Yellow を用いる。
-279:     material = Yellow;
-280:     shapeModel.setShape(&shape);
-281:     shapeModel.setMaterial(material);
-282: 
-283:     // 視点の設定
-284:     camera.glTranslate(0.0, 100.0, 1000.0);
-285:     camera.glFocus(0.0, 0.0, 0.0);
-286:     camera.glUpvec(0.0, 1.0, 0.0);
-287: 
-288:     // ディスプレイリストへソリッド、光源、視点を登録
-289:     scene.entryModel(&shapeModel);
-290:     scene.entryModel(&lightModel[0]);
-291:     scene.entryModel(&lightModel[1]);
-292:     scene.entryCamera(&camera);
-293: 
-294:     // ViewWin にディスプレイリストを登録
-295:     viewWin.setScene(&scene);
-296: 
-297:     mainWindow.show();
-298:     viewWin.show();
-299: 
-300:     while(true) {
-301: 
-302:         if(mainWindow.visible() == 0) {
-303:             if(Fl::wait() == 0) {
-304:                 break;
-305:             } else {
-306:                 continue;
-307:             }
-308:         }
-309:         if(viewWin.drawWindow() == 0) break;
-310:         if(Fl::check() == 0) break;
-311:         if(viewWin.winOpenStatus() == false) continue;
-312: 
-313:         // ライトを Y 軸中心に回転
-314:         lightModel[0].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/100.0);
-315:         lightModel[1].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/100.0);
-316: 
-317:         // スライダーやローラーに従ってソリッドモデルの姿勢と大きさを決定
-318:         shapeModel.glAngle(gui.getHead(), gui.getPitch(), 0.0);
-319:         shapeModel.setScale(gui.getScale());
-320: 
-321:         if(gui.toggleColorChooser() == true) {
-322:             // カラー設定モード
-323:             getMaterial(gui.materialSelect(), &material,
-324:                         &colorR, &colorG, &colorB);
-325:             fl_color_chooser("COLOR SET", colorR, colorG, colorB);
-326:             setMaterial(gui.materialSelect(), &material,
-327:                         colorR, colorG, colorB);
-328:             shapeModel.setMaterial(material);
-329:         }
-330: 
-331:         if(gui.toggleFileOpen() == true) {
-332:             // ファイル取得モード
-333:             fileName = gui.getFileName();
-334:             if(fileName != "") {
-335:                 // キャンセルを押されたのでないなら
-336:                 if(shape.readVRMLFile(fileName, true, false) == false) {
-337:                     // VRML ファイルではなかったら
-338:                     fl_alert(" is not VRML2.0 file.", fileName.c_str());
-339:                 } else {
-340:                     shapeModel.setMaterialMode(FK_PARENT_MODE);
-341:                 }
-342:             }
-343:         }
-344: 
-345:         if(gui.toggleExit() == true) {
-346:             // 終了ボタンが押されたら while ループを抜ける。
-347:             break;
-348:         }
-349:     }
-350: 
-351:     return 0;
-352: }
-\end{verbatim}
-\end{breakbox}
-\section{マルチウィンドウ}
-次のサンプルは、マルチウィンドウを用いて複数の視点を同時に表示する
-プログラムである。このプログラムは、同一シーンで異なる3つの
-ウィンドウが表示される。それぞれの視点は左から順に、車の運転者視点、
-建物から見た視点、車を斜め後ろから見下ろした鳥瞰視点を表して
-いる。
-
-このプログラムでは、116 〜 126 行目で3つのウィンドウを同時に
-処理している以外は、特に目新しい部分はない。このように、特別な
-処理を施す必要なくマルチウィンドウプログラムを作成することが
-可能である。
-\\
-\begin{breakbox}
-\begin{verbatim}
-  1: #include <FK/FK.h>
-  2: 
-  3: const double    BUILDWIDTH  = 25.0;     // 建物幅の基本単位
-  4: const double    SPEED       = 2.0;      // 車のスピード
-  5: const double    CIRCUITX    = 150.0;    // コースの X 方向幅
-  6: const double    CIRCUITY    = 250.0;    // コースの Y 方向幅
-  7: const double    EPS         = 0.001;    // 誤差判定用数値
-  8: 
-  9: class Car {
- 10: private:
- 11:     fk_Model    carModel;       // 車全体モデル
- 12:     fk_Model    bodyModel;      // 車体モデル
- 13:     fk_Model    tireModel[4];   // 各タイヤモデル
- 14:     fk_Model    driverModel[2]; // 運転者モデル
- 15:     fk_Model    birdModel;      // 鳥瞰視点モデル
- 16: 
- 17:     fk_Block    body;           // 車体形状
- 18:     fk_Circle   tire;           // タイヤ形状
- 19:     fk_Sphere   driver;         // 運転者形状
- 20: 
- 21: public:
- 22:     Car(void) {     // コンストラクタ
- 23:         init();
- 24:     }
- 25: 
- 26:     void        init(void);
- 27:     void        entryScene(fk_Scene *, bool);   
- 28:     fk_Vector   getCarPosition(void);
- 29:     fk_Model *  getBirdModel(void);
- 30:     void        forward(void);
- 31:     void        rotate(fk_Model *, fk_Vector, fk_Vector);
- 32: };
- 33: 
- 34: class World {
- 35: private:
- 36:     fk_Model    buildModel[6], groundModel, lightModel[2];
- 37:     fk_Block    buildShape, groundShape;
- 38:     fk_Light    lightShape;
- 39: 
- 40:     void        defLight(int, double, double, double);
- 41:     void        makeBuild(int, double, double, double, fk_Material *);
- 42: 
- 43: public:
- 44:     World(void) {
- 45:         init();
- 46:     }
- 47: 
- 48:     void        init(void);
- 49:     void        entryScene(fk_Scene *, bool);
- 50: };
- 51: 
- 52: int main(int argc, char *argv[])
- 53: {
- 54:     Car             carObj;
- 55:     World           worldObj;
- 56:     Fl_Window       mainWindow(940, 320, "FK TEST");
- 57:     fk_Scene        carViewScene, buildViewScene, birdViewScene;
- 58:     fk_Window       carViewWindow(10, 10, 300, 300);
- 59:     fk_Window       buildViewWindow(320, 10, 300, 300);
- 60:     fk_Window       birdViewWindow(630, 10, 300, 300);
- 61:     fk_Color        bgColor(0.2, 0.7, 1.0);
+ 24:         private int direction;          // ボールの状態(DOWN_MODE or RISE_MODE)
+ 25:         private int view_mode;          // 視点モード
+ 26:         private int bound_count;        // バウンド回数を数える変数
+ 27:         private double y_trs;           // ボールのｙ座標移動量
+ 28:         private fk_Model ball_model;    // ボールのモデル
+ 29:         private fk_Sphere BALL2;        // 二分割形状
+ 30:         private fk_Sphere BALL3;        // 三分割形状
+ 31:         private fk_Sphere BALL4;        // 四分割形状
+ 32: 
+ 33:         public const int LOW_MODE       = 0;        // ブロック視点モード
+ 34:         public const int HIGH_MODE      = 1;        // 鳥瞰モード
+ 35: 
+ 36:         public Ball()
+ 37:         {
+ 38:             BALL2 = new fk_Sphere(6, BALL_SIZE);
+ 39:             BALL3 = new fk_Sphere(8, BALL_SIZE);
+ 40:             BALL4 = new fk_Sphere(10, BALL_SIZE);
+ 41:             ball_model = new fk_Model();
+ 42:             Init();
+ 43:         }
+ 44: 
+ 45:         public void Init()
+ 46:         {
+ 47:             direction   = DOWN_MODE;
+ 48:             y_trs       = 0.1;
+ 49:             view_mode   = HIGH_MODE;
+ 50:             bound_count = 1;
+ 51:             ball_model.GlMoveTo(0.0, TOP_BALL_POS, 0.0);
+ 52:             ball_model.Shape = BALL2;
+ 53:         }
+ 54: 
+ 55:         public fk_Model Model
+ 56:         {
+ 57:             get
+ 58:             {
+ 59:                 return ball_model;
+ 60:             }
+ 61:         }
  62: 
- 63:     fk_Model        buildViewModel, birdViewModel;
- 64: 
- 65:     mainWindow.end();
- 66:     fk_Material::initDefault();
- 67: 
- 68:     carObj.init();
- 69:     worldObj.init();
+ 63:         public fk_Vector Pos
+ 64:         {
+ 65:             get
+ 66:             {
+ 67:                 return ball_model.Position;
+ 68:             }
+ 69:         }
  70: 
- 71: 
- 72:     // 各ウィンドウにバックグラウンドカラー設定
- 73:     carViewScene.setBGColor(bgColor);
- 74:     buildViewScene.setBGColor(bgColor);
- 75:     birdViewScene.setBGColor(bgColor);
- 76: 
- 77: 
- 78:     // 各モデルをディスプレイリストに登録
- 79:     worldObj.entryScene(&carViewScene, false);
- 80:     worldObj.entryScene(&buildViewScene, true);
- 81:     worldObj.entryScene(&birdViewScene, false);
- 82: 
- 83:     carObj.entryScene(&carViewScene, false);
- 84:     carObj.entryScene(&buildViewScene, true);
- 85:     carObj.entryScene(&birdViewScene, true);
- 86: 
- 87:     // 建物ウィンドウの視点設定
- 88:     buildViewModel.glMoveTo(-250.0, 100.0, 100.0);
- 89:     buildViewModel.glFocus(carObj.getCarPosition());
- 90:     buildViewModel.glUpvec(0.0, 0.0, 1.0);
- 91:     buildViewScene.entryCamera(&buildViewModel);
- 92: 
- 93:     // 鳥瞰ウィンドウの視点設定
- 94:     birdViewScene.entryCamera(carObj.getBirdModel());
- 95: 
- 96:     // ウィンドウへディスプレイリストを登録
- 97:     carViewWindow.setScene(&carViewScene);
- 98:     buildViewWindow.setScene(&buildViewScene);
- 99:     birdViewWindow.setScene(&birdViewScene);
-100: 
-101:     mainWindow.show();
-102:     carViewWindow.show();
-103:     buildViewWindow.show();
-104:     birdViewWindow.show();
-105: 
-106:     while(true) {
+ 71:         public void LOD(fk_Vector argPos)
+ 72:         {
+ 73:             double  Distance = (ball_model.Position - argPos).Dist();
+ 74:             switch(view_mode) {
+ 75:                 case HIGH_MODE:
+ 76:                     if(Distance < LOD4_HIGH) {
+ 77:                         ball_model.Shape = BALL4;
+ 78:                     } else if(Distance < LOD3_HIGH) {
+ 79:                         ball_model.Shape = BALL3;
+ 80:                     } else {
+ 81:                         ball_model.Shape = BALL2;
+ 82:                     }
+ 83:                     break;
+ 84: 
+ 85:                 case LOW_MODE:
+ 86:                     if(Distance < LOD4_LOW) {
+ 87:                         ball_model.Shape = BALL4;
+ 88:                     } else if(Distance < LOD3_LOW) {
+ 89:                         ball_model.Shape = BALL3;
+ 90:                     } else {
+ 91:                         ball_model.Shape = BALL2;
+ 92:                     }
+ 93:                     break;
+ 94: 
+ 95:                 default:
+ 96:                     break;
+ 97:             }
+ 98:         }
+ 99: 
+100:         public void Accel()
+101:         {
+102:             switch(direction) {
+103:                 case DOWN_MODE:
+104:                     y_trs += DOWN_ACCEL;
+105:                     ball_model.GlTranslate(0.0, -y_trs, 0.0);
+106:                     break;
 107: 
-108:         if(mainWindow.visible() == 0) {
-109:             if(Fl::wait() == 0) {
-110:                 break;
-111:             } else {
-112:                 continue;
-113:             }
-114:         }
-115: 
-116:         if(carViewWindow.drawWindow() == 0 ||
-117:            buildViewWindow.drawWindow() == 0 ||
-118:            birdViewWindow.drawWindow() == 0) break;
-119: 
-120:         if(Fl::check() == 0) break;
-121: 
-122:         if(carViewWindow.winOpenStatus() == false ||
-123:            buildViewWindow.winOpenStatus() == false ||
-124:            birdViewWindow.winOpenStatus() == false) {
-125:             continue;
-126:         }     
-127: 
-128:         carObj.forward();
-129:         buildViewModel.glFocus(carObj.getCarPosition());
-130:         buildViewModel.glUpvec(0.0, 0.0, 1.0);
-131:     }
-132:     
-133:     return 0;
-134: }
-135: 
-136: void Car::init(void)
-137: {
-138:     int     i;
-139: 
-140:     body.setSize(7.0, 6.0, 20.0);
-141:     tire.setRadius(2.0);
-142:     tire.setDivide(2);
-143:     driver.setRadius(2.0);
-144:     driver.setDivide(2);
+108:                 case RISE_MODE:
+109:                     y_trs -= RISE_ACCEL;
+110:                     ball_model.GlTranslate(0.0, y_trs, 0.0);
+111:                     break;
+112: 
+113:                 default:
+114:                     break;
+115:             }
+116:         }
+117: 
+118:         public void Bound()
+119:         {
+120:             if(ball_model.Position.y < BTM_BALL_POS) {
+121:                 direction = RISE_MODE;
+122:             } else if(y_trs < 0.01) {
+123:                 if(direction == RISE_MODE) {
+124:                     if(bound_count % 4 < 2) {
+125:                         view_mode = HIGH_MODE;
+126:                     } else {
+127:                         view_mode = LOW_MODE;
+128:                     }
+129:                     bound_count++;
+130:                 }
+131:                 direction = DOWN_MODE;
+132:             }
+133:         }
+134: 
+135:         public int Draw(fk_Vector argPos)
+136:         {
+137:             LOD(argPos);
+138:             Bound();
+139:             Accel();
+140:             //４回跳ね返ると初期化
+141:             if(bound_count > 4) Init();
+142:             return view_mode;
+143:         }
+144:     }
 145: 
-146:     bodyModel.setShape(&body);
-147:     bodyModel.glMoveTo(0.0, 5.0, 0.0);
-148:     bodyModel.setMaterial(Yellow);
-149:     bodyModel.setParent(&carModel);
+146:     class Program
+147:     {
+148:         static void Main(string[] args)
+149:         {
+150:             var win = new fk_AppWindow();
+151:             win.Size = new fk_Dimension(600, 600);
+152:             win.ClearModel(false); // デフォルト光源消去
+153: 
+154:             int view_mode = Ball.HIGH_MODE;
+155:     
+156:             var ball = new Ball();
+157:             
+158:             var viewModel = new fk_Model();
+159:             var lightModel = new fk_Model();
+160:             var groundModel = new fk_Model();
+161:             var blockModel = new fk_Model();
+162: 
+163:             var light = new fk_Light();
+164:             var ground = new fk_Circle(4, 100.0);
+165:             var block = new fk_Block(10.0, 10.0, 10.0);
+166: 
+167: 
+168:             fk_Material.InitDefault();
+169: 
+170:             // ### VIEW POINT ###
+171:             // 上の方から見た視点
+172:             viewModel.GlMoveTo(0.0, 400.0, 80.0);
+173:             viewModel.GlFocus(0.0, 30.0, 0.0);
+174:             viewModel.GlUpvec(0.0, 1.0, 0.0);
+175: 
+176:             // ### LIGHT ###
+177:             light.Type = fk_LightType.POINT;
+178:             light.SetAttenuation(0.0, 0.0);
+179:             lightModel.Shape = light;
+180:             lightModel.Material = fk_Material.White;
+181:             lightModel.GlTranslate(-60.0, 60.0, 0.0);
+182: 
+183:             // ### GROUND ###
+184:             groundModel.Shape = ground;
+185:             groundModel.Material = fk_Material.LightGreen;
+186:             groundModel.SmoothMode = true;
+187:             groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/2.0);
+188: 
+189:             // ### VIEW BLOCK ###
+190:             blockModel.Shape = block;
+191:             blockModel.Material = fk_Material.Blue;
+192:             blockModel.GlMoveTo(60.0, 30.0, 0.0);
+193:             blockModel.Parent = groundModel;
+194: 
+195:             // ### BALL ###
+196:             ball.Model.Material = fk_Material.Red;
+197:             ball.Model.SmoothMode = true;
+198:     
+199:             // ### Model Entry ###
+200:             win.CameraModel = viewModel;
+201:             win.Entry(lightModel);
+202:             win.Entry(ball.Model);
+203:             win.Entry(groundModel);
+204:             win.Entry(blockModel); 
+205: 
+206:             win.Open();
+207: 
+208:             while(win.Update() == true) {
+209: 
+210:                 // ボールを弾ませて, カメラの状態を取得。
+211:                 view_mode = ball.Draw(viewModel.Position);
+212: 
+213:                 if(view_mode == Ball.HIGH_MODE) {
+214:                     // カメラを上からの視点にする。
+215:                     viewModel.GlMoveTo(0.0, 400.0, 80.0);
+216:                     viewModel.GlFocus(0.0, 30.0, 0.0);
+217:                     viewModel.GlUpvec(0.0, 1.0, 0.0);
+218:                 } else {
+219:                     // カメラをブロックからの視点にする。
+220:                     viewModel.GlMoveTo(blockModel.InhPosition);
+221:                     viewModel.GlTranslate(0.0, 10.0, 0.0);
+222:                     viewModel.GlFocus(ball.Pos);
+223:                     viewModel.GlUpvec(0.0, 1.0, 0.0);
+224:                 }
+225: 
+226:                 // 地面をくるくる回転させましょう。
+227:                 groundModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
+228:             }
+229:         }
+230:     }
+231: }
+\end{verbatim}
+\end{small}
+\end{breakbox}
+
+\section{Boid アルゴリズムによる群集シミュレーション}
+Boid アルゴリズムとは、群集シミュレーションを実現するための最も基本的なアルゴリズムである。
+このアルゴリズムでは、群を構成する各エージェントは以下の3つの動作規則を持つ。
+
+\begin{description}
+\item[分離 (Separation):] ~ \\
+	エージェントが、他のエージェントとぶつからないように距離を取る。
+	\myfig{Fig:Boid-Sep}{./Fig/Boid-Sep.eps}{scale=3.0}{分離の概念図}{0mm}
+
+\item[整列 (Alignment):] ~ \\
+	エージェントが周囲のエージェントと方向ベクトルと速度ベクトルを合わせる。
+	\myfig{Fig:Boid-Ali}{./Fig/Boid-Ali.eps}{scale=3.0}{整列の概念図}{0mm}
+
+\item[結合 (Cohesion):] ~ \\
+	エージェントは、群れの中心方向に集まるようにする。
+	\myfig{Fig:Boid-Coh}{./Fig/Boid-Coh.eps}{scale=3.0}{結合の概念図}{0mm}
+
+\end{description}
+これを実現するための計算式は、以下の通りである。
+なお、\(n\)個のエージェントの識別番号を\(i \; (0, 1, \cdots, n-1)\) とし、
+それぞれの位置ベクトル、速度ベクトルを \(\bP_i, \bV_i\) とする。
+
+\begin{description}
+ \item[分離:] ~ \\
+エージェント\(i\)が\(j\)から離れたければ、元の速度ベクトルに対し
+\(\lvec{\bP_j\bP_i} = \bP_i - \bP_j\) を合わせれば良いので、
+\(\alpha\)をやや小さめの適当な数値として
+\begin{equation}
+	{\bV_i}' = \bV_i + \alpha \frac{\bP_i - \bP_j}{|\bP_i - \bP_j|}
+\end{equation}
+とすればよい。これを近隣にあるエージェント全てにおいて計算すればよい。
+近隣エージェントの番号集合を\(N\)とすれば、
+\begin{equation}
+	{\bV_i}' = \bV_i + \alpha \sum_{j \in N}\frac{\bP_i - \bP_j}{|\bP_i - \bP_j|}
+\end{equation}
+となる。
+
+\item[整列:] ~ \\
+周囲のエージェントの速度ベクトルの平均を出し、その分を自身の速度ベクトルに足せばよい。
+数式としては以下の通り。
+\begin{equation}
+	{\bV_i}' = \frac{\bV_i + \beta\sum_{j \in N}\bV_j}{|\bV_i + \beta\sum_{j \in N}\bV_j|} .
+\end{equation}
+
+\item[結合:] ~ \\
+群れ全体の重心\(\bG\)を算出し、そこに向かうようなベクトルを速度ベクトルに追加する。
+\begin{equation}
+	{\bV_i}' = \bV_i + \gamma (\frac{\sum\bP_i}{n} - \bP_i) .
+\end{equation}
+\end{description}
+
+以下、C\# と F\# によるサンプルプログラムを掲載する。
+これらついての詳細な解説は割愛するが、
+各エージェントを表す「Agent」クラスと、群を表す「Boid」クラスを構築することにより、
+メインループがかなりシンプルになっていることがわかる。また、
+「S」「A」「C」キーを押すと、それぞれ「分離」「整列」「結合」規則を無効にするように
+なっているので、各規則がどのようにエージェントの動作に影響しているかがわかるだろう。
+
+F\# は C\# に比べるとかなりコンパクトなコードになっている。
+F\# は、配列やリストに対しての各種操作で強力な機能を持つ文法となっており、
+今回のようなシミュレーションプログラムの記述には大きな威力を発揮することがわかる。
+
+\begin{center}
+C\#版
+\end{center}
+\begin{breakbox}
+\begin{small}
+\begin{verbatim}
+  1: using System;
+  2: using System.Collections.Generic;
+  3: using System.Linq;
+  4: using System.Text;
+  5: using System.Threading.Tasks;
+  6: using FK_CLI;
+  7: 
+  8: namespace FK_CLI_Boid
+  9: {
+ 10:     // エージェント用クラス
+ 11:     class Agent
+ 12:     {
+ 13:         private fk_Model model;
+ 14:         private fk_Vector newVec;
+ 15: 
+ 16:         public Agent(double argSize, Random argRand)
+ 17:         {
+ 18:             // コンストラクタ
+ 19:             // 各モデルの位置と方向をランダムに設定する。
+ 20:             model = new fk_Model();
+ 21:             model.Material = fk_Material.Red;
+ 22:             model.GlVec(argRand.NextDouble()*2.0 - 1.0, argRand.NextDouble()*2.0 - 1.0, 0.0);
+ 23:             model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
+ 24:                            argRand.NextDouble() * argSize * 2.0 - argSize, 0.0);
+ 25:         }
+ 26: 
+ 27:         // 位置ベクトルプロパティ
+ 28:         public fk_Vector Pos
+ 29:         {
+ 30:             get
+ 31:             {
+ 32:                 return model.Position;
+ 33:             }
+ 34:         }
+ 35: 
+ 36:         // 方向ベクトルプロパティ
+ 37:         public fk_Vector Vec
+ 38:         {
+ 39:             set
+ 40:             {
+ 41:                 newVec = value;
+ 42:             }
+ 43:             get
+ 44:             {
+ 45:                 return model.Vec;
+ 46:             }
+ 47:         }
+ 48: 
+ 49:         // 形状インスタンスプロパティ
+ 50:         public fk_Shape Shape
+ 51:         {
+ 52:             set
+ 53:             {
+ 54:                 model.Shape = value;
+ 55:             }
+ 56:         }
+ 57: 
+ 58:         // ウィンドウ登録メソッド
+ 59:         public void Entry(fk_AppWindow argWin)
+ 60:         {
+ 61:             argWin.Entry(model);
+ 62:         }
+ 63: 
+ 64:         // 前進メソッド
+ 65:         public void Forward()
+ 66:         {
+ 67:             model.GlVec(newVec);
+ 68:             model.LoTranslate(0.0, 0.0, -0.05);
+ 69:         }
+ 70:     }
+ 71: 
+ 72:     // 群衆用クラス
+ 73:     class Boid {
+ 74:         private Agent [] agent;
+ 75:         private fk_Cone cone;
+ 76:         private const int IAREA = 15;
+ 77:         private const double AREASIZE = (double)(IAREA);
+ 78: 
+ 79:         private double paramA, paramB, paramC, paramLA, paramLB;
+ 80: 
+ 81:         // コンストラクタ
+ 82:         public Boid(int argNum)
+ 83:         {
+ 84:             // 乱数発生器の初期化
+ 85:             var rand = new Random();
+ 86: 
+ 87:             // 形状インスタンスの性生
+ 88:             fk_Material.InitDefault();
+ 89:             cone = new fk_Cone(16, 0.4, 1.0);
+ 90:             if(argNum < 0) return;
+ 91: 
+ 92:             // エージェント配列作成
+ 93:             agent = new Agent[argNum];
+ 94: 
+ 95:             // エージェントインスタンスの作成
+ 96:             for(int i = 0; i < argNum; ++i) {
+ 97:                 agent[i] = new Agent(AREASIZE, rand);
+ 98:                 agent[i].Shape = cone;
+ 99:             }
+100: 
+101:             // 各種パラメータ設定
+102:             paramA = 0.2;
+103:             paramB = 0.02;
+104:             paramC = 0.01;
+105:             paramLA = 3.0;
+106:             paramLB = 5.0;
+107:         }
+108: 
+109:         // パラメータ設定メソッド
+110:         public void SetParam(double argA, double argB, double argC,
+111:                              double argLA, double argLB)
+112:         {
+113:             paramA = argA;
+114:             paramB = argB;
+115:             paramC = argC;
+116:             paramLA = argLA;
+117:             paramLB = argLB;
+118:         }
+119: 
+120:         // ウィンドウへのエージェント登録メソッド
+121:         public void SetWindow(fk_AppWindow argWin)
+122:         {
+123:             foreach(Agent M in agent) {
+124:                 M.Entry(argWin);
+125:             }
+126:         }
+127: 
+128:         // 各エージェント動作メソッド
+129:         public void Forward(bool argSMode, bool argAMode, bool argCMode)
+130:         {
+131:             var gVec = new fk_Vector();
+132:             fk_Vector diff = new fk_Vector();
+133:             fk_Vector [] pArray = new fk_Vector[agent.Length]; // 位置ベクトル格納用配列
+134:             fk_Vector [] vArray = new fk_Vector[agent.Length]; // 方向ベクトル格納用配列
+135: 
+136:             // 全体の重心計算
+137:             for(int i = 0; i < agent.Length; i++) {
+138:                 pArray[i] = agent[i].Pos;
+139:                 vArray[i] = agent[i].Vec;
+140:                 gVec += pArray[i];
+141:             }
+142:             gVec /= (double)(agent.Length);
+143: 
+144:             // エージェントごとの動作算出演算
+145:             for(int i = 0; i < agent.Length; i++) {
+146:                 fk_Vector vec = new fk_Vector(vArray[i]);
+147: 
+148:                 for(int j = 0; j < agent.Length; j++) {
+149:                     if(i == j) continue;
+150:                     diff = pArray[i] - pArray[j];
+151:                     double dist = diff.Dist();
+152: 
+153:                     // 分離 (Separation) 処理
+154:                     if(dist < paramLA && argSMode) {
+155:                         vec += paramA * diff / (dist*dist);
+156:                     }
+157: 
+158:                     // 整列 (Alignment) 処理
+159:                     if(dist < paramLB && argAMode) {
+160:                         vec += paramB * vArray[j];
+161:                     }
+162:                 }
+163: 
+164:                 // 結合 (Cohesion) 処理 (スペースキーが押されていたら無効化)
+165:                 if(argCMode == true) {
+166:                     vec += paramC * (gVec - pArray[i]);
+167:                 }
+168: 
+169:                 // 領域の外側に近づいたら方向修正
+170:                 if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
+171:                     vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
+172:                 }
+173:                 if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
+174:                     vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
+175:                 }
+176: 
+177:                 // 最終的な方向ベクトル演算結果を代入
+178:                 vec.z = 0.0;
+179:                 agent[i].Vec = vec;
+180:             }
+181: 
+182:             // 全エージェントを前進
+183:             foreach(Agent M in agent) {
+184:                 M.Forward();
+185:             }
+186:         }
+187:     }
+188: 
+189:     class Program {
+190:         static void Main(string[] args)
+191:         {
+192:             var win = new fk_AppWindow();
+193:             var boid = new Boid(200);
+194: 
+195:             boid.SetWindow(win);
+196: 
+197:             win.Size = new fk_Dimension(600, 600);
+198:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
+199:             win.ShowGuide(fk_GuideMode.GRID_XY);
+200:             win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
+201:             win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+202:             win.FPS = 0;
+203: 
+204:             win.Open();
+205: 
+206:             while(win.Update() == true) {
+207:                 bool sMode = win.GetKeyStatus('S', fk_SwitchStatus.RELEASE);
+208:                 bool aMode = win.GetKeyStatus('A', fk_SwitchStatus.RELEASE);
+209:                 bool cMode = win.GetKeyStatus('C', fk_SwitchStatus.RELEASE);
+210:                 boid.Forward(sMode, aMode, cMode);
+211:             }
+212: 
+213:         }
+214:     }
+215: }
+\end{verbatim}
+\end{small}
+\end{breakbox}
+\begin{center}
+F\#版
+\end{center}
+\begin{breakbox}
+\begin{small}
+\begin{verbatim}
+  1: open System
+  2: open FK_CLI
+  3: 
+  4: // エージェント用クラス
+  5: type Agent(argID:int) = class
+  6:     // コンストラクタ
+  7:     let model = new fk_Model()
+  8:     let newVec = new fk_Vector()
+  9:     let id = argID
+ 10: 
+ 11:     do
+ 12:         model.Material <- fk_Material.Red
+ 13: 
+ 14:     // (ここまでがコンストラクタ)
+ 15: 
+ 16:     // ID プロパティ
+ 17:     member this.ID with get() = id
+ 18: 
+ 19:     // 位置ベクトルプロパティ
+ 20:     member this.Pos with get() = model.Position
+ 21: 
+ 22:     // 方向ベクトルプロパティ
+ 23:     member this.Vec with get() = model.Vec
+ 24:                     and set(v:fk_Vector) = newVec.Set(v.x, v.y, v.z)
+ 25: 
+ 26:     // 形状プロパティ
+ 27:     member this.Shape with get() = model.Shape
+ 28:                       and set(s:fk_Shape) = model.Shape <- s 
+ 29: 
+ 30:     // 初期化メソッド
+ 31:     member this.Init(argSize: double, argRand: Random) =
+ 32:         model.GlVec(argRand.NextDouble()*2.0 - 1.0,
+ 33:                     argRand.NextDouble()*2.0 - 1.0,
+ 34:                     0.0) |> ignore
+ 35:         model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
+ 36:                        argRand.NextDouble() * argSize * 2.0 - argSize,
+ 37:                        0.0) |> ignore
+ 38: 
+ 39:     // ウィンドウ登録メソッド
+ 40:     member this.Entry(argWin: fk_AppWindow) =
+ 41:         argWin.Entry(model)
+ 42: 
+ 43:     // 前進メソッド
+ 44:     member this.Forward() =
+ 45:         model.GlVec(newVec) |> ignore
+ 46:         model.LoTranslate(0.0, 0.0, -0.05) |> ignore
+ 47:         model.GlMoveTo(this.Pos.x, this.Pos.y, 0.0) |> ignore
+ 48: end;;
+ 49: 
+ 50: // 群集クラス
+ 51: type Boid(argNum) = class
+ 52:     // コンストラクタ
+ 53:     do
+ 54:         fk_Material.InitDefault()
+ 55: 
+ 56:     // 乱数発生器生成
+ 57:     let rand = new Random()
+ 58: 
+ 59:     // エージェント配列生成
+ 60:     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
+ 61: 
+ 62:     // 形状生成
+ 63:     let cone = new fk_Cone(16, 0.4, 1.0)
+ 64: 
+ 65:     // 各種パラメータ設定
+ 66:     let IAREA = 15
+ 67:     let AREASIZE = double(IAREA)
+ 68:     let paramA = 0.2
+ 69:     let paramB = 0.02
+ 70:     let paramC = 0.01
+ 71:     let paramLA = 3.0
+ 72:     let paramLB = 5.0
+ 73:     do
+ 74:         // 各エージェントの初期化
+ 75:         agent |> Array.iter (fun a -> a.Init(AREASIZE, rand))
+ 76:         agent |> Array.iter (fun a -> a.Shape <- cone)
+ 77: 
+ 78:     // (ここまでがコンストラクタ)
+ 79: 
+ 80:     // ウィンドウ登録メソッド
+ 81:     member this.SetWindow(argWin: fk_AppWindow) =
+ 82:         agent |> Array.iter (fun a -> a.Entry(argWin))
+ 83: 
+ 84:     // 各エージェント動作メソッド
+ 85:     member this.Forward(argSMode: bool, argAMode: bool, argCMode: bool) =
+ 86:         let pA = agent |> Array.map (fun a -> a.Pos) // 位置ベクトル配列
+ 87:         let vA = agent |> Array.map (fun a -> a.Vec) // 方向ベクトル配列
+ 88:         let iA = agent |> Array.map (fun a -> a.ID)  // ID配列
+ 89:         let vArray = Array.zip3 pA vA iA             // 結合リスト作成
+ 90: 
+ 91:         let newV0 = vArray |> Array.map (fun (p1, v1, i) ->
+ 92:             let mutable tmpV = v1
+ 93:             for j = 0 to vArray.Length - 1 do
+ 94:                 if i <> j then
+ 95:                     let diff = p1 - pA.[j]
+ 96:                     let dist = diff.Dist()
+ 97:                     // 分離ルール
+ 98:                     if dist < paramLA && argSMode then
+ 99:                         tmpV <- tmpV + paramA * diff / (dist*dist)
+100: 
+101:                     // 整列ルール
+102:                     if dist < paramLB && argAMode then
+103:                         tmpV <- tmpV + paramB * vA.[j]
+104:             tmpV
+105:         )
+106: 
+107:         // 重心計算
+108:         let gVec = (Array.reduce (fun x y -> x + y) pA) / (double pA.Length)
+109: 
+110:         // 結合ルール
+111:         let calcG (p, v) = v + paramB * (gVec - p)
+112:         let newV1 =
+113:             if argCMode then
+114:                 Array.zip pA newV0 |> Array.map calcG
+115:             else
+116:                 Array.copy newV0
+117: 
+118:         // 領域外判定用メソッド
+119:         let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
+120:         let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
+121: 
+122:         // 反転メソッド
+123:         let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
+124: 
+125:         // 領域の外側に近づいたら方向修正するメソッド
+126:         let xNegate (p:fk_Vector, v:fk_Vector) =
+127:             if xOut (p, v) then
+128:                 new fk_Vector(vNegate(p.x, v.x), v.y, 0.0)
+129:             else
+130:                 v
+131: 
+132:         let yNegate (p: fk_Vector, v:fk_Vector) =
+133:             if yOut (p, v) then
+134:                 new fk_Vector(v.x, vNegate(p.y, v.y), 0.0)
+135:             else
+136:                 v
+137: 
+138:         // 方向修正を行ったエージェントリストを取得
+139:         let newV2 = Array.zip pA newV1 |> Array.map xNegate
+140:         let newV3 = Array.zip pA newV2 |> Array.map yNegate
+141: 
+142:         // エージェントに新速度設定
+143:         let newAgent = Array.zip agent newV3
+144:         newAgent |> Array.iter (fun (a, v) -> (a.Vec <- v))
+145: 
+146:         // エージェント前進
+147:         agent |> Array.iter (fun a -> a.Forward())
+148: 
+149: end;;
 150: 
 151: 
-152:     tireModel[0].glMoveTo(-4.0, 1.0, -8.0);
-153:     tireModel[0].glVec(1.0, 0.0, 0.0);
-154:     tireModel[1].glMoveTo(4.0, 1.0, -8.0);
-155:     tireModel[1].glVec(-1.0, 0.0, 0.0);
-156:     tireModel[2].glMoveTo(-4.0, 1.0, 8.0);
-157:     tireModel[2].glVec(1.0, 0.0, 0.0);
-158:     tireModel[3].glMoveTo(4.0, 1.0, 8.0);
-159:     tireModel[3].glVec(-1.0, 0.0, 0.0);
-160: 
-161:     for(i = 0; i < 4; i++) {
-162:         tireModel[i].setShape(&tire);
-163:         tireModel[i].setMaterial(Gray2);
-164:         tireModel[i].setParent(&carModel);
-165:     }
-166: 
-167:     driverModel[0].setShape(&driver);
-168:     driverModel[1].setShape(&driver);
-169:     driverModel[0].glMoveTo(-2.0, 10.0, 0.0);
-170:     driverModel[1].glMoveTo(2.0, 10.0, 0.0);
-171:     driverModel[0].setMaterial(Cream);
-172:     driverModel[1].setMaterial(Cream);
-173:     driverModel[0].setSmoothMode(true);
-174:     driverModel[1].setSmoothMode(true);
-175:     driverModel[0].setParent(&carModel);
-176:     driverModel[1].setParent(&carModel);
-177: 
-178:     birdModel.glMoveTo(0.0, 100.0, 200.0);
-179:     birdModel.glFocus(0.0, 5.0, 0.0);
-180:     birdModel.glUpvec(0.0, 1.0, 0.0);
-181:     birdModel.setParent(&carModel);
-182: 
-183:     carModel.glMoveTo(CIRCUITX, CIRCUITY, 0.0);
-184:     carModel.glVec(0.0, -1.0, 0.0);
-185:     carModel.glUpvec(0.0, 0.0, 1.0);
-186: 
-187:     return;
-188: }
-189: 
-190: void Car::entryScene(fk_Scene *scene, bool viewFlag)
-191: {
-192:     int     i;
-193: 
-194:     scene->entryModel(&bodyModel);
-195: 
-196:     for(i = 0; i < 4; i++) {
-197:         scene->entryModel(&tireModel[i]);
-198:     }
-199: 
-200:     scene->entryModel(&driverModel[0]);
-201:     if(viewFlag == true) {
-202:         scene->entryModel(&driverModel[1]);
-203:     } else {
-204:         scene->entryCamera(&driverModel[1]);
-205:     }
-206: 
-207:     return;
-208: }
-209: 
-210: fk_Vector Car::getCarPosition(void)
-211: {
-212:     return carModel.getPosition();
-213: }
-214: 
-215: fk_Model * Car::getBirdModel(void)
-216: {
-217:     return &birdModel;
-218: }
-219: 
-220: void Car::forward(void)
-221: {
-222:     fk_Vector   carPosition, carVelocity;
-223:     fk_Vector   Xplus(1.0, 0.0, 0.0), Xminus(-1.0, 0.0, 0.0);
-224:     fk_Vector   Yplus(0.0, 1.0, 0.0), Yminus(0.0, -1.0, 0.0);
-225:     double      X = CIRCUITX;
-226:     double      Y = CIRCUITY;
-227: 
-228:     carPosition = carModel.getPosition();
-229:     carVelocity = carModel.getVec();
-230:     carModel.loTranslate(0.0, 0.0, -SPEED); // 前進
-231: 
-232:     // サーキットの外にでた場合、回転する。
-233:     if(carPosition.x > X) {
-234:         rotate(&carModel, carVelocity, Xplus);
-235:     }
-236:     if(carPosition.x < -X) {
-237:         rotate(&carModel, carVelocity, Xminus);
-238:     }
-239:     if(carPosition.y > Y) {
-240:         rotate(&carModel, carVelocity, Yplus);
-241:     }
-242:     if(carPosition.y < -Y) {
-243:         rotate(&carModel, carVelocity, Yminus);
-244:     }
-245: 
-246:     return;
-247: }
-248: 
-249: void Car::rotate(fk_Model *model, fk_Vector velocity, fk_Vector orgVec)
-250: {
-251:     // velocity と orgVec の内積値が正、つまり角度が 90 度以内の場合回転
-252:     if(velocity * orgVec > EPS) {
-253:         model->loAngle(FK_PI/100.0, 0.0, 0.0);
-254:     }
-255:     return;
-256: }
-257: 
-258: void World::defLight(int lightID, double x, double y, double z)
-259: {
-260:     lightModel[lightID].setShape(&lightShape);
-261:     lightModel[lightID].setMaterial(White);
-262:     lightModel[lightID].glTranslate(0.0, 0.0, 0.0);
-263:     lightModel[lightID].glFocus(x, y, z);
-264: 
-265:     return;
-266: }
-267: 
-268: void World::makeBuild(int buildID, double x, double y,
-269:                       double heightScale, fk_Material *buildMat)
-270: {
-271:     buildModel[buildID].setShape(&buildShape);
-272:     buildModel[buildID].setScale(heightScale, fk_Z);
-273:     buildModel[buildID].glMoveTo(x, y, (BUILDWIDTH * heightScale)/2.0);
-274:     buildModel[buildID].setMaterial(*buildMat);
-275: 
-276:     return;
-277: }
-278: 
-279: void World::init(void)
-280: {
-281:     // 照明の設定
-282:     defLight(0, 1.0, 1.0, -1.0);
-283:     defLight(1, -1.0, -1.0, -1.0);
-284: 
-285:     // 建物の設定
-286:     buildShape.setSize(BUILDWIDTH, BUILDWIDTH, BUILDWIDTH);
-287:     makeBuild(0, -250.0, 100.0, 5.0, &Red);
-288:     makeBuild(1, -150.0, 400.0, 2.0, &DimYellow);
-289:     makeBuild(2, 50.0, 250.0, 4.0, &Blue); 
-290:     makeBuild(3, 300.0, 200.0, 3.0, &Gray1); 
-291:     makeBuild(4, 250.0, -250.0, 0.5, &Green);
-292:     makeBuild(5, -50.0, -350.0, 6.0, &Orange);
-293: 
-294:     // 地面の設定
-295:     groundShape.setSize(1000, 1000, 2.0);
-296:     groundModel.setShape(&groundShape);
-297:     groundModel.glTranslate(0.0, 0.0, -1.0);
-298:     groundModel.setMaterial(Brown);
-299: 
-300:     return;
-301: }
-302: 
-303: void World::entryScene(fk_Scene *scene, bool buildFlag)
-304: {
-305:     int     i;
-306: 
-307:     scene->entryModel(&groundModel);
-308: 
-309:     for(i = 0; i < 2; i++) {
-310:         scene->entryModel(&lightModel[i]);
-311:     }
-312: 
-313:     for(i = 0; i < 6; i++) {
-314:         scene->entryModel(&buildModel[i]);
-315:     }
-316: 
-317:     if(buildFlag == true) scene->removeModel(&buildModel[0]);
-318:     return;
-319: }
+152: module FK_Boid =
+153:     let win = new fk_AppWindow()
+154:     let boid = new Boid(150)
+155: 
+156:     boid.SetWindow(win)
+157: 
+158:     win.Size <- new fk_Dimension(600, 600)
+159:     win.BGColor <- new fk_Color(0.6, 0.7, 0.8)
+160:     win.ShowGuide(fk_GuideMode.GRID_XY)
+161:     win.CameraPos <- new fk_Vector(0.0, 0.0, 80.0)
+162:     win.CameraFocus <- new fk_Vector(0.0, 0.0, 0.0)
+163:     win.FPS <- 0
+164: 
+165:     win.Open()
+166:     while win.Update() = true do
+167:         let sMode = win.GetKeyStatus('s', fk_SwitchStatus.RELEASE)
+168:         let aMode = win.GetKeyStatus('a', fk_SwitchStatus.RELEASE)
+169:         let cMode = win.GetKeyStatus('c', fk_SwitchStatus.RELEASE)
+170:         boid.Forward(sMode, aMode, cMode)
 \end{verbatim}
+\end{small}
 \end{breakbox}
+
 \section{形状の簡易表示とアニメーション} \label{sec:sampleviewer}
 次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。
 \begin{itemize}
@@ -1271,6 +978,8 @@ FLTK を用いて GUI を作成し、FK システムと併用するサンプル�
 
  \item 50 行目で初期位置に移動量が足され、53 行目で実際に各頂点を移動している。
 \end{itemize}
+
+
 
 \begin{breakbox}
 \begin{verbatim}
