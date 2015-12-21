@@ -1060,175 +1060,211 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 描画することができる。
 
 ここでは、サンプルとして円柱の周囲を流れる水流のシミュレーションの様子を
-描画するプログラムを紹介する。
-\begin{itemize}
- \item 8 〜 15 行目は、fk\_ParticleSet クラスを継承した「MyParticle」という
-	クラスを定義している。定義の際、仮想関数である genMethod()、
-	allMethod()、indivMethod() の各関数の宣言を必ず行う。
+描画するプログラムを紹介する。\\ ~
 
- \item 19 〜 29 行目は MyParticle クラスのコンストラクタである。ここで、
+\begin{breakbox}
+\begin{small}
+\begin{verbatim}
+  1: using System;
+  2: using System.Collections.Generic;
+  3: using System.Linq;
+  4: using System.Text;
+  5: using System.Threading.Tasks;
+  6: using FK_CLI;
+  7: 
+  8: namespace FK_CLI_Particle
+  9: {
+ 10:     class MyParticle : fk_ParticleSet {
+ 11:         private Random rand;
+ 12:         private fk_Color red, blue;
+ 13:         private double maxSpeed, minSpeed;
+ 14: 
+ 15:         // コンストラクタ。
+ 16:         // ここに様々な初期設定を記述しておく。
+ 17:         public MyParticle()
+ 18:         {
+ 19:             MaxSize = 1000;                      // パーティクルの最大数設定
+ 20:             IndivMode = true;                    // 個別処理 (IndivMethod) を有効にしておく。
+ 21:             AllMode = true;                      // 全体処理 (AllMethod) を有効にしておく。
+ 22:             for(int i = 0; i < MaxSize; i++) {
+ 23:                 // 各パーティクルごとの初期色を設定
+ 24:                 SetColorPalette(i, 0.0, 1.0, 0.6);
+ 25:             }
+ 26:             rand = new Random();                 // 乱数発生器の初期化
+ 27:             red = new fk_Color(1.0, 0.0, 0.0);
+ 28:             blue = new fk_Color(0.0, 0.0, 0.5);
+ 29:             maxSpeed = 0.3;                      // これより速いパーティクルは全て赤
+ 30:             minSpeed = 0.1;                      // これより遅いパーティクルは全て青
+ 31:         }
+ 32:         
+ 33:         // ここにパーティクル生成時の処理を記述する。
+ 34:         // 引数 P には新たなパーティクルインスタンスが入る。
+ 35:         public override void GenMethod(fk_Particle P)
+ 36:         {
+ 37:             // 生成時の位置を(ランダムに)設定
+ 38:             double y = rand.NextDouble()*50.0 - 25.0;
+ 39:             double z = rand.NextDouble()*50.0 - 25.0;
+ 40:             P.Position = new fk_Vector(50.0, y, z);
+ 41: 
+ 42:             // パーティクルの色IDを設定
+ 43:             P.ColorID = P.ID;
+ 44:         }
+ 45: 
+ 46:         // ここの毎ループ時の全体処理を記述する。
+ 47:         public override void AllMethod()
+ 48:         {
+ 49:             for(int i = 0; i < 5; i++) {
+ 50:                 if(rand.NextDouble() < 0.3) {   // 発生確率は 30% (を5回)
+ 51:                     NewParticle();              // パーティクル生成処理
+ 52:                 }
+ 53:             }
+ 54:         }
+ 55: 
+ 56:         // ここに毎ループ時のパーティクル個別処理を記述する。
+ 57:         public override void IndivMethod(fk_Particle P)
+ 58:         {
+ 59:             fk_Vector pos, vec, tmp1, tmp2;
+ 60:             var water = new fk_Vector(-0.2, 0.0, 0.0);
+ 61:             double R = 15.0;
+ 62:             double r;
+ 63: 
+ 64:             pos = P.Position;        // パーティクル位置取得。
+ 65:             pos.z = 0.0;
+ 66:             r = pos.Dist();          // |p| を r に代入。
+ 67: 
+ 68:             // パーティクルの速度ベクトルを計算
+ 69:             tmp1 = water/(r*r*r);
+ 70:             tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
+ 71:             vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
+ 72:             P.Velocity = vec;
+ 73: 
+ 74:             // パーティクルの色を計算。パーティクル速度が
+ 75:             // minSpeed ～ maxSpeed の場合は青と赤をブレンドする。
+ 76:             double speed = vec.Dist();
+ 77:             double t = (speed - minSpeed)/(maxSpeed - minSpeed);
+ 78:             if(t > 1.0) t = 1.0;
+ 79:             if(t < 0.0) t = 0.0;
+ 80:             fk_Color newCol = (1.0 - t)*blue + t*red;  // 色値の線形補間
+ 81:             SetColorPalette(P.ID, newCol);
+ 82: 
+ 83:             // パーティクルの x 成分が -50 以下になったら消去
+ 84:             if(pos.x < -50.0) {
+ 85:                 RemoveParticle(P);
+ 86:             }
+ 87:         } 
+ 88:     }           
+ 89: 
+ 90: 
+ 91:     class Program
+ 92:     {
+ 93:         static void Main(string[] args)
+ 94:         {
+ 95:             fk_ShapeViewer viewer = new fk_ShapeViewer(600, 600);
+ 96:             MyParticle particle = new MyParticle();
+ 97:             fk_Prism prism = new fk_Prism(40, 15.0, 15.0, 50.0);
+ 98: 
+ 99:             viewer.SetShape(1, prism);
+100:             viewer.SetPosition(1, 0.0, 0.0, 25.0);
+101:             viewer.SetDrawMode(1, fk_DrawMode.POLYMODE);
+102:             viewer.SetShape(2, particle.Shape);
+103:             viewer.SetDrawMode(2, fk_DrawMode.POINTMODE);
+104:             viewer.Scale = 10.0;
+105:  
+106:             while(viewer.Draw() == true) {
+107:                 for(int i = 0; i < 3; ++i) { // 3倍速再生
+108:                     particle.Handle(); // パーティクルを 1 ステップ実行する。
+109:                 }
+110:             }
+111: 
+112:         }
+113:     }
+114: }
+\end{verbatim}
+\end{small}
+\end{breakbox}
+
+\begin{itemize}
+ \item 10 〜 88 行目は、fk\_ParticleSet クラスを継承した「MyParticle」という
+	クラスを定義している。
+	継承したクラスに対し、GenMethod()、AllMethod()、IndivMethod() の
+	各メソッドを再定義(上書き)することで、パーティクルの挙動を制御することなる。
+
+ \item 17 〜 31 行目は MyParticle クラスのコンストラクタである。ここで、
 	パーティクルの初期設定を行う。
 
- \item 21 行目の setMaxSize() 関数は fk\_ParticleSet クラスのメンバ関数で
+ \item 19 行目の MaxSize プロパティは fk\_ParticleSet クラスのメンバで、
 	パーティクル個数の最大値を設定する。もしパーティクルの個数が
-	この値と等しくなったとき、newParticle() メソッドを呼んでも
+	この値と等しくなったときは、NewParticle() メソッドを呼んでも
 	パーティクルは新たに生成されなくなる。
 
- \item 23,24 行目はそれぞれ個別処理、全体処理に対するモード設定である。
-	ここで true に設定しない場合、allMethod() や indivMethod() の
+ \item 20,21 行目はそれぞれ個別処理、全体処理に対するモード設定である。
+	ここで true に設定しない場合、IndivMethod() や AllMethod() の
 	記述は無視される。
 
- \item 27 行目は、パーティクル全体の色パレットを設定しているものである。
-	ここでは緑色を ID 1 として登録している。
+ \item 22 〜 25 行目は、各パーティクルの色パレットを設定しているものである。
+	今回は、パーティクル ID と色 ID を完全に一対一対応することにし、
+	パーティクルの個数だけ色を用意している。
 
- \item 33 〜 40 行目では、新たにパーティクルが生成された際の処理を記述する。
-	引数の p に新パーティクルのオブジェクトが入っており、これに対して
-	様々な設定を行う。36 行目では初期位置を、38 行目では色 ID を設定
+ \item 35 〜 44 行目では、新たにパーティクルが生成された際の処理を記述する。
+	引数の P に新パーティクルのインスタンスが入っており、これに対して
+	様々な設定を行う。40 行目では初期位置を、43 行目では色 ID を設定
 	している。
 
- \item 43 〜 54 行目では、allMethod() メンバ関数を再定義している。
-	allMethod() 関数には、パーティクル集合全体に対しての処理を記述する。
+ \item 47 〜 54 行目では、AllMethod() メソッドを再定義している。
+	AllMethod() メソッドには、パーティクル集合全体に対しての処理を記述する。
 	ここではランダムにパーティクルの生成を行っているだけであるが、
 	パーティクル全体に対して一括の処理を記述することもできる。
 
- \item 57 〜 82 行目では、indivMethod() メンバ関数を再定義している。
-	indivMethod 関数には、個別のパーティクルに対する処理を記述する。
+ \item 57 〜 88 行目では、IndivMethod() メソッドを再定義している。
+	IndivMethod 関数には、個別のパーティクルに対する処理を記述する。
 
- \item indivMethod() 中では、65 〜 74 行目で速度ベクトルの入力を行っている。
+ \item IndivMethod() 中では、64 〜 72 行目で速度ベクトルの設定を行っている。
 	中心が原点で、\(z\) 軸に平行な半径 \(R\) の円柱の周囲を
 	速度 \((-V_x, 0, 0)\) の水流が流れているとする。このとき、各地点
 	\((x, y, z)\) での水流を表す偏微分方程式は以下のようなものである。
-	\[
+	\begin{equation}
 		\frac{\partial}{\partial t}\bP =
 		\bV + \frac{R^3}{2}
 		\left(\frac{\bV}{r^3} -
-		\frac{3 \bV \cdot \bP}{r^5} \bP \right)
-	\]
+		\frac{3 \bV \cdot \bP}{r^5} \bP \right) .
+	\end{equation}
 	ただし、
-	\[
+	\begin{equation}
 		\bV = (-V_x, 0, 0), \qquad
 		\bP = (x, y, 0), \qquad r = |\bP|
-	\]
-	今回は、\(V_x = 0.2\)(60行目の「water」変数)、
+	\end{equation}
+	である。今回は、\(\bV = (0.2, 0, 0)\)(60行目の「water」変数)、
 	\(R = 15\)(61行目の「R」変数) として算出している。この式から、
-	各パーティクルの速度ベクトルを算出し、74 行目で設定している。
+	各パーティクルの速度ベクトルを算出し、72 行目で設定している。
 
- \item 77 〜 79 行目でパーティクル削除判定を行っている。
+ \item パーティクルの色は、速度が minSpeed 未満の場合は青、
+	maxSpeed 以上の場合は赤とし、その中間の場合は
+	赤色と青色をブレンドした色となるように設定している。
+	その色値の算出と設定を 76 〜 81 行目で行っている。
+	パーティクルの速度 \(s\) が \(m < s < M\) を満たすとき、
+	\begin{equation}
+		t = \frac{s - m}{M - m}
+	\end{equation}
+	とし、赤色値を\(R\)、青色値を\(B\)としたとき
+	\begin{equation}
+		 C = (1-t)B + tR
+	\end{equation}
+	という式で色値\(C\)を決定している。
+
+ \item 84 〜 86 行目でパーティクル削除判定を行っている。
 	パーティクルが \(x = -50\) よりも左へ流れてしまった場合には
-	78 行目で削除を行っている。
+	85 行目で削除を行っている。
 
- \item 93 行目では、パーティクル集合を fk\_ShapeViewer で表示するために
-	getShape() 関数を用いている。
+ \item 99,102 行目では、パーティクル集合を fk\_ShapeViewer で表示するために
+	SetShape() メソッドを用いている。それぞれを別 ID として登録することで、
+	2つの形状を同時に表示できる。
 
- \item 98 行目にあるように、handle() メンバ関数を用いることで
+ \item 108 行目にあるように、Handle() メソッドを用いることで
 	パーティクル全体に 1 ステップ処理が行われる。その際には、設定した
 	速度や加速度にしたがって各パーティクルが移動する。特に再設定
 	しない限り、加速度は処理終了後も保存される。
+	今回のプログラムではパーティクルの加速度は一切設定していないため、
+	IndivMethod() メソッド内の 72 行目の速度設定のみが
+	パーティクルの動作を決定する要因となる。
 
 \end{itemize}
-
-\begin{breakbox}
-\begin{verbatim}
- 1: #include <FK/FK.h>
- 2: 
- 3: double myRandom(void)
- 4: {
- 5:     return double(rand())/double(RAND_MAX);
- 6: }
- 7:  
- 8: class MyParticle: public fk_ParticleSet {
- 9: protected:
-10:     void        genMethod(fk_Particle *);
-11:     void        allMethod(void);
-12:     void        indivMethod(fk_Particle *);
-13: public:
-14:     MyParticle(void);
-15: };
-16:  
-17: // コンストラクタ。
-18: // ここに、様々な設定を記述しておく。
-19: MyParticle::MyParticle(void)
-20: {
-21:     setMaxSize(1000);   // パーティクルの最大数設定。
-22:     srand(time(0));     // 乱数の初期化。
-23:     setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
-24:     setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
-25:  
-26:     // パレットに色を設定しておく。
-27:     setColorPalette(1, 0.0, 1.0, 0.6);
-28:     return;
-29: }
-30:  
-31: // ここにパーティクル生成時の処理を記述する。
-32: // p に新たなパーティクル要素が入っている。
-33: void MyParticle::genMethod(fk_Particle *p)
-34: {
-35:     // 生成時の位置を設定
-36:     p->setPosition(50.0, myRandom()*50.0 - 25.0, myRandom()*50.0 - 25.0);
-37:     // パーティクルの色 ID を設定
-38:     p->setColorID(1);
-39:     return;
-40: }
-41:  
-42: // ここに毎ループ時の全体処理処理を記述する
-43: void MyParticle::allMethod(void)
-44: {
-45:     for(int i = 0; i < 5; i++) {
-46:         if(myRandom() < 0.3) {
-47:             // 新たなパーティクルを生成。
-48:             // 生成時に genMethod() が呼ばれる。
-49:             newParticle();
-50:         }
-51:     }
-52:  
-53:     return;
-54: }
-55:  
-56: // ここに毎ループ時の各パーティクルへの処理を記述する。
-57: void MyParticle::indivMethod(fk_Particle *p)
-58: {
-59:     fk_Vector       pos, vec, tmp1, tmp2;
-60:     fk_Vector       water(-0.2, 0.0, 0.0);
-61:     double          R = 15.0;
-62:     double          r;
-63:  
-64:     // パーティクルの位置を取得。
-65:     pos = p->getPosition();
-66:     pos.z = 0.0;
-67:     r = pos.dist(); // |p| を r に代入。
-68:  
-69:     // パーティクルの速度ベクトルを計算
-70:     tmp1 = water/(r*r*r);
-71:     tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
-72:     vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
-73:     // パーティクルの速度ベクトルを代入
-74:     p->setVelocity(vec);
-75:  
-76:     // パーティクルの x 成分が -50 以下になったら消去。
-77:     if(pos.x < -50.0) {
-78:         removeParticle(p);
-79:     }
-80:  
-81:     return;
-82: }
-83:  
-84: int main()
-85: {
-86:     fk_ShapeViewer      viewer(600, 600);
-87:     MyParticle          particle;
-88:     fk_Prism            prism(40, 15.0, 15.0, 50.0);
-89:
-90:     viewer.setShape(3, &prism);
-91:     viewer.setPosition(3, 0.0, 0.0, 25.0);
-92:     viewer.setDrawMode(3, FK_POLYMODE);
-93:     viewer.setShape(2, particle.getShape());
-94:     viewer.setDrawMode(2, FK_POINTMODE);
-95:     viewer.setScale(10.0);
-96: 
-97:     while(viewer.draw() == true) {
-98:         particle.handle(); // パーティクルを 1 ステップ実行する。
-99:     }
-100:    return 0;
-101:}
-\end{verbatim}
-\end{breakbox}
