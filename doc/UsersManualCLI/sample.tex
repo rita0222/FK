@@ -949,102 +949,103 @@ F\#版
 \end{breakbox}
 
 \section{形状の簡易表示とアニメーション} \label{sec:sampleviewer}
-次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。
+
+次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。\\ ~
+
+\begin{breakbox}
+\begin{small}
+\begin{verbatim}
+ 1: using System;
+ 2: using System.Collections.Generic;
+ 3: using System.Linq;
+ 4: using System.Text;
+ 5: using System.Threading.Tasks;
+ 6: using FK_CLI;
+ 7: 
+ 8: namespace FK_CLI_Viewer
+ 9: {
+10:     class Program
+11:     {
+12:         static void Main(string[] args)
+13:         {
+14:             var viewer = new fk_ShapeViewer(600, 600);
+15:             var shape = new fk_IndexFaceSet();
+16:             var pos = new fk_Vector[121];
+17:             var moveVec = new fk_Vector();
+18:             var movePos = new fk_Vector();
+19:             var IFSet = new int[4*100];
+20:             int i, j;
+21:             double x, y;
+22: 
+23:             for(i = 0; i <= 10; ++i) {
+24:                 for(j = 0; j <= 10; ++j) {
+25:                     x = (double)(i-5);
+26:                     y = (double)(j-5);
+27:                     pos[i*11+j] = new fk_Vector(x, y, (x*x - y*y)/10.0);
+28:                 }
+29:             }
+30: 
+31:             for(i = 0; i < 10; i++) {
+32:                 for(j = 0; j < 10; j++) {
+33:                     IFSet[(i*10 + j)*4 + 0] = i*11 + j;
+34:                     IFSet[(i*10 + j)*4 + 1] = (i+1)*11 + j;
+35:                     IFSet[(i*10 + j)*4 + 2] = (i+1)*11 + j+1;
+36:                     IFSet[(i*10 + j)*4 + 3] = i*11 + j+1;
+37:                 }
+38:             }
+39: 
+40:             shape.MakeIFSet(100, 4, IFSet, 121, pos);
+41:             viewer.Shape = shape;
+42:             viewer.DrawMode = fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE;
+43:             viewer.Scale = 10.0;
+44: 
+45:             for(int counter = 0; viewer.Draw() == true; counter += 10) {
+46:                 for(i = 0; i <= 10; i++) {
+47:                     for(j = 0; j <= 10; j++) {
+48:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/FK.PI));
+49:                         movePos = moveVec + pos[i*11+j];
+50:                         shape.MoveVPosition(i*11+j, movePos);
+51:                     }
+52:                 }
+53:             }
+54:         }
+55:     }
+56: }
+\end{verbatim}
+\end{small}
+\end{breakbox}
+
 \begin{itemize}
- \item まず、13 〜 19 行目で 11 行 11 列の行列として並んでいる状態の
+ \item 23 〜 28 行目で 11 行 11 列の行列として並んでいる状態の
 	座標を計算している。その際、\(z = \dfrac{x^2 - y^2}{10}\)
 	として \(z\) 成分は計算されている。
 
- \item 次に、22 〜 29 行目でインデックスフェースセットを表す
+ \item 次に、31 〜 38 行目でインデックスフェースセットを表す
 	配列を作成している。インデックスフェースセットに関しては、
 	第 \ref{sec:solidGen1} 節を参照すること。
 
- \item 32 行目で実際に形状を生成する。この部分の解説も、
+ \item 40 行目で実際に形状を生成する。この部分の解説も、
 	第 \ref{sec:solidGen1} 節に記述がある。
 
- \item 35 行目では、作成した形状を描画形状として登録している。ID には
-	0 が選択されているが、特にどのような整数値でも構わない。
+ \item 41 行目では、作成した形状を描画形状として登録している。
+	今回は登録する形状が一つだけなので Shape プロパティに代入することで登録を
+	行っているが、複数の形状を同時に表示したい場合は fk\_ShapeViewer クラスの
+	SetShape() メソッドを用いるとよい。
 
- \item 38,39 行目では、表裏の両面及び稜線や頂点を描画するように設定している。
+ \item 42,43 行目では、表裏の両面及び稜線を描画するように設定している。
 
- \item 42 行目では while ループ中で描画が行われるよう記述されている。
-	これにより、43 〜 56 行目が実行される度に描画処理が行われるようになる。
+ \item 45 行目では for ループ中で描画が行われるよう記述されている。
+	これにより、46 〜 52 行目が実行される度に描画処理が行われるようになる。
 
- \item 46,47 行目では、アニメーションの際の頂点移動量が計算されている。
+ \item 48 行目では、アニメーションの際の頂点移動量が計算されている。
 	移動は \(z\) 方向のみ行われ、移動量は
 	\(\sin\frac{counter + 10j}{5\pi}\)である。counter はループの度に
-	56 行目で 10 ずつ追加されているので、描画の度に移動量が異なる
+	45 行目で 10 ずつ追加されているので、描画の度に移動量が異なる
 	ことになる。
 
- \item 50 行目で初期位置に移動量が足され、53 行目で実際に各頂点を移動している。
+ \item 49 行目で初期位置に移動量が足され、50 行目で実際に各頂点を移動している。
 \end{itemize}
 
-
-
-\begin{breakbox}
-\begin{verbatim}
- 1: #include <FK/FK.h>
- 2: 
- 3: int main()
- 4: {
- 5:     fk_ShapeViewer   viewer(300, 360);
- 6:     fk_IndexFaceSet  shape;
- 7:     fk_Vector        pos[121], moveVec, movePos;
- 8:     int              IFSet[4*100];
- 9:     int              i, j, counter;
-10:     double           x, y;
-11: 
-12:     // 各頂点位置の設定
-13:     for(i = 0; i <= 10; i++) {
-14:         for(j = 0; j <= 10; j++) {
-15:             x = double(i - 5);    
-16:             y = double(j - 5);
-17:             pos[i*11 + j].set(x, y, (x*x - y*y)/10.0);
-18:         }
-19:     }
-20: 
-21:     // インデックスフェースセットの生成
-22:     for(i = 0; i < 10; i++) {
-23:         for(j = 0; j < 10; j++) {
-24:             IFSet[(i*10 + j)*4 + 0] = i*11 + j;
-25:             IFSet[(i*10 + j)*4 + 1] = (i+1)*11 + j;
-26:             IFSet[(i*10 + j)*4 + 2] = (i+1)*11 + j+1;
-27:             IFSet[(i*10 + j)*4 + 3] = i*11 + j+1;
-28:         }
-29:     }
-30: 
-31:     // 形状の生成
-32:     shape.makeIFSet(100, 4, IFSet, 121, pos);
-33: 
-34:     // fk_ShapeViewer へ形状を設定
-35:     viewer.setShape(0, &shape);
-36: 
-37:     // 各種設定
-38:     viewer.setDrawMode(FK_FRONTBACK_POLYMODE | FK_LINEMODE);
-39:     viewer.setScale(10.0);
-40: 
-41:     counter = 0;
-42:     while(viewer.draw() == true) {
-43:         for(i = 0; i <= 10; i++) {
-44:             for(j = 0; j <= 10; j++) {
-45:                 // 各頂点の移動量計算
-46:                 moveVec.set(0.0, 0.0,
-47:                             sin(double(counter+j*40)*0.05/FK_PI));
-48: 
-49:                 // 各頂点を移動場所を計算
-50:                 movePos = moveVec + pos[i*11 + j];
-51: 
-52:                 // 各頂点を実際に移動
-53:                 shape.moveVPosition(i*11 + j, movePos);
-54:             }
-55:         }
-56:         counter += 10;
-57:     }
-58: 
-59:     return 0;
-60: }
-\end{verbatim}
-\end{breakbox}
 \section{パーティクルアニメーション}
 パーティクルアニメーションとは、粒子の移動によって気流や水流などを
 表現する手法である。FK システムでは、パーティクルアニメーションを作成する
