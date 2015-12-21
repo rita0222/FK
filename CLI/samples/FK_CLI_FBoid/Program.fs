@@ -1,7 +1,9 @@
 ﻿open System
 open FK_CLI
 
+// エージェント用クラス
 type Agent(argID:int) = class
+    // コンストラクタ
     let model = new fk_Model()
     let newVec = new fk_Vector()
     let id = argID
@@ -9,13 +11,23 @@ type Agent(argID:int) = class
     do
         model.Material <- fk_Material.Red
 
+    // (ここまでがコンストラクタ)
+
+    // ID プロパティ
     member this.ID with get() = id
+
+    // 位置ベクトルプロパティ
     member this.Pos with get() = model.Position
+
+    // 方向ベクトルプロパティ
     member this.Vec with get() = model.Vec
                     and set(v:fk_Vector) = newVec.Set(v.x, v.y, v.z)
+
+    // 形状プロパティ
     member this.Shape with get() = model.Shape
                       and set(s:fk_Shape) = model.Shape <- s 
 
+    // 初期化メソッド
     member this.Init(argSize: double, argRand: Random) =
         model.GlVec(argRand.NextDouble()*2.0 - 1.0,
                     argRand.NextDouble()*2.0 - 1.0,
@@ -24,22 +36,33 @@ type Agent(argID:int) = class
                        argRand.NextDouble() * argSize * 2.0 - argSize,
                        0.0) |> ignore
 
+    // ウィンドウ登録メソッド
     member this.Entry(argWin: fk_AppWindow) =
         argWin.Entry(model)
 
+    // 前進メソッド
     member this.Forward() =
         model.GlVec(newVec) |> ignore
         model.LoTranslate(0.0, 0.0, -0.05) |> ignore
         model.GlMoveTo(this.Pos.x, this.Pos.y, 0.0) |> ignore
 end;;
 
+// 群集クラス
 type Boid(argNum) = class
+    // コンストラクタ
     do
         fk_Material.InitDefault()
 
+    // 乱数発生器生成
     let rand = new Random()
+
+    // エージェント配列生成
     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
+
+    // 形状生成
     let cone = new fk_Cone(16, 0.4, 1.0)
+
+    // 各種パラメータ設定
     let IAREA = 15
     let AREASIZE = double(IAREA)
     let paramA = 0.2
@@ -48,17 +71,22 @@ type Boid(argNum) = class
     let paramLA = 3.0
     let paramLB = 5.0
     do
+        // 各エージェントの初期化
         agent |> Array.iter (fun a -> a.Init(AREASIZE, rand))
         agent |> Array.iter (fun a -> a.Shape <- cone)
 
+    // (ここまでがコンストラクタ)
+
+    // ウィンドウ登録メソッド
     member this.SetWindow(argWin: fk_AppWindow) =
         agent |> Array.iter (fun a -> a.Entry(argWin))
 
+    // 各エージェント動作メソッド
     member this.Forward(argSMode: bool, argAMode: bool, argCMode: bool) =
-        let pA = agent |> Array.map (fun a -> a.Pos)
-        let vA = agent |> Array.map (fun a -> a.Vec)
-        let iA = agent |> Array.map (fun a -> a.ID)
-        let vArray = Array.zip3 pA vA iA
+        let pA = agent |> Array.map (fun a -> a.Pos) // 位置ベクトル配列
+        let vA = agent |> Array.map (fun a -> a.Vec) // 方向ベクトル配列
+        let iA = agent |> Array.map (fun a -> a.ID)  // ID配列
+        let vArray = Array.zip3 pA vA iA             // 結合リスト作成
 
         let newV0 = vArray |> Array.map (fun (p1, v1, i) ->
             let mutable tmpV = v1
@@ -87,12 +115,14 @@ type Boid(argNum) = class
             else
                 Array.copy newV0
 
-        // 外部判定
+        // 領域外判定用メソッド
         let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
         let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
 
+        // 反転メソッド
         let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
 
+        // 領域の外側に近づいたら方向修正するメソッド
         let xNegate (p:fk_Vector, v:fk_Vector) =
             if xOut (p, v) then
                 new fk_Vector(vNegate(p.x, v.x), v.y, 0.0)
@@ -105,6 +135,7 @@ type Boid(argNum) = class
             else
                 v
 
+        // 方向修正を行ったエージェントリストを取得
         let newV2 = Array.zip pA newV1 |> Array.map xNegate
         let newV3 = Array.zip pA newV2 |> Array.map yNegate
 
