@@ -175,8 +175,8 @@ namespace FK_CLI_Audio
 			se.LoadData(1, "SDCRKRM.wav");
 
 			win.Open();
-			bgmTask.Start();
-			seTask.Start();
+			bgmTask.Start(); // BGM スレッド開始
+			seTask.Start();  // SE スレッド開始
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
@@ -185,15 +185,15 @@ namespace FK_CLI_Audio
 				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 
 				// 上矢印キーで BGM 音量アップ
-				if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true && volume < 1.0)
+				if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true)
 				{
-					volume += 0.1;
+					if(volume < 1.0) volume += 0.1;
 				}
 
 				// 下矢印キーで BGM 音量ダウン
-				if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true && volume > 0.0)
+				if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true)
 				{
-					volume -= 0.1;
+					if(volume > 0.0) volume -= 0.1;
 				}
 
 				// Z キーで 0 番の SE を再生開始
