@@ -1268,3 +1268,234 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 	パーティクルの動作を決定する要因となる。
 
 \end{itemize}
+
+
+\section{音再生}
+\begin{breakbox}
+\begin{small}
+\begin{verbatim}
+  1: using System;
+  2: using System.Collections.Generic;
+  3: using System.Linq;
+  4: using System.Text;
+  5: using System.Threading.Tasks;
+  6: using System.Threading;
+  7: using FK_CLI;
+  8: 
+  9: namespace FK_CLI_Audio
+ 10: {
+ 11:     // BGM用クラス
+ 12:     class MyBGM : IDisposable
+ 13:     {
+ 14:         public bool EndStatus { get; set; } // 終了指示用プロパティ
+ 15:         private fk_AudioStream bgm;
+ 16:         private bool openStatus;
+ 17: 
+ 18:         // コンストラクタ 引数は音源ファイル名 (Ogg 形式)
+ 19:         public MyBGM(string argFileName)
+ 20:         {
+ 21:             EndStatus = false;
+ 22:             bgm = new fk_AudioStream();
+ 23:             openStatus = bgm.Open(argFileName);
+ 24:             if(openStatus == false)
+ 25:             {
+ 26:                 Console.WriteLine("Audio File Open Error.");
+ 27:             }
+ 28:         }
+ 29: 
+ 30:         // BGM再生処理
+ 31:         public void Start()
+ 32:         {
+ 33:             if(openStatus == false) return;
+ 34:             bgm.LoopMode = true;
+ 35:             bgm.Gain = 0.5;
+ 36:             while(EndStatus == false)
+ 37:             {
+ 38:                 bgm.Play();
+ 39:                 Thread.Sleep(50);
+ 40:             }
+ 41:         }
+ 42: 
+ 43:         // 音量用プロパティ
+ 44:         public double Gain
+ 45:         {
+ 46:             set
+ 47:             {
+ 48:                 bgm.Gain = value;
+ 49:             }
+ 50:         }
+ 51: 
+ 52:         // スレッド終了時処理
+ 53:         public void Dispose()
+ 54:         {
+ 55:             bgm.Dispose();
+ 56:         }
+ 57:     }
+ 58: 
+ 59:     // Sound Effect (SE) 用クラス
+ 60:     class MySE : IDisposable
+ 61:     {
+ 62:         public bool EndStatus { get; set; } // 終了指示用プロパティ
+ 63:         private fk_AudioWavBuffer [] se;
+ 64:         private bool [] openStatus;
+ 65:         private bool [] playStatus;
+ 66: 
+ 67:         // コンストラクタ 引数は音源の個数
+ 68:         public MySE(int argNum)
+ 69:         {
+ 70:             EndStatus = false;
+ 71:             if(argNum < 1) return;
+ 72:             se = new fk_AudioWavBuffer [argNum];
+ 73:             openStatus = new bool [argNum];
+ 74:             playStatus = new bool [argNum];
+ 75: 
+ 76:             for(int i = 0; i < argNum; i++)
+ 77:             {
+ 78:                 se[i] = new fk_AudioWavBuffer();
+ 79:                 openStatus[i] = false;
+ 80:                 playStatus[i] = false;
+ 81:             }
+ 82:         }
+ 83: 
+ 84:         // SE音源読み込みメソッド (WAV 形式)
+ 85:         public bool LoadData(int argID, string argFileName)
+ 86:         {
+ 87:             if(argID < 0 || argID >= se.Length)
+ 88:             {
+ 89:                 return false;
+ 90:             }
+ 91: 
+ 92:             openStatus[argID] = se[argID].Open(argFileName);
+ 93:             if(openStatus[argID] == false)
+ 94:             {
+ 95:                 Console.WriteLine("Audio File ({0}) Open Error.", argFileName);
+ 96:             }
+ 97:             se[argID].LoopMode = false;
+ 98:             se[argID].Gain = 0.5;
+ 99:             return true;
+100:         }
+101: 
+102:         // SE開始メソッド
+103:         public void StartSE(int argID)
+104:         {
+105:             if(argID < 0 || argID >= se.Length) return;
+106:             playStatus[argID] = true;
+107:             se[argID].Seek(0.0);
+108:         }
+109: 
+110:         // SE再生処理
+111:         public void Start()
+112:         {
+113:             int i;
+114: 
+115:             for(i = 0; i < se.Length; i++)
+116:             {
+117:                 if(openStatus[i] == false) return;
+118:             }
+119: 
+120:             while(EndStatus == false)
+121:             {
+122:                 for(i = 0; i < se.Length; i++)
+123:                 {
+124:                     if(playStatus[i] == true)
+125:                     {
+126:                         playStatus[i] = se[i].Play();
+127:                     }
+128:                 }
+129:                 Thread.Sleep(10);
+130:             }
+131:         }
+132: 
+133:         // スレッド終了時処理
+134:         public void Dispose()
+135:         {
+136:             for(int i = 0; i < se.Length; i++)
+137:             {
+138:                 se[i].Dispose();
+139:             }
+140:         }
+141:     }
+142: 
+143:     class Program
+144:     {
+145:         static void Main(string[] args)
+146:         {
+147:             // 組込マテリアル初期化
+148:             fk_Material.InitDefault();          
+149: 
+150:             // ウィンドウの各種設定
+151:             var win = new fk_AppWindow();
+152:             win.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
+153:             win.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
+154:             win.Size = new fk_Dimension(600, 600);
+155:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
+156:             win.ShowGuide(fk_GuideMode.GRID_XZ);
+157: 
+158:             // 立方体の各種設定
+159:             var block = new fk_Block(1.0, 1.0, 1.0);
+160:             var blockModel = new fk_Model();
+161:             blockModel.Shape = block;
+162:             blockModel.GlMoveTo(3.0, 3.0, 0.0);
+163:             blockModel.Material = fk_Material.Yellow;
+164:             win.Entry(blockModel);
+165: 
+166:             // BGMの各種設定
+167:             var bgm = new MyBGM("epoq.ogg");
+168:             var bgmTask = new Task(bgm.Start);
+169:             double volume = 0.5;
+170:             
+171:             // SEの各種設定
+172:             var se = new MySE(2);
+173:             var seTask = new Task(se.Start);
+174:             se.LoadData(0, "MIDTOM2.wav");
+175:             se.LoadData(1, "SDCRKRM.wav");
+176: 
+177:             win.Open();
+178:             bgmTask.Start();
+179:             seTask.Start();
+180: 
+181:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+182: 
+183:             while(win.Update())
+184:             {
+185:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+186: 
+187:                 // 上矢印キーで BGM 音量アップ
+188:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true && volume < 1.0)
+189:                 {
+190:                     volume += 0.1;
+191:                 }
+192: 
+193:                 // 下矢印キーで BGM 音量ダウン
+194:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true && volume > 0.0)
+195:                 {
+196:                     volume -= 0.1;
+197:                 }
+198: 
+199:                 // Z キーで 0 番の SE を再生開始
+200:                 if(win.GetKeyStatus('Z', fk_SwitchStatus.DOWN) == true)
+201:                 {
+202:                     se.StartSE(0);
+203:                 }
+204: 
+205:                 // X キーで 1 番の SE を再生開始
+206:                 if(win.GetKeyStatus('X', fk_SwitchStatus.DOWN) == true)
+207:                 {
+208:                     se.StartSE(1);
+209:                 }
+210: 
+211:                 bgm.Gain = volume;
+212:             }
+213: 
+214:             // BGM 変数と SE 変数に終了を指示
+215:             bgm.EndStatus = true;
+216:             se.EndStatus = true;
+217: 
+218:             // BGM, SE 両スレッドが終了するまで待機
+219:             Task.WaitAll(new[] { bgmTask, seTask });
+220:         }
+221:     }
+222: }
+\end{verbatim}
+\end{small}
+\end{breakbox}
