@@ -21,11 +21,9 @@ namespace FK_CLI_Sprite
 			int count;
 			string str, space;
  
-			if(sprite.InitFont("mona.ttf") == false) {
+			if(sprite.InitFont("rm1b.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
-
-			sprite.SetPositionLT(-240.0, 230.0);
 
 			sprite.Text.MonospaceMode = true;
 			sprite.Text.MonospaceSize = 12;
@@ -44,12 +42,9 @@ namespace FK_CLI_Sprite
  
 			count = 0;
 			while(window.Update() == true) {
-				if(count < 10) space = "   ";
-				else if(count < 100) space = "  ";
-				else if(count < 1000) space = " ";
-				else space = "";
-				str = "count = " + space + count.ToString();
+				str = "count = " + count.ToString();
 				sprite.DrawText(str, true);
+                sprite.SetPositionLT(-240.0, 230.0);
 				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
 				count++;
 			}
