@@ -1545,6 +1545,23 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 \end{breakbox}
 
 \section{スプライト表示}
+この節では、第\ref{sec:spritemodel}節で紹介したスプライトモデルを用いた
+文字列表示のサンプルを示す。ここではフォントファイルとして
+「rm1b.ttf」というファイル名のフォントデータを利用している。
+これはビルド時に生成される exe ファイルと同一の場所に置かれている必要がある。
+
+29,30 行目で Text プロパティに様々な設定を行っているが、
+この Text プロパティは fk\_TextImage 型であり、fk\_TextImage が持つ様々な設定を
+変更することで色やフォントサイズなど、様々な設定を変更することができる。
+
+55行目の SetPositionLT() メソッドは表示位置を指定するものである。
+文字列設定の度に位置の再設定を行っている理由は、
+文字列を表すテクスチャ画像の幅が変更されたときに再設定を行わないと、
+表示位置がずれてしまうためである。
+表示文字列が変更されていない場合や、
+文字列テクスチャの幅が変わっていないことが保証されている場合は、
+このメソッドを呼ぶ必要はない。\\ ~
+
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
@@ -1610,6 +1627,98 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 60:         }
 61:     }
 62: }
+\end{verbatim}
+\end{small}
+\end{breakbox}
+
+\section{四元数}
+この節では、第\ref{sec:quaternion}節で紹介した四元数を用いて、
+姿勢補間を行うサンプルプログラムを示す。
+3DCGのプログラミングでは、ベクトル、行列、オイラー角、四元数といった多くの
+代数要素を扱う必要があるが、このサンプルプログラムはそれらの利用方法を
+コンパクトにまとめたものとなっている。
+
+四元数は姿勢を表現する手段として強力な数学手法であるが、
+四元数の成分を直接扱うことは現実的ではなく、
+通常はオイラー角を介して制御を行う。
+このサンプルプログラムでも、まず2種類の姿勢を angle1, angle2 という変数で
+設定(24,25行目)してから、それを四元数に変換(52,53行目)している。
+そして、59行目で球面線形補間を行った四元数を算出し、
+それを62行目でモデルの姿勢として設定している。\\ ~
+
+\begin{breakbox}
+\begin{small}
+\begin{verbatim}
+ 1: using System;
+ 2: using System.Collections.Generic;
+ 3: using System.Linq;
+ 4: using System.Text;
+ 5: using System.Threading.Tasks;
+ 6: using FK_CLI;
+ 7: 
+ 8: namespace FK_CLI_Quaternion
+ 9: {
+10:     class Program
+11:     {
+12:         static void Main(string[] args)
+13:         {
+14:             // 各種変数生成
+15:             fk_Material.InitDefault();
+16:             var win = new fk_AppWindow();
+17:             var model = new fk_Model();
+18:             var pointM = new fk_Model();
+19:             var cone = new fk_Cone(3, 4.0, 15.0);
+20:             var pos = new fk_Vector(0.0, 0.0, -15.0);
+21:             var poly = new fk_Polyline();
+22: 
+23:             // オイラー角の初期値設定
+24:             var angle1 = new fk_Angle(0.0, 0.0, 0.0);
+25:             var angle2 = new fk_Angle(FK.PI/2.0, FK.PI/2.0 - 0.01, 0.0);
+26: 
+27:             // 四元数変数作成
+28:             var q1 = new fk_Quaternion();
+29:             var q2 = new fk_Quaternion();
+30:             fk_Quaternion q;
+31: 
+32:             // 三角錐モデルの設定
+33:             model.Shape = cone;
+34:             model.Material = fk_Material.Yellow;
+35:             model.GlAngle(angle1);
+36: 
+37:             // 軌跡用ポリラインモデルの設定
+38:             pointM.Shape = poly;
+39:             pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
+40: 
+41:             // ウィンドウ設定
+42:             win.Size = new fk_Dimension(500, 500);
+43:             win.BGColor = new fk_Color(0.3, 0.4, 0.5);
+44:             win.Entry(model);
+45:             win.Entry(pointM);
+46:             win.TrackBallMode = true;
+47:             win.ShowGuide();
+48: 
+49:             win.Open();
+50: 
+51:             // オイラー角の初期値を四元数に設定
+52:             q1.Euler = angle1;
+53:             q2.Euler = angle2;
+54: 
+55:             for(int i = 0;  win.Update() == true; i++) {
+56:                 double t = i / 200.0;
+57:                 if(t < 1.0) {
+58:                     // パラメータ t で球面線形補間
+59:                     q = fk_Math.QuatInterSphere(q1, q2, t);
+60: 
+61:                     // q をモデルの姿勢(オイラー角)に変換
+62:                     model.GlAngle(q.Euler);
+63: 
+64:                     // 軌跡用に点を追加
+65:                     poly.PushVertex(model.Matrix * pos);
+66:                 }
+67:             }
+68:         }
+69:     }
+70: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
