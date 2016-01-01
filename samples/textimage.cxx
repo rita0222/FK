@@ -73,93 +73,46 @@
 
 int main (int, char *[])
 {
-	Fl_Window		mainWin(1024, 256, "TextImage Demo");
-	fk_Window		fkWin(0, 0, 1024, 256);
+	fk_AppWindow	win;
+	fk_TextImage	textImage;
+	fk_RectTexture	texture;
+	fk_UniStr		str;
+	fk_Model		strModel;
 
-	fk_TextImage	textImage[2];
-	fk_RectTexture	texture[2];
-	fk_UniStr		str[2];
 
-	fk_Light		light;
-	fk_Model		strModel[2], lightModel[2], camera, strBase;
-	fk_Scene		scene;
-
-#if defined(_MACOSX_)
 	fk_System::setcwd();
-#endif
-
-	mainWin.end();
 	fk_Material::initDefault();
 
-	str[0].convert("3D", FK_STR_UTF8);
-	str[1].convert("Graphics", FK_STR_UTF8);
+	str.convert("FK日本語", FK_STR_UTF8);
 
-	for(int i = 0; i < 2; i++) {
-		texture[i].setImage(&textImage[i]);
-		if(textImage[i].initFont("rm1b.ttf") == false) {
-			fl_alert("Font Init Error.");
-			exit(1);
-		}
-		textImage[i].setDPI(96);
-		textImage[i].setPTSize(96);
-		textImage[i].setLineSkip(30);
-		textImage[i].setMonospaceSize(32);
-		textImage[i].setForeColor(0.5, 1.0, 0.8, 1.0);
-		textImage[i].setBackColor(0.2, 0.7, 0.8, 0.0);
-		textImage[i].setAlign(FK_ALIGN_CENTER);
-
-		textImage[i].loadUniStr(&str[i]);
-
-		strModel[i].setShape(&texture[i]);
-		strModel[i].setMaterial(White);
-		strModel[i].glVec(0.0, 0.0, -1.0);
-		strModel[i].setParent(&strBase);
+	texture.setImage(&textImage);
+	if(textImage.initFont("rm1b.ttf") == false) {
+		fl_alert("Font Init Error.");
 	}
 
-	texture[0].setTextureSize(30.0, 40.0);
-	texture[1].setTextureSize(150.0, 40.0);
-	strModel[0].glMoveTo(-80.0, 0.0, 0.0);
-	strModel[1].glMoveTo(20.0, 0.0, 0.0);
+	textImage.setDPI(96);
+	textImage.setPTSize(96);
+	textImage.setLineSkip(30);
+	textImage.setMonospaceMode(true);
+	textImage.setMonospaceSize(96);
+	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
+	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
+	textImage.setAlign(FK_ALIGN_CENTER);
+	textImage.loadUniStr(&str);
+	texture.setTextureSize(40.0, 10.0);
+	strModel.setMaterial(TrueWhite);
 
-	for(int i = 0; i < 2; i++) {
-		lightModel[i].setShape(&light);
-		lightModel[i].setMaterial(White);
-	}
+	strModel.setShape(&texture);
+	strModel.glVec(0.0, 0.0, -1.0);
+	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
 
-	lightModel[0].glFocus(0.0, 0.0, -1.0);
-	lightModel[1].glFocus(0.0, 0.0, 1.0);
+	win.entry(&strModel);
+	win.open();
+	win.setCameraPos(0.0, 0.0, 100.0);
+	win.setCameraFocus(0.0, 0.0, 0.0);
 
-	for(int i = 0; i < 2; i++) {
-		scene.entryModel(&strModel[i]);
-		scene.entryModel(&lightModel[i]);
-	}
-	scene.entryCamera(&camera);
-	scene.setBlendStatus(true);
-	scene.setBGColor(68.0/256.0, 68.0/256.0, 68.0/256.0);
-
-	camera.glMoveTo(0.0, 0.0, 100.0);
-	camera.glVec(0.0, 0.0, -1.0);
-	camera.glUpvec(0.0, 1.0, 0.0);
-
-	fkWin.setScene(&scene);
-	mainWin.show();
-
-	strBase.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
-
-	while(true) {
-		if(mainWin.visible() == 0) {
-			if(Fl::wait() == 0) {
-				break;
-			} else {
-				continue;
-			}
-		}
-
-		if(fkWin.drawWindow() == 0) break;
-		if(Fl::check() == 0) break;
-		if(fkWin.winOpenStatus() == false) continue;
-
-		strBase.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/200.0);
+	while(win.update() == true) {
+		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/200.0);
 	}
 	return 0;
 }
