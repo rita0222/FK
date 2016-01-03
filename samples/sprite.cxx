@@ -21,8 +21,6 @@ int main(int, char *[])
 	fk_System::setcwd();
 
 	sprite.initFont("rm1b.ttf");
-	//sprite.text.setMonospaceMode(true);
-	//sprite.text.setMonospaceSize(10);
 	sprite.setPositionLT(-280.0, 230.0);
 	window.entry(sprite);
 
@@ -42,6 +40,7 @@ int main(int, char *[])
 	while(window.update() == true) {
 		str = "count = " + IntToString(count);
 		sprite.drawText(str, true);
+		sprite.setPositionLT(-280.0, 230.0);
 		model.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
 		count++;
 	}
