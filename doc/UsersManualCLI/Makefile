@@ -1,7 +1,7 @@
 SHELL	= /bin/sh
 
 RM		= rm -f
-MAINNAME	= FK_UsersManual
+MAINNAME	= FK_UsersManual_CLI
 
 doc:
 	cd Fig; ../../com/svg2eps *.svg
