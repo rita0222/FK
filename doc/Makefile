@@ -16,5 +16,6 @@ clean:
 	cd Tutorial; $(MAKE) clean
 	cd Setup; $(MAKE) clean
 	cd doxygen; $(MAKE) clean
+	cd Output; rm -rf *.pdf FK_Ref_Base FK_Ref_CLI
 
 ####################
