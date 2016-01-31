@@ -235,19 +235,20 @@ int Ball::draw(fk_Vector pos)
 
 int main(int, char *[])
 {
-	fk_Scene		scene;
 	int				view_mode = HIGH_MODE;
 	Ball			ball;
-	fk_Model		viewModel, lightModel, groundModel, blockModel;
+	fk_Model		viewModel, groundModel, blockModel, lightModel;
 	fk_Light		light;
 	fk_Circle		ground(4, 100.0);
 	fk_Block		block(10.0, 10.0, 10.0);
-
+	fk_Scene		scene;
 
 	// ### WINDOW ###
-	Fl_Window		mainWin(820, 820, "BALL TEST");
-	fk_Window		win(10, 10, 800, 800);
-	mainWin.end();
+	fk_AppWindow	win;
+	win.setSize(800, 800);
+	win.setScene(&scene);
+
+	// ### Material 初期化 ###
 	fk_Material::initDefault();
 
 	// ### VIEW POINT ###
@@ -285,24 +286,11 @@ int main(int, char *[])
 	scene.entryModel(ball.getModel());
 	scene.entryModel(&groundModel);
 	scene.entryModel(&blockModel); 
-	win.setScene(&scene);
 
-	mainWin.show();
-	win.show();
+	win.open();
 
 	// ### MAIN LOOP ###
-	while(true) {
-
-		if(mainWin.visible() == 0) {
-			if(Fl::wait() == 0) {
-				break;
-			} else {
-				continue;
-			}
-		}
-		if(win.drawWindow() == 0) break;
-		if(Fl::check() == 0) break;
-		if(win.winOpenStatus() == false) continue;
+	while(win.update() == true) {
 
 		// ボールを弾ませて, カメラの状態を取得。
 		view_mode = ball.draw(viewModel.getPosition());

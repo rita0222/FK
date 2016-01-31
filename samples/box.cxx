@@ -73,24 +73,17 @@
 
 int main(int, char *[])
 {
-	Fl_Window		mainWindow(820, 820, "FK TEST");
-	fk_Model		camera, blockModel, lightModel, lineModel[2];
+	fk_AppWindow	window;
+	fk_Model		camera, blockModel, lineModel[2];
 	fk_Vector		pos[4];
 	fk_Line			line[2];
-	fk_Light		light;
 	fk_Block		block(50.0, 70.0, 40.0);
-	fk_Scene		scene;
-	fk_Window		window(10, 10, 800, 800);
-	int				i = 0;
 
-	mainWindow.end();
+	// マテリアルの初期化
 	fk_Material::initDefault();
 
-	// 照明の設定
-	lightModel.setShape(&light);
-	lightModel.setMaterial(White);
-	lightModel.glMoveTo(0.0, 0.0, 0.0);
-	lightModel.glFocus(-1.0, -1.0, -1.0);
+	// ウィンドウ設定
+	window.setSize(800, 800);
 
 	// 直方体の設定
 	blockModel.setShape(&block);
@@ -114,38 +107,20 @@ int main(int, char *[])
 	lineModel[0].setParent(&blockModel);
 	lineModel[1].setParent(&blockModel);
 
-	// 各モデルをディスプレイリストに登録
-	scene.entryCamera(&camera);
-	scene.entryModel(&blockModel);
-	scene.entryModel(&lightModel);
-	scene.entryModel(&lineModel[0]);
-	scene.entryModel(&lineModel[1]);
-
-	// ウィンドウへディスプレイリストを登録
-	window.setScene(&scene);
-
 	// 視点の位置と姿勢を設定
 	camera.glMoveTo(0.0, 0.0, 2000.0);
 	camera.glFocus(0.0, 0.0, 0.0);
 	camera.glUpvec(0.0, 1.0, 0.0);
 
-	i = 0;
-	mainWindow.show();
-	window.show();
+	// 各モデルをウィンドウに登録
+	window.setCameraModel(&camera);
+	window.entry(&blockModel);
+	window.entry(&lineModel[0]);
+	window.entry(&lineModel[1]);
 
-	while(true) {
+	window.open();
 
-		if(mainWindow.visible() == 0) {
-			if(Fl::wait() == 0) {
-				break;
-			} else {
-				continue;
-			}
-		}
-
-		if(window.drawWindow() == 0) break;
-		if(Fl::check() == 0) break;
-		if(window.winOpenStatus() == false) continue;
+	for(int i = 0; window.update() == true; i++) {
 
 		// 視点を原点に近づける
 		camera.glTranslate(0.0, 0.0, -1.0);
@@ -158,12 +133,10 @@ int main(int, char *[])
 			camera.glFocus(0.0, 0.0, 0.0);
 		}
 
+		// i が 1000 以上なら、視点をひねっていく
 		if(i >= 1000) {
-			// i が 1000 以上なら、視点をひねっていく
 			camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Z, FK_PI/500.0);
 		}
-
-		i++;
 	}
 
 	return 0;
