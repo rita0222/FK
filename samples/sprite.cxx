@@ -1,12 +1,4 @@
 ﻿#include <FK/FK.h>
-#include <sstream>
-
-string IntToString(int argI)
-{
-	stringstream ss;
-	ss << argI;
-	return ss.str();
-}
 
 int main(int, char *[])
 {
@@ -38,7 +30,7 @@ int main(int, char *[])
 
 	count = 0;
 	while(window.update() == true) {
-		str = "count = " + IntToString(count);
+		str = "count = " + std::to_string(count);
 		sprite.drawText(str, true);
 		sprite.setPositionLT(-280.0, 230.0);
 		model.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
