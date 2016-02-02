@@ -7,84 +7,93 @@ using namespace std;
 class Agent {
 
 private:
-	fk_Model model;
-	fk_Vector newVec;
+	fk_Model		model;
+	fk_Vector		newVec;
 	
 public:
 	Agent(double);
-	fk_Vector getPos(void);
-	void setVec(fk_Vector);
-	fk_Vector getVec(void);
-	void setShape(fk_Shape *);
-	void entry(fk_AppWindow *);
-	void forward(void);
+
+	fk_Vector		getPos(void);
+	void			setVec(fk_Vector);
+	fk_Vector		getVec(void);
+	void			setShape(fk_Shape *);
+	void			entry(fk_AppWindow *);
+	void			forward(void);
 };
 
+// 群衆用クラス
+class Boid {
+private:
+	const double	AREASIZE = 15.0;
+	vector<Agent *>	agent;
+	fk_Cone			*cone;
+	double			paramA, paramB, paramC, paramLA, paramLB;
+
+public:
+	Boid(int);
+	~Boid();
+
+	void			setParam(double, double, double, double, double);
+	void			setWindow(fk_AppWindow *);
+	void			forward(bool, bool, bool);
+};
+
+// コンストラクタ
 Agent::Agent(double argSize)
 {
-	// コンストラクタ
-	// 各モデルの位置と方向をランダムに設定する。
+	// -1 〜 1 までの乱数発生器生成
 	random_device				rnd;
 	mt19937						mt(rnd());
 	uniform_real_distribution<>	randR(-1.0, 1.0);
 		
 	model.setMaterial(Red);
+
+	// モデルの方向と位置をランダムに設定
 	model.glVec(randR(mt), randR(mt), 0.0);
 	model.glMoveTo(randR(mt)*argSize, randR(mt)*argSize, 0.0);
 }
 
+// 位置取得
 fk_Vector Agent::getPos(void)
 {
 	return model.getPosition();
 }
 
+// 方向設定
 void Agent::setVec(fk_Vector argV)
 {
 	newVec = argV;
 }
 
+// 方向取得
 fk_Vector Agent::getVec(void)
 {
 	return model.getVec();
 }
 
+// 形状設定
 void Agent::setShape(fk_Shape *argS)
 {
 	model.setShape(argS);
 }
 
+// ウィンドウ登録
 void Agent::entry(fk_AppWindow *argWin)
 {
 	argWin->entry(model);
 }
 
+// 前進
 void Agent::forward()
 {
 	model.glVec(newVec);
 	model.loTranslate(0.0, 0.0, -0.05);
 }
 	
-// 群衆用クラス
-class Boid {
-private:
-	const int IAREA = 15;
-	const double AREASIZE = (double)(IAREA);
-	vector<Agent *> agent;
-	fk_Cone *cone;
-	double paramA, paramB, paramC, paramLA, paramLB;
-
-	// コンストラクタ
-public:
-	Boid(int);
-	~Boid();
-	void setParam(double, double, double, double, double);
-	void setWindow(fk_AppWindow *);
-	void forward(bool, bool, bool);
-};
-
+// 群集のコンストラクタ
 Boid::Boid(int argNum)
 {
-	// 形状インスタンスの性生
+	// 形状インスタンス生成
 	fk_Material::initDefault();
 	cone = new fk_Cone(16, 0.4, 1.0);
 	if(argNum < 0) return;
@@ -104,6 +113,7 @@ Boid::Boid(int argNum)
 	paramLB = 5.0;
 }
 
+// 群集のデストラクタ
 Boid::~Boid()
 {
 	for(auto M : agent) {
@@ -196,18 +206,25 @@ int main(int, char **)
 
 	boid.setWindow(&win);
 
+	// ウィンドウ各種設定
 	win.setSize(600, 600);
 	win.setBGColor(0.6, 0.7, 0.8);
 	win.showGuide(FK_GRID_XY);
 	win.setCameraPos(0.0, 0.0, 80.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
-
 	win.open();
 
 	while(win.update() == true) {
+		// Sキーで「Separate(分離)」を OFF に
 		bool sMode = win.getKeyStatus('S', FK_SW_RELEASE);
+
+		// Aキーで「Alignment(整列)」を OFF に
 		bool aMode = win.getKeyStatus('A', FK_SW_RELEASE);
+
+		// Cキーで「Cohesion(結合)」を OFF に
 		bool cMode = win.getKeyStatus('C', FK_SW_RELEASE);
+
+		// 群集の前進処理
 		boid.forward(sMode, aMode, cMode);
 	}
 }
