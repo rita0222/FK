@@ -11,7 +11,7 @@ private:
 	fk_Vector		newVec;
 	
 public:
-	Agent(double);
+	Agent(double, mt19937 &);
 
 	fk_Vector		getPos(void);
 	void			setVec(fk_Vector);
@@ -39,18 +39,14 @@ public:
 };
 
 // コンストラクタ
-Agent::Agent(double argSize)
+Agent::Agent(double argSize, mt19937 &argMT)
 {
-	// -1 〜 1 までの乱数発生器生成
-	random_device				rnd;
-	mt19937						mt(rnd());
 	uniform_real_distribution<>	randR(-1.0, 1.0);
-		
-	model.setMaterial(Red);
 
+	model.setMaterial(Red);
 	// モデルの方向と位置をランダムに設定
-	model.glVec(randR(mt), randR(mt), 0.0);
-	model.glMoveTo(randR(mt)*argSize, randR(mt)*argSize, 0.0);
+	model.glVec(randR(argMT), randR(argMT), 0.0);
+	model.glMoveTo(randR(argMT)*argSize, randR(argMT)*argSize, 0.0);
 }
 
 // 位置取得
@@ -93,6 +89,10 @@ void Agent::forward()
 // 群集のコンストラクタ
 Boid::Boid(int argNum)
 {
+	// -1 〜 1 までの乱数発生器生成
+	random_device				rnd;
+	mt19937						mt(rnd());
+
 	// 形状インスタンス生成
 	fk_Material::initDefault();
 	cone = new fk_Cone(16, 0.4, 1.0);
@@ -100,7 +100,7 @@ Boid::Boid(int argNum)
 
 	// エージェントインスタンスの作成
 	for(int i = 0; i < argNum; ++i) {
-		Agent *newAgent = new Agent(AREASIZE);
+		Agent *newAgent = new Agent(AREASIZE, mt);
 		newAgent->setShape(cone);
 		agent.push_back(newAgent);
 	}
