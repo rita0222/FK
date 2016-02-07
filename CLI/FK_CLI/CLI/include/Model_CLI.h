@@ -86,10 +86,15 @@ namespace FK_CLI
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Model::fk_Model(bool argNewFlg);
-		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
 #endif
 
+	public:
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
 		::fk_Model * GetP(void);
+		void fk_Model::Test(void) { System::Diagnostics::Debug::WriteLine("hoge~"); };
+#endif
 		
 	public:
 		//! コンストラクタ
