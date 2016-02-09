@@ -42,6 +42,7 @@ class fk_GraphicsEngine {
 	bool						resizeFlag;
 	bool						textureMode;
 	fk_BlendFactor				srcFactor, dstFactor;
+	bool						depthRead, depthWrite;
 
 	std::vector<fk_Model *>		modelArray;
 
@@ -85,6 +86,7 @@ class fk_GraphicsEngine {
 	void				DrawStereoObjs(bool);
 
 	void				SetBlendMode(fk_Model *model);
+	void				SetDepthMode(fk_DepthMode mode);
 
 
 #ifdef NO_GLU_LIBRARY

@@ -27,6 +27,13 @@ const fk_BlendFactor	FK_FACTOR_ONE_MINUS_SRC_ALPHA = 7;	//! 1-Sa
 const fk_BlendFactor	FK_FACTOR_DST_ALPHA = 8;			//! Da
 const fk_BlendFactor	FK_FACTOR_ONE_MINUS_DST_ALPHA = 9;	//! 1-Da
 
+//! デプス読み書きモード型
+typedef unsigned char	fk_DepthMode;
+
+const fk_DepthMode		FK_DEPTH_NO_USE = 0;			//!< デプスバッファの参照も更新せず、常に上書きします
+const fk_DepthMode		FK_DEPTH_READ = 1;				//!< デプスバッファを参照し、前後関係のチェックを行います
+const fk_DepthMode		FK_DEPTH_WRITE = 2;				//!< デプスバッファに書き込みを行い、更新します
+const fk_DepthMode		FK_DEPTH_READ_AND_WRITE = 3;	//!< デプスバッファの参照と書き込みを共に行います(初期値)
 
 #endif // __FK_RENDER_STATE_HEADER__
 

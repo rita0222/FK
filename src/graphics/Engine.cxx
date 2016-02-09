@@ -109,6 +109,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 
 	srcFactor = FK_FACTOR_SRC_ALPHA;
 	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+	depthRead = depthWrite = true;
 
 	return;
 }
@@ -534,6 +535,7 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	modelPEnd = curDLink->GetModelList()->end();
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
+		SetDepthMode((*modelP)->getDepthMode());
 		DrawModel(*modelP, lightFlag, argPickFlg);
 	}
 
@@ -541,11 +543,13 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	if(overlayList->empty() == true) return;
 
 	glDisable(GL_DEPTH_TEST);
+	depthRead = false;
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
 		DrawModel(*modelP, lightFlag, argPickFlg);
 	}
 	glEnable(GL_DEPTH_TEST);
+	depthRead = true;
 
 	return;
 }
@@ -1045,6 +1049,19 @@ void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
 		glBlendFunc(GetBlendFactor(srcFactor), GetBlendFactor(dstFactor));
 	}
 	return;
+}
+
+void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
+{
+	bool r = (argMode & FK_DEPTH_READ) != 0;
+	bool w = (argMode & FK_DEPTH_WRITE) != 0;
+	if (depthRead != r) {
+		if (r) glEnable(GL_DEPTH_TEST);
+		else glDisable(GL_DEPTH_TEST);
+	}
+	if (depthWrite != w) {
+		glDepthMask(w ? GL_TRUE : GL_FALSE);
+	}
 }
 
 bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)

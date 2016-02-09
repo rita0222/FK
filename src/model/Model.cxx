@@ -398,6 +398,16 @@ fk_BlendMode fk_Model::getBlendMode(fk_BlendFactor *outSrc, fk_BlendFactor *outD
 	return blendMode;
 }
 
+void fk_Model::setDepthMode(const fk_DepthMode argMode)
+{
+	depthMode = argMode;
+}
+
+fk_DepthMode fk_Model::getDepthMode(void) const
+{
+	return depthMode;
+}
+
 fk_Matrix fk_Model::getInhMatrix(void) const
 {
 	if(parent == nullptr) return getMatrix();

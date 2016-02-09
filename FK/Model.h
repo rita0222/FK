@@ -87,6 +87,7 @@ class fk_Model : public fk_Boundary {
 	fk_BlendMode		blendMode;
 	fk_BlendFactor		srcFactor;
 	fk_BlendFactor		dstFactor;
+	fk_DepthMode		depthMode;
 	double				drawSize;
 	double				drawWidth;
 	bool				pickFlag;
@@ -1324,6 +1325,33 @@ class fk_Model : public fk_Boundary {
 	 *	\sa setReverseDrawMode()
 	 */
 	bool	getReverseDrawMode(void) const;
+
+	//! 前後関係制御関数
+	/*!
+	*	この関数では、モデルを描画する際の前後関係に関する設定を制御します。
+	*	fk_Scene::entryOverlayModel()でも前後関係を無視した描画はできますが、
+	*	通常の描画中に前後関係を無視したり、半透明物体が後続の描画の前後関係に作用しないようにするなど、
+	*	細かな調整を行いたい場合に用います。
+	*
+	*	\param[in]	mode
+	*		前後関係の処理モードを設定します。与えられる値は以下の4種類です。
+	*		\arg FK_DEPTH_NO_USE			前後関係の参照も更新も行わず、常に上書きします。
+	*		\arg FK_DEPTH_READ				前後関係を参照してチェックします。
+	*		\arg FK_DEPTH_WRITE				前後関係を更新して後続の描画に影響するようにします。
+	*		\arg FK_DEPTH_READ_AND_WRITE	前後関係を参照しつつ更新します。FK_DEPTH_READ | FK_DEPTH_WRITE と等価です。初期値です。
+	*/
+	void	setDepthMode(const fk_DepthMode mode);
+
+	//! 前後関係参照関数
+	/*!
+	*	setDepthMode() で設定した前後関係の設定を取得します。
+	*
+	*	\return		前後関係処理モード
+	*
+	*	\sa setDepthMode()
+	*/
+	fk_DepthMode	getDepthMode(void) const;
+
 	//@}
 
 	//! \name 座標系情報参照関数
