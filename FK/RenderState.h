@@ -1,147 +1,34 @@
-﻿#ifdef FK_D3D
-#include "./D3D/Engine.h"
-#else
+﻿#ifndef __FK_RENDER_STATE_HEADER__
+#define __FK_RENDER_STATE_HEADER__
 
-#ifndef __FK_GRAPHICS_ENGINE_HEADER__
-#define __FK_GRAPHICS_ENGINE_HEADER__
+//! ブレンドモード型
+typedef unsigned char	fk_BlendMode;
 
-// for FK Header.
-#include <FK/Base.h>
-#include <FK/OpenGL.H>
-#include <FK/PickData.h>
-#include <FK/Matrix.h>
-#include <FK/Image.h>
-#include <FK/DList.h>
+const fk_BlendMode		FK_BLEND_ALPHA_MODE = 0;	//!< アルファブレンド(デフォルト)
+const fk_BlendMode		FK_BLEND_NEGATIVE_MODE = 1;	//!< 反転
+const fk_BlendMode		FK_BLEND_ADDITION_MODE = 2;	//!< 加算
+const fk_BlendMode		FK_BLEND_SCREEN_MODE = 3;	//!< スクリーン
+const fk_BlendMode		FK_BLEND_LIGHTEN_MODE = 4;	//!< 比較(明)
+const fk_BlendMode		FK_BLEND_MULTIPLY_MODE = 5;	//!< 乗算
+const fk_BlendMode		FK_BLEND_NONE_MODE = 128;	//!< ブレンドなし
+const fk_BlendMode		FK_BLEND_CUSTOM_MODE = 255; //!< カスタム
 
-class fk_PointDraw;
-class fk_LineDraw;
-class fk_FaceDraw;
-class fk_TextureDraw;
-class fk_DisplayLink;
-class fk_ProjectBase;
-class fk_Scene;
-class fk_Plane;
+//! ブレンド係数型
+typedef unsigned char	fk_BlendFactor;
 
-class fk_GraphicsEngine {
-
- private:
-
-	fk_PointDraw				*pointDraw;
-	fk_LineDraw					*lineDraw;
-	fk_FaceDraw					*faceDraw;
-	fk_TextureDraw				*textureDraw;
-
-	unsigned int				winID;
-	fk_DisplayLink				*curDLink;
-	int							dLinkStatus;
-	int							dLinkID;
-	int							wSize;
-	int							hSize;
-	GLuint						selectBuf[FK_PICKDATAMAX*5];
-	bool						arrayState;
-	bool						resizeFlag;
-	bool						textureMode;
-	fk_BlendFactor				srcFactor, dstFactor;
-
-	std::vector<fk_Model *>		modelArray;
-
-	fk_Matrix					viewMat;
-	GLint						viewArray[4];
-
-	std::vector<fk_ImType>		snapBuffer;
+const fk_BlendFactor	FK_FACTOR_ZERO = 0;					//! 0
+const fk_BlendFactor	FK_FACTOR_ONE = 1;					//! 1
+const fk_BlendFactor	FK_FACTOR_SRC_COLOR = 2;			//! Sr,Sg,Sb
+const fk_BlendFactor	FK_FACTOR_ONE_MINUS_SRC_COLOR = 3;	//! 1-Sr,Sg,Sb
+const fk_BlendFactor	FK_FACTOR_DST_COLOR = 4;			//! Dr,Dg,Db
+const fk_BlendFactor	FK_FACTOR_ONE_MINUS_DST_COLOR = 5;	//! 1-Dr,Dg,Db
+const fk_BlendFactor	FK_FACTOR_SRC_ALPHA = 6;			//! Sa
+const fk_BlendFactor	FK_FACTOR_ONE_MINUS_SRC_ALPHA = 7;	//! 1-Sa
+const fk_BlendFactor	FK_FACTOR_DST_ALPHA = 8;			//! Da
+const fk_BlendFactor	FK_FACTOR_ONE_MINUS_DST_ALPHA = 9;	//! 1-Da
 
 
-	void				DrawObjs(bool);
-	void				DrawModel(fk_Model *, bool, bool);
-	void				RecalcModelView(void);
-	void				RecalcInhModelView(const fk_Model *);
-	void				CurrentDispLinkDraw(void);
-	bool				DefineLight(void);
-	void				LoadModelMatrix(fk_Model *);
-	void				LoadAABBMatrix(fk_Model *);
-
-	void				DrawShapeObj(fk_Model *, bool, bool);
-	void				DrawBoundaryObj(fk_Model *, bool);
-
-	void				SetViewPort(void);
-	void				SetProjection(const fk_ProjectBase *);
-	void				SetDefaultProjection(void);
-
-	void				ApplySceneParameter(bool);
-
-	void				InitFogStatus(fk_Scene *);
-
-	bool				IsInsideWindow(void);
-
-	unsigned long		GetNow(void);
-
-	void				ViewMatCalc(fk_Matrix *);
-
-	bool				GetViewLinePos(double, double,
-									   fk_Vector *, fk_Vector *);
-
-	void				SetStereoViewPort(fk_StereoChannel);
-	void				RecalcStereoModelView(fk_StereoChannel);
-	void				DrawStereoObjs(bool);
-
-	void				SetBlendMode(fk_Model *model);
-
-
-#ifdef NO_GLU_LIBRARY
-
-	void				gluLookAt(GLdouble, GLdouble, GLdouble,
-								  GLdouble, GLdouble, GLdouble,
-								  GLdouble, GLdouble, GLdouble);
-
-	void				gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
-
-	void				gluPickMatrix(GLdouble, GLdouble, GLdouble, GLdouble,
-									  const GLint [4]);
-
-#endif
-
- public:
-	fk_GraphicsEngine(void);
-	virtual ~fk_GraphicsEngine();
-
-	void				Init(int, int);
-
-	void				SetScene(fk_Scene *);
-	void				ResizeWindow(int, int);
-
-
-	bool				GetProjectPosition(double, double,
-										   fk_Plane *, fk_Vector *);
-	bool				GetProjectPosition(double, double,
-										   double, fk_Vector *);
-	bool				GetWindowPosition(fk_Vector, fk_Vector *);
-	void				GetPickData(fk_PickData *, int, int, int);
-
-
-	void				SetOGLPointerMode(bool);
-	bool				GetOGLPointerMode(void);
-
-	void				SetOGLTextureBindMode(bool);
-	bool				GetOGLTextureBindMode(void);
-
-	// bool				SnapImage(string, fk_ImageType = FK_IMAGE_BMP, fk_SnapProcMode = FK_SNAP_GL_FRONT);
-	bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
-
-	void				ClearTextureMemory(void);
-	unsigned long		GetUsingTextureMemory(void);
-	void				OpenGLInit(void);
-
-	void				SetPickViewPort(int, int, int);
-	void				Draw(bool);
-
-	void				StereoDrawPrep(fk_StereoChannel);
-	void				StereoDrawMain(fk_StereoChannel);
-};
-
-
-#endif /* !__FK_GRAPHICS_ENGINE_HEADER__ */
-
-#endif /* !D3D_BRANCH */
+#endif // __FK_RENDER_STATE_HEADER__
 
 /****************************************************************************
  *

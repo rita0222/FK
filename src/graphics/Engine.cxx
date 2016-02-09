@@ -107,6 +107,9 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	resizeFlag = false;
 	textureMode = false;
 
+	srcFactor = FK_FACTOR_SRC_ALPHA;
+	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+
 	return;
 }
 
@@ -578,7 +581,8 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	} else {
 		LoadModelMatrix(argModel);
 	}
-		
+	
+	SetBlendMode(argModel);
 	argModel->preShader();
 
 	if(modelShape->getRealShapeType() == FK_SHAPE_TEXTURE) {
@@ -1000,6 +1004,47 @@ void fk_GraphicsEngine::SetOGLTextureBindMode(bool argFlg)
 bool fk_GraphicsEngine::GetOGLTextureBindMode(void)
 {
 	return textureDraw->GetBindMode();
+}
+
+GLenum GetBlendFactor(fk_BlendFactor factor)
+{
+	switch (factor) {
+	case FK_FACTOR_ZERO:
+		return GL_ZERO;
+	case FK_FACTOR_ONE:
+		return GL_ONE;
+	case FK_FACTOR_SRC_COLOR:
+		return GL_SRC_COLOR;
+	case FK_FACTOR_ONE_MINUS_SRC_COLOR:
+		return GL_ONE_MINUS_SRC_ALPHA;
+	case FK_FACTOR_DST_COLOR:
+		return GL_DST_COLOR;
+	case FK_FACTOR_ONE_MINUS_DST_COLOR:
+		return GL_ONE_MINUS_DST_COLOR;
+	case FK_FACTOR_SRC_ALPHA:
+		return GL_SRC_ALPHA;
+	case FK_FACTOR_ONE_MINUS_SRC_ALPHA:
+		return GL_ONE_MINUS_SRC_ALPHA;
+	case FK_FACTOR_DST_ALPHA:
+		return GL_DST_ALPHA;
+	case FK_FACTOR_ONE_MINUS_DST_ALPHA:
+		return GL_ONE_MINUS_DST_ALPHA;
+	default:
+		return GL_ONE;
+	}
+}
+
+void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
+{
+	fk_BlendFactor src, dst;
+	argModel->getBlendMode(&src, &dst);
+
+	if(src != srcFactor || dst != dstFactor) {
+		srcFactor = src;
+		dstFactor = dst;
+		glBlendFunc(GetBlendFactor(srcFactor), GetBlendFactor(dstFactor));
+	}
+	return;
 }
 
 bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)

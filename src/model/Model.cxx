@@ -87,6 +87,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 {
 	setDrawMode(FK_NONEMODE);
 	setMaterialMode(FK_CHILD_MODE);
+	setBlendMode(FK_BLEND_ALPHA_MODE);
 
 	material = new fk_Material();
 	parent = nullptr;
@@ -337,6 +338,64 @@ void fk_Model::setMaterialMode(const fk_MaterialMode argMode)
 fk_MaterialMode fk_Model::getMaterialMode(void) const
 {
 	return materialMode;
+}
+
+void fk_Model::setBlendMode(const fk_BlendMode argMode, const fk_BlendFactor argSrcFactor, const fk_BlendFactor argDstFactor)
+{
+	switch(argMode) {
+	  case FK_BLEND_ALPHA_MODE:
+		srcFactor = FK_FACTOR_SRC_ALPHA;
+		dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+		break;
+
+	  case FK_BLEND_NEGATIVE_MODE:
+		srcFactor = FK_FACTOR_ONE_MINUS_DST_COLOR;
+		dstFactor = FK_FACTOR_ZERO;
+		break;
+
+	  case FK_BLEND_ADDITION_MODE:
+		srcFactor = FK_FACTOR_ONE;
+		dstFactor = FK_FACTOR_ONE;
+		break;
+
+	  case FK_BLEND_SCREEN_MODE:
+		srcFactor = FK_FACTOR_SRC_ALPHA;
+		dstFactor = FK_FACTOR_ONE;
+		break;
+
+	  case FK_BLEND_LIGHTEN_MODE:
+		srcFactor = FK_FACTOR_ONE_MINUS_DST_COLOR;
+		dstFactor = FK_FACTOR_ONE;
+		break;
+
+	  case FK_BLEND_MULTIPLY_MODE:
+		srcFactor = FK_FACTOR_ZERO;
+		dstFactor = FK_FACTOR_SRC_COLOR;
+		break;
+
+	  case FK_BLEND_NONE_MODE:
+		srcFactor = FK_FACTOR_ONE;
+		dstFactor = FK_FACTOR_ZERO;
+		break;
+
+	  case FK_BLEND_CUSTOM_MODE:
+		srcFactor = argSrcFactor;
+		dstFactor = argDstFactor;
+		break;
+
+	  default:
+		return;
+	}
+
+	blendMode = argMode;
+	return;
+}
+
+fk_BlendMode fk_Model::getBlendMode(fk_BlendFactor *outSrc, fk_BlendFactor *outDst) const
+{
+	if (outSrc != nullptr) *outSrc = srcFactor;
+	if (outDst != nullptr) *outDst = dstFactor;
+	return blendMode;
 }
 
 fk_Matrix fk_Model::getInhMatrix(void) const
