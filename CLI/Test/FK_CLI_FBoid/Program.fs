@@ -40,8 +40,7 @@ type Boid(argNum) = class
     let rand = new Random()
     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
     let cone = new fk_Cone(16, 0.4, 1.0)
-    let IAREA = 15
-    let AREASIZE = double(IAREA)
+    let AREASIZE = 15.0
     let paramA = 0.2
     let paramB = 0.02
     let paramC = 0.01
@@ -120,7 +119,7 @@ end;;
 
 module FK_Boid =
     let win = new fk_AppWindow()
-    let boid = new Boid(150)
+    let boid = new Boid(200)
 
     boid.SetWindow(win)
 

@@ -16,8 +16,12 @@ namespace FK_CLI_Boid
 		{
 			model = new fk_Model();
 			model.Material = fk_Material.Red;
-			model.GlVec(argRand.NextDouble()*2.0 - 1.0, argRand.NextDouble()*2.0 - 1.0, 0.0);
-			model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize, argRand.NextDouble() * argSize * 2.0 - argSize, 0.0);
+			model.GlVec(argRand.NextDouble()*2.0 - 1.0,
+                        argRand.NextDouble()*2.0 - 1.0,
+                        0.0);
+			model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
+                           argRand.NextDouble() * argSize * 2.0 - argSize,
+                           0.0);
 		}
 
 		public fk_Vector Pos
@@ -64,8 +68,7 @@ namespace FK_CLI_Boid
     {
 		private Agent [] agent;
 		private fk_Cone cone;
-		private const int IAREA = 15;
-		private const double AREASIZE = (double)(IAREA);
+		private const double AREASIZE = 15.0;
 
 		private double paramA, paramB, paramC, paramLA, paramLB;
 
@@ -127,41 +130,41 @@ namespace FK_CLI_Boid
 
 			for(int i = 0; i < agent.Length; i++)
             {
-                fk_Vector pos = new fk_Vector(pArray[i]);
-                fk_Vector vec = new fk_Vector(vArray[i]);
+                fk_Vector p = new fk_Vector(pArray[i]);
+                fk_Vector v = new fk_Vector(vArray[i]);
 				for(int j = 0; j < agent.Length; j++)
                 {
 					if(i == j) continue;
-					diff = pos - pArray[j];
+					diff = p - pArray[j];
 					double dist = diff.Dist();
 					if(dist < paramLA)
                     {
-						vec += paramA * diff / (dist*dist);
+						v += paramA * diff / (dist*dist);
 					}
 
 					if(dist < paramLB)
                     {
-						vec += paramB * vArray[j];
+						v += paramB * vArray[j];
 					}
 				}
 
 				if(argGMode == true)
                 {
-					vec += paramC * (gVec - pArray[i]);
+					v += paramC * (gVec - pArray[i]);
 				}
 
-                if(Math.Abs(pos.x) > AREASIZE && pos.x * vec.x > 0.0 && Math.Abs(vec.x) > 0.01)
+                if(Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01)
                 {
-					vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
+					v.x -= v.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
 				}
 
-				if(Math.Abs(pos.y) > AREASIZE && pos.y * vec.y > 0.0 && Math.Abs(vec.y) > 0.01)
+				if(Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01)
                 {
-					vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
+					v.y -= v.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
 				}
 
-				vec.z = 0.0;
-				agent[i].Vec = vec;
+				v.z = 0.0;
+				agent[i].Vec = v;
 			}
 
 			foreach(Agent M in agent) {
