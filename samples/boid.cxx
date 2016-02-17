@@ -157,11 +157,12 @@ void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 
 	// エージェントごとの動作算出演算
 	for(size_t i = 0; i < agent.size(); i++) {
+		fk_Vector pos = pArray[i];
 		fk_Vector vec = vArray[i];
 
 		for(size_t j = 0; j < agent.size(); j++) {
 			if(i == j) continue;
-			diff = pArray[i] - pArray[j];
+			diff = pos - pArray[j];
 			double dist = diff.dist();
 
 			// 分離 (Separation) 処理
@@ -177,15 +178,15 @@ void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 
 		// 結合 (Cohesion) 処理 (スペースキーが押されていたら無効化)
 		if(argCMode == true) {
-			vec += paramC * (gVec - pArray[i]);
+			vec += paramC * (gVec - pos);
 		}
 
 		// 領域の外側に近づいたら方向修正
-		if(fabs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
-			vec.x -= vec.x * (fabs(pArray[i].x) - AREASIZE)*0.2;
+		if(fabs(pos.x) > AREASIZE && pos.x * vec.x > 0.0 && fabs(vec.x) > 0.01) {
+			vec.x -= vec.x * (fabs(pos.x) - AREASIZE)*0.2;
 		}
-		if(fabs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
-			vec.y -= vec.y * (fabs(pArray[i].y) - AREASIZE)*0.2;
+		if(fabs(pos.y) > AREASIZE && pos.y * vec.y > 0.0 && fabs(vec.y) > 0.01) {
+			vec.y -= vec.y * (fabs(pos.y) - AREASIZE)*0.2;
 		}
 
 		// 最終的な方向ベクトル演算結果を代入
