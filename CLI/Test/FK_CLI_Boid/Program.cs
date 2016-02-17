@@ -60,7 +60,8 @@ namespace FK_CLI_Boid
 		}
 	}
 
-	class Boid {
+	class Boid
+    {
 		private Agent [] agent;
 		private fk_Cone cone;
 		private const int IAREA = 15;
@@ -77,7 +78,8 @@ namespace FK_CLI_Boid
 			if(argNum < 0) return;
 			agent = new Agent[argNum];
 
-			for(int i = 0; i < argNum; ++i) {
+			for(int i = 0; i < argNum; ++i)
+            {
 				agent[i] = new Agent(AREASIZE, rand);
 				agent[i].Shape = cone;
 			}
@@ -100,7 +102,8 @@ namespace FK_CLI_Boid
 
 		public void SetWindow(fk_AppWindow argWin)
 		{
-			foreach(Agent M in agent) {
+			foreach(Agent M in agent)
+            {
 				M.Entry(argWin);
 			}
 		}
@@ -112,7 +115,8 @@ namespace FK_CLI_Boid
 			fk_Vector [] pArray = new fk_Vector[agent.Length];
 			fk_Vector [] vArray = new fk_Vector[agent.Length];
 
-			for(int i = 0; i < agent.Length; i++) {
+			for(int i = 0; i < agent.Length; i++)
+            {
 				pArray[i] = agent[i].Pos;
 				vArray[i] = agent[i].Vec;
 				gVec += pArray[i];
@@ -121,30 +125,38 @@ namespace FK_CLI_Boid
 			gVec /= (double)(agent.Length);
 
 
-			for(int i = 0; i < agent.Length; i++) {
-				fk_Vector vec = new fk_Vector(vArray[i]);
-				for(int j = 0; j < agent.Length; j++) {
+			for(int i = 0; i < agent.Length; i++)
+            {
+                fk_Vector pos = new fk_Vector(pArray[i]);
+                fk_Vector vec = new fk_Vector(vArray[i]);
+				for(int j = 0; j < agent.Length; j++)
+                {
 					if(i == j) continue;
-					diff = pArray[i] - pArray[j];
+					diff = pos - pArray[j];
 					double dist = diff.Dist();
-					if(dist < paramLA) {
+					if(dist < paramLA)
+                    {
 						vec += paramA * diff / (dist*dist);
 					}
 
-					if(dist < paramLB) {
+					if(dist < paramLB)
+                    {
 						vec += paramB * vArray[j];
 					}
 				}
 
-				if(argGMode == true) {
+				if(argGMode == true)
+                {
 					vec += paramC * (gVec - pArray[i]);
 				}
 
-				if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
+                if(Math.Abs(pos.x) > AREASIZE && pos.x * vec.x > 0.0 && Math.Abs(vec.x) > 0.01)
+                {
 					vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
 				}
 
-				if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
+				if(Math.Abs(pos.y) > AREASIZE && pos.y * vec.y > 0.0 && Math.Abs(vec.y) > 0.01)
+                {
 					vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
 				}
 
@@ -158,7 +170,8 @@ namespace FK_CLI_Boid
 		}
 	}
 
-	class Program {
+	class Program
+    {
 		static void Main(string[] args)
 		{
 			var win = new fk_AppWindow();
@@ -175,8 +188,9 @@ namespace FK_CLI_Boid
 
 			win.Open();
 
-			while(win.Update() == true) {
-				boid.Forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE));
+			while(win.Update() == true)
+            {
+                boid.Forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE));
 			}
 
 		}

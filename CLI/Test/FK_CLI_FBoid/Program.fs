@@ -88,8 +88,8 @@ type Boid(argNum) = class
                 Array.copy newV0
 
         // 外部判定
-        let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
-        let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
+        let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01
+        let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01
 
         let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
 
