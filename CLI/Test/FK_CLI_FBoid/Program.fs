@@ -40,8 +40,7 @@ type Boid(argNum) = class
     let rand = new Random()
     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
     let cone = new fk_Cone(16, 0.4, 1.0)
-    let IAREA = 15
-    let AREASIZE = double(IAREA)
+    let AREASIZE = 15.0
     let paramA = 0.2
     let paramB = 0.02
     let paramC = 0.01
@@ -88,8 +87,8 @@ type Boid(argNum) = class
                 Array.copy newV0
 
         // 外部判定
-        let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
-        let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
+        let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01
+        let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01
 
         let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
 
@@ -120,7 +119,7 @@ end;;
 
 module FK_Boid =
     let win = new fk_AppWindow()
-    let boid = new Boid(150)
+    let boid = new Boid(200)
 
     boid.SetWindow(win)
 
