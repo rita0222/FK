@@ -1,5 +1,5 @@
 VSWIZARD 7.0
-Wizard=VsWizard.VsWizardEngine.12.0
+Wizard=VsWizard.VsWizardEngine.14.0
 
 Param="WIZARD_NAME = FK_ProjectWizard"
 Param="FALLBACK_LCID = 1041"
