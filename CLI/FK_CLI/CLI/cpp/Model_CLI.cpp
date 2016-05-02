@@ -1,4 +1,28 @@
 ﻿#include "Model_CLI.h"
+#include <functional>
+
+class InnerModel : public ::fk_Model
+{
+public:
+	int pPreShader;
+	int pPostShader;
+
+	InnerModel(int pre, int post) : pPreShader(pre), pPostShader(post)
+	{
+	};
+
+	void preShader()
+	{
+		void (*func)() = (void(__cdecl *)(void))pPreShader;
+		func();
+	};
+
+	void postShader()
+	{
+		void(*func)() = (void(__cdecl *)(void))pPostShader;
+		func();
+	};
+};
 
 namespace FK_CLI {
 
@@ -9,20 +33,34 @@ namespace FK_CLI {
 
 	fk_Model::fk_Model(): fk_Boundary(false), shape(nullptr)
 	{
-		pBase = new ::fk_Model();
+		CallPreShader^ pre = gcnew CallPreShader(this, &fk_Model::PreShader);
+		System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(pre);
+		CallPostShader^ post = gcnew CallPostShader(this, &fk_Model::PostShader);
+		System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(post);
+		pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
 		modelList->Add(this);
 	}
 
 	fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false), shape(nullptr)
 	{
-		if (argNewFlg) pBase = new ::fk_Model();
+		if (argNewFlg) {
+			CallPreShader^ pre = gcnew CallPreShader(this, &fk_Model::PreShader);
+			System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(pre);
+			CallPostShader^ post = gcnew CallPostShader(this, &fk_Model::PostShader);
+			System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(post);
+			pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
+		}
 		modelList->Add(this);
 	}
 
 	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
 	{
 		if (argUnmanagedPtr == nullptr) {
-			pBase = new ::fk_Model();
+			CallPreShader^ pre = gcnew CallPreShader(this, &fk_Model::PreShader);
+			System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(pre);
+			CallPostShader^ post = gcnew CallPostShader(this, &fk_Model::PostShader);
+			System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(post);
+			pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
 		} else {
 			pBase = argUnmanagedPtr;
 			dFlg = false;

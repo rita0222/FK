@@ -93,7 +93,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
 		::fk_Model * GetP(void);
-		void fk_Model::Test(void) { System::Diagnostics::Debug::WriteLine("hoge~"); };
 #endif
 		
 	public:
@@ -585,6 +584,12 @@ namespace FK_CLI
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		delegate void CallPreShader();
+		delegate void CallPostShader();
+
+		virtual void PreShader() {};
+		virtual void PostShader() {};
+
 		bool Equals(fk_Model^ argModel);
 #endif
 

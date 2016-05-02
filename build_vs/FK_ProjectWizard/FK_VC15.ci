@@ -1,7 +1,7 @@
 <*project
       version = 4 civer = "Free v4.14.5" winver = "2.8/6.1.7601" > 
    <output> ..\ReleasePackages</>
-   <exename> FK_VC15_3_0_0_0.exe</>
+   <exename> FK_VC15_3_0_0_2.exe</>
    <digitsign> </>
    <appname> Fine Kernel ToolKit (VisualC++2015”Å)</>
    <password> </>

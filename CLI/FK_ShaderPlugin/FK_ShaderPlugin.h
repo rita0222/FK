@@ -7,33 +7,14 @@
 using namespace System;
 using namespace FK_CLI;
 
-#pragma make_public(::fk_Model)
-
-class GLSLModel : public ::fk_Model
-{
-public:
-	void preShader()
-	{
-		System::Diagnostics::Debug::WriteLine("preShader");
-	};
-
-	void postShader()
-	{
-		System::Diagnostics::Debug::WriteLine("postShader");
-	};
-};
-
 namespace FK_ShaderPlugin
 {
 
 	public ref class fk_ShaderModel : public FK_CLI::fk_Model
 	{
-	private:
-		GLSLModel	*unmanageP;
 	public:
-		fk_ShaderModel::fk_ShaderModel() : fk_Model(new GLSLModel())
+		fk_ShaderModel::fk_ShaderModel() : fk_Model()
 		{
-			unmanageP = (GLSLModel *)GetP();
 		};
 	};
 }
