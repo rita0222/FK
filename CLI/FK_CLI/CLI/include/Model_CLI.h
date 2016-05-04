@@ -83,9 +83,13 @@ namespace FK_CLI
 
 		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
 		fk_Shape^ shape;
-		
+		delegate void ShaderCallback();
+		ShaderCallback^ preShader;
+		ShaderCallback^ postShader;
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Model::fk_Model(bool argNewFlg);
+		void MakeNativeModel(void);
 #endif
 
 	public:
@@ -584,9 +588,6 @@ namespace FK_CLI
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		delegate void CallPreShader();
-		delegate void CallPostShader();
-
 		virtual void PreShader() {};
 		virtual void PostShader() {};
 

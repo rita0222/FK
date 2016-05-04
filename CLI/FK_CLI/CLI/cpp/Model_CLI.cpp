@@ -1,26 +1,29 @@
 ﻿#include "Model_CLI.h"
-#include <functional>
 
 class InnerModel : public ::fk_Model
 {
 public:
-	int pPreShader;
-	int pPostShader;
+	void(*pPreShader)();
+	void(*pPostShader)();
 
-	InnerModel(int pre, int post) : pPreShader(pre), pPostShader(post)
+#ifdef _WIN64
+	InnerModel(uint64_t pre, uint64_t post)
+#else
+	InnerModel(uint32_t pre, uint32_t post)
+#endif
 	{
+		pPreShader = (void(__cdecl *)(void))pre;
+		pPostShader = (void(__cdecl *)(void))post;
 	};
 
 	void preShader()
 	{
-		void (*func)() = (void(__cdecl *)(void))pPreShader;
-		func();
+		pPreShader();
 	};
 
 	void postShader()
 	{
-		void(*func)() = (void(__cdecl *)(void))pPostShader;
-		func();
+		pPostShader();
 	};
 };
 
@@ -31,24 +34,29 @@ namespace FK_CLI {
 		return (::fk_Model *)(pBase);
 	}
 
+	void fk_Model::MakeNativeModel(void)
+	{
+		preShader = gcnew ShaderCallback(this, &fk_Model::PreShader);
+		System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preShader);
+		postShader = gcnew ShaderCallback(this, &fk_Model::PostShader);
+		System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postShader);
+#ifdef _WIN64
+		pBase = new ::InnerModel(p1.ToInt64(), p2.ToInt64());
+#else
+		pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
+#endif
+	}
+
 	fk_Model::fk_Model(): fk_Boundary(false), shape(nullptr)
 	{
-		CallPreShader^ pre = gcnew CallPreShader(this, &fk_Model::PreShader);
-		System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(pre);
-		CallPostShader^ post = gcnew CallPostShader(this, &fk_Model::PostShader);
-		System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(post);
-		pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
+		MakeNativeModel();
 		modelList->Add(this);
 	}
 
 	fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false), shape(nullptr)
 	{
 		if (argNewFlg) {
-			CallPreShader^ pre = gcnew CallPreShader(this, &fk_Model::PreShader);
-			System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(pre);
-			CallPostShader^ post = gcnew CallPostShader(this, &fk_Model::PostShader);
-			System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(post);
-			pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
+			MakeNativeModel();
 		}
 		modelList->Add(this);
 	}
@@ -56,11 +64,7 @@ namespace FK_CLI {
 	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
 	{
 		if (argUnmanagedPtr == nullptr) {
-			CallPreShader^ pre = gcnew CallPreShader(this, &fk_Model::PreShader);
-			System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(pre);
-			CallPostShader^ post = gcnew CallPostShader(this, &fk_Model::PostShader);
-			System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(post);
-			pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
+			MakeNativeModel();
 		} else {
 			pBase = argUnmanagedPtr;
 			dFlg = false;
@@ -72,6 +76,8 @@ namespace FK_CLI {
 	fk_Model::~fk_Model()
 	{
 		shape = nullptr;
+		preShader = nullptr;
+		postShader = nullptr;
 		if(pBase == nullptr) return;
 		if(dFlg == true) delete GetP();
 		pBase = nullptr;
@@ -81,6 +87,8 @@ namespace FK_CLI {
 	fk_Model::!fk_Model()
 	{
 		shape = nullptr;
+		preShader = nullptr;
+		postShader = nullptr;
 		if(pBase == nullptr) return;
 		if(dFlg == true) {
 			GetP()->SetTreeDelMode(false);
