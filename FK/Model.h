@@ -1219,8 +1219,8 @@ class fk_Model : public fk_Boundary {
 	*		\arg FK_BLEND_SCREEN_MODE		アルファ付き加算ブレンドです。
 	*		\arg FK_BLEND_LIGHTEN_MODE		入出力ピクセルのうち明るい方を採用するブレンドです。
 	*		\arg FK_BLEND_MULTIPLY_MODE		乗算ブレンドです。
-	*		\arg FK_BLEND_NONE_MODE			ブレンドを行いません。fk_Scene側の設定によらずブレンドを無効にします。
-	*		\arg FK_BLEND_CUSTOM_MODE		カスタムモードです。第2,3引数にて指定した係数を用いた計算式でブレンドします。
+	*		\arg FK_BLEND_NONE_MODE			ブレンドを行いません。fk_Scene 側の設定によらずブレンドを無効にします。
+	*		\arg FK_BLEND_CUSTOM_MODE		カスタムモードです。第 2,3 引数にて指定した係数を用いた計算式でブレンドします。
 	*	\param[in]	srcFactor
 	*		入力ピクセルに対する係数を設定します。mode に FK_BLEND_CUSTOM_MODE を指定した場合のみ有効です。
 	*		それ以外のモードでは省略可能です。与えられる値は以下の10種類です。

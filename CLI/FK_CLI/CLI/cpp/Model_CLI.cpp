@@ -268,6 +268,63 @@ namespace FK_CLI {
 		return GetP()->getReverseDrawMode();
 	}
 
+	void fk_Model::DepthMode::set(fk_DepthMode argMode)
+	{
+		GetP()->setDepthMode(static_cast<unsigned char>(argMode));
+	}
+
+	fk_DepthMode fk_Model::DepthMode::get(void)
+	{
+		return static_cast<fk_DepthMode>(GetP()->getDepthMode());
+	}
+
+	void fk_Model::BlendMode::set(fk_BlendMode argMode)
+	{
+		if (argMode == fk_BlendMode::CUSTOM_MODE) {
+			::fk_BlendFactor src, dst;
+			GetP()->getBlendMode(&src, &dst);
+			GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+			return;
+		}
+
+		GetP()->setBlendMode(static_cast<unsigned char>(argMode));
+	}
+
+	fk_BlendMode fk_Model::BlendMode::get(void)
+	{
+		return static_cast<fk_BlendMode>(GetP()->getBlendMode());
+	}
+
+	void fk_Model::BlendSrcFactor::set(fk_BlendFactor argMode)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		src = static_cast<unsigned char>(argMode);
+		GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+	}
+
+	fk_BlendFactor fk_Model::BlendSrcFactor::get(void)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		return static_cast<fk_BlendFactor>(src);
+	}
+
+	void fk_Model::BlendDstFactor::set(fk_BlendFactor argMode)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		dst = static_cast<unsigned char>(argMode);
+		GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+	}
+
+	fk_BlendFactor fk_Model::BlendDstFactor::get(void)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		return static_cast<fk_BlendFactor>(dst);
+	}
+
 	fk_Matrix^ fk_Model::InhMatrix::get(void)
 	{
 		fk_Matrix^ M = gcnew fk_Matrix();

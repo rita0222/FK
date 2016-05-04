@@ -21,6 +21,40 @@ namespace FK_CLI
 		TEXTUREMODE			= 0x0020					//!< テクスチャ描画
 	};
 
+	//! ブレンドモード型
+	public enum class fk_BlendMode : unsigned char {
+		ALPHA_MODE		= 0,	//!< アルファブレンド(デフォルト)
+		NEGATIVE_MODE	= 1,	//!< 反転
+		ADDITION_MODE	= 2,	//!< 加算
+		SCREEN_MODE		= 3,	//!< スクリーン
+		LIGHTEN_MODE	= 4,	//!< 比較(明)
+		MULTIPLY_MODE	= 5,	//!< 乗算
+		NONE_MODE		= 128,	//!< ブレンドなし
+		CUSTOM_MODE		= 255	//!< カスタム
+	};
+
+	//! ブレンド係数型
+	public enum class fk_BlendFactor : unsigned char {
+		ZERO				= 0,	//! 0
+		ONE					= 1,	//! 1
+		SRC_COLOR			= 2,	//! Sr,Sg,Sb
+		ONE_MINUS_SRC_COLOR	= 3,	//! 1-Sr,Sg,Sb
+		DST_COLOR			= 4,	//! Dr,Dg,Db
+		ONE_MINUS_DST_COLOR	= 5,	//! 1-Dr,Dg,Db
+		SRC_ALPHA			= 6,	//! Sa
+		ONE_MINUS_SRC_ALPHA	= 7,	//! 1-Sa
+		DST_ALPHA			= 8,	//! Da
+		ONE_MINUS_DST_ALPHA	= 9		//! 1-Da
+	};
+
+	//! デプス読み書きモード型
+	public enum class fk_DepthMode : unsigned char {
+		NO_USE			= 0,	//!< デプスバッファの参照も更新せず、常に上書きします
+		READ			= 1,	//!< デプスバッファを参照し、前後関係のチェックを行います
+		WRITE			= 2,	//!< デプスバッファに書き込みを行い、更新します
+		READ_AND_WRITE	= 3		//!< デプスバッファの参照と書き込みを共に行います(初期値)
+	};
+
 	//! モデルを生成、管理するクラス
 	/*!
 	 *	このクラスは、「モデル」を制御する機能を提供します。
@@ -367,6 +401,86 @@ namespace FK_CLI
 		property bool ReverseDrawMode {
 			void set(bool);
 			bool get(void);
+		}
+
+		//! 前後関係制御プロパティ
+		/*!
+		*	このプロパティでは、モデルを描画する際の前後関係に関する設定を制御します。
+		*	fk_Scene::entryOverlayModel()でも前後関係を無視した描画はできますが、
+		*	通常の描画中に前後関係を無視したり、半透明物体が後続の描画の前後関係に作用しないようにするなど、
+		*	細かな調整を行いたい場合に用います。与えられる値は以下の4種類です。
+		*		\arg fk_DepthMode.NO_USE			前後関係の参照も更新も行わず、常に上書きします。
+		*		\arg fk_DepthMode.READ				前後関係を参照してチェックします。
+		*		\arg fk_DepthMode.WRITE				前後関係を更新して後続の描画に影響するようにします。
+		*		\arg fk_DepthMode.READ_AND_WRITE	前後関係を参照しつつ更新します。初期値です。
+		*/
+		property fk_DepthMode DepthMode {
+			void set(fk_DepthMode);
+			fk_DepthMode get(void);
+		}
+
+		//! ブレンドモード設定プロパティ
+		/*!
+		*	形状を描画する際に、どのような計算式でブレンドを行うかを設定します。
+		*	ここでブレンドモードを設定しても、fk_Scene.BlendStatus で
+		*	ブレンドを有効にしていないと実際の描画で有効になりません。
+		*	ブレンドモードの設定は、一般的な設定をプリセットの中から選択するか、
+		*	カスタムモードを選択した上で、入力ピクセルと出力ピクセルに対する係数を
+		*	個別に指定するかのどちらかによって行います。与えられる値は以下の 8 種類です。
+		*		\arg fk_BlendMode.ALPHA_MODE		通常のアルファブレンドです。初期値です。
+		*		\arg fk_BlendMode.NEGATIVE_MODE		反転ブレンドです。
+		*		\arg fk_BlendMode.ADDITION_MODE		加算ブレンドです。
+		*		\arg fk_BlendMode.SCREEN_MODE		アルファ付き加算ブレンドです。
+		*		\arg fk_BlendMode.LIGHTEN_MODE		入出力ピクセルのうち明るい方を採用するブレンドです。
+		*		\arg fk_BlendMode.MULTIPLY_MODE		乗算ブレンドです。
+		*		\arg fk_BlendMode.NONE_MODE			ブレンドを行いません。fk_Scene 側の設定によらずブレンドを無効にします。
+		*		\arg fk_BlendMode.CUSTOM_MODE		カスタムモードです。BlendSrcFactor, BlendDstFactor プロパティにて指定した係数を用いた計算式でブレンドします。
+		*/
+		property fk_BlendMode BlendMode {
+			void set(fk_BlendMode);
+			fk_BlendMode get(void);
+		}
+
+		//! ブレンド時の入力ピクセル係数設定プロパティ
+		/*!
+		*	ブレンド計算時の入力ピクセルに対する係数を設定します。
+		*	このプロパティに値を設定すると、自動的に BlendMode プロパティに fk_BlendMode.CUSTOM_MODE が設定されます。
+		*	与えられる値は以下の 10 種類です。
+		*		\arg FK_FACTOR_ZERO
+		*		\arg FK_FACTOR_ONE
+		*		\arg FK_FACTOR_SRC_COLOR
+		*		\arg FK_FACTOR_ONE_MINUS_SRC_COLOR
+		*		\arg FK_FACTOR_DST_COLOR
+		*		\arg FK_FACTOR_ONE_MINUS_DST_COLOR
+		*		\arg FK_FACTOR_SRC_ALPHA
+		*		\arg FK_FACTOR_ONE_MINUS_SRC_ALPHA
+		*		\arg FK_FACTOR_DST_ALPHA
+		*		\arg FK_FACTOR_ONE_MINUS_DST_ALPHA
+		*/
+		property fk_BlendFactor BlendSrcFactor {
+			void set(fk_BlendFactor);
+			fk_BlendFactor get(void);
+		}
+
+		//! ブレンド時の出力ピクセル係数設定プロパティ
+		/*!
+		*	ブレンド計算時の出力ピクセルに対する係数を設定します。
+		*	このプロパティに値を設定すると、自動的に BlendMode プロパティに fk_BlendMode.CUSTOM_MODE が設定されます。
+		*	与えられる値は以下の 10 種類です。
+		*		\arg FK_FACTOR_ZERO
+		*		\arg FK_FACTOR_ONE
+		*		\arg FK_FACTOR_SRC_COLOR
+		*		\arg FK_FACTOR_ONE_MINUS_SRC_COLOR
+		*		\arg FK_FACTOR_DST_COLOR
+		*		\arg FK_FACTOR_ONE_MINUS_DST_COLOR
+		*		\arg FK_FACTOR_SRC_ALPHA
+		*		\arg FK_FACTOR_ONE_MINUS_SRC_ALPHA
+		*		\arg FK_FACTOR_DST_ALPHA
+		*		\arg FK_FACTOR_ONE_MINUS_DST_ALPHA
+		*/
+		property fk_BlendFactor BlendDstFactor {
+			void set(fk_BlendFactor);
+			fk_BlendFactor get(void);
 		}
 
 		//@}

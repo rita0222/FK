@@ -88,6 +88,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	setDrawMode(FK_NONEMODE);
 	setMaterialMode(FK_CHILD_MODE);
 	setBlendMode(FK_BLEND_ALPHA_MODE);
+	setDepthMode(FK_DEPTH_READ_AND_WRITE);
 
 	material = new fk_Material();
 	parent = nullptr;

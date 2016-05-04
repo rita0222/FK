@@ -9,7 +9,6 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
-
 	public ref class fk_ShaderModel : public FK_CLI::fk_Model
 	{
 	public:
