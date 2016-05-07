@@ -1,6 +1,7 @@
 #pragma once
 
 using namespace System;
+using namespace System::Collections::Generic;
 using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
@@ -10,6 +11,10 @@ namespace FK_ShaderPlugin
 	public:
 		fk_ShaderParameter();
 		virtual ~fk_ShaderParameter();
+	private:
+		Dictionary<String^, Int32> locationTable;
+		Dictionary<Int32, Single> floatTable;
+		Dictionary<Int32, Single> floatTable;
 	};
 }
 

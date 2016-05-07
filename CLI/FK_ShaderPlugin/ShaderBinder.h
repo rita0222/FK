@@ -14,15 +14,21 @@ namespace FK_ShaderPlugin
 	{
 	public:
 		fk_ShaderBinder();
+		fk_ShaderBinder(fk_ShaderProgram^ prog, fk_ShaderParameter^ param);
+		~fk_ShaderBinder();
 		property fk_ShaderProgram^ Program;
 		property fk_ShaderParameter^ Parameter;
 		void BindModel(fk_Model^ model);
 		void UnbindModel(fk_Model^ model);
 
 	private:
-		static bool	isExtensionInitialized = false;
-		static bool Initialize(void);
 		void ProcPreShader(void);
 		void ProcPostShader(void);
+		static bool Initialize(void);
+
+		fk_ShaderProgram^ innerProgram = nullptr;
+		fk_ShaderParameter^ innerParameter = nullptr;
+		bool usingProgram = false;
+		static bool	isExtensionInitialized = false;
 	};
 }
