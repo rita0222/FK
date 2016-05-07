@@ -36,10 +36,11 @@ namespace FK_CLI {
 
 	void fk_Model::MakeNativeModel(void)
 	{
-		preShader = gcnew ShaderCallback(this, &fk_Model::PreShader);
-		System::IntPtr p1 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preShader);
-		postShader = gcnew ShaderCallback(this, &fk_Model::PostShader);
-		System::IntPtr p2 = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postShader);
+		using namespace System::Runtime::InteropServices;
+		preShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPreShader);
+		System::IntPtr p1 = Marshal::GetFunctionPointerForDelegate(preShader);
+		postShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPostShader);
+		System::IntPtr p2 = Marshal::GetFunctionPointerForDelegate(postShader);
 #ifdef _WIN64
 		pBase = new ::InnerModel(p1.ToInt64(), p2.ToInt64());
 #else

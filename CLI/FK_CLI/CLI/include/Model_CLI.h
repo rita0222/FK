@@ -55,6 +55,10 @@ namespace FK_CLI
 		READ_AND_WRITE	= 3		//!< デプスバッファの参照と書き込みを共に行います(初期値)
 	};
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+	public delegate void fk_ShaderCallback();
+#endif
+
 	//! モデルを生成、管理するクラス
 	/*!
 	 *	このクラスは、「モデル」を制御する機能を提供します。
@@ -117,9 +121,8 @@ namespace FK_CLI
 
 		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
 		fk_Shape^ shape;
-		delegate void ShaderCallback();
-		ShaderCallback^ preShader;
-		ShaderCallback^ postShader;
+		fk_ShaderCallback^ preShader;
+		fk_ShaderCallback^ postShader;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Model::fk_Model(bool argNewFlg);
@@ -702,8 +705,18 @@ namespace FK_CLI
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		virtual void PreShader() {};
-		virtual void PostShader() {};
+
+		event fk_ShaderCallback^ PreShader;
+		event fk_ShaderCallback^ PostShader;
+
+		virtual void OnPreShader()
+		{
+			PreShader();
+		};
+		virtual void OnPostShader()
+		{
+			PostShader();
+		};
 
 		bool Equals(fk_Model^ argModel);
 #endif
