@@ -15,11 +15,6 @@ namespace FK_ShaderPlugin
 		return isExtensionInitialized;
 	}
 
-	void fk_ShaderBinder::Dispose()
-	{
-		throw gcnew System::NotImplementedException();
-	}
-
 	fk_ShaderBinder::fk_ShaderBinder()
 	{
 		Initialize();
@@ -41,8 +36,8 @@ namespace FK_ShaderPlugin
 
 	fk_ShaderBinder::~fk_ShaderBinder()
 	{
-		if (innerProgram != nullptr) innerProgram->Dispose();
-		if (innerParameter != nullptr) innerParameter->Dispose();
+		if (innerProgram != nullptr) delete innerProgram;
+		if (innerParameter != nullptr) delete innerParameter;
 		Program = innerProgram = nullptr;
 		Parameter = innerParameter = nullptr;
 	}
@@ -65,17 +60,17 @@ namespace FK_ShaderPlugin
 
 	void fk_ShaderBinder::ProcPreShader(void)
 	{
-		Console::WriteLine("ProcPreShader");
-		if (Program->ProgramId != 0)
+		UInt32 id = Program->ProgramId;
+		if (id != 0)
 		{
-			glUseProgram(Program->ProgramId);
+			glUseProgram(id);
+			Parameter->Apply(id);
 			usingProgram = true;
 		}
 	}
 
 	void fk_ShaderBinder::ProcPostShader(void)
 	{
-		Console::WriteLine("ProcPostShader");
 		if (usingProgram)
 		{
 			glUseProgram(0);

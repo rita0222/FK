@@ -8,23 +8,14 @@ namespace FK_ShaderPlugin
 	public ref class fk_ShaderProgram
 	{
 	public:
-		
 		fk_ShaderProgram();
-		
 		virtual ~fk_ShaderProgram();
 
 		property String^ VertexShaderSource;
-		
 		property String^ FragmentShaderSource;
-		
-		property UInt32 ProgramId {
-			UInt32 get(void);
-		};
+		property UInt32 ProgramId { UInt32 get(void); };
+		property String^ LastError { String^ get(void); };
 
-		property String^ LastError {
-			String^ get(void);
-		};
-		
 		bool Validate(void);
 
 	private:

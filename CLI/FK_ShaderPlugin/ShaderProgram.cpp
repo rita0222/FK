@@ -1,6 +1,6 @@
 #include "ShaderProgram.h"
 #include "GL/glew.h"
-#include <string>
+#include <stdlib.h>
 #include <vcclr.h>
 
 namespace FK_ShaderPlugin {
@@ -36,7 +36,7 @@ namespace FK_ShaderPlugin {
 
 		if (String::IsNullOrEmpty(VertexShaderSource))
 		{
-			lastError = "VertexShaderSource is empty.";
+			lastError = "ERROR: VertexShaderSource is empty.";
 			return false;
 		}
 
@@ -49,7 +49,7 @@ namespace FK_ShaderPlugin {
 		idVertex = Compile(VertexShaderSource, GL_VERTEX_SHADER);
 		if (idVertex == 0)
 		{
-			lastError = "VertexShader could not create.";
+			lastError = "ERROR: VertexShader could not create.";
 			return false;
 		}
 
@@ -62,7 +62,7 @@ namespace FK_ShaderPlugin {
 
 		if (String::IsNullOrEmpty(FragmentShaderSource))
 		{
-			lastError = "FragmentShaderSource is empty.";
+			lastError = "ERROR: FragmentShaderSource is empty.";
 			return false;
 		}
 
@@ -75,7 +75,7 @@ namespace FK_ShaderPlugin {
 		idFragment = Compile(FragmentShaderSource, GL_FRAGMENT_SHADER);
 		if (idFragment == 0)
 		{
-			lastError = "FragmentShader could not create.";
+			lastError = "ERROR: FragmentShader could not create.";
 			return false;
 		}
 
@@ -127,7 +127,7 @@ namespace FK_ShaderPlugin {
 		idProgram = glCreateProgram();
 		if (idProgram == 0)
 		{
-			lastError = "Could not create program.";
+			lastError = "ERROR: Could not create program.";
 			return false;
 		}
 
@@ -139,7 +139,7 @@ namespace FK_ShaderPlugin {
 		glGetProgramiv(idProgram, GL_LINK_STATUS, &linked);
 		if (linked == GL_FALSE)
 		{
-			lastError = "Shader Link Error.";
+			lastError = "ERROR: Shader Link Failed.";
 			return false;
 		}
 
@@ -162,10 +162,10 @@ namespace FK_ShaderPlugin {
 			}
 			else
 			{
-				lastError = "Could not allocate InfoLog buffer.";
+				lastError = "ERROR: Could not allocate InfoLog buffer.";
 			}
 
-			return true;
+			return lastError->Contains("ERROR");
 		}
 		else
 		{
