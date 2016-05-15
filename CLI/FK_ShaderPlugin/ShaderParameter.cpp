@@ -11,6 +11,7 @@ namespace FK_ShaderPlugin {
 		floatArrayTable = gcnew Dictionary<String^, array<float>^>();
 		intTable = gcnew Dictionary<String^, int>();
 		intArrayTable = gcnew Dictionary<String^, array<int>^>();
+		matrixTable = gcnew Dictionary<String^, fk_Matrix^>();
 		locationTable = gcnew Dictionary<String^, Int32>();
 	}
 
@@ -20,11 +21,13 @@ namespace FK_ShaderPlugin {
 		delete floatArrayTable;
 		delete intTable;
 		delete intArrayTable;
+		delete matrixTable;
 		delete locationTable;
 		floatTable = nullptr;
 		floatArrayTable = nullptr;
 		intTable = nullptr;
 		intArrayTable = nullptr;
+		matrixTable = nullptr;
 		locationTable = nullptr;
 	}
 
@@ -53,6 +56,11 @@ namespace FK_ShaderPlugin {
 		intArrayTable[name] = value;
 	}
 
+	void fk_ShaderParameter::Register(String ^ name, fk_Matrix ^ value)
+	{
+		matrixTable[name] = value;
+	}
+
 	bool fk_ShaderParameter::Unregister(String ^ name)
 	{
 		if (floatTable->ContainsKey(name))
@@ -76,6 +84,12 @@ namespace FK_ShaderPlugin {
 		if (intArrayTable->ContainsKey(name))
 		{
 			intArrayTable->Remove(name);
+			return true;
+		}
+
+		if (matrixTable->ContainsKey(name))
+		{
+			matrixTable->Remove(name);
 			return true;
 		}
 
@@ -175,6 +189,20 @@ namespace FK_ShaderPlugin {
 				default:
 					result = false;
 				}
+			}
+			else
+			{
+				lastError += "ERROR: " + pair->Key + " is not found.";
+				result = false;
+			}
+		}
+
+		for each (KeyValuePair<String^, fk_Matrix^>^ pair in matrixTable)
+		{
+			Int32 location = GetLocation(programId, pair->Key);
+			if (location >= 0)
+			{
+				glUniformMatrix4fv(location, 1, GL_FALSE, NULL);
 			}
 			else
 			{

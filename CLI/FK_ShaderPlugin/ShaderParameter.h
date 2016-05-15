@@ -18,6 +18,7 @@ namespace FK_ShaderPlugin
 		void Register(String^ name, array<float>^ value);
 		void Register(String^ name, int value);
 		void Register(String^ name, array<int>^ value);
+		void Register(String^ name, fk_Matrix^ value);
 		bool Unregister(String^ name);
 		bool Apply(UInt32 programId);
 
@@ -28,6 +29,7 @@ namespace FK_ShaderPlugin
 		Dictionary<String^, array<float>^>^ floatArrayTable;
 		Dictionary<String^, int>^ intTable;
 		Dictionary<String^, array<int>^>^ intArrayTable;
+		Dictionary<String^, fk_Matrix^>^ matrixTable;
 		Dictionary<String^, Int32>^ locationTable;
 		String^ lastError;
 
