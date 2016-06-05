@@ -202,7 +202,8 @@ namespace FK_ShaderPlugin {
 			Int32 location = GetLocation(programId, pair->Key);
 			if (location >= 0)
 			{
-				glUniformMatrix4fv(location, 1, GL_FALSE, NULL);
+				pin_ptr<float> pArray = &(pair->Value->GetFloatArray()[0]);
+				glUniformMatrix4fv(location, 1, GL_FALSE, pArray);
 			}
 			else
 			{

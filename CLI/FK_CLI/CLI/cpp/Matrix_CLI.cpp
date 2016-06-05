@@ -89,11 +89,13 @@ namespace FK_CLI {
 	fk_Matrix::fk_Matrix()
 	{
 		pMatrix = new ::fk_Matrix();
+		refArray = gcnew cli::array<float>(16);
 	}
 
 	fk_Matrix::fk_Matrix(fk_Matrix^ argM)
 	{
 		pMatrix = new ::fk_Matrix(*(argM->pMatrix));
+		refArray = gcnew cli::array<float>(16);
 	}
 
 	fk_Matrix::~fk_Matrix()
@@ -116,6 +118,15 @@ namespace FK_CLI {
 		(*pMatrix)[argI1][argI2] = argD;
 	}
 
+	cli::array<float>^ fk_Matrix::GetFloatArray()
+	{
+		for (int i = 0; i < 16; ++i)
+		{
+			refArray[i] = (*pMatrix)[i % 4][i / 4];
+		}
+
+		return refArray;
+	}
 
 	bool fk_Matrix::Equals(fk_Matrix^ argM)
 	{

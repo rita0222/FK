@@ -111,6 +111,7 @@ namespace FK_CLI {
 	public ref class fk_Matrix {
 	internal:
 		::fk_Matrix *pMatrix;
+		cli::array<float>^ refArray;
 	public:
 
 		//! コンストラクタ
@@ -139,6 +140,10 @@ namespace FK_CLI {
 			double get(int, int);
 			void set(int, int, double);
 		}
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		cli::array<float>^ GetFloatArray();
+#endif // FK_DOXYGEN_USER_PROCESS
 
 		//////////////////// 比較演算子		
 
