@@ -6,6 +6,7 @@ CP		= cp
 all:
 	@echo "	FreeBSD:		make fb"
 	@echo "	FreeBSD Debug:		make fb-g"
+	@echo " Linux: 			make linux"
 	@echo "	MingW:			make ming"
 	@echo "	MingW Debug:		make ming-g"
 	@echo "	MingW64:		make ming64"
@@ -30,6 +31,10 @@ fb:
 fb-g:
 	cd src; $(MAKE) fb-g
 	cd samples; $(MAKE) fb-g
+
+linux:
+	cd src; $(MAKE) linux
+	cd samples; $(MAKE) linux
 
 ming:
 	cd src; $(MAKE) ming MAKE=make

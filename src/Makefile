@@ -9,6 +9,7 @@ OPENCL		= OpenCL
 all:
 	@echo "	FreeBSD:		make fb"
 	@echo "	FreeBSD Debug:		make fb-g"
+	@echo "	Linux:			make linux"
 	@echo "	MingW:			make ming"
 	@echo "	MingW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
@@ -40,6 +41,15 @@ fb-g:
 		$(MAKE) fb-g ; \
 		cd .. ; done
 	cd fltk; $(MAKE) fb-g
+
+linux:
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) linux TARGET=depend ; \
+		$(MAKE) linux ; \
+		cd .. ; done
+	cd fltk; $(MAKE) linux
 
 ming:
 	for sd in $(BASE) $(AUDIO) ; do \

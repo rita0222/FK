@@ -6,6 +6,7 @@ CP		= cp
 all:
 	@echo "	FreeBSD:		make fb"
 	@echo "	FreeBSD Debug:		make fb-g"
+	@echo "	Linux:			make linux"
 	@echo "	MinGW:			make ming"
 	@echo "	MinGW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
@@ -24,6 +25,12 @@ fb-g:
 	cd Window; $(MAKE) fb-g TARGET=depend; $(MAKE) fb-g
 	cd Error; $(CP) Makefile.plane Makefile
 	cd Error; $(MAKE) fb-g TARGET=depend; $(MAKE) fb-g
+
+linux:
+	cd Window; $(CP) Makefile.plane Makefile
+	cd Window; $(MAKE) linux TARGET=depend; $(MAKE) linux
+	cd Error; $(CP) Makefile.plane Makefile
+	cd Error; $(MAKE) linux TARGET=depend; $(MAKE) linux
 
 ming:
 	cd Window; $(CP) Makefile.plane Makefile

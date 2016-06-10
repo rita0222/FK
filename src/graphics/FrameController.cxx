@@ -83,7 +83,7 @@ static bool _SleepMP (float duration)
 	unsigned int seconds = static_cast<unsigned int>(duration);
 	float rest = duration - static_cast<float>(seconds);
 
-#if defined(_FREEBSD_) || defined(_MACOSX_)
+#if defined(_FREEBSD_) || defined(_MACOSX_) || defined(_LINUX_)
 
 	unsigned int microSecs = (unsigned int) (rest * 1000000);
 	struct timespec t, remainingTime;
