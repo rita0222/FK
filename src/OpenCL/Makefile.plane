@@ -51,7 +51,7 @@ all:
 
 fb:
 	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++14" \
+	"GRAMOPT = -pedantic -std=c++1y" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include -I$(LOCAL)/include" \
 	"DEPENDDIRS = $(INCLDIRS)" \
@@ -59,7 +59,7 @@ fb:
 
 fb-g:
 	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++14" \
+	"GRAMOPT = -pedantic -std=c++1y" \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include -I$(LOCAL)/include" \
