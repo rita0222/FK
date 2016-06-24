@@ -147,12 +147,14 @@
     <ClInclude Include="ShaderBinder.h" />
     <ClInclude Include="ShaderParameter.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="TextureSampler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="ShaderBinder.cpp" />
     <ClCompile Include="ShaderParameter.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="TextureSampler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

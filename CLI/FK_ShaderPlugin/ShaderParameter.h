@@ -36,4 +36,3 @@ namespace FK_ShaderPlugin
 		UInt32 lastAppliedId;
 	};
 }
-

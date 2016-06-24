@@ -313,6 +313,10 @@ namespace FK_CLI
 			fk_Dimension^ get();
 		}
 
+		property void* Buffer {
+			void* get();
+		}
+
 		//! 初期化関数
 		/*!
 		 *	画像データを初期化します。

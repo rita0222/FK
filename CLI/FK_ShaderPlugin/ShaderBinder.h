@@ -1,5 +1,3 @@
-// FK_ShaderPlugin.h
-
 #pragma once
 
 #include "ShaderProgram.h"

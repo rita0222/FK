@@ -247,7 +247,12 @@ namespace FK_CLI {
 		*D->pDim = *(GetP()->getBufferSize());
 		return D;
 	}
-				
+
+	void* fk_Image::Buffer::get(void)
+	{
+		return (void*)(GetP()->getBufPointer());
+	}
+
 	void fk_Image::Init(void)
 	{
 		GetP()->init();
