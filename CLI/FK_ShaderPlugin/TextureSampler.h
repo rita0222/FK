@@ -6,6 +6,12 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
+	// モデルの描画モードを表す列挙型
+	public enum class fk_TexWrapMode {
+		REPEAT,
+		CLAMP,
+	};
+
 	public ref class fk_TextureSampler : fk_MeshTexture
 	{
 	public:
@@ -15,14 +21,14 @@ namespace FK_ShaderPlugin
 		~fk_TextureSampler();
 		!fk_TextureSampler();
 
+		property fk_TexWrapMode WrapMode;
+
 		void Init(void);
+		bool BindTexture(bool forceLoad);
 
 	private:
 		// このクラスで利用できないプロパティです。
-		property int TriNum {
-			void set(int) {};
-			int get() { return 0; };
-		}
+		property int TriNum;
 
 		// このクラスで利用できない関数です。
 		bool SetTextureCoord(int tID, int vID, double x, double y) { return false; };
@@ -37,8 +43,8 @@ namespace FK_ShaderPlugin
 		bool ReadMQOFile(String^ fileName, String^ objName, bool contFlg) { return false; };
 		bool ReadMQOFile(String^ fileName, String^ objName) { return false; };
 
-		void LoadTexture(void);
-
-		UInt32	id;
+		// フィールド
+		UInt32			id;
+		bool			loaded;
 	};
 }

@@ -6,11 +6,7 @@ public:
 	void(*pPreShader)();
 	void(*pPostShader)();
 
-#ifdef _WIN64
-	InnerModel(uint64_t pre, uint64_t post)
-#else
-	InnerModel(uint32_t pre, uint32_t post)
-#endif
+	InnerModel(void* pre, void* post)
 	{
 		pPreShader = (void(__cdecl *)(void))pre;
 		pPostShader = (void(__cdecl *)(void))post;
@@ -41,11 +37,7 @@ namespace FK_CLI {
 		System::IntPtr p1 = Marshal::GetFunctionPointerForDelegate(preShader);
 		postShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPostShader);
 		System::IntPtr p2 = Marshal::GetFunctionPointerForDelegate(postShader);
-#ifdef _WIN64
-		pBase = new ::InnerModel(p1.ToInt64(), p2.ToInt64());
-#else
-		pBase = new ::InnerModel(p1.ToInt32(), p2.ToInt32());
-#endif
+		pBase = new ::InnerModel((void*)p1, (void*)p2);
 	}
 
 	fk_Model::fk_Model(): fk_Boundary(false), shape(nullptr)

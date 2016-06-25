@@ -13,6 +13,7 @@ namespace FK_ShaderPlugin {
 		intArrayTable = gcnew Dictionary<String^, array<int>^>();
 		matrixTable = gcnew Dictionary<String^, fk_Matrix^>();
 		locationTable = gcnew Dictionary<String^, Int32>();
+		textureTable = gcnew Dictionary<int, fk_TextureSampler^>();
 	}
 
 	fk_ShaderParameter::~fk_ShaderParameter()
@@ -23,12 +24,14 @@ namespace FK_ShaderPlugin {
 		delete intArrayTable;
 		delete matrixTable;
 		delete locationTable;
+		delete textureTable;
 		floatTable = nullptr;
 		floatArrayTable = nullptr;
 		intTable = nullptr;
 		intArrayTable = nullptr;
 		matrixTable = nullptr;
 		locationTable = nullptr;
+		textureTable = nullptr;
 	}
 
 	String^ fk_ShaderParameter::LastError::get(void)
@@ -96,6 +99,24 @@ namespace FK_ShaderPlugin {
 		return false;
 	}
 
+	bool fk_ShaderParameter::AttachTexture(int unit, fk_TextureSampler ^ texture)
+	{
+		if (unit < 0 || unit > 31) return false;
+		textureTable[unit] = texture;
+		return true;
+	}
+
+	bool fk_ShaderParameter::DetachTexture(int unit)
+	{
+		if (textureTable->ContainsKey(unit))
+		{
+			textureTable->Remove(unit);
+			return true;
+		}
+
+		return false;
+	}
+
 	bool fk_ShaderParameter::Apply(UInt32 programId)
 	{
 		bool result = true;
@@ -106,6 +127,16 @@ namespace FK_ShaderPlugin {
 		}
 
 		lastError = "";
+
+		bool changed = false;
+		for each (KeyValuePair<int, fk_TextureSampler^>^ pair in textureTable)
+		{
+			glActiveTexture(GL_TEXTURE0 + pair->Key);
+			pair->Value->BindTexture(false);
+			changed = true;
+		}
+
+		if (changed) glActiveTexture(GL_TEXTURE0);
 
 		for each (KeyValuePair<String^, float>^ pair in floatTable)
 		{

@@ -248,10 +248,12 @@ namespace FK_CLI {
 		return D;
 	}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
 	void* fk_Image::Buffer::get(void)
 	{
 		return (void*)(GetP()->getBufPointer());
 	}
+#endif
 
 	void fk_Image::Init(void)
 	{

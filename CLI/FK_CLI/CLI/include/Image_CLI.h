@@ -313,9 +313,11 @@ namespace FK_CLI
 			fk_Dimension^ get();
 		}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
 		property void* Buffer {
 			void* get();
 		}
+#endif
 
 		//! 初期化関数
 		/*!
