@@ -360,6 +360,8 @@ void fk_GraphicsEngine::StereoDrawMain(fk_StereoChannel argChannel)
 
 	ApplySceneParameter(false);
 
+	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
+	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	SetStereoViewPort(argChannel);
@@ -470,6 +472,8 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 
 	ApplySceneParameter(true);
 
+	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
+	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	glPushMatrix();
@@ -542,14 +546,11 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	overlayList = curDLink->GetOverlayList();
 	if(overlayList->empty() == true) return;
 
-	glDisable(GL_DEPTH_TEST);
-	depthRead = false;
+	SetDepthMode(FK_DEPTH_NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
 		DrawModel(*modelP, lightFlag, argPickFlg);
 	}
-	glEnable(GL_DEPTH_TEST);
-	depthRead = true;
 
 	return;
 }
@@ -1058,9 +1059,11 @@ void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
 	if (depthRead != r) {
 		if (r) glEnable(GL_DEPTH_TEST);
 		else glDisable(GL_DEPTH_TEST);
+		depthRead = r;
 	}
 	if (depthWrite != w) {
 		glDepthMask(w ? GL_TRUE : GL_FALSE);
+		depthWrite = w;
 	}
 }
 
