@@ -65,6 +65,7 @@ namespace FK_FormHelper
 
         public void Dispose()
         {
+            timer.Enabled = false;
             renderer.Dispose();
         }
 
