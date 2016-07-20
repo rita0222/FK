@@ -567,13 +567,14 @@ void fk_OrthoMatrix::Print(string argStr) const
 		fk_PutError("Matrix[" + argStr + "] = ");
 	}
 
+	ss.clear();
 	for(i = 0; i < 4; i++) {
-		ss.clear();
 		ss << "t| ";
 		for(j = 0; j < 4; j++) ss << m[i][j] << " ";
 		ss << "|";
-		fk_PutError(ss.str());
+		if(i != 3) ss << endl;
 	}
+	fk_PutError(ss.str());
 	return;
 }
 
