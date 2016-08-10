@@ -74,7 +74,7 @@
 #include <FK/Image.h>
 #include <FK/Error.H>
 
-#ifdef _FREEBSD_
+#if defined(_FREEBSD_) || defined(_LINUX_)
 #include <png.h>
 #else
 #ifdef _MACOSX_
@@ -96,14 +96,10 @@ extern "C" {
 	#ifdef WIN32
 		#define HAVE_BOOLEAN
 	#endif
-	#ifdef _FREEBSD_
-		#include <jpeglib.h>
-	#else
-	#ifdef _MACOSX_
+	#if defined(_FREEBSD_) || defined(_LINUX_) || defined(_MACOSX_)
 		#include <jpeglib.h>
 	#else
 		#include "jpeg/jpeglib.h"
-	#endif
 	#endif
 }
 

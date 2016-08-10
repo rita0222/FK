@@ -627,7 +627,7 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_) || defined(_MINGW_)
+#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_) || defined(_MINGW_) || defined(_LINUX_)
 		if(iconv(argIV, const_cast<char **>(&inBuf),
 				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
@@ -669,7 +669,7 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_) || defined(_MINGW_)
+#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_) || defined(_MINGW_) || defined(_LINUX_)
 		if(iconv(argIV, const_cast<char **>(&inBuf),
 				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;

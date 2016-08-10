@@ -71,6 +71,7 @@ OUTPUT		= -o $*
 all:
 	@echo "	FreeBSD:		make fb"
 	@echo "	FreeBSD Debug:		make fb-g"
+	@echo "	Linux:			make linux"
 	@echo "	MingW:			make ming"
 	@echo "	MingW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
@@ -109,6 +110,19 @@ fb-g:
 		-lXext -lX11 -lz -lbz2 -lm" \
 	"RANLIB = ranlib" \
 	"FKLINK = $(FKLIB_G)"
+
+linux:
+	$(MAKE) $(TARGET) \
+	"GRAMOPT = -pedantic -std=c++14" \
+	"SYSOPS = -D_LINUX_ -DNO_GLU_LIBRARY" \
+	"INCLDIRS = -I. -I.. -I$(LOCAL)/include" \
+	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \
+	"SYSLIBS = -liconv \
+		-lopenal -lvorbisfile -lvorbis -logg \
+		-lfltk_images -lfltk_forms -lfltk_gl -lfltk \
+		-ljpeg -lpng -lfreetype -lGL -lpthread \
+		-lXext -lX11 -lz -lm" \
+	"RANLIB = ranlib"
 
 ming:
 	$(MAKE) $(TARGET) \
