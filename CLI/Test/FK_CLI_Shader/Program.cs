@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FK_CLI;
+using FK_ShaderPlugin;
 
 namespace FK_CLI_Box
 {
@@ -66,31 +67,44 @@ namespace FK_CLI_Box
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
+            fk_ShaderBinder binder;
+            fk_TextureSampler sampler = new fk_TextureSampler();
+            if(!sampler.ReadBMP("../../../../../../samples/samp.bmp")) System.Console.WriteLine("failed");
+            sampler.WrapMode = fk_TexWrapMode.REPEAT;
+            var colorParam = new[] { 1.0f, 0.0f, 0.0f };
+            fk_Matrix scaleMatrix = new fk_Matrix();
+            scaleMatrix.MakeTrans(100.0, 0.0, 0.0);
             if (win.Update())
             {
-                var binder = new FK_ShaderPlugin.fk_ShaderBinder();
+                binder = new fk_ShaderBinder();
                 binder.Program.VertexShaderSource =
-                    "#version 120" + Environment.NewLine +
+                    "uniform mat4 scale;" +
+                    "varying vec4 pos;" +
                     "void main(void)" +
                     "{" +
-                    "    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;" +
+                    "    gl_Position = gl_ModelViewProjectionMatrix * scale * gl_Vertex;" +
+                    "    pos = gl_ModelViewProjectionMatrix * gl_Vertex;" +
                     "}";
                 binder.Program.FragmentShaderSource =
-                    "#version 120" + Environment.NewLine +
-                    "uniform vec3 color;" + Environment.NewLine +
+                    "uniform vec3 color;" +
+                    "uniform sampler2D tex;" +
+                    "varying vec4 pos;" +
                     "void main(void)" +
                     "{" +
-                    "    gl_FragColor.rgb = color;" +
-                    "    gl_FragColor.a   = 1.0;" +
+                    "    gl_FragColor.rgb = texture2D(tex, pos.xy).rgb; " +
+                    "    gl_FragColor.a = 1.0; " +
                     "}";
                 if (binder.Program.Validate())
                 {
-                    binder.Parameter.Register("color", new[] { 0.0f, 0.5f, 1.0f });
+                    binder.Parameter.AttachTexture(1, sampler);
+                    binder.Parameter.Register("color", colorParam);
+                    binder.Parameter.Register("scale", scaleMatrix);
+                    binder.Parameter.Register("tex", 1);
                     binder.BindModel(blockModel);
                 }
                 else
                 {
-                    Console.WriteLine(binder.Program.LastError);
+                    System.Console.WriteLine(binder.Program.LastError);
                 }
             }
 

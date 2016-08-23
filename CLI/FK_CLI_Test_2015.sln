@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_WinFormAppTest", "FK_CLI_WinFormAppTest\FK_CLI_WinFormAppTest.csproj", "{3A891CD6-2F77-45E5-97E3-3F10B10BECA1}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -136,6 +136,7 @@ Global
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Any CPU.Build.0 = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Mixed Platforms.ActiveCfg = Release|Win32
+		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Mixed Platforms.Build.0 = Release|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|Win32.Build.0 = Debug|Win32
 		{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}.Debug|x64.ActiveCfg = Debug|Win32
