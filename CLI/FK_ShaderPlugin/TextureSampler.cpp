@@ -6,12 +6,14 @@ namespace FK_ShaderPlugin
 {
 	fk_TextureSampler::fk_TextureSampler() : fk_MeshTexture(true)
 	{
+		SamplerSource = fk_SamplerSource::TEXTURE_IMAGE;
 		loaded = false;
 		Init();
 	}
 
 	fk_TextureSampler::fk_TextureSampler(fk_Image^ argImage) : fk_MeshTexture(argImage)
 	{
+		SamplerSource = fk_SamplerSource::TEXTURE_IMAGE;
 		loaded = false;
 		Init();
 	}
@@ -79,9 +81,27 @@ namespace FK_ShaderPlugin
 
 		if (!loaded || forceLoad)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-				0, GL_RGBA, GL_UNSIGNED_BYTE, this->Image->Buffer);
+			if (SamplerSource == fk_SamplerSource::TEXTURE_IMAGE)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+					0, GL_RGBA, GL_UNSIGNED_BYTE, this->Image->Buffer);
+			}
+			else if (SamplerSource == fk_SamplerSource::COLOR_BUFFER)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+					0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			}
+			else
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
+					0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+			}
 			loaded = true;
+		}
+
+		if (SamplerSource != fk_SamplerSource::TEXTURE_IMAGE)
+		{
+			glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, this->Image->BufferSize->w, this->Image->BufferSize->h);
 		}
 
 		return true;

@@ -275,38 +275,26 @@ namespace FK_ShaderPlugin {
 
 	Int32 fk_ShaderParameter::GetLocation(UInt32 programId, String^ name)
 	{
-		if (locationTable->ContainsKey(name))
-		{
-			return locationTable[name];
-		}
+		if (locationTable->ContainsKey(name)) return locationTable[name];
 
 		using namespace Runtime::InteropServices;
 		const char* pName = (const char*)(Marshal::StringToHGlobalAnsi(name)).ToPointer();
 		Int32 location = glGetUniformLocation(programId, pName);
 		Marshal::FreeHGlobal(IntPtr((void*)pName));
-		if (location >= 0)
-		{
-			locationTable->Add(name, location);
-		}
+		if (location >= 0) locationTable->Add(name, location);
 
 		return location;
 	}
 
 	Int32 fk_ShaderParameter::GetAttributeLocation(UInt32 programId, String ^ name)
 	{
-		if (attributeLocationTable->ContainsKey(name))
-		{
-			return attributeLocationTable[name];
-		}
+		if (attributeLocationTable->ContainsKey(name)) return attributeLocationTable[name];
 
 		using namespace Runtime::InteropServices;
 		const char* pName = (const char*)(Marshal::StringToHGlobalAnsi(name)).ToPointer();
 		Int32 location = glGetAttribLocation(programId, pName);
 		Marshal::FreeHGlobal(IntPtr((void*)pName));
-		if (location >= 0)
-		{
-			attributeLocationTable->Add(name, location);
-		}
+		if (location >= 0) attributeLocationTable->Add(name, location);
 
 		return location;
 	}

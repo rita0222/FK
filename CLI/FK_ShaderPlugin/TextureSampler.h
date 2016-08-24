@@ -12,6 +12,13 @@ namespace FK_ShaderPlugin
 		CLAMP,
 	};
 
+	// フレームバッファのサンプリングソースを表す列挙型
+	public enum class fk_SamplerSource {
+		TEXTURE_IMAGE,
+		COLOR_BUFFER,
+		DEPTH_BUFFER,
+	};
+
 	public ref class fk_TextureSampler : fk_MeshTexture
 	{
 	public:
@@ -22,6 +29,7 @@ namespace FK_ShaderPlugin
 		!fk_TextureSampler();
 
 		property fk_TexWrapMode WrapMode;
+		property fk_SamplerSource SamplerSource;
 
 		void Init(void);
 		bool BindTexture(bool forceLoad);

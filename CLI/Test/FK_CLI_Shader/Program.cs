@@ -66,11 +66,13 @@ namespace FK_CLI_Box
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
             fk_ShaderBinder binder;
-            fk_TextureSampler sampler = new fk_TextureSampler();
-            if(!sampler.ReadBMP("../../../../../../samples/samp.bmp")) System.Console.WriteLine("failed");
+            //fk_TextureSampler sampler = new fk_TextureSampler();
+            //if(!sampler.ReadBMP("../../../../../../samples/samp.bmp")) System.Console.WriteLine("failed");
+            fk_TextureSampler sampler = new fk_TextureSampler(new fk_Image(512, 512));
+            sampler.SamplerSource = fk_SamplerSource.COLOR_BUFFER;
             sampler.WrapMode = fk_TexWrapMode.REPEAT;
             fk_Matrix scaleMatrix = new fk_Matrix();
-            scaleMatrix.MakeScale(10.0, 10.0, 10.0);
+            scaleMatrix.MakeScale(1.0, 1.0, 1.0);
             var uvArray = new[]
             {
                 1.0f, 0.0f,
@@ -118,7 +120,7 @@ namespace FK_CLI_Box
                     System.Console.WriteLine(binder.Program.LastError);
                 }
             }
-
+            win.Scene.EntryModel(blockModel);
             for (i = 0; win.Update() == true; i++) {
 				camera.GlTranslate(0.0, 0.0, -1.0);
 				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
