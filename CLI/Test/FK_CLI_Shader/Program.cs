@@ -32,9 +32,7 @@ namespace FK_CLI_Box
 			var block = new fk_Block(50.0, 70.0, 40.0);
 			blockModel.Shape = block;
 			blockModel.Material = fk_Material.Yellow;
-            blockModel.BlendMode = fk_BlendMode.CUSTOM_MODE;
-            blockModel.BlendSrcFactor = fk_BlendFactor.ONE;
-            blockModel.BlendDstFactor = fk_BlendFactor.ONE;
+            blockModel.SmoothMode = true;
             win.Entry(blockModel);
 
 			// 線分モデル生成
@@ -71,34 +69,47 @@ namespace FK_CLI_Box
             fk_TextureSampler sampler = new fk_TextureSampler();
             if(!sampler.ReadBMP("../../../../../../samples/samp.bmp")) System.Console.WriteLine("failed");
             sampler.WrapMode = fk_TexWrapMode.REPEAT;
-            var colorParam = new[] { 1.0f, 0.0f, 0.0f };
             fk_Matrix scaleMatrix = new fk_Matrix();
-            scaleMatrix.MakeTrans(100.0, 0.0, 0.0);
+            scaleMatrix.MakeScale(10.0, 10.0, 10.0);
+            var uvArray = new[]
+            {
+                1.0f, 0.0f,
+                0.9f, 0.8f,
+                0.0f, 0.7f,
+                0.0f, 0.0f,
+                1.0f, 0.0f,
+                0.0f, 0.0f,
+                1.0f, 1.0f,
+                0.0f, 0.0f,
+            };
             if (win.Update())
             {
                 binder = new fk_ShaderBinder();
                 binder.Program.VertexShaderSource =
                     "uniform mat4 scale;" +
                     "varying vec4 pos;" +
+                    "varying vec2 fUV;" +
+                    "attribute vec2 vUV;" +
                     "void main(void)" +
                     "{" +
                     "    gl_Position = gl_ModelViewProjectionMatrix * scale * gl_Vertex;" +
                     "    pos = gl_ModelViewProjectionMatrix * gl_Vertex;" +
+                    "    fUV = vUV;" +
                     "}";
                 binder.Program.FragmentShaderSource =
-                    "uniform vec3 color;" +
                     "uniform sampler2D tex;" +
                     "varying vec4 pos;" +
+                    "varying vec2 fUV;" +
                     "void main(void)" +
                     "{" +
-                    "    gl_FragColor.rgb = texture2D(tex, pos.xy).rgb; " +
+                    "    gl_FragColor.rgb = texture2D(tex, fUV).rgb; " +
                     "    gl_FragColor.a = 1.0; " +
                     "}";
                 if (binder.Program.Validate())
                 {
                     binder.Parameter.AttachTexture(1, sampler);
-                    binder.Parameter.Register("color", colorParam);
                     binder.Parameter.Register("scale", scaleMatrix);
+                    binder.Parameter.AddAttribute("vUV", 2, uvArray);
                     binder.Parameter.Register("tex", 1);
                     binder.BindModel(blockModel);
                 }

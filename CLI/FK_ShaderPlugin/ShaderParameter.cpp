@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <vcclr.h>
 
+#define SAFE_DELETE(p) { delete p; p = nullptr; };
+
 namespace FK_ShaderPlugin {
 
 	fk_ShaderParameter::fk_ShaderParameter() : lastAppliedId(0)
@@ -13,25 +15,28 @@ namespace FK_ShaderPlugin {
 		intArrayTable = gcnew Dictionary<String^, array<int>^>();
 		matrixTable = gcnew Dictionary<String^, fk_Matrix^>();
 		locationTable = gcnew Dictionary<String^, Int32>();
+		
+		floatAttributeTable = gcnew Dictionary<String^, Tuple<int, array<float>^>^>();
+		intAttributeTable = gcnew Dictionary<String^, Tuple<int, array<int>^>^>();
+		attributeLocationTable = gcnew Dictionary<String^, Int32>();
+
 		textureTable = gcnew Dictionary<int, fk_TextureSampler^>();
 	}
 
 	fk_ShaderParameter::~fk_ShaderParameter()
 	{
-		delete floatTable;
-		delete floatArrayTable;
-		delete intTable;
-		delete intArrayTable;
-		delete matrixTable;
-		delete locationTable;
-		delete textureTable;
-		floatTable = nullptr;
-		floatArrayTable = nullptr;
-		intTable = nullptr;
-		intArrayTable = nullptr;
-		matrixTable = nullptr;
-		locationTable = nullptr;
-		textureTable = nullptr;
+		SAFE_DELETE(floatTable);
+		SAFE_DELETE(floatArrayTable);
+		SAFE_DELETE(intTable);
+		SAFE_DELETE(intArrayTable);
+		SAFE_DELETE(matrixTable);
+		SAFE_DELETE(locationTable);
+
+		SAFE_DELETE(floatAttributeTable);
+		SAFE_DELETE(intAttributeTable);
+		SAFE_DELETE(attributeLocationTable);
+
+		SAFE_DELETE(textureTable);
 	}
 
 	String^ fk_ShaderParameter::LastError::get(void)
@@ -66,36 +71,28 @@ namespace FK_ShaderPlugin {
 
 	bool fk_ShaderParameter::Unregister(String ^ name)
 	{
-		if (floatTable->ContainsKey(name))
-		{
-			floatTable->Remove(name);
-			return true;
-		}
+		if (floatTable->Remove(name)) return true;
+		if (floatArrayTable->Remove(name)) return true;
+		if (intTable->Remove(name)) return true;
+		if (intArrayTable->Remove(name)) return true;
+		if (matrixTable->Remove(name)) return true;
+		return false;
+	}
 
-		if (floatArrayTable->ContainsKey(name))
-		{
-			floatArrayTable->Remove(name);
-			return true;
-		}
+	void fk_ShaderParameter::AddAttribute(String ^ name, int dim, array<float>^ value)
+	{
+		floatAttributeTable[name] = gcnew Tuple<int, array<float>^>(dim, value);
+	}
 
-		if (intTable->ContainsKey(name))
-		{
-			intTable->Remove(name);
-			return true;
-		}
+	void fk_ShaderParameter::AddAttribute(String ^ name, int dim, array<int>^ value)
+	{
+		intAttributeTable[name] = gcnew Tuple<int, array<int>^>(dim, value);
+	}
 
-		if (intArrayTable->ContainsKey(name))
-		{
-			intArrayTable->Remove(name);
-			return true;
-		}
-
-		if (matrixTable->ContainsKey(name))
-		{
-			matrixTable->Remove(name);
-			return true;
-		}
-
+	bool fk_ShaderParameter::RemoveAttribute(String ^ name)
+	{
+		if (floatAttributeTable->Remove(name)) return true;
+		if (intAttributeTable->Remove(name)) return true;
 		return false;
 	}
 
@@ -108,13 +105,7 @@ namespace FK_ShaderPlugin {
 
 	bool fk_ShaderParameter::DetachTexture(int unit)
 	{
-		if (textureTable->ContainsKey(unit))
-		{
-			textureTable->Remove(unit);
-			return true;
-		}
-
-		return false;
+		return textureTable->Remove(unit);
 	}
 
 	bool fk_ShaderParameter::Apply(UInt32 programId)
@@ -243,6 +234,42 @@ namespace FK_ShaderPlugin {
 			}
 		}
 
+		for each (KeyValuePair<String^, Tuple<int, array<float>^>^>^ pair in floatAttributeTable)
+		{
+			Int32 location = GetAttributeLocation(programId, pair->Key);
+			if (location >= 0)
+			{
+				int dim = pair->Value->Item1;
+				array<float>^ values = pair->Value->Item2;
+				pin_ptr<float> pNative = &values[0];
+				glEnableVertexAttribArray(location);
+				glVertexAttribPointer(location, dim, GL_FLOAT, GL_FALSE, sizeof(float) * dim, pNative);
+			}
+			else
+			{
+				lastError += "ERROR: " + pair->Key + " is not found.";
+				result = false;
+			}
+		}
+
+		for each (KeyValuePair<String^, Tuple<int, array<int>^>^>^ pair in intAttributeTable)
+		{
+			Int32 location = GetAttributeLocation(programId, pair->Key);
+			if (location >= 0)
+			{
+				int dim = pair->Value->Item1;
+				array<int>^ values = pair->Value->Item2;
+				pin_ptr<int> pNative = &values[0];
+				glEnableVertexAttribArray(location);
+				glVertexAttribPointer(location, dim, GL_INT, GL_FALSE, sizeof(int) * dim, pNative);
+			}
+			else
+			{
+				lastError += "ERROR: " + pair->Key + " is not found.";
+				result = false;
+			}
+		}
+
 		return result;
 	}
 
@@ -260,6 +287,25 @@ namespace FK_ShaderPlugin {
 		if (location >= 0)
 		{
 			locationTable->Add(name, location);
+		}
+
+		return location;
+	}
+
+	Int32 fk_ShaderParameter::GetAttributeLocation(UInt32 programId, String ^ name)
+	{
+		if (attributeLocationTable->ContainsKey(name))
+		{
+			return attributeLocationTable[name];
+		}
+
+		using namespace Runtime::InteropServices;
+		const char* pName = (const char*)(Marshal::StringToHGlobalAnsi(name)).ToPointer();
+		Int32 location = glGetAttribLocation(programId, pName);
+		Marshal::FreeHGlobal(IntPtr((void*)pName));
+		if (location >= 0)
+		{
+			attributeLocationTable->Add(name, location);
 		}
 
 		return location;
