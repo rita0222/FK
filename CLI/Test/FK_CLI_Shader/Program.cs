@@ -16,6 +16,7 @@ namespace FK_CLI_Box
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
+            win.Size = new fk_Dimension(1024, 768);
 			fk_Material.InitDefault();
             win.BGColor = new fk_Color(0.5, 0.5, 0.5);
 
@@ -65,12 +66,28 @@ namespace FK_CLI_Box
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
+            var proj = new fk_Perspective();
+
+            var bgImg = new fk_Image(1024, 768);
+            var bg = new fk_RectTexture(bgImg);
+            var tan = Math.Tan(Math.PI / 9.0) * 2.0;
+            var asp = (float)bgImg.Size.w / (float)bgImg.Size.h;
+            bg.TextureSize = new fk_TexCoord(tan * asp, tan);
+            var bgModel = new fk_Model();
+            bgModel.Shape = bg;
+            bgModel.Parent = camera;
+            bgModel.GlMoveTo(0.0, 0.0, -1.0);
+            win.Entry(bgModel);
+            fk_ShaderBinder bgBinder;
+            var bgSampler = new fk_TextureSampler(bgImg);
+            bgSampler.WrapMode = fk_TexWrapMode.CLAMP;
+            bgSampler.RendMode = fk_TexRendMode.SMOOTH;
+            bgSampler.SamplerSource = fk_SamplerSource.COLOR_BUFFER;
+
             fk_ShaderBinder binder;
-            //fk_TextureSampler sampler = new fk_TextureSampler();
-            //if(!sampler.ReadBMP("../../../../../../samples/samp.bmp")) System.Console.WriteLine("failed");
-            fk_TextureSampler sampler = new fk_TextureSampler(new fk_Image(512, 512));
-            sampler.SamplerSource = fk_SamplerSource.COLOR_BUFFER;
-            sampler.WrapMode = fk_TexWrapMode.REPEAT;
+            var sampler = new fk_TextureSampler();
+            if (!sampler.ReadBMP("../../../../../../samples/samp.bmp")) System.Console.WriteLine("failed");
+            sampler.WrapMode = fk_TexWrapMode.CLAMP;
             fk_Matrix scaleMatrix = new fk_Matrix();
             scaleMatrix.MakeScale(1.0, 1.0, 1.0);
             var uvArray = new[]
@@ -119,14 +136,50 @@ namespace FK_CLI_Box
                 {
                     System.Console.WriteLine(binder.Program.LastError);
                 }
+
+                bgBinder = new fk_ShaderBinder();
+                bgBinder.Program.VertexShaderSource =
+                    "varying vec2 fUV;" +
+                    "void main(void)" +
+                    "{" +
+                    "    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;" +
+                    "    fUV = gl_MultiTexCoord0.xy;" +
+                    "}";
+                bgBinder.Program.FragmentShaderSource =
+                    "uniform sampler2D tex;" +
+                    "varying vec2 fUV;" +
+                    "void main(void)" +
+                    "{" +
+                    "    gl_FragColor.rgb = texture2D(tex, fUV).rrr; " +
+                    "    gl_FragColor.a = 1.0; " +
+                    "}";
+                if (bgBinder.Program.Validate())
+                {
+                    bgBinder.Parameter.AttachTexture(1, bgSampler);
+                    bgBinder.Parameter.Register("tex", 1);
+                    bgBinder.BindModel(bgModel);
+                }
+                else
+                {
+                    System.Console.WriteLine(bgBinder.Program.LastError);
+                }
             }
-            win.Scene.EntryModel(blockModel);
+
             for (i = 0; win.Update() == true; i++) {
 				camera.GlTranslate(0.0, 0.0, -1.0);
 				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
 				var cPos = camera.Position;
 				if(cPos.z < -FK.EPS) camera.GlFocus(origin);
 				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+
+                if(win.GetKeyStatus(' ', fk_SwitchStatus.PRESS))
+                {
+                    win.Remove(bgModel);
+                }
+                else
+                {
+                    win.Entry(bgModel);
+                }
 			}
 		}
 	}
