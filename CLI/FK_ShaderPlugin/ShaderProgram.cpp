@@ -1,4 +1,5 @@
 #include "ShaderProgram.h"
+#include "ShaderBinder.h"
 #include "GL/glew.h"
 #include <stdlib.h>
 #include <vcclr.h>
@@ -32,6 +33,9 @@ namespace FK_ShaderPlugin {
 
 	bool fk_ShaderProgram::Validate(void)
 	{
+		bool extensionEnable = fk_ShaderBinder::Initialize();
+		if (!extensionEnable) return false;
+
 		// 頂点シェーダ
 
 		if (String::IsNullOrEmpty(VertexShaderSource))

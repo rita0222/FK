@@ -32,6 +32,8 @@ namespace FK_ShaderPlugin
 		property fk_SamplerSource SamplerSource;
 
 		void Init(void);
+
+	internal:
 		bool BindTexture(bool forceLoad);
 
 	private:

@@ -18,9 +18,11 @@ namespace FK_ShaderPlugin
 		property fk_ShaderProgram^ Program;
 		property fk_ShaderParameter^ Parameter;
 
-		static bool Initialize(void);
 		void BindModel(fk_Model^ model);
 		void UnbindModel(fk_Model^ model);
+
+	internal:
+		static bool Initialize(void);
 
 	private:
 		void ProcPreShader(void);

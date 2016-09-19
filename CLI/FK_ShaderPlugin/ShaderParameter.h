@@ -30,6 +30,7 @@ namespace FK_ShaderPlugin
 		bool AttachTexture(int unit, fk_TextureSampler^ texture);
 		bool DetachTexture(int unit);
 
+	internal:
 		bool Apply(UInt32 programId);
 
 	private:
