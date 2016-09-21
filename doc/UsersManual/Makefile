@@ -5,12 +5,12 @@ MAINNAME	= FK_UsersManual
 
 doc:
 	cd Fig; ../../com/svg2eps *.svg
-	platex $(MAINNAME); platex $(MAINNAME); platex $(MAINNAME)
-	dvipdfmx -d 5 $(MAINNAME)
+	latexmk $(MAINNAME)
 	cp $(MAINNAME).pdf ../Output
 
 clean:
-	$(RM) *.dvi *.log *.aux *.toc *.out *.lof *.lot *.bbl *.blg *.pdf *~
+	$(RM) *.dvi *.log *.aux *.toc *.out *.lof *.lot *.bbl \
+		*.blg *.fls *.fdb_latexmk *.synctex.gz *.pdf *~
 	cd Fig; $(RM) *.eps
 
 ####################
