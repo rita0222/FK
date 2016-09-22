@@ -1,12 +1,11 @@
 #pragma once
 
-#include "ShaderProgram.h"
-#include "ShaderParameter.h"
+#include "ShaderProgram_CLI.h"
+#include "ShaderParameter_CLI.h"
 
-using namespace System;
-using namespace FK_CLI;
+//using namespace System;
 
-namespace FK_ShaderPlugin
+namespace FK_CLI
 {
 	public ref class fk_ShaderBinder
 	{

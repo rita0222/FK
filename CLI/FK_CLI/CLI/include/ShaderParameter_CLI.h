@@ -1,12 +1,11 @@
 #pragma once
 
-#include "TextureSampler.h"
+#include "TextureSampler_CLI.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
-using namespace FK_CLI;
 
-namespace FK_ShaderPlugin
+namespace FK_CLI
 {
 	public ref class fk_ShaderParameter
 	{

@@ -271,6 +271,9 @@
     <ClCompile Include="CLI\cpp\Reference_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Renderer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Scene_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ShaderBinder_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ShaderParameter_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ShaderProgram_CLI.cpp" />
     <ClCompile Include="CLI\cpp\ShapeViewer_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Shape_CLI.cpp" />
     <ClCompile Include="CLI\cpp\SolidBase_CLI.cpp" />
@@ -278,6 +281,7 @@
     <ClCompile Include="CLI\cpp\Sphere_CLI.cpp" />
     <ClCompile Include="CLI\cpp\SpriteModel_CLI.cpp" />
     <ClCompile Include="CLI\cpp\TextImage_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\TextureSampler_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Texture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Topology_CLI.cpp" />
     <ClCompile Include="CLI\cpp\TriTexture_CLI.cpp" />
@@ -453,6 +457,9 @@
     <ClInclude Include="CLI\include\Reference_CLI.h" />
     <ClInclude Include="CLI\include\Renderer_CLI.h" />
     <ClInclude Include="CLI\include\Scene_CLI.h" />
+    <ClInclude Include="CLI\include\ShaderBinder_CLI.h" />
+    <ClInclude Include="CLI\include\ShaderParameter_CLI.h" />
+    <ClInclude Include="CLI\include\ShaderProgram_CLI.h" />
     <ClInclude Include="CLI\include\ShapeViewer_CLI.h" />
     <ClInclude Include="CLI\include\Shape_CLI.h" />
     <ClInclude Include="CLI\include\SolidBase_CLI.h" />
@@ -460,6 +467,7 @@
     <ClInclude Include="CLI\include\Sphere_CLI.h" />
     <ClInclude Include="CLI\include\SpriteModel_CLI.h" />
     <ClInclude Include="CLI\include\TextImage_CLI.h" />
+    <ClInclude Include="CLI\include\TextureSampler_CLI.h" />
     <ClInclude Include="CLI\include\Texture_CLI.h" />
     <ClInclude Include="CLI\include\Topology_CLI.h" />
     <ClInclude Include="CLI\include\TriTexture_CLI.h" />

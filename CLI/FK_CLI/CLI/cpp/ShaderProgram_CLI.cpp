@@ -1,10 +1,10 @@
-#include "ShaderProgram.h"
-#include "ShaderBinder.h"
 #include "GL/glew.h"
 #include <stdlib.h>
 #include <vcclr.h>
+#include "ShaderProgram_CLI.h"
+#include "ShaderBinder_CLI.h"
 
-namespace FK_ShaderPlugin {
+namespace FK_CLI {
 
 	fk_ShaderProgram::fk_ShaderProgram() : idProgram(0), idVertex(0), idFragment(0)
 	{

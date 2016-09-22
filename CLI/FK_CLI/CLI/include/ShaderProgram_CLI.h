@@ -1,9 +1,8 @@
 #pragma once
 
 using namespace System;
-using namespace FK_CLI;
 
-namespace FK_ShaderPlugin
+namespace FK_CLI
 {
 	public ref class fk_ShaderProgram
 	{

@@ -1,8 +1,7 @@
-#include "TextureSampler.h"
 #include "GL/glew.h"
+#include "TextureSampler_CLI.h"
 
-
-namespace FK_ShaderPlugin
+namespace FK_CLI
 {
 	fk_TextureSampler::fk_TextureSampler() : fk_MeshTexture(true)
 	{

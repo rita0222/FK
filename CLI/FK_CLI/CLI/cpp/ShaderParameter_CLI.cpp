@@ -1,11 +1,11 @@
-#include "ShaderParameter.h"
 #include "GL/glew.h"
 #include <stdlib.h>
 #include <vcclr.h>
+#include "ShaderParameter_CLI.h"
 
 #define SAFE_DELETE(p) { delete p; p = nullptr; };
 
-namespace FK_ShaderPlugin {
+namespace FK_CLI {
 
 	fk_ShaderParameter::fk_ShaderParameter() : lastAppliedId(0)
 	{

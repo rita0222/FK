@@ -1,9 +1,9 @@
-#include "ShaderBinder.h"
 #include "GL/glew.h"
 #include <string>
 #include <vcclr.h>
+#include "ShaderBinder_CLI.h"
 
-namespace FK_ShaderPlugin
+namespace FK_CLI
 {
 	bool fk_ShaderBinder::Initialize()
 	{

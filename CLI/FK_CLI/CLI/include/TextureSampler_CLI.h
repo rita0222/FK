@@ -1,10 +1,11 @@
 #pragma once
 
+#include "MeshTexture_CLI.h"
+
 using namespace System;
 using namespace System::Collections::Generic;
-using namespace FK_CLI;
 
-namespace FK_ShaderPlugin
+namespace FK_CLI
 {
 	// モデルの描画モードを表す列挙型
 	public enum class fk_TexWrapMode {
