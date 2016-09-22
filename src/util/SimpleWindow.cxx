@@ -79,11 +79,52 @@
 #include <FK/System.h>
 #include <FK/MatExample.h>
 
-/*
-bool	fk_AppWindow::prevKeySt[256],
-		fk_AppWindow::prevSPKeySt[32],
-		fk_AppWindow::prevMouseSt[3];
-*/
+#ifdef FK_CLI_CODE
+class InnerWindow : public ::fk_Window
+{
+private:
+	void(*pPreInit)();
+	void(*pPostInit)();
+	void(*pPreDraw)();
+	void(*pPostDraw)();
+	void(*pPreDrawLeft)();
+	void(*pPostDrawLeft)();
+	void(*pPreDrawRight)();
+	void(*pPostDrawRight)();
+
+public:
+#ifdef _WIN64
+	InnerWindow(
+		uint64_t *argCallbacks,
+		int x = 0, int y = 0,
+		int w = 300, int h = 300, std::string name = "FK Window") : fk_Window(x, y, w, h, name)
+#else
+	InnerWindow(
+		uint32_t *argCallbacks,
+		int x = 0, int y = 0,
+		int w = 300, int h = 300, std::string name = "FK Window") : fk_Window(x, y, w, h, name)
+#endif
+	{
+		pPreInit = (void(__cdecl *)(void))argCallbacks[0];
+		pPostInit = (void(__cdecl *)(void))argCallbacks[1];
+		pPreDraw = (void(__cdecl *)(void))argCallbacks[2];
+		pPostDraw = (void(__cdecl *)(void))argCallbacks[3];
+		pPreDrawLeft = (void(__cdecl *)(void))argCallbacks[4];
+		pPostDrawLeft = (void(__cdecl *)(void))argCallbacks[5];
+		pPreDrawRight = (void(__cdecl *)(void))argCallbacks[6];
+		pPostDrawRight = (void(__cdecl *)(void))argCallbacks[7];
+	};
+
+	void preInit() { pPreInit(); };
+	void postInit() { pPostInit(); };
+	void preDraw() { pPreDraw(); };
+	void postDraw() { pPostDraw(); };
+	void preDrawLeft() { pPreDrawLeft(); };
+	void postDrawLeft() { pPostDrawLeft(); };
+	void preDrawRight() { pPreDrawRight(); };
+	void postDrawRight() { pPostDrawRight(); };
+};
+#endif
 
 const static fk_SwitchStatus stArray[4] = {
 	FK_SW_UP,
@@ -95,24 +136,12 @@ void fk_AppWindow::PushPrevStatus(void)
 {
 	int	i;
 
-/*
-	for(i = 0; i < 255; ++i) {
-		prevKeySt[i] = drawWin->getKeyStatus((char)i, false);
-	}
-	for(i = 0; i < 32; ++i) {
-		prevSPKeySt[i] = drawWin->getSpecialKeyStatus((fk_SpecialKey)i, false);
-	}
-	for(i = 0; i < 3; ++i) {
-		prevMouseSt[i] = drawWin->getMouseStatus((fk_MouseButton)i, false);
-	}
-*/
 	for(i = 0; i < inputCount; ++i) {
 		prevInput[i] = nowInput[i];
 	}
 
 	return;
 }
-
 
 // スクリーンモードのハンドリング処理
 void fk_AppWindow::ToggleScreen(void)
@@ -136,12 +165,28 @@ void fk_AppWindow::ToggleScreen(void)
 	return;
 }
 
+#ifdef FK_CLI_CODE
+#ifdef _WIN64
+fk_AppWindow::fk_AppWindow(uint64_t *argCallbacks)
+#else
+fk_AppWindow::fk_AppWindow(uint32_t *argCallbacks)
+#endif // _WIN64
+#else
 fk_AppWindow::fk_AppWindow(void)
+#endif // FK_CLI_CODE
 {
 	fk_System::setcwd();
 
 	mainWin = new Fl_Window(512, 512, "FKAPP Window");
+#ifdef FK_CLI_CODE
+#ifdef _WIN64
+	drawWin = new InnerWindow(argCallbacks, 0, 0, 512, 512);
+#else
+	drawWin = new InnerWindow(argCallbacks, 0, 0, 512, 512);
+#endif // _WIN64
+#else
 	drawWin = new fk_Window(0, 0, 512, 512);
+#endif // FK_CLI_CODE
 	mainWin->end();
 
 	fk_Material::initDefault();

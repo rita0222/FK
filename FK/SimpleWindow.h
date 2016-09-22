@@ -62,8 +62,6 @@ private:
 	int		fps;
 	bool	tbFlag, childMode;
 
-	//static bool	prevKeySt[256], prevSPKeySt[32], prevMouseSt[3];
-
 	fk_Input		input;
 	fk_InputInfo	prevInput[16], nowInput[16];
 	int				inputCount;
@@ -74,7 +72,15 @@ private:
 public:
 
 	//! コンストラクタ
+#ifdef FK_CLI_CODE
+#ifdef _WIN64
+	fk_AppWindow(uint64_t *argCallbacks);
+#else
+	fk_AppWindow(uint32_t *argCallbacks);
+#endif
+#else
 	fk_AppWindow(void);
+#endif
 	//! 子ウィンドウ作成時用コンストラクタ
 	fk_AppWindow(fk_AppWindow &parent);
 	//! デストラクタ

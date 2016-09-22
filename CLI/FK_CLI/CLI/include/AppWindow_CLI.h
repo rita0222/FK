@@ -77,6 +77,16 @@ namespace FK_CLI
 		::fk_AppWindow *pWin;
 		fk_Scene^ scene;
 
+		delegate void ShaderCallback(void);
+		ShaderCallback^ preInit;
+		ShaderCallback^ postInit;
+		ShaderCallback^ preDraw;
+		ShaderCallback^ postDraw;
+		ShaderCallback^ preDrawLeft;
+		ShaderCallback^ postDrawLeft;
+		ShaderCallback^ preDrawRight;
+		ShaderCallback^ postDrawRight;
+
 		::fk_AppWindow * GetP(void);
 		::fk_SpecialKey GetSK(fk_SpecialKey);
 		::fk_SwitchStatus GetSS(fk_SwitchStatus);
@@ -899,6 +909,16 @@ namespace FK_CLI
 		bool	GetWindowPosition(fk_Vector^ pos_3D, fk_Vector^ pos_2D);
 		//@}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		virtual void PreInit() {};
+		virtual void PostInit() {};
+		virtual void PreDraw() {};
+		virtual void PostDraw() {};
+		virtual void PreDrawLeft() {};
+		virtual void PostDrawLeft() {};
+		virtual void PreDrawRight() {};
+		virtual void PostDrawRight() {};
+#endif
 	};
 }
 

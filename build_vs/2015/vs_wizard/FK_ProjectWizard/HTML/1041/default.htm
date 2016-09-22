@@ -277,17 +277,7 @@ function OnFinish(document)
 </SCRIPT>
 <SCRIPT ID="INCLUDE_SCRIPT" LANGUAGE="JSCRIPT"></SCRIPT>
 <SCRIPT ID="INCLUDE_COMMON" LANGUAGE="JSCRIPT"></SCRIPT>
-<!--
-Common.js は、ウィザードで使用するヘルパー関数を含む
-スクリプト ファイルです。HTML スクリプトからこれらの関数を呼び出すには、
-この行を記述してください。
-//-->
 <SCRIPT>
-	var strPath = window.external.FindSymbol("PRODUCT_INSTALLATION_DIR");
-	strPath += "VCWizards/";
-	strPath += window.external.GetHostLocale();
-	var strScriptPath = strPath + "/Script.js";
-	var strCommonPath = strPath + "/Common.js";
-	document.scripts("INCLUDE_SCRIPT").src = strScriptPath;
-	document.scripts("INCLUDE_COMMON").src = strCommonPath;
+	document.scripts("INCLUDE_SCRIPT").src = window.external.FindSymbol("SCRIPT_COMMON_PATH") + "/Script.js";
+	document.scripts("INCLUDE_COMMON").src = window.external.FindSymbol("SCRIPT_COMMON_PATH") + "/Common.js";
 </SCRIPT>

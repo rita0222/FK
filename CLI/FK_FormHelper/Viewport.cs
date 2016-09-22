@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FK_CLI;
+using System.Diagnostics;
 
 namespace FK_FormHelper
 {
@@ -64,6 +65,7 @@ namespace FK_FormHelper
 
         public void Dispose()
         {
+            timer.Enabled = false;
             renderer.Dispose();
         }
 
@@ -109,6 +111,8 @@ namespace FK_FormHelper
 
         private void Setup(Control argPanel)
         {
+            if (IsInDesignMode()) return;
+
             panel = argPanel;
 
             if (panel.Handle != null)
@@ -136,6 +140,22 @@ namespace FK_FormHelper
             if (scene != null) renderer.SetScene(scene);
             IsDrawing = true;
             panel.HandleCreated -= InitializeRenderer;
+        }
+
+        public static bool IsInDesignMode()
+        {
+            bool returnFlag = false;
+#if DEBUG
+            if (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime)
+            {
+                returnFlag = true;
+            }
+            else if (Process.GetCurrentProcess().ProcessName.ToUpper().Equals("DEVENV"))
+            {
+                returnFlag = true;
+            }
+#endif
+            return returnFlag;
         }
 
         /// <summary>

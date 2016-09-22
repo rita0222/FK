@@ -107,6 +107,10 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	resizeFlag = false;
 	textureMode = false;
 
+	srcFactor = FK_FACTOR_SRC_ALPHA;
+	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+	depthRead = depthWrite = true;
+
 	return;
 }
 
@@ -356,6 +360,8 @@ void fk_GraphicsEngine::StereoDrawMain(fk_StereoChannel argChannel)
 
 	ApplySceneParameter(false);
 
+	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
+	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	SetStereoViewPort(argChannel);
@@ -466,6 +472,8 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 
 	ApplySceneParameter(true);
 
+	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
+	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	glPushMatrix();
@@ -531,18 +539,18 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	modelPEnd = curDLink->GetModelList()->end();
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
+		SetDepthMode((*modelP)->getDepthMode());
 		DrawModel(*modelP, lightFlag, argPickFlg);
 	}
 
 	overlayList = curDLink->GetOverlayList();
 	if(overlayList->empty() == true) return;
 
-	glDisable(GL_DEPTH_TEST);
+	SetDepthMode(FK_DEPTH_NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
 		DrawModel(*modelP, lightFlag, argPickFlg);
 	}
-	glEnable(GL_DEPTH_TEST);
 
 	return;
 }
@@ -578,7 +586,8 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	} else {
 		LoadModelMatrix(argModel);
 	}
-		
+	
+	SetBlendMode(argModel);
 	argModel->preShader();
 
 	if(modelShape->getRealShapeType() == FK_SHAPE_TEXTURE) {
@@ -1000,6 +1009,62 @@ void fk_GraphicsEngine::SetOGLTextureBindMode(bool argFlg)
 bool fk_GraphicsEngine::GetOGLTextureBindMode(void)
 {
 	return textureDraw->GetBindMode();
+}
+
+GLenum GetBlendFactor(fk_BlendFactor factor)
+{
+	switch (factor) {
+	case FK_FACTOR_ZERO:
+		return GL_ZERO;
+	case FK_FACTOR_ONE:
+		return GL_ONE;
+	case FK_FACTOR_SRC_COLOR:
+		return GL_SRC_COLOR;
+	case FK_FACTOR_ONE_MINUS_SRC_COLOR:
+		return GL_ONE_MINUS_SRC_ALPHA;
+	case FK_FACTOR_DST_COLOR:
+		return GL_DST_COLOR;
+	case FK_FACTOR_ONE_MINUS_DST_COLOR:
+		return GL_ONE_MINUS_DST_COLOR;
+	case FK_FACTOR_SRC_ALPHA:
+		return GL_SRC_ALPHA;
+	case FK_FACTOR_ONE_MINUS_SRC_ALPHA:
+		return GL_ONE_MINUS_SRC_ALPHA;
+	case FK_FACTOR_DST_ALPHA:
+		return GL_DST_ALPHA;
+	case FK_FACTOR_ONE_MINUS_DST_ALPHA:
+		return GL_ONE_MINUS_DST_ALPHA;
+	default:
+		return GL_ONE;
+	}
+}
+
+void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
+{
+	fk_BlendFactor src, dst;
+	argModel->getBlendMode(&src, &dst);
+
+	if(src != srcFactor || dst != dstFactor) {
+		srcFactor = src;
+		dstFactor = dst;
+		glBlendFunc(GetBlendFactor(srcFactor), GetBlendFactor(dstFactor));
+	}
+	return;
+}
+
+void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
+{
+	bool r = (argMode & FK_DEPTH_READ) != 0;
+	bool w = (argMode & FK_DEPTH_WRITE) != 0;
+	if (depthRead != r) {
+		if (r) glEnable(GL_DEPTH_TEST);
+		else glDisable(GL_DEPTH_TEST);
+		depthRead = r;
+	}
+	if (depthWrite != w) {
+		glDepthMask(w ? GL_TRUE : GL_FALSE);
+		depthWrite = w;
+	}
 }
 
 bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)

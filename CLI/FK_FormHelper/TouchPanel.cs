@@ -35,7 +35,7 @@ namespace FK_FormHelper
         public TouchPanel()
         {
             // Setup handlers
-            HandleCreated += new System.EventHandler(this.OnLoadHandler);
+            HandleCreated += this.OnLoadHandler;
 
             // GetTouchInputInfo needs to be
             // passed the size of the structure it will be filling.

@@ -1,5 +1,28 @@
 ﻿#include "Model_CLI.h"
 
+class InnerModel : public ::fk_Model
+{
+public:
+	void(*pPreShader)();
+	void(*pPostShader)();
+
+	InnerModel(void* pre, void* post)
+	{
+		pPreShader = (void(__cdecl *)(void))pre;
+		pPostShader = (void(__cdecl *)(void))post;
+	};
+
+	void preShader()
+	{
+		pPreShader();
+	};
+
+	void postShader()
+	{
+		pPostShader();
+	};
+};
+
 namespace FK_CLI {
 
 	::fk_Model * fk_Model::GetP(void)
@@ -7,22 +30,34 @@ namespace FK_CLI {
 		return (::fk_Model *)(pBase);
 	}
 
+	void fk_Model::MakeNativeModel(void)
+	{
+		using namespace System::Runtime::InteropServices;
+		preShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPreShader);
+		System::IntPtr p1 = Marshal::GetFunctionPointerForDelegate(preShader);
+		postShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPostShader);
+		System::IntPtr p2 = Marshal::GetFunctionPointerForDelegate(postShader);
+		pBase = new ::InnerModel((void*)p1, (void*)p2);
+	}
+
 	fk_Model::fk_Model(): fk_Boundary(false), shape(nullptr)
 	{
-		pBase = new ::fk_Model();
+		MakeNativeModel();
 		modelList->Add(this);
 	}
 
 	fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false), shape(nullptr)
 	{
-		if (argNewFlg) pBase = new ::fk_Model();
+		if (argNewFlg) {
+			MakeNativeModel();
+		}
 		modelList->Add(this);
 	}
 
 	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
 	{
 		if (argUnmanagedPtr == nullptr) {
-			pBase = new ::fk_Model();
+			MakeNativeModel();
 		} else {
 			pBase = argUnmanagedPtr;
 			dFlg = false;
@@ -34,6 +69,8 @@ namespace FK_CLI {
 	fk_Model::~fk_Model()
 	{
 		shape = nullptr;
+		preShader = nullptr;
+		postShader = nullptr;
 		if(pBase == nullptr) return;
 		if(dFlg == true) delete GetP();
 		pBase = nullptr;
@@ -43,6 +80,8 @@ namespace FK_CLI {
 	fk_Model::!fk_Model()
 	{
 		shape = nullptr;
+		preShader = nullptr;
+		postShader = nullptr;
 		if(pBase == nullptr) return;
 		if(dFlg == true) {
 			GetP()->SetTreeDelMode(false);
@@ -220,6 +259,63 @@ namespace FK_CLI {
 	bool fk_Model::ReverseDrawMode::get(void)
 	{
 		return GetP()->getReverseDrawMode();
+	}
+
+	void fk_Model::DepthMode::set(fk_DepthMode argMode)
+	{
+		GetP()->setDepthMode(static_cast<unsigned char>(argMode));
+	}
+
+	fk_DepthMode fk_Model::DepthMode::get(void)
+	{
+		return static_cast<fk_DepthMode>(GetP()->getDepthMode());
+	}
+
+	void fk_Model::BlendMode::set(fk_BlendMode argMode)
+	{
+		if (argMode == fk_BlendMode::CUSTOM_MODE) {
+			::fk_BlendFactor src, dst;
+			GetP()->getBlendMode(&src, &dst);
+			GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+			return;
+		}
+
+		GetP()->setBlendMode(static_cast<unsigned char>(argMode));
+	}
+
+	fk_BlendMode fk_Model::BlendMode::get(void)
+	{
+		return static_cast<fk_BlendMode>(GetP()->getBlendMode());
+	}
+
+	void fk_Model::BlendSrcFactor::set(fk_BlendFactor argMode)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		src = static_cast<unsigned char>(argMode);
+		GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+	}
+
+	fk_BlendFactor fk_Model::BlendSrcFactor::get(void)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		return static_cast<fk_BlendFactor>(src);
+	}
+
+	void fk_Model::BlendDstFactor::set(fk_BlendFactor argMode)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		dst = static_cast<unsigned char>(argMode);
+		GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+	}
+
+	fk_BlendFactor fk_Model::BlendDstFactor::get(void)
+	{
+		::fk_BlendFactor src, dst;
+		GetP()->getBlendMode(&src, &dst);
+		return static_cast<fk_BlendFactor>(dst);
 	}
 
 	fk_Matrix^ fk_Model::InhMatrix::get(void)

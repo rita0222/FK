@@ -138,7 +138,36 @@ namespace FK_CLI {
 
 	fk_AppWindow::fk_AppWindow()
 	{
-		pWin = new ::fk_AppWindow();
+		preInit = gcnew ShaderCallback(this, &fk_AppWindow::PreInit);
+		postInit = gcnew ShaderCallback(this, &fk_AppWindow::PostInit);
+		preDraw = gcnew ShaderCallback(this, &fk_AppWindow::PreDraw);
+		postDraw = gcnew ShaderCallback(this, &fk_AppWindow::PostDraw);
+		preDrawLeft = gcnew ShaderCallback(this, &fk_AppWindow::PreDrawLeft);
+		postDrawLeft = gcnew ShaderCallback(this, &fk_AppWindow::PostDrawLeft);
+		preDrawRight = gcnew ShaderCallback(this, &fk_AppWindow::PreDrawRight);
+		postDrawRight = gcnew ShaderCallback(this, &fk_AppWindow::PostDrawRight);
+#ifdef _WIN64
+		uint64_t callbacks[8];
+		callbacks[0] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preInit).ToInt64();
+		callbacks[1] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postInit).ToInt64();
+		callbacks[2] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDraw).ToInt64();
+		callbacks[3] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDraw).ToInt64();
+		callbacks[4] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDrawLeft).ToInt64();
+		callbacks[5] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDrawLeft).ToInt64();
+		callbacks[6] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDrawRight).ToInt64();
+		callbacks[7] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDrawRight).ToInt64();
+#else
+		uint32_t callbacks[8];
+		callbacks[0] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preInit).ToInt32();
+		callbacks[1] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postInit).ToInt32();
+		callbacks[2] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDraw).ToInt32();
+		callbacks[3] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDraw).ToInt32();
+		callbacks[4] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDrawLeft).ToInt32();
+		callbacks[5] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDrawLeft).ToInt32();
+		callbacks[6] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDrawRight).ToInt32();
+		callbacks[7] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDrawRight).ToInt32();
+#endif
+		pWin = new ::fk_AppWindow(callbacks);
 		scene = gcnew fk_Scene(false);
 		scene->pBase = GetP()->getScene();
 		scene->dFlg = false;
@@ -147,12 +176,28 @@ namespace FK_CLI {
 
 	fk_AppWindow::~fk_AppWindow()
 	{
+		preInit = nullptr;
+		postInit = nullptr;
+		preDraw = nullptr;
+		postDraw = nullptr;
+		preDrawLeft = nullptr;
+		postDrawLeft = nullptr;
+		preDrawRight = nullptr;
+		postDrawRight = nullptr;
 		delete pWin;
 		pWin = nullptr;
 	}
 
 	fk_AppWindow::!fk_AppWindow()
 	{
+		preInit = nullptr;
+		postInit = nullptr;
+		preDraw = nullptr;
+		postDraw = nullptr;
+		preDrawLeft = nullptr;
+		postDrawLeft = nullptr;
+		preDrawRight = nullptr;
+		postDrawRight = nullptr;
 		pWin->SetFinalizeMode();
 		delete pWin;
 		pWin = nullptr;
