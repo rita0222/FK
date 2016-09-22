@@ -122,7 +122,7 @@ namespace FK_CLI {
 	{
 		for (int i = 0; i < 16; ++i)
 		{
-			refArray[i] = (*pMatrix)[i % 4][i / 4];
+			refArray[i] = float((*pMatrix)[i % 4][i / 4]);
 		}
 
 		return refArray;

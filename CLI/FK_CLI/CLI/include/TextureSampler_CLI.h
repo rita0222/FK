@@ -2,8 +2,8 @@
 
 #include "MeshTexture_CLI.h"
 
-using namespace System;
-using namespace System::Collections::Generic;
+//using namespace System;
+//using namespace System::Collections::Generic;
 
 namespace FK_CLI
 {
