@@ -5,6 +5,10 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
+	//! シェーダープログラムクラス
+	/*!
+	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
+	 */
 	public ref class fk_ShaderProgram
 	{
 	public:
