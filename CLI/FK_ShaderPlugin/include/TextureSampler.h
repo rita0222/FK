@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 using namespace System;
 using namespace System::Collections::Generic;
@@ -26,7 +26,6 @@ namespace FK_ShaderPlugin
 		fk_TextureSampler(fk_Image^ image);
 
 		~fk_TextureSampler();
-		!fk_TextureSampler();
 
 		property fk_TexWrapMode WrapMode;
 		property fk_SamplerSource SamplerSource;

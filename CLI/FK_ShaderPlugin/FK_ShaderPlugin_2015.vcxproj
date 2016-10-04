@@ -74,7 +74,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\build_vs\extlibs\glew-1.12.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>include;..\..\build_vs\extlibs\glew-1.12.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
@@ -87,7 +87,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\build_vs\extlibs\glew-1.12.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>include;..\..\build_vs\extlibs\glew-1.12.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
@@ -150,19 +150,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ShaderBinder.h" />
-    <ClInclude Include="ShaderParameter.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="TextureSampler.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="ShaderBinder.cpp" />
-    <ClCompile Include="ShaderParameter.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="TextureSampler.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +162,19 @@
     <ProjectReference Include="..\FK_CLI\FK_CLI_2015.vcxproj">
       <Project>{df7dd30e-bb32-4c17-a0de-32b447c37bce}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cpp\AssemblyInfo.cpp" />
+    <ClCompile Include="cpp\ShaderBinder.cpp" />
+    <ClCompile Include="cpp\ShaderParameter.cpp" />
+    <ClCompile Include="cpp\ShaderProgram.cpp" />
+    <ClCompile Include="cpp\TextureSampler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ShaderBinder.h" />
+    <ClInclude Include="include\ShaderParameter.h" />
+    <ClInclude Include="include\ShaderProgram.h" />
+    <ClInclude Include="include\TextureSampler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

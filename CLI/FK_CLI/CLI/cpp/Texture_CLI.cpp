@@ -31,13 +31,6 @@ namespace FK_CLI {
 		
 	fk_TexCoord::~fk_TexCoord()
 	{
-		this->!fk_TexCoord();
-		return;
-	}
-
-	fk_TexCoord::!fk_TexCoord()
-	{
-		return;
 	}
 
 	double fk_TexCoord::x::get()

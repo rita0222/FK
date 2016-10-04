@@ -1,4 +1,4 @@
-#include "ShaderParameter.h"
+﻿#include "ShaderParameter.h"
 #include "GL/glew.h"
 #include <stdlib.h>
 #include <vcclr.h>

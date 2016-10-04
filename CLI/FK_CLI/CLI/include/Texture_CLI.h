@@ -133,7 +133,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Texture(bool argNewFlg);
 		~fk_Texture();
-		!fk_Texture();
 #endif
 
 		//! 画像データプロパティ

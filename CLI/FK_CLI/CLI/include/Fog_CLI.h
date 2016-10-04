@@ -39,7 +39,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Fog(bool argNewFlg);
 		~fk_Fog();
-		!fk_Fog();
 #endif
 		
 		//! 減衰関数プロパティ

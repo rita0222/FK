@@ -1,4 +1,4 @@
-#include "TextureSampler.h"
+﻿#include "TextureSampler.h"
 #include "GL/glew.h"
 
 
@@ -19,11 +19,6 @@ namespace FK_ShaderPlugin
 	}
 
 	fk_TextureSampler::~fk_TextureSampler()
-	{
-		this->!fk_TextureSampler();
-	}
-
-	fk_TextureSampler::!fk_TextureSampler()
 	{
 	}
 
