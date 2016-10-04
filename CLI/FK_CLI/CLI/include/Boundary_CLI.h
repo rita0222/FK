@@ -67,7 +67,7 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Boundary(bool);
 		~fk_Boundary();
-		!fk_Boundary();
+
 #endif		
 		//! 境界ボリューム選択プロパティ
 		/*!

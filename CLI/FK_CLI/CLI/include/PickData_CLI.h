@@ -27,7 +27,6 @@ namespace FK_CLI
 			fk_Model^ model, fk_PickedTopologyType^ type,
 			int id, double far, double near);
 		fk_PickData::~fk_PickData();
-		fk_PickData::!fk_PickData();
 
 		property fk_Model^ Model {
 			fk_Model^ get();

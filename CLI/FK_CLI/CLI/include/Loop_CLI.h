@@ -35,7 +35,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Loop(bool argNewFlg);
 		~fk_Loop();
-		!fk_Loop();
 #endif
 
 		//! 接続半稜線プロパティ

@@ -70,14 +70,8 @@ namespace FK_CLI {
 	// デストラクタ
 	fk_Vector::~fk_Vector()
 	{
-		this->!fk_Vector();
 	}
 
-	// ファイナライザ
-	fk_Vector::!fk_Vector()
-	{
-	}
-	
 	bool fk_Vector::Equals(fk_Vector^ argV)
 	{
 		if(!argV) false;
@@ -339,13 +333,6 @@ namespace FK_CLI {
 	// デストラクタ
 	fk_HVector::~fk_HVector()
 	{
-		this->!fk_HVector();
-	}
-
-	// ファイナライザ
-	fk_HVector::!fk_HVector()
-	{
-		return;
 	}
 
 	double fk_HVector::x::get()
@@ -536,12 +523,6 @@ namespace FK_CLI {
 
 	fk_FVector::~fk_FVector()
 	{
-		this->!fk_FVector();
-	}
-
-	fk_FVector::!fk_FVector()
-	{
-		return;
 	}
 
 	fk_FVector::operator fk_FVector ^ (fk_Vector^ argV)

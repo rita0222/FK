@@ -108,11 +108,6 @@ namespace FK_CLI {
 
 	fk_Texture::~fk_Texture()
 	{
-		this->!fk_Texture();
-	}
-
-	fk_Texture::!fk_Texture()
-	{
 	}
 
 	void fk_Texture::Image::set(fk_Image^ argImage)

@@ -14,12 +14,6 @@ namespace FK_CLI {
 
 	fk_Operation::~fk_Operation()
 	{
-		this->!fk_Operation();
-	}
-
-	fk_Operation::!fk_Operation()
-	{
-		return;
 	}
 
 	void fk_Operation::HistoryMode::set(bool argMode)

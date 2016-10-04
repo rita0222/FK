@@ -16,11 +16,6 @@ namespace FK_CLI {
 
 	fk_Modify::~fk_Modify()
 	{
-		this->!fk_Modify();
-	}
-
-	fk_Modify::!fk_Modify()
-	{
 	}
 
 	fk_Loop^ fk_Modify::RemoveVertexInLoop(fk_Vertex ^argV)

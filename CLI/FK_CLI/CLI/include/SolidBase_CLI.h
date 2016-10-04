@@ -37,7 +37,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_SolidBase(bool argNewFlg);
 		~fk_SolidBase();
-		!fk_SolidBase();
 #endif
 
 		//! 任意形状生成関数1-1

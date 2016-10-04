@@ -47,7 +47,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Modify(bool argNewFlg);
 		~fk_Modify();
-		!fk_Modify();
 #endif
 		//! \name 位相操作関数
 		//@{

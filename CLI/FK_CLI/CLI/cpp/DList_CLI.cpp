@@ -30,11 +30,6 @@ namespace FK_CLI {
 
 	fk_DisplayLink::~fk_DisplayLink()
 	{
-		this->!fk_DisplayLink();
-	}
-
-	fk_DisplayLink::!fk_DisplayLink()
-	{
 	}
 
 	fk_Model^ fk_DisplayLink::Camera::get()

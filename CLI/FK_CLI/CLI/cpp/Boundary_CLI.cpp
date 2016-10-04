@@ -13,11 +13,6 @@ namespace FK_CLI {
 
 	fk_Boundary::~fk_Boundary()
 	{
-		this->!fk_Boundary();
-	}
-
-	fk_Boundary::!fk_Boundary()
-	{
 	}
 		
 	fk_BoundaryMode fk_Boundary::BMode::get()

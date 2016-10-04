@@ -31,7 +31,6 @@ namespace FK_CLI {
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Vertex(bool argNewFlg);
 		~fk_Vertex();
-		!fk_Vertex();
 #endif
 
 		//! 位置ベクトルプロパティ

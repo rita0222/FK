@@ -14,11 +14,6 @@ namespace FK_CLI {
 
 	fk_Vertex::~fk_Vertex()
 	{
-		this->!fk_Vertex();
-	}
-
-	fk_Vertex::!fk_Vertex()
-	{
 	}
 
 	fk_Vector^ fk_Vertex::Position::get(void)

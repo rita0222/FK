@@ -16,9 +16,7 @@ namespace FK_CLI {
 
 	fk_Renderer::~fk_Renderer()
 	{
-		if (pEngine != nullptr) Shutdown();
-		delete pEngine;
-		pEngine = nullptr;
+		this->!fk_Renderer();
 	}
 
 	fk_Renderer::!fk_Renderer()

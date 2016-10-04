@@ -62,7 +62,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_DisplayLink(bool argNewFlg);
 		~fk_DisplayLink();
-		!fk_DisplayLink();
 #endif
 
 		//! カメラモデルプロパティ

@@ -14,12 +14,6 @@ namespace FK_CLI {
 	// デストラクタ
 	fk_PickData::~fk_PickData()
 	{
-		this->!fk_PickData();
-	}
-
-	// ファイナライザ
-	fk_PickData::!fk_PickData()
-	{
 	}
 
 	fk_Model^ fk_PickData::Model::get(void) {

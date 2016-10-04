@@ -74,8 +74,6 @@ namespace FK_CLI
 		
 		// デストラクタ
 		~fk_Vector();
-		// ファイナライザ
-		!fk_Vector();
 		
 		//! x成分プロパティ
 		/*!
@@ -490,9 +488,6 @@ namespace FK_CLI
 		//! デストラクタ
 		~fk_HVector();
 
-		//! ファイナライザ
-		!fk_HVector();
-
 		//! x成分プロパティ
 		/*!
 		 *	x成分を表すプロパティです。以下のようなコードで利用できます。
@@ -735,9 +730,6 @@ namespace FK_CLI
 
 		//! デストラクタ
 		~fk_FVector();
-
-		//! ファイナライザ
-		!fk_FVector();
 
 		//! fk_Vector 型からの変換演算子
 		/*!

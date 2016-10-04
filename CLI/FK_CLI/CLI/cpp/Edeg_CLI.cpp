@@ -14,11 +14,6 @@ namespace FK_CLI {
 
 	fk_Edge::~fk_Edge()
 	{
-		this->!fk_Edge();
-	}
-
-	fk_Edge::!fk_Edge()
-	{
 	}
 
 	fk_Half^ fk_Edge::LeftHalf::get()

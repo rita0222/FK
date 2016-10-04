@@ -61,9 +61,6 @@ namespace FK_CLI
 		//! デストラクタ
 		~fk_TexCoord();
 
-		//! ファイナライザ
-		!fk_TexCoord();
-
 		//! x 成分プロパティ
 		property double x {
 			double get();

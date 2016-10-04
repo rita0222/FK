@@ -5,13 +5,17 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
-	//! シェーダープログラムクラス
+	//! シェーダープログラム格納クラス
 	/*!
+	 *	このクラスは、シェーダーのプログラムソースを格納するための機能を提供します。
+	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
 	 */
 	public ref class fk_ShaderProgram
 	{
 	public:
+
+		//! コンストラクタ
 		fk_ShaderProgram();
 		virtual ~fk_ShaderProgram();
 

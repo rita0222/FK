@@ -184,21 +184,13 @@ namespace FK_CLI {
 		postDrawLeft = nullptr;
 		preDrawRight = nullptr;
 		postDrawRight = nullptr;
-		delete pWin;
-		pWin = nullptr;
+		delete scene;
+		scene = nullptr;
+		this->!fk_AppWindow();
 	}
 
 	fk_AppWindow::!fk_AppWindow()
 	{
-		preInit = nullptr;
-		postInit = nullptr;
-		preDraw = nullptr;
-		postDraw = nullptr;
-		preDrawLeft = nullptr;
-		postDrawLeft = nullptr;
-		preDrawRight = nullptr;
-		postDrawRight = nullptr;
-		pWin->SetFinalizeMode();
 		delete pWin;
 		pWin = nullptr;
 	}

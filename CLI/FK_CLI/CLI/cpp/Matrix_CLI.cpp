@@ -39,12 +39,6 @@ namespace FK_CLI {
 
 	fk_Angle::~fk_Angle()
 	{
-		this->!fk_Angle();
-	}
-
-	fk_Angle::!fk_Angle()
-	{
-		return;
 	}
 
 	double fk_Angle::h::get()

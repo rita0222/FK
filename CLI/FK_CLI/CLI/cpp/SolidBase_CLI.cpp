@@ -16,11 +16,6 @@ namespace FK_CLI {
 
 	fk_SolidBase::~fk_SolidBase()
 	{
-		this->!fk_SolidBase();
-	}
-
-	fk_SolidBase::!fk_SolidBase()
-	{
 	}
 
 	void fk_SolidBase::MakeIFSet(int argFNum, int argPNum, IEnumerable<int>^ argIFSet,

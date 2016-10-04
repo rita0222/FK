@@ -14,11 +14,6 @@ namespace FK_CLI {
 
 	fk_Loop::~fk_Loop()
 	{
-		this->!fk_Loop();
-	}
-
-	fk_Loop::!fk_Loop()
-	{
 	}
 
 	fk_Half^ fk_Loop::OneHalf::get(void)

@@ -13,11 +13,6 @@ namespace FK_CLI {
 
 	fk_MatrixAdmin::~fk_MatrixAdmin()
 	{
-		this->!fk_MatrixAdmin();
-	}
-
-	fk_MatrixAdmin::!fk_MatrixAdmin()
-	{
 	}
 
 	fk_Vector^ fk_MatrixAdmin::Position::get(void)

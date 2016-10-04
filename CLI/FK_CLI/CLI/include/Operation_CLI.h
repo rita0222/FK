@@ -50,7 +50,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Operation(bool argNewFlg);
 		~fk_Operation();
-		!fk_Operation();
 #endif
 
 		//! 履歴保存モードプロパティ

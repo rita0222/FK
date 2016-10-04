@@ -59,9 +59,6 @@ namespace FK_CLI {
 		//! デストラクタ
 		~fk_Angle();
 
-		//! ファイナライザ
-		!fk_Angle();
-
 		//! ヘディング角プロパティ
 		property double h {
 			double get();

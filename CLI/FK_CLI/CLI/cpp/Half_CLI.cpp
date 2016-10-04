@@ -16,11 +16,6 @@ namespace FK_CLI {
 
 	fk_Half::~fk_Half()
 	{
-		this->!fk_Half();
-	}
-
-	fk_Half::!fk_Half()
-	{
 	}
 
 	fk_Vertex^ fk_Half::Vertex::get(void)

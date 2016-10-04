@@ -34,7 +34,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Topology(bool argNewFlg);
 		~fk_Topology();
-		!fk_Topology();
 #endif
 		
 		//! IDプロパティ

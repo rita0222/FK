@@ -13,11 +13,6 @@ namespace FK_CLI {
 
 	fk_Topology::~fk_Topology()
 	{
-		this->!fk_Topology();
-	}
-
-	fk_Topology::!fk_Topology()
-	{
 	}
 
 	int fk_Topology::ID::get(void)

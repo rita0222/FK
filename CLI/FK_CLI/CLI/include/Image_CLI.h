@@ -8,39 +8,6 @@
 
 namespace FK_CLI
 {
-	/*	
-	public enum class fk_ImageStatus {
-		OK,
-		OPENERROR,
-		DATAERROR,
-		READERROR
-	};
-
-	public enum class fk_ImageFix {
-		FIX_LARGE,
-		FIX_SMALL,
-		FIX_64,
-		FIX_128,
-		FIX_256,
-		FIX_512,
-		FIX_1024,
-		FIX_2048,
-		FIX_4096,
-		FIX_8192,
-		FIX_16384,
-		FIX_32768,
-		FIX_65536
-	};
-
-	public enum class fk_SnapProcMode {
-		FK_GL_FRONT,
-		FK_GL_BACK,
-		FK_WIN32_GDI,
-		FK_D3D_WINDOW,
-		FK_D3D_FULL
-	};
-	*/
-	
 	//! 画像フォーマットを表す列挙型
 	public enum class fk_ImageType {
 		BMP,	//!< Windows Bitmap (BMP) 形式

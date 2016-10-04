@@ -15,11 +15,6 @@ namespace FK_CLI {
 
 	fk_Reference::~fk_Reference()
 	{
-		this->!fk_Reference();
-	}
-
-	fk_Reference::!fk_Reference()
-	{
 	}
 
 	fk_Half^ fk_Reference::GetOneHOnV(fk_Vertex^ argV)

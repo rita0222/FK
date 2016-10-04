@@ -34,7 +34,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Half(bool argNewFlg);
 		~fk_Half();
-		!fk_Half();
 #endif
 
 		//! 頂点プロパティ

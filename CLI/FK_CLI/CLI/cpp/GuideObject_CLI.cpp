@@ -21,9 +21,7 @@ namespace FK_CLI {
 
 	fk_GuideObject::~fk_GuideObject()
 	{
-		if(pGuide == nullptr) return;
-		if(dFlg == true) delete pGuide;
-		pGuide = nullptr;
+		this->!fk_GuideObject();
 	}
 
 	fk_GuideObject::!fk_GuideObject()

@@ -14,11 +14,6 @@ namespace FK_CLI {
 
 	fk_Fog::~fk_Fog()
 	{
-		this->!fk_Fog();
-	}
-
-	fk_Fog::!fk_Fog()
-	{
 	}
 
 	void fk_Fog::FogMode::set(fk_FogMode argMode)

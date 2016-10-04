@@ -25,6 +25,9 @@ namespace FK_ShaderPlugin
 		//! デストラクタ
 		~fk_ShaderBinder();
 
+		//! ファイナライザ
+		!fk_ShaderBinder();
+		
 		//! シェーダープログラムプロパティ
 		property fk_ShaderProgram^ Program;
 

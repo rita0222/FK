@@ -38,7 +38,6 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Edge(bool argNewFlg);
 		~fk_Edge();
-		!fk_Edge();
 #endif
 		
 		//! 左側半稜線プロパティ

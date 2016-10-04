@@ -16,11 +16,6 @@ namespace FK_CLI {
 
 	fk_DataAccess::~fk_DataAccess()
 	{
-		this->!fk_DataAccess();
-	}
-
-	fk_DataAccess::!fk_DataAccess()
-	{
 	}
 
 	int fk_DataAccess::VNum::get()
