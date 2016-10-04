@@ -25,7 +25,7 @@ class fk_RDSParser : public fk_ParserBase {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2016, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -61,7 +61,7 @@ class fk_RDSParser : public fk_ParserBase {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2015, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2016, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
