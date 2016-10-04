@@ -14,7 +14,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute(L"")];
 [assembly:AssemblyCompanyAttribute(L"")];
 [assembly:AssemblyProductAttribute(L"FK_CLI")];
-[assembly:AssemblyCopyrightAttribute(L"Copyright (c) 2015 Fine Kernel Project")];
+[assembly:AssemblyCopyrightAttribute(L"Copyright (c) 2016 Fine Kernel Project")];
 [assembly:AssemblyTrademarkAttribute(L"")];
 [assembly:AssemblyCultureAttribute(L"")];
 
