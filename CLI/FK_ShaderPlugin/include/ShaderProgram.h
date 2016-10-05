@@ -25,6 +25,8 @@ namespace FK_ShaderPlugin
 		property String^ LastError { String^ get(void); };
 
 		bool Validate(void);
+		bool LoadVertexShader(String^);
+		bool LoadFragmentShader(String^);
 
 	private:
 		UInt32 Compile(String^ code, UInt32 kind);

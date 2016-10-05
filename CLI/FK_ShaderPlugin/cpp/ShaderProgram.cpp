@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <vcclr.h>
 
+using namespace System::IO;
+
 namespace FK_ShaderPlugin {
 
 	fk_ShaderProgram::fk_ShaderProgram() : idProgram(0), idVertex(0), idFragment(0)
@@ -90,6 +92,54 @@ namespace FK_ShaderPlugin {
 
 		// リンク
 		return Link();
+	}
+
+	bool fk_ShaderProgram::LoadVertexShader(String^ argFileName)
+	{
+		try {
+			StreamReader^ din = File::OpenText(argFileName);
+			String^ str;
+
+			VertexShaderSource = "";
+			while ((str = din->ReadLine()) != nullptr) {
+				VertexShaderSource += str;
+			}
+		}
+		catch (Exception^ e) {
+			if (dynamic_cast<FileNotFoundException^>(e)) {
+				lastError = "File " + argFileName + " not found.";
+			}
+			else {
+				lastError = "Problem Reading file " + argFileName + " .";
+			}
+			return false;
+		}
+
+		return true;
+	}
+
+	bool fk_ShaderProgram::LoadFragmentShader(String^ argFileName)
+	{
+		try {
+			StreamReader^ din = File::OpenText(argFileName);
+			String^ str;
+
+			FragmentShaderSource = "";
+			while ((str = din->ReadLine()) != nullptr) {
+				FragmentShaderSource += str;
+			}
+		}
+		catch (Exception^ e) {
+			if (dynamic_cast<FileNotFoundException^>(e)) {
+				lastError = "File " + argFileName + " not found.";
+			}
+			else {
+				lastError = "Problem Reading file " + argFileName + " .";
+			}
+			return false;
+		}
+
+		return true;
 	}
 
 	UInt32 fk_ShaderProgram::ProgramId::get(void)
