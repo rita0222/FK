@@ -33,18 +33,174 @@ namespace FK_ShaderPlugin
 		 */
 		property String^ LastError { String^ get(void); };
 
+		//! float 型 uniform 変数設定メソッド
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	float 型の uniform 変数を渡す設定を行います。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す値
+		 */
 		void Register(String^ name, float value);
+
+		//! float 配列型 uniform 変数設定メソッド
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	float 配列型の uniform 変数を渡す設定を行います。
+		 *	配列のサイズは 1 から 4 までで、
+		 *	GLSL 内での型は配列サイズが 1 から順に float, vec2, vec3, vec4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す配列
+		 */
 		void Register(String^ name, array<float>^ value);
+
+		//! int 型 uniform 変数設定メソッド
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	int 型の uniform 変数を渡す設定を行います。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す値
+		 */
 		void Register(String^ name, int value);
+
+		//! int 配列型 uniform 変数設定メソッド
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	int 配列型の uniform 変数を渡す設定を行います。
+		 *	配列のサイズは 1 から 4 までで、
+		 *	GLSL 内での型は配列サイズが 1 から順に int, ivec2, ivec3, ivec4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す配列
+		 */
 		void Register(String^ name, array<int>^ value);
+		
+		//! 行列型 uniform 変数設定メソッド
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	行列型の uniform 変数を渡す設定を行います。
+		 *	このメソッドの引数は fk_Matrix 型変数となり、
+		 *	GLSL コード内での型は mat4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す行列
+		 */
 		void Register(String^ name, fk_Matrix^ value);
+
+		//! uniform 変数解除メソッド
+		/*!
+		 *	各種 Register() メソッドで設定した uniform 変数を解除します。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\return
+		 *		uniform 変数が存在していた場合は解除し true を返します。
+		 *		変数が存在していなかった場合は false を返します。
+		 */
 		bool Unregister(String^ name);
 
+		//! float 配列型 attribute 変数設定メソッド
+		/*!
+		 *	このメソッドは、
+		 *	バーテックスシェーダーに対し float 配列型の attribute 変数を渡す設定を行います。
+		 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
+		 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
+		 *	GLSL 内での型は、要素数が 1 から順に float, vec2, vec3, vec4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		attribute 変数の要素数
+		 *
+		 *	\param[in]	value
+		 *		attribute 変数に渡す値の配列
+		 */
 		void AddAttribute(String^ name, int dim, array<float>^ value);
+
+		//! int 配列型 attribute 変数設定メソッド
+		/*!
+		 *	このメソッドは、
+		 *	バーテックスシェーダーに対し int 配列型の attribute 変数を渡す設定を行います。
+		 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
+		 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
+		 *	GLSL 内での型は、要素数が 1 から順に int, ivec2, ivec3, ivec4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		attribute 変数の要素数
+		 *
+		 *	\param[in]	value
+		 *		attribute 変数に渡す値の配列
+		 */
 		void AddAttribute(String^ name, int dim, array<int>^ value);
+
+		//! attribute 変数解除メソッド
+		/*!
+		 *	各種 AddAttribute() メソッドで設定した attribute 変数を解除します。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\return
+		 *		attribute 変数が存在していた場合は解除し true を返します。
+		 *		変数が存在していなかった場合は false を返します。
+		 */
 		bool RemoveAttribute(String^ name);
 
+		//! 参照テクスチャ設定メソッド
+		/*!
+		 *	GLSLコード内の参照テクスチャを設定します。
+		 *	ここで設定したテクスチャは、
+		 *	GLSL内では sampler2D 型 uniform 変数として扱われます。
+		 *	複数のテクスチャを設定した場合、
+		 *	GLSLコード内で変数を宣言した順番に割り振られます。
+		 *
+		 *	\param[in]	unit
+		 *		シェーダー内でのテクスチャ ID を指定します。
+		 *		0 から 31 までを指定することができます。
+		 *		既に使用している ID を用いた場合、
+		 *		前にその ID を用いていたテクスチャの設定は破棄されます。
+		 *		GLSLコード内では、複数の sampler2D 変数に対し ID の若い順に割り振られます。
+		 *
+		 *	\param[in]	texture
+		 *		テクスチャオブジェクト。詳細は fk_TextureSampler を参照して下さい。
+		 *
+		 *	\return
+		 *		設定に成功すれば true を、失敗すれば false を返します。
+		 */
 		bool AttachTexture(int unit, fk_TextureSampler^ texture);
+
+		//! 参照テクスチャ解除メソッド
+		/*!
+		 *	AttachTexture() メソッドにて設定した参照テクスチャを解除します。
+		 *
+		 *	\param[in]	unit
+		 *		テクスチャ ID
+		 *
+		 *	\return
+		 *		解除に成功すれば true を、失敗すれば false を返します。
+		 */
 		bool DetachTexture(int unit);
 
 	internal:
