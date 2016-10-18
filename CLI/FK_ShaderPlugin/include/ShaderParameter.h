@@ -8,12 +8,29 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
+	//! シェーダーパラメーター管理クラス
+	/*!
+	 *	このクラスは、シェーダープログラムに対してパラメーターを渡すための機能を提供します。
+	 *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
+	 *	fk_ShaderBinder の Parameter プロパティとして利用することがほとんどです。
+	 *
+	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
+	 */
+
 	public ref class fk_ShaderParameter
 	{
 	public:
+		//! コンストラクタ
 		fk_ShaderParameter();
+
+		//! デストラクタ
 		virtual ~fk_ShaderParameter();
 
+		//! エラーメッセージプロパティ
+		/*!
+		 *	シェーダーに関するエラーが生じた場合に、
+		 *	エラーメッセージの文字列をこのプロパティから取得できます。
+		 */
 		property String^ LastError { String^ get(void); };
 
 		void Register(String^ name, float value);

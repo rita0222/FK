@@ -8,6 +8,10 @@ namespace FK_ShaderPlugin
 	//! シェーダープログラム格納クラス
 	/*!
 	 *	このクラスは、シェーダーのプログラムソースを格納するための機能を提供します。
+	 *	インスタンス内部でバーテックス(頂点)シェーダーと
+	 *	フラグメント(ピクセル)シェーダーのソースコードを管理します。
+	 *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
+	 *	fk_ShaderBinder の Program プロパティとして利用することがほとんどです。
 	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
 	 */
@@ -17,16 +21,90 @@ namespace FK_ShaderPlugin
 
 		//! コンストラクタ
 		fk_ShaderProgram();
+
+		//! デストラクタ
 		virtual ~fk_ShaderProgram();
 
+		//! バーテックスシェーダーコードプロパティ
+		/*!
+		 *	バーテックス(頂点)シェーダーのコードの設定や取得を行います。
+		 *	バーテックスシェーダーのコードを設定する際は、
+		 *	本プロパティに直接コードを書き込むか、
+		 *	LoadVertexShader() メソッドでコードが格納されているファイル名を指定して下さい。
+		 */
 		property String^ VertexShaderSource;
+
+		//! フラグメントシェーダーコードプロパティ
+		/*!
+		 *	フラグメント(ピクセル)シェーダーのコードの設定や取得を行います。
+		 *	フラグメントシェーダーのコードを設定する際は、
+		 *	本プロパティに直接コードを書き込むか、
+		 *	LoadVertexShader() メソッドでコードが格納されているファイル名を指定して下さい。
+		 */
 		property String^ FragmentShaderSource;
+
+		//! IDプロパティ
+		/*!
+		 *	GPU からシェーダープログラムに割り振られた ID を取得します。
+		 *
+		 *	\note
+		 *		この ID は、具体的には OpenGL の関数である
+		 *		glCreateProgram() による返値のことです。
+		 */
 		property UInt32 ProgramId { UInt32 get(void); };
+
+		//! エラーメッセージプロパティ
+		/*!
+		 *	シェーダーに関するエラーが生じた場合に、
+		 *	エラーメッセージの文字列をこのプロパティから取得できます。
+		 */
 		property String^ LastError { String^ get(void); };
 
+		//! バーテックスシェーダーコード入力メソッド
+		/*!
+		 *	バーテックス(頂点)シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	VertexShaderSource プロパティにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 Validate() メソッドを呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool LoadVertexShader(String^ fileName);
+
+		//! フラグメントシェーダーコード入力メソッド
+		/*!
+		 *	フラグメント(ピクセル)シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	FragmentShaderSource プロパティにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 Validate() メソッドを呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool LoadFragmentShader(String^ fileName);
+
+		//! シェーダープログラムコンパイルメソッド
+		/*!
+		 *	VertexShaderSource, FragmentShaderSource
+		 *	に格納されているコードのコンパイルを行います。
+		 *
+		 *	\return
+		 *		コンパイルに成功すれば true を、失敗すれば false を返します。
+		 *		失敗した場合は、
+		 *		LastError プロパティでエラーメッセージを参照できます。
+		 */
 		bool Validate(void);
-		bool LoadVertexShader(String^);
-		bool LoadFragmentShader(String^);
 
 	private:
 		UInt32 Compile(String^ code, UInt32 kind);

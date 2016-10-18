@@ -19,6 +19,11 @@ namespace FK_ShaderPlugin
 		DEPTH_BUFFER,
 	};
 
+	//! シェーダー入出力テクスチャークラス
+	/*
+	 *
+	 */
+	
 	public ref class fk_TextureSampler : fk_MeshTexture
 	{
 	public:

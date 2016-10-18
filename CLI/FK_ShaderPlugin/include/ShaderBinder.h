@@ -8,8 +8,26 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
-	//! シェーダー・モデル連携用クラス
+	//! シェーダープログラム統括クラス
 	/*!
+	 *	このクラスは、FK におけるシェーダー全体を統括する機能を提供します。
+	 *	FK でシェーダーを扱う場合は、
+	 *	基本的にはこの fk_ShaderBinder クラスによるインスタンスを用いて制御を行います。
+	 *
+	 *	このクラスの役割は大きく以下の3種類となります。
+	 *		- シェーダープログラム管理: \n
+	 *			Program プロパティを用いて、シェーダープログラムの設定を行います。
+	 *		- シェーダーパラメーター管理: \n
+	 *			Parameter プロパティを用いて、
+	 *			C# 側からシェーダー側に渡すパラメーターを設定します。
+	 *		- モデル管理: \n
+	 *			シェーダーを適用するモデルを BindModel() メソッドを用いて設定します。
+	 *
+	 *	Program プロパティの扱い方については fk_ShaderProgram を、
+	 *	Parameter プロパティの扱い方については
+	 *	fk_ShaderParameter を参照して下さい。
+	 *	また、入出力用テクスチャについては fk_TextureSample を参照して下さい。
+	 *
 	 *	\sa fk_ShaderProgram, fk_ShaderParameter, fk_TextureSampler, fk_Model
 	 */
 
@@ -17,31 +35,64 @@ namespace FK_ShaderPlugin
 	{
 	public:
 		//! コンストラクタ1
+		/*!
+		 *	インスタンスを生成します。
+		 *	シェーダープログラムおよびシェーダーパラメーターは何も設定されません。
+		 */
 		fk_ShaderBinder();
 
 		//! コンストラクタ2
+		/*!
+		 *	インスタンスを生成する際に、
+		 *	プログラムとパラメーターを初期設定するコンストラクタです。
+		 *
+		 *	\param[in]	prog
+		 *		シェーダープログラム
+		 *
+		 *	\param[in]	param
+		 *		シェーダーパラメーター
+		 */
 		fk_ShaderBinder(fk_ShaderProgram^ prog, fk_ShaderParameter^ param);
 
 		//! デストラクタ
 		~fk_ShaderBinder();
 
 		//! シェーダープログラムプロパティ
+		/*!
+		 *	シェーダープログラムを設定します。
+		 *	詳細は fk_ShaderProgram のマニュアルを参照して下さい。
+		 */
 		property fk_ShaderProgram^ Program;
 
 		//! シェーダーパラメータープロパティ
+		/*!
+		 *	シェーダープログラムに渡すパラメーターを設定します。
+		 *	詳細は fk_ShaderParameter のマニュアルを参照して下さい。
+		 */
 		property fk_ShaderParameter^ Parameter;
 
 		//! シェーダーモデル連携設定関数
 		/*!
+		 *	Program プロパティに設定されているシェーダープログラムを適用するモデルを設定します。
+		 *	1つの fk_ShaderBinder インスタンスによるプログラムを、
+		 *	複数のモデルに対して適用することが可能です。
+		 *	モデルへのシェーダー適用を外すには、 UnbindModel() メソッドを利用して下さい。
 		 *
+		 *	また、1つのモデルに対し、複数のシェーダーを適用することも可能です。
+		 *	その場合は、BindModel() によって適用した順番に処理がなされます。
 		 *
+		 *	\param[in]	model
+		 *		シェーダー適用モデルインスタンス
 		 */
 		void BindModel(fk_Model^ model);
 
 		//! シェーダーモデル連携解除関数
 		/*!
+		 *	BindModel() メソッドによってシェーダーを適用したモデルに対し、
+		 *	適用を外します。
 		 *
-		 *
+		 *	\param[in]	model
+		 *		シェーダー適用済モデルインスタンス
 		 */
 		void UnbindModel(fk_Model^ model);
 
