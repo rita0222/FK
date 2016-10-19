@@ -8,33 +8,97 @@ namespace FK_ShaderPlugin
 {
 	// モデルの描画モードを表す列挙型
 	public enum class fk_TexWrapMode {
-		REPEAT,
-		CLAMP,
+		REPEAT,		//!< 繰り返し式
+		CLAMP,		//!< 縁部伸張式
 	};
 
 	// フレームバッファのサンプリングソースを表す列挙型
 	public enum class fk_SamplerSource {
-		TEXTURE_IMAGE,
-		COLOR_BUFFER,
-		DEPTH_BUFFER,
+		TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
+		COLOR_BUFFER,	//!< 画面色情報参照
+		DEPTH_BUFFER,	//!< 画面深度情報参照
 	};
 
 	//! シェーダー入出力テクスチャークラス
-	/*
+	/*!
+	 *	このクラスは、シェーダープログラムでの参照テクスチャを管理する機能を提供します。
+	 *	GLSL プログラムにおいて、テクスチャデータは
+	 *	sampler2D という型の変数として扱います。
+	 *	このクラスを利用することで、
+	 *	フラグメントシェーダーの uniform 変数として参照テクスチャを
+	 *	C# プログラムとリンクすることができます。
 	 *
+	 *	最低限必要な手順は以下の通りとなります。
+	 *		-# 本クラスのインスタンスを生成する。
+	 *		-# SamplerSource プロパティを利用用途に応じて適切な値を設定する。
+	 *		-# fk_ShaderBinder 型変数の Parameter プロパティに対し、
+	 *			fk_ShaderParameter::AttachTexture() メソッドによって連携設定を行う。
+	 *		-# フラグメントシェーダー内で uniform sampler2D 型変数を生成する。
+	 *
+	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_MeshTexture
 	 */
-	
 	public ref class fk_TextureSampler : fk_MeshTexture
 	{
 	public:
+
+		//! コンストラクタ1
+		/*!
+		 *	参照テクスチャを生成します。
+		 *	引数に何も入れなかった場合は、C# 側で画像情報の設定や参照は行えません。
+		 */
 		fk_TextureSampler();
+
+		//! コンストラクタ2
+		/*!
+		 *	参照テクスチャを生成します。
+		 *	引数に fk_Image 型インスタンスを入力することにより、
+		 *	その画像情報を GLSL 側に転送することや、
+		 *	GLSL 側で生成した画像情報を C# 側で参照することができます。
+		 *
+		 *	\param[in]	image
+		 *		参照テクスチャ用画像データ
+		 */
 		fk_TextureSampler(fk_Image^ image);
 
+		//! デストラクタ
 		~fk_TextureSampler();
 
+		//! テクスチャ外周部設定プロパティ
+		/*!
+		 *	テクスチャ描画の際、外周部についてどのように描画するかを設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- REPEAT \n
+		 *		内部の画像を繰り返して描画していきます。
+		 *
+		 *	- CLAMP \n
+		 *		縁部の色値を伸張して描画します。
+		 *	.
+		 *	デフォルトでは REPEAT に設定されています。
+		 */
 		property fk_TexWrapMode WrapMode;
+
+		//! テクスチャ参照情報設定プロパティ
+		/*!
+		 *	参照テクスチャが参照する情報を設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- TEXTURE_IMAGE \n
+		 *		コンストラクタで設定した
+		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
+		 *	- COLOR_BUFFER \n
+		 *		描画シーン全体の色値情報を参照先とします。
+		 *	- DEPTH_BUFFER \n
+		 *		描画シーン全体の深度情報を参照先とします。
+		 *	.
+		 *	デフォルトは TEXTURE_IMAGE に設定されています。
+		 */
 		property fk_SamplerSource SamplerSource;
 
+		//! 初期化メソッド
+		/*!
+		 *	現在設定されているテクスチャ情報を解除し、初期化を行います。
+		 */
 		void Init(void);
 
 	internal:
