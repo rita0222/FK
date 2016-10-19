@@ -7,7 +7,7 @@ namespace FK_ShaderPlugin
 	fk_TextureSampler::fk_TextureSampler() : fk_MeshTexture(true)
 	{
 		SamplerSource = fk_SamplerSource::TEXTURE_IMAGE;
-		WrapMode = fk_SamplerSource::REPEAT;
+		WrapMode = fk_TexWrapMode::REPEAT;
 		loaded = false;
 		Init();
 	}
@@ -15,7 +15,7 @@ namespace FK_ShaderPlugin
 	fk_TextureSampler::fk_TextureSampler(fk_Image^ argImage) : fk_MeshTexture(argImage)
 	{
 		SamplerSource = fk_SamplerSource::TEXTURE_IMAGE;
-		WrapMode = fk_SamplerSource::REPEAT;
+		WrapMode = fk_TexWrapMode::REPEAT;
 		loaded = false;
 		Init();
 	}
