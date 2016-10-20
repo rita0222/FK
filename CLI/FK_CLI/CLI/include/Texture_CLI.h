@@ -253,13 +253,10 @@ namespace FK_CLI
 		 *	テクスチャ描画の際、外周部についてどのように描画するかを設定します。
 		 *	設定できる種類は以下のとおりです。
 		 *
-		 *	- REPEAT \n
-		 *		内部の画像を繰り返して描画していきます。
-		 *
-		 *	- CLAMP \n
-		 *		縁部の色値を伸張して描画します。
+		 *	- fk_TexWrapMode.REPEAT: 内部の画像を繰り返して描画していきます。
+		 *	- fk_TexWrapMode.CLAMP: 縁部の色値を伸張して描画します。
 		 *	.
-		 *	デフォルトでは REPEAT に設定されています。
+		 *	デフォルトでは fk_TexWrapMode.REPEAT に設定されています。
 		 */
 		property fk_TexWrapMode WrapMode {
 			fk_TexWrapMode get();

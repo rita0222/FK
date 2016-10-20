@@ -16,19 +16,20 @@ namespace FK_ShaderPlugin
 	 *
 	 *	このクラスの役割は大きく以下の3種類となります。
 	 *		- シェーダープログラム管理: \n
-	 *			Program プロパティを用いて、シェーダープログラムの設定を行います。
+	 *			fk_ShaderBinder.Program プロパティを用いて、
+	 *			シェーダープログラムの設定を行います。
 	 *		- シェーダーパラメーター管理: \n
-	 *			Parameter プロパティを用いて、
+	 *			fk_ShaderBinder.Parameter プロパティを用いて、
 	 *			C# 側からシェーダー側に渡すパラメーターを設定します。
 	 *		- モデル管理: \n
 	 *			シェーダーを適用するモデルを BindModel() メソッドを用いて設定します。
 	 *
-	 *	Program プロパティの扱い方については fk_ShaderProgram を、
-	 *	Parameter プロパティの扱い方については
+	 *	fk_ShaderBinder.Program プロパティの扱い方については fk_ShaderProgram を、
+	 *	fk_ShaderBinder.Parameter プロパティの扱い方については
 	 *	fk_ShaderParameter を参照して下さい。
-	 *	また、入出力用テクスチャについては fk_TextureSample を参照して下さい。
+	 *	また、入出力用テクスチャについては fk_TextureSampler を参照して下さい。
 	 *
-	 *	\sa fk_ShaderProgram, fk_ShaderParameter, fk_TextureSampler, fk_Model
+	 *	\sa fk_ShaderProgram, fk_ShaderParameter, fk_TextureSampler, FK_CLI::fk_Model
 	 */
 
    public ref class fk_ShaderBinder
@@ -79,7 +80,7 @@ namespace FK_ShaderPlugin
 		 *	モデルへのシェーダー適用を外すには、 UnbindModel() メソッドを利用して下さい。
 		 *
 		 *	また、1つのモデルに対し、複数のシェーダーを適用することも可能です。
-		 *	その場合は、BindModel() によって適用した順番に処理がなされます。
+		 *	その場合は、 BindModel() によって適用した順番に処理がなされます。
 		 *
 		 *	\param[in]	model
 		 *		シェーダー適用モデルインスタンス

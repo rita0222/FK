@@ -11,7 +11,8 @@ namespace FK_ShaderPlugin
 	 *	インスタンス内部でバーテックス(頂点)シェーダーと
 	 *	フラグメント(ピクセル)シェーダーのソースコードを管理します。
 	 *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
-	 *	fk_ShaderBinder の Program プロパティとして利用することがほとんどです。
+	 *	fk_ShaderBinder の fk_ShaderBinder.Program
+	 *	プロパティとして利用することがほとんどです。
 	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
 	 */
@@ -65,7 +66,7 @@ namespace FK_ShaderPlugin
 		 *	バーテックス(頂点)シェーダーのコードが記述されているファイルから、
 		 *	コードを読み込みます。
 		 *	読み込みに成功した場合、
-		 *	VertexShaderSource プロパティにその内容が格納されます。
+		 *	fk_ShaderProgram.VertexShaderSource プロパティにその内容が格納されます。
 		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
 		 *	実際に利用するには、 Validate() メソッドを呼ぶ必要があります。
 		 *
@@ -82,7 +83,7 @@ namespace FK_ShaderPlugin
 		 *	フラグメント(ピクセル)シェーダーのコードが記述されているファイルから、
 		 *	コードを読み込みます。
 		 *	読み込みに成功した場合、
-		 *	FragmentShaderSource プロパティにその内容が格納されます。
+		 *	fk_ShaderProgram.FragmentShaderSource プロパティにその内容が格納されます。
 		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
 		 *	実際に利用するには、 Validate() メソッドを呼ぶ必要があります。
 		 *
@@ -96,13 +97,13 @@ namespace FK_ShaderPlugin
 
 		//! シェーダープログラムコンパイルメソッド
 		/*!
-		 *	VertexShaderSource, FragmentShaderSource
+		 *	fk_ShaderProgram.VertexShaderSource, fk_ShaderProgram.FragmentShaderSource
 		 *	に格納されているコードのコンパイルを行います。
 		 *
 		 *	\return
 		 *		コンパイルに成功すれば true を、失敗すれば false を返します。
 		 *		失敗した場合は、
-		 *		LastError プロパティでエラーメッセージを参照できます。
+		 *		fk_ShaderProgram.LastError プロパティでエラーメッセージを参照できます。
 		 */
 		bool Validate(void);
 

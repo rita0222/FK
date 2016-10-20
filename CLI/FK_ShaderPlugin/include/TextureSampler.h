@@ -32,8 +32,8 @@ namespace FK_ShaderPlugin
 	 *
 	 *	最低限必要な手順は以下の通りとなります。
 	 *		-# 本クラスのインスタンスを生成する。
-	 *		-# SamplerSource プロパティを利用用途に応じて適切な値を設定する。
-	 *		-# fk_ShaderBinder 型変数の Parameter プロパティに対し、
+	 *		-# fk_TextureSampler.SamplerSource プロパティを利用用途に応じて適切な値を設定する。
+	 *		-# fk_ShaderBinder 型変数の fk_ShaderBinder.Parameter プロパティに対し、
 	 *			fk_ShaderParameter::AttachTexture() メソッドによって連携設定を行う。
 	 *		-# フラグメントシェーダー内で uniform sampler2D 型変数を生成する。
 	 *
@@ -53,7 +53,7 @@ namespace FK_ShaderPlugin
 		//! コンストラクタ2
 		/*!
 		 *	参照テクスチャを生成します。
-		 *	引数に fk_Image 型インスタンスを入力することにより、
+		 *	引数に FK_CLI::fk_Image 型インスタンスを入力することにより、
 		 *	その画像情報を GLSL 側に転送することや、
 		 *	GLSL 側で生成した画像情報を C# 側で参照することができます。
 		 *
@@ -70,15 +70,15 @@ namespace FK_ShaderPlugin
 		 *	参照テクスチャが参照する情報を設定します。
 		 *	設定できる種類は以下のとおりです。
 		 *
-		 *	- TEXTURE_IMAGE \n
+		 *	- fk_SamplerSource.TEXTURE_IMAGE: 
 		 *		コンストラクタで設定した
 		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
-		 *	- COLOR_BUFFER \n
+		 *	- fk_SamplerSource.COLOR_BUFFER: 
 		 *		描画シーン全体の色値情報を参照先とします。
-		 *	- DEPTH_BUFFER \n
+		 *	- fk_SamplerSource.DEPTH_BUFFER: 
 		 *		描画シーン全体の深度情報を参照先とします。
 		 *	.
-		 *	デフォルトは TEXTURE_IMAGE に設定されています。
+		 *	デフォルトは fk_SamplerSource.TEXTURE_IMAGE に設定されています。
 		 */
 		property fk_SamplerSource SamplerSource;
 

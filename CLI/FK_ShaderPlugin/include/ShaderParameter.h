@@ -12,7 +12,8 @@ namespace FK_ShaderPlugin
 	/*!
 	 *	このクラスは、シェーダープログラムに対してパラメーターを渡すための機能を提供します。
 	 *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
-	 *	fk_ShaderBinder の Parameter プロパティとして利用することがほとんどです。
+	 *	fk_ShaderBinder クラスの fk_ShaderBinder.Parameter
+	 *	プロパティとして利用することがほとんどです。
 	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
 	 */
