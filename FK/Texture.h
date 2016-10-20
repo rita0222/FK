@@ -21,6 +21,12 @@ enum fk_TexRendMode {
 	FK_TEX_REND_SMOOTH	//!< 高品質
 };
 
+//! テクスチャ外周部の描画モードを表す列挙型
+enum fk_TexWrapMode {
+	FK_TEX_WRAP_REPEAT,		//!< 繰り返し式
+	FK_TEX_WRAP_CLAMP,		//!< 縁部伸張式
+};
+
 //! テクスチャ座標を管理するクラス
 /*!
  *	このクラスは、テクスチャ座標に関する基本的な機能を提供します。
@@ -88,30 +94,6 @@ class fk_TexCoord {
 
 class fk_Texture: public fk_Shape {
 	friend class		fk_TextureDraw;
-
- private:
-	fk_Image			*image;
-	fk_Image			localImage;
-	fk_TexMode			texMode;
-	fk_TexRendMode		texRendMode;
-	fk_Palette			localPal;
-
-	bool				GetInitFlag(void);
-	void				SetInitFlag(bool);
-	fk_TexID			GetTexID(void);
-	void				SetTexID(const fk_TexID);
-
-	static void			ClearTexState(fk_Image *);
-
- protected:
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-	void				BaseInit(void);
-	bool				IsLocalImage(void);
-	void				SetLocalImage(void);
-
-#endif
 
  public:
 
@@ -312,6 +294,28 @@ class fk_Texture: public fk_Shape {
 	 */
 	fk_TexRendMode			getTexRendMode(void);
 
+	//! テクスチャ外周部モード設定関数
+	/*!
+	 *	テクスチャ描画の際、外周部についてどのように描画するかを設定します。
+	 *	設定できる種類は以下のとおりです。
+	 *
+	 *	- FK_TEX_WRAP_REPEAT: 内部の画像を繰り返して描画していきます。
+	 *	- FK_TEX_WRAP_CLAMP: 縁部の色値を伸張して描画します。
+	 *	.
+	 *	なお、デフォルトでは FK_TEX_WRAP_REPEAT に設定されています。
+	 *
+	 *	\param[in]	mode	外周部モード
+	 */
+	void					setTexWrapMode(fk_TexWrapMode mode);
+
+	//! テクスチャ外周部モード取得関数
+	/*!
+	 *	現在設定されているテクスチャ外周部モードを取得します。
+	 *
+	 *	\return		外周部モード
+	 */
+	fk_TexWrapMode			getTexWrapMode(void);
+	
 	//! 一様色初期化関数1
 	/*!
 	 *	内部の画像ピクセルを、すべて同じ色で初期化します。
@@ -353,6 +357,32 @@ class fk_Texture: public fk_Shape {
 	 *	\sa fk_Image::getBufPointer()
 	 */
 	const fk_ImType *		getImageBuf(void);
+
+protected:
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+	void				BaseInit(void);
+	bool				IsLocalImage(void);
+	void				SetLocalImage(void);
+
+#endif
+
+private:
+	fk_Image			*image;
+	fk_Image			localImage;
+	fk_TexMode			texMode;
+	fk_TexRendMode		texRendMode;
+	fk_TexWrapMode		texWrapMode;
+	fk_Palette			localPal;
+
+	bool				GetInitFlag(void);
+	void				SetInitFlag(bool);
+	fk_TexID			GetTexID(void);
+	void				SetTexID(const fk_TexID);
+
+	static void			ClearTexState(fk_Image *);
+
 };
 
 //! 矩形テクスチャを生成、管理するクラス

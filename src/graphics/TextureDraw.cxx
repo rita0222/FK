@@ -432,9 +432,19 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 
 	glGenTextures(1, &tmpTexName);
 	glBindTexture(GL_TEXTURE_2D, tmpTexName);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+	switch(argTexObj->getTexWrapMode()) {
+	  case FK_TEX_WRAP_REPEAT:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		break;
+
+	  case FK_TEX_WRAP_CLAMP:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		break;
+	}
+	
 	switch(argTexObj->getTexRendMode()) {
 	  case FK_TEX_REND_NORMAL:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -577,8 +587,19 @@ void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 	if(bindMode == false || curID != oldTexID) {
 		glEnable(GL_TEXTURE_2D);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		
+		switch(argTexObj->getTexWrapMode()) {
+		  case FK_TEX_WRAP_REPEAT:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			break;
+
+		  case FK_TEX_WRAP_CLAMP:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			break;
+		}
+
 		glBindTexture(GL_TEXTURE_2D, curID);
 	}
 

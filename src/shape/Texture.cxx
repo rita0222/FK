@@ -133,6 +133,7 @@ void fk_Texture::BaseInit(void)
 	setTextureMode(FK_TEX_MODULATE);
 	setMaterialMode(FK_PARENT_MODE);
 	setTexRendMode(FK_TEX_REND_NORMAL);
+	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 
 	return;
 }
@@ -285,6 +286,17 @@ void fk_Texture::setTexRendMode(fk_TexRendMode argMode)
 fk_TexRendMode fk_Texture::getTexRendMode(void)
 {
 	return texRendMode;
+}
+
+void fk_Texture::setTexWrapMode(fk_TexWrapMode argMode)
+{
+	texWrapMode = argMode;
+	return;
+}
+
+fk_TexWrapMode fk_Texture::getTexWrapMode(void)
+{
+	return texWrapMode;
 }
 
 void fk_Texture::fillColor(const fk_Color &argCol)
