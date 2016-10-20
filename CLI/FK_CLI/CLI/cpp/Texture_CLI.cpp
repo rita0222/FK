@@ -199,6 +199,37 @@ namespace FK_CLI {
 		}
 		return fk_TexRendMode::NORMAL;
 	}
+
+	void fk_Texture::WrapMode::set(fk_TexWrapMode argMode)
+	{
+		switch(argMode) {
+		  case fk_TexWrapMode::REPEAT:
+			GetP()->setTexWrapMode(FK_TEX_WRAP_REPEAT);
+			break;
+
+		  case fk_TexWrapMode::CLAMP:
+			GetP()->setTexWrapMode(FK_TEX_WRAP_CLAMP);
+			break;
+
+		  default:
+			break;
+		}
+	}
+
+	fk_TexWrapMode fk_Texture::WrapMode::get(void)
+	{
+		switch(GetP()->getTexWrapMode()) {
+		  case FK_TEX_WRAP_REPEAT:
+			return fk_TexWrapMode::REPEAT;
+
+		  case FK_TEX_WRAP_CLAMP:
+			return fk_TexWrapMode::CLAMP;
+
+		  default:
+			break;
+		}
+		return fk_TexWrapMode::REPEAT;
+	}
 	
 	bool fk_Texture::ReadBMP(String^ argFileName)
 	{

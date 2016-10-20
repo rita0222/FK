@@ -22,6 +22,12 @@ namespace FK_CLI
 		SMOOTH		//!<	高品質
 	};
 
+	//! テクスチャ外周部の描画モードを表す列挙型
+	public enum class fk_TexWrapMode {
+		REPEAT,		//!<	繰り返し式
+		CLAMP		//!<	縁部伸張式
+	};
+
 	//! テクスチャ座標を管理するクラス
 	/*!
 	 *	このクラスは、テクスチャ座標に関する基本的な機能を提供します。
@@ -240,6 +246,24 @@ namespace FK_CLI
 		property fk_TexRendMode RendMode {
 			fk_TexRendMode get();
 			void set(fk_TexRendMode);
+		}
+
+		//! テクスチャ外周部設定プロパティ
+		/*!
+		 *	テクスチャ描画の際、外周部についてどのように描画するかを設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- REPEAT \n
+		 *		内部の画像を繰り返して描画していきます。
+		 *
+		 *	- CLAMP \n
+		 *		縁部の色値を伸張して描画します。
+		 *	.
+		 *	デフォルトでは REPEAT に設定されています。
+		 */
+		property fk_TexWrapMode WrapMode {
+			fk_TexWrapMode get();
+			void set(fk_TexWrapMode);
 		}
 		
 		//! BMP ファイル入力関数

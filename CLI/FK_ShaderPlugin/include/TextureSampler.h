@@ -6,11 +6,13 @@ using namespace FK_CLI;
 
 namespace FK_ShaderPlugin
 {
+	/*
 	// モデルの描画モードを表す列挙型
 	public enum class fk_TexWrapMode {
 		REPEAT,		//!< 繰り返し式
 		CLAMP,		//!< 縁部伸張式
 	};
+	*/
 
 	// フレームバッファのサンプリングソースを表す列挙型
 	public enum class fk_SamplerSource {
@@ -62,21 +64,6 @@ namespace FK_ShaderPlugin
 
 		//! デストラクタ
 		~fk_TextureSampler();
-
-		//! テクスチャ外周部設定プロパティ
-		/*!
-		 *	テクスチャ描画の際、外周部についてどのように描画するかを設定します。
-		 *	設定できる種類は以下のとおりです。
-		 *
-		 *	- REPEAT \n
-		 *		内部の画像を繰り返して描画していきます。
-		 *
-		 *	- CLAMP \n
-		 *		縁部の色値を伸張して描画します。
-		 *	.
-		 *	デフォルトでは REPEAT に設定されています。
-		 */
-		property fk_TexWrapMode WrapMode;
 
 		//! テクスチャ参照情報設定プロパティ
 		/*!
