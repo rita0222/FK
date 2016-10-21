@@ -767,7 +767,6 @@ void fk_Modify::makeCircle(int argDiv, double argRadius)
 	vector< vector<int> >	IFArray;
 	_st						i, div;
 	double					theta;
-	int						j;
 
 	if(checkDB() == false) return;
 	AllClear_();
@@ -784,14 +783,14 @@ void fk_Modify::makeCircle(int argDiv, double argRadius)
 	}
 
 	IFArray.clear();
-	for(j = 0; j < argDiv*4; i++) {
+	for(i = 0; i < div*4; i++) {
 		IDArray.clear();
 		IDArray.push_back(1);
-		IDArray.push_back(j+2);
+		IDArray.push_back(int(i+2));
 		if(i == div * 4 - 1) {
 			IDArray.push_back(2);
 		} else {
-			IDArray.push_back(j+3);
+			IDArray.push_back(int(i+3));
 		}
 		IFArray.push_back(IDArray);
 	}
