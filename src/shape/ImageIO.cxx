@@ -1225,7 +1225,7 @@ bool fk_Image::writeJPG(const string fileName, int quality)
 	for(int j = 0; j < static_cast<int>(hgt); j++) {
 		img[j] = (JSAMPROW)malloc(sizeof(JSAMPLE) * 3 * wid);
 		if(img[j] == nullptr) {
-			for(int k = j-1; k >= 0; j--) free(img[k]);
+			for(int k = j-1; k >= 0; k--) free(img[k]);
 			free(img);
 			fclose(outfile);
 			return false;
