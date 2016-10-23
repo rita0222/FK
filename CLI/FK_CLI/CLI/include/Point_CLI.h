@@ -169,7 +169,7 @@ namespace FK_CLI
 		//! 描画色設定関数
 		/*!
 		 *	個別の頂点に対し、描画色の ID を設定します。
-		 *	色そのものの設定は、 fk_Shape::setPalette() を参照して下さい。
+		 *	色そのものの設定は、 fk_Shape::SetPalette() を参照して下さい。
 		 *
 		 *	\param[in]	vID		頂点ID
 		 *	\param[in]	cID		色ID
