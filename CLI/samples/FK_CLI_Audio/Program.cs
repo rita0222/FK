@@ -166,7 +166,8 @@ namespace FK_CLI_Audio
 			// BGMの各種設定
 			var bgm = new MyBGM("epoq.ogg");
 			var bgmTask = new Task(bgm.Start);
-			double volume = 0.5;
+            double volume = 0.5;
+            bgm.Gain = volume;
 			
 			// SEの各種設定
 			var se = new MySE(2);
