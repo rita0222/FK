@@ -103,6 +103,7 @@ namespace FK_ShaderPlugin {
 			VertexShaderSource = "";
 			while ((str = din->ReadLine()) != nullptr) {
 				VertexShaderSource += str;
+				VertexShaderSource += Environment::NewLine;
 			}
 		}
 		catch (Exception^ e) {
@@ -127,6 +128,7 @@ namespace FK_ShaderPlugin {
 			FragmentShaderSource = "";
 			while ((str = din->ReadLine()) != nullptr) {
 				FragmentShaderSource += str;
+				FragmentShaderSource += Environment::NewLine;
 			}
 		}
 		catch (Exception^ e) {
