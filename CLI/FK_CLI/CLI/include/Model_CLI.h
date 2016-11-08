@@ -353,9 +353,9 @@ namespace FK_CLI
 		 *	形状中の各要素を描画する際に、
 		 *	どの要素のマテリアルを採用するかというモードの参照・設定を行います。
 		 *	与えられる値は以下の3種類です。
-		 *		\arg fk_MaterialMode.CHILD
-		 *		\arg fk_MaterialMode.PARENT
-		 *		\arg fk_MaterialMode.NONE
+		 *	- fk_MaterialMode.CHILD
+		 *	- fk_MaterialMode.PARENT
+		 *	- fk_MaterialMode.NONE
 		 *
 		 *	マテリアルの採用は、以下のような優先順で決定します。
 		 *	-# fk_Model のマテリアルモードが fk_MaterialMode.CHILD の場合、
@@ -412,10 +412,10 @@ namespace FK_CLI
 		*	fk_Scene::entryOverlayModel()でも前後関係を無視した描画はできますが、
 		*	通常の描画中に前後関係を無視したり、半透明物体が後続の描画の前後関係に作用しないようにするなど、
 		*	細かな調整を行いたい場合に用います。与えられる値は以下の4種類です。
-		*		\arg fk_DepthMode.NO_USE			前後関係の参照も更新も行わず、常に上書きします。
-		*		\arg fk_DepthMode.READ				前後関係を参照してチェックします。
-		*		\arg fk_DepthMode.WRITE				前後関係を更新して後続の描画に影響するようにします。
-		*		\arg fk_DepthMode.READ_AND_WRITE	前後関係を参照しつつ更新します。初期値です。
+		*	- fk_DepthMode.NO_USE:			前後関係の参照も更新も行わず、常に上書きします。
+		*	- fk_DepthMode.READ:			前後関係を参照してチェックします。
+		*	- fk_DepthMode.WRITE:			前後関係を更新して後続の描画に影響するようにします。
+		*	- fk_DepthMode.READ_AND_WRITE:	前後関係を参照しつつ更新します。初期値です。
 		*/
 		property fk_DepthMode DepthMode {
 			void set(fk_DepthMode);
@@ -430,14 +430,17 @@ namespace FK_CLI
 		*	ブレンドモードの設定は、一般的な設定をプリセットの中から選択するか、
 		*	カスタムモードを選択した上で、入力ピクセルと出力ピクセルに対する係数を
 		*	個別に指定するかのどちらかによって行います。与えられる値は以下の 8 種類です。
-		*		\arg fk_BlendMode.ALPHA_MODE		通常のアルファブレンドです。初期値です。
-		*		\arg fk_BlendMode.NEGATIVE_MODE		反転ブレンドです。
-		*		\arg fk_BlendMode.ADDITION_MODE		加算ブレンドです。
-		*		\arg fk_BlendMode.SCREEN_MODE		アルファ付き加算ブレンドです。
-		*		\arg fk_BlendMode.LIGHTEN_MODE		入出力ピクセルのうち明るい方を採用するブレンドです。
-		*		\arg fk_BlendMode.MULTIPLY_MODE		乗算ブレンドです。
-		*		\arg fk_BlendMode.NONE_MODE			ブレンドを行いません。fk_Scene 側の設定によらずブレンドを無効にします。
-		*		\arg fk_BlendMode.CUSTOM_MODE		カスタムモードです。BlendSrcFactor, BlendDstFactor プロパティにて指定した係数を用いた計算式でブレンドします。
+		*	- fk_BlendMode.ALPHA_MODE:		通常のアルファブレンドです。初期値です。
+		*	- fk_BlendMode.NEGATIVE_MODE:	反転ブレンドです。
+		*	- fk_BlendMode.ADDITION_MODE:	加算ブレンドです。
+		*	- fk_BlendMode.SCREEN_MODE:		アルファ付き加算ブレンドです。
+		*	- fk_BlendMode.LIGHTEN_MODE:	入出力ピクセルのうち明るい方を採用するブレンドです。
+		*	- fk_BlendMode.MULTIPLY_MODE:	乗算ブレンドです。
+		*	- fk_BlendMode.NONE_MODE:		ブレンドを行いません。
+		*									fk_Scene 側の設定によらずブレンドを無効にします。
+		*	- fk_BlendMode.CUSTOM_MODE:		カスタムモードです。
+		*									fk_Model::BlendSrcFactor, fk_Model::BlendDstFactor
+		*									プロパティにて指定した係数を用いた計算式でブレンドします。
 		*/
 		property fk_BlendMode BlendMode {
 			void set(fk_BlendMode);
@@ -447,18 +450,22 @@ namespace FK_CLI
 		//! ブレンド時の入力ピクセル係数設定プロパティ
 		/*!
 		*	ブレンド計算時の入力ピクセルに対する係数を設定します。
-		*	このプロパティに値を設定すると、自動的に BlendMode プロパティに fk_BlendMode.CUSTOM_MODE が設定されます。
-		*	与えられる値は以下の 10 種類です。
-		*		\arg FK_FACTOR_ZERO
-		*		\arg FK_FACTOR_ONE
-		*		\arg FK_FACTOR_SRC_COLOR
-		*		\arg FK_FACTOR_ONE_MINUS_SRC_COLOR
-		*		\arg FK_FACTOR_DST_COLOR
-		*		\arg FK_FACTOR_ONE_MINUS_DST_COLOR
-		*		\arg FK_FACTOR_SRC_ALPHA
-		*		\arg FK_FACTOR_ONE_MINUS_SRC_ALPHA
-		*		\arg FK_FACTOR_DST_ALPHA
-		*		\arg FK_FACTOR_ONE_MINUS_DST_ALPHA
+		*	このプロパティに値を設定すると、
+		*	自動的に fk_Model::BlendMode プロパティに fk_BlendMode.CUSTOM_MODE が設定されます。
+		*	本プロパティの仕様は OpenGL 関数の glBlendFunc() に準拠します。
+		*	詳細は glBlendFunc() の情報を参照して下さい。
+		*	与えられる値は以下の10種類で、
+		*	それぞれの「fk_BlendFactor.」を「GL_」に置き換えた GLenum 型の値に対応します。
+		*	- fk_BlendFactor.ZERO
+		*	- fk_BlendFactor.ONE
+		*	- fk_BlendFactor.SRC_COLOR
+		*	- fk_BlendFactor.ONE_MINUS_SRC_COLOR
+		*	- fk_BlendFactor.DST_COLOR
+		*	- fk_BlendFactor.ONE_MINUS_DST_COLOR
+		*	- fk_BlendFactor.SRC_ALPHA
+		*	- fk_BlendFactor.ONE_MINUS_SRC_ALPHA
+		*	- fk_BlendFactor.DST_ALPHA
+		*	- fk_BlendFactor.ONE_MINUS_DST_ALPHA
 		*/
 		property fk_BlendFactor BlendSrcFactor {
 			void set(fk_BlendFactor);
@@ -468,18 +475,22 @@ namespace FK_CLI
 		//! ブレンド時の出力ピクセル係数設定プロパティ
 		/*!
 		*	ブレンド計算時の出力ピクセルに対する係数を設定します。
-		*	このプロパティに値を設定すると、自動的に BlendMode プロパティに fk_BlendMode.CUSTOM_MODE が設定されます。
-		*	与えられる値は以下の 10 種類です。
-		*		\arg FK_FACTOR_ZERO
-		*		\arg FK_FACTOR_ONE
-		*		\arg FK_FACTOR_SRC_COLOR
-		*		\arg FK_FACTOR_ONE_MINUS_SRC_COLOR
-		*		\arg FK_FACTOR_DST_COLOR
-		*		\arg FK_FACTOR_ONE_MINUS_DST_COLOR
-		*		\arg FK_FACTOR_SRC_ALPHA
-		*		\arg FK_FACTOR_ONE_MINUS_SRC_ALPHA
-		*		\arg FK_FACTOR_DST_ALPHA
-		*		\arg FK_FACTOR_ONE_MINUS_DST_ALPHA
+		*	このプロパティに値を設定すると、
+		*	自動的に fk_Model::BlendMode プロパティに fk_BlendMode.CUSTOM_MODE が設定されます。
+		*	本プロパティの仕様は OpenGL 関数の glBlendFunc() に準拠します。
+		*	詳細は glBlendFunc() の情報を参照して下さい。
+		*	与えられる値は以下の10種類で、
+		*	それぞれの「fk_BlendFactor.」を「GL_」に置き換えた GLenum 型の値に対応します。
+		*	- fk_BlendFactor.ZERO
+		*	- fk_BlendFactor.ONE
+		*	- fk_BlendFactor.SRC_COLOR
+		*	- fk_BlendFactor.ONE_MINUS_SRC_COLOR
+		*	- fk_BlendFactor.DST_COLOR
+		*	- fk_BlendFactor.ONE_MINUS_DST_COLOR
+		*	- fk_BlendFactor.SRC_ALPHA
+		*	- fk_BlendFactor.ONE_MINUS_SRC_ALPHA
+		*	- fk_BlendFactor.DST_ALPHA
+		*	- fk_BlendFactor.ONE_MINUS_DST_ALPHA
 		*/
 		property fk_BlendFactor BlendDstFactor {
 			void set(fk_BlendFactor);

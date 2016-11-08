@@ -1204,58 +1204,72 @@ class fk_Model : public fk_Boundary {
 
 	//! ブレンドモード設定関数
 	/*!
-	*	形状を描画する際に、どのような計算式でブレンドを行うかを設定します。
-	*	ここでブレンドモードを設定しても、fk_Scene:setBlendStatus() で
-	*	ブレンドを有効にしていないと実際の描画で有効になりません。
-	*	ブレンドモードの設定は、一般的な設定をプリセットの中から選択するか、
-	*	カスタムモードを選択した上で、入力ピクセルと出力ピクセルに対する係数を
-	*	個別に指定するかのどちらかによって行います。
-	*
-	*	\param[in]	mode
-	*		ブレンドモードを設定します。与えられる値は以下の8種類です。
-	*		\arg FK_BLEND_ALPHA_MODE		通常のアルファブレンドです。初期値です。
-	*		\arg FK_BLEND_NEGATIVE_MODE		反転ブレンドです。
-	*		\arg FK_BLEND_ADDITION_MODE		加算ブレンドです。
-	*		\arg FK_BLEND_SCREEN_MODE		アルファ付き加算ブレンドです。
-	*		\arg FK_BLEND_LIGHTEN_MODE		入出力ピクセルのうち明るい方を採用するブレンドです。
-	*		\arg FK_BLEND_MULTIPLY_MODE		乗算ブレンドです。
-	*		\arg FK_BLEND_NONE_MODE			ブレンドを行いません。fk_Scene 側の設定によらずブレンドを無効にします。
-	*		\arg FK_BLEND_CUSTOM_MODE		カスタムモードです。第 2,3 引数にて指定した係数を用いた計算式でブレンドします。
-	*	\param[in]	srcFactor
-	*		入力ピクセルに対する係数を設定します。mode に FK_BLEND_CUSTOM_MODE を指定した場合のみ有効です。
-	*		それ以外のモードでは省略可能です。与えられる値は以下の10種類です。
-	*		\arg FK_FACTOR_ZERO
-	*		\arg FK_FACTOR_ONE
-	*		\arg FK_FACTOR_SRC_COLOR
-	*		\arg FK_FACTOR_ONE_MINUS_SRC_COLOR
-	*		\arg FK_FACTOR_DST_COLOR
-	*		\arg FK_FACTOR_ONE_MINUS_DST_COLOR
-	*		\arg FK_FACTOR_SRC_ALPHA
-	*		\arg FK_FACTOR_ONE_MINUS_SRC_ALPHA
-	*		\arg FK_FACTOR_DST_ALPHA
-	*		\arg FK_FACTOR_ONE_MINUS_DST_ALPHA
-	*	\param[in]	dstFactor
-	*		出力ピクセルに対する係数を設定します。mode に FK_CUSTOM_BLEND_MODE を指定した場合のみ有効です。
-	*		それ以外のモードでは省略可能です。与えられる値は srcFactor と同様です。
-	*
-	*	\sa getBlendMode(), fk_Scene::setBlendStatus(), fk_Scene::getBlendStatus()
-	*/
+	 *	テクスチャ画像を伴うモデルを表示する場合、
+	 *	表示色はテクスチャ画像の各画素色と、
+	 *	モデルに設定されているマテリアルの両方が関与します。
+	 *	この関数は、テクスチャ画像の画素色とモデルのマテリアル色に対し、
+	 *	どのような計算式で双方を混合(ブレンド)するかを設定します。
+	 *	ここでブレンドモードを設定しても、fk_Scene:setBlendStatus() で
+	 *	ブレンドを有効にしていないと実際の描画で有効になりません。
+	 *	ブレンドモードの設定は、一般的な設定をプリセットの中から選択するか、
+	 *	カスタムモードを選択した上で、入力ピクセルと出力ピクセルに対する係数を
+	 *	個別に指定するかのどちらかによって行います。
+	 *
+	 *	\param[in]	mode
+	 *		ブレンドモードを設定します。与えられる値は以下の8種類です。
+	 *		- FK_BLEND_ALPHA_MODE:		通常のアルファブレンドです。初期値です。
+	 *		- FK_BLEND_NEGATIVE_MODE:	反転ブレンドです。
+	 *		- FK_BLEND_ADDITION_MODE:	加算ブレンドです。
+	 *		- FK_BLEND_SCREEN_MODE:		アルファ付き加算ブレンドです。
+	 *		- FK_BLEND_LIGHTEN_MODE:	入出力ピクセルのうち明るい方を採用するブレンドです。
+	 *		- FK_BLEND_MULTIPLY_MODE:	乗算ブレンドです。
+	 *		- FK_BLEND_NONE_MODE:		ブレンドを行いません。
+	 *									fk_Scene 側の設定によらずブレンドを無効にします。
+	 *		- FK_BLEND_CUSTOM_MODE:		カスタムモードです。
+	 *									第 2,3 引数にて指定した係数を用いた計算式でブレンドします。
+	 *
+	 *	\param[in]	srcFactor
+	 *		入力ピクセルに対する係数を設定します。
+	 *		mode に FK_BLEND_CUSTOM_MODE を指定した場合のみ有効です。
+	 *		それ以外のモードでは省略可能です。
+	 *		本関数の仕様は OpenGL 関数の glBlendFunc() に準拠します。
+	 *		詳細は glBlendFunc() の情報を参照して下さい。
+	 *		与えられる値は以下の10種類で、
+	 *		それぞれの「FK_FACTOR」を「GL」に置き換えた GLenum 型の値に対応します。
+	 *		- FK_FACTOR_ZERO
+	 *		- FK_FACTOR_ONE
+	 *		- FK_FACTOR_SRC_COLOR
+	 *		- FK_FACTOR_ONE_MINUS_SRC_COLOR
+	 *		- FK_FACTOR_DST_COLOR
+	 *		- FK_FACTOR_ONE_MINUS_DST_COLOR
+	 *		- FK_FACTOR_SRC_ALPHA
+	 *		- FK_FACTOR_ONE_MINUS_SRC_ALPHA
+	 *		- FK_FACTOR_DST_ALPHA
+	 *		- FK_FACTOR_ONE_MINUS_DST_ALPHA
+	 *
+	 *	\param[in]	dstFactor
+	 *		出力ピクセルに対する係数を設定します。
+	 *		mode に FK_CUSTOM_BLEND_MODE を指定した場合のみ有効です。
+	 *		それ以外のモードでは省略可能です。与えられる値は srcFactor と同様です。
+	 *
+	 *	\sa getBlendMode(), fk_Scene::setBlendStatus(), fk_Scene::getBlendStatus()
+	 */
 	void	setBlendMode(const fk_BlendMode mode,
 							const fk_BlendFactor srcFactor = FK_FACTOR_SRC_ALPHA,
 							const fk_BlendFactor dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA);
 
 	//! ブレンドモード参照関数
 	/*!
-	*	モデルのブレンドモードを取得します。
-	*
-	*	\param[out]	outSrc
-	*		入力ピクセルにかかる係数の種類を取得します。省略可能です。
-	*	\param[out]	outDst
-	*		出力ピクセルにかかる係数の種類を取得します。省略可能です。
-	*	\return		ブレンドモード
-	*
-	*	\sa setBlendMode()
-	*/
+	 *	モデルのブレンドモードを取得します。
+	 *
+	 *	\param[out]	outSrc
+	 *		入力ピクセルにかかる係数の種類を取得します。省略可能です。
+	 *	\param[out]	outDst
+	 *		出力ピクセルにかかる係数の種類を取得します。省略可能です。
+	 *	\return		ブレンドモード
+	 *
+	 *	\sa setBlendMode()
+	 */
 	fk_BlendMode		getBlendMode(fk_BlendFactor *outSrc = nullptr, fk_BlendFactor *outDst = nullptr) const;
 
 	//! ピックモード設定関数
@@ -1335,10 +1349,11 @@ class fk_Model : public fk_Boundary {
 	*
 	*	\param[in]	mode
 	*		前後関係の処理モードを設定します。与えられる値は以下の4種類です。
-	*		\arg FK_DEPTH_NO_USE			前後関係の参照も更新も行わず、常に上書きします。
-	*		\arg FK_DEPTH_READ				前後関係を参照してチェックします。
-	*		\arg FK_DEPTH_WRITE				前後関係を更新して後続の描画に影響するようにします。
-	*		\arg FK_DEPTH_READ_AND_WRITE	前後関係を参照しつつ更新します。FK_DEPTH_READ | FK_DEPTH_WRITE と等価です。初期値です。
+	*		- FK_DEPTH_NO_USE:			前後関係の参照も更新も行わず、常に上書きします。
+	*		- FK_DEPTH_READ:			前後関係を参照してチェックします。
+	*		- FK_DEPTH_WRITE:			前後関係を更新して後続の描画に影響するようにします。
+	*		- FK_DEPTH_READ_AND_WRITE:	前後関係を参照しつつ更新します。
+	*									FK_DEPTH_READ | FK_DEPTH_WRITE と等価です。初期値です。
 	*/
 	void	setDepthMode(const fk_DepthMode mode);
 
