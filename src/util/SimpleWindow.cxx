@@ -506,6 +506,8 @@ void fk_AppWindow::clearModel(bool argLightAndCamera)
 	if(argLightAndCamera) {
 		ref_scene->entryCamera(&camera);
 		ref_scene->entryModel(&light);
+		ref_camera = &camera;
+		tb->setCamera(&camera);
 	}
 }
 
