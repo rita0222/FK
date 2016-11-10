@@ -362,12 +362,14 @@ void fk_AppWindow::setCameraFocus(const fk_Vector &argPos)
 void fk_AppWindow::setCameraModel(fk_Model &model)
 {
 	ref_camera = &model;
+	tb->setCamera(&model);
 	ref_scene->entryCamera(ref_camera);
 }
 
 void fk_AppWindow::setCameraModel(fk_Model *argModel)
 {
 	ref_camera = argModel;
+	tb->setCamera(argModel);
 	ref_scene->entryCamera(ref_camera);
 }
 
