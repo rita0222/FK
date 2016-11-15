@@ -138,14 +138,14 @@ namespace FK_CLI {
 
 	fk_AppWindow::fk_AppWindow()
 	{
-		preInit = gcnew ShaderCallback(this, &fk_AppWindow::PreInit);
-		postInit = gcnew ShaderCallback(this, &fk_AppWindow::PostInit);
-		preDraw = gcnew ShaderCallback(this, &fk_AppWindow::PreDraw);
-		postDraw = gcnew ShaderCallback(this, &fk_AppWindow::PostDraw);
-		preDrawLeft = gcnew ShaderCallback(this, &fk_AppWindow::PreDrawLeft);
-		postDrawLeft = gcnew ShaderCallback(this, &fk_AppWindow::PostDrawLeft);
-		preDrawRight = gcnew ShaderCallback(this, &fk_AppWindow::PreDrawRight);
-		postDrawRight = gcnew ShaderCallback(this, &fk_AppWindow::PostDrawRight);
+		preInit = gcnew ShaderCallback(this, &fk_AppWindow::OnPreInit);
+		postInit = gcnew ShaderCallback(this, &fk_AppWindow::OnPostInit);
+		preDraw = gcnew ShaderCallback(this, &fk_AppWindow::OnPreDraw);
+		postDraw = gcnew ShaderCallback(this, &fk_AppWindow::OnPostDraw);
+		preDrawLeft = gcnew ShaderCallback(this, &fk_AppWindow::OnPreDrawLeft);
+		postDrawLeft = gcnew ShaderCallback(this, &fk_AppWindow::OnPostDrawLeft);
+		preDrawRight = gcnew ShaderCallback(this, &fk_AppWindow::OnPreDrawRight);
+		postDrawRight = gcnew ShaderCallback(this, &fk_AppWindow::OnPostDrawRight);
 #ifdef _WIN64
 		uint64_t callbacks[8];
 		callbacks[0] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preInit).ToInt64();

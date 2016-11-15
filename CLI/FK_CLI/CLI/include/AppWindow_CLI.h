@@ -910,14 +910,55 @@ namespace FK_CLI
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		virtual void PreInit() {};
-		virtual void PostInit() {};
-		virtual void PreDraw() {};
-		virtual void PostDraw() {};
-		virtual void PreDrawLeft() {};
-		virtual void PostDrawLeft() {};
-		virtual void PreDrawRight() {};
-		virtual void PostDrawRight() {};
+		event fk_ShaderCallback^ PreInit;
+		event fk_ShaderCallback^ PostInit;
+		event fk_ShaderCallback^ PreDraw;
+		event fk_ShaderCallback^ PostDraw;
+		event fk_ShaderCallback^ PreDrawLeft;
+		event fk_ShaderCallback^ PostDrawLeft;
+		event fk_ShaderCallback^ PreDrawRight;
+		event fk_ShaderCallback^ PostDrawRight;
+
+		virtual void OnPreInit()
+		{
+			PreInit();
+		};
+
+		virtual void OnPostInit()
+		{
+			PostInit();
+		};
+
+		virtual void OnPreDraw()
+		{
+			PreDraw();
+		};
+
+		virtual void OnPostDraw()
+		{
+			PostDraw();
+		};
+
+		virtual void OnPreDrawLeft()
+		{
+			PreDrawLeft();
+		};
+
+		virtual void OnPostDrawLeft()
+		{
+			PostDrawLeft();
+		};
+
+		virtual void OnPreDrawRight()
+		{
+			PreDrawRight();
+		};
+
+		virtual void OnPostDrawRight()
+		{
+			PostDrawRight();
+		};
+
 #endif
 	};
 }

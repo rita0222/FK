@@ -97,6 +97,11 @@ namespace FK_ShaderPlugin
 		 */
 		void UnbindModel(fk_Model^ model);
 
+		void InitializeFrameBufferObject(int width, int height);
+		void FinalizeFrameBufferObject();
+		void BindAppWindow(fk_AppWindow^ window);
+		void UnbindAppWindow(fk_AppWindow^ window);
+
 	internal:
 		static bool Initialize(void);
 
@@ -109,6 +114,15 @@ namespace FK_ShaderPlugin
 
 		static bool	isExtensionInitialized = false;
 		bool usingProgram = false;
+
+		void ProcPreDraw(void);
+		void ProcPostDraw(void);
+		UInt32	fboID;
+		UInt32	texID;
+		UInt32	depthTexID;
+		UInt32	rendID;
+		Int32	bufW;
+		Int32	bufH;
 	};
 }
 

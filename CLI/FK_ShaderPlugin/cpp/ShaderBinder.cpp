@@ -3,6 +3,12 @@
 #include <string>
 #include <vcclr.h>
 
+// レンダーターゲットのリスト
+static const GLenum bufs[] = {
+	GL_COLOR_ATTACHMENT0,	// カラーバッファ
+	GL_DEPTH_ATTACHMENT,	// デプステクスチャ
+};
+
 namespace FK_ShaderPlugin
 {
 	bool fk_ShaderBinder::Initialize()
@@ -58,6 +64,80 @@ namespace FK_ShaderPlugin
 			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostShader);
 	}
 
+	void fk_ShaderBinder::InitializeFrameBufferObject(int width, int height)
+	{
+		bufW = width;
+		bufH = height;
+
+		// カラーバッファ用のテクスチャを用意する
+		GLuint tmpID;
+		glGenTextures(1, &tmpID);
+		texID = tmpID;
+		glBindTexture(GL_TEXTURE_2D, texID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufW, bufH, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		// デプステクスチャ用のテクスチャを用意する
+		glGenTextures(1, &tmpID);
+		depthTexID = tmpID;
+		glBindTexture(GL_TEXTURE_2D, depthTexID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufW, bufH, 0,
+			GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		// フレームバッファオブジェクトを作成する
+		glGenFramebuffers(1, &tmpID);
+		fboID = tmpID;
+		glBindFramebuffer(GL_FRAMEBUFFER, fboID);
+
+		// フレームバッファオブジェクトにカラーバッファとしてテクスチャを結合する
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+			GL_TEXTURE_2D, texID, 0);
+		// フレームバッファオブジェクトにデプステクスチャを結合する
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+			GL_TEXTURE_2D, depthTexID, 0);
+
+		// フレームバッファオブジェクトの結合を解除する
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void fk_ShaderBinder::FinalizeFrameBufferObject()
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		GLuint tmpID;
+		tmpID = fboID;
+		glDeleteFramebuffers(1, &tmpID);
+		tmpID = texID;
+		glDeleteTextures(1, &tmpID);
+		tmpID = depthTexID;
+		glDeleteTextures(1, &tmpID);
+	}
+
+	void fk_ShaderBinder::BindAppWindow(fk_AppWindow^ window)
+	{
+		window->PreDraw +=
+			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPreDraw);
+		window->PostDraw +=
+			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostDraw);
+	}
+
+	void fk_ShaderBinder::UnbindAppWindow(fk_AppWindow^ window)
+	{
+		window->PreDraw -=
+			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPreDraw);
+		window->PostDraw -=
+			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostDraw);
+	}
+
 	void fk_ShaderBinder::ProcPreShader(void)
 	{
 		UInt32 id = Program->ProgramId;
@@ -76,6 +156,71 @@ namespace FK_ShaderPlugin
 			glUseProgram(0);
 			usingProgram = false;
 		}
+	}
+
+	void fk_ShaderBinder::ProcPreDraw(void)
+	{
+		// フレームバッファオブジェクトを結合する
+		glBindFramebuffer(GL_FRAMEBUFFER, fboID);
+		// レンダーターゲットを指定する
+		glDrawBuffers(sizeof bufs / sizeof bufs[0], bufs);
+		// これでFKでの描画内容はFBOにスイッチする
+	}
+
+	void fk_ShaderBinder::ProcPostDraw(void)
+	{
+		// レンダーターゲットを元に戻す
+		glDrawBuffer(GL_BACK);
+		// フレームバッファオブジェクトを結合を解除する
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// 透視変換行列を単位行列にする
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+
+		// モデルビュー変換行列を単位行列にする
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// テクスチャマッピングを有効にする
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texID);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, depthTexID);
+
+		ProcPreShader();
+
+		// 正方形を描く
+		glColor3d(1.0, 1.0, 1.0);
+		glBegin(GL_TRIANGLE_FAN);
+		glTexCoord2d(0.0, 0.0);
+		glVertex2d(-1.0, -1.0);
+		glTexCoord2d(1.0, 0.0);
+		glVertex2d(1.0, -1.0);
+		glTexCoord2d(1.0, 1.0);
+		glVertex2d(1.0, 1.0);
+		glTexCoord2d(0.0, 1.0);
+		glVertex2d(-1.0, 1.0);
+		glEnd();
+
+		ProcPostShader();
+
+		// テクスチャマッピングを無効にする
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		glFlush();
 	}
 }
 
