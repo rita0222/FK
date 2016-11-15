@@ -57,6 +57,12 @@ namespace FK_CLI
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 	public delegate void fk_DrawCallback();
+
+	public interface class fk_IBindableDrawer {
+	public:
+		event fk_DrawCallback^ PreDraw;
+		event fk_DrawCallback^ PostDraw;
+	};
 #endif
 
 	//! モデルを生成、管理するクラス

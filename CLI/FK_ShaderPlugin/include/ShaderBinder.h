@@ -99,8 +99,8 @@ namespace FK_ShaderPlugin
 
 		void InitializeFrameBufferObject(int width, int height);
 		void FinalizeFrameBufferObject();
-		void BindAppWindow(fk_AppWindow^ window);
-		void UnbindAppWindow(fk_AppWindow^ window);
+		void BindWindow(fk_IBindableDrawer^ window);
+		void UnbindWindow(fk_IBindableDrawer^ window);
 
 	internal:
 		static bool Initialize(void);

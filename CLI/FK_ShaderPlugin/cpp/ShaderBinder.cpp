@@ -122,7 +122,7 @@ namespace FK_ShaderPlugin
 		glDeleteTextures(1, &tmpID);
 	}
 
-	void fk_ShaderBinder::BindAppWindow(fk_AppWindow^ window)
+	void fk_ShaderBinder::BindWindow(fk_IBindableDrawer^ window)
 	{
 		window->PreDraw +=
 			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPreDraw);
@@ -130,7 +130,7 @@ namespace FK_ShaderPlugin
 			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPostDraw);
 	}
 
-	void fk_ShaderBinder::UnbindAppWindow(fk_AppWindow^ window)
+	void fk_ShaderBinder::UnbindWindow(fk_IBindableDrawer^ window)
 	{
 		window->PreDraw -=
 			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPreDraw);

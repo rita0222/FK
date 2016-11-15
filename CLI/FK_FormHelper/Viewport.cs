@@ -12,7 +12,7 @@ namespace FK_FormHelper
     /// <summary>
     /// ビューポート
     /// </summary>
-    public class fk_Viewport : IDisposable
+    public class fk_Viewport : IDisposable, fk_IBindableDrawer
     {
         private Control panel;
         private fk_Scene scene;

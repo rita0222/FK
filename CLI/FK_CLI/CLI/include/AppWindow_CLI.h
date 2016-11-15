@@ -72,7 +72,7 @@ namespace FK_CLI
 	 *	Fl_Window、 fk_Window 、 fk_Scene を複合したクラスですので、
 	 *	既存の FK ユーザが利用する場合はその旨を念頭に置いてください。
 	 */
-	public ref class fk_AppWindow {
+	public ref class fk_AppWindow : public fk_IBindableDrawer {
 	internal:
 		::fk_AppWindow *pWin;
 		fk_Scene^ scene;
@@ -912,8 +912,8 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		event fk_DrawCallback^ PreInit;
 		event fk_DrawCallback^ PostInit;
-		event fk_DrawCallback^ PreDraw;
-		event fk_DrawCallback^ PostDraw;
+		virtual event fk_DrawCallback^ PreDraw;
+		virtual event fk_DrawCallback^ PostDraw;
 		event fk_DrawCallback^ PreDrawLeft;
 		event fk_DrawCallback^ PostDrawLeft;
 		event fk_DrawCallback^ PreDrawRight;
