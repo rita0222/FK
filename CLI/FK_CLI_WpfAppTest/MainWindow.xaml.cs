@@ -89,7 +89,7 @@ namespace FK_CLI_WpfAppTest
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
-            viewport.PreDraw += (s, ee) =>
+            viewport.Update += (s, ee) =>
             {
                 camera.GlTranslate(0.0, 0.0, -1.0);
                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);

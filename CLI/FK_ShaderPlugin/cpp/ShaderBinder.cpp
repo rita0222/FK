@@ -51,17 +51,17 @@ namespace FK_ShaderPlugin
 	void fk_ShaderBinder::BindModel(fk_Model ^ model)
 	{
 		model->PreShader +=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPreShader);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPreShader);
 		model->PostShader +=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostShader);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPostShader);
 	}
 
 	void fk_ShaderBinder::UnbindModel(fk_Model ^ model)
 	{
 		model->PreShader -=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPreShader);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPreShader);
 		model->PostShader -=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostShader);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPostShader);
 	}
 
 	void fk_ShaderBinder::InitializeFrameBufferObject(int width, int height)
@@ -125,17 +125,17 @@ namespace FK_ShaderPlugin
 	void fk_ShaderBinder::BindAppWindow(fk_AppWindow^ window)
 	{
 		window->PreDraw +=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPreDraw);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPreDraw);
 		window->PostDraw +=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostDraw);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPostDraw);
 	}
 
 	void fk_ShaderBinder::UnbindAppWindow(fk_AppWindow^ window)
 	{
 		window->PreDraw -=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPreDraw);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPreDraw);
 		window->PostDraw -=
-			gcnew fk_ShaderCallback(this, &fk_ShaderBinder::ProcPostDraw);
+			gcnew fk_DrawCallback(this, &fk_ShaderBinder::ProcPostDraw);
 	}
 
 	void fk_ShaderBinder::ProcPreShader(void)

@@ -33,9 +33,9 @@ namespace FK_CLI {
 	void fk_Model::MakeNativeModel(void)
 	{
 		using namespace System::Runtime::InteropServices;
-		preShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPreShader);
+		preShader = gcnew fk_DrawCallback(this, &fk_Model::OnPreShader);
 		System::IntPtr p1 = Marshal::GetFunctionPointerForDelegate(preShader);
-		postShader = gcnew fk_ShaderCallback(this, &fk_Model::OnPostShader);
+		postShader = gcnew fk_DrawCallback(this, &fk_Model::OnPostShader);
 		System::IntPtr p2 = Marshal::GetFunctionPointerForDelegate(postShader);
 		pBase = new ::InnerModel((void*)p1, (void*)p2);
 	}

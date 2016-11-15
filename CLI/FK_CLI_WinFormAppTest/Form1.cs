@@ -115,7 +115,7 @@ namespace FK_CLI_WinFormAppTest
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
-            viewport.PreDraw += (s, e) =>
+            viewport.Update += (s, e) =>
             {
                 camera.GlTranslate(0.0, 0.0, -1.0);
                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);

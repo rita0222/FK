@@ -910,14 +910,14 @@ namespace FK_CLI
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		event fk_ShaderCallback^ PreInit;
-		event fk_ShaderCallback^ PostInit;
-		event fk_ShaderCallback^ PreDraw;
-		event fk_ShaderCallback^ PostDraw;
-		event fk_ShaderCallback^ PreDrawLeft;
-		event fk_ShaderCallback^ PostDrawLeft;
-		event fk_ShaderCallback^ PreDrawRight;
-		event fk_ShaderCallback^ PostDrawRight;
+		event fk_DrawCallback^ PreInit;
+		event fk_DrawCallback^ PostInit;
+		event fk_DrawCallback^ PreDraw;
+		event fk_DrawCallback^ PostDraw;
+		event fk_DrawCallback^ PreDrawLeft;
+		event fk_DrawCallback^ PostDrawLeft;
+		event fk_DrawCallback^ PreDrawRight;
+		event fk_DrawCallback^ PostDrawRight;
 
 		virtual void OnPreInit()
 		{

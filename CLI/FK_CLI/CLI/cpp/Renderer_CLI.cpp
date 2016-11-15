@@ -71,7 +71,9 @@ namespace FK_CLI {
 
 		wglMakeCurrent(hDC, hRC);
 		pEngine->Init(argW, argH);
+		PreInit();
 		pEngine->OpenGLInit();
+		PostInit();
 
 		return true;
 	}
@@ -112,7 +114,9 @@ namespace FK_CLI {
 			wglMakeCurrent(hDC, hRC);
 		}
 
+		PreDraw();
 		pEngine->Draw(false);
+		PostDraw();
 
 		SwapBuffers(hDC);
 	}

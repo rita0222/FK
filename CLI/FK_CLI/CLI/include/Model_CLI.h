@@ -56,7 +56,7 @@ namespace FK_CLI
 	};
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	public delegate void fk_ShaderCallback();
+	public delegate void fk_DrawCallback();
 #endif
 
 	//! モデルを生成、管理するクラス
@@ -121,8 +121,8 @@ namespace FK_CLI
 
 		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
 		fk_Shape^ shape;
-		fk_ShaderCallback^ preShader;
-		fk_ShaderCallback^ postShader;
+		fk_DrawCallback^ preShader;
+		fk_DrawCallback^ postShader;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Model::fk_Model(bool argNewFlg);
@@ -717,8 +717,8 @@ namespace FK_CLI
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		event fk_ShaderCallback^ PreShader;
-		event fk_ShaderCallback^ PostShader;
+		event fk_DrawCallback^ PreShader;
+		event fk_DrawCallback^ PostShader;
 
 		virtual void OnPreShader()
 		{

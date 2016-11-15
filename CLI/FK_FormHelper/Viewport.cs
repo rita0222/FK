@@ -60,8 +60,19 @@ namespace FK_FormHelper
             get { return panel; }
         }
 
-        public event EventHandler PreDraw;
-        public event EventHandler PostDraw;
+        public event EventHandler Update;
+
+        public event fk_DrawCallback PreDraw
+        {
+            add { this.renderer.PreDraw += value; }
+            remove { this.renderer.PreDraw -= value; }
+        }
+
+        public event fk_DrawCallback PostDraw
+        {
+            add { this.renderer.PostDraw += value; }
+            remove { this.renderer.PostDraw -= value; }
+        }
 
         public void Dispose()
         {
@@ -71,9 +82,8 @@ namespace FK_FormHelper
 
         public void Draw()
         {
-            if (PreDraw != null) PreDraw(null, null);
+            if (Update != null) Update(null, null);
             renderer.Draw();
-            if (PostDraw != null) PostDraw(null, null);
         }
 
         public bool GetProjectPosition(double argX, double argY, fk_Plane argPlane, out fk_Vector outPos)

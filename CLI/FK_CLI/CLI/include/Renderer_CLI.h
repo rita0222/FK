@@ -35,6 +35,11 @@ namespace FK_CLI
 		bool GetWindowPosition(fk_Vector^ argPos_3D, fk_Vector^ argPos_2D);
 
 		cli::array<fk_PickData^>^ GetPickData(int argX, int argY, int argPixel);
+
+		event fk_DrawCallback^ PreInit;
+		event fk_DrawCallback^ PostInit;
+		event fk_DrawCallback^ PreDraw;
+		event fk_DrawCallback^ PostDraw;
 	};
 }
 
