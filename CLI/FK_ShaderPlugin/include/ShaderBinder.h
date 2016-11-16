@@ -22,7 +22,10 @@ namespace FK_ShaderPlugin
 	 *			fk_ShaderBinder.Parameter プロパティを用いて、
 	 *			C# 側からシェーダー側に渡すパラメーターを設定します。
 	 *		- モデル管理: \n
-	 *			シェーダーを適用するモデルを BindModel() メソッドを用いて設定します。
+	 *			シェーダーを適用するモデルを
+	 *			BindModel() メソッド
+	 *			(FBO へ適用する場合は InitializeFrameBufferObject() メソッド)
+	 *			を用いて設定します。
 	 *
 	 *	fk_ShaderBinder.Program プロパティの扱い方については fk_ShaderProgram を、
 	 *	fk_ShaderBinder.Parameter プロパティの扱い方については

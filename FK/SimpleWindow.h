@@ -43,8 +43,8 @@ private:
 	friend class fk_CubicModel;
 	friend class fk_SpriteModel;
 
-	Fl_Window	*mainWin;
-	fk_Window	*drawWin;
+	Fl_Window		*mainWin;
+	fk_Window		*drawWin;
 
 	fk_AppWindow		*ref_child;
 	fk_FrameController	fps_admin;
