@@ -101,6 +101,7 @@ namespace FK_ShaderPlugin
 		void UnbindModel(fk_Model^ model);
 
 		void InitializeFrameBufferObject(int width, int height);
+		void InitializeFrameBufferObject(fk_Dimension^ dim);
 		void FinalizeFrameBufferObject();
 		void BindWindow(fk_IBindableDrawer^ window);
 		void UnbindWindow(fk_IBindableDrawer^ window);

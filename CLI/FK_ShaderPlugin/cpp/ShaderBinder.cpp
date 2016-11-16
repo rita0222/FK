@@ -110,6 +110,11 @@ namespace FK_ShaderPlugin
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void fk_ShaderBinder::InitializeFrameBufferObject(fk_Dimension^ argDim)
+	{
+		InitializeFrameBufferObject(argDim->w, argDim->h);
+	}
+
 	void fk_ShaderBinder::FinalizeFrameBufferObject()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

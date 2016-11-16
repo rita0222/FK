@@ -18,11 +18,12 @@ namespace Sample08_04
 			camera.GlMoveTo(100.0, 100.0, 100.0);
 			camera.GlFocus(0.0, 0.0, 0.0);
 			camera.GlUpvec(0.0, 1.0, 0.0);
-				
+
+            var winSize = new fk_Dimension(800, 600);
             var window = new fk_AppWindow();
             window.ClearModel();
             window.CameraModel = camera;
-            window.Size = new fk_Dimension(1024, 768);
+            window.Size = winSize;
             window.BGColor = new fk_Color(0.5, 0.5, 0.5);
             window.ShowGuide();
             window.Open();
@@ -121,7 +122,7 @@ namespace Sample08_04
 			if(bgBinder.Program.Validate())
 			{
                 // bgBinder.Parameter.AttachTexture(1, bgSampler);
-                bgBinder.InitializeFrameBufferObject(1024, 768);    // ↑と置き換え
+                bgBinder.InitializeFrameBufferObject(winSize);    // ↑と置き換え
 				bgBinder.Parameter.Register("tex0", 0); // 1->0
                 bgBinder.Parameter.Register("Width", 1024.0f);
                 bgBinder.Parameter.Register("Height", 768.0f);
