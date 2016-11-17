@@ -75,7 +75,7 @@ namespace FK_ShaderPlugin
 		 */
 		property fk_ShaderParameter^ Parameter;
 
-		//! シェーダーモデル連携設定関数
+		//! シェーダーモデル連携設定メソッド
 		/*!
 		 *	Program プロパティに設定されているシェーダープログラムを適用するモデルを設定します。
 		 *	1つの fk_ShaderBinder インスタンスによるプログラムを、
@@ -90,7 +90,7 @@ namespace FK_ShaderPlugin
 		 */
 		void BindModel(fk_Model^ model);
 
-		//! シェーダーモデル連携解除関数
+		//! シェーダーモデル連携解除メソッド
 		/*!
 		 *	BindModel() メソッドによってシェーダーを適用したモデルに対し、
 		 *	適用を外します。

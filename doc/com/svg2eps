@@ -11,15 +11,15 @@ foreach $svgName (@ARGV) {
 	$epsName = $svgName;
 	$epsName =~ s/.svg$/.eps/;
 
-	if($opts{"r"} == 1) {
-	    $com = "rsvg-convert ";
-	    $com .= $svgName;
-	    $com .= " -z 0.8 --format=ps -o ";
-	    $com .= $epsName;
-	} else {
+	if($opts{"i"} == 1) {
 	    $com = "inkscape --file=";
 	    $com .= $svgName;
 	    $com .= " --export-eps=";
+	    $com .= $epsName;
+	} else {
+	    $com = "rsvg-convert ";
+	    $com .= $svgName;
+	    $com .= " -z 0.8 --format=ps -o ";
 	    $com .= $epsName;
 	}
 

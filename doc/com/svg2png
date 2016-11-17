@@ -11,15 +11,15 @@ foreach $svgName (@ARGV) {
 	$pngName = $svgName;
 	$pngName =~ s/.svg$/.png/;
 
-	if($opts{"r"} == 1) {
-	    $com = "rsvg-convert ";
-	    $com .= $svgName;
-	    $com .= " -z 0.8 --format=png -o ";
-	    $com .= $pngName;
-	} else {
+	if($opts{"i"} == 1) {
 	    $com = "inkscape --export-area-drawing --file=";
 	    $com .= $svgName;
 	    $com .= " --export-png=";
+	    $com .= $pngName;
+	} else {
+	    $com = "rsvg-convert ";
+	    $com .= $svgName;
+	    $com .= " -z 0.8 --format=png -o ";
 	    $com .= $pngName;
 	}
 	if(!(-f $pngName)) {
