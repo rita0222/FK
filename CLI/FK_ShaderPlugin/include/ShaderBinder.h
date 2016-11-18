@@ -100,10 +100,73 @@ namespace FK_ShaderPlugin
 		 */
 		void UnbindModel(fk_Model^ model);
 
+		//! フレームバッファーオブジェクト (FBO) 初期化メソッド1
+		/*!
+		 *	シェーダー内でフレームバッファーオブジェクト
+		 *	(FBO) を利用する際の初期化を行います。
+		 *	このメソッドを呼ぶことで、
+		 *	FBO にアクセスするシェーダープログラムを利用することができます。
+		 *
+		 *	本メソッドを用いたあと、実際に画面に出力を行うには
+		 *	BindWindow() メソッドで連携を行う必要があります。
+		 *
+		 *	\param[in]	width
+		 *		FBO の横幅
+		 *
+		 *	\param[in]	height
+		 *		FBO の縦幅
+		 *
+		 *	\sa BindWindow(), FinalizeFrameBufferObject()
+		 */
 		void InitializeFrameBufferObject(int width, int height);
+
+		//! フレームバッファーオブジェクト (FBO) 初期化メソッド2
+		/*!
+		 *	シェーダー内でフレームバッファーオブジェクト
+		 *	(FBO) を利用する際の初期化を行います。
+		 *	このメソッドを呼ぶことで、
+		 *	FBO にアクセスするシェーダープログラムを利用することができます。
+		 *
+		 *	\param[in]	dim
+		 *		FBO の横幅と縦幅を表す fk_Dimension^ 型インスタンス
+		 *
+		 *	\sa BindWindow(), FinalizeFrameBufferObject()
+		 */
 		void InitializeFrameBufferObject(fk_Dimension^ dim);
+
+		//! フレームバッファーオブジェクト (FBO) 利用終了メソッド
+		/*!
+		 *	フレームバッファーオブジェクト (FBO) の利用を終了します。
+		 *
+		 *	\sa InitializeFrameBufferObject(int, int),
+		 *			InitializeFrameBufferObject(fk_Dimension^)
+		 */
 		void FinalizeFrameBufferObject();
+
+		//! ウィンドウ連携設定メソッド
+		/*!
+		 *	フレームバッファーオブジェクト
+		 *	(FBO) を処理するシェーダーの出力を、
+		 *	ウィンドウに表示するよう連携する設定を行います。
+		 *
+		 *	\param[in]	window
+		 *		FBO用シェーダーの出力を表示するウィンドウインスタンス
+		 *
+		 *	\sa InitializeFrameBufferObject(int, int),
+		 *			InitializeFrameBufferObject(fk_Dimension^),
+		 *			UnbindWindow()
+		 */
 		void BindWindow(fk_IBindableDrawer^ window);
+
+		//! ウィンドウ連携解除メソッド
+		/*!
+		 *	BindWindow() メソッドによって設定していた連携を解除します。
+		 *
+		 *	\param[in]	window
+		 *		BindWindow() メソッドで連携設定を行っていたウィンドウインスタンス
+		 *
+		 *	\sa BindWindow()
+		 */
 		void UnbindWindow(fk_IBindableDrawer^ window);
 
 	internal:
