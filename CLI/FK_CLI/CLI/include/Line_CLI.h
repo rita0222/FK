@@ -19,7 +19,7 @@ namespace FK_CLI
 	 *	線分を生成、管理することに特化していることです。
 	 *	基底クラスの機能を利用することは可能ですが、
 	 *	位相操作を伴う変形をした場合、
-	 *	本クラスのメンバ関数が正しく動作しない可能性があります。
+	 *	本クラスのメソッドが正しく動作しない可能性があります。
 	 *
 	 *	\sa	fk_Solid, fk_Model, fk_Shape
 	 */
@@ -40,7 +40,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Line();
 
-		//! 単独線分追加関数1
+		//! 単独線分追加メソッド1
 		/*!
 		 *	線分を追加します。
 		 *	
@@ -50,7 +50,7 @@ namespace FK_CLI
 		 */
 		void PushLine(IEnumerable<fk_Vector^>^ array);
 
-		//! 単独線分追加関数2
+		//! 単独線分追加メソッド2
 		/*!
 		 *	線分を追加します。
 		 *	
@@ -59,7 +59,7 @@ namespace FK_CLI
 		 */
 		void PushLine(fk_Vector^ startPos, fk_Vector^ endPos);
 
-		//! 線分端点位置変更関数
+		//! 線分端点位置変更メソッド
 		/*!
 		 *	線分の端点位置を変更します。
 		 *
@@ -77,9 +77,9 @@ namespace FK_CLI
 		 */
 		bool ChangeLine(int lineID, fk_Vector^ startPos, fk_Vector^ endPos);
 
-		//! 単独線分端点位置設定関数
+		//! 単独線分端点位置設定メソッド
 		/*!
-		 *	この関数は、現在の線分本数によって挙動が異なります。
+		 *	このメソッドは、現在の線分本数によって挙動が異なります。
 		 *	- 線分が生成されていない場合、vertexID の値は無視され、
 		 *		pos を両端点とする縮退した線分が生成されます。
 		 *	- 線分が1本のみの場合は、その線分の端点位置を pos に変更します。
@@ -96,7 +96,7 @@ namespace FK_CLI
 		 */
 		bool SetVertex(int vertexID, fk_Vector^ pos);
 
-		//! 任意線分端点位置設定関数
+		//! 任意線分端点位置設定メソッド
 		/*!
 		 *	生成されている任意の線分の端点位置を変更します。
 		 *
@@ -117,11 +117,11 @@ namespace FK_CLI
 		 */
 		bool SetVertex(int lineID, int vertexID, fk_Vector^ pos);
 
-		//! 単独線分生成関数
+		//! 単独線分生成メソッド
 		/*!
 		 *	1本の線分を生成します。
 		 *	入力する fk_Vector 型の配列は、長さが 2 以上でなければなりません。
-		 *	この関数を呼んだ場合、既にあった線分はすべて破棄されます。
+		 *	このメソッドを呼んだ場合、既にあった線分はすべて破棄されます。
 		 *
 		 *	\param[in]	array
 		 *		fk_Vector 型の配列。array[0] が始点、array[1] が終点となります。

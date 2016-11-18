@@ -136,10 +136,10 @@ namespace FK_CLI
 			void set(fk_BVHMotion^);
 		}
 
-		//! \name 形状ファイル・形状データ入力関数
+		//! \name 形状ファイル・形状データ入力メソッド
 		//@{
 
-		//! SMFファイル入力関数
+		//! SMFファイル入力メソッド
 		/*!
 		 *	SMF形式のファイルからデータを入力します。
 		 *
@@ -149,11 +149,11 @@ namespace FK_CLI
 		 */
 		bool ReadSMFFile(String^ name);
 
-		//! VRML ファイル入力関数1
+		//! VRML ファイル入力メソッド1
 		/*!
 		 *	VRML形式のファイルからデータを入力します。
 		 *	VRMLでは、形状を表す様々なノードがありますが、
-		 *	本関数が対応しているのは「IndexedFaceSet」
+		 *	本メソッドが対応しているのは「IndexedFaceSet」
 		 *	ノードに記述された形状のみです。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -175,7 +175,7 @@ namespace FK_CLI
 		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
 		 *		1997年に策定された「VRML97」の2種類があり、
 		 *		VRML97は「VRML2.0」とも呼ばれます。
-		 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+		 *		本メソッドでは入力フォーマットとして VRML2.0 を想定しています。
 		 *
 		 *	\note
 		 *		VRMLは文法解釈、
@@ -185,14 +185,14 @@ namespace FK_CLI
 		 */
 		bool ReadVRMLFile(String^ name, bool materialFlg, bool solidFlg);
 
-		//! VRML ファイル入力関数2
+		//! VRML ファイル入力メソッド2
 		/*!
 		 *	VRML形式のファイルからデータを入力します。
 		 *	VRMLでは、形状を表す様々なノードがありますが、
-		 *	本関数が対応しているのは「IndexedFaceSet」
+		 *	本メソッドが対応しているのは「IndexedFaceSet」
 		 *	ノードに記述された形状のみです。
 		 *
-		 *	なお、本関数は ReadVRMLFile(String^, bool, bool) において、
+		 *	なお、本メソッドは ReadVRMLFile(String^, bool, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -208,7 +208,7 @@ namespace FK_CLI
 		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
 		 *		1997年に策定された「VRML97」の2種類があり、
 		 *		VRML97は「VRML2.0」とも呼ばれます。
-		 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+		 *		本メソッドでは入力フォーマットとして VRML2.0 を想定しています。
 		 *
 		 *	\note
 		 *		VRMLは文法解釈、
@@ -218,14 +218,14 @@ namespace FK_CLI
 		 */
 		bool ReadVRMLFile(String^ name, bool materialFlg);
 
-		//! VRML ファイル入力関数3
+		//! VRML ファイル入力メソッド3
 		/*!
 		 *	VRML形式のファイルからデータを入力します。
 		 *	VRMLでは、形状を表す様々なノードがありますが、
-		 *	本関数が対応しているのは「IndexedFaceSet」
+		 *	本メソッドが対応しているのは「IndexedFaceSet」
 		 *	ノードに記述された形状のみです。
 		 *
-		 *	なお、本関数は ReadVRMLFile(String^, bool, bool) において、
+		 *	なお、本メソッドは ReadVRMLFile(String^, bool, bool) において、
 		 *	第2引数と第3引数で共に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -236,7 +236,7 @@ namespace FK_CLI
 		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
 		 *		1997年に策定された「VRML97」の2種類があり、
 		 *		VRML97は「VRML2.0」とも呼ばれます。
-		 *		本関数では入力フォーマットとして VRML2.0 を想定しています。
+		 *		本メソッドでは入力フォーマットとして VRML2.0 を想定しています。
 		 *
 		 *	\note
 		 *		VRMLは文法解釈、
@@ -246,7 +246,7 @@ namespace FK_CLI
 		 */
 		bool ReadVRMLFile(String^ name);
 
-		//! STL ファイル入力関数1
+		//! STL ファイル入力メソッド1
 		/*!
 		 *	STL形式のファイルからデータを入力します。
 		 *	対応しているのは面データのみです。
@@ -272,7 +272,7 @@ namespace FK_CLI
 		 */
 		bool ReadSTLFile(String^ name, bool solidFlg, double tolerance);
 
-		//! STL ファイル入力関数2
+		//! STL ファイル入力メソッド2
 		/*!
 		 *	STL形式のファイルからデータを入力します。
 		 *	対応しているのは面データのみです。
@@ -281,7 +281,7 @@ namespace FK_CLI
 		 *	- 5以上の角数である面が存在する。
 		 *	- 3角形面と4角形面が混在している。
 		 *
-		 *	なお、本関数は ReadSTLFile(String^, bool, double) において、
+		 *	なお、本メソッドは ReadSTLFile(String^, bool, double) において、
 		 *	第3引数に 1.0e-0.8 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -296,7 +296,7 @@ namespace FK_CLI
 		 */
 		bool ReadSTLFile(String^ name, bool solidFlg);
 
-		//! STL ファイル入力関数3
+		//! STL ファイル入力メソッド3
 		/*!
 		 *	STL形式のファイルからデータを入力します。
 		 *	対応しているのは面データのみです。
@@ -305,7 +305,7 @@ namespace FK_CLI
 		 *	- 5以上の角数である面が存在する。
 		 *	- 3角形面と4角形面が混在している。
 		 *
-		 *	なお、本関数は ReadSTLFile(String^, bool, double) において、
+		 *	なお、本メソッドは ReadSTLFile(String^, bool, double) において、
 		 *	第2引数に true、第3引数に 1.0e-0.8 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -315,7 +315,7 @@ namespace FK_CLI
 		bool ReadSTLFile(String^ name);
 
 
-		//! HRCファイル入力関数
+		//! HRCファイル入力メソッド
 		/*!
 		 *	HRC形式のファイルからデータを入力します。
 		 *
@@ -325,7 +325,7 @@ namespace FK_CLI
 		 */
 		bool ReadHRCFile(String^ name);
 
-		//! RDSファイル入力関数1
+		//! RDSファイル入力メソッド1
 		/*!
 		 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
 		 *
@@ -341,10 +341,10 @@ namespace FK_CLI
 		 */
 		bool ReadRDSFile(String^ name, bool solidFlg);
 
-		//! RDSファイル入力関数2
+		//! RDSファイル入力メソッド2
 		/*!
 		 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
-		 *	本関数は、 ReadRDSFile(String^, bool) において、
+		 *	本メソッドは、 ReadRDSFile(String^, bool) において、
 		 *	第2引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -353,7 +353,7 @@ namespace FK_CLI
 		 */
 		bool ReadRDSFile(String^ name);
 
-		//! DXFファイル入力関数1
+		//! DXFファイル入力メソッド1
 		/*!
 		 *	DXF 形式のファイルからデータを入力します。
 		 *
@@ -369,10 +369,10 @@ namespace FK_CLI
 		bool ReadDXFFile(String^ name, bool solidFlg);
 
 		
-		//! DXFファイル入力関数1
+		//! DXFファイル入力メソッド1
 		/*!
 		 *	DXF 形式のファイルからデータを入力します。
-		 *	本関数は、 ReadDXFFile(String^, bool) において、
+		 *	本メソッドは、 ReadDXFFile(String^, bool) において、
 		 *	第2引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	name		ファイル名
@@ -381,17 +381,17 @@ namespace FK_CLI
 		 */
 		bool ReadDXFFile(String^ name);
 
-		//! MQOファイル入力関数1-1
+		//! MQOファイル入力メソッド1-1
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *	\param[in]	objName		オブジェクト名
@@ -423,19 +423,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
 
-		//! MQOファイル入力関数1-2
+		//! MQOファイル入力メソッド1-2
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -463,19 +463,19 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
 
-		//! MQOファイル入力関数1-3
+		//! MQOファイル入力メソッド1-3
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第4引数に true を、第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -492,19 +492,19 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg);
 
-		//! MQOファイル入力関数1-4
+		//! MQOファイル入力メソッド1-4
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第3引数に true を、第4引数に true を、第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -516,17 +516,17 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName);
 
-		//! MQOファイル入力関数2-1
+		//! MQOファイル入力メソッド2-1
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -565,19 +565,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg, bool materialFlg);
 
-		//! MQOファイル入力関数2-2
+		//! MQOファイル入力メソッド2-2
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, int, bool, bool, bool) において、
 		 *	第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -613,19 +613,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg);
 
-		//! MQOファイル入力関数2-3
+		//! MQOファイル入力メソッド2-3
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, int, bool, bool, bool) において、
 		 *	第5引数に true を、第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -651,19 +651,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 int materialID, bool solidFlg);
 
-		//! MQOファイル入力関数2-4
+		//! MQOファイル入力メソッド2-4
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, int, bool, bool, bool) において、
 		 *	第4引数に true を、第5引数に true を、第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -682,20 +682,20 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, int materialID);
 
-		//! MQOデータ入力関数1-1
+		//! MQOデータ入力メソッド1-1
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
 		 *
@@ -728,22 +728,22 @@ namespace FK_CLI
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
 
-		//! MQOデータ入力関数1-2
+		//! MQOデータ入力メソッド1-2
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
 		 *	第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -772,22 +772,22 @@ namespace FK_CLI
 		 */
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, bool solidFlg, bool contFlg);
 
-		//! MQOデータ入力関数1-3
+		//! MQOデータ入力メソッド1-3
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
 		 *	第4引数に true を、第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -806,22 +806,22 @@ namespace FK_CLI
 		 */
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, bool solidFlg);
 
-		//! MQOデータ入力関数1-4
+		//! MQOデータ入力メソッド1-4
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOData(IEnumerable<Byte>^, String^, bool, bool, bool) において、
 		 *	第3引数に true を、第4引数に true を、第5引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -834,20 +834,20 @@ namespace FK_CLI
 		 */
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName);
 
-		//! MQOデータ入力関数2-1
+		//! MQOデータ入力メソッド2-1
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
 		 *
@@ -886,22 +886,22 @@ namespace FK_CLI
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg, bool materialFlg);
 
-		//! MQOデータ入力関数2-2
+		//! MQOデータ入力メソッド2-2
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
 		 *	第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -937,22 +937,22 @@ namespace FK_CLI
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName,
 						 int materialID, bool solidFlg, bool contFlg);
 
-		//! MQOデータ入力関数2-3
+		//! MQOデータ入力メソッド2-3
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
 		 *	第5引数に true を、第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -977,22 +977,22 @@ namespace FK_CLI
 		 */
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, int materialID, bool solidFlg);
 
-		//! MQOデータ入力関数2-4
+		//! MQOデータ入力メソッド2-4
 		/*!
 		 *	MQO形式のデータを入力します。
-		 *	本関数では、MQO形式のデータが既に
+		 *	本メソッドでは、MQO形式のデータが既に
 		 *	Byte 型の配列中に入力されていると仮定し、
-		 *	ReadMQOFile() 関数と同様の処理を行います。
+		 *	ReadMQOFile() メソッドと同様の処理を行います。
 		 *
-		 *	本関数は、テクスチャ用のデータの入力は行いません。
+		 *	本メソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOData(IEnumerable<Byte>^, String^, int, bool, bool, bool) において、
 		 *	第4引数に true を、第5引数に true を、第6引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	buffer		データが格納されているバッファ
@@ -1011,17 +1011,17 @@ namespace FK_CLI
 		 */
 		bool ReadMQOData(IEnumerable<Byte>^ buffer, String^ objName, int materialID);
 
-		//! DirectX (D3DX) ファイル入力関数1-1
+		//! DirectX (D3DX) ファイル入力メソッド1-1
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	本関数で入力できるのは形状データとアニメーションデータです。
+		 *	本メソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_IndexFaceSet クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -1042,19 +1042,19 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, bool solidFlg);
 
-		//! DirectX (D3DX) ファイル入力関数1-2
+		//! DirectX (D3DX) ファイル入力メソッド1-2
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	本関数で入力できるのは形状データとアニメーションデータです。
+		 *	本メソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_IndexFaceSet クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadD3DXFile(String^, String^, bool) において、
+		 *	なお、本メソッドは ReadD3DXFile(String^, String^, bool) において、
 		 *	第3引数に true を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -1070,17 +1070,17 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName);
 
-		//! DirectX (D3DX) ファイル入力関数2-1
+		//! DirectX (D3DX) ファイル入力メソッド2-1
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	本関数で入力できるのは形状データとアニメーションデータです。
+		 *	本メソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_IndexFaceSet クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -1107,19 +1107,19 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
 
-		//! DirectX (D3DX) ファイル入力関数2-2
+		//! DirectX (D3DX) ファイル入力メソッド2-2
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	本関数で入力できるのは形状データとアニメーションデータです。
+		 *	本メソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_IndexFaceSet クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	本関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	本メソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadD3DXFile(String^, String^, int, bool) において、
+		 *	なお、本メソッドは ReadD3DXFile(String^, String^, int, bool) において、
 		 *	第4引数に true を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -1143,10 +1143,10 @@ namespace FK_CLI
 
 		//@}
 
-		//! \name 形状ファイル・形状データ出力関数
+		//! \name 形状ファイル・形状データ出力メソッド
 		//@{
 		
-		//! VRML ファイル出力関数1-1
+		//! VRML ファイル出力メソッド1-1
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *
@@ -1157,17 +1157,17 @@ namespace FK_CLI
 		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 		 *
 		 *	\param[in]	triFlg
-		 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
+		 *		仮想メソッドからの継承のために存在する引数で、処理には一切影響しません。
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
 		bool WriteVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
 
-		//! VRML ファイル出力関数1-2
+		//! VRML ファイル出力メソッド1-2
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *
-		 *	なお、本関数は WriteVRMLFile(String^, fk_Material^, bool) において、
+		 *	なお、本メソッドは WriteVRMLFile(String^, fk_Material^, bool) において、
 		 *	第3引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -1180,11 +1180,11 @@ namespace FK_CLI
 		 */
 		bool WriteVRMLFile(String^ fileName, fk_Material^ material);
 
-		//! VRML ファイル出力関数1-3
+		//! VRML ファイル出力メソッド1-3
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *
-		 *	なお、本関数は WriteVRMLFile(String^, fk_Material^, bool) において、
+		 *	なお、本メソッドは WriteVRMLFile(String^, fk_Material^, bool) において、
 		 *	第2引数に null を、第3引数に false を入力している場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -1193,7 +1193,7 @@ namespace FK_CLI
 		 */
 		bool WriteVRMLFile(String^ fileName);
 
-		//! VRML ファイル出力関数2-1
+		//! VRML ファイル出力メソッド2-1
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *	この引数形式の場合は、
@@ -1213,21 +1213,21 @@ namespace FK_CLI
 		 *		nullptr を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 		 *
 		 *	\param[in]	triFlg
-		 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
+		 *		仮想メソッドからの継承のために存在する引数で、処理には一切影響しません。
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
 		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time,
 						   IEnumerable<fk_Vector^>^ pos, fk_Material^ material, bool triFlg);
 
-		//! VRML ファイル出力関数2-2
+		//! VRML ファイル出力メソッド2-2
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *	この引数形式の場合は、
 		 *	CoordinateInterpolator ノードを用いた
 		 *	アニメーションデータを出力することが可能です。
 		 *
-		 *	なお、本関数は
+		 *	なお、本メソッドは
 		 *	WriteVRMLFile(String^, IEnumerable<double>^,
 		 *	IEnumerable<fk_Vector^>^, fk_Material^, bool) において、
 		 *	第5引数に false を入力している場合と同義となります。
@@ -1249,14 +1249,14 @@ namespace FK_CLI
 		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time,
 						   IEnumerable<fk_Vector^>^ pos, fk_Material^ material);
 
-		//! VRML ファイル出力関数2-3
+		//! VRML ファイル出力メソッド2-3
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *	この引数形式の場合は、
 		 *	CoordinateInterpolator ノードを用いた
 		 *	アニメーションデータを出力することが可能です。
 		 *
-		 *	なお、本関数は
+		 *	なお、本メソッドは
 		 *	WriteVRMLFile(String^, IEnumerable<double>^,
 		 *	IEnumerable<fk_Vector^>^, fk_Material^, bool) において、
 		 *	第4引数に null を、第5引数に false を入力している場合と同義となります。
@@ -1273,7 +1273,7 @@ namespace FK_CLI
 		 */
 		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time, IEnumerable<fk_Vector^>^ pos);
 
-		//! STL ファイル出力関数
+		//! STL ファイル出力メソッド
 		/*!
 		 *	STL 形式で形状データを出力します。
 		 *
@@ -1283,7 +1283,7 @@ namespace FK_CLI
 		 */
 		bool WriteSTLFile(String^ fileName);
 
-		//! DXF ファイル出力関数1
+		//! DXF ファイル出力メソッド1
 		/*!
 		 *	DXF 形式で形状データを出力します。
 		 *
@@ -1297,11 +1297,11 @@ namespace FK_CLI
 		 */
 		bool WriteDXFFile(String^ fileName, bool triFlg);
 
-		//! DXF ファイル出力関数1
+		//! DXF ファイル出力メソッド1
 		/*!
 		 *	DXF 形式で形状データを出力します。
 		 *
-		 *	なお、本関数は WriteDXFFile(String^, bool) において、
+		 *	なお、本メソッドは WriteDXFFile(String^, bool) において、
 		 *	第2引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -1310,7 +1310,7 @@ namespace FK_CLI
 		 */
 		bool WriteDXFFile(String^ fileName);
 
-		//! MQO ファイル出力関数
+		//! MQO ファイル出力メソッド
 		/*!
 		 *	MQO 形式で形状データを出力します。
 		 *
@@ -1321,10 +1321,10 @@ namespace FK_CLI
 		bool WriteMQOFile(String^ fileName);
 		//@}
 
-		//! \name 形状情報参照関数
+		//! \name 形状情報参照メソッド
 		//@{
 
-		//! 頂点位置ベクトル参照関数
+		//! 頂点位置ベクトル参照メソッド
 		/*!
 		 *	形状データ中の、頂点の位置ベクトルを取得します。
 		 *
@@ -1338,7 +1338,7 @@ namespace FK_CLI
 		 */
 		fk_Vector^ GetPosVec(int vertexID);
 
-		//! 頂点 ID 配列参照関数
+		//! 頂点 ID 配列参照メソッド
 		/*!
 		 *	面を構成する頂点 ID の配列を取得します。
 		 *
@@ -1350,7 +1350,7 @@ namespace FK_CLI
 		 */
 		cli::array<int>^ GetFaceData(int faceID);
 
-		//! 頂点 ID 参照関数
+		//! 頂点 ID 参照メソッド
 		/*!
 		 *	面を構成する頂点 ID を取得します。
 		 *
@@ -1368,7 +1368,7 @@ namespace FK_CLI
 		 */
 		int	GetFaceData(int faceID, int vertexNum);
 
-		//! 面法線ベクトル取得関数1
+		//! 面法線ベクトル取得メソッド1
 		/*!
 		 *	面の法線ベクトルを取得します。
 		 *
@@ -1383,11 +1383,11 @@ namespace FK_CLI
 		 */
 		fk_Vector^ GetPNorm(int faceID, int order);
 
-		//! 面法線ベクトル取得関数2
+		//! 面法線ベクトル取得メソッド2
 		/*!
 		 *	面の法線ベクトルを取得します。
 		 *
-		 *	なお、本関数は GetPNorm(int, int) において、
+		 *	なお、本メソッドは GetPNorm(int, int) において、
 		 *	第2引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceID		面ID
@@ -1398,7 +1398,7 @@ namespace FK_CLI
 		 */
 		fk_Vector^ GetPNorm(int faceID);
 
-		//! 頂点法線ベクトル取得関数1
+		//! 頂点法線ベクトル取得メソッド1
 		/*!
 		 *	頂点の法線ベクトルを取得します。
 		 *
@@ -1413,11 +1413,11 @@ namespace FK_CLI
 		 */
 		fk_Vector^ GetVNorm(int vertexID, int order);
 
-		//! 頂点法線ベクトル取得関数2
+		//! 頂点法線ベクトル取得メソッド2
 		/*!
 		 *	頂点の法線ベクトルを取得します。
 		 *
-		 *	なお、本関数は GetVNorm(int, int) において、
+		 *	なお、本メソッドは GetVNorm(int, int) において、
 		 *	第2引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1428,7 +1428,7 @@ namespace FK_CLI
 		 */
 		fk_Vector^ GetVNorm(int vertexID);
 
-		//! マテリアルID取得関数
+		//! マテリアルID取得メソッド
 		/*!
 		 *	面に対して個別に設定してあるマテリアル ID を取得します。
 		 *	マテリアルの個別設定については
@@ -1445,15 +1445,15 @@ namespace FK_CLI
 
 		//@}
 		
-		//! \name 形状操作関数
+		//! \name 形状操作メソッド
 		//@{
 		
-		//! 頂点移動関数1-1
+		//! 頂点移動メソッド1-1
 		/*!
 		 *	指定された頂点を移動します。
 		 *	なお、 SetVNorm() によって法線ベクトルが設定されていた場合や、
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
-		 *	本関数によって破棄されます。
+		 *	本メソッドによって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
 		 *
@@ -1468,14 +1468,14 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, fk_Vector^ pos, int order);
 
-		//! 頂点移動関数1-2
+		//! 頂点移動メソッド1-2
 		/*!
 		 *	指定された頂点を移動します。
 		 *	なお、 SetVNorm() によって法線ベクトルが設定されていた場合や、
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
-		 *	本関数によって破棄されます。
+		 *	本メソッドによって破棄されます。
 		 *
-		 *	なお、本関数は MoveVPosition(int, fk_Vector^, int) において、
+		 *	なお、本メソッドは MoveVPosition(int, fk_Vector^, int) において、
 		 *	第3引数に 0 を入力した場合と同義になります。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1488,12 +1488,12 @@ namespace FK_CLI
 		bool MoveVPosition(int vertexID, fk_Vector^ pos);
 
 		
-		//! 頂点移動関数2-1
+		//! 頂点移動メソッド2-1
 		/*!
 		 *	指定された頂点を移動します。
 		 *	なお、 SetVNorm() によって法線ベクトルが設定されていた場合や、
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
-		 *	本関数によって破棄されます。
+		 *	本メソッドによって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
 		 *	\param[in]	x				移動先位置ベクトルの x 成分
@@ -1509,14 +1509,14 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, double x, double y, double z, int order);
 
-		//! 頂点移動関数2-1
+		//! 頂点移動メソッド2-1
 		/*!
 		 *	指定された頂点を移動します。
 		 *	なお、 SetVNorm() によって法線ベクトルが設定されていた場合や、
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
-		 *	本関数によって破棄されます。
+		 *	本メソッドによって破棄されます。
 		 *
-		 *	なお、本関数は MoveVPosition(int, double, double, double, int) において、
+		 *	なお、本メソッドは MoveVPosition(int, double, double, double, int) において、
 		 *	第5引数に 0 を入力した場合と同義になります。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1530,12 +1530,12 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, double x, double y, double z);
 
-		//! 頂点移動関数3-1
+		//! 頂点移動メソッド3-1
 		/*!
 		 *	指定された頂点を移動します。
 		 *	なお、 SetVNorm() によって法線ベクトルが設定されていた場合や、
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
-		 *	本関数によって破棄されます。
+		 *	本メソッドによって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
 		 *
@@ -1551,14 +1551,14 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, IEnumerable<double>^ array, int order);
 
-		//! 頂点移動関数3-2
+		//! 頂点移動メソッド3-2
 		/*!
 		 *	指定された頂点を移動します。
 		 *	なお、 SetVNorm() によって法線ベクトルが設定されていた場合や、
 		 *	SetPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
-		 *	本関数によって破棄されます。
+		 *	本メソッドによって破棄されます。
 		 *
-		 *	なお、本関数は MoveVPosition(int, IEnumerable<double>^, int) において、
+		 *	なお、本メソッドは MoveVPosition(int, IEnumerable<double>^, int) において、
 		 *	第3引数に 0 を入力した場合と同義になります。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1572,7 +1572,7 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, IEnumerable<double>^ array);
 
-		//! 任意形状生成関数1
+		//! 任意形状生成メソッド1
 		/*!
 		 *	与えられたインデックスフェースセット情報から、形状を生成します。
 		 *
@@ -1603,11 +1603,11 @@ namespace FK_CLI
 		void MakeIFSet(int faceNum, int polyNum, IEnumerable<int>^ IFSet,
 					   int vertexNum, IEnumerable<fk_Vector^>^ posArray, int order);
 
-		//! 任意形状生成関数2
+		//! 任意形状生成メソッド2
 		/*!
 		 *	与えられたインデックスフェースセット情報から、形状を生成します。
 		 *
-		 *	なお、本関数は MakeIFSet(int, int, IEnumerable<int>^, int, IEnumerable<fk_Vector^>^, int) において、
+		 *	なお、本メソッドは MakeIFSet(int, int, IEnumerable<int>^, int, IEnumerable<fk_Vector^>^, int) において、
 		 *	第6引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceNum		面数
@@ -1634,16 +1634,16 @@ namespace FK_CLI
 		void MakeIFSet(int faceNum, int polyNum, IEnumerable<int>^ IFSet,
 					   int vertexNum, IEnumerable<fk_Vector^>^ posArray);
 
-		//! 面法線ベクトル設定関数1
+		//! 面法線ベクトル設定メソッド1
 		/*!
 		 *	面の法線ベクトルを設定します。
 		 *
 		 *	通常、面の法線ベクトルは自前で設定しなくても、
 		 *	形状から自動的に算出されます。
 		 *	しかし、バンプマッピングなどの技法を用いる場合など、
-		 *	自前で計算した法線ベクトルを与える場合は、この関数を用います。
+		 *	自前で計算した法線ベクトルを与える場合は、このメソッドを用います。
 		 *
-		 *	なお、 MoveVPosition() 関数によって面上の点が移動された場合、
+		 *	なお、 MoveVPosition() メソッドによって面上の点が移動された場合、
 		 *	設定した法線ベクトルは破棄されます。
 		 *
 		 *	\param[in]	faceID		面ID
@@ -1662,19 +1662,19 @@ namespace FK_CLI
 		 */
 		bool SetPNorm(int faceID, fk_Vector^ norm, int order);
 
-		//! 面法線ベクトル設定関数2
+		//! 面法線ベクトル設定メソッド2
 		/*!
 		 *	面の法線ベクトルを設定します。
 		 *
 		 *	通常、面の法線ベクトルは自前で設定しなくても、
 		 *	形状から自動的に算出されます。
 		 *	しかし、バンプマッピングなどの技法を用いる場合など、
-		 *	自前で計算した法線ベクトルを与える場合は、この関数を用います。
+		 *	自前で計算した法線ベクトルを与える場合は、このメソッドを用います。
 		 *
-		 *	なお、 MoveVPosition() 関数によって面上の点が移動された場合、
+		 *	なお、 MoveVPosition() メソッドによって面上の点が移動された場合、
 		 *	設定した法線ベクトルは破棄されます。
 		 *
-		 *	本関数は SetPNorm(int, fk_Vector^, int) において、
+		 *	本メソッドは SetPNorm(int, fk_Vector^, int) において、
 		 *	第3引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	faceID		面ID
@@ -1690,16 +1690,16 @@ namespace FK_CLI
 		 */
 		bool SetPNorm(int faceID, fk_Vector^ norm);
 
-		//! 頂点法線ベクトル設定関数1
+		//! 頂点法線ベクトル設定メソッド1
 		/*!
 		 *	頂点の法線ベクトルを設定します。
 		 *
 		 *	通常、頂点の法線ベクトルは自前で設定しなくても、
 		 *	形状から自動的に算出されます。
 		 *	しかし、バンプマッピングなどの技法を用いる場合など、
-		 *	自前で計算した法線ベクトルを与える場合は、この関数を用います。
+		 *	自前で計算した法線ベクトルを与える場合は、このメソッドを用います。
 		 *
-		 *	なお、 MoveVPosition() 関数によって頂点が移動された場合、
+		 *	なお、 MoveVPosition() メソッドによって頂点が移動された場合、
 		 *	設定した法線ベクトルは破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1718,19 +1718,19 @@ namespace FK_CLI
 		 */
 		bool SetVNorm(int vertexID, fk_Vector^ norm, int order);
 
-		//! 頂点法線ベクトル設定関数1
+		//! 頂点法線ベクトル設定メソッド1
 		/*!
 		 *	頂点の法線ベクトルを設定します。
 		 *
 		 *	通常、頂点の法線ベクトルは自前で設定しなくても、
 		 *	形状から自動的に算出されます。
 		 *	しかし、バンプマッピングなどの技法を用いる場合など、
-		 *	自前で計算した法線ベクトルを与える場合は、この関数を用います。
+		 *	自前で計算した法線ベクトルを与える場合は、このメソッドを用います。
 		 *
-		 *	なお、 MoveVPosition() 関数によって頂点が移動された場合、
+		 *	なお、 MoveVPosition() メソッドによって頂点が移動された場合、
 		 *	設定した法線ベクトルは破棄されます。
 		 *
-		 *	本関数は SetVNorm(int, fk_Vector^, int) において、
+		 *	本メソッドは SetVNorm(int, fk_Vector^, int) において、
 		 *	第3引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -1746,7 +1746,7 @@ namespace FK_CLI
 		 */
 		bool SetVNorm(int vertexID, fk_Vector^ norm);
 
-		//! マテリアルID設定関数
+		//! マテリアルID設定メソッド
 		/*!
 		 *	面に対してマテリアルIDを設定します。
 		 *	マテリアルの個別設定については
@@ -1763,7 +1763,7 @@ namespace FK_CLI
 		 */
 		bool SetElemMaterialID(int faceID, int materialID);
 
-		//! 法線ベクトル強制計算関数 
+		//! 法線ベクトル強制計算メソッド 
 		/*!
 		 *	fk_IndexFaceSet では、
 		 *	面や頂点の法線ベクトルは形状生成した時点ではまだ算出しません。
@@ -1774,7 +1774,7 @@ namespace FK_CLI
 		 *	例えば、対象形状が初めてシーンに登録された時点で
 		 *	画面が一瞬止まってしまうといった状況が想定されます。
 		 *
-		 *	本関数は、形状中のすべての面と頂点に対して法線ベクトルを強制的に算出します。
+		 *	本メソッドは、形状中のすべての面と頂点に対して法線ベクトルを強制的に算出します。
 		 *	なお、 SetPNorm() や SetVNorm() で設定した法線ベクトルは全て破棄されます。
 		 *
 		 *	\sa GetPNorm(), GetVNorm(), SetPNorm(), SetVNorm()
@@ -1783,10 +1783,10 @@ namespace FK_CLI
 
 		//@}
 		
-		//! \name 直方体形状制御関数
+		//! \name 直方体形状制御メソッド
 		//@{
 
-		//! 直方体生成関数
+		//! 直方体生成メソッド
 		/*!
 		 *	直方体を生成します。
 		 *
@@ -1802,7 +1802,7 @@ namespace FK_CLI
 		 *	- (-x/2, -y/2, -z/2)
 		 *	- (x/2, -y/2, -z/2)
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	x	x方向の辺長
 		 *	\param[in]	y	y方向の辺長
@@ -1812,12 +1812,12 @@ namespace FK_CLI
 		 */
 		void MakeBlock(double x, double y, double z);
 
-		//! 直方体辺長変更関数
+		//! 直方体辺長変更メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	直方体の辺長を一括して設定しなおします。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	x	x方向の辺長
 		 *	\param[in]	y	y方向の辺長
@@ -1827,12 +1827,12 @@ namespace FK_CLI
 		 */
 		void SetBlockSize(double x, double y, double z);
 
-		//! 直方体個別辺長設定関数
+		//! 直方体個別辺長設定メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	直方体の辺長を個別に設定します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	length	辺長
 		 *	\param[in]	axis	軸方向。以下のいずれかを指定します。
@@ -1844,12 +1844,12 @@ namespace FK_CLI
 		 */
 		void SetBlockSize(double length, fk_Axis axis);
 
-		//! 直方体全体拡大縮小関数
+		//! 直方体全体拡大縮小メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	直方体全体を指定された倍率で拡大・縮小します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *
@@ -1857,12 +1857,12 @@ namespace FK_CLI
 		 */
 		void SetBlockScale(double scale);
 
-		//! 直方体軸方向拡大縮小関数
+		//! 直方体軸方向拡大縮小メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	指定された軸方向についてのみ拡大・縮小します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *	\param[in]	axis	軸方向。以下のいずれかを指定します。
@@ -1874,12 +1874,12 @@ namespace FK_CLI
 		 */
 		void SetBlockScale(double scale, fk_Axis axis);
 
-		//! 直方体軸方向個別拡大縮小関数
+		//! 直方体軸方向個別拡大縮小メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	各軸方向に対し個別の倍率で拡大・縮小します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	x	x方向の倍率
 		 *	\param[in]	y	y方向の倍率
@@ -1890,10 +1890,10 @@ namespace FK_CLI
 		void SetBlockScale(double x, double y, double z);
 		//@}
 
-		//! \name 円形状制御関数
+		//! \name 円形状制御メソッド
 		//@{
 
-		//! 円形状生成関数
+		//! 円形状生成メソッド
 		/*!
 		 *	円形状を生成します。
 		 *
@@ -1906,7 +1906,7 @@ namespace FK_CLI
 		 *	初期状態では、中心を原点とし、
 		 *	面の法線ベクトルが (0, 0, 1) となるように配置されます。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
 		 *	\param[in]	rad	半径
@@ -1915,12 +1915,12 @@ namespace FK_CLI
 		 */
 		void MakeCircle(int div, double rad);
 
-		//! 円形状半径設定関数
+		//! 円形状半径設定メソッド
 		/*!
 		 *	MakeCircle() によって円形状を生成した後に、
 		 *	半径を設定しなおします。
-		 *	この関数は、 MakeCircle() によって円形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCircle() によって円形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	rad	半径
 		 *
@@ -1928,12 +1928,12 @@ namespace FK_CLI
 		 */
 		void SetCircleRadius(double rad);
 
-		//! 円形状分割数設定関数
+		//! 円形状分割数設定メソッド
 		/*!
 		 *	MakeCircle() によって円形状を生成した後に、
 		 *	分割数を設定しなおします。
-		 *	この関数は、 MakeCircle() によって円形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCircle() によって円形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div		分割数
 		 *
@@ -1941,12 +1941,12 @@ namespace FK_CLI
 		 */
 		void SetCircleDivide(int div);
 
-		//! 円形状拡大縮小関数
+		//! 円形状拡大縮小メソッド
 		/*!
 		 *	MakeCircle() によって円形状を生成した後に、
 		 *	形状全体を与えられた倍率で拡大・縮小します。
-		 *	この関数は、 MakeCircle() によって円形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCircle() によって円形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *
@@ -1955,10 +1955,10 @@ namespace FK_CLI
 		void SetCircleScale(double scale);
 		//@}
 
-		//! \name 球形状制御関数
+		//! \name 球形状制御メソッド
 		//@{
 
-		//! 球形状生成関数
+		//! 球形状生成メソッド
 		/*!
 		 *	球形状を生成します。
 		 *
@@ -1970,7 +1970,7 @@ namespace FK_CLI
 		 *
 		 *	初期状態では、中心を原点とするように配置されます。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *	
 		 *	\param[in]	div	分割数
 		 *	\param[in]	rad	半径
@@ -1979,12 +1979,12 @@ namespace FK_CLI
 		 */
 		void MakeSphere(int div, double rad);
 
-		//! 球形状半径設定関数
+		//! 球形状半径設定メソッド
 		/*!
 		 *	MakeSphere() によって球形状を生成した後に、
 		 *	半径を設定しなおします。
-		 *	この関数は、 MakeSphere() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeSphere() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	rad	半径
 		 *
@@ -1992,12 +1992,12 @@ namespace FK_CLI
 		 */
 		void SetSphereRadius(double rad);
 
-		//! 球形状分割数設定関数
+		//! 球形状分割数設定メソッド
 		/*!
 		 *	MakeSphere() によって球形状を生成した後に、
 		 *	分割数を設定しなおします。
-		 *	この関数は、 MakeSphere() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeSphere() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div		分割数
 		 *
@@ -2005,12 +2005,12 @@ namespace FK_CLI
 		 */
 		void SetSphereDivide(int div);
 
-		//! 球形状拡大縮小関数
+		//! 球形状拡大縮小メソッド
 		/*!
 		 *	MakeSphere() によって球形状を生成した後に、
 		 *	形状全体を与えられた倍率で拡大・縮小します。
-		 *	この関数は、 MakeSphere() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeSphere() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *
@@ -2019,10 +2019,10 @@ namespace FK_CLI
 		void SetSphereScale(double scale);
 		//@}
 
-		//! \name 正多角柱(円柱)形状制御関数
+		//! \name 正多角柱(円柱)形状制御メソッド
 		//@{
 
-		//! 正多角柱(円柱)形状生成関数
+		//! 正多角柱(円柱)形状生成メソッド
 		/*!
 		 *	正多角柱(円柱)を生成します。
 		 *
@@ -2034,7 +2034,7 @@ namespace FK_CLI
 		 *	設定できる要素は角数、上面半径、底面半径、高さの4要素です。
 		 *	上面と底面の半径とは、それぞれの面を構成する正多角形の外接円半径を指します。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div		角数
 		 *	\param[in]	top		上面半径
@@ -2046,12 +2046,12 @@ namespace FK_CLI
 		void MakePrism(int div, double top, double bottom, double height);
 
 
-		//! 正多角柱(円柱)角数設定関数
+		//! 正多角柱(円柱)角数設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	角数を設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div	角数
 		 *
@@ -2059,12 +2059,12 @@ namespace FK_CLI
 		 */
 		void SetPrismDivide(int div);
 
-		//! 正多角柱(円柱)上面半径設定関数
+		//! 正多角柱(円柱)上面半径設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	上面の外接円半径を設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	top	上面半径
 		 *
@@ -2072,12 +2072,12 @@ namespace FK_CLI
 		 */
 		void SetPrismTopRadius(double top);
 
-		//! 正多角柱(円柱)角数設定関数
+		//! 正多角柱(円柱)角数設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	底面の外接円半径を設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	bottom	底面半径
 		 *
@@ -2085,12 +2085,12 @@ namespace FK_CLI
 		 */
 		void SetPrismBottomRadius(double bottom);
 
-		//! 正多角柱(円柱)高さ設定関数
+		//! 正多角柱(円柱)高さ設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	高さを設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	height	高さ
 		 *
@@ -2099,10 +2099,10 @@ namespace FK_CLI
 		void SetPrismHeight(double height);
 		//@}
 
-		//! \name 正多角錐(円錐)形状制御関数
+		//! \name 正多角錐(円錐)形状制御メソッド
 		//@{
 
-		//! 正多角錐(円錐)形状生成関数
+		//! 正多角錐(円錐)形状生成メソッド
 		/*!
 		 *	正多角錐(円錐)を生成します。
 		 *
@@ -2114,7 +2114,7 @@ namespace FK_CLI
 		 *	設定できる要素は角数、底面半径、高さの3要素です。
 		 *	底面半径とは、面を構成する正多角形の外接円半径を指します。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div		角数
 		 *	\param[in]	rad		底面半径
@@ -2124,12 +2124,12 @@ namespace FK_CLI
 		 */
 		void MakeCone(int div, double rad, double height);
 
-		//! 正多角錐(円錐)角数設定関数
+		//! 正多角錐(円錐)角数設定メソッド
 		/*!
 		 *	MakeCone() によって正多角錐(円錐)を生成した後に、
 		 *	角数を設定しなおします。
-		 *	この関数は、 MakeCone() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCone() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div	角数
 		 *
@@ -2137,12 +2137,12 @@ namespace FK_CLI
 		 */
 		void SetConeDivide(int div);
 
-		//! 正多角錐(円錐)底面半径設定関数
+		//! 正多角錐(円錐)底面半径設定メソッド
 		/*!
 		 *	MakeCone() によって正多角錐(円錐)を生成した後に、
 		 *	底面外接円半径を設定しなおします。
-		 *	この関数は、 MakeCone() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCone() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	rad		底面半径
 		 *
@@ -2150,12 +2150,12 @@ namespace FK_CLI
 		 */
 		void SetConeRadius(double rad);
 
-		//! 正多角錐(円錐)高さ設定関数
+		//! 正多角錐(円錐)高さ設定メソッド
 		/*!
 		 *	MakeCone() によって正多角錐(円錐)を生成した後に、
 		 *	高さを設定しなおします。
-		 *	この関数は、 MakeCone() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCone() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	height		高さ
 		 *
@@ -2164,10 +2164,10 @@ namespace FK_CLI
 		void SetConeHeight(double height);
 		//@}
 
-		//! \name カプセル型形状制御関数
+		//! \name カプセル型形状制御メソッド
 		//@{
 
-		//! カプセル型形状生成関数
+		//! カプセル型形状生成メソッド
 		/*!
 		 *	カプセル型を生成します。
 		 *	カプセル型は半径の等しい円柱側面と半球面によって構成されています。
@@ -2177,7 +2177,7 @@ namespace FK_CLI
 		 *	設定できる要素は中心軸長、半径、分割数です。
 		 *	実際のカプセル型の全長は「中心軸長 + (半径)*2」となります。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div		分割数
 		 *	\param[in]	len		中心軸長
@@ -2187,12 +2187,12 @@ namespace FK_CLI
 		 */
 		void MakeCapsule(int div, double len, double rad);
 
-		//! カプセル型形状寸法設定関数
+		//! カプセル型形状寸法設定メソッド
 		/*!
 		 *	MakeCapsule() によってカプセル型形状を生成した後に、
 		 *	中心軸長と半径を再度設定します。
-		 *	この関数は、 MakeCapsule() によってカプセル型形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCapsule() によってカプセル型形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	len		中心軸長
 		 *	\param[in]	rad		半径
@@ -2202,10 +2202,10 @@ namespace FK_CLI
 		void SetCapsuleSize(double len, double rad);
 		//@}
 
-		//! \name 形状コピー操作関数
+		//! \name 形状コピー操作メソッド
 		//@{
 
-		//! fk_Solid 出力関数
+		//! fk_Solid 出力メソッド
 		/*!
 		 *	fk_IndexFaceSet 型にある形状情報を、
 		 *	fk_Solid 型のインスタンスにコピーします。
@@ -2218,7 +2218,7 @@ namespace FK_CLI
 		 */
 		void PutSolid(fk_Solid^ solid);
 
-		//! 形状コピー関数
+		//! 形状コピーメソッド
 		/*!
 		 *	引数として与えられたインスタンス中の形状をコピーします。
 		 *	各種属性およびマテリアル情報は写しません。

@@ -23,7 +23,7 @@ namespace FK_CLI
 	 *	これにより、 fk_Operation の持つ履歴操作が、
 	 *	本クラスの変形処理においても有効となっています。
 	 *	fk_Solid を利用する際に、
-	 *	関数が fk_Operation によるものか、
+	 *	メソッドが fk_Operation によるものか、
 	 *	fk_Modify によるものかを利用者が意識する必要はありません。
 	 *
 	 *	このクラスの機能は、大きく分けて
@@ -32,7 +32,7 @@ namespace FK_CLI
 	 *	- 頂点移動 (moveVPosition())
 	 *	.
 	 *	の3種類があります。基本形状の生成および頂点移動については、
-	 *	fk_IndexFaceSet クラスにも全て同名の関数が提供されており、機能も同一です。
+	 *	fk_IndexFaceSet クラスにも全て同名のメソッドが提供されており、機能も同一です。
 	 *	fk_Block や fk_Sphere といった基本形状を
 	 *	fk_Solid によって生成したい場合に便利です。
 	 *
@@ -48,22 +48,22 @@ namespace FK_CLI
 		fk_Modify(bool argNewFlg);
 		~fk_Modify();
 #endif
-		//! \name 位相操作関数
+		//! \name 位相操作メソッド
 		//@{
 
-		//! 頂点削除関数
+		//! 頂点削除メソッド
 		/*!
 		 *	形状中の頂点と、その頂点に接続していた稜線を全て削除します。
 		 *	また、頂点に接続していたループを全て結合し、新たなループを生成します。
 		 *
-		 *	この関数を実行するには、削除する頂点に隣接している頂点が、
+		 *	このメソッドを実行するには、削除する頂点に隣接している頂点が、
 		 *	全て3本以上の稜線と接続しているという条件を満たしているという必要があります。
 		 *	隣接するループについては、必ずしもループが生成されている必要はありません。
-		 *	この関数で削除を実行してしまうと、
+		 *	このメソッドで削除を実行してしまうと、
 		 *	それに伴い接続している稜線やループも自動的に削除されます。
 		 *	削除される稜線やループの情報が必要な場合は、
-		 *	事前に fk_Reference::GetAllEOnV() 関数や
-		 *	fk_Reference::GetAllLOnV() 関数等によって参照しておく必要があります。
+		 *	事前に fk_Reference::GetAllEOnV() メソッドや
+		 *	fk_Reference::GetAllLOnV() メソッド等によって参照しておく必要があります。
 		 *
 		 *	\image html Euler07.png "RemoveVertexInLoop"
 		 *	\image latex Euler07.eps "RemoveVertexInLoop" width=10cm
@@ -77,7 +77,7 @@ namespace FK_CLI
 		 */
 		fk_Loop^ RemoveVertexInLoop(fk_Vertex ^V);
 
-		//! 稜線削除関数1-1
+		//! 稜線削除メソッド1-1
 		/*!
 		 *	形状中の稜線を削除し、その両端点を結合します。
 		 *	結合後の頂点位置は、稜線の両端点の中点となります。
@@ -88,7 +88,7 @@ namespace FK_CLI
 		 *	fk_Operation の解説にある「定義稜線」の条件を満たしている必要があります。
 		 *	その他にも、処理後に形状が矛盾を来さない多くの条件があります。
 		 *	削除が可能かどうかを事前に調べるには、
-		 *	CheckContract() 関数を利用して下さい。
+		 *	CheckContract() メソッドを利用して下さい。
 		 *
 		 *	稜線の削除に成功した場合、以下の位相が同時に削除されます。
 		 *	- 稜線に接続していたループ2つ。
@@ -97,8 +97,8 @@ namespace FK_CLI
 		 *	.
 		 *	削除される稜線やループの情報が必要な場合は、
 		 *	事前に fk_Reference::GetRightLOnE()、
-		 *	fk_Reference::GetLeftLOnE() 関数や、
-		 *	fk_Reference::GetAllEOnV() 関数等によって参照しておく必要があります。
+		 *	fk_Reference::GetLeftLOnE() メソッドや、
+		 *	fk_Reference::GetAllEOnV() メソッド等によって参照しておく必要があります。
 		 *
 		 *	\param[in]	E	削除する稜線位相院寸タンス
 		 *
@@ -112,7 +112,7 @@ namespace FK_CLI
 		 */
 		bool ContractEdge(fk_Edge ^E, bool R);
 
-		//! 稜線削除関数1-2
+		//! 稜線削除メソッド1-2
 		/*!
 		 *	形状中の稜線を削除し、その両端点を結合します。
 		 *	結合後の頂点位置は、稜線の両端点の中点となります。
@@ -123,7 +123,7 @@ namespace FK_CLI
 		 *	fk_Operation の解説にある「定義稜線」の条件を満たしている必要があります。
 		 *	その他にも、処理後に形状が矛盾を来さない多くの条件があります。
 		 *	削除が可能かどうかを事前に調べるには、
-		 *	CheckContract() 関数を利用して下さい。
+		 *	CheckContract() メソッドを利用して下さい。
 		 *
 		 *	稜線の削除に成功した場合、以下の位相が同時に削除されます。
 		 *	- 稜線に接続していたループ2つ。
@@ -132,10 +132,10 @@ namespace FK_CLI
 		 *	.
 		 *	削除される稜線やループの情報が必要な場合は、
 		 *	事前に fk_Reference::GetRightLOnE()、
-		 *	fk_Reference::GetLeftLOnE() 関数や、
-		 *	fk_Reference::GetAllEOnV() 関数等によって参照しておく必要があります。
+		 *	fk_Reference::GetLeftLOnE() メソッドや、
+		 *	fk_Reference::GetAllEOnV() メソッド等によって参照しておく必要があります。
 		 *
-		 *	なお、本関数は ContractEdge(fk_Edge^, bool) において、
+		 *	なお、本メソッドは ContractEdge(fk_Edge^, bool) において、
 		 *	第2引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	E	削除する稜線位相院寸タンス
@@ -146,7 +146,7 @@ namespace FK_CLI
 		 */
 		bool ContractEdge(fk_Edge ^E);
 
-		//! 稜線削除関数2-1
+		//! 稜線削除メソッド2-1
 		/*!
 		 *	形状中の稜線を削除し、その両端点を結合します。
 		 *	結合後の頂点位置を指定できる以外は、
@@ -165,13 +165,13 @@ namespace FK_CLI
 		 */
 		bool ContractEdge(fk_Edge ^E, fk_Vector ^P, bool R);
 
-		//! 稜線削除関数2-2
+		//! 稜線削除メソッド2-2
 		/*!
 		 *	形状中の稜線を削除し、その両端点を結合します。
 		 *	結合後の頂点位置を指定できる以外は、
 		 *	ContractEdge(fk_Edge^, bool) と同様です。
 		 *
-		 *	なお、本関数は ContractEdge(fk_Edge^, fk_Vector^, bool) において、
+		 *	なお、本メソッドは ContractEdge(fk_Edge^, fk_Vector^, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 
 		 *	\param[in]	E	削除する稜線位相院寸タンス
@@ -184,9 +184,9 @@ namespace FK_CLI
 		bool ContractEdge(fk_Edge ^E, fk_Vector ^P);
 
 
-		//! 稜線削除可能判定関数
+		//! 稜線削除可能判定メソッド
 		/*!
-		 *	ContractEdge() 関数によって、稜線が削除可能かどうかを判定する関数です。
+		 *	ContractEdge() メソッドによって、稜線が削除可能かどうかを判定するメソッドです。
 		 *
 		 *	\param[in]	E	判定する稜線の位相インスタンス
 		 *
@@ -195,10 +195,10 @@ namespace FK_CLI
 		bool CheckContract(fk_Edge ^E);
 		//@}
 
-		//! \name 多角形生成関数
+		//! \name 多角形生成メソッド
 		//@{
 
-		//! 多角形生成関数1
+		//! 多角形生成メソッド1
 		/*!
 		 *	新たに多角形を生成します。
 		 *
@@ -225,10 +225,10 @@ namespace FK_CLI
 		 */
 		fk_Loop^ MakePolygon(IEnumerable<fk_Vector^>^ array, bool openFlg, bool initFlg);
 
-		//! 多角形生成関数2
+		//! 多角形生成メソッド2
 		/*!
 		 *	新たに多角形を生成します。
-		 *	本関数は、 MakePolygon(IEnumerable<fk_Vector^>^, bool, bool) において、
+		 *	本メソッドは、 MakePolygon(IEnumerable<fk_Vector^>^, bool, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	array
@@ -250,10 +250,10 @@ namespace FK_CLI
 		 */
 		fk_Loop^ MakePolygon(IEnumerable<fk_Vector^>^ array, bool openFlg);
 
-		//! 多角形追加関数1
+		//! 多角形追加メソッド1
 		/*!
 		 *	多角形を追加します。
-		 *	本関数は、実質的に MakePolygon(IEnumerable<fk_Vector^>^, bool, bool) 関数で、
+		 *	本メソッドは、実質的に MakePolygon(IEnumerable<fk_Vector^>^, bool, bool) メソッドで、
 		 *	initFlg を false にした場合と機能的に同一となります。
 		 *
 		 *	\param[in]	array
@@ -275,10 +275,10 @@ namespace FK_CLI
 		 */
 		fk_Loop^ PushPolygon(IEnumerable<fk_Vector^>^ array, bool openFlg);
 
-		//! 多角形追加関数2
+		//! 多角形追加メソッド2
 		/*!
 		 *	多角形を追加します。
-		 *	本関数は、 PushPolygon(IEnumerable<fk_Vector^>^, bool) において、
+		 *	本メソッドは、 PushPolygon(IEnumerable<fk_Vector^>^, bool) において、
 		 *	第2引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	array
@@ -294,11 +294,11 @@ namespace FK_CLI
 		 */
 		fk_Loop^ PushPolygon(IEnumerable<fk_Vector^>^ array);
 
-		//! 多角形頂点追加関数
+		//! 多角形頂点追加メソッド
 		/*!
-		 *	この関数は、多角形に対して頂点を追加します。
-		 *	本関数を用いる前提条件として、
-		 *	MakePolygon() 関数によって 1 つだけ多角形が生成された状況でなければなりません。
+		 *	このメソッドは、多角形に対して頂点を追加します。
+		 *	本メソッドを用いる前提条件として、
+		 *	MakePolygon() メソッドによって 1 つだけ多角形が生成された状況でなければなりません。
 		 *	その条件が満たされていない場合の動作は保証されません。
 		 *
 		 *	\param[in]	pos		追加頂点の位置ベクトル
@@ -312,19 +312,19 @@ namespace FK_CLI
 		void PushPolygonVertex(fk_Vector ^pos, bool openFlg);
 		//@}
 
-		//! \name 頂点群生成関数
+		//! \name 頂点群生成メソッド
 		//@{
 
-		//! 頂点群生成関数
+		//! 頂点群生成メソッド
 		/*!
 		 *	与えられた位置ベクトル配列による頂点群を生成します。
-		 *	この関数を呼ぶ前に存在していた形状データは全て消去されます。
+		 *	このメソッドを呼ぶ前に存在していた形状データは全て消去されます。
 		 *
 		 *	\param[in]	array		頂点群の位置ベクトル配列
 		 */
 		void MakePoint(IEnumerable<fk_Vector^>^ array);
 
-		//! 頂点追加関数
+		//! 頂点追加メソッド
 		/*!
 		 *	形状に頂点1個を追加します。
 		 *
@@ -336,21 +336,21 @@ namespace FK_CLI
 
 		//@}
 
-		//! \name 線分生成関数
+		//! \name 線分生成メソッド
 		//@{
 
-		//! 線分群生成関数
+		//! 線分群生成メソッド
 		/*!
 		 *	与えられた位置ベクトル配列を元に、線分群を生成します。
 		 *	位置ベクトルは、配列中で [始点1, 終点1, 始点2, 終点2, ...]
 		 *	と扱われます。配列の長さが奇数であった場合、最後の要素は無視されます。
-		 *	この関数を呼ぶ前に存在していた形状データは全て消去されます。
+		 *	このメソッドを呼ぶ前に存在していた形状データは全て消去されます。
 		 *
 		 *	\param[in]	array		線分の両端点を表す頂点位置ベクトル配列
 		 */
 		void MakeLines(IEnumerable<fk_Vector^>^ array);
 
-		//! 線分追加関数
+		//! 線分追加メソッド
 		/*!
 		 *	形状に線分1本を追加します。
 		 *
@@ -361,10 +361,10 @@ namespace FK_CLI
 		 */
 		fk_Edge^ PushLines(fk_Vector ^pos1, fk_Vector ^pos2);
 
-		//! 線分頂点移動関数1
+		//! 線分頂点移動メソッド1
 		/*!
 		 *	線分の端点位置を移動します。
-		 *	本関数を用いる前提条件として、
+		 *	本メソッドを用いる前提条件として、
 		 *	MakeLines() によって 1 本だけ線分が生成された状況でなければなりません。
 		 *	その状況が満たされていない場合の動作は保証されません。
 		 *
@@ -378,10 +378,10 @@ namespace FK_CLI
 		 */
 		bool SetLinePos(int ID, fk_Vector ^pos);
 
-		//! 線分頂点移動関数2
+		//! 線分頂点移動メソッド2
 		/*!
 		 *	線分の端点位置を移動します。
-		 *	本関数を用いる前提条件として、
+		 *	本メソッドを用いる前提条件として、
 		 *	MakeLines() と PushLines() のみによって、
 		 *	複数の線分が生成された状況でなければなりません。
 		 *	その条件が満たされていない場合の動作は保証されません。
@@ -399,10 +399,10 @@ namespace FK_CLI
 		 */
 		bool SetLinePos(int edgeID, int vertexID, fk_Vector^ pos);
 
-		//! 線分両端点移動関数
+		//! 線分両端点移動メソッド
 		/*!
 		 *	線分の、両端点の位置を同時に移動します。
-		 *	本関数を用いる前提条件として、
+		 *	本メソッドを用いる前提条件として、
 		 *	MakeLines() と PushLines() のみによって、
 		 *	複数の線分が生成された状況でなければなりません。
 		 *	その条件が満たされていない場合の動作は保証されません。
@@ -416,10 +416,10 @@ namespace FK_CLI
 		bool ChangeLine(int edgeID, fk_Vector^ pos1, fk_Vector^ pos2);
 		//@}
 
-		//! \name 直方体形状生成関数
+		//! \name 直方体形状生成メソッド
 		//@{
 
-		//! 直方体生成関数
+		//! 直方体生成メソッド
 		/*!
 		 *	直方体を生成します。
 		 *
@@ -435,7 +435,7 @@ namespace FK_CLI
 		 *	- (-x/2, -y/2, -z/2)
 		 *	- (x/2, -y/2, -z/2)
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	x	x方向の辺長
 		 *	\param[in]	y	y方向の辺長
@@ -445,12 +445,12 @@ namespace FK_CLI
 		 */
 		void MakeBlock(double x, double y, double z);
 
-		//! 直方体辺長変更関数
+		//! 直方体辺長変更メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	直方体の辺長を一括して設定しなおします。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	x	x方向の辺長
 		 *	\param[in]	y	y方向の辺長
@@ -460,12 +460,12 @@ namespace FK_CLI
 		 */
 		void SetBlockSize(double x, double y, double z);
 
-		//! 直方体個別辺長設定関数
+		//! 直方体個別辺長設定メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	直方体の辺長を個別に設定します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	length	辺長
 		 *	\param[in]	axis	軸方向。以下のいずれかを指定します。
@@ -477,12 +477,12 @@ namespace FK_CLI
 		 */
 		void SetBlockSize(double length, fk_Axis axis);
 
-		//! 直方体全体拡大縮小関数
+		//! 直方体全体拡大縮小メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	直方体全体を指定された倍率で拡大・縮小します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *
@@ -490,12 +490,12 @@ namespace FK_CLI
 		 */
 		void SetBlockScale(double scale);
 
-		//! 直方体軸方向拡大縮小関数
+		//! 直方体軸方向拡大縮小メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	指定された軸方向についてのみ拡大・縮小します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *	\param[in]	axis	軸方向。以下のいずれかを指定します。
@@ -507,12 +507,12 @@ namespace FK_CLI
 		 */
 		void SetBlockScale(double scale, fk_Axis axis);
 
-		//! 直方体軸方向個別拡大縮小関数
+		//! 直方体軸方向個別拡大縮小メソッド
 		/*!
 		 *	MakeBlock() によって直方体を生成した後に、
 		 *	各軸方向に対し個別の倍率で拡大・縮小します。
-		 *	この関数は、 MakeBlock() によって直方体を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeBlock() によって直方体を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	x	x方向の倍率
 		 *	\param[in]	y	y方向の倍率
@@ -523,10 +523,10 @@ namespace FK_CLI
 		void SetBlockScale(double x, double y, double z);
 		//@}
 
-		//! \name 円形状生成関数
+		//! \name 円形状生成メソッド
 		//@{
 
-		//! 円形状生成関数
+		//! 円形状生成メソッド
 		/*!
 		 *	円形状を生成します。
 		 *
@@ -539,7 +539,7 @@ namespace FK_CLI
 		 *	初期状態では、中心を原点とし、
 		 *	面の法線ベクトルが (0, 0, 1) となるように配置されます。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
 		 *	\param[in]	rad	半径
@@ -548,12 +548,12 @@ namespace FK_CLI
 		 */
 		void MakeCircle(int div, double rad);
 
-		//! 円形状半径設定関数
+		//! 円形状半径設定メソッド
 		/*!
 		 *	MakeCircle() によって円形状を生成した後に、
 		 *	半径を設定しなおします。
-		 *	この関数は、 MakeCircle() によって円形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCircle() によって円形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	rad	半径
 		 *
@@ -561,12 +561,12 @@ namespace FK_CLI
 		 */
 		void SetCircleRadius(double rad);
 
-		//! 円形状分割数設定関数
+		//! 円形状分割数設定メソッド
 		/*!
 		 *	MakeCircle() によって円形状を生成した後に、
 		 *	分割数を設定しなおします。
-		 *	この関数は、 MakeCircle() によって円形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCircle() によって円形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div		分割数
 		 *
@@ -574,12 +574,12 @@ namespace FK_CLI
 		 */
 		void SetCircleDivide(int div);
 
-		//! 円形状拡大縮小関数
+		//! 円形状拡大縮小メソッド
 		/*!
 		 *	MakeCircle() によって円形状を生成した後に、
 		 *	形状全体を与えられた倍率で拡大・縮小します。
-		 *	この関数は、 MakeCircle() によって円形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCircle() によって円形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *
@@ -588,10 +588,10 @@ namespace FK_CLI
 		void SetCircleScale(double scale);
 		//@}
 
-		//! \name 球形状制御関数
+		//! \name 球形状制御メソッド
 		//@{
 
-		//! 球形状生成関数
+		//! 球形状生成メソッド
 		/*!
 		 *	球形状を生成します。
 		 *
@@ -603,7 +603,7 @@ namespace FK_CLI
 		 *
 		 *	初期状態では、中心を原点とするように配置されます。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *	
 		 *	\param[in]	div	分割数
 		 *	\param[in]	rad	半径
@@ -611,12 +611,12 @@ namespace FK_CLI
 		 */
 		void MakeSphere(int div, double rad);
 
-		//! 球形状半径設定関数
+		//! 球形状半径設定メソッド
 		/*!
 		 *	MakeSphere() によって球形状を生成した後に、
 		 *	半径を設定しなおします。
-		 *	この関数は、 MakeSphere() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeSphere() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	rad	半径
 		 *
@@ -624,12 +624,12 @@ namespace FK_CLI
 		 */
 		void SetSphereRadius(double rad);
 
-		//! 球形状分割数設定関数
+		//! 球形状分割数設定メソッド
 		/*!
 		 *	MakeSphere() によって球形状を生成した後に、
 		 *	分割数を設定しなおします。
-		 *	この関数は、 MakeSphere() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeSphere() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div		分割数
 		 *
@@ -637,12 +637,12 @@ namespace FK_CLI
 		 */
 		void SetSphereDivide(int div);
 
-		//! 球形状拡大縮小関数
+		//! 球形状拡大縮小メソッド
 		/*!
 		 *	MakeSphere() によって球形状を生成した後に、
 		 *	形状全体を与えられた倍率で拡大・縮小します。
-		 *	この関数は、 MakeSphere() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeSphere() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	scale	倍率
 		 *
@@ -651,10 +651,10 @@ namespace FK_CLI
 		void SetSphereScale(double scale);
 		//@}
 
-		//! \name 正多角柱(円柱)形状制御関数
+		//! \name 正多角柱(円柱)形状制御メソッド
 		//@{
 
-		//! 正多角柱(円柱)形状生成関数
+		//! 正多角柱(円柱)形状生成メソッド
 		/*!
 		 *	正多角柱(円柱)を生成します。
 		 *
@@ -666,7 +666,7 @@ namespace FK_CLI
 		 *	設定できる要素は角数、上面半径、底面半径、高さの4要素です。
 		 *	上面と底面の半径とは、それぞれの面を構成する正多角形の外接円半径を指します。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div		角数
 		 *	\param[in]	top		上面半径
@@ -677,12 +677,12 @@ namespace FK_CLI
 		 */
 		void MakePrism(int div, double top, double bottom, double height);
 
-		//! 正多角柱(円柱)角数設定関数
+		//! 正多角柱(円柱)角数設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	角数を設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div	角数
 		 *
@@ -690,12 +690,12 @@ namespace FK_CLI
 		 */
 		void SetPrismDivide(int div);
 
-		//! 正多角柱(円柱)上面半径設定関数
+		//! 正多角柱(円柱)上面半径設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	上面の外接円半径を設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	top	上面半径
 		 *
@@ -703,12 +703,12 @@ namespace FK_CLI
 		 */
 		void SetPrismTopRadius(double top);
 
-		//! 正多角柱(円柱)角数設定関数
+		//! 正多角柱(円柱)角数設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	底面の外接円半径を設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	bottom	底面半径
 		 *
@@ -716,12 +716,12 @@ namespace FK_CLI
 		 */
 		void SetPrismBottomRadius(double bottom);
 
-		//! 正多角柱(円柱)高さ設定関数
+		//! 正多角柱(円柱)高さ設定メソッド
 		/*!
 		 *	MakePrism() によって正多角柱(円柱)を生成した後に、
 		 *	高さを設定しなおします。
-		 *	この関数は、 MakePrism() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakePrism() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	height	高さ
 		 *
@@ -730,10 +730,10 @@ namespace FK_CLI
 		void SetPrismHeight(double height);
 		//@}
 
-		//! \name 正多角錐(円錐)形状制御関数
+		//! \name 正多角錐(円錐)形状制御メソッド
 		//@{
 
-		//! 正多角錐(円錐)形状生成関数
+		//! 正多角錐(円錐)形状生成メソッド
 		/*!
 		 *	正多角錐(円錐)を生成します。
 		 *
@@ -745,7 +745,7 @@ namespace FK_CLI
 		 *	設定できる要素は角数、底面半径、高さの3要素です。
 		 *	底面半径とは、面を構成する正多角形の外接円半径を指します。
 		 *
-		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
+		 *	このメソッドを呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
 		 *	\param[in]	div		角数
 		 *	\param[in]	rad		底面半径
@@ -755,12 +755,12 @@ namespace FK_CLI
 		 */
 		void MakeCone(int div, double rad, double height);
 
-		//! 正多角錐(円錐)角数設定関数
+		//! 正多角錐(円錐)角数設定メソッド
 		/*!
 		 *	MakeCone() によって正多角錐(円錐)を生成した後に、
 		 *	角数を設定しなおします。
-		 *	この関数は、 MakeCone() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCone() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	div	角数
 		 *
@@ -768,12 +768,12 @@ namespace FK_CLI
 		 */
 		void SetConeDivide(int div);
 
-		//! 正多角錐(円錐)底面半径設定関数
+		//! 正多角錐(円錐)底面半径設定メソッド
 		/*!
 		 *	MakeCone() によって正多角錐(円錐)を生成した後に、
 		 *	底面外接円半径を設定しなおします。
-		 *	この関数は、 MakeCone() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCone() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	rad		底面半径
 		 *
@@ -781,12 +781,12 @@ namespace FK_CLI
 		 */
 
 		void SetConeRadius(double rad);
-		//! 正多角錐(円錐)高さ設定関数
+		//! 正多角錐(円錐)高さ設定メソッド
 		/*!
 		 *	MakeCone() によって正多角錐(円錐)を生成した後に、
 		 *	高さを設定しなおします。
-		 *	この関数は、 MakeCone() によって球形状を生成した場合のみ有効であり、
-		 *	それ以外の形状状態に対してこの関数を呼んだときの挙動は保証されません。
+		 *	このメソッドは、 MakeCone() によって球形状を生成した場合のみ有効であり、
+		 *	それ以外の形状状態に対してこのメソッドを呼んだときの挙動は保証されません。
 		 *
 		 *	\param[in]	height		高さ
 		 *
@@ -795,10 +795,10 @@ namespace FK_CLI
 		void SetConeHeight(double height);
 		//@}
 
-		//! \name 頂点移動関数
+		//! \name 頂点移動メソッド
 		//@{
 
-		//! 頂点移動関数1-1
+		//! 頂点移動メソッド1-1
 		/*!
 		 *	指定された頂点を移動します。
 		 *
@@ -812,10 +812,10 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, fk_Vector ^pos, int order);
 
-		//! 頂点移動関数1-2
+		//! 頂点移動メソッド1-2
 		/*!
 		 *	指定された頂点を移動します。
-		 *	本関数は、 MoveVPosition(int, fk_Vector^, int) において、
+		 *	本メソッドは、 MoveVPosition(int, fk_Vector^, int) において、
 		 *	第3引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	vertexID		頂点ID。
@@ -825,7 +825,7 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, fk_Vector ^pos);
 
-		//! 頂点移動関数2-1
+		//! 頂点移動メソッド2-1
 		/*!
 		 *	指定された頂点を移動します。
 		 *
@@ -841,10 +841,10 @@ namespace FK_CLI
 		 */
 		bool MoveVPosition(int vertexID, double x, double y, double z, int order);
 
-		//! 頂点移動関数2-2
+		//! 頂点移動メソッド2-2
 		/*!
 		 *	指定された頂点を移動します。
-		 *	本関数は、 MoveVPosition(int, double, double, double, int) において、
+		 *	本メソッドは、 MoveVPosition(int, double, double, double, int) において、
 		 *	第5引数に 0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	vertexID		頂点ID。
@@ -857,11 +857,11 @@ namespace FK_CLI
 		bool MoveVPosition(int vertexID, double x, double y, double z);
 		//@}
 
-		//! \name 細分割曲面生成関数
+		//! \name 細分割曲面生成メソッド
 		//@{
-		//! 細分割曲面生成関数
+		//! 細分割曲面生成メソッド
 		/*!
-		 *	この関数は、細分割曲面 (Subdivision Surface) 手法に基づいた面分割を行います。
+		 *	このメソッドは、細分割曲面 (Subdivision Surface) 手法に基づいた面分割を行います。
 		 *	分割回数を増加するほど細分割曲面に形状は近くなりますが、
 		 *	面数は大きく増加します。
 		 *	現状では、曲面生成手法は「Catmull-Clark 手法」のみをサポートしています。

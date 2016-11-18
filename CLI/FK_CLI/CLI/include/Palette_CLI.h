@@ -76,17 +76,17 @@ namespace FK_CLI
 
 		}
 
-		//! 初期化関数
+		//! 初期化メソッド
 		/*!
 		 *	パレットを初期化します。
 		 */
 		void ClearMaterial(void);
 
-		//! マテリアル追加関数
+		//! マテリアル追加メソッド
 		/*!
 		 *	パレットにマテリアルを新たに追加します。
 		 *	追加するマテリアルの ID は、
-		 *	この関数を呼ぶ前に PaletteSize プロパティを参照することで得られます。
+		 *	このメソッドを呼ぶ前に PaletteSize プロパティを参照することで得られます。
 		 *	以下のコードは、マテリアルを追加しその ID を引数に代入します。
 		 *
 		 *		fk_Palette		pal = new fk_Palette();
@@ -102,7 +102,7 @@ namespace FK_CLI
 		 */
 		void PushPalette(fk_Material^ material);
 
-		//! マテリアル設定関数
+		//! マテリアル設定メソッド
 		/*!
 		 *	パレットに対し、対応する ID でマテリアルを設定します。
 		 *	ID の指定により、以下のように挙動が若干変わります。
@@ -120,7 +120,7 @@ namespace FK_CLI
 		 */
 		void SetPalette(fk_Material^ material, int ID);
 
-		//! マテリアル取得関数
+		//! マテリアル取得メソッド
 		/*!
 		 *	指定された ID に対応するマテリアルのポインタを返します。
 		 *	

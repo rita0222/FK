@@ -31,10 +31,10 @@ namespace FK_CLI
 		fk_Reference::~fk_Reference();
 #endif
 		
-		//! \name 頂点に関連する関数
+		//! \name 頂点に関連するメソッド
 		//@{
 
-		//! 頂点接続半稜線参照関数
+		//! 頂点接続半稜線参照メソッド
 		/*!
 		 *	頂点 V に接続する半稜線のうちの1つを返します。
 		 *	V が独立頂点であった場合は null を返します。
@@ -45,7 +45,7 @@ namespace FK_CLI
 		 */
 		fk_Half^			GetOneHOnV(fk_Vertex^ V);
 
-		//! 頂点接続稜線参照関数
+		//! 頂点接続稜線参照メソッド
 		/*!
 		 *	頂点 V に接続する稜線のうちの1つを返します。
 		 *	V が独立頂点であった場合は null を返します。
@@ -56,7 +56,7 @@ namespace FK_CLI
 		 */
 		fk_Edge^			GetOneEOnV(fk_Vertex^ V);
 
-		//! 隣接頂点参照関数
+		//! 隣接頂点参照メソッド
 		/*!
 		 *	頂点 V に隣接している頂点のうちの1つを返します。
 		 *	V が独立頂点であった場合は null を返します。
@@ -67,7 +67,7 @@ namespace FK_CLI
 		 */
 		fk_Vertex^			GetOneNeighborVOnV(fk_Vertex^ V);
 
-		//! 頂点接続全半稜線参照関数
+		//! 頂点接続全半稜線参照メソッド
 		/*!
 		 *	頂点 V を元頂点(開始点)としている全ての半稜線を配列として返します。
 		 *
@@ -77,7 +77,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Half^>^	GetAllHOnV(fk_Vertex^ V);
 
-		//! 頂点接続全稜線参照関数
+		//! 頂点接続全稜線参照メソッド
 		/*!
 		 *	頂点 V に接続している全ての稜線を配列として返します。
 		 *
@@ -87,7 +87,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Edge^>^	GetAllEOnV(fk_Vertex^ V);
 
-		//! 頂点接続全ループ参照関数
+		//! 頂点接続全ループ参照メソッド
 		/*!
 		 *	頂点 V に接続している全てのループを配列として返します。
 		 *
@@ -97,7 +97,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Loop^>^	GetAllLOnV(fk_Vertex^ V);
 
-		//! 頂点接続稜線数参照関数
+		//! 頂点接続稜線数参照メソッド
 		/*!
 		 *	頂点 V に接続している稜線の本数を返します。
 		 *
@@ -107,7 +107,7 @@ namespace FK_CLI
 		 */
 		int					GetENumOnV(fk_Vertex^ V);
 
-		//! 全隣接頂点参照関数
+		//! 全隣接頂点参照メソッド
 		/*!
 		 *	頂点 V に隣接している全ての頂点を配列として返します。
 		 *
@@ -117,7 +117,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Vertex^>^	GetAllNeighborVOnV(fk_Vertex^ V);
 
-		//! 頂点間稜線参照関数
+		//! 頂点間稜線参照メソッド
 		/*!
 		 *	頂点 V1 と V2 の両方に接続している全ての稜線を配列で返します。
 		 *
@@ -128,7 +128,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Edge^>^	GetEOnVV(fk_Vertex^ V1, fk_Vertex^ V2);
 
-		//! 頂点接続ループ参照関数
+		//! 頂点接続ループ参照メソッド
 		/*!
 		 *	頂点 V に接続しているループのうちの1つを返します。
 		 *	V に接続するループが存在しない場合は、null を返します。
@@ -141,10 +141,10 @@ namespace FK_CLI
 
 		//@}
 
-		//! \name 半稜線に関連する関数
+		//! \name 半稜線に関連するメソッド
 		//@{
 
-		//! 半稜線接続頂点参照関数
+		//! 半稜線接続頂点参照メソッド
 		/*!
 		 *	半稜線 H の元頂点(出発点)を返します。
 		 *
@@ -154,7 +154,7 @@ namespace FK_CLI
 		 */
 		fk_Vertex^			GetVOnH(fk_Half^ H);
 
-		//! 対半稜線参照関数
+		//! 対半稜線参照メソッド
 		/*!
 		 *	半稜線 H と同じ稜線を共有する、反対側の半稜線を返します。
 		 *
@@ -164,7 +164,7 @@ namespace FK_CLI
 		 */
 		fk_Half^			GetMateHOnH(fk_Half^ H);
 
-		//! 親稜線参照関数
+		//! 親稜線参照メソッド
 		/*!
 		 *	半稜線 H が所属している稜線を返します。
 		 *
@@ -174,7 +174,7 @@ namespace FK_CLI
 		 */
 		fk_Edge^			GetParentEOnH(fk_Half^ H);
 
-		//! 親ループ参照関数
+		//! 親ループ参照メソッド
 		/*!
 		 *	半稜線 H が所属しているループを返します。
 		 *	もし H がどのループにも所属していない場合は null を返します。
@@ -187,10 +187,10 @@ namespace FK_CLI
 
 		//@}
 	
-		//! \name 稜線に関連する関数
+		//! \name 稜線に関連するメソッド
 		//@{
 
-		//! 右側頂点参照関数
+		//! 右側頂点参照メソッド
 		/*!
 		 *	稜線 E において、右側の半稜線の元頂点(出発点)を返します。
 		 *
@@ -200,7 +200,7 @@ namespace FK_CLI
 		 */
 		fk_Vertex^			GetRightVOnE(fk_Edge^ E);
 
-		//! 左側頂点参照関数
+		//! 左側頂点参照メソッド
 		/*!
 		 *	稜線 E において、左側の半稜線の元頂点(出発点)を返します。
 		 *
@@ -210,7 +210,7 @@ namespace FK_CLI
 		 */
 		fk_Vertex^			GetLeftVOnE(fk_Edge^ E);
 
-		//! 右側半稜線参照関数
+		//! 右側半稜線参照メソッド
 		/*!
 		 *	稜線 E において、右側の半稜線を返します。
 		 *
@@ -220,7 +220,7 @@ namespace FK_CLI
 		 */
 		fk_Half^			GetRightHOnE(fk_Edge^ E);
 
-		//! 左側半稜線参照関数
+		//! 左側半稜線参照メソッド
 		/*!
 		 *	稜線 E において、左側の半稜線を返します。
 		 *
@@ -230,7 +230,7 @@ namespace FK_CLI
 		 */
 		fk_Half^			GetLeftHOnE(fk_Edge^ E);
 
-		//! 右側ループ参照関数
+		//! 右側ループ参照メソッド
 		/*!
 		 *	稜線 E において、右側にあるループを返します。
 		 *	もし右側にループがなければ null を返します。
@@ -241,7 +241,7 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetRightLOnE(fk_Edge^ E);
 
-		//! 左側ループ参照関数
+		//! 左側ループ参照メソッド
 		/*!
 		 *	稜線 E において、左側にあるループを返します。
 		 *	もし左側にループがなければ null を返します。
@@ -252,7 +252,7 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetLeftLOnE(fk_Edge^ E);
 
-		//! 稜線位相状態参照関数
+		//! 稜線位相状態参照メソッド
 		/*!
 		 *	稜線 E の位相状態を返します。
 		 *	位相状態には、以下のものがあります。
@@ -270,10 +270,10 @@ namespace FK_CLI
 
 		//@}
 	
-		//! \name ループに関連する関数
+		//! \name ループに関連するメソッド
 		//@{
 
-		//! ループ所属頂点参照関数
+		//! ループ所属頂点参照メソッド
 		/*!
 		 *	ループ L に属している頂点のうちの1つを返します。
 		 *
@@ -283,7 +283,7 @@ namespace FK_CLI
 		 */
 		fk_Vertex^			GetOneVOnL(fk_Loop^ L);
 
-		//! ループ所属半稜線参照関数
+		//! ループ所属半稜線参照メソッド
 		/*!
 		 *	ループ L に属している半稜線のうちの1つを返します。
 		 *
@@ -293,7 +293,7 @@ namespace FK_CLI
 		 */
 		fk_Half^			GetOneHOnL(fk_Loop^ L);
 
-		//! ループ所属稜線参照関数
+		//! ループ所属稜線参照メソッド
 		/*!
 		 *	ループ L に属している稜線のうちの1つを返します。
 		 *
@@ -303,7 +303,7 @@ namespace FK_CLI
 		 */
 		fk_Edge^			GetOneEOnL(fk_Loop^ L);
 
-		//! ループ所属全頂点参照関数
+		//! ループ所属全頂点参照メソッド
 		/*!
 		 *	ループ L に所属している全ての頂点を配列として返します。
 		 *
@@ -313,7 +313,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Vertex^>^	GetAllVOnL(fk_Loop^ L);
 
-		//! ループ所属全半稜線参照関数
+		//! ループ所属全半稜線参照メソッド
 		/*!
 		 *	ループ L に所属している全ての半稜線を配列として返します。
 		 *
@@ -323,7 +323,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Half^>^	GetAllHOnL(fk_Loop^ L);
 
-		//! ループ所属全稜線参照関数
+		//! ループ所属全稜線参照メソッド
 		/*!
 		 *	ループ L に所属している全ての稜線を配列として返します。
 		 *
@@ -333,7 +333,7 @@ namespace FK_CLI
 		 */
 		cli::array<fk_Edge^>^	GetAllEOnL(fk_Loop^ L);
 
-		//! 隣接ループ参照関数
+		//! 隣接ループ参照メソッド
 		/*!
 		 *	ループ L と隣接しているループのうちの1つを返します。
 		 *	隣接するループが存在しないときは null を返します。
@@ -344,7 +344,7 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetOneNeighborLOnL(fk_Loop^ L);
 
-		//! 半稜線条件付き隣接ループ参照関数
+		//! 半稜線条件付き隣接ループ参照メソッド
 		/*!
 		 *	ループ L と隣接しているループのうち、
 		 *	半稜線 H の親稜線を共有しているループを返します。
@@ -359,7 +359,7 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetNeighborLOnLH(fk_Loop^ L, fk_Half^ H);
 
-		//! ループ上頂点数参照関数
+		//! ループ上頂点数参照メソッド
 		/*!
 		 *	ループ L に所属している頂点の個数を返します。
 		 *
@@ -369,7 +369,7 @@ namespace FK_CLI
 		 */
 		int					GetVNumOnL(fk_Loop^ L);
 
-		//! 稜線条件付き隣接ループ参照関数
+		//! 稜線条件付き隣接ループ参照メソッド
 		/*!
 		 *	ループ L と隣接しているループのうち、
 		 *	稜線 E を共有しているループを返します。
@@ -384,7 +384,7 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetNeighborLOnLE(fk_Loop^ L, fk_Edge^ E);
 
-		//! 全隣接ループ参照関数
+		//! 全隣接ループ参照メソッド
 		/*!
 		 *	ループ L に隣接している全てのループを配列として返します。
 		 *

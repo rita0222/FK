@@ -100,13 +100,13 @@ namespace FK_CLI
 			fk_TexCoord^ get();
 		}
 		
-		//! 初期化関数
+		//! 初期化メソッド
 		/*!
 		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
 		 */
 		void			Init(void);
 
-		//! 部分抽出設定関数1
+		//! 部分抽出設定メソッド1
 		/*!
 		 *	画像の部分矩形領域を切り出し、その部分をテクスチャ画像とします。
 		 *	領域指定はテクスチャ座標系を用います。
@@ -121,7 +121,7 @@ namespace FK_CLI
 		 */
 		void			SetTextureCoord(double sX, double sY, double eX, double eY);
 
-		//! 部分抽出設定関数2
+		//! 部分抽出設定メソッド2
 		/*!
 		 *	画像の部分矩形領域を切り出し、その部分をテクスチャ画像とします。
 		 *	領域指定はテクスチャ座標系を用います。
@@ -134,9 +134,9 @@ namespace FK_CLI
 		 */
 		void			SetTextureCoord(fk_TexCoord^ S, fk_TexCoord^ E);
 
-		//! 部分抽出参照関数
+		//! 部分抽出参照メソッド
 		/*!
-		 *	setTextureCoord() 関数によって部分抽出領域を設定した場合、
+		 *	setTextureCoord() メソッドによって部分抽出領域を設定した場合、
 		 *	その領域のテクスチャ座標を取得します。
 		 *
 		 *	\param[in]	ID

@@ -54,7 +54,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Sphere();
 
-		//! 分割数設定関数
+		//! 分割数設定メソッド
 		/*!
 		 *	分割数を設定します。分割数の最小値は 2 です。
 		 *
@@ -62,7 +62,7 @@ namespace FK_CLI
 		 */
 		void SetDivide(int div);
 
-		//! 半径設定関数
+		//! 半径設定メソッド
 		/*!
 		 *	半径を設定します。
 		 *
@@ -70,7 +70,7 @@ namespace FK_CLI
 		 */
 		void SetRadius(double rad);
 
-		//! 拡大縮小関数
+		//! 拡大縮小メソッド
 		/*!
 		 *	球全体を与えられた倍率で拡大縮小します。
 		 *

@@ -77,7 +77,7 @@ namespace FK_CLI
 			void set(int value);
 		}
 
-		//! 文字列変換関数
+		//! 文字列変換メソッド
 		/*!
 		 *	座標を文字列に変換します。
 		 *
@@ -85,7 +85,7 @@ namespace FK_CLI
 		 */
 		String^	ToString() override;
 
-		//! 画像サイズ設定関数
+		//! 画像サイズ設定メソッド
 		/*!
 		 *	\param[in] W 画像の横幅
 		 *	\param[in] H 画像の縦幅
@@ -154,7 +154,7 @@ namespace FK_CLI
 			void set(int value);
 		}
 
-		//! 文字列変換関数
+		//! 文字列変換メソッド
 		/*!
 		 *	座標を文字列に変換します。
 		 *
@@ -162,7 +162,7 @@ namespace FK_CLI
 		 */
 		String^	ToString() override;
 		
-		//! 領域設定関数
+		//! 領域設定メソッド
 		/*!
 		 *	\param[in] X 領域左上の x 座標
 		 *	\param[in] Y 領域左上の y 座標
@@ -171,21 +171,21 @@ namespace FK_CLI
 		 */	
 		void Set(int X, int Y, int W, int H);
 
-		//! 領域位置設定関数
+		//! 領域位置設定メソッド
 		/*!
 		 *	\param[in] X 領域左上の x 座標
 		 *	\param[in] Y 領域左上の y 座標
 		 */
 		void SetPos(int X, int Y);
 
-		//! 領域サイズ設定関数
+		//! 領域サイズ設定メソッド
 		/*!
 		 *	\param[in] W 領域の横幅
 		 *	\param[in] H 領域の縦幅
 		 */	
 		void SetSize(int W, int H);
 
-		//! 領域サイズ参照関数
+		//! 領域サイズ参照メソッド
 		/*!
 		 *	\return 領域サイズ
 		 */
@@ -286,7 +286,7 @@ namespace FK_CLI
 		}
 #endif
 
-		//! 初期化関数
+		//! 初期化メソッド
 		/*!
 		 *	画像データを初期化します。
 		 *	画像サイズも (0, 0) となります。
@@ -294,7 +294,7 @@ namespace FK_CLI
 		void Init(void);
 
 		
-		//! 画像領域生成関数1
+		//! 画像領域生成メソッド1
 		/*!
 		 *	画像データを与えられたサイズに従って生成します。
 		 *
@@ -309,7 +309,7 @@ namespace FK_CLI
 		 */
 		void NewImage(int w, int h, bool initFlg);
 
-		//! 画像領域生成関数2
+		//! 画像領域生成メソッド2
 		/*!
 		 *	画像データを与えられたサイズに従って生成します。
 		 *	データ全体の色値は (0, 0, 0, 0) で初期化します。
@@ -319,7 +319,7 @@ namespace FK_CLI
 		 */
 		void NewImage(int w, int h);
 
-		//! 画像データコピー関数1
+		//! 画像データコピーメソッド1
 		/*!
 		 *	画像データを別インスタンスからコピーします。
 		 *	この引数形式の場合、画像サイズは元画像データと同一となります。
@@ -328,7 +328,7 @@ namespace FK_CLI
 		 */
 		void CopyImage(fk_Image^ image);
 		
-		//! 画像データコピー関数2
+		//! 画像データコピーメソッド2
 		/*!
 		 *	画像データの部分矩形領域を、別インスタンスの画像データ内容に書き換えます。
 		 *	この引数形式では、画像中の一部分となる任意領域を書き換えることが可能ですが、
@@ -342,7 +342,7 @@ namespace FK_CLI
 		 */
 		void CopyImage(fk_Image^ image, int x, int y);
 		
-		//! 画像データ部分抽出関数
+		//! 画像データ部分抽出メソッド
 		/*!
 		 *	別インスタンス中にある画像データの部分矩形領域をコピーします。
 		 *	指定した矩形領域は全て元画像内に収まっている必要があります。
@@ -356,7 +356,7 @@ namespace FK_CLI
 		 */
 		bool SubImage(fk_Image^ image, int x, int y, int w, int h);
 
-		//! ピクセルR要素取得関数
+		//! ピクセルR要素取得メソッド
 		/*!
 		 *	ピクセルのR(赤)要素値を取得します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -370,7 +370,7 @@ namespace FK_CLI
 		 */
 		int	GetR(int x, int y);
 
-		//! ピクセルG要素取得関数
+		//! ピクセルG要素取得メソッド
 		/*!
 		 *	ピクセルのG(緑)要素値を取得します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -384,7 +384,7 @@ namespace FK_CLI
 		 */
 		int GetG(int x, int y);
 
-		//! ピクセルB要素取得関数
+		//! ピクセルB要素取得メソッド
 		/*!
 		 *	ピクセルのB(青)要素値を取得します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -398,7 +398,7 @@ namespace FK_CLI
 		 */
 		int GetB(int x, int y);
 
-		//! ピクセルA要素取得関数
+		//! ピクセルA要素取得メソッド
 		/*!
 		 *	ピクセルのA(透過度)要素値を取得します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -412,7 +412,7 @@ namespace FK_CLI
 		 */
 		int GetA(int x, int y);
 
-		//! ピクセル RGBA 値設定関数
+		//! ピクセル RGBA 値設定メソッド
 		/*!
 		 *	ピクセルの RGBA 各色要素を設定します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -433,7 +433,7 @@ namespace FK_CLI
 		 */
 		bool SetRGBA(int x, int y, int r, int g, int b, int a);
 
-		//! ピクセル RGB 値設定関数
+		//! ピクセル RGB 値設定メソッド
 		/*!
 		 *	ピクセルの RGB 各色要素を設定します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -453,7 +453,7 @@ namespace FK_CLI
 		 */
 		bool SetRGB(int x, int y, int r, int g, int b);
 
-		//! ピクセル R 値設定関数
+		//! ピクセル R 値設定メソッド
 		/*!
 		 *	ピクセルの R 色要素を設定します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -471,7 +471,7 @@ namespace FK_CLI
 		 */
 		bool SetR(int x, int y, int r);
 
-		//! ピクセル G 値設定関数
+		//! ピクセル G 値設定メソッド
 		/*!
 		 *	ピクセルの G 色要素を設定します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -489,7 +489,7 @@ namespace FK_CLI
 		 */
 		bool SetG(int x, int y, int g);
 
-		//! ピクセル B 値設定関数
+		//! ピクセル B 値設定メソッド
 		/*!
 		 *	ピクセルの B 色要素を設定します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -507,7 +507,7 @@ namespace FK_CLI
 		 */
 		bool SetB(int x, int y, int b);
 
-		//! ピクセル A 値設定関数
+		//! ピクセル A 値設定メソッド
 		/*!
 		 *	ピクセルの A 色要素を設定します。
 		 *	座標系は fk_Rect の座標系に従います。
@@ -525,7 +525,7 @@ namespace FK_CLI
 		 */
 		bool SetA(int x, int y, int a);
 
-		//! バッファ全体初期化関数1
+		//! バッファ全体初期化メソッド1
 		/*!
 		 *	画像データ内の全てのピクセルを同一色で初期化します。
 		 *	初期化の際には、実際の表示領域ではない部分についても更新を行います。
@@ -535,7 +535,7 @@ namespace FK_CLI
 		 */
 		void FillColor(fk_Color^ color);
 
-		//! バッファ全体初期化関数2
+		//! バッファ全体初期化メソッド2
 		/*!
 		 *	画像データ内の全てのピクセルを同一色で初期化します。
 		 *	初期化の際には、実際の表示領域ではない部分についても更新を行います。
@@ -548,7 +548,7 @@ namespace FK_CLI
 		 */
 		void FillColor(int r, int g, int b, int a);
 
-		//! バッファ全体初期化関数3
+		//! バッファ全体初期化メソッド3
 		/*!
 		 *	画像データ内の全てのピクセルを同一色で初期化します。
 		 *	初期化の際には、実際の表示領域ではない部分についても更新を行います。
@@ -561,7 +561,7 @@ namespace FK_CLI
 		 */
 		void FillColor(int r, int g, int b);
 
-		//! BMP ファイル入力関数
+		//! BMP ファイル入力メソッド
 		/*!
 		 *	BMP (Windows Bitmap) 形式のファイルからデータを読み込みます。
 		 *
@@ -571,7 +571,7 @@ namespace FK_CLI
 		 */
 		bool ReadBMP(String^ fileName);
 
-		//! PNG ファイル入力関数
+		//! PNG ファイル入力メソッド
 		/*!
 		 *	PNG 形式のファイルからデータを読み込みます。
 		 *
@@ -581,7 +581,7 @@ namespace FK_CLI
 		 */
 		bool ReadPNG(String^ fileName);
 
-		//! JPEG ファイル入力関数
+		//! JPEG ファイル入力メソッド
 		/*!
 		 *	JPEG 形式のファイルからデータを読み込みます。
 		 *
@@ -591,7 +591,7 @@ namespace FK_CLI
 		 */
 		bool ReadJPG(String^ fileName);
 
-		//! BMP ファイル出力関数1
+		//! BMP ファイル出力メソッド1
 		/*!
 		 *	画像データを BMP (Windows Bitmap) 形式でファイルに保存します。
 		 *
@@ -608,7 +608,7 @@ namespace FK_CLI
 		 */
 		bool WriteBMP(String^ fileName, bool transFlg);
 
-		//! BMP ファイル出力関数2
+		//! BMP ファイル出力メソッド2
 		/*!
 		 *	画像データを BMP (Windows Bitmap) 形式でファイルに保存します。
 		 *
@@ -618,7 +618,7 @@ namespace FK_CLI
 		 */
 		bool WriteBMP(String^ fileName);
 
-		//! PNG ファイル出力関数1
+		//! PNG ファイル出力メソッド1
 		/*!
 		 *	画像データを PNG 形式でファイルに保存します。
 		 *
@@ -631,7 +631,7 @@ namespace FK_CLI
 		 */
 		bool WritePNG(String^ fileName, bool transFlg);
 
-		//! PNG ファイル出力関数2
+		//! PNG ファイル出力メソッド2
 		/*!
 		 *	画像データを PNG 形式でファイルに保存します。
 		 *
@@ -641,7 +641,7 @@ namespace FK_CLI
 		 */
 		bool WritePNG(String^ fileName);
 
-		//! JPEG ファイル出力関数1
+		//! JPEG ファイル出力メソッド1
 		/*!
 		 *	画像データを JPEG 形式でファイルに保存します。
 		 *	なお、JPEG 形式は透過がサポートされていないので、
@@ -658,12 +658,12 @@ namespace FK_CLI
 		 */
 		bool WriteJPG(String^ fileName, int quality);
 
-		//! JPEG ファイル出力関数2
+		//! JPEG ファイル出力メソッド2
 		/*!
 		 *	画像データを JPEG 形式でファイルに保存します。
 		 *	なお、JPEG 形式は透過がサポートされていないので、
 		 *	画像中に透過色データを出力することはできません。
-		 *	本関数は WriteJPG(String^, int) において、
+		 *	本メソッドは WriteJPG(String^, int) において、
 		 *	品質値を 80 に設定した場合と同一の挙動となります。
 		 *
 		 *	\param[in] fileName	ファイル名

@@ -57,7 +57,7 @@ namespace FK_CLI {
 		/*!
 		 *	この頂点を始点とする半稜線のうちの1つを参照します。
 		 *	条件を満たす全ての半稜線を得たい場合は、
-		 *	fk_Reference::GetAllHOnV() 関数を用いて下さい。
+		 *	fk_Reference::GetAllHOnV() メソッドを用いて下さい。
 		 *	対象となる半稜線が存在しない場合は null となります。
 		 */
 		property fk_Half^ OneHalf {

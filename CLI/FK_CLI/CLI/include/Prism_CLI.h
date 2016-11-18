@@ -54,7 +54,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Prism();
 
-		//! 角数設定関数
+		//! 角数設定メソッド
 		/*!
 		 *	角数を変更します。
 		 *
@@ -62,7 +62,7 @@ namespace FK_CLI
 		 */		
 		void SetDivide(int div);
 
-		//! 上面半径設定関数
+		//! 上面半径設定メソッド
 		/*!
 		 *	上面半径を設定します。
 		 *
@@ -70,7 +70,7 @@ namespace FK_CLI
 		 */
 		void SetTopRadius(double rad);
 
-		//! 底面半径設定関数
+		//! 底面半径設定メソッド
 		/*!
 		 *	底面半径を設定します。
 		 *
@@ -78,7 +78,7 @@ namespace FK_CLI
 		 */
 		void SetBottomRadius(double rad);
 
-		//! 高さ設定関数
+		//! 高さ設定メソッド
 		/*!
 		 *	高さを設定します。
 		 *

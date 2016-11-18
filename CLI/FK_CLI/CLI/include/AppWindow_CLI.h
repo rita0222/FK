@@ -127,7 +127,7 @@ namespace FK_CLI
 		//! 描画領域サイズ設定プロパティ
 		/*!
 		 *	ウィンドウの内部に持つ3DCGの描画領域の位置とサイズを変更します。
-		 *	マルチウィンドウを実現する際の調整用関数なので、上級者向けです。
+		 *	マルチウィンドウを実現する際に使用します。
 		 *
 		 *		Window.InnerSize.x = 10;	// 描画領域左上位置 x 座標
 		 *		Window.InnerSize.y = 10;	// 描画領域左上位置 y 座標
@@ -252,8 +252,8 @@ namespace FK_CLI
 		 *	ウィンドウに対して、
 		 *	別の fk_Model (及びその派生クラス)のオブジェクトをカメラとして
 		 *	セットします。
-		 *	この関数でセットしたモデルを操作すれば、
-		 *	fk_AppWindow のメンバ関数を介さずカメラ制御が可能です。
+		 *	このメソッドでセットしたモデルを操作すれば、
+		 *	fk_AppWindow のメソッドを介さずカメラ制御が可能です。
 		 *
 		 *		fk_Model model = new fk_Model;
 		 *		Window.CameraModel = model;
@@ -269,7 +269,7 @@ namespace FK_CLI
 		/*!
 		 *	ウィンドウに対して、別の fk_Scene のオブジェクトをセットします。
 		 *	アプリの画面ごとにモデルを登録した fk_Scene オブジェクトを、
-		 *	この関数でセットして切り替えることで、
+		 *	このメソッドでセットして切り替えることで、
 		 *	モデルを個別に登録や解除を行う手間が省けます。
 		 *	ある程度以上の規模を持つアプリを開発する場合は便利です。
 		 *	また、現時点のシーンを取得することも可能です。
@@ -314,10 +314,10 @@ namespace FK_CLI
 			void set(bool);
 		}
 		
-		//! \name カメラ制御関数
+		//! \name カメラ制御メソッド
 		//@{
 
-		//! カメラ初期化関数
+		//! カメラ初期化メソッド
 		/*!
 		 *	ウィンドウが制御するカメラを、
 		 *	デフォルトで内部に保持している fk_Model のインスタンスに戻します。
@@ -327,13 +327,13 @@ namespace FK_CLI
 		void SetCameraDefault(void);
 		//@}
 
-		//! \name シーン制御関数
+		//! \name シーン制御メソッド
 		//@{
-		//! シーン設定関数
+		//! シーン設定メソッド
 		/*!
 		 *	ウィンドウに対して、別の fk_Scene のオブジェクトをセットします。
 		 *	アプリの画面ごとにモデルを登録した fk_Scene オブジェクトを、
-		 *	この関数でセットして切り替えることで、
+		 *	このメソッドでセットして切り替えることで、
 		 *	モデルを個別に登録や解除を行う手間が省けます。
 		 *	ある程度以上の規模を持つアプリを開発する場合は便利です。
 		 *	Scene プロパティによる設定との違いは、第 2 引数にあります。
@@ -354,7 +354,7 @@ namespace FK_CLI
 		 */
 		void SetScene(fk_Scene^ scene, bool defCameraAndLight);
 
-		//! シーン設定初期化関数
+		//! シーン設定初期化メソッド
 		/*!
 		 *	ウィンドウが制御するシーンを、
 		 *	デフォルトで内部に保持している fk_Scene のインスタンスに戻します。
@@ -363,7 +363,7 @@ namespace FK_CLI
 		 */
 		void SetSceneDefault(void);
 
-		//! 通常モデル表示登録関数
+		//! 通常モデル表示登録メソッド
 		/*!
 		 *	ウィンドウに対してモデルを登録し、表示するようにします。
 		 *	既に登録済みのモデルに対して行った場合、登録順が最後尾となります。
@@ -383,7 +383,7 @@ namespace FK_CLI
 		 */
 		void Entry(fk_Model^ model);
 
-		//! 座標軸付きモデル表示登録関数
+		//! 座標軸付きモデル表示登録メソッド
 		/*!
 		 *	ウィンドウに対してモデルを登録し、表示するようにします。
 		 *	既に登録済みのモデルに対して行った場合、登録順が最後尾となります。
@@ -397,7 +397,7 @@ namespace FK_CLI
 		 */
 		void Entry(fk_Model^ model, fk_GuideObject^ guide);
 
-		//! スプライトモデル登録関数
+		//! スプライトモデル登録メソッド
 		/*!
 		 *	ウィンドウに対してスプライトモデルを登録し、表示するようにします。
 		 *
@@ -407,7 +407,7 @@ namespace FK_CLI
 		 */
 		void Entry(fk_SpriteModel^ model);
 
-		//! fk_Performer モデル登録関数
+		//! fk_Performer モデル登録メソッド
 		/*!
 		 *	ウィンドウに対して fk_Performer 型のモデルを登録し、
 		 *	表示するようにします。
@@ -418,7 +418,7 @@ namespace FK_CLI
 		 */
 		void Entry(fk_Performer^ chara);
 
-		//! 通常モデル表示解除関数
+		//! 通常モデル表示解除メソッド
 		/*!
 		 *	ウィンドウからモデルの登録を解除し、表示されないようにします。
 		 *	登録していないモデルを指定した場合は何も起きません。
@@ -429,7 +429,7 @@ namespace FK_CLI
 		 */
 		void Remove(fk_Model^ model);
 
-		//! 座標軸付きモデル表示解除関数
+		//! 座標軸付きモデル表示解除メソッド
 		/*!
 		 *	ウィンドウから、座標軸付きモデルの登録を解除し、
 		 *	表示されないようにします。
@@ -442,7 +442,7 @@ namespace FK_CLI
 		 */
 		void Remove(fk_Model^ model, fk_GuideObject^ guide);
 
-		//! スプライトモデル表示解除関数
+		//! スプライトモデル表示解除メソッド
 		/*!
 		 *	ウィンドウから、スプライトモデルの登録を解除し、
 		 *	表示されないようにします。
@@ -454,7 +454,7 @@ namespace FK_CLI
 		 */
 		void Remove(fk_SpriteModel^ model);
 
-		//! fk_Performer モデル表示解除関数
+		//! fk_Performer モデル表示解除メソッド
 		/*!
 		 *	ウィンドウから、fk_Performer 型モデルの登録を解除し、
 		 *	表示されないようにします。
@@ -466,7 +466,7 @@ namespace FK_CLI
 		 */
 		void Remove(fk_Performer^ chara);
 
-		//! 全モデル登録解除関数1
+		//! 全モデル登録解除メソッド1
 		/*!
 		 *	現在のシーンから全てのモデルの表示登録を解除します。
 		 *
@@ -477,7 +477,7 @@ namespace FK_CLI
 		 */
 		void ClearModel(bool defCameraAndLight);
 
-		//! 全モデル登録解除関数2
+		//! 全モデル登録解除メソッド2
 		/*!
 		 *	現在のシーンから全てのモデルの表示登録を解除します。
 		 *	ウィンドウ内部で保持しているライトとカメラのモデルは全てクリアとなります。
@@ -487,9 +487,9 @@ namespace FK_CLI
 		void ClearModel(void);
 		//@}
 
-		//! \name 描画制御関数
+		//! \name 描画制御メソッド
 		//@{
-		//! ウィンドウ生成関数
+		//! ウィンドウ生成メソッド
 		/*!
 		 *	ウィンドウを開いて表示します。
 		 *
@@ -497,20 +497,20 @@ namespace FK_CLI
 		 */
 		void Open(void);
 
-		//! ウィンドウ破棄関数
+		//! ウィンドウ破棄メソッド
 		/*!
 		 *	ウィンドウを閉じます。
 		 *	ウィンドウが表示されている状態でプログラムが終了した場合は
 		 *	自動的に閉じられるので、
-		 *	本関数を明示的に呼ぶ必要はありません。
+		 *	本メソッドを明示的に呼ぶ必要はありません。
 		 *	プログラム自体は動作し続けるが、ウィンドウを閉じたい場合や、
-		 *	改めてウィンドウを再生成したい場合に本関数を利用して下さい。
+		 *	改めてウィンドウを再生成したい場合に本メソッドを利用して下さい。
 		 *
 		 *	\sa Open(), Update()
 		 */
 		void Close(void);
 
-		//! シーン描画関数1
+		//! シーン描画メソッド1
 		/*!
 		 *	シーン画面を描画し、さらに各種入力デバイスの状態を更新します。
 		 *	基本的にメインループ内でコールすることになります。
@@ -521,29 +521,29 @@ namespace FK_CLI
 		 *	\param[in]	forceFlg
 		 *		true の場合、FPS制御を無視して強制的に再描画を行います。
 		 * 		false の場合は FPS制御により描画タイミングを制御し、
-		 *		描画が行われるまでは関数は終了しなくなります。
+		 *		描画が行われるまではメソッドは終了しなくなります。
 		 *		デフォルトは false です。
 		 *
 		 *	\sa Open(), Close(), FPS
 		 */
 		bool Update(bool forceFlg);
 
-		//! シーン描画関数2
+		//! シーン描画メソッド2
 		/*!
 		 *	シーン画面を描画し、さらに各種入力デバイスの状態を更新します。
 		 *	基本的にメインループ内でコールすることになります。
 		 *	その際、 FPS プロパティの数値基づいて時間調整が入ります。
-		 *	本関数は、 Update(bool) において引数に false を与えた場合と同様の挙動となります。
+		 *	本メソッドは、 Update(bool) において引数に false を与えた場合と同様の挙動となります。
 		 *
 		 *	\sa Open(), Close(), FPS
 		 */
 		bool Update(void);
 		//@}
 
-		//! \name グリッド・座標軸表示設定関数
+		//! \name グリッド・座標軸表示設定メソッド
 		//@{
 
-		//! グリッド・軸設定関数1
+		//! グリッド・軸設定メソッド1
 		/*!
 		 *	画面内の座標系を表すグリッドと軸を指定します。
 		 *	引数は、 AXIS_X, AXIS_Y, AXIS_Z がそれぞれの軸を、
@@ -561,10 +561,10 @@ namespace FK_CLI
 		 */
 		void ShowGuide(fk_GuideMode mode);
 
-		//! グリッド・軸設定関数2
+		//! グリッド・軸設定メソッド2
 		/*!
 		 *	画面内の座標系を表すグリッドと軸を指定します。
-		 *	本関数では、3次元座標軸と xz 平面のグリッドを表示します。
+		 *	本メソッドでは、3次元座標軸と xz 平面のグリッドを表示します。
 		 *	表示する座標軸およびグリッド面を細かく指定したい場合は、
 		 *	ShowGuide(bool) を利用してください。
 		 *
@@ -572,7 +572,7 @@ namespace FK_CLI
 		 */
 		void ShowGuide(void);
 
-		//! グリッド・軸消去関数
+		//! グリッド・軸消去メソッド
 		/*!
 		 *	ShowGuide() で表示した軸とグリッドを消去します。
 		 *	ShowGuide( fk_GuideMode.NO_GUIDE ) と等価です。
@@ -582,10 +582,10 @@ namespace FK_CLI
 		void HideGuide(void);
 		//@}
 
-		//! \name キーボード状態取得関数
+		//! \name キーボード状態取得メソッド
 		//@{
 
-		//! 通常キー状態取得関数1
+		//! 通常キー状態取得メソッド1
 		/*!
 		 *	通常キーの入力状態を検出します。
 		 *	引数として、
@@ -620,14 +620,14 @@ namespace FK_CLI
 		 */
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlag);
 
-		//! 通常キー状態取得関数2
+		//! 通常キー状態取得メソッド2
 		/*!
 		 *	通常キーの入力状態を検出します。
 		 *	引数として、
 		 *	検出したい文字をシングルクォーテーションで囲って指定します。
 		 *	'A' や 'X' などとします。
 		 *	入力できない特殊キーには getSpecialKeyStatus() を使います。
-		 *	なお、本関数は GetKeyStatus(wchar_t, fk_SwitchStatus, bool) にて
+		 *	なお、本メソッドは GetKeyStatus(wchar_t, fk_SwitchStatus, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
 		 *	以下のコードは、「A」キーが押されているかどうかを検出します。
@@ -652,7 +652,7 @@ namespace FK_CLI
 		 */
 		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status);
 
-		//! 特殊キー状態取得関数1
+		//! 特殊キー状態取得メソッド1
 		/*!
 		 *	特殊キーの入力状態を検出します。
 		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
@@ -682,20 +682,20 @@ namespace FK_CLI
 		 *		そうでなければ false を返します。
 		 *
 		 *	\note
-		 *		スペースキーの状態取得は、本関数ではなく GetKeyStatus() を用います。
+		 *		スペースキーの状態取得は、本メソッドではなく GetKeyStatus() を用います。
 		 *
 		 *	\sa GetKeyStatus(), Update()
 		 */
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
 								 fk_SwitchStatus status, bool insideFlag);
 		
-		//! 特殊キー状態取得関数2
+		//! 特殊キー状態取得メソッド2
 		/*!
 		 *	特殊キーの入力状態を検出します。
 		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
 		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
 		 *	通常キーの状態取得は GetKeyStatus() を使います。
-		 *	なお、本関数は GetSpecialKeyStatus(fk_SpecialKey, fk_SwitchStatus, bool) にて
+		 *	なお、本メソッドは GetSpecialKeyStatus(fk_SpecialKey, fk_SwitchStatus, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
 		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
@@ -716,17 +716,17 @@ namespace FK_CLI
 		 *		そうでなければ false を返します。
 		 *
 		 *	\note
-		 *		スペースキーの状態取得は、本関数ではなく GetKeyStatus() を用います。
+		 *		スペースキーの状態取得は、本メソッドではなく GetKeyStatus() を用います。
 		 *
 		 *	\sa GetKeyStatus(), Update()
 		 */
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
 		//@}
 
-		//! \name マウス状態取得関数
+		//! \name マウス状態取得メソッド
 		//@{
 
-		//! マウスボタン状態取得関数
+		//! マウスボタン状態取得メソッド
 		/*!
 		 *	マウスボタンのクリック状態を検出します。
 		 *	マウスボタンの種類については、 FK_CLI::fk_MouseButton の項目を参照して下さい。
@@ -753,7 +753,7 @@ namespace FK_CLI
 		 */
 		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlag);
 		
-		//! マウスカーソル表示制御関数
+		//! マウスカーソル表示制御メソッド
 		/*!
 		 *	マウスカーソルの表示・非表示と、
 		 *	カーソルを画面の中心に移動するか否かを指定します。
@@ -769,7 +769,7 @@ namespace FK_CLI
 		void SetCursorState(bool visible, bool center);
 
 
-		//! モデルクリック判定関数1
+		//! モデルクリック判定メソッド1
 		/*!
 		 *	マウスでモデルをクリックしているかどうかを判定します。
 		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
@@ -798,7 +798,7 @@ namespace FK_CLI
 		 */
 		bool IsModelPicked(fk_Model^ model, int pixel, int mouseX, int mouseY);
 
-		//! モデルクリック判定関数2
+		//! モデルクリック判定メソッド2
 		/*!
 		 *	マウスでモデルをクリックしているかどうかを判定します。
 		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
@@ -816,14 +816,14 @@ namespace FK_CLI
 		 */
 		bool IsModelPicked(fk_Model^ model, int pixel);
 
-		//! モデルクリック判定関数3
+		//! モデルクリック判定メソッド3
 		/*!
 		 *	マウスでモデルをクリックしているかどうかを判定します。
 		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
 		 *	現在のカーソル位置を基準に判定します。
 		 *	カーソルがモデルに重なっている場合は true、
 		 *	いない場合は false を返します。
-		 *	本関数は、 IsModelPicked(fk_Model^, int) において
+		 *	本メソッドは、 IsModelPicked(fk_Model^, int) において
 		 *	第二引数に 1 を指定した場合と同一の挙動となります。
 		 *
 		 *	\param[in]	model	判定対象モデル。
@@ -834,7 +834,7 @@ namespace FK_CLI
 		 */
 		bool IsModelPicked(fk_Model^ model);
 		
-		//! FPS視点的カメラ制御関数
+		//! FPS視点的カメラ制御メソッド
 		/*!
 		 *	FPS 視点のゲーム特有の、マウス移動による視点操作処理を行います。
 		 *
@@ -848,12 +848,12 @@ namespace FK_CLI
 		void ProcMouseView(fk_Model^ camera, double x, double y, bool lockSW);
 		//@}
 
-		//! \name 投影座標・空間座標変換関数
+		//! \name 投影座標・空間座標変換メソッド
 		//@{
 
-		//! 投影平面から任意平面への射影点算出関数
+		//! 投影平面から任意平面への射影点算出メソッド
 		/*!
-		 *	この関数は、描画領域上の投影座標から、
+		 *	このメソッドは、描画領域上の投影座標から、
 		 *	任意の平面への射影変換を行い、射影点を求めます。
 		 *	これは、投影面上の投影座標とカメラを結ぶ直線と、
 		 *	引数として入力された平面の交点を求めるということと同義です。
@@ -872,9 +872,9 @@ namespace FK_CLI
 		bool	GetProjectPosition(double x, double y,
 								   fk_Plane^ plane, fk_Vector^ pos);
 
-		//! 投影平面から任意距離での射影点算出関数
+		//! 投影平面から任意距離での射影点算出メソッド
 		/*!
-		 *	この関数は、描画領域上の投影座標に対し、
+		 *	このメソッドは、描画領域上の投影座標に対し、
 		 *	カメラから指定した距離となっている3D空間中の点を算出します。
 		 *	これは、投影面上の投影座標とカメラを結ぶ直線と、
 		 *	カメラを中心とし指定距離を半径とする球面の交点を求めることと同義です。
@@ -889,9 +889,9 @@ namespace FK_CLI
 		bool	GetProjectPosition(double x, double y,
 								   double dist, fk_Vector^ pos);
 
-		//! 空間座標から投影座標への射影点算出関数
+		//! 空間座標から投影座標への射影点算出メソッド
 		/*!
-		 *	この関数は、空間座標から投影座標への射影点を算出します。
+		 *	このメソッドは、空間座標から投影座標への射影点を算出します。
 		 *	これは、ある空間中の位置が画面上でどこに表示されるかを知ることと同義です。
 		 *	投影座標の詳細は fk_Window の概要を参照して下さい。
 		 *

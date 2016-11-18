@@ -96,7 +96,7 @@ namespace FK_CLI
 			double get();
 		}
 		
-		//! スポットライト減衰指数設定関数
+		//! スポットライト減衰指数設定メソッド
 		/*!
 		 *	スポットライト光源における、
 		 *	光源方向からの減衰の度合いを指数 \f$\alpha\f$ として設定します。
@@ -111,7 +111,7 @@ namespace FK_CLI
 		 *		\frac{(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}}
 		 *		{|(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}|}, \; 0\right)^\alpha
 		 *	\f]
-		 *	この関数は、光源から物体への方向ベクトル
+		 *	このメソッドは、光源から物体への方向ベクトル
 		 *	\f$ (\mathbf{Q} - \mathbf{P}) \f$ が
 		 *	光源の方向ベクトル \f$ \mathbf{L}\ \f$ と角度が大きいほど、
 		 *	減衰関数 \f$ g(\alpha) \f$ の値は小さくなっていくことを意味します。
@@ -125,7 +125,7 @@ namespace FK_CLI
 		 *	光源からの照射光量は 0 となります。つまり、本プロパティによる影響よりも
 		 *	SpotCutOff プロパティによる照射範囲の方が優先されることになりますので、
 		 *	設定には注意が必要です。
-		 *	また、この減衰効果は SetAttenuation() 関数による減衰効果
+		 *	また、この減衰効果は SetAttenuation() メソッドによる減衰効果
 		 *	\f$ f(d) \f$ と合わせて行われます。
 		 *	つまり、実際の減衰量は \f$ f(d)\cdot g(\alpha) \f$ となります。
 		 *
@@ -136,7 +136,7 @@ namespace FK_CLI
 			double get();
 		}
 
-		//! 減衰係数設定関数1
+		//! 減衰係数設定メソッド1
 		/*!
 		 *	点光源やスポットライトにおける、
 		 *	距離による減衰関数の係数を設定します。
@@ -163,7 +163,7 @@ namespace FK_CLI
 		 */
 		void SetAttenuation(double k_l, double k_q, double k_c);
 
-		//! 減衰係数設定関数2
+		//! 減衰係数設定メソッド2
 		/*!
 		 *	点光源やスポットライトにおける、
 		 *	距離による減衰関数の係数を設定します。
@@ -182,7 +182,7 @@ namespace FK_CLI
 		 *	実際の利用においては点光源の影響が著しく少なくなってしまい、
 		 *	効果として望ましくない場合もあります。
 		 *
-		 *	なお、本関数は SetAttenuation(double, double, double) において、
+		 *	なお、本メソッドは SetAttenuation(double, double, double) において、
 		 *	第3引数に 1.0 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	k_l		線形減衰係数
@@ -192,7 +192,7 @@ namespace FK_CLI
 		 */
 		void SetAttenuation(double k_l, double k_q);
 
-		//! 減衰係数参照関数
+		//! 減衰係数参照メソッド
 		/*!
 		 *	距離による減衰関数の係数を参照します。
 		 *

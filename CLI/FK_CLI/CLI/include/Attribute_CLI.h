@@ -25,10 +25,10 @@ namespace FK_CLI
 		!fk_Attribute();
 #endif
 		
-		//! \name 属性設定用関数
+		//! \name 属性設定用メソッド
 		//@{
 
-		//! キーが int 型、値が int 型である属性設定関数
+		//! キーが int 型、値が int 型である属性設定メソッド
 		/*!
 		 *	キーを int 型、値を int 型とする属性を設定します。
 		 *	
@@ -43,7 +43,7 @@ namespace FK_CLI
 		 */
 		bool SetAttrII(int key, int value);
 
-		//! キーが int 型、値が double 型である属性設定関数
+		//! キーが int 型、値が double 型である属性設定メソッド
 		/*!
 		 *	キーを int 型、値を double 型とする属性を設定します。
 		 *	
@@ -58,7 +58,7 @@ namespace FK_CLI
 		 */
 		bool SetAttrID(int key, double value);
 
-		//! キーが int 型、値が String 型である属性設定関数
+		//! キーが int 型、値が String 型である属性設定メソッド
 		/*!
 		 *	キーを int 型、値を String 型とする属性を設定します。
 		 *
@@ -73,7 +73,7 @@ namespace FK_CLI
 		 */
 		bool SetAttrIS(int key, String^ value);
 
-		//! キーが String 型、値が int 型である属性設定関数
+		//! キーが String 型、値が int 型である属性設定メソッド
 		/*!
 		 *	キーを String 型、値を int 型とする属性を設定します。
 		 *	
@@ -88,7 +88,7 @@ namespace FK_CLI
 		 */
 		bool SetAttrSI(String^ key, int value);
 
-		//! キーが String 型、値が double 型である属性設定関数
+		//! キーが String 型、値が double 型である属性設定メソッド
 		/*!
 		 *	キーを String 型、値を double 型とする属性を設定します。
 		 *	
@@ -103,7 +103,7 @@ namespace FK_CLI
 		 */
 		bool SetAttrSD(String^ key, double value);
 
-		//! キーが String 型、値が String 型である属性設定関数
+		//! キーが String 型、値が String 型である属性設定メソッド
 		/*!
 		 *	キーを String 型、値を String 型とする属性を設定します。
 		 *	
@@ -119,10 +119,10 @@ namespace FK_CLI
 		bool SetAttrSS(String ^key, String^ value);
 		//@}
 
-		//! \name 属性取得用関数
+		//! \name 属性取得用メソッド
 		//@{
 
-		//! キーが int 型、値が int 型である属性参照関数
+		//! キーが int 型、値が int 型である属性参照メソッド
 		/*!
 		 *	キーが int 型、値が int 方である属性を参照します。
 		 *
@@ -134,7 +134,7 @@ namespace FK_CLI
 		 */
 		int GetAttrII(int key);
 
-		//! キーが int 型、値が double 型である属性参照関数
+		//! キーが int 型、値が double 型である属性参照メソッド
 		/*!
 		 *	キーが int 型、値が double 型である属性を参照します。
 		 *
@@ -147,7 +147,7 @@ namespace FK_CLI
 		 */
 		double GetAttrID(int key);
 
-		//! キーが int 型、値が String 型である属性参照関数
+		//! キーが int 型、値が String 型である属性参照メソッド
 		/*!
 		 *	キーが int 型、値が String 型である属性を参照します。
 		 *
@@ -159,7 +159,7 @@ namespace FK_CLI
 		 */
 		String^ GetAttrIS(int key);
 
-		//! キーが String 型、値が int 型である属性参照関数
+		//! キーが String 型、値が int 型である属性参照メソッド
 		/*!
 		 *	キーが String 型、値が int 型である属性を参照します。
 		 *
@@ -171,7 +171,7 @@ namespace FK_CLI
 		 */
 		int GetAttrSI(String^ key);
 
-		//! キーが String 型、値が double 型である属性参照関数
+		//! キーが String 型、値が double 型である属性参照メソッド
 		/*!
 		 *	キーが String 型、値が double 型である属性を参照します。
 		 *
@@ -183,7 +183,7 @@ namespace FK_CLI
 		 */
 		double GetAttrSD(String^ key);
 
-		//! キーが String 型、値が String 型である属性参照関数
+		//! キーが String 型、値が String 型である属性参照メソッド
 		/*!
 		 *	キーが String 型、値が String 型である属性を参照します。
 		 *
@@ -196,9 +196,9 @@ namespace FK_CLI
 		String^ GetAttrSS(String^ key);
 		//@}
 		
-		//! \name 属性存在参照関数
+		//! \name 属性存在参照メソッド
 		//@{
-		//! キーが int 型、値が int 型である属性存在参照関数
+		//! キーが int 型、値が int 型である属性存在参照メソッド
 		/*!
 		 *	キーが int 型、値が int 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
@@ -213,7 +213,7 @@ namespace FK_CLI
 		 */
 		bool ExistAttrII(int key);
 
-		//! キーが int 型、値が double 型である属性存在参照関数
+		//! キーが int 型、値が double 型である属性存在参照メソッド
 		/*!
 		 *	キーが int 型、値が double 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
@@ -228,7 +228,7 @@ namespace FK_CLI
 		 */
 		bool ExistAttrID(int key);
 
-		//! キーが int 型、値が String 型である属性存在参照関数
+		//! キーが int 型、値が String 型である属性存在参照メソッド
 		/*!
 		 *	キーが int 型、値が String 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
@@ -243,7 +243,7 @@ namespace FK_CLI
 		 */
 		bool ExistAttrIS(int key);
 
-		//! キーが String 型、値が int 型である属性存在参照関数
+		//! キーが String 型、値が int 型である属性存在参照メソッド
 		/*!
 		 *	キーが String 型、値が int 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
@@ -258,7 +258,7 @@ namespace FK_CLI
 		 */
 		bool ExistAttrSI(String^ key);
 
-		//! キーが String 型、値が double 型である属性存在参照関数
+		//! キーが String 型、値が double 型である属性存在参照メソッド
 		/*!
 		 *	キーが String 型、値が double 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
@@ -273,7 +273,7 @@ namespace FK_CLI
 		 */
 		bool ExistAttrSD(String^ key);
 
-		//! キーが String 型、値が String 型である属性存在参照関数
+		//! キーが String 型、値が String 型である属性存在参照メソッド
 		/*!
 		 *	キーが String 型、値が String 型である属性に対し、
 		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
@@ -289,9 +289,9 @@ namespace FK_CLI
 		bool ExistAttrSS(String^ key);
 
 		//@}
-		//! \name 属性消去関数
+		//! \name 属性消去メソッド
 		//@{	
-		//! キーが int 型、値が int 型である属性消去関数
+		//! キーが int 型、値が int 型である属性消去メソッド
 		/*!
 		 *	キーが int 型、値が int 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
@@ -306,7 +306,7 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrII(int key);
 
-		//! キーが int 型、値が double 型である属性消去関数
+		//! キーが int 型、値が double 型である属性消去メソッド
 		/*!
 		 *	キーが int 型、値が double 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
@@ -321,7 +321,7 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrID(int key);
 
-		//! キーが int 型、値が String 型である属性消去関数
+		//! キーが int 型、値が String 型である属性消去メソッド
 		/*!
 		 *	キーが int 型、値が String 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
@@ -336,7 +336,7 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrIS(int key);
 
-		//! キーが String 型、値が int 型である属性消去関数
+		//! キーが String 型、値が int 型である属性消去メソッド
 		/*!
 		 *	キーが String 型、値が int 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
@@ -351,7 +351,7 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrSI(String^ key);
 
-		//! キーが String 型、値が double 型である属性消去関数
+		//! キーが String 型、値が double 型である属性消去メソッド
 		/*!
 		 *	キーが String 型、値が double 型である属性に対し、
 		 *	指定されたキーの属性を消去します。
@@ -366,7 +366,7 @@ namespace FK_CLI
 		 */
 		bool DeleteAttrSD(String^ key);
 
-		//! キーが String 型、値が String 型である属性消去関数
+		//! キーが String 型、値が String 型である属性消去メソッド
 		/*!
 		 *	キーが String 型、値が String 型である属性に対し、
 		 *	指定されたキーの属性を消去します。

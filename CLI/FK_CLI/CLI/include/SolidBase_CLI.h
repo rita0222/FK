@@ -17,7 +17,7 @@ namespace FK_CLI
 	 *	頂点IDを格納した面データ集合の2つのデータから成る形状データです。
 	 *
 	 *	一般形状を表すクラスとして、 fk_Solid の他に fk_IndexFaceSet クラスがあります。
-	 *	fk_IndexFaceSet クラスにも fk_IndexFaceSet::MakeIFSet() 関数によって、
+	 *	fk_IndexFaceSet クラスにも fk_IndexFaceSet::MakeIFSet() メソッドによって、
 	 *	IFS データから形状を生成することが可能です。
 	 *	ただし、 fk_IndexFaceSet においては面が3角形か4角形のみ
 	 *	(そして混在は不可)という制限があります。また、生成後の位相変化にも対応していません。
@@ -39,10 +39,10 @@ namespace FK_CLI
 		~fk_SolidBase();
 #endif
 
-		//! 任意形状生成関数1-1
+		//! 任意形状生成メソッド1-1
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
-		 *	この関数形式の場合、全ての面が同じ角数である必要があります。
+		 *	このメソッド形式の場合、全ての面が同じ角数である必要があります。
 		 *	角数の異なる面が混在する形状を作成したい場合は、
 		 *	MakeIFSet(IEnumerable< IEnumerable<int>^ >^, IEnumerable<fk_Vector^>^, int);
 		 *	を利用して下さい。
@@ -75,15 +75,15 @@ namespace FK_CLI
 					   IEnumerable<fk_Vector^>^ posArray,
 					   int order);
 
-		//! 任意形状生成関数1-2
+		//! 任意形状生成メソッド1-2
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
-		 *	この関数形式の場合、全ての面が同じ角数である必要があります。
+		 *	このメソッド形式の場合、全ての面が同じ角数である必要があります。
 		 *	角数の異なる面が混在する形状を作成したい場合は、
 		 *	MakeIFSet(IEnumerable< IEnumerable<int>^ >^, IEnumerable<fk_Vector^>^, int)
 		 *	を利用して下さい。
 		 *
-		 *	本関数は、
+		 *	本メソッドは、
 		 *	MakeIFSet(int, int, IEnumerable<int>^, int, IEnumerable<fk_Vector^>^, int) において、
 		 *	第6引数に 0 を入力した場合と同義となります。
 		 *
@@ -111,7 +111,7 @@ namespace FK_CLI
 					   int vertexNum,
 					   IEnumerable<fk_Vector^>^ posArray);
 
-		//! 任意形状生成関数2-1
+		//! 任意形状生成メソッド2-1
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
 		 *
@@ -128,10 +128,10 @@ namespace FK_CLI
 					   IEnumerable<fk_Vector^>^ posArray,
 					   int order);
 
-		//! 任意形状生成関数2-2
+		//! 任意形状生成メソッド2-2
 		/*!
 		 *	与えられたIFSデータから、形状を生成します。
-		 *	本関数は、
+		 *	本メソッドは、
 		 *	MakeIFSet(IEnumerable< IEnumerable<int>^ >^, IEnumerable<fk_Vector^>^, int) において、
 		 *	第3引数の 0 を入力した場合と同義となります。
 		 *

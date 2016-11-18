@@ -57,13 +57,13 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_TriTexture();
 
-		//! 初期化関数
+		//! 初期化メソッド
 		/*!
 		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
 		 */
 		void Init(void);
 
-		//! テクスチャ座標設定関数1
+		//! テクスチャ座標設定メソッド1
 		/*!
 		 *	頂点のテクスチャ座標を設定します。
 		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
@@ -85,7 +85,7 @@ namespace FK_CLI
 		 */
 		bool SetTextureCoord(int ID, double x, double y);
 
-		//! テクスチャ座標設定関数2
+		//! テクスチャ座標設定メソッド2
 		/*!
 		 *	頂点のテクスチャ座標を設定します。
 		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
@@ -103,7 +103,7 @@ namespace FK_CLI
 		 */
 		bool SetTextureCoord(int ID, fk_TexCoord^ coord);
 
-		//! テクスチャ座標取得関数
+		//! テクスチャ座標取得メソッド
 		/*!
 		 *	SetTextureCoord() で設定したテクスチャ座標を取得します。
 		 *
@@ -115,7 +115,7 @@ namespace FK_CLI
 		 */
 		fk_TexCoord^ GetTextureCoord(int ID);
 
-		//! 頂点位置ベクトル設定関数1
+		//! 頂点位置ベクトル設定メソッド1
 		/*!
 		 *	頂点の空間中での位置ベクトルを設定します。
 		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
@@ -132,7 +132,7 @@ namespace FK_CLI
 		 */
 		bool SetVertexPos(int ID, double x, double y, double z);
 
-		//! 頂点位置ベクトル設定関数2
+		//! 頂点位置ベクトル設定メソッド2
 		/*!
 		 *	頂点の空間中での位置ベクトルを設定します。
 		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
@@ -147,7 +147,7 @@ namespace FK_CLI
 		 */
 		bool SetVertexPos(int ID, fk_Vector^ pos);
 
-		//! 頂点位置ベクトル取得関数
+		//! 頂点位置ベクトル取得メソッド
 		/*!
 		 *	SetTexturePos() で設定したテクスチャ座標を取得します。
 		 *

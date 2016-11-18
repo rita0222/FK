@@ -17,7 +17,7 @@ namespace FK_CLI
 	 *	fk_Solid は様々な機能を持つ形状制御用クラスです。
 	 *	fk_Solid 型のインスタンスが利用を想定している機能は、
 	 *	実際には多くの基底クラスにて定義されています。
-	 *	fk_Solid で直接定義されている関数は、
+	 *	fk_Solid で直接定義されているメソッドは、
 	 *	ほとんどが様々な3次元形状用ファイルフォーマットに対応した入出力機能となります。
 	 *	その他、以下のようなような機能はそれぞれのクラスのマニュアルを参照して下さい。
 	 *	- 位相に対する基本的な参照機能は、 fk_DataAccess を参照して下さい。
@@ -79,7 +79,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Solid();
 
-		//! 形状初期化関数1
+		//! 形状初期化メソッド1
 		/*!
 		 *	インスタンスに設定されている形状と独自属性を全て消去し、
 		 *	データの初期化を行います。
@@ -90,15 +90,15 @@ namespace FK_CLI
 		 */
 		void AllClear(bool matFlg);
 
-		//! 形状初期化関数2
+		//! 形状初期化メソッド2
 		/*!
 		 *	インスタンスに設定されている形状と独自属性を全て消去し、
 		 *	データの初期化を行います。
-		 *	本関数は AllClear(bool) において、引数に true を入力した場合と同義となります。
+		 *	本メソッドは AllClear(bool) において、引数に true を入力した場合と同義となります。
 		 */
 		void AllClear(void);
 
-		//! 空形状状態参照関数
+		//! 空形状状態参照メソッド
 		/*!
 		 *	形状情報が空かどうかを参照します。
 		 *
@@ -106,7 +106,7 @@ namespace FK_CLI
 		 */
 		bool IsEmpty(void);
 
-		//! 形状コピー関数
+		//! 形状コピーメソッド
 		/*!
 		 *	引数として与えられたインスタンス中の形状をコピーします。
 		 *	各種属性およびマテリアル情報は写しません。
@@ -115,7 +115,7 @@ namespace FK_CLI
 		 */
 		void CloneShape(fk_Solid^ solid);
 
-		//! 形状同値比較関数
+		//! 形状同値比較メソッド
 		/*!
 		 *	引数として与えられたインスタンス中の形状と、同じ状態かどうかを比較します。
 		 *	ここでいう「同じ」とは、全ての位相要素の ID も一致している状態を指します。
@@ -127,9 +127,9 @@ namespace FK_CLI
 		 */
 		bool CompareShape(fk_Solid^ solid);
 
-		//! \name ファイル入力関数
+		//! \name ファイル入力メソッド
 		//@{
-		//! SMFファイル入力関数
+		//! SMFファイル入力メソッド
 		/*!
 		 *	SMF形式のファイルからデータを入力します。
 		 *
@@ -139,7 +139,7 @@ namespace FK_CLI
 		 */
 		bool ReadSMFFile(String^ fileName);
 
-		//! SRFファイル入力関数
+		//! SRFファイル入力メソッド
 		/*!
 		 *	SRF形式のファイルからデータを入力します。
 		 *
@@ -149,11 +149,11 @@ namespace FK_CLI
 		 */
 		bool ReadSRFFile(String^ fileName);
 
-		//! VRML ファイル入力関数1
+		//! VRML ファイル入力メソッド1
 		/*!
 		 *	VRML形式のファイルからデータを入力します。
 		 *	VRMLでは、形状を表す様々なノードがありますが、
-		 *	本関数が対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
+		 *	本メソッドが対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
 		 *
 		 *	\param[in]	fileName		ファイル名
 		 *
@@ -173,7 +173,7 @@ namespace FK_CLI
 		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
 		 *		1997年に策定された「VRML97」の2種類があり、
 		 *		VRML97は「VRML2.0」とも呼ばれます。
-		 *		本関数では入力フォーマットとして VRML97 を想定しています。
+		 *		本メソッドでは入力フォーマットとして VRML97 を想定しています。
 		 *
 		 *	\note
 		 *		VRMLは文法解釈、特にセパレータの扱い方についてはあまり厳密になっておらず、
@@ -182,13 +182,13 @@ namespace FK_CLI
 		 */
 		bool ReadVRMLFile(String^ fileName, bool materialFlg, bool solidFlg);
 
-		//! VRML ファイル入力関数2
+		//! VRML ファイル入力メソッド2
 		/*!
 		 *	VRML形式のファイルからデータを入力します。
 		 *	VRMLでは、形状を表す様々なノードがありますが、
-		 *	本関数が対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
+		 *	本メソッドが対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
 		 *
-		 *	なお、本関数は ReadVRMLFile(String^, bool, bool) において、
+		 *	なお、本メソッドは ReadVRMLFile(String^, bool, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -203,7 +203,7 @@ namespace FK_CLI
 		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
 		 *		1997年に策定された「VRML97」の2種類があり、
 		 *		VRML97は「VRML2.0」とも呼ばれます。
-		 *		本関数では入力フォーマットとして VRML97 を想定しています。
+		 *		本メソッドでは入力フォーマットとして VRML97 を想定しています。
 		 *
 		 *	\note
 		 *		VRMLは文法解釈、特にセパレータの扱い方についてはあまり厳密になっておらず、
@@ -212,13 +212,13 @@ namespace FK_CLI
 		 */
 		bool ReadVRMLFile(String^ fileName, bool materialFlg);
 
-		//! VRML ファイル入力関数3
+		//! VRML ファイル入力メソッド3
 		/*!
 		 *	VRML形式のファイルからデータを入力します。
 		 *	VRMLでは、形状を表す様々なノードがありますが、
-		 *	本関数が対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
+		 *	本メソッドが対応しているのは「IndexedFaceSet」ノードに記述された形状のみです。
 		 *
-		 *	なお、本関数は ReadVRMLFile(String^, bool, bool) において、
+		 *	なお、本メソッドは ReadVRMLFile(String^, bool, bool) において、
 		 *	第2引数に true、第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -229,7 +229,7 @@ namespace FK_CLI
 		 *		VRML形式は、1994年に策定された通称「VRML1.0」と、
 		 *		1997年に策定された「VRML97」の2種類があり、
 		 *		VRML97は「VRML2.0」とも呼ばれます。
-		 *		本関数では入力フォーマットとして VRML97 を想定しています。
+		 *		本メソッドでは入力フォーマットとして VRML97 を想定しています。
 		 *
 		 *	\note
 		 *		VRMLは文法解釈、特にセパレータの扱い方についてはあまり厳密になっておらず、
@@ -238,7 +238,7 @@ namespace FK_CLI
 		 */
 		bool ReadVRMLFile(String^ fileName);
 
-		//! STL ファイル入力関数1
+		//! STL ファイル入力メソッド1
 		/*!
 		 *	STL形式のファイルからデータを入力します。
 		 *	対応しているのは面データのみです。
@@ -260,12 +260,12 @@ namespace FK_CLI
 		 */
 		bool ReadSTLFile(String^ fileName, bool solidFlg, double tolerance);
 
-		//! STL ファイル入力関数2
+		//! STL ファイル入力メソッド2
 		/*!
 		 *	STL形式のファイルからデータを入力します。
 		 *	対応しているのは面データのみです。
 		 *
-		 *	なお、本関数は ReadSTLFile(String^, bool, double) において、
+		 *	なお、本メソッドは ReadSTLFile(String^, bool, double) において、
 		 *	第3引数に 1.0e-08 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -280,12 +280,12 @@ namespace FK_CLI
 		 */
 		bool ReadSTLFile(String^ fileName, bool solidFlg);
 
-		//! STL ファイル入力関数2
+		//! STL ファイル入力メソッド2
 		/*!
 		 *	STL形式のファイルからデータを入力します。
 		 *	対応しているのは面データのみです。
 		 *
-		 *	なお、本関数は ReadSTLFile(String^, bool, double) において、
+		 *	なお、本メソッドは ReadSTLFile(String^, bool, double) において、
 		 *	第2引数に true を、第3引数に 1.0e-08 を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -294,7 +294,7 @@ namespace FK_CLI
 		 */
 		bool ReadSTLFile(String^ fileName);
 
-		//! HRCファイル入力関数
+		//! HRCファイル入力メソッド
 		/*!
 		 *	HRC形式のファイルからデータを入力します。
 		 *
@@ -304,7 +304,7 @@ namespace FK_CLI
 		 */
 		bool ReadHRCFile(String^ fileName);
 
-		//! RDSファイル入力関数1
+		//! RDSファイル入力メソッド1
 		/*!
 		 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
 		 *
@@ -320,10 +320,10 @@ namespace FK_CLI
 		 */
 		bool ReadRDSFile(String^ fileName, bool solidFlg);
 
-		//! RDSファイル入力関数2
+		//! RDSファイル入力メソッド2
 		/*!
 		 *	RDS (Ray Dream Studio) 形式のファイルからデータを入力します。
-		 *	本関数は ReadRDSFile(String^, bool) 関数において、
+		 *	本メソッドは ReadRDSFile(String^, bool) メソッドにおいて、
 		 *	第2引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -332,7 +332,7 @@ namespace FK_CLI
 		 */
 		bool ReadRDSFile(String^ fileName);
 
-		//! DXFファイル入力関数1
+		//! DXFファイル入力メソッド1
 		/*!
 		 *	DXF 形式のファイルからデータを入力します。
 		 *
@@ -348,10 +348,10 @@ namespace FK_CLI
 		 */
 		bool ReadDXFFile(String^ fileName, bool solidFlg);
 
-		//! DXFファイル入力関数2
+		//! DXFファイル入力メソッド2
 		/*!
 		 *	DXF 形式のファイルからデータを入力します。
-		 *	本関数は ReadDXFFile(String^, bool) 関数において、
+		 *	本メソッドは ReadDXFFile(String^, bool) メソッドにおいて、
 		 *	第2引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -360,17 +360,17 @@ namespace FK_CLI
 		 */
 		bool ReadDXFFile(String^ fileName);
 
-		//! MQOファイル入力関数1-1
+		//! MQOファイル入力メソッド1-1
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -401,19 +401,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName,
 						 bool solidFlg, bool contFlg, bool materialFlg);
 
-		//! MQOファイル入力関数1-2
+		//! MQOファイル入力メソッド1-2
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -440,19 +440,19 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg, bool contFlg);
 
-		//! MQOファイル入力関数1-3
+		//! MQOファイル入力メソッド1-3
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第4引数に true、第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -469,19 +469,19 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool solidFlg);
 
-		//! MQOファイル入力関数1-4
+		//! MQOファイル入力メソッド1-4
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool, bool, bool) において、
 		 *	第3引数に true、第4引数に true、第5引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -492,17 +492,17 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName);
 
-		//! MQOファイル入力関数2-1
+		//! MQOファイル入力メソッド2-1
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -539,19 +539,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName, int materialID,
 						 bool solidFlg, bool contFlg, bool materialFlg);
 
-		//! MQOファイル入力関数2-2
+		//! MQOファイル入力メソッド2-2
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, int, bool, bool, bool) において、
 		 *	第6引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -585,19 +585,19 @@ namespace FK_CLI
 		bool ReadMQOFile(String^ fileName, String^ objName, int materialID,
 						 bool solidFlg, bool contFlg);
 
-		//! MQOファイル入力関数2-3
+		//! MQOファイル入力メソッド2-3
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, int, bool, bool, bool) において、
 		 *	第5引数に true、第6引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -620,19 +620,19 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
 
-		//! MQOファイル入力関数2-4
+		//! MQOファイル入力メソッド2-4
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
 		 *
-		 *	この関数は、テクスチャ用のデータの入力は行いません。
+		 *	このメソッドは、テクスチャ用のデータの入力は行いません。
 		 *	テクスチャデータも併せて表示を行いたい場合は、
 		 *	fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, int, bool, bool, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, int, bool, bool, bool) において、
 		 *	第4引数に true、第5引数に true、第6引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -649,17 +649,17 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, int materialID);
 
-		//! DirectX (D3DX) ファイル入力関数1-1
+		//! DirectX (D3DX) ファイル入力メソッド1-1
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	この関数で入力できるのは形状データとアニメーションデータです。
+		 *	このメソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_Solid クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -680,19 +680,19 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, bool solidFlg);
 
-		//! DirectX (D3DX) ファイル入力関数1-2
+		//! DirectX (D3DX) ファイル入力メソッド1-2
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	この関数で入力できるのは形状データとアニメーションデータです。
+		 *	このメソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_Solid クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	本関数は、 ReadD3DXFile(String^, String^, bool) において、
+		 *	本メソッドは、 ReadD3DXFile(String^, String^, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -708,17 +708,17 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName);
 
-		//! DirectX (D3DX) ファイル入力関数2-1
+		//! DirectX (D3DX) ファイル入力メソッド2-1
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	この関数で入力できるのは形状データとアニメーションデータです。
+		 *	このメソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_Solid クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *
@@ -745,19 +745,19 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID, bool solidFlg);
 
-		//! DirectX (D3DX) ファイル入力関数2-2
+		//! DirectX (D3DX) ファイル入力メソッド2-2
 		/*!
 		 *	DirectX 形式 (X 形式と呼ばれることもあります) のフォーマット
 		 *	(以下、「D3DX形式」) であるファイルからデータを入力します。
-		 *	この関数で入力できるのは形状データとアニメーションデータです。
+		 *	このメソッドで入力できるのは形状データとアニメーションデータです。
 		 *	テクスチャデータを入力したい場合は、
 		 *	fk_Solid クラスではなく fk_IFSTexture クラスを利用して下さい。
 		 *
 		 *	D3DXデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	本関数は、 ReadD3DXFile(String^, String^, int, bool) において、
+		 *	本メソッドは、 ReadD3DXFile(String^, String^, int, bool) において、
 		 *	第4引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名
@@ -779,7 +779,7 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID);
 
-		//! VRML ファイル出力関数1-1
+		//! VRML ファイル出力メソッド1-1
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *
@@ -790,13 +790,13 @@ namespace FK_CLI
 		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 		 *
 		 *	\param[in]	triFlg
-		 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
+		 *		仮想メソッドからの継承のために存在する引数で、処理には一切影響しません。
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
 		bool WriteVRMLFile(String^ fileName, fk_Material^ material, bool triFlg);
 
-		//! VRML ファイル出力関数1-2
+		//! VRML ファイル出力メソッド1-2
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *
@@ -810,11 +810,11 @@ namespace FK_CLI
 		 */
 		bool WriteVRMLFile(String^ fileName, fk_Material^ material);
 
-		//! VRML ファイル出力関数1-3
+		//! VRML ファイル出力メソッド1-3
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *
-		 *	本関数は、 WriteVRMLFile(String^, fk_Material^) において、
+		 *	本メソッドは、 WriteVRMLFile(String^, fk_Material^) において、
 		 *	第2引数に null を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -823,7 +823,7 @@ namespace FK_CLI
 		 */
 		bool WriteVRMLFile(String^ fileName);
 
-		//! VRML ファイル出力関数2-1
+		//! VRML ファイル出力メソッド2-1
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *	この引数形式の場合は、
@@ -843,7 +843,7 @@ namespace FK_CLI
 		 *		null を代入した場合は、VRMLファイル中に「Material」ノードを生成しません。
 		 *
 		 *	\param[in]	triFlg
-		 *		仮想関数からの継承のために存在する引数で、処理には一切影響しません。
+		 *		仮想メソッドからの継承のために存在する引数で、処理には一切影響しません。
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
@@ -851,7 +851,7 @@ namespace FK_CLI
 						   IEnumerable<fk_Vector^>^ pos,
 						   fk_Material^ material, bool triFlg);
 
-		//! VRML ファイル出力関数2-2
+		//! VRML ファイル出力メソッド2-2
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *	この引数形式の場合は、
@@ -876,14 +876,14 @@ namespace FK_CLI
 						   IEnumerable<fk_Vector^>^ pos,
 						   fk_Material^ material);
 
-		//! VRML ファイル出力関数2-3
+		//! VRML ファイル出力メソッド2-3
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
 		 *	この引数形式の場合は、
 		 *	CoordinateInterpolator ノードを用いた
 		 *	アニメーションデータを出力することが可能です。
 		 *
-		 *	本関数は、
+		 *	本メソッドは、
 		 *	WriteVRMLFile(String^, IEnumerable<double>^, IEnumerable<fk_Vector^>^, fk_Material^) において、
 		 *	第4引数に null を入力した場合と同義となります。
 		 *
@@ -899,7 +899,7 @@ namespace FK_CLI
 		 */
 		bool WriteVRMLFile(String^ fileName, IEnumerable<double>^ time, IEnumerable<fk_Vector^>^ pos);
 
-		//! STL ファイル出力関数
+		//! STL ファイル出力メソッド
 		/*!
 		 *	STL 形式で形状データを出力します。
 		 *
@@ -909,7 +909,7 @@ namespace FK_CLI
 		 */
 		bool WriteSTLFile(String^ fileName);
 
-		//! DXF ファイル出力関数1
+		//! DXF ファイル出力メソッド1
 		/*!
 		 *	DXF 形式で形状データを出力します。
 		 *
@@ -923,10 +923,10 @@ namespace FK_CLI
 		 */
 		bool WriteDXFFile(String^ fileName, bool triFlg);
 
-		//! DXF ファイル出力関数2
+		//! DXF ファイル出力メソッド2
 		/*!
 		 *	DXF 形式で形状データを出力します。
-		 *	本関数は、 WriteDXFFile(String^, bool) において、
+		 *	本メソッドは、 WriteDXFFile(String^, bool) において、
 		 *	第2引数に false を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName		ファイル名
@@ -935,7 +935,7 @@ namespace FK_CLI
 		 */
 		bool WriteDXFFile(String^ fileName);
 
-		//! MQO ファイル出力関数
+		//! MQO ファイル出力メソッド
 		/*!
 		 *	MQO 形式で形状データを出力します。
 		 *

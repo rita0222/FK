@@ -69,7 +69,7 @@ namespace FK_CLI {
 
 		//////////////////// 比較演算子		
 
-		//! 同値比較関数1
+		//! 同値比較メソッド1
 		/*!
 		 *	2つのベクトルの値が同値かどうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -81,7 +81,7 @@ namespace FK_CLI {
 		 */
 		bool Equals(fk_GenVector^ V);
 
-		//! 同値比較関数2
+		//! 同値比較メソッド2
 		/*!
 		 *	2つのベクトルの値が同値かどうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -319,7 +319,7 @@ namespace FK_CLI {
 			double get();
 		}
 		
-		//! 文字列出力関数
+		//! 文字列出力メソッド
 		/*!
 		 *	現在のベクトル成分値を文字列として出力します。
 		 *
@@ -327,7 +327,7 @@ namespace FK_CLI {
 		 */
 		String^	ToString() override;
 
-		//! 正規化関数
+		//! 正規化メソッド
 		/*!
 		 *	ベクトルの正規化を行います。
 		 *	正規化とは、ベクトル \f$ \mathbf{V} \f$ に対し、
@@ -345,7 +345,7 @@ namespace FK_CLI {
 		 */
 		bool Normalize(void);
 
-		//! 初期化関数1
+		//! 初期化メソッド1
 		/*!
 		 *	ベクトルの成分を全て 0 にします。
 		 *
@@ -355,14 +355,14 @@ namespace FK_CLI {
 		 */
 		void Init(bool degFlg);
 		
-		//! 初期化関数2
+		//! 初期化メソッド2
 		/*!
 		 *	ベクトルの成分を全て 0 にします。
 		 *	次元数は変化しません。
 		 */
 		void Init(void);
 
-		//! 零ベクトル判定関数
+		//! 零ベクトル判定メソッド
 		/*!
 		 *	ベクトルが零ベクトルであるかどうかを判定します。
 		 *
@@ -372,7 +372,7 @@ namespace FK_CLI {
 		 */
 		bool IsZero(void);
 
-		//! 部分置換関数1
+		//! 部分置換メソッド1
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -398,7 +398,7 @@ namespace FK_CLI {
 		 */
 		bool Replace(int s, fk_GenVector^ Q);
 
-		//! 部分置換関数2
+		//! 部分置換メソッド2
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -424,7 +424,7 @@ namespace FK_CLI {
 		 */
 		bool Replace(int s, fk_Vector^ Q);
 
-		//! 部分置換関数3
+		//! 部分置換メソッド3
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -450,7 +450,7 @@ namespace FK_CLI {
 		 */
 		bool Replace(int s, fk_HVector^ Q);
 
-		//! 部分加算関数1
+		//! 部分加算メソッド1
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -476,7 +476,7 @@ namespace FK_CLI {
 		 */
 		bool Add(int s, fk_GenVector^ Q);
 
-		//! 部分加算関数2
+		//! 部分加算メソッド2
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -502,7 +502,7 @@ namespace FK_CLI {
 		 */
 		bool Add(int s, fk_Vector^ Q);
 
-		//! 部分加算関数3
+		//! 部分加算メソッド3
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -528,7 +528,7 @@ namespace FK_CLI {
 		 */
 		bool Add(int s, fk_HVector^ Q);
 
-		//! 部分減算関数1
+		//! 部分減算メソッド1
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -554,7 +554,7 @@ namespace FK_CLI {
 		 */
 		bool Sub(int s, fk_GenVector^ Q);
 
-		//! 部分減算関数2
+		//! 部分減算メソッド2
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -579,7 +579,7 @@ namespace FK_CLI {
 		 */
 		bool Sub(int s, fk_Vector^ Q);
 
-		//! 部分減算関数3
+		//! 部分減算メソッド3
 		/*!
 		 *	現在の変数が表す n 次元のベクトル
 		 *	\f[
@@ -605,7 +605,7 @@ namespace FK_CLI {
 		 */
 		bool Sub(int s, fk_HVector^ Q);
 
-		//! 部分抽出関数
+		//! 部分抽出メソッド
 		/*!
 		 *	ID が s から e までの成分値を持つ部分ベクトルを抽出します。
 		 *	条件として、\f$ 0 \leq s < e < n \f$

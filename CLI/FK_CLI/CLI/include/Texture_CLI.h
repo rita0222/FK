@@ -81,7 +81,7 @@ namespace FK_CLI
 
 		//////////////////// 比較演算子		
 
-		//! 同値比較関数1
+		//! 同値比較メソッド1
 		/*!
 		 *	2つのテクスチャ座標か同値どうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -93,7 +93,7 @@ namespace FK_CLI
 		 */
 		bool Equals(fk_TexCoord^ T);
 
-		//! 同値比較関数2
+		//! 同値比較メソッド2
 		/*!
 		 *	2つのテクスチャ座標か同値どうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -105,7 +105,7 @@ namespace FK_CLI
 		 */
 		virtual bool Equals(Object^ O) override;
 
-		//! 成分設定関数
+		//! 成分設定メソッド
 		/*!
 		 *	各成分を設定します。
 		 *
@@ -114,7 +114,7 @@ namespace FK_CLI
 		 */
 		void Set(double x, double y);
 
-		//! 文字列出力関数
+		//! 文字列出力メソッド
 		/*!
 		 *	現在のテクスチャ座標成分値を文字列として出力します。
 		 *
@@ -263,7 +263,7 @@ namespace FK_CLI
 			void set(fk_TexWrapMode);
 		}
 		
-		//! BMP ファイル入力関数
+		//! BMP ファイル入力メソッド
 		/*!
 		 *	BMP (Windows Bitmap) 形式のファイルからデータを読み込み、
 		 *	テクスチャ画像として設定します。
@@ -274,7 +274,7 @@ namespace FK_CLI
 		 */
 		bool	ReadBMP(String^ fileName);
 
-		//! PNG ファイル入力関数
+		//! PNG ファイル入力メソッド
 		/*!
 		 *	PNG 形式のファイルからデータを読み込み、
 		 *	テクスチャ画像として設定します。
@@ -285,7 +285,7 @@ namespace FK_CLI
 		 */
 		bool	ReadPNG(String^ fileName);
 
-		//! JPEG ファイル入力関数
+		//! JPEG ファイル入力メソッド
 		/*!
 		 *	JPEG 形式のファイルからデータを読み込み、
 		 *	テクスチャ画像として設定します。
@@ -296,7 +296,7 @@ namespace FK_CLI
 		 */
 		bool	ReadJPG(String^ fileName);
 
-		//! 一様色初期化関数1
+		//! 一様色初期化メソッド1
 		/*!
 		 *	内部の画像ピクセルを、すべて同じ色で初期化します。
 		 *

@@ -77,7 +77,7 @@ namespace FK_CLI
 			bool get();
 		}
 		
-		//! 頂点追加関数
+		//! 頂点追加メソッド
 		/*!
 		 * 	頂点を新たに追加します。
 		 *
@@ -87,7 +87,7 @@ namespace FK_CLI
 		 */
 		int			PushVertex(fk_Vector^ pos);
 
-		//! 頂点位置設定関数
+		//! 頂点位置設定メソッド
 		/*!
 		 *	点群中の任意の頂点に対し、位置を設定します。
 		 *
@@ -98,10 +98,10 @@ namespace FK_CLI
 		 */
 		bool		SetVertex(int ID, fk_Vector^ pos);
 
-		//! 点群生成関数
+		//! 点群生成メソッド
 		/*
 		 *	配列データから点群全体を生成します。
-		 *	関数を呼ぶ前に存在していた点は全て消去されます。
+		 *	メソッドを呼ぶ前に存在していた点は全て消去されます。
 		 *
 		 *	\param[in]	array	頂点位置ベクトルの配列
 		 *
@@ -109,7 +109,7 @@ namespace FK_CLI
 		 */
 		bool		SetVertex(IEnumerable<fk_Vector^>^ array);
 
-		//! 頂点削除関数
+		//! 頂点削除メソッド
 		/*
 		 *	頂点を削除します。
 		 *
@@ -119,7 +119,7 @@ namespace FK_CLI
 		 */
 		bool		RemoveVertex(int ID);
 
-		//! 頂点位置ベクトル取得関数
+		//! 頂点位置ベクトル取得メソッド
 		/*!
 		 *	指定した頂点の位置ベクトルを返します。
 		 *
@@ -131,7 +131,7 @@ namespace FK_CLI
 		 */
 		fk_Vector^	GetVertex(int ID);
 
-		//! 頂点描画制御関数
+		//! 頂点描画制御メソッド
 		/*!
 		 *	個別の頂点に対し、描画の有無を設定します。
 		 *
@@ -142,7 +142,7 @@ namespace FK_CLI
 		 */
 		void		SetDrawMode(int ID, bool mode);
 
-		//! 全頂点描画状態参照関数
+		//! 全頂点描画状態参照メソッド
 		/*!
 		 *	点群全体の描画状況を取得します。
 		 *
@@ -154,7 +154,7 @@ namespace FK_CLI
 		 */
 		bool		GetDrawMode(void);
 
-		//! 個別頂点描画状態参照関数
+		//! 個別頂点描画状態参照メソッド
 		/*!
 		 *	個別の頂点に対し、描画状況をを取得します。
 		 *
@@ -166,7 +166,7 @@ namespace FK_CLI
 		 */
 		bool		GetDrawMode(int ID);
 
-		//! 描画色設定関数
+		//! 描画色設定メソッド
 		/*!
 		 *	個別の頂点に対し、描画色の ID を設定します。
 		 *	色そのものの設定は、 fk_Shape::SetPalette() を参照して下さい。
@@ -176,7 +176,7 @@ namespace FK_CLI
 		 */
 		void		SetColorID(int vID, int cID);
 
-		//! 描画色参照関数
+		//! 描画色参照メソッド
 		/*!
 		 *	個別の頂点の描画色を取得します。
 		 *
@@ -189,7 +189,7 @@ namespace FK_CLI
 		 */
 		int			GetColorID(int vID);
 
-		//! 点群全消去関数1
+		//! 点群全消去メソッド1
 		/*!
 		 *	全ての頂点に関するデータを消去します。
 		 *
@@ -199,7 +199,7 @@ namespace FK_CLI
 		 */
 		void		AllClear(bool matFlag);
 
-		//! 点群全消去関数2
+		//! 点群全消去メソッド2
 		/*!
 		 *	全ての頂点に関するデータを消去します。
 		 *	マテリアルパレットも初期化します。

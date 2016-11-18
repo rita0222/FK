@@ -24,7 +24,7 @@ namespace FK_CLI
 	 *	シーンにモデルを登録するための機能は、
 	 *	実質的には fk_DisplayLink クラスに集約されています。
 	 *	fk_Scene クラスは fk_DisplayLink クラスの派生クラスとなっており、
-	 *	fk_DisplayLink クラスのメンバ関数を利用することが可能です。
+	 *	fk_DisplayLink クラスのメソッドを利用することが可能です。
 	 *	モデル登録についての機能は、 fk_DisplayLink クラスの説明を参照して下さい。
 	 *
 	 *	シーンは、通常のモデルとは別に霧に関する設定も可能です。
@@ -32,7 +32,7 @@ namespace FK_CLI
 	 *	fk_Scene クラスは fk_Fog クラスの派生クラスとなっています。
 	 *	霧についての機能は、 fk_Fog クラスの説明を参照して下さい。
 	 *
-	 *	本クラス固有のメンバ関数は、背景色設定に関する機能と、
+	 *	本クラス固有のプロパティは、背景色設定に関する機能と、
 	 *	透過処理に関するものとなっています
 	 *
 	 *	\sa fk_DisplayLink, fk_Fog, fk_AppWindow

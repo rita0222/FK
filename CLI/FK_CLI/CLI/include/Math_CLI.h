@@ -9,12 +9,12 @@ namespace FK_CLI
 {
 	using namespace System;
 
-	//! 数学処理関数集合クラス
+	//! 数学処理メソッド集合クラス
 	/*!
-	 *	このクラスは、様々な数学的処理関数を static 関数群としてまとめたものです。
+	 *	このクラスは、様々な数学的処理メソッドを static メソッド群としてまとめたものです。
 	 *
-	 *	全ての関数は static 宣言されているため、
-	 *	本クラスの関数を用いる際に fk_Math 型のインスタンスを生成する必要はありません。
+	 *	全てのメソッドは static 宣言されているため、
+	 *	本クラスのメソッドを用いる際に fk_Math 型のインスタンスを生成する必要はありません。
 	 *	例えば、以下のようにしてコードを記述します。
 	 *
 	 *		fk_Vector	vec1, vec2;
@@ -26,10 +26,10 @@ namespace FK_CLI
 	public ref class fk_Math {
 	public:
 
-		//! \name 基本数値演算関数
+		//! \name 基本数値演算メソッド
 		//@{
 
-		//! 数値範囲制限関数
+		//! 数値範囲制限メソッド
 		/*!
 		 *	数値を、指定した範囲内に収まるように補正します。
 		 *
@@ -45,9 +45,9 @@ namespace FK_CLI
 		static double Clamp(double a, double min, double max);
 		//@}
 
-		//! \name 幾何的演算関数
+		//! \name 幾何的演算メソッド
 		//@{
-		//! 直線上判定関数
+		//! 直線上判定メソッド
 		/*!
 		 *	頂点 \f$\mathbf{P}\f$ が、
 		 *	\f$\mathbf{A}, \mathbf{B}\f$ を通る直線上にあるかどうかを判定します。
@@ -68,7 +68,7 @@ namespace FK_CLI
 		 */
 		static bool IsOnLine(fk_Vector^ A, fk_Vector^ B, fk_Vector^ P);
 
-		//! 線分上判定関数1
+		//! 線分上判定メソッド1
 		/*!
 		 *	頂点 \f$\mathbf{P}\f$ が、
 		 *	\f$\mathbf{A}, \mathbf{B}\f$ を端点とする線分上にあるかどうかを判定します。
@@ -95,13 +95,13 @@ namespace FK_CLI
 		 */
 		static bool IsOnLineSegment(fk_Vector^ A, fk_Vector^ B, fk_Vector^ P, bool openFlg);
 
-		//! 線分上判定関数2
+		//! 線分上判定メソッド2
 		/*!
 		 *	頂点 \f$\mathbf{P}\f$ が、
 		 *	\f$\mathbf{A}, \mathbf{B}\f$ を端点とする線分上にあるかどうかを判定します。
 		 *	厳密には、線分と \f$\mathbf{P}\f$ の距離が FK.EPS 内である場合は、
 		 *	線分上にあると解釈します。
-		 *	なお、本関数において線分は閉区間として解釈します。
+		 *	なお、本メソッドにおいて線分は閉区間として解釈します。
 		 *	つまり、両端点そのものも線分の一部とみなします。
 		 *	線分を開区間として扱いたい場合は、
 		 *	IsOnLineSegment(fk_Vector^, fk_Vector^, fk_Vector^, bool) を利用して下さい。
@@ -120,7 +120,7 @@ namespace FK_CLI
 		 */
 		static bool IsOnLineSegment(fk_Vector^ A, fk_Vector^ B, fk_Vector^ P);
 
-		//! 直線交差判定関数
+		//! 直線交差判定メソッド
 		/*!
 		 * 	点A,B を通る直線と、点C,D を通る直線が、空間上で交差するかどうかを判定します。
 		 *	厳密には、両直線の距離が FK_EPS 内である場合は、交差すると解釈します。
@@ -140,7 +140,7 @@ namespace FK_CLI
 		 */
 		static bool IsCrossLine(fk_Vector^ A, fk_Vector^ B, fk_Vector^ C, fk_Vector^ D);
 
-		//! 線分交差判定関数1
+		//! 線分交差判定メソッド1
 		/*!
 		 *	点A,Bを端点とする線分と、点C,Dを端点とする線分が、
 		 *	空間上で交差するかどうかを判定します。
@@ -172,12 +172,12 @@ namespace FK_CLI
 		static bool IsCrossLineSegment(fk_Vector^ A, fk_Vector^ B,
 									   fk_Vector^ C, fk_Vector^ D, bool openFlg);
 
-		//! 線分交差判定関数2
+		//! 線分交差判定メソッド2
 		/*!
 		 *	点A,Bを端点とする線分と、点C,Dを端点とする線分が、
 		 *	空間上で交差するかどうかを判定します。
 		 *	厳密には、両線分の距離が FK.EPS 内である場合は、交差すると解釈します。
-		 *	なお、本関数において線分は閉区間として解釈します。
+		 *	なお、本メソッドにおいて線分は閉区間として解釈します。
 		 *	つまり、両端点そのものも線分の一部とみなします。
 		 *	線分を開区間として扱いたい場合は、
 		 *	IsCrossLineSegment(fk_Vector^, fk_Vector^, fk_Vector^, fk_Vector^, bool)
@@ -201,11 +201,11 @@ namespace FK_CLI
 		 */
 		static bool IsCrossLineSegment(fk_Vector^ A, fk_Vector^ B, fk_Vector^ C, fk_Vector^ D);
 
-		//! 線分対線分・最近接点算出関数
+		//! 線分対線分・最近接点算出メソッド
 		/*!
 		 *	点A,Bを端点とする線分と、点C,Dを端点とする線分における最近接点を算出します。
 		 *	線分の交差のみを判定するのであればisCrossLineSegment()で十分ですが、
-		 *	この関数は線分間の距離と、それぞれの線分における最近接点を指すパラメータを
+		 *	このメソッドは線分間の距離と、それぞれの線分における最近接点を指すパラメータを
 		 *	同時に算出することができます。
 		 *
 		 *	\param[in]	A	1本目の線分の始点。B とは異なる位置でなければなりません。
@@ -225,7 +225,7 @@ namespace FK_CLI
 		static double CalcClosestPtSegToSeg(fk_Vector^ A, fk_Vector^ B, fk_Vector^ C, fk_Vector^ D,
 											double %s, double %t, fk_Vector^ P, fk_Vector^ Q);
 
-		//! 点対線分・最近接点算出関数
+		//! 点対線分・最近接点算出メソッド
 		/*!
 		 *	点Cに対する、点A,Bを端点とする線分上の最近接点を算出します。
 		 *	最近接点を指すパラメータと座標値を同時に返します。
@@ -239,10 +239,10 @@ namespace FK_CLI
 		static void CalcClosestPtPtToSeg(fk_Vector^ C, fk_Vector^ A, fk_Vector^ B,
 										 double %t, fk_Vector^ P);
 
-		//! 三角形対線分交差判定関数1
+		//! 三角形対線分交差判定メソッド1
 		/*!
 		 *	線分 PQ と、三角形 ABC が交差しているかどうかを判定します。
-		 *	この関数では、三角形の境界と線分が接している場合や、
+		 *	このメソッドでは、三角形の境界と線分が接している場合や、
 		 *	線分の端点が三角形面上にあるような場合でも、交差していると判断します。
 		 *	以下の条件を満たす場合は、常に false を返します。
 		 *		- 線分 PQ の両端点が同じ場所にある場合。
@@ -278,10 +278,10 @@ namespace FK_CLI
 		static bool CalcCrossLineAndTri(fk_Vector^ P, fk_Vector^ Q, fk_Vector^ A, fk_Vector^ B,
 										fk_Vector^ C, fk_Vector^ R);
 
-		//! 三角形対線分交差判定関数2
+		//! 三角形対線分交差判定メソッド2
 		/*!
 		 *	線分 PQ と、三角形 ABC が交差しているかどうかを判定します。
-		 *	この関数では、三角形の境界と線分が接している場合や、
+		 *	このメソッドでは、三角形の境界と線分が接している場合や、
 		 *	線分の端点が三角形面上にあるような場合でも、交差していると判断します。
 		 *	以下の条件を満たす場合は、常に false を返します。
 		 *		- 線分 PQ の両端点が同じ場所にある場合。
@@ -305,7 +305,7 @@ namespace FK_CLI
 		static bool CalcCrossLineAndTri(fk_Vector^ P, fk_Vector^ Q,
 										fk_Vector^ A, fk_Vector^ B, fk_Vector^ C);
 
-		//! 余弦値算出関数
+		//! 余弦値算出メソッド
 		/*!
 		 *	方向ベクトル \f$ \mathbf{A}, \mathbf{B} \f$
 		 *	のなす角を \f$ \theta \f$ としたとき、
@@ -321,7 +321,7 @@ namespace FK_CLI
 		static double CalcCosine(fk_Vector^ A, fk_Vector^ B);
 
 
-		//! ベクトル分離係数算出関数
+		//! ベクトル分離係数算出メソッド
 		/*!
 		 *	任意のベクトル \f$\mathbf{V}\f$ と、
 		 *	それぞれが一次独立であるベクトル
@@ -348,10 +348,10 @@ namespace FK_CLI
 		static fk_Vector^ DivideVec(fk_Vector^ V, fk_Vector^ A, fk_Vector^ B, fk_Vector^ C);
 		//@}
 
-		//! \name 四元数補間関数
+		//! \name 四元数補間メソッド
 		//@{
 
-		//! 四元数単純線形補間関数
+		//! 四元数単純線形補間メソッド
 		/*!
 		 *	2つの四元数 \f$ \mathbf{q}_1, \mathbf{q}_2 \f$ に対し、
 		 *	パラメータ \f$ t \f$ で単純線形補間した四元数を返します。
@@ -385,7 +385,7 @@ namespace FK_CLI
 											  fk_Quaternion^ Q2,
 											  double t);
 
-		//! 四元数球面線形補間関数
+		//! 四元数球面線形補間メソッド
 		/*!
 		 *	2つの四元数 \f$ \mathbf{q}_1, \mathbf{q}_2 \f$ に対し、
 		 *	パラメータ \f$ t \f$ で球面線形補間した四元数を返します。
@@ -403,7 +403,7 @@ namespace FK_CLI
 		 *	正反対に近い姿勢の補間で誤差が生じにくいといった長所があります。
 		 *	速度面がそれほど切実でないのであれば、
 		 *	quatInterLinear() による単純線形補間よりも
-		 *	本関数による球面線形補間を推奨します。
+		 *	本メソッドによる球面線形補間を推奨します。
 		 *
 		 *	\param[in]	Q1		補間の始点となる四元数
 		 *	\param[in]	Q2		補間の終点となる四元数

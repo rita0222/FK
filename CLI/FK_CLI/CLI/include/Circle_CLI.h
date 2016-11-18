@@ -53,7 +53,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Circle();
 
-		//! 分割数設定関数
+		//! 分割数設定メソッド
 		/*!
 		 *	分割数を設定します。
 		 *
@@ -61,7 +61,7 @@ namespace FK_CLI
 		 */
 		void SetDivide(int div);
 
-		//! 半径設定関数
+		//! 半径設定メソッド
 		/*!
 		 *	半径を設定します。
 		 *
@@ -69,7 +69,7 @@ namespace FK_CLI
 		 */
 		void SetRadius(double rad);
 
-		//! 拡大縮小関数
+		//! 拡大縮小メソッド
 		/*!
 		 *	円全体を与えられた倍率で拡大縮小します。
 		 *

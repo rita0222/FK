@@ -53,7 +53,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Capsule();
 
-		//! 分割数設定関数
+		//! 分割数設定メソッド
 		/*!
 		 *	分割数を設定します。分割数の最小値は 2 です。
 		 *
@@ -66,7 +66,7 @@ namespace FK_CLI
 		 */
 		void SetDivide(int div);
 
-		//! 中心軸長設定関数
+		//! 中心軸長設定メソッド
 		/*!
 		 *	中心軸の長さを設定します。
 		 *
@@ -80,7 +80,7 @@ namespace FK_CLI
 		 */
 		void SetLength(double length);
 
-		//! 半径設定関数
+		//! 半径設定メソッド
 		/*!
 		 *	円柱面や半球面の半径を設定します。
 		 *
@@ -90,7 +90,7 @@ namespace FK_CLI
 		 */
 		void SetRadius(double radius);
 
-		//! 拡大縮小関数
+		//! 拡大縮小メソッド
 		/*!
 		 *	カプセル型全体を与えられた倍率で拡大縮小します。
 		 *

@@ -78,13 +78,13 @@ namespace FK_CLI
 			int get();
 		}
 
-		//! 初期化関数
+		//! 初期化メソッド
 		/*!
 		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
 		 */
 		void Init(void);
 
-		//! テクスチャ座標設定関数1
+		//! テクスチャ座標設定メソッド1
 		/*!
 		 *	頂点のテクスチャ座標を設定します。
 		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
@@ -110,7 +110,7 @@ namespace FK_CLI
 		 */
 		bool SetTextureCoord(int tID, int vID, double x, double y);
 
-		//! テクスチャ座標設定関数2
+		//! テクスチャ座標設定メソッド2
 		/*!
 		 *	頂点のテクスチャ座標を設定します。
 		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
@@ -132,7 +132,7 @@ namespace FK_CLI
 		 */
 		bool SetTextureCoord(int tID, int vID, fk_TexCoord^ coord);
 
-		//! テクスチャ座標配列設定関数
+		//! テクスチャ座標配列設定メソッド
 		/*!
 		 *	各3角形テクスチャのテクスチャ座標を、配列によって設定します。
 		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
@@ -150,7 +150,7 @@ namespace FK_CLI
 		 */
 		bool SetTriTextureCoord(int tID, IEnumerable<fk_TexCoord^>^ array);
 
-		//! テクスチャ座標参照関数
+		//! テクスチャ座標参照メソッド
 		/*!
 		 *	設定されているテクスチャ座標を取得します。
 		 *
@@ -167,7 +167,7 @@ namespace FK_CLI
 		 */
 		fk_TexCoord^ GetTextureCoord(int tID, int vID);
 
-		//! 頂点位置ベクトル設定関数1
+		//! 頂点位置ベクトル設定メソッド1
 		/*!
 		 *	頂点の空間中での位置ベクトルを設定します。
 		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
@@ -188,7 +188,7 @@ namespace FK_CLI
 		 */
 		bool SetVertexPos(int tID, int vID, double x, double y, double z);
 
-		//! 頂点位置ベクトル設定関数2
+		//! 頂点位置ベクトル設定メソッド2
 		/*!
 		 *	頂点の空間中での位置ベクトルを設定します。
 		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
@@ -207,7 +207,7 @@ namespace FK_CLI
 		 */
 		bool SetVertexPos(int tID, int vID, fk_Vector^ pos);
 
-		//! 頂点位置ベクトル配列設定関数
+		//! 頂点位置ベクトル配列設定メソッド
 		/*!
 		 *	各3角形テクスチャの頂点位置ベクトルを、配列によって設定します。
 		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
@@ -224,7 +224,7 @@ namespace FK_CLI
 		 */
 		bool SetTriPos(int tID, IEnumerable<fk_Vector^>^ array);
 
-		//! 頂点位置ベクトル参照関数
+		//! 頂点位置ベクトル参照メソッド
 		/*!
 		 *	設定されている頂点位置ベクトルを取得します。
 		 *
@@ -241,7 +241,7 @@ namespace FK_CLI
 		 */
 		fk_Vector^ GetVertexPos(int tID, int vID);
 
-		//! fk_IndexFaceSet インスタンスコピー関数
+		//! fk_IndexFaceSet インスタンスコピーメソッド
 		/*!
 		 *	現在の形状データを、
 		 *	fk_IndexFaceSet 型のインスタンスにコピーします。
@@ -250,16 +250,16 @@ namespace FK_CLI
 		 */
 		void PutIndexFaceSet(fk_IndexFaceSet^ ifs);
 
-		//! MQOファイル入力関数1
+		//! MQOファイル入力メソッド1
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
-		 *	本関数が入力を行うのは形状データとテクスチャ座標であり、
+		 *	本メソッドが入力を行うのは形状データとテクスチャ座標であり、
 		 *	画像データの入力は行いません。
-		 *	画像データ入力は fk_Texture のメンバ関数等を用いて別途行ってください。
+		 *	画像データ入力は fk_Texture のメンバメソッド等を用いて別途行ってください。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
 		 *	\param[in]	fileName	ファイル名
 		 *	\param[in]	objName		オブジェクト名
@@ -279,18 +279,18 @@ namespace FK_CLI
 		 */
 		bool ReadMQOFile(String^ fileName, String^ objName, bool contFlg);
 
-		//! MQOファイル入力関数2
+		//! MQOファイル入力メソッド2
 		/*!
 		 *	MQO 形式のファイルからデータを入力します。
-		 *	本関数が入力を行うのは形状データとテクスチャ座標であり、
+		 *	本メソッドが入力を行うのは形状データとテクスチャ座標であり、
 		 *	画像データの入力は行いません。
-		 *	画像データ入力は fk_Texture のメンバ関数等を用いて別途行ってください。
+		 *	画像データ入力は fk_Texture のメソッド等を用いて別途行ってください。
 		 *
 		 *	MQOデータには「オブジェクト」という概念があり、
 		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
+		 *	このメソッドでは、ファイル名とともにオブジェクト名を指定する必要があります。
 		 *
-		 *	なお、本関数は ReadMQOFile(String^, String^, bool) において、
+		 *	なお、本メソッドは ReadMQOFile(String^, String^, bool) において、
 		 *	第3引数に true を入力した場合と同義となります。
 		 *
 		 *	\param[in]	fileName	ファイル名

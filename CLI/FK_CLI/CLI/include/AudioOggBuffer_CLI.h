@@ -30,7 +30,7 @@ namespace FK_CLI
 	 *
 	 *	なお、本クラスは fk_AudioBase クラスの派生クラスであり、
 	 *	音量やループ再生の制御、サラウンド効果の使用といった機能の利用については
-	 *	fk_AudioBase のメンバ関数を用いて行います。
+	 *	fk_AudioBase のメソッドを用いて行います。
 	 *
 	 *	\sa fk_AudioBase, fk_AudioWavBuffer, fk_AudioStream
 	 */
@@ -48,7 +48,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_AudioOggBuffer();
 
-		//! オーディオデータ読み込み関数
+		//! オーディオデータ読み込みメソッド
 		/*!
 		 *	Ogg Vorbis 形式のファイルを指定することで、
 		 *	音声データを読み込みます。
@@ -65,13 +65,13 @@ namespace FK_CLI
 		 */
 		virtual bool Open(String^ filename) override;
 
-		//! 再生開始可能状態取得関数
+		//! 再生開始可能状態取得メソッド
 		/*!
 		 *	Open() によってファイルから音声を入力した後、
 		 *	再生可能な状態になっているかどうかを取得します。
 		 *
 		 *	\note
-		 *		本関数は、通常の利用においてはユーザが使用する必要はありません。
+		 *		本メソッドは、通常の利用においてはユーザが使用する必要はありません。
 		 *
 		 *	\return
 		 *		再生可能状態であれば true を、
@@ -79,10 +79,10 @@ namespace FK_CLI
 		 */
 		virtual bool Ready(void) override;
 
-		//! 再生関数
+		//! 再生メソッド
 		/*!
-		 *	実際に音声の再生を行う関数です。
-		 *	この関数は、再生を行いたい状況においては1秒に数回以上の割合で、
+		 *	実際に音声の再生を行うメソッドです。
+		 *	このメソッドは、再生を行いたい状況においては1秒に数回以上の割合で、
 		 *	連続して実行する必要があります。
 		 *	通常は、画面更新のためのメインループ中に一度ずつ実行します。
 		 *
@@ -93,10 +93,10 @@ namespace FK_CLI
 
 		virtual bool Play(void) override;
 
-		//! 再生位置取得関数
+		//! 再生位置取得メソッド
 		/*!
 		 *	現在の再生位置を返します。単位は秒です。
-		 *	この関数が返す値は再生時間ではなく、
+		 *	このメソッドが返す値は再生時間ではなく、
 		 *	音源での始端からの時間となります。
 		 *
 		 *	\return
@@ -106,7 +106,7 @@ namespace FK_CLI
 		 */
 		virtual double Tell(void) override;
 
-		//! 再生位置頭出し関数
+		//! 再生位置頭出しメソッド
 		/*!
 		 *	現在の再生位置を変更します。単位は秒です。
 		 *
@@ -116,7 +116,7 @@ namespace FK_CLI
 		 */
 		virtual void Seek(double time) override;
 
-		//! 停止関数
+		//! 停止メソッド
 		/*!
 		 *	音声の再生を停止し、再生位置も初期化します。
 		 *	この後に Play() を実行した場合、
@@ -127,7 +127,7 @@ namespace FK_CLI
 		 */
 		virtual void Stop(void) override;
 
-		//! オーディオデータ解放関数
+		//! オーディオデータ解放メソッド
 		/*!
 		 *	Open() 等で確保したデータを解放します。
 		 *

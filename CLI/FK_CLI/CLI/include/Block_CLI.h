@@ -59,7 +59,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Block();
 
-		//! 各辺長設定関数
+		//! 各辺長設定メソッド
 		/*!
 		 *	直方体の各軸方向の辺長を一括して設定します。
 		 *
@@ -69,7 +69,7 @@ namespace FK_CLI
 		 */
 		void SetSize(double x, double y, double z);
 
-		//! 個別辺長設定関数
+		//! 個別辺長設定メソッド
 		/*!
 		 *	直方体の辺長を個別に設定します。
 		 *
@@ -81,7 +81,7 @@ namespace FK_CLI
 		 */
 		void SetSize(double length, fk_Axis axis);
 
-		//! 全体拡大縮小関数
+		//! 全体拡大縮小メソッド
 		/*!
 		 *	直方体全体を、指定された倍率で拡大・縮小します。
 		 *
@@ -89,7 +89,7 @@ namespace FK_CLI
 		 */
 		void SetScale(double scale);
 
-		//! 軸方向拡大縮小関数
+		//! 軸方向拡大縮小メソッド
 		/*!
 		 *	直方体を、指定された軸方向についてのみ拡大・縮小します。
 		 *
@@ -101,7 +101,7 @@ namespace FK_CLI
 		 */
 		void SetScale(double scale, fk_Axis axis);
 
-		//! 軸方向個別拡大縮小関数
+		//! 軸方向個別拡大縮小メソッド
 		/*!
 		 *	直方体を、各軸方向に対し個別の倍率で拡大・縮小します。
 		 *

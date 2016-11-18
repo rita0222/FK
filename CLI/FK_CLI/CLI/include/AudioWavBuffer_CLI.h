@@ -29,7 +29,7 @@ namespace FK_CLI
 	 *
 	 *	なお、本クラスは fk_AudioBase クラスの派生クラスであり、
 	 *	音量やループ再生の制御、サラウンド効果の使用といった機能の利用については
-	 *	fk_AudioBase のメンバ関数を用いて行います。
+	 *	fk_AudioBase のメソッドを用いて行います。
 	 *
 	 *	\sa fk_AudioBase, fk_AudioOggBuffer, fk_AudioStream
 	 */
@@ -47,7 +47,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_AudioWavBuffer();
 
-		//! オーディオデータ読み込み関数
+		//! オーディオデータ読み込みメソッド
 		/*!
 		 *	Wave 形式のファイルを指定することで、
 		 *	音声データを読み込みます。

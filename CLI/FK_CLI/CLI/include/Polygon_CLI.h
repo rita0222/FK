@@ -51,7 +51,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Polygon();
 
-		//! 頂点追加関数
+		//! 頂点追加メソッド
 		/*!
 		 *	頂点を追加します。
 		 *
@@ -59,7 +59,7 @@ namespace FK_CLI
 		 */
 		void PushVertex(fk_Vector^ pos);
 
-		//! 頂点位置設定関数
+		//! 頂点位置設定メソッド
 		/*!
 		 *	頂点の位置を設定します。
 		 *	対象となる頂点がまだ存在していなかった場合、
@@ -70,7 +70,7 @@ namespace FK_CLI
 		 */
 		void SetVertex(int ID, fk_Vector^ pos);
 
-		//! 頂点位置設定関数
+		//! 頂点位置設定メソッド
 		/*!
 		 *	頂点全部を、指定した配列に入れ替えます。
 		 *
@@ -114,7 +114,7 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Polyline();
 	
-		//! 頂点追加関数
+		//! 頂点追加メソッド
 		/*!
 		 *	頂点を追加します。
 		 *
@@ -122,7 +122,7 @@ namespace FK_CLI
 		 */
 		void PushVertex(fk_Vector^ pos);
 
-		//! 頂点位置設定関数
+		//! 頂点位置設定メソッド
 		/*!
 		 *	頂点の位置を設定します。
 		 *	対象となる頂点がまだ存在していなかった場合、
@@ -133,7 +133,7 @@ namespace FK_CLI
 		 */
 		void SetVertex(int ID, fk_Vector^ pos);
 
-		//! 頂点位置設定関数
+		//! 頂点位置設定メソッド
 		/*!
 		 *	頂点全部を、指定した配列に入れ替えます。
 		 *

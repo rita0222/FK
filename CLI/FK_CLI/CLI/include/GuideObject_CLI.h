@@ -100,7 +100,7 @@ namespace FK_CLI {
 			void set(int);
 		}
 
-		//! シーン登録関数
+		//! シーン登録メソッド
 		/*!
 		 *	座標軸ならびにグリッドをシーンに登録します。
 		 *	登録を制御できるのは x,y,z 軸ならびに xy, yz, xz 平面グリッドの6種類となります。
@@ -122,7 +122,7 @@ namespace FK_CLI {
 		 */
 		void EntryScene(fk_Scene^ scene, fk_GuideMode mode);
 
-		//! シーン登録解除関数
+		//! シーン登録解除メソッド
 		/*!
 		 *	EntryScene() によって登録した要素を解除します。
 		 *

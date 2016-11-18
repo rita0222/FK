@@ -64,7 +64,7 @@ namespace FK_CLI
 	 *
 	 *	fk_Solid による1つの形状内で、
 	 *	各位相要素について別々にマテリアルを設定したい場合は、
-	 *	このクラスのメンバ関数を用います。
+	 *	このクラスのプロパティを用います。
 	 *
 	 *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_Shape, fk_Model
 	 */

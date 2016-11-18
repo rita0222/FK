@@ -90,7 +90,7 @@ namespace FK_CLI
 		//! 色要素配列プロパティ
 		/*!
 		 *	各色要素を float の配列によってアクセスできるプロパティです。
-		 *	メンバ関数を介さずに直接参照、操作しても問題ありません。
+		 *	メソッドを介さずに直接参照、操作しても問題ありません。
 		 */
 		property float col[int] {
 			float get(int argI);
@@ -267,7 +267,7 @@ namespace FK_CLI
 
 		//@}
 		
-		//! 同値比較関数1
+		//! 同値比較メソッド1
 		/*!
 		 *	二つの色値が同値かどうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -279,7 +279,7 @@ namespace FK_CLI
 		 */
 		bool fk_Color::Equals(fk_Color^ C);
 
-		//! 同値比較関数2
+		//! 同値比較メソッド2
 		/*!
 		 *	二つの色値の値が同値かどうかを判定します。
 		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -291,7 +291,7 @@ namespace FK_CLI
 		 */
 		virtual bool fk_Color::Equals(Object^ C) override;
 
-		//! 文字列出力関数
+		//! 文字列出力メソッド
 		/*!
 		 *	現在の色成分値を文字列として出力します。
 		 *
@@ -299,13 +299,13 @@ namespace FK_CLI
 		 */
 		String^ fk_Color::ToString() override;
 
-		//! 初期化関数1
+		//! 初期化メソッド1
 		/*!
 		 *	(R, G, B, A) = (0, 0, 0, 1) で初期化を行います。
 		 */
 		void Init(void);
 
-		//! 初期化関数2
+		//! 初期化メソッド2
 		/*!
 		 *	色要素の設定を行います。
 		 *	Set(float, float, float) と同様に動作します。
@@ -316,7 +316,7 @@ namespace FK_CLI
 		 */
 		void Init(float R, float G, float B);
 
-		//! 初期化関数3
+		//! 初期化メソッド3
 		/*!
 		 *	色要素の設定を行います。
 		 *	同一引数型を持つ Set(float, float, float, float) と同様に動作します。
@@ -328,7 +328,7 @@ namespace FK_CLI
 		 */
 		void Init(float R, float G, float B, float A);
 
-		//! 初期化関数4
+		//! 初期化メソッド4
 		/*!
 		 *	色要素の設定を行います。
 		 *	Set(double, double, double) と同様に動作します。
@@ -339,7 +339,7 @@ namespace FK_CLI
 		 */
 		void Init(double R, double G, double B);
 
-		//! 初期化関数5
+		//! 初期化メソッド5
 		/*!
 		 *	色要素の設定を行います。
 		 *	同一引数型を持つ Set(double, double, double, double) と同様に動作します。
@@ -351,7 +351,7 @@ namespace FK_CLI
 		 */
 		void Init(double R, double G, double B, double A);
 
-		//! 設定関数1
+		//! 設定メソッド1
 		/*!
 		 *	色要素の設定を行います。
 		 *	Init(float, float, float) と同様に動作します。
@@ -362,7 +362,7 @@ namespace FK_CLI
 		 */
 		void Set(float R, float G, float B);
 
-		//! 設定関数2
+		//! 設定メソッド2
 		/*!
 		 *	色要素の設定を行います。
 		 *	Init(float, float, float, float) と同様に動作します。
@@ -374,7 +374,7 @@ namespace FK_CLI
 		 */
 		void Set(float R, float G, float B, float A);
 
-		//! 設定関数3
+		//! 設定メソッド3
 		/*!
 		 *	色要素の設定を行います。
 		 *	Init(double, double, double) と同様に動作します。
@@ -385,7 +385,7 @@ namespace FK_CLI
 		 */
 		void Set(double R, double G, double B);
 
-		//! 設定関数4
+		//! 設定メソッド4
 		/*!
 		 *	色要素の設定を行います。
 		 *	Init(double, double, double, double) と同様に動作します。
@@ -397,7 +397,7 @@ namespace FK_CLI
 		 */
 		void Set(double R, double G, double B, double A);
 
-		//! HSV変換関数
+		//! HSV変換メソッド
 		/*!
 		 *	HSV色からの変換を行い、その結果を格納します。
 		 *	透明度は 1.0 (完全な不透明) となります。
@@ -428,7 +428,7 @@ namespace FK_CLI
 	 *
 	 *	マテリアルには、最初から定義されているグローバル変数があります。
 	 *	これらのリストはユーザーズマニュアルの付録Aに記されています。
-	 *	利用するには、 InitDefault() 関数を呼ぶ必要があります。
+	 *	利用するには、 InitDefault() メソッドを呼ぶ必要があります。
 	 *
 	 *	インスタンス生成時の初期状態は以下のような値となります。
 	 *
@@ -465,7 +465,7 @@ namespace FK_CLI
 		 //! ファイナライザ
 		 !fk_Material();
 
-		 //! 同値比較関数1
+		 //! 同値比較メソッド1
 		 /*!
 		  *	二つのマテリアル値が同値かどうかを判定します。
 		  *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -477,7 +477,7 @@ namespace FK_CLI
 		  */
 		 bool Equals(fk_Material^ M);
 
-		 //! 同値比較関数2
+		 //! 同値比較メソッド2
 		 /*!
 		  *	二つのマテリアル値が同値かどうかを判定します。
 		  *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
@@ -556,21 +556,21 @@ namespace FK_CLI
 			 void set(float s);
 		 };
 
-		 //! 初期化関数
+		 //! 初期化メソッド
 		 /*!
 		  *	変数を初期状態に戻します。
 		  */
 		 void Init(void);
 
-		 //! デフォルトマテリアル初期化関数
+		 //! デフォルトマテリアル初期化メソッド
 		 /*!
-		  *	この関数を呼ぶと、
+		  *	このメソッドを呼ぶと、
 		  *	ユーザーズマニュアルに掲載しているマテリアル変数の値を、
 		  *	マニュアルに記載してある値に初期化します。
-		  *	この関数を呼んだ後、該当マテリアル変数を
+		  *	このメソッドを呼んだ後、該当マテリアル変数を
 		  *	別のマテリアル値に設定することが可能です。
 		  *
-		  *	この関数は static 宣言されているため、
+		  *	このメソッドは static 宣言されているため、
 		  *	クラスのインスタンスを生成しなくても呼ぶことができます。
 		  */
 		 static void InitDefault(void);
