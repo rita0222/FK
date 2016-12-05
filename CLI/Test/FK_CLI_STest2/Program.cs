@@ -121,13 +121,11 @@ namespace Sample08_04
 			bgBinder.Program.LoadFragmentShader("shader/fbo_fp.glsl");
 			if(bgBinder.Program.Validate())
 			{
-                // bgBinder.Parameter.AttachTexture(1, bgSampler);
                 bgBinder.InitializeFrameBufferObject(winSize);    // ↑と置き換え
 				bgBinder.Parameter.Register("tex0", 0); // 1->0
                 bgBinder.Parameter.Register("Width", 1024.0f);
                 bgBinder.Parameter.Register("Height", 768.0f);
                 bgBinder.Parameter.Register("Thresshold", (float)thresshold);
-                // bgBinder.BindModel(bgModel);
                 bgBinder.BindWindow(window); // ↑と置き換え
 			}
 			else
