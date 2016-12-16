@@ -5,6 +5,7 @@ CP		= cp
 BASE		= base math material parser shape solid model scene graphics util
 AUDIO		= audio
 OPENCL		= OpenCL
+SHADER		= shader
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -70,7 +71,7 @@ ming-g:
 	cd fltk; $(MAKE) ming-g
 
 mac:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac TARGET=depend ; \
