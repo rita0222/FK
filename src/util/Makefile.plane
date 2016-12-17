@@ -26,7 +26,7 @@ LIBSRCS = \
 		Misc.cxx \
 		MotionCharactor.cxx \
 		MotionData.cxx \
-		SimpleWindow.cxx \
+		AppWindow.cxx \
 		SpriteModel.cxx \
 		TrackBall.cxx
 

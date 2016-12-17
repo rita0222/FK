@@ -174,6 +174,11 @@ void fk_Window::draw(void)
 	}
 
 	preDraw();
+
+	for(auto it = preDrawList.begin(); it != preDrawList.end(); ++it) {
+		get<1>(*it)();
+	}
+	
 	if(stereoMode == true) {
 		engine.StereoDrawPrep(FK_STEREO_LEFT);
 		preDrawLeft();
@@ -187,6 +192,10 @@ void fk_Window::draw(void)
 		engine.Draw(false);
 	}
 	postDraw();
+
+	for(auto it = postDrawList.begin(); it != postDrawList.end(); ++it) {
+		get<1>(*it)();
+	}
 
 	winOpenFlag = true;
 

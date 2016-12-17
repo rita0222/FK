@@ -589,7 +589,10 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	
 	SetBlendMode(argModel);
 	argModel->preShader();
-
+	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end(); ++it) {
+		get<1>(*it)();
+	}
+	
 	if(modelShape->getRealShapeType() == FK_SHAPE_TEXTURE) {
 		if(textureMode == false) {
 			glEnable(GL_TEXTURE_2D);
@@ -601,6 +604,10 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	}
 
 	argModel->postShader();
+	for(auto it = argModel->postShaderList.begin(); it != argModel->postShaderList.end(); ++it) {
+		get<1>(*it)();
+	}
+
 	glPopMatrix();
 
 	return;

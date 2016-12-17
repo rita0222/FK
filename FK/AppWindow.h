@@ -1,5 +1,5 @@
-﻿#ifndef __FK_SIMPLE_WINDOW_HEADER__
-#define __FK_SIMPLE_WINDOW_HEADER__
+﻿#ifndef __FK_APP_WINDOW_HEADER__
+#define __FK_APP_WINDOW_HEADER__
 
 #include <FK/Window.h>
 #include <FK/Light.h>

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <FK/SimpleWindow.h>
+#include <FK/AppWindow.h>
 #include "GuideObject_CLI.h"
 #include "SpriteModel_CLI.h"
 #include "Performer_CLI.h"

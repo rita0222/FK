@@ -26,7 +26,7 @@
 #include <FK/Error.H>
 #include <FK/BVHMotion.h>
 #include <FK/System.h>
-#include <FK/SimpleWindow.h>
+#include <FK/AppWindow.h>
 #include <FK/SpriteModel.h>
 #include <FK/MotionCharactor.h>
 

@@ -72,7 +72,7 @@
 
 #define _APPWINDOWSRC_
 
-#include <FK/SimpleWindow.h>
+#include <FK/AppWindow.h>
 #ifndef _MINGW_
 #include <FL/x.H>
 #endif
