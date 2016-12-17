@@ -8,6 +8,7 @@
 #include <FK/IndexFace.h>
 #include <FK/Tree.h>
 #include <memory>
+#include <functional>
 
 class fk_Material;
 class fk_Shape;

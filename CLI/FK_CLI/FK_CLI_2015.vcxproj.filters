@@ -562,9 +562,6 @@
     <ClCompile Include="..\..\src\util\MotionData.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\SimpleWindow.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\util\SpriteModel.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
@@ -579,6 +576,9 @@
     </ClCompile>
     <ClCompile Include="CLI\cpp\PickData_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\AppWindow.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -861,9 +861,6 @@
     <ClInclude Include="..\..\FK\ShapeViewer.h">
       <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\SimpleWindow.h">
-      <Filter>ヘッダー ファイル\CPP</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\SMFParser.H">
       <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
@@ -1121,6 +1118,9 @@
     </ClInclude>
     <ClInclude Include="CLI\include\PickData_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\AppWindow.h">
+      <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

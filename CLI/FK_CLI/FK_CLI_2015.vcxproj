@@ -211,13 +211,13 @@
     <ClCompile Include="..\..\src\solid\Surface.cxx" />
     <ClCompile Include="..\..\src\solid\Topology.cxx" />
     <ClCompile Include="..\..\src\solid\Vertex.cxx" />
+    <ClCompile Include="..\..\src\util\AppWindow.cxx" />
     <ClCompile Include="..\..\src\util\Fullscreen.cxx" />
     <ClCompile Include="..\..\src\util\GuideObject.cxx" />
     <ClCompile Include="..\..\src\util\Input.cxx" />
     <ClCompile Include="..\..\src\util\Misc.cxx" />
     <ClCompile Include="..\..\src\util\MotionCharactor.cxx" />
     <ClCompile Include="..\..\src\util\MotionData.cxx" />
-    <ClCompile Include="..\..\src\util\SimpleWindow.cxx" />
     <ClCompile Include="..\..\src\util\SpriteModel.cxx" />
     <ClCompile Include="..\..\src\util\TrackBall.cxx" />
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp" />
@@ -287,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h" />
+    <ClInclude Include="..\..\FK\AppWindow.h" />
     <ClInclude Include="..\..\FK\Array.H" />
     <ClInclude Include="..\..\FK\Attribute.h" />
     <ClInclude Include="..\..\FK\AttributeData.H" />
@@ -380,7 +381,6 @@
     <ClInclude Include="..\..\FK\Scene.h" />
     <ClInclude Include="..\..\FK\Shape.h" />
     <ClInclude Include="..\..\FK\ShapeViewer.h" />
-    <ClInclude Include="..\..\FK\SimpleWindow.h" />
     <ClInclude Include="..\..\FK\SMFParser.H" />
     <ClInclude Include="..\..\FK\Solid.h" />
     <ClInclude Include="..\..\FK\SolidBase.h" />
