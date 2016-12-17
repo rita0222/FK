@@ -80,7 +80,7 @@ mac:
 	cd fltk; $(MAKE) mac
 
 mac-g:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-g TARGET=depend ; \
@@ -89,7 +89,7 @@ mac-g:
 	cd fltk; $(MAKE) mac-g
 
 mac-gcc:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-gcc TARGET=depend ; \
@@ -98,7 +98,7 @@ mac-gcc:
 	cd fltk; $(MAKE) mac-gcc
 
 mac-gcc-g:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-gcc-g TARGET=depend ; \
@@ -119,7 +119,7 @@ mac-qt-g:
 	cd qt; $(MAKE) mac-qt-g MAKE=$(MAKE)
 
 clean:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(MAKE) clean -f Makefile.plane ; \
 		$(RM) Makefile ; \

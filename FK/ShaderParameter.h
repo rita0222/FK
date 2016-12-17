@@ -1,6 +1,230 @@
 #ifndef __FK_SHADER_PARAMETER_HEADER__
 #define __FK_SHADER_PARAMETER_HEADER__
 
+#include <FK/TextureSampler.h>
+#include <string>
+#include <map>
+
+//! シェーダーパラメーター管理クラス
+/*!
+ *	このクラスは、シェーダープログラムに対してパラメーターを渡すための機能を提供します。
+ *	本クラスの機能は、 fk_ShaderBinder クラスの
+ *	fk_ShaderBinder::getParameter() によってインスタンスを得ることで利用します。
+ *
+ *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
+ */
+
+class fk_ShaderParameter
+{
+public:
+	//! コンストラクタ
+	fk_ShaderParameter();
+
+	//! デストラクタ
+	virtual ~fk_ShaderParameter();
+
+	//! エラーメッセージプロパティ
+	/*!
+	 *	シェーダーに関するエラーが生じた場合に、
+	 *	エラーメッセージの文字列をこのプロパティから取得できます。
+	 */
+	std::string getLastError(void);
+
+	//! float 型 uniform 変数設定関数
+	/*!
+	 *	この関数は、バーテックスシェーダーやフラグメントシェーダーに対し、
+	 *	float 型の uniform 変数を渡す設定を行います。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	value
+	 *		uniform 変数に渡す値
+	 */
+	void setRegister(std::string name, float value);
+
+	//! float 配列型 uniform 変数設定関数
+	/*!
+	 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+	 *	float 配列型の uniform 変数を渡す設定を行います。
+	 *	配列のサイズは 1 から 4 までで、
+	 *	GLSL 内での型は配列サイズが 1 から順に float, vec2, vec3, vec4 となります。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	value
+	 *		uniform 変数に渡す配列
+	 */
+	void setRegister(std::string name, std::vector<float> *value);
+
+	//! int 型 uniform 変数設定関数
+	/*!
+	 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+	 *	int 型の uniform 変数を渡す設定を行います。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	value
+	 *		uniform 変数に渡す値
+	 */
+	void setRegister(std::string name, int value);
+
+	//! int 配列型 uniform 変数設定関数
+	/*!
+	 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+	 *	int 配列型の uniform 変数を渡す設定を行います。
+	 *	配列のサイズは 1 から 4 までで、
+	 *	GLSL 内での型は配列サイズが 1 から順に int, ivec2, ivec3, ivec4 となります。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	value
+	 *		uniform 変数に渡す配列
+	 */
+	void setRegister(std::string name, std::vector<int> *value);
+	
+	//! 行列型 uniform 変数設定関数
+	/*!
+	 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+	 *	行列型の uniform 変数を渡す設定を行います。
+	 *	この関数の引数は fk_Matrix 型変数となり、
+	 *	GLSL コード内での型は mat4 となります。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	value
+	 *		uniform 変数に渡す行列
+	 */
+	void setRegister(std::string name, fk_Matrix *value);
+
+	//! uniform 変数解除関数
+	/*!
+	 *	各種 setRegister() 関数で設定した uniform 変数を解除します。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\return
+	 *		uniform 変数が存在していた場合は解除し true を返します。
+	 *		変数が存在していなかった場合は false を返します。
+	 */
+	bool removeRegister(std::string name);
+
+	//! float 配列型 attribute 変数設定関数
+	/*!
+	 *	この関数は、
+	 *	バーテックスシェーダーに対し float 配列型の attribute 変数を渡す設定を行います。
+	 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
+	 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
+	 *	GLSL 内での型は、要素数が 1 から順に float, vec2, vec3, vec4 となります。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	dim
+	 *		attribute 変数の要素数
+	 *
+	 *	\param[in]	value
+	 *		attribute 変数に渡す値の配列
+	 */
+	void addAttribute(std::string name, int dim, std::vector<float> *value);
+
+	//! int 配列型 attribute 変数設定関数
+	/*!
+	 *	この関数は、
+	 *	バーテックスシェーダーに対し int 配列型の attribute 変数を渡す設定を行います。
+	 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
+	 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
+	 *	GLSL 内での型は、要素数が 1 から順に int, ivec2, ivec3, ivec4 となります。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\param[in]	dim
+	 *		attribute 変数の要素数
+	 *
+	 *	\param[in]	value
+	 *		attribute 変数に渡す値の配列
+	 */
+	void addAttribute(std::string name, int dim, std::vector<int> *value);
+
+	//! attribute 変数解除関数
+	/*!
+	 *	各種 addAttribute() 関数で設定した attribute 変数を解除します。
+	 *
+	 *	\param[in]	name
+	 *		GLSL コード内での変数名
+	 *
+	 *	\return
+	 *		attribute 変数が存在していた場合は解除し true を返します。
+	 *		変数が存在していなかった場合は false を返します。
+	 */
+	bool removeAttribute(std::string name);
+
+	//! 参照テクスチャ設定関数
+	/*!
+	 *	GLSLコード内の参照テクスチャを設定します。
+	 *	ここで設定したテクスチャは、
+	 *	GLSL内では sampler2D 型 uniform 変数として扱われます。
+	 *	複数のテクスチャを設定した場合、
+	 *	GLSLコード内で変数を宣言した順番に割り振られます。
+	 *
+	 *	\param[in]	unit
+	 *		シェーダー内でのテクスチャ ID を指定します。
+	 *		0 から 31 までを指定することができます。
+	 *		既に使用している ID を用いた場合、
+	 *		前にその ID を用いていたテクスチャの設定は破棄されます。
+	 *		GLSLコード内では、複数の sampler2D 変数に対し ID の若い順に割り振られます。
+	 *
+	 *	\param[in]	texture
+	 *		テクスチャオブジェクト。詳細は fk_TextureSampler を参照して下さい。
+	 *
+	 *	\return
+	 *		設定に成功すれば true を、失敗すれば false を返します。
+	 */
+	bool attachTexture(int unit, fk_TextureSampler *texture);
+
+	//! 参照テクスチャ解除関数
+	/*!
+	 *	attachTexture() メソッドにて設定した参照テクスチャを解除します。
+	 *
+	 *	\param[in]	unit
+	 *		テクスチャ ID
+	 *
+	 *	\return
+	 *		解除に成功すれば true を、失敗すれば false を返します。
+	 */
+	bool detachTexture(int unit);
+
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+	bool Apply(GLuint);
+#endif
+	
+private:
+	GLint GetLocation(GLuint, std::string);
+	GLint GetAttributeLocation(GLuint, std::string);
+
+	std::map<std::string, float> floatTable;
+	std::map<std::string, std::vector<float> > floatArrayTable;
+	std::map<std::string, int> intTable;
+	std::map<std::string, std::vector<int> > intArrayTable;
+	std::map<std::string, fk_Matrix> matrixTable;
+	std::map<std::string, int> locationTable;
+
+	std::map<std::string, std::tuple<int, std::vector<float> *> > floatAttributeTable;
+	std::map<std::string, std::tuple<int, std::vector<int> *> > intAttributeTable;
+
+	std::map<std::string, int> attributeLocationTable;
+	std::map<int, fk_TextureSampler *> textureTable;
+
+	std::string lastError;
+	unsigned int lastAppliedId;
+};
 
 
 #endif

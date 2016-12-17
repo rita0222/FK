@@ -93,7 +93,7 @@ inline bool AlmostEqual(double x, double y)
 void CopyMatrix(_st deg, vector<double> &m1, const vector<double> &m2)
 {
 	_st		i;
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		m1[i] = m2[i];
 	}
 	return;
@@ -102,7 +102,7 @@ void CopyMatrix(_st deg, vector<double> &m1, const vector<double> &m2)
 static void AddMatrix(_st deg, vector<double> &m1, const vector<double> &m2)
 {
 	_st		i;
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		m1[i] += m2[i];
 	}
 	return;
@@ -111,7 +111,7 @@ static void AddMatrix(_st deg, vector<double> &m1, const vector<double> &m2)
 static void SubMatrix(_st deg, vector<double> &m1, const vector<double> &m2)
 {
 	_st		i;
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		m1[i] -= m2[i];
 	}
 	return;
@@ -122,11 +122,11 @@ static void MultMatrix(_st deg, vector<double> &m1,
 {
 	_st		i, j, k;
 	
-	for(i = 0; i < deg*deg; i++) m1[i] = 0.0;
+	for(i = 0; i < deg*deg; ++i) m1[i] = 0.0;
 	
-	for(i = 0; i < deg; i++) {
-		for(j = 0; j < deg; j++) {
-			for(k = 0; k < deg; k++) {
+	for(i = 0; i < deg; ++i) {
+		for(j = 0; j < deg; ++j) {
+			for(k = 0; k < deg; ++k) {
 				m1[i*deg + j] += m2[i*deg + k] * m3[k*deg + j];
 			}
 		}
@@ -148,9 +148,9 @@ static bool LUDecomposition(_st deg, vector<double> &mat,
 	// Get Scaling Information.;
 
 	iMax = 0;
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		big = 0.0;
-		for(j = 0; j < deg; j++) {
+		for(j = 0; j < deg; ++j) {
 			tmp = fabs(mat[i*deg+j]);
 			if(tmp > big) big = tmp;
 		}
@@ -162,19 +162,19 @@ static bool LUDecomposition(_st deg, vector<double> &mat,
 	
 	// Crout's Algorithm ';
 
-	for(j = 0; j < deg; j++) {
-		for(i = 0; i < j; i++) {
+	for(j = 0; j < deg; ++j) {
+		for(i = 0; i < j; ++i) {
 			sum = mat[i*deg+j];
-			for(k = 0; k < i; k++) {
+			for(k = 0; k < i; ++k) {
 				sum -= mat[i*deg+k]*mat[k*deg+j];
 			}
 			mat[i*deg+j] = sum;
 		}
 	
 		big = 0.0;
-		for(i = j; i < deg; i++) {
+		for(i = j; i < deg; ++i) {
 			sum = mat[i*deg+j];
-			for(k = 0; k < j; k++) {
+			for(k = 0; k < j; ++k) {
 				sum -= mat[i*deg+k]*mat[k*deg+j];
 			}
 			mat[i*deg+j] = sum;
@@ -186,7 +186,7 @@ static bool LUDecomposition(_st deg, vector<double> &mat,
 		}
 		if(j != iMax) {
 			// Row Exchange;
-			for(k = 0; k < deg; k++) {
+			for(k = 0; k < deg; ++k) {
 				dum = mat[iMax*deg+k];
 				mat[iMax*deg+k] = mat[j*deg+k];
 				mat[j*deg+k] = dum;
@@ -202,7 +202,7 @@ static bool LUDecomposition(_st deg, vector<double> &mat,
 
 		if(j != deg-1) {
 			dum = 1.0/(mat[j*deg+j]);
-			for(i = j+1; i < deg; i++) mat[i*deg+j] *= dum;
+			for(i = j+1; i < deg; ++i) mat[i*deg+j] *= dum;
 		}
 	}
 
@@ -222,24 +222,24 @@ static void LUBackSubsutitution(_st deg,
 
 	iFlg = false;
 
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		// Forward Subsutitution;
 		ip = static_cast<_st>(index[i]);
 		sum = vec[ip];
 		vec[ip] = vec[i];
 		if(iFlg == false) {
-			for(j = 0; j < i; j++) {
+			for(j = 0; j < i; ++j) {
 				sum -= mat[i*deg+j]*vec[j];
 			}
 		} else if(AlmostZero(sum) == true) iFlg = true;
 		vec[i] = sum;
 	}
 	
-	for(k = static_cast<int>(deg)-1; k >= 0; k--) {
+	for(k = static_cast<int>(deg)-1; k >= 0; --k) {
 		i = static_cast<_st>(k);
 		// Backward Subsutitution;
 		sum = vec[i];
-		for(j = i+1; j < deg; j++) sum -= mat[i*deg+j]*vec[j];
+		for(j = i+1; j < deg; ++j) sum -= mat[i*deg+j]*vec[j];
 		vec[i] = sum/mat[i*deg+i];
 	}
 }
@@ -250,9 +250,9 @@ void fk_GenMatrix::MultVec(fk_GenVector &retVec,
 {
 	_st		i, j;
 
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		retVec.v[i] = 0.0;
-		for(j = 0; j < deg; j++) {
+		for(j = 0; j < deg; ++j) {
 			retVec.v[i] += argVec.v[j]*m[i*deg+j];
 		}
 	}
@@ -263,9 +263,9 @@ void fk_GenMatrix::MakeIdentMatrix(void)
 {
 	_st		i;
 
-	for(i = 0; i < deg*deg; i++) m[i] = 0.0;
+	for(i = 0; i < deg*deg; ++i) m[i] = 0.0;
 
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		m[i*deg + i] = 1.0;
 	}
 	return;
@@ -275,7 +275,7 @@ void fk_GenMatrix::MakeZeroMatrix(void)
 {
 	_st		i;
 
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		m[i] = 0.0;
 	}
 	return;
@@ -297,26 +297,26 @@ bool fk_GenMatrix::MatrixInverse(void)
 		index.resize(deg);
 	}
 	
-	for(i = 0; i < deg*deg; i++) mat[i] = m[i];
+	for(i = 0; i < deg*deg; ++i) mat[i] = m[i];
 
 	if(LUDecomposition(deg, mat, index) == false) {
 		return false;
 	}
 
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		if(AlmostZero(mat[i*deg+i]) == true) {
 			return false;
 		}
 	}
 
-	for(j = 0; j < deg; j++) {
-		for(i = 0; i < deg; i++) vec[i] = 0.0;
+	for(j = 0; j < deg; ++j) {
+		for(i = 0; i < deg; ++i) vec[i] = 0.0;
 		vec[j] = 1.0;
 		LUBackSubsutitution(deg, mat, index, vec);
-		for(i = 0; i < deg; i++) dummy[i*deg+j] = vec[i];
+		for(i = 0; i < deg; ++i) dummy[i*deg+j] = vec[i];
 	}
 	
-	for(i = 0; i < deg*deg; i++) m[i] = dummy[i];
+	for(i = 0; i < deg*deg; ++i) m[i] = dummy[i];
 
 	return true;
 }
@@ -332,7 +332,7 @@ fk_GenMatrix::fk_GenMatrix(const fk_GenMatrix &argM)
 	_st		i;
 
 	setDeg(static_cast<int>(argM.deg));
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		m[i] = argM.m[i];
 	}
 }
@@ -396,8 +396,8 @@ void fk_GenMatrix::negate(void)
 	_st		i, j;
 	double	tmp;
 
-	for(i = 0; i < deg; i++) {
-		for(j = 0; j < i; j++) {
+	for(i = 0; i < deg; ++i) {
+		for(j = 0; j < i; ++j) {
 			tmp = m[i*deg + j];
 			m[i*deg + j] = m[j*deg + i];
 			m[j*deg + i] = tmp;
@@ -418,13 +418,13 @@ bool fk_GenMatrix::isSingular(void) const
 		index.resize(deg);
 	}
 
-	for(i = 0; i < deg*deg; i++) mat[i] = m[i];
+	for(i = 0; i < deg*deg; ++i) mat[i] = m[i];
 
 	if(LUDecomposition(deg, mat, index) == false) {
 		return false;
 	}
 
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		if(AlmostZero(mat[i*deg+i]) == true) {
 			return true;
 		}
@@ -451,7 +451,7 @@ bool fk_GenMatrix::operator ==(const fk_GenMatrix &argMat) const
 	_st		i;
 	
 	if(deg != argMat.deg) return false;
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		if(AlmostEqual(m[i], argMat.m[i]) == false) return false;
 	}
 	return true;
@@ -462,7 +462,7 @@ bool fk_GenMatrix::operator !=(const fk_GenMatrix &argMat) const
 	_st 	i;
 	
 	if(deg != argMat.deg) return true;
-	for(i = 0; i < deg*deg; i++) {
+	for(i = 0; i < deg*deg; ++i) {
 		if(AlmostEqual(m[i], argMat.m[i]) == false) return true;
 	}
 	return false;
@@ -523,10 +523,10 @@ void fk_GenMatrix::Print(string argStr) const
 		fk_PutError("Matrix[" + argStr + "] = ");
 	}
 
-	for(i = 0; i < deg; i++) {
+	for(i = 0; i < deg; ++i) {
 		ss.clear();
 		ss << "\t| ";
-		for(j = 0; j < deg; j++) {
+		for(j = 0; j < deg; ++j) {
 			ss << m[i*deg + j] << " ";
 		}
 		ss << "|";

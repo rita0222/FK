@@ -50,6 +50,8 @@ class fk_OrthoMatrix {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 	double	m[4][4];
+	float	*buf;
+	bool	updateStatus;
 	void	MultVec(fk_HVector &, const fk_HVector &) const;
 
 #endif
@@ -64,6 +66,10 @@ class fk_OrthoMatrix {
 
 	//! コピーコンストラクタ
 	fk_OrthoMatrix(const fk_OrthoMatrix &);
+
+
+	//! デストラクタ
+	~fk_OrthoMatrix();
 
 	//! \name 単項演算子
 	//@{
@@ -395,6 +401,7 @@ class fk_OrthoMatrix {
 	
 #ifndef FK_DOXYGEN_USER_PROCESS
 
+	float *			GetBuffer(void);
 	void			Print(std::string = "") const;
 
 #endif

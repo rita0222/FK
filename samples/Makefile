@@ -39,7 +39,6 @@ FKLIB		= \
 			-lFK3_scene \
 			-lFK3_model \
 			-lFK3_solid \
-			-lFK3_shape \
 			-lFK3_parser \
 			-lFK3_shape \
 			-lFK3_solid \
@@ -172,7 +171,7 @@ mac:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK3_OpenCL $(FKLIB)" \
+	"FKLINK = -lFK3_shader -lFK3_OpenCL $(FKLIB)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 

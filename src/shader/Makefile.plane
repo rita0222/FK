@@ -20,7 +20,9 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 #
 
 LIBSRCS = \
-		ShaderProgram.cxx
+		ShaderParameter.cxx \
+		ShaderProgram.cxx \
+		TextureSampler.cxx
 
 LIBOBJS = $(LIBSRCS:cxx=o)
 LIBBCCOBJS = $(LIBSRCS:cxx=obj)

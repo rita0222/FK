@@ -97,7 +97,7 @@ fk_GenVector::fk_GenVector(int argSize, double *argArray)
 	if(argSize <= 0) return;
 
 	resize(argSize);
-	for(i = 0; i < static_cast<_st>(argSize); i++) {
+	for(i = 0; i < static_cast<_st>(argSize); ++i) {
 		v[i] = argArray[i];
 	}
 
@@ -139,7 +139,7 @@ fk_GenVector & fk_GenVector::operator -(void) const
 	_st						i;
 	_st						end = static_cast<_st>(size());
 
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		tmpVec.v[i] = -v[i];
 	}
 
@@ -199,7 +199,7 @@ fk_GenVector & fk_GenVector::operator *=(double d)
 	_st		i;
 	_st		end = static_cast<_st>(size());
 
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		v[i] *= d;
 	}
 
@@ -212,7 +212,7 @@ fk_GenVector & fk_GenVector::operator /=(double d)
 	_st		end = static_cast<_st>(size());
 
 	if(fabs(d) < FK_VECTOREPS) return *this;
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		v[i] /= d;
 	}
 
@@ -225,7 +225,7 @@ fk_GenVector & fk_GenVector::operator +=(const fk_GenVector &tmp)
 	_st		end = static_cast<_st>(size());
 
 	if(end != static_cast<_st>(tmp.size())) return *this;
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		v[i] += tmp.v[i];
 	}
 
@@ -238,7 +238,7 @@ fk_GenVector & fk_GenVector::operator -=(const fk_GenVector &tmp)
 	_st		end = static_cast<_st>(size());
 
 	if(end != static_cast<_st>(tmp.size())) return *this;
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		v[i] -= tmp.v[i];
 	}
 
@@ -282,7 +282,7 @@ double fk_GenVector::norm2(void) const
 	_st		i;
 	_st		end = static_cast<_st>(size());
 
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		len += v[i]*v[i];
 	}
 
@@ -297,7 +297,7 @@ bool fk_GenVector::normalize(void)
 
 	if(len < FK_VECTOREPS) return false;
 	end = static_cast<_st>(size());
-	for(i = 0; i < end; i++) {
+	for(i = 0; i < end; ++i) {
 		v[i] /= len;
 	}
 
@@ -310,7 +310,7 @@ void fk_GenVector::init(bool argFlag)
 		v.clear();
 	} else {
 		_st end = static_cast<_st>(size());
-		for(_st i = 0; i < end; i++) {
+		for(_st i = 0; i < end; ++i) {
 			v[i] = 0.0;
 		}
 	}
@@ -334,7 +334,7 @@ bool fk_GenVector::replace(int argID, fk_GenVector &argVec)
 	start = static_cast<_st>(argID);
 	end = start + static_cast<_st>(argVec.size());
 
-	for(i = start; i < end; i++) {
+	for(i = start; i < end; ++i) {
 		v[i] = argVec.v[i];
 	}
 
@@ -373,7 +373,7 @@ bool fk_GenVector::add(int argID, fk_GenVector &argVec)
 	start = static_cast<_st>(argID);
 	end = start + static_cast<_st>(argVec.size());
 
-	for(i = start; i < end; i++) {
+	for(i = start; i < end; ++i) {
 		v[i] += argVec.v[i];
 	}
 
@@ -412,7 +412,7 @@ bool fk_GenVector::sub(int argID, fk_GenVector &argVec)
 	start = static_cast<_st>(argID);
 	end = start + static_cast<_st>(argVec.size());
 
-	for(i = start; i < end; i++) {
+	for(i = start; i < end; ++i) {
 		v[i] -= argVec.v[i];
 	}
 
@@ -452,7 +452,7 @@ fk_GenVector fk_GenVector::div(int argID, int argNum)
 	retVec.resize(argNum);
 
 	start = static_cast<_st>(argID);
-	for(i = 0; i < static_cast<_st>(argNum); i++) {
+	for(i = 0; i < static_cast<_st>(argNum); ++i) {
 		retVec.v[i] = v[i+start];
 	}
 
@@ -465,7 +465,7 @@ void fk_GenVector::Print(void) const
 	stringstream	ss;
 
 	ss << "Vector = (";
-	for(i = 0; i < static_cast<_st>(size()); i++) {
+	for(i = 0; i < static_cast<_st>(size()); ++i) {
 		ss << v[i];
 		if(i != static_cast<_st>(size())-1) ss << ", ";
 	}
@@ -483,7 +483,7 @@ void fk_GenVector::Print(string argStr) const
 	ss << "Vector[";
 	ss << argStr;
 	ss << "] = (";
-	for(i = 0; i < static_cast<_st>(size()); i++) {
+	for(i = 0; i < static_cast<_st>(size()); ++i) {
 		ss << v[i];
 		if(i != static_cast<_st>(size())-1) ss << ", ";
 	}
@@ -504,7 +504,7 @@ double operator *(const fk_GenVector &a, const fk_GenVector &b)
 	if((size = a.size()) != b.size()) return 0.0;
 	prod = 0.0;
 
-	for(i = 0; i < static_cast<_st>(size); i++) {
+	for(i = 0; i < static_cast<_st>(size); ++i) {
 		prod += a.v[i] * b.v[i];
 	}
 
@@ -520,7 +520,7 @@ fk_GenVector operator +(const fk_GenVector &a, const fk_GenVector &b)
 	if((size = a.size()) != b.size()) return retVec;
 	retVec.resize(size);
 
-	for(i = 0; i < static_cast<_st>(size); i++) {
+	for(i = 0; i < static_cast<_st>(size); ++i) {
 		retVec.v[i] = a.v[i] + b.v[i];
 	}
 
@@ -536,7 +536,7 @@ fk_GenVector operator -(const fk_GenVector &a, const fk_GenVector &b)
 	if((size = a.size()) != b.size()) return retVec;
 	retVec.resize(size);
 
-	for(i = 0; i < static_cast<_st>(size); i++) {
+	for(i = 0; i < static_cast<_st>(size); ++i) {
 		retVec.v[i] = a.v[i] - b.v[i];
 	}
 
@@ -549,7 +549,7 @@ fk_GenVector operator *(const fk_GenVector &v, double d)
 	_st				i;
 	_st				size = static_cast<_st>(v.size());
 
-	for(i = 0; i < size; i++) {
+	for(i = 0; i < size; ++i) {
 		retVec.v[i] = v.v[i]*d;
 	}
 
@@ -562,7 +562,7 @@ fk_GenVector operator *(double d, const fk_GenVector &v)
 	_st				i;
 	_st				size = static_cast<_st>(v.size());
 
-	for(i = 0; i < size; i++) {
+	for(i = 0; i < size; ++i) {
 		retVec.v[i] = v.v[i]*d;
 	}
 
@@ -576,7 +576,7 @@ fk_GenVector operator /(const fk_GenVector &v, double d)
 	_st				size = static_cast<_st>(v.size());
 
 	if(d < FK_VECTOREPS) return v;
-	for(i = 0; i < size; i++) {
+	for(i = 0; i < size; ++i) {
 		retVec.v[i] /= d;
 	}
 
@@ -591,7 +591,7 @@ fk_GenVector operator ^(const fk_GenVector &a, const fk_GenVector &b)
 	size = static_cast<_st>(a.size());
 	if(size < 3 || size != static_cast<_st>(b.size())) return retVec;
 
-	for(i = 0; i < size-2; i++) {
+	for(i = 0; i < size-2; ++i) {
 		retVec.v[i] = a.v[i+1]*b.v[i+2] - a.v[i+2]*b.v[i+1];
 	}
 
