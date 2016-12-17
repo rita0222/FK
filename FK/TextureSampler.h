@@ -17,13 +17,14 @@ enum fk_SamplerSource {
  *	sampler2D という型の変数として扱います。
  *	このクラスを利用することで、
  *	フラグメントシェーダーの uniform 変数として参照テクスチャを
- *	C# プログラムとリンクすることができます。
+ *	C++ プログラムとリンクすることができます。
  *
  *	最低限必要な手順は以下の通りとなります。
  *		-# 本クラスのインスタンスを生成する。
- *		-# fk_TextureSampler.SamplerSource プロパティを利用用途に応じて適切な値を設定する。
- *		-# fk_ShaderBinder 型変数の fk_ShaderBinder.Parameter プロパティに対し、
- *			fk_ShaderParameter::AttachTexture() メソッドによって連携設定を行う。
+ *		-# 利用用途に応じて適切な値を setSamplerSource() 関数で設定する。
+ *		-# fk_ShaderBinder 型変数の fk_ShaderBinder::getParameter() 関数で得られる
+ *			fk_ShaderParameter 型のインスタンスを取得し、
+ *			fk_ShaderParameter::attachTexture() 関数によって連携設定を行う。
  *		-# フラグメントシェーダー内で uniform sampler2D 型変数を生成する。
  *
  *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_MeshTexture
