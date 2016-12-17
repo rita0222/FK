@@ -230,6 +230,8 @@ void fk_ShaderBinder::finalizeFrameBufferObject(void)
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
+	if(argWin == nullptr) return;
+
 	GLuint		id = program->getProgramID();
 
 	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
@@ -238,8 +240,16 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 	argWin->postDrawList.push_back(postD);
 }
 
+void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
+{
+	if(argWin == nullptr) return;
+	bindWindow(argWin->drawWin);
+}
+
 void fk_ShaderBinder::unbindWindow(fk_Window *argWin)
 {
+	if(argWin == nullptr) return;
+
 	GLuint id = program->getProgramID();
 
 	for(auto it = argWin->preDrawList.begin(); it != argWin->preDrawList.end();) {
@@ -251,6 +261,12 @@ void fk_ShaderBinder::unbindWindow(fk_Window *argWin)
 		if(get<0>(*it) == id) it = argWin->postDrawList.erase(it);
 		else ++it;
 	}
+}
+
+void fk_ShaderBinder::unbindWindow(fk_AppWindow *argWin)
+{
+	if(argWin == nullptr) return;
+	unbindWindow(argWin->drawWin);
 }
 
 void fk_ShaderBinder::ProcPreShader(void)

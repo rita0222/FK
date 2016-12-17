@@ -251,31 +251,59 @@ public:
 	 */
 	void finalizeFrameBufferObject();
 	
-	//! ウィンドウ連携設定関数
+	//! ウィンドウ連携設定関数1
 	/*!
 	 *	フレームバッファーオブジェクト
 	 *	(FBO) を処理するシェーダーの出力を、
 	 *	ウィンドウに表示するよう連携する設定を行います。
 	 *
 	 *	\param[in]	window
-	 *		FBO用シェーダーの出力を表示するウィンドウインスタンス
+	 *		FBO用シェーダーの出力を表示するウィンドウの fk_Window 型インスタンス
 	 *
 	 *	\sa initializeFrameBufferObject(int, int),
 	 *			initializeFrameBufferObject(fk_Dimension *),
-	 *			unbindWindow()
+	 *			unbindWindow(fk_Window *), bindWindow(fk_AppWindow *)
 	 */
 	void bindWindow(fk_Window *window);
 
-	//! ウィンドウ連携解除メソッド
+	//! ウィンドウ連携設定関数2
+	/*!
+	 *	フレームバッファーオブジェクト
+	 *	(FBO) を処理するシェーダーの出力を、
+	 *	ウィンドウに表示するよう連携する設定を行います。
+	 *
+	 *	\param[in]	window
+	 *		FBO用シェーダーの出力を表示するウィンドウの fk_AppWindow 型インスタンス
+	 *
+	 *	\sa initializeFrameBufferObject(int, int),
+	 *			initializeFrameBufferObject(fk_Dimension *),
+	 *			unbindWindow(fk_AppWindow *), bindWindow(fk_Window *)
+	 */
+	void bindWindow(fk_AppWindow *window);
+
+	//! ウィンドウ連携解除メソッド1
 	/*!
 	 *	bindWindow() メソッドによって設定していた連携を解除します。
 	 *
 	 *	\param[in]	window
-	 *		bindWindow() メソッドで連携設定を行っていたウィンドウインスタンス
+	 *		bindWindow() メソッドで連携設定を行っていたウィンドウの
+	 *		fk_Window 型インスタンス
 	 *
-	 *	\sa bindWindow()
+	 *	\sa bindWindow(fk_Window *), unbindWindow(fk_AppWindow *)
 	 */
 	void unbindWindow(fk_Window *window);
+
+	//! ウィンドウ連携解除メソッド2
+	/*!
+	 *	bindWindow() メソッドによって設定していた連携を解除します。
+	 *
+	 *	\param[in]	window
+	 *		bindWindow() メソッドで連携設定を行っていたウィンドウの
+	 *		fk_AppWindow 型インスタンス
+	 *
+	 *	\sa bindWindow(fk_AppWindow *), unbindWindow(fk_Window *)
+	 */
+	void unbindWindow(fk_AppWindow *window);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 	static bool Initialize(void);
