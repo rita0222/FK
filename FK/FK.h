@@ -29,6 +29,7 @@
 #include <FK/AppWindow.h>
 #include <FK/SpriteModel.h>
 #include <FK/MotionCharactor.h>
+#include <FK/ShaderBinder.h>
 
 #ifndef FK_NO_FLTK
 

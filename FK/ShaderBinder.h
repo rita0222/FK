@@ -124,22 +124,10 @@ public:
 	 *	\param[in]	param
 	 *		シェーダーパラメーター
 	 */
-	fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam);
+	fk_ShaderBinder(fk_ShaderProgram *prog, fk_ShaderParameter *param);
 
 	//! デストラクタ
 	~fk_ShaderBinder();
-
-	//! シェーダープログラム設定関数
-	/*!
-	 *	シェーダープログラムを設定します。
-	 *	詳細は fk_ShaderProgram のマニュアルを参照して下さい。
-	 *
-	 *	\param[in]	program
-	 *		新たに設定する fk_ShaderProgram 型インスタンス
-	 *
-	 *	\sa fk_ShaderProgram, getProgram()
-	 */
-	void setProgram(fk_ShaderProgram *program);
 
 	//! シェーダープログラム参照関数
 	/*!
@@ -153,9 +141,38 @@ public:
 	 */
 	fk_ShaderProgram *getProgram(void);
 
+	//! シェーダープログラム設定関数
+	/*!
+	 *	シェーダープログラムを設定します。
+	 *	fk_ShaderBinder はインスタンスを生成すると、
+	 *	内部に fk_ShaderProgram インスタンスを確保しますので、
+	 *	通常はこの関数を用いる必要はありません。
+	 *	他の fk_ShaderBinder 型インスタンスのシェーダープログラムを流用したい場合や、
+	 *	fk_ShaderProgram インスタンスを複数の
+	 *	fk_ShaderBinder インスタンスで共有したい場合に用いて下さい。
+	 *
+	 *	\param[in]	program
+	 *		新たに設定する fk_ShaderProgram 型インスタンス
+	 *
+	 *	\sa fk_ShaderProgram, getProgram()
+	 */
+	void setProgram(fk_ShaderProgram *program);
+
+	//! シェーダーパラメーター参照関数
+	/*!
+	 *	シェーダーパラメーターを格納する、 fk_ShaderParameter 型インスタンスを参照します。
+	 *	シェーダーへのパラメーターの設定はこのインスタンスを利用して行います。
+	 *	詳細は fk_ShaderParametern のマニュアルを参照して下さい。
+	 *
+	 *	\return	  現在設定されている fk_ShaderParameter 型インスタンス
+	 *
+	 *	\sa fk_ShaderParameter, setParameter()
+	 */
+	fk_ShaderParameter *getParameter(void);
+
 	//! シェーダーパラメーター設定関数
 	/*!
-	 *	シェーダープログラムに渡すパラメーターを設定します。
+	 *	シェーダープログラムを設定します。
 	 *	詳細は fk_ShaderParameter のマニュアルを参照して下さい。
 	 *
 	 *	\param[in]	param
@@ -165,6 +182,7 @@ public:
 	 */
 	void setParameter(fk_ShaderParameter *param);
 
+	
 	//! シェーダーモデル連携設定関数
 	/*!
 	 *	設定されているシェーダープログラムを適用するモデルを設定します。
@@ -281,7 +299,6 @@ private:
 	GLuint	fboID;
 	GLuint	texID;
 	GLuint	depthTexID;
-	GLuint	rendID;
 	GLint	bufW;
 	GLint	bufH;
 };

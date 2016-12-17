@@ -74,6 +74,8 @@
 
 using namespace std;
 
+bool fk_ShaderBinder::isExtensionInitialized = false;
+
 // レンダーターゲットのリスト
 static const GLenum bufs[] = {
 	GL_COLOR_ATTACHMENT0,	// カラーバッファ
@@ -106,12 +108,34 @@ fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *
 	isExtensionInitialized = false;
 	Initialize();
 
-	program = (argProg != nullptr) ? argProg : &innerProgram;
-	parameter = (argParam != nullptr) ? argParam : &innerParameter;
+	setProgram(argProg);
+	setParameter(argParam);
 }
 
 fk_ShaderBinder::~fk_ShaderBinder()
 {
+}
+
+void fk_ShaderBinder::setProgram(fk_ShaderProgram *argProg)
+{
+	program = (argProg != nullptr) ? argProg : &innerProgram;
+	return;
+}
+
+fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
+{
+	return program;
+}
+
+void fk_ShaderBinder::setParameter(fk_ShaderParameter *argParam)
+{
+	parameter = (argParam != nullptr) ? argParam : &innerParameter;
+	return;
+}
+
+fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
+{
+	return parameter;
 }
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
