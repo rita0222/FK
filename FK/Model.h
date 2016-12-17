@@ -14,6 +14,8 @@ class fk_Shape;
 class fk_TreeData;
 class fk_Color;
 
+typedef std::tuple<unsigned int, std::function<void(void)> >  fk_funcSet;
+
 //! モデルを生成、管理するクラス
 /*!
  *	このクラスは、「モデル」を制御する機能を提供します。
@@ -122,7 +124,7 @@ class fk_Model : public fk_Boundary {
 
 	static std::unique_ptr<fk_Tree>	_modelTree;
 	
- public:
+public:
 
 	//! コンストラクタ
 	/*!
@@ -2046,6 +2048,10 @@ class fk_Model : public fk_Boundary {
 
 	void	SetTreeDelMode(bool);
 	void	TreePrint(void);
+
+	std::list<fk_funcSet>	preShaderList;
+	std::list<fk_funcSet>	postShaderList;
+
 #endif
 };
 

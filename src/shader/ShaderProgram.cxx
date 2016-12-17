@@ -134,13 +134,27 @@ bool fk_ShaderProgram::validate(void)
 	return Link();
 }
 
-bool fk_ShaderProgram::loadVertexShader(string)
+bool fk_ShaderProgram::loadVertexShader(string argFileName)
 {
+	ifstream		ifs(argFileName);
+	if(ifs.fail()) return false;
+
+	istreambuf_iterator<char> it(ifs);
+	istreambuf_iterator<char> last;
+	vertexShaderSource = string(it, last);
+
 	return true;
 }
 
-bool fk_ShaderProgram::loadFragmentShader(string)
+bool fk_ShaderProgram::loadFragmentShader(string argFileName)
 {
+	ifstream		ifs(argFileName);
+	if(ifs.fail()) return false;
+
+	istreambuf_iterator<char> it(ifs);
+	istreambuf_iterator<char> last;
+	fragmentShaderSource = string(it, last);
+
 	return true;
 }
 

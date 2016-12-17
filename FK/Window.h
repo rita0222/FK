@@ -819,6 +819,9 @@ class fk_Window : public Fl_Gl_Window {
 	virtual void	postDrawLeft(void) {}
 	virtual void	preDrawRight(void) {}
 	virtual void	postDrawRight(void) {}
+
+	std::list<fk_funcSet>	preDrawList;
+	std::list<fk_funcSet>	postDrawList;
 #endif
 
 	//! \name 描画画像取り込み関数

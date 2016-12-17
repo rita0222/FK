@@ -20,6 +20,7 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 #
 
 LIBSRCS = \
+		ShaderBinder.cxx \
 		ShaderParameter.cxx \
 		ShaderProgram.cxx \
 		TextureSampler.cxx
