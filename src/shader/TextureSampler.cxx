@@ -103,10 +103,10 @@ void fk_TextureSampler::init()
 
 bool fk_TextureSampler::BindTexture(bool forceLoad)
 {
-	fk_Image		*image = getImage();
-	if (image == nullptr) return false;
+	fk_Image		*tmpImage = getImage();
+	if (tmpImage == nullptr) return false;
 
-	const fk_Dimension	*bufSize = image->getBufferSize();
+	const fk_Dimension	*bufSize = tmpImage->getBufferSize();
 	if(bufSize == nullptr) return false;
 
 	GLuint			tmpId = GLuint(id);
@@ -122,32 +122,32 @@ bool fk_TextureSampler::BindTexture(bool forceLoad)
 
 	id = int(tmpId);
 
-	GLint wrapModeGl = (getTexWrapMode() == FK_TEX_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP_TO_EDGE;
-	GLint rendMode = (getTexRendMode() == FK_TEX_REND_NORMAL) ? GL_NEAREST : GL_LINEAR;
-	GLint texMode;
+	GLint tmpWrapModeGl = (getTexWrapMode() == FK_TEX_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP_TO_EDGE;
+	GLint tmpRendMode = (getTexRendMode() == FK_TEX_REND_NORMAL) ? GL_NEAREST : GL_LINEAR;
+	GLint tmpTexMode = GL_REPLACE;
 
 	switch (getTextureMode()) {
 	  case FK_TEX_REPLACE:
-		texMode = GL_REPLACE;
+		tmpTexMode = GL_REPLACE;
 		break;
 	  case FK_TEX_MODULATE:
-		texMode = GL_MODULATE;
+		tmpTexMode = GL_MODULATE;
 		break;
 	  case FK_TEX_DECAL:
-		texMode = GL_DECAL;
+		tmpTexMode = GL_DECAL;
 		break;
 	}
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texMode);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapModeGl);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapModeGl);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, rendMode);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, rendMode);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, tmpTexMode);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
 	if (!loaded || forceLoad) {
 		if (samplerSource == FK_TEXTURE_IMAGE) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpImage->getBufPointer());
 		}  else if (samplerSource == FK_COLOR_BUFFER) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);

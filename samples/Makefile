@@ -62,6 +62,13 @@ FKLIB_G		= \
 			-lFK3_base_g \
 			-lFK3_fltkErr_g
 
+FKAUDIO		= -lFK3_audio
+FKAUDIO_G	= -lFK3_audio_g
+FKOPENCL	= -lFK3_OpenCL
+FKOPENCL_G	= -lFK3_OpenCL_g
+FKSHADER	= -lFK3_shader
+FKSHADER_G	= -lFK3_shader_g
+
 FKLINK		= $(FKLIB)
 LINK		= $(FKLINK) $(SYSLIBS)
 TARGET		= target
@@ -171,7 +178,7 @@ mac:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK3_shader -lFK3_OpenCL $(FKLIB)" \
+	"FKLINK = $(FKLIB)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -191,14 +198,14 @@ mac-g:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = -lFK3_OpenCL_g $(FKLIB_G)" \
+	"FKLINK = $(FKLIB_G)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
 mac-gcc:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-5" \
-	"LINKCC = g++-mp-5" \
+	"CC = g++-mp-6" \
+	"LINKCC = g++-mp-6" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
@@ -218,8 +225,8 @@ mac-gcc:
 
 mac-gcc-g:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-5" \
-	"LINKCC = g++-mp-5" \
+	"CC = g++-mp-6" \
+	"LINKCC = g++-mp-6" \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \

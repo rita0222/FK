@@ -122,8 +122,8 @@ mac-g:
 
 mac-gcc:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-5" \
-	"LINKCC = g++-mp-5" \
+	"CC = g++-mp-6" \
+	"LINKCC = g++-mp-6" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -std=c++14 -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -135,8 +135,8 @@ mac-gcc:
 
 mac-gcc-g:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-5" \
-	"LINKCC = g++-mp-5" \
+	"CC = g++-mp-6" \
+	"LINKCC = g++-mp-6" \
 	"OPTOPT = -g" \
 	"SYSOPS = -std=c++14 -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
