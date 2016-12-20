@@ -750,8 +750,6 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 	st					objIndex = 0;
 	fk_Quaternion		tmpQ;
 
-	cout << argFileName << endl;
-
 	// モーション複数化対応
 	int	totalFrame = 0;
 	vector<fk_PerformerMotion>	tmpMotionArray;
