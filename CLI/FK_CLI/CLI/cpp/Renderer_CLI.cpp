@@ -1,4 +1,4 @@
-﻿#include "Renderer_CLI.h"
+﻿#include "Renderer_CLI.H"
 #include <msclr/marshal_cppstd.h>
 #include <GL/gl.h>
 #include <stdlib.h>

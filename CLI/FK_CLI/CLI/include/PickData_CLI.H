@@ -15,6 +15,23 @@ namespace FK_CLI
 		LOOP	//!< 面
 	};
 
+	//! ピックによる取得データを管理するクラス
+	/*!
+	 *	このクラスは、ピックによって得られるデータを参照する機能を提供します。
+	 *	「ピック」とは、マウスなどのポインティングデバイスによって画面上をクリックし、
+	 *	形状要素を選択することです。具体的な利用方法については、
+	 *	fk_Renderer::GetPickData(int, int, int)
+	 *	の解説を参照して下さい。ここでは、得られたデータの参照方法を主に記述します。
+	 *
+	 *	ピックデータは、以下の5種類によって構成されています。
+	 *	- モデル
+	 *	- 位相要素タイプ
+	 *	- 位相要素 ID
+	 *	- 位相の最大深度
+	 *	- 位相の最小深度
+	 *
+	 *	\sa fk_Renderer::GetPickData(int, int, int)
+	 */
 	public ref class fk_PickData {
 	private:
 		fk_Model^				_model;
@@ -22,28 +39,62 @@ namespace FK_CLI
 		int						_id;
 		double					_farDepth;
 		double					_nearDepth;
+
 	public:
-		fk_PickData::fk_PickData(
-			fk_Model^ model, fk_PickedTopologyType^ type,
-			int id, double far, double near);
+		//! コンストラクタ
+		fk_PickData::fk_PickData(fk_Model^, fk_PickedTopologyType^,
+								 int, double, double);
+
+		//! デストラクタ
 		fk_PickData::~fk_PickData();
 
+		//! モデル参照プロパティ
+		/*!
+		 *	ピックデータのモデルインスタンスを参照します。
+		 */
 		property fk_Model^ Model {
 			fk_Model^ get();
 		}
 
+		//! 位相タイプ参照プロパティ
+		/*!
+		 *	ピックデータの位相タイプを参照します。
+		 *	タイプは以下のいずれかとなります。
+		 *	- fk_PickedTopologyType.VERTEX:		頂点
+		 *	- fk_PickedTopologyType.EDGE:		稜線
+		 *	- fk_PickedTopologyType.LOOP:		面
+		 */
 		property fk_PickedTopologyType^ Type {
 			fk_PickedTopologyType^ get();
 		}
 
+		//! 位相 ID 参照プロパティ
+		/*!
+		 *	ピックデータの位相 ID を参照します。
+		 */
 		property int ID {
 			int get();
 		}
 
+		//! 位相最大深度取得プロパティ
+		/*!
+		 *	ピックデータの位相の最大深度を参照します。
+		 *	最大深度とは、その位相を描画した際に画面から最も遠い距離のことを指します。
+		 *	値の範囲は 0～1 です。
+		 */
 		property double FarDepth {
 			double get();
 		}
 
+		//! 位相最小深度取得プロパティ
+		/*!
+		 *	ピックデータの位相の最小深度を参照します。
+		 *	最小深度とは、その位相を描画した際に画面に最も近い距離のことを指します。
+		 *	ピックデータのなかで一番画面に近い要素を選択するときに有効ですが、
+		 *	位相の姿勢や位置関係によっては最小深度だけでは判断できないケースがあります。
+		 *	その場合は FarDepth で得られる値も考慮して処理してください。
+		 *	値の範囲は 0～1 です。
+		 */
 		property double NearDepth {
 			double get();
 		}

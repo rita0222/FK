@@ -6,7 +6,7 @@
 #include <msclr/marshal_cppstd.h>
 #include "Scene_CLI.h"
 #include "Plane_CLI.h"
-#include "PickData_CLI.h"
+#include "PickData_CLI.H"
 
 namespace FK_CLI
 {
