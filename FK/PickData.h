@@ -4,139 +4,139 @@
 #include <vector>
 #include <FK/Base.h>
 
-class fk_Model;
+namespace FK {
+	class fk_Model;
 
-const int FK_PICKDATAMAX	= 512;
+	const int FK_PICKDATAMAX	= 512;
 
-//! ピックによる取得データを管理するクラス
-/*!
- *	このクラスは、ピックによって得られるデータを参照する機能を提供します。
- *	「ピック」とは、マウスなどのポインティングデバイスによって画面上をクリックし、
- *	形状要素を選択することです。具体的な利用方法については、
- *	fk_Window::getPickModel(fk_PickData *, int),
- *	fk_Window::getPickModel(fk_PickData *, int, int, int)
- *	の解説を参照して下さい。ここでは、得られたデータの参照方法を主に記述します。
- *
- *	ピックデータは、以下の5種類によって構成されています。
- *	- モデル
- *	- 位相要素タイプ
- *	- 位相要素 ID
- *	- 位相の最大深度
- *	- 位相の最小深度
- *
- *	\sa fk_Window::getPickModel(fk_PickData *, int),
- *	fk_Window::getPickModel(fk_PickData *, int, int, int),
- *	fk_Model::setPickMode()
- */
-
-class fk_PickData : public fk_BaseObject {
- private:
-	std::vector<fk_Model *>		ModelArray;
-	std::vector<int>			IDArray;
-	std::vector<fk_ObjectType>	typeArray;
-	std::vector<double>			farDepthArray, nearDepthArray;
-
- public:
-	//! コンストラクタ
-	fk_PickData(void);
-
-	//! デストラクタ
-	virtual ~fk_PickData();
-
-	//! コピーコンストラクタ
-	fk_PickData(const fk_PickData &);
-
-	//! 単純代入演算子
-	fk_PickData & operator =(const fk_PickData &);
-
-	//! 取得サイズ参照関数
+	//! ピックによる取得データを管理するクラス
 	/*!
-	 *	fk_Window::getPickModel() によって得られたデータの個数を返します。
+	 *	このクラスは、ピックによって得られるデータを参照する機能を提供します。
+	 *	「ピック」とは、マウスなどのポインティングデバイスによって画面上をクリックし、
+	 *	形状要素を選択することです。具体的な利用方法については、
+	 *	fk_Window::getPickModel(fk_PickData *, int),
+	 *	fk_Window::getPickModel(fk_PickData *, int, int, int)
+	 *	の解説を参照して下さい。ここでは、得られたデータの参照方法を主に記述します。
 	 *
-	 *	\return		取得データ数
+	 *	ピックデータは、以下の5種類によって構成されています。
+	 *	- モデル
+	 *	- 位相要素タイプ
+	 *	- 位相要素 ID
+	 *	- 位相の最大深度
+	 *	- 位相の最小深度
+	 *
+	 *	\sa fk_Window::getPickModel(fk_PickData *, int),
+	 *	fk_Window::getPickModel(fk_PickData *, int, int, int),
+	 *	fk_Model::setPickMode()
 	 */
-	int						getSize(void);
 
-	//! モデル参照関数
-	/*!
-	 *	得られたピックデータのモデルインスタンスのポインタを返します。
-	 *	
-	 *	\param[in]		index
-	 *		データのインデックス。
-	 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
-	 *
-	 *	\return		モデルインスタンスのポインタ
-	 */
-	fk_Model *				getModel(int index);
+	class fk_PickData : public fk_BaseObject {
+	public:
+		//! コンストラクタ
+		fk_PickData(void);
 
-	//! 位相タイプ参照関数
-	/*!
-	 *	得られたピックデータの位相タイプを返します。
-	 *	タイプは以下のいずれかとなります。
-	 *	- FK_VERTEX (頂点)
-	 *	- FK_EDGE	(稜線)
-	 *	- FK_LOOP	(面)
-	 *
-	 *	\param[in]		index
-	 *		データのインデックス。
-	 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
-	 *
-	 *	\return		位相タイプ
-	 */
-	fk_ObjectType			getType(int index);
+		//! デストラクタ
+		virtual ~fk_PickData();
 
-	//! 位相 ID 参照関数
-	/*!
-	 *	得られたピックデータの位相 ID を返します。
-	 *
-	 *	\param[in]		index
-	 *		データのインデックス。
-	 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
-	 *
-	 *	\return		位相ID
-	 */
-	int						getID(int index);
+		//! コピーコンストラクタ
+		fk_PickData(const fk_PickData &);
 
-	//! 位相最大深度取得関数
-	/*!
-	 *	得られたピックデータの位相の最大深度を返します。
-	 *	最大深度とは、その位相を描画した際に画面から最も遠い距離のことを指します。
-	 *	値の範囲は 0～1 です。
-	 *
-	 *	\param[in]		index
-	 *		データのインデックス。
-	 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
-	 *
-	 *	\return		位相noの最大深度
-	 */
-	double					getFarDepth(int index);
+		//! 単純代入演算子
+		fk_PickData & operator =(const fk_PickData &);
 
-	//! 位相最小深度取得関数
-	/*!
-	 *	得られたピックデータの位相の最小深度を返します。
-	 *	最小深度とは、その位相を描画した際に画面に最も近い距離のことを指します。
-	 *	ピックデータのなかで一番画面に近い要素を選択するときに有効ですが、
-	 *	位相の姿勢や位置関係によっては最小深度だけでは判断できないケースがあります。
-	 *	その場合は getFarDepth()で得られる値も考慮して処理してください。
-	 *	値の範囲は 0～1 です。
-	 *
-	 *	\param[in]		index
-	 *		データのインデックス。
-	 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
-	 *
-	 *	\return		位相の最小深度
-	 */
-	double					getNearDepth(int index);
+		//! 取得サイズ参照関数
+		/*!
+		 *	fk_Window::getPickModel() によって得られたデータの個数を返します。
+		 *
+		 *	\return		取得データ数
+		 */
+		int						getSize(void);
+
+		//! モデル参照関数
+		/*!
+		 *	得られたピックデータのモデルインスタンスのポインタを返します。
+		 *	
+		 *	\param[in]		index
+		 *		データのインデックス。
+		 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
+		 *
+		 *	\return		モデルインスタンスのポインタ
+		 */
+		fk_Model *				getModel(int index);
+
+		//! 位相タイプ参照関数
+		/*!
+		 *	得られたピックデータの位相タイプを返します。
+		 *	タイプは以下のいずれかとなります。
+		 *	- FK_VERTEX (頂点)
+		 *	- FK_EDGE	(稜線)
+		 *	- FK_LOOP	(面)
+		 *
+		 *	\param[in]		index
+		 *		データのインデックス。
+		 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
+		 *
+		 *	\return		位相タイプ
+		 */
+		fk_ObjectType			getType(int index);
+
+		//! 位相 ID 参照関数
+		/*!
+		 *	得られたピックデータの位相 ID を返します。
+		 *
+		 *	\param[in]		index
+		 *		データのインデックス。
+		 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
+		 *
+		 *	\return		位相ID
+		 */
+		int						getID(int index);
+
+		//! 位相最大深度取得関数
+		/*!
+		 *	得られたピックデータの位相の最大深度を返します。
+		 *	最大深度とは、その位相を描画した際に画面から最も遠い距離のことを指します。
+		 *	値の範囲は 0～1 です。
+		 *
+		 *	\param[in]		index
+		 *		データのインデックス。
+		 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
+		 *
+		 *	\return		位相noの最大深度
+		 */
+		double					getFarDepth(int index);
+
+		//! 位相最小深度取得関数
+		/*!
+		 *	得られたピックデータの位相の最小深度を返します。
+		 *	最小深度とは、その位相を描画した際に画面に最も近い距離のことを指します。
+		 *	ピックデータのなかで一番画面に近い要素を選択するときに有効ですが、
+		 *	位相の姿勢や位置関係によっては最小深度だけでは判断できないケースがあります。
+		 *	その場合は getFarDepth()で得られる値も考慮して処理してください。
+		 *	値の範囲は 0～1 です。
+		 *
+		 *	\param[in]		index
+		 *		データのインデックス。
+		 *		最初の要素は 0 で、最後の要素は getSize() から 1 を引いた数となります。
+		 *
+		 *	\return		位相の最小深度
+		 */
+		double					getNearDepth(int index);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	void					ClearData(void);
-	void					PushData(fk_Model *, int, fk_ObjectType, double, double);
+		void					ClearData(void);
+		void					PushData(fk_Model *, int, fk_ObjectType, double, double);
 
 #endif
 
-};
-
+	private:
+		std::vector<fk_Model *>		ModelArray;
+		std::vector<int>			IDArray;
+		std::vector<fk_ObjectType>	typeArray;
+		std::vector<double>			farDepthArray, nearDepthArray;
+	};
+}
 #endif // !__FK_PICKDATA_HEADER__
 
 

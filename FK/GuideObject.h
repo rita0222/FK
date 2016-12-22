@@ -4,16 +4,17 @@
 #include <FK/Line.h>
 #include <FK/Model.h>
 
-typedef unsigned int fk_GuideMode;
+namespace FK {
+	typedef unsigned int fk_GuideMode;
 
-const fk_GuideMode FK_NO_GUIDE = 0x0000;
-const fk_GuideMode FK_AXIS_X   = 0x0001;
-const fk_GuideMode FK_AXIS_Y   = 0x0002;
-const fk_GuideMode FK_AXIS_Z   = 0x0004;
-const fk_GuideMode FK_GRID_XZ  = 0x0008;
-const fk_GuideMode FK_GRID_XY  = 0x0010;
-const fk_GuideMode FK_GRID_YZ  = 0x0020;
-const fk_GuideMode FK_ALL_GUIDE
+	const fk_GuideMode FK_NO_GUIDE = 0x0000;
+	const fk_GuideMode FK_AXIS_X   = 0x0001;
+	const fk_GuideMode FK_AXIS_Y   = 0x0002;
+	const fk_GuideMode FK_AXIS_Z   = 0x0004;
+	const fk_GuideMode FK_GRID_XZ  = 0x0008;
+	const fk_GuideMode FK_GRID_XY  = 0x0010;
+	const fk_GuideMode FK_GRID_YZ  = 0x0020;
+	const fk_GuideMode FK_ALL_GUIDE
 	= FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ | FK_GRID_XY | FK_GRID_YZ;
 
 #define FKUT_NO_GUIDE	FK_NO_GUIDE
@@ -25,134 +26,133 @@ const fk_GuideMode FK_ALL_GUIDE
 #define FKUT_GRID_YZ	FK_GRID_YZ
 #define FKUT_ALL_GUIDE	FK_ALL_GUIDE
 
-class fk_Scene;
+	class fk_Scene;
 
-//! 座標系可視化支援クラス
-/*!
- *	このクラスは、座標系を可視化を支援するためのクラスで、
- *	座標軸やグリッド(方眼状の線の集合)を表示する機能を提供します。
- *	fk_AppWindow では内部で利用しています。
- *
- *	座標軸については、x 軸が赤、y 軸が緑、z 軸が青となり、
- *	すべて原点より正方向に伸びています。
- *	グリッドの線色は黒となります。
- *
- *	\sa fk_Model, fk_Scene, fk_AppWindow
- */
-
-class fk_GuideObject {
-private:
-	fk_Line			grid;
-	fk_Model		gridModel[3];
-	fk_Line			axis[3];
-	fk_Model		axisModel[3];
-
-	int	num;
-	double scale;
-
-public:
-	//! コンストラクタ
-	fk_GuideObject(void);
-	//! デストラクタ
-	~fk_GuideObject(void);
-
-	//! 座標軸ライン幅設定関数
+	//! 座標系可視化支援クラス
 	/*!
-	 *	座標軸を表す線分の太さを設定します。
-	 *	デフォルトでは 4 になっています。
+	 *	このクラスは、座標系を可視化を支援するためのクラスで、
+	 *	座標軸やグリッド(方眼状の線の集合)を表示する機能を提供します。
+	 *	fk_AppWindow では内部で利用しています。
 	 *
-	 *	\param[in]	width	座標軸線の太さ。
+	 *	座標軸については、x 軸が赤、y 軸が緑、z 軸が青となり、
+	 *	すべて原点より正方向に伸びています。
+	 *	グリッドの線色は黒となります。
 	 *
-	 *	\sa setGridWidth()
+	 *	\sa fk_Model, fk_Scene, fk_AppWindow
 	 */
-	void	setAxisWidth(double width);
 
-	//! グリッド構成ライン幅設定関数
-	/*!
-	 *	グリッドを校正する線分の太さを設定します。
-	 *	デフォルトでは 1 になっています。
-	 *
-	 *	\param[in]	width	グリッド線の太さ。
-	 *
-	 *	\sa setAxisWidth()
-	 */
-	void	setGridWidth(double width);
+	class fk_GuideObject {
+	public:
+		//! コンストラクタ
+		fk_GuideObject(void);
+		//! デストラクタ
+		~fk_GuideObject(void);
 
-	//! グリッド間隔設定関数
-	/*!
-	 *	グリッドの線同士の間隔を設定します。
-	 *	デフォルトでは 5 になっています。
-	 *
-	 *	\param[in]	scale	グリッド線同士の間隔。
-	 *
-	 *	\sa setNum()
-	 */
-	void	setScale(double scale);
+		//! 座標軸ライン幅設定関数
+		/*!
+		 *	座標軸を表す線分の太さを設定します。
+		 *	デフォルトでは 4 になっています。
+		 *
+		 *	\param[in]	width	座標軸線の太さ。
+		 *
+		 *	\sa setGridWidth()
+		 */
+		void	setAxisWidth(double width);
 
-	//! グリッド分割数設定関数
-	/*!
-	 *	グリッドの分割数を指定します。
-	 *	ここでの分割数とは、グリッドの縦、横それぞれの領域の分割数を表します。
-	 *	分割数を \f$ n \f$ としたとき、
-	 *	グリッド領域全体の分割数は \f$ n^2 \f$ となり、
-	 *	線分の本数は \f$ 2(n+1) \f$ となります。
-	 *	デフォルトでは 20 になっています。
-	 *
-	 *	\param[in]	num		分割数。
-	 *
-	 *	\sa setScale()
-	 */
-	void	setNum(int num);
+		//! グリッド構成ライン幅設定関数
+		/*!
+		 *	グリッドを校正する線分の太さを設定します。
+		 *	デフォルトでは 1 になっています。
+		 *
+		 *	\param[in]	width	グリッド線の太さ。
+		 *
+		 *	\sa setAxisWidth()
+		 */
+		void	setGridWidth(double width);
 
-	//! 座標系ガイド適用モデル設定関数
-	/*!
-	 *	座標軸やグリッドを、この関数で指定したモデルの子モデルとします。
-	 *	これにより、任意モデルのローカル座標系に追従した座標軸やグリッドを表示することができます。
-	 *
-	 *	\param[in]	model	座標系表示を追従させたいモデルインスタンスのポインタ。
-	 *
-	 *	\sa entryScene()
-	 */
-	void	setParent(fk_Model *model);
+		//! グリッド間隔設定関数
+		/*!
+		 *	グリッドの線同士の間隔を設定します。
+		 *	デフォルトでは 5 になっています。
+		 *
+		 *	\param[in]	scale	グリッド線同士の間隔。
+		 *
+		 *	\sa setNum()
+		 */
+		void	setScale(double scale);
 
-	//! シーン登録関数
-	/*!
-	 *	座標軸ならびにグリッドをシーンに登録します。
-	 *	登録を制御できるのは x,y,z 軸ならびに xy, yz, xz 平面グリッドの6種類となります。
-	 *	複数の要素を同時に登録するには、
-	 *	対応する値をビット論理和演算子によって並べることで実現できます。
-	 *	例えば x 軸, z 軸、xz 面グリッドを表示したい場合は以下の様になります。
-	 *
-	 *		fk_GuideObject	gobj;
-	 *
-	 *		gobj.entryScene(scene, FK_AXIS_X | FK_AXIS_Z | FK_GRID_XZ);
-	 *
-	 *	\param[in]	scene		登録するシーンインスタンスのポインタ。
-	 *	\param[in]	mode		登録する要素。
-	 *
-	 *	\sa removeScene()
-	 */
-	void	entryScene(fk_Scene *scene,
-					   fk_GuideMode mode = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
+		//! グリッド分割数設定関数
+		/*!
+		 *	グリッドの分割数を指定します。
+		 *	ここでの分割数とは、グリッドの縦、横それぞれの領域の分割数を表します。
+		 *	分割数を \f$ n \f$ としたとき、
+		 *	グリッド領域全体の分割数は \f$ n^2 \f$ となり、
+		 *	線分の本数は \f$ 2(n+1) \f$ となります。
+		 *	デフォルトでは 20 になっています。
+		 *
+		 *	\param[in]	num		分割数。
+		 *
+		 *	\sa setScale()
+		 */
+		void	setNum(int num);
 
-	//! シーン登録解除関数
-	/*!
-	 *	entryScene() によって登録した要素を解除します。
-	 *	要素の複数指定方法は entryScene() と同様です。
-	 *
-	 *	\param[in]	scene		登録解除するシーンインスタンスのポインタ。
-	 *	\param[in]	mode		登録解除する要素。
-	 *
-	 *	\sa entryScene()
-	 */
-	void	removeScene(fk_Scene *scene, fk_GuideMode mode = FK_NO_GUIDE);
+		//! 座標系ガイド適用モデル設定関数
+		/*!
+		 *	座標軸やグリッドを、この関数で指定したモデルの子モデルとします。
+		 *	これにより、任意モデルのローカル座標系に追従した座標軸やグリッドを表示することができます。
+		 *
+		 *	\param[in]	model	座標系表示を追従させたいモデルインスタンスのポインタ。
+		 *
+		 *	\sa entryScene()
+		 */
+		void	setParent(fk_Model *model);
+
+		//! シーン登録関数
+		/*!
+		 *	座標軸ならびにグリッドをシーンに登録します。
+		 *	登録を制御できるのは x,y,z 軸ならびに xy, yz, xz 平面グリッドの6種類となります。
+		 *	複数の要素を同時に登録するには、
+		 *	対応する値をビット論理和演算子によって並べることで実現できます。
+		 *	例えば x 軸, z 軸、xz 面グリッドを表示したい場合は以下の様になります。
+		 *
+		 *		fk_GuideObject	gobj;
+		 *
+		 *		gobj.entryScene(scene, FK_AXIS_X | FK_AXIS_Z | FK_GRID_XZ);
+		 *
+		 *	\param[in]	scene		登録するシーンインスタンスのポインタ。
+		 *	\param[in]	mode		登録する要素。
+		 *
+		 *	\sa removeScene()
+		 */
+		void	entryScene(fk_Scene *scene,
+						   fk_GuideMode mode = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
+
+		//! シーン登録解除関数
+		/*!
+		 *	entryScene() によって登録した要素を解除します。
+		 *	要素の複数指定方法は entryScene() と同様です。
+		 *
+		 *	\param[in]	scene		登録解除するシーンインスタンスのポインタ。
+		 *	\param[in]	mode		登録解除する要素。
+		 *
+		 *	\sa entryScene()
+		 */
+		void	removeScene(fk_Scene *scene, fk_GuideMode mode = FK_NO_GUIDE);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	void	SetFinalizeMode(void);
+		void	SetFinalizeMode(void);
 #endif
 
-};
+	private:
+		fk_Line			grid;
+		fk_Model		gridModel[3];
+		fk_Line			axis[3];
+		fk_Model		axisModel[3];
 
+		int	num;
+		double scale;
+	};
+}
 #endif //!__FK_GUIDE_OBJECT_HEADER__
 
 /****************************************************************************

@@ -6,53 +6,50 @@
 #include <FK/Matrix.h>
 #include <FK/Texture.h>
 
-class fk_IFSTexture;
+namespace FK {
 
-enum fk_D3DX_VecMode {
-	FK_D3DX_V_MODE,
-	FK_D3DX_T_MODE
-};
+	class fk_IFSTexture;
 
-class fk_D3DXShapeParser : public fk_ParserBase {
+	enum fk_D3DX_VecMode {
+		FK_D3DX_V_MODE,
+		FK_D3DX_T_MODE
+	};
 
- private:
+	class fk_D3DXShapeParser : public fk_ParserBase {
+	public:
+		fk_D3DXShapeParser(void);
+		virtual ~fk_D3DXShapeParser();
 
-	std::vector<fk_Vector>				vData, optVData;
-	std::vector< std::vector<int> >		fData, optFData;
-	std::vector<fk_TexCoord>			tData, optTData;
-	std::vector<int>					mData;
-	std::vector<int>					vMapData;
-	fk_Matrix							frameMatrix;
+		bool			SetFrameMatrix(fk_TreeData *);
+		bool			ReadMeshData(fk_TreeData *, std::ifstream &);
+		bool			ReadVectorData(std::ifstream &, fk_D3DX_VecMode);
+		bool			ReadMaterialData(std::ifstream &);
+		bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
+		bool			GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
+		bool			ReadFaceData(std::ifstream &);
+		bool			ReadTextureData(std::ifstream &);
 
- public:
-	fk_D3DXShapeParser(void);
-	virtual ~fk_D3DXShapeParser();
+		void			SetIFSTexCoord(fk_IFSTexture *);
+		void			SetQuadFace(int);
+		void			OptimizeData(int);
+		bool			MakeMesh(fk_ParserData *, bool);
 
-	bool			SetFrameMatrix(fk_TreeData *);
-	bool			ReadMeshData(fk_TreeData *, std::ifstream &);
-	bool			ReadVectorData(std::ifstream &, fk_D3DX_VecMode);
-	bool			ReadMaterialData(std::ifstream &);
-	bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
-	bool			GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
-	bool			ReadFaceData(std::ifstream &);
-	bool			ReadTextureData(std::ifstream &);
+		int				GetOrgVSize(void);
+		int				GetOptVSize(void);
+		int				GetVMap(int);
 
-	void			SetIFSTexCoord(fk_IFSTexture *);
-	void			SetQuadFace(int);
-	void			OptimizeData(int);
-	bool			MakeMesh(fk_ParserData *, bool);
+		void			Clear(void);
+		void			Print(void);
 
-	int				GetOrgVSize(void);
-	int				GetOptVSize(void);
-	int				GetVMap(int);
-
-	void			Clear(void);
-	void			Print(void);
-};
-
-
-
-
+	private:
+		std::vector<fk_Vector>				vData, optVData;
+		std::vector< std::vector<int> >		fData, optFData;
+		std::vector<fk_TexCoord>			tData, optTData;
+		std::vector<int>					mData;
+		std::vector<int>					vMapData;
+		fk_Matrix							frameMatrix;
+	};
+}
 
 #endif // !__FK_D3DX_SHAPE_PARSER_HEADER__
 

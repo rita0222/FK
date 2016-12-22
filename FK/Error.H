@@ -23,42 +23,45 @@
 #define FK_EXTERN extern
 #endif
 
-enum fk_ErrorMode {
-	FK_ERR_NONE,
-	FK_ERR_INTERACTIVE,
-	FK_ERR_QUEUE,
-	FK_ERR_CONSOLE_INTERACTIVE,
-	FK_ERR_CONSOLE_QUEUE,
-	FK_ERR_OUT_CONSOLE_INTERACTIVE,
-	FK_ERR_OUT_CONSOLE_QUEUE,
-	FK_ERR_BROWSER_INTERACTIVE,
-	FK_ERR_BROWSER_QUEUE,
-	FK_ERR_FILE
-};
+namespace FK {
 
-class fk_ErrorBrowser {
-public:
-	fk_ErrorBrowser(void);
-	virtual ~fk_ErrorBrowser();
+	enum fk_ErrorMode {
+		FK_ERR_NONE,
+		FK_ERR_INTERACTIVE,
+		FK_ERR_QUEUE,
+		FK_ERR_CONSOLE_INTERACTIVE,
+		FK_ERR_CONSOLE_QUEUE,
+		FK_ERR_OUT_CONSOLE_INTERACTIVE,
+		FK_ERR_OUT_CONSOLE_QUEUE,
+		FK_ERR_BROWSER_INTERACTIVE,
+		FK_ERR_BROWSER_QUEUE,
+		FK_ERR_FILE
+	};
 
-	void		PutBrowser(const std::string &);
-	void		PutAlert(const std::string &);
-};
+	class fk_ErrorBrowser {
+	public:
+		fk_ErrorBrowser(void);
+		virtual ~fk_ErrorBrowser();
 
-FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
-FK_EXTERN fk_ErrorMode		fk_GetErrorMode(void);
-FK_EXTERN void				fk_PutError(const std::string,
-										const std::string, const int);
-FK_EXTERN void				fk_PutError(const std::string, const std::string,
-										const int, const std::string);
-FK_EXTERN void				fk_PutError(const std::string);
-FK_EXTERN bool				fk_ErrorPrint(void);
-FK_EXTERN bool				fk_SetErrorFile(std::string);
+		void		PutBrowser(const std::string &);
+		void		PutAlert(const std::string &);
+	};
+
+	FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
+	FK_EXTERN fk_ErrorMode		fk_GetErrorMode(void);
+	FK_EXTERN void				fk_PutError(const std::string,
+											const std::string, const int);
+	FK_EXTERN void				fk_PutError(const std::string, const std::string,
+											const int, const std::string);
+	FK_EXTERN void				fk_PutError(const std::string);
+	FK_EXTERN bool				fk_ErrorPrint(void);
+	FK_EXTERN bool				fk_SetErrorFile(std::string);
 
 #ifndef FK_CLI_CODE
-FK_EXTERN void				fk_Printf(const char *, ...);
-FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
+	FK_EXTERN void				fk_Printf(const char *, ...);
+	FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
 #endif
+}
 
 #endif // !__FK_ERROR_HEADER__
 

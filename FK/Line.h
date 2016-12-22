@@ -3,141 +3,142 @@
 
 #include <FK/Solid.h>
 
-//! 有向線分を生成、管理するクラス
-/*!
- *	このクラスは、形状として有向線分を制御する機能を提供します。
- *	1つのインスタンスで、複数の有向線分の制御が可能です。
- *	特に断りがない場合、「線分」は有向線分のことを指すものとします。
- *
- *	本クラスの実質的な意義は、 fk_Solid が持つ汎用的な形状操作機能のうち、
- *	線分を生成、管理することに特化していることです。
- *	基底クラスの機能を利用することは可能ですが、
- *	位相操作を伴う変形をした場合、
- *	本クラスのメンバ関数が正しく動作しない可能性があります。
- *
- *	\sa	fk_Solid, fk_Model, fk_Shape
- */
-
-class fk_Line: public fk_Solid {
- public:
-
-	//! コンストラクタ
+namespace FK {
+	//! 有向線分を生成、管理するクラス
 	/*!
-	 *	引数として vector による fk_Vector 型の配列を与えることによって、
-	 *	最初から線分を生成することができます。
+	 *	このクラスは、形状として有向線分を制御する機能を提供します。
+	 *	1つのインスタンスで、複数の有向線分の制御が可能です。
+	 *	特に断りがない場合、「線分」は有向線分のことを指すものとします。
 	 *
-	 *	\param[in]	array
-	 *		端点位置ベクトルの配列。
-	 *		線分 ID が i となる線分の端点が、
-	 *		array[2*i] と array[2*i+1] となるように配置してください。
-	 *		線分の端点配列。nullptr が代入された場合、線分を生成しません。
+	 *	本クラスの実質的な意義は、 fk_Solid が持つ汎用的な形状操作機能のうち、
+	 *	線分を生成、管理することに特化していることです。
+	 *	基底クラスの機能を利用することは可能ですが、
+	 *	位相操作を伴う変形をした場合、
+	 *	本クラスのメンバ関数が正しく動作しない可能性があります。
+	 *
+	 *	\sa	fk_Solid, fk_Model, fk_Shape
 	 */
-	fk_Line(std::vector<fk_Vector> *array = nullptr);
 
-	//! デストラクタ
-	virtual ~fk_Line();
+	class fk_Line: public fk_Solid {
+	public:
 
-	//! 単独線分端点位置設定関数
-	/*!
-	 *	この関数は、現在の線分本数によって挙動が異なります。
-	 *	- 線分が生成されていない場合、vertexID の値は無視され、
-	 *		pos を両端点とする縮退した線分が生成されます。
-	 *	- 線分が1本のみの場合は、その線分の端点位置を pos に変更します。
-	 *		vertexID が 0 の場合始点、1 の場合終点を変更します。
-	 *		vertexID がその他の値だった場合は、何も起こりません。
-	 *	- 線分が2本以上あった場合は、何も起こりません。
-	 *
-	 *	\param[in]	vertexID	端点ID。(線分が1本のときのみ有効)
-	 *	\param[in]	pos			端点の位置ベクトル
-	 *
-	 *	\return
-	 *		なんらかの形で端点位置の設定がなされれば true、
-	 *		そうでない場合は false を返します。
-	 */
-	bool	setVertex(int vertexID, fk_Vector pos);
+		//! コンストラクタ
+		/*!
+		 *	引数として vector による fk_Vector 型の配列を与えることによって、
+		 *	最初から線分を生成することができます。
+		 *
+		 *	\param[in]	array
+		 *		端点位置ベクトルの配列。
+		 *		線分 ID が i となる線分の端点が、
+		 *		array[2*i] と array[2*i+1] となるように配置してください。
+		 *		線分の端点配列。nullptr が代入された場合、線分を生成しません。
+		 */
+		fk_Line(std::vector<fk_Vector> *array = nullptr);
 
-	//! 任意線分端点位置設定関数
-	/*!
-	 *	生成されている任意の線分の端点位置を変更します。
-	 *
-	 *	\param[in]		lineID
-	 *		制御する線分ID。線分IDは、最初に生成したものが0で、
-	 *		以降生成順に 1 ずつ増加したものになります。
-	 *		存在しない線分 ID を指定した場合は何も起こりません。
-	 *
-	 *	\param[in]		vertexID
-	 *		始点の場合 0、終点の場合 1 を入力します。
-	 *		その他の値を指定した場合は何も起こりません。
-	 *
-	 *	\param[in]		pos		端点の位置ベクトル
-	 *
-	 *	\return
-	 *		端点位置の設定がなされれば true、
-	 *		そうでない場合は false を返します。
-	 */
-	bool	setVertex(int lineID, int vertexID, fk_Vector pos);
+		//! デストラクタ
+		virtual ~fk_Line();
 
-	//! 単独線分生成関数
-	/*!
-	 *	1本の線分を生成します。
-	 *	入力する fk_Vector 型の配列は、長さが 2 以上でなければなりません。
-	 *	この関数を呼んだ場合、既にあった線分はすべて破棄されます。
-	 *
-	 *	\param[in]	array
-	 *		fk_Vector 型の配列。array[0] が始点、array[1] が終点となります。
-	 */
-	void	setVertex(fk_Vector *array);
+		//! 単独線分端点位置設定関数
+		/*!
+		 *	この関数は、現在の線分本数によって挙動が異なります。
+		 *	- 線分が生成されていない場合、vertexID の値は無視され、
+		 *		pos を両端点とする縮退した線分が生成されます。
+		 *	- 線分が1本のみの場合は、その線分の端点位置を pos に変更します。
+		 *		vertexID が 0 の場合始点、1 の場合終点を変更します。
+		 *		vertexID がその他の値だった場合は、何も起こりません。
+		 *	- 線分が2本以上あった場合は、何も起こりません。
+		 *
+		 *	\param[in]	vertexID	端点ID。(線分が1本のときのみ有効)
+		 *	\param[in]	pos			端点の位置ベクトル
+		 *
+		 *	\return
+		 *		なんらかの形で端点位置の設定がなされれば true、
+		 *		そうでない場合は false を返します。
+		 */
+		bool	setVertex(int vertexID, fk_Vector pos);
 
-	//! 複数線分生成関数
-	/*!
-	 *	複数の線分を生成します。
-	 * 	この関数を呼んだ場合、既にあった線分はすべて破棄されます。
-	 *
-	 *	\param[in]	array
-	 *		端点位置ベクトルの配列。
-	 *		線分 ID が i となる線分の端点が、
-	 *		array[2*i] と array[2*i+1] となるように配置してください。
-	 */
-	void	setVertex(std::vector<fk_Vector> *array);
+		//! 任意線分端点位置設定関数
+		/*!
+		 *	生成されている任意の線分の端点位置を変更します。
+		 *
+		 *	\param[in]		lineID
+		 *		制御する線分ID。線分IDは、最初に生成したものが0で、
+		 *		以降生成順に 1 ずつ増加したものになります。
+		 *		存在しない線分 ID を指定した場合は何も起こりません。
+		 *
+		 *	\param[in]		vertexID
+		 *		始点の場合 0、終点の場合 1 を入力します。
+		 *		その他の値を指定した場合は何も起こりません。
+		 *
+		 *	\param[in]		pos		端点の位置ベクトル
+		 *
+		 *	\return
+		 *		端点位置の設定がなされれば true、
+		 *		そうでない場合は false を返します。
+		 */
+		bool	setVertex(int lineID, int vertexID, fk_Vector pos);
 
-	//! 単独線分追加関数1
-	/*!
-	 *	線分を追加します。
-	 *	
-	 *	\param[in]	array
-	 *		端点位置ベクトルの配列。
-	 *		array[0] に始点、array[1] に終点となるように配置してください。
-	 */
-	void	pushLine(fk_Vector *array);
+		//! 単独線分生成関数
+		/*!
+		 *	1本の線分を生成します。
+		 *	入力する fk_Vector 型の配列は、長さが 2 以上でなければなりません。
+		 *	この関数を呼んだ場合、既にあった線分はすべて破棄されます。
+		 *
+		 *	\param[in]	array
+		 *		fk_Vector 型の配列。array[0] が始点、array[1] が終点となります。
+		 */
+		void	setVertex(fk_Vector *array);
 
-	//! 単独線分追加関数2
-	/*!
-	 *	線分を追加します。
-	 *	
-	 *	\param[in]	startPos		始点位置ベクトル
-	 *	\param[in]	endPos			終点位置ベクトル
-	 */
-	void	pushLine(fk_Vector startPos, fk_Vector endPos);
+		//! 複数線分生成関数
+		/*!
+		 *	複数の線分を生成します。
+		 * 	この関数を呼んだ場合、既にあった線分はすべて破棄されます。
+		 *
+		 *	\param[in]	array
+		 *		端点位置ベクトルの配列。
+		 *		線分 ID が i となる線分の端点が、
+		 *		array[2*i] と array[2*i+1] となるように配置してください。
+		 */
+		void	setVertex(std::vector<fk_Vector> *array);
 
-	//! 線分端点位置変更関数
-	/*!
-	 *	線分の端点位置を変更します。
-	 *
-	 *	\param[in]	lineID
-	 *		制御する線分ID。線分IDは、最初に生成したものが0で、
-	 *		以降生成順に 1 ずつ増加したものになります。
-	 *		存在しない線分 ID を指定した場合は何も起こりません。
-	 *
-	 *	\param[in]	startPos		始点位置ベクトル
-	 *	\param[in]	endPos			終点位置ベクトル
-	 *
-	 *	\return
-	 *		端点位置の設定がなされれば true、
-	 *		そうでない場合は false を返します。
-	 */
-	bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
-};
+		//! 単独線分追加関数1
+		/*!
+		 *	線分を追加します。
+		 *	
+		 *	\param[in]	array
+		 *		端点位置ベクトルの配列。
+		 *		array[0] に始点、array[1] に終点となるように配置してください。
+		 */
+		void	pushLine(fk_Vector *array);
 
+		//! 単独線分追加関数2
+		/*!
+		 *	線分を追加します。
+		 *	
+		 *	\param[in]	startPos		始点位置ベクトル
+		 *	\param[in]	endPos			終点位置ベクトル
+		 */
+		void	pushLine(fk_Vector startPos, fk_Vector endPos);
+
+		//! 線分端点位置変更関数
+		/*!
+		 *	線分の端点位置を変更します。
+		 *
+		 *	\param[in]	lineID
+		 *		制御する線分ID。線分IDは、最初に生成したものが0で、
+		 *		以降生成順に 1 ずつ増加したものになります。
+		 *		存在しない線分 ID を指定した場合は何も起こりません。
+		 *
+		 *	\param[in]	startPos		始点位置ベクトル
+		 *	\param[in]	endPos			終点位置ベクトル
+		 *
+		 *	\return
+		 *		端点位置の設定がなされれば true、
+		 *		そうでない場合は false を返します。
+		 */
+		bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
+	};
+}
 #endif // !__FK_LINE_HEADER__
 
 /****************************************************************************

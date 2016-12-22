@@ -3,395 +3,396 @@
 
 #include <FK/Base.h>
 
-class fk_Attribute_Data;
+namespace FK {
 
-//!	形状や位相要素の属性を付与、取得するクラス
-/*!
- *	このクラスは、 fk_Block や fk_Solid などの形状を表すインスタンスや、
- *	fk_Solid による形状中の各位相要素に対して属性を付与する機能を提供します。
- *	属性はハッシュマップによるもので、キーとして int か std::string の 2 種、
- *	値として int、double、std::string の 3 種を使用することができます。
- */
+	class fk_Attribute_Data;
 
-class fk_Attribute : public fk_BaseObject {
- private:
-	fk_Attribute_Data		*attr_data;
-
-	bool	IsExistData(void) const;
-
- public:
-
-	//! コンストラクタ
-	fk_Attribute(void);
-
-	//! デストラクタ
-	virtual ~fk_Attribute();
-
-	//! \name 属性設定用関数
-	//@{
-	//! キーが int 型、値が int 型である属性設定関数
+	//!	形状や位相要素の属性を付与、取得するクラス
 	/*!
-	 *	キーを int 型、値を int 型とする属性を設定します。
-	 *	
-	 *	\param[in] key		キー。ただし、負数は受け付けません。
-	 *	\param[in] value 	値。
-	 *
-	 *	\return
-	 *		既にそのキーで属性が存在していた場合 true を、
-	 *		存在していなかった場合は false を返します。
-	 *
-	 *	\sa getAttrII(), existAttrII(), deleteAttrII()
+	 *	このクラスは、 fk_Block や fk_Solid などの形状を表すインスタンスや、
+	 *	fk_Solid による形状中の各位相要素に対して属性を付与する機能を提供します。
+	 *	属性はハッシュマップによるもので、キーとして int か std::string の 2 種、
+	 *	値として int、double、std::string の 3 種を使用することができます。
 	 */
-	bool	setAttrII(const int key, const int value);
 
-	//! キーが int 型、値が double 型である属性設定関数
-	/*!
-	 *	キーを int 型、値を double 型とする属性を設定します。
-	 *	
-	 *	\param[in] key 		キー。ただし、負数は受け付けません。
-	 *	\param[in] value 	値。
-	 *
-	 *	\return
-	 *		既にそのキーで属性が存在していた場合 true を、
-	 *		存在していなかった場合は false を返します。
-	 *
-	 *	\sa getAttrID(), existAttrID(), deleteAttrID()
-	 */
-	bool	setAttrID(const int key, const double value);
+	class fk_Attribute : public fk_BaseObject {
+	public:
 
-	//! キーが int 型、値が std::string 型である属性設定関数
-	/*!
-	 *	キーを int 型、値を std::string 型とする属性を設定します。
-	 *
-	 *	\param[in] key		キー。ただし、負数は受け付けません。
-	 *	\param[in] value 	値。
-	 *
-	 *	\return
-	 *		既にそのキーで属性が存在していた場合 true を、
-	 *		存在していなかった場合は false を返します。
-	 *
-	 *	\sa getAttrIS(), existAttrIS(), deleteAttrIS()
-	 */
-	bool	setAttrIS(const int key, const std::string value);
+		//! コンストラクタ
+		fk_Attribute(void);
 
-	//! キーが std::string 型、値が int 型である属性設定関数
-	/*!
-	 *	キーを std::string 型、値を int 型とする属性を設定します。
-	 *	
-	 *	\param[in] key		キー。
-	 *	\param[in] value 	値。
-	 *
-	 *	\return
-	 *		既にそのキーで属性が存在していた場合 true を、
-	 *		存在していなかった場合は false を返します。
-	 *
-	 *	\sa getAttrSI(), existAttrSI(), deleteAttrSI()
-	 */
-	bool	setAttrSI(const std::string key, const int value);
+		//! デストラクタ
+		virtual ~fk_Attribute();
 
-	//! キーが std::string 型、値が double 型である属性設定関数
-	/*!
-	 *	キーを std::string 型、値を double 型とする属性を設定します。
-	 *	
-	 *	\param[in] key		キー。
-	 *	\param[in] value 	値。
-	 *
-	 *	\return
-	 *		既にそのキーで属性が存在していた場合 true を、
-	 *		存在していなかった場合は false を返します。
-	 *
-	 *	\sa getAttrSD(), existAttrSD(), deleteAttrSD()
-	 */
-	bool	setAttrSD(const std::string key, const double value);
+		//! \name 属性設定用関数
+		//@{
+		//! キーが int 型、値が int 型である属性設定関数
+		/*!
+		 *	キーを int 型、値を int 型とする属性を設定します。
+		 *	
+		 *	\param[in] key		キー。ただし、負数は受け付けません。
+		 *	\param[in] value 	値。
+		 *
+		 *	\return
+		 *		既にそのキーで属性が存在していた場合 true を、
+		 *		存在していなかった場合は false を返します。
+		 *
+		 *	\sa getAttrII(), existAttrII(), deleteAttrII()
+		 */
+		bool	setAttrII(const int key, const int value);
 
-	//! キーが std::string 型、値が std::string 型である属性設定関数
-	/*!
-	 *	キーを std::string 型、値を std::string 型とする属性を設定します。
-	 *	
-	 *	\param[in] key		キー。
-	 *	\param[in] value 	値。
-	 *
-	 *	\return
-	 *		既にそのキーで属性が存在していた場合 true を、
-	 *		存在していなかった場合は false を返します。
-	 *
-	 *	\sa getAttrSS(), existAttrSS(), deleteAttrSS()
-	 */
-	bool	setAttrSS(const std::string key, const std::string value);
-	//@}
+		//! キーが int 型、値が double 型である属性設定関数
+		/*!
+		 *	キーを int 型、値を double 型とする属性を設定します。
+		 *	
+		 *	\param[in] key 		キー。ただし、負数は受け付けません。
+		 *	\param[in] value 	値。
+		 *
+		 *	\return
+		 *		既にそのキーで属性が存在していた場合 true を、
+		 *		存在していなかった場合は false を返します。
+		 *
+		 *	\sa getAttrID(), existAttrID(), deleteAttrID()
+		 */
+		bool	setAttrID(const int key, const double value);
 
-	//! \name 属性取得用関数
-	//@{
+		//! キーが int 型、値が std::string 型である属性設定関数
+		/*!
+		 *	キーを int 型、値を std::string 型とする属性を設定します。
+		 *
+		 *	\param[in] key		キー。ただし、負数は受け付けません。
+		 *	\param[in] value 	値。
+		 *
+		 *	\return
+		 *		既にそのキーで属性が存在していた場合 true を、
+		 *		存在していなかった場合は false を返します。
+		 *
+		 *	\sa getAttrIS(), existAttrIS(), deleteAttrIS()
+		 */
+		bool	setAttrIS(const int key, const std::string value);
 
-	//! キーが int 型、値が int 型である属性参照関数
-	/*!
-	 *	キーが int 型、値が int 方である属性を参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return 属性値。もしその属性が存在しなかった場合、0 を返します。
-	 *
-	 *	\sa setAttrII(), existAttrII(), deleteAttrII()
-	 */
-	int	getAttrII(const int key) const;
+		//! キーが std::string 型、値が int 型である属性設定関数
+		/*!
+		 *	キーを std::string 型、値を int 型とする属性を設定します。
+		 *	
+		 *	\param[in] key		キー。
+		 *	\param[in] value 	値。
+		 *
+		 *	\return
+		 *		既にそのキーで属性が存在していた場合 true を、
+		 *		存在していなかった場合は false を返します。
+		 *
+		 *	\sa getAttrSI(), existAttrSI(), deleteAttrSI()
+		 */
+		bool	setAttrSI(const std::string key, const int value);
 
-	//! キーが int 型、値が double 型である属性参照関数
-	/*!
-	 *	キーが int 型、値が double 型である属性を参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return 属性値。もしその属性が存在しなかった場合、0.0 を返します。
-	 *
-	 *	\sa setAttrID(), existAttrID(), deleteAttrID()
-	 *
-	 */
-	double	getAttrID(const int key) const;
+		//! キーが std::string 型、値が double 型である属性設定関数
+		/*!
+		 *	キーを std::string 型、値を double 型とする属性を設定します。
+		 *	
+		 *	\param[in] key		キー。
+		 *	\param[in] value 	値。
+		 *
+		 *	\return
+		 *		既にそのキーで属性が存在していた場合 true を、
+		 *		存在していなかった場合は false を返します。
+		 *
+		 *	\sa getAttrSD(), existAttrSD(), deleteAttrSD()
+		 */
+		bool	setAttrSD(const std::string key, const double value);
 
-	//! キーが int 型、値が std::string 型である属性参照関数
-	/*!
-	 *	キーが int 型、値が std::string 型である属性を参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return 属性値。もしその属性が存在しなかった場合、空文字列を返します。
-	 *
-	 *	\sa setAttrIS(), existAttrIS(), deleteAttrIS()
-	 */
-	std::string	getAttrIS(const int key) const;
+		//! キーが std::string 型、値が std::string 型である属性設定関数
+		/*!
+		 *	キーを std::string 型、値を std::string 型とする属性を設定します。
+		 *	
+		 *	\param[in] key		キー。
+		 *	\param[in] value 	値。
+		 *
+		 *	\return
+		 *		既にそのキーで属性が存在していた場合 true を、
+		 *		存在していなかった場合は false を返します。
+		 *
+		 *	\sa getAttrSS(), existAttrSS(), deleteAttrSS()
+		 */
+		bool	setAttrSS(const std::string key, const std::string value);
+		//@}
 
-	//! キーが std::string 型、値が int 型である属性参照関数
-	/*!
-	 *	キーが std::string 型、値が int 型である属性を参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return 属性値。もしその属性が存在しなかった場合、0 を返します。
-	 *
-	 *	\sa setAttrSI(), existAttrSI(), deleteAttrSI()
-	 */
-	int				getAttrSI(const std::string key) const;
+		//! \name 属性取得用関数
+		//@{
 
-	//! キーが std::string 型、値が double 型である属性参照関数
-	/*!
-	 *	キーが std::string 型、値が double 型である属性を参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return 属性値。もしその属性が存在しなかった場合、0.0 を返します。
-	 *
-	 *	\sa setAttrSD(), existAttrSD(), deleteAttrSD()
-	 */
-	double			getAttrSD(const std::string key) const;
+		//! キーが int 型、値が int 型である属性参照関数
+		/*!
+		 *	キーが int 型、値が int 方である属性を参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return 属性値。もしその属性が存在しなかった場合、0 を返します。
+		 *
+		 *	\sa setAttrII(), existAttrII(), deleteAttrII()
+		 */
+		int	getAttrII(const int key) const;
 
-	//! キーが std::string 型、値が std::string 型である属性参照関数
-	/*!
-	 *	キーが std::string 型、値が std::string 型である属性を参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return 属性値。もしその属性が存在しなかった場合、空文字列を返します。
-	 *
-	 *	\sa setAttrSS(), existAttrSS(), deleteAttrSS()
-	 */
-	std::string		getAttrSS(const std::string key) const;
-	//@}
+		//! キーが int 型、値が double 型である属性参照関数
+		/*!
+		 *	キーが int 型、値が double 型である属性を参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return 属性値。もしその属性が存在しなかった場合、0.0 を返します。
+		 *
+		 *	\sa setAttrID(), existAttrID(), deleteAttrID()
+		 *
+		 */
+		double	getAttrID(const int key) const;
 
-	//! \name 属性存在参照関数
-	//@{
+		//! キーが int 型、値が std::string 型である属性参照関数
+		/*!
+		 *	キーが int 型、値が std::string 型である属性を参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return 属性値。もしその属性が存在しなかった場合、空文字列を返します。
+		 *
+		 *	\sa setAttrIS(), existAttrIS(), deleteAttrIS()
+		 */
+		std::string	getAttrIS(const int key) const;
 
-	//! キーが int 型、値が int 型である属性存在参照関数
-	/*!
-	 *	キーが int 型、値が int 型である属性に対し、
-	 *	指定したキーによる属性が既に存在しているかどうかを参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在している場合 true を、
-	 *		存在しない場合 false を返します。
-	 *
-	 *	\sa setAttrII(), getAttrII(), deleteAttrII()
-	 */
-	bool	existAttrII(const int key) const;
+		//! キーが std::string 型、値が int 型である属性参照関数
+		/*!
+		 *	キーが std::string 型、値が int 型である属性を参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return 属性値。もしその属性が存在しなかった場合、0 を返します。
+		 *
+		 *	\sa setAttrSI(), existAttrSI(), deleteAttrSI()
+		 */
+		int				getAttrSI(const std::string key) const;
 
-	//! キーが int 型、値が double 型である属性存在参照関数
-	/*!
-	 *	キーが int 型、値が double 型である属性に対し、
-	 *	指定したキーによる属性が既に存在しているかどうかを参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在している場合 true を、
-	 *		存在しない場合 false を返します。
-	 *
-	 *	\sa setAttrID(), getAttrID(), deleteAttrID()
-	 */
-	bool	existAttrID(const int key) const;
+		//! キーが std::string 型、値が double 型である属性参照関数
+		/*!
+		 *	キーが std::string 型、値が double 型である属性を参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return 属性値。もしその属性が存在しなかった場合、0.0 を返します。
+		 *
+		 *	\sa setAttrSD(), existAttrSD(), deleteAttrSD()
+		 */
+		double			getAttrSD(const std::string key) const;
 
-	//! キーが int 型、値が std::string 型である属性存在参照関数
-	/*!
-	 *	キーが int 型、値が std::string 型である属性に対し、
-	 *	指定したキーによる属性が既に存在しているかどうかを参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在している場合 true を、
-	 *		存在しない場合 false を返します。
-	 *
-	 *	\sa setAttrIS(), getAttrIS(), deleteAttrIS()
-	 */
-	bool	existAttrIS(const int key) const;
+		//! キーが std::string 型、値が std::string 型である属性参照関数
+		/*!
+		 *	キーが std::string 型、値が std::string 型である属性を参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return 属性値。もしその属性が存在しなかった場合、空文字列を返します。
+		 *
+		 *	\sa setAttrSS(), existAttrSS(), deleteAttrSS()
+		 */
+		std::string		getAttrSS(const std::string key) const;
+		//@}
 
-	//! キーが std::string 型、値が int 型である属性存在参照関数
-	/*!
-	 *	キーが std::string 型、値が int 型である属性に対し、
-	 *	指定したキーによる属性が既に存在しているかどうかを参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在している場合 true を、
-	 *		存在しない場合 false を返します。
-	 *
-	 *	\sa setAttrSI(), getAttrSI(), deleteAttrSI()
-	 */
-	bool	existAttrSI(const std::string key) const;
+		//! \name 属性存在参照関数
+		//@{
 
-	//! キーが std::string 型、値が double 型である属性存在参照関数
-	/*!
-	 *	キーが std::string 型、値が double 型である属性に対し、
-	 *	指定したキーによる属性が既に存在しているかどうかを参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在している場合 true を、
-	 *		存在しない場合 false を返します。
-	 *
-	 *	\sa setAttrSD(), getAttrSD(), deleteAttrSD()
-	 */
-	bool	existAttrSD(const std::string key) const;
+		//! キーが int 型、値が int 型である属性存在参照関数
+		/*!
+		 *	キーが int 型、値が int 型である属性に対し、
+		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在している場合 true を、
+		 *		存在しない場合 false を返します。
+		 *
+		 *	\sa setAttrII(), getAttrII(), deleteAttrII()
+		 */
+		bool	existAttrII(const int key) const;
 
-	//! キーが std::string 型、値が std::string 型である属性存在参照関数
-	/*!
-	 *	キーが std::string 型、値が std::string 型である属性に対し、
-	 *	指定したキーによる属性が既に存在しているかどうかを参照します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在している場合 true を、
-	 *		存在しない場合 false を返します。
-	 *
-	 *	\sa setAttrSS(), getAttrSS(), deleteAttrSS()
-	 */
-	bool	existAttrSS(const std::string key) const;
-	//@}
+		//! キーが int 型、値が double 型である属性存在参照関数
+		/*!
+		 *	キーが int 型、値が double 型である属性に対し、
+		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在している場合 true を、
+		 *		存在しない場合 false を返します。
+		 *
+		 *	\sa setAttrID(), getAttrID(), deleteAttrID()
+		 */
+		bool	existAttrID(const int key) const;
 
-	//! \name 属性消去関数
-	//@{
+		//! キーが int 型、値が std::string 型である属性存在参照関数
+		/*!
+		 *	キーが int 型、値が std::string 型である属性に対し、
+		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在している場合 true を、
+		 *		存在しない場合 false を返します。
+		 *
+		 *	\sa setAttrIS(), getAttrIS(), deleteAttrIS()
+		 */
+		bool	existAttrIS(const int key) const;
 
-	//! キーが int 型、値が int 型である属性消去関数
-	/*!
-	 *	キーが int 型、値が int 型である属性に対し、
-	 *	指定されたキーの属性を消去します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在していた場合 true を、
-	 *		存在していなかった場合 false を返します。
-	 *
-	 *	\sa setAttrII(), getAttrII(), existAttrII()
-	 */
-	bool	deleteAttrII(const int key);
+		//! キーが std::string 型、値が int 型である属性存在参照関数
+		/*!
+		 *	キーが std::string 型、値が int 型である属性に対し、
+		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在している場合 true を、
+		 *		存在しない場合 false を返します。
+		 *
+		 *	\sa setAttrSI(), getAttrSI(), deleteAttrSI()
+		 */
+		bool	existAttrSI(const std::string key) const;
 
-	//! キーが int 型、値が double 型である属性消去関数
-	/*!
-	 *	キーが int 型、値が double 型である属性に対し、
-	 *	指定されたキーの属性を消去します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在していた場合 true を、
-	 *		存在していなかった場合 false を返します。
-	 *
-	 *	\sa setAttrID(), getAttrID(), existAttrID()
-	 */
-	bool	deleteAttrID(const int key);
+		//! キーが std::string 型、値が double 型である属性存在参照関数
+		/*!
+		 *	キーが std::string 型、値が double 型である属性に対し、
+		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在している場合 true を、
+		 *		存在しない場合 false を返します。
+		 *
+		 *	\sa setAttrSD(), getAttrSD(), deleteAttrSD()
+		 */
+		bool	existAttrSD(const std::string key) const;
 
-	//! キーが int 型、値が std::string 型である属性消去関数
-	/*!
-	 *	キーが int 型、値が std::string 型である属性に対し、
-	 *	指定されたキーの属性を消去します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在していた場合 true を、
-	 *		存在していなかった場合 false を返します。
-	 *
-	 *	\sa setAttrIS(), getAttrIS(), existAttrIS()
-	 */
-	bool	deleteAttrIS(const int key);
+		//! キーが std::string 型、値が std::string 型である属性存在参照関数
+		/*!
+		 *	キーが std::string 型、値が std::string 型である属性に対し、
+		 *	指定したキーによる属性が既に存在しているかどうかを参照します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在している場合 true を、
+		 *		存在しない場合 false を返します。
+		 *
+		 *	\sa setAttrSS(), getAttrSS(), deleteAttrSS()
+		 */
+		bool	existAttrSS(const std::string key) const;
+		//@}
 
-	//! キーが std::string 型、値が int 型である属性消去関数
-	/*!
-	 *	キーが std::string 型、値が int 型である属性に対し、
-	 *	指定されたキーの属性を消去します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在していた場合 true を、
-	 *		存在していなかった場合 false を返します。
-	 *
-	 *	\sa setAttrSI(), getAttrSI(), existAttrSI()
-	 */
-	bool	deleteAttrSI(const std::string key);
+		//! \name 属性消去関数
+		//@{
 
-	//! キーが std::string 型、値が double 型である属性消去関数
-	/*!
-	 *	キーが std::string 型、値が double 型である属性に対し、
-	 *	指定されたキーの属性を消去します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在していた場合 true を、
-	 *		存在していなかった場合 false を返します。
-	 *
-	 *	\sa setAttrSD(), getAttrSD(), existAttrSD()
-	 */
-	bool	deleteAttrSD(const std::string key);
+		//! キーが int 型、値が int 型である属性消去関数
+		/*!
+		 *	キーが int 型、値が int 型である属性に対し、
+		 *	指定されたキーの属性を消去します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在していた場合 true を、
+		 *		存在していなかった場合 false を返します。
+		 *
+		 *	\sa setAttrII(), getAttrII(), existAttrII()
+		 */
+		bool	deleteAttrII(const int key);
 
-	//! キーが std::string 型、値が std::string 型である属性消去関数
-	/*!
-	 *	キーが std::string 型、値が std::string 型である属性に対し、
-	 *	指定されたキーの属性を消去します。
-	 *
-	 *	\param[in] key キー
-	 *
-	 *	\return
-	 *		もしその属性が存在していた場合 true を、
-	 *		存在していなかった場合 false を返します。
-	 *
-	 *	\sa setAttrSS(), getAttrSS(), existAttrSS()
-	 */
-	bool	deleteAttrSS(const std::string key);
-	//@}
+		//! キーが int 型、値が double 型である属性消去関数
+		/*!
+		 *	キーが int 型、値が double 型である属性に対し、
+		 *	指定されたキーの属性を消去します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在していた場合 true を、
+		 *		存在していなかった場合 false を返します。
+		 *
+		 *	\sa setAttrID(), getAttrID(), existAttrID()
+		 */
+		bool	deleteAttrID(const int key);
+
+		//! キーが int 型、値が std::string 型である属性消去関数
+		/*!
+		 *	キーが int 型、値が std::string 型である属性に対し、
+		 *	指定されたキーの属性を消去します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在していた場合 true を、
+		 *		存在していなかった場合 false を返します。
+		 *
+		 *	\sa setAttrIS(), getAttrIS(), existAttrIS()
+		 */
+		bool	deleteAttrIS(const int key);
+
+		//! キーが std::string 型、値が int 型である属性消去関数
+		/*!
+		 *	キーが std::string 型、値が int 型である属性に対し、
+		 *	指定されたキーの属性を消去します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在していた場合 true を、
+		 *		存在していなかった場合 false を返します。
+		 *
+		 *	\sa setAttrSI(), getAttrSI(), existAttrSI()
+		 */
+		bool	deleteAttrSI(const std::string key);
+
+		//! キーが std::string 型、値が double 型である属性消去関数
+		/*!
+		 *	キーが std::string 型、値が double 型である属性に対し、
+		 *	指定されたキーの属性を消去します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在していた場合 true を、
+		 *		存在していなかった場合 false を返します。
+		 *
+		 *	\sa setAttrSD(), getAttrSD(), existAttrSD()
+		 */
+		bool	deleteAttrSD(const std::string key);
+
+		//! キーが std::string 型、値が std::string 型である属性消去関数
+		/*!
+		 *	キーが std::string 型、値が std::string 型である属性に対し、
+		 *	指定されたキーの属性を消去します。
+		 *
+		 *	\param[in] key キー
+		 *
+		 *	\return
+		 *		もしその属性が存在していた場合 true を、
+		 *		存在していなかった場合 false を返します。
+		 *
+		 *	\sa setAttrSS(), getAttrSS(), existAttrSS()
+		 */
+		bool	deleteAttrSS(const std::string key);
+		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	void	AttrInit(void);
+		void	AttrInit(void);
 
 #endif
 
-};
+	private:
+		fk_Attribute_Data		*attr_data;
+		bool	IsExistData(void) const;
+	};
+}
 
 #endif // !__FK_ATTRIBUTE_HEADER__
 

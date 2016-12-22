@@ -1,8 +1,4 @@
-﻿#ifdef FK_D3D
-#include "./D3D/Engine.h"
-#else
-
-#ifndef __FK_GRAPHICS_ENGINE_HEADER__
+﻿#ifndef __FK_GRAPHICS_ENGINE_HEADER__
 #define __FK_GRAPHICS_ENGINE_HEADER__
 
 // for FK Header.
@@ -13,137 +9,133 @@
 #include <FK/Image.h>
 #include <FK/DList.h>
 
-class fk_PointDraw;
-class fk_LineDraw;
-class fk_FaceDraw;
-class fk_TextureDraw;
-class fk_DisplayLink;
-class fk_ProjectBase;
-class fk_Scene;
-class fk_Plane;
+namespace FK {
 
-class fk_GraphicsEngine {
+	class fk_PointDraw;
+	class fk_LineDraw;
+	class fk_FaceDraw;
+	class fk_TextureDraw;
+	class fk_DisplayLink;
+	class fk_ProjectBase;
+	class fk_Scene;
+	class fk_Plane;
 
- private:
-
-	fk_PointDraw				*pointDraw;
-	fk_LineDraw					*lineDraw;
-	fk_FaceDraw					*faceDraw;
-	fk_TextureDraw				*textureDraw;
-
-	unsigned int				winID;
-	fk_DisplayLink				*curDLink;
-	int							dLinkStatus;
-	int							dLinkID;
-	int							wSize;
-	int							hSize;
-	GLuint						selectBuf[FK_PICKDATAMAX*5];
-	bool						arrayState;
-	bool						resizeFlag;
-	bool						textureMode;
-	fk_BlendFactor				srcFactor, dstFactor;
-	bool						depthRead, depthWrite;
-
-	std::vector<fk_Model *>		modelArray;
-
-	fk_Matrix					viewMat;
-	GLint						viewArray[4];
-
-	std::vector<fk_ImType>		snapBuffer;
+	class fk_GraphicsEngine {
 
 
-	void				DrawObjs(bool);
-	void				DrawModel(fk_Model *, bool, bool);
-	void				RecalcModelView(void);
-	void				RecalcInhModelView(const fk_Model *);
-	void				CurrentDispLinkDraw(void);
-	bool				DefineLight(void);
-	void				LoadModelMatrix(fk_Model *);
-	void				LoadAABBMatrix(fk_Model *);
+	public:
+		fk_GraphicsEngine(void);
+		virtual ~fk_GraphicsEngine();
 
-	void				DrawShapeObj(fk_Model *, bool, bool);
-	void				DrawBoundaryObj(fk_Model *, bool);
+		void				Init(int, int);
 
-	void				SetViewPort(void);
-	void				SetProjection(const fk_ProjectBase *);
-	void				SetDefaultProjection(void);
+		void				SetScene(fk_Scene *);
+		void				ResizeWindow(int, int);
 
-	void				ApplySceneParameter(bool);
+		bool				GetProjectPosition(double, double,
+											   fk_Plane *, fk_Vector *);
+		bool				GetProjectPosition(double, double,
+											   double, fk_Vector *);
+		bool				GetWindowPosition(fk_Vector, fk_Vector *);
+		void				GetPickData(fk_PickData *, int, int, int);
 
-	void				InitFogStatus(fk_Scene *);
 
-	bool				IsInsideWindow(void);
+		void				SetOGLPointerMode(bool);
+		bool				GetOGLPointerMode(void);
 
-	unsigned long		GetNow(void);
+		void				SetOGLTextureBindMode(bool);
+		bool				GetOGLTextureBindMode(void);
 
-	void				ViewMatCalc(fk_Matrix *);
+		bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
 
-	bool				GetViewLinePos(double, double,
-									   fk_Vector *, fk_Vector *);
+		void				ClearTextureMemory(void);
+		unsigned long		GetUsingTextureMemory(void);
+		void				OpenGLInit(void);
 
-	void				SetStereoViewPort(fk_StereoChannel);
-	void				RecalcStereoModelView(fk_StereoChannel);
-	void				DrawStereoObjs(bool);
+		void				SetPickViewPort(int, int, int);
+		void				Draw(bool);
 
-	void				SetBlendMode(fk_Model *model);
-	void				SetDepthMode(fk_DepthMode mode);
+		void				StereoDrawPrep(fk_StereoChannel);
+		void				StereoDrawMain(fk_StereoChannel);
 
+	private:
+
+		fk_PointDraw				*pointDraw;
+		fk_LineDraw					*lineDraw;
+		fk_FaceDraw					*faceDraw;
+		fk_TextureDraw				*textureDraw;
+
+		unsigned int				winID;
+		fk_DisplayLink				*curDLink;
+		int							dLinkStatus;
+		int							dLinkID;
+		int							wSize;
+		int							hSize;
+		GLuint						selectBuf[FK_PICKDATAMAX*5];
+		bool						arrayState;
+		bool						resizeFlag;
+		bool						textureMode;
+		fk_BlendFactor				srcFactor, dstFactor;
+		bool						depthRead, depthWrite;
+
+		std::vector<fk_Model *>		modelArray;
+
+		fk_Matrix					viewMat;
+		GLint						viewArray[4];
+
+		std::vector<fk_ImType>		snapBuffer;
+
+
+		void				DrawObjs(bool);
+		void				DrawModel(fk_Model *, bool, bool);
+		void				RecalcModelView(void);
+		void				RecalcInhModelView(const fk_Model *);
+		void				CurrentDispLinkDraw(void);
+		bool				DefineLight(void);
+		void				LoadModelMatrix(fk_Model *);
+		void				LoadAABBMatrix(fk_Model *);
+
+		void				DrawShapeObj(fk_Model *, bool, bool);
+		void				DrawBoundaryObj(fk_Model *, bool);
+
+		void				SetViewPort(void);
+		void				SetProjection(const fk_ProjectBase *);
+		void				SetDefaultProjection(void);
+
+		void				ApplySceneParameter(bool);
+
+		void				InitFogStatus(fk_Scene *);
+
+		bool				IsInsideWindow(void);
+
+		unsigned long		GetNow(void);
+
+		void				ViewMatCalc(fk_Matrix *);
+
+		bool				GetViewLinePos(double, double,
+										   fk_Vector *, fk_Vector *);
+
+		void				SetStereoViewPort(fk_StereoChannel);
+		void				RecalcStereoModelView(fk_StereoChannel);
+		void				DrawStereoObjs(bool);
+
+		void				SetBlendMode(fk_Model *model);
+		void				SetDepthMode(fk_DepthMode mode);
 
 #ifdef NO_GLU_LIBRARY
+		void				gluLookAt(GLdouble, GLdouble, GLdouble,
+									  GLdouble, GLdouble, GLdouble,
+									  GLdouble, GLdouble, GLdouble);
 
-	void				gluLookAt(GLdouble, GLdouble, GLdouble,
-								  GLdouble, GLdouble, GLdouble,
-								  GLdouble, GLdouble, GLdouble);
+		void				gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
 
-	void				gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
-
-	void				gluPickMatrix(GLdouble, GLdouble, GLdouble, GLdouble,
-									  const GLint [4]);
-
+		void				gluPickMatrix(GLdouble, GLdouble, GLdouble, GLdouble,
+										  const GLint [4]);
 #endif
-
- public:
-	fk_GraphicsEngine(void);
-	virtual ~fk_GraphicsEngine();
-
-	void				Init(int, int);
-
-	void				SetScene(fk_Scene *);
-	void				ResizeWindow(int, int);
-
-
-	bool				GetProjectPosition(double, double,
-										   fk_Plane *, fk_Vector *);
-	bool				GetProjectPosition(double, double,
-										   double, fk_Vector *);
-	bool				GetWindowPosition(fk_Vector, fk_Vector *);
-	void				GetPickData(fk_PickData *, int, int, int);
-
-
-	void				SetOGLPointerMode(bool);
-	bool				GetOGLPointerMode(void);
-
-	void				SetOGLTextureBindMode(bool);
-	bool				GetOGLTextureBindMode(void);
-
-	// bool				SnapImage(string, fk_ImageType = FK_IMAGE_BMP, fk_SnapProcMode = FK_SNAP_GL_FRONT);
-	bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
-
-	void				ClearTextureMemory(void);
-	unsigned long		GetUsingTextureMemory(void);
-	void				OpenGLInit(void);
-
-	void				SetPickViewPort(int, int, int);
-	void				Draw(bool);
-
-	void				StereoDrawPrep(fk_StereoChannel);
-	void				StereoDrawMain(fk_StereoChannel);
-};
-
+	};
+}
 
 #endif /* !__FK_GRAPHICS_ENGINE_HEADER__ */
-
-#endif /* !D3D_BRANCH */
 
 /****************************************************************************
  *

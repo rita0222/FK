@@ -5,184 +5,186 @@
 #include <FK/Palette.h>
 #include <FK/Attribute.h>
 
-//! 形状データの具体的なデータ構造を表す列挙型
-enum fk_RealShapeType {
-	FK_SHAPE_IFS,		//!<	fk_IndexFaceSetベース
-	FK_SHAPE_SOLID,		//!<	fk_Solidベース
-	FK_SHAPE_TEXTURE,	//!<	fk_Textureベース
-	FK_SHAPE_POINT,		//!<	fk_Pointベース
-	FK_SHAPE_LIGHT,		//!<	fk_Lightベース
-	FK_SHAPE_OTHER		//!<	その他
-};
+namespace FK {
+	//! 形状データの具体的なデータ構造を表す列挙型
+	enum fk_RealShapeType {
+		FK_SHAPE_IFS,		//!<	fk_IndexFaceSetベース
+		FK_SHAPE_SOLID,		//!<	fk_Solidベース
+		FK_SHAPE_TEXTURE,	//!<	fk_Textureベース
+		FK_SHAPE_POINT,		//!<	fk_Pointベース
+		FK_SHAPE_LIGHT,		//!<	fk_Lightベース
+		FK_SHAPE_OTHER		//!<	その他
+	};
 
-//! 形状用基底クラス
-/*!
- *	このクラスは、形状を表すクラスの基底クラスです。
- *	クラス自体の主な機能は、マテリアルやパレットの管理です。
- *
- *	\sa fk_Material, fk_Palette
- */
-
-class fk_Shape: public fk_Attribute {
-
- private:
-	fk_Palette			*palette;
-	fk_MaterialMode		materialMode;
-
- public:
-	//! コンストラクタ
-	fk_Shape(fk_ObjectType = FK_SHAPE);
-	//! デストラクタ
-	virtual ~fk_Shape();
-
-	//!	形状データ構造取得関数
+	//! 形状用基底クラス
 	/*!
+	 *	このクラスは、形状を表すクラスの基底クラスです。
+	 *	クラス自体の主な機能は、マテリアルやパレットの管理です。
 	 *
-	 *	格納されているインスタンスの具体的なデータ構造を取得します。
-	 *
-	 *	\return		格納データ構造
+	 *	\sa fk_Material, fk_Palette
 	 */
-	fk_RealShapeType				getRealShapeType(void);
 
-	//! パレット取得関数
-	/*!
-	 *	パレットのアドレスを取得します。
-	 *
-	 *	\return	パレット
-	 */
-	fk_Palette *					getPaletteData(void);
+	class fk_Shape: public fk_Attribute {
 
-	//! パレット初期化関数
-	/*!
-	 *	現在設定されているパレットを初期化します。
-	 *
-	 *	\sa fk_Palette::clearMaterial()
-	 */
-	void							clearMaterial(void);
+	public:
+		//! コンストラクタ
+		fk_Shape(fk_ObjectType = FK_SHAPE);
+		//! デストラクタ
+		virtual ~fk_Shape();
 
-	//! オブジェクトマテリアル ID 設定関数
-	/*!
-	 *	オブジェクトマテリアルの ID を設定します。
-	 *
-	 *	\param[in]	ID		オブジェクトマテリアルの ID。
-	 *
-	 *	\sa getObjMaterialID()
-	 *	\sa fk_Palette::setObjMaterialID()
-	 */
-	void							setObjMaterialID(int ID);
+		//!	形状データ構造取得関数
+		/*!
+		 *
+		 *	格納されているインスタンスの具体的なデータ構造を取得します。
+		 *
+		 *	\return		格納データ構造
+		 */
+		fk_RealShapeType				getRealShapeType(void);
 
-	//! マテリアル追加関数
-	/*!
-	 *	パレットにマテリアルを新たに追加します。
-	 *
-	 *	\param[in]	mat		追加するマテリアル変数のアドレス
-	 *
-	 *	\sa fk_Palette::pushPalette(), setPalette()
-	 */
-	void							pushPalette(fk_Material &mat);
+		//! パレット取得関数
+		/*!
+		 *	パレットのアドレスを取得します。
+		 *
+		 *	\return	パレット
+		 */
+		fk_Palette *					getPaletteData(void);
 
-	//! マテリアル設定関数
-	/*!
-	 *	パレットに対し、対応する ID でマテリアルを設定します。
-	 *	詳細な仕様は fk_Palette::setPalette() を参照して下さい。
-	 *
-	 *	\param[in]	mat		設定するマテリアル
-	 *	\param[in]	ID		マテリアルID
-	 *
-	 *	\sa fk_Palette::setPalette(), pushPalette()
-	 */
-	void							setPalette(fk_Material &mat, int ID);
+		//! パレット初期化関数
+		/*!
+		 *	現在設定されているパレットを初期化します。
+		 *
+		 *	\sa fk_Palette::clearMaterial()
+		 */
+		void							clearMaterial(void);
 
-	//! マテリアルモード設定関数
-	/*!
-	 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
-	 *	マテリアルの採用は、以下のような優先順で決定します。
-	 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
-	 *		モデルのマテリアルが採用されます。
-	 *		FK_NONE_MODE の場合は描画されません。
-	 *		FK_PARENT_MODE の場合は以下の条件に従います。
-	 *		(fk_Model::setMaterialMode() を参照して下さい。)
-	 *	-# fk_Shape の派生クラスにてマテリアルモードが
-	 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
-	 *		FK_NONE_MODE の場合は描画されません。
-	 *		FK_PARENT_MODE の場合は以下の条件に従います。
-	 *	-# 各位相要素でのマテリアルモードが、
-	 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
-	 *		FK_NONE_MODE の場合は描画されません。
-	 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
-	 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
-	 *
-	 *	\param[in]	mode
-	 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
-	 *		\arg FK_CHILD_MODE
-	 *		\arg FK_PARENT_MODE
-	 *		\arg FK_NONE_MODE
-	 *
-	 *	\sa getMaterialMode(), fk_Model::setMaterialMode(), fk_TopologyMaterial::setElemMaterialMode()
-	 */
-	void							setMaterialMode(fk_MaterialMode mode);
+		//! オブジェクトマテリアル ID 設定関数
+		/*!
+		 *	オブジェクトマテリアルの ID を設定します。
+		 *
+		 *	\param[in]	ID		オブジェクトマテリアルの ID。
+		 *
+		 *	\sa getObjMaterialID()
+		 *	\sa fk_Palette::setObjMaterialID()
+		 */
+		void							setObjMaterialID(int ID);
+
+		//! マテリアル追加関数
+		/*!
+		 *	パレットにマテリアルを新たに追加します。
+		 *
+		 *	\param[in]	mat		追加するマテリアル変数のアドレス
+		 *
+		 *	\sa fk_Palette::pushPalette(), setPalette()
+		 */
+		void							pushPalette(fk_Material &mat);
+
+		//! マテリアル設定関数
+		/*!
+		 *	パレットに対し、対応する ID でマテリアルを設定します。
+		 *	詳細な仕様は fk_Palette::setPalette() を参照して下さい。
+		 *
+		 *	\param[in]	mat		設定するマテリアル
+		 *	\param[in]	ID		マテリアルID
+		 *
+		 *	\sa fk_Palette::setPalette(), pushPalette()
+		 */
+		void							setPalette(fk_Material &mat, int ID);
+
+		//! マテリアルモード設定関数
+		/*!
+		 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
+		 *	マテリアルの採用は、以下のような優先順で決定します。
+		 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
+		 *		モデルのマテリアルが採用されます。
+		 *		FK_NONE_MODE の場合は描画されません。
+		 *		FK_PARENT_MODE の場合は以下の条件に従います。
+		 *		(fk_Model::setMaterialMode() を参照して下さい。)
+		 *	-# fk_Shape の派生クラスにてマテリアルモードが
+		 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
+		 *		FK_NONE_MODE の場合は描画されません。
+		 *		FK_PARENT_MODE の場合は以下の条件に従います。
+		 *	-# 各位相要素でのマテリアルモードが、
+		 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
+		 *		FK_NONE_MODE の場合は描画されません。
+		 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
+		 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
+		 *
+		 *	\param[in]	mode
+		 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
+		 *		\arg FK_CHILD_MODE
+		 *		\arg FK_PARENT_MODE
+		 *		\arg FK_NONE_MODE
+		 *
+		 *	\sa getMaterialMode(), fk_Model::setMaterialMode(), fk_TopologyMaterial::setElemMaterialMode()
+		 */
+		void							setMaterialMode(fk_MaterialMode mode);
 
 
-	//! マテリアルモード取得関数
-	/*!
-	 *	マテリアルモードを取得します。
-	 *
-	 *	\return マテリアルモード
-	 *
-	 *	\sa setMaterialMode()
-	 */
-	fk_MaterialMode					getMaterialMode(void);
+		//! マテリアルモード取得関数
+		/*!
+		 *	マテリアルモードを取得します。
+		 *
+		 *	\return マテリアルモード
+		 *
+		 *	\sa setMaterialMode()
+		 */
+		fk_MaterialMode					getMaterialMode(void);
 
-	//! オブジェクトマテリアル ID 取得関数
-	/*!
-	 *	現在設定されているオブジェクトマテリアルの ID を取得します。
-	 *
-	 *	\return オブジェクトマテリアルの ID
-	 *
-	 *	\sa setObjMaterialID(), fk_Palette::getObjMaterialID()
-	 */
-	int								getObjMaterialID(void);
+		//! オブジェクトマテリアル ID 取得関数
+		/*!
+		 *	現在設定されているオブジェクトマテリアルの ID を取得します。
+		 *
+		 *	\return オブジェクトマテリアルの ID
+		 *
+		 *	\sa setObjMaterialID(), fk_Palette::getObjMaterialID()
+		 */
+		int								getObjMaterialID(void);
 
-	//! パレット中のマテリアル格納数取得関数
-	/*!
-	 *	現在パレットに格納されているマテリアルの数を返します。
-	 *
-	 *	\return マテリアル数
-	 *
-	 *	\sa pushPalette(), setPalette(), getMaterial(), fk_Palette::getPaletteSize()
-	 */
-	int								getPaletteSize(void);
+		//! パレット中のマテリアル格納数取得関数
+		/*!
+		 *	現在パレットに格納されているマテリアルの数を返します。
+		 *
+		 *	\return マテリアル数
+		 *
+		 *	\sa pushPalette(), setPalette(), getMaterial(), fk_Palette::getPaletteSize()
+		 */
+		int								getPaletteSize(void);
 
-	//! マテリアル取得関数
-	/*!
-	 *	指定された id に対応するマテリアルのポインタを返します。
-	 *	id に対応するマテリアルがパレット中にない場合は、
-	 * 	デフォルト状態のマテリアルインスタンスへのポインタを返します。
-	 *
-	 *	\return マテリアルのポインタ
-	 *
-	 *	\sa pushPalette(), setPalette(), getPaletteSize(), fk_Palette::getMaterial()
-	 */
-	fk_Material *					getMaterial(int id);
+		//! マテリアル取得関数
+		/*!
+		 *	指定された id に対応するマテリアルのポインタを返します。
+		 *	id に対応するマテリアルがパレット中にない場合は、
+		 * 	デフォルト状態のマテリアルインスタンスへのポインタを返します。
+		 *
+		 *	\return マテリアルのポインタ
+		 *
+		 *	\sa pushPalette(), setPalette(), getPaletteSize(), fk_Palette::getMaterial()
+		 */
+		fk_Material *					getMaterial(int id);
 
-	//! マテリアル配列取得関数
-	/*!
-	 *	パレットに格納されているマテリアルを、
-	 *	STL の vector 配列へのポインタとして返します。
-	 *
-	 *	\return マテリアル配列
-	 *
-	 *	\sa getMaterial(), fk_Palette::getMaterialVector()
-	 */
-	std::vector<fk_Material> *		getMaterialVector(void);
+		//! マテリアル配列取得関数
+		/*!
+		 *	パレットに格納されているマテリアルを、
+		 *	STL の vector 配列へのポインタとして返します。
+		 *
+		 *	\return マテリアル配列
+		 *
+		 *	\sa getMaterial(), fk_Palette::getMaterialVector()
+		 */
+		std::vector<fk_Material> *		getMaterialVector(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	void							SetPaletteData(fk_Palette *pal);
-	void							setPaletteData(fk_Palette *pal);
+		void							SetPaletteData(fk_Palette *pal);
+		void							setPaletteData(fk_Palette *pal);
 
 #endif
-};
+
+	private:
+		fk_Palette			*palette;
+		fk_MaterialMode		materialMode;
+	};
+}
 
 #endif // !__FK_SHAPEBASE_HEADER__
 

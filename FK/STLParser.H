@@ -3,20 +3,21 @@
 
 #include <FK/ParserBase.H>
 
-class fk_STLParser : public fk_ParserBase {
- private:
+namespace FK {
+	class fk_STLParser : public fk_ParserBase {
+	public:
+		fk_STLParser(void);
+		virtual ~fk_STLParser();
 
-	bool	CheckSTLFile(std::ifstream *);
-	bool	MakeSTLIFSet(std::ifstream *, std::vector<fk_Vector> *,
-						 std::vector< std::vector<int> > *, bool);
+		bool	ReadSTLFile(std::string, bool, double = 0.0);
 
- public:
-	fk_STLParser(void);
-	virtual ~fk_STLParser();
+	private:
 
-	bool	ReadSTLFile(std::string, bool, double = 0.0);
-};
-
+		bool	CheckSTLFile(std::ifstream *);
+		bool	MakeSTLIFSet(std::ifstream *, std::vector<fk_Vector> *,
+							 std::vector< std::vector<int> > *, bool);
+	};
+}
 #endif // !__FK_STL_PARSER_HEADER__
 
 /****************************************************************************

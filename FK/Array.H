@@ -3,83 +3,85 @@
 
 #include <FK/IDAdmin.H>
 
-template<class TYPE> class fk_Array {
- private:
-	TYPE			*array;
-	int				bufSize;
-	fk_IDAdmin		IDAdmin;
+namespace FK {
 
- public:
+	template<class TYPE> class fk_Array {
+	public:
 
-	fk_Array(void) {
-		array = nullptr;
-		bufClear();
-	}
-
-	virtual ~fk_Array() {
-		bufClear();
-	}
-
-	void bufClear(void) {
-		delete [] array;
-		array = nullptr;
-		bufSize = 0;
-		IDAdmin.Init(0);
-	}
-
-	void clear(void) {
-		IDAdmin.Init(0);
-	}
-
-	bool isSerial(void) {
-		if(IDAdmin.GetIDNum() == IDAdmin.GetMaxID() + 1) return true;
-		return false;
-	}
-
-	int push(const TYPE &);
-			
-	TYPE * at(int id) {
-		return &array[id];
-	}
-
-	bool remove(int id) {
-		return IDAdmin.EraseID(id);
-	}
-
-	bool isAlive(int id) {
-		return IDAdmin.ExistID(id);
-	}
-
-	int next(int id) {
-		return (IDAdmin.GetNext(id));
-	}
-
-	int size(void) {
-		return IDAdmin.GetIDNum();
-	}
-};
-
-template<class TYPE> int fk_Array<TYPE>::push(const TYPE &a) {
-	int		id;
-	TYPE	*tmpBuf;
-
-	id = IDAdmin.CreateID();
-	if(bufSize == 0) {
-		bufSize = 1;
-		array = new TYPE [static_cast<size_t>(bufSize)];
-	} else if(isSerial() == true && id >= bufSize) {
-		bufSize *= 2;
-		tmpBuf = new TYPE [static_cast<size_t>(bufSize)];
-		for(int i = 0; i < id; i++) {
-			tmpBuf[i] = array[i];
+		fk_Array(void) {
+			array = nullptr;
+			bufClear();
 		}
-		delete [] array;
-		array = tmpBuf;
-	}
-	array[id] = a;
-	return (id);
-}
 
+		virtual ~fk_Array() {
+			bufClear();
+		}
+
+		void bufClear(void) {
+			delete [] array;
+			array = nullptr;
+			bufSize = 0;
+			IDAdmin.Init(0);
+		}
+
+		void clear(void) {
+			IDAdmin.Init(0);
+		}
+
+		bool isSerial(void) {
+			if(IDAdmin.GetIDNum() == IDAdmin.GetMaxID() + 1) return true;
+			return false;
+		}
+
+		int push(const TYPE &);
+			
+		TYPE * at(int id) {
+			return &array[id];
+		}
+
+		bool remove(int id) {
+			return IDAdmin.EraseID(id);
+		}
+
+		bool isAlive(int id) {
+			return IDAdmin.ExistID(id);
+		}
+
+		int next(int id) {
+			return (IDAdmin.GetNext(id));
+		}
+
+		int size(void) {
+			return IDAdmin.GetIDNum();
+		}
+
+	private:
+		TYPE			*array;
+		int				bufSize;
+		fk_IDAdmin		IDAdmin;
+	};
+
+	template<class TYPE> int fk_Array<TYPE>::push(const TYPE &a) {
+		int		id;
+		TYPE	*tmpBuf;
+
+		id = IDAdmin.CreateID();
+		if(bufSize == 0) {
+			bufSize = 1;
+			array = new TYPE [static_cast<size_t>(bufSize)];
+		} else if(isSerial() == true && id >= bufSize) {
+			bufSize *= 2;
+			tmpBuf = new TYPE [static_cast<size_t>(bufSize)];
+			for(int i = 0; i < id; i++) {
+				tmpBuf[i] = array[i];
+			}
+			delete [] array;
+			array = tmpBuf;
+		}
+		array[id] = a;
+		return (id);
+	}
+}
 #endif // !__FK_ARRAY_HEADER__
 
 /****************************************************************************

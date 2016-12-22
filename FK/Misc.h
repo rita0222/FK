@@ -8,17 +8,18 @@
 
 #define SAFE_DELETE(p) if(p!=0){delete p;p=0;}
 
-class Noncopyable {
-public:
-	Noncopyable() {};
+namespace FK {
+	class Noncopyable {
+	public:
+		Noncopyable() {};
 
-private:
-	void operator =(const Noncopyable&) {};
-	Noncopyable(const Noncopyable&) {};
-};
+	private:
+		void operator =(const Noncopyable&) {};
+		Noncopyable(const Noncopyable&) {};
+	};
 
-std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken);
-
+	std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken);
+}
 #endif
 
 #endif //!__FK_MISC__

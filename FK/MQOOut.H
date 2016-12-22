@@ -1,50 +1,50 @@
-﻿
-#ifndef __FK_MQO_OUT_HEADER__
+﻿#ifndef __FK_MQO_OUT_HEADER__
 #define __FK_MQO_OUT_HEADER__
 
 #include <string>
 #include <vector>
 #include <map>
-//using namespace std;
 
-class fk_Solid;
-class fk_Loop;
-class fk_Vertex;
-class fk_IndexFaceSet;
-class fk_Color;
+namespace FK {
 
-class fk_MQOOut {
+	class fk_Solid;
+	class fk_Loop;
+	class fk_Vertex;
+	class fk_IndexFaceSet;
+	class fk_Color;
 
- private:
+	class fk_MQOOut {
 
-	fk_Solid					*solid;
-	fk_IndexFaceSet				*ifs;
-	std::map<fk_Vertex *, int>	vertIDMap;
+	public:
 
-	std::vector<std::string>	mBuf;
-	std::vector<std::string>	vBuf;
-	std::vector<std::string>	fBuf;
+		fk_MQOOut(void);
+		fk_MQOOut(fk_Solid *);
+		fk_MQOOut(fk_IndexFaceSet *);
+		virtual ~fk_MQOOut();
 
-	void				Init(void);
-	bool				Convert(void);
-	bool				Convert_Solid(void);
-	bool				Convert_IFS(void);
-	void				MakeVertexIDMap_Solid(void);
-	void				MakeVertexIDMap_IFS(void);
-	void				MakeMaterialPalette(int);
-	float				CalcMonotoneLuminance(fk_Color *);
+		void				SetSolid(fk_Solid *);
+		void				SetIndexFaceSet(fk_IndexFaceSet *);
+		bool				WriteMQOFile(std::string);
 
- public:
+	private:
+		fk_Solid					*solid;
+		fk_IndexFaceSet				*ifs;
+		std::map<fk_Vertex *, int>	vertIDMap;
 
-	fk_MQOOut(void);
-	fk_MQOOut(fk_Solid *);
-	fk_MQOOut(fk_IndexFaceSet *);
-	virtual ~fk_MQOOut();
+		std::vector<std::string>	mBuf;
+		std::vector<std::string>	vBuf;
+		std::vector<std::string>	fBuf;
 
-	void				SetSolid(fk_Solid *);
-	void				SetIndexFaceSet(fk_IndexFaceSet *);
-	bool				WriteMQOFile(std::string);
-};
+		void				Init(void);
+		bool				Convert(void);
+		bool				Convert_Solid(void);
+		bool				Convert_IFS(void);
+		void				MakeVertexIDMap_Solid(void);
+		void				MakeVertexIDMap_IFS(void);
+		void				MakeMaterialPalette(int);
+		float				CalcMonotoneLuminance(fk_Color *);
+	};
+}
 
 #endif // !__FK_MQO_OUT_HEADER__
 

@@ -3,60 +3,63 @@
 
 #include <FK/IndexFace.h>
 
-//! 正多角錐・円錐を生成、管理するクラス
-/*!
- *	このクラスは、形状として正多角錐や円錐を制御する機能を提供します。
- *	円錐は、分割数の多い正多角錐として生成します。
- *	通常、分割数が 20 を超える程度でほとんど円錐と見分けがつかなくなります。
- *	配置は、底面の中心が原点となり、
- *	頂点が -z 方向、底面が +z 方向となります。
- *
- *	設定できる要素は角数、底面半径、高さの3要素です。
- *	底面半径とは、面を構成する正多角形の外接円半径を指します。
- *
- *	このクラスは、実質的には fk_IndexFaceSet クラスの派生クラスであり、
- *	生成後に fk_IndexFaceSet クラスの機能によって頂点を移動することが可能です。
- *	\sa fk_IndexFaceSet, fk_Shape, fk_Model, fk_Prism
- */
+namespace FK {
 
-class fk_Cone: public fk_IndexFaceSet {
- public:
-
-	//! コンストラクタ
+	//! 正多角錐・円錐を生成、管理するクラス
 	/*!
-	 *	\param[in]	div		角数
-	 *	\param[in]	rad		底面半径
-	 *	\param[in]	height	高さ
-	 */
-	fk_Cone(int div = 3, double rad = 1.0, double height = 1.0);
-
-	//! デストラクタ
-	virtual ~fk_Cone();
-
-	//! 角数設定関数
-	/*!
-	 *	角数を変更します。
+	 *	このクラスは、形状として正多角錐や円錐を制御する機能を提供します。
+	 *	円錐は、分割数の多い正多角錐として生成します。
+	 *	通常、分割数が 20 を超える程度でほとんど円錐と見分けがつかなくなります。
+	 *	配置は、底面の中心が原点となり、
+	 *	頂点が -z 方向、底面が +z 方向となります。
 	 *
-	 *	\param[in]	div	角数
-	 */		
-	void	setDivide(int div);
-
-	//! 底面半径設定関数
-	/*!
-	 *	底面半径を設定します。
+	 *	設定できる要素は角数、底面半径、高さの3要素です。
+	 *	底面半径とは、面を構成する正多角形の外接円半径を指します。
 	 *
-	 *	\param[in]	rad	底面半径
+	 *	このクラスは、実質的には fk_IndexFaceSet クラスの派生クラスであり、
+	 *	生成後に fk_IndexFaceSet クラスの機能によって頂点を移動することが可能です。
+	 *	\sa fk_IndexFaceSet, fk_Shape, fk_Model, fk_Prism
 	 */
-	void	setRadius(double rad);
 
-	//! 高さ設定関数
-	/*!
-	 *	高さを設定します。
-	 *
-	 *	\param[in]	height	高さ
-	 */
-	void	setHeight(double height);
-};
+	class fk_Cone: public fk_IndexFaceSet {
+	public:
+
+		//! コンストラクタ
+		/*!
+		 *	\param[in]	div		角数
+		 *	\param[in]	rad		底面半径
+		 *	\param[in]	height	高さ
+		 */
+		fk_Cone(int div = 3, double rad = 1.0, double height = 1.0);
+
+		//! デストラクタ
+		virtual ~fk_Cone();
+
+		//! 角数設定関数
+		/*!
+		 *	角数を変更します。
+		 *
+		 *	\param[in]	div	角数
+		 */		
+		void	setDivide(int div);
+
+		//! 底面半径設定関数
+		/*!
+		 *	底面半径を設定します。
+		 *
+		 *	\param[in]	rad	底面半径
+		 */
+		void	setRadius(double rad);
+
+		//! 高さ設定関数
+		/*!
+		 *	高さを設定します。
+		 *
+		 *	\param[in]	height	高さ
+		 */
+		void	setHeight(double height);
+	};
+}
 
 #endif // !__FK_CONE_HEADER__
 

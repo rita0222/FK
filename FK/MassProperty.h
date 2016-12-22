@@ -3,22 +3,23 @@
 
 #include <FK/DataAccess.h>
 
-//! マスプロパティ用クラス
-/*!
- *	このクラスは、fk_Solid 型データのマスプロパティを計算し、
- *	出力するための機能を提供します。
- */
+namespace FK {
+	//! マスプロパティ用クラス
+	/*!
+	 *	このクラスは、fk_Solid 型データのマスプロパティを計算し、
+	 *	出力するための機能を提供します。
+	 */
 
-class fk_MassProperty : public fk_DataAccess {
+	class fk_MassProperty : public fk_DataAccess {
 
- private:
- protected:
- public:
+	private:
+	protected:
+	public:
 
-	fk_MassProperty(void);
+		fk_MassProperty(void);
 
-};	
-
+	};	
+}
 
 #endif // !__FK_MASSPROPERTY_HEADER__
 

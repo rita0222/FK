@@ -1,8 +1,6 @@
 ﻿#ifndef __FK_FRAMECONTROL_HEADER__
 #define __FK_FRAMECONTROL_HEADER__
 
-//#include <FK/Window.h>
-
 #include <FK/Base.h>
 
 #ifdef _MACOSX_
@@ -16,108 +14,108 @@
 #include <mmsystem.h>
 #endif
 
+namespace FK {
 
-//! フレームレート制御クラス
-/*!
- *	このクラスは、フレームレートのキープや計測などの機能を提供します。
- *	fk_Window にも同様の実装がありますが、それよりも高機能です。
- *	fk_AppWindow では内部実装としてこのクラスを利用しています。
- *	fk_Window を利用する場合でも、このクラスだけ単体で利用することが可能です。
- *
- *	\sa fk_Window
- */
-class fk_FrameController {
-private:
-	//unsigned long m_dwLastFlipped;
-	unsigned long nowTime;
+	//! フレームレート制御クラス
+	/*!
+	 *	このクラスは、フレームレートのキープや計測などの機能を提供します。
+	 *	fk_Window にも同様の実装がありますが、それよりも高機能です。
+	 *	fk_AppWindow では内部実装としてこのクラスを利用しています。
+	 *	fk_Window を利用する場合でも、このクラスだけ単体で利用することが可能です。
+	 *
+	 *	\sa fk_Window
+	 */
+	class fk_FrameController {
 
-	unsigned long m_dwLastMinitues;
-	unsigned long m_dwFrameRate;
-	unsigned long m_dwSkipRate;
-	float m_fFrameTime;
-	bool m_bDrawFlag;
-	bool m_bFrameSkip;
+	public:
+		//! コンストラクタ
+		fk_FrameController(unsigned long dwFps = 60, bool bFrameSkip = true);
+		//! デストラクタ
+		~fk_FrameController();
+
+		//! フレームレート計測関数
+		/*!
+		 *	この関数をコールしてから、次にコールされるまでを 1 フレームとして扱い、
+		 *	その処理時間を計測します。時間調整はせずに、最速で処理を返します。
+		 *	ゲームのメインループ中で 1 度だけ呼ぶようにしてください。
+		 *	timeRegular() とは排他的な関係になるので、両方を同時に利用することは避けてください。
+		 */
+		void measure(void);
+
+		//! フレームレート指定関数
+		/*!
+		 *	timeRegular() で時間調整をする際に目標とするフレームレートを指定します。
+		 *	デフォルトでは 60FPS になっています。
+		 *	\param[in] time	キープしたいフレームレート。
+		 */
+		void setFPS(unsigned long time);
+
+		//! フレームスキップモード設定関数
+		/*!
+		 *	setFPS() で設定したフレームレートを下回った場合に、
+		 *	描画フラグでスキップを促すか否かを設定します。
+		 *	デフォルトでは有効になっており、多くの場面ではその方が適切ですが、
+		 *	あまりに過負荷なプログラムでは、画面が一切更新されずに応答不能に見える場合があります。
+		 *	そのような場合は、一定時間が経過したら強制的に描画を行うように調整するのが良いでしょう。
+		 *
+		 *	\param[in] bFrameSkip
+		 *		フレームスキップを有効にする場合は true を、無効にする場合は false を渡します。
+		 */
+		void setFrameSkipMode(bool bFrameSkip);
+
+		//! 描画フラグ取得関数
+		/*!
+		 *	timeRegular() 使用時に、フレームレートに応じて、
+		 *	描画するべきか、スキップするべきかを判定して返します。
+		 *
+		 *	\return 描画するべきタイミングなら true を、スキップするべきなら false を返します。
+		 */
+		bool getDrawFlag(void);
+
+		//! フレームキープ基準点指定関数
+		/*!
+		 *	この関数をコールしてから、次にコールされるまでを 1 フレームとして扱い、
+		 *	その間が setFPS() で指定したフレームレートになるよう時間調整を行います。
+		 *	ゲームのメインループ中で 1 度だけ呼ぶようにしてください。
+		 *	measure() とは排他的な関係になるので、両方を同時に利用することは避けてください。
+		 */
+		void timeRegular(void);
+
+		//! スキップレート取得関数
+		/*!
+		 *	1 秒間に描画をスキップした回数を取得します。
+		 *
+		 *	\return スキップレート。
+		 */
+		unsigned long getSkipRate(void);
+
+		//! フレームレート取得関数
+		/*!
+		 *	1 秒間に描画が行われている回数、いわゆる FPS(Frame Per Second) を取得します。
+		 *
+		 *	\return フレームレート。
+		 */
+		unsigned long getFrameRate(void);
+
+		static unsigned long	getNow(void);
+
+	private:
+		unsigned long nowTime;
+
+		unsigned long m_dwLastMinitues;
+		unsigned long m_dwFrameRate;
+		unsigned long m_dwSkipRate;
+		float m_fFrameTime;
+		bool m_bDrawFlag;
+		bool m_bFrameSkip;
 		
-	bool m_bInit;
-	unsigned long m_dwFrameCount;
-	unsigned long m_dwSkipCount;
+		bool m_bInit;
+		unsigned long m_dwFrameCount;
+		unsigned long m_dwSkipCount;
 
-	static void SleepOneMSec(void);
-
-public:
-	//! コンストラクタ
-	fk_FrameController(unsigned long dwFps = 60, bool bFrameSkip = true);
-	//! デストラクタ
-	~fk_FrameController();
-
-	//! フレームレート計測関数
-	/*!
-	 *	この関数をコールしてから、次にコールされるまでを 1 フレームとして扱い、
-	 *	その処理時間を計測します。時間調整はせずに、最速で処理を返します。
-	 *	ゲームのメインループ中で 1 度だけ呼ぶようにしてください。
-	 *	timeRegular() とは排他的な関係になるので、両方を同時に利用することは避けてください。
-	 */
-	void measure(void);
-
-	//! フレームレート指定関数
-	/*!
-	 *	timeRegular() で時間調整をする際に目標とするフレームレートを指定します。
-	 *	デフォルトでは 60FPS になっています。
-	 *	\param[in] time	キープしたいフレームレート。
-	 */
-	void setFPS(unsigned long time);
-
-	//! フレームスキップモード設定関数
-	/*!
-	 *	setFPS() で設定したフレームレートを下回った場合に、
-	 *	描画フラグでスキップを促すか否かを設定します。
-	 *	デフォルトでは有効になっており、多くの場面ではその方が適切ですが、
-	 *	あまりに過負荷なプログラムでは、画面が一切更新されずに応答不能に見える場合があります。
-	 *	そのような場合は、一定時間が経過したら強制的に描画を行うように調整するのが良いでしょう。
-	 *
-	 *	\param[in] bFrameSkip
-	 *		フレームスキップを有効にする場合は true を、無効にする場合は false を渡します。
-	 */
-	void setFrameSkipMode(bool bFrameSkip);
-
-	//! 描画フラグ取得関数
-	/*!
-	 *	timeRegular() 使用時に、フレームレートに応じて、
-	 *	描画するべきか、スキップするべきかを判定して返します。
-	 *
-	 *	\return 描画するべきタイミングなら true を、スキップするべきなら false を返します。
-	 */
-	bool getDrawFlag(void);
-
-	//! フレームキープ基準点指定関数
-	/*!
-	 *	この関数をコールしてから、次にコールされるまでを 1 フレームとして扱い、
-	 *	その間が setFPS() で指定したフレームレートになるよう時間調整を行います。
-	 *	ゲームのメインループ中で 1 度だけ呼ぶようにしてください。
-	 *	measure() とは排他的な関係になるので、両方を同時に利用することは避けてください。
-	 */
-	void timeRegular(void);
-
-	//! スキップレート取得関数
-	/*!
-	 *	1 秒間に描画をスキップした回数を取得します。
-	 *
-	 *	\return スキップレート。
-	 */
-	unsigned long getSkipRate(void);
-
-	//! フレームレート取得関数
-	/*!
-	 *	1 秒間に描画が行われている回数、いわゆる FPS(Frame Per Second) を取得します。
-	 *
-	 *	\return フレームレート。
-	 */
-	unsigned long getFrameRate(void);
-
-	static unsigned long	getNow(void);
-
-};
-
+		static void SleepOneMSec(void);
+	};
+}
 #endif // !__FK_FRAMECONTROL_HEADER__
 
 /****************************************************************************

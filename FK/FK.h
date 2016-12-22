@@ -38,8 +38,8 @@
 
 #endif
 
-#ifndef FK_NO_STD_NAMESPACE
-using namespace std;
+#ifdef FK_DEF_NAMESPACE
+using namespace FK;
 #endif
 
 /*!

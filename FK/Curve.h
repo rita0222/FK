@@ -4,101 +4,99 @@
 #include <FK/Base.h>
 #include <FK/Vector.h>
 
-class fk_Window;
+namespace FK {
 
-//! 曲線用純粋仮想クラス
-/*!
- *	このクラスは、自由曲線用の純粋仮想クラスです。
- *	このクラスを継承することによって、
- *	ユーザは任意の自由曲線形式を fk_Edge に追加することができます。
- *	fk_BezCurve と fk_BSplCurve はこのクラスを継承しています。
- *	自由曲線は、以下の条件を満たす必要があります。
- *	- パラメータ空間が [0, 1] である。
- *	- パラメータ空間中のあらゆるパラメータで曲線上の点を算出できる。
- *	- パラメータ空間中のあらゆるパラメータで曲線上の微分ベクトルを算出できる。
- *	- 曲線の始点と終点の位置ベクトルが、稜線 (fk_Edge) の始点、終点と一致している。
- *
- *	\sa fk_Edge, fk_BezCurve, fk_BSplCurve, fk_Surface
- *
- *	\remarks
- *	本クラスは現在ベータ機能としての位置づけであり、
- *	ユーザーズマニュアルには記載されていません。
- *	また、今後のバージョンアップにおいて仕様が変更される可能性があります。
- */
-class fk_Curve : public fk_BaseObject {
+	class fk_Window;
 
-	friend class				fk_LineDraw;
-
- private:
-	int							div;
-	std::vector<fk_Vector>		posCache;
-	std::vector<fk_Vector>		diffCache;
-
-	std::vector<fk_Vector> *	getPosCache(void);
-	std::vector<fk_Vector> * 	getDiffCache(void);
-
- protected:
-
-	//! 修正告知用フラグ
+	//! 曲線用純粋仮想クラス
 	/*!
-	 *	この変数は、派生クラスにおいて曲線形状を変更した状況となったとき、
-	 *	値を true に変更して下さい。
-	 *	描画データキャッシュが生成された時点で再び false に戻されます。
+	 *	このクラスは、自由曲線用の純粋仮想クラスです。
+	 *	このクラスを継承することによって、
+	 *	ユーザは任意の自由曲線形式を fk_Edge に追加することができます。
+	 *	fk_BezCurve と fk_BSplCurve はこのクラスを継承しています。
+	 *	自由曲線は、以下の条件を満たす必要があります。
+	 *	- パラメータ空間が [0, 1] である。
+	 *	- パラメータ空間中のあらゆるパラメータで曲線上の点を算出できる。
+	 *	- パラメータ空間中のあらゆるパラメータで曲線上の微分ベクトルを算出できる。
+	 *	- 曲線の始点と終点の位置ベクトルが、稜線 (fk_Edge) の始点、終点と一致している。
+	 *
+	 *	\sa fk_Edge, fk_BezCurve, fk_BSplCurve, fk_Surface
 	 */
-	bool				changeFlg;
+	class fk_Curve : public fk_BaseObject {
 
- public:
+		friend class				fk_LineDraw;
 
-	//! コンストラクタ
-	fk_Curve(void);
+	protected:
 
-	//! デストラクタ
-	virtual ~fk_Curve();
+		//! 修正告知用フラグ
+		/*!
+		 *	この変数は、派生クラスにおいて曲線形状を変更した状況となったとき、
+		 *	値を true に変更して下さい。
+		 *	描画データキャッシュが生成された時点で再び false に戻されます。
+		 */
+		bool				changeFlg;
+
+	public:
+
+		//! コンストラクタ
+		fk_Curve(void);
+
+		//! デストラクタ
+		virtual ~fk_Curve();
  
-	//! 曲線点位置ベクトル算出関数
-	/*!
-	 *	曲線上の点の位置ベクトルを算出する純粋仮想関数です。
-	 *	派生クラスにおいて実際に実装する必要があります。
-	 *
-	 *	\param[in]	t	曲線パラメータ
-	 *
-	 *	\return		曲線点の位置ベクトル
-	 */
-	virtual fk_Vector	pos(double t) = 0;
+		//! 曲線点位置ベクトル算出関数
+		/*!
+		 *	曲線上の点の位置ベクトルを算出する純粋仮想関数です。
+		 *	派生クラスにおいて実際に実装する必要があります。
+		 *
+		 *	\param[in]	t	曲線パラメータ
+		 *
+		 *	\return		曲線点の位置ベクトル
+		 */
+		virtual fk_Vector	pos(double t) = 0;
 
-	//! 曲線微分ベクトル算出関数
-	/*!
-	 *	曲線上の点の微分ベクトルを算出する純粋仮想関数です。
-	 *	派生クラスにおいて実際に実装する必要があります。
-	 *
-	 *	\param[in]	t	曲線パラメータ
-	 *
-	 *	\return		曲線点の微分ベクトル
-	 */
-	virtual fk_Vector	diff(double t) = 0;
+		//! 曲線微分ベクトル算出関数
+		/*!
+		 *	曲線上の点の微分ベクトルを算出する純粋仮想関数です。
+		 *	派生クラスにおいて実際に実装する必要があります。
+		 *
+		 *	\param[in]	t	曲線パラメータ
+		 *
+		 *	\return		曲線点の微分ベクトル
+		 */
+		virtual fk_Vector	diff(double t) = 0;
 
-	//! 曲線キャッシュ分割数設定関数
-	/*!
-	 *	描画する際の曲線の分割数を設定します。
-	 *	本関数は、派生クラスにおいて再定義する必要はありません。
-	 *
-	 *	\param[in]	div		分割数。
-	 */
-	void	setDiv(int div);
+		//! 曲線キャッシュ分割数設定関数
+		/*!
+		 *	描画する際の曲線の分割数を設定します。
+		 *	本関数は、派生クラスにおいて再定義する必要はありません。
+		 *
+		 *	\param[in]	div		分割数。
+		 */
+		void	setDiv(int div);
 	
-	//! 曲線キャッシュ分割数参照関数
-	/*!
-	 *	描画する際の曲線の分割数を参照します。
-	 *	本関数は、派生クラスにおいて再定義する必要はありません。
-	 *
-	 *	\return		分割数
-	 */
-	int		getDiv(void);
+		//! 曲線キャッシュ分割数参照関数
+		/*!
+		 *	描画する際の曲線の分割数を参照します。
+		 *	本関数は、派生クラスにおいて再定義する必要はありません。
+		 *
+		 *	\return		分割数
+		 */
+		int		getDiv(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	void	makeCache(void);
+		void	makeCache(void);
 #endif
-};
+
+	private:
+		int							div;
+		std::vector<fk_Vector>		posCache;
+		std::vector<fk_Vector>		diffCache;
+
+		std::vector<fk_Vector> *	getPosCache(void);
+		std::vector<fk_Vector> * 	getDiffCache(void);
+	};
+}
 
 #endif	// __FK_CURVE_HEADER__
 

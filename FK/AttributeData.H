@@ -4,78 +4,82 @@
 #include <vector>
 #include <string>
 
-class fk_Attribute_Data {
- private:
-	std::vector<int>			*ItoIIndex;
-	std::vector<int>			*ItoIValue;
+namespace FK {
 
-	std::vector<int>			*ItoDIndex;
-	std::vector<double>			*ItoDValue;
+	class fk_Attribute_Data {
 
-	std::vector<int>			*ItoSIndex;
-	std::vector<std::string>	*ItoSValue;
+	public:
+		fk_Attribute_Data(void);
+		virtual ~fk_Attribute_Data();
 
-	std::vector<std::string>	*StoIIndex;
-	std::vector<int>			*StoIValue;
+		void	AttrInit(void);
 
-	std::vector<std::string>	*StoDIndex;
-	std::vector<double>			*StoDValue;
+		// もしすでに要素が存在したら true を、そうでなければ false を返す。
 
-	std::vector<std::string>	*StoSIndex;
-	std::vector<std::string>	*StoSValue;
+		bool	ExistAttrII(const int) const;
+		bool	ExistAttrID(const int) const;
+		bool	ExistAttrIS(const int) const;
+		bool	ExistAttrSI(const std::string) const;
+		bool	ExistAttrSD(const std::string) const;
+		bool	ExistAttrSS(const std::string) const;
 
-	int		GetIndexAttrII(const int) const;
-	int		GetIndexAttrID(const int) const;
-	int		GetIndexAttrIS(const int) const;
-	int		GetIndexAttrSI(const std::string) const;
-	int		GetIndexAttrSD(const std::string) const;
-	int		GetIndexAttrSS(const std::string) const;
+		// 返り値は exist 系と同様。
 
-	int		CreateNewIndexI(std::vector<int> *, int);
-	int		CreateNewIndexS(std::vector<std::string> *, std::string);
+		bool	SetAttrII(const int, const int);
+		bool	SetAttrID(const int, const double);
+		bool	SetAttrIS(const int, const std::string);
+		bool	SetAttrSI(const std::string, const int);
+		bool	SetAttrSD(const std::string, const double);
+		bool	SetAttrSS(const std::string, const std::string);
 
- public:
-	fk_Attribute_Data(void);
-	virtual ~fk_Attribute_Data();
+		// 属性を得るための関数。
 
-	void	AttrInit(void);
+		int				GetAttrII(const int) const;
+		double			GetAttrID(const int) const;
+		std::string		GetAttrIS(const int) const;
+		int				GetAttrSI(const std::string) const;
+		double			GetAttrSD(const std::string) const;
+		std::string		GetAttrSS(const std::string) const;
 
-	// もしすでに要素が存在したら true を、そうでなければ false を返す。
+		// 属性を消去するための関数。
 
-	bool	ExistAttrII(const int) const;
-	bool	ExistAttrID(const int) const;
-	bool	ExistAttrIS(const int) const;
-	bool	ExistAttrSI(const std::string) const;
-	bool	ExistAttrSD(const std::string) const;
-	bool	ExistAttrSS(const std::string) const;
+		bool	DeleteAttrII(const int);
+		bool	DeleteAttrID(const int);
+		bool	DeleteAttrIS(const int);
+		bool	DeleteAttrSI(const std::string);
+		bool	DeleteAttrSD(const std::string);
+		bool	DeleteAttrSS(const std::string);
 
-	// 返り値は exist 系と同様。
+	private:
+		std::vector<int>			*ItoIIndex;
+		std::vector<int>			*ItoIValue;
 
-	bool	SetAttrII(const int, const int);
-	bool	SetAttrID(const int, const double);
-	bool	SetAttrIS(const int, const std::string);
-	bool	SetAttrSI(const std::string, const int);
-	bool	SetAttrSD(const std::string, const double);
-	bool	SetAttrSS(const std::string, const std::string);
+		std::vector<int>			*ItoDIndex;
+		std::vector<double>			*ItoDValue;
 
-	// 属性を得るための関数。
+		std::vector<int>			*ItoSIndex;
+		std::vector<std::string>	*ItoSValue;
 
-	int				GetAttrII(const int) const;
-	double			GetAttrID(const int) const;
-	std::string		GetAttrIS(const int) const;
-	int				GetAttrSI(const std::string) const;
-	double			GetAttrSD(const std::string) const;
-	std::string		GetAttrSS(const std::string) const;
+		std::vector<std::string>	*StoIIndex;
+		std::vector<int>			*StoIValue;
 
-	// 属性を消去するための関数。
+		std::vector<std::string>	*StoDIndex;
+		std::vector<double>			*StoDValue;
 
-	bool	DeleteAttrII(const int);
-	bool	DeleteAttrID(const int);
-	bool	DeleteAttrIS(const int);
-	bool	DeleteAttrSI(const std::string);
-	bool	DeleteAttrSD(const std::string);
-	bool	DeleteAttrSS(const std::string);
-};
+		std::vector<std::string>	*StoSIndex;
+		std::vector<std::string>	*StoSValue;
+
+		int		GetIndexAttrII(const int) const;
+		int		GetIndexAttrID(const int) const;
+		int		GetIndexAttrIS(const int) const;
+		int		GetIndexAttrSI(const std::string) const;
+		int		GetIndexAttrSD(const std::string) const;
+		int		GetIndexAttrSS(const std::string) const;
+
+		int		CreateNewIndexI(std::vector<int> *, int);
+		int		CreateNewIndexS(std::vector<std::string> *, std::string);
+	};
+}
 
 #endif // !__FK_ATTRIBUTE_DATA_HEADER__
 

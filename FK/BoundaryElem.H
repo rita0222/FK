@@ -4,84 +4,91 @@
 #include <FK/Base.h>
 #include <FK/Matrix.h>
 
-class fk_Shape;
-class fk_IndexFaceSet;
-class fk_Solid;
-class fk_Point;
-class fk_Texture;
-class fk_RectTexture;
-class fk_TriTexture;
-class fk_MeshTexture;
+namespace FK {
 
-class fk_SphereBoundary {
- private:
-	static double	GetAdjustIFS(fk_IndexFaceSet *);
-	static double	GetAdjustSolid(fk_Solid *);
-	static double	GetAdjustPoint(fk_Point *);
-	static double	GetAdjustTexture(fk_Texture *);
-	static double	GetAdjustMeshTexture(fk_MeshTexture *);
+	class fk_Shape;
+	class fk_IndexFaceSet;
+	class fk_Solid;
+	class fk_Point;
+	class fk_Texture;
+	class fk_RectTexture;
+	class fk_TriTexture;
+	class fk_MeshTexture;
 
- public:
-	static bool		isInter(const fk_Vector &, double, const fk_Vector &, double);
-	static bool		isCollision(const fk_Vector &, const fk_Vector &, double,
-								const fk_Vector &, const fk_Vector &, double, double *);
-	static double	getAdjustRadius(fk_Shape *);
-};
+	class fk_SphereBoundary {
+	public:
+		static bool		isInter(const fk_Vector &, double, const fk_Vector &, double);
+		static bool		isCollision(const fk_Vector &, const fk_Vector &, double,
+									const fk_Vector &, const fk_Vector &, double, double *);
+		static double	getAdjustRadius(fk_Shape *);
 
-class fk_AABBBoundary {
- private:
-	static fk_Vector	GetAdjustIFS(fk_IndexFaceSet *, const fk_Vector &,
-									 const fk_Vector &, const fk_Vector &);
-	static fk_Vector	GetAdjustSolid(fk_Solid *, const fk_Vector &,
-									   const fk_Vector &, const fk_Vector &);
-	static fk_Vector	GetAdjustPoint(fk_Point *, const fk_Vector &,
-									   const fk_Vector &, const fk_Vector &);
-	static fk_Vector	GetAdjustTexture(fk_Texture *, const fk_Vector &,
+	private:
+		static double	GetAdjustIFS(fk_IndexFaceSet *);
+		static double	GetAdjustSolid(fk_Solid *);
+		static double	GetAdjustPoint(fk_Point *);
+		static double	GetAdjustTexture(fk_Texture *);
+		static double	GetAdjustMeshTexture(fk_MeshTexture *);
+	};
+
+	class fk_AABBBoundary {
+	public:
+
+		static bool			isInter(const fk_Vector &, const fk_Vector &,
+									const fk_Vector &, const fk_Vector &);
+		static fk_Vector	getAdjustSize(fk_Shape *, fk_Matrix);
+
+	private:
+		static fk_Vector	GetAdjustIFS(fk_IndexFaceSet *, const fk_Vector &,
 										 const fk_Vector &, const fk_Vector &);
-	static fk_Vector	GetAdjustMeshTexture(fk_MeshTexture *, const fk_Vector &,
+		static fk_Vector	GetAdjustSolid(fk_Solid *, const fk_Vector &,
+										   const fk_Vector &, const fk_Vector &);
+		static fk_Vector	GetAdjustPoint(fk_Point *, const fk_Vector &,
+										   const fk_Vector &, const fk_Vector &);
+		static fk_Vector	GetAdjustTexture(fk_Texture *, const fk_Vector &,
 											 const fk_Vector &, const fk_Vector &);
-	static void			AdjustVec(fk_Vector *, const fk_Vector &,
-								  const fk_Vector &,
-								  const fk_Vector &,
-								  const fk_Vector &);
- public:
+		static fk_Vector	GetAdjustMeshTexture(fk_MeshTexture *, const fk_Vector &,
+												 const fk_Vector &, const fk_Vector &);
+		static void			AdjustVec(fk_Vector *, const fk_Vector &,
+									  const fk_Vector &,
+									  const fk_Vector &,
+									  const fk_Vector &);
+	};
 
-	static bool			isInter(const fk_Vector &, const fk_Vector &,
-								const fk_Vector &, const fk_Vector &);
-	static fk_Vector	getAdjustSize(fk_Shape *, fk_Matrix);
-};
+	class fk_OBBBoundary {
+	public:
+		static bool			isInter(const fk_Vector [3], const fk_Vector [3],
+									const double [3], const double [3], const fk_Vector &);
+		static fk_Vector	getAdjustSize(fk_Shape *);
 
-class fk_OBBBoundary {
- private:
-	static fk_Vector	GetAdjustIFS(fk_IndexFaceSet *);
-	static fk_Vector	GetAdjustSolid(fk_Solid *);
-	static fk_Vector	GetAdjustPoint(fk_Point *);
-	static fk_Vector	GetAdjustTexture(fk_Texture *);
-	static fk_Vector	GetAdjustMeshTexture(fk_MeshTexture *);
-	static void			AdjustVec(fk_Vector *, const fk_Vector &);
+	private:
+		static fk_Vector	GetAdjustIFS(fk_IndexFaceSet *);
+		static fk_Vector	GetAdjustSolid(fk_Solid *);
+		static fk_Vector	GetAdjustPoint(fk_Point *);
+		static fk_Vector	GetAdjustTexture(fk_Texture *);
+		static fk_Vector	GetAdjustMeshTexture(fk_MeshTexture *);
+		static void			AdjustVec(fk_Vector *, const fk_Vector &);
+	};
 
- public:
-	static bool			isInter(const fk_Vector [3], const fk_Vector [3],
-								const double [3], const double [3], const fk_Vector &);
-	static fk_Vector	getAdjustSize(fk_Shape *);
-};
+	class fk_CapsuleBoundary {
+	public:
+		static bool		isInter(const fk_Vector &, const fk_Vector &, double,
+								const fk_Vector &, const fk_Vector &, double);
+		static double	getAdjustRadius(fk_Shape *, const fk_Vector &, const fk_Vector &);
 
-class fk_CapsuleBoundary {
- private:
-	static double	GetAdjustIFS(fk_IndexFaceSet *, const fk_Vector &, const fk_Vector &);
-	static double	GetAdjustSolid(fk_Solid *, const fk_Vector &, const fk_Vector &);
-	static double	GetAdjustPoint(fk_Point *, const fk_Vector &, const fk_Vector &);
-	static double	GetAdjustTexture(fk_Texture *, const fk_Vector &, const fk_Vector &);
-	static double	GetAdjustRectTexture(fk_RectTexture *, const fk_Vector &, const fk_Vector &);
-	static double	GetAdjustTriTexture(fk_TriTexture *, const fk_Vector &, const fk_Vector &);
-	static double	GetAdjustMeshTexture(fk_MeshTexture *, const fk_Vector &, const fk_Vector &);
-	static double	CalcLen(const fk_Vector &, const fk_Vector &, const fk_Vector &);
-
- public:
-	static bool		isInter(const fk_Vector &, const fk_Vector &, double,
-							const fk_Vector &, const fk_Vector &, double);
-	static double	getAdjustRadius(fk_Shape *, const fk_Vector &, const fk_Vector &);
-};
+	private:
+		static double	GetAdjustIFS(fk_IndexFaceSet *, const fk_Vector &, const fk_Vector &);
+		static double	GetAdjustSolid(fk_Solid *, const fk_Vector &, const fk_Vector &);
+		static double	GetAdjustPoint(fk_Point *, const fk_Vector &, const fk_Vector &);
+		static double	GetAdjustTexture(fk_Texture *, const fk_Vector &, const fk_Vector &);
+		static double	GetAdjustRectTexture(fk_RectTexture *,
+											 const fk_Vector &, const fk_Vector &);
+		static double	GetAdjustTriTexture(fk_TriTexture *,
+											const fk_Vector &, const fk_Vector &);
+		static double	GetAdjustMeshTexture(fk_MeshTexture *,
+											 const fk_Vector &, const fk_Vector &);
+		static double	CalcLen(const fk_Vector &, const fk_Vector &, const fk_Vector &);
+	};
+}
 
 #endif // !__FK_BOUNDARYELEM_HEADER__
 

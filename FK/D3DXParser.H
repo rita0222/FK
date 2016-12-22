@@ -3,45 +3,46 @@
 
 #include <FK/ParserBase.H>
 
-class fk_IFSTexture;
-class fk_TexCoord;
-class fk_D3DXAnimation;
-class fk_D3DXShapeParser;
-class fk_Tree;
-class fk_TreeData;
+namespace FK {
 
-class fk_D3DXParser : public fk_ParserBase {
+	class fk_IFSTexture;
+	class fk_TexCoord;
+	class fk_D3DXAnimation;
+	class fk_D3DXShapeParser;
+	class fk_Tree;
+	class fk_TreeData;
 
- private:
+	class fk_D3DXParser : public fk_ParserBase {
+	public:
+		fk_D3DXParser(void);
+		virtual ~fk_D3DXParser();
 
-	fk_Tree						*tree;
-	fk_D3DXShapeParser			*shape;
+		bool	ReadD3DXFile(const std::string &, const std::string &,
+							 int, bool, bool *);
+		void	SetIFSTexture(fk_IFSTexture *);
+		void	SetAnimation(fk_D3DXAnimation *);
+		void	print(void);
 
-	fk_IFSTexture				*ifsTexture;
-	fk_D3DXAnimation			*anim;
+	private:
+		fk_Tree				*tree;
+		fk_D3DXShapeParser	*shape;
 
-	bool			CheckFile(const std::string &);
-	bool			ReadData(const std::string &,
-							 const std::string &, int, bool, bool *);
+		fk_IFSTexture		*ifsTexture;
+		fk_D3DXAnimation	*anim;
 
-	bool			CheckOneLineProperty(const std::string *);
-	fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
-	bool			CheckMeshProperty(fk_TreeData *, const std::string &);
-	bool			CheckProperty(fk_TreeData *, const std::string &);
-	bool			ReadFrameMatrix(fk_TreeData *, std::ifstream &);
+		bool			CheckFile(const std::string &);
+		bool			ReadData(const std::string &,
+								 const std::string &, int, bool, bool *);
 
-	bool			MakeData(int, bool);
+		bool			CheckOneLineProperty(const std::string *);
+		fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
+		bool			CheckMeshProperty(fk_TreeData *, const std::string &);
+		bool			CheckProperty(fk_TreeData *, const std::string &);
+		bool			ReadFrameMatrix(fk_TreeData *, std::ifstream &);
 
- public:
-	fk_D3DXParser(void);
-	virtual ~fk_D3DXParser();
-
-	bool	ReadD3DXFile(const std::string &, const std::string &,
-						 int, bool, bool *);
-	void	SetIFSTexture(fk_IFSTexture *);
-	void	SetAnimation(fk_D3DXAnimation *);
-	void	print(void);
-};
+		bool			MakeData(int, bool);
+	};
+}
 
 #endif
 

@@ -3,19 +3,21 @@
 
 #include <FK/ParserBase.H>
 
-class fk_HRCParser : public fk_ParserBase {
- private:
-	bool	CheckHRCFile(std::ifstream &);
-	bool	ReadHRCVertexData(std::ifstream &, std::vector<fk_Vector> *);
-	bool	ReadHRCPolygonData(std::ifstream &, std::vector< std::vector<int> > *);
+namespace FK {
 
- public:
-	fk_HRCParser(void);
-	virtual ~fk_HRCParser();
+	class fk_HRCParser : public fk_ParserBase {
+	public:
+		fk_HRCParser(void);
+		virtual ~fk_HRCParser();
 
-	bool	ReadHRCFile(std::string);
-};
+		bool	ReadHRCFile(std::string);
 
+	private:
+		bool	CheckHRCFile(std::ifstream &);
+		bool	ReadHRCVertexData(std::ifstream &, std::vector<fk_Vector> *);
+		bool	ReadHRCPolygonData(std::ifstream &, std::vector< std::vector<int> > *);
+	};
+}
 #endif // !__FK_HRC_PARSER_HEADER__
 
 /****************************************************************************

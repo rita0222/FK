@@ -3,129 +3,127 @@
 
 #include <FK/Topology.h>
 
-class fk_Edge;
-class fk_Loop;
-class fk_Vertex;
+namespace FK {
+	class fk_Edge;
+	class fk_Loop;
+	class fk_Vertex;
 
-//! ソリッドモデルの半稜線位相を管理するクラス
-/*!
- *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
- *	半稜線位相に関する制御機能を提供します。
- *	FK におけるソリッドモデルの構造については、
- *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
- *
- *	派生クラスのうち、ID 管理については fk_Topology,
- *	個別マテリアル設定については fk_TopologyMaterial,
- *	属性設定については fk_Attribute を参照して下さい。
- *
- *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
- */
-
-class fk_Half : public fk_Topology {
-
-	friend class		fk_Operation;
-	friend class		fk_DataBase;
-	friend class		fk_FileInput;
-	friend class		fk_FileOutput;
-	friend class		fk_IFSetHandle;
-	friend class		fk_SolidBase;
-
- private:
-	fk_Vertex *	vertex;
-	fk_Half *	nextHalf;
-	fk_Half *	prevHalf;
-	fk_Edge *	parentEdge;
-	fk_Loop *	parentLoop;
-
-	fk_Vertex *	SetVertex(fk_Vertex *);
-	fk_Half *	SetNextHalf(fk_Half *);
-	fk_Half *	SetPrevHalf(fk_Half *);
-	fk_Edge *	SetParentEdge(fk_Edge *);
-	fk_Loop *	SetParentLoop(fk_Loop *);
-
- public:
-	//! コンストラクタ
-	fk_Half(int);
-	//! デストラクタ
-	virtual ~fk_Half();
-
-	// コピーコンストラクタ
-	fk_Half(const fk_Half &);
-
-	//! 初期化関数
+	//! ソリッドモデルの半稜線位相を管理するクラス
 	/*!
-	 *	この関数は、半稜線位相の初期化を行います。
-	 *	通常、ユーザがこの関数を利用することはありません。
-	 */
-	void		Init(int);
-
-	//! 始点頂点位相取得関数
-	/*!
-	 *	この半稜線が始点としている頂点位相を取得します。
-	 *	\return 始点頂点位相を表す fk_Vertex 型インスタンスのアドレス
-	 */
-	fk_Vertex *	getVertex(void) const;
-
-	//! 後半稜線位相取得関数
-	/*!
-	 *	半稜線の接続関係において、この半稜線の後にあたる半稜線を取得します。
+	 *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
+p	 *	半稜線位相に関する制御機能を提供します。
+	 *	FK におけるソリッドモデルの構造については、
+	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
-	 *	\return 後の半稜線位相を表す fk_Half 型インスタンスのアドレス
-	 */
-	fk_Half *	getNextHalf(void) const;
-
-	//! 前半稜線位相取得関数
-	/*!
-	 *	半稜線の接続関係において、この半稜線の前にあたる半稜線を取得します。
+	 *	派生クラスのうち、ID 管理については fk_Topology,
+	 *	個別マテリアル設定については fk_TopologyMaterial,
+	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
-	 *	\return 前の半稜線位相を表す fk_Half 型インスタンスのアドレス
+	 *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
 	 */
-	fk_Half *	getPrevHalf(void) const;
 
-	//! 稜線位相取得関数
-	/*!
-	 *	この半稜線が属している稜線位相を取得します。
-	 *
-	 *	\return 稜線位相を表す fk_Edge 型インスタンスのアドレス
-	 */
-	fk_Edge *	getParentEdge(void) const;
+	class fk_Half : public fk_Topology {
 
-	//! ループ位相取得関数
-	/*!
-	 *	この半稜線が属しているループ位相を取得します。
-	 *
-	 *	\return
-	 *		ループ位相を表す fk_Loop 型インスタンスのアドレス。
-	 *		半稜線がループに属していない場合は nullptr を返します。
-	 */
-	fk_Loop *	getParentLoop(void) const;
+		friend class		fk_Operation;
+		friend class		fk_DataBase;
+		friend class		fk_FileInput;
+		friend class		fk_FileOutput;
+		friend class		fk_IFSetHandle;
+		friend class		fk_SolidBase;
 
-	//! 左側判定関数
-	/*!
-	 *	この半稜線が、属している稜線の「左側」かどうかを判定する関数です。
-	 *
-	 *	\return 「左側」である場合 true を、「右側」である場合 false を返します。
-	 */
-	bool		isLeft(void) const;
+	public:
+		//! コンストラクタ
+		fk_Half(int);
+		//! デストラクタ
+		virtual ~fk_Half();
 
-	//! 右側判定関数
-	/*!
-	 *	この半稜線が、属している稜線の「右側」かどうかを判定する関数です。
-	 *
-	 *	\return 「右側」である場合 true を、「左側」である場合 false を返します。
-	 */
-	bool		isRight(void) const;
+		// コピーコンストラクタ
+		fk_Half(const fk_Half &);
+
+		//! 初期化関数
+		/*!
+		 *	この関数は、半稜線位相の初期化を行います。
+		 *	通常、ユーザがこの関数を利用することはありません。
+		 */
+		void		Init(int);
+
+		//! 始点頂点位相取得関数
+		/*!
+		 *	この半稜線が始点としている頂点位相を取得します。
+		 *	\return 始点頂点位相を表す fk_Vertex 型インスタンスのアドレス
+		 */
+		fk_Vertex *	getVertex(void) const;
+
+		//! 後半稜線位相取得関数
+		/*!
+		 *	半稜線の接続関係において、この半稜線の後にあたる半稜線を取得します。
+		 *
+		 *	\return 後の半稜線位相を表す fk_Half 型インスタンスのアドレス
+		 */
+		fk_Half *	getNextHalf(void) const;
+
+		//! 前半稜線位相取得関数
+		/*!
+		 *	半稜線の接続関係において、この半稜線の前にあたる半稜線を取得します。
+		 *
+		 *	\return 前の半稜線位相を表す fk_Half 型インスタンスのアドレス
+		 */
+		fk_Half *	getPrevHalf(void) const;
+
+		//! 稜線位相取得関数
+		/*!
+		 *	この半稜線が属している稜線位相を取得します。
+		 *
+		 *	\return 稜線位相を表す fk_Edge 型インスタンスのアドレス
+		 */
+		fk_Edge *	getParentEdge(void) const;
+
+		//! ループ位相取得関数
+		/*!
+		 *	この半稜線が属しているループ位相を取得します。
+		 *
+		 *	\return
+		 *		ループ位相を表す fk_Loop 型インスタンスのアドレス。
+		 *		半稜線がループに属していない場合は nullptr を返します。
+		 */
+		fk_Loop *	getParentLoop(void) const;
+
+		//! 左側判定関数
+		/*!
+		 *	この半稜線が、属している稜線の「左側」かどうかを判定する関数です。
+		 *
+		 *	\return 「左側」である場合 true を、「右側」である場合 false を返します。
+		 */
+		bool		isLeft(void) const;
+
+		//! 右側判定関数
+		/*!
+		 *	この半稜線が、属している稜線の「右側」かどうかを判定する関数です。
+		 *
+		 *	\return 「右側」である場合 true を、「左側」である場合 false を返します。
+		 */
+		bool		isRight(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-
-	void		Print(void) const;
-	bool		Check(void) const;
-	bool		Compare(fk_Half *) const;
-
+		void		Print(void) const;
+		bool		Check(void) const;
+		bool		Compare(fk_Half *) const;
 #endif
 
-};
+	private:
+		fk_Vertex *	vertex;
+		fk_Half *	nextHalf;
+		fk_Half *	prevHalf;
+		fk_Edge *	parentEdge;
+		fk_Loop *	parentLoop;
 
+		fk_Vertex *	SetVertex(fk_Vertex *);
+		fk_Half *	SetNextHalf(fk_Half *);
+		fk_Half *	SetPrevHalf(fk_Half *);
+		fk_Edge *	SetParentEdge(fk_Edge *);
+		fk_Loop *	SetParentLoop(fk_Loop *);
+	};
+}
 #endif // !__FK_HALF_HEADER__
 
 /****************************************************************************

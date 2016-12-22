@@ -10,94 +10,98 @@
 
 #endif //WIN32
 
-//! フルスクリーン制御クラス
-/*!
- *	このクラスは、WIN32APIを利用した完全なフルスクリーンモードを提供します。
- *
- *	\attention
- *		本クラスの機能は、
- *		FLTK と Windows に依存していますので、
- *		それ以外の環境では利用できません。
- *
- *	\sa fk_Window
- */
-class fk_FullscreenController {
-private:
+namespace FK {
+
+	//! フルスクリーン制御クラス
+	/*!
+	 *	このクラスは、WIN32APIを利用した完全なフルスクリーンモードを提供します。
+	 *
+	 *	\attention
+	 *		本クラスの機能は、
+	 *		FLTK と Windows に依存していますので、
+	 *		それ以外の環境では利用できません。
+	 *
+	 *	\sa fk_Window
+	 */
+	class fk_FullscreenController {
+	public:
+		//! コンストラクタ
+		fk_FullscreenController(void);
+		//! デストラクタ
+		~fk_FullscreenController(void);
+
+		//! 初期化関数
+		/*!
+		 *	フルスクリーン化したい Fl_Window と fk_Window を指定して初期化を行います。
+		 *
+		 *	\param[in] fl_win	Fl_Window のポインタ
+		 *	\param[in] fk_win	fk_Window のポインタ
+		 */
+		void	init(Fl_Window *fl_win, fk_Window *fk_win);
+
+		//! フルスクリーンモード取得関数
+		/*!
+		 *	現在フルスクリーン化しているか否かを取得します。
+		 *
+		 *	\return フルスクリーンなら true を、ウィンドウなら false を返します。
+		 */
+		bool	isFullscreen(void);
+
+		//! フルスクリーン化関数
+		/*!
+		 *	フルスクリーン化します。モニタの解像度が対応していない場合は失敗します。
+		 *
+		 *	\return 成功したら true を、失敗したら false を返します。
+		 */
+		bool	changeToFullscreen(void);
+
+		//! ウィンドウ化関数
+		/*!
+		 *	ウィンドウに戻します。
+		 */
+		void	changeToWindow(void);
+
+	private:
 
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 
-	////////// ウインドウ保存関係 //////////
-	#define MAX_NAMELENGTH		512
-	#define MAX_WINDOWNUMBER	128
+		////////// ウインドウ保存関係 //////////
+#define MAX_NAMELENGTH		512
+#define MAX_WINDOWNUMBER	128
 
-	enum{
-		SCMODE_FULLSCREEN,				// フルスクリーンモード
-		SCMODE_WINDOW					// ウインドウモード
-	};
+		enum{
+			SCMODE_FULLSCREEN,				// フルスクリーンモード
+			SCMODE_WINDOW					// ウインドウモード
+		};
 
-	Fl_Window	*pFlWnd;
-	fk_Window	*pFkWnd;
-	HWND		hFlWnd;
-	int			nWndX, nWndY, nWndW, nWndH;
-	int			fscW, fscH;
-	bool		mode;
+		Fl_Window	*pFlWnd;
+		fk_Window	*pFkWnd;
+		HWND		hFlWnd;
+		int			nWndX, nWndY, nWndW, nWndH;
+		int			fscW, fscH;
+		bool		mode;
 
-	BOOL		SaveWindowPosition(void);
-	BOOL		LoadWindowPosition(void);
-	BOOL		ChangeScreen(HWND, int, int, int);
+		BOOL		SaveWindowPosition(void);
+		BOOL		LoadWindowPosition(void);
+		BOOL		ChangeScreen(HWND, int, int, int);
 
 #endif //WIN32
 
-public:
-	//! コンストラクタ
-	fk_FullscreenController(void);
-	//! デストラクタ
-	~fk_FullscreenController(void);
-
-	//! 初期化関数
-	/*!
-	 *	フルスクリーン化したい Fl_Window と fk_Window を指定して初期化を行います。
-	 *
-	 *	\param[in] fl_win	Fl_Window のポインタ
-	 *	\param[in] fk_win	fk_Window のポインタ
-	 */
-	void	init(Fl_Window *fl_win, fk_Window *fk_win);
-
-	//! フルスクリーンモード取得関数
-	/*!
-	 *	現在フルスクリーン化しているか否かを取得します。
-	 *
-	 *	\return フルスクリーンなら true を、ウィンドウなら false を返します。
-	 */
-	bool	isFullscreen(void);
-
-	//! フルスクリーン化関数
-	/*!
-	 *	フルスクリーン化します。モニタの解像度が対応していない場合は失敗します。
-	 *
-	 *	\return 成功したら true を、失敗したら false を返します。
-	 */
-	bool	changeToFullscreen(void);
-
-	//! ウィンドウ化関数
-	/*!
-	 *	ウィンドウに戻します。
-	 */
-	void	changeToWindow(void);
-};
+	};
 
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-//! ウインドウ状態を保持する構造体
-typedef struct{
-	HWND hWnd;
-	WINDOWPLACEMENT WindowPlacement;
-} windowstate;
+	//! ウインドウ状態を保持する構造体
+	typedef struct{
+		HWND hWnd;
+		WINDOWPLACEMENT WindowPlacement;
+	} windowstate;
 
 #endif //!FK_DOXYGEN_USER_PROCESS
 #endif //WIN32
 
+}
 #endif //!__FK_FULLSCREEN_HEADER__
 
 /****************************************************************************

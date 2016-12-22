@@ -3,749 +3,748 @@
 
 #include <FK/Base.h>
 
-const float FK_COLOR_EPS = 0.0001f;
+namespace FK {
 
-//! RGB色を管理するクラス
-/*!
- *	このクラスは、RGBA法による色を管理、制御する機能を提供します。
- *	「RGBA」のRが赤、Gが緑、Bが青、Aが透過度を意味します。
- *	各要素は float 型によって表現し、値域は 0 から 1 までです。
- *	透過色要素は 0 が完全な透明、1 が完全な不透明となります。
- *
- *	なお、透過色を設定した場合でも、
- *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
- *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
- *
- *	\sa fk_Material, fk_Scene
- */
-class fk_Color : public fk_BaseObject {
- public:
+	const float FK_COLOR_EPS = 0.0001f;
 
-	//! 色要素配列
+	//! RGB色を管理するクラス
 	/*!
-	 *	各色要素を float の配列によって格納しています。
-	 *	メンバ関数を介さずに直接参照、操作しても問題ありません。
+	 *	このクラスは、RGBA法による色を管理、制御する機能を提供します。
+	 *	「RGBA」のRが赤、Gが緑、Bが青、Aが透過度を意味します。
+	 *	各要素は float 型によって表現し、値域は 0 から 1 までです。
+	 *	透過色要素は 0 が完全な透明、1 が完全な不透明となります。
+	 *
+	 *	なお、透過色を設定した場合でも、
+	 *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
+	 *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
+	 *
+	 *	\sa fk_Material, fk_Scene
 	 */
-	float col[4];
+	class fk_Color : public fk_BaseObject {
+	public:
 
-	//! コンストラクタ1
+		//! 色要素配列
+		/*!
+		 *	各色要素を float の配列によって格納しています。
+		 *	メンバ関数を介さずに直接参照、操作しても問題ありません。
+		 */
+		float col[4];
+
+		//! コンストラクタ1
+		/*!
+		 *	\param[in] r R要素の値
+		 *	\param[in] g G要素の値
+		 *	\param[in] b B要素の値
+		 *	\param[in] a 透過要素の値
+		 */
+		fk_Color(float r = 0.2f, float g = 0.2f, float b = 0.2f, float a = 1.0f);
+
+		//! コンストラクタ2
+		/*!
+		 *	引数の型が double 型である以外は、「コンストラクタ1」と同じです。
+		 *
+		 *	\param[in] r R要素の値
+		 *	\param[in] g G要素の値
+		 *	\param[in] b B要素の値
+		 *	\param[in] a 透過要素の値
+		 */
+		fk_Color(double r, double g, double b, double a = 1.0);
+
+		//! デストラクタ
+		virtual ~fk_Color() {}
+
+		//! 比較等号演算子
+		/*!
+		 *	この等号演算子では、各色要素の差が
+		 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
+		 *	等しいと判断します。
+		 */
+		friend bool operator ==(fk_Color left, fk_Color right);
+
+		//! コピーコンストラクタ
+		fk_Color(const fk_Color &col);
+
+		//! 単純代入演算子
+		fk_Color & operator =(const fk_Color &col);
+
+		//! 実数積代入演算子
+		/*!
+		 *	以下のコードは、C の各成分を d 倍します。
+		 *	C は fk_Color 型の変数、d は double 型の変数です。
+		 *
+		 *		C *= d;
+		 *
+		 *	d は変数でなく数値でも構いません。
+		 *
+		 *		C *= 2.0;
+		 *
+		 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+		 *	1 を超える場合はその成分を 1 とします。
+		 */
+		fk_Color &			operator *=(double);
+
+		//! 実数商代入演算子
+		/*!
+		 *	以下のコードは、C の各成分を 1/d 倍します。
+		 *	C は fk_Color 型の変数、d は double 型の変数です。
+		 *
+		 *		C /= d;
+		 *
+		 *	d は変数でなく数値でも構いません。
+		 *
+		 *		C /= 2.0;
+		 *
+		 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+		 *	1 を超える場合はその成分を 1 とします。
+		 *	また、d が 0 であった場合は C の値を変更しません。
+		 */
+		fk_Color &			operator /=(double);
+
+		//! 単項和代入演算子
+		/*!
+		 *	以下のコードは、C1 に C2 を追加します。
+		 *	C1、C2 はいずれも fk_Color 型の変数です。
+		 *
+		 *		C1 += C2;
+		 *
+		 *	上記コードは、以下のコードと同義です。
+		 *
+		 *		C1 = C1 + C2;
+		 *
+		 *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
+		 */
+		fk_Color &			operator +=(const fk_Color &);
+
+		//! 単項差代入演算子
+		/*!
+		 *	以下のコードは、C1 から C2 を引きます。
+		 *	C1、C2 はいずれも fk_Color 型の変数です。
+		 *
+		 *		C1 -= C2;
+		 *
+		 *	上記コードは、以下のコードと同義です。
+		 *
+		 *		C1 = C1 - C2;
+		 *
+		 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
+		 */
+		fk_Color &			operator -=(const fk_Color &);
+
+		//! 初期化関数1
+		/*!
+		 *	(R, G, B, A) = (0, 0, 0, 1) で初期化を行います。
+		 */
+		void		init(void);
+
+		//! 初期化関数2
+		/*!
+		 *	色要素の設定を行います。同一引数型を持つ set() と同様に動作します。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 *	\param[in] a A要素値
+		 */
+		void		init(float r, float g, float b, float a = 1.0f);
+
+		//! 初期化関数3
+		/*!
+		 *	色要素の設定を行います。同一引数型を持つ set() と同様に動作します。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 *	\param[in] a A要素値
+		 */
+		void		init(double r, double g, double b, double a = 1.0);
+
+		//! 設定関数1
+		/*!
+		 *	色要素の設定を行います。同一引数型を持つ init() と同様に動作します。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 *	\param[in] a A要素値
+		 */
+		void		set(float r, float g, float b, float a = 1.0f);
+
+		//! 設定関数2
+		/*!
+		 *	色要素の設定を行います。同一引数型を持つ init() と同様に動作します。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 *	\param[in] a A要素値
+		 */
+		void		set(double r, double g, double b, double a = 1.0);
+
+		//! HSV変換関数
+		/*!
+		 *	HSV色からの変換を行い、その結果を格納します。
+		 *	透明度は 1.0 (完全な不透明) となります。
+		 *	
+		 *
+		 *	\param[in] h 色相要素値。単位は弧度法(ラジアン)です。
+		 *	\param[in] s 彩度要素値。最小値は0、最大値は1です。
+		 *	\param[in] v 明度要素値。最小値は0、最大値は1です。
+		 */
+		void		setHSV(double h, double s, double v);
+
+		//! R要素設定関数
+		/*!
+		 *	\param[in] r R要素値
+		 */
+		void		setR(float r);
+
+		//! G要素設定関数
+		/*!
+		 *	\param[in] g G要素値
+		 */
+		void		setG(float g);
+
+		//! B要素設定関数
+		/*!
+		 *	\param[in] b B要素値
+		 */
+		void		setB(float b);
+
+		//! A要素設定関数
+		/*!
+		 *	\param[in] a A要素値
+		 */
+		void		setA(float a);
+
+		//! R要素設定関数
+		/*!
+		 *	\param[in] r R要素値
+		 */
+		void		setR(double r);
+
+		//! G要素設定関数
+		/*!
+		 *	\param[in] g G要素値
+		 */
+		void		setG(double g);
+
+		//! B要素設定関数
+		/*!
+		 *	\param[in] b B要素値
+		 */
+		void		setB(double b);
+
+		//! A要素設定関数
+		/*!
+		 *	\param[in] a A要素値
+		 */
+		void		setA(double a);
+
+		//! R要素参照関数
+		/*!
+		 *	\return R要素値
+		 */
+		float		getR(void) const;
+
+		//! G要素参照関数
+		/*!
+		 *	\return G要素値
+		 */
+		float		getG(void) const;
+
+		//! B要素参照関数
+		/*!
+		 *	\return B要素値
+		 */
+		float		getB(void) const;
+
+		//! A要素参照関数
+		/*!
+		 *	\return A要素値
+		 */
+		float		getA(void) const;
+
+		//! 
+
+		//! 色成分範囲補正関数1
+		/*!
+		 *	入力した成分値に対し、0 未満である場合 0 を、
+		 *	1 以上である場合 1 を、それ以外の場合は入力値自身を返します。
+		 *
+		 *	\param[in]	x	入力値
+		 *
+		 *	\return		補正値
+		 */
+		static double	clamp(double x);
+
+		//! 色成分範囲補正関数2
+		/*!
+		 *	入力した成分値に対し、0 未満である場合 0 を、
+		 *	1 以上である場合 1 を、それ以外の場合は入力値自身を返します。
+		 *
+		 *	\param[in]	x	入力値
+		 *
+		 *	\return		補正値
+		 */
+		static float	clamp(float x);
+
+		//! \name 二項演算子
+		//@{
+		friend fk_Color	operator +(const fk_Color &, const fk_Color &);
+		friend fk_Color	operator -(const fk_Color &, const fk_Color &);
+		friend fk_Color	operator *(const fk_Color &, double);
+		friend fk_Color	operator *(double, const fk_Color &);
+		friend fk_Color	operator /(const fk_Color &, double);
+		//@}
+
+	};
+
+	//! 色要素和二項演算子
 	/*!
-	 *	\param[in] r R要素の値
-	 *	\param[in] g G要素の値
-	 *	\param[in] b B要素の値
-	 *	\param[in] a 透過要素の値
-	 */
-	fk_Color(float r = 0.2f, float g = 0.2f, float b = 0.2f, float a = 1.0f);
-
-	//! コンストラクタ2
-	/*!
-	 *	引数の型が double 型である以外は、「コンストラクタ1」と同じです。
+	 *	色値 C1 と C2 の和を得るには、以下のように記述します。
+	 *	C1, C2, C3 はいずれも fk_Color 型の変数です。
 	 *
-	 *	\param[in] r R要素の値
-	 *	\param[in] g G要素の値
-	 *	\param[in] b B要素の値
-	 *	\param[in] a 透過要素の値
-	 */
-	fk_Color(double r, double g, double b, double a = 1.0);
-
-	//! デストラクタ
-	virtual ~fk_Color() {}
-
-	//! 比較等号演算子
-	/*!
-	 *	この等号演算子では、各色要素の差が
-	 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
-	 *	等しいと判断します。
-	 */
-	friend bool operator ==(fk_Color left, fk_Color right);
-
-	//! コピーコンストラクタ
-	fk_Color(const fk_Color &col);
-
-	//! 単純代入演算子
-	fk_Color & operator =(const fk_Color &col);
-
-	//! 実数積代入演算子
-	/*!
-	 *	以下のコードは、C の各成分を d 倍します。
-	 *	C は fk_Color 型の変数、d は double 型の変数です。
-	 *
-	 *		C *= d;
-	 *
-	 *	d は変数でなく数値でも構いません。
-	 *
-	 *		C *= 2.0;
-	 *
-	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
-	 *	1 を超える場合はその成分を 1 とします。
-	 */
-	fk_Color &			operator *=(double);
-
-	//! 実数商代入演算子
-	/*!
-	 *	以下のコードは、C の各成分を 1/d 倍します。
-	 *	C は fk_Color 型の変数、d は double 型の変数です。
-	 *
-	 *		C /= d;
-	 *
-	 *	d は変数でなく数値でも構いません。
-	 *
-	 *		C /= 2.0;
-	 *
-	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
-	 *	1 を超える場合はその成分を 1 とします。
-	 *	また、d が 0 であった場合は C の値を変更しません。
-	 */
-	fk_Color &			operator /=(double);
-
-	//! 単項和代入演算子
-	/*!
-	 *	以下のコードは、C1 に C2 を追加します。
-	 *	C1、C2 はいずれも fk_Color 型の変数です。
-	 *
-	 *		C1 += C2;
-	 *
-	 *	上記コードは、以下のコードと同義です。
-	 *
-	 *		C1 = C1 + C2;
+	 *		C3 = C1 + C2;
 	 *
 	 *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
 	 */
-	fk_Color &			operator +=(const fk_Color &);
+	fk_Color	operator +(const fk_Color &, const fk_Color &);
 
-	//! 単項差代入演算子
+	//! 色要素差二項演算子
 	/*!
-	 *	以下のコードは、C1 から C2 を引きます。
-	 *	C1、C2 はいずれも fk_Color 型の変数です。
+	 *	色値 C1 と C2 の差を得るには、以下のように記述します。
+	 *	C1, C2, C3 はいずれも fk_Color 型の変数です。
 	 *
-	 *		C1 -= C2;
-	 *
-	 *	上記コードは、以下のコードと同義です。
-	 *
-	 *		C1 = C1 - C2;
+	 *		C3 = C1 - C2;
 	 *
 	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
 	 */
-	fk_Color &			operator -=(const fk_Color &);
+	fk_Color	operator -(const fk_Color &, const fk_Color &);
 
-	//! 初期化関数1
+	//! 実数倍二項演算子1
 	/*!
-	 *	(R, G, B, A) = (0, 0, 0, 1) で初期化を行います。
-	 */
-	void		init(void);
-
-	//! 初期化関数2
-	/*!
-	 *	色要素の設定を行います。同一引数型を持つ set() と同様に動作します。
+	 *	ベクトル C1 のスカラー倍色値を得るには、以下のように記述します。
+	 *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
 	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 *	\param[in] a A要素値
-	 */
-	void		init(float r, float g, float b, float a = 1.0f);
-
-	//! 初期化関数3
-	/*!
-	 *	色要素の設定を行います。同一引数型を持つ set() と同様に動作します。
+	 *		C2 = C1 * d;
 	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 *	\param[in] a A要素値
+	 *	色値と実数の順番は逆でも構いません。
+	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+	 *	1 を超える場合はその成分を 1 とします。
 	 */
-	void		init(double r, double g, double b, double a = 1.0);
+	fk_Color	operator *(const fk_Color &, double);
 
-	//! 設定関数1
+	//! 実数倍二項演算子2
 	/*!
-	 *	色要素の設定を行います。同一引数型を持つ init() と同様に動作します。
+	 *	ベクトル C1 のスカラー倍色値を得るには、以下のように記述します。
+	 *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
 	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 *	\param[in] a A要素値
-	 */
-	void		set(float r, float g, float b, float a = 1.0f);
-
-	//! 設定関数2
-	/*!
-	 *	色要素の設定を行います。同一引数型を持つ init() と同様に動作します。
+	 *		C2 = d * C1;
 	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 *	\param[in] a A要素値
+	 *	色値と実数の順番は逆でも構いません。
+	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+	 *	1 を超える場合はその成分を 1 とします。
 	 */
-	void		set(double r, double g, double b, double a = 1.0);
+	fk_Color	operator *(double, const fk_Color &);
 
-	//! HSV変換関数
+	//! 実数商二項演算子
 	/*!
-	 *	HSV色からの変換を行い、その結果を格納します。
-	 *	透明度は 1.0 (完全な不透明) となります。
-	 *	
+	 *	ベクトル C1 のスカラー商色値を得るには、以下のように記述します。
+	 *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
 	 *
-	 *	\param[in] h 色相要素値。単位は弧度法(ラジアン)です。
-	 *	\param[in] s 彩度要素値。最小値は0、最大値は1です。
-	 *	\param[in] v 明度要素値。最小値は0、最大値は1です。
-	 */
-	void		setHSV(double h, double s, double v);
-
-	//! R要素設定関数
-	/*!
-	 *	\param[in] r R要素値
-	 */
-	void		setR(float r);
-
-	//! G要素設定関数
-	/*!
-	 *	\param[in] g G要素値
-	 */
-	void		setG(float g);
-
-	//! B要素設定関数
-	/*!
-	 *	\param[in] b B要素値
-	 */
-	void		setB(float b);
-
-	//! A要素設定関数
-	/*!
-	 *	\param[in] a A要素値
-	 */
-	void		setA(float a);
-
-	//! R要素設定関数
-	/*!
-	 *	\param[in] r R要素値
-	 */
-	void		setR(double r);
-
-	//! G要素設定関数
-	/*!
-	 *	\param[in] g G要素値
-	 */
-	void		setG(double g);
-
-	//! B要素設定関数
-	/*!
-	 *	\param[in] b B要素値
-	 */
-	void		setB(double b);
-
-	//! A要素設定関数
-	/*!
-	 *	\param[in] a A要素値
-	 */
-	void		setA(double a);
-
-	//! R要素参照関数
-	/*!
-	 *	\return R要素値
-	 */
-	float		getR(void) const;
-
-	//! G要素参照関数
-	/*!
-	 *	\return G要素値
-	 */
-	float		getG(void) const;
-
-	//! B要素参照関数
-	/*!
-	 *	\return B要素値
-	 */
-	float		getB(void) const;
-
-	//! A要素参照関数
-	/*!
-	 *	\return A要素値
-	 */
-	float		getA(void) const;
-
-	//! 
-
-	//! 色成分範囲補正関数1
-	/*!
-	 *	入力した成分値に対し、0 未満である場合 0 を、
-	 *	1 以上である場合 1 を、それ以外の場合は入力値自身を返します。
+	 *		C2 = C1/d;
 	 *
-	 *	\param[in]	x	入力値
-	 *
-	 *	\return		補正値
+	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
+	 *	1 を超える場合はその成分を 1 とします。
 	 */
-	static double	clamp(double x);
+	fk_Color	operator /(const fk_Color &, double);
 
-	//! 色成分範囲補正関数2
+
+	//! マテリアル(質感)を管理するクラス
 	/*!
-	 *	入力した成分値に対し、0 未満である場合 0 を、
-	 *	1 以上である場合 1 を、それ以外の場合は入力値自身を返します。
+	 *	このクラスは、マテリアル(質感)を管理、制御する機能を提供します。
+	 *	FKにおけるマテリアルは、以下の要素によって成り立っています。
 	 *
-	 *	\param[in]	x	入力値
+	 *	- 環境反射係数 (Ambient)
+	 *	- 拡散反射係数 (Diffuse)
+	 *	- 鏡面反射係数 (Specular)
+	 *	- 放射光係数 (Emission)
+	 *	- 鏡面反射ハイライト (Shininess)
+	 *	- 透明度 (alpha)
+	 *	.
+	 *	これらのうち、前者4つは fk_Color による RGBA 色表現であり、
+	 *	後者2つは float 型によるスカラー値となっています。
+	 *	各要素についての詳細はユーザーズマニュアルやCGの解説文献を参照して下さい。
 	 *
-	 *	\return		補正値
-	 */
-	static float	clamp(float x);
-
-	//! \name 二項演算子
-	//@{
-	friend fk_Color	operator +(const fk_Color &, const fk_Color &);
-	friend fk_Color	operator -(const fk_Color &, const fk_Color &);
-	friend fk_Color	operator *(const fk_Color &, double);
-	friend fk_Color	operator *(double, const fk_Color &);
-	friend fk_Color	operator /(const fk_Color &, double);
-	//@}
-
-};
-
-//! 色要素和二項演算子
-/*!
- *	色値 C1 と C2 の和を得るには、以下のように記述します。
- *	C1, C2, C3 はいずれも fk_Color 型の変数です。
- *
- *		C3 = C1 + C2;
- *
- *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
- */
-fk_Color	operator +(const fk_Color &, const fk_Color &);
-
-//! 色要素差二項演算子
-/*!
- *	色値 C1 と C2 の差を得るには、以下のように記述します。
- *	C1, C2, C3 はいずれも fk_Color 型の変数です。
- *
- *		C3 = C1 - C2;
- *
- *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
- */
-fk_Color	operator -(const fk_Color &, const fk_Color &);
-
-//! 実数倍二項演算子1
-/*!
- *	ベクトル C1 のスカラー倍色値を得るには、以下のように記述します。
- *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
- *
- *		C2 = C1 * d;
- *
- *	色値と実数の順番は逆でも構いません。
- *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
- *	1 を超える場合はその成分を 1 とします。
- */
-fk_Color	operator *(const fk_Color &, double);
-
-//! 実数倍二項演算子2
-/*!
- *	ベクトル C1 のスカラー倍色値を得るには、以下のように記述します。
- *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
- *
- *		C2 = d * C1;
- *
- *	色値と実数の順番は逆でも構いません。
- *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
- *	1 を超える場合はその成分を 1 とします。
- */
-fk_Color	operator *(double, const fk_Color &);
-
-//! 実数商二項演算子
-/*!
- *	ベクトル C1 のスカラー商色値を得るには、以下のように記述します。
- *	C1, C2 は共に fk_Color 型の変数で、d は double 型の変数です。
- *
- *		C2 = C1/d;
- *
- *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
- *	1 を超える場合はその成分を 1 とします。
- */
-fk_Color	operator /(const fk_Color &, double);
-
-
-//! マテリアル(質感)を管理するクラス
-/*!
- *	このクラスは、マテリアル(質感)を管理、制御する機能を提供します。
- *	FKにおけるマテリアルは、以下の要素によって成り立っています。
- *
- *	- 環境反射係数 (Ambient)
- *	- 拡散反射係数 (Diffuse)
- *	- 鏡面反射係数 (Specular)
- *	- 放射光係数 (Emission)
- *	- 鏡面反射ハイライト (Shininess)
- *	- 透明度 (alpha)
- *	.
- *	これらのうち、前者4つは fk_Color による RGBA 色表現であり、
- *	後者2つは float 型によるスカラー値となっています。
- *	各要素についての詳細はユーザーズマニュアルやCGの解説文献を参照して下さい。
- *
- *	マテリアルには、最初から定義されているグローバル変数があります。
- *	これらのリストはユーザーズマニュアルの付録Aに記されています。
- *	利用するには、 initDefault() 関数を呼ぶ必要があります。
- *
- *	インスタンス生成時の初期状態は以下のような値となります。
- *
- *	- 環境反射係数: (0.3, 0.3, 0.3)
- *	- 拡散反射係数: (0.0, 0.0, 0.0)
- *	- 鏡面反射係数: (0.2, 0.2, 0.2)
- *	- 放射光係数: (0.0, 0.0, 0.0)
- *	- 鏡面反射ハイライト: 17.0
- *	- 透明度: 1.0
- *	.
- *	なお、透過色を設定した場合でも、
- *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
- *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
- *
- *	\sa fk_Color, fk_Palette, fk_Scene
- */
-
-class fk_Material : public fk_BaseObject {
-
- private:
-	float		alpha;
-	fk_Color	ambient;
-	fk_Color	diffuse;
-	fk_Color	emission;
-	fk_Color	specular;
-	float		shininess;
-
- public:
-
-	//! コンストラクタ
-	fk_Material();
-
-	//! デストラクタ
-	virtual ~fk_Material() {}
-
-	//! 比較等号演算子
-	/*!
-	 *	この等号演算子では、各色要素の差が
-	 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
-	 *	等しいと判断します。
-	 */
-	friend bool operator==(fk_Material left, fk_Material right);
-
-	//! コピーコンストラクタ
-	fk_Material(const fk_Material &arg);
-
-	//! 代入演算子
-	fk_Material & operator =(const fk_Material &arg);
-
-
-
-	//! 初期化関数
-	/*!
-	 *	変数を初期状態に戻します。
-	 */
-	void		init(void);
-
-	//! \name 設定用関数
-	//@{
-	//! 透明度設定関数1
-	/*!
-	 *	透明度を設定します。引数は float 型です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
+	 *	マテリアルには、最初から定義されているグローバル変数があります。
+	 *	これらのリストはユーザーズマニュアルの付録Aに記されています。
+	 *	利用するには、 initDefault() 関数を呼ぶ必要があります。
 	 *
-	 *	\note
-	 *	透過色を設定した場合でも、
+	 *	インスタンス生成時の初期状態は以下のような値となります。
+	 *
+	 *	- 環境反射係数: (0.3, 0.3, 0.3)
+	 *	- 拡散反射係数: (0.0, 0.0, 0.0)
+	 *	- 鏡面反射係数: (0.2, 0.2, 0.2)
+	 *	- 放射光係数: (0.0, 0.0, 0.0)
+	 *	- 鏡面反射ハイライト: 17.0
+	 *	- 透明度: 1.0
+	 *	.
+	 *	なお、透過色を設定した場合でも、
 	 *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
 	 *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
 	 *
-	 *	\param[in] a 透明度
-	 *
-	 *	\sa fk_Scene::setBlendStatus()
+	 *	\sa fk_Color, fk_Palette, fk_Scene
 	 */
-	void		setAlpha(float a);
 
-	//! 透明度設定関数2
-	/*!
-	 *	透明度を設定します。引数は double 型です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\note
-	 *	透過色を設定した場合でも、
-	 *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
-	 *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
-	 *
-	 *	\param[in] a 透明度
-	 *
-	 *	\sa fk_Scene::setBlendStatus()
-	 */
-	void		setAlpha(double a);
+	class fk_Material : public fk_BaseObject {
 
-	//! 環境反射係数設定関数1
-	/*!
-	 *	環境反射係数を設定します。引数は fk_Color 型です。
-	 *
-	 *	\param[in] c 色
-	 */
-	void		setAmbient(fk_Color c);
+	public:
 
-	//! 環境反射係数設定関数2
-	/*!
-	 *	環境反射係数を設定します。
-	 *	引数は R, G, B の各色要素を表す float 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setAmbient(float r, float g, float b);
+		//! コンストラクタ
+		fk_Material();
 
-	//! 環境反射係数設定関数3
-	/*!
-	 *	環境反射係数を設定します。
-	 *	引数は R, G, B の各色要素を表す double 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setAmbient(double r, double g, double b);
+		//! デストラクタ
+		virtual ~fk_Material() {}
 
-	//! 拡散反射係数設定関数1
-	/*!
-	 *	拡散反射係数を設定します。引数は fk_Color 型です。
-	 *
-	 *	\param[in] c 色
-	 */
-	void		setDiffuse(fk_Color c);
+		//! 比較等号演算子
+		/*!
+		 *	この等号演算子では、各色要素の差が
+		 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
+		 *	等しいと判断します。
+		 */
+		friend bool operator==(fk_Material left, fk_Material right);
 
-	//! 拡散反射係数設定関数2
-	/*!
-	 *	拡散反射係数を設定します。
-	 *	引数は R, G, B の各色要素を表す float 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setDiffuse(float r, float g, float b);
+		//! コピーコンストラクタ
+		fk_Material(const fk_Material &arg);
 
-	//! 拡散反射係数設定関数3
-	/*!
-	 *	拡散反射係数を設定します。
-	 *	引数は R, G, B の各色要素を表す double 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setDiffuse(double r, double g, double b);
+		//! 代入演算子
+		fk_Material & operator =(const fk_Material &arg);
 
-	//! 鏡面反射設定関数1
-	/*!
-	 *	鏡面反射係数を設定します。引数は fk_Color 型です。
-	 *
-	 *	\param[in] c 色
-	 */
-	void		setSpecular(fk_Color c);
 
-	//! 鏡面反射係数設定関数2
-	/*!
-	 *	鏡面反射係数を設定します。
-	 *	引数は R, G, B の各色要素を表す float 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setSpecular(float r, float g, float b);
 
-	//! 鏡面反射係数設定関数3
-	/*!
-	 *	鏡面反射係数を設定します。
-	 *	引数は R, G, B の各色要素を表す double 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setSpecular(double r, double g, double b);
+		//! 初期化関数
+		/*!
+		 *	変数を初期状態に戻します。
+		 */
+		void		init(void);
 
-	//! 放射光係数設定関数1
-	/*!
-	 *	放射光係数を設定します。引数は fk_Color 型です。
-	 *
-	 *	\param[in] c 色
-	 */
-	void		setEmission(fk_Color c);
+		//! \name 設定用関数
+		//@{
+		//! 透明度設定関数1
+		/*!
+		 *	透明度を設定します。引数は float 型です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\note
+		 *	透過色を設定した場合でも、
+		 *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
+		 *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
+		 *
+		 *	\param[in] a 透明度
+		 *
+		 *	\sa fk_Scene::setBlendStatus()
+		 */
+		void		setAlpha(float a);
 
-	//! 放射光係数設定関数2
-	/*!
-	 *	放射光係数を設定します。
-	 *	引数は R, G, B の各色要素を表す float 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setEmission(float r, float g, float b);
+		//! 透明度設定関数2
+		/*!
+		 *	透明度を設定します。引数は double 型です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\note
+		 *	透過色を設定した場合でも、
+		 *	シーンで透過処理設定を有効としなければ、透過処理が行われません。
+		 *	詳細は fk_Scene::setBlendStatus() の説明を参照して下さい。
+		 *
+		 *	\param[in] a 透明度
+		 *
+		 *	\sa fk_Scene::setBlendStatus()
+		 */
+		void		setAlpha(double a);
 
-	//! 放射光係数設定関数3
-	/*!
-	 *	放射光係数を設定します。
-	 *	引数は R, G, B の各色要素を表す double 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setEmission(double r, double g, double b);
+		//! 環境反射係数設定関数1
+		/*!
+		 *	環境反射係数を設定します。引数は fk_Color 型です。
+		 *
+		 *	\param[in] c 色
+		 */
+		void		setAmbient(fk_Color c);
 
-	//! 鏡面反射ハイライト設定関数1
-	/*!
-	 *	鏡面反射ハイライトを設定します。引数は float 型です。
-	 *
-	 *	\param[in] s 鏡面反射ハイライト
-	 */
-	void		setShininess(float s);
+		//! 環境反射係数設定関数2
+		/*!
+		 *	環境反射係数を設定します。
+		 *	引数は R, G, B の各色要素を表す float 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setAmbient(float r, float g, float b);
 
-	//! 鏡面反射ハイライト設定関数2
-	/*!
-	 *	鏡面反射ハイライトを設定します。引数は double 型です。
-	 *
-	 *	\param[in] s 鏡面反射ハイライト
-	 */
-	void		setShininess(double s);
+		//! 環境反射係数設定関数3
+		/*!
+		 *	環境反射係数を設定します。
+		 *	引数は R, G, B の各色要素を表す double 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setAmbient(double r, double g, double b);
 
-	//! 環境反射・拡散反射同時設定関数1
-	/*!
-	 *	環境反射係数と拡散反射係数を同一の値で設定します。引数は fk_Color 型です。
-	 *
-	 *	\param[in] c 色
-	 */
-	void		setAmbDiff(fk_Color c);
+		//! 拡散反射係数設定関数1
+		/*!
+		 *	拡散反射係数を設定します。引数は fk_Color 型です。
+		 *
+		 *	\param[in] c 色
+		 */
+		void		setDiffuse(fk_Color c);
 
-	//! 環境反射・拡散反射同時設定関数2
-	/*!
-	 *	環境反射係数と拡散反射係数を同一の値で設定します。
-	 *	引数は R, G, B の各色要素を表す float 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setAmbDiff(float r, float g, float b);
+		//! 拡散反射係数設定関数2
+		/*!
+		 *	拡散反射係数を設定します。
+		 *	引数は R, G, B の各色要素を表す float 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setDiffuse(float r, float g, float b);
 
-	//! 環境反射・拡散反射同時設定関数3
-	/*!
-	 *	環境反射係数と拡散反射係数を同一の値で設定します。
-	 *	引数は R, G, B の各色要素を表す double 型の数値です。
-	 *	設定できる値は 0 から 1 までで、
-	 *	範囲外の数値については上下限に丸められます。
-	 *
-	 *	\param[in] r R要素値
-	 *	\param[in] g G要素値
-	 *	\param[in] b B要素値
-	 */
-	void		setAmbDiff(double r, double g, double b);
-	//@}
+		//! 拡散反射係数設定関数3
+		/*!
+		 *	拡散反射係数を設定します。
+		 *	引数は R, G, B の各色要素を表す double 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setDiffuse(double r, double g, double b);
 
-	//! \name 参照用関数
-	//@{
+		//! 鏡面反射設定関数1
+		/*!
+		 *	鏡面反射係数を設定します。引数は fk_Color 型です。
+		 *
+		 *	\param[in] c 色
+		 */
+		void		setSpecular(fk_Color c);
 
-	//! 透明度参照関数
-	/*!
-	 *	\return 透明度
-	 *
-	 *	\sa setAlpha()
-	 */
-	float		getAlpha(void);
+		//! 鏡面反射係数設定関数2
+		/*!
+		 *	鏡面反射係数を設定します。
+		 *	引数は R, G, B の各色要素を表す float 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setSpecular(float r, float g, float b);
 
-	//! 環境反射係数参照関数
-	/*!
-	 *	返り値の型はポインタであることに注意して下さい。
-	 *	ここで得られるアドレスは参照元マテリアルの実体であり、
-	 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
-	 *
-	 *	\return 環境反射係数へのポインタ
-	 *
-	 *	\sa setAmbient(), setAmbDiff()
-	 */
-	fk_Color *	getAmbient(void);
+		//! 鏡面反射係数設定関数3
+		/*!
+		 *	鏡面反射係数を設定します。
+		 *	引数は R, G, B の各色要素を表す double 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setSpecular(double r, double g, double b);
 
-	//! 拡散反射係数参照関数
-	/*!
-	 *	返り値の型はポインタであることに注意して下さい。
-	 *	ここで得られるアドレスは参照元マテリアルの実体であり、
-	 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
-	 *
-	 *	\return 拡散反射係数へのポインタ
-	 *
-	 *	\sa setDiffuse(), setAmbDiff()
-	 */
-	fk_Color *	getDiffuse(void);
+		//! 放射光係数設定関数1
+		/*!
+		 *	放射光係数を設定します。引数は fk_Color 型です。
+		 *
+		 *	\param[in] c 色
+		 */
+		void		setEmission(fk_Color c);
 
-	//! 鏡面反射係数参照関数
-	/*!
-	 *	返り値の型はポインタであることに注意して下さい。
-	 *	ここで得られるアドレスは参照元マテリアルの実体であり、
-	 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
-	 *
-	 *	\return 鏡面反射係数へのポインタ
-	 *
-	 *	\sa setSpecular()
-	 */
-	fk_Color *	getSpecular(void);
+		//! 放射光係数設定関数2
+		/*!
+		 *	放射光係数を設定します。
+		 *	引数は R, G, B の各色要素を表す float 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setEmission(float r, float g, float b);
 
-	//! 放射光係数参照関数
-	/*!
-	 *	返り値の型はポインタであることに注意して下さい。
-	 *	ここで得られるアドレスは参照元マテリアルの実体であり、
-	 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
-	 *
-	 *	\return 放射光係数へのポインタ
-	 *
-	 *	\sa setEmission()
-	 */
-	fk_Color *	getEmission(void);
+		//! 放射光係数設定関数3
+		/*!
+		 *	放射光係数を設定します。
+		 *	引数は R, G, B の各色要素を表す double 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setEmission(double r, double g, double b);
 
-	//! 鏡面反射ハイライト参照関数
-	/*!
-	 *	\return 鏡面反射ハイライト
-	 *
-	 *	\sa setShininess()
-	 */
-	float		getShininess(void);
-	//@}
+		//! 鏡面反射ハイライト設定関数1
+		/*!
+		 *	鏡面反射ハイライトを設定します。引数は float 型です。
+		 *
+		 *	\param[in] s 鏡面反射ハイライト
+		 */
+		void		setShininess(float s);
 
-	//! デフォルトマテリアル初期化関数
-	/*!
-	 *	この関数を呼ぶと、
-	 *	ユーザーズマニュアルに掲載しているマテリアル変数の値を、
-	 *	マニュアルに記載してある値に初期化します。
-	 *	この関数を呼んだ後、該当マテリアル変数を
-	 *	別のマテリアル値に設定することが可能です。
-	 *
-	 *	この関数は static 宣言されているため、
-	 *	クラスのインスタンスを生成しなくても呼ぶことができます。
-	 */
-	static void	initDefault(void);
+		//! 鏡面反射ハイライト設定関数2
+		/*!
+		 *	鏡面反射ハイライトを設定します。引数は double 型です。
+		 *
+		 *	\param[in] s 鏡面反射ハイライト
+		 */
+		void		setShininess(double s);
+
+		//! 環境反射・拡散反射同時設定関数1
+		/*!
+		 *	環境反射係数と拡散反射係数を同一の値で設定します。引数は fk_Color 型です。
+		 *
+		 *	\param[in] c 色
+		 */
+		void		setAmbDiff(fk_Color c);
+
+		//! 環境反射・拡散反射同時設定関数2
+		/*!
+		 *	環境反射係数と拡散反射係数を同一の値で設定します。
+		 *	引数は R, G, B の各色要素を表す float 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setAmbDiff(float r, float g, float b);
+
+		//! 環境反射・拡散反射同時設定関数3
+		/*!
+		 *	環境反射係数と拡散反射係数を同一の値で設定します。
+		 *	引数は R, G, B の各色要素を表す double 型の数値です。
+		 *	設定できる値は 0 から 1 までで、
+		 *	範囲外の数値については上下限に丸められます。
+		 *
+		 *	\param[in] r R要素値
+		 *	\param[in] g G要素値
+		 *	\param[in] b B要素値
+		 */
+		void		setAmbDiff(double r, double g, double b);
+		//@}
+
+		//! \name 参照用関数
+		//@{
+
+		//! 透明度参照関数
+		/*!
+		 *	\return 透明度
+		 *
+		 *	\sa setAlpha()
+		 */
+		float		getAlpha(void);
+
+		//! 環境反射係数参照関数
+		/*!
+		 *	返り値の型はポインタであることに注意して下さい。
+		 *	ここで得られるアドレスは参照元マテリアルの実体であり、
+		 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
+		 *
+		 *	\return 環境反射係数へのポインタ
+		 *
+		 *	\sa setAmbient(), setAmbDiff()
+		 */
+		fk_Color *	getAmbient(void);
+
+		//! 拡散反射係数参照関数
+		/*!
+		 *	返り値の型はポインタであることに注意して下さい。
+		 *	ここで得られるアドレスは参照元マテリアルの実体であり、
+		 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
+		 *
+		 *	\return 拡散反射係数へのポインタ
+		 *
+		 *	\sa setDiffuse(), setAmbDiff()
+		 */
+		fk_Color *	getDiffuse(void);
+
+		//! 鏡面反射係数参照関数
+		/*!
+		 *	返り値の型はポインタであることに注意して下さい。
+		 *	ここで得られるアドレスは参照元マテリアルの実体であり、
+		 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
+		 *
+		 *	\return 鏡面反射係数へのポインタ
+		 *
+		 *	\sa setSpecular()
+		 */
+		fk_Color *	getSpecular(void);
+
+		//! 放射光係数参照関数
+		/*!
+		 *	返り値の型はポインタであることに注意して下さい。
+		 *	ここで得られるアドレスは参照元マテリアルの実体であり、
+		 *	実体の値を修正すると元マテリアルの色要素を修正することになります。
+		 *
+		 *	\return 放射光係数へのポインタ
+		 *
+		 *	\sa setEmission()
+		 */
+		fk_Color *	getEmission(void);
+
+		//! 鏡面反射ハイライト参照関数
+		/*!
+		 *	\return 鏡面反射ハイライト
+		 *
+		 *	\sa setShininess()
+		 */
+		float		getShininess(void);
+		//@}
+
+		//! デフォルトマテリアル初期化関数
+		/*!
+		 *	この関数を呼ぶと、
+		 *	ユーザーズマニュアルに掲載しているマテリアル変数の値を、
+		 *	マニュアルに記載してある値に初期化します。
+		 *	この関数を呼んだ後、該当マテリアル変数を
+		 *	別のマテリアル値に設定することが可能です。
+		 *
+		 *	この関数は static 宣言されているため、
+		 *	クラスのインスタンスを生成しなくても呼ぶことができます。
+		 */
+		static void	initDefault(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-
-	void		Print(int, std::string = "");
-
+		void		Print(int, std::string = "");
 #endif
 
-};
-
+	private:
+		float		alpha;
+		fk_Color	ambient;
+		fk_Color	diffuse;
+		fk_Color	emission;
+		fk_Color	specular;
+		float		shininess;
+	};
+}
 #endif // __FK_MATERIAL_HEADER__
 
 /****************************************************************************

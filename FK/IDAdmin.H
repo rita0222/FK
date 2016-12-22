@@ -4,34 +4,37 @@
 #include <vector>
 #include <list>
 
-class fk_IDAdmin {
+namespace FK {
 
-	friend class	fk_FileInput;
-	friend class	fk_FileOutput;
+	class fk_IDAdmin {
 
- private:
-	int					order;
-	int					MaxID;
-	std::list<int>		*eraseIDSet;
-	std::vector<char>	existFlagSet;
+		friend class	fk_FileInput;
+		friend class	fk_FileOutput;
 
- public:
-	fk_IDAdmin(int = 1);
-	virtual ~fk_IDAdmin();
+	public:
+		fk_IDAdmin(int = 1);
+		virtual ~fk_IDAdmin();
 
-	void	CloneData(fk_IDAdmin *);
-	void	Init(int = 1);
-	void	Resize(int);
-	int		NewID(void) const;
-	int		CreateID(void);
-	bool	CreateID(int);
-	bool	EraseID(int);
-	bool	ExistID(int) const;
-	int		GetMaxID(void) const;
-	int		GetIDNum(void) const;
-	int		GetNext(int) const;
-	int		GetOrder(void) const;
-};
+		void	CloneData(fk_IDAdmin *);
+		void	Init(int = 1);
+		void	Resize(int);
+		int		NewID(void) const;
+		int		CreateID(void);
+		bool	CreateID(int);
+		bool	EraseID(int);
+		bool	ExistID(int) const;
+		int		GetMaxID(void) const;
+		int		GetIDNum(void) const;
+		int		GetNext(int) const;
+		int		GetOrder(void) const;
+
+	private:
+		int					order;
+		int					MaxID;
+		std::list<int>		*eraseIDSet;
+		std::vector<char>	existFlagSet;
+	};
+}
 
 #endif // !__FK_IDADMIN_HEADER__
 

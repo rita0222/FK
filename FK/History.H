@@ -4,62 +4,63 @@
 #include <FK/Vector.h>
 #include <FK/Command.H>
 
-class fk_History {
- private:
-	std::vector<fk_Command>		comStack;
-	std::vector<char>			boolStack;
-	std::vector<int>			intStack;
-	std::vector<fk_Vector>		vecStack;
-	std::vector<double>			doubleStack;
-	std::vector<std::string>	strStack;
+namespace FK {
+	class fk_History {
+	public:
+		fk_History(void);
+		virtual ~fk_History();
 
-	int					curIndex;
-	bool				defFlag;
+		// 初期化用関数 
+		void				Init(void);
 
- public:
-	fk_History(void);
-	virtual ~fk_History();
+		// コマンド定義用関数 
+		bool				Open(const int);
+		bool				Close(void);
 
-	// 初期化用関数 
-	void				Init(void);
+		// 情報保存用関数 
+		void				PushBool(const bool);
+		void				PushInt(const int);
+		void				PushVec(const fk_Vector);
+		void				PushDouble(const double);
+		void				PushStr(const std::string);
 
-	// コマンド定義用関数 
-	bool				Open(const int);
-	bool				Close(void);
+		// コマンド情報取得用関数 
+		int					GetComIndex(void) const;
+		fk_Command			GetCom(void) const;
+		fk_Command			GetCom(const unsigned int) const;
 
-	// 情報保存用関数 
-	void				PushBool(const bool);
-	void				PushInt(const int);
-	void				PushVec(const fk_Vector);
-	void				PushDouble(const double);
-	void				PushStr(const std::string);
+		bool				GetBool(const unsigned int) const;
+		int					GetInt(const unsigned int) const;
+		fk_Vector			GetVec(const unsigned int) const;
+		double				GetDouble(const unsigned int) const;
+		std::string			GetStr(const unsigned int) const;
 
-	// コマンド情報取得用関数 
-	int					GetComIndex(void) const;
-	fk_Command			GetCom(void) const;
-	fk_Command			GetCom(const unsigned int) const;
+		// 履歴操作用関数 
+		void				SetMark(bool = true);
+		bool				GetMarkStatus(void);
+		bool				Undo(void);
+		bool				Undo(unsigned int);
+		bool				Redo(void);
+		bool				Redo(unsigned int);
 
-	bool				GetBool(const unsigned int) const;
-	int					GetInt(const unsigned int) const;
-	fk_Vector			GetVec(const unsigned int) const;
-	double				GetDouble(const unsigned int) const;
-	std::string			GetStr(const unsigned int) const;
+		// デバッグ用関数 
+		void				Print(void);
+		void				PrintSize(void);
 
-	// 履歴操作用関数 
-	void				SetMark(bool = true);
-	bool				GetMarkStatus(void);
-	bool				Undo(void);
-	bool				Undo(unsigned int);
-	bool				Redo(void);
-	bool				Redo(unsigned int);
+	private:
+		std::vector<fk_Command>		comStack;
+		std::vector<char>			boolStack;
+		std::vector<int>			intStack;
+		std::vector<fk_Vector>		vecStack;
+		std::vector<double>			doubleStack;
+		std::vector<std::string>	strStack;
 
-	// デバッグ用関数 
-	void				Print(void);
-	void				PrintSize(void);
-};
+		int					curIndex;
+		bool				defFlag;
+	};
+}
 
 #endif // !__FK_HISTORY_HEADER__
-
 
 /****************************************************************************
  *

@@ -5,88 +5,88 @@
 #include <FK/Vector.h>
 #include <list>
 
-//! 描画用キャッシュデータを管理するクラス
-/*!
- *	このクラスは、 fk_Solid 型のデータを表示する際に
- *	描画用データのキャッシングを制御するための機能を提供します。
- *	通常、ユーザがこのクラスの機能を利用することはありません。
- */
-class fk_DrawCache : public fk_MassProperty {
+namespace FK {
+	//! 描画用キャッシュデータを管理するクラス
+	/*!
+	 *	このクラスは、 fk_Solid 型のデータを表示する際に
+	 *	描画用データのキャッシングを制御するための機能を提供します。
+	 *	通常、ユーザがこのクラスの機能を利用することはありません。
+	 */
+	class fk_DrawCache : public fk_MassProperty {
 
-	friend class	fk_PointDraw;
-	friend class	fk_LineDraw;
-	friend class	fk_FaceDraw;
+		friend class	fk_PointDraw;
+		friend class	fk_LineDraw;
+		friend class	fk_FaceDraw;
 
- private:
-	std::list<fk_Vertex *>	vertexCache;
-	std::list<fk_Edge *>	edgeCache;
-	std::list<fk_Loop *>	loopCache;
-
-	std::vector<fk_Vector>	vertexArray;
-	std::vector<int>		ifsArray;
-
-
-	void			ClearVCache(void);
-	void			ClearECache(void);
-	void			ClearLCache(void);
-	bool			ClearVCache(fk_Vertex *);
-	bool			ClearECache(fk_Edge *);
-	bool			ClearLCache(fk_Loop *);
-
-	bool			GetVCacheStatus(void);
-	bool			GetECacheStatus(void);
-	bool			GetLCacheStatus(void);
-	void			MakeVCache(void);
-	void			MakeECache(void);
-	void			MakeLCache(void);
-	void			AddVCache(fk_Vertex *);
-	void			AddECache(fk_Edge *);
-	void			AddLCache(fk_Loop *);
-
-	std::list<fk_Vertex *> *	GetVCache(void);
-	std::list<fk_Edge *> *		GetECache(void);
-	std::list<fk_Loop *> *		GetLCache(void);
-
- protected:
+	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	fk_Vertex *			GetNewVertexObj(void);
-	fk_Vertex *			GetNewVertexObj(int);
-	fk_Half *			GetNewHalfObj(void);
-	fk_Half *			GetNewHalfObj(int);
-	fk_Edge *			GetNewEdgeObj(void);
-	fk_Edge *			GetNewEdgeObj(int);
-	fk_Loop *			GetNewLoopObj(void);
-	fk_Loop *			GetNewLoopObj(int);
+		fk_DrawCache(void);
+		virtual ~fk_DrawCache();
 
-	bool				DeleteVertexObj(fk_Vertex *);
-	bool				DeleteVertexObj(int);
-	bool				DeleteHalfObj(fk_Half *);
-	bool				DeleteHalfObj(int);
-	bool				DeleteEdgeObj(fk_Edge *);
-	bool				DeleteEdgeObj(int);
-	bool				DeleteLoopObj(fk_Loop *);
-	bool				DeleteLoopObj(int);
-
-	void				AllCacheClear(void);
-	void				AllCacheMake(void);
+		void			AllClear_(void);
+		void			PrintCache(void);
 
 #endif
 
- public:
+	private:
+		std::list<fk_Vertex *>	vertexCache;
+		std::list<fk_Edge *>	edgeCache;
+		std::list<fk_Loop *>	loopCache;
+
+		std::vector<fk_Vector>	vertexArray;
+		std::vector<int>		ifsArray;
+
+
+		void			ClearVCache(void);
+		void			ClearECache(void);
+		void			ClearLCache(void);
+		bool			ClearVCache(fk_Vertex *);
+		bool			ClearECache(fk_Edge *);
+		bool			ClearLCache(fk_Loop *);
+
+		bool			GetVCacheStatus(void);
+		bool			GetECacheStatus(void);
+		bool			GetLCacheStatus(void);
+		void			MakeVCache(void);
+		void			MakeECache(void);
+		void			MakeLCache(void);
+		void			AddVCache(fk_Vertex *);
+		void			AddECache(fk_Edge *);
+		void			AddLCache(fk_Loop *);
+
+		std::list<fk_Vertex *> *	GetVCache(void);
+		std::list<fk_Edge *> *		GetECache(void);
+		std::list<fk_Loop *> *		GetLCache(void);
+
+	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	fk_DrawCache(void);
-	virtual ~fk_DrawCache();
+		fk_Vertex *			GetNewVertexObj(void);
+		fk_Vertex *			GetNewVertexObj(int);
+		fk_Half *			GetNewHalfObj(void);
+		fk_Half *			GetNewHalfObj(int);
+		fk_Edge *			GetNewEdgeObj(void);
+		fk_Edge *			GetNewEdgeObj(int);
+		fk_Loop *			GetNewLoopObj(void);
+		fk_Loop *			GetNewLoopObj(int);
 
-	void			AllClear_(void);
-	void			PrintCache(void);
+		bool				DeleteVertexObj(fk_Vertex *);
+		bool				DeleteVertexObj(int);
+		bool				DeleteHalfObj(fk_Half *);
+		bool				DeleteHalfObj(int);
+		bool				DeleteEdgeObj(fk_Edge *);
+		bool				DeleteEdgeObj(int);
+		bool				DeleteLoopObj(fk_Loop *);
+		bool				DeleteLoopObj(int);
 
+		void				AllCacheClear(void);
+		void				AllCacheMake(void);
 #endif
-
-};	
+	};	
+}
 
 
 

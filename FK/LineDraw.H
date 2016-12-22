@@ -1,52 +1,48 @@
-﻿#ifdef FK_D3D
-#include "./D3D/LineDraw.h"
-#else
-
-#ifndef __FK_LINE_DRAW_HEADER__
+﻿#ifndef __FK_LINE_DRAW_HEADER__
 #define __FK_LINE_DRAW_HEADER__
 
 #include <vector>
 #include <FK/Material.h>
 
-class fk_Model;
-class fk_Edge;
-class fk_Color;
-class fk_IndexFaceSet;
+namespace FK {
 
-class fk_LineDraw {
- private:
-	bool	arrayState;
+	class fk_Model;
+	class fk_Edge;
+	class fk_Color;
+	class fk_IndexFaceSet;
 
-	void	DrawShapeLineMaterial(fk_Model *);
-	void	DrawSolidLineMaterial(fk_Model *);
-	int		DrawSolidLineMaterialElem(fk_Edge *, int,
-									  int, double,
-									  std::vector<fk_Material> *,
-									  fk_Color *);
-	void	DrawIFSLineMaterial(fk_Model *);
-	void	DrawShapeLinePick(fk_Model *);
-	void	DrawSolidLinePick(fk_Model *);
-	void	DrawSolidLinePickElem(fk_Edge *);
-	void	DrawIFSLinePick(fk_Model *);
-	void	DrawShapeLineNormal(fk_Model *, bool);
-	void	DrawSolidLineNormal(fk_Model *, bool);
-	void	DrawSolidLineNormalElem(fk_Edge *, double);
-	void	DrawIFSLineNormal(fk_Model *, bool);
-	void	CommonLineDrawFunc(fk_Edge *, bool);
-	void	DrawIFSLineSub(fk_IndexFaceSet *);
+	class fk_LineDraw {
+	public:
+		fk_LineDraw(void);
+		virtual ~fk_LineDraw();
 
- public:
-	fk_LineDraw(void);
-	virtual ~fk_LineDraw();
+		void	SetArrayState(bool);
+		void	DrawShapeLine(fk_Model *, bool);
+		void	DrawBoundaryLine(fk_Model *);
 
-	void	SetArrayState(bool);
-	void	DrawShapeLine(fk_Model *, bool);
-	void	DrawBoundaryLine(fk_Model *);
-};
+	private:
+		bool	arrayState;
 
+		void	DrawShapeLineMaterial(fk_Model *);
+		void	DrawSolidLineMaterial(fk_Model *);
+		int		DrawSolidLineMaterialElem(fk_Edge *, int,
+										  int, double,
+										  std::vector<fk_Material> *,
+										  fk_Color *);
+		void	DrawIFSLineMaterial(fk_Model *);
+		void	DrawShapeLinePick(fk_Model *);
+		void	DrawSolidLinePick(fk_Model *);
+		void	DrawSolidLinePickElem(fk_Edge *);
+		void	DrawIFSLinePick(fk_Model *);
+		void	DrawShapeLineNormal(fk_Model *, bool);
+		void	DrawSolidLineNormal(fk_Model *, bool);
+		void	DrawSolidLineNormalElem(fk_Edge *, double);
+		void	DrawIFSLineNormal(fk_Model *, bool);
+		void	CommonLineDrawFunc(fk_Edge *, bool);
+		void	DrawIFSLineSub(fk_IndexFaceSet *);
+	};
+}
 #endif /* !__FK_LINE_DRAW_HEADER__ */
-
-#endif /* !D3D_BRANCH */
 
 /****************************************************************************
  *

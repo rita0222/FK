@@ -4,108 +4,110 @@
 #include <FK/IDAdmin.H>
 #include <vector>
 
-class fk_Vertex;
-class fk_Half;
-class fk_Edge;
-class fk_Loop;
+namespace FK {
+	class fk_Vertex;
+	class fk_Half;
+	class fk_Edge;
+	class fk_Loop;
 
-class fk_DataBase {
+	class fk_DataBase {
 
-	friend class		fk_DataAccess;
-	friend class		fk_FileInput;
-	friend class		fk_FileOutput;
-	friend class		fk_IFSetHandle;
+		friend class		fk_DataAccess;
+		friend class		fk_FileInput;
+		friend class		fk_FileOutput;
+		friend class		fk_IFSetHandle;
 
- private:
-
-	fk_IDAdmin			vAdmin;		// 頂点 ID 管理オブジェクト
-	fk_IDAdmin			hAdmin;		// 半稜線 ID 管理オブジェクト
-	fk_IDAdmin			eAdmin;		// 稜線 ID 管理オブジェクト
-	fk_IDAdmin			lAdmin;		// ループ ID 管理オブジェクト
-
-	std::vector<fk_Vertex *>	vSet;
-	std::vector<fk_Half *>		hSet;
-	std::vector<fk_Edge *>		eSet;
-	std::vector<fk_Loop *>		lSet;
-
-	void				ResizeData(fk_DataBase *);
-	void				ResizeData(int, int, int, int);
-	void				VSetClone(std::vector<fk_Vertex *> *);
-	void				HSetClone(std::vector<fk_Half *> *);
-	void				ESetClone(std::vector<fk_Edge *> *);
-	void				LSetClone(std::vector<fk_Loop *> *);
-
-	bool				VCompare(fk_DataBase *);
-	bool				HCompare(fk_DataBase *);
-	bool				ECompare(fk_DataBase *);
-	bool				LCompare(fk_DataBase *);
-
-	fk_Vertex *			GetNewVertex(void);
-	fk_Vertex *			GetNewVertex(int);
-	fk_Half *			GetNewHalf(void);
-	fk_Half *			GetNewHalf(int);
-	fk_Edge *			GetNewEdge(void);
-	fk_Edge *			GetNewEdge(int);
-	fk_Loop *			GetNewLoop(void);
-	fk_Loop *			GetNewLoop(int);
-
-	bool				DeleteVertex(int);
-	bool				DeleteHalf(int);
-	bool				DeleteEdge(int);
-	bool				DeleteLoop(int);
-
- public:
+	public:
 		
-	fk_DataBase(void);		// コンストラクタ
-	virtual ~fk_DataBase();	// デストラクタ
+		fk_DataBase(void);		// コンストラクタ
+		virtual ~fk_DataBase();	// デストラクタ
 
-	void				AllClear(void);
-	void				CloneData(fk_DataBase *);
-	bool				Compare(fk_DataBase *);
+		void				AllClear(void);
+		void				CloneData(fk_DataBase *);
+		bool				Compare(fk_DataBase *);
 
-	bool				ExistVertex(fk_Vertex *) const;
-	bool				ExistVertex(int) const;
-	bool				ExistHalf(fk_Half *) const;
-	bool				ExistHalf(int) const;
-	bool				ExistEdge(fk_Edge *) const;
-	bool				ExistEdge(int) const;
-	bool				ExistLoop(fk_Loop *) const;
-	bool				ExistLoop(int) const;
+		bool				ExistVertex(fk_Vertex *) const;
+		bool				ExistVertex(int) const;
+		bool				ExistHalf(fk_Half *) const;
+		bool				ExistHalf(int) const;
+		bool				ExistEdge(fk_Edge *) const;
+		bool				ExistEdge(int) const;
+		bool				ExistLoop(fk_Loop *) const;
+		bool				ExistLoop(int) const;
 
-	fk_Vertex *			GetVData(int) const;
-	fk_Half *			GetHData(int) const;
-	fk_Edge *			GetEData(int) const;
-	fk_Loop *			GetLData(int) const;
+		fk_Vertex *			GetVData(int) const;
+		fk_Half *			GetHData(int) const;
+		fk_Edge *			GetEData(int) const;
+		fk_Loop *			GetLData(int) const;
 
-	fk_Vertex *			GetNextV(fk_Vertex *) const;
-	fk_Half *			GetNextH(fk_Half *) const;
-	fk_Edge *			GetNextE(fk_Edge *) const;
-	fk_Loop *			GetNextL(fk_Loop *) const;
+		fk_Vertex *			GetNextV(fk_Vertex *) const;
+		fk_Half *			GetNextH(fk_Half *) const;
+		fk_Edge *			GetNextE(fk_Edge *) const;
+		fk_Loop *			GetNextL(fk_Loop *) const;
 
-	fk_Vertex *			GetLastV(void) const;
-	fk_Half *			GetLastH(void) const;
-	fk_Edge *			GetLastE(void) const;
-	fk_Loop *			GetLastL(void) const;
+		fk_Vertex *			GetLastV(void) const;
+		fk_Half *			GetLastH(void) const;
+		fk_Edge *			GetLastE(void) const;
+		fk_Loop *			GetLastL(void) const;
 
-	int					GetVNum(void) const;
-	int					GetHNum(void) const;
-	int					GetENum(void) const;
-	int					GetLNum(void) const;
+		int					GetVNum(void) const;
+		int					GetHNum(void) const;
+		int					GetENum(void) const;
+		int					GetLNum(void) const;
 
-	void				VPrint(int = FK_UNDEFINED) const;
-	void				HPrint(int = FK_UNDEFINED) const;
-	void				EPrint(int = FK_UNDEFINED) const;
-	void				LPrint(int = FK_UNDEFINED) const;
+		void				VPrint(int = FK_UNDEFINED) const;
+		void				HPrint(int = FK_UNDEFINED) const;
+		void				EPrint(int = FK_UNDEFINED) const;
+		void				LPrint(int = FK_UNDEFINED) const;
 
-	void				AllPrint(void) const;
+		void				AllPrint(void) const;
 
-	bool				VCheck(int = FK_UNDEFINED) const;
-	bool				HCheck(int = FK_UNDEFINED) const;
-	bool				ECheck(int = FK_UNDEFINED) const;
-	bool				LCheck(int = FK_UNDEFINED) const;
+		bool				VCheck(int = FK_UNDEFINED) const;
+		bool				HCheck(int = FK_UNDEFINED) const;
+		bool				ECheck(int = FK_UNDEFINED) const;
+		bool				LCheck(int = FK_UNDEFINED) const;
 
-	bool				AllCheck(void) const;
-};
+		bool				AllCheck(void) const;
+
+	private:
+
+		fk_IDAdmin			vAdmin;		// 頂点 ID 管理オブジェクト
+		fk_IDAdmin			hAdmin;		// 半稜線 ID 管理オブジェクト
+		fk_IDAdmin			eAdmin;		// 稜線 ID 管理オブジェクト
+		fk_IDAdmin			lAdmin;		// ループ ID 管理オブジェクト
+
+		std::vector<fk_Vertex *>	vSet;
+		std::vector<fk_Half *>		hSet;
+		std::vector<fk_Edge *>		eSet;
+		std::vector<fk_Loop *>		lSet;
+
+		void				ResizeData(fk_DataBase *);
+		void				ResizeData(int, int, int, int);
+		void				VSetClone(std::vector<fk_Vertex *> *);
+		void				HSetClone(std::vector<fk_Half *> *);
+		void				ESetClone(std::vector<fk_Edge *> *);
+		void				LSetClone(std::vector<fk_Loop *> *);
+
+		bool				VCompare(fk_DataBase *);
+		bool				HCompare(fk_DataBase *);
+		bool				ECompare(fk_DataBase *);
+		bool				LCompare(fk_DataBase *);
+
+		fk_Vertex *			GetNewVertex(void);
+		fk_Vertex *			GetNewVertex(int);
+		fk_Half *			GetNewHalf(void);
+		fk_Half *			GetNewHalf(int);
+		fk_Edge *			GetNewEdge(void);
+		fk_Edge *			GetNewEdge(int);
+		fk_Loop *			GetNewLoop(void);
+		fk_Loop *			GetNewLoop(int);
+
+		bool				DeleteVertex(int);
+		bool				DeleteHalf(int);
+		bool				DeleteEdge(int);
+		bool				DeleteLoop(int);
+	};
+}
 
 #endif // !__FK_DATABASE_HEADER__
 

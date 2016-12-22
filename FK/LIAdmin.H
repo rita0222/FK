@@ -3,20 +3,20 @@
 
 #include <vector>
 
-class fk_LoopIndexAdmin {
+namespace FK {
+	class fk_LoopIndexAdmin {
+	public:
+		fk_LoopIndexAdmin(void);
+		virtual ~fk_LoopIndexAdmin();
 
- private:
-	int									maxID;
-	std::vector< std::vector<int> >		IDAdmin;
+		void	PushRemoveID(int, int);
+		int		GetNewID(int);
 
- public:
-	fk_LoopIndexAdmin(void);
-	virtual ~fk_LoopIndexAdmin();
-
-	void	PushRemoveID(int, int);
-	int		GetNewID(int);
-};
-
+	private:
+		int									maxID;
+		std::vector< std::vector<int> >		IDAdmin;
+	};
+}
 #endif // !__FK_LOOP_INDEX_ADMIN_HEADER__
 
 /****************************************************************************

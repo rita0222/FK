@@ -1,3 +1,114 @@
+#ifndef __FK_TEXTURE_SAMPLER_HEADER__
+#define __FK_TEXTURE_SAMPLER_HEADER__
+
+#include <FK/Texture.h>
+
+namespace FK {
+	
+	// フレームバッファのサンプリングソースを表す列挙型
+	enum fk_SamplerSource {
+		FK_TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
+		FK_COLOR_BUFFER,	//!< 画面色情報参照
+		FK_DEPTH_BUFFER,	//!< 画面深度情報参照
+	};
+
+	//! シェーダー入出力テクスチャークラス
+	/*!
+	 *	このクラスは、シェーダープログラムでの参照テクスチャを管理する機能を提供します。
+	 *	GLSL プログラムにおいて、テクスチャデータは
+	 *	sampler2D という型の変数として扱います。
+	 *	このクラスを利用することで、
+	 *	フラグメントシェーダーの uniform 変数として参照テクスチャを
+	 *	C++ プログラムとリンクすることができます。
+	 *
+	 *	最低限必要な手順は以下の通りとなります。
+	 *		-# 本クラスのインスタンスを生成する。
+	 *		-# 利用用途に応じて適切な値を setSamplerSource() 関数で設定する。
+	 *		-# fk_ShaderBinder 型変数の fk_ShaderBinder::getParameter() 関数で得られる
+	 *			fk_ShaderParameter 型のインスタンスを取得し、
+	 *			fk_ShaderParameter::attachTexture() 関数によって連携設定を行う。
+	 *		-# フラグメントシェーダー内で uniform sampler2D 型変数を生成する。
+	 *
+	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_MeshTexture
+	 */
+	class fk_TextureSampler : public fk_MeshTexture
+	{
+	public:
+
+		//! コンストラクタ1
+		/*!
+		 *	参照テクスチャを生成します。
+		 *	引数に何も入れなかった場合は、C++ 側で画像情報の設定や参照は行えません。
+		 */
+		fk_TextureSampler();
+
+		//! コンストラクタ2
+		/*!
+		 *	参照テクスチャを生成します。
+		 *	引数に fk_Image 型インスタンスを入力することにより、
+		 *	その画像情報を GLSL 側に転送することや、
+		 *	GLSL 側で生成した画像情報を C++ 側で参照することができます。
+		 *
+		 *	\param[in]	image
+		 *		参照テクスチャ用画像データ
+		 */
+		fk_TextureSampler(fk_Image *image);
+
+		//! デストラクタ
+		~fk_TextureSampler();
+
+		//! テクスチャ参照情報設定関数
+		/*!
+		 *	参照テクスチャが参照する情報を設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- FK_TEXTURE_IMAGE: 
+		 *		コンストラクタで設定した
+		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
+		 *	- FK_COLOR_BUFFER: 
+		 *		描画シーン全体の色値情報を参照先とします。
+		 *	- FK_DEPTH_BUFFER: 
+		 *		描画シーン全体の深度情報を参照先とします。
+		 *	.
+		 *	デフォルトは FK_TEXTURE_IMAGE に設定されています。
+		 *
+		 *	\param[in]	mode
+		 *		テクスチャ参照情報の参照先
+		 *
+		 *	\sa getSamplerSource()
+		 */
+		void setSamplerSource(fk_SamplerSource mode);
+
+		//! テクスチャ参照情報参照関数
+		/*!
+		 *	参照テクスチャが参照する情報を参照します。
+		 *
+		 *	\return		テクスチャ参照情報
+		 */
+		fk_SamplerSource getSamplerSource(void);
+	
+		//! 初期化関数
+		/*!
+		 *	現在設定されているテクスチャ情報を解除し、初期化を行います。
+		 *
+		 *	\sa setSamplerSource()
+		 */
+		void init(void);
+
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool BindTexture(bool forceLoad);
+#endif
+
+	private:
+		fk_SamplerSource	samplerSource;
+		int					id;
+		bool				loaded;
+	};
+}
+
+#endif
+
 /****************************************************************************
  *
  *	Copyright (c) 1999-2016, Fine Kernel Project, All rights reserved.
@@ -70,110 +181,3 @@
  *
  ****************************************************************************/
 
-#ifndef __FK_TEXTURE_SAMPLER_HEADER__
-#define __FK_TEXTURE_SAMPLER_HEADER__
-
-#include <FK/Texture.h>
-
-// フレームバッファのサンプリングソースを表す列挙型
-enum fk_SamplerSource {
-	FK_TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
-	FK_COLOR_BUFFER,	//!< 画面色情報参照
-	FK_DEPTH_BUFFER,	//!< 画面深度情報参照
-};
-
-//! シェーダー入出力テクスチャークラス
-/*!
- *	このクラスは、シェーダープログラムでの参照テクスチャを管理する機能を提供します。
- *	GLSL プログラムにおいて、テクスチャデータは
- *	sampler2D という型の変数として扱います。
- *	このクラスを利用することで、
- *	フラグメントシェーダーの uniform 変数として参照テクスチャを
- *	C++ プログラムとリンクすることができます。
- *
- *	最低限必要な手順は以下の通りとなります。
- *		-# 本クラスのインスタンスを生成する。
- *		-# 利用用途に応じて適切な値を setSamplerSource() 関数で設定する。
- *		-# fk_ShaderBinder 型変数の fk_ShaderBinder::getParameter() 関数で得られる
- *			fk_ShaderParameter 型のインスタンスを取得し、
- *			fk_ShaderParameter::attachTexture() 関数によって連携設定を行う。
- *		-# フラグメントシェーダー内で uniform sampler2D 型変数を生成する。
- *
- *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_MeshTexture
- */
-class fk_TextureSampler : public fk_MeshTexture
-{
-public:
-
-	//! コンストラクタ1
-	/*!
-	 *	参照テクスチャを生成します。
-	 *	引数に何も入れなかった場合は、C++ 側で画像情報の設定や参照は行えません。
-	 */
-	fk_TextureSampler();
-
-	//! コンストラクタ2
-	/*!
-	 *	参照テクスチャを生成します。
-	 *	引数に fk_Image 型インスタンスを入力することにより、
-	 *	その画像情報を GLSL 側に転送することや、
-	 *	GLSL 側で生成した画像情報を C++ 側で参照することができます。
-	 *
-	 *	\param[in]	image
-	 *		参照テクスチャ用画像データ
-	 */
-	fk_TextureSampler(fk_Image *image);
-
-	//! デストラクタ
-	~fk_TextureSampler();
-
-	//! テクスチャ参照情報設定関数
-	/*!
-	 *	参照テクスチャが参照する情報を設定します。
-	 *	設定できる種類は以下のとおりです。
-	 *
-	 *	- FK_TEXTURE_IMAGE: 
-	 *		コンストラクタで設定した
-	 *		fk_Image 型インスタンスに入っているデータを参照先とします。
-	 *	- FK_COLOR_BUFFER: 
-	 *		描画シーン全体の色値情報を参照先とします。
-	 *	- FK_DEPTH_BUFFER: 
-	 *		描画シーン全体の深度情報を参照先とします。
-	 *	.
-	 *	デフォルトは FK_TEXTURE_IMAGE に設定されています。
-	 *
-	 *	\param[in]	mode
-	 *		テクスチャ参照情報の参照先
-	 *
-	 *	\sa getSamplerSource()
-	 */
-	void setSamplerSource(fk_SamplerSource mode);
-
-	//! テクスチャ参照情報参照関数
-	/*!
-	 *	参照テクスチャが参照する情報を参照します。
-	 *
-	 *	\return		テクスチャ参照情報
-	 */
-	fk_SamplerSource getSamplerSource(void);
-	
-	//! 初期化関数
-	/*!
-	 *	現在設定されているテクスチャ情報を解除し、初期化を行います。
-	 *
-	 *	\sa setSamplerSource()
-	 */
-	void init(void);
-
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-	bool BindTexture(bool forceLoad);
-#endif
-
-private:
-	fk_SamplerSource	samplerSource;
-	int					id;
-	bool				loaded;
-};
-
-#endif

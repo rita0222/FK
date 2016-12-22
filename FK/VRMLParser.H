@@ -4,41 +4,44 @@
 #include <FK/ParserBase.H>
 #include <FK/HeapBase.h>
 
-class fk_VRMLParser : public fk_ParserBase {
- private:
-
-	bool				CheckVRMLFile(std::ifstream &);
-	void				ReadVRMLShapeData(std::ifstream &, std::string *);
-	void				MakeVRMLIFSet(std::string *,
-									  std::vector<fk_Vector> *,
-									  std::vector< std::vector<int> > *,
-									  std::vector<int> *, bool);
-
-	std::string::size_type	SearchVRMLShapeLast(std::string *, 
-												std::string::size_type);
-	bool				GetVRMLShapeMaterial(std::string *, fk_Material *,
-											 std::string::size_type,
-											 std::string::size_type);
+namespace FK {
 	
-	void				GetVRMLVertexInfo(std::string *,
+	class fk_VRMLParser : public fk_ParserBase {
+	public:
+		fk_VRMLParser(void);
+		virtual ~fk_VRMLParser();
+
+		bool		ReadVRMLFile(std::string, bool = true, bool = true);
+
+	private:
+
+		bool				CheckVRMLFile(std::ifstream &);
+		void				ReadVRMLShapeData(std::ifstream &, std::string *);
+		void				MakeVRMLIFSet(std::string *,
 										  std::vector<fk_Vector> *,
-										  fk_HeapBase<fk_Vector> *,
-										  std::vector<int> *,
-										  std::string::size_type,
-										  std::string::size_type, bool);
+										  std::vector< std::vector<int> > *,
+										  std::vector<int> *, bool);
 
-	int					GetVRMLIndexFSetInfo(std::string *,
-											 std::vector<int> *,
-											 std::vector< std::vector<int> > *,
-											 std::string::size_type,
-											 std::string::size_type);
+		std::string::size_type	SearchVRMLShapeLast(std::string *, 
+													std::string::size_type);
+		bool				GetVRMLShapeMaterial(std::string *, fk_Material *,
+												 std::string::size_type,
+												 std::string::size_type);
+	
+		void				GetVRMLVertexInfo(std::string *,
+											  std::vector<fk_Vector> *,
+											  fk_HeapBase<fk_Vector> *,
+											  std::vector<int> *,
+											  std::string::size_type,
+											  std::string::size_type, bool);
 
- public:
-	fk_VRMLParser(void);
-	virtual ~fk_VRMLParser();
-
-	bool		ReadVRMLFile(std::string, bool = true, bool = true);
-};
+		int					GetVRMLIndexFSetInfo(std::string *,
+												 std::vector<int> *,
+												 std::vector< std::vector<int> > *,
+												 std::string::size_type,
+												 std::string::size_type);
+	};
+}
 
 #endif // !__FK_VRML_PARSER_HEADER__
 

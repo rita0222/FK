@@ -5,282 +5,284 @@
 #include <FK/Model.h>
 #include <list>
 
-//! 立体視出力を制御する際に用いる列挙型
-enum fk_StereoChannel {
-	FK_STEREO_LEFT,			//!< 左目側
-	FK_STEREO_RIGHT			//!< 右目側
-};
+namespace FK {
 
-//!	ディスプレイリストを制御するクラス
-/*!
- *	このクラスは、ディスプレイリストを制御する機能を提供します。
- *	ディスプレイリストとは、シーン中に表示するためのモデルを管理する仕組みです。
- *	実際の利用時には、インスタンスは本クラスのものではなく
- *	派生クラスの fk_Scene によるものを利用することになります。
- *
- *	ディスプレイリストに登録する要素は、以下のようなものがあります。
- *		- 通常モデル:
- *			3次元空間に表示するためのモデルです。
- *		- オーバーレイモデル:
- *			オーバーレイモデルとして登録したモデルは、
- *			カメラからの前後に関係なく常に全体が表示されます。
- *			オーバーレイモデルが複数登録されている場合は、
- *			後に登録されたものほど前面に表示されます。
- *		- カメラ:
- *			シーンのカメラに当たるモデルです。
- *			同時に登録できるモデルは1つだけですが、
- *			どの時点でもモデルを変更することができます。
- *		- 投影設定:
- *			シーンを表示する際の投影設定です。
- *			詳細は fk_Perspective, fk_Frustum, fk_Ortho の
- *			各マニュアルを参照して下さい。
- *
- *	\sa fk_Scene, fk_Fog, fk_Model, fk_Perspective, , fk_Frustum, fk_Ortho
- */
+	//! 立体視出力を制御する際に用いる列挙型
+	enum fk_StereoChannel {
+		FK_STEREO_LEFT,			//!< 左目側
+		FK_STEREO_RIGHT			//!< 右目側
+	};
 
-class fk_DisplayLink : public fk_BaseObject {
-
-	friend class		fk_Window;
-	friend class		fk_GraphicsEngine;
-
- private:
-	std::list<fk_Model *>	modelList;
-	std::list<fk_Model *>	lightList;
-	std::list<fk_Model *>	overlayList;
-	int						displayID;
-	fk_Model				localCamera;
-	fk_Model				*camera;
-	fk_ProjectBase			*proj;
-	fk_Perspective			perspective;
-	fk_Frustum				frustum;
-	fk_Ortho				ortho;
-	int						projStatus;
-
-	fk_Model				*stereoCamera[2];
-	fk_ProjectBase			*stereoProj[2];
-	fk_Perspective			stereoPers[2];
-	fk_Frustum				stereoFrus[2];
-	fk_Ortho				stereoOrtho[2];
-	bool					stereoOverlayMode;
-
-	std::list<fk_Model *> *	GetModelList(void);
-	std::list<fk_Model *> *	GetLightList(void);
-	std::list<fk_Model *> *	GetOverlayList(void);
-	int						GetID(void) const;
-	int						GetProjChangeStatus(void) const;
-
- public:
-
-	//! コンストラクタ
-	fk_DisplayLink(void);
-
-	//! デストラクタ
-	virtual ~fk_DisplayLink();
-
-	//!	初期化関数
+	//!	ディスプレイリストを制御するクラス
 	/*!
-	 *	ディスプレイリストに登録されていた全ての情報を解除します。
-	 *	解除する対象は通常表示モデル、モデルオーバーレイモデル、
-	 *	カメラ、投影設定です。
+	 *	このクラスは、ディスプレイリストを制御する機能を提供します。
+	 *	ディスプレイリストとは、シーン中に表示するためのモデルを管理する仕組みです。
+	 *	実際の利用時には、インスタンスは本クラスのものではなく
+	 *	派生クラスの fk_Scene によるものを利用することになります。
+	 *
+	 *	ディスプレイリストに登録する要素は、以下のようなものがあります。
+	 *		- 通常モデル:
+	 *			3次元空間に表示するためのモデルです。
+	 *		- オーバーレイモデル:
+	 *			オーバーレイモデルとして登録したモデルは、
+	 *			カメラからの前後に関係なく常に全体が表示されます。
+	 *			オーバーレイモデルが複数登録されている場合は、
+	 *			後に登録されたものほど前面に表示されます。
+	 *		- カメラ:
+	 *			シーンのカメラに当たるモデルです。
+	 *			同時に登録できるモデルは1つだけですが、
+	 *			どの時点でもモデルを変更することができます。
+	 *		- 投影設定:
+	 *			シーンを表示する際の投影設定です。
+	 *			詳細は fk_Perspective, fk_Frustum, fk_Ortho の
+	 *			各マニュアルを参照して下さい。
+	 *
+	 *	\sa fk_Scene, fk_Fog, fk_Model, fk_Perspective, , fk_Frustum, fk_Ortho
 	 */
-	void					clearDisplay(void);
 
-	//! 通常モデル登録関数
-	/*!
-	 *	通常モデルをディスプレイリストに登録します。
-	 *
-	 *	\param[in] model	登録モデルのアドレス
-	 */
-	void					entryModel(fk_Model *model);
+	class fk_DisplayLink : public fk_BaseObject {
 
-	//! 通常モデル解除関数
-	/*!
-	 *	ディスプレイリストに登録されている通常モデルに対し、
-	 *	登録を解除します。
-	 *
-	 *	\param[in] model	解除モデルのアドレス
-	 */
-	void					removeModel(fk_Model *model);
+		friend class		fk_Window;
+		friend class		fk_GraphicsEngine;
 
-	//! 通常モデル全解除関数
-	/*!
-	 *	ディスプレイリストに登録されている全ての通常モデルに対し、
-	 *	登録を解除します。
-	 */
-	void					clearModel(void);
+	public:
 
-	//! オーバーレイモデル登録関数
-	/*!
-	 *	オーバーレイモデルをディスプレイリストに登録します。
-	 *	オーバーレイモデルは、後に登録したものほど前面に表示されるようになります。
-	 *	もし既に登録されているモデルを再度登録した場合は、
-	 *	一度解除したのちに改めて登録しなおすことと同義となります。
-	 *
-	 *	\param[in] model	登録モデルのアドレス
-	 */
-	void					entryOverlayModel(fk_Model *model);
+		//! コンストラクタ
+		fk_DisplayLink(void);
 
-	//! オーバーレイモデル解除関数
-	/*!
-	 *	ディスプレイリストに登録されているオーバーレイモデルに対し、
-	 *	登録を解除します。
-	 *
-	 *	\param[in] model	解除モデルのアドレス
-	 */
-	void					removeOverlayModel(fk_Model *model);
+		//! デストラクタ
+		virtual ~fk_DisplayLink();
 
-	//! オーバーレイモデル全解除関数
-	/*!
-	 *	ディスプレイリストに登録されている全てのオーバーレイモデルに対し、
-	 *	登録を解除します。
-	 */
-	void					clearOverlayModel(void);
+		//!	初期化関数
+		/*!
+		 *	ディスプレイリストに登録されていた全ての情報を解除します。
+		 *	解除する対象は通常表示モデル、モデルオーバーレイモデル、
+		 *	カメラ、投影設定です。
+		 */
+		void					clearDisplay(void);
 
-	//! カメラモデル登録関数
-	/*!
-	 * 	カメラモデルをディスプレイリストに登録します。
-	 *
-	 *	\param[in] model	カメラモデルのアドレス
-	 */
-	void					entryCamera(fk_Model *model);
+		//! 通常モデル登録関数
+		/*!
+		 *	通常モデルをディスプレイリストに登録します。
+		 *
+		 *	\param[in] model	登録モデルのアドレス
+		 */
+		void					entryModel(fk_Model *model);
 
-	//! カメラモデル取得関数
-	/*!
-	 *	ディスプレイリストに登録されているカメラモデルの
-	 *	アドレスを取得します。
-	 *
-	 *	\return	カメラモデルのアドレス
-	 */
-	const fk_Model *		getCamera(void) const;
+		//! 通常モデル解除関数
+		/*!
+		 *	ディスプレイリストに登録されている通常モデルに対し、
+		 *	登録を解除します。
+		 *
+		 *	\param[in] model	解除モデルのアドレス
+		 */
+		void					removeModel(fk_Model *model);
 
-	//! 投影設定関数
-	/*!
-	 *	シーンで表示する際の投影設定を設定します。
-	 *
-	 *	\param[in] proj		投影設定のアドレス
-	 *
-	 *	\sa fk_Perspective, fk_Ortho
-	 */
-	void					setProjection(fk_ProjectBase *proj);
+		//! 通常モデル全解除関数
+		/*!
+		 *	ディスプレイリストに登録されている全ての通常モデルに対し、
+		 *	登録を解除します。
+		 */
+		void					clearModel(void);
 
-	//! 投影設定取得関数
-	/*!
-	 *	シーンに登録されている投影設定のアドレスを取得します。
-	 *
-	 *	\return 投影設定のアドレス
-	 */
-	const fk_ProjectBase *	getProjection(void) const;
+		//! オーバーレイモデル登録関数
+		/*!
+		 *	オーバーレイモデルをディスプレイリストに登録します。
+		 *	オーバーレイモデルは、後に登録したものほど前面に表示されるようになります。
+		 *	もし既に登録されているモデルを再度登録した場合は、
+		 *	一度解除したのちに改めて登録しなおすことと同義となります。
+		 *
+		 *	\param[in] model	登録モデルのアドレス
+		 */
+		void					entryOverlayModel(fk_Model *model);
 
-	//! \name 立体視モード制御関数
-	//@{
-	//! 立体視用カメラモデル登録関数
-	/*!
-	 *	立体視モードで使用するカメラモデルをディスプレイリストに登録します。
-	 *	立体視モードは fk_Window::setOGLStereoMode()で設定します。
-	 *
-	 *	\param[in] channel
-	 *		左右どちらの視点を登録するかを指定します。
-	 *		設定値については fk_StereoChannel を参照してください。
-	 *	\param[in] model	カメラモデルのアドレス
-	 *
-	 *	\sa fk_StereoChannel, fk_Window::setOGLStereoMode()
-	 */
-	void					entryStereoCamera(fk_StereoChannel channel, fk_Model *model);
+		//! オーバーレイモデル解除関数
+		/*!
+		 *	ディスプレイリストに登録されているオーバーレイモデルに対し、
+		 *	登録を解除します。
+		 *
+		 *	\param[in] model	解除モデルのアドレス
+		 */
+		void					removeOverlayModel(fk_Model *model);
 
-	//! 立体視用射影設定関数
-	/*!
-	 *	立体視モードで使用する射影設定を設定します。
-	 *	立体視モードは fk_Window::setOGLStereoMode()で設定します。
-	 *
-	 *	\param[in] channel
-	 *		左右どちらの視点の設定を登録するかを指定します。
-	 *		fk_StereoChannel を参照してください。
-	 *	\param[in] proj		射影設定のアドレス
-	 *
-	 *	\sa fk_StereoChannel, fk_Window::setOGLStereoMode()
-	 */
-	void					setStereoProjection(fk_StereoChannel channel, fk_ProjectBase *proj);
+		//! オーバーレイモデル全解除関数
+		/*!
+		 *	ディスプレイリストに登録されている全てのオーバーレイモデルに対し、
+		 *	登録を解除します。
+		 */
+		void					clearOverlayModel(void);
 
-	//! 立体視用カメラモデル取得関数
-	/*!
-	 *	立体視モードで使用するカメラモデルのアドレスを取得します。
-	 *	立体視モードは fk_Window::setGLStereoMode()で設定します。
-	 *
-	 *	\param[in] channel
-	 *		左右どちらの視点を取得するかを指定します。
-	 *		fk_StereoChannel を参照してください。
-	 *
-	 *	\return
-	 *		カメラモデルのアドレス。
-	 *		立体視用の設定が未設定の場合、通常のカメラモデルのアドレスを返します。
-	 *
-	 *	\sa fk_StereoChannel, entryStereoCamera()
-	 */
-	const fk_Model *		getStereoCamera(fk_StereoChannel channel);
+		//! カメラモデル登録関数
+		/*!
+		 * 	カメラモデルをディスプレイリストに登録します。
+		 *
+		 *	\param[in] model	カメラモデルのアドレス
+		 */
+		void					entryCamera(fk_Model *model);
 
-	//! 立体視用射影設定取得関数
-	/*!
-	 *	立体視モードで使用する射影設定を取得します。
-	 *
-	 *	\param[in] channel
-	 *		左右どちらの視点の設定を取得するかを指定します。
-	 *		fk_StereoChannel を参照してください。
-	 *
-	 *	\return
-	 *		射影設定のアドレス。
-	 *		立体視用の設定が未設定の場合、通常の射影設定のアドレスを返します。
-	 *
-	 *	\sa fk_StereoChannel, getStereoProjection()
-	 */
-	const fk_ProjectBase *	getStereoProjection(fk_StereoChannel channel);
+		//! カメラモデル取得関数
+		/*!
+		 *	ディスプレイリストに登録されているカメラモデルの
+		 *	アドレスを取得します。
+		 *
+		 *	\return	カメラモデルのアドレス
+		 */
+		const fk_Model *		getCamera(void) const;
 
-	//! 立体視用設定情報初期化関数
-	/*!
-	 *	立体視モードで使用する設定情報を初期化します。
-	 *
-	 *	\sa entryStereoCamera(), setStereoProjection(), getStereoCamera(), getStereoProjection()
-	 */
-	void					clearStereo(void);
+		//! 投影設定関数
+		/*!
+		 *	シーンで表示する際の投影設定を設定します。
+		 *
+		 *	\param[in] proj		投影設定のアドレス
+		 *
+		 *	\sa fk_Perspective, fk_Ortho
+		 */
+		void					setProjection(fk_ProjectBase *proj);
 
-	//! 立体視モード時のオーバーレイ描画モード設定関数
-	/*!
-	 *	立体視モード時のオーバーレイ描画モデルに対する動作を設定します。
-	 *	一般的なゲームアプリケーションでは、3DCG をレンダリングした画面上に
-	 *	2D の画像や文字などを情報として表示(いわゆる HUD 表示)しますが、
-	 *	立体視を有効にした場合はそれらの表示にも視差が適用されます。
-	 *	この動作は状況によっては望ましくない場合もあります。
-	 *	この関数によって、オーバーレイ描画を行うモデルに対して視差を適用するか、
-	 *	しないかを選択することができます。
-	 *	HUD 表示はオーバーレイ描画によって実現することが多いため、
-	 *	多くの場合はこの関数による設定で十分制御が可能となるはずです。
-	 *	デフォルトではオーバーレイ描画モデルにも視差を適用する設定(true)になっています。
-	 *
-	 *	\param[in]	mode
-	 *		true だった場合、オーバーレイ描画モデルの視差を有効にします。
-	 *		false だった場合、オーバーレイ描画モデルの視差を無効にします。
-	 *
-	 *	\sa fk_Window::setOGLStereoMode(), getStereoOverlayMode()
-	 */
-	void	setStereoOverlayMode(bool mode);
+		//! 投影設定取得関数
+		/*!
+		 *	シーンに登録されている投影設定のアドレスを取得します。
+		 *
+		 *	\return 投影設定のアドレス
+		 */
+		const fk_ProjectBase *	getProjection(void) const;
 
-	//! 立体視モード時のオーバーレイ描画モード取得関数
-	/*!
-	 *	立体視モード時のオーバーレイ描画モデルに対する動作モードを取得します。
-	 *
-	 *	\return
-	 *		true だった場合、オーバーレイ描画モデルの視差が有効になっています。
-	 *		false だった場合、オーバーレイ描画モデルの視差が無効になっています。
-	 *
-	 *	\sa fk_DisplayLink, setOGLStereoOverlayMode()
-	 */
-	bool	getStereoOverlayMode(void);
-	//@}
+		//! \name 立体視モード制御関数
+		//@{
+		//! 立体視用カメラモデル登録関数
+		/*!
+		 *	立体視モードで使用するカメラモデルをディスプレイリストに登録します。
+		 *	立体視モードは fk_Window::setOGLStereoMode()で設定します。
+		 *
+		 *	\param[in] channel
+		 *		左右どちらの視点を登録するかを指定します。
+		 *		設定値については fk_StereoChannel を参照してください。
+		 *	\param[in] model	カメラモデルのアドレス
+		 *
+		 *	\sa fk_StereoChannel, fk_Window::setOGLStereoMode()
+		 */
+		void					entryStereoCamera(fk_StereoChannel channel, fk_Model *model);
+
+		//! 立体視用射影設定関数
+		/*!
+		 *	立体視モードで使用する射影設定を設定します。
+		 *	立体視モードは fk_Window::setOGLStereoMode()で設定します。
+		 *
+		 *	\param[in] channel
+		 *		左右どちらの視点の設定を登録するかを指定します。
+		 *		fk_StereoChannel を参照してください。
+		 *	\param[in] proj		射影設定のアドレス
+		 *
+		 *	\sa fk_StereoChannel, fk_Window::setOGLStereoMode()
+		 */
+		void					setStereoProjection(fk_StereoChannel channel, fk_ProjectBase *proj);
+
+		//! 立体視用カメラモデル取得関数
+		/*!
+		 *	立体視モードで使用するカメラモデルのアドレスを取得します。
+		 *	立体視モードは fk_Window::setGLStereoMode()で設定します。
+		 *
+		 *	\param[in] channel
+		 *		左右どちらの視点を取得するかを指定します。
+		 *		fk_StereoChannel を参照してください。
+		 *
+		 *	\return
+		 *		カメラモデルのアドレス。
+		 *		立体視用の設定が未設定の場合、通常のカメラモデルのアドレスを返します。
+		 *
+		 *	\sa fk_StereoChannel, entryStereoCamera()
+		 */
+		const fk_Model *		getStereoCamera(fk_StereoChannel channel);
+
+		//! 立体視用射影設定取得関数
+		/*!
+		 *	立体視モードで使用する射影設定を取得します。
+		 *
+		 *	\param[in] channel
+		 *		左右どちらの視点の設定を取得するかを指定します。
+		 *		fk_StereoChannel を参照してください。
+		 *
+		 *	\return
+		 *		射影設定のアドレス。
+		 *		立体視用の設定が未設定の場合、通常の射影設定のアドレスを返します。
+		 *
+		 *	\sa fk_StereoChannel, getStereoProjection()
+		 */
+		const fk_ProjectBase *	getStereoProjection(fk_StereoChannel channel);
+
+		//! 立体視用設定情報初期化関数
+		/*!
+		 *	立体視モードで使用する設定情報を初期化します。
+		 *
+		 *	\sa entryStereoCamera(), setStereoProjection(), getStereoCamera(), getStereoProjection()
+		 */
+		void					clearStereo(void);
+
+		//! 立体視モード時のオーバーレイ描画モード設定関数
+		/*!
+		 *	立体視モード時のオーバーレイ描画モデルに対する動作を設定します。
+		 *	一般的なゲームアプリケーションでは、3DCG をレンダリングした画面上に
+		 *	2D の画像や文字などを情報として表示(いわゆる HUD 表示)しますが、
+		 *	立体視を有効にした場合はそれらの表示にも視差が適用されます。
+		 *	この動作は状況によっては望ましくない場合もあります。
+		 *	この関数によって、オーバーレイ描画を行うモデルに対して視差を適用するか、
+		 *	しないかを選択することができます。
+		 *	HUD 表示はオーバーレイ描画によって実現することが多いため、
+		 *	多くの場合はこの関数による設定で十分制御が可能となるはずです。
+		 *	デフォルトではオーバーレイ描画モデルにも視差を適用する設定(true)になっています。
+		 *
+		 *	\param[in]	mode
+		 *		true だった場合、オーバーレイ描画モデルの視差を有効にします。
+		 *		false だった場合、オーバーレイ描画モデルの視差を無効にします。
+		 *
+		 *	\sa fk_Window::setOGLStereoMode(), getStereoOverlayMode()
+		 */
+		void	setStereoOverlayMode(bool mode);
+
+		//! 立体視モード時のオーバーレイ描画モード取得関数
+		/*!
+		 *	立体視モード時のオーバーレイ描画モデルに対する動作モードを取得します。
+		 *
+		 *	\return
+		 *		true だった場合、オーバーレイ描画モデルの視差が有効になっています。
+		 *		false だった場合、オーバーレイ描画モデルの視差が無効になっています。
+		 *
+		 *	\sa fk_DisplayLink, setOGLStereoOverlayMode()
+		 */
+		bool	getStereoOverlayMode(void);
+		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	void	SetFinalizeMode(void);
+		void	SetFinalizeMode(void);
 #endif
 
-};
+	private:
+		std::list<fk_Model *>	modelList;
+		std::list<fk_Model *>	lightList;
+		std::list<fk_Model *>	overlayList;
+		int						displayID;
+		fk_Model				localCamera;
+		fk_Model				*camera;
+		fk_ProjectBase			*proj;
+		fk_Perspective			perspective;
+		fk_Frustum				frustum;
+		fk_Ortho				ortho;
+		int						projStatus;
+
+		fk_Model				*stereoCamera[2];
+		fk_ProjectBase			*stereoProj[2];
+		fk_Perspective			stereoPers[2];
+		fk_Frustum				stereoFrus[2];
+		fk_Ortho				stereoOrtho[2];
+		bool					stereoOverlayMode;
+
+		std::list<fk_Model *> *	GetModelList(void);
+		std::list<fk_Model *> *	GetLightList(void);
+		std::list<fk_Model *> *	GetOverlayList(void);
+		int						GetID(void) const;
+		int						GetProjChangeStatus(void) const;
+	};
+}
 
 #endif // !__FK_DISPLAYLIST_HEADER__
 

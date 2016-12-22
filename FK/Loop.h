@@ -4,191 +4,190 @@
 #include <FK/Topology.h>
 #include <FK/Vector.h>
 
-class fk_Surface;
-class fk_Half;
-class fk_Vertex;
+namespace FK {
+
+	class fk_Surface;
+	class fk_Half;
+	class fk_Vertex;
 
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-enum fk_LoopCrossStatus {
-	FK_LOOP_FRONT_CROSS,
-	FK_LOOP_BACK_CROSS,
-	FK_LOOP_ONEDGE_CROSS,
-	FK_LOOP_ONFACE_CROSS,
-	FK_LOOP_NO_CROSS,
-	FK_LOOP_ERROR_CROSS
-};
+	enum fk_LoopCrossStatus {
+		FK_LOOP_FRONT_CROSS,
+		FK_LOOP_BACK_CROSS,
+		FK_LOOP_ONEDGE_CROSS,
+		FK_LOOP_ONFACE_CROSS,
+		FK_LOOP_NO_CROSS,
+		FK_LOOP_ERROR_CROSS
+	};
 
 #endif
 
 
 
-//! ソリッドモデルのループ位相を管理するクラス
-/*!
- *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
- *	ループ位相に関する制御機能を提供します。
- *	FK におけるソリッドモデルの構造については、
- *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
- *
- *	派生クラスのうち、ID 管理については fk_Topology,
- *	個別マテリアル設定については fk_TopologyMaterial,
- *	属性設定については fk_Attribute を参照して下さい。
- *
- *	ループに対して、幾何形状として曲面データを設定することができます。
- *	詳細は fk_Surface を参照して下さい。
- *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Topology,
- *		fk_TopologyMaterial, fk_Attribute, fk_Surface
- */
+	//! ソリッドモデルのループ位相を管理するクラス
+	/*!
+	 *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
+	 *	ループ位相に関する制御機能を提供します。
+	 *	FK におけるソリッドモデルの構造については、
+	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
+	 *
+	 *	派生クラスのうち、ID 管理については fk_Topology,
+	 *	個別マテリアル設定については fk_TopologyMaterial,
+	 *	属性設定については fk_Attribute を参照して下さい。
+	 *
+	 *	ループに対して、幾何形状として曲面データを設定することができます。
+	 *	詳細は fk_Surface を参照して下さい。
+	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Topology,
+	 *		fk_TopologyMaterial, fk_Attribute, fk_Surface
+	 */
 
-class fk_Loop : public fk_TopologyMaterial {
+	class fk_Loop : public fk_TopologyMaterial {
 
-	friend class	fk_Operation;
-	friend class	fk_DataBase;
-	friend class	fk_FileInput;
-	friend class	fk_FileOutput;
-	friend class	fk_IFSetHandle;
+		friend class	fk_Operation;
+		friend class	fk_DataBase;
+		friend class	fk_FileInput;
+		friend class	fk_FileOutput;
+		friend class	fk_IFSetHandle;
 
- private:
-	fk_Half						*oneHalf;
-	fk_Vector					norm;
-	bool						normFlag, errorFlag;
-	bool						tesselateFlag, tesselateMode;
-	fk_Surface					*surf;
-	std::vector<fk_Vertex *>	tesselateVertex;
-	std::vector<int>			tesselateIndex;
-	int							ifsID;
-
-	bool					SetNormal(void);
-	void					ModifyLoop(void);
-	fk_Half *				SetOneHalf(fk_Half *);
-	void					MakeTesselateData(void);
-
- public:
-	//! コンストラクタ
-	fk_Loop(int);
-	//! デストラクタ
-	virtual ~fk_Loop();
+	public:
+		//! コンストラクタ
+		fk_Loop(int);
+		//! デストラクタ
+		virtual ~fk_Loop();
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	void						Init(int);
+		void						Init(int);
 #endif
 
-	//! 接続半稜線取得関数
-	/*!
-	 *	このループを構成する半稜線のうちの1つを取得します。
-	 *	条件を満たす全ての半稜線を得たい場合は、
-	 *	fk_ReferenceL2::getAllHOnL() 関数を用いて下さい。
-	 *
-	 *	\return このループを構成する半稜線を表す fk_Half 型インスタンスのアドレス。
-	 */
-	fk_Half *					getOneHalf(void) const;
+		//! 接続半稜線取得関数
+		/*!
+		 *	このループを構成する半稜線のうちの1つを取得します。
+		 *	条件を満たす全ての半稜線を得たい場合は、
+		 *	fk_ReferenceL2::getAllHOnL() 関数を用いて下さい。
+		 *
+		 *	\return このループを構成する半稜線を表す fk_Half 型インスタンスのアドレス。
+		 */
+		fk_Half *					getOneHalf(void) const;
 
-	//! 法線ベクトル取得関数
-	/*!
-	 *	適切な法線ベクトルを取得します。
-	 *	ループが曲面である場合は、面全体の平均法線ベクトルを返します。
-	 *	返り値が実体ではなくポインタであることに注意して下さい。
-	 *	特に、nullptr を返すケースがありえることは重要です。
-	 *
-	 *	\return 法線ベクトルのアドレス。算出できなかった場合は nullptr を返します。
-	 */
-	fk_Vector *					getNormal(void);
+		//! 法線ベクトル取得関数
+		/*!
+		 *	適切な法線ベクトルを取得します。
+		 *	ループが曲面である場合は、面全体の平均法線ベクトルを返します。
+		 *	返り値が実体ではなくポインタであることに注意して下さい。
+		 *	特に、nullptr を返すケースがありえることは重要です。
+		 *
+		 *	\return 法線ベクトルのアドレス。算出できなかった場合は nullptr を返します。
+		 */
+		fk_Vector *					getNormal(void);
 
-	//! 頂点数取得関数
-	/*!
-	 *	このループを構成する頂点数を返します。
-	 *
-	 *	\return	ループを構成する頂点数。もしエラーが生じた場合は -1 を返します。
-	 *
-	 *	\sa fk_ReferenceL2::getVNumOnL()
-	 */
-	int							getVNum(void) const;
+		//! 頂点数取得関数
+		/*!
+		 *	このループを構成する頂点数を返します。
+		 *
+		 *	\return	ループを構成する頂点数。もしエラーが生じた場合は -1 を返します。
+		 *
+		 *	\sa fk_ReferenceL2::getVNumOnL()
+		 */
+		int							getVNum(void) const;
 
-	//! テセレーション設定関数
-	/*!
-	 *	「テセレーション」とは、4角以上の多角形に対し、
-	 *	内部を複数の3角形に分割する処理のことです。
-	 *	一般的に、非凸多角形や非平面多角形である場合、
-	 *	描画処理が適切に行えないことがあります。
-	 *	そのようなループに対しては、
-	 *	テセレーションを施すことによって正常に描画されることが期待できます。
-	 *
-	 *	形状中の全てのループに対して、テセレーションの有無効を設定するには、
-	 *	fk_Operation::setTesselateMode() を利用して下さい。
-	 *
-	 *	\param[in] mode
-	 *		true の場合、4角以上のループに対してテセレーション処理を施すようになります。
-	 *		false の場合はテセレーション処理を行いません。
-	 *
-	 *	\sa fk_Operation::setTesselateMode()
-	 */
-	void						setTesselateMode(bool mode);
+		//! テセレーション設定関数
+		/*!
+		 *	「テセレーション」とは、4角以上の多角形に対し、
+		 *	内部を複数の3角形に分割する処理のことです。
+		 *	一般的に、非凸多角形や非平面多角形である場合、
+		 *	描画処理が適切に行えないことがあります。
+		 *	そのようなループに対しては、
+		 *	テセレーションを施すことによって正常に描画されることが期待できます。
+		 *
+		 *	形状中の全てのループに対して、テセレーションの有無効を設定するには、
+		 *	fk_Operation::setTesselateMode() を利用して下さい。
+		 *
+		 *	\param[in] mode
+		 *		true の場合、4角以上のループに対してテセレーション処理を施すようになります。
+		 *		false の場合はテセレーション処理を行いません。
+		 *
+		 *	\sa fk_Operation::setTesselateMode()
+		 */
+		void						setTesselateMode(bool mode);
 
-	//! テセレーション設定取得関数
-	/*!
-	 *	現在のテセレーション設定を取得します。
-	 *	テセレーションに関する詳細は setTesselateMode() を参照して下さい。
-	 *
-	 *	\return テセレーション設定。
-	 *
-	 *	\sa isTesselated(), fk_Operation::getTesselateMode()
-	 */
-	bool						getTesselateMode(void);
+		//! テセレーション設定取得関数
+		/*!
+		 *	現在のテセレーション設定を取得します。
+		 *	テセレーションに関する詳細は setTesselateMode() を参照して下さい。
+		 *
+		 *	\return テセレーション設定。
+		 *
+		 *	\sa isTesselated(), fk_Operation::getTesselateMode()
+		 */
+		bool						getTesselateMode(void);
 
-	//! テセレーション状態参照関数
-	/*!
-	 *	テセレーションが有効になっていても、ループが 3 角形であった場合など、
-	 *	内部ではテセレーション処理を行っていない可能性があります。
-	 *	実際にテセレーション処理を行ったかどうかを知るには、
-	 *	この関数を用いる必要があります。
-	 *
-	 *	\return
-	 *		true であれば、ループに対しテセレーション処理が行われています。
-	 *		false であれば行われていません。
-	 *
-	 *	\sa getTesselateMode()
-	 */
-	bool						isTesselated(void);
+		//! テセレーション状態参照関数
+		/*!
+		 *	テセレーションが有効になっていても、ループが 3 角形であった場合など、
+		 *	内部ではテセレーション処理を行っていない可能性があります。
+		 *	実際にテセレーション処理を行ったかどうかを知るには、
+		 *	この関数を用いる必要があります。
+		 *
+		 *	\return
+		 *		true であれば、ループに対しテセレーション処理が行われています。
+		 *		false であれば行われていません。
+		 *
+		 *	\sa getTesselateMode()
+		 */
+		bool						isTesselated(void);
 
-	//! 幾何曲面形状設定関数
-	/*!
-	 *	任意の自由曲面を幾何曲面としてループに設定します。
-	 *	fk_Surface の条件を満たせばユーザによる自作クラスも設定することができます。
-	 *	条件については fk_Surface を参照して下さい。
-	 *
-	 *	\param[in] surface	幾何曲面インスタンスのアドレス
-	 */
-	void						setSurfGeometry(fk_Surface *surface);
+		//! 幾何曲面形状設定関数
+		/*!
+		 *	任意の自由曲面を幾何曲面としてループに設定します。
+		 *	fk_Surface の条件を満たせばユーザによる自作クラスも設定することができます。
+		 *	条件については fk_Surface を参照して下さい。
+		 *
+		 *	\param[in] surface	幾何曲面インスタンスのアドレス
+		 */
+		void						setSurfGeometry(fk_Surface *surface);
 
-	//! 幾何曲面形状取得関数
-	/*!
-	 * 	ループに設定されている自由曲面を取得します。
-	 *
-	 *	\return
-	 *		自由曲面インスタンスのアドレス。
-	 *		設定されていなかった場合は nullptr を返します。
-	 */
-	fk_Surface *				getSurfGeometry(void);
+		//! 幾何曲面形状取得関数
+		/*!
+		 * 	ループに設定されている自由曲面を取得します。
+		 *
+		 *	\return
+		 *		自由曲面インスタンスのアドレス。
+		 *		設定されていなかった場合は nullptr を返します。
+		 */
+		fk_Surface *				getSurfGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		std::vector<fk_Vector> *	GetTesselatePos(void);
+		std::vector<fk_Vertex *> *	GetTesselateVertex(void);
+		std::vector<int> *			GetTesselateIndex(void);
+		void						Print(void) const;
+		bool						Check(void) const;
+		bool						Compare(fk_Loop *) const;
+		void						SetIFSID(int);
+		int							GetIFSID(void);
 
-	std::vector<fk_Vector> *	GetTesselatePos(void);
-	std::vector<fk_Vertex *> *	GetTesselateVertex(void);
-	std::vector<int> *			GetTesselateIndex(void);
-	void						Print(void) const;
-	bool						Check(void) const;
-	bool						Compare(fk_Loop *) const;
-	void						SetIFSID(int);
-	int							GetIFSID(void);
-
-	fk_LoopCrossStatus			IsCross(const fk_Vector &,
-										const fk_Vector &,
-										fk_Vector * = nullptr);
-
+		fk_LoopCrossStatus			IsCross(const fk_Vector &,
+											const fk_Vector &,
+											fk_Vector * = nullptr);
 #endif
+	private:
+		fk_Half						*oneHalf;
+		fk_Vector					norm;
+		bool						normFlag, errorFlag;
+		bool						tesselateFlag, tesselateMode;
+		fk_Surface					*surf;
+		std::vector<fk_Vertex *>	tesselateVertex;
+		std::vector<int>			tesselateIndex;
+		int							ifsID;
 
-};
+		bool					SetNormal(void);
+		void					ModifyLoop(void);
+		fk_Half *				SetOneHalf(fk_Half *);
+		void					MakeTesselateData(void);
+	};
+}
 
 #endif // !__FK_LOOP_HEADER__
 

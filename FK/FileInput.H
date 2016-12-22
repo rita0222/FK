@@ -5,76 +5,79 @@
 #include <FK/FileBase.h>
 #include <FK/ParserBase.H>
 
-class fk_DataBase;
-class fk_Palette;
-class fk_IDAdmin;
+namespace FK {
+	class fk_DataBase;
+	class fk_Palette;
+	class fk_IDAdmin;
 
-class fk_FileInput : public fk_ParserBase {
- private:
+	class fk_FileInput : public fk_ParserBase {
+	public:
+		fk_FileInput(void);
+		virtual ~fk_FileInput();
 
-	fk_DataBase		*DB;
-	fk_Palette		*palette;
-	bool			sizeMode;
+		void				SetDataBase(fk_DataBase *);
+		void				SetPalette(fk_Palette *);
+		bool				GetShapeData(std::string);
+		bool				GetShapeData(std::ifstream &, fk_DataFormatMode);
+		bool				GetPaletteData(std::string);
+		bool				GetPaletteData(std::ifstream &, fk_DataFormatMode);
+		void				SetSizeMode(bool);
 
-	// Get File Mode
-	fk_DataFormatMode	GetMode(std::string);
+	private:
 
-	// for Get
-	bool				GetShapeData_(fk_DataFormatMode, std::ifstream &, bool);
+		fk_DataBase		*DB;
+		fk_Palette		*palette;
+		bool			sizeMode;
 
-	//// for Header
-	void				GetHeader(fk_DataFormatMode, std::ifstream &,
-								  int *, int *, int *);
+		// Get File Mode
+		fk_DataFormatMode	GetMode(std::string);
 
-	//// for Get Topology Elements
-	void				GetElemNum(fk_DataFormatMode,
-								   std::ifstream &, int *, int *, int *, int *);
-	bool				GetElem(fk_DataFormatMode, std::ifstream &, int, int, int, int);
-	bool				GetElemTag(std::ifstream &, const std::string &);
-	bool				GetVertexData(fk_DataFormatMode, std::ifstream &, int);
-	bool				GetHalfData(fk_DataFormatMode, std::ifstream &, int);
-	bool				GetEdgeData(fk_DataFormatMode, std::ifstream &, int);
-	bool				GetLoopData(fk_DataFormatMode, std::ifstream &, int);
-	bool				GetLineTagStatus(std::ifstream &, std::string *,
-										 const std::string &);
+		// for Get
+		bool				GetShapeData_(fk_DataFormatMode, std::ifstream &, bool);
 
-	//// for Get IDAdmin
-	bool				GetIDAdmin(fk_DataFormatMode,
-								   std::ifstream &, fk_IDAdmin *, const std::string &);
-	bool				GetAdminDataFile(fk_DataFormatMode,
-										 std::ifstream &, fk_IDAdmin *);
-	bool				GetAdminHeader(fk_DataFormatMode,
-									   std::ifstream &, int *, int *);
-	bool				GetAdminEraseList(fk_DataFormatMode,
-										  std::ifstream &, fk_IDAdmin *, int);
+		//// for Header
+		void				GetHeader(fk_DataFormatMode, std::ifstream &,
+									  int *, int *, int *);
 
-	// for Set Topology Elements
-	bool				SetVertexData(int, int, int, int,
-									  double, double, double, double);
-	bool				SetHalfData(int, int, int, int, int);
-	bool				SetEdgeData(int, int, int, int, int, double);
-	bool				SetLoopData(int, int, int, int);
+		//// for Get Topology Elements
+		void				GetElemNum(fk_DataFormatMode,
+									   std::ifstream &, int *, int *, int *, int *);
+		bool				GetElem(fk_DataFormatMode, std::ifstream &, int, int, int, int);
+		bool				GetElemTag(std::ifstream &, const std::string &);
+		bool				GetVertexData(fk_DataFormatMode, std::ifstream &, int);
+		bool				GetHalfData(fk_DataFormatMode, std::ifstream &, int);
+		bool				GetEdgeData(fk_DataFormatMode, std::ifstream &, int);
+		bool				GetLoopData(fk_DataFormatMode, std::ifstream &, int);
+		bool				GetLineTagStatus(std::ifstream &, std::string *,
+											 const std::string &);
 
-	// for Material
-	bool				GetPaletteData_(fk_DataFormatMode, std::ifstream &, bool);
-	bool				GetMainMaterialData(fk_DataFormatMode, std::ifstream &);
-	bool				GetSubMaterialData(fk_DataFormatMode, std::ifstream &);
+		//// for Get IDAdmin
+		bool				GetIDAdmin(fk_DataFormatMode,
+									   std::ifstream &, fk_IDAdmin *, const std::string &);
+		bool				GetAdminDataFile(fk_DataFormatMode,
+											 std::ifstream &, fk_IDAdmin *);
+		bool				GetAdminHeader(fk_DataFormatMode,
+										   std::ifstream &, int *, int *);
+		bool				GetAdminEraseList(fk_DataFormatMode,
+											  std::ifstream &, fk_IDAdmin *, int);
 
-	bool				GetMaterialData(fk_DataFormatMode, std::ifstream &,
-										fk_Material *);
+		// for Set Topology Elements
+		bool				SetVertexData(int, int, int, int,
+										  double, double, double, double);
+		bool				SetHalfData(int, int, int, int, int);
+		bool				SetEdgeData(int, int, int, int, int, double);
+		bool				SetLoopData(int, int, int, int);
 
- public:
-	fk_FileInput(void);
-	virtual ~fk_FileInput();
+		// for Material
+		bool				GetPaletteData_(fk_DataFormatMode, std::ifstream &, bool);
+		bool				GetMainMaterialData(fk_DataFormatMode, std::ifstream &);
+		bool				GetSubMaterialData(fk_DataFormatMode, std::ifstream &);
 
-	void				SetDataBase(fk_DataBase *);
-	void				SetPalette(fk_Palette *);
-	bool				GetShapeData(std::string);
-	bool				GetShapeData(std::ifstream &, fk_DataFormatMode);
-	bool				GetPaletteData(std::string);
-	bool				GetPaletteData(std::ifstream &, fk_DataFormatMode);
-	void				SetSizeMode(bool);
-};
+		bool				GetMaterialData(fk_DataFormatMode, std::ifstream &,
+											fk_Material *);
+
+	};
+}
 
 #endif // !__FK_FILEINPUT_HEADER__
 

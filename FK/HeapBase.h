@@ -3,185 +3,159 @@
 
 #include <vector>
 
-//! 重複要素に同一IDを与えるための汎用テンプレート
-/*!
- *	このテンプレートは、重複要素を管理する機能を提供します。
- *	管理したいインスタンスを getID() 関数に代入したとき、
- *	既に同じ値を持つインスタンスが代入済みであった場合にはその ID を返します。
- *	初めて代入された値であった場合は、新しい ID を返します。
- *	内部ではヒープソートを用いているため、
- *	要素数が増加してもそれほど処理速度は低下しません。
- *
- *	対象となるクラスあるいは型においては、以下の条件を満たす必要があります。
- *	- 等号演算子「==」によって値の同一性比較ができる。
- *	- 不等号演算子「>」および「<」によって大小比較ができる。
- *	- 不等号において、a < b かつ b < c であるならば a < c であるという
- *		推移律が必ず成り立つ。逆方向も同様。
- *	- getID() 関数を用いる際、これまでに格納した全インスタンスが生存している。
- *	.
- *	\remarks
- *	本クラスは現在ベータ機能としての位置づけであり、
- *	ユーザーズマニュアルには記載されていません。
- *	また、今後のバージョンアップにおいて仕様が変更される可能性があります。
- */
+namespace FK {
+	typedef std::vector<int>::size_type		_fk_h_s;
 
-typedef std::vector<int>::size_type		_fk_h_s;
+	//! 重複要素に同一IDを与えるための汎用テンプレート
+	/*!
+	 *	このテンプレートは、重複要素を管理する機能を提供します。
+	 *	管理したいインスタンスを getID() 関数に代入したとき、
+	 *	既に同じ値を持つインスタンスが代入済みであった場合にはその ID を返します。
+	 *	初めて代入された値であった場合は、新しい ID を返します。
+	 *	内部ではヒープソートを用いているため、
+	 *	要素数が増加してもそれほど処理速度は低下しません。
+	 *
+	 *	対象となるクラスあるいは型においては、以下の条件を満たす必要があります。
+	 *	- 等号演算子「==」によって値の同一性比較ができる。
+	 *	- 不等号演算子「>」および「<」によって大小比較ができる。
+	 *	- 不等号において、a < b かつ b < c であるならば a < c であるという
+	 *		推移律が必ず成り立つ。逆方向も同様。
+	 *	- getID() 関数を用いる際、これまでに格納した全インスタンスが生存している。
+	 *	.
+	 */
 
-//! 重複要素に同一IDを与えるための汎用テンプレート
-/*!
- *	このテンプレートは、重複要素を管理する機能を提供します。
- *	管理したいインスタンスを getID() 関数に代入したとき、
- *	既に同じ値を持つインスタンスが代入済みであった場合にはその ID を返します。
- *	初めて代入された値であった場合は、新しい ID を返します。
- *	内部ではヒープソートを用いているため、
- *	要素数が増加してもそれほど処理速度は低下しません。
- *
- *	対象となるクラスあるいは型においては、以下の条件を満たす必要があります。
- *	- 等号演算子「==」によって値の同一性比較ができる。
- *	- 不等号演算子「>」および「<」によって大小比較ができる。
- *	- 不等号において、a < b かつ b < c であるならば a < c であるという
- *		推移律が必ず成り立つ。逆方向も同様。
- *	- getID() 関数を用いる際、これまでに格納した全インスタンスが生存している。
- *	.
- *	\remarks
- *	本クラスは現在ベータ機能としての位置づけであり、
- *	ユーザーズマニュアルには記載されていません。
- *	また、今後のバージョンアップにおいて仕様が変更される可能性があります。
- */
+	template<class TYPE> class fk_HeapBase {
+	public:
+		//! コンストラクタ
+		fk_HeapBase(void) { clear(); }
 
-template<class TYPE> class fk_HeapBase {
- private:
-	std::vector<TYPE *>		array;
-	std::vector<int>		id;
+		//! デストラクタ
+		virtual ~fk_HeapBase() { clear(); }
 
-	int Compare(TYPE *a, TYPE *b) {
-		if(*a < *b) return -1;
-		if(*a > *b) return 1;
-		return 0;
-	}
+		//! 初期化関数
+		/*!
+		 *	これまで格納した情報を全て初期化します。
+		 *	この関数を呼んだ場合、過去に格納したインスタンスは解放しても構いません。
+		 */
+		void clear(void);
 
-	int HeapData(TYPE *argData, int argS, int argE) {
-		TYPE	*pData;
-		int		comp;
-		int		index;
-
-		if(argE == -1) {
-			pData = new TYPE();
-			*pData = *argData;
-			array.insert(array.begin(), pData);
-			id.insert(id.begin(), 1);
-			return 1;
-		}
-
-		if(argS == argE) {
-			comp = Compare(argData, array[static_cast<_fk_h_s>(argS)]);
-			if(comp == 0) {
-				return id[static_cast<_fk_h_s>(argS)];
-			}
-
-			pData = new TYPE();
-			*pData = *argData;
-			if(comp == -1) {
-				array.insert(array.begin()+argS, pData);
-				id.insert(id.begin()+argS,
-						  static_cast<int>(array.size()));
-			} else {
-				array.insert(array.begin()+argS+1, pData);
-				id.insert(id.begin()+argS+1,
-						  static_cast<int>(array.size()));
-			}
+		/*!
+		 *	現時点での要素数を返します。
+		 *	これは、これまで返された ID の最大値でもあります。
+		 *	\return 要素数
+		 */
+		int getSize(void) {
 			return static_cast<int>(array.size());
 		}
 
-		if(argE - argS == 1) {
-			comp = Compare(argData,
-						   array[static_cast<_fk_h_s>(argS)]);
+		/*!
+		 *	以下の条件で ID となる値を返します。
+		 *	- はじめて値を格納する場合、
+		 *		あるいは clear() を呼んではじめて値を格納する場合、
+		 *		ID として 1 を返します。
+		 *	- argV の値がこれまでに格納されたインスタンスの値と等しい場合、
+		 *		そのインスタンスの ID を返します。
+		 *	- argV がこれまでに格納されたどのインスタンスとも値が異なる場合、
+		 *	   	新しい ID を返します。
+		 *
+		 *	\param[in] argV	比較対象インスタンスのアドレス
+		 */
+		int getID(TYPE *argV) {
+			return HeapData(argV, 0, getSize()-1);
+		}
 
-			if(comp == 0) {
-				return id[static_cast<_fk_h_s>(argS)];
-			}
+	private:
+		std::vector<TYPE *>		array;
+		std::vector<int>		id;
 
-			if(comp == -1) {
+		int Compare(TYPE *a, TYPE *b) {
+			if(*a < *b) return -1;
+			if(*a > *b) return 1;
+			return 0;
+		}
+
+		int HeapData(TYPE *argData, int argS, int argE) {
+			TYPE	*pData;
+			int		comp;
+			int		index;
+
+			if(argE == -1) {
 				pData = new TYPE();
 				*pData = *argData;
-				array.insert(array.begin()+argS, pData);
-				id.insert(id.begin()+argS,
-						  static_cast<int>(array.size()));
+				array.insert(array.begin(), pData);
+				id.insert(id.begin(), 1);
+				return 1;
+			}
+
+			if(argS == argE) {
+				comp = Compare(argData, array[static_cast<_fk_h_s>(argS)]);
+				if(comp == 0) {
+					return id[static_cast<_fk_h_s>(argS)];
+				}
+
+				pData = new TYPE();
+				*pData = *argData;
+				if(comp == -1) {
+					array.insert(array.begin()+argS, pData);
+					id.insert(id.begin()+argS,
+							  static_cast<int>(array.size()));
+				} else {
+					array.insert(array.begin()+argS+1, pData);
+					id.insert(id.begin()+argS+1,
+							  static_cast<int>(array.size()));
+				}
 				return static_cast<int>(array.size());
 			}
 
-			return HeapData(argData, argE, argE);
+			if(argE - argS == 1) {
+				comp = Compare(argData,
+							   array[static_cast<_fk_h_s>(argS)]);
+
+				if(comp == 0) {
+					return id[static_cast<_fk_h_s>(argS)];
+				}
+
+				if(comp == -1) {
+					pData = new TYPE();
+					*pData = *argData;
+					array.insert(array.begin()+argS, pData);
+					id.insert(id.begin()+argS,
+							  static_cast<int>(array.size()));
+					return static_cast<int>(array.size());
+				}
+
+				return HeapData(argData, argE, argE);
+			}
+
+			index = (argE-argS)/2 + argS;
+
+			comp = Compare(argData, array[static_cast<_fk_h_s>(index)]);
+
+			if(comp == 0) {
+				return id[static_cast<_fk_h_s>(index)];
+			}
+
+			if(comp == -1) {
+				return HeapData(argData, argS, index);
+			}
+
+			if(comp == 1) {
+				return HeapData(argData, index, argE);
+			}
+
+			return 0;
+		}
+	};
+
+	template<class TYPE> void fk_HeapBase<TYPE>::clear(void) {
+		for(unsigned int i = 0; i < array.size(); i++) {
+			delete array[i];
 		}
 
-		index = (argE-argS)/2 + argS;
-
-		comp = Compare(argData, array[static_cast<_fk_h_s>(index)]);
-
-		if(comp == 0) {
-			return id[static_cast<_fk_h_s>(index)];
-		}
-
-		if(comp == -1) {
-			return HeapData(argData, argS, index);
-		}
-
-		if(comp == 1) {
-			return HeapData(argData, index, argE);
-		}
-
-		return 0;
+		array.clear();
+		id.clear();
+		return;
 	}
-
-			
- public:
-			
-	//! コンストラクタ
-	fk_HeapBase(void) { clear(); }
-
-	//! デストラクタ
-	virtual ~fk_HeapBase() { clear(); }
-
-	//! 初期化関数
-	/*!
-	 *	これまで格納した情報を全て初期化します。
-	 *	この関数を呼んだ場合、過去に格納したインスタンスは解放しても構いません。
-	 */
-	void clear(void);
-
-	/*!
-	 *	現時点での要素数を返します。
-	 *	これは、これまで返された ID の最大値でもあります。
-	 *	\return 要素数
-	 */
-	int getSize(void) {
-		return static_cast<int>(array.size());
-	}
-
-	/*!
-	 *	以下の条件で ID となる値を返します。
-	 *	- はじめて値を格納する場合、
-	 *		あるいは clear() を呼んではじめて値を格納する場合、
-	 *		ID として 1 を返します。
-	 *	- argV の値がこれまでに格納されたインスタンスの値と等しい場合、
-	 *		そのインスタンスの ID を返します。
-	 *	- argV がこれまでに格納されたどのインスタンスとも値が異なる場合、
-	 *	   	新しい ID を返します。
-	 *
-	 *	\param[in] argV	比較対象インスタンスのアドレス
-	 */
-	int getID(TYPE *argV) {
-		return HeapData(argV, 0, getSize()-1);
-	}
-};
-
-template<class TYPE> void fk_HeapBase<TYPE>::clear(void) {
-	for(unsigned int i = 0; i < array.size(); i++) {
-		delete array[i];
-	}
-
-	array.clear();
-	id.clear();
-	return;
 }
 
 #endif // !__FK_HEAP_BASE_HEADER__

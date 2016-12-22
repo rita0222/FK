@@ -7,60 +7,61 @@
 #include <FK/Angle.h>
 #include <FL/Fl.H>
 
+namespace FK {
+	
+	//! マウスによる視点操作クラス
+	/*!	
+	 *	このクラスは、マウスでの自由な視点操作を提供します。
+	 */
+	class fk_TrackBall {
 
-//! マウスによる視点操作クラス
-/*!	
- *	このクラスは、マウスでの自由な視点操作を提供します。
- */
-class fk_TrackBall {
+	public:
+		//! コンストラクタ
+		fk_TrackBall(fk_Window*, fk_Model* = nullptr);
 
-private:
-	fk_Window	*fk_win;							// FKウィンドウ
-	fk_Model	*camera;							// カメラ
-	fk_Vector	lookPos;							// ３人称視点注視点
+		//! 操作に使用するマウスボタン
+		fk_MouseButton	lookButton, distButton[2], moveButton;
+		//! 画面外にカーソルが出た場合の判定の有無
+		bool		overCheck;
+		//! カーソル移動量:処理量比率指定
+		double		divPos, divLook;
+		//! ３人称視点制御カーソル移動量:処理量比率指定
+		double		divDist;
+		//! エコーの有無
+		bool		bEcho;
 
-	int			nowX, nowY, oldX, oldY;				// ウィンドウ上座標
-	int			echoX, echoY;
-	bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
+		//! カメラの変更
+		void		setCamera(fk_Model*);
+		//! カメラポインタは渡されているか
+		bool		isSetCamera(void);
 
-public:
-	//! コンストラクタ
-	fk_TrackBall(fk_Window*, fk_Model* = nullptr);
+		//! ３人称視点注視点変更
+		void		setLookTo(fk_Vector);
+		//! ３人称視点ショートカット制御
+		void		controlLookToSC(void);
 
-	//! 操作に使用するマウスボタン
-	fk_MouseButton	lookButton, distButton[2], moveButton;
-	//! 画面外にカーソルが出た場合の判定の有無
-	bool		overCheck;
-	//! カーソル移動量:処理量比率指定
-	double		divPos, divLook;
-	//! ３人称視点制御カーソル移動量:処理量比率指定
-	double		divDist;
-	//! エコーの有無
-	bool		bEcho;
+		//! ３人称視点位置制御
+		void		controlLookTo(void);
+		//! ３人称視点距離制御
+		void		controlLookToDist(void);
+		//! ３人称視点注視点制御
+		void		controlLookToMove(void);
 
-	//! カメラの変更
-	void		setCamera(fk_Model*);
-	//! カメラポインタは渡されているか
-	bool		isSetCamera(void);
+		//! 位置・距離・注視点をまとめて制御
+		void		update(void);
 
-	//! ３人称視点注視点変更
-	void		setLookTo(fk_Vector);
-	//! ３人称視点ショートカット制御
-	void		controlLookToSC(void);
+	private:
+		fk_Window	*fk_win;							// FKウィンドウ
+		fk_Model	*camera;							// カメラ
+		fk_Vector	lookPos;							// ３人称視点注視点
 
-	//! ３人称視点位置制御
-	void		controlLookTo(void);
-	//! ３人称視点距離制御
-	void		controlLookToDist(void);
-	//! ３人称視点注視点制御
-	void		controlLookToMove(void);
+		int			nowX, nowY, oldX, oldY;				// ウィンドウ上座標
+		int			echoX, echoY;
+		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
+	};
 
-	//! 位置・距離・注視点をまとめて制御
-	void		update(void);
-
-};
-
-typedef fk_TrackBall fkut_TrackBall;
+	typedef fk_TrackBall fkut_TrackBall;
+}
 
 #endif //!__FK_TRACKBALL_HEADER__
 

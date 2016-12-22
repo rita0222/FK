@@ -9,62 +9,65 @@
 #define FK_EXTERN extern
 #endif // FK_MATPALCODE
 
-/*! @file MatExample.h
-	デフォルトマテリアル
-*/
+namespace FK {
+	/*! @file MatExample.h
+	 *	デフォルトマテリアル
+	 */
 
-/*! デフォルトマテリアル変数の初期化
-	この関数は、最初から用意されているマテリアル用変数の初期化を行います。
-	これを行わないと、各変数に適切な値が入力されません。
-	この関数を呼んだあとに、各変数のマテリアル要素を設定しなおすことが可能です。
-	その後改めて初期化するには、再度この関数を呼んで下さい。
-	@return なし
-*/
-void fk_InitMaterial(void);
+	/*!	デフォルトマテリアル変数の初期化
+	 *
+	 *	この関数は、最初から用意されているマテリアル用変数の初期化を行います。
+	 *	これを行わないと、各変数に適切な値が入力されません。
+	 *	この関数を呼んだあとに、各変数のマテリアル要素を設定しなおすことが可能です。
+	 *	その後改めて初期化するには、再度この関数を呼んで下さい。
+	 */
+	void fk_InitMaterial(void);
 
-FK_EXTERN fk_Material LightCyan;
-FK_EXTERN fk_Material AshGray;
-FK_EXTERN fk_Material BurntTitan;
-FK_EXTERN fk_Material IridescentGreen;
-FK_EXTERN fk_Material UltraMarine;
-FK_EXTERN fk_Material Ivory;
-FK_EXTERN fk_Material BambooGreen;
-FK_EXTERN fk_Material PearWhite;
-FK_EXTERN fk_Material Lilac;
-FK_EXTERN fk_Material HolidaySkyBlue;
-FK_EXTERN fk_Material DimYellow;
-FK_EXTERN fk_Material LavaRed;
-FK_EXTERN fk_Material GrassGreen;
-FK_EXTERN fk_Material Red;
-FK_EXTERN fk_Material Pink;
-FK_EXTERN fk_Material DarkRed;
-FK_EXTERN fk_Material Orange;
-FK_EXTERN fk_Material Flesh;
-FK_EXTERN fk_Material Brown;
-FK_EXTERN fk_Material Yellow;
-FK_EXTERN fk_Material Cream;
-FK_EXTERN fk_Material DarkYellow;
-FK_EXTERN fk_Material Green;
-FK_EXTERN fk_Material LightGreen;
-FK_EXTERN fk_Material Cyan;
-FK_EXTERN fk_Material PaleBlue;
-FK_EXTERN fk_Material Blue;
-FK_EXTERN fk_Material LightBlue;
-FK_EXTERN fk_Material DarkGreen;
-FK_EXTERN fk_Material DarkBlue;
-FK_EXTERN fk_Material DarkPurple;
-FK_EXTERN fk_Material Violet;
-FK_EXTERN fk_Material Purple;
-FK_EXTERN fk_Material LightViolet;
-FK_EXTERN fk_Material Coral;
-FK_EXTERN fk_Material White;
-FK_EXTERN fk_Material Gray1;
-FK_EXTERN fk_Material Gray2;
-FK_EXTERN fk_Material GlossBlack;
-FK_EXTERN fk_Material MatBlack;
-FK_EXTERN fk_Material TrueWhite;
-
-#undef FK_EXTERN
+	//! デフォルトマテリアル用名前空間
+	namespace Material {
+		FK_EXTERN fk_Material LightCyan;
+		FK_EXTERN fk_Material AshGray;
+		FK_EXTERN fk_Material BurntTitan;
+		FK_EXTERN fk_Material IridescentGreen;
+		FK_EXTERN fk_Material UltraMarine;
+		FK_EXTERN fk_Material Ivory;
+		FK_EXTERN fk_Material BambooGreen;
+		FK_EXTERN fk_Material PearWhite;
+		FK_EXTERN fk_Material Lilac;
+		FK_EXTERN fk_Material HolidaySkyBlue;
+		FK_EXTERN fk_Material DimYellow;
+		FK_EXTERN fk_Material LavaRed;
+		FK_EXTERN fk_Material GrassGreen;
+		FK_EXTERN fk_Material Red;
+		FK_EXTERN fk_Material Pink;
+		FK_EXTERN fk_Material DarkRed;
+		FK_EXTERN fk_Material Orange;
+		FK_EXTERN fk_Material Flesh;
+		FK_EXTERN fk_Material Brown;
+		FK_EXTERN fk_Material Yellow;
+		FK_EXTERN fk_Material Cream;
+		FK_EXTERN fk_Material DarkYellow;
+		FK_EXTERN fk_Material Green;
+		FK_EXTERN fk_Material LightGreen;
+		FK_EXTERN fk_Material Cyan;
+		FK_EXTERN fk_Material PaleBlue;
+		FK_EXTERN fk_Material Blue;
+		FK_EXTERN fk_Material LightBlue;
+		FK_EXTERN fk_Material DarkGreen;
+		FK_EXTERN fk_Material DarkBlue;
+		FK_EXTERN fk_Material DarkPurple;
+		FK_EXTERN fk_Material Violet;
+		FK_EXTERN fk_Material Purple;
+		FK_EXTERN fk_Material LightViolet;
+		FK_EXTERN fk_Material Coral;
+		FK_EXTERN fk_Material White;
+		FK_EXTERN fk_Material Gray1;
+		FK_EXTERN fk_Material Gray2;
+		FK_EXTERN fk_Material GlossBlack;
+		FK_EXTERN fk_Material MatBlack;
+		FK_EXTERN fk_Material TrueWhite;
+	}
+}
 
 #endif // !__EW_MATERIAL_EXAMPLE_HEADER__
 

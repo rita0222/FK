@@ -5,148 +5,150 @@
 #include <FK/Attribute.h>
 #include <FK/Palette.h>
 
-typedef char	   	fk_TopologyType;
-
-const fk_TopologyType	FK_VERTEX_TYPE = 1;
-const fk_TopologyType	FK_HALF_TYPE = 2;
-const fk_TopologyType	FK_EDGE_TYPE = 3;
-const fk_TopologyType	FK_LOOP_TYPE = 4;
-const fk_TopologyType	FK_INDEXFACE_TYPE = 6;
-const fk_TopologyType	FK_UNDEFINED_TYPE = -1;
-
-
-//! ソリッドモデル位相要素用基底クラス
-/*!
- *	このクラスは、 fk_Solid における位相要素の共通部分に関する機能を提供します。
- *	FK におけるソリッドモデルの構造については、
- *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
- *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Loop, fk_TopologyMaterial
- */
-
-class fk_Topology : public fk_Attribute {
-
- private:
-	int					ID;
-	bool				ariveFlg;
-	fk_TopologyType		type;
-	void				SetType(fk_TopologyType);
+namespace FK {
 	
- protected:
+	typedef char	   	fk_TopologyType;
+
+	const fk_TopologyType	FK_VERTEX_TYPE = 1;
+	const fk_TopologyType	FK_HALF_TYPE = 2;
+	const fk_TopologyType	FK_EDGE_TYPE = 3;
+	const fk_TopologyType	FK_LOOP_TYPE = 4;
+	const fk_TopologyType	FK_INDEXFACE_TYPE = 6;
+	const fk_TopologyType	FK_UNDEFINED_TYPE = -1;
+
+
+	//! ソリッドモデル位相要素用基底クラス
+	/*!
+	 *	このクラスは、 fk_Solid における位相要素の共通部分に関する機能を提供します。
+	 *	FK におけるソリッドモデルの構造については、
+	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
+	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Loop, fk_TopologyMaterial
+	 */
+
+	class fk_Topology : public fk_Attribute {
+
+
+	public:
+		//! コンストラクタ
+		fk_Topology(void);
+		//! デストラクタ
+		virtual ~fk_Topology();
+
+		//! ID取得関数
+		/*!
+		 *	\return 位相要素ID
+		 */
+		int		getID(void) const;
+
+		//! 位相タイプ取得関数
+		/*!
+		 *	位相タイプを返します。返り値は以下のいずれかとなります。
+		 *
+		 *	\retval FK_VERTEX_TYPE		頂点を表します。
+		 *	\retval FK_HALF_TYPE		半稜線を表します。
+		 *	\retval FK_EDGE_TYPE		稜線を表します。
+		 *	\retval FK_LOOP_TYPE		ループを表します。
+		 *	\retval FK_INDEXFACE_TYPE	インデックスフェースセットを表します。
+		 *	\retval FK_UNDEFINED_TYPE	未定義な位相要素を表します。
+		 */
+		fk_TopologyType		getType(void) const;
+	};
+
+
+	//! 位相要素個別マテリアル管理クラス
+	/*!
+	 *	このクラスは、 fk_Solid における位相要素について、
+	 *	個別にマテリアルを管理する機能を提供します。
+	 *
+	 *	fk_Solid による1つの形状内で、
+	 *	各位相要素について別々にマテリアルを設定したい場合は、
+	 *	このクラスのメンバ関数を用います。
+	 *
+	 *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_Shape, fk_Model
+	 */
+	class fk_TopologyMaterial : public fk_Topology {
+
+		friend class		fk_DataBase;
+
+	private:
+		int					mateID;
+		fk_MaterialMode		mateMode;
+
+		void				CloneMaterial(fk_TopologyMaterial *);
+
+	public:
+		//! コンストラクタ
+		fk_TopologyMaterial(void);
+
+		//! デストラクタ
+		virtual ~fk_TopologyMaterial();
+
+		//! マテリアルモード設定関数
+		/*!
+		 *	各位相要素の描画の際に、個別のマテリアルを利用するかどうかを設定します。
+		 *	fk_Solid による形状では、
+		 *	個別マテリアルを有効とするのには以下の条件を満たす必要があります。
+		 *	- fk_Model にてマテリアルモードが FK_PARENT_MODE になっている。
+		 *		(fk_Model::setMaterialMode() を参照して下さい。)
+		 *	- fk_Solid にてマテリアルモードが FK_PARENT_MODE になっている。
+		 *		(fk_Shape::setMaterialMode() を参照して下さい。)
+		 *	.
+		 *	上記の条件を満たさない場合、個別のマテリアル設定の有無に関わらず
+		 *	全ての位相要素がモデルに設定されたマテリアルによって描画を行います。
+		 *
+		 *	\param[in] mode
+		 *		前述の条件を前提として、位相要素のマテリアルを以下のように設定します。
+		 *		\arg FK_CHILD_MODE		個別設定を利用します。
+		 *		\arg FK_PARENT_MODE		モデル設定を利用します。
+		 *		\arg FK_NONE_MODE		描画を行いません。
+		 */
+		void				setElemMaterialMode(fk_MaterialMode mode);
+
+		//!	マテリアルID設定関数
+		/*!
+		 *	位相要素の個別マテリアルを、パレットの ID によって設定します。
+		 *	パレットに関する解説は
+		 *	fk_Shape::setPalette() や fk_Shape::pushPalette() を参照して下さい。
+		 *
+		 *	\param[in] ID	マテリアルの ID
+		 */
+		void				setElemMaterialID(int ID);
+
+		//! マテリアルモード参照関数
+		/*!
+		 *	現在のマテリアルモードを参照します。
+		 *
+		 *	\return マテリアルモード
+		 */
+		fk_MaterialMode		getElemMaterialMode(void);
+
+		//! マテリアル ID 参照関数
+		/*!
+		 *	現在のマテリアル ID を参照します。
+		 *
+		 *	\return マテリアル ID
+		 */
+		int					getElemMaterialID(void);
+
+	private:
+		int					ID;
+		bool				ariveFlg;
+		fk_TopologyType		type;
+		void				SetType(fk_TopologyType);
+	
+	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		void				SetID(int);
+		void				InitTopology(int, fk_TopologyType);
 
-	void				SetID(int);
-	void				InitTopology(int, fk_TopologyType);
 
-
-	void				DeleteElem(void);
-	void				MakeElem(int);
-	bool				CloneElem(fk_Topology *);
-
+		void				DeleteElem(void);
+		void				MakeElem(int);
+		bool				CloneElem(fk_Topology *);
 #endif
-
- public:
-	//! コンストラクタ
-	fk_Topology(void);
-	//! デストラクタ
-	virtual ~fk_Topology();
-
-	//! ID取得関数
-	/*!
-	 *	\return 位相要素ID
-	 */
-	int		getID(void) const;
-
-	//! 位相タイプ取得関数
-	/*!
-	 *	位相タイプを返します。返り値は以下のいずれかとなります。
-	 *
-	 *	\retval FK_VERTEX_TYPE		頂点を表します。
-	 *	\retval FK_HALF_TYPE		半稜線を表します。
-	 *	\retval FK_EDGE_TYPE		稜線を表します。
-	 *	\retval FK_LOOP_TYPE		ループを表します。
-	 *	\retval FK_INDEXFACE_TYPE	インデックスフェースセットを表します。
-	 *	\retval FK_UNDEFINED_TYPE	未定義な位相要素を表します。
-	 */
-	fk_TopologyType		getType(void) const;
-};
-
-
-//! 位相要素個別マテリアル管理クラス
-/*!
- *	このクラスは、 fk_Solid における位相要素について、
- *	個別にマテリアルを管理する機能を提供します。
- *
- *	fk_Solid による1つの形状内で、
- *	各位相要素について別々にマテリアルを設定したい場合は、
- *	このクラスのメンバ関数を用います。
- *
- *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_Shape, fk_Model
- */
-class fk_TopologyMaterial : public fk_Topology {
-
-	friend class		fk_DataBase;
-
- private:
-	int					mateID;
-	fk_MaterialMode		mateMode;
-
-	void				CloneMaterial(fk_TopologyMaterial *);
-
- public:
-	//! コンストラクタ
-	fk_TopologyMaterial(void);
-
-	//! デストラクタ
-	virtual ~fk_TopologyMaterial();
-
-	//! マテリアルモード設定関数
-	/*!
-	 *	各位相要素の描画の際に、個別のマテリアルを利用するかどうかを設定します。
-	 *	fk_Solid による形状では、
-	 *	個別マテリアルを有効とするのには以下の条件を満たす必要があります。
-	 *	- fk_Model にてマテリアルモードが FK_PARENT_MODE になっている。
-	 *		(fk_Model::setMaterialMode() を参照して下さい。)
-	 *	- fk_Solid にてマテリアルモードが FK_PARENT_MODE になっている。
-	 *		(fk_Shape::setMaterialMode() を参照して下さい。)
-	 *	.
-	 *	上記の条件を満たさない場合、個別のマテリアル設定の有無に関わらず
-	 *	全ての位相要素がモデルに設定されたマテリアルによって描画を行います。
-	 *
-	 *	\param[in] mode
-	 *		前述の条件を前提として、位相要素のマテリアルを以下のように設定します。
-	 *		\arg FK_CHILD_MODE		個別設定を利用します。
-	 *		\arg FK_PARENT_MODE		モデル設定を利用します。
-	 *		\arg FK_NONE_MODE		描画を行いません。
-	 */
-	void				setElemMaterialMode(fk_MaterialMode mode);
-
-	//!	マテリアルID設定関数
-	/*!
-	 *	位相要素の個別マテリアルを、パレットの ID によって設定します。
-	 *	パレットに関する解説は
-	 *	fk_Shape::setPalette() や fk_Shape::pushPalette() を参照して下さい。
-	 *
-	 *	\param[in] ID	マテリアルの ID
-	 */
-	void				setElemMaterialID(int ID);
-
-	//! マテリアルモード参照関数
-	/*!
-	 *	現在のマテリアルモードを参照します。
-	 *
-	 *	\return マテリアルモード
-	 */
-	fk_MaterialMode		getElemMaterialMode(void);
-
-	//! マテリアル ID 参照関数
-	/*!
-	 *	現在のマテリアル ID を参照します。
-	 *
-	 *	\return マテリアル ID
-	 */
-	int					getElemMaterialID(void);
-};
+	};
+}
 
 #endif // !__FK_TOPOLOGY_HEADER__
 

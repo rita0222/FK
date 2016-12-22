@@ -5,145 +5,147 @@
 #include <FK/Quaternion.h>
 #include <FK/Tree.h>
 
-class fk_D3DXFrameAnimation {
- private:
-	std::string					name;
+namespace FK {
 
-	std::vector<double>			rotKey;
-	std::vector<double>			scaleKey;
-	std::vector<double>			transKey;
+	class fk_D3DXFrameAnimation {
 
-	std::vector<fk_Quaternion>	rotData;
-	std::vector<fk_Vector>		scaleData;
-	std::vector<fk_Vector>		transData;
+	public:
+		fk_D3DXFrameAnimation(void);
+		virtual ~fk_D3DXFrameAnimation();
 
-	fk_Matrix				frameMatrix;
+		void			SetName(const std::string &);
+		std::string		GetName(void);
 
-	void					LinearDiv(double, std::vector<double> *,
-									  int *, double *);
+		void			SetRotKeyNum(int);
+		void			SetScaleKeyNum(int);
+		void			SetTransKeyNum(int);
+		int				GetRotKeyNum(void);
+		int				GetScaleKeyNum(void);
+		int				GetTransKeyNum(void);
 
- public:
-	fk_D3DXFrameAnimation(void);
-	virtual ~fk_D3DXFrameAnimation();
+		void			SetRotKey(int, double);
+		void			SetScaleKey(int, double);
+		void			SetTransKey(int, double);
+		double			GetRotKey(int);
+		double			GetScaleKey(int);
+		double			GetTransKey(int);
 
-	void			SetName(const std::string &);
-	std::string		GetName(void);
+		void			SetRotData(int, const fk_Quaternion &);
+		void			SetScaleData(int, const fk_Vector &);
+		void			SetTransData(int, const fk_Vector &);
+		fk_Quaternion	GetRotData(int);
+		fk_Vector		GetScaleData(int);
+		fk_Vector		GetTransData(int);
 
-	void			SetRotKeyNum(int);
-	void			SetScaleKeyNum(int);
-	void			SetTransKeyNum(int);
-	int				GetRotKeyNum(void);
-	int				GetScaleKeyNum(void);
-	int				GetTransKeyNum(void);
+		void			SetTime(double);
+		double			GetStartTime(void);
+		fk_Matrix		GetFrameMatrix(void);
 
-	void			SetRotKey(int, double);
-	void			SetScaleKey(int, double);
-	void			SetTransKey(int, double);
-	double			GetRotKey(int);
-	double			GetScaleKey(int);
-	double			GetTransKey(int);
+	private:
+		std::string					name;
 
-	void			SetRotData(int, const fk_Quaternion &);
-	void			SetScaleData(int, const fk_Vector &);
-	void			SetTransData(int, const fk_Vector &);
-	fk_Quaternion	GetRotData(int);
-	fk_Vector		GetScaleData(int);
-	fk_Vector		GetTransData(int);
+		std::vector<double>			rotKey;
+		std::vector<double>			scaleKey;
+		std::vector<double>			transKey;
 
-	void			SetTime(double);
-	double			GetStartTime(void);
-	fk_Matrix		GetFrameMatrix(void);
-};
+		std::vector<fk_Quaternion>	rotData;
+		std::vector<fk_Vector>		scaleData;
+		std::vector<fk_Vector>		transData;
 
-class fk_D3DXSkinData {
- private:
-	std::string				name;
-	int						vNum;
-	std::vector<int>		vArray;
-	std::vector<double>		wArray;
+		fk_Matrix				frameMatrix;
 
-	fk_Matrix				offsetMatrix;
+		void					LinearDiv(double, std::vector<double> *,
+										  int *, double *);
+	};
 
- public:
-	fk_D3DXSkinData(void);
-	virtual ~fk_D3DXSkinData();
+	class fk_D3DXSkinData {
+	private:
+		std::string				name;
+		int						vNum;
+		std::vector<int>		vArray;
+		std::vector<double>		wArray;
 
-	void				SetName(const std::string &);
-	void				SetNum(int);
-	void				SetVID(int, int);
-	void				SetVWeight(int, double);
-	void				SetOffsetMatrixValue(int, int, double);
+		fk_Matrix				offsetMatrix;
 
-	std::string			GetName(void);
-	int					GetNum(void);
-	int					GetVID(int);
-	double				GetWeight(int);
-	fk_Matrix			GetOffsetMatrix(void);
-};
+	public:
+		fk_D3DXSkinData(void);
+		virtual ~fk_D3DXSkinData();
 
-class fk_D3DXFrame {
- private:
-	std::string				name;
-	fk_D3DXSkinData			*skin;
-	fk_D3DXFrameAnimation	*anim;
+		void				SetName(const std::string &);
+		void				SetNum(int);
+		void				SetVID(int, int);
+		void				SetVWeight(int, double);
+		void				SetOffsetMatrixValue(int, int, double);
 
-	// Frame の初期行列
-	fk_Matrix				initMatrix;
+		std::string			GetName(void);
+		int					GetNum(void);
+		int					GetVID(int);
+		double				GetWeight(int);
+		fk_Matrix			GetOffsetMatrix(void);
+	};
 
-	// 各ボーン固有のオフセット行列
-	fk_Matrix				offsetMatrix;
+	class fk_D3DXFrame {
+	public:
+		fk_D3DXFrame(void);
+		virtual ~fk_D3DXFrame();
 
-	// 親からの継承を反映したボーン行列
-	fk_Matrix				curMatrix;
+		void					SetName(const std::string &);
+		std::string				GetName(void);
+		void					SetSkin(fk_D3DXSkinData *);
+		fk_D3DXSkinData *		GetSkin(void);
+		void					SetAnimation(fk_D3DXFrameAnimation *);
+		fk_D3DXFrameAnimation *	GetAnimation(void);
+		void					SetParentFrame(fk_D3DXFrame *);
 
-	// ボーン行列 * オフセット行列
-	fk_Matrix				totalMatrix;
+		void					SetInitMatrix(const fk_Matrix *);
 
-	// 親ボーン行列
-	fk_Matrix				*parentMatrix;
+		void					SetUpMatrix(void);
+		void					SetTime(double);
+		fk_Matrix *				GetTotalMatrix(void);
 
- public:
-	fk_D3DXFrame(void);
-	virtual ~fk_D3DXFrame();
+	private:
+		std::string				name;
+		fk_D3DXSkinData			*skin;
+		fk_D3DXFrameAnimation	*anim;
 
-	void					SetName(const std::string &);
-	std::string				GetName(void);
-	void					SetSkin(fk_D3DXSkinData *);
-	fk_D3DXSkinData *		GetSkin(void);
-	void					SetAnimation(fk_D3DXFrameAnimation *);
-	fk_D3DXFrameAnimation *	GetAnimation(void);
-	void					SetParentFrame(fk_D3DXFrame *);
+		// Frame の初期行列
+		fk_Matrix				initMatrix;
 
-	void					SetInitMatrix(const fk_Matrix *);
+		// 各ボーン固有のオフセット行列
+		fk_Matrix				offsetMatrix;
 
-	void					SetUpMatrix(void);
-	void					SetTime(double);
-	fk_Matrix *				GetTotalMatrix(void);
-};
+		// 親からの継承を反映したボーン行列
+		fk_Matrix				curMatrix;
 
+		// ボーン行列 * オフセット行列
+		fk_Matrix				totalMatrix;
 
+		// 親ボーン行列
+		fk_Matrix				*parentMatrix;
+	};
 
-class fk_D3DXPropertyList : public fk_TreeBaseObject {
- private:
-	bool				matrixFlg;
-	fk_Matrix			frameMatrix;
-	std::string			property;
-	std::string			data;
-	fk_D3DXFrame		*frame;
+	class fk_D3DXPropertyList : public fk_TreeBaseObject {
+	public:
+		fk_D3DXPropertyList(void);
+		virtual ~fk_D3DXPropertyList();
 
- public:
-	fk_D3DXPropertyList(void);
-	virtual ~fk_D3DXPropertyList();
+		void				SetProperty(const std::string &);
+		std::string			GetProperty(void);
+		void				SetData(const std::string &);
+		std::string			GetData(void);
+		void				SetFrameMatrixValue(int, int, double);
+		fk_Matrix *			GetFrameMatrix(void);
+		void				SetFrame(fk_D3DXFrame *);
+		fk_D3DXFrame *		GetFrame(void);
 
-	void				SetProperty(const std::string &);
-	std::string			GetProperty(void);
-	void				SetData(const std::string &);
-	std::string			GetData(void);
-	void				SetFrameMatrixValue(int, int, double);
-	fk_Matrix *			GetFrameMatrix(void);
-	void				SetFrame(fk_D3DXFrame *);
-	fk_D3DXFrame *		GetFrame(void);
-};
+	private:
+		bool				matrixFlg;
+		fk_Matrix			frameMatrix;
+		std::string			property;
+		std::string			data;
+		fk_D3DXFrame		*frame;
+	};
+}
 
 #endif
 

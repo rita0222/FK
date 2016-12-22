@@ -4,22 +4,25 @@
 #include <FK/ParserBase.H>
 #include <FK/HeapBase.h>
 
-class fk_RDSParser : public fk_ParserBase {
- private:
-	bool	CheckRDSFile(std::ifstream &);
-	bool	ReadRDSVertexData(std::ifstream &,
-							  std::vector<fk_Vector> *,
-							  std::vector<int> *, bool);
-	bool	ReadRDSPolygonData(std::ifstream &,
-							   std::vector< std::vector<int> > *,
-							   std::vector<int> *);
+namespace FK {
+	class fk_RDSParser : public fk_ParserBase {
 
- public:
-	fk_RDSParser(void);
-	virtual ~fk_RDSParser();
+	public:
+		fk_RDSParser(void);
+		virtual ~fk_RDSParser();
 
-	bool	ReadRDSFile(std::string, bool);
-};
+		bool	ReadRDSFile(std::string, bool);
+
+	private:
+		bool	CheckRDSFile(std::ifstream &);
+		bool	ReadRDSVertexData(std::ifstream &,
+								  std::vector<fk_Vector> *,
+								  std::vector<int> *, bool);
+		bool	ReadRDSPolygonData(std::ifstream &,
+								   std::vector< std::vector<int> > *,
+								   std::vector<int> *);
+	};
+}
 
 #endif // !__FK_RDS_PARSER_HEADER__
 

@@ -1,51 +1,47 @@
-﻿#ifdef FK_D3D
-#include "./D3D/PointDraw.h"
-#else
-
-#ifndef __FK_POINT_DRAW_HEADER__
+﻿#ifndef __FK_POINT_DRAW_HEADER__
 #define __FK_POINT_DRAW_HEADER__
 
 #include <vector>
 #include <FK/Material.h>
 
-class fk_Model;
-class fk_Vertex;
-class fk_Color;
+namespace FK {
+	class fk_Model;
+	class fk_Vertex;
+	class fk_Color;
 
-class fk_PointDraw {
- private:
-	bool			arrayState;
+	class fk_PointDraw {
+	public:
+		fk_PointDraw(void);
+		virtual ~fk_PointDraw();
 
-	void			DrawShapePointMaterial(fk_Model *);
-	void			DrawIFSPointMaterial(fk_Model *);
-	void			DrawParticlePointMaterial(fk_Model *);
-	void			DrawShapePointPick(fk_Model *);
-	void			DrawSolidPointMaterial(fk_Model *);
-	int				DrawSolidPointMaterialElem(fk_Vertex *, int,
-											   int, double,
-											   std::vector<fk_Material> *,
-											   fk_Color *);
-	void			DrawIFSPointPick(fk_Model *);
-	void			DrawParticlePointPick(fk_Model *);
-	void			DrawSolidPointPick(fk_Model *);
-	void			DrawSolidPointPickElem(fk_Vertex *);
-	void			DrawShapePointNormal(fk_Model *, bool);
-	void			DrawIFSPointNormal(fk_Model *, bool);
-	void			DrawParticlePointNormal(fk_Model *, bool);
-	void			DrawSolidPointNormal(fk_Model *, bool);
-	void			DrawSolidPointNormalElem(fk_Vertex *, double);
+		void			SetArrayState(bool);
+		void			DrawShapePoint(fk_Model *, bool);
 
- public:
-	fk_PointDraw(void);
-	virtual ~fk_PointDraw();
+	private:
+		bool			arrayState;
 
-	void			SetArrayState(bool);
-	void			DrawShapePoint(fk_Model *, bool);
-};
+		void			DrawShapePointMaterial(fk_Model *);
+		void			DrawIFSPointMaterial(fk_Model *);
+		void			DrawParticlePointMaterial(fk_Model *);
+		void			DrawShapePointPick(fk_Model *);
+		void			DrawSolidPointMaterial(fk_Model *);
+		int				DrawSolidPointMaterialElem(fk_Vertex *, int,
+												   int, double,
+												   std::vector<fk_Material> *,
+												   fk_Color *);
+		void			DrawIFSPointPick(fk_Model *);
+		void			DrawParticlePointPick(fk_Model *);
+		void			DrawSolidPointPick(fk_Model *);
+		void			DrawSolidPointPickElem(fk_Vertex *);
+		void			DrawShapePointNormal(fk_Model *, bool);
+		void			DrawIFSPointNormal(fk_Model *, bool);
+		void			DrawParticlePointNormal(fk_Model *, bool);
+		void			DrawSolidPointNormal(fk_Model *, bool);
+		void			DrawSolidPointNormalElem(fk_Vertex *, double);
+	};
+}
 
 #endif /* !__FK_POINT_DRAW_HEADER__ */
-
-#endif /* !D3D_BRANCH */
 
 /****************************************************************************
  *

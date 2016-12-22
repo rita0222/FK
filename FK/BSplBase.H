@@ -3,15 +3,17 @@
 
 #include <vector>
 
-namespace fk_BSplBase {
+namespace FK {
+	namespace BSplBase {
 
-	bool			IsSame(double, double);
-	bool			IsBig(double, double);
-	bool			UpdateKnot(int, int, std::vector<double> &);
-	double			PosBasis(int, int, double,
-							 const std::vector<double> &);
-	double			DiffBasis(int, int, double,
-							  const std::vector<double> &);
+		bool			IsSame(double, double);
+		bool			IsBig(double, double);
+		bool			UpdateKnot(int, int, std::vector<double> &);
+		double			PosBasis(int, int, double,
+								 const std::vector<double> &);
+		double			DiffBasis(int, int, double,
+								  const std::vector<double> &);
+	}
 }
 
 #endif	// __FK_BSPLBASE_HEADER__

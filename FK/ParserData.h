@@ -4,52 +4,55 @@
 #include <FK/Vector.h>
 #include <FK/Shape.h>
 
-//! ファイル入出力機能用抽象クラス
-/*!
- *	このクラスは、ファイル入出力機能に関する抽象クラスです。
- *	通常、ユーザがこのクラスの機能を利用することはありません。
- */
+namespace FK {
 
-class fk_ParserData : public fk_Shape {
+	//! ファイル入出力機能用抽象クラス
+	/*!
+	 *	このクラスは、ファイル入出力機能に関する抽象クラスです。
+	 *	通常、ユーザがこのクラスの機能を利用することはありません。
+	 */
 
- public:
+	class fk_ParserData : public fk_Shape {
+
+	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 
-	virtual bool	MakeMesh(std::vector<fk_Vector> *,
-							 std::vector< std::vector<int> > *,
-							 std::vector<int> * = nullptr,
-							 bool = true) = 0;
+		virtual bool	MakeMesh(std::vector<fk_Vector> *,
+								 std::vector< std::vector<int> > *,
+								 std::vector<int> * = nullptr,
+								 bool = true) = 0;
 
-	virtual void	Init(void) = 0;
+		virtual void	Init(void) = 0;
 
-	virtual bool	readSMFFile(std::string) = 0;
-	virtual bool	readVRMLFile(std::string, bool = true, bool = true) = 0;
-	virtual bool	readSTLFile(std::string,
-								bool = true, double = 1.0e-08) = 0;
-	virtual bool	readHRCFile(std::string) = 0;
-	virtual bool	readRDSFile(std::string, bool = true) = 0;
-	virtual bool	readDXFFile(std::string, bool = true) = 0;
-	virtual bool	readMQOFile(std::string, std::string, bool = true,
-								bool = true, bool = false) = 0;
+		virtual bool	readSMFFile(std::string) = 0;
+		virtual bool	readVRMLFile(std::string, bool = true, bool = true) = 0;
+		virtual bool	readSTLFile(std::string,
+									bool = true, double = 1.0e-08) = 0;
+		virtual bool	readHRCFile(std::string) = 0;
+		virtual bool	readRDSFile(std::string, bool = true) = 0;
+		virtual bool	readDXFFile(std::string, bool = true) = 0;
+		virtual bool	readMQOFile(std::string, std::string, bool = true,
+									bool = true, bool = false) = 0;
 
-	virtual bool	writeVRMLFile(std::string,
-								  fk_Material * = nullptr,
-								  bool = false) = 0;
+		virtual bool	writeVRMLFile(std::string,
+									  fk_Material * = nullptr,
+									  bool = false) = 0;
 
-	virtual bool	writeVRMLFile(std::string,
-								  std::vector<double> *,
-								  std::vector<fk_Vector> *,
-								  fk_Material * = nullptr,
-								  bool = false) = 0;
+		virtual bool	writeVRMLFile(std::string,
+									  std::vector<double> *,
+									  std::vector<fk_Vector> *,
+									  fk_Material * = nullptr,
+									  bool = false) = 0;
 
-	virtual bool	writeSTLFile(std::string) = 0;
-	virtual bool	writeDXFFile(std::string, bool = false) = 0;
+		virtual bool	writeSTLFile(std::string) = 0;
+		virtual bool	writeDXFFile(std::string, bool = false) = 0;
 
 #endif
 
-};
+	};
+}
 
 #endif // !__FK_PARSER_DATA_HEADER__
 

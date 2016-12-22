@@ -3,27 +3,25 @@
 
 #include <FK/Base.h>
 
-class fk_Solid;
-class fk_IndexFaceSet;
+namespace FK {
+	class fk_Solid;
+	class fk_IndexFaceSet;
 
-class fk_STLOut {
+	class fk_STLOut {
+	public:
+		fk_STLOut(fk_Solid *);
+		fk_STLOut(fk_IndexFaceSet *);
+		virtual ~fk_STLOut();
 
- private:
+		bool	WriteSTLFile(std::string);
 
-	fk_Solid		*solid;
-	fk_IndexFaceSet	*ifset;
-	bool			WriteSTLShape_Solid(std::ofstream *);
-	bool			WriteSTLShape_IFS(std::ofstream *);
-
- public:
-
-	fk_STLOut(fk_Solid *);
-	fk_STLOut(fk_IndexFaceSet *);
-	virtual ~fk_STLOut();
-
-	bool	WriteSTLFile(std::string);
-};
-
+	private:
+		fk_Solid		*solid;
+		fk_IndexFaceSet	*ifset;
+		bool			WriteSTLShape_Solid(std::ofstream *);
+		bool			WriteSTLShape_IFS(std::ofstream *);
+	};
+}
 #endif // !__FK_STL_OUT_HEADER__
 
 /****************************************************************************

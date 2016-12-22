@@ -3,124 +3,121 @@
 
 #include <FK/Surface.h>
 
-//! Bezier曲面を生成、管理するクラス
-/*!
- *	このクラスは、形状として Bezier 曲面を制御する機能を提供します。
- *	初期状態はu,v両方で 3 次式で、制御点が全て原点にある状態となります。
- *	現状では、2,3,4次式のいずれかのみしか生成できません。
- *	\remarks
- *	本クラスは現在ベータ機能としての位置づけであり、
- *	ユーザーズマニュアルには記載されていません。
- *	また、今後のバージョンアップにおいて仕様が変更される可能性があります。
- */
-
-class fk_BezSurface : public fk_Surface {
-
- private:
-
-	int						uDeg, vDeg;
-	std::vector<fk_Vector>	ctrlPos;
-	double					bezier(int, int, double);
-
- public:
-
-	//! コンストラクタ
-	fk_BezSurface(void);
-
-	//! デストラクタ
-	virtual ~fk_BezSurface();
-
-	//! 初期化用関数
+namespace FK {
+	//! Bezier曲面を生成、管理するクラス
 	/*!
-	 *	この関数は、曲線を初期状態(3次式、全ての制御点が原点にある状態)にします。
+	 *	このクラスは、形状として Bezier 曲面を制御する機能を提供します。
+	 *	初期状態はu,v両方で 3 次式で、制御点が全て原点にある状態となります。
+	 *	現状では、2,3,4次式のいずれかのみしか生成できません。
 	 */
-	void			init(void);
 
-	//! 次数設定関数
-	/*!
-	 *	この関数は、曲面の次数を設定します。
-	 *	現状では、2,3,4のいずれかのみ以外は設定できません。
-	 *	この関数の実行後、全ての制御点の位置ベクトルは原点になります。
-	 *
-	 *	\param[in]	uDeg	u方向字数
-	 *	\param[in]	vDeg	v方向次数
-	 *
-	 *	\return 次数設定に成功した場合 true、失敗した場合 false を返します。
-	 */
-	bool			setDegree(int uDeg, int vDeg);
+	class fk_BezSurface : public fk_Surface {
 
-	//! 制御点設定関数
-	/*!
-	 *	曲面の制御点位置ベクトルを設定します。
-	 *
-	 *	\param[in] uID	設定する制御点の u方向 ID。先頭は 0 になります。
-	 *	\param[in] vID	設定する制御点の v方向 ID。先頭は 0 になります。
-	 *	\param[in] pos	制御点位置ベクトル
-	 *
-	 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-	 */
-	bool			setCtrl(int uID, int vID, const fk_Vector &pos);
+	public:
 
-	//! u方向次数参照関数
-	/*!
-	 *	曲面のu方向次数を参照します。
-	 *
-	 *	\return	u方向次数
-	 */
-	int				getUDegree(void);	
+		//! コンストラクタ
+		fk_BezSurface(void);
 
-	//! v方向次数参照関数
-	/*!
-	 *	曲面のv方向次数を参照します。
-	 *
-	 *	\return	v方向次数
-	 */
-	int				getVDegree(void);	
+		//! デストラクタ
+		virtual ~fk_BezSurface();
 
-	//! 制御点参照関数
-	/*!
-	 *	曲面の制御点位置ベクトルを参照します。
-	 *
-	 *	\param[in]	uID	制御点のu方向ID
-	 *	\param[in]	vID	制御点のv方向ID
-	 *
-	 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
-	 */
-	fk_Vector		getCtrl(int uID, int vID);
+		//! 初期化用関数
+		/*!
+		 *	この関数は、曲線を初期状態(3次式、全ての制御点が原点にある状態)にします。
+		 */
+		void			init(void);
 
-	//! 曲面点算出関数
-	/*!
-	 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
-	 *
-	 *	\param[in]	u	曲面の u パラメータ
-	 *	\param[in]	v	曲面の v パラメータ
-	 *
-	 *	\return 曲面上の点の位置ベクトル
-	 */
-	fk_Vector		pos(double u, double v);
+		//! 次数設定関数
+		/*!
+		 *	この関数は、曲面の次数を設定します。
+		 *	現状では、2,3,4のいずれかのみ以外は設定できません。
+		 *	この関数の実行後、全ての制御点の位置ベクトルは原点になります。
+		 *
+		 *	\param[in]	uDeg	u方向字数
+		 *	\param[in]	vDeg	v方向次数
+		 *
+		 *	\return 次数設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool			setDegree(int uDeg, int vDeg);
 
-	//! 曲面 u 方向偏微分ベクトル算出関数
-	/*!
-	 *	曲面上の u 方向偏微分ベクトルを算出する関数です。
-	 *
-	 *	\param[in]	u	u パラメータ
-	 *	\param[in]	v	v パラメータ
-	 *
-	 *	\return		曲面上の u 方向偏微分ベクトル
-	 */
-	fk_Vector		uDeriv(double u, double v);
+		//! 制御点設定関数
+		/*!
+		 *	曲面の制御点位置ベクトルを設定します。
+		 *
+		 *	\param[in] uID	設定する制御点の u方向 ID。先頭は 0 になります。
+		 *	\param[in] vID	設定する制御点の v方向 ID。先頭は 0 になります。
+		 *	\param[in] pos	制御点位置ベクトル
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool			setCtrl(int uID, int vID, const fk_Vector &pos);
 
-	//! 曲面 v 方向偏微分ベクトル算出関数
-	/*!
-	 *	曲面上の v 方向偏微分ベクトルを算出する関数です。
-	 *
-	 *	\param[in]	u	u パラメータ
-	 *	\param[in]	v	v パラメータ
-	 *
-	 *	\return		曲面上の v 方向偏微分ベクトル
-	 */
-	fk_Vector		vDeriv(double u, double v);
-};
+		//! u方向次数参照関数
+		/*!
+		 *	曲面のu方向次数を参照します。
+		 *
+		 *	\return	u方向次数
+		 */
+		int				getUDegree(void);	
+
+		//! v方向次数参照関数
+		/*!
+		 *	曲面のv方向次数を参照します。
+		 *
+		 *	\return	v方向次数
+		 */
+		int				getVDegree(void);	
+
+		//! 制御点参照関数
+		/*!
+		 *	曲面の制御点位置ベクトルを参照します。
+		 *
+		 *	\param[in]	uID	制御点のu方向ID
+		 *	\param[in]	vID	制御点のv方向ID
+		 *
+		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 */
+		fk_Vector		getCtrl(int uID, int vID);
+
+		//! 曲面点算出関数
+		/*!
+		 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
+		 *
+		 *	\param[in]	u	曲面の u パラメータ
+		 *	\param[in]	v	曲面の v パラメータ
+		 *
+		 *	\return 曲面上の点の位置ベクトル
+		 */
+		fk_Vector		pos(double u, double v);
+
+		//! 曲面 u 方向偏微分ベクトル算出関数
+		/*!
+		 *	曲面上の u 方向偏微分ベクトルを算出する関数です。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の u 方向偏微分ベクトル
+		 */
+		fk_Vector		uDeriv(double u, double v);
+
+		//! 曲面 v 方向偏微分ベクトル算出関数
+		/*!
+		 *	曲面上の v 方向偏微分ベクトルを算出する関数です。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の v 方向偏微分ベクトル
+		 */
+		fk_Vector		vDeriv(double u, double v);
+
+	private:
+		int						uDeg, vDeg;
+		std::vector<fk_Vector>	ctrlPos;
+		double					bezier(int, int, double);
+	};
+}
 
 #endif	// __FK_BEZSURFACE_HEADER__
 

@@ -3,44 +3,47 @@
 
 #include <FK/Base.h>
 
-class fk_Command {
- private:
-	int				commandID;
-	unsigned int	boolIndex;
-	unsigned int	intIndex;
-	unsigned int	vecIndex;
-	unsigned int	doubleIndex;
-	unsigned int	strIndex;
-	bool			mark;
+namespae FK {
+	
+	class fk_Command {
+	public:
+		fk_Command(int = FK_UNDEFINED);
+		virtual ~fk_Command();
 
- public:
-	fk_Command(int = FK_UNDEFINED);
-	virtual ~fk_Command();
+		// コピーコンストラクタ 
+		fk_Command(const fk_Command &);
 
-	// コピーコンストラクタ 
-	fk_Command(const fk_Command &);
+		// 代入演算子 
+		fk_Command &	operator =(const fk_Command &);
 
-	// 代入演算子 
-	fk_Command &	operator =(const fk_Command &);
+		// 設定用メンバ関数 
+		void			SetCommandID(const int);
+		void			SetBoolIndex(const unsigned int);
+		void			SetIntIndex(const unsigned int);
+		void			SetVecIndex(const unsigned int);
+		void			SetDoubleIndex(const unsigned int);
+		void			SetStrIndex(const unsigned int);
+		void			SetMarkStatus(const bool);
 
-	// 設定用メンバ関数 
-	void			SetCommandID(const int);
-	void			SetBoolIndex(const unsigned int);
-	void			SetIntIndex(const unsigned int);
-	void			SetVecIndex(const unsigned int);
-	void			SetDoubleIndex(const unsigned int);
-	void			SetStrIndex(const unsigned int);
-	void			SetMarkStatus(const bool);
+		// 取得用メンバ関数 
+		int				GetCommandID(void) const;
+		unsigned int	GetBoolIndex(void) const;
+		unsigned int	GetIntIndex(void) const;
+		unsigned int	GetVecIndex(void) const;
+		unsigned int	GetDoubleIndex(void) const;
+		unsigned int	GetStrIndex(void) const;
+		bool			GetMarkStatus(void) const;
 
-	// 取得用メンバ関数 
-	int				GetCommandID(void) const;
-	unsigned int	GetBoolIndex(void) const;
-	unsigned int	GetIntIndex(void) const;
-	unsigned int	GetVecIndex(void) const;
-	unsigned int	GetDoubleIndex(void) const;
-	unsigned int	GetStrIndex(void) const;
-	bool			GetMarkStatus(void) const;
-};
+	private:
+		int				commandID;
+		unsigned int	boolIndex;
+		unsigned int	intIndex;
+		unsigned int	vecIndex;
+		unsigned int	doubleIndex;
+		unsigned int	strIndex;
+		bool			mark;
+	};
+}
 
 #endif // !__FK_COMMAND_HEADER__
 

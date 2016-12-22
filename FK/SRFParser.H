@@ -3,21 +3,22 @@
 
 #include <FK/ParserBase.H>
 
-class fk_SRFParser : public fk_ParserBase {
- private:
+namespace FK {
+	class fk_SRFParser : public fk_ParserBase {
+	public:
+		fk_SRFParser(void);
+		virtual ~fk_SRFParser();
 
-	bool	CheckSRFFile(std::ifstream *);
-	bool	ReadSRFVertexData(std::ifstream *, std::vector<fk_Vector> *);
-	bool	ReadSRFPolygonData(std::ifstream *, int,
-							   std::vector< std::vector<int> > *);
+		bool	ReadSRFFile(std::string);
 
- public:
-	fk_SRFParser(void);
-	virtual ~fk_SRFParser();
+	private:
 
-	bool	ReadSRFFile(std::string);
-};
-
+		bool	CheckSRFFile(std::ifstream *);
+		bool	ReadSRFVertexData(std::ifstream *, std::vector<fk_Vector> *);
+		bool	ReadSRFPolygonData(std::ifstream *, int,
+								   std::vector< std::vector<int> > *);
+	};
+}
 #endif // !__FK_SRF_PARSER_HEADER__
 
 /****************************************************************************

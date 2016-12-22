@@ -77,6 +77,10 @@
 #include <FK/Half.h>
 #include <FK/Vertex.h>
 
+#if defined(_MINGW_) || defined(_MSC_VER)
+typedef unsigned int uint;
+#endif
+
 using namespace std;
 
 fk_SubDivision::fk_SubDivision()

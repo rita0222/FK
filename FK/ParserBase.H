@@ -3,59 +3,61 @@
 
 #include <FK/ParserData.h>
 
-class fk_ParserBase {
+namespace FK {
 
- private:
-	std::vector<std::string>		commentStack;
+	class fk_ParserBase {
 
- protected:
+	public:
+		fk_ParserBase();
+		virtual ~fk_ParserBase(void);
 
-	fk_ParserData			*meshData;
+		void					SetMeshData(fk_ParserData *);
 
-	// for Byte Order Swap
-	void					BSwap(int *);
-	void					BSwap(float *);
-	void					BSwap(double *);
+	private:
+		std::vector<std::string>		commentStack;
+
+	protected:
+
+		fk_ParserData			*meshData;
+
+		// for Byte Order Swap
+		void					BSwap(int *);
+		void					BSwap(float *);
+		void					BSwap(double *);
 	
-	// for Binary File IO
-	bool					BRead(int *, size_t, std::ifstream &);
-	bool					BRead(float *, size_t, std::ifstream &);
-	bool					BRead(double *, size_t, std::ifstream &);
+		// for Binary File IO
+		bool					BRead(int *, size_t, std::ifstream &);
+		bool					BRead(float *, size_t, std::ifstream &);
+		bool					BRead(double *, size_t, std::ifstream &);
 	
-	bool					BWrite(int *, size_t, std::ofstream &);
-	bool					BWrite(float *, size_t, std::ofstream &);
-	bool					BWrite(double *, size_t, std::ofstream &);
+		bool					BWrite(int *, size_t, std::ofstream &);
+		bool					BWrite(float *, size_t, std::ofstream &);
+		bool					BWrite(double *, size_t, std::ofstream &);
 
-	// for Text Processing
-	bool					AddLineList(std::ifstream &, std::string *);
-	bool					GetWord(std::ifstream &, const std::string,
-									std::string *, std::string *);
-	void					PushOneLineCommentSep(const std::string);
+		// for Text Processing
+		bool					AddLineList(std::ifstream &, std::string *);
+		bool					GetWord(std::ifstream &, const std::string,
+										std::string *, std::string *);
+		void					PushOneLineCommentSep(const std::string);
 
 
-	void					StringToLower(std::string *);
-	std::string::size_type	SearchWord(std::string *, const std::string &,
-									   std::string::size_type = 0);
-	void					TrimString(std::string *);
-	int						CharCount(const std::string &, const std::string &);
-	void					ReplaceString(std::string *, const std::string &,
-										  const std::string &);
+		void					StringToLower(std::string *);
+		std::string::size_type	SearchWord(std::string *, const std::string &,
+										   std::string::size_type = 0);
+		void					TrimString(std::string *);
+		int						CharCount(const std::string &, const std::string &);
+		void					ReplaceString(std::string *, const std::string &,
+											  const std::string &);
 
-	std::string				PopWord(std::string *, std::string = "");
-	int						Str2Int(const std::string &);
-	float					Str2Float(const std::string &);
-	double					Str2Double(const std::string &);
+		std::string				PopWord(std::string *, std::string = "");
+		int						Str2Int(const std::string &);
+		float					Str2Float(const std::string &);
+		double					Str2Double(const std::string &);
 
-	bool					IsInteger(const std::string &);
-	bool					IsNumeric(const std::string &);
-
- public:
-	fk_ParserBase();
-	virtual ~fk_ParserBase(void);
-
-	void					SetMeshData(fk_ParserData *);
-};
-
+		bool					IsInteger(const std::string &);
+		bool					IsNumeric(const std::string &);
+	};
+}
 #endif // !__FK_PARSER_BASE_HEADER__
 
 /****************************************************************************

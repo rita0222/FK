@@ -3,21 +3,22 @@
 
 #include <FK/ParserBase.H>
 
-class fk_SMFParser : public fk_ParserBase {
- private:
+namespace FK {
+	class fk_SMFParser : public fk_ParserBase {
+	public:
+		fk_SMFParser(void);
+		virtual ~fk_SMFParser();
 
-	bool	CheckSMFFile(std::ifstream &);
-	bool	ReadSMFNumData(std::ifstream &, int *, int *);
-	bool	ReadSMFVertexData(int, std::ifstream &, std::vector<fk_Vector> *);
-	bool	ReadSMFPolygonData(int, std::ifstream &, std::vector< std::vector<int> > *);
+		bool	ReadSMFFile(std::string);
 
- public:
-	fk_SMFParser(void);
-	virtual ~fk_SMFParser();
+	private:
 
-	bool	ReadSMFFile(std::string);
-};
-
+		bool	CheckSMFFile(std::ifstream &);
+		bool	ReadSMFNumData(std::ifstream &, int *, int *);
+		bool	ReadSMFVertexData(int, std::ifstream &, std::vector<fk_Vector> *);
+		bool	ReadSMFPolygonData(int, std::ifstream &, std::vector< std::vector<int> > *);
+	};
+}
 #endif // !__FK_SMF_PARSER_HEADER__
 
 /****************************************************************************

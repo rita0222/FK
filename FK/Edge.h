@@ -3,141 +3,142 @@
 
 #include <FK/Topology.h>
 
-class fk_Half;
-class fk_Curve;
+namespace FK {
 
-//! 稜線状態を表す列挙型
-enum fk_EdgeStatus {
-	FK_NONE_EDGE,		//!< 位相の不整合
-	FK_UNDEF_EDGE,		//!< 未定義稜線
-	FK_HALFDEF_EDGE,	//!< 半定義稜線
-	FK_BOTHDEF_EDGE		//!< 両定義稜線
-};
+	class fk_Half;
+	class fk_Curve;
 
-//! 幾何曲線の種類を表す列挙型
-enum fk_CurveType {
-	FK_BEZ_CURVE,		//!< Bezier 曲線
-	FK_BSPL_CURVE		//!< B-Spline 曲線
-};
+	//! 稜線状態を表す列挙型
+	enum fk_EdgeStatus {
+		FK_NONE_EDGE,		//!< 位相の不整合
+		FK_UNDEF_EDGE,		//!< 未定義稜線
+		FK_HALFDEF_EDGE,	//!< 半定義稜線
+		FK_BOTHDEF_EDGE		//!< 両定義稜線
+	};
 
-//! ソリッドモデルの稜線位相を管理するクラス
-/*!
- *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
- *	稜線位相に関する制御機能を提供します。
- *	FK におけるソリッドモデルの構造については、
- *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
- *
- *	派生クラスのうち、ID 管理については fk_Topology,
- *	個別マテリアル設定については fk_TopologyMaterial,
- *	属性設定については fk_Attribute を参照して下さい。
- *
- *	稜線に対して、幾何形状として曲線データを設定することができます。
- *	詳細は fk_Curve, fk_BezCurve, fk_BSplCurve を参照して下さい。
- *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Loop, fk_Topology,
- *		fk_TopologyMaterial, fk_Attribute, fk_Curve, fk_BezCurve, fk_BSplCurve
- */
+	//! 幾何曲線の種類を表す列挙型
+	enum fk_CurveType {
+		FK_BEZ_CURVE,		//!< Bezier 曲線
+		FK_BSPL_CURVE		//!< B-Spline 曲線
+	};
 
-class fk_Edge : public fk_TopologyMaterial {
-
-	friend class		fk_Operation;
-	friend class		fk_DataBase;
-	friend class		fk_FileInput;
-	friend class		fk_FileOutput;
-	friend class		fk_IFSetHandle;
-
- private:
-	fk_Half		*leftHalf;
-	fk_Half		*rightHalf;
-	fk_Curve	*curv;
-
-	double		width;
-
-	fk_Half *  	SetLeftHalf(fk_Half *);
-	fk_Half *	SetRightHalf(fk_Half *);
-
-	void		SwapHalf(void);
-
- public:
-	//! コンストラクタ
-	fk_Edge(int);
-	//! デストラクタ
-	virtual ~fk_Edge();
-
-	//! 初期化関数
+	//! ソリッドモデルの稜線位相を管理するクラス
 	/*!
-	 *	この関数は、稜線位相の初期化を行います。
-	 *	通常、ユーザがこの関数を利用することはありません。
-	 */
-	void		Init(int);
-
-	//! 左側半稜線取得関数
-	/*!
-	 *	この稜線に属する「左側」にあたる半稜線を取得します。
+	 *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
+	 *	稜線位相に関する制御機能を提供します。
+	 *	FK におけるソリッドモデルの構造については、
+	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
-	 *	\return 「左側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
-	 */
-	fk_Half *	getLeftHalf(void) const;
-
-	//! 右側半稜線取得関数
-	/*!
-	 *	この稜線に属する「右側」にあたる半稜線を取得します。
+	 *	派生クラスのうち、ID 管理については fk_Topology,
+	 *	個別マテリアル設定については fk_TopologyMaterial,
+	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
-	 *	\return 「右側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
+	 *	稜線に対して、幾何形状として曲線データを設定することができます。
+	 *	詳細は fk_Curve, fk_BezCurve, fk_BSplCurve を参照して下さい。
+	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Loop, fk_Topology,
+	 *		fk_TopologyMaterial, fk_Attribute, fk_Curve, fk_BezCurve, fk_BSplCurve
 	 */
-	fk_Half *	getRightHalf(void) const;
 
-	//! 描画線幅取得関数
-	/*!
-	 *	稜線が描画される際の線幅を返します。
-	 *
-	 *	\return 描画線幅
-	 */
-	double		getDrawWidth(void) const;
+	class fk_Edge : public fk_TopologyMaterial {
 
-	//! 描画線幅設定関数
-	/*!
-	 *	稜線を描画する際の線幅を設定します。
-	 *	ここでの単位は「ピクセル」となります。
-	 *	カメラからの距離に関係なく、同一の幅で描画されます。
-	 *	また、設定した幅で実際に描画されるかどうかは
-	 *	グラフィックスハードウェアの機能に依存します。
-	 *
-	 *	\param[in] width	描画線幅
-	 */
-	void		setDrawWidth(double width);
+		friend class		fk_Operation;
+		friend class		fk_DataBase;
+		friend class		fk_FileInput;
+		friend class		fk_FileOutput;
+		friend class		fk_IFSetHandle;
 
-	//! 幾何曲線形状設定関数
-	/*!
-	 *	任意の自由曲線を幾何曲線として稜線に設定します。
-	 * 	FK には既に Bezier 曲線 (fk_BezCurve) と
-	 * 	B-Spline 曲線 (fk_BSplCurve) が標準で実装されていますが、
-	 *	fk_Curve の条件を満たせばユーザによる自作クラスも設定することができます。
-	 *	条件については fk_Curve を参照して下さい。
-	 *
-	 *	\param[in] curve	幾何曲線インスタンスのアドレス
-	 */
-	void		setCurveGeometry(fk_Curve *curve);
+	public:
+		//! コンストラクタ
+		fk_Edge(int);
+		//! デストラクタ
+		virtual ~fk_Edge();
 
-	//! 幾何曲線形状取得関数
-	/*!
-	 * 	稜線に設定されている自由曲線を取得します。
-	 *
-	 *	\return
-	 *		自由曲線インスタンスのアドレス。
-	 *		設定されていなかった場合は nullptr を返します。
-	 */
-	fk_Curve *	getCurveGeometry(void);
+		//! 初期化関数
+		/*!
+		 *	この関数は、稜線位相の初期化を行います。
+		 *	通常、ユーザがこの関数を利用することはありません。
+		 */
+		void		Init(int);
+
+		//! 左側半稜線取得関数
+		/*!
+		 *	この稜線に属する「左側」にあたる半稜線を取得します。
+		 *
+		 *	\return 「左側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
+		 */
+		fk_Half *	getLeftHalf(void) const;
+
+		//! 右側半稜線取得関数
+		/*!
+		 *	この稜線に属する「右側」にあたる半稜線を取得します。
+		 *
+		 *	\return 「右側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
+		 */
+		fk_Half *	getRightHalf(void) const;
+
+		//! 描画線幅取得関数
+		/*!
+		 *	稜線が描画される際の線幅を返します。
+		 *
+		 *	\return 描画線幅
+		 */
+		double		getDrawWidth(void) const;
+
+		//! 描画線幅設定関数
+		/*!
+		 *	稜線を描画する際の線幅を設定します。
+		 *	ここでの単位は「ピクセル」となります。
+		 *	カメラからの距離に関係なく、同一の幅で描画されます。
+		 *	また、設定した幅で実際に描画されるかどうかは
+		 *	グラフィックスハードウェアの機能に依存します。
+		 *
+		 *	\param[in] width	描画線幅
+		 */
+		void		setDrawWidth(double width);
+
+		//! 幾何曲線形状設定関数
+		/*!
+		 *	任意の自由曲線を幾何曲線として稜線に設定します。
+		 * 	FK には既に Bezier 曲線 (fk_BezCurve) と
+		 * 	B-Spline 曲線 (fk_BSplCurve) が標準で実装されていますが、
+		 *	fk_Curve の条件を満たせばユーザによる自作クラスも設定することができます。
+		 *	条件については fk_Curve を参照して下さい。
+		 *
+		 *	\param[in] curve	幾何曲線インスタンスのアドレス
+		 */
+		void		setCurveGeometry(fk_Curve *curve);
+
+		//! 幾何曲線形状取得関数
+		/*!
+		 * 	稜線に設定されている自由曲線を取得します。
+		 *
+		 *	\return
+		 *		自由曲線インスタンスのアドレス。
+		 *		設定されていなかった場合は nullptr を返します。
+		 */
+		fk_Curve *	getCurveGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	void		Print(void) const;
-	bool		Check(void) const;
-	bool		Compare(fk_Edge *) const;
+		void		Print(void) const;
+		bool		Check(void) const;
+		bool		Compare(fk_Edge *) const;
 
 #endif
 
-};
+	private:
+		fk_Half		*leftHalf;
+		fk_Half		*rightHalf;
+		fk_Curve	*curv;
 
+		double		width;
+
+		fk_Half *  	SetLeftHalf(fk_Half *);
+		fk_Half *	SetRightHalf(fk_Half *);
+
+		void		SwapHalf(void);
+	};
+}
 #endif // !__FK_EDGE_HEADER__
 
 /****************************************************************************

@@ -3,176 +3,175 @@
 
 #include <FK/Surface.h>
 
-//! B-Spline 曲面を生成、管理するクラス
-/*!
- *	このクラスは、形状として B-Spline 曲面を制御する機能を提供します。
- *	初期状態での位数はu,v方向ともに 3 で、制御点が全て原点にある状態となります。
- *	現状では位数が 3,4,5 のいずれかのみしか生成できません。
- *	また、このクラスの B-Spline 曲面は開一様 (Open Uniform)
- *	であることを前提にしており、ノットベクトルを制御することはできません。
- *	\remarks
- *	本クラスは現在ベータ機能としての位置づけであり、
- *	ユーザーズマニュアルには記載されていません。
- *	また、今後のバージョンアップにおいて仕様が変更される可能性があります。
- */
+namespace FK {
 
-class fk_BSplSurface : public fk_Surface {
- private:
-
-	int						uOrd, vOrd;
-	int						uNum, vNum;
-	std::vector<fk_Vector>	ctrlPos;
-	std::vector<double>		uKnot, vKnot;
-	std::vector<double>		tmpU, tmpV;
-
- public:
-
-	//! コンストラクタ
-	fk_BSplSurface(void);
-
-	//! デストラクタ
-	virtual ~fk_BSplSurface();
-
-	//! 初期化用関数
+	//! B-Spline 曲面を生成、管理するクラス
 	/*!
-	 *	この関数は、曲面を初期状態にします。
-	 *	初期状態とは、以下のような条件で曲面を構築することです。
-	 *		- u方向、v方向共に位数が 3。
-	 *		- 制御点数が 3x3。
-	 *		- すべての制御点の位置ベクトルが原点と一致。
-	 *		.
+	 *	このクラスは、形状として B-Spline 曲面を制御する機能を提供します。
+	 *	初期状態での位数はu,v方向ともに 3 で、制御点が全て原点にある状態となります。
+	 *	現状では位数が 3,4,5 のいずれかのみしか生成できません。
+	 *	また、このクラスの B-Spline 曲面は開一様 (Open Uniform)
+	 *	であることを前提にしており、ノットベクトルを制御することはできません。
 	 */
-	void	init(void);
 
-	//! 位数設定関数
-	/*!
-	 *	曲面の位数を設定します。
-	 *	現状では、3,4,5 のいずれかのみ以外は設定できません。
-	 *	この関数を設定した後、制御点数は位数の2乗に固定され、
-	 *	すべての制御点は原点に配置されます。
-	 *
-	 *	\param[in]	uO	u方向の位数
-	 *	\param[in]	vO	v方向の位数
-	 *
-	 *	\return 位数設定に成功した場合 true、失敗した場合 false を返します。
-	 */
-	bool	setOrdinate(int uO, int vO);
+	class fk_BSplSurface : public fk_Surface {
 
-	//! 制御点数設定関数
-	/*!
-	 *	曲面の制御点数を設定します。
-	 *	制御点数は u 方向、v 方向で別々に指定し、
-	 *	実際にはその積が制御点数となります。
-	 *	制御点数は、それぞれの方向に設定されている位数以上である必要があります。
-	 *	上限値はありません。
-	 *
-	 *	\param[in]	uN   	u方向の制御点数
-	 *	\param[in]	vN		v方向の制御点数
-	 *
-	 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-	 */
-	bool	setNum(int uN, int vN);
+	public:
 
-	//! 制御点個別設定関数
-	/*!
-	 *	曲線の制御点位置ベクトルを設定します。
-	 *
-	 *	\param[in]	uID	設定する制御点の u 方向の ID。先頭は 0 になります。
-	 *	\param[in]	vID	設定する制御点の v 方向の ID。先頭は 0 になります。
-	 *	\param[in]	pos	制御点位置ベクトル
-	 *
-	 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-	 */
-	bool	setCtrl(int uID, int vID, const fk_Vector &pos);
+		//! コンストラクタ
+		fk_BSplSurface(void);
 
-	//! 制御点一斉設定関数
-	/*!
-	 *	曲面の制御点位置ベクトルを、vector 配列を用いて一斉に設定します。
-	 *	設定の際、制御点数は setNum() によって設定しておく必要があり、
-	 *	配列のサイズは上記の積と一致していなければなりません。
-	 *
-	 *	\param[in]	array	制御点の vector 配列のポインタ
-	 *
-	 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-	 */
-	bool	setCtrl(std::vector<fk_Vector> *array);	
+		//! デストラクタ
+		virtual ~fk_BSplSurface();
 
-	//! u方向位数参照関数
-	/*!
-	 *	曲面の u 方向の位数を参照します。
-	 *
-	 *	\return 位数
-	 */
-	int		getUOrdinate(void);	
+		//! 初期化用関数
+		/*!
+		 *	この関数は、曲面を初期状態にします。
+		 *	初期状態とは、以下のような条件で曲面を構築することです。
+		 *		- u方向、v方向共に位数が 3。
+		 *		- 制御点数が 3x3。
+		 *		- すべての制御点の位置ベクトルが原点と一致。
+		 *		.
+		 */
+		void	init(void);
 
-	//! v方向位数参照関数
-	/*!
-	 *	曲面の v 方向の位数を参照します。
-	 *
-	 *	\return 位数
-	 */
-	int		getVOrdinate(void);	
+		//! 位数設定関数
+		/*!
+		 *	曲面の位数を設定します。
+		 *	現状では、3,4,5 のいずれかのみ以外は設定できません。
+		 *	この関数を設定した後、制御点数は位数の2乗に固定され、
+		 *	すべての制御点は原点に配置されます。
+		 *
+		 *	\param[in]	uO	u方向の位数
+		 *	\param[in]	vO	v方向の位数
+		 *
+		 *	\return 位数設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool	setOrdinate(int uO, int vO);
 
-	//! u方向制御点数参照関数
-	/*!
-	 *	曲面の u 方向の制御点数を参照します。
-	 *
-	 *	\return	u 方向の制御点数
-	 */
-	int		getUNum(void);
+		//! 制御点数設定関数
+		/*!
+		 *	曲面の制御点数を設定します。
+		 *	制御点数は u 方向、v 方向で別々に指定し、
+		 *	実際にはその積が制御点数となります。
+		 *	制御点数は、それぞれの方向に設定されている位数以上である必要があります。
+		 *	上限値はありません。
+		 *
+		 *	\param[in]	uN   	u方向の制御点数
+		 *	\param[in]	vN		v方向の制御点数
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool	setNum(int uN, int vN);
 
-	//! v方向制御点数参照関数
-	/*!
-	 *	曲面の v 方向の制御点数を参照します。
-	 *
-	 *	\return	v 方向の制御点数
-	 */
-	int		getVNum(void);
+		//! 制御点個別設定関数
+		/*!
+		 *	曲線の制御点位置ベクトルを設定します。
+		 *
+		 *	\param[in]	uID	設定する制御点の u 方向の ID。先頭は 0 になります。
+		 *	\param[in]	vID	設定する制御点の v 方向の ID。先頭は 0 になります。
+		 *	\param[in]	pos	制御点位置ベクトル
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool	setCtrl(int uID, int vID, const fk_Vector &pos);
 
-	//! 制御点参照関数
-	/*!
-	 *	曲面の制御点位置ベクトルを参照します。
-	 *
-	 *	\param[in]	uID	u 方向の制御点 ID
-	 *	\param[in]	vID	v 方向の制御点 ID
-	 *
-	 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
-	 */
-	fk_Vector	getCtrl(int uID, int vID);
+		//! 制御点一斉設定関数
+		/*!
+		 *	曲面の制御点位置ベクトルを、vector 配列を用いて一斉に設定します。
+		 *	設定の際、制御点数は setNum() によって設定しておく必要があり、
+		 *	配列のサイズは上記の積と一致していなければなりません。
+		 *
+		 *	\param[in]	array	制御点の vector 配列のポインタ
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool	setCtrl(std::vector<fk_Vector> *array);	
 
-	//! 曲面算出関数
-	/*!
-	 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
-	 *
-	 *	\param[in]	u	曲面上の u パラメータ
-	 *	\param[in]	v	曲面上の v パラメータ
-	 *
-	 *	\return 曲面上の点の位置ベクトル
-	 */
-	fk_Vector	pos(double u, double v);
+		//! u方向位数参照関数
+		/*!
+		 *	曲面の u 方向の位数を参照します。
+		 *
+		 *	\return 位数
+		 */
+		int		getUOrdinate(void);	
 
-	//! 曲線 u 方向1階偏微分ベクトル算出関数
-	/*!
-	 *	パラメータに対応する曲面上の u 方向1階偏微分ベクトルを返します。
-	 *
-	 *	\param[in]	u	曲面上の u パラメータ
-	 *	\param[in]	v	曲面上の v パラメータ
-	 *
-	 *	\return 曲面上の u 方向1階偏微分ベクトル
-	 */
-	fk_Vector	uDeriv(double u, double v);
+		//! v方向位数参照関数
+		/*!
+		 *	曲面の v 方向の位数を参照します。
+		 *
+		 *	\return 位数
+		 */
+		int		getVOrdinate(void);	
 
-	//! 曲線 v 方向1階偏微分ベクトル算出関数
-	/*!
-	 *	パラメータに対応する曲面上の v 方向1階偏微分ベクトルを返します。
-	 *
-	 *	\param[in]	u	曲面上の u パラメータ
-	 *	\param[in]	v	曲面上の v パラメータ
-	 *
-	 *	\return 曲面上の v 方向1階偏微分ベクトル
-	 */
-	fk_Vector	vDeriv(double u, double v);
-};
+		//! u方向制御点数参照関数
+		/*!
+		 *	曲面の u 方向の制御点数を参照します。
+		 *
+		 *	\return	u 方向の制御点数
+		 */
+		int		getUNum(void);
+
+		//! v方向制御点数参照関数
+		/*!
+		 *	曲面の v 方向の制御点数を参照します。
+		 *
+		 *	\return	v 方向の制御点数
+		 */
+		int		getVNum(void);
+
+		//! 制御点参照関数
+		/*!
+		 *	曲面の制御点位置ベクトルを参照します。
+		 *
+		 *	\param[in]	uID	u 方向の制御点 ID
+		 *	\param[in]	vID	v 方向の制御点 ID
+		 *
+		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 */
+		fk_Vector	getCtrl(int uID, int vID);
+
+		//! 曲面算出関数
+		/*!
+		 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
+		 *
+		 *	\param[in]	u	曲面上の u パラメータ
+		 *	\param[in]	v	曲面上の v パラメータ
+		 *
+		 *	\return 曲面上の点の位置ベクトル
+		 */
+		fk_Vector	pos(double u, double v);
+
+		//! 曲線 u 方向1階偏微分ベクトル算出関数
+		/*!
+		 *	パラメータに対応する曲面上の u 方向1階偏微分ベクトルを返します。
+		 *
+		 *	\param[in]	u	曲面上の u パラメータ
+		 *	\param[in]	v	曲面上の v パラメータ
+		 *
+		 *	\return 曲面上の u 方向1階偏微分ベクトル
+		 */
+		fk_Vector	uDeriv(double u, double v);
+
+		//! 曲線 v 方向1階偏微分ベクトル算出関数
+		/*!
+		 *	パラメータに対応する曲面上の v 方向1階偏微分ベクトルを返します。
+		 *
+		 *	\param[in]	u	曲面上の u パラメータ
+		 *	\param[in]	v	曲面上の v パラメータ
+		 *
+		 *	\return 曲面上の v 方向1階偏微分ベクトル
+		 */
+		fk_Vector	vDeriv(double u, double v);
+
+	private:
+		int						uOrd, vOrd;
+		int						uNum, vNum;
+		std::vector<fk_Vector>	ctrlPos;
+		std::vector<double>		uKnot, vKnot;
+		std::vector<double>		tmpU, tmpV;
+	};
+}
 
 #endif	// __FK_BSPLSURFACE_HEADER__
 

@@ -5,165 +5,165 @@
 #include <FK/Model.h>
 #include <map>
 
-//! BVH 形式のモーションデータを読み込み、保持するクラス
-/*!
- *	このクラスは BVH 形式のモーションデータを読み込み、制御を行います。
- *	主な用途は fk_IFSTexture クラスのインスタンスに対して Direct3D の X 形式を
- *	読み込んだ際に、任意のモーションへと差し替える場合に使用します。
- *	それ以外にも、このクラスのメンバ自体が fk_Model のツリー構造を保持しているため、
- *	モーションの再生時刻を指定することでボーンの状態を再現することも可能です。
- *	これを利用すれば、X 形式以外の形状要素を用いている場合でもモーションデータを
- *	活用することができます。
- *
- *	\sa fk_IndexFaceSet, fk_IFSTexture, fk_Model
- */
-
-class fk_BVHMotion : public fk_ParserBase {
-
-	friend class				fk_D3DXAnimation;
-
-private:
-	std::vector<fk_Model *>					nodeArray;
-	std::vector<std::string>				nameArray;
-	std::vector<fk_Vector>					offsetArray;
-	std::vector<int>						typeArray;
-	std::vector< std::vector<fk_Vector> >	posArray;
-	std::vector< std::vector<fk_Angle> >	rotArray;
-
-	std::map<std::string, fk_Model *>		nameToNodeMap;
-
-	std::vector< std::pair<std::vector<int>::size_type, int> >	frameFormat;
-
-	int			nowFrame, length;
-	double		oneFrameTime;
-
-
-	int			ReadHierarchy(std::vector<std::string> *, int);
-	int			ReadMotion(std::vector<std::string> *, int);
-	int			SetFrameFormat(std::vector<std::string> *, int);
-
-
-public:
-	//! コンストラクタ
-	fk_BVHMotion(void);
-
-	//! デストラクタ
-	virtual ~fk_BVHMotion(void);
-
-	//! 初期化関数
+namespace FK {
+	//! BVH 形式のモーションデータを読み込み、保持するクラス
 	/*!
-	 *	モーションデータを初期化します。
+	 *	このクラスは BVH 形式のモーションデータを読み込み、制御を行います。
+	 *	主な用途は fk_IFSTexture クラスのインスタンスに対して Direct3D の X 形式を
+	 *	読み込んだ際に、任意のモーションへと差し替える場合に使用します。
+	 *	それ以外にも、このクラスのメンバ自体が fk_Model のツリー構造を保持しているため、
+	 *	モーションの再生時刻を指定することでボーンの状態を再現することも可能です。
+	 *	これを利用すれば、X 形式以外の形状要素を用いている場合でもモーションデータを
+	 *	活用することができます。
+	 *
+	 *	\sa fk_IndexFaceSet, fk_IFSTexture, fk_Model
 	 */
-	void		init(void);
 
-	//! BVH ファイル入力関数
-	/*!
-	 *	BVH 形式のファイルからモーションデータを読み込みます。
-	 *
-	 *	\param[in] fileName ファイル名
-	 *
-	 *	\return 入力に成功すれば true、失敗すれば false を返します。
-	 */
-	bool		readBVHFile(const std::string fileName);
+	class fk_BVHMotion : public fk_ParserBase {
 
-	//! ノード数取得関数
-	/*!
-	 *	現在のモーションデータが持っているノード(ボーン)数を返します。
-	 *
-	 *	\return ノード数。
-	 *	モーションデータが未入力の場合は、0 を返します。
-	 */
-	int			getNodeNum(void);
+		friend class				fk_D3DXAnimation;
 
-	//! ノード名取得関数
-	/*!
-	 *	引数で指定したノードの名称を返します。
-	 *
-	 *	\param[in] index ノードのインデックス。0 からノード数-1 までの値をとります。
-	 *
-	 *	\return ノード名。
-	 *	インデックスが無効な値の場合は、空の文字列を返します。
-	 */
-	std::string	getNodeName(int index);
+	public:
+		//! コンストラクタ
+		fk_BVHMotion(void);
 
-	//! ノードモデル取得関数
-	/*!
-	 *	引数で指定したノードについて、その状態を保持している fk_Model のポインタを返します。
-	 *
-	 *	\param[in] index ノードのインデックス。0 からノード数-1 までの値をとります。
-	 *
-	 *	\return ノードを表す fk_Model のポインタ。
-	 *	インデックスが無効な値の場合は、nullptr を返します。
-	 */
-	fk_Model *	getNodeModel(int index);
+		//! デストラクタ
+		virtual ~fk_BVHMotion(void);
 
-	//! ノードモデル取得関数
-	/*!
-	 *	引数で指定したノードについて、その状態を保持している fk_Model のポインタを返します。
-	 *	ノードの名称を表す文字列で、対象ノードを指定します。
-	 *
-	 *	\param[in] nodeName ノードの名称。
-	 *
-	 *	\return ノードを表す fk_Model のポインタ。
-	 *	存在しないノード名を指定した場合は、nullptr を返します。
-	 */
-	fk_Model *	getNodeModel(std::string nodeName);
+		//! 初期化関数
+		/*!
+		 *	モーションデータを初期化します。
+		 */
+		void		init(void);
 
+		//! BVH ファイル入力関数
+		/*!
+		 *	BVH 形式のファイルからモーションデータを読み込みます。
+		 *
+		 *	\param[in] fileName ファイル名
+		 *
+		 *	\return 入力に成功すれば true、失敗すれば false を返します。
+		 */
+		bool		readBVHFile(const std::string fileName);
 
-	//! モーション再生関数
-	/*!
-	 *	モーションを 1 フレーム分進め、各ノードの状態を更新します。
-	 *	モーションの終端まで進んだら、先頭(0 フレーム目)に戻ります。
-	 *
-	 *	\return モーションを 1 フレーム進めた後のフレームカウント。
-	 */
-	int			nextFrame(void);
+		//! ノード数取得関数
+		/*!
+		 *	現在のモーションデータが持っているノード(ボーン)数を返します。
+		 *
+		 *	\return ノード数。
+		 *	モーションデータが未入力の場合は、0 を返します。
+		 */
+		int			getNodeNum(void);
 
-	//! モーション状態セット関数
-	/*!
-	 *	各ノードの状態を、指定したフレームカウントのものに更新します。
-	 *	モーションの現在位置も指定したフレームになります。
-	 *
-	 *	\param[in] frame モーションのフレームカウント。
-	 *	0 未満やモーションの長さ以上の値を指定した場合は、それぞれ上下限に丸められます。
-	 */
-	void		setFrameCount(int frame);
+		//! ノード名取得関数
+		/*!
+		 *	引数で指定したノードの名称を返します。
+		 *
+		 *	\param[in] index ノードのインデックス。0 からノード数-1 までの値をとります。
+		 *
+		 *	\return ノード名。
+		 *	インデックスが無効な値の場合は、空の文字列を返します。
+		 */
+		std::string	getNodeName(int index);
 
-	//! アニメーション時間設定関数
-	/*!
-	 *	各ノードの状態を、秒で指定した時間に対応する状態に設定します。
-	 *	モーションの現在位置は、指定した時間に直近のフレームになります。
-	 *
-	 *	\param[in] t 時間
-	 *	0.0 未満やモーションの長さ以上の値を指定した場合は、それぞれ上下限に丸められます。
-	 */
-	void		setAnimationTime(double t);
+		//! ノードモデル取得関数
+		/*!
+		 *	引数で指定したノードについて、その状態を保持している fk_Model のポインタを返します。
+		 *
+		 *	\param[in] index ノードのインデックス。0 からノード数-1 までの値をとります。
+		 *
+		 *	\return ノードを表す fk_Model のポインタ。
+		 *	インデックスが無効な値の場合は、nullptr を返します。
+		 */
+		fk_Model *	getNodeModel(int index);
+
+		//! ノードモデル取得関数
+		/*!
+		 *	引数で指定したノードについて、その状態を保持している fk_Model のポインタを返します。
+		 *	ノードの名称を表す文字列で、対象ノードを指定します。
+		 *
+		 *	\param[in] nodeName ノードの名称。
+		 *
+		 *	\return ノードを表す fk_Model のポインタ。
+		 *	存在しないノード名を指定した場合は、nullptr を返します。
+		 */
+		fk_Model *	getNodeModel(std::string nodeName);
 
 
-	//! モーション現在位置取得関数
-	/*!
-	 *	モーション再生の現在位置を取得します。
-	 *
-	 *	\return モーション再生の現在位置を指すフレームカウント。
-	 */
-	int			getNowFrameCount(void);
+		//! モーション再生関数
+		/*!
+		 *	モーションを 1 フレーム分進め、各ノードの状態を更新します。
+		 *	モーションの終端まで進んだら、先頭(0 フレーム目)に戻ります。
+		 *
+		 *	\return モーションを 1 フレーム進めた後のフレームカウント。
+		 */
+		int			nextFrame(void);
 
-	//! モーション長取得関数
-	/*!
-	 *	モーションの長さをフレーム数で取得します。
-	 *
-	 *	\return モーションの長さを指すフレーム数。
-	 */
-	int			getFrameLength(void);
+		//! モーション状態セット関数
+		/*!
+		 *	各ノードの状態を、指定したフレームカウントのものに更新します。
+		 *	モーションの現在位置も指定したフレームになります。
+		 *
+		 *	\param[in] frame モーションのフレームカウント。
+		 *	0 未満やモーションの長さ以上の値を指定した場合は、それぞれ上下限に丸められます。
+		 */
+		void		setFrameCount(int frame);
 
-	//! 1フレームの実時間取得関数
-	/*!
-	 *	そのモーションデータにおける、1フレームの実時間を秒数で取得します。
-	 *
-	 *	\return モーションの長さを指すフレーム数。
-	 */
-	double		getOneFrameTime(void);
-};
+		//! アニメーション時間設定関数
+		/*!
+		 *	各ノードの状態を、秒で指定した時間に対応する状態に設定します。
+		 *	モーションの現在位置は、指定した時間に直近のフレームになります。
+		 *
+		 *	\param[in] t 時間
+		 *	0.0 未満やモーションの長さ以上の値を指定した場合は、それぞれ上下限に丸められます。
+		 */
+		void		setAnimationTime(double t);
+
+
+		//! モーション現在位置取得関数
+		/*!
+		 *	モーション再生の現在位置を取得します。
+		 *
+		 *	\return モーション再生の現在位置を指すフレームカウント。
+		 */
+		int			getNowFrameCount(void);
+
+		//! モーション長取得関数
+		/*!
+		 *	モーションの長さをフレーム数で取得します。
+		 *
+		 *	\return モーションの長さを指すフレーム数。
+		 */
+		int			getFrameLength(void);
+
+		//! 1フレームの実時間取得関数
+		/*!
+		 *	そのモーションデータにおける、1フレームの実時間を秒数で取得します。
+		 *
+		 *	\return モーションの長さを指すフレーム数。
+		 */
+		double		getOneFrameTime(void);
+
+	private:
+		std::vector<fk_Model *>					nodeArray;
+		std::vector<std::string>				nameArray;
+		std::vector<fk_Vector>					offsetArray;
+		std::vector<int>						typeArray;
+		std::vector< std::vector<fk_Vector> >	posArray;
+		std::vector< std::vector<fk_Angle> >	rotArray;
+
+		std::map<std::string, fk_Model *>		nameToNodeMap;
+
+		std::vector< std::pair<std::vector<int>::size_type, int> >	frameFormat;
+
+		int			nowFrame, length;
+		double		oneFrameTime;
+
+		int			ReadHierarchy(std::vector<std::string> *, int);
+		int			ReadMotion(std::vector<std::string> *, int);
+		int			SetFrameFormat(std::vector<std::string> *, int);
+	};
+}
 
 #endif //__FK_BVHMOTION_HEADER__
 

@@ -4,134 +4,132 @@
 #include <FK/Base.h>
 #include <FK/Vector.h>
 
-class fk_Window;
+namespace FK {
 
-//! 曲面用純粋仮想クラス
-/*!
- *	このクラスは、自由曲面用の純粋仮想クラスです。
- *	このクラスを継承することによって、
- *	ユーザは任意の自由曲面形式を四辺形となる fk_Loop に追加することができます。
- *	自由曲面は、以下の条件を満たす必要があります。
- *	- パラメータ空間が 2 次元である。(以降、これを「u方向」「v方向」とします。)
- *	- パラメータ空間中のあらゆるパラメータで曲面上の点を算出できる。
- *	- パラメータ空間中のあらゆるパラメータで、
- *		u 方向 と v 方向共に偏微分ベクトルが算出できる。
- *	- 曲面のパラメータ端点、
- *		つまり (0, 0), (0, 1), (1, 0), (1, 1) となる 4 点の位置ベクトルが、
- *		ループの 4 頂点の位置ベクトルと一致している。
- *
- *	\sa fk_Loop, fk_Curve
- *
- *	\remarks
- *	本クラスは現在ベータ機能としての位置づけであり、
- *	ユーザーズマニュアルには記載されていません。
- *	また、今後のバージョンアップにおいて仕様が変更される可能性があります。
- */ 
+	class fk_Window;
 
-class fk_Surface : public fk_BaseObject {
-
-	friend class		fk_Window;
-
- private:
-	int							div;
-	bool						smoothFlg;
-	std::vector<fk_Vector>		posCache;
-	std::vector<fk_Vector>		normCache;
-
-	std::vector<fk_Vector> *	getPosCache(void);
-	std::vector<fk_Vector> * 	getNormCache(void);
-
-	void				makePosCache(void);
-	void				makeNormCache(bool);
-
- protected:
-
-	//! 修正告知用フラグ
+	//! 曲面用純粋仮想クラス
 	/*!
-	 *	この変数は、派生クラスにおいて曲面形状を変更した状況となったとき、
-	 *	値を true に変更して下さい。
-	 *	描画データキャッシュが生成された時点で再び false に戻されます。
-	 */
-	bool				changeFlg;
+	 *	このクラスは、自由曲面用の純粋仮想クラスです。
+	 *	このクラスを継承することによって、
+	 *	ユーザは任意の自由曲面形式を四辺形となる fk_Loop に追加することができます。
+	 *	自由曲面は、以下の条件を満たす必要があります。
+	 *	- パラメータ空間が 2 次元である。(以降、これを「u方向」「v方向」とします。)
+	 *	- パラメータ空間中のあらゆるパラメータで曲面上の点を算出できる。
+	 *	- パラメータ空間中のあらゆるパラメータで、
+	 *		u 方向 と v 方向共に偏微分ベクトルが算出できる。
+	 *	- 曲面のパラメータ端点、
+	 *		つまり (0, 0), (0, 1), (1, 0), (1, 1) となる 4 点の位置ベクトルが、
+	 *		ループの 4 頂点の位置ベクトルと一致している。
+	 *
+	 *	\sa fk_Loop, fk_Curve
+	 */ 
 
- public:
+	class fk_Surface : public fk_BaseObject {
 
-	//! コンストラクタ
-	fk_Surface(void);
+		friend class		fk_Window;
 
-	//! デストラクタ
-	virtual ~fk_Surface();
+	protected:
 
-	//! 曲面点位置ベクトル算出関数
-	/*!
-	 *	曲面上の点の位置ベクトルを算出する純粋仮想関数です。
-	 *	派生クラスにおいて実際に実装する必要があります。
-	 *
-	 *	\param[in]	u	u パラメータ
-	 *	\param[in]	v	v パラメータ
-	 *
-	 *	\return		曲面上の位置ベクトル
-	 */
-	virtual fk_Vector	pos(double u, double v) = 0;
+		//! 修正告知用フラグ
+		/*!
+		 *	この変数は、派生クラスにおいて曲面形状を変更した状況となったとき、
+		 *	値を true に変更して下さい。
+		 *	描画データキャッシュが生成された時点で再び false に戻されます。
+		 */
+		bool				changeFlg;
 
-	//! 曲面 u 方向偏微分ベクトル算出関数
-	/*!
-	 *	曲面上の u 方向偏微分ベクトルを算出する純粋仮想関数です。
-	 *	派生クラスにおいて実際に実装する必要があります。
-	 *
-	 *	\param[in]	u	u パラメータ
-	 *	\param[in]	v	v パラメータ
-	 *
-	 *	\return		曲面上の u 方向偏微分ベクトル
-	 */
-	virtual fk_Vector	uDeriv(double u, double v) = 0;
+	public:
 
-	//! 曲面 v 方向偏微分ベクトル算出関数
-	/*!
-	 *	曲面上の v 方向偏微分ベクトルを算出する純粋仮想関数です。
-	 *	派生クラスにおいて実際に実装する必要があります。
-	 *
-	 *	\param[in]	u	u パラメータ
-	 *	\param[in]	v	v パラメータ
-	 *
-	 *	\return		曲面上の v 方向偏微分ベクトル
-	 */
-	virtual fk_Vector	vDeriv(double u, double v) = 0;
+		//! コンストラクタ
+		fk_Surface(void);
 
-	// 曲面法線ベクトル算出関数
-	/*!
-	 *	曲面上の法線ベクトルを算出します。
-	 *	本関数は、派生クラスにおいて再定義する必要はありません。
-	 *
-	 *	\param[in]	u	u パラメータ
-	 *	\param[in]	v	v パラメータ
-	 *
-	 *	\return		曲面上の法線ベクトル
-	 */
-	fk_Vector	norm(double u, double v);
+		//! デストラクタ
+		virtual ~fk_Surface();
 
-	//! 曲面キャッシュ分割数設定関数
-	/*!
-	 *	描画する際の曲面の分割数を設定します。
-	 *	本関数は、派生クラスにおいて再定義する必要はありません。
-	 *
-	 *	\param[in]	div		分割数。
-	 */
-	void	setDiv(int div);
+		//! 曲面点位置ベクトル算出関数
+		/*!
+		 *	曲面上の点の位置ベクトルを算出する純粋仮想関数です。
+		 *	派生クラスにおいて実際に実装する必要があります。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の位置ベクトル
+		 */
+		virtual fk_Vector	pos(double u, double v) = 0;
+
+		//! 曲面 u 方向偏微分ベクトル算出関数
+		/*!
+		 *	曲面上の u 方向偏微分ベクトルを算出する純粋仮想関数です。
+		 *	派生クラスにおいて実際に実装する必要があります。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の u 方向偏微分ベクトル
+		 */
+		virtual fk_Vector	uDeriv(double u, double v) = 0;
+
+		//! 曲面 v 方向偏微分ベクトル算出関数
+		/*!
+		 *	曲面上の v 方向偏微分ベクトルを算出する純粋仮想関数です。
+		 *	派生クラスにおいて実際に実装する必要があります。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の v 方向偏微分ベクトル
+		 */
+		virtual fk_Vector	vDeriv(double u, double v) = 0;
+
+		// 曲面法線ベクトル算出関数
+		/*!
+		 *	曲面上の法線ベクトルを算出します。
+		 *	本関数は、派生クラスにおいて再定義する必要はありません。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の法線ベクトル
+		 */
+		fk_Vector	norm(double u, double v);
+
+		//! 曲面キャッシュ分割数設定関数
+		/*!
+		 *	描画する際の曲面の分割数を設定します。
+		 *	本関数は、派生クラスにおいて再定義する必要はありません。
+		 *
+		 *	\param[in]	div		分割数。
+		 */
+		void	setDiv(int div);
 	
-	//! 曲面キャッシュ分割数参照関数
-	/*!
-	 *	描画する際の曲面の分割数を参照します。
-	 *	本関数は、派生クラスにおいて再定義する必要はありません。
-	 *
-	 *	\return		分割数
-	 */
-	int		getDiv(void);
+		//! 曲面キャッシュ分割数参照関数
+		/*!
+		 *	描画する際の曲面の分割数を参照します。
+		 *	本関数は、派生クラスにおいて再定義する必要はありません。
+		 *
+		 *	\return		分割数
+		 */
+		int		getDiv(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	void	makeCache(bool = true);
+		void	makeCache(bool = true);
 #endif
-};
+
+	private:
+		int							div;
+		bool						smoothFlg;
+		std::vector<fk_Vector>		posCache;
+		std::vector<fk_Vector>		normCache;
+
+		std::vector<fk_Vector> *	getPosCache(void);
+		std::vector<fk_Vector> * 	getNormCache(void);
+
+		void				makePosCache(void);
+		void				makeNormCache(bool);
+	};
+}
 
 #endif	// __FK_SURFACE_HEADER__
 

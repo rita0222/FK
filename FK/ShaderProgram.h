@@ -1,3 +1,126 @@
+#ifndef __FK_SHADER_PROGRAM_HEADER__
+#define __FK_SHADER_PROGRAM_HEADER__
+
+#include <FK/Engine.H>
+
+namespace FK {
+	//! シェーダープログラム格納クラス
+	/*!
+	 *	このクラスは、シェーダーのプログラムソースを格納するための機能を提供します。
+	 *	インスタンス内部でバーテックス(頂点)シェーダーと
+	 *	フラグメント(ピクセル)シェーダーのソースコードを管理します。
+	 *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
+	 *	fk_ShaderBinder::getProgram() を介して利用することがほとんどです。
+	 *
+	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
+	 */
+	class fk_ShaderProgram {
+
+	public:
+		//! バーテックスシェーダーコードメンバー
+		/*!
+		 *	バーテックス(頂点)シェーダーのコードの設定や取得を行います。
+		 *	バーテックスシェーダーのコードを設定する際は、
+		 *	本メンバーに直接コードを書き込むか、
+		 *	loadVertexShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		std::string vertexShaderSource;
+
+		//! フラグメントシェーダーコードメンバー
+		/*!
+		 *	フラグメント(ピクセル)シェーダーのコードの設定や取得を行います。
+		 *	フラグメントシェーダーのコードを設定する際は、
+		 *	本メンバーに直接コードを書き込むか、
+		 *	loadVertexShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		std::string fragmentShaderSource;
+
+		//! コンストラクタ
+		fk_ShaderProgram(void);
+
+		//! デストラクタ
+		~fk_ShaderProgram();
+
+		//! ID取得関数
+		/*!
+		 *	GPU からシェーダープログラムに割り振られた ID を取得します。
+		 *
+		 *	\note
+		 *		この ID は、具体的には OpenGL の関数である
+		 *		glCreateProgram() による返値のことです。
+		 *
+		 *	\return プログラムID
+		 */
+		GLuint getProgramID(void);
+
+		//! エラーメッセージ取得関数
+		/*!
+		 *	シェーダーに関するエラーが生じた場合に、
+		 *	エラーメッセージの文字列をこの関数で取得します。
+		 *
+		 *	\return エラーメッセージ文字列
+		 */
+		std::string getLastError(void);
+
+		//! バーテックスシェーダーコード入力関数
+		/*!
+		 *	バーテックス(頂点)シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram::vertexShaderSource メンバーにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool loadVertexShader(std::string fileName);
+
+		//! フラグメントシェーダーコード入力関数
+		/*!
+		 *	フラグメント(ピクセル)シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram::fragmentShaderSource メンバーにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+
+		bool loadFragmentShader(std::string fileName);
+
+		//! シェーダープログラムコンパイルメソッド
+		/*!
+		 *	fk_ShaderProgram::vertexShaderSource, fk_ShaderProgram::fragmentShaderSource
+		 *	に格納されているコードのコンパイルを行います。
+		 *
+		 *	\return
+		 *		コンパイルに成功すれば true を、失敗すれば false を返します。
+		 *		失敗した場合は、 getLastError() でエラーメッセージを取得できます。
+		 */
+		bool validate(void);
+
+	private:
+		GLuint idProgram;
+		GLuint idVertex;
+		GLuint idFragment;
+		std::string lastError;
+
+		GLuint Compile(std::string *, GLuint);
+		bool Link(void);
+		bool UpdateLastError(GLuint);
+	};	
+}
+#endif
+
 /****************************************************************************
  *
  *	Copyright (c) 1999-2016, Fine Kernel Project, All rights reserved.
@@ -69,125 +192,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-#ifndef __FK_SHADER_PROGRAM_HEADER__
-#define __FK_SHADER_PROGRAM_HEADER__
-
-#include <FK/Engine.H>
-
-//! シェーダープログラム格納クラス
-/*!
- *	このクラスは、シェーダーのプログラムソースを格納するための機能を提供します。
- *	インスタンス内部でバーテックス(頂点)シェーダーと
- *	フラグメント(ピクセル)シェーダーのソースコードを管理します。
- *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
- *	fk_ShaderBinder::getProgram() を介して利用することがほとんどです。
- *
- *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
- */
-class fk_ShaderProgram {
-
-public:
-	//! バーテックスシェーダーコードメンバー
-	/*!
-	 *	バーテックス(頂点)シェーダーのコードの設定や取得を行います。
-	 *	バーテックスシェーダーのコードを設定する際は、
-	 *	本メンバーに直接コードを書き込むか、
-	 *	loadVertexShader() 関数でコードが格納されているファイル名を指定して下さい。
-	 */
-	std::string vertexShaderSource;
-
-	//! フラグメントシェーダーコードメンバー
-	/*!
-	 *	フラグメント(ピクセル)シェーダーのコードの設定や取得を行います。
-	 *	フラグメントシェーダーのコードを設定する際は、
-	 *	本メンバーに直接コードを書き込むか、
-	 *	loadVertexShader() 関数でコードが格納されているファイル名を指定して下さい。
-	 */
-	std::string fragmentShaderSource;
-
-	//! コンストラクタ
-	fk_ShaderProgram(void);
-
-	//! デストラクタ
-	~fk_ShaderProgram();
-
-	//! ID取得関数
-	/*!
-	 *	GPU からシェーダープログラムに割り振られた ID を取得します。
-	 *
-	 *	\note
-	 *		この ID は、具体的には OpenGL の関数である
-	 *		glCreateProgram() による返値のことです。
-	 *
-	 *	\return プログラムID
-	 */
-	GLuint getProgramID(void);
-
-	//! エラーメッセージ取得関数
-	/*!
-	 *	シェーダーに関するエラーが生じた場合に、
-	 *	エラーメッセージの文字列をこの関数で取得します。
-	 *
-	 *	\return エラーメッセージ文字列
-	 */
-	std::string getLastError(void);
-
-	//! バーテックスシェーダーコード入力関数
-	/*!
-	 *	バーテックス(頂点)シェーダーのコードが記述されているファイルから、
-	 *	コードを読み込みます。
-	 *	読み込みに成功した場合、
-	 *	fk_ShaderProgram::vertexShaderSource メンバーにその内容が格納されます。
-	 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
-	 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
-	 *
-	 *	\param[in]	fileName
-	 *		ファイル名
-	 *
-	 *	\return
-	 *		入力に成功すれば true を、失敗すれば false を返します。
-	 */
-	bool loadVertexShader(std::string fileName);
-
-	//! フラグメントシェーダーコード入力関数
-	/*!
-	 *	フラグメント(ピクセル)シェーダーのコードが記述されているファイルから、
-	 *	コードを読み込みます。
-	 *	読み込みに成功した場合、
-	 *	fk_ShaderProgram::fragmentShaderSource メンバーにその内容が格納されます。
-	 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
-	 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
-	 *
-	 *	\param[in]	fileName
-	 *		ファイル名
-	 *
-	 *	\return
-	 *		入力に成功すれば true を、失敗すれば false を返します。
-	 */
-
-	bool loadFragmentShader(std::string fileName);
-
-	//! シェーダープログラムコンパイルメソッド
-	/*!
-	 *	fk_ShaderProgram::vertexShaderSource, fk_ShaderProgram::fragmentShaderSource
-	 *	に格納されているコードのコンパイルを行います。
-	 *
-	 *	\return
-	 *		コンパイルに成功すれば true を、失敗すれば false を返します。
-	 *		失敗した場合は、 getLastError() でエラーメッセージを取得できます。
-	 */
-	bool validate(void);
-
-private:
-	GLuint idProgram;
-	GLuint idVertex;
-	GLuint idFragment;
-	std::string lastError;
-
-	GLuint Compile(std::string *, GLuint);
-	bool Link(void);
-	bool UpdateLastError(GLuint);
-};	
-
-#endif
