@@ -52,6 +52,24 @@ namespace FK {
 		 *	\retval FK_UNDEFINED_TYPE	未定義な位相要素を表します。
 		 */
 		fk_TopologyType		getType(void) const;
+
+	private:
+		int					ID;
+		bool				ariveFlg;
+		fk_TopologyType		type;
+		void				SetType(fk_TopologyType);
+	
+	protected:
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void				SetID(int);
+		void				InitTopology(int, fk_TopologyType);
+
+
+		void				DeleteElem(void);
+		void				MakeElem(int);
+		bool				CloneElem(fk_Topology *);
+#endif
 	};
 
 
@@ -130,23 +148,6 @@ namespace FK {
 		 */
 		int					getElemMaterialID(void);
 
-	private:
-		int					ID;
-		bool				ariveFlg;
-		fk_TopologyType		type;
-		void				SetType(fk_TopologyType);
-	
-	protected:
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		void				SetID(int);
-		void				InitTopology(int, fk_TopologyType);
-
-
-		void				DeleteElem(void);
-		void				MakeElem(int);
-		bool				CloneElem(fk_Topology *);
-#endif
 	};
 }
 

@@ -86,45 +86,47 @@ typedef char **			iconvpp;
 
 using namespace std;
 
-class fk_StrStack {
- private:
-	vector<char *>		stack;
+namespace FK {
+	class fk_StrStack {
+	private:
+		vector<char *>		stack;
 
-public:
-	fk_StrStack(void);
-	~fk_StrStack();
+	public:
+		fk_StrStack(void);
+		~fk_StrStack();
 
-	void	push(const string &);
-	char *	get(int);
-};
+		void	push(const string &);
+		char *	get(int);
+	};
 
-class fk_StrConverterBase {
-private:
-	char *	_buffer;
-	int		_size;
+	class fk_StrConverterBase {
+	private:
+		char *	_buffer;
+		int		_size;
 
-public:
-	iconv_t	jis_utf8;
-	iconv_t	sjis_utf8;
-	iconv_t	euc_utf8;
-	iconv_t	utf16_utf8;
+	public:
+		iconv_t	jis_utf8;
+		iconv_t	sjis_utf8;
+		iconv_t	euc_utf8;
+		iconv_t	utf16_utf8;
 
-	iconv_t	jis_utf16;
-	iconv_t	sjis_utf16;
-	iconv_t	euc_utf16;
-	iconv_t	utf8_utf16;
+		iconv_t	jis_utf16;
+		iconv_t	sjis_utf16;
+		iconv_t	euc_utf16;
+		iconv_t	utf8_utf16;
 
-	iconv_t	jis_sjis;
-	iconv_t	euc_sjis;
-	iconv_t	utf8_sjis;
-	iconv_t	utf16_sjis;
+		iconv_t	jis_sjis;
+		iconv_t	euc_sjis;
+		iconv_t	utf8_sjis;
+		iconv_t	utf16_sjis;
 
-	fk_StrConverterBase();
-	~fk_StrConverterBase();
+		fk_StrConverterBase();
+		~fk_StrConverterBase();
 
-	bool	CommonConvert(iconv_t, const std::string &, fk_UniStr *);
-	bool	CommonConvert(iconv_t, const std::string &, std::string *);
-};
+		bool	CommonConvert(iconv_t, const std::string &, fk_UniStr *);
+		bool	CommonConvert(iconv_t, const std::string &, std::string *);
+	};
+}
 
 static fk_StrConverter * getStrConverter(void)
 {

@@ -585,56 +585,57 @@ fk_FVector & fk_FVector::operator =(const fk_Vector &v)
 }
 
 // friend 宣言による外部関数化した二項演算子
+namespace FK {
+	double operator *(const fk_Vector &a, const fk_Vector &b)
+	{
+		return(a.x*b.x + a.y*b.y + a.z*b.z);
+	}
 
-double operator *(const fk_Vector &a, const fk_Vector &b)
-{
-	return(a.x*b.x + a.y*b.y + a.z*b.z);
-}
+	double operator *(const fk_HVector &a, const fk_HVector &b)
+	{
+		return(a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w);
+	}
 
-double operator *(const fk_HVector &a, const fk_HVector &b)
-{
-	return(a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w);
-}
+	fk_Vector operator +(const fk_Vector &a, const fk_Vector &b)
+	{
+		fk_Vector tmp(a.x + b.x, a.y + b.y, a.z + b.z);
 
-fk_Vector operator +(const fk_Vector &a, const fk_Vector &b)
-{
-	fk_Vector tmp(a.x + b.x, a.y + b.y, a.z + b.z);
+		return(tmp);
+	}
 
-	return(tmp);
-}
+	fk_Vector operator -(const fk_Vector &a, const fk_Vector &b)
+	{
+		fk_Vector tmp(a.x - b.x, a.y - b.y, a.z - b.z);
 
-fk_Vector operator -(const fk_Vector &a, const fk_Vector &b)
-{
-	fk_Vector tmp(a.x - b.x, a.y - b.y, a.z - b.z);
+		return(tmp);
+	}
 
-	return(tmp);
-}
+	fk_Vector operator *(const fk_Vector &a, double t)
+	{
+		fk_Vector tmp(a.x * t, a.y * t, a.z * t);
 
-fk_Vector operator *(const fk_Vector &a, double t)
-{
-	fk_Vector tmp(a.x * t, a.y * t, a.z * t);
+		return(tmp);
+	}
 
-	return(tmp);
-}
+	fk_Vector operator *(double t, const fk_Vector &a)
+	{
+		fk_Vector tmp(a.x * t, a.y * t, a.z * t);
 
-fk_Vector operator *(double t, const fk_Vector &a)
-{
-	fk_Vector tmp(a.x * t, a.y * t, a.z * t);
+		return(tmp);
+	}
 
-	return(tmp);
-}
+	fk_Vector operator /(const fk_Vector &a, double t)
+	{
+		fk_Vector tmp(a.x / t, a.y / t, a.z / t);
 
-fk_Vector operator /(const fk_Vector &a, double t)
-{
-	fk_Vector tmp(a.x / t, a.y / t, a.z / t);
+		return(tmp);
+	}
 
-	return(tmp);
-}
-
-fk_Vector operator ^(const fk_Vector &a, const fk_Vector &b)
-{
-	fk_Vector tmp(a.y * b.z - a.z * b.y,
-				  a.z * b.x - a.x * b.z,
-				  a.x * b.y - a.y * b.x);
-	return(tmp);
+	fk_Vector operator ^(const fk_Vector &a, const fk_Vector &b)
+	{
+		fk_Vector tmp(a.y * b.z - a.z * b.y,
+					  a.z * b.x - a.x * b.z,
+					  a.x * b.y - a.y * b.x);
+		return(tmp);
+	}
 }

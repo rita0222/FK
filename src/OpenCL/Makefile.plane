@@ -11,7 +11,7 @@ AR		= ar
 AROPS		= cq
 LODER		= $(AR) $(AROPS)
 OPTOPT		= -O
-GRAMOPT		= -pedantic -std=c++14
+GRAMOPT		= -pedantic -std=c++14 -DFK_LIB_SRC
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror

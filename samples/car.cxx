@@ -73,6 +73,8 @@
 #include <FK/FK.h>
 
 using namespace std;
+using namespace FK;
+using namespace FK::Material;
 
 const double	BUILDWIDTH	= 25.0;		// 建物幅の基本単位
 const double	CIRCUITX	= 150.0;	// コースの X 方向幅

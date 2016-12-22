@@ -72,6 +72,10 @@
 #include <FK/FK.h>
 #include <FL/Fl_Native_File_Chooser.H>
 
+using namespace std;
+using namespace FK;
+using namespace FK::Material;
+
 string imageFileSelect(void)
 {
 	Fl_Native_File_Chooser	*fc;

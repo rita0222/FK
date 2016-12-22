@@ -71,6 +71,9 @@
  ****************************************************************************/
 #include <FK/FK.h>
 
+using namespace FK;
+using namespace FK::Material;
+
 const double	DOWN_ACCEL		= 1.0500;	// 降下時の加速度
 const double	RISE_ACCEL		= 1.0530;	// 上昇時の減速度
 const int		DOWN_MODE		= 0;		// 降下モード

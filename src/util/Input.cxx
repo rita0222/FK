@@ -942,6 +942,8 @@ fk_InputInfo fk_Input::getInputStatus(int index)
 
 #else // WIN32
 
+using namespace FK;
+
 fk_Input::fk_Input(void) {}
 fk_Input::~fk_Input(void) {}
 

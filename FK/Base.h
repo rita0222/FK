@@ -30,10 +30,6 @@
 
 #endif	// !WIN32 || _CYGWIN_GCC_
 
-#ifdef FK_LIB_SRC
-using namespace FK;
-#endif
-
 //! Fine Kernel Toolkit 名前空間
 namespace FK {
 
@@ -192,6 +188,11 @@ namespace FK {
 #endif
 
 }
+
+#ifdef FK_LIB_SRC
+using namespace FK;
+#endif
+
 #endif /* !__FK_BASE_HEADER__ */
 
 /****************************************************************************

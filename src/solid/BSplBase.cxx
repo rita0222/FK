@@ -74,19 +74,18 @@
 #include <FK/Base.h>
 
 using namespace std;
-using namespace fk_BSplBase;
 
-bool fk_BSplBase::IsSame(double a, double b)
+bool BSplBase::IsSame(double a, double b)
 {
 	return ((a + FK_EPS) > b && (a - FK_EPS) < b);
 }
 
-bool fk_BSplBase::IsBig(double a, double b)
+bool BSplBase::IsBig(double a, double b)
 {
 	return ((a + FK_EPS) >= b);
 }
 
-bool fk_BSplBase::UpdateKnot(int o, int n, vector<double> &knotVec)
+bool BSplBase::UpdateKnot(int o, int n, vector<double> &knotVec)
 {
 	int				i;
 	double			knot;
@@ -114,7 +113,7 @@ bool fk_BSplBase::UpdateKnot(int o, int n, vector<double> &knotVec)
 	return true;
 }
 
-double fk_BSplBase::PosBasis(int argI, int argK, double t,
+double BSplBase::PosBasis(int argI, int argK, double t,
 							 const vector<double> &knotVec)
 {
 	double		p, q;
@@ -158,7 +157,7 @@ double fk_BSplBase::PosBasis(int argI, int argK, double t,
 	return (p + q);
 }
 
-double fk_BSplBase::DiffBasis(int argI, int argK, double t,
+double BSplBase::DiffBasis(int argI, int argK, double t,
 							  const vector<double> &knotVec)
 {
 	double		p, q;

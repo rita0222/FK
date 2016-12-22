@@ -11,12 +11,13 @@
 #include <FK/IDAdmin.H>
 #include <FK/Vector.h>
 
+struct OggVorbis_File;
+
 namespace FK {
 	const unsigned int FK_OV_BUFSIZE = 4096;
 	const unsigned int FK_OV_DEFAULT_QUEUE_SIZE = 64;
 
 	class fk_Model;
-	struct OggVorbis_File;
 
 	//! オーディオ基底クラス
 	/*!

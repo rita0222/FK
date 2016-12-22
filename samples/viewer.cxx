@@ -71,6 +71,10 @@
  ****************************************************************************/
 #include <FK/FK.h>
 
+using namespace std;
+using namespace FK;
+using namespace FK::Material;
+
 int main()
 {
 	fk_ShapeViewer	viewer(600, 660);

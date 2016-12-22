@@ -145,19 +145,21 @@ fk_Color & fk_Color::operator =(const fk_Color &argColor)
 	return *this;
 }
 
-bool operator ==(fk_Color argA, fk_Color argB)
-{
-	float r, g, b, a;
+namespace FK {
+	bool operator ==(fk_Color argA, fk_Color argB)
+	{
+		float r, g, b, a;
 
-	r = argA.col[0] - argB.col[0];
-	g = argA.col[1] - argB.col[1];
-	b = argA.col[2] - argB.col[2];
-	a = argA.col[3] - argB.col[3];
+		r = argA.col[0] - argB.col[0];
+		g = argA.col[1] - argB.col[1];
+		b = argA.col[2] - argB.col[2];
+		a = argA.col[3] - argB.col[3];
 
-	return(fabs((float)r) < FK_COLOR_EPS &&
-		   fabs((float)g) < FK_COLOR_EPS &&
-		   fabs((float)b) < FK_COLOR_EPS &&
-		   fabs((float)a) < FK_COLOR_EPS);
+		return(fabs((float)r) < FK_COLOR_EPS &&
+			   fabs((float)g) < FK_COLOR_EPS &&
+			   fabs((float)b) < FK_COLOR_EPS &&
+			   fabs((float)a) < FK_COLOR_EPS);
+	}
 }
 
 fk_Color & fk_Color::operator *=(double argD)
@@ -481,20 +483,22 @@ fk_Color * fk_Material::getEmission(void) { return &emission; }
 fk_Color * fk_Material::getSpecular(void) { return &specular; }
 float fk_Material::getShininess(void) { return shininess; }
 
-bool operator ==(fk_Material argA, fk_Material argB)
-{
-	float al, sh;
+namespace FK {
+	bool operator ==(fk_Material argA, fk_Material argB)
+	{
+		float al, sh;
 
-	al = argA.alpha - argB.alpha;
-	sh = argA.shininess - argB.shininess;
-	return(fabs((float)al) < FK_COLOR_EPS &&
-		   fabs((float)sh) < FK_COLOR_EPS &&
-		   argA.ambient == argB.ambient &&
-		   argA.diffuse == argB.diffuse &&
-		   argA.emission == argB.emission &&
-		   argA.specular == argB.specular);
+		al = argA.alpha - argB.alpha;
+		sh = argA.shininess - argB.shininess;
+		return(fabs((float)al) < FK_COLOR_EPS &&
+			   fabs((float)sh) < FK_COLOR_EPS &&
+			   argA.ambient == argB.ambient &&
+			   argA.diffuse == argB.diffuse &&
+			   argA.emission == argB.emission &&
+			   argA.specular == argB.specular);
+	}
 }
-
+	
 void fk_Material::initDefault(void)
 {
 	fk_InitMaterial();

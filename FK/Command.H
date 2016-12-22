@@ -3,7 +3,7 @@
 
 #include <FK/Base.h>
 
-namespae FK {
+namespace FK {
 	
 	class fk_Command {
 	public:

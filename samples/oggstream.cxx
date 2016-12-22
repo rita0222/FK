@@ -3,6 +3,8 @@
 #include <thread>
 
 using namespace std;
+using namespace FK;
+using namespace FK::Material;
 
 void bgmPlay(double &, bool &);
 

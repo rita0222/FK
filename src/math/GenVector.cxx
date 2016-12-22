@@ -494,109 +494,110 @@ void fk_GenVector::Print(string argStr) const
 }
 
 // friend 宣言による外部関数化した二項演算子
+namespace FK {
+	double operator *(const fk_GenVector &a, const fk_GenVector &b)
+	{
+		int			size;
+		_st			i;
+		double		prod;
 
-double operator *(const fk_GenVector &a, const fk_GenVector &b)
-{
-	int			size;
-	_st			i;
-	double		prod;
+		if((size = a.size()) != b.size()) return 0.0;
+		prod = 0.0;
 
-	if((size = a.size()) != b.size()) return 0.0;
-	prod = 0.0;
+		for(i = 0; i < static_cast<_st>(size); ++i) {
+			prod += a.v[i] * b.v[i];
+		}
 
-	for(i = 0; i < static_cast<_st>(size); ++i) {
-		prod += a.v[i] * b.v[i];
+		return prod;
 	}
 
-	return prod;
-}
+	fk_GenVector operator +(const fk_GenVector &a, const fk_GenVector &b)
+	{
+		int				size;
+		_st				i;
+		fk_GenVector	retVec;
 
-fk_GenVector operator +(const fk_GenVector &a, const fk_GenVector &b)
-{
-	int				size;
-	_st				i;
-	fk_GenVector	retVec;
+		if((size = a.size()) != b.size()) return retVec;
+		retVec.resize(size);
 
-	if((size = a.size()) != b.size()) return retVec;
-	retVec.resize(size);
+		for(i = 0; i < static_cast<_st>(size); ++i) {
+			retVec.v[i] = a.v[i] + b.v[i];
+		}
 
-	for(i = 0; i < static_cast<_st>(size); ++i) {
-		retVec.v[i] = a.v[i] + b.v[i];
+		return retVec;
 	}
 
-	return retVec;
-}
+	fk_GenVector operator -(const fk_GenVector &a, const fk_GenVector &b)
+	{
+		int				size;
+		_st				i;
+		fk_GenVector	retVec;
 
-fk_GenVector operator -(const fk_GenVector &a, const fk_GenVector &b)
-{
-	int				size;
-	_st				i;
-	fk_GenVector	retVec;
+		if((size = a.size()) != b.size()) return retVec;
+		retVec.resize(size);
 
-	if((size = a.size()) != b.size()) return retVec;
-	retVec.resize(size);
+		for(i = 0; i < static_cast<_st>(size); ++i) {
+			retVec.v[i] = a.v[i] - b.v[i];
+		}
 
-	for(i = 0; i < static_cast<_st>(size); ++i) {
-		retVec.v[i] = a.v[i] - b.v[i];
+		return retVec;
 	}
 
-	return retVec;
-}
+	fk_GenVector operator *(const fk_GenVector &v, double d)
+	{
+		fk_GenVector	retVec(v.size());
+		_st				i;
+		_st				size = static_cast<_st>(v.size());
 
-fk_GenVector operator *(const fk_GenVector &v, double d)
-{
-	fk_GenVector	retVec(v.size());
-	_st				i;
-	_st				size = static_cast<_st>(v.size());
+		for(i = 0; i < size; ++i) {
+			retVec.v[i] = v.v[i]*d;
+		}
 
-	for(i = 0; i < size; ++i) {
-		retVec.v[i] = v.v[i]*d;
+		return retVec;
 	}
 
-	return retVec;
-}
+	fk_GenVector operator *(double d, const fk_GenVector &v)
+	{
+		fk_GenVector	retVec(v.size());
+		_st				i;
+		_st				size = static_cast<_st>(v.size());
 
-fk_GenVector operator *(double d, const fk_GenVector &v)
-{
-	fk_GenVector	retVec(v.size());
-	_st				i;
-	_st				size = static_cast<_st>(v.size());
+		for(i = 0; i < size; ++i) {
+			retVec.v[i] = v.v[i]*d;
+		}
 
-	for(i = 0; i < size; ++i) {
-		retVec.v[i] = v.v[i]*d;
+		return retVec;
 	}
 
-	return retVec;
-}
+	fk_GenVector operator /(const fk_GenVector &v, double d)
+	{
+		fk_GenVector	retVec(v.size());
+		_st				i;
+		_st				size = static_cast<_st>(v.size());
 
-fk_GenVector operator /(const fk_GenVector &v, double d)
-{
-	fk_GenVector	retVec(v.size());
-	_st				i;
-	_st				size = static_cast<_st>(v.size());
+		if(d < FK_VECTOREPS) return v;
+		for(i = 0; i < size; ++i) {
+			retVec.v[i] /= d;
+		}
 
-	if(d < FK_VECTOREPS) return v;
-	for(i = 0; i < size; ++i) {
-		retVec.v[i] /= d;
+		return retVec;
 	}
 
-	return retVec;
-}
+	fk_GenVector operator ^(const fk_GenVector &a, const fk_GenVector &b)
+	{
+		_st				i, size;
+		fk_GenVector	retVec;
 
-fk_GenVector operator ^(const fk_GenVector &a, const fk_GenVector &b)
-{
-	_st				i, size;
-	fk_GenVector	retVec;
+		size = static_cast<_st>(a.size());
+		if(size < 3 || size != static_cast<_st>(b.size())) return retVec;
 
-	size = static_cast<_st>(a.size());
-	if(size < 3 || size != static_cast<_st>(b.size())) return retVec;
+		for(i = 0; i < size-2; ++i) {
+			retVec.v[i] = a.v[i+1]*b.v[i+2] - a.v[i+2]*b.v[i+1];
+		}
 
-	for(i = 0; i < size-2; ++i) {
-		retVec.v[i] = a.v[i+1]*b.v[i+2] - a.v[i+2]*b.v[i+1];
+		retVec.v[size-2] = a.v[size-1]*b.v[0] - a.v[0]*b.v[size-1];
+		retVec.v[size-1] = a.v[0]*b.v[1] - a.v[1]*b.v[0];
+
+		return retVec;
 	}
-
-	retVec.v[size-2] = a.v[size-1]*b.v[0] - a.v[0]*b.v[size-1];
-	retVec.v[size-1] = a.v[0]*b.v[1] - a.v[1]*b.v[0];
-
-	return retVec;
 }

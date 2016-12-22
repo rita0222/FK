@@ -2,6 +2,8 @@
 #include <random>
 
 using namespace std;
+using namespace FK;
+using namespace FK::Material;
 
 // エージェント用クラス
 class Agent {

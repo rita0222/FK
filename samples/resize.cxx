@@ -71,6 +71,10 @@
  ****************************************************************************/
 #include <FK/FK.h>
 
+using namespace std;
+using namespace FK;
+using namespace FK::Material;
+
 int main(int, char *[])
 {
 	Fl_Window		MainWindow(300, 300, "FK TEST");

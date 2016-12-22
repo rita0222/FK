@@ -93,18 +93,19 @@ using namespace std;
 static fk_ShapeGUIMenuItem	globalMenuStatus = FK_SV_GUI_NONE;
 static bool					globalMenuValue = true;
 
-class fk_GUI_ {
-public:
+namespace FK {
+	class fk_GUI_ {
+	public:
 
-	Fl_Menu_Bar			*menuBar;
-	Fl_Group			*ortGroup;
-	Fl_Value_Slider		*headSlider;
-	Fl_Value_Slider		*pitchSlider;
-	Fl_Value_Slider		*bankSlider;
-	Fl_Roller			*scaleRoller;
-	Fl_Roller			*axisRoller;
-};
-
+		Fl_Menu_Bar			*menuBar;
+		Fl_Group			*ortGroup;
+		Fl_Value_Slider		*headSlider;
+		Fl_Value_Slider		*pitchSlider;
+		Fl_Value_Slider		*bankSlider;
+		Fl_Roller			*scaleRoller;
+		Fl_Roller			*axisRoller;
+	};
+}
 
 Fl_Menu_Item menuTable[] = {
 	{"&File",		FL_ALT + 'f',	0, 0, FL_SUBMENU, 0, 0, 0, 0},
@@ -575,7 +576,7 @@ void fk_ShapeViewer::ModelInit(int argIndex, fk_Shape *argShape)
 	fk_Material	*matP;
 	fk_Color	*eColP, *vColP;
 
-	mat = Yellow;
+	mat = Material::Yellow;
 	eCol.set(0.0, 0.0, 1.0);
 	vCol.set(0.0, 1.0, 0.0);
 

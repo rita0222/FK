@@ -695,24 +695,25 @@ fk_HVector & fk_HVector::operator *=(const fk_OrthoMatrix &argMat)
 }
 
 // 二項演算子 
-fk_HVector operator *(const fk_OrthoMatrix &Mat, const fk_HVector &Vec)
-{
-	fk_HVector Ret;
+namespace FK {
+	fk_HVector operator *(const fk_OrthoMatrix &Mat, const fk_HVector &Vec)
+	{
+		fk_HVector Ret;
 
-	Mat.MultVec(Ret, Vec);
+		Mat.MultVec(Ret, Vec);
 
-	return Ret;
+		return Ret;
+	}
+
+	fk_OrthoMatrix operator *(const fk_OrthoMatrix &m1, const fk_OrthoMatrix &m2)
+	{
+		fk_OrthoMatrix Ret;
+
+		MultMatrix(Ret.m, m1.m, m2.m);
+
+		return Ret;
+	}
 }
-
-fk_OrthoMatrix operator *(const fk_OrthoMatrix &m1, const fk_OrthoMatrix &m2)
-{
-	fk_OrthoMatrix Ret;
-
-	MultMatrix(Ret.m, m1.m, m2.m);
-
-	return Ret;
-}
-
 
 /////////// 4x4 汎用行列クラス 
 
@@ -894,128 +895,130 @@ fk_HVector & fk_HVector::operator *=(const fk_Matrix &argMat)
 	return *this;
 }
 
-fk_HVector operator *(const fk_Matrix &Mat, const fk_HVector &Vec)
-{
-	fk_HVector Ret;
+namespace FK {
+	fk_HVector operator *(const fk_Matrix &Mat, const fk_HVector &Vec)
+	{
+		fk_HVector Ret;
 
-	Mat.MultVec(Ret, Vec);
+		Mat.MultVec(Ret, Vec);
 
-	return Ret;
-}
-
-fk_Matrix operator +(const fk_Matrix &m1, const fk_Matrix &m2)
-{
-	fk_Matrix Ret;
-
-	Ret = m1;
-	AddMatrix(Ret.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator +(const fk_Matrix &m1, const fk_OrthoMatrix &m2)
-{
-	fk_Matrix Ret;
-
-	Ret = m1;
-	AddMatrix(Ret.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator +(const fk_OrthoMatrix &m1, const fk_Matrix &m2)
-{
-	fk_Matrix Ret;
-
-	Ret = m1;
-	AddMatrix(Ret.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator -(const fk_Matrix &m1, const fk_Matrix &m2)
-{
-	fk_Matrix Ret;
-
-	Ret = m1;
-	SubMatrix(Ret.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator -(const fk_Matrix &m1, const fk_OrthoMatrix &m2)
-{
-	fk_Matrix Ret;
-
-	Ret = m1;
-	SubMatrix(Ret.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator -(const fk_OrthoMatrix &m1, const fk_Matrix &m2)
-{
-	fk_Matrix Ret;
-
-	Ret = m1;
-	SubMatrix(Ret.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator *(const fk_Matrix &m1, const fk_Matrix &m2)
-{
-	fk_Matrix Ret;
-
-	MultMatrix(Ret.m, m1.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator *(const fk_Matrix &m1, const fk_OrthoMatrix &m2)
-{
-	fk_Matrix Ret;
-
-	MultMatrix(Ret.m, m1.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator *(const fk_OrthoMatrix &m1, const fk_Matrix &m2)
-{
-	fk_Matrix Ret;
-
-	MultMatrix(Ret.m, m1.m, m2.m);
-
-	return Ret;
-}
-
-fk_Matrix operator *(double d, const fk_Matrix &m)
-{
-	fk_Matrix	Ret;
-	int			i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
-			Ret.m[i][j] = d*m.m[i][j];
-		}
+		return Ret;
 	}
 
-	return Ret;
-}
+	fk_Matrix operator +(const fk_Matrix &m1, const fk_Matrix &m2)
+	{
+		fk_Matrix Ret;
 
-fk_Matrix operator *(const fk_Matrix &m, double d)
-{
-	fk_Matrix	Ret;
-	int			i, j;
+		Ret = m1;
+		AddMatrix(Ret.m, m2.m);
 
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
-			Ret.m[i][j] = d*m.m[i][j];
-		}
+		return Ret;
 	}
 
-	return Ret;
+	fk_Matrix operator +(const fk_Matrix &m1, const fk_OrthoMatrix &m2)
+	{
+		fk_Matrix Ret;
+
+		Ret = m1;
+		AddMatrix(Ret.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator +(const fk_OrthoMatrix &m1, const fk_Matrix &m2)
+	{
+		fk_Matrix Ret;
+
+		Ret = m1;
+		AddMatrix(Ret.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator -(const fk_Matrix &m1, const fk_Matrix &m2)
+	{
+		fk_Matrix Ret;
+
+		Ret = m1;
+		SubMatrix(Ret.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator -(const fk_Matrix &m1, const fk_OrthoMatrix &m2)
+	{
+		fk_Matrix Ret;
+
+		Ret = m1;
+		SubMatrix(Ret.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator -(const fk_OrthoMatrix &m1, const fk_Matrix &m2)
+	{
+		fk_Matrix Ret;
+
+		Ret = m1;
+		SubMatrix(Ret.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator *(const fk_Matrix &m1, const fk_Matrix &m2)
+	{
+		fk_Matrix Ret;
+
+		MultMatrix(Ret.m, m1.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator *(const fk_Matrix &m1, const fk_OrthoMatrix &m2)
+	{
+		fk_Matrix Ret;
+
+		MultMatrix(Ret.m, m1.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator *(const fk_OrthoMatrix &m1, const fk_Matrix &m2)
+	{
+		fk_Matrix Ret;
+
+		MultMatrix(Ret.m, m1.m, m2.m);
+
+		return Ret;
+	}
+
+	fk_Matrix operator *(double d, const fk_Matrix &m)
+	{
+		fk_Matrix	Ret;
+		int			i, j;
+
+		for(i = 0; i < 4; ++i) {
+			for(j = 0; j < 4; ++j) {
+				Ret.m[i][j] = d*m.m[i][j];
+			}
+		}
+
+		return Ret;
+	}
+
+	fk_Matrix operator *(const fk_Matrix &m, double d)
+	{
+		fk_Matrix	Ret;
+		int			i, j;
+
+		for(i = 0; i < 4; ++i) {
+			for(j = 0; j < 4; ++j) {
+				Ret.m[i][j] = d*m.m[i][j];
+			}
+		}
+
+		return Ret;
+	}
 }
 
 fk_Vector fk_DivideVec(const fk_Vector &orgVec,

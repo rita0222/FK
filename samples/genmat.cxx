@@ -72,6 +72,10 @@
 #include <FK/FK.h>
 #include <FK/GenMatrix.h>
 
+using namespace std;
+using namespace FK;
+using namespace FK::Material;
+
 double myRandom(void)
 {
 	return double(rand())/double(RAND_MAX);

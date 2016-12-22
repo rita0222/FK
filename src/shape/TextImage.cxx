@@ -90,84 +90,87 @@ using namespace std;
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
 
-// rita: UTF-16 における空白コード
-const unsigned int SP_1BYTE = 0x0020;
-const unsigned int SP_2BYTE = 0x3000;
+namespace FK {
+	// rita: UTF-16 における空白コード
+	const unsigned int SP_1BYTE = 0x0020;
+	const unsigned int SP_2BYTE = 0x3000;
 
-class fk_GlyphStatus {
-private:
-	FT_Face		face;
-	FT_UInt		index, code;
-	int			ptsize, dpi, strength;
 
-public:
-	fk_GlyphStatus(void);
-	fk_GlyphStatus(const fk_GlyphStatus &);
-	~fk_GlyphStatus();
+	class fk_GlyphStatus {
+	private:
+		FT_Face		face;
+		FT_UInt		index, code;
+		int			ptsize, dpi, strength;
 
-	bool				operator ==(const fk_GlyphStatus &) const;
-	bool				operator >(const fk_GlyphStatus &) const;
-	bool				operator <(const fk_GlyphStatus &) const;
-	fk_GlyphStatus &	operator =(const fk_GlyphStatus &);
+	public:
+		fk_GlyphStatus(void);
+		fk_GlyphStatus(const fk_GlyphStatus &);
+		~fk_GlyphStatus();
 
-	void		Init(void);
-	void		Set(FT_Face, FT_UInt, int, int, int);
-	FT_UInt		GetIndex(void) const;
-	FT_UInt		GetCode(void) const;
-};
+		bool				operator ==(const fk_GlyphStatus &) const;
+		bool				operator >(const fk_GlyphStatus &) const;
+		bool				operator <(const fk_GlyphStatus &) const;
+		fk_GlyphStatus &	operator =(const fk_GlyphStatus &);
 
-class fk_FTGlyph {
- public:
-	fk_GlyphStatus			status;
-	FT_Pos					xOffset;
-	FT_BBox					bbox;
+		void		Init(void);
+		void		Set(FT_Face, FT_UInt, int, int, int);
+		FT_UInt		GetIndex(void) const;
+		FT_UInt		GetCode(void) const;
+	};
 
-	fk_FTGlyph(void);
-	~fk_FTGlyph();
+	class fk_FTGlyph {
+	public:
+		fk_GlyphStatus			status;
+		FT_Pos					xOffset;
+		FT_BBox					bbox;
 
-	void		Init(void);
-};
+		fk_FTGlyph(void);
+		~fk_FTGlyph();
 
-class fk_FontServer {
- private:
-	FT_Library				library;
-	map<string, FT_Face>	faceArray;
+		void		Init(void);
+	};
 
- public:
-	fk_FontServer(void);
-	~fk_FontServer();
+	class fk_FontServer {
+	private:
+		FT_Library				library;
+		map<string, FT_Face>	faceArray;
 
-	FT_Face					GetFace(string);
-};
+	public:
+		fk_FontServer(void);
+		~fk_FontServer();
 
-class fk_GlyphCache {
-public:
-	FT_BBox					bbox;
-	fk_GlyphBuffer			*buffer;
-};
+		FT_Face					GetFace(string);
+	};
 
-class fk_GlyphServer {
-private:
-	map<fk_GlyphStatus, fk_GlyphCache *>	glyphArray;
+	class fk_GlyphCache {
+	public:
+		FT_BBox					bbox;
+		fk_GlyphBuffer			*buffer;
+	};
 
-public:
-	fk_GlyphServer(void);
-	~fk_GlyphServer();
+	class fk_GlyphServer {
+	private:
+		map<fk_GlyphStatus, fk_GlyphCache *>	glyphArray;
 
-	void				Clear(void);
-	void				MakeCache(const fk_GlyphStatus &, const FT_BBox &);
-	fk_GlyphBuffer *	GetBuffer(const fk_GlyphStatus &);
-	FT_BBox *			GetBBox(const fk_GlyphStatus &);
-	bool				IsArive(const fk_GlyphStatus &) const;
-};
+	public:
+		fk_GlyphServer(void);
+		~fk_GlyphServer();
 
-class fk_FTFace {
-public:
-	FT_Face		face;
+		void				Clear(void);
+		void				MakeCache(const fk_GlyphStatus &, const FT_BBox &);
+		fk_GlyphBuffer *	GetBuffer(const fk_GlyphStatus &);
+		FT_BBox *			GetBBox(const fk_GlyphStatus &);
+		bool				IsArive(const fk_GlyphStatus &) const;
+	};
 
-	fk_FTFace(void);
-	~fk_FTFace();
-};
+	class fk_FTFace {
+	public:
+		FT_Face		face;
+
+		fk_FTFace(void);
+		~fk_FTFace();
+	};
+}
 
 fk_GlyphStatus::fk_GlyphStatus(void)
 {

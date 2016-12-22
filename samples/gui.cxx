@@ -78,6 +78,10 @@
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/fl_ask.H>
 
+using namespace std;
+using namespace FK;
+using namespace FK::Material;
+
 class GUISet {
 private:
 

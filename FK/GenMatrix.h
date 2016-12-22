@@ -17,7 +17,7 @@ namespace FK {
 
 	class fk_GenMatrix {
 
-		friend class		fk_GenVector;
+		friend class		FK::fk_GenVector;
 
 	public:
 	
@@ -251,10 +251,10 @@ namespace FK {
 		std::vector<double>					m;
 		std::vector<double>::size_type		deg;
 
-		void				MultVec(fk_GenVector &, const fk_GenVector &) const;
-		void				MakeIdentMatrix(void);
-		void				MakeZeroMatrix(void);
-		bool				MatrixInverse(void);
+		void	MultVec(fk_GenVector &, const fk_GenVector &) const;
+		void	MakeIdentMatrix(void);
+		void	MakeZeroMatrix(void);
+		bool	MatrixInverse(void);
 	};	
 
 	//////// 二項演算子の外部関数宣言
@@ -323,7 +323,6 @@ namespace FK {
 	 */
 	fk_GenMatrix	operator *(const fk_GenMatrix &, const fk_GenMatrix &);
 }
-
 
 #endif // !__FK_GEN_MATRIX_HEADER__
 

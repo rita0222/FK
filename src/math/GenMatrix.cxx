@@ -536,43 +536,45 @@ void fk_GenMatrix::Print(string argStr) const
 	return;
 }
 
-fk_GenVector operator *(const fk_GenMatrix &mat, const fk_GenVector &vec)
-{
-	fk_GenVector	ret(0);
+namespace FK {
+	fk_GenVector operator *(const fk_GenMatrix &mat, const fk_GenVector &vec)
+	{
+		fk_GenVector	ret(0);
 
-	if(vec.size() != mat.getDeg()) return ret;
-	ret.resize(vec.size());
+		if(vec.size() != mat.getDeg()) return ret;
+		ret.resize(vec.size());
 
-	mat.MultVec(ret, vec);
-	return ret;
-}
+		mat.MultVec(ret, vec);
+		return ret;
+	}
 
-fk_GenMatrix operator +(const fk_GenMatrix &m1, const fk_GenMatrix &m2)
-{
-	fk_GenMatrix	ret;
+	fk_GenMatrix operator +(const fk_GenMatrix &m1, const fk_GenMatrix &m2)
+	{
+		fk_GenMatrix	ret;
 
-	if(m1.deg != m2.deg) return ret;
-	ret = m1;
-	AddMatrix(m1.deg, ret.m, m2.m);
-	return ret;
-}
+		if(m1.deg != m2.deg) return ret;
+		ret = m1;
+		AddMatrix(m1.deg, ret.m, m2.m);
+		return ret;
+	}
 
-fk_GenMatrix operator -(const fk_GenMatrix &m1, const fk_GenMatrix &m2)
-{
-	fk_GenMatrix	ret;
+	fk_GenMatrix operator -(const fk_GenMatrix &m1, const fk_GenMatrix &m2)
+	{
+		fk_GenMatrix	ret;
 
-	if(m1.deg != m2.deg) return ret;
-	ret = m1;
-	SubMatrix(m1.deg, ret.m, m2.m);
-	return ret;
-}
+		if(m1.deg != m2.deg) return ret;
+		ret = m1;
+		SubMatrix(m1.deg, ret.m, m2.m);
+		return ret;
+	}
 
-fk_GenMatrix operator *(const fk_GenMatrix &m1, const fk_GenMatrix &m2)
-{
-	fk_GenMatrix	ret;
+	fk_GenMatrix operator *(const fk_GenMatrix &m1, const fk_GenMatrix &m2)
+	{
+		fk_GenMatrix	ret;
 
-	if(m1.deg != m2.deg) return ret;
-	ret.setDeg(static_cast<int>(m1.deg));
-	MultMatrix(m1.deg, ret.m, m1.m, m2.m);
-	return ret;
+		if(m1.deg != m2.deg) return ret;
+		ret.setDeg(static_cast<int>(m1.deg));
+		MultMatrix(m1.deg, ret.m, m1.m, m2.m);
+		return ret;
+	}
 }

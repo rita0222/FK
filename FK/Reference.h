@@ -4,13 +4,13 @@
 #include <FK/Edge.h>
 #include <FK/ParserData.h>
 
-class fk_Vertex;
-class fk_Half;
-class fk_Loop;
-
 #include <vector>
 
 namespace FK {
+	class fk_Vertex;
+	class fk_Half;
+	class fk_Loop;
+
 	/*
 	  ここで定義する参照関数 ---
 
