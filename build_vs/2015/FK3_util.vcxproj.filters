@@ -33,13 +33,13 @@
     <ClCompile Include="..\..\src\util\MotionData.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\SimpleWindow.cxx">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\util\SpriteModel.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\util\TrackBall.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\AppWindow.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
