@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <list>
 #include <string>
 #include <functional>
 

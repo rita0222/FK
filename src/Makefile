@@ -2,7 +2,7 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
-BASE		= base math material parser shape solid model scene graphics util
+BASE		= base math material shape solid parser model scene graphics util
 AUDIO		= audio
 OPENCL		= OpenCL
 SHADER		= shader

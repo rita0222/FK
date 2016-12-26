@@ -6,6 +6,22 @@
 #include <map>
 
 namespace FK {
+
+	class fk_BVHBase : public fk_ParserBase {
+	public:
+		fk_BVHBase(void);
+		virtual ~fk_BVHBase();
+
+		virtual int getNodeNum(void) = 0;
+		virtual std::string getNodeName(int) = 0;
+		virtual int getPosSize(int) = 0;
+		virtual int getRotSize(int) = 0;
+		virtual double getOneFrameTime(void) = 0;
+		virtual fk_Vector getPos(int, int) = 0;
+		virtual fk_Angle getRot(int, int) = 0;
+		
+	};
+
 	//! BVH 形式のモーションデータを読み込み、保持するクラス
 	/*!
 	 *	このクラスは BVH 形式のモーションデータを読み込み、制御を行います。
@@ -19,7 +35,7 @@ namespace FK {
 	 *	\sa fk_IndexFaceSet, fk_IFSTexture, fk_Model
 	 */
 
-	class fk_BVHMotion : public fk_ParserBase {
+	class fk_BVHMotion : public fk_BVHBase {
 
 		friend class				fk_D3DXAnimation;
 
@@ -144,6 +160,14 @@ namespace FK {
 		 */
 		double		getOneFrameTime(void);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		int getPosSize(int);
+		int getRotSize(int);
+		fk_Vector getPos(int, int);
+		fk_Angle getRot(int, int);
+#endif		
+		
 	private:
 		std::vector<fk_Model *>					nodeArray;
 		std::vector<std::string>				nameArray;

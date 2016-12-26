@@ -420,20 +420,20 @@ namespace FK {
 
 	void fk_SetErrorMode(const fk_ErrorMode argMode)
 	{
-		getErrorDB()->SetMode(argMode);
+		fk_GetErrorDB()->SetMode(argMode);
 		return;
 	}
 
 	fk_ErrorMode fk_GetErrorMode(void)
 	{
-		return getErrorDB()->GetMode();
+		return fk_GetErrorDB()->GetMode();
 	}
 
 	void fk_PutError(const string argClassName,
 					 const string argFuncName,
 					 const int argErrCode)
 	{
-		getErrorDB()->PutError(argClassName, argFuncName, argErrCode);
+		fk_GetErrorDB()->PutError(argClassName, argFuncName, argErrCode);
 		return;
 	}
 
@@ -441,24 +441,24 @@ namespace FK {
 					 const string argFuncName,
 					 const int argErrCode, const string argMessage)
 	{
-		getErrorDB()->PutError(argClassName, argFuncName, argErrCode, argMessage);
+		fk_GetErrorDB()->PutError(argClassName, argFuncName, argErrCode, argMessage);
 		return;
 	}
 
 	void fk_PutError(const string argMessage)
 	{
-		getErrorDB()->PutError(argMessage);
+		fk_GetErrorDB()->PutError(argMessage);
 		return;
 	}
 
 	bool fk_ErrorPrint(void)
 	{
-		return getErrorDB()->Print();
+		return fk_GetErrorDB()->Print();
 	}
 
 	bool fk_SetErrorFile(string argFileName)
 	{
-		return getErrorDB()->SetFileName(argFileName);
+		return fk_GetErrorDB()->SetFileName(argFileName);
 	}
 
 	fk_ErrorDataBase * fk_GetErrorDB(void)
@@ -477,7 +477,7 @@ namespace FK {
 		va_start(ap, argFormat);
 		vsnprintf(&buffer[0], 8191, argFormat, ap);
 		va_end(ap);
-		getErrorDB()->PutError(buffer);
+		fk_GetErrorDB()->PutError(buffer);
 		delete [] buffer;
 		return;
 	}

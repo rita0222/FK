@@ -10,14 +10,17 @@ MV		= mv
 TOUCH		= touch
 AR		= ar
 AROPS		= cq
-LODER		= $(AR) $(AROPS)
+LOADER_S	= $(AR) $(AROPS)
+LOADER_D	= $(CC)
+LOADER_D_OPT	= -L. -dynamiclib -lc -o
 OPTOPT		= -O
+FKDEF		= -DFK_LIB_SRC
+SYSOPT		=
 GRAMOPT		= -pedantic -std=c++14 -DFK_LIB_SRC
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
 OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
-POSTLINK	= :
 #
 
 LIBSRCS = \
@@ -64,14 +67,26 @@ ALLSRCS = $(LIBSRCS)
 ###################
 
 FKTOP		= ../..
-LIBRARY		= $(FKTOP)/lib/libFK3_solid.a
-LIBRARY_G	= $(FKTOP)/lib/libFK3_solid_g.a
-FTEST		= ftest
-CTEST		= ctest
+STATIC_DIR	= $(FKTOP)/lib/static
+DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
+LIBRARY_S	= $(STATIC_DIR)/libFK3_solid.a
+LIBRARY_SG	= $(STATIC_DIR)/libFK3_solid_g.a
+LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_solid.3.1.dylib
+LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_solid_g.3.1.dylib
+LIBRARY		= $(LIBRARY_S) 
+FKLINK		= \
+	-lFK3_base.3.1 \
+	-lFK3_math.3.1 \
+	-lFK3_material.3.1
+
+FKLINK_G	= \
+	-lFK3_base_g.3.1 \
+	-lFK3_math_g.3.1 \
+	-lFK3_material_g.3.1
+
 TARGET		= target
 LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
-MVLIB		= :
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -132,38 +147,49 @@ ming-g:
 mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
-	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"SYSLIBS = " \
+	"FKLIBS = $(FKLINK)" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LIBRARY = $(LIBRARY_S) $(LIBRARY_D)" \
 	"RANLIB = ranlib"
 
 mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
-	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"FKLIBS = $(FKLINK_G)" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
+	"LIBRARY_S = $(LIBRARY_SG)" \
+	"LIBRARY_D = $(LIBRARY_DG)" \
+	"LIBRARY = $(LIBRARY_SG) $(LIBRARY_DG)" \
+	"RANLIB = ranlib"
 
 mac-gcc:
 	$(MAKE) $(TARGET) \
 	"CC = g++-mp-6" \
 	"LINKCC = g++-mp-6" \
-	"OPTOPT = -O -pipe" \
 	"GRAMOPT = -std=c++14" \
-	"SYSOPS = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
+	"OPTOPT = -O -pipe" \
+	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
+	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"FKLIBS = $(FKLINK)" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LIBRARY = $(LIBRARY_S) $(LIBRARY_D)" \
 	"RANLIB = ranlib"
 
 mac-gcc-g:
@@ -172,25 +198,29 @@ mac-gcc-g:
 	"LINKCC = g++-mp-6" \
 	"OPTOPT = -g" \
 	"GRAMOPT = -std=c++14" \
-	"SYSOPS = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
+	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
+	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"FKLIBS = $(FKLINK_G)" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
+	"LIBRARY_S = $(LIBRARY_SG)" \
+	"LIBRARY_D = $(LIBRARY_DG)" \
+	"LIBRARY = $(LIBRARY_SG) $(LIBRARY_DG)" \
+	"RANLIB = ranlib"
 
-CFLAGS 		= $(OPS) $(SYSOPS) $(INCLDIRS)
+CFLAGS 		= $(OPS) $(FKDEF) $(SYSOPT) $(INCLDIRS)
 DEPENDCFLAGS	= $(CFLAGS)
 
 target : $(LIBRARY)
 
 $(LIBRARY) : $(LIBOBJS)
 	$(RM) $(LIBRARY)
-	$(LODER) $(LIBRARY) $(LIBOBJS)
-	$(RANLIB) $(LIBRARY)
-	$(MVLIB)
+	$(LOADER_S) $(LIBRARY_S) $(LIBOBJS)
+	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) $(LIBRARY_D) $(LIBOBJS)
+	$(RANLIB) $(LIBRARY_S)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
@@ -198,7 +228,7 @@ depend:: $(ALLSRCS)
 
 clean:
 	touch dummy~
-	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) $(FTEST) $(CTEST) \
+	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) \
 		Makefile.bak fk2_base.bak *.out core *.core *~ #*# *.exe *.obj
 
 ###

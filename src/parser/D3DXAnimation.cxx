@@ -571,68 +571,72 @@ fk_FVector fk_D3DXAnimation::GetMovePos(int argID, const fk_FVector &argV)
 	return fk_FVector(retV);
 }
 
-void fk_D3DXAnimation::SetBVHMotion(fk_BVHMotion *argBVH)
+void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 {
-	_st						i, j;
+	int						i, j;
 	fk_Quaternion			q;
 	fk_D3DXFrameAnimation	*cur;
 	double					timeD;
 	int						fTime;
+	int						posSize, rotSize;
 
 	if(argBVH == nullptr) return;
 
-	for(i = 0; i < frameData.size(); i++) {
-		frameData.at(i)->SetAnimation(nullptr);
+	for(i = 0; i < int(frameData.size()); i++) {
+		frameData.at(_st(i))->SetAnimation(nullptr);
 	}
-	for(i = 0; i < animData.size(); i++) {
-		delete animData.at(i);
+	for(i = 0; i < int(animData.size()); i++) {
+		delete animData.at(_st(i));
 	}
 	animData.clear();
 
-	for(i = 0; i < static_cast<_st>(argBVH->getNodeNum()); i++) {
+	for(i = 0; i < argBVH->getNodeNum(); i++) {
 
-		if(argBVH->getNodeName(static_cast<int>(i)) == "End Site") continue;
+		if(argBVH->getNodeName(i) == "End Site") continue;
 
 		MakeNewAnimation();
 
 		cur = animData.back();
-		cur->SetName(argBVH->getNodeName(static_cast<int>(i)));
-		cur->SetTransKeyNum(static_cast<int>(argBVH->posArray[i].size()));
-		cur->SetRotKeyNum(static_cast<int>(argBVH->rotArray[i].size()));
 
-		if(argBVH->posArray[i].size() > argBVH->rotArray[i].size()) {
-			cur->SetScaleKeyNum(static_cast<int>(argBVH->posArray[i].size()));
+		cur->SetName(argBVH->getNodeName(i));
+		posSize = argBVH->getPosSize(i);
+		rotSize = argBVH->getRotSize(i);
+		cur->SetTransKeyNum(posSize);
+		cur->SetRotKeyNum(rotSize);
+
+		if(posSize > rotSize) {
+			cur->SetScaleKeyNum(posSize);
 		} else {
-			cur->SetScaleKeyNum(static_cast<int>(argBVH->rotArray[i].size()));
+			cur->SetScaleKeyNum(rotSize);
 		}
 
-		for(j = 0; j < static_cast<_st>(cur->GetTransKeyNum()); j++) {
-			fTime = static_cast<int>(argBVH->oneFrameTime*1000.0);
-			timeD = static_cast<double>(fTime*static_cast<int>(j+1));
+		for(j = 0; j < cur->GetTransKeyNum(); j++) {
+			fTime = static_cast<int>(argBVH->getOneFrameTime()*1000.0);
+			timeD = static_cast<double>(fTime*(j+1));
 															 
-			cur->SetTransKey(static_cast<int>(j), timeD);
-			cur->SetTransData(static_cast<int>(j), argBVH->posArray[i][j]);
+			cur->SetTransKey(j, timeD);
+			cur->SetTransData(j, argBVH->getPos(i, j));
 		}
-		for(j = 0; j < static_cast<_st>(cur->GetRotKeyNum()); j++) {
-			fTime = static_cast<int>(argBVH->oneFrameTime*1000.0);
-			timeD = static_cast<double>(fTime*static_cast<int>(j+1));
+		for(j = 0; j < cur->GetRotKeyNum(); j++) {
+			fTime = static_cast<int>(argBVH->getOneFrameTime()*1000.0);
+			timeD = static_cast<double>(fTime*(j+1));
 
-			cur->SetRotKey(static_cast<int>(j), timeD);
-			q.makeEuler(argBVH->rotArray[i][j]);
-			cur->SetRotData(static_cast<int>(j), q);
+			cur->SetRotKey(j, timeD);
+			q.makeEuler(argBVH->getRot(i, j));
+			cur->SetRotData(j, q);
 		}
-		for(j = 0; j < static_cast<_st>(cur->GetScaleKeyNum()); j++) {
-			fTime = static_cast<int>(argBVH->oneFrameTime*1000.0);
-			timeD = static_cast<double>(fTime*static_cast<int>(j+1));
+		for(j = 0; j < cur->GetScaleKeyNum(); j++) {
+			fTime = static_cast<int>(argBVH->getOneFrameTime()*1000.0);
+			timeD = static_cast<double>(fTime*(j+1));
 
-			cur->SetScaleKey(static_cast<int>(j), timeD);
-			cur->SetScaleData(static_cast<int>(j), fk_Vector(1.0, 1.0, 1.0));
+			cur->SetScaleKey(j, timeD);
+			cur->SetScaleData(j, fk_Vector(1.0, 1.0, 1.0));
 		}
 
-		for(j = 0; j < frameData.size(); j++) {
-			if(cur->GetName() == frameData.at(j)->GetName()) {
-				frameData.at(j)->SetAnimation(cur);
-				frameData.at(j)->SetUpMatrix();
+		for(j = 0; j < int(frameData.size()); j++) {
+			if(cur->GetName() == frameData.at(_st(j))->GetName()) {
+				frameData.at(_st(j))->SetAnimation(cur);
+				frameData.at(_st(j))->SetUpMatrix();
 				break;
 			}
 		}

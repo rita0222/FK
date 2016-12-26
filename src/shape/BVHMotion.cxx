@@ -93,6 +93,16 @@ enum BVH_ChannelType {
 	BVH_ZROT
 };
 
+fk_BVHBase::fk_BVHBase(void)
+{
+	return;
+}
+
+fk_BVHBase::~fk_BVHBase()
+{
+	return;
+}
+
 fk_BVHMotion::fk_BVHMotion(void)
 {
 	init();
@@ -570,3 +580,24 @@ double fk_BVHMotion::getOneFrameTime(void)
 {
 	return oneFrameTime;
 }
+
+int fk_BVHMotion::getPosSize(int argID)
+{
+	return int(posArray[_st(argID)].size());
+}
+
+int fk_BVHMotion::getRotSize(int argID)
+{
+	return int(rotArray[_st(argID)].size());
+}
+
+fk_Vector fk_BVHMotion::getPos(int argI, int argJ)
+{
+	return posArray[_st(argI)][_st(argJ)];
+}
+
+fk_Angle fk_BVHMotion::getRot(int argI, int argJ)
+{
+	return rotArray[_st(argI)][_st(argJ)];
+}
+

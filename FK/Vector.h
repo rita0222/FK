@@ -757,6 +757,62 @@ namespace FK {
 		 */
 		fk_FVector &	operator =(const fk_Vector &);
 	};
+
+	//! テクスチャ座標を管理するクラス
+	/*!
+	 *	このクラスは、テクスチャ座標に関する基本的な機能を提供します。
+	 *
+	 *	テクスチャ座標系とは、画像のピクセルサイズにかかわらず左下を (0, 0)、
+	 *	右上端を (1, 1) として、画像の任意の位置をパラメータとして表す座標系のことです。
+	 *	例えば、画像の中心は (0.5, 0,5) として表されます。
+	 *	テクスチャ座標系では、横方向が x 成分、縦方向が y 成分となります。
+	 *
+	 *	\sa fk_TriTexture, fk_MeshTexture, fk_IFSTexture
+	 */
+
+	class fk_TexCoord {
+
+	public:
+
+		float	x;	//!<	x成分
+		float	y;	//!<	y成分
+
+		//! コンストラクタ
+		/*!
+		 *	\param[in]	x	x成分
+		 *	\param[in]	y	y成分
+		 */
+		fk_TexCoord(double x = 0.0, double y = 0.0);
+
+		//! コピーコンストラクタ
+		fk_TexCoord(const fk_TexCoord &);
+
+		//! 代入演算子
+		fk_TexCoord & operator =(const fk_TexCoord &);
+
+		//! 等号比較演算子
+		/*!
+		 *	fk_TexCoord では、以下のように記述することで、
+		 *	c1 と c2 が等しいかどうかを判断できます。
+		 *
+		 *		if(c1 == c2) {
+		 *			:
+		 *			:
+		 *		}
+		 *
+		 *	ここでの比較は、ある程度の計算誤差を許容します。
+		 */
+		bool	operator ==(const fk_TexCoord &) const;
+
+		//! 成分設定関数
+		/*!
+		 *	各成分を設定します。
+		 *
+		 *	\param[in]	x	x成分の値
+		 *	\param[in]	y	y成分の値
+		 */
+		void	set(double x, double y);
+	};
 }
 
 #endif /* !__FK_VECTOR_HEADER__ */

@@ -13,7 +13,7 @@ namespace FK {
 	class fk_Quaternion;
 	class fk_Tree;
 	class fk_TreeData;
-	class fk_BVHMotion;
+	class fk_BVHBase;
 
 	class fk_D3DXSkinMap {
 	public:
@@ -48,7 +48,7 @@ namespace FK {
 		void			MakeDummySkinWeights(fk_TreeData *, int);
 		void			SetTime(double);
 		fk_FVector		GetMovePos(int, const fk_FVector &);
-		void			SetBVHMotion(fk_BVHMotion *);
+		void			SetBVHMotion(fk_BVHBase *);
 
 	private:
 
