@@ -1015,6 +1015,9 @@ namespace FK {
 		static std::ofstream	putStrOFS;
 		static int				winNum;
 
+		static Fl_Window		*error_win;
+		static Fl_Multi_Browser	*err_browser;
+
 		void					SetPickViewPort(int &, int &);
 		bool					IsInsideWindow(void);
 		Fl_Group *				GetInhParentWindow(void);
@@ -1028,6 +1031,7 @@ namespace FK {
 #ifdef WIN32
 		bool					SnapImageGDI(fk_Image *);
 #endif
+		void					ErrorInit(void);
 
 	protected:
 

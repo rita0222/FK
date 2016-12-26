@@ -69,9 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "Window_fltk_D3D.cxx"
-#else
 
 #include <iostream>
 #include <FK/Window.h>
@@ -80,6 +77,7 @@
 #include <FK/Error.H>
 #include <FL/Fl_Multi_Browser.H>
 #include <FL/x.H>
+#include <FL/fl_ask.H>
 
 using namespace std;
 
@@ -88,6 +86,8 @@ Fl_Multi_Browser *	fk_Window::browser = nullptr;
 fk_PutStrMode		fk_Window::putStrMode = FK_PUTSTR_BROWSER;
 ofstream			fk_Window::putStrOFS;
 int					fk_Window::winNum = 0;
+Fl_Window *			fk_Window::error_win = nullptr;
+Fl_Multi_Browser *	fk_Window::err_browser = nullptr;
 
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0])
@@ -105,6 +105,7 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 
 	setFPS(0);
 
+	ErrorInit();
 	return;
 }
 
@@ -472,4 +473,51 @@ void fk_Window::clearBrowser(void)
 	return;
 }
 
-#endif
+void fk_Window::ErrorInit(void)
+{
+	fk_ErrorDataBase		*db = fk_GetErrorDB();
+
+	if(db->errorBrowser == nullptr) {
+		db->errorBrowser = new fk_ErrorBrowser();
+		db->errorBrowser->PutBrowser = [&](const string argStr) {
+			static const string		space = "			 ";
+			string					output, str;
+			string::size_type		index, old;
+
+			if(error_win == NULL) {
+				error_win = new Fl_Window(320, 520, "FK Error Window");
+				browser = new Fl_Multi_Browser(10, 10, 300, 500);
+				error_win->size_range(320, 520);
+				error_win->resizable(browser);
+				error_win->end();
+				error_win->show();
+			}
+
+			index = argStr.find('\n');
+			output = argStr.substr(0, index);
+			while(index != string::npos) {
+				str = output + space;
+				browser->add(str.c_str());
+				old = index+1;
+				index = argStr.find('\n', old);
+				if(index == string::npos) {
+					output = argStr.substr(old, index);
+				} else {
+					output = argStr.substr(old, index-old);
+				}
+			}
+
+			if(output.length() != 0) {
+				str = output + space;
+				browser->add(str.c_str());
+			}
+
+			browser->bottomline(99999999);
+		};
+
+		db->errorBrowser->PutAlert = [&](const string argStr) {
+			fl_alert("%s", argStr.c_str());
+			return;
+		};
+	}
+}

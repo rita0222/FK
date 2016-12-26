@@ -77,6 +77,8 @@
 using namespace std;
 
 namespace FK {
+	class fk_Window;
+
 	class fk_ErrorData {
 	private:
 
@@ -105,36 +107,6 @@ namespace FK {
 		string	GetErrMessage(void) const;
 		bool	GetMode(void) const;
 	};	  
-
-	class fk_ErrorDataBase {
-	private:
-		list<fk_ErrorData *>	DataBase;
-		fk_ErrorMode			mode;
-		bool					fileMode;
-		ofstream				ofs;
-		fk_ErrorBrowser			errorBrowser;
-
-	public:
-		fk_ErrorDataBase(void);
-		~fk_ErrorDataBase();
-
-		void			SetMode(const fk_ErrorMode);
-		fk_ErrorMode	GetMode(void) const;
-
-		void			PutError(const string, const string,
-								 const int, const string);
-		void			PutError(const string, const string, const int);
-		void			PutError(const string);
-		bool			IsEmpty() const;
-		bool			SetFileName(string);
-		bool			Print(void);
-	};
-
-	static fk_ErrorDataBase * getErrorDB(void)
-	{
-		static fk_ErrorDataBase		errDB;
-		return &errDB;
-	}
 
 
 	fk_ErrorData::fk_ErrorData(void)
@@ -237,8 +209,7 @@ fk_ErrorDataBase::fk_ErrorDataBase(void)
 	mode = FK_ERR_NONE;
 	DataBase.clear();
 	fileMode = false;
-	PutBrowser = [](const string &){};
-	PutAlert = [](const string &){};
+	errorBrowser = nullptr;
 	
 	return;
 }
@@ -257,6 +228,7 @@ fk_ErrorDataBase::~fk_ErrorDataBase()
 		ofs.close();
 	}
 
+	delete errorBrowser;
 	return;
 }
 
@@ -376,6 +348,16 @@ bool fk_ErrorDataBase::SetFileName(string argFileName)
 	return fileMode;
 }
 
+fk_ErrorBrowser::fk_ErrorBrowser(void)
+{
+	return;
+}
+
+fk_ErrorBrowser::~fk_ErrorBrowser()
+{
+	return;
+}
+
 namespace FK {
 
 	bool fk_ErrorDataBase::Print(void)
@@ -405,7 +387,7 @@ namespace FK {
 		switch(mode) {
 		  case FK_ERR_INTERACTIVE:
 		  case FK_ERR_QUEUE:
-			errorBrowser.PutAlert(outStr.c_str());
+			if(errorBrowser != nullptr) errorBrowser->PutAlert(outStr.c_str());
 			break;
 
 		  case FK_ERR_CONSOLE_INTERACTIVE:
@@ -420,7 +402,7 @@ namespace FK {
 
 		  case FK_ERR_BROWSER_INTERACTIVE:
 		  case FK_ERR_BROWSER_QUEUE:
-			errorBrowser.PutBrowser(outStr);
+			if(errorBrowser != nullptr) errorBrowser->PutBrowser(outStr);
 			break;
 
 		  case FK_ERR_FILE:
@@ -477,6 +459,12 @@ namespace FK {
 	bool fk_SetErrorFile(string argFileName)
 	{
 		return getErrorDB()->SetFileName(argFileName);
+	}
+
+	fk_ErrorDataBase * fk_GetErrorDB(void)
+	{
+		static fk_ErrorDataBase		errDB;
+		return &errDB;
 	}
 
 #ifndef FK_CLI_CODE

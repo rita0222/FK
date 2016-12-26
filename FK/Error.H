@@ -3,15 +3,10 @@
 
 #include <FK/Base.h>
 
-#if !defined(WIN32) || defined(_CYGWIN_GCC_)
 #include <stdio.h>
-//#include <iostream>
-#else
-#include <stdio.h>
-#endif
-
 #include <stdarg.h>
 #include <string>
+#include <functional>
 
 #ifdef FK_EXTERN
 #undef FK_EXTERN
@@ -25,6 +20,8 @@
 
 namespace FK {
 
+	class fk_ErrorData;
+	
 	enum fk_ErrorMode {
 		FK_ERR_NONE,
 		FK_ERR_INTERACTIVE,
@@ -47,6 +44,33 @@ namespace FK {
 		std::function<void(const std::string &)>		PutAlert;
 	};
 
+	class fk_ErrorDataBase {
+
+		friend class			fk_Window;
+
+	private:
+		std::list<fk_ErrorData *>	DataBase;
+		fk_ErrorMode				mode;
+		bool						fileMode;
+		std::ofstream				ofs;
+		fk_ErrorBrowser				*errorBrowser;
+
+	public:
+		fk_ErrorDataBase(void);
+		~fk_ErrorDataBase();
+
+		void			SetMode(const fk_ErrorMode);
+		fk_ErrorMode	GetMode(void) const;
+
+		void			PutError(const std::string, const std::string,
+								 const int, const std::string);
+		void			PutError(const std::string, const std::string, const int);
+		void			PutError(const std::string);
+		bool			IsEmpty() const;
+		bool			SetFileName(std::string);
+		bool			Print(void);
+	};
+
 	FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
 	FK_EXTERN fk_ErrorMode		fk_GetErrorMode(void);
 	FK_EXTERN void				fk_PutError(const std::string,
@@ -60,6 +84,7 @@ namespace FK {
 #ifndef FK_CLI_CODE
 	FK_EXTERN void				fk_Printf(const char *, ...);
 	FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
+	FK_EXTERN fk_ErrorDataBase *	fk_GetErrorDB();
 #endif
 }
 
