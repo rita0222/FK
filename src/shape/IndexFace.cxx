@@ -1826,7 +1826,7 @@ void fk_IndexFaceSet::setAnimationTime(double argTime)
 	return;
 }
 
-void fk_IndexFaceSet::setBVHMotion(fk_BVHMotion *argBVH)
+void fk_IndexFaceSet::setBVHMotion(fk_BVHBase *argBVH)
 {
 	if(anim == nullptr || cloneFlg == true) {
 		anim = new fk_D3DXAnimation;

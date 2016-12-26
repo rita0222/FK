@@ -7,7 +7,7 @@
 
 namespace FK {
 	class fk_D3DXAnimation;
-	class fk_BVHMotion;
+	class fk_BVHBase;
 	class fk_Solid;
 
 	//! インデックスフェースセットの内部データタイプを表す列挙型
@@ -1330,7 +1330,7 @@ namespace FK {
 		 *
 		 *	\sa setAnimationTime(), readD3DXFile(), fk_BVHMotion
 		 */
-		void	setBVHMotion(fk_BVHMotion *bvh);
+		void	setBVHMotion(fk_BVHBase *bvh);
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS

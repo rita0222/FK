@@ -21,6 +21,7 @@ POSTLINK	= :
 #
 
 LIBSRCS = \
+		BVHMotion.cxx \
 		Boundary.cxx \
 		BoundaryElem.cxx \
 		MatAdmin.cxx \

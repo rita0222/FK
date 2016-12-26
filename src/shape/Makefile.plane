@@ -24,7 +24,6 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 #
 
 LIBSRCS = \
-		BVHMotion.cxx \
 		Block.cxx \
 		Capsule.cxx \
 		Circle.cxx \
