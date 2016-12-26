@@ -11,6 +11,7 @@ TOUCH		= touch
 AR		= ar
 AROPS		= cq
 LODER		= $(AR) $(AROPS)
+LODER_D		= $(CC) -L. -dynamiclib -lc -o
 OPTOPT		= -O
 GRAMOPT		= -pedantic -std=c++14 -DFK_LIB_SRC
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
@@ -37,6 +38,8 @@ ALLSRCS = $(LIBSRCS)
 FKTOP		= ../..
 LIBRARY		= $(FKTOP)/lib/libFK3_base.a
 LIBRARY_G	= $(FKTOP)/lib/libFK3_base_g.a
+LIBRARY_D	= $(FKTOP)/lib/dynamic/libFK3_base.3.1.dylib
+
 FTEST		= ftest
 CTEST		= ctest
 TARGET		= target
@@ -160,6 +163,7 @@ target : $(LIBRARY)
 $(LIBRARY) : $(LIBOBJS)
 	$(RM) $(LIBRARY)
 	$(LODER) $(LIBRARY) $(LIBOBJS)
+	$(LODER_D) $(LIBRARY_D) $(LIBOBJS)
 	$(RANLIB) $(LIBRARY)
 	$(MVLIB)
 

@@ -237,7 +237,9 @@ fk_ErrorDataBase::fk_ErrorDataBase(void)
 	mode = FK_ERR_NONE;
 	DataBase.clear();
 	fileMode = false;
-
+	PutBrowser = [](const string &){};
+	PutAlert = [](const string &){};
+	
 	return;
 }
 

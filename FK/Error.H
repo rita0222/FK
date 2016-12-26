@@ -43,8 +43,8 @@ namespace FK {
 		fk_ErrorBrowser(void);
 		virtual ~fk_ErrorBrowser();
 
-		void		PutBrowser(const std::string &);
-		void		PutAlert(const std::string &);
+		std::function<void(const std::string &)>		PutBrowser;
+		std::function<void(const std::string &)>		PutAlert;
 	};
 
 	FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
