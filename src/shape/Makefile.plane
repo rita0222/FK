@@ -110,14 +110,22 @@ LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_shape.3.1.dylib
 LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_shape_g.3.1.dylib
 LIBRARY		= $(LIBRARY_S) 
 FKLINK		= \
-	-lFK3_base.3.1 \
-	-lFK3_math.3.1 \
-	-lFK3_material.3.1
+			-lFK3_base.3.1 \
+			-lFK3_math.3.1 \
+			-lFK3_material.3.1
 
 FKLINK_G	= \
-	-lFK3_base_g.3.1 \
-	-lFK3_math_g.3.1 \
-	-lFK3_material_g.3.1
+			-lFK3_base_g.3.1 \
+			-lFK3_math_g.3.1 \
+			-lFK3_material_g.3.1
+
+SYSLIBS		= \
+			-lfreetype \
+			-lfltk_jpeg \
+			-lfltk_png \
+			-liconv \
+			-lbz2 \
+			-lz
 
 TARGET		= target
 LOCAL		= /usr/local
@@ -183,8 +191,7 @@ mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY" \
-	"LFLAGS = -L$(DYNAMIC_DIR)" \
-	"SYSLIBS = " \
+	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"FKLIBS = $(FKLINK)" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \

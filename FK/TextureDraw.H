@@ -24,7 +24,7 @@ namespace FK {
 		bool	GetBindMode(void);
 
 		unsigned long GetUsingTextureMemory(void);
-		static void	ReleaseTexture(fk_Image *);
+		static std::function<void(fk_Image *)>	ReleaseTexture;
 
 	private:
 		bool							arrayState;

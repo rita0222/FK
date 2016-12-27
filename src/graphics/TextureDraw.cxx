@@ -88,13 +88,28 @@ vector<GLuint>		fk_TextureDraw::texNameArray;
 unsigned long		fk_TextureDraw::texLoadedSize = 0;
 vector<fk_Image *>	fk_TextureDraw::texImageArray;
 
-fk_TextureDraw::fk_TextureDraw(void)
+fk_TextureDraw::fk_TextureDraw(void) : oldTexID(0)
 {
 	SetArrayState(false);
 	SetBindMode(false);
-	oldTexID = 0;
-}
 
+	ReleaseTexture = [](fk_Image *argImage) {
+		if(argImage->GetTexID() == 0) return;
+		for(_st i = 0; i < texNameArray.size(); i++) {
+			if(argImage->GetTexID() == texNameArray[i]) {
+				const fk_Dimension *bufSize = argImage->getBufferSize();
+				glDeleteTextures(1, &texNameArray[i]);
+				fk_Texture::ClearTexState(argImage);
+				texNameArray[i] = 0;
+				texImageArray[i] = nullptr;
+				texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+				break;
+			}
+		}
+		return;
+	};
+}
+		
 fk_TextureDraw::~fk_TextureDraw()
 {
 	ClearTextureMemory();
@@ -125,6 +140,9 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 	texObj = static_cast<fk_Texture *>(argObj->getShape());
 
 	if(texObj->getBufferSize() == nullptr) return;
+
+	fk_Image		*image = texObj->getImage();
+	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture;
 
 	// ピックモードが ON の場合
 	if(argPickFlag == true) {
@@ -543,6 +561,7 @@ unsigned long fk_TextureDraw::GetUsingTextureMemory(void)
 	return texLoadedSize;
 }
 
+/*
 void fk_TextureDraw::ReleaseTexture(fk_Image *argImage)
 {
 	if(argImage->GetTexID() == 0) return;
@@ -559,6 +578,7 @@ void fk_TextureDraw::ReleaseTexture(fk_Image *argImage)
 	}
 	return;
 }
+*/
 
 void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 {

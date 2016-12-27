@@ -5,6 +5,7 @@
 #include <FK/Material.h>
 #include <vector>
 #include <string>
+#include <functional>
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 #ifdef	NO_GL_LIBRARY
@@ -618,6 +619,7 @@ namespace FK {
 		void		SetUpdateArea(void);
 		void		SetUpdateArea(int, int, int, int);
 		fk_Rect		GetUpdateArea(void);
+		std::function<void(FK::fk_Image *)> ReleaseTexture;
 
 #endif
 
@@ -627,6 +629,7 @@ namespace FK {
 		fk_ImType				*bufPointer;
 		fk_TexID				texID;
 		bool					initFlag;
+
 		// テクスチャの部分更新用情報
 		fk_Rect					updateRect;
 
