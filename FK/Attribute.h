@@ -2,10 +2,9 @@
 #define __FK_ATTIRIBUTE_HEADER__
 
 #include <FK/Base.h>
+#include <FK/AttributeData.H>
 
 namespace FK {
-
-	class fk_Attribute_Data;
 
 	//!	形状や位相要素の属性を付与、取得するクラス
 	/*!

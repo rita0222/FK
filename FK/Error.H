@@ -5,9 +5,9 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <list>
 #include <string>
 #include <functional>
+#include <list>
 
 #ifdef FK_EXTERN
 #undef FK_EXTERN

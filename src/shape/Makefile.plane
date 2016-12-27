@@ -24,23 +24,75 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 #
 
 LIBSRCS = \
+		Attribute.cxx \
+		AttributeData.cxx \
+		BSplBase.cxx \
+		BSplCurve.cxx \
+		BSplSurface.cxx \
+		BezCurve.cxx \
+		BezSurface.cxx \
+		Block.cxx \
+		Capsule.cxx \
+		Circle.cxx \
+		Command.cxx \
+		Cone.cxx \
+		Curve.cxx \
 		D3DXAnimation.cxx \
 		D3DXData.cxx \
 		D3DXParser.cxx \
 		D3DXShapeParser.cxx \
 		DXFOut.cxx \
 		DXFParser.cxx \
+		DataAccess.cxx \
+		DataBase.cxx \
+		DrawCache.cxx \
+		Edge.cxx \
+		FileInput.cxx \
+		FileOutput.cxx \
 		HRCParser.cxx \
+		Half.cxx \
+		History.cxx \
+		IFSTexture.cxx \
+		IFSetHandle.cxx \
+		Image.cxx \
+		ImageIO.cxx \
+		IndexFace.cxx \
+		Light.cxx \
+		Line.cxx \
+		Loop.cxx \
 		MQOOut.cxx \
 		MQOParser.cxx \
+		MassProperty.cxx \
+		MeshTexture.cxx \
+		Modify.cxx \
+		Operation.cxx \
 		ParserBase.cxx \
+		Particle.cxx \
+		PickData.cxx \
+		Point.cxx \
+		Polygon.cxx \
+		Prism.cxx \
 		RDSParser.cxx \
+		Reference1.cxx \
+		Reference2.cxx \
+		Reference3.cxx \
 		SMFParser.cxx \
 		SRFParser.cxx \
 		STLOut.cxx \
 		STLParser.cxx \
+		Shape.cxx \
+		Solid.cxx \
+		SolidBase.cxx \
+		Sphere.cxx \
+		SubDivision.cxx \
+		Surface.cxx \
+		TextImage.cxx \
+		Texture.cxx \
+		Topology.cxx \
+		UniCode.cxx \
 		VRMLOut.cxx \
-		VRMLParser.cxx
+		VRMLParser.cxx \
+		Vertex.cxx
 
 LIBOBJS = $(LIBSRCS:cxx=o)
 LIBBCCOBJS = $(LIBSRCS:cxx=obj)
@@ -52,10 +104,10 @@ ALLSRCS = $(LIBSRCS)
 FKTOP		= ../..
 STATIC_DIR	= $(FKTOP)/lib/static
 DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
-LIBRARY_S	= $(STATIC_DIR)/libFK3_parser.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_parser_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_parser.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_parser_g.3.1.dylib
+LIBRARY_S	= $(STATIC_DIR)/libFK3_shape.a
+LIBRARY_SG	= $(STATIC_DIR)/libFK3_shape_g.a
+LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_shape.3.1.dylib
+LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_shape_g.3.1.dylib
 LIBRARY		= $(LIBRARY_S) 
 FKLINK		= \
 	-lFK3_base.3.1 \

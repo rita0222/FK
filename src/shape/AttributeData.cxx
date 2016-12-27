@@ -69,7 +69,10 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
 #define FK_DEF_SIZETYPE
+
+#include <FK/Base.h>
 #include <FK/AttributeData.H>
 #include <FK/Error.H>
 
