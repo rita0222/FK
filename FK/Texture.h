@@ -504,6 +504,7 @@ namespace FK {
 		bool				repeatFlag;
 		fk_TexCoord			repeatParam;
 		fk_TexCoord			texCoord[2];
+
 	};
 
 	//! 3角形テクスチャを生成、管理するクラス

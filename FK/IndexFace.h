@@ -6,6 +6,7 @@
 #include <list>
 
 namespace FK {
+
 	class fk_D3DXAnimation;
 	class fk_BVHBase;
 	class fk_Solid;
@@ -1347,6 +1348,7 @@ namespace FK {
 #endif
 
 	private:
+
 		fk_Palette						localPalette;
 		std::vector<fk_FVector>			pos;
 		std::vector<fk_FVector>			timeOrgPos;
@@ -1394,6 +1396,7 @@ namespace FK {
 		void				MakeCapsuleIFSet(std::vector< std::vector<int> > *, int);
 	};
 }
+
 #endif // !__FK_INDEXFACE_HEADER__
 
 /****************************************************************************

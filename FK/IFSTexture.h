@@ -43,7 +43,6 @@ namespace FK {
 	class fk_IFSTexture : public fk_Texture {
 
 		friend class			fk_TextureDraw;
-		friend class			fk_MQOParser;
 
 	public:
 
@@ -311,8 +310,12 @@ namespace FK {
 		 *
 		 *	\param[in]	bvh		モーションデータ
 		 */
-		void					setBVHMotion(fk_BVHMotion *bvh);
+		void					setBVHMotion(fk_BVHBase *bvh);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		std::vector< std::vector<int> > * GetCommonList(void);
+#endif
+	   
 	private:
 
 		fk_IndexFaceSet						*ifs;
@@ -320,7 +323,7 @@ namespace FK {
 		std::vector< std::vector<int> >		commonList;
 		bool								connectMode;
 
-		void					SetConnectNormal(void);
+		void	SetConnectNormal(void);
 	};
 }
 

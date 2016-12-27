@@ -98,6 +98,11 @@ fk_IFSTexture::~fk_IFSTexture()
 	return;
 }
 
+vector< vector<int> > * fk_IFSTexture::GetCommonList(void)
+{
+	return &commonList;
+}
+
 void fk_IFSTexture::init(void)
 {
 	BaseInit();
@@ -189,8 +194,21 @@ bool fk_IFSTexture::readMQOFile(string argFileName,
 	fk_MQOParser		*mqoParser = new fk_MQOParser();
 	bool				retVal;
 
-	mqoParser->SetIFSTexture(this);
+	mqoParser->SetIFSTexture(this, ifs);
 	mqoParser->SetContMode(argContFlg);
+
+	mqoParser->IFSListUpdate = [](fk_IFSTexture *argIFSTex, fk_MQOListSet *argListSet) {
+		auto	tmpCommonList = argIFSTex->GetCommonList();
+
+		tmpCommonList->resize(argListSet->size());
+		for(_st i = 0; i < argListSet->size(); i++) {
+			for(_st j = 1; j < argListSet->at(i).size(); j++) {
+				tmpCommonList->at(i).push_back(argListSet->at(i).at(j).id);
+			}
+		}
+		return;
+	};
+
 	retVal = mqoParser->ReadMQOFile(argFileName, argObjName, argMateID, true);
 	delete mqoParser;
 
@@ -208,8 +226,21 @@ bool fk_IFSTexture::readMQOData(unsigned char *argBuffer,
 	fk_MQOParser		*mqoParser = new fk_MQOParser();
 	bool				retVal;
 
-	mqoParser->SetIFSTexture(this);
+	mqoParser->SetIFSTexture(this, ifs);
 	mqoParser->SetContMode(argContFlg);
+
+	mqoParser->IFSListUpdate = [](fk_IFSTexture *argIFSTex, fk_MQOListSet *argListSet) {
+		auto	tmpCommonList = argIFSTex->GetCommonList();
+
+		tmpCommonList->resize(argListSet->size());
+		for(_st i = 0; i < argListSet->size(); i++) {
+			for(_st j = 1; j < argListSet->at(i).size(); j++) {
+				tmpCommonList->at(i).push_back(argListSet->at(i).at(j).id);
+			}
+		}
+		return;
+	};
+
 	retVal = mqoParser->ReadMQOData(argBuffer, argObjName, argMateID, true);
 	delete mqoParser;
 
@@ -312,7 +343,7 @@ void fk_IFSTexture::setAnimationTime(double argTime)
 	return;
 }
 
-void fk_IFSTexture::setBVHMotion(fk_BVHMotion *argBVH)
+void fk_IFSTexture::setBVHMotion(fk_BVHBase *argBVH)
 {
 	ifs->setBVHMotion(argBVH);
 	return;

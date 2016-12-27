@@ -83,16 +83,6 @@ public:
 	string		data;
 };
 
-class _fk_MQO_IDSet {
-public:
-	int				id;
-	fk_TexCoord		coord;
-
-	_fk_MQO_IDSet(void);
-
-	bool			operator ==(const _fk_MQO_IDSet &) const;
-};
-
 _fk_MQO_IDSet::_fk_MQO_IDSet(void)
 {
 	id = -1;
@@ -115,6 +105,8 @@ fk_MQOParser::fk_MQOParser(void)
 	contFlg = true;
 	matFlg = false;
 	tData.clear();
+
+	IFSListUpdate = [](fk_IFSTexture *, fk_MQOListSet *) {};
 	return;
 }
 
@@ -159,10 +151,10 @@ void fk_MQOParser::SetMeshTexture(fk_MeshTexture *argTexture)
 	return;
 }
 
-void fk_MQOParser::SetIFSTexture(fk_IFSTexture *argTexture)
+void fk_MQOParser::SetIFSTexture(fk_IFSTexture *argTexture, fk_IndexFaceSet *argMesh)
 {
 	ifsTexture = argTexture;
-	SetMeshData(argTexture->getIFS());
+	SetMeshData(argMesh);
 	meshTexture = nullptr;
 	return;
 }
@@ -718,12 +710,11 @@ void fk_MQOParser::OptimizeData(void)
 
 void fk_MQOParser::MakeUniqueVertex4Texture(void)
 {
-	vector< vector<_fk_MQO_IDSet> >		listSet;
+	fk_MQOListSet						listSet;
 	fk_TexCoord							coord;
 	_st									i, j, k, index;
 	_fk_MQO_IDSet						idset;
 	int									newID;
-	vector< vector<int> >				*commonList;
 
 	listSet.resize(optVData.size());
 	newID = static_cast<int>(optVData.size());
@@ -758,6 +749,9 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 		}
 	}
 
+	if(ifsTexture != nullptr) IFSListUpdate(ifsTexture, &listSet);
+		
+	/*
 	if(ifsTexture != nullptr) {
 		commonList = &(ifsTexture->commonList);
 		commonList->resize(listSet.size());
@@ -767,7 +761,7 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 			}
 		}
 	}
-
+	*/
 	return;
 }
 

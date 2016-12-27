@@ -9,7 +9,21 @@ namespace FK {
 	class fk_TreeData;
 	class fk_IFSTexture;
 
+	class _fk_MQO_IDSet {
+	public:
+		int				id;
+		fk_TexCoord		coord;
+
+		_fk_MQO_IDSet(void);
+
+		bool			operator ==(const _fk_MQO_IDSet &) const;
+	};
+
+	typedef std::vector< std::vector<_fk_MQO_IDSet> >  	fk_MQOListSet;
+	
 	class fk_MQOParser : public fk_ParserBase {
+
+		friend fk_IFSTexture;
 
 	public:
 		fk_MQOParser(void);
@@ -18,11 +32,12 @@ namespace FK {
 		bool	ReadMQOFile(const std::string &, const std::string &, int, bool);
 		bool	ReadMQOData(unsigned char *, const std::string &, int, bool);
 		void	SetMeshTexture(fk_MeshTexture *);
-		void	SetIFSTexture(fk_IFSTexture *);
+		void	SetIFSTexture(fk_IFSTexture *, fk_IndexFaceSet *);
 		void	SetContMode(bool);
 		void	SetMaterialMode(bool);
 
 	private:
+
 		fk_MeshTexture								*meshTexture;
 		fk_IFSTexture								*ifsTexture;
 		fk_Tree										*tree;
@@ -55,6 +70,8 @@ namespace FK {
 							std::vector<fk_TexCoord> *);
 
 		fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
+
+		std::function<void(fk_IFSTexture *, fk_MQOListSet *)>	IFSListUpdate;
 	};
 }
 
