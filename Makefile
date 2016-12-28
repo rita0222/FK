@@ -90,7 +90,8 @@ document:
 clean:
 	cd src; $(MAKE) clean
 	cd samples; $(MAKE) clean
-	cd lib; $(RM) lib*
+	cd lib/dynamic; $(RM) lib*
+	cd lib/static; $(RM) lib*
 	$(RM) core *.core *.exe *~ #*# Makefile.bak
 	cd FK; $(RM) *~
 

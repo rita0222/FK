@@ -47,6 +47,13 @@ LIBRARY		= $(LIBRARY_S)
 TARGET		= target
 LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
+FKLINK		= \
+			-lFK3_base.3.1
+
+FKLINK_G	= \
+			-lFK3_base_g.3.1
+
+SYSLIBS		=
 
 all:
 	@echo "	FreeBSD:		make fb"
