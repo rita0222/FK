@@ -14,5 +14,6 @@ LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_math_g.3.1.dylib
 LIBRARY		= $(LIBRARY_S) 
 FKLINK		= -lFK3_base.3.1
 FKLINK_G	= -lFK3_base_g.3.1
+FKLIBS		=
 
 include ../makeinclude
