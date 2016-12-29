@@ -1,14 +1,9 @@
-LIBSRCS = \
-	OpenCL.cxx
+BASENAME	= OpenCL
 
-LIBRARY_S	= $(STATIC_DIR)/libFK3_OpenCL.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_OpenCL_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_OpenCL.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_OpenCL_g.3.1.dylib
+LIBSRCS		= OpenCL.cxx
 
-FKLINK		= \
-			-lFK3_base.3.1
-FKLINK_G	= \
-			-lFK3_base_g.3.1
+FKLINK		= -lFK3_base.$(VERNAME)
+
+FKLINK_G	= -lFK3_base_g.$(VERNAME)
 
 include ../makeinclude

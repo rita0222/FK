@@ -29,22 +29,22 @@ SAMPLEAPPS = $(SAMPLESRCS:cxx=app)
 
 ALLSRCS = $(SAMPLESRCS)
 
+VERNAME = 3.1
+
 ###################
 
-FKLIB		= \
-			-lFK3_audio.3.1 \
-			-lFK3_util.3.1 \
-			-lFK3_window.3.1 \
-			-lFK3_graphics.3.1 \
-			-lFK3_scene.3.1 \
-			-lFK3_model.3.1 \
-			-lFK3_shape.3.1 \
-			-lFK3_material.3.1 \
-			-lFK3_math.3.1 \
-			-lFK3_base.3.1 \
+FKLIB_S		= \
+			-lFK3_util \
+			-lFK3_window \
+			-lFK3_graphics \
+			-lFK3_scene \
+			-lFK3_model \
+			-lFK3_shape \
+			-lFK3_material \
+			-lFK3_math \
+			-lFK3_base \
 
-FKLIB_G		= \
-			-lFK3_audio_g \
+FKLIB_SG		= \
 			-lFK3_util_g \
 			-lFK3_window_g \
 			-lFK3_graphics_g \
@@ -55,14 +55,45 @@ FKLIB_G		= \
 			-lFK3_math_g \
 			-lFK3_base_g \
 
-FKAUDIO		= -lFK3_audio.3.1
-FKAUDIO_G	= -lFK3_audio_g
-FKOPENCL	= -lFK3_OpenCL.3.1
-FKOPENCL_G	= -lFK3_OpenCL_g
-FKSHADER	= -lFK3_shader.3.1
-FKSHADER_G	= -lFK3_shader_g
+FKLIB_D		= \
+			-lFK3_util.$(VERNAME) \
+			-lFK3_window.$(VERNAME) \
+			-lFK3_graphics.$(VERNAME) \
+			-lFK3_scene.$(VERNAME) \
+			-lFK3_model.$(VERNAME) \
+			-lFK3_shape.$(VERNAME) \
+			-lFK3_material.$(VERNAME) \
+			-lFK3_math.$(VERNAME) \
+			-lFK3_base.$(VERNAME) \
 
-FKLINK		= $(FKLIB)
+FKLIB_SG		= \
+			-lFK3_util_g.$(VERNAME) \
+			-lFK3_window_g.$(VERNAME) \
+			-lFK3_graphics_g.$(VERNAME) \
+			-lFK3_scene_g.$(VERNAME) \
+			-lFK3_model_g.$(VERNAME) \
+			-lFK3_shape_g.$(VERNAME) \
+			-lFK3_material_g.$(VERNAME) \
+			-lFK3_math_g.$(VERNAME) \
+			-lFK3_base_g.$(VERNAME) \
+
+FKAUDIO_S	= -lFK3_audio
+FKAUDIO_SG	= -lFK3_audio_g
+FKAUDIO_D	= -lFK3_audio.$(VERNAME)
+FKAUDIO_DG	= -lFK3_audio_g.$(VERNAME)
+
+
+FKOPENCL_S	= -lFK3_OpenCL
+FKOPENCL_SG	= -lFK3_OpenCL_g
+FKOPENCL_D	= -lFK3_OpenCL.$(VERNAME)
+FKOPENCL_DG	= -lFK3_OpenCL_g.$(VERNAME)
+
+FKSHADER_S	= -lFK3_shader
+FKSHADER_SG	= -lFK3_shader_g
+FKSHADER_D	= -lFK3_shader.$(VERNAME)
+FKSHADER_DG	= -lFK3_shader_g.$(VERNAME)
+
+FKLINK		= $(FKLIB_S)
 LINK		= $(FKLINK) $(SYSLIBS)
 TARGET		= target
 OUTPUT		= -o $*
@@ -72,8 +103,8 @@ all:
 	@echo "	FreeBSD Debug:		make fb-g"
 	@echo "	Linux:			make linux"
 	@echo "	MingW:			make ming"
-	@echo "	MingW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
+	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
@@ -137,25 +168,29 @@ ming:
 		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
 		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB) $(FKLIB)"
-
-ming-g:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -g" \
-	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I.. -I../../FK_MingPack/include" \
-	"LFLAGS = -L../lib -L../../FK_MingPack/lib \
-		-Wl,--enable-auto-import" \
-	"SYSLIBS = -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
-		-lfltk_forms -lfltk -lfltk_z \
-		-lfreetype -liconv \
-		-lOpenAL32 -lvorbisfile -lvorbis -logg \
-		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
-		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
-	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_G)"
+	"FKLINK = $(FKLIB_S) $(FKLIB_S)"
 
 mac:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"SYSOPS = -D_MACOSX_" \
+	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
+	"LFLAGS = -L../lib/static -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"SYSLIBS = -liconv -lfltk_gl.1.3 -lfltk.1.3 \
+		-lvorbisfile -lvorbis -logg \
+		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa -framework OpenAL \
+		-framework ApplicationServices \
+		-framework OpenCL \
+		-framework Foundation \
+		-framework AudioToolBox" \
+	"RANLIB = ranlib" \
+	"FKLINK = $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
+	"SAMPLE = $(SAMPLEAPPS)" \
+	"POSTLINK = ../FK/appmake.pl"
+
+mac-d:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
@@ -171,7 +206,7 @@ mac:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB)" \
+	"FKLINK = $(FKAUDIO_D) $(FKSHADER_D) $(FKLIB_D)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -180,7 +215,7 @@ mac-g:
 	"OPTOPT = -g" \
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = -L../lib/static -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -191,7 +226,7 @@ mac-g:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_G)" \
+	"FKLINK = $(FKLIB_SG)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -212,7 +247,7 @@ mac-gcc:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB)" \
+	"FKLINK = $(FKLIB_S)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -233,7 +268,7 @@ mac-gcc-g:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_G)" \
+	"FKLINK = $(FKLIB_SG)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -251,6 +286,8 @@ clean:
 	$(CC) -c $(CFLAGS) $< -o $*.o
 	$(LINKCC) $(SYSOPS) $(LFLAGS) $*.o $(LINK) -o $*
 	$(POSTLINK) $*
+	cp -r ../lib/dynamic $*.app/Contents/MacOS/lib
+	cp ../../FK_MacPack/lib/*.dylib $*.app/Contents/MacOS/lib
 
 .cxx :
 	$(CC) $(CFLAGS) $(LFLAGS) $< $(OUTPUT) $(LINK)

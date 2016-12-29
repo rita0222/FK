@@ -1,21 +1,18 @@
-LIBSRCS = \
-	Audio_Base.cxx \
-	Audio_Buffer.cxx \
-	Audio_Stream.cxx
+BASENAME	= audio
 
-LIBRARY_S	= $(STATIC_DIR)/libFK3_audio.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_audio_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_audio.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_audio_g.3.1.dylib
+LIBSRCS		= \
+			Audio_Base.cxx \
+			Audio_Buffer.cxx \
+			Audio_Stream.cxx
 
 FKLINK		= \
-			-lFK3_base.3.1 \
-			-lFK3_math.3.1 \
-			-lFK3_model.3.1
+			-lFK3_base.$(VERNAME) \
+			-lFK3_math.$(VERNAME) \
+			-lFK3_model.$(VERNAME)
 
 FKLINK_G	= \
-			-lFK3_base_g.3.1 \
-			-lFK3_math_g.3.1 \
-			-lFK3_model_g.3.1
+			-lFK3_base_g.$(VERNAME) \
+			-lFK3_math_g.$(VERNAME) \
+			 -lFK3_model_g.$(VERNAME)
 
 include ../makeinclude

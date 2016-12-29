@@ -136,16 +136,16 @@ fk_Dimension fk_Rect::getSize(void)
 		
 fk_Image::fk_Image(int argW, int argH) : texID(0)
 {
+	ReleaseTexture = nullptr;
 	SetObjectType(FK_IMAGE);
 	CreateBuffer(argW, argH, true);
-	ReleaseTexture = [](fk_Image *) {};
 	
 	return;
 }
 
 fk_Image::~fk_Image()
 {
-	init();
+	if(ReleaseTexture != nullptr) ReleaseTexture(this);
 
 	return;
 }
@@ -165,7 +165,7 @@ void fk_Image::init(void)
 	imageBuf.clear();
 	bufPointer = nullptr;
 	SetInitFlag(true);
-	ReleaseTexture(this);
+	if(ReleaseTexture != nullptr) ReleaseTexture(this);
 
 	return;
 }

@@ -1,20 +1,16 @@
-LIBSRCS = \
-		GenMatrix.cxx \
-		GenVector.cxx \
-		Math.cxx \
-		Matrix.cxx \
-		Plane.cxx \
-		Quaternion.cxx \
-		Vector.cxx
+BASENAME	= math
 
-LIBRARY_S	= $(STATIC_DIR)/libFK3_math.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_matn_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_math.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_math_g.3.1.dylib
+LIBSRCS		= \
+			GenMatrix.cxx \
+			GenVector.cxx \
+			Math.cxx \
+			Matrix.cxx \
+			Plane.cxx \
+			Quaternion.cxx \
+			Vector.cxx
 
-FKLINK		= \
-			-lFK3_base.3.1
-FKLINK_G	= \
-			-lFK3_base_g.3.1
+FKLINK		= -lFK3_base.$(VERNAME)
+
+FKLINK_G	= -lFK3_base_g.$(VERNAME)
 
 include ../makeinclude

@@ -1,24 +1,21 @@
-LIBSRCS = \
-		DList.cxx \
-		Fog.cxx \
-		Projection.cxx \
-		Scene.cxx
+BASENAME	= scene
 
-LIBRARY_S	= $(STATIC_DIR)/libFK3_scene.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_scene_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_scene.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_scene_g.3.1.dylib
+LIBSRCS		= \
+			DList.cxx \
+			Fog.cxx \
+			Projection.cxx \
+			Scene.cxx
 
 FKLINK		= \
-			-lFK3_base.3.1 \
-			-lFK3_material.3.1 \
-			-lFK3_shape.3.1 \
-			-lFK3_model.3.1
+			-lFK3_base.$(VERNAME) \
+			-lFK3_material.$(VERNAME) \
+			-lFK3_shape.$(VERNAME) \
+			-lFK3_model.$(VERNAME)
 
 FKLINK_G	= \
-			-lFK3_base_g.3.1 \
-			-lFK3_material_g.3.1 \
-			-lFK3_shape_g.3.1 \
-			-lFK3_model_g.3.1
+			-lFK3_base_g.$(VERNAME) \
+			-lFK3_material_g.$(VERNAME) \
+			-lFK3_shape_g.$(VERNAME) \
+			-lFK3_model_g.$(VERNAME)
 
 include ../makeinclude

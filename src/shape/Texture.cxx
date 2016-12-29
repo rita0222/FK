@@ -74,39 +74,6 @@
 
 using namespace std;
 
-fk_TexCoord::fk_TexCoord(double argX, double argY)
-{
-	set(argX, argY);
-}
-
-fk_TexCoord::fk_TexCoord(const fk_TexCoord &argCoord)
-{
-	x = argCoord.x;
-	y = argCoord.y;
-}
-
-fk_TexCoord & fk_TexCoord::operator =(const fk_TexCoord &argCoord)
-{
-	x = argCoord.x;
-	y = argCoord.y;
-
-	return *this;
-}
-
-bool fk_TexCoord::operator ==(const fk_TexCoord &c) const
-{
-	fk_TexCoord	tmp(c.x - x, c.y - y);
-	if(tmp.x * tmp.x + tmp.y * tmp.y < float(FK_VECTOREPS)) return true;
-	return false;
-}
-
-void fk_TexCoord::set(double argX, double argY)
-{
-	x = static_cast<float>(argX);
-	y = static_cast<float>(argY);
-	return;
-}
-
 fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(FK_TEXTURE)
 {

@@ -1,20 +1,17 @@
-LIBSRCS = \
-		ShaderBinder.cxx \
-		ShaderParameter.cxx \
-		ShaderProgram.cxx \
-		TextureSampler.cxx
+BASENAME	= shader
 
-LIBRARY_S	= $(STATIC_DIR)/libFK3_shader.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_shader_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_shader.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_shader_g.3.1.dylib
+LIBSRCS		= \
+			ShaderBinder.cxx \
+			ShaderParameter.cxx \
+			ShaderProgram.cxx \
+			TextureSampler.cxx
 
 FKLINK		= \
-			-lFK3_math.3.1 \
-			-lFK3_shape.3.1
+			-lFK3_math.$(VERNAME) \
+			-lFK3_shape.$(VERNAME)
 
 FKLINK_G	= \
-			-lFK3_math_g.3.1 \
-			-lFK3_shape_g.3.1
+			-lFK3_math_g.$(VERNAME) \
+			-lFK3_shape_g.$(VERNAME)
 
 include ../makeinclude

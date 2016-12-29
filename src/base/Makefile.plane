@@ -1,16 +1,14 @@
-LIBSRCS = \
-		Base.cxx \
-		Error.cxx \
-		IDAdmin.cxx \
-		System.cxx \
-		Tree.cxx
+BASENAME	= base
 
-LIBRARY_S	= $(STATIC_DIR)/libFK3_base.a
-LIBRARY_SG	= $(STATIC_DIR)/libFK3_base_g.a
-LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_base.3.1.dylib
-LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_base_g.3.1.dylib
+LIBSRCS 	= \
+			Base.cxx \
+			Error.cxx \
+			IDAdmin.cxx \
+			System.cxx \
+			Tree.cxx
 
 FKLINK		=
+
 FKLINK_G	=
 
 include ../makeinclude
