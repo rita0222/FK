@@ -32,41 +32,34 @@ ALLSRCS = $(SAMPLESRCS)
 ###################
 
 FKLIB		= \
-			-lFK3_audio \
-			-lFK3_util \
-			-lFK3_fltkWin \
-			-lFK3_graphics \
-			-lFK3_scene \
-			-lFK3_model \
-			-lFK3_solid \
-			-lFK3_parser \
-			-lFK3_shape \
-			-lFK3_solid \
-			-lFK3_material \
-			-lFK3_math \
-			-lFK3_base \
-			-lFK3_fltkErr
+			-lFK3_audio.3.1 \
+			-lFK3_util.3.1 \
+			-lFK3_window.3.1 \
+			-lFK3_graphics.3.1 \
+			-lFK3_scene.3.1 \
+			-lFK3_model.3.1 \
+			-lFK3_shape.3.1 \
+			-lFK3_material.3.1 \
+			-lFK3_math.3.1 \
+			-lFK3_base.3.1 \
 
 FKLIB_G		= \
 			-lFK3_audio_g \
 			-lFK3_util_g \
-			-lFK3_fltkWin_g \
+			-lFK3_window_g \
 			-lFK3_graphics_g \
 			-lFK3_scene_g \
 			-lFK3_model_g \
-			-lFK3_solid_g \
 			-lFK3_shape_g \
-			-lFK3_parser_g \
 			-lFK3_material_g \
 			-lFK3_math_g \
 			-lFK3_base_g \
-			-lFK3_fltkErr_g
 
-FKAUDIO		= -lFK3_audio
+FKAUDIO		= -lFK3_audio.3.1
 FKAUDIO_G	= -lFK3_audio_g
-FKOPENCL	= -lFK3_OpenCL
+FKOPENCL	= -lFK3_OpenCL.3.1
 FKOPENCL_G	= -lFK3_OpenCL_g
-FKSHADER	= -lFK3_shader
+FKSHADER	= -lFK3_shader.3.1
 FKSHADER_G	= -lFK3_shader_g
 
 FKLINK		= $(FKLIB)
@@ -167,7 +160,7 @@ mac:
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = -L../lib/dynamic -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \

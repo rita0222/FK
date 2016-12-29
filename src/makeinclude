@@ -12,7 +12,7 @@ AR		= ar
 AROPS		= cq
 LOADER_S	= $(AR) $(AROPS)
 LOADER_D	= $(CC)
-LOADER_D_OPT	= -L. -dynamiclib -lc -o
+LOADER_D_OPT	= -L. -dynamiclib -lc
 OPTOPT		= -O
 FKDEF		= -DFK_LIB_SRC
 SYSOPT		=
@@ -208,7 +208,7 @@ $(LIBRARY_S) : $(LIBOBJS)
 
 $(LIBRARY_D) : $(LIBOBJS)
 	$(RM) $(LIBRARY_D)
-	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) $(LIBRARY_D) $(LIBOBJS)
+	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) -o $(LIBRARY_D) $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
