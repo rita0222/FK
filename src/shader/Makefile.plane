@@ -1,180 +1,20 @@
-SHELL = /bin/sh
-
-.SUFFIXES : .cxx .o
-.SUFFIXES : .c .o
-
-CC		= c++
-LINKCC		= c++
-RM		= rm -f
-MV		= mv
-TOUCH		= touch
-AR		= ar
-AROPS		= cq
-LODER		= $(AR) $(AROPS)
-OPTOPT		= -O
-GRAMOPT		= -pedantic -std=c++14 -DFK_LIB_SRC
-WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
-			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
-EXTOPT		= -Werror
-OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
-#
-
 LIBSRCS = \
 		ShaderBinder.cxx \
 		ShaderParameter.cxx \
 		ShaderProgram.cxx \
 		TextureSampler.cxx
 
-LIBOBJS = $(LIBSRCS:cxx=o)
-LIBBCCOBJS = $(LIBSRCS:cxx=obj)
+LIBRARY_S	= $(STATIC_DIR)/libFK3_shader.a
+LIBRARY_SG	= $(STATIC_DIR)/libFK3_shader_g.a
+LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_shader.3.1.dylib
+LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_shader_g.3.1.dylib
 
-ALLSRCS = $(LIBSRCS)
+FKLINK		= \
+			-lFK3_math.3.1 \
+			-lFK3_shape.3.1
 
-###################
+FKLINK_G	= \
+			-lFK3_math_g.3.1 \
+			-lFK3_shape_g.3.1
 
-FKTOP		= ../..
-LIBRARY		= $(FKTOP)/lib/libFK3_shader.a
-LIBRARY_G	= $(FKTOP)/lib/libFK3_shader_g.a
-FTEST		= ftest
-CTEST		= ctest
-TARGET		= target
-LOCAL		= /usr/local
-OPTLOCAL	= /opt/local
-MVLIB		= :
-
-all:
-	@echo "	FreeBSD:		make fb"
-	@echo "	FreeBSD Debug:		make fb-g"
-	@echo "	Linux:			make linux"
-	@echo "	MinGW:			make ming"
-	@echo "	MinGW Debug:		make ming-g"
-	@echo "	MacOS X:		make mac"
-	@echo "	MacOS X Debug:		make mac-g"
-	@echo "	MacOS X gcc:		make mac-gcc"
-	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
-
-fb:
-	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"RANLIB = ranlib"
-
-fb-g:
-	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"OPTOPT = -g" \
-	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
-
-linux:
-	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++14" \
-	"SYSOPS = -D_LINUX_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(LOCAL)/include" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"RANLIB = ranlib"
-
-ming:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = " \
-	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
-	"DEPENDDIRS = " \
-	"RANLIB = ranlib"
-
-ming-g:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -g" \
-	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
-	"DEPENDDIRS = " \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
-
-mac:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -O -pipe" \
-	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
-	"DEPENDCFLAGS = -D_MACOSX_" \
-	"RANLIB = ranlib"
-
-mac-g:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -g" \
-	"SYSOPS = -D_MACOSX_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
-	"DEPENDCFLAGS = -D_MACOSX_" \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
-
-mac-gcc:
-	$(MAKE) $(TARGET) \
-	"CC = g++-mp-6" \
-	"LINKCC = g++-mp-6" \
-	"OPTOPT = -O -pipe" \
-	"GRAMOPT = -std=c++14" \
-	"SYSOPS = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
-	"DEPENDCFLAGS = -D_MACOSX_" \
-	"RANLIB = ranlib"
-
-mac-gcc-g:
-	$(MAKE) $(TARGET) \
-	"CC = g++-mp-6" \
-	"LINKCC = g++-mp-6" \
-	"OPTOPT = -g" \
-	"GRAMOPT = -std=c++14" \
-	"SYSOPS = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
-	"DEPENDCFLAGS = -D_MACOSX_" \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
-
-CFLAGS 		= $(OPS) $(SYSOPS) $(INCLDIRS)
-DEPENDCFLAGS	= $(CFLAGS)
-
-target : $(LIBRARY)
-
-$(LIBRARY) : $(LIBOBJS)
-	$(RM) $(LIBRARY)
-	$(LODER) $(LIBRARY) $(LIBOBJS)
-	$(RANLIB) $(LIBRARY)
-	$(MVLIB)
-
-depend:: $(ALLSRCS)
-	makedepend -s "# DO NOT DELETE!!!" \
-		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) > /dev/null 2>&1
-
-clean:
-	touch dummy~
-	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) $(FTEST) $(CTEST) \
-		Makefile.bak fk2_base.bak *.out core *.core *~ #*# *.exe *.obj
-
-###
-%.o : %.cxx
-	$(CC) -c $(CFLAGS) $< -o $@
-
-%.obj : %.cxx
-	$(CC) $(CFLAGS) $<
-
-####################
+include ../makeinclude

@@ -93,21 +93,6 @@ fk_TextureDraw::fk_TextureDraw(void) : oldTexID(0)
 	SetArrayState(false);
 	SetBindMode(false);
 
-	ReleaseTexture = [](fk_Image *argImage) {
-		if(argImage->GetTexID() == 0) return;
-		for(_st i = 0; i < texNameArray.size(); i++) {
-			if(argImage->GetTexID() == texNameArray[i]) {
-				const fk_Dimension *bufSize = argImage->getBufferSize();
-				glDeleteTextures(1, &texNameArray[i]);
-				fk_Texture::ClearTexState(argImage);
-				texNameArray[i] = 0;
-				texImageArray[i] = nullptr;
-				texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
-				break;
-			}
-		}
-		return;
-	};
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
@@ -115,6 +100,23 @@ fk_TextureDraw::~fk_TextureDraw()
 	ClearTextureMemory();
 	return;
 }
+
+void fk_TextureDraw::ReleaseTexture_(fk_Image *argImage)
+{
+	if(argImage->GetTexID() == 0) return;
+	for(_st i = 0; i < texNameArray.size(); i++) {
+		if(argImage->GetTexID() == texNameArray[i]) {
+			const fk_Dimension *bufSize = argImage->getBufferSize();
+			glDeleteTextures(1, &texNameArray[i]);
+			fk_Texture::ClearTexState(argImage);
+			texNameArray[i] = 0;
+			texImageArray[i] = nullptr;
+			texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+			break;
+		}
+	}
+	return;
+}	
 
 void fk_TextureDraw::SetArrayState(bool argState)
 {
@@ -142,7 +144,7 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 	if(texObj->getBufferSize() == nullptr) return;
 
 	fk_Image		*image = texObj->getImage();
-	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture;
+	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture_;
 
 	// ピックモードが ON の場合
 	if(argPickFlag == true) {

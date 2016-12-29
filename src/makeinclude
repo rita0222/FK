@@ -52,7 +52,7 @@ all:
 fb:
 	$(MAKE) $(TARGET) \
 	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DFK_LIB_SRC" \
+	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
 	"DEPENDDIRS = $(INCLDIRS)" \
@@ -62,7 +62,7 @@ fb-g:
 	$(MAKE) $(TARGET) \
 	"GRAMOPT = -pedantic -std=c++1y" \
 	"OPTOPT = -g" \
-	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
+	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
 	"DEPENDDIRS = $(INCLDIRS)" \
@@ -72,7 +72,7 @@ fb-g:
 linux:
 	$(MAKE) $(TARGET) \
 	"GRAMOPT = -pedantic -std=c++14" \
-	"SYSOPT = -D_LINUX_ -DNO_GLU_LIBRARY" \
+	"SYSOPT = -D_LINUX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(LOCAL)/include" \
 	"DEPENDDIRS = $(INCLDIRS)" \
 	"RANLIB = ranlib"
@@ -97,9 +97,18 @@ ming-g:
 mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
-	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY" \
+	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
 	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"FKLIBS = $(FKLINK)" \
+	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+		-lvorbisfile -lvorbis -logg \
+		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa -framework OpenAL \
+		-framework ApplicationServices \
+		-framework OpenCL \
+		-framework Foundation \
+		-framework AudioToolBox" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -111,9 +120,18 @@ mac:
 mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
-	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY" \
-	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"FKLIBS = $(FKLINK_G)" \
+	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+		-lvorbisfile -lvorbis -logg \
+		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa -framework OpenAL \
+		-framework ApplicationServices \
+		-framework OpenCL \
+		-framework Foundation \
+		-framework AudioToolBox" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -130,9 +148,18 @@ mac-gcc:
 	"LINKCC = g++-mp-6" \
 	"GRAMOPT = -std=c++14" \
 	"OPTOPT = -O -pipe" \
-	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
-	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"FKLIBS = $(FKLINK)" \
+	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+		-lvorbisfile -lvorbis -logg \
+		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa -framework OpenAL \
+		-framework ApplicationServices \
+		-framework OpenCL \
+		-framework Foundation \
+		-framework AudioToolBox" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -147,9 +174,18 @@ mac-gcc-g:
 	"LINKCC = g++-mp-6" \
 	"OPTOPT = -g" \
 	"GRAMOPT = -std=c++14" \
-	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY" \
-	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
 	"FKLIBS = $(FKLINK_G)" \
+	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+		-lvorbisfile -lvorbis -logg \
+		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa -framework OpenAL \
+		-framework ApplicationServices \
+		-framework OpenCL \
+		-framework Foundation \
+		-framework AudioToolBox" \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
 		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
 	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
@@ -165,11 +201,14 @@ DEPENDCFLAGS	= $(CFLAGS)
 
 target : $(LIBRARY)
 
-$(LIBRARY) : $(LIBOBJS)
-	$(RM) $(LIBRARY)
+$(LIBRARY_S) : $(LIBOBJS)
+	$(RM) $(LIBRARY_S)
 	$(LOADER_S) $(LIBRARY_S) $(LIBOBJS)
-	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) $(LIBRARY_D) $(LIBOBJS)
 	$(RANLIB) $(LIBRARY_S)
+
+$(LIBRARY_D) : $(LIBOBJS)
+	$(RM) $(LIBRARY_D)
+	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) $(LIBRARY_D) $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \

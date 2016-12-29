@@ -2,7 +2,7 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
-BASE		= base math material shape model scene graphics util
+BASE		= base math material shape model scene graphics window util
 AUDIO		= audio
 OPENCL		= OpenCL
 SHADER		= shader
@@ -32,7 +32,6 @@ fb:
 		$(MAKE) fb TARGET=depend ; \
 		$(MAKE) fb ; \
 		cd .. ; done
-	cd fltk; $(MAKE) fb
 
 fb-g:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
@@ -41,7 +40,6 @@ fb-g:
 		$(MAKE) fb-g TARGET=depend ; \
 		$(MAKE) fb-g ; \
 		cd .. ; done
-	cd fltk; $(MAKE) fb-g
 
 linux:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
@@ -50,7 +48,6 @@ linux:
 		$(MAKE) linux TARGET=depend ; \
 		$(MAKE) linux ; \
 		cd .. ; done
-	cd fltk; $(MAKE) linux
 
 ming:
 	for sd in $(BASE) $(AUDIO) ; do \
@@ -59,7 +56,6 @@ ming:
 		$(MAKE) ming TARGET=depend ; \
 		$(MAKE) ming ; \
 		cd .. ; done
-	cd fltk; $(MAKE) ming
 
 ming-g:
 	for sd in $(BASE) $(AUDIO) ; do \
@@ -68,7 +64,6 @@ ming-g:
 		$(MAKE) ming-g TARGET=depend ; \
 		$(MAKE) ming-g ; \
 		cd .. ; done
-	cd fltk; $(MAKE) ming-g
 
 mac:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
@@ -77,7 +72,6 @@ mac:
 		$(MAKE) mac TARGET=depend ; \
 		$(MAKE) mac ; \
 		cd .. ; done
-	cd fltk; $(MAKE) mac
 
 mac-g:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
@@ -86,7 +80,6 @@ mac-g:
 		$(MAKE) mac-g TARGET=depend ; \
 		$(MAKE) mac-g ; \
 		cd .. ; done
-	cd fltk; $(MAKE) mac-g
 
 mac-gcc:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
@@ -95,7 +88,6 @@ mac-gcc:
 		$(MAKE) mac-gcc TARGET=depend ; \
 		$(MAKE) mac-gcc ; \
 		cd .. ; done
-	cd fltk; $(MAKE) mac-gcc
 
 mac-gcc-g:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
@@ -104,7 +96,6 @@ mac-gcc-g:
 		$(MAKE) mac-gcc-g TARGET=depend ; \
 		$(MAKE) mac-gcc-g ; \
 		cd .. ; done
-	cd fltk; $(MAKE) mac-gcc-g
 
 qt:
 	cd qt; $(MAKE) release MAKE=$(MAKE)
@@ -124,7 +115,6 @@ clean:
 		$(MAKE) clean -f Makefile.plane ; \
 		$(RM) Makefile ; \
 		cd .. ; done
-	cd fltk; $(MAKE) clean
 
 clean-qt:
 	cd qt; $(MAKE) clean

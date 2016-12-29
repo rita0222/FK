@@ -73,7 +73,7 @@ LIBRARY_S	= $(STATIC_DIR)/libFK3_shape.a
 LIBRARY_SG	= $(STATIC_DIR)/libFK3_shape_g.a
 LIBRARY_D	= $(DYNAMIC_DIR)/libFK3_shape.3.1.dylib
 LIBRARY_DG	= $(DYNAMIC_DIR)/libFK3_shape_g.3.1.dylib
-LIBRARY		= $(LIBRARY_S) 
+
 FKLINK		= \
 			-lFK3_base.3.1 \
 			-lFK3_math.3.1 \
@@ -83,13 +83,5 @@ FKLINK_G	= \
 			-lFK3_base_g.3.1 \
 			-lFK3_math_g.3.1 \
 			-lFK3_material_g.3.1
-
-SYSLIBS		= \
-			-lfreetype \
-			-lfltk_jpeg \
-			-lfltk_png \
-			-liconv \
-			-lbz2 \
-			-lz
 
 include ../makeinclude
