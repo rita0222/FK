@@ -16,7 +16,7 @@ LOADER_D_OPT	= -L. -dynamiclib -lc -o
 OPTOPT		= -O
 FKDEF		= -DFK_LIB_SRC
 SYSOPT		=
-GRAMOPT		= -pedantic -std=c++14 -DFK_LIB_SRC
+GRAMOPT		= -pedantic -std=c++14
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
