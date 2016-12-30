@@ -77,11 +77,7 @@
 #if defined(_FREEBSD_) || defined(_LINUX_)
 #include <png.h>
 #else
-#ifdef _MACOSX_
-#include <png.h>
-#else
 #include <png/png.h>
-#endif
 #endif
 
 #if defined(WIN32) && !defined(_MINGW_)
@@ -96,7 +92,7 @@ extern "C" {
 	#ifdef WIN32
 		#define HAVE_BOOLEAN
 	#endif
-	#if defined(_FREEBSD_) || defined(_LINUX_) || defined(_MACOSX_)
+	#if defined(_FREEBSD_) || defined(_LINUX_)
 		#include <jpeglib.h>
 	#else
 		#include "jpeg/jpeglib.h"

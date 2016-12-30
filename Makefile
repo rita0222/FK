@@ -9,9 +9,8 @@ all:
 	@echo " Linux: 			make linux"
 	@echo "	MingW:			make ming"
 	@echo "	MingW Debug:		make ming-g"
-	@echo "	MingW64:		make ming64"
-	@echo "	MingW64 Debug:		make ming64-g"
 	@echo "	MacOS X:		make mac"
+	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
@@ -44,17 +43,13 @@ ming-g:
 	cd src; $(MAKE) ming-g MAKE=make
 	cd samples; $(MAKE) ming-g MAKE=make
 
-ming64:
-	cd src; $(MAKE) ming64 MAKE=make
-	cd samples; $(MAKE) ming64 MAKE=make
-
-ming64-g:
-	cd src; $(MAKE) ming64-g MAKE=make
-	cd samples; $(MAKE) ming64-g MAKE=make
-
 mac:
 	cd src; $(MAKE) mac
 	cd samples; $(MAKE) mac
+
+mac-d:
+	cd src; $(MAKE) mac-d
+	cd samples; $(MAKE) mac-d
 
 mac-g:
 	cd src; $(MAKE) mac-g

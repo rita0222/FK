@@ -14,6 +14,7 @@ all:
 	@echo "	MingW:			make ming"
 	@echo "	MingW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
+	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
@@ -71,6 +72,14 @@ mac:
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac TARGET=depend ; \
 		$(MAKE) mac ; \
+		cd .. ; done
+
+mac-d:
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) mac-d TARGET=depend ; \
+		$(MAKE) mac-d ; \
 		cd .. ; done
 
 mac-g:

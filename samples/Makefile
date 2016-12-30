@@ -21,15 +21,14 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 POSTLINK	= :
 #
 
-SAMPLESRCS = $(shell /usr/bin/find . -maxdepth 1 -name "*.cxx" -print)
+SAMPLESRCS	= $(shell /usr/bin/find . -maxdepth 1 -name "*.cxx" -print)
 
-SAMPLE	= $(SAMPLESRCS:.cxx=)
-SAMPLEEXE = $(SAMPLESRCS:cxx=exe)
-SAMPLEAPPS = $(SAMPLESRCS:cxx=app)
+SAMPLE		= $(SAMPLESRCS:.cxx=)
+SAMPLEEXE	= $(SAMPLESRCS:cxx=exe)
+SAMPLEAPPS	= $(SAMPLESRCS:cxx=app)
+ALLSRCS		= $(SAMPLESRCS)
 
-ALLSRCS = $(SAMPLESRCS)
-
-VERNAME = 3.1
+VERNAME		= 3.1.1
 
 ###################
 
@@ -82,7 +81,6 @@ FKAUDIO_SG	= -lFK3_audio_g
 FKAUDIO_D	= -lFK3_audio.$(VERNAME)
 FKAUDIO_DG	= -lFK3_audio_g.$(VERNAME)
 
-
 FKOPENCL_S	= -lFK3_OpenCL
 FKOPENCL_SG	= -lFK3_OpenCL_g
 FKOPENCL_D	= -lFK3_OpenCL.$(VERNAME)
@@ -97,6 +95,13 @@ FKLINK		= $(FKLIB_S)
 LINK		= $(FKLINK) $(SYSLIBS)
 TARGET		= target
 OUTPUT		= -o $*
+
+FKTOP		= ..
+MACPACK		= $(FKTOP)/../FK_MacPack
+MACINCLUDE	= $(MACPACK)/include
+MACSYSLIB_S	= $(MACPACK)/lib/static
+MACSYSLIB_D	= $(MACPACK)/lib/dynamic
+
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -174,9 +179,9 @@ mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib/static -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -liconv -lfltk_gl.1.3 -lfltk.1.3 \
+	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
+	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S) -L/opt/local/lib" \
+	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework AGL -framework OpenGL \
@@ -194,11 +199,12 @@ mac-d:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib/dynamic -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
+	"LFLAGS = -L../lib/dynamic -L$(MACSYSLIB_D)" \
+	"SYSLIBS = -lfltk_gl.1.3 -lfltk.1.3 -liconv.8 \
+		-lvorbisfile.3 -lvorbis.0 -logg.0 \
+		-lpng16.16 -ljpeg.9 -lfreetype.6 \
+		-lz.1 -lbz2.1.0.6 \
 		-framework AGL -framework OpenGL \
 		-framework Cocoa -framework OpenAL \
 		-framework ApplicationServices \
@@ -214,8 +220,8 @@ mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib/static -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
+	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -236,8 +242,8 @@ mac-gcc:
 	"LINKCC = g++-mp-6" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
+	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -257,8 +263,8 @@ mac-gcc-g:
 	"LINKCC = g++-mp-6" \
 	"OPTOPT = -g" \
 	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I../../FK_MacPack/include -I$(OPTLOCAL)/include" \
-	"LFLAGS = -L../lib -L../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
+	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
@@ -287,7 +293,7 @@ clean:
 	$(LINKCC) $(SYSOPS) $(LFLAGS) $*.o $(LINK) -o $*
 	$(POSTLINK) $*
 	cp -r ../lib/dynamic $*.app/Contents/MacOS/lib
-	cp ../../FK_MacPack/lib/*.dylib $*.app/Contents/MacOS/lib
+	cp $(MACSYSLIB_D)/*.dylib $*.app/Contents/MacOS/lib
 
 .cxx :
 	$(CC) $(CFLAGS) $(LFLAGS) $< $(OUTPUT) $(LINK)

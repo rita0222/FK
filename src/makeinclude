@@ -5,7 +5,8 @@ SHELL = /bin/sh
 
 MAJORVERSION	= 3
 MINORVERSION	= 1
-VERNAME		= $(MAJORVERSION).$(MINORVERSION)
+PATCHVERSION	= 1
+VERNAME		= $(MAJORVERSION).$(MINORVERSION).$(PATCHVERSION)
 
 CC		= c++
 LINKCC		= c++
@@ -38,6 +39,11 @@ FKTOP		= ../..
 STATIC_DIR	= $(FKTOP)/lib/static
 DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
 
+MACPACK		= $(FKTOP)/../FK_MacPack
+MACINCLUDE	= $(MACPACK)/include
+MACSYSLIB_S	= $(MACPACK)/lib/static
+MACSYSLIB_D	= $(MACPACK)/lib/dynamic
+
 LIBNAME_S	= libFK3_$(BASENAME).a
 LIBNAME_SG	= libFK3_$(BASENAME)_g.a
 LIBNAME_D	= libFK3_$(BASENAME).$(VERNAME).dylib
@@ -59,6 +65,7 @@ all:
 	@echo "	MinGW:			make ming"
 	@echo "	MinGW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
+	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
@@ -112,48 +119,49 @@ mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
 	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LIBRARY = $(LIBRARY_S)" \
+	"RANLIB = ranlib"
+
+mac-d:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = -L$(DYNAMIC_DIR) -L$(MACSYSLIB_D)" \
 	"FKLIBS = $(FKLINK)" \
-	"SYSLIBS = -liconv -lfltk_gl.1.3 -lfltk.1.3 \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
+	"SYSLIBS = -lfltk_gl.1.3 -lfltk.1.3 \
+		-lvorbisfile.3 -lvorbis.0 -logg.0 \
+		-liconv.8 -lpng16.16 -ljpeg.9 -lfreetype.6 -lz.1 -lbz2.1.0.6 \
 		-framework AGL -framework OpenGL \
 		-framework Cocoa -framework OpenAL \
 		-framework ApplicationServices \
 		-framework OpenCL \
 		-framework Foundation \
 		-framework AudioToolBox" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LIBRARY = $(LIBRARY_S) $(LIBRARY_D)" \
+	"LIBRARY = $(LIBRARY_D)" \
 	"RANLIB = ranlib"
 
 mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
 	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"FKLIBS = $(FKLINK_G)" \
-	"SYSLIBS = -liconv -lfltk_gl.1.3 -lfltk.1.3 \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
-		-framework ApplicationServices \
-		-framework OpenCL \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"LIBRARY_S = $(LIBRARY_SG)" \
 	"LIBRARY_D = $(LIBRARY_DG)" \
-	"LIBRARY = $(LIBRARY_SG) $(LIBRARY_DG)" \
+	"LIBRARY = $(LIBRARY_SG)" \
 	"RANLIB = ranlib"
 
 mac-gcc:
@@ -163,23 +171,13 @@ mac-gcc:
 	"GRAMOPT = -std=c++14" \
 	"OPTOPT = -O -pipe" \
 	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"FKLIBS = $(FKLINK)" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
-		-framework ApplicationServices \
-		-framework OpenCL \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LIBRARY = $(LIBRARY_S) $(LIBRARY_D)" \
+	"LIBRARY = $(LIBRARY_S)" \
 	"RANLIB = ranlib"
 
 mac-gcc-g:
@@ -189,25 +187,15 @@ mac-gcc-g:
 	"OPTOPT = -g" \
 	"GRAMOPT = -std=c++14" \
 	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = -L$(DYNAMIC_DIR) -L../../../FK_MacPack/lib -L$(OPTLOCAL)/lib" \
-	"FKLIBS = $(FKLINK_G)" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
-		-framework ApplicationServices \
-		-framework OpenCL \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include -I$(OPTLOCAL)/include/freetype2" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_MacPack/include \
-		-I$(OPTLOCAL)/include" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
 	"DEPENDCFLAGS = -D_MACOSX_" \
 	"LIBRARY_S = $(LIBRARY_SG)" \
 	"LIBRARY_D = $(LIBRARY_DG)" \
-	"LIBRARY = $(LIBRARY_SG) $(LIBRARY_DG)" \
+	"LIBRARY = $(LIBRARY_SG)" \
 	"RANLIB = ranlib"
 
 CFLAGS 		= $(OPS) $(FKDEF) $(SYSOPT) $(INCLDIRS)
@@ -223,7 +211,10 @@ $(LIBRARY_S) : $(LIBOBJS)
 $(LIBRARY_D) : $(LIBOBJS)
 	$(RM) $(LIBRARY_D)
 	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) \
-		-install_name @executable_path/lib/$(LIBNAME_D) -o $(LIBRARY_D) $(LIBOBJS)
+		-install_name @executable_path/lib/$(LIBNAME_D) \
+		-current_version $(VERNAME) \
+		-compatibility_version $(MAJORVERSION).$(MINORVERSION).0 \
+		-o $(LIBRARY_D) $(LIBOBJS)
 
 depend:: $(ALLSRCS)
 	makedepend -s "# DO NOT DELETE!!!" \
