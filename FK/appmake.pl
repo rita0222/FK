@@ -1,10 +1,17 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
-if($#ARGV != 0) {
-    die "Usage: $0 exefile\n";
-}
+use Getopt::Std;
 
-$exefile = $ARGV[0];
+%opts = ();
+
+getopts("s", \%opts);
+
+if($opts{"s"} == 1) {
+	$sysLibDir = $ARGV[0];
+	$exefile = $ARGV[1];
+} else {
+	$exefile = $ARGV[0];
+}	
 
 die "Not Regular Exefile: $exefile\n" unless -f $exefile;
 die "Not Execute File: $exefile\n" unless -x $exefile;
@@ -71,3 +78,12 @@ print PKGINFO "APPL????\n";
 close(PKGINFO);
 
 system("mv $exefile $toCopy");
+
+if($opts{"s"} == 1) {
+	$sysLibDir = $ARGV[0];
+	$libDir = $macOsDir . '/lib';
+	system("cp -r ../lib/dynamic $libDir");
+	system("cp $sysLibDir/*.dylib $libDir");
+}
+
+0;

@@ -191,7 +191,7 @@ mac:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
+	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -212,9 +212,9 @@ mac-d:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKAUDIO_D) $(FKSHADER_D) $(FKLIB_D)" \
+	"FKLINK = $(FKOPENCL_D) $(FKAUDIO_D) $(FKSHADER_D) $(FKLIB_D)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
-	"POSTLINK = ../FK/appmake.pl"
+	"POSTLINK = ../FK/appmake.pl -s $(MACSYSLIB_D)"
 
 mac-g:
 	$(MAKE) $(TARGET) \
@@ -232,7 +232,7 @@ mac-g:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_SG)" \
+	"FKLINK = $(FKOPENCL_SG) $(FKAUDIO_SG) $(FKSHADER_SG) $(FKLIB_SG)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
@@ -253,9 +253,8 @@ mac-gcc:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_S)" \
-	"SAMPLE = $(SAMPLEAPPS)" \
-	"POSTLINK = ../FK/appmake.pl"
+	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
+	"SAMPLE = $(SAMPLEAPPS)"
 
 mac-gcc-g:
 	$(MAKE) $(TARGET) \
@@ -274,9 +273,8 @@ mac-gcc-g:
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_SG)" \
-	"SAMPLE = $(SAMPLEAPPS)" \
-	"POSTLINK = ../FK/appmake.pl"
+	"FKLINK = $(FKOPENCL_SG) $(FKAUDIO_SG) $(FKSHADER_SG) $(FKLIB_SG)" \
+	"SAMPLE = $(SAMPLEAPPS)"
 
 CFLAGS = $(OPS) $(SYSOPS) $(INCLDIRS)
 
@@ -292,8 +290,6 @@ clean:
 	$(CC) -c $(CFLAGS) $< -o $*.o
 	$(LINKCC) $(SYSOPS) $(LFLAGS) $*.o $(LINK) -o $*
 	$(POSTLINK) $*
-	cp -r ../lib/dynamic $*.app/Contents/MacOS/lib
-	cp $(MACSYSLIB_D)/*.dylib $*.app/Contents/MacOS/lib
 
 .cxx :
 	$(CC) $(CFLAGS) $(LFLAGS) $< $(OUTPUT) $(LINK)
