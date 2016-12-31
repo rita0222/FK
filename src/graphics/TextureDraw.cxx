@@ -104,7 +104,7 @@ fk_TextureDraw::~fk_TextureDraw()
 void fk_TextureDraw::ReleaseTexture_(fk_Image *argImage)
 {
 	if(argImage->GetTexID() == 0) return;
-	for(_st i = 0; i < texNameArray.size(); i++) {
+	for(_st i = 0; i < texNameArray.size(); ++i) {
 		if(argImage->GetTexID() == texNameArray[i]) {
 			const fk_Dimension *bufSize = argImage->getBufferSize();
 			glDeleteTextures(1, &texNameArray[i]);
@@ -320,7 +320,7 @@ void fk_TextureDraw::DrawTriTextureObj(fk_TriTexture *argTexObj)
 	glBegin(GL_TRIANGLES);
 
 	glNormal3dv((GLdouble *)&(norm.x));
-	for(counter = 0; counter < 3; counter++) {
+	for(counter = 0; counter < 3; ++counter) {
 		glTexCoord2f(coord[counter].x * float(wScale),
 					 coord[counter].y * float(hScale));
 		glVertex3d(pos[counter].x,
@@ -359,7 +359,7 @@ void fk_TextureDraw::DrawMeshTextureObj(fk_MeshTexture *argTexObj)
 	coordArray = argTexObj->getCoord();
 
 	glBegin(GL_TRIANGLES);
-	for(ii = 0; ii < static_cast<_st>(triNum); ii++) {
+	for(ii = 0; ii < static_cast<_st>(triNum); ++ii) {
 		norm = (posArray[ii*3 + 1] - posArray[ii*3]) ^
 				(posArray[ii*3 + 2] - posArray[ii*3]);
 		if(norm.normalize() == false) {
@@ -369,7 +369,7 @@ void fk_TextureDraw::DrawMeshTextureObj(fk_MeshTexture *argTexObj)
 		}
 						
 		glNormal3dv(static_cast<GLdouble *>(&(norm.x)));
-		for(ij = 0; ij < 3; ij++) {
+		for(ij = 0; ij < 3; ++ij) {
 			glTexCoord2f((*coordArray)[ii*3+ij].x * static_cast<float>(wScale),
 						 (*coordArray)[ii*3+ij].y * static_cast<float>(hScale));
 			glVertex3dv(static_cast<GLdouble *>(&(posArray[ii*3+ij].x)));
@@ -430,8 +430,8 @@ void fk_TextureDraw::DrawIFSTextureObj(fk_IFSTexture *argTexObj)
 					   GL_UNSIGNED_INT, &ifsP->ifs[0]);
 	} else {
 		glBegin(tmpType);
-		for(_st ii = 0; ii < static_cast<_st>(ifsP->faceSize); ii++) {
-			for(_st ij = 0; ij < pNum; ij++) {
+		for(_st ii = 0; ii < static_cast<_st>(ifsP->faceSize); ++ii) {
+			for(_st ij = 0; ij < pNum; ++ij) {
 				_st index = static_cast<_st>(ifsP->ifs[pNum*ii+ij]);
 				glNormal3fv((GLfloat *)&(ifsP->vNorm[index]));
 				glTexCoord2fv((GLfloat *)&texCoord[index]);
@@ -519,7 +519,7 @@ void fk_TextureDraw::ReplaceTextureObj(fk_Texture *argTexObj)
 							GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
 		} else {	// 指定されていたら部分更新
 			subBuffer.resize(static_cast<_st>(tmpRect.w*tmpRect.h*4));
-			for(int i = 0; i < tmpRect.h; i++) {
+			for(int i = 0; i < tmpRect.h; ++i) {
 				memcpy(&(subBuffer[static_cast<_st>((tmpRect.h-i-1)*tmpRect.w*4)]),
 					   imageBuf+((imageSize->h - (tmpRect.y+i) - 1)*bufSize->w + tmpRect.x)*4,
 					   static_cast<size_t>(tmpRect.w*4));
@@ -547,7 +547,7 @@ void fk_TextureDraw::ClearTextureMemory(void)
 {
 	if(texNameArray.empty() == false) {
 		glDeleteTextures(static_cast<GLsizei>(texNameArray.size()), &texNameArray[0]);
-		for(_st i = 0; i < texImageArray.size(); i++) {
+		for(_st i = 0; i < texImageArray.size(); ++i) {
 			if(texImageArray[i] == nullptr) continue;
 			fk_Texture::ClearTexState(texImageArray[i]);
 		}
@@ -562,25 +562,6 @@ unsigned long fk_TextureDraw::GetUsingTextureMemory(void)
 {
 	return texLoadedSize;
 }
-
-/*
-void fk_TextureDraw::ReleaseTexture(fk_Image *argImage)
-{
-	if(argImage->GetTexID() == 0) return;
-	for(_st i = 0; i < texNameArray.size(); i++) {
-		if(argImage->GetTexID() == texNameArray[i]) {
-			const fk_Dimension *bufSize = argImage->getBufferSize();
-			glDeleteTextures(1, &texNameArray[i]);
-			fk_Texture::ClearTexState(argImage);
-			texNameArray[i] = 0;
-			texImageArray[i] = nullptr;
-			texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
-			break;
-		}
-	}
-	return;
-}
-*/
 
 void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 {
@@ -684,7 +665,7 @@ void fk_TextureDraw::DrawTriTexturePick(fk_TriTexture *argTexObj)
 	glPushName(0);
 	glBegin(GL_TRIANGLES);
 
-	for(counter = 0; counter < 3; counter++) {
+	for(counter = 0; counter < 3; ++counter) {
 		glVertex3d(pos[counter].x,
 				   pos[counter].y,
 				   pos[counter].z);
@@ -713,11 +694,11 @@ void fk_TextureDraw::DrawMeshTexturePick(fk_MeshTexture *argTexObj)
 
 	posArray = &(argTexObj->getPos()->at(0));
 
-	for(ii = 0; ii < static_cast<_st>(triNum); ii++) {
+	for(ii = 0; ii < static_cast<_st>(triNum); ++ii) {
 		glPushName(static_cast<GLuint>(ii*3));
 		glBegin(GL_TRIANGLES);
 
-		for(ij = 0; ij < 3; ij++) {
+		for(ij = 0; ij < 3; ++ij) {
 			glVertex3dv(static_cast<GLdouble *>(&(posArray[ii*3+ij].x)));
 		}
 
@@ -754,10 +735,10 @@ void fk_TextureDraw::DrawIFSTexturePick(fk_IFSTexture *argObj)
 	pos = &ifsP->pos[0];
 	ifs = &ifsP->ifs[0];
 
-	for(ii = 0; ii < ifsP->faceSize; ii++) {
+	for(ii = 0; ii < ifsP->faceSize; ++ii) {
 		glPushName(static_cast<GLuint>(ii*3));
 		glBegin(GL_POLYGON);
-		for(ij = 0; ij < pNum; ij++) {
+		for(ij = 0; ij < pNum; ++ij) {
 			glVertex3fv(static_cast<GLfloat *>(&pos[ifs[pNum*ii+ij]].x));
 		}
 		glEnd();
