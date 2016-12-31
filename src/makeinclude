@@ -72,23 +72,33 @@ all:
 
 fb:
 	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
 	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
+		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
 	"DEPENDDIRS = $(INCLDIRS)" \
+	"LIBRARY = $(LIBRARY_S)" \
 	"RANLIB = ranlib"
 
 fb-g:
 	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++1y" \
 	"OPTOPT = -g" \
-	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"GRAMOPT = -pedantic -std=c++1y" \
+	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
+		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2 " \
+		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
 	"DEPENDDIRS = $(INCLDIRS)" \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
+	"LIBRARY = $(LIBRARY_G)" \
+	"RANLIB = ranlib"
 
 linux:
 	$(MAKE) $(TARGET) \
