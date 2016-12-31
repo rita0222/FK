@@ -27,7 +27,7 @@ all:
 	@echo "	Qt-Mac-Clean:		make clean-mac"
 
 fb:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) fb TARGET=depend ; \
@@ -35,7 +35,7 @@ fb:
 		cd .. ; done
 
 fb-g:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) fb-g TARGET=depend ; \
