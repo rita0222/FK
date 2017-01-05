@@ -1,4 +1,4 @@
-﻿// B に入っている3次元座標配列の大きさを A に格納するサンプル
+// B に入っている3次元座標配列の大きさを A に格納するサンプル
 
 float myDist(float3);
 __kernel void fk_OpenCL(__global float *, __global float *);
