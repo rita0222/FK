@@ -141,7 +141,11 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 	}
 	
 	//-- command_queueの作成
+#ifdef _MACOSX_
 	command_queue = clCreateCommandQueue(context, testdevid, 0, nullptr);
+#else
+	command_queue = clCreateCommandQueueWithProperties(context, testdevid, 0, nullptr);
+#endif
 	
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clCreateCmmandQueue()");
