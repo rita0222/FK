@@ -129,7 +129,7 @@ fb:
 		-lfreetype -lGL \
 		-lXft -lfontconfig -lXinerama -lpthread \
 		-lXext -lX11 -lz -lbz2 -lm" \
-	"FKLINK = $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)"
+	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)"
 
 fb-d:
 	$(MAKE) $(TARGET) \
