@@ -2,14 +2,16 @@
 
 class InnerModel : public ::fk_Model
 {
-public:
-	void(*pPreShader)();
-	void(*pPostShader)();
+private:
+	using callback_type = void(__stdcall *)(void);
+	callback_type pPreShader;
+	callback_type pPostShader;
 
+public:
 	InnerModel(void* pre, void* post)
 	{
-		pPreShader = (void(__cdecl *)(void))pre;
-		pPostShader = (void(__cdecl *)(void))post;
+		pPreShader = (callback_type)pre;
+		pPostShader = (callback_type)post;
 	};
 
 	void preShader()

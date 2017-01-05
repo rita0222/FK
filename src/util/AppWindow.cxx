@@ -85,14 +85,15 @@ using namespace FK::Material;
 class InnerWindow : public ::fk_Window
 {
 private:
-	void(*pPreInit)();
-	void(*pPostInit)();
-	void(*pPreDraw)();
-	void(*pPostDraw)();
-	void(*pPreDrawLeft)();
-	void(*pPostDrawLeft)();
-	void(*pPreDrawRight)();
-	void(*pPostDrawRight)();
+	using callback_type = void(__stdcall *)(void);
+	callback_type pPreInit;
+	callback_type pPostInit;
+	callback_type pPreDraw;
+	callback_type pPostDraw;
+	callback_type pPreDrawLeft;
+	callback_type pPostDrawLeft;
+	callback_type pPreDrawRight;
+	callback_type pPostDrawRight;
 
 public:
 #ifdef _WIN64
@@ -107,14 +108,14 @@ public:
 		int w = 300, int h = 300, std::string name = "FK Window") : fk_Window(x, y, w, h, name)
 #endif
 	{
-		pPreInit = (void(__cdecl *)(void))argCallbacks[0];
-		pPostInit = (void(__cdecl *)(void))argCallbacks[1];
-		pPreDraw = (void(__cdecl *)(void))argCallbacks[2];
-		pPostDraw = (void(__cdecl *)(void))argCallbacks[3];
-		pPreDrawLeft = (void(__cdecl *)(void))argCallbacks[4];
-		pPostDrawLeft = (void(__cdecl *)(void))argCallbacks[5];
-		pPreDrawRight = (void(__cdecl *)(void))argCallbacks[6];
-		pPostDrawRight = (void(__cdecl *)(void))argCallbacks[7];
+		pPreInit = (callback_type)argCallbacks[0];
+		pPostInit = (callback_type)argCallbacks[1];
+		pPreDraw = (callback_type)argCallbacks[2];
+		pPostDraw = (callback_type)argCallbacks[3];
+		pPreDrawLeft = (callback_type)argCallbacks[4];
+		pPostDrawLeft = (callback_type)argCallbacks[5];
+		pPreDrawRight = (callback_type)argCallbacks[6];
+		pPostDrawRight = (callback_type)argCallbacks[7];
 	};
 
 	void preInit() { pPreInit(); };
