@@ -105,6 +105,7 @@ MACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
 all:
 	@echo "	FreeBSD:		make fb"
+	@echo "	FreeBSD Dynamic:	make fb-d"
 	@echo "	FreeBSD Debug:		make fb-g"
 	@echo "	Linux:			make linux"
 	@echo "	MingW:			make ming"
@@ -122,13 +123,29 @@ fb:
 		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
 	"INCLDIRS = -I. -I.. -I../../FK_BSDPack/include -I$(LOCAL)/include" \
 	"LFLAGS = -L../lib/static -L../../FK_BSDPack/lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv -lopenal -lvorbisfile -lvorbis -logg \
+	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
 		-lfltk_gl -lfltk \
 		-ljpeg -lpng \
 		-lfreetype -lGL \
 		-lXft -lfontconfig -lXinerama -lpthread \
 		-lXext -lX11 -lz -lbz2 -lm" \
 	"FKLINK = $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)"
+
+fb-d:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"GRAMOPT = -pedantic -std=c++1y" \
+	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
+		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"INCLDIRS = -I. -I.. -I../../FK_BSDPack/include -I$(LOCAL)/include" \
+	"LFLAGS = -L../lib/dynamic -L../../FK_BSDPack/lib -L$(LOCAL)/lib" \
+	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
+		-lfltk_gl -lfltk \
+		-ljpeg -lpng \
+		-lfreetype -lGL \
+		-lXft -lfontconfig -lXinerama -lpthread \
+		-lXext -lX11 -lz -lbz2 -lm" \
+	"FKLINK = $(FKAUDIO_D) $(FKOPENCL_D) $(FKSHADER_D) $(FKLIB_D)"
 
 fb-g:
 	$(MAKE) $(TARGET) \
@@ -137,8 +154,7 @@ fb-g:
 	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I../../FK_BSDPack/include -I$(LOCAL)/include" \
 	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv \
-		-lopenal -lvorbisfile -lvorbis -logg \
+	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
 		-lfltk_images -lfltk_forms -lfltk_gl -lfltk \
 		-ljpeg -lpng \
 		-lfreetype -lGL \

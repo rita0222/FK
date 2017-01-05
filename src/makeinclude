@@ -17,7 +17,10 @@ AR		= ar
 AROPS		= cq
 LOADER_S	= $(AR) $(AROPS)
 LOADER_D	= $(CC)
-LOADER_D_OPT	= -L. -dynamiclib -lc
+LOADER_D_OPT	= -L. -dynamiclib -lc \
+			-install_name @executable_path/lib/$(LIBNAME_D) \
+			-current_version $(VERNAME) \
+			-compatibility_version $(MAJORVERSION).$(MINORVERSION).0
 OPTOPT		= -O
 FKDEF		= -DFK_LIB_SRC
 SYSOPT		=
@@ -44,10 +47,12 @@ MACINCLUDE	= $(MACPACK)/include
 MACSYSLIB_S	= $(MACPACK)/lib/static
 MACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
+DLPRE		= dylib
+
 LIBNAME_S	= libFK3_$(BASENAME).a
 LIBNAME_SG	= libFK3_$(BASENAME)_g.a
-LIBNAME_D	= libFK3_$(BASENAME).$(VERNAME).dylib
-LIBNAME_DG	= libFK3_$(BASENAME)_g.$(VERNAME).dylib
+LIBNAME_D	= libFK3_$(BASENAME).$(VERNAME).$(DLPRE)
+LIBNAME_DG	= libFK3_$(BASENAME)_g.$(VERNAME).$(DLPRE)
 
 LIBRARY_S	= $(STATIC_DIR)/$(LIBNAME_S)
 LIBRARY_SG	= $(STATIC_DIR)/$(LIBNAME_SG)
@@ -60,6 +65,7 @@ OPTLOCAL	= /opt/local
 
 all:
 	@echo "	FreeBSD:		make fb"
+	@echo "	FreeBSD Dynamic:	make fb-d"
 	@echo "	FreeBSD Debug:		make fb-g"
 	@echo "	Linux:			make linux"
 	@echo "	MinGW:			make ming"
@@ -83,6 +89,31 @@ fb:
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
 	"DEPENDDIRS = $(INCLDIRS)" \
 	"LIBRARY = $(LIBRARY_S)" \
+	"RANLIB = ranlib"
+
+fb-d:
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"GRAMOPT = -pedantic -std=c++1y" \
+	"SYSOPT = -fPIC -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
+		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"LFLAGS = -L$(DYNAMIC_DIR)" \
+	"FKLIBS = $(FKLINK)" \
+	"DLPRE = so" \
+	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
+		-lfltk_gl -lfltk \
+		-ljpeg -lpng \
+		-lfreetype -lGL \
+		-lXft -lfontconfig -lXinerama -lpthread \
+		-lXext -lX11 -lz -lbz2 -lm" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
+		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
+	"DEPENDDIRS = $(INCLDIRS)" \
+	"LIBRARY_D = $(DYNAMIC_DIR)/libFK3_$(BASENAME).$(VERNAME).so" \
+	"LIBRARY = $(DYNAMIC_DIR)/libFK3_$(BASENAME).$(VERNAME).so" \
+	"LOADER_D_OPT = -L. -L$(LOCAL)/lib -shared \
+		-Wl,-no-undefined -Wl,-Bsymbolic-functions \
+		-Wl,-gc-sections -Wl,-soname,libFK3_$(BASENAME).$(VERNAME).so" \
 	"RANLIB = ranlib"
 
 fb-g:
@@ -221,9 +252,6 @@ $(LIBRARY_S) : $(LIBOBJS)
 $(LIBRARY_D) : $(LIBOBJS)
 	$(RM) $(LIBRARY_D)
 	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) \
-		-install_name @executable_path/lib/$(LIBNAME_D) \
-		-current_version $(VERNAME) \
-		-compatibility_version $(MAJORVERSION).$(MINORVERSION).0 \
 		-o $(LIBRARY_D) $(LIBOBJS)
 
 depend:: $(ALLSRCS)

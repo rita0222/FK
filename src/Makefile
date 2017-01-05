@@ -9,6 +9,7 @@ SHADER		= shader
 
 all:
 	@echo "	FreeBSD:		make fb"
+	@echo "	FreeBSD Dynamic:	make fb-d"
 	@echo "	FreeBSD Debug:		make fb-g"
 	@echo "	Linux:			make linux"
 	@echo "	MingW:			make ming"
@@ -32,6 +33,14 @@ fb:
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) fb TARGET=depend ; \
 		$(MAKE) fb ; \
+		cd .. ; done
+
+fb-d:
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
+		cd $$sd ; \
+		$(CP) Makefile.plane Makefile ; \
+		$(MAKE) fb-d TARGET=depend ; \
+		$(MAKE) fb-d ; \
 		cd .. ; done
 
 fb-g:
