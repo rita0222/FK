@@ -82,6 +82,8 @@ fk_Surface::fk_Surface(void)
 	posCache.clear();
 	normCache.clear();
 
+	pos_ = [](double, double) {return fk_Vector(0.0, 0.0, 0.0);};
+
 	return;
 }
 
