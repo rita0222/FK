@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK3_shape", "FK3_shape.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK3_solid", "FK3_solid.vcxproj", "{80D09435-C1F9-44B4-90D0-5E13B586CA08}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK3_shader", "FK3_shader.vcxproj", "{20CEA45E-407A-429E-AC8F-0B3073AA3870}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -141,6 +143,14 @@ Global
 		{80D09435-C1F9-44B4-90D0-5E13B586CA08}.Release|Win32.Build.0 = Release|Win32
 		{80D09435-C1F9-44B4-90D0-5E13B586CA08}.Release|x64.ActiveCfg = Release|x64
 		{80D09435-C1F9-44B4-90D0-5E13B586CA08}.Release|x64.Build.0 = Release|x64
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Debug|Win32.ActiveCfg = Debug|Win32
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Debug|Win32.Build.0 = Debug|Win32
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Debug|x64.ActiveCfg = Debug|x64
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Debug|x64.Build.0 = Debug|x64
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Release|Win32.ActiveCfg = Release|Win32
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Release|Win32.Build.0 = Release|Win32
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Release|x64.ActiveCfg = Release|x64
+		{20CEA45E-407A-429E-AC8F-0B3073AA3870}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

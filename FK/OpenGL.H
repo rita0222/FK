@@ -7,6 +7,7 @@
 #else // _MACOSX_
 #if defined(WIN32) && !defined(_MINGW_)
 #include <windows.h>
+#include <GL/glew.h>
 #endif // WIN32
 #include <GL/gl.h>
 #include <GL/glext.h>
