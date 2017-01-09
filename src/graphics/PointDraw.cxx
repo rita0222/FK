@@ -256,6 +256,10 @@ void fk_PointDraw::DrawShapePointMaterial(fk_Model *argObj)
 
 	  case FK_SHAPE_SOLID:
 		DrawSolidPointMaterial(argObj);
+		break;
+
+	  case FK_SHAPE_CURVE:
+	  case FK_SHAPE_SURFACE:
 
 	  default:
 		break;

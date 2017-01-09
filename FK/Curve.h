@@ -1,8 +1,8 @@
 ﻿#ifndef __FK_CURVE_HEADER__
 #define __FK_CURVE_HEADER__
 
-#include <FK/Base.h>
 #include <FK/Vector.h>
+#include <FK/Shape.h>
 
 namespace FK {
 
@@ -22,7 +22,7 @@ namespace FK {
 	 *
 	 *	\sa fk_Edge, fk_BezCurve, fk_BSplCurve, fk_Surface
 	 */
-	class fk_Curve : public fk_BaseObject {
+	class fk_Curve : public fk_Shape {
 
 		friend class				fk_LineDraw;
 

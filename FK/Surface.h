@@ -1,8 +1,8 @@
 ﻿#ifndef __FK_SURFACE_HEADER__
 #define __FK_SURFACE_HEADER__
 
-#include <FK/Base.h>
 #include <FK/Vector.h>
+#include <FK/Shape.h>
 
 namespace FK {
 
@@ -25,7 +25,7 @@ namespace FK {
 	 *	\sa fk_Loop, fk_Curve
 	 */ 
 
-	class fk_Surface : public fk_BaseObject {
+	class fk_Surface : public fk_Shape {
 
 		friend class		fk_Window;
 

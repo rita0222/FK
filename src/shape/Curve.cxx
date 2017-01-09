@@ -73,10 +73,10 @@
 
 using namespace std;
 
-fk_Curve::fk_Curve(void)
+fk_Curve::fk_Curve(void) :
+	changeFlg(true), div(-1)
 {
-	div = -1;
-	changeFlg = true;
+	SetObjectType(FK_CURVE);
 	posCache.clear();
 	diffCache.clear();
 

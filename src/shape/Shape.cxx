@@ -189,6 +189,16 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_PARTICLESET:
 		return FK_SHAPE_POINT;
 
+	  case FK_CURVE:
+	  case FK_BEZCURVE:
+	  case FK_BSPLCURVE:
+		return FK_SHAPE_CURVE;
+
+	  case FK_SURFACE:
+	  case FK_BEZSURFACE:
+	  case FK_BSPLSURFACE:
+		return FK_SHAPE_SURFACE;
+		
 	  case FK_LIGHT:
 		return FK_SHAPE_LIGHT;
 

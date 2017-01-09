@@ -16,6 +16,16 @@ VER3_1_0:
 	= fk_AppWindow で、カメラがデフォルトでなくてもトラックボールモードが
 		有効となるように仕様変更。
 
+	= C++版で名前空間を導入。
+
+	= libFK3_parser と libFK3_solid を libFK3_shape に統合。
+
+	- fk_BVHMotion を libFK3_shape から libFK3_model に移行。
+
+	- WindowError_fltk.cxx を廃止。それに伴い、src/window のディレクトリ構成を変更。
+
+	- fk_Curve, fk_Surface の基底を fk_Shape に変更。それに伴い、描画関連も対応。
+
 ============================================================================
 VER3_0_0: (12/3, '15)
 	- C++11 に対応。

@@ -23,16 +23,18 @@ namespace FK {
 		void			DrawShapePointMaterial(fk_Model *);
 		void			DrawIFSPointMaterial(fk_Model *);
 		void			DrawParticlePointMaterial(fk_Model *);
-		void			DrawShapePointPick(fk_Model *);
 		void			DrawSolidPointMaterial(fk_Model *);
 		int				DrawSolidPointMaterialElem(fk_Vertex *, int,
 												   int, double,
 												   std::vector<fk_Material> *,
 												   fk_Color *);
+
+		void			DrawShapePointPick(fk_Model *);
 		void			DrawIFSPointPick(fk_Model *);
 		void			DrawParticlePointPick(fk_Model *);
 		void			DrawSolidPointPick(fk_Model *);
 		void			DrawSolidPointPickElem(fk_Vertex *);
+
 		void			DrawShapePointNormal(fk_Model *, bool);
 		void			DrawIFSPointNormal(fk_Model *, bool);
 		void			DrawParticlePointNormal(fk_Model *, bool);

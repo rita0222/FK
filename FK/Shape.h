@@ -12,6 +12,8 @@ namespace FK {
 		FK_SHAPE_SOLID,		//!<	fk_Solidベース
 		FK_SHAPE_TEXTURE,	//!<	fk_Textureベース
 		FK_SHAPE_POINT,		//!<	fk_Pointベース
+		FK_SHAPE_CURVE,		//!<	fk_Curveベース
+		FK_SHAPE_SURFACE,	//!<	fk_Surface ベース
 		FK_SHAPE_LIGHT,		//!<	fk_Lightベース
 		FK_SHAPE_OTHER		//!<	その他
 	};

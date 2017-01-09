@@ -75,14 +75,12 @@
 
 using namespace std;
 
-fk_Surface::fk_Surface(void)
+fk_Surface::fk_Surface(void) :
+	changeFlg(true), div(-1)
 {
-	div = -1;
-	changeFlg = true;
+	SetObjectType(FK_SURFACE);
 	posCache.clear();
 	normCache.clear();
-
-	pos_ = [](double, double) {return fk_Vector(0.0, 0.0, 0.0);};
 
 	return;
 }
@@ -167,7 +165,7 @@ void fk_Surface::makeNormCache(bool argSmoothFlg)
 	int			i, j;
 	fk_Vector	tmpV1, tmpV2, tmpV3, tmpNorm;
 
-	if(changeFlg == false && smoothFlg == argSmoothFlg) return;
+	if(smoothFlg == argSmoothFlg) return;
 
 	normCache.clear();
 

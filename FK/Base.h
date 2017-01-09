@@ -66,8 +66,10 @@ namespace FK {
 		FK_CONE,			//!<	fk_Cone 型
 		FK_INDEXFACESET,	//!<	fk_IndexFaceSet 型
 		FK_LIGHT,			//!<	fk_Light 型
+		FK_CURVE,			//!<	fk_Curve 型
 		FK_BEZCURVE,		//!<	fk_BezCurve 型
 		FK_BSPLCURVE,		//!<	fk_BSplCurve 型
+		FK_SURFACE,			//!<	fk_Surface 型
 		FK_BEZSURFACE,		//!<	fk_BezSurface 型
 		FK_BSPLSURFACE,		//!<	fk_BSplSurface 型
 		FK_IMAGE,			//!<	fk_Image 型
