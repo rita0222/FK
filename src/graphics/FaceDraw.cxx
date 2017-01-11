@@ -302,11 +302,11 @@ void fk_FaceDraw::DrawIFSFacePick(fk_Model *argObj)
 
 void fk_FaceDraw::DrawSurfaceFacePick(fk_Model *argObj)
 {
-	_st div = static_cast<_st>(argSurf->getDiv());
+	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
+	_st div = static_cast<_st>(surf->getDiv());
 
-	argSurf->makeCache();
-	auto pArray = argSurf->getPosCache();
-	auto nArray = argSurf->getNormCache();
+	surf->makeCache();
+	auto pArray = surf->getPosCache();
 	GLuint count = 0;
 
 	for(_st i = 0; i < div; ++i) {
