@@ -25,20 +25,27 @@ namespace FK {
 		void	DrawSolidFacePick(fk_Model *);
 		void	DrawSolidFacePickElem(fk_Loop *);
 		void	DrawIFSFacePick(fk_Model *);
+
 		void	DrawShapeFaceMaterial(fk_Model *, bool);
 		void	DrawSolidFaceMaterial(fk_Model *, bool);
 		int		DrawSolidFaceMaterialElem(fk_Model *, fk_Loop *, int, int,
 										  std::vector<fk_Material> *, bool);
 		void	DrawIFSFaceMaterial(fk_Model *, bool);
+
 		void	DrawShapeFaceNormal(fk_Model *, bool, bool);
 		void	DrawSolidFaceNormal(fk_Model *, bool, bool);
 		void	DrawSolidFaceNormalElem(fk_Loop *);
 		void	DrawIFSFaceNormal(fk_Model *, bool, bool);
+		void	DrawSurfaceFaceNormal(fk_Model *, bool, bool);
+
 		void	DrawShapeFaceSmooth(fk_Model *, bool, bool);
 		void	DrawSolidFaceSmooth(fk_Model *, bool, bool);
 		void	DrawSolidFaceSmoothElem(fk_Loop *);
 		void	DrawIFSFaceSmooth(fk_Model *, bool, bool);
-		void	DrawSurface(fk_Surface *);
+		void	DrawSurfaceFaceSmooth(fk_Model *, bool, bool);
+
+		void	DrawSurfaceNormalElem(fk_Surface *);
+		void	DrawSurfaceSmoothElem(fk_Surface *);
 	};
 }
 

@@ -81,6 +81,7 @@
 #include <FK/Vertex.h>
 #include <FK/Half.h>
 #include <FK/Loop.h>
+#include <FK/Surface.h>
 
 using namespace std;
 
@@ -397,7 +398,7 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 	}
 
 	if((surf = argL->getSurfGeometry()) != nullptr) {
-		DrawSurface(surf);
+		DrawSurfaceNormalElem(surf);
 	} else if(argL->isTesselated() == true) {
 		if((tmpNormP = argL->getNormal()) == nullptr) {
 			return retMateID;
@@ -570,7 +571,7 @@ void fk_FaceDraw::DrawSolidFaceSmoothElem(fk_Loop *argL)
 
 
 	if((surf = argL->getSurfGeometry()) != nullptr) {
-		DrawSurface(surf);
+		DrawSurfaceSmoothElem(surf);
 	} else {
 		glBegin(GL_POLYGON);
 		startH = curH = argL->getOneHalf();
@@ -660,6 +661,10 @@ void fk_FaceDraw::DrawShapeFaceNormal(fk_Model *argObj,
 		DrawSolidFaceNormal(argObj, argLightFlag, argNodeFlag);
 		break;
 
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceFaceNormal(argObj, argLightFlag, argNodeFlag);
+		break;
+
 	  default:
 		break;
 	}
@@ -713,7 +718,7 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 	fk_Surface			*surf;
 
 	if((surf = argL->getSurfGeometry()) != nullptr) {
-		DrawSurface(surf);
+		DrawSurfaceNormalElem(surf);
 	} else if(argL->isTesselated() == true) {
 		if((tmpNormP = argL->getNormal()) == nullptr) return;
 		tesseVertexArray = argL->GetTesselateVertex();
@@ -746,7 +751,7 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 }
 
 void fk_FaceDraw::DrawIFSFaceNormal(fk_Model *argObj,
-								  bool argLightFlag, bool argNodeFlag)
+									bool argLightFlag, bool argNodeFlag)
 {
 	fk_IndexFaceSet		*ifsP;
 	int					pNum;
@@ -792,12 +797,21 @@ void fk_FaceDraw::DrawIFSFaceNormal(fk_Model *argObj,
 	return;
 }
 
-void fk_FaceDraw::DrawSurface(fk_Surface *)
+void fk_FaceDraw::DrawSurfaceFaceNormal(fk_Model *argObj,
+										bool argLightFlag, bool argNodeFlag)
 {
+	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+	glShadeModel(GL_FLAT);
+
+	DrawSurfaceNormalElem(static_cast<fk_Surface *>(argObj->getShape()));
 	return;
 }
 
-
+void fk_FaceDraw::DrawSurfaceNormalElem(fk_Surface *)
+{
+	
+}
+	
 void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 {
 	float 		tmpShininess;
