@@ -35,6 +35,8 @@ namespace FK {
 		void	DrawSolidLinePick(fk_Model *);
 		void	DrawSolidLinePickElem(fk_Edge *);
 		void	DrawIFSLinePick(fk_Model *);
+		void	DrawCurveLinePick(fk_Model *);
+		void	DrawSurfaceLinePick(fk_Model *);
 
 		void	DrawShapeLineNormal(fk_Model *, bool);
 		void	DrawSolidLineNormal(fk_Model *, bool);

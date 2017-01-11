@@ -162,6 +162,14 @@ void fk_LineDraw::DrawShapeLinePick(fk_Model *argObj)
 		DrawSolidLinePick(argObj);
 		break;
 
+	  case FK_SHAPE_CURVE:
+		DrawCurveLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceLinePick(argObj);
+		break;
+
 	  default:
 		break;
 	}
@@ -189,8 +197,6 @@ void fk_LineDraw::DrawSolidLinePick(fk_Model *argObj)
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	edgeStack = solidP->GetECache();
-
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 
 	if(reverseFlag == false) {
 		for(ite = edgeStack->begin(); ite != edgeStack->end(); ++ite) {
@@ -224,8 +230,6 @@ void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
 
 	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
 
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
-
 	pos = &ifsetP->pos[0];
 	lineNum = static_cast<int>(ifsetP->edgeSet.size())/2;
 	lineSet = &ifsetP->edgeSet[0];
@@ -243,6 +247,73 @@ void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
 
 	return;
 }
+
+void fk_LineDraw::DrawCurveLinePick(fk_Model *argObj)
+{
+	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	curve->makeCache();
+	_st div = static_cast<_st>(curve->getDiv());
+	auto vArray = curve->getPosCache();
+
+	for(_st i = 0; i < div; ++i) {
+		auto vPos1 = &((*vArray)[i]);
+		auto vPos2 = &((*vArray)[i+1]);
+		glPushName(static_cast<GLuint>(i*3 + 1));
+		glBegin(GL_LINE);
+		glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+		glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+		glEnd();
+		glPopName();
+	}
+
+	return;
+}
+
+void fk_LineDraw::DrawSurfaceLinePick(fk_Model *argObj)
+{
+	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
+	GLuint count = 0;
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	surf->makeCache();
+	_st div = static_cast<_st>(surf->getDiv());
+	auto vArray = surf->getPosCache();
+
+	for(_st i = 0; i <= div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			auto vPos1 = &((*vArray)[i*(div+1)+j]);
+			auto vPos2 = &((*vArray)[i*(div+1)+j+1]);
+			glPushName(static_cast<GLuint>(count*3 + 1));
+			glBegin(GL_LINE);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+
+	for(_st i = 0; i <= div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			auto vPos1 = &((*vArray)[j*(div+1)+i]);
+			auto vPos2 = &((*vArray)[(j+1)*(div+1)+i]);
+			glPushName(static_cast<GLuint>(count*3 + 1));
+			glBegin(GL_LINE);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+	return;
+}
+
+
 
 void fk_LineDraw::DrawShapeLineMaterial(fk_Model *argObj)
 {
@@ -424,7 +495,6 @@ void fk_LineDraw::DrawSolidLineNormal(fk_Model *argObj, bool argFlg)
 	}
 
 	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 	glColor4fv(&ModelColor->col[0]);	
 
 	orgWidth = argObj->getWidth();
@@ -476,7 +546,6 @@ void fk_LineDraw::DrawIFSLineNormal(fk_Model *argObj, bool argFlag)
 	}
 
 	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 	glColor4fv(&modelColor->col[0]);	
 
 	DrawIFSLineSub(ifsetP);
@@ -578,7 +647,6 @@ void fk_LineDraw::DrawCurveLineNormal(fk_Model *argObj, bool argMode)
 	}
 
 	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 	glColor4fv(&modelColor->col[0]);	
 	
 	curve->makeCache();
@@ -610,7 +678,6 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 	}
 
 	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 	glColor4fv(&modelColor->col[0]);	
 
 	surf->makeCache();
@@ -624,7 +691,9 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 			glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
 		}
 		glEnd();
+	}
 
+	for(_st i = 0; i <= div; ++i) {
 		glBegin(GL_LINE_STRIP);
 		for(_st j = 0; j <= div; ++j) {
 			auto vPos = &((*vArray)[j*(div+1)+i]);
@@ -634,6 +703,5 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 	}
 	return;
 }
-
 
 #endif
