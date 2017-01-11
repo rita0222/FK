@@ -563,22 +563,22 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 	return;
 }
 
-void fk_LineDraw::DrawCurveLineNormal(fk_Model *argModel, bool argMode)
+void fk_LineDraw::DrawCurveLineNormal(fk_Model *argObj, bool argMode)
 {
-	fk_Curve	*curve = static_cast<fk_Curve *>(argModel->getShape());
+	fk_Curve	*curve = static_cast<fk_Curve *>(argObj->getShape());
 	fk_Color	*modelColor;
 
 	if(argMode == true) {
-		modelColor = argModel->getInhLineColor();
+		modelColor = argObj->getInhLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argModel->getInhMaterial()->getAmbient();
+			modelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = curve->getMaterial(0)->getAmbient();
 	}
 
 	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argModel->getWidth()));
+	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 	glColor4fv(&modelColor->col[0]);	
 	
 	curve->makeCache();
@@ -595,22 +595,22 @@ void fk_LineDraw::DrawCurveLineNormal(fk_Model *argModel, bool argMode)
 	return;
 }
 
-void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argModel, bool argMode)
+void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 {
-	fk_Surface	*surf = static_cast<fk_Surface *>(argModel->getShape());
+	fk_Surface	*surf = static_cast<fk_Surface *>(argObj->getShape());
 	fk_Color	*modelColor;
 	
 	if(argMode == true) {
-		modelColor = argModel->getInhLineColor();
+		modelColor = argObj->getInhLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argModel->getInhMaterial()->getAmbient();
+			modelColor = argObj->getInhMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = surf->getMaterial(0)->getAmbient();
 	}
 
 	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argModel->getWidth()));
+	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 	glColor4fv(&modelColor->col[0]);	
 
 	surf->makeCache();

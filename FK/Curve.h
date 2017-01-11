@@ -24,7 +24,9 @@ namespace FK {
 	 */
 	class fk_Curve : public fk_Shape {
 
-		friend class				fk_LineDraw;
+		friend class	fk_PointDraw;
+		friend class	fk_LineDraw;
+		friend class	fk_FaceDraw;
 
 	protected:
 

@@ -21,7 +21,6 @@ namespace FK {
 		bool			arrayState;
 
 		void			DrawShapePointMaterial(fk_Model *);
-		void			DrawIFSPointMaterial(fk_Model *);
 		void			DrawParticlePointMaterial(fk_Model *);
 		void			DrawSolidPointMaterial(fk_Model *);
 		int				DrawSolidPointMaterialElem(fk_Vertex *, int,
@@ -34,12 +33,16 @@ namespace FK {
 		void			DrawParticlePointPick(fk_Model *);
 		void			DrawSolidPointPick(fk_Model *);
 		void			DrawSolidPointPickElem(fk_Vertex *);
+		void			DrawCurvePointPick(fk_Model *);
+		void			DrawSurfacePointPick(fk_Model *);
 
 		void			DrawShapePointNormal(fk_Model *, bool);
 		void			DrawIFSPointNormal(fk_Model *, bool);
 		void			DrawParticlePointNormal(fk_Model *, bool);
 		void			DrawSolidPointNormal(fk_Model *, bool);
 		void			DrawSolidPointNormalElem(fk_Vertex *, double);
+		void			DrawCurvePointNormal(fk_Model *, bool);
+		void			DrawSurfacePointNormal(fk_Model *, bool);
 	};
 }
 

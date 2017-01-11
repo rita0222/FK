@@ -81,6 +81,8 @@
 #include <FK/Solid.h>
 #include <FK/IndexFace.h>
 #include <FK/Vertex.h>
+#include <FK/Curve.h>
+#include <FK/Surface.h>
 
 using namespace std;
 
@@ -140,6 +142,14 @@ void fk_PointDraw::DrawShapePointPick(fk_Model *argObj)
 
 	  case FK_SHAPE_SOLID:
 		DrawSolidPointPick(argObj);
+		break;
+
+	  case FK_SHAPE_CURVE:
+		DrawCurvePointPick(argObj);
+		break;
+
+	  case FK_SHAPE_SURFACE:
+		DrawSurfacePointPick(argObj);
 		break;
 
 	  default:
@@ -243,6 +253,50 @@ void fk_PointDraw::DrawParticlePointPick(fk_Model *argObj)
 	return;
 }
 
+void fk_PointDraw::DrawCurvePointPick(fk_Model *argObj)
+{
+	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	curve->makeCache();
+	_st div = static_cast<_st>(curve->getDiv());
+	auto vArray = curve->getPosCache();
+
+	for(_st i = 0; i <= div; ++i) {
+		auto vPos = &((*vArray)[i]);
+		glPushName(static_cast<GLuint>(i*3 + 2));
+		glBegin(GL_POINTS);
+		glVertex3dv(static_cast<GLdouble *>(&vPos->x));
+		glEnd();
+		glPopName();
+	}
+
+	return;
+}
+
+void fk_PointDraw::DrawSurfacePointPick(fk_Model *argObj)
+{
+	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	surf->makeCache();
+	_st div = static_cast<_st>(surf->getDiv());
+	auto vArray = surf->getPosCache();
+
+	for(_st i = 0; i < (div+1)*(div+1); ++i) {
+		auto vPos = &((*vArray)[i]);
+		glPushName(static_cast<GLuint>(i*3 + 2));
+		glBegin(GL_POINTS);
+		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
+		glEnd();
+		glPopName();
+	}
+
+	return;
+}
+	
 void fk_PointDraw::DrawShapePointMaterial(fk_Model *argObj)
 {
 	switch(argObj->getShape()->getRealShapeType()) {
@@ -259,7 +313,12 @@ void fk_PointDraw::DrawShapePointMaterial(fk_Model *argObj)
 		break;
 
 	  case FK_SHAPE_CURVE:
+		DrawCurvePointNormal(argObj, true);
+		break;
+		
 	  case FK_SHAPE_SURFACE:
+		DrawSurfacePointNormal(argObj, true);
+		break;
 
 	  default:
 		break;
@@ -440,6 +499,15 @@ void fk_PointDraw::DrawShapePointNormal(fk_Model *argObj, bool argFlag)
 
 	  case FK_SHAPE_SOLID:
 		DrawSolidPointNormal(argObj, argFlag);
+		break;
+
+	  case FK_SHAPE_CURVE:
+		DrawCurvePointNormal(argObj, argFlag);
+		break;
+		
+	  case FK_SHAPE_SURFACE:
+		DrawSurfacePointNormal(argObj, argFlag);
+		break;
 
 	  default:
 		break;
@@ -581,6 +649,66 @@ void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 		}
 		glEnd();
 	}
+	return;
+}
+
+void fk_PointDraw::DrawCurvePointNormal(fk_Model *argObj, bool argFlag)
+{
+	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
+	fk_Color *modelColor;
+
+	if(argFlag == true) {
+		modelColor = argObj->getInhPointColor();
+		if(modelColor == nullptr) {
+			modelColor = argObj->getInhMaterial()->getAmbient();
+		}
+	} else {
+		modelColor = (*curve->getMaterialVector())[0].getAmbient();
+	}
+
+	glColor4fv(&modelColor->col[0]);
+
+	curve->makeCache();
+	_st div = static_cast<_st>(curve->getDiv());
+	auto vArray = curve->getPosCache();
+
+	glBegin(GL_POINTS);
+	for(_st i = 0; i < div; ++i) {
+		auto vPos = &((*vArray)[i]);
+		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
+	}
+	glEnd();
+
+	return;
+}
+
+void fk_PointDraw::DrawSurfacePointNormal(fk_Model *argObj, bool argMode)
+{
+	fk_Surface	*surf = static_cast<fk_Surface *>(argObj->getShape());
+	fk_Color	*modelColor;
+	
+	if(argMode == true) {
+		modelColor = argObj->getInhPointColor();
+		if(modelColor == nullptr) {
+			modelColor = argObj->getInhMaterial()->getAmbient();
+		}
+	} else {
+		modelColor = surf->getMaterial(0)->getAmbient();
+	}
+
+	glColor4fv(&modelColor->col[0]);
+
+	surf->makeCache();
+	_st div = static_cast<_st>(surf->getDiv());
+	auto vArray = surf->getPosCache();
+
+	glBegin(GL_POINTS);
+	for(_st i = 0; i < (div+1)*(div+1); ++i) {
+		auto vPos = &((*vArray)[i]);
+		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
+	}
+	glEnd();
+
 	return;
 }
 
