@@ -1031,7 +1031,7 @@ namespace FK {
 #ifdef WIN32
 		bool					SnapImageGDI(fk_Image *);
 #endif
-		void					ErrorInit(void);
+		static void				ErrorInit(void);
 
 	protected:
 

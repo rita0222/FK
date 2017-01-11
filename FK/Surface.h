@@ -27,7 +27,8 @@ namespace FK {
 
 	class fk_Surface : public fk_Shape {
 
-		friend class		fk_Window;
+		//friend class	fk_Window;
+		friend class	fk_LineDraw;
 
 	protected:
 

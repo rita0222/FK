@@ -210,8 +210,8 @@ bool fk_BezSurface::setDegree(int argUD, int argVD)
 bool fk_BezSurface::setCtrl(int argUID, int argVID,
 							const fk_Vector &argPos)
 {
-	if(argUID < 0 || argUID >= uDeg ||
-	   argVID < 0 || argVID >= vDeg) return false;
+	if(argUID < 0 || argUID > uDeg ||
+	   argVID < 0 || argVID > vDeg) return false;
 
 	ctrlPos[static_cast<_st>((vDeg+1)*argVID + argUID)] = argPos;
 	return true;

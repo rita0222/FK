@@ -150,7 +150,7 @@ void fk_Surface::makePosCache(void)
 	posCache.clear();
 
 	for(i = 0; i <= div; i++) {
-		v = double(i)/double(div);
+		v = static_cast<double>(i)/static_cast<double>(div);
 		for(j = 0; j <= div; j++) {
 			u = static_cast<double>(j)/static_cast<double>(div);
 			posCache.push_back(pos(u, v));

@@ -78,10 +78,12 @@
 #include <FK/OpenGL.H>
 #include <FK/Model.h>
 #include <FK/Curve.h>
+#include <FK/Surface.h>
 #include <FK/Solid.h>
 #include <FK/IndexFace.h>
 #include <FK/Vertex.h>
 #include <FK/Half.h>
+#include <FK/Error.H>
 
 using namespace std;
 
@@ -230,7 +232,7 @@ void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	for(ii = 0; ii < lineNum; ii++) {
+	for(ii = 0; ii < lineNum; ++ii) {
 		glPushName(static_cast<GLuint>(ii*3 + 1));
 		glBegin(GL_LINE);
 		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii]].x));
@@ -499,7 +501,7 @@ void fk_LineDraw::DrawIFSLineSub(fk_IndexFaceSet *argIFS)
 					   GL_UNSIGNED_INT, edgeSet);
 	} else {
 		glBegin(GL_LINES);
-		for(_st ii = 0; ii < static_cast<_st>(lineSize); ii++) {
+		for(_st ii = 0; ii < static_cast<_st>(lineSize); ++ii) {
 			glVertex3fv(static_cast<GLfloat *>(&pos[edgeSet[ii]].x));
 		}
 		glEnd();
@@ -525,7 +527,7 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 		}
 
 		glBegin(GL_LINE_STRIP);
-		for(_st ii = 0; ii <= static_cast<_st>(div); ii++) {
+		for(_st ii = 0; ii <= static_cast<_st>(div); ++ii) {
 			vPos = &((*vArray)[ii]);
 			glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
 		}
@@ -580,11 +582,11 @@ void fk_LineDraw::DrawCurveLineNormal(fk_Model *argModel, bool argMode)
 	glColor4fv(&modelColor->col[0]);	
 	
 	curve->makeCache();
-	int div = curve->getDiv();
+	_st div = static_cast<_st>(curve->getDiv());
 	auto vArray = curve->getPosCache();
 
 	glBegin(GL_LINE_STRIP);
-	for(_st i = 0; i < static_cast<_st>(div); ++i) {
+	for(_st i = 0; i < div; ++i) {
 		auto vPos = &((*vArray)[i]);
 		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
 	}
@@ -593,8 +595,44 @@ void fk_LineDraw::DrawCurveLineNormal(fk_Model *argModel, bool argMode)
 	return;
 }
 
-void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *, bool)
+void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argModel, bool argMode)
 {
+	fk_Surface	*surf = static_cast<fk_Surface *>(argModel->getShape());
+	fk_Color	*modelColor;
+	
+	if(argMode == true) {
+		modelColor = argModel->getInhLineColor();
+		if(modelColor == nullptr) {
+			modelColor = argModel->getInhMaterial()->getAmbient();
+		}
+	} else {
+		modelColor = surf->getMaterial(0)->getAmbient();
+	}
+
+	glDisable(GL_LIGHTING);
+	glLineWidth(static_cast<GLfloat>(argModel->getWidth()));
+	glColor4fv(&modelColor->col[0]);	
+
+	surf->makeCache();
+	_st div = static_cast<_st>(surf->getDiv());
+	auto vArray = surf->getPosCache();
+
+	for(_st i = 0; i <= div; ++i) {
+		glBegin(GL_LINE_STRIP);
+		for(_st j = 0; j <= div; ++j) {
+			auto vPos = &((*vArray)[i*(div+1)+j]);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
+		}
+		glEnd();
+
+		glBegin(GL_LINE_STRIP);
+		for(_st j = 0; j <= div; ++j) {
+			auto vPos = &((*vArray)[j*(div+1)+i]);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
+		}
+		glEnd();
+	}
+	return;
 }
 
 

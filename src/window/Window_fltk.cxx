@@ -484,7 +484,7 @@ void fk_Window::ErrorInit(void)
 			string					output, str;
 			string::size_type		index, old;
 
-			if(error_win == NULL) {
+			if(error_win == nullptr) {
 				error_win = new Fl_Window(320, 520, "FK Error Window");
 				browser = new Fl_Multi_Browser(10, 10, 300, 500);
 				error_win->size_range(320, 520);
