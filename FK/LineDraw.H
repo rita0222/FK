@@ -30,14 +30,19 @@ namespace FK {
 										  std::vector<fk_Material> *,
 										  fk_Color *);
 		void	DrawIFSLineMaterial(fk_Model *);
+
 		void	DrawShapeLinePick(fk_Model *);
 		void	DrawSolidLinePick(fk_Model *);
 		void	DrawSolidLinePickElem(fk_Edge *);
 		void	DrawIFSLinePick(fk_Model *);
+
 		void	DrawShapeLineNormal(fk_Model *, bool);
 		void	DrawSolidLineNormal(fk_Model *, bool);
 		void	DrawSolidLineNormalElem(fk_Edge *, double);
 		void	DrawIFSLineNormal(fk_Model *, bool);
+		void	DrawCurveLineNormal(fk_Model *, bool);
+		void	DrawSurfaceLineNormal(fk_Model *, bool);
+		
 		void	CommonLineDrawFunc(fk_Edge *, bool);
 		void	DrawIFSLineSub(fk_IndexFaceSet *);
 	};

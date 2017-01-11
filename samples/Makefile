@@ -65,7 +65,7 @@ FKLIB_D		= \
 			-lFK3_math.$(VERNAME) \
 			-lFK3_base.$(VERNAME) \
 
-FKLIB_SG		= \
+FKLIB_DG		= \
 			-lFK3_util_g.$(VERNAME) \
 			-lFK3_window_g.$(VERNAME) \
 			-lFK3_graphics_g.$(VERNAME) \
