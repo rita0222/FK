@@ -25,6 +25,7 @@ namespace FK {
 		void	DrawSolidFacePick(fk_Model *);
 		void	DrawSolidFacePickElem(fk_Loop *);
 		void	DrawIFSFacePick(fk_Model *);
+		void	DrawSurfaceFacePick(fk_Model *);
 
 		void	DrawShapeFaceMaterial(fk_Model *, bool);
 		void	DrawSolidFaceMaterial(fk_Model *, bool);

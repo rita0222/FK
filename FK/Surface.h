@@ -116,7 +116,7 @@ namespace FK {
 		int		getDiv(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	makeCache(bool = true);
+		void	makeCache(void);
 #endif
 
 	private:
@@ -129,7 +129,7 @@ namespace FK {
 		std::vector<fk_Vector> * 	getNormCache(void);
 
 		void				makePosCache(void);
-		void				makeNormCache(bool);
+		void				makeNormCache(void);
 	};
 }
 

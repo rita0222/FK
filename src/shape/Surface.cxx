@@ -130,12 +130,12 @@ fk_Vector fk_Surface::norm(double argU, double argV)
 	return nVec;
 }
 
-void fk_Surface::makeCache(bool argSmoothFlg)
+void fk_Surface::makeCache(void)
 {
 	if(div <= 0) return;
 
 	makePosCache();
-	makeNormCache(argSmoothFlg);
+	makeNormCache();
 	changeFlg = false;
 	return;
 }
@@ -160,33 +160,20 @@ void fk_Surface::makePosCache(void)
 	return;
 }
 
-void fk_Surface::makeNormCache(bool argSmoothFlg)
+void fk_Surface::makeNormCache(void)
 {
 	int			i, j;
 	fk_Vector	tmpV1, tmpV2, tmpV3, tmpNorm;
 
-	if(smoothFlg == argSmoothFlg) return;
+	if(changeFlg == false) return;
 
 	normCache.clear();
 
-	if(smoothFlg == true) {
-		for(i = 0; i <= div; i++) {
-			double v = static_cast<double>(i)/static_cast<double>(div);
-			for(j = 0; j <= div; j++) {
-				double u = static_cast<double>(j)/static_cast<double>(div);
-				normCache.push_back(norm(u, v));
-			}
-		}
-	} else {
-		for(i = 0; i < div; i++) {
-			for(j = 0; j < div; j++) {
-				tmpV1 = posCache[static_cast<_st>(i*(div+1)+j)];
-				tmpV2 = posCache[static_cast<_st>(i*(div+1)+j+1)];
-				tmpV3 = posCache[static_cast<_st>((i+1)*(div+1)+j)];
-				tmpNorm = (tmpV2 - tmpV1) ^ (tmpV3 - tmpV1);
-				tmpNorm.normalize();
-				normCache.push_back(tmpNorm);
-			}
+	for(i = 0; i <= div; i++) {
+		double v = static_cast<double>(i)/static_cast<double>(div);
+		for(j = 0; j <= div; j++) {
+			double u = static_cast<double>(j)/static_cast<double>(div);
+			normCache.push_back(norm(u, v));
 		}
 	}
 

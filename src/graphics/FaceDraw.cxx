@@ -174,6 +174,10 @@ void fk_FaceDraw::DrawShapeFacePick(fk_Model *argObj)
 		DrawSolidFacePick(argObj);
 		break;
 
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceFacePick(argObj);
+		break;
+
 	  default:
 		break;
 	}
@@ -296,6 +300,48 @@ void fk_FaceDraw::DrawIFSFacePick(fk_Model *argObj)
 	return;
 }
 
+void fk_FaceDraw::DrawSurfaceFacePick(fk_Model *argObj)
+{
+	_st div = static_cast<_st>(argSurf->getDiv());
+
+	argSurf->makeCache();
+	auto pArray = argSurf->getPosCache();
+	auto nArray = argSurf->getNormCache();
+	GLuint count = 0;
+
+	for(_st i = 0; i < div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			_st i1 = i*(div+1) + j;
+			_st i2 = (i+1)*(div+1) + j;
+
+			auto p11 = &((*pArray)[i1]);
+			auto p12 = &((*pArray)[i1+1]);
+			auto p21 = &((*pArray)[i2]);
+			auto p22 = &((*pArray)[i2+1]);
+
+			glPushName(count*3);
+			glBegin(GL_TRIANGLES);
+			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
+			glEnd();
+			glPopName();
+			++count;
+			
+			glPushName(count*3);
+			glBegin(GL_TRIANGLES);
+			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p22->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+	return;
+}
+
+
 void fk_FaceDraw::DrawShapeFaceMaterial(fk_Model *argObj, bool argLightFlag)
 {
 	switch(argObj->getShape()->getRealShapeType()) {
@@ -306,6 +352,9 @@ void fk_FaceDraw::DrawShapeFaceMaterial(fk_Model *argObj, bool argLightFlag)
 	  case FK_SHAPE_SOLID:
 		DrawSolidFaceMaterial(argObj, argLightFlag);
 		break;
+
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceFaceNormal(argObj, argLightFlag, true);
 
 	  default:
 		break;
@@ -518,7 +567,12 @@ void fk_FaceDraw::DrawShapeFaceSmooth(fk_Model *argObj,
 
 	  case FK_SHAPE_SOLID:
 		DrawSolidFaceSmooth(argObj, argLightFlag, argNodeFlag);
+		break;
 
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceFaceSmooth(argObj, argLightFlag, argNodeFlag);
+		break;
+		
 	  default:
 		break;
 	}
@@ -649,8 +703,21 @@ void fk_FaceDraw::DrawIFSFaceSmooth(fk_Model *argObj,
 	return;
 }
 
+void fk_FaceDraw::DrawSurfaceFaceSmooth(fk_Model *argObj,
+										bool argLightFlag, bool argNodeFlag)
+
+{
+	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glShadeModel(GL_SMOOTH);
+
+	DrawSurfaceSmoothElem(static_cast<fk_Surface *>(argObj->getShape()));
+}
+
+
 void fk_FaceDraw::DrawShapeFaceNormal(fk_Model *argObj,
-									bool argLightFlag, bool argNodeFlag)
+									  bool argLightFlag, bool argNodeFlag)
 {
 	switch(argObj->getShape()->getRealShapeType()) {
 	  case FK_SHAPE_IFS:
@@ -801,17 +868,94 @@ void fk_FaceDraw::DrawSurfaceFaceNormal(fk_Model *argObj,
 										bool argLightFlag, bool argNodeFlag)
 {
 	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glShadeModel(GL_FLAT);
 
 	DrawSurfaceNormalElem(static_cast<fk_Surface *>(argObj->getShape()));
 	return;
 }
 
-void fk_FaceDraw::DrawSurfaceNormalElem(fk_Surface *)
+void fk_FaceDraw::DrawSurfaceNormalElem(fk_Surface *argSurf)
 {
-	
+	_st div = static_cast<_st>(argSurf->getDiv());
+	argSurf->makeCache();
+	auto pArray = argSurf->getPosCache();
+	auto nArray = argSurf->getNormCache();
+
+	glBegin(GL_TRIANGLES);
+	for(_st i = 0; i < div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			_st i1 = i*(div+1) + j;
+			_st i2 = (i+1)*(div+1) + j;
+
+			auto p11 = &((*pArray)[i1]);
+			auto p12 = &((*pArray)[i1+1]);
+			auto p21 = &((*pArray)[i2]);
+			auto p22 = &((*pArray)[i2+1]);
+
+			auto n11 = &((*nArray)[i1]);
+
+			glNormal3dv(static_cast<GLdouble *>(&(n11->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p22->x)));
+		}
+	}
+	glEnd();
+	return;
 }
 	
+void fk_FaceDraw::DrawSurfaceSmoothElem(fk_Surface *argSurf)
+{
+	_st div = static_cast<_st>(argSurf->getDiv());
+	argSurf->makeCache();
+	auto pArray = argSurf->getPosCache();
+	auto nArray = argSurf->getNormCache();
+
+	glBegin(GL_TRIANGLES);
+	for(_st i = 0; i < div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			_st i1 = i*(div+1) + j;
+			_st i2 = (i+1)*(div+1) + j;
+
+			auto p11 = &((*pArray)[i1]);
+			auto p12 = &((*pArray)[i1+1]);
+			auto p21 = &((*pArray)[i2]);
+			auto p22 = &((*pArray)[i2+1]);
+
+			auto n11 = &((*nArray)[i1]);
+			auto n12 = &((*nArray)[i1+1]);
+			auto n21 = &((*nArray)[i2]);
+			auto n22 = &((*nArray)[i2+1]);
+
+			glNormal3dv(static_cast<GLdouble *>(&(n11->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
+
+			glNormal3dv(static_cast<GLdouble *>(&(n12->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
+
+			glNormal3dv(static_cast<GLdouble *>(&(n21->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
+
+
+			glNormal3dv(static_cast<GLdouble *>(&(n21->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
+
+			glNormal3dv(static_cast<GLdouble *>(&(n12->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
+
+			glNormal3dv(static_cast<GLdouble *>(&(n22->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(p22->x)));
+		}
+	}
+	glEnd();
+	return;
+}
+
 void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 {
 	float 		tmpShininess;
