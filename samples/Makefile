@@ -267,6 +267,7 @@ mac-gcc:
 		-framework AGL -framework OpenGL \
 		-framework Cocoa -framework OpenAL \
 		-framework ApplicationServices \
+		-framework OpenCL \
 		-framework Foundation \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
