@@ -76,7 +76,7 @@
 
 using namespace std;
 
-unique_ptr<fk_Tree> fk_Model::_modelTree(new fk_Tree("modelTree"));
+fk_Tree fk_Model::_modelTree;
 
 class fk_ModelTreeObject : public fk_TreeBaseObject {
 private:
@@ -112,8 +112,8 @@ fk_TreeData * fk_Model::GetTreeData(fk_Model *argModel)
 	fk_TreeData				*curData;
 	fk_ModelTreeObject		*object;
 
-	for(curData = _modelTree->foreachData(nullptr);
-		curData != nullptr; curData = _modelTree->foreachData(curData)) {
+	for(curData = _modelTree.foreachData(nullptr);
+		curData != nullptr; curData = _modelTree.foreachData(curData)) {
 		object = static_cast<fk_ModelTreeObject *>(curData->getObject());
 		if(object == nullptr) continue;
 		if(object->GetModel() == argModel) return curData;
@@ -143,7 +143,7 @@ void fk_Model::EntryTree(void)
 
 	thisObject = new fk_ModelTreeObject();
 	ss << "m" << _modelID;
-	treeData = _modelTree->addNewChild(_modelTree->getRoot(), ss.str());
+	treeData = _modelTree.addNewChild(_modelTree.getRoot(), ss.str());
 	thisObject->SetModel(this);
 	treeData->setObject(thisObject);
 	parent = nullptr;
@@ -158,7 +158,7 @@ void fk_Model::DeleteTree(void)
 	if(treeDelMode == true) {
 		deleteChildren();
 		deleteParent();
-		_modelTree->deleteBranch(treeData);
+		_modelTree.deleteBranch(treeData);
 	}
 	treeData = nullptr;
 	return;
@@ -184,7 +184,7 @@ bool fk_Model::setParent(fk_Model *argModel, bool argBindFlg)
 
 	if((parentData = argModel->treeData) == nullptr) return false;
 	if(treeData == nullptr) return false;
-	if(_modelTree->moveBranch(parentData, treeData) == false) return false;
+	if(_modelTree.moveBranch(parentData, treeData) == false) return false;
 
 	parent = argModel;
 
@@ -212,7 +212,7 @@ void fk_Model::deleteParent(bool argBindFlg)
 	if(treeFlag == false) return;
 	if(treeData == nullptr) return;
 
-	_modelTree->moveBranch(_modelTree->getRoot(), treeData);
+	_modelTree.moveBranch(_modelTree.getRoot(), treeData);
 
 	if(argBindFlg == true) {
 		tmpPos.set(0.0, 0.0, 0.0, 1.0);
@@ -315,6 +315,6 @@ fk_Model * fk_Model::foreachChild(fk_Model *argModel)
 
 void fk_Model::TreePrint(void)
 {
-	_modelTree->Print();
+	_modelTree.Print();
 	return;
 }

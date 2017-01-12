@@ -2059,7 +2059,7 @@ namespace FK {
 		void				PreMove(void);
 		void				PostMove(void);
 
-		static std::unique_ptr<fk_Tree>	_modelTree;
+		static fk_Tree		_modelTree;
 	};
 }
 
