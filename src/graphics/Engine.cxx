@@ -568,7 +568,6 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	}
 
 	modelShape = argModel->getShape();
-	if(modelShape == nullptr) return;
 
 	glPushMatrix();
 		
@@ -587,6 +586,11 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 		LoadModelMatrix(argModel);
 	}
 	
+	if(modelShape == nullptr) {
+		glPopMatrix();
+		return;
+	}
+
 	SetBlendMode(argModel);
 	argModel->preShader();
 	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end(); ++it) {
