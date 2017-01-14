@@ -364,6 +364,7 @@ fk_OrthoMatrix::fk_OrthoMatrix(void)
 
 // コピーコンストラクタ 
 fk_OrthoMatrix::fk_OrthoMatrix(const fk_OrthoMatrix &ArgMat)
+	: buf(nullptr), updateStatus(true)
 {
 	CopyMatrix(m, ArgMat.m);
 }
