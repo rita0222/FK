@@ -47,7 +47,7 @@ namespace FK {
 		 *
 		 *	\sa setCtrl(), getBoundary(), fk_SurfDirection
 		 */
-		bool	setBoundary(int uv, int ID, fk_Vector pos);
+		bool	setBoundary(int uv, int ID, const fk_Vector &pos);
 
 		//! 内部制御点設定関数
 		/*!
@@ -66,7 +66,7 @@ namespace FK {
 		 *
 		 *	\sa setBoudary(), getCtrl(), fk_SurfDirection
 		 */
-		bool	setCtrl(int uv, int ID, fk_Vector pos);
+		bool	setCtrl(int uv, int ID, const fk_Vector &pos);
 
 		//! 境界上制御点参照関数
 		/*!
@@ -137,8 +137,11 @@ namespace FK {
 		fk_Vector		vDeriv(double u, double v);
 
 	private:
-		fk_BezSurface			bez;
-		std::vector<fk_Vector>	ctrlPos;
+		fk_BezSurface	bez;
+		fk_Vector		ctrl[20];
+
+		int		MapID(bool, int, int);
+		void	BezSet(double, double);
 	};
 }
 

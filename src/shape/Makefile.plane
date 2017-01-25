@@ -26,6 +26,7 @@ LIBSRCS		= \
 			Edge.cxx \
 			FileInput.cxx \
 			FileOutput.cxx \
+			Gregory.cxx \
 			HRCParser.cxx \
 			Half.cxx \
 			History.cxx \

@@ -197,6 +197,7 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_SURFACE:
 	  case FK_BEZSURFACE:
 	  case FK_BSPLSURFACE:
+	  case FK_GREGORY:
 		return FK_SHAPE_SURFACE;
 		
 	  case FK_LIGHT:
