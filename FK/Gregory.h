@@ -1,83 +1,107 @@
-﻿#ifndef __FK_BEZSURFACE_HEADER__
-#define __FK_BEZSURFACE_HEADER__
+﻿#ifndef __FK_GREGORY_HEADER__
+#define __FK_GREGORY_HEADER__
 
-#include <FK/Surface.h>
+#include <FK/BezSurface.h>
 
 namespace FK {
-	//! Bezier曲面を生成、管理するクラス
+	//! Gregory 曲面を生成、管理するクラス
 	/*!
-	 *	このクラスは、形状として Bezier 曲面を制御する機能を提供します。
-	 *	初期状態はu,v両方で 3 次式で、制御点が全て原点にある状態となります。
-	 *	現状では、2,3,4次式のいずれかのみしか生成できません。
+	 *	このクラスは、形状として Gregory 曲面を制御する機能を提供します。
+	 *	次数は u,v 両方で 3 次式で固定となります。
+	 *	制御点を直接指定する方法の他に、
+	 *	他の Gregory 曲面と G1 連続性を保証する接続を行う機能が提供されています。
 	 */
 
-	class fk_BezSurface : public fk_Surface {
+	class fk_Gregory : public fk_Surface {
 
 	public:
 
 		//! コンストラクタ
-		fk_BezSurface(void);
+		fk_Gregory(void);
 
 		//! デストラクタ
-		virtual ~fk_BezSurface();
+		virtual ~fk_Gregory();
 
 		//! 初期化用関数
 		/*!
-		 *	この関数は、曲面を初期状態(3次式、全ての制御点が原点にある状態)にします。
+		 *	この関数は、曲線を初期状態(3次式、全ての制御点が原点にある状態)にします。
 		 */
-		void			init(void);
+		void	init(void);
 
-		//! 次数設定関数
+		//! 境界上制御点設定関数
 		/*!
-		 *	この関数は、曲面の次数を設定します。
-		 *	現状では、2,3,4のいずれかのみ以外は設定できません。
-		 *	この関数の実行後、全ての制御点の位置ベクトルは原点になります。
+		 *	Gregory 曲面の境界線の制御点位置ベクトルを設定します。
+		 *	なお、Gregory 曲面の四隅にあたる制御点は、
+		 *	u 方向側からも v 方向側も指定が可能です。
 		 *
-		 *	\param[in]	uDeg	u方向字数
-		 *	\param[in]	vDeg	v方向次数
-		 *
-		 *	\return 次数設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool			setDegree(int uDeg, int vDeg);
-
-		//! 制御点設定関数
-		/*!
-		 *	曲面の制御点位置ベクトルを設定します。
-		 *
-		 *	\param[in] uID	設定する制御点の u方向 ID。先頭は 0 になります。
-		 *	\param[in] vID	設定する制御点の v方向 ID。先頭は 0 になります。
+		 *	\param[in] uv	境界線のIDを指定します。
+		 *					0 が u側でv始点側、1 がu側でv終点側、
+		 *					2 が v側でu始点側、3 がv側でu終点側です。
+		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *	\param[in] ID	境界線制御点のIDを指定します。
+		 *					曲線の始点は0で、
+		 *					続く制御点のIDが 1,2,3 となります。
 		 *	\param[in] pos	制御点位置ベクトル
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool			setCtrl(int uID, int vID, const fk_Vector &pos);
-
-		//! u方向次数参照関数
-		/*!
-		 *	曲面のu方向次数を参照します。
 		 *
-		 *	\return	u方向次数
+		 *	\sa setCtrl(), getBoundary(), fk_SurfDirection
 		 */
-		int				getUDegree(void);	
+		bool	setBoundary(int uv, int ID, fk_Vector pos);
 
-		//! v方向次数参照関数
+		//! 内部制御点設定関数
 		/*!
-		 *	曲面のv方向次数を参照します。
+		 *	Gregory 曲面の内部制御点の位置ベクトルを設定します。
+		 *	ID は、隣接する境界線の制御点 ID と一致します。
 		 *
-		 *	\return	v方向次数
+		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
+		 *					0 が u側でv始点側、1 がu側でv終点側、
+		 *					2 が v側でu始点側、3 がv側でu終点側です。
+		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *	\param[in] ID	境界線制御点のIDを指定します。
+		 *					1 か 2 のいずれかしか指定できません。
+		 *	\param[in] pos	制御点位置ベクトル
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 *
+		 *	\sa setBoudary(), getCtrl(), fk_SurfDirection
 		 */
-		int				getVDegree(void);	
+		bool	setCtrl(int uv, int ID, fk_Vector pos);
 
-		//! 制御点参照関数
+		//! 境界上制御点参照関数
 		/*!
-		 *	曲面の制御点位置ベクトルを参照します。
+		 *	Gregory 曲面の境界線の制御点位置ベクトルを参照します。
 		 *
-		 *	\param[in]	uID	制御点のu方向ID
-		 *	\param[in]	vID	制御点のv方向ID
+		 *	\param[in] uv	境界線のIDを指定します。
+		 *					0 が u側でv始点側、1 がu側でv終点側、
+		 *					2 が v側でu始点側、3 がv側でu終点側です。
+		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *	\param[in] ID	境界線制御点のIDを指定します。
+		 *					曲線の始点は0で、
+		 *					続く制御点のIDが 1,2,3 となります。
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 *
+		 *	\sa setBoundary(), fk_SurfDirection
 		 */
-		fk_Vector		getCtrl(int uID, int vID);
+		fk_Vector	getBoundary(int uv, int ID);
+
+		//! 内部制御点参照関数
+		/*!
+		 *	Gregory 曲面の内部制御点の位置ベクトルを参照します。
+		 *
+		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
+		 *					0 が u側でv始点側、1 がu側でv終点側、
+		 *					2 が v側でu始点側、3 がv側でu終点側です。
+		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *	\param[in] ID	境界線制御点のIDを指定します。
+		 *					1 か 2 のいずれかしか指定できません。
+		 *
+		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 *
+		 *	\sa setCtrl(), fk_SurfDirection
+		 */
+		fk_Vector	getCtrl(int uv, int ID);
 
 		//! 曲面点算出関数
 		/*!
@@ -113,13 +137,12 @@ namespace FK {
 		fk_Vector		vDeriv(double u, double v);
 
 	private:
-		int						uDeg, vDeg;
+		fk_BezSurface			bez;
 		std::vector<fk_Vector>	ctrlPos;
-		double					bezier(int, int, double);
 	};
 }
 
-#endif	// __FK_BEZSURFACE_HEADER__
+#endif	// __FK_GREGORY_HEADER__
 
 /****************************************************************************
  *

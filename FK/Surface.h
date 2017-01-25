@@ -8,6 +8,14 @@ namespace FK {
 
 	class fk_Window;
 
+	//! 曲面の uv 方向を表す列挙型
+	enum fk_SurfDirction : int {
+		FK_SURF_U_S = 0,	//!< u側(v始点側)
+		FK_SURF_U_E = 1,	//!< u側(v終点側)
+		FK_SURF_V_S = 2,	//!< v側(u始点側)
+		FK_SURF_V_E = 3	//!< v側(u終点側)
+	};
+	
 	//! 曲面用純粋仮想クラス
 	/*!
 	 *	このクラスは、自由曲面用の純粋仮想クラスです。
