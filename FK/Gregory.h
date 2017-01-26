@@ -103,6 +103,15 @@ namespace FK {
 		 */
 		fk_Vector	getCtrl(int uv, int ID);
 
+		//! 内部制御点自動設定関数
+		/*!
+		 *	現在の境界曲線情報より、内部制御点を自動的に設定します。
+		 *	このとき、内部制御点は境界上の偏微分ベクトルが線形補間となるように設定されます。
+		 *
+		 *	\sa setBoundary(), getBoundary(), setCtrl(), getCtrl()
+		 */
+		void	adjustCtrl(void);
+
 		//! 曲面点算出関数
 		/*!
 		 *	パラメータに対応する曲面上の点の位置ベクトルを返します。

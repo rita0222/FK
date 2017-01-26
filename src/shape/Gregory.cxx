@@ -180,6 +180,37 @@ fk_Vector fk_Gregory::getCtrl(int argUV, int argID)
 	return ctrl[_st(mapID)];
 }
 
+void fk_Gregory::adjustCtrl(void)
+{
+	fk_Vector A, B;
+
+	A = ctrl[4] - ctrl[0];
+	B = ctrl[7] - ctrl[3];
+
+	ctrl[5] = 2.0*A/3.0 + B/3.0 + ctrl[1];
+	ctrl[6] = A/3.0 + 2.0*B/3.0 + ctrl[2];
+
+	A = ctrl[8] - ctrl[12];
+	B = ctrl[11] - ctrl[15];
+	
+	ctrl[9] = 2.0*A/3.0 + B/3.0 + ctrl[13];
+	ctrl[10] = A/3.0 + 2.0*B/3.0 + ctrl[14];
+
+	A = ctrl[1] - ctrl[0];
+	B = ctrl[13] - ctrl[12];
+
+	ctrl[16] = 2.0*A/3.0 + B/3.0 + ctrl[4];
+	ctrl[17] = A/3.0 + 2.0*B/3.0 + ctrl[8];
+	
+	A = ctrl[2] - ctrl[3];
+	B = ctrl[14] - ctrl[15];
+
+	ctrl[16] = 2.0*A/3.0 + B/3.0 + ctrl[7];
+	ctrl[17] = A/3.0 + 2.0*B/3.0 + ctrl[11];
+	
+	return;
+}
+
 void fk_Gregory::BezSet(double argU, double argV)
 {
 	fk_Vector tmpC[4];
