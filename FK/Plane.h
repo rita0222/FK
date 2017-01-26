@@ -21,6 +21,11 @@ namespace FK {
 	 *	という式でなされます。\f$u, v\f$ は実数パラメータです。
 	 *	各関数の解説では、\f$\mathbf{B}\f$ を「基点ベクトル」、
 	 *	\f$\mathbf{U}, \mathbf{V}\f$を「Uベクトル」「Vベクトル」とします。
+	 *
+	 *	なお、平面が関与しない幾何計算は fk_Math クラスに集約しているので、
+	 *	そちらも参照して下さい。
+	 *
+	 *	\sa fk_Math
 	 */
 
 	class fk_Plane : public fk_BaseObject {
@@ -153,7 +158,7 @@ namespace FK {
 		 */
 		bool		isParallel(const fk_Vector &V);
 
-		// 平面平行判定関数
+		//! 平面平行判定関数
 		/*!
 		 *	別の任意の平面と平行であるかどうかを判定します。
 		 *
@@ -174,7 +179,7 @@ namespace FK {
 		 */
 		bool		isVertical(const fk_Vector &V);
 
-		// 平面垂直判定関数
+		//! 平面垂直判定関数
 		/*!
 		 *	別の任意の平面と垂直であるかどうかを判定します。
 		 *
@@ -263,6 +268,18 @@ namespace FK {
 								 fk_Vector *pos,
 								 double *t,
 								 double *u, double *v);
+
+		
+		//! 点正射影算出関数
+		/*!
+		 *	任意の位置から平面へ正射影した位置を算出します。
+		 *
+		 *	\param[in]	P	点の位置ベクトル
+		 *
+		 *	\return		点の平面への正射影点の位置ベクトル
+		 */
+		fk_Vector	proj(const fk_Vector &P);
+
 	private:
 		// 平面上の一点 
 		fk_Vector	base;

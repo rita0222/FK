@@ -72,6 +72,9 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/Gregory.h>
+#include <FK/Plane.h>
+#include <FK/Math.h>
+#include <FK/Error.h>
 
 using namespace std;
 
@@ -114,7 +117,7 @@ int fk_Gregory::MapID(bool argMode, int argUV, int argID)
 		}
 	} else {
 		// 内部
-		if(argID < 1 || argID > 2) return -1;
+		if(argID < 0 || argID > 3) return -1;
 
 		switch(argUV) {
 		  case 0:
@@ -124,10 +127,12 @@ int fk_Gregory::MapID(bool argMode, int argUV, int argID)
 			return argID + 8;
 
 		  case 2:
-			return argID + 15;
+			if(argID == 1 || argID == 2) return argID + 15;
+			return argID * 4 + 1;
 
 		  case 3:
-			return argID + 17;
+			if(argID == 1 || argID == 2) return argID + 17;
+			return argID * 4 + 2;
 
 		  default:
 			break;
@@ -135,80 +140,6 @@ int fk_Gregory::MapID(bool argMode, int argUV, int argID)
 	}
 
 	return -1;
-}
-
-void fk_Gregory::init(void)
-{
-	for(_st i = 0; i < 20; i++) ctrl[i].init();
-	bez.init();
-	return;
-}
-
-bool fk_Gregory::setBoundary(int argUV, int argID, const fk_Vector &argPos)
-{
-	int mapID = MapID(true, argUV, argID);
-	if(mapID == -1) return false;
-
-	ctrl[_st(mapID)] = argPos;
-	bez.setCtrl(mapID % 4, mapID/4, argPos);
-	
-	return true;
-}
-
-bool fk_Gregory::setCtrl(int argUV, int argID, const fk_Vector &argPos)
-{
-	int mapID = MapID(false, argUV, argID);
-	if(mapID == -1) return false;
-
-	ctrl[_st(mapID)] = argPos;
-	return true;
-}
-
-fk_Vector fk_Gregory::getBoundary(int argUV, int argID)
-{
-	int mapID = MapID(true, argUV, argID);
-	if(mapID == -1) return fk_Vector();
-
-	return ctrl[_st(mapID)];
-}
-
-fk_Vector fk_Gregory::getCtrl(int argUV, int argID)
-{
-	int mapID = MapID(false, argUV, argID);
-	if(mapID == -1) return fk_Vector();
-
-	return ctrl[_st(mapID)];
-}
-
-void fk_Gregory::adjustCtrl(void)
-{
-	fk_Vector A, B;
-
-	A = ctrl[4] - ctrl[0];
-	B = ctrl[7] - ctrl[3];
-
-	ctrl[5] = 2.0*A/3.0 + B/3.0 + ctrl[1];
-	ctrl[6] = A/3.0 + 2.0*B/3.0 + ctrl[2];
-
-	A = ctrl[8] - ctrl[12];
-	B = ctrl[11] - ctrl[15];
-	
-	ctrl[9] = 2.0*A/3.0 + B/3.0 + ctrl[13];
-	ctrl[10] = A/3.0 + 2.0*B/3.0 + ctrl[14];
-
-	A = ctrl[1] - ctrl[0];
-	B = ctrl[13] - ctrl[12];
-
-	ctrl[16] = 2.0*A/3.0 + B/3.0 + ctrl[4];
-	ctrl[17] = A/3.0 + 2.0*B/3.0 + ctrl[8];
-	
-	A = ctrl[2] - ctrl[3];
-	B = ctrl[14] - ctrl[15];
-
-	ctrl[16] = 2.0*A/3.0 + B/3.0 + ctrl[7];
-	ctrl[17] = A/3.0 + 2.0*B/3.0 + ctrl[11];
-	
-	return;
 }
 
 void fk_Gregory::BezSet(double argU, double argV)
@@ -219,13 +150,13 @@ void fk_Gregory::BezSet(double argU, double argV)
 	double uu = 1.0 - argU;
 	double vv = 1.0 - argV;
 	tmpC[0] = (u * ctrl[5] + v * ctrl[16])/(u + v);
-	tmpC[1] = (u * ctrl[6] + vv * ctrl[18])/(u + vv);
-	tmpC[2] = (uu * ctrl[9] + v * ctrl[17])/(uu + v);
+	tmpC[1] = (uu * ctrl[6] + v * ctrl[18])/(uu + v);
+	tmpC[2] = (u * ctrl[9] + vv * ctrl[17])/(u + vv);
 	tmpC[3] = (uu * ctrl[10] + vv * ctrl[19])/(uu + vv);
 
 	bez.setCtrl(1, 1, tmpC[0]);
-	bez.setCtrl(1, 2, tmpC[1]);
-	bez.setCtrl(2, 1, tmpC[2]);
+	bez.setCtrl(2, 1, tmpC[1]);
+	bez.setCtrl(1, 2, tmpC[2]);
 	bez.setCtrl(2, 2, tmpC[3]);
 }	
 
@@ -269,4 +200,148 @@ fk_Vector fk_Gregory::vDeriv(double argU, double argV)
 
 	BezSet(argU, argV);
 	return bez.vDeriv(argU, argV);
+}
+
+void fk_Gregory::init(void)
+{
+	for(_st i = 0; i < 20; i++) ctrl[i].init();
+	bez.init();
+	return;
+}
+
+bool fk_Gregory::setBoundary(int argUV, int argID, const fk_Vector &argPos)
+{
+	int mapID = MapID(true, argUV, argID);
+	if(mapID == -1) return false;
+
+	ctrl[_st(mapID)] = argPos;
+	bez.setCtrl(mapID % 4, mapID/4, argPos);
+	
+	return true;
+}
+
+bool fk_Gregory::setCtrl(int argUV, int argID, const fk_Vector &argPos)
+{
+	int mapID = MapID(false, argUV, argID);
+	if(mapID == -1) return false;
+
+	ctrl[_st(mapID)] = argPos;
+	if(argID == 0 || argID == 3) bez.setCtrl(mapID % 4, mapID/4, argPos);
+	return true;
+}
+
+fk_Vector fk_Gregory::getBoundary(int argUV, int argID)
+{
+	int mapID = MapID(true, argUV, argID);
+	if(mapID == -1) return fk_Vector();
+
+	return ctrl[_st(mapID)];
+}
+
+fk_Vector fk_Gregory::getCtrl(int argUV, int argID)
+{
+	int mapID = MapID(false, argUV, argID);
+	if(mapID == -1) return fk_Vector();
+
+	return ctrl[_st(mapID)];
+}
+
+void fk_Gregory::adjustCtrl(int argUV)
+{
+	fk_Vector A = ctrl[_st(MapID(false, argUV, 0))] - ctrl[_st(MapID(true, argUV, 0))];
+	fk_Vector B = ctrl[_st(MapID(false, argUV, 3))] - ctrl[_st(MapID(true, argUV, 3))];
+
+	setCtrl(argUV, 1, 2.0*A/3.0 + B/3.0 + ctrl[_st(MapID(true, argUV, 1))]);
+	setCtrl(argUV, 2, A/3.0 + 2.0*B/3.0 + ctrl[_st(MapID(true, argUV, 2))]);
+
+	return;
+}
+		
+
+void fk_Gregory::adjustCtrl(void)
+{
+	for(int i = 0; i < 4; i++) adjustCtrl(i);
+	return;
+}
+
+bool fk_Gregory::connect(fk_Gregory *argSurf, int argThisUV, int argOtherUV, bool negateFlg, bool modeFlg)
+{
+	fk_Vector	oC[8], A, B, C, D, param;
+	fk_Plane	plane;
+	int			i, index;
+	double		s0, s1, t0, t1;
+
+	if(argSurf == nullptr ||
+	   argThisUV < 0 || argThisUV > 3 ||
+	   argOtherUV < 0 || argOtherUV > 3) {
+		return false;
+	}
+
+	// 相手側曲面の内部制御点を事前に補正
+	argSurf->adjustCtrl(argOtherUV);
+	
+	// 相手側曲面から制御点情報を取得
+	for(i = 0; i < 4; i++) {
+		index = (negateFlg == true) ? i : 3-i;
+		oC[i] = argSurf->ctrl[_st(MapID(true, argOtherUV, index))];
+		oC[i+4] = argSurf->ctrl[_st(MapID(false, argOtherUV, index))];
+	}
+
+	// 端点チェック
+	if(oC[0] != ctrl[_st(MapID(true, argThisUV, 0))]) return false;
+	if(oC[3] != ctrl[_st(MapID(true, argThisUV, 3))]) return false;
+
+	// 境界線上制御点の補正
+	setBoundary(argThisUV, 1, oC[1]);
+	setBoundary(argThisUV, 2, oC[2]);
+
+	// 境界線端点の接平面が一致するように、自身境界線の制御点を補正
+	if(modeFlg == false) {
+		plane.set3Pos(oC[0], oC[1], oC[4]);
+		A = plane.proj(getCtrl(argThisUV, 0));
+		if((oC[0] - oC[4])*(oC[0] - A) > 0.0) A = 2.0*oC[0] - oC[4];
+		setCtrl(argThisUV, 0, A);
+	
+		plane.set3Pos(oC[3], oC[2], oC[7]);
+		A = plane.proj(getCtrl(argThisUV, 3));
+		if((oC[3] - oC[7])*(oC[3] - A) > 0.0) A = 2.0*oC[3] - oC[7];
+		setCtrl(argThisUV, 3, A);
+	} else {
+		setCtrl(argThisUV, 0, 2.0*oC[0] - oC[4]);
+		setCtrl(argThisUV, 3, 2.0*oC[3] - oC[7]);
+	}		
+
+	// 分解パラメータの算出
+	A = oC[0] - oC[4];
+	B = oC[1] - oC[0];
+	C = A ^ B;
+	D = ctrl[_st(MapID(false, argThisUV, 0))] - ctrl[_st(MapID(true, argThisUV, 0))];
+	param = fk_Math::divideVec(D, A, B, C);
+	s0 = param.x;
+	t0 = param.y;
+
+	A = oC[3] - oC[7];
+	B = oC[3] - oC[2];
+	C = A ^ B;
+	D = ctrl[_st(MapID(false, argThisUV, 3))] - ctrl[_st(MapID(true, argThisUV, 3))];
+	param = fk_Math::divideVec(D, A, B, C);
+	s1 = param.x;
+	t1 = param.y;
+	
+	// 内部制御点算出
+	A = oC[0] - oC[4];
+	B = oC[1] - oC[5];
+	C = oC[2] - oC[1];
+	D = oC[1] - oC[0];
+
+	setCtrl(argThisUV, 1, (s1 - s0)*A/3.0 + s0*B + 2.0*t0*C/3.0 + t1*D/3.0 + oC[1]);
+
+	A = oC[2] - oC[6];
+	B = oC[3] - oC[7];
+	C = oC[3] - oC[2];
+	D = oC[2] - oC[1];
+
+	setCtrl(argThisUV, 2, s1*A - (s1 - s0)*B/3.0 + t0*C/3.0 + 2.0*t1*D/3.0 + oC[2]);
+
+	return true;
 }

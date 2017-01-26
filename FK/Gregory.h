@@ -22,6 +22,39 @@ namespace FK {
 		//! デストラクタ
 		virtual ~fk_Gregory();
 
+		//! 曲面点算出関数
+		/*!
+		 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
+		 *
+		 *	\param[in]	u	曲面の u パラメータ
+		 *	\param[in]	v	曲面の v パラメータ
+		 *
+		 *	\return 曲面上の点の位置ベクトル
+		 */
+		fk_Vector		pos(double u, double v);
+
+		//! 曲面 u 方向偏微分ベクトル算出関数
+		/*!
+		 *	曲面上の u 方向偏微分ベクトルを算出する関数です。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の u 方向偏微分ベクトル
+		 */
+		fk_Vector		uDeriv(double u, double v);
+
+		//! 曲面 v 方向偏微分ベクトル算出関数
+		/*!
+		 *	曲面上の v 方向偏微分ベクトルを算出する関数です。
+		 *
+		 *	\param[in]	u	u パラメータ
+		 *	\param[in]	v	v パラメータ
+		 *
+		 *	\return		曲面上の v 方向偏微分ベクトル
+		 */
+		fk_Vector		vDeriv(double u, double v);
+
 		//! 初期化用関数
 		/*!
 		 *	この関数は、曲線を初期状態(3次式、全ての制御点が原点にある状態)にします。
@@ -59,7 +92,8 @@ namespace FK {
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
 		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
 		 *	\param[in] ID	境界線制御点のIDを指定します。
-		 *					1 か 2 のいずれかしか指定できません。
+		 *					0から3まで指定でき、
+		 *					0と3の場合は隣接する境界線の制御点を制御します。
 		 *	\param[in] pos	制御点位置ベクトル
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
@@ -95,7 +129,8 @@ namespace FK {
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
 		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
 		 *	\param[in] ID	境界線制御点のIDを指定します。
-		 *					1 か 2 のいずれかしか指定できません。
+		 *					0から3まで指定でき、
+		 *					0と3の場合は隣接する境界線の制御点を返します。
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 *
@@ -108,43 +143,51 @@ namespace FK {
 		 *	現在の境界曲線情報より、内部制御点を自動的に設定します。
 		 *	このとき、内部制御点は境界上の偏微分ベクトルが線形補間となるように設定されます。
 		 *
-		 *	\sa setBoundary(), getBoundary(), setCtrl(), getCtrl()
+		 *	\sa adjustCtrl(int), setBoundary(), getBoundary(), setCtrl(), getCtrl()
 		 */
 		void	adjustCtrl(void);
 
-		//! 曲面点算出関数
+		//! 境界別内部制御点自動設定関数
 		/*!
-		 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
+		 *	特定の境界線に対し、現在の境界曲線情報より内部制御点を自動的に設定します。
+		 *	このとき、内部制御点は境界上の偏微分ベクトルが線形補間となるように設定されます。
 		 *
-		 *	\param[in]	u	曲面の u パラメータ
-		 *	\param[in]	v	曲面の v パラメータ
+		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
+		 *					0 が u側でv始点側、1 がu側でv終点側、
+		 *					2 が v側でu始点側、3 がv側でu終点側です。
+		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
 		 *
-		 *	\return 曲面上の点の位置ベクトル
+		 *	\sa adjustCtrl(void), setBoundary(), getBoundary(), setCtrl(), getCtrl()
 		 */
-		fk_Vector		pos(double u, double v);
+		void	adjustCtrl(int uv);
 
-		//! 曲面 u 方向偏微分ベクトル算出関数
+		//! 隣接曲面G1連続接続関数
 		/*!
-		 *	曲面上の u 方向偏微分ベクトルを算出する関数です。
+		 *	隣接する曲面と G1 連続性を持つように制御点位置を移動します。
+		 *	隣接する境界線のうち、両端点については一致している必要があります。
+		 *	その他の制御点については、 surf 側の制御点に従って補正が行われます。
 		 *
-		 *	\param[in]	u	u パラメータ
-		 *	\param[in]	v	v パラメータ
+		 *	\param[in] surf		隣接曲面。
+		 *						隣接している境界線の両端点が一致している必要があります。
+		 *	\param[in] thisUV	接続する境界曲線の ID を指定します。
+		 *						0 が u側でv始点側、1 がu側でv終点側、
+		 *						2 が v側でu始点側、3 がv側でu終点側です。
+		 *						この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *	\param[in] otherUV	surf 側の接続境界曲線 ID を指定します。
+		 *						IDの指定方法は thisUV と同様です。
+		 *	\param[in] d		自身と surf の境界が同じ方向になる場合 true を、
+		 *						逆方向になる場合 false を代入します。
+		 *	\param[in] mode		境界曲線に対しても連続性を設定するかどうかを指定します。
+		 *						true の場合、自身の境界曲線を surf の境界曲線と強制的に連続にします。
+		 *						false の場合は、接平面連続性を保証しつつ、
+		 *						できる限り元の境界曲線形状を保つように補正します。
 		 *
-		 *	\return		曲面上の u 方向偏微分ベクトル
+		 *	\return		接続に成功した場合 true を、失敗した場合 false を返します。
+		 *
+		 *	\sa setBoundary(), setCtrl(), adjustCtrl()
 		 */
-		fk_Vector		uDeriv(double u, double v);
-
-		//! 曲面 v 方向偏微分ベクトル算出関数
-		/*!
-		 *	曲面上の v 方向偏微分ベクトルを算出する関数です。
-		 *
-		 *	\param[in]	u	u パラメータ
-		 *	\param[in]	v	v パラメータ
-		 *
-		 *	\return		曲面上の v 方向偏微分ベクトル
-		 */
-		fk_Vector		vDeriv(double u, double v);
-
+		bool	connect(fk_Gregory *surf, int thisUV, int otherUV, bool d, bool mode = false);
+		
 	private:
 		fk_BezSurface	bez;
 		fk_Vector		ctrl[20];

@@ -26,6 +26,11 @@ namespace FK_CLI
 	 *	という式でなされます。\f$u, v\f$ は実数パラメータです。
 	 *	各メソッドの解説では、\f$\mathbf{B}\f$ を「基点ベクトル」、
 	 *	\f$\mathbf{U}, \mathbf{V}\f$を「Uベクトル」「Vベクトル」とします。
+	 *
+	 *	なお、平面が関与しない幾何計算は fk_Math クラスに集約しているので、
+	 *	そちらも参照して下さい。
+	 *
+	 *	\sa fk_Math
 	 */
 
 	public ref class fk_Plane {

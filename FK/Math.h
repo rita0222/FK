@@ -17,6 +17,11 @@ namespace FK {
 	 *		double		theta;
 	 *		
 	 *		theta = fk_Math::calcCosine(vec1, vec2);
+	 *
+	 *	なお、平面に関する幾何計算は fk_Plane 型に集約しているので、
+	 *	そちらも参照して下さい。
+	 *
+	 *	\sa fk_Plane
 	 */
 
 	class fk_Math {

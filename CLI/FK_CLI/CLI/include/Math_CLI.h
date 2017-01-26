@@ -21,6 +21,11 @@ namespace FK_CLI
 	 *		double		theta;
 	 *		
 	 *		theta = fk_Math.CalcCosine(vec1, vec2);
+	 *
+	 *	なお、平面に関する幾何計算は fk_Plane 型に集約しているので、
+	 *	そちらも参照して下さい。
+	 *
+	 *	\sa fk_Plane
 	 */
 
 	public ref class fk_Math {

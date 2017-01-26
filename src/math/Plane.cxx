@@ -299,3 +299,8 @@ bool fk_Plane::calcCrossPlaneParam(const fk_Vector &argStart,
 
 	return calcCrossAll(argStart, argEnd, &dummy, &t, retU, retV);
 }
+
+fk_Vector fk_Plane::proj(const fk_Vector &argP)
+{
+	return argP - ((argP - base) * norm) * norm;
+}
