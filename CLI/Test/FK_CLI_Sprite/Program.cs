@@ -44,7 +44,7 @@ namespace FK_CLI_Sprite
  
 			count = 0;
 			while(window.Update() == true) {
-				if(count < 10) space = "   ";
+                if (count < 10) space = "   ";
 				else if(count < 100) space = "  ";
 				else if(count < 1000) space = " ";
 				else space = "";
