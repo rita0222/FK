@@ -169,18 +169,25 @@ namespace FK {
 		 *
 		 *	\param[in] surf		隣接曲面。
 		 *						隣接している境界線の両端点が一致している必要があります。
+		 *
 		 *	\param[in] thisUV	接続する境界曲線の ID を指定します。
 		 *						0 が u側でv始点側、1 がu側でv終点側、
 		 *						2 が v側でu始点側、3 がv側でu終点側です。
 		 *						この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *
 		 *	\param[in] otherUV	surf 側の接続境界曲線 ID を指定します。
 		 *						IDの指定方法は thisUV と同様です。
+		 *
 		 *	\param[in] d		自身と surf の境界が同じ方向になる場合 true を、
 		 *						逆方向になる場合 false を代入します。
-		 *	\param[in] mode		境界曲線に対しても連続性を設定するかどうかを指定します。
-		 *						true の場合、自身の境界曲線を surf の境界曲線と強制的に連続にします。
-		 *						false の場合は、接平面連続性を保証しつつ、
-		 *						できる限り元の境界曲線形状を保つように補正します。
+		 *
+		 *	\param[in] mode		連続性を C1 とするか G1 とするかを設定します。
+		 *						C1 連続とは、境界上の偏微分ベクトルが全て連続であることです。
+		 *						一方、G1 連続とは境界上の接平面が連続であることです。
+		 *						G1 連続は必ずしも偏微分ベクトルが連続である必要はありません。
+		 *						
+		 *						true の場合、C1 連続性を持つように制御点を移動します。
+		 *						false の場合、G1 連続性を持つように制御点を移動します。
 		 *
 		 *	\return		接続に成功した場合 true を、失敗した場合 false を返します。
 		 *
@@ -194,6 +201,8 @@ namespace FK {
 
 		int		MapID(bool, int, int);
 		void	BezSet(double, double);
+		void	C1Connect(int, fk_Vector *);
+		void	G1Connect(int, fk_Vector *);
 	};
 }
 

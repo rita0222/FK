@@ -264,12 +264,11 @@ void fk_Gregory::adjustCtrl(void)
 	return;
 }
 
-bool fk_Gregory::connect(fk_Gregory *argSurf, int argThisUV, int argOtherUV, bool negateFlg, bool modeFlg)
+bool fk_Gregory::connect(fk_Gregory *argSurf, int argThisUV, int argOtherUV,
+						 bool negateFlg, bool modeFlg)
 {
-	fk_Vector	oC[8], A, B, C, D, param;
-	fk_Plane	plane;
+	fk_Vector	oC[8];
 	int			i, index;
-	double		s0, s1, t0, t1;
 
 	if(argSurf == nullptr ||
 	   argThisUV < 0 || argThisUV > 3 ||
@@ -295,53 +294,72 @@ bool fk_Gregory::connect(fk_Gregory *argSurf, int argThisUV, int argOtherUV, boo
 	setBoundary(argThisUV, 1, oC[1]);
 	setBoundary(argThisUV, 2, oC[2]);
 
-	// 境界線端点の接平面が一致するように、自身境界線の制御点を補正
-	if(modeFlg == false) {
-		plane.set3Pos(oC[0], oC[1], oC[4]);
-		A = plane.proj(getCtrl(argThisUV, 0));
-		if((oC[0] - oC[4])*(oC[0] - A) > 0.0) A = 2.0*oC[0] - oC[4];
-		setCtrl(argThisUV, 0, A);
-	
-		plane.set3Pos(oC[3], oC[2], oC[7]);
-		A = plane.proj(getCtrl(argThisUV, 3));
-		if((oC[3] - oC[7])*(oC[3] - A) > 0.0) A = 2.0*oC[3] - oC[7];
-		setCtrl(argThisUV, 3, A);
+	// 接続処理
+	if(modeFlg == true) {
+		C1Connect(argThisUV, oC);
 	} else {
-		setCtrl(argThisUV, 0, 2.0*oC[0] - oC[4]);
-		setCtrl(argThisUV, 3, 2.0*oC[3] - oC[7]);
-	}		
+		G1Connect(argThisUV, oC); 
+	}
+
+	return true;
+}
+
+void fk_Gregory::C1Connect(int argUV, fk_Vector *argOC)
+{
+	for(int i = 0; i <= 3; i++) {
+		setCtrl(argUV, i, 2.0*argOC[i] - argOC[i+4]);
+	}
+	return;
+}
+
+void fk_Gregory::G1Connect(int argUV, fk_Vector *argOC)
+{
+	double		s0, s1, t0, t1;
+	fk_Vector	A, B, C, D, param;
+	fk_Plane	plane;
+
+	// 境界線端点の接平面が一致するように、自身境界線の制御点を補正
+	plane.set3Pos(argOC[0], argOC[1], argOC[4]);
+	A = plane.proj(getCtrl(argUV, 0));
+	if((argOC[0] - argOC[4])*(argOC[0] - A) > 0.0) A = 2.0*argOC[0] - argOC[4];
+	setCtrl(argUV, 0, A);
+	
+	plane.set3Pos(argOC[3], argOC[2], argOC[7]);
+	A = plane.proj(getCtrl(argUV, 3));
+	if((argOC[3] - argOC[7])*(argOC[3] - A) > 0.0) A = 2.0*argOC[3] - argOC[7];
+	setCtrl(argUV, 3, A);
 
 	// 分解パラメータの算出
-	A = oC[0] - oC[4];
-	B = oC[1] - oC[0];
+	A = argOC[0] - argOC[4];
+	B = argOC[1] - argOC[0];
 	C = A ^ B;
-	D = ctrl[_st(MapID(false, argThisUV, 0))] - ctrl[_st(MapID(true, argThisUV, 0))];
+	D = ctrl[_st(MapID(false, argUV, 0))] - ctrl[_st(MapID(true, argUV, 0))];
 	param = fk_Math::divideVec(D, A, B, C);
 	s0 = param.x;
 	t0 = param.y;
 
-	A = oC[3] - oC[7];
-	B = oC[3] - oC[2];
+	A = argOC[3] - argOC[7];
+	B = argOC[3] - argOC[2];
 	C = A ^ B;
-	D = ctrl[_st(MapID(false, argThisUV, 3))] - ctrl[_st(MapID(true, argThisUV, 3))];
+	D = ctrl[_st(MapID(false, argUV, 3))] - ctrl[_st(MapID(true, argUV, 3))];
 	param = fk_Math::divideVec(D, A, B, C);
 	s1 = param.x;
 	t1 = param.y;
 	
 	// 内部制御点算出
-	A = oC[0] - oC[4];
-	B = oC[1] - oC[5];
-	C = oC[2] - oC[1];
-	D = oC[1] - oC[0];
+	A = argOC[0] - argOC[4];
+	B = argOC[1] - argOC[5];
+	C = argOC[2] - argOC[1];
+	D = argOC[1] - argOC[0];
 
-	setCtrl(argThisUV, 1, (s1 - s0)*A/3.0 + s0*B + 2.0*t0*C/3.0 + t1*D/3.0 + oC[1]);
+	setCtrl(argUV, 1, (s1 - s0)*A/3.0 + s0*B + 2.0*t0*C/3.0 + t1*D/3.0 + argOC[1]);
 
-	A = oC[2] - oC[6];
-	B = oC[3] - oC[7];
-	C = oC[3] - oC[2];
-	D = oC[2] - oC[1];
+	A = argOC[2] - argOC[6];
+	B = argOC[3] - argOC[7];
+	C = argOC[3] - argOC[2];
+	D = argOC[2] - argOC[1];
 
-	setCtrl(argThisUV, 2, s1*A - (s1 - s0)*B/3.0 + t0*C/3.0 + 2.0*t1*D/3.0 + oC[2]);
+	setCtrl(argUV, 2, s1*A - (s1 - s0)*B/3.0 + t0*C/3.0 + 2.0*t1*D/3.0 + argOC[2]);
 
-	return true;
+	return;
 }
