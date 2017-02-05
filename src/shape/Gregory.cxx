@@ -74,7 +74,7 @@
 #include <FK/Gregory.h>
 #include <FK/Plane.h>
 #include <FK/Math.h>
-#include <FK/Error.h>
+#include <FK/Error.H>
 
 using namespace std;
 
