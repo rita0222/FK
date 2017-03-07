@@ -95,9 +95,28 @@ namespace FK {
 		 */
 		fk_Vector		diff(double t);
 
+		//! 曲線分割制御点算出関数
+		/*!
+		 *	現在の曲線を任意のパラメータで2つに分割し、
+		 *	その分割した曲線の制御点列を出力します。
+		 *
+		 *	\param[in]	t	曲線上のパラメータ
+		 *
+		 *	\param[out]	C	分割した後の制御点配列。
+		 *					元の曲線の次数を n としたとき、
+		 *					出力配列は、0 〜 t までの部分の曲線制御点が C[0] 〜 C[n]、
+		 *					t 〜 1 までの部分の曲線制御点が C[n] 〜 C[2n+1] となります。
+		 *
+		 *	\return	分割に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool			split(double t, std::vector<fk_Vector> *C);
+
 	private:
-		int						deg;
-		std::vector<fk_Vector>	ctrlPos;
+		int										deg;
+		std::vector<fk_Vector>					ctrlPos;
+		std::vector<std::vector<fk_Vector> >	divPos;
+
+		void			MakeDiv(double);
 	};
 }
 

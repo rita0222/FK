@@ -71,6 +71,7 @@
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
 #include <FK/BezCurve.h>
+#include <FK/Error.H>
 
 using namespace std;
 
@@ -103,6 +104,7 @@ bool fk_BezCurve::setDegree(int argDeg)
 
 	deg = argDeg;
 	ctrlPos.resize(static_cast<_st>(deg+1));
+	divPos.clear();
 	changeFlg = true;
 	return true;
 }
@@ -206,3 +208,54 @@ fk_Vector fk_BezCurve::diff(double t)
 
 	return (vec*double(deg));
 }
+
+void fk_BezCurve::MakeDiv(double argT)
+{
+	_st i, j, d;
+
+	d = _st(deg);
+
+	if(divPos.empty() == true) {
+		divPos.resize(d+1);
+
+		for(i = 0; i <= d; ++i) {
+			divPos[i].resize(d+1-i);
+		}
+	}
+
+	for(i = 0; i <= d; ++i) {
+		divPos[0][i] = ctrlPos[i];
+	}
+
+	for(i = 1; i <= d; ++i) {
+		for(j = 0; j <= d - i; ++j) {
+			divPos[i][j] = (1.0 - argT) * divPos[i-1][j] + argT * divPos[i-1][j+1];
+		}
+	}
+
+	for(i = 0; i < divPos.size(); ++i) {
+		for(j = 0; j < divPos[i].size(); ++j) {
+			fk_Printf("[%d, %d] = (%f, %f, %f)", i, j,
+					  divPos[i][j].x, divPos[i][j].y, divPos[i][j].z);
+		}
+	}
+}
+
+bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
+{
+	_st		i, d;
+
+	if(argP == nullptr) return false;
+	if(argT < -FK_EPS || argT > 1.0 + FK_EPS) return false;
+
+	d = _st(deg);
+	argP->clear();
+
+	MakeDiv(argT);
+	for(i = 0; i <= d; ++i) argP->push_back(divPos[i][0]);
+	for(i = 1; i <= d; ++i) argP->push_back(divPos[d-i][i]);
+	return true;
+}
+
+		
+		

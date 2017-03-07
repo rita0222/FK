@@ -70,7 +70,7 @@ namespace FK {
 		 *	\param[in] uv	境界線のIDを指定します。
 		 *					0 が u側でv始点側、1 がu側でv終点側、
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
 		 *	\param[in] ID	境界線制御点のIDを指定します。
 		 *					曲線の始点は0で、
 		 *					続く制御点のIDが 1,2,3 となります。
@@ -78,7 +78,7 @@ namespace FK {
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
 		 *
-		 *	\sa setCtrl(), getBoundary(), fk_SurfDirection
+		 *	\sa setCtrl(), getBoundary(), FK::fk_SurfDirection
 		 */
 		bool	setBoundary(int uv, int ID, const fk_Vector &pos);
 
@@ -90,7 +90,7 @@ namespace FK {
 		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
 		 *					0 が u側でv始点側、1 がu側でv終点側、
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
 		 *	\param[in] ID	境界線制御点のIDを指定します。
 		 *					0から3まで指定でき、
 		 *					0と3の場合は隣接する境界線の制御点を制御します。
@@ -98,7 +98,7 @@ namespace FK {
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
 		 *
-		 *	\sa setBoudary(), getCtrl(), fk_SurfDirection
+		 *	\sa setBoundary(), getCtrl(), FK::fk_SurfDirection
 		 */
 		bool	setCtrl(int uv, int ID, const fk_Vector &pos);
 
@@ -109,14 +109,14 @@ namespace FK {
 		 *	\param[in] uv	境界線のIDを指定します。
 		 *					0 が u側でv始点側、1 がu側でv終点側、
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
 		 *	\param[in] ID	境界線制御点のIDを指定します。
 		 *					曲線の始点は0で、
 		 *					続く制御点のIDが 1,2,3 となります。
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 *
-		 *	\sa setBoundary(), fk_SurfDirection
+		 *	\sa setBoundary(), FK::fk_SurfDirection
 		 */
 		fk_Vector	getBoundary(int uv, int ID);
 
@@ -127,14 +127,14 @@ namespace FK {
 		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
 		 *					0 が u側でv始点側、1 がu側でv終点側、
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
 		 *	\param[in] ID	境界線制御点のIDを指定します。
 		 *					0から3まで指定でき、
 		 *					0と3の場合は隣接する境界線の制御点を返します。
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 *
-		 *	\sa setCtrl(), fk_SurfDirection
+		 *	\sa setCtrl(), FK::fk_SurfDirection
 		 */
 		fk_Vector	getCtrl(int uv, int ID);
 
@@ -155,7 +155,7 @@ namespace FK {
 		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
 		 *					0 が u側でv始点側、1 がu側でv終点側、
 		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
 		 *
 		 *	\sa adjustCtrl(void), setBoundary(), getBoundary(), setCtrl(), getCtrl()
 		 */
@@ -173,7 +173,7 @@ namespace FK {
 		 *	\param[in] thisUV	接続する境界曲線の ID を指定します。
 		 *						0 が u側でv始点側、1 がu側でv終点側、
 		 *						2 が v側でu始点側、3 がv側でu終点側です。
-		 *						この部分は、 fk_SurfDirection 型で指定することも可能です。
+		 *						この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
 		 *
 		 *	\param[in] otherUV	surf 側の接続境界曲線 ID を指定します。
 		 *						IDの指定方法は thisUV と同様です。
