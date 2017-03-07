@@ -232,13 +232,7 @@ void fk_BezCurve::MakeDiv(double argT)
 			divPos[i][j] = (1.0 - argT) * divPos[i-1][j] + argT * divPos[i-1][j+1];
 		}
 	}
-
-	for(i = 0; i < divPos.size(); ++i) {
-		for(j = 0; j < divPos[i].size(); ++j) {
-			fk_Printf("[%d, %d] = (%f, %f, %f)", i, j,
-					  divPos[i][j].x, divPos[i][j].y, divPos[i][j].z);
-		}
-	}
+	return;
 }
 
 bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
