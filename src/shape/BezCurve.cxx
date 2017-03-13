@@ -252,4 +252,128 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 }
 
 		
+double fk_BezCurve::CrossZero(fk_Vector &argA, fk_Vector &argB)
+{
+	if(fabs(argA.y - argB.y) < FK_EPS) return -1.0;
+
+	if((argA.y >= 0.0 && argB.y < 0.0) ||
+	   (argA.y < 0.0 && argB.y >= 0.0)) {
+		return (argA.y/(argA.y - argB.y))*(argB.x - argA.x) + argA.x;
+	}
+	return -1.0;
+}
+
+bool fk_BezCurve::CrossCH(vector<fk_Vector> *argC, double *argMin, double *argMax)
+{
+	static _st id[6][2] =
+		{{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3}};
+
+	double min = 1.0;
+	double max = 0.0;
+
+	int count = 0;
+	for(_st i = 0; i < 6; i++) {
+		double ans = CrossZero(argC->at(id[i][0]), argC->at(id[i][1]));
+		if(ans < -0.5) continue;
+		count++;
+		if(ans < min) min = ans;
+		if(ans > max) max = ans;
+	}
+	if(count < 2) return false;
+
+	*argMin = min;
+	*argMax = max;
+	return true;
+}	
+
+void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
+							double argMax, vector<double> *argA)
+{
+	_st					i, j;
+	vector<fk_Vector>	clip, tmpClip;
+	fk_BezCurve			curv;
+	double				min_o, min_n, max_o, max_n;
+	double				t1, t2, t;
+
+	for(i = 0; i <= 3; ++i) {
+		clip.push_back(fk_Vector(double(i)/3.0, argC->at(i).y, 0.0));
+		curv.setCtrl(int(i), clip[i]);
+	}
+	min_o = min_n = 0.0;
+	max_o = max_n = 1.0;
+	
+	if(CrossCH(&clip, &min_n, &max_n) == false) return;
+
+	for(j = 0;; ++j) {
+		if(j == 4 || max_n - min_n < FK_EPS) break;
+
+		t1 = (min_n - min_o)/(max_o - min_o);
+		t2 = (max_n - min_n)/(max_o - min_n);
 		
+		curv.split(t1, &tmpClip);
+		for(i = 0; i <= 3; ++i) curv.setCtrl(int(i), tmpClip[i+3]);
+
+		curv.split(t2, &tmpClip);
+		for(i = 0; i <= 3; ++i) {
+			curv.setCtrl(int(i), tmpClip[i]);
+			clip[i] = tmpClip[i];
+		}
+		min_o = min_n;
+		max_o = max_n;
+		CrossCH(&clip, &min_n, &max_n);
+	}
+
+	if(max_n - min_n > 0.001) {
+		for(i = 0; i <= 3; ++i) {
+			clip[i] = fk_Vector(double(i)/3.0, argC->at(i).y, 0.0);
+			curv.setCtrl(int(i), clip[i]);
+		}
+		curv.split(0.5, &tmpClip);
+		for(i = 0; i <= 3; ++i) clip[i] = tmpClip[i+3];
+		CrossFunc(&tmpClip, argMin, (argMax + argMin)/2.0, argA);
+		CrossFunc(&clip, (argMax + argMin)/2.0, argMax, argA);
+	} else {
+		t = (min_n + max_n)/2.0;
+		argA->push_back((1.0 - t) * argMin + t * argMax);
+	}
+	return;
+}
+
+void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> *argA)
+{
+	vector<fk_Vector>	ctrl;
+	fk_Vector			p = argS;
+	fk_Vector			v = argE - argS;
+	fk_Matrix			m;
+	v.normalize();
+
+	m[0][0] = m[1][1] = v.x;
+	m[0][1] = v.y;
+	m[1][0] = -v.y;
+
+	for(_st i = 0; i < ctrlPos.size(); ++i) {
+		ctrl.push_back(m * (ctrlPos[i] - argS));
+	}
+	
+	CrossFunc(&ctrl, 0.0, 1.0, argA);
+}
+
+void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
+								 fk_Vector argE, vector<double> *argA)
+{
+	vector<fk_Vector>	ctrl;
+	fk_Vector			p = argS;
+	fk_Vector			v = argE - argS;
+	fk_Matrix			m;
+	v.normalize();
+
+	m[0][0] = m[1][1] = v.x;
+	m[0][1] = v.y;
+	m[1][0] = -v.y;
+
+	for(_st i = 0; i < ctrlPos.size(); ++i) {
+		ctrl.push_back(m * ((argM * ctrlPos[i]) - argS));
+	}
+	
+	CrossFunc(&ctrl, 0.0, 1.0, argA);
+}

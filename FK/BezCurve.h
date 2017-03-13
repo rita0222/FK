@@ -2,6 +2,7 @@
 #define __FK_BEZCURVE_HEADER__
 
 #include <FK/Curve.h>
+#include <FK/Matrix.h>
 
 namespace FK {
 
@@ -25,7 +26,7 @@ namespace FK {
 		/*!
 		 *	この関数は、曲線を初期状態(3次式、全ての制御点が原点にある状態)にします。
 		 */
-		void			init(void);
+		void	init(void);
 
 		//! 次数設定関数
 		/*!
@@ -40,7 +41,7 @@ namespace FK {
 		 *
 		 *	\return	次数設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool			setDegree(int deg);
+		bool	setDegree(int deg);
 
 		//! 制御点設定関数
 		/*!
@@ -51,7 +52,7 @@ namespace FK {
 		 *
 		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool			setCtrl(int ID, const fk_Vector &pos);
+		bool	setCtrl(int ID, const fk_Vector &pos);
 
 		//! 次数参照関数
 		/*!
@@ -59,7 +60,7 @@ namespace FK {
 		 *
 		 *	\return 次数
 		 */
-		int				getDegree(void);	
+		int		getDegree(void);	
 
 		//! 制御点参照関数
 		/*!
@@ -69,7 +70,7 @@ namespace FK {
 		 *
 		 *	\return	制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 */
-		fk_Vector		getCtrl(int ID);
+		fk_Vector	getCtrl(int ID);
 
 		//! 曲線算出関数
 		/*!
@@ -81,7 +82,7 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の位置ベクトル
 		 */
-		fk_Vector		pos(double t);
+		fk_Vector	pos(double t);
 
 		//! 曲線1階微分ベクトル算出関数
 		/*!
@@ -93,7 +94,7 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の1階微分ベクトル
 		 */
-		fk_Vector		diff(double t);
+		fk_Vector	diff(double t);
 
 		//! 曲線分割制御点算出関数
 		/*!
@@ -109,7 +110,40 @@ namespace FK {
 		 *
 		 *	\return	分割に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			split(double t, std::vector<fk_Vector> *C);
+		bool	split(double t, std::vector<fk_Vector> *C);
+
+		//! 直線交点算出関数
+		/*!
+		 *	平面 \(z = 0\) 上にある Bezier 曲線と直線の交点パラメータを求めます。
+		 *	等関数では、曲線や直線の全ての \(z\) 成分が無視されます。
+		 *
+		 *	\param[in]	S	直線上の点。E とは異なる点である必要があります。
+		 *
+		 *	\param[in]	E	直線上の点。S とは異なる点である必要があります。
+		 *
+		 *	\param[out]	A	曲線上の交点パラメータ配列。
+		 *					交点がない場合は空配列となります。
+		 */
+		void	calcCrossParam(fk_Vector S, fk_Vector E, std::vector<double> *A);
+
+		//! 変換行列付直線交点算出関数
+		/*!
+		 *	平面 \(z = 0\) 上にある Bezier 曲線と直線の交点パラメータを求めます。
+		 *	等関数では、曲線や直線の全ての \(z\) 成分が無視されます。
+		 *
+		 *	\param[in]	M	曲線に対する変換行列。
+		 *					fk_Model による移動や拡大縮小の反映後で交点を算出したい場合は、
+		 *					ここに fk_MatAdmin::getMatrix() や
+		 *					fk_Model::getInhMatrix() で得た行列を代入します。
+		 *
+		 *	\param[in]	S	直線上の点。E とは異なる点である必要があります。
+		 *
+		 *	\param[in]	E	直線上の点。S とは異なる点である必要があります。
+		 *
+		 *	\param[out]	A	曲線上の交点パラメータ配列。
+		 *					交点がない場合は空配列となります。
+		 */
+		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
 
 	private:
 		int										deg;
@@ -117,6 +151,10 @@ namespace FK {
 		std::vector<std::vector<fk_Vector> >	divPos;
 
 		void			MakeDiv(double);
+		double			CrossZero(fk_Vector &, fk_Vector &);
+		bool			CrossCH(std::vector<fk_Vector> *, double *, double *);
+		void			CrossFunc(std::vector<fk_Vector> *,
+								  double, double, std::vector<double> *);
 	};
 }
 
