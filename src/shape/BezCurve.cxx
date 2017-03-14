@@ -265,15 +265,39 @@ double fk_BezCurve::CrossZero(fk_Vector &argA, fk_Vector &argB)
 
 bool fk_BezCurve::CrossCH(vector<fk_Vector> *argC, double *argMin, double *argMax)
 {
-	static _st id[6][2] =
+	static vector<vector<_st> > id2 =
+		{{0, 1}, {0, 2}, {1, 2}};
+
+	static vector<vector<_st> > id3 =
 		{{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3}};
 
+	static vector<vector<_st> > id4 =
+		{{0, 1}, {0, 2}, {0, 3}, {0, 4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}};
+	
 	double min = 1.0;
 	double max = 0.0;
-
 	int count = 0;
-	for(_st i = 0; i < 6; i++) {
-		double ans = CrossZero(argC->at(id[i][0]), argC->at(id[i][1]));
+	vector<vector<_st> > *id;
+	
+	switch(deg) {
+	  case 2:
+		id = &id2;
+		break;
+		
+	  case 3:
+		id = &id3;
+		break;
+		
+	  case 4:
+		id = &id4;
+		break;
+		
+	  default:
+		return false;
+	}
+	
+	for(_st i = 0; i < id->size(); ++i) {
+		double ans = CrossZero(argC->at(id->at(i)[0]), argC->at(id->at(i)[1]));
 		if(ans < -0.5) continue;
 		count++;
 		if(ans < min) min = ans;
@@ -294,9 +318,11 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 	fk_BezCurve			curv;
 	double				min_o, min_n, max_o, max_n;
 	double				t1, t2, t;
+	_st					_deg = _st(deg);
 
-	for(i = 0; i <= 3; ++i) {
-		clip.push_back(fk_Vector(double(i)/3.0, argC->at(i).y, 0.0));
+	fk_Printf("start = (%f, %f)", argMin, argMax);
+	for(i = 0; i <= _deg; ++i) {
+		clip.push_back(fk_Vector(double(i)/double(deg), argC->at(i).y, 0.0));
 		curv.setCtrl(int(i), clip[i]);
 	}
 	min_o = min_n = 0.0;
@@ -310,11 +336,14 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 		t1 = (min_n - min_o)/(max_o - min_o);
 		t2 = (max_n - min_n)/(max_o - min_n);
 		
+		fk_Printf("(min_o, max_o) = (%f, %f)", min_o, max_o);
+		fk_Printf("(min_n, max_n) = (%f, %f)", min_n, max_n);
+		
 		curv.split(t1, &tmpClip);
-		for(i = 0; i <= 3; ++i) curv.setCtrl(int(i), tmpClip[i+3]);
+		for(i = 0; i <= _deg; ++i) curv.setCtrl(int(i), tmpClip[i+_deg]);
 
 		curv.split(t2, &tmpClip);
-		for(i = 0; i <= 3; ++i) {
+		for(i = 0; i <= _deg; ++i) {
 			curv.setCtrl(int(i), tmpClip[i]);
 			clip[i] = tmpClip[i];
 		}
@@ -324,17 +353,18 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 	}
 
 	if(max_n - min_n > 0.001) {
-		for(i = 0; i <= 3; ++i) {
-			clip[i] = fk_Vector(double(i)/3.0, argC->at(i).y, 0.0);
+		for(i = 0; i <= _deg; ++i) {
+			clip[i] = fk_Vector(double(i)/double(deg), argC->at(i).y, 0.0);
 			curv.setCtrl(int(i), clip[i]);
 		}
 		curv.split(0.5, &tmpClip);
-		for(i = 0; i <= 3; ++i) clip[i] = tmpClip[i+3];
+		for(i = 0; i <= _deg; ++i) clip[i] = tmpClip[i+_deg];
 		CrossFunc(&tmpClip, argMin, (argMax + argMin)/2.0, argA);
 		CrossFunc(&clip, (argMax + argMin)/2.0, argMax, argA);
 	} else {
 		t = (min_n + max_n)/2.0;
 		argA->push_back((1.0 - t) * argMin + t * argMax);
+		fk_Printf("push = %f", (1.0 - t) * argMin + t * argMax);
 	}
 	return;
 }
