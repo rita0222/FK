@@ -381,8 +381,14 @@ void fk_BezCurve::CheckCross(vector<fk_Vector> *argC, vector<double> *argTmpA,
 	argTrueA->clear();
 
 	for(_st i = 0; i < argTmpA->size(); ++i) {
-		if(fabs(curv.pos(argTmpA->at(i)).y) < argT) {
-			argTrueA->push_back(argTmpA->at(i));
+		double p = argTmpA->at(i);
+		double d = fabs(curv.pos(p).y);
+		if(d < argT) {
+			argTrueA->push_back(p);
+		} else {
+			if(debugMode == true) {
+				fk_Printf("(p, d) = %f, %f", p, d);
+			}
 		}
 	}
 }
@@ -398,7 +404,7 @@ void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> 
 	fk_Vector			p = argS;
 	fk_Vector			v = argE - argS;
 	fk_Matrix			m;
-	vector<double>		tmpA;
+	//vector<double>		tmpA;
 
 	v.normalize();
 	m[0][0] = m[1][1] = v.x;
@@ -409,8 +415,9 @@ void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> 
 		ctrl.push_back(m * (ctrlPos[i] - argS));
 	}
 	
-	CrossFunc(&ctrl, 0.0, 1.0, &tmpA);
-	CheckCross(&ctrl, &tmpA, argA, argT);
+	argA->clear();
+	CrossFunc(&ctrl, 0.0, 1.0, argA);
+	//CheckCross(&ctrl, &tmpA, argA, argT);
 }
 
 void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
@@ -420,7 +427,7 @@ void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
 	fk_Vector			p = argS;
 	fk_Vector			v = argE - argS;
 	fk_Matrix			m;
-	vector<double>		tmpA;
+	//vector<double>		tmpA;
 
 	v.normalize();
 	m[0][0] = m[1][1] = v.x;
@@ -431,7 +438,8 @@ void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
 		ctrl.push_back(m * ((argM * ctrlPos[i]) - argS));
 	}
 	
-	CrossFunc(&ctrl, 0.0, 1.0, &tmpA);
-	CheckCross(&ctrl, &tmpA, argA, argT);
+	argA->clear();
+	CrossFunc(&ctrl, 0.0, 1.0, argA);
+	//CheckCross(&ctrl, &tmpA, argA, argT);
 }
 
