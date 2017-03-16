@@ -80,6 +80,7 @@ fk_BezCurve::fk_BezCurve(void)
 	SetObjectType(FK_BEZCURVE);
 
 	setDegree(3);
+	debugMode = false;
 	return;
 }
 
@@ -240,7 +241,7 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 	_st		i, d;
 
 	if(argP == nullptr) return false;
-	if(argT < -FK_EPS || argT > 1.0 + FK_EPS) return false;
+	if(argT < FK_EPS || argT > 1.0 - FK_EPS) return false;
 
 	d = _st(deg);
 	argP->clear();
@@ -255,7 +256,7 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 double fk_BezCurve::CrossZero(fk_Vector &argA, fk_Vector &argB)
 {
 	if(fabs(argA.y - argB.y) < FK_EPS) return -1.0;
-
+	
 	if((argA.y >= 0.0 && argB.y < 0.0) ||
 	   (argA.y < 0.0 && argB.y >= 0.0)) {
 		return (argA.y/(argA.y - argB.y))*(argB.x - argA.x) + argA.x;
@@ -320,26 +321,25 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 	double				t1, t2, t;
 	_st					_deg = _st(deg);
 
-	fk_Printf("start = (%f, %f)", argMin, argMax);
+	curv.setDegree(deg);
 	for(i = 0; i <= _deg; ++i) {
 		clip.push_back(fk_Vector(double(i)/double(deg), argC->at(i).y, 0.0));
 		curv.setCtrl(int(i), clip[i]);
 	}
 	min_o = min_n = 0.0;
 	max_o = max_n = 1.0;
-	
+
 	if(CrossCH(&clip, &min_n, &max_n) == false) return;
 
-	for(j = 0;; ++j) {
-		if(j == 4 || max_n - min_n < FK_EPS) break;
+	for(j = 0; j < 4 && max_n - min_n > FK_EPS; ++j) {
 
 		t1 = (min_n - min_o)/(max_o - min_o);
 		t2 = (max_n - min_n)/(max_o - min_n);
 		
-		fk_Printf("(min_o, max_o) = (%f, %f)", min_o, max_o);
-		fk_Printf("(min_n, max_n) = (%f, %f)", min_n, max_n);
-		
+		if(t1 < FK_EPS && t2 > 1.0 - FK_EPS) break;
+
 		curv.split(t1, &tmpClip);
+		
 		for(i = 0; i <= _deg; ++i) curv.setCtrl(int(i), tmpClip[i+_deg]);
 
 		curv.split(t2, &tmpClip);
@@ -364,19 +364,43 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 	} else {
 		t = (min_n + max_n)/2.0;
 		argA->push_back((1.0 - t) * argMin + t * argMax);
-		fk_Printf("push = %f", (1.0 - t) * argMin + t * argMax);
 	}
 	return;
 }
 
-void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> *argA)
+void fk_BezCurve::CheckCross(vector<fk_Vector> *argC, vector<double> *argTmpA,
+							 vector<double> *argTrueA, double argT)
+{
+	fk_BezCurve		curv;
+
+	curv.setDegree(deg);
+	for(_st i = 0; i < argC->size(); ++i) {
+		curv.setCtrl(int(i), argC->at(i));
+	}
+	
+	argTrueA->clear();
+
+	for(_st i = 0; i < argTmpA->size(); ++i) {
+		if(fabs(curv.pos(argTmpA->at(i)).y) < argT) {
+			argTrueA->push_back(argTmpA->at(i));
+		}
+	}
+}
+
+void fk_BezCurve::DebugMode(bool argMode)
+{
+	debugMode = argMode;
+}
+
+void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> *argA, double argT)
 {
 	vector<fk_Vector>	ctrl;
 	fk_Vector			p = argS;
 	fk_Vector			v = argE - argS;
 	fk_Matrix			m;
-	v.normalize();
+	vector<double>		tmpA;
 
+	v.normalize();
 	m[0][0] = m[1][1] = v.x;
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
@@ -385,18 +409,20 @@ void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> 
 		ctrl.push_back(m * (ctrlPos[i] - argS));
 	}
 	
-	CrossFunc(&ctrl, 0.0, 1.0, argA);
+	CrossFunc(&ctrl, 0.0, 1.0, &tmpA);
+	CheckCross(&ctrl, &tmpA, argA, argT);
 }
 
 void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
-								 fk_Vector argE, vector<double> *argA)
+								 fk_Vector argE, vector<double> *argA, double argT)
 {
 	vector<fk_Vector>	ctrl;
 	fk_Vector			p = argS;
 	fk_Vector			v = argE - argS;
 	fk_Matrix			m;
-	v.normalize();
+	vector<double>		tmpA;
 
+	v.normalize();
 	m[0][0] = m[1][1] = v.x;
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
@@ -405,5 +431,7 @@ void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
 		ctrl.push_back(m * ((argM * ctrlPos[i]) - argS));
 	}
 	
-	CrossFunc(&ctrl, 0.0, 1.0, argA);
+	CrossFunc(&ctrl, 0.0, 1.0, &tmpA);
+	CheckCross(&ctrl, &tmpA, argA, argT);
 }
+

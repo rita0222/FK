@@ -123,8 +123,11 @@ namespace FK {
 		 *
 		 *	\param[out]	A	曲線上の交点パラメータ配列。
 		 *					交点がない場合は空配列となります。
+		 *
+		 *	\param[in]	T	交点算出誤差許容値。
 		 */
-		void	calcCrossParam(fk_Vector S, fk_Vector E, std::vector<double> *A);
+		void	calcCrossParam(fk_Vector S, fk_Vector E,
+							   std::vector<double> *A, double T = 0.001);
 
 		//! 変換行列付直線交点算出関数
 		/*!
@@ -142,19 +145,27 @@ namespace FK {
 		 *
 		 *	\param[out]	A	曲線上の交点パラメータ配列。
 		 *					交点がない場合は空配列となります。
+		 *
+		 *	\param[in]	T	交点算出誤差許容値。
 		 */
-		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
+		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E,
+							   std::vector<double> *A, double T = 0.001);
 
+
+		void	DebugMode(bool);
 	private:
 		int										deg;
 		std::vector<fk_Vector>					ctrlPos;
 		std::vector<std::vector<fk_Vector> >	divPos;
+		bool									debugMode;
 
 		void			MakeDiv(double);
 		double			CrossZero(fk_Vector &, fk_Vector &);
 		bool			CrossCH(std::vector<fk_Vector> *, double *, double *);
 		void			CrossFunc(std::vector<fk_Vector> *,
 								  double, double, std::vector<double> *);
+		void			CheckCross(std::vector<fk_Vector> *, std::vector<double> *,
+								   std::vector<double> *, double);
 	};
 }
 
