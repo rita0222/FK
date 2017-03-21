@@ -123,11 +123,8 @@ namespace FK {
 		 *
 		 *	\param[out]	A	曲線上の交点パラメータ配列。
 		 *					交点がない場合は空配列となります。
-		 *
-		 *	\param[in]	T	交点算出誤差許容値。
 		 */
-		void	calcCrossParam(fk_Vector S, fk_Vector E,
-							   std::vector<double> *A, double T = 0.001);
+		void	calcCrossParam(fk_Vector S, fk_Vector E, std::vector<double> *A);
 
 		//! 変換行列付直線交点算出関数
 		/*!
@@ -145,12 +142,8 @@ namespace FK {
 		 *
 		 *	\param[out]	A	曲線上の交点パラメータ配列。
 		 *					交点がない場合は空配列となります。
-		 *
-		 *	\param[in]	T	交点算出誤差許容値。
 		 */
-		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E,
-							   std::vector<double> *A, double T = 0.001);
-
+		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
 
 		void	DebugMode(bool);
 	private:
