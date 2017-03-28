@@ -232,7 +232,7 @@ enum {GLUT_NOT_VISIBLE, GLUT_VISIBLE};
 FL_EXPORT void glutIdleFunc(void (*f)());
 
 // Warning: this cast may not work on all machines:
-inline void glutTimerFunc(unsigned int msec, void (*f)(int), int value) {
+inline void glutTimerFunc(unsigned int msec, void (*f)(int), fl_intptr_t value) {
 #if defined(__LP64__)
   Fl::add_timeout(msec*.001, (void (*)(void *))f, (void *) (long long) value);
 #else
