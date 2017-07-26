@@ -127,7 +127,7 @@ double BSplBase::PosBasis(int argI, int argK, double t,
 		else return 0.0;
 	}
 
-	if(IsSame(t, 1.0)) {
+	if(IsSame(t, knotVec[knotVec.size()-1])) {
 		if(i == knotVec.size()-k-1) return 1.0;
 		else return 0.0;
 	}
