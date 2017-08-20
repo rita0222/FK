@@ -27,6 +27,10 @@
     <ClCompile Include="..\..\src\math\Quaternion.cxx" />
     <ClCompile Include="..\..\src\math\Vector.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\Error.H" />
+    <ClInclude Include="..\..\FK\Vector.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AD84AEE2-7B35-4910-8533-B3BA580A063B}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>

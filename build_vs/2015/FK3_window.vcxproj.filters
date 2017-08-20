@@ -15,7 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\fltk\Error\Error_fltk.cxx">
+    <ClCompile Include="..\..\src\window\ShapeViewer_fltk.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\Window_fltk.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

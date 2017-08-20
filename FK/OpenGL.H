@@ -10,7 +10,6 @@
 #include <GL/glew.h>
 #endif // WIN32
 #include <GL/gl.h>
-#include <GL/glext.h>
 #ifndef NO_GLU_LIBRARY
 #include <GL/glu.h>
 #endif // NO_GLU_LIBRARY
