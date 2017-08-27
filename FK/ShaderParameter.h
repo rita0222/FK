@@ -1,4 +1,4 @@
-#ifndef __FK_SHADER_PARAMETER_HEADER__
+﻿#ifndef __FK_SHADER_PARAMETER_HEADER__
 #define __FK_SHADER_PARAMETER_HEADER__
 
 #include <FK/TextureSampler.h>

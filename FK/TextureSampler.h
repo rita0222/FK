@@ -1,4 +1,4 @@
-#ifndef __FK_TEXTURE_SAMPLER_HEADER__
+﻿#ifndef __FK_TEXTURE_SAMPLER_HEADER__
 #define __FK_TEXTURE_SAMPLER_HEADER__
 
 #include <FK/Texture.h>

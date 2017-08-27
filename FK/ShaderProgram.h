@@ -1,4 +1,4 @@
-#ifndef __FK_SHADER_PROGRAM_HEADER__
+﻿#ifndef __FK_SHADER_PROGRAM_HEADER__
 #define __FK_SHADER_PROGRAM_HEADER__
 
 #include <FK/Engine.H>

@@ -1,4 +1,4 @@
-#ifndef __FK_SHADER_BINDER_HEADER__
+﻿#ifndef __FK_SHADER_BINDER_HEADER__
 #define __FK_SHADER_BINDER_HEADER__
 
 #include <FK/AppWindow.h>
