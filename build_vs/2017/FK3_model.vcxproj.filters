@@ -30,5 +30,8 @@
     <ClCompile Include="..\..\src\model\ModelTree.cxx">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\model\BVHMotion.cxx">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
