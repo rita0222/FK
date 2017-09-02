@@ -14,6 +14,7 @@
     <ProjectGuid>{7EBF7EFA-FDD5-4A47-B4CF-ED40B8189792}</ProjectGuid>
     <RootNamespace>WizReg</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>WizReg17</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -90,7 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main13.cpp" />
+    <ClCompile Include="main17.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
