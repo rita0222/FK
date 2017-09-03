@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
 [!else]
 #include <FK/FK.h>
 
+using namespace FK;
+using namespace FK::Material;
+
 int main(int argc, char *argv[])
 {
 	Fl_Window		mainWindow(512, 512, "FK TEST");

@@ -1,10 +1,8 @@
 ﻿#ifndef __FKUT_HEADER__
 #define __FKUT_HEADER__
 
-#include "SimpleWindow.h"
-#include "Audio.h"
-#include "SpriteModel.h"
-#include "MotionCharactor.h"
+#include <FK/AppWindow.h>
+#include <FK/Audio.h>
 
 #endif
 

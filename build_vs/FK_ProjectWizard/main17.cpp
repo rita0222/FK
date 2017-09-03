@@ -67,6 +67,7 @@ bool regist(const string &vcwizPath, const string &libPath)
 	targetList.push_back("FK_ProjectWizard.vsdir");
 	targetList.push_back("FK_ProjectWizard.vsz");
 
+	CreateDirectory(vcwizPath.c_str(), NULL);
 	for(int i = 0; i < (int)targetList.size(); i++) {
 		retVal &= CopyFile(targetList[i].c_str(), (vcwizPath + targetList[i]).c_str(), FALSE);
 		if (i == (int)targetList.size() - 1) {
