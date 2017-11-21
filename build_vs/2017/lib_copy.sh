@@ -71,4 +71,4 @@ cp ../doc/License.txt ../FK_VC17/doc
 cp ../doc/RelativeLibraries.txt ../FK_VC17/doc
 cp ../doc/Version_2017.txt ../FK_VC17/doc/Version.txt
 
-cp -r vs_wizard ../FK_VC17/vs_wizard
+cp -r vs_wizard ../FK_VC17
