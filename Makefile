@@ -10,11 +10,12 @@ all:
 	@echo " Linux: 			make linux"
 	@echo "	MingW:			make ming"
 	@echo "	MingW Debug:		make ming-g"
-	@echo "	MacOS X:		make mac"
-	@echo "	MacOS X Dynamic:	make mac-d"
-	@echo "	MacOS X Debug:		make mac-g"
-	@echo "	MacOS X gcc:		make mac-gcc"
-	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
+	@echo "	macOS:			make mac"
+	@echo "	macOS Dynamic:		make mac-d"
+	@echo "	macOS Debug:		make mac-g"
+	@echo "	macOS gcc:		make mac-gcc"
+	@echo "	macOS gcc Debug:	make mac-gcc-g"
+	@echo " macOS All:		make mac-all"
 	@echo "	Qt:			make qt"
 	@echo "	Qt Debug:		make qt-g"
 	@echo "	Mac Qt:			make mac-qt"
@@ -67,6 +68,14 @@ mac-gcc:
 mac-gcc-g:
 	cd src; $(MAKE) mac-gcc-g
 	cd samples; $(MAKE) mac-gcc-g
+
+mac-all:
+	cd src; $(MAKE) clean
+	cd lib/dynamic; $(RM) lib*
+	cd lib/static; $(RM) lib*
+	cd src; $(MAKE) mac
+	cd src; $(MAKE) clean
+	cd src; $(MAKE) mac-d
 
 qt:
 	cd src; $(MAKE) qt
