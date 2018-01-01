@@ -1,0 +1,18 @@
+BASENAME	= AR
+
+LIBSRCS		= \
+			ARDevice.cxx \
+			ARTexture.cxx
+			
+
+FKLINK		= \
+			-lFK3_base.$(VERNAME) \
+			-lFK3_math.$(VERNAME) \
+			-lFK3_model.$(VERNAME)
+
+FKLINK_G	= \
+			-lFK3_base_g.$(VERNAME) \
+			-lFK3_math_g.$(VERNAME) \
+			 -lFK3_model_g.$(VERNAME)
+
+include ../makeinclude
