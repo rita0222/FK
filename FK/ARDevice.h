@@ -41,21 +41,23 @@ namespace FK {
 		int							videoXSize, videoYSize;
 		int							thresh;
 
-		std::string					cparam_name;
-		ARParam						cparam;
+		std::vector<fk_ARPattern>	pat_array;
+		std::map<int, int>			pat_map;
 
-		std::vector<fk_ARPattern>	pattern;
-		std::map<int, int>			pattern_map;
+		ARParam			cparam;
+		ARParamLT		*paramLT;
+		ARPattHandle	*patHandle;
+		ARHandle		*handle;
+		AR3DHandle		*handle3D;
 
-		ARParam			gCparam;
-		fk_Matrix		cpara_mat;
+		std::string		cparam_name;
+		fk_Matrix		cparam_mat;
 	
 		bool			contFlag, startFlag;
 
-
 		void		CameraInit(void);
 		void		CameraInit1(void);
-		fk_Matrix	ConvARCMat(double, double);
+		void		ConvARCMat(double, double);
 		void		SetARCam(fk_Model *);
 		void		ConvARModelR(fk_Matrix, fk_Model *);
 		void		ConvARModelT(fk_Matrix, fk_Model *);

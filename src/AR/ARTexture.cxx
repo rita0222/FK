@@ -8,11 +8,11 @@ fk_ARTexture::fk_ARTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_ARTEXTURE);
-	arVideoBuf = NULL;
+	arVideoBuf = nullptr;
 	imageSize.set(0, 0);
 	texSize.set(0.0, 0.0);
 	pixelFormatType = FK_DEFAULT_PIXEL_FORMAT;
-	setImage(&localImage);
+	SetLocalImage();
 	return;
 }
 

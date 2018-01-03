@@ -1,12 +1,6 @@
 #include <FK/ARDevice.h>
 #include <FK/Error.H>
 
-const int MINIWIN_MAX = 8;
-const int REVERSE_LR = 1;
-const int LEFTEYE = 1;
-const int RIGHTEYE = 2;
-const int GMINI = 2;
-
 using namespace std;
 using namespace FK;
 
@@ -15,7 +9,7 @@ typedef std::vector<int>::size_type st;
 fk_ARPattern::fk_ARPattern(void)
 {
 	name.clear();
-	model = NULL;
+	model = nullptr;
 	contFlg = false;
 	return;
 }
@@ -38,25 +32,30 @@ fk_ARDevice::fk_ARDevice(void)
 	contFlag = false;
 	startFlag = false;
 
-	pattern.clear();
-	pattern_map.clear();
+	pat_array.clear();
+	pat_map.clear();
 
 	return;
 }
 
 fk_ARDevice::~fk_ARDevice()
 {
-	pattern.clear();
-	pattern_map.clear();
+	pat_array.clear();
+	pat_map.clear();
+
+	if(handle != nullptr) arPattDetach(handle);
+	if(patHandle != nullptr) arPattDeleteHandle(patHandle);
+	arVideoCapStop();
+	if(handle3D != nullptr) ar3DDeleteHandle(&handle3D);
+	if(handle != nullptr) arDeleteHandle(handle);
+	arVideoClose();
 	return;
 }
 
 int fk_ARDevice::GetID(int argID)
 {
-	map<int, int>::iterator		ite;
-
-	ite = pattern_map.find(argID);
-	if(ite == pattern_map.end()) {
+	auto ite = pat_map.find(argID);
+	if(ite == pat_map.end()) {
 		return CreatePattern(argID);
 	}
 	return (*ite).second;
@@ -64,11 +63,9 @@ int fk_ARDevice::GetID(int argID)
 
 int fk_ARDevice::CreatePattern(int argID)
 {
-	vector<fk_ARPattern>::size_type		size;
-
-	size = pattern.size();
-	pattern.resize(size+1);
-	pattern_map[argID] = int(size);
+	auto size = pat_array.size();
+	pat_array.resize(size+1);
+	pat_map[argID] = int(size);
 	return int(size);
 }
 
@@ -101,7 +98,7 @@ void fk_ARDevice::setPatternFile(int argID, string argFileName)
 {
 	st		id = st(GetID(argID));
 
-	pattern[id].name = argFileName;
+	pat_array[id].name = argFileName;
 	return;
 }
 
@@ -115,7 +112,7 @@ void fk_ARDevice::setPatternWidth(int argID, double argWidth)
 {
 	st		id = st(GetID(argID));
 
-	pattern[id].width = argWidth;
+	pat_array[id].width = argWidth;
 	return;
 }
 
@@ -129,8 +126,8 @@ void fk_ARDevice::setPatternCenter(int argID, double argX, double argY)
 {
 	st		id = st(GetID(argID));
 
-	pattern[id].center[0] = argX;
-	pattern[id].center[1] = argY;
+	pat_array[id].center[0] = argX;
+	pat_array[id].center[1] = argY;
 	return;
 }
 
@@ -138,58 +135,81 @@ void fk_ARDevice::setPatternModel(int argID, fk_Model *argModel)
 {
 	st		id = st(GetID(argID));
 
-	pattern[id].model = argModel;
+	pat_array[id].model = argModel;
 	return;
 }
 
 bool fk_ARDevice::deviceInit(void)
 {
-	ARParam				wparam;
 	AR_PIXEL_FORMAT		pixelFormat;
 	int					erNo;
 
 	erNo = 1;
     if(arVideoOpen(const_cast<char *>(vconf.c_str())) < 0) {
-		fk_PutError("fk_ARDevice", "deviceInit", erNo,
-					"Video Open Error.");
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Video Open Error.");
 		return false;
 	}
 	++erNo;
 
     if(arVideoGetSize(&videoXSize, &videoYSize) < 0) {
-		fk_PutError("fk_ARDevice", "deviceInit", erNo,
-					"Video Get Size Error.");
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Video Get Size Error.");
 		return false;
 	}
 	++erNo;
 
 	pixelFormat = arVideoGetPixelFormat();
 	if(pixelFormat < 0) {
-		fk_PutError("fk_ARDevice", "deviceInit", erNo,
-					"Video Pixel Format Error,");
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Video Pixel Format Error,");
 		return false;
 	}
 	++erNo;
 	
-    if(arParamLoad(cparam_name.c_str(), 1, &wparam) < 0) {
-		fk_PutError("fk_ARDevice", "deviceInit", erNo,
-					"Camera Parameter Load Error.");
+    if(arParamLoad(cparam_name.c_str(), 1, &cparam) < 0) {
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Camera Parameter Load Error.");
 		return false;
     }
 	++erNo;
 	
-	arParamChangeSize(&wparam, videoXSize, videoYSize, &cparam);
+	arParamChangeSize(&cparam, videoXSize, videoYSize, &cparam);
+	if((paramLT = arParamLTCreate(&cparam, AR_PARAM_LT_DEFAULT_OFFSET)) == nullptr) {
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "ParamLT Create Error.");
+		return false;
+	}
+	++erNo;
 
-	
-	arInitCparam(&cparam);
+	if((handle = arCreateHandle(paramLT)) == nullptr) {
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Create Handle Error.");
+		return false;
+	}
+	++erNo;
 
-	for(unsigned int i = 0; i < pattern.size(); i++) {
-		if((pattern[i].id = arLoadPatt(pattern[i].name.c_str())) < 0) {
-			fk_PutError("fk_ARDevice", "deviceInit", 4,
-						"Pattern Load Error.");
+	if(arSetPixelFormat(handle, pixelFormat) < 0) {
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Set Pixel Format Error.");
+		return false;
+	}
+	++erNo;
+
+	if((handle3D = ar3DCreateHandle(&cparam)) == nullptr) {
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "3D Handle Create Error.");
+		return false;
+	}
+	++erNo;
+
+	if((patHandle = arPattCreateHandle()) == nullptr) {
+		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Pattern Handle Create Error.");
+		return false;
+	}
+	++erNo;
+
+	for(st i = 0; i < pat_array.size(); ++i) {
+		if((pat_array[i].id = arPattLoad(patHandle, pat_array[i].name.c_str())) < 0) {
+			fk_PutError("fk_ARDevice", "deviceInit", erNo, "Pattern Load Error.");
 			return false;
 		}
 	}
+	++erNo;
+
+	arPattAttach(handle, patHandle);
 
 	CameraInit();
 	return true;
@@ -198,7 +218,7 @@ bool fk_ARDevice::deviceInit(void)
 void fk_ARDevice::CameraInit(void)
 {
 	CameraInit1();
-	ConvARCMat(AR_GL_CLIP_NEAR, AR_GL_CLIP_FAR);
+	ConvARCMat(AR_GL_DEFAULT_CLIP_NEAR, AR_GL_DEFAULT_CLIP_FAR);
 	arVideoCapStart();	
 	return;
 }
@@ -207,28 +227,26 @@ void fk_ARDevice::CameraInit1(void)
 {
 	int		count;
 
-    gCparam = cparam;
     for(count = 0; count < 4; count++ ) {
-        gCparam.mat[1][count] =
-			(gCparam.ysize-1)*(gCparam.mat[2][count]) - gCparam.mat[1][count];
+        cparam.mat[1][count] = (cparam.ysize-1)*(cparam.mat[2][count]) - cparam.mat[1][count];
     }
 	
 	return;
 }
 
-fk_Matrix fk_ARDevice::ConvARCMat(double argNear, double argFar)
+void fk_ARDevice::ConvARCMat(double argNear, double argFar)
 {
     double   icpara[3][4];
     double   trans[3][4];
     double   p[3][3], q[4][4];
     int      j, k;
 	
-	int width = gCparam.xsize;
-	int height = gCparam.ysize;
+	int width = cparam.xsize;
+	int height = cparam.ysize;
 	
-    if(arParamDecompMat(gCparam.mat, icpara, trans) < 0) {
+    if(arParamDecompMat(cparam.mat, icpara, trans) < 0) {
         fk_PutError("fk_ARDevice", "ConvARCMat", 1, "Parameter error.");
-		return cpara_mat;
+		return;
     }
 	
     for( k = 0; k < 3; k++ ) {
@@ -259,23 +277,23 @@ fk_Matrix fk_ARDevice::ConvARCMat(double argNear, double argFar)
 	// カメラ用射影変換行列cpara_mat算出
 	for(k = 0; k < 4; k++){
 		for(j = 0; j < 3; j++){
-			cpara_mat.set(k, j, q[k][0] * trans[0][j]
-						  + q[k][1] * trans[1][j]
-						  + q[k][2] * trans[2][j]);
+			cparam_mat.set(k, j, q[k][0] * trans[0][j]
+						   + q[k][1] * trans[1][j]
+						   + q[k][2] * trans[2][j]);
 		}
-		cpara_mat.set(k, 3, q[k][0] * trans[0][3]
+		cparam_mat.set(k, 3, q[k][0] * trans[0][3]
 					  + q[k][1] * trans[1][3]
 					  + q[k][2] * trans[2][3]
 					  + q[k][3]);
 	}
 
-	return cpara_mat;
+	return;
 	
 }
 
 void fk_ARDevice::SetARCam(fk_Model *argModel)
 {
-	ConvARModelR(cpara_mat, argModel);
+	ConvARModelR(cparam_mat, argModel);
 	return;
 }
 
@@ -309,7 +327,7 @@ void fk_ARDevice::SetMarkerModel(int argID, fk_Model *model)
 	
     for(int k = 0; k < 3; k++ ) {
         for(int j = 0; j < 4; j++ ) {
-			tmpMat.set(k, j, pattern[argID].transMat[k][j]);
+			tmpMat.set(k, j, pat_array[st(argID)].transMat[k][j]);
 		}
     }
 
@@ -322,9 +340,9 @@ void fk_ARDevice::SetMarkerModel(int argID, fk_Model *model)
 fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex,
 										fk_Model *argModel)
 {
-	if(pattern.empty() == true) return FK_AR_NO_DETECT;
+	if(pat_array.empty() == true) return FK_AR_NO_DETECT;
 
-	pattern[0].model = argModel;
+	pat_array[0].model = argModel;
 	return update(argVideoTex);
 }
 
@@ -333,10 +351,10 @@ fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex)
     ARUint8         *dataPtr;
     ARMarkerInfo    *marker_info;
     int             marker_num;
-    int             i, j, k;
 	bool			detectFlg;
+	int				k;
 
-    if((dataPtr = (ARUint8 *)arVideoGetImage()) == NULL) {
+    if((dataPtr = (ARUint8 *)arVideoGetImage()) == nullptr) {
         arUtilSleep(2);
         return FK_AR_IMAGE_NULL;
     }
@@ -348,42 +366,46 @@ fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex)
 
 	argVideoTex->setVideoBuf(dataPtr, videoXSize, videoYSize);
 
-    if(arDetectMarker(dataPtr, thresh,
-					  &marker_info, &marker_num) < 0) {
+    if(arDetectMarker(handle, dataPtr) < 0) {
 		return FK_AR_DETECT_ERROR;
     }
 	
 	detectFlg = false;
-	for(i = 0; i < int(pattern.size()); i++) {
+	if((marker_num = arGetMarkerNum(handle)) == 0) return FK_AR_NO_DETECT;
+	marker_info = arGetMarker(handle);
+
+	for(st i = 0; i < pat_array.size(); ++i) {
 		k = -1;
-		for(j = 0; j < marker_num; j++) {
-			if(pattern[i].id == marker_info[j].id) {
+		for(st j = 0; j < st(marker_num); j++) {
+			if(pat_array[i].id == marker_info[j].id) {
 				if(k == -1) {
-					k = j;
+					k = int(j);
 				} else if(marker_info[k].cf < marker_info[j].cf) {
-					k = j;
+					k = int(j);
 				}
 			}
 		}
 		if(k == -1) {
-			pattern[i].contFlg = false;
+			pat_array[i].contFlg = false;
 			continue;
 		}
 
 		detectFlg = true;
 
-		if(pattern[i].contFlg == false) {
-			arGetTransMat(&marker_info[k], pattern[i].center,
-						  pattern[i].width, pattern[i].transMat);
-			pattern[i].contFlg = true;
+		if(pat_array[i].contFlg == false) {
+			arGetTransMatSquare(handle3D,
+								&marker_info[k],
+								pat_array[i].width,
+								pat_array[i].transMat);
+			pat_array[i].contFlg = true;
 		} else {
-			arGetTransMatCont(&marker_info[k],
-							  pattern[i].transMat,
-							  pattern[i].center,
-							  pattern[i].width,
-							  pattern[i].transMat);
+			arGetTransMatSquareCont(handle3D,
+									&marker_info[k],
+									pat_array[i].transMat,
+									pat_array[i].width,
+									pat_array[i].transMat);
 		}
-		SetMarkerModel(i, pattern[i].model);
+		SetMarkerModel(int(i), pat_array[i].model);
 	}
 
 	return (detectFlg == true) ? FK_AR_DETECT : FK_AR_NO_DETECT;
@@ -403,13 +425,13 @@ void fk_ARDevice::makeProject(double argNear, double argFar,
 	scale = argFar/argNear;
 	xPos = yPos = 0.0;
 
-	w_minus = 2.0*argNear/cpara_mat[0][0];
-	w_plus = w_minus * cpara_mat[0][2];
+	w_minus = 2.0*argNear/cparam_mat[0][0];
+	w_plus = w_minus * cparam_mat[0][2];
 	right = (w_plus + w_minus)/2.0;
 	left = (w_plus - w_minus)/2.0;
 
-	h_minus = 2.0*argNear/cpara_mat[1][1];
-	h_plus = h_minus * cpara_mat[1][2];
+	h_minus = 2.0*argNear/cparam_mat[1][1];
+	h_plus = h_minus * cparam_mat[1][2];
 	top = -(h_plus + h_minus)/2.0;
 	bottom = -(h_plus - h_minus)/2.0;
 
@@ -435,7 +457,5 @@ void fk_ARDevice::makeProject(double argNear, double argFar,
 
 bool fk_ARDevice::getModelDetect(int argID)
 {
-	int		id = GetID(argID);
-
-	return pattern[id].contFlg;
+	return pat_array[st(GetID(argID))].contFlg;
 }

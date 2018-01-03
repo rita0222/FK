@@ -310,6 +310,8 @@ namespace FK {
 		void				BaseInit(void);
 		bool				IsLocalImage(void);
 		void				SetLocalImage(void);
+		bool				GetInitFlag(void);
+		void				SetInitFlag(bool);
 
 #endif
 
@@ -321,11 +323,8 @@ namespace FK {
 		fk_TexWrapMode		texWrapMode;
 		fk_Palette			localPal;
 
-		bool				GetInitFlag(void);
-		void				SetInitFlag(bool);
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
-
 		static void			ClearTexState(fk_Image *);
 
 	};
