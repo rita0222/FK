@@ -141,7 +141,6 @@ void fk_ARDevice::setPatternModel(int argID, fk_Model *argModel)
 
 bool fk_ARDevice::deviceInit(void)
 {
-	AR_PIXEL_FORMAT		pixelFormat;
 	int					erNo;
 
 	erNo = 1;
@@ -163,7 +162,7 @@ bool fk_ARDevice::deviceInit(void)
 		return false;
 	}
 	++erNo;
-	
+
     if(arParamLoad(cparam_name.c_str(), 1, &cparam) < 0) {
 		fk_PutError("fk_ARDevice", "deviceInit", erNo, "Camera Parameter Load Error.");
 		return false;
@@ -213,6 +212,43 @@ bool fk_ARDevice::deviceInit(void)
 
 	CameraInit();
 	return true;
+}
+
+fk_PixelFormatType fk_ARDevice::ConvFormat(AR_PIXEL_FORMAT argF)
+{
+	switch(argF) {
+	  case AR_PIXEL_FORMAT_RGB:
+		return FK_PIXEL_FORMAT_RGB;
+
+	  case AR_PIXEL_FORMAT_BGR:
+		return FK_PIXEL_FORMAT_BGR;
+
+	  case AR_PIXEL_FORMAT_RGBA:
+		return FK_PIXEL_FORMAT_RGBA;
+
+	  case AR_PIXEL_FORMAT_BGRA:
+		return FK_PIXEL_FORMAT_BGRA;
+
+	  case AR_PIXEL_FORMAT_ABGR:
+		return FK_PIXEL_FORMAT_ABGR;
+
+	  case AR_PIXEL_FORMAT_MONO:
+		return FK_PIXEL_FORMAT_MONO;
+
+	  case AR_PIXEL_FORMAT_ARGB:
+		return FK_PIXEL_FORMAT_ARGB;
+
+	  case AR_PIXEL_FORMAT_2vuy:
+		return FK_PIXEL_FORMAT_2vuy;
+
+	  case AR_PIXEL_FORMAT_yuvs:
+		return FK_PIXEL_FORMAT_yuvs;
+
+	  default:
+		break;
+	}
+
+	return FK_DEFAULT_PIXEL_FORMAT;
 }
 
 void fk_ARDevice::CameraInit(void)
@@ -365,6 +401,7 @@ fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex)
 	}
 
 	argVideoTex->setVideoBuf(dataPtr, videoXSize, videoYSize);
+	argVideoTex->setPixelFormatType(ConvFormat(pixelFormat));
 	
     if(arDetectMarker(handle, dataPtr) < 0) {
 		return FK_AR_DETECT_ERROR;

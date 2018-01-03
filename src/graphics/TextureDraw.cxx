@@ -138,7 +138,6 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 	fk_TexID	texID;
 
 	if((argObj->getDrawMode() & FK_TEXTUREMODE) == FK_NONEMODE) return;
-
 	texObj = static_cast<fk_Texture *>(argObj->getShape());
 
 	if(texObj->getObjectType() != FK_ARTEXTURE && texObj->getBufferSize() == nullptr) return;

@@ -49,6 +49,7 @@ namespace FK {
 		ARPattHandle	*patHandle;
 		ARHandle		*handle;
 		AR3DHandle		*handle3D;
+		AR_PIXEL_FORMAT	pixelFormat;
 
 		std::string		cparam_name;
 		fk_Matrix		cparam_mat;
@@ -64,6 +65,7 @@ namespace FK {
 		void		SetMarkerModel(int, fk_Model *);
 		int			GetID(int);
 		int			CreatePattern(int);
+		fk_PixelFormatType	ConvFormat(AR_PIXEL_FORMAT);
 
 	public:
 		fk_ARDevice(void);
