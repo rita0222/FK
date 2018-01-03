@@ -365,7 +365,7 @@ fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex)
 	}
 
 	argVideoTex->setVideoBuf(dataPtr, videoXSize, videoYSize);
-
+	
     if(arDetectMarker(handle, dataPtr) < 0) {
 		return FK_AR_DETECT_ERROR;
     }
