@@ -78,6 +78,7 @@
 #include <FK/IFSTexture.h>
 #include <FK/Model.h>
 #include <FK/FaceDraw.H>
+#include <FK/ARTexture.h>
 
 #include <FK/Error.H>
 #include <algorithm>
@@ -92,7 +93,6 @@ fk_TextureDraw::fk_TextureDraw(void) : oldTexID(0)
 {
 	SetArrayState(false);
 	SetBindMode(false);
-
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
@@ -141,7 +141,7 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 
 	texObj = static_cast<fk_Texture *>(argObj->getShape());
 
-	if(texObj->getBufferSize() == nullptr) return;
+	if(texObj->getObjectType() != FK_ARTEXTURE && texObj->getBufferSize() == nullptr) return;
 
 	fk_Image		*image = texObj->getImage();
 	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture_;
@@ -226,6 +226,11 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 
 	  case FK_IFSTEXTURE:
 		DrawIFSTextureObj(static_cast<fk_IFSTexture *>(texObj));
+		break;
+
+	  case FK_ARTEXTURE:
+		DrawARTextureObj(static_cast<fk_ARTexture *>(texObj));
+		break;
 
 	  default:
 		break;
@@ -443,6 +448,34 @@ void fk_TextureDraw::DrawIFSTextureObj(fk_IFSTexture *argTexObj)
 	return;
 }
 
+void fk_TextureDraw::DrawARTextureObj(fk_ARTexture *argTexObj)
+{
+	fk_TexCoord		texSize = argTexObj->getTextureSize();
+	double			tmpX, tmpY;
+
+	tmpX = texSize.x/2.0;
+	tmpY = texSize.y/2.0;
+	
+	glNormal3d(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2d(0.0, 0.0);
+	glVertex3d(-tmpX, -tmpY, 0.0);
+	
+	glTexCoord2d(1.0, 0.0);
+	glVertex3d(tmpX, -tmpY, 0.0);
+	
+	glTexCoord2d(1.0, 1.0);
+	glVertex3d(tmpX, tmpY, 0.0);
+	
+	glTexCoord2d(0.0, 1.0);
+	glVertex3d(-tmpX, tmpY, 0.0);
+
+	glEnd();
+
+	return;
+}
+
 void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 {
 	fk_TexID	tmpTexName;
@@ -478,8 +511,13 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 
 	}
 	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-				 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
+	if(argTexObj->getObjectType() == FK_ARTEXTURE) {
+		GenARTextureObj(static_cast<fk_ARTexture *>(argTexObj));
+	} else {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+					 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
+	}
+
 	argTexObj->SetTexID(tmpTexName);
 	argTexObj->SetInitFlag(false);
 	texNameArray.push_back(tmpTexName);
@@ -487,6 +525,84 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 
 	texLoadedSize += static_cast<unsigned long>(bufSize->w*bufSize->h*4);
 
+	return;
+}
+
+void fk_TextureDraw::GenARTextureObj(fk_ARTexture *argTexObj)
+{
+	fk_Dimension			bufSize = argTexObj->getVideoSize();
+	const unsigned char		*arImageBuf = argTexObj->getVideoBuf();
+	fk_PixelFormatType		type = argTexObj->getPixelFormatType();
+
+	switch (type) {
+	  case FK_PIXEL_FORMAT_RGB:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+					 bufSize.w, bufSize.h,
+					 0, GL_RGB,
+					 GL_UNSIGNED_BYTE,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_BGR:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+					 bufSize.w, bufSize.h,
+					 0, GL_BGR,
+					 GL_UNSIGNED_BYTE,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_RGBA:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					 bufSize.w, bufSize.h,
+					 0, GL_RGBA,
+					 GL_UNSIGNED_BYTE,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_BGRA:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+					 bufSize.w, bufSize.h,
+					 0, GL_BGRA,
+					 GL_UNSIGNED_BYTE,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_MONO:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					 bufSize.w, bufSize.h,
+					 0, GL_LUMINANCE,
+					 GL_UNSIGNED_BYTE,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_ARGB:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					 bufSize.w, bufSize.h,
+					 0, GL_BGRA,
+					 GL_UNSIGNED_INT_8_8_8_8,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_2vuy:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					 bufSize.w, bufSize.h,
+					 0, GL_YCBCR_422_APPLE,
+					 GL_UNSIGNED_SHORT_8_8_APPLE,
+					 arImageBuf);
+		break;
+			
+	  case FK_PIXEL_FORMAT_yuvs:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					 bufSize.w, bufSize.h,
+					 0, GL_YCBCR_422_APPLE,
+					 GL_UNSIGNED_SHORT_8_8_APPLE,
+					 arImageBuf);
+		break;
+			
+	  default:
+		break;			
+	}
+	// =====================================================================
 	return;
 }
 
@@ -508,34 +624,43 @@ void fk_TextureDraw::ReplaceTextureObj(fk_Texture *argTexObj)
 
 	// 同じバッファサイズなら SubImage による更新、違っていたら一度削除して再生成
 	if(texW == bufSize->w && texH == bufSize->h) {
-		static fk_Rect				tmpRect;	// 部分更新矩形情報
-		static vector<fk_ImType>	subBuffer;	// 部分更新用バッファ
-		const fk_Dimension			*imageSize = argTexObj->getImageSize();
 
-		// 更新領域取得
-		tmpRect = argTexObj->getImage()->GetUpdateArea();
-		if(tmpRect.w < 1 || tmpRect.h < 1) {	// 矩形が指定されていなかったら全体更新
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
-							GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
-		} else {	// 指定されていたら部分更新
-			subBuffer.resize(static_cast<_st>(tmpRect.w*tmpRect.h*4));
-			for(int i = 0; i < tmpRect.h; ++i) {
-				memcpy(&(subBuffer[static_cast<_st>((tmpRect.h-i-1)*tmpRect.w*4)]),
-					   imageBuf+((imageSize->h - (tmpRect.y+i) - 1)*bufSize->w + tmpRect.x)*4,
-					   static_cast<size_t>(tmpRect.w*4));
-			}
-			if(!subBuffer.empty()) {
-				glTexSubImage2D(GL_TEXTURE_2D, 0, tmpRect.x,
-								imageSize->h - tmpRect.h - tmpRect.y,
-								tmpRect.w, tmpRect.h,
-								GL_RGBA, GL_UNSIGNED_BYTE, &(subBuffer[0]));
+		if(argTexObj->getObjectType() == FK_ARTEXTURE) {
+			GenARTextureObj(static_cast<fk_ARTexture *>(argTexObj));
+		} else {
+			static fk_Rect				tmpRect;	// 部分更新矩形情報
+			static vector<fk_ImType>	subBuffer;	// 部分更新用バッファ
+			const fk_Dimension			*imageSize = argTexObj->getImageSize();
+
+			// 更新領域取得
+			tmpRect = argTexObj->getImage()->GetUpdateArea();
+			if(tmpRect.w < 1 || tmpRect.h < 1) {	// 矩形が指定されていなかったら全体更新
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
+								GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
+			} else {	// 指定されていたら部分更新
+				subBuffer.resize(static_cast<_st>(tmpRect.w*tmpRect.h*4));
+				for(int i = 0; i < tmpRect.h; ++i) {
+					memcpy(&(subBuffer[static_cast<_st>((tmpRect.h-i-1)*tmpRect.w*4)]),
+						   imageBuf+((imageSize->h - (tmpRect.y+i) - 1)*bufSize->w + tmpRect.x)*4,
+						   static_cast<size_t>(tmpRect.w*4));
+				}
+				if(!subBuffer.empty()) {
+					glTexSubImage2D(GL_TEXTURE_2D, 0, tmpRect.x,
+									imageSize->h - tmpRect.h - tmpRect.y,
+									tmpRect.w, tmpRect.h,
+									GL_RGBA, GL_UNSIGNED_BYTE, &(subBuffer[0]));
+				}
 			}
 		}
 	} else {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-					 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
-		texLoadedSize -= static_cast<unsigned long>(texW*texH*4);
-		texLoadedSize += static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+		if(argTexObj->getObjectType() == FK_ARTEXTURE) {
+			GenARTextureObj(static_cast<fk_ARTexture *>(argTexObj));
+		} else {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
+			texLoadedSize -= static_cast<unsigned long>(texW*texH*4);
+			texLoadedSize += static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+		}
 	}
 	// フラグ解除
 	argTexObj->SetInitFlag(false);

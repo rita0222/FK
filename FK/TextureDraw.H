@@ -8,6 +8,7 @@
 namespace FK {
 	
 	class fk_IFSTexture;
+	class fk_ARTexture;
 	class fk_Model;
 
 	class fk_TextureDraw {
@@ -38,7 +39,9 @@ namespace FK {
 		void	DrawTriTextureObj(fk_TriTexture *);
 		void	DrawMeshTextureObj(fk_MeshTexture *);
 		void	DrawIFSTextureObj(fk_IFSTexture *);
+		void	DrawARTextureObj(fk_ARTexture *);
 		void	GenTextureObj(fk_Texture *);
+		void	GenARTextureObj(fk_ARTexture *);
 		void	ReplaceTextureObj(fk_Texture *);
 		void	InitTextureEnv(fk_Texture *);
 

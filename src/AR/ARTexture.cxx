@@ -36,7 +36,7 @@ void fk_ARTexture::setVideoBuf(unsigned char *argVid, int argW, int argH)
 	
 	setTextureMode(FK_TEX_REPLACE);
 	
-	if(argVid != NULL){
+	if(argVid != nullptr) {
 		arVideoBuf = argVid;
 	}else{
 		fk_PutError("VideoBUffer NULL!");
