@@ -144,6 +144,7 @@ bool fk_BSplSurface::setCtrl(int argUID, int argVID,
 	index = static_cast<_st>(argVID*uNum + argUID);
 
 	ctrlPos[index] = argPos;
+	changeFlg = true;
 	return true;
 }
 
@@ -154,6 +155,7 @@ bool fk_BSplSurface::setCtrl(vector<fk_Vector> *argArray)
 	for(_st i = 0; i < static_cast<_st>(ctrlPos.size()); i++) {
 		ctrlPos[i] = argArray->at(i);
 	}
+	changeFlg = true;
 	return true;
 }
 
