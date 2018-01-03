@@ -129,7 +129,7 @@ mac-qt-g:
 	cd qt; $(MAKE) mac-qt-g MAKE=$(MAKE)
 
 clean:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
 		cd $$sd ; \
 		$(MAKE) clean -f Makefile.plane ; \
 		$(RM) Makefile ; \
