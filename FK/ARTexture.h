@@ -1,4 +1,4 @@
-#ifndef	__FK_AR_TEXTURE_HEADER__
+﻿#ifndef	__FK_AR_TEXTURE_HEADER__
 #define	__FK_AR_TEXTURE_HEADER__
 
 #include <FK/Texture.h>

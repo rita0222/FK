@@ -1,4 +1,4 @@
-#ifndef __FK_AR_DEVICE_HEADER__
+﻿#ifndef __FK_AR_DEVICE_HEADER__
 #define __FK_AR_DEVICE_HEADER__
 
 #include <map>

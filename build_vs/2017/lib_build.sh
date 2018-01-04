@@ -2,7 +2,7 @@
 
 source ./vsenv.sh
 
-# VS2015へのパスを設定
+# VS2017へのパスを設定
 #export VS15_DEVENV_PATH=$VS150COMNTOOLS/../IDE/devenv
 
 ## FK

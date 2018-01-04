@@ -1,9 +1,8 @@
-#include <FK/ARDevice.h>
+﻿#include <FK/ARDevice.h>
 #include <FK/Error.H>
 
 using namespace std;
 using namespace FK;
-
 typedef std::vector<int>::size_type st;
 
 fk_ARPattern::fk_ARPattern(void)
