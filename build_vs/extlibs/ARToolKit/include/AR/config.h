@@ -376,7 +376,7 @@ enum {
 #define AR_INPUT_WINDOWS_DSVIDEOLIB
 #endif
 #ifndef _WIN64 // QuickTime is not available for 64-bit.
-#define AR_INPUT_QUICKTIME
+//#define AR_INPUT_QUICKTIME
 #endif
 #undef  AR_INPUT_WINDOWS_DRAGONFLY
 #define AR_INPUT_WINDOWS_MEDIA_FOUNDATION
