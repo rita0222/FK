@@ -44,7 +44,7 @@
 #  endif
 #  include <GL/glut.h>
 #  ifdef GL_VERSION_1_2
-#    include <GL/glext.h>
+//#    include <GL/glext.h>
 #  endif
 #else
 #  include <GLUT/glut.h>
