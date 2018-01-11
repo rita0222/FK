@@ -42,12 +42,7 @@
 #  ifdef _WIN32
 #    include <windows.h>
 #  endif
-#  include <GL/glut.h>
-#  ifdef GL_VERSION_1_2
-//#    include <GL/glext.h>
-#  endif
 #else
-#  include <GLUT/glut.h>
 #  include <OpenGL/glext.h>
 #endif
 #include <AR/ar.h>
