@@ -2,8 +2,10 @@
 
 echo "--- Create FK Package ---"
 
-sh -x lib_clean.sh
-sh -x lib_build.sh
+sh -x lib_clean_FK.sh
+sh -x lib_clean_other.sh
+sh -x lib_build_FK.sh
+sh -x lib_build_other.sh
 sh -x lib_copy.sh
 
 if [ -z "$ZSH_NAME" ] ; then

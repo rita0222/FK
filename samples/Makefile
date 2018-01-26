@@ -91,6 +91,11 @@ FKSHADER_SG	= -lFK3_shader_g
 FKSHADER_D	= -lFK3_shader.$(VERNAME)
 FKSHADER_DG	= -lFK3_shader_g.$(VERNAME)
 
+FKAR_S		= -lFK3_AR
+FKAR_SG		= -lFK3_AR_g
+FKAR_D		= -lFK3_AR.$(VERNAME)
+FKAR_DG		= -lFK3_AR_g.$(VERNAME)
+
 FKLINK		= $(FKLIB_S)
 LINK		= $(FKLINK) $(SYSLIBS)
 TARGET		= target
@@ -198,17 +203,25 @@ mac:
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
 	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S) -L/opt/local/lib" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+	"SYSLIBS = \
+		-lAR -lARvideo -lARICP \
+		-liconv \
+		-lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
+		-framework QTKit \
+		-framework CoreVideo \
+		-framework AGL \
+		-framework OpenGL \
+		-framework Cocoa \
+		-framework OpenAL \
 		-framework ApplicationServices \
 		-framework OpenCL \
 		-framework Foundation \
+		-framework Accelerate \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
+	"FKLINK = $(FKAR_S) $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 

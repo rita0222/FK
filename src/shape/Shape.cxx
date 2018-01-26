@@ -183,6 +183,7 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_TRITEXTURE:
 	  case FK_MESHTEXTURE:
 	  case FK_IFSTEXTURE:
+	  case FK_ARTEXTURE:
 		return FK_SHAPE_TEXTURE;
 
 	  case FK_POINT:

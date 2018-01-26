@@ -183,6 +183,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case FK_TRITEXTURE:
 		  case FK_MESHTEXTURE:
 		  case FK_IFSTEXTURE:
+		  case FK_ARTEXTURE:
 			drawMode = FK_TEXTUREMODE;
 			break;
 

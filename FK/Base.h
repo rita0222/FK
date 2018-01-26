@@ -80,6 +80,7 @@ namespace FK {
 		FK_TRITEXTURE,		//!<	fk_TriTexture 型
 		FK_MESHTEXTURE,		//!<	fk_MeshTexture 型
 		FK_IFSTEXTURE,		//!<	fk_IFSTexture 型
+		FK_ARTEXTURE,		//!<	fk_ARTexture 型
 		FK_UNICHAR,			//!<	fk_UniChar 型
 		FK_UNISTR,			//!<	fk_UniStr 型
 		FK_TEXTIMAGE,		//!<	fk_TextImage 型

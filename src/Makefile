@@ -6,6 +6,7 @@ BASE		= base math material shape model scene graphics window util
 AUDIO		= audio
 OPENCL		= OpenCL
 SHADER		= shader
+AR		= AR
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -76,7 +77,7 @@ ming-g:
 		cd .. ; done
 
 mac:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac TARGET=depend ; \
@@ -84,7 +85,7 @@ mac:
 		cd .. ; done
 
 mac-d:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-d TARGET=depend ; \
@@ -128,7 +129,7 @@ mac-qt-g:
 	cd qt; $(MAKE) mac-qt-g MAKE=$(MAKE)
 
 clean:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
 		cd $$sd ; \
 		$(MAKE) clean -f Makefile.plane ; \
 		$(RM) Makefile ; \
