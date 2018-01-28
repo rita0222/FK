@@ -358,66 +358,65 @@ fk_ErrorBrowser::~fk_ErrorBrowser()
 	return;
 }
 
-namespace FK {
+bool fk_ErrorDataBase::Print(void)
+{
+	fk_ErrorData	*data;
+	string			outStr;
+	stringstream	ss;
 
-	bool fk_ErrorDataBase::Print(void)
-	{
-		fk_ErrorData	*data;
-		string			outStr;
-		stringstream	ss;
+	if(mode == FK_ERR_NONE) return false;
+	if(IsEmpty() == true) return false;
 
-		if(mode == FK_ERR_NONE) return false;
-		if(IsEmpty() == true) return false;
+	data = DataBase.front();
+	DataBase.pop_front();
 
-		data = DataBase.front();
-		DataBase.pop_front();
+	outStr.erase();
 
-		outStr.erase();
-
-		if(data->GetMode() == true) {
-			outStr = data->GetClassName() + "::" + data->GetFuncName();
-			ss << " -- ErrorCode " << data->GetErrCode() << endl;
-			outStr += ss.str();
-		}
-
-		outStr += data->GetErrMessage();
-
-		delete data;
-
-		switch(mode) {
-		  case FK_ERR_INTERACTIVE:
-		  case FK_ERR_QUEUE:
-			if(errorBrowser != nullptr) errorBrowser->PutAlert(outStr.c_str());
-			break;
-
-		  case FK_ERR_CONSOLE_INTERACTIVE:
-		  case FK_ERR_CONSOLE_QUEUE:
-			cerr << outStr << endl;
-			break;
-
-		  case FK_ERR_OUT_CONSOLE_INTERACTIVE:
-		  case FK_ERR_OUT_CONSOLE_QUEUE:
-			cout << outStr << endl;
-			break;
-
-		  case FK_ERR_BROWSER_INTERACTIVE:
-		  case FK_ERR_BROWSER_QUEUE:
-			if(errorBrowser != nullptr) errorBrowser->PutBrowser(outStr);
-			break;
-
-		  case FK_ERR_FILE:
-			if(fileMode == true) {
-				ofs << outStr << endl;
-			}
-			break;
-
-		  default:
-			break;
-		}
-
-		return true;
+	if(data->GetMode() == true) {
+		outStr = data->GetClassName() + "::" + data->GetFuncName();
+		ss << " -- ErrorCode " << data->GetErrCode() << endl;
+		outStr += ss.str();
 	}
 
+	outStr += data->GetErrMessage();
+
+	delete data;
+
+	switch(mode) {
+	  case FK_ERR_INTERACTIVE:
+	  case FK_ERR_QUEUE:
+		if(errorBrowser != nullptr) errorBrowser->PutAlert(outStr.c_str());
+		break;
+
+	  case FK_ERR_CONSOLE_INTERACTIVE:
+	  case FK_ERR_CONSOLE_QUEUE:
+		cerr << outStr << endl;
+		break;
+
+	  case FK_ERR_OUT_CONSOLE_INTERACTIVE:
+	  case FK_ERR_OUT_CONSOLE_QUEUE:
+		cout << outStr << endl;
+		break;
+
+	  case FK_ERR_BROWSER_INTERACTIVE:
+	  case FK_ERR_BROWSER_QUEUE:
+		if(errorBrowser != nullptr) errorBrowser->PutBrowser(outStr);
+		break;
+
+	  case FK_ERR_FILE:
+		if(fileMode == true) {
+			ofs << outStr << endl;
+		}
+		break;
+
+	  default:
+		break;
+	}
+
+	return true;
+}
+
+namespace FK {
 	void fk_SetErrorMode(const fk_ErrorMode argMode)
 	{
 		fk_GetErrorDB()->SetMode(argMode);
@@ -495,6 +494,6 @@ namespace FK {
 		delete [] buffer;
 		return str;
 	}
-}
 
 #endif // !FK_CLI_CODE
+}
