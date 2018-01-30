@@ -28,7 +28,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_RectTexture : fk_Texture {
 	internal:
-		::fk_RectTexture * GetP(void);
+		::FK::fk_RectTexture * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

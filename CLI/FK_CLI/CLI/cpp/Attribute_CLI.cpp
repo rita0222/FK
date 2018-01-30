@@ -5,14 +5,14 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_Attribute * fk_Attribute::GetP(void)
+	::FK::fk_Attribute * fk_Attribute::GetP(void)
 	{
-		return (::fk_Attribute *)(pBase);
+		return (::FK::fk_Attribute *)(pBase);
 	}
 
 	fk_Attribute::fk_Attribute(bool argNewFlg) : fk_BaseObject(false)
 	{
-		if(argNewFlg == true) pBase = new ::fk_Attribute();
+		if(argNewFlg == true) pBase = new ::FK::fk_Attribute();
 	}
 
 	fk_Attribute::~fk_Attribute()

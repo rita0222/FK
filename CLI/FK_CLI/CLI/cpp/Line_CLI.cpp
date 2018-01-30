@@ -5,19 +5,19 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace System::Collections::Generic;
 	
-	::fk_Line * fk_Line::GetP(void)
+	::FK::fk_Line * fk_Line::GetP(void)
 	{
-		return (::fk_Line *)(pBase);
+		return (::FK::fk_Line *)(pBase);
 	}
 
 	fk_Line::fk_Line() : fk_Solid(false)
 	{
-		pBase = new ::fk_Line();
+		pBase = new ::FK::fk_Line();
 	}
 
 	fk_Line::fk_Line(bool argNewFlg) : fk_Solid(false)
 	{
-		if(argNewFlg == true) pBase = new ::fk_Line();
+		if(argNewFlg == true) pBase = new ::FK::fk_Line();
 	}
 
 	fk_Line::~fk_Line()
@@ -35,7 +35,7 @@ namespace FK_CLI {
 	void fk_Line::PushLine(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 
 		for each(fk_Vector^ pos in argArray) {
 			vArray.push_back(pos);
@@ -52,7 +52,10 @@ namespace FK_CLI {
 	bool fk_Line::ChangeLine(int argLineID, fk_Vector^ argS, fk_Vector^ argE)
 	{
 		if(!argS || !argE) return false;
-		return GetP()->changeLine(argLineID, argS, argE);
+		::FK::fk_Vector S(argS->x_, argS->y_, argS->z_);
+		::FK::fk_Vector E(argE->x_, argE->y_, argE->z_);
+
+		return GetP()->changeLine(argLineID, S, E);
 	}
 
 	bool fk_Line::SetVertex(int argVID, fk_Vector^ argPos)
@@ -70,7 +73,7 @@ namespace FK_CLI {
 	void fk_Line::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 
 		for each (fk_Vector^ pos in argArray) {
 			vArray.push_back(pos);

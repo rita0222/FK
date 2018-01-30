@@ -32,7 +32,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Edge : fk_TopologyMaterial {
 	internal:
-		::fk_Edge * GetP(void);
+		::FK::fk_Edge * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

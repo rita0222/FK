@@ -4,33 +4,33 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	::fk_Axis fk_Vector::GetAxis(FK_CLI::fk_Axis argAxis)
+	::FK::fk_Axis fk_Vector::GetAxis(FK_CLI::fk_Axis argAxis)
 	{
-		::fk_Axis tmpAxis;
+		::FK::fk_Axis tmpAxis;
 
 		switch(argAxis) {
 		  case FK_CLI::fk_Axis::X:
-			tmpAxis	= fk_X;
+			tmpAxis	= ::FK::fk_X;
 			break;
 				
 		  case FK_CLI::fk_Axis::Y:
-			tmpAxis = fk_Y;
+			tmpAxis = ::FK::fk_Y;
 			break;
 
 		  case FK_CLI::fk_Axis::Z:
-			tmpAxis = fk_Z;
+			tmpAxis = ::FK::fk_Z;
 			break;
 
 		  default:
-			tmpAxis = fk_X;
+			tmpAxis = ::FK::fk_X;
 			break;
 		}
 		return tmpAxis;
 	}
 
-	fk_Vector::operator ::fk_Vector (fk_Vector^ argV)
+	fk_Vector::operator ::FK::fk_Vector (fk_Vector^ argV)
 	{
-		::fk_Vector	V(argV->x_, argV->y_, argV->z_);
+		::FK::fk_Vector	V(argV->x_, argV->y_, argV->z_);
 		return V;
 	}
 	
@@ -55,13 +55,13 @@ namespace FK_CLI {
 		return;
 	}
 
-	fk_Vector::fk_Vector(::fk_Vector *argV)
+	fk_Vector::fk_Vector(::FK::fk_Vector *argV)
 		: x_(argV->x), y_(argV->y), z_(argV->z)
 	{
 		return;
 	}
 
-	fk_Vector::fk_Vector(::fk_Vector argV)
+	fk_Vector::fk_Vector(::FK::fk_Vector argV)
 		: x_(argV.x), y_(argV.y), z_(argV.z)
 	{
 		return;
@@ -75,8 +75,8 @@ namespace FK_CLI {
 	bool fk_Vector::Equals(fk_Vector^ argV)
 	{
 		if(!argV) false;
-		::fk_Vector tmpA(x_, y_, z_);
-		::fk_Vector tmpB(argV->x_, argV->y_, argV->z_);
+		::FK::fk_Vector tmpA(x_, y_, z_);
+		::FK::fk_Vector tmpB(argV->x_, argV->y_, argV->z_);
 		return (tmpA == tmpB);
 	}
 
@@ -86,8 +86,8 @@ namespace FK_CLI {
 		if(this == argObj) return true;
 		if(GetType() == argObj->GetType()) {
 			fk_Vector^ V = static_cast<fk_Vector^>(argObj);
-			::fk_Vector tmpA(x_, y_, z_);
-			::fk_Vector tmpB(V->x_, V->y_, V->z_);
+			::FK::fk_Vector tmpA(x_, y_, z_);
+			::FK::fk_Vector tmpB(V->x_, V->y_, V->z_);
 			return (tmpA == tmpB);
 		}
 		return false;
@@ -157,8 +157,8 @@ namespace FK_CLI {
 	fk_Vector^ fk_Vector::operator^(fk_Vector^ argV1, fk_Vector^ argV2)
 	{
 		if(!argV1 || !argV2) return nullptr;
-		::fk_Vector V1(argV1->x_, argV1->y_, argV1->z_);
-		::fk_Vector V2(argV2->x_, argV2->y_, argV2->z_);
+		::FK::fk_Vector V1(argV1->x_, argV1->y_, argV1->z_);
+		::FK::fk_Vector V2(argV2->x_, argV2->y_, argV2->z_);
 		fk_Vector^ V = gcnew fk_Vector(V1 ^ V2);
 		return V;
 	}
@@ -242,19 +242,19 @@ namespace FK_CLI {
 
 	double fk_Vector::Dist()
 	{
-		::fk_Vector V(x_, y_, z_);
+		::FK::fk_Vector V(x_, y_, z_);
 		return V.dist();
 	}
 		
 	double fk_Vector::Dist2()
 	{
-		::fk_Vector V(x_, y_, z_);
+		::FK::fk_Vector V(x_, y_, z_);
 		return V.dist2();
 	}
 
 	bool fk_Vector::Normalize()
 	{
-		::fk_Vector V(x_, y_, z_);
+		::FK::fk_Vector V(x_, y_, z_);
 		if(V.normalize() == false) return false;
 		Set(V.x, V.y, V.z);
 		return true;
@@ -262,22 +262,22 @@ namespace FK_CLI {
 
 	bool fk_Vector::IsZero()
 	{
-		::fk_Vector V(x_, y_, z_);
+		::FK::fk_Vector V(x_, y_, z_);
 		return V.isZero();
 	}
 
 	fk_Vector^ fk_Vector::Proj(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		::fk_Vector V(x_, y_, z_);
-		return gcnew fk_Vector(V.proj(::fk_Vector(argV->x_, argV->y_, argV->z_)));
+		::FK::fk_Vector V(x_, y_, z_);
+		return gcnew fk_Vector(V.proj(::FK::fk_Vector(argV->x_, argV->y_, argV->z_)));
 	}
 
 	fk_Vector^ fk_Vector::Perp(fk_Vector^ argV)
 	{
 		if(!argV) return nullptr;
-		::fk_Vector V(x_, y_, z_);
-		return gcnew fk_Vector(V.perp(::fk_Vector(argV->x_, argV->y_, argV->z_)));
+		::FK::fk_Vector V(x_, y_, z_);
+		return gcnew fk_Vector(V.perp(::FK::fk_Vector(argV->x_, argV->y_, argV->z_)));
 	}
 
 	void fk_Vector::Init(void)
@@ -289,9 +289,9 @@ namespace FK_CLI {
 
 	////////////////////////////////////////////////////////////////////
 
-	fk_HVector::operator ::fk_HVector (fk_HVector^ argV)
+	fk_HVector::operator ::FK::fk_HVector (fk_HVector^ argV)
 	{
-		::fk_HVector V(argV->x_, argV->y_, argV->z_, argV->w_);
+		::FK::fk_HVector V(argV->x_, argV->y_, argV->z_, argV->w_);
 		return V;
 	}
 
@@ -324,7 +324,7 @@ namespace FK_CLI {
 		Set(argHV->x_, argHV->y_, argHV->z_, argHV->w_);
 	}
 
-	fk_HVector::fk_HVector(::fk_HVector argV)
+	fk_HVector::fk_HVector(::FK::fk_HVector argV)
 		: x_(argV.x), y_(argV.y), z_(argV.z), w_(argV.w)
 	{
 		return;
@@ -401,8 +401,8 @@ namespace FK_CLI {
 	bool fk_HVector::Equals(fk_HVector^ argH)
 	{
 		if(argH == nullptr) false;
-		::fk_HVector H1(x_, y_, z_, w_);
-		::fk_HVector H2(argH->x_, argH->y_, argH->z_, argH->w_);
+		::FK::fk_HVector H1(x_, y_, z_, w_);
+		::FK::fk_HVector H2(argH->x_, argH->y_, argH->z_, argH->w_);
 		return (H1 == H2);
 	}
 		
@@ -412,8 +412,8 @@ namespace FK_CLI {
 		if(this == argObj) return true;
 		if(GetType() == argObj->GetType()) {
 			fk_HVector^ V = static_cast<fk_HVector^>(argObj);
-			::fk_HVector H1(x_, y_, z_, w_);
-			::fk_HVector H2(V->x_, V->y_, V->z_, V->w_);
+			::FK::fk_HVector H1(x_, y_, z_, w_);
+			::FK::fk_HVector H2(V->x_, V->y_, V->z_, V->w_);
 			return (H1 == H2);
 		}
 		return false;

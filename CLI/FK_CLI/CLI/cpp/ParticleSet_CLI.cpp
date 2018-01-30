@@ -4,20 +4,20 @@ namespace FK_CLI
 {
 	using namespace std;
 
-	::fk_ParticleSet * fk_ParticleSet::GetP(void)
+	::FK::fk_ParticleSet * fk_ParticleSet::GetP(void)
 	{
-		return (::fk_ParticleSet *)(pBase);
+		return (::FK::fk_ParticleSet *)(pBase);
 	}
 
 	fk_ParticleSet::fk_ParticleSet() : fk_BaseObject(false)
 	{
-		pBase = new ::fk_ParticleSet();
+		pBase = new ::FK::fk_ParticleSet();
 	}
 
 	fk_ParticleSet::fk_ParticleSet(bool argNewFlg) : fk_BaseObject(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_ParticleSet();
+			pBase = new ::FK::fk_ParticleSet();
 		}
 	}
 
@@ -129,7 +129,7 @@ namespace FK_CLI
 
 	fk_Particle^ fk_ParticleSet::GetNextParticle(fk_Particle^ argP)
 	{
-		::fk_Particle *pP = (!argP) ? nullptr : argP->GetP();
+		::FK::fk_Particle *pP = (!argP) ? nullptr : argP->GetP();
 		pP = GetP()->getNextParticle(pP);
 		if(pP == nullptr) return nullptr;
 		fk_Particle^ P = gcnew fk_Particle();

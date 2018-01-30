@@ -1,6 +1,6 @@
 ﻿#include "Model_CLI.h"
 
-class InnerModel : public ::fk_Model
+class InnerModel : public ::FK::fk_Model
 {
 private:
 	using callback_type = void(__stdcall *)(void);
@@ -27,9 +27,9 @@ public:
 
 namespace FK_CLI {
 
-	::fk_Model * fk_Model::GetP(void)
+	::FK::fk_Model * fk_Model::GetP(void)
 	{
-		return (::fk_Model *)(pBase);
+		return (::FK::fk_Model *)(pBase);
 	}
 
 	void fk_Model::MakeNativeModel(void)
@@ -56,7 +56,7 @@ namespace FK_CLI {
 		modelList->Add(this);
 	}
 
-	fk_Model::fk_Model(::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
+	fk_Model::fk_Model(::FK::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
 	{
 		if (argUnmanagedPtr == nullptr) {
 			MakeNativeModel();
@@ -104,7 +104,7 @@ namespace FK_CLI {
 	{
 		shape = argShape;
 		if(!argShape) return;
-		::fk_Shape *pS = (::fk_Shape *)(argShape->pBase);
+		::FK::fk_Shape *pS = (::FK::fk_Shape *)(argShape->pBase);
 		GetP()->setShape(pS);
 	}
 
@@ -208,15 +208,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 			case fk_MaterialMode::PARENT:
-				GetP()->setMaterialMode(FK_PARENT_MODE);
+				GetP()->setMaterialMode(::FK::FK_PARENT_MODE);
 				break;
 
 			case fk_MaterialMode::CHILD:
-				GetP()->setMaterialMode(FK_CHILD_MODE);
+				GetP()->setMaterialMode(::FK::FK_CHILD_MODE);
 				break;
 
 			default:
-				GetP()->setMaterialMode(FK_NONE_MODE);
+				GetP()->setMaterialMode(::FK::FK_NONE_MODE);
 				break;
 		}
 	}
@@ -224,10 +224,10 @@ namespace FK_CLI {
 	fk_MaterialMode fk_Model::MaterialMode::get(void)
 	{
 		switch(GetP()->getMaterialMode()) {
-			case FK_PARENT_MODE:
+		case ::FK::FK_PARENT_MODE:
 				return fk_MaterialMode::PARENT;
 
-			case FK_CHILD_MODE:
+		case ::FK::FK_CHILD_MODE:
 				return fk_MaterialMode::CHILD;
 		}
 		return fk_MaterialMode::NONE;
@@ -276,9 +276,9 @@ namespace FK_CLI {
 	void fk_Model::BlendMode::set(fk_BlendMode argMode)
 	{
 		if (argMode == fk_BlendMode::CUSTOM_MODE) {
-			::fk_BlendFactor src, dst;
+			::FK::fk_BlendFactor src, dst;
 			GetP()->getBlendMode(&src, &dst);
-			GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+			GetP()->setBlendMode(::FK::FK_BLEND_CUSTOM_MODE, src, dst);
 			return;
 		}
 
@@ -292,30 +292,30 @@ namespace FK_CLI {
 
 	void fk_Model::BlendSrcFactor::set(fk_BlendFactor argMode)
 	{
-		::fk_BlendFactor src, dst;
+		::FK::fk_BlendFactor src, dst;
 		GetP()->getBlendMode(&src, &dst);
 		src = static_cast<unsigned char>(argMode);
-		GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+		GetP()->setBlendMode(::FK::FK_BLEND_CUSTOM_MODE, src, dst);
 	}
 
 	fk_BlendFactor fk_Model::BlendSrcFactor::get(void)
 	{
-		::fk_BlendFactor src, dst;
+		::FK::fk_BlendFactor src, dst;
 		GetP()->getBlendMode(&src, &dst);
 		return static_cast<fk_BlendFactor>(src);
 	}
 
 	void fk_Model::BlendDstFactor::set(fk_BlendFactor argMode)
 	{
-		::fk_BlendFactor src, dst;
+		::FK::fk_BlendFactor src, dst;
 		GetP()->getBlendMode(&src, &dst);
 		dst = static_cast<unsigned char>(argMode);
-		GetP()->setBlendMode(FK_BLEND_CUSTOM_MODE, src, dst);
+		GetP()->setBlendMode(::FK::FK_BLEND_CUSTOM_MODE, src, dst);
 	}
 
 	fk_BlendFactor fk_Model::BlendDstFactor::get(void)
 	{
-		::fk_BlendFactor src, dst;
+		::FK::fk_BlendFactor src, dst;
 		GetP()->getBlendMode(&src, &dst);
 		return static_cast<fk_BlendFactor>(dst);
 	}
@@ -379,7 +379,7 @@ namespace FK_CLI {
 
 	fk_Model^ fk_Model::Parent::get(void)
 	{
-		::fk_Model *pM = GetP()->getParent();
+		::FK::fk_Model *pM = GetP()->getParent();
 		if(pM == nullptr) return nullptr;
 		return gcnew fk_Model(pM);
 	}
@@ -519,7 +519,10 @@ namespace FK_CLI {
 	void fk_Model::AdjustCapsule(fk_Vector^ argS, fk_Vector^ argE)
 	{
 		if(!argS || !argE) return;
-		GetP()->adjustCapsule(argS, argE);
+		::FK::fk_Vector S(argS->x_, argS->y_, argS->z_);
+		::FK::fk_Vector E(argE->x_, argE->y_, argE->z_);
+
+		GetP()->adjustCapsule(S, E);
 	}
 
 	bool fk_Model::IsInter(fk_Model^ argModel)

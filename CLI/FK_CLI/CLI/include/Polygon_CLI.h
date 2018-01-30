@@ -25,7 +25,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Polygon : fk_Solid {
 	internal:
-		::fk_Polygon * GetP(void);
+		::FK::fk_Polygon * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
@@ -87,7 +87,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Polyline : fk_Solid {
 	internal:
-		::fk_Polyline * GetP(void);
+		::FK::fk_Polyline * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
@@ -153,7 +153,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Closedline : fk_Polygon {
 	internal:
-		::fk_Closedline * GetP(void);
+		::FK::fk_Closedline * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

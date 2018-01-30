@@ -6,19 +6,19 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_SpriteModel * fk_SpriteModel::GetP(void)
+	::FK::fk_SpriteModel * fk_SpriteModel::GetP(void)
 	{
-		return (::fk_SpriteModel *)(pBase);
+		return (::FK::fk_SpriteModel *)(pBase);
 	}
 
 	fk_SpriteModel::fk_SpriteModel() : fk_Model(false)
 	{
-		pBase = new ::fk_SpriteModel();
+		pBase = new ::FK::fk_SpriteModel();
 	}
 
 	fk_SpriteModel::fk_SpriteModel(bool argNewFlg) : fk_Model(false)
 	{
-		if(argNewFlg == true) pBase = new ::fk_SpriteModel();
+		if(argNewFlg == true) pBase = new ::FK::fk_SpriteModel();
 	}
 
 	fk_SpriteModel::~fk_SpriteModel()
@@ -118,13 +118,13 @@ namespace FK_CLI {
 	void fk_SpriteModel::DrawText(String^ argStr)
 	{
 		if(!argStr) return;
-		GetP()->drawText(marshal_as<string>(argStr), FK_STR_SJIS);
+		GetP()->drawText(marshal_as<string>(argStr), ::FK::FK_STR_SJIS);
 	}
 
 	void fk_SpriteModel::DrawText(String^ argStr, bool argMode)
 	{
 		if(!argStr) return;
-		GetP()->drawText(marshal_as<string>(argStr), argMode, FK_STR_SJIS);
+		GetP()->drawText(marshal_as<string>(argStr), argMode, ::FK::FK_STR_SJIS);
 	}
 
 	void fk_SpriteModel::ClearText(void)

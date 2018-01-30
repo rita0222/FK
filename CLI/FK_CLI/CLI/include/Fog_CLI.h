@@ -32,7 +32,7 @@ namespace FK_CLI
  */
 	public ref class fk_Fog : fk_DisplayLink {
 	internal:
-		::fk_Scene * GetP(void);
+		::FK::fk_Scene * GetP(void);
 
 	public:
 

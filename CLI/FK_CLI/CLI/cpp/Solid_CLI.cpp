@@ -7,19 +7,19 @@ namespace FK_CLI {
 	using namespace msclr::interop;
 	using namespace System::Collections::Generic;
 	
-	::fk_Solid * fk_Solid::GetP(void)
+	::FK::fk_Solid * fk_Solid::GetP(void)
 	{
-		return (::fk_Solid *)(pBase);
+		return (::FK::fk_Solid *)(pBase);
 	}
 
 	fk_Solid::fk_Solid() : fk_SolidBase(false)
 	{
-		pBase = new ::fk_Solid();
+		pBase = new ::FK::fk_Solid();
 	}
 
 	fk_Solid::fk_Solid(bool argNewFlg) : fk_SolidBase(false)
 	{
-		if(argNewFlg == true) pBase = new ::fk_Solid();
+		if(argNewFlg == true) pBase = new ::FK::fk_Solid();
 	}
 
 	fk_Solid::~fk_Solid()
@@ -260,7 +260,7 @@ namespace FK_CLI {
 		if(!argFName || !argTime || !argPos || !argMat) return false;
 
 		vector<double> timeArray;
-		vector<::fk_Vector> posArray;
+		vector<::FK::fk_Vector> posArray;
 
 		for each (double time in argTime) {
 			timeArray.push_back(time);
@@ -281,7 +281,7 @@ namespace FK_CLI {
 	{
 		if(!argFName || !argTime || !argPos || !argMat) return false;
 		vector<double> timeArray;
-		vector<::fk_Vector> posArray;
+		vector<::FK::fk_Vector> posArray;
 
 		for each (double time in argTime) {
 			timeArray.push_back(time);
@@ -301,7 +301,7 @@ namespace FK_CLI {
 	{
 		if(!argFName || !argTime || !argPos) return false;
 		vector<double> timeArray;
-		vector<::fk_Vector> posArray;
+		vector<::FK::fk_Vector> posArray;
 
 		for each (double time in argTime) {
 			timeArray.push_back(time);

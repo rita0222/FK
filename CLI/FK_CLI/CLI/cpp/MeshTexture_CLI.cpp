@@ -5,29 +5,29 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_MeshTexture * fk_MeshTexture::GetP(void)
+	::FK::fk_MeshTexture * fk_MeshTexture::GetP(void)
 	{
-		return (::fk_MeshTexture *)(pBase);
+		return (::FK::fk_MeshTexture *)(pBase);
 	}
 
 	fk_MeshTexture::fk_MeshTexture() : fk_Texture(false)
 	{
-		pBase = new ::fk_MeshTexture();
+		pBase = new ::FK::fk_MeshTexture();
 	}
 
 	fk_MeshTexture::fk_MeshTexture(bool argNewFlg) : fk_Texture(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_MeshTexture();
+			pBase = new ::FK::fk_MeshTexture();
 		}
 	}
 
 	fk_MeshTexture::fk_MeshTexture(fk_Image^ argImage) : fk_Texture(false)
 	{
 		if(!argImage) {
-			pBase = new ::fk_MeshTexture();
+			pBase = new ::FK::fk_MeshTexture();
 		} else {
-			pBase = new ::fk_MeshTexture(argImage->GetP());
+			pBase = new ::FK::fk_MeshTexture(argImage->GetP());
 		}
 	}
 
@@ -72,7 +72,7 @@ namespace FK_CLI {
 	bool fk_MeshTexture::SetTriTextureCoord(int argTID, IEnumerable<fk_TexCoord^>^ argArray)
 	{
 		if(!argArray) return false;
-		vector<::fk_TexCoord> array;
+		vector<::FK::fk_TexCoord> array;
 
 		for each (fk_TexCoord^ c in argArray) {
 			array.push_back(c);
@@ -99,7 +99,7 @@ namespace FK_CLI {
 	bool fk_MeshTexture::SetTriPos(int argTID, IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return false;
-		vector<::fk_Vector> array;
+		vector<::FK::fk_Vector> array;
 		  
 		for each(fk_Vector^ pos in argArray) {
 			array.push_back(pos);

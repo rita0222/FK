@@ -2,20 +2,20 @@
 
 namespace FK_CLI {
 
-	::fk_Cone * fk_Cone::GetP(void)
+	::FK::fk_Cone * fk_Cone::GetP(void)
 	{
-		return (::fk_Cone *)(pBase);
+		return (::FK::fk_Cone *)(pBase);
 	}
 
 	fk_Cone::fk_Cone() : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Cone();
+		pBase = new ::FK::fk_Cone();
 	}
 
 	fk_Cone::fk_Cone(bool argNewFlg) : fk_IndexFaceSet(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Cone();
+			pBase = new ::FK::fk_Cone();
 		}
 				
 	}
@@ -23,7 +23,7 @@ namespace FK_CLI {
 	fk_Cone::fk_Cone(int argDiv, double argRad, double argHeight)
 		: fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Cone(argDiv, argRad, argHeight);
+		pBase = new ::FK::fk_Cone(argDiv, argRad, argHeight);
 	}
 
 	fk_Cone::~fk_Cone()

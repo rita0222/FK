@@ -2,27 +2,27 @@
 
 namespace FK_CLI {
 
-	::fk_Block * fk_Block::GetP(void)
+	::FK::fk_Block * fk_Block::GetP(void)
 	{
-		return (::fk_Block *)(pBase);
+		return (::FK::fk_Block *)(pBase);
 	}
 
 	fk_Block::fk_Block() : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Block();
+		pBase = new ::FK::fk_Block();
 	}
 
 	fk_Block::fk_Block(bool argNewFlg) : fk_IndexFaceSet(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Block();
+			pBase = new ::FK::fk_Block();
 		}
 				
 	}
 
 	fk_Block::fk_Block(double argX, double argY, double argZ) : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Block(argX, argY, argZ);
+		pBase = new ::FK::fk_Block(argX, argY, argZ);
 	}
 
 	fk_Block::~fk_Block()

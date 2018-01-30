@@ -1,27 +1,27 @@
 ﻿#include "Prism_CLI.h"
 
 namespace FK_CLI {
-	::fk_Prism * fk_Prism::GetP(void)
+	::FK::fk_Prism * fk_Prism::GetP(void)
 	{
-		return (::fk_Prism *)(pBase);
+		return (::FK::fk_Prism *)(pBase);
 	}
 
 	fk_Prism::fk_Prism() : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Prism();
+		pBase = new ::FK::fk_Prism();
 	}
 
 	fk_Prism::fk_Prism(bool argNewFlg) : fk_IndexFaceSet(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Prism();
+			pBase = new ::FK::fk_Prism();
 		}
 	}
 		
 	fk_Prism::fk_Prism(int argDiv, double argTop, double argBottom, double argHeight)
 		: fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Prism(argDiv, argTop, argBottom, argHeight);
+		pBase = new ::FK::fk_Prism(argDiv, argTop, argBottom, argHeight);
 	}
 
 	fk_Prism::~fk_Prism()

@@ -16,7 +16,7 @@ namespace FK_CLI
 		HDC		hDC;
 		HGLRC	hRC;
 
-		::fk_GraphicsEngine *pEngine;
+		::FK::fk_GraphicsEngine *pEngine;
 
 	public:
 		fk_Renderer::fk_Renderer(void);

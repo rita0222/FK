@@ -42,11 +42,11 @@ namespace FK_CLI
 	public ref class fk_TexCoord {
 	internal:
 		double x_, y_;
-		static operator ::fk_TexCoord (fk_TexCoord^);
+		static operator ::FK::fk_TexCoord (fk_TexCoord^);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_TexCoord(::fk_TexCoord);
+		fk_TexCoord(::FK::fk_TexCoord);
 #endif
 
 		//! コンストラクタ1
@@ -133,7 +133,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Texture : fk_Shape {
 	internal:
-		::fk_Texture * GetP(void);
+		::FK::fk_Texture * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

@@ -18,7 +18,7 @@ namespace FK_CLI {
 	 */
 	public ref class fk_GenMatrix {
 	internal:
-		::fk_GenMatrix *pGMat;
+		::FK::fk_GenMatrix *pGMat;
 	public:
 
 		//! コンストラクタ1

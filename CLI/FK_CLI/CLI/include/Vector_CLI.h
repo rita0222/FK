@@ -40,8 +40,8 @@ namespace FK_CLI
 		//::fk_Vector *pVec;
 		double	x_, y_, z_;
 
-		static ::fk_Axis GetAxis(fk_Axis);
-		static operator ::fk_Vector (fk_Vector^);
+		static ::FK::fk_Axis GetAxis(fk_Axis);
+		static operator ::FK::fk_Vector (fk_Vector^);
 
 	public:
 
@@ -68,8 +68,8 @@ namespace FK_CLI
 		fk_Vector(fk_Vector^ V);
 
 #ifndef FK_DOXYGEN_USER_PROCESS		
-		fk_Vector(::fk_Vector *);
-		fk_Vector(::fk_Vector);
+		fk_Vector(::FK::fk_Vector *);
+		fk_Vector(::FK::fk_Vector);
 #endif
 		
 		// デストラクタ
@@ -446,11 +446,11 @@ namespace FK_CLI
 	public ref class fk_HVector {
 	internal:
 		double x_, y_, z_, w_;
-		static operator ::fk_HVector (fk_HVector^);
+		static operator ::FK::fk_HVector (fk_HVector^);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
-		fk_HVector(::fk_HVector);
+		fk_HVector(::FK::fk_HVector);
 #endif
 
 		//! コンストラクタ1

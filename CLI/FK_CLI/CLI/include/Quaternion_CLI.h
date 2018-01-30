@@ -40,12 +40,12 @@ namespace FK_CLI
 	 */
 	public ref class fk_Quaternion {
 	internal:
-		::fk_Quaternion *pQuat;
+		::FK::fk_Quaternion *pQuat;
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Quaternion(::fk_Quaternion *argQ);
-		fk_Quaternion(::fk_Quaternion argQ);
+		fk_Quaternion(::FK::fk_Quaternion *argQ);
+		fk_Quaternion(::FK::fk_Quaternion argQ);
 #endif
 		//! コンストラクタ1
 		/*!

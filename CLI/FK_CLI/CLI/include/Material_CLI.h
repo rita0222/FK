@@ -24,9 +24,9 @@ namespace FK_CLI
 	public ref class fk_Color {
 	internal:
 		bool dFlg;
-		::fk_Color *pCol;
+		::FK::fk_Color *pCol;
 
-		::fk_Color * GetP(void);
+		::FK::fk_Color * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
@@ -448,9 +448,9 @@ namespace FK_CLI
 	 public ref class fk_Material {
 	 internal:
 		 bool dFlg;
-		 ::fk_Material *pMat;
+		 ::FK::fk_Material *pMat;
 
-		 ::fk_Material * GetP(void);
+		 ::FK::fk_Material * GetP(void);
 
 	 public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

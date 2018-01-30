@@ -2,9 +2,9 @@
 
 namespace FK_CLI {
 
-	::fk_Model * fk_Boundary::GetP(void)
+	::FK::fk_Model * fk_Boundary::GetP(void)
 	{
-		return (::fk_Model *)(pBase);
+		return (::FK::fk_Model *)(pBase);
 	}
 
 	fk_Boundary::fk_Boundary(bool argNewFlg) : fk_MatrixAdmin(false)
@@ -18,16 +18,16 @@ namespace FK_CLI {
 	fk_BoundaryMode fk_Boundary::BMode::get()
 	{
 		switch(GetP()->getBMode()) {
-		  case FK_B_SPHERE:
+		case ::FK::FK_B_SPHERE:
 			return FK_CLI::fk_BoundaryMode::SPHERE;
 
-		  case FK_B_AABB:
+		case ::FK::FK_B_AABB:
 			return FK_CLI::fk_BoundaryMode::AABB;
 
-		  case FK_B_OBB:
+		case ::FK::FK_B_OBB:
 			return FK_CLI::fk_BoundaryMode::OBB;
 
-		  case FK_B_CAPSULE:
+		case ::FK::FK_B_CAPSULE:
 			return FK_CLI::fk_BoundaryMode::CAPSULE;
 
 		  default:
@@ -40,23 +40,23 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case FK_CLI::fk_BoundaryMode::SPHERE:
-			GetP()->setBMode(FK_B_SPHERE);
+			GetP()->setBMode(::FK::FK_B_SPHERE);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::AABB:
-			GetP()->setBMode(FK_B_AABB);
+			GetP()->setBMode(::FK::FK_B_AABB);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::OBB:
-			GetP()->setBMode(FK_B_OBB);
+			GetP()->setBMode(::FK::FK_B_OBB);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::CAPSULE:
-			GetP()->setBMode(FK_B_CAPSULE);
+			GetP()->setBMode(::FK::FK_B_CAPSULE);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::NONE:
-			GetP()->setBMode(FK_B_NONE);
+			GetP()->setBMode(::FK::FK_B_NONE);
 			break;
 
 		  default:
@@ -147,7 +147,11 @@ namespace FK_CLI {
 	void fk_Boundary::SetCapsule(fk_Vector^ argS, fk_Vector^ argE, double argR)
 	{
 		if(!argS || !argE) return;
-		GetP()->setCapsule(argS, argE, argR);
+
+		::FK::fk_Vector S(argS->x_, argS->y_, argS->z_);
+		::FK::fk_Vector E(argE->x_, argE->y_, argE->z_);
+
+		GetP()->setCapsule(S, E, argR);
 	}
 
 	double fk_Boundary::GetCapsuleRadius(void)

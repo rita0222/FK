@@ -35,11 +35,11 @@ namespace FK_CLI
 
 	public ref class fk_Plane {
 	internal:
-		::fk_Plane *pPlane;
+		::FK::fk_Plane *pPlane;
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Plane(::fk_Plane *argP);
+		fk_Plane(::FK::fk_Plane *argP);
 #endif
 		//! コンストラクタ
 		fk_Plane();

@@ -5,26 +5,26 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace System::Collections::Generic;	
 
-	::fk_Polygon * fk_Polygon::GetP(void)
+	::FK::fk_Polygon * fk_Polygon::GetP(void)
 	{
-		return (::fk_Polygon *)(pBase);
+		return (::FK::fk_Polygon *)(pBase);
 	}
 
 	fk_Polygon::fk_Polygon() : fk_Solid(false)
 	{
-		pBase = new ::fk_Polygon();
+		pBase = new ::FK::fk_Polygon();
 	}
 
 	fk_Polygon::fk_Polygon(IEnumerable<fk_Vector^>^ argArray) : fk_Solid(false)
 	{
-		pBase = new ::fk_Polygon();
+		pBase = new ::FK::fk_Polygon();
 		SetVertex(argArray);
 	}
 
 	fk_Polygon::fk_Polygon(bool argNewFlg) : fk_Solid(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Polygon();
+			pBase = new ::FK::fk_Polygon();
 		}
 	}
 
@@ -43,7 +43,9 @@ namespace FK_CLI {
 	void fk_Polygon::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->pushVertex(argPos);
+		::FK::fk_Vector P(argPos->x_, argPos->y_, argPos->z_);
+
+		GetP()->pushVertex(P);
 	}
 
 	void fk_Polygon::SetVertex(int argID, fk_Vector^ argPos)
@@ -55,7 +57,7 @@ namespace FK_CLI {
 	void fk_Polygon::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 
 		for each (fk_Vector^ pos in argArray) {
 			vArray.push_back(pos);
@@ -64,26 +66,26 @@ namespace FK_CLI {
 		GetP()->setVertex(&vArray);
 	}
 
-	::fk_Polyline * fk_Polyline::GetP(void)
+	::FK::fk_Polyline * fk_Polyline::GetP(void)
 	{
-		return (::fk_Polyline *)(pBase);
+		return (::FK::fk_Polyline *)(pBase);
 	}
 
 	fk_Polyline::fk_Polyline() : fk_Solid(false)
 	{
-		pBase = new ::fk_Polyline();
+		pBase = new ::FK::fk_Polyline();
 	}
 
 	fk_Polyline::fk_Polyline(IEnumerable<fk_Vector^>^ argArray) : fk_Solid(false)
 	{
-		pBase = new ::fk_Polyline();
+		pBase = new ::FK::fk_Polyline();
 		SetVertex(argArray);
 	}
 
 	fk_Polyline::fk_Polyline(bool argNewFlg) : fk_Solid(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Polyline();
+			pBase = new ::FK::fk_Polyline();
 		}
 				
 	}
@@ -103,7 +105,9 @@ namespace FK_CLI {
 	void fk_Polyline::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->pushVertex(argPos);
+		::FK::fk_Vector P(argPos->x_, argPos->y_, argPos->z_);
+
+		GetP()->pushVertex(P);
 	}
 
 	void fk_Polyline::SetVertex(int argID, fk_Vector^ argPos)
@@ -115,7 +119,7 @@ namespace FK_CLI {
 	void fk_Polyline::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return;
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 
 		for each (fk_Vector^ pos in argArray) {
 			vArray.push_back(pos);
@@ -123,26 +127,26 @@ namespace FK_CLI {
 		GetP()->setVertex(&vArray);
 	}
 
-	::fk_Closedline * fk_Closedline::GetP(void)
+	::FK::fk_Closedline * fk_Closedline::GetP(void)
 	{
-		return (::fk_Closedline *)(pBase);
+		return (::FK::fk_Closedline *)(pBase);
 	}
 
 	fk_Closedline::fk_Closedline() : fk_Polygon(false)
 	{
-		pBase = new ::fk_Closedline();
+		pBase = new ::FK::fk_Closedline();
 	}
 
 	fk_Closedline::fk_Closedline(IEnumerable<fk_Vector^>^ argArray) : fk_Polygon(false)
 	{
-		pBase = new ::fk_Closedline();
+		pBase = new ::FK::fk_Closedline();
 		SetVertex(argArray);
 	}
 
 	fk_Closedline::fk_Closedline(bool argNewFlg) : fk_Polygon(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Closedline();
+			pBase = new ::FK::fk_Closedline();
 		}
 	}
 

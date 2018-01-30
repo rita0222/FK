@@ -2,9 +2,9 @@
 
 namespace FK_CLI {
 
-	::fk_MatrixAdmin * fk_MatrixAdmin::GetP(void)
+	::FK::fk_MatrixAdmin * fk_MatrixAdmin::GetP(void)
 	{
-		return (::fk_MatrixAdmin *)(pBase);
+		return (::FK::fk_MatrixAdmin *)(pBase);
 	}
 
 	fk_MatrixAdmin::fk_MatrixAdmin(bool argNewFlg) : fk_BaseObject(false)

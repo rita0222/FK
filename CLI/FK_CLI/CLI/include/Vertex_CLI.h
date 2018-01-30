@@ -25,7 +25,7 @@ namespace FK_CLI {
 	 */
 	public ref class fk_Vertex : fk_TopologyMaterial {
 	internal:
-		::fk_Vertex * GetP(void);
+		::FK::fk_Vertex * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

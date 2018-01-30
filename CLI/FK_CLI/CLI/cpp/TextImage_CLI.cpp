@@ -5,20 +5,20 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 	
-	::fk_TextImage * fk_TextImage::GetP(void)
+	::FK::fk_TextImage * fk_TextImage::GetP(void)
 	{
-		return (::fk_TextImage *)(pBase);
+		return (::FK::fk_TextImage *)(pBase);
 	}
 
 	fk_TextImage::fk_TextImage() : fk_Image(false)
 	{
-		pBase = new ::fk_TextImage();
+		pBase = new ::FK::fk_TextImage();
 	}
 
 	fk_TextImage::fk_TextImage(bool argNewFlg) : fk_Image(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_TextImage();
+			pBase = new ::FK::fk_TextImage();
 		}
 	}
 
@@ -191,15 +191,15 @@ namespace FK_CLI {
 	{
 		switch(argAlign) {
 		  case fk_TextAlign::LEFT:
-			GetP()->setAlign(FK_ALIGN_LEFT);
+			GetP()->setAlign(::FK::FK_ALIGN_LEFT);
 			break;
 
 		  case fk_TextAlign::CENTER:
-			GetP()->setAlign(FK_ALIGN_CENTER);
+			GetP()->setAlign(::FK::FK_ALIGN_CENTER);
 			break;
 
 		  case fk_TextAlign::RIGHT:
-			GetP()->setAlign(FK_ALIGN_RIGHT);
+			GetP()->setAlign(::FK::FK_ALIGN_RIGHT);
 			break;
 
 		  default:
@@ -210,13 +210,13 @@ namespace FK_CLI {
 	fk_TextAlign fk_TextImage::Align::get(void)
 	{
 		switch(GetP()->getAlign()) {
-		  case FK_ALIGN_LEFT:
+		case ::FK::FK_ALIGN_LEFT:
 			return fk_TextAlign::LEFT;
 
-		  case FK_ALIGN_CENTER:
+		case ::FK::FK_ALIGN_CENTER:
 			return fk_TextAlign::CENTER;
 
-		  case FK_ALIGN_RIGHT:
+		case ::FK::FK_ALIGN_RIGHT:
 			return fk_TextAlign::RIGHT;
 
 		  default:
@@ -260,15 +260,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TextSendingMode::ALL:
-			GetP()->setSendingMode(FK_SENDING_ALL);
+			GetP()->setSendingMode(::FK::FK_SENDING_ALL);
 			break;
 
 		  case fk_TextSendingMode::CHAR:
-			GetP()->setSendingMode(FK_SENDING_CHAR);
+			GetP()->setSendingMode(::FK::FK_SENDING_CHAR);
 			break;
 
 		  case fk_TextSendingMode::LINE:
-			GetP()->setSendingMode(FK_SENDING_LINE);
+			GetP()->setSendingMode(::FK::FK_SENDING_LINE);
 			break;
 
 		  default:
@@ -279,13 +279,13 @@ namespace FK_CLI {
 	fk_TextSendingMode fk_TextImage::SendingMode::get(void)
 	{
 		switch(GetP()->getSendingMode()) {
-		  case FK_SENDING_ALL:
+		case ::FK::FK_SENDING_ALL:
 			return fk_TextSendingMode::ALL;
 
-		  case FK_SENDING_CHAR:
+		case ::FK::FK_SENDING_CHAR:
 			return fk_TextSendingMode::CHAR;
 
-		  case FK_SENDING_LINE:
+		case ::FK::FK_SENDING_LINE:
 			return fk_TextSendingMode::LINE;
 			
 		  default:
@@ -296,12 +296,12 @@ namespace FK_CLI {
 
 	void fk_TextImage::CacheMode::set(bool argMode)
 	{
-		::fk_TextImage::setCacheMode(argMode);
+		::FK::fk_TextImage::setCacheMode(argMode);
 	}
 
 	bool fk_TextImage::CacheMode::get(void)
 	{
-		return ::fk_TextImage::getCacheMode();
+		return ::FK::fk_TextImage::getCacheMode();
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -352,7 +352,7 @@ namespace FK_CLI {
 	bool fk_TextImage::LoadStrFile(String^ argFileName)
 	{
 		if(!argFileName) return false;
-		return GetP()->loadStrFile(marshal_as<string>(argFileName), FK_STR_UTF8);
+		return GetP()->loadStrFile(marshal_as<string>(argFileName), ::FK::FK_STR_UTF8);
 	}
 
 	int fk_TextImage::GetLineCharNum(int argNum)
@@ -397,7 +397,7 @@ namespace FK_CLI {
 
 	void fk_TextImage::ClearCache(void)
 	{
-		::fk_TextImage::clearCache();
+		::FK::fk_TextImage::clearCache();
 	}
 }
 /****************************************************************************

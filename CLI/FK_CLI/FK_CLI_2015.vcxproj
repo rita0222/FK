@@ -66,11 +66,11 @@
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
       <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;opengl32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,13 +80,14 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP</AdditionalOptions>
       <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;opengl32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/IGNORE:4098,4248,4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -140,6 +141,10 @@
     <ClCompile Include="..\..\src\scene\Fog.cxx" />
     <ClCompile Include="..\..\src\scene\Projection.cxx" />
     <ClCompile Include="..\..\src\scene\Scene.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderBinder.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderParameter.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderProgram.cxx" />
+    <ClCompile Include="..\..\src\shader\TextureSampler.cxx" />
     <ClCompile Include="..\..\src\shape\Attribute.cxx" />
     <ClCompile Include="..\..\src\shape\AttributeData.cxx" />
     <ClCompile Include="..\..\src\shape\BezCurve.cxx" />
@@ -381,6 +386,9 @@
     <ClInclude Include="..\..\FK\RDSParser.H" />
     <ClInclude Include="..\..\FK\Reference.h" />
     <ClInclude Include="..\..\FK\Scene.h" />
+    <ClInclude Include="..\..\FK\ShaderBinder.h" />
+    <ClInclude Include="..\..\FK\ShaderParameter.h" />
+    <ClInclude Include="..\..\FK\ShaderProgram.h" />
     <ClInclude Include="..\..\FK\Shape.h" />
     <ClInclude Include="..\..\FK\ShapeViewer.h" />
     <ClInclude Include="..\..\FK\SMFParser.H" />
@@ -397,6 +405,7 @@
     <ClInclude Include="..\..\FK\TextImage.h" />
     <ClInclude Include="..\..\FK\Texture.h" />
     <ClInclude Include="..\..\FK\TextureDraw.H" />
+    <ClInclude Include="..\..\FK\TextureSampler.h" />
     <ClInclude Include="..\..\FK\Topology.h" />
     <ClInclude Include="..\..\FK\TrackBall.h" />
     <ClInclude Include="..\..\FK\Tree.h" />
@@ -424,6 +433,7 @@
     <ClInclude Include="CLI\include\Edge_CLI.h" />
     <ClInclude Include="CLI\include\Fog_CLI.h" />
     <ClInclude Include="CLI\include\GenMatrix_CLI.h" />
+    <ClInclude Include="CLI\include\GenVector_CLI.h" />
     <ClInclude Include="CLI\include\GuideObject_CLI.h" />
     <ClInclude Include="CLI\include\Half_CLI.h" />
     <ClInclude Include="CLI\include\IFSTexture_CLI.h" />

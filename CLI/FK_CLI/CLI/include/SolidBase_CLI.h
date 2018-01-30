@@ -31,7 +31,7 @@ namespace FK_CLI
 	public ref class fk_SolidBase : fk_Modify {
 
 	internal:
-		::fk_SolidBase * GetP(void);
+		::FK::fk_SolidBase * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

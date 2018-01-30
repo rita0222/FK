@@ -5,19 +5,19 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_Dimension * fk_Dimension::GetP(void)
+	::FK::fk_Dimension * fk_Dimension::GetP(void)
 	{
 		return pDim;
 	}
 
 	fk_Dimension::fk_Dimension()
 	{
-		pDim = new ::fk_Dimension();
+		pDim = new ::FK::fk_Dimension();
 	}
 
 	fk_Dimension::fk_Dimension(int argW, int argH)
 	{
-		pDim = new ::fk_Dimension(argW, argH);
+		pDim = new ::FK::fk_Dimension(argW, argH);
 	}
 
 	fk_Dimension::~fk_Dimension()
@@ -87,19 +87,19 @@ namespace FK_CLI {
 
 
 
-	::fk_Rect * fk_Rect::GetP(void)
+	::FK::fk_Rect * fk_Rect::GetP(void)
 	{
 		return pRect;
 	}
 
 	fk_Rect::fk_Rect()
 	{
-		pRect = new ::fk_Rect();
+		pRect = new ::FK::fk_Rect();
 	}
 
 	fk_Rect::fk_Rect(int argX, int argY, int argW, int argH)
 	{
-		pRect = new ::fk_Rect(argX, argY, argW, argH);
+		pRect = new ::FK::fk_Rect(argX, argY, argW, argH);
 	}
 
 	fk_Rect::~fk_Rect()
@@ -187,26 +187,26 @@ namespace FK_CLI {
 
 	/////////////////////////////////////////////////////////////////////
 
-	::fk_Image * fk_Image::GetP(void)
+	::FK::fk_Image * fk_Image::GetP(void)
 	{
-		return (::fk_Image *)(pBase);
+		return (::FK::fk_Image *)(pBase);
 	}
 	
 	fk_Image::fk_Image() : fk_BaseObject(false)
 	{
-		pBase = new ::fk_Image();
+		pBase = new ::FK::fk_Image();
 	}
 
 	fk_Image::fk_Image(bool argNewFlg) : fk_BaseObject(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Image();
+			pBase = new ::FK::fk_Image();
 		}
 	}
 
 	fk_Image::fk_Image(int argW, int argH) : fk_BaseObject(false)
 	{
-		pBase = new ::fk_Image(argW, argH);
+		pBase = new ::FK::fk_Image(argW, argH);
 	}
 
 	fk_Image::~fk_Image()

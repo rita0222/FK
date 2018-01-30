@@ -21,8 +21,8 @@ namespace FK_CLI
 	 */
 	public ref class fk_BVHMotion {
 	internal:
-		::fk_BVHMotion *pMotion;
-		::fk_BVHMotion * GetP(void);
+		::FK::fk_BVHMotion *pMotion;
+		::FK::fk_BVHMotion * GetP(void);
 
 	public:
 		//! コンストラクタ

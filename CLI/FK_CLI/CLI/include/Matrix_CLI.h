@@ -24,11 +24,11 @@ namespace FK_CLI {
 	internal:
 		double h_, p_, b_;
 
-		static operator ::fk_Angle (fk_Angle^);
+		static operator ::FK::fk_Angle (fk_Angle^);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
-		fk_Angle(::fk_Angle);
+		fk_Angle(::FK::fk_Angle);
 #endif
 
 		//! コンストラクタ1
@@ -107,7 +107,7 @@ namespace FK_CLI {
 	 */
 	public ref class fk_Matrix {
 	internal:
-		::fk_Matrix *pMatrix;
+		::FK::fk_Matrix *pMatrix;
 		cli::array<float>^ refArray;
 	public:
 

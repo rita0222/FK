@@ -39,7 +39,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_ParticleSet : fk_BaseObject {
 	internal:
-		::fk_ParticleSet * GetP(void);
+		::FK::fk_ParticleSet * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

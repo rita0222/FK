@@ -2,22 +2,22 @@
 
 namespace FK_CLI {
 
-	::fk_DisplayLink * fk_DisplayLink::GetP(void)
+	::FK::fk_DisplayLink * fk_DisplayLink::GetP(void)
 	{
-		return (::fk_DisplayLink *)(pBase);
+		return (::FK::fk_DisplayLink *)(pBase);
 	}
 
 	void fk_DisplayLink::CameraUpdate(void)
 	{
-		_camera = gcnew fk_Model(const_cast<::fk_Model *>(GetP()->getCamera()));
+		_camera = gcnew fk_Model(const_cast<::FK::fk_Model *>(GetP()->getCamera()));
 	}
 
-	::fk_StereoChannel fk_DisplayLink::GetStereo(FK_CLI::fk_StereoChannel argC)
+	::FK::fk_StereoChannel fk_DisplayLink::GetStereo(FK_CLI::fk_StereoChannel argC)
 	{
 		if(argC == fk_StereoChannel::STEREO_LEFT) {
-			return FK_STEREO_LEFT;
+			return ::FK::FK_STEREO_LEFT;
 		}
-		return FK_STEREO_RIGHT;
+		return ::FK::FK_STEREO_RIGHT;
 	}
 
 	fk_DisplayLink::fk_DisplayLink(bool argNewFlg)
@@ -53,7 +53,7 @@ namespace FK_CLI {
 	void fk_DisplayLink::LeftCamera::set(fk_Model^ argM)
 	{
 		if(!argM) return;
-		GetP()->entryStereoCamera(FK_STEREO_LEFT, argM->GetP());
+		GetP()->entryStereoCamera(::FK::FK_STEREO_LEFT, argM->GetP());
 		_lCamera = argM;
 	}
 
@@ -65,26 +65,26 @@ namespace FK_CLI {
 	void fk_DisplayLink::RightCamera::set(fk_Model^ argM)
 	{
 		if(!argM) return;
-		GetP()->entryStereoCamera(FK_STEREO_RIGHT, argM->GetP());
+		GetP()->entryStereoCamera(::FK::FK_STEREO_RIGHT, argM->GetP());
 		_rCamera = argM;
 	}
 		
 	fk_ProjectBase^ fk_DisplayLink::Projection::get()
 	{
 		if(!_proj) {
-			const ::fk_ProjectBase *cP = GetP()->getProjection();
-			::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
+			const ::FK::fk_ProjectBase *cP = GetP()->getProjection();
+			::FK::fk_ProjectBase *proj = const_cast<::FK::fk_ProjectBase *>(cP);
 
 			switch(proj->getMode()) {
-			  case FK_PERSPECTIVE_MODE:
+			case ::FK::FK_PERSPECTIVE_MODE:
 				_proj = gcnew fk_Perspective(false);
 				break;
 
-			  case FK_FRUSTUM_MODE:
+			case ::FK::FK_FRUSTUM_MODE:
 				_proj = gcnew fk_Frustum(false);
 				break;
 
-			  case FK_ORTHO_MODE:
+			case ::FK::FK_ORTHO_MODE:
 				_proj = gcnew fk_Ortho(false);
 				break;
 						
@@ -107,19 +107,19 @@ namespace FK_CLI {
 	fk_ProjectBase^ fk_DisplayLink::LeftProjection::get()
 	{
 		if(!_lProj) {
-			const ::fk_ProjectBase *cP = GetP()->getStereoProjection(FK_STEREO_LEFT);
-			::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
+			const ::FK::fk_ProjectBase *cP = GetP()->getStereoProjection(::FK::FK_STEREO_LEFT);
+			::FK::fk_ProjectBase *proj = const_cast<::FK::fk_ProjectBase *>(cP);
 
 			switch(proj->getMode()) {
-			  case FK_PERSPECTIVE_MODE:
+			case ::FK::FK_PERSPECTIVE_MODE:
 				_lProj = gcnew fk_Perspective(false);
 				break;
 
-			  case FK_FRUSTUM_MODE:
+			case ::FK::FK_FRUSTUM_MODE:
 				_lProj = gcnew fk_Frustum(false);
 				break;
 
-			  case FK_ORTHO_MODE:
+			case ::FK::FK_ORTHO_MODE:
 				_lProj = gcnew fk_Ortho(false);
 				break;
 						
@@ -134,26 +134,26 @@ namespace FK_CLI {
 	void fk_DisplayLink::LeftProjection::set(fk_ProjectBase^ argP)
 	{
 		if(!argP) return;
-		GetP()->setStereoProjection(FK_STEREO_LEFT, argP->GetP());
+		GetP()->setStereoProjection(::FK::FK_STEREO_LEFT, argP->GetP());
 		_lProj = argP;
 	}
 		
 	fk_ProjectBase^ fk_DisplayLink::RightProjection::get()
 	{
 		if(!_rProj) {
-			const ::fk_ProjectBase *cP = GetP()->getStereoProjection(FK_STEREO_RIGHT);
-			::fk_ProjectBase *proj = const_cast<::fk_ProjectBase *>(cP);
+			const ::FK::fk_ProjectBase *cP = GetP()->getStereoProjection(::FK::FK_STEREO_RIGHT);
+			::FK::fk_ProjectBase *proj = const_cast<::FK::fk_ProjectBase *>(cP);
 
 			switch(proj->getMode()) {
-			  case FK_PERSPECTIVE_MODE:
+			case ::FK::FK_PERSPECTIVE_MODE:
 				_rProj = gcnew fk_Perspective(false);
 				break;
 
-			  case FK_FRUSTUM_MODE:
+			case ::FK::FK_FRUSTUM_MODE:
 				_rProj = gcnew fk_Frustum(false);
 				break;
 
-			  case FK_ORTHO_MODE:
+			case ::FK::FK_ORTHO_MODE:
 				_rProj = gcnew fk_Ortho(false);
 				break;
 						
@@ -168,7 +168,7 @@ namespace FK_CLI {
 	void fk_DisplayLink::RightProjection::set(fk_ProjectBase^ argP)
 	{
 		if(!argP) return;
-		GetP()->setStereoProjection(FK_STEREO_RIGHT, argP->GetP());
+		GetP()->setStereoProjection(::FK::FK_STEREO_RIGHT, argP->GetP());
 		_rProj = argP;
 	}
 

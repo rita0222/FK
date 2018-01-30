@@ -5,9 +5,9 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	fk_TexCoord::operator ::fk_TexCoord (fk_TexCoord^ argC)
+	fk_TexCoord::operator ::FK::fk_TexCoord (fk_TexCoord^ argC)
 	{
-		::fk_TexCoord C(argC->x_, argC->y_);
+		::FK::fk_TexCoord C(argC->x_, argC->y_);
 		return C;
 	}
 	
@@ -23,7 +23,7 @@ namespace FK_CLI {
 		return;
 	}
 
-	fk_TexCoord::fk_TexCoord(::fk_TexCoord argT)
+	fk_TexCoord::fk_TexCoord(::FK::fk_TexCoord argT)
 		: x_(argT.x), y_(argT.y)
 	{
 		return;
@@ -56,8 +56,8 @@ namespace FK_CLI {
 	bool fk_TexCoord::Equals(fk_TexCoord^ argT)
 	{
 		if(!argT) false;
-		::fk_TexCoord T1(x_, y_);
-		::fk_TexCoord T2(argT->x_, argT->y_);
+		::FK::fk_TexCoord T1(x_, y_);
+		::FK::fk_TexCoord T2(argT->x_, argT->y_);
 		return (T1 == T2);
 	}
 
@@ -67,8 +67,8 @@ namespace FK_CLI {
 		if(this == argObj) return true;
 		if(GetType() == argObj->GetType()) {
 			fk_TexCoord^ T = static_cast<fk_TexCoord^>(argObj);
-			::fk_TexCoord T1(x_, y_);
-			::fk_TexCoord T2(T->x_, T->y_);
+			::FK::fk_TexCoord T1(x_, y_);
+			::FK::fk_TexCoord T2(T->x_, T->y_);
 			return (T1 == T2);
 		}
 		return false;
@@ -90,9 +90,9 @@ namespace FK_CLI {
 
 	//////////////////////////////////////////////////////////////////////////
 
-	::fk_Texture * fk_Texture::GetP(void)
+	::FK::fk_Texture * fk_Texture::GetP(void)
 	{
-		return (::fk_Texture *)(pBase);
+		return (::FK::fk_Texture *)(pBase);
 	}
 	
 	fk_Texture::fk_Texture(bool argNewFlg) : fk_Shape(false)
@@ -135,15 +135,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TexMode::MODULATE:
-			GetP()->setTextureMode(FK_TEX_MODULATE);
+			GetP()->setTextureMode(::FK::FK_TEX_MODULATE);
 			break;
 
 		  case fk_TexMode::REPLACE:
-			GetP()->setTextureMode(FK_TEX_REPLACE);
+			GetP()->setTextureMode(::FK::FK_TEX_REPLACE);
 			break;
 				
 		  case fk_TexMode::DECAL:
-			GetP()->setTextureMode(FK_TEX_DECAL);
+			GetP()->setTextureMode(::FK::FK_TEX_DECAL);
 			break;
 
 		  default:
@@ -154,13 +154,13 @@ namespace FK_CLI {
 	fk_TexMode fk_Texture::TextureMode::get(void)
 	{
 		switch(GetP()->getTextureMode()) {
-		  case FK_TEX_MODULATE:
+		case ::FK::FK_TEX_MODULATE:
 			return fk_TexMode::MODULATE;
 
-		  case FK_TEX_REPLACE:
+		case ::FK::FK_TEX_REPLACE:
 			return fk_TexMode::REPLACE;
 
-		  case FK_TEX_DECAL:
+		case ::FK::FK_TEX_DECAL:
 			return fk_TexMode::DECAL;
 
 		  default:
@@ -173,11 +173,11 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TexRendMode::NORMAL:
-			GetP()->setTexRendMode(FK_TEX_REND_NORMAL);
+			GetP()->setTexRendMode(::FK::FK_TEX_REND_NORMAL);
 			break;
 
 		  case fk_TexRendMode::SMOOTH:
-			GetP()->setTexRendMode(FK_TEX_REND_SMOOTH);
+			GetP()->setTexRendMode(::FK::FK_TEX_REND_SMOOTH);
 			break;
 
 		  default:
@@ -188,10 +188,10 @@ namespace FK_CLI {
 	fk_TexRendMode fk_Texture::RendMode::get(void)
 	{
 		switch(GetP()->getTexRendMode()) {
-		  case FK_TEX_REND_NORMAL:
+		case ::FK::FK_TEX_REND_NORMAL:
 			return fk_TexRendMode::NORMAL;
 
-		  case FK_TEX_REND_SMOOTH:
+		case ::FK::FK_TEX_REND_SMOOTH:
 			return fk_TexRendMode::SMOOTH;
 
 		  default:
@@ -204,11 +204,11 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TexWrapMode::REPEAT:
-			GetP()->setTexWrapMode(FK_TEX_WRAP_REPEAT);
+			GetP()->setTexWrapMode(::FK::FK_TEX_WRAP_REPEAT);
 			break;
 
 		  case fk_TexWrapMode::CLAMP:
-			GetP()->setTexWrapMode(FK_TEX_WRAP_CLAMP);
+			GetP()->setTexWrapMode(::FK::FK_TEX_WRAP_CLAMP);
 			break;
 
 		  default:
@@ -219,10 +219,10 @@ namespace FK_CLI {
 	fk_TexWrapMode fk_Texture::WrapMode::get(void)
 	{
 		switch(GetP()->getTexWrapMode()) {
-		  case FK_TEX_WRAP_REPEAT:
+		case ::FK::FK_TEX_WRAP_REPEAT:
 			return fk_TexWrapMode::REPEAT;
 
-		  case FK_TEX_WRAP_CLAMP:
+		case ::FK::FK_TEX_WRAP_CLAMP:
 			return fk_TexWrapMode::CLAMP;
 
 		  default:

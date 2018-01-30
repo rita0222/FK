@@ -3,9 +3,9 @@
 
 namespace FK_CLI {
 
-	::fk_Scene * fk_Fog::GetP(void)
+	::FK::fk_Scene * fk_Fog::GetP(void)
 	{
-		return (::fk_Scene *)(pBase);
+		return (::FK::fk_Scene *)(pBase);
 	}
 
 	fk_Fog::fk_Fog(bool argNewFlg) : fk_DisplayLink(false)
@@ -20,19 +20,19 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_FogMode::LINEAR_FOG:
-			GetP()->setFogMode(FK_LINEAR_FOG);
+			GetP()->setFogMode(::FK::FK_LINEAR_FOG);
 			break;
 				
 		  case fk_FogMode::EXP_FOG:
-			GetP()->setFogMode(FK_EXP_FOG);
+			GetP()->setFogMode(::FK::FK_EXP_FOG);
 			break;
 				
 		  case fk_FogMode::EXP2_FOG:
-			GetP()->setFogMode(FK_EXP2_FOG);
+			GetP()->setFogMode(::FK::FK_EXP2_FOG);
 			break;
 
 		  default:
-			GetP()->setFogMode(FK_NONE_FOG);
+			GetP()->setFogMode(::FK::FK_NONE_FOG);
 			break;
 		}
 	}
@@ -40,13 +40,13 @@ namespace FK_CLI {
 	fk_FogMode fk_Fog::FogMode::get(void)
 	{
 		switch(GetP()->getFogMode()) {
-		  case FK_LINEAR_FOG:
+		case ::FK::FK_LINEAR_FOG:
 			return fk_FogMode::LINEAR_FOG;
 
-		  case FK_EXP_FOG:
+		case ::FK::FK_EXP_FOG:
 			return fk_FogMode::EXP_FOG;
 
-		  case FK_EXP2_FOG:
+		case ::FK::FK_EXP2_FOG:
 			return fk_FogMode::EXP2_FOG;
 
 		  default:
@@ -59,15 +59,15 @@ namespace FK_CLI {
 	{
 		switch(argOpt) {
 		  case fk_FogOption::FASTEST_FOG:
-			GetP()->setFogOption(FK_FASTEST_FOG);
+			GetP()->setFogOption(::FK::FK_FASTEST_FOG);
 			break;
 
 		  case fk_FogOption::NICEST_FOG:
-			GetP()->setFogOption(FK_NICEST_FOG);
+			GetP()->setFogOption(::FK::FK_NICEST_FOG);
 			break;
 
 		  default:
-			GetP()->setFogOption(FK_NOOPTION_FOG);
+			GetP()->setFogOption(::FK::FK_NOOPTION_FOG);
 			break;
 		}
 	}
@@ -75,10 +75,10 @@ namespace FK_CLI {
 	fk_FogOption fk_Fog::FogOption::get(void)
 	{
 		switch(GetP()->getFogOption()) {
-		  case FK_FASTEST_FOG:
+		case ::FK::FK_FASTEST_FOG:
 			return fk_FogOption::FASTEST_FOG;
 				
-		  case FK_NICEST_FOG:
+		case ::FK::FK_NICEST_FOG:
 			return fk_FogOption::NICEST_FOG;
 
 		  default:
@@ -126,7 +126,7 @@ namespace FK_CLI {
 	fk_Color^ fk_Fog::FogColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
-		::fk_Color tmpC = GetP()->getFogColor();
+		::FK::fk_Color tmpC = GetP()->getFogColor();
 		C->Set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
 		return C;
 	}

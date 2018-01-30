@@ -2,9 +2,9 @@
 
 namespace FK_CLI {
 
-	::fk_Topology * fk_Topology::GetP(void)
+	::FK::fk_Topology * fk_Topology::GetP(void)
 	{
-		return (::fk_Topology *)(pBase);
+		return (::FK::fk_Topology *)(pBase);
 	}
 
 	fk_Topology::fk_Topology(bool argNewFlg) : fk_Attribute(false)
@@ -23,19 +23,19 @@ namespace FK_CLI {
 	fk_TopologyType fk_Topology::Type::get(void)
 	{
 		switch(GetP()->getType()) {
-		  case ::FK_VERTEX_TYPE:
+		case ::FK::FK_VERTEX_TYPE:
 			return fk_TopologyType::VERTEX;
 				
-		  case ::FK_HALF_TYPE:
+		case ::FK::FK_HALF_TYPE:
 			return fk_TopologyType::HALF;
 				
-		  case ::FK_EDGE_TYPE:
+		case ::FK::FK_EDGE_TYPE:
 			return fk_TopologyType::EDGE;
 				
-		  case ::FK_LOOP_TYPE:
+		case ::FK::FK_LOOP_TYPE:
 			return fk_TopologyType::LOOP;
 				
-		  case ::FK_INDEXFACE_TYPE:
+		case ::FK::FK_INDEXFACE_TYPE:
 			return fk_TopologyType::INDEXFACE;
 				
 		  default:
@@ -46,9 +46,9 @@ namespace FK_CLI {
 
 	///////////////////////////////////////////////////////////////////////
 	
-	::fk_TopologyMaterial * fk_TopologyMaterial::GetP(void)
+	::FK::fk_TopologyMaterial * fk_TopologyMaterial::GetP(void)
 	{
-		return (::fk_TopologyMaterial *)(pBase);
+		return (::FK::fk_TopologyMaterial *)(pBase);
 	}
 
 	fk_TopologyMaterial::fk_TopologyMaterial(bool argNewFlg) : fk_Topology(false)
@@ -68,15 +68,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_MaterialMode::PARENT:
-			GetP()->setElemMaterialMode(FK_PARENT_MODE);
+			GetP()->setElemMaterialMode(::FK::FK_PARENT_MODE);
 			break;
 
 		  case fk_MaterialMode::CHILD:
-			GetP()->setElemMaterialMode(FK_CHILD_MODE);
+			GetP()->setElemMaterialMode(::FK::FK_CHILD_MODE);
 			break;
 
 		  case fk_MaterialMode::NONE:
-			GetP()->setElemMaterialMode(FK_NONE_MODE);
+			GetP()->setElemMaterialMode(::FK::FK_NONE_MODE);
 			break;
 		}
 	}
@@ -84,10 +84,10 @@ namespace FK_CLI {
 	fk_MaterialMode fk_TopologyMaterial::MaterialMode::get(void)
 	{
 		switch(GetP()->getElemMaterialMode()) {
-		  case FK_PARENT_MODE:
+		case ::FK::FK_PARENT_MODE:
 			return fk_MaterialMode::PARENT;
 
-		  case FK_CHILD_MODE:
+		case ::FK::FK_CHILD_MODE:
 			return fk_MaterialMode::CHILD;
 
 		  default:

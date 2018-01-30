@@ -28,7 +28,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Topology : fk_Attribute {
 	internal:
-		::fk_Topology * GetP(void);
+		::FK::fk_Topology * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -70,7 +70,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_TopologyMaterial : fk_Topology {
 	internal:
-		::fk_TopologyMaterial * GetP(void);
+		::FK::fk_TopologyMaterial * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

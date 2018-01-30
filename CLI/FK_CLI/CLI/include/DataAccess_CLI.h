@@ -17,7 +17,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_DataAccess : fk_Reference {
 	internal:
-		::fk_DataAccess * GetP(void);
+		::FK::fk_DataAccess * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

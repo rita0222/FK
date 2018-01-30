@@ -5,29 +5,29 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_IFSTexture * fk_IFSTexture::GetP(void)
+	::FK::fk_IFSTexture * fk_IFSTexture::GetP(void)
 	{
-		return (::fk_IFSTexture *)(pBase);
+		return (::FK::fk_IFSTexture *)(pBase);
 	}
 
 	fk_IFSTexture::fk_IFSTexture() : fk_Texture(false)
 	{
-		pBase = new ::fk_IFSTexture();
+		pBase = new ::FK::fk_IFSTexture();
 	}
 
 	fk_IFSTexture::fk_IFSTexture(bool argNewFlg) : fk_Texture(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_IFSTexture();
+			pBase = new ::FK::fk_IFSTexture();
 		}
 	}
 
 	fk_IFSTexture::fk_IFSTexture(fk_Image^ argImage) : fk_Texture(false)
 	{
 		if(!argImage) {
-			pBase = new ::fk_IFSTexture();
+			pBase = new ::FK::fk_IFSTexture();
 		} else {
-			pBase = new ::fk_IFSTexture(argImage->GetP());
+			pBase = new ::FK::fk_IFSTexture(argImage->GetP());
 		}
 	}
 
@@ -91,7 +91,7 @@ namespace FK_CLI {
 	void fk_IFSTexture::SetTextureCoord(int argTID, int argVID, fk_TexCoord^ argTex)
 	{
 		if(!argTex) return;
-		::fk_TexCoord T(argTex->x_, argTex->y_);
+		::FK::fk_TexCoord T(argTex->x_, argTex->y_);
 		GetP()->setTextureCoord(argTID, argVID, T);
 	}
 
@@ -136,14 +136,14 @@ namespace FK_CLI {
 	bool fk_IFSTexture::MoveVPosition(int argVID, const fk_Vector^ argP, int argOrder)
 	{
 		if(!argP) return false;
-		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		::FK::fk_Vector P(argP->x_, argP->y_, argP->z_);
 		return GetP()->moveVPosition(argVID, P, argOrder);
 	}
 				
 	bool fk_IFSTexture::MoveVPosition(int argVID, const fk_Vector^ argP)
 	{
 		if(!argP) return false;
-		::fk_Vector P(argP->x_, argP->y_, argP->z_);
+		::FK::fk_Vector P(argP->x_, argP->y_, argP->z_);
 		return GetP()->moveVPosition(argVID, P);
 	}
 

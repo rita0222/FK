@@ -30,7 +30,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_UniChar : fk_BaseObject {
 	internal:
-		::fk_UniChar * GetP(void);
+		::FK::fk_UniChar * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -114,8 +114,8 @@ namespace FK_CLI
 	public ref class fk_UniStr : fk_BaseObject {
 
 	internal:
-		::fk_UniStr * GetP(void);
-		static ::fk_StringCode GetCode(fk_StringCode);
+		::FK::fk_UniStr * GetP(void);
+		static ::FK::fk_StringCode GetCode(fk_StringCode);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

@@ -25,7 +25,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Line : fk_Solid {
 	internal:
-		::fk_Line * GetP(void);
+		::FK::fk_Line * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

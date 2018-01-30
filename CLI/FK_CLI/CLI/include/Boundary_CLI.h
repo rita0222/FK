@@ -61,7 +61,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Boundary : fk_MatrixAdmin {
 	internal:
-		::fk_Model * GetP(void);
+		::FK::fk_Model * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

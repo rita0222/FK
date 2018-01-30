@@ -7,19 +7,19 @@ namespace FK_CLI {
 	using namespace msclr::interop;
 	using namespace System::Collections::Generic;
 	
-	::fk_IndexFaceSet * fk_IndexFaceSet::GetP(void)
+	::FK::fk_IndexFaceSet * fk_IndexFaceSet::GetP(void)
 	{
-		return (::fk_IndexFaceSet *)(this->pBase);
+		return (::FK::fk_IndexFaceSet *)(this->pBase);
 	}
 
 	fk_IndexFaceSet::fk_IndexFaceSet(): fk_Shape(false)
 	{
-		this->pBase = new ::fk_IndexFaceSet();
+		this->pBase = new ::FK::fk_IndexFaceSet();
 	}
 
 	fk_IndexFaceSet::fk_IndexFaceSet(bool argNewFlg) : fk_Shape(false)
 	{
-		if(argNewFlg == true) this->pBase = new ::fk_IndexFaceSet();
+		if(argNewFlg == true) this->pBase = new ::FK::fk_IndexFaceSet();
 	}
 
 	fk_IndexFaceSet::~fk_IndexFaceSet()
@@ -49,19 +49,19 @@ namespace FK_CLI {
 		fk_IFType^ type = gcnew fk_IFType();
 
 		switch(GetP()->getFaceType()) {
-		  case FK_IF_TRIANGLES:
+		case ::FK::FK_IF_TRIANGLES:
 			type = FK_CLI::fk_IFType::NONE;
 			break;
 
-		  case FK_IF_QUADS:
+		case ::FK::FK_IF_QUADS:
 			type = FK_CLI::fk_IFType::NONE;
 			break;
 
-		  case FK_IF_POLYGON:
+		case ::FK::FK_IF_POLYGON:
 			type = FK_CLI::fk_IFType::NONE;
 			break;
 
-		  case FK_IF_NONE:
+		case ::FK::FK_IF_NONE:
 		  default:
 			type = FK_CLI::fk_IFType::NONE;
 			break;
@@ -83,7 +83,7 @@ namespace FK_CLI {
 	void fk_IndexFaceSet::CloneShape(fk_IndexFaceSet^ argIFS)
 	{
 		if(!argIFS) return;
-		GetP()->cloneShape((::fk_IndexFaceSet *)(argIFS->pBase));
+		GetP()->cloneShape((::FK::fk_IndexFaceSet *)(argIFS->pBase));
 	}
 
 	bool fk_IndexFaceSet::ReadSMFFile(String^ argName)
@@ -323,7 +323,7 @@ namespace FK_CLI {
 
 	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, fk_Material^ argMat, bool argTriFlg)
 	{
-		::fk_Material *pM;
+		::FK::fk_Material *pM;
 
 		pM = (!argMat) ? nullptr : argMat->pMat;
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, argTriFlg);
@@ -331,7 +331,7 @@ namespace FK_CLI {
 
 	bool fk_IndexFaceSet::WriteVRMLFile(String^ argFileName, fk_Material^ argMat)
 	{
-		::fk_Material *pM;
+		::FK::fk_Material *pM;
 
 		pM = (!argMat) ? nullptr : argMat->pMat;
 		return GetP()->writeVRMLFile(marshal_as<string>(argFileName), pM, false);
@@ -345,7 +345,7 @@ namespace FK_CLI {
 										IEnumerable<fk_Vector^>^ argPos, fk_Material^ argMat,
 										bool argTriFlg)
 	{
-		::fk_Material *pM;
+		::FK::fk_Material *pM;
 
 		if(!argFileName || !argTime || !argPos) return false;
 		pM = (!argMat) ? nullptr : argMat->pMat;
@@ -355,7 +355,7 @@ namespace FK_CLI {
 			timeArray.push_back(time);
 		}
 
-		vector<::fk_Vector> posArray;
+		vector<::FK::fk_Vector> posArray;
 		for each (fk_Vector^ pos in argPos) {
 			posArray.push_back(pos);
 		}
@@ -458,7 +458,7 @@ namespace FK_CLI {
 
 	bool fk_IndexFaceSet::MoveVPosition(int argVID, double x, double y, double z)
 	{
-		::fk_IndexFaceSet *p = (::fk_IndexFaceSet *)(pBase);
+		::FK::fk_IndexFaceSet *p = (::FK::fk_IndexFaceSet *)(pBase);
 		return GetP()->moveVPosition(argVID, x, y, z, 0);
 	}
 
@@ -484,7 +484,7 @@ namespace FK_CLI {
 		if(!argIFSet || !argPosArray) return;
 
 		vector<int> pIF;
-		vector<::fk_Vector> tmpV;
+		vector<::FK::fk_Vector> tmpV;
 
 		for each (int id in argIFSet) {
 			pIF.push_back(id);

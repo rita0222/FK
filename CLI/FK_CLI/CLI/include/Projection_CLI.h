@@ -26,9 +26,9 @@ namespace FK_CLI
 	public ref class fk_ProjectBase {
 	internal:
 		bool dFlg;
-		::fk_ProjectBase *pProj;
+		::FK::fk_ProjectBase *pProj;
 
-		::fk_ProjectBase * GetP(void);
+		::FK::fk_ProjectBase * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
@@ -85,7 +85,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Perspective : fk_ProjectBase {
 	internal:
-		::fk_Perspective * GetP(void);
+		::FK::fk_Perspective * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
@@ -188,7 +188,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Frustum : fk_ProjectBase {
 	internal:
-		::fk_Frustum * GetP(void);
+		::FK::fk_Frustum * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
@@ -313,7 +313,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Ortho : fk_ProjectBase {
 	internal:
-		::fk_Ortho * GetP(void);
+		::FK::fk_Ortho * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

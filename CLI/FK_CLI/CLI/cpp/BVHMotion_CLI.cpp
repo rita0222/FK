@@ -6,14 +6,14 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_BVHMotion * fk_BVHMotion::GetP(void)
+	::FK::fk_BVHMotion * fk_BVHMotion::GetP(void)
 	{
 		return pMotion;
 	}
 
 	fk_BVHMotion::fk_BVHMotion()
 	{
-		pMotion = new ::fk_BVHMotion();
+		pMotion = new ::FK::fk_BVHMotion();
 	}
 
 	fk_BVHMotion::~fk_BVHMotion()
@@ -67,7 +67,7 @@ namespace FK_CLI {
 
 	fk_Model^ fk_BVHMotion::GetNodeModel(int argIndex)
 	{
-		::fk_Model *pM = GetP()->getNodeModel(argIndex);
+		::FK::fk_Model *pM = GetP()->getNodeModel(argIndex);
 		if(pM == nullptr) return nullptr;
 
 		return gcnew fk_Model(pM);
@@ -76,7 +76,7 @@ namespace FK_CLI {
 	fk_Model^ fk_BVHMotion::GetNodeModel(String^ argNodeName)
 	{
 		if(!argNodeName) return nullptr;
-		::fk_Model *pM = GetP()->getNodeModel(marshal_as<string>(argNodeName));
+		::FK::fk_Model *pM = GetP()->getNodeModel(marshal_as<string>(argNodeName));
 		if(pM == nullptr) return nullptr;
 
 		return gcnew fk_Model(pM);

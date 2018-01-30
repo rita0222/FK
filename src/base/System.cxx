@@ -206,6 +206,8 @@ bool fk_System::setcwd(void)
 
 #else
 
+using namespace FK;
+
 std::string fk_System::get_cwd(void)
 {
 	return "";

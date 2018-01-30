@@ -74,7 +74,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_IndexFaceSet : fk_Shape {
 	internal:
-		::fk_IndexFaceSet * GetP(void);
+		::FK::fk_IndexFaceSet * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

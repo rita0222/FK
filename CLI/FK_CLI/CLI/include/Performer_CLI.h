@@ -40,11 +40,11 @@ namespace FK_CLI
 	 */
 	public ref class fk_Performer {
 	internal:
-		::fk_Performer *pMotion;
+		::FK::fk_Performer *pMotion;
 		bool dFlg;
 		fk_Model^ baseModel;
 
-		::fk_Performer * GetP(void);
+		::FK::fk_Performer * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

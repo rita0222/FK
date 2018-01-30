@@ -21,12 +21,12 @@ namespace FK_CLI {
 	 */
 	public ref class fk_GenVector {
 	internal:
-		::fk_GenVector *pGVec;
+		::FK::fk_GenVector *pGVec;
 
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS		
-		fk_GenVector(::fk_GenVector *argV);
+		fk_GenVector(::FK::fk_GenVector *argV);
 #endif
 		//! コンストラクタ1
 		/*!

@@ -5,9 +5,9 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	::fk_DataAccess * fk_DataAccess::GetP(void)
+	::FK::fk_DataAccess * fk_DataAccess::GetP(void)
 	{
-		return (::fk_DataAccess *)(pBase);
+		return (::FK::fk_DataAccess *)(pBase);
 	}
 
 	fk_DataAccess::fk_DataAccess(bool argNewFlg) : fk_Reference(false)
@@ -95,7 +95,7 @@ namespace FK_CLI {
 
 	fk_Vertex^ fk_DataAccess::GetVData(int argID)
 	{
-		::fk_Vertex *pV = GetP()->getVData(argID);
+		::FK::fk_Vertex *pV = GetP()->getVData(argID);
 		if(pV == nullptr) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
 		V->pBase = pV;
@@ -105,7 +105,7 @@ namespace FK_CLI {
 
 	fk_Half^ fk_DataAccess::GetHData(int argID)
 	{
-		::fk_Half *pH = GetP()->getHData(argID);
+		::FK::fk_Half *pH = GetP()->getHData(argID);
 		if(pH == nullptr) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
 		H->pBase = pH;
@@ -115,7 +115,7 @@ namespace FK_CLI {
 
 	fk_Edge^ fk_DataAccess::GetEData(int argID)
 	{
-		::fk_Edge *pE = GetP()->getEData(argID);
+		::FK::fk_Edge *pE = GetP()->getEData(argID);
 		if(pE == nullptr) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
 		E->pBase = pE;
@@ -125,7 +125,7 @@ namespace FK_CLI {
 
 	fk_Loop^ fk_DataAccess::GetLData(int argID)
 	{
-		::fk_Loop *pL = GetP()->getLData(argID);
+		::FK::fk_Loop *pL = GetP()->getLData(argID);
 		if(pL == nullptr) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = pL;
@@ -135,7 +135,7 @@ namespace FK_CLI {
 
 	fk_Vertex^ fk_DataAccess::GetNextV(fk_Vertex^ argV)
 	{
-		::fk_Vertex *pV = (!argV) ? GetP()->getNextV(nullptr) : GetP()->getNextV(argV->GetP());
+		::FK::fk_Vertex *pV = (!argV) ? GetP()->getNextV(nullptr) : GetP()->getNextV(argV->GetP());
 		if(pV == nullptr) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
 		V->pBase = pV;
@@ -145,7 +145,7 @@ namespace FK_CLI {
 
 	fk_Half^ fk_DataAccess::GetNextH(fk_Half^ argH)
 	{
-		::fk_Half *pH = (!argH) ? GetP()->getNextH(nullptr) : GetP()->getNextH(argH->GetP());
+		::FK::fk_Half *pH = (!argH) ? GetP()->getNextH(nullptr) : GetP()->getNextH(argH->GetP());
 		if(pH == nullptr) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
 		H->pBase = pH;
@@ -155,7 +155,7 @@ namespace FK_CLI {
 
 	fk_Edge^ fk_DataAccess::GetNextE(fk_Edge^ argE)
 	{
-		::fk_Edge *pE = (!argE) ? GetP()->getNextE(nullptr) : GetP()->getNextE(argE->GetP());
+		::FK::fk_Edge *pE = (!argE) ? GetP()->getNextE(nullptr) : GetP()->getNextE(argE->GetP());
 		if(pE == nullptr) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
 		E->pBase = pE;
@@ -165,7 +165,7 @@ namespace FK_CLI {
 
 	fk_Loop^ fk_DataAccess::GetNextL(fk_Loop^ argL)
 	{
-		::fk_Loop *pL = (!argL) ? GetP()->getNextL(nullptr) : GetP()->getNextL(argL->GetP());
+		::FK::fk_Loop *pL = (!argL) ? GetP()->getNextL(nullptr) : GetP()->getNextL(argL->GetP());
 		if(pL == nullptr) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = pL;
@@ -175,7 +175,7 @@ namespace FK_CLI {
 
 	fk_Vertex^ fk_DataAccess::GetLastV(void)
 	{
-		::fk_Vertex *pV = GetP()->getLastV();
+		::FK::fk_Vertex *pV = GetP()->getLastV();
 		if(pV == nullptr) return nullptr;
 		fk_Vertex^ V = gcnew fk_Vertex(false);
 		V->pBase = pV;
@@ -185,7 +185,7 @@ namespace FK_CLI {
 
 	fk_Half^ fk_DataAccess::GetLastH(void)
 	{
-		::fk_Half *pH = GetP()->getLastH();
+		::FK::fk_Half *pH = GetP()->getLastH();
 		if(pH == nullptr) return nullptr;
 		fk_Half^ H = gcnew fk_Half(false);
 		H->pBase = pH;
@@ -195,7 +195,7 @@ namespace FK_CLI {
 
 	fk_Edge^ fk_DataAccess::GetLastE(void)
 	{
-		::fk_Edge *pE = GetP()->getLastE();
+		::FK::fk_Edge *pE = GetP()->getLastE();
 		if(pE == nullptr) return nullptr;
 		fk_Edge^ E = gcnew fk_Edge(false);
 		E->pBase = pE;
@@ -205,7 +205,7 @@ namespace FK_CLI {
 
 	fk_Loop^ fk_DataAccess::GetLastL(void)
 	{
-		::fk_Loop *pL = GetP()->getLastL();
+		::FK::fk_Loop *pL = GetP()->getLastL();
 		if(pL == nullptr) return nullptr;
 		fk_Loop^ L = gcnew fk_Loop(false);
 		L->pBase = pL;
@@ -215,7 +215,7 @@ namespace FK_CLI {
 
 	cli::array<fk_Vertex^>^ fk_DataAccess::GetVertexArray(void)
 	{
-		list<::fk_Vertex *> vList;
+		list<::FK::fk_Vertex *> vList;
 		GetP()->getVertexList(&vList);
 		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(vList.size());
 		int count = 0;
@@ -229,7 +229,7 @@ namespace FK_CLI {
 
 	cli::array<fk_Half^>^ fk_DataAccess::GetHalfArray(void)
 	{
-		list<::fk_Half *> hList;
+		list<::FK::fk_Half *> hList;
 		GetP()->getHalfList(&hList);
 		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(hList.size());
 		int count = 0;
@@ -243,7 +243,7 @@ namespace FK_CLI {
 
 	cli::array<fk_Edge^>^ fk_DataAccess::GetEdgeArray(void)
 	{
-		list<::fk_Edge *> eList;
+		list<::FK::fk_Edge *> eList;
 		GetP()->getEdgeList(&eList);
 		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(eList.size());
 		int count = 0;
@@ -257,7 +257,7 @@ namespace FK_CLI {
 
 	cli::array<fk_Loop^>^ fk_DataAccess::GetLoopArray(void)
 	{
-		list<::fk_Loop *> lList;
+		list<::FK::fk_Loop *> lList;
 		GetP()->getLoopList(&lList);
 		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(lList.size());
 		int count = 0;

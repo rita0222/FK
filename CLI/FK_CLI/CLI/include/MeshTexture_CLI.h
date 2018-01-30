@@ -42,7 +42,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_MeshTexture : fk_Texture {
 	internal:
-		::fk_MeshTexture * GetP(void);
+		::FK::fk_MeshTexture * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

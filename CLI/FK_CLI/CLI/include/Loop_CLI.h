@@ -29,7 +29,7 @@ namespace FK_CLI
 
 	public ref class fk_Loop : fk_TopologyMaterial {
 	internal:
-		::fk_Loop * GetP(void);
+		::FK::fk_Loop * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

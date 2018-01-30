@@ -50,7 +50,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Particle : fk_Attribute {
 	internal:
-		::fk_Particle * GetP(void);
+		::FK::fk_Particle * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

@@ -2,7 +2,7 @@
 
 namespace FK_CLI {
 
-	::fk_AudioBase * fk_AudioBase::GetP(void)
+	::FK::fk_AudioBase * fk_AudioBase::GetP(void)
 	{
 		return pAudio;
 	}
@@ -117,28 +117,28 @@ namespace FK_CLI {
 	
 	bool fk_AudioBase::Init(void)
 	{
-		return ::fk_AudioBase::init();
+		return ::FK::fk_AudioBase::init();
 	}
 	
 	bool fk_AudioBase::GetInit(void)
 	{
-		return ::fk_AudioBase::getInit();
+		return ::FK::fk_AudioBase::getInit();
 	}
 	
 	void fk_AudioBase::Sleep(double argTime)
 	{
-		::fk_AudioBase::sleep(argTime);
+		::FK::fk_AudioBase::sleep(argTime);
 	}
 	
 	void fk_AudioBase::SetListenerModel(fk_Model^ argModel)
 	{
 		if(!argModel) return;
-		::fk_AudioBase::setListenerModel(argModel->GetP());
+		::FK::fk_AudioBase::setListenerModel(argModel->GetP());
 	}
 	
 	fk_Model^ fk_AudioBase::GetListenerModel(void)
 	{
-		::fk_Model *pM = ::fk_AudioBase::getListenerModel();
+		::FK::fk_Model *pM = ::FK::fk_AudioBase::getListenerModel();
 		if(pM == nullptr) return nullptr;
 		return gcnew fk_Model(pM);
 	}

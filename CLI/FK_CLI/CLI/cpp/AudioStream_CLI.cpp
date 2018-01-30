@@ -6,14 +6,14 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 	
-	::fk_AudioStream * fk_AudioStream::GetP(void)
+	::FK::fk_AudioStream * fk_AudioStream::GetP(void)
 	{
-		return (::fk_AudioStream *)(pAudio);
+		return (::FK::fk_AudioStream *)(pAudio);
 	}
 
 	fk_AudioStream::fk_AudioStream()
 	{
-		pAudio = new ::fk_AudioStream();
+		pAudio = new ::FK::fk_AudioStream();
 	}
 
 	fk_AudioStream::~fk_AudioStream()

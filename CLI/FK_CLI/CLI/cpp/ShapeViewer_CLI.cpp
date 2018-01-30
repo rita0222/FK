@@ -5,24 +5,24 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_ShapeViewer * fk_ShapeViewer::GetP(void)
+	::FK::fk_ShapeViewer * fk_ShapeViewer::GetP(void)
 	{
-		return (::fk_ShapeViewer *)(pBase);
+		return (::FK::fk_ShapeViewer *)(pBase);
 	}
 
 	fk_ShapeViewer::fk_ShapeViewer() : fk_BaseObject(false)
 	{
-		pBase = new ::fk_ShapeViewer();
+		pBase = new ::FK::fk_ShapeViewer();
 	}
 
 	fk_ShapeViewer::fk_ShapeViewer(bool argNewFlg) : fk_BaseObject(false)
 	{
-		if(argNewFlg == true) pBase = new ::fk_ShapeViewer();
+		if(argNewFlg == true) pBase = new ::FK::fk_ShapeViewer();
 	}
 
 	fk_ShapeViewer::fk_ShapeViewer(int argW, int argH) : fk_BaseObject(false)
 	{
-		pBase = new ::fk_ShapeViewer(argW, argH);
+		pBase = new ::FK::fk_ShapeViewer(argW, argH);
 	}
 
 	fk_ShapeViewer::~fk_ShapeViewer()
@@ -292,13 +292,13 @@ namespace FK_CLI {
 		string fileName = marshal_as<string>(argFileName);
 		switch(argFormat) {
 		  case fk_ImageType::BMP:
-			return GetP()->snapImage(fileName, FK_IMAGE_BMP);
+			return GetP()->snapImage(fileName, ::FK::FK_IMAGE_BMP);
 
 		  case fk_ImageType::PNG:
-			return GetP()->snapImage(fileName, FK_IMAGE_PNG);
+			return GetP()->snapImage(fileName, ::FK::FK_IMAGE_PNG);
 
 		  case fk_ImageType::JPG:
-			return GetP()->snapImage(fileName, FK_IMAGE_JPG);
+			return GetP()->snapImage(fileName, ::FK::FK_IMAGE_JPG);
 
 		  default:
 			break;

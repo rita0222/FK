@@ -48,7 +48,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_ShapeViewer : fk_BaseObject {
 	internal:
-		::fk_ShapeViewer * GetP(void);
+		::FK::fk_ShapeViewer * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

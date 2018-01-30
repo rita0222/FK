@@ -5,9 +5,9 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace System::Collections::Generic;
 
-	::fk_SolidBase * fk_SolidBase::GetP(void)
+	::FK::fk_SolidBase * fk_SolidBase::GetP(void)
 	{
-		return (::fk_SolidBase *)(pBase);
+		return (::FK::fk_SolidBase *)(pBase);
 	}
 
 	fk_SolidBase::fk_SolidBase(bool argNewFlg) : fk_Modify(false)
@@ -24,7 +24,7 @@ namespace FK_CLI {
 		if(!argIFSet || !argArray) return;
 
 		vector<int>				IFSet;
-		vector<::fk_Vector>		vArray;
+		vector<::FK::fk_Vector>		vArray;
 
 		for each (int id in argIFSet) {
 			IFSet.push_back(id);
@@ -43,7 +43,7 @@ namespace FK_CLI {
 		if(!argIFSet || !argPos) return;
 
 		vector<int>				IFSet;
-		vector<::fk_Vector>		vArray;
+		vector<::FK::fk_Vector>		vArray;
 
 		for each (int id in argIFSet) {
 			IFSet.push_back(id);
@@ -72,7 +72,7 @@ namespace FK_CLI {
 			IFSet.push_back(fSet);
 		}
 
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 		for each (fk_Vector^ pos in argPos) {
 			vArray.push_back(pos);
 		}
@@ -96,7 +96,7 @@ namespace FK_CLI {
 			IFSet.push_back(fSet);
 		}
 
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 		for each (fk_Vector^ pos in argPos) {
 			vArray.push_back(pos);
 		}

@@ -74,7 +74,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_AppWindow : public fk_IBindableDrawer {
 	internal:
-		::fk_AppWindow *pWin;
+		::FK::fk_AppWindow *pWin;
 		fk_Scene^ scene;
 
 		delegate void ShaderCallback(void);
@@ -87,9 +87,9 @@ namespace FK_CLI
 		ShaderCallback^ preDrawRight;
 		ShaderCallback^ postDrawRight;
 
-		::fk_AppWindow * GetP(void);
-		::fk_SpecialKey GetSK(fk_SpecialKey);
-		::fk_SwitchStatus GetSS(fk_SwitchStatus);
+		::FK::fk_AppWindow * GetP(void);
+		::FK::fk_SpecialKey GetSK(fk_SpecialKey);
+		::FK::fk_SwitchStatus GetSS(fk_SwitchStatus);
 
 	public:
 		//! コンストラクタ

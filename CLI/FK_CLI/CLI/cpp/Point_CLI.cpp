@@ -5,26 +5,26 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace System::Collections::Generic;
 	
-	::fk_Point * fk_Point::GetP(void)
+	::FK::fk_Point * fk_Point::GetP(void)
 	{
-		return (::fk_Point *)(pBase);
+		return (::FK::fk_Point *)(pBase);
 	}
 
 	fk_Point::fk_Point() : fk_Shape(false)
 	{
-		pBase = new ::fk_Point();
+		pBase = new ::FK::fk_Point();
 	}
 
 	fk_Point::fk_Point(IEnumerable<fk_Vector^>^ argArray) : fk_Shape(false)
 	{
-		pBase = new ::fk_Point();
+		pBase = new ::FK::fk_Point();
 		SetVertex(argArray);
 	}
 
 	fk_Point::fk_Point(bool argNewFlg) : fk_Shape(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Point();
+			pBase = new ::FK::fk_Point();
 		}
 	}
 
@@ -53,7 +53,9 @@ namespace FK_CLI {
 	int fk_Point::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return -1;
-		return GetP()->pushVertex(argPos);
+		::FK::fk_Vector P(argPos->x_, argPos->y_, argPos->z_);
+		
+		return GetP()->pushVertex(P);
 	}
 
 	bool fk_Point::SetVertex(int argID, fk_Vector^ argPos)
@@ -65,7 +67,7 @@ namespace FK_CLI {
 	bool fk_Point::SetVertex(IEnumerable<fk_Vector^>^ argArray)
 	{
 		if(!argArray) return false;
-		vector<::fk_Vector> vArray;
+		vector<::FK::fk_Vector> vArray;
 
 		for each (fk_Vector^ pos in argArray) {
 			vArray.push_back(pos);
@@ -80,7 +82,7 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Point::GetVertex(int argID)
 	{
-		::fk_FVector *fV = GetP()->getVertex(argID);
+		::FK::fk_FVector *fV = GetP()->getVertex(argID);
 		return gcnew fk_Vector(static_cast<double>(fV->x),
 							   static_cast<double>(fV->y),
 							   static_cast<double>(fV->z));

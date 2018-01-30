@@ -26,7 +26,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Sphere : fk_IndexFaceSet {
 	internal:
-		::fk_Sphere * GetP(void);
+		::FK::fk_Sphere * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

@@ -28,7 +28,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Half : fk_Topology {
 	internal:
-		::fk_Half * GetP(void);
+		::FK::fk_Half * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

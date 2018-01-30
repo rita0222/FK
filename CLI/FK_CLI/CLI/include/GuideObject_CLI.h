@@ -36,8 +36,8 @@ namespace FK_CLI {
 	public ref class fk_GuideObject {
 	internal:
 		bool dFlg;
-		::fk_GuideObject *pGuide;
-		::fk_GuideObject * GetP(void);
+		::FK::fk_GuideObject *pGuide;
+		::FK::fk_GuideObject * GetP(void);
 		
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

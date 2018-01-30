@@ -6,14 +6,14 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 	
-	::fk_AudioWavBuffer * fk_AudioWavBuffer::GetP(void)
+	::FK::fk_AudioWavBuffer * fk_AudioWavBuffer::GetP(void)
 	{
-		return (::fk_AudioWavBuffer *)(pAudio);
+		return (::FK::fk_AudioWavBuffer *)(pAudio);
 	}
 
 	fk_AudioWavBuffer::fk_AudioWavBuffer()
 	{
-		pAudio = new ::fk_AudioWavBuffer();
+		pAudio = new ::FK::fk_AudioWavBuffer();
 	}
 
 	fk_AudioWavBuffer::~fk_AudioWavBuffer()

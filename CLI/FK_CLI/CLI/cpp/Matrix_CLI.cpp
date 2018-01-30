@@ -4,9 +4,9 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	fk_Angle::operator ::fk_Angle (fk_Angle^ argA)
+	fk_Angle::operator ::FK::fk_Angle (fk_Angle^ argA)
 	{
-		::fk_Angle	A(argA->h_, argA->p_, argA->b_);
+		::FK::fk_Angle	A(argA->h_, argA->p_, argA->b_);
 		return A;
 	}
 
@@ -31,7 +31,7 @@ namespace FK_CLI {
 		b_ = argA->b_;
 	}
 
-	fk_Angle::fk_Angle(::fk_Angle argA)
+	fk_Angle::fk_Angle(::FK::fk_Angle argA)
 		: h_(argA.h), p_(argA.p), b_(argA.b)
 	{
 		return;
@@ -82,13 +82,13 @@ namespace FK_CLI {
 	
 	fk_Matrix::fk_Matrix()
 	{
-		pMatrix = new ::fk_Matrix();
+		pMatrix = new ::FK::fk_Matrix();
 		refArray = gcnew cli::array<float>(16);
 	}
 
 	fk_Matrix::fk_Matrix(fk_Matrix^ argM)
 	{
-		pMatrix = new ::fk_Matrix(*(argM->pMatrix));
+		pMatrix = new ::FK::fk_Matrix(*(argM->pMatrix));
 		refArray = gcnew cli::array<float>(16);
 	}
 
@@ -158,7 +158,7 @@ namespace FK_CLI {
 	fk_HVector^ fk_Matrix::operator*(fk_Matrix^ argM, fk_HVector^ argV)
 	{
 		if(!argM || !argV) return nullptr;
-		::fk_HVector H((*argM->pMatrix) * ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		::FK::fk_HVector H((*argM->pMatrix) * ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 		return gcnew fk_HVector(H);
 	}
 

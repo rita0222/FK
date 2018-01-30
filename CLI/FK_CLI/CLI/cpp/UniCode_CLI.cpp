@@ -5,26 +5,26 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_UniChar * fk_UniChar::GetP(void)
+	::FK::fk_UniChar * fk_UniChar::GetP(void)
 	{
-		return (::fk_UniChar *)(pBase);
+		return (::FK::fk_UniChar *)(pBase);
 	}
 
 	fk_UniChar::fk_UniChar() : fk_BaseObject(false)
 	{
-		pBase = new ::fk_UniChar();
+		pBase = new ::FK::fk_UniChar();
 	}
 
 	fk_UniChar::fk_UniChar(bool argNewFlg) : fk_BaseObject(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_UniChar();
+			pBase = new ::FK::fk_UniChar();
 		}
 	}
 
 	fk_UniChar::fk_UniChar(int argCode) : fk_BaseObject(false)
 	{
-		pBase = new ::fk_UniChar(argCode);
+		pBase = new ::FK::fk_UniChar(argCode);
 	}
 
 	fk_UniChar::~fk_UniChar()
@@ -65,44 +65,44 @@ namespace FK_CLI {
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	::fk_UniStr * fk_UniStr::GetP(void)
+	::FK::fk_UniStr * fk_UniStr::GetP(void)
 	{
-		return (::fk_UniStr *)(pBase);
+		return (::FK::fk_UniStr *)(pBase);
 	}
 
-	::fk_StringCode fk_UniStr::GetCode(fk_StringCode argCode)
+	::FK::fk_StringCode fk_UniStr::GetCode(fk_StringCode argCode)
 	{
 		switch(argCode) {
 		  case fk_StringCode::UTF16:
-			return FK_STR_UTF16;
+			return ::FK::FK_STR_UTF16;
 
 		  case fk_StringCode::UTF8:
-			return FK_STR_UTF8;
+			return ::FK::FK_STR_UTF8;
 
 		  case fk_StringCode::JIS:
-			return FK_STR_JIS;
+			return ::FK::FK_STR_JIS;
 
 		  case fk_StringCode::SJIS:
-			return FK_STR_SJIS;
+			return ::FK::FK_STR_SJIS;
 
 		  case fk_StringCode::EUC:
-			return FK_STR_EUC;
+			return ::FK::FK_STR_EUC;
 
 		  default:
 			break;
 		}
-		return FK_STR_UTF16;
+		return ::FK::FK_STR_UTF16;
 	}
 
 	fk_UniStr::fk_UniStr() : fk_BaseObject(false)
 	{
-		pBase = new ::fk_UniStr();
+		pBase = new ::FK::fk_UniStr();
 	}
 
 	fk_UniStr::fk_UniStr(bool argNewFlg) : fk_BaseObject(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_UniStr();
+			pBase = new ::FK::fk_UniStr();
 		}
 	}
 
@@ -149,7 +149,7 @@ namespace FK_CLI {
 	bool fk_UniStr::ReadFile(String^ argFileName)
 	{
 		if(!argFileName) return false;
-		return GetP()->readFile(marshal_as<string>(argFileName), FK_STR_SJIS);
+		return GetP()->readFile(marshal_as<string>(argFileName), ::FK::FK_STR_SJIS);
 	}
 
 	void fk_UniStr::CopyStr(fk_UniStr^ argStr)
@@ -167,7 +167,7 @@ namespace FK_CLI {
 	void fk_UniStr::Convert(String^ argStr)
 	{
 		if(!argStr) return;
-		GetP()->convert(marshal_as<string>(argStr), FK_STR_SJIS);
+		GetP()->convert(marshal_as<string>(argStr), ::FK::FK_STR_SJIS);
 	}
 
 	int fk_UniStr::GetCode(int argNum)

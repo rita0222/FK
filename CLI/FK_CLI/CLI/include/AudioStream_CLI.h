@@ -33,7 +33,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_AudioStream : fk_AudioBase {
 	internal:
-		::fk_AudioStream * GetP(void);
+		::FK::fk_AudioStream * GetP(void);
 
 	public:
 		//! コンストラクタ

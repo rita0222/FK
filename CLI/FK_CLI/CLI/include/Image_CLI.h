@@ -23,9 +23,9 @@ namespace FK_CLI
 	 */
 	public ref class fk_Dimension {
 	internal:
-		::fk_Dimension	*pDim;
+		::FK::fk_Dimension	*pDim;
 
-		::fk_Dimension * GetP(void);
+		::FK::fk_Dimension * GetP(void);
 
 	public:
 		//! コンストラクタ1
@@ -103,9 +103,9 @@ namespace FK_CLI
 	 */
 	public ref class fk_Rect {
 	internal:
-		::fk_Rect	*pRect;
+		::FK::fk_Rect	*pRect;
 
-		::fk_Rect * GetP(void);
+		::FK::fk_Rect * GetP(void);
 
 	public:
 
@@ -209,7 +209,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Image : fk_BaseObject {
 	internal:
-		::fk_Image * GetP(void);
+		::FK::fk_Image * GetP(void);
 
 	public:
 

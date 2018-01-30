@@ -11,7 +11,7 @@ namespace FK_CLI {
 
 	fk_Renderer::fk_Renderer(void) : hWnd(nullptr), hDC(nullptr), hRC(nullptr)
 	{
-		pEngine = new ::fk_GraphicsEngine();
+		pEngine = new ::FK::fk_GraphicsEngine();
 	}
 
 	fk_Renderer::~fk_Renderer()
@@ -125,7 +125,7 @@ namespace FK_CLI {
 		fk_Plane^ argPlane, fk_Vector^ argPos)
 	{
 		if (!argPlane || !argPos) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
 		bool		ret;
 
 		ret = pEngine->GetProjectPosition(argX, argY, argPlane->pPlane, &retPos);
@@ -137,7 +137,7 @@ namespace FK_CLI {
 		double argDist, fk_Vector^ argPos)
 	{
 		if (!argPos) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
 		bool		ret;
 
 		ret = pEngine->GetProjectPosition(argX, argY, argDist, &retPos);
@@ -148,17 +148,18 @@ namespace FK_CLI {
 	bool fk_Renderer::GetWindowPosition(fk_Vector^ argPos_3D, fk_Vector^ argPos_2D)
 	{
 		if (!argPos_3D || !argPos_2D) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
+		::FK::fk_Vector P(argPos_3D->x_, argPos_3D->y_, argPos_3D->z_);
 		bool		ret;
 
-		ret = pEngine->GetWindowPosition(argPos_3D, &retPos);
+		ret = pEngine->GetWindowPosition(P, &retPos);
 		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}
 
 	cli::array<fk_PickData^>^ fk_Renderer::GetPickData(int argX, int argY, int argPixel)
 	{
-		::fk_PickData pick;
+		::FK::fk_PickData pick;
 		pEngine->GetPickData(&pick, argPixel, argX, argY);
 		int size = pick.getSize();
 		cli::array<fk_PickData^>^ ret = gcnew cli::array<fk_PickData^>(size);
@@ -168,13 +169,13 @@ namespace FK_CLI {
 			fk_PickedTopologyType^ pickedType;
 			switch (pick.getType(i))
 			{
-			case FK_VERTEX:
+			case ::FK::FK_VERTEX:
 				pickedType = fk_PickedTopologyType::VERTEX;
 				break;
-			case FK_EDGE:
+			case ::FK::FK_EDGE:
 				pickedType = fk_PickedTopologyType::EDGE;
 				break;
-			case FK_LOOP:
+			case ::FK::FK_LOOP:
 				pickedType = fk_PickedTopologyType::LOOP;
 				break;
 			default:

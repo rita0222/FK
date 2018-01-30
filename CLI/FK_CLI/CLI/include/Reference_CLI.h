@@ -23,7 +23,7 @@ namespace FK_CLI
 
 	public ref class fk_Reference : fk_Shape {
 	internal:
-		::fk_ReferenceL3 * GetP(void);
+		::FK::fk_ReferenceL3 * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

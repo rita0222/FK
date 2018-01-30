@@ -49,7 +49,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Light : fk_Shape {
 	internal:
-		::fk_Light * GetP(void);
+		::FK::fk_Light * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

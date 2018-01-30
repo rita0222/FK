@@ -2,29 +2,29 @@
 
 namespace FK_CLI {
 
-	::fk_RectTexture * fk_RectTexture::GetP(void)
+	::FK::fk_RectTexture * fk_RectTexture::GetP(void)
 	{
-		return (::fk_RectTexture *)(pBase);
+		return (::FK::fk_RectTexture *)(pBase);
 	}
 
 	fk_RectTexture::fk_RectTexture() : fk_Texture(false)
 	{
-		pBase = new ::fk_RectTexture();
+		pBase = new ::FK::fk_RectTexture();
 	}
 
 	fk_RectTexture::fk_RectTexture(bool argNewFlg) : fk_Texture(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_RectTexture();
+			pBase = new ::FK::fk_RectTexture();
 		}
 	}
 
 	fk_RectTexture::fk_RectTexture(fk_Image^ argImage) : fk_Texture(false)
 	{
 		if(!argImage) {
-			pBase = new ::fk_RectTexture();
+			pBase = new ::FK::fk_RectTexture();
 		} else {
-			pBase = new ::fk_RectTexture(argImage->GetP());
+			pBase = new ::FK::fk_RectTexture(argImage->GetP());
 		}
 	}
 

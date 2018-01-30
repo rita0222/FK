@@ -30,7 +30,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_TriTexture : fk_Texture {
 	internal:
-		::fk_TriTexture * GetP(void);
+		::FK::fk_TriTexture * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

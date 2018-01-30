@@ -2,22 +2,22 @@
 
 namespace FK_CLI {
 
-	::fk_Scene * fk_Scene::GetP(void)
+	::FK::fk_Scene * fk_Scene::GetP(void)
 	{
-		return (::fk_Scene *)(pBase);
+		return (::FK::fk_Scene *)(pBase);
 	}
 
 	fk_Scene::fk_Scene(bool argNewFlg) : fk_Fog(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Scene();
+			pBase = new ::FK::fk_Scene();
 			CameraUpdate();
 		}
 	}
 
 	fk_Scene::fk_Scene() : fk_Fog(false)
 	{
-		pBase = new ::fk_Scene();
+		pBase = new ::FK::fk_Scene();
 		CameraUpdate();
 	}
 
@@ -46,7 +46,7 @@ namespace FK_CLI {
 	fk_Color^ fk_Scene::BGColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
-		::fk_Color tmpC = GetP()->getBGColor();
+		::FK::fk_Color tmpC = GetP()->getBGColor();
 		C->Set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
 		return C;
 	}

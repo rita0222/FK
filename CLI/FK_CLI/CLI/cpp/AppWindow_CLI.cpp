@@ -4,13 +4,14 @@
 namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
+	using namespace FK;
 
-	::fk_AppWindow * fk_AppWindow::GetP(void)
+	::FK::fk_AppWindow * fk_AppWindow::GetP(void)
 	{
 		return pWin;
 	}
 	
-	::fk_SpecialKey fk_AppWindow::GetSK(fk_SpecialKey argK)
+	::FK::fk_SpecialKey fk_AppWindow::GetSK(fk_SpecialKey argK)
 	{
 		switch(argK) {
 		  case fk_SpecialKey::SHIFT_R:
@@ -115,7 +116,7 @@ namespace FK_CLI {
 		return FK_ENTER;
 	}
 
-	::fk_SwitchStatus fk_AppWindow::GetSS(fk_SwitchStatus argSS)
+	::FK::fk_SwitchStatus fk_AppWindow::GetSS(fk_SwitchStatus argSS)
 	{
 		switch(argSS) {
 		  case fk_SwitchStatus::RELEASE:
@@ -167,7 +168,7 @@ namespace FK_CLI {
 		callbacks[6] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(preDrawRight).ToInt32();
 		callbacks[7] = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(postDrawRight).ToInt32();
 #endif
-		pWin = new ::fk_AppWindow(callbacks);
+		pWin = new ::FK::fk_AppWindow(callbacks);
 		scene = gcnew fk_Scene(false);
 		scene->pBase = GetP()->getScene();
 		scene->dFlg = false;
@@ -427,7 +428,7 @@ namespace FK_CLI {
 			
 	bool fk_AppWindow::GetMouseStatus(fk_MouseButton argB, fk_SwitchStatus argSS, bool argInFlg)
 	{
-		::fk_MouseButton	b;
+		::FK::fk_MouseButton	b;
 		switch(argB) {
 		  case fk_MouseButton::MOUSE1:
 			b = FK_MOUSE1;
@@ -478,7 +479,7 @@ namespace FK_CLI {
 										  fk_Plane^ argPlane, fk_Vector^ argPos)
 	{
 		if(!argPlane || !argPos) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
 		bool		ret;
 
 		ret = GetP()->getProjectPosition(argX, argY, argPlane->pPlane, &retPos);
@@ -490,7 +491,7 @@ namespace FK_CLI {
 										  double argDist, fk_Vector^ argPos)
 	{
 		if(!argPos) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
 		bool		ret;
 
 		ret = GetP()->getProjectPosition(argX, argY, argDist, &retPos);
@@ -501,10 +502,11 @@ namespace FK_CLI {
 	bool fk_AppWindow::GetWindowPosition(fk_Vector^ argPos_3D, fk_Vector^ argPos_2D)
 	{
 		if(!argPos_3D || !argPos_2D) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
+		::FK::fk_Vector pos3D(argPos_3D->x_, argPos_3D->y_, argPos_3D->z_);
 		bool		ret;
 
-		ret = GetP()->getWindowPosition(argPos_3D, &retPos);
+		ret = GetP()->getWindowPosition(pos3D, &retPos);
 		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}

@@ -30,7 +30,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Block : fk_IndexFaceSet {
 	internal:
-		::fk_Block * GetP(void);
+		::FK::fk_Block * GetP(void);
 
 	public:
 		//! コンストラクタ1

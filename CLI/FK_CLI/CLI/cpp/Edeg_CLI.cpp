@@ -3,9 +3,9 @@
 
 namespace FK_CLI {
 
-	::fk_Edge * fk_Edge::GetP(void)
+	::FK::fk_Edge * fk_Edge::GetP(void)
 	{
-		return (::fk_Edge *)(pBase);
+		return (::FK::fk_Edge *)(pBase);
 	}
 
 	fk_Edge::fk_Edge(bool argNewFlg) : fk_TopologyMaterial(false)

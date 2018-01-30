@@ -31,7 +31,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Point : fk_Shape {
 	internal:
-		::fk_Point * GetP(void);
+		::FK::fk_Point * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

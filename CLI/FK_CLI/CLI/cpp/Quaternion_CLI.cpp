@@ -6,36 +6,36 @@ namespace FK_CLI {
 
 	fk_Quaternion::fk_Quaternion()
 	{
-		pQuat = new ::fk_Quaternion();
+		pQuat = new ::FK::fk_Quaternion();
 	}
 
 	fk_Quaternion::fk_Quaternion(double argS, double argX, double argY, double argZ)
 	{
-		pQuat = new ::fk_Quaternion(argS, argX, argY, argZ);
+		pQuat = new ::FK::fk_Quaternion(argS, argX, argY, argZ);
 	}
 
 	fk_Quaternion::fk_Quaternion(double argS, fk_Vector^ argV)
 	{
 		if(!argV) {
-			pQuat = new ::fk_Quaternion(argS, 0.0, 0.0, 0.0);
+			pQuat = new ::FK::fk_Quaternion(argS, 0.0, 0.0, 0.0);
 		} else {
-			pQuat = new ::fk_Quaternion(argS, argV->x_, argV->y_, argV->z_);
+			pQuat = new ::FK::fk_Quaternion(argS, argV->x_, argV->y_, argV->z_);
 		}
 	}
 
 	fk_Quaternion::fk_Quaternion(fk_Quaternion^ argQ)
 	{
-		pQuat = new ::fk_Quaternion(*(argQ->pQuat));
+		pQuat = new ::FK::fk_Quaternion(*(argQ->pQuat));
 	}
 
-	fk_Quaternion::fk_Quaternion(::fk_Quaternion *argQ)
+	fk_Quaternion::fk_Quaternion(::FK::fk_Quaternion *argQ)
 	{
-		pQuat = new ::fk_Quaternion(argQ->s, argQ->v);
+		pQuat = new ::FK::fk_Quaternion(argQ->s, argQ->v);
 	}
 
-	fk_Quaternion::fk_Quaternion(::fk_Quaternion argQ)
+	fk_Quaternion::fk_Quaternion(::FK::fk_Quaternion argQ)
 	{
-		pQuat = new ::fk_Quaternion(argQ.s, argQ.v);
+		pQuat = new ::FK::fk_Quaternion(argQ.s, argQ.v);
 	}
 
 	// デストラクタ

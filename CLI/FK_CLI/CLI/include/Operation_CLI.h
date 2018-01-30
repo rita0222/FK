@@ -44,7 +44,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Operation : fk_DataAccess {
 	internal:
-		::fk_Operation * GetP(void);
+		::FK::fk_Operation * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

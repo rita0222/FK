@@ -30,10 +30,10 @@ namespace FK_CLI
 	 */
 	public ref class fk_AudioBase abstract {
 	internal:
-		::fk_AudioBase *pAudio;
+		::FK::fk_AudioBase *pAudio;
 		bool dFlg;
 
-		::fk_AudioBase * GetP(void);
+		::FK::fk_AudioBase * GetP(void);
 
 	public:
 		//! コンストラクタ

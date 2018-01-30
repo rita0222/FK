@@ -6,17 +6,17 @@ namespace FK_CLI {
 
 	fk_Plane::fk_Plane()
 	{
-		pPlane = new ::fk_Plane();
+		pPlane = new ::FK::fk_Plane();
 	}
 
 	fk_Plane::fk_Plane(fk_Plane^ argP)
 	{
-		pPlane = new ::fk_Plane(*(argP->pPlane));
+		pPlane = new ::FK::fk_Plane(*(argP->pPlane));
 	}
 
-	fk_Plane::fk_Plane(::fk_Plane *argP)
+	fk_Plane::fk_Plane(::FK::fk_Plane *argP)
 	{
-		pPlane = new ::fk_Plane();
+		pPlane = new ::FK::fk_Plane();
 		*pPlane = *argP;
 	}
 
@@ -33,7 +33,7 @@ namespace FK_CLI {
 	String^ fk_Plane::ToString()
 	{
 		string	tmpBuf;
-		::fk_Vector	base, u, v;
+		::FK::fk_Vector	base, u, v;
 
 		base = pPlane->getBasePos();
 		u = pPlane->getUVec();
@@ -133,7 +133,7 @@ namespace FK_CLI {
 	bool fk_Plane::CalcCrossPos(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argPos)
 	{
 		if(!argA || !argB || !argPos) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
 
 		bool ret = pPlane->calcCrossPos(argA, argB, &retPos);
 		argPos->Set(retPos.x, retPos.y, retPos.z);
@@ -167,7 +167,7 @@ namespace FK_CLI {
 								double %argT, double %argU, double %argV)
 	{
 		if(!argA || !argB || !argPos) return false;
-		::fk_Vector	retPos;
+		::FK::fk_Vector	retPos;
 		bool		ret;
 		double		t, u, v;
 

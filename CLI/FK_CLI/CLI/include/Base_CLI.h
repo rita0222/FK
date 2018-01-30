@@ -106,7 +106,7 @@ namespace FK_CLI {
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		bool dFlg;
-		::fk_BaseObject *pBase;
+		::FK::fk_BaseObject *pBase;
 		//! コンストラクタ
 		fk_BaseObject(bool);
 

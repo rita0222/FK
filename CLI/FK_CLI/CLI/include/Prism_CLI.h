@@ -25,7 +25,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Prism : fk_IndexFaceSet {
 	internal:
-		::fk_Prism * GetP(void);
+		::FK::fk_Prism * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

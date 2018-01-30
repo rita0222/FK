@@ -34,7 +34,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_SpriteModel : fk_Model {
 	internal:
-		::fk_SpriteModel * GetP(void);
+		::FK::fk_SpriteModel * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

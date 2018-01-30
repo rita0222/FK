@@ -5,9 +5,9 @@
 
 namespace FK_CLI {
 
-	::fk_Half * fk_Half::GetP(void)
+	::FK::fk_Half * fk_Half::GetP(void)
 	{
-		return (::fk_Half *)(pBase);
+		return (::FK::fk_Half *)(pBase);
 	}
 
 	fk_Half::fk_Half(bool argNewFlg) : fk_Topology(false)

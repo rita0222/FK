@@ -41,7 +41,7 @@ namespace FK_CLI
 
 	public ref class fk_Modify : fk_Operation {
 	internal:
-		::fk_Modify * GetP(void);
+		::FK::fk_Modify * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

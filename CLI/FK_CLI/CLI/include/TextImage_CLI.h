@@ -59,7 +59,7 @@ namespace FK_CLI {
 	 */
 	public ref class fk_TextImage : fk_Image {
 	internal:
-		::fk_TextImage * GetP(void);
+		::FK::fk_TextImage * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

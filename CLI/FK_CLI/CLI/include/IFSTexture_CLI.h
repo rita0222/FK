@@ -43,7 +43,7 @@ namespace FK_CLI
 	public ref class fk_IFSTexture : fk_Texture {
 	internal:
 
-		::fk_IFSTexture * GetP(void);
+		::FK::fk_IFSTexture * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

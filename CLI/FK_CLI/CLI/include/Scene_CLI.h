@@ -40,7 +40,7 @@ namespace FK_CLI
 	public ref class fk_Scene : fk_Fog {
 	internal:
 
-		::fk_Scene * GetP(void);
+		::FK::fk_Scene * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

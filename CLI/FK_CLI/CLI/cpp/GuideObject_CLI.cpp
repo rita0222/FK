@@ -2,20 +2,20 @@
 
 namespace FK_CLI {
 
-	::fk_GuideObject * fk_GuideObject::GetP(void)
+	::FK::fk_GuideObject * fk_GuideObject::GetP(void)
 	{
 		return pGuide;
 	}
 
 	fk_GuideObject::fk_GuideObject()
 	{
-		pGuide = new ::fk_GuideObject();
+		pGuide = new ::FK::fk_GuideObject();
 		dFlg = true;
 	}
 
 	fk_GuideObject::fk_GuideObject(bool argNewFlg)
 	{
-		if(argNewFlg == true) pGuide = new ::fk_GuideObject();
+		if(argNewFlg == true) pGuide = new ::FK::fk_GuideObject();
 		dFlg = argNewFlg;
 	}
 

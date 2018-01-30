@@ -50,7 +50,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_MatrixAdmin : fk_BaseObject {
 	internal:
-		::fk_MatrixAdmin * GetP(void);
+		::FK::fk_MatrixAdmin * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

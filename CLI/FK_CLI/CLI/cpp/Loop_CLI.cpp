@@ -3,9 +3,9 @@
 
 namespace FK_CLI {
 
-	::fk_Loop * fk_Loop::GetP(void)
+	::FK::fk_Loop * fk_Loop::GetP(void)
 	{
-		return (::fk_Loop *)(pBase);
+		return (::FK::fk_Loop *)(pBase);
 	}
 
 	fk_Loop::fk_Loop(bool argNewFlg) : fk_TopologyMaterial(false)

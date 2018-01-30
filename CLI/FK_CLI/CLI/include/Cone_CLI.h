@@ -24,7 +24,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Cone : fk_IndexFaceSet {
 	internal:
-		::fk_Cone * GetP(void);
+		::FK::fk_Cone * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

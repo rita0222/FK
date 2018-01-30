@@ -3,40 +3,40 @@
 namespace FK_CLI {
 	using namespace std;
 	
-	::fk_Color * fk_Color::GetP(void)
+	::FK::fk_Color * fk_Color::GetP(void)
 	{
 		return pCol;
 	}
 
 	fk_Color::fk_Color() : dFlg(true)
 	{
-		pCol = new ::fk_Color();
+		pCol = new ::FK::fk_Color();
 	}
 
 	fk_Color::fk_Color(bool argNewFlg) : dFlg(argNewFlg)
 	{
-		if(argNewFlg == true) pCol = new ::fk_Color();
+		if(argNewFlg == true) pCol = new ::FK::fk_Color();
 	}
 
 	fk_Color::fk_Color(double argR, double argG, double argB) : dFlg(true)
 	{
-		pCol = new ::fk_Color(argR, argG, argB);
+		pCol = new ::FK::fk_Color(argR, argG, argB);
 	}
 
 	fk_Color::fk_Color(double argR, double argG, double argB, double argA) : dFlg(true)
 	{
-		pCol = new ::fk_Color();
+		pCol = new ::FK::fk_Color();
 		pCol->init(argR, argG, argB, argA);
 	}
 
 	fk_Color::fk_Color(float argR, float argG, float argB) : dFlg(true)
 	{
-		pCol = new ::fk_Color(argR, argG, argB);
+		pCol = new ::FK::fk_Color(argR, argG, argB);
 	}
 
 	fk_Color::fk_Color(float argR, float argG, float argB, float argA) : dFlg(true)
 	{
-		pCol = new ::fk_Color();
+		pCol = new ::FK::fk_Color();
 		pCol->init(argR, argG, argB, argA);
 	}
 
@@ -59,7 +59,7 @@ namespace FK_CLI {
 
 	void fk_Color::col::set(int argI, float argC)
 	{
-		GetP()->col[argI] = ::fk_Color::clamp(argC);
+		GetP()->col[argI] = ::FK::fk_Color::clamp(argC);
 	}
 
 	float fk_Color::r::get()
@@ -69,7 +69,7 @@ namespace FK_CLI {
 
 	void fk_Color::r::set(float argF)
 	{
-		GetP()->col[0] = ::fk_Color::clamp(argF);
+		GetP()->col[0] = ::FK::fk_Color::clamp(argF);
 	}
 	
 	float fk_Color::g::get()
@@ -79,7 +79,7 @@ namespace FK_CLI {
 
 	void fk_Color::g::set(float argF)
 	{
-		GetP()->col[1] = ::fk_Color::clamp(argF);
+		GetP()->col[1] = ::FK::fk_Color::clamp(argF);
 	}
 
 	float fk_Color::b::get()
@@ -89,7 +89,7 @@ namespace FK_CLI {
 
 	void fk_Color::b::set(float argF)
 	{
-		GetP()->col[2] = ::fk_Color::clamp(argF);
+		GetP()->col[2] = ::FK::fk_Color::clamp(argF);
 	}
 
 	float fk_Color::a::get()
@@ -99,7 +99,7 @@ namespace FK_CLI {
 
 	void fk_Color::a::set(float argF)
 	{
-		GetP()->col[3] = ::fk_Color::clamp(argF);
+		GetP()->col[3] = ::FK::fk_Color::clamp(argF);
 	}
 
 	bool fk_Color::Equals(fk_Color^ argC)
@@ -288,19 +288,19 @@ namespace FK_CLI {
 
 	///////////////////////////////////////////////////////////////////
 
-	::fk_Material * fk_Material::GetP(void)
+	::FK::fk_Material * fk_Material::GetP(void)
 	{
 		return pMat;
 	}
 
 	fk_Material::fk_Material() : dFlg(true)
 	{
-		pMat = new ::fk_Material();
+		pMat = new ::FK::fk_Material();
 	}
 
 	fk_Material::fk_Material(bool argNewFlg) : dFlg(argNewFlg)
 	{
-		if(argNewFlg == true) pMat = new ::fk_Material();
+		if(argNewFlg == true) pMat = new ::FK::fk_Material();
 	}
 
 	fk_Material::~fk_Material()
@@ -410,7 +410,7 @@ namespace FK_CLI {
 
 	void fk_Material::InitDefault(void)
 	{
-		::fk_Material::initDefault();
+		::FK::fk_Material::initDefault();
 
 		LightCyan = gcnew fk_Material();
 		*LightCyan->pMat = ::FK::Material::LightCyan;

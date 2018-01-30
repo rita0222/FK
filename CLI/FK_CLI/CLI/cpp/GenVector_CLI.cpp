@@ -6,17 +6,17 @@ namespace FK_CLI {
 		
 	fk_GenVector::fk_GenVector()
 	{
-		pGVec = new ::fk_GenVector();
+		pGVec = new ::FK::fk_GenVector();
 	}
 
 	fk_GenVector::fk_GenVector(int deg)
 	{
-		pGVec = new ::fk_GenVector(deg);
+		pGVec = new ::FK::fk_GenVector(deg);
 	}
 
-	fk_GenVector::fk_GenVector(::fk_GenVector *argV)
+	fk_GenVector::fk_GenVector(::FK::fk_GenVector *argV)
 	{
-		pGVec = new ::fk_GenVector(*argV);
+		pGVec = new ::FK::fk_GenVector(*argV);
 	}
 
 	fk_GenVector::fk_GenVector(IEnumerable<double>^ argArray)
@@ -28,34 +28,34 @@ namespace FK_CLI {
 			pD.push_back(d);
 			count++;
 		}
-		pGVec = new ::fk_GenVector(count, &pD[0]);
+		pGVec = new ::FK::fk_GenVector(count, &pD[0]);
 	}
 
 	fk_GenVector::fk_GenVector(fk_Vector^ argV)
 	{
 		if(!argV) {
-			pGVec = new ::fk_GenVector();
+			pGVec = new ::FK::fk_GenVector();
 		} else {
-			::fk_Vector V(argV->x_, argV->y_, argV->z_);
-			pGVec = new ::fk_GenVector(V);
+			::FK::fk_Vector V(argV->x_, argV->y_, argV->z_);
+			pGVec = new ::FK::fk_GenVector(V);
 		}
 	}
 
 	fk_GenVector::fk_GenVector(fk_HVector^ argH)
 	{
 		if(!argH) {
-			pGVec = new ::fk_GenVector();
+			pGVec = new ::FK::fk_GenVector();
 		} else {
-			pGVec = new ::fk_GenVector(::fk_HVector(argH->x_, argH->y_, argH->z_, argH->w_));
+			pGVec = new ::FK::fk_GenVector(::FK::fk_HVector(argH->x_, argH->y_, argH->z_, argH->w_));
 		}
 	}
 		
 	fk_GenVector::fk_GenVector(fk_GenVector^ argGV)
 	{
 		if(!argGV) {
-			pGVec = new ::fk_GenVector();
+			pGVec = new ::FK::fk_GenVector();
 		} else {
-			pGVec = new ::fk_GenVector(*argGV->pGVec);
+			pGVec = new ::FK::fk_GenVector(*argGV->pGVec);
 		}
 	}
 
@@ -247,14 +247,14 @@ namespace FK_CLI {
 	bool fk_GenVector::Replace(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		::FK::fk_Vector V(argV->x_, argV->y_, argV->z_);
 		return pGVec->replace(argS, V);
 	}
 
 	bool fk_GenVector::Replace(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->replace(argS, ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		return pGVec->replace(argS, ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 	}
 
 	bool fk_GenVector::Add(int argS, fk_GenVector^ argV)
@@ -266,14 +266,14 @@ namespace FK_CLI {
 	bool fk_GenVector::Add(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		::FK::fk_Vector V(argV->x_, argV->y_, argV->z_);
 		return pGVec->add(argS, V);
 	}
 
 	bool fk_GenVector::Add(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->add(argS, ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		return pGVec->add(argS, ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 	}
 
 	bool fk_GenVector::Sub(int argS, fk_GenVector^ argV)
@@ -285,14 +285,14 @@ namespace FK_CLI {
 	bool fk_GenVector::Sub(int argS, fk_Vector^ argV)
 	{
 		if(!argV) return false;
-		::fk_Vector V(argV->x_, argV->y_, argV->z_);
+		::FK::fk_Vector V(argV->x_, argV->y_, argV->z_);
 		return pGVec->sub(argS, V);
 	}
 
 	bool fk_GenVector::Sub(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->sub(argS, ::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		return pGVec->sub(argS, ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
 	}
 
 	fk_GenVector^ fk_GenVector::Div(int argS, int argE)

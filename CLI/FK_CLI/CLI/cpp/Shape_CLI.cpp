@@ -2,14 +2,14 @@
 
 namespace FK_CLI {
 
-	::fk_Shape * fk_Shape::GetP(void)
+	::FK::fk_Shape * fk_Shape::GetP(void)
 	{
-		return (::fk_Shape *)(pBase);
+		return (::FK::fk_Shape *)(pBase);
 	}
 
 	fk_Shape::fk_Shape(bool argNewFlg) : fk_Attribute(false)
 	{
-		if(argNewFlg == true) pBase = new ::fk_Shape();
+		if(argNewFlg == true) pBase = new ::FK::fk_Shape();
 	}
 
 	fk_Shape::~fk_Shape()
@@ -29,27 +29,27 @@ namespace FK_CLI {
 		fk_RealShapeType^ type = gcnew fk_RealShapeType();
 
 		switch(GetP()->getRealShapeType()) {
-		  case FK_SHAPE_IFS:
+		case ::FK::FK_SHAPE_IFS:
 			type = fk_RealShapeType::IFS;
 			break;
 				
-		  case FK_SHAPE_SOLID:
+		case ::FK::FK_SHAPE_SOLID:
 			type = fk_RealShapeType::SOLID;
 			break;
 				
-		  case FK_SHAPE_TEXTURE:
+		case ::FK::FK_SHAPE_TEXTURE:
 			type = fk_RealShapeType::TEXTURE;
 			break;
 				
-		  case FK_SHAPE_POINT:
+		case ::FK::FK_SHAPE_POINT:
 			type = fk_RealShapeType::POINT;
 			break;
 				
-		  case FK_SHAPE_LIGHT:
+		case ::FK::FK_SHAPE_LIGHT:
 			type = fk_RealShapeType::LIGHT;
 			break;
 				
-		  case FK_SHAPE_OTHER:
+		case ::FK::FK_SHAPE_OTHER:
 			type = fk_RealShapeType::OTHER;
 			break;
 				
@@ -62,11 +62,11 @@ namespace FK_CLI {
 
 	fk_Palette^ fk_Shape::Palette::get(void)
 	{
-		::fk_Palette *pP = GetP()->getPaletteData();
+		::FK::fk_Palette *pP = GetP()->getPaletteData();
 		if(pP == nullptr) return nullptr;
 
 		fk_Palette^ pal = gcnew fk_Palette();
-		::fk_Palette *pP2 = pal->GetP();
+		::FK::fk_Palette *pP2 = pal->GetP();
 		*pP2 = *pP;
 		return pal;
 	}
@@ -75,15 +75,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_MaterialMode::CHILD:
-			GetP()->setMaterialMode(FK_CHILD_MODE);
+			GetP()->setMaterialMode(::FK::FK_CHILD_MODE);
 			break;
 
 		  case fk_MaterialMode::PARENT:
-			GetP()->setMaterialMode(FK_PARENT_MODE);
+			GetP()->setMaterialMode(::FK::FK_PARENT_MODE);
 			break;
 
 		  default:
-			GetP()->setMaterialMode(FK_NONE_MODE);
+			GetP()->setMaterialMode(::FK::FK_NONE_MODE);
 			break;
 		}
 	}
@@ -91,10 +91,10 @@ namespace FK_CLI {
 	fk_MaterialMode fk_Shape::MaterialMode::get(void)
 	{
 		switch(GetP()->getMaterialMode()) {
-		  case FK_CHILD_MODE:
+		case ::FK::FK_CHILD_MODE:
 			return fk_MaterialMode::CHILD;
 
-		  case FK_PARENT_MODE:
+		case ::FK::FK_PARENT_MODE:
 			return fk_MaterialMode::PARENT;
 
 		  default:

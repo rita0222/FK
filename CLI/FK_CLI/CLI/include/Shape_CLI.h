@@ -27,7 +27,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Shape : fk_Attribute {
 	internal:
-		::fk_Shape * GetP(void);
+		::FK::fk_Shape * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

@@ -2,20 +2,20 @@
 
 namespace FK_CLI {
 
-	::fk_Capsule * fk_Capsule::GetP(void)
+	::FK::fk_Capsule * fk_Capsule::GetP(void)
 	{
-		return (::fk_Capsule *)(pBase);
+		return (::FK::fk_Capsule *)(pBase);
 	}
 
 	fk_Capsule::fk_Capsule() : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Capsule();
+		pBase = new ::FK::fk_Capsule();
 	}
 
 	fk_Capsule::fk_Capsule(bool argNewFlg) : fk_IndexFaceSet(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Capsule();
+			pBase = new ::FK::fk_Capsule();
 		}
 				
 	}
@@ -23,7 +23,7 @@ namespace FK_CLI {
 	fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
 		: fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Capsule(argDiv, argLen, argRad);
+		pBase = new ::FK::fk_Capsule(argDiv, argLen, argRad);
 	}
 
 	fk_Capsule::~fk_Capsule()

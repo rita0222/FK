@@ -2,29 +2,29 @@
 
 namespace FK_CLI {
 
-	::fk_TriTexture * fk_TriTexture::GetP(void)
+	::FK::fk_TriTexture * fk_TriTexture::GetP(void)
 	{
-		return (::fk_TriTexture *)(pBase);
+		return (::FK::fk_TriTexture *)(pBase);
 	}
 
 	fk_TriTexture::fk_TriTexture() : fk_Texture(false)
 	{
-		pBase = new ::fk_TriTexture();
+		pBase = new ::FK::fk_TriTexture();
 	}
 
 	fk_TriTexture::fk_TriTexture(bool argNewFlg) : fk_Texture(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_TriTexture();
+			pBase = new ::FK::fk_TriTexture();
 		}
 	}
 
 	fk_TriTexture::fk_TriTexture(fk_Image^ argImage) : fk_Texture(false)
 	{
 		if(!argImage) {
-			pBase = new ::fk_TriTexture();
+			pBase = new ::FK::fk_TriTexture();
 		} else {
-			pBase = new ::fk_TriTexture(argImage->GetP());
+			pBase = new ::FK::fk_TriTexture(argImage->GetP());
 		}
 	}
 

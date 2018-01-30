@@ -5,7 +5,7 @@ namespace FK_CLI {
 	using namespace std;
 	using namespace msclr::interop;
 
-	::fk_Performer * fk_Performer::GetP(void)
+	::FK::fk_Performer * fk_Performer::GetP(void)
 	{
 		return pMotion;
 		baseModel = GetBaseModel();
@@ -13,12 +13,12 @@ namespace FK_CLI {
 
 	fk_Performer::fk_Performer()
 	{
-		pMotion = new ::fk_Performer();
+		pMotion = new ::FK::fk_Performer();
 	}
 
 	fk_Performer::fk_Performer(bool argNewFlg)
 	{
-		if(argNewFlg == true) pMotion = new ::fk_Performer();
+		if(argNewFlg == true) pMotion = new ::FK::fk_Performer();
 		baseModel = GetBaseModel();
 	}
 

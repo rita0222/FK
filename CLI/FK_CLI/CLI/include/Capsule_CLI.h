@@ -22,7 +22,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Capsule : fk_IndexFaceSet {
 	internal:
-		::fk_Capsule * GetP(void);
+		::FK::fk_Capsule * GetP(void);
 
 	public:
 		//! コンストラクタ1

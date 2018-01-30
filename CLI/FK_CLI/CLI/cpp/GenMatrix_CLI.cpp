@@ -5,12 +5,12 @@ namespace FK_CLI {
 
 	fk_GenMatrix::fk_GenMatrix()
 	{
-		pGMat = new ::fk_GenMatrix();
+		pGMat = new ::FK::fk_GenMatrix();
 	}
 
 	fk_GenMatrix::fk_GenMatrix(int argDeg)
 	{
-		pGMat = new ::fk_GenMatrix(argDeg);
+		pGMat = new ::FK::fk_GenMatrix(argDeg);
 	}
 
 	fk_GenMatrix::~fk_GenMatrix()

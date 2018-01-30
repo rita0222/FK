@@ -2,27 +2,27 @@
 
 namespace FK_CLI {
 
-	::fk_Circle * fk_Circle::GetP(void)
+	::FK::fk_Circle * fk_Circle::GetP(void)
 	{
-		return (::fk_Circle *)(pBase);
+		return (::FK::fk_Circle *)(pBase);
 	}
 
 	fk_Circle::fk_Circle() : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Circle();
+		pBase = new ::FK::fk_Circle();
 	}
 
 	fk_Circle::fk_Circle(bool argNewFlg) : fk_IndexFaceSet(false)
 	{
 		if(argNewFlg == true) {
-			pBase = new ::fk_Circle();
+			pBase = new ::FK::fk_Circle();
 		}
 				
 	}
 
 	fk_Circle::fk_Circle(int argDiv, double argRad) : fk_IndexFaceSet(false)
 	{
-		pBase = new ::fk_Circle(argDiv, argRad);
+		pBase = new ::FK::fk_Circle(argDiv, argRad);
 	}
 
 	fk_Circle::~fk_Circle()

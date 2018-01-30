@@ -3,9 +3,9 @@
 
 namespace FK_CLI {
 
-	::fk_Vertex * fk_Vertex::GetP(void)
+	::FK::fk_Vertex * fk_Vertex::GetP(void)
 	{
-		return (::fk_Vertex *)(pBase);
+		return (::FK::fk_Vertex *)(pBase);
 	}
 
 	fk_Vertex::fk_Vertex(bool argNewFlg) : fk_TopologyMaterial(false)

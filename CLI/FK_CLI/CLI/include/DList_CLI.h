@@ -54,9 +54,9 @@ namespace FK_CLI
 		fk_ProjectBase^ _lProj;
 		fk_ProjectBase^ _rProj;
 
-		::fk_DisplayLink * GetP(void);
+		::FK::fk_DisplayLink * GetP(void);
 		void CameraUpdate(void);
-		::fk_StereoChannel GetStereo(fk_StereoChannel);
+		::FK::fk_StereoChannel GetStereo(fk_StereoChannel);
 	
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		

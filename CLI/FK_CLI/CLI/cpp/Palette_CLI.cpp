@@ -2,19 +2,19 @@
 
 namespace FK_CLI {
 
-	::fk_Palette * fk_Palette::GetP(void)
+	::FK::fk_Palette * fk_Palette::GetP(void)
 	{
 		return pPalette;
 	}
 	
 	fk_Palette::fk_Palette() : dFlg(true)
 	{
-		pPalette = new ::fk_Palette();
+		pPalette = new ::FK::fk_Palette();
 	}
 
 	fk_Palette::fk_Palette(bool argNewFlg) : dFlg(argNewFlg)
 	{
-		if(argNewFlg == true) pPalette = new ::fk_Palette();
+		if(argNewFlg == true) pPalette = new ::FK::fk_Palette();
 	}
 
 	fk_Palette::~fk_Palette()

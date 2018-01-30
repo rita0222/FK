@@ -25,10 +25,10 @@ namespace FK_CLI
 	 */
 	public ref class fk_Palette {
 	internal:
-		::fk_Palette *pPalette;
+		::FK::fk_Palette *pPalette;
 		bool dFlg;
 		
-		::fk_Palette * GetP(void);
+		::FK::fk_Palette * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

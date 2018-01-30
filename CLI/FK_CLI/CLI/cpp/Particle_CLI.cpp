@@ -4,9 +4,9 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	::fk_Particle * fk_Particle::GetP(void)
+	::FK::fk_Particle * fk_Particle::GetP(void)
 	{
-		return (::fk_Particle *)(pBase);
+		return (::FK::fk_Particle *)(pBase);
 	}
 
 	fk_Particle::fk_Particle(bool argNewFlg) : fk_Attribute(false)

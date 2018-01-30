@@ -36,7 +36,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_AudioOggBuffer : fk_AudioBase {
 	internal:
-		::fk_AudioOggBuffer * GetP(void);
+		::FK::fk_AudioOggBuffer * GetP(void);
 
 	public:
 		//! コンストラクタ

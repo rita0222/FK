@@ -63,7 +63,7 @@ namespace FK_CLI
 	 */
 	public ref class fk_Solid : fk_SolidBase {
 	internal:
-		::fk_Solid * GetP(void);
+		::FK::fk_Solid * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

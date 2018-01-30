@@ -1,6 +1,7 @@
 ﻿#ifndef __FK_SHADER_BINDER_HEADER__
 #define __FK_SHADER_BINDER_HEADER__
 
+#include <GL/glew.h>
 #include <FK/AppWindow.h>
 #include <FK/ShaderProgram.h>
 #include <FK/ShaderParameter.h>

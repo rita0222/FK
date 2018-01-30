@@ -16,8 +16,8 @@ namespace FK_CLI
 		POINTMODE			= 0x0001,					//!< 頂点描画
 		LINEMODE			= 0x0002,					//!< 稜線描画
 		POLYMODE			= 0x0004,					//!< 面(表側)描画
-		BACK_POLYMODE		= (0x0008 | FK_POLYMODE),	//!< 面(裏側)描画
-		FRONTBACK_POLYMODE	= (0x0010 | FK_POLYMODE),	//!< 面(両面)描画
+		BACK_POLYMODE		= (0x0008 | POLYMODE),	//!< 面(裏側)描画
+		FRONTBACK_POLYMODE	= (0x0010 | POLYMODE),	//!< 面(両面)描画
 		TEXTUREMODE			= 0x0020					//!< テクスチャ描画
 	};
 
@@ -138,8 +138,8 @@ namespace FK_CLI
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Model::fk_Model(::fk_Model *argUnmanagedPtr);
-		::fk_Model * GetP(void);
+		fk_Model::fk_Model(::FK::fk_Model *argUnmanagedPtr);
+		::FK::fk_Model * GetP(void);
 #endif
 		
 	public:

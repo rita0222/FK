@@ -8,7 +8,7 @@ namespace FK_CLI {
 	
 	fk_AudioOggBuffer::fk_AudioOggBuffer()
 	{
-		pAudio = new ::fk_AudioOggBuffer();
+		pAudio = new ::FK::fk_AudioOggBuffer();
 	}
 
 	fk_AudioOggBuffer::~fk_AudioOggBuffer()
@@ -23,9 +23,9 @@ namespace FK_CLI {
 		pAudio = nullptr;
 	}
 
-	::fk_AudioOggBuffer * fk_AudioOggBuffer::GetP(void)
+	::FK::fk_AudioOggBuffer * fk_AudioOggBuffer::GetP(void)
 	{
-		return (::fk_AudioOggBuffer *)(pAudio);
+		return (::FK::fk_AudioOggBuffer *)(pAudio);
 	}
 
 	bool fk_AudioOggBuffer::Open(String^ argName)

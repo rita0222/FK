@@ -2,19 +2,19 @@
 
 namespace FK_CLI {
 
-	::fk_ProjectBase * fk_ProjectBase::GetP(void)
+	::FK::fk_ProjectBase * fk_ProjectBase::GetP(void)
 	{
 		return pProj;
 	}
 
 	fk_ProjectBase::fk_ProjectBase(bool argNewFlg) : dFlg(argNewFlg)
 	{
-		if(argNewFlg == true) pProj = new ::fk_ProjectBase();
+		if(argNewFlg == true) pProj = new ::FK::fk_ProjectBase();
 	}
 
 	fk_ProjectBase::fk_ProjectBase() : dFlg(true)
 	{
-		pProj = new ::fk_ProjectBase();
+		pProj = new ::FK::fk_ProjectBase();
 	}
 
 	fk_ProjectBase::~fk_ProjectBase()
@@ -32,13 +32,13 @@ namespace FK_CLI {
 	fk_ProjectMode fk_ProjectBase::Mode::get(void)
 	{
 		switch(GetP()->getMode()) {
-		  case FK_PERSPECTIVE_MODE:
+		case ::FK::FK_PERSPECTIVE_MODE:
 			return fk_ProjectMode::PERSPECTIVE_MODE;
 
-		  case FK_FRUSTUM_MODE:
+		case ::FK::FK_FRUSTUM_MODE:
 			return fk_ProjectMode::FRUSTUM_MODE;
 
-		  case FK_ORTHO_MODE:
+		case ::FK::FK_ORTHO_MODE:
 			return fk_ProjectMode::ORTHO_MODE;
 
 		  default:
@@ -49,25 +49,25 @@ namespace FK_CLI {
 
 	////////////////////////////////////////////////////////////////////////	
 
-	::fk_Perspective * fk_Perspective::GetP(void)
+	::FK::fk_Perspective * fk_Perspective::GetP(void)
 	{
-		return (::fk_Perspective *)(pProj);
+		return (::FK::fk_Perspective *)(pProj);
 	}
 
 	fk_Perspective::fk_Perspective(bool argNewFlg) : fk_ProjectBase(false)
 	{
-		if(argNewFlg == true) pProj = new ::fk_Perspective();
+		if(argNewFlg == true) pProj = new ::FK::fk_Perspective();
 	}
 
 	fk_Perspective::fk_Perspective() : fk_ProjectBase(false)
 	{
-		pProj = new ::fk_Perspective();
+		pProj = new ::FK::fk_Perspective();
 	}
 
 	fk_Perspective::fk_Perspective(double argFovy, double argNear, double argFar)
 		: fk_ProjectBase(false)
 	{
-		pProj = new ::fk_Perspective(argFovy, argNear, argFar);
+		pProj = new ::FK::fk_Perspective(argFovy, argNear, argFar);
 	}
 
 	fk_Perspective::~fk_Perspective()
@@ -118,26 +118,26 @@ namespace FK_CLI {
 
 	////////////////////////////////////////////////////////////////////////
 
-	::fk_Frustum * fk_Frustum::GetP(void)
+	::FK::fk_Frustum * fk_Frustum::GetP(void)
 	{
-		return (::fk_Frustum *)(pProj);
+		return (::FK::fk_Frustum *)(pProj);
 	}
 
 	fk_Frustum::fk_Frustum(bool argNewFlg) : fk_ProjectBase(false)
 	{
-		if(argNewFlg == true) pProj = new ::fk_Frustum();
+		if(argNewFlg == true) pProj = new ::FK::fk_Frustum();
 	}
 
 	fk_Frustum::fk_Frustum() : fk_ProjectBase(false)
 	{
-		pProj = new ::fk_Frustum();
+		pProj = new ::FK::fk_Frustum();
 	}
 
 	fk_Frustum::fk_Frustum(double argL, double argR,
 						   double argB, double argT,
 						   double argN, double argF) : fk_ProjectBase(false)
 	{
-		pProj = new ::fk_Frustum(argL, argR, argB, argT, argN, argF);
+		pProj = new ::FK::fk_Frustum(argL, argR, argB, argT, argN, argF);
 	}
 
 	fk_Frustum::~fk_Frustum()
@@ -220,26 +220,26 @@ namespace FK_CLI {
 
 	////////////////////////////////////////////////////////////////////////	
 
-	::fk_Ortho * fk_Ortho::GetP(void)
+	::FK::fk_Ortho * fk_Ortho::GetP(void)
 	{
-		return (::fk_Ortho *)(pProj);
+		return (::FK::fk_Ortho *)(pProj);
 	}
 
 	fk_Ortho::fk_Ortho(bool argNewFlg) : fk_ProjectBase(false)
 	{
-		if(argNewFlg == true) pProj = new ::fk_Ortho();
+		if(argNewFlg == true) pProj = new ::FK::fk_Ortho();
 	}
 
 	fk_Ortho::fk_Ortho() : fk_ProjectBase(false)
 	{
-		pProj = new ::fk_Ortho();
+		pProj = new ::FK::fk_Ortho();
 	}
 
 	fk_Ortho::fk_Ortho(double argL, double argR,
 					   double argB, double argT,
 					   double argN, double argF) : fk_ProjectBase(false)
 	{
-		pProj = new ::fk_Ortho(argL, argR, argB, argT, argN, argF);
+		pProj = new ::FK::fk_Ortho(argL, argR, argB, argT, argN, argF);
 	}
 
 	fk_Ortho::~fk_Ortho()
