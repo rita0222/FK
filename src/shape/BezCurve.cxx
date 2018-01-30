@@ -385,10 +385,6 @@ void fk_BezCurve::CheckCross(vector<fk_Vector> *argC, vector<double> *argTmpA,
 		double d = fabs(curv.pos(p).y);
 		if(d < argT) {
 			argTrueA->push_back(p);
-		} else {
-			if(debugMode == true) {
-				fk_Printf("(p, d) = %f, %f", p, d);
-			}
 		}
 	}
 }

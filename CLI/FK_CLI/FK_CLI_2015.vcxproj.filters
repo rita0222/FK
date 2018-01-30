@@ -340,18 +340,6 @@
     <ClCompile Include="..\..\src\scene\Scene.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shader\ShaderBinder.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shader\ShaderParameter.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shader\ShaderProgram.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shader\TextureSampler.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Attribute.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
