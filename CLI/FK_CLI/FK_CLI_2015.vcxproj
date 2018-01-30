@@ -61,7 +61,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;FK_CLI_CODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FK_LIB_SRC;FK_CLI_CODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -76,7 +76,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;FK_CLI_CODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FK_LIB_SRC;FK_CLI_CODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -104,6 +104,8 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\AR\ARDevice.cxx" />
+    <ClCompile Include="..\..\src\AR\ARTexture.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />
@@ -112,10 +114,6 @@
     <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
-    <ClCompile Include="..\..\src\fltk\Error\Error_fltk.cxx" />
-    <ClCompile Include="..\..\src\fltk\Window\ShapeViewer_fltk.cxx" />
-    <ClCompile Include="..\..\src\fltk\Window\WindowEvent_fltk.cxx" />
-    <ClCompile Include="..\..\src\fltk\Window\Window_fltk.cxx" />
     <ClCompile Include="..\..\src\graphics\Engine.cxx" />
     <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
@@ -134,83 +132,88 @@
     <ClCompile Include="..\..\src\math\Vector.cxx" />
     <ClCompile Include="..\..\src\model\Boundary.cxx" />
     <ClCompile Include="..\..\src\model\BoundaryElem.cxx" />
+    <ClCompile Include="..\..\src\model\BVHMotion.cxx" />
     <ClCompile Include="..\..\src\model\MatAdmin.cxx" />
     <ClCompile Include="..\..\src\model\Model.cxx" />
     <ClCompile Include="..\..\src\model\ModelTree.cxx" />
-    <ClCompile Include="..\..\src\parser\D3DXAnimation.cxx" />
-    <ClCompile Include="..\..\src\parser\D3DXData.cxx" />
-    <ClCompile Include="..\..\src\parser\D3DXParser.cxx" />
-    <ClCompile Include="..\..\src\parser\D3DXShapeParser.cxx" />
-    <ClCompile Include="..\..\src\parser\DXFOut.cxx" />
-    <ClCompile Include="..\..\src\parser\DXFParser.cxx" />
-    <ClCompile Include="..\..\src\parser\HRCParser.cxx" />
-    <ClCompile Include="..\..\src\parser\MQOOut.cxx" />
-    <ClCompile Include="..\..\src\parser\MQOParser.cxx" />
-    <ClCompile Include="..\..\src\parser\ParserBase.cxx" />
-    <ClCompile Include="..\..\src\parser\RDSParser.cxx" />
-    <ClCompile Include="..\..\src\parser\SMFParser.cxx" />
-    <ClCompile Include="..\..\src\parser\SRFParser.cxx" />
-    <ClCompile Include="..\..\src\parser\STLOut.cxx" />
-    <ClCompile Include="..\..\src\parser\STLParser.cxx" />
-    <ClCompile Include="..\..\src\parser\VRMLOut.cxx" />
-    <ClCompile Include="..\..\src\parser\VRMLParser.cxx" />
     <ClCompile Include="..\..\src\scene\DList.cxx" />
     <ClCompile Include="..\..\src\scene\Fog.cxx" />
     <ClCompile Include="..\..\src\scene\Projection.cxx" />
     <ClCompile Include="..\..\src\scene\Scene.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderBinder.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderParameter.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderProgram.cxx" />
+    <ClCompile Include="..\..\src\shader\TextureSampler.cxx" />
+    <ClCompile Include="..\..\src\shape\Attribute.cxx" />
+    <ClCompile Include="..\..\src\shape\AttributeData.cxx" />
+    <ClCompile Include="..\..\src\shape\BezCurve.cxx" />
+    <ClCompile Include="..\..\src\shape\BezSurface.cxx" />
     <ClCompile Include="..\..\src\shape\Block.cxx" />
-    <ClCompile Include="..\..\src\shape\BVHMotion.cxx" />
+    <ClCompile Include="..\..\src\shape\BSplBase.cxx" />
+    <ClCompile Include="..\..\src\shape\BSplCurve.cxx" />
+    <ClCompile Include="..\..\src\shape\BSplSurface.cxx" />
     <ClCompile Include="..\..\src\shape\Capsule.cxx" />
     <ClCompile Include="..\..\src\shape\Circle.cxx" />
+    <ClCompile Include="..\..\src\shape\Command.cxx" />
     <ClCompile Include="..\..\src\shape\Cone.cxx" />
+    <ClCompile Include="..\..\src\shape\Curve.cxx" />
+    <ClCompile Include="..\..\src\shape\D3DXAnimation.cxx" />
+    <ClCompile Include="..\..\src\shape\D3DXData.cxx" />
+    <ClCompile Include="..\..\src\shape\D3DXParser.cxx" />
+    <ClCompile Include="..\..\src\shape\D3DXShapeParser.cxx" />
+    <ClCompile Include="..\..\src\shape\DataAccess.cxx" />
+    <ClCompile Include="..\..\src\shape\DataBase.cxx" />
+    <ClCompile Include="..\..\src\shape\DrawCache.cxx" />
+    <ClCompile Include="..\..\src\shape\DXFOut.cxx" />
+    <ClCompile Include="..\..\src\shape\DXFParser.cxx" />
+    <ClCompile Include="..\..\src\shape\Edge.cxx" />
+    <ClCompile Include="..\..\src\shape\FileInput.cxx" />
+    <ClCompile Include="..\..\src\shape\FileOutput.cxx" />
+    <ClCompile Include="..\..\src\shape\Gregory.cxx" />
+    <ClCompile Include="..\..\src\shape\Half.cxx" />
+    <ClCompile Include="..\..\src\shape\History.cxx" />
+    <ClCompile Include="..\..\src\shape\HRCParser.cxx" />
+    <ClCompile Include="..\..\src\shape\IFSetHandle.cxx" />
     <ClCompile Include="..\..\src\shape\IFSTexture.cxx" />
     <ClCompile Include="..\..\src\shape\Image.cxx" />
     <ClCompile Include="..\..\src\shape\ImageIO.cxx" />
     <ClCompile Include="..\..\src\shape\IndexFace.cxx" />
     <ClCompile Include="..\..\src\shape\Light.cxx" />
+    <ClCompile Include="..\..\src\shape\Line.cxx" />
+    <ClCompile Include="..\..\src\shape\Loop.cxx" />
+    <ClCompile Include="..\..\src\shape\MassProperty.cxx" />
     <ClCompile Include="..\..\src\shape\MeshTexture.cxx" />
+    <ClCompile Include="..\..\src\shape\Modify.cxx" />
+    <ClCompile Include="..\..\src\shape\MQOOut.cxx" />
+    <ClCompile Include="..\..\src\shape\MQOParser.cxx" />
+    <ClCompile Include="..\..\src\shape\Operation.cxx" />
+    <ClCompile Include="..\..\src\shape\ParserBase.cxx" />
     <ClCompile Include="..\..\src\shape\Particle.cxx" />
+    <ClCompile Include="..\..\src\shape\PickData.cxx" />
     <ClCompile Include="..\..\src\shape\Point.cxx" />
+    <ClCompile Include="..\..\src\shape\Polygon.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />
+    <ClCompile Include="..\..\src\shape\RDSParser.cxx" />
+    <ClCompile Include="..\..\src\shape\Reference1.cxx" />
+    <ClCompile Include="..\..\src\shape\Reference2.cxx" />
+    <ClCompile Include="..\..\src\shape\Reference3.cxx" />
     <ClCompile Include="..\..\src\shape\Shape.cxx" />
+    <ClCompile Include="..\..\src\shape\SMFParser.cxx" />
+    <ClCompile Include="..\..\src\shape\Solid.cxx" />
+    <ClCompile Include="..\..\src\shape\SolidBase.cxx" />
     <ClCompile Include="..\..\src\shape\Sphere.cxx" />
+    <ClCompile Include="..\..\src\shape\SRFParser.cxx" />
+    <ClCompile Include="..\..\src\shape\STLOut.cxx" />
+    <ClCompile Include="..\..\src\shape\STLParser.cxx" />
+    <ClCompile Include="..\..\src\shape\SubDivision.cxx" />
+    <ClCompile Include="..\..\src\shape\Surface.cxx" />
     <ClCompile Include="..\..\src\shape\TextImage.cxx" />
     <ClCompile Include="..\..\src\shape\Texture.cxx" />
+    <ClCompile Include="..\..\src\shape\Topology.cxx" />
     <ClCompile Include="..\..\src\shape\UniCode.cxx" />
-    <ClCompile Include="..\..\src\solid\Attribute.cxx" />
-    <ClCompile Include="..\..\src\solid\AttributeData.cxx" />
-    <ClCompile Include="..\..\src\solid\BezCurve.cxx" />
-    <ClCompile Include="..\..\src\solid\BezSurface.cxx" />
-    <ClCompile Include="..\..\src\solid\BSplBase.cxx" />
-    <ClCompile Include="..\..\src\solid\BSplCurve.cxx" />
-    <ClCompile Include="..\..\src\solid\BSplSurface.cxx" />
-    <ClCompile Include="..\..\src\solid\Command.cxx" />
-    <ClCompile Include="..\..\src\solid\Curve.cxx" />
-    <ClCompile Include="..\..\src\solid\DataAccess.cxx" />
-    <ClCompile Include="..\..\src\solid\DataBase.cxx" />
-    <ClCompile Include="..\..\src\solid\DrawCache.cxx" />
-    <ClCompile Include="..\..\src\solid\Edge.cxx" />
-    <ClCompile Include="..\..\src\solid\FileInput.cxx" />
-    <ClCompile Include="..\..\src\solid\FileOutput.cxx" />
-    <ClCompile Include="..\..\src\solid\Half.cxx" />
-    <ClCompile Include="..\..\src\solid\History.cxx" />
-    <ClCompile Include="..\..\src\solid\IFSetHandle.cxx" />
-    <ClCompile Include="..\..\src\solid\Line.cxx" />
-    <ClCompile Include="..\..\src\solid\Loop.cxx" />
-    <ClCompile Include="..\..\src\solid\MassProperty.cxx" />
-    <ClCompile Include="..\..\src\solid\Modify.cxx" />
-    <ClCompile Include="..\..\src\solid\Operation.cxx" />
-    <ClCompile Include="..\..\src\solid\PickData.cxx" />
-    <ClCompile Include="..\..\src\solid\Polygon.cxx" />
-    <ClCompile Include="..\..\src\solid\Reference1.cxx" />
-    <ClCompile Include="..\..\src\solid\Reference2.cxx" />
-    <ClCompile Include="..\..\src\solid\Reference3.cxx" />
-    <ClCompile Include="..\..\src\solid\Solid.cxx" />
-    <ClCompile Include="..\..\src\solid\SolidBase.cxx" />
-    <ClCompile Include="..\..\src\solid\SubDivision.cxx" />
-    <ClCompile Include="..\..\src\solid\Surface.cxx" />
-    <ClCompile Include="..\..\src\solid\Topology.cxx" />
-    <ClCompile Include="..\..\src\solid\Vertex.cxx" />
+    <ClCompile Include="..\..\src\shape\Vertex.cxx" />
+    <ClCompile Include="..\..\src\shape\VRMLOut.cxx" />
+    <ClCompile Include="..\..\src\shape\VRMLParser.cxx" />
     <ClCompile Include="..\..\src\util\AppWindow.cxx" />
     <ClCompile Include="..\..\src\util\Fullscreen.cxx" />
     <ClCompile Include="..\..\src\util\GuideObject.cxx" />
@@ -220,6 +223,9 @@
     <ClCompile Include="..\..\src\util\MotionData.cxx" />
     <ClCompile Include="..\..\src\util\SpriteModel.cxx" />
     <ClCompile Include="..\..\src\util\TrackBall.cxx" />
+    <ClCompile Include="..\..\src\window\ShapeViewer_fltk.cxx" />
+    <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx" />
+    <ClCompile Include="..\..\src\window\Window_fltk.cxx" />
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp" />
     <ClCompile Include="CLI\cpp\AssemblyInfo.cpp" />
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />

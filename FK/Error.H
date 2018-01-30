@@ -81,11 +81,11 @@ namespace FK {
 	FK_EXTERN void				fk_PutError(const std::string);
 	FK_EXTERN bool				fk_ErrorPrint(void);
 	FK_EXTERN bool				fk_SetErrorFile(std::string);
+	FK_EXTERN fk_ErrorDataBase *	fk_GetErrorDB();
 
 #ifndef FK_CLI_CODE
 	FK_EXTERN void				fk_Printf(const char *, ...);
 	FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
-	FK_EXTERN fk_ErrorDataBase *	fk_GetErrorDB();
 #endif
 }
 
