@@ -75,6 +75,7 @@
 #include <FK/Tree.h>
 
 using namespace std;
+using namespace FK;
 
 fk_D3DXFrameAnimation::fk_D3DXFrameAnimation(void)
 {

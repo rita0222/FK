@@ -73,6 +73,7 @@
 #include <FK/Attribute.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Attribute::fk_Attribute(void)
 {

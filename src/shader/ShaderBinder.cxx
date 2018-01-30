@@ -73,6 +73,7 @@
 #include <FK/ShaderBinder.h>
 
 using namespace std;
+using namespace FK;
 
 bool fk_ShaderBinder::isExtensionInitialized = false;
 

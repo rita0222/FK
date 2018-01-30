@@ -74,6 +74,7 @@
 #include <FK/BSplBase.H>
 
 using namespace std;
+using namespace FK;
 using namespace FK::BSplBase;
 
 fk_BSplCurve::fk_BSplCurve(void)

@@ -72,6 +72,8 @@
 #include <FK/GuideObject.h>
 #include <FK/Scene.h>
 
+using namespace FK;
+
 fk_GuideObject::fk_GuideObject(void)
 {
 	axis[0].pushLine(fk_Vector(0.0, 0.0, 0.0), fk_Vector(1.0, 0.0, 0.0));

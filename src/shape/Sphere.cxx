@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Sphere.h>
 
+using namespace FK;
+
 fk_Sphere::fk_Sphere(int argDiv, double argRad)
 {
 	SetObjectType(FK_SPHERE);

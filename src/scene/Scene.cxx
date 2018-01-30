@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Scene.h>
 
+using namespace FK;
+
 fk_Scene::fk_Scene(void)
 {
 	SetObjectType(FK_SCENE);

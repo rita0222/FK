@@ -74,6 +74,8 @@
 #include <FK/PickData.h>
 #include <FK/Model.h>
 
+using namespace FK;
+
 fk_PickData::fk_PickData(void)
 	: fk_BaseObject(FK_PICKDATA)
 {

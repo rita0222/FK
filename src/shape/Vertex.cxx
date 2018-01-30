@@ -79,6 +79,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 static const fk_Vector fk_VInitPos(0.0, 0.0, 0.0);
 

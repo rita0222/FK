@@ -79,6 +79,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_FileInput::fk_FileInput(void)
 {

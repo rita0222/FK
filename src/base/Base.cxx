@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Base.h>
 
+using namespace FK;
+
 fk_BaseObject::fk_BaseObject(fk_ObjectType argObjType)
 {
 	ObjectType = argObjType;

@@ -81,7 +81,7 @@
 #include <sstream>
 
 using namespace std;
-
+using namespace FK;
 
 fk_VRMLOut::fk_VRMLOut(fk_Solid *argSolid)
 {

@@ -193,10 +193,6 @@ namespace FK {
 
 }
 
-#ifdef FK_LIB_SRC
-using namespace FK;
-#endif
-
 #endif /* !__FK_BASE_HEADER__ */
 
 /****************************************************************************

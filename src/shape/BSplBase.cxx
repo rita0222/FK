@@ -74,6 +74,7 @@
 #include <FK/Base.h>
 
 using namespace std;
+using namespace FK;
 
 bool BSplBase::IsSame(double a, double b)
 {

@@ -76,6 +76,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 	: fk_Texture(argImage)

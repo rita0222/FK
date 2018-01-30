@@ -76,6 +76,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 static fk_Material * dummyMat()
 {

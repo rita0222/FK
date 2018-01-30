@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Model.h>
 
+using namespace FK;
+
 fk_Boundary::fk_Boundary(fk_ObjectType argType)
 	: fk_MatrixAdmin(argType)
 {

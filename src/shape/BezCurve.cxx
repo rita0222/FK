@@ -74,6 +74,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_BezCurve::fk_BezCurve(void)
 {

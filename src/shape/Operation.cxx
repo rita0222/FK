@@ -79,6 +79,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Operation::fk_Operation(fk_DataBase *argDB)
 {

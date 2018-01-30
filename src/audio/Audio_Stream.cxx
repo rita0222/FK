@@ -92,6 +92,7 @@ const int _ENDIAN = 0;
 #endif
 
 using namespace std;
+using namespace FK;
 
 fk_AudioStream::fk_AudioStream(void)
 {

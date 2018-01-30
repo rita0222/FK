@@ -72,6 +72,7 @@
 #include <FK/Shape.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
 {

@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Block.h>
 
+using namespace FK;
+
 fk_Block::fk_Block(double argX, double argY, double argZ)
 {
 	SetObjectType(FK_BLOCK);

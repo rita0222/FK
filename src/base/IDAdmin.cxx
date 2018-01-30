@@ -75,6 +75,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_IDAdmin::fk_IDAdmin(int argOrder)
 {

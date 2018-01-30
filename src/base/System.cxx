@@ -82,6 +82,7 @@
 #include <sys/stat.h>
 
 using namespace std;
+using namespace FK;
 
 static char *getcwd_logical(void)
 {
@@ -129,6 +130,7 @@ string fk_System::get_cwd(void)
 #include <CoreFoundation/CoreFoundation.h>
 
 using namespace std;
+using namespace FK;
 
 string fk_System::get_cwd(void)
 {
@@ -166,6 +168,7 @@ bool fk_System::setcwd(void)
 #if defined(WIN32) && !defined(FK_CLI_CODE)
 
 #include <Windows.h>
+using namespace FK;
 
 static std::string GetModulePath(void)
 {

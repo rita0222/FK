@@ -79,6 +79,7 @@
 #include <FK/Tree.h>
 
 using namespace std;
+using namespace FK;
 
 fk_D3DXParser::fk_D3DXParser(void)
 {

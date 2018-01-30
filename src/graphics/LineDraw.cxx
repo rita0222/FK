@@ -86,6 +86,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
 {

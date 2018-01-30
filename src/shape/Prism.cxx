@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Prism.h>
 
+using namespace FK;
+
 fk_Prism::fk_Prism(int argDiv,
 				   double argTop, double argBottom, double argHeight)
 {

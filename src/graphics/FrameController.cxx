@@ -72,6 +72,8 @@
 #include <FK/FrameController.H>
 #include <FK/Error.H>
 
+using namespace FK;
+
 #ifndef WIN32
 
 static bool _SleepMP (float duration)

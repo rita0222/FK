@@ -77,6 +77,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_Half::fk_Half(int argID)
 {

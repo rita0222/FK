@@ -72,6 +72,7 @@
 #include <FK/Line.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {

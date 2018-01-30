@@ -77,6 +77,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_Edge::fk_Edge(int argID)
 {

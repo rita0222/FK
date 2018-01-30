@@ -72,6 +72,8 @@
 #include <FK/Math.h>
 #include <FK/Matrix.h>
 
+using namespace FK;
+
 bool fk_Math::isOnLine(const fk_Vector &argA,
 					   const fk_Vector &argB,
 					   const fk_Vector &argP)

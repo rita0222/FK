@@ -92,6 +92,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_IndexFaceSet::fk_IndexFaceSet(void)
 {

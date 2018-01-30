@@ -84,6 +84,7 @@
 #include <FK/Surface.h>
 
 using namespace std;
+using namespace FK;
 
 typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;

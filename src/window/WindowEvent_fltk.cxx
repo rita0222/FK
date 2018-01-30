@@ -82,6 +82,7 @@
 #endif
 
 using namespace std;
+using namespace FK;
 
 void fk_Window::PushPrevStatus(void)
 {

@@ -75,6 +75,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_Tree fk_Model::_modelTree;
 

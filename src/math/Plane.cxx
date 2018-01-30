@@ -72,6 +72,8 @@
 #include <FK/Plane.h>
 #include <FK/Matrix.h>
 
+using namespace FK;
+
 fk_Plane::fk_Plane(void)
 	: fk_BaseObject(FK_PLANE)
 {

@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Command.H>
 
+using namespace FK;
+
 fk_Command::fk_Command(int argComID)
 {
 	SetCommandID(argComID);

@@ -82,6 +82,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_FileOutput::fk_FileOutput(void)
 {

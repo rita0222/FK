@@ -85,6 +85,7 @@ typedef char **			iconvpp;
 #endif
 
 using namespace std;
+using namespace FK;
 
 namespace FK {
 	class fk_StrStack {

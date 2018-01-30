@@ -96,6 +96,7 @@ const int _ENDIAN = 0;
 #endif
 
 using namespace std;
+using namespace FK;
 
 fk_AudioOggBuffer::fk_AudioOggBuffer(void)
 {

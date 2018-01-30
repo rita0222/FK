@@ -80,6 +80,7 @@
 #include <FL/fl_ask.H>
 
 using namespace std;
+using namespace FK;
 
 Fl_Window *			fk_Window::putWin = nullptr;
 Fl_Multi_Browser *	fk_Window::browser = nullptr;

@@ -78,6 +78,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
 
 fk_LoopIndexAdmin::fk_LoopIndexAdmin(void)
 {

@@ -75,6 +75,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 typedef fk_TList::iterator	list_ite;
 

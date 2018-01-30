@@ -77,6 +77,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Attribute_Data::fk_Attribute_Data(void)
 {

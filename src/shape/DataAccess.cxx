@@ -78,6 +78,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_DataAccess::fk_DataAccess(void)
 {

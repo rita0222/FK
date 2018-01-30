@@ -72,6 +72,7 @@
 #include <FK/Curve.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Curve::fk_Curve(void) :
 	changeFlg(true), div(-1)

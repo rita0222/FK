@@ -76,6 +76,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_GenVector::fk_GenVector(int argSize)
 {

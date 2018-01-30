@@ -76,6 +76,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 // 0 との比較関数 (実数用) 
 inline bool AlmostZero(double x)

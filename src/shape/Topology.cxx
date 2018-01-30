@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Topology.h>
 
+using namespace FK;
+
 fk_Topology::fk_Topology(void)
 {
 	ID = -1;

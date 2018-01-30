@@ -73,6 +73,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
 
 fk_ParserBase::fk_ParserBase(void)
 {

@@ -75,6 +75,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_VRMLParser::fk_VRMLParser(void)
 {

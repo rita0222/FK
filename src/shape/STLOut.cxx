@@ -79,6 +79,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_STLOut::fk_STLOut(fk_Solid *argSolid)
 {

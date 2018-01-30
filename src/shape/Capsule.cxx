@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Capsule.h>
 
+using namespace FK;
+
 fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
 {
 	SetObjectType(FK_CAPSULE);

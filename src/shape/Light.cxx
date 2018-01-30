@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Light.h>
 
+using namespace FK;
+
 fk_Light::fk_Light(fk_LightType argType)
 {
 	SetObjectType(FK_LIGHT);

@@ -75,6 +75,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 fk_Color::fk_Color(float argR, float argG, float argB, float argA)
 	: fk_BaseObject(FK_COLOR)

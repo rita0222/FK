@@ -88,6 +88,7 @@
 #include <FK/MQOOut.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Solid::fk_Solid(void)
 {

@@ -76,6 +76,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 static const fk_Command		dummyCom;
 static const fk_Vector		dummyVec;

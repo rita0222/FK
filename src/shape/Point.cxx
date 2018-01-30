@@ -74,6 +74,7 @@
 #include <FK/Point.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {

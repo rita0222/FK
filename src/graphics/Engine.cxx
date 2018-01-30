@@ -87,6 +87,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 static unsigned int		generalID = 1;
 

@@ -87,6 +87,7 @@
 #endif
 
 using namespace std;
+using namespace FK;
 
 static fk_IDAdmin * getAdmin(void)
 {

@@ -81,6 +81,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 bool fk_SphereBoundary::isInter(const fk_Vector &argP1, double argR1,
 								const fk_Vector &argP2, double argR2)

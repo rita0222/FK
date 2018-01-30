@@ -74,6 +74,7 @@
 #include <FK/BezSurface.h>
 
 using namespace std;
+using namespace FK;
 
 fk_BezSurface::fk_BezSurface(void)
 {

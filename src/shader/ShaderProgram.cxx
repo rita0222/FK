@@ -74,6 +74,7 @@
 #include <FK/Engine.H>
 
 using namespace std;
+using namespace FK;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0), idVertex(0), idFragment(0)

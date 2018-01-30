@@ -72,6 +72,7 @@
 #include <FK/HRCParser.H>
 
 using namespace std;
+using namespace FK;
 
 fk_HRCParser::fk_HRCParser(void)
 {

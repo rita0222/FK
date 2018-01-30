@@ -75,6 +75,7 @@
 #include <FK/IDAdmin.H>
 
 using namespace std;
+using namespace FK;
 
 static fk_IDAdmin & fk_DLManager(void)
 {

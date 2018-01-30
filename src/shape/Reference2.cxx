@@ -77,6 +77,7 @@
 #include <FK/Loop.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Vertex * fk_ReferenceL2::getOneNeighborVOnV(fk_Vertex *argV) const
 {

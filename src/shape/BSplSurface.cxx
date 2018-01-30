@@ -76,6 +76,7 @@
 #include <FK/BSplBase.H>
 
 using namespace std;
+using namespace FK;
 using namespace FK::BSplBase;
 
 fk_BSplSurface::fk_BSplSurface(void)

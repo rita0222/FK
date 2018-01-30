@@ -80,6 +80,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
 
 vector<fk_Edge *> fk_ReferenceL3::getEOnVV(fk_Vertex *argV1,
 										   fk_Vertex *argV2) const

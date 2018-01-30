@@ -72,6 +72,8 @@
 #include <FK/Math.h>
 #include <FK/Error.H>
 
+using namespace FK;
+
 static fk_Angle & VectorToHeadPitch(const fk_Vector &argVec)
 {
 	fk_Vector			tmpVec;

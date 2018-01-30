@@ -74,6 +74,7 @@
 #include <FK/Surface.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Surface::fk_Surface(void) :
 	changeFlg(true), div(-1)

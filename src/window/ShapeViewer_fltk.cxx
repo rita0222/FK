@@ -89,6 +89,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 static fk_ShapeGUIMenuItem	globalMenuStatus = FK_SV_GUI_NONE;
 static bool					globalMenuValue = true;

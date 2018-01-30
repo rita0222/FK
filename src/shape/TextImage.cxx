@@ -172,6 +172,8 @@ namespace FK {
 	};
 }
 
+using namespace FK;
+
 fk_GlyphStatus::fk_GlyphStatus(void)
 {
 	Init();

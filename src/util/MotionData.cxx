@@ -72,6 +72,7 @@
 #include <FK/MotionData.H>
 
 using namespace std;
+using namespace FK;
 
 typedef string::size_type	st;
 

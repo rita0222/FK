@@ -75,6 +75,7 @@
 #include <FK/HeapBase.h>
 
 using namespace std;
+using namespace FK;
 
 fk_STLParser::fk_STLParser(void)
 {

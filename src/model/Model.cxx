@@ -78,6 +78,8 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
+
 typedef list<fk_Model *>::iterator	mi;
 
 static unsigned int		_globalModelID = 1;

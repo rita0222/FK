@@ -79,6 +79,7 @@
 #include <FK/System.h>
 #include <FK/MatExample.h>
 
+using namespace FK;
 using namespace FK::Material;
 
 #ifdef FK_CLI_CODE

@@ -74,6 +74,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
 
 fk_SRFParser::fk_SRFParser(void)
 {

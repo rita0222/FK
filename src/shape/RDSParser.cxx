@@ -74,6 +74,7 @@
 #include <FK/RDSParser.H>
 
 using namespace std;
+using namespace FK;
 
 fk_RDSParser::fk_RDSParser(void)
 {

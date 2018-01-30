@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Fog.h>
 
+using namespace FK;
+
 fk_Fog::fk_Fog(void)
 {
 	setFogMode(FK_NONE_FOG);

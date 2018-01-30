@@ -81,6 +81,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 void fk_IFSetHandle::Init(void)
 {

@@ -72,6 +72,7 @@
 #include <FK/SpriteModel.h>
 
 using namespace std;
+using namespace FK;
 
 double fk_SpriteModel::distPut = 1.0;
 

@@ -74,6 +74,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 ///////////// inline 関数群 
 

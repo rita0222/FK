@@ -73,6 +73,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
 
 fk_SMFParser::fk_SMFParser(void)
 {

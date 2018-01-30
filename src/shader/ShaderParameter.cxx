@@ -74,6 +74,7 @@
 #include <FK/Matrix.h>
 
 using namespace std;
+using namespace FK;
 
 fk_ShaderParameter::fk_ShaderParameter(void) : lastAppliedId(0)
 {

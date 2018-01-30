@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Cone.h>
 
+using namespace FK;
+
 fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight)
 {
 	SetObjectType(FK_CONE);

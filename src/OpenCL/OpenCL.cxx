@@ -77,6 +77,7 @@
 #define ErrOut fk_Printf
 
 using namespace std;
+using namespace FK;
 
 fk_OpenCL::fk_OpenCL(void)
 {

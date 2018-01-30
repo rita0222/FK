@@ -86,6 +86,7 @@
 #endif
 
 using namespace std;
+using namespace FK;
 
 extern "C" {
 	#define XMD_H

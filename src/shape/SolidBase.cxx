@@ -79,6 +79,7 @@
 #include <FK/Material.h>
 
 using namespace std;
+using namespace FK;
 
 fk_SolidBase::fk_SolidBase(void)
 {

@@ -72,6 +72,8 @@
 
 #include <FK/MassProperty.h>
 
+using namespace FK;
+
 fk_MassProperty::fk_MassProperty(void)
 {
 	return;

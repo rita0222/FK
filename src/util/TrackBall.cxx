@@ -74,6 +74,8 @@
 
 #include <FK/TrackBall.h>
 
+using namespace FK;
+
 // コンストラクタ
 fk_TrackBall::fk_TrackBall(fk_Window *p_fk_win, fk_Model *p_camera)
 {

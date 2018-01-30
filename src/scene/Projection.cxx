@@ -72,6 +72,8 @@
 #include <FK/Projection.h>
 #include <FK/Error.H>
 
+using namespace FK;
+
 fk_ProjectBase::fk_ProjectBase(fk_ProjectMode argMode)
 {
 	SetMode(argMode);

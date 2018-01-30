@@ -72,6 +72,8 @@
 
 #include <FK/TextureSampler.h>
 
+using namespace FK;
+
 fk_TextureSampler::fk_TextureSampler()
 	: fk_MeshTexture(), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
 {

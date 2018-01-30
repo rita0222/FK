@@ -84,6 +84,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace FK;
 
 vector<GLuint>		fk_TextureDraw::texNameArray;
 unsigned long		fk_TextureDraw::texLoadedSize = 0;

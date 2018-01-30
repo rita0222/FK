@@ -76,6 +76,7 @@
 #include <FK/Tree.h>
 
 using namespace std;
+using namespace FK;
 
 class _fk_MQOPropertyList : public fk_TreeBaseObject {
 public:

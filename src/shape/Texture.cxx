@@ -73,6 +73,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(FK_TEXTURE)

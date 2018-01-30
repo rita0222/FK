@@ -82,6 +82,7 @@ typedef unsigned int uint;
 #endif
 
 using namespace std;
+using namespace FK;
 
 fk_SubDivision::fk_SubDivision()
 {

@@ -74,6 +74,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 // static fk_HVector fk_dummy_vec;
 

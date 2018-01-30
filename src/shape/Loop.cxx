@@ -81,6 +81,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 const double TESS_DELTA = 0.0001;
 

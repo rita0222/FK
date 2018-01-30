@@ -77,6 +77,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Gregory::fk_Gregory(void)
 {

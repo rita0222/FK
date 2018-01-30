@@ -74,6 +74,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 map<string, fk_Shape *>			fk_Performer::shapeCache;
 map<string, fk_Image *>			fk_Performer::imageCache;

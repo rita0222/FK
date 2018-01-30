@@ -71,6 +71,8 @@
  ****************************************************************************/
 #include <FK/Misc.h>
 
+using namespace FK;
+
 std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken)
 {
 	std::vector<std::string>	retStrArray;

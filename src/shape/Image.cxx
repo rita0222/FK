@@ -75,6 +75,7 @@
 #include <FK/TextureDraw.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Dimension::fk_Dimension(int argW, int argH)
 {

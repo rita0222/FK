@@ -81,6 +81,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 typedef list<fk_Loop *>::iterator	loopIte;
 

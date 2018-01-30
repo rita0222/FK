@@ -74,9 +74,9 @@
 #include <stack>
 #include <FK/BVHMotion.h>
 #include <FK/Error.H>
-//#include <FK/Window.h>
 
 using namespace std;
+using namespace FK;
 
 enum BVH_NodeType {
 	BVH_ROOT,

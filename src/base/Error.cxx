@@ -121,6 +121,8 @@ namespace FK {
 	}
 }
 
+using namespace FK;
+
 fk_ErrorData::~fk_ErrorData() {}
 
 void fk_ErrorData::Set(const string argClass, const string argFunc,

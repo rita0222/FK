@@ -77,6 +77,7 @@
 #include <FK/Shape.h>
 
 using namespace std;
+using namespace FK;
 
 fk_Particle::fk_Particle(fk_Point *argBase, int argID)
 {

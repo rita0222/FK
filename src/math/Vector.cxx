@@ -74,6 +74,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
 
 static int dCmp(double a, double b)
 {

@@ -76,6 +76,8 @@
 #include <FK/Edge.h>
 #include <FK/Loop.h>
 
+using namespace FK;
+
 fk_Half * fk_ReferenceL1::getOneHOnV(fk_Vertex *argV) const
 {
 	if(argV == nullptr) return nullptr;

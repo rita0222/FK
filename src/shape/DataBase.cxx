@@ -88,6 +88,7 @@
 #include <FK/ParserBase.H>
 
 using namespace std;
+using namespace FK;
 
 fk_DataBase::fk_DataBase(void)
 {

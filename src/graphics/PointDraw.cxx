@@ -85,6 +85,7 @@
 #include <FK/Surface.h>
 
 using namespace std;
+using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
 {

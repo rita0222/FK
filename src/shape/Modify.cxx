@@ -81,6 +81,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_Modify::fk_Modify(fk_DataBase *argDB)
 	: fk_Operation(argDB)

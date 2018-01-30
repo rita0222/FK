@@ -77,6 +77,7 @@
 #include <FK/Error.H>
 
 using namespace std;
+using namespace FK;
 
 fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
