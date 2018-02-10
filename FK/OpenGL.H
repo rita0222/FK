@@ -6,7 +6,7 @@
 #include <OpenGL/glu.h>
 #else // _MACOSX_
 #if defined(WIN32) && !defined(_MINGW_)
-#define GLEW_STATIC
+//#define GLEW_STATIC
 #include <windows.h>
 #include <GL/glew.h>
 #endif // WIN32

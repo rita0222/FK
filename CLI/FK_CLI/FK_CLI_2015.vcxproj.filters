@@ -586,18 +586,6 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shader\ShaderParameter.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shader\ShaderProgram.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shader\TextureSampler.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shader\ShaderBinder.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h">
@@ -1142,18 +1130,6 @@
     </ClInclude>
     <ClInclude Include="CLI\include\GenVector_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\TextureSampler.h">
-      <Filter>ヘッダー ファイル\CPP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\ShaderBinder.h">
-      <Filter>ヘッダー ファイル\CPP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\ShaderParameter.h">
-      <Filter>ヘッダー ファイル\CPP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\ShaderProgram.h">
-      <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
