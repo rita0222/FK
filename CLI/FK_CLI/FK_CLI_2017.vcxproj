@@ -453,7 +453,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <IntDir>obj2017\$(Configuration)\</IntDir>
     <TargetName>FK_CLI</TargetName>
     <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolkit\include;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib_2017;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
@@ -464,7 +464,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <IntDir>obj2017\$(Configuration)\</IntDir>
     <TargetName>FK_CLI</TargetName>
     <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolkit\include;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib_2017;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
