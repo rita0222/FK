@@ -120,7 +120,7 @@ namespace FK_CLI
 		 *
 		 *	\return		成分値の文字列
 		 */
-		String^ fk_TexCoord::ToString() override;
+		String^ ToString() override;
 	};
 
 	//! テクスチャ用基底クラス

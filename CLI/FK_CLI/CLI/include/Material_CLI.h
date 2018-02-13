@@ -277,7 +277,7 @@ namespace FK_CLI
 		 *
 		 *	\return		同値であれば true を、そうでなければ false を返します。
 		 */
-		bool fk_Color::Equals(fk_Color^ C);
+		bool Equals(fk_Color^ C);
 
 		//! 同値比較メソッド2
 		/*!
@@ -289,7 +289,7 @@ namespace FK_CLI
 		 *
 		 *	\return		同値であれば true を、そうでなければ false を返します。
 		 */
-		virtual bool fk_Color::Equals(Object^ C) override;
+		virtual bool Equals(Object^ C) override;
 
 		//! 文字列出力メソッド
 		/*!
@@ -297,7 +297,7 @@ namespace FK_CLI
 		 *
 		 *	\return		成分値の文字列
 		 */
-		String^ fk_Color::ToString() override;
+		String^ ToString() override;
 
 		//! 初期化メソッド1
 		/*!

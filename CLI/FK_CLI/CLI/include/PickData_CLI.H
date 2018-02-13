@@ -42,11 +42,11 @@ namespace FK_CLI
 
 	public:
 		//! コンストラクタ
-		fk_PickData::fk_PickData(fk_Model^, fk_PickedTopologyType^,
+		fk_PickData(fk_Model^, fk_PickedTopologyType^,
 								 int, double, double);
 
 		//! デストラクタ
-		fk_PickData::~fk_PickData();
+		~fk_PickData();
 
 		//! モデル参照プロパティ
 		/*!

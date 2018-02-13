@@ -131,26 +131,26 @@ namespace FK_CLI
 		fk_DrawCallback^ postShader;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Model::fk_Model(bool argNewFlg);
+		fk_Model(bool argNewFlg);
 		void MakeNativeModel(void);
 #endif
 
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Model::fk_Model(::FK::fk_Model *argUnmanagedPtr);
+		fk_Model(::FK::fk_Model *argUnmanagedPtr);
 		::FK::fk_Model * GetP(void);
 #endif
 		
 	public:
 		//! コンストラクタ
-		fk_Model::fk_Model();
+		fk_Model();
 
 		//! デストラクタ
-		fk_Model::~fk_Model();
+		~fk_Model();
 
 		//! ファイナライザ
-		fk_Model::!fk_Model();
+		!fk_Model();
 
 		//! \name 基本情報プロパティ
 		//@{

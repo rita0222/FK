@@ -27,8 +27,8 @@ namespace FK_CLI
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Reference::fk_Reference(bool argNewFlg);
-		fk_Reference::~fk_Reference();
+		fk_Reference(bool argNewFlg);
+		~fk_Reference();
 #endif
 		
 		//! \name 頂点に関連するメソッド

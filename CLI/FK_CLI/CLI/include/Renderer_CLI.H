@@ -19,9 +19,9 @@ namespace FK_CLI
 		::FK::fk_GraphicsEngine *pEngine;
 
 	public:
-		fk_Renderer::fk_Renderer(void);
-		fk_Renderer::~fk_Renderer();
-		fk_Renderer::!fk_Renderer();
+		fk_Renderer(void);
+		~fk_Renderer();
+		!fk_Renderer();
 
 		bool Initialize(System::IntPtr pWnd, int w, int h);
 		void Shutdown(void);

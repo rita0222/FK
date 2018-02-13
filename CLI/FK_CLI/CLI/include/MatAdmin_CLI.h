@@ -54,8 +54,8 @@ namespace FK_CLI
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_MatrixAdmin::fk_MatrixAdmin(bool argNewFlg);
-		fk_MatrixAdmin::~fk_MatrixAdmin();
+		fk_MatrixAdmin(bool argNewFlg);
+		~fk_MatrixAdmin();
 #endif
 
 		//! 位置ベクトルプロパティ
@@ -622,7 +622,7 @@ namespace FK_CLI
 		bool LoAngle(double h, double p, double b);
 		//@}
 	};
-}
+};
 
 /****************************************************************************
  *
