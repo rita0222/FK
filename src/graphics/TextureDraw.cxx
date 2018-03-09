@@ -94,6 +94,7 @@ fk_TextureDraw::fk_TextureDraw(void) : oldTexID(0)
 {
 	SetArrayState(false);
 	SetBindMode(false);
+	GenARTextureObj = [](fk_ARTexture *) {};
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
@@ -409,6 +410,8 @@ void fk_TextureDraw::DrawIFSTextureObj(fk_IFSTexture *argTexObj)
 		tmpType = GL_TRIANGLES;
 		break;
 
+
+
 	  case FK_IF_QUADS:
 		pNum = 4;
 		tmpType = GL_QUADS;
@@ -512,7 +515,9 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 	}
 	
 	if(argTexObj->getObjectType() == FK_ARTEXTURE) {
-		GenARTextureObj(static_cast<fk_ARTexture *>(argTexObj));
+		fk_ARTexture *arTex = static_cast<fk_ARTexture *>(argTexObj);
+		GenARTextureObj = arTex->GenFunc;
+		GenARTextureObj(arTex);
 	} else {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 					 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
@@ -528,6 +533,7 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 	return;
 }
 
+/*
 void fk_TextureDraw::GenARTextureObj(fk_ARTexture *argTexObj)
 {
 	fk_Dimension			bufSize = argTexObj->getVideoSize();
@@ -605,6 +611,7 @@ void fk_TextureDraw::GenARTextureObj(fk_ARTexture *argTexObj)
 	// =====================================================================
 	return;
 }
+*/
 
 // テクスチャオブジェクトの更新処理(by rita)
 void fk_TextureDraw::ReplaceTextureObj(fk_Texture *argTexObj)
