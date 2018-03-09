@@ -45,7 +45,7 @@ namespace FK_CLI_Viewer
 			for(int counter = 0; viewer.Draw() == true; counter += 10) {
 				for(i = 0; i <= 10; i++) {
 					for(j = 0; j <= 10; j++) {
-						moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/FK.PI));
+						moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/Math.PI));
 						movePos = moveVec + pos[i*11+j];
 						shape.MoveVPosition(i*11+j, movePos);
 					}

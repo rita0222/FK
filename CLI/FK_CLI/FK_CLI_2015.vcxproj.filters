@@ -232,12 +232,6 @@
     <ClCompile Include="CLI\cpp\PickData_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\AR\ARDevice.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\AR\ARTexture.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
@@ -584,6 +578,12 @@
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\AR\ARDevice.cxx">
+      <Filter>ソース ファイル\CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\AR\ARTexture.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
   </ItemGroup>

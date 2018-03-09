@@ -23,13 +23,24 @@ namespace FK_CLI {
 		delete pGMat;
 	}
 
-
-	double fk_GenMatrix::default::get(int argI1, int argI2)
+/*
+	double fk_GenMatrix::m::get(int argI1, int argI2)
 	{
 		return pGMat->get(argI1, argI2);
 	}
 
-	void fk_GenMatrix::default::set(int argI1, int argI2, double argD)
+	void fk_GenMatrix::m::set(int argI1, int argI2, double argD)
+	{
+		pGMat->set(argI1, argI2, argD);
+	}
+*/
+
+	double fk_GenMatrix::Get(int argI1, int argI2)
+	{
+		return pGMat->get(argI1, argI2);
+	}
+
+	void fk_GenMatrix::Set(int argI1, int argI2, double argD)
 	{
 		pGMat->set(argI1, argI2, argD);
 	}

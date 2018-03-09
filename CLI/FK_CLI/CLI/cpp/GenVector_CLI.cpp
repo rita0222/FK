@@ -24,8 +24,10 @@ namespace FK_CLI {
 		vector<double>	pD;
 		int				count = 0;
 
-		for each (double d in argArray) {
-			pD.push_back(d);
+		IEnumerator<double>^ d = argArray->GetEnumerator();
+
+		while (d->MoveNext()) {
+			pD.push_back(d->Current);
 			count++;
 		}
 		pGVec = new ::FK::fk_GenVector(count, &pD[0]);
@@ -188,12 +190,12 @@ namespace FK_CLI {
 		return gcnew String(tmpBuf.c_str());
 	}
 
-	void fk_GenVector::default::set(int argID, double argValue)
+	void fk_GenVector::Set(int argID, double argValue)
 	{
 		pGVec->set(argID, argValue);
 	}
 	
-	double fk_GenVector::default::get(int argID)
+	double fk_GenVector::Get(int argID)
 	{
 		return pGVec->get(argID);
 	}
@@ -254,7 +256,8 @@ namespace FK_CLI {
 	bool fk_GenVector::Replace(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->replace(argS, ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		::FK::fk_HVector V(argV->x_, argV->y_, argV->z_, argV->w_);
+		return pGVec->replace(argS, V);
 	}
 
 	bool fk_GenVector::Add(int argS, fk_GenVector^ argV)
@@ -273,7 +276,8 @@ namespace FK_CLI {
 	bool fk_GenVector::Add(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->add(argS, ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		::FK::fk_HVector V(argV->x_, argV->y_, argV->z_, argV->w_);
+		return pGVec->add(argS, V);
 	}
 
 	bool fk_GenVector::Sub(int argS, fk_GenVector^ argV)
@@ -292,7 +296,8 @@ namespace FK_CLI {
 	bool fk_GenVector::Sub(int argS, fk_HVector^ argV)
 	{
 		if(!argV) return false;
-		return pGVec->sub(argS, ::FK::fk_HVector(argV->x_, argV->y_, argV->z_, argV->w_));
+		::FK::fk_HVector V(argV->x_, argV->y_, argV->z_, argV->w_);
+		return pGVec->sub(argS, V);
 	}
 
 	fk_GenVector^ fk_GenVector::Div(int argS, int argE)

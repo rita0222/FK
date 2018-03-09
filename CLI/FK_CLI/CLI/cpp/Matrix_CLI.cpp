@@ -4,7 +4,8 @@ namespace FK_CLI {
 
 	using namespace std;
 
-	fk_Angle::operator ::FK::fk_Angle (fk_Angle^ argA)
+
+	fk_Angle::operator::FK::fk_Angle(fk_Angle ^argA)
 	{
 		::FK::fk_Angle	A(argA->h_, argA->p_, argA->b_);
 		return A;
@@ -30,6 +31,7 @@ namespace FK_CLI {
 		p_ = argA->p_;
 		b_ = argA->b_;
 	}
+
 
 	fk_Angle::fk_Angle(::FK::fk_Angle argA)
 		: h_(argA.h), p_(argA.p), b_(argA.b)
@@ -101,15 +103,20 @@ namespace FK_CLI {
 	{
 		delete pMatrix;
 	}
-
-	double fk_Matrix::default::get(int argI1, int argI2)
+/*
+	double fk_Matrix::m::get(int argI1, int argI2)
 	{
 		return (*pMatrix)[argI1][argI2];
 	}
 
-	void fk_Matrix::default::set(int argI1, int argI2, double argD)
+	void fk_Matrix::m::set(int argI1, int argI2, double argD)
 	{
 		(*pMatrix)[argI1][argI2] = argD;
+	}
+*/
+	double fk_Matrix::Get(int argI1, int argI2)
+	{
+		return (*pMatrix)[argI1][argI2];
 	}
 
 	cli::array<float>^ fk_Matrix::GetFloatArray()

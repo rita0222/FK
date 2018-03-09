@@ -17,6 +17,7 @@ namespace FK_CLI_C
 		static void samp1()
 		{
 			int i;
+            const double EPS = 0.00001;
 
 			// ウィンドウ生成
 			var win = new fk_AppWindow();
@@ -68,11 +69,11 @@ namespace FK_CLI_C
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
 
 			for(i = 0; win.Update() == true; i++) {
-				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
+				blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/300.0);
 				camera.GlTranslate(0.0, 0.0, -1.0);
 				var cPos = camera.Position;
-				if(cPos.z < -FK.EPS) camera.GlFocus(origin);
-				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+				if(cPos.z < -EPS) camera.GlFocus(origin);
+				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI/500.0);
 			}
 		}
 
@@ -105,12 +106,12 @@ namespace FK_CLI_C
 			strModel.Shape = texture;
 			strModel.GlVec(0.0, 0.0, -1.0);
 			win.Entry(strModel);
-			strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, FK.PI/2.0);
+			strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, Math.PI/2.0);
 			win.Open();
 			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			while(win.Update() == true) {
-				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/500.0);
+				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/500.0);
 			}
 		}
 		static void samp3()
@@ -148,7 +149,7 @@ namespace FK_CLI_C
 			while(window.Update() == true) {
 				str = "count = " + count.ToString();
 				sprite.DrawText(str, true);
-				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+				model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
 				count++;
 			}
 		}

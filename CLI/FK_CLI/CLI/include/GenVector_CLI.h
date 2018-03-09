@@ -8,7 +8,7 @@
 namespace FK_CLI {
 	using namespace System;
 	using namespace System::Collections::Generic;
-	
+
 	//! 任意次元ベクトルを管理するクラス
 	/*!
 	 * 	このクラスは、任意次元ベクトルの様々な機能を提供します。
@@ -266,12 +266,16 @@ namespace FK_CLI {
 		/*!
 		 *	各成分の設定や参照を行います。
 		 *
-		 *		V[0] = 5.0;
+		 *		V.v[0] = 5.0;
 		 */
-		property double default[int] {
+/*
+		property double v[int] {
 			double get(int argID);
 			void set(int argID, double argD);
 		}
+*/
+		void Set(int, double);
+		double Get(int);
 
 		//! 次元数プロパティ
 		/*!

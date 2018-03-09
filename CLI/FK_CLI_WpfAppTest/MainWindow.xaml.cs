@@ -92,10 +92,10 @@ namespace FK_CLI_WpfAppTest
             viewport.Update += (s, ee) =>
             {
                 camera.GlTranslate(0.0, 0.0, -1.0);
-                blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
+                blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI / 300.0);
                 var cPos = camera.Position;
-                if (cPos.z < -FK.EPS) camera.GlFocus(origin);
-                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
+                if (cPos.z < -0.00001) camera.GlFocus(origin);
+                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI / 500.0);
                 ++count;
                 this.TextBox1.Text = camera.Position.ToString();
             };

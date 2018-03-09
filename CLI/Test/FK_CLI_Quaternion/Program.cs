@@ -21,7 +21,7 @@ namespace FK_CLI_Quaternion
 
 
 			var angle1 = new fk_Angle(0.0, 0.0, 0.0);
-			var angle2 = new fk_Angle(FK.PI/2.0, FK.PI/2.0 - 0.01, 0.0);
+			var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
 
 			var q1 = new fk_Quaternion();
 			var q2 = new fk_Quaternion();

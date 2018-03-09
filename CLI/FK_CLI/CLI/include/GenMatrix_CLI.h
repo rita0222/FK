@@ -46,12 +46,17 @@ namespace FK_CLI {
 		 *	各成分の設定や参照を行います。
 		 *	1番目の引数が行番号、2番目の引数が列番号です。
 		 *
-		 *		M[1,2] = 5.0;
+		 *		M.m[1,2] = 5.0;
 		 */
- 		property double default[int,int] {
+/*
+
+ 		property double m [int,int] {
 			double get(int, int);
 			void set(int, int, double);
 		}
+*/
+		double Get(int, int);
+		void Set(int, int, double);
 
 		//! 次元数プロパティ
 		/*!

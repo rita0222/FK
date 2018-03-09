@@ -184,7 +184,7 @@ namespace FK_CLI_Ball
 			groundModel.Shape = ground;
 			groundModel.Material = fk_Material.LightGreen;
 			groundModel.SmoothMode = true;
-			groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/2.0);
+			groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
 
 			// ### VIEW BLOCK ###
 			blockModel.Shape = block;

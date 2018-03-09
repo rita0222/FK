@@ -50,7 +50,7 @@ namespace FK_CLI_Sprite
 				else space = "";
 				str = "count = " + space + count.ToString();
 				sprite.DrawText(str, true);
-				model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+				model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
 				count++;
 			}
 		}

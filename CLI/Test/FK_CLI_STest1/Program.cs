@@ -136,10 +136,10 @@ namespace FK_CLI_Box
 
 			for (i = 0; win.Update() == true; i++) {
 				camera.GlTranslate(0.0, 0.0, -1.0);
-				blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
+				blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/300.0);
 				var cPos = camera.Position;
-				if(cPos.z < -FK.EPS) camera.GlFocus(origin);
-				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+				if(cPos.z < -0.00001) camera.GlFocus(origin);
+				if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI/500.0);
 
 				if(win.GetKeyStatus(' ', fk_SwitchStatus.PRESS))
 				{
