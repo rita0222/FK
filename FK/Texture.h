@@ -313,6 +313,8 @@ namespace FK {
 		bool				GetInitFlag(void);
 		void				SetInitFlag(bool);
 
+		std::function<void(void)>	GenTextureObj;
+		std::function<void(void)>	ReplaceSubImage;
 #endif
 
 	private:
@@ -326,6 +328,7 @@ namespace FK {
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
+		void				MakeObjFunction(void);
 
 	};
 

@@ -26,7 +26,8 @@ namespace FK {
 		fk_PixelFormatType	pixelFormatType;
 		fk_Dimension		imageSize;
 		fk_TexCoord			texSize;
-		void				GenARTextureObj(fk_ARTexture *);
+
+		void				MakeGenFunction(void);
 
 	public:
 		fk_ARTexture(fk_Image * = NULL);
@@ -41,8 +42,6 @@ namespace FK {
 		void					setTextureSize(double, double);
 		fk_TexCoord				getTextureSize(void) const;
 		void					update(void);
-
-		std::function<void(fk_ARTexture *)>		GenFunc;
 	};
 }
 

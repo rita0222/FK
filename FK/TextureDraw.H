@@ -41,7 +41,6 @@ namespace FK {
 		void	DrawIFSTextureObj(fk_IFSTexture *);
 		void	DrawARTextureObj(fk_ARTexture *);
 		void	GenTextureObj(fk_Texture *);
-		//void	GenARTextureObj(fk_ARTexture *);
 		void	ReplaceTextureObj(fk_Texture *);
 		void	InitTextureEnv(fk_Texture *);
 
@@ -50,7 +49,7 @@ namespace FK {
 		void	DrawMeshTexturePick(fk_MeshTexture *);
 		void	DrawIFSTexturePick(fk_IFSTexture *);
 
-		std::function<void(fk_ARTexture *)>	GenARTextureObj;
+		//std::function<void(fk_ARTexture *)>	GenARTextureObj;
 	};
 }
 #endif /* !__FK_TEXTURE_DRAW_HEADER__ */

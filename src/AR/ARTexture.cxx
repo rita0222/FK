@@ -13,7 +13,7 @@ fk_ARTexture::fk_ARTexture(fk_Image *argImage)
 	texSize.set(0.0, 0.0);
 	pixelFormatType = FK_DEFAULT_PIXEL_FORMAT;
 	SetLocalImage();
-	GenFunc = GenARTextureObj;
+	MakeGenFunction();
 
 	return;
 }
@@ -25,80 +25,84 @@ fk_ARTexture::~fk_ARTexture()
 	return;
 }
 
-void fk_ARTexture::GenARTextureObj(fk_ARTexture *argTexObj)
+void fk_ARTexture::MakeGenFunction(void)
 {
-	fk_Dimension			bufSize = argTexObj->getVideoSize();
-	const unsigned char		*arImageBuf = argTexObj->getVideoBuf();
-	fk_PixelFormatType		type = argTexObj->getPixelFormatType();
+	GenTextureObj = [this] {
+		fk_Dimension			bufSize = getVideoSize();
+		const unsigned char		*arImageBuf = getVideoBuf();
+		fk_PixelFormatType		type = getPixelFormatType();
 
-	switch (type) {
-	  case FK_PIXEL_FORMAT_RGB:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-					 bufSize.w, bufSize.h,
-					 0, GL_RGB,
-					 GL_UNSIGNED_BYTE,
-					 arImageBuf);
-		break;
+		switch (type) {
+		  case FK_PIXEL_FORMAT_RGB:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+						 bufSize.w, bufSize.h,
+						 0, GL_RGB,
+						 GL_UNSIGNED_BYTE,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_BGR:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-					 bufSize.w, bufSize.h,
-					 0, GL_BGR,
-					 GL_UNSIGNED_BYTE,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_BGR:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+						 bufSize.w, bufSize.h,
+						 0, GL_BGR,
+						 GL_UNSIGNED_BYTE,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_RGBA:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 bufSize.w, bufSize.h,
-					 0, GL_RGBA,
-					 GL_UNSIGNED_BYTE,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_RGBA:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+						 bufSize.w, bufSize.h,
+						 0, GL_RGBA,
+						 GL_UNSIGNED_BYTE,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_BGRA:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-					 bufSize.w, bufSize.h,
-					 0, GL_BGRA,
-					 GL_UNSIGNED_BYTE,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_BGRA:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+						 bufSize.w, bufSize.h,
+						 0, GL_BGRA,
+						 GL_UNSIGNED_BYTE,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_MONO:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 bufSize.w, bufSize.h,
-					 0, GL_LUMINANCE,
-					 GL_UNSIGNED_BYTE,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_MONO:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+						 bufSize.w, bufSize.h,
+						 0, GL_LUMINANCE,
+						 GL_UNSIGNED_BYTE,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_ARGB:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 bufSize.w, bufSize.h,
-					 0, GL_BGRA,
-					 GL_UNSIGNED_INT_8_8_8_8,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_ARGB:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+						 bufSize.w, bufSize.h,
+						 0, GL_BGRA,
+						 GL_UNSIGNED_INT_8_8_8_8,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_2vuy:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 bufSize.w, bufSize.h,
-					 0, GL_YCBCR_422_APPLE,
-					 GL_UNSIGNED_SHORT_8_8_APPLE,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_2vuy:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+						 bufSize.w, bufSize.h,
+						 0, GL_YCBCR_422_APPLE,
+						 GL_UNSIGNED_SHORT_8_8_APPLE,
+						 arImageBuf);
+			break;
 			
-	  case FK_PIXEL_FORMAT_yuvs:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 bufSize.w, bufSize.h,
-					 0, GL_YCBCR_422_APPLE,
-					 GL_UNSIGNED_SHORT_8_8_APPLE,
-					 arImageBuf);
-		break;
+		  case FK_PIXEL_FORMAT_yuvs:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+						 bufSize.w, bufSize.h,
+						 0, GL_YCBCR_422_APPLE,
+						 GL_UNSIGNED_SHORT_8_8_APPLE,
+						 arImageBuf);
+			break;
 			
-	  default:
-		break;			
-	}
+		  default:
+			break;			
+		}
+	};
+
+	ReplaceSubImage = GenTextureObj;
 	// =====================================================================
 	return;
 }

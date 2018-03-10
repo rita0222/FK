@@ -69,6 +69,7 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
 #include <FK/Texture.h>
 #include <FK/Error.H>
 
@@ -102,8 +103,51 @@ void fk_Texture::BaseInit(void)
 	setMaterialMode(FK_PARENT_MODE);
 	setTexRendMode(FK_TEX_REND_NORMAL);
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
+	MakeObjFunction();
 
 	return;
+}
+
+void fk_Texture::MakeObjFunction(void)
+{
+	GenTextureObj = [this] {
+		const fk_ImType		*imageBuf = image->getBufPointer();
+		const fk_Dimension	*bufSize = image->getBufferSize();
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+					 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
+	};
+
+	ReplaceSubImage = [this] {
+
+		if(image == nullptr) return;
+
+		static fk_Rect				tmpRect;	// 部分更新矩形情報
+		static vector<fk_ImType>	subBuffer;	// 部分更新用バッファ
+		const fk_Dimension			*imageSize = image->getImageSize();
+		const fk_Dimension			*bufSize = image->getBufferSize();
+		const fk_ImType				*imageBuf = image->getBufPointer();
+
+		// 更新領域取得
+		tmpRect = image->GetUpdateArea();
+		if(tmpRect.w < 1 || tmpRect.h < 1) {	// 矩形が指定されていなかったら全体更新
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
+							GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
+		} else {	// 指定されていたら部分更新
+			subBuffer.resize(static_cast<_st>(tmpRect.w*tmpRect.h*4));
+			for(int i = 0; i < tmpRect.h; ++i) {
+				memcpy(&(subBuffer[static_cast<_st>((tmpRect.h-i-1)*tmpRect.w*4)]),
+					   imageBuf+((imageSize->h - (tmpRect.y+i) - 1)*bufSize->w + tmpRect.x)*4,
+					   static_cast<size_t>(tmpRect.w*4));
+			}
+			if(!subBuffer.empty()) {
+				glTexSubImage2D(GL_TEXTURE_2D, 0, tmpRect.x,
+								imageSize->h - tmpRect.h - tmpRect.y,
+								tmpRect.w, tmpRect.h,
+								GL_RGBA, GL_UNSIGNED_BYTE, &(subBuffer[0]));
+			}
+		}
+	};
 }
 
 bool fk_Texture::IsLocalImage(void)
