@@ -324,6 +324,7 @@ namespace FK {
 		bool								connectMode;
 
 		void	SetConnectNormal(void);
+		void	MakeDrawIFSFunc(void);
 	};
 }
 

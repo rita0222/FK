@@ -78,6 +78,7 @@ namespace FK {
 		friend class			fk_LineDraw;
 		friend class			fk_FaceDraw;
 		friend class			fk_TextureDraw;
+		friend class			fk_IFSTexture;
 
 	public:
 

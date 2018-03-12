@@ -86,6 +86,8 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 	posArray.clear();
 	coordArray.clear();
 	setImage(argImage);
+	MakeDrawMeshFunc();
+	
 	return;
 }
 
@@ -96,6 +98,71 @@ fk_MeshTexture::~fk_MeshTexture()
 
 	return;
 }
+
+void fk_MeshTexture::MakeDrawMeshFunc(void)
+{
+	DrawTexture = [this](bool) {
+		double				wScale, hScale;
+		_st					ii, ij;
+		fk_Vector			norm;
+
+		const fk_Dimension *imageSize = getImageSize();
+		const fk_Dimension *bufSize = getBufferSize();
+
+		// rita: メッシュ枚数チェックを先に
+		if(triNum <= 0) return;
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+		hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+
+		glBegin(GL_TRIANGLES);
+		for(ii = 0; ii < static_cast<_st>(triNum); ++ii) {
+			norm = (posArray[ii*3 + 1] - posArray[ii*3]) ^
+				(posArray[ii*3 + 2] - posArray[ii*3]);
+			if(norm.normalize() == false) {
+				fk_PutError("fk_Window", "DrawMeshTextureObj", 1,
+							"Normal Vector Error.");
+				continue;
+			}
+						
+			glNormal3dv(static_cast<GLdouble *>(&(norm.x)));
+			for(ij = 0; ij < 3; ++ij) {
+				glTexCoord2f(coordArray[ii*3+ij].x * static_cast<float>(wScale),
+							 coordArray[ii*3+ij].y * static_cast<float>(hScale));
+				glVertex3dv(static_cast<GLdouble *>(&(posArray[ii*3+ij].x)));
+			}
+		}
+
+		glEnd();
+	};
+
+	DrawPick = [this]() {
+		_st			ii, ij;
+
+		const fk_Dimension *bufSize = getBufferSize();
+
+		// rita: メッシュ枚数チェックを先に
+		if(triNum <= 0) return;
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		for(ii = 0; ii < static_cast<_st>(triNum); ++ii) {
+			glPushName(static_cast<GLuint>(ii*3));
+			glBegin(GL_TRIANGLES);
+
+			for(ij = 0; ij < 3; ++ij) {
+				glVertex3dv(static_cast<GLdouble *>(&(posArray[ii*3+ij].x)));
+			}
+
+			glEnd();
+			glPopName();
+		}
+	};
+}			 
 
 void fk_MeshTexture::init(void)
 {

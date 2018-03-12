@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  *
  *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
  *
@@ -88,6 +88,8 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 	commonList.clear();
 	setImage(argImage);
 	connectMode = true;
+	MakeDrawIFSFunc();
+	
 	return;
 }
 
@@ -98,6 +100,93 @@ fk_IFSTexture::~fk_IFSTexture()
 	delete ifs;
 	return;
 }
+
+void fk_IFSTexture::MakeDrawIFSFunc(void)
+{
+	DrawTexture = [this](bool argArrayState) {
+		_st				pNum;
+		GLenum			tmpType;
+
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		if(ifs->modifyFlg == true) {
+			ifs->ModifyVNorm();
+		}
+		switch(ifs->type) {
+		  case FK_IF_TRIANGLES:
+			pNum = 3;
+			tmpType = GL_TRIANGLES;
+			break;
+
+		  case FK_IF_QUADS:
+			pNum = 4;
+			tmpType = GL_QUADS;
+			break;
+
+		  default:
+			return;
+		}
+
+		glShadeModel(GL_SMOOTH);
+
+		if(argArrayState == true) {
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			glVertexPointer(3, GL_FLOAT, 0, &ifs->pos[0]);
+			glNormalPointer(GL_FLOAT, 0, &ifs->vNorm[0]);
+			glTexCoordPointer(2, GL_FLOAT, 0, &coordArray[0]);
+		
+			glDrawElements(tmpType, ifs->faceSize * static_cast<GLsizei>(pNum),
+						   GL_UNSIGNED_INT, &ifs->ifs[0]);
+		} else {
+			glBegin(tmpType);
+			for(_st ii = 0; ii < static_cast<_st>(ifs->faceSize); ++ii) {
+				for(_st ij = 0; ij < pNum; ++ij) {
+					_st index = static_cast<_st>(ifs->ifs[pNum*ii+ij]);
+					glNormal3fv((GLfloat *)&(ifs->vNorm[index]));
+					glTexCoord2fv((GLfloat *)&coordArray[index]);
+					glVertex3fv((GLfloat *)&(ifs->pos[index]));
+				}
+			}
+			glEnd();
+		}
+	};
+
+	DrawPick = [this]() {
+		int				ii, ij;
+		int				pNum;
+		fk_FVector		*pos = &ifs->pos[0];
+		int				*ifsArray = &ifs->ifs[0];
+
+		switch(ifs->type) {
+		  case FK_IF_TRIANGLES:
+			  pNum = 3;
+			  break;
+
+		  case FK_IF_QUADS:
+			  pNum = 4;
+			  break;
+
+		  default:
+			  return;
+		}
+
+		for(ii = 0; ii < ifs->faceSize; ++ii) {
+			glPushName(static_cast<GLuint>(ii*3));
+			glBegin(GL_POLYGON);
+			for(ij = 0; ij < pNum; ++ij) {
+				glVertex3fv(static_cast<GLfloat *>(&pos[ifsArray[pNum*ii+ij]].x));
+			}
+			glEnd();
+			glPopName();
+		}
+	};
+}	
 
 vector< vector<int> > * fk_IFSTexture::GetCommonList(void)
 {

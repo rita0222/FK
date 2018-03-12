@@ -117,9 +117,8 @@ void fk_Texture::MakeObjFunction(void)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 					 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
 	};
-
+		
 	ReplaceSubImage = [this] {
-
 		if(image == nullptr) return;
 
 		static fk_Rect				tmpRect;	// 部分更新矩形情報
@@ -148,6 +147,9 @@ void fk_Texture::MakeObjFunction(void)
 			}
 		}
 	};
+
+	DrawTexture = [](bool) {};
+	DrawPick = []() {};
 }
 
 bool fk_Texture::IsLocalImage(void)
@@ -337,6 +339,8 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	texCoord[0].set(0.0, 0.0);
 	texCoord[1].set(1.0, 1.0);
 
+	MakeDrawRectFunc();
+
 	return;
 }
 
@@ -346,6 +350,77 @@ fk_RectTexture::~fk_RectTexture()
 
 	return;
 }
+
+void fk_RectTexture::MakeDrawRectFunc(void)
+{
+	DrawTexture = [this](bool) {
+		fk_TexCoord	startParam, endParam;
+		double		tmpX, tmpY;
+
+		const fk_Dimension *imageSize = getImageSize();
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		if(getRepeatMode() == true) {
+			startParam.set(0.0, 0.0);
+			endParam = getRepeatParam();
+		} else {
+			double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+			double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+			startParam.set(wScale * texCoord[0].x,
+						   hScale * texCoord[0].y);
+			endParam.set(wScale * texCoord[1].x,
+						 hScale * texCoord[1].y);
+		}
+
+		tmpX = texSize.x/2.0;
+		tmpY = texSize.y/2.0;
+
+		glNormal3d(0.0, 0.0, 1.0);
+		glBegin(GL_QUADS);
+
+		glTexCoord2d(startParam.x, startParam.y);
+		glVertex3d(-tmpX, -tmpY, 0.0);
+
+		glTexCoord2d(endParam.x, startParam.y);
+		glVertex3d(tmpX, -tmpY, 0.0);
+
+		glTexCoord2d(endParam.x, endParam.y);
+		glVertex3d(tmpX, tmpY, 0.0);
+
+		glTexCoord2d(startParam.x, endParam.y);
+		glVertex3d(-tmpX, tmpY, 0.0);
+
+		glEnd();
+	};
+
+	DrawPick = [this]() {
+		double		tmpX, tmpY;
+
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		tmpX = texSize.x/2.0;
+		tmpY = texSize.y/2.0;
+
+		glPushName(0);
+		glBegin(GL_QUADS);
+
+		glVertex3d(-tmpX, -tmpY, 0.0);
+		glVertex3d(tmpX, -tmpY, 0.0);
+		glVertex3d(tmpX, tmpY, 0.0);
+		glVertex3d(-tmpX, tmpY, 0.0);
+
+		glEnd();
+		glPopName();
+	};
+
+	return;
+}	
 
 void fk_RectTexture::init(void)
 {
@@ -440,6 +515,7 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_TRITEXTURE);
+	MakeDrawTriFunc();
 
 	return;
 }
@@ -449,6 +525,66 @@ fk_TriTexture::~fk_TriTexture()
 	init();
 
 	return;
+}
+
+void fk_TriTexture::MakeDrawTriFunc(void)
+{
+	DrawTexture = [this](bool) {
+		double			wScale, hScale;
+		_st				counter;
+		fk_Vector		norm;
+
+		const fk_Dimension *imageSize = getImageSize();
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+		hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+
+		norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
+		if(norm.normalize() == false) {
+			fk_PutError("fk_Window", "DrawTriTextureObj", 1,
+						"Triangle Normal Vector Error.");
+			return;
+		}
+
+		glBegin(GL_TRIANGLES);
+
+		glNormal3dv((GLdouble *)&(norm.x));
+		for(counter = 0; counter < 3; ++counter) {
+			glTexCoord2f(texCoord[counter].x * float(wScale),
+						 texCoord[counter].y * float(hScale));
+			glVertex3d(pos[counter].x,
+					   pos[counter].y,
+					   pos[counter].z);
+		}
+
+		glEnd();
+	};
+
+	DrawPick = [this]() {
+		int				counter;
+
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		glPushName(0);
+		glBegin(GL_TRIANGLES);
+
+		for(counter = 0; counter < 3; ++counter) {
+			glVertex3d(pos[counter].x,
+					   pos[counter].y,
+					   pos[counter].z);
+		}
+
+		glEnd();
+		glPopName();
+	};
+		
 }
 
 void fk_TriTexture::init(void)

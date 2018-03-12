@@ -13,7 +13,7 @@ fk_ARTexture::fk_ARTexture(fk_Image *argImage)
 	texSize.set(0.0, 0.0);
 	pixelFormatType = FK_DEFAULT_PIXEL_FORMAT;
 	SetLocalImage();
-	MakeGenFunction();
+	MakeFunction();
 
 	return;
 }
@@ -25,7 +25,7 @@ fk_ARTexture::~fk_ARTexture()
 	return;
 }
 
-void fk_ARTexture::MakeGenFunction(void)
+void fk_ARTexture::MakeFunction(void)
 {
 	GenTextureObj = [this] {
 		fk_Dimension			bufSize = getVideoSize();
@@ -103,7 +103,30 @@ void fk_ARTexture::MakeGenFunction(void)
 	};
 
 	ReplaceSubImage = GenTextureObj;
-	// =====================================================================
+
+	DrawTexture = [this](bool) {
+		double			tmpX, tmpY;
+
+		tmpX = texSize.x/2.0;
+		tmpY = texSize.y/2.0;
+	
+		glNormal3d(0.0, 0.0, 1.0);
+		glBegin(GL_QUADS);
+	
+		glTexCoord2d(0.0, 0.0);
+		glVertex3d(-tmpX, -tmpY, 0.0);
+	
+		glTexCoord2d(1.0, 0.0);
+		glVertex3d(tmpX, -tmpY, 0.0);
+	
+		glTexCoord2d(1.0, 1.0);
+		glVertex3d(tmpX, tmpY, 0.0);
+	
+		glTexCoord2d(0.0, 1.0);
+		glVertex3d(-tmpX, tmpY, 0.0);
+
+		glEnd();
+	};
 	return;
 }
 

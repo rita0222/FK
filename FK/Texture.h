@@ -315,6 +315,9 @@ namespace FK {
 
 		std::function<void(void)>	GenTextureObj;
 		std::function<void(void)>	ReplaceSubImage;
+		std::function<void(bool)>	DrawTexture;
+		std::function<void(void)>	DrawPick;
+
 #endif
 
 	private:
@@ -329,7 +332,6 @@ namespace FK {
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
 		void				MakeObjFunction(void);
-
 	};
 
 	//! 矩形テクスチャを生成、管理するクラス
@@ -506,6 +508,7 @@ namespace FK {
 		bool				repeatFlag;
 		fk_TexCoord			repeatParam;
 		fk_TexCoord			texCoord[2];
+		void				MakeDrawRectFunc(void);
 
 	};
 
@@ -655,6 +658,8 @@ namespace FK {
 
 		fk_Vector *			getPos(void);
 		fk_TexCoord *		getCoord(void);
+
+		void				MakeDrawTriFunc(void);
 	};
 
 	//! メッシュテクスチャを生成、管理するクラス
@@ -975,6 +980,8 @@ namespace FK {
 
 		std::vector<fk_Vector> *	getPos(void);
 		std::vector<fk_TexCoord> *	getCoord(void);
+
+		void						MakeDrawMeshFunc(void);
 	};
 }
 

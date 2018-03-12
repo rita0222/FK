@@ -35,21 +35,9 @@ namespace FK {
 		static unsigned long			texLoadedSize;
 		static std::vector<fk_Image *>	texImageArray;
 
-		void	DrawRectTextureObj(fk_RectTexture *);
-		void	DrawTriTextureObj(fk_TriTexture *);
-		void	DrawMeshTextureObj(fk_MeshTexture *);
-		void	DrawIFSTextureObj(fk_IFSTexture *);
-		void	DrawARTextureObj(fk_ARTexture *);
 		void	GenTextureObj(fk_Texture *);
 		void	ReplaceTextureObj(fk_Texture *);
 		void	InitTextureEnv(fk_Texture *);
-
-		void	DrawRectTexturePick(fk_RectTexture *);
-		void	DrawTriTexturePick(fk_TriTexture *);
-		void	DrawMeshTexturePick(fk_MeshTexture *);
-		void	DrawIFSTexturePick(fk_IFSTexture *);
-
-		//std::function<void(fk_ARTexture *)>	GenARTextureObj;
 	};
 }
 #endif /* !__FK_TEXTURE_DRAW_HEADER__ */

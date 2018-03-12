@@ -27,7 +27,7 @@ namespace FK {
 		fk_Dimension		imageSize;
 		fk_TexCoord			texSize;
 
-		void				MakeGenFunction(void);
+		void				MakeFunction(void);
 
 	public:
 		fk_ARTexture(fk_Image * = NULL);
