@@ -580,12 +580,6 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\AR\ARDevice.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\AR\ARTexture.cxx">
-      <Filter>ソース ファイル\CPP</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h">

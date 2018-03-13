@@ -44,18 +44,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolKit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>.\lib_2015;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib_2015;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <IntDir>obj_2015\$(Configuration)\</IntDir>
     <TargetName>FK_CLI</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolKit\include;$(IncludePath)</IncludePath>
-    <LibraryPath>.\lib_2015;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib_2015;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <IntDir>obj_2015\$(Configuration)\</IntDir>
     <TargetName>FK_CLI</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,8 +106,6 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\AR\ARDevice.cxx" />
-    <ClCompile Include="..\..\src\AR\ARTexture.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />
