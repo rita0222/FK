@@ -26,7 +26,6 @@ fk_ARDevice::fk_ARDevice(void)
 
 	setThresh(100);
 	setPatternWidth(80.0);
-	setPatternCenter(0.0, 0.0);
 
 	contFlag = false;
 	startFlag = false;
@@ -101,32 +100,11 @@ void fk_ARDevice::setPatternFile(int argID, string argFileName)
 	return;
 }
 
-void fk_ARDevice::setPatternWidth(double argWidth)
-{
-	setPatternWidth(0, argWidth);
-	return;
-}
-
 void fk_ARDevice::setPatternWidth(int argID, double argWidth)
 {
 	st		id = st(GetID(argID));
 
 	pat_array[id].width = argWidth;
-	return;
-}
-
-void fk_ARDevice::setPatternCenter(double argX, double argY)
-{
-	setPatternCenter(0, argX, argY);
-	return;
-}
-
-void fk_ARDevice::setPatternCenter(int argID, double argX, double argY)
-{
-	st		id = st(GetID(argID));
-
-	pat_array[id].center[0] = argX;
-	pat_array[id].center[1] = argY;
 	return;
 }
 
@@ -370,15 +348,6 @@ void fk_ARDevice::SetMarkerModel(int argID, fk_Model *model)
 	ConvARModelT(tmpMat, model);		// 平行移動成分適応
 	
 	return;
-}
-
-fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex,
-										fk_Model *argModel)
-{
-	if(pat_array.empty() == true) return FK_AR_NO_DETECT;
-
-	pat_array[0].model = argModel;
-	return update(argVideoTex);
 }
 
 fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex)

@@ -13,19 +13,21 @@
 
 namespace FK {
 
+	//! ARの状態を表す列挙型
 	enum fk_AR_Device_Status {
-		FK_AR_IMAGE_NULL,
-		FK_AR_DETECT_ERROR,
-		FK_AR_NO_DETECT,
-		FK_AR_DETECT
+		FK_AR_IMAGE_NULL,		//!< 画像未設定
+		FK_AR_DETECT_ERROR,		//!< 検出エラー
+		FK_AR_NO_DETECT,		//!< 未検出
+		FK_AR_DETECT			//!< 検出成功
 	};
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+	
 	class fk_ARPattern {
 	public:
 		std::string		name;
 		int				id;
 		double			width;
-		double			center[2];
 		double			transMat[3][4];
 		fk_Model		*model;
 		bool			contFlg;
@@ -33,6 +35,19 @@ namespace FK {
 		fk_ARPattern(void);
 		~fk_ARPattern();
 	};
+
+#endif
+
+	//! AR カメラデバイス用クラス
+	/*!
+	 *	このクラスは、AR利用でのカメラデバイスを制御するためのクラスです。
+	 *	FK では、AR 用システムとして内部で ARToolKit を用いており、
+	 *	各種の設定ファイルフォーマットは ARToolKit に準拠します。
+	 *	ARToolKit についての詳細は、以下の URL を参照して下さい。
+	 *	https://sourceforge.net/projects/artoolkit/
+	 *
+	 *	\sa fk_ARTexture
+	 */
 
 	class fk_ARDevice {
 
@@ -68,29 +83,132 @@ namespace FK {
 		fk_PixelFormatType	ConvFormat(AR_PIXEL_FORMAT);
 
 	public:
+
+		//! コンストラクタ
 		fk_ARDevice(void);
+
+		//! デストラクタ
 		~fk_ARDevice();
 
-		void		setConfigFile(std::string);
-		void		setCameraParamFile(std::string);
-		void		setThresh(int);
+		//! 設定ファイル名設定関数
+		/*!
+		 *	AR 用の設定ファイル名を設定します。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 */
+		void		setConfigFile(std::string fileName);
 
-		void		setPatternFile(std::string);
-		void		setPatternFile(int, std::string);
-		void		setPatternWidth(double);
-		void		setPatternWidth(int, double);
-		void		setPatternCenter(double, double);
-		void		setPatternCenter(int, double, double);
-		void		setPatternModel(int, fk_Model *);
+		//! カメラパラメータファイル名設定関数
+		/*!
+		 *	AR 用カメラパラメータファイル名を設定します。
+		 *
+		 *	\param[in]	fileName	ファイル名
+		 */
+		void		setCameraParamFile(std::string fileName);
 
+		//!	閾値設定関数
+		/*!
+		 *	検出の際の2値化処理の際の閾値を設定します。
+		 *	検出精度が悪い場合、この値を変更することによって精度が向上する可能性があります。
+		 *	値は、完全な黒が 0, 完全な白が 255 となります。
+		 *	デフォルトでは 100 に設定されています。
+		 *
+		 *	\param[in]	th	閾値
+		 */
+		void		setThresh(int th);
+
+		//! マーカー用パターンファイル設定関数1
+		/*!
+		 *	マーカー用のファイルを設定します。
+		 *	マーカー用データのフォーマットは ARToolKit のマニュアルを参照して下さい。
+		 *	なお、この関数を用いた場合、マーカーの内部 ID は自動的に 0 番となります。
+		 *
+		 *	\param[in]	fileName	パターンファイル名
+		 */
+		void		setPatternFile(std::string fileName);
+
+		//! マーカー用パターンファイル設定関数2
+		/*!
+		 *	マーカー用のファイルを設定します。
+		 *	マーカー用データのフォーマットは ARToolKit のマニュアルを参照して下さい。
+		 *	本クラスでは、複数のマーカーを同時に登録することが可能で、
+		 * 	その場合は id を別々にして登録を行って下さい。
+		 *
+		 *	\param[in]	id			マーカー ID
+		 *	\param[in]	fileName	マーカーファイル名
+		 */
+		void		setPatternFile(int id, std::string fileName);
+
+		//! マーカー実寸設定関数
+		/*!
+		 *	マーカーの実寸を指定します。
+		 *	この値が適切に設定されていないと、検出の精度が悪くなる、
+		 *	誤検出が多くなるなどの問題が生じる場合があります。
+		 *	単位はミリメートルとなります。デフォルトは 80 に設定されています。
+		 *
+		 *	\param[in]	id		マーカー ID
+		 *	\param[in]	width	マーカー実寸幅
+		 */
+		void		setPatternWidth(int id, double width);
+
+		//! マーカー連動モデル設定関数
+		/*!
+		 *	カメラ映像中のマーカーと連動するモデルを設定します。
+		 *	一つのマーカーに同時に複数のモデルを設定することはできません。
+		 *	複数モデルを同時に連動させたい場合は、親子関係を用いて下さい。
+		 *
+		 *	\param[in]	id		マーカー ID
+		 *	\param[in]	model	連動モデル
+		 */
+		void		setPatternModel(int id, fk_Model *model);
+
+		//! カメラデバイス初期化関数
+		/*!
+		 *	カメラデバイスを初期化します。
+		 *	AR を利用する際には必ず最初に一回実行して下さい。
+		 */
 		bool		deviceInit(void);
-		void		makeProject(double, double, fk_Frustum *,
-								fk_ARTexture *, fk_Model *, fk_Model *);
 
-		fk_AR_Device_Status		update(fk_ARTexture *, fk_Model *);
-		fk_AR_Device_Status		update(fk_ARTexture *);
+		//! カメラ投影設定関数
+		/*!
+		 *	初期化を行った後、投影情報の取得と設定を行います。
+		 *	ここで得られた投資情報は、 fk_DisplayLink::setProjection() によって
+		 *	FK 内のシーンに反映する必要があります。
+		 *	なお、投影情報に関する詳細は fk_Frustum の説明を参照して下さい。
+		 *
+		 *	\param[in]	near		クリッピング近距離面への距離
+		 *	\param[in]	far			クリッピング遠距離面への距離
+		 *	\param[out]	proj		カメラから取得した一般投資投影情報
+		 *	\param[in]	texture		AR投影映像用テクスチャ
+		 *	\param[in]	video		AR投影映像用モデル
+		 *	\param[in]	camera		カメラ用モデル
+		 */
+		void		makeProject(double near, double far, fk_Frustum *proj,
+								fk_ARTexture *texture, fk_Model *video, fk_Model *camera);
 
-		bool		getModelDetect(int);
+		//! カメラ映像反映関数
+		/*!
+		 *	現在のカメラ映像の状態から、映像テクスチャの更新およびマーカーからの
+		 *	モデル位置・姿勢への反映を行います。
+		 *	事前に setPatternModel() で設定していた各モデルは、
+		 *	マーカーの位置により自動的に位置・姿勢の変更が行われます。
+		 *
+		 *	\param[in]	texture		AR投影映像用テクスチャ
+		 *
+		 *	\return		現在のカメラデバイスの状況を返します。
+		 */
+		fk_AR_Device_Status		update(fk_ARTexture *texture);
+
+		//! 検出状況参照関数
+		/*!
+		 *	setPatternFile() によって設定した各マーカーが、
+		 *	現時点で検出に成功しているかどうかの判定結果を返します。
+		 *
+		 *	\param[in]	id		マーカー ID
+		 *
+		 *	\return		検出に成功していれば true を、失敗していれば false を返します。
+		 */
+		bool		getModelDetect(int id);
 	};
 }
 

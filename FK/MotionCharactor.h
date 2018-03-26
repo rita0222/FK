@@ -17,7 +17,7 @@ namespace FK {
 	 *	FK Performer は、メタセコイアで作成した MQO 形式の形状モデルを読み込み、
 	 *	キーフレームアニメーションを作成することができるツールです。
 	 *	ツールやデータの仕様に関する詳細は、次の URL を参照してください。
-	 *	http://gamescience.jp/~rita/FKP/
+	 *	https://gamescience.jp/~rita/FKP/
 	 *
 	 *	本クラスにおいて、各関節は階層構造的に接続されることになり、
 	 *	内部的にはそれぞれに対応する fk_Model 型のインスタンスを保持します。
