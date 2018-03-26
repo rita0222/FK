@@ -398,7 +398,7 @@
     <ProjectGuid>{80D11C11-E353-464E-8567-51F004A6941F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FKCLI2017</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -453,7 +453,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj2017\$(Configuration)\</IntDir>
+    <IntDir>obj_2017\$(Configuration)\</IntDir>
     <TargetName>FK_CLI</TargetName>
     <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolkit\include;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib_2017;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
@@ -464,7 +464,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj2017\$(Configuration)\</IntDir>
+    <IntDir>obj_2017\$(Configuration)\</IntDir>
     <TargetName>FK_CLI</TargetName>
     <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolkit\include;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib_2017;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
@@ -485,7 +485,7 @@
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -521,7 +521,7 @@
       <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

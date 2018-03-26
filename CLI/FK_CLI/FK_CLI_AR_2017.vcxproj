@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -9,31 +9,56 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DF7DD30E-BB32-4C17-A0DE-32B447C37BCE}</ProjectGuid>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{AAFFDA7A-6513-429D-84E4-55FC51F6C061}</ProjectGuid>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
-    <RootNamespace>FK_CLI</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <RootNamespace>FKCLIAR2017</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -41,54 +66,77 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
-    <LibraryPath>.\lib_2015;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj_2015\$(Configuration)\</IntDir>
-    <TargetName>FK_CLI</TargetName>
+    <IntDir>obj_2017AR\$(Configuration)\</IntDir>
+    <TargetName>FK_CLI_AR</TargetName>
+    <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolkit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib_2017;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>CLI\include;include;..\..;$(IncludePath)</IncludePath>
-    <LibraryPath>.\lib_2015;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Configuration)\</OutDir>
-    <IntDir>obj_2015\$(Configuration)\</IntDir>
-    <TargetName>FK_CLI</TargetName>
+    <IntDir>obj_2017AR\$(Configuration)\</IntDir>
+    <TargetName>FK_CLI_AR</TargetName>
+    <IncludePath>CLI\include;include;..\..;..\..\build_vs\extlibs\glew-1.12.0\include;..\..\build_vs\extlibs\ARToolkit\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib_2017;..\..\build_vs\extlibs\glew-1.12.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;FK_LIB_SRC;FK_CLI_CODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FK_LIB_SR;FK_CLI_CODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <EnableParallelCodeGeneration>false</EnableParallelCodeGeneration>
-      <AdditionalOptions>/MP</AdditionalOptions>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>NotSet</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies />
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;FK_LIB_SRC;FK_CLI_CODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;FK_LIB_SR;FK_CLI_CODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <AdditionalOptions>/MP</AdditionalOptions>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>
-      </AdditionalOptions>
+      <AdditionalDependencies>fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;glu32.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;winmm.lib;wsock32.lib;comctl32.lib;AR.lib;ARICP.lib;ARvideo.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>NotSet</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies />
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -97,15 +145,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="app.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="app.ico" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="..\..\src\AR\ARDevice.cxx" />
+    <ClCompile Include="..\..\src\AR\ARTexture.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />
@@ -290,7 +331,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h" />
     <ClInclude Include="..\..\FK\AppWindow.h" />
+    <ClInclude Include="..\..\FK\ARDevice.h" />
     <ClInclude Include="..\..\FK\Array.H" />
+    <ClInclude Include="..\..\FK\ARTexture.h" />
     <ClInclude Include="..\..\FK\Attribute.h" />
     <ClInclude Include="..\..\FK\AttributeData.H" />
     <ClInclude Include="..\..\FK\Audio.h" />
@@ -333,6 +376,7 @@
     <ClInclude Include="..\..\FK\Fullscreen.h" />
     <ClInclude Include="..\..\FK\GenMatrix.h" />
     <ClInclude Include="..\..\FK\GenVector.h" />
+    <ClInclude Include="..\..\FK\Gregory.h" />
     <ClInclude Include="..\..\FK\GuideObject.h" />
     <ClInclude Include="..\..\FK\Half.h" />
     <ClInclude Include="..\..\FK\HeapBase.h" />
@@ -380,7 +424,11 @@
     <ClInclude Include="..\..\FK\Quaternion.h" />
     <ClInclude Include="..\..\FK\RDSParser.H" />
     <ClInclude Include="..\..\FK\Reference.h" />
+    <ClInclude Include="..\..\FK\RenderState.h" />
     <ClInclude Include="..\..\FK\Scene.h" />
+    <ClInclude Include="..\..\FK\ShaderBinder.h" />
+    <ClInclude Include="..\..\FK\ShaderParameter.h" />
+    <ClInclude Include="..\..\FK\ShaderProgram.h" />
     <ClInclude Include="..\..\FK\Shape.h" />
     <ClInclude Include="..\..\FK\ShapeViewer.h" />
     <ClInclude Include="..\..\FK\SMFParser.H" />
@@ -397,6 +445,7 @@
     <ClInclude Include="..\..\FK\TextImage.h" />
     <ClInclude Include="..\..\FK\Texture.h" />
     <ClInclude Include="..\..\FK\TextureDraw.H" />
+    <ClInclude Include="..\..\FK\TextureSampler.h" />
     <ClInclude Include="..\..\FK\Topology.h" />
     <ClInclude Include="..\..\FK\TrackBall.h" />
     <ClInclude Include="..\..\FK\Tree.h" />
@@ -445,7 +494,7 @@
     <ClInclude Include="CLI\include\ParticleSet_CLI.h" />
     <ClInclude Include="CLI\include\Particle_CLI.h" />
     <ClInclude Include="CLI\include\Performer_CLI.h" />
-    <ClInclude Include="CLI\include\PickData_CLI.h" />
+    <ClInclude Include="CLI\include\PickData_CLI.H" />
     <ClInclude Include="CLI\include\Plane_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
@@ -454,7 +503,7 @@
     <ClInclude Include="CLI\include\Quaternion_CLI.h" />
     <ClInclude Include="CLI\include\RectTexture_CLI.h" />
     <ClInclude Include="CLI\include\Reference_CLI.h" />
-    <ClInclude Include="CLI\include\Renderer_CLI.h" />
+    <ClInclude Include="CLI\include\Renderer_CLI.H" />
     <ClInclude Include="CLI\include\Scene_CLI.h" />
     <ClInclude Include="CLI\include\ShapeViewer_CLI.h" />
     <ClInclude Include="CLI\include\Shape_CLI.h" />

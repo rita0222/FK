@@ -190,6 +190,16 @@ namespace FK_CLI {
 		return gcnew String(tmpBuf.c_str());
 	}
 
+	void fk_GenVector::v::set(int argID, double argValue)
+	{
+		pGVec->set(argID, argValue);
+	}
+
+	double fk_GenVector::v::get(int argID)
+	{
+		return pGVec->get(argID);
+	}
+
 	void fk_GenVector::Set(int argID, double argValue)
 	{
 		pGVec->set(argID, argValue);

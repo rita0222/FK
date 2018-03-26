@@ -268,10 +268,16 @@ namespace FK_CLI {
 		 *
 		 *		V.v[0] = 5.0;
 		 */
-/*
+
 		property double v[int] {
 			double get(int argID);
 			void set(int argID, double argD);
+		}
+
+/*
+		property double default [int] {
+		    double get(int argID);
+		    void set(int argID, double argD);
 		}
 */
 		void Set(int, double);

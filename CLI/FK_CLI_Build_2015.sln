@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_ShaderPlugin_2015", "FK_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_FormHelper_2015", "FK_FormHelper\FK_FormHelper_2015.csproj", "{90147F49-5A6F-4A5F-8EB4-B35922995482}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_CLI_AR_2015", "FK_CLI\FK_CLI_AR_2015.vcxproj", "{D14FA073-F686-4650-967E-63AEFE9B5DAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,24 @@ Global
 		{90147F49-5A6F-4A5F-8EB4-B35922995482}.Release|x64.Build.0 = Release|Any CPU
 		{90147F49-5A6F-4A5F-8EB4-B35922995482}.Release|x86.ActiveCfg = Release|x86
 		{90147F49-5A6F-4A5F-8EB4-B35922995482}.Release|x86.Build.0 = Release|x86
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|Win32.Build.0 = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|x64.ActiveCfg = Debug|x64
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|x64.Build.0 = Debug|x64
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|x86.ActiveCfg = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Debug|x86.Build.0 = Debug|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|Win32.ActiveCfg = Release|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|Win32.Build.0 = Release|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|x64.ActiveCfg = Release|x64
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|x64.Build.0 = Release|x64
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|x86.ActiveCfg = Release|Win32
+		{D14FA073-F686-4650-967E-63AEFE9B5DAB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
