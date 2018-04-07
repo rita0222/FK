@@ -280,6 +280,7 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx" />
     <ClCompile Include="..\..\src\window\Window_fltk.cxx" />
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ARTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\AssemblyInfo.cpp" />
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />
     <ClCompile Include="CLI\cpp\AudioBase_CLI.cpp" />
@@ -472,6 +473,8 @@
     <ClInclude Include="..\..\FK\VRMLParser.H" />
     <ClInclude Include="..\..\FK\Window.h" />
     <ClInclude Include="CLI\include\AppWindow_CLI.h" />
+    <ClInclude Include="CLI\include\ARDevice_CLI.h" />
+    <ClInclude Include="CLI\include\ARTexture_CLI.h" />
     <ClInclude Include="CLI\include\Attribute_CLI.h" />
     <ClInclude Include="CLI\include\AudioBase_CLI.h" />
     <ClInclude Include="CLI\include\AudioOggBuffer_CLI.h" />

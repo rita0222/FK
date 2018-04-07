@@ -456,6 +456,8 @@
     <ClInclude Include="..\..\FK\VRMLParser.H" />
     <ClInclude Include="..\..\FK\Window.h" />
     <ClInclude Include="CLI\include\AppWindow_CLI.h" />
+    <ClInclude Include="CLI\include\ARDevice_CLI.h" />
+    <ClInclude Include="CLI\include\ARTexture_CLI.h" />
     <ClInclude Include="CLI\include\Attribute_CLI.h" />
     <ClInclude Include="CLI\include\AudioBase_CLI.h" />
     <ClInclude Include="CLI\include\AudioOggBuffer_CLI.h" />

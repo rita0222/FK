@@ -1142,5 +1142,11 @@
     <ClInclude Include="..\..\FK\Window.h">
       <Filter>ヘッダー ファイル\CPP</Filter>
     </ClInclude>
+    <ClInclude Include="CLI\include\ARDevice_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\ARTexture_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

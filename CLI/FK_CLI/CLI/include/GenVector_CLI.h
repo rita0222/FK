@@ -273,13 +273,13 @@ namespace FK_CLI {
 			double get(int argID);
 			void set(int argID, double argD);
 		}
-
 /*
 		property double default [int] {
 		    double get(int argID);
 		    void set(int argID, double argD);
 		}
 */
+
 		void Set(int, double);
 		double Get(int);
 

@@ -49,7 +49,6 @@ namespace FK_CLI {
 		 *		M.m[1,2] = 5.0;
 		 */
 /*
-
  		property double m [int,int] {
 			double get(int, int);
 			void set(int, int, double);
