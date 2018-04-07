@@ -32,6 +32,7 @@ namespace FK {
 
 		unsigned char *		arVideoBuf;		// ARのバッファを保持
 		fk_PixelFormatType	pixelFormatType;
+		fk_Dimension		imageSize;
 		fk_TexCoord			texSize;
 
 		void				MakeFunction(void);
@@ -91,6 +92,11 @@ namespace FK {
 		 *	テクスチャデータを現時点でカメラデバイスから取り込んでいるデータに更新します。
 		 */
 		void					update(void);
+
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void					SetVideoBuf(unsigned char *, int, int);
+#endif
 	};
 }
 

@@ -158,7 +158,7 @@ ming-g:
 
 mac:
 	$(MAKE) $(TARGET) \
-	"OPTOPT = -O -pipe" \
+	"OPTOPT = -pipe" \
 	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
 	"LFLAGS = " \
 	"FKLIBS = " \

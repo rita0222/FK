@@ -25,7 +25,7 @@ fk_ARDevice::fk_ARDevice(void)
 	setPatternFile("");
 
 	setThresh(100);
-	setPatternWidth(80.0);
+	setPatternWidth(0, 80.0);
 
 	contFlag = false;
 	startFlag = false;
@@ -368,7 +368,7 @@ fk_AR_Device_Status fk_ARDevice::update(fk_ARTexture *argVideoTex)
 		startFlag = true;
 	}
 
-	argVideoTex->setVideoBuf(dataPtr, videoXSize, videoYSize);
+	argVideoTex->SetVideoBuf(dataPtr, videoXSize, videoYSize);
 	argVideoTex->setPixelFormatType(ConvFormat(pixelFormat));
 	
     if(arDetectMarker(handle, dataPtr) < 0) {

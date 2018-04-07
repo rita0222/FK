@@ -26,73 +26,71 @@ fk_ARTexture::~fk_ARTexture()
 void fk_ARTexture::MakeFunction(void)
 {
 	GenTextureObj = [this] {
-		fk_Dimension			bufSize = getVideoSize();
-		const unsigned char		*arImageBuf = getVideoBuf();
-		fk_PixelFormatType		type = getPixelFormatType();
+		fk_PixelFormatType	type = getPixelFormatType();
 
 		switch (type) {
 		  case FK_PIXEL_FORMAT_RGB:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_RGB,
 						 GL_UNSIGNED_BYTE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_BGR:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_BGR,
 						 GL_UNSIGNED_BYTE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_RGBA:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_RGBA,
 						 GL_UNSIGNED_BYTE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_BGRA:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_BGRA,
 						 GL_UNSIGNED_BYTE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_MONO:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_LUMINANCE,
 						 GL_UNSIGNED_BYTE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_ARGB:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_BGRA,
 						 GL_UNSIGNED_INT_8_8_8_8,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_2vuy:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_YCBCR_422_APPLE,
 						 GL_UNSIGNED_SHORT_8_8_APPLE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  case FK_PIXEL_FORMAT_yuvs:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-						 bufSize.w, bufSize.h,
+						 imageSize.w, imageSize.h,
 						 0, GL_YCBCR_422_APPLE,
 						 GL_UNSIGNED_SHORT_8_8_APPLE,
-						 arImageBuf);
+						 arVideoBuf);
 			break;
 			
 		  default:
@@ -162,3 +160,18 @@ void fk_ARTexture::update(void)
 	SetInitFlag(true);
 	return;
 }
+
+void fk_ARTexture::SetVideoBuf(unsigned char *argVid, int argW, int argH)
+{
+	imageSize.set(argW, argH);
+	
+	setTextureMode(FK_TEX_REPLACE);
+	
+	if(argVid != nullptr) {
+		arVideoBuf = argVid;
+	}else{
+		fk_PutError("VideoBUffer NULL!");
+	}
+	return;
+}
+

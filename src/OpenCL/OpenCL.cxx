@@ -125,9 +125,14 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 		return false;
 	}
 
+/*
 	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, 0, nullptr, &devicenum);
 	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, devicenum, &testdevid, nullptr);
-	
+*/
+
+	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_ALL, 0, nullptr, &devicenum);
+	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_ALL, devicenum, &testdevid, nullptr);
+
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clGetDeviceIDs()");
 		return false;
@@ -313,6 +318,8 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 	cl_platform_id	*clPlatformIDs;			// プラットフォームの数が不定なので、最初はアドレスのみ
 	cl_int			ciErrNum;				// OpenCL関数実行時のエラーチェック用int
 	
+	fk_SetErrorMode(FK_ERR_BROWSER_INTERACTIVE);
+
 	*argID = nullptr;
  
 	//-- OpenCLのプラットフォーム数取得
