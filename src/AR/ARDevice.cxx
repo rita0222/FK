@@ -85,6 +85,10 @@ void fk_ARDevice::setThresh(int argThresh)
 	return;
 }
 
+int fk_ARDevice::getThresh(void)
+{
+	return thresh;
+}
 
 void fk_ARDevice::setPatternFile(string argFileName)
 {
