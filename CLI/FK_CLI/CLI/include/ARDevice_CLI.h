@@ -21,6 +21,7 @@ namespace FK_CLI
 	internal:
 		::FK::fk_ARDevice	*pARDev;
 		::FK::fk_ARDevice   *GetP(void);
+		fk_AR_Device_Status Conv(::FK::fk_AR_Device_Status);
 
 	public:
 		fk_ARDevice();
@@ -36,6 +37,7 @@ namespace FK_CLI
 		void SetConfigFile(String^ fileName);
 		void SetCameraParamFile(String^ fileName);
 		void SetPatternFile(int ID, String^ fileName);
+		void SetPatternWidth(int ID, double width);
 		void SetPatternModel(int ID, fk_Model^ model);
 		bool DeviceInit(void);
 		void MakeProject(double near, double far, fk_Frustum^ proj,

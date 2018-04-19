@@ -11,72 +11,45 @@ namespace FK_CLI {
 		return pTex;
 	}
 
-	fk_ARTexture::fk_ARTexture()
+	::FK::fk_PixelFormatType fk_ARTexture::Conv(fk_PixelFormatType argType)
 	{
-		pTex = new ::FK::fk_ARTexture();
-	}
-
-	fk_ARTexture::~fk_ARTexture()
-	{
-		this->!fk_ARTexture();
-	}
-
-	fk_ARTexture::!fk_ARTexture()
-	{
-		delete pTex;
-	}
-
-	void fk_ARTexture::Type::set(fk_PixelFormatType argType)
-	{
-		::FK::fk_PixelFormatType type;
-
 		switch (argType) {
 		case fk_PixelFormatType::DEFAULT:
-			type = FK_DEFAULT_PIXEL_FORMAT;
-			break;
+			return FK_DEFAULT_PIXEL_FORMAT;
 
 		case fk_PixelFormatType::RGB:
-			type = FK_PIXEL_FORMAT_RGB;
-			break;
+			return FK_PIXEL_FORMAT_RGB;
 
 		case fk_PixelFormatType::BGR:
-			type = FK_PIXEL_FORMAT_BGR;
-			break;
+			return FK_PIXEL_FORMAT_BGR;
 
 		case fk_PixelFormatType::RGBA:
-			type = FK_PIXEL_FORMAT_RGBA;
-			break;
+			return FK_PIXEL_FORMAT_RGBA;
 
 		case fk_PixelFormatType::BGRA:
-			type = FK_PIXEL_FORMAT_BGRA;
-			break;
+			return FK_PIXEL_FORMAT_BGRA;
 
 		case fk_PixelFormatType::MONO:
-			type = FK_PIXEL_FORMAT_MONO;
-			break;
+			return FK_PIXEL_FORMAT_MONO;
 
 		case fk_PixelFormatType::ARGB:
-			type = FK_PIXEL_FORMAT_ARGB;
-			break;
+			return FK_PIXEL_FORMAT_ARGB;
 
 		case fk_PixelFormatType::VUY2:
-			type = FK_PIXEL_FORMAT_2vuy;
-			break;
+			return FK_PIXEL_FORMAT_2vuy;
 
 		case fk_PixelFormatType::YUVS:
-			type = FK_PIXEL_FORMAT_yuvs;
-			break;
+			return FK_PIXEL_FORMAT_yuvs;
 
 		default:
-			type = FK_DEFAULT_PIXEL_FORMAT;
 			break;
 		}
-		GetP()->setPixelFormatType(type);
+		return FK_DEFAULT_PIXEL_FORMAT;
 	}
 
-	fk_PixelFormatType fk_ARTexture::Type::get()
+	fk_PixelFormatType fk_ARTexture::Conv(::FK::fk_PixelFormatType argType)
 	{
-		switch (GetP()->getPixelFormatType()) {
+		switch (argType) {
 		case FK_DEFAULT_PIXEL_FORMAT:
 			return fk_PixelFormatType::DEFAULT;
 
@@ -108,6 +81,31 @@ namespace FK_CLI {
 			break;
 		}
 		return fk_PixelFormatType::DEFAULT;
+	}
+
+	fk_ARTexture::fk_ARTexture()
+	{
+		pTex = new ::FK::fk_ARTexture();
+	}
+
+	fk_ARTexture::~fk_ARTexture()
+	{
+		this->!fk_ARTexture();
+	}
+
+	fk_ARTexture::!fk_ARTexture()
+	{
+		delete pTex;
+	}
+
+	void fk_ARTexture::Type::set(fk_PixelFormatType argType)
+	{
+		GetP()->setPixelFormatType(Conv(argType));
+	}
+
+	fk_PixelFormatType fk_ARTexture::Type::get()
+	{
+		return Conv(GetP()->getPixelFormatType());
 	}
 
 	void fk_ARTexture::Size::set(fk_TexCoord^ argC)
