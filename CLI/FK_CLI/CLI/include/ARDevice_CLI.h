@@ -20,6 +20,7 @@ namespace FK_CLI
 	public ref class fk_ARDevice {
 	internal:
 		::FK::fk_ARDevice	*pARDev;
+		::FK::fk_ARDevice   *GetP(void);
 
 	public:
 		fk_ARDevice();

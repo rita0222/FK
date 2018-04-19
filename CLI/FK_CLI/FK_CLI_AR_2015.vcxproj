@@ -280,6 +280,7 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx" />
     <ClCompile Include="..\..\src\window\Window_fltk.cxx" />
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\ARDevice_CLI.cpp" />
     <ClCompile Include="CLI\cpp\ARTexture_CLI.cpp" />
     <ClCompile Include="CLI\cpp\AssemblyInfo.cpp" />
     <ClCompile Include="CLI\cpp\Attribute_CLI.cpp" />

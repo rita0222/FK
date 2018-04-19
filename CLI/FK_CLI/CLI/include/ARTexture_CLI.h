@@ -3,6 +3,7 @@
 #pragma once
 
 #include <FK/ARTexture.h>
+#include "Texture_CLI.h"
 
 namespace FK_CLI {
 	public enum class fk_PixelFormatType {
@@ -32,9 +33,9 @@ namespace FK_CLI {
 			void set(fk_PixelFormatType);
 		}
 
-		property fk_Dimension Size {
-			fk_Dimension get();
-			void set(fk_Dimension);
+		property fk_TexCoord^ Size {
+			fk_TexCoord^ get();
+			void set(fk_TexCoord^);
 		}
 		void Init(void);
 		void Update(void);

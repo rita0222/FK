@@ -1,136 +1,32 @@
-﻿#include "ARTexture_CLI.h"
-#include <msclr/marshal_cppstd.h>
+﻿#include "ARDevice_CLI.h"
 
 namespace FK_CLI {
 	using namespace std;
-	using namespace msclr::interop;
 	using namespace FK;
 
-	::FK::fk_ARTexture * fk_ARTexture::GetP(void)
+	::FK::fk_ARDevice * fk_ARDevice::GetP(void)
 	{
-		return pTex;
+		return pARDev;
 	}
 
-	fk_ARTexture::fk_ARTexture()
+	fk_ARDevice::fk_ARDevice()
 	{
-		pTex = new ::FK::fk_ARTexture();
+		pARDev = new ::FK::fk_ARDevice();
 	}
 
-	fk_ARTexture::~fk_ARTexture()
+	fk_ARDevice::~fk_ARDevice()
 	{
-		this->!fk_ARTexture();
+		this->!fk_ARDevice();
 	}
 
-	fk_ARTexture::!fk_ARTexture()
+	fk_ARDevice::!fk_ARDevice()
 	{
-		delete pTex;
+		delete pARDev;
 	}
 
-	void fk_ARTexture::Type::set(fk_PixelFormatType argType)
+	void fk_ARDevice::Thresh::set(int argT)
 	{
-		::FK::fk_PixelFormatType type;
-
-		switch (argType) {
-		case fk_PixelFormatType::DEFAULT:
-			type = FK_DEFAULT_PIXEL_FORMAT;
-			break;
-
-		case fk_PixelFormatType::RGB:
-			type = FK_PIXEL_FORMAT_RGB;
-			break;
-
-		case fk_PixelFormatType::BGR:
-			type = FK_PIXEL_FORMAT_BGR;
-			break;
-
-		case fk_PixelFormatType::RGBA:
-			type = FK_PIXEL_FORMAT_RGBA;
-			break;
-
-		case fk_PixelFormatType::BGRA:
-			type = FK_PIXEL_FORMAT_BGRA;
-			break;
-
-		case fk_PixelFormatType::MONO:
-			type = FK_PIXEL_FORMAT_MONO;
-			break;
-
-		case fk_PixelFormatType::ARGB:
-			type = FK_PIXEL_FORMAT_ARGB;
-			break;
-
-		case fk_PixelFormatType::VUY2:
-			type = FK_PIXEL_FORMAT_2vuy;
-			break;
-
-		case fk_PixelFormatType::YUVS:
-			type = FK_PIXEL_FORMAT_yuvs;
-			break;
-
-		default:
-			type = FK_DEFAULT_PIXEL_FORMAT;
-			break;
-		}
-		GetP()->setPixelFormatType(type);
-	}
-
-	fk_PixelFormatType fk_ARTexture::Type::get()
-	{
-		switch (GetP()->getPixelFormatType()) {
-		case FK_DEFAULT_PIXEL_FORMAT:
-			return fk_PixelFormatType::DEFAULT;
-
-		case FK_PIXEL_FORMAT_RGB:
-			return fk_PixelFormatType::RGB;
-
-		case FK_PIXEL_FORMAT_BGR:
-			return fk_PixelFormatType::BGR;
-
-		case FK_PIXEL_FORMAT_RGBA:
-			return fk_PixelFormatType::RGBA;
-
-		case FK_PIXEL_FORMAT_BGRA:
-			return fk_PixelFormatType::BGRA;
-
-		case FK_PIXEL_FORMAT_MONO:
-			return fk_PixelFormatType::MONO;
-
-		case FK_PIXEL_FORMAT_ARGB:
-			return fk_PixelFormatType::ARGB;
-
-		case FK_PIXEL_FORMAT_2vuy:
-			return fk_PixelFormatType::VUY2;
-
-		case FK_PIXEL_FORMAT_yuvs:
-			return fk_PixelFormatType::YUVS;
-
-		default:
-			break;
-		}
-		return fk_PixelFormatType::DEFAULT;
-	}
-
-	void fk_ARTexture::Size::set(fk_TexCoord^ argC)
-	{
-		if (!argC) return;
-		GetP()->setTextureSize(argC->x, argC->y);
-	}
-
-	fk_TexCoord^ fk_ARTexture::Size::get()
-	{
-		::FK::fk_TexCoord coord = GetP()->getTextureSize();
-		fk_TexCoord^ c = gcnew fk_TexCoord(coord.x, coord.y);
-		return c;
-	}
-
-	void fk_ARTexture::Init()
-	{
-		GetP()->init();
-	}
-
-	void fk_ARTexture::Update()
-	{
-		GetP()->update();
+		GetP()->setThresh(argT);
 	}
 }
 
