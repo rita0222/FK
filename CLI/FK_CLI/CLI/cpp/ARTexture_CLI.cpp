@@ -83,7 +83,7 @@ namespace FK_CLI {
 		return fk_PixelFormatType::DEFAULT;
 	}
 
-	fk_ARTexture::fk_ARTexture()
+	fk_ARTexture::fk_ARTexture() : fk_Texture(true)
 	{
 		pTex = new ::FK::fk_ARTexture();
 	}

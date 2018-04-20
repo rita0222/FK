@@ -19,7 +19,7 @@ namespace FK_CLI {
 		YUVS = 9
 	};
 
-	public ref class  fk_ARTexture {
+	public ref class  fk_ARTexture : fk_Texture {
 	internal:
 		::FK::fk_ARTexture     *pTex;
 		::FK::fk_ARTexture     *GetP(void);
