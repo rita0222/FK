@@ -131,15 +131,13 @@ namespace FK_CLI {
 		 *	各成分の設定や参照を行います。
 		 *	1番目の引数が行番号、2番目の引数が列番号です。
 		 *
-		 *		M.m[1,2] = 5.0;
+		 *		M[1,2] = 5.0;
 		 */
-		 /*
- 		property double m[int, int] {
+
+ 		property double default [int, int] {
 			double get(int, int);
 			void set(int, int, double);
 		}
-		*/
-		double Get(int, int);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		cli::array<float>^ GetFloatArray();
@@ -360,10 +358,10 @@ namespace FK_CLI {
 		 *		
 		 *	は、以下のコードと同義になります。
 		 *
-		 *		M.m[row, 0] = vec.x;
-		 *		M.m[row, 1] = vec.y;
-		 *		M.m[row, 2] = vec.z;
-		 *		M.m[row, 3] = vec.w;
+		 *		M[row, 0] = vec.x;
+		 *		M[row, 1] = vec.y;
+		 *		M[row, 2] = vec.z;
+		 *		M[row, 3] = vec.w;
 		 *
 		 *	\param[in]	row		行番号
 		 *	\param[in]	V		設定ベクトル
@@ -382,9 +380,9 @@ namespace FK_CLI {
 		 *
 		 *	は、以下のコードと同義になります。
 		 *		
-		 *		M.m[0, col] = vec.x;
-		 *		M.m[1, col] = vec.y;
-		 *		M.m[2, col] = vec.z;
+		 *		M[0, col] = vec.x;
+		 *		M[1, col] = vec.y;
+		 *		M[2, col] = vec.z;
 		 *
 		 *	\param[in]	col		列番号
 		 *	\param[in]	V		設定ベクトル
@@ -402,10 +400,10 @@ namespace FK_CLI {
 		 *
 		 *	は、以下のコードと同義になります。
 		 *		
-		 *		M.m[0, col] = vec.x;
-		 *		M.m[1, col] = vec.y;
-		 *		M.m[2, col] = vec.z;
-		 *		M.m[3, col] = vec.w;
+		 *		M[0, col] = vec.x;
+		 *		M[1, col] = vec.y;
+		 *		M[2, col] = vec.z;
+		 *		M[3, col] = vec.w;
 		 *
 		 *	\param[in]	col		列番号
 		 *	\param[in]	V		設定ベクトル

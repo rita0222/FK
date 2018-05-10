@@ -103,20 +103,15 @@ namespace FK_CLI {
 	{
 		delete pMatrix;
 	}
-/*
-	double fk_Matrix::m::get(int argI1, int argI2)
+
+	double fk_Matrix::default::get(int argI1, int argI2)
 	{
 		return (*pMatrix)[argI1][argI2];
 	}
 
-	void fk_Matrix::m::set(int argI1, int argI2, double argD)
+	void fk_Matrix::default::set(int argI1, int argI2, double argD)
 	{
 		(*pMatrix)[argI1][argI2] = argD;
-	}
-*/
-	double fk_Matrix::Get(int argI1, int argI2)
-	{
-		return (*pMatrix)[argI1][argI2];
 	}
 
 	cli::array<float>^ fk_Matrix::GetFloatArray()
