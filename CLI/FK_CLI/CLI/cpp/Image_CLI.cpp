@@ -220,28 +220,15 @@ namespace FK_CLI {
 		if(dFlg == true) delete GetP();
 		pBase = nullptr;
 	}
-/*
-	fk_Color^ fk_Image::p::get(int argX, int argY)
+
+	fk_Color^ fk_Image::default::get(int argX, int argY)
 	{
 		fk_Color^ C = gcnew fk_Color();
 		*C->pCol = GetP()->getColor(argX, argY);
 		return C;
 	}
 
-	void fk_Image::p::set(int argX, int argY, fk_Color^ argC)
-	{
-		if(!argC) return;
-		GetP()->setColor(argX, argY, *(argC->pCol));
-	}
-*/
-	fk_Color^ fk_Image::Get(int argX, int argY)
-	{
-		fk_Color^ C = gcnew fk_Color();
-		*C->pCol = GetP()->getColor(argX, argY);
-		return C;
-	}
-
-	void fk_Image::Set(int argX, int argY, fk_Color^ argC)
+	void fk_Image::default::set(int argX, int argY, fk_Color^ argC)
 	{
 		if(!argC) return;
 		GetP()->setColor(argX, argY, *(argC->pCol));

@@ -24,9 +24,9 @@ namespace FK_CLI_GenMatrix
 			diff = 0;
 			for(c = 0; c < COUNT; c++) {
 				for(i = 0; i < DEG; i++) {
-                    largeV[0].Set(i, rand.NextDouble());
+                    largeV[0][i] = rand.NextDouble();
 					for(j = 0; j < DEG; j++) {
-                        largeM[0].Set(i, j, rand.NextDouble());
+                        largeM[0][i, j] = rand.NextDouble();
 					}
 				}
 

@@ -1,12 +1,36 @@
 ﻿#include "ARDevice_CLI.h"
+#include <msclr/marshal_cppstd.h>
 
 namespace FK_CLI {
 	using namespace std;
 	using namespace FK;
+	using namespace msclr::interop;
 
 	::FK::fk_ARDevice * fk_ARDevice::GetP(void)
 	{
 		return pARDev;
+	}
+
+	fk_AR_Device_Status fk_ARDevice::Conv(::FK::fk_AR_Device_Status argStatus)
+	{
+		switch (argStatus)
+		{
+		case ::FK::FK_AR_IMAGE_NULL:
+			return fk_AR_Device_Status::IMAGE_NULL;
+
+		case ::FK::FK_AR_DETECT_ERROR:
+			return fk_AR_Device_Status::DETECT_ERROR;
+
+		case ::FK::FK_AR_NO_DETECT:
+			return fk_AR_Device_Status::NO_DETECT;
+
+		case ::FK::FK_AR_DETECT:
+			return fk_AR_Device_Status::DETECT;
+
+		default:
+			break;
+		}
+		return fk_AR_Device_Status::IMAGE_NULL;
 	}
 
 	fk_ARDevice::fk_ARDevice()
@@ -27,6 +51,63 @@ namespace FK_CLI {
 	void fk_ARDevice::Thresh::set(int argT)
 	{
 		GetP()->setThresh(argT);
+	}
+
+	int fk_ARDevice::Thresh::get()
+	{
+		return GetP()->getThresh();
+	}
+
+	void fk_ARDevice::SetConfigFile(String^ argFileName)
+	{
+		GetP()->setConfigFile(marshal_as<string>(argFileName));
+	}
+
+	void fk_ARDevice::SetCameraParamFile(String^ argFileName)
+	{
+		GetP()->setCameraParamFile(marshal_as<string>(argFileName));
+	}
+
+	void fk_ARDevice::SetPatternFile(int argID, String^ argFileName)
+	{
+		GetP()->setPatternFile(argID, marshal_as<string>(argFileName));
+	}
+
+	void fk_ARDevice::SetPatternWidth(int argID, double argWidth)
+	{
+		GetP()->setPatternWidth(argID, argWidth);
+	}
+
+	void fk_ARDevice::SetPatternModel(int argID, fk_Model^ argModel)
+	{
+		if (!argModel) return;
+		GetP()->setPatternModel(argID, argModel->GetP());
+	}
+
+	bool fk_ARDevice::DeviceInit()
+	{
+		return GetP()->deviceInit();
+	}
+
+	void fk_ARDevice::MakeProject(double argNear, double argFar,
+		fk_Frustum^ argProj, fk_ARTexture^ argTex,
+		fk_Model ^argVideo, fk_Model ^argCamera)
+	{
+		if (!argProj || !argTex || !argVideo || !argCamera) return;
+
+		GetP()->makeProject(argNear, argFar, argProj->GetP(),
+			argTex->GetP(), argVideo->GetP(), argCamera->GetP());
+	}
+
+	fk_AR_Device_Status fk_ARDevice::Update(fk_ARTexture^ argTex)
+	{
+		if (!argTex) return fk_AR_Device_Status::IMAGE_NULL;
+		return Conv(GetP()->update(argTex->GetP()));
+	}
+
+	bool fk_ARDevice::GetModelDetect(int argID)
+	{
+		return GetP()->getModelDetect(argID);
 	}
 }
 

@@ -240,17 +240,13 @@ namespace FK_CLI
 		/*!
 		 *	各画素色値の設定や参照を行います。
 		 *
-		 *		image.p[100, 100] = new fk_Color(0.3, 0.4, 0.5);
+		 *		image[100, 100] = new fk_Color(0.3, 0.4, 0.5);
 		 */
-/*
-		property fk_Color^ p[int, int] {
+
+		property fk_Color^ default [int, int] {
 			fk_Color^ get(int, int);
 			void set(int, int, fk_Color^);
 		}
-		*/
-
-		fk_Color^ Get(int, int);
-		void Set(int, int, fk_Color^);
 
 		//! 画像サイズプロパティ
 		/*!
