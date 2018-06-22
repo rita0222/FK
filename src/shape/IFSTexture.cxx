@@ -165,8 +165,10 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 	};
 
 	// opengl
-	/*
 	DrawPick = [this]() {
+		FK_UNUSED(this);
+		// opengl
+		/*
 		int				ii, ij;
 		int				pNum;
 		fk_FVector		*pos = &ifs->pos[0];
@@ -194,9 +196,8 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 			glEnd();
 			glPopName();
 		}
+		*/
 	};
-	*/
-	DrawPick = []{};
 }	
 
 vector< vector<int> > * fk_IFSTexture::GetCommonList(void)
