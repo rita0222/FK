@@ -353,6 +353,8 @@ fk_RectTexture::~fk_RectTexture()
 
 void fk_RectTexture::MakeDrawRectFunc(void)
 {
+	// opengl
+	/*
 	DrawTexture = [this](bool) {
 		fk_TexCoord	startParam, endParam;
 		double		tmpX, tmpY;
@@ -395,7 +397,11 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 
 		glEnd();
 	};
+	*/
+	DrawTexture = [](bool) {};
 
+	// opengl
+	/*
 	DrawPick = [this]() {
 		double		tmpX, tmpY;
 
@@ -418,7 +424,9 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		glEnd();
 		glPopName();
 	};
+	*/
 
+	DrawPick = [](){};
 	return;
 }	
 
@@ -530,6 +538,9 @@ fk_TriTexture::~fk_TriTexture()
 void fk_TriTexture::MakeDrawTriFunc(void)
 {
 	DrawTexture = [this](bool) {
+		FK_UNUSED(this);
+		// opengl
+		/*
 		double			wScale, hScale;
 		_st				counter;
 		fk_Vector		norm;
@@ -562,8 +573,14 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 		}
 
 		glEnd();
+		*/
 	};
 
+	
+	DrawTexture = [](bool){};
+
+	// opengl
+	/*
 	DrawPick = [this]() {
 		int				counter;
 
@@ -584,7 +601,8 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 		glEnd();
 		glPopName();
 	};
-		
+	*/
+DrawPick = [](){};
 }
 
 void fk_TriTexture::init(void)

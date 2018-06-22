@@ -173,9 +173,12 @@ unsigned long fk_GraphicsEngine::GetUsingTextureMemory(void)
 
 void fk_GraphicsEngine::SetViewPort(void)
 {
+	// opengl
+	/*
 	glViewport(0, 0, wSize, hSize);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	*/
 
 	if(curDLink == nullptr) {
 		SetDefaultProjection();
@@ -183,17 +186,25 @@ void fk_GraphicsEngine::SetViewPort(void)
 		SetProjection(curDLink->getProjection());
 	}
 
+	// opengl
+	/*
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	*/
 
 	return;
 }
 
 void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
 {
+	FK_UNUSED(argPixSize);
+	FK_UNUSED(argX);
+	FK_UNUSED(argY);
+	// opengl
+	/*
 	GLint	ViewPort[4];
-
+	
 	glViewport(0, 0, wSize, hSize);
 
 	glGetIntegerv(GL_VIEWPORT, &ViewPort[0]);
@@ -209,16 +220,20 @@ void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
 				  GLdouble(argPixSize),
 				  GLdouble(argPixSize),
 				  ViewPort);
-
+	*/
+	
 	if(curDLink == nullptr) {
 		SetDefaultProjection();
 	} else {
 		SetProjection(curDLink->getProjection());
 	}
 
+	// opengl
+	/*
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	*/
 
 	return;
 }
@@ -228,12 +243,15 @@ void fk_GraphicsEngine::SetDefaultProjection(void)
 	double			aspect;
 
 	aspect = static_cast<GLfloat>(wSize)/static_cast<GLfloat>(hSize);
-	gluPerspective(40.0, aspect, 1.0, 6000.0);
+	// opengl
+	//gluPerspective(40.0, aspect, 1.0, 6000.0);
 }
-
 
 void fk_GraphicsEngine::SetProjection(const fk_ProjectBase *argProj)
 {
+	FK_UNUSED(argProj);
+	// opengl
+	/*
 	fk_ProjectBase	*proj;
 	fk_Perspective	*pers;
 	fk_Frustum		*frus;
@@ -266,12 +284,14 @@ void fk_GraphicsEngine::SetProjection(const fk_ProjectBase *argProj)
 	  default:
 		break;
 	}
-
+	*/
 	return;
 }
 
 void fk_GraphicsEngine::OpenGLInit(void)
 {
+	// opengl
+	/*
 	glDisable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
@@ -291,7 +311,8 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
 	glAlphaFunc(GL_GREATER, 0.01f);
-
+	*/
+	
 #ifdef NO_GL_POINTER
 	arrayState = false;
 	pointDraw->setArrayState(arrayState);
@@ -305,19 +326,25 @@ void fk_GraphicsEngine::OpenGLInit(void)
 
 void fk_GraphicsEngine::SetStereoViewPort(fk_StereoChannel argChannel)
 {
+	// opengl
+	/*
 	glViewport(0, 0, wSize, hSize);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
+	*/
+	
 	if(curDLink == nullptr) {
 		SetDefaultProjection();
 	} else {
 		SetProjection(curDLink->getStereoProjection(argChannel));
 	}
 
+	// opengl
+	/*
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	*/
 
 	return;
 }
@@ -366,13 +393,16 @@ void fk_GraphicsEngine::StereoDrawMain(fk_StereoChannel argChannel)
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	SetStereoViewPort(argChannel);
-	glPushMatrix();
+	// opengl
+	//glPushMatrix();
 
 	RecalcStereoModelView(argChannel);
 	DrawStereoObjs(false);
+	// opengl
+	/*
 	glPopMatrix();
 	glFlush();
-
+	*/
 	return;
 }
 
@@ -477,13 +507,18 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-	glPushMatrix();
+	// opengl
+	//glPushMatrix();
 
 	RecalcModelView();
 	DrawObjs(argPickFlg);
+
+	// opengl
+	/*
 	glPopMatrix();
 	glFlush();
-
+	*/
+	
 	return;
 }
 
@@ -512,11 +547,14 @@ void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
 	MAngle = argModel->getAngle();
 	MPos = argModel->getPosition();
 
+	// opengl
+	/*
 	glRotated(180.0*MAngle.b/FK_PI, 0.0, 0.0, 1.0);
 	glRotated(-180.0*MAngle.p/FK_PI, 1.0, 0.0, 0.0);
 	glRotated(180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
 	glTranslated(-MPos.x, -MPos.y, -MPos.z);
-
+	*/
+	
 	if(argModel->getParent() != nullptr) {
 		RecalcInhModelView(argModel->getParent());
 	}
@@ -564,20 +602,25 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 
 	if(argPickFlg == true) {
 		if(argModel->getPickMode() == false) return;
-		glLoadName(GLuint(modelArray.size()));
+		// opengl
+		//glLoadName(GLuint(modelArray.size()));
 		modelArray.push_back(argModel);
 	}
 
 	modelShape = argModel->getShape();
 
-	glPushMatrix();
+	// opengl
+	//glPushMatrix();
 		
 	if(argModel->getBDrawToggle() == true) {
 		if(argModel->getBMode() == FK_B_AABB) {
 			LoadAABBMatrix(argModel);
 			DrawBoundaryObj(argModel, argLightFlg);
+			// opengl
+			/*
 			glPopMatrix();
 			glPushMatrix();
+			*/
 			LoadModelMatrix(argModel);
 		} else {
 			LoadModelMatrix(argModel);
@@ -588,7 +631,8 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	}
 	
 	if(modelShape == nullptr) {
-		glPopMatrix();
+		// opengl
+		//glPopMatrix();
 		return;
 	}
 
@@ -613,13 +657,16 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 		get<1>(*it)();
 	}
 
-	glPopMatrix();
+	// opengl
+	//glPopMatrix();
 
 	return;
 }
 
 bool fk_GraphicsEngine::DefineLight(void)
 {
+	// opengl
+	/*
 	const GLenum		LArray[8] = {
 		GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3,
 		GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7
@@ -721,8 +768,9 @@ bool fk_GraphicsEngine::DefineLight(void)
 			glEnable(LArray[LightID]);
 		}
 	}	
-
 	return lightFlag;
+	*/
+	return true;
 }
 
 void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
@@ -752,29 +800,37 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 		lineDraw->DrawShapeLine(argObj, argPickFlg);
 	}
 
+	// opengl
+	/*
 	if(argLightFlag == true) {
 		glEnable(GL_LIGHTING);
 	} else {
 		glDisable(GL_LIGHTING);
 	}
-
+	*/
+	
 	return;
 }
 
 void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
 {
+	FK_UNUSED(argLightFlag);
+	
 	if(textureMode == true) {
 		glDisable(GL_TEXTURE_2D);
 		textureMode = false;
 	}
 
 	if(argObj->getBMode() == FK_B_CAPSULE) {
-		glPushMatrix();
+		// opengl
+		//glPushMatrix();
 		LoadModelMatrix(argObj->GetCapsuleModel());
 	}
 
 	lineDraw->DrawBoundaryLine(argObj);
 
+	// opengl
+	/*
 	if(argObj->getBMode() == FK_B_CAPSULE) {
 		glPopMatrix();
 	}
@@ -784,7 +840,8 @@ void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
 	} else {
 		glDisable(GL_LIGHTING);
 	}
-
+	*/
+	
 	return;
 }
 
@@ -801,6 +858,8 @@ void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
 		LoadModelMatrix(argModel->getParent());
 	}
 
+	// opengl
+	/*
 	glTranslated(MPos.x, MPos.y, MPos.z);
 	glRotated(-180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
 	glRotated(180.0*MAngle.p/FK_PI, 1.0, 0.0, 0.0);
@@ -812,21 +871,30 @@ void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
 				 Scale * argModel->getScale(fk_Y),
 				 Scale * argModel->getScale(fk_Z));
 	}
-
+	*/
+	
 	return;
 }
 
 void fk_GraphicsEngine::LoadAABBMatrix(fk_Model *argModel)
 {
+	FK_UNUSED(argModel);
+	// opengl
+	/*
 	fk_Vector MPos = argModel->getInhPosition();
 	double scale = argModel->getInhScale();
 	glTranslated(MPos.x, MPos.y, MPos.z);
 	glScaled(scale, scale, scale);
+	*/
 	return;
 }
 
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
+	FK_UNUSED(argScene);
+
+	// opengl
+	/*
 	fk_FogMode		fogMode = argScene->getFogMode();
 
 	if(fogMode == FK_NONE_FOG) {
@@ -875,7 +943,8 @@ void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 	glFogf(GL_FOG_END, static_cast<float>(argScene->getFogLinearEnd()));
 
 	glFogfv(GL_FOG_COLOR, argScene->getFogColor().col);
-
+	*/
+	
 	return;
 }
 
@@ -885,15 +954,19 @@ void fk_GraphicsEngine::ViewMatCalc(fk_Matrix *argMat)
 	fk_Matrix	projMat, modelMat;
 	int			ii, ij;
 
-	glPushMatrix();
+	// opengl
+	//glPushMatrix();
 	RecalcModelView();
 
+	// opengl
+	/*
 	glGetIntegerv(GL_VIEWPORT, viewArray);
 	glGetDoublev(GL_PROJECTION_MATRIX, projArray);
 	glGetDoublev(GL_MODELVIEW_MATRIX, tmp_modelArray);
 
 	glPopMatrix();
-
+	*/
+	
 	for(ii = 0; ii < 4; ii++) {
 		for(ij = 0; ij < 4; ij++) {
 			projMat[ii][ij] = projArray[ij*4+ii];
@@ -1117,7 +1190,7 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 void fk_GraphicsEngine::GetPickData(fk_PickData *argPickData,
 									int argPixSize, int argMouseX, int argMouseY)
 {
-	GLint			hits;
+	GLint			hits = 0;
 	_st				ii;
 	int				elemID;
 	fk_ObjectType	elemType = FK_BASEOBJECT;
@@ -1129,7 +1202,8 @@ void fk_GraphicsEngine::GetPickData(fk_PickData *argPickData,
 	RecalcModelView();
 	DrawObjs(true);
 
-	hits = glRenderMode(GL_RENDER);
+	// opengl
+	//hits = glRenderMode(GL_RENDER);
 
 	argPickData->ClearData();
 
@@ -1158,12 +1232,11 @@ void fk_GraphicsEngine::GetPickData(fk_PickData *argPickData,
 		argPickData->PushData(modelArray[selectBuf[ii*5 + 3]],
 							  elemID, elemType, farDepth, nearDepth);
 	}
-
+	
 	SetViewPort();
 
 	return;
 }
-
 
 #ifdef NO_GLU_LIBRARY
 
@@ -1220,7 +1293,8 @@ void fk_GraphicsEngine::gluLookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez,
 	m[2] = tmpZ[0];	m[6] = tmpZ[1];	m[10] = tmpZ[2];	m[14] = 0.0;
 	m[3] = 0.0;		m[7] = 0.0;		m[11] = 0.0;		m[15] = 1.0;
 
-	glMultMatrixd(m);
+	// opengl
+	//glMultMatrixd(m);
 
 	// Translate Eye to Origin
 	glTranslated(-eyex, -eyey, -eyez);

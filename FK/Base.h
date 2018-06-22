@@ -30,6 +30,8 @@
 
 #endif	// !WIN32 || _CYGWIN_GCC_
 
+#define FK_UNUSED(x)	(void)(x)
+
 //! Fine Kernel Toolkit 名前空間
 namespace FK {
 

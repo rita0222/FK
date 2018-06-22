@@ -2,8 +2,12 @@
 #define __FK_OPENGL_HEADER__
 
 #ifdef _MACOSX_
+#ifdef OPENGL4
+#include <OpenGL/gl3.h>
+#else // OPENGL4
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+#endif // OPENGL4
 #else // _MACOSX_
 #if defined(WIN32) && !defined(_MINGW_)
 //#define GLEW_STATIC
