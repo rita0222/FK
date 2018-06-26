@@ -305,15 +305,20 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// 透視変換行列を単位行列にする
+	// opengl
+/*
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-
+*/
+	
 	// モデルビュー変換行列を単位行列にする
+	// opengl
+/*
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-
+*/
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// テクスチャマッピングを有効にする
@@ -325,6 +330,8 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	ProcPreShader();
 
 	// 正方形を描く
+	// opengl
+/*
 	glColor3d(1.0, 1.0, 1.0);
 	glBegin(GL_TRIANGLE_FAN);
 	glTexCoord2d(0.0, 0.0);
@@ -336,7 +343,7 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glTexCoord2d(0.0, 1.0);
 	glVertex2d(-1.0, 1.0);
 	glEnd();
-
+*/
 	ProcPostShader();
 
 	// テクスチャマッピングを無効にする
@@ -345,10 +352,12 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	// opengl
+/*
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-
+*/
 	glFlush();
 }
