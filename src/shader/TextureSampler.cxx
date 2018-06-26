@@ -133,17 +133,15 @@ bool fk_TextureSampler::BindTexture(bool forceLoad)
 		tmpTexMode = GL_REPLACE;
 		  break;
 	  case FK_TEX_MODULATE:
-		// opengl
-		// tmpTexMode = GL_MODULATE;
+		tmpTexMode = GL_MODULATE;
 		break;
 	  case FK_TEX_DECAL:
-		// opengl
-		// tmpTexMode = GL_DECAL;
+		tmpTexMode = GL_DECAL;
 		break;
 	}
 
 	// opengl
-	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, tmpTexMode);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, tmpTexMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
