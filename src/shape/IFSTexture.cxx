@@ -130,12 +130,13 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 			return;
 		}
 
-		// opengl
-		// glShadeModel(GL_SMOOTH);
+#ifndef OPENGL4
+		glShadeModel(GL_SMOOTH);
+#endif
 
 		if(argArrayState == true) {
-			// opengl
-			/*
+
+#ifndef OPENGL4
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_NORMAL_ARRAY);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -146,10 +147,10 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 		
 			glDrawElements(tmpType, ifs->faceSize * static_cast<GLsizei>(pNum),
 						   GL_UNSIGNED_INT, &ifs->ifs[0]);
-			*/
+#endif
+
 		} else {
-			// opengl
-			/*
+#ifndef OPENGL4
 			glBegin(tmpType);
 			for(_st ii = 0; ii < static_cast<_st>(ifs->faceSize); ++ii) {
 				for(_st ij = 0; ij < pNum; ++ij) {
@@ -160,15 +161,13 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 				}
 			}
 			glEnd();
-			*/
+#endif
 		}
 	};
 
-	// opengl
 	DrawPick = [this]() {
 		FK_UNUSED(this);
-		// opengl
-		/*
+#ifndef OPENGL4
 		int				ii, ij;
 		int				pNum;
 		fk_FVector		*pos = &ifs->pos[0];
@@ -196,7 +195,8 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 			glEnd();
 			glPopName();
 		}
-		*/
+#endif
+
 	};
 }	
 

@@ -132,15 +132,24 @@ bool fk_TextureSampler::BindTexture(bool forceLoad)
 	  case FK_TEX_REPLACE:
 		tmpTexMode = GL_REPLACE;
 		break;
+
+#ifndef OPENGL4
 	  case FK_TEX_MODULATE:
 		tmpTexMode = GL_MODULATE;
 		break;
 	  case FK_TEX_DECAL:
 		tmpTexMode = GL_DECAL;
 		break;
+#endif
+
+	  default:
+		break;
 	}
 
+#ifndef OPENGL4
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, tmpTexMode);
+#endif
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);

@@ -103,8 +103,8 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 {
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
-		// opengl
-		/*
+#ifndef OPENGL4
+
 		double				wScale, hScale;
 		_st					ii, ij;
 		fk_Vector			norm;
@@ -140,13 +140,12 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 		}
 
 		glEnd();
-		*/
+#endif
 	};
 
 	DrawPick = [this]() {
 		FK_UNUSED(this);
-		// opengl
-		/*
+#ifndef OPENGL4
 		_st			ii, ij;
 
 		const fk_Dimension *bufSize = getBufferSize();
@@ -168,7 +167,7 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 			glEnd();
 			glPopName();
 		}
-		*/
+#endif
 	};
 }			 
 

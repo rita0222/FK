@@ -356,8 +356,7 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
-		// opengl
-		/*
+#ifndef OPENGL4
 		fk_TexCoord	startParam, endParam;
 		double		tmpX, tmpY;
 
@@ -398,15 +397,13 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		glVertex3d(-tmpX, tmpY, 0.0);
 
 		glEnd();
-		*/
-
+#endif
 	};
 
 	DrawPick = [this]() {
 		FK_UNUSED(this);
 
-		// opengl
-		/*
+#ifndef OPENGL4
 		double		tmpX, tmpY;
 
 		const fk_Dimension *bufSize = getBufferSize();
@@ -427,7 +424,7 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 
 		glEnd();
 		glPopName();
-		*/
+#endif
 	};
 
 	return;
@@ -542,8 +539,8 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 {
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
-		// opengl
-		/*
+
+#ifndef OPENGL4
 		double			wScale, hScale;
 		_st				counter;
 		fk_Vector		norm;
@@ -576,14 +573,13 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 		}
 
 		glEnd();
-		*/
+#endif
 	};
 
 	DrawPick = [this]() {
 		FK_UNUSED(this);
 
-		// opengl
-		/*
+#ifndef OPENGL4
 		int				counter;
 
 		const fk_Dimension *bufSize = getBufferSize();
@@ -602,7 +598,7 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 
 		glEnd();
 		glPopName();
-		*/
+#endif
 	};
 }
 

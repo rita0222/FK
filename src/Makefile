@@ -77,7 +77,7 @@ ming-g:
 		cd .. ; done
 
 mac:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac TARGET=depend ; \
@@ -85,7 +85,7 @@ mac:
 		cd .. ; done
 
 mac-d:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-d TARGET=depend ; \

@@ -203,10 +203,12 @@ void fk_FaceDraw::DrawSolidFacePick(fk_Model *argObj)
 
 	loopStack = solidP->GetLCache();
 
+#ifndef OPENGL4
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
+#endif
+	
 	if(reverseFlag == false) {
 		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
 			DrawSolidFacePickElem(*ite);
@@ -222,6 +224,9 @@ void fk_FaceDraw::DrawSolidFacePick(fk_Model *argObj)
 
 void fk_FaceDraw::DrawSolidFacePickElem(fk_Loop *argL)
 {
+	FK_UNUSED(argL);
+
+#ifndef OPENGL4	
 	vector<fk_Vertex *>	*tesseVertexArray;
 	vector<int>			*tesseIDArray;
 	fk_Vertex			*curV;
@@ -255,11 +260,14 @@ void fk_FaceDraw::DrawSolidFacePickElem(fk_Loop *argL)
 	}
 
 	glPopName();
-
+#endif
 }
 
 void fk_FaceDraw::DrawIFSFacePick(fk_Model *argObj)
 {
+	FK_UNUSED(argObj);
+
+#ifndef OPENGL4
 	fk_IndexFaceSet		*ifsP;
 	_st					ii, ij;
 	_st					pNum;
@@ -298,11 +306,15 @@ void fk_FaceDraw::DrawIFSFacePick(fk_Model *argObj)
 		glPopName();
 	}
 
+#endif
 	return;
 }
 
 void fk_FaceDraw::DrawSurfaceFacePick(fk_Model *argObj)
 {
+	FK_UNUSED(argObj);
+
+#ifndef OPENGL4	
 	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
 	_st div = static_cast<_st>(surf->getDiv());
 
@@ -339,6 +351,7 @@ void fk_FaceDraw::DrawSurfaceFacePick(fk_Model *argObj)
 			++count;
 		}
 	}
+#endif
 	return;
 }
 
@@ -385,7 +398,10 @@ void fk_FaceDraw::DrawSolidFaceMaterial(fk_Model *argObj, bool lightFlag)
 	loopStack = solidP->GetLCache();
 
 	oldMateID = -2;
+
+#ifndef OPENGL4
 	glShadeModel(GL_FLAT);
+#endif
 
 	paletteSize = solidP->getPaletteSize();
 	matV = solidP->getMaterialVector();
@@ -421,6 +437,10 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 	vector<int>				*tesseIDArray;
 
 
+	FK_UNUSED(tmpPosP);
+	FK_UNUSED(i);
+	FK_UNUSED(curV);
+	
 	retMateID = argOldMateID;
 
 	switch(argL->getElemMaterialMode()) {
@@ -457,6 +477,7 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 		tesseVertexArray = argL->GetTesselateVertex();
 		tesseIDArray = argL->GetTesselateIndex();
 
+#ifndef OPENGL4
 		glBegin(GL_TRIANGLES);
 		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
 		for(i = 0; i < tesseIDArray->size(); i++) {
@@ -465,11 +486,15 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
 		}
 		glEnd();
+#endif
+
 	} else {
 		if((tmpNormP = argL->getNormal()) == nullptr) {
 			return retMateID;
 		}
 		startH = curH = argL->getOneHalf();
+
+#ifndef OPENGL4		
 		glBegin(GL_POLYGON);
 		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
 		do {
@@ -479,6 +504,7 @@ int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
 			curH = curH->getNextHalf();
 		} while(startH != curH);
 		glEnd();
+#endif
 	}
 
 	return retMateID;
@@ -496,12 +522,17 @@ void fk_FaceDraw::DrawIFSFaceMaterial(fk_Model *argObj, bool argLightFlag)
 	int					oldMateID, curMateID, paletteSize;
 	vector<fk_Material>	*matV;
 
+	FK_UNUSED(ij);
+	
 	ifsP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
 
 	curMateID = FK_UNDEFINED;
 	oldMateID = -2;
 
+#ifndef OPENGL4
 	glShadeModel(GL_FLAT);
+#endif
+
 	ifsP->ModifyPNorm();
 	switch(ifsP->type) {
 	  case FK_IF_TRIANGLES:
@@ -525,7 +556,9 @@ void fk_FaceDraw::DrawIFSFaceMaterial(fk_Model *argObj, bool argLightFlag)
 	paletteSize = ifsP->getPaletteSize();
 	matV = ifsP->getMaterialVector();
 
+#ifndef OPENGL4
 	glBegin(tmpType);
+#endif
 
 	if(ifsP->colorFlg == false) CommonMateSet(argObj, argLightFlag, true);
 
@@ -547,13 +580,18 @@ void fk_FaceDraw::DrawIFSFaceMaterial(fk_Model *argObj, bool argLightFlag)
 			}
 		}
 
+#ifndef OPENGL4
 		glNormal3fv(static_cast<GLfloat *>(&(pNorm[ii].x)));
 
 		for(ij = 0; ij < pNum; ij++) {
 			glVertex3fv(static_cast<GLfloat *>(&pos[ifs[pNum*ii+ij]].x));
 		}
+#endif
 	}
+
+#ifndef OPENGL4
 	glEnd();
+#endif
 
 	return;
 }
@@ -602,8 +640,10 @@ void fk_FaceDraw::DrawSolidFaceSmooth(fk_Model *argObj,
 
 	CommonMateSet(argObj, argLightFlag, argNodeFlg);
 
+#ifndef OPENGL4
 	glShadeModel(GL_SMOOTH);
-
+#endif
+	
 	if(reverseFlag == false) {
 		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
 			DrawSolidFaceSmoothElem(*ite);
@@ -628,7 +668,9 @@ void fk_FaceDraw::DrawSolidFaceSmoothElem(fk_Loop *argL)
 	if((surf = argL->getSurfGeometry()) != nullptr) {
 		DrawSurfaceSmoothElem(surf);
 	} else {
+#ifndef OPENGL4		
 		glBegin(GL_POLYGON);
+#endif
 		startH = curH = argL->getOneHalf();
 
 		do {
@@ -636,12 +678,16 @@ void fk_FaceDraw::DrawSolidFaceSmoothElem(fk_Loop *argL)
 			tmpNorm = curV->GetNormalP();
 			tmpPos = curV->GetPositionP(); 
 			if(tmpNorm == nullptr || tmpPos == nullptr) continue;
+#ifndef OPENGL4			
 			glNormal3dv(static_cast<GLdouble *>(&(tmpNorm->x)));
 			glVertex3dv(static_cast<GLdouble *>(&(tmpPos->x)));
+#endif
 			curH = curH->getNextHalf();
 		} while(startH != curH);
 
+#ifndef OPENGL4
 		glEnd();
+#endif
 	}
 
 	return;
@@ -659,8 +705,10 @@ void fk_FaceDraw::DrawIFSFaceSmooth(fk_Model *argObj,
 	ifsP = (fk_IndexFaceSet *)argObj->getShape();
 
 	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+#ifndef OPENGL4	
 	glShadeModel(GL_SMOOTH);
-
+#endif
+	
 	ifsP->ModifyVNorm();
 	switch(ifsP->type) {
 	  case FK_IF_TRIANGLES:
@@ -682,6 +730,7 @@ void fk_FaceDraw::DrawIFSFaceSmooth(fk_Model *argObj,
 	ifs = &ifsP->ifs[0];
 
 	if(arrayState == true) {
+#ifndef OPENGL4
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -690,7 +739,9 @@ void fk_FaceDraw::DrawIFSFaceSmooth(fk_Model *argObj,
 		glNormalPointer(GL_FLOAT, 0, vNorm);
 		glDrawElements(tmpType, ifsP->faceSize * pNum,
 					   GL_UNSIGNED_INT, &ifs[0]);
+#endif
 	} else {
+#ifndef OPENGL4
 		glBegin(tmpType);
 		for(int ii = 0; ii < ifsP->faceSize; ii++) {
 			for(int ij = 0; ij < pNum; ij++) {
@@ -700,6 +751,7 @@ void fk_FaceDraw::DrawIFSFaceSmooth(fk_Model *argObj,
 			}
 		}
 		glEnd();
+#endif
 	}
 	return;
 }
@@ -709,10 +761,11 @@ void fk_FaceDraw::DrawSurfaceFaceSmooth(fk_Model *argObj,
 
 {
 	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+#ifndef OPENGL4
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glShadeModel(GL_SMOOTH);
-
+#endif
 	DrawSurfaceSmoothElem(static_cast<fk_Surface *>(argObj->getShape()));
 }
 
@@ -761,7 +814,9 @@ void fk_FaceDraw::DrawSolidFaceNormal(fk_Model *argObj,
 
 	CommonMateSet(argObj, argLightFlag, argNodeFlg);
 
+#ifndef OPENGL4
 	glShadeModel(GL_FLAT);
+#endif
 
 	if(reverseFlag == false) {
 		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
@@ -785,12 +840,17 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 	vector<int>			*tesseIDArray;
 	fk_Surface			*surf;
 
+
+	FK_UNUSED(curV);
+	FK_UNUSED(tmpPosP);
+
 	if((surf = argL->getSurfGeometry()) != nullptr) {
 		DrawSurfaceNormalElem(surf);
 	} else if(argL->isTesselated() == true) {
 		if((tmpNormP = argL->getNormal()) == nullptr) return;
 		tesseVertexArray = argL->GetTesselateVertex();
 		tesseIDArray = argL->GetTesselateIndex();
+#ifndef OPENGL4
 		glBegin(GL_TRIANGLES);
 		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
 		for(_st i = 0; i < tesseIDArray->size(); i++) {
@@ -799,10 +859,12 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
 		}
 		glEnd();
+#endif
 
 	} else {
 		if((tmpNormP = argL->getNormal()) == nullptr) return;
 		startH = curH = argL->getOneHalf();
+#ifndef OPENGL4
 		glBegin(GL_POLYGON);
 		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
 
@@ -814,6 +876,7 @@ void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
 		} while(startH != curH);
 
 		glEnd();
+#endif
 	}
 	return;
 }
@@ -828,10 +891,16 @@ void fk_FaceDraw::DrawIFSFaceNormal(fk_Model *argObj,
 	int					ii, ij;
 	GLenum				tmpType;
 
+	FK_UNUSED(ii);
+	FK_UNUSED(ij);
+	
 	ifsP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
 
 	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+
+#ifndef OPENGL4	
 	glShadeModel(GL_FLAT);
+#endif
 
 	ifsP->ModifyPNorm();
 	switch(ifsP->type) {
@@ -853,6 +922,7 @@ void fk_FaceDraw::DrawIFSFaceNormal(fk_Model *argObj,
 	pNorm = &ifsP->pNorm[0];
 	ifs = &ifsP->ifs[0];
 
+#ifndef OPENGL4	
 	glBegin(tmpType);
 	for(ii = 0; ii < ifsP->faceSize; ii++) {
 		glNormal3fv(static_cast<GLfloat *>(&(pNorm[ii].x)));
@@ -861,7 +931,8 @@ void fk_FaceDraw::DrawIFSFaceNormal(fk_Model *argObj,
 		}
 	}
 	glEnd();
-
+#endif
+	
 	return;
 }
 
@@ -869,10 +940,11 @@ void fk_FaceDraw::DrawSurfaceFaceNormal(fk_Model *argObj,
 										bool argLightFlag, bool argNodeFlag)
 {
 	CommonMateSet(argObj, argLightFlag, argNodeFlag);
+#ifndef OPENGL4	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glShadeModel(GL_FLAT);
-
+#endif
 	DrawSurfaceNormalElem(static_cast<fk_Surface *>(argObj->getShape()));
 	return;
 }
@@ -884,6 +956,11 @@ void fk_FaceDraw::DrawSurfaceNormalElem(fk_Surface *argSurf)
 	auto pArray = argSurf->getPosCache();
 	auto nArray = argSurf->getNormCache();
 
+	FK_UNUSED(div);
+	FK_UNUSED(pArray);
+	FK_UNUSED(nArray);
+
+#ifndef OPENGL4
 	glBegin(GL_TRIANGLES);
 	for(_st i = 0; i < div; ++i) {
 		for(_st j = 0; j < div; ++j) {
@@ -907,6 +984,8 @@ void fk_FaceDraw::DrawSurfaceNormalElem(fk_Surface *argSurf)
 		}
 	}
 	glEnd();
+#endif
+
 	return;
 }
 	
@@ -917,6 +996,12 @@ void fk_FaceDraw::DrawSurfaceSmoothElem(fk_Surface *argSurf)
 	auto pArray = argSurf->getPosCache();
 	auto nArray = argSurf->getNormCache();
 
+
+	FK_UNUSED(div);
+	FK_UNUSED(pArray);
+	FK_UNUSED(nArray);
+
+#ifndef OPENGL4
 	glBegin(GL_TRIANGLES);
 	for(_st i = 0; i < div; ++i) {
 		for(_st j = 0; j < div; ++j) {
@@ -932,7 +1017,7 @@ void fk_FaceDraw::DrawSurfaceSmoothElem(fk_Surface *argSurf)
 			auto n12 = &((*nArray)[i1+1]);
 			auto n21 = &((*nArray)[i2]);
 			auto n22 = &((*nArray)[i2+1]);
-
+			
 			glNormal3dv(static_cast<GLdouble *>(&(n11->x)));
 			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
 
@@ -954,6 +1039,8 @@ void fk_FaceDraw::DrawSurfaceSmoothElem(fk_Surface *argSurf)
 		}
 	}
 	glEnd();
+#endif	
+
 	return;
 }
 
@@ -962,6 +1049,10 @@ void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 	float 		tmpShininess;
 	fk_Shape	*shapeP;
 	fk_Material	*curMat;
+	
+	
+	FK_UNUSED(lightFlag);
+	FK_UNUSED(tmpShininess);
 
 	shapeP = argObj->getShape();
 
@@ -971,6 +1062,7 @@ void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 		curMat = &(*shapeP->getMaterialVector())[0];
 	}
 								  
+#ifndef OPENGL4
 	if(lightFlag == true) {
 		glEnable(GL_LIGHTING);
 		glMaterialfv(GL_FRONT, GL_AMBIENT,
@@ -987,13 +1079,17 @@ void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 		glDisable(GL_LIGHTING);
 		glColor4fv(&curMat->getAmbient()->col[0]);
 	}
+#endif
 	return;
 }
 
 void fk_FaceDraw::LocalMateSet(fk_Material *argMaterial, bool lightFlag)
 {
-	float tmpShininess;
+	FK_UNUSED(argMaterial);
+	FK_UNUSED(lightFlag);
 
+#ifndef OPENGL4		
+	float tmpShininess;
 	if(lightFlag == true) {
 		glEnable(GL_LIGHTING);
 		glMaterialfv(GL_FRONT, GL_AMBIENT,
@@ -1010,6 +1106,7 @@ void fk_FaceDraw::LocalMateSet(fk_Material *argMaterial, bool lightFlag)
 		glDisable(GL_LIGHTING);
 		glColor4fv(&argMaterial->getAmbient()->col[0]);
 	}
+#endif
 
 	return;
 }

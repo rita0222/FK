@@ -111,7 +111,10 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 	shapeMateMode = argObj->getShape()->getMaterialMode();
 	modelMateMode = argObj->getMaterialMode();
 
+#ifndef OPENGL4
 	glDisable(GL_LIGHTING);
+#endif
+
 	glPointSize((GLfloat)argObj->getSize());
 
 	if(argPickFlag == true) {
@@ -179,7 +182,9 @@ void fk_PointDraw::DrawSolidPointPick(fk_Model *argObj)
 
 	vertexStack = solidP->GetVCache();
 
+#ifndef OPENGL4
 	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	if(reverseFlag == false) {
 		for(ite = vertexStack->begin(); ite != vertexStack->end(); ++ite) {
@@ -196,6 +201,9 @@ void fk_PointDraw::DrawSolidPointPick(fk_Model *argObj)
 
 void fk_PointDraw::DrawSolidPointPickElem(fk_Vertex *argV)
 {
+	FK_UNUSED(argV);
+
+#ifndef OPENGL4	
 	glPushName(static_cast<GLuint>(argV->getID()*3 + 2));
 	glBegin(GL_POINTS);
 
@@ -203,12 +211,16 @@ void fk_PointDraw::DrawSolidPointPickElem(fk_Vertex *argV)
 
 	glEnd();
 	glPopName();
+#endif
 	return;
 }
 
 
 void fk_PointDraw::DrawIFSPointPick(fk_Model *argObj)
 {
+	FK_UNUSED(argObj);
+
+#ifndef OPENGL4
 	fk_IndexFaceSet		*ifsetP;
 	_st					ii;
 
@@ -223,12 +235,16 @@ void fk_PointDraw::DrawIFSPointPick(fk_Model *argObj)
 		glEnd();
 		glPopName();
 	}
-
+#endif
+	
 	return;
 }
 
 void fk_PointDraw::DrawParticlePointPick(fk_Model *argObj)
 {
+	FK_UNUSED(argObj);
+
+#ifndef OPENGL4	
 	fk_Point		*point;
 	fk_FVector		*pos;
 	int				id;
@@ -250,12 +266,16 @@ void fk_PointDraw::DrawParticlePointPick(fk_Model *argObj)
 		}
 		id = point->vec.next(id);
 	}
-
+#endif
+	
 	return;
 }
 
 void fk_PointDraw::DrawCurvePointPick(fk_Model *argObj)
 {
+	FK_UNUSED(argObj);
+
+#ifndef OPENGL4
 	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
 
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -272,12 +292,16 @@ void fk_PointDraw::DrawCurvePointPick(fk_Model *argObj)
 		glEnd();
 		glPopName();
 	}
+#endif
 
 	return;
 }
 
 void fk_PointDraw::DrawSurfacePointPick(fk_Model *argObj)
 {
+	FK_UNUSED(argObj);
+
+#ifndef OPENGL4
 	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
 
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -294,7 +318,7 @@ void fk_PointDraw::DrawSurfacePointPick(fk_Model *argObj)
 		glEnd();
 		glPopName();
 	}
-
+#endif
 	return;
 }
 	
@@ -392,6 +416,8 @@ int fk_PointDraw::DrawSolidPointMaterialElem(fk_Vertex *argV,
 	double		trueSize;
 	fk_Color	*curColor;
 
+	FK_UNUSED(argModelColor);
+
 	retMateID = argOldMateID;
 	switch(argV->getElemMaterialMode()) {
 	  case FK_CHILD_MODE:
@@ -409,11 +435,18 @@ int fk_PointDraw::DrawSolidPointMaterialElem(fk_Vertex *argV,
 
 	if(curMateID != argOldMateID) {
 		if(curMateID == FK_UNDEFINED) {
-			glColor4fv(&argModelColor->col[0]);	
+
+#ifndef OPENGL4			
+			glColor4fv(&argModelColor->col[0]);
+#endif
+
 			retMateID = FK_UNDEFINED;
 		} else {
 			curColor = (*argMatV)[static_cast<_st>(curMateID)].getAmbient();
+
+#ifndef OPENGL4			
 			glColor4fv(&curColor->col[0]);
+#endif
 			retMateID = curMateID;
 		}
 	}
@@ -425,9 +458,11 @@ int fk_PointDraw::DrawSolidPointMaterialElem(fk_Vertex *argV,
 		glPointSize(static_cast<GLfloat>(trueSize));
 	}
 
+#ifndef OPENGL4
 	glBegin(GL_POINTS);
 	glVertex3dv(static_cast<GLdouble *>(&(argV->GetPositionP()->x)));
 	glEnd();
+#endif
 
 	return retMateID;
 }
@@ -457,7 +492,11 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 	id = point->vec.next(-1);
 	matV = point->getMaterialVector();
 	paletteSize = point->getPaletteSize();
+
+#ifndef OPENGL4	
 	glBegin(GL_POINTS);
+#endif
+
 	while(id >= 0) {
 		if(point->getDrawMode(id) == true) {
 			curMateID = point->getColorID(id);
@@ -468,22 +507,31 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 
 			if(curMateID != oldMateID) {
 				if(curMateID == FK_UNDEFINED) {
+#ifndef OPENGL4					
 					glColor4fv(&modelColor->col[0]);	
+#endif
 					oldMateID = FK_UNDEFINED;
 				} else {
 					mat = &(*matV)[static_cast<_st>(curMateID)];
 					curColor = mat->getAmbient();
+#ifndef OPENGL4					
 					glColor4fv(&curColor->col[0]);
+#endif
 					oldMateID = curMateID;
 				}
 				oldMateID = curMateID;
 			}
 
+#ifndef OPENGL4
 			glVertex3fv(static_cast<GLfloat *>(&pos[id].x));
+#endif
 		}
 		id = point->vec.next(id);
 	}
+
+#ifndef OPENGL4	
 	glEnd();
+#endif
 	return;
 }
 
@@ -547,7 +595,9 @@ void fk_PointDraw::DrawSolidPointNormal(fk_Model *argObj, bool argFlg)
 		ModelColor = (*solidP->getMaterialVector())[0].getAmbient();
 	}
 
+#ifndef OPENGL4
 	glColor4fv(&ModelColor->col[0]);
+#endif
 	orgSize = argObj->getSize();
 
 	if(reverseFlag == false) {
@@ -574,10 +624,11 @@ void fk_PointDraw::DrawSolidPointNormalElem(fk_Vertex *argV, double argOrgSize)
 		glPointSize(static_cast<GLfloat>(trueSize));
 	}
 
+#ifndef OPENGL4	
 	glBegin(GL_POINTS);
 	glVertex3dv(static_cast<GLdouble *>(&(argV->GetPositionP()->x)));
 	glEnd();
-
+#endif
 	return;
 }
 
@@ -598,8 +649,9 @@ void fk_PointDraw::DrawIFSPointNormal(fk_Model *argObj, bool argFlag)
 		modelColor = (*ifsetP->getMaterialVector())[0].getAmbient();
 	}
 
+#ifndef OPENGL4
 	glColor4fv(&modelColor->col[0]);
-
+	
 	if(arrayState == true) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, &ifsetP->pos[0]);
@@ -611,6 +663,8 @@ void fk_PointDraw::DrawIFSPointNormal(fk_Model *argObj, bool argFlag)
 		}
 		glEnd();
 	}
+#endif
+
 	return;
 }
 
@@ -632,6 +686,7 @@ void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 		modelColor = (*point->getMaterialVector())[0].getAmbient();
 	}
 
+#ifndef OPENGL4
 	glColor4fv(&modelColor->col[0]);
 
 	if(point->vec.isSerial() == true && arrayState == true) {
@@ -650,6 +705,7 @@ void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 		}
 		glEnd();
 	}
+#endif
 	return;
 }
 
@@ -667,6 +723,7 @@ void fk_PointDraw::DrawCurvePointNormal(fk_Model *argObj, bool argFlag)
 		modelColor = (*curve->getMaterialVector())[0].getAmbient();
 	}
 
+#ifndef OPENGL4	
 	glColor4fv(&modelColor->col[0]);
 
 	curve->makeCache();
@@ -679,7 +736,8 @@ void fk_PointDraw::DrawCurvePointNormal(fk_Model *argObj, bool argFlag)
 		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
 	}
 	glEnd();
-
+#endif
+	
 	return;
 }
 
@@ -697,6 +755,7 @@ void fk_PointDraw::DrawSurfacePointNormal(fk_Model *argObj, bool argMode)
 		modelColor = surf->getMaterial(0)->getAmbient();
 	}
 
+#ifndef OPENGL4
 	glColor4fv(&modelColor->col[0]);
 
 	surf->makeCache();
@@ -709,7 +768,7 @@ void fk_PointDraw::DrawSurfacePointNormal(fk_Model *argObj, bool argMode)
 		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
 	}
 	glEnd();
-
+#endif
 	return;
 }
 

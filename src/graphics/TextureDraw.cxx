@@ -196,11 +196,13 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 	// glFlush();
 	// glDisable(GL_TEXTURE_2D);
 
+#ifndef OPENGL4
 	if(argLightFlag == true) {
 		glEnable(GL_LIGHTING);
 	} else {
 		glDisable(GL_LIGHTING);
 	}
+#endif
    
 	return;
 }
@@ -222,8 +224,10 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 		break;
 
 	  case FK_TEX_WRAP_CLAMP:
+#ifndef OPENGL4
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+#endif
 		break;
 	}
 	
@@ -304,7 +308,7 @@ unsigned long fk_TextureDraw::GetUsingTextureMemory(void)
 
 void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 {
-	GLint		texMode = GL_MODULATE;
+	GLint		texMode = GL_REPLACE;
 	fk_TexID	curID;
 
 	switch(argTexObj->getTextureMode()) {
@@ -312,6 +316,7 @@ void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 		texMode = GL_REPLACE;
 		break;
 
+#ifndef OPENGL4
 	  case FK_TEX_MODULATE:
 		texMode = GL_MODULATE;
 		break;
@@ -319,7 +324,8 @@ void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 	  case FK_TEX_DECAL:
 		texMode = GL_DECAL;
 		break;
-
+#endif
+		
 	  default:
 		break;
 	}
@@ -328,8 +334,11 @@ void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 
 	if(bindMode == false || curID != oldTexID) {
 		glEnable(GL_TEXTURE_2D);
+
+#ifndef OPENGL4		
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texMode);
-		
+#endif		
+
 		switch(argTexObj->getTexWrapMode()) {
 		  case FK_TEX_WRAP_REPEAT:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -337,8 +346,10 @@ void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 			break;
 
 		  case FK_TEX_WRAP_CLAMP:
+#ifndef OPENGL4			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+#endif
 			break;
 		}
 
