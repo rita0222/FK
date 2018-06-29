@@ -107,22 +107,31 @@ void fk_PointDraw::SetArrayState(bool argState)
 
 void fk_PointDraw::ShaderSetup(void)
 {
-	shader = new fk_ShaderProgram();
-	shader->vertexShaderSource = "#version 150 core\n";
-	shader->vertexShaderSource += "in vec4 position;\n";
-	shader->vertexShaderSource += "void main()\n";
-	shader->vertexShaderSource += "{\n";
-	shader->vertexShaderSource += "    gl_Position = position;\n";
-	shader->vertexShaderSource += "}\n";
+	shader = new fk_ShaderBinder();
+	auto prog = shader->getProgram();
 
-	shader->fragmentShaderSource = "#version 150 core\n";
-	shader->fragmentShaderSource += "out vec4 fragment;\n";
-	shader->fragmentShaderSource += "void main()\n";
-	shader->fragmentShaderSource += "{\n";
-	shader->fragmentShaderSource += "    fragment = vec4(1.0, 0.0, 0.0, 1.0);\n";
-	shader->fragmentShaderSource += "}\n";
+	prog->vertexShaderSource = "#version 150 core\n";
+	prog->vertexShaderSource += "in vec4 position;\n";
+	prog->vertexShaderSource += "void main()\n";
+	prog->vertexShaderSource += "{\n";
+	prog->vertexShaderSource += "    gl_Position = position;\n";
+	prog->vertexShaderSource += "}\n";
 
-	shader->validate();
+	prog->fragmentShaderSource = "#version 150 core\n";
+	prog->fragmentShaderSource += "out vec4 fragment;\n";
+	prog->fragmentShaderSource += "void main()\n";
+	prog->fragmentShaderSource += "{\n";
+	prog->fragmentShaderSource += "    fragment = vec4(1.0, 0.0, 0.0, 1.0);\n";
+	prog->fragmentShaderSource += "}\n";
+
+	prog->validate();
+
+	glBindAttribLocation(prog->getProgramID(), 0, "position");
+	glGenBuffers(1, &bufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(_fk_P_Position), nullptr, GL_DYNAMIC_DRAW);
+	position = (_fk_P_Position *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	
 	return;
 }
 
@@ -137,9 +146,15 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 	
 #ifdef OPENGL4
 	if(shader == nullptr) {
-		shader = new fk_ShaderProgram();
+		shader = new fk_ShaderBinder();
 		ShaderSetup();
 	}
+
+	if(argObj->preShaderList.empty() == true &&
+	   argObj->postShaderList.empty() == true) {
+		shader->bindModel(argObj);
+	}
+
 #else
 	glDisable(GL_LIGHTING);
 #endif
@@ -163,7 +178,6 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 
 void fk_PointDraw::DrawShapePointPick(fk_Model *argObj)
 {
-	
 	switch(argObj->getShape()->getRealShapeType()) {
 	  case FK_SHAPE_IFS:
 		DrawIFSPointPick(argObj);
@@ -506,7 +520,6 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 	int						id;
 	int						oldMateID, curMateID, paletteSize;
 
-
 	point = static_cast<fk_Point *>(argObj->getShape());
 	pos = point->vec.at(0);
 
@@ -522,7 +535,11 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 	matV = point->getMaterialVector();
 	paletteSize = point->getPaletteSize();
 
-#ifndef OPENGL4	
+#ifdef OPENGL4
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+#else
 	glBegin(GL_POINTS);
 #endif
 
@@ -551,7 +568,12 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 				oldMateID = curMateID;
 			}
 
-#ifndef OPENGL4
+#ifdef OPENGL4
+			position[0][0] = static_cast<GLfloat>(pos[id].x);
+			position[0][1] = static_cast<GLfloat>(pos[id].y);
+			position[0][2] = static_cast<GLfloat>(pos[id].z);
+			glDrawArrays(GL_POINTS, 0, 1);
+#else
 			glVertex3fv(static_cast<GLfloat *>(&pos[id].x));
 #endif
 		}
@@ -715,7 +737,24 @@ void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 		modelColor = (*point->getMaterialVector())[0].getAmbient();
 	}
 
-#ifndef OPENGL4
+#ifdef OPENGL4
+	int id = point->vec.next(-1);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	while(id >= 0) {
+		if(point->getDrawMode(id) == true) {
+			_st		i = static_cast<_st>(id);
+			position[0][0] = static_cast<GLfloat>(pos[i].x);
+			position[0][1] = static_cast<GLfloat>(pos[i].y);
+			position[0][2] = static_cast<GLfloat>(pos[i].z);
+			glDrawArrays(GL_POINTS, 0, 1);
+		}
+		id = point->vec.next(id);
+	}
+#else
 	glColor4fv(&modelColor->col[0]);
 
 	if(point->vec.isSerial() == true && arrayState == true) {

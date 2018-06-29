@@ -3,12 +3,14 @@
 
 #include <vector>
 #include <FK/Material.h>
-#include <FK/ShaderProgram.h>
+#include <FK/ShaderBinder.h>
 
 namespace FK {
 	class fk_Model;
 	class fk_Vertex;
 	class fk_Color;
+
+	typedef GLfloat _fk_P_Position[3];
 
 	class fk_PointDraw {
 	public:
@@ -20,9 +22,11 @@ namespace FK {
 
 	private:
 
-		fk_ShaderProgram	*shader;
+		fk_ShaderBinder	*shader;
 		bool			arrayState;
-
+		GLuint			bufferID;
+		_fk_P_Position	*position;
+		
 		void			ShaderSetup(void);
 
 		void			DrawShapePointMaterial(fk_Model *);
