@@ -90,16 +90,39 @@ using namespace FK;
 fk_PointDraw::fk_PointDraw(void)
 {
 	SetArrayState(false);
+	shader = nullptr;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
+	if(shader != nullptr) delete shader;
 	return;
 }
 
 void fk_PointDraw::SetArrayState(bool argState)
 {
 	arrayState = argState;
+	return;
+}
+
+void fk_PointDraw::ShaderSetup(void)
+{
+	shader = new fk_ShaderProgram();
+	shader->vertexShaderSource = "#version 150 core\n";
+	shader->vertexShaderSource += "in vec4 position;\n";
+	shader->vertexShaderSource += "void main()\n";
+	shader->vertexShaderSource += "{\n";
+	shader->vertexShaderSource += "    gl_Position = position;\n";
+	shader->vertexShaderSource += "}\n";
+
+	shader->fragmentShaderSource = "#version 150 core\n";
+	shader->fragmentShaderSource += "out vec4 fragment;\n";
+	shader->fragmentShaderSource += "void main()\n";
+	shader->fragmentShaderSource += "{\n";
+	shader->fragmentShaderSource += "    fragment = vec4(1.0, 0.0, 0.0, 1.0);\n";
+	shader->fragmentShaderSource += "}\n";
+
+	shader->validate();
 	return;
 }
 
@@ -111,7 +134,13 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 	shapeMateMode = argObj->getShape()->getMaterialMode();
 	modelMateMode = argObj->getMaterialMode();
 
-#ifndef OPENGL4
+	
+#ifdef OPENGL4
+	if(shader == nullptr) {
+		shader = new fk_ShaderProgram();
+		ShaderSetup();
+	}
+#else
 	glDisable(GL_LIGHTING);
 #endif
 

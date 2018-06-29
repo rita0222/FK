@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <FK/Material.h>
+#include <FK/ShaderProgram.h>
 
 namespace FK {
 	class fk_Model;
@@ -18,7 +19,11 @@ namespace FK {
 		void			DrawShapePoint(fk_Model *, bool);
 
 	private:
+
+		fk_ShaderProgram	*shader;
 		bool			arrayState;
+
+		void			ShaderSetup(void);
 
 		void			DrawShapePointMaterial(fk_Model *);
 		void			DrawParticlePointMaterial(fk_Model *);
