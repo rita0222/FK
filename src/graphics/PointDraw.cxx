@@ -129,7 +129,7 @@ void fk_PointDraw::ShaderSetup(void)
 	glBindAttribLocation(prog->getProgramID(), 0, "position");
 	glGenBuffers(1, &bufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(_fk_P_Position), nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(_fk_P_Position) * 2, nullptr, GL_DYNAMIC_DRAW);
 	position = (_fk_P_Position *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 	
 	return;
@@ -537,8 +537,8 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 
 #ifdef OPENGL4
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 #else
 	glBegin(GL_POINTS);
 #endif
@@ -569,6 +569,8 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 			}
 
 #ifdef OPENGL4
+			glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			position[0][0] = static_cast<GLfloat>(pos[id].x);
 			position[0][1] = static_cast<GLfloat>(pos[id].y);
 			position[0][2] = static_cast<GLfloat>(pos[id].z);
@@ -744,16 +746,19 @@ void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	_st j = 0;
 	while(id >= 0) {
 		if(point->getDrawMode(id) == true) {
 			_st		i = static_cast<_st>(id);
-			position[0][0] = static_cast<GLfloat>(pos[i].x);
-			position[0][1] = static_cast<GLfloat>(pos[i].y);
-			position[0][2] = static_cast<GLfloat>(pos[i].z);
-			glDrawArrays(GL_POINTS, 0, 1);
+			position[j][0] = static_cast<GLfloat>(pos[i].x);
+			position[j][1] = static_cast<GLfloat>(pos[i].y);
+			position[j][2] = static_cast<GLfloat>(pos[i].z);
+			j++;
 		}
 		id = point->vec.next(id);
 	}
+	glDrawArrays(GL_POINTS, 0, 2);
+
 #else
 	glColor4fv(&modelColor->col[0]);
 
