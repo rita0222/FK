@@ -10,7 +10,6 @@ mkdir ../FK_VC15/include
 mkdir ../FK_VC15/lib
 mkdir ../FK_VC15/lib_x64
 mkdir ../FK_VC15/redist
-mkdir ../FK_VC15/vs_wizard
 
 cp lib_Win32/*.lib                                                                    ../FK_VC15/lib
 cp ../extlibs/fltk-1.3.3/ide/VisualC2015/bin/Win32/*.lib                              ../FK_VC15/lib
@@ -55,6 +54,7 @@ cp ../../FK/*.h ../FK_VC15/include/FK
 
 mkdir ../FK_VC15/include/FL
 cp ../extlibs/fltk-1.3.3/FL/*.h ../FK_VC15/include/FL
+cp ../extlibs/fltk-1.3.3/FL/*.H ../FK_VC15/include/FL
 
 mkdir ../FK_VC15/include/DX
 cp ../extlibs/DirectInput/include/DX/*.h ../FK_VC15/include/DX
@@ -71,4 +71,4 @@ cp ../doc/License.txt ../FK_VC15/doc
 cp ../doc/RelativeLibraries.txt ../FK_VC15/doc
 cp ../doc/Version_2015.txt ../FK_VC15/doc/Version.txt
 
-cp -r vs_wizard ../FK_VC15/vs_wizard
+cp -r vs_wizard ../FK_VC15
