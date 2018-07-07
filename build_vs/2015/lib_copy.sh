@@ -50,11 +50,10 @@ cp ../extlibs/glew-1.12.0/lib/Release/x64/*.lib                                 
 cp ../extlibs/glew-1.12.0/bin/Release/x64/*.*                                         ../FK_VC15/bin_x64
 
 mkdir ../FK_VC15/include/FK
-cp ../../FK/*.h ../FK_VC15/include/FK
+cp ../../FK/*.[h,H] ../FK_VC15/include/FK
 
 mkdir ../FK_VC15/include/FL
-cp ../extlibs/fltk-1.3.3/FL/*.h ../FK_VC15/include/FL
-cp ../extlibs/fltk-1.3.3/FL/*.H ../FK_VC15/include/FL
+cp ../extlibs/fltk-1.3.3/FL/*.[h,H] ../FK_VC15/include/FL
 
 mkdir ../FK_VC15/include/DX
 cp ../extlibs/DirectInput/include/DX/*.h ../FK_VC15/include/DX
