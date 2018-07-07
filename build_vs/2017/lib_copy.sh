@@ -10,7 +10,6 @@ mkdir ../FK_VC17/include
 mkdir ../FK_VC17/lib
 mkdir ../FK_VC17/lib_x64
 mkdir ../FK_VC17/redist
-mkdir ../FK_VC17/vs_wizard
 
 cp lib_Win32/*.lib ../FK_VC17/lib
 cp ../extlibs/fltk-1.3.3/ide/VisualC2017/bin/Win32/*.lib ../FK_VC17/lib
