@@ -27,7 +27,8 @@ namespace FK {
 		GLuint			bufferID;
 		_fk_P_Position	*position;
 		
-		void			ShaderSetup(void);
+		void			ShaderSetup(fk_Model *);
+		void			VAOSetup(fk_Model *);
 
 		void			DrawShapePointMaterial(fk_Model *);
 		void			DrawParticlePointMaterial(fk_Model *);

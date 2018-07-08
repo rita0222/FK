@@ -122,6 +122,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	interStatus = false;
 	interStopMode = false;
 
+	vao = 0;
 	return;
 }
 
@@ -1052,4 +1053,14 @@ bool fk_Model::glMoveTo(double argX, double argY, double argZ)
 	ret = glMoveTo_(argX, argY, argZ);
 	PostMove();
 	return ret;
+}
+
+void fk_Model::SetVAO(unsigned int argVAO)
+{
+	vao = argVAO;
+}
+
+unsigned int fk_Model::GetVAO(void)
+{
+	return vao;
 }
