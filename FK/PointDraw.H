@@ -24,8 +24,8 @@ namespace FK {
 
 		fk_ShaderBinder	*shader;
 		bool			arrayState;
-		GLuint			bufferID;
-		_fk_P_Position	*position;
+		//GLuint			bufferID;
+		//_fk_P_Position	*position;
 		
 		void			ShaderSetup(fk_Model *);
 		void			VAOSetup(fk_Model *);

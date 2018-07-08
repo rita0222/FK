@@ -3,6 +3,7 @@
 
 #ifdef _MACOSX_
 #ifdef OPENGL4
+#include <OpenGL/OpenGL.h>
 #include <OpenGL/gl3.h>
 #else // OPENGL4
 #include <OpenGL/gl.h>

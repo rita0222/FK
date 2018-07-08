@@ -108,50 +108,39 @@ void fk_PointDraw::SetArrayState(bool argState)
 void fk_PointDraw::ShaderSetup(fk_Model *argM)
 {
 	FK_UNUSED(argM);
+
 	shader = new fk_ShaderBinder();
 	auto prog = shader->getProgram();
-
-	prog->vertexShaderSource = "#version 150 core\n";
-	prog->vertexShaderSource += "in vec4 position;\n";
+	prog->vertexShaderSource = "#version 320 core\n";
+	prog->vertexShaderSource += "in vec position;\n";
 	prog->vertexShaderSource += "void main()\n";
 	prog->vertexShaderSource += "{\n";
 	prog->vertexShaderSource += "    gl_Position = position;\n";
 	prog->vertexShaderSource += "}\n";
 
-	prog->fragmentShaderSource = "#version 150 core\n";
+	prog->fragmentShaderSource = "#version 320 core\n";
 	prog->fragmentShaderSource += "out vec4 fragment;\n";
 	prog->fragmentShaderSource += "void main()\n";
 	prog->fragmentShaderSource += "{\n";
 	prog->fragmentShaderSource += "    fragment = vec4(1.0, 0.0, 0.0, 1.0);\n";
 	prog->fragmentShaderSource += "}\n";
 
-	prog->validate();
-	glBindAttribLocation(prog->getProgramID(), 0, "position");
-/*
-	glGenBuffers(1, &bufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(_fk_P_Position) * 2, nullptr, GL_DYNAMIC_DRAW);
-	position = (_fk_P_Position *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	fk_Point *point = static_cast<fk_Point *>(argM->getShape());
-	fk_FVector *pos = point->vec.at(0);
-	int id = point->vec.next(-1);
-	while(id >= 0) {
-		if(point->getDrawMode(id) == true) {
-			position[0][0] = static_cast<GLfloat>(pos[id].x);
-			position[0][1] = static_cast<GLfloat>(pos[id].y);
-			position[0][2] = static_cast<GLfloat>(pos[id].z);
-		}
-		id = point->vec.next(id);
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
 	}
-*/
+	glBindAttribLocation(prog->getProgramID(), 0, "position");
+	shader->bindModel(argM);
+
 	return;
 }
 
 void fk_PointDraw::VAOSetup(fk_Model *argM)
 {
-	GLuint vao;
+	GLuint 			vao;
+	GLuint			bufferID;
+	fk_Point		*point = static_cast<fk_Point *>(argM->getShape());
+	fk_FVector		*pos = point->vec.at(0);
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -159,21 +148,28 @@ void fk_PointDraw::VAOSetup(fk_Model *argM)
 
 	glGenBuffers(1, &bufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(_fk_P_Position) * 2, nullptr, GL_DYNAMIC_DRAW);
-	position = (_fk_P_Position *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(fk_FVector) * 2, pos, GL_DYNAMIC_DRAW);
 
-	fk_Point *point = static_cast<fk_Point *>(argM->getShape());
+/*
+	position = (_fk_P_Position *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+ 	fk_Point *point = static_cast<fk_Point *>(argM->getShape());
 	fk_FVector *pos = point->vec.at(0);
 	int id = point->vec.next(-1);
+	_st j = 0;
 	while(id >= 0) {
 		if(point->getDrawMode(id) == true) {
-			position[0][0] = static_cast<GLfloat>(pos[id].x);
-			position[0][1] = static_cast<GLfloat>(pos[id].y);
-			position[0][2] = static_cast<GLfloat>(pos[id].z);
+			position[j][0] = static_cast<GLfloat>(pos[id].x);
+			position[j][1] = static_cast<GLfloat>(pos[id].y);
+			position[j][2] = static_cast<GLfloat>(pos[id].z);
+			j++;
 		}
 		id = point->vec.next(id);
 	}
+*/
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(fk_FVector), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
@@ -563,6 +559,10 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 	int						id;
 	int						oldMateID, curMateID, paletteSize;
 
+	FK_UNUSED(curMateID);
+	FK_UNUSED(curColor);
+	FK_UNUSED(mat);
+
 	point = static_cast<fk_Point *>(argObj->getShape());
 	pos = point->vec.at(0);
 
@@ -585,7 +585,7 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 #else
 	glBegin(GL_POINTS);
 #endif
-
+/*
 	while(id >= 0) {
 		if(point->getDrawMode(id) == true) {
 			curMateID = point->getColorID(id);
@@ -630,8 +630,7 @@ void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
 #endif
 	glBindVertexArray(argObj->GetVAO());
 	glDrawArrays(GL_POINTS, 0, 1);
-	fk_Window::printf("OK1");
-	
+*/	
 	return;
 }
 
@@ -771,50 +770,13 @@ void fk_PointDraw::DrawIFSPointNormal(fk_Model *argObj, bool argFlag)
 void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
 {
 	FK_UNUSED(argFlag);
-/*
-	fk_Point		*point;
-	fk_FVector		*pos;
-	fk_Color		*modelColor;
 
-	point = static_cast<fk_Point *>(argObj->getShape());
-	pos = point->vec.at(0);
-
-	if(argFlag == true) {
-		modelColor = argObj->getInhPointColor();
-		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
-		}
-	} else {
-		modelColor = (*point->getMaterialVector())[0].getAmbient();
-	}
-*/
-	
 #ifdef OPENGL4
 	GLuint vao = argObj->GetVAO();
-	fk_Window::printf("vao = %d", vao);
 	glBindVertexArray(vao);
 	glDrawArrays(GL_POINTS, 0, 2);
-
-#else
-	glColor4fv(&modelColor->col[0]);
-
-	if(point->vec.isSerial() == true && arrayState == true) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, point->vec.at(0));
-		glDrawArrays(GL_POINTS, 0, point->vec.size());
-	} else {
-		int id = point->vec.next(-1);
-		glBegin(GL_POINTS);
-		while(id >= 0) {
-			if(point->getDrawMode(id) == true) {
-				_st		i = static_cast<_st>(id);
-				glVertex3fv(static_cast<GLfloat *>(&pos[i].x));
-			}
-			id = point->vec.next(id);
-		}
-		glEnd();
-	}
 #endif
+	
 	return;
 }
 
