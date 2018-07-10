@@ -177,14 +177,18 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		void							SetPaletteData(fk_Palette *pal);
-		void							setPaletteData(fk_Palette *pal);
+		void	SetPaletteData(fk_Palette *pal);
+		void	setPaletteData(fk_Palette *pal);
+
+		void			SetVAO(unsigned int);
+		unsigned int	GetVAO(void);
 
 #endif
 
 	private:
 		fk_Palette			*palette;
 		fk_MaterialMode		materialMode;
+		unsigned int		vao;
 	};
 }
 

@@ -2008,10 +2008,6 @@ namespace FK {
 
 		void	SetTreeDelMode(bool);
 		void	TreePrint(void);
-		unsigned int	GetVAO(void);
-		void			SetVAO(unsigned int);
-		bool			GetVAOStatus(void);
-		void			SetVAOStatus(bool);
 
 		std::list<fk_funcSet>	preShaderList;
 		std::list<fk_funcSet>	postShaderList;
@@ -2064,8 +2060,6 @@ namespace FK {
 		void				PostMove(void);
 
 		static fk_Tree		_modelTree;
-
-		unsigned int		vao;
 	};
 }
 

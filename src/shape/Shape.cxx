@@ -78,6 +78,7 @@ fk_Shape::fk_Shape(fk_ObjectType argObjType)
 {
 	SetObjectType(argObjType);
 	materialMode = FK_NONE_MODE;
+	vao = 0;
 	return;
 }
 
@@ -209,4 +210,14 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 		break;
 	}
 	return FK_SHAPE_OTHER;
+}
+
+unsigned int fk_Shape::GetVAO(void)
+{
+	return vao;
+}
+
+void fk_Shape::SetVAO(unsigned int argVAO)
+{
+	vao = argVAO;
 }

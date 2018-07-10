@@ -82,6 +82,7 @@ fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 	SetPaletteData(&localPal);
 	allClear(false);
 	MakePoint(argVertexSet);
+	vbo = 0;
 	return;
 }
 
@@ -273,4 +274,14 @@ void fk_Point::allClear(bool argMateFlg)
 	if(argMateFlg == true) clearMaterial();
 
 	return;
+}
+
+unsigned int fk_Point::GetVBO(void)
+{
+	return vbo;
+}
+
+void fk_Point::SetVBO(unsigned int argVBO)
+{
+	vbo = argVBO;
 }

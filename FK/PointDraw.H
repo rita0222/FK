@@ -9,7 +9,8 @@ namespace FK {
 	class fk_Model;
 	class fk_Vertex;
 	class fk_Color;
-
+	class fk_Point;
+	
 	typedef GLfloat _fk_P_Position[3];
 
 	class fk_PointDraw {
@@ -28,7 +29,7 @@ namespace FK {
 		//_fk_P_Position	*position;
 		
 		void			ShaderSetup(fk_Model *);
-		void			VAOSetup(fk_Model *);
+		void			ParticleVAOSetup(fk_Point *);
 
 		void			DrawShapePointMaterial(fk_Model *);
 		void			DrawParticlePointMaterial(fk_Model *);

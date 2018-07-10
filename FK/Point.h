@@ -201,6 +201,11 @@ namespace FK {
 		 */
 		void			allClear(bool matFlag = true);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		unsigned int	GetVBO(void);
+		void			SetVBO(unsigned int);
+#endif
+		
 	private:
 		fk_Palette				localPal;
 		fk_Array<fk_FVector>	vec;
@@ -208,7 +213,8 @@ namespace FK {
 		int						drawCount;
 		std::vector<int>		colorID;
 		int						colorCount;
-
+		unsigned int			vbo;
+		
 		bool	MakePoint(std::vector<fk_Vector> *);
 		bool	MakePoint(int, fk_Vector *);
 	};
