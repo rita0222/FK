@@ -111,14 +111,14 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 
 	shader = new fk_ShaderBinder();
 	auto prog = shader->getProgram();
-	prog->vertexShaderSource = "#version 150 core\n";
+	prog->vertexShaderSource = "#version 410 core\n";
 	prog->vertexShaderSource += "in vec4 position;\n";
 	prog->vertexShaderSource += "void main()\n";
 	prog->vertexShaderSource += "{\n";
 	prog->vertexShaderSource += "    gl_Position = position;\n";
 	prog->vertexShaderSource += "}\n";
 
-	prog->fragmentShaderSource = "#version 150 core\n";
+	prog->fragmentShaderSource = "#version 410 core\n";
 	prog->fragmentShaderSource += "out vec4 fragment;\n";
 	prog->fragmentShaderSource += "void main()\n";
 	prog->fragmentShaderSource += "{\n";
