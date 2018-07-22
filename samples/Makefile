@@ -221,7 +221,7 @@ mac:
 		-framework Accelerate \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKAR_S) $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
+	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 
