@@ -709,12 +709,13 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 	pos[static_cast<_st>(trueID)] = argPos;
 
 	modifyFlg = true;
-
+/*
 	if(find(modifyList.begin(),
 			modifyList.end(), trueID) == modifyList.end()) {
 		modifyList.push_back(trueID);
 	}
-
+*/
+	modifyList.push_back(trueID);
 	return true;
 }
 
@@ -732,11 +733,13 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 	pos[id].y = float(argY);
 	pos[id].z = float(argZ);
 	modifyFlg = true;
+	/*
 	if(find(modifyList.begin(),
 			modifyList.end(), trueID) == modifyList.end()) {
 		modifyList.push_back(trueID);
 	}
-
+	*/
+	modifyList.push_back(trueID);
 	return true;
 }
 
@@ -754,12 +757,13 @@ bool fk_IndexFaceSet::moveVPosition(int argID, double *argPos, int argOrder)
 
 	modifyFlg = true;
 	modifyList.push_back(trueID);
-
+/*
 	if(find(modifyList.begin(),
 			modifyList.end(), trueID) == modifyList.end()) {
 		modifyList.push_back(trueID);
 	}
-
+*/
+	modifyList.push_back(trueID);
 	return true;
 }
 

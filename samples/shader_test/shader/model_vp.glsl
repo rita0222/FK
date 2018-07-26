@@ -1,3 +1,5 @@
+#version 120
+
 //varying変数
 varying vec3 normal;
 varying vec4 vertexPos;

@@ -1,6 +1,5 @@
 ﻿#include <FK/FK.h>
 
-using namespace std;
 using namespace FK;
 using namespace FK::Material;
 
@@ -18,12 +17,12 @@ int main(int, char *[])
 
 	sprite.initFont("rm1b.ttf");
 	sprite.setPositionLT(-280.0, 230.0);
-	window.entry(sprite);
+	window.entry(&sprite);
 
 	model.setShape(&block);
 	model.glMoveTo(0.0, 6.0, 0.0);
 	model.setMaterial(Yellow);
-	window.entry(model);
+	window.entry(&model);
 
 	window.setCameraPos(0.0, 5.0, 20.0);
 	window.setCameraFocus(0.0, 5.0, 0.0);

@@ -1,6 +1,9 @@
+#version 120
+
 //varying変数
 varying vec3 normal;
 varying vec4 vertexPos;
+//out vec4 fragment
 
 //フラグメント
 void main(void)
@@ -21,5 +24,6 @@ void main(void)
 	float k_specular = pow(max(0.0, NdotH), gl_FrontMaterial.shininess);
 	vec4 specular = k_specular * gl_LightSource[0].specular * gl_FrontMaterial.specular;
 
+	//fragment = ambient + diffuse + specular;
 	gl_FragColor = ambient + diffuse + specular;
 }
