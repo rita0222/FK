@@ -6,6 +6,7 @@
 #endif
 
 #ifdef _MACOSX_
+#define CL_SILENCE_DEPRECATION
 #include <OpenCL/opencl.h>
 #else
 #include <CL/cl.h>

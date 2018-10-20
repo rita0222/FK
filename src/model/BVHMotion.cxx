@@ -235,7 +235,6 @@ int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 	stack<fk_Model *>	hieStack;
 	string				lineStr;
 	fk_Vector			tmpVec;
-	pair<int, int>		tmpFmt;
 
 	while(argBuf->size() > curLine) {
 		// 1 行取得
