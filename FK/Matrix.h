@@ -755,6 +755,19 @@ namespace FK {
 		 */
 		void			makeScale(const fk_Vector &V);
 
+		//! 透視投影変換行列生成関数
+		/*!
+		 */
+		void			makePerspective(double fovy, double aspect,
+										double near, double far);
+
+		void			makeFrustum(double left, double right,
+									double bottom, double top,
+									double near, double far);
+
+		void			makeOrtho(double left, double right,
+								  double bottom, double top,
+								  double near, double far);
 		//@}
 
 		//! \name 二項演算子 

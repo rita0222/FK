@@ -785,8 +785,62 @@ void fk_Matrix::makeScale(const fk_Vector &Vec)
 	m[1][1] = Vec.y;
 	m[2][2] = Vec.z;
 
+	updateStatus = true;
 	return;
 }
+
+void fk_Matrix::makePerspective(double argFovy, double argAspect,
+								double argNear, double argFar)
+{
+	MakeZeroMatrix(m);
+	double f = 1.0/tan(argFovy/2.0);
+
+	m[0][0] = f/argAspect;
+	m[1][1] = f;
+	m[2][2] = -(argFar + argNear)/(argFar - argNear);
+	m[2][3] = -(2.0 * argFar * argNear)/(argFar - argNear);
+	m[3][2] = -1.0;
+
+	updateStatus = true;
+	return;
+}
+
+void fk_Matrix::makeFrustum(double argLeft, double argRight,
+							double argBottom, double argTop,
+							double argNear, double argFar)
+{
+	MakeZeroMatrix(m);
+
+	m[0][0] = (2.0 * argNear)/(argRight - argLeft);
+	m[0][2] = (argRight + argLeft)/(argRight - argLeft);
+	m[1][1] = (2.0 * argNear)/(argTop - argBottom);
+	m[1][2] = (argTop + argBottom)/(argTop - argBottom);
+	m[2][2] = -(argFar + argNear)/(argFar - argNear);
+	m[2][3] = -(2.0 * argFar * argNear)/(argFar - argNear);
+	m[3][2] = -1.0;
+
+	updateStatus = true;
+	return;
+}
+
+void fk_Matrix::makeOrtho(double argLeft, double argRight,
+						  double argBottom, double argTop,
+						  double argNear, double argFar)
+{
+	MakeIdentMatrix(m);
+
+	m[0][0] = 2.0/(argRight - argLeft);
+	m[1][1] = 2.0/(argTop - argBottom);
+	m[2][2] = -2.0/(argFar - argNear);
+	m[0][3] = -(argRight + argLeft)/(argRight - argLeft);
+	m[1][3] = -(argTop + argBottom)/(argTop - argBottom);
+	m[2][3] = -(argFar + argNear)/(argFar - argNear);
+
+	updateStatus = true;
+	return;
+}
+
+
 
 // 逆行列出力演算子 
 fk_Matrix fk_Matrix::operator !(void) const
