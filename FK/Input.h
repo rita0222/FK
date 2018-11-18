@@ -17,10 +17,10 @@ struct POINT
 	long  x;
 	long  y;
 };
-typedef unsigned long DWORD;
-typedef long HRESULT;
-typedef int* HINSTANCE;
-typedef int* HWND;
+using DWORD = unsigned long;
+using HRESULT = long;
+using HINSTANCE = int*;
+using HWND = int*;
 
 #else
 

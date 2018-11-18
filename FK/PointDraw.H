@@ -11,8 +11,6 @@ namespace FK {
 	class fk_Color;
 	class fk_Point;
 	
-	typedef GLfloat _fk_P_Position[3];
-
 	class fk_PointDraw {
 	public:
 		fk_PointDraw(void);
@@ -25,8 +23,6 @@ namespace FK {
 
 		fk_ShaderBinder	*shader;
 		bool			arrayState;
-		//GLuint			bufferID;
-		//_fk_P_Position	*position;
 		
 		void			ShaderSetup(fk_Model *);
 		void			ParticleVAOSetup(fk_Point *);

@@ -64,7 +64,7 @@ namespace FK {
 	 */
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	typedef std::vector<unsigned char>	fk_GlyphBuffer;
+    using fk_GlyphBuffer = std::vector<unsigned char>;
 #endif
 
 	class fk_TextImage : public fk_Image {

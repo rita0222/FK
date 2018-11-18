@@ -328,7 +328,7 @@ namespace FK {
 		static std::map<fk_BaseObject *, std::string>	reverseCache;
 	};
 
-	typedef fk_Performer fkut_Performer;
+	using fkut_Performer = fk_Performer;
 }
 #endif //!__FK_MOTIONCHARACTOR_HEADER__
 

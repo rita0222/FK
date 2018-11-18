@@ -14,10 +14,10 @@
 
 // for Graphics Routine
 //! フレーム制御タイプを表す型
-typedef unsigned int fk_FrameMode;
 
 namespace FK {
 
+	using fk_FrameMode = unsigned int;
 
 	const fk_FrameMode FK_DEFAULT_FRAME	= 0x0000;	//!< フレーム制御無効
 	const fk_FrameMode FK_WAIT_FRAME	= 0x0001;	//!< フレーム待機制御
@@ -83,7 +83,7 @@ namespace FK {
 		FK_SW_PRESS			//!< 押しっぱなしの状態
 	};
 
-	typedef fk_SwitchStatus fkut_SwitchStatus;
+	using fkut_SwitchStatus = fk_SwitchStatus;
 
 #define FKUT_SW_RELEASE		FK_SW_RELEASE
 #define FKUT_SW_UP			FK_SW_UP

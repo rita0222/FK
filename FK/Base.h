@@ -135,9 +135,9 @@ namespace FK {
 		GL_BITMAP
 	};
 
-	typedef	int				GLint;
-	typedef unsigned int	GLuint;
-	typedef float			GLfloat;
+	using GLint = int;
+	using GLuint = unsigned int;
+	using GLfloat = float;
 
 #endif
 
@@ -179,7 +179,7 @@ namespace FK {
 #endif
 
 #ifdef FK_DEF_SIZETYPE
-	typedef std::vector<int>::size_type	_st;
+	using _st = std::vector<int>::size_type;
 #endif
 
 #ifndef FK_DOXYGEN_USER_PROCESS

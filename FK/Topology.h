@@ -7,7 +7,7 @@
 
 namespace FK {
 	
-	typedef char	   	fk_TopologyType;
+	using fk_TopologyType = char;
 
 	const fk_TopologyType	FK_VERTEX_TYPE = 1;
 	const fk_TopologyType	FK_HALF_TYPE = 2;

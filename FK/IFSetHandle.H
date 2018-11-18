@@ -14,8 +14,8 @@ namespace FK {
 	class fk_DataBase;
 	class fk_Vector;
 
-	typedef std::multimap<int, fk_Edge *>	fk_IFS_EdgeSet;
-	typedef fk_IFS_EdgeSet::value_type		fk_IFS_Entry;
+	using fk_IFS_EdgeSet = std::multimap<int, fk_Edge *>;
+	using fk_IFS_Entry = fk_IFS_EdgeSet::value_type;
 
 	class fk_IFSetHandle {
 

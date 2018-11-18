@@ -18,7 +18,7 @@ namespace FK {
 		FK_B_NONE			//!<	未定義境界
 	};
 
-	typedef unsigned int fk_DrawMode;
+	using fk_DrawMode = unsigned int;
 
 	const fk_DrawMode	FK_NONEMODE				= 0x0000;
 	const fk_DrawMode	FK_POINTMODE			= 0x0001;

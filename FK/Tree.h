@@ -26,7 +26,7 @@ namespace FK {
 		virtual ~fk_TreeBaseObject(void) {};
 	};
 
-	typedef std::list<fk_TreeData *>	fk_TList;
+	using fk_TList = std::list<fk_TreeData *>;
 
 
 	//! 木構造用ノードデータクラス

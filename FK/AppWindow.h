@@ -20,7 +20,7 @@ namespace FK {
 		FK_PAD_RIGHT
 	};
 
-	typedef fk_PadDirection fkut_PadDirection;
+	using fkut_PadDirection = fk_PadDirection;
 
 #define FKUT_PAD_UP		FK_PAD_UP
 #define FKUT_PAD_DOWN	FK_PAD_DOWN
@@ -1011,7 +1011,7 @@ namespace FK {
 		void ToggleScreen(void);
 	};
 
-	typedef fk_AppWindow fkut_SimpleWindow;
+	using fkut_SimpleWindow = fk_AppWindow;
 }
 
 #endif //!__FK_SIMPLE_WINDOW_HEADER__

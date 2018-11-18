@@ -93,10 +93,10 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 	//! ウインドウ状態を保持する構造体
-	typedef struct{
+	struct windowstate {
 		HWND hWnd;
 		WINDOWPLACEMENT WindowPlacement;
-	} windowstate;
+	};
 
 #endif //!FK_DOXYGEN_USER_PROCESS
 #endif //WIN32

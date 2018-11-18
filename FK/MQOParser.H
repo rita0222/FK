@@ -19,7 +19,7 @@ namespace FK {
 		bool			operator ==(const _fk_MQO_IDSet &) const;
 	};
 
-	typedef std::vector< std::vector<_fk_MQO_IDSet> >  	fk_MQOListSet;
+	using fk_MQOListSet = std::vector< std::vector<_fk_MQO_IDSet> >;
 	
 	class fk_MQOParser : public fk_ParserBase {
 

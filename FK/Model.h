@@ -16,7 +16,7 @@ namespace FK {
 	class fk_TreeData;
 	class fk_Color;
 
-	typedef std::tuple<unsigned int, std::function<void(void)> >  fk_funcSet;
+	using fk_funcSet = std::tuple<unsigned int, std::function<void(void)> >;
 
 	//! モデルを生成、管理するクラス
 	/*!

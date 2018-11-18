@@ -5,7 +5,7 @@
 #include <FK/Model.h>
 
 namespace FK {
-	typedef unsigned int fk_GuideMode;
+	using fk_GuideMode = unsigned int;
 
 	const fk_GuideMode FK_NO_GUIDE = 0x0000;
 	const fk_GuideMode FK_AXIS_X   = 0x0001;

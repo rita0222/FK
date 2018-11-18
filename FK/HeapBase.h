@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace FK {
-	typedef std::vector<int>::size_type		_fk_h_s;
+	using _fk_h_s = std::vector<int>::size_type;
 
 	//! 重複要素に同一IDを与えるための汎用テンプレート
 	/*!

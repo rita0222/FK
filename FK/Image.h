@@ -9,12 +9,12 @@
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 #ifdef	NO_GL_LIBRARY
-typedef	unsigned char	fk_ImType;
-typedef unsigned int	fk_TexID;
+using fk_ImType = unsigned char;
+using fk_TexID = unsigned int;
 #else
 #include <FK/OpenGL.H>
-typedef GLubyte			fk_ImType;
-typedef GLuint			fk_TexID;
+using fk_ImType = GLubyte;
+using fk_TexID = GLuint;
 #endif
 #endif
 

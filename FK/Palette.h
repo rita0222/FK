@@ -7,7 +7,7 @@
 namespace FK {
 
 	//! マテリアルモード型
-	typedef unsigned char	fk_MaterialMode;
+	using fk_MaterialMode = unsigned char;
 
 	const fk_MaterialMode	FK_NONE_MODE = 0;		//!< 不描画モード
 	const fk_MaterialMode	FK_CHILD_MODE = 1;		//!< 個別設定モード

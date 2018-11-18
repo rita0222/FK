@@ -60,7 +60,7 @@ namespace FK {
 		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
 	};
 
-	typedef fk_TrackBall fkut_TrackBall;
+	using fkut_TrackBall = fk_TrackBall;
 }
 
 #endif //!__FK_TRACKBALL_HEADER__
