@@ -1,7 +1,8 @@
 ﻿#ifndef __FK_PROJECTION_HEADER__
 #define __FK_PROJECTION_HEADER__
 
-#include <FK/Base.h>
+#include <functional>
+#include <FK/Matrix.h>
 
 namespace FK {
 	//! 投影法を表す列挙型
@@ -38,14 +39,19 @@ namespace FK {
 		 */
 		fk_ProjectMode	getMode(void) const;
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		GLfloat			*GetBuf(void);
+#endif
+
 	private:
 		fk_ProjectMode	Mode;
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-
-		void			SetMode(fk_ProjectMode);
+		std::function<void()>	MakeMat;
+		fk_Matrix				ProjM;
+		void					SetMode(fk_ProjectMode);
 
 #endif
 
@@ -146,7 +152,18 @@ namespace FK {
 		 */
 		void			setAll(double fovy, double near, double far);
 
-		//! 視野角参照関数
+		//! アスペクト比設定関数
+		/*!
+		 *	アスペクト比を明示的に設定する場合に使用します。
+		 *	通常、アスペクト比は自動的に設定されるためこの設定を行う必要はありませんが、
+		 *	あえてウィンドウの縦横比とは異なるアスペクト比を設定したい場合は、
+		 *	この関数を利用して下さい。
+		 *
+		 *	\param[in]	aspect	アスペクト比
+		 */
+		void			setAspect(double aspect);
+
+//! 視野角参照関数
 		/*!
 		 *	視野角を参照します。
 		 *
@@ -171,9 +188,18 @@ namespace FK {
 		 */
 		double			getFar(void) const;
 
+		//! アスペクト比参照関数
+		/*!
+		 *	アスペクト比を参照します。
+		 *
+		 *	\return		アスペクト比
+		 */
+		double			getAspect(void) const;
+
 	private:
 		double			Fovy;
 		double			Near, Far;
+		double			Aspect;
 	};
 
 	//! 一般透視投影を制御するクラス

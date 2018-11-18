@@ -606,7 +606,7 @@ void fk_OrthoMatrix::Print(string argStr) const
 	return;
 }
 
-float * fk_OrthoMatrix::GetBuffer(void)
+GLfloat * fk_OrthoMatrix::GetBuffer(void)
 {
 	if(buf == nullptr) buf = new float[16];
 	if(updateStatus == true) {

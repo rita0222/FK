@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace FK;
-typedef std::vector<int>::size_type st;
+using st = std::vector<int>::size_type;
 
 fk_ARPattern::fk_ARPattern(void)
 {

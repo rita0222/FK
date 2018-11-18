@@ -390,8 +390,8 @@ namespace FK {
 	
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		float *			GetBuffer(void);
-		void			Print(std::string = "") const;
+		GLfloat *			GetBuffer(void);
+		void				Print(std::string = "") const;
 
 #endif
 

@@ -77,7 +77,7 @@
 using namespace std;
 using namespace FK;
 
-typedef fk_TList::iterator	list_ite;
+using list_ite = fk_TList::iterator;
 
 fk_TreeData::fk_TreeData(fk_Tree *argTree,
 						 const string argName, fk_TreeData *argParent)

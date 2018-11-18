@@ -92,6 +92,7 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 	switch(Mode) {
 	  case FK_NONE_PROJ_MODE:
 		SetObjectType(FK_PROJECTBASE);
+		MakeMat = [&] { ProjM.init(); };
 		break;
 
 	  case FK_PERSPECTIVE_MODE:
@@ -111,6 +112,11 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 	}
 
 	return;
+}
+
+GLfloat * fk_ProjectBase::GetBuf()
+{
+	return ProjM.GetBuffer();
 }
 
 fk_ProjectMode fk_ProjectBase::getMode(void) const

@@ -5,6 +5,12 @@
 #include <string>
 #include <vector>
 
+#ifdef OPENGL4
+#include <FK/OpenGL.H>
+#else
+using GLfloat = float;
+#endif
+
 namespace FK {
 	const double FK_VECTOREPS = 1.0e-12;	//!< ベクトル演算誤差基準値
 
