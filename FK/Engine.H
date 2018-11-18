@@ -55,8 +55,8 @@ namespace FK {
 		void				SetPickViewPort(int, int, int);
 		void				Draw(bool);
 
-		void				StereoDrawPrep(fk_StereoChannel);
-		void				StereoDrawMain(fk_StereoChannel);
+		//void				StereoDrawPrep(fk_StereoChannel);
+		//void				StereoDrawMain(fk_StereoChannel);
 
 	private:
 
@@ -85,6 +85,8 @@ namespace FK {
 
 		std::vector<fk_ImType>		snapBuffer;
 
+		fk_Perspective				defProj;
+
 
 		void				DrawObjs(bool);
 		void				DrawModel(fk_Model *, bool, bool);
@@ -100,7 +102,7 @@ namespace FK {
 
 		void				SetViewPort(void);
 		void				SetProjection(const fk_ProjectBase *);
-		void				SetDefaultProjection(void);
+		//void				SetDefaultProjection(void);
 
 		void				ApplySceneParameter(bool);
 
@@ -115,9 +117,9 @@ namespace FK {
 		bool				GetViewLinePos(double, double,
 										   fk_Vector *, fk_Vector *);
 
-		void				SetStereoViewPort(fk_StereoChannel);
-		void				RecalcStereoModelView(fk_StereoChannel);
-		void				DrawStereoObjs(bool);
+		//void				SetStereoViewPort(fk_StereoChannel);
+		//void				RecalcStereoModelView(fk_StereoChannel);
+		//void				DrawStereoObjs(bool);
 
 		void				SetBlendMode(fk_Model *model);
 		void				SetDepthMode(fk_DepthMode mode);

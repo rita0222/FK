@@ -147,6 +147,8 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 
 	textureDraw->SetBindMode(true);
 
+	defProj.setAll(40.0, 1.0, 6000.0);
+	
 	return;
 }
 
@@ -180,7 +182,7 @@ void fk_GraphicsEngine::SetViewPort(void)
 #endif
 
 	if(curDLink == nullptr) {
-		SetDefaultProjection();
+		SetProjection(&defProj);
 	} else {
 		SetProjection(curDLink->getProjection());
 	}
@@ -221,7 +223,7 @@ void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
 #endif
 	
 	if(curDLink == nullptr) {
-		SetDefaultProjection();
+		SetProjection(&defProj);
 	} else {
 		SetProjection(curDLink->getProjection());
 	}
@@ -233,17 +235,6 @@ void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
 #endif
 
 	return;
-}
-
-void fk_GraphicsEngine::SetDefaultProjection(void)
-{
-	double			aspect;
-
-	aspect = static_cast<GLfloat>(wSize)/static_cast<GLfloat>(hSize);
-
-#ifndef OPENGL4
-	gluPerspective(40.0, aspect, 1.0, 6000.0);
-#endif
 }
 
 void fk_GraphicsEngine::SetProjection(const fk_ProjectBase *argProj)
@@ -322,6 +313,7 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	return;
 }
 
+/*
 void fk_GraphicsEngine::SetStereoViewPort(fk_StereoChannel argChannel)
 {
 #ifndef OPENGL4
@@ -331,7 +323,7 @@ void fk_GraphicsEngine::SetStereoViewPort(fk_StereoChannel argChannel)
 #endif
 	
 	if(curDLink == nullptr) {
-		SetDefaultProjection();
+		SetProjection(&defProj);
 	} else {
 		SetProjection(curDLink->getStereoProjection(argChannel));
 	}
@@ -439,6 +431,7 @@ void fk_GraphicsEngine::DrawStereoObjs(bool argPickFlg)
 
 	return;
 }
+*/
 
 void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 {
