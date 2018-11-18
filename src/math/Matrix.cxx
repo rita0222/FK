@@ -789,8 +789,7 @@ void fk_Matrix::makeScale(const fk_Vector &Vec)
 	return;
 }
 
-void fk_Matrix::makePerspective(double argFovy, double argAspect,
-								double argNear, double argFar)
+void fk_Matrix::makePerspective(double argFovy, double argNear, double argFar, double argAspect)
 {
 	MakeZeroMatrix(m);
 	double f = 1.0/tan(argFovy/2.0);

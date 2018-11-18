@@ -758,8 +758,9 @@ namespace FK {
 		//! 透視投影変換行列生成関数
 		/*!
 		 */
-		void			makePerspective(double fovy, double aspect,
-										double near, double far);
+		void			makePerspective(double fovy, 
+										double near, double far,
+										double aspect);
 
 		void			makeFrustum(double left, double right,
 									double bottom, double top,

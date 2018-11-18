@@ -142,16 +142,6 @@ namespace FK {
 		 */
 		void			setFar(double far);
 
-		//! 一括設定関数
-		/*!
-		 *	視野角、クリッピング面距離を一括して設定します。
-		 *
-		 *	\param[in]	fovy	視野角。単位は弧度法(ラジアン)です。
-		 *	\param[in]	near	クリッピング近距離面への距離
-		 *	\param[in]	far		クリッピング遠距離面への距離
-		 */
-		void			setAll(double fovy, double near, double far);
-
 		//! アスペクト比設定関数
 		/*!
 		 *	アスペクト比を明示的に設定する場合に使用します。
@@ -162,6 +152,27 @@ namespace FK {
 		 *	\param[in]	aspect	アスペクト比
 		 */
 		void			setAspect(double aspect);
+
+		//! 一括設定関数1
+		/*!
+		 *	視野角、クリッピング面距離を一括して設定します。
+		 *
+		 *	\param[in]	fovy	視野角。単位は弧度法(ラジアン)です。
+		 *	\param[in]	near	クリッピング近距離面への距離
+		 *	\param[in]	far		クリッピング遠距離面への距離
+		 */
+		void			setAll(double fovy, double near, double far);
+
+		//! 一括設定関数2
+		/*!
+		 *	視野角、クリッピング面距離、アスペクト比を一括して設定します。
+		 *
+		 *	\param[in]	fovy	視野角。単位は弧度法(ラジアン)です。
+		 *	\param[in]	near	クリッピング近距離面への距離
+		 *	\param[in]	far		クリッピング遠距離面への距離
+		 *	\param[in]	aspect	アスペクト比
+		 */
+		void			setAll(double fovy, double near, double far, double aspect);
 
 //! 視野角参照関数
 		/*!
@@ -200,6 +211,7 @@ namespace FK {
 		double			Fovy;
 		double			Near, Far;
 		double			Aspect;
+		bool			AutoMode;
 	};
 
 	//! 一般透視投影を制御するクラス
