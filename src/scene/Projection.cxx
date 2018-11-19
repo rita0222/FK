@@ -114,9 +114,9 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 	return;
 }
 
-GLfloat * fk_ProjectBase::GetBuf()
+fk_Matrix * fk_ProjectBase::GetMatrix()
 {
-	return ProjM.GetBuffer();
+	return &ProjM;
 }
 
 fk_ProjectMode fk_ProjectBase::getMode(void) const

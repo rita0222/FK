@@ -105,6 +105,18 @@ void fk_PointDraw::SetArrayState(bool argState)
 	return;
 }
 
+void fk_PointDraw::SetProjection(fk_ProjectBase *argProj)
+{
+	project = argProj;
+	return;
+}
+
+void fk_PointDraw::SetCamera(fk_Model *argCamera)
+{
+	camera = argCamera;
+	return;
+}
+
 void fk_PointDraw::ShaderSetup(fk_Model *argM)
 {
 	FK_UNUSED(argM);

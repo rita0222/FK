@@ -160,12 +160,12 @@ void fk_Window::drawScene(void)
 
 void fk_Window::drawSceneLeft(void)
 {
-	engine.StereoDrawMain(FK_STEREO_LEFT);
+	//engine.StereoDrawMain(FK_STEREO_LEFT);
 }
 
 void fk_Window::drawSceneRight(void)
 {
-	engine.StereoDrawMain(FK_STEREO_RIGHT);
+	//engine.StereoDrawMain(FK_STEREO_RIGHT);
 }
 
 void fk_Window::draw(void)
@@ -183,6 +183,7 @@ void fk_Window::draw(void)
 	}
 	
 	if(stereoMode == true) {
+		/*
 		engine.StereoDrawPrep(FK_STEREO_LEFT);
 		preDrawLeft();
 		drawSceneLeft();
@@ -191,6 +192,7 @@ void fk_Window::draw(void)
 		preDrawRight();
 		drawSceneRight();
 		postDrawRight();
+		*/
 	} else {
 		engine.Draw(false);
 	}

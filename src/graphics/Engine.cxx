@@ -237,11 +237,15 @@ void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
 	return;
 }
 
-void fk_GraphicsEngine::SetProjection(const fk_ProjectBase *argProj)
+void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 {
 	FK_UNUSED(argProj);
 
-#ifndef OPENGL4	
+#ifdef OPENGL4
+	argProj->MakeMat();
+	viewMat = argProj->GetMatrix();
+
+#else	
 	fk_ProjectBase	*proj;
 	fk_Perspective	*pers;
 	fk_Frustum		*frus;

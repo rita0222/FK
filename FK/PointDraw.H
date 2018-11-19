@@ -18,11 +18,15 @@ namespace FK {
 
 		void			SetArrayState(bool);
 		void			DrawShapePoint(fk_Model *, bool);
+		void			SetProjection(fk_ProjectBase *);
+		void			SetCamera(fk_Model *);
 
 	private:
 
 		fk_ShaderBinder	*shader;
 		bool			arrayState;
+		fk_ProjectBase	*project;
+		fk_Model		*camera;
 		
 		void			ShaderSetup(fk_Model *);
 		void			ParticleVAOSetup(fk_Point *);

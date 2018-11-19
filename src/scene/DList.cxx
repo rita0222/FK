@@ -254,7 +254,7 @@ void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 	return;
 }
 
-const fk_ProjectBase * fk_DisplayLink::getProjection(void) const
+fk_ProjectBase * fk_DisplayLink::getProjection(void) const
 {
 	return proj;
 }

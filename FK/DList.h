@@ -145,7 +145,7 @@ namespace FK {
 		 *
 		 *	\return 投影設定のアドレス
 		 */
-		const fk_ProjectBase *	getProjection(void) const;
+		fk_ProjectBase *	getProjection(void) const;
 
 		//! \name 立体視モード制御関数
 		//@{

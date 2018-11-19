@@ -40,7 +40,8 @@ namespace FK {
 		fk_ProjectMode	getMode(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		GLfloat			*GetBuf(void);
+		fk_Matrix		*GetMatrix(void);
+		std::function<void()>	MakeMat;
 #endif
 
 	private:
@@ -49,9 +50,8 @@ namespace FK {
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		std::function<void()>	MakeMat;
-		fk_Matrix				ProjM;
-		void					SetMode(fk_ProjectMode);
+		fk_Matrix		ProjM;
+		void			SetMode(fk_ProjectMode);
 
 #endif
 

@@ -80,7 +80,7 @@ namespace FK {
 
 		std::vector<fk_Model *>		modelArray;
 
-		fk_Matrix					viewMat;
+		fk_Matrix					*viewMat, *cameraMat;
 		GLint						viewArray[4];
 
 		std::vector<fk_ImType>		snapBuffer;
@@ -101,7 +101,7 @@ namespace FK {
 		void				DrawBoundaryObj(fk_Model *, bool);
 
 		void				SetViewPort(void);
-		void				SetProjection(const fk_ProjectBase *);
+		void				SetProjection(fk_ProjectBase *);
 		//void				SetDefaultProjection(void);
 
 		void				ApplySceneParameter(bool);
