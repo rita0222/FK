@@ -498,32 +498,6 @@ int fk_Window::getMouseWheelStatus(void)
 	return retVal;
 }
 
-void fk_Window::getPickModel(fk_PickData *argPickData, int argPixSize)
-{
-	GetPickData(true, argPickData, argPixSize, -1, -1);
-	return;
-}
-
-void fk_Window::getPickModel(fk_PickData *argPickData, int argPixSize,
-							 int argMouseX, int argMouseY)
-{
-	GetPickData(false, argPickData, argPixSize, argMouseX, argMouseY);
-	return;
-}
-
-void fk_Window::GetPickData(bool argFlag, fk_PickData *argPickData,
-							int argPixSize, int argMouseX, int argMouseY)
-{
-	// if(argPickData == (fk_PickData *)NULL) return;
-
-	if(argFlag == true) {
-		SetPickViewPort(argMouseX, argMouseY);
-	}
-	engine.GetPickData(argPickData, argPixSize, argMouseX, argMouseY);
-
-	return;
-}
-
 void fk_Window::setFrameMode(fk_FrameMode argMode)
 {
 	frameMode = argMode;

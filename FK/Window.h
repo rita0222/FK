@@ -386,54 +386,6 @@ namespace FK {
 		 *	\sa getMousePosition(), getMouseStatus()
 		 */
 		int		getMouseWheelStatus(void);
-
-		//! ピックによるモデル選択関数
-		/*!
-		 *	この関数を呼び出すと、
-		 *	プログラムは描画領域にマウスピックが行われるまで一旦停止します。
-		 *	ピックが行われたときに、
-		 *	fk_Solid およびその派生クラスによる形状が表示されていた場合、
-		 *	ピックした付近にあったモデルと位相要素を格納します。
-		 *	格納データの詳細については、 fk_PickData を参照して下さい。
-		 *
-		 *	ピック操作を行わず、任意の投影座標において探索を行いたい場合は、
-		 *	getPickModel(fk_PickData *, int, int, int) を用いてください。
-		 *
-		 *	\param[out]		data
-		 *		モデルと位相要素を格納するための、
-		 *		fk_PickData 型インスタンスのポインタ。
-		 *	\param[in]		pixel
-		 *		選択の際、どの程度の範囲までを取得対象とするかの距離。
-		 *		単位はピクセルとなります。
-		 *
-		 *	\sa getPickModel(fk_PickData *data, int, int, int),
-		 *		fk_PickData, fk_Solid
-		 */
-		void	getPickModel(fk_PickData *data, int pixel);
-
-		//! 任意投影座標でのモデル選択関数
-		/*!
-		 *	この関数は、 fk_Solid およびその派生クラスによる形状が表示されていた場合、
-		 *	指定した投影座標の付近にあったモデルと位相要素を格納します。
-		 *	投影座標についての詳細は、本クラスの概要を参照して下さい。
-		 *	格納データの詳細については、 fk_PickData を参照して下さい。
-		 *
-		 *	ピック操作によってモデルや位相要素を選択したい場合は、
-		 *	getPickModel(fk_PickData *, int) を用いてください。
-		 *
-		 *	\param[out]		data
-		 *		モデルと位相要素を格納するための、
-		 *		fk_PickData 型インスタンスのポインタ。
-		 *	\param[in]		pixel
-		 *		選択の際、どの程度の範囲までを取得対象とするかの距離。
-		 *		単位はピクセルとなります。
-		 *	\param[in]		x		探索対象の投影座標 x 成分
-		 *	\param[in]		y		探索対象の投影座標 y 成分
-		 *
-		 *	\sa getPickModel(fk_PickData *data, int),
-		 *		fk_PickData, fk_Solid
-		 */
-		void	getPickModel(fk_PickData *data, int pixel, int x, int y);
 		//@}
 
 		//! \name フレームレート制御関数
@@ -1018,10 +970,8 @@ namespace FK {
 		static Fl_Window		*error_win;
 		static Fl_Multi_Browser	*err_browser;
 
-		void					SetPickViewPort(int &, int &);
 		bool					IsInsideWindow(void);
 		Fl_Group *				GetInhParentWindow(void);
-		void					GetPickData(bool, fk_PickData *, int, int, int);
 		void					PushPrevStatus(void);
 	
 		void					draw();	// virtual Function from Fl_Gl_Window class

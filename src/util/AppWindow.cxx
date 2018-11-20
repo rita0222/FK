@@ -704,32 +704,6 @@ fk_Input * fk_AppWindow::getPadManager(void)
 	return &input;
 }
 
-bool fk_AppWindow::isModelPicked(fk_Model *model, int pixel, int mouseX, int mouseY)
-{
-	static fk_PickData	pick;
-	const bool orgMode = model->getPickMode();
-
-	if(mouseX == -1 || mouseY == -1) {
-		drawWin->getMousePosition(&mouseX, &mouseY);
-	}
-	if(mouseX == -1 || mouseY == -1) return false;
-
-	model->setPickMode(true);
-	drawWin->getPickModel(&pick, pixel, mouseX, mouseY);
-	model->setPickMode(orgMode);
-
-	for(int i = 0; i < pick.getSize(); i++) {
-		if(pick.getModel(i) == model) return true;
-	}
-
-	return false;
-}
-
-bool fk_AppWindow::isModelPicked(fk_Model &model, int pixel, int mouseX, int mouseY)
-{
-	return this->isModelPicked(&model, pixel, mouseX, mouseY);
-}
-
 void fk_AppWindow::setGuideAxisWidth(double width)
 {
 	guide.setAxisWidth(width);

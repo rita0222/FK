@@ -136,23 +136,6 @@ unsigned long fk_Window::getUsingTextureMemory(void)
 	return engine.GetUsingTextureMemory();
 }
 
-void fk_Window::SetPickViewPort(int &argX, int &argY)
-{
-	int		mouseX = 0;
-	int		mouseY = 0;
-
-	while(getMouseStatus(FK_MOUSE1) == false &&
-		  getMouseStatus(FK_MOUSE2) == false &&
-		  getMouseStatus(FK_MOUSE3) == false) {
-		if(Fl::check() == 0) break;
-		if(winOpenStatus() == false) continue;
-		getMousePosition(&mouseX, &mouseY);
-	}
-	argX = mouseX;
-	argY = mouseY;
-	return;
-}
-
 void fk_Window::drawScene(void)
 {
 	engine.Draw(false);
