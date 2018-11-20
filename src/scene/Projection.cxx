@@ -127,18 +127,19 @@ fk_ProjectMode fk_ProjectBase::getMode(void) const
 fk_Perspective::fk_Perspective(double argFovy, double argNear, double argFar)
 	: fk_ProjectBase(FK_PERSPECTIVE_MODE)
 {
-	MakeMat = [&] { ProjM.makePerspective(Fovy, Aspect, Near, Far); };
+	MakeMat = [&] { ProjM.makePerspective(Fovy, Near, Far, Aspect); };
 	AutoMode = true;
-	setAll(argFovy, argNear, argFar);
+	setAll(argFovy, argNear, argFar, 1.0);
+	Aspect = 1.0;
 	return;
 }
 
 fk_Perspective::fk_Perspective(const fk_Perspective &argPers)
 	: fk_ProjectBase(FK_PERSPECTIVE_MODE)
 {
-	MakeMat = [&] { ProjM.makePerspective(Fovy, Aspect, Near, Far); };
+	MakeMat = [&] { ProjM.makePerspective(Fovy, Near, Far, Aspect); };
 	AutoMode = true;
-	setAll(argPers.Fovy, argPers.Near, argPers.Far);
+	setAll(argPers.Fovy, argPers.Near, argPers.Far, argPers.Aspect);
 }
 
 fk_Perspective::~fk_Perspective()

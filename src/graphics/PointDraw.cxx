@@ -122,12 +122,15 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 	FK_UNUSED(argM);
 
 	shader = new fk_ShaderBinder();
-	auto prog = shader->getProgram();
+ 	auto prog = shader->getProgram();
 	prog->vertexShaderSource = "#version 410 core\n";
+	//prog->vertexShaderSource += "uniform mat4 modelview\n";
+	prog->vertexShaderSource += "uniform mat4 projection;\n";
 	prog->vertexShaderSource += "in vec4 position;\n";
 	prog->vertexShaderSource += "void main()\n";
 	prog->vertexShaderSource += "{\n";
-	prog->vertexShaderSource += "    gl_Position = position;\n";
+	//prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
+	prog->vertexShaderSource += "    gl_Position = projection * position;\n";
 	prog->vertexShaderSource += "}\n";
 
 	prog->fragmentShaderSource = "#version 410 core\n";
@@ -183,6 +186,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 	if(argObj->preShaderList.empty() == true &&
 	   argObj->postShaderList.empty() == true) {
 		shader->bindModel(argObj);
+		auto parameter = shader->getParameter();
+		parameter->setRegister("projection", project->GetMatrix());
 	}
 
 #else

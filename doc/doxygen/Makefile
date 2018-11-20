@@ -9,7 +9,7 @@ BASECOPYDIR	= ../Output/FK_Ref_Base
 CLICOPYDIR	= ../Output/FK_Ref_CLI
 
 doc:
-	cd Fig; ../../com/svg2png *.svg; ../../com/svg2eps *.svg
+	cd Fig; ../../com/svg2png -i *.svg; ../../com/svg2eps -i *.svg
 	doxygen $(BASECONFFILE)
 	doxygen $(CLICONFFILE)
 	rm -rf $(BASECOPYDIR)

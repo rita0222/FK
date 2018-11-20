@@ -80,7 +80,7 @@ namespace FK {
 
 		std::vector<fk_Model *>		modelArray;
 
-		fk_Matrix					*viewMat, *cameraMat;
+		//fk_Matrix					projMat, cameraMat;
 		GLint						viewArray[4];
 
 		std::vector<fk_ImType>		snapBuffer;
@@ -112,7 +112,7 @@ namespace FK {
 
 		unsigned long		GetNow(void);
 
-		void				ViewMatCalc(fk_Matrix *);
+		//void				ViewMatCalc(fk_Matrix *);
 
 		bool				GetViewLinePos(double, double,
 										   fk_Vector *, fk_Vector *);

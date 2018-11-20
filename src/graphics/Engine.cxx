@@ -242,8 +242,13 @@ void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 	FK_UNUSED(argProj);
 
 #ifdef OPENGL4
+	if(argProj->getMode() == FK_PERSPECTIVE_MODE) {
+		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(argProj);
+		pers->setAspect(GLfloat(wSize)/GLfloat(hSize));
+		//pers->setAspect(1.0);
+	}
 	argProj->MakeMat();
-	viewMat = argProj->GetMatrix();
+	pointDraw->SetProjection(argProj);
 
 #else	
 	fk_ProjectBase	*proj;
@@ -937,7 +942,7 @@ void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 	
 	return;
 }
-
+/*
 void fk_GraphicsEngine::ViewMatCalc(fk_Matrix *argMat)
 {
 	GLdouble	tmp_modelArray[16], projArray[16];
@@ -967,6 +972,7 @@ void fk_GraphicsEngine::ViewMatCalc(fk_Matrix *argMat)
 	*argMat = projMat * modelMat;
 	return;
 }
+*/
 
 bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 									   fk_Vector *retS, fk_Vector *retE)
@@ -976,7 +982,7 @@ bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 	double			tmpY;
 	double			diffX, diffY;
 
-	ViewMatCalc(&mat);
+	//ViewMatCalc(&mat);
 	mat.inverse();
 
 	tmpY = static_cast<double>(hSize) - argY - 1.0;
@@ -1047,7 +1053,7 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 
 	if(generalID > 2) SetViewPort();
 
-	ViewMatCalc(&mat);
+	//ViewMatCalc(&mat);
 	outVec = mat * inVec;
 	if(fabs(outVec.w) < FK_EPS) return false;
 	outVec /= outVec.w;
