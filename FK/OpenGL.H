@@ -2,6 +2,7 @@
 #define __FK_OPENGL_HEADER__
 
 #ifdef _MACOSX_
+#define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else // _MACOSX_

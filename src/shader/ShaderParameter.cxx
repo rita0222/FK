@@ -188,13 +188,7 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 		GLint location = GetAttributeLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			int dim = get<0>(pair.second);
-			vector<float> *values = get<1>(pair.second);
-			float *pValue = &((*values)[0]);
 			glEnableVertexAttribArray(GLuint(location));
-			/*
-			glVertexAttribPointer(GLuint(location), dim, GL_FLOAT, GL_FALSE,
-								  GLsizei(int(sizeof(float)) * dim), pValue);
-			*/
 			glVertexAttribPointer(GLuint(location), dim, GL_FLOAT, GL_FALSE, 0, 0);
 		} else {
 			lastError += "ERROR: " + pair.first + " is not found.";
@@ -206,13 +200,7 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 		int location = GetAttributeLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			int dim = get<0>(pair.second);
-			vector<int> *values = get<1>(pair.second);
-			int *pValue = &((*values)[0]);
 			glEnableVertexAttribArray(GLuint(location));
-			/*
-			glVertexAttribPointer(GLuint(location), dim, GL_INT, GL_FALSE,
-								  GLsizei(int(sizeof(int)) * dim), pValue);
-			*/
 			glVertexAttribPointer(GLuint(location), dim, GL_INT, GL_FALSE, 0, 0);
 		} else {
 			lastError += "ERROR: " + pair.first + " is not found.";
