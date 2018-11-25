@@ -149,7 +149,7 @@ int main(int, char *[])
 		fkWin.getMousePosition(&mX, &mY);
 		curMode = shapeModel.getDrawMode();
 		shapeModel.setDrawMode(FK_POINTMODE | FK_LINEMODE);
-		fkWin.getPickModel(&pickData, 10, mX, mY);
+		//fkWin.getPickModel(&pickData, 10, mX, mY);
 
 		for(i = 0; i < pickData.getSize(); i++) {
 			if(pickData.getType(i) == FK_VERTEX) {
