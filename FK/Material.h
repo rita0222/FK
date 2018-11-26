@@ -28,7 +28,7 @@ namespace FK {
 		 *	各色要素を float の配列によって格納しています。
 		 *	メンバ関数を介さずに直接参照、操作しても問題ありません。
 		 */
-		float col[4];
+		std::vector<float> col;
 
 		//! コンストラクタ1
 		/*!

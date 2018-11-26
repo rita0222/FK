@@ -1057,7 +1057,7 @@ void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
 	shapeP = argObj->getShape();
 
 	if(matFlag == true || shapeP == nullptr) {
-		curMat = argObj->getInhMaterial();
+		//curMat = argObj->getInhMaterial();
 	} else {
 		curMat = &(*shapeP->getMaterialVector())[0];
 	}

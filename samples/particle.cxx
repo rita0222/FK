@@ -93,7 +93,7 @@ class MyParticle: public fk_ParticleSet {
 // ここに、様々な設定を記述しておく。
 MyParticle::MyParticle(void)
 {
-	setMaxSize(1000);   // パーティクルの最大数設定。
+	setMaxSize(5000);   // パーティクルの最大数設定。
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
 	setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
@@ -144,6 +144,7 @@ void MyParticle::indivMethod(fk_Particle *p)
 	tmp1 = water/(r*r*r);
 	tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
 	vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
+	vec /= 5.0;
 	// パーティクルの速度ベクトルを代入
 	p->setVelocity(vec);
  

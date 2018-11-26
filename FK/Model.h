@@ -937,29 +937,6 @@ namespace FK {
 		 */
 		void	setLineColor(float r, float g, float b);
 
-		//! 基本マテリアル削除関数
-		/*!
-		 *	基本マテリアル設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの基本マテリアルを継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルトマテリアルが採用されます。
-		 */
-		void	deleteMaterial(void);
-
-		//! 頂点色削除関数
-		/*!
-		 *	頂点色設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの頂点色を継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルト頂点色が採用されます。
-		 */
-		void	deletePointColor(void);
-
-		//! 稜線色削除関数
-		/*!
-		 *	稜線色設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの稜線色を継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルト稜線色が採用されます。
-		 */
-		void	deleteLineColor(void);
 		//@}
 
 		//! \name マテリアル属性参照関数
@@ -967,48 +944,22 @@ namespace FK {
 		//! マテリアル参照関数
 		/*!
 		 *	現在モデルに設定されている基本マテリアルを参照します。
-		 *	モデルにマテリアルが設定されていない場合は nullptr を返します。
 		 *
 		 *	\return		基本マテリアルのポインタ
 		 *
-		 *	\sa fk_Material, setMaterial(), getInhMaterial()
+		 *	\sa fk_Material, setMaterial()
 		 */
 		fk_Material *	getMaterial(void);
-
-		//! 継承マテリアル参照関数
-		/*!
-		 *	親子関係を踏まえた基本マテリアルを参照します。
-		 *	当モデルにマテリアルが設定されている場合、そのマテリアルを返します。
-		 *	当モデルにマテリアルが設定されていない場合は、親モデルのマテリアルを返します。
-		 *
-		 *	\return		継承マテリアルのポインタ
-		 *
-		 *	\sa fk_Material, setMaterial(), getMaterial()
-		 */
-		fk_Material *	getInhMaterial(void);
 
 		//! 頂点色参照関数
 		/*!
 		 *	現在モデルに設定されている頂点色を参照します。
-		 *	モデルに頂点色が設定されていない場合は nullptr を返します。
 		 *
 		 *	\return		頂点色のポインタ
 		 *
-		 *	\sa fk_Color, setPointColor(), getInhPointColor()
+		 *	\sa fk_Color, setPointColor()
 		 */
 		fk_Color *	getPointColor(void);
-
-		//! 継承頂点色参照関数
-		/*!
-		 *	親子関係を踏まえた頂点色を参照します。
-		 *	当モデルに頂点色が設定されている場合、その頂点色を返します。
-		 *	当モデルに頂点色が設定されていない場合は、親モデルの頂点色を返します。
-		 *
-		 *	\return		頂点色のポインタ
-		 *
-		 *	\sa fk_Color, setPointColor(), getPointColor()
-		 */
-		fk_Color *	getInhPointColor(void);
 
 		//! 稜線色参照関数
 		/*!
@@ -1017,21 +968,10 @@ namespace FK {
 		 *
 		 *	\return		稜線色のポインタ
 		 *
-		 *	\sa fk_Color, setLineColor(), getInhLineColor()
+		 *	\sa fk_Color, setLineColor()
 		 */
 		fk_Color *	getLineColor(void);
 
-		//! 継承稜線色参照関数
-		/*!
-		 *	親子関係を踏まえた稜線色を参照します。
-		 *	当モデルに稜線色が設定されている場合、その稜線色を返します。
-		 *	当モデルに稜線色が設定されていない場合は、親モデルの稜線色を返します。
-		 *
-		 *	\return		稜線色のポインタ
-		 *
-		 *	\sa fk_Color, setLineColor(), getLineColor()
-		 */
-		fk_Color *	getInhLineColor(void);
 		//@}
 
 		//! \name 描画属性制御関数
@@ -2014,9 +1954,9 @@ namespace FK {
 #endif
 
 	private:
-		fk_Material			*material;
-		fk_Color			*pointColor;
-		fk_Color			*lineColor;
+		fk_Material			material;
+		fk_Color			pointColor;
+		fk_Color			lineColor;
 		fk_Shape			*shape;
 		fk_Model			*parent;
 		fk_TreeData			*treeData;

@@ -769,7 +769,7 @@ void fk_TextImage::MakeColorScale(const fk_Color &argC1,
 								  const fk_Color &argC2,
 								  int *argScale)
 {
-	int		index, i, j;
+	_st		index, i, j;
 	float	val1, val2;
 
 	for(i = 0; i < 256; i++) {

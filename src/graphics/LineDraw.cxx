@@ -386,9 +386,9 @@ void fk_LineDraw::DrawSolidLineMaterial(fk_Model *argObj)
 
 	edgeStack = solidP->GetECache();
 
-	modelColor = argObj->getInhLineColor();
+	modelColor = argObj->getLineColor();
 	if(modelColor == nullptr) {
-		modelColor = argObj->getInhMaterial()->getAmbient();
+		modelColor = argObj->getMaterial()->getAmbient();
 	}
 
 	oldMateID = -2;
@@ -527,9 +527,9 @@ void fk_LineDraw::DrawSolidLineNormal(fk_Model *argObj, bool argFlg)
 	edgeStack = solidP->GetECache();
 
 	if(argFlg == true) {
-		ModelColor = argObj->getInhLineColor();
+		ModelColor = argObj->getLineColor();
 		if(ModelColor == nullptr) {
-			ModelColor = argObj->getInhMaterial()->getAmbient();
+			ModelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		ModelColor = solidP->getMaterial(0)->getAmbient();
@@ -586,9 +586,9 @@ void fk_LineDraw::DrawIFSLineNormal(fk_Model *argObj, bool argFlag)
 	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
 
 	if(argFlag == true) {
-		modelColor = argObj->getInhLineColor();
+		modelColor = argObj->getLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
+			modelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = ifsetP->getMaterial(0)->getAmbient();
@@ -702,9 +702,9 @@ void fk_LineDraw::DrawCurveLineNormal(fk_Model *argObj, bool argMode)
 	fk_Color	*modelColor;
 
 	if(argMode == true) {
-		modelColor = argObj->getInhLineColor();
+		modelColor = argObj->getLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
+			modelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = curve->getMaterial(0)->getAmbient();
@@ -740,9 +740,9 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 	fk_Color	*modelColor;
 	
 	if(argMode == true) {
-		modelColor = argObj->getInhLineColor();
+		modelColor = argObj->getLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
+			modelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = surf->getMaterial(0)->getAmbient();

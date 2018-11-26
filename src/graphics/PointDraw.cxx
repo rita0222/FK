@@ -120,24 +120,26 @@ void fk_PointDraw::SetCamera(fk_Model *argCamera)
 
 void fk_PointDraw::ShaderSetup(fk_Model *argM)
 {
-	FK_UNUSED(argM);
-
 	shader = new fk_ShaderBinder();
  	auto prog = shader->getProgram();
 	prog->vertexShaderSource = "#version 410 core\n";
 	prog->vertexShaderSource += "uniform mat4 modelview;\n";
 	prog->vertexShaderSource += "uniform mat4 projection;\n";
+	prog->vertexShaderSource += "uniform vec4 color;\n";
 	prog->vertexShaderSource += "in vec4 position;\n";
+	prog->vertexShaderSource += "flat out vec4 f_color;\n";
 	prog->vertexShaderSource += "void main()\n";
 	prog->vertexShaderSource += "{\n";
 	prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
+	prog->vertexShaderSource += "    f_color = color;\n";
 	prog->vertexShaderSource += "}\n";
 
 	prog->fragmentShaderSource = "#version 410 core\n";
+	prog->fragmentShaderSource += "flat in vec4 f_color;\n";
 	prog->fragmentShaderSource += "out vec4 fragment;\n";
 	prog->fragmentShaderSource += "void main()\n";
 	prog->fragmentShaderSource += "{\n";
-	prog->fragmentShaderSource += "    fragment = vec4(1.0, 0.0, 0.0, 1.0);\n";
+	prog->fragmentShaderSource += "    fragment = f_color;\n";
 	prog->fragmentShaderSource += "}\n";
 
 	if(prog->validate() == false) {
@@ -145,6 +147,7 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 		fk_Window::putString(prog->getLastError());
 	}
 	glBindAttribLocation(prog->getProgramID(), 0, "position");
+	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 	shader->bindModel(argM);
 
 	return;
@@ -192,10 +195,18 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	fk_Matrix modelM = argObj->getInhMatrix();
 	fk_Matrix modelViewM = cameraM * modelM;
 
+	vector<float> col;
+	col.resize(4);
+	col[0] = 0.0f;
+	col[1] = 1.0f;
+	col[2] = 1.0f;
+	col[3] = 1.0f;
+	
 	auto parameter = shader->getParameter();
 	parameter->setRegister("projection", project->GetMatrix());
 	parameter->setRegister("modelview", &modelViewM);
-
+	parameter->setRegister("color", &(argObj->getPointColor()->col));
+	//parameter->setRegister("color", &col);
 	DrawShapePointModel(argObj);
 
 	return;
@@ -235,6 +246,7 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 #ifdef OPENGL4
 	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
 	fk_FVector	*pos = point->vec.at(0);
+	int			size = point->getSize();
 
 	GLuint 		vao = point->GetVAO();
 
@@ -247,8 +259,9 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(fk_FVector) * 2, pos, GL_DYNAMIC_DRAW);
-	glDrawArrays(GL_POINTS, 0, 2);
+	glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(sizeof(fk_FVector)) * GLsizeiptr(size),
+				 pos, GL_DYNAMIC_DRAW);
+	glDrawArrays(GL_POINTS, 0, size);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 #endif

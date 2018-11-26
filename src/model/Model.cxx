@@ -92,19 +92,14 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	setBlendMode(FK_BLEND_ALPHA_MODE);
 	setDepthMode(FK_DEPTH_READ_AND_WRITE);
 
-	material = new fk_Material();
 	parent = nullptr;
 	treeData = nullptr;
 	shape = nullptr;
 	setShape(argShape);
-	deleteMaterial();
 	setSize(1.0);
 	setWidth(1.0);
 	setPickMode(false);
 	setReverseDrawMode(false);
-
-	pointColor = nullptr;
-	lineColor = nullptr;
 
 	_modelID = _globalModelID;
 	_globalModelID++;
@@ -127,11 +122,8 @@ fk_Model::fk_Model(fk_Shape *argShape)
 
 fk_Model::~fk_Model()
 {
-	deletePointColor();
-	deleteLineColor();
 	DeleteTree();
 
-	delete material;
 	delete snapPos;
 	delete snapInhPos;
 	delete snapAngle;
@@ -201,48 +193,32 @@ void fk_Model::setShape(fk_Shape *argShape)
 
 void fk_Model::setMaterial(const fk_Material &argMate)
 {
-	*material = argMate;
+	material = argMate;
 	materialFlag = true;
 	return;
 }
 
 void fk_Model::setPointColor(fk_Color *argColor)
 {
-	if(argColor == nullptr) {
-		return;
-	}
-
 	setPointColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
 
 void fk_Model::setPointColor(float argR, float argG, float argB)
 {
-	if(pointColor == nullptr) {
-		pointColor = new fk_Color();
-	}
-
-	pointColor->set(argR, argG, argB);
+	pointColor.set(argR, argG, argB);
 	return;
 }
 
 void fk_Model::setLineColor(fk_Color *argColor)
 {
-	if(argColor == nullptr) {
-		return;
-	}
-
 	setLineColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
 
 void fk_Model::setLineColor(float argR, float argG, float argB)
 {
-	if(lineColor == nullptr) {
-		lineColor = new fk_Color();
-	}
-
-	lineColor->set(argR, argG, argB);
+	lineColor.set(argR, argG, argB);
 	return;
 }
 
@@ -253,73 +229,17 @@ fk_Shape * fk_Model::getShape(void) const
 
 fk_Material * fk_Model::getMaterial(void)
 {
-	return material;
-}
-
-fk_Material * fk_Model::getInhMaterial(void)
-{
-	if(parent != nullptr) {
-		if(materialFlag == false) {
-			return parent->getInhMaterial();
-		} else {
-			return material;
-		}
-	}
-	return material;
+	return &material;
 }
 
 fk_Color * fk_Model::getPointColor(void)
 {
-	return pointColor;
-}
-
-fk_Color * fk_Model::getInhPointColor(void)
-{
-	if(parent != nullptr) {
-		if(pointColor == nullptr) {
-			return parent->getInhPointColor();
-		} else {
-			return pointColor;
-		}
-	}
-	return pointColor;
+	return &pointColor;
 }
 
 fk_Color * fk_Model::getLineColor(void)
 {
-	return lineColor;
-}
-
-fk_Color * fk_Model::getInhLineColor(void)
-{
-	if(parent != nullptr) {
-		if(lineColor == nullptr) {
-			return parent->getInhLineColor();
-		} else {
-			return lineColor;
-		}
-	}
-	return lineColor;
-}
-
-void fk_Model::deleteMaterial(void)
-{
-	materialFlag = false;
-	return;
-}
-
-void fk_Model::deletePointColor(void)
-{
-	delete pointColor;
-	pointColor = nullptr;
-	return;
-}
-
-void fk_Model::deleteLineColor(void)
-{
-	delete lineColor;
-	lineColor = nullptr;
-	return;
+	return &lineColor;
 }
 
 void fk_Model::setDrawMode(const fk_DrawMode argMode)

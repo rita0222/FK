@@ -532,7 +532,7 @@ bool fk_MQOParser::PushMaterialData(string *argLine)
 	while((word = PopWord(argLine, sep)) != "") {
 		if(word == "col") {
 			if(PopWord(argLine, sep) != "(") return false;
-			for(int i = 0; i < 4; i++) {
+			for(_st i = 0; i < 4; i++) {
 				word = PopWord(argLine, sep);
 				if(IsNumeric(word) == false) return false;
 				col.col[i] = Str2Float(word);

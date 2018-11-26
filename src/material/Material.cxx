@@ -69,6 +69,8 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
+
 #include <FK/Material.h>
 #include <FK/MatExample.h>
 #include <FK/Error.H>
@@ -94,6 +96,7 @@ void fk_Color::init(void) { init(0.0f, 0.0f, 0.0f, 1.0f); }
 
 void fk_Color::init(float argR, float argG, float argB, float argA)
 {
+	col.resize(4);
 	col[0] = clamp(argR);
 	col[1] = clamp(argG);
 	col[2] = clamp(argB);
@@ -165,7 +168,7 @@ namespace FK {
 
 fk_Color & fk_Color::operator *=(double argD)
 {
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] * float(argD));
 	}
 
@@ -176,7 +179,7 @@ fk_Color & fk_Color::operator /=(double argD)
 {
 	if(fabs(argD) < FK_COLOR_EPS) return *this;
 
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] / float(argD));
 	}
 
@@ -185,7 +188,7 @@ fk_Color & fk_Color::operator /=(double argD)
 
 fk_Color & fk_Color::operator +=(const fk_Color &argC)
 {
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] + argC.col[i]);
 	}
 
@@ -194,7 +197,7 @@ fk_Color & fk_Color::operator +=(const fk_Color &argC)
 
 fk_Color & fk_Color::operator -=(const fk_Color &argC)
 {
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] - argC.col[i]);
 	}
 
@@ -509,11 +512,11 @@ void fk_Material::initDefault(void)
 void fk_Material::Print(int argTabSize, string argTag)
 {
 	string			tab;
-	int				i;
+	_st				i;
 	stringstream	ss;
 	
 	tab.erase();
-	for(i = 0; i < argTabSize; i++) tab += '\t';
+	for(i = 0; i < _st(argTabSize); i++) tab += '\t';
 
 	if(argTag.size() == 0) {
 		fk_PutError(tab + "Mat = {");

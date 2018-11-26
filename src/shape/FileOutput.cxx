@@ -599,7 +599,7 @@ bool fk_FileOutput::PutMaterialData(fk_DataFormatMode argMode, ofstream &argOFS,
 		value = argMat->getAlpha();
 		if(BWrite(&value, 1, argOFS) != 1) return false;
 
-		for(int i = 0; i < 3; i++) {
+		for(_st i = 0; i < 3; i++) {
 			colArray[i] = argMat->getAmbient()->col[i];
 			colArray[i+3] = argMat->getDiffuse()->col[i];
 			colArray[i+6] = argMat->getSpecular()->col[i];

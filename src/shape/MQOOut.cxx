@@ -309,8 +309,8 @@ void fk_MQOOut::MakeMaterialPalette(int argType)
 		baseCol = *(tmpMate->getDiffuse());
 		if(tmpDif > FK_COLOR_EPS) {
 			for(j = 0; j < 3; ++j) {
-				float tmp = baseCol.col[j] / tmpDif;
-				baseCol.col[j] = (tmp < 1.0f) ? tmp : 1.0f;
+				float tmp = baseCol.col[_st(j)] / tmpDif;
+				baseCol.col[_st(j)] = (tmp < 1.0f) ? tmp : 1.0f;
 			}
 		} else {
 			baseCol.set(1.0f, 1.0f, 1.0f);
