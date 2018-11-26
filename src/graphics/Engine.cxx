@@ -311,9 +311,10 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 
 #ifndef OPENGL4
 	glPushMatrix();
+	RecalcModelView();
 #endif
 
-	RecalcModelView();
+	pointDraw->SetCamera(curDLink->getCamera());
 	DrawObjs(argPickFlg);
 
 #ifndef OPENGL4
@@ -595,7 +596,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 	}
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
-		pointDraw->DrawShapePoint(argObj, argPickFlg);
+		pointDraw->DrawShapePoint(argObj);
 	}
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {

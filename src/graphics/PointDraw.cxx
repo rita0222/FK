@@ -114,6 +114,7 @@ void fk_PointDraw::SetProjection(fk_ProjectBase *argProj)
 void fk_PointDraw::SetCamera(fk_Model *argCamera)
 {
 	camera = argCamera;
+	cameraM = camera->getInhInvMatrix();
 	return;
 }
 
@@ -124,13 +125,12 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 	shader = new fk_ShaderBinder();
  	auto prog = shader->getProgram();
 	prog->vertexShaderSource = "#version 410 core\n";
-	//prog->vertexShaderSource += "uniform mat4 modelview\n";
+	prog->vertexShaderSource += "uniform mat4 modelview;\n";
 	prog->vertexShaderSource += "uniform mat4 projection;\n";
 	prog->vertexShaderSource += "in vec4 position;\n";
 	prog->vertexShaderSource += "void main()\n";
 	prog->vertexShaderSource += "{\n";
-	//prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
-	prog->vertexShaderSource += "    gl_Position = projection * position;\n";
+	prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
 	prog->vertexShaderSource += "}\n";
 
 	prog->fragmentShaderSource = "#version 410 core\n";
@@ -169,14 +169,8 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 	glBindVertexArray(0);
 }
 
-void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
+void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
-	fk_MaterialMode	shapeMateMode;
-	fk_MaterialMode	modelMateMode;
-
-	shapeMateMode = argObj->getShape()->getMaterialMode();
-	modelMateMode = argObj->getMaterialMode();
-	
 #ifdef OPENGL4
 	if(shader == nullptr) {
 		shader = new fk_ShaderBinder();
@@ -186,8 +180,6 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 	if(argObj->preShaderList.empty() == true &&
 	   argObj->postShaderList.empty() == true) {
 		shader->bindModel(argObj);
-		auto parameter = shader->getParameter();
-		parameter->setRegister("projection", project->GetMatrix());
 	}
 
 #else
@@ -196,396 +188,28 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj, bool argPickFlag)
 
 	glPointSize((GLfloat)argObj->getSize());
 
-	if(argPickFlag == true) {
-		DrawShapePointPick(argObj);
-	} else if(modelMateMode == FK_PARENT_MODE) {
-		if(shapeMateMode == FK_PARENT_MODE) {
-			DrawShapePointMaterial(argObj);
-		} else if(shapeMateMode == FK_CHILD_MODE) {
-			DrawShapePointNormal(argObj, false);
-		}
-	} else if(modelMateMode == FK_CHILD_MODE) {
-		DrawShapePointNormal(argObj, true);
-	}
+	cameraM = camera->getInhInvMatrix();
+	fk_Matrix modelM = argObj->getInhMatrix();
+	fk_Matrix modelViewM = cameraM * modelM;
+
+	auto parameter = shader->getParameter();
+	parameter->setRegister("projection", project->GetMatrix());
+	parameter->setRegister("modelview", &modelViewM);
+
+	DrawShapePointModel(argObj);
 
 	return;
 }
 
-void fk_PointDraw::DrawShapePointPick(fk_Model *argObj)
+void fk_PointDraw::DrawShapePointModel(fk_Model *argObj)
 {
 	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSPointPick(argObj);
-		break;
-
 	  case FK_SHAPE_POINT:
-		DrawParticlePointPick(argObj);
+		DrawParticlePointModel(argObj);
 		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidPointPick(argObj);
-		break;
-
-	  case FK_SHAPE_CURVE:
-		DrawCurvePointPick(argObj);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfacePointPick(argObj);
-		break;
-
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_PointDraw::DrawSolidPointPick(fk_Model *argObj)
-{
-	fk_Solid				*solidP;
-	list<fk_Vertex *>		*vertexStack;
-	bool					reverseFlag = argObj->getReverseDrawMode();
-
-	list<fk_Vertex *>::iterator				ite;
-	list<fk_Vertex *>::reverse_iterator		rite;
-
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextV(nullptr) == nullptr) return;
-
-	if(solidP->GetVCacheStatus() == false) {
-		solidP->MakeVCache();
-	}
-
-	vertexStack = solidP->GetVCache();
-
-#ifndef OPENGL4
-	glDisableClientState(GL_VERTEX_ARRAY);
-#endif
-
-	if(reverseFlag == false) {
-		for(ite = vertexStack->begin(); ite != vertexStack->end(); ++ite) {
-			DrawSolidPointPickElem(*ite);
-		}
-	} else {
-		for(rite = vertexStack->rbegin(); rite != vertexStack->rend(); ++rite) {
-			DrawSolidPointPickElem(*rite);
-		}
-	}
-
-	return;
-}
-
-void fk_PointDraw::DrawSolidPointPickElem(fk_Vertex *argV)
-{
-	FK_UNUSED(argV);
-
-#ifndef OPENGL4	
-	glPushName(static_cast<GLuint>(argV->getID()*3 + 2));
-	glBegin(GL_POINTS);
-
-	glVertex3dv(static_cast<GLdouble *>(&(argV->GetPositionP()->x)));
-
-	glEnd();
-	glPopName();
-#endif
-	return;
-}
-
-
-void fk_PointDraw::DrawIFSPointPick(fk_Model *argObj)
-{
-	FK_UNUSED(argObj);
-
-#ifndef OPENGL4
-	fk_IndexFaceSet		*ifsetP;
-	_st					ii;
-
-	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	for(ii = 0; ii < static_cast<_st>(ifsetP->posSize); ii++) {
-		glPushName(static_cast<GLuint>(ii*3 + 2));
-		glBegin(GL_POINTS);
-		glVertex3fv(static_cast<GLfloat *>(&ifsetP->pos[ii].x));
-		glEnd();
-		glPopName();
-	}
-#endif
-	
-	return;
-}
-
-void fk_PointDraw::DrawParticlePointPick(fk_Model *argObj)
-{
-	FK_UNUSED(argObj);
-
-#ifndef OPENGL4	
-	fk_Point		*point;
-	fk_FVector		*pos;
-	int				id;
-
-	point = static_cast<fk_Point *>(argObj->getShape());
-	pos = point->vec.at(0);
-
-	id = point->vec.next(-1);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	while(id >= 0) {
-		if(point->getDrawMode(id) == true) {
-			glPushName(static_cast<GLuint>(id* 3 + 2));
-			glBegin(GL_POINTS);
-			glVertex3fv(static_cast<GLfloat *>(&pos[id].x));
-			glEnd();
-			glPopName();
-		}
-		id = point->vec.next(id);
-	}
-#endif
-	
-	return;
-}
-
-void fk_PointDraw::DrawCurvePointPick(fk_Model *argObj)
-{
-	FK_UNUSED(argObj);
-
-#ifndef OPENGL4
-	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	curve->makeCache();
-	_st div = static_cast<_st>(curve->getDiv());
-	auto vArray = curve->getPosCache();
-
-	for(_st i = 0; i <= div; ++i) {
-		auto vPos = &((*vArray)[i]);
-		glPushName(static_cast<GLuint>(i*3 + 2));
-		glBegin(GL_POINTS);
-		glVertex3dv(static_cast<GLdouble *>(&vPos->x));
-		glEnd();
-		glPopName();
-	}
-#endif
-
-	return;
-}
-
-void fk_PointDraw::DrawSurfacePointPick(fk_Model *argObj)
-{
-	FK_UNUSED(argObj);
-
-#ifndef OPENGL4
-	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	surf->makeCache();
-	_st div = static_cast<_st>(surf->getDiv());
-	auto vArray = surf->getPosCache();
-
-	for(_st i = 0; i < (div+1)*(div+1); ++i) {
-		auto vPos = &((*vArray)[i]);
-		glPushName(static_cast<GLuint>(i*3 + 2));
-		glBegin(GL_POINTS);
-		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
-		glEnd();
-		glPopName();
-	}
-#endif
-	return;
-}
-	
-void fk_PointDraw::DrawShapePointMaterial(fk_Model *argObj)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSPointNormal(argObj, true);
-		break;
-
-	  case FK_SHAPE_POINT:
-		DrawParticlePointMaterial(argObj);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidPointMaterial(argObj);
-		break;
-
-	  case FK_SHAPE_CURVE:
-		DrawCurvePointNormal(argObj, true);
-		break;
-		
-	  case FK_SHAPE_SURFACE:
-		DrawSurfacePointNormal(argObj, true);
-		break;
-
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_PointDraw::DrawSolidPointMaterial(fk_Model *argObj)
-{
-	fk_Solid				*solidP;
-	fk_Color				*modelColor;
-	int						oldMateID, paletteSize;
-	double					orgSize;
-	vector<fk_Material>		*matV;
-	list<fk_Vertex *>		*vertexStack;
-	bool					reverseFlag = argObj->getReverseDrawMode();
-
-	list<fk_Vertex *>::iterator				ite;
-	list<fk_Vertex *>::reverse_iterator		rite;
-	
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextV(nullptr) == nullptr) return;
-
-	if(solidP->GetVCacheStatus() == false) {
-		solidP->MakeVCache();
-	}
-
-	vertexStack = solidP->GetVCache();
-
-	modelColor = argObj->getInhPointColor();
-
-	if(modelColor == nullptr) {
-		modelColor = argObj->getInhMaterial()->getAmbient();
-	}
-
-	oldMateID = -2;
-	orgSize = argObj->getSize();
-
-	paletteSize = solidP->getPaletteSize();
-	matV = solidP->getMaterialVector();
-
-	if(reverseFlag == false) {
-		for(ite = vertexStack->begin(); ite != vertexStack->end(); ++ite) {
-			oldMateID = DrawSolidPointMaterialElem(*ite, oldMateID,
-												   paletteSize, orgSize,
-												   matV, modelColor);
-		}
-	} else {
-		for(rite = vertexStack->rbegin();
-			rite != vertexStack->rend(); ++rite) {
-			oldMateID = DrawSolidPointMaterialElem(*rite, oldMateID,
-												   paletteSize, orgSize,
-												   matV, modelColor);
-		}
-	}
-
-	return;
-}
-
-int fk_PointDraw::DrawSolidPointMaterialElem(fk_Vertex *argV,
-											 int argOldMateID,
-											 int argPaletteSize,
-											 double argOrgSize,
-											 vector<fk_Material> *argMatV,
-											 fk_Color *argModelColor)
-{
-	int			curMateID, retMateID;
-	double		trueSize;
-	fk_Color	*curColor;
-
-	FK_UNUSED(argModelColor);
-
-	retMateID = argOldMateID;
-	switch(argV->getElemMaterialMode()) {
-	  case FK_CHILD_MODE:
-		curMateID = argV->getElemMaterialID();
-		if(curMateID < 0 || curMateID >= argPaletteSize) {
-			curMateID = FK_UNDEFINED;
-		}
-		break;
-	  case FK_NONE_MODE:
-		return argOldMateID;
-	  default:
-		curMateID = FK_UNDEFINED;
-		break;
-	}
-
-	if(curMateID != argOldMateID) {
-		if(curMateID == FK_UNDEFINED) {
-
-#ifndef OPENGL4			
-			glColor4fv(&argModelColor->col[0]);
-#endif
-
-			retMateID = FK_UNDEFINED;
-		} else {
-			curColor = (*argMatV)[static_cast<_st>(curMateID)].getAmbient();
-
-#ifndef OPENGL4			
-			glColor4fv(&curColor->col[0]);
-#endif
-			retMateID = curMateID;
-		}
-	}
-
-	trueSize = argV->getDrawSize();
-	if(trueSize < 0.0) {
-		glPointSize(static_cast<GLfloat>(argOrgSize));
-	} else {
-		glPointSize(static_cast<GLfloat>(trueSize));
-	}
-
-#ifndef OPENGL4
-	glBegin(GL_POINTS);
-	glVertex3dv(static_cast<GLdouble *>(&(argV->GetPositionP()->x)));
-	glEnd();
-#endif
-
-	return retMateID;
-}
-
-void fk_PointDraw::DrawParticlePointMaterial(fk_Model *argObj)
-{
-	fk_Point				*point;
-	fk_FVector				*pos;
-	fk_Color				*modelColor, *curColor;
-	vector<fk_Material>		*matV;
-	fk_Material				*mat;
-	int						id;
-	int						oldMateID, curMateID, paletteSize;
-
-	FK_UNUSED(curMateID);
-	FK_UNUSED(curColor);
-	FK_UNUSED(mat);
-
-	point = static_cast<fk_Point *>(argObj->getShape());
-	pos = point->vec.at(0);
-
-	modelColor = argObj->getInhPointColor();
-
-	if(modelColor == nullptr) {
-		modelColor = argObj->getInhMaterial()->getAmbient();
-	}
-
-	oldMateID = -2;
-
-	id = point->vec.next(-1);
-	matV = point->getMaterialVector();
-	paletteSize = point->getPaletteSize();
-
-	return;
-}
-
-void fk_PointDraw::DrawShapePointNormal(fk_Model *argObj, bool argFlag)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
+/*
 	  case FK_SHAPE_IFS:
 		DrawIFSPointNormal(argObj, argFlag);
-		break;
-
-	  case FK_SHAPE_POINT:
-		DrawParticlePointNormal(argObj, argFlag);
 		break;
 
 	  case FK_SHAPE_SOLID:
@@ -599,13 +223,40 @@ void fk_PointDraw::DrawShapePointNormal(fk_Model *argObj, bool argFlag)
 	  case FK_SHAPE_SURFACE:
 		DrawSurfacePointNormal(argObj, argFlag);
 		break;
-
+*/
 	  default:
 		break;
 	}
 	return;
 }
 
+void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
+{
+#ifdef OPENGL4
+	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
+	fk_FVector	*pos = point->vec.at(0);
+
+	GLuint 		vao = point->GetVAO();
+
+	if(vao == 0) {
+		ParticleVAOSetup(point);
+		vao = point->GetVAO();
+	}
+
+	GLuint		vbo = point->GetVBO();
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(fk_FVector) * 2, pos, GL_DYNAMIC_DRAW);
+	glDrawArrays(GL_POINTS, 0, 2);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+#endif
+
+	return;
+}
+
+/*
 void fk_PointDraw::DrawSolidPointNormal(fk_Model *argObj, bool argFlg)
 {
 	fk_Solid				*solidP;
@@ -710,33 +361,6 @@ void fk_PointDraw::DrawIFSPointNormal(fk_Model *argObj, bool argFlag)
 	return;
 }
 
-void fk_PointDraw::DrawParticlePointNormal(fk_Model *argObj, bool argFlag)
-{
-	FK_UNUSED(argFlag);
-
-#ifdef OPENGL4
-	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
-	fk_FVector	*pos = point->vec.at(0);
-
-	GLuint 		vao = point->GetVAO();
-
-	if(vao == 0) {
-		ParticleVAOSetup(point);
-		vao = point->GetVAO();
-	}
-
-	GLuint		vbo = point->GetVBO();
-
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(fk_FVector) * 2, pos, GL_DYNAMIC_DRAW);
-	glDrawArrays(GL_POINTS, 0, 2);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-#endif
-
-	return;
-}
 
 void fk_PointDraw::DrawCurvePointNormal(fk_Model *argObj, bool argFlag)
 {
@@ -800,5 +424,6 @@ void fk_PointDraw::DrawSurfacePointNormal(fk_Model *argObj, bool argMode)
 #endif
 	return;
 }
+*/
 
 #endif

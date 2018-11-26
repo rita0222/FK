@@ -17,7 +17,7 @@ namespace FK {
 		virtual ~fk_PointDraw();
 
 		void			SetArrayState(bool);
-		void			DrawShapePoint(fk_Model *, bool);
+		void			DrawShapePoint(fk_Model *);
 		void			SetProjection(fk_ProjectBase *);
 		void			SetCamera(fk_Model *);
 
@@ -27,33 +27,13 @@ namespace FK {
 		bool			arrayState;
 		fk_ProjectBase	*project;
 		fk_Model		*camera;
+		fk_Matrix		cameraM;
 		
 		void			ShaderSetup(fk_Model *);
 		void			ParticleVAOSetup(fk_Point *);
 
-		void			DrawShapePointMaterial(fk_Model *);
-		void			DrawParticlePointMaterial(fk_Model *);
-		void			DrawSolidPointMaterial(fk_Model *);
-		int				DrawSolidPointMaterialElem(fk_Vertex *, int,
-												   int, double,
-												   std::vector<fk_Material> *,
-												   fk_Color *);
-
-		void			DrawShapePointPick(fk_Model *);
-		void			DrawIFSPointPick(fk_Model *);
-		void			DrawParticlePointPick(fk_Model *);
-		void			DrawSolidPointPick(fk_Model *);
-		void			DrawSolidPointPickElem(fk_Vertex *);
-		void			DrawCurvePointPick(fk_Model *);
-		void			DrawSurfacePointPick(fk_Model *);
-
-		void			DrawShapePointNormal(fk_Model *, bool);
-		void			DrawIFSPointNormal(fk_Model *, bool);
-		void			DrawParticlePointNormal(fk_Model *, bool);
-		void			DrawSolidPointNormal(fk_Model *, bool);
-		void			DrawSolidPointNormalElem(fk_Vertex *, double);
-		void			DrawCurvePointNormal(fk_Model *, bool);
-		void			DrawSurfacePointNormal(fk_Model *, bool);
+		void			DrawShapePointModel(fk_Model *);
+		void			DrawParticlePointModel(fk_Model *);
 	};
 }
 

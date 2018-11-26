@@ -127,7 +127,7 @@ namespace FK {
 		 *
 		 *	\return	カメラモデルのアドレス
 		 */
-		const fk_Model *		getCamera(void) const;
+		fk_Model *				getCamera(void) const;
 
 		//! 投影設定関数
 		/*!

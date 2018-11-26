@@ -215,7 +215,7 @@ list<fk_Model *> * fk_DisplayLink::GetOverlayList(void)
 	return &overlayList;
 }
 
-const fk_Model * fk_DisplayLink::getCamera(void) const
+fk_Model * fk_DisplayLink::getCamera(void) const
 {
 	return camera;
 }
