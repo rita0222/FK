@@ -78,7 +78,9 @@ fk_Shape::fk_Shape(fk_ObjectType argObjType)
 {
 	SetObjectType(argObjType);
 	materialMode = FK_NONE_MODE;
-	vao = 0;
+	pointVAO = 0;
+	lineVAO = 0;
+	faceVAO = 0;
 	return;
 }
 
@@ -212,12 +214,32 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	return FK_SHAPE_OTHER;
 }
 
-unsigned int fk_Shape::GetVAO(void)
+void fk_Shape::SetPointVAO(GLuint argVAO)
 {
-	return vao;
+	pointVAO = argVAO;
 }
 
-void fk_Shape::SetVAO(unsigned int argVAO)
+void fk_Shape::SetLineVAO(GLuint argVAO)
 {
-	vao = argVAO;
+	lineVAO = argVAO;
+}
+
+void fk_Shape::SetFaceVAO(GLuint argVAO)
+{
+	faceVAO = argVAO;
+}
+
+GLuint fk_Shape::GetPointVAO(void)
+{
+	return pointVAO;
+}
+
+GLuint fk_Shape::GetLineVAO(void)
+{
+	return lineVAO;
+}
+
+GLuint fk_Shape::GetFaceVAO(void)
+{
+	return faceVAO;
 }

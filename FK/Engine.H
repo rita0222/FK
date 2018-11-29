@@ -80,7 +80,7 @@ namespace FK {
 
 		std::vector<fk_Model *>		modelArray;
 
-		//fk_Matrix					projMat, cameraMat;
+		fk_ProjectBase				*curProj;
 		GLint						viewArray[4];
 
 		std::vector<fk_ImType>		snapBuffer;

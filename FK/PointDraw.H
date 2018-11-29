@@ -18,15 +18,14 @@ namespace FK {
 
 		void			SetArrayState(bool);
 		void			DrawShapePoint(fk_Model *);
-		void			SetProjection(fk_ProjectBase *);
+		void			SetProjectMatrix(fk_Matrix *);
 		void			SetCamera(fk_Model *);
 
 	private:
 
 		fk_ShaderBinder	*shader;
 		bool			arrayState;
-		fk_ProjectBase	*project;
-		fk_Model		*camera;
+		fk_Matrix		*projM;
 		fk_Matrix		cameraM;
 		
 		void			ShaderSetup(fk_Model *);
@@ -34,6 +33,7 @@ namespace FK {
 
 		void			DrawShapePointModel(fk_Model *);
 		void			DrawParticlePointModel(fk_Model *);
+		void			DrawSolidPointModel(fk_Model *);
 	};
 }
 

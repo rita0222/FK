@@ -175,39 +175,23 @@ unsigned long fk_GraphicsEngine::GetUsingTextureMemory(void)
 
 void fk_GraphicsEngine::SetViewPort(void)
 {
-#ifndef OPENGL4
-	glViewport(0, 0, wSize, hSize);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-#endif
-
 	if(curDLink == nullptr) {
 		SetProjection(&defProj);
 	} else {
 		SetProjection(curDLink->getProjection());
 	}
-
-#ifndef OPENGL4
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
-#endif
-
 	return;
 }
 
 void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 {
-	FK_UNUSED(argProj);
-
-#ifdef OPENGL4
-	if(argProj->getMode() == FK_PERSPECTIVE_MODE) {
-		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(argProj);
+	curProj = argProj;
+	if(curProj->getMode() == FK_PERSPECTIVE_MODE) {
+		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(curProj);
 		pers->setAspect(GLfloat(wSize)/GLfloat(hSize));
 	}
-	argProj->MakeMat();
-	pointDraw->SetProjection(argProj);
-#endif
+	curProj->MakeMat();
+	pointDraw->SetProjectMatrix(curProj->GetMatrix());
 	return;
 }
 
@@ -309,18 +293,10 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-#ifndef OPENGL4
-	glPushMatrix();
-	RecalcModelView();
-#endif
-
+	curProj->MakeMat();
 	pointDraw->SetCamera(curDLink->getCamera());
 	DrawObjs(argPickFlg);
 
-#ifndef OPENGL4
-	glPopMatrix();
-	glFlush();
-#endif
 	return;
 }
 

@@ -4,6 +4,7 @@
 #include <FK/Base.h>
 #include <FK/Palette.h>
 #include <FK/Attribute.h>
+#include <FK/OpenGL.H>
 
 namespace FK {
 	//! 形状データの具体的なデータ構造を表す列挙型
@@ -180,15 +181,19 @@ namespace FK {
 		void	SetPaletteData(fk_Palette *pal);
 		void	setPaletteData(fk_Palette *pal);
 
-		void			SetVAO(unsigned int);
-		unsigned int	GetVAO(void);
+		void			SetPointVAO(GLuint);
+		void			SetLineVAO(GLuint);
+		void			SetFaceVAO(GLuint);
+		GLuint			GetPointVAO(void);
+		GLuint			GetLineVAO(void);
+		GLuint			GetFaceVAO(void);
 
 #endif
 
 	private:
 		fk_Palette			*palette;
 		fk_MaterialMode		materialMode;
-		unsigned int		vao;
+		GLuint				pointVAO, lineVAO, faceVAO;
 	};
 }
 
