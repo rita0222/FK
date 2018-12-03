@@ -131,7 +131,21 @@ bool fk_ShaderProgram::validate(void)
 		
 	if(UpdateLastError(idFragment)) return false;
 
-	return Link();
+	if(idProgram != 0) {
+		glDeleteProgram(idProgram);
+		idProgram = 0;
+	}
+
+	idProgram = glCreateProgram();
+	if(idProgram == 0) {
+		lastError = "ERROR: Could not create program.";
+		return false;
+	}
+
+	glAttachShader(idProgram, idVertex);
+	glAttachShader(idProgram, idFragment);
+
+	return true;
 }
 
 bool fk_ShaderProgram::loadVertexShader(string argFileName)
@@ -181,21 +195,8 @@ GLuint fk_ShaderProgram::Compile(string *argCode, GLuint argKind)
 	return id;
 }
 
-bool fk_ShaderProgram::Link(void)
+bool fk_ShaderProgram::link(void)
 {
-	if(idProgram != 0) {
-		glDeleteProgram(idProgram);
-		idProgram = 0;
-	}
-
-	idProgram = glCreateProgram();
-	if(idProgram == 0) {
-		lastError = "ERROR: Could not create program.";
-		return false;
-	}
-
-	glAttachShader(idProgram, idVertex);
-	glAttachShader(idProgram, idFragment);
 	glLinkProgram(idProgram);
 
 	GLint linked = 0;

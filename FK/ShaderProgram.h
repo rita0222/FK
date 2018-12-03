@@ -108,6 +108,16 @@ namespace FK {
 		 */
 		bool validate(void);
 
+		//! シェーダープログラムリンクメソッド
+		/*!
+		 *	コンパイル後、プログラムのリンクを実行します。
+		 *	Attribute 変数等の定義はこの前に行っておく必要があります。
+		 *
+		 *	\return
+		 *		リンクに成功すれば true を、失敗すれば false を返します。
+		 *		失敗した場合は、 getLastError() でエラーメッセージを取得できます。
+		 */
+		bool link(void);
 	private:
 		GLuint idProgram;
 		GLuint idVertex;
@@ -115,7 +125,6 @@ namespace FK {
 		std::string lastError;
 
 		GLuint Compile(std::string *, GLuint);
-		bool Link(void);
 		bool UpdateLastError(GLuint);
 	};	
 }

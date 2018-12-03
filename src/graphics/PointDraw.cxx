@@ -133,7 +133,7 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 	prog->vertexShaderSource += "{\n";
 	prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
 	prog->vertexShaderSource += "    f_color = color;\n";
-	prog->vertexShaderSource += "    if(drawmode == 10) f_color = vec4(1.0, 0.0, 0.0, 1.0);\n";
+	//prog->vertexShaderSource += "    if(drawmode == 10) f_color = vec4(1.0, 0.0, 0.0, 1.0);\n";
 	prog->vertexShaderSource += "}\n";
 
 	prog->fragmentShaderSource = "#version 410 core\n";
@@ -148,19 +148,43 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 		fk_Window::printf("Shader Error");
 		fk_Window::putString(prog->getLastError());
 	}
+	shader->bindModel(argM);
+
 	glBindAttribLocation(prog->getProgramID(), 0, "position");
 	glBindAttribLocation(prog->getProgramID(), 1, "drawmode");
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
-	shader->bindModel(argM);
 
+	GLuint pID = prog->getProgramID();
+	fk_Window::printf("A: pid = %d, (%d, %d)", pID,
+					  glGetAttribLocation(pID, "position"),
+					  glGetAttribLocation(pID, "drawmode"));
+
+	prog->link();
+
+	fk_Window::printf("B: pid = %d, (%d, %d)", pID,
+					  glGetAttribLocation(pID, "position"),
+					  glGetAttribLocation(pID, "drawmode"));
 	return;
 }
 
 void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 {
-	GLuint 			vao;
-	GLuint			*vbo;
+	GLuint 		vao;
+	GLuint		*vbo;
+	fk_FVector	*pos = &(argPoint->pos[0]);
+	int			*drawmode = &(argPoint->alive[0]);
+	int			size = int(argPoint->pos.size());
+ 	auto 		prog = shader->getProgram();
 
+	FK_UNUSED(pos);
+	FK_UNUSED(drawmode);
+	FK_UNUSED(size);
+
+	GLuint pID = prog->getProgramID();
+	fk_Window::printf("C: pid = %d, (%d, %d)", pID,
+					  glGetAttribLocation(pID, "position"),
+					  glGetAttribLocation(pID, "drawmode"));
+					  
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	argPoint->SetPointVAO(vao);
@@ -169,11 +193,21 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 
 	glGenBuffers(2, &vbo[0]);
 
+	
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBufferData(GL_ARRAY_BUFFER,
+				 GLsizeiptr(sizeof(fk_FVector)) * GLsizeiptr(size),
+				 pos, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glVertexAttribPointer(1, 1, GL_INT, GL_FALSE, 0, 0);
+	glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(sizeof(int)) * GLsizeiptr(size),
+				 drawmode, GL_STATIC_DRAW);
+
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(1, 1, GL_INT, GL_FALSE, 0, 0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -255,20 +289,20 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, GLsizeiptr(sizeof(fk_FVector)) * GLsizeiptr(size), pos);
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(fk_FVector)) * GLsizeiptr(size),
 				 pos, GL_STATIC_DRAW);
 
-
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
 	glVertexAttribPointer(1, 1, GL_INT, GL_FALSE, 0, 0);
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, GLsizeiptr(sizeof(int)) * GLsizeiptr(size), drawmode);
 	glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(sizeof(int)) * GLsizeiptr(size),
 				 drawmode, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(2);
 	
-
 	glDrawArrays(GL_POINTS, 0, size);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
