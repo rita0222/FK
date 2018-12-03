@@ -8,7 +8,7 @@
 namespace FK {
 	class fk_Window;
 
-	//! 点群を生成、管理するクラス
+    //! 点群を生成、管理するクラス
 	/*!
 	 *	このクラスは、形状として点群を制御する機能を提供します。
 	 *	1つのインスタンスで、複数の点を制御することが可能です。
@@ -123,6 +123,7 @@ namespace FK {
 		 */
 		int				getSize(void);
 
+
 		//! 頂点描画制御関数
 		/*!
 		 *	個別の頂点に対し、描画の有無を設定します。
@@ -133,18 +134,6 @@ namespace FK {
 		 *		true であれば描画を有効に、false であれば無効にします。
 		 */
 		void			setDrawMode(int ID, bool mode);
-
-		//! 全頂点描画状態参照関数
-		/*!
-		 *	点群全体の描画状況を取得します。
-		 *
-		 *	\return
-		 *		点群中、1つでも描画される状態であれば true を、
-		 *		そうでない場合は false を返します。
-		 *		false を返す場合は、頂点が存在するが全て描画状態が無効である場合と、
-		 *		1個も頂点が存在していない場合の2通りがありえます。
-		 */
-		bool			getDrawMode(void);
 
 		//! 個別頂点描画状態参照関数
 		/*!
@@ -167,16 +156,6 @@ namespace FK {
 		 *	\param[in]	cID		色ID
 		 */
 		void			setColorID(int vID, int cID);
-
-		//! 描画色設定有無参照関数
-		/*!
-		 *	点群の描画色設定の有無を取得します。
-		 *
-		 *	\return
-		 *		1個以上の点に描画色が設定されている場合 true を、
-		 *		1つも描画色が設定されていない場合に false を返します。
-		 */
-		bool			getColorCount(void);
 
 		//! 描画色参照関数
 		/*!
@@ -202,21 +181,26 @@ namespace FK {
 		void			allClear(bool matFlag = true);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		unsigned int	GetVBO(void);
-		void			SetVBO(unsigned int);
+		GLuint *	GetVBO(void);
+		void		SetVBO(int, GLuint);
 #endif
 		
 	private:
 		fk_Palette				localPal;
-		fk_Array<fk_FVector>	vec;
-		std::vector<char>		drawMode;
-		int						drawCount;
-		std::vector<int>		colorID;
-		int						colorCount;
-		unsigned int			vbo;
+
+		//fk_Array<fk_FVector>	vec;
+		//std::vector<int>		drawMode;
+		//std::vector<int>		colorID;
+
+		std::vector<fk_FVector>	pos;
+		std::vector<fk_Color>	col;
+		std::vector<int>		alive;
+
+		GLuint					vBufferObj[2];
 		
 		bool	MakePoint(std::vector<fk_Vector> *);
 		bool	MakePoint(int, fk_Vector *);
+		//void	CopyElem(fk_PointElement *, fk_Vector *, bool);
 	};
 }
 

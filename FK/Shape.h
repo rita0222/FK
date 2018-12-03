@@ -7,6 +7,10 @@
 #include <FK/OpenGL.H>
 
 namespace FK {
+
+	const int FK_SHAPE_ALIVE = 1;
+	const int FK_SHAPE_DEAD = 2;
+	
 	//! 形状データの具体的なデータ構造を表す列挙型
 	enum fk_RealShapeType {
 		FK_SHAPE_IFS,		//!<	fk_IndexFaceSetベース

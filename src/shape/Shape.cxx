@@ -86,6 +86,9 @@ fk_Shape::fk_Shape(fk_ObjectType argObjType)
 
 fk_Shape::~fk_Shape()
 {
+	if(pointVAO != 0) glDeleteBuffers(1, &pointVAO);
+	if(lineVAO != 0) glDeleteBuffers(1, &lineVAO);
+	if(faceVAO != 0) glDeleteBuffers(1, &faceVAO);
 	return;
 }
 

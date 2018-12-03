@@ -9,7 +9,7 @@ namespace FK {
 	public:
 
 		fk_Array(void) {
-			array = nullptr;
+			_array = nullptr;
 			bufClear();
 		}
 
@@ -18,67 +18,71 @@ namespace FK {
 		}
 
 		void bufClear(void) {
-			delete [] array;
-			array = nullptr;
-			bufSize = 0;
-			IDAdmin.Init(0);
+			delete [] _array;
+			_array = nullptr;
+			_bufSize = 0;
+			_IDAdmin.Init(0);
 		}
 
 		void clear(void) {
-			IDAdmin.Init(0);
+			_IDAdmin.Init(0);
 		}
 
 		bool isSerial(void) {
-			if(IDAdmin.GetIDNum() == IDAdmin.GetMaxID() + 1) return true;
+			if(_IDAdmin.GetIDNum() == _IDAdmin.GetMaxID() + 1) return true;
 			return false;
 		}
 
 		int push(const TYPE &);
 			
 		TYPE * at(int id) {
-			return &array[id];
+			return &_array[id];
 		}
 
 		bool remove(int id) {
-			return IDAdmin.EraseID(id);
+			return _IDAdmin.EraseID(id);
 		}
 
 		bool isAlive(int id) {
-			return IDAdmin.ExistID(id);
+			return _IDAdmin.ExistID(id);
 		}
 
 		int next(int id) {
-			return (IDAdmin.GetNext(id));
+			return (_IDAdmin.GetNext(id));
 		}
 
 		int size(void) {
-			return IDAdmin.GetIDNum();
+			return _IDAdmin.GetIDNum();
 		}
 
+		int bufSize(void) {
+			return _bufSize;
+		}
+		
 	private:
-		TYPE			*array;
-		int				bufSize;
-		fk_IDAdmin		IDAdmin;
+		TYPE			*_array;
+		int				_bufSize;
+		fk_IDAdmin		_IDAdmin;
 	};
 
 	template<class TYPE> int fk_Array<TYPE>::push(const TYPE &a) {
 		int		id;
 		TYPE	*tmpBuf;
 
-		id = IDAdmin.CreateID();
-		if(bufSize == 0) {
-			bufSize = 1;
-			array = new TYPE [static_cast<size_t>(bufSize)];
-		} else if(isSerial() == true && id >= bufSize) {
-			bufSize *= 2;
-			tmpBuf = new TYPE [static_cast<size_t>(bufSize)];
+		id = _IDAdmin.CreateID();
+		if(_bufSize == 0) {
+			_bufSize = 1;
+			_array = new TYPE [static_cast<size_t>(_bufSize)];
+		} else if(isSerial() == true && id >= _bufSize) {
+			_bufSize *= 2;
+			tmpBuf = new TYPE [static_cast<size_t>(_bufSize)];
 			for(int i = 0; i < id; i++) {
-				tmpBuf[i] = array[i];
+				tmpBuf[i] = _array[i];
 			}
-			delete [] array;
-			array = tmpBuf;
+			delete [] _array;
+			_array = tmpBuf;
 		}
-		array[id] = a;
+		_array[id] = a;
 		return (id);
 	}
 }

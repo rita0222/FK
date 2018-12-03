@@ -93,7 +93,7 @@ class MyParticle: public fk_ParticleSet {
 // ここに、様々な設定を記述しておく。
 MyParticle::MyParticle(void)
 {
-	setMaxSize(5000);   // パーティクルの最大数設定。
+	setMaxSize(500);   // パーティクルの最大数設定。
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
 	setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
@@ -118,7 +118,7 @@ void MyParticle::genMethod(fk_Particle *p)
 void MyParticle::allMethod(void)
 {
 	for(int i = 0; i < 5; i++) {
-		if(myRandom() < 0.3) {
+		if(myRandom() < 0.03) {
 			// 新たなパーティクルを生成。
 			// 生成時に genMethod() が呼ばれる。
 			newParticle();
