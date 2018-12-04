@@ -71,13 +71,12 @@
  ****************************************************************************/
 
 #include <FK/ShaderProgram.h>
-#include <FK/Engine.H>
 
 using namespace std;
 using namespace FK;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
-	: idProgram(0), idVertex(0), idFragment(0)
+	: idProgram(0), idVertex(0), idFragment(0), parameter(nullptr)
 {
 	return;
 }
@@ -90,10 +89,13 @@ fk_ShaderProgram::~fk_ShaderProgram()
 	return;
 }
 
+void fk_ShaderProgram::SetParameter(fk_ShaderParamter *argP)
+{
+	parameter = argP;
+}
+
 bool fk_ShaderProgram::validate(void)
 {
-	//if(fk_ShaderBinder::Initialize() == false) return false;
-	
 	if(vertexShaderSource.empty()) {
 		lastError = "ERROR: VertexShader is empty.";
 		return false;

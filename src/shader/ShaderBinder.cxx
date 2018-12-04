@@ -101,6 +101,7 @@ fk_ShaderBinder::fk_ShaderBinder()
 {
 	isExtensionInitialized = false;
 	Initialize();
+	program->SetParameter(parameter);
 }
 
 fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -131,6 +132,7 @@ fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
 void fk_ShaderBinder::setParameter(fk_ShaderParameter *argParam)
 {
 	parameter = (argParam != nullptr) ? argParam : &innerParameter;
+	if(program != nullptr) program->SetParameter(parameter);
 	return;
 }
 
@@ -303,18 +305,6 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glDrawBuffer(GL_BACK);
 	// フレームバッファオブジェクトを結合を解除する
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// 透視変換行列を単位行列にする
-#ifndef OPENGL4
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-
-	// モデルビュー変換行列を単位行列にする
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-#endif
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -348,13 +338,6 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-#ifndef OPENGL4
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-#endif
 
 	glFlush();
 }

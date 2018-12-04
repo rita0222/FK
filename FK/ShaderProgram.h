@@ -2,6 +2,7 @@
 #define __FK_SHADER_PROGRAM_HEADER__
 
 #include <FK/Engine.H>
+#include <FK/ShaderParameter.h>
 
 namespace FK {
 	//! シェーダープログラム格納クラス
@@ -118,11 +119,17 @@ namespace FK {
 		 *		失敗した場合は、 getLastError() でエラーメッセージを取得できます。
 		 */
 		bool link(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void SetParameter(fk_ShaderParameter *);
+#endif
+
 	private:
 		GLuint idProgram;
 		GLuint idVertex;
 		GLuint idFragment;
 		std::string lastError;
+		fk_ShaderParameter *parameter;
 
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint);

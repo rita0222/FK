@@ -5,7 +5,6 @@
 //#include <GL/glew.h>
 #include <FK/AppWindow.h>
 #include <FK/ShaderProgram.h>
-#include <FK/ShaderParameter.h>
 
 namespace FK {
 	//! シェーダープログラム統括クラス
