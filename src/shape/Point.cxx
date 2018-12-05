@@ -83,6 +83,9 @@ fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 	allClear(false);
 	MakePoint(argVertexSet);
 	vBufferObj[0] = vBufferObj[1] = 0;
+
+	setShaderAttribute("fk_position", 3, &posArray);
+	setShaderAttribute("fk_alive", 1, &aliveArray);
 	return;
 }
 
@@ -99,9 +102,9 @@ bool fk_Point::MakePoint(int argNum, fk_Vector *argP)
 	if(argNum < 0) return false;
 	if(argP == nullptr) return false;
 
-	pos.clear();
-	col.clear();
-	alive.clear();
+	posArray.clear();
+	colArray.clear();
+	aliveArray.clear();
 
 	for(i = 0; i < argNum; i++) {
 		pushVertex(argP[i]);
@@ -120,18 +123,28 @@ int fk_Point::pushVertex(fk_Vector argPos)
 {
 	fk_Color	tmpCol(0.0, 0.0, 0.0, 0.0);
 
-	pos.push_back(argPos);
-	col.push_back(tmpCol);
-	alive.push_back(FK_SHAPE_ALIVE);
+	posArray.push_back(float(argPos.x));
+	posArray.push_back(float(argPos.y));
+	posArray.push_back(float(argPos.z));
 
-	return int(pos.size() - 1);
+	colArray.push_back(0.0f);
+	colArray.push_back(0.0f);
+	colArray.push_back(0.0f);
+	colArray.push_back(1.0f);
+
+	aliveArray.push_back(FK_SHAPE_ALIVE);
+
+	return int(aliveArray.size() - 1);
 }
 
 bool fk_Point::setVertex(int argID, fk_Vector argPos)
 {
-	if(argID < 0 || argID >= int(alive.size())) return false;
-	if(alive[_st(argID)] == FK_SHAPE_DEAD) return false;
-	pos[_st(argID)] = argPos;
+	if(argID < 0 || argID >= int(aliveArray.size())) return false;
+	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
+	_st i = _st(argID) * 3;
+	posArray[i] = float(argPos.x);
+	posArray[i+1] = float(argPos.y);
+	posArray[i+2] = float(argPos.z);
 	return true;
 }
 
@@ -147,34 +160,38 @@ bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)
 
 bool fk_Point::removeVertex(int argID)
 {
-	if(alive[_st(argID)] == FK_SHAPE_DEAD) return false;
-	alive[_st(argID)] = FK_SHAPE_DEAD;
+	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
+	aliveArray[_st(argID)] = FK_SHAPE_DEAD;
 
 	return true;
 }
 
-fk_FVector * fk_Point::getVertex(int argID)
+fk_Vector fk_Point::getVertex(int argID)
 {
-	if(alive[_st(argID)] == FK_SHAPE_DEAD) return nullptr;
-	return &pos[_st(argID)];
+	fk_Vector tmp(0.0, 0.0, 0.0);
+	_st i = _st(argID) * 3;
+	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return tmp;
+	
+	tmp.set(posArray[i], posArray[i+1], posArray[i+2]);
+	return tmp;
 }
 
 int fk_Point::getSize(void)
 {
-	return int(pos.size());
+	return int(aliveArray.size());
 }
 
 void fk_Point::setDrawMode(int argID, bool argFlag)
 {
-	if(argID < 0 || argID >= int(alive.size())) return;
-	alive[_st(argID)] = (argFlag) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
+	if(argID < 0 || argID >= int(aliveArray.size())) return;
+	aliveArray[_st(argID)] = (argFlag) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
 	return;
 }
 
 bool fk_Point::getDrawMode(int argID)
 {
-	if(argID < 0 || argID >= int(alive.size())) return false;
-	if(alive[_st(argID)] == FK_SHAPE_ALIVE) return true;
+	if(argID < 0 || argID >= int(aliveArray.size())) return false;
+	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
 	return false;
 }
 
@@ -219,9 +236,9 @@ int fk_Point::getColorID(int argID)
 
 void fk_Point::allClear(bool argMateFlg)
 {
-	pos.clear();
-	col.clear();
-	alive.clear();
+	posArray.clear();
+	colArray.clear();
+	aliveArray.clear();
 	if(argMateFlg == true) clearMaterial();
 
 	return;

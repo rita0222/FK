@@ -114,10 +114,7 @@ unsigned int fk_Particle::getCount(void) const
 
 fk_Vector fk_Particle::getPosition(void) const
 {
-	fk_Vector	pos;
-
-	pos = *base->getVertex(id);
-	return pos;
+	return base->getVertex(id);
 }
 
 void fk_Particle::setPosition(const fk_Vector &argVec)

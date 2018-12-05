@@ -103,17 +103,15 @@ namespace FK {
 
 		//! 頂点位置ベクトル取得関数
 		/*!
-		 *	指定した頂点の位置ベクトルのポインタを返します。
-		 *	ベクトルの型は fk_Vector ではなく
-		 *	fk_FVector であることに注意して下さい。
+		 *	指定した頂点の位置ベクトルを返します。
 		 *
 		 *	\param[in]	ID		頂点ID
 		 *
 		 *	\return
-		 *		頂点の位置ベクトルインスタンスへのポインタ。
-		 *		指定した頂点が存在しない場合は nullptr を返します。
+		 *		頂点の位置ベクトル
+		 *		指定した頂点が存在しない場合はゼロベクトルを返します。
 		 */
-		fk_FVector *	getVertex(int ID);
+		fk_Vector getVertex(int ID);
 
 		//! 頂点数取得関数
 		/*!
@@ -192,9 +190,9 @@ namespace FK {
 		//std::vector<int>		drawMode;
 		//std::vector<int>		colorID;
 
-		std::vector<fk_FVector>	pos;
-		std::vector<fk_Color>	col;
-		std::vector<int>		alive;
+		std::vector<float>		posArray;
+		std::vector<float>		colArray;
+		std::vector<int>		aliveArray;
 
 		GLuint					vBufferObj[2];
 		
