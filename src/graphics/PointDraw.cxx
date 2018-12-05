@@ -129,17 +129,16 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 	prog->vertexShaderSource += "uniform mat4 modelview;\n";
 	prog->vertexShaderSource += "uniform mat4 projection;\n";
 	prog->vertexShaderSource += "uniform vec4 color;\n";
-	prog->vertexShaderSource += "in vec4 position;\n";
+	prog->vertexShaderSource += "in vec3 position;\n";
 	prog->vertexShaderSource += "in int drawmode;\n";
 	prog->vertexShaderSource += "flat out vec4 f_color;\n";
 	prog->vertexShaderSource += "void main()\n";
 	prog->vertexShaderSource += "{\n";
-	prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
+	prog->vertexShaderSource += "    vec4 p = vec4(position, 1.0);\n";
+	prog->vertexShaderSource += "    gl_Position = projection * modelview * p;\n";
 	prog->vertexShaderSource += "    f_color = color;\n";
 	prog->vertexShaderSource += "    if(drawmode == 2) {\n";
 	prog->vertexShaderSource += "    	f_color = vec4(1.0, 0.0, 0.0, 1.0);\n";
-	//prog->vertexShaderSource += "    } else {\n";
-	//prog->vertexShaderSource += "    	f_color = vec4(0.0, 0.0, 1.0, 1.0);\n";
 	prog->vertexShaderSource += "    }\n";
 	prog->vertexShaderSource += "}\n";
 
@@ -202,7 +201,6 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 
 	glGenBuffers(2, &vbo[0]);
 
-	
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
@@ -214,7 +212,7 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 				 pos, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glVertexAttribPointer(2, 1, GL_INT, GL_FALSE, 0, 0);
+	glVertexAttribIPointer(2, 1, GL_INT, 0, 0);
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(int)) * GLsizeiptr(size),
 				 drawmode, GL_STATIC_DRAW);
@@ -307,12 +305,16 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 				 pos, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glVertexAttribPointer(2, 1, GL_INT, GL_FALSE, 0, 0);
+	glVertexAttribIPointer(2, 1, GL_INT, 0, 0);
 	//glBufferSubData(GL_ARRAY_BUFFER, 0, GLsizeiptr(sizeof(int)) * GLsizeiptr(size), drawmode);
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(int)) * GLsizeiptr(size),
 				 drawmode, GL_STATIC_DRAW);
-
+/*
+	for(int i = 0; i < size; i++) {
+		if(drawmode[i] == FK_SHAPE_DEAD) fk_Window::printf("d[%d] = %d", i, drawmode[i]);
+	}
+*/
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 	
