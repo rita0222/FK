@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/Point.h>
+//#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -184,7 +185,14 @@ int fk_Point::getSize(void)
 void fk_Point::setDrawMode(int argID, bool argFlag)
 {
 	if(argID < 0 || argID >= int(aliveArray.size())) return;
-	aliveArray[_st(argID)] = (argFlag) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
+	if(argFlag == false) {
+		//if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) {
+		//fk_Window::printf("%d Dead", argID);
+		//}
+		aliveArray[_st(argID)] = FK_SHAPE_DEAD;
+	} else {
+		aliveArray[_st(argID)] = FK_SHAPE_ALIVE;
+	}
 	return;
 }
 

@@ -89,7 +89,7 @@ fk_ShaderProgram::~fk_ShaderProgram()
 	return;
 }
 
-void fk_ShaderProgram::SetParameter(fk_ShaderParamter *argP)
+void fk_ShaderProgram::SetParameter(fk_ShaderParameter *argP)
 {
 	parameter = argP;
 }

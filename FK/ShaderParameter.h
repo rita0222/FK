@@ -12,7 +12,7 @@ namespace FK {
 	 *	本クラスの機能は、 fk_ShaderBinder クラスの
 	 *	fk_ShaderBinder::getParameter() によってインスタンスを得ることで利用します。
 	 *
-	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
+	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_TextureSampler
 	 */
 
 	class fk_ShaderParameter {

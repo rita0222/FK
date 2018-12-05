@@ -174,7 +174,7 @@ double fk_SphereBoundary::GetAdjustPoint(fk_Point *argPoint)
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		V = *(argPoint->getVertex(i));
+		V = argPoint->getVertex(i);
 		len = V.dist();
 		if(lMax < len) lMax = len;
 	}
@@ -327,7 +327,7 @@ fk_Vector fk_AABBBoundary::GetAdjustPoint(fk_Point *argPoint,
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		p = *(argPoint->getVertex(i));
+		p = argPoint->getVertex(i);
 		AdjustVec(&pMax, p, argX, argY, argZ);
 	}
 	return (2.0*pMax);
@@ -502,7 +502,7 @@ fk_Vector fk_OBBBoundary::GetAdjustPoint(fk_Point *argPoint)
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		p = *(argPoint->getVertex(i));
+		p = argPoint->getVertex(i);
 		AdjustVec(&pMax, p);
 	}
 	return (2.0*pMax);
@@ -651,7 +651,7 @@ double fk_CapsuleBoundary::GetAdjustPoint(fk_Point *argPoint,
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		p = *(argPoint->getVertex(i));
+		p = argPoint->getVertex(i);
 		len = CalcLen(p, argS, argE);
 		if(lMax < len) lMax = len;
 	}
