@@ -117,7 +117,7 @@ void fk_PointDraw::SetCamera(fk_Model *argCamera)
 	return;
 }
 
-void fk_PointDraw::ShaderSetup(void)
+void fk_PointDraw::ShaderSetup(fk_Model *argM)
 {
 	shader = new fk_ShaderBinder();
  	auto prog = shader->getProgram();
@@ -136,7 +136,11 @@ void fk_PointDraw::ShaderSetup(void)
 	prog->vertexShaderSource += "{\n";
 	prog->vertexShaderSource += "    gl_Position = projection * modelview * position;\n";
 	prog->vertexShaderSource += "    f_color = color;\n";
-	prog->vertexShaderSource += "    if(drawmode == 2) f_color = vec4(1.0, 0.0, 0.0, 1.0);\n";
+	prog->vertexShaderSource += "    if(drawmode == 2) {\n";
+	prog->vertexShaderSource += "    	f_color = vec4(1.0, 0.0, 0.0, 1.0);\n";
+	//prog->vertexShaderSource += "    } else {\n";
+	//prog->vertexShaderSource += "    	f_color = vec4(0.0, 0.0, 1.0, 1.0);\n";
+	prog->vertexShaderSource += "    }\n";
 	prog->vertexShaderSource += "}\n";
 
 	prog->fragmentShaderSource = "#version 410 core\n";
@@ -151,26 +155,24 @@ void fk_PointDraw::ShaderSetup(void)
 		fk_Window::printf("Shader Error");
 		fk_Window::putString(prog->getLastError());
 	}
-	//shader->bindModel(argM);
+	shader->bindModel(argM);
 
-	glBindAttribLocation(prog->getProgramID(), 0, "position");
-	glBindAttribLocation(prog->getProgramID(), 1, "drawmode");
+	glBindAttribLocation(prog->getProgramID(), 1, "position");
+	glBindAttribLocation(prog->getProgramID(), 2, "drawmode");
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 
-	
-	/*
 	GLuint pID = prog->getProgramID();
 	fk_Window::printf("A: pid = %d, (%d, %d)", pID,
 					  glGetAttribLocation(pID, "position"),
 					  glGetAttribLocation(pID, "drawmode"));
-	*/
+
 	prog->link();
 
-	/*
+
 	fk_Window::printf("B: pid = %d, (%d, %d)", pID,
 					  glGetAttribLocation(pID, "position"),
 					  glGetAttribLocation(pID, "drawmode"));
-	*/
+
 	return;
 }
 
@@ -185,12 +187,12 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 
 	FK_UNUSED(prog);
 
-	/*
+
 	GLuint pID = prog->getProgramID();
 	fk_Window::printf("C: pid = %d, (%d, %d)", pID,
 					  glGetAttribLocation(pID, "position"),
 					  glGetAttribLocation(pID, "drawmode"));
-	*/
+
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -201,21 +203,21 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 	glGenBuffers(2, &vbo[0]);
 
 	
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(float) * 3) * GLsizeiptr(size),
 				 pos, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glVertexAttribPointer(1, 1, GL_INT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(2, 1, GL_INT, GL_FALSE, 0, 0);
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(int)) * GLsizeiptr(size),
 				 drawmode, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -225,7 +227,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
 	if(shader == nullptr) {
 		shader = new fk_ShaderBinder();
-		ShaderSetup();
+		ShaderSetup(argObj);
 	}
 
 	if(argObj->preShaderList.empty() == true &&
@@ -294,21 +296,21 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 	glBindVertexArray(vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	//glBufferSubData(GL_ARRAY_BUFFER, 0, GLsizeiptr(sizeof(fk_FVector)) * GLsizeiptr(size), pos);
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(float) * 3) * GLsizeiptr(size),
 				 pos, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glVertexAttribPointer(1, 1, GL_INT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(2, 1, GL_INT, GL_FALSE, 0, 0);
 	//glBufferSubData(GL_ARRAY_BUFFER, 0, GLsizeiptr(sizeof(int)) * GLsizeiptr(size), drawmode);
 	glBufferData(GL_ARRAY_BUFFER,
 				 GLsizeiptr(sizeof(int)) * GLsizeiptr(size),
 				 drawmode, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 	
 	glDrawArrays(GL_POINTS, 0, size);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
