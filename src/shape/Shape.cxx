@@ -246,3 +246,29 @@ GLuint fk_Shape::GetFaceVAO(void)
 {
 	return faceVAO;
 }
+
+void fk_Shape::setShaderAttribute(std::string argName, int argDim, vector<int> *argValue)
+{
+	attrMapI[argName] = tuple<int, vector<int> *>(argDim, argValue);
+}
+
+void fk_Shape::setShaderAttribute(std::string argName, int argDim, vector<float> *argValue)
+{
+	attrMapF[argName] = tuple<int, vector<float> *>(argDim, argValue);
+}
+
+tuple<int, vector<int> *> * fk_Shape::GetAttrMapI(string argName)
+{
+	if(attrMapI.find(argName) != attrMapI.end()) {
+		return &attrMapI[argName];
+	}
+	return nullptr;
+}
+
+tuple<int, vector<float> *> * fk_Shape::GetAttrMapF(string argName)
+{
+	if(attrMapF.find(argName) != attrMapF.end()) {
+		return &attrMapF[argName];
+	}
+	return nullptr;
+}

@@ -5,6 +5,7 @@
 #include <FK/Palette.h>
 #include <FK/Attribute.h>
 #include <FK/OpenGL.H>
+#include <map>
 
 namespace FK {
 
@@ -180,6 +181,9 @@ namespace FK {
 		 */
 		std::vector<fk_Material> *		getMaterialVector(void);
 
+		void setShaderAttribute(std::string, int, std::vector<int> *);
+		void setShaderAttribute(std::string, int, std::vector<float> *);
+		
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 		void	SetPaletteData(fk_Palette *pal);
@@ -192,12 +196,18 @@ namespace FK {
 		GLuint			GetLineVAO(void);
 		GLuint			GetFaceVAO(void);
 
+		std::tuple<int, std::vector<int> *> * GetAttrMapI(std::string);
+		std::tuple<int, std::vector<float> *> * GetAttrMapF(std::string);
+
 #endif
 
 	private:
 		fk_Palette			*palette;
 		fk_MaterialMode		materialMode;
 		GLuint				pointVAO, lineVAO, faceVAO;
+
+		std::map<std::string, std::tuple<int, std::vector<int> *> > attrMapI;
+		std::map<std::string, std::tuple<int, std::vector<float> *> > attrMapF;
 	};
 }
 
