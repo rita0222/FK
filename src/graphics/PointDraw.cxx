@@ -117,7 +117,7 @@ void fk_PointDraw::SetCamera(fk_Model *argCamera)
 	return;
 }
 
-void fk_PointDraw::ShaderSetup(fk_Model *argM)
+void fk_PointDraw::ShaderSetup(void)
 {
 	shader = new fk_ShaderBinder();
  	auto prog = shader->getProgram();
@@ -154,7 +154,7 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 		fk_Window::printf("Shader Error");
 		fk_Window::putString(prog->getLastError());
 	}
-	shader->bindModel(argM);
+	//shader->bindModel(argM);
 
 	glBindAttribLocation(prog->getProgramID(), 1, "position");
 	glBindAttribLocation(prog->getProgramID(), 2, "drawmode");
@@ -185,13 +185,6 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 	auto 			prog = shader->getProgram();
 
 	FK_UNUSED(prog);
-
-/*
-	GLuint pID = prog->getProgramID();
-	fk_Window::printf("C: pid = %d, (%d, %d)", pID,
-					  glGetAttribLocation(pID, "position"),
-					  glGetAttribLocation(pID, "drawmode"));
-*/
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -225,7 +218,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
 	if(shader == nullptr) {
 		shader = new fk_ShaderBinder();
-		ShaderSetup(argObj);
+		ShaderSetup();
 	}
 
 	if(argObj->preShaderList.empty() == true &&

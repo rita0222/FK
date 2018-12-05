@@ -86,6 +86,7 @@ fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 	vBufferObj[0] = vBufferObj[1] = 0;
 
 	setShaderAttribute("fk_position", 3, &posArray);
+	setShaderAttribute("fk_color", 4, &colArray);
 	setShaderAttribute("fk_alive", 1, &aliveArray);
 	return;
 }

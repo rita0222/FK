@@ -114,56 +114,15 @@ namespace FK {
 		 */
 		bool removeRegister(std::string name);
 
-		//! float 配列型 attribute 変数設定関数
+		//! attribute 変数予約関数
 		/*!
-		 *	この関数は、
-		 *	バーテックスシェーダーに対し float 配列型の attribute 変数を渡す設定を行います。
-		 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
-		 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
-		 *	GLSL 内での型は、要素数が 1 から順に float, vec2, vec3, vec4 となります。
+		 *	attribute 変数用の名前を予約します。
 		 *
 		 *	\param[in]	name
 		 *		GLSL コード内での変数名
 		 *
-		 *	\param[in]	dim
-		 *		attribute 変数の要素数
-		 *
-		 *	\param[in]	value
-		 *		attribute 変数に渡す値の配列
 		 */
-		void addAttribute(std::string name, int dim, std::vector<float> *value);
-
-		//! int 配列型 attribute 変数設定関数
-		/*!
-		 *	この関数は、
-		 *	バーテックスシェーダーに対し int 配列型の attribute 変数を渡す設定を行います。
-		 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
-		 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
-		 *	GLSL 内での型は、要素数が 1 から順に int, ivec2, ivec3, ivec4 となります。
-		 *
-		 *	\param[in]	name
-		 *		GLSL コード内での変数名
-		 *
-		 *	\param[in]	dim
-		 *		attribute 変数の要素数
-		 *
-		 *	\param[in]	value
-		 *		attribute 変数に渡す値の配列
-		 */
-		void addAttribute(std::string name, int dim, std::vector<int> *value);
-
-		//! attribute 変数解除関数
-		/*!
-		 *	各種 addAttribute() 関数で設定した attribute 変数を解除します。
-		 *
-		 *	\param[in]	name
-		 *		GLSL コード内での変数名
-		 *
-		 *	\return
-		 *		attribute 変数が存在していた場合は解除し true を返します。
-		 *		変数が存在していなかった場合は false を返します。
-		 */
-		bool removeAttribute(std::string name);
+		void reserveAttribute(std::string name);
 
 		//! 参照テクスチャ設定関数
 		/*!
@@ -203,11 +162,12 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool Apply(GLuint);
+		void BindAttr(GLuint);
 #endif
 	
 	private:
 		GLint GetLocation(GLuint, std::string);
-		GLint GetAttributeLocation(GLuint, std::string);
+		GLint GetAttrLocation(GLuint, std::string);
 
 		std::map<std::string, float> floatTable;
 		std::map<std::string, std::vector<float> > floatArrayTable;
@@ -216,10 +176,7 @@ namespace FK {
 		std::map<std::string, fk_Matrix> matrixTable;
 		std::map<std::string, int> locationTable;
 
-		std::map<std::string, std::tuple<int, std::vector<float> *> > floatAttributeTable;
-		std::map<std::string, std::tuple<int, std::vector<int> *> > intAttributeTable;
-
-		std::map<std::string, int> attributeLocationTable;
+		std::map<std::string, int> attrTable;
 		std::map<int, fk_TextureSampler *> textureTable;
 
 		std::string lastError;

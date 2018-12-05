@@ -52,21 +52,11 @@ bool fk_ShaderParameter::removeRegister(string argName)
 	return false;
 }
 
-void fk_ShaderParameter::addAttribute(string argName, int argDim, vector<float> *argValue)
+void fk_ShaderParameter::reserveAttribute(string argName)
 {
-	floatAttributeTable[argName] = tuple<int, vector<float> *>(argDim, argValue);
-}
-
-void fk_ShaderParameter::addAttribute(string argName, int argDim, vector<int> *argValue)
-{
-	intAttributeTable[argName] = tuple<int, vector<int> *>(argDim, argValue);
-}
-
-bool fk_ShaderParameter::removeAttribute(string argName)
-{
-	if (floatAttributeTable.erase(argName) > 0) return true;
-	if (intAttributeTable.erase(argName) > 0) return true;
-	return false;
+	if(attrTable.find(argName) == attrTable.end()) {
+		attrTable[argName] = -1;
+	}
 }
 
 bool fk_ShaderParameter::attachTexture(int argUnit, fk_TextureSampler *argTexture)
@@ -184,30 +174,6 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 		}
 	}
 
-	for(auto pair : floatAttributeTable) {
-		GLint location = GetAttributeLocation(argProgramID, pair.first);
-		if (location >= 0) {
-			int dim = get<0>(pair.second);
-			glEnableVertexAttribArray(GLuint(location));
-			glVertexAttribPointer(GLuint(location), dim, GL_FLOAT, GL_FALSE, 0, 0);
-		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
-			result = false;
-		}
-	}
-
-	for(auto pair : intAttributeTable) {
-		int location = GetAttributeLocation(argProgramID, pair.first);
-		if (location >= 0) {
-			int dim = get<0>(pair.second);
-			glEnableVertexAttribArray(GLuint(location));
-			glVertexAttribPointer(GLuint(location), dim, GL_INT, GL_FALSE, 0, 0);
-		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
-			result = false;
-		}
-	}
-
 	return result;
 }
 
@@ -223,17 +189,28 @@ GLint fk_ShaderParameter::GetLocation(GLuint argProgramID, string argName)
 	return location;
 }
 
-GLint fk_ShaderParameter::GetAttributeLocation(GLuint argProgramID, string argName)
+GLint fk_ShaderParameter::GetAttrLocation(GLuint argProgramID, string argName)
 {
-	if (attributeLocationTable.find(argName) != attributeLocationTable.end()) {
-		return attributeLocationTable[argName];
+	if (attrTable.find(argName) != attrTable.end()) {
+		return attrTable[argName];
 	}
 
 	GLint location = glGetAttribLocation(argProgramID, argName.c_str());
-	if (location >= 0) attributeLocationTable[argName] = location;
+	if (location >= 0) attrTable[argName] = location;
 
 	return location;
 }
+
+void fk_ShaderParameter::BindAttr(GLuint argID)
+{
+	GLuint locID = 0;
+
+	for(auto itr = attrTable.begin(); itr != attrTable.end(); ++itr) {
+		glBindAttribLocation(argID, locID, itr->first.c_str());
+		itr->second = int(locID);
+		locID++;
+	}
+}			
 
 /****************************************************************************
  *
