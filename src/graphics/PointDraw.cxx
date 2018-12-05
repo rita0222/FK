@@ -160,19 +160,19 @@ void fk_PointDraw::ShaderSetup(fk_Model *argM)
 	glBindAttribLocation(prog->getProgramID(), 1, "position");
 	glBindAttribLocation(prog->getProgramID(), 2, "drawmode");
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
-
+/*
 	GLuint pID = prog->getProgramID();
 	fk_Window::printf("A: pid = %d, (%d, %d)", pID,
 					  glGetAttribLocation(pID, "position"),
 					  glGetAttribLocation(pID, "drawmode"));
-
+*/
 	prog->link();
 
-
+/*
 	fk_Window::printf("B: pid = %d, (%d, %d)", pID,
 					  glGetAttribLocation(pID, "position"),
 					  glGetAttribLocation(pID, "drawmode"));
-
+*/
 	return;
 }
 
@@ -187,12 +187,12 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 
 	FK_UNUSED(prog);
 
-
+/*
 	GLuint pID = prog->getProgramID();
 	fk_Window::printf("C: pid = %d, (%d, %d)", pID,
 					  glGetAttribLocation(pID, "position"),
 					  glGetAttribLocation(pID, "drawmode"));
-
+*/
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -285,6 +285,8 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 	int				size = int(point->aliveArray.size());
 
 	GLuint 		vao = point->GetPointVAO();
+ 
+	FK_UNUSED(drawmode);
 
 	if(vao == 0) {
 		ParticleVAOSetup(point);
@@ -292,6 +294,8 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 	}
 
 	GLuint *	vbo = point->GetVBO();
+
+	//fk_Window::printf("(%d, %d)", vbo[0], vbo[1]);
 
 	glBindVertexArray(vao);
 
