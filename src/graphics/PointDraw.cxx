@@ -124,32 +124,13 @@ void fk_PointDraw::ShaderSetup(void)
 	auto param = shader->getParameter();
 
 	FK_UNUSED(param);
+	prog->vertexShaderSource =
+		#include "GLSL/Point_VS.glsl"
+		;
 
-	prog->vertexShaderSource = "#version 410 core\n";
-	prog->vertexShaderSource += "uniform mat4 modelview;\n";
-	prog->vertexShaderSource += "uniform mat4 projection;\n";
-	prog->vertexShaderSource += "uniform vec4 color;\n";
-	prog->vertexShaderSource += "in vec3 position;\n";
-	prog->vertexShaderSource += "in int drawmode;\n";
-	prog->vertexShaderSource += "flat out vec4 f_color;\n";
-	prog->vertexShaderSource += "void main()\n";
-	prog->vertexShaderSource += "{\n";
-	prog->vertexShaderSource += "    vec4 p = vec4(position, 1.0);\n";
-	prog->vertexShaderSource += "    gl_Position = projection * modelview * p;\n";
-	prog->vertexShaderSource += "    f_color = color;\n";
-	prog->vertexShaderSource += "    if(drawmode == 2) {\n";
-	prog->vertexShaderSource += "    	f_color = vec4(1.0, 0.0, 0.0, 1.0);\n";
-	prog->vertexShaderSource += "    }\n";
-	prog->vertexShaderSource += "}\n";
-
-	prog->fragmentShaderSource = "#version 410 core\n";
-	prog->fragmentShaderSource += "flat in vec4 f_color;\n";
-	prog->fragmentShaderSource += "out vec4 fragment;\n";
-	prog->fragmentShaderSource += "void main()\n";
-	prog->fragmentShaderSource += "{\n";
-	prog->fragmentShaderSource += "    fragment = f_color;\n";
-	prog->fragmentShaderSource += "}\n";
-
+	prog->fragmentShaderSource =
+		#include "GLSL/Point_FS.glsl"
+		;
 	if(prog->validate() == false) {
 		fk_Window::printf("Shader Error");
 		fk_Window::putString(prog->getLastError());
