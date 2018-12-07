@@ -55,7 +55,6 @@ namespace FK {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-
 		fk_Particle(fk_Point *, int);
 		virtual ~fk_Particle();
 
@@ -163,25 +162,6 @@ namespace FK {
 		 */
 		void			setAccel(double x, double y, double z);
 
-		//! 色 ID 参照関数
-		/*!
-		 *	パーティクルの色 ID を参照します。
-		 *
-		 *	\return		色 ID
-		 *
-		 *	\sa fk_ParticleSet::setColorPalette()
-		 */
-		int				getColorID(void) const;
-
-		//! 色 ID 設定関数
-		/*!
-		 *	パーティクルの色 ID を設定します。
-		 *
-		 *	\param[in]	ID		色 ID
-		 *
-		 *	\sa fk_ParticleSet::setColorPalette()
-		 */
-		void			setColorID(int ID);
 
 		//! 描画有無効参照関数
 		/*!
@@ -212,6 +192,11 @@ namespace FK {
 		 *	\sa fk_ParticleSet::handle()
 		 */
 		void			handle(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		int				getColorID(void) const;
+		void			setColorID(int ID);
+#endif		
 
 	private:
 		int				id;			// 頂点 ID 
@@ -430,59 +415,6 @@ namespace FK {
 		 */
 		unsigned int	getMaxSize(void) const;
 
-		//! カラーパレット設定1
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	col		色
-		 */
-		void			setColorPalette(int ID, const fk_Color &col);
-
-		//! カラーパレット設定2
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	色成分の最小値は 0、最大値は 1 です。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	R		色のR(赤)成分
-		 *	\param[in]	G		色のG(緑)成分
-		 *	\param[in]	B		色のB(青)成分
-		 */
-		void			setColorPalette(int ID, float R, float G, float B);
-
-		//! カラーパレット設定3
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	色成分の最小値は 0、最大値は 1 です。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	R		色のR(赤)成分
-		 *	\param[in]	G		色のG(緑)成分
-		 *	\param[in]	B		色のB(青)成分
-		 */
-		void			setColorPalette(int ID, double R, double G, double B);
 
 		//! 個別初期化用仮想関数
 		/*!
@@ -561,6 +493,12 @@ namespace FK {
 		 */
 		bool			getIndivMode(void) const;
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void			setColorPalette(int ID, const fk_Color &col);
+		void			setColorPalette(int ID, float R, float G, float B);
+		void			setColorPalette(int ID, double R, double G, double B);
+
+#endif
 	private:
 		std::vector<fk_Particle *>	pSet;
 		fk_IDAdmin					*pAdmin;

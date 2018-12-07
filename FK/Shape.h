@@ -33,9 +33,9 @@ namespace FK {
 	//! 形状用基底クラス
 	/*!
 	 *	このクラスは、形状を表すクラスの基底クラスです。
-	 *	クラス自体の主な機能は、マテリアルやパレットの管理です。
+	 *	クラス自体の主な機能は、マテリアルの管理です。
 	 *
-	 *	\sa fk_Material, fk_Palette
+	 *	\sa fk_Material
 	 */
 
 	class fk_Shape: public fk_Attribute {
@@ -208,6 +208,7 @@ namespace FK {
 
 	private:
 		fk_Palette			*palette;
+		fk_Palette			defaultPalette;
 		fk_MaterialMode		materialMode;
 		GLuint				pointVAO, lineVAO, faceVAO;
 

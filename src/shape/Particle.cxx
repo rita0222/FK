@@ -312,24 +312,36 @@ unsigned int fk_ParticleSet::getMaxSize(void) const
 
 void fk_ParticleSet::setColorPalette(int argID, const fk_Color &argColor)
 {
-	setColorPalette(argID, argColor.col[0], argColor.col[1], argColor.col[2]);
+	//setColorPalette(argID, argColor.col[0], argColor.col[1], argColor.col[2]);
+	FK_UNUSED(argID);
+	FK_UNUSED(argColor);
 	return;
 }
 
 void fk_ParticleSet::setColorPalette(int argID,
 									 float argR, float argG, float argB)
 {
+	FK_UNUSED(argID);
+	FK_UNUSED(argR);
+	FK_UNUSED(argG);
+	FK_UNUSED(argB);
+/*
 	fk_Material		col;
 
 	col.setAmbient(argR, argG, argB);
 	point->setPalette(col, argID);
+*/
 	return;
 }
 
 void fk_ParticleSet::setColorPalette(int argID,
 									 double argR, double argG, double argB)
 {
-	setColorPalette(argID, float(argR), float(argG), float(argB));
+	FK_UNUSED(argID);
+	FK_UNUSED(argR);
+	FK_UNUSED(argG);
+	FK_UNUSED(argB);
+	//setColorPalette(argID, float(argR), float(argG), float(argB));
 	return;
 }
 

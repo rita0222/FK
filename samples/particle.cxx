@@ -99,7 +99,7 @@ MyParticle::MyParticle(void)
 	setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
  
 	// パレットに色を設定しておく。
-	setColorPalette(1, 0.0, 1.0, 0.6);
+	//setColorPalette(1, 0.0, 1.0, 0.6);
 	return;
 }
  

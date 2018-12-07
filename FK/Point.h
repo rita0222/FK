@@ -177,18 +177,9 @@ namespace FK {
 		 *		false の場合は、マテリアルパレットに関しては消去しません。
 		 */
 		void			allClear(bool matFlag = true);
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		GLuint *	GetVBO(void);
-		void		SetVBO(int, GLuint);
-#endif
 		
 	private:
-		fk_Palette				localPal;
-
-		//fk_Array<fk_FVector>	vec;
-		//std::vector<int>		drawMode;
-		//std::vector<int>		colorID;
+		//fk_Palette				localPal;
 
 		std::vector<float>		posArray;
 		std::vector<float>		colArray;

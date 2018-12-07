@@ -78,12 +78,10 @@ using namespace std;
 using namespace FK;
 
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
+	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
+	  pointVAO(0), lineVAO(0), faceVAO(0)
 {
 	SetObjectType(argObjType);
-	materialMode = FK_NONE_MODE;
-	pointVAO = 0;
-	lineVAO = 0;
-	faceVAO = 0;
 	return;
 }
 
