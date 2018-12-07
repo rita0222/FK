@@ -11,6 +11,12 @@ namespace FK {
 
 	const int FK_SHAPE_ALIVE = 1;
 	const int FK_SHAPE_DEAD = 2;
+
+	using shapeAttrI = std::tuple<int, int, std::vector<int> *>;
+	using shapeAttrF = std::tuple<int, int, std::vector<float> *>;
+
+	using shapeMapI = std::map<std::string, shapeAttrI>;
+	using shapeMapF = std::map<std::string, shapeAttrF>;
 	
 	//! 形状データの具体的なデータ構造を表す列挙型
 	enum fk_RealShapeType {
@@ -196,9 +202,8 @@ namespace FK {
 		GLuint			GetLineVAO(void);
 		GLuint			GetFaceVAO(void);
 
-		std::tuple<int, std::vector<int> *> * GetAttrMapI(std::string);
-		std::tuple<int, std::vector<float> *> * GetAttrMapF(std::string);
-
+		void			DefineVBO(void);
+		void			BindShaderBuffer(std::map<std::string, int> *);
 #endif
 
 	private:
@@ -206,8 +211,8 @@ namespace FK {
 		fk_MaterialMode		materialMode;
 		GLuint				pointVAO, lineVAO, faceVAO;
 
-		std::map<std::string, std::tuple<int, std::vector<int> *> > attrMapI;
-		std::map<std::string, std::tuple<int, std::vector<float> *> > attrMapF;
+		shapeMapI 			attrMapI;
+		shapeMapF 			attrMapF;
 	};
 }
 

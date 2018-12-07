@@ -200,6 +200,7 @@ GLuint fk_ShaderProgram::Compile(string *argCode, GLuint argKind)
 bool fk_ShaderProgram::link(void)
 {
 	parameter->BindAttr(idProgram);
+
 	glLinkProgram(idProgram);
 
 	GLint linked = 0;

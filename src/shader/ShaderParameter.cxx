@@ -1,5 +1,6 @@
 ﻿#include <FK/ShaderParameter.h>
 #include <FK/Matrix.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -57,6 +58,11 @@ void fk_ShaderParameter::reserveAttribute(string argName)
 	if(attrTable.find(argName) == attrTable.end()) {
 		attrTable[argName] = -1;
 	}
+}
+
+map<string, int> * fk_ShaderParameter::getAttrTable(void)
+{
+	return &attrTable;
 }
 
 bool fk_ShaderParameter::attachTexture(int argUnit, fk_TextureSampler *argTexture)
@@ -189,20 +195,9 @@ GLint fk_ShaderParameter::GetLocation(GLuint argProgramID, string argName)
 	return location;
 }
 
-GLint fk_ShaderParameter::GetAttrLocation(GLuint argProgramID, string argName)
-{
-	if (attrTable.find(argName) != attrTable.end()) {
-		return attrTable[argName];
-	}
-
-	GLint location = glGetAttribLocation(argProgramID, argName.c_str());
-	if (location >= 0) attrTable[argName] = location;
-
-	return location;
-}
-
 void fk_ShaderParameter::BindAttr(GLuint argID)
 {
+	FK_UNUSED(argID);
 	GLuint locID = 0;
 
 	for(auto itr = attrTable.begin(); itr != attrTable.end(); ++itr) {

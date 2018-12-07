@@ -124,6 +124,8 @@ namespace FK {
 		 */
 		void reserveAttribute(std::string name);
 
+		std::map<std::string, int> * getAttrTable(void);
+
 		//! 参照テクスチャ設定関数
 		/*!
 		 *	GLSLコード内の参照テクスチャを設定します。
@@ -167,7 +169,7 @@ namespace FK {
 	
 	private:
 		GLint GetLocation(GLuint, std::string);
-		GLint GetAttrLocation(GLuint, std::string);
+		//GLint GetAttrLocation(GLuint, std::string);
 
 		std::map<std::string, float> floatTable;
 		std::map<std::string, std::vector<float> > floatArrayTable;

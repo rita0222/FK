@@ -69,7 +69,10 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
+
 #include <FK/Shape.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -89,6 +92,21 @@ fk_Shape::~fk_Shape()
 	if(pointVAO != 0) glDeleteBuffers(1, &pointVAO);
 	if(lineVAO != 0) glDeleteBuffers(1, &lineVAO);
 	if(faceVAO != 0) glDeleteBuffers(1, &faceVAO);
+		
+	GLuint tmpID = 0;
+	for(auto p : attrMapI) {
+		if(get<0>(p.second) != -1) {
+			tmpID = GLuint(get<0>(p.second));
+			glDeleteBuffers(1, &tmpID);
+		}
+	}
+
+	for(auto p : attrMapF) {
+		if(get<0>(p.second) != -1) {
+			tmpID = GLuint(get<0>(p.second));
+			glDeleteBuffers(1, &tmpID);
+		}
+	}
 	return;
 }
 
@@ -247,28 +265,87 @@ GLuint fk_Shape::GetFaceVAO(void)
 	return faceVAO;
 }
 
-void fk_Shape::setShaderAttribute(std::string argName, int argDim, vector<int> *argValue)
+void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argValue)
 {
-	attrMapI[argName] = tuple<int, vector<int> *>(argDim, argValue);
+	int id = -1;
+	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
+	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
 }
 
-void fk_Shape::setShaderAttribute(std::string argName, int argDim, vector<float> *argValue)
+void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *argValue)
 {
-	attrMapF[argName] = tuple<int, vector<float> *>(argDim, argValue);
+	int id = -1;
+	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
+	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
 }
 
-tuple<int, vector<int> *> * fk_Shape::GetAttrMapI(string argName)
+void fk_Shape::DefineVBO(void)
 {
-	if(attrMapI.find(argName) != attrMapI.end()) {
-		return &attrMapI[argName];
+	GLuint tmpID = 0;
+	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+		if(get<0>(itr->second) != -1) {
+			tmpID = GLuint(get<0>(itr->second));
+			glDeleteBuffers(1, &tmpID);
+		}
+		glGenBuffers(1, &tmpID);
+		get<0>(itr->second) = int(tmpID);
 	}
-	return nullptr;
+
+	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+		if(get<0>(itr->second) != -1) {
+			tmpID = GLuint(get<0>(itr->second));
+			glDeleteBuffers(1, &tmpID);
+		}
+		glGenBuffers(1, &tmpID);
+		get<0>(itr->second) = int(tmpID);
+	}
+
+	return;
 }
 
-tuple<int, vector<float> *> * fk_Shape::GetAttrMapF(string argName)
+void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 {
-	if(attrMapF.find(argName) != attrMapF.end()) {
-		return &attrMapF[argName];
+	GLuint loc;
+	_st size;
+	int vbo, dim;
+	vector<float> *fArray;
+	vector<int> *iArray;
+
+	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+		if(argTable->find(itr->first) == argTable->end()) continue;
+		loc = GLuint(argTable->at(itr->first));
+		vbo = get<0>(itr->second);
+		dim = get<1>(itr->second);
+		iArray = get<2>(itr->second);
+		size = iArray->size();
+
+		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
+		glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
+		glBufferData(GL_ARRAY_BUFFER,
+					 GLsizeiptr(sizeof(int) * size),
+					 &((*iArray)[0]), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(loc);
 	}
-	return nullptr;
+
+	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+		if(argTable->find(itr->first) == argTable->end()) continue;
+		loc = GLuint(argTable->at(itr->first));
+		vbo = get<0>(itr->second);
+		dim = get<1>(itr->second);
+		fArray = get<2>(itr->second);
+		size = fArray->size();
+
+		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
+		glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
+		glBufferData(GL_ARRAY_BUFFER,
+					 GLsizeiptr(sizeof(float) * size),
+					 &((*fArray)[0]), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(loc);
+	}
+
+
+	return;
 }
+

@@ -83,17 +83,15 @@ fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 	SetPaletteData(&localPal);
 	allClear(false);
 	MakePoint(argVertexSet);
-	vBufferObj[0] = vBufferObj[1] = 0;
 
-	setShaderAttribute("fk_position", 3, &posArray);
-	setShaderAttribute("fk_color", 4, &colArray);
-	setShaderAttribute("fk_alive", 1, &aliveArray);
+	setShaderAttribute("position", 3, &posArray);
+	setShaderAttribute("color", 4, &colArray);
+	setShaderAttribute("alive", 1, &aliveArray);
 	return;
 }
 
 fk_Point::~fk_Point()
 {
-	if(vBufferObj[0] != 0) glDeleteBuffers(2, &vBufferObj[0]);
 	return;
 }
 
@@ -251,14 +249,4 @@ void fk_Point::allClear(bool argMateFlg)
 	if(argMateFlg == true) clearMaterial();
 
 	return;
-}
-
-GLuint * fk_Point::GetVBO(void)
-{
-	return &vBufferObj[0];
-}
-
-void fk_Point::SetVBO(int argID, GLuint argVBO)
-{
-	vBufferObj[argID] = argVBO;
 }
