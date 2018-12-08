@@ -232,6 +232,16 @@ fk_DrawMode fk_Model::getDrawMode(void) const
 	return drawMode;
 }
 
+void fk_Model::setElementMode(const fk_ElementMode argMode)
+{
+	elemMode = argMode;
+}
+
+fk_ElementMode fk_Model::getElementMode(void) const
+{
+	return elemMode;
+}
+
 void fk_Model::setMaterialMode(const fk_MaterialMode) {}
 fk_MaterialMode fk_Model::getMaterialMode(void) const { return FK_PARENT_MODE; }
 

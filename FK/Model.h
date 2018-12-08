@@ -1065,46 +1065,9 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(void) const;
 
-		//! マテリアルモード設定関数
-		/*!
-		 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
-		 *	マテリアルの採用は、以下のような優先順で決定します。
-		 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
-		 *		モデルのマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *	-# fk_Shape の派生クラスにてマテリアルモードが
-		 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *		(fk_Shape::setMaterialMode() を参照して下さい。)
-		 *	-# 各位相要素でのマテリアルモードが、
-		 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
-		 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
-		 *
-		 *	\param[in]	mode
-		 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
-		 *		\arg FK_CHILD_MODE
-		 *		\arg FK_PARENT_MODE
-		 *		\arg FK_NONE_MODE
-		 *
-		 *	\sa getMaterialMode(), fk_Shape::setMaterialMode(),
-		 *		fk_TopologyMaterial::setElemMaterialMode()
-		 */
-		void	setMaterialMode(const fk_MaterialMode mode);
-
-		//! マテリアルモード参照関数
-		/*!
-		 *	モデルのマテリアルモードを取得します。
-		 *
-		 *	\return		マテリアルモード
-		 *
-		 *	\sa setMaterialMode()
-		 */
-		fk_MaterialMode		getMaterialMode(void) const;
-
+		void			setElementMode(const fk_ElementMode mode);
+		fk_ElementMode	getElementMode(void) const;
+		
 		//! ブレンドモード設定関数
 		/*!
 		 *	テクスチャ画像を伴うモデルを表示する場合、
@@ -1359,6 +1322,8 @@ namespace FK {
 		fk_Vector	getInhUpVec(void) const;
 		void		setPickMode(const bool);
 		bool		getPickMode(void) const;
+		void		setMaterialMode(const fk_MaterialMode mode);
+		fk_MaterialMode		getMaterialMode(void) const;
 #endif
 
 		//! 継承オイラー角参照関数
