@@ -131,7 +131,7 @@ void fk_TextureDraw::StartUp(void)
 	return;
 }
 
-void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool argPickFlag)
+void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag)
 {
 	fk_Texture	*texObj;
 	int			mateID = -2;
@@ -145,12 +145,6 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag, bool ar
 
 	fk_Image		*image = texObj->getImage();
 	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture_;
-
-	// ピックモードが ON の場合
-	if(argPickFlag == true) {
-		texObj->DrawPick();
-		return;
-	}
 
 	// マテリアルモードによるマテリアルの決定 
 	switch(texObj->getMaterialMode()) {

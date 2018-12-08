@@ -104,7 +104,7 @@ void fk_LineDraw::SetArrayState(bool argState)
 	return;
 }
 
-void fk_LineDraw::DrawShapeLine(fk_Model *argObj, bool argPickFlag)
+void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 {
 	fk_MaterialMode	shapeMateMode;
 	fk_MaterialMode	modelMateMode;
@@ -117,9 +117,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj, bool argPickFlag)
 #endif
 	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
 
-	if(argPickFlag == true) {
-		DrawShapeLinePick(argObj);
-	} else if(modelMateMode == FK_PARENT_MODE) {
+	if(modelMateMode == FK_PARENT_MODE) {
 		if(shapeMateMode == FK_PARENT_MODE) {
 			DrawShapeLineMaterial(argObj);
 		} else if(shapeMateMode == FK_CHILD_MODE) {
@@ -154,192 +152,6 @@ void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
 
 	DrawIFSLineSub(ifsetP);
 
-	return;
-}
-
-void fk_LineDraw::DrawShapeLinePick(fk_Model *argObj)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSLinePick(argObj);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidLinePick(argObj);
-		break;
-
-	  case FK_SHAPE_CURVE:
-		DrawCurveLinePick(argObj);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfaceLinePick(argObj);
-		break;
-
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_LineDraw::DrawSolidLinePick(fk_Model *argObj)
-{
-	fk_Solid			*solidP;
-	list<fk_Edge *>		*edgeStack;
-	bool				reverseFlag = argObj->getReverseDrawMode();
-
-	list<fk_Edge *>::iterator			ite;
-	list<fk_Edge *>::reverse_iterator	rite;
-
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextE(nullptr) == nullptr) return;
-
-	if(solidP->GetECacheStatus() == false) {
-		solidP->MakeECache();
-	}
-
-#ifndef OPENGL4	
-	glDisableClientState(GL_VERTEX_ARRAY);
-#endif
-
-	edgeStack = solidP->GetECache();
-
-	if(reverseFlag == false) {
-		for(ite = edgeStack->begin(); ite != edgeStack->end(); ++ite) {
-			DrawSolidLinePickElem(*ite);
-		}
-	} else {
-		for(rite = edgeStack->rbegin(); rite != edgeStack->rend(); ++rite) {
-			DrawSolidLinePickElem(*rite);
-		}
-	}
-
-	return;
-}
-
-void fk_LineDraw::DrawSolidLinePickElem(fk_Edge *argE)
-{
-	FK_UNUSED(argE);
-#ifndef OPENGL4	
-	glPushName(static_cast<GLuint>(argE->getID()*3 + 1));
-	CommonLineDrawFunc(argE, true);
-	glPopName();
-#endif
-	return;
-}
-
-
-void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
-{
-	fk_IndexFaceSet		*ifsetP;
-	int					ii;
-	int					lineNum;
-	fk_FVector			*pos;
-	int					*lineSet;
-
-	FK_UNUSED(ii);
-	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
-
-	pos = &ifsetP->pos[0];
-	lineNum = static_cast<int>(ifsetP->edgeSet.size())/2;
-	lineSet = &ifsetP->edgeSet[0];
-
-#ifndef OPENGL4
-	glDisableClientState(GL_VERTEX_ARRAY);
-	for(ii = 0; ii < lineNum; ++ii) {
-		glPushName(static_cast<GLuint>(ii*3 + 1));
-		glBegin(GL_LINE);
-		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii]].x));
-		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii+1]].x));
-		glEnd();
-		glPopName();
-	}
-#endif
-
-	return;
-}
-
-void fk_LineDraw::DrawCurveLinePick(fk_Model *argObj)
-{
-	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
-
-#ifndef OPENGL4
-	glDisableClientState(GL_VERTEX_ARRAY);
-#endif
-
-	curve->makeCache();
-	_st div = static_cast<_st>(curve->getDiv());
-	auto vArray = curve->getPosCache();
-	FK_UNUSED(div);
-	FK_UNUSED(vArray);
-
-#ifndef OPENGL4
-	for(_st i = 0; i < div; ++i) {
-		auto vPos1 = &((*vArray)[i]);
-		auto vPos2 = &((*vArray)[i+1]);
-		glPushName(static_cast<GLuint>(i*3 + 1));
-		glBegin(GL_LINE);
-		glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
-		glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
-		glEnd();
-		glPopName();
-	}
-#endif
-
-	return;
-}
-
-void fk_LineDraw::DrawSurfaceLinePick(fk_Model *argObj)
-{
-	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
-	GLuint count = 0;
-
-	FK_UNUSED(count);
-
-#ifndef OPENGL4
-	glDisableClientState(GL_VERTEX_ARRAY);
-#endif
-
-	surf->makeCache();
-	_st div = static_cast<_st>(surf->getDiv());
-	auto vArray = surf->getPosCache();
-
-	FK_UNUSED(div);
-	FK_UNUSED(vArray);
-
-#ifndef OPENGL4
-	for(_st i = 0; i <= div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			auto vPos1 = &((*vArray)[i*(div+1)+j]);
-			auto vPos2 = &((*vArray)[i*(div+1)+j+1]);
-			glPushName(static_cast<GLuint>(count*3 + 1));
-			glBegin(GL_LINE);
-			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
-			glEnd();
-			glPopName();
-			++count;
-		}
-	}
-#endif
-
-#ifndef OPENGL4	
-	for(_st i = 0; i <= div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			auto vPos1 = &((*vArray)[j*(div+1)+i]);
-			auto vPos2 = &((*vArray)[(j+1)*(div+1)+i]);
-			glPushName(static_cast<GLuint>(count*3 + 1));
-			glBegin(GL_LINE);
-			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
-			glEnd();
-			glPopName();
-			++count;
-		}
-	}
-#endif
 	return;
 }
 
@@ -784,3 +596,190 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 }
 
 #endif
+/*
+void fk_LineDraw::DrawShapeLinePick(fk_Model *argObj)
+{
+	switch(argObj->getShape()->getRealShapeType()) {
+	  case FK_SHAPE_IFS:
+		DrawIFSLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_SOLID:
+		DrawSolidLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_CURVE:
+		DrawCurveLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceLinePick(argObj);
+		break;
+
+	  default:
+		break;
+	}
+	return;
+}
+
+void fk_LineDraw::DrawSolidLinePick(fk_Model *argObj)
+{
+	fk_Solid			*solidP;
+	list<fk_Edge *>		*edgeStack;
+	bool				reverseFlag = argObj->getReverseDrawMode();
+
+	list<fk_Edge *>::iterator			ite;
+	list<fk_Edge *>::reverse_iterator	rite;
+
+
+	solidP = static_cast<fk_Solid *>(argObj->getShape());
+	if(solidP->checkDB() == false) return;
+	if(solidP->getNextE(nullptr) == nullptr) return;
+
+	if(solidP->GetECacheStatus() == false) {
+		solidP->MakeECache();
+	}
+
+#ifndef OPENGL4	
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	edgeStack = solidP->GetECache();
+
+	if(reverseFlag == false) {
+		for(ite = edgeStack->begin(); ite != edgeStack->end(); ++ite) {
+			DrawSolidLinePickElem(*ite);
+		}
+	} else {
+		for(rite = edgeStack->rbegin(); rite != edgeStack->rend(); ++rite) {
+			DrawSolidLinePickElem(*rite);
+		}
+	}
+
+	return;
+}
+
+void fk_LineDraw::DrawSolidLinePickElem(fk_Edge *argE)
+{
+	FK_UNUSED(argE);
+#ifndef OPENGL4	
+	glPushName(static_cast<GLuint>(argE->getID()*3 + 1));
+	CommonLineDrawFunc(argE, true);
+	glPopName();
+#endif
+	return;
+}
+
+
+void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
+{
+	fk_IndexFaceSet		*ifsetP;
+	int					ii;
+	int					lineNum;
+	fk_FVector			*pos;
+	int					*lineSet;
+
+	FK_UNUSED(ii);
+	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
+
+	pos = &ifsetP->pos[0];
+	lineNum = static_cast<int>(ifsetP->edgeSet.size())/2;
+	lineSet = &ifsetP->edgeSet[0];
+
+#ifndef OPENGL4
+	glDisableClientState(GL_VERTEX_ARRAY);
+	for(ii = 0; ii < lineNum; ++ii) {
+		glPushName(static_cast<GLuint>(ii*3 + 1));
+		glBegin(GL_LINE);
+		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii]].x));
+		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii+1]].x));
+		glEnd();
+		glPopName();
+	}
+#endif
+
+	return;
+}
+
+void fk_LineDraw::DrawCurveLinePick(fk_Model *argObj)
+{
+	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
+
+#ifndef OPENGL4
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	curve->makeCache();
+	_st div = static_cast<_st>(curve->getDiv());
+	auto vArray = curve->getPosCache();
+	FK_UNUSED(div);
+	FK_UNUSED(vArray);
+
+#ifndef OPENGL4
+	for(_st i = 0; i < div; ++i) {
+		auto vPos1 = &((*vArray)[i]);
+		auto vPos2 = &((*vArray)[i+1]);
+		glPushName(static_cast<GLuint>(i*3 + 1));
+		glBegin(GL_LINE);
+		glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+		glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+		glEnd();
+		glPopName();
+	}
+#endif
+
+	return;
+}
+
+void fk_LineDraw::DrawSurfaceLinePick(fk_Model *argObj)
+{
+	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
+	GLuint count = 0;
+
+	FK_UNUSED(count);
+
+#ifndef OPENGL4
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	surf->makeCache();
+	_st div = static_cast<_st>(surf->getDiv());
+	auto vArray = surf->getPosCache();
+
+	FK_UNUSED(div);
+	FK_UNUSED(vArray);
+
+#ifndef OPENGL4
+	for(_st i = 0; i <= div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			auto vPos1 = &((*vArray)[i*(div+1)+j]);
+			auto vPos2 = &((*vArray)[i*(div+1)+j+1]);
+			glPushName(static_cast<GLuint>(count*3 + 1));
+			glBegin(GL_LINE);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+#endif
+
+#ifndef OPENGL4	
+	for(_st i = 0; i <= div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			auto vPos1 = &((*vArray)[j*(div+1)+i]);
+			auto vPos2 = &((*vArray)[(j+1)*(div+1)+i]);
+			glPushName(static_cast<GLuint>(count*3 + 1));
+			glBegin(GL_LINE);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+#endif
+	return;
+}
+*/

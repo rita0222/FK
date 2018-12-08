@@ -279,7 +279,7 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 	return;
 }
 
-void fk_GraphicsEngine::Draw(bool argPickFlg)
+void fk_GraphicsEngine::Draw(void)
 {
 	// リサイズ時に加えて、マルチウィンドウ時もビューポートを再設定(by rita)
 	if(resizeFlag == true || generalID > 2) {
@@ -295,7 +295,7 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 
 	curProj->MakeMat();
 	pointDraw->SetCamera(curDLink->getCamera());
-	DrawObjs(argPickFlg);
+	DrawObjs();
 
 	return;
 }
@@ -339,7 +339,7 @@ void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
 	return;
 }
 
-void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
+void fk_GraphicsEngine::DrawObjs(void)
 {
 	list<fk_Model *>::iterator	modelP, modelPEnd;
 	list<fk_Model *>			*overlayList;
@@ -348,7 +348,7 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	if(curDLink == nullptr) return;
 	lightFlag = DefineLight();
 
-	if(argPickFlg == true) modelArray.clear();
+	//if(argPickFlg == true) modelArray.clear();
 
 	textureDraw->StartUp();
 
@@ -356,7 +356,7 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
 		SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP, lightFlag, argPickFlg);
+		DrawModel(*modelP, lightFlag);
 	}
 
 	overlayList = curDLink->GetOverlayList();
@@ -365,18 +365,17 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	SetDepthMode(FK_DEPTH_NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP, lightFlag, argPickFlg);
+		DrawModel(*modelP, lightFlag);
 	}
 
 	return;
 }
 
 void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
-								  bool argLightFlg,
-								  bool argPickFlg)
+								  bool argLightFlg)
 {
 	fk_Shape		*modelShape;
-
+/*
 	if(argPickFlg == true) {
 		if(argModel->getPickMode() == false) return;
 #ifndef OPENGL4
@@ -384,7 +383,7 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 #endif
 		modelArray.push_back(argModel);
 	}
-
+*/
 	modelShape = argModel->getShape();
 
 #ifndef OPENGL4
@@ -426,9 +425,9 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 			glEnable(GL_TEXTURE_2D);
 			textureMode = true;
 		}
-		textureDraw->DrawTextureObj(argModel, argLightFlg, argPickFlg);
+		textureDraw->DrawTextureObj(argModel, argLightFlg);
 	} else {
-		DrawShapeObj(argModel, argLightFlg, argPickFlg);
+		DrawShapeObj(argModel, argLightFlg);
 	}
 
 	argModel->postShader();
@@ -553,8 +552,7 @@ bool fk_GraphicsEngine::DefineLight(void)
 }
 
 void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
-									 bool argLightFlag,
-									 bool argPickFlg)
+									 bool argLightFlag)
 {
 	fk_DrawMode		DrawMode;
 
@@ -568,7 +566,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 	}
 
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
-		faceDraw->DrawShapeFace(argObj, argLightFlag, DrawMode, argPickFlg);
+		faceDraw->DrawShapeFace(argObj, argLightFlag, DrawMode);
 	}
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
@@ -576,7 +574,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 	}
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
-		lineDraw->DrawShapeLine(argObj, argPickFlg);
+		lineDraw->DrawShapeLine(argObj);
 	}
 
 #ifndef OPENGL4

@@ -123,7 +123,6 @@ void fk_PointDraw::ShaderSetup(void)
  	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 
-	FK_UNUSED(param);
 	prog->vertexShaderSource =
 		#include "GLSL/Point_VS.glsl"
 		;
@@ -148,7 +147,7 @@ void fk_PointDraw::ShaderSetup(void)
 	return;
 }
 
-void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
+GLuint fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 {
 	GLuint 			vao;
 	
@@ -160,6 +159,7 @@ void fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	return vao;
 }
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
@@ -219,17 +219,11 @@ void fk_PointDraw::DrawShapePointModel(fk_Model *argObj)
 void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 {
 	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
-	float		*pos = &(point->posArray[0]);
-	int			*alive = &(point->aliveArray[0]);
 	int			size = int(point->aliveArray.size());
 	GLuint 		vao = point->GetPointVAO();
 
-	FK_UNUSED(alive);
-	FK_UNUSED(pos);
-	
 	if(vao == 0) {
-		ParticleVAOSetup(point);
-		vao = point->GetPointVAO();
+		vao = ParticleVAOSetup(point);
 	}
 
 	glBindVertexArray(vao);

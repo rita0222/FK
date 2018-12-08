@@ -138,7 +138,7 @@ unsigned long fk_Window::getUsingTextureMemory(void)
 
 void fk_Window::drawScene(void)
 {
-	engine.Draw(false);
+	engine.Draw();
 }
 
 void fk_Window::drawSceneLeft(void)
@@ -177,7 +177,7 @@ void fk_Window::draw(void)
 		postDrawRight();
 		*/
 	} else {
-		engine.Draw(false);
+		engine.Draw();
 	}
 	postDraw();
 

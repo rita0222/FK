@@ -29,7 +29,7 @@ namespace FK {
 		fk_Matrix		cameraM;
 		
 		void			ShaderSetup(void);
-		void			ParticleVAOSetup(fk_Point *);
+		GLuint			ParticleVAOSetup(fk_Point *);
 
 		void			DrawShapePointModel(fk_Model *);
 		void			DrawParticlePointModel(fk_Model *);

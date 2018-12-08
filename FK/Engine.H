@@ -53,7 +53,7 @@ namespace FK {
 		void				OpenGLInit(void);
 
 		void				SetPickViewPort(int, int, int);
-		void				Draw(bool);
+		void				Draw(void);
 
 		//void				StereoDrawPrep(fk_StereoChannel);
 		//void				StereoDrawMain(fk_StereoChannel);
@@ -88,8 +88,8 @@ namespace FK {
 		fk_Perspective				defProj;
 
 
-		void				DrawObjs(bool);
-		void				DrawModel(fk_Model *, bool, bool);
+		void				DrawObjs(void);
+		void				DrawModel(fk_Model *, bool);
 		void				RecalcModelView(void);
 		void				RecalcInhModelView(const fk_Model *);
 		void				CurrentDispLinkDraw(void);
@@ -97,7 +97,7 @@ namespace FK {
 		void				LoadModelMatrix(fk_Model *);
 		void				LoadAABBMatrix(fk_Model *);
 
-		void				DrawShapeObj(fk_Model *, bool, bool);
+		void				DrawShapeObj(fk_Model *, bool);
 		void				DrawBoundaryObj(fk_Model *, bool);
 
 		void				SetViewPort(void);

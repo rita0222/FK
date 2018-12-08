@@ -13,7 +13,7 @@ namespace FK {
 		virtual ~fk_FaceDraw();
 
 		void		SetArrayState(bool);
-		void		DrawShapeFace(fk_Model *, bool, fk_DrawMode, bool);
+		void		DrawShapeFace(fk_Model *, bool, fk_DrawMode);
 
 		static void	CommonMateSet(fk_Model *, bool, bool);
 		static void	LocalMateSet(fk_Material *, bool);
@@ -21,11 +21,11 @@ namespace FK {
 	private:
 		bool	arrayState;
 
-		void	DrawShapeFacePick(fk_Model *);
-		void	DrawSolidFacePick(fk_Model *);
-		void	DrawSolidFacePickElem(fk_Loop *);
-		void	DrawIFSFacePick(fk_Model *);
-		void	DrawSurfaceFacePick(fk_Model *);
+		//void	DrawShapeFacePick(fk_Model *);
+		//void	DrawSolidFacePick(fk_Model *);
+		//void	DrawSolidFacePickElem(fk_Loop *);
+		//void	DrawIFSFacePick(fk_Model *);
+		//void	DrawSurfaceFacePick(fk_Model *);
 
 		void	DrawShapeFaceMaterial(fk_Model *, bool);
 		void	DrawSolidFaceMaterial(fk_Model *, bool);

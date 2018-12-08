@@ -17,7 +17,7 @@ namespace FK {
 		virtual ~fk_LineDraw();
 
 		void	SetArrayState(bool);
-		void	DrawShapeLine(fk_Model *, bool);
+		void	DrawShapeLine(fk_Model *);
 		void	DrawBoundaryLine(fk_Model *);
 
 	private:
@@ -31,12 +31,12 @@ namespace FK {
 										  fk_Color *);
 		void	DrawIFSLineMaterial(fk_Model *);
 
-		void	DrawShapeLinePick(fk_Model *);
-		void	DrawSolidLinePick(fk_Model *);
-		void	DrawSolidLinePickElem(fk_Edge *);
-		void	DrawIFSLinePick(fk_Model *);
-		void	DrawCurveLinePick(fk_Model *);
-		void	DrawSurfaceLinePick(fk_Model *);
+		//void	DrawShapeLinePick(fk_Model *);
+		//void	DrawSolidLinePick(fk_Model *);
+		//void	DrawSolidLinePickElem(fk_Edge *);
+		//void	DrawIFSLinePick(fk_Model *);
+		//void	DrawCurveLinePick(fk_Model *);
+		//void	DrawSurfaceLinePick(fk_Model *);
 
 		void	DrawShapeLineNormal(fk_Model *, bool);
 		void	DrawSolidLineNormal(fk_Model *, bool);
