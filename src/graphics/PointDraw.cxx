@@ -124,11 +124,11 @@ void fk_PointDraw::ShaderSetup(void)
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Point_VS.glsl"
+		#include "GLSL/Point_VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS.glsl"
+		#include "GLSL/Point_FS.out"
 		;
 
 	if(prog->validate() == false) {
@@ -136,8 +136,8 @@ void fk_PointDraw::ShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute("alive");
-	param->reserveAttribute("position");
+	param->reserveAttribute("fk_point_elem_position");
+	param->reserveAttribute("fk_point_elem_alive");
 	
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 

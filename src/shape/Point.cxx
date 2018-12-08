@@ -80,13 +80,12 @@ using namespace FK;
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
 	SetObjectType(FK_POINT);
-	//SetPaletteData(&localPal);
 	allClear(false);
 	MakePoint(argVertexSet);
 
-	setShaderAttribute("position", 3, &posArray);
-	setShaderAttribute("fk_p_elem_color", 4, &colArray);
-	setShaderAttribute("alive", 1, &aliveArray);
+	setShaderAttribute("fk_point_elem_position", 3, &posArray);
+	setShaderAttribute("fk_point_elem_color", 4, &colArray);
+	setShaderAttribute("fk_point_elem_alive", 1, &aliveArray);
 	return;
 }
 

@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+
+foreach $glslName (@ARGV) {
+	next if $glslName !~ /.glsl$/;
+	$outName = $glslName;
+	$outName =~ s/.glsl$/.out/;
+
+	open(INFILE, $glslName) || die "Can't Open $glslName : $!\n";
+	open(OUTFILE, ">$outName") || die "Can't Open $outName : $!\n";
+
+	print OUTFILE "R\"(\n";
+	while(<INFILE>) {
+		print OUTFILE $_;
+	}
+	print OUTFILE ")\"\n";
+
+	close(INFILE);
+	close(OUTFILE);
+}
+
+0;

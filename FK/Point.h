@@ -179,17 +179,12 @@ namespace FK {
 		void			allClear(bool matFlag = true);
 		
 	private:
-		//fk_Palette				localPal;
-
 		std::vector<float>		posArray;
 		std::vector<float>		colArray;
 		std::vector<int>		aliveArray;
 
-		GLuint					vBufferObj[2];
-		
 		bool	MakePoint(std::vector<fk_Vector> *);
 		bool	MakePoint(int, fk_Vector *);
-		//void	CopyElem(fk_PointElement *, fk_Vector *, bool);
 	};
 }
 
