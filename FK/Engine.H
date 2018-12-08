@@ -90,12 +90,12 @@ namespace FK {
 
 		void				DrawObjs(void);
 		void				DrawModel(fk_Model *, bool);
-		void				RecalcModelView(void);
-		void				RecalcInhModelView(const fk_Model *);
+		//void				RecalcModelView(void);
+		//void				RecalcInhModelView(const fk_Model *);
 		void				CurrentDispLinkDraw(void);
 		bool				DefineLight(void);
-		void				LoadModelMatrix(fk_Model *);
-		void				LoadAABBMatrix(fk_Model *);
+		//void				LoadModelMatrix(fk_Model *);
+		//void				LoadAABBMatrix(fk_Model *);
 
 		void				DrawShapeObj(fk_Model *, bool);
 		void				DrawBoundaryObj(fk_Model *, bool);

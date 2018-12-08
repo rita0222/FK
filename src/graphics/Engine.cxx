@@ -305,7 +305,7 @@ void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 	curDLink = argScene;
 	return;
 }
-
+/*
 void fk_GraphicsEngine::RecalcModelView(void)
 {
 	if(curDLink != nullptr) {
@@ -338,6 +338,7 @@ void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
 
 	return;
 }
+*/
 
 void fk_GraphicsEngine::DrawObjs(void)
 {
@@ -392,19 +393,19 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 		
 	if(argModel->getBDrawToggle() == true) {
 		if(argModel->getBMode() == FK_B_AABB) {
-			LoadAABBMatrix(argModel);
+			//LoadAABBMatrix(argModel);
 			DrawBoundaryObj(argModel, argLightFlg);
 #ifndef OPENGL4
 			glPopMatrix();
 			glPushMatrix();
 #endif
-			LoadModelMatrix(argModel);
+			//LoadModelMatrix(argModel);
 		} else {
-			LoadModelMatrix(argModel);
+			//LoadModelMatrix(argModel);
 			DrawBoundaryObj(argModel, argLightFlg);
 		}
 	} else {
-		LoadModelMatrix(argModel);
+		//LoadModelMatrix(argModel);
 	}
 	
 	if(modelShape == nullptr) {
@@ -602,7 +603,7 @@ void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
 #ifndef OPENGL4
 		glPushMatrix();
 #endif
-		LoadModelMatrix(argObj->GetCapsuleModel());
+		//LoadModelMatrix(argObj->GetCapsuleModel());
 	}
 
 	lineDraw->DrawBoundaryLine(argObj);
@@ -622,7 +623,7 @@ void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
 	return;
 }
 
-
+/*
 void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
 {
 	fk_Angle	MAngle;
@@ -651,7 +652,8 @@ void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
 	
 	return;
 }
-
+*/
+/*
 void fk_GraphicsEngine::LoadAABBMatrix(fk_Model *argModel)
 {
 	FK_UNUSED(argModel);
@@ -663,7 +665,7 @@ void fk_GraphicsEngine::LoadAABBMatrix(fk_Model *argModel)
 #endif
 	return;
 }
-
+*/
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
 	FK_UNUSED(argScene);

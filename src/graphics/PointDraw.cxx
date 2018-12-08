@@ -179,9 +179,9 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
 
 	auto parameter = shader->getParameter();
-	parameter->setRegister("projection", projM);
-	parameter->setRegister("modelview", &modelViewM);
-	parameter->setRegister("color", &(argObj->getPointColor()->col));
+	parameter->setRegister("fk_projection", projM);
+	parameter->setRegister("fk_modelview", &modelViewM);
+	parameter->setRegister("fk_point_model_color", &(argObj->getPointColor()->col));
 	DrawShapePointModel(argObj);
 
 	return;
