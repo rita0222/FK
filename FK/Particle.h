@@ -430,7 +430,8 @@ namespace FK {
 		 *
 		 *	\param[in]	p		新たに生成されたパーティクルインスタンス
 		 */
-		virtual void	genMethod(fk_Particle *p);
+		//virtual void	genMethod(fk_Particle *p);
+		std::function<void(fk_Particle *)>	genMethod;
 
 		//! 全体動作用仮想関数
 		/*!
@@ -440,7 +441,8 @@ namespace FK {
 		 *	この関数を上書き定義することによって、
 		 *	パーティクル集合に対して様々な制御を行うことができます。
 		 */
-		virtual void	allMethod(void);
+		//virtual void	allMethod(void);
+		std::function<void(void)> allMethod;
 
 		//! 個別動作用仮想関数
 		/*!
@@ -453,7 +455,8 @@ namespace FK {
 		 *
 		 *	\param[in]	p		個別パーティクルインスタンス
 		 */
-		virtual void	indivMethod(fk_Particle *p);
+		//virtual void	indivMethod(fk_Particle *p);
+		std::function<void(fk_Particle *)> indivMethod;
 
 		//! 全体動作モード設定関数
 		/*!

@@ -212,6 +212,10 @@ fk_ParticleSet::fk_ParticleSet(unsigned int argMax)
 	count = 0;
 	allMode = indivMode = false;
 
+	genMethod = [](fk_Particle *){};
+	allMethod = [](){};
+	indivMethod = [](fk_Particle *){};
+
 	return;
 }
 
@@ -313,6 +317,7 @@ unsigned int fk_ParticleSet::getMaxSize(void) const
 {
 	return maxNum;
 }
+/*
 void fk_ParticleSet::genMethod(fk_Particle *)
 {
 	return;
@@ -327,6 +332,7 @@ void fk_ParticleSet::indivMethod(fk_Particle *)
 {
 	return;
 }
+*/
 
 void fk_ParticleSet::setAllMode(bool argMode)
 {

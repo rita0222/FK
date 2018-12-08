@@ -79,99 +79,69 @@ double myRandom(void)
 {
 	return double(rand())/double(RAND_MAX);
 }
- 
-class MyParticle: public fk_ParticleSet {
-protected:
-	void        genMethod(fk_Particle *);
-	void        allMethod(void);
-	void        indivMethod(fk_Particle *);
-public:
-	MyParticle(void);
 
-private:
-	fk_Color	red, blue;
-	double		maxSpeed, minSpeed;
-};
- 
-// コンストラクタ。
-// ここに、様々な設定を記述しておく。
-MyParticle::MyParticle(void)
+int main(int, char **)
 {
-	setMaxSize(500);   // パーティクルの最大数設定。
+	fk_ShapeViewer      viewer(600, 600);
+	fk_ParticleSet      particle;
+	fk_Prism			prism(40, 15.0, 15.0, 50.0);
+	fk_Color			red, blue;
+	double				maxSpeed, minSpeed;
+	fk_Vector       	water(-0.2, 0.0, 0.0);
+	double          	R = 15.0;
+
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
-	setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
-	setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
+	particle.setMaxSize(500);   // パーティクルの最大数設定。
+	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
+	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
 
 	red.set(1.0, 0.0, 0.0);
 	blue.set(0.0, 0.0, 1.0);
 	maxSpeed = 0.06;
 	minSpeed = 0.02;
-	return;
-}
- 
-// ここにパーティクル生成時の処理を記述する。
-// p に新たなパーティクル要素が入っている。
-void MyParticle::genMethod(fk_Particle *p)
-{
-	// 生成時の位置を設定
-	p->setPosition(50.0, myRandom()*50.0 - 25.0, myRandom()*50.0 - 25.0);
-	// パーティクルの色 ID を設定
-	p->setColorID(1);
-	return;
-}
- 
-// ここに毎ループ時の全体処理処理を記述する
-void MyParticle::allMethod(void)
-{
-	for(int i = 0; i < 5; i++) {
-		if(myRandom() < 0.03) {
-			// 新たなパーティクルを生成。
-			// 生成時に genMethod() が呼ばれる。
-			newParticle();
-		}
-	}
-	return;
-}
- 
-// ここに毎ループ時の各パーティクルへの処理を記述する。
-void MyParticle::indivMethod(fk_Particle *p)
-{
-	fk_Vector       pos, vec, tmp1, tmp2;
-	fk_Vector       water(-0.2, 0.0, 0.0);
-	double          R = 15.0;
-	double          r;
- 
-	// パーティクルの位置を取得。
-	pos = p->getPosition();
-	pos.z = 0.0;
-	r = pos.dist(); // |p| を r に代入。
- 
-	// パーティクルの速度ベクトルを計算
-	tmp1 = water/(r*r*r);
-	tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
-	vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
-	vec /= 5.0;
-	// パーティクルの速度ベクトルを代入
-	p->setVelocity(vec);
 
-	double speed = vec.dist();
-	double t = (speed - minSpeed)/(maxSpeed - minSpeed);
-	t = min(1.0, max(0.0, t));
-	fk_Color col = (1.0 - t)*blue + t*red;
-	p->setColor(col);
-	// パーティクルの x 座標が -50 以下になったら消去。
-	if(pos.x < -50.0) {
-		removeParticle(p);
-	}
+	particle.genMethod = [](fk_Particle *p) {
+		p->setPosition(50.0, myRandom()*50.0 - 25.0, myRandom()*50.0 - 25.0);
+	};
+
+	particle.allMethod = [&](void) {
+		for(int i = 0; i < 5; i++) {
+			if(myRandom() < 0.03) {
+				// 新たなパーティクルを生成。
+				// 生成時に genMethod() が呼ばれる。
+				particle.newParticle();
+			}
+		}
+	};
+
+
+	particle.indivMethod = [&](fk_Particle *p) {
+		fk_Vector       pos, vec, tmp1, tmp2;
+		double          r;
  
-	return;
-}
+		// パーティクルの位置を取得。
+		pos = p->getPosition();
+		pos.z = 0.0;
+		r = pos.dist(); // |p| を r に代入。
  
-int main()
-{
-	fk_ShapeViewer      viewer(600, 600);
-	MyParticle          particle;
-	fk_Prism			prism(40, 15.0, 15.0, 50.0);
+		// パーティクルの速度ベクトルを計算
+		tmp1 = water/(r*r*r);
+		tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
+		vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
+		vec /= 5.0;
+		// パーティクルの速度ベクトルを代入
+		p->setVelocity(vec);
+
+		double speed = vec.dist();
+		double t = (speed - minSpeed)/(maxSpeed - minSpeed);
+		t = min(1.0, max(0.0, t));
+		fk_Color col = (1.0 - t)*blue + t*red;
+		p->setColor(col);
+		// パーティクルの x 座標が -50 以下になったら消去。
+		if(pos.x < -50.0) {
+			particle.removeParticle(p);
+		}
+	}; 
 
 	viewer.setShape(3, &prism);
 	viewer.setPosition(3, 0.0, 0.0, 25.0);
