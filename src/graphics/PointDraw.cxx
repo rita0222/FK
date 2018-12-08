@@ -88,14 +88,15 @@ using namespace std;
 using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
+	: arrayState(false), modelShader(nullptr), elemShader(nullptr)
 {
-	SetArrayState(false);
-	shader = nullptr;
+	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	if(shader != nullptr) delete shader;
+	if(modelShader != nullptr) delete modelShader;
+	if(elemShader != nullptr) delete elemShader;
 	return;
 }
 
@@ -117,14 +118,14 @@ void fk_PointDraw::SetCamera(fk_Model *argCamera)
 	return;
 }
 
-void fk_PointDraw::ShaderSetup(void)
+void fk_PointDraw::ModelShaderSetup(void)
 {
-	shader = new fk_ShaderBinder();
- 	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	modelShader = new fk_ShaderBinder();
+ 	auto prog = modelShader->getProgram();
+	auto param = modelShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Point_VS.out"
+		#include "GLSL/Point_Model_VS.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -143,6 +144,35 @@ void fk_PointDraw::ShaderSetup(void)
 
 	prog->link();
 
+	return;
+}
+
+void fk_PointDraw::ElemShaderSetup(void)
+{
+	modelShader = new fk_ShaderBinder();
+ 	auto prog = modelShader->getProgram();
+	auto param = modelShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Point_Elem_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Point_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	param->reserveAttribute("fk_point_elem_position");
+	param->reserveAttribute("fk_point_elem_color");
+	param->reserveAttribute("fk_point_elem_alive");
+	
+	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+
+	prog->link();
 
 	return;
 }
@@ -165,9 +195,11 @@ GLuint fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
 	if(shader == nullptr) {
-		shader = new fk_ShaderBinder();
-		ShaderSetup();
+		ModelShaderSetup();
+		ElemShaderSetup();
 	}
+
+	fk_ShaderParameter *shader;
 
 	if(argObj->preShaderList.empty() == true &&
 	   argObj->postShaderList.empty() == true) {

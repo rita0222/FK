@@ -18,6 +18,12 @@ namespace FK {
 
 	using fk_funcSet = std::tuple<unsigned int, std::function<void(void)> >;
 
+	enum fk_ElementMode {
+		FK_ELEM_NONE,
+		FK_ELEM_MODEL,
+		FK_ELEM_ELEMENT
+	};
+
 	//! モデルを生成、管理するクラス
 	/*!
 	 *	このクラスは、「モデル」を制御する機能を提供します。
@@ -1170,31 +1176,6 @@ namespace FK {
 		fk_BlendMode		getBlendMode(fk_BlendFactor *outSrc = nullptr,
 										 fk_BlendFactor *outDst = nullptr) const;
 
-		//! ピックモード設定関数
-		/*!
-		 *	モデルのピックモードを設定します。
-		 *	ピックモードとは、
-		 *	モデルをピックによる取得操作の対象とするかどうかを制御するものです。
-		 *	ピックモードが有効である場合、モデルはピック取得の候補となります。
-		 *	デフォルトでは無効となっています。
-		 *
-		 *	\param[in]	mode	true である場合、ピックモードが有効となります。
-		 *		false である場合は無効となります。
-		 *
-		 *	\sa fk_Window::getPickModel(), fk_PickData
-		 */
-		void	setPickMode(const bool mode);
-
-		//! ピックモード参照関数
-		/*!
-		 *	現在のピックモードを取得します。
-		 *
-		 *	\return		有効である場合 true を、無効である場合 false を返します。
-		 *
-		 *	\sa setPickMode(), fk_Window::getPickModel(), fk_PickData
-		 */
-		bool	getPickMode(void) const;
-
 		//! スムースモード設定関数
 		/*!
 		 *	モデルのスムースモードを設定します。
@@ -1376,6 +1357,8 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Vector	getInhUpVec(void) const;
+		void		setPickMode(const bool);
+		bool		getPickMode(void) const;
 #endif
 
 		//! 継承オイラー角参照関数
@@ -1958,18 +1941,16 @@ namespace FK {
 		fk_Color			pointColor;
 		fk_Color			lineColor;
 		fk_Shape			*shape;
-		fk_Model			*parent;
+		fk_Model			*parentModel;
 		fk_TreeData			*treeData;
-		bool				materialFlag;
 		fk_DrawMode			drawMode;
-		fk_MaterialMode		materialMode;
+		fk_ElementMode		elemMode;
 		fk_BlendMode		blendMode;
 		fk_BlendFactor		srcFactor;
 		fk_BlendFactor		dstFactor;
 		fk_DepthMode		depthMode;
 		double				drawSize;
 		double				drawWidth;
-		bool				pickFlag;
 		bool				smoothFlag;
 		bool				reverseFlag;
 		bool				treeFlag;

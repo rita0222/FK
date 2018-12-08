@@ -80,42 +80,22 @@
 using namespace std;
 using namespace FK;
 
-typedef list<fk_Model *>::iterator	mi;
+using mi = list<fk_Model *>::iterator;
 
 static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(FK_MODEL)
+	: fk_Boundary(FK_MODEL), shape(argShape),
+	  parentModel(nullptr), treeData(nullptr),
+	  drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
+	  blendMode(FK_BLEND_ALPHA_MODE), depthMode(FK_DEPTH_READ_AND_WRITE),
+	  drawSize(1.0), drawWidth(1.0), smoothFlag(false), reverseFlag(false),
+	  treeFlag(false), treeDelMode(true),
+	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
+	  interMode(false), interStatus(false), interStopMode(false)
 {
-	setDrawMode(FK_NONEMODE);
-	setMaterialMode(FK_CHILD_MODE);
-	setBlendMode(FK_BLEND_ALPHA_MODE);
-	setDepthMode(FK_DEPTH_READ_AND_WRITE);
-
-	parent = nullptr;
-	treeData = nullptr;
-	shape = nullptr;
-	setShape(argShape);
-	setSize(1.0);
-	setWidth(1.0);
-	setPickMode(false);
-	setReverseDrawMode(false);
-
 	_modelID = _globalModelID;
 	_globalModelID++;
-
-	treeFlag = false;
-	treeDelMode = true;
-	smoothFlag = false;
-
-	snapPos = nullptr;
-	snapInhPos = nullptr;
-	snapAngle = nullptr;
-	snapFlag = false;
-
-	interMode = false;
-	interStatus = false;
-	interStopMode = false;
 
 	return;
 }
@@ -194,7 +174,6 @@ void fk_Model::setShape(fk_Shape *argShape)
 void fk_Model::setMaterial(const fk_Material &argMate)
 {
 	material = argMate;
-	materialFlag = true;
 	return;
 }
 
@@ -253,16 +232,8 @@ fk_DrawMode fk_Model::getDrawMode(void) const
 	return drawMode;
 }
 
-void fk_Model::setMaterialMode(const fk_MaterialMode argMode)
-{
-	materialMode = argMode;
-	return;
-}
-
-fk_MaterialMode fk_Model::getMaterialMode(void) const
-{
-	return materialMode;
-}
+void fk_Model::setMaterialMode(const fk_MaterialMode) {}
+fk_MaterialMode fk_Model::getMaterialMode(void) const { return FK_PARENT_MODE; }
 
 void fk_Model::setBlendMode(const fk_BlendMode argMode, const fk_BlendFactor argSrcFactor, const fk_BlendFactor argDstFactor)
 {
@@ -334,38 +305,38 @@ fk_DepthMode fk_Model::getDepthMode(void) const
 
 fk_Matrix fk_Model::getInhMatrix(void) const
 {
-	if(parent == nullptr) return getMatrix();
-	return (parent->getInhMatrix() * getMatrix());
+	if(parentModel == nullptr) return getMatrix();
+	return (parentModel->getInhMatrix() * getMatrix());
 }
 
 fk_Matrix fk_Model::getInhInvMatrix(void) const
 {
-	if(parent == nullptr) return getInvMatrix();
-	return (getInvMatrix() * parent->getInhInvMatrix());
+	if(parentModel == nullptr) return getInvMatrix();
+	return (getInvMatrix() * parentModel->getInhInvMatrix());
 }
 
 fk_OrthoMatrix fk_Model::getInhBaseMatrix(void) const
 {
-	if(parent == nullptr) return OrthoMatrix;
-	return (parent->getInhBaseMatrix() * OrthoMatrix);
+	if(parentModel == nullptr) return OrthoMatrix;
+	return (parentModel->getInhBaseMatrix() * OrthoMatrix);
 }
 
 fk_OrthoMatrix fk_Model::getInhInvBaseMatrix(void) const
 {
 	fk_OrthoMatrix	RetMat = OrthoMatrix;
 	RetMat.inverse();
-	if(parent == nullptr) return RetMat;
-	return (parent->getInhInvBaseMatrix() * RetMat);
+	if(parentModel == nullptr) return RetMat;
+	return (parentModel->getInhInvBaseMatrix() * RetMat);
 }
 
 fk_Vector fk_Model::getInhPosition(void) const
 {
 	fk_Vector retVec;
 
-	if(parent == nullptr) {
+	if(parentModel == nullptr) {
 		retVec = Position;
 	} else {
-		retVec = parent->getInhMatrix() * Position;
+		retVec = parentModel->getInhMatrix() * Position;
 	}
 	return retVec;
 }
@@ -374,20 +345,20 @@ fk_Vector fk_Model::getInhVec(void) const
 {
 	fk_HVector	hvec(Vec);
 
-	if(parent == nullptr) return Vec;
+	if(parentModel == nullptr) return Vec;
 
 	hvec.isvec();
-	return (parent->getInhMatrix() * hvec);
+	return (parentModel->getInhMatrix() * hvec);
 }
 	
 fk_Vector fk_Model::getInhUpvec(void) const
 {
 	fk_HVector	hvec(UpVec);
 
-	if(parent == nullptr) return UpVec;
+	if(parentModel == nullptr) return UpVec;
 	
 	hvec.isvec();
-	return (parent->getInhMatrix() * hvec);
+	return (parentModel->getInhMatrix() * hvec);
 }
 
 fk_Vector fk_Model::getInhUpVec(void) const
@@ -400,7 +371,7 @@ fk_Angle fk_Model::getInhAngle(void) const
 	fk_Angle		retAngle;
 	fk_Vector		vec, upvec;
 
-	if(parent == nullptr) return Angle;
+	if(parentModel == nullptr) return Angle;
 	vec = getInhVec();
 	upvec = getInhUpVec();
 	VectorToAngle(&retAngle, &vec, &upvec);
@@ -409,10 +380,10 @@ fk_Angle fk_Model::getInhAngle(void) const
 
 double fk_Model::getInhScale(void) const
 {
-	if(parent == nullptr) {
+	if(parentModel == nullptr) {
 		return Scale;
 	}
-	return (parent->getInhScale() * Scale);
+	return (parentModel->getInhScale() * Scale);
 }
 
 void fk_Model::setSize(const double argSize)
@@ -437,17 +408,6 @@ double fk_Model::getSize(void) const
 double fk_Model::getWidth(void) const
 {
 	return drawWidth;
-}
-
-void fk_Model::setPickMode(const bool argFlg)
-{
-	pickFlag = argFlg;
-	return;
-}
-
-bool fk_Model::getPickMode(void) const
-{
-	return pickFlag;
 }
 
 #ifndef _FREEBSD_
@@ -488,7 +448,6 @@ unsigned int fk_Model::getID(void) const
 {
 	return _modelID;
 }
-
 
 void fk_Model::snapShot(void)
 {
@@ -973,3 +932,6 @@ bool fk_Model::glMoveTo(double argX, double argY, double argZ)
 	PostMove();
 	return ret;
 }
+
+void fk_Model::setPickMode(const bool) {}
+bool fk_Model::getPickMode(void) const { return true; }
