@@ -20,13 +20,15 @@ namespace FK {
 
 	using fk_DrawMode = unsigned int;
 
-	const fk_DrawMode	FK_NONEMODE				= 0x0000;
-	const fk_DrawMode	FK_POINTMODE			= 0x0001;
-	const fk_DrawMode	FK_LINEMODE				= 0x0002;
-	const fk_DrawMode	FK_POLYMODE				= 0x0004;
-	const fk_DrawMode	FK_BACK_POLYMODE		= (0x0008 | FK_POLYMODE);
-	const fk_DrawMode	FK_FRONTBACK_POLYMODE	= (0x0010 | FK_POLYMODE);
-	const fk_DrawMode	FK_TEXTUREMODE			= 0x002;
+	const fk_DrawMode	FK_NONEMODE 			= 0;
+	const fk_DrawMode 	FK_POINTMODE 			= 1 << 0;
+	const fk_DrawMode	FK_LINEMODE 			= 1 << 1;
+	const fk_DrawMode	FK_POLYMODE 			= 1 << 2;
+	const fk_DrawMode	FK_BACK_POLYMODE		= ((1 << 3) | FK_POLYMODE);
+	const fk_DrawMode	FK_FRONTBACK_POLYMODE	= ((1 << 4) | FK_POLYMODE);
+	const fk_DrawMode	FK_TEXTUREMODE			= 1 << 5;
+	const fk_DrawMode	FK_MODELMODE			= 1 << 6;
+	const fk_DrawMode	FK_ELEMENTMODE			= 1 << 7;
 
 	//! 境界ボリュームを管理するクラス
 	/*!
