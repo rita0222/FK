@@ -267,57 +267,58 @@ void fk_Color::setHSV(double argH, double argS, double argV)
 }
 
 // friend 宣言による外部関数化した二項演算子
+namespace FK {
+	fk_Color operator +(const fk_Color &argA, const fk_Color &argB)
+	{
+		fk_Color	tmp(fk_Color::clamp(argA.col[0] + argB.col[0]),
+						fk_Color::clamp(argA.col[1] + argB.col[1]),
+						fk_Color::clamp(argA.col[2] + argB.col[2]),
+						fk_Color::clamp(argA.col[3] + argB.col[3]));
 
-fk_Color operator +(const fk_Color &argA, const fk_Color &argB)
-{
-	fk_Color	tmp(fk_Color::clamp(argA.col[0] + argB.col[0]),
-					fk_Color::clamp(argA.col[1] + argB.col[1]),
-					fk_Color::clamp(argA.col[2] + argB.col[2]),
-					fk_Color::clamp(argA.col[3] + argB.col[3]));
-
-	return tmp;
-}
+		return tmp;
+	}
 					
-fk_Color operator -(const fk_Color &argA, const fk_Color &argB)
-{
-	fk_Color	tmp(fk_Color::clamp(argA.col[0] - argB.col[0]),
-					fk_Color::clamp(argA.col[1] - argB.col[1]),
-					fk_Color::clamp(argA.col[2] - argB.col[2]),
-					fk_Color::clamp(argA.col[3] - argB.col[3]));
+	fk_Color operator -(const fk_Color &argA, const fk_Color &argB)
+	{
+		fk_Color	tmp(fk_Color::clamp(argA.col[0] - argB.col[0]),
+						fk_Color::clamp(argA.col[1] - argB.col[1]),
+						fk_Color::clamp(argA.col[2] - argB.col[2]),
+						fk_Color::clamp(argA.col[3] - argB.col[3]));
 
-	return tmp;
-}
+		return tmp;
+	}
 
-fk_Color operator *(const fk_Color &argC, double argD)
-{
-	fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
-					fk_Color::clamp(argC.col[1] * float(argD)),
-					fk_Color::clamp(argC.col[2] * float(argD)),
-					fk_Color::clamp(argC.col[3] * float(argD)));
+	fk_Color operator *(const fk_Color &argC, double argD)
+	{
+		fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
+						fk_Color::clamp(argC.col[1] * float(argD)),
+						fk_Color::clamp(argC.col[2] * float(argD)),
+						fk_Color::clamp(argC.col[3] * float(argD)));
 
-	return tmp;
-}
+		return tmp;
+	}
 					
-fk_Color operator *(double argD, const fk_Color &argC)
-{
-	fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
-					fk_Color::clamp(argC.col[1] * float(argD)),
-					fk_Color::clamp(argC.col[2] * float(argD)),
-					fk_Color::clamp(argC.col[3] * float(argD)));
+	fk_Color operator *(double argD, const fk_Color &argC)
+	{
+		fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
+						fk_Color::clamp(argC.col[1] * float(argD)),
+						fk_Color::clamp(argC.col[2] * float(argD)),
+						fk_Color::clamp(argC.col[3] * float(argD)));
 
-	return tmp;
-}
+		return tmp;
+	}
 					
-fk_Color	operator /(const fk_Color &argC, double argD)
-{
-	if(fabs(argD) < FK_COLOR_EPS) return argC;
+	fk_Color	operator /(const fk_Color &argC, double argD)
+	{
+		if(fabs(argD) < FK_COLOR_EPS) return argC;
 
-	fk_Color	tmp(fk_Color::clamp(argC.col[0] / float(argD)),
-					fk_Color::clamp(argC.col[1] / float(argD)),
-					fk_Color::clamp(argC.col[2] / float(argD)),
-					fk_Color::clamp(argC.col[3] / float(argD)));
+		fk_Color	tmp(fk_Color::clamp(argC.col[0] / float(argD)),
+						fk_Color::clamp(argC.col[1] / float(argD)),
+						fk_Color::clamp(argC.col[2] / float(argD)),
+						fk_Color::clamp(argC.col[3] / float(argD)));
 
-	return tmp;
+		return tmp;
+	}
 }
 
 fk_Material::fk_Material()

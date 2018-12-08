@@ -1160,6 +1160,44 @@ void fk_ShapeViewer::SetDrawMode(void)
 	return;
 }
 
+void fk_ShapeViewer::setElementMode(fk_ElementMode argMode)
+{
+	for(_st i = 0; i < modelArray.size(); i++) {
+		modelArray[i]->setElementMode(argMode);
+	}
+
+	return;
+}
+
+void fk_ShapeViewer::setElementMode(int argID, fk_ElementMode argMode)
+{
+	_st			trueID;
+	fk_Model	*model;
+
+	if(IDMap.find(argID) == IDMap.end()) return;
+	trueID = static_cast<_st>(IDMap[argID]);
+	model = modelArray[trueID];
+	model->setElementMode(argMode);
+	return;
+}
+
+fk_ElementMode fk_ShapeViewer::getElementMode(void)
+{
+	if(modelArray.empty() == true) return FK_ELEM_NONE;
+	return modelArray[0]->getElementMode();
+}
+
+fk_ElementMode fk_ShapeViewer::getElementMode(int argID)
+{
+	_st			trueID;
+	fk_Model	*model;
+
+	if(IDMap.find(argID) == IDMap.end()) return FK_ELEM_NONE;
+	trueID = static_cast<_st>(IDMap[argID]);
+	model = modelArray[trueID];
+	return model->getElementMode();
+}
+	
 void fk_ShapeViewer::setBlendStatus(bool argMode)
 {
 	scene.setBlendStatus(argMode);

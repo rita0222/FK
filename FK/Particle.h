@@ -193,6 +193,10 @@ namespace FK {
 		 */
 		void			handle(void);
 
+		void			setColor(fk_Color col);
+		void			setColor(fk_Color *col);
+		fk_Color		getColor(void);
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		int				getColorID(void) const;
 		void			setColorID(int ID);

@@ -85,17 +85,37 @@ using mi = list<fk_Model *>::iterator;
 static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(FK_MODEL), shape(argShape),
-	  parentModel(nullptr), treeData(nullptr),
-	  drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
-	  blendMode(FK_BLEND_ALPHA_MODE), depthMode(FK_DEPTH_READ_AND_WRITE),
-	  drawSize(1.0), drawWidth(1.0), smoothFlag(false), reverseFlag(false),
-	  treeFlag(false), treeDelMode(true),
-	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
-	  interMode(false), interStatus(false), interStopMode(false)
+	: fk_Boundary(FK_MODEL)
 {
+	setDrawMode(FK_NONEMODE);
+	setMaterialMode(FK_CHILD_MODE);
+	setBlendMode(FK_BLEND_ALPHA_MODE);
+	setDepthMode(FK_DEPTH_READ_AND_WRITE);
+
+	parentModel = nullptr;
+	treeData = nullptr;
+	shape = nullptr;
+	setShape(argShape);
+	setSize(1.0);
+	setWidth(1.0);
+	setReverseDrawMode(false);
+	elemMode = FK_ELEM_MODEL;
+
 	_modelID = _globalModelID;
 	_globalModelID++;
+
+	treeFlag = false;
+	treeDelMode = true;
+	smoothFlag = false;
+
+	snapPos = nullptr;
+	snapInhPos = nullptr;
+	snapAngle = nullptr;
+	snapFlag = false;
+
+	interMode = false;
+	interStatus = false;
+	interStopMode = false;
 
 	return;
 }

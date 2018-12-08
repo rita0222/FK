@@ -166,26 +166,30 @@ void fk_Particle::setAccel(double argX, double argY, double argZ)
 	return;
 }
 
-int fk_Particle::getColorID(void) const
-{
-	return base->getColorID(id);
-}
-
 bool fk_Particle::getDrawMode(void) const
 {
 	return base->getDrawMode(id);
-}
-
-void fk_Particle::setColorID(int argID)
-{
-	base->setColorID(id, argID);
-	return;
 }
 
 void fk_Particle::setDrawMode(bool argFlag)
 {
 	base->setDrawMode(id, argFlag);
 	return;
+}
+
+void fk_Particle::setColor(fk_Color argCol)
+{
+	base->setColor(id, &argCol);
+}
+
+void fk_Particle::setColor(fk_Color *argCol)
+{
+	base->setColor(id, argCol);
+}
+
+fk_Color fk_Particle::getColor(void)
+{
+	return base->getColor(id);
 }
 
 void fk_Particle::handle(void)
@@ -309,42 +313,6 @@ unsigned int fk_ParticleSet::getMaxSize(void) const
 {
 	return maxNum;
 }
-
-void fk_ParticleSet::setColorPalette(int argID, const fk_Color &argColor)
-{
-	//setColorPalette(argID, argColor.col[0], argColor.col[1], argColor.col[2]);
-	FK_UNUSED(argID);
-	FK_UNUSED(argColor);
-	return;
-}
-
-void fk_ParticleSet::setColorPalette(int argID,
-									 float argR, float argG, float argB)
-{
-	FK_UNUSED(argID);
-	FK_UNUSED(argR);
-	FK_UNUSED(argG);
-	FK_UNUSED(argB);
-/*
-	fk_Material		col;
-
-	col.setAmbient(argR, argG, argB);
-	point->setPalette(col, argID);
-*/
-	return;
-}
-
-void fk_ParticleSet::setColorPalette(int argID,
-									 double argR, double argG, double argB)
-{
-	FK_UNUSED(argID);
-	FK_UNUSED(argR);
-	FK_UNUSED(argG);
-	FK_UNUSED(argB);
-	//setColorPalette(argID, float(argR), float(argG), float(argB));
-	return;
-}
-
 void fk_ParticleSet::genMethod(fk_Particle *)
 {
 	return;
@@ -408,3 +376,9 @@ fk_Shape * fk_ParticleSet::getShape(void) const
 {
 	return static_cast<fk_Shape *>(point);
 }
+
+int fk_Particle::getColorID(void) const { return 0; }
+void fk_Particle::setColorID(int) { return; }
+void fk_ParticleSet::setColorPalette(int, const fk_Color &) { return; }
+void fk_ParticleSet::setColorPalette(int, float, float, float) { return; }
+void fk_ParticleSet::setColorPalette(int, double, double, double) { return; }

@@ -33,10 +33,8 @@ namespace FK {
 		void			ModelShaderSetup(void);
 		void			ElemShaderSetup(void);
 		GLuint			ParticleVAOSetup(fk_Point *);
+		void			DrawParticlePoint(fk_Model *, fk_ShaderParameter *);
 
-		void			DrawShapePointModel(fk_Model *);
-		void			DrawParticlePointModel(fk_Model *);
-		void			DrawSolidPointModel(fk_Model *);
 	};
 }
 

@@ -81,12 +81,16 @@ double myRandom(void)
 }
  
 class MyParticle: public fk_ParticleSet {
-  protected:
+protected:
 	void        genMethod(fk_Particle *);
 	void        allMethod(void);
 	void        indivMethod(fk_Particle *);
-  public:
+public:
 	MyParticle(void);
+
+private:
+	fk_Color	red, blue;
+	double		maxSpeed, minSpeed;
 };
  
 // コンストラクタ。
@@ -97,9 +101,11 @@ MyParticle::MyParticle(void)
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
 	setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
- 
-	// パレットに色を設定しておく。
-	//setColorPalette(1, 0.0, 1.0, 0.6);
+
+	red.set(1.0, 0.0, 0.0);
+	blue.set(0.0, 0.0, 1.0);
+	maxSpeed = 0.06;
+	minSpeed = 0.02;
 	return;
 }
  
@@ -147,7 +153,12 @@ void MyParticle::indivMethod(fk_Particle *p)
 	vec /= 5.0;
 	// パーティクルの速度ベクトルを代入
 	p->setVelocity(vec);
- 
+
+	double speed = vec.dist();
+	double t = (speed - minSpeed)/(maxSpeed - minSpeed);
+	t = min(1.0, max(0.0, t));
+	fk_Color col = (1.0 - t)*blue + t*red;
+	p->setColor(col);
 	// パーティクルの x 座標が -50 以下になったら消去。
 	if(pos.x < -50.0) {
 		removeParticle(p);
@@ -164,9 +175,9 @@ int main()
 
 	viewer.setShape(3, &prism);
 	viewer.setPosition(3, 0.0, 0.0, 25.0);
-	viewer.setDrawMode(3, FK_POLYMODE);
 	viewer.setShape(2, particle.getShape());
 	viewer.setDrawMode(2, FK_POINTMODE);
+	viewer.setElementMode(2, FK_ELEM_ELEMENT);
 	viewer.setScale(10.0);
  
 	while(viewer.draw() == true) {

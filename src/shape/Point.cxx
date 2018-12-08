@@ -201,45 +201,6 @@ bool fk_Point::getDrawMode(int argID)
 	return false;
 }
 
-void fk_Point::setColorID(int argID, int argCol)
-{
-	FK_UNUSED(argID);
-	FK_UNUSED(argCol);
-
-	/*
-	_st		id = static_cast<_st>(argID);
-
-	if(vec.isAlive(argID) == false) return;
-
-	if(argCol >= 0) {
-		if(colorID[id] < 0) {
-			colorCount++;
-		}
-		colorID[id] = argCol;
-	}
-
-	if(argCol < 0) {
-		if(colorID[id] >= 0) {
-			colorCount--;
-		}
-		colorID[id] = -1;
-	}
-	*/
-
-	return;
-}
-
-int fk_Point::getColorID(int argID)
-{
-	FK_UNUSED(argID);
-	/*
-	if(vec.isAlive(argID) == false) return -2;
-	return colorID[static_cast<_st>(argID)];
-	*/
-
-	return 0;
-}
-
 void fk_Point::allClear(bool argMateFlg)
 {
 	posArray.clear();
@@ -249,3 +210,33 @@ void fk_Point::allClear(bool argMateFlg)
 
 	return;
 }
+
+void fk_Point::setColor(int argID, fk_Color argCol)
+{
+	if(argID < 0 || argID >= int(aliveArray.size())) return;
+	_st id = _st(argID * 4);
+	for(_st i = 0; i < 4; i++) colArray[id+i] = argCol.col[i];
+	return;
+}
+
+void fk_Point::setColor(int argID, fk_Color *argCol)
+{
+	if(argID < 0 || argID >= int(aliveArray.size())) return;
+	_st id = _st(argID * 4);
+	for(_st i = 0; i < 4; i++) colArray[id+i] = argCol->col[i];
+	return;
+}
+
+fk_Color fk_Point::getColor(int argID)
+{
+	fk_Color col;
+	if(argID < 0 || argID >= int(aliveArray.size())) return col;
+	_st id = _st(argID * 4);
+	for(_st i = 0; i < 4; i++) col.col[i] = colArray[id+i];
+	return col;
+}
+	
+	
+void fk_Point::setColorID(int, int) { return; }
+int fk_Point::getColorID(int) { return 0; }
+

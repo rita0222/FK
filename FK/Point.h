@@ -145,6 +145,10 @@ namespace FK {
 		 */
 		bool			getDrawMode(int ID);
 
+		void			setColor(int vID, fk_Color col);
+		void			setColor(int vID, fk_Color *col);
+		fk_Color		getColor(int vID);
+
 		//! 描画色設定関数
 		/*!
 		 *	個別の頂点に対し、描画色の ID を設定します。

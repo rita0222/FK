@@ -88,8 +88,10 @@ using namespace std;
 using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
-	: arrayState(false), modelShader(nullptr), elemShader(nullptr)
 {
+	arrayState = false;
+	modelShader = nullptr;
+	elemShader = nullptr;
 	return;
 }
 
@@ -143,15 +145,14 @@ void fk_PointDraw::ModelShaderSetup(void)
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 
 	prog->link();
-
 	return;
 }
 
 void fk_PointDraw::ElemShaderSetup(void)
 {
-	modelShader = new fk_ShaderBinder();
- 	auto prog = modelShader->getProgram();
-	auto param = modelShader->getParameter();
+	elemShader = new fk_ShaderBinder();
+ 	auto prog = elemShader->getProgram();
+	auto param = elemShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Point_Elem_VS.out"
@@ -194,12 +195,24 @@ GLuint fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
-	if(shader == nullptr) {
-		ModelShaderSetup();
-		ElemShaderSetup();
-	}
+	if(modelShader == nullptr) ModelShaderSetup();
+	if(elemShader == nullptr) ElemShaderSetup();
 
-	fk_ShaderParameter *shader;
+	fk_ElementMode mode = argObj->getElementMode();
+	fk_ShaderBinder *shader;
+
+	switch(mode) {
+	  case FK_ELEM_MODEL:
+		  shader = modelShader;
+		  break;
+
+	  case FK_ELEM_ELEMENT:
+		  shader = elemShader;
+		  break;
+
+	  default:
+		  return;
+	}
 
 	if(argObj->preShaderList.empty() == true &&
 	   argObj->postShaderList.empty() == true) {
@@ -214,16 +227,10 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	parameter->setRegister("fk_projection", projM);
 	parameter->setRegister("fk_modelview", &modelViewM);
 	parameter->setRegister("fk_point_model_color", &(argObj->getPointColor()->col));
-	DrawShapePointModel(argObj);
 
-	return;
-}
-
-void fk_PointDraw::DrawShapePointModel(fk_Model *argObj)
-{
 	switch(argObj->getShape()->getRealShapeType()) {
 	  case FK_SHAPE_POINT:
-		DrawParticlePointModel(argObj);
+		  DrawParticlePoint(argObj, parameter);
 		break;
 /*
 	  case FK_SHAPE_IFS:
@@ -248,7 +255,7 @@ void fk_PointDraw::DrawShapePointModel(fk_Model *argObj)
 	return;
 }
 
-void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
+void fk_PointDraw::DrawParticlePoint(fk_Model *argObj, fk_ShaderParameter *argParam)
 {
 	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
 	int			size = int(point->aliveArray.size());
@@ -259,8 +266,7 @@ void fk_PointDraw::DrawParticlePointModel(fk_Model *argObj)
 	}
 
 	glBindVertexArray(vao);
-
-	point->BindShaderBuffer(shader->getParameter()->getAttrTable());
+	point->BindShaderBuffer(argParam->getAttrTable());
 	glDrawArrays(GL_POINTS, 0, size);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

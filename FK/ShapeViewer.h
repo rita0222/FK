@@ -274,6 +274,9 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(void);
 
+		void	setElementMode(fk_ElementMode mode);
+		fk_ElementMode	getElementMode(void);
+		
 		//! 透過処理設定関数
 		/*!
 		 *	描画の際、透過処理を有効とするかどうかを設定します。
@@ -426,6 +429,9 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(int ID);
 
+		void	setElementMode(int ID, fk_ElementMode mode);
+		fk_ElementMode	getElementMode(int ID);
+		
 		//! 形状稜線描画幅設定関数
 		/*!
 		 *	形状に対し、稜線の描画幅を設定します。
