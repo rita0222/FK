@@ -148,6 +148,7 @@ int main(int, char **)
 	viewer.setShape(2, particle.getShape());
 	viewer.setDrawMode(2, FK_POINTMODE);
 	viewer.setElementMode(2, FK_ELEM_ELEMENT);
+	viewer.setPointSize(2, 3.0);
 	viewer.setScale(10.0);
  
 	while(viewer.draw() == true) {

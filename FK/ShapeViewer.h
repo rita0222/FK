@@ -430,12 +430,7 @@ namespace FK {
 		fk_DrawMode		getDrawMode(int ID);
 
 		void			setElementMode(int ID, fk_ElementMode mode);
-		void			setPointSize(int ID, double size);
-		void			setLineWidth(int ID, double width);
-		
 		fk_ElementMode	getElementMode(int ID);
-		double			getPointSize(int ID);
-		double			getLineWidth(int ID);
 		
 		//! 形状稜線描画幅設定関数
 		/*!
