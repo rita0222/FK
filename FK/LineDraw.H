@@ -32,8 +32,8 @@ namespace FK {
 		void				ModelShaderSetup(void);
 		void				ElemShaderSetup(void);
 
-		GLuint				VAOSetup(fk_Line *);
-		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
+		GLuint				VAOSetup(fk_Shape *);
+ 		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
 /*
 		void	DrawShapeLineMaterial(fk_Model *);
 		void	DrawSolidLineMaterial(fk_Model *);

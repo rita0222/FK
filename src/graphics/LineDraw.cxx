@@ -117,12 +117,70 @@ void fk_LineDraw::SetCameraMatrix(fk_Matrix *argM)
 
 void fk_LineDraw::ModelShaderSetup(void)
 {
+	modelShader = new fk_ShaderBinder();
+ 	auto prog = modelShader->getProgram();
+	auto param = modelShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Line_Model_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Line_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	param->reserveAttribute("fk_line_elem_position");
+	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+
+	prog->link();
 	return;
 }
 
 void fk_LineDraw::ElemShaderSetup(void)
 {
+	elemShader = new fk_ShaderBinder();
+ 	auto prog = elemShader->getProgram();
+	auto param = elemShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Line_Elem_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Line_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	param->reserveAttribute("fk_line_elem_position");
+	param->reserveAttribute("fk_line_elem_color");
+	
+	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+
+	prog->link();
 	return;
+}
+
+GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
+{
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetLineVAO(vao);
+	argShape->DefineVBO();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	return vao;
 }
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
@@ -151,7 +209,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 		shader->bindModel(argObj);
 	}
 	
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
+	glLineWidth(GLfloat(argObj->getWidth()));
 
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
 
@@ -178,8 +236,18 @@ void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
 
 void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
 {
-	FK_UNUSED(argObj);
-	FK_UNUSED(argParam);
+	fk_Line		*line = dynamic_cast<fk_Line *>(argObj->getShape());
+	int			size = int(line->posArray.size());
+	GLuint		vao = line->GetLineVAO();
+
+	if(vao == 0) {
+		vao = VAOSetup(line);
+	}
+	glBindVertexArray(vao);
+	line->BindShaderBuffer(argParam->getAttrTable());
+	glDrawArrays(GL_LINES, 0, size);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 	return;
 }
 

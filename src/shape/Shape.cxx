@@ -199,7 +199,6 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_POLYGON:
 	  case FK_POLYLINE:
 	  case FK_CLOSEDLINE:
-	  case FK_LINE:
 		return FK_SHAPE_SOLID;
 
 	  case FK_RECTTEXTURE:
@@ -213,6 +212,9 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_PARTICLESET:
 		return FK_SHAPE_POINT;
 
+	  case FK_LINE:
+		  return FK_SHAPE_LINE;
+		  
 	  case FK_CURVE:
 	  case FK_BEZCURVE:
 	  case FK_BSPLCURVE:

@@ -78,8 +78,11 @@ using namespace FK;
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {
 	SetObjectType(FK_LINE);
+	allClear();
 	MakeLines(argVertexPos);
 
+	setShaderAttribute("fk_line_elem_position", 3, &posArray);
+	setShaderAttribute("fk_line_elem_color", 4, &colArray);
 	return;
 }
 

@@ -378,21 +378,7 @@ void fk_GraphicsEngine::DrawObjs(void)
 void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 								  bool argLightFlg)
 {
-	fk_Shape		*modelShape;
-/*
-	if(argPickFlg == true) {
-		if(argModel->getPickMode() == false) return;
-#ifndef OPENGL4
-		glLoadName(GLuint(modelArray.size()));
-#endif
-		modelArray.push_back(argModel);
-	}
-*/
-	modelShape = argModel->getShape();
-
-#ifndef OPENGL4
-	glPushMatrix();
-#endif
+	fk_Shape		*modelShape = argModel->getShape();
 		
 	if(argModel->getBDrawToggle() == true) {
 		if(argModel->getBMode() == FK_B_AABB) {

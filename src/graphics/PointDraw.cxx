@@ -178,15 +178,14 @@ void fk_PointDraw::ElemShaderSetup(void)
 	return;
 }
 
-GLuint fk_PointDraw::VAOSetup(fk_Shape *argPoint)
+GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 {
 	GLuint 			vao;
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-	argPoint->SetPointVAO(vao);
-
-	argPoint->DefineVBO();
+	argShape->SetPointVAO(vao);
+	argShape->DefineVBO();
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -257,7 +256,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 
 void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam)
 {
-	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
+	fk_Point	*point = dynamic_cast<fk_Point *>(argObj->getShape());
 	int			size = int(point->aliveArray.size());
 	GLuint 		vao = point->GetPointVAO();
 
