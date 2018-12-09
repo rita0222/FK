@@ -1,11 +1,10 @@
 ﻿#ifndef __FK_LINE_DRAW_HEADER__
 #define __FK_LINE_DRAW_HEADER__
 
-#include <vector>
-#include <FK/Material.h>
+//#include <FK/Material.h>
+#include <FK/ShaderBinder.h>
 
 namespace FK {
-
 	class fk_Model;
 	class fk_Edge;
 	class fk_Color;
@@ -19,10 +18,23 @@ namespace FK {
 		void	SetArrayState(bool);
 		void	DrawShapeLine(fk_Model *);
 		void	DrawBoundaryLine(fk_Model *);
+		void	SetProjectMatrix(fk_Matrix *);
+		void	SetCameraMatrix(fk_Matrix *);
 
 	private:
-		bool	arrayState;
+		fk_ShaderBinder		*modelShader;
+		fk_ShaderBinder		*elemShader;
+		bool				arrayState;
+		fk_Matrix			*projM;
+		fk_Matrix			cameraM;
 
+		void				ShaderSetup(void);
+		void				ModelShaderSetup(void);
+		void				ElemShaderSetup(void);
+
+		GLuint				VAOSetup(fk_Line *);
+		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
+/*
 		void	DrawShapeLineMaterial(fk_Model *);
 		void	DrawSolidLineMaterial(fk_Model *);
 		int		DrawSolidLineMaterialElem(fk_Edge *, int,
@@ -31,12 +43,12 @@ namespace FK {
 										  fk_Color *);
 		void	DrawIFSLineMaterial(fk_Model *);
 
-		//void	DrawShapeLinePick(fk_Model *);
-		//void	DrawSolidLinePick(fk_Model *);
-		//void	DrawSolidLinePickElem(fk_Edge *);
-		//void	DrawIFSLinePick(fk_Model *);
-		//void	DrawCurveLinePick(fk_Model *);
-		//void	DrawSurfaceLinePick(fk_Model *);
+		void	DrawShapeLinePick(fk_Model *);
+		void	DrawSolidLinePick(fk_Model *);
+		void	DrawSolidLinePickElem(fk_Edge *);
+		void	DrawIFSLinePick(fk_Model *);
+		void	DrawCurveLinePick(fk_Model *);
+		void	DrawSurfaceLinePick(fk_Model *);
 
 		void	DrawShapeLineNormal(fk_Model *, bool);
 		void	DrawSolidLineNormal(fk_Model *, bool);
@@ -47,6 +59,7 @@ namespace FK {
 		
 		void	CommonLineDrawFunc(fk_Edge *, bool);
 		void	DrawIFSLineSub(fk_IndexFaceSet *);
+*/
 	};
 }
 #endif /* !__FK_LINE_DRAW_HEADER__ */

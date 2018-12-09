@@ -69,10 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "LineDraw_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
 #include <FK/LineDraw.H>
 #include <FK/OpenGL.H>
@@ -90,11 +86,15 @@ using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
 {
-	SetArrayState(false);
+	arrayState = false;
+	modelShader = nullptr;
+	elemShader = nullptr;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
+	if(modelShader != nullptr) delete modelShader;
+	if(elemShader != nullptr) delete elemShader;
 	return;
 }
 
@@ -104,59 +104,86 @@ void fk_LineDraw::SetArrayState(bool argState)
 	return;
 }
 
+void fk_LineDraw::SetProjectMatrix(fk_Matrix *argM)
+{
+	projM = argM;
+	return;
+}
+
+void fk_LineDraw::SetCameraMatrix(fk_Matrix *argM)
+{
+	cameraM = *argM;
+}
+
+void fk_LineDraw::ModelShaderSetup(void)
+{
+	return;
+}
+
+void fk_LineDraw::ElemShaderSetup(void)
+{
+	return;
+}
+
 void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 {
-	fk_MaterialMode	shapeMateMode;
-	fk_MaterialMode	modelMateMode;
+	if(modelShader == nullptr) ModelShaderSetup();
+	if(elemShader == nullptr) ElemShaderSetup();
 
-	shapeMateMode = argObj->getShape()->getMaterialMode();
-	modelMateMode = argObj->getMaterialMode();
+	fk_ElementMode mode = argObj->getElementMode();
+	fk_ShaderBinder *shader;
 
-#ifndef OPENGL4
-	glDisable(GL_LIGHTING);
-#endif
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
+	switch(mode) {
+	  case FK_ELEM_MODEL:
+		  shader = modelShader;
+		  break;
 
-	if(modelMateMode == FK_PARENT_MODE) {
-		if(shapeMateMode == FK_PARENT_MODE) {
-			DrawShapeLineMaterial(argObj);
-		} else if(shapeMateMode == FK_CHILD_MODE) {
-			DrawShapeLineNormal(argObj, false);
-		}
-	} else if(modelMateMode == FK_CHILD_MODE) {
-		DrawShapeLineNormal(argObj, true);
+	  case FK_ELEM_ELEMENT:
+		  shader = elemShader;
+		  break;
+
+	  default:
+		  return;
 	}
 
+	if(argObj->preShaderList.empty() == true &&
+	   argObj->postShaderList.empty() == true) {
+		shader->bindModel(argObj);
+	}
+	
+	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
+
+	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
+
+	auto parameter = shader->getParameter();
+	parameter->setRegister("fk_projection", projM);
+	parameter->setRegister("fk_modelview", &modelViewM);
+	parameter->setRegister("fk_line_model_color", &(argObj->getLineColor()->col));
+
+	switch(argObj->getShape()->getRealShapeType()) {
+	  case FK_SHAPE_LINE:
+		  Draw_Line(argObj, parameter);
+		break;
+	  default:
+		break;
+	}
 	return;
 }
 
 void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
 {
-	fk_IndexFaceSet		*ifsetP = argObj->GetBShape();
-	fk_Color			*modelColor;
-
-	if(argObj->getInterMode() == true &&
-	   argObj->getInterStatus() == true) {
-		modelColor = argObj->getBIntLineColor();
-	} else {
-		modelColor = argObj->getBLineColor();
-	}
-
-	if(ifsetP == nullptr) return;
-	glLineWidth(static_cast<GLfloat>(argObj->getBLineWidth()));
-
-#ifndef OPENGL4	
-	glDisable(GL_LIGHTING);
-	glColor4fv(&modelColor->col[0]);	
-#endif
-
-	DrawIFSLineSub(ifsetP);
-
+	FK_UNUSED(argObj);
 	return;
 }
 
+void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
+{
+	FK_UNUSED(argObj);
+	FK_UNUSED(argParam);
+	return;
+}
 
-
+/*
 void fk_LineDraw::DrawShapeLineMaterial(fk_Model *argObj)
 {
 	switch(argObj->getShape()->getRealShapeType()) {
@@ -596,7 +623,7 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 }
 
 #endif
-/*
+
 void fk_LineDraw::DrawShapeLinePick(fk_Model *argObj)
 {
 	switch(argObj->getShape()->getRealShapeType()) {

@@ -16,10 +16,10 @@ namespace FK {
 	 *	位相操作を伴う変形をした場合、
 	 *	本クラスのメンバ関数が正しく動作しない可能性があります。
 	 *
-	 *	\sa	fk_Solid, fk_Model, fk_Shape
+	 *	\sa	fk_Model, fk_Shape
 	 */
 
-	class fk_Line: public fk_Solid {
+	class fk_Line: public fk_Shape {
 	public:
 
 		//! コンストラクタ
@@ -137,6 +137,23 @@ namespace FK {
 		 *		そうでない場合は false を返します。
 		 */
 		bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
+
+		int			getSize(void);
+		void		allClear(void);
+		void		setColor(int eID, fk_Color col);
+		void		setColor(int eID, fk_Color *col);
+		fk_Color	getColor(int eID);
+		
+
+	private:
+		std::vector<float>		posArray;
+		std::vector<float>		colArray;
+
+		void MakeLines(std::vector<fk_Vector> *);
+		void MakeLines(fk_Vector *);
+		void PushLines(fk_Vector *, fk_Vector *);
+		void SetPos(int, int, fk_Vector *);
+		void SetCol(int, int, fk_Color *);
 	};
 }
 #endif // !__FK_LINE_HEADER__

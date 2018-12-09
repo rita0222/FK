@@ -192,6 +192,7 @@ void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 	}
 	curProj->MakeMat();
 	pointDraw->SetProjectMatrix(curProj->GetMatrix());
+	lineDraw->SetProjectMatrix(curProj->GetMatrix());
 	return;
 }
 
@@ -294,7 +295,9 @@ void fk_GraphicsEngine::Draw(void)
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	curProj->MakeMat();
-	pointDraw->SetCamera(curDLink->getCamera());
+	fk_Matrix cameraM = curDLink->getCamera()->getInhInvMatrix();
+	pointDraw->SetCameraMatrix(&cameraM);
+	lineDraw->SetCameraMatrix(&cameraM);
 	DrawObjs();
 
 	return;

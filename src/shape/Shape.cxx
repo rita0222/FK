@@ -79,7 +79,7 @@ using namespace FK;
 
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
 	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
-	  pointVAO(0), lineVAO(0), faceVAO(0)
+	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false)
 {
 	SetObjectType(argObjType);
 	return;
@@ -268,6 +268,7 @@ void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argVa
 	int id = -1;
 	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
 	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
+	vboInitFlg = false;
 }
 
 void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *argValue)
@@ -275,10 +276,12 @@ void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *arg
 	int id = -1;
 	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
 	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
+	vboInitFlg = false;
 }
 
 void fk_Shape::DefineVBO(void)
 {
+	if(vboInitFlg == true) return;
 	GLuint tmpID = 0;
 	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
 		if(get<0>(itr->second) != -1) {
@@ -297,6 +300,7 @@ void fk_Shape::DefineVBO(void)
 		glGenBuffers(1, &tmpID);
 		get<0>(itr->second) = int(tmpID);
 	}
+	vboInitFlg = true;
 
 	return;
 }

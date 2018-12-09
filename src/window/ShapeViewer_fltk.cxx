@@ -457,12 +457,11 @@ void fk_ShapeViewer::LightInit(void)
 void fk_ShapeViewer::AxisInit(void)
 {
 	fk_Vector		linePos[4], rPos, lPos;
-	fk_Material		localRed, localGreen, localCyan;
-	fk_Edge			*curE;
+	fk_Color		localRed, localGreen, localCyan;
 
-	localRed.setAmbient(1.0f, 0.0f, 0.0f);
-	localGreen.setAmbient(0.0f, 1.0f, 0.0f);
-	localCyan.setAmbient(0.0f, 1.0f, 1.0f);
+	localRed.set(1.0f, 0.0f, 0.0f);
+	localGreen.set(0.0f, 1.0f, 0.0f);
+	localCyan.set(0.0f, 1.0f, 1.0f);
 
 	linePos[0].set(0.0, 0.0, 0.0);
 	linePos[1].set(1.0, 0.0, 0.0);
@@ -474,30 +473,15 @@ void fk_ShapeViewer::AxisInit(void)
 	axisLine.pushLine(linePos[0], linePos[2]);
 	axisLine.pushLine(linePos[0], linePos[3]);
 
-	axisLine.setPalette(localRed, 0);
-	axisLine.setPalette(localGreen, 1);
-	axisLine.setPalette(localCyan, 2);
-
-	curE = axisLine.getNextE(NULL);
-	while(curE != NULL) {
-		rPos = axisLine.getRightVOnE(curE)->getPosition();
-		lPos = axisLine.getLeftVOnE(curE)->getPosition();
-
-		if(rPos.x > 0.5 || lPos.x > 0.5) {
-			curE->setElemMaterialID(0);
-		} else if(rPos.y > 0.5 || lPos.y > 0.5) {
-			curE->setElemMaterialID(1);
-		} else if(rPos.z > 0.5 || lPos.z > 0.5) {
-			curE->setElemMaterialID(2);
-		}
-
-		curE = axisLine.getNextE(curE);
-	}
+	axisLine.setColor(0, localRed);
+	axisLine.setColor(1, localGreen);
+	axisLine.setColor(2, localCyan);
 
 	axisModel.setShape(&axisLine);
 	axisModel.setParent(&parentModel);
-	axisLine.setMaterialMode(FK_PARENT_MODE);
-	axisModel.setMaterialMode(FK_PARENT_MODE);
+	//axisLine.setMaterialMode(FK_PARENT_MODE);
+	//axisModel.setMaterialMode(FK_PARENT_MODE);
+	axisModel.setElementMode(FK_ELEM_ELEMENT);
 	scene.entryModel(&axisModel);
 	axisFlag = true;
 	return;

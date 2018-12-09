@@ -80,7 +80,7 @@ using namespace FK;
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
 	SetObjectType(FK_POINT);
-	allClear(false);
+	allClear();
 	MakePoint(argVertexSet);
 
 	setShaderAttribute("fk_point_elem_position", 3, &posArray);
@@ -159,6 +159,7 @@ bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)
 
 bool fk_Point::removeVertex(int argID)
 {
+	if(argID < 0 || argID >= int(aliveArray.size())) return false;
 	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
 	aliveArray[_st(argID)] = FK_SHAPE_DEAD;
 
@@ -180,34 +181,11 @@ int fk_Point::getSize(void)
 	return int(aliveArray.size());
 }
 
-void fk_Point::setDrawMode(int argID, bool argFlag)
-{
-	if(argID < 0 || argID >= int(aliveArray.size())) return;
-	if(argFlag == false) {
-		//if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) {
-		//fk_Window::printf("%d Dead", argID);
-		//}
-		aliveArray[_st(argID)] = FK_SHAPE_DEAD;
-	} else {
-		aliveArray[_st(argID)] = FK_SHAPE_ALIVE;
-	}
-	return;
-}
-
-bool fk_Point::getDrawMode(int argID)
-{
-	if(argID < 0 || argID >= int(aliveArray.size())) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
-	return false;
-}
-
-void fk_Point::allClear(bool argMateFlg)
+void fk_Point::allClear(void)
 {
 	posArray.clear();
 	colArray.clear();
 	aliveArray.clear();
-	if(argMateFlg == true) clearMaterial();
-
 	return;
 }
 
@@ -235,7 +213,19 @@ fk_Color fk_Point::getColor(int argID)
 	for(_st i = 0; i < 4; i++) col.col[i] = colArray[id+i];
 	return col;
 }
-	
+
+void fk_Point::setDrawMode(int argID, bool argMode)
+{
+	if(argID < 0 || argID >= int(aliveArray.size())) return;
+	aliveArray[_st(argID)] = (argMode) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
+}
+
+bool fk_Point::getDrawMode(int argID)
+{
+	if(argID < 0 || argID >= int(aliveArray.size())) return false;
+	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
+	return false;
+}
 	
 void fk_Point::setColorID(int, int) { return; }
 int fk_Point::getColorID(int) { return 0; }

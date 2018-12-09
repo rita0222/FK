@@ -69,6 +69,7 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
 #include <FK/Line.h>
 
 using namespace std;
@@ -77,7 +78,7 @@ using namespace FK;
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {
 	SetObjectType(FK_LINE);
-	makeLines(argVertexPos);
+	MakeLines(argVertexPos);
 
 	return;
 }
@@ -87,47 +88,158 @@ fk_Line::~fk_Line()
 	return;
 }
 
-bool fk_Line::setVertex(int argID, fk_Vector argPos)
+void fk_Line::SetPos(int argEID, int argVID, fk_Vector *argV)
 {
-	fk_Vector		TmpPos;
+	_st pID = _st(argEID*6 + argVID*3);
+	posArray[pID] = float(argV->x);
+	posArray[pID+1] = float(argV->y);
+	posArray[pID+2] = float(argV->z);
+	return;
+}
 
-	if(getVNum() == 0) {
-		pushLines(TmpPos, TmpPos);
+void fk_Line::SetCol(int argEID, int argVID, fk_Color *argC)
+{
+	_st pID = _st(argEID*8 + argVID*4);
+	for(_st i = 0; i < 4; i++) {
+		colArray[pID+i] = argC->col[i];
+	}
+	return;
+}
+
+void fk_Line::MakeLines(vector<fk_Vector> *argVPos)
+{
+	if(argVPos == nullptr) {
+		posArray.clear();
+		colArray.clear();
+		return;
 	}
 
-	return setLinePos(argID, argPos);
+	fk_Color col(0.0, 0.0, 0.0, 1.0);
+
+	posArray.resize(argVPos->size() * 3);
+	colArray.resize(argVPos->size() * 4);
+
+	for(int i = 0; i < int(argVPos->size()/2); ++i) {
+		SetPos(i, 0, &(*argVPos)[_st(i*2)]);
+		SetPos(i, 1, &(*argVPos)[_st(i*2+1)]);
+		SetCol(i, 0, &col);
+		SetCol(i, 1, &col);
+	}
+	return;
+}
+
+void fk_Line::MakeLines(fk_Vector *argVPos)
+{
+	if(argVPos == nullptr) {
+		posArray.clear();
+		colArray.clear();
+		return;
+	}
+
+	PushLines(&argVPos[0], &argVPos[1]);
+	return;
+}
+
+void fk_Line::PushLines(fk_Vector *argS, fk_Vector *argE)
+{
+	posArray.push_back(float(argS->x));
+	posArray.push_back(float(argS->y));
+	posArray.push_back(float(argS->z));
+	posArray.push_back(float(argE->x));
+	posArray.push_back(float(argE->y));
+	posArray.push_back(float(argE->z));
+
+	for(_st i = 0; i < 2; ++i) {
+		for(_st j = 0; j < 3; ++j) {
+			colArray.push_back(0.0f);
+		}
+		colArray.push_back(1.0f);
+	}
+}
+
+bool fk_Line::setVertex(int argID, fk_Vector argPos)
+{
+	if(argID != 0 && argID != 1) return false;
+	posArray.resize(6);
+	colArray.resize(8);
+
+	SetPos(0, argID, &argPos);
+	return true;
 }
 
 bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
 {
-	return setLinePos(argEID, argVID, argPos);
+	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
+	SetPos(argEID, argVID, &argPos);
+	return true;
 }
 
 void fk_Line::setVertex(fk_Vector *argPosArray)
 {
-	makeLines(1, argPosArray);
+	MakeLines(argPosArray);
 	return;
 }
 
 void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
 {
-	makeLines(argPosArray);
+	MakeLines(argPosArray);
 	return;
 }
 
 void fk_Line::pushLine(fk_Vector *argVec)
 {
-	pushLines(argVec[0], argVec[1]);
+	if(argVec == nullptr) return;
+	PushLines(&argVec[0], &argVec[1]);
 	return;
 }
 
 void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
 {
-	pushLines(argV1, argV2);
+	PushLines(&argV1, &argV2);
 	return;
 }
 
 bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
 {
-	return fk_Modify::changeLine(argID, argPos1, argPos2);
+	if(argID < 0 || argID >= getSize()) return false;
+
+	SetPos(argID, 0, &argPos1);
+	SetPos(argID, 1, &argPos2);
+	return true;
 }
+
+int fk_Line::getSize(void)
+{
+	return int(posArray.size()/6);
+}
+
+void fk_Line::allClear(void)
+{
+	posArray.clear();
+	colArray.clear();
+}
+
+void fk_Line::setColor(int argID, fk_Color argCol)
+{
+	setColor(argID, &argCol);
+}
+
+void fk_Line::setColor(int argID, fk_Color *argCol)
+{
+	if(argID < 0 || argID >= getSize()) return;
+	SetCol(argID, 0, argCol);
+	SetCol(argID, 1, argCol);
+}
+
+fk_Color fk_Line::getColor(int argID)
+{
+	fk_Color tmpCol(0.0, 0.0, 0.0, 1.0);
+
+	if(argID < 0 || argID >= getSize()) return tmpCol;
+	_st cID = _st(argID*8);
+	for(_st i = 0; i < 4; ++i) {
+		tmpCol.col[i] = colArray[cID+i];
+	}
+	return tmpCol;
+}
+

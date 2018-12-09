@@ -6,8 +6,6 @@
 #include <FK/Shape.h>
 
 namespace FK {
-	class fk_Window;
-
     //! 点群を生成、管理するクラス
 	/*!
 	 *	このクラスは、形状として点群を制御する機能を提供します。
@@ -93,7 +91,8 @@ namespace FK {
 
 		//! 頂点削除関数
 		/*
-		 *	頂点を削除します。
+		 *	頂点を削除します。実際には setDrawMode(ID, false) と同様の意味を持ち、
+		 *	setDrawMode(ID, true) とすれば改めて描画されるようになります。
 		 *
 		 *	\param[in]	ID		頂点ID
 		 *
@@ -120,7 +119,6 @@ namespace FK {
 		 *	\return		頂点数
 		 */
 		int				getSize(void);
-
 
 		//! 頂点描画制御関数
 		/*!
@@ -152,12 +150,8 @@ namespace FK {
 		//! 点群全消去関数
 		/*!
 		 *	全ての頂点に関するデータを消去します。
-		 *
-		 *	\param[in]	matFlag
-		 *		true の場合は、マテリアルパレットも初期化します。
-		 *		false の場合は、マテリアルパレットに関しては消去しません。
 		 */
-		void			allClear(bool matFlag = true);
+		void			allClear(void);
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 

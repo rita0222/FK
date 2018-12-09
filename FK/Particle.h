@@ -163,24 +163,6 @@ namespace FK {
 		void			setAccel(double x, double y, double z);
 
 
-		//! 描画有無効参照関数
-		/*!
-		 *	現在の描画状態の有無を参照します。
-		 *
-		 *	\return
-		 *		描画が有効である場合 true を、
-		 *		無効となっている場合 false を返します。
-		 */
-		bool			getDrawMode(void) const;
-
-		//! 描画有無効設定関数
-		/*!
-		 *	現在の描画状態の有無を設定します。
-		 *
-		 *	\param[in]	mode
-		 *		true の場合、描画を有効とします。false の場合無効とします。
-		 */
-		void			setDrawMode(bool mode);
 
 		//! 年齢更新関数
 		/*!
@@ -196,6 +178,8 @@ namespace FK {
 		void			setColor(fk_Color col);
 		void			setColor(fk_Color *col);
 		fk_Color		getColor(void);
+		bool			getDrawMode(void) const;
+		void			setDrawMode(bool mode);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		int				getColorID(void) const;

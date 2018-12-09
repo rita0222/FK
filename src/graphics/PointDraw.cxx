@@ -114,9 +114,9 @@ void fk_PointDraw::SetProjectMatrix(fk_Matrix *argM)
 	return;
 }
 
-void fk_PointDraw::SetCamera(fk_Model *argCamera)
+void fk_PointDraw::SetCameraMatrix(fk_Matrix *argM)
 {
-	cameraM = argCamera->getInhInvMatrix();
+	cameraM = *argM;
 	return;
 }
 
@@ -178,7 +178,7 @@ void fk_PointDraw::ElemShaderSetup(void)
 	return;
 }
 
-GLuint fk_PointDraw::ParticleVAOSetup(fk_Point *argPoint)
+GLuint fk_PointDraw::VAOSetup(fk_Shape *argPoint)
 {
 	GLuint 			vao;
 	
@@ -230,7 +230,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 
 	switch(argObj->getShape()->getRealShapeType()) {
 	  case FK_SHAPE_POINT:
-		  DrawParticlePoint(argObj, parameter);
+		  Draw_Point(argObj, parameter);
 		break;
 /*
 	  case FK_SHAPE_IFS:
@@ -255,14 +255,14 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	return;
 }
 
-void fk_PointDraw::DrawParticlePoint(fk_Model *argObj, fk_ShaderParameter *argParam)
+void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam)
 {
 	fk_Point	*point = static_cast<fk_Point *>(argObj->getShape());
 	int			size = int(point->aliveArray.size());
 	GLuint 		vao = point->GetPointVAO();
 
 	if(vao == 0) {
-		vao = ParticleVAOSetup(point);
+		vao = VAOSetup(point);
 	}
 
 	glBindVertexArray(vao);

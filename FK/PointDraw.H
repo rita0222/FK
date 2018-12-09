@@ -1,8 +1,7 @@
 ﻿#ifndef __FK_POINT_DRAW_HEADER__
 #define __FK_POINT_DRAW_HEADER__
 
-#include <vector>
-#include <FK/Material.h>
+//#include <FK/Material.h>
 #include <FK/ShaderBinder.h>
 
 namespace FK {
@@ -19,7 +18,7 @@ namespace FK {
 		void			SetArrayState(bool);
 		void			DrawShapePoint(fk_Model *);
 		void			SetProjectMatrix(fk_Matrix *);
-		void			SetCamera(fk_Model *);
+		void			SetCameraMatrix(fk_Matrix *);
 
 	private:
 
@@ -32,8 +31,9 @@ namespace FK {
 		void			ShaderSetup(void);
 		void			ModelShaderSetup(void);
 		void			ElemShaderSetup(void);
-		GLuint			ParticleVAOSetup(fk_Point *);
-		void			DrawParticlePoint(fk_Model *, fk_ShaderParameter *);
+
+		GLuint			VAOSetup(fk_Shape *);
+		void			Draw_Point(fk_Model *, fk_ShaderParameter *);
 
 	};
 }
