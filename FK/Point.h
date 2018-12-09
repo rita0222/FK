@@ -149,29 +149,6 @@ namespace FK {
 		void			setColor(int vID, fk_Color *col);
 		fk_Color		getColor(int vID);
 
-		//! 描画色設定関数
-		/*!
-		 *	個別の頂点に対し、描画色の ID を設定します。
-		 *	色そのものの設定は、 fk_Shape::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	vID		頂点ID
-		 *	\param[in]	cID		色ID
-		 */
-		void			setColorID(int vID, int cID);
-
-		//! 描画色参照関数
-		/*!
-		 *	個別の頂点の描画色を取得します。
-		 *
-		 *	\param[in]	vID		頂点ID
-		 *
-		 *	\return
-		 *		描画色が設定されている場合はその描画色 ID を返します。
-		 *		描画色が設定されていない場合は -1 を返します。
-		 *		頂点が存在しない場合は -2 を返します。
-		 */
-		int				getColorID(int vID);
-
 		//! 点群全消去関数
 		/*!
 		 *	全ての頂点に関するデータを消去します。
@@ -182,6 +159,13 @@ namespace FK {
 		 */
 		void			allClear(bool matFlag = true);
 		
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		void			setColorID(int, int);
+		int				getColorID(int);
+
+#endif		
+
 	private:
 		std::vector<float>		posArray;
 		std::vector<float>		colArray;

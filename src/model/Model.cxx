@@ -96,8 +96,8 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	treeData = nullptr;
 	shape = nullptr;
 	setShape(argShape);
-	setSize(1.0);
-	setWidth(1.0);
+	setPointSize(1.0);
+	setLineWidth(1.0);
 	setReverseDrawMode(false);
 	elemMode = FK_ELEM_MODEL;
 
@@ -416,28 +416,48 @@ double fk_Model::getInhScale(void) const
 	return (parentModel->getInhScale() * Scale);
 }
 
-void fk_Model::setSize(const double argSize)
+void fk_Model::setPointSize(const double argSize)
 {
 	if(argSize <= FK_EPS) return;
-	drawSize = argSize;
+	pointSize = argSize;
+	return;
+}
+
+void fk_Model::setSize(const double argSize)
+{
+	setPointSize(argSize);
+}
+
+void fk_Model::setLineWidth(const double argWidth)
+{
+	if(argWidth <= FK_EPS) return;
+	lineWidth = argWidth;
 	return;
 }
 
 void fk_Model::setWidth(const double argWidth)
 {
-	if(argWidth <= FK_EPS) return;
-	drawWidth = argWidth;
-	return;
+	setLineWidth(argWidth);
+}
+
+double fk_Model::getPointSize(void) const
+{
+	return pointSize;
 }
 
 double fk_Model::getSize(void) const
 {
-	return drawSize;
+	return getPointSize();
+}
+
+double fk_Model::getLineWidth(void) const
+{
+	return lineWidth;
 }
 
 double fk_Model::getWidth(void) const
 {
-	return drawWidth;
+	return getLineWidth();
 }
 
 #ifndef _FREEBSD_

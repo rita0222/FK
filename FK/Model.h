@@ -990,9 +990,9 @@ namespace FK {
 		 *
 		 *	\param[in]	size	頂点描画サイズ
 		 *
-		 *	\sa	getSize(), setWidth()
+		 *	\sa	getPointSize(), setLineWidth()
 		 */
-		void	setSize(const double size);
+		void	setPointSize(const double size);
 
 		//! 稜線描画幅設定関数
 		/*!
@@ -1001,9 +1001,9 @@ namespace FK {
 		 *
 		 *	\param[in]	width	稜線幅
 		 *
-		 *	\sa	setSize(), getWidth()
+		 *	\sa	setPointSize(), getLineWidth()
 		 */
-		void	setWidth(const double width);
+		void	setLineWidth(const double width);
 
 		//! 頂点描画サイズ参照関数
 		/*!
@@ -1011,9 +1011,9 @@ namespace FK {
 		 *
 		 *	\return		頂点描画サイズ
 		 *
-		 *	\sa	setSize()
+		 *	\sa	setPointSize()
 		 */
-		double	getSize(void) const;
+		double	getPointSize(void) const;
 
 		//! 稜線描画幅設定関数
 		/*!
@@ -1021,9 +1021,9 @@ namespace FK {
 		 *
 		 *	\return		稜線幅
 		 *
-		 *	\sa	setWidth()
+		 *	\sa	setLineWidth()
 		 */
-		double	getWidth(void) const;
+		double	getLineWidth(void) const;
 		//@}
 
 		//! \name 描画モード制御関数
@@ -1897,6 +1897,11 @@ namespace FK {
 		void	SetTreeDelMode(bool);
 		void	TreePrint(void);
 
+		void	setSize(double);
+		double	getSize(void) const;
+		void	setWidth(double);
+		double	getWidth(void) const;
+
 		std::list<fk_funcSet>	preShaderList;
 		std::list<fk_funcSet>	postShaderList;
 #endif
@@ -1914,8 +1919,8 @@ namespace FK {
 		fk_BlendFactor		srcFactor;
 		fk_BlendFactor		dstFactor;
 		fk_DepthMode		depthMode;
-		double				drawSize;
-		double				drawWidth;
+		double				pointSize;
+		double				lineWidth;
 		bool				smoothFlag;
 		bool				reverseFlag;
 		bool				treeFlag;

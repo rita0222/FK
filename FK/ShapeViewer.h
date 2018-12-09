@@ -274,9 +274,9 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(void);
 
-		void	setElementMode(fk_ElementMode mode);
+		void			setElementMode(fk_ElementMode mode);
 		fk_ElementMode	getElementMode(void);
-		
+
 		//! 透過処理設定関数
 		/*!
 		 *	描画の際、透過処理を有効とするかどうかを設定します。
@@ -429,8 +429,13 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(int ID);
 
-		void	setElementMode(int ID, fk_ElementMode mode);
+		void			setElementMode(int ID, fk_ElementMode mode);
+		void			setPointSize(int ID, double size);
+		void			setLineWidth(int ID, double width);
+		
 		fk_ElementMode	getElementMode(int ID);
+		double			getPointSize(int ID);
+		double			getLineWidth(int ID);
 		
 		//! 形状稜線描画幅設定関数
 		/*!
