@@ -392,7 +392,7 @@ bool fk_D3DXShapeParser::MakeMesh(fk_ParserData *argMesh,
 								  bool argSolidFlg)
 {
 	argMesh->Init();
-	return argMesh->MakeMesh(&optVData, &optFData, nullptr, argSolidFlg);
+	return argMesh->MakeMesh(&optVData, &optFData, argSolidFlg);
 }
 
 int fk_D3DXShapeParser::GetVMap(int argIndex)

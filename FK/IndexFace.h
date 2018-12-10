@@ -11,14 +11,6 @@ namespace FK {
 	class fk_BVHBase;
 	class fk_Solid;
 
-	//! インデックスフェースセットの内部データタイプを表す列挙型
-	enum fk_IFType {
-		FK_IF_NONE,			//!<	未定義
-		FK_IF_TRIANGLES,	//!<	3角形集合
-		FK_IF_QUADS,		//!<	4角形集合
-		FK_IF_POLYGON		//!<	任意多角形集合
-	};
-
 	//! インデックスフェースセットによる任意形状を生成、管理するクラス
 	/*!
 	 *	このクラスは、
@@ -637,13 +629,6 @@ namespace FK {
 		 */
 		int		getFaceData(int faceID, int vertexNum);
 
-		//! 面タイプ取得関数
-		/*!
-		 *	形状データの面タイプを取得します。
-		 *
-		 *	\return		面タイプ
-		 */
-		fk_IFType	getFaceType(void);
 
 		//! 面法線ベクトル取得関数
 		/*!
@@ -1338,23 +1323,23 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 		bool				MakeMesh(std::vector<fk_Vector> *,
-									 std::vector< std::vector<int> > *,
-									 std::vector<int> * = nullptr,
-									 bool = true);
+									 std::vector< std::vector<int> > *, bool);
+
 
 		fk_D3DXAnimation *	GetAnimation(void);
 
 		void				PosPrint(std::string);
 
+		//fk_IFType	getFaceType(void);
 #endif
 
 	private:
 
 		fk_Palette						localPalette;
-		std::vector<fk_FVector>			pos;
-		std::vector<fk_FVector>			timeOrgPos;
-		std::vector<fk_FVector>			vNorm;
-		std::vector<fk_FVector>			pNorm;
+		std::vector<float>				pos;
+		std::vector<float>				timeOrgPos;
+		std::vector<float>				vNorm;
+		std::vector<float>				pNorm;
 		std::vector<int>				ifs;
 		std::vector<int>				edgeSet;
 		std::vector< std::vector<int> >	loopStack;
@@ -1362,14 +1347,14 @@ namespace FK {
 		std::vector<char>				vNormFlg;
 		std::vector<char>				pNormFlg;
 		std::vector<int>				modifyList;
-		std::vector<int>				colorID;
-		bool							colorFlg;
+		//std::vector<int>				colorID;
+		//bool							colorFlg;
 		fk_D3DXAnimation				*anim;
 
-		int								posSize;
-		int								faceSize;
-		fk_IFType						type;
-
+		//int								posSize;
+		//int								faceSize;
+		//fk_IFType						type;
+		
 		bool							cloneFlg;
 		std::list<fk_IndexFaceSet *>	cloneList;
 		fk_IndexFaceSet					*orgIFS;
@@ -1383,12 +1368,12 @@ namespace FK {
 		void				ClearPFlg(void);
 		void				ClearVFlg(void);
 
-		fk_Vector			CalcTriNorm(int *);
-		fk_Vector			CalcPolyNorm(int, int *);
+		fk_FVector			CalcTriNorm(int *);
+		fk_FVector			CalcPolyNorm(int, int *);
 		void				MakeLoopTable(void);
-		void				MakeEdgeSet(void);
+		void				MakeEdgeSet(std::vector< std::vector<int> > *);
+		void				MakeEdgeSet(int);
 
-		bool				Init(int, int, int);
 		void				Init(void);
 
 		void				DeleteCloneLink(fk_IndexFaceSet *);

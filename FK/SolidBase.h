@@ -103,7 +103,6 @@ namespace FK {
 
 		bool		MakeMesh(std::vector<fk_Vector> *,
 							 std::vector< std::vector<int> > *,
-							 std::vector<int> * = nullptr,
 							 bool = true);
 
 		void		Init(void);

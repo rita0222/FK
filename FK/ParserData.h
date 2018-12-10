@@ -20,9 +20,7 @@ namespace FK {
 
 
 		virtual bool	MakeMesh(std::vector<fk_Vector> *,
-								 std::vector< std::vector<int> > *,
-								 std::vector<int> * = nullptr,
-								 bool = true) = 0;
+								 std::vector< std::vector<int> > *, bool = true) = 0;
 
 		virtual void	Init(void) = 0;
 

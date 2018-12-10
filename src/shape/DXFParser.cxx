@@ -111,7 +111,7 @@ bool fk_DXFParser::ReadDXFFile(string argFileName, bool argSolidFlg)
 
 	meshData->Init();
 
-	return meshData->MakeMesh(&vecSet, &IFSet, nullptr, argSolidFlg);
+	return meshData->MakeMesh(&vecSet, &IFSet, argSolidFlg);
 }
 
 bool fk_DXFParser::CheckDXFFile(ifstream &argIFS)

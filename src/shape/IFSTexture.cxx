@@ -104,9 +104,6 @@ fk_IFSTexture::~fk_IFSTexture()
 void fk_IFSTexture::MakeDrawIFSFunc(void)
 {
 	DrawTexture = [this](bool argArrayState) {
-		_st				pNum;
-		GLenum			tmpType;
-
 		const fk_Dimension *bufSize = getBufferSize();
 
 		if(bufSize == nullptr) return;
@@ -114,20 +111,6 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 
 		if(ifs->modifyFlg == true) {
 			ifs->ModifyVNorm();
-		}
-		switch(ifs->type) {
-		  case FK_IF_TRIANGLES:
-			pNum = 3;
-			tmpType = GL_TRIANGLES;
-			break;
-
-		  case FK_IF_QUADS:
-			pNum = 4;
-			tmpType = GL_QUADS;
-			break;
-
-		  default:
-			return;
 		}
 
 #ifndef OPENGL4
@@ -218,11 +201,6 @@ fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 	fk_TexCoord	coord(0.0, 0.0);
 	int			index;
 	double		wScale, hScale;
-
-	if(ifs->getFaceType() != FK_IF_TRIANGLES &&
-	   ifs->getFaceType() != FK_IF_QUADS) {
-		return coord;
-	}
 
 	index = ifs->getFaceData(argTID, argVID);
 	if(index < 0) {
