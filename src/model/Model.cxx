@@ -152,6 +152,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 	if(drawModeFlag == true) {
 		switch(type) {
 		  case FK_POINT:
+		  case FK_PARTICLESET:
 			drawMode = FK_POINTMODE;
 			break;
 

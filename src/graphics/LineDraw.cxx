@@ -188,6 +188,9 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	if(modelShader == nullptr) ModelShaderSetup();
 	if(elemShader == nullptr) ElemShaderSetup();
 
+	modelShader->unbindModel(argObj);
+	elemShader->unbindModel(argObj);
+
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
 
@@ -204,10 +207,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 		  return;
 	}
 
-	if(argObj->preShaderList.empty() == true &&
-	   argObj->postShaderList.empty() == true) {
-		shader->bindModel(argObj);
-	}
+	shader->bindModel(argObj);
 	
 	glLineWidth(GLfloat(argObj->getWidth()));
 
@@ -237,7 +237,6 @@ void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
 void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
 {
 	fk_Line		*line = dynamic_cast<fk_Line *>(argObj->getShape());
-	int			size = int(line->posArray.size());
 	GLuint		vao = line->GetLineVAO();
 
 	if(vao == 0) {
@@ -245,7 +244,7 @@ void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
 	}
 	glBindVertexArray(vao);
 	line->BindShaderBuffer(argParam->getAttrTable());
-	glDrawArrays(GL_LINES, 0, size);
+	glDrawArrays(GL_LINES, 0, line->getSize()*2);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	return;

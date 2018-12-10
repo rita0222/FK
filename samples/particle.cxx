@@ -150,8 +150,9 @@ int main(int, char **)
 	viewer.setElementMode(2, FK_ELEM_ELEMENT);
 	viewer.setPointSize(2, 3.0);
 	viewer.setScale(10.0);
+	//viewer.setAxisMode(true);
  
-	while(viewer.draw() == true) {
+	for(int i = 0; viewer.draw() == true; i++) {
 		particle.handle(); // パーティクルを 1 ステップ実行する。
 	}
 	return 0;

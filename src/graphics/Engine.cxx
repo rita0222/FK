@@ -78,7 +78,6 @@
 #include <FK/Scene.h>
 #include <FK/Light.h>
 #include <FK/Plane.h>
-//#include <FK/PickData.h>
 #include <FK/Projection.h>
 #include <FK/PointDraw.H>
 #include <FK/LineDraw.H>
@@ -545,6 +544,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 									 bool argLightFlag)
 {
 	fk_DrawMode		DrawMode;
+	bool			drawFlg = false;
 
 	DrawMode = argObj->getDrawMode();
 
@@ -561,21 +561,13 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
 		pointDraw->DrawShapePoint(argObj);
+		drawFlg = true;
 	}
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
 		lineDraw->DrawShapeLine(argObj);
 	}
 
-#ifndef OPENGL4
-
-	if(argLightFlag == true) {
-		glEnable(GL_LIGHTING);
-	} else {
-		glDisable(GL_LIGHTING);
-	}
-#endif
-	
 	return;
 }
 

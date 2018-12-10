@@ -197,6 +197,9 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	if(modelShader == nullptr) ModelShaderSetup();
 	if(elemShader == nullptr) ElemShaderSetup();
 
+	modelShader->unbindModel(argObj);
+	elemShader->unbindModel(argObj);
+
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
 
@@ -213,11 +216,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 		  return;
 	}
 
-	if(argObj->preShaderList.empty() == true &&
-	   argObj->postShaderList.empty() == true) {
-		shader->bindModel(argObj);
-	}
-
+	shader->bindModel(argObj);
 	glPointSize((GLfloat)argObj->getSize());
 
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
@@ -257,7 +256,6 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam)
 {
 	fk_Point	*point = dynamic_cast<fk_Point *>(argObj->getShape());
-	int			size = int(point->aliveArray.size());
 	GLuint 		vao = point->GetPointVAO();
 
 	if(vao == 0) {
@@ -266,7 +264,7 @@ void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam)
 
 	glBindVertexArray(vao);
 	point->BindShaderBuffer(argParam->getAttrTable());
-	glDrawArrays(GL_POINTS, 0, size);
+	glDrawArrays(GL_POINTS, 0, GLsizei(point->aliveArray.size()));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
