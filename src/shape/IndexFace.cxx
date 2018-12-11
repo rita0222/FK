@@ -562,77 +562,43 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 
 int fk_IndexFaceSet::getPosSize(void)
 {
-	if(posSize < 0) return 0;
-	return posSize;
+	return pos.getSize();
 }
 
 int fk_IndexFaceSet::getFaceSize(void)
 {
-	if(faceSize < 0) return 0;
-	return faceSize;
+	return int(ifs.size()/3);
 }
 
 fk_Vector fk_IndexFaceSet::getPosVec(int argID)
 {
 	fk_Vector		retVec(0.0, 0.0, 0.0);
 
-	if(argID < 0 || argID >= posSize) return retVec;
-	retVec = pos[_st(argID)];
-	return retVec;
+	if(argID < 0 || argID >= pos.getSize()) return retVec;
+	return pos.getV(argID);
 }
 
 vector<int> fk_IndexFaceSet::getFaceData(int argID)
 {
 	vector<int>		retIF;
-	_st				pNum, i, id;
 
-	if(argID < 0 || argID >= faceSize) return retIF;
-	id = _st(argID);
+	if(argID < 0 || argID >= int(ifs.size()/3)) return retIF;
 
-	switch(type) {
-	  case FK_IF_TRIANGLES:
-		pNum = 3;
-		break;
-	  case FK_IF_QUADS:
-		pNum = 4;
-		break;
-	  default:
-		return retIF;
-	}
+	_st id = _st(argID*3);
 
-	for(i = id*pNum; i < (id+1)*pNum; i++) {
-		retIF.push_back(ifs[i]);
-	}
+	retIF.push_back(ifs[id]);
+	retIF.push_back(ifs[id+1]);
+	retIF.push_back(ifs[id+2]);
 
 	return retIF;
 }
 
 int fk_IndexFaceSet::getFaceData(int argFID, int argVID)
 {
-	int			pNum;
+	if(argFID < 0 || argFID >= int(ifs.size()/3)) return -1;
+	if(argVID < 0 || argVID >= 3) return -1;
 
-	if(argFID < 0 || argFID >= faceSize) return -1;
-
-	switch(type) {
-	  case FK_IF_TRIANGLES:
-		pNum = 3;
-		break;
-	  case FK_IF_QUADS:
-		pNum = 4;
-		break;
-	  default:
-		return -1;
-	}
-
-	if(argVID < 0 || argVID >= pNum) return -1;
-
-	return ifs[_st(argFID * pNum + argVID)];
-}
-
-
-fk_IFType fk_IndexFaceSet::getFaceType(void)
-{
-	return type;
+	return ifs[_st(argFID * 3 + argVID)];
 }
 
 bool fk_IndexFaceSet::moveVPosition(int argID,
@@ -640,16 +606,12 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 {
 	int		trueID = argID - argOrder;
 
-	if(trueID < 0 || trueID >= posSize) return false;
+	if(trueID < 0 || trueID >= pos.getSize()) return false;
 
-	pos[_st(trueID)] = argPos;
+	pos.set(trueID, argPos);
 
 	modifyFlg = true;
-
-	if(find(modifyList.begin(),
-			modifyList.end(), trueID) == modifyList.end()) {
-		modifyList.push_back(trueID);
-	}
+	modifyList.push_back(trueID);
 
 	return true;
 }
@@ -659,19 +621,13 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 									int argOrder)
 {
 	int		trueID = argID - argOrder;
-	_st		id;
 
-	if(trueID < 0 || trueID >= posSize) return false;
-	id = _st(trueID);
+	if(trueID < 0 || trueID >= pos.getSize()) return false;
 
-	pos[id].x = float(argX);
-	pos[id].y = float(argY);
-	pos[id].z = float(argZ);
+	pos.set(trueID, argX, argY, argZ);
+
 	modifyFlg = true;
-	if(find(modifyList.begin(),
-			modifyList.end(), trueID) == modifyList.end()) {
-		modifyList.push_back(trueID);
-	}
+	modifyList.push_back(trueID);
 
 	return true;
 }
@@ -679,22 +635,13 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 bool fk_IndexFaceSet::moveVPosition(int argID, double *argPos, int argOrder)
 {
 	int		trueID = argID - argOrder;
-	_st		id;
 
-	if(trueID < 0 || trueID >= posSize) return false;
-	id = _st(trueID);
+	if(trueID < 0 || trueID >= pos.getSize()) return false;
 
-	pos[id].x = float(argPos[0]);
-	pos[id].y = float(argPos[1]);
-	pos[id].z = float(argPos[2]);
+	pos.set(trueID, argPos[0], argPos[1], argPos[2]);
 
 	modifyFlg = true;
 	modifyList.push_back(trueID);
-
-	if(find(modifyList.begin(),
-			modifyList.end(), trueID) == modifyList.end()) {
-		modifyList.push_back(trueID);
-	}
 
 	return true;
 }
@@ -703,11 +650,11 @@ fk_Vector fk_IndexFaceSet::getPNorm(int argPID, int argOrder)
 {
 	int			trueID = argPID - argOrder;
 
-	if(trueID < 0 || trueID >= int(pNorm.size())) {
+	if(trueID < 0 || trueID >= pNorm.getSize()) {
 		return fk_Vector(0.0, 0.0, 0.0);
 	}
 
-	return fk_Vector(pNorm[_st(trueID)]);
+	return pNorm.getV(trueID);
 }
 
 bool fk_IndexFaceSet::setPNorm(int argPID,

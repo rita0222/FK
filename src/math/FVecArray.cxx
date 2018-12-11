@@ -102,14 +102,14 @@ void fk_FVecArray::clear(void)
 	array.clear();
 }
 
-void fk_FVecArray::push(fk_Vector &argV)
+void fk_FVecArray::push(const fk_Vector &argV)
 {
 	array.push_back(float(argV.x));
 	array.push_back(float(argV.y));
 	array.push_back(float(argV.z));
 }
 
-void fk_FVecArray::push(fk_FVector &argF)
+void fk_FVecArray::push(const fk_FVector &argF)
 {
 	array.push_back(argF.x);
 	array.push_back(argF.y);
@@ -130,7 +130,7 @@ void fk_FVecArray::push(float argX, float argY, float argZ)
 	array.push_back(argZ);
 }
 
-bool fk_FVecArray::set(int argID, fk_Vector &argV)
+bool fk_FVecArray::set(int argID, const fk_Vector &argV)
 {
 	if(argID < 0 || argID >= getSize()) return false;
 
@@ -141,7 +141,7 @@ bool fk_FVecArray::set(int argID, fk_Vector &argV)
 	return true;
 }
 
-bool fk_FVecArray::set(int argID, fk_FVector &argF)
+bool fk_FVecArray::set(int argID, const fk_FVector &argF)
 {
 	if(argID < 0 || argID >= getSize()) return false;
 

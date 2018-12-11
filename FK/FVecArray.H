@@ -15,13 +15,13 @@ namespace FK {
 		int getSize(void);
 		void resize(int);
 		void clear(void);
-		void push(fk_Vector &);
-		void push(fk_FVector &);
+		void push(const fk_Vector &);
+		void push(const fk_FVector &);
 		void push(double, double, double);
 		void push(float, float, float);
 
-		bool set(int, fk_Vector &);
-		bool set(int, fk_FVector &);
+		bool set(int, const fk_Vector &);
+		bool set(int, const fk_FVector &);
 		bool set(int, double, double, double);
 		bool set(int, float, float, float);
 
