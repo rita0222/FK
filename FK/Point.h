@@ -1,7 +1,7 @@
 ﻿#ifndef __FK_POINT_HEADER__
 #define __FK_POINT_HEADER__
 
-#include <FK/Vector.h>
+#include <FK/FVecArray.H>
 #include <FK/Array.H>
 #include <FK/Shape.h>
 
@@ -161,8 +161,8 @@ namespace FK {
 #endif		
 
 	private:
-		std::vector<float>		posArray;
-		std::vector<float>		colArray;
+		fk_FVecArray		posArray;
+		fk_FVecArray		colArray;
 		std::vector<int>		aliveArray;
 
 		bool	MakePoint(std::vector<fk_Vector> *);

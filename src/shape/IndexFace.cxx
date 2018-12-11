@@ -97,6 +97,8 @@ using namespace FK;
 namespace FK {
 	class fk_EdgePair {
 	public:
+		int id[2];
+
 		fk_EdgePair();
 		
 		bool	operator ==(const fk_EdgePair &) const;
@@ -104,9 +106,6 @@ namespace FK {
 		bool	operator <(const fk_EdgePair &) const;
 
 		void	set(int, int);
-		
-	private:
-		int id[2];
 	};		
 }
 
@@ -240,9 +239,7 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 
 	// 頂点データのコピー
 	for(i = 0; i < vData->size(); ++i) {
-		pos.push_back(float((*vData)[i].x));
-		pos.push_back(float((*vData)[i].y));
-		pos.push_back(float((*vData)[i].z));
+		pos.push((*vData)[i]);
 	}
 
 	// 面データのコピー
@@ -275,12 +272,8 @@ void fk_IndexFaceSet::makeIFSet(int argTNum, int argPNum, int *argIF,
 	Init();
 
 	// 頂点データのコピー
-	for(i = 0; i < _st(argVNum); i++) {
-		pos.push_back(float(argPos[i].x));
-		pos.push_back(float(argPos[i].y));
-		pos.push_back(float(argPos[i].z));
-	}
-
+	for(i = 0; i < _st(argVNum); i++) pos.push(argPos[i]);
+	
 	// 面データのコピー
 	for(i = 0; i < _st(argPNum*argTNum); i++) {
 		ifs.push_back(argIF[i] - argOrder);
@@ -295,11 +288,11 @@ void fk_IndexFaceSet::InitPNorm(void)
 {
 	int i;
 
-	pNorm.resize(pos.size());
-	pNormFlg.resize(pos.size()/3);
+	pNorm.resize(pos.getSize());
+	pNormFlg.resize(_st(pos.getSize()));
 	ClearPFlg();
 
-	for(i = 0; i < int(pNormFlg.size()); ++i) {
+	for(i = 0; i < pNorm.getSize(); ++i) {
 		MakePNorm(i);
 	}
 
@@ -315,7 +308,7 @@ void fk_IndexFaceSet::ModifyPNorm(void)
 	if(ifs.empty() == true) return;
 
 	// まだ面法線配列が生成されていない場合
-	if(pNorm.empty() == true) {
+	if(pNorm.getSize() == 0) {
 		InitPNorm();
 		return;
 	}
@@ -351,12 +344,10 @@ void fk_IndexFaceSet::MakePNorm(int argID)
 	if(pNormFlg[id] == char(false)) return;
 
 	v = CalcTriNorm(&ifs[id*3]);
-	pNorm[id*3] = v.x;
-	pNorm[id*3+1] = v.y;
-	pNorm[id*3+2] = v.z;
+	pNorm.set(int(id), v);
 	pNormFlg[id] = char(false);
 
-	if(vNorm.empty() == false) {
+	if(vNorm.getSize() != 0) {
 		for(j = id*3; j < id*3 + 3; ++j) {
 			vNormFlg[_st(ifs[j])] = char(true);
 		}
@@ -379,19 +370,18 @@ void fk_IndexFaceSet::InitVNorm(void)
 {
 	vector<fk_Vector>	normArray;
 	fk_Vector			tmpVec;
-	_st					vNum;
 	_st					i, j;
 
-	if(pNorm.empty() == true) InitPNorm();
+	if(pNorm.getSize() == 0) InitPNorm();
 
-	vNorm.resize(pos.size());
-	vNormFlg.resize(pos.size()/3);
-	normArray.resize(vNormFlg.size());
+	vNorm.resize(pos.getSize());
+	vNormFlg.resize(_st(pos.getSize()));
+	normArray.resize(_st(pos.getSize()));
 
 	for(i = 0; i < normArray.size(); ++i) normArray[i].init();
 
 	for(i = 0; i < ifs.size()/3; ++i) {
-		tmpVec.set(pNorm[i*3], pNorm[i*3+1], pNorm[i*3+2]);
+		tmpVec = pNorm.getV(int(i));
 		for(j = 0; j < 3; ++j) {
 			normArray[_st(ifs[i*3+j])] += tmpVec;
 		}
@@ -399,9 +389,7 @@ void fk_IndexFaceSet::InitVNorm(void)
 
 	for(i = 0; i < normArray.size(); ++i) {
 		normArray[i].normalize();
-		vNorm[3*i] = float(normArray[i].x);
-		vNorm[3*i+1] = float(normArray[i].y);
-		vNorm[3*i+2] = float(normArray[i].z);
+		vNorm.set(int(i), normArray[i]);
 	}
 
 	ClearVFlg();
@@ -414,10 +402,10 @@ void fk_IndexFaceSet::ModifyVNorm(void)
 	_st				i, j, loopID;
 
 	// 形状が定義されていない場合
-	if(faceSize < 0) return;
+	if(ifs.empty()) return;
 
 	// まだ頂点法線配列が生成されていない場合
-	if(vNorm.empty() == true) {
+	if(vNorm.getSize() == 0) {
 		InitVNorm();
 		return;
 	}
@@ -428,25 +416,16 @@ void fk_IndexFaceSet::ModifyVNorm(void)
 	// 面法線情報を再計算
 	ModifyPNorm();
 
-	switch(type) {
-	  case FK_IF_TRIANGLES:
-		break;
-	  case FK_IF_QUADS:
-		break;
-	  default:
-		return;
-	}
-
-	for(i = 0; i < _st(posSize); i++) {
+	for(i = 0; i < _st(pos.getSize()); ++i) {
 		if(vNormFlg[i] == char(true)) {
 			norm.init();
 			for(j = 0; j < loopStack[i].size(); j++) {
 				loopID = _st(loopStack[i][j]);
-				tmpV = pNorm[loopID];
+				tmpV = pNorm.getV(int(loopID));
 				norm += tmpV;
 			}
 			norm.normalize();
-			vNorm[i] = norm;
+			vNorm.set(int(i), norm);
 			vNormFlg[i] = char(false);
 		}
 	}
@@ -458,7 +437,7 @@ void fk_IndexFaceSet::ClearVFlg(void)
 {
 	_st		i;
 
-	for(i = 0; i < _st(posSize); i++) {
+	for(i = 0; i < _st(pos.getSize()); ++i) {
 		vNormFlg[i] = char(false);
 	}
 	return;
@@ -470,8 +449,8 @@ fk_FVector fk_IndexFaceSet::CalcTriNorm(int *argIF)
 	fk_Vector	retNorm;
 	fk_Vector	triV[3];
 
-	for(i = 0; i < 3; i++) {
-		triV[i] = pos[_st(argIF[i])];
+	for(i = 0; i < 3; ++i) {
+		triV[i] = pos.getV(argIF[i]);
 	}
 
 	retNorm = (triV[1] - triV[0]) ^ (triV[2] - triV[1]);
@@ -491,7 +470,7 @@ fk_FVector fk_IndexFaceSet::CalcPolyNorm(int argNum, int *argIF)
 
 	if(argNum < 4) return sumNorm;
 	for(i = 0; i < _st(argNum); i++) {
-		tmpVec = pos[_st(argIF[i])];
+		tmpVec = pos.getV(argIF[i]);
 		posArray.push_back(tmpVec);
 	}
 
@@ -515,30 +494,19 @@ fk_FVector fk_IndexFaceSet::CalcPolyNorm(int argNum, int *argIF)
 	}
 
 	sumNorm.normalize();
-	return static_cast<fk_FVector(sumNorm);
+	return static_cast<fk_FVector>(sumNorm);
 }
 
 void fk_IndexFaceSet::MakeLoopTable(void)
 {
-	_st		i, j, vNum, vID;
-
-	switch(type) {
-	  case FK_IF_TRIANGLES:
-		vNum = 3;
-		break;
-	  case FK_IF_QUADS:
-		vNum = 4;
-		break;
-	  default:
-		return;
-	}
+	_st		i, j, vID;
 
 	loopStack.clear();
-	loopStack.resize(_st(posSize));
+	loopStack.resize(_st(pos.getSize()));
 
-	for(i = 0; i < _st(faceSize); i++) {
-		for(j = 0; j < vNum; j++) {
-			vID = _st(ifs[i*vNum + j]);
+	for(i = 0; i < ifs.size()/3; i++) {
+		for(j = 0; j < 3; j++) {
+			vID = _st(ifs[i*3 + j]);
 			loopStack[vID].push_back(int(i));
 		}
 	}
@@ -546,51 +514,44 @@ void fk_IndexFaceSet::MakeLoopTable(void)
 	return;
 }
 
-void fk_IndexFaceSet::MakeEdgeSet(void)
+void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 {
-	vector< vector<int> >	edgeTable;
-	_st						i, j, pSize;
-	_st						tmpV1, tmpV2, v1, v2;
+	fk_HeapBase<fk_EdgePair>	edgeHeap;
+	vector<fk_EdgePair>			edgeArray;
+	_st							i, j;
+	int							id1, id2;
+	vector<char>				edgeFlg;
 
-	switch(type) {
-	  case FK_IF_TRIANGLES:
-		pSize = 3;
-		break;
-	  case FK_IF_QUADS:
-		pSize = 4;
-		break;
-	  default:
-		return;
+	for(i = 0; i < argLoop->size(); ++i) {
+		for(j = 1; j < (*argLoop)[i].size(); ++j) {
+			id1 = (*argLoop)[i][j-1];
+			id2 = (*argLoop)[i][j];
+			edgeArray.resize(edgeArray.size()+1);
+			edgeArray[edgeArray.size()-1].set(id1, id2);
+		}
+		id1 = (*argLoop)[i][(*argLoop)[i].size()-1];
+		id2 = (*argLoop)[i][0];
+		edgeArray.resize(edgeArray.size()+1);
+		edgeArray[edgeArray.size()-1].set(id1, id2);
 	}
 
-	for(i = 0; i < _st(faceSize); i++) {
-		for(j = 0; j < pSize; j++) {
-			tmpV1 = _st(ifs[i*pSize+j]);
-			if(j == pSize-1) {
-				tmpV2 = _st(ifs[i*pSize]);
-			} else {
-				tmpV2 = _st(ifs[i*pSize+j+1]);
-			}
-
-			if(tmpV1 < tmpV2) {
-				v1 = tmpV1; v2 = tmpV2;
-			} else {
-				v1 = tmpV2; v2 = tmpV1;
-			}
-
-			if(edgeTable.size() <= v1) edgeTable.resize(v1+1);
-
-			if(find(edgeTable[v1].begin(),
-					edgeTable[v1].end(), v2) == edgeTable[v1].end()) {
-				edgeTable[v1].push_back(int(v2));
-			}
+	int maxID = -1;
+	edgeFlg.resize(edgeArray.size());
+	for(i = 0; i < edgeArray.size(); ++i) {
+		int tmpID = edgeHeap.getID(&edgeArray[i]);
+		if(maxID < tmpID) {
+			edgeFlg[i] = char(true);
+			maxID = tmpID;
+		} else {
+			edgeFlg[i] = char(false);
 		}
 	}
-
-	for(i = 0; i < edgeTable.size(); i++) {
-		for(j = 0; j < edgeTable[i].size(); j++) {
-			edgeSet.push_back(int(i));
-			edgeSet.push_back(edgeTable[i][j]);
+	
+	edgeSet.clear();
+	for(i = 0; i < edgeArray.size(); ++i) {
+		if(edgeFlg[i] == char(true)) {
+			edgeSet.push_back(edgeArray[i].id[0]);
+			edgeSet.push_back(edgeArray[i].id[1]);
 		}
 	}
 

@@ -1,6 +1,7 @@
 ﻿#ifndef __FK_INDEXFACE_HEADER__
 #define __FK_INDEXFACE_HEADER__
 
+#include <FK/FVecArray.H>
 #include <FK/ParserBase.H>
 #include <FK/ParserData.h>
 #include <list>
@@ -1336,10 +1337,10 @@ namespace FK {
 	private:
 
 		fk_Palette						localPalette;
-		std::vector<float>				pos;
-		std::vector<float>				timeOrgPos;
-		std::vector<float>				vNorm;
-		std::vector<float>				pNorm;
+		fk_FVecArray					pos;
+		fk_FVecArray					timeOrgPos;
+		fk_FVecArray					vNorm;
+		fk_FVecArray					pNorm;
 		std::vector<int>				ifs;
 		std::vector<int>				edgeSet;
 		std::vector< std::vector<int> >	loopStack;

@@ -1,6 +1,7 @@
 ﻿#ifndef __FK_LINE_HEADER__
 #define __FK_LINE_HEADER__
 
+#include <FK/FVecArray.H>
 #include <FK/Solid.h>
 
 namespace FK {
@@ -149,8 +150,8 @@ namespace FK {
 		
 
 	private:
-		std::vector<float>		posArray;
-		std::vector<float>		colArray;
+		fk_FVecArray	posArray;
+		fk_FVecArray	colArray;
 
 		void MakeLines(std::vector<fk_Vector> *);
 		void MakeLines(fk_Vector *);
