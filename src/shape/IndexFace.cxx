@@ -662,8 +662,8 @@ bool fk_IndexFaceSet::setPNorm(int argPID,
 {
 	int			trueID = argPID - argOrder;
 
-	if(trueID < 0 || trueID >= int(pNorm.size())) return false;
-	pNorm[_st(trueID)] = argVec;
+	if(trueID < 0 || trueID >= pNorm.getSize()) return false;
+	pNorm.set(trueID, argVec);
 	return true;
 }
 
@@ -671,10 +671,11 @@ fk_Vector fk_IndexFaceSet::getVNorm(int argVID, int argOrder)
 {
 	int			trueID = argVID - argOrder;
 
-	if(trueID < 0 || trueID >= int(vNorm.size())) {
+	if(trueID < 0 || trueID >= vNorm.getSize()) {
 		return fk_Vector(0.0, 0.0, 0.0);
 	}
-	return fk_Vector(vNorm[_st(trueID)]);
+
+	return vNorm.getV(trueID);
 }
 
 bool fk_IndexFaceSet::setVNorm(int argVID,
@@ -682,39 +683,25 @@ bool fk_IndexFaceSet::setVNorm(int argVID,
 {
 	int			trueID = argVID - argOrder;
 
-	if(trueID < 0 || trueID >= int(vNorm.size())) return false;
-	vNorm[_st(trueID)] = argVec;
-	return true;
-}
-
-bool fk_IndexFaceSet::setElemMaterialID(int argIndex, int argColor)
-{
-	_st		index = _st(argIndex);
-
-	if(argIndex < 0 || index >= colorID.size()) {
-		return false;
-	}
-
-	colorID[index] = argColor;
-	colorFlg = true;
+	if(trueID < 0 || trueID >= vNorm.getSize()) return false;
+	vNorm.set(trueID, argVec);
 
 	return true;
 }
 
-int fk_IndexFaceSet::getElemMaterialID(int argIndex)
+bool fk_IndexFaceSet::setElemMaterialID(int, int)
 {
-	_st		index = _st(argIndex);
+	return true;
+}
 
-	if(argIndex < 0 || index >= colorID.size()) {
-		return -1;
-	}
-
-	return colorID[index];
+int fk_IndexFaceSet::getElemMaterialID(int)
+{
+	return -1;
 }
 
 void fk_IndexFaceSet::flush(void)
 {
-	if(pNorm.empty() == true) {
+	if(pNorm.getSize() == 0) {
 		ModifyPNorm();
 	} else {
 		ModifyVNorm();
@@ -977,7 +964,7 @@ void fk_IndexFaceSet::setBlockSize(double argX, double argY, double argZ)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(posSize != 8 || faceSize != 6) return;
+	if(pos.getSize() != 8 || ifs.size() != 24) return;
 
 	for(i = 0; i < 8; i++) {
 		moveVPosition(i, argX * vParam[i][0],
@@ -991,6 +978,7 @@ void fk_IndexFaceSet::setBlockSize(double argSize, fk_Axis argAxis)
 {
 	fk_Vector			newPos;
 	int					i;
+
 	const static double vParam[8][3] = {
 		{0.5, 0.5, 0.5},
 		{-0.5, 0.5, 0.5},
@@ -1002,9 +990,9 @@ void fk_IndexFaceSet::setBlockSize(double argSize, fk_Axis argAxis)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(posSize != 8 || faceSize != 6) return;
+	if(pos.getSize() != 8 || ifs.size() != 24) return;
 
-	newPos = pos[0];
+	newPos = pos.getV(0);
 	newPos *= 2.0;
 
 	switch(argAxis) {
@@ -1038,6 +1026,7 @@ void fk_IndexFaceSet::setBlockScale(double argScale, fk_Axis argAxis)
 {
 	fk_Vector		newPos;
 	int				i;
+
 	const static double vParam[8][3] = {
 		{0.5, 0.5, 0.5},
 		{-0.5, 0.5, 0.5},
@@ -1049,8 +1038,8 @@ void fk_IndexFaceSet::setBlockScale(double argScale, fk_Axis argAxis)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(posSize != 8 || faceSize != 6) return;
-	newPos = pos[0];
+	if(pos.getSize() != 8 || ifs.size() != 24) return;
+	newPos = pos.getV(0);
 	newPos *= 2.0;
 
 	switch(argAxis) {
@@ -1079,6 +1068,7 @@ void fk_IndexFaceSet::setBlockScale(double argX, double argY, double argZ)
 {
 	fk_Vector		newPos;
 	int				i;
+
 	const static double vParam[8][3] = {
 		{0.5, 0.5, 0.5},
 		{-0.5, 0.5, 0.5},
@@ -1090,7 +1080,7 @@ void fk_IndexFaceSet::setBlockScale(double argX, double argY, double argZ)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(posSize != 8 || faceSize != 6) return;
+	if(pos.getSize() != 8 || ifs.size() != 24) return;
 	newPos.set(double(pos[0].x)*2.0*argX,
 			   double(pos[0].y)*2.0*argY,
 			   double(pos[0].z)*2.0*argZ);
