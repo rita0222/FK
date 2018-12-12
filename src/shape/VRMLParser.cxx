@@ -96,6 +96,8 @@ bool fk_VRMLParser::ReadVRMLFile(string argFileName,
 	vector< vector<int> >	IndexFaceSet;
 	vector<int>				ColIDArray;
 
+	FK_UNUSED(argMaterialFlag);
+
 	if(meshData == nullptr) return false;
 
 	if(ifs.fail()) return false;
@@ -115,11 +117,14 @@ bool fk_VRMLParser::ReadVRMLFile(string argFileName,
 				  &ColIDArray, argSolidFlag);
 
 	meshData->Init();
+	/*
 	if(meshData->MakeMesh(&VecSet, &IndexFaceSet,
 						  &ColIDArray, argSolidFlag) == false) {
+	*/
+	if(meshData->MakeMesh(&VecSet, &IndexFaceSet, argSolidFlag) == false) {
 		return false;
 	}
-
+/*
 	if(argMaterialFlag == true) {
 		if(meshData->getPaletteSize() == 0) {
 			meshData->setMaterialMode(FK_CHILD_MODE);
@@ -129,7 +134,7 @@ bool fk_VRMLParser::ReadVRMLFile(string argFileName,
 	} else {
 		meshData->setMaterialMode(FK_CHILD_MODE);
 	}
-
+*/
 	return true;
 }
 

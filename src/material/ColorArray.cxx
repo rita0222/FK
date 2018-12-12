@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  *
  *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
  *
@@ -69,207 +69,108 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
 #define FK_DEF_SIZETYPE
-#include <FK/RDSParser.H>
+#include <FK/ColorArray.H>
 
 using namespace std;
 using namespace FK;
 
-fk_RDSParser::fk_RDSParser(void)
+fk_ColorArray::fk_ColorArray(void)
 {
-	return;
+	array.clear();
 }
 
-fk_RDSParser::~fk_RDSParser()
+fk_ColorArray::fk_ColorArray(int argSize)
 {
-	return;
+	array.resize(_st(argSize*4));
 }
 
-bool fk_RDSParser::ReadRDSFile(string argFileName, bool argSolidFlg)
+fk_ColorArray::~fk_ColorArray() {}
+
+int fk_ColorArray::getSize(void)
 {
-	ifstream				ifs(argFileName);
-	vector<fk_Vector>		vData;
-	vector<int>				vMap;
-	vector< vector<int> >	lIndex;
-
-	if(meshData == nullptr) return false;
-
-	if(ifs.fail()) return false;
-
-	if(CheckRDSFile(ifs) == false) {
-		ifs.close();
-		return false;
-	}
-
-	if(ReadRDSVertexData(ifs, &vData, &vMap, argSolidFlg) == false) {
-		ifs.close();
-		return false;
-	}
-
-	ifs.seekg(0, ios_base::beg);
-
-	if(ReadRDSPolygonData(ifs, &lIndex, &vMap) == false) {
-		ifs.close();
-		return false;
-	}
-
-	ifs.close();
-
-	meshData->Init();
-
-	return meshData->MakeMesh(&vData, &lIndex, argSolidFlg);
+	return int(array.size()/4);
 }
 
-bool fk_RDSParser::CheckRDSFile(ifstream &argIFS)
+void fk_ColorArray::resize(int argSize)
 {
-	string		lineString;
+	array.resize(_st(argSize*4));
+}
 
-	getline(argIFS, lineString);
+void fk_ColorArray::clear(void)
+{
+	array.clear();
+}
 
-	if(lineString.find("3DC") != 0) {
-		return false;
+void fk_ColorArray::push(const fk_Color &argC)
+{
+	for(_st i = 0; i < 4; ++i) array.push_back(argC.col[i]);
+}
+
+void fk_ColorArray::push(double argR, double argG, double argB, double argA)
+{
+	array.push_back(float(argR));
+	array.push_back(float(argG));
+	array.push_back(float(argB));
+	array.push_back(float(argA));
+}
+
+void fk_ColorArray::push(float argR, float argG, float argB, float argA)
+{
+	array.push_back(argR);
+	array.push_back(argG);
+	array.push_back(argB);
+	array.push_back(argA);
+}
+
+bool fk_ColorArray::set(int argID, const fk_Color &argC)
+{
+	if(argID < 0 || argID >= getSize()) return false;
+
+	_st	id = _st(argID*4);
+	for(_st i = 0; i < 4; ++i) {
+		array[id+i] = argC.col[i];
 	}
-
 	return true;
 }
 
-bool fk_RDSParser::ReadRDSVertexData(ifstream &argIFS, vector<fk_Vector> *argVData,
-									 vector<int> *argVMap, bool solidFlg)
+bool fk_ColorArray::set(int argID, double argR, double argG, double argB, double argA)
 {
-	string					lineStr;
-	string					coordStr;
-	fk_Vector				tmpVec;
-	bool					startFlg, existFlg;
-	int						tabNum, vTagNum;
-	string::size_type		numS;
-	_st						size;
-	int						index;
-	fk_HeapBase<fk_Vector>	heap;
+	if(argID < 0 || argID >= getSize()) return false;
 
-
-	startFlg = false;
-	vTagNum = 0;
-	tabNum = 0;
-	argVMap->clear();
-
-	while(getline(argIFS, lineStr)) {
-		lineStr += "\n";
-		if(tabNum == 0) {
-			if(lineStr.find("Vrts") != string::npos) {
-				tabNum++;
-				startFlg = true;
-				continue;
-			}
-
-			if(lineStr.find("vmda") != string::npos) {
-				vTagNum = static_cast<int>(argVData->size());
-				heap.clear();
-				continue;
-			}
-		}
-
-		if(startFlg == true) {
-			if(lineStr.find("VerS") != string::npos) {
-				tabNum++;
-			} else if(lineStr.find("Posn") != string::npos) {
-				numS = lineStr.find_first_of("0123456789-.");
-				coordStr = lineStr.substr(numS, string::npos);
-				tmpVec.x = Str2Double(PopWord(&coordStr));
-				tmpVec.y = Str2Double(PopWord(&coordStr));
-				tmpVec.z = Str2Double(PopWord(&coordStr));
-
-				if(solidFlg == true) {
-
-					size = argVData->size();
-					existFlg = false;
-
-					index = heap.getID(&tmpVec) + vTagNum - 1;
-					if(index != static_cast<int>(size)) {
-						argVMap->push_back(index);
-						existFlg = true;
-					}
-
-					if(existFlg == false) {
-						argVMap->push_back(static_cast<int>(argVData->size()));
-						argVData->push_back(tmpVec);
-					}
-
-				} else {
-					argVMap->push_back(static_cast<int>(argVData->size()));
-					argVData->push_back(tmpVec);
-				}
-
-			} else if(lineStr.find("}") != string::npos) {
-				tabNum--;
-			}
-
-			if(tabNum == 0) {
-				startFlg = false;
-			}
-		}
-	}
-
+	_st	id = _st(argID*4);
+	array[id] = float(argR);
+	array[id+1] = float(argG);
+	array[id+2] = float(argB);
+	array[id+3] = float(argA);
 	return true;
 }
 
-bool fk_RDSParser::ReadRDSPolygonData(ifstream &argIFS,
-									  vector< vector<int> > *argLIndex,
-									  vector<int> *argVMap)
+bool fk_ColorArray::set(int argID, float argR, float argG, float argB, float argA)
 {
-	string				lineStr;
-	string				subStr;
-	string::size_type	numTag, tag;
-	bool				startFlg;
-	int					vtNum, vID, tmpVID;
-	vector<int>			polyIndex;
+	if(argID < 0 || argID >= getSize()) return false;
 
-	startFlg = false;
-	vtNum = -1;
-
-	while(getline(argIFS, lineStr)) {
-		lineStr += "\n";
-		if(lineStr.find("Pgns") != string::npos) {
-			startFlg = true;
-			continue;
-		}
-
-		if(startFlg == true) {
-			if((tag = lineStr.find("PgSz")) != string::npos) {
-
-				subStr = lineStr.substr(tag + 5, string::npos);
-				vtNum = Str2Int(PopWord(&subStr));
-
-			} else if((tag = lineStr.find("Pgon")) != string::npos) {
-
-				numTag = 0;
-				tag += 5;
-				polyIndex.clear();
-				while(numTag != string::npos) {
-					numTag = lineStr.find(",", tag);
-					subStr = lineStr.substr(tag, numTag - 1);
-					tmpVID = atoi(subStr.c_str());
-
-					if(tmpVID >= static_cast<int>(argVMap->size())) {
-						return false;
-					}
-
-					vID = (*argVMap)[static_cast<_st>(tmpVID)] + 1;
-					polyIndex.push_back(vID);
-					tag = numTag + 1;
-				}
-
-				if(polyIndex.size() != static_cast<_st>(vtNum)) {
-					return false;
-				} else {
-					argLIndex->push_back(polyIndex);
-				}
-
-			} else if(lineStr.find("}") != string::npos) {
-				startFlg = false;
-			}
-		}
-	}
-
+	_st	id = _st(argID*4);
+	array[id] = argR;
+	array[id+1] = argG;
+	array[id+2] = argB;
+	array[id+3] = argA;
 	return true;
+}
+
+fk_Color fk_ColorArray::get(int argID)
+{
+	fk_Color tmp(0.0, 0.0, 0.0, 1.0);
+	if(argID < 0 || argID >= getSize()) return tmp;
+
+	_st	id = _st(argID*4);
+	for(_st i = 0; i < 4; ++i) {
+		tmp.col[i] = array[id+i];
+	}
+	return tmp;
+}
+
+vector<float> * fk_ColorArray::getP(void)
+{
+	return &array;
 }

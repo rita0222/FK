@@ -345,8 +345,11 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 		}
 
 		meshData->Init();
+		/*
 		if(meshData->MakeMesh(&optVData, &fData,
 							  &cIDData, argSolidFlg) == false) {
+		*/
+		if(meshData->MakeMesh(&optVData, &fData, argSolidFlg) == false) {
 			return false;
 		}
 

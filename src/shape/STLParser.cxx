@@ -111,8 +111,7 @@ bool fk_STLParser::ReadSTLFile(string argFileName, bool argSolidFlag, double)
 	   
 	ifs.close();
 
-	return meshData->MakeMesh(&VecSet, &IndexFaceSet,
-							  nullptr, argSolidFlag);
+	return meshData->MakeMesh(&VecSet, &IndexFaceSet, argSolidFlag);
 }
 
 bool fk_STLParser::CheckSTLFile(ifstream *argIFS)

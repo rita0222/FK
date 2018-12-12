@@ -1,4 +1,40 @@
-﻿ /****************************************************************************
+﻿#ifndef __FK_COLORARRAY_HEADER__
+#define __FK_COLORARRAY_HEADER__
+
+#include <FK/Material.h>
+
+namespace FK {
+	class fk_ColorArray {
+
+	public:
+		fk_ColorArray(void);
+		fk_ColorArray(int);
+
+		~fk_ColorArray();
+
+		int getSize(void);
+		void resize(int);
+		void clear(void);
+		void push(const fk_Color &);
+		void push(double, double, double, double = 1.0);
+		void push(float, float, float, float = 1.0);
+
+		bool set(int, const fk_Color &);
+		bool set(int, double, double, double, double = 1.0);
+		bool set(int, float, float, float, float = 1.0);
+
+		fk_Color get(int);
+
+		std::vector<float> * getP(void);
+
+	private:
+		std::vector<float>	array;
+	};
+}
+
+#endif /* !__FK_COLORARRAY_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
  *
@@ -69,143 +105,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-#define FK_DEF_SIZETYPE
-#include <FK/Point.h>
-//#include <FK/Window.h>
-
-using namespace std;
-using namespace FK;
-
-fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
-{
-	SetObjectType(FK_POINT);
-	allClear();
-	MakePoint(argVertexSet);
-
-	setShaderAttribute("fk_point_elem_position", 3, posArray.getP());
-	setShaderAttribute("fk_point_elem_color", 4, colArray.getP());
-	setShaderAttribute("fk_point_elem_alive", 1, &aliveArray);
-	return;
-}
-
-fk_Point::~fk_Point()
-{
-	return;
-}
-
-bool fk_Point::MakePoint(int argNum, fk_Vector *argP)
-{
-	int				i;
-
-	if(argNum < 0) return false;
-	if(argP == nullptr) return false;
-
-	posArray.clear();
-	colArray.clear();
-	aliveArray.clear();
-
-	for(i = 0; i < argNum; i++) {
-		pushVertex(argP[i]);
-	}
-
-	return true;
-}
-
-bool fk_Point::MakePoint(vector<fk_Vector> *argP)
-{
-	if(argP == nullptr) return false;
-	return MakePoint(int(argP->size()), &(argP->at(0)));
-}
-
-int fk_Point::pushVertex(fk_Vector argPos)
-{
-	posArray.push(argPos);
-	colArray.push(0.0, 0.0, 0.0, 1.0);
-	aliveArray.push_back(FK_SHAPE_ALIVE);
-
-	return int(aliveArray.size() - 1);
-}
-
-bool fk_Point::setVertex(int argID, fk_Vector argPos)
-{
-	if(argID < 0 || argID >= posArray.getSize()) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
-	posArray.set(argID, argPos);
-	return true;
-}
-
-bool fk_Point::setVertex(int argNum, fk_Vector *argPosArray)
-{
-	return MakePoint(argNum, argPosArray);
-}
-
-bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)
-{
-	return MakePoint(argPosArray);
-}
-
-bool fk_Point::removeVertex(int argID)
-{
-	if(argID < 0 || argID >= int(aliveArray.size())) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
-	aliveArray[_st(argID)] = FK_SHAPE_DEAD;
-
-	return true;
-}
-
-fk_Vector fk_Point::getVertex(int argID)
-{
-	fk_Vector tmp(0.0, 0.0, 0.0);
-	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return tmp;
-	
-	return posArray.getV(argID);
-}
-
-int fk_Point::getSize(void)
-{
-	return int(aliveArray.size());
-}
-
-void fk_Point::allClear(void)
-{
-	posArray.clear();
-	colArray.clear();
-	aliveArray.clear();
-	return;
-}
-
-void fk_Point::setColor(int argID, fk_Color argCol)
-{
-	if(argID < 0 || argID >= colArray.getSize()) return;
-	colArray.set(argID, argCol);
-	return;
-}
-
-void fk_Point::setColor(int argID, fk_Color *argCol)
-{
-	if(argID < 0 || argID >= colArray.getSize()) return;
-	colArray.set(argID, *argCol);
-	return;
-}
-
-fk_Color fk_Point::getColor(int argID)
-{
-	return colArray.get(argID);
-}
-
-void fk_Point::setDrawMode(int argID, bool argMode)
-{
-	if(argID < 0 || argID >= int(aliveArray.size())) return;
-	aliveArray[_st(argID)] = (argMode) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
-}
-
-bool fk_Point::getDrawMode(int argID)
-{
-	if(argID < 0 || argID >= int(aliveArray.size())) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
-	return false;
-}
-	
-void fk_Point::setColorID(int, int) { return; }
-int fk_Point::getColorID(int) { return 0; }

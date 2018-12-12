@@ -661,20 +661,6 @@ namespace FK {
 		 */
 		fk_Vector	getVNorm(int vertexID, int order = 0);
 
-		//! マテリアルID取得関数
-		/*!
-		 *	面に対して個別に設定してあるマテリアル ID を取得します。
-		 *	マテリアルの個別設定については
-		 *	fk_Shape::setMaterialMode() および
-		 *	fk_Shape::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	faceID		面ID
-		 *
-		 *	\return		マテリアルID
-		 *
-		 *	\sa setElemMaterialID(), fk_Shape
-		 */
-		int		getElemMaterialID(int faceID);
 		//@}
 
 		//! \name 汎用形状操作関数
@@ -833,22 +819,6 @@ namespace FK {
 		 */
 		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
-		//! マテリアルID設定関数
-		/*!
-		 *	面に対してマテリアルIDを設定します。
-		 *	マテリアルの個別設定については
-		 *	fk_Shape::setMaterialMode() および
-		 *	fk_Shape::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	faceID		面ID
-		 *
-		 *	\param[in]	materialID	マテリアルID
-		 *
-		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
-		 *
-		 *	\sa getElemMaterialID, fk_Shape
-		 */
-		bool	setElemMaterialID(int faceID, int materialID);
 
 		//! 法線ベクトル強制計算関数 
 		/*!
@@ -1324,7 +1294,7 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 		bool				MakeMesh(std::vector<fk_Vector> *,
-									 std::vector< std::vector<int> > *, bool);
+									 std::vector< std::vector<int> > *, bool = true);
 
 
 		fk_D3DXAnimation *	GetAnimation(void);
@@ -1332,6 +1302,9 @@ namespace FK {
 		void				PosPrint(std::string);
 
 		//fk_IFType	getFaceType(void);
+
+		int		getElemMaterialID(int);
+		bool	setElemMaterialID(int, int);
 #endif
 
 	private:

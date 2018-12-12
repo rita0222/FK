@@ -28,7 +28,7 @@ namespace FK {
 		fk_Vector getV(int);
 		fk_FVector getF(int);
 
-		float * getP(void);
+		std::vector<float> * getP(void);
 
 	private:
 		std::vector<float>	array;

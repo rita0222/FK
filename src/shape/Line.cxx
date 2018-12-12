@@ -81,8 +81,8 @@ fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 	allClear();
 	MakeLines(argVertexPos);
 
-	setShaderAttribute("fk_line_elem_position", 3, &posArray);
-	setShaderAttribute("fk_line_elem_color", 4, &colArray);
+	setShaderAttribute("fk_line_elem_position", 3, posArray.getP());
+	setShaderAttribute("fk_line_elem_color", 4, colArray.getP());
 	return;
 }
 
@@ -93,19 +93,13 @@ fk_Line::~fk_Line()
 
 void fk_Line::SetPos(int argEID, int argVID, fk_Vector *argV)
 {
-	_st pID = _st(argEID*6 + argVID*3);
-	posArray[pID] = float(argV->x);
-	posArray[pID+1] = float(argV->y);
-	posArray[pID+2] = float(argV->z);
+	posArray.set(argEID*2 + argVID, *argV);
 	return;
 }
 
 void fk_Line::SetCol(int argEID, int argVID, fk_Color *argC)
 {
-	_st pID = _st(argEID*8 + argVID*4);
-	for(_st i = 0; i < 4; i++) {
-		colArray[pID+i] = argC->col[i];
-	}
+	colArray.set(argEID*2 + argVID, *argC);
 	return;
 }
 
@@ -119,10 +113,10 @@ void fk_Line::MakeLines(vector<fk_Vector> *argVPos)
 
 	fk_Color col(0.0, 0.0, 0.0, 1.0);
 
-	posArray.resize(argVPos->size() * 3);
-	colArray.resize(argVPos->size() * 4);
+	posArray.resize(int(argVPos->size()));
+	colArray.resize(int(argVPos->size()));
 
-	for(int i = 0; i < int(argVPos->size()/2); ++i) {
+	for(int i = 0; i < posArray.getSize(); ++i) {
 		SetPos(i, 0, &(*argVPos)[_st(i*2)]);
 		SetPos(i, 1, &(*argVPos)[_st(i*2+1)]);
 		SetCol(i, 0, &col);
@@ -145,26 +139,17 @@ void fk_Line::MakeLines(fk_Vector *argVPos)
 
 void fk_Line::PushLines(fk_Vector *argS, fk_Vector *argE)
 {
-	posArray.push_back(float(argS->x));
-	posArray.push_back(float(argS->y));
-	posArray.push_back(float(argS->z));
-	posArray.push_back(float(argE->x));
-	posArray.push_back(float(argE->y));
-	posArray.push_back(float(argE->z));
-
-	for(_st i = 0; i < 2; ++i) {
-		for(_st j = 0; j < 3; ++j) {
-			colArray.push_back(0.0f);
-		}
-		colArray.push_back(1.0f);
-	}
+	posArray.push(*argS);
+	posArray.push(*argE);
+	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
+	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 bool fk_Line::setVertex(int argID, fk_Vector argPos)
 {
 	if(argID != 0 && argID != 1) return false;
-	posArray.resize(6);
-	colArray.resize(8);
+	posArray.resize(2);
+	colArray.resize(2);
 
 	SetPos(0, argID, &argPos);
 	return true;
@@ -213,7 +198,7 @@ bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
 
 int fk_Line::getSize(void)
 {
-	return int(posArray.size()/6);
+	return posArray.getSize()/2;
 }
 
 void fk_Line::allClear(void)
@@ -236,13 +221,5 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 
 fk_Color fk_Line::getColor(int argID)
 {
-	fk_Color tmpCol(0.0, 0.0, 0.0, 1.0);
-
-	if(argID < 0 || argID >= getSize()) return tmpCol;
-	_st cID = _st(argID*8);
-	for(_st i = 0; i < 4; ++i) {
-		tmpCol.col[i] = colArray[cID+i];
-	}
-	return tmpCol;
+	return colArray.get(argID);
 }
-

@@ -198,8 +198,7 @@ fk_FVector fk_FVecArray::getF(int argID)
 	return tmp;
 }
 
-float * fk_FVecArray::getP(void)
+vector<float> * fk_FVecArray::getP(void)
 {
-	if(array.empty()) return nullptr;
-	return array.data();
+	return &array;
 }
