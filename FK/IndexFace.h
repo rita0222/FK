@@ -1346,7 +1346,6 @@ namespace FK {
 		fk_FVector			CalcPolyNorm(int, int *);
 		void				MakeLoopTable(void);
 		void				MakeEdgeSet(std::vector< std::vector<int> > *);
-		void				MakeEdgeSet(int);
 
 		void				Init(void);
 

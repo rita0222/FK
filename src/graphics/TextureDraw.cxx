@@ -101,24 +101,6 @@ fk_TextureDraw::~fk_TextureDraw()
 	ClearTextureMemory();
 	return;
 }
-
-void fk_TextureDraw::ReleaseTexture_(fk_Image *argImage)
-{
-	if(argImage->GetTexID() == 0) return;
-	for(_st i = 0; i < texNameArray.size(); ++i) {
-		if(argImage->GetTexID() == texNameArray[i]) {
-			const fk_Dimension *bufSize = argImage->getBufferSize();
-			glDeleteTextures(1, &texNameArray[i]);
-			fk_Texture::ClearTexState(argImage);
-			texNameArray[i] = 0;
-			texImageArray[i] = nullptr;
-			texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
-			break;
-		}
-	}
-	return;
-}	
-
 void fk_TextureDraw::SetArrayState(bool argState)
 {
 	arrayState = argState;
@@ -138,6 +120,8 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag)
 	GLboolean	texStatus;
 	fk_TexID	texID;
 
+	FK_UNUSED(argLightFlag);
+	
 	if((argObj->getDrawMode() & FK_TEXTUREMODE) == FK_NONEMODE) return;
 	texObj = static_cast<fk_Texture *>(argObj->getShape());
 
@@ -161,9 +145,9 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag)
 	}
 
 	if(mateID == FK_UNDEFINED) {
-		fk_FaceDraw::CommonMateSet(argObj, argLightFlag, true);
+		//fk_FaceDraw::CommonMateSet(argObj, argLightFlag, true);
 	} else {
-		fk_FaceDraw::LocalMateSet(texObj->getMaterial(mateID), argLightFlag);
+		//fk_FaceDraw::LocalMateSet(texObj->getMaterial(mateID), argLightFlag);
 	}
 
 	// (必要なら)テクスチャオブジェクトの生成 
@@ -200,6 +184,25 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag)
    
 	return;
 }
+
+
+void fk_TextureDraw::ReleaseTexture_(fk_Image *argImage)
+{
+	if(argImage->GetTexID() == 0) return;
+	for(_st i = 0; i < texNameArray.size(); ++i) {
+		if(argImage->GetTexID() == texNameArray[i]) {
+			const fk_Dimension *bufSize = argImage->getBufferSize();
+			glDeleteTextures(1, &texNameArray[i]);
+			fk_Texture::ClearTexState(argImage);
+			texNameArray[i] = 0;
+			texImageArray[i] = nullptr;
+			texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+			break;
+		}
+	}
+	return;
+}	
+
 
 void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 {

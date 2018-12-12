@@ -267,20 +267,27 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 void fk_IndexFaceSet::makeIFSet(int argTNum, int argPNum, int *argIF,
 								int argVNum, fk_Vector *argPos, int argOrder)
 {
-	_st		i;
+	vector<fk_Vector> posArray;
+	vector< vector<int> > loopArray;
+	vector<int> loop;
+	int id;
 
 	Init();
 
 	// 頂点データのコピー
-	for(i = 0; i < _st(argVNum); ++i) pos.push(argPos[i]);
+	for(_st i = 0; i < _st(argVNum); ++i) posArray.push_back(argPos[i]);
 	
 	// 面データのコピー
-	for(i = 0; i < _st(argPNum*argTNum); ++i) {
-		ifs.push_back(argIF[i] - argOrder);
+	for(_st i = 0; i < _st(argTNum); ++i) {
+		loop.clear();
+		for(_st j = 0; j < _st(argPNum); ++j) {
+			id = argIF[i*_st(argPNum) + j] - argOrder;
+			loop.push_back(id);
+		}
+		loopArray.push_back(loop);
 	}
 
-	MakeEdgeSet(argPNum);
-
+	MakeMesh(&posArray, &loopArray);
 	return;
 }
 
@@ -557,7 +564,6 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 
 	return;
 }
-
 
 
 int fk_IndexFaceSet::getPosSize(void)

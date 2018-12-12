@@ -69,10 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "FaceDraw_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
 #include <FK/FaceDraw.H>
 #include <FK/OpenGL.H>
@@ -104,7 +100,7 @@ void fk_FaceDraw::SetArrayState(bool argState)
 	arrayState = argState;
 	return;
 }
-
+/*
 void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, bool lightFlag, fk_DrawMode argDMode)
 {
 	fk_MaterialMode	shapeMateMode;
@@ -915,7 +911,7 @@ void fk_FaceDraw::LocalMateSet(fk_Material *argMaterial, bool lightFlag)
 }
 
 #endif
-
+*/
 /*
 void fk_FaceDraw::DrawShapeFacePick(fk_Model *argObj)
 {
