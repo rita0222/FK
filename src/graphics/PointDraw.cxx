@@ -92,13 +92,15 @@ fk_PointDraw::fk_PointDraw(void)
 	arrayState = false;
 	pointModelShader = nullptr;
 	pointElemShader = nullptr;
+	ifsShader = nullptr;
 	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	if(pointModelShader != nullptr) delete pointModelShader;
-	if(pointElemShader != nullptr) delete pointElemShader;
+	delete pointModelShader;
+	delete pointElemShader;
+	delete ifsShader;
 	return;
 }
 
@@ -178,6 +180,33 @@ void fk_PointDraw::PointElemShaderSetup(void)
 	return;
 }
 
+void fk_PointDraw::IFSShaderSetup(void)
+{
+	ifsShader = new fk_ShaderBinder();
+ 	auto prog = ifsShader->getProgram();
+	auto param = ifsShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Point_IFS_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Point_IFS_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	param->reserveAttribute("fk_point_elem_position");
+	
+	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+
+	prog->link();
+	return;
+}
+
 GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 {
 	GLuint 			vao;
@@ -194,27 +223,32 @@ GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
-	if(pointModelShader == nullptr) PointModelShaderSetup();
-	if(pointElemShader == nullptr) PointElemShaderSetup();
-
-	pointModelShader->unbindModel(argObj);
-	pointElemShader->unbindModel(argObj);
-
+	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
+	int pointSize;
 
-	switch(mode) {
-	  case FK_ELEM_MODEL:
-		  shader = pointModelShader;
-		  break;
+	switch(shapeType) {
+	  case FK_SHAPE_POINT:
+		if(pointModelShader == nullptr) PointModelShaderSetup();
+		if(pointElemShader == nullptr) PointElemShaderSetup();
+		pointSize = dynamic_cast<fk_Point *>(argObj->getShape())->getSize();
+		shader = (mode == FK_ELEM_MODEL) ? pointModelShader : pointElemShader;
+		break;
 
-	  case FK_ELEM_ELEMENT:
-		  shader = pointElemShader;
-		  break;
+	  case FK_SHAPE_IFS:
+		if(ifsShader == nullptr) IFSShaderSetup();
+		shader = ifsShader;
+		pointSize = dynamic_cast<fk_IndexFaceSet *>(argObj->getShape())->getPosSize();
+		break;
 
 	  default:
-		  return;
-	}
+		return;
+	}			
+
+	if(pointModelShader != nullptr) pointModelShader->unbindModel(argObj);
+	if(pointElemShader != nullptr) pointElemShader->unbindModel(argObj);
+	if(ifsShader != nullptr) ifsShader->unbindModel(argObj);
 
 	shader->bindModel(argObj);
 	glPointSize((GLfloat)argObj->getSize());
@@ -226,16 +260,13 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	parameter->setRegister("fk_modelview", &modelViewM);
 	parameter->setRegister("fk_point_model_color", &(argObj->getPointColor()->col));
 
-	switch(argObj->getShape()->getRealShapeType()) {
+	switch(shapeType) {
 	  case FK_SHAPE_POINT:
-		Draw_Point(argObj, parameter);
-		break;
-/*
 	  case FK_SHAPE_IFS:
-		Draw_IFS(argObj, parameter);
+		Draw_Point(argObj, parameter, pointSize);
 		break;
 
-
+/*
 	  case FK_SHAPE_SOLID:
 		DrawSolidPointNormal(argObj, argFlag);
 		break;
@@ -254,18 +285,16 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	return;
 }
 
-void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam)
+void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam, int argSize)
 {
-	fk_Point	*point = dynamic_cast<fk_Point *>(argObj->getShape());
-	GLuint 		vao = point->GetPointVAO();
+	fk_Shape	*shape = argObj->getShape();
+	GLuint 		vao = shape->GetPointVAO();
 
-	if(vao == 0) {
-		vao = VAOSetup(point);
-	}
+	if(vao == 0) vao = VAOSetup(shape);
 
 	glBindVertexArray(vao);
-	point->BindShaderBuffer(argParam->getAttrTable());
-	glDrawArrays(GL_POINTS, 0, GLsizei(point->aliveArray.size()));
+	shape->BindShaderBuffer(argParam->getAttrTable());
+	glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 

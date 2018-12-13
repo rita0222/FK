@@ -168,6 +168,8 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	modifyList.clear();
 	cloneList.clear();
 
+	setShaderAttribute("fk_point_elem_position", 3, pos.getP());
+
 	return;
 }
 

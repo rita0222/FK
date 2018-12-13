@@ -185,6 +185,9 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 {
+	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
+	if(shapeType != FK_SHAPE_LINE) return;
+
 	if(modelShader == nullptr) ModelShaderSetup();
 	if(elemShader == nullptr) ElemShaderSetup();
 
@@ -218,7 +221,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	parameter->setRegister("fk_modelview", &modelViewM);
 	parameter->setRegister("fk_line_model_color", &(argObj->getLineColor()->col));
 
-	switch(argObj->getShape()->getRealShapeType()) {
+	switch(shapeType) {
 	  case FK_SHAPE_LINE:
 		  Draw_Line(argObj, parameter);
 		break;

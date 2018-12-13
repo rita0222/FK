@@ -24,6 +24,7 @@ namespace FK {
 
 		fk_ShaderBinder	*pointModelShader;
 		fk_ShaderBinder	*pointElemShader;
+		fk_ShaderBinder *ifsShader;
 		bool			arrayState;
 		fk_Matrix		*projM;
 		fk_Matrix		cameraM;
@@ -31,9 +32,10 @@ namespace FK {
 		void			ShaderSetup(void);
 		void			PointModelShaderSetup(void);
 		void			PointElemShaderSetup(void);
+		void			IFSShaderSetup(void);
 
 		GLuint			VAOSetup(fk_Shape *);
-		void			Draw_Point(fk_Model *, fk_ShaderParameter *);
+		void			Draw_Point(fk_Model *, fk_ShaderParameter *, int);
 		void			Draw_IFS(fk_Model *, fk_ShaderParameter *);
 
 	};

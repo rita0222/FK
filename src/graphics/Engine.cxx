@@ -544,7 +544,6 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 									 bool argLightFlag)
 {
 	fk_DrawMode		DrawMode;
-	bool			drawFlg = false;
 
 	FK_UNUSED(argLightFlag);
 	DrawMode = argObj->getDrawMode();
@@ -562,7 +561,6 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
 		pointDraw->DrawShapePoint(argObj);
-		drawFlg = true;
 	}
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
