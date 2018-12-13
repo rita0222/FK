@@ -728,7 +728,7 @@ namespace FK {
 		 */
 		bool	moveVPosition(int vertexID, double *array, int order = 0);
 
-		//! 任意形状生成関数
+		//! 任意形状生成関数1
 		/*!
 		 *	与えられたインデックスフェースセット情報から、形状を生成します。
 		 *
@@ -762,6 +762,30 @@ namespace FK {
 						  int vertexNum,
 						  fk_Vector *posArray,
 						  int order = 0);
+
+		//! 任意形状生成関数2
+		/*!
+		 *	与えられたIFSデータから、形状を生成します。
+		 *
+		 *	\param[in]	faceArray
+		 *		面データ配列。
+		 *		IFSet を vector< vector<int> > 型、
+		 *		polygon を vector<int> 型としたとき、
+		 *		以下のようにして面データを生成していきます。
+		 *
+		 *			polygon.clear();
+		 *			polygon.push_back(頂点ID1);
+		 *			polygon.push_back(頂点ID2);
+		 *				:
+		 *			polygon.push_back(頂点IDn);
+		 *			IFSet.push_back(polygon);
+		 *
+		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
+		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
+		 */
+		void		makeIFSet(std::vector< std::vector<int> > *faceArray,
+							  std::vector<fk_Vector> *posArray,
+							  int order = 0);
 
 		//! 面法線ベクトル設定関数
 		/*!
@@ -1299,7 +1323,7 @@ namespace FK {
 
 		fk_D3DXAnimation *	GetAnimation(void);
 
-		void				PosPrint(std::string);
+		void				DataPrint(void);
 
 		//fk_IFType	getFaceType(void);
 

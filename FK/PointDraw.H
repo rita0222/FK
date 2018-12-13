@@ -22,18 +22,19 @@ namespace FK {
 
 	private:
 
-		fk_ShaderBinder	*modelShader;
-		fk_ShaderBinder	*elemShader;
+		fk_ShaderBinder	*pointModelShader;
+		fk_ShaderBinder	*pointElemShader;
 		bool			arrayState;
 		fk_Matrix		*projM;
 		fk_Matrix		cameraM;
 		
 		void			ShaderSetup(void);
-		void			ModelShaderSetup(void);
-		void			ElemShaderSetup(void);
+		void			PointModelShaderSetup(void);
+		void			PointElemShaderSetup(void);
 
 		GLuint			VAOSetup(fk_Shape *);
 		void			Draw_Point(fk_Model *, fk_ShaderParameter *);
+		void			Draw_IFS(fk_Model *, fk_ShaderParameter *);
 
 	};
 }

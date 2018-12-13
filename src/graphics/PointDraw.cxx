@@ -90,15 +90,15 @@ using namespace FK;
 fk_PointDraw::fk_PointDraw(void)
 {
 	arrayState = false;
-	modelShader = nullptr;
-	elemShader = nullptr;
+	pointModelShader = nullptr;
+	pointElemShader = nullptr;
 	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	if(modelShader != nullptr) delete modelShader;
-	if(elemShader != nullptr) delete elemShader;
+	if(pointModelShader != nullptr) delete pointModelShader;
+	if(pointElemShader != nullptr) delete pointElemShader;
 	return;
 }
 
@@ -120,18 +120,18 @@ void fk_PointDraw::SetCameraMatrix(fk_Matrix *argM)
 	return;
 }
 
-void fk_PointDraw::ModelShaderSetup(void)
+void fk_PointDraw::PointModelShaderSetup(void)
 {
-	modelShader = new fk_ShaderBinder();
- 	auto prog = modelShader->getProgram();
-	auto param = modelShader->getParameter();
+	pointModelShader = new fk_ShaderBinder();
+ 	auto prog = pointModelShader->getProgram();
+	auto param = pointModelShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Point_Model_VS.out"
+		#include "GLSL/Point_Point_Model_VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS.out"
+		#include "GLSL/Point_Point_FS.out"
 		;
 
 	if(prog->validate() == false) {
@@ -148,18 +148,18 @@ void fk_PointDraw::ModelShaderSetup(void)
 	return;
 }
 
-void fk_PointDraw::ElemShaderSetup(void)
+void fk_PointDraw::PointElemShaderSetup(void)
 {
-	elemShader = new fk_ShaderBinder();
- 	auto prog = elemShader->getProgram();
-	auto param = elemShader->getParameter();
+	pointElemShader = new fk_ShaderBinder();
+ 	auto prog = pointElemShader->getProgram();
+	auto param = pointElemShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Point_Elem_VS.out"
+		#include "GLSL/Point_Point_Elem_VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS.out"
+		#include "GLSL/Point_Point_FS.out"
 		;
 
 	if(prog->validate() == false) {
@@ -194,22 +194,22 @@ GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
-	if(modelShader == nullptr) ModelShaderSetup();
-	if(elemShader == nullptr) ElemShaderSetup();
+	if(pointModelShader == nullptr) PointModelShaderSetup();
+	if(pointElemShader == nullptr) PointElemShaderSetup();
 
-	modelShader->unbindModel(argObj);
-	elemShader->unbindModel(argObj);
+	pointModelShader->unbindModel(argObj);
+	pointElemShader->unbindModel(argObj);
 
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
 
 	switch(mode) {
 	  case FK_ELEM_MODEL:
-		  shader = modelShader;
+		  shader = pointModelShader;
 		  break;
 
 	  case FK_ELEM_ELEMENT:
-		  shader = elemShader;
+		  shader = pointElemShader;
 		  break;
 
 	  default:
@@ -228,12 +228,13 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 
 	switch(argObj->getShape()->getRealShapeType()) {
 	  case FK_SHAPE_POINT:
-		  Draw_Point(argObj, parameter);
+		Draw_Point(argObj, parameter);
 		break;
 /*
 	  case FK_SHAPE_IFS:
-		DrawIFSPointNormal(argObj, argFlag);
+		Draw_IFS(argObj, parameter);
 		break;
+
 
 	  case FK_SHAPE_SOLID:
 		DrawSolidPointNormal(argObj, argFlag);

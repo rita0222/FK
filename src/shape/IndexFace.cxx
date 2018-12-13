@@ -246,15 +246,15 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 	for(i = 0; i < lIndex->size(); ++i) {
 		if((*lIndex)[i].size() == 3) {
 			for(j = 0; j < 3; ++j) {
-				ifs.push_back((*lIndex)[i][j]-1);
+				ifs.push_back((*lIndex)[i][j]);
 			}
 		} else {
-			ifs.push_back((*lIndex)[i][0]-1);
-			ifs.push_back((*lIndex)[i][1]-1);
-			ifs.push_back((*lIndex)[i][2]-1);
-			ifs.push_back((*lIndex)[i][2]-1);
-			ifs.push_back((*lIndex)[i][3]-1);
-			ifs.push_back((*lIndex)[i][0]-1);
+			ifs.push_back((*lIndex)[i][0]);
+			ifs.push_back((*lIndex)[i][1]);
+			ifs.push_back((*lIndex)[i][2]);
+			ifs.push_back((*lIndex)[i][2]);
+			ifs.push_back((*lIndex)[i][3]);
+			ifs.push_back((*lIndex)[i][0]);
 		}
 	}
 
@@ -288,6 +288,30 @@ void fk_IndexFaceSet::makeIFSet(int argTNum, int argPNum, int *argIF,
 	}
 
 	MakeMesh(&posArray, &loopArray);
+	return;
+}
+
+void fk_IndexFaceSet::makeIFSet(vector< vector<int> > *argIFS,
+								vector<fk_Vector> *argPos,
+								int argOrder)
+{
+	vector< vector<int> >	tmpIFS;
+	vector<int>				tmpLoop;
+	vector< vector<int> >	*ifsP;
+
+	if(argOrder != 0) {
+		for(_st i = 0; i < argIFS->size(); ++i) {
+			tmpLoop.clear();
+			for(_st j = 0; j < (*argIFS)[i].size(); ++j) {
+				tmpLoop.push_back((*argIFS)[i][j] - argOrder);
+			}
+			tmpIFS.push_back(tmpLoop);
+		}
+		ifsP = &tmpIFS;
+	} else {
+		ifsP = argIFS;
+	}
+	MakeMesh(argPos, ifsP);
 	return;
 }
 
@@ -1712,7 +1736,7 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 	return;
 }
 
-void fk_IndexFaceSet::PosPrint(string argStr)
+void fk_IndexFaceSet::DataPrint(void)
 {
 	stringstream	ss;
 	fk_Vector		v;
@@ -1720,9 +1744,25 @@ void fk_IndexFaceSet::PosPrint(string argStr)
 	for(int i = 0; i < pos.getSize(); ++i) {
 		v = pos.getV(i);
 		ss.clear();
-		ss << argStr << "[" << i << "] = (";
-		ss << v.x << ", " << v.y << ", " << v.z << ")";
-		fk_PutError(ss.str());
+		ss << "pos[" << i << "] = (";
+		ss << v.x << ", " << v.y << ", " << v.z << ")" << endl;
 	}
+
+	for(_st i = 0; i < ifs.size()/3; ++i) {
+		ss.clear();
+		ss << "ifs[" << i << "] = {";
+		ss << ifs[i*3] << ", ";
+		ss << ifs[i*3+1] << ", ";
+		ss << ifs[i*3+2] << "}" << endl;
+	}
+
+	for(_st i = 0; i < edgeSet.size()/2; ++i) {
+		ss.clear();
+		ss << "edge[" << i << "] = {";
+		ss << edgeSet[2*i] << ", ";
+		ss << edgeSet[2*i+1] << "}" << endl;
+	}
+	fk_PutError(ss.str());
+
 	return;
 }
