@@ -307,40 +307,6 @@ void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 	curDLink = argScene;
 	return;
 }
-/*
-void fk_GraphicsEngine::RecalcModelView(void)
-{
-	if(curDLink != nullptr) {
-		RecalcInhModelView(curDLink->getCamera());
-	}
-
-	return;
-}
-
-void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
-{
-	fk_Angle	MAngle(0.0, 0.0, 0.0);
-	fk_Vector	MPos(0.0, 0.0, 0.0);
-
-	if(argModel == nullptr) return;
-
-	MAngle = argModel->getAngle();
-	MPos = argModel->getPosition();
-
-#ifndef OPENGL4
-	glRotated(180.0*MAngle.b/FK_PI, 0.0, 0.0, 1.0);
-	glRotated(-180.0*MAngle.p/FK_PI, 1.0, 0.0, 0.0);
-	glRotated(180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
-	glTranslated(-MPos.x, -MPos.y, -MPos.z);
-#endif
-	
-	if(argModel->getParent() != nullptr) {
-		RecalcInhModelView(argModel->getParent());
-	}
-
-	return;
-}
-*/
 
 void fk_GraphicsEngine::DrawObjs(void)
 {

@@ -34,6 +34,7 @@ namespace FK {
 
 		GLuint				VAOSetup(fk_Shape *);
  		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
+ 		void				Draw_IFS(fk_Model *, fk_ShaderParameter *);
 /*
 		void	DrawShapeLineMaterial(fk_Model *);
 		void	DrawSolidLineMaterial(fk_Model *);

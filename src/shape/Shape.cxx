@@ -79,7 +79,7 @@ using namespace FK;
 
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
 	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
-	  pointVAO(0), lineVAO(0), faceVAO(0), lineIBO(0), faceIBO(0), vboInitFlg(false)
+	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false)
 {
 	SetObjectType(argObjType);
 	return;
@@ -90,8 +90,6 @@ fk_Shape::~fk_Shape()
 	if(pointVAO != 0) glDeleteBuffers(1, &pointVAO);
 	if(lineVAO != 0) glDeleteBuffers(1, &lineVAO);
 	if(faceVAO != 0) glDeleteBuffers(1, &faceVAO);
-	if(lineIBO != 0) glDeleteBuffers(1, &lineIBO);
-	if(faceIBO != 0) glDeleteBuffers(1, &faceIBO);
 		
 	int tmpID1 = 0;
 	GLuint tmpID2 = 0;
@@ -112,13 +110,6 @@ fk_Shape::~fk_Shape()
 		}
 	}
 
-	for(auto p : attrMapU) {
-		tmpID1 = get<0>(p.second);
-		if(tmpID1 != -1) {
-			tmpID2 = GLuint(tmpID1);
-			glDeleteBuffers(1, &tmpID2);
-		}
-	}
 	return;
 }
 
@@ -259,21 +250,10 @@ void fk_Shape::SetLineVAO(GLuint argVAO)
 	lineVAO = argVAO;
 }
 
-void fk_Shape::SetLineIBO(GLuint argIBO)
-{
-	lineIBO = argIBO;
-}
-
 void fk_Shape::SetFaceVAO(GLuint argVAO)
 {
 	faceVAO = argVAO;
 }
-
-void fk_Shape::SetFaceIBO(GLuint argIBO)
-{
-	faceIBO = argIBO;
-}
-
 
 GLuint fk_Shape::GetPointVAO(void)
 {
@@ -285,19 +265,9 @@ GLuint fk_Shape::GetLineVAO(void)
 	return lineVAO;
 }
 
-GLuint fk_Shape::GetLineIBO(void)
-{
-	return lineIBO;
-}
-
 GLuint fk_Shape::GetFaceVAO(void)
 {
 	return faceVAO;
-}
-
-GLuint fk_Shape::GetFaceIBO(void)
-{
-	return faceIBO;
 }
 
 void fk_Shape::DeleteMapI(string argName)
@@ -324,24 +294,11 @@ void fk_Shape::DeleteMapF(string argName)
 	}
 }	
 
-void fk_Shape::DeleteMapU(string argName)
-{
-	if(attrMapU.find(argName) != attrMapU.end()) {
-		int tmpID = get<0>(attrMapU[argName]);
-		if(tmpID != -1) {
-			GLuint tmpID2 = GLuint(tmpID);
-			glDeleteBuffers(1, &tmpID2);
-		}
-		attrMapU.erase(argName);
-	}
-}	
-
 void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argValue)
 {
 	int id = -1;
 
 	DeleteMapF(argName);
-	DeleteMapU(argName);
 	
 	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
 	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
@@ -354,23 +311,9 @@ void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *arg
 	int id = -1;
 
 	DeleteMapI(argName);
-	DeleteMapU(argName);
 
 	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
 	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
-	attrModify[argName] = true;
-	vboInitFlg = false;
-}
-
-void fk_Shape::setShaderIndex(string argName, vector<GLuint> *argValue)
-{
-	int id = -1;
-
-	DeleteMapI(argName);
-	DeleteMapF(argName);
-
-	if(attrMapU.find(argName) != attrMapU.end()) id = get<0>(attrMapU[argName]);
-	attrMapU[argName] = shapeAttrU(id, argValue);
 	attrModify[argName] = true;
 	vboInitFlg = false;
 }
@@ -378,24 +321,28 @@ void fk_Shape::setShaderIndex(string argName, vector<GLuint> *argValue)
 void fk_Shape::DefineVBO(void)
 {
 	if(vboInitFlg == true) return;
-	GLuint tmpID = 0;
+	int tmpID = 0;
+	GLuint tmpUID = 0;
 	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
-		if(get<0>(itr->second) != -1) {
-			tmpID = GLuint(get<0>(itr->second));
-			glDeleteBuffers(1, &tmpID);
+		tmpID = get<0>(itr->second);
+		if(tmpID != -1) {
+			tmpUID = GLuint(tmpID);
+			glDeleteBuffers(1, &tmpUID);
 		}
-		glGenBuffers(1, &tmpID);
-		get<0>(itr->second) = int(tmpID);
+		glGenBuffers(1, &tmpUID);
+		get<0>(itr->second) = int(tmpUID);
 	}
 
 	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
-		if(get<0>(itr->second) != -1) {
-			tmpID = GLuint(get<0>(itr->second));
-			glDeleteBuffers(1, &tmpID);
+		tmpID = get<0>(itr->second);
+		if(tmpID != -1) {
+			tmpUID = GLuint(tmpID);
+			glDeleteBuffers(1, &tmpUID);
 		}
-		glGenBuffers(1, &tmpID);
-		get<0>(itr->second) = int(tmpID);
+		glGenBuffers(1, &tmpUID);
+		get<0>(itr->second) = int(tmpUID);
 	}
+
 	vboInitFlg = true;
 
 	return;
@@ -449,7 +396,6 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 		}
 		glEnableVertexAttribArray(loc);
 	}
-
 
 	return;
 }

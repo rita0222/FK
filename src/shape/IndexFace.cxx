@@ -146,15 +146,17 @@ void fk_EdgePair::set(int argID1, int argID2)
 	}
 }
 
+const string fk_IndexFaceSet::pointPosAttrName = "fk_point_elem_position";
+const string fk_IndexFaceSet::edgePosAttrName = "fk_line_elem_position";
+
 fk_IndexFaceSet::fk_IndexFaceSet(void)
+	: modifyFlg(true), edgeModifyFlg(true),
+	  anim(nullptr), cloneFlg(false),
+	  orgIFS(nullptr), edgeIBO(0)
 {
 	SetObjectType(FK_INDEXFACESET);
 	SetPaletteData(&localPalette);
-
-	modifyFlg = true;
-	anim = nullptr;
-	cloneFlg = false;
-	orgIFS = nullptr;
+	
 
 	pos.clear();
 	timeOrgPos.clear();
@@ -168,7 +170,8 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	modifyList.clear();
 	cloneList.clear();
 
-	setShaderAttribute("fk_point_elem_position", 3, pos.getP());
+	setShaderAttribute(pointPosAttrName, 3, pos.getP());
+	setShaderAttribute(edgePosAttrName, 3, pos.getP());
 
 	return;
 }
@@ -182,6 +185,7 @@ fk_IndexFaceSet::~fk_IndexFaceSet()
 	}
 
 	DeleteCloneLink(this);
+	if(edgeIBO != 0) glDeleteBuffers(1, &edgeIBO);
 	return;
 }
 
@@ -214,6 +218,9 @@ void fk_IndexFaceSet::Init(void)
 	loopStack.clear();
 	vNormFlg.clear();
 	pNormFlg.clear();
+
+	modifyFlg = true;
+	edgeModifyFlg = true;
 
 	return;
 }
@@ -587,6 +594,7 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 			edgeSet.push_back(GLuint(edgeArray[i].id[1]));
 		}
 	}
+	edgeModifyFlg = true;
 
 	return;
 }
@@ -595,6 +603,11 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 int fk_IndexFaceSet::getPosSize(void)
 {
 	return pos.getSize();
+}
+
+int fk_IndexFaceSet::getEdgeSize(void)
+{
+	return int(edgeSet.size()/2);
 }
 
 int fk_IndexFaceSet::getFaceSize(void)
@@ -1731,12 +1744,30 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 	anim = argIFS->anim;
 	orgIFS = argIFS;
 	cloneFlg = true;
+	modifyFlg = true;
+	edgeModifyFlg = true;
 
 	argIFS->cloneList.push_back(this);
 
 
 	return;
 }
+
+void fk_IndexFaceSet::EdgeIBOSetup(void)
+{
+	if(edgeIBO == 0) {
+		glGenBuffers(1, &edgeIBO);
+	}
+
+	if(edgeModifyFlg == true) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, edgeIBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+					 GLsizei(edgeSet.size()*sizeof(GLuint)),
+					 &edgeSet[0], GL_STATIC_DRAW);
+		edgeModifyFlg = false;
+	}
+}
+
 
 void fk_IndexFaceSet::DataPrint(void)
 {

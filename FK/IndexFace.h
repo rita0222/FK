@@ -578,6 +578,14 @@ namespace FK {
 		 */
 		int		getPosSize(void);
 
+		//! 稜線数参照関数
+		/*!
+		 *	形状データの稜線数を取得します。
+		 *
+		 *	\return		稜線数
+		 */
+		int		getEdgeSize(void);
+
 		//! 面数参照関数
 		/*!
 		 *	形状データの面数を取得します。
@@ -1317,15 +1325,15 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		bool				MakeMesh(std::vector<fk_Vector> *,
-									 std::vector< std::vector<int> > *, bool = true);
+		bool	MakeMesh(std::vector<fk_Vector> *,
+						 std::vector< std::vector<int> > *, bool = true);
 
 
 		fk_D3DXAnimation *	GetAnimation(void);
 
-		void				DataPrint(void);
+		void	DataPrint(void);
 
-		//fk_IFType	getFaceType(void);
+		void	EdgeIBOSetup(void);
 
 		int		getElemMaterialID(int);
 		bool	setElemMaterialID(int, int);
@@ -1342,6 +1350,7 @@ namespace FK {
 		std::vector<GLuint>				edgeSet;
 		std::vector< std::vector<int> >	loopStack;
 		bool							modifyFlg;
+		bool							edgeModifyFlg;
 		std::vector<char>				vNormFlg;
 		std::vector<char>				pNormFlg;
 		std::vector<int>				modifyList;
@@ -1356,6 +1365,11 @@ namespace FK {
 		bool							cloneFlg;
 		std::list<fk_IndexFaceSet *>	cloneList;
 		fk_IndexFaceSet					*orgIFS;
+
+		GLuint							edgeIBO;
+
+		static const std::string		pointPosAttrName;
+		static const std::string		edgePosAttrName;
 
 		void				InitPNorm(void);
 		void				InitVNorm(void);
