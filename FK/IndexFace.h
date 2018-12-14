@@ -1339,7 +1339,7 @@ namespace FK {
 		fk_FVecArray					vNorm;
 		fk_FVecArray					pNorm;
 		std::vector<int>				ifs;
-		std::vector<int>				edgeSet;
+		std::vector<GLuint>				edgeSet;
 		std::vector< std::vector<int> >	loopStack;
 		bool							modifyFlg;
 		std::vector<char>				vNormFlg;

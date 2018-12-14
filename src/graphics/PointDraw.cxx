@@ -141,8 +141,8 @@ void fk_PointDraw::PointModelShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute("fk_point_elem_position");
-	param->reserveAttribute("fk_point_elem_alive");
+	param->reserveAttribute(fk_Point::posAttrName);
+	param->reserveAttribute(fk_Point::aliveAttrName);
 	
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 
@@ -169,9 +169,9 @@ void fk_PointDraw::PointElemShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute("fk_point_elem_position");
-	param->reserveAttribute("fk_point_elem_color");
-	param->reserveAttribute("fk_point_elem_alive");
+	param->reserveAttribute(fk_Point::posAttrName);
+	param->reserveAttribute(fk_Point::colAttrName);
+	param->reserveAttribute(fk_Point::aliveAttrName);
 	
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 

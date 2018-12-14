@@ -134,7 +134,7 @@ void fk_LineDraw::ModelShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute("fk_line_elem_position");
+	param->reserveAttribute(fk_Line::posAttrName);
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 
 	prog->link();
@@ -160,8 +160,8 @@ void fk_LineDraw::ElemShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute("fk_line_elem_position");
-	param->reserveAttribute("fk_line_elem_color");
+	param->reserveAttribute(fk_Line::posAttrName);
+	param->reserveAttribute(fk_Line::colAttrName);
 	
 	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
 

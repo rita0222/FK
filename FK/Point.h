@@ -159,12 +159,15 @@ namespace FK {
 		void			setColorID(int, int);
 		int				getColorID(int);
 
+		static const std::string	posAttrName;
+		static const std::string	colAttrName;
+		static const std::string	aliveAttrName;
 #endif		
 
 	private:
 		fk_FVecArray		posArray;
 		fk_ColorArray		colArray;
-		std::vector<int>		aliveArray;
+		std::vector<int>	aliveArray;
 
 		bool	MakePoint(std::vector<fk_Vector> *);
 		bool	MakePoint(int, fk_Vector *);

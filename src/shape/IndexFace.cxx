@@ -583,8 +583,8 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 	edgeSet.clear();
 	for(i = 0; i < edgeArray.size(); ++i) {
 		if(edgeFlg[i] == char(true)) {
-			edgeSet.push_back(edgeArray[i].id[0]);
-			edgeSet.push_back(edgeArray[i].id[1]);
+			edgeSet.push_back(GLuint(edgeArray[i].id[0]));
+			edgeSet.push_back(GLuint(edgeArray[i].id[1]));
 		}
 	}
 

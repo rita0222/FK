@@ -91,18 +91,22 @@ fk_Shape::~fk_Shape()
 	if(lineVAO != 0) glDeleteBuffers(1, &lineVAO);
 	if(faceVAO != 0) glDeleteBuffers(1, &faceVAO);
 		
-	GLuint tmpID = 0;
+	int tmpID1 = 0;
+	GLuint tmpID2 = 0;
+
 	for(auto p : attrMapI) {
-		if(get<0>(p.second) != -1) {
-			tmpID = GLuint(get<0>(p.second));
-			glDeleteBuffers(1, &tmpID);
+		tmpID1 = get<0>(p.second);
+		if(tmpID1 != -1) {
+			tmpID2 = GLuint(tmpID1);
+			glDeleteBuffers(1, &tmpID2);
 		}
 	}
 
 	for(auto p : attrMapF) {
-		if(get<0>(p.second) != -1) {
-			tmpID = GLuint(get<0>(p.second));
-			glDeleteBuffers(1, &tmpID);
+		tmpID1 = get<0>(p.second);
+		if(tmpID1 != -1) {
+			tmpID2 = GLuint(tmpID1);
+			glDeleteBuffers(1, &tmpID2);
 		}
 	}
 	return;
@@ -268,14 +272,35 @@ GLuint fk_Shape::GetFaceVAO(void)
 void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argValue)
 {
 	int id = -1;
+
+	if(attrMapF.find(argName) != attrMapF.end()) {
+		int tmpID = get<0>(attrMapF[argName]);
+		if(tmpID != -1) {
+			GLuint tmpID2 = GLuint(tmpID);
+			glDeleteBuffers(1, &tmpID2);
+		}
+		attrMapF.erase(argName);
+	}
+	
 	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
 	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
+	attrModify[argName] = true;
 	vboInitFlg = false;
 }
 
 void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *argValue)
 {
 	int id = -1;
+
+	if(attrMapI.find(argName) != attrMapI.end()) {
+		int tmpID = get<0>(attrMapI[argName]);
+		if(tmpID != -1) {
+			GLuint tmpID2 = GLuint(tmpID);
+			glDeleteBuffers(1, &tmpID2);
+		}
+		attrMapI.erase(argName);
+	}
+
 	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
 	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
 	vboInitFlg = false;
@@ -320,14 +345,17 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 		loc = GLuint(argTable->at(itr->first));
 		vbo = get<0>(itr->second);
 		dim = get<1>(itr->second);
-		iArray = get<2>(itr->second);
-		size = iArray->size();
-
 		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
 		glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
-		glBufferData(GL_ARRAY_BUFFER,
-					 GLsizeiptr(sizeof(int) * size),
-					 &((*iArray)[0]), GL_STATIC_DRAW);
+
+//		if(attrModify[itr->first] == true) {
+			iArray = get<2>(itr->second);
+			size = iArray->size();
+			glBufferData(GL_ARRAY_BUFFER,
+						 GLsizeiptr(sizeof(int) * size),
+						 &((*iArray)[0]), GL_STATIC_DRAW);
+			attrModify[itr->first] = false;
+//		}
 
 		glEnableVertexAttribArray(loc);
 	}
@@ -337,14 +365,17 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 		loc = GLuint(argTable->at(itr->first));
 		vbo = get<0>(itr->second);
 		dim = get<1>(itr->second);
-		fArray = get<2>(itr->second);
-		size = fArray->size();
-
 		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
 		glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
-		glBufferData(GL_ARRAY_BUFFER,
-					 GLsizeiptr(sizeof(float) * size),
-					 &((*fArray)[0]), GL_STATIC_DRAW);
+
+//		if(attrModify[itr->first] == true) {
+			fArray = get<2>(itr->second);
+			size = fArray->size();
+			glBufferData(GL_ARRAY_BUFFER,
+						 GLsizeiptr(sizeof(float) * size),
+						 &((*fArray)[0]), GL_STATIC_DRAW);
+			attrModify[itr->first] = false;
+//		}
 
 		glEnableVertexAttribArray(loc);
 	}
@@ -353,3 +384,7 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 	return;
 }
 
+void fk_Shape::modifyAttribute(string argName)
+{
+	attrModify[argName] = true;
+}

@@ -148,7 +148,9 @@ namespace FK {
 		void		setColor(int eID, fk_Color col);
 		void		setColor(int eID, fk_Color *col);
 		fk_Color	getColor(int eID);
-		
+
+		static const std::string posAttrName;
+		static const std::string colAttrName;
 
 	private:
 		fk_FVecArray	posArray;

@@ -17,7 +17,7 @@ namespace FK {
 
 	using shapeMapI = std::map<std::string, shapeAttrI>;
 	using shapeMapF = std::map<std::string, shapeAttrF>;
-	
+
 	//! 形状データの具体的なデータ構造を表す列挙型
 	enum fk_RealShapeType {
 		FK_SHAPE_IFS,		//!<	fk_IndexFaceSetベース
@@ -190,6 +190,7 @@ namespace FK {
 
 		void setShaderAttribute(std::string, int, std::vector<int> *);
 		void setShaderAttribute(std::string, int, std::vector<float> *);
+		void modifyAttribute(std::string);
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -217,6 +218,8 @@ namespace FK {
 		shapeMapF 			attrMapF;
 
 		bool				vboInitFlg;
+
+		std::map<std::string, bool>		attrModify;
 	};
 }
 
