@@ -85,16 +85,14 @@ using mi = list<fk_Model *>::iterator;
 static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(FK_MODEL)
+	: fk_Boundary(FK_MODEL), shape(nullptr), parentModel(nullptr),
+	  treeData(nullptr), snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr)
 {
 	setDrawMode(FK_NONEMODE);
 	setMaterialMode(FK_CHILD_MODE);
 	setBlendMode(FK_BLEND_ALPHA_MODE);
 	setDepthMode(FK_DEPTH_READ_AND_WRITE);
 
-	parentModel = nullptr;
-	treeData = nullptr;
-	shape = nullptr;
 	setShape(argShape);
 	setPointSize(1.0);
 	setLineWidth(1.0);
@@ -108,9 +106,6 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	treeDelMode = true;
 	smoothFlag = false;
 
-	snapPos = nullptr;
-	snapInhPos = nullptr;
-	snapAngle = nullptr;
 	snapFlag = false;
 
 	interMode = false;
@@ -245,6 +240,7 @@ fk_Color * fk_Model::getLineColor(void)
 void fk_Model::setDrawMode(const fk_DrawMode argMode)
 {
 	drawMode = argMode;
+	if(shape != nullptr) shape->updateAttr();
 	return;
 }
 
@@ -266,7 +262,9 @@ fk_ElementMode fk_Model::getElementMode(void) const
 void fk_Model::setMaterialMode(const fk_MaterialMode) {}
 fk_MaterialMode fk_Model::getMaterialMode(void) const { return FK_PARENT_MODE; }
 
-void fk_Model::setBlendMode(const fk_BlendMode argMode, const fk_BlendFactor argSrcFactor, const fk_BlendFactor argDstFactor)
+void fk_Model::setBlendMode(const fk_BlendMode argMode,
+							const fk_BlendFactor argSrcFactor,
+							const fk_BlendFactor argDstFactor)
 {
 	switch(argMode) {
 	  case FK_BLEND_ALPHA_MODE:

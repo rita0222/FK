@@ -14,9 +14,11 @@ namespace FK {
 
 	using shapeAttrI = std::tuple<int, int, std::vector<int> *>;
 	using shapeAttrF = std::tuple<int, int, std::vector<float> *>;
+	using shapeAttrU = std::tuple<int, std::vector<GLuint> *>;
 
 	using shapeMapI = std::map<std::string, shapeAttrI>;
 	using shapeMapF = std::map<std::string, shapeAttrF>;
+	using shapeMapU = std::map<std::string, shapeAttrU>;
 
 	//! 形状データの具体的なデータ構造を表す列挙型
 	enum fk_RealShapeType {
@@ -190,7 +192,9 @@ namespace FK {
 
 		void setShaderAttribute(std::string, int, std::vector<int> *);
 		void setShaderAttribute(std::string, int, std::vector<float> *);
+		void setShaderIndex(std::string, std::vector<GLuint> *);
 		void modifyAttribute(std::string);
+		void updateAttr(void);
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -199,10 +203,14 @@ namespace FK {
 
 		void			SetPointVAO(GLuint);
 		void			SetLineVAO(GLuint);
+		void			SetLineIBO(GLuint);
 		void			SetFaceVAO(GLuint);
+		void			SetFaceIBO(GLuint);
 		GLuint			GetPointVAO(void);
 		GLuint			GetLineVAO(void);
+		GLuint			GetLineIBO(void);
 		GLuint			GetFaceVAO(void);
+		GLuint			GetFaceIBO(void);
 
 		void			DefineVBO(void);
 		void			BindShaderBuffer(std::map<std::string, int> *);
@@ -212,14 +220,20 @@ namespace FK {
 		fk_Palette			*palette;
 		fk_Palette			defaultPalette;
 		fk_MaterialMode		materialMode;
-		GLuint				pointVAO, lineVAO, faceVAO;
+		GLuint				pointVAO, lineVAO, faceVAO, lineIBO, faceIBO;
 
 		shapeMapI 			attrMapI;
 		shapeMapF 			attrMapF;
+		shapeMapU			attrMapU;
 
 		bool				vboInitFlg;
 
 		std::map<std::string, bool>		attrModify;
+
+
+		void			DeleteMapI(std::string);
+		void			DeleteMapF(std::string);
+		void			DeleteMapU(std::string);
 	};
 }
 

@@ -145,15 +145,17 @@ int main(int, char **)
 
 	viewer.setShape(3, &prism);
 	viewer.setPosition(3, 0.0, 0.0, 25.0);
-	viewer.setDrawMode(3, FK_POINTMODE);
+	//viewer.setDrawMode(3, FK_LINEMODE);
 	viewer.setVertexColor(3, fk_Color(0.0, 1.0, 0.0));
 	viewer.setPointSize(3, 3.0);
+
 	viewer.setShape(2, particle.getShape());
 	viewer.setDrawMode(2, FK_POINTMODE);
 	viewer.setElementMode(2, FK_ELEM_ELEMENT);
 	viewer.setPointSize(2, 3.0);
+
 	viewer.setScale(10.0);
-	//viewer.setAxisMode(true);
+	//viewer.setAxisMode(false);
  
 	for(int i = 0; viewer.draw() == true; i++) {
 		particle.handle(); // パーティクルを 1 ステップ実行する。

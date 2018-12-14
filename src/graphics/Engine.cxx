@@ -548,6 +548,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 	FK_UNUSED(argLightFlag);
 	DrawMode = argObj->getDrawMode();
 
+	//fk_Window::printf("DrawMode = %d", DrawMode);
 	if(DrawMode == FK_NONEMODE) return;
 
 	if(textureMode == true) {
