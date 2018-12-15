@@ -93,8 +93,8 @@ fk_LineDraw::fk_LineDraw(void)
 
 fk_LineDraw::~fk_LineDraw()
 {
-	if(modelShader != nullptr) delete modelShader;
-	if(elemShader != nullptr) delete elemShader;
+	delete modelShader;
+	delete elemShader;
 	return;
 }
 
@@ -187,11 +187,11 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 {
 	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
 
-	if(modelShader == nullptr) ModelShaderSetup();
-	if(elemShader == nullptr) ElemShaderSetup();
-
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
+
+	if(modelShader == nullptr) ModelShaderSetup();
+	if(elemShader == nullptr) ElemShaderSetup();
 
 	switch(mode) {
 	  case FK_ELEM_MODEL:
