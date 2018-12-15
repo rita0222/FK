@@ -291,7 +291,6 @@ void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam, in
 	GLuint 		vao = shape->GetPointVAO();
 
 	if(vao == 0) vao = VAOSetup(shape);
-
 	glBindVertexArray(vao);
 	shape->BindShaderBuffer(argParam->getAttrTable());
 	glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
