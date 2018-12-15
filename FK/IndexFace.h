@@ -1337,6 +1337,7 @@ namespace FK {
 
 		int		getElemMaterialID(int);
 		bool	setElemMaterialID(int, int);
+		void	updateAttr(void);
 #endif
 
 	private:

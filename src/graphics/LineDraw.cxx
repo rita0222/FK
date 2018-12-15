@@ -190,9 +190,6 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	if(modelShader == nullptr) ModelShaderSetup();
 	if(elemShader == nullptr) ElemShaderSetup();
 
-	modelShader->unbindModel(argObj);
-	elemShader->unbindModel(argObj);
-
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
 
@@ -209,8 +206,8 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 		  return;
 	}
 
-	shader->bindModel(argObj);
-	
+	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+
 	glLineWidth(GLfloat(argObj->getWidth()));
 
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
@@ -232,6 +229,8 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	  default:
 		break;
 	}
+
+	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
 }
 
@@ -262,6 +261,7 @@ void fk_LineDraw::Draw_IFS(fk_Model *argObj, fk_ShaderParameter *argParam)
 	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argObj->getShape());
 	GLuint			vao = ifs->GetLineVAO();
 
+	//fk_Window::printf("IFS Line Draw");
 	if(vao == 0) {
 		vao = VAOSetup(ifs);
 	}

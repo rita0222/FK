@@ -112,6 +112,9 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	interStatus = false;
 	interStopMode = false;
 
+	preShader = [](){};
+	postShader = [](){};
+
 	return;
 }
 

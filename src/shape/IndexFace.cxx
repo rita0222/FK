@@ -89,6 +89,7 @@
 #include <FK/MQOOut.H>
 #include <FK/IFSetHandle.H>
 #include <FK/Error.H>
+#include <FK/Window.h>
 #include <sstream>
 
 using namespace std;
@@ -1757,10 +1758,11 @@ void fk_IndexFaceSet::EdgeIBOSetup(void)
 {
 	if(edgeIBO == 0) {
 		glGenBuffers(1, &edgeIBO);
+		edgeModifyFlg = true;
 	}
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, edgeIBO);
 	if(edgeModifyFlg == true) {
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, edgeIBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 					 GLsizei(edgeSet.size()*sizeof(GLuint)),
 					 &edgeSet[0], GL_STATIC_DRAW);
@@ -1768,6 +1770,12 @@ void fk_IndexFaceSet::EdgeIBOSetup(void)
 	}
 }
 
+void fk_IndexFaceSet::updateAttr(void)
+{
+	fk_Shape::updateAttr();
+	modifyFlg = true;
+	edgeModifyFlg = true;
+}
 
 void fk_IndexFaceSet::DataPrint(void)
 {

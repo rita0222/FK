@@ -237,11 +237,11 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		static bool Initialize(void);
+		void ProcPreShader(void);
+		void ProcPostShader(void);
 #endif
 	
 	private:
-		void ProcPreShader(void);
-		void ProcPostShader(void);
 
 		fk_ShaderProgram innerProgram;
 		fk_ShaderParameter innerParameter;

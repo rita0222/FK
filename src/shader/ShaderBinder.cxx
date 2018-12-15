@@ -143,17 +143,22 @@ fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
 {
+	/*
 	GLuint		id = program->getProgramID();
 
 	fk_funcSet	preS = fk_funcSet(id, [&](){ ProcPreShader(); });
 	fk_funcSet	postS = fk_funcSet(id, [&](){ ProcPostShader(); });
-
+	
 	argModel->preShaderList.push_back(preS);
 	argModel->postShaderList.push_back(postS);
+	*/
+	argModel->preShader = [&](){ ProcPreShader(); };
+	argModel->postShader = [&](){ ProcPostShader(); };
 }
 
 void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 {
+	/*
 	GLuint id = program->getProgramID();
 
 	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end();) {
@@ -165,6 +170,9 @@ void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 		if(get<0>(*it) == id) it = argModel->postShaderList.erase(it);
 		else ++it;
 	}
+	*/
+	argModel->preShader = [](){};
+	argModel->postShader = [](){};
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)

@@ -244,13 +244,10 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 
 	  default:
 		return;
-	}			
+	}
 
-	if(pointModelShader != nullptr) pointModelShader->unbindModel(argObj);
-	if(pointElemShader != nullptr) pointElemShader->unbindModel(argObj);
-	if(ifsShader != nullptr) ifsShader->unbindModel(argObj);
+	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
-	shader->bindModel(argObj);
 	glPointSize((GLfloat)argObj->getSize());
 
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
@@ -282,6 +279,9 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	  default:
 		break;
 	}
+
+	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+
 	return;
 }
 

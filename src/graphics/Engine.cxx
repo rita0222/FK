@@ -349,10 +349,6 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 		if(argModel->getBMode() == FK_B_AABB) {
 			//LoadAABBMatrix(argModel);
 			DrawBoundaryObj(argModel, argLightFlg);
-#ifndef OPENGL4
-			glPopMatrix();
-			glPushMatrix();
-#endif
 			//LoadModelMatrix(argModel);
 		} else {
 			//LoadModelMatrix(argModel);
@@ -362,18 +358,11 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 		//LoadModelMatrix(argModel);
 	}
 	
-	if(modelShape == nullptr) {
-#ifndef OPENGL4
-		glPopMatrix();
-#endif
-		return;
-	}
+	if(modelShape == nullptr) return;
 
 	SetBlendMode(argModel);
-	argModel->preShader();
-	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end(); ++it) {
-		get<1>(*it)();
-	}
+	fk_DrawMode drawMode = argModel->getDrawMode();
+	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->preShader();
 	
 	if(modelShape->getRealShapeType() == FK_SHAPE_TEXTURE) {
 		if(textureMode == false) {
@@ -385,14 +374,12 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 		DrawShapeObj(argModel, argLightFlg);
 	}
 
-	argModel->postShader();
+	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->postShader();
+	/*
 	for(auto it = argModel->postShaderList.begin(); it != argModel->postShaderList.end(); ++it) {
 		get<1>(*it)();
 	}
-
-#ifndef OPENGL4
-	glPopMatrix();
-#endif
+	*/
 
 	return;
 }
