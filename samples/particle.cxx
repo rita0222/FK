@@ -148,7 +148,6 @@ int main(int, char **)
 	viewer.setDrawMode(3, FK_LINEMODE);
 	viewer.setVertexColor(3, fk_Color(0.0, 1.0, 0.0));
 	viewer.setEdgeColor(3, fk_Color(0.0, 0.0, 1.0));
-	viewer.setLineWidth(3, 10.0);
 
 	viewer.setShape(2, particle.getShape());
 	viewer.setDrawMode(2, FK_POINTMODE);
