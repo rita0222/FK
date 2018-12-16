@@ -15,7 +15,6 @@ namespace FK {
 		fk_LineDraw(void);
 		virtual ~fk_LineDraw();
 
-		void	SetArrayState(bool);
 		void	DrawShapeLine(fk_Model *);
 		void	DrawBoundaryLine(fk_Model *);
 		void	SetProjectMatrix(fk_Matrix *);
@@ -24,7 +23,6 @@ namespace FK {
 	private:
 		fk_ShaderBinder		*modelShader;
 		fk_ShaderBinder		*elemShader;
-		bool				arrayState;
 		fk_Matrix			*projM;
 		fk_Matrix			cameraM;
 

@@ -39,10 +39,6 @@ namespace FK {
 		bool				GetWindowPosition(fk_Vector, fk_Vector *);
 		void				GetPickData(fk_PickData *, int, int, int);
 
-
-		void				SetOGLPointerMode(bool);
-		bool				GetOGLPointerMode(void);
-
 		void				SetOGLTextureBindMode(bool);
 		bool				GetOGLTextureBindMode(void);
 
@@ -72,7 +68,6 @@ namespace FK {
 		int							wSize;
 		int							hSize;
 		GLuint						selectBuf[FK_PICKDATAMAX*5];
-		bool						arrayState;
 		bool						resizeFlag;
 		bool						textureMode;
 		fk_BlendFactor				srcFactor, dstFactor;

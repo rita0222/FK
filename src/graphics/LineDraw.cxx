@@ -86,7 +86,6 @@ using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
 {
-	arrayState = false;
 	modelShader = nullptr;
 	elemShader = nullptr;
 }
@@ -95,12 +94,6 @@ fk_LineDraw::~fk_LineDraw()
 {
 	delete modelShader;
 	delete elemShader;
-	return;
-}
-
-void fk_LineDraw::SetArrayState(bool argState)
-{
-	arrayState = argState;
 	return;
 }
 
@@ -206,16 +199,17 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 		  return;
 	}
 
-	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
-
-	glLineWidth(GLfloat(argObj->getWidth()));
-
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
+	vector<float> * col = &(argObj->getLineColor()->col);
 
 	auto parameter = shader->getParameter();
 	parameter->setRegister("fk_projection", projM);
 	parameter->setRegister("fk_modelview", &modelViewM);
-	parameter->setRegister("fk_line_model_color", &(argObj->getLineColor()->col));
+	parameter->setRegister("fk_line_model_color", col);
+
+	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+
+	glLineWidth(GLfloat(argObj->getLineWidth()));
 
 	switch(shapeType) {
 	  case FK_SHAPE_LINE:

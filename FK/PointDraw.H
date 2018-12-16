@@ -15,7 +15,6 @@ namespace FK {
 		fk_PointDraw(void);
 		virtual ~fk_PointDraw();
 
-		void			SetArrayState(bool);
 		void			DrawShapePoint(fk_Model *);
 		void			SetProjectMatrix(fk_Matrix *);
 		void			SetCameraMatrix(fk_Matrix *);
@@ -25,7 +24,6 @@ namespace FK {
 		fk_ShaderBinder	*pointModelShader;
 		fk_ShaderBinder	*pointElemShader;
 		fk_ShaderBinder *ifsShader;
-		bool			arrayState;
 		fk_Matrix		*projM;
 		fk_Matrix		cameraM;
 		

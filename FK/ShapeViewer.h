@@ -125,40 +125,6 @@ namespace FK {
 		 */
 		void	setWindowSize(int w, int h);
 
-		//! OpenGL 頂点配列処理制御関数
-		/*!
-		 *	この関数は、OpenGL 環境における頂点配列の使用を制御します。
-		 *	OpenGL には「頂点配列」と呼ばれる仕組みがあり、
-		 *	一般的にはこの機能を用いると描画処理が高速になります。
-		 *	しかし、実行する環境によってはかえって低速になったり、
-		 *	描画に不具合が生じることもあります。
-		 *	そのような場合、この関数を用いて頂点配列を利用しないように、
-		 *	内部処理を切り替えることが可能です。
-		 *	デフォルトでは「有効」となっています。
-		 *
-		 *	\note
-		 *		この関数による設定は、OpenGL 環境においてのみ有効です。
-		 *		Direct3D 版においては設定は意味をなしません。
-		 *
-		 *	\param[in]	mode	
-		 *		true の場合、頂点配列処理を有効とします。
-		 *		false の場合は無効とします。
-		 */
-		void	setOGLPointerMode(bool mode);
-
-		//! OpenGL 頂点配列処理参照関数
-		/*!
-		 *	現在の OpenGL 頂点配列処理が有効であるかどうかを参照します。
-		 *	頂点配列についての詳細は setOGLPointerMode() の解説を参照して下さい。
-		 *
-		 *	\return
-		 *		頂点配列処理が有効である場合 true を、
-		 *		無効である場合 false を返します。
-		 *
-		 *	\sa setOGLPointerMode()
-		 */
-		bool	getOGLPointerMode(void);
-
 		//@}
 
 		//! \name 形状制御関数

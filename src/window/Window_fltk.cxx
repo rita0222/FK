@@ -213,17 +213,6 @@ bool fk_Window::getWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 	return engine.GetWindowPosition(argPos, retPos);
 }
 
-void fk_Window::setOGLPointerMode(bool argFlg)
-{
-	engine.SetOGLPointerMode(argFlg);
-	return;
-}
-
-bool fk_Window::getOGLPointerMode(void)
-{
-	return engine.GetOGLPointerMode();
-}
-
 void fk_Window::setOGLTextureBindMode(bool argFlg)
 {
 	engine.SetOGLTextureBindMode(argFlg);

@@ -89,7 +89,6 @@ using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
 {
-	arrayState = false;
 	pointModelShader = nullptr;
 	pointElemShader = nullptr;
 	ifsShader = nullptr;
@@ -101,12 +100,6 @@ fk_PointDraw::~fk_PointDraw()
 	delete pointModelShader;
 	delete pointElemShader;
 	delete ifsShader;
-	return;
-}
-
-void fk_PointDraw::SetArrayState(bool argState)
-{
-	arrayState = argState;
 	return;
 }
 
@@ -246,9 +239,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 		return;
 	}
 
-	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
-
-	glPointSize((GLfloat)argObj->getSize());
+	glPointSize((GLfloat)argObj->getPointSize());
 
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
 
@@ -256,6 +247,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	parameter->setRegister("fk_projection", projM);
 	parameter->setRegister("fk_modelview", &modelViewM);
 	parameter->setRegister("fk_point_model_color", &(argObj->getPointColor()->col));
+
+	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
 	switch(shapeType) {
 	  case FK_SHAPE_POINT:

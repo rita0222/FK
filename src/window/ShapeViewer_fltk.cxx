@@ -1059,20 +1059,6 @@ void fk_ShapeViewer::setWindowSize(int argW, int argH)
 	return;
 }
 
-void fk_ShapeViewer::setOGLPointerMode(bool argMode)
-{
-	if(viewWin == NULL) return;
-	viewWin->setOGLPointerMode(argMode);
-	return;
-}
-
-bool fk_ShapeViewer::getOGLPointerMode(void)
-{
-	if(viewWin == NULL) return false;
-	return viewWin->getOGLPointerMode();
-}
-
-
 void fk_ShapeViewer::setShape(int argIndex, fk_Shape *argShape)
 {
 	if(argShape == NULL) {

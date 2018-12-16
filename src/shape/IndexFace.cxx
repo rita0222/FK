@@ -1158,6 +1158,8 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 	}
 
 	IFArray.clear();
+
+/*	
 	for(i = 0; i < argDiv*4; ++i) {
 		IDArray.clear();
 		IDArray.push_back(1);
@@ -1170,8 +1172,22 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 		IFArray.push_back(IDArray);
 	}
 
-	MakeMesh(&vecArray, &IFArray);
+	makeIFSet(&IFArray, &vecArray, 1);
+*/
+	for(i = 0; i < argDiv*4; ++i) {
+		IDArray.clear();
+		IDArray.push_back(0);
+		IDArray.push_back(i + 1);
+		if(i == argDiv * 4 - 1) {
+			IDArray.push_back(1);
+		} else {
+			IDArray.push_back(i + 2);
+		}
+		IFArray.push_back(IDArray);
+	}
 
+	MakeMesh(&vecArray, &IFArray);
+	
 	return;
 }
 
@@ -1242,7 +1258,7 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	}
 
 	IFArray.clear();
-
+/*
 	// TOP
 	for(ii = 0; ii < argDiv*4; ++ii) {
 		IDArray.clear();
@@ -1289,7 +1305,54 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 			IFArray.push_back(IDArray);
 		}
 	}
+*/
+	// TOP
+	for(ii = 0; ii < argDiv*4; ++ii) {
+		IDArray.clear();
+		IDArray.push_back(0);
+		if(ii == argDiv*4 - 1) {
+			IDArray.push_back(1);
+		} else {
+			IDArray.push_back(ii+2);
+		}
+		IDArray.push_back(ii+1);
+		IFArray.push_back(IDArray);
+	}
 
+	// BOTTOM
+	iindex = (argDiv*4)*(argDiv*2 - 2) + 1;
+	for(ii = 0; ii < argDiv*4; ++ii) {
+		IDArray.clear();
+		IDArray.push_back(iindex + (argDiv*4));
+		IDArray.push_back(iindex + ii);
+		if(ii == argDiv*4 - 1) {
+			IDArray.push_back(iindex);
+		} else {
+			IDArray.push_back(iindex + ii + 1);
+		}
+		IFArray.push_back(IDArray);
+	}
+
+	// SIDE
+	for(ii = 0; ii < argDiv*2 - 2; ++ii) {
+		for(jj = 0; jj < argDiv*4; ++jj) {
+			IDArray.clear();
+			iindex = ii*argDiv*4 + jj + 1;
+			iindex2 = (jj == argDiv*4 - 1) ? ii*argDiv*4 + 1 : iindex + 1;
+
+			IDArray.push_back(iindex);
+			IDArray.push_back(iindex2);
+			IDArray.push_back(iindex2 + argDiv*4);
+			IFArray.push_back(IDArray);
+
+			IDArray.clear();
+			IDArray.push_back(iindex);
+			IDArray.push_back(iindex2 + argDiv*4);
+			IDArray.push_back(iindex + argDiv*4);
+			IFArray.push_back(IDArray);
+		}
+	}
+	
 	MakeMesh(&vecArray, &IFArray);
 
 	return;
@@ -1346,7 +1409,7 @@ void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
 	}
 
 	IFArray.clear();
-
+/*
 	for(j = 0; j < div; ++j) {
 		i = int(j);
 		// 底面
@@ -1394,7 +1457,56 @@ void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
 		IDArray.push_back(v[2]);
 		IFArray.push_back(IDArray);
 	}
+	makeIFSet(&IFArray, &vecArray, 1);
+*/
 
+	for(j = 0; j < div; ++j) {
+		i = int(j);
+		// 底面
+		IDArray.clear();
+		IDArray.push_back(0);
+		IDArray.push_back(i+1);
+		if(i == argDiv - 1) {
+			IDArray.push_back(1);
+		} else {
+			IDArray.push_back(i+2);
+		}
+		IFArray.push_back(IDArray);
+
+		// 上面
+		IDArray.clear();
+		IDArray.push_back(argDiv+1);
+		if(i == argDiv-1) {
+			IDArray.push_back(argDiv+2);
+		} else {
+			IDArray.push_back(argDiv+i+3);
+		}
+		IDArray.push_back(argDiv+i+2);
+
+		IFArray.push_back(IDArray);
+
+		// 側面
+		v[0] = i + 1;
+		v[1] = argDiv + i + 2;
+		if(i == argDiv-1) {
+			v[2] = 1;
+			v[3] = argDiv + 2;
+		} else {
+			v[2] = i + 2;
+			v[3] = argDiv + i + 3;
+		}
+		IDArray.clear();
+		IDArray.push_back(v[0]);
+		IDArray.push_back(v[1]);
+		IDArray.push_back(v[2]);
+		IFArray.push_back(IDArray);
+
+		IDArray.clear();
+		IDArray.push_back(v[1]);
+		IDArray.push_back(v[3]);
+		IDArray.push_back(v[2]);
+		IFArray.push_back(IDArray);
+	}
 	MakeMesh(&vecArray, &IFArray);
 
 	return;
@@ -1483,7 +1595,7 @@ void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight)
 	}
 
 	IFArray.clear();
-
+/*
 	for(int i = 0; i < argDiv; ++i) {
 		// 底面
 		IDArray.clear();
@@ -1507,7 +1619,32 @@ void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight)
 		IDArray.push_back(i+3);
 		IFArray.push_back(IDArray);
 	}
+*/
 
+	for(int i = 0; i < argDiv; ++i) {
+		// 底面
+		IDArray.clear();
+		IDArray.push_back(0);
+		IDArray.push_back(i+2);
+		if(i == argDiv - 1) {
+			IDArray.push_back(2);
+		} else {
+			IDArray.push_back(i+3);
+		}
+		IFArray.push_back(IDArray);
+
+		// 側面
+		IDArray.clear();
+		IDArray.push_back(1);
+		if(i == argDiv - 1) {
+			IDArray.push_back(2);
+		} else {
+			IDArray.push_back(i+3);
+		}
+		IDArray.push_back(i+2);
+		IFArray.push_back(IDArray);
+	}
+	
 	MakeMesh(&vecArray, &IFArray);
 
 	return;
@@ -1599,7 +1736,7 @@ void fk_IndexFaceSet::MakeCapsuleIFSet(vector< vector<int> > *argIF, int argDiv)
 	int				i, j, index1, index2;
 
 	argIF->clear();
-
+/*
 	// TOP
 	for(i = 0; i < argDiv*4; ++i) {
 		IDArray.clear();
@@ -1646,6 +1783,54 @@ void fk_IndexFaceSet::MakeCapsuleIFSet(vector< vector<int> > *argIF, int argDiv)
 			argIF->push_back(IDArray);
 		}
 	}
+*/
+	// TOP
+	for(i = 0; i < argDiv*4; ++i) {
+		IDArray.clear();
+		IDArray.push_back(0);
+		IDArray.push_back(i+1);
+		if(i == argDiv*4 - 1) {
+			IDArray.push_back(1);
+		} else {
+			IDArray.push_back(i+2);
+		}
+		argIF->push_back(IDArray);
+	}
+
+	// BOTTOM
+	index1 = (argDiv*4)*(argDiv*2 - 1) + 1;
+	for(i = 0; i < argDiv*4; ++i) {
+		IDArray.clear();
+		IDArray.push_back(index1 + (argDiv*4));
+		if(i == argDiv*4 - 1) {
+			IDArray.push_back(index1);
+		} else {
+			IDArray.push_back(index1 + i + 1);
+		}
+		IDArray.push_back(index1 + i);
+		argIF->push_back(IDArray);
+	}
+
+	// SIDE
+	for(i = 0; i < argDiv*2 - 1; ++i) {
+		for(j = 0; j < argDiv*4; ++j) {
+			IDArray.clear();
+			index1 = i*argDiv*4 + j + 1;
+			index2 = (j == argDiv*4 - 1) ? i*argDiv*4 + 1 : index1 + 1;
+
+			IDArray.push_back(index1);
+			IDArray.push_back(index2 + argDiv*4);
+			IDArray.push_back(index2);
+			argIF->push_back(IDArray);
+
+			IDArray.clear();
+			IDArray.push_back(index1);
+			IDArray.push_back(index1 + argDiv*4);
+			IDArray.push_back(index2 + argDiv*4);
+			argIF->push_back(IDArray);
+		}
+	}
+
 	return;
 }
 

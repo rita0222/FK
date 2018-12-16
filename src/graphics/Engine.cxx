@@ -103,7 +103,6 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	dLinkID = 0;
 	wSize = 0;
 	hSize = 0;
-	arrayState = false;
 	resizeFlag = false;
 	textureMode = false;
 
@@ -136,13 +135,7 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	wSize = argW;
 	hSize = argH;
 	resizeFlag = false;
-	arrayState = true;
 	textureMode = false;
-
-	pointDraw->SetArrayState(arrayState);
-	lineDraw->SetArrayState(arrayState);
-	faceDraw->SetArrayState(arrayState);
-	textureDraw->SetArrayState(arrayState);
 
 	textureDraw->SetBindMode(true);
 
@@ -197,36 +190,26 @@ void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 
 void fk_GraphicsEngine::OpenGLInit(void)
 {
-#ifndef OPENGL4
-	glDisable(GL_LIGHTING);
+	//glDisable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_ALPHA_TEST);
-	glEnable(GL_NORMALIZE);
-	glEnable(GL_POINT_SMOOTH);
+	//glEnable(GL_ALPHA_TEST);
+	//glEnable(GL_NORMALIZE);
+	//glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	//glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	glShadeModel(GL_FLAT);
+	//glShadeModel(GL_FLAT);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0f, 1.0f);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
-	glAlphaFunc(GL_GREATER, 0.01f);
-#endif
+	//glAlphaFunc(GL_GREATER, 0.01f);
 	
-#ifdef NO_GL_POINTER
-	arrayState = false;
-	pointDraw->setArrayState(arrayState);
-	lineDraw->setArrayState(arrayState);
-	faceDraw->setArrayState(arrayState);
-	textureDraw->setArrayState(arrayState);
-#endif
-
 	return;
 }
 
@@ -779,21 +762,6 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 				static_cast<double>(viewArray[3])*(outVec.y + 1.0)/2.0,
 				(1.0 + outVec.z)/2.0);
 	return true;
-}
-
-void fk_GraphicsEngine::SetOGLPointerMode(bool argFlg)
-{
-	arrayState = argFlg;
-	pointDraw->SetArrayState(arrayState);
-	lineDraw->SetArrayState(arrayState);
-	faceDraw->SetArrayState(arrayState);
-	textureDraw->SetArrayState(arrayState);
-	return;
-}
-
-bool fk_GraphicsEngine::GetOGLPointerMode(void)
-{
-	return arrayState;
 }
 
 void fk_GraphicsEngine::SetOGLTextureBindMode(bool argFlg)
