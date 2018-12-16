@@ -994,16 +994,6 @@ namespace FK {
 		 */
 		void	setPointSize(const double size);
 
-		//! 稜線描画幅設定関数
-		/*!
-		 *	稜線の描画幅を設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
-		 *
-		 *	\param[in]	width	稜線幅
-		 *
-		 *	\sa	setPointSize(), getLineWidth()
-		 */
-		void	setLineWidth(const double width);
 
 		//! 頂点描画サイズ参照関数
 		/*!
@@ -1015,15 +1005,6 @@ namespace FK {
 		 */
 		double	getPointSize(void) const;
 
-		//! 稜線描画幅設定関数
-		/*!
-		 *	稜線の描画幅を取得します。
-		 *
-		 *	\return		稜線幅
-		 *
-		 *	\sa	setLineWidth()
-		 */
-		double	getLineWidth(void) const;
 		//@}
 
 		//! \name 描画モード制御関数
@@ -1899,7 +1880,6 @@ namespace FK {
 		double	getSize(void) const;
 		void	setWidth(double);
 		double	getWidth(void) const;
-
 #endif
 
 	private:
@@ -1916,7 +1896,6 @@ namespace FK {
 		fk_BlendFactor		dstFactor;
 		fk_DepthMode		depthMode;
 		double				pointSize;
-		double				lineWidth;
 		bool				smoothFlag;
 		bool				reverseFlag;
 		bool				treeFlag;

@@ -207,9 +207,8 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	parameter->setRegister("fk_modelview", &modelViewM);
 	parameter->setRegister("fk_line_model_color", col);
 
+	glEnable(GL_LINE_SMOOTH);
 	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
-
-	glLineWidth(GLfloat(argObj->getLineWidth()));
 
 	switch(shapeType) {
 	  case FK_SHAPE_LINE:
@@ -244,6 +243,7 @@ void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
 	}
 	glBindVertexArray(vao);
 	line->BindShaderBuffer(argParam->getAttrTable());
+	glEnable(GL_LINE_SMOOTH);
 	glDrawArrays(GL_LINES, 0, line->getSize()*2);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -255,13 +255,13 @@ void fk_LineDraw::Draw_IFS(fk_Model *argObj, fk_ShaderParameter *argParam)
 	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argObj->getShape());
 	GLuint			vao = ifs->GetLineVAO();
 
-	//fk_Window::printf("IFS Line Draw");
 	if(vao == 0) {
 		vao = VAOSetup(ifs);
 	}
 	glBindVertexArray(vao);
 	ifs->BindShaderBuffer(argParam->getAttrTable());
 	ifs->EdgeIBOSetup();
+	glEnable(GL_LINE_SMOOTH);
 	glDrawElements(GL_LINES, GLint(ifs->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

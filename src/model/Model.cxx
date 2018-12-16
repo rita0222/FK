@@ -95,7 +95,6 @@ fk_Model::fk_Model(fk_Shape *argShape)
 
 	setShape(argShape);
 	setPointSize(1.0);
-	setLineWidth(1.0);
 	setReverseDrawMode(false);
 	elemMode = FK_ELEM_MODEL;
 
@@ -430,16 +429,9 @@ void fk_Model::setSize(const double argSize)
 	setPointSize(argSize);
 }
 
-void fk_Model::setLineWidth(const double argWidth)
+void fk_Model::setWidth(const double)
 {
-	if(argWidth <= FK_EPS) return;
-	lineWidth = argWidth;
 	return;
-}
-
-void fk_Model::setWidth(const double argWidth)
-{
-	setLineWidth(argWidth);
 }
 
 double fk_Model::getPointSize(void) const
@@ -452,14 +444,9 @@ double fk_Model::getSize(void) const
 	return getPointSize();
 }
 
-double fk_Model::getLineWidth(void) const
-{
-	return lineWidth;
-}
-
 double fk_Model::getWidth(void) const
 {
-	return getLineWidth();
+	return 0.0;
 }
 
 #ifndef _FREEBSD_

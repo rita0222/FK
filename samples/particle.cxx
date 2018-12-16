@@ -91,7 +91,7 @@ int main(int, char **)
 	double          	R = 15.0;
 
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
-	particle.setMaxSize(5000);   // パーティクルの最大数設定。
+	particle.setMaxSize(2000);   // パーティクルの最大数設定。
 	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
 
@@ -148,6 +148,7 @@ int main(int, char **)
 	viewer.setDrawMode(3, FK_LINEMODE);
 	viewer.setVertexColor(3, fk_Color(0.0, 1.0, 0.0));
 	viewer.setEdgeColor(3, fk_Color(0.0, 0.0, 1.0));
+	viewer.setLineWidth(3, 10.0);
 
 	viewer.setShape(2, particle.getShape());
 	viewer.setDrawMode(2, FK_POINTMODE);
@@ -155,8 +156,8 @@ int main(int, char **)
 	viewer.setPointSize(2, 3.0);
 
 	viewer.setScale(10.0);
-	viewer.setAxisMode(true);
- 
+	//viewer.setAxisMode(false);
+
 	for(int i = 0; viewer.draw() == true; i++) {
 		particle.handle(); // パーティクルを 1 ステップ実行する。
 	}

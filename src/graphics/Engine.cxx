@@ -190,26 +190,28 @@ void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 
 void fk_GraphicsEngine::OpenGLInit(void)
 {
-	//glDisable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_ALPHA_TEST);
-	//glEnable(GL_NORMALIZE);
-	//glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_LINE_SMOOTH);
-	//glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	//glShadeModel(GL_FLAT);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0f, 1.0f);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
-	glDisable(GL_BLEND);
-	//glAlphaFunc(GL_GREATER, 0.01f);
-	
+	//glDisable(GL_BLEND);
+
+#ifndef OPENGL4
+	glDisable(GL_LIGHTING);
+	glEnable(GL_ALPHA_TEST);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_POINT_SMOOTH);
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	glShadeModel(GL_FLAT);
+	glAlphaFunc(GL_GREATER, 0.01f);
+#endif
 	return;
 }
 
