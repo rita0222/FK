@@ -9,8 +9,12 @@ using namespace FK::Material;
 class Agent {
 
 private:
+	static const double		SPEED;
+
 	fk_Model		model;
 	fk_Vector		newVec;
+	
+	
 	
 public:
 	Agent(double, mt19937 &);
@@ -22,6 +26,8 @@ public:
 	void			entry(fk_AppWindow *);
 	void			forward(void);
 };
+
+const double Agent::SPEED = 0.01;
 
 // 群衆用クラス
 class Boid {
@@ -85,7 +91,7 @@ void Agent::entry(fk_AppWindow *argWin)
 void Agent::forward()
 {
 	model.glVec(newVec);
-	model.loTranslate(0.0, 0.0, -0.05);
+	model.loTranslate(0.0, 0.0, -SPEED);
 }
 	
 // 群集のコンストラクタ
