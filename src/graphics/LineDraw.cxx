@@ -85,9 +85,9 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
+	: modelShader(nullptr), elemShader(nullptr)
 {
-	modelShader = nullptr;
-	elemShader = nullptr;
+	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
@@ -95,17 +95,6 @@ fk_LineDraw::~fk_LineDraw()
 	delete modelShader;
 	delete elemShader;
 	return;
-}
-
-void fk_LineDraw::SetProjectMatrix(fk_Matrix *argM)
-{
-	projM = argM;
-	return;
-}
-
-void fk_LineDraw::SetCameraMatrix(fk_Matrix *argM)
-{
-	cameraM = *argM;
 }
 
 void fk_LineDraw::ModelShaderSetup(void)
@@ -179,9 +168,10 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 {
 	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
-
-	fk_ElementMode mode = argObj->getElementMode();
+	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
+	vector<float> * col = &(argObj->getLineColor()->col);
 	fk_ShaderBinder *shader;
+	fk_ElementMode mode = argObj->getElementMode();
 
 	if(modelShader == nullptr) ModelShaderSetup();
 	if(elemShader == nullptr) ElemShaderSetup();
@@ -198,10 +188,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	  default:
 		  return;
 	}
-
-	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
-	vector<float> * col = &(argObj->getLineColor()->col);
-
+	
 	auto parameter = shader->getParameter();
 	parameter->setRegister("fk_projection", projM);
 	parameter->setRegister("fk_modelview", &modelViewM);

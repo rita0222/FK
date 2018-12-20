@@ -69,10 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "PointDraw_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
 #include <FK/PointDraw.H>
 #include <FK/OpenGL.H>
@@ -100,18 +96,6 @@ fk_PointDraw::~fk_PointDraw()
 	delete pointModelShader;
 	delete pointElemShader;
 	delete ifsShader;
-	return;
-}
-
-void fk_PointDraw::SetProjectMatrix(fk_Matrix *argM)
-{
-	projM = argM;
-	return;
-}
-
-void fk_PointDraw::SetCameraMatrix(fk_Matrix *argM)
-{
-	cameraM = *argM;
 	return;
 }
 
@@ -216,29 +200,30 @@ GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 {
-	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
+	fk_Shape *shape = argObj->getShape();
+	fk_RealShapeType shapeType = shape->getRealShapeType();
 	fk_ElementMode mode = argObj->getElementMode();
 	fk_ShaderBinder *shader;
 	int pointSize;
 
-	switch(shapeType) {
+	switch(shape->getRealShapeType()) {
 	  case FK_SHAPE_POINT:
 		if(pointModelShader == nullptr) PointModelShaderSetup();
 		if(pointElemShader == nullptr) PointElemShaderSetup();
-		pointSize = dynamic_cast<fk_Point *>(argObj->getShape())->getSize();
+		pointSize = dynamic_cast<fk_Point *>(shape)->getSize();
 		shader = (mode == FK_ELEM_MODEL) ? pointModelShader : pointElemShader;
 		break;
 
 	  case FK_SHAPE_IFS:
 		if(ifsShader == nullptr) IFSShaderSetup();
 		shader = ifsShader;
-		pointSize = dynamic_cast<fk_IndexFaceSet *>(argObj->getShape())->getPosSize();
+		pointSize = dynamic_cast<fk_IndexFaceSet *>(shape)->getPosSize();
 		break;
 
 	  default:
 		return;
 	}
-
+	
 	glPointSize((GLfloat)argObj->getPointSize());
 
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
@@ -462,5 +447,3 @@ void fk_PointDraw::DrawSurfacePointNormal(fk_Model *argObj, bool argMode)
 	return;
 }
 */
-
-#endif

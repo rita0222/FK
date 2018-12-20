@@ -1,7 +1,7 @@
 ﻿#ifndef __FK_POINT_DRAW_HEADER__
 #define __FK_POINT_DRAW_HEADER__
 
-//#include <FK/Material.h>
+#include <FK/DrawBase.H>
 #include <FK/ShaderBinder.h>
 
 namespace FK {
@@ -10,32 +10,26 @@ namespace FK {
 	class fk_Color;
 	class fk_Point;
 	
-	class fk_PointDraw {
+	class fk_PointDraw : public fk_DrawBase {
 	public:
 		fk_PointDraw(void);
 		virtual ~fk_PointDraw();
 
-		void			DrawShapePoint(fk_Model *);
-		void			SetProjectMatrix(fk_Matrix *);
-		void			SetCameraMatrix(fk_Matrix *);
+		void	DrawShapePoint(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
 
 	private:
 
 		fk_ShaderBinder	*pointModelShader;
 		fk_ShaderBinder	*pointElemShader;
 		fk_ShaderBinder *ifsShader;
-		fk_Matrix		*projM;
-		fk_Matrix		cameraM;
 		
-		void			ShaderSetup(void);
 		void			PointModelShaderSetup(void);
 		void			PointElemShaderSetup(void);
 		void			IFSShaderSetup(void);
 
-		GLuint			VAOSetup(fk_Shape *);
 		void			Draw_Point(fk_Model *, fk_ShaderParameter *, int);
 		void			Draw_IFS(fk_Model *, fk_ShaderParameter *);
-
 	};
 }
 

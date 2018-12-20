@@ -185,19 +185,23 @@ void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 	curProj->MakeMat();
 	pointDraw->SetProjectMatrix(curProj->GetMatrix());
 	lineDraw->SetProjectMatrix(curProj->GetMatrix());
+	faceDraw->SetProjectMatrix(curProj->GetMatrix());
 	return;
 }
 
 void fk_GraphicsEngine::OpenGLInit(void)
 {
-	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LINE_SMOOTH);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0f, 1.0f);
+	glClearDepth(1.0);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_DEPTH_TEST);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
@@ -274,7 +278,6 @@ void fk_GraphicsEngine::Draw(void)
 
 	ApplySceneParameter(true);
 
-	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
 	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
 	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
@@ -282,6 +285,7 @@ void fk_GraphicsEngine::Draw(void)
 	fk_Matrix cameraM = curDLink->getCamera()->getInhInvMatrix();
 	pointDraw->SetCameraMatrix(&cameraM);
 	lineDraw->SetCameraMatrix(&cameraM);
+	faceDraw->SetCameraMatrix(&cameraM);
 	DrawObjs();
 
 	return;
@@ -495,7 +499,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 	}
 
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
-		//faceDraw->DrawShapeFace(argObj, argLightFlag, DrawMode);
+		//faceDraw->DrawShapeFace(argObj, DrawMode);
 	}
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {

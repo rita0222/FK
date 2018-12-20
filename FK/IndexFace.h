@@ -1343,11 +1343,11 @@ namespace FK {
 	private:
 
 		fk_Palette						localPalette;
-		fk_FVecArray					pos;
+		fk_FVecArray					posSet;
 		fk_FVecArray					timeOrgPos;
 		fk_FVecArray					vNorm;
 		fk_FVecArray					pNorm;
-		std::vector<int>				ifs;
+		std::vector<GLuint>				faceSet;
 		std::vector<GLuint>				edgeSet;
 		std::vector< std::vector<int> >	loopStack;
 		bool							modifyFlg;
@@ -1371,6 +1371,7 @@ namespace FK {
 
 		static const std::string		pointPosAttrName;
 		static const std::string		edgePosAttrName;
+		static const std::string		facePosAttrName;
 
 		void				InitPNorm(void);
 		void				InitVNorm(void);
@@ -1381,7 +1382,7 @@ namespace FK {
 		void				ClearPFlg(void);
 		void				ClearVFlg(void);
 
-		fk_FVector			CalcTriNorm(int *);
+		fk_FVector			CalcTriNorm(GLuint *);
 		fk_FVector			CalcPolyNorm(int, int *);
 		void				MakeLoopTable(void);
 		void				MakeEdgeSet(std::vector< std::vector<int> > *);

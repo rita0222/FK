@@ -1,6 +1,7 @@
 BASENAME	= graphics
 
 LIBSRCS		= \
+			DrawBase.cxx \
 			Engine.cxx \
 			FaceDraw.cxx \
 			FrameController.cxx \

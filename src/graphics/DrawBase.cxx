@@ -1,26 +1,3 @@
-﻿#ifndef __FK_FACE_DRAW_HEADER__
-#define __FK_FACE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-	class fk_FaceDraw : public fk_DrawBase {
-	public:
-		fk_FaceDraw(void);
-		virtual ~fk_FaceDraw();
-
-		void	DrawShapeFace(fk_Model *, fk_DrawMode);
-		bool	ShaderSetup(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
-
-	private:
-		//fk_ShaderBinder		*modelShader;
-	};
-}
-
-#endif /* !__FK_WINDOW_HEADER__ */
-
 /****************************************************************************
  *
  *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
@@ -92,3 +69,32 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
+#define FK_DEF_SIZETYPE
+#include <FK/DrawBase.H>
+#include <FK/Matrix.h>
+
+using namespace FK;
+
+fk_DrawBase::fk_DrawBase(void)
+	: projM(nullptr)
+{
+	return;
+}
+
+fk_DrawBase::~fk_DrawBase()
+{
+	return;
+}
+
+void fk_DrawBase::SetProjectMatrix(fk_Matrix *argM)
+{
+	projM = argM;
+	return;
+}
+
+void fk_DrawBase::SetCameraMatrix(fk_Matrix *argM)
+{
+	cameraM = *argM;
+	return;
+}

@@ -87,7 +87,7 @@ typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
 {
-	SetArrayState(false);
+	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
@@ -95,22 +95,10 @@ fk_FaceDraw::~fk_FaceDraw()
 	return;
 }
 
-void fk_FaceDraw::SetArrayState(bool argState)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, fk_DrawMode argDMode)
 {
-	arrayState = argState;
-	return;
-}
-/*
-void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, bool lightFlag, fk_DrawMode argDMode)
-{
-	fk_MaterialMode	shapeMateMode;
-	fk_MaterialMode	modelMateMode;
-	bool			smoothMode;
-
-	shapeMateMode = argObj->getShape()->getMaterialMode();
-	modelMateMode = argObj->getMaterialMode();
-	smoothMode = argObj->getSmoothMode();
-
+	FK_UNUSED(argObj);
+	
 	if((argDMode & FK_FRONTBACK_POLYMODE) == FK_FRONTBACK_POLYMODE) {
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -124,37 +112,22 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, bool lightFlag, fk_DrawMode ar
 		glPolygonMode(GL_FRONT, GL_FILL);
 	}
 
-	if(shapeMateMode == FK_PARENT_MODE &&
-			  modelMateMode == FK_PARENT_MODE) {
-		// マテリアルが個別に設定してある場合
-		DrawShapeFaceMaterial(argObj, lightFlag);
-
-	} else {
-		bool drawMode = false;
-		bool nodeMode = false;
-		if(modelMateMode == FK_CHILD_MODE) {
-			drawMode = true;
-			nodeMode = true;
-		} else if(modelMateMode == FK_PARENT_MODE &&
-				  shapeMateMode == FK_CHILD_MODE) {
-			drawMode = true;
-			nodeMode = false;
-		}
-
-		if(drawMode == true) {
-			if(smoothMode == true) {
-				// マテリアルがモデル別で、スムースシェーディングが ON の場合
-				DrawShapeFaceSmooth(argObj, lightFlag, nodeMode);
-			} else {
-				// マテリアルがモデル別で、フラットシェーディングの場合
-				DrawShapeFaceNormal(argObj, lightFlag, nodeMode);
-			}
-		}
-	}
-
 	return;
 }
 
+bool fk_FaceDraw::ShaderSetup(fk_Model *argModel)
+{
+	FK_UNUSED(argModel);
+	return true;
+}
+
+GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
+{
+	FK_UNUSED(argShape);
+	return 0;
+}
+
+/*
 void fk_FaceDraw::DrawShapeFaceMaterial(fk_Model *argObj, bool argLightFlag)
 {
 	switch(argObj->getShape()->getRealShapeType()) {

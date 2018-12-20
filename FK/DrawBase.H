@@ -1,25 +1,29 @@
-﻿#ifndef __FK_FACE_DRAW_HEADER__
-#define __FK_FACE_DRAW_HEADER__
+﻿#ifndef __FK_DRAW_BASE_HEADER__
+#define __FK_DRAW_BASE_HEADER__
 
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
+#include <FK/OpenGL.H>
+#include <FK/Matrix.h>
 
 namespace FK {
-	class fk_FaceDraw : public fk_DrawBase {
+	class fk_Model;
+	class fk_Shape;
+	
+	class fk_DrawBase {
 	public:
-		fk_FaceDraw(void);
-		virtual ~fk_FaceDraw();
+		fk_DrawBase(void);
+		virtual ~fk_DrawBase();
 
-		void	DrawShapeFace(fk_Model *, fk_DrawMode);
-		bool	ShaderSetup(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
+		void			SetProjectMatrix(fk_Matrix *);
+		void			SetCameraMatrix(fk_Matrix *);
+		virtual GLuint	VAOSetup(fk_Shape *) = 0;
 
-	private:
-		//fk_ShaderBinder		*modelShader;
+	protected:
+		fk_Matrix		*projM;
+		fk_Matrix		cameraM;
 	};
 }
 
-#endif /* !__FK_WINDOW_HEADER__ */
+#endif /* !__FK_DRAW_BASE_HEADER__ */
 
 /****************************************************************************
  *

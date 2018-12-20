@@ -149,6 +149,7 @@ void fk_EdgePair::set(int argID1, int argID2)
 
 const string fk_IndexFaceSet::pointPosAttrName = "fk_point_elem_position";
 const string fk_IndexFaceSet::edgePosAttrName = "fk_line_elem_position";
+const string fk_IndexFaceSet::facePosAttrName = "fk_face_elem_position";
 
 fk_IndexFaceSet::fk_IndexFaceSet(void)
 	: modifyFlg(true), edgeModifyFlg(true),
@@ -159,11 +160,11 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	SetPaletteData(&localPalette);
 	
 
-	pos.clear();
+	posSet.clear();
 	timeOrgPos.clear();
 	vNorm.clear();
 	pNorm.clear();
-	ifs.clear();
+	faceSet.clear();
 	edgeSet.clear();
 	loopStack.clear();
 	vNormFlg.clear();
@@ -171,8 +172,9 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	modifyList.clear();
 	cloneList.clear();
 
-	setShaderAttribute(pointPosAttrName, 3, pos.getP());
-	setShaderAttribute(edgePosAttrName, 3, pos.getP());
+	setShaderAttribute(pointPosAttrName, 3, posSet.getP());
+	setShaderAttribute(edgePosAttrName, 3, posSet.getP());
+	setShaderAttribute(facePosAttrName, 3, posSet.getP());
 
 	return;
 }
@@ -210,10 +212,10 @@ void fk_IndexFaceSet::DeleteCloneLink(fk_IndexFaceSet *argIFS)
 void fk_IndexFaceSet::Init(void)
 {
 	// 各データを一旦解放
-	pos.clear();
+	posSet.clear();
 	vNorm.clear();
 	pNorm.clear();
-	ifs.clear();
+	faceSet.clear();
 	edgeSet.clear();
 
 	loopStack.clear();
@@ -230,7 +232,6 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 							   vector< vector<int> > *lIndex, bool)
 {
 	_st				i, j;
-	vector<int>		tmpP;
 
 	if(vData == nullptr || lIndex == nullptr) {
 		return false;
@@ -249,22 +250,22 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 
 	// 頂点データのコピー
 	for(i = 0; i < vData->size(); ++i) {
-		pos.push((*vData)[i]);
+		posSet.push((*vData)[i]);
 	}
 
 	// 面データのコピー
 	for(i = 0; i < lIndex->size(); ++i) {
 		if((*lIndex)[i].size() == 3) {
 			for(j = 0; j < 3; ++j) {
-				ifs.push_back((*lIndex)[i][j]);
+				faceSet.push_back(GLuint((*lIndex)[i][j]));
 			}
 		} else {
-			ifs.push_back((*lIndex)[i][0]);
-			ifs.push_back((*lIndex)[i][1]);
-			ifs.push_back((*lIndex)[i][2]);
-			ifs.push_back((*lIndex)[i][2]);
-			ifs.push_back((*lIndex)[i][3]);
-			ifs.push_back((*lIndex)[i][0]);
+			faceSet.push_back(GLuint((*lIndex)[i][0]));
+			faceSet.push_back(GLuint((*lIndex)[i][1]));
+			faceSet.push_back(GLuint((*lIndex)[i][2]));
+			faceSet.push_back(GLuint((*lIndex)[i][2]));
+			faceSet.push_back(GLuint((*lIndex)[i][3]));
+			faceSet.push_back(GLuint((*lIndex)[i][0]));
 		}
 	}
 
@@ -329,8 +330,8 @@ void fk_IndexFaceSet::InitPNorm(void)
 {
 	int i;
 
-	pNorm.resize(pos.getSize());
-	pNormFlg.resize(_st(pos.getSize()));
+	pNorm.resize(posSet.getSize());
+	pNormFlg.resize(_st(posSet.getSize()));
 	ClearPFlg();
 
 	for(i = 0; i < pNorm.getSize(); ++i) {
@@ -346,7 +347,7 @@ void fk_IndexFaceSet::ModifyPNorm(void)
 	_st		i, j, vID;
 
 	// 形状が定義されていない場合
-	if(ifs.empty() == true) return;
+	if(faceSet.empty() == true) return;
 
 	// まだ面法線配列が生成されていない場合
 	if(pNorm.getSize() == 0) {
@@ -384,13 +385,13 @@ void fk_IndexFaceSet::MakePNorm(int argID)
 
 	if(pNormFlg[id] == char(false)) return;
 
-	v = CalcTriNorm(&ifs[id*3]);
+	v = CalcTriNorm(&faceSet[id*3]);
 	pNorm.set(int(id), v);
 	pNormFlg[id] = char(false);
 
 	if(vNorm.getSize() != 0) {
 		for(j = id*3; j < id*3 + 3; ++j) {
-			vNormFlg[_st(ifs[j])] = char(true);
+			vNormFlg[faceSet[j]] = char(true);
 		}
 	}
 
@@ -415,16 +416,16 @@ void fk_IndexFaceSet::InitVNorm(void)
 
 	if(pNorm.getSize() == 0) InitPNorm();
 
-	vNorm.resize(pos.getSize());
-	vNormFlg.resize(_st(pos.getSize()));
-	normArray.resize(_st(pos.getSize()));
+	vNorm.resize(posSet.getSize());
+	vNormFlg.resize(_st(posSet.getSize()));
+	normArray.resize(_st(posSet.getSize()));
 
 	for(i = 0; i < normArray.size(); ++i) normArray[i].init();
 
-	for(i = 0; i < ifs.size()/3; ++i) {
+	for(i = 0; i < faceSet.size()/3; ++i) {
 		tmpVec = pNorm.getV(int(i));
 		for(j = 0; j < 3; ++j) {
-			normArray[_st(ifs[i*3+j])] += tmpVec;
+			normArray[faceSet[i*3+j]] += tmpVec;
 		}
 	}
 
@@ -443,7 +444,7 @@ void fk_IndexFaceSet::ModifyVNorm(void)
 	_st				i, j, loopID;
 
 	// 形状が定義されていない場合
-	if(ifs.empty()) return;
+	if(faceSet.empty()) return;
 
 	// まだ頂点法線配列が生成されていない場合
 	if(vNorm.getSize() == 0) {
@@ -457,7 +458,7 @@ void fk_IndexFaceSet::ModifyVNorm(void)
 	// 面法線情報を再計算
 	ModifyPNorm();
 
-	for(i = 0; i < _st(pos.getSize()); ++i) {
+	for(i = 0; i < _st(posSet.getSize()); ++i) {
 		if(vNormFlg[i] == char(true)) {
 			norm.init();
 			for(j = 0; j < loopStack[i].size(); ++j) {
@@ -478,20 +479,20 @@ void fk_IndexFaceSet::ClearVFlg(void)
 {
 	_st		i;
 
-	for(i = 0; i < _st(pos.getSize()); ++i) {
+	for(i = 0; i < _st(posSet.getSize()); ++i) {
 		vNormFlg[i] = char(false);
 	}
 	return;
 }
 
-fk_FVector fk_IndexFaceSet::CalcTriNorm(int *argIF)
+fk_FVector fk_IndexFaceSet::CalcTriNorm(GLuint *argIF)
 {
 	_st			i;
 	fk_Vector	retNorm;
 	fk_Vector	triV[3];
 
 	for(i = 0; i < 3; ++i) {
-		triV[i] = pos.getV(argIF[i]);
+		triV[i] = posSet.getV(int(argIF[i]));
 	}
 
 	retNorm = (triV[1] - triV[0]) ^ (triV[2] - triV[1]);
@@ -511,7 +512,7 @@ fk_FVector fk_IndexFaceSet::CalcPolyNorm(int argNum, int *argIF)
 
 	if(argNum < 4) return sumNorm;
 	for(i = 0; i < _st(argNum); ++i) {
-		tmpVec = pos.getV(argIF[i]);
+		tmpVec = posSet.getV(argIF[i]);
 		posArray.push_back(tmpVec);
 	}
 
@@ -543,11 +544,11 @@ void fk_IndexFaceSet::MakeLoopTable(void)
 	_st		i, j, vID;
 
 	loopStack.clear();
-	loopStack.resize(_st(pos.getSize()));
+	loopStack.resize(_st(posSet.getSize()));
 
-	for(i = 0; i < ifs.size()/3; ++i) {
+	for(i = 0; i < faceSet.size()/3; ++i) {
 		for(j = 0; j < 3; ++j) {
-			vID = _st(ifs[i*3 + j]);
+			vID = faceSet[i*3 + j];
 			loopStack[vID].push_back(int(i));
 		}
 	}
@@ -603,7 +604,7 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 
 int fk_IndexFaceSet::getPosSize(void)
 {
-	return pos.getSize();
+	return posSet.getSize();
 }
 
 int fk_IndexFaceSet::getEdgeSize(void)
@@ -613,38 +614,38 @@ int fk_IndexFaceSet::getEdgeSize(void)
 
 int fk_IndexFaceSet::getFaceSize(void)
 {
-	return int(ifs.size()/3);
+	return int(faceSet.size()/3);
 }
 
 fk_Vector fk_IndexFaceSet::getPosVec(int argID)
 {
 	fk_Vector		retVec(0.0, 0.0, 0.0);
 
-	if(argID < 0 || argID >= pos.getSize()) return retVec;
-	return pos.getV(argID);
+	if(argID < 0 || argID >= posSet.getSize()) return retVec;
+	return posSet.getV(argID);
 }
 
 vector<int> fk_IndexFaceSet::getFaceData(int argID)
 {
 	vector<int>		retIF;
 
-	if(argID < 0 || argID >= int(ifs.size()/3)) return retIF;
+	if(argID < 0 || argID >= int(faceSet.size()/3)) return retIF;
 
 	_st id = _st(argID*3);
 
-	retIF.push_back(ifs[id]);
-	retIF.push_back(ifs[id+1]);
-	retIF.push_back(ifs[id+2]);
+	retIF.push_back(int(faceSet[id]));
+	retIF.push_back(int(faceSet[id+1]));
+	retIF.push_back(int(faceSet[id+2]));
 
 	return retIF;
 }
 
 int fk_IndexFaceSet::getFaceData(int argFID, int argVID)
 {
-	if(argFID < 0 || argFID >= int(ifs.size()/3)) return -1;
+	if(argFID < 0 || argFID >= int(faceSet.size()/3)) return -1;
 	if(argVID < 0 || argVID >= 3) return -1;
 
-	return ifs[_st(argFID * 3 + argVID)];
+	return int(faceSet[_st(argFID * 3 + argVID)]);
 }
 
 bool fk_IndexFaceSet::moveVPosition(int argID,
@@ -652,9 +653,9 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 {
 	int		trueID = argID - argOrder;
 
-	if(trueID < 0 || trueID >= pos.getSize()) return false;
+	if(trueID < 0 || trueID >= posSet.getSize()) return false;
 
-	pos.set(trueID, argPos);
+	posSet.set(trueID, argPos);
 
 	modifyFlg = true;
 	modifyList.push_back(trueID);
@@ -668,9 +669,9 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 {
 	int		trueID = argID - argOrder;
 
-	if(trueID < 0 || trueID >= pos.getSize()) return false;
+	if(trueID < 0 || trueID >= posSet.getSize()) return false;
 
-	pos.set(trueID, argX, argY, argZ);
+	posSet.set(trueID, argX, argY, argZ);
 
 	modifyFlg = true;
 	modifyList.push_back(trueID);
@@ -682,9 +683,9 @@ bool fk_IndexFaceSet::moveVPosition(int argID, double *argPos, int argOrder)
 {
 	int		trueID = argID - argOrder;
 
-	if(trueID < 0 || trueID >= pos.getSize()) return false;
+	if(trueID < 0 || trueID >= posSet.getSize()) return false;
 
-	pos.set(trueID, argPos[0], argPos[1], argPos[2]);
+	posSet.set(trueID, argPos[0], argPos[1], argPos[2]);
 
 	modifyFlg = true;
 	modifyList.push_back(trueID);
@@ -1010,7 +1011,7 @@ void fk_IndexFaceSet::setBlockSize(double argX, double argY, double argZ)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(pos.getSize() != 8 || ifs.size() != 24) return;
+	if(posSet.getSize() != 8 || faceSet.size() != 24) return;
 
 	for(i = 0; i < 8; ++i) {
 		moveVPosition(i, argX * vParam[i][0],
@@ -1036,9 +1037,9 @@ void fk_IndexFaceSet::setBlockSize(double argSize, fk_Axis argAxis)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(pos.getSize() != 8 || ifs.size() != 24) return;
+	if(posSet.getSize() != 8 || faceSet.size() != 24) return;
 
-	newPos = pos.getV(0);
+	newPos = posSet.getV(0);
 	newPos *= 2.0;
 
 	switch(argAxis) {
@@ -1084,8 +1085,8 @@ void fk_IndexFaceSet::setBlockScale(double argScale, fk_Axis argAxis)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(pos.getSize() != 8 || ifs.size() != 24) return;
-	newPos = pos.getV(0);
+	if(posSet.getSize() != 8 || faceSet.size() != 24) return;
+	newPos = posSet.getV(0);
 	newPos *= 2.0;
 
 	switch(argAxis) {
@@ -1126,8 +1127,8 @@ void fk_IndexFaceSet::setBlockScale(double argX, double argY, double argZ)
 		{-0.5, -0.5, -0.5}
 	};
 
-	if(pos.getSize() != 8 || ifs.size() != 24) return;
-	curPos = pos.getV(0);
+	if(posSet.getSize() != 8 || faceSet.size() != 24) return;
+	curPos = posSet.getV(0);
 	newPos.set(curPos.x*2.0*argX,
 			   curPos.y*2.0*argY,
 			   curPos.z*2.0*argZ);
@@ -1193,7 +1194,7 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 
 void fk_IndexFaceSet::setCircleDivide(int argDiv)
 {
-	makeCircle(argDiv, pos.getV(1).x);
+	makeCircle(argDiv, posSet.getV(1).x);
 
 	return;
 }
@@ -1203,10 +1204,10 @@ void fk_IndexFaceSet::setCircleRadius(double argRadius)
 	double		scale;
 	fk_Vector	V;
 
-	scale = argRadius/pos.getV(1).x;
+	scale = argRadius/posSet.getV(1).x;
 
-	for(int i = 1; i < pos.getSize(); ++i) {
-		V = pos.getV(i);
+	for(int i = 1; i < posSet.getSize(); ++i) {
+		V = posSet.getV(i);
 		moveVPosition(i, V.x*scale, V.y*scale, 0.0);
 	}
 
@@ -1217,8 +1218,8 @@ void fk_IndexFaceSet::setCircleScale(double argScale)
 {
 	fk_Vector	V;
 
-	for(int i = 1; i < pos.getSize(); ++i) {
-		V = pos.getV(i);
+	for(int i = 1; i < posSet.getSize(); ++i) {
+		V = posSet.getV(i);
 		moveVPosition(i, V.x * argScale, V.y * argScale, 0.0);
 	}
 
@@ -1360,16 +1361,16 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 
 void fk_IndexFaceSet::setSphereDivide(int argDiv)
 {
-	makeSphere(argDiv, pos.getV(0).y);
+	makeSphere(argDiv, posSet.getV(0).y);
 	return;
 }
 
 void fk_IndexFaceSet::setSphereRadius(double argRadius)
 {
-	double		scale = argRadius/pos.getV(0).y;
+	double		scale = argRadius/posSet.getV(0).y;
 
-	for(int i = 0; i < pos.getSize(); ++i) {
-		moveVPosition(i, pos.getV(i) * scale);
+	for(int i = 0; i < posSet.getSize(); ++i) {
+		moveVPosition(i, posSet.getV(i) * scale);
 	}
 
 	return;
@@ -1377,8 +1378,8 @@ void fk_IndexFaceSet::setSphereRadius(double argRadius)
 
 void fk_IndexFaceSet::setSphereScale(double argScale)
 {
-	for(int i = 0; i < pos.getSize(); ++i) {
-		moveVPosition(i, pos.getV(i) * argScale);
+	for(int i = 0; i < posSet.getSize(); ++i) {
+		moveVPosition(i, posSet.getV(i) * argScale);
 	}
 
 	return;
@@ -1517,11 +1518,11 @@ void fk_IndexFaceSet::setPrismDivide(int argDiv)
 	int		div;
 	double	top, bottom, height;
 
-	if((div = pos.getSize()/2 - 1) < 3) return;
+	if((div = posSet.getSize()/2 - 1) < 3) return;
 
-	top = pos.getV(div+2).x;
-	bottom = pos.getV(1).x;
-	height = -pos.getV(div+1).z;
+	top = posSet.getV(div+2).x;
+	bottom = posSet.getV(1).x;
+	height = -posSet.getV(div+1).z;
 
 	makePrism(argDiv, top, bottom, height);
 	return;
@@ -1534,8 +1535,8 @@ void fk_IndexFaceSet::setPrismTopRadius(double argTop)
 	double		theta, z;
 	fk_Vector	vec;
 
-	div = pos.getSize()/2 - 1;
-	z = pos.getV(div+2).z;
+	div = posSet.getSize()/2 - 1;
+	z = posSet.getV(div+2).z;
 	for(i = 0; i < div; ++i) {
 		theta = (double(i*2) * FK_PI)/double(div);
 		vec.set(cos(theta) * argTop, sin(theta) * argTop, z);
@@ -1552,7 +1553,7 @@ void fk_IndexFaceSet::setPrismBottomRadius(double argBottom)
 	double		theta;
 	fk_Vector	vec;
 
-	div = pos.getSize()/2 - 1;
+	div = posSet.getSize()/2 - 1;
 	for(i = 0; i < div; ++i) {
 		theta = (double(i*2) * FK_PI)/double(div);
 		vec.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
@@ -1567,10 +1568,10 @@ void fk_IndexFaceSet::setPrismHeight(double argHeight)
 	int			i, div;
 	fk_Vector	vec;
 
-	div = pos.getSize()/2 - 1;
+	div = posSet.getSize()/2 - 1;
 	for(i = 0; i <= div; ++i) {
-		vec.set(pos.getV(div+i+1).x,
-				pos.getV(div+i+1).y,
+		vec.set(posSet.getV(div+i+1).x,
+				posSet.getV(div+i+1).y,
 				-argHeight);
 		moveVPosition(div+i+1, vec);
 	}
@@ -1654,8 +1655,8 @@ void fk_IndexFaceSet::setConeDivide(int argDiv)
 {
 	double	rad, height;
 
-	rad = pos.getV(2).x;
-	height = -pos.getV(1).z;
+	rad = posSet.getV(2).x;
+	height = -posSet.getV(1).z;
 
 	makeCone(argDiv, rad, height);
 }
@@ -1666,7 +1667,7 @@ void fk_IndexFaceSet::setConeRadius(double argRadius)
 	double		theta;
 	fk_Vector	vec;
 
-	div = pos.getSize() - 2;
+	div = posSet.getSize() - 2;
 	for(int i = 0; i < div; ++i) {
 		theta = (double(i*2) * FK_PI)/double(div);
 		vec.set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
@@ -1852,9 +1853,9 @@ void fk_IndexFaceSet::setCapsuleSize(double argLen, double argRad)
 	int					div;
 	_st					i;
 
-	div = int(sqrt(double(pos.getSize())/8.0));
+	div = int(sqrt(double(posSet.getSize())/8.0));
 	MakeCapsuleVec(&vecArray, div, argLen, argRad);
-	for(i = 0; i < _st(pos.getSize()); ++i) {
+	for(i = 0; i < _st(posSet.getSize()); ++i) {
 		moveVPosition(int(i), vecArray[i]);
 	}
 
@@ -1863,15 +1864,19 @@ void fk_IndexFaceSet::setCapsuleSize(double argLen, double argRad)
 
 void fk_IndexFaceSet::putSolid(fk_Solid *argSolid)
 {
-	fk_Vector	*vArray;
+	vector<fk_Vector>	vArray;
+	vector<int>			tmpIDArray;
 
 	if(argSolid == nullptr) return;
 
-	vArray = new fk_Vector [_st(pos.getSize())];
-	for(_st i = 0; i < _st(pos.getSize()); ++i) vArray[i] = pos.getV(int(i));
+	vArray.resize(_st(posSet.getSize()));
+	for(_st i = 0; i < _st(posSet.getSize()); ++i) vArray[i] = posSet.getV(int(i));
 
-	argSolid->makeIFSet(int(ifs.size())/3, 3, &ifs[0], pos.getSize(), vArray);
-	delete [] vArray;
+	tmpIDArray.resize(faceSet.size());
+	for(_st i = 0; i < faceSet.size(); ++i) tmpIDArray[i] = int(faceSet[i]);
+
+	argSolid->makeIFSet(int(faceSet.size())/3, 3, &tmpIDArray[0],
+						posSet.getSize(), &vArray[0]);
 
 	return;
 }
@@ -1886,13 +1891,13 @@ void fk_IndexFaceSet::setAnimationTime(double argTime)
 {
 	if(anim == nullptr) return;
 
-	if(pos.getSize() != timeOrgPos.getSize()) {
-		timeOrgPos = pos;
+	if(posSet.getSize() != timeOrgPos.getSize()) {
+		timeOrgPos = posSet;
 	}
 
 	anim->SetTime(argTime);
 
-	for(int i = 0; i < pos.getSize(); ++i) {
+	for(int i = 0; i < posSet.getSize(); ++i) {
 		moveVPosition(i, anim->GetMovePos(i, timeOrgPos.getV(i)));
 	}
 
@@ -1915,11 +1920,11 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 	if(argIFS == nullptr) return;
 
 	localPalette = argIFS->localPalette;
-	pos = argIFS->pos;
+	posSet = argIFS->posSet;
 	timeOrgPos = argIFS->timeOrgPos;
 	vNorm = argIFS->vNorm;
 	pNorm = argIFS->pNorm;
-	ifs = argIFS->ifs;
+	faceSet = argIFS->faceSet;
 	edgeSet = argIFS->edgeSet;
 	loopStack = argIFS->loopStack;
 	modifyFlg = argIFS->modifyFlg;
@@ -1967,19 +1972,19 @@ void fk_IndexFaceSet::DataPrint(void)
 	stringstream	ss;
 	fk_Vector		v;
 	
-	for(int i = 0; i < pos.getSize(); ++i) {
-		v = pos.getV(i);
+	for(int i = 0; i < posSet.getSize(); ++i) {
+		v = posSet.getV(i);
 		ss.clear();
 		ss << "pos[" << i << "] = (";
 		ss << v.x << ", " << v.y << ", " << v.z << ")" << endl;
 	}
 
-	for(_st i = 0; i < ifs.size()/3; ++i) {
+	for(_st i = 0; i < faceSet.size()/3; ++i) {
 		ss.clear();
 		ss << "ifs[" << i << "] = {";
-		ss << ifs[i*3] << ", ";
-		ss << ifs[i*3+1] << ", ";
-		ss << ifs[i*3+2] << "}" << endl;
+		ss << faceSet[i*3] << ", ";
+		ss << faceSet[i*3+1] << ", ";
+		ss << faceSet[i*3+2] << "}" << endl;
 	}
 
 	for(_st i = 0; i < edgeSet.size()/2; ++i) {

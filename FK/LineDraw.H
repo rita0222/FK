@@ -1,36 +1,27 @@
 ﻿#ifndef __FK_LINE_DRAW_HEADER__
 #define __FK_LINE_DRAW_HEADER__
 
-//#include <FK/Material.h>
+#include <FK/DrawBase.H>
 #include <FK/ShaderBinder.h>
 
 namespace FK {
-	class fk_Model;
-	class fk_Edge;
-	class fk_Color;
-	class fk_IndexFaceSet;
 
-	class fk_LineDraw {
+	class fk_LineDraw : public fk_DrawBase {
 	public:
 		fk_LineDraw(void);
 		virtual ~fk_LineDraw();
 
 		void	DrawShapeLine(fk_Model *);
 		void	DrawBoundaryLine(fk_Model *);
-		void	SetProjectMatrix(fk_Matrix *);
-		void	SetCameraMatrix(fk_Matrix *);
+		GLuint	VAOSetup(fk_Shape *);
 
 	private:
 		fk_ShaderBinder		*modelShader;
 		fk_ShaderBinder		*elemShader;
-		fk_Matrix			*projM;
-		fk_Matrix			cameraM;
 
-		void				ShaderSetup(void);
 		void				ModelShaderSetup(void);
 		void				ElemShaderSetup(void);
 
-		GLuint				VAOSetup(fk_Shape *);
  		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
  		void				Draw_IFS(fk_Model *, fk_ShaderParameter *);
 /*
