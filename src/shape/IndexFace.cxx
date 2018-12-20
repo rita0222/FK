@@ -147,10 +147,6 @@ void fk_EdgePair::set(int argID1, int argID2)
 	}
 }
 
-const string fk_IndexFaceSet::pointPosAttrName = "fk_point_elem_position";
-const string fk_IndexFaceSet::edgePosAttrName = "fk_line_elem_position";
-const string fk_IndexFaceSet::facePosAttrName = "fk_face_elem_position";
-
 fk_IndexFaceSet::fk_IndexFaceSet(void)
 	: modifyFlg(true), edgeModifyFlg(true),
 	  anim(nullptr), cloneFlg(false),
@@ -172,9 +168,7 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	modifyList.clear();
 	cloneList.clear();
 
-	setShaderAttribute(pointPosAttrName, 3, posSet.getP());
-	setShaderAttribute(edgePosAttrName, 3, posSet.getP());
-	setShaderAttribute(facePosAttrName, 3, posSet.getP());
+	setShaderAttribute(vertexName, 3, posSet.getP());
 
 	return;
 }

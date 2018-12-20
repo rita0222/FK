@@ -208,6 +208,18 @@ namespace FK {
 
 		void			DefineVBO(void);
 		void			BindShaderBuffer(std::map<std::string, int> *);
+
+		// シェーダー変数名: 頂点座標
+		static const std::string	vertexName;
+
+		// シェーダー変数名: 頂点モデル色
+		static const std::string	pointModelColorName;
+		static const std::string	pointElementColorName;
+		static const std::string	pointElementAliveName;
+
+		static const std::string	lineModelColorName;
+		static const std::string	lineElementColorName;
+		
 #endif
 
 	private:

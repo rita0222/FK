@@ -75,17 +75,14 @@
 using namespace std;
 using namespace FK;
 
-const string fk_Line::posAttrName = "fk_line_elem_position";
-const string fk_Line::colAttrName = "fk_line_elem_color";
-
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {
 	SetObjectType(FK_LINE);
 	allClear();
 	MakeLines(argVertexPos);
 
-	setShaderAttribute(posAttrName, 3, posArray.getP());
-	setShaderAttribute(colAttrName, 4, colArray.getP());
+	setShaderAttribute(vertexName, 3, posArray.getP());
+	setShaderAttribute(lineElementColorName, 4, colArray.getP());
 	return;
 }
 
@@ -97,14 +94,14 @@ fk_Line::~fk_Line()
 void fk_Line::SetPos(int argEID, int argVID, fk_Vector *argV)
 {
 	posArray.set(argEID*2 + argVID, *argV);
-	modifyAttribute(posAttrName);
+	modifyAttribute(vertexName);
 	return;
 }
 
 void fk_Line::SetCol(int argEID, int argVID, fk_Color *argC)
 {
 	colArray.set(argEID*2 + argVID, *argC);
-	modifyAttribute(colAttrName);
+	modifyAttribute(lineElementColorName);
 	return;
 }
 
@@ -128,8 +125,8 @@ void fk_Line::MakeLines(vector<fk_Vector> *argVPos)
 		SetCol(i, 1, &col);
 	}
 
-	modifyAttribute(posAttrName);
-	modifyAttribute(colAttrName);
+	modifyAttribute(vertexName);
+	modifyAttribute(lineElementColorName);
 	return;
 }
 
@@ -151,8 +148,8 @@ void fk_Line::PushLines(fk_Vector *argS, fk_Vector *argE)
 	posArray.push(*argE);
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
-	modifyAttribute(posAttrName);
-	modifyAttribute(colAttrName);
+	modifyAttribute(vertexName);
+	modifyAttribute(lineElementColorName);
 }
 
 bool fk_Line::setVertex(int argID, fk_Vector argPos)
@@ -163,8 +160,8 @@ bool fk_Line::setVertex(int argID, fk_Vector argPos)
 
 	SetPos(0, argID, &argPos);
 
-	modifyAttribute(posAttrName);
-	modifyAttribute(colAttrName);
+	modifyAttribute(vertexName);
+	modifyAttribute(lineElementColorName);
 	return true;
 }
 
@@ -218,8 +215,8 @@ void fk_Line::allClear(void)
 {
 	posArray.clear();
 	colArray.clear();
-	modifyAttribute(posAttrName);
-	modifyAttribute(colAttrName);
+	modifyAttribute(vertexName);
+	modifyAttribute(lineElementColorName);
 }
 
 void fk_Line::setColor(int argID, fk_Color argCol)

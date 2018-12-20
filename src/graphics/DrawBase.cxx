@@ -74,7 +74,12 @@
 #include <FK/DrawBase.H>
 #include <FK/Matrix.h>
 
+using namespace std;
 using namespace FK;
+
+const string fk_DrawBase::projectionMatrixName = "fk_ProjectionMatrix";
+const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
+const string fk_DrawBase::fragmentName = "fragment";
 
 fk_DrawBase::fk_DrawBase(void)
 	: projM(nullptr)

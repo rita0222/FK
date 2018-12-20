@@ -77,6 +77,13 @@
 using namespace std;
 using namespace FK;
 
+const string fk_Shape::vertexName = "fk_Vertex";
+const string fk_Shape::pointModelColorName = "fk_PointModelColor";
+const string fk_Shape::pointElementColorName = "fk_PointElementColor";
+const string fk_Shape::pointElementAliveName = "fk_PointElementAlive";
+const string fk_Shape::lineModelColorName = "fk_LineModelColor";
+const string fk_Shape::lineElementColorName = "fk_LineElementColorName";
+
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
 	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
 	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false)

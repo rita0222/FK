@@ -1369,10 +1369,6 @@ namespace FK {
 
 		GLuint							edgeIBO;
 
-		static const std::string		pointPosAttrName;
-		static const std::string		edgePosAttrName;
-		static const std::string		facePosAttrName;
-
 		void				InitPNorm(void);
 		void				InitVNorm(void);
 		void				ModifyPNorm(void);

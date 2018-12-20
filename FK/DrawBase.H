@@ -17,6 +17,10 @@ namespace FK {
 		void			SetCameraMatrix(fk_Matrix *);
 		virtual GLuint	VAOSetup(fk_Shape *) = 0;
 
+		static const std::string projectionMatrixName;
+		static const std::string modelViewMatrixName;
+		static const std::string fragmentName;
+
 	protected:
 		fk_Matrix		*projM;
 		fk_Matrix		cameraM;

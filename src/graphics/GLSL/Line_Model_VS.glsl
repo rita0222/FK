@@ -1,15 +1,15 @@
 #version 410 core
 
-uniform mat4 fk_modelview;
-uniform mat4 fk_projection;
-uniform vec4 fk_line_model_color;
+uniform mat4 fk_ModelViewMatrix;
+uniform mat4 fk_ProjectionMatrix;
+uniform vec4 fk_LineModelColor;
 
-in vec3 fk_line_elem_position;
+in vec3 fk_Vertex;
 flat out vec4 put_color;
 
 void main()
 {
-	vec4 p = vec4(fk_line_elem_position, 1.0);
-	gl_Position = fk_projection * fk_modelview * p;
-	put_color = fk_line_model_color;
+	vec4 p = vec4(fk_Vertex, 1.0);
+	gl_Position = fk_ProjectionMatrix * fk_ModelViewMatrix * p;
+	put_color = fk_LineModelColor;
 }

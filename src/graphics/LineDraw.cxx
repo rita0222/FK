@@ -116,8 +116,8 @@ void fk_LineDraw::ModelShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute(fk_Line::posAttrName);
-	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+	param->reserveAttribute(fk_Shape::vertexName);
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();
 	return;
@@ -142,10 +142,12 @@ void fk_LineDraw::ElemShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute(fk_Line::posAttrName);
-	param->reserveAttribute(fk_Line::colAttrName);
+	//param->reserveAttribute(fk_Line::posAttrName);
+	//param->reserveAttribute(fk_Line::colAttrName);
+	param->reserveAttribute(fk_Line::vertexName);
+	param->reserveAttribute(fk_Line::lineElementColorName);
 	
-	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();
 	return;
@@ -190,9 +192,9 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	}
 	
 	auto parameter = shader->getParameter();
-	parameter->setRegister("fk_projection", projM);
-	parameter->setRegister("fk_modelview", &modelViewM);
-	parameter->setRegister("fk_line_model_color", col);
+	parameter->setRegister(projectionMatrixName, projM);
+	parameter->setRegister(modelViewMatrixName, &modelViewM);
+	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
 	glEnable(GL_LINE_SMOOTH);
 	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();

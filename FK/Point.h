@@ -159,9 +159,6 @@ namespace FK {
 		void			setColorID(int, int);
 		int				getColorID(int);
 
-		static const std::string	posAttrName;
-		static const std::string	colAttrName;
-		static const std::string	aliveAttrName;
 #endif		
 
 	private:

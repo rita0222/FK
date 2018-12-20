@@ -118,10 +118,10 @@ void fk_PointDraw::PointModelShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute(fk_Point::posAttrName);
-	param->reserveAttribute(fk_Point::aliveAttrName);
+	param->reserveAttribute(fk_Shape::vertexName);
+	param->reserveAttribute(fk_Shape::pointElementAliveName);
 	
-	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();
 	return;
@@ -146,11 +146,11 @@ void fk_PointDraw::PointElemShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute(fk_Point::posAttrName);
-	param->reserveAttribute(fk_Point::colAttrName);
-	param->reserveAttribute(fk_Point::aliveAttrName);
+	param->reserveAttribute(fk_Shape::vertexName);
+	param->reserveAttribute(fk_Shape::pointElementColorName);
+	param->reserveAttribute(fk_Shape::pointElementAliveName);
 	
-	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();
 
@@ -176,9 +176,9 @@ void fk_PointDraw::IFSShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute("fk_point_elem_position");
+	param->reserveAttribute(fk_Shape::vertexName);
 	
-	glBindFragDataLocation(prog->getProgramID(), 0, "fragment");
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();
 	return;
@@ -229,9 +229,9 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
 
 	auto parameter = shader->getParameter();
-	parameter->setRegister("fk_projection", projM);
-	parameter->setRegister("fk_modelview", &modelViewM);
-	parameter->setRegister("fk_point_model_color", &(argObj->getPointColor()->col));
+	parameter->setRegister(projectionMatrixName, projM);
+	parameter->setRegister(modelViewMatrixName, &modelViewM);
+	parameter->setRegister(fk_Shape::pointModelColorName, &(argObj->getPointColor()->col));
 
 	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
