@@ -13,20 +13,12 @@ all:
 	@echo "	FreeBSD Dynamic:	make fb-d"
 	@echo "	FreeBSD Debug:		make fb-g"
 	@echo "	Linux:			make linux"
-	@echo "	MingW:			make ming"
-	@echo "	MingW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
 	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
-	@echo "	Qt:			make qt"
-	@echo "	Qt Debug:		make qt-g"
-	@echo "	Mac Qt:			make mac-qt"
-	@echo "	Mac Qt Debug:		make mac-qt-g"
 	@echo "	Clean:			make clean"
-	@echo "	Qt-Clean:		make clean-qt"
-	@echo "	Qt-Mac-Clean:		make clean-mac"
 
 fb:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
@@ -60,23 +52,8 @@ linux:
 		$(MAKE) linux ; \
 		cd .. ; done
 
-ming:
-	for sd in $(BASE) $(AUDIO) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) ming TARGET=depend ; \
-		$(MAKE) ming ; \
-		cd .. ; done
-
-ming-g:
-	for sd in $(BASE) $(AUDIO) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) ming-g TARGET=depend ; \
-		$(MAKE) ming-g ; \
-		cd .. ; done
-
 mac:
+	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
@@ -85,6 +62,7 @@ mac:
 		cd .. ; done
 
 mac-d:
+	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
@@ -93,6 +71,7 @@ mac-d:
 		cd .. ; done
 
 mac-g:
+	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
@@ -101,6 +80,7 @@ mac-g:
 		cd .. ; done
 
 mac-gcc:
+	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
@@ -109,24 +89,13 @@ mac-gcc:
 		cd .. ; done
 
 mac-gcc-g:
+	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-gcc-g TARGET=depend ; \
 		$(MAKE) mac-gcc-g ; \
 		cd .. ; done
-
-qt:
-	cd qt; $(MAKE) release MAKE=$(MAKE)
-
-qt-g:
-	cd qt; $(MAKE) debug MAKE=$(MAKE)
-
-mac-qt:
-	cd qt; $(MAKE) mac-qt MAKE=$(MAKE)
-
-mac-qt-g:
-	cd qt; $(MAKE) mac-qt-g MAKE=$(MAKE)
 
 clean:
 	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \

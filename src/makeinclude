@@ -45,7 +45,7 @@ DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
 MACPACK		= $(FKTOP)/../FK_MacPack
 MACINCLUDE	= $(MACPACK)/include
 MACSYSLIB_S	= $(MACPACK)/lib/static
-MACSYSLIB_D	= $(MACPACK)/lib/dynamic
+ACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
 DLPRE		= dylib
 
@@ -245,11 +245,13 @@ DEPENDCFLAGS	= $(CFLAGS)
 target : $(LIBRARY)
 
 $(LIBRARY_S) : $(LIBOBJS)
+	$(PRECOM)
 	$(RM) $(LIBRARY_S)
 	$(LOADER_S) $(LIBRARY_S) $(LIBOBJS)
 	$(RANLIB) $(LIBRARY_S)
 
 $(LIBRARY_D) : $(LIBOBJS)
+	$(PRECOM)
 	$(RM) $(LIBRARY_D)
 	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) \
 		-o $(LIBRARY_D) $(LIBOBJS)
