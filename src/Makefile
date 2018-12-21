@@ -104,10 +104,4 @@ clean:
 		$(RM) Makefile ; \
 		cd .. ; done
 
-clean-qt:
-	cd qt; $(MAKE) clean
-
-clean-mac:
-	cd qt; $(MAKE) clean-mac
-
 ####################

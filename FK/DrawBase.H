@@ -14,8 +14,8 @@ namespace FK {
 		fk_DrawBase(void);
 		virtual ~fk_DrawBase();
 
-		static void			SetProjectMatrix(fk_Matrix *);
-		static void			SetCameraMatrix(fk_Matrix *);
+		static void			SetProjectionMatrix(fk_Matrix *);
+		static void			SetViewMatrix(fk_Model *);
 		virtual GLuint		VAOSetup(fk_Shape *) = 0;
 
 		static const std::string projectionMatrixName;
@@ -23,8 +23,11 @@ namespace FK {
 		static const std::string fragmentName;
 
 	protected:
-		static fk_Matrix	*projM;
-		static fk_Matrix	cameraM;
+		static fk_Matrix	*projectionMatrix;
+		static fk_Matrix	viewMatrix;
+		static fk_Matrix	modelMatrix;
+		static fk_Matrix	modelViewMatrix;
+		static fk_Matrix	modelViewProjectionMatrix;
 
 		void SetCommonParameter(fk_Model *, fk_ShaderParameter *);
 	};

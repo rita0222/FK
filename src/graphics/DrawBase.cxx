@@ -83,8 +83,11 @@ const string fk_DrawBase::projectionMatrixName = "fk_ProjectionMatrix";
 const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
 const string fk_DrawBase::fragmentName = "fragment";
 
-fk_Matrix * fk_DrawBase::projM;
-fk_Matrix fk_DrawBase::cameraM;
+fk_Matrix * fk_DrawBase::projectionMatrix;
+fk_Matrix fk_DrawBase::viewMatrix;
+fk_Matrix fk_DrawBase::modelMatrix;
+fk_Matrix fk_DrawBase::modelViewMatrix;
+fk_Matrix fk_DrawBase::modelViewProjectionMatrix;
 
 fk_DrawBase::fk_DrawBase(void)
 {
@@ -96,24 +99,26 @@ fk_DrawBase::~fk_DrawBase()
 	return;
 }
 
-void fk_DrawBase::SetProjectMatrix(fk_Matrix *argM)
+void fk_DrawBase::SetProjectionMatrix(fk_Matrix *argM)
 {
-	projM = argM;
+	projectionMatrix = argM;
 	return;
 }
 
-void fk_DrawBase::SetCameraMatrix(fk_Matrix *argM)
+void fk_DrawBase::SetViewMatrix(fk_Model *argModel)
 {
-	cameraM = *argM;
+	viewMatrix = argModel->getInhInvMatrix();
 	return;
 }
 
 void fk_DrawBase::SetCommonParameter(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_Matrix	modelViewM = cameraM * argModel->getInhMatrix();
+	modelMatrix = argModel->getInhMatrix();
+	modelViewMatrix = viewMatrix * modelMatrix;
+	modelViewProjectionMatrix = (*projectionMatrix) * modelViewMatrix;
 
-	argParam->setRegister(projectionMatrixName, projM);
-	argParam->setRegister(modelViewMatrixName, &modelViewM);
+	argParam->setRegister(projectionMatrixName, projectionMatrix);
+	argParam->setRegister(modelViewMatrixName, &modelViewMatrix);
 
 	return;
 }

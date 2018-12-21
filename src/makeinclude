@@ -263,7 +263,7 @@ depend:: $(ALLSRCS)
 clean:
 	touch dummy~
 	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) \
-		Makefile.bak fk2_base.bak *.out core *.core *~ #*# *.exe *.obj
+		Makefile.bak fk2_base.bak *.out GLSL/*.out core *.core *~ #*# *.exe *.obj
 
 ###
 %.o : %.cxx
