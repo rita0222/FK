@@ -183,9 +183,8 @@ void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 		pers->setAspect(GLfloat(wSize)/GLfloat(hSize));
 	}
 	curProj->MakeMat();
-	pointDraw->SetProjectMatrix(curProj->GetMatrix());
-	lineDraw->SetProjectMatrix(curProj->GetMatrix());
-	faceDraw->SetProjectMatrix(curProj->GetMatrix());
+	fk_DrawBase::SetProjectMatrix(curProj->GetMatrix());
+
 	return;
 }
 
@@ -283,9 +282,7 @@ void fk_GraphicsEngine::Draw(void)
 
 	curProj->MakeMat();
 	fk_Matrix cameraM = curDLink->getCamera()->getInhInvMatrix();
-	pointDraw->SetCameraMatrix(&cameraM);
-	lineDraw->SetCameraMatrix(&cameraM);
-	faceDraw->SetCameraMatrix(&cameraM);
+	fk_DrawBase::SetCameraMatrix(&cameraM);
 	DrawObjs();
 
 	return;

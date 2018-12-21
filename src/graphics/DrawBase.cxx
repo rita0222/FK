@@ -83,8 +83,10 @@ const string fk_DrawBase::projectionMatrixName = "fk_ProjectionMatrix";
 const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
 const string fk_DrawBase::fragmentName = "fragment";
 
+fk_Matrix * fk_DrawBase::projM;
+fk_Matrix fk_DrawBase::cameraM;
+
 fk_DrawBase::fk_DrawBase(void)
-	: projM(nullptr)
 {
 	return;
 }
