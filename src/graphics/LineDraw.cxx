@@ -142,8 +142,6 @@ void fk_LineDraw::ElemShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	//param->reserveAttribute(fk_Line::posAttrName);
-	//param->reserveAttribute(fk_Line::colAttrName);
 	param->reserveAttribute(fk_Line::vertexName);
 	param->reserveAttribute(fk_Line::lineElementColorName);
 	
