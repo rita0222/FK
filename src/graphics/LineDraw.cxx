@@ -170,7 +170,6 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 {
 	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
-	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
 	vector<float> * col = &(argObj->getLineColor()->col);
 	fk_ShaderBinder *shader;
 	fk_ElementMode mode = argObj->getElementMode();
@@ -192,8 +191,8 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	}
 	
 	auto parameter = shader->getParameter();
-	parameter->setRegister(projectionMatrixName, projM);
-	parameter->setRegister(modelViewMatrixName, &modelViewM);
+
+	SetCommonParameter(argObj, parameter);
 	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
 	glEnable(GL_LINE_SMOOTH);

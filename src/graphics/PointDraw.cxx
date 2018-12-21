@@ -226,11 +226,9 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	
 	glPointSize((GLfloat)argObj->getPointSize());
 
-	fk_Matrix modelViewM = cameraM * argObj->getInhMatrix();
-
 	auto parameter = shader->getParameter();
-	parameter->setRegister(projectionMatrixName, projM);
-	parameter->setRegister(modelViewMatrixName, &modelViewM);
+	SetCommonParameter(argObj, parameter);
+
 	parameter->setRegister(fk_Shape::pointModelColorName, &(argObj->getPointColor()->col));
 
 	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
