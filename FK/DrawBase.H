@@ -7,6 +7,7 @@
 namespace FK {
 	class fk_Model;
 	class fk_Shape;
+	class fk_ShaderParameter;
 	
 	class fk_DrawBase {
 	public:
@@ -24,6 +25,8 @@ namespace FK {
 	protected:
 		fk_Matrix		*projM;
 		fk_Matrix		cameraM;
+
+		void SetCommonParameter(fk_Model *, fk_ShaderParameter *);
 	};
 }
 

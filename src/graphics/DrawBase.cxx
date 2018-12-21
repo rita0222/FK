@@ -73,6 +73,8 @@
 #define FK_DEF_SIZETYPE
 #include <FK/DrawBase.H>
 #include <FK/Matrix.h>
+#include <FK/Model.h>
+#include <FK/ShaderParameter.h>
 
 using namespace std;
 using namespace FK;
@@ -101,5 +103,15 @@ void fk_DrawBase::SetProjectMatrix(fk_Matrix *argM)
 void fk_DrawBase::SetCameraMatrix(fk_Matrix *argM)
 {
 	cameraM = *argM;
+	return;
+}
+
+void fk_DrawBase::SetCommonParameter(fk_Model *argModel, fk_ShaderParameter *argParam)
+{
+	fk_Matrix	modelViewM = cameraM * argModel->getInhMatrix();
+
+	argParam->setRegister(projectionMatrixName, projM);
+	argParam->setRegister(modelViewMatrixName, &modelViewM);
+
 	return;
 }
