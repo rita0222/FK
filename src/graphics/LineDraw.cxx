@@ -189,8 +189,8 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	}
 	
 	auto parameter = shader->getParameter();
-
-	SetCommonParameter(argObj, parameter);
+	
+	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
 	glEnable(GL_LINE_SMOOTH);

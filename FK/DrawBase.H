@@ -16,10 +16,14 @@ namespace FK {
 
 		static void			SetProjectionMatrix(fk_Matrix *);
 		static void			SetViewMatrix(fk_Model *);
+		static void			SetModel(fk_Model *);
 		virtual GLuint		VAOSetup(fk_Shape *) = 0;
 
 		static const std::string projectionMatrixName;
+		static const std::string viewMatrixName;
+		static const std::string modelMatrixName;
 		static const std::string modelViewMatrixName;
+		static const std::string modelViewProjectionMatrixName;
 		static const std::string fragmentName;
 
 	protected:
@@ -29,7 +33,7 @@ namespace FK {
 		static fk_Matrix	modelViewMatrix;
 		static fk_Matrix	modelViewProjectionMatrix;
 
-		void SetCommonParameter(fk_Model *, fk_ShaderParameter *);
+		void SetParameter(fk_ShaderParameter *);
 	};
 }
 

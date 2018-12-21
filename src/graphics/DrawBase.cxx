@@ -80,7 +80,10 @@ using namespace std;
 using namespace FK;
 
 const string fk_DrawBase::projectionMatrixName = "fk_ProjectionMatrix";
+const string fk_DrawBase::viewMatrixName = "fk_ViewMatrix";
+const string fk_DrawBase::modelMatrixName = "fk_ModelMatrix";
 const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
+const string fk_DrawBase::modelViewProjectionMatrixName = "fk_ModelViewProjectionMatrix";
 const string fk_DrawBase::fragmentName = "fragment";
 
 fk_Matrix * fk_DrawBase::projectionMatrix;
@@ -111,14 +114,20 @@ void fk_DrawBase::SetViewMatrix(fk_Model *argModel)
 	return;
 }
 
-void fk_DrawBase::SetCommonParameter(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_DrawBase::SetModel(fk_Model *argModel)
 {
 	modelMatrix = argModel->getInhMatrix();
 	modelViewMatrix = viewMatrix * modelMatrix;
 	modelViewProjectionMatrix = (*projectionMatrix) * modelViewMatrix;
+}
 
+void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
+{
 	argParam->setRegister(projectionMatrixName, projectionMatrix);
+	argParam->setRegister(viewMatrixName, &viewMatrix);
+	argParam->setRegister(modelMatrixName, &modelViewMatrix);
 	argParam->setRegister(modelViewMatrixName, &modelViewMatrix);
+	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix);
 
 	return;
 }

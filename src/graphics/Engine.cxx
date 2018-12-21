@@ -330,6 +330,8 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 								  bool argLightFlg)
 {
 	fk_Shape		*modelShape = argModel->getShape();
+
+	fk_DrawBase::SetModel(argModel);
 		
 	if(argModel->getBDrawToggle() == true) {
 		if(argModel->getBMode() == FK_B_AABB) {

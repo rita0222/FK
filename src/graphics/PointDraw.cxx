@@ -227,7 +227,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 	glPointSize((GLfloat)argObj->getPointSize());
 
 	auto parameter = shader->getParameter();
-	SetCommonParameter(argObj, parameter);
+	SetParameter(parameter);
 
 	parameter->setRegister(fk_Shape::pointModelColorName, &(argObj->getPointColor()->col));
 
