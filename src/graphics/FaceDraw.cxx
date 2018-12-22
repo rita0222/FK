@@ -125,7 +125,6 @@ void fk_FaceDraw::ShaderSetup(void)
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 
-/*
 	prog->vertexShaderSource =
 		#include "GLSL/Face_VS.out"
 		;
@@ -133,7 +132,6 @@ void fk_FaceDraw::ShaderSetup(void)
 	prog->fragmentShaderSource =
 		#include "GLSL/Face_FS.out"
 		;
-*/
 	
 	if(prog->validate() == false) {
 		fk_Window::printf("Shader Error");

@@ -481,13 +481,13 @@ bool fk_GraphicsEngine::DefineLight(void)
 	return true;
 }
 
-void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
+void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel,
 									 bool argLightFlag)
 {
 	fk_DrawMode		DrawMode;
 
 	FK_UNUSED(argLightFlag);
-	DrawMode = argObj->getDrawMode();
+	DrawMode = argModel->getDrawMode();
 
 	//fk_Window::printf("DrawMode = %d", DrawMode);
 	if(DrawMode == FK_NONEMODE) return;
@@ -498,21 +498,21 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
 	}
 
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
-		//faceDraw->DrawShapeFace(argObj, DrawMode);
+		//faceDraw->DrawShapeFace(argModel, DrawMode);
 	}
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
-		pointDraw->DrawShapePoint(argObj);
+		pointDraw->DrawShapePoint(argModel);
 	}
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
-		lineDraw->DrawShapeLine(argObj);
+		lineDraw->DrawShapeLine(argModel);
 	}
 
 	return;
 }
 
-void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
+void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argModel, bool argLightFlag)
 {
 	FK_UNUSED(argLightFlag);
 	
@@ -521,17 +521,17 @@ void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
 		textureMode = false;
 	}
 
-	if(argObj->getBMode() == FK_B_CAPSULE) {
+	if(argModel->getBMode() == FK_B_CAPSULE) {
 #ifndef OPENGL4
 		glPushMatrix();
 #endif
-		//LoadModelMatrix(argObj->GetCapsuleModel());
+		//LoadModelMatrix(argModel->GetCapsuleModel());
 	}
 
-	lineDraw->DrawBoundaryLine(argObj);
+	lineDraw->DrawBoundaryLine(argModel);
 
 #ifndef OPENGL4	
-	if(argObj->getBMode() == FK_B_CAPSULE) {
+	if(argModel->getBMode() == FK_B_CAPSULE) {
 		glPopMatrix();
 	}
 

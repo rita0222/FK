@@ -165,12 +165,12 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
+void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 {
-	fk_RealShapeType shapeType = argObj->getShape()->getRealShapeType();
-	vector<float> * col = &(argObj->getLineColor()->col);
+	fk_RealShapeType shapeType = argModel->getShape()->getRealShapeType();
+	vector<float> * col = &(argModel->getLineColor()->col);
 	fk_ShaderBinder *shader;
-	fk_ElementMode mode = argObj->getElementMode();
+	fk_ElementMode mode = argModel->getElementMode();
 
 	if(modelShader == nullptr) ModelShaderSetup();
 	if(elemShader == nullptr) ElemShaderSetup();
@@ -194,34 +194,34 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argObj)
 	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
 	glEnable(GL_LINE_SMOOTH);
-	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+	if((argModel->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
 	switch(shapeType) {
 	  case FK_SHAPE_LINE:
-		  Draw_Line(argObj, parameter);
+		  Draw_Line(argModel, parameter);
 		  break;
 
 	  case FK_SHAPE_IFS:
-		  Draw_IFS(argObj, parameter);
+		  Draw_IFS(argModel, parameter);
 		  break;
 		  
 	  default:
 		break;
 	}
 
-	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	if((argModel->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
 }
 
-void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
+void fk_LineDraw::DrawBoundaryLine(fk_Model *argModel)
 {
-	FK_UNUSED(argObj);
+	FK_UNUSED(argModel);
 	return;
 }
 
-void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
+void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_Line		*line = dynamic_cast<fk_Line *>(argObj->getShape());
+	fk_Line		*line = dynamic_cast<fk_Line *>(argModel->getShape());
 	GLuint		vao = line->GetLineVAO();
 
 	if(vao == 0) {
@@ -236,9 +236,9 @@ void fk_LineDraw::Draw_Line(fk_Model *argObj, fk_ShaderParameter *argParam)
 	return;
 }
 
-void fk_LineDraw::Draw_IFS(fk_Model *argObj, fk_ShaderParameter *argParam)
+void fk_LineDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argObj->getShape());
+	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
 	GLuint			vao = ifs->GetLineVAO();
 
 	if(vao == 0) {

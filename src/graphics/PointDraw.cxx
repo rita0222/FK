@@ -198,11 +198,11 @@ GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
+void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 {
-	fk_Shape *shape = argObj->getShape();
+	fk_Shape *shape = argModel->getShape();
 	fk_RealShapeType shapeType = shape->getRealShapeType();
-	fk_ElementMode mode = argObj->getElementMode();
+	fk_ElementMode mode = argModel->getElementMode();
 	fk_ShaderBinder *shader;
 	int pointSize;
 
@@ -224,46 +224,46 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argObj)
 		return;
 	}
 	
-	glPointSize((GLfloat)argObj->getPointSize());
+	glPointSize((GLfloat)argModel->getPointSize());
 
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
 
-	parameter->setRegister(fk_Shape::pointModelColorName, &(argObj->getPointColor()->col));
+	parameter->setRegister(fk_Shape::pointModelColorName, &(argModel->getPointColor()->col));
 
-	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+	if((argModel->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
 	switch(shapeType) {
 	  case FK_SHAPE_POINT:
 	  case FK_SHAPE_IFS:
-		Draw_Point(argObj, parameter, pointSize);
+		Draw_Point(argModel, parameter, pointSize);
 		break;
 
 /*
 	  case FK_SHAPE_SOLID:
-		DrawSolidPointNormal(argObj, argFlag);
+		DrawSolidPointNormal(argModel, argFlag);
 		break;
 
 	  case FK_SHAPE_CURVE:
-		DrawCurvePointNormal(argObj, argFlag);
+		DrawCurvePointNormal(argModel, argFlag);
 		break;
 		
 	  case FK_SHAPE_SURFACE:
-		DrawSurfacePointNormal(argObj, argFlag);
+		DrawSurfacePointNormal(argModel, argFlag);
 		break;
 */
 	  default:
 		break;
 	}
 
-	if((argObj->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	if((argModel->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 
 	return;
 }
 
-void fk_PointDraw::Draw_Point(fk_Model *argObj, fk_ShaderParameter *argParam, int argSize)
+void fk_PointDraw::Draw_Point(fk_Model *argModel, fk_ShaderParameter *argParam, int argSize)
 {
-	fk_Shape	*shape = argObj->getShape();
+	fk_Shape	*shape = argModel->getShape();
 	GLuint 		vao = shape->GetPointVAO();
 
 	if(vao == 0) vao = VAOSetup(shape);
