@@ -11,11 +11,13 @@ namespace FK {
 		virtual ~fk_FaceDraw();
 
 		void	DrawShapeFace(fk_Model *, fk_DrawMode);
-		bool	ShaderSetup(fk_Model *);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		//fk_ShaderBinder		*modelShader;
+		fk_ShaderBinder		*shader;
+
+		void	ShaderSetup(void);
+		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
 	};
 }
 

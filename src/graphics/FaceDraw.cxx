@@ -86,18 +86,22 @@ typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
+	: shader(nullptr)
 {
 	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
+	delete shader;
 	return;
 }
 
 void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, fk_DrawMode argDMode)
 {
 	FK_UNUSED(argObj);
+
+	if(shader == nullptr) ShaderSetup();
 	
 	if((argDMode & FK_FRONTBACK_POLYMODE) == FK_FRONTBACK_POLYMODE) {
 		glDisable(GL_CULL_FACE);
@@ -115,16 +119,47 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, fk_DrawMode argDMode)
 	return;
 }
 
-bool fk_FaceDraw::ShaderSetup(fk_Model *argModel)
+void fk_FaceDraw::ShaderSetup(void)
 {
-	FK_UNUSED(argModel);
-	return true;
+	shader = new fk_ShaderBinder();
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+/*
+	prog->vertexShaderSource =
+		#include "GLSL/Face_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_FS.out"
+		;
+*/
+	
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	param->reserveAttribute(fk_Shape::vertexName);
+	param->reserveAttribute(fk_Shape::normalName);
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
+
+	prog->link();
+	return;
 }
 
 GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 {
-	FK_UNUSED(argShape);
-	return 0;
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetFaceVAO(vao);
+	argShape->DefineVBO();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	return vao;
 }
 
 /*
