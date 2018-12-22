@@ -78,6 +78,7 @@ using namespace std;
 using namespace FK;
 
 const string fk_Shape::vertexName = "fk_Vertex";
+const string fk_Shape::normalName = "fk_Normal";
 const string fk_Shape::pointModelColorName = "fk_PointModelColor";
 const string fk_Shape::pointElementColorName = "fk_PointElementColor";
 const string fk_Shape::pointElementAliveName = "fk_PointElementAlive";

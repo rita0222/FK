@@ -211,6 +211,7 @@ namespace FK {
 
 		// シェーダー変数名: 頂点座標
 		static const std::string	vertexName;
+		static const std::string	normalName;
 
 		// シェーダー変数名: 頂点モデル色
 		static const std::string	pointModelColorName;

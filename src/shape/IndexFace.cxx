@@ -169,6 +169,7 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	cloneList.clear();
 
 	setShaderAttribute(vertexName, 3, posSet.getP());
+	setShaderAttribute(normalName, 3, vNorm.getP());
 
 	return;
 }
@@ -324,8 +325,8 @@ void fk_IndexFaceSet::InitPNorm(void)
 {
 	int i;
 
-	pNorm.resize(posSet.getSize());
-	pNormFlg.resize(_st(posSet.getSize()));
+	pNorm.resize(int(faceSet.size())/3);
+	pNormFlg.resize(faceSet.size()/3);
 	ClearPFlg();
 
 	for(i = 0; i < pNorm.getSize(); ++i) {
