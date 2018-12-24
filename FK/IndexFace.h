@@ -1342,18 +1342,18 @@ namespace FK {
 
 	private:
 
-		fk_Palette						localPalette;
-		fk_FVecArray					posSet;
-		fk_FVecArray					timeOrgPos;
-		fk_FVecArray					vNorm;
-		fk_FVecArray					pNorm;
-		std::vector<GLuint>				faceSet;
-		std::vector<GLuint>				edgeSet;
+		//fk_Palette						localPalette;
+		fk_FVecArray					vertexPosition;
+		fk_FVecArray					timeOrgPosition;
+		fk_FVecArray					vertexNormal;
+		fk_FVecArray					faceNormal;
+		std::vector<GLuint>				faceIndex;
+		std::vector<GLuint>				edgeIndex;
 		std::vector< std::vector<int> >	loopStack;
 		bool							modifyFlg;
 		bool							edgeModifyFlg;
-		std::vector<char>				vNormFlg;
-		std::vector<char>				pNormFlg;
+		std::vector<char>				vertexNormFlg;
+		std::vector<char>				faceNormFlg;
 		std::vector<int>				modifyList;
 		//std::vector<int>				colorID;
 		//bool							colorFlg;
