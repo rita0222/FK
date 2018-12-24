@@ -1982,6 +1982,18 @@ void fk_IndexFaceSet::forceUpdateAttr(void)
 	faceIndexFlg = true;
 }
 
+void fk_IndexFaceSet::updateAttr(void)
+{
+	if(vertexPosition.isModify() == true) {
+		modifyAttribute(vertexName);
+		vertexPosition.reset();
+	}
+
+	if(vertexNormal.isModify() == true) {
+		modifyAttribute(normalName);
+		vertexNormal.reset();
+	}
+}
 /////////////////////////////////////////////////////////////////////////////
 
 void fk_IndexFaceSet::DataPrint(void)

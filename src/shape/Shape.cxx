@@ -380,6 +380,8 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 						 GLsizeiptr(sizeof(int) * size),
 						 &((*iArray)[0]), GL_STATIC_DRAW);
 			attrModify[itr->first] = false;
+
+			//fk_Window::printf("Bind: %s", itr->first.c_str());
 		}
 		glEnableVertexAttribArray(loc);
 	}
@@ -401,6 +403,8 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 						 GLsizeiptr(sizeof(float) * size),
 						 &((*fArray)[0]), GL_STATIC_DRAW);
 			attrModify[itr->first] = false;
+
+			//fk_Window::printf("Bind: %s", itr->first.c_str());
 		}
 		glEnableVertexAttribArray(loc);
 	}

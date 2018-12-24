@@ -1344,6 +1344,8 @@ namespace FK {
 		bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
 		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
+		void	updateAttr(void);
+
 #endif
 
 	private:
