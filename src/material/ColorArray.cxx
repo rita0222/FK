@@ -76,35 +76,47 @@ using namespace std;
 using namespace FK;
 
 fk_ColorArray::fk_ColorArray(void)
+	: allFlg(false)
 {
 	array.clear();
+	elemFlg.clear();
 }
 
 fk_ColorArray::fk_ColorArray(int argSize)
 {
 	array.resize(_st(argSize*4));
+	elemFlg.resize(_st(argSize));
+	for(_st i = 0; i < elemFlg.size(); ++i) elemFlg[i] = char(true);
+	allFlg = true;
 }
 
 fk_ColorArray::~fk_ColorArray() {}
 
 int fk_ColorArray::getSize(void)
 {
-	return int(array.size()/4);
+	return int(elemFlg.size());
 }
 
 void fk_ColorArray::resize(int argSize)
 {
 	array.resize(_st(argSize*4));
+	elemFlg.resize(_st(argSize));
+	for(_st i = 0; i < elemFlg.size(); ++i) elemFlg[i] = char(true);
+	allFlg = true;
 }
 
 void fk_ColorArray::clear(void)
 {
 	array.clear();
+	elemFlg.clear();
+	allFlg = true;
 }
 
 void fk_ColorArray::push(const fk_Color &argC)
 {
 	for(_st i = 0; i < 4; ++i) array.push_back(argC.col[i]);
+	elemFlg.push_back(char(true));
+	allFlg = true;
 }
 
 void fk_ColorArray::push(double argR, double argG, double argB, double argA)
@@ -113,6 +125,8 @@ void fk_ColorArray::push(double argR, double argG, double argB, double argA)
 	array.push_back(float(argG));
 	array.push_back(float(argB));
 	array.push_back(float(argA));
+	elemFlg.push_back(char(true));
+	allFlg = true;
 }
 
 void fk_ColorArray::push(float argR, float argG, float argB, float argA)
@@ -121,6 +135,8 @@ void fk_ColorArray::push(float argR, float argG, float argB, float argA)
 	array.push_back(argG);
 	array.push_back(argB);
 	array.push_back(argA);
+	elemFlg.push_back(char(true));
+	allFlg = true;
 }
 
 bool fk_ColorArray::set(int argID, const fk_Color &argC)
@@ -131,6 +147,9 @@ bool fk_ColorArray::set(int argID, const fk_Color &argC)
 	for(_st i = 0; i < 4; ++i) {
 		array[id+i] = argC.col[i];
 	}
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
 	return true;
 }
 
@@ -143,6 +162,9 @@ bool fk_ColorArray::set(int argID, double argR, double argG, double argB, double
 	array[id+1] = float(argG);
 	array[id+2] = float(argB);
 	array[id+3] = float(argA);
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
 	return true;
 }
 
@@ -155,6 +177,9 @@ bool fk_ColorArray::set(int argID, float argR, float argG, float argB, float arg
 	array[id+1] = argG;
 	array[id+2] = argB;
 	array[id+3] = argA;
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
 	return true;
 }
 
@@ -173,4 +198,22 @@ fk_Color fk_ColorArray::get(int argID)
 vector<float> * fk_ColorArray::getP(void)
 {
 	return &array;
+}
+
+bool fk_ColorArray::isModify(void)
+{
+	return allFlg;
+}
+
+bool fk_ColorArray::isModify(int argID)
+{
+	if(argID < 0 || argID >= getSize()) return false;
+	return elemFlg[_st(argID)];
+}
+
+void fk_ColorArray::reset(void)
+{
+	if(allFlg == false) return;
+	allFlg = false;
+	for(_st i = 0; i < elemFlg.size(); ++i) elemFlg[i] = char(false);
 }

@@ -103,6 +103,7 @@ fk_IFSTexture::~fk_IFSTexture()
 
 void fk_IFSTexture::MakeDrawIFSFunc(void)
 {
+	/*
 	DrawTexture = [this](bool argArrayState) {
 		const fk_Dimension *bufSize = getBufferSize();
 
@@ -181,6 +182,7 @@ void fk_IFSTexture::MakeDrawIFSFunc(void)
 #endif
 
 	};
+	*/
 }	
 
 vector< vector<int> > * fk_IFSTexture::GetCommonList(void)

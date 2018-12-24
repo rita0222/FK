@@ -331,6 +331,8 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 {
 	fk_Shape		*modelShape = argModel->getShape();
 
+	modelShape->flushAttr();
+
 	fk_DrawBase::SetModel(argModel);
 		
 	if(argModel->getBDrawToggle() == true) {

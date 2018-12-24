@@ -94,14 +94,12 @@ fk_Line::~fk_Line()
 void fk_Line::SetPos(int argEID, int argVID, fk_Vector *argV)
 {
 	posArray.set(argEID*2 + argVID, *argV);
-	modifyAttribute(vertexName);
 	return;
 }
 
 void fk_Line::SetCol(int argEID, int argVID, fk_Color *argC)
 {
 	colArray.set(argEID*2 + argVID, *argC);
-	modifyAttribute(lineElementColorName);
 	return;
 }
 
@@ -124,9 +122,6 @@ void fk_Line::MakeLines(vector<fk_Vector> *argVPos)
 		SetCol(i, 0, &col);
 		SetCol(i, 1, &col);
 	}
-
-	modifyAttribute(vertexName);
-	modifyAttribute(lineElementColorName);
 	return;
 }
 
@@ -148,8 +143,6 @@ void fk_Line::PushLines(fk_Vector *argS, fk_Vector *argE)
 	posArray.push(*argE);
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
-	modifyAttribute(vertexName);
-	modifyAttribute(lineElementColorName);
 }
 
 bool fk_Line::setVertex(int argID, fk_Vector argPos)
@@ -159,9 +152,6 @@ bool fk_Line::setVertex(int argID, fk_Vector argPos)
 	colArray.resize(2);
 
 	SetPos(0, argID, &argPos);
-
-	modifyAttribute(vertexName);
-	modifyAttribute(lineElementColorName);
 	return true;
 }
 
@@ -234,4 +224,17 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 fk_Color fk_Line::getColor(int argID)
 {
 	return colArray.get(argID);
+}
+
+void fk_Line::flushAttr(void)
+{
+	if(posArray.isModify() == true) {
+		modifyAttribute(vertexName);
+		posArray.reset();
+	}
+
+	if(colArray.isModify() == true) {
+		modifyAttribute(lineElementColorName);
+		colArray.reset();
+	}
 }

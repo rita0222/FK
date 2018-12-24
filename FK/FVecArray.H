@@ -30,8 +30,14 @@ namespace FK {
 
 		std::vector<float> * getP(void);
 
+		bool	isModify(void);
+		bool	isModify(int);
+		void	reset(void);
+
 	private:
+		bool				allFlg;
 		std::vector<float>	array;
+		std::vector<char>	elemFlg;
 	};
 }
 

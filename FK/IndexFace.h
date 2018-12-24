@@ -650,9 +650,9 @@ namespace FK {
 		 *
 		 *	\return		面の法線ベクトル
 		 *
-		 *	\sa setPNorm(), getVNorm()
+		 *	\sa setFaceNorm(), getVertexNorm()
 		 */
-		fk_Vector	getPNorm(int faceID, int order = 0);
+		fk_Vector	getFaceNorm(int faceID, int order = 0);
 
 		//! 頂点法線ベクトル取得関数
 		/*!
@@ -665,9 +665,9 @@ namespace FK {
 		 *
 		 *	\return		頂点の法線ベクトル
 		 *
-		 *	\sa setVNorm(), getPNorm()
+		 *	\sa setVertexNorm(), getFaceNorm()
 		 */
-		fk_Vector	getVNorm(int vertexID, int order = 0);
+		fk_Vector	getVertexNorm(int vertexID, int order = 0);
 
 		//@}
 
@@ -677,8 +677,8 @@ namespace FK {
 		//! 頂点移動関数1
 		/*!
 		 *	指定された頂点を移動します。
-		 *	なお、 setVNorm() によって法線ベクトルが設定されていた場合や、
-		 *	setPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
+		 *	なお、 setVertexNorm() によって法線ベクトルが設定されていた場合や、
+		 *	setFaceNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	この関数によって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -697,8 +697,8 @@ namespace FK {
 		//! 頂点移動関数2
 		/*!
 		 *	指定された頂点を移動します。
-		 *	なお、 setVNorm() によって法線ベクトルが設定されていた場合や、
-		 *	setPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
+		 *	なお、 setVertexNorm() によって法線ベクトルが設定されていた場合や、
+		 *	setFaceNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	この関数によって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -718,8 +718,8 @@ namespace FK {
 		//! 頂点移動関数3
 		/*!
 		 *	指定された頂点を移動します。
-		 *	なお、 setVNorm() によって法線ベクトルが設定されていた場合や、
-		 *	setPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
+		 *	なお、 setVertexNorm() によって法線ベクトルが設定されていた場合や、
+		 *	setFaceNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	この関数によって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -819,9 +819,9 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 *
-		 *	\sa getPNorm(), setVNorm()
+		 *	\sa getFaceNorm(), setVertexNorm()
 		 */
-		bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
+		bool	setFaceNorm(int faceID, const fk_Vector &norm, int order = 0);
 
 		//! 頂点法線ベクトル設定関数
 		/*!
@@ -847,10 +847,9 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 *
-		 *	\sa getVNorm(), setPNorm()
+		 *	\sa getVertexNorm(), setFaceNorm()
 		 */
-		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
-
+		bool	setVertexNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
 		//! 法線ベクトル強制計算関数 
 		/*!
@@ -864,9 +863,9 @@ namespace FK {
 		 *	画面が一瞬止まってしまうといった状況が想定されます。
 		 *
 		 *	この関数は、形状中のすべての面と頂点に対して法線ベクトルを強制的に算出します。
-		 *	なお、 setPNorm() や setVNorm() で設定した法線ベクトルは全て破棄されます。
+		 *	なお、 setFaceNorm() や setVertexNorm() で設定した法線ベクトルは全て破棄されます。
 		 *
-		 *	\sa getPNorm(), getVNorm(), setPNorm(), setVNorm()
+		 *	\sa getFaceNorm(), getVertexNorm(), setFaceNorm(), setVertexNorm()
 		 */
 		void	flush(void);
 
@@ -1334,49 +1333,54 @@ namespace FK {
 		void	DataPrint(void);
 
 		void	EdgeIBOSetup(void);
+		void	FaceIBOSetup(void);
 
 		int		getElemMaterialID(int);
 		bool	setElemMaterialID(int, int);
-		void	updateAttr(void);
+		void	forceUpdateAttr(void);
+
+		fk_Vector	getPNorm(int faceID, int order = 0);
+		fk_Vector	getVNorm(int vertexID, int order = 0);
+		bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
+		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
+
 #endif
 
 	private:
 
-		//fk_Palette						localPalette;
 		fk_FVecArray					vertexPosition;
 		fk_FVecArray					timeOrgPosition;
 		fk_FVecArray					vertexNormal;
 		fk_FVecArray					faceNormal;
-		std::vector<GLuint>				faceIndex;
 		std::vector<GLuint>				edgeIndex;
+		std::vector<GLuint>				faceIndex;
 		std::vector< std::vector<int> >	loopStack;
-		bool							modifyFlg;
-		bool							edgeModifyFlg;
-		std::vector<char>				vertexNormFlg;
-		std::vector<char>				faceNormFlg;
+		//bool							modifyFlg;
+		//bool							edgeModifyFlg;
 		std::vector<int>				modifyList;
-		//std::vector<int>				colorID;
-		//bool							colorFlg;
 		fk_D3DXAnimation				*anim;
 
-		//int								posSize;
-		//int								faceSize;
-		//fk_IFType						type;
-		
 		bool							cloneFlg;
 		std::list<fk_IndexFaceSet *>	cloneList;
 		fk_IndexFaceSet					*orgIFS;
 
-		GLuint							edgeIBO;
+		// 編集があった場合に true, ない場合 false
+		bool				edgeIndexFlg, faceIndexFlg;
+		std::vector<char>	faceNormFlg;
+		std::vector<char>	vertexNormFlg;
 
-		void				InitPNorm(void);
-		void				InitVNorm(void);
-		void				ModifyPNorm(void);
-		void				ModifyVNorm(void);
-		void				MakePNorm(int);
+		GLuint				edgeIBO, faceIBO;
 
-		void				ClearPFlg(void);
-		void				ClearVFlg(void);
+		void				InitFaceNorm(void);
+		void				InitVertexNorm(void);
+
+		void				ModifyFaceNorm(void);
+		void				ModifyVertexNorm(void);
+
+		void				MakeFaceNorm(int);
+
+		void				ResetFaceFlg(void);
+		void				ResetVertexFlg(void);
 
 		fk_FVector			CalcTriNorm(GLuint *);
 		fk_FVector			CalcPolyNorm(int, int *);

@@ -147,21 +147,22 @@ void fk_EdgePair::set(int argID1, int argID2)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
 fk_IndexFaceSet::fk_IndexFaceSet(void)
-	: modifyFlg(true), edgeModifyFlg(true),
-	  anim(nullptr), cloneFlg(false),
-	  orgIFS(nullptr), edgeIBO(0)
+	: anim(nullptr), cloneFlg(false), orgIFS(nullptr),
+	  edgeIndexFlg(true), faceIndexFlg(true),
+	  edgeIBO(0), faceIBO(0)
 {
 	SetObjectType(FK_INDEXFACESET);
 	//SetPaletteData(&localPalette);
 	
-
 	vertexPosition.clear();
 	timeOrgPosition.clear();
 	vertexNormal.clear();
 	faceNormal.clear();
-	faceIndex.clear();
 	edgeIndex.clear();
+	faceIndex.clear();
 	loopStack.clear();
 	vertexNormFlg.clear();
 	faceNormFlg.clear();
@@ -184,6 +185,7 @@ fk_IndexFaceSet::~fk_IndexFaceSet()
 
 	DeleteCloneLink(this);
 	if(edgeIBO != 0) glDeleteBuffers(1, &edgeIBO);
+	if(faceIBO != 0) glDeleteBuffers(1, &faceIBO);
 	return;
 }
 
@@ -212,13 +214,13 @@ void fk_IndexFaceSet::Init(void)
 	faceNormal.clear();
 	faceIndex.clear();
 	edgeIndex.clear();
-
 	loopStack.clear();
+
 	vertexNormFlg.clear();
 	faceNormFlg.clear();
 
-	modifyFlg = true;
-	edgeModifyFlg = true;
+	edgeIndexFlg = true;
+	faceIndexFlg = true;
 
 	return;
 }
@@ -246,6 +248,7 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 	// 頂点データのコピー
 	for(i = 0; i < vData->size(); ++i) {
 		vertexPosition.push((*vData)[i]);
+		vertexNormFlg.push_back(char(true));
 	}
 
 	// 面データのコピー
@@ -265,7 +268,9 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 	}
 
 	MakeEdgeSet(lIndex);
-	ModifyVNorm();
+	ModifyVertexNorm();
+
+	faceIndexFlg = true;
 
 	return true;
 }
@@ -321,23 +326,22 @@ void fk_IndexFaceSet::makeIFSet(vector< vector<int> > *argIFS,
 	return;
 }
 
-void fk_IndexFaceSet::InitPNorm(void)
+void fk_IndexFaceSet::InitFaceNorm(void)
 {
 	int i;
 
 	faceNormal.resize(int(faceIndex.size())/3);
 	faceNormFlg.resize(faceIndex.size()/3);
-	ClearPFlg();
 
 	for(i = 0; i < faceNormal.getSize(); ++i) {
-		MakePNorm(i);
+		MakeFaceNorm(i);
 	}
 
-	modifyFlg = false;
+	ResetFaceFlg();
 	return;
 }
 
-void fk_IndexFaceSet::ModifyPNorm(void)
+void fk_IndexFaceSet::ModifyFaceNorm(void)
 {
 	_st		i, j, vID;
 
@@ -346,12 +350,8 @@ void fk_IndexFaceSet::ModifyPNorm(void)
 
 	// まだ面法線配列が生成されていない場合
 	if(faceNormal.getSize() == 0) {
-		InitPNorm();
-		return;
+		InitFaceNorm();
 	}
-
-	// 変形がなかった場合は終了
-	if(modifyFlg == false) return;
 
 	// 頂点の面接続テーブルが生成されていない場合, テーブルを生成する。
 	if(loopStack.empty() == true) {
@@ -362,17 +362,17 @@ void fk_IndexFaceSet::ModifyPNorm(void)
 	for(i = 0; i < modifyList.size(); ++i) {
 		vID = _st(modifyList[i]);
 		for(j = 0; j < loopStack[vID].size(); ++j) {
-			MakePNorm(loopStack[vID][j]);
+			MakeFaceNorm(loopStack[vID][j]);
 		}
 	}
 
-	ClearPFlg();
+	ResetFaceFlg();
 	modifyList.clear();
-	modifyFlg = false;
+
 	return;
 }
 
-void fk_IndexFaceSet::MakePNorm(int argID)
+void fk_IndexFaceSet::MakeFaceNorm(int argID)
 {
 	_st			id = _st(argID);
 	_st			j;
@@ -389,27 +389,28 @@ void fk_IndexFaceSet::MakePNorm(int argID)
 			vertexNormFlg[faceIndex[j]] = char(true);
 		}
 	}
-
+	
 	return;
 }
 
-void fk_IndexFaceSet::ClearPFlg(void)
+void fk_IndexFaceSet::ResetFaceFlg(void)
 {
 	_st		i;
 
 	for(i = 0; i < faceNormFlg.size(); ++i) {
 		faceNormFlg[i] = char(true);
 	}
+	
 	return;
 }
 
-void fk_IndexFaceSet::InitVNorm(void)
+void fk_IndexFaceSet::InitVertexNorm(void)
 {
 	vector<fk_Vector>	normArray;
 	fk_Vector			tmpVec;
 	_st					i, j;
 
-	if(faceNormal.getSize() == 0) InitPNorm();
+	if(faceNormal.getSize() == 0) InitFaceNorm();
 
 	vertexNormal.resize(vertexPosition.getSize());
 	vertexNormFlg.resize(_st(vertexPosition.getSize()));
@@ -429,11 +430,11 @@ void fk_IndexFaceSet::InitVNorm(void)
 		vertexNormal.set(int(i), normArray[i]);
 	}
 
-	ClearVFlg();
+	ResetVertexFlg();
 	return;
 }
 
-void fk_IndexFaceSet::ModifyVNorm(void)
+void fk_IndexFaceSet::ModifyVertexNorm(void)
 {
 	fk_Vector		norm, tmpV;
 	_st				i, j, loopID;
@@ -443,15 +444,11 @@ void fk_IndexFaceSet::ModifyVNorm(void)
 
 	// まだ頂点法線配列が生成されていない場合
 	if(vertexNormal.getSize() == 0) {
-		InitVNorm();
-		return;
+		InitFaceNorm();
 	}
 
-	// 変形がなかった場合は終了
-	if(modifyFlg == false) return;
-
 	// 面法線情報を再計算
-	ModifyPNorm();
+	ModifyFaceNorm();
 
 	for(i = 0; i < _st(vertexPosition.getSize()); ++i) {
 		if(vertexNormFlg[i] == char(true)) {
@@ -470,7 +467,7 @@ void fk_IndexFaceSet::ModifyVNorm(void)
 	return;
 }
 
-void fk_IndexFaceSet::ClearVFlg(void)
+void fk_IndexFaceSet::ResetVertexFlg(void)
 {
 	_st		i;
 
@@ -591,7 +588,7 @@ void fk_IndexFaceSet::MakeEdgeSet(vector< vector<int> > *argLoop)
 			edgeIndex.push_back(GLuint(edgeArray[i].id[1]));
 		}
 	}
-	edgeModifyFlg = true;
+	edgeIndexFlg = true;
 
 	return;
 }
@@ -651,8 +648,6 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 	if(trueID < 0 || trueID >= vertexPosition.getSize()) return false;
 
 	vertexPosition.set(trueID, argPos);
-
-	modifyFlg = true;
 	modifyList.push_back(trueID);
 
 	return true;
@@ -667,8 +662,6 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 	if(trueID < 0 || trueID >= vertexPosition.getSize()) return false;
 
 	vertexPosition.set(trueID, argX, argY, argZ);
-
-	modifyFlg = true;
 	modifyList.push_back(trueID);
 
 	return true;
@@ -681,14 +674,12 @@ bool fk_IndexFaceSet::moveVPosition(int argID, double *argPos, int argOrder)
 	if(trueID < 0 || trueID >= vertexPosition.getSize()) return false;
 
 	vertexPosition.set(trueID, argPos[0], argPos[1], argPos[2]);
-
-	modifyFlg = true;
 	modifyList.push_back(trueID);
 
 	return true;
 }
 
-fk_Vector fk_IndexFaceSet::getPNorm(int argPID, int argOrder)
+fk_Vector fk_IndexFaceSet::getFaceNorm(int argPID, int argOrder)
 {
 	int			trueID = argPID - argOrder;
 
@@ -699,8 +690,12 @@ fk_Vector fk_IndexFaceSet::getPNorm(int argPID, int argOrder)
 	return faceNormal.getV(trueID);
 }
 
-bool fk_IndexFaceSet::setPNorm(int argPID,
-							   const fk_Vector &argVec, int argOrder)
+fk_Vector fk_IndexFaceSet::getPNorm(int argPID, int argOrder)
+{
+	return getFaceNorm(argPID, argOrder);
+}
+
+bool fk_IndexFaceSet::setFaceNorm(int argPID, const fk_Vector &argVec, int argOrder)
 {
 	int			trueID = argPID - argOrder;
 
@@ -709,7 +704,12 @@ bool fk_IndexFaceSet::setPNorm(int argPID,
 	return true;
 }
 
-fk_Vector fk_IndexFaceSet::getVNorm(int argVID, int argOrder)
+bool fk_IndexFaceSet::setPNorm(int argPID, const fk_Vector &argVec, int argOrder)
+{
+	return setFaceNorm(argPID, argVec, argOrder);
+}
+
+fk_Vector fk_IndexFaceSet::getVertexNorm(int argVID, int argOrder)
 {
 	int			trueID = argVID - argOrder;
 
@@ -720,8 +720,12 @@ fk_Vector fk_IndexFaceSet::getVNorm(int argVID, int argOrder)
 	return vertexNormal.getV(trueID);
 }
 
-bool fk_IndexFaceSet::setVNorm(int argVID,
-							   const fk_Vector &argVec, int argOrder)
+fk_Vector fk_IndexFaceSet::getVNorm(int argVID, int argOrder)
+{
+	return getVertexNorm(argVID, argOrder);
+}
+
+bool fk_IndexFaceSet::setVertexNorm(int argVID, const fk_Vector &argVec, int argOrder)
 {
 	int			trueID = argVID - argOrder;
 
@@ -729,6 +733,11 @@ bool fk_IndexFaceSet::setVNorm(int argVID,
 	vertexNormal.set(trueID, argVec);
 
 	return true;
+}
+
+bool fk_IndexFaceSet::setVNorm(int argVID, const fk_Vector &argVec, int argOrder)
+{
+	return setVertexNorm(argVID, argVec, argOrder);
 }
 
 bool fk_IndexFaceSet::setElemMaterialID(int, int)
@@ -743,11 +752,7 @@ int fk_IndexFaceSet::getElemMaterialID(int)
 
 void fk_IndexFaceSet::flush(void)
 {
-	if(faceNormal.getSize() == 0) {
-		ModifyPNorm();
-	} else {
-		ModifyVNorm();
-	}
+	ModifyVertexNorm();
 	return;
 }
 
@@ -1922,7 +1927,6 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 	faceIndex = argIFS->faceIndex;
 	edgeIndex = argIFS->edgeIndex;
 	loopStack = argIFS->loopStack;
-	modifyFlg = argIFS->modifyFlg;
 	vertexNormFlg = argIFS->vertexNormFlg;
 	faceNormFlg = argIFS->faceNormFlg;
 	modifyList = argIFS->modifyList;
@@ -1930,8 +1934,6 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 	anim = argIFS->anim;
 	orgIFS = argIFS;
 	cloneFlg = true;
-	modifyFlg = true;
-	edgeModifyFlg = true;
 
 	argIFS->cloneList.push_back(this);
 
@@ -1945,23 +1947,39 @@ void fk_IndexFaceSet::EdgeIBOSetup(void)
 {
 	if(edgeIBO == 0) {
 		glGenBuffers(1, &edgeIBO);
-		edgeModifyFlg = true;
+		edgeIndexFlg = true;
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, edgeIBO);
-	if(edgeModifyFlg == true) {
+	if(edgeIndexFlg == true) {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 					 GLsizei(edgeIndex.size()*sizeof(GLuint)),
 					 &edgeIndex[0], GL_STATIC_DRAW);
-		edgeModifyFlg = false;
+		edgeIndexFlg = false;
 	}
 }
 
-void fk_IndexFaceSet::updateAttr(void)
+void fk_IndexFaceSet::FaceIBOSetup(void)
 {
-	fk_Shape::updateAttr();
-	modifyFlg = true;
-	edgeModifyFlg = true;
+	if(faceIBO == 0) {
+		glGenBuffers(1, &faceIBO);
+		faceIndexFlg = true;
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+	if(faceIndexFlg == true) {
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+					 GLsizei(faceIndex.size()*sizeof(GLuint)),
+					 &faceIndex[0], GL_STATIC_DRAW);
+		faceIndexFlg = false;
+	}
+}
+
+void fk_IndexFaceSet::forceUpdateAttr(void)
+{
+	fk_Shape::forceUpdateAttr();
+	edgeIndexFlg = true;
+	faceIndexFlg = true;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -128,8 +128,6 @@ int fk_Point::pushVertex(fk_Vector argPos)
 	colArray.push(0.0, 0.0, 0.0, 1.0);
 	aliveArray.push_back(FK_SHAPE_ALIVE);
 
-	modifyAttribute(vertexName);
-	modifyAttribute(pointElementColorName);
 	modifyAttribute(pointElementAliveName);
 
 	return int(aliveArray.size() - 1);
@@ -140,8 +138,6 @@ bool fk_Point::setVertex(int argID, fk_Vector argPos)
 	if(argID < 0 || argID >= posArray.getSize()) return false;
 	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
 	posArray.set(argID, argPos);
-
-	modifyAttribute(vertexName);
 
 	return true;
 }
@@ -197,7 +193,6 @@ void fk_Point::setColor(int argID, fk_Color argCol)
 {
 	if(argID < 0 || argID >= colArray.getSize()) return;
 	colArray.set(argID, argCol);
-	modifyAttribute(pointElementColorName);
 	return;
 }
 
@@ -205,7 +200,6 @@ void fk_Point::setColor(int argID, fk_Color *argCol)
 {
 	if(argID < 0 || argID >= colArray.getSize()) return;
 	colArray.set(argID, *argCol);
-	modifyAttribute(pointElementColorName);
 	return;
 }
 
@@ -227,6 +221,19 @@ bool fk_Point::getDrawMode(int argID)
 	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
 	return false;
 }
-	
+
+void fk_Point::flushAttr(void)
+{
+	if(posArray.isModify() == true) {
+		modifyAttribute(vertexName);
+		posArray.reset();
+	}
+
+	if(colArray.isModify() == true) {
+		modifyAttribute(pointElementColorName);
+		colArray.reset();
+	}
+}
+
 void fk_Point::setColorID(int, int) { return; }
 int fk_Point::getColorID(int) { return 0; }

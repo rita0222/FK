@@ -413,9 +413,13 @@ void fk_Shape::modifyAttribute(string argName)
 	attrModify[argName] = true;
 }
 
-void fk_Shape::updateAttr(void)
+void fk_Shape::forceUpdateAttr(void)
 {
 	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
 		itr->second = true;
 	}
+}
+
+void fk_Shape::flushAttr(void)
+{
 }
