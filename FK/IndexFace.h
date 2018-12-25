@@ -1382,7 +1382,6 @@ namespace FK {
 		void				MakeFaceNorm(int);
 
 		void				ResetFaceFlg(void);
-		void				ResetVertexFlg(void);
 
 		fk_FVector			CalcTriNorm(GLuint *);
 		fk_FVector			CalcPolyNorm(int, int *);

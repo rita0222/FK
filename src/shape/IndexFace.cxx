@@ -248,7 +248,7 @@ bool fk_IndexFaceSet::MakeMesh(vector<fk_Vector> *vData,
 	// 頂点データのコピー
 	for(i = 0; i < vData->size(); ++i) {
 		vertexPosition.push((*vData)[i]);
-		vertexNormFlg.push_back(char(true));
+		//vertexNormFlg.push_back(char(true));
 	}
 
 	// 面データのコピー
@@ -333,6 +333,8 @@ void fk_IndexFaceSet::InitFaceNorm(void)
 	faceNormal.resize(int(faceIndex.size())/3);
 	faceNormFlg.resize(faceIndex.size()/3);
 
+	fill(faceNormFlg.begin(), faceNormFlg.end(), char(true));
+
 	for(i = 0; i < faceNormal.getSize(); ++i) {
 		MakeFaceNorm(i);
 	}
@@ -401,18 +403,20 @@ void fk_IndexFaceSet::ResetFaceFlg(void)
 
 void fk_IndexFaceSet::InitVertexNorm(void)
 {
+	/*
 	vector<fk_Vector>	normArray;
 	fk_Vector			tmpVec;
 	_st					i, j;
+	*/
 
 	if(faceNormal.getSize() == 0) InitFaceNorm();
 
 	vertexNormal.resize(vertexPosition.getSize());
 	vertexNormFlg.resize(_st(vertexPosition.getSize()));
-	normArray.resize(_st(vertexPosition.getSize()));
+	//normArray.resize(_st(vertexPosition.getSize()));
 
+/*
 	for(i = 0; i < normArray.size(); ++i) normArray[i].init();
-
 	for(i = 0; i < faceIndex.size()/3; ++i) {
 		tmpVec = faceNormal.getV(int(i));
 		for(j = 0; j < 3; ++j) {
@@ -424,8 +428,8 @@ void fk_IndexFaceSet::InitVertexNorm(void)
 		normArray[i].normalize();
 		vertexNormal.set(int(i), normArray[i]);
 	}
-
-	ResetVertexFlg();
+*/
+	fill(vertexNormFlg.begin(), vertexNormFlg.end(), char(true));
 	return;
 }
 
@@ -439,7 +443,7 @@ void fk_IndexFaceSet::ModifyVertexNorm(void)
 
 	// まだ頂点法線配列が生成されていない場合
 	if(vertexNormal.getSize() == 0) {
-		InitFaceNorm();
+		InitVertexNorm();
 	}
 
 	// 面法線情報を再計算
@@ -459,12 +463,6 @@ void fk_IndexFaceSet::ModifyVertexNorm(void)
 		}
 	}
 
-	return;
-}
-
-void fk_IndexFaceSet::ResetVertexFlg(void)
-{
-	fill(vertexNormFlg.begin(), vertexNormFlg.end(), char(false));
 	return;
 }
 
@@ -1990,13 +1988,15 @@ void fk_IndexFaceSet::updateAttr(void)
 void fk_IndexFaceSet::DataPrint(void)
 {
 	stringstream	ss;
-	fk_Vector		v;
+	fk_Vector		p, n;
 	
 	for(int i = 0; i < vertexPosition.getSize(); ++i) {
-		v = vertexPosition.getV(i);
+		p = vertexPosition.getV(i);
+		n = vertexNormal.getV(i);
 		ss.clear();
-		ss << "pos[" << i << "] = (";
-		ss << v.x << ", " << v.y << ", " << v.z << ")" << endl;
+		ss << "(p, n)[" << i << "] = (";
+		ss << p.x << ", " << p.y << ", " << p.z << "), (";
+		ss << n.x << ", " << n.y << ", " << n.z << ")" << endl;
 	}
 
 	for(_st i = 0; i < faceIndex.size()/3; ++i) {

@@ -125,7 +125,7 @@ void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
 	argParam->setRegister(projectionMatrixName, projectionMatrix);
 	argParam->setRegister(viewMatrixName, &viewMatrix);
-	argParam->setRegister(modelMatrixName, &modelViewMatrix);
+	argParam->setRegister(modelMatrixName, &modelMatrix);
 	argParam->setRegister(modelViewMatrixName, &modelViewMatrix);
 	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix);
 
