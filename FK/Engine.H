@@ -10,18 +10,14 @@
 #include <FK/DList.h>
 
 namespace FK {
-
+	class fk_Scene;
+	class fk_Plane;
 	class fk_PointDraw;
 	class fk_LineDraw;
 	class fk_FaceDraw;
 	class fk_TextureDraw;
-	class fk_DisplayLink;
-	class fk_ProjectBase;
-	class fk_Scene;
-	class fk_Plane;
 
 	class fk_GraphicsEngine {
-
 
 	public:
 		fk_GraphicsEngine(void);
@@ -84,7 +80,7 @@ namespace FK {
 
 
 		void				DrawObjs(void);
-		void				DrawModel(fk_Model *, bool);
+		void				DrawModel(fk_Model *);
 		//void				RecalcModelView(void);
 		//void				RecalcInhModelView(const fk_Model *);
 		void				CurrentDispLinkDraw(void);
@@ -92,8 +88,8 @@ namespace FK {
 		//void				LoadModelMatrix(fk_Model *);
 		//void				LoadAABBMatrix(fk_Model *);
 
-		void				DrawShapeObj(fk_Model *, bool);
-		void				DrawBoundaryObj(fk_Model *, bool);
+		void				DrawShapeObj(fk_Model *);
+		void				DrawBoundaryObj(fk_Model *);
 
 		void				SetViewPort(void);
 		void				SetProjection(fk_ProjectBase *);
@@ -119,16 +115,10 @@ namespace FK {
 		void				SetBlendMode(fk_Model *model);
 		void				SetDepthMode(fk_DepthMode mode);
 
-#ifdef NO_GLU_LIBRARY
-		void				gluLookAt(GLdouble, GLdouble, GLdouble,
-									  GLdouble, GLdouble, GLdouble,
-									  GLdouble, GLdouble, GLdouble);
-
-		void				gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
-
-		void				gluPickMatrix(GLdouble, GLdouble, GLdouble, GLdouble,
-										  const GLint [4]);
-#endif
+		void				DrawListFace(std::list<fk_Model *> *);
+		void				DrawListLine(std::list<fk_Model *> *);
+		void				DrawListPoint(std::list<fk_Model *> *);
+		void				ModelSetting(std::list<fk_Model *> *);
 	};
 }
 

@@ -113,15 +113,13 @@ void fk_TextureDraw::StartUp(void)
 	return;
 }
 
-void fk_TextureDraw::DrawTextureObj(fk_Model *argObj, bool argLightFlag)
+void fk_TextureDraw::DrawTextureObj(fk_Model *argObj)
 {
 	fk_Texture	*texObj;
 	int			mateID = -2;
 	GLboolean	texStatus;
 	fk_TexID	texID;
 
-	FK_UNUSED(argLightFlag);
-	
 	if((argObj->getDrawMode() & FK_TEXTUREMODE) == FK_NONEMODE) return;
 	texObj = static_cast<fk_Texture *>(argObj->getShape());
 

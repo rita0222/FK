@@ -19,7 +19,7 @@ namespace FK {
 
 		void	StartUp(void);
 		void	SetArrayState(bool);
-		void	DrawTextureObj(fk_Model *, bool);
+		void	DrawTextureObj(fk_Model *);
 		void	ClearTextureMemory(void);
 		void	SetBindMode(bool);
 		bool	GetBindMode(void);

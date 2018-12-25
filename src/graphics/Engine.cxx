@@ -298,10 +298,8 @@ void fk_GraphicsEngine::DrawObjs(void)
 {
 	list<fk_Model *>::iterator	modelP, modelPEnd;
 	list<fk_Model *>			*overlayList;
-	bool						lightFlag;
 
 	if(curDLink == nullptr) return;
-	lightFlag = DefineLight();
 
 	//if(argPickFlg == true) modelArray.clear();
 
@@ -311,7 +309,7 @@ void fk_GraphicsEngine::DrawObjs(void)
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
 		SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP, lightFlag);
+		DrawModel(*modelP);
 	}
 
 	overlayList = curDLink->GetOverlayList();
@@ -320,14 +318,85 @@ void fk_GraphicsEngine::DrawObjs(void)
 	SetDepthMode(FK_DEPTH_NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP, lightFlag);
+		DrawModel(*modelP);
 	}
 
 	return;
 }
 
-void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
-								  bool argLightFlg)
+/*
+void fk_GraphicsEngine::DrawObjs(void)
+{
+	if(curDLink == nullptr) return;
+
+	auto modelList = curDLink->GetModelList();
+	if(modelList->empty() == false) {
+		ModelSetting(modelList);
+		DrawListPoint(modelList);
+		DrawListLine(modelList);
+		DrawListFace(modelList);
+	}
+
+	auto overlayList = curDLink->GetOverlayList();
+	if(overlayList->empty() == false) {
+		SetDepthMode(FK_DEPTH_NO_USE);
+		ModelSetting(overlayList);
+		DrawListPoint(overlayList);
+		DrawListLine(overlayList);
+		DrawListFace(overlayList);
+	}
+	return;
+}
+*/
+
+void fk_GraphicsEngine::DrawListFace(list<fk_Model *> *argList)
+{
+	for(auto modelP = argList->begin(); modelP != argList->end(); ++modelP) {
+		auto model = *modelP;
+		auto drawMode = model->getDrawMode();
+		if((drawMode & FK_POLYMODE) != FK_NONEMODE) {
+			SetDepthMode(model->getDepthMode());
+			faceDraw->DrawShapeFace(model);
+		}
+	}
+}
+
+void fk_GraphicsEngine::DrawListLine(list<fk_Model *> *argList)
+{
+	for(auto modelP = argList->begin(); modelP != argList->end(); ++modelP) {
+		auto model = *modelP;
+		auto drawMode = model->getDrawMode();
+		if((drawMode & FK_LINEMODE) != FK_NONEMODE) {
+			SetDepthMode(model->getDepthMode());
+			lineDraw->DrawShapeLine(model);
+		}
+	}
+}
+
+void fk_GraphicsEngine::DrawListPoint(list<fk_Model *> *argList)
+{
+	for(auto modelP = argList->begin(); modelP != argList->end(); ++modelP) {
+		auto model = *modelP;
+		auto drawMode = model->getDrawMode();
+		if((drawMode & FK_POINTMODE) != FK_NONEMODE) {
+			SetDepthMode(model->getDepthMode());
+			pointDraw->DrawShapePoint(model);
+		}
+	}
+}
+
+void fk_GraphicsEngine::ModelSetting(list<fk_Model *> *argList)
+{
+	for(auto modelP = argList->begin(); modelP != argList->end(); ++modelP) {
+		auto model = *modelP;
+		auto shape = model->getShape();
+		if(shape == nullptr) continue;
+		shape->flushAttr();
+		fk_DrawBase::SetModel(model);
+	}
+}
+
+void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 {
 	fk_Shape		*modelShape = argModel->getShape();
 
@@ -338,11 +407,11 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	if(argModel->getBDrawToggle() == true) {
 		if(argModel->getBMode() == FK_B_AABB) {
 			//LoadAABBMatrix(argModel);
-			DrawBoundaryObj(argModel, argLightFlg);
+			DrawBoundaryObj(argModel);
 			//LoadModelMatrix(argModel);
 		} else {
 			//LoadModelMatrix(argModel);
-			DrawBoundaryObj(argModel, argLightFlg);
+			DrawBoundaryObj(argModel);
 		}
 	} else {
 		//LoadModelMatrix(argModel);
@@ -359,9 +428,9 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 			glEnable(GL_TEXTURE_2D);
 			textureMode = true;
 		}
-		textureDraw->DrawTextureObj(argModel, argLightFlg);
+		textureDraw->DrawTextureObj(argModel);
 	} else {
-		DrawShapeObj(argModel, argLightFlg);
+		DrawShapeObj(argModel);
 	}
 
 	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->postShader();
@@ -478,12 +547,10 @@ bool fk_GraphicsEngine::DefineLight(void)
 	return true;
 }
 
-void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel,
-									 bool argLightFlag)
+void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 {
 	fk_DrawMode		DrawMode;
 
-	FK_UNUSED(argLightFlag);
 	DrawMode = argModel->getDrawMode();
 
 	//fk_Window::printf("DrawMode = %d", DrawMode);
@@ -509,10 +576,8 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel,
 	return;
 }
 
-void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argModel, bool argLightFlag)
+void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argModel)
 {
-	FK_UNUSED(argLightFlag);
-	
 	if(textureMode == true) {
 		glDisable(GL_TEXTURE_2D);
 		textureMode = false;
