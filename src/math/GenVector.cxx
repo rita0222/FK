@@ -310,10 +310,7 @@ void fk_GenVector::init(bool argFlag)
 	if(argFlag == true) {
 		v.clear();
 	} else {
-		_st end = static_cast<_st>(size());
-		for(_st i = 0; i < end; ++i) {
-			v[i] = 0.0;
-		}
+		fill(v.begin(), v.end(), 0.0);
 	}
 	return;
 }

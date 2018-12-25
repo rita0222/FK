@@ -97,12 +97,34 @@ fk_FaceDraw::~fk_FaceDraw()
 	return;
 }
 
-void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, fk_DrawMode argDMode)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 {
-	FK_UNUSED(argObj);
+	fk_RealShapeType	shapeType = argModel->getShape()->getRealShapeType();
+	fk_DrawMode			drawMode = argModel->getDrawMode();
 
 	if(shader == nullptr) ShaderSetup();
-	
+	PolygonModeSet(drawMode);
+
+	auto parameter = shader->getParameter();
+	SetParameter(parameter);
+
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+
+	switch(shapeType) {
+	  case FK_SHAPE_IFS:
+		Draw_IFS(argModel, parameter);
+		break;
+
+	  default:
+		break;
+	}
+
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	return;
+}
+
+void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
+{
 	if((argDMode & FK_FRONTBACK_POLYMODE) == FK_FRONTBACK_POLYMODE) {
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -115,8 +137,6 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, fk_DrawMode argDMode)
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT, GL_FILL);
 	}
-
-	return;
 }
 
 void fk_FaceDraw::ShaderSetup(void)
@@ -160,6 +180,23 @@ GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
+void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
+{
+	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
+	GLuint			vao = ifs->GetFaceVAO();
+
+	if(vao == 0) {
+		vao = VAOSetup(ifs);
+	}
+	glBindVertexArray(vao);
+	ifs->BindShaderBuffer(argParam->getAttrTable());
+	ifs->FaceIBOSetup();
+	glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	return;
+}
 /*
 void fk_FaceDraw::DrawShapeFaceMaterial(fk_Model *argObj, bool argLightFlag)
 {

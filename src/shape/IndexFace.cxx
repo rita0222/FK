@@ -395,12 +395,7 @@ void fk_IndexFaceSet::MakeFaceNorm(int argID)
 
 void fk_IndexFaceSet::ResetFaceFlg(void)
 {
-	_st		i;
-
-	for(i = 0; i < faceNormFlg.size(); ++i) {
-		faceNormFlg[i] = char(true);
-	}
-	
+	fill(faceNormFlg.begin(), faceNormFlg.end(), char(true));
 	return;
 }
 
@@ -469,11 +464,7 @@ void fk_IndexFaceSet::ModifyVertexNorm(void)
 
 void fk_IndexFaceSet::ResetVertexFlg(void)
 {
-	_st		i;
-
-	for(i = 0; i < _st(vertexPosition.getSize()); ++i) {
-		vertexNormFlg[i] = char(false);
-	}
+	fill(vertexNormFlg.begin(), vertexNormFlg.end(), char(false));
 	return;
 }
 

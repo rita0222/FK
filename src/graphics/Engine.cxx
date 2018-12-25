@@ -365,11 +365,6 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
 	}
 
 	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->postShader();
-	/*
-	for(auto it = argModel->postShaderList.begin(); it != argModel->postShaderList.end(); ++it) {
-		get<1>(*it)();
-	}
-	*/
 
 	return;
 }
@@ -500,7 +495,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel,
 	}
 
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
-		//faceDraw->DrawShapeFace(argModel, DrawMode);
+		faceDraw->DrawShapeFace(argModel);
 	}
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {

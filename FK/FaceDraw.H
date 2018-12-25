@@ -10,13 +10,14 @@ namespace FK {
 		fk_FaceDraw(void);
 		virtual ~fk_FaceDraw();
 
-		void	DrawShapeFace(fk_Model *, fk_DrawMode);
+		void	DrawShapeFace(fk_Model *);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
 		fk_ShaderBinder		*shader;
 
 		void	ShaderSetup(void);
+		void	PolygonModeSet(fk_DrawMode);
 		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
 	};
 }

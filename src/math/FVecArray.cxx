@@ -86,7 +86,7 @@ fk_FVecArray::fk_FVecArray(int argSize)
 {
 	array.resize(_st(argSize*3));
 	elemFlg.resize(_st(argSize));
-	for(_st i = 0; i < elemFlg.size(); ++i) elemFlg[i] = char(true);
+	fill(elemFlg.begin(), elemFlg.end(), char(true));
 	allFlg = true;
 }
 
@@ -101,7 +101,7 @@ void fk_FVecArray::resize(int argSize)
 {
 	array.resize(_st(argSize*3));
 	elemFlg.resize(_st(argSize));
-	for(_st i = 0; i < elemFlg.size(); ++i) elemFlg[i] = char(true);
+	fill(elemFlg.begin(), elemFlg.end(), char(true));
 	allFlg = true;
 }
 
@@ -248,5 +248,5 @@ void fk_FVecArray::reset(void)
 {
 	if(allFlg == false) return;
 	allFlg = false;
-	for(_st i = 0; i < elemFlg.size(); ++i) elemFlg[i] = char(false);
+	fill(elemFlg.begin(), elemFlg.end(), char(false));
 }
