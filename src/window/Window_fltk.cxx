@@ -101,7 +101,8 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	GLWinHSize = argH;
 	setFrameMode(FK_DEFAULT_FRAME);
 	winNum++;
-	mode(FL_RGB8 | FL_DOUBLE | FL_OPENGL3);
+	//mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_ACCUM | FL_STENCIL | FL_DEPTH | FL_OPENGL3);
+	mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_DEPTH | FL_OPENGL3);
 
 	stereoMode = false;
 

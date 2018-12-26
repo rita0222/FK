@@ -955,8 +955,9 @@ bool fk_IndexFaceSet::writeMQOFile(string argFileName)
 
 void fk_IndexFaceSet::makeBlock(double argX, double argY, double argZ)
 {
-	_st			i;
-	fk_Vector	tmpVec[8];
+	vector<fk_Vector>		pos;
+	vector<int>				loop;
+	vector< vector<int> >	ifs;
 
 	const static double vParam[8][3] = {
 		{0.5, 0.5, 0.5},
@@ -970,41 +971,36 @@ void fk_IndexFaceSet::makeBlock(double argX, double argY, double argZ)
 	};
 
 	static int vertexTable[6][4] = {
-		{1, 2, 4, 3}, {5, 7 ,8, 6},
-		{3, 7, 5, 1}, {2, 6, 8, 4},
-		{1, 5, 6, 2}, {3, 4, 8, 7}
+		{0, 1, 3, 2}, {4, 6 ,7, 5},
+		{2, 6, 4, 0}, {1, 5, 7, 3},
+		{0, 4, 5, 1}, {2, 3, 7, 6}
 	};
 
-	for(i = 0; i < 8; ++i) {
-		tmpVec[i].set(argX * vParam[i][0],
-					  argY * vParam[i][1], argZ * vParam[i][2]);
+	fk_Vector vec;
+	for(int i = 0; i < 6; ++i) {
+		loop.clear();
+		for(int j = 0; j < 4; ++j) {
+			vec.x = argX * vParam[vertexTable[i][j]][0];
+			vec.y = argY * vParam[vertexTable[i][j]][1];
+			vec.z = argZ * vParam[vertexTable[i][j]][2];
+			pos.push_back(vec);
+			loop.push_back(i*4+j);
+		}
+		ifs.push_back(loop);
 	}
-
-	makeIFSet(6, 4, &vertexTable[0][0], 8, tmpVec, 1);
+	MakeMesh(&pos, &ifs);
 	return;
 }
 
 void fk_IndexFaceSet::setBlockSize(double argX, double argY, double argZ)
 
 {
-	int			i;
-
-	const static double vParam[8][3] = {
-		{0.5, 0.5, 0.5},
-		{-0.5, 0.5, 0.5},
-		{0.5, -0.5, 0.5},
-		{-0.5, -0.5, 0.5},
-		{0.5, 0.5, -0.5},
-		{-0.5, 0.5, -0.5},
-		{0.5, -0.5, -0.5},
-		{-0.5, -0.5, -0.5}
-	};
-
-	if(vertexPosition.getSize() != 8 || faceIndex.size() != 24) return;
-
-	for(i = 0; i < 8; ++i) {
-		moveVPosition(i, argX * vParam[i][0],
-					  argY * vParam[i][1], argZ * vParam[i][2]);
+	for(int i = 0; i < vertexPosition.getSize(); ++i) {
+		fk_Vector pos = vertexPosition.getV(i);
+		pos.x = (pos.x > 0.0) ? argX * 0.5 : -argX * 0.5;
+		pos.y = (pos.y > 0.0) ? argY * 0.5 : -argY * 0.5;
+		pos.z = (pos.z > 0.0) ? argZ * 0.5 : -argZ * 0.5;
+		moveVPosition(i, pos);
 	}
 
 	return;
@@ -1012,44 +1008,28 @@ void fk_IndexFaceSet::setBlockSize(double argX, double argY, double argZ)
 
 void fk_IndexFaceSet::setBlockSize(double argSize, fk_Axis argAxis)
 {
-	fk_Vector			newPos;
-	int					i;
-
-	const static double vParam[8][3] = {
-		{0.5, 0.5, 0.5},
-		{-0.5, 0.5, 0.5},
-		{0.5, -0.5, 0.5},
-		{-0.5, -0.5, 0.5},
-		{0.5, 0.5, -0.5},
-		{-0.5, 0.5, -0.5},
-		{0.5, -0.5, -0.5},
-		{-0.5, -0.5, -0.5}
-	};
-
-	if(vertexPosition.getSize() != 8 || faceIndex.size() != 24) return;
-
-	newPos = vertexPosition.getV(0);
-	newPos *= 2.0;
-
+	fk_Vector pos = vertexPosition.getV(0);
+	pos.x = fabs(pos.x) * 2.0;
+	pos.y = fabs(pos.y) * 2.0;
+	pos.z = fabs(pos.z) * 2.0;
 	switch(argAxis) {
 	  case fk_X:
-		newPos.x = argSize;
+		pos.x = argSize;
 		break;
+		
 	  case fk_Y:
-		newPos.y = argSize;
+		pos.y = argSize;
 		break;
+		
 	  case fk_Z:
-		newPos.z = argSize;
+		pos.z = argSize;
 		break;
+
 	  default:
 		break;
 	}
-
-	for(i = 0; i < 8; ++i) {
-		moveVPosition(i, newPos.x * vParam[i][0],
-					  newPos.y * vParam[i][1], newPos.z * vParam[i][2]);
-	}
-
+	setBlockSize(pos.x, pos.y, pos.z);
+		   
 	return;
 }
 
@@ -1060,73 +1040,38 @@ void fk_IndexFaceSet::setBlockScale(double argScale)
 
 void fk_IndexFaceSet::setBlockScale(double argScale, fk_Axis argAxis)
 {
-	fk_Vector		newPos;
-	int				i;
-
-	const static double vParam[8][3] = {
-		{0.5, 0.5, 0.5},
-		{-0.5, 0.5, 0.5},
-		{0.5, -0.5, 0.5},
-		{-0.5, -0.5, 0.5},
-		{0.5, 0.5, -0.5},
-		{-0.5, 0.5, -0.5},
-		{0.5, -0.5, -0.5},
-		{-0.5, -0.5, -0.5}
-	};
-
-	if(vertexPosition.getSize() != 8 || faceIndex.size() != 24) return;
-	newPos = vertexPosition.getV(0);
-	newPos *= 2.0;
-
+	fk_Vector pos = vertexPosition.getV(0);
+	pos.x = fabs(pos.x) * 2.0;
+	pos.y = fabs(pos.y) * 2.0;
+	pos.z = fabs(pos.z) * 2.0;
 	switch(argAxis) {
 	  case fk_X:
-		newPos.x *= argScale;
+		pos.x *= argScale;
 		break;
+		
 	  case fk_Y:
-		newPos.y *= argScale;
+		pos.y *= argScale;
 		break;
+		
 	  case fk_Z:
-		newPos.z *= argScale;
+		pos.z *= argScale;
 		break;
+
 	  default:
 		break;
 	}
-
-	for(i = 0; i < 8; ++i) {
-		moveVPosition(i, newPos.x * vParam[i][0],
-					  newPos.y * vParam[i][1], newPos.z * vParam[i][2]);
-	}
+	setBlockSize(pos.x, pos.y, pos.z);
 
 	return;
 }
 
 void fk_IndexFaceSet::setBlockScale(double argX, double argY, double argZ)
 {
-	fk_Vector		newPos, curPos;
-	int				i;
-
-	const static double vParam[8][3] = {
-		{0.5, 0.5, 0.5},
-		{-0.5, 0.5, 0.5},
-		{0.5, -0.5, 0.5},
-		{-0.5, -0.5, 0.5},
-		{0.5, 0.5, -0.5},
-		{-0.5, 0.5, -0.5},
-		{0.5, -0.5, -0.5},
-		{-0.5, -0.5, -0.5}
-	};
-
-	if(vertexPosition.getSize() != 8 || faceIndex.size() != 24) return;
-	curPos = vertexPosition.getV(0);
-	newPos.set(curPos.x*2.0*argX,
-			   curPos.y*2.0*argY,
-			   curPos.z*2.0*argZ);
-
-	for(i = 0; i < 8; ++i) {
-		moveVPosition(i, newPos.x * vParam[i][0],
-					  newPos.y * vParam[i][1], newPos.z * vParam[i][2]);
-	}
-
+	fk_Vector pos = vertexPosition.getV(0);
+	pos.x = fabs(pos.x) * 2.0 * argX;
+	pos.y = fabs(pos.y) * 2.0 * argY;
+	pos.z = fabs(pos.z) * 2.0 * argZ;
+	setBlockSize(pos.x, pos.y, pos.z);
 	return;
 }
 
@@ -1135,16 +1080,15 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 	vector<fk_Vector>		vecArray;
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
-	int						i;
 	double					theta;
 
-	vecArray.resize(_st(argDiv * 4 + 1));
-	vecArray[0].set(0.0, 0.0, 0.0);
+	vecArray.resize(_st(argDiv*4 + 1));
+	vecArray[_st(argDiv*4)].set(0.0, 0.0, 0.0);
 
-	for(i = 0; i < 4 * argDiv; ++i) {
+	for(int i = 0; i < 4 * argDiv; ++i) {
 		theta = (double(i) * FK_PI)/(double(argDiv*2));
-		vecArray[_st(i+1)].set(cos(theta) * argRadius,
-											sin(theta) * argRadius, 0.0);
+		vecArray[_st(i)].set(cos(theta) * argRadius,
+							 sin(theta) * argRadius, 0.0);
 	}
 
 	IFArray.clear();
@@ -1164,14 +1108,14 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 
 	makeIFSet(&IFArray, &vecArray, 1);
 */
-	for(i = 0; i < argDiv*4; ++i) {
+	for(int i = 0; i < argDiv*4; ++i) {
 		IDArray.clear();
-		IDArray.push_back(0);
-		IDArray.push_back(i + 1);
+		IDArray.push_back(argDiv*4);
+		IDArray.push_back(i);
 		if(i == argDiv * 4 - 1) {
-			IDArray.push_back(1);
+			IDArray.push_back(0);
 		} else {
-			IDArray.push_back(i + 2);
+			IDArray.push_back(i+1);
 		}
 		IFArray.push_back(IDArray);
 	}
@@ -1183,7 +1127,7 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 
 void fk_IndexFaceSet::setCircleDivide(int argDiv)
 {
-	makeCircle(argDiv, vertexPosition.getV(1).x);
+	makeCircle(argDiv, vertexPosition.getV(0).x);
 
 	return;
 }
@@ -1193,9 +1137,9 @@ void fk_IndexFaceSet::setCircleRadius(double argRadius)
 	double		scale;
 	fk_Vector	V;
 
-	scale = argRadius/vertexPosition.getV(1).x;
+	scale = argRadius/vertexPosition.getV(0).x;
 
-	for(int i = 1; i < vertexPosition.getSize(); ++i) {
+	for(int i = 0; i < vertexPosition.getSize()-1; ++i) {
 		V = vertexPosition.getV(i);
 		moveVPosition(i, V.x*scale, V.y*scale, 0.0);
 	}
@@ -1207,7 +1151,7 @@ void fk_IndexFaceSet::setCircleScale(double argScale)
 {
 	fk_Vector	V;
 
-	for(int i = 1; i < vertexPosition.getSize(); ++i) {
+	for(int i = 0; i < vertexPosition.getSize()-1; ++i) {
 		V = vertexPosition.getV(i);
 		moveVPosition(i, V.x * argScale, V.y * argScale, 0.0);
 	}
@@ -1221,7 +1165,8 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
 	_st						i, j, index, div;
-	int						ii, jj, iindex, iindex2;
+	int						ii, jj;
+	int						iindex1, iindex2, iindex3, iindex4;
 	vector<double>			xz_radius;
 	double					theta1, theta2;
 
@@ -1310,15 +1255,15 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	}
 
 	// BOTTOM
-	iindex = (argDiv*4)*(argDiv*2 - 2) + 1;
+	iindex1 = (argDiv*4)*(argDiv*2 - 2) + 1;
 	for(ii = 0; ii < argDiv*4; ++ii) {
 		IDArray.clear();
-		IDArray.push_back(iindex + (argDiv*4));
-		IDArray.push_back(iindex + ii);
+		IDArray.push_back(iindex1 + (argDiv*4));
+		IDArray.push_back(iindex1 + ii);
 		if(ii == argDiv*4 - 1) {
-			IDArray.push_back(iindex);
+			IDArray.push_back(iindex1);
 		} else {
-			IDArray.push_back(iindex + ii + 1);
+			IDArray.push_back(iindex1 + ii + 1);
 		}
 		IFArray.push_back(IDArray);
 	}
@@ -1327,18 +1272,16 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	for(ii = 0; ii < argDiv*2 - 2; ++ii) {
 		for(jj = 0; jj < argDiv*4; ++jj) {
 			IDArray.clear();
-			iindex = ii*argDiv*4 + jj + 1;
-			iindex2 = (jj == argDiv*4 - 1) ? ii*argDiv*4 + 1 : iindex + 1;
-
-			IDArray.push_back(iindex);
-			IDArray.push_back(iindex2);
-			IDArray.push_back(iindex2 + argDiv*4);
-			IFArray.push_back(IDArray);
+			iindex1 = ii*argDiv*4 + jj + 1;
+			iindex2 = (jj == argDiv*4 - 1) ? ii*argDiv*4 + 1 : iindex1 + 1;
+			iindex3 = iindex1 + argDiv*4;
+			iindex4 = iindex2 + argDiv*4;
 
 			IDArray.clear();
-			IDArray.push_back(iindex);
-			IDArray.push_back(iindex2 + argDiv*4);
-			IDArray.push_back(iindex + argDiv*4);
+			IDArray.push_back(iindex1);
+			IDArray.push_back(iindex2);
+			IDArray.push_back(iindex4);
+			IDArray.push_back(iindex3);
 			IFArray.push_back(IDArray);
 		}
 	}
@@ -1381,120 +1324,75 @@ void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
 	vector<fk_Vector>		vecArray;
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
-	int						v[4], i;
-	_st						j, div;
-	double					theta;
 
-	div = _st(argDiv);
-	vecArray.resize(div*2+2);
-	vecArray[0].set(0.0, 0.0, 0.0);
-	vecArray[div + 1].set(0.0, 0.0, -argHeight);
+	_st div = _st(argDiv);
+	vecArray.resize(div*4+2);
 
-	for(j = 0; j < div; ++j) {
-		theta = (double(j*2) * FK_PI)/double(div);
-		vecArray[j+1].set(cos(theta) * argBottom,
-						  sin(theta) * argBottom, 0.0);
-		vecArray[div+j+2].set(cos(theta) * argTop,
+	// 底面中心
+	vecArray[4*div].set(0.0, 0.0, 0.0);
+
+	// 上面中心
+	vecArray[4*div+1].set(0.0, 0.0, -argHeight);
+
+	for(_st j = 0; j < div; ++j) {
+		double theta = (double(j*2) * FK_PI)/double(div);
+
+		// 底面
+		vecArray[j].set(cos(theta) * argBottom,
+						sin(theta) * argBottom, 0.0);
+
+		// 側面底側
+		vecArray[div+j] = vecArray[j];
+
+		// 側面上側
+		vecArray[2*div+j].set(cos(theta) * argTop,
 							  sin(theta) * argTop, -argHeight);
+		// 上面
+		vecArray[3*div+j] = vecArray[2*div+j];
 	}
 
 	IFArray.clear();
-/*
-	for(j = 0; j < div; ++j) {
-		i = int(j);
+
+	for(_st j = 0; j < div; ++j) {
+		int i = int(j);
 		// 底面
 		IDArray.clear();
-		IDArray.push_back(1);
-		IDArray.push_back(i+2);
+		IDArray.push_back(argDiv*4);
+		IDArray.push_back(i);
 		if(i == argDiv - 1) {
-			IDArray.push_back(2);
+			IDArray.push_back(0);
 		} else {
-			IDArray.push_back(i+3);
+			IDArray.push_back(i+1);
 		}
 		IFArray.push_back(IDArray);
 
 		// 上面
 		IDArray.clear();
-		IDArray.push_back(argDiv+2);
+		IDArray.push_back(4*argDiv+1);
 		if(i == argDiv-1) {
-			IDArray.push_back(argDiv+3);
+			IDArray.push_back(3*argDiv);
 		} else {
-			IDArray.push_back(argDiv+i+4);
+			IDArray.push_back(3*argDiv+i+1);
 		}
-		IDArray.push_back(argDiv+i+3);
+		IDArray.push_back(3*argDiv+i);
 
 		IFArray.push_back(IDArray);
 
 		// 側面
-		v[0] = i + 2;
-		v[1] = argDiv + i + 3;
-		if(i == argDiv-1) {
-			v[2] = 2;
-			v[3] = argDiv + 3;
-		} else {
-			v[2] = i + 3;
-			v[3] = argDiv + i + 4;
-		}
-		IDArray.clear();
-		IDArray.push_back(v[0]);
-		IDArray.push_back(v[1]);
-		IDArray.push_back(v[2]);
-		IFArray.push_back(IDArray);
-
-		IDArray.clear();
-		IDArray.push_back(v[1]);
-		IDArray.push_back(v[3]);
-		IDArray.push_back(v[2]);
-		IFArray.push_back(IDArray);
-	}
-	makeIFSet(&IFArray, &vecArray, 1);
-*/
-
-	for(j = 0; j < div; ++j) {
-		i = int(j);
-		// 底面
-		IDArray.clear();
-		IDArray.push_back(0);
-		IDArray.push_back(i+1);
+		int id1, id2;
 		if(i == argDiv - 1) {
-			IDArray.push_back(1);
+			id1 = argDiv+1;
+			id2 = 2*argDiv+1;
 		} else {
-			IDArray.push_back(i+2);
+			id1 = argDiv+i+1;
+			id2 = 2*argDiv+i+1;
 		}
-		IFArray.push_back(IDArray);
-
-		// 上面
+		
 		IDArray.clear();
-		IDArray.push_back(argDiv+1);
-		if(i == argDiv-1) {
-			IDArray.push_back(argDiv+2);
-		} else {
-			IDArray.push_back(argDiv+i+3);
-		}
-		IDArray.push_back(argDiv+i+2);
-
-		IFArray.push_back(IDArray);
-
-		// 側面
-		v[0] = i + 1;
-		v[1] = argDiv + i + 2;
-		if(i == argDiv-1) {
-			v[2] = 1;
-			v[3] = argDiv + 2;
-		} else {
-			v[2] = i + 2;
-			v[3] = argDiv + i + 3;
-		}
-		IDArray.clear();
-		IDArray.push_back(v[0]);
-		IDArray.push_back(v[1]);
-		IDArray.push_back(v[2]);
-		IFArray.push_back(IDArray);
-
-		IDArray.clear();
-		IDArray.push_back(v[1]);
-		IDArray.push_back(v[3]);
-		IDArray.push_back(v[2]);
+		IDArray.push_back(id1);
+		IDArray.push_back(argDiv+i);
+		IDArray.push_back(2*argDiv+i);
+		IDArray.push_back(id2);
 		IFArray.push_back(IDArray);
 	}
 	MakeMesh(&vecArray, &IFArray);
@@ -1507,11 +1405,11 @@ void fk_IndexFaceSet::setPrismDivide(int argDiv)
 	int		div;
 	double	top, bottom, height;
 
-	if((div = vertexPosition.getSize()/2 - 1) < 3) return;
+	if((div = (vertexPosition.getSize() - 2)/4) < 3) return;
 
-	top = vertexPosition.getV(div+2).x;
-	bottom = vertexPosition.getV(1).x;
-	height = -vertexPosition.getV(div+1).z;
+	top = vertexPosition.getV(2*div).x;
+	bottom = vertexPosition.getV(0).x;
+	height = -vertexPosition.getV(2*div).z;
 
 	makePrism(argDiv, top, bottom, height);
 	return;
@@ -1524,12 +1422,13 @@ void fk_IndexFaceSet::setPrismTopRadius(double argTop)
 	double		theta, z;
 	fk_Vector	vec;
 
-	div = vertexPosition.getSize()/2 - 1;
-	z = vertexPosition.getV(div+2).z;
+	div = (vertexPosition.getSize()-2)/4;
+	z = vertexPosition.getV(2*div).z;
 	for(i = 0; i < div; ++i) {
 		theta = (double(i*2) * FK_PI)/double(div);
 		vec.set(cos(theta) * argTop, sin(theta) * argTop, z);
-		moveVPosition(div+i+2, vec);
+		moveVPosition(2*div+i, vec);
+		moveVPosition(3*div+i, vec);
 	}
 
 	return;
@@ -1542,11 +1441,12 @@ void fk_IndexFaceSet::setPrismBottomRadius(double argBottom)
 	double		theta;
 	fk_Vector	vec;
 
-	div = vertexPosition.getSize()/2 - 1;
+	div = (vertexPosition.getSize()-2)/4;
 	for(i = 0; i < div; ++i) {
 		theta = (double(i*2) * FK_PI)/double(div);
 		vec.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
-		moveVPosition(i+1, vec);
+		moveVPosition(i, vec);
+		moveVPosition(div+i, vec);
 	}
 
 	return;
@@ -1557,13 +1457,15 @@ void fk_IndexFaceSet::setPrismHeight(double argHeight)
 	int			i, div;
 	fk_Vector	vec;
 
-	div = vertexPosition.getSize()/2 - 1;
-	for(i = 0; i <= div; ++i) {
-		vec.set(vertexPosition.getV(div+i+1).x,
-				vertexPosition.getV(div+i+1).y,
-				-argHeight);
-		moveVPosition(div+i+1, vec);
+	div = (vertexPosition.getSize()-2)/4;
+	for(i = 0; i < div; ++i) {
+		vec = vertexPosition.getV(2*div+i);
+		vec.z = -argHeight;
+		moveVPosition(2*div+i, vec);
+		moveVPosition(3*div+i, vec);
 	}
+	vec.set(0.0, 0.0, -argHeight);
+	moveVPosition(4*div+1, vec);
 
 	return;
 }
@@ -1573,65 +1475,41 @@ void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight)
 	vector<fk_Vector>		vecArray;
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
-	double					theta;
+	_st						div = _st(argDiv);
 
-	vecArray.resize(_st(argDiv+2));
-	vecArray[0].set(0.0, 0.0, 0.0);
-	vecArray[1].set(0.0, 0.0, -argHeight);
+	vecArray.resize(3*div+1);
+	vecArray[3*div].set(0.0, 0.0, 0.0);
 
-	for(_st j = 0; j < _st(argDiv); ++j) {
-		theta = (double(j*2) * FK_PI)/double(argDiv);
-		vecArray[j+2].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
+	for(_st j = 0; j < div; ++j) {
+		double theta = (double(j*2) * FK_PI)/double(div);
+		vecArray[j].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
+		vecArray[div+j] = vecArray[j];
+		vecArray[2*div+j].set(0.0, 0.0, -argHeight);
 	}
 
 	IFArray.clear();
-/*
+
 	for(int i = 0; i < argDiv; ++i) {
 		// 底面
 		IDArray.clear();
-		IDArray.push_back(1);
-		IDArray.push_back(i+3);
+		IDArray.push_back(3*argDiv);
+		IDArray.push_back(i);
 		if(i == argDiv - 1) {
-			IDArray.push_back(3);
+			IDArray.push_back(0);
 		} else {
-			IDArray.push_back(i+4);
+			IDArray.push_back(i+1);
 		}
 		IFArray.push_back(IDArray);
 
 		// 側面
 		IDArray.clear();
-		IDArray.push_back(2);
+		IDArray.push_back(2*argDiv+i);
 		if(i == argDiv - 1) {
-			IDArray.push_back(3);
+			IDArray.push_back(argDiv);
 		} else {
-			IDArray.push_back(i+4);
+			IDArray.push_back(argDiv+i+1);
 		}
-		IDArray.push_back(i+3);
-		IFArray.push_back(IDArray);
-	}
-*/
-
-	for(int i = 0; i < argDiv; ++i) {
-		// 底面
-		IDArray.clear();
-		IDArray.push_back(0);
-		IDArray.push_back(i+2);
-		if(i == argDiv - 1) {
-			IDArray.push_back(2);
-		} else {
-			IDArray.push_back(i+3);
-		}
-		IFArray.push_back(IDArray);
-
-		// 側面
-		IDArray.clear();
-		IDArray.push_back(1);
-		if(i == argDiv - 1) {
-			IDArray.push_back(2);
-		} else {
-			IDArray.push_back(i+3);
-		}
-		IDArray.push_back(i+2);
+		IDArray.push_back(argDiv+i);
 		IFArray.push_back(IDArray);
 	}
 	
@@ -1643,9 +1521,10 @@ void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight)
 void fk_IndexFaceSet::setConeDivide(int argDiv)
 {
 	double	rad, height;
+	int	    id = vertexPosition.getSize() - 2;
 
-	rad = vertexPosition.getV(2).x;
-	height = -vertexPosition.getV(1).z;
+	rad = vertexPosition.getV(0).x;
+	height = -vertexPosition.getV(id).z;
 
 	makeCone(argDiv, rad, height);
 }
@@ -1656,11 +1535,12 @@ void fk_IndexFaceSet::setConeRadius(double argRadius)
 	double		theta;
 	fk_Vector	vec;
 
-	div = vertexPosition.getSize() - 2;
+	div = (vertexPosition.getSize()-1)/3;
 	for(int i = 0; i < div; ++i) {
 		theta = (double(i*2) * FK_PI)/double(div);
 		vec.set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
-		moveVPosition(i+2, vec);
+		moveVPosition(i, vec);
+		moveVPosition(div+i, vec);
 	}
 
 	return;
@@ -1668,9 +1548,10 @@ void fk_IndexFaceSet::setConeRadius(double argRadius)
 
 void fk_IndexFaceSet::setConeHeight(double argHeight)
 {
-	fk_Vector		vec(0.0, 0.0, -argHeight);
+	fk_Vector	vec(0.0, 0.0, -argHeight);
+	int 		div = (vertexPosition.getSize()-1)/3;
 
-	moveVPosition(1, vec);
+	for(int i = 2*div; i < 3*div; ++i) moveVPosition(i, vec);
 
 	return;
 }
@@ -1807,16 +1688,13 @@ void fk_IndexFaceSet::MakeCapsuleIFSet(vector< vector<int> > *argIF, int argDiv)
 			IDArray.clear();
 			index1 = i*argDiv*4 + j + 1;
 			index2 = (j == argDiv*4 - 1) ? i*argDiv*4 + 1 : index1 + 1;
+			int index3 = index1 + argDiv*4;
+			int index4 = index2 + argDiv*4;
 
 			IDArray.push_back(index1);
-			IDArray.push_back(index2 + argDiv*4);
+			IDArray.push_back(index3);
+			IDArray.push_back(index4);
 			IDArray.push_back(index2);
-			argIF->push_back(IDArray);
-
-			IDArray.clear();
-			IDArray.push_back(index1);
-			IDArray.push_back(index1 + argDiv*4);
-			IDArray.push_back(index2 + argDiv*4);
 			argIF->push_back(IDArray);
 		}
 	}

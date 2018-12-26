@@ -199,12 +199,13 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0f, 1.0f);
 	glClearDepth(1.0);
-	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
-	//glDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 
 #ifndef OPENGL4
 	glDisable(GL_LIGHTING);
@@ -275,10 +276,10 @@ void fk_GraphicsEngine::Draw(void)
 		resizeFlag = false;
 	}
 
-	ApplySceneParameter(true);
-
 	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
-	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	ApplySceneParameter(true);
 
 	curProj->MakeMat();
 	fk_Matrix cameraM = curDLink->getCamera()->getInhInvMatrix();
@@ -885,16 +886,24 @@ void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
 
 void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
 {
-	bool r = (argMode & FK_DEPTH_READ) != 0;
-	bool w = (argMode & FK_DEPTH_WRITE) != 0;
-	if (depthRead != r) {
-		if (r) glEnable(GL_DEPTH_TEST);
-		else glDisable(GL_DEPTH_TEST);
-		depthRead = r;
+	bool readMode = (argMode & FK_DEPTH_READ) != 0;
+	bool writeMode = (argMode & FK_DEPTH_WRITE) != 0;
+
+	if (depthRead != readMode) {
+		if (readMode == true) {
+			glEnable(GL_DEPTH_TEST);
+		} else {
+			glDisable(GL_DEPTH_TEST);
+		}
+		depthRead = readMode;
 	}
-	if (depthWrite != w) {
-		glDepthMask(w ? GL_TRUE : GL_FALSE);
-		depthWrite = w;
+	if (depthWrite != writeMode) {
+		if(writeMode == true) {
+			glDepthMask(GL_TRUE);
+		} else {
+			glDepthMask(GL_FALSE);
+		}
+		depthWrite = writeMode;
 	}
 }
 

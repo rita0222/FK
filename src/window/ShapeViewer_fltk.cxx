@@ -428,7 +428,7 @@ void fk_ShapeViewer::InitFlag(void)
 	moveFlag = false;
 	oldMoveFlag = false;
 
-	drawMode = FK_POLYMODE | FK_LINEMODE;
+	drawMode = FK_POLYMODE | FK_LINEMODE | FK_POINTMODE;
 	return;
 }
 
