@@ -336,9 +336,11 @@ void fk_Shape::DefineVBO(void)
 		if(tmpID != -1) {
 			tmpUID = GLuint(tmpID);
 			glDeleteBuffers(1, &tmpUID);
+			fk_Window::printf("VBO (%d, %s) Delete", tmpUID, itr->first.c_str());
 		}
 		glGenBuffers(1, &tmpUID);
 		get<0>(itr->second) = int(tmpUID);
+		fk_Window::printf("VBO (%d, %s) Gen", tmpUID, itr->first.c_str());
 	}
 
 	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
@@ -346,9 +348,11 @@ void fk_Shape::DefineVBO(void)
 		if(tmpID != -1) {
 			tmpUID = GLuint(tmpID);
 			glDeleteBuffers(1, &tmpUID);
+			fk_Window::printf("VBO (%d, %s) Delete", tmpUID, itr->first.c_str());
 		}
 		glGenBuffers(1, &tmpUID);
 		get<0>(itr->second) = int(tmpUID);
+		fk_Window::printf("VBO (%d, %s) Gen", tmpUID, itr->first.c_str());
 	}
 
 	vboInitFlg = true;
@@ -381,7 +385,7 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 						 &((*iArray)[0]), GL_STATIC_DRAW);
 			attrModify[itr->first] = false;
 
-			//fk_Window::printf("Bind: %s", itr->first.c_str());
+			fk_Window::printf("Bind: (%d, %s)", vbo, itr->first.c_str());
 		}
 		glEnableVertexAttribArray(loc);
 	}
@@ -404,7 +408,7 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 						 &((*fArray)[0]), GL_STATIC_DRAW);
 			attrModify[itr->first] = false;
 
-			//fk_Window::printf("Bind: %s", itr->first.c_str());
+			fk_Window::printf("Bind: (%d, %s)", vbo, itr->first.c_str());
 		}
 		glEnableVertexAttribArray(loc);
 	}
@@ -422,6 +426,7 @@ void fk_Shape::forceUpdateAttr(void)
 	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
 		itr->second = true;
 	}
+	vboInitFlg = false;
 }
 
 void fk_Shape::flushAttr(void)

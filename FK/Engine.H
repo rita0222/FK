@@ -114,11 +114,6 @@ namespace FK {
 
 		void				SetBlendMode(fk_Model *model);
 		void				SetDepthMode(fk_DepthMode mode);
-
-		void				DrawListFace(std::list<fk_Model *> *);
-		void				DrawListLine(std::list<fk_Model *> *);
-		void				DrawListPoint(std::list<fk_Model *> *);
-		void				ModelSetting(std::list<fk_Model *> *);
 	};
 }
 
