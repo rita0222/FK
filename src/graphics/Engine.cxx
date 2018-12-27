@@ -364,6 +364,8 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 
 	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->postShader();
 
+	modelShape->finishSetVBO();
+
 	return;
 }
 

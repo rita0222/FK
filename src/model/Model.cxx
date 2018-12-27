@@ -241,6 +241,7 @@ fk_Color * fk_Model::getLineColor(void)
 
 void fk_Model::setDrawMode(const fk_DrawMode argMode)
 {
+	if(drawMode == argMode) return;
 	drawMode = argMode;
 	if(shape != nullptr) {
 		shape->forceUpdateAttr();

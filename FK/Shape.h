@@ -192,6 +192,7 @@ namespace FK {
 		void setShaderAttribute(std::string, int, std::vector<float> *);
 		void setShaderIndex(std::string, std::vector<GLuint> *);
 		void modifyAttribute(std::string);
+		void finishSetVBO(void);
 		virtual void forceUpdateAttr(void);
 		virtual void flushAttr(void);
 		

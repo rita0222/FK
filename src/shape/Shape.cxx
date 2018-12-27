@@ -311,7 +311,6 @@ void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argVa
 	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
 	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
 	attrModify[argName] = true;
-	vboInitFlg = false;
 }
 
 void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *argValue)
@@ -323,14 +322,16 @@ void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *arg
 	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
 	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
 	attrModify[argName] = true;
-	vboInitFlg = false;
 }
 	
 void fk_Shape::DefineVBO(void)
 {
 	if(vboInitFlg == true) return;
-	int tmpID = 0;
 	GLuint tmpUID = 0;
+
+	/*
+	int tmpID = 0;
+
 	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
 		tmpID = get<0>(itr->second);
 		if(tmpID != -1) {
@@ -354,9 +355,22 @@ void fk_Shape::DefineVBO(void)
 		get<0>(itr->second) = int(tmpUID);
 		fk_Window::printf("VBO (%d, %s) Gen", tmpUID, itr->first.c_str());
 	}
+	*/
+	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+		if(get<0>(itr->second) == -1) {
+			glGenBuffers(1, &tmpUID);
+			get<0>(itr->second) = int(tmpUID);
+			//fk_Window::printf("VBO (%d, %s) Gen", tmpUID, itr->first.c_str());
+		}
+	}
 
-	vboInitFlg = true;
-
+	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+		if(get<0>(itr->second) == -1) {
+			glGenBuffers(1, &tmpUID);
+			get<0>(itr->second) = int(tmpUID);
+			//fk_Window::printf("VBO (%d, %s) Gen", tmpUID, itr->first.c_str());
+		}
+	}
 	return;
 }
 
@@ -371,21 +385,18 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
 		if(argTable->find(itr->first) == argTable->end()) continue;
 		loc = GLuint(argTable->at(itr->first));
-
+		vbo = get<0>(itr->second);
+		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
+		dim = get<1>(itr->second);
+		glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
 		if(attrModify[itr->first] == true) {
-			vbo = get<0>(itr->second);
-			dim = get<1>(itr->second);
-
-			glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
-			glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
 			iArray = get<2>(itr->second);
 			size = iArray->size();
 			glBufferData(GL_ARRAY_BUFFER,
 						 GLsizeiptr(sizeof(int) * size),
 						 &((*iArray)[0]), GL_STATIC_DRAW);
 			attrModify[itr->first] = false;
-
-			fk_Window::printf("Bind: (%d, %s)", vbo, itr->first.c_str());
+			//fk_Window::printf("Bind: (%d, %d, %s)", vbo, loc, itr->first.c_str());
 		}
 		glEnableVertexAttribArray(loc);
 	}
@@ -393,22 +404,18 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
 		if(argTable->find(itr->first) == argTable->end()) continue;
 		loc = GLuint(argTable->at(itr->first));
-
+		vbo = get<0>(itr->second);
+		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
+		dim = get<1>(itr->second);
+		glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
 		if(attrModify[itr->first] == true) {
-			vbo = get<0>(itr->second);
-			dim = get<1>(itr->second);
-
-			glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
-			glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
-		
 			fArray = get<2>(itr->second);
 			size = fArray->size();
 			glBufferData(GL_ARRAY_BUFFER,
 						 GLsizeiptr(sizeof(float) * size),
 						 &((*fArray)[0]), GL_STATIC_DRAW);
 			attrModify[itr->first] = false;
-
-			fk_Window::printf("Bind: (%d, %s)", vbo, itr->first.c_str());
+			//fk_Window::printf("Bind: (%d, %d, %s)", vbo, loc, itr->first.c_str());
 		}
 		glEnableVertexAttribArray(loc);
 	}
@@ -427,6 +434,11 @@ void fk_Shape::forceUpdateAttr(void)
 		itr->second = true;
 	}
 	vboInitFlg = false;
+}
+
+void fk_Shape::finishSetVBO(void)
+{
+	vboInitFlg = true;
 }
 
 void fk_Shape::flushAttr(void)

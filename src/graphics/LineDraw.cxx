@@ -163,7 +163,7 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	fk_Window::printf("Line VAO = %d", vao);
+	//fk_Window::printf("Line VAO = %d", vao);
 	return vao;
 }
 
