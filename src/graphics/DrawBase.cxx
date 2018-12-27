@@ -84,6 +84,10 @@ const string fk_DrawBase::viewMatrixName = "fk_ViewMatrix";
 const string fk_DrawBase::modelMatrixName = "fk_ModelMatrix";
 const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
 const string fk_DrawBase::modelViewProjectionMatrixName = "fk_ModelViewProjectionMatrix";
+const string fk_DrawBase::modelMaterialName = "fk_Material";
+const string fk_DrawBase::diffuseName = "diffuse";
+const string fk_DrawBase::ambientName = "ambient";
+
 const string fk_DrawBase::fragmentName = "fragment";
 
 fk_Matrix * fk_DrawBase::projectionMatrix;
@@ -91,6 +95,7 @@ fk_Matrix fk_DrawBase::viewMatrix;
 fk_Matrix fk_DrawBase::modelMatrix;
 fk_Matrix fk_DrawBase::modelViewMatrix;
 fk_Matrix fk_DrawBase::modelViewProjectionMatrix;
+fk_Material * fk_DrawBase::modelMaterial;
 
 fk_DrawBase::fk_DrawBase(void)
 {
@@ -119,6 +124,8 @@ void fk_DrawBase::SetModel(fk_Model *argModel)
 	modelMatrix = argModel->getInhMatrix();
 	modelViewMatrix = viewMatrix * modelMatrix;
 	modelViewProjectionMatrix = (*projectionMatrix) * modelViewMatrix;
+
+	modelMaterial = argModel->getMaterial();
 }
 
 void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
@@ -128,6 +135,11 @@ void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 	argParam->setRegister(modelMatrixName, &modelMatrix);
 	argParam->setRegister(modelViewMatrixName, &modelViewMatrix);
 	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix);
+
+	argParam->setRegister(modelMaterialName + "." + diffuseName,
+						  &(modelMaterial->getDiffuse()->col));
+	argParam->setRegister(modelMaterialName + "." + ambientName,
+						  &(modelMaterial->getAmbient()->col));
 
 	return;
 }

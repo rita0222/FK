@@ -3,6 +3,7 @@
 
 #include <FK/OpenGL.H>
 #include <FK/Matrix.h>
+#include <FK/Material.h>
 
 namespace FK {
 	class fk_Model;
@@ -19,11 +20,18 @@ namespace FK {
 		static void			SetModel(fk_Model *);
 		virtual GLuint		VAOSetup(fk_Shape *) = 0;
 
+		// Input
 		static const std::string projectionMatrixName;
 		static const std::string viewMatrixName;
 		static const std::string modelMatrixName;
 		static const std::string modelViewMatrixName;
 		static const std::string modelViewProjectionMatrixName;
+
+		static const std::string modelMaterialName;
+		static const std::string diffuseName;
+		static const std::string ambientName;
+
+		// Output
 		static const std::string fragmentName;
 
 	protected:
@@ -32,6 +40,7 @@ namespace FK {
 		static fk_Matrix	modelMatrix;
 		static fk_Matrix	modelViewMatrix;
 		static fk_Matrix	modelViewProjectionMatrix;
+		static fk_Material	*modelMaterial;
 
 		void SetParameter(fk_ShaderParameter *);
 	};
