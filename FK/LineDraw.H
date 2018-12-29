@@ -12,7 +12,6 @@ namespace FK {
 		virtual ~fk_LineDraw();
 
 		void	DrawShapeLine(fk_Model *);
-		void	DrawBoundaryLine(fk_Model *);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:

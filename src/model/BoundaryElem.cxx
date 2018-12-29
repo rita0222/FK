@@ -750,5 +750,5 @@ double fk_CapsuleBoundary::CalcLen(const fk_Vector &argP,
 	double		t;
 
 	fk_Math::calcClosestPtPtToSeg(argP, argS, argE, &t, &q);
-	return (argP-q).dist();
+	return (argP - q).dist();
 }

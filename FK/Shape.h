@@ -204,9 +204,11 @@ namespace FK {
 		void			SetPointVAO(GLuint);
 		void			SetLineVAO(GLuint);
 		void			SetFaceVAO(GLuint);
+		void			SetBoundaryVAO(GLuint);
 		GLuint			GetPointVAO(void);
 		GLuint			GetLineVAO(void);
 		GLuint			GetFaceVAO(void);
+		GLuint			GetBoundaryVAO(void);
 
 		void			DefineVBO(void);
 		void			BindShaderBuffer(std::map<std::string, int> *);
@@ -229,7 +231,7 @@ namespace FK {
 		fk_Palette			*palette;
 		fk_Palette			defaultPalette;
 		fk_MaterialMode		materialMode;
-		GLuint				pointVAO, lineVAO, faceVAO;
+		GLuint				pointVAO, lineVAO, faceVAO, boundaryVAO;
 
 		shapeMapI 			attrMapI;
 		shapeMapF 			attrMapF;

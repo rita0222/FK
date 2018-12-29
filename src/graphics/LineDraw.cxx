@@ -215,12 +215,6 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 	return;
 }
 
-void fk_LineDraw::DrawBoundaryLine(fk_Model *argModel)
-{
-	FK_UNUSED(argModel);
-	return;
-}
-
 void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
 	fk_Line		*line = dynamic_cast<fk_Line *>(argModel->getShape());

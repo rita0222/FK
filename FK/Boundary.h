@@ -375,7 +375,6 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_IndexFaceSet *		GetBShape(void);
-		fk_Model *				GetCapsuleModel(void);
 #endif
 
 	private:
@@ -394,7 +393,6 @@ namespace FK {
 		fk_IndexFaceSet		*bAABB;
 		fk_IndexFaceSet		*bOBB;
 		fk_IndexFaceSet		*bCapsule;
-		fk_Model			*bCapModel;
 	};
 }
 

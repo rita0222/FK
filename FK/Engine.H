@@ -78,6 +78,7 @@ namespace FK {
 
 		fk_Perspective				defProj;
 
+		fk_Model					boundaryModel;
 
 		void				DrawObjs(void);
 		void				DrawModel(fk_Model *);
@@ -89,7 +90,7 @@ namespace FK {
 		//void				LoadAABBMatrix(fk_Model *);
 
 		void				DrawShapeObj(fk_Model *);
-		void				DrawBoundaryObj(fk_Model *);
+		void				DrawBoundaryLine(fk_Model *);
 
 		void				SetViewPort(void);
 		void				SetProjection(fk_ProjectBase *);

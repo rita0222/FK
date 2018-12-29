@@ -110,6 +110,9 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
 	depthRead = depthWrite = true;
 
+	boundaryModel.setDrawMode(FK_LINEMODE);
+	boundaryModel.setBMode(FK_B_NONE);
+	boundaryModel.setBDrawToggle(false);
 	return;
 }
 
@@ -327,27 +330,14 @@ void fk_GraphicsEngine::DrawObjs(void)
 
 void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 {
-	fk_Shape		*modelShape = argModel->getShape();
+	if(argModel->getBDrawToggle() == true) DrawBoundaryLine(argModel);
 
-	modelShape->flushAttr();
-
-	fk_DrawBase::SetModel(argModel);
-		
-	if(argModel->getBDrawToggle() == true) {
-		if(argModel->getBMode() == FK_B_AABB) {
-			//LoadAABBMatrix(argModel);
-			DrawBoundaryObj(argModel);
-			//LoadModelMatrix(argModel);
-		} else {
-			//LoadModelMatrix(argModel);
-			DrawBoundaryObj(argModel);
-		}
-	} else {
-		//LoadModelMatrix(argModel);
-	}
-	
+	fk_Shape * modelShape = argModel->getShape();
 	if(modelShape == nullptr) return;
 
+	modelShape->flushAttr();
+	fk_DrawBase::SetModel(argModel);
+		
 	SetBlendMode(argModel);
 	fk_DrawMode drawMode = argModel->getDrawMode();
 	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->preShader();
@@ -366,6 +356,46 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 
 	modelShape->finishSetVBO();
 
+	return;
+}
+
+void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
+{
+	fk_Vector posS, posE;
+	fk_Matrix mat;
+
+	switch(argModel->getBMode()) {
+	  case FK_B_SPHERE:
+	  case FK_B_AABB:
+		  boundaryModel.glMoveTo(argModel->getInhPosition());
+		  break;
+		  
+	  case FK_B_OBB:
+		  boundaryModel.glMoveTo(argModel->getInhPosition());
+		  boundaryModel.glAngle(argModel->getInhAngle());
+		  break;
+
+	  case FK_B_CAPSULE:
+		  mat = argModel->getInhMatrix();
+		  posS = mat * argModel->getCapsuleStartPos();
+		  posE = mat * argModel->getCapsuleEndPos();
+		  boundaryModel.glMoveTo((posS + posE)/2.0);
+		  boundaryModel.glVec(posE - posS);
+		  break;
+		  
+	  default:
+		  return;
+	}
+
+	if(argModel->getInterMode() == true &&
+	   argModel->getInterStatus() == true) {
+		boundaryModel.setLineColor(argModel->getBIntLineColor());
+	} else {
+		boundaryModel.setLineColor(argModel->getBLineColor());
+	}	
+	boundaryModel.setShape(argModel->GetBShape());
+	boundaryModel.setDrawMode(FK_LINEMODE);
+	DrawModel(&boundaryModel);
 	return;
 }
 
@@ -507,80 +537,6 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	return;
 }
 
-void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argModel)
-{
-	if(textureMode == true) {
-		glDisable(GL_TEXTURE_2D);
-		textureMode = false;
-	}
-
-	if(argModel->getBMode() == FK_B_CAPSULE) {
-#ifndef OPENGL4
-		glPushMatrix();
-#endif
-		//LoadModelMatrix(argModel->GetCapsuleModel());
-	}
-
-	lineDraw->DrawBoundaryLine(argModel);
-
-#ifndef OPENGL4	
-	if(argModel->getBMode() == FK_B_CAPSULE) {
-		glPopMatrix();
-	}
-
-	if(argLightFlag == true) {
-		glEnable(GL_LIGHTING);
-	} else {
-		glDisable(GL_LIGHTING);
-	}
-#endif
-	
-	return;
-}
-
-/*
-void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
-{
-	fk_Angle	MAngle;
-	fk_Vector	MPos;
-
-	MAngle = argModel->getAngle();
-	MPos = argModel->getPosition();
-
-	if(argModel->getParent() != nullptr) {
-		LoadModelMatrix(argModel->getParent());
-	}
-
-#ifndef OPENGL4
-	glTranslated(MPos.x, MPos.y, MPos.z);
-	glRotated(-180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
-	glRotated(180.0*MAngle.p/FK_PI, 1.0, 0.0, 0.0);
-	glRotated(-180.0*MAngle.b/FK_PI, 0.0, 0.0, 1.0);
-
-	if(argModel->getScaleMode() == true) {
-		double Scale = argModel->getScale();
-		glScaled(Scale * argModel->getScale(fk_X),
-				 Scale * argModel->getScale(fk_Y),
-				 Scale * argModel->getScale(fk_Z));
-	}
-#endif
-	
-	return;
-}
-*/
-/*
-void fk_GraphicsEngine::LoadAABBMatrix(fk_Model *argModel)
-{
-	FK_UNUSED(argModel);
-#ifndef OPENGL4
-	fk_Vector MPos = argModel->getInhPosition();
-	double scale = argModel->getInhScale();
-	glTranslated(MPos.x, MPos.y, MPos.z);
-	glScaled(scale, scale, scale);
-#endif
-	return;
-}
-*/
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
 	FK_UNUSED(argScene);
@@ -638,37 +594,6 @@ void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 	
 	return;
 }
-/*
-void fk_GraphicsEngine::ViewMatCalc(fk_Matrix *argMat)
-{
-	GLdouble	tmp_modelArray[16], projArray[16];
-	fk_Matrix	projMat, modelMat;
-	int			ii, ij;
-
-#ifndef OPENGL4
-	glPushMatrix();
-#endif
-	RecalcModelView();
-
-#ifndef OPENGL4
-	glGetIntegerv(GL_VIEWPORT, viewArray);
-	glGetDoublev(GL_PROJECTION_MATRIX, projArray);
-	glGetDoublev(GL_MODELVIEW_MATRIX, tmp_modelArray);
-
-	glPopMatrix();
-#endif
-	
-	for(ii = 0; ii < 4; ii++) {
-		for(ij = 0; ij < 4; ij++) {
-			projMat[ii][ij] = projArray[ij*4+ii];
-			modelMat[ii][ij] = tmp_modelArray[ij*4+ii];
-		}
-	}
-
-	*argMat = projMat * modelMat;
-	return;
-}
-*/
 
 bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 									   fk_Vector *retS, fk_Vector *retE)
