@@ -4,6 +4,7 @@
 #include <FK/OpenGL.H>
 #include <FK/Matrix.h>
 #include <FK/Material.h>
+#include <list>
 
 namespace FK {
 	class fk_Model;
@@ -18,21 +19,31 @@ namespace FK {
 		static void			SetProjectionMatrix(fk_Matrix *);
 		static void			SetViewMatrix(fk_Model *);
 		static void			SetModel(fk_Model *);
+		static void			SetLight(std::list<fk_Model *> *);
 		virtual GLuint		VAOSetup(fk_Shape *) = 0;
 
-		// Input
 		static const std::string projectionMatrixName;
 		static const std::string viewMatrixName;
 		static const std::string modelMatrixName;
 		static const std::string modelViewMatrixName;
 		static const std::string modelViewProjectionMatrixName;
+		static const std::string normalMatrixName;
 
 		static const std::string modelMaterialName;
 		static const std::string diffuseName;
 		static const std::string ambientName;
 
-		// Output
+		static const std::string lightName;
+		static const std::string lightTypeName;
+		static const std::string lightPositionName;
+		static const std::string lightVecName;
+		static const std::string lightDiffuseName;
+		static const std::string lightSpecularName;
+		static const std::string lightNumName;
+		
 		static const std::string fragmentName;
+
+		static const int MAXLIGHTNUM;
 
 	protected:
 		static fk_Matrix	*projectionMatrix;
@@ -40,9 +51,17 @@ namespace FK {
 		static fk_Matrix	modelMatrix;
 		static fk_Matrix	modelViewMatrix;
 		static fk_Matrix	modelViewProjectionMatrix;
+		static fk_Matrix	normalMatrix;
 		static fk_Material	*modelMaterial;
 
+		static std::list<fk_Model *> *lightList;
+
 		void SetParameter(fk_ShaderParameter *);
+
+	private:
+		void SetMatrixParam(fk_ShaderParameter *);
+		void SetMaterialParam(fk_ShaderParameter *);
+		void SetLightParam(fk_ShaderParameter *);
 	};
 }
 

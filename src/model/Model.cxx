@@ -86,30 +86,15 @@ static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
 	: fk_Boundary(FK_MODEL), shape(nullptr), parentModel(nullptr),
-	  treeData(nullptr), snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr)
+	  treeData(nullptr), drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
+	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
+	  smoothFlag(false), reverseFlag(false),
+	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
+	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
+	  interMode(false), interStatus(false), interStopMode(false)
 {
-	setDrawMode(FK_NONEMODE);
-	setMaterialMode(FK_CHILD_MODE);
 	setBlendMode(FK_BLEND_ALPHA_MODE);
-	setDepthMode(FK_DEPTH_READ_AND_WRITE);
-
 	setShape(argShape);
-	setPointSize(1.0);
-	setReverseDrawMode(false);
-	elemMode = FK_ELEM_MODEL;
-
-	_modelID = _globalModelID;
-	_globalModelID++;
-
-	treeFlag = false;
-	treeDelMode = true;
-	smoothFlag = false;
-
-	snapFlag = false;
-
-	interMode = false;
-	interStatus = false;
-	interStopMode = false;
 
 	preShader = [](){};
 	postShader = [](){};

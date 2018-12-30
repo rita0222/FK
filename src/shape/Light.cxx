@@ -73,6 +73,8 @@
 
 using namespace FK;
 
+const int fk_Light::MAXLIGHTNUM = 8;
+
 fk_Light::fk_Light(fk_LightType argType)
 {
 	SetObjectType(FK_LIGHT);

@@ -742,6 +742,19 @@ bool fk_Matrix::inverse(void)
 	return false;
 }
 
+bool fk_Matrix::covariant(void)
+{
+	m[0][3] = 0.0;
+	m[1][3] = 0.0;
+	m[2][3] = 0.0;
+	m[3][3] = 0.0;
+	if(fk_MatrixInverse(m) == false) {
+		return false;
+	}
+	negate();
+	return true;
+}
+
 // 特異行列判定関数 
 bool fk_Matrix::isSingular(void) const
 {

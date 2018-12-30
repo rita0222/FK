@@ -208,6 +208,8 @@ namespace FK {
 		 */
 		double				getSpotExponent(void);
 
+		static const int	MAXLIGHTNUM;
+
 	private:
 		fk_LightType		lightType;
 		double				attenuation[3];

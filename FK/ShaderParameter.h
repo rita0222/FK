@@ -86,11 +86,38 @@ namespace FK {
 		 */
 		void setRegister(std::string name, std::vector<int> *value);
 	
-		//! 行列型 uniform 変数設定関数
+		//! fk_Vector 型 uniform 変数設定関数
 		/*!
 		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	行列型の uniform 変数を渡す設定を行います。
-		 *	この関数の引数は fk_Matrix 型変数となり、
+		 *	fk_Vector 型の uniform 変数を渡す設定を行います。
+		 *	GLSL コード内での型は vec3 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す行列
+		 */
+		void setRegister(std::string name, fk_Vector *value);
+
+		//! fk_HVector 型 uniform 変数設定関数
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	fk_HVector 型の uniform 変数を渡す設定を行います。
+		 *	GLSL コード内での型は vec4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す行列
+		 */
+		void setRegister(std::string name, fk_HVector *value);
+
+		//! fk_Matrix 型 uniform 変数設定関数
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	fk_Matrix 型の uniform 変数を渡す設定を行います。
 		 *	GLSL コード内での型は mat4 となります。
 		 *
 		 *	\param[in]	name

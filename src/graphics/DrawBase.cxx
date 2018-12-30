@@ -74,6 +74,7 @@
 #include <FK/DrawBase.H>
 #include <FK/Matrix.h>
 #include <FK/Model.h>
+#include <FK/Light.h>
 #include <FK/ShaderParameter.h>
 
 using namespace std;
@@ -84,9 +85,19 @@ const string fk_DrawBase::viewMatrixName = "fk_ViewMatrix";
 const string fk_DrawBase::modelMatrixName = "fk_ModelMatrix";
 const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
 const string fk_DrawBase::modelViewProjectionMatrixName = "fk_ModelViewProjectionMatrix";
+const string fk_DrawBase::normalMatrixName = "fk_NormalMatrix";
+
 const string fk_DrawBase::modelMaterialName = "fk_Material";
 const string fk_DrawBase::diffuseName = "diffuse";
 const string fk_DrawBase::ambientName = "ambient";
+
+const string fk_DrawBase::lightName = "fk_Light";
+const string fk_DrawBase::lightTypeName = "type";
+const string fk_DrawBase::lightPositionName = "position";
+const string fk_DrawBase::lightVecName = "vec";
+const string fk_DrawBase::lightDiffuseName = "diffuse";
+const string fk_DrawBase::lightSpecularName = "specular";
+const string fk_DrawBase::lightNumName = "fk_LightNum";
 
 const string fk_DrawBase::fragmentName = "fragment";
 
@@ -95,7 +106,10 @@ fk_Matrix fk_DrawBase::viewMatrix;
 fk_Matrix fk_DrawBase::modelMatrix;
 fk_Matrix fk_DrawBase::modelViewMatrix;
 fk_Matrix fk_DrawBase::modelViewProjectionMatrix;
+fk_Matrix fk_DrawBase::normalMatrix;
 fk_Material * fk_DrawBase::modelMaterial;
+
+list<fk_Model *> * fk_DrawBase::lightList;
 
 fk_DrawBase::fk_DrawBase(void)
 {
@@ -124,22 +138,89 @@ void fk_DrawBase::SetModel(fk_Model *argModel)
 	modelMatrix = argModel->getInhMatrix();
 	modelViewMatrix = viewMatrix * modelMatrix;
 	modelViewProjectionMatrix = (*projectionMatrix) * modelViewMatrix;
-
 	modelMaterial = argModel->getMaterial();
+	normalMatrix = modelMatrix;
+	normalMatrix.covariant();
+}
+
+void fk_DrawBase::SetLight(list<fk_Model *> *argList)
+{
+	lightList = argList;
 }
 
 void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
+{
+	SetMatrixParam(argParam);
+	SetMaterialParam(argParam);
+	SetLightParam(argParam);
+	return;
+}
+
+void fk_DrawBase::SetMatrixParam(fk_ShaderParameter *argParam)
 {
 	argParam->setRegister(projectionMatrixName, projectionMatrix);
 	argParam->setRegister(viewMatrixName, &viewMatrix);
 	argParam->setRegister(modelMatrixName, &modelMatrix);
 	argParam->setRegister(modelViewMatrixName, &modelViewMatrix);
 	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix);
+	argParam->setRegister(normalMatrixName, &normalMatrix);
+	return;
+}
 
+void fk_DrawBase::SetMaterialParam(fk_ShaderParameter *argParam)
+{
 	argParam->setRegister(modelMaterialName + "." + diffuseName,
 						  &(modelMaterial->getDiffuse()->col));
 	argParam->setRegister(modelMaterialName + "." + ambientName,
 						  &(modelMaterial->getAmbient()->col));
-
 	return;
 }
+
+void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam)
+{
+	FK_UNUSED(argParam);
+	int lightID = 0;
+	int lightType;
+	fk_Vector tmp;
+
+	for(auto p = lightList->begin(); p != lightList->end(); ++p) {
+		fk_Model *model = *p;
+		fk_Light *light = dynamic_cast<fk_Light *>(model->getShape());
+
+		string nameBase = lightName + "[" + to_string(lightID) + "]";
+
+		switch(light->getLightType()) {
+		  case FK_PARALLEL_LIGHT:
+			  lightType = 1;
+			  break;
+
+		  case FK_POINT_LIGHT:
+			  lightType = 2;
+			  break;
+
+		  case FK_SPOT_LIGHT:
+			  lightType = 3;
+			  break;
+
+		  default:
+			  lightType = 0;
+		}
+		argParam->setRegister(nameBase + "." + lightTypeName, lightType);
+
+		tmp = model->getInhPosition();
+		argParam->setRegister(nameBase + "." + lightPositionName, &tmp);
+
+		tmp = model->getInhVec();
+		argParam->setRegister(nameBase + "." + lightVecName, &tmp);
+
+		argParam->setRegister(nameBase + "." + lightDiffuseName,
+							  &(model->getMaterial()->getDiffuse()->col));
+		argParam->setRegister(nameBase + "." + lightSpecularName,
+							  &(model->getMaterial()->getSpecular()->col));
+		++lightID;
+		if(lightID >= fk_Light::MAXLIGHTNUM) break;
+	}
+
+	argParam->setRegister(lightNumName, lightID);
+}
+

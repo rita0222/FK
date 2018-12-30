@@ -43,6 +43,19 @@ void fk_ShaderParameter::setRegister(string argName, fk_Matrix *argValue)
 	matrixTable[argName] = *argValue;
 }
 
+void fk_ShaderParameter::setRegister(string argName, fk_Vector *argValue)
+{
+	vector<float> tmp{float(argValue->x), float(argValue->y), float(argValue->z)};
+	setRegister(argName, &tmp);
+}
+
+void fk_ShaderParameter::setRegister(string argName, fk_HVector *argValue)
+{
+	vector<float> tmp{float(argValue->x), float(argValue->y),
+					  float(argValue->z), float(argValue->w)};
+	setRegister(argName, &tmp);
+}
+
 bool fk_ShaderParameter::removeRegister(string argName)
 {
 	if (floatTable.erase(argName) > 0) return true;
