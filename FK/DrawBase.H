@@ -32,6 +32,8 @@ namespace FK {
 		static const std::string modelMaterialName;
 		static const std::string diffuseName;
 		static const std::string ambientName;
+		static const std::string specularName;
+		static const std::string shininessName;
 
 		static const std::string lightName;
 		static const std::string lightTypeName;

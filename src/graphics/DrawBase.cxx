@@ -90,6 +90,8 @@ const string fk_DrawBase::normalMatrixName = "fk_NormalMatrix";
 const string fk_DrawBase::modelMaterialName = "fk_Material";
 const string fk_DrawBase::diffuseName = "diffuse";
 const string fk_DrawBase::ambientName = "ambient";
+const string fk_DrawBase::specularName = "specular";
+const string fk_DrawBase::shininessName = "shininess";
 
 const string fk_DrawBase::lightName = "fk_Light";
 const string fk_DrawBase::lightTypeName = "type";
@@ -173,6 +175,11 @@ void fk_DrawBase::SetMaterialParam(fk_ShaderParameter *argParam)
 						  &(modelMaterial->getDiffuse()->col));
 	argParam->setRegister(modelMaterialName + "." + ambientName,
 						  &(modelMaterial->getAmbient()->col));
+	argParam->setRegister(modelMaterialName + "." + specularName,
+						  &(modelMaterial->getSpecular()->col));
+	argParam->setRegister(modelMaterialName + "." + shininessName,
+						  modelMaterial->getShininess());
+						  
 	return;
 }
 

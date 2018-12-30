@@ -3,6 +3,8 @@
 struct Material {
 	vec4 diffuse;
 	vec4 ambient;
+	vec4 specular;
+	float shininess;
 };
 
 struct Light {
@@ -27,6 +29,9 @@ void main()
 	if(fk_LightNum > 0) {
 		lightVec = fk_Light[0].vec;
 	}
-	float col = clamp(-dot(v, lightVec), 0.1, 1.0);
-    fragment = vec4(fk_Material.diffuse.rgb * col, 1.0);
+	float col = clamp(-dot(v, lightVec), 0.0, 1.0);
+	vec3 dif = fk_Material.diffuse.rgb * col;
+	vec3 sum = dif + fk_Material.ambient.rgb;
+	float alpha = (fk_Material.diffuse.a * col + fk_Material.ambient.a)/(1.0 + col);
+    fragment = vec4(min(1.0, sum.r), min(1.0, sum.g), min(1.0, sum.b), alpha);
 }
