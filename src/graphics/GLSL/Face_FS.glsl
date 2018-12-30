@@ -19,19 +19,30 @@ uniform Material fk_Material;
 uniform Light fk_Light[8];
 uniform int fk_LightNum;
 
-in vec4 outVec;
+in vec4 varP;
+in vec4 varN;
 out vec4 fragment;
+const int LIGHTNUM = 8;
 
 void main()
 {
-	vec3 v = normalize(outVec.xyz);
-	vec3 lightVec = vec3(1.0, 0.0, 0.0);
-	if(fk_LightNum > 0) {
-		lightVec = fk_Light[0].vec;
+	vec3 Vn = normalize(varN.xyz);
+	vec3 sumColor = vec3(0.0, 0.0, 0.0);
+	float col = 0.0;
+
+	for(int i = 0; i < LIGHTNUM; i++) {
+		if(i == fk_LightNum) break;
+		if(fk_Light[i].type == 1) {
+			col = clamp(-dot(Vn, fk_Light[i].vec), 0.0, 1.0);
+		} else if(fk_Light[i].type == 2) {
+			vec3 Vl = normalize(varP.xyz - fk_Light[i].position);
+			col = clamp(-dot(Vn, Vl), 0.0, 1.0);
+		} else {
+			col = 0.0;
+		}
+		sumColor += fk_Light[i].diffuse.rgb * col;
 	}
-	float col = clamp(-dot(v, lightVec), 0.0, 1.0);
-	vec3 dif = fk_Material.diffuse.rgb * col;
-	vec3 sum = dif + fk_Material.ambient.rgb;
-	float alpha = (fk_Material.diffuse.a * col + fk_Material.ambient.a)/(1.0 + col);
-    fragment = vec4(min(1.0, sum.r), min(1.0, sum.g), min(1.0, sum.b), alpha);
+	sumColor *= fk_Material.diffuse.rgb;
+	sumColor += fk_Material.ambient.rgb;
+    fragment = vec4(min(sumColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }
