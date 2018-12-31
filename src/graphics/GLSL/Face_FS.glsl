@@ -18,10 +18,10 @@ struct Light {
 uniform Material fk_Material;
 uniform Light fk_Light[8];
 uniform int fk_LightNum;
+uniform vec3 fk_CameraPosition;
 
 in vec4 varP;
 in vec4 varN;
-in vec4 varViewP;
 out vec4 fragment;
 const int LIGHTNUM = 8;
 
@@ -31,7 +31,7 @@ void main()
 	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
 	vec3 speSumColor = vec3(0.0, 0.0, 0.0);
 	vec3 Vl;
-	vec3 viewVec = -normalize(varViewP.xyz);
+	vec3 viewVec = normalize(varP.xyz - fk_CameraPosition);
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_LightNum) break;

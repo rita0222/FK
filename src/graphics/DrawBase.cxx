@@ -86,6 +86,7 @@ const string fk_DrawBase::modelMatrixName = "fk_ModelMatrix";
 const string fk_DrawBase::modelViewMatrixName = "fk_ModelViewMatrix";
 const string fk_DrawBase::modelViewProjectionMatrixName = "fk_ModelViewProjectionMatrix";
 const string fk_DrawBase::normalMatrixName = "fk_NormalMatrix";
+const string fk_DrawBase::cameraPositionName = "fk_CameraPosition";
 
 const string fk_DrawBase::modelMaterialName = "fk_Material";
 const string fk_DrawBase::diffuseName = "diffuse";
@@ -109,7 +110,9 @@ fk_Matrix fk_DrawBase::modelMatrix;
 fk_Matrix fk_DrawBase::modelViewMatrix;
 fk_Matrix fk_DrawBase::modelViewProjectionMatrix;
 fk_Matrix fk_DrawBase::normalMatrix;
+fk_Vector fk_DrawBase::cameraPosition;
 fk_Material * fk_DrawBase::modelMaterial;
+
 
 list<fk_Model *> * fk_DrawBase::lightList;
 
@@ -129,9 +132,10 @@ void fk_DrawBase::SetProjectionMatrix(fk_Matrix *argM)
 	return;
 }
 
-void fk_DrawBase::SetViewMatrix(fk_Model *argModel)
+void fk_DrawBase::SetCamera(fk_Model *argModel)
 {
 	viewMatrix = argModel->getInhInvMatrix();
+	cameraPosition = argModel->getInhPosition();
 	return;
 }
 
@@ -143,11 +147,13 @@ void fk_DrawBase::SetModel(fk_Model *argModel)
 	modelMaterial = argModel->getMaterial();
 	normalMatrix = modelMatrix;
 	normalMatrix.covariant();
+	return;
 }
 
 void fk_DrawBase::SetLight(list<fk_Model *> *argList)
 {
 	lightList = argList;
+	return;
 }
 
 void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
@@ -166,6 +172,7 @@ void fk_DrawBase::SetMatrixParam(fk_ShaderParameter *argParam)
 	argParam->setRegister(modelViewMatrixName, &modelViewMatrix);
 	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix);
 	argParam->setRegister(normalMatrixName, &normalMatrix);
+	argParam->setRegister(cameraPositionName, &cameraPosition);
 	return;
 }
 

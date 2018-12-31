@@ -285,8 +285,7 @@ void fk_GraphicsEngine::Draw(void)
 	ApplySceneParameter(true);
 
 	curProj->MakeMat();
-	fk_Matrix cameraM = curDLink->getCamera()->getInhInvMatrix();
-	fk_DrawBase::SetViewMatrix(curDLink->getCamera());
+	fk_DrawBase::SetCamera(curDLink->getCamera());
 	fk_DrawBase::SetLight(curDLink->GetLightList());
 	DrawObjs();
 

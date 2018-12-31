@@ -17,7 +17,7 @@ namespace FK {
 		virtual ~fk_DrawBase();
 
 		static void			SetProjectionMatrix(fk_Matrix *);
-		static void			SetViewMatrix(fk_Model *);
+		static void			SetCamera(fk_Model *);
 		static void			SetModel(fk_Model *);
 		static void			SetLight(std::list<fk_Model *> *);
 		virtual GLuint		VAOSetup(fk_Shape *) = 0;
@@ -28,6 +28,7 @@ namespace FK {
 		static const std::string modelViewMatrixName;
 		static const std::string modelViewProjectionMatrixName;
 		static const std::string normalMatrixName;
+		static const std::string cameraPositionName;
 
 		static const std::string modelMaterialName;
 		static const std::string diffuseName;
@@ -55,6 +56,7 @@ namespace FK {
 		static fk_Matrix	modelViewProjectionMatrix;
 		static fk_Matrix	normalMatrix;
 		static fk_Material	*modelMaterial;
+		static fk_Vector	cameraPosition;
 
 		static std::list<fk_Model *> *lightList;
 

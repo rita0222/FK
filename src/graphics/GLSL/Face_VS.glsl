@@ -9,7 +9,6 @@ in vec3 fk_Vertex;
 in vec3 fk_Normal;
 out vec4 varP;
 out vec4 varN;
-out vec4 varViewP;
 
 void main()
 {
@@ -17,5 +16,4 @@ void main()
 	gl_Position = fk_ModelViewProjectionMatrix * p;
 	varP = fk_ModelMatrix * p;
 	varN = fk_NormalMatrix * vec4(fk_Normal, 0.0);
-	varViewP = fk_ModelViewMatrix * p;
 }
