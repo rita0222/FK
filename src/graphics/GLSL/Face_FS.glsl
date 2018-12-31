@@ -21,28 +21,35 @@ uniform int fk_LightNum;
 
 in vec4 varP;
 in vec4 varN;
+in vec4 varViewP;
 out vec4 fragment;
 const int LIGHTNUM = 8;
 
 void main()
 {
 	vec3 Vn = normalize(varN.xyz);
-	vec3 sumColor = vec3(0.0, 0.0, 0.0);
-	float col = 0.0;
+	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
+	vec3 speSumColor = vec3(0.0, 0.0, 0.0);
+	vec3 Vl;
+	vec3 viewVec = -normalize(varViewP.xyz);
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_LightNum) break;
 		if(fk_Light[i].type == 1) {
-			col = clamp(-dot(Vn, fk_Light[i].vec), 0.0, 1.0);
-		} else if(fk_Light[i].type == 2) {
-			vec3 Vl = normalize(varP.xyz - fk_Light[i].position);
-			col = clamp(-dot(Vn, Vl), 0.0, 1.0);
+			Vl = fk_Light[i].vec;
+		} else if(fk_Light[i].type == 2 || fk_Light[i].type == 3) {
+			Vl = normalize(varP.xyz - fk_Light[i].position);
 		} else {
-			col = 0.0;
+			Vl = vec3(0.0, 0.0, 1.0);
 		}
-		sumColor += fk_Light[i].diffuse.rgb * col;
+		difSumColor += fk_Light[i].diffuse.rgb * clamp(-dot(Vn, Vl), 0.0, 1.0);
+
+		float specProd = dot(Vn, normalize(viewVec + Vl));
+		float k_spec = pow(max(0.0, specProd), fk_Material.shininess);
+		speSumColor += k_spec * fk_Material.specular.rgb;
 	}
-	sumColor *= fk_Material.diffuse.rgb;
-	sumColor += fk_Material.ambient.rgb;
-    fragment = vec4(min(sumColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+	difSumColor *= fk_Material.diffuse.rgb;
+	speSumColor *= fk_Material.specular.rgb;
+	vec3 addColor = difSumColor + speSumColor + fk_Material.ambient.rgb;
+    fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }

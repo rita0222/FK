@@ -66,6 +66,7 @@ namespace FK {
 		FK_EXTERN fk_Material GlossBlack;
 		FK_EXTERN fk_Material MatBlack;
 		FK_EXTERN fk_Material TrueWhite;
+		FK_EXTERN fk_Material WhiteLight;
 	}
 }
 

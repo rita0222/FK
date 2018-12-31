@@ -253,6 +253,11 @@ namespace FK {
 		TrueWhite.init();
 		TrueWhite.setAmbDiff(1.0f, 1.0f, 1.0f);
 		TrueWhite.setSpecular(0.0f, 0.0f, 0.0f);
+
+		WhiteLight.init();
+		WhiteLight.setAmbient(0.0f, 0.0f, 0.0f);
+		WhiteLight.setDiffuse(1.0f, 1.0f, 1.0f);
+		WhiteLight.setSpecular(1.0f, 1.0f, 1.0f);
 	
 		return;
 	}

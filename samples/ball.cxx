@@ -74,8 +74,8 @@
 using namespace FK;
 using namespace FK::Material;
 
-const double	DOWN_ACCEL		= 1.0500;	// 降下時の加速度
-const double	RISE_ACCEL		= 1.0530;	// 上昇時の減速度
+const double	DOWN_ACCEL		= 0.00050;	// 降下時の加速度
+const double	RISE_ACCEL		= 0.00053;	// 上昇時の減速度
 const int		DOWN_MODE		= 0;		// 降下モード
 const int		RISE_MODE		= 1;		// 上昇モード
 const int		LOW_MODE		= 0;		// ブロック視点モード
@@ -84,9 +84,10 @@ const int		LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
 const int		LOD3_HIGH		= 300;		// 三分割距離 (鳥瞰)
 const int		LOD4_LOW		= 90;		// 四分割距離 (ブロック)
 const int		LOD3_LOW		= 120;		// 三分割距離 (ブロック)
-const double	TOP_BALL_POS	= 300.0;	// ボール始点高さ
-const double	BTM_BALL_POS	= 18.0;		// ボール跳ね返り高さ
+const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
+const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
 const double	BALL_SIZE		= 12.0;		// ボール半径
+const double	ROTATE_SPEED	= 0.002;	// 地面回転速度
 
 class Ball {
 
@@ -122,7 +123,7 @@ Ball::Ball(void)
 void Ball::init(void)
 {
 	direction	= DOWN_MODE;
-	y_trs		= 0.1;
+	y_trs		= 0.0;
 	view_mode	= HIGH_MODE;
 	bound_count	= 1;
 	BALL2.setRadius(BALL_SIZE);
@@ -190,12 +191,12 @@ void Ball::accel(void)
 {
 	switch(direction) {
 	  case DOWN_MODE:
-		y_trs *= DOWN_ACCEL;
+		y_trs += DOWN_ACCEL;
 		ball_model.glTranslate(0.0, -y_trs, 0.0);
 		break;
 
 	  case RISE_MODE:
-		y_trs /= RISE_ACCEL;
+		y_trs -= RISE_ACCEL;
 		ball_model.glTranslate(0.0, y_trs,0.0);
 		break;
 		
@@ -264,7 +265,7 @@ int main(int, char *[])
 	light.setLightType(FK_POINT_LIGHT);
 	light.setAttenuation(0.0, 0.0);
 	lightModel.setShape(&light);
-	lightModel.setMaterial(White);
+	lightModel.setMaterial(WhiteLight);
 	lightModel.glTranslate(-60.0, 60.0, 0.0);
 
 	// ### GROUND ###
@@ -314,7 +315,7 @@ int main(int, char *[])
 		}
 
 		// 地面をくるくる回転させましょう。
-		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.02);
+		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, ROTATE_SPEED);
 	}
 
 	return 0;

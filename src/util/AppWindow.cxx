@@ -196,8 +196,7 @@ fk_AppWindow::fk_AppWindow(void)
 	fk_Material::initDefault();
 
 	light.setShape(&lightShape);
-	light.setMaterial(White);
-	light.getMaterial()->setAmbDiff(1.0, 1.0, 1.0);
+	light.setMaterial(WhiteLight);
 	light.glMoveTo(0.0, 0.0, 0.0);
 	light.glFocus(-1.0, -1.0, -1.0);
 
