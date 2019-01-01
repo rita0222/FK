@@ -31,7 +31,7 @@ void main()
 	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
 	vec3 speSumColor = vec3(0.0, 0.0, 0.0);
 	vec3 Vl;
-	vec3 viewVec = normalize(varP.xyz - fk_CameraPosition);
+	vec3 viewVec = normalize(fk_CameraPosition - varP.xyz);
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_LightNum) break;
@@ -44,7 +44,7 @@ void main()
 		}
 		difSumColor += fk_Light[i].diffuse.rgb * clamp(-dot(Vn, Vl), 0.0, 1.0);
 
-		float specProd = dot(Vn, normalize(viewVec + Vl));
+		float specProd = dot(Vn, normalize(viewVec - Vl));
 		float k_spec = pow(max(0.0, specProd), fk_Material.shininess);
 		speSumColor += k_spec * fk_Material.specular.rgb;
 	}

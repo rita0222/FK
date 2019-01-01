@@ -281,6 +281,8 @@ int main(int, char *[])
 	blockModel.setParent(&groundModel);
 
 	// ### BALL ###
+	Red.setSpecular(1.0, 1.0, 1.0);
+	Red.setShininess(80.0);
 	ball.getModel()->setMaterial(Red);
 	ball.getModel()->setSmoothMode(true);
 	
