@@ -286,7 +286,9 @@ void fk_GraphicsEngine::Draw(void)
 
 	curProj->MakeMat();
 	fk_DrawBase::SetCamera(curDLink->getCamera());
-	fk_DrawBase::SetLight(curDLink->GetLightList());
+	fk_DrawBase::SetLight(curDLink->GetLightList(FK_PARALLEL_LIGHT), FK_PARALLEL_LIGHT);
+	fk_DrawBase::SetLight(curDLink->GetLightList(FK_POINT_LIGHT), FK_POINT_LIGHT);
+	fk_DrawBase::SetLight(curDLink->GetLightList(FK_SPOT_LIGHT), FK_SPOT_LIGHT);
 	DrawObjs();
 
 	return;

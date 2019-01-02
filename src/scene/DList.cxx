@@ -71,8 +71,8 @@
  ****************************************************************************/
 #include <FK/DList.h>
 #include <FK/Model.h>
-#include <FK/Shape.h>
 #include <FK/IDAdmin.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -87,10 +87,6 @@ fk_DisplayLink::fk_DisplayLink(void)
 	: fk_BaseObject(FK_DISPLAYLINK)
 {
 	camera = &localCamera;
-	modelList.clear();
-	lightList.clear();
-	overlayList.clear();
-
 	displayID = fk_DLManager().CreateID();
 	proj = &perspective;
 	projStatus = 0;
@@ -103,10 +99,6 @@ fk_DisplayLink::fk_DisplayLink(void)
 
 fk_DisplayLink::~fk_DisplayLink()
 {
-	modelList.clear();
-	lightList.clear();
-	overlayList.clear();
-
 	fk_DLManager().EraseID(displayID);
 
 	return;
@@ -132,8 +124,26 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 
 	if(argModel->getShape() != nullptr) {
 		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
-			lightList.remove(argModel);
-			lightList.push_back(argModel);
+			fk_Light *light = dynamic_cast<fk_Light *>(argModel->getShape());
+			switch(light->getLightType()) {
+			  case FK_PARALLEL_LIGHT:
+				  parallelLightList.remove(argModel);
+				  parallelLightList.push_front(argModel);
+				  break;
+
+			  case FK_POINT_LIGHT:
+				  pointLightList.remove(argModel);
+				  pointLightList.push_front(argModel);
+				  break;
+
+			  case FK_SPOT_LIGHT:
+				  spotLightList.remove(argModel);
+				  spotLightList.push_front(argModel);
+				  break;
+
+			  default:
+				  break;
+			}
 			return;
 		}
 	}
@@ -146,7 +156,9 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 
 void fk_DisplayLink::removeModel(fk_Model *argModel)
 {
-	lightList.remove(argModel);
+	parallelLightList.remove(argModel);
+	pointLightList.remove(argModel);
+	spotLightList.remove(argModel);
 	modelList.remove(argModel);
 
 	return;
@@ -154,7 +166,9 @@ void fk_DisplayLink::removeModel(fk_Model *argModel)
 
 void fk_DisplayLink::clearModel(void)
 {
-	lightList.clear();
+	parallelLightList.clear();
+	pointLightList.clear();
+	spotLightList.clear();
 	modelList.clear();
 
 	return;
@@ -205,9 +219,23 @@ list<fk_Model *> * fk_DisplayLink::GetModelList(void)
 	return &modelList;
 }
 
-list<fk_Model *> * fk_DisplayLink::GetLightList(void)
+list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 {
-	return &lightList;
+	switch(argType) {
+	  case FK_PARALLEL_LIGHT:
+		  return &parallelLightList;
+
+	  case FK_POINT_LIGHT:
+		  return &pointLightList;
+
+	  case FK_SPOT_LIGHT:
+		  return &spotLightList;
+
+	  default:
+		  break;
+	}
+
+	return nullptr;
 }
 
 list<fk_Model *> * fk_DisplayLink::GetOverlayList(void)

@@ -94,13 +94,18 @@ const string fk_DrawBase::ambientName = "ambient";
 const string fk_DrawBase::specularName = "specular";
 const string fk_DrawBase::shininessName = "shininess";
 
-const string fk_DrawBase::lightName = "fk_Light";
-const string fk_DrawBase::lightTypeName = "type";
+const string fk_DrawBase::parallelLightName = "fk_ParallelLight";
+const string fk_DrawBase::pointLightName = "fk_PointLight";
+const string fk_DrawBase::spotLightName = "fk_SpotLight";
+
+const string fk_DrawBase::parallelLightNumName = "fk_ParallelLightNum";
+const string fk_DrawBase::pointLightNumName = "fk_PointLightNum";
+const string fk_DrawBase::spotLightNumName = "fk_SpotLightNum";
+
 const string fk_DrawBase::lightPositionName = "position";
 const string fk_DrawBase::lightVecName = "vec";
 const string fk_DrawBase::lightDiffuseName = "diffuse";
 const string fk_DrawBase::lightSpecularName = "specular";
-const string fk_DrawBase::lightNumName = "fk_LightNum";
 
 const string fk_DrawBase::fragmentName = "fragment";
 
@@ -113,8 +118,9 @@ fk_Matrix fk_DrawBase::normalMatrix;
 fk_Vector fk_DrawBase::cameraPosition;
 fk_Material * fk_DrawBase::modelMaterial;
 
-
-list<fk_Model *> * fk_DrawBase::lightList;
+list<fk_Model *> * fk_DrawBase::parallelLightList;
+list<fk_Model *> * fk_DrawBase::pointLightList;
+list<fk_Model *> * fk_DrawBase::spotLightList;
 
 fk_DrawBase::fk_DrawBase(void)
 {
@@ -150,9 +156,25 @@ void fk_DrawBase::SetModel(fk_Model *argModel)
 	return;
 }
 
-void fk_DrawBase::SetLight(list<fk_Model *> *argList)
+void fk_DrawBase::SetLight(list<fk_Model *> *argList, fk_LightType argType)
 {
-	lightList = argList;
+	switch(argType) {
+	  case FK_PARALLEL_LIGHT:
+		  parallelLightList = argList;
+		  return;
+
+	  case FK_POINT_LIGHT:
+		  pointLightList = argList;
+		  return;
+		  
+	  case FK_SPOT_LIGHT:
+		  spotLightList = argList;
+		  return;
+
+	  default:
+		  break;
+	}
+
 	return;
 }
 
@@ -160,7 +182,9 @@ void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
 	SetMatrixParam(argParam);
 	SetMaterialParam(argParam);
-	SetLightParam(argParam);
+	SetLightParam(argParam, FK_PARALLEL_LIGHT);
+	SetLightParam(argParam, FK_POINT_LIGHT);
+	SetLightParam(argParam, FK_SPOT_LIGHT);
 	return;
 }
 
@@ -190,42 +214,53 @@ void fk_DrawBase::SetMaterialParam(fk_ShaderParameter *argParam)
 	return;
 }
 
-void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam)
+void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argType)
 {
-	FK_UNUSED(argParam);
 	int lightID = 0;
-	int lightType;
 	fk_Vector tmp;
+	list<fk_Model *> *list;
+	string lightName;
+	string numName;
 
-	for(auto p = lightList->begin(); p != lightList->end(); ++p) {
+	switch(argType) {
+	  case FK_PARALLEL_LIGHT:
+		  list = parallelLightList;
+		  lightName = parallelLightName;
+		  numName = parallelLightNumName;
+		  break;
+
+	  case FK_POINT_LIGHT:
+		  list = pointLightList;
+		  lightName = pointLightName;
+		  numName = pointLightNumName;
+		  break;
+
+	  case FK_SPOT_LIGHT:
+		  list = spotLightList;
+		  lightName = spotLightName;
+		  numName = spotLightNumName;
+		  break;
+
+	  default:
+		  return;
+	}
+
+	for(auto p = list->begin(); p != list->end(); ++p) {
 		fk_Model *model = *p;
 		fk_Light *light = dynamic_cast<fk_Light *>(model->getShape());
+		FK_UNUSED(light);
 
 		string nameBase = lightName + "[" + to_string(lightID) + "]";
 
-		switch(light->getLightType()) {
-		  case FK_PARALLEL_LIGHT:
-			  lightType = 1;
-			  break;
-
-		  case FK_POINT_LIGHT:
-			  lightType = 2;
-			  break;
-
-		  case FK_SPOT_LIGHT:
-			  lightType = 3;
-			  break;
-
-		  default:
-			  lightType = 0;
+		if(argType != FK_PARALLEL_LIGHT) {
+			tmp = model->getInhPosition();
+			argParam->setRegister(nameBase + "." + lightPositionName, &tmp);
 		}
-		argParam->setRegister(nameBase + "." + lightTypeName, lightType);
 
-		tmp = model->getInhPosition();
-		argParam->setRegister(nameBase + "." + lightPositionName, &tmp);
-
-		tmp = model->getInhVec();
-		argParam->setRegister(nameBase + "." + lightVecName, &tmp);
+		if(argType != FK_POINT_LIGHT) {
+			tmp = model->getInhVec();
+			argParam->setRegister(nameBase + "." + lightVecName, &tmp);
+		}
 
 		argParam->setRegister(nameBase + "." + lightDiffuseName,
 							  &(model->getMaterial()->getDiffuse()->col));
@@ -235,6 +270,5 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam)
 		if(lightID >= fk_Light::MAXLIGHTNUM) break;
 	}
 
-	argParam->setRegister(lightNumName, lightID);
+	argParam->setRegister(numName, lightID);
 }
-

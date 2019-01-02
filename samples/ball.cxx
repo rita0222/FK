@@ -241,7 +241,8 @@ int main(int, char *[])
 {
 	int				view_mode = HIGH_MODE;
 	Ball			ball;
-	fk_Model		viewModel, groundModel, blockModel, lightModel;
+	fk_Sphere		lightBall(4, 2.0);
+	fk_Model		viewModel, groundModel, blockModel, lightModel, lightBallModel;
 	fk_Light		light;
 	fk_Circle		ground(4, 100.0);
 	fk_Block		block(10.0, 10.0, 10.0);
@@ -268,21 +269,30 @@ int main(int, char *[])
 	lightModel.setMaterial(WhiteLight);
 	lightModel.glTranslate(-60.0, 60.0, 0.0);
 
+	lightBallModel.setShape(&lightBall);
+	lightBallModel.setMaterial(TrueWhite);
+	lightBallModel.glTranslate(lightModel.getInhPosition());
+	
+	
 	// ### GROUND ###
 	groundModel.setShape(&ground);
+	LightGreen.setSpecular(0.1, 0.1, 0.1);
+	LightGreen.setShininess(80.0);
 	groundModel.setMaterial(LightGreen);
 	groundModel.setSmoothMode(true);
 	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2.0);
 
 	// ### VIEW BLOCK ###
 	blockModel.setShape(&block);
+	Blue.setSpecular(1.0, 1.0, 1.0);
+	Blue.setShininess(70.0);
 	blockModel.setMaterial(Blue);
 	blockModel.glMoveTo(60.0, 30.0, 0.0);
 	blockModel.setParent(&groundModel);
 
 	// ### BALL ###
 	Red.setSpecular(1.0, 1.0, 1.0);
-	Red.setShininess(80.0);
+	Red.setShininess(100.0);
 	ball.getModel()->setMaterial(Red);
 	ball.getModel()->setSmoothMode(true);
 	
@@ -291,7 +301,8 @@ int main(int, char *[])
 	scene.entryModel(&lightModel);
 	scene.entryModel(ball.getModel());
 	scene.entryModel(&groundModel);
-	scene.entryModel(&blockModel); 
+	scene.entryModel(&blockModel);
+	scene.entryModel(&lightBallModel);
 
 	win.open();
 

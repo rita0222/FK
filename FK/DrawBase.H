@@ -4,6 +4,7 @@
 #include <FK/OpenGL.H>
 #include <FK/Matrix.h>
 #include <FK/Material.h>
+#include <FK/Light.h>
 #include <list>
 
 namespace FK {
@@ -19,7 +20,7 @@ namespace FK {
 		static void			SetProjectionMatrix(fk_Matrix *);
 		static void			SetCamera(fk_Model *);
 		static void			SetModel(fk_Model *);
-		static void			SetLight(std::list<fk_Model *> *);
+		static void			SetLight(std::list<fk_Model *> *, fk_LightType);
 		virtual GLuint		VAOSetup(fk_Shape *) = 0;
 
 		static const std::string projectionMatrixName;
@@ -36,13 +37,18 @@ namespace FK {
 		static const std::string specularName;
 		static const std::string shininessName;
 
-		static const std::string lightName;
-		static const std::string lightTypeName;
+		static const std::string parallelLightName;
+ 		static const std::string pointLightName;
+ 		static const std::string spotLightName;
+
+		static const std::string parallelLightNumName;
+		static const std::string pointLightNumName;
+		static const std::string spotLightNumName;
+
 		static const std::string lightPositionName;
 		static const std::string lightVecName;
 		static const std::string lightDiffuseName;
 		static const std::string lightSpecularName;
-		static const std::string lightNumName;
 		
 		static const std::string fragmentName;
 
@@ -58,14 +64,16 @@ namespace FK {
 		static fk_Material	*modelMaterial;
 		static fk_Vector	cameraPosition;
 
-		static std::list<fk_Model *> *lightList;
+		static std::list<fk_Model *> *parallelLightList;
+		static std::list<fk_Model *> *pointLightList;
+		static std::list<fk_Model *> *spotLightList;
 
 		void SetParameter(fk_ShaderParameter *);
 
 	private:
 		void SetMatrixParam(fk_ShaderParameter *);
 		void SetMaterialParam(fk_ShaderParameter *);
-		void SetLightParam(fk_ShaderParameter *);
+		void SetLightParam(fk_ShaderParameter *, fk_LightType);
 	};
 }
 
