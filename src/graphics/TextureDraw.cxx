@@ -116,37 +116,16 @@ void fk_TextureDraw::StartUp(void)
 void fk_TextureDraw::DrawTextureObj(fk_Model *argObj)
 {
 	fk_Texture	*texObj;
-	int			mateID = -2;
 	GLboolean	texStatus;
 	fk_TexID	texID;
 
 	if((argObj->getDrawMode() & FK_TEXTUREMODE) == FK_NONEMODE) return;
-	texObj = static_cast<fk_Texture *>(argObj->getShape());
+	texObj = dynamic_cast<fk_Texture *>(argObj->getShape());
 
 	if(texObj->getObjectType() != FK_ARTEXTURE && texObj->getBufferSize() == nullptr) return;
 
 	fk_Image		*image = texObj->getImage();
 	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture_;
-
-	// マテリアルモードによるマテリアルの決定 
-	switch(texObj->getMaterialMode()) {
-	  case FK_CHILD_MODE:
-		mateID = texObj->getObjMaterialID();
-		break;
-	
-	  case FK_NONE_MODE:
-		return;
-
-	  default:
-		mateID = FK_UNDEFINED;
-		break;
-	}
-
-	if(mateID == FK_UNDEFINED) {
-		//fk_FaceDraw::CommonMateSet(argObj, argLightFlag, true);
-	} else {
-		//fk_FaceDraw::LocalMateSet(texObj->getMaterial(mateID), argLightFlag);
-	}
 
 	// (必要なら)テクスチャオブジェクトの生成 
 	texID = texObj->GetTexID();
@@ -171,14 +150,6 @@ void fk_TextureDraw::DrawTextureObj(fk_Model *argObj)
 
 	// glFlush();
 	// glDisable(GL_TEXTURE_2D);
-
-#ifndef OPENGL4
-	if(argLightFlag == true) {
-		glEnable(GL_LIGHTING);
-	} else {
-		glDisable(GL_LIGHTING);
-	}
-#endif
    
 	return;
 }
@@ -194,7 +165,7 @@ void fk_TextureDraw::ReleaseTexture_(fk_Image *argImage)
 			fk_Texture::ClearTexState(argImage);
 			texNameArray[i] = 0;
 			texImageArray[i] = nullptr;
-			texLoadedSize -= static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+			texLoadedSize -= (unsigned long)(bufSize->w*bufSize->h*4);
 			break;
 		}
 	}
@@ -219,10 +190,8 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 		break;
 
 	  case FK_TEX_WRAP_CLAMP:
-#ifndef OPENGL4
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-#endif
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		break;
 	}
 	
@@ -246,7 +215,7 @@ void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
 	texNameArray.push_back(tmpTexName);
 	texImageArray.push_back(argTexObj->getImage());
 
-	texLoadedSize += static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+	texLoadedSize += (unsigned long)(bufSize->w*bufSize->h*4);
 
 	return;
 }
@@ -271,8 +240,8 @@ void fk_TextureDraw::ReplaceTextureObj(fk_Texture *argTexObj)
 		argTexObj->ReplaceSubImage();
 	} else {
 		argTexObj->GenTextureObj();
-		texLoadedSize -= static_cast<unsigned long>(texW*texH*4);
-		texLoadedSize += static_cast<unsigned long>(bufSize->w*bufSize->h*4);
+		texLoadedSize -= (unsigned long)(texW*texH*4);
+		texLoadedSize += (unsigned long)(bufSize->w*bufSize->h*4);
 	}
 
 	// フラグ解除
@@ -284,7 +253,7 @@ void fk_TextureDraw::ReplaceTextureObj(fk_Texture *argTexObj)
 void fk_TextureDraw::ClearTextureMemory(void)
 {
 	if(texNameArray.empty() == false) {
-		glDeleteTextures(static_cast<GLsizei>(texNameArray.size()), &texNameArray[0]);
+		glDeleteTextures(GLsizei(texNameArray.size()), &texNameArray[0]);
 		for(_st i = 0; i < texImageArray.size(); ++i) {
 			if(texImageArray[i] == nullptr) continue;
 			fk_Texture::ClearTexState(texImageArray[i]);
