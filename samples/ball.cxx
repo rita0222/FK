@@ -268,11 +268,12 @@ int main(int, char *[])
 	lightModel.setShape(&light);
 	lightModel.setMaterial(WhiteLight);
 	lightModel.glTranslate(-60.0, 60.0, 0.0);
+	lightModel.glVec(0.0, -1.0, 0.0);
 
 	lightBallModel.setShape(&lightBall);
 	lightBallModel.setMaterial(TrueWhite);
 	lightBallModel.glTranslate(lightModel.getInhPosition());
-	
+	light.setAttenuation(0.01, 0.0, 0.2);
 	
 	// ### GROUND ###
 	groundModel.setShape(&ground);

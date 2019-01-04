@@ -28,7 +28,8 @@ namespace FK {
 		static const std::string modelMatrixName;
 		static const std::string modelViewMatrixName;
 		static const std::string modelViewProjectionMatrixName;
-		static const std::string normalMatrixName;
+		static const std::string normalModelMatrixName;
+		static const std::string normalModelViewMatrixName;
 		static const std::string cameraPositionName;
 
 		static const std::string modelMaterialName;
@@ -49,6 +50,9 @@ namespace FK {
 		static const std::string lightVecName;
 		static const std::string lightDiffuseName;
 		static const std::string lightSpecularName;
+		static const std::string lightSpotCutOffName;
+		static const std::string lightSpotExponentName;
+		static const std::string lightAttenuationName;
 		
 		static const std::string fragmentName;
 
@@ -60,7 +64,8 @@ namespace FK {
 		static fk_Matrix	modelMatrix;
 		static fk_Matrix	modelViewMatrix;
 		static fk_Matrix	modelViewProjectionMatrix;
-		static fk_Matrix	normalMatrix;
+		static fk_Matrix	normalModelMatrix;
+		static fk_Matrix	normalModelViewMatrix;
 		static fk_Material	*modelMaterial;
 		static fk_Vector	cameraPosition;
 

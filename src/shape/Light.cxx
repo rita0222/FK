@@ -83,7 +83,6 @@ fk_Light::fk_Light(fk_LightType argType)
 	attenuation[2] = 1.0;
 	spotExponent = 0.0;
 	spotCutOff = FK_PI/16.0;
-	SetPaletteData(&localPal);
 
 	return;
 }

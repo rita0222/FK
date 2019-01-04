@@ -570,6 +570,7 @@ namespace FK {
 		 *	\param[in] r R要素値
 		 *	\param[in] g G要素値
 		 *	\param[in] b B要素値
+		 *	\param[in] a A(透過)要素
 		 */
 		void		setAmbDiff(float r, float g, float b, float a = 1.0f);
 

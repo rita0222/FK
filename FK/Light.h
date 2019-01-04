@@ -118,7 +118,7 @@ namespace FK {
 		 *	照射対象物体位置を \f$\mathbf{Q}\f$ としたとき、
 		 *	以下の数式を満たすのであればスポットライトで照射されることになります。
 		 *	\f[
-		 *		\theta \geq \frac{(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}}
+		 *		\cos\theta \geq \frac{(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}}
 		 *		{|(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}|}
 		 *	\f]
 		 *	なお、デフォルトでは \f$\theta\f$は \f$\frac{\pi}{16}\f$ に設定されています。
@@ -214,7 +214,6 @@ namespace FK {
 		fk_LightType		lightType;
 		double				attenuation[3];
 		double				spotExponent, spotCutOff;
-		fk_Palette			localPal;
 	};
 }
 

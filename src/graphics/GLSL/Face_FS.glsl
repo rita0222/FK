@@ -19,6 +19,7 @@ struct PointLight {
 	vec3 position;
 	vec4 diffuse;
 	vec4 specular;
+	vec3 attenuation;
 };
 
 struct SpotLight {
@@ -26,6 +27,9 @@ struct SpotLight {
 	vec3 vec;
 	vec4 diffuse;
 	vec4 specular;
+	vec3 attenuation;
+	float cut;
+	float exp;
 };
 
 uniform Material fk_Material;
@@ -40,6 +44,12 @@ uniform vec3 fk_CameraPosition;
 in vec4 varP;
 in vec4 varN;
 out vec4 fragment;
+
+float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
+{
+	float dist = distance(argP1, argP2);
+	return 1.0/(argA[0] * dist + argA[1] * dist * dist + argA[2]);
+}
 
 vec3 ParallelDiffuse(vec3 argN)
 {
@@ -61,8 +71,10 @@ vec3 PointDiffuse(vec3 argN)
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_PointLightNum) break;
 		vec3 Vl = normalize(varP.xyz - fk_PointLight[i].position);
-		float k = clamp(-dot(argN, Vl), 0.0, 1.0);
-		sum  += fk_PointLight[i].diffuse.rgb * k;
+		float a = Attenuation(fk_PointLight[i].attenuation, varP.xyz,
+							  fk_PointLight[i].position);
+		float k = clamp(-dot(argN, Vl) * a, 0.0, 1.0);
+		sum += fk_PointLight[i].diffuse.rgb * k;
 	}
 	return sum;
 }
@@ -73,17 +85,23 @@ vec3 SpotDiffuse(vec3 argN)
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_SpotLightNum) break;
+		float cutMin = cos(fk_SpotLight[i].cut);
 		vec3 Vl = normalize(varP.xyz - fk_SpotLight[i].position);
-		float k = clamp(-dot(argN, Vl), 0.0, 1.0);
-		sum  += fk_SpotLight[i].diffuse.rgb * k;
+		float prod = -dot(argN, Vl);
+		if(prod > cutMin) {
+			float a = Attenuation(fk_SpotLight[i].attenuation, varP.xyz,
+								  fk_SpotLight[i].position);
+			float k = clamp(pow(prod, fk_SpotLight[i].exp) * a, 0.0, 1.0);
+			sum += fk_SpotLight[i].diffuse.rgb * k;
+		}
 	}
 	return sum;
 }
 
-float GetSpecular(vec3 argN, vec3 argV, vec3 argL)
+float GetSpecular(vec3 argN, vec3 argV, vec3 argL, float argExp)
 {
 	float specProd = dot(argN, normalize(argV - argL));
-	return pow(max(0.0, specProd), fk_Material.shininess);
+	return pow(max(0.0, specProd), fk_Material.shininess * argExp);
 }
 
 vec3 ParallelSpecular(vec3 argN, vec3 argV)
@@ -92,7 +110,7 @@ vec3 ParallelSpecular(vec3 argN, vec3 argV)
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_ParallelLightNum) break;
-		float k = GetSpecular(argN, argV, fk_ParallelLight[i].vec);
+		float k = GetSpecular(argN, argV, fk_ParallelLight[i].vec, 1.0);
 		sum += k * fk_ParallelLight[i].specular.rgb;
 	}
 
@@ -106,8 +124,10 @@ vec3 PointSpecular(vec3 argN, vec3 argV)
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_PointLightNum) break;
 		vec3 Vl = normalize(varP.xyz - fk_PointLight[i].position);
-		float k = GetSpecular(argN, argV, Vl);
-		sum += k * fk_PointLight[i].specular.rgb;
+		float k = GetSpecular(argN, argV, Vl, 1.0);
+		float a = Attenuation(fk_PointLight[i].attenuation, varP.xyz,
+							  fk_PointLight[i].position);
+		sum += k * a * fk_PointLight[i].specular.rgb;
 	}
 
 	return sum;
@@ -119,9 +139,15 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_SpotLightNum) break;
+		float cutMin = cos(fk_SpotLight[i].cut);
 		vec3 Vl = normalize(varP.xyz - fk_SpotLight[i].position);
-		float k = GetSpecular(argN, argV, Vl);
-		sum += k * fk_SpotLight[i].specular.rgb;
+		float prod = -dot(argN, Vl);
+		if(prod > cutMin) {
+			float k = GetSpecular(argN, argV, Vl, fk_SpotLight[i].exp);
+			float a = Attenuation(fk_SpotLight[i].attenuation, varP.xyz,
+								  fk_SpotLight[i].position);
+			sum += k * a * fk_SpotLight[i].specular.rgb;
+		}
 	}
 
 	return sum;

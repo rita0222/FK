@@ -2,8 +2,8 @@
 
 uniform mat4 fk_ModelViewProjectionMatrix;
 uniform mat4 fk_ModelMatrix;
-uniform mat4 fk_NormalMatrix;
 uniform mat4 fk_ModelViewMatrix;
+uniform mat4 fk_NormalModelMatrix;
 
 in vec3 fk_Vertex;
 in vec3 fk_Normal;
@@ -15,5 +15,5 @@ void main()
 	vec4 p = vec4(fk_Vertex, 1.0);
 	gl_Position = fk_ModelViewProjectionMatrix * p;
 	varP = fk_ModelMatrix * p;
-	varN = fk_NormalMatrix * vec4(fk_Normal, 0.0);
+	varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
 }
