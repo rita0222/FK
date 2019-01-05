@@ -88,6 +88,8 @@ const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
 const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
 const double	BALL_SIZE		= 12.0;		// ボール半径
 const double	ROTATE_SPEED	= 0.002;	// 地面回転速度
+const int		BOUND_CYCLE		= 6;		// 視点初期化周期
+const int		VIEW_CHANGE		= 4;		// 視点切り替えタイミング
 
 class Ball {
 
@@ -213,7 +215,7 @@ void Ball::bound(void)
 		direction = RISE_MODE;
 	} else if(y_trs < 0.01) {
 		if(direction == RISE_MODE) {
-			if(bound_count % 4 < 2) {
+			if(bound_count % BOUND_CYCLE < VIEW_CHANGE) {
 				view_mode = HIGH_MODE;
 			} else {
 				view_mode = LOW_MODE;
@@ -232,8 +234,7 @@ int Ball::draw(fk_Vector pos)
 	lod(pos);
 	bound();
 	accel();
-	//４回跳ね返ると初期化
-	if(bound_count > 4) init();
+	if(bound_count > BOUND_CYCLE) init();
 	return view_mode;
 }
 
