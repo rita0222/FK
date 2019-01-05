@@ -348,6 +348,7 @@ void fk_ShapeViewer::InitWindow(void)
 	mainWindow->show();
 	viewWin->show();
 
+	setFPS(60);
 	return;
 }
 
@@ -1032,6 +1033,7 @@ bool fk_ShapeViewer::draw(void)
 	SetOrientation(getHead(), getPitch(), getBank(), getScale());
 	SetAxisLine(getAxisScale());
 
+	if(fps != 0) fps_admin.timeRegular();
 	loopFlg = true;
 	while(loopFlg == true) {
 		if(mainWindow->visible() == 0) {
@@ -1039,7 +1041,9 @@ bool fk_ShapeViewer::draw(void)
 			continue;
 		}
 
-		if(viewWin->drawWindow() == 0) return false;
+		if(fps_admin.getDrawFlag() || fps == 0) {
+			if(viewWin->drawWindow() == 0) return false;
+		}
 		if(Fl::check() == 0) return false;
 
 		if(viewWin->winOpenStatus() == false) continue;
@@ -1489,6 +1493,18 @@ int fk_ShapeViewer::getSkipFrame(void)
 	return viewWin->getSkipFrame();
 }
 
+void fk_ShapeViewer::setFPS(int argFPS)
+{
+	if(argFPS == 0) {
+		fps = 0;
+		fps_admin.setFrameSkipMode(false);
+	} else {
+		fps = argFPS;
+		fps_admin.setFrameSkipMode(true);
+		fps_admin.setFPS((unsigned long)(argFPS));
+	}
+}
+
 double fk_ShapeViewer::getHead(void)
 {
 	return gui->headSlider->value();
@@ -1625,3 +1641,4 @@ void fk_ShapeViewer::SetFinalizeMode(void)
 
 	return;
 }
+

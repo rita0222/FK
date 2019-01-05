@@ -91,14 +91,14 @@ int main(int, char **)
 	double          	R = 15.0;
 
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
-	particle.setMaxSize(2000);   // パーティクルの最大数設定。
+	particle.setMaxSize(1000);   // パーティクルの最大数設定。
 	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
 
 	red.set(1.0, 0.0, 0.0);
 	blue.set(0.0, 0.0, 1.0);
-	maxSpeed = 0.06;
-	minSpeed = 0.02;
+	maxSpeed = 0.3;
+	minSpeed = 0.1;
 
 	particle.genMethod = [](fk_Particle *p) {
 		p->setPosition(50.0, myRandom()*50.0 - 25.0, myRandom()*50.0 - 25.0);
@@ -106,7 +106,7 @@ int main(int, char **)
 
 	particle.allMethod = [&](void) {
 		for(int i = 0; i < 5; i++) {
-			if(myRandom() < 0.1) {
+			if(myRandom() < 0.3) {
 				// 新たなパーティクルを生成。
 				// 生成時に genMethod() が呼ばれる。
 				particle.newParticle();
@@ -128,7 +128,7 @@ int main(int, char **)
 		tmp1 = water/(r*r*r);
 		tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
 		vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
-		vec /= 5.0;
+		//vec /= 5.0;
 		// パーティクルの速度ベクトルを代入
 		p->setVelocity(vec);
 

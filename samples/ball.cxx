@@ -253,7 +253,7 @@ int main(int, char *[])
 	fk_AppWindow	win;
 	win.setSize(800, 800);
 	win.setScene(&scene);
-	win.setFPS(120);
+	win.setFPS(60);
 
 	// ### Material 初期化 ###
 	fk_Material::initDefault();
