@@ -74,8 +74,8 @@
 using namespace FK;
 using namespace FK::Material;
 
-const double	DOWN_ACCEL		= 0.00050;	// 降下時の加速度
-const double	RISE_ACCEL		= 0.00053;	// 上昇時の減速度
+const double	DOWN_ACCEL		= 0.050;	// 降下時の加速度
+const double	RISE_ACCEL		= 0.053;	// 上昇時の減速度
 const int		DOWN_MODE		= 0;		// 降下モード
 const int		RISE_MODE		= 1;		// 上昇モード
 const int		LOW_MODE		= 0;		// ブロック視点モード
@@ -87,7 +87,7 @@ const int		LOD3_LOW		= 120;		// 三分割距離 (ブロック)
 const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
 const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
 const double	BALL_SIZE		= 12.0;		// ボール半径
-const double	ROTATE_SPEED	= 0.002;	// 地面回転速度
+const double	ROTATE_SPEED	= 0.02;		// 地面回転速度
 const int		BOUND_CYCLE		= 6;		// 視点初期化周期
 const int		VIEW_CHANGE		= 4;		// 視点切り替えタイミング
 
@@ -253,6 +253,7 @@ int main(int, char *[])
 	fk_AppWindow	win;
 	win.setSize(800, 800);
 	win.setScene(&scene);
+	win.setFPS(120);
 
 	// ### Material 初期化 ###
 	fk_Material::initDefault();

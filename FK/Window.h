@@ -10,7 +10,7 @@
 
 // for FK Header.
 #include <FK/Engine.H>
-#include <FK/FrameController.H>
+#include <FK/FrameController.h>
 
 // for Graphics Routine
 //! フレーム制御タイプを表す型

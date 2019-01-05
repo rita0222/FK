@@ -3,7 +3,7 @@
 
 #include <FK/Window.h>
 #include <FK/Light.h>
-#include <FK/FrameController.H>
+#include <FK/FrameController.h>
 #include <FK/GuideObject.h>
 #include <FK/TrackBall.h>
 #include <FK/MotionCharactor.h>

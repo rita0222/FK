@@ -69,7 +69,7 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FrameController.H>
+#include <FK/FrameController.h>
 #include <FK/Error.H>
 
 using namespace FK;
