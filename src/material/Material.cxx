@@ -337,10 +337,10 @@ fk_Material::fk_Material()
 
 void fk_Material::init(void)
 {
-	setAmbient(0.3f, 0.3f, 0.3f);
-	setDiffuse(0.0f, 0.0f, 0.0f);
-	setSpecular(0.2f, 0.2f, 0.2f);
-	setShininess(17.0f);
+	setAmbient(0.3, 0.3, 0.3);
+	setDiffuse(0.0, 0.0, 0.0);
+	setSpecular(1.0, 1.0, 1.0);
+	setShininess(30.0);
 }
 
 fk_Material::fk_Material(const fk_Material &argMat)
