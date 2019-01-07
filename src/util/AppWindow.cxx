@@ -206,7 +206,7 @@ fk_AppWindow::fk_AppWindow(void)
 
 	drawWin->setScene(&scene);
 
-	setFPS(60);
+	setFPS(0);
 
 	camera.glMoveTo(0.0, 0.0, 100.0);
 	camera.glFocus(0.0, 0.0, 0.0);
@@ -249,7 +249,7 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 
 	drawWin->setScene(&scene);
 
-	setFPS(60);
+	setFPS(0);
 
 	camera.glMoveTo(0.0, 0.0, 100.0);
 	camera.glFocus(0.0, 0.0, 0.0);
