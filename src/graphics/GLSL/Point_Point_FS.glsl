@@ -1,4 +1,4 @@
-#version 410 core
+#version 330 core
 
 flat in vec4 put_color;
 flat in int draw_flag;
