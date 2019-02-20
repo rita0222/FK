@@ -143,9 +143,9 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 #endif
 	};
 
+#ifndef OPENGL4
 	DrawPick = [this]() {
 		FK_UNUSED(this);
-#ifndef OPENGL4
 		_st			ii, ij;
 
 		const fk_Dimension *bufSize = getBufferSize();
@@ -167,8 +167,8 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 			glEnd();
 			glPopName();
 		}
-#endif
 	};
+#endif
 }			 
 
 void fk_MeshTexture::init(void)

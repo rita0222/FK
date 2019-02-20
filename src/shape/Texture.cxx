@@ -149,7 +149,11 @@ void fk_Texture::MakeObjFunction(void)
 	};
 
 	DrawTexture = [](bool) {};
+
+#ifndef OPENGL4
 	DrawPick = []() {};
+#endif
+
 }
 
 bool fk_Texture::IsLocalImage(void)
@@ -329,6 +333,9 @@ void fk_Texture::fillColor(int argR, int argG, int argB, int argA)
 	return;
 }
 
+const GLuint fk_RectTexture::faceIndex[6] = {0, 1, 3, 2, 3, 1};
+GLuint fk_RectTexture::faceIBO = 0;
+
 fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
@@ -356,8 +363,9 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
+		const fk_Vector norm(0.0, 0.0, 1.0);
+
 		fk_TexCoord	startParam, endParam;
-		double		tmpX, tmpY;
 
 		const fk_Dimension *imageSize = getImageSize();
 		const fk_Dimension *bufSize = getBufferSize();
@@ -377,29 +385,35 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 						 hScale * texCoord[1].y);
 		}
 
-		tmpX = texSize.x/2.0;
-		tmpY = texSize.y/2.0;
+		for(int i = 0; i < 4; ++i) vertexNormal.set(i, norm);
+		fk_Vector	pos, coord;
 
-#ifndef OPENGL4
-		glNormal3d(0.0, 0.0, 1.0);
-		glBegin(GL_QUADS);
+		double tmpX = texSize.x/2.0;
+		double tmpY = texSize.y/2.0;
+		
+		coord.set(startParam.x, startParam.y, 0.0);
+		vertexTexCoord.set(0, coord);
+		pos.set(-tmpX, -tmpY, 0.0);
+		vertexPosition.set(0, pos);
+		
+		coord.set(endParam.x, startParam.y);
+		vertexTexCoord.set(1, coord);
+		pos.set(tmpX, -tmpY, 0.0);
+		vertexPosition.set(1, pos);
 
-		glTexCoord2d(startParam.x, startParam.y);
-		glVertex3d(-tmpX, -tmpY, 0.0);
+		coord.set(endParam.x, endParam.y);
+		vertexTexCoord.set(2, coord);
+		pos.set(tmpX, tmpY, 0.0);
+		vertexPosition.set(2, pos);
 
-		glTexCoord2d(endParam.x, startParam.y);
-		glVertex3d(tmpX, -tmpY, 0.0);
+		coord.set(startParam.x, endParam.y);
+		vertexTexCoord.set(3, coord);
+		pos.set(-tmpX, tmpY, 0.0);
+		vertexPosition.set(3, pos);
 
-		glTexCoord2d(endParam.x, endParam.y);
-		glVertex3d(tmpX, tmpY, 0.0);
-
-		glTexCoord2d(startParam.x, endParam.y);
-		glVertex3d(-tmpX, tmpY, 0.0);
-
-		glEnd();
-#endif
 	};
 
+#ifndef OPENGL4
 	DrawPick = [this]() {
 		FK_UNUSED(this);
 
@@ -413,7 +427,6 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		tmpX = texSize.x/2.0;
 		tmpY = texSize.y/2.0;
 
-#ifndef OPENGL4
 		glPushName(0);
 		glBegin(GL_QUADS);
 
@@ -424,8 +437,8 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 
 		glEnd();
 		glPopName();
-#endif
 	};
+#endif
 
 	return;
 }	
@@ -433,9 +446,29 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 void fk_RectTexture::init(void)
 {
 	BaseInit();
-
+	RectInit();
 	return;
 }
+
+void fk_RectTexture::RectInit(void)
+{
+	if(faceIBO == 0) {
+		glGenBuffers(1, &faceIBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+					 GLsizei(6*sizeof(GLuint)),
+					 &faceIndex[0], GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	
+	vertexPosition.resize(4);
+	vertexNormal.resize(4);
+	vertexTexCoord.resize(4);
+
+	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	setShaderAttribute(normalName, 3, vertexNormal.getP());
+	setShaderAttribute(texCoordName, 3, vertexTexCoord.getP());
+}	
 
 bool fk_RectTexture::setTextureSize(double argX, double argY)
 {
@@ -576,10 +609,10 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 #endif
 	};
 
+#ifndef OPENGL4
 	DrawPick = [this]() {
 		FK_UNUSED(this);
 
-#ifndef OPENGL4
 		int				counter;
 
 		const fk_Dimension *bufSize = getBufferSize();
@@ -598,8 +631,8 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 
 		glEnd();
 		glPopName();
-#endif
 	};
+#endif
 }
 
 void fk_TriTexture::init(void)

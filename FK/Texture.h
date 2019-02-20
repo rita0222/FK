@@ -316,7 +316,7 @@ namespace FK {
 		std::function<void(void)>	GenTextureObj;
 		std::function<void(void)>	ReplaceSubImage;
 		std::function<void(bool)>	DrawTexture;
-		std::function<void(void)>	DrawPick;
+//		std::function<void(void)>	DrawPick;
 
 #endif
 
@@ -508,6 +508,13 @@ namespace FK {
 		bool				repeatFlag;
 		fk_TexCoord			repeatParam;
 		fk_TexCoord			texCoord[2];
+
+		fk_FVecArray		vertexPosition;
+		fk_FVecArray		vertexNormal;
+		fk_FVecArray		vertexTexCoord;
+		static const GLuint	faceIndex[6];
+		static GLuint		faceIBO;
+		void				RectInit(void);
 		void				MakeDrawRectFunc(void);
 
 	};
