@@ -356,7 +356,6 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
-#ifndef OPENGL4
 		fk_TexCoord	startParam, endParam;
 		double		tmpX, tmpY;
 
@@ -381,6 +380,7 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		tmpX = texSize.x/2.0;
 		tmpY = texSize.y/2.0;
 
+#ifndef OPENGL4
 		glNormal3d(0.0, 0.0, 1.0);
 		glBegin(GL_QUADS);
 
@@ -403,7 +403,6 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 	DrawPick = [this]() {
 		FK_UNUSED(this);
 
-#ifndef OPENGL4
 		double		tmpX, tmpY;
 
 		const fk_Dimension *bufSize = getBufferSize();
@@ -414,6 +413,7 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		tmpX = texSize.x/2.0;
 		tmpY = texSize.y/2.0;
 
+#ifndef OPENGL4
 		glPushName(0);
 		glBegin(GL_QUADS);
 

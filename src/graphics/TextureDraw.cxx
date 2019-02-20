@@ -297,9 +297,9 @@ void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
 	curID = argTexObj->GetTexID();
 
 	if(bindMode == false || curID != oldTexID) {
+#ifndef OPENGL4		
 		glEnable(GL_TEXTURE_2D);
 
-#ifndef OPENGL4		
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texMode);
 #endif		
 
