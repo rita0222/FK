@@ -155,7 +155,7 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	  edgeIBO(0), faceIBO(0)
 {
 	SetObjectType(FK_INDEXFACESET);
-	//SetPaletteData(&localPalette);
+	realType = FK_SHAPE_IFS;
 	
 	vertexPosition.clear();
 	timeOrgPosition.clear();

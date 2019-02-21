@@ -79,6 +79,7 @@ using namespace FK;
 
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
+	realType = FK_SHAPE_POINT;
 	SetObjectType(FK_POINT);
 	allClear();
 	MakePoint(argVertexSet);

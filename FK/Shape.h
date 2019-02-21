@@ -1,5 +1,5 @@
-﻿#ifndef __FK_SHAPEBASE_HEADER__
-#define __FK_SHAPEBASE_HEADER__
+﻿#ifndef __FK_SHAPE_BASE_HEADER__
+#define __FK_SHAPE_BASE_HEADER__
 
 #include <FK/Base.h>
 #include <FK/Palette.h>
@@ -246,10 +246,13 @@ namespace FK {
 
 		void			DeleteMapI(std::string);
 		void			DeleteMapF(std::string);
+
+	protected:
+		fk_RealShapeType	realType;
 	};
 }
 
-#endif // !__FK_SHAPEBASE_HEADER__
+#endif // !__FK_SHAPE_BASE_HEADER__
 
 /****************************************************************************
  *

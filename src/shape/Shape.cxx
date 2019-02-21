@@ -88,7 +88,7 @@ const string fk_Shape::texCoordName = "fk_TexCoord";
 
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
 	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
-	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false)
+	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(FK_SHAPE_OTHER)
 {
 	SetObjectType(argObjType);
 	return;
@@ -199,6 +199,8 @@ vector<fk_Material> * fk_Shape::getMaterialVector(void)
 
 fk_RealShapeType fk_Shape::getRealShapeType(void)
 {
+	return realType;
+/*	
 	switch(getObjectType()) {
 	  case FK_INDEXFACESET:
 	  case FK_BLOCK:
@@ -247,6 +249,7 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 		break;
 	}
 	return FK_SHAPE_OTHER;
+*/
 }
 
 void fk_Shape::SetPointVAO(GLuint argVAO)

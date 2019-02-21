@@ -115,7 +115,6 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 fk_Window::~fk_Window()
 {
 	snapBuffer.init();
-	clearTextureMemory();
 	winNum--;
 	if(winNum == 0) {
 		delete putWin;
@@ -124,17 +123,6 @@ fk_Window::~fk_Window()
 	}
 
 	return;
-}
-
-void fk_Window::clearTextureMemory(void)
-{
-	engine.ClearTextureMemory();
-	return;
-}
-
-unsigned long fk_Window::getUsingTextureMemory(void)
-{	
-	return engine.GetUsingTextureMemory();
 }
 
 void fk_Window::drawScene(void)
@@ -214,21 +202,9 @@ bool fk_Window::getWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 	return engine.GetWindowPosition(argPos, retPos);
 }
 
-void fk_Window::setOGLTextureBindMode(bool argFlg)
-{
-	engine.SetOGLTextureBindMode(argFlg);
-	return;
-}
-
-bool fk_Window::getOGLTextureBindMode(void)
-{
-	return engine.GetOGLTextureBindMode();
-}
-
 // Stereo Mode
 void fk_Window::setOGLStereoMode(bool argFlg)
 {
-	clearTextureMemory();
 	if(argFlg == true) {
 		GLboolean	val = GL_FALSE;
 		Fl_Window	*pWin = dynamic_cast<Fl_Window *>(GetInhParentWindow());

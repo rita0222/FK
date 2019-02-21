@@ -104,7 +104,6 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	wSize = 0;
 	hSize = 0;
 	resizeFlag = false;
-	textureMode = false;
 
 	srcFactor = FK_FACTOR_SRC_ALPHA;
 	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
@@ -138,9 +137,6 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	wSize = argW;
 	hSize = argH;
 	resizeFlag = false;
-	textureMode = false;
-
-	textureDraw->SetBindMode(true);
 
 	defProj.setAll(40.0, 1.0, 6000.0);
 	
@@ -154,18 +150,6 @@ void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 	resizeFlag = true;
 
 	return;
-}
-
-void fk_GraphicsEngine::ClearTextureMemory(void)
-{
-	textureDraw->ClearTextureMemory();
-	generalID++;
-	return;
-}
-
-unsigned long fk_GraphicsEngine::GetUsingTextureMemory(void)
-{
-	return textureDraw->GetUsingTextureMemory();
 }
 
 void fk_GraphicsEngine::SetViewPort(void)
@@ -307,10 +291,6 @@ void fk_GraphicsEngine::DrawObjs(void)
 
 	if(curDLink == nullptr) return;
 
-	//if(argPickFlg == true) modelArray.clear();
-
-	textureDraw->StartUp();
-
 	modelPEnd = curDLink->GetModelList()->end();
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
@@ -344,15 +324,7 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 	fk_DrawMode drawMode = argModel->getDrawMode();
 	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->preShader();
 	
-	if(modelShape->getRealShapeType() == FK_SHAPE_TEXTURE) {
-		if(textureMode == false) {
-			glEnable(GL_TEXTURE_2D);
-			textureMode = true;
-		}
-		textureDraw->DrawTextureObj(argModel);
-	} else {
-		DrawShapeObj(argModel);
-	}
+	DrawShapeObj(argModel);
 
 	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->postShader();
 
@@ -410,11 +382,6 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	//fk_Window::printf("DrawMode = %d", DrawMode);
 	if(DrawMode == FK_NONEMODE) return;
 
-	if(textureMode == true) {
-		glDisable(GL_TEXTURE_2D);
-		textureMode = false;
-	}
-
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
 		faceDraw->DrawShapeFace(argModel);
 	}
@@ -425,6 +392,10 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
 		lineDraw->DrawShapeLine(argModel);
+	}
+
+	if((DrawMode & FK_TEXTUREMODE) != FK_NONEMODE) {
+		textureDraw->DrawShapeTexture(argModel);
 	}
 
 	return;
@@ -578,17 +549,6 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 				static_cast<double>(viewArray[3])*(outVec.y + 1.0)/2.0,
 				(1.0 + outVec.z)/2.0);
 	return true;
-}
-
-void fk_GraphicsEngine::SetOGLTextureBindMode(bool argFlg)
-{
-	textureDraw->SetBindMode(argFlg);
-	return;
-}
-
-bool fk_GraphicsEngine::GetOGLTextureBindMode(void)
-{
-	return textureDraw->GetBindMode();
 }
 
 GLenum GetBlendFactor(fk_BlendFactor factor)

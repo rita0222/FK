@@ -79,6 +79,7 @@ using namespace FK;
 fk_Surface::fk_Surface(void) :
 	changeFlg(true), div(-1)
 {
+	realType = FK_SHAPE_SURFACE;
 	SetObjectType(FK_SURFACE);
 	posCache.clear();
 	normCache.clear();

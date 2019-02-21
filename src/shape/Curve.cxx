@@ -77,6 +77,7 @@ using namespace FK;
 fk_Curve::fk_Curve(void) :
 	changeFlg(true), div(-1)
 {
+	realType = FK_SHAPE_CURVE;
 	SetObjectType(FK_CURVE);
 	posCache.clear();
 	diffCache.clear();

@@ -35,13 +35,8 @@ namespace FK {
 		bool				GetWindowPosition(fk_Vector, fk_Vector *);
 		void				GetPickData(fk_PickData *, int, int, int);
 
-		void				SetOGLTextureBindMode(bool);
-		bool				GetOGLTextureBindMode(void);
-
 		bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
 
-		void				ClearTextureMemory(void);
-		unsigned long		GetUsingTextureMemory(void);
 		void				OpenGLInit(void);
 
 		void				SetPickViewPort(int, int, int);
@@ -65,7 +60,6 @@ namespace FK {
 		int							hSize;
 		GLuint						selectBuf[FK_PICKDATAMAX*5];
 		bool						resizeFlag;
-		bool						textureMode;
 		fk_BlendFactor				srcFactor, dstFactor;
 		bool						depthRead, depthWrite;
 

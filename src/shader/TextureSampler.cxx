@@ -75,14 +75,14 @@
 using namespace FK;
 
 fk_TextureSampler::fk_TextureSampler()
-	: fk_MeshTexture(), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
+	: fk_Texture(), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
 {
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 	init();
 }
 
 fk_TextureSampler::fk_TextureSampler(fk_Image *argImage)
-	: fk_MeshTexture(argImage), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
+	: fk_Texture(argImage), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
 {
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 	init();

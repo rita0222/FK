@@ -1,45 +1,24 @@
 ﻿#ifndef __FK_TEXTURE_DRAW_HEADER__
 #define __FK_TEXTURE_DRAW_HEADER__
 
-#include <FK/OpenGL.H>
-#include <FK/Texture.h>
-#include <vector>
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
 
 namespace FK {
-	
-	class fk_IFSTexture;
-	class fk_ARTexture;
-	class fk_Model;
-
-	class fk_TextureDraw {
-
+	class fk_TextureDraw : public fk_DrawBase {
 	public:
 		fk_TextureDraw(void);
 		virtual ~fk_TextureDraw();
 
-		void	StartUp(void);
-		void	SetArrayState(bool);
-		void	DrawTextureObj(fk_Model *);
-		void	ClearTextureMemory(void);
-		void	SetBindMode(bool);
-		bool	GetBindMode(void);
-
-		unsigned long GetUsingTextureMemory(void);
-		static void	ReleaseTexture_(fk_Image *);
-
+		void	DrawShapeTexture(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
 	private:
-		bool							arrayState;
-		bool							bindMode;
-		fk_TexID						oldTexID;
-		static std::vector<GLuint>		texNameArray;
-		static unsigned long			texLoadedSize;
-		static std::vector<fk_Image *>	texImageArray;
-
-		void	GenTextureObj(fk_Texture *);
-		void	ReplaceTextureObj(fk_Texture *);
-		void	InitTextureEnv(fk_Texture *);
+		fk_ShaderBinder		*shader;
+		void 	ShaderSetup(void);
+		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
 	};
 }
+
 #endif /* !__FK_TEXTURE_DRAW_HEADER__ */
 
 /****************************************************************************

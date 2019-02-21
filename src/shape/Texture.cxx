@@ -79,6 +79,7 @@ using namespace FK;
 fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(FK_TEXTURE)
 {
+	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
 	image = nullptr;
 	BaseInit();

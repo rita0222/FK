@@ -77,6 +77,7 @@ using namespace FK;
 
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {
+	realType = FK_SHAPE_LINE;
 	SetObjectType(FK_LINE);
 	allClear();
 	MakeLines(argVertexPos);

@@ -69,271 +69,85 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "TextureDraw_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
 #include <FK/TextureDraw.H>
 #include <FK/IFSTexture.h>
 #include <FK/Model.h>
-#include <FK/FaceDraw.H>
-#include <FK/ARTexture.h>
-
 #include <FK/Error.H>
-#include <algorithm>
 
 using namespace std;
 using namespace FK;
 
-vector<GLuint>		fk_TextureDraw::texNameArray;
-unsigned long		fk_TextureDraw::texLoadedSize = 0;
-vector<fk_Image *>	fk_TextureDraw::texImageArray;
-
-fk_TextureDraw::fk_TextureDraw(void) : oldTexID(0)
+fk_TextureDraw::fk_TextureDraw(void)
+	: shader(nullptr)
 {
-	SetArrayState(false);
-	SetBindMode(false);
+	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	ClearTextureMemory();
-	return;
-}
-void fk_TextureDraw::SetArrayState(bool argState)
-{
-	arrayState = argState;
+	delete shader;
 	return;
 }
 
-void fk_TextureDraw::StartUp(void)
+void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 {
-	oldTexID = 0;
+	fk_DrawMode				drawMode = argModel->getDrawMode();
+
+	if(shader == nullptr) ShaderSetup();
+	auto parameter = shader->getParameter();
+	SetParameter(parameter);
+
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+	Draw_Texture(argModel, parameter);
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
 }
 
-void fk_TextureDraw::DrawTextureObj(fk_Model *argObj)
+void fk_TextureDraw::ShaderSetup(void)
 {
-	fk_Texture	*texObj;
-	GLboolean	texStatus;
-	fk_TexID	texID;
+	shader = new fk_ShaderBinder();
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
-	if((argObj->getDrawMode() & FK_TEXTUREMODE) == FK_NONEMODE) return;
-	texObj = dynamic_cast<fk_Texture *>(argObj->getShape());
+	prog->vertexShaderSource =
+		#include "GLSL/Face_VS.out"
+		;
 
-	if(texObj->getObjectType() != FK_ARTEXTURE && texObj->getBufferSize() == nullptr) return;
-
-	fk_Image		*image = texObj->getImage();
-	image->ReleaseTexture = fk_TextureDraw::ReleaseTexture_;
-
-	// (必要なら)テクスチャオブジェクトの生成 
-	texID = texObj->GetTexID();
-	texStatus = glIsTexture(texID);
-	if(texStatus == GL_FALSE || texObj->GetInitFlag() == true) {
-		// 生成か更新かの分岐(by rita)
-		if(texStatus == GL_TRUE) {
-			ReplaceTextureObj(texObj);
-		} else {
-			GenTextureObj(texObj);
-		}
-	}
-
-	// テクスチャ表示の初期化 
-	InitTextureEnv(texObj);
-
-	// rita_ext: カスタムテクスチャ描画処理の実行ポイント
-	argObj->connectShader(texObj->GetTexID());
-
-	// テクスチャ描画処理
-	texObj->DrawTexture(arrayState);
-
-	// glFlush();
-	// glDisable(GL_TEXTURE_2D);
-   
-	return;
-}
-
-
-void fk_TextureDraw::ReleaseTexture_(fk_Image *argImage)
-{
-	if(argImage->GetTexID() == 0) return;
-	for(_st i = 0; i < texNameArray.size(); ++i) {
-		if(argImage->GetTexID() == texNameArray[i]) {
-			const fk_Dimension *bufSize = argImage->getBufferSize();
-			glDeleteTextures(1, &texNameArray[i]);
-			fk_Texture::ClearTexState(argImage);
-			texNameArray[i] = 0;
-			texImageArray[i] = nullptr;
-			texLoadedSize -= (unsigned long)(bufSize->w*bufSize->h*4);
-			break;
-		}
-	}
-	return;
-}	
-
-
-void fk_TextureDraw::GenTextureObj(fk_Texture *argTexObj)
-{
-	fk_TexID	tmpTexName;
-
-	//const fk_ImType		*imageBuf = argTexObj->getImageBuf();
-	const fk_Dimension	*bufSize = argTexObj->getBufferSize();
-
-	glGenTextures(1, &tmpTexName);
-	glBindTexture(GL_TEXTURE_2D, tmpTexName);
-
-	switch(argTexObj->getTexWrapMode()) {
-	  case FK_TEX_WRAP_REPEAT:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		break;
-
-	  case FK_TEX_WRAP_CLAMP:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		break;
-	}
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_FS.out"
+		;
 	
-	switch(argTexObj->getTexRendMode()) {
-	  case FK_TEX_REND_NORMAL:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		break;
-
-	  case FK_TEX_REND_SMOOTH:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		break;
-
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
 	}
+
+	param->reserveAttribute(fk_Shape::vertexName);
+	param->reserveAttribute(fk_Shape::normalName);
+	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
+
+	prog->link();
+	return;
+}
+
+GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
+{
+	GLuint 			vao;
 	
-	argTexObj->GenTextureObj();
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetFaceVAO(vao);
+	argShape->DefineVBO();
 
-	argTexObj->SetTexID(tmpTexName);
-	argTexObj->SetInitFlag(false);
-	texNameArray.push_back(tmpTexName);
-	texImageArray.push_back(argTexObj->getImage());
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
-	texLoadedSize += (unsigned long)(bufSize->w*bufSize->h*4);
-
-	return;
+	return vao;
 }
 
-// テクスチャオブジェクトの更新処理
-void fk_TextureDraw::ReplaceTextureObj(fk_Texture *argTexObj)
+void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_TexID	tmpTexName;
-	GLint		texW, texH;
-
-	const fk_Dimension	*bufSize = argTexObj->getBufferSize();
-
-	tmpTexName = argTexObj->GetTexID();
-
-	glBindTexture(GL_TEXTURE_2D, tmpTexName);
-	// 現在読み込んでいるテクスチャのサイズを取得
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texW);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texH);
-
-	// 同じバッファサイズなら SubImage による更新、違っていたら一度削除して再生成
-	if(texW == bufSize->w && texH == bufSize->h) {
-		argTexObj->ReplaceSubImage();
-	} else {
-		argTexObj->GenTextureObj();
-		texLoadedSize -= (unsigned long)(texW*texH*4);
-		texLoadedSize += (unsigned long)(bufSize->w*bufSize->h*4);
-	}
-
-	// フラグ解除
-	argTexObj->SetInitFlag(false);
-
-	return;
+	FK_UNUSED(argModel);
+	FK_UNUSED(argParam);
 }
-
-void fk_TextureDraw::ClearTextureMemory(void)
-{
-	if(texNameArray.empty() == false) {
-		glDeleteTextures(GLsizei(texNameArray.size()), &texNameArray[0]);
-		for(_st i = 0; i < texImageArray.size(); ++i) {
-			if(texImageArray[i] == nullptr) continue;
-			fk_Texture::ClearTexState(texImageArray[i]);
-		}
-		texNameArray.clear();
-		texImageArray.clear();
-		texLoadedSize = 0;
-	}
-	return;
-}
-
-unsigned long fk_TextureDraw::GetUsingTextureMemory(void)
-{
-	return texLoadedSize;
-}
-
-void fk_TextureDraw::InitTextureEnv(fk_Texture *argTexObj)
-{
-	GLint		texMode = GL_REPLACE;
-	fk_TexID	curID;
-
-	switch(argTexObj->getTextureMode()) {
-	  case FK_TEX_REPLACE:
-		texMode = GL_REPLACE;
-		break;
-
-#ifndef OPENGL4
-	  case FK_TEX_MODULATE:
-		texMode = GL_MODULATE;
-		break;
-
-	  case FK_TEX_DECAL:
-		texMode = GL_DECAL;
-		break;
-#endif
-		
-	  default:
-		break;
-	}
-
-	curID = argTexObj->GetTexID();
-
-	if(bindMode == false || curID != oldTexID) {
-#ifndef OPENGL4		
-		glEnable(GL_TEXTURE_2D);
-
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, texMode);
-#endif		
-
-		switch(argTexObj->getTexWrapMode()) {
-		  case FK_TEX_WRAP_REPEAT:
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			break;
-
-		  case FK_TEX_WRAP_CLAMP:
-#ifndef OPENGL4			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-#endif
-			break;
-		}
-
-		glBindTexture(GL_TEXTURE_2D, curID);
-	}
-
-	oldTexID = curID;
-
-	return;
-}
-
-void fk_TextureDraw::SetBindMode(bool argFlg)
-{
-	bindMode = argFlg;
-	return;
-}
-
-bool fk_TextureDraw::GetBindMode(void)
-{
-	return bindMode;
-}
-
-#endif

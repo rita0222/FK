@@ -31,7 +31,9 @@ namespace FK {
 	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_MeshTexture
 	 */
-	class fk_TextureSampler : public fk_MeshTexture
+
+	//class fk_TextureSampler : public fk_MeshTexture
+	class fk_TextureSampler : public fk_Texture
 	{
 	public:
 
