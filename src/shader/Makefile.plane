@@ -3,8 +3,7 @@ BASENAME	= shader
 LIBSRCS		= \
 			ShaderBinder.cxx \
 			ShaderParameter.cxx \
-			ShaderProgram.cxx \
-			TextureSampler.cxx
+			ShaderProgram.cxx
 
 FKLINK		= \
 			-lFK3_math.$(VERNAME) \
