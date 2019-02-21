@@ -75,14 +75,14 @@
 using namespace FK;
 
 fk_TextureSampler::fk_TextureSampler()
-	: fk_Texture(), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
+	: fk_Texture(), samplerSource(FK_TEXTURE_IMAGE)
 {
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 	init();
 }
 
 fk_TextureSampler::fk_TextureSampler(fk_Image *argImage)
-	: fk_Texture(argImage), samplerSource(FK_TEXTURE_IMAGE), loaded(false)
+	: fk_Texture(argImage), samplerSource(FK_TEXTURE_IMAGE)
 {
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 	init();
@@ -94,35 +94,34 @@ fk_TextureSampler::~fk_TextureSampler()
 
 void fk_TextureSampler::init()
 {
-	if (!loaded) {
-		GLuint	tmpId = GLuint(id);
-		if (tmpId != 0) glDeleteTextures(1, &tmpId);
-	}
+	fk_Image *image = getImage();
+	if(image == nullptr) return;
 
-	id = 0;
-	loaded = false;
+	GLuint tmpID = image->GetTexID();
+	if (tmpID != 0) {
+		glDeleteTextures(1, &tmpID);
+		image->SetTexID(0);
+	}
 }
 
 bool fk_TextureSampler::BindTexture(bool forceLoad)
 {
-	fk_Image		*tmpImage = getImage();
-	if (tmpImage == nullptr) return false;
+	bool 		loaded = true;
+	fk_Image	*image = getImage();
+	if (image == nullptr) return false;
 
-	const fk_Dimension	*bufSize = tmpImage->getBufferSize();
+	const fk_Dimension	*bufSize = image->getBufferSize();
 	if(bufSize == nullptr) return false;
 
-	GLuint			tmpId = GLuint(id);
+	GLuint			id = image->GetTexID();
 
-	if (!loaded || forceLoad) {
-		if (tmpId != 0) glDeleteTextures(1, &tmpId);
-		glGenTextures(1, &tmpId);
+	if(id == 0) {
+		glGenTextures(1, &id);
+		image->SetTexID(id);
+		loaded = false;
 	}
 
-	if (tmpId == 0) return false;
-
-	glBindTexture(GL_TEXTURE_2D, tmpId);
-
-	id = int(tmpId);
+	glBindTexture(GL_TEXTURE_2D, id);
 
 	GLint tmpWrapModeGl = (getTexWrapMode() == FK_TEX_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP_TO_EDGE;
 	GLint tmpRendMode = (getTexRendMode() == FK_TEX_REND_NORMAL) ? GL_NEAREST : GL_LINEAR;
@@ -155,10 +154,10 @@ bool fk_TextureSampler::BindTexture(bool forceLoad)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
-	if (!loaded || forceLoad) {
+	if (loaded == false || forceLoad) {
 		if (samplerSource == FK_TEXTURE_IMAGE) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-						 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpImage->getBufPointer());
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
 		}  else if (samplerSource == FK_COLOR_BUFFER) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
@@ -166,7 +165,6 @@ bool fk_TextureSampler::BindTexture(bool forceLoad)
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
 						 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 		}
-		loaded = true;
 	}
 
 	if (samplerSource != FK_TEXTURE_IMAGE) {

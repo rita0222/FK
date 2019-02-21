@@ -111,11 +111,11 @@ void fk_TextureDraw::ShaderSetup(void)
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Face_VS.out"
+		#include "GLSL/Texture_VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS.out"
+		#include "GLSL/Texture_FS.out"
 		;
 	
 	if(prog->validate() == false) {
@@ -124,7 +124,8 @@ void fk_TextureDraw::ShaderSetup(void)
 	}
 
 	param->reserveAttribute(fk_Shape::vertexName);
-	param->reserveAttribute(fk_Shape::normalName);
+	param->reserveAttribute(fk_Shape::texCoordName);
+	
 	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();

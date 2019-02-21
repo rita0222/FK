@@ -6,6 +6,7 @@
 #include <FK/IndexFace.h>
 
 namespace FK {
+
 	class fk_MQOParser;
 	class fk_IndexFaceSet;
 
@@ -26,6 +27,13 @@ namespace FK {
 	enum fk_TexWrapMode {
 		FK_TEX_WRAP_REPEAT,		//!< 繰り返し式
 		FK_TEX_WRAP_CLAMP,		//!< 縁部伸張式
+	};
+
+	// フレームバッファのサンプリングソースを表す列挙型
+	enum fk_SamplerSource {
+		FK_TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
+		FK_COLOR_BUFFER,	//!< 画面色情報参照
+		FK_DEPTH_BUFFER,	//!< 画面深度情報参照
 	};
 
 	//! テクスチャ用基底クラス
@@ -303,6 +311,40 @@ namespace FK {
 		 */
 		const fk_ImType *		getImageBuf(void);
 
+		//! テクスチャ参照情報設定関数
+		/*!
+		 *	参照テクスチャが参照する情報を設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- FK_TEXTURE_IMAGE: 
+		 *		コンストラクタで設定した
+		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
+		 *	- FK_COLOR_BUFFER: 
+		 *		描画シーン全体の色値情報を参照先とします。
+		 *	- FK_DEPTH_BUFFER: 
+		 *		描画シーン全体の深度情報を参照先とします。
+		 *	.
+		 *	デフォルトは FK_TEXTURE_IMAGE に設定されています。
+		 *
+		 *	\param[in]	mode
+		 *		テクスチャ参照情報の参照先
+		 *
+		 *	\sa getSamplerSource()
+		 */
+		void setSamplerSource(fk_SamplerSource mode);
+
+		//! テクスチャ参照情報参照関数
+		/*!
+		 *	参照テクスチャが参照する情報を参照します。
+		 *
+		 *	\return		テクスチャ参照情報
+		 */
+		fk_SamplerSource getSamplerSource(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool BindTexture(bool forceLoad);
+#endif
+
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -327,6 +369,7 @@ namespace FK {
 		fk_TexRendMode		texRendMode;
 		fk_TexWrapMode		texWrapMode;
 		fk_Palette			localPal;
+		fk_SamplerSource	samplerSource;
 
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);

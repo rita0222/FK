@@ -78,7 +78,7 @@ map<string, int> * fk_ShaderParameter::getAttrTable(void)
 	return &attrTable;
 }
 
-bool fk_ShaderParameter::attachTexture(int argUnit, fk_TextureSampler *argTexture)
+bool fk_ShaderParameter::attachTexture(int argUnit, fk_Texture *argTexture)
 {
 	if (argUnit < 0 || argUnit > 31) return false;
 	textureTable[argUnit] = argTexture;

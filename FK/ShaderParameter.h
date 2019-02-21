@@ -1,7 +1,7 @@
 ﻿#ifndef __FK_SHADER_PARAMETER_HEADER__
 #define __FK_SHADER_PARAMETER_HEADER__
 
-#include <FK/TextureSampler.h>
+#include <FK/Texture.h>
 #include <string>
 #include <map>
 
@@ -12,7 +12,7 @@ namespace FK {
 	 *	本クラスの機能は、 fk_ShaderBinder クラスの
 	 *	fk_ShaderBinder::getParameter() によってインスタンスを得ることで利用します。
 	 *
-	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_TextureSampler
+	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
 	 */
 
 	class fk_ShaderParameter {
@@ -169,12 +169,12 @@ namespace FK {
 		 *		GLSLコード内では、複数の sampler2D 変数に対し ID の若い順に割り振られます。
 		 *
 		 *	\param[in]	texture
-		 *		テクスチャオブジェクト。詳細は fk_TextureSampler を参照して下さい。
+		 *		テクスチャオブジェクト。詳細は fk_Texture を参照して下さい。
 		 *
 		 *	\return
 		 *		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool attachTexture(int unit, fk_TextureSampler *texture);
+		bool attachTexture(int unit, fk_Texture *texture);
 
 		//! 参照テクスチャ解除関数
 		/*!
@@ -206,7 +206,7 @@ namespace FK {
 		std::map<std::string, int> locationTable;
 
 		std::map<std::string, int> attrTable;
-		std::map<int, fk_TextureSampler *> textureTable;
+		std::map<int, fk_Texture *> textureTable;
 
 		std::string lastError;
 		unsigned int lastAppliedId;

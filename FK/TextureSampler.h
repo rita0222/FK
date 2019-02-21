@@ -104,8 +104,6 @@ namespace FK {
 
 	private:
 		fk_SamplerSource	samplerSource;
-		int					id;
-		bool				loaded;
 	};
 }
 

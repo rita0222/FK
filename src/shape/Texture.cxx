@@ -77,11 +77,10 @@ using namespace std;
 using namespace FK;
 
 fk_Texture::fk_Texture(fk_Image *argImage)
-	: fk_Shape(FK_TEXTURE)
+	: fk_Shape(FK_TEXTURE), image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
 {
 	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
-	image = nullptr;
 	BaseInit();
 	setImage(argImage);
 
@@ -735,4 +734,84 @@ fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
 	}
 
 	return texCoord[argID];
+}
+
+bool fk_Texture::BindTexture(bool forceLoad)
+{
+	bool 		loaded = true;
+
+	if (image == nullptr) return false;
+
+	const fk_Dimension	*bufSize = image->getBufferSize();
+	if(bufSize == nullptr) return false;
+
+	GLuint			id = image->GetTexID();
+
+	if(id == 0) {
+		glGenTextures(1, &id);
+		image->SetTexID(id);
+		loaded = false;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	GLint tmpWrapModeGl = (getTexWrapMode() == FK_TEX_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP_TO_EDGE;
+	GLint tmpRendMode = (getTexRendMode() == FK_TEX_REND_NORMAL) ? GL_NEAREST : GL_LINEAR;
+	GLint tmpTexMode = GL_REPLACE;
+
+	switch (getTextureMode()) {
+	  case FK_TEX_REPLACE:
+		tmpTexMode = GL_REPLACE;
+		break;
+
+#ifndef OPENGL4
+	  case FK_TEX_MODULATE:
+		tmpTexMode = GL_MODULATE;
+		break;
+	  case FK_TEX_DECAL:
+		tmpTexMode = GL_DECAL;
+		break;
+#endif
+
+	  default:
+		break;
+	}
+
+#ifndef OPENGL4
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, tmpTexMode);
+#endif
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
+
+	if (loaded == false || forceLoad) {
+		if (samplerSource == FK_TEXTURE_IMAGE) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+		}  else if (samplerSource == FK_COLOR_BUFFER) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		} else {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
+						 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+		}
+	}
+
+	if (samplerSource != FK_TEXTURE_IMAGE) {
+		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufSize->w, bufSize->h);
+	}
+
+	return true;
+}
+
+void fk_Texture::setSamplerSource(fk_SamplerSource argMode)
+{
+	samplerSource = argMode;
+}
+
+fk_SamplerSource fk_Texture::getSamplerSource(void)
+{
+	return samplerSource;
 }
