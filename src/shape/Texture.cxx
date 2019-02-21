@@ -110,6 +110,7 @@ void fk_Texture::BaseInit(void)
 
 void fk_Texture::MakeObjFunction(void)
 {
+	/*
 	GenTextureObj = [this] {
 		const fk_ImType		*imageBuf = image->getBufPointer();
 		const fk_Dimension	*bufSize = image->getBufferSize();
@@ -153,7 +154,7 @@ void fk_Texture::MakeObjFunction(void)
 #ifndef OPENGL4
 	DrawPick = []() {};
 #endif
-
+	*/
 }
 
 bool fk_Texture::IsLocalImage(void)
@@ -360,6 +361,7 @@ fk_RectTexture::~fk_RectTexture()
 
 void fk_RectTexture::MakeDrawRectFunc(void)
 {
+	/*
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
@@ -439,7 +441,7 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		glPopName();
 	};
 #endif
-
+	*/
 	return;
 }	
 
@@ -460,14 +462,16 @@ void fk_RectTexture::RectInit(void)
 					 &faceIndex[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-	
+/*	
 	vertexPosition.resize(4);
 	vertexNormal.resize(4);
 	vertexTexCoord.resize(4);
-
-	setShaderAttribute(vertexName, 3, vertexPosition.getP());
-	setShaderAttribute(normalName, 3, vertexNormal.getP());
-	setShaderAttribute(texCoordName, 3, vertexTexCoord.getP());
+*/
+	/*
+	setShaderAttribute(vertexName, 3, vertexPosition);
+	setShaderAttribute(normalName, 3, vertexNormal);
+	setShaderAttribute(texCoordName, 3, vertexTexCoord);
+	*/
 }	
 
 bool fk_RectTexture::setTextureSize(double argX, double argY)
@@ -570,6 +574,7 @@ fk_TriTexture::~fk_TriTexture()
 
 void fk_TriTexture::MakeDrawTriFunc(void)
 {
+	/*
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
@@ -633,6 +638,7 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 		glPopName();
 	};
 #endif
+	*/
 }
 
 void fk_TriTexture::init(void)

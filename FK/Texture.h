@@ -355,9 +355,9 @@ namespace FK {
 		bool				GetInitFlag(void);
 		void				SetInitFlag(bool);
 
-		std::function<void(void)>	GenTextureObj;
-		std::function<void(void)>	ReplaceSubImage;
-		std::function<void(bool)>	DrawTexture;
+//		std::function<void(void)>	GenTextureObj;
+//		std::function<void(void)>	ReplaceSubImage;
+//		std::function<void(bool)>	DrawTexture;
 //		std::function<void(void)>	DrawPick;
 
 #endif
@@ -370,6 +370,10 @@ namespace FK {
 		fk_TexWrapMode		texWrapMode;
 		fk_Palette			localPal;
 		fk_SamplerSource	samplerSource;
+
+		fk_FVecArray		*vertexPosition;
+		fk_FVecArray		*vertexNormal;
+		fk_FVecArray		*texCoord;
 
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
@@ -552,8 +556,6 @@ namespace FK {
 		fk_TexCoord			repeatParam;
 		fk_TexCoord			texCoord[2];
 
-		fk_FVecArray		vertexPosition;
-		fk_FVecArray		vertexNormal;
 		fk_FVecArray		vertexTexCoord;
 		static const GLuint	faceIndex[6];
 		static GLuint		faceIBO;

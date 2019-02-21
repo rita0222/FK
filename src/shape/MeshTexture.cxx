@@ -101,6 +101,7 @@ fk_MeshTexture::~fk_MeshTexture()
 
 void fk_MeshTexture::MakeDrawMeshFunc(void)
 {
+	/*
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 #ifndef OPENGL4
@@ -169,6 +170,7 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 		}
 	};
 #endif
+	*/
 }			 
 
 void fk_MeshTexture::init(void)
