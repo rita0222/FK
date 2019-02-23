@@ -4,6 +4,9 @@
 #include <FK/Vector.h>
 
 namespace FK {
+
+	class fk_Color;
+	
 	class fk_FVecArray {
 
 	public:
@@ -19,16 +22,25 @@ namespace FK {
 		void clear(void);
 		void push(const fk_Vector &);
 		void push(const fk_FVector &);
-		void push(double, double, double);
-		void push(float, float, float);
+		void push(const fk_HVector &);
+		void push(const fk_TexCoord &);
+		void push(const fk_Color &);
+		void push(double, double, double = 0.0, double = 0.0);
+		void push(float, float, float = 0.0f, float = 0.0f);
 
 		bool set(int, const fk_Vector &);
 		bool set(int, const fk_FVector &);
-		bool set(int, double, double, double);
-		bool set(int, float, float, float);
+		bool set(int, const fk_HVector &);
+		bool set(int, const fk_TexCoord &);
+		bool set(int, const fk_Color &);
+		bool set(int, double, double, double = 0.0, double = 0.0);
+		bool set(int, float, float, float = 0.0f, float = 0.0f);
 
 		fk_Vector getV(int);
 		fk_FVector getF(int);
+		fk_HVector getHV(int);
+		fk_TexCoord getT(int);
+		fk_Color getC(int);
 
 		std::vector<float> * getP(void);
 

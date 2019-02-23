@@ -105,6 +105,12 @@ void fk_Texture::BaseInit(void)
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 	//MakeObjFunction();
 
+	texCoord.setDim(2);
+
+	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	setShaderAttribute(normalName, 3, vertexNormal.getP());
+	setShaderAttribute(texCoordName, 2, texCoord.getP());
+
 	return;
 }
 
@@ -334,9 +340,6 @@ void fk_Texture::fillColor(int argR, int argG, int argB, int argA)
 	return;
 }
 
-const GLuint fk_RectTexture::faceIndex[6] = {0, 1, 3, 2, 3, 1};
-GLuint fk_RectTexture::faceIBO = 0;
-
 fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
@@ -455,27 +458,71 @@ void fk_RectTexture::RectInit(void)
 	rectSE[0].set(0.0, 0.0);
 	rectSE[1].set(1.0, 1.0);
 
-	if(faceIBO == 0) {
-		glGenBuffers(1, &faceIBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-					 GLsizei(6*sizeof(GLuint)),
-					 &faceIndex[0], GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-	
-	rectVPos.resize(4);
-	rectVNorm.resize(4);
-	rectTexCoord.resize(4);
+	faceIndex.clear();
+	faceIndex.push_back(0);
+	faceIndex.push_back(1);
+	faceIndex.push_back(3);
+	faceIndex.push_back(1);
+	faceIndex.push_back(2);
+	faceIndex.push_back(3);
 
-	Update();
+	if(faceIBO != 0) glDeleteBuffers(1, &faceIBO);
+	glGenBuffers(1, &faceIBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+				 GLsizei(6*sizeof(GLuint)),
+				 &faceIndex[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	setShaderAttribute(vertexName, 3, rectVPos.getP());
-	setShaderAttribute(normalName, 3, rectVNorm.getP());
-	setShaderAttribute(texCoordName, 3, rectTexCoord.getP());
+	SizeUpdate();
+	NormalUpdate();
+	TexCoordUpdate();
 }	
 
-	
+void fk_RectTexture::SizeUpdate(void)
+{
+	double tmpX = texSize.x/2.0;
+	double tmpY = texSize.y/2.0;
+		
+	vertexPosition.resize(4);
+	vertexPosition.set(0, -tmpX, -tmpY);
+	vertexPosition.set(1, tmpX, -tmpY);
+	vertexPosition.set(2, tmpX, tmpY);
+	vertexPosition.set(3, -tmpX, tmpY);
+}
+
+void fk_RectTexture::NormalUpdate(void)
+{
+	fk_Vector		norm(0.0, 0.0, 1.0);
+	vertexNormal.resize(4);
+	for(int i = 0; i < 4; i++) vertexNormal.set(i, norm);
+}
+
+void fk_RectTexture::TexCoordUpdate(void)
+{
+	fk_TexCoord		s, e;
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	if(getRepeatMode() == true) {
+		s.set(0.0, 0.0);
+		e = getRepeatParam();
+	} else {
+		double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+		double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+		s.set(wScale * rectSE[0].x, hScale * rectSE[0].y);
+		e.set(wScale * rectSE[1].x, hScale * rectSE[1].y);
+	}
+
+	texCoord.resize(4);
+	texCoord.set(0, s.x, s.y);
+	texCoord.set(1, e.x, s.y);
+	texCoord.set(2, e.x, e.y);
+	texCoord.set(3, s.x, e.y);
+}
 
 
 bool fk_RectTexture::setTextureSize(double argX, double argY)
@@ -485,6 +532,7 @@ bool fk_RectTexture::setTextureSize(double argX, double argY)
 	}
 
 	texSize.set(argX, argY);
+	SizeUpdate();
 
 	return true;
 }
@@ -508,6 +556,7 @@ bool fk_RectTexture::getRepeatMode(void)
 void fk_RectTexture::setRepeatParam(double argS, double argT)
 {
 	repeatParam.set(argS, argT);
+	TexCoordUpdate();
 	return;
 }
 
@@ -528,8 +577,10 @@ void fk_RectTexture::setTextureCoord(double argSU, double argSV,
 		return;
 	}
 
-	texCoord[0].set(argSU, argSV);
-	texCoord[1].set(argEU, argEV);
+	rectSE[0].set(argSU, argSV);
+	rectSE[1].set(argEU, argEV);
+
+	TexCoordUpdate();
 
 	return;
 }
@@ -546,8 +597,10 @@ void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
 		return;
 	}
 
-	texCoord[0].set(argS.x, argS.y);
-	texCoord[1].set(argE.x, argE.y);
+	rectSE[0].set(argS.x, argS.y);
+	rectSE[1].set(argE.x, argE.y);
+
+	TexCoordUpdate();
 	return;
 }
 
@@ -557,7 +610,7 @@ fk_TexCoord fk_RectTexture::getTextureCoord(int argID)
 		fk_PutError("fk_RectTexture", "getTextureCoord", 1, "ID Error");
 		return fk_TexCoord(0.0, 0.0);
 	}
-	return texCoord[argID];
+	return rectSE[argID];
 }
 
 fk_TriTexture::fk_TriTexture(fk_Image *argImage)

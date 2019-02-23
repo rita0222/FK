@@ -347,8 +347,6 @@ namespace FK {
 
 	protected:
 
-#ifndef FK_DOXYGEN_USER_PROCESS
-
 		void				BaseInit(void);
 		bool				IsLocalImage(void);
 		void				SetLocalImage(void);
@@ -360,7 +358,12 @@ namespace FK {
 //		std::function<void(bool)>	DrawTexture;
 //		std::function<void(void)>	DrawPick;
 
-#endif
+
+		fk_FVecArray			vertexPosition;
+		fk_FVecArray			vertexNormal;
+		fk_FVecArray			texCoord;
+		std::vector<GLuint>		faceIndex;		
+		GLuint					faceIBO;
 
 	private:
 		fk_Image			*image;
@@ -370,10 +373,6 @@ namespace FK {
 		fk_TexWrapMode		texWrapMode;
 		fk_Palette			localPal;
 		fk_SamplerSource	samplerSource;
-
-		fk_FVecArray		*vertexPosition;
-		fk_FVecArray		*vertexNormal;
-		fk_FVecArray		*texCoord;
 
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
@@ -549,25 +548,24 @@ namespace FK {
 		 */
 		fk_TexCoord			getTextureCoord(int ID);
 
-
-		void				Update(void);
-
 	private:
 
 		fk_TexCoord			texSize;
 		bool				repeatFlag;
 		fk_TexCoord			repeatParam;
-
-		fk_FVecArray		rectVPos;
-		fk_FVecArray		rectVNorm;
-		fk_FVecArray		rectTexCoord;
 		fk_TexCoord			rectSE[2];
 		bool				modifyFlg;
 		
-		static const GLuint	faceIndex[6];
-		static GLuint		faceIBO;
+
+		fk_FVecArray		rectArray;
+		GLuint				rectIBO;
 
 		void				RectInit(void);
+
+		void				SizeUpdate();
+		void				NormalUpdate();
+		void				TexCoordUpdate();
+		
 		//void				MakeDrawRectFunc(void);
 
 	};
