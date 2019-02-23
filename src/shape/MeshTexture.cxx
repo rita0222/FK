@@ -86,7 +86,7 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 	posArray.clear();
 	coordArray.clear();
 	setImage(argImage);
-	MakeDrawMeshFunc();
+	//MakeDrawMeshFunc();
 	
 	return;
 }
@@ -99,9 +99,9 @@ fk_MeshTexture::~fk_MeshTexture()
 	return;
 }
 
+/*
 void fk_MeshTexture::MakeDrawMeshFunc(void)
 {
-	/*
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 #ifndef OPENGL4
@@ -170,8 +170,8 @@ void fk_MeshTexture::MakeDrawMeshFunc(void)
 		}
 	};
 #endif
-	*/
 }			 
+*/
 
 void fk_MeshTexture::init(void)
 {

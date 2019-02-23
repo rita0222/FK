@@ -162,7 +162,6 @@ namespace FK {
 	class fk_Image : public fk_BaseObject {
 
 		friend class	fk_Texture;
-		friend class	fk_TextureSampler;
 
 	public:
 

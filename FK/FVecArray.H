@@ -8,10 +8,12 @@ namespace FK {
 
 	public:
 		fk_FVecArray(void);
-		fk_FVecArray(int);
+		//fk_FVecArray(int);
 
 		~fk_FVecArray();
 
+		void setDim(int);
+		int getDim(void);
 		int getSize(void);
 		void resize(int);
 		void clear(void);
@@ -35,6 +37,8 @@ namespace FK {
 		void	reset(void);
 
 	private:
+		int					dim;
+		int					size;
 		bool				allFlg;
 		std::vector<float>	array;
 		std::vector<char>	elemFlg;

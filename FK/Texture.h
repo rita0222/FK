@@ -378,7 +378,7 @@ namespace FK {
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
-		void				MakeObjFunction(void);
+		//void				MakeObjFunction(void);
 	};
 
 	//! 矩形テクスチャを生成、管理するクラス
@@ -549,18 +549,26 @@ namespace FK {
 		 */
 		fk_TexCoord			getTextureCoord(int ID);
 
+
+		void				Update(void);
+
 	private:
 
 		fk_TexCoord			texSize;
 		bool				repeatFlag;
 		fk_TexCoord			repeatParam;
-		fk_TexCoord			texCoord[2];
 
-		fk_FVecArray		vertexTexCoord;
+		fk_FVecArray		rectVPos;
+		fk_FVecArray		rectVNorm;
+		fk_FVecArray		rectTexCoord;
+		fk_TexCoord			rectSE[2];
+		bool				modifyFlg;
+		
 		static const GLuint	faceIndex[6];
 		static GLuint		faceIBO;
+
 		void				RectInit(void);
-		void				MakeDrawRectFunc(void);
+		//void				MakeDrawRectFunc(void);
 
 	};
 
@@ -711,7 +719,7 @@ namespace FK {
 		fk_Vector *			getPos(void);
 		fk_TexCoord *		getCoord(void);
 
-		void				MakeDrawTriFunc(void);
+		//void				MakeDrawTriFunc(void);
 	};
 
 	//! メッシュテクスチャを生成、管理するクラス
@@ -1033,7 +1041,7 @@ namespace FK {
 		std::vector<fk_Vector> *	getPos(void);
 		std::vector<fk_TexCoord> *	getCoord(void);
 
-		void						MakeDrawMeshFunc(void);
+		//void						MakeDrawMeshFunc(void);
 	};
 }
 

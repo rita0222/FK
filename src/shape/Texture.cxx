@@ -103,14 +103,14 @@ void fk_Texture::BaseInit(void)
 	setMaterialMode(FK_PARENT_MODE);
 	setTexRendMode(FK_TEX_REND_NORMAL);
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
-	MakeObjFunction();
+	//MakeObjFunction();
 
 	return;
 }
 
+/*
 void fk_Texture::MakeObjFunction(void)
 {
-	/*
 	GenTextureObj = [this] {
 		const fk_ImType		*imageBuf = image->getBufPointer();
 		const fk_Dimension	*bufSize = image->getBufferSize();
@@ -125,7 +125,7 @@ void fk_Texture::MakeObjFunction(void)
 		static fk_Rect				tmpRect;	// 部分更新矩形情報
 		static vector<fk_ImType>	subBuffer;	// 部分更新用バッファ
 		const fk_Dimension			*imageSize = image->getImageSize();
-		const fk_Dimension			*bufSize = image->getBufferSize();
+3		const fk_Dimension			*bufSize = image->getBufferSize();
 		const fk_ImType				*imageBuf = image->getBufPointer();
 
 		// 更新領域取得
@@ -154,8 +154,8 @@ void fk_Texture::MakeObjFunction(void)
 #ifndef OPENGL4
 	DrawPick = []() {};
 #endif
-	*/
 }
+*/
 
 bool fk_Texture::IsLocalImage(void)
 {
@@ -341,27 +341,21 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_RECTTEXTURE);
-	texSize.set(2.0, 2.0);
-	setRepeatMode(false);
-	repeatParam.set(1.0, 1.0);
-	texCoord[0].set(0.0, 0.0);
-	texCoord[1].set(1.0, 1.0);
+	init();
 
-	MakeDrawRectFunc();
+	//MakeDrawRectFunc();
 
 	return;
 }
 
 fk_RectTexture::~fk_RectTexture()
 {
-	init();
-
 	return;
 }
 
+/*
 void fk_RectTexture::MakeDrawRectFunc(void)
 {
-	/*
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
@@ -441,9 +435,9 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 		glPopName();
 	};
 #endif
-	*/
 	return;
 }	
+*/
 
 void fk_RectTexture::init(void)
 {
@@ -454,6 +448,13 @@ void fk_RectTexture::init(void)
 
 void fk_RectTexture::RectInit(void)
 {
+	modifyFlg = true;
+	texSize.set(2.0, 2.0);
+	setRepeatMode(false);
+	repeatParam.set(1.0, 1.0);
+	rectSE[0].set(0.0, 0.0);
+	rectSE[1].set(1.0, 1.0);
+
 	if(faceIBO == 0) {
 		glGenBuffers(1, &faceIBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
@@ -462,17 +463,20 @@ void fk_RectTexture::RectInit(void)
 					 &faceIndex[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-/*	
-	vertexPosition.resize(4);
-	vertexNormal.resize(4);
-	vertexTexCoord.resize(4);
-*/
-	/*
-	setShaderAttribute(vertexName, 3, vertexPosition);
-	setShaderAttribute(normalName, 3, vertexNormal);
-	setShaderAttribute(texCoordName, 3, vertexTexCoord);
-	*/
+	
+	rectVPos.resize(4);
+	rectVNorm.resize(4);
+	rectTexCoord.resize(4);
+
+	Update();
+
+	setShaderAttribute(vertexName, 3, rectVPos.getP());
+	setShaderAttribute(normalName, 3, rectVNorm.getP());
+	setShaderAttribute(texCoordName, 3, rectTexCoord.getP());
 }	
+
+	
+
 
 bool fk_RectTexture::setTextureSize(double argX, double argY)
 {
@@ -560,7 +564,7 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_TRITEXTURE);
-	MakeDrawTriFunc();
+	//MakeDrawTriFunc();
 
 	return;
 }
@@ -572,9 +576,9 @@ fk_TriTexture::~fk_TriTexture()
 	return;
 }
 
+/*
 void fk_TriTexture::MakeDrawTriFunc(void)
 {
-	/*
 	DrawTexture = [this](bool) {
 		FK_UNUSED(this);
 
@@ -638,8 +642,8 @@ void fk_TriTexture::MakeDrawTriFunc(void)
 		glPopName();
 	};
 #endif
-	*/
 }
+*/
 
 void fk_TriTexture::init(void)
 {
