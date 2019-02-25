@@ -85,7 +85,6 @@ int main(int, char **)
 	fk_ShapeViewer      viewer(600, 600);
 	fk_ParticleSet      particle;
 	fk_Prism			prism(40, 15.0, 15.0, 50.0);
-	fk_Color			red, blue;
 	double				maxSpeed, minSpeed;
 	fk_Vector       	water(-0.2, 0.0, 0.0);
 	double          	R = 15.0;
@@ -95,8 +94,6 @@ int main(int, char **)
 	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
 
-	red.set(1.0, 0.0, 0.0);
-	blue.set(0.0, 0.0, 1.0);
 	maxSpeed = 0.3;
 	minSpeed = 0.1;
 
@@ -117,12 +114,12 @@ int main(int, char **)
 
 	particle.indivMethod = [&](fk_Particle *p) {
 		fk_Vector       pos, vec, tmp1, tmp2;
-		double          r;
+		fk_Color		col;
  
 		// パーティクルの位置を取得。
 		pos = p->getPosition();
 		pos.z = 0.0;
-		r = pos.dist(); // |p| を r に代入。
+		double r = pos.dist(); // |p| を r に代入。
  
 		// パーティクルの速度ベクトルを計算
 		tmp1 = water/(r*r*r);
@@ -134,8 +131,8 @@ int main(int, char **)
 
 		double speed = vec.dist();
 		double t = (speed - minSpeed)/(maxSpeed - minSpeed);
-		t = min(1.0, max(0.0, t));
-		fk_Color col = (1.0 - t)*blue + t*red;
+		double h = FK_PI*4.0/3.0 + min(1.0, max(0.0, t)) * FK_PI*2.0/3.0;
+		col.setHSV(h, 1.0, 1.0);
 		p->setColor(col);
 		// パーティクルの x 座標が -50 以下になったら消去。
 		if(pos.x < -50.0) {
