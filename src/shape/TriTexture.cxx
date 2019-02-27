@@ -70,112 +70,195 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/TextureDraw.H>
-#include <FK/IFSTexture.h>
-#include <FK/Model.h>
+#include <FK/Texture.h>
 #include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
-fk_TextureDraw::fk_TextureDraw(void)
-	: shader(nullptr)
+fk_TriTexture::fk_TriTexture(fk_Image *argImage)
+	: fk_Texture(argImage)
 {
-	return;
-}
-		
-fk_TextureDraw::~fk_TextureDraw()
-{
-	delete shader;
+	SetObjectType(FK_TRITEXTURE);
+	//MakeDrawTriFunc();
+
 	return;
 }
 
-void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
+fk_TriTexture::~fk_TriTexture()
 {
-	fk_DrawMode				drawMode = argModel->getDrawMode();
+	init();
 
-	if(shader == nullptr) ShaderSetup();
-	PolygonModeSet();
-
-	auto parameter = shader->getParameter();
-	SetParameter(parameter);
-
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
-	Draw_Texture(argModel, parameter);
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
 }
 
-void fk_TextureDraw::PolygonModeSet(void)
+/*
+void fk_TriTexture::MakeDrawTriFunc(void)
 {
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	DrawTexture = [this](bool) {
+		FK_UNUSED(this);
+
+#ifndef OPENGL4
+		double			wScale, hScale;
+		_st				counter;
+		fk_Vector		norm;
+
+		const fk_Dimension *imageSize = getImageSize();
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+		hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+
+		norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
+		if(norm.normalize() == false) {
+			fk_PutError("fk_Window", "DrawTriTextureObj", 1,
+						"Triangle Normal Vector Error.");
+			return;
+		}
+
+		glBegin(GL_TRIANGLES);
+
+		glNormal3dv((GLdouble *)&(norm.x));
+		for(counter = 0; counter < 3; ++counter) {
+			glTexCoord2f(texCoord[counter].x * float(wScale),
+						 texCoord[counter].y * float(hScale));
+			glVertex3d(pos[counter].x,
+					   pos[counter].y,
+					   pos[counter].z);
+		}
+
+		glEnd();
+#endif
+	};
+
+#ifndef OPENGL4
+	DrawPick = [this]() {
+		FK_UNUSED(this);
+
+		int				counter;
+
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		glPushName(0);
+		glBegin(GL_TRIANGLES);
+
+		for(counter = 0; counter < 3; ++counter) {
+			glVertex3d(pos[counter].x,
+					   pos[counter].y,
+					   pos[counter].z);
+		}
+
+		glEnd();
+		glPopName();
+	};
+#endif
+}
+*/
+
+void fk_TriTexture::init(void)
+{
+	BaseInit();
+
+	return;
 }
 
-void fk_TextureDraw::ShaderSetup(void)
+fk_Vector * fk_TriTexture::getPos(void)
 {
-	shader = new fk_ShaderBinder();
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	return &pos[0];
+}
 
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS.out"
-		;
+fk_TexCoord * fk_TriTexture::getCoord(void)
+{
+	return &texCoord[0];
+}
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+bool fk_TriTexture::setVertexPos(int argID,
+								 double argX, double argY, double argZ)
+{
+	if(argID < 0 || argID > 2) {
+		fk_PutError("fk_TriTexture", "setVertexPos", 1, "ID Error.");
+		return false;
 	}
 
-	param->reserveAttribute(fk_Shape::vertexName);
-	param->reserveAttribute(fk_Shape::texCoordName);
-	
-	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
-
-	prog->link();
-	return;
+	pos[argID].set(argX, argY, argZ);
+	return true;
 }
 
-GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
+bool fk_TriTexture::setVertexPos(int argID, fk_Vector argPos)
 {
-	GLuint 			vao;
-	
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	argShape->SetFaceVAO(vao);
-	argShape->DefineVBO();
+	if(argID < 0 || argID > 2) {
+		fk_PutError("fk_TriTexture", "setVertexPos", 2, "ID Error.");
+		return false;
+	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	return vao;
+	pos[argID] = argPos;
+	return true;
 }
 
-void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam)
+bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
 {
-	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
-	GLuint			vao = texture->GetFaceVAO();
-
-	if(vao == 0) {
-		vao = VAOSetup(texture);
+	if(argID < 0 || argID > 2) {
+		fk_PutError("fk_TriTexture", "setTextureCoord", 1, "ID Error.");
+		return false;
 	}
 
-	argParam->attachTexture(1, texture);
-	for(int i = 0; i < 8; ++i) {
-		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
+	if(argS < -FK_EPS || argS > 1.0 + FK_EPS ||
+	   argT < -FK_EPS || argT > 1.0 + FK_EPS) {
+		fk_PutError("fk_TriTexture", "setTextureCoord", 2,
+					"Texture Coord Error.");
+		return false;
 	}
 
-	glBindVertexArray(vao);
-	texture->BindShaderBuffer(argParam->getAttrTable());
-	texture->FaceIBOSetup();
-	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	return;
+	texCoord[argID].set(argS, argT);
+	return true;
+}
+
+
+bool fk_TriTexture::setTextureCoord(int argID, fk_TexCoord argCoord)
+{
+	if(argID < 0 || argID > 2) {
+		fk_PutError("fk_TriTexture", "setTextureCoord", 3, "ID Error.");
+		return false;
+	}
+
+	if(argCoord.x < -FK_EPS || argCoord.x > 1.0 + FK_EPS ||
+	   argCoord.y < -FK_EPS || argCoord.y > 1.0 + FK_EPS) {
+		fk_PutError("fk_TriTexture", "setTextureCoord", 4,
+					"Texture Coord Error.");
+		return false;
+	}
+
+	texCoord[argID].set(argCoord.x, argCoord.y);
+	return true;
+}
+
+fk_Vector fk_TriTexture::getVertexPos(int argID)
+{
+	fk_Vector		dummy(0.0, 0.0, 0.0);
+
+	if(argID < 0 || argID > 2) {
+		fk_PutError("fk_TriTexture", "getVertexPos", 1, "ID Error.");
+		return dummy;
+	}
+
+	return pos[argID];
+}
+
+fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
+{
+	fk_TexCoord		dummy(0.0, 0.0);
+
+	if(argID < 0 || argID > 2) {
+		fk_PutError("fk_TriTexture", "getTextureCoord", 1, "ID Error.");
+		return dummy;
+	}
+
+	return texCoord[argID];
 }

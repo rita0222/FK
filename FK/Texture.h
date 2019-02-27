@@ -345,6 +345,10 @@ namespace FK {
 		bool BindTexture(bool forceLoad);
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
+
+
+		static const std::string		texIDName;
+
 #endif
 
 	protected:

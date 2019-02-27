@@ -70,112 +70,195 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/TextureDraw.H>
-#include <FK/IFSTexture.h>
-#include <FK/Model.h>
+#include <FK/Texture.h>
 #include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
-fk_TextureDraw::fk_TextureDraw(void)
-	: shader(nullptr)
+fk_RectTexture::fk_RectTexture(fk_Image *argImage)
+	: fk_Texture(argImage)
 {
-	return;
-}
+	SetObjectType(FK_RECTTEXTURE);
+	GetFaceSize = []() { return 2; };
+	StatusUpdate = [this]() {
+		SizeUpdate();
+		NormalUpdate();
+		TexCoordUpdate();
+	};
 		
-fk_TextureDraw::~fk_TextureDraw()
-{
-	delete shader;
+	init();
+
+	//MakeDrawRectFunc();
+
 	return;
 }
 
-void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
+fk_RectTexture::~fk_RectTexture()
 {
-	fk_DrawMode				drawMode = argModel->getDrawMode();
-
-	if(shader == nullptr) ShaderSetup();
-	PolygonModeSet();
-
-	auto parameter = shader->getParameter();
-	SetParameter(parameter);
-
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
-	Draw_Texture(argModel, parameter);
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	return;
+}
+void fk_RectTexture::init(void)
+{
+	BaseInit();
+	RectInit();
 	return;
 }
 
-void fk_TextureDraw::PolygonModeSet(void)
+void fk_RectTexture::RectInit(void)
 {
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	modifyFlg = true;
+	texSize.set(2.0, 2.0);
+	setRepeatMode(false);
+	repeatParam.set(1.0, 1.0);
+	rectSE[0].set(0.0, 0.0);
+	rectSE[1].set(1.0, 1.0);
+
+	faceIndex.clear();
+	faceIndex.push_back(0);
+	faceIndex.push_back(1);
+	faceIndex.push_back(3);
+	faceIndex.push_back(1);
+	faceIndex.push_back(2);
+	faceIndex.push_back(3);
+
+	SizeUpdate();
+	NormalUpdate();
+	TexCoordUpdate();
+}	
+
+void fk_RectTexture::SizeUpdate(void)
+{
+	double tmpX = texSize.x/2.0;
+	double tmpY = texSize.y/2.0;
+		
+	vertexPosition.resize(4);
+	vertexPosition.set(0, -tmpX, -tmpY);
+	vertexPosition.set(1, tmpX, -tmpY);
+	vertexPosition.set(2, tmpX, tmpY);
+	vertexPosition.set(3, -tmpX, tmpY);
 }
 
-void fk_TextureDraw::ShaderSetup(void)
+void fk_RectTexture::NormalUpdate(void)
 {
-	shader = new fk_ShaderBinder();
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	fk_Vector		norm(0.0, 0.0, 1.0);
+	vertexNormal.resize(4);
+	for(int i = 0; i < 4; i++) vertexNormal.set(i, norm);
+}
 
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS.out"
-		;
+void fk_RectTexture::TexCoordUpdate(void)
+{
+	fk_TexCoord		s, e;
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+	texCoord.resize(4);
+
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	if(getRepeatMode() == true) {
+		s.set(0.0, 0.0);
+		e = getRepeatParam();
+	} else {
+		double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+		double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+		s.set(wScale * rectSE[0].x, hScale * rectSE[0].y);
+		e.set(wScale * rectSE[1].x, hScale * rectSE[1].y);
 	}
 
-	param->reserveAttribute(fk_Shape::vertexName);
-	param->reserveAttribute(fk_Shape::texCoordName);
-	
-	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
+	texCoord.set(0, s.x, s.y);
+	texCoord.set(1, e.x, s.y);
+	texCoord.set(2, e.x, e.y);
+	texCoord.set(3, s.x, e.y);
+}
 
-	prog->link();
+
+bool fk_RectTexture::setTextureSize(double argX, double argY)
+{
+	if(argX < -FK_EPS || argY < -FK_EPS) {
+		return false;
+	}
+
+	texSize.set(argX, argY);
+	SizeUpdate();
+
+	return true;
+}
+
+fk_TexCoord fk_RectTexture::getTextureSize(void)
+{
+	return texSize;
+}
+
+void fk_RectTexture::setRepeatMode(bool argFlag)
+{
+	repeatFlag = argFlag;
 	return;
 }
 
-GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
+bool fk_RectTexture::getRepeatMode(void)
 {
-	GLuint 			vao;
-	
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	argShape->SetFaceVAO(vao);
-	argShape->DefineVBO();
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	return vao;
+	return repeatFlag;
 }
 
-void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_RectTexture::setRepeatParam(double argS, double argT)
 {
-	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
-	GLuint			vao = texture->GetFaceVAO();
-
-	if(vao == 0) {
-		vao = VAOSetup(texture);
-	}
-
-	argParam->attachTexture(1, texture);
-	for(int i = 0; i < 8; ++i) {
-		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
-	}
-
-	glBindVertexArray(vao);
-	texture->BindShaderBuffer(argParam->getAttrTable());
-	texture->FaceIBOSetup();
-	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	repeatParam.set(argS, argT);
+	TexCoordUpdate();
 	return;
+}
+
+fk_TexCoord fk_RectTexture::getRepeatParam(void)
+{
+	return repeatParam;
+}
+
+void fk_RectTexture::setTextureCoord(double argSU, double argSV,
+									 double argEU, double argEV)
+{
+	if(argSU < -FK_EPS || argSU > 1.0 + FK_EPS ||
+	   argSV < -FK_EPS || argSV > 1.0 + FK_EPS ||
+	   argEU < -FK_EPS || argEU > 1.0 + FK_EPS ||
+	   argEV < -FK_EPS || argEV > 1.0 + FK_EPS) {
+		fk_PutError("fk_RectTexture", "setTextureCoord", 1,
+					"Texture Coord Error.");
+		return;
+	}
+
+	rectSE[0].set(argSU, argSV);
+	rectSE[1].set(argEU, argEV);
+
+	TexCoordUpdate();
+
+	return;
+}
+
+void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
+									 const fk_TexCoord &argE)
+{
+	if(argS.x < -FK_EPS || argS.x > 1.0 + FK_EPS ||
+	   argS.y < -FK_EPS || argS.y > 1.0 + FK_EPS ||
+	   argE.x < -FK_EPS || argE.x > 1.0 + FK_EPS ||
+	   argE.y < -FK_EPS || argE.y > 1.0 + FK_EPS) {
+		fk_PutError("fk_RectTexture", "setTextureCoord", 2,
+					"Texture Coord Error.");
+		return;
+	}
+
+	rectSE[0].set(argS.x, argS.y);
+	rectSE[1].set(argE.x, argE.y);
+
+	TexCoordUpdate();
+	return;
+}
+
+fk_TexCoord fk_RectTexture::getTextureCoord(int argID)
+{
+	if(argID < 0 || argID > 1) {
+		fk_PutError("fk_RectTexture", "getTextureCoord", 1, "ID Error");
+		return fk_TexCoord(0.0, 0.0);
+	}
+	return rectSE[argID];
 }
