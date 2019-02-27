@@ -323,8 +323,13 @@ namespace FK {
 		std::vector<fk_Vector>		posArray;
 		std::vector<fk_TexCoord>	coordArray;
 
-		std::vector<fk_Vector> *	getPos(void);
-		std::vector<fk_TexCoord> *	getCoord(void);
+		void						FaceUpdate(void);
+		void						PosUpdate(void);
+		void						PosUpdate(int, int);
+		void						NormUpdate(void);
+		void						NormUpdate(int);
+		void						TexCoordUpdate(void);
+		void						TexCoordUpdate(int, int);
 
 		//void						MakeDrawMeshFunc(void);
 	};
