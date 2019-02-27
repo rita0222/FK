@@ -72,6 +72,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/Texture.h>
 #include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -80,6 +81,7 @@ fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(FK_TEXTURE), image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
 {
 	GetFaceSize = []() { return 0; };
+	StatusUpdate = []() {};
 	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
 	BaseInit();
@@ -197,31 +199,41 @@ void fk_Texture::SetLocalImage(void)
 bool fk_Texture::readBMP(string argFileName)
 {
 	SetLocalImage();
-	return image->readBMP(argFileName);
+	if(image->readBMP(argFileName) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readBMPData(fk_ImType *argBuffer)
 {
 	SetLocalImage();
-	return image->readBMPData(argBuffer);
+	if(image->readBMPData(argBuffer) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readPNG(string argFileName)
 {
 	SetLocalImage();
-	return image->readPNG(argFileName);
+	if(image->readPNG(argFileName) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readPNGData(fk_ImType *argBuffer)
 {
 	SetLocalImage();
-	return image->readPNGData(argBuffer);
+	if(image->readPNGData(argBuffer) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readJPG(string argFileName)
 {
 	SetLocalImage();
-	return image->readJPG(argFileName);
+	if(image->readJPG(argFileName) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 const fk_ImType * fk_Texture::getImageBuf(void)
@@ -365,6 +377,12 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 {
 	SetObjectType(FK_RECTTEXTURE);
 	GetFaceSize = []() { return 2; };
+	StatusUpdate = [this]() {
+		SizeUpdate();
+		NormalUpdate();
+		TexCoordUpdate();
+	};
+		
 	init();
 
 	//MakeDrawRectFunc();
@@ -517,6 +535,8 @@ void fk_RectTexture::TexCoordUpdate(void)
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
 
+	texCoord.resize(4);
+
 	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
@@ -530,7 +550,6 @@ void fk_RectTexture::TexCoordUpdate(void)
 		e.set(wScale * rectSE[1].x, hScale * rectSE[1].y);
 	}
 
-	texCoord.resize(4);
 	texCoord.set(0, s.x, s.y);
 	texCoord.set(1, e.x, s.y);
 	texCoord.set(2, e.x, e.y);

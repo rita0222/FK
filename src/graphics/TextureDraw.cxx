@@ -165,6 +165,9 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		vao = VAOSetup(texture);
 	}
 
+	argParam->attachTexture(1, texture);
+	argParam->setRegister("fk_TexID", 1);
+
 	glBindVertexArray(vao);
 	texture->BindShaderBuffer(argParam->getAttrTable());
 	texture->FaceIBOSetup();

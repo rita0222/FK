@@ -344,6 +344,7 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool BindTexture(bool forceLoad);
 		std::function<int(void)> GetFaceSize;
+		std::function<void(void)> StatusUpdate;
 #endif
 
 	protected:
