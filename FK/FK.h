@@ -52,7 +52,7 @@ using namespace FK;
 /*!
  *	\mainpage Fine Kernel ToolKit C++版 リファレンスマニュアル
  *
- *	<b> Copyright 1999 - 2018 by Fine Kernel Project. </b> \n
+ *	<b> Copyright 1999 - 2019 by Fine Kernel Project. </b> \n
  *	この文書は、「Fine Kernel ToolKit」C++版 のリファレンスマニュアルです。
  *	システムに関する概略は、以下の URL を参照して下さい。
  *	- http://gamescience.jp/FK
@@ -124,7 +124,7 @@ using namespace FK;
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -160,7 +160,7 @@ using namespace FK;
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
