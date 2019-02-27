@@ -181,10 +181,6 @@ namespace FK {
 		fk_TexCoord			rectSE[2];
 		bool				modifyFlg;
 		
-
-		fk_FVecArray		rectArray;
-		GLuint				rectIBO;
-
 		void				RectInit(void);
 
 		void				SizeUpdate();

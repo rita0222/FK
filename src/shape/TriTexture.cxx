@@ -81,102 +81,38 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_TRITEXTURE);
-	//MakeDrawTriFunc();
+	GetFaceSize = []() { return 1; };
+	StatusUpdate = [this]() {
+		PosUpdate();
+		NormUpdate();
+		TexCoordUpdate();
+	};
+
+	init();
 
 	return;
 }
 
 fk_TriTexture::~fk_TriTexture()
 {
-	init();
-
 	return;
 }
 
-/*
-void fk_TriTexture::MakeDrawTriFunc(void)
-{
-	DrawTexture = [this](bool) {
-		FK_UNUSED(this);
-
-#ifndef OPENGL4
-		double			wScale, hScale;
-		_st				counter;
-		fk_Vector		norm;
-
-		const fk_Dimension *imageSize = getImageSize();
-		const fk_Dimension *bufSize = getBufferSize();
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-		hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
-
-		norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
-		if(norm.normalize() == false) {
-			fk_PutError("fk_Window", "DrawTriTextureObj", 1,
-						"Triangle Normal Vector Error.");
-			return;
-		}
-
-		glBegin(GL_TRIANGLES);
-
-		glNormal3dv((GLdouble *)&(norm.x));
-		for(counter = 0; counter < 3; ++counter) {
-			glTexCoord2f(texCoord[counter].x * float(wScale),
-						 texCoord[counter].y * float(hScale));
-			glVertex3d(pos[counter].x,
-					   pos[counter].y,
-					   pos[counter].z);
-		}
-
-		glEnd();
-#endif
-	};
-
-#ifndef OPENGL4
-	DrawPick = [this]() {
-		FK_UNUSED(this);
-
-		int				counter;
-
-		const fk_Dimension *bufSize = getBufferSize();
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		glPushName(0);
-		glBegin(GL_TRIANGLES);
-
-		for(counter = 0; counter < 3; ++counter) {
-			glVertex3d(pos[counter].x,
-					   pos[counter].y,
-					   pos[counter].z);
-		}
-
-		glEnd();
-		glPopName();
-	};
-#endif
-}
-*/
 
 void fk_TriTexture::init(void)
 {
 	BaseInit();
+	faceIndex.clear();
+	faceIndex.push_back(0);
+	faceIndex.push_back(1);
+	faceIndex.push_back(2);
+
+	vertexPosition.resize(3);
+	vertexNormal.resize(3);
+	texCoord.resize(3);
+
 
 	return;
-}
-
-fk_Vector * fk_TriTexture::getPos(void)
-{
-	return &pos[0];
-}
-
-fk_TexCoord * fk_TriTexture::getCoord(void)
-{
-	return &texCoord[0];
 }
 
 bool fk_TriTexture::setVertexPos(int argID,
@@ -188,6 +124,8 @@ bool fk_TriTexture::setVertexPos(int argID,
 	}
 
 	pos[argID].set(argX, argY, argZ);
+	PosUpdate();
+	NormUpdate();
 	return true;
 }
 
@@ -199,6 +137,8 @@ bool fk_TriTexture::setVertexPos(int argID, fk_Vector argPos)
 	}
 
 	pos[argID] = argPos;
+	PosUpdate();
+	NormUpdate();
 	return true;
 }
 
@@ -216,7 +156,8 @@ bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
 		return false;
 	}
 
-	texCoord[argID].set(argS, argT);
+	triTexCoord[argID].set(argS, argT);
+	TexCoordUpdate();
 	return true;
 }
 
@@ -235,7 +176,9 @@ bool fk_TriTexture::setTextureCoord(int argID, fk_TexCoord argCoord)
 		return false;
 	}
 
-	texCoord[argID].set(argCoord.x, argCoord.y);
+	triTexCoord[argID].set(argCoord.x, argCoord.y);
+
+	TexCoordUpdate();
 	return true;
 }
 
@@ -260,5 +203,36 @@ fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
 		return dummy;
 	}
 
-	return texCoord[argID];
+	return triTexCoord[argID];
+}
+
+void fk_TriTexture::PosUpdate(void)
+{
+	for(int i = 0; i < 3; ++i) vertexPosition.set(i, pos[i]);
+}
+
+void fk_TriTexture::NormUpdate(void)
+{
+	fk_Vector		norm;
+	norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
+	norm.normalize();
+	for(int i = 0; i < 3; ++i) vertexNormal.set(i, norm);
+}
+	
+		
+void fk_TriTexture::TexCoordUpdate(void)
+{
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+
+	texCoord.resize(3);
+
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
+	double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+	for(int i = 0; i < 3; ++i) {
+		texCoord.set(i, triTexCoord[i].x * wScale, triTexCoord[i].y * hScale);
+	}
 }

@@ -89,9 +89,6 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	};
 		
 	init();
-
-	//MakeDrawRectFunc();
-
 	return;
 }
 
@@ -99,6 +96,7 @@ fk_RectTexture::~fk_RectTexture()
 {
 	return;
 }
+
 void fk_RectTexture::init(void)
 {
 	BaseInit();

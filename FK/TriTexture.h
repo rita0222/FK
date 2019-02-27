@@ -147,12 +147,12 @@ namespace FK {
 
 	private:
 		fk_Vector			pos[3];
-		fk_TexCoord			texCoord[3];
+		fk_TexCoord			triTexCoord[3];
 
-		fk_Vector *			getPos(void);
-		fk_TexCoord *		getCoord(void);
-
-		//void				MakeDrawTriFunc(void);
+		void				TriInit(void);
+		void				PosUpdate(void);
+		void				NormUpdate(void);
+		void				TexCoordUpdate(void);
 	};
 }
 
