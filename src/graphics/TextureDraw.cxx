@@ -95,6 +95,8 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 	fk_DrawMode				drawMode = argModel->getDrawMode();
 
 	if(shader == nullptr) ShaderSetup();
+	PolygonModeSet();
+
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
 
@@ -102,6 +104,13 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 	Draw_Texture(argModel, parameter);
 	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
+}
+
+void fk_TextureDraw::PolygonModeSet(void)
+{
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT, GL_FILL);
 }
 
 void fk_TextureDraw::ShaderSetup(void)
@@ -149,6 +158,19 @@ GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	FK_UNUSED(argModel);
-	FK_UNUSED(argParam);
+	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
+	GLuint			vao = texture->GetFaceVAO();
+
+	if(vao == 0) {
+		vao = VAOSetup(texture);
+	}
+
+	glBindVertexArray(vao);
+	texture->BindShaderBuffer(argParam->getAttrTable());
+	texture->FaceIBOSetup();
+	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	return;
 }

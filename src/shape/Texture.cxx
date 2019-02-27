@@ -79,6 +79,7 @@ using namespace FK;
 fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(FK_TEXTURE), image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
 {
+	GetFaceSize = []() { return 0; };
 	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
 	BaseInit();
@@ -111,7 +112,26 @@ void fk_Texture::BaseInit(void)
 	setShaderAttribute(normalName, 3, vertexNormal.getP());
 	setShaderAttribute(texCoordName, 2, texCoord.getP());
 
+	faceIBO = 0;
+	faceIndexFlg = true;
+	  
 	return;
+}
+
+void fk_Texture::FaceIBOSetup(void)
+{
+	if(faceIBO == 0) {
+		glGenBuffers(1, &faceIBO);
+		faceIndexFlg = true;
+	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+	if(faceIndexFlg == true) {
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+					 GLsizei(faceIndex.size()*sizeof(GLuint)),
+					 &faceIndex[0], GL_STATIC_DRAW);
+		faceIndexFlg = false;
+	}
 }
 
 /*
@@ -344,6 +364,7 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_RECTTEXTURE);
+	GetFaceSize = []() { return 2; };
 	init();
 
 	//MakeDrawRectFunc();
@@ -439,7 +460,7 @@ void fk_RectTexture::MakeDrawRectFunc(void)
 	};
 #endif
 	return;
-}	
+	
 */
 
 void fk_RectTexture::init(void)
@@ -465,14 +486,6 @@ void fk_RectTexture::RectInit(void)
 	faceIndex.push_back(1);
 	faceIndex.push_back(2);
 	faceIndex.push_back(3);
-
-	if(faceIBO != 0) glDeleteBuffers(1, &faceIBO);
-	glGenBuffers(1, &faceIBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-				 GLsizei(6*sizeof(GLuint)),
-				 &faceIndex[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	SizeUpdate();
 	NormalUpdate();

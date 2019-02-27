@@ -16,6 +16,7 @@ namespace FK {
 		fk_ShaderBinder		*shader;
 		void 	ShaderSetup(void);
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
+		void	PolygonModeSet(void);
 	};
 }
 

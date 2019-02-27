@@ -343,6 +343,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool BindTexture(bool forceLoad);
+		std::function<int(void)> GetFaceSize;
 #endif
 
 	protected:
@@ -352,6 +353,7 @@ namespace FK {
 		void				SetLocalImage(void);
 		bool				GetInitFlag(void);
 		void				SetInitFlag(bool);
+		void				FaceIBOSetup(void);
 
 //		std::function<void(void)>	GenTextureObj;
 //		std::function<void(void)>	ReplaceSubImage;
@@ -364,6 +366,7 @@ namespace FK {
 		fk_FVecArray			texCoord;
 		std::vector<GLuint>		faceIndex;		
 		GLuint					faceIBO;
+		bool					faceIndexFlg;
 
 	private:
 		fk_Image			*image;
