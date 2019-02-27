@@ -76,7 +76,9 @@
 #include <FK/Solid.h>
 #include <FK/Vertex.h>
 #include <FK/Point.h>
-#include <FK/Texture.h>
+#include <FK/RectTexture.h>
+#include <FK/TriTexture.h>
+#include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
 #include <FK/Error.H>
 

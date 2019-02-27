@@ -13,6 +13,9 @@
 #include <FK/Capsule.h>
 #include <FK/Particle.h>
 #include <FK/TextImage.h>
+#include <FK/RectTexture.h>
+#include <FK/TriTexture.h>
+#include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
 #include <FK/GenMatrix.h>
 #include <FK/Quaternion.h>

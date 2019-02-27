@@ -70,7 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/Texture.h>
+#include <FK/TriTexture.h>
 #include <FK/Error.H>
 #include <FK/Window.h>
 

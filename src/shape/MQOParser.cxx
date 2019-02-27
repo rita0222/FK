@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/MQOParser.H>
+#include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
 #include <FK/Tree.h>
 

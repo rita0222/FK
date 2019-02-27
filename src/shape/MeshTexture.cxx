@@ -71,7 +71,7 @@
  ****************************************************************************/
 
 #define FK_DEF_SIZETYPE
-#include <FK/Texture.h>
+#include <FK/MeshTexture.h>
 #include <FK/MQOParser.H>
 #include <FK/Error.H>
 

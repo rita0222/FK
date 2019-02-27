@@ -8,6 +8,7 @@ namespace FK {
 	class fk_Tree;
 	class fk_TreeData;
 	class fk_IFSTexture;
+	class fk_MeshTexture;
 
 	class _fk_MQO_IDSet {
 	public:

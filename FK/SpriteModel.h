@@ -4,7 +4,7 @@
 #include <FK/UniCode.h>
 #include <FK/Model.h>
 #include <FK/TextImage.h>
-#include <FK/Texture.h>
+#include <FK/RectTexture.h>
 #include <FK/Scene.h>
 #include <FK/Window.h>
 
