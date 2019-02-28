@@ -80,14 +80,15 @@ int main (int, char *[])
 	fk_AppWindow	win;
 	fk_TextImage	textImage;
 	fk_RectTexture	texture;
-	fk_UniStr		str;
+	fk_UniStr		str1, str2;
 	fk_Model		strModel;
 
 
 	fk_System::setcwd();
 	fk_Material::initDefault();
 
-	str.convert("FK日本語", FK_STR_UTF8);
+	str1.convert("日本語", FK_STR_UTF8);
+	str2.convert("日本語2", FK_STR_UTF8);
 
 	texture.setImage(&textImage);
 	if(textImage.initFont("rm1b.ttf") == false) {
@@ -102,13 +103,13 @@ int main (int, char *[])
 	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
 	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
 	textImage.setAlign(FK_ALIGN_CENTER);
-	textImage.loadUniStr(&str);
+	textImage.loadUniStr(&str2);
 	texture.setTextureSize(40.0, 10.0);
 	strModel.setMaterial(TrueWhite);
 
 	strModel.setShape(&texture);
 	strModel.glVec(0.0, 0.0, -1.0);
-	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
+	//strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI);
 
 	win.entry(&strModel);
 	win.open();
@@ -116,7 +117,11 @@ int main (int, char *[])
 	win.setCameraFocus(0.0, 0.0, 0.0);
 
 	for(int i = 0; win.update() == true; ++i) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2000.0);
+		//strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2000.0);
+		if(i == 2000) {
+			textImage.loadUniStr(&str1);
+			//fk_Window::printf("1000");
+		}
 	}
 	return 0;
 }

@@ -313,9 +313,9 @@ void fk_UniStr::convert(const string &argStr, fk_StringCode argCode)
 	_st				i;
 	fk_UniChar		uniChar;
 
+	clear();
 	switch(argCode) {
 	  case FK_STR_UTF16:
-		clear();
 		for(i = 0; i < argStr.size(); i += 2) {
 			uniChar.setBuffer(static_cast<unsigned char>(argStr[i]),
 							  static_cast<unsigned char>(argStr[i+1]));
