@@ -84,6 +84,7 @@ fk_Texture::fk_Texture(fk_Image *argImage)
 {
 	GetFaceSize = []() { return 0; };
 	StatusUpdate = []() {};
+	FaceIBOSetup = [this]() { _FaceIBOSetup(); };
 	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
 	BaseInit();
@@ -94,8 +95,6 @@ fk_Texture::fk_Texture(fk_Image *argImage)
 
 fk_Texture::~fk_Texture()
 {
-	BaseInit();
-
 	return;
 }
 
@@ -121,7 +120,7 @@ void fk_Texture::BaseInit(void)
 	return;
 }
 
-void fk_Texture::FaceIBOSetup(void)
+void fk_Texture::_FaceIBOSetup(void)
 {
 	if(faceIBO == 0) {
 		glGenBuffers(1, &faceIBO);

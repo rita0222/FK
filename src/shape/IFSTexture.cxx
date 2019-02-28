@@ -82,14 +82,26 @@ using namespace FK;
 fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
+	GetFaceSize = [this]() {
+		return ifs->getFaceSize();
+	};
+
+	StatusUpdate = [this]() {
+		TexCoordUpdate();
+	};
+
+	FaceIBOSetup = [this]() {
+		ifs->FaceIBOSetup();
+	};
+
 	SetObjectType(FK_IFSTEXTURE);
 	ifs = new fk_IndexFaceSet;
 	coordArray.clear();
 	commonList.clear();
-	setImage(argImage);
 	connectMode = true;
-	MakeDrawIFSFunc();
-	
+
+	setShaderAttribute(vertexName, 3, ifs->GetVertexP());
+	setShaderAttribute(normalName, 3, ifs->GetNormP());
 	return;
 }
 
@@ -100,91 +112,6 @@ fk_IFSTexture::~fk_IFSTexture()
 	delete ifs;
 	return;
 }
-
-void fk_IFSTexture::MakeDrawIFSFunc(void)
-{
-	/*
-	DrawTexture = [this](bool argArrayState) {
-		const fk_Dimension *bufSize = getBufferSize();
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		if(ifs->modifyFlg == true) {
-			ifs->ModifyVNorm();
-		}
-
-#ifndef OPENGL4
-		glShadeModel(GL_SMOOTH);
-#endif
-
-		if(argArrayState == true) {
-
-#ifndef OPENGL4
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			glVertexPointer(3, GL_FLOAT, 0, &ifs->pos[0]);
-			glNormalPointer(GL_FLOAT, 0, &ifs->vNorm[0]);
-			glTexCoordPointer(2, GL_FLOAT, 0, &coordArray[0]);
-		
-			glDrawElements(tmpType, ifs->faceSize * static_cast<GLsizei>(pNum),
-						   GL_UNSIGNED_INT, &ifs->ifs[0]);
-#endif
-
-		} else {
-#ifndef OPENGL4
-			glBegin(tmpType);
-			for(_st ii = 0; ii < static_cast<_st>(ifs->faceSize); ++ii) {
-				for(_st ij = 0; ij < pNum; ++ij) {
-					_st index = static_cast<_st>(ifs->ifs[pNum*ii+ij]);
-					glNormal3fv((GLfloat *)&(ifs->vNorm[index]));
-					glTexCoord2fv((GLfloat *)&coordArray[index]);
-					glVertex3fv((GLfloat *)&(ifs->pos[index]));
-				}
-			}
-			glEnd();
-#endif
-		}
-	};
-
-	DrawPick = [this]() {
-		FK_UNUSED(this);
-#ifndef OPENGL4
-		int				ii, ij;
-		int				pNum;
-		fk_FVector		*pos = &ifs->pos[0];
-		int				*ifsArray = &ifs->ifs[0];
-
-		switch(ifs->type) {
-		  case FK_IF_TRIANGLES:
-			  pNum = 3;
-			  break;
-
-		  case FK_IF_QUADS:
-			  pNum = 4;
-			  break;
-
-		  default:
-			  return;
-		}
-
-		for(ii = 0; ii < ifs->faceSize; ++ii) {
-			glPushName(static_cast<GLuint>(ii*3));
-			glBegin(GL_POLYGON);
-			for(ij = 0; ij < pNum; ++ij) {
-				glVertex3fv(static_cast<GLfloat *>(&pos[ifsArray[pNum*ii+ij]].x));
-			}
-			glEnd();
-			glPopName();
-		}
-#endif
-
-	};
-	*/
-}	
-
 vector< vector<int> > * fk_IFSTexture::GetCommonList(void)
 {
 	return &commonList;
@@ -202,7 +129,6 @@ fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 {
 	fk_TexCoord	coord(0.0, 0.0);
 	int			index;
-	double		wScale, hScale;
 
 	index = ifs->getFaceData(argTID, argVID);
 	if(index < 0) {
@@ -211,19 +137,50 @@ fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 		return coord;
 	}
 
-	coord = coordArray[static_cast<_st>(index)];
-	const fk_Dimension *imageSize = getImageSize();
-	const fk_Dimension *bufSize = getBufferSize();
-	wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-	hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
-	coord.x /= static_cast<float>(wScale);
-	coord.y /= static_cast<float>(hScale);
-	return coord;
+	return coordArray[_st(index)];
 }
 
 fk_IndexFaceSet * fk_IFSTexture::getIFS(void)
 {
 	return ifs;
+}
+
+void fk_IFSTexture::TexCoordUpdate(void)
+{
+	texCoord.resize(int(coordArray.size()));
+
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+
+	if(ifs->getFaceSize() == 0) return;
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	double wScale = double(imageSize->w)/double(bufSize->w);
+	double hScale = double(imageSize->h)/double(bufSize->h);
+
+	for(_st i = 0; i < coordArray.size(); ++i) {
+		texCoord.set(int(i), coordArray[i].x * wScale, coordArray[i].y * hScale);
+	}
+}
+
+void fk_IFSTexture::TexCoordUpdate(int argID)
+{
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+
+	if(ifs->getFaceSize() == 0) return;
+	if(texCoord.getSize() <= argID) texCoord.resize(argID+1);
+
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	double wScale = double(imageSize->w)/double(bufSize->w);
+	double hScale = double(imageSize->h)/double(bufSize->h);
+
+	if(texCoord.getSize() <= argID) texCoord.resize(argID+1);
+
+	texCoord.set(argID, coordArray[_st(argID)].x * wScale, coordArray[_st(argID)].y * hScale);
 }
 
 void fk_IFSTexture::cloneShape(fk_IFSTexture *argIT)
@@ -243,28 +200,18 @@ void fk_IFSTexture::cloneShape(fk_IFSTexture *argIT)
 void fk_IFSTexture::setTextureCoord(int argFID, int argVID,
 									fk_TexCoord &argCoord)
 {
-	int			tmp;
-	_st			index;
-	double		wScale, hScale;
+	int			id;
+	_st			id_;
 
-	const fk_Dimension *imageSize = getImageSize();
-	const fk_Dimension *bufSize = getBufferSize();
+	id = ifs->getFaceData(argFID, argVID);
+	if(id < 0) return;
 
-	if(bufSize == nullptr) return;
-	if(bufSize->w < 64 || bufSize->h < 64) return;
-
-	wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-	hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
-
-	tmp = ifs->getFaceData(argFID, argVID);
-	if(tmp < 0) return;
-
-	index = static_cast<_st>(tmp);
-	if(index >= coordArray.size()) {
-		coordArray.resize(index+1);
+	id_ = _st(id);
+	if(id_ >= coordArray.size()) {
+		coordArray.resize(id_ + 1);
 	}
-	coordArray[index].x = argCoord.x * float(wScale);
-	coordArray[index].y = argCoord.y * float(hScale);
+	coordArray[id_] = argCoord;
+	TexCoordUpdate(id);
 	
 	return;
 }
@@ -298,6 +245,8 @@ bool fk_IFSTexture::readMQOFile(string argFileName,
 
 	if(connectMode == true) SetConnectNormal();
 
+	TexCoordUpdate();
+
 	return true;
 }
 
@@ -330,6 +279,8 @@ bool fk_IFSTexture::readMQOData(unsigned char *argBuffer,
 
 	if(connectMode == true) SetConnectNormal();
 
+	TexCoordUpdate();
+
 	return true;
 }
 
@@ -346,6 +297,7 @@ bool fk_IFSTexture::readD3DXFile(string argFileName, string argObjName,
 
 	if(animFlg == true) setAnimationTime(-1.0);
 	delete d3dxParser;
+	TexCoordUpdate();
 	return retVal;
 }
 
@@ -389,7 +341,7 @@ bool fk_IFSTexture::moveVPosition(int argID, const fk_Vector &argV,
 	int		tmp = argID - argOrder;
 
 	if(tmp < 0) return false;
-	trueID = static_cast<_st>(tmp);
+	trueID = _st(tmp);
 	if(trueID >= commonList.size()) return false;
 
 	if(ifs->moveVPosition(static_cast<int>(trueID), argV) == false) {
@@ -430,3 +382,88 @@ void fk_IFSTexture::setBVHMotion(fk_BVHBase *argBVH)
 	ifs->setBVHMotion(argBVH);
 	return;
 }
+
+
+/*
+void fk_IFSTexture::MakeDrawIFSFunc(void)
+{
+	DrawTexture = [this](bool argArrayState) {
+		const fk_Dimension *bufSize = getBufferSize();
+
+		if(bufSize == nullptr) return;
+		if(bufSize->w < 64 || bufSize->h < 64) return;
+
+		if(ifs->modifyFlg == true) {
+			ifs->ModifyVNorm();
+		}
+
+#ifndef OPENGL4
+		glShadeModel(GL_SMOOTH);
+#endif
+
+		if(argArrayState == true) {
+
+#ifndef OPENGL4
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			glVertexPointer(3, GL_FLOAT, 0, &ifs->pos[0]);
+			glNormalPointer(GL_FLOAT, 0, &ifs->vNorm[0]);
+			glTexCoordPointer(2, GL_FLOAT, 0, &coordArray[0]);
+		
+			glDrawElements(tmpType, ifs->faceSize * static_cast<GLsizei>(pNum),
+						   GL_UNSIGNED_INT, &ifs->ifs[0]);
+#endif
+
+		} else {
+#ifndef OPENGL4
+			glBegin(tmpType);
+			for(_st ii = 0; ii < _st(ifs->faceSize); ++ii) {
+				for(_st ij = 0; ij < pNum; ++ij) {
+					_st index = _st(ifs->ifs[pNum*ii+ij]);
+					glNormal3fv((GLfloat *)&(ifs->vNorm[index]));
+					glTexCoord2fv((GLfloat *)&coordArray[index]);
+					glVertex3fv((GLfloat *)&(ifs->pos[index]));
+				}
+			}
+			glEnd();
+#endif
+		}
+	};
+
+	DrawPick = [this]() {
+		FK_UNUSED(this);
+#ifndef OPENGL4
+		int				ii, ij;
+		int				pNum;
+		fk_FVector		*pos = &ifs->pos[0];
+		int				*ifsArray = &ifs->ifs[0];
+
+		switch(ifs->type) {
+		  case FK_IF_TRIANGLES:
+			  pNum = 3;
+			  break;
+
+		  case FK_IF_QUADS:
+			  pNum = 4;
+			  break;
+
+		  default:
+			  return;
+		}
+
+		for(ii = 0; ii < ifs->faceSize; ++ii) {
+			glPushName(static_cast<GLuint>(ii*3));
+			glBegin(GL_POLYGON);
+			for(ij = 0; ij < pNum; ++ij) {
+				glVertex3fv(static_cast<GLfloat *>(&pos[ifsArray[pNum*ii+ij]].x));
+			}
+			glEnd();
+			glPopName();
+		}
+#endif
+
+	};
+}	
+*/

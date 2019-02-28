@@ -403,32 +403,10 @@ void fk_IndexFaceSet::ResetFaceFlg(void)
 
 void fk_IndexFaceSet::InitVertexNorm(void)
 {
-	/*
-	vector<fk_Vector>	normArray;
-	fk_Vector			tmpVec;
-	_st					i, j;
-	*/
-
 	if(faceNormal.getSize() == 0) InitFaceNorm();
 
 	vertexNormal.resize(vertexPosition.getSize());
 	vertexNormFlg.resize(_st(vertexPosition.getSize()));
-	//normArray.resize(_st(vertexPosition.getSize()));
-
-/*
-	for(i = 0; i < normArray.size(); ++i) normArray[i].init();
-	for(i = 0; i < faceIndex.size()/3; ++i) {
-		tmpVec = faceNormal.getV(int(i));
-		for(j = 0; j < 3; ++j) {
-			normArray[faceIndex[i*3+j]] += tmpVec;
-		}
-	}
-
-	for(i = 0; i < normArray.size(); ++i) {
-		normArray[i].normalize();
-		vertexNormal.set(int(i), normArray[i]);
-	}
-*/
 	fill(vertexNormFlg.begin(), vertexNormFlg.end(), char(true));
 	return;
 }
@@ -1093,21 +1071,6 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 
 	IFArray.clear();
 
-/*	
-	for(i = 0; i < argDiv*4; ++i) {
-		IDArray.clear();
-		IDArray.push_back(1);
-		IDArray.push_back(i + 2);
-		if(i == argDiv * 4 - 1) {
-			IDArray.push_back(2);
-		} else {
-			IDArray.push_back(i + 3);
-		}
-		IFArray.push_back(IDArray);
-	}
-
-	makeIFSet(&IFArray, &vecArray, 1);
-*/
 	for(int i = 0; i < argDiv*4; ++i) {
 		IDArray.clear();
 		IDArray.push_back(argDiv*4);
@@ -1193,54 +1156,7 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	}
 
 	IFArray.clear();
-/*
-	// TOP
-	for(ii = 0; ii < argDiv*4; ++ii) {
-		IDArray.clear();
-		IDArray.push_back(1);
-		if(ii == argDiv*4 - 1) {
-			IDArray.push_back(2);
-		} else {
-			IDArray.push_back(ii+3);
-		}
-		IDArray.push_back(ii+2);
-		IFArray.push_back(IDArray);
-	}
 
-	// BOTTOM
-	iindex = (argDiv*4)*(argDiv*2 - 2) + 2;
-	for(ii = 0; ii < argDiv*4; ++ii) {
-		IDArray.clear();
-		IDArray.push_back(iindex + (argDiv*4));
-		IDArray.push_back(iindex + ii);
-		if(ii == argDiv*4 - 1) {
-			IDArray.push_back(iindex);
-		} else {
-			IDArray.push_back(iindex + ii + 1);
-		}
-		IFArray.push_back(IDArray);
-	}
-
-	// SIDE
-	for(ii = 0; ii < argDiv*2 - 2; ++ii) {
-		for(jj = 0; jj < argDiv*4; ++jj) {
-			IDArray.clear();
-			iindex = ii*argDiv*4 + jj + 2;
-			iindex2 = (jj == argDiv*4 - 1) ? ii*argDiv*4 + 2 : iindex + 1;
-
-			IDArray.push_back(iindex);
-			IDArray.push_back(iindex2);
-			IDArray.push_back(iindex2 + argDiv*4);
-			IFArray.push_back(IDArray);
-
-			IDArray.clear();
-			IDArray.push_back(iindex);
-			IDArray.push_back(iindex2 + argDiv*4);
-			IDArray.push_back(iindex + argDiv*4);
-			IFArray.push_back(IDArray);
-		}
-	}
-*/
 	// TOP
 	for(ii = 0; ii < argDiv*4; ++ii) {
 		IDArray.clear();
@@ -1607,54 +1523,7 @@ void fk_IndexFaceSet::MakeCapsuleIFSet(vector< vector<int> > *argIF, int argDiv)
 	int				i, j, index1, index2;
 
 	argIF->clear();
-/*
-	// TOP
-	for(i = 0; i < argDiv*4; ++i) {
-		IDArray.clear();
-		IDArray.push_back(1);
-		IDArray.push_back(i+2);
-		if(i == argDiv*4 - 1) {
-			IDArray.push_back(2);
-		} else {
-			IDArray.push_back(i+3);
-		}
-		argIF->push_back(IDArray);
-	}
 
-	// BOTTOM
-	index1 = (argDiv*4)*(argDiv*2 - 1) + 2;
-	for(i = 0; i < argDiv*4; ++i) {
-		IDArray.clear();
-		IDArray.push_back(index1 + (argDiv*4));
-		if(i == argDiv*4 - 1) {
-			IDArray.push_back(index1);
-		} else {
-			IDArray.push_back(index1 + i + 1);
-		}
-		IDArray.push_back(index1 + i);
-		argIF->push_back(IDArray);
-	}
-
-	// SIDE
-	for(i = 0; i < argDiv*2 - 1; ++i) {
-		for(j = 0; j < argDiv*4; ++j) {
-			IDArray.clear();
-			index1 = i*argDiv*4 + j + 2;
-			index2 = (j == argDiv*4 - 1) ? i*argDiv*4 + 2 : index1 + 1;
-
-			IDArray.push_back(index1);
-			IDArray.push_back(index2 + argDiv*4);
-			IDArray.push_back(index2);
-			argIF->push_back(IDArray);
-
-			IDArray.clear();
-			IDArray.push_back(index1);
-			IDArray.push_back(index1 + argDiv*4);
-			IDArray.push_back(index2 + argDiv*4);
-			argIF->push_back(IDArray);
-		}
-	}
-*/
 	// TOP
 	for(i = 0; i < argDiv*4; ++i) {
 		IDArray.clear();
@@ -1861,6 +1730,17 @@ void fk_IndexFaceSet::updateAttr(void)
 		vertexNormal.reset();
 	}
 }
+
+vector<float> * fk_IndexFaceSet::GetVertexP(void)
+{
+	return vertexPosition.getP();
+}
+
+vector<float> * fk_IndexFaceSet::GetNormP(void)
+{
+	return vertexNormal.getP();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 void fk_IndexFaceSet::DataPrint(void)

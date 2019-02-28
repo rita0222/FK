@@ -322,7 +322,9 @@ namespace FK {
 		bool								connectMode;
 
 		void	SetConnectNormal(void);
-		void	MakeDrawIFSFunc(void);
+		//void	MakeDrawIFSFunc(void);
+		void	TexCoordUpdate(void);
+		void	TexCoordUpdate(int);
 	};
 }
 

@@ -1340,6 +1340,9 @@ namespace FK {
 
 		void	updateAttr(void);
 
+		std::vector<float>	*	GetVertexP(void);
+		std::vector<float>	*	GetNormP(void);
+
 #endif
 
 	private:

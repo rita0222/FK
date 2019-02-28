@@ -337,7 +337,8 @@ namespace FK {
 		fk_SamplerSource getSamplerSource(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void FaceIBOSetup(void);
+		std::function<void(void)> FaceIBOSetup;
+		void _FaceIBOSetup(void);
 		bool BindTexture(bool forceLoad);
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
