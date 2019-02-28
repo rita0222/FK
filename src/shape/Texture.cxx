@@ -144,6 +144,7 @@ bool fk_Texture::IsLocalImage(void)
 void fk_Texture::SetLocalImage(void)
 {
 	image = &localImage;
+	StatusUpdate();
 	return;
 }
 
@@ -202,6 +203,7 @@ void fk_Texture::setImage(fk_Image *argImage)
 	}
 
 	image = argImage;
+	StatusUpdate();
 	return;
 }
 
@@ -228,24 +230,6 @@ const fk_Dimension * fk_Texture::getBufferSize(void)
 	return nullptr;
 }
 
-bool fk_Texture::GetInitFlag(void)
-{
-	if(image != nullptr) {
-		return image->GetInitFlag();
-	}
-
-	return false;
-}
-
-void fk_Texture::SetInitFlag(bool argFlg)
-{
-	if(image != nullptr) {
-		image->SetInitFlag(argFlg);
-	}
-
-	return;
-}
-
 fk_TexID fk_Texture::GetTexID(void)
 {
 	if(image != nullptr) {
@@ -268,7 +252,7 @@ void fk_Texture::ClearTexState(fk_Image *argImage)
 {
 	if(argImage == nullptr) return;
 
-	argImage->SetInitFlag(false);
+	argImage->SetUpdate(false);
 	argImage->SetTexID(0);
 
 	return;
@@ -350,16 +334,34 @@ bool fk_Texture::BindTexture(bool forceLoad)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
-	if (loaded == false || forceLoad) {
-		if (samplerSource == FK_TEXTURE_IMAGE) {
+	if (loaded == false || forceLoad == true) {
+		switch(samplerSource) {
+		  case FK_TEXTURE_IMAGE:
+/*
+			if(loaded == false) {
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+							 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+			} else {
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
+								GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+			}
+*/
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-		}  else if (samplerSource == FK_COLOR_BUFFER) {
+			break;
+			
+		  case FK_COLOR_BUFFER:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-		} else {
+			break;
+
+		  case FK_DEPTH_BUFFER:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
 						 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+			break;
+
+		  default:
+			break;
 		}
 	}
 
@@ -370,6 +372,16 @@ bool fk_Texture::BindTexture(bool forceLoad)
 	return true;
 }
 
+void fk_Texture::Replace(void)
+{
+	if(image == nullptr) return;
+	if(image->GetUpdate() == true) {
+		StatusUpdate();
+		BindTexture(true);
+		image->SetUpdate(false);
+	}
+}
+
 void fk_Texture::setSamplerSource(fk_SamplerSource argMode)
 {
 	samplerSource = argMode;
@@ -378,4 +390,12 @@ void fk_Texture::setSamplerSource(fk_SamplerSource argMode)
 fk_SamplerSource fk_Texture::getSamplerSource(void)
 {
 	return samplerSource;
+}
+
+void fk_Texture::InfoOut(void)
+{
+	for(int i = 0; i < texCoord.getSize(); ++i) {
+		fk_TexCoord c = texCoord.getT(i);
+		fk_Window::printf("t[%d] = (%f, %f)", i, c.x, c.y);
+	}
 }

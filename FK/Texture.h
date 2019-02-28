@@ -342,6 +342,9 @@ namespace FK {
 		bool BindTexture(bool forceLoad);
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
+		void Replace(void);
+		
+		void				InfoOut(void);
 
 		static const std::string		texIDName;
 #endif
@@ -351,8 +354,6 @@ namespace FK {
 		void				BaseInit(void);
 		bool				IsLocalImage(void);
 		void				SetLocalImage(void);
-		bool				GetInitFlag(void);
-		void				SetInitFlag(bool);
 
 //		std::function<void(void)>	GenTextureObj;
 //		std::function<void(void)>	ReplaceSubImage;

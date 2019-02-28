@@ -170,6 +170,8 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
+	texture->Replace();
+	
 	glBindVertexArray(vao);
 	texture->BindShaderBuffer(argParam->getAttrTable());
 	texture->FaceIBOSetup();

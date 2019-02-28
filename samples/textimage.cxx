@@ -115,8 +115,8 @@ int main (int, char *[])
 	win.setCameraPos(0.0, 0.0, 100.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
 
-	while(win.update() == true) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/200.0);
+	for(int i = 0; win.update() == true; ++i) {
+		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2000.0);
 	}
 	return 0;
 }

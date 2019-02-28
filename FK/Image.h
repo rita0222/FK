@@ -615,10 +615,8 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 		fk_TexID	GetTexID(void);
-		void		ClearUpdateArea(void);
-		void		SetUpdateArea(void);
-		void		SetUpdateArea(int, int, int, int);
-		fk_Rect		GetUpdateArea(void);
+		bool		GetUpdate(void);
+		void		SetUpdate(bool);
 		std::function<void(FK::fk_Image *)> ReleaseTexture;
 
 #endif
@@ -628,10 +626,7 @@ namespace FK {
 		std::vector<fk_ImType>	imageBuf;
 		fk_ImType				*bufPointer;
 		fk_TexID				texID;
-		bool					initFlag;
-
-		// テクスチャの部分更新用情報
-		fk_Rect					updateRect;
+		bool					updateFlg;
 
 		unsigned int		ChgUInt(fk_ImType *, int) const;
 		unsigned int		ChgUShort(fk_ImType *, int) const;
@@ -650,8 +645,6 @@ namespace FK {
 		void				SetLong2Byte(long, fk_ImType *, int);
 		void				SetInt2Byte(int, fk_ImType *, int);
 
-		bool				GetInitFlag(void);
-		void				SetInitFlag(bool);
 		void				SetTexID(const fk_TexID);
 
 		bool				IsBmpFile(const std::string) const;

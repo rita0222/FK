@@ -297,4 +297,3 @@ void fk_SpriteModel::SetFinalizeMode(void)
 	pixelBase.SetTreeDelMode(false);
 	SetTreeDelMode(false);
 }
-

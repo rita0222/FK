@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 
 flat in vec4 put_color;
 out vec4 fragment;
