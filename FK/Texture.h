@@ -43,8 +43,6 @@ namespace FK {
 	 */
 
 	class fk_Texture: public fk_Shape {
-		friend class		fk_TextureDraw;
-
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -339,13 +337,12 @@ namespace FK {
 		fk_SamplerSource getSamplerSource(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		void FaceIBOSetup(void);
 		bool BindTexture(bool forceLoad);
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
 
-
 		static const std::string		texIDName;
-
 #endif
 
 	protected:
@@ -355,7 +352,6 @@ namespace FK {
 		void				SetLocalImage(void);
 		bool				GetInitFlag(void);
 		void				SetInitFlag(bool);
-		void				FaceIBOSetup(void);
 
 //		std::function<void(void)>	GenTextureObj;
 //		std::function<void(void)>	ReplaceSubImage;

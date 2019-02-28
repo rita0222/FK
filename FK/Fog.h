@@ -32,7 +32,6 @@ namespace FK {
 
 	class fk_Fog : public fk_DisplayLink {
 
-		friend class	fk_Window;
 		friend class	fk_GraphicsEngine;
 
 	public:

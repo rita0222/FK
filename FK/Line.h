@@ -23,8 +23,6 @@ namespace FK {
 
 	class fk_Line: public fk_Shape {
 
-		friend class		fk_LineDraw;
-
 	public:
 
 		//! コンストラクタ

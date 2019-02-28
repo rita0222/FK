@@ -923,7 +923,6 @@ namespace FK {
 #endif
 
 	private:
-		friend class fk_SpriteModel;
 		friend class fk_ShaderBinder;
 
 		Fl_Window				*mainWin;

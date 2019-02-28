@@ -35,10 +35,6 @@ namespace FK {
 
 	class fk_Surface : public fk_Shape {
 
-		friend class	fk_PointDraw;
-		friend class	fk_LineDraw;
-		friend class	fk_FaceDraw;
-
 	protected:
 
 		//! 修正告知用フラグ
@@ -129,7 +125,7 @@ namespace FK {
 
 	private:
 		int							div;
-		bool						smoothFlg;
+		//bool						smoothFlg;
 		std::vector<fk_Vector>		posCache;
 		std::vector<fk_Vector>		normCache;
 

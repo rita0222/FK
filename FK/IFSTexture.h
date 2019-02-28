@@ -42,8 +42,6 @@ namespace FK {
 
 	class fk_IFSTexture : public fk_Texture {
 
-		friend class			fk_TextureDraw;
-
 	public:
 
 		//! コンストラクタ

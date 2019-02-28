@@ -28,8 +28,6 @@ namespace FK {
 
 	class fk_TriTexture : public fk_Texture {
 
-		friend class		fk_TextureDraw;
-
 	public:
 
 		//! コンストラクタ

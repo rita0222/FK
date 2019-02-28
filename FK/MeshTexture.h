@@ -39,8 +39,6 @@ namespace FK {
 
 	class fk_MeshTexture : public fk_Texture {
 
-		friend class			fk_TextureDraw;
-
 	public:
 
 		//! コンストラクタ

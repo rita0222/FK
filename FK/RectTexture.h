@@ -27,8 +27,6 @@ namespace FK {
 
 	class fk_RectTexture : public fk_Texture {
 
-		friend class		fk_TextureDraw;
-
 	public:
 
 		//! コンストラクタ

@@ -29,8 +29,6 @@ namespace FK {
 
 	class fk_Point: public fk_Shape {
 
-		friend class			fk_PointDraw;
-
 	public:
 
 		//! コンストラクタ
