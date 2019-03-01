@@ -75,6 +75,7 @@
 #include <FK/MQOParser.H>
 #include <FK/D3DXParser.H>
 #include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -87,6 +88,7 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 	};
 
 	StatusUpdate = [this]() {
+		ShapeUpdate();
 		TexCoordUpdate();
 	};
 
@@ -102,6 +104,9 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 
 	setShaderAttribute(vertexName, 3, ifs->GetVertexP());
 	setShaderAttribute(normalName, 3, ifs->GetNormP());
+
+	modifyAttribute(vertexName);
+	modifyAttribute(normalName);
 	return;
 }
 
@@ -112,6 +117,7 @@ fk_IFSTexture::~fk_IFSTexture()
 	delete ifs;
 	return;
 }
+
 vector< vector<int> > * fk_IFSTexture::GetCommonList(void)
 {
 	return &commonList;
@@ -143,6 +149,12 @@ fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 fk_IndexFaceSet * fk_IFSTexture::getIFS(void)
 {
 	return ifs;
+}
+
+void fk_IFSTexture::ShapeUpdate(void)
+{
+	modifyAttribute(vertexName);
+	modifyAttribute(normalName);
 }
 
 void fk_IFSTexture::TexCoordUpdate(void)
@@ -195,6 +207,8 @@ void fk_IFSTexture::cloneShape(fk_IFSTexture *argIT)
 	}
 	coordArray = argIT->coordArray;
 	commonList = argIT->commonList;
+
+	StatusUpdate();
 	return;
 }
 
@@ -246,7 +260,7 @@ bool fk_IFSTexture::readMQOFile(string argFileName,
 
 	if(connectMode == true) SetConnectNormal();
 
-	TexCoordUpdate();
+	StatusUpdate();
 
 	return true;
 }
@@ -280,7 +294,7 @@ bool fk_IFSTexture::readMQOData(unsigned char *argBuffer,
 
 	if(connectMode == true) SetConnectNormal();
 
-	TexCoordUpdate();
+	StatusUpdate();
 
 	return true;
 }
@@ -298,7 +312,7 @@ bool fk_IFSTexture::readD3DXFile(string argFileName, string argObjName,
 
 	if(animFlg == true) setAnimationTime(-1.0);
 	delete d3dxParser;
-	TexCoordUpdate();
+	StatusUpdate();
 	return retVal;
 }
 
@@ -332,6 +346,7 @@ void fk_IFSTexture::SetConnectNormal(void)
 			ifs->setVNorm(commonList[i][j], tmpNorm);
 		}
 	}
+
 	return;
 }
 
@@ -353,6 +368,8 @@ bool fk_IFSTexture::moveVPosition(int argID, const fk_Vector &argV,
 			return false;
 		}
 	}
+
+	ShapeUpdate();
 	return true;
 }
 
@@ -384,87 +401,18 @@ void fk_IFSTexture::setBVHMotion(fk_BVHBase *argBVH)
 	return;
 }
 
-
-/*
-void fk_IFSTexture::MakeDrawIFSFunc(void)
+void fk_IFSTexture::forceUpdateAttr(void)
 {
-	DrawTexture = [this](bool argArrayState) {
-		const fk_Dimension *bufSize = getBufferSize();
+	fk_Shape::forceUpdateAttr();
+	ifs->forceUpdateAttr();
+	StatusUpdate();
+}
 
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		if(ifs->modifyFlg == true) {
-			ifs->ModifyVNorm();
-		}
-
-#ifndef OPENGL4
-		glShadeModel(GL_SMOOTH);
-#endif
-
-		if(argArrayState == true) {
-
-#ifndef OPENGL4
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			glVertexPointer(3, GL_FLOAT, 0, &ifs->pos[0]);
-			glNormalPointer(GL_FLOAT, 0, &ifs->vNorm[0]);
-			glTexCoordPointer(2, GL_FLOAT, 0, &coordArray[0]);
-		
-			glDrawElements(tmpType, ifs->faceSize * static_cast<GLsizei>(pNum),
-						   GL_UNSIGNED_INT, &ifs->ifs[0]);
-#endif
-
-		} else {
-#ifndef OPENGL4
-			glBegin(tmpType);
-			for(_st ii = 0; ii < _st(ifs->faceSize); ++ii) {
-				for(_st ij = 0; ij < pNum; ++ij) {
-					_st index = _st(ifs->ifs[pNum*ii+ij]);
-					glNormal3fv((GLfloat *)&(ifs->vNorm[index]));
-					glTexCoord2fv((GLfloat *)&coordArray[index]);
-					glVertex3fv((GLfloat *)&(ifs->pos[index]));
-				}
-			}
-			glEnd();
-#endif
-		}
-	};
-
-	DrawPick = [this]() {
-		FK_UNUSED(this);
-#ifndef OPENGL4
-		int				ii, ij;
-		int				pNum;
-		fk_FVector		*pos = &ifs->pos[0];
-		int				*ifsArray = &ifs->ifs[0];
-
-		switch(ifs->type) {
-		  case FK_IF_TRIANGLES:
-			  pNum = 3;
-			  break;
-
-		  case FK_IF_QUADS:
-			  pNum = 4;
-			  break;
-
-		  default:
-			  return;
-		}
-
-		for(ii = 0; ii < ifs->faceSize; ++ii) {
-			glPushName(static_cast<GLuint>(ii*3));
-			glBegin(GL_POLYGON);
-			for(ij = 0; ij < pNum; ++ij) {
-				glVertex3fv(static_cast<GLfloat *>(&pos[ifsArray[pNum*ii+ij]].x));
-			}
-			glEnd();
-			glPopName();
-		}
-#endif
-
-	};
-}	
-*/
+void fk_IFSTexture::NormOut(void)
+{
+	int size = ifs->getPosSize();
+	for(int i = 0; i < size; i++) {
+		fk_Vector n = ifs->getVertexNorm(i);
+		fk_Window::printf("N[%d] = (%f, %f, %f)", i, n.x, n.y, n.z);
+	}
+}

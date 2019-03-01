@@ -51,6 +51,12 @@ float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 	return 1.0/(argA[0] * dist + argA[1] * dist * dist + argA[2]);
 }
 
+float GetSpecular(vec3 argN, vec3 argV, vec3 argL, float argExp)
+{
+	float specProd = dot(argN, normalize(argV - argL));
+	return pow(max(0.0, specProd), fk_Material.shininess * argExp);
+}
+
 vec3 ParallelDiffuse(vec3 argN)
 {
 	vec3 sum = vec3(0.0, 0.0, 0.0);
@@ -98,19 +104,13 @@ vec3 SpotDiffuse(vec3 argN)
 	return sum;
 }
 
-float GetSpecular(vec3 argN, vec3 argV, vec3 argL, float argExp)
-{
-	float specProd = dot(argN, normalize(argV - argL));
-	return pow(max(0.0, specProd), fk_Material.shininess * argExp);
-}
-
 vec3 ParallelSpecular(vec3 argN, vec3 argV)
 {
 	vec3 sum = vec3(0.0, 0.0, 0.0);
 
 	for(int i = 0; i < LIGHTNUM; i++) {
 		if(i == fk_ParallelLightNum) break;
-		float k = GetSpecular(argN, argV, fk_ParallelLight[i].vec, 1.0);
+		float k = min(1.0, GetSpecular(argN, argV, fk_ParallelLight[i].vec, 1.0));
 		sum += k * fk_ParallelLight[i].specular.rgb;
 	}
 

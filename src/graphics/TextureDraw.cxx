@@ -79,7 +79,7 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
-	: shader(nullptr)
+	: shader(nullptr), modulateID(0), replaceID(0), decalID(0)
 {
 	return;
 }
@@ -133,11 +133,19 @@ void fk_TextureDraw::ShaderSetup(void)
 	}
 
 	param->reserveAttribute(fk_Shape::vertexName);
+	param->reserveAttribute(fk_Shape::normalName);
 	param->reserveAttribute(fk_Shape::texCoordName);
 	
 	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
 
 	prog->link();
+
+	modulateID = glGetSubroutineIndex(prog->getProgramID(), GL_FRAGMENT_SHADER, "Modulate");
+	replaceID = glGetSubroutineIndex(prog->getProgramID(), GL_FRAGMENT_SHADER, "Replace");
+	decalID = glGetSubroutineIndex(prog->getProgramID(), GL_FRAGMENT_SHADER, "Decal");
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
+
 	return;
 }
 
@@ -175,6 +183,24 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	glBindVertexArray(vao);
 	texture->BindShaderBuffer(argParam->getAttrTable());
 	texture->FaceIBOSetup();
+
+	switch(texture->getTextureMode()) {
+	  case FK_TEX_MODULATE:
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
+		break;
+
+	  case FK_TEX_REPLACE:
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &replaceID);
+		break;
+
+	  case FK_TEX_DECAL:
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &decalID);
+		break;
+
+	  default:
+		break;
+	}
+	
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

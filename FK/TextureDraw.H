@@ -14,6 +14,9 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 	private:
 		fk_ShaderBinder		*shader;
+
+		GLuint	modulateID, replaceID, decalID;
+
 		void 	ShaderSetup(void);
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
 		void	PolygonModeSet(void);

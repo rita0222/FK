@@ -257,7 +257,6 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 	for(auto p = list->begin(); p != list->end(); ++p) {
 		fk_Model *model = *p;
 		fk_Light *light = dynamic_cast<fk_Light *>(model->getShape());
-		FK_UNUSED(light);
 
 		string nameBase = lightName + "[" + to_string(lightID) + "]";
 
