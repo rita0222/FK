@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -80,15 +80,14 @@ int main (int, char *[])
 	fk_AppWindow	win;
 	fk_TextImage	textImage;
 	fk_RectTexture	texture;
-	fk_UniStr		str1, str2;
+	fk_UniStr		str;
 	fk_Model		strModel;
 
 
 	fk_System::setcwd();
 	fk_Material::initDefault();
 
-	str1.convert("日本語", FK_STR_UTF8);
-	str2.convert("日本語2", FK_STR_UTF8);
+	str.convert("FK日本語", FK_STR_UTF8);
 
 	texture.setImage(&textImage);
 	if(textImage.initFont("rm1b.ttf") == false) {
@@ -103,25 +102,21 @@ int main (int, char *[])
 	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
 	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
 	textImage.setAlign(FK_ALIGN_CENTER);
-	textImage.loadUniStr(&str2);
+	textImage.loadUniStr(&str);
 	texture.setTextureSize(40.0, 10.0);
 	strModel.setMaterial(TrueWhite);
 
 	strModel.setShape(&texture);
 	strModel.glVec(0.0, 0.0, -1.0);
-	//strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI);
+	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
 
 	win.entry(&strModel);
 	win.open();
 	win.setCameraPos(0.0, 0.0, 100.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
 
-	for(int i = 0; win.update() == true; ++i) {
-		//strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2000.0);
-		if(i == 2000) {
-			textImage.loadUniStr(&str1);
-			//fk_Window::printf("1000");
-		}
+	while(win.update() == true) {
+		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/200.0);
 	}
 	return 0;
 }

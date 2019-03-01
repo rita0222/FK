@@ -209,6 +209,7 @@ fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
 void fk_TriTexture::PosUpdate(void)
 {
 	for(int i = 0; i < 3; ++i) vertexPosition.set(i, pos[i]);
+	modifyAttribute(vertexName);
 }
 
 void fk_TriTexture::NormUpdate(void)
@@ -217,6 +218,7 @@ void fk_TriTexture::NormUpdate(void)
 	norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
 	norm.normalize();
 	for(int i = 0; i < 3; ++i) vertexNormal.set(i, norm);
+	modifyAttribute(normalName);
 }
 	
 		
@@ -235,4 +237,6 @@ void fk_TriTexture::TexCoordUpdate(void)
 	for(int i = 0; i < 3; ++i) {
 		texCoord.set(i, triTexCoord[i].x * wScale, triTexCoord[i].y * hScale);
 	}
+
+	modifyAttribute(texCoordName);
 }

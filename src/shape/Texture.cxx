@@ -348,6 +348,7 @@ bool fk_Texture::BindTexture(bool forceLoad)
 */
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+
 			break;
 			
 		  case FK_COLOR_BUFFER:

@@ -120,6 +120,7 @@ void fk_RectTexture::RectInit(void)
 	faceIndex.push_back(1);
 	faceIndex.push_back(2);
 	faceIndex.push_back(3);
+	faceIndexFlg = true;
 
 	SizeUpdate();
 	NormalUpdate();
@@ -136,6 +137,7 @@ void fk_RectTexture::SizeUpdate(void)
 	vertexPosition.set(1, tmpX, -tmpY);
 	vertexPosition.set(2, tmpX, tmpY);
 	vertexPosition.set(3, -tmpX, tmpY);
+	modifyAttribute(vertexName);
 }
 
 void fk_RectTexture::NormalUpdate(void)
@@ -143,6 +145,7 @@ void fk_RectTexture::NormalUpdate(void)
 	fk_Vector		norm(0.0, 0.0, 1.0);
 	vertexNormal.resize(4);
 	for(int i = 0; i < 4; i++) vertexNormal.set(i, norm);
+	modifyAttribute(normalName);
 }
 
 void fk_RectTexture::TexCoordUpdate(void)
@@ -160,8 +163,8 @@ void fk_RectTexture::TexCoordUpdate(void)
 		s.set(0.0, 0.0);
 		e = getRepeatParam();
 	} else {
-		double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-		double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
+		double wScale = double(imageSize->w)/double(bufSize->w);
+		double hScale = double(imageSize->h)/double(bufSize->h);
 		s.set(wScale * rectSE[0].x, hScale * rectSE[0].y);
 		e.set(wScale * rectSE[1].x, hScale * rectSE[1].y);
 	}
@@ -170,6 +173,8 @@ void fk_RectTexture::TexCoordUpdate(void)
 	texCoord.set(1, e.x, s.y);
 	texCoord.set(2, e.x, e.y);
 	texCoord.set(3, s.x, e.y);
+
+	modifyAttribute(texCoordName);
 }
 
 

@@ -162,6 +162,7 @@ void fk_IFSTexture::TexCoordUpdate(void)
 	for(_st i = 0; i < coordArray.size(); ++i) {
 		texCoord.set(int(i), coordArray[i].x * wScale, coordArray[i].y * hScale);
 	}
+	modifyAttribute(texCoordName);
 }
 
 void fk_IFSTexture::TexCoordUpdate(int argID)
