@@ -99,6 +99,7 @@ document:
 clean:
 	cd src; $(MAKE) clean
 	cd samples; $(MAKE) clean
+	cd doc; $(MAKE) clean
 	cd lib/dynamic; $(RM) lib*
 	cd lib/static; $(RM) lib*
 	$(RM) core *.core *.exe *~ #*# Makefile.bak
