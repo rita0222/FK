@@ -147,6 +147,13 @@ namespace FK {
 		fk_Vector			pos[3];
 		fk_TexCoord			triTexCoord[3];
 
+		fk_FVecArray		vertexPosition;
+		fk_FVecArray		vertexNormal;
+
+		static std::vector<GLuint>	faceIndex;
+		static GLuint				faceIBO;
+		static bool					faceIndexFlg;
+
 		void				TriInit(void);
 		void				PosUpdate(void);
 		void				NormUpdate(void);

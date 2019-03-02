@@ -338,18 +338,17 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::function<void(void)> FaceIBOSetup;
-		void _FaceIBOSetup(void);
 		bool BindTexture(bool forceLoad);
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
 		void Replace(void);
 		
-		void				InfoOut(void);
-
 		static const std::string		texIDName;
 #endif
 
 	protected:
+
+		fk_FVecArray		texCoord;
 
 		void				BaseInit(void);
 		bool				IsLocalImage(void);
@@ -360,14 +359,15 @@ namespace FK {
 //		std::function<void(bool)>	DrawTexture;
 //		std::function<void(void)>	DrawPick;
 
-
-		fk_FVecArray			vertexPosition;
-		fk_FVecArray			vertexNormal;
-		fk_FVecArray			texCoord;
-		std::vector<GLuint>		faceIndex;		
+/*
+		fk_FVecArray			*vertexPosition;
+		fk_FVecArray			*vertexNormal;
+		fk_FVecArray			*texCoord;
+		std::vector<GLuint>		*faceIndex;		
 		GLuint					faceIBO;
 		bool					faceIndexFlg;
-
+*/
+		
 	private:
 		fk_Image			*image;
 		fk_Image			localImage;
@@ -380,7 +380,6 @@ namespace FK {
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
-		//void				MakeObjFunction(void);
 	};
 }
 

@@ -85,9 +85,34 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 
 	GetFaceSize = [this]() { return triNum; };
 	StatusUpdate = [this]() {
-		TexCoordUpdate();
+		modifyAttribute(vertexName);
+		modifyAttribute(normalName);
+		modifyAttribute(texCoordName);
 	};
+
+	FaceIBOSetup = [this]() {
+		if(faceIBO == 0) {
+			glGenBuffers(1, &faceIBO);
+			faceIndexFlg = true;
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+		if(faceIndexFlg == true) {
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+						 GLsizei(3*triNum*int(sizeof(GLuint))),
+						 faceIndex.data(), GL_STATIC_DRAW);
+			faceIndexFlg = false;
+		}
+	};
+
+	vertexPosition.setDim(3);
+	vertexNormal.setDim(3);
+	texCoord.setDim(2);
 	
+	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	setShaderAttribute(normalName, 3, vertexNormal.getP());
+	setShaderAttribute(texCoordName, 2, texCoord.getP());
+		
 	init();
 
 	return;
@@ -97,6 +122,10 @@ fk_MeshTexture::~fk_MeshTexture()
 {
 	posArray.clear();
 	coordArray.clear();
+	faceIndex.clear();
+	vertexPosition.clear();
+	vertexNormal.clear();
+	texCoord.clear();
 
 	return;
 }
@@ -113,9 +142,13 @@ void fk_MeshTexture::init(void)
 	vertexNormal.clear();
 	texCoord.clear();
 
-	modifyAttribute(vertexName);
-	modifyAttribute(normalName);
-	modifyAttribute(texCoordName);
+	StatusUpdate();
+	if(faceIBO != 0) {
+		glDeleteBuffers(1, &faceIBO);
+		faceIBO = 0;
+	}
+	faceIndexFlg = true;
+	
 	return;
 }
 

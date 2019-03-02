@@ -77,6 +77,10 @@
 using namespace std;
 using namespace FK;
 
+vector<GLuint> fk_TriTexture::faceIndex = {0, 1, 2};
+GLuint fk_TriTexture::faceIBO = 0;
+bool fk_TriTexture::faceIndexFlg = false;
+
 fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
@@ -87,6 +91,33 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 		NormUpdate();
 		TexCoordUpdate();
 	};
+
+	FaceIBOSetup = []() {
+		if(faceIBO == 0) {
+			glGenBuffers(1, &faceIBO);
+			faceIndexFlg = true;
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+		if(faceIndexFlg == true) {
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+						 GLsizei(3*sizeof(GLuint)),
+						 faceIndex.data(), GL_STATIC_DRAW);
+			faceIndexFlg = false;
+		}
+	};
+
+	vertexPosition.setDim(3);
+	vertexPosition.resize(3);
+	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+
+	vertexNormal.setDim(3);
+	vertexNormal.resize(3);
+	setShaderAttribute(normalName, 3, vertexNormal.getP());
+
+	texCoord.setDim(2);
+	texCoord.resize(3);
+	setShaderAttribute(texCoordName, 2, texCoord.getP());
 
 	init();
 
@@ -102,16 +133,6 @@ fk_TriTexture::~fk_TriTexture()
 void fk_TriTexture::init(void)
 {
 	BaseInit();
-	faceIndex.clear();
-	faceIndex.push_back(0);
-	faceIndex.push_back(1);
-	faceIndex.push_back(2);
-
-	vertexPosition.resize(3);
-	vertexNormal.resize(3);
-	texCoord.resize(3);
-
-
 	return;
 }
 

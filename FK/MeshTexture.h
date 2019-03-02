@@ -321,6 +321,14 @@ namespace FK {
 		std::vector<fk_Vector>		posArray;
 		std::vector<fk_TexCoord>	coordArray;
 
+		fk_FVecArray				vertexPosition;
+		fk_FVecArray				vertexNormal;
+		fk_FVecArray				texCoord;
+
+		std::vector<GLuint>			faceIndex;
+		GLuint						faceIBO;
+		bool						faceIndexFlg;
+
 		void						FaceUpdate(void);
 		void						PosUpdate(void);
 		void						PosUpdate(int, int);

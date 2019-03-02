@@ -80,11 +80,12 @@ using namespace FK;
 const string fk_Texture::texIDName = "fk_TexID";
 
 fk_Texture::fk_Texture(fk_Image *argImage)
-	: fk_Shape(FK_TEXTURE), image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
+	: fk_Shape(FK_TEXTURE),
+	  image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
 {
 	GetFaceSize = []() { return 0; };
 	StatusUpdate = []() {};
-	FaceIBOSetup = [this]() { _FaceIBOSetup(); };
+	FaceIBOSetup = []() {};
 	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
 	BaseInit();
@@ -108,18 +109,18 @@ void fk_Texture::BaseInit(void)
 	setTexRendMode(FK_TEX_REND_NORMAL);
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 
-	texCoord.setDim(2);
+	//texCoord.setDim(2);
 
-	setShaderAttribute(vertexName, 3, vertexPosition.getP());
-	setShaderAttribute(normalName, 3, vertexNormal.getP());
-	setShaderAttribute(texCoordName, 2, texCoord.getP());
+	//setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	//setShaderAttribute(normalName, 3, vertexNormal.getP());
+	//setShaderAttribute(texCoordName, 2, texCoord.getP());
 
-	faceIBO = 0;
-	faceIndexFlg = true;
+	//faceIBO = 0;
+	//faceIndexFlg = true;
 	  
 	return;
 }
-
+/*
 void fk_Texture::_FaceIBOSetup(void)
 {
 	if(faceIBO == 0) {
@@ -128,13 +129,14 @@ void fk_Texture::_FaceIBOSetup(void)
 	}
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
-	if(faceIndexFlg == true) {
+	if(faceIndexFlg == true && faceIndex != nullptr) {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 					 GLsizei(faceIndex.size()*sizeof(GLuint)),
-					 &faceIndex[0], GL_STATIC_DRAW);
+					 faceIndex->data(), GL_STATIC_DRAW);
 		faceIndexFlg = false;
 	}
 }
+*/
 
 bool fk_Texture::IsLocalImage(void)
 {
@@ -391,12 +393,4 @@ void fk_Texture::setSamplerSource(fk_SamplerSource argMode)
 fk_SamplerSource fk_Texture::getSamplerSource(void)
 {
 	return samplerSource;
-}
-
-void fk_Texture::InfoOut(void)
-{
-	for(int i = 0; i < texCoord.getSize(); ++i) {
-		fk_TexCoord c = texCoord.getT(i);
-		fk_Window::printf("t[%d] = (%f, %f)", i, c.x, c.y);
-	}
 }

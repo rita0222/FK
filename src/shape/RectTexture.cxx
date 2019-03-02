@@ -77,6 +77,10 @@
 using namespace std;
 using namespace FK;
 
+vector<GLuint> fk_RectTexture::faceIndex = {0, 1, 3, 1, 2, 3};
+GLuint fk_RectTexture::faceIBO = 0;
+bool fk_RectTexture::faceIndexFlg = false;
+
 fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
@@ -87,7 +91,34 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 		NormalUpdate();
 		TexCoordUpdate();
 	};
+
+	FaceIBOSetup = []() {
+		if(faceIBO == 0) {
+			glGenBuffers(1, &faceIBO);
+			faceIndexFlg = true;
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+		if(faceIndexFlg == true) {
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+						 GLsizei(6*sizeof(GLuint)),
+						 faceIndex.data(), GL_STATIC_DRAW);
+			faceIndexFlg = false;
+		}
+	};
 		
+	vertexPosition.setDim(3);
+	vertexPosition.resize(6);
+	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+
+	vertexNormal.setDim(3);
+	vertexNormal.resize(6);
+	setShaderAttribute(normalName, 3, vertexNormal.getP());
+
+	texCoord.setDim(2);
+	texCoord.resize(6);
+	setShaderAttribute(texCoordName, 2, texCoord.getP());
+
 	init();
 	return;
 }
@@ -106,21 +137,11 @@ void fk_RectTexture::init(void)
 
 void fk_RectTexture::RectInit(void)
 {
-	modifyFlg = true;
 	texSize.set(2.0, 2.0);
 	setRepeatMode(false);
 	repeatParam.set(1.0, 1.0);
 	rectSE[0].set(0.0, 0.0);
 	rectSE[1].set(1.0, 1.0);
-
-	faceIndex.clear();
-	faceIndex.push_back(0);
-	faceIndex.push_back(1);
-	faceIndex.push_back(3);
-	faceIndex.push_back(1);
-	faceIndex.push_back(2);
-	faceIndex.push_back(3);
-	faceIndexFlg = true;
 
 	SizeUpdate();
 	NormalUpdate();

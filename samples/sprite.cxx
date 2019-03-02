@@ -28,8 +28,9 @@ int main(int, char *[])
 	window.setCameraFocus(0.0, 5.0, 0.0);
 	window.setSize(800, 600);
 	window.setBGColor(0.6, 0.7, 0.8);
-	window.open();
 	window.showGuide(FKUT_GRID_XZ);
+	window.setTrackBallMode(true);
+	window.open();
 
 	count = 0;
 	while(window.update() == true) {

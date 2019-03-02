@@ -177,7 +177,13 @@ namespace FK {
 		bool				repeatFlag;
 		fk_TexCoord			repeatParam;
 		fk_TexCoord			rectSE[2];
-		bool				modifyFlg;
+
+		fk_FVecArray		vertexPosition;
+		fk_FVecArray		vertexNormal;
+
+		static std::vector<GLuint>	faceIndex;
+		static GLuint				faceIBO;
+		static bool					faceIndexFlg;
 		
 		void				RectInit(void);
 

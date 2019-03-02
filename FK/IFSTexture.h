@@ -312,7 +312,6 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::vector< std::vector<int> > * GetCommonList(void);
-		void NormOut(void);
 		void	forceUpdateAttr(void);
 #endif
 	   
@@ -324,7 +323,6 @@ namespace FK {
 		bool								connectMode;
 
 		void	SetConnectNormal(void);
-		//void	MakeDrawIFSFunc(void);
 		void	ShapeUpdate(void);
 		void	TexCoordUpdate(void);
 		void	TexCoordUpdate(int);

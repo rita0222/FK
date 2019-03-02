@@ -80,7 +80,7 @@ fk_SpriteModel::fk_SpriteModel(void) : fk_Model(), fontReady(false)
 {
 	setParent(&pixelBase);
 
-	texShape.setTextureMode(FK_TEX_MODULATE);
+	texShape.setTextureMode(FK_TEX_REPLACE);
 	texShape.setTexRendMode(FK_TEX_REND_SMOOTH);
 	setShape(&texShape);
 

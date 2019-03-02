@@ -104,9 +104,12 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 
 	setShaderAttribute(vertexName, 3, ifs->GetVertexP());
 	setShaderAttribute(normalName, 3, ifs->GetNormP());
+	texCoord.setDim(2);
+	setShaderAttribute(texCoordName, 2, texCoord.getP());
 
 	modifyAttribute(vertexName);
 	modifyAttribute(normalName);
+	modifyAttribute(texCoordName);
 	return;
 }
 
@@ -406,13 +409,4 @@ void fk_IFSTexture::forceUpdateAttr(void)
 	fk_Shape::forceUpdateAttr();
 	ifs->forceUpdateAttr();
 	StatusUpdate();
-}
-
-void fk_IFSTexture::NormOut(void)
-{
-	int size = ifs->getPosSize();
-	for(int i = 0; i < size; i++) {
-		fk_Vector n = ifs->getVertexNorm(i);
-		fk_Window::printf("N[%d] = (%f, %f, %f)", i, n.x, n.y, n.z);
-	}
 }
