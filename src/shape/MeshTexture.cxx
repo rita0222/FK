@@ -143,6 +143,7 @@ void fk_MeshTexture::init(void)
 	texCoord.clear();
 
 	StatusUpdate();
+
 	if(faceIBO != 0) {
 		glDeleteBuffers(1, &faceIBO);
 		faceIBO = 0;
@@ -161,6 +162,7 @@ void fk_MeshTexture::FaceUpdate(void)
 	}
 	faceIndexFlg = true;
 }
+
 
 void fk_MeshTexture::PosUpdate(void)
 {

@@ -542,11 +542,8 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 	outVec = mat * inVec;
 	if(fabs(outVec.w) < FK_EPS) return false;
 	outVec /= outVec.w;
-	retPos->set(static_cast<double>(viewArray[0]) +
-				static_cast<double>(viewArray[2])*(outVec.x + 1.0)/2.0,
-				static_cast<double>(viewArray[1]) +
-				static_cast<double>(hSize) - 1.0 -
-				static_cast<double>(viewArray[3])*(outVec.y + 1.0)/2.0,
+	retPos->set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
+				double(viewArray[1] + hSize - 1) - double(viewArray[3])*(outVec.y + 1.0)/2.0,
 				(1.0 + outVec.z)/2.0);
 	return true;
 }

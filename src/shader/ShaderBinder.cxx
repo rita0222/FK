@@ -143,34 +143,12 @@ fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
 {
-	/*
-	GLuint		id = program->getProgramID();
-
-	fk_funcSet	preS = fk_funcSet(id, [&](){ ProcPreShader(); });
-	fk_funcSet	postS = fk_funcSet(id, [&](){ ProcPostShader(); });
-	
-	argModel->preShaderList.push_back(preS);
-	argModel->postShaderList.push_back(postS);
-	*/
 	argModel->preShader = [&](){ ProcPreShader(); };
 	argModel->postShader = [&](){ ProcPostShader(); };
 }
 
 void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 {
-	/*
-	GLuint id = program->getProgramID();
-
-	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end();) {
-		if(get<0>(*it) == id) it = argModel->preShaderList.erase(it);
-		else ++it;
-	}
-
-	for(auto it = argModel->postShaderList.begin(); it != argModel->postShaderList.end();) {
-		if(get<0>(*it) == id) it = argModel->postShaderList.erase(it);
-		else ++it;
-	}
-	*/
 	argModel->preShader = [](){};
 	argModel->postShader = [](){};
 }
@@ -181,9 +159,7 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	bufH = height;
 
 	// カラーバッファ用のテクスチャを用意する
-	GLuint tmpID;
-	glGenTextures(1, &tmpID);
-	texID = tmpID;
+	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufW, bufH, 0,
 				 GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -194,8 +170,7 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// デプステクスチャ用のテクスチャを用意する
-	glGenTextures(1, &tmpID);
-	depthTexID = tmpID;
+	glGenTextures(1, &depthTexID);
 	glBindTexture(GL_TEXTURE_2D, depthTexID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufW, bufH, 0,
 				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
@@ -206,8 +181,7 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// フレームバッファオブジェクトを作成する
-	glGenFramebuffers(1, &tmpID);
-	fboID = tmpID;
+	glGenFramebuffers(1, &fboID);
 	glBindFramebuffer(GL_FRAMEBUFFER, fboID);
 
 	// フレームバッファオブジェクトにカラーバッファとしてテクスチャを結合する

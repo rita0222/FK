@@ -336,8 +336,6 @@ namespace FK {
 		void						NormUpdate(int);
 		void						TexCoordUpdate(void);
 		void						TexCoordUpdate(int, int);
-
-		//void						MakeDrawMeshFunc(void);
 	};
 }
 
