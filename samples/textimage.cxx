@@ -104,6 +104,7 @@ int main (int, char *[])
 	textImage.setAlign(FK_ALIGN_CENTER);
 	textImage.loadUniStr(&str);
 	texture.setTextureSize(40.0, 10.0);
+	texture.setTextureMode(FK_TEX_REPLACE);
 	strModel.setMaterial(TrueWhite);
 
 	strModel.setShape(&texture);
@@ -116,7 +117,7 @@ int main (int, char *[])
 	win.setCameraFocus(0.0, 0.0, 0.0);
 
 	while(win.update() == true) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/200.0);
+		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2000.0);
 	}
 	return 0;
 }
