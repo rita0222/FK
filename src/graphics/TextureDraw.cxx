@@ -184,7 +184,10 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	texture->BindShaderBuffer(argParam->getAttrTable());
 	texture->FaceIBOSetup();
 
-	switch(texture->getTextureMode()) {
+	fk_TexMode texMode = argModel->getTextureMode();
+	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
+
+	switch(texMode) {
 	  case FK_TEX_MODULATE:
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
 		break;

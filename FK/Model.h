@@ -6,6 +6,7 @@
 #include <FK/RenderState.h>
 #include <FK/Angle.h>
 #include <FK/IndexFace.h>
+#include <FK/Texture.h>
 #include <FK/Tree.h>
 #include <memory>
 #include <functional>
@@ -1191,6 +1192,74 @@ namespace FK {
 		 */
 		fk_DepthMode	getDepthMode(void) const;
 
+		//! テクスチャモード設定関数
+		/*!
+		 *	テクスチャの描画時における描画色処理モードを設定します。
+		 *	これは、ポリゴンに設定されているマテリアルによる発色と、
+		 *	テクスチャ画像の色をどのように混成するかを制御するものです。
+		 *	それぞれのモードの概要と厳密な計算式を以下に記載します。
+		 *	なお、数式中の \f$ C_f \f$ はポリゴン色、
+		 *	\f$ C_\alpha \f$ ポリゴンの透明度、
+		 *	\f$ T_f \f$ はテクスチャピクセル色、
+		 *	\f$ T_\alpha \f$ はテクスチャの透明度を表します。
+		 *
+		 *	- FK_TEX_MODULATE \n
+		 *		この設定では、ポリゴンの色とテクスチャの色を積算します。
+		 *		そのため、光源による陰影効果が生じます。
+		 *		透明度に関しても積算となります。
+		 *		数式として表すと、色と透明度はそれぞれ
+		 *		\f[
+		 *			(C_f T_f, \; C_\alpha T_\alpha)
+		 *		\f]
+		 *		となります。
+		 *
+		 *	- FK_TEX_REPLACE \n
+		 *		この設定では、ポリゴンの色は完全に無視され、
+		 *		テクスチャのピクセル色がそのまま表示されます。
+		 *		そのため、光源による陰影効果が生じません。
+		 *		また、テクスチャ画像の透明度はそのまま描画に反映されます。
+		 *		数式として表すと、色と透明度はそれぞれ
+		 *		\f[
+		 *			(T_f, \; T_\alpha)
+		 *		\f]
+		 *		となります。
+		 *
+		 *	- FK_TEX_DECAL \n
+		 *		この設定では、各ピクセルの透明度に応じて、
+		 *		ポリゴン色とピクセル色の混合が行われます。
+		 *		光源による陰影効果は、ピクセルの透明度が低い場合に強くなります。
+		 *		透明度は、ポリゴンの透明度がそのまま適用されます。
+		 *		これを数式として表すと、色と透明度はそれぞれ
+		 *		\f[
+		 *			(C_f (1-T_\alpha) + T_f T_\alpha, \; C_\alpha)
+		 *		\f]
+		 *		となります。
+		 *
+		 *	- FK_TEX_NONE \n
+		 *		この設定では、 fk_Model での設定は無視し、
+		 *		fk_Texture::setTextureMode() での設定に従います。
+		 *	.
+		 *	デフォルトでは FK_TEX_NONE が設定されています。
+		 *	なお、同様の設定は fk_Texture::setTextureMode() でも行うことが可能で、
+		 *	fk_Model 側で FK_TEX_NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で FK_TEX_NONE が設定されている場合のみ、
+		 *	fk_Texture 側での設定が有効となります。
+		 *
+		 *	\param[in]		mode	モード
+		 *
+		 *	\sa getTextureMode(), fk_Texture::setTextureMode()
+		 */
+		void	setTextureMode(fk_TexMode mode);
+		
+		//! テクスチャモード取得関数
+		/*!
+		 *	現在のテクスチャモードを取得します。
+		 *
+		 *	\return		テクスチャモード
+		 *
+		 *	\sa setTextureMode()
+		 */
+		fk_TexMode		getTextureMode(void);
 		//@}
 
 		//! \name 座標系情報参照関数
@@ -1901,6 +1970,7 @@ namespace FK {
 		bool				treeFlag;
 		unsigned int		_modelID;
 		bool				treeDelMode;
+		fk_TexMode			texMode;
 
 		fk_HVector			*snapPos;
 		fk_HVector			*snapInhPos;

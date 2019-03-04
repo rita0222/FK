@@ -11,7 +11,8 @@ namespace FK {
 	enum fk_TexMode {
 		FK_TEX_MODULATE,	//!< 積算モード
 		FK_TEX_REPLACE,		//!< 画像モード
-		FK_TEX_DECAL		//!< 線形補間モード
+		FK_TEX_DECAL,		//!< 線形補間モード
+		FK_TEX_NONE			//!< 指定なし
 	};
 
 	//! テクスチャ描画品質を表す列挙型
@@ -19,7 +20,7 @@ namespace FK {
 		FK_TEX_REND_NORMAL,	//!< 標準品質
 		FK_TEX_REND_SMOOTH	//!< 高品質
 	};
-
+	
 	//! テクスチャ外周部の描画モードを表す列挙型
 	enum fk_TexWrapMode {
 		FK_TEX_WRAP_REPEAT,		//!< 繰り返し式
@@ -203,9 +204,15 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *	.
-		 *	なお、デフォルトでは FK_TEX_MODULATE が設定されています。
+		 *	デフォルトでは FK_TEX_MODULATE が設定されています。
+		 *	なお、同様の設定は fk_Model::setTextureMode() でも行うことが可能で、
+		 *	fk_Model 側で FK_TEX_NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で FK_TEX_NONE が設定されている場合のみ、
+		 *	この fk_Texture 側での設定が有効となります。
 		 *
 		 *	\param[in]		mode	モード
+		 *
+		 *	\sa getTextureMode(), fk_Model::setTextureMode()
 		 */
 		void					setTextureMode(fk_TexMode mode);
 

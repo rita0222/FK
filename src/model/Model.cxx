@@ -89,7 +89,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	  treeData(nullptr), drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
 	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
-	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
+	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true), texMode(FK_TEX_NONE),
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
 	  interMode(false), interStatus(false), interStopMode(false)
 {
@@ -469,6 +469,16 @@ void fk_Model::setReverseDrawMode(const bool argFlg)
 bool fk_Model::getReverseDrawMode(void) const
 {
 	return reverseFlag;
+}
+
+void fk_Model::setTextureMode(fk_TexMode argMode)
+{
+	texMode = argMode;
+}
+
+fk_TexMode fk_Model::getTextureMode(void)
+{
+	return texMode;
 }
 
 unsigned int fk_Model::getID(void) const
