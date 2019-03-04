@@ -180,6 +180,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
@@ -201,7 +202,6 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		break;
 	}
 	
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
