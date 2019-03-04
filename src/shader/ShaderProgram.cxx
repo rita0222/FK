@@ -75,6 +75,10 @@
 using namespace std;
 using namespace FK;
 
+const string fk_ShaderProgram::buildIn =
+	#include "GLSL/BuildIn.out"
+	;
+
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0), idVertex(0), idFragment(0), parameter(nullptr)
 {
@@ -189,6 +193,8 @@ GLuint fk_ShaderProgram::Compile(string *argCode, GLuint argKind)
 	GLuint id = glCreateShader(argKind);
 	if(id == 0) return id;
 
+	ReplaceBuildIn(argCode);
+	
 	const GLchar *str[1] = {argCode->c_str()};
 
 	glShaderSource(id, 1, str, nullptr);
@@ -235,4 +241,15 @@ bool fk_ShaderProgram::UpdateLastError(GLuint argShader)
 		lastError.clear();
 		return false;
 	}
+}
+
+void fk_ShaderProgram::ReplaceBuildIn(string *argCode)
+{
+	string	incStr = "#FKBuildIn";
+	string::size_type	pos = 0;
+	while((pos = argCode->find(incStr, pos)) != string::npos) {
+		argCode->replace(pos, incStr.length(), buildIn);
+		pos += buildIn.length();
+	}
+	return;
 }

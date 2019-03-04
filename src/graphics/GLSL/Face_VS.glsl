@@ -1,12 +1,7 @@
 #version 410 core
 
-uniform mat4 fk_ModelViewProjectionMatrix;
-uniform mat4 fk_ModelMatrix;
-uniform mat4 fk_ModelViewMatrix;
-uniform mat4 fk_NormalModelMatrix;
+#FKBuildIn
 
-in vec3 fk_Vertex;
-in vec3 fk_Normal;
 out vec4 varP;
 out vec4 varN;
 

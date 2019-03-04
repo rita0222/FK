@@ -1,7 +1,8 @@
 #version 410 core
 
+#FKBuildIn
+
 flat in vec4 put_color;
-out vec4 fragment;
 
 void main()
 {

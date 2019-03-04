@@ -1,8 +1,9 @@
 #version 410 core
 
+#FKBuildIn
+
 flat in vec4 put_color;
 flat in int draw_flag;
-out vec4 fragment;
 
 void main()
 {

@@ -1,49 +1,9 @@
 #version 410 core
 
-const int LIGHTNUM = 8;
-
-struct Material {
-	vec4 diffuse;
-	vec4 ambient;
-	vec4 specular;
-	float shininess;
-};
-
-struct ParallelLight {
-	vec3 vec;
-	vec4 diffuse;
-	vec4 specular;
-};
-
-struct PointLight {
-	vec3 position;
-	vec4 diffuse;
-	vec4 specular;
-	vec3 attenuation;
-};
-
-struct SpotLight {
-	vec3 position;
-	vec3 vec;
-	vec4 diffuse;
-	vec4 specular;
-	vec3 attenuation;
-	float cut;
-	float exp;
-};
-
-uniform Material fk_Material;
-uniform ParallelLight fk_ParallelLight[LIGHTNUM];
-uniform PointLight fk_PointLight[LIGHTNUM];
-uniform SpotLight fk_SpotLight[LIGHTNUM];
-uniform int fk_ParallelLightNum;
-uniform int fk_PointLightNum;
-uniform int fk_SpotLightNum;
-uniform vec3 fk_CameraPosition;
+#FKBuildIn
 
 in vec4 varP;
 in vec4 varN;
-out vec4 fragment;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {

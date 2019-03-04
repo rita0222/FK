@@ -1,9 +1,7 @@
 #version 410 core
 
-uniform mat4 fk_ModelViewProjectionMatrix;
+#FKBuildIn
 
-in vec3 fk_Vertex;
-in vec4 fk_LineElementColor;
 flat out vec4 put_color;
 
 void main()
