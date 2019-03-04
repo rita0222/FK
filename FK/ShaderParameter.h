@@ -188,6 +188,11 @@ namespace FK {
 		 */
 		bool detachTexture(int unit);
 
+		//! 参照テクスチャ全解除関数
+		/*!
+		 *	attachTexture() メソッドにて設定した参照テクスチャを全て解除します。
+		 */
+		void clearTexture(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool Apply(GLuint);

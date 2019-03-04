@@ -90,6 +90,11 @@ bool fk_ShaderParameter::detachTexture(int argUnit)
 	return ((textureTable.erase(argUnit) > 0) ? true : false);
 }
 
+void fk_ShaderParameter::clearTexture(void)
+{
+	textureTable.clear();
+}
+
 bool fk_ShaderParameter::Apply(GLuint argProgramID)
 {
 	bool result = true;

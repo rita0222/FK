@@ -92,17 +92,13 @@ fk_TextureDraw::~fk_TextureDraw()
 
 void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 {
-	fk_DrawMode				drawMode = argModel->getDrawMode();
-
 	if(shader == nullptr) ShaderSetup();
 	PolygonModeSet();
 
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
 
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 	Draw_Texture(argModel, parameter);
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
 }
 
@@ -168,21 +164,22 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 {
 	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
 	GLuint			vao = texture->GetFaceVAO();
+	fk_DrawMode		drawMode = argModel->getDrawMode();
 
 	if(vao == 0) {
 		vao = VAOSetup(texture);
 	}
 
+	glBindVertexArray(vao);
+	texture->FaceIBOSetup();
+	texture->BindShaderBuffer(argParam->getAttrTable());
+
+	texture->Replace();
 	argParam->attachTexture(1, texture);
 	for(int i = 0; i < 8; ++i) {
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
-	texture->Replace();
-	
-	glBindVertexArray(vao);
-	texture->BindShaderBuffer(argParam->getAttrTable());
-	texture->FaceIBOSetup();
 
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
@@ -204,9 +201,11 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		break;
 	}
 	
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
 	return;
 }
