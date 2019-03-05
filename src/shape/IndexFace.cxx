@@ -1690,7 +1690,7 @@ void fk_IndexFaceSet::EdgeIBOSetup(void)
 	if(edgeIndexFlg == true) {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 					 GLsizei(edgeIndex.size()*sizeof(GLuint)),
-					 &edgeIndex[0], GL_STATIC_DRAW);
+					 edgeIndex.data(), GL_STATIC_DRAW);
 		edgeIndexFlg = false;
 	}
 }
@@ -1706,7 +1706,7 @@ void fk_IndexFaceSet::FaceIBOSetup(void)
 	if(faceIndexFlg == true) {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 					 GLsizei(faceIndex.size()*sizeof(GLuint)),
-					 &faceIndex[0], GL_STATIC_DRAW);
+					 faceIndex.data(), GL_STATIC_DRAW);
 		faceIndexFlg = false;
 	}
 }
