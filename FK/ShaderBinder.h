@@ -252,23 +252,15 @@ namespace FK {
 		static bool	isExtensionInitialized;
 		bool usingProgram;
 
-		GLuint	fboID;
-		GLuint	colorTexID;
-		GLuint	depthTexID;
-
-		static GLuint				fbo_VAO, fbo_IBO, fbo_PosID, fbo_TexCoordID;
-		static std::vector<GLuint>	fbo_Index;
-		static fk_FVecArray			fbo_Pos, fbo_TexCoord;
-		
 		GLint	bufW;
 		GLint	bufH;
+
+		GLuint		rectVAO, fboHandle;
 
 		void ProcPreDraw(void);
 		void ProcPostDraw(void);
 
-		void ColorBufSetup(void);
-		void DepthBufSetup(void);
-		void FBOSetup(void);
+		void	SetupFBO(void);
 	};
 }
 
