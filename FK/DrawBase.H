@@ -74,8 +74,8 @@ namespace FK {
 		static std::list<fk_Model *> *spotLightList;
 
 		void SetParameter(fk_ShaderParameter *);
-
 	private:
+
 		void SetMatrixParam(fk_ShaderParameter *);
 		void SetMaterialParam(fk_ShaderParameter *);
 		void SetLightParam(fk_ShaderParameter *, fk_LightType);
