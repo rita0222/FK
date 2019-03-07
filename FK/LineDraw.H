@@ -15,13 +15,9 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		//fk_ShaderBinder		*modelShader;
-		//fk_ShaderBinder		*elemShader;
 		fk_ShaderBinder		*shader;
 
 		GLuint				modelID, elemID;
-		//void				ModelShaderSetup(void);
-		//void				ElemShaderSetup(void);
 		void				ShaderSetup(void);
 
  		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
