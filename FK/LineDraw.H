@@ -15,40 +15,17 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder		*modelShader;
-		fk_ShaderBinder		*elemShader;
+		//fk_ShaderBinder		*modelShader;
+		//fk_ShaderBinder		*elemShader;
+		fk_ShaderBinder		*shader;
 
-		void				ModelShaderSetup(void);
-		void				ElemShaderSetup(void);
+		GLuint				modelID, elemID;
+		//void				ModelShaderSetup(void);
+		//void				ElemShaderSetup(void);
+		void				ShaderSetup(void);
 
  		void				Draw_Line(fk_Model *, fk_ShaderParameter *);
  		void				Draw_IFS(fk_Model *, fk_ShaderParameter *);
-/*
-		void	DrawShapeLineMaterial(fk_Model *);
-		void	DrawSolidLineMaterial(fk_Model *);
-		int		DrawSolidLineMaterialElem(fk_Edge *, int,
-										  int, double,
-										  std::vector<fk_Material> *,
-										  fk_Color *);
-		void	DrawIFSLineMaterial(fk_Model *);
-
-		void	DrawShapeLinePick(fk_Model *);
-		void	DrawSolidLinePick(fk_Model *);
-		void	DrawSolidLinePickElem(fk_Edge *);
-		void	DrawIFSLinePick(fk_Model *);
-		void	DrawCurveLinePick(fk_Model *);
-		void	DrawSurfaceLinePick(fk_Model *);
-
-		void	DrawShapeLineNormal(fk_Model *, bool);
-		void	DrawSolidLineNormal(fk_Model *, bool);
-		void	DrawSolidLineNormalElem(fk_Edge *, double);
-		void	DrawIFSLineNormal(fk_Model *, bool);
-		void	DrawCurveLineNormal(fk_Model *, bool);
-		void	DrawSurfaceLineNormal(fk_Model *, bool);
-		
-		void	CommonLineDrawFunc(fk_Edge *, bool);
-		void	DrawIFSLineSub(fk_IndexFaceSet *);
-*/
 	};
 }
 #endif /* !__FK_LINE_DRAW_HEADER__ */

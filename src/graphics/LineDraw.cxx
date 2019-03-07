@@ -85,18 +85,17 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
-	: modelShader(nullptr), elemShader(nullptr)
+	: shader(nullptr), modelID(0), elemID(0)
 {
 	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
-	delete modelShader;
-	delete elemShader;
+	delete shader;
 	return;
 }
-
+/*
 void fk_LineDraw::ModelShaderSetup(void)
 {
 	modelShader = new fk_ShaderBinder();
@@ -150,6 +149,49 @@ void fk_LineDraw::ElemShaderSetup(void)
 	prog->link();
 	return;
 }
+*/
+
+void fk_LineDraw::ShaderSetup(void)
+{
+	shader = new fk_ShaderBinder();
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Line_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Line_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	param->reserveAttribute(fk_Line::vertexName);
+	param->reserveAttribute(fk_Line::lineElementColorName);
+	
+	auto progID = prog->getProgramID();
+
+	glBindFragDataLocation(progID, 0, fragmentName.c_str());
+
+	prog->link();
+
+	modelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ModelColor");
+	elemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ElementColor");
+
+	if(modelID == GL_INVALID_ENUM) fk_Window::printf("Subroutine Error1");
+	if(modelID == GL_INVALID_VALUE) fk_Window::printf("Subroutine Error2");
+	if(elemID == GL_INVALID_ENUM) fk_Window::printf("Subroutine Error3");
+	if(elemID == GL_INVALID_VALUE) fk_Window::printf("Subroutine Error4");
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+
+	return;
+}
+
 
 GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 {
@@ -169,49 +211,49 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 {
-	fk_RealShapeType shapeType = argModel->getShape()->getRealShapeType();
-	vector<float> * col = &(argModel->getLineColor()->col);
-	fk_ShaderBinder *shader;
-	fk_ElementMode mode = argModel->getElementMode();
+	auto shapeType = argModel->getShape()->getRealShapeType();
+	auto col = &(argModel->getLineColor()->col);
+	auto mode = argModel->getElementMode();
 
-	if(modelShader == nullptr) ModelShaderSetup();
-	if(elemShader == nullptr) ElemShaderSetup();
-
-	switch(mode) {
-	  case FK_ELEM_MODEL:
-		  shader = modelShader;
-		  break;
-
-	  case FK_ELEM_ELEMENT:
-		  shader = elemShader;
-		  break;
-
-	  default:
-		  return;
-	}
+	if(shader == nullptr) ShaderSetup();
 	
 	auto parameter = shader->getParameter();
-	
+
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
+
+	switch(mode) {
+	  case FK_ELEM_MODEL:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
+		break;
+
+	  case FK_ELEM_ELEMENT:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+		break;
+
+	  default:
+		break;
+	}
+	
+	shader->ProcPreShader();
+
 	glEnable(GL_LINE_SMOOTH);
-	if((argModel->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
 
 	switch(shapeType) {
 	  case FK_SHAPE_LINE:
-		  Draw_Line(argModel, parameter);
-		  break;
+		Draw_Line(argModel, parameter);
+		break;
 
 	  case FK_SHAPE_IFS:
-		  Draw_IFS(argModel, parameter);
-		  break;
-		  
+		Draw_IFS(argModel, parameter);
+		break;
+
 	  default:
 		break;
 	}
 
-	if((argModel->getDrawMode() & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	shader->ProcPostShader();
 	return;
 }
 

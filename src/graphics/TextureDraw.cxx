@@ -132,13 +132,15 @@ void fk_TextureDraw::ShaderSetup(void)
 	param->reserveAttribute(fk_Shape::normalName);
 	param->reserveAttribute(fk_Shape::texCoordName);
 	
-	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
+	auto progID = prog->getProgramID();
+
+	glBindFragDataLocation(progID, 0, fragmentName.c_str());
 
 	prog->link();
 
-	modulateID = glGetSubroutineIndex(prog->getProgramID(), GL_FRAGMENT_SHADER, "Modulate");
-	replaceID = glGetSubroutineIndex(prog->getProgramID(), GL_FRAGMENT_SHADER, "Replace");
-	decalID = glGetSubroutineIndex(prog->getProgramID(), GL_FRAGMENT_SHADER, "Decal");
+	modulateID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
+	replaceID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
+	decalID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
 
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
 
