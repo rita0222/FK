@@ -222,22 +222,21 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
+	shader->ProcPreShader();
 
 	switch(mode) {
 	  case FK_ELEM_MODEL:
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
-		break;
-
-	  case FK_ELEM_ELEMENT:
 		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
 		break;
 
-	  default:
+	  case FK_ELEM_ELEMENT:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
 		break;
+
+	  default:
+		return;
 	}
 	
-	shader->ProcPreShader();
-
 	glEnable(GL_LINE_SMOOTH);
 
 	switch(shapeType) {

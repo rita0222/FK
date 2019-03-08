@@ -108,7 +108,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
 
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+	shader->ProcPreShader();
 
 	switch(shapeType) {
 	  case FK_SHAPE_IFS:
@@ -119,7 +119,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 		break;
 	}
 
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	shader->ProcPostShader();
 	return;
 }
 

@@ -166,7 +166,6 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 {
 	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
 	GLuint			vao = texture->GetFaceVAO();
-	fk_DrawMode		drawMode = argModel->getDrawMode();
 
 	if(vao == 0) {
 		vao = VAOSetup(texture);
@@ -182,7 +181,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPreShader();
+	shader->ProcPreShader();
 
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
@@ -208,6 +207,6 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	if((drawMode & FK_SHADERMODE) == FK_NONEMODE) shader->ProcPostShader();
+	shader->ProcPostShader();
 	return;
 }

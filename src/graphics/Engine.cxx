@@ -321,13 +321,9 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 	fk_DrawBase::SetModel(argModel);
 		
 	SetBlendMode(argModel);
-	fk_DrawMode drawMode = argModel->getDrawMode();
-	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->preShader();
-	
+	argModel->preShader();
 	DrawShapeObj(argModel);
-
-	if((drawMode & FK_SHADERMODE) != FK_NONEMODE) argModel->postShader();
-
+	argModel->postShader();
 	modelShape->finishSetVBO();
 
 	return;
