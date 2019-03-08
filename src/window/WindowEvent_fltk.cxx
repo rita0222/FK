@@ -107,7 +107,7 @@ int fk_Window::drawWindow(bool argDrawMode)
 	Fl_Window				*pWin;
 
 	pWin = static_cast<Fl_Window *>(this->parent());
-	if(pWin == NULL) return 0;
+	if(pWin == nullptr) return 0;
 	// rita_ext: ESC キー抑制
 	/*
 	if(Fl::event_inside(pWin) != 0) {
@@ -397,7 +397,7 @@ Fl_Group * fk_Window::GetInhParentWindow(void)
 {
 	Fl_Group	*mainWin = this;
 
-	while(mainWin->parent() != NULL) {
+	while(mainWin->parent() != nullptr) {
 		mainWin = mainWin->parent();
 	}
 

@@ -79,20 +79,31 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
-	: shader(nullptr), modulateID(0), replaceID(0), decalID(0)
+	: textureShader(nullptr), modulateID(0), replaceID(0), decalID(0)
 {
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete shader;
+	delete textureShader;
 	return;
 }
 
 void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 {
-	if(shader == nullptr) ShaderSetup();
+	auto modelShader = argModel->getShader();
+
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
+		}
+	} else {
+		if(textureShader == nullptr) ShaderSetup();
+		else shader = textureShader;
+	}
+	
 	PolygonModeSet();
 
 	auto parameter = shader->getParameter();
@@ -111,7 +122,8 @@ void fk_TextureDraw::PolygonModeSet(void)
 
 void fk_TextureDraw::ShaderSetup(void)
 {
-	shader = new fk_ShaderBinder();
+	textureShader = new fk_ShaderBinder();
+	shader = textureShader;
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 
@@ -128,16 +140,10 @@ void fk_TextureDraw::ShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute(fk_Shape::vertexName);
-	param->reserveAttribute(fk_Shape::normalName);
-	param->reserveAttribute(fk_Shape::texCoordName);
-	
+	ParamInit(prog, param);
+
 	auto progID = prog->getProgramID();
-
-	glBindFragDataLocation(progID, 0, fragmentName.c_str());
-
-	prog->link();
-
+	
 	modulateID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
 	replaceID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
 	decalID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
@@ -146,6 +152,17 @@ void fk_TextureDraw::ShaderSetup(void)
 
 	return;
 }
+
+void fk_TextureDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+{
+	argParam->reserveAttribute(fk_Shape::vertexName);
+	argParam->reserveAttribute(fk_Shape::normalName);
+	argParam->reserveAttribute(fk_Shape::texCoordName);
+	
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
+	argProg->link();
+}
+
 
 GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
 {

@@ -86,23 +86,33 @@ typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
-	: shader(nullptr)
+	: faceShader(nullptr)
 {
 	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
-	delete shader;
+	delete faceShader;
 	return;
 }
 
 void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 {
-	fk_RealShapeType	shapeType = argModel->getShape()->getRealShapeType();
-	fk_DrawMode			drawMode = argModel->getDrawMode();
+	auto	shapeType = argModel->getShape()->getRealShapeType();
+	auto	drawMode = argModel->getDrawMode();
+	auto	modelShader = argModel->getShader();
 
-	if(shader == nullptr) ShaderSetup();
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
+		}
+	} else {
+		if(faceShader == nullptr) ShaderSetup();
+		else shader = faceShader;
+	}
+
 	PolygonModeSet(drawMode);
 
 	auto parameter = shader->getParameter();
@@ -141,7 +151,8 @@ void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
 
 void fk_FaceDraw::ShaderSetup(void)
 {
-	shader = new fk_ShaderBinder();
+	faceShader = new fk_ShaderBinder();
+	shader = faceShader;
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 
@@ -158,12 +169,17 @@ void fk_FaceDraw::ShaderSetup(void)
 		fk_Window::putString(prog->getLastError());
 	}
 
-	param->reserveAttribute(fk_Shape::vertexName);
-	param->reserveAttribute(fk_Shape::normalName);
-	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
-
-	prog->link();
+	ParamInit(prog, param);
 	return;
+}
+
+void fk_FaceDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+{
+	argParam->reserveAttribute(fk_Shape::vertexName);
+	argParam->reserveAttribute(fk_Shape::normalName);
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
+
+	argProg->link();
 }
 
 GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)

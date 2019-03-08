@@ -81,8 +81,8 @@ using namespace FK;
 /*
 #include <d3d9.h>
 #pragma comment(lib,"d3d9.lib")
-static LPDIRECT3D9			g_lpD3D = NULL;
-static LPDIRECT3DDEVICE9	g_lpD3DDEV = NULL;
+static LPDIRECT3D9			g_lpD3D = nullptr;
+static LPDIRECT3DDEVICE9	g_lpD3DDEV = nullptr;
 */
 
 // グローバル変数
@@ -101,7 +101,7 @@ BOOL CALLBACK EnumWindowsSaveFunc(HWND hWnd, LPARAM lParam)
 
 	// 見えているウインドウだけをセレクト
 	if(IsWindowVisible(hWnd) &&
-		GetWindow(hWnd, GW_OWNER) == NULL &&
+		GetWindow(hWnd, GW_OWNER) == nullptr &&
 		lstrlen(szWindowName) > 0 &&
 		lstrcmp(szClassName, "Progman") != 0 ){
 
@@ -143,9 +143,9 @@ BOOL CALLBACK EnumWindowsLoadFunc(HWND hWnd, LPARAM lParam)
 // プライベートコンストラクタ
 fk_FullscreenController::fk_FullscreenController()
 {
-	pFlWnd = NULL;
-	hFlWnd = NULL;
-	pFkWnd = NULL;
+	pFlWnd = nullptr;
+	hFlWnd = nullptr;
+	pFkWnd = nullptr;
 	fscW = fscH = 0;
 
 	return;
@@ -160,7 +160,7 @@ fk_FullscreenController::~fk_FullscreenController()
 BOOL fk_FullscreenController::SaveWindowPosition()
 {
 	iWindowNumber = 0;
-	if(EnumWindows(EnumWindowsSaveFunc, NULL) == 0)	return FALSE;
+	if(EnumWindows(EnumWindowsSaveFunc, nullptr) == 0)	return FALSE;
 
 	return TRUE;
 }
@@ -168,7 +168,7 @@ BOOL fk_FullscreenController::SaveWindowPosition()
 // ウインドウ位置再現
 BOOL fk_FullscreenController::LoadWindowPosition()
 {
-	if(EnumWindows(EnumWindowsLoadFunc, NULL) == 0)	return FALSE;
+	if(EnumWindows(EnumWindowsLoadFunc, nullptr) == 0)	return FALSE;
 
 	return TRUE;
 }
@@ -195,7 +195,7 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 			// フルスクリーンモードを探す
 			int	i = 0, just = -1, overlap = 0;
 			while(true){
-				if(!EnumDisplaySettings(NULL, i, &DeviceMode)) break;
+				if(!EnumDisplaySettings(nullptr, i, &DeviceMode)) break;
 				if(DeviceMode.dmPelsWidth == (unsigned int)nWidth &&
 					DeviceMode.dmPelsHeight	== (unsigned int)nHeight &&
 					DeviceMode.dmBitsPerPel	== (DWORD)ScreenColors &&
@@ -214,7 +214,7 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 				i++;
 			}
 			if(just == -1) return FALSE;
-			EnumDisplaySettings(NULL, just, &DeviceMode);
+			EnumDisplaySettings(nullptr, just, &DeviceMode);
 			fscW = DeviceMode.dmPelsWidth;
 			fscH = DeviceMode.dmPelsHeight;
 			DeviceMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
@@ -235,7 +235,7 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 
 	// 元の画面モードに戻すですよ
 	if(iFlag == SCMODE_WINDOW) {
-		ChangeDisplaySettings(NULL, 0);
+		ChangeDisplaySettings(nullptr, 0);
 		// 常に最前面設定を解除
 		SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
 			SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
@@ -261,8 +261,8 @@ void fk_FullscreenController::init(Fl_Window *p_main_win, fk_Window *p_draw_win)
 bool fk_FullscreenController::changeByD3D(bool argMode)
 {
 	// D3D9 オブジェクトはグローバルでひとつだけ
-	if(g_lpD3D == NULL) {
-		if(NULL == (g_lpD3D = Direct3DCreate9(D3D_SDK_VERSION))) {
+	if(g_lpD3D == nullptr) {
+		if(nullptr == (g_lpD3D = Direct3DCreate9(D3D_SDK_VERSION))) {
 			MessageBox(hFlWnd, "Direct3D の作成に失敗しました。", "FK_D3D", MB_OK | MB_ICONSTOP);
 			return false;
 		}
@@ -292,7 +292,7 @@ bool fk_FullscreenController::changeByD3D(bool argMode)
 	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	// デバイスの作成は一度だけ、2回目以降は追加スワップチェインを作成
-	if(g_lpD3DDEV == NULL  && argMode) {
+	if(g_lpD3DDEV == nullptr  && argMode) {
 		// デバイス作成は2回試行する
 		for(int i = 0; i < 1; i++) {
 			// デバイスの作成 - T&L HAL
@@ -308,11 +308,11 @@ bool fk_FullscreenController::changeByD3D(bool argMode)
 				}
 			}
 		}
-	} else if(g_lpD3DDEV != NULL && !argMode) {
+	} else if(g_lpD3DDEV != nullptr && !argMode) {
 		g_lpD3DDEV->Release();
-		g_lpD3DDEV = NULL;
+		g_lpD3DDEV = nullptr;
 		g_lpD3D->Release();
-		g_lpD3D = NULL;
+		g_lpD3D = nullptr;
 	}
 
 	return true;

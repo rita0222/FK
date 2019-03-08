@@ -16,6 +16,7 @@ namespace FK {
 	class fk_Shape;
 	class fk_TreeData;
 	class fk_Color;
+	class fk_ShaderBinder;
 
 	using fk_funcSet = std::tuple<unsigned int, std::function<void(void)> >;
 
@@ -1587,6 +1588,11 @@ namespace FK {
 		//! \name 描画制御用関数
 		//@{
 
+		//! シェーダー設定関数
+		void				setShader(fk_ShaderBinder *);
+		fk_ShaderBinder		*getShader(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 		//! 描画処理事前関数
 		/*!
 		 *	この関数は、
@@ -1600,7 +1606,7 @@ namespace FK {
 		 *	本関数を利用するには、FK の描画エンジン内部に精通している必要があります。
 		 *	ソースコードを解析し、内部処理を理解した上で利用することを推奨します。
 		 */
-		std::function<void(void)>	preShader;
+		//std::function<void(void)>	preShader;
 		
 		//! 描画処理事後関数
 		/*!
@@ -1615,7 +1621,8 @@ namespace FK {
 		 *	本関数を利用するには、FK の描画エンジン内部に精通している必要があります。
 		 *	ソースコードを解析し、内部処理を理解した上で利用することを推奨します。
 		 */
-		std::function<void(void)>	postShader;
+		//std::function<void(void)>	postShader;
+#endif
 		//@}
 
 		//! \name 境界ボリューム自動設定関数
@@ -1938,6 +1945,7 @@ namespace FK {
 
 		//@}
 
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		// カスタムテクスチャ描画用エントリポイント
 		virtual void	connectShader(unsigned int) {};
@@ -1949,6 +1957,7 @@ namespace FK {
 		double	getSize(void) const;
 		void	setWidth(double);
 		double	getWidth(void) const;
+
 #endif
 
 	private:
@@ -1982,6 +1991,8 @@ namespace FK {
 		bool				interStopMode;
 
 		std::list<fk_Model *>	interList;
+
+		fk_ShaderBinder		*shader;
 
 		void				EntryTree(void);
 		void				DeleteTree(void);

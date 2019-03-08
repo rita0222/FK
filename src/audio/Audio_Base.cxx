@@ -96,9 +96,9 @@ static fk_IDAdmin * getAdmin(void)
 }
 
 static bool					initStatus = false;
-static ALCcontext			*alContext = NULL;
+static ALCcontext			*alContext = nullptr;
 
-fk_Model *fk_AudioBase::listenerCamera = NULL;
+fk_Model *fk_AudioBase::listenerCamera = nullptr;
 
 
 static bool ALInit(void)
@@ -106,13 +106,13 @@ static bool ALInit(void)
 	ALCdevice	*device;
 	ALCcontext	*context;
 
-	device = alcOpenDevice(NULL);
-	if(device == NULL) {
+	device = alcOpenDevice(nullptr);
+	if(device == nullptr) {
 		return false;
 	}
 
-	context = alcCreateContext(device, NULL);
-	if(context == NULL) {
+	context = alcCreateContext(device, nullptr);
+	if(context == nullptr) {
 		alcCloseDevice (device);
 		return false;
     }
@@ -131,7 +131,7 @@ static bool ALExit(void)
 {
 	ALCdevice *device;
 
-	if(!alcMakeContextCurrent(NULL)) {
+	if(!alcMakeContextCurrent(nullptr)) {
 		return false;
 	}
 
@@ -145,7 +145,7 @@ static bool ALExit(void)
 		return false;
 	}
 
-	alContext = NULL;
+	alContext = nullptr;
 	return true;
 }
 
@@ -223,7 +223,7 @@ fk_AudioBase::fk_AudioBase(void)
 	loopStartTime = 0.0;
 	loopEndTime = -1.0;
 	refDist = 1.0;
-	ref_model = NULL;
+	ref_model = nullptr;
 
 	init();
 
@@ -338,7 +338,7 @@ double fk_AudioBase::getLoopEndTime(void)
 
 void fk_AudioBase::MakeOVInfo(OggVorbis_File *argVF)
 {
-	vorbis_info		*info = NULL;
+	vorbis_info		*info = nullptr;
 
 	info = ov_info(argVF, -1);
 	if(info->channels == 1) {
@@ -389,7 +389,7 @@ void fk_AudioBase::UpdateListener(void)
 	static fk_Vector	camPos, camVec, camUpvec;
 	static ALfloat		orient[6];
 
-	if(listenerCamera != NULL) {
+	if(listenerCamera != nullptr) {
 		camPos = listenerCamera->getInhPosition();
 		camVec = listenerCamera->getInhVec();
 		camUpvec = listenerCamera->getInhUpvec();
@@ -413,7 +413,7 @@ void fk_AudioBase::setPosition(const fk_Vector &argPos)
 void fk_AudioBase::setModel(fk_Model *argModel)
 {
 	ref_model = argModel;
-	if(ref_model != NULL) {
+	if(ref_model != nullptr) {
 		sourcePos = ref_model->getInhPosition();
 		surround = true;
 	}
@@ -429,7 +429,7 @@ void fk_AudioBase::setReferenceDist(double argDist)
 /*
 void fk_AudioBase::disableSurround(void)
 {
-	ref_model = NULL;
+	ref_model = nullptr;
 	sourcePos.init();
 	refDist = 1.0;
 	surround = false;

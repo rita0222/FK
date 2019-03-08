@@ -124,7 +124,7 @@ void fk_TrackBall::setLookTo(fk_Vector vec)
 // カメラポインタは渡されているか
 bool fk_TrackBall::isSetCamera()
 {
-	if(camera != NULL) return true;
+	if(camera != nullptr) return true;
 	else return false;
 }
 

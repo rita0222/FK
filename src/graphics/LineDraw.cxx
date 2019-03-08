@@ -85,137 +85,34 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
-	: shader(nullptr), modelID(0), elemID(0)
+	: lineShader(nullptr), modelID(0), elemID(0)
 {
 	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
-	delete shader;
-	return;
-}
-/*
-void fk_LineDraw::ModelShaderSetup(void)
-{
-	modelShader = new fk_ShaderBinder();
- 	auto prog = modelShader->getProgram();
-	auto param = modelShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Line_Model_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Line_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
-	}
-
-	param->reserveAttribute(fk_Shape::vertexName);
-	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
-
-	prog->link();
+	delete lineShader;
 	return;
 }
 
-void fk_LineDraw::ElemShaderSetup(void)
-{
-	elemShader = new fk_ShaderBinder();
- 	auto prog = elemShader->getProgram();
-	auto param = elemShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Line_Elem_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Line_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
-	}
-
-	param->reserveAttribute(fk_Line::vertexName);
-	param->reserveAttribute(fk_Line::lineElementColorName);
-	
-	glBindFragDataLocation(prog->getProgramID(), 0, fragmentName.c_str());
-
-	prog->link();
-	return;
-}
-*/
-
-void fk_LineDraw::ShaderSetup(void)
-{
-	shader = new fk_ShaderBinder();
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Line_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Line_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
-	}
-
-	param->reserveAttribute(fk_Line::vertexName);
-	param->reserveAttribute(fk_Line::lineElementColorName);
-	
-	auto progID = prog->getProgramID();
-
-	glBindFragDataLocation(progID, 0, fragmentName.c_str());
-
-	prog->link();
-
-	modelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ModelColor");
-	elemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ElementColor");
-
-	if(modelID == GL_INVALID_ENUM) fk_Window::printf("Subroutine Error1");
-	if(modelID == GL_INVALID_VALUE) fk_Window::printf("Subroutine Error2");
-	if(elemID == GL_INVALID_ENUM) fk_Window::printf("Subroutine Error3");
-	if(elemID == GL_INVALID_VALUE) fk_Window::printf("Subroutine Error4");
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
-
-	return;
-}
-
-
-GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
-{
-	GLuint 			vao;
-	
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	argShape->SetLineVAO(vao);
-	argShape->DefineVBO();
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	//fk_Window::printf("Line VAO = %d", vao);
-	return vao;
-}
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 {
 	auto shapeType = argModel->getShape()->getRealShapeType();
 	auto col = &(argModel->getLineColor()->col);
 	auto mode = argModel->getElementMode();
+	auto modelShader = argModel->getShader();
 
-	if(shader == nullptr) ShaderSetup();
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
+		}
+	} else {
+		if(lineShader == nullptr) ShaderSetup();
+		else shader = lineShader;
+	}
 	
 	auto parameter = shader->getParameter();
 
@@ -254,6 +151,63 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 
 	shader->ProcPostShader();
 	return;
+}
+
+void fk_LineDraw::ShaderSetup(void)
+{
+	lineShader = new fk_ShaderBinder();
+	shader = lineShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Line_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Line_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+	
+	modelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ModelColor");
+	elemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ElementColor");
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+
+	return;
+}
+
+void fk_LineDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+{
+	argParam->reserveAttribute(fk_Line::vertexName);
+	argParam->reserveAttribute(fk_Line::lineElementColorName);
+	
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
+	argProg->link();
+}
+
+GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
+{
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetLineVAO(vao);
+	argShape->DefineVBO();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	//fk_Window::printf("Line VAO = %d", vao);
+	return vao;
 }
 
 void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)

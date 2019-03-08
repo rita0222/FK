@@ -106,7 +106,7 @@ fk_AudioOggBuffer::fk_AudioOggBuffer(void)
 	length = current = 0;
 	startStatus = endStatus = surround = false;
 	refDist = 1.0;
-	ref_model = NULL;
+	ref_model = nullptr;
 	return;
 }
 
@@ -442,7 +442,7 @@ bool fk_AudioOggBuffer::PlayBuffer(void)
 
 	if(surround == true) {
 		alSourcei(source, AL_SOURCE_RELATIVE, AL_FALSE);
-		if(ref_model != NULL) {
+		if(ref_model != nullptr) {
 			sourcePos = ref_model->getInhPosition();
 		}
 		alSource3f(source, AL_POSITION, (float)sourcePos.x, (float)sourcePos.y, (float)sourcePos.z);

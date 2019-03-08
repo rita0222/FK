@@ -215,7 +215,7 @@ fk_AppWindow::fk_AppWindow(void)
 	tb = new fk_TrackBall(drawWin, &camera);
 	tbFlag = false;
 	childMode = false;
-	ref_child = NULL;
+	ref_child = nullptr;
 
 	ref_camera = &camera;
 	ref_scene = &scene;
@@ -258,7 +258,7 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 	tb = new fk_TrackBall(drawWin, &camera);
 	tbFlag = false;
 	childMode = true;
-	ref_child = NULL;
+	ref_child = nullptr;
 	argParent.ref_child = this;
 
 	ref_camera = &camera;
@@ -433,7 +433,7 @@ void fk_AppWindow::entry(fk_Model &model, fk_GuideObject &argGuide)
 
 void fk_AppWindow::remove(fk_Model &model, fk_GuideObject &argGuide)
 {
-	argGuide.setParent(NULL);
+	argGuide.setParent(nullptr);
 	argGuide.removeScene(ref_scene);
 	ref_scene->removeModel(&model);
 }
@@ -478,7 +478,7 @@ void fk_AppWindow::entry(fk_Model *model, fk_GuideObject *argGuide)
 
 void fk_AppWindow::remove(fk_Model *model, fk_GuideObject *argGuide)
 {
-	argGuide->setParent(NULL);
+	argGuide->setParent(nullptr);
 	argGuide->removeScene(ref_scene);
 	ref_scene->removeModel(model);
 }
@@ -563,7 +563,7 @@ bool fk_AppWindow::update(bool argForceDraw)
 
 	if(fps_admin.getDrawFlag() || fps == 0 || argForceDraw) {
 		drawWin->drawWindow();
-		if(ref_child != NULL) ref_child->drawWin->drawWindow();
+		if(ref_child != nullptr) ref_child->drawWin->drawWindow();
 	}
 	if(Fl::check() == 0) return false;
 
@@ -577,7 +577,7 @@ bool fk_AppWindow::update(bool argForceDraw)
 	}
 
 	if(tbFlag) tb->update();
-	if(ref_child != NULL) {
+	if(ref_child != nullptr) {
 		ref_child->tb->update();
 	}
 

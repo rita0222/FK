@@ -91,7 +91,7 @@ bool fk_ShaderBinder::Initialize()
 }
 
 fk_ShaderBinder::fk_ShaderBinder()
-	: program(&innerProgram), parameter(&innerParameter),  usingProgram(false),
+	: program(&innerProgram), parameter(&innerParameter),  usingProgram(false), setupFlg(false),
 	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0)
 {
 	isExtensionInitialized = false;
@@ -139,14 +139,16 @@ fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
 {
-	argModel->preShader = [&](){ ProcPreShader(); };
-	argModel->postShader = [&](){ ProcPostShader(); };
+	//argModel->preShader = [&](){ ProcPreShader(); };
+	//argModel->postShader = [&](){ ProcPostShader(); };
+	argModel->setShader(this);
 }
 
 void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 {
-	argModel->preShader = [](){};
-	argModel->postShader = [](){};
+	argModel->setShader(nullptr);
+	//argModel->preShader = [](){};
+	//argModel->postShader = [](){};
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
@@ -307,4 +309,14 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	ProcPostShader();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void fk_ShaderBinder::SetupDone(bool argFlg)
+{
+	setupFlg = argFlg;
+}
+
+bool fk_ShaderBinder::IsSetup(void)
+{
+	return setupFlg;
 }

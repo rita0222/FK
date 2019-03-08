@@ -239,6 +239,8 @@ namespace FK {
 		static bool Initialize(void);
 		void ProcPreShader(void);
 		void ProcPostShader(void);
+		void SetupDone(bool = true);
+		bool IsSetup(void);
 #endif
 	
 	private:
@@ -251,6 +253,7 @@ namespace FK {
 
 		static bool	isExtensionInitialized;
 		bool usingProgram;
+		bool setupFlg;
 
 		GLint	bufW;
 		GLint	bufH;

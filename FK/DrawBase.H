@@ -10,6 +10,7 @@
 namespace FK {
 	class fk_Model;
 	class fk_Shape;
+	class fk_ShaderBinder;
 	class fk_ShaderParameter;
 	
 	class fk_DrawBase {
@@ -73,7 +74,10 @@ namespace FK {
 		static std::list<fk_Model *> *pointLightList;
 		static std::list<fk_Model *> *spotLightList;
 
+		fk_ShaderBinder		*shader;
+
 		void SetParameter(fk_ShaderParameter *);
+
 	private:
 
 		void SetMatrixParam(fk_ShaderParameter *);

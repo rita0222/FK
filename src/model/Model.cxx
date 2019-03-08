@@ -91,13 +91,14 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	  smoothFlag(false), reverseFlag(false),
 	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true), texMode(FK_TEX_NONE),
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
-	  interMode(false), interStatus(false), interStopMode(false)
+	  interMode(false), interStatus(false), interStopMode(false),
+	  shader(nullptr)
 {
 	setBlendMode(FK_BLEND_ALPHA_MODE);
 	setShape(argShape);
 
-	preShader = [](){};
-	postShader = [](){};
+	//preShader = [](){};
+	//postShader = [](){};
 
 	return;
 }
@@ -968,6 +969,16 @@ bool fk_Model::glMoveTo(double argX, double argY, double argZ)
 	ret = glMoveTo_(argX, argY, argZ);
 	PostMove();
 	return ret;
+}
+
+void fk_Model::setShader(fk_ShaderBinder *argShader)
+{
+	shader = argShader;
+}
+
+fk_ShaderBinder * fk_Model::getShader(void)
+{
+	return shader;
 }
 
 void fk_Model::setPickMode(const bool) {}

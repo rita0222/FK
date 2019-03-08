@@ -75,7 +75,7 @@
 #include <FK/Matrix.h>
 #include <FK/Model.h>
 #include <FK/Light.h>
-#include <FK/ShaderParameter.h>
+#include <FK/ShaderBinder.h>
 
 using namespace std;
 using namespace FK;
@@ -128,6 +128,7 @@ list<fk_Model *> * fk_DrawBase::pointLightList;
 list<fk_Model *> * fk_DrawBase::spotLightList;
 
 fk_DrawBase::fk_DrawBase(void)
+	: shader(nullptr)
 {
 	return;
 }
