@@ -193,7 +193,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	texture->BindShaderBuffer(argParam->getAttrTable());
 
 	texture->Replace();
-	argParam->attachTexture(1, texture);
+	argParam->attachTexture(0, texture);
 	for(int i = 0; i < 8; ++i) {
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
