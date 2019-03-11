@@ -2,6 +2,7 @@
 #define __FK_SHADER_PROGRAM_HEADER__
 
 #include <FK/Engine.H>
+#include <FK/ShaderParameter.h>
 
 namespace FK {
 	//! シェーダープログラム格納クラス
@@ -108,22 +109,40 @@ namespace FK {
 		 */
 		bool validate(void);
 
+		//! シェーダープログラムリンクメソッド
+		/*!
+		 *	コンパイル後、プログラムのリンクを実行します。
+		 *	Attribute 変数等の定義はこの前に行っておく必要があります。
+		 *
+		 *	\return
+		 *		リンクに成功すれば true を、失敗すれば false を返します。
+		 *		失敗した場合は、 getLastError() でエラーメッセージを取得できます。
+		 */
+		bool link(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void SetParameter(fk_ShaderParameter *);
+#endif
+
 	private:
 		GLuint idProgram;
 		GLuint idVertex;
 		GLuint idFragment;
 		std::string lastError;
+		fk_ShaderParameter *parameter;
+
+		static const std::string		buildIn;
 
 		GLuint Compile(std::string *, GLuint);
-		bool Link(void);
 		bool UpdateLastError(GLuint);
+		void	ReplaceBuildIn(std::string *);
 	};	
 }
 #endif
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -159,7 +178,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

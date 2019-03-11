@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -101,6 +101,8 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	GLWinHSize = argH;
 	setFrameMode(FK_DEFAULT_FRAME);
 	winNum++;
+	//mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_ACCUM | FL_STENCIL | FL_DEPTH | FL_OPENGL3);
+	mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_STENCIL | FL_DEPTH | FL_OPENGL3);
 
 	stereoMode = false;
 
@@ -113,7 +115,6 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 fk_Window::~fk_Window()
 {
 	snapBuffer.init();
-	clearTextureMemory();
 	winNum--;
 	if(winNum == 0) {
 		delete putWin;
@@ -124,47 +125,19 @@ fk_Window::~fk_Window()
 	return;
 }
 
-void fk_Window::clearTextureMemory(void)
-{
-	engine.ClearTextureMemory();
-	return;
-}
-
-unsigned long fk_Window::getUsingTextureMemory(void)
-{	
-	return engine.GetUsingTextureMemory();
-}
-
-void fk_Window::SetPickViewPort(int &argX, int &argY)
-{
-	int		mouseX = 0;
-	int		mouseY = 0;
-
-	while(getMouseStatus(FK_MOUSE1) == false &&
-		  getMouseStatus(FK_MOUSE2) == false &&
-		  getMouseStatus(FK_MOUSE3) == false) {
-		if(Fl::check() == 0) break;
-		if(winOpenStatus() == false) continue;
-		getMousePosition(&mouseX, &mouseY);
-	}
-	argX = mouseX;
-	argY = mouseY;
-	return;
-}
-
 void fk_Window::drawScene(void)
 {
-	engine.Draw(false);
+	engine.Draw();
 }
 
 void fk_Window::drawSceneLeft(void)
 {
-	engine.StereoDrawMain(FK_STEREO_LEFT);
+	//engine.StereoDrawMain(FK_STEREO_LEFT);
 }
 
 void fk_Window::drawSceneRight(void)
 {
-	engine.StereoDrawMain(FK_STEREO_RIGHT);
+	//engine.StereoDrawMain(FK_STEREO_RIGHT);
 }
 
 void fk_Window::draw(void)
@@ -182,6 +155,7 @@ void fk_Window::draw(void)
 	}
 	
 	if(stereoMode == true) {
+		/*
 		engine.StereoDrawPrep(FK_STEREO_LEFT);
 		preDrawLeft();
 		drawSceneLeft();
@@ -190,8 +164,9 @@ void fk_Window::draw(void)
 		preDrawRight();
 		drawSceneRight();
 		postDrawRight();
+		*/
 	} else {
-		engine.Draw(false);
+		engine.Draw();
 	}
 	postDraw();
 
@@ -227,32 +202,9 @@ bool fk_Window::getWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 	return engine.GetWindowPosition(argPos, retPos);
 }
 
-void fk_Window::setOGLPointerMode(bool argFlg)
-{
-	engine.SetOGLPointerMode(argFlg);
-	return;
-}
-
-bool fk_Window::getOGLPointerMode(void)
-{
-	return engine.GetOGLPointerMode();
-}
-
-void fk_Window::setOGLTextureBindMode(bool argFlg)
-{
-	engine.SetOGLTextureBindMode(argFlg);
-	return;
-}
-
-bool fk_Window::getOGLTextureBindMode(void)
-{
-	return engine.GetOGLTextureBindMode();
-}
-
 // Stereo Mode
 void fk_Window::setOGLStereoMode(bool argFlg)
 {
-	clearTextureMemory();
 	if(argFlg == true) {
 		GLboolean	val = GL_FALSE;
 		Fl_Window	*pWin = dynamic_cast<Fl_Window *>(GetInhParentWindow());

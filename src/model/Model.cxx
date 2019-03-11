@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -80,58 +80,33 @@
 using namespace std;
 using namespace FK;
 
-typedef list<fk_Model *>::iterator	mi;
+using mi = list<fk_Model *>::iterator;
 
 static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(FK_MODEL)
+	: fk_Boundary(FK_MODEL), shape(nullptr), parentModel(nullptr),
+	  treeData(nullptr), drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
+	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
+	  smoothFlag(false), reverseFlag(false),
+	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true), texMode(FK_TEX_NONE),
+	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
+	  interMode(false), interStatus(false), interStopMode(false),
+	  shader(nullptr)
 {
-	setDrawMode(FK_NONEMODE);
-	setMaterialMode(FK_CHILD_MODE);
 	setBlendMode(FK_BLEND_ALPHA_MODE);
-	setDepthMode(FK_DEPTH_READ_AND_WRITE);
-
-	material = new fk_Material();
-	parent = nullptr;
-	treeData = nullptr;
-	shape = nullptr;
 	setShape(argShape);
-	deleteMaterial();
-	setSize(1.0);
-	setWidth(1.0);
-	setPickMode(false);
-	setReverseDrawMode(false);
 
-	pointColor = nullptr;
-	lineColor = nullptr;
-
-	_modelID = _globalModelID;
-	_globalModelID++;
-
-	treeFlag = false;
-	treeDelMode = true;
-	smoothFlag = false;
-
-	snapPos = nullptr;
-	snapInhPos = nullptr;
-	snapAngle = nullptr;
-	snapFlag = false;
-
-	interMode = false;
-	interStatus = false;
-	interStopMode = false;
+	//preShader = [](){};
+	//postShader = [](){};
 
 	return;
 }
 
 fk_Model::~fk_Model()
 {
-	deletePointColor();
-	deleteLineColor();
 	DeleteTree();
 
-	delete material;
 	delete snapPos;
 	delete snapInhPos;
 	delete snapAngle;
@@ -160,6 +135,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 	if(drawModeFlag == true) {
 		switch(type) {
 		  case FK_POINT:
+		  case FK_PARTICLESET:
 			drawMode = FK_POINTMODE;
 			break;
 
@@ -201,48 +177,31 @@ void fk_Model::setShape(fk_Shape *argShape)
 
 void fk_Model::setMaterial(const fk_Material &argMate)
 {
-	*material = argMate;
-	materialFlag = true;
+	material = argMate;
 	return;
 }
 
 void fk_Model::setPointColor(fk_Color *argColor)
 {
-	if(argColor == nullptr) {
-		return;
-	}
-
 	setPointColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
 
 void fk_Model::setPointColor(float argR, float argG, float argB)
 {
-	if(pointColor == nullptr) {
-		pointColor = new fk_Color();
-	}
-
-	pointColor->set(argR, argG, argB);
+	pointColor.set(argR, argG, argB);
 	return;
 }
 
 void fk_Model::setLineColor(fk_Color *argColor)
 {
-	if(argColor == nullptr) {
-		return;
-	}
-
 	setLineColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
 
 void fk_Model::setLineColor(float argR, float argG, float argB)
 {
-	if(lineColor == nullptr) {
-		lineColor = new fk_Color();
-	}
-
-	lineColor->set(argR, argG, argB);
+	lineColor.set(argR, argG, argB);
 	return;
 }
 
@@ -253,78 +212,26 @@ fk_Shape * fk_Model::getShape(void) const
 
 fk_Material * fk_Model::getMaterial(void)
 {
-	return material;
-}
-
-fk_Material * fk_Model::getInhMaterial(void)
-{
-	if(parent != nullptr) {
-		if(materialFlag == false) {
-			return parent->getInhMaterial();
-		} else {
-			return material;
-		}
-	}
-	return material;
+	return &material;
 }
 
 fk_Color * fk_Model::getPointColor(void)
 {
-	return pointColor;
-}
-
-fk_Color * fk_Model::getInhPointColor(void)
-{
-	if(parent != nullptr) {
-		if(pointColor == nullptr) {
-			return parent->getInhPointColor();
-		} else {
-			return pointColor;
-		}
-	}
-	return pointColor;
+	return &pointColor;
 }
 
 fk_Color * fk_Model::getLineColor(void)
 {
-	return lineColor;
-}
-
-fk_Color * fk_Model::getInhLineColor(void)
-{
-	if(parent != nullptr) {
-		if(lineColor == nullptr) {
-			return parent->getInhLineColor();
-		} else {
-			return lineColor;
-		}
-	}
-	return lineColor;
-}
-
-void fk_Model::deleteMaterial(void)
-{
-	materialFlag = false;
-	return;
-}
-
-void fk_Model::deletePointColor(void)
-{
-	delete pointColor;
-	pointColor = nullptr;
-	return;
-}
-
-void fk_Model::deleteLineColor(void)
-{
-	delete lineColor;
-	lineColor = nullptr;
-	return;
+	return &lineColor;
 }
 
 void fk_Model::setDrawMode(const fk_DrawMode argMode)
 {
+	if(drawMode == argMode) return;
 	drawMode = argMode;
+	if(shape != nullptr) {
+		shape->forceUpdateAttr();
+	}
 	return;
 }
 
@@ -333,18 +240,22 @@ fk_DrawMode fk_Model::getDrawMode(void) const
 	return drawMode;
 }
 
-void fk_Model::setMaterialMode(const fk_MaterialMode argMode)
+void fk_Model::setElementMode(const fk_ElementMode argMode)
 {
-	materialMode = argMode;
-	return;
+	elemMode = argMode;
 }
 
-fk_MaterialMode fk_Model::getMaterialMode(void) const
+fk_ElementMode fk_Model::getElementMode(void) const
 {
-	return materialMode;
+	return elemMode;
 }
 
-void fk_Model::setBlendMode(const fk_BlendMode argMode, const fk_BlendFactor argSrcFactor, const fk_BlendFactor argDstFactor)
+void fk_Model::setMaterialMode(const fk_MaterialMode) {}
+fk_MaterialMode fk_Model::getMaterialMode(void) const { return FK_PARENT_MODE; }
+
+void fk_Model::setBlendMode(const fk_BlendMode argMode,
+							const fk_BlendFactor argSrcFactor,
+							const fk_BlendFactor argDstFactor)
 {
 	switch(argMode) {
 	  case FK_BLEND_ALPHA_MODE:
@@ -414,38 +325,38 @@ fk_DepthMode fk_Model::getDepthMode(void) const
 
 fk_Matrix fk_Model::getInhMatrix(void) const
 {
-	if(parent == nullptr) return getMatrix();
-	return (parent->getInhMatrix() * getMatrix());
+	if(parentModel == nullptr) return getMatrix();
+	return (parentModel->getInhMatrix() * getMatrix());
 }
 
 fk_Matrix fk_Model::getInhInvMatrix(void) const
 {
-	if(parent == nullptr) return getInvMatrix();
-	return (getInvMatrix() * parent->getInhInvMatrix());
+	if(parentModel == nullptr) return getInvMatrix();
+	return (getInvMatrix() * parentModel->getInhInvMatrix());
 }
 
 fk_OrthoMatrix fk_Model::getInhBaseMatrix(void) const
 {
-	if(parent == nullptr) return OrthoMatrix;
-	return (parent->getInhBaseMatrix() * OrthoMatrix);
+	if(parentModel == nullptr) return OrthoMatrix;
+	return (parentModel->getInhBaseMatrix() * OrthoMatrix);
 }
 
 fk_OrthoMatrix fk_Model::getInhInvBaseMatrix(void) const
 {
 	fk_OrthoMatrix	RetMat = OrthoMatrix;
 	RetMat.inverse();
-	if(parent == nullptr) return RetMat;
-	return (parent->getInhInvBaseMatrix() * RetMat);
+	if(parentModel == nullptr) return RetMat;
+	return (parentModel->getInhInvBaseMatrix() * RetMat);
 }
 
 fk_Vector fk_Model::getInhPosition(void) const
 {
 	fk_Vector retVec;
 
-	if(parent == nullptr) {
+	if(parentModel == nullptr) {
 		retVec = Position;
 	} else {
-		retVec = parent->getInhMatrix() * Position;
+		retVec = parentModel->getInhMatrix() * Position;
 	}
 	return retVec;
 }
@@ -454,20 +365,20 @@ fk_Vector fk_Model::getInhVec(void) const
 {
 	fk_HVector	hvec(Vec);
 
-	if(parent == nullptr) return Vec;
+	if(parentModel == nullptr) return Vec;
 
 	hvec.isvec();
-	return (parent->getInhMatrix() * hvec);
+	return (parentModel->getInhMatrix() * hvec);
 }
 	
 fk_Vector fk_Model::getInhUpvec(void) const
 {
 	fk_HVector	hvec(UpVec);
 
-	if(parent == nullptr) return UpVec;
+	if(parentModel == nullptr) return UpVec;
 	
 	hvec.isvec();
-	return (parent->getInhMatrix() * hvec);
+	return (parentModel->getInhMatrix() * hvec);
 }
 
 fk_Vector fk_Model::getInhUpVec(void) const
@@ -480,7 +391,7 @@ fk_Angle fk_Model::getInhAngle(void) const
 	fk_Angle		retAngle;
 	fk_Vector		vec, upvec;
 
-	if(parent == nullptr) return Angle;
+	if(parentModel == nullptr) return Angle;
 	vec = getInhVec();
 	upvec = getInhUpVec();
 	VectorToAngle(&retAngle, &vec, &upvec);
@@ -489,45 +400,42 @@ fk_Angle fk_Model::getInhAngle(void) const
 
 double fk_Model::getInhScale(void) const
 {
-	if(parent == nullptr) {
+	if(parentModel == nullptr) {
 		return Scale;
 	}
-	return (parent->getInhScale() * Scale);
+	return (parentModel->getInhScale() * Scale);
+}
+
+void fk_Model::setPointSize(const double argSize)
+{
+	if(argSize <= FK_EPS) return;
+	pointSize = argSize;
+	return;
 }
 
 void fk_Model::setSize(const double argSize)
 {
-	if(argSize <= FK_EPS) return;
-	drawSize = argSize;
+	setPointSize(argSize);
+}
+
+void fk_Model::setWidth(const double)
+{
 	return;
 }
 
-void fk_Model::setWidth(const double argWidth)
+double fk_Model::getPointSize(void) const
 {
-	if(argWidth <= FK_EPS) return;
-	drawWidth = argWidth;
-	return;
+	return pointSize;
 }
 
 double fk_Model::getSize(void) const
 {
-	return drawSize;
+	return getPointSize();
 }
 
 double fk_Model::getWidth(void) const
 {
-	return drawWidth;
-}
-
-void fk_Model::setPickMode(const bool argFlg)
-{
-	pickFlag = argFlg;
-	return;
-}
-
-bool fk_Model::getPickMode(void) const
-{
-	return pickFlag;
+	return 0.0;
 }
 
 #ifndef _FREEBSD_
@@ -564,11 +472,20 @@ bool fk_Model::getReverseDrawMode(void) const
 	return reverseFlag;
 }
 
+void fk_Model::setTextureMode(fk_TexMode argMode)
+{
+	texMode = argMode;
+}
+
+fk_TexMode fk_Model::getTextureMode(void)
+{
+	return texMode;
+}
+
 unsigned int fk_Model::getID(void) const
 {
 	return _modelID;
 }
-
 
 void fk_Model::snapShot(void)
 {
@@ -1053,3 +970,16 @@ bool fk_Model::glMoveTo(double argX, double argY, double argZ)
 	PostMove();
 	return ret;
 }
+
+void fk_Model::setShader(fk_ShaderBinder *argShader)
+{
+	shader = argShader;
+}
+
+fk_ShaderBinder * fk_Model::getShader(void)
+{
+	return shader;
+}
+
+void fk_Model::setPickMode(const bool) {}
+bool fk_Model::getPickMode(void) const { return true; }

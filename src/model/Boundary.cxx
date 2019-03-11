@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -74,27 +74,12 @@
 using namespace FK;
 
 fk_Boundary::fk_Boundary(fk_ObjectType argType)
-	: fk_MatrixAdmin(argType)
+	: fk_MatrixAdmin(argType), bMode(FK_B_NONE), bDrawToggle(false),
+	  bLineColor(nullptr), bIntLineColor(nullptr), bLineWidth(1.0),
+	  bSphereRad(0.0), bAABBSize(nullptr), bOBBSize(nullptr),
+	  bCapSPos(nullptr), bCapEPos(nullptr), bCapRad(0.0),
+	  bSphere(nullptr), bAABB(nullptr), bOBB(nullptr), bCapsule(nullptr)
 {
-	bMode = FK_B_NONE;
-	bDrawToggle = false;
-	bLineWidth = 1.0;
-	bLineColor = nullptr;
-	bIntLineColor = nullptr;
-
-	bSphereRad = 0.0;
-	bAABBSize = nullptr;
-	bOBBSize = nullptr;
-	bCapSPos = nullptr;
-	bCapEPos = nullptr;
-	bCapRad = 0.0;
-
-	bSphere = nullptr;
-	bAABB = nullptr;
-	bOBB = nullptr;
-	bCapsule = nullptr;
-	bCapModel = nullptr;
-
 	return;
 }
 
@@ -112,7 +97,6 @@ fk_Boundary::~fk_Boundary()
 	delete bAABB;
 	delete bOBB;
 	delete bCapsule;
-	delete bCapModel;
 
 	return;
 }
@@ -196,8 +180,8 @@ fk_Vector fk_Boundary::getOBBSize(void)
 
 void fk_Boundary::setCapsule(fk_Vector argS, fk_Vector argE, double argRad)
 {
-	fk_Vector	pos, vec;
-
+	fk_Vector	vec;
+	
 	if(bCapSPos == nullptr) bCapSPos = new fk_Vector;
 	if(bCapEPos == nullptr) bCapEPos = new fk_Vector;
 	if(argRad < 0.0) return;
@@ -206,13 +190,12 @@ void fk_Boundary::setCapsule(fk_Vector argS, fk_Vector argE, double argRad)
 	*bCapEPos = argE;
 	bCapRad = argRad;
 
-	if(bCapModel == nullptr) bCapModel = new fk_Model;
-
-	pos = (argS + argE)/2.0;
 	vec = argE - argS;
-	
-	bCapModel->glMoveTo(pos);
-	bCapModel->glVec(vec);
+//	bModel->glVec(vec);
+/*
+	pos = (argS + argE)/2.0;
+	bModel->glMoveTo(pos);
+*/
 
 	if(bCapsule == nullptr) {
 		bCapsule = new fk_IndexFaceSet;
@@ -319,11 +302,5 @@ fk_IndexFaceSet * fk_Boundary::GetBShape(void)
 		break;
 	}
 	return nullptr;
-}
-
-fk_Model * fk_Boundary::GetCapsuleModel(void)
-{
-	if(bCapModel == nullptr) bCapModel = new fk_Model;
-	return bCapModel;
 }
 

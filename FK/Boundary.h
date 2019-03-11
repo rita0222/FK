@@ -18,15 +18,15 @@ namespace FK {
 		FK_B_NONE			//!<	未定義境界
 	};
 
-	typedef unsigned int fk_DrawMode;
+	using fk_DrawMode = unsigned int;
 
-	const fk_DrawMode	FK_NONEMODE				= 0x0000;
-	const fk_DrawMode	FK_POINTMODE			= 0x0001;
-	const fk_DrawMode	FK_LINEMODE				= 0x0002;
-	const fk_DrawMode	FK_POLYMODE				= 0x0004;
-	const fk_DrawMode	FK_BACK_POLYMODE		= (0x0008 | FK_POLYMODE);
-	const fk_DrawMode	FK_FRONTBACK_POLYMODE	= (0x0010 | FK_POLYMODE);
-	const fk_DrawMode	FK_TEXTUREMODE			= 0x002;
+	const fk_DrawMode	FK_NONEMODE 			= 0;
+	const fk_DrawMode 	FK_POINTMODE 			= 1 << 1;
+	const fk_DrawMode	FK_LINEMODE 			= 1 << 2;
+	const fk_DrawMode	FK_POLYMODE 			= 1 << 3;
+	const fk_DrawMode	FK_BACK_POLYMODE		= ((1 << 4) | FK_POLYMODE);
+	const fk_DrawMode	FK_FRONTBACK_POLYMODE	= ((1 << 5) | FK_POLYMODE);
+	const fk_DrawMode	FK_TEXTUREMODE			= 1 << 6;
 
 	//! 境界ボリュームを管理するクラス
 	/*!
@@ -374,7 +374,6 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_IndexFaceSet *		GetBShape(void);
-		fk_Model *				GetCapsuleModel(void);
 #endif
 
 	private:
@@ -393,7 +392,6 @@ namespace FK {
 		fk_IndexFaceSet		*bAABB;
 		fk_IndexFaceSet		*bOBB;
 		fk_IndexFaceSet		*bCapsule;
-		fk_Model			*bCapModel;
 	};
 }
 
@@ -401,7 +399,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -437,7 +435,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

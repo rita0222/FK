@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,6 +69,8 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
+
 #include <FK/Material.h>
 #include <FK/MatExample.h>
 #include <FK/Error.H>
@@ -94,6 +96,7 @@ void fk_Color::init(void) { init(0.0f, 0.0f, 0.0f, 1.0f); }
 
 void fk_Color::init(float argR, float argG, float argB, float argA)
 {
+	col.resize(4);
 	col[0] = clamp(argR);
 	col[1] = clamp(argG);
 	col[2] = clamp(argB);
@@ -165,7 +168,7 @@ namespace FK {
 
 fk_Color & fk_Color::operator *=(double argD)
 {
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] * float(argD));
 	}
 
@@ -176,7 +179,7 @@ fk_Color & fk_Color::operator /=(double argD)
 {
 	if(fabs(argD) < FK_COLOR_EPS) return *this;
 
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] / float(argD));
 	}
 
@@ -185,7 +188,7 @@ fk_Color & fk_Color::operator /=(double argD)
 
 fk_Color & fk_Color::operator +=(const fk_Color &argC)
 {
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] + argC.col[i]);
 	}
 
@@ -194,7 +197,7 @@ fk_Color & fk_Color::operator +=(const fk_Color &argC)
 
 fk_Color & fk_Color::operator -=(const fk_Color &argC)
 {
-	for(int i = 0; i < 3; i++) {
+	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] - argC.col[i]);
 	}
 
@@ -263,58 +266,67 @@ void fk_Color::setHSV(double argH, double argS, double argV)
 	return;
 }
 
+string fk_Color::OutStr(void)
+{
+	stringstream		ss;
+
+	ss << "(" << col[0] << ", " << col[1] << ", " << col[2] << ", " << col[3] << ")";
+	return ss.str();
+}
+
 // friend 宣言による外部関数化した二項演算子
+namespace FK {
+	fk_Color operator +(const fk_Color &argA, const fk_Color &argB)
+	{
+		fk_Color	tmp(fk_Color::clamp(argA.col[0] + argB.col[0]),
+						fk_Color::clamp(argA.col[1] + argB.col[1]),
+						fk_Color::clamp(argA.col[2] + argB.col[2]),
+						fk_Color::clamp(argA.col[3] + argB.col[3]));
 
-fk_Color operator +(const fk_Color &argA, const fk_Color &argB)
-{
-	fk_Color	tmp(fk_Color::clamp(argA.col[0] + argB.col[0]),
-					fk_Color::clamp(argA.col[1] + argB.col[1]),
-					fk_Color::clamp(argA.col[2] + argB.col[2]),
-					fk_Color::clamp(argA.col[3] + argB.col[3]));
-
-	return tmp;
-}
+		return tmp;
+	}
 					
-fk_Color operator -(const fk_Color &argA, const fk_Color &argB)
-{
-	fk_Color	tmp(fk_Color::clamp(argA.col[0] - argB.col[0]),
-					fk_Color::clamp(argA.col[1] - argB.col[1]),
-					fk_Color::clamp(argA.col[2] - argB.col[2]),
-					fk_Color::clamp(argA.col[3] - argB.col[3]));
+	fk_Color operator -(const fk_Color &argA, const fk_Color &argB)
+	{
+		fk_Color	tmp(fk_Color::clamp(argA.col[0] - argB.col[0]),
+						fk_Color::clamp(argA.col[1] - argB.col[1]),
+						fk_Color::clamp(argA.col[2] - argB.col[2]),
+						fk_Color::clamp(argA.col[3] - argB.col[3]));
 
-	return tmp;
-}
+		return tmp;
+	}
 
-fk_Color operator *(const fk_Color &argC, double argD)
-{
-	fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
-					fk_Color::clamp(argC.col[1] * float(argD)),
-					fk_Color::clamp(argC.col[2] * float(argD)),
-					fk_Color::clamp(argC.col[3] * float(argD)));
+	fk_Color operator *(const fk_Color &argC, double argD)
+	{
+		fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
+						fk_Color::clamp(argC.col[1] * float(argD)),
+						fk_Color::clamp(argC.col[2] * float(argD)),
+						fk_Color::clamp(argC.col[3] * float(argD)));
 
-	return tmp;
-}
+		return tmp;
+	}
 					
-fk_Color operator *(double argD, const fk_Color &argC)
-{
-	fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
-					fk_Color::clamp(argC.col[1] * float(argD)),
-					fk_Color::clamp(argC.col[2] * float(argD)),
-					fk_Color::clamp(argC.col[3] * float(argD)));
+	fk_Color operator *(double argD, const fk_Color &argC)
+	{
+		fk_Color	tmp(fk_Color::clamp(argC.col[0] * float(argD)),
+						fk_Color::clamp(argC.col[1] * float(argD)),
+						fk_Color::clamp(argC.col[2] * float(argD)),
+						fk_Color::clamp(argC.col[3] * float(argD)));
 
-	return tmp;
-}
+		return tmp;
+	}
 					
-fk_Color	operator /(const fk_Color &argC, double argD)
-{
-	if(fabs(argD) < FK_COLOR_EPS) return argC;
+	fk_Color	operator /(const fk_Color &argC, double argD)
+	{
+		if(fabs(argD) < FK_COLOR_EPS) return argC;
 
-	fk_Color	tmp(fk_Color::clamp(argC.col[0] / float(argD)),
-					fk_Color::clamp(argC.col[1] / float(argD)),
-					fk_Color::clamp(argC.col[2] / float(argD)),
-					fk_Color::clamp(argC.col[3] / float(argD)));
+		fk_Color	tmp(fk_Color::clamp(argC.col[0] / float(argD)),
+						fk_Color::clamp(argC.col[1] / float(argD)),
+						fk_Color::clamp(argC.col[2] / float(argD)),
+						fk_Color::clamp(argC.col[3] / float(argD)));
 
-	return tmp;
+		return tmp;
+	}
 }
 
 fk_Material::fk_Material()
@@ -325,31 +337,25 @@ fk_Material::fk_Material()
 
 void fk_Material::init(void)
 {
-	setAlpha(1.0f);
-	setAmbient(0.3f, 0.3f, 0.3f);
-	setDiffuse(0.0f, 0.0f, 0.0f);
-	setEmission(0.0f, 0.0f, 0.0f);
-	setSpecular(0.2f, 0.2f, 0.2f);
-	setShininess(17.0f);
+	setAmbient(0.3, 0.3, 0.3);
+	setDiffuse(0.0, 0.0, 0.0);
+	setSpecular(1.0, 1.0, 1.0);
+	setShininess(30.0);
 }
 
 fk_Material::fk_Material(const fk_Material &argMat)
 	: fk_BaseObject(FK_MATERIAL)
 {
-	alpha = argMat.alpha;
 	ambient = argMat.ambient;
 	diffuse = argMat.diffuse;
-	emission = argMat.emission;
 	specular = argMat.specular;
 	shininess = argMat.shininess;
 }
 
 fk_Material & fk_Material::operator =(const fk_Material &argMat)
 {
-	alpha = argMat.alpha;
 	ambient = argMat.ambient;
 	diffuse = argMat.diffuse;
-	emission = argMat.emission;
 	specular = argMat.specular;
 	shininess = argMat.shininess;
 
@@ -363,42 +369,31 @@ void fk_Material::setAlpha(float argA)
 					"Alpha Value Error.");
 		return;
 	}
-	alpha = argA;
 
 	ambient.setA(argA);
 	diffuse.setA(argA);
-	emission.setA(argA);
 	specular.setA(argA);
+	return;
 }
 
 void fk_Material::setAlpha(double argA)
 {
 	setAlpha(float(argA));
-	return;
 }
 
 void fk_Material::setAmbient(fk_Color argC)
 {
 	ambient = argC;
-	ambient.setA(alpha);
 }
 
 void fk_Material::setDiffuse(fk_Color argC)
 {
 	diffuse = argC;
-	diffuse.setA(alpha);
-}
-
-void fk_Material::setEmission(fk_Color argC)
-{
-	emission = argC;
-	emission.setA(alpha);
 }
 
 void fk_Material::setSpecular(fk_Color argC)
 {
 	specular = argC;
-	specular.setA(alpha);
 }
 
 void fk_Material::setAmbDiff(fk_Color argC)
@@ -407,58 +402,46 @@ void fk_Material::setAmbDiff(fk_Color argC)
 	setDiffuse(argC);
 }
 
-void fk_Material::setAmbient(float argR, float argG, float argB)
+void fk_Material::setAmbient(float argR, float argG, float argB, float argA)
 {
-	ambient.init(argR, argG, argB, alpha);
+	ambient.init(argR, argG, argB, argA);
 }
 
-void fk_Material::setDiffuse(float argR, float argG, float argB)
+void fk_Material::setDiffuse(float argR, float argG, float argB, float argA)
 {
-	diffuse.init(argR, argG, argB, alpha);
+	diffuse.init(argR, argG, argB, argA);
 }
 
-void fk_Material::setEmission(float argR, float argG, float argB)
+void fk_Material::setSpecular(float argR, float argG, float argB, float argA)
 {
-	emission.init(argR, argG, argB, alpha);
-
+	specular.init(argR, argG, argB, argA);
 }
 
-void fk_Material::setSpecular(float argR, float argG, float argB)
+void fk_Material::setAmbDiff(float argR, float argG, float argB, float argA)
 {
-	specular.init(argR, argG, argB, alpha);
+	ambient.init(argR, argG, argB, argA);  
+	diffuse.init(argR, argG, argB, argA);
 }
 
-void fk_Material::setAmbDiff(float argR, float argG, float argB)
+void fk_Material::setAmbient(double argR, double argG, double argB, double argA)
 {
-	ambient.init(argR, argG, argB, alpha);  
-	diffuse.init(argR, argG, argB, alpha);
+	ambient.init(float(argR), float(argG), float(argB), float(argA));
 }
 
-void fk_Material::setAmbient(double argR, double argG, double argB)
+void fk_Material::setDiffuse(double argR, double argG, double argB, double argA)
 {
-	ambient.init(float(argR), float(argG), float(argB), alpha);
+	diffuse.init(float(argR), float(argG), float(argB), float(argA));
 }
 
-void fk_Material::setDiffuse(double argR, double argG, double argB)
+void fk_Material::setSpecular(double argR, double argG, double argB, double argA)
 {
-	diffuse.init(float(argR), float(argG), float(argB), alpha);
+	specular.init(float(argR), float(argG), float(argB), float(argA));
 }
 
-void fk_Material::setEmission(double argR, double argG, double argB)
+void fk_Material::setAmbDiff(double argR, double argG, double argB, double argA)
 {
-	emission.init(float(argR), float(argG), float(argB), alpha);
-
-}
-
-void fk_Material::setSpecular(double argR, double argG, double argB)
-{
-	specular.init(float(argR), float(argG), float(argB), alpha);
-}
-
-void fk_Material::setAmbDiff(double argR, double argG, double argB)
-{
-	ambient.init(float(argR), float(argG), float(argB), alpha);	
-	diffuse.init(float(argR), float(argG), float(argB), alpha);
+	ambient.init(float(argR), float(argG), float(argB), float(argA));	
+	diffuse.init(float(argR), float(argG), float(argB), float(argA));
 }
 
 void fk_Material::setShininess(float argS)
@@ -477,25 +460,19 @@ void fk_Material::setShininess(double argS)
 	return;
 }
 
-float fk_Material::getAlpha(void) { return alpha; }
+float fk_Material::getAlpha(void) { return diffuse.getA(); }
 fk_Color * fk_Material::getAmbient(void) { return &ambient; }
 fk_Color * fk_Material::getDiffuse(void) { return &diffuse; }
-fk_Color * fk_Material::getEmission(void) { return &emission; }
 fk_Color * fk_Material::getSpecular(void) { return &specular; }
 float fk_Material::getShininess(void) { return shininess; }
 
 namespace FK {
 	bool operator ==(fk_Material argA, fk_Material argB)
 	{
-		float al, sh;
-
-		al = argA.alpha - argB.alpha;
-		sh = argA.shininess - argB.shininess;
-		return(fabs((float)al) < FK_COLOR_EPS &&
-			   fabs((float)sh) < FK_COLOR_EPS &&
+		float sh = argA.shininess - argB.shininess;
+		return(fabs((float)sh) < FK_COLOR_EPS &&
 			   argA.ambient == argB.ambient &&
 			   argA.diffuse == argB.diffuse &&
-			   argA.emission == argB.emission &&
 			   argA.specular == argB.specular);
 	}
 }
@@ -506,14 +483,19 @@ void fk_Material::initDefault(void)
 	return;
 }
 
+void fk_Material::setEmission(float, float, float) {}
+void fk_Material::setEmission(double, double, double) {}
+void fk_Material::setEmission(fk_Color) {}
+fk_Color * fk_Material::getEmission(void) { return &ambient; }
+
 void fk_Material::Print(int argTabSize, string argTag)
 {
 	string			tab;
-	int				i;
+	_st				i;
 	stringstream	ss;
 	
 	tab.erase();
-	for(i = 0; i < argTabSize; i++) tab += '\t';
+	for(i = 0; i < _st(argTabSize); i++) tab += '\t';
 
 	if(argTag.size() == 0) {
 		fk_PutError(tab + "Mat = {");
@@ -521,49 +503,20 @@ void fk_Material::Print(int argTabSize, string argTag)
 		fk_PutError(tab + "Mat[" + argTag + "] = {");
 	}
 
-	ss << "\talpha = " << alpha << ";";
+	ss << "\tamb = " << ambient.OutStr() << ";";
 	fk_PutError(tab + ss.str());
 	ss.clear();
 
-	ss << "\tamb = (";
-	for(i = 0; i < 4; i++) {
-		ss << ambient.col[i];
-		if(i != 3) ss << ", ";
-	}
-	ss << ");";
+	ss << "\tdiff = " << diffuse.OutStr() << ";";
 	fk_PutError(tab + ss.str());
 	ss.clear();
 
-	ss << "\tdiff = (";
-	for(i = 0; i < 4; i++) {
-		ss << diffuse.col[i];
-		if(i != 3) ss << ", ";
-	}
-	ss << ");";
-	fk_PutError(tab + ss.str());
-	ss.clear();
-
-	ss << "\tspec = (";
-	for(i = 0; i < 4; i++) {
-		ss << specular.col[i];
-		if(i != 3) ss << ", ";
-	}
-	ss << ");";
-	fk_PutError(tab + ss.str());
-	ss.clear();
-
-	ss << "\temis = (";
-	for(i = 0; i < 4; i++) {
-		ss << emission.col[i];
-		if(i != 3) ss << ", ";
-	}
-	ss << ");";
+	ss << "\tspec = " << specular.OutStr() << ";";
 	fk_PutError(tab + ss.str());
 	ss.clear();
 
 	ss << "\tshini = " << shininess << ";";
 	fk_PutError(tab + ss.str());
-
 	fk_PutError(tab + "}");
 	
 	return;

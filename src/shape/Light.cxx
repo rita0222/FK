@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -73,15 +73,17 @@
 
 using namespace FK;
 
+const int fk_Light::MAXLIGHTNUM = 8;
+
 fk_Light::fk_Light(fk_LightType argType)
 {
+	realType = FK_SHAPE_LIGHT;
 	SetObjectType(FK_LIGHT);
 	setLightType(argType);
 	attenuation[0] = attenuation[1] = 0.0;
 	attenuation[2] = 1.0;
 	spotExponent = 0.0;
 	spotCutOff = FK_PI/16.0;
-	SetPaletteData(&localPal);
 
 	return;
 }

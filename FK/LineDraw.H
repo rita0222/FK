@@ -1,59 +1,35 @@
 ﻿#ifndef __FK_LINE_DRAW_HEADER__
 #define __FK_LINE_DRAW_HEADER__
 
-#include <vector>
-#include <FK/Material.h>
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
 
 namespace FK {
 
-	class fk_Model;
-	class fk_Edge;
-	class fk_Color;
-	class fk_IndexFaceSet;
-
-	class fk_LineDraw {
+	class fk_LineDraw : public fk_DrawBase {
 	public:
 		fk_LineDraw(void);
 		virtual ~fk_LineDraw();
 
-		void	SetArrayState(bool);
-		void	DrawShapeLine(fk_Model *, bool);
-		void	DrawBoundaryLine(fk_Model *);
+		void	DrawShapeLine(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		bool	arrayState;
+		fk_ShaderBinder		*lineShader;
 
-		void	DrawShapeLineMaterial(fk_Model *);
-		void	DrawSolidLineMaterial(fk_Model *);
-		int		DrawSolidLineMaterialElem(fk_Edge *, int,
-										  int, double,
-										  std::vector<fk_Material> *,
-										  fk_Color *);
-		void	DrawIFSLineMaterial(fk_Model *);
+		GLuint	modelID, elemID;
+		void	ShaderSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
-		void	DrawShapeLinePick(fk_Model *);
-		void	DrawSolidLinePick(fk_Model *);
-		void	DrawSolidLinePickElem(fk_Edge *);
-		void	DrawIFSLinePick(fk_Model *);
-		void	DrawCurveLinePick(fk_Model *);
-		void	DrawSurfaceLinePick(fk_Model *);
-
-		void	DrawShapeLineNormal(fk_Model *, bool);
-		void	DrawSolidLineNormal(fk_Model *, bool);
-		void	DrawSolidLineNormalElem(fk_Edge *, double);
-		void	DrawIFSLineNormal(fk_Model *, bool);
-		void	DrawCurveLineNormal(fk_Model *, bool);
-		void	DrawSurfaceLineNormal(fk_Model *, bool);
-		
-		void	CommonLineDrawFunc(fk_Edge *, bool);
-		void	DrawIFSLineSub(fk_IndexFaceSet *);
+ 		void	Draw_Line(fk_Model *, fk_ShaderParameter *);
+ 		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
 	};
 }
 #endif /* !__FK_LINE_DRAW_HEADER__ */
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -89,7 +65,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

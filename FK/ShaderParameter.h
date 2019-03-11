@@ -1,7 +1,7 @@
 ﻿#ifndef __FK_SHADER_PARAMETER_HEADER__
 #define __FK_SHADER_PARAMETER_HEADER__
 
-#include <FK/TextureSampler.h>
+#include <FK/Texture.h>
 #include <string>
 #include <map>
 
@@ -12,7 +12,7 @@ namespace FK {
 	 *	本クラスの機能は、 fk_ShaderBinder クラスの
 	 *	fk_ShaderBinder::getParameter() によってインスタンスを得ることで利用します。
 	 *
-	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_TextureSampler
+	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
 	 */
 
 	class fk_ShaderParameter {
@@ -86,11 +86,38 @@ namespace FK {
 		 */
 		void setRegister(std::string name, std::vector<int> *value);
 	
-		//! 行列型 uniform 変数設定関数
+		//! fk_Vector 型 uniform 変数設定関数
 		/*!
 		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	行列型の uniform 変数を渡す設定を行います。
-		 *	この関数の引数は fk_Matrix 型変数となり、
+		 *	fk_Vector 型の uniform 変数を渡す設定を行います。
+		 *	GLSL コード内での型は vec3 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す行列
+		 */
+		void setRegister(std::string name, fk_Vector *value);
+
+		//! fk_HVector 型 uniform 変数設定関数
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	fk_HVector 型の uniform 変数を渡す設定を行います。
+		 *	GLSL コード内での型は vec4 となります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL コード内での変数名
+		 *
+		 *	\param[in]	value
+		 *		uniform 変数に渡す行列
+		 */
+		void setRegister(std::string name, fk_HVector *value);
+
+		//! fk_Matrix 型 uniform 変数設定関数
+		/*!
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	fk_Matrix 型の uniform 変数を渡す設定を行います。
 		 *	GLSL コード内での型は mat4 となります。
 		 *
 		 *	\param[in]	name
@@ -114,56 +141,17 @@ namespace FK {
 		 */
 		bool removeRegister(std::string name);
 
-		//! float 配列型 attribute 変数設定関数
+		//! attribute 変数予約関数
 		/*!
-		 *	この関数は、
-		 *	バーテックスシェーダーに対し float 配列型の attribute 変数を渡す設定を行います。
-		 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
-		 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
-		 *	GLSL 内での型は、要素数が 1 から順に float, vec2, vec3, vec4 となります。
+		 *	attribute 変数用の名前を予約します。
 		 *
 		 *	\param[in]	name
 		 *		GLSL コード内での変数名
 		 *
-		 *	\param[in]	dim
-		 *		attribute 変数の要素数
-		 *
-		 *	\param[in]	value
-		 *		attribute 変数に渡す値の配列
 		 */
-		void addAttribute(std::string name, int dim, std::vector<float> *value);
+		void reserveAttribute(std::string name);
 
-		//! int 配列型 attribute 変数設定関数
-		/*!
-		 *	この関数は、
-		 *	バーテックスシェーダーに対し int 配列型の attribute 変数を渡す設定を行います。
-		 *	1つの頂点に対して渡せる要素数は 1 から 4 までで、第2引数で指定します。
-		 *	value に渡す配列のサイズは dim * 頂点数である必要があります。
-		 *	GLSL 内での型は、要素数が 1 から順に int, ivec2, ivec3, ivec4 となります。
-		 *
-		 *	\param[in]	name
-		 *		GLSL コード内での変数名
-		 *
-		 *	\param[in]	dim
-		 *		attribute 変数の要素数
-		 *
-		 *	\param[in]	value
-		 *		attribute 変数に渡す値の配列
-		 */
-		void addAttribute(std::string name, int dim, std::vector<int> *value);
-
-		//! attribute 変数解除関数
-		/*!
-		 *	各種 addAttribute() 関数で設定した attribute 変数を解除します。
-		 *
-		 *	\param[in]	name
-		 *		GLSL コード内での変数名
-		 *
-		 *	\return
-		 *		attribute 変数が存在していた場合は解除し true を返します。
-		 *		変数が存在していなかった場合は false を返します。
-		 */
-		bool removeAttribute(std::string name);
+		std::map<std::string, int> * getAttrTable(void);
 
 		//! 参照テクスチャ設定関数
 		/*!
@@ -181,12 +169,12 @@ namespace FK {
 		 *		GLSLコード内では、複数の sampler2D 変数に対し ID の若い順に割り振られます。
 		 *
 		 *	\param[in]	texture
-		 *		テクスチャオブジェクト。詳細は fk_TextureSampler を参照して下さい。
+		 *		テクスチャオブジェクト。詳細は fk_Texture を参照して下さい。
 		 *
 		 *	\return
 		 *		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool attachTexture(int unit, fk_TextureSampler *texture);
+		bool attachTexture(int unit, fk_Texture *texture);
 
 		//! 参照テクスチャ解除関数
 		/*!
@@ -200,14 +188,20 @@ namespace FK {
 		 */
 		bool detachTexture(int unit);
 
+		//! 参照テクスチャ全解除関数
+		/*!
+		 *	attachTexture() メソッドにて設定した参照テクスチャを全て解除します。
+		 */
+		void clearTexture(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool Apply(GLuint);
+		void BindAttr(GLuint);
 #endif
 	
 	private:
 		GLint GetLocation(GLuint, std::string);
-		GLint GetAttributeLocation(GLuint, std::string);
+		//GLint GetAttrLocation(GLuint, std::string);
 
 		std::map<std::string, float> floatTable;
 		std::map<std::string, std::vector<float> > floatArrayTable;
@@ -216,11 +210,8 @@ namespace FK {
 		std::map<std::string, fk_Matrix> matrixTable;
 		std::map<std::string, int> locationTable;
 
-		std::map<std::string, std::tuple<int, std::vector<float> *> > floatAttributeTable;
-		std::map<std::string, std::tuple<int, std::vector<int> *> > intAttributeTable;
-
-		std::map<std::string, int> attributeLocationTable;
-		std::map<int, fk_TextureSampler *> textureTable;
+		std::map<std::string, int> attrTable;
+		std::map<int, fk_Texture *> textureTable;
 
 		std::string lastError;
 		unsigned int lastAppliedId;
@@ -231,7 +222,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -267,7 +258,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

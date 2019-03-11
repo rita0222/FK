@@ -3,8 +3,7 @@ BASENAME	= shader
 LIBSRCS		= \
 			ShaderBinder.cxx \
 			ShaderParameter.cxx \
-			ShaderProgram.cxx \
-			TextureSampler.cxx
+			ShaderProgram.cxx
 
 FKLINK		= \
 			-lFK3_math.$(VERNAME) \
@@ -14,4 +13,15 @@ FKLINK_G	= \
 			-lFK3_math_g.$(VERNAME) \
 			-lFK3_shape_g.$(VERNAME)
 
+GLSLSRCS	= $(shell /usr/bin/find ./GLSL -maxdepth 1 -name "*.glsl" -print)
+
+GLSLOUTS	= $(GLSLSRCS:.glsl=.out)
+
 include ../makeinclude
+
+glsl : $(GLSLOUTS)
+
+%.out : %.glsl
+	./GLSL/glsl2out $<
+
+ShaderProgram.o: GLSL/BuildIn.out

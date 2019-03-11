@@ -1,6 +1,8 @@
 ﻿#ifndef __FK_LINE_HEADER__
 #define __FK_LINE_HEADER__
 
+#include <FK/FVecArray.H>
+#include <FK/ColorArray.H>
 #include <FK/Solid.h>
 
 namespace FK {
@@ -16,10 +18,11 @@ namespace FK {
 	 *	位相操作を伴う変形をした場合、
 	 *	本クラスのメンバ関数が正しく動作しない可能性があります。
 	 *
-	 *	\sa	fk_Solid, fk_Model, fk_Shape
+	 *	\sa	fk_Model, fk_Shape
 	 */
 
-	class fk_Line: public fk_Solid {
+	class fk_Line: public fk_Shape {
+
 	public:
 
 		//! コンストラクタ
@@ -137,13 +140,31 @@ namespace FK {
 		 *		そうでない場合は false を返します。
 		 */
 		bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
+
+		int			getSize(void);
+		void		allClear(void);
+		void		setColor(int eID, fk_Color col);
+		void		setColor(int eID, fk_Color *col);
+		fk_Color	getColor(int eID);
+
+		void		flushAttr(void);
+
+	private:
+		fk_FVecArray	posArray;
+		fk_ColorArray	colArray;
+
+		void MakeLines(std::vector<fk_Vector> *);
+		void MakeLines(fk_Vector *);
+		void PushLines(fk_Vector *, fk_Vector *);
+		void SetPos(int, int, fk_Vector *);
+		void SetCol(int, int, fk_Color *);
 	};
 }
 #endif // !__FK_LINE_HEADER__
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -179,7 +200,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

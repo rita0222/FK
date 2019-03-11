@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,10 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "FaceDraw_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
 #include <FK/FaceDraw.H>
 #include <FK/OpenGL.H>
@@ -90,32 +86,55 @@ typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
+	: faceShader(nullptr)
 {
-	SetArrayState(false);
+	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
+	delete faceShader;
 	return;
 }
 
-void fk_FaceDraw::SetArrayState(bool argState)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 {
-	arrayState = argState;
+	auto	shapeType = argModel->getShape()->getRealShapeType();
+	auto	drawMode = argModel->getDrawMode();
+	auto	modelShader = argModel->getShader();
+
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
+		}
+	} else {
+		if(faceShader == nullptr) ShaderSetup();
+		else shader = faceShader;
+	}
+
+	PolygonModeSet(drawMode);
+
+	auto parameter = shader->getParameter();
+	SetParameter(parameter);
+
+	shader->ProcPreShader();
+
+	switch(shapeType) {
+	  case FK_SHAPE_IFS:
+		Draw_IFS(argModel, parameter);
+		break;
+
+	  default:
+		break;
+	}
+
+	shader->ProcPostShader();
 	return;
 }
 
-void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, bool lightFlag,
-								fk_DrawMode argDMode, bool argPickFlag)
+void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
 {
-	fk_MaterialMode	shapeMateMode;
-	fk_MaterialMode	modelMateMode;
-	bool			smoothMode;
-
-	shapeMateMode = argObj->getShape()->getMaterialMode();
-	modelMateMode = argObj->getMaterialMode();
-	smoothMode = argObj->getSmoothMode();
-
 	if((argDMode & FK_FRONTBACK_POLYMODE) == FK_FRONTBACK_POLYMODE) {
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -128,890 +147,70 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argObj, bool lightFlag,
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT, GL_FILL);
 	}
-
-	if(argPickFlag == true) {
-		// ピックモードが ON の場合
-		DrawShapeFacePick(argObj);
-
-	} else if(shapeMateMode == FK_PARENT_MODE &&
-			  modelMateMode == FK_PARENT_MODE) {
-		// マテリアルが個別に設定してある場合
-		DrawShapeFaceMaterial(argObj, lightFlag);
-
-	} else {
-		bool drawMode = false;
-		bool nodeMode = false;
-		if(modelMateMode == FK_CHILD_MODE) {
-			drawMode = true;
-			nodeMode = true;
-		} else if(modelMateMode == FK_PARENT_MODE &&
-				  shapeMateMode == FK_CHILD_MODE) {
-			drawMode = true;
-			nodeMode = false;
-		}
-
-		if(drawMode == true) {
-			if(smoothMode == true) {
-				// マテリアルがモデル別で、スムースシェーディングが ON の場合
-				DrawShapeFaceSmooth(argObj, lightFlag, nodeMode);
-			} else {
-				// マテリアルがモデル別で、フラットシェーディングの場合
-				DrawShapeFaceNormal(argObj, lightFlag, nodeMode);
-			}
-		}
-	}
-
-	return;
 }
 
-void fk_FaceDraw::DrawShapeFacePick(fk_Model *argObj)
+void fk_FaceDraw::ShaderSetup(void)
 {
-	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSFacePick(argObj);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidFacePick(argObj);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfaceFacePick(argObj);
-		break;
-
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFacePick(fk_Model *argObj)
-{
-	fk_Solid			*solidP;
-	list<fk_Loop *>		*loopStack;
-	bool				reverseFlag = argObj->getReverseDrawMode();
-	loopIte				ite;
-	loopRIte			rite;
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(nullptr) == nullptr) return;
-
-	if(solidP->GetLCacheStatus() == false) {
-		solidP->MakeLCache();
-	}
-
-	loopStack = solidP->GetLCache();
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	if(reverseFlag == false) {
-		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
-			DrawSolidFacePickElem(*ite);
-		}
-	} else {
-		for(rite = loopStack->rbegin(); rite != loopStack->rend(); ++rite) {
-			DrawSolidFacePickElem(*rite);
-		}
-	}
-
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFacePickElem(fk_Loop *argL)
-{
-	vector<fk_Vertex *>	*tesseVertexArray;
-	vector<int>			*tesseIDArray;
-	fk_Vertex			*curV;
-	fk_Half				*startH, *curH;
-	fk_Vector			*tmpPosP;
-
-	glPushName(static_cast<GLuint>(argL->getID()*3));
-
-	if(argL->isTesselated() == true) {
-		tesseVertexArray = argL->GetTesselateVertex();
-		tesseIDArray = argL->GetTesselateIndex();
-
-		glBegin(GL_TRIANGLES);
-		for(_st i = 0; i < tesseIDArray->size(); i++) {
-			_st index = static_cast<_st>(tesseIDArray->at(i));
-			tmpPosP = tesseVertexArray->at(index)->GetPositionP();
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
-		}
-		glEnd();
-	} else {
-		glBegin(GL_POLYGON);
-		startH = curH = argL->getOneHalf();
-		do {
-			curV = curH->getVertex();
-			tmpPosP = curV->GetPositionP(); 
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
-			curH = curH->getNextHalf();
-		} while(startH != curH);
-
-		glEnd();
-	}
-
-	glPopName();
-
-}
-
-void fk_FaceDraw::DrawIFSFacePick(fk_Model *argObj)
-{
-	fk_IndexFaceSet		*ifsP;
-	_st					ii, ij;
-	_st					pNum;
-	fk_FVector			*pos;
-	int					*ifs;
-
-	ifsP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
-
-	switch(ifsP->type) {
-	  case FK_IF_TRIANGLES:
-		pNum = 3;
-		break;
-
-	  case FK_IF_QUADS:
-		pNum = 4;
-		break;
-
-	  default:
-		return;
-	}
-
-	pos = &ifsP->pos[0];
-	ifs = &ifsP->ifs[0];
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	for(ii = 0; ii < _st(ifsP->faceSize); ii++) {
-		glPushName(static_cast<GLuint>(ii*3));
-		glBegin(GL_POLYGON);
-		for(ij = 0; ij < pNum; ij++) {
-			glVertex3fv(static_cast<GLfloat *>(&(pos[ifs[pNum*ii+ij]].x)));
-		}
-		glEnd();
-		glPopName();
-	}
-
-	return;
-}
-
-void fk_FaceDraw::DrawSurfaceFacePick(fk_Model *argObj)
-{
-	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
-	_st div = static_cast<_st>(surf->getDiv());
-
-	surf->makeCache();
-	auto pArray = surf->getPosCache();
-	GLuint count = 0;
-
-	for(_st i = 0; i < div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			_st i1 = i*(div+1) + j;
-			_st i2 = (i+1)*(div+1) + j;
-
-			auto p11 = &((*pArray)[i1]);
-			auto p12 = &((*pArray)[i1+1]);
-			auto p21 = &((*pArray)[i2]);
-			auto p22 = &((*pArray)[i2+1]);
-
-			glPushName(count*3);
-			glBegin(GL_TRIANGLES);
-			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
-			glEnd();
-			glPopName();
-			++count;
-			
-			glPushName(count*3);
-			glBegin(GL_TRIANGLES);
-			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p22->x)));
-			glEnd();
-			glPopName();
-			++count;
-		}
-	}
-	return;
-}
-
-
-void fk_FaceDraw::DrawShapeFaceMaterial(fk_Model *argObj, bool argLightFlag)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSFaceMaterial(argObj, argLightFlag);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidFaceMaterial(argObj, argLightFlag);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfaceFaceNormal(argObj, argLightFlag, true);
-
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFaceMaterial(fk_Model *argObj, bool lightFlag)
-{
-	fk_Solid				*solidP;
-	int						oldMateID, paletteSize;
-	vector<fk_Material>		*matV;
-	list<fk_Loop *>			*loopStack;
-	bool					reverseFlag = argObj->getReverseDrawMode();
-	loopIte					ite;
-	loopRIte				rite;
-
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(nullptr) == nullptr) return;
-
-	if(solidP->GetLCacheStatus() == false) {
-		solidP->MakeLCache();
-	}
-
-	loopStack = solidP->GetLCache();
-
-	oldMateID = -2;
-	glShadeModel(GL_FLAT);
-
-	paletteSize = solidP->getPaletteSize();
-	matV = solidP->getMaterialVector();
-
-	if(reverseFlag == false) {
-		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
-			oldMateID = DrawSolidFaceMaterialElem(argObj, *ite, oldMateID,
-												  paletteSize, matV, lightFlag);
-		}
-	} else {
-		for(rite = loopStack->rbegin(); rite != loopStack->rend(); ++rite) {
-			oldMateID = DrawSolidFaceMaterialElem(argObj, *rite, oldMateID,
-												  paletteSize, matV, lightFlag);
-		}
-	}
-
-	return;
-}
-
-int fk_FaceDraw::DrawSolidFaceMaterialElem(fk_Model *argObj, fk_Loop *argL,
-										   int argOldMateID,
-										   int argPaletteSize,
-										   vector<fk_Material> *argMatV,
-										   bool argLightFlag)
-{
-	fk_Half					*startH, *curH;
-	fk_Vertex				*curV;
-	fk_Vector				*tmpPosP, *tmpNormP;
-	int						retMateID, curMateID;
-	fk_Surface				*surf;
-	_st						i;
-	vector<fk_Vertex *>		*tesseVertexArray;
-	vector<int>				*tesseIDArray;
-
-
-	retMateID = argOldMateID;
-
-	switch(argL->getElemMaterialMode()) {
-	  case FK_CHILD_MODE:
-		curMateID = argL->getElemMaterialID();
-		if(curMateID < 0 || curMateID >= argPaletteSize) {
-			curMateID = FK_UNDEFINED;
-		}
-		break;
-	  case FK_NONE_MODE:
-		return argOldMateID;
-	  default:
-		curMateID = FK_UNDEFINED;
-		break;
-	}
-
-	if(curMateID != argOldMateID) {
-		if(curMateID == FK_UNDEFINED) {
-			CommonMateSet(argObj, argLightFlag, true);
-			retMateID = FK_UNDEFINED;
-		} else {
-			LocalMateSet(&((*argMatV)[_st(curMateID)]), argLightFlag);
-			retMateID = curMateID;
-		}
-	}
-
-	if((surf = argL->getSurfGeometry()) != nullptr) {
-		DrawSurfaceNormalElem(surf);
-	} else if(argL->isTesselated() == true) {
-		if((tmpNormP = argL->getNormal()) == nullptr) {
-			return retMateID;
-		}
-
-		tesseVertexArray = argL->GetTesselateVertex();
-		tesseIDArray = argL->GetTesselateIndex();
-
-		glBegin(GL_TRIANGLES);
-		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
-		for(i = 0; i < tesseIDArray->size(); i++) {
-			_st index = static_cast<_st>(tesseIDArray->at(i));
-			tmpPosP = tesseVertexArray->at(index)->GetPositionP();
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
-		}
-		glEnd();
-	} else {
-		if((tmpNormP = argL->getNormal()) == nullptr) {
-			return retMateID;
-		}
-		startH = curH = argL->getOneHalf();
-		glBegin(GL_POLYGON);
-		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
-		do {
-			curV = curH->getVertex();
-			tmpPosP = curV->GetPositionP(); 
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
-			curH = curH->getNextHalf();
-		} while(startH != curH);
-		glEnd();
-	}
-
-	return retMateID;
-}
-
-
-void fk_FaceDraw::DrawIFSFaceMaterial(fk_Model *argObj, bool argLightFlag)
-{
-	fk_IndexFaceSet		*ifsP;
-	_st					pNum;
-	fk_FVector			*pos, *pNorm;
-	int					*ifs;
-	_st					ii, ij;
-	GLenum				tmpType;
-	int					oldMateID, curMateID, paletteSize;
-	vector<fk_Material>	*matV;
-
-	ifsP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
-
-	curMateID = FK_UNDEFINED;
-	oldMateID = -2;
-
-	glShadeModel(GL_FLAT);
-	ifsP->ModifyPNorm();
-	switch(ifsP->type) {
-	  case FK_IF_TRIANGLES:
-		pNum = 3;
-		tmpType = GL_TRIANGLES;
-		break;
-
-	  case FK_IF_QUADS:
-		pNum = 4;
-		tmpType = GL_QUADS;
-		break;
-
-	  default:
-		return;
-	}
-
-	pos = &ifsP->pos[0];
-	pNorm = &ifsP->pNorm[0];
-	ifs = &ifsP->ifs[0];
-
-	paletteSize = ifsP->getPaletteSize();
-	matV = ifsP->getMaterialVector();
-
-	glBegin(tmpType);
-
-	if(ifsP->colorFlg == false) CommonMateSet(argObj, argLightFlag, true);
-
-	for(ii = 0; ii < static_cast<_st>(ifsP->faceSize); ii++) {
-		if(ifsP->colorFlg == true) {
-			curMateID = ifsP->colorID[ii];
-			if(curMateID < 0 || curMateID >= paletteSize) {
-				curMateID = FK_UNDEFINED;
-			}
-			if(curMateID != oldMateID) {
-				if(curMateID == FK_UNDEFINED) {
-					CommonMateSet(argObj, argLightFlag, true);
-					oldMateID = FK_UNDEFINED;
-				} else {
-					LocalMateSet(&((*matV)[_st(curMateID)]),
-								 argLightFlag);
-					oldMateID = curMateID;
-				}
-			}
-		}
-
-		glNormal3fv(static_cast<GLfloat *>(&(pNorm[ii].x)));
-
-		for(ij = 0; ij < pNum; ij++) {
-			glVertex3fv(static_cast<GLfloat *>(&pos[ifs[pNum*ii+ij]].x));
-		}
-	}
-	glEnd();
-
-	return;
-}
-
-void fk_FaceDraw::DrawShapeFaceSmooth(fk_Model *argObj,
-									  bool argLightFlag, bool argNodeFlag)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSFaceSmooth(argObj, argLightFlag, argNodeFlag);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidFaceSmooth(argObj, argLightFlag, argNodeFlag);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfaceFaceSmooth(argObj, argLightFlag, argNodeFlag);
-		break;
-		
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFaceSmooth(fk_Model *argObj,
-									bool argLightFlag, bool argNodeFlg)
-{
-	fk_Solid			*solidP;
-	list<fk_Loop *>		*loopStack;
-	bool				reverseFlag = argObj->getReverseDrawMode();
-	loopIte				ite;
-	loopRIte			rite;
-
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(nullptr) == nullptr) return;
-
-	if(solidP->GetLCacheStatus() == false) {
-		solidP->MakeLCache();
-	}
-
-	loopStack = solidP->GetLCache();
-
-	CommonMateSet(argObj, argLightFlag, argNodeFlg);
-
-	glShadeModel(GL_SMOOTH);
-
-	if(reverseFlag == false) {
-		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
-			DrawSolidFaceSmoothElem(*ite);
-		}
-	} else {
-		for(rite = loopStack->rbegin(); rite != loopStack->rend(); ++rite) {
-			DrawSolidFaceSmoothElem(*rite);
-		}
-	}
-
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFaceSmoothElem(fk_Loop *argL)
-{
-	fk_Half				*startH, *curH;
-	fk_Vertex			*curV;
-	fk_Vector			*tmpPos, *tmpNorm;
-	fk_Surface			*surf;
-
-
-	if((surf = argL->getSurfGeometry()) != nullptr) {
-		DrawSurfaceSmoothElem(surf);
-	} else {
-		glBegin(GL_POLYGON);
-		startH = curH = argL->getOneHalf();
-
-		do {
-			curV = curH->getVertex();
-			tmpNorm = curV->GetNormalP();
-			tmpPos = curV->GetPositionP(); 
-			if(tmpNorm == nullptr || tmpPos == nullptr) continue;
-			glNormal3dv(static_cast<GLdouble *>(&(tmpNorm->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPos->x)));
-			curH = curH->getNextHalf();
-		} while(startH != curH);
-
-		glEnd();
-	}
-
-	return;
-}
-
-void fk_FaceDraw::DrawIFSFaceSmooth(fk_Model *argObj,
-								  bool argLightFlag, bool argNodeFlag)
-{
-	fk_IndexFaceSet		*ifsP;
-	int					pNum;
-	fk_FVector			*pos, *vNorm;
-	int					*ifs;
-	GLenum				tmpType;
-
-	ifsP = (fk_IndexFaceSet *)argObj->getShape();
-
-	CommonMateSet(argObj, argLightFlag, argNodeFlag);
-	glShadeModel(GL_SMOOTH);
-
-	ifsP->ModifyVNorm();
-	switch(ifsP->type) {
-	  case FK_IF_TRIANGLES:
-		pNum = 3;
-		tmpType = GL_TRIANGLES;
-		break;
-
-	  case FK_IF_QUADS:
-		pNum = 4;
-		tmpType = GL_QUADS;
-		break;
-
-	  default:
-		return;
-	}
-
-	pos = &ifsP->pos[0];
-	vNorm = &ifsP->vNorm[0];
-	ifs = &ifsP->ifs[0];
-
-	if(arrayState == true) {
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glVertexPointer(3, GL_FLOAT, 0, pos);
-		glNormalPointer(GL_FLOAT, 0, vNorm);
-		glDrawElements(tmpType, ifsP->faceSize * pNum,
-					   GL_UNSIGNED_INT, &ifs[0]);
-	} else {
-		glBegin(tmpType);
-		for(int ii = 0; ii < ifsP->faceSize; ii++) {
-			for(int ij = 0; ij < pNum; ij++) {
-				int index = ifs[pNum*ii+ij];
-				glNormal3fv(static_cast<GLfloat *>(&vNorm[index].x));
-				glVertex3fv(static_cast<GLfloat *>(&pos[index].x));
-			}
-		}
-		glEnd();
-	}
-	return;
-}
-
-void fk_FaceDraw::DrawSurfaceFaceSmooth(fk_Model *argObj,
-										bool argLightFlag, bool argNodeFlag)
-
-{
-	CommonMateSet(argObj, argLightFlag, argNodeFlag);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glShadeModel(GL_SMOOTH);
-
-	DrawSurfaceSmoothElem(static_cast<fk_Surface *>(argObj->getShape()));
-}
-
-
-void fk_FaceDraw::DrawShapeFaceNormal(fk_Model *argObj,
-									  bool argLightFlag, bool argNodeFlag)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
-		DrawIFSFaceNormal(argObj, argLightFlag, argNodeFlag);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidFaceNormal(argObj, argLightFlag, argNodeFlag);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfaceFaceNormal(argObj, argLightFlag, argNodeFlag);
-		break;
-
-	  default:
-		break;
-	}
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFaceNormal(fk_Model *argObj,
-									  bool argLightFlag, bool argNodeFlg)
-{
-	fk_Solid			*solidP;
-	list<fk_Loop *>		*loopStack;
-	bool				reverseFlag = argObj->getReverseDrawMode();
-	loopIte				ite;
-	loopRIte			rite;
-
-
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextL(nullptr) == nullptr) return;
-
-	if(solidP->GetLCacheStatus() == false) {
-		solidP->MakeLCache();
-	}
-
-	loopStack = solidP->GetLCache();
-
-	CommonMateSet(argObj, argLightFlag, argNodeFlg);
-
-	glShadeModel(GL_FLAT);
-
-	if(reverseFlag == false) {
-		for(ite = loopStack->begin(); ite != loopStack->end(); ++ite) {
-			DrawSolidFaceNormalElem(*ite);
-		}
-	} else {
-		for(rite = loopStack->rbegin(); rite != loopStack->rend(); ++rite) {
-			DrawSolidFaceNormalElem(*rite);
-		}
-	}
-
-	return;
-}
-
-void fk_FaceDraw::DrawSolidFaceNormalElem(fk_Loop *argL)
-{
-	fk_Half				*startH, *curH;
-	fk_Vertex			*curV;
-	fk_Vector			*tmpPosP, *tmpNormP;
-	vector<fk_Vertex *>	*tesseVertexArray;
-	vector<int>			*tesseIDArray;
-	fk_Surface			*surf;
-
-	if((surf = argL->getSurfGeometry()) != nullptr) {
-		DrawSurfaceNormalElem(surf);
-	} else if(argL->isTesselated() == true) {
-		if((tmpNormP = argL->getNormal()) == nullptr) return;
-		tesseVertexArray = argL->GetTesselateVertex();
-		tesseIDArray = argL->GetTesselateIndex();
-		glBegin(GL_TRIANGLES);
-		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
-		for(_st i = 0; i < tesseIDArray->size(); i++) {
-			_st index = static_cast<_st>(tesseIDArray->at(i));
-			tmpPosP = tesseVertexArray->at(index)->GetPositionP();
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
-		}
-		glEnd();
-
-	} else {
-		if((tmpNormP = argL->getNormal()) == nullptr) return;
-		startH = curH = argL->getOneHalf();
-		glBegin(GL_POLYGON);
-		glNormal3dv(static_cast<GLdouble *>(&(tmpNormP->x)));
-
-		do {
-			curV = curH->getVertex();
-			tmpPosP = curV->GetPositionP(); 
-			glVertex3dv(static_cast<GLdouble *>(&(tmpPosP->x)));
-			curH = curH->getNextHalf();
-		} while(startH != curH);
-
-		glEnd();
-	}
-	return;
-}
-
-void fk_FaceDraw::DrawIFSFaceNormal(fk_Model *argObj,
-									bool argLightFlag, bool argNodeFlag)
-{
-	fk_IndexFaceSet		*ifsP;
-	int					pNum;
-	fk_FVector			*pos, *pNorm;
-	int					*ifs;
-	int					ii, ij;
-	GLenum				tmpType;
-
-	ifsP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
-
-	CommonMateSet(argObj, argLightFlag, argNodeFlag);
-	glShadeModel(GL_FLAT);
-
-	ifsP->ModifyPNorm();
-	switch(ifsP->type) {
-	  case FK_IF_TRIANGLES:
-		pNum = 3;
-		tmpType = GL_TRIANGLES;
-		break;
-
-	  case FK_IF_QUADS:
-		pNum = 4;
-		tmpType = GL_QUADS;
-		break;
-
-	  default:
-		return;
-	}
-
-	pos = &ifsP->pos[0];
-	pNorm = &ifsP->pNorm[0];
-	ifs = &ifsP->ifs[0];
-
-	glBegin(tmpType);
-	for(ii = 0; ii < ifsP->faceSize; ii++) {
-		glNormal3fv(static_cast<GLfloat *>(&(pNorm[ii].x)));
-		for(ij = 0; ij < pNum; ij++) {
-			glVertex3fv(static_cast<GLfloat *>(&pos[ifs[pNum*ii+ij]].x));
-		}
-	}
-	glEnd();
-
-	return;
-}
-
-void fk_FaceDraw::DrawSurfaceFaceNormal(fk_Model *argObj,
-										bool argLightFlag, bool argNodeFlag)
-{
-	CommonMateSet(argObj, argLightFlag, argNodeFlag);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glShadeModel(GL_FLAT);
-
-	DrawSurfaceNormalElem(static_cast<fk_Surface *>(argObj->getShape()));
-	return;
-}
-
-void fk_FaceDraw::DrawSurfaceNormalElem(fk_Surface *argSurf)
-{
-	_st div = static_cast<_st>(argSurf->getDiv());
-	argSurf->makeCache();
-	auto pArray = argSurf->getPosCache();
-	auto nArray = argSurf->getNormCache();
-
-	glBegin(GL_TRIANGLES);
-	for(_st i = 0; i < div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			_st i1 = i*(div+1) + j;
-			_st i2 = (i+1)*(div+1) + j;
-
-			auto p11 = &((*pArray)[i1]);
-			auto p12 = &((*pArray)[i1+1]);
-			auto p21 = &((*pArray)[i2]);
-			auto p22 = &((*pArray)[i2+1]);
-
-			auto n11 = &((*nArray)[i1]);
-
-			glNormal3dv(static_cast<GLdouble *>(&(n11->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p22->x)));
-		}
-	}
-	glEnd();
-	return;
-}
+	faceShader = new fk_ShaderBinder();
+	shader = faceShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Face_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_FS.out"
+		;
 	
-void fk_FaceDraw::DrawSurfaceSmoothElem(fk_Surface *argSurf)
-{
-	_st div = static_cast<_st>(argSurf->getDiv());
-	argSurf->makeCache();
-	auto pArray = argSurf->getPosCache();
-	auto nArray = argSurf->getNormCache();
-
-	glBegin(GL_TRIANGLES);
-	for(_st i = 0; i < div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			_st i1 = i*(div+1) + j;
-			_st i2 = (i+1)*(div+1) + j;
-
-			auto p11 = &((*pArray)[i1]);
-			auto p12 = &((*pArray)[i1+1]);
-			auto p21 = &((*pArray)[i2]);
-			auto p22 = &((*pArray)[i2+1]);
-
-			auto n11 = &((*nArray)[i1]);
-			auto n12 = &((*nArray)[i1+1]);
-			auto n21 = &((*nArray)[i2]);
-			auto n22 = &((*nArray)[i2+1]);
-
-			glNormal3dv(static_cast<GLdouble *>(&(n11->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p11->x)));
-
-			glNormal3dv(static_cast<GLdouble *>(&(n12->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
-
-			glNormal3dv(static_cast<GLdouble *>(&(n21->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
-
-
-			glNormal3dv(static_cast<GLdouble *>(&(n21->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p21->x)));
-
-			glNormal3dv(static_cast<GLdouble *>(&(n12->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p12->x)));
-
-			glNormal3dv(static_cast<GLdouble *>(&(n22->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(p22->x)));
-		}
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
 	}
-	glEnd();
+
+	ParamInit(prog, param);
 	return;
 }
 
-void fk_FaceDraw::CommonMateSet(fk_Model *argObj, bool lightFlag, bool matFlag)
+void fk_FaceDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
 {
-	float 		tmpShininess;
-	fk_Shape	*shapeP;
-	fk_Material	*curMat;
+	argParam->reserveAttribute(fk_Shape::vertexName);
+	argParam->reserveAttribute(fk_Shape::normalName);
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
 
-	shapeP = argObj->getShape();
-
-	if(matFlag == true || shapeP == nullptr) {
-		curMat = argObj->getInhMaterial();
-	} else {
-		curMat = &(*shapeP->getMaterialVector())[0];
-	}
-								  
-	if(lightFlag == true) {
-		glEnable(GL_LIGHTING);
-		glMaterialfv(GL_FRONT, GL_AMBIENT,
-					 &curMat->getAmbient()->col[0]);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE,
-					 &curMat->getDiffuse()->col[0]);
-		glMaterialfv(GL_FRONT, GL_SPECULAR,
-					 &curMat->getSpecular()->col[0]);
-		glMaterialfv(GL_FRONT, GL_EMISSION,
-					 &curMat->getEmission()->col[0]);
-		tmpShininess = curMat->getShininess();
-		glMaterialfv(GL_FRONT, GL_SHININESS, &tmpShininess);
-	} else {
-		glDisable(GL_LIGHTING);
-		glColor4fv(&curMat->getAmbient()->col[0]);
-	}
-	return;
+	argProg->link();
 }
 
-void fk_FaceDraw::LocalMateSet(fk_Material *argMaterial, bool lightFlag)
+GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 {
-	float tmpShininess;
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetFaceVAO(vao);
+	argShape->DefineVBO();
 
-	if(lightFlag == true) {
-		glEnable(GL_LIGHTING);
-		glMaterialfv(GL_FRONT, GL_AMBIENT,
-					 &argMaterial->getAmbient()->col[0]);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE,
-					 &argMaterial->getDiffuse()->col[0]);
-		glMaterialfv(GL_FRONT, GL_SPECULAR,
-					 &argMaterial->getSpecular()->col[0]);
-		glMaterialfv(GL_FRONT, GL_EMISSION,
-					 &argMaterial->getEmission()->col[0]);
-		tmpShininess = argMaterial->getShininess();
-		glMaterialfv(GL_FRONT, GL_SHININESS, &tmpShininess);
-	} else {
-		glDisable(GL_LIGHTING);
-		glColor4fv(&argMaterial->getAmbient()->col[0]);
-	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
-	return;
+	return vao;
 }
 
-#endif
+void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
+{
+	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
+	GLuint			vao = ifs->GetFaceVAO();
+
+	if(vao == 0) {
+		vao = VAOSetup(ifs);
+	}
+	glBindVertexArray(vao);
+	ifs->BindShaderBuffer(argParam->getAttrTable());
+	ifs->FaceIBOSetup();
+	glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	return;
+}

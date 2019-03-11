@@ -8,6 +8,7 @@ namespace FK {
 	class fk_Tree;
 	class fk_TreeData;
 	class fk_IFSTexture;
+	class fk_MeshTexture;
 
 	class _fk_MQO_IDSet {
 	public:
@@ -19,7 +20,7 @@ namespace FK {
 		bool			operator ==(const _fk_MQO_IDSet &) const;
 	};
 
-	typedef std::vector< std::vector<_fk_MQO_IDSet> >  	fk_MQOListSet;
+	using fk_MQOListSet = std::vector< std::vector<_fk_MQO_IDSet> >;
 	
 	class fk_MQOParser : public fk_ParserBase {
 
@@ -79,7 +80,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -115,7 +116,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

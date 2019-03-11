@@ -64,7 +64,7 @@ namespace FK {
 	 */
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	typedef std::vector<unsigned char>	fk_GlyphBuffer;
+    using fk_GlyphBuffer = std::vector<unsigned char>;
 #endif
 
 	class fk_TextImage : public fk_Image {
@@ -1047,7 +1047,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -1083,7 +1083,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

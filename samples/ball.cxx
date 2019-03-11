@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -74,8 +74,8 @@
 using namespace FK;
 using namespace FK::Material;
 
-const double	DOWN_ACCEL		= 1.0500;	// 降下時の加速度
-const double	RISE_ACCEL		= 1.0530;	// 上昇時の減速度
+const double	DOWN_ACCEL		= 0.050;	// 降下時の加速度
+const double	RISE_ACCEL		= 0.053;	// 上昇時の減速度
 const int		DOWN_MODE		= 0;		// 降下モード
 const int		RISE_MODE		= 1;		// 上昇モード
 const int		LOW_MODE		= 0;		// ブロック視点モード
@@ -84,9 +84,12 @@ const int		LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
 const int		LOD3_HIGH		= 300;		// 三分割距離 (鳥瞰)
 const int		LOD4_LOW		= 90;		// 四分割距離 (ブロック)
 const int		LOD3_LOW		= 120;		// 三分割距離 (ブロック)
-const double	TOP_BALL_POS	= 300.0;	// ボール始点高さ
-const double	BTM_BALL_POS	= 18.0;		// ボール跳ね返り高さ
+const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
+const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
 const double	BALL_SIZE		= 12.0;		// ボール半径
+const double	ROTATE_SPEED	= 0.02;		// 地面回転速度
+const int		BOUND_CYCLE		= 6;		// 視点初期化周期
+const int		VIEW_CHANGE		= 4;		// 視点切り替えタイミング
 
 class Ball {
 
@@ -122,7 +125,7 @@ Ball::Ball(void)
 void Ball::init(void)
 {
 	direction	= DOWN_MODE;
-	y_trs		= 0.1;
+	y_trs		= 0.0;
 	view_mode	= HIGH_MODE;
 	bound_count	= 1;
 	BALL2.setRadius(BALL_SIZE);
@@ -190,12 +193,12 @@ void Ball::accel(void)
 {
 	switch(direction) {
 	  case DOWN_MODE:
-		y_trs *= DOWN_ACCEL;
+		y_trs += DOWN_ACCEL;
 		ball_model.glTranslate(0.0, -y_trs, 0.0);
 		break;
 
 	  case RISE_MODE:
-		y_trs /= RISE_ACCEL;
+		y_trs -= RISE_ACCEL;
 		ball_model.glTranslate(0.0, y_trs,0.0);
 		break;
 		
@@ -212,7 +215,7 @@ void Ball::bound(void)
 		direction = RISE_MODE;
 	} else if(y_trs < 0.01) {
 		if(direction == RISE_MODE) {
-			if(bound_count % 4 < 2) {
+			if(bound_count % BOUND_CYCLE < VIEW_CHANGE) {
 				view_mode = HIGH_MODE;
 			} else {
 				view_mode = LOW_MODE;
@@ -231,8 +234,7 @@ int Ball::draw(fk_Vector pos)
 	lod(pos);
 	bound();
 	accel();
-	//４回跳ね返ると初期化
-	if(bound_count > 4) init();
+	if(bound_count > BOUND_CYCLE) init();
 	return view_mode;
 }
 
@@ -240,7 +242,8 @@ int main(int, char *[])
 {
 	int				view_mode = HIGH_MODE;
 	Ball			ball;
-	fk_Model		viewModel, groundModel, blockModel, lightModel;
+	fk_Sphere		lightBall(4, 2.0);
+	fk_Model		viewModel, groundModel, blockModel, lightModel, lightBallModel;
 	fk_Light		light;
 	fk_Circle		ground(4, 100.0);
 	fk_Block		block(10.0, 10.0, 10.0);
@@ -265,22 +268,34 @@ int main(int, char *[])
 	light.setLightType(FK_POINT_LIGHT);
 	light.setAttenuation(0.0, 0.0);
 	lightModel.setShape(&light);
-	lightModel.setMaterial(White);
+	lightModel.setMaterial(WhiteLight);
 	lightModel.glTranslate(-60.0, 60.0, 0.0);
+	lightModel.glVec(0.0, -1.0, 0.0);
 
+	lightBallModel.setShape(&lightBall);
+	lightBallModel.setMaterial(TrueWhite);
+	lightBallModel.glTranslate(lightModel.getInhPosition());
+	light.setAttenuation(0.01, 0.0, 0.2);
+	
 	// ### GROUND ###
 	groundModel.setShape(&ground);
+	LightGreen.setSpecular(0.1, 0.1, 0.1);
+	LightGreen.setShininess(80.0);
 	groundModel.setMaterial(LightGreen);
 	groundModel.setSmoothMode(true);
 	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2.0);
 
 	// ### VIEW BLOCK ###
 	blockModel.setShape(&block);
+	Blue.setSpecular(1.0, 1.0, 1.0);
+	Blue.setShininess(70.0);
 	blockModel.setMaterial(Blue);
 	blockModel.glMoveTo(60.0, 30.0, 0.0);
 	blockModel.setParent(&groundModel);
 
 	// ### BALL ###
+	Red.setSpecular(1.0, 1.0, 1.0);
+	Red.setShininess(100.0);
 	ball.getModel()->setMaterial(Red);
 	ball.getModel()->setSmoothMode(true);
 	
@@ -289,7 +304,8 @@ int main(int, char *[])
 	scene.entryModel(&lightModel);
 	scene.entryModel(ball.getModel());
 	scene.entryModel(&groundModel);
-	scene.entryModel(&blockModel); 
+	scene.entryModel(&blockModel);
+	scene.entryModel(&lightBallModel);
 
 	win.open();
 
@@ -315,7 +331,7 @@ int main(int, char *[])
 		}
 
 		// 地面をくるくる回転させましょう。
-		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.02);
+		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, ROTATE_SPEED);
 	}
 
 	return 0;

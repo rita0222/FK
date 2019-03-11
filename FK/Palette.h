@@ -7,7 +7,7 @@
 namespace FK {
 
 	//! マテリアルモード型
-	typedef unsigned char	fk_MaterialMode;
+	using fk_MaterialMode = unsigned char;
 
 	const fk_MaterialMode	FK_NONE_MODE = 0;		//!< 不描画モード
 	const fk_MaterialMode	FK_CHILD_MODE = 1;		//!< 個別設定モード
@@ -149,7 +149,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -185,7 +185,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

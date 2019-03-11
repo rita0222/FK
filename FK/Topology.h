@@ -7,7 +7,7 @@
 
 namespace FK {
 	
-	typedef char	   	fk_TopologyType;
+	using fk_TopologyType = char;
 
 	const fk_TopologyType	FK_VERTEX_TYPE = 1;
 	const fk_TopologyType	FK_HALF_TYPE = 2;
@@ -155,7 +155,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -191,7 +191,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

@@ -1,6 +1,7 @@
 BASENAME	= graphics
 
 LIBSRCS		= \
+			DrawBase.cxx \
 			Engine.cxx \
 			FaceDraw.cxx \
 			FrameController.cxx \
@@ -24,4 +25,13 @@ FKLINK_G	= \
 			-lFK3_model_g.$(VERNAME) \
 			-lFK3_scene_g.$(VERNAME)
 
+GLSLSRCS	= $(shell /usr/bin/find ./GLSL -maxdepth 1 -name "*.glsl" -print)
+
+GLSLOUTS	= $(GLSLSRCS:.glsl=.out)
+
 include ../makeinclude
+
+glsl : $(GLSLOUTS)
+
+%.out : %.glsl
+	./GLSL/glsl2out $<

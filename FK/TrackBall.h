@@ -60,14 +60,14 @@ namespace FK {
 		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
 	};
 
-	typedef fk_TrackBall fkut_TrackBall;
+	using fkut_TrackBall = fk_TrackBall;
 }
 
 #endif //!__FK_TRACKBALL_HEADER__
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -103,7 +103,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

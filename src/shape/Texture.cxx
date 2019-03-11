@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -72,15 +72,22 @@
 #define FK_DEF_SIZETYPE
 #include <FK/Texture.h>
 #include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
+const string fk_Texture::texIDName = "fk_TexID";
+
 fk_Texture::fk_Texture(fk_Image *argImage)
-	: fk_Shape(FK_TEXTURE)
+	: fk_Shape(FK_TEXTURE),
+	  image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
 {
+	GetFaceSize = []() { return 0; };
+	StatusUpdate = []() {};
+	FaceIBOSetup = []() {};
+	realType = FK_SHAPE_TEXTURE;
 	SetPaletteData(&localPal);
-	image = nullptr;
 	BaseInit();
 	setImage(argImage);
 
@@ -89,8 +96,6 @@ fk_Texture::fk_Texture(fk_Image *argImage)
 
 fk_Texture::~fk_Texture()
 {
-	BaseInit();
-
 	return;
 }
 
@@ -103,54 +108,35 @@ void fk_Texture::BaseInit(void)
 	setMaterialMode(FK_PARENT_MODE);
 	setTexRendMode(FK_TEX_REND_NORMAL);
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
-	MakeObjFunction();
 
+	//texCoord.setDim(2);
+
+	//setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	//setShaderAttribute(normalName, 3, vertexNormal.getP());
+	//setShaderAttribute(texCoordName, 2, texCoord.getP());
+
+	//faceIBO = 0;
+	//faceIndexFlg = true;
+	  
 	return;
 }
-
-void fk_Texture::MakeObjFunction(void)
+/*
+void fk_Texture::_FaceIBOSetup(void)
 {
-	GenTextureObj = [this] {
-		const fk_ImType		*imageBuf = image->getBufPointer();
-		const fk_Dimension	*bufSize = image->getBufferSize();
+	if(faceIBO == 0) {
+		glGenBuffers(1, &faceIBO);
+		faceIndexFlg = true;
+	}
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-					 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
-	};
-		
-	ReplaceSubImage = [this] {
-		if(image == nullptr) return;
-
-		static fk_Rect				tmpRect;	// 部分更新矩形情報
-		static vector<fk_ImType>	subBuffer;	// 部分更新用バッファ
-		const fk_Dimension			*imageSize = image->getImageSize();
-		const fk_Dimension			*bufSize = image->getBufferSize();
-		const fk_ImType				*imageBuf = image->getBufPointer();
-
-		// 更新領域取得
-		tmpRect = image->GetUpdateArea();
-		if(tmpRect.w < 1 || tmpRect.h < 1) {	// 矩形が指定されていなかったら全体更新
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
-							GL_RGBA, GL_UNSIGNED_BYTE, imageBuf);
-		} else {	// 指定されていたら部分更新
-			subBuffer.resize(static_cast<_st>(tmpRect.w*tmpRect.h*4));
-			for(int i = 0; i < tmpRect.h; ++i) {
-				memcpy(&(subBuffer[static_cast<_st>((tmpRect.h-i-1)*tmpRect.w*4)]),
-					   imageBuf+((imageSize->h - (tmpRect.y+i) - 1)*bufSize->w + tmpRect.x)*4,
-					   static_cast<size_t>(tmpRect.w*4));
-			}
-			if(!subBuffer.empty()) {
-				glTexSubImage2D(GL_TEXTURE_2D, 0, tmpRect.x,
-								imageSize->h - tmpRect.h - tmpRect.y,
-								tmpRect.w, tmpRect.h,
-								GL_RGBA, GL_UNSIGNED_BYTE, &(subBuffer[0]));
-			}
-		}
-	};
-
-	DrawTexture = [](bool) {};
-	DrawPick = []() {};
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+	if(faceIndexFlg == true && faceIndex != nullptr) {
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+					 GLsizei(faceIndex.size()*sizeof(GLuint)),
+					 faceIndex->data(), GL_STATIC_DRAW);
+		faceIndexFlg = false;
+	}
 }
+*/
 
 bool fk_Texture::IsLocalImage(void)
 {
@@ -160,37 +146,48 @@ bool fk_Texture::IsLocalImage(void)
 void fk_Texture::SetLocalImage(void)
 {
 	image = &localImage;
+	StatusUpdate();
 	return;
 }
 
 bool fk_Texture::readBMP(string argFileName)
 {
 	SetLocalImage();
-	return image->readBMP(argFileName);
+	if(image->readBMP(argFileName) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readBMPData(fk_ImType *argBuffer)
 {
 	SetLocalImage();
-	return image->readBMPData(argBuffer);
+	if(image->readBMPData(argBuffer) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readPNG(string argFileName)
 {
 	SetLocalImage();
-	return image->readPNG(argFileName);
+	if(image->readPNG(argFileName) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readPNGData(fk_ImType *argBuffer)
 {
 	SetLocalImage();
-	return image->readPNGData(argBuffer);
+	if(image->readPNGData(argBuffer) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 bool fk_Texture::readJPG(string argFileName)
 {
 	SetLocalImage();
-	return image->readJPG(argFileName);
+	if(image->readJPG(argFileName) == false) return false;
+	StatusUpdate();
+	return true;
 }
 
 const fk_ImType * fk_Texture::getImageBuf(void)
@@ -208,6 +205,7 @@ void fk_Texture::setImage(fk_Image *argImage)
 	}
 
 	image = argImage;
+	StatusUpdate();
 	return;
 }
 
@@ -234,24 +232,6 @@ const fk_Dimension * fk_Texture::getBufferSize(void)
 	return nullptr;
 }
 
-bool fk_Texture::GetInitFlag(void)
-{
-	if(image != nullptr) {
-		return image->GetInitFlag();
-	}
-
-	return false;
-}
-
-void fk_Texture::SetInitFlag(bool argFlg)
-{
-	if(image != nullptr) {
-		image->SetInitFlag(argFlg);
-	}
-
-	return;
-}
-
 fk_TexID fk_Texture::GetTexID(void)
 {
 	if(image != nullptr) {
@@ -274,7 +254,7 @@ void fk_Texture::ClearTexState(fk_Image *argImage)
 {
 	if(argImage == nullptr) return;
 
-	argImage->SetInitFlag(false);
+	argImage->SetUpdate(false);
 	argImage->SetTexID(0);
 
 	return;
@@ -329,361 +309,88 @@ void fk_Texture::fillColor(int argR, int argG, int argB, int argA)
 	return;
 }
 
-fk_RectTexture::fk_RectTexture(fk_Image *argImage)
-	: fk_Texture(argImage)
+bool fk_Texture::BindTexture(bool forceLoad)
 {
-	SetObjectType(FK_RECTTEXTURE);
-	texSize.set(2.0, 2.0);
-	setRepeatMode(false);
-	repeatParam.set(1.0, 1.0);
-	texCoord[0].set(0.0, 0.0);
-	texCoord[1].set(1.0, 1.0);
+	bool 		loaded = true;
 
-	MakeDrawRectFunc();
+	if (image == nullptr) return false;
 
-	return;
-}
+	const fk_Dimension	*bufSize = image->getBufferSize();
+	if(bufSize == nullptr) return false;
 
-fk_RectTexture::~fk_RectTexture()
-{
-	init();
+	GLuint			id = image->GetTexID();
 
-	return;
-}
+	if(id == 0) {
+		glGenTextures(1, &id);
+		image->SetTexID(id);
+		loaded = false;
+	}
 
-void fk_RectTexture::MakeDrawRectFunc(void)
-{
-	DrawTexture = [this](bool) {
-		fk_TexCoord	startParam, endParam;
-		double		tmpX, tmpY;
+	glBindTexture(GL_TEXTURE_2D, id);
 
-		const fk_Dimension *imageSize = getImageSize();
-		const fk_Dimension *bufSize = getBufferSize();
+	GLint tmpWrapModeGl = (getTexWrapMode() == FK_TEX_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP_TO_EDGE;
+	GLint tmpRendMode = (getTexRendMode() == FK_TEX_REND_NORMAL) ? GL_NEAREST : GL_LINEAR;
 
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
-		if(getRepeatMode() == true) {
-			startParam.set(0.0, 0.0);
-			endParam = getRepeatParam();
-		} else {
-			double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-			double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
-			startParam.set(wScale * texCoord[0].x,
-						   hScale * texCoord[0].y);
-			endParam.set(wScale * texCoord[1].x,
-						 hScale * texCoord[1].y);
+	if (loaded == false || forceLoad == true) {
+		switch(samplerSource) {
+		  case FK_TEXTURE_IMAGE:
+/*
+			if(loaded == false) {
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+							 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+			} else {
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
+								GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+			}
+*/
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+
+			break;
+			
+		  case FK_COLOR_BUFFER:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			break;
+
+		  case FK_DEPTH_BUFFER:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
+						 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+			break;
+
+		  default:
+			break;
 		}
-
-		tmpX = texSize.x/2.0;
-		tmpY = texSize.y/2.0;
-
-		glNormal3d(0.0, 0.0, 1.0);
-		glBegin(GL_QUADS);
-
-		glTexCoord2d(startParam.x, startParam.y);
-		glVertex3d(-tmpX, -tmpY, 0.0);
-
-		glTexCoord2d(endParam.x, startParam.y);
-		glVertex3d(tmpX, -tmpY, 0.0);
-
-		glTexCoord2d(endParam.x, endParam.y);
-		glVertex3d(tmpX, tmpY, 0.0);
-
-		glTexCoord2d(startParam.x, endParam.y);
-		glVertex3d(-tmpX, tmpY, 0.0);
-
-		glEnd();
-	};
-
-	DrawPick = [this]() {
-		double		tmpX, tmpY;
-
-		const fk_Dimension *bufSize = getBufferSize();
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		tmpX = texSize.x/2.0;
-		tmpY = texSize.y/2.0;
-
-		glPushName(0);
-		glBegin(GL_QUADS);
-
-		glVertex3d(-tmpX, -tmpY, 0.0);
-		glVertex3d(tmpX, -tmpY, 0.0);
-		glVertex3d(tmpX, tmpY, 0.0);
-		glVertex3d(-tmpX, tmpY, 0.0);
-
-		glEnd();
-		glPopName();
-	};
-
-	return;
-}	
-
-void fk_RectTexture::init(void)
-{
-	BaseInit();
-
-	return;
-}
-
-bool fk_RectTexture::setTextureSize(double argX, double argY)
-{
-	if(argX < -FK_EPS || argY < -FK_EPS) {
-		return false;
 	}
 
-	texSize.set(argX, argY);
+	if (samplerSource != FK_TEXTURE_IMAGE) {
+		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufSize->w, bufSize->h);
+	}
 
 	return true;
 }
 
-fk_TexCoord fk_RectTexture::getTextureSize(void)
+void fk_Texture::Replace(void)
 {
-	return texSize;
-}
-
-void fk_RectTexture::setRepeatMode(bool argFlag)
-{
-	repeatFlag = argFlag;
-	return;
-}
-
-bool fk_RectTexture::getRepeatMode(void)
-{
-	return repeatFlag;
-}
-
-void fk_RectTexture::setRepeatParam(double argS, double argT)
-{
-	repeatParam.set(argS, argT);
-	return;
-}
-
-fk_TexCoord fk_RectTexture::getRepeatParam(void)
-{
-	return repeatParam;
-}
-
-void fk_RectTexture::setTextureCoord(double argSU, double argSV,
-									 double argEU, double argEV)
-{
-	if(argSU < -FK_EPS || argSU > 1.0 + FK_EPS ||
-	   argSV < -FK_EPS || argSV > 1.0 + FK_EPS ||
-	   argEU < -FK_EPS || argEU > 1.0 + FK_EPS ||
-	   argEV < -FK_EPS || argEV > 1.0 + FK_EPS) {
-		fk_PutError("fk_RectTexture", "setTextureCoord", 1,
-					"Texture Coord Error.");
-		return;
+	if(image == nullptr) return;
+	if(image->GetUpdate() == true) {
+		StatusUpdate();
+		BindTexture(true);
+		image->SetUpdate(false);
 	}
-
-	texCoord[0].set(argSU, argSV);
-	texCoord[1].set(argEU, argEV);
-
-	return;
 }
 
-void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
-									 const fk_TexCoord &argE)
+void fk_Texture::setSamplerSource(fk_SamplerSource argMode)
 {
-	if(argS.x < -FK_EPS || argS.x > 1.0 + FK_EPS ||
-	   argS.y < -FK_EPS || argS.y > 1.0 + FK_EPS ||
-	   argE.x < -FK_EPS || argE.x > 1.0 + FK_EPS ||
-	   argE.y < -FK_EPS || argE.y > 1.0 + FK_EPS) {
-		fk_PutError("fk_RectTexture", "setTextureCoord", 2,
-					"Texture Coord Error.");
-		return;
-	}
-
-	texCoord[0].set(argS.x, argS.y);
-	texCoord[1].set(argE.x, argE.y);
-	return;
+	samplerSource = argMode;
 }
 
-fk_TexCoord fk_RectTexture::getTextureCoord(int argID)
+fk_SamplerSource fk_Texture::getSamplerSource(void)
 {
-	if(argID < 0 || argID > 1) {
-		fk_PutError("fk_RectTexture", "getTextureCoord", 1, "ID Error");
-		return fk_TexCoord(0.0, 0.0);
-	}
-	return texCoord[argID];
-}
-
-fk_TriTexture::fk_TriTexture(fk_Image *argImage)
-	: fk_Texture(argImage)
-{
-	SetObjectType(FK_TRITEXTURE);
-	MakeDrawTriFunc();
-
-	return;
-}
-
-fk_TriTexture::~fk_TriTexture()
-{
-	init();
-
-	return;
-}
-
-void fk_TriTexture::MakeDrawTriFunc(void)
-{
-	DrawTexture = [this](bool) {
-		double			wScale, hScale;
-		_st				counter;
-		fk_Vector		norm;
-
-		const fk_Dimension *imageSize = getImageSize();
-		const fk_Dimension *bufSize = getBufferSize();
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-		hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
-
-		norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
-		if(norm.normalize() == false) {
-			fk_PutError("fk_Window", "DrawTriTextureObj", 1,
-						"Triangle Normal Vector Error.");
-			return;
-		}
-
-		glBegin(GL_TRIANGLES);
-
-		glNormal3dv((GLdouble *)&(norm.x));
-		for(counter = 0; counter < 3; ++counter) {
-			glTexCoord2f(texCoord[counter].x * float(wScale),
-						 texCoord[counter].y * float(hScale));
-			glVertex3d(pos[counter].x,
-					   pos[counter].y,
-					   pos[counter].z);
-		}
-
-		glEnd();
-	};
-
-	DrawPick = [this]() {
-		int				counter;
-
-		const fk_Dimension *bufSize = getBufferSize();
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		glPushName(0);
-		glBegin(GL_TRIANGLES);
-
-		for(counter = 0; counter < 3; ++counter) {
-			glVertex3d(pos[counter].x,
-					   pos[counter].y,
-					   pos[counter].z);
-		}
-
-		glEnd();
-		glPopName();
-	};
-		
-}
-
-void fk_TriTexture::init(void)
-{
-	BaseInit();
-
-	return;
-}
-
-fk_Vector * fk_TriTexture::getPos(void)
-{
-	return &pos[0];
-}
-
-fk_TexCoord * fk_TriTexture::getCoord(void)
-{
-	return &texCoord[0];
-}
-
-bool fk_TriTexture::setVertexPos(int argID,
-								 double argX, double argY, double argZ)
-{
-	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setVertexPos", 1, "ID Error.");
-		return false;
-	}
-
-	pos[argID].set(argX, argY, argZ);
-	return true;
-}
-
-bool fk_TriTexture::setVertexPos(int argID, fk_Vector argPos)
-{
-	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setVertexPos", 2, "ID Error.");
-		return false;
-	}
-
-	pos[argID] = argPos;
-	return true;
-}
-
-bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
-{
-	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 1, "ID Error.");
-		return false;
-	}
-
-	if(argS < -FK_EPS || argS > 1.0 + FK_EPS ||
-	   argT < -FK_EPS || argT > 1.0 + FK_EPS) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 2,
-					"Texture Coord Error.");
-		return false;
-	}
-
-	texCoord[argID].set(argS, argT);
-	return true;
-}
-
-
-bool fk_TriTexture::setTextureCoord(int argID, fk_TexCoord argCoord)
-{
-	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 3, "ID Error.");
-		return false;
-	}
-
-	if(argCoord.x < -FK_EPS || argCoord.x > 1.0 + FK_EPS ||
-	   argCoord.y < -FK_EPS || argCoord.y > 1.0 + FK_EPS) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 4,
-					"Texture Coord Error.");
-		return false;
-	}
-
-	texCoord[argID].set(argCoord.x, argCoord.y);
-	return true;
-}
-
-fk_Vector fk_TriTexture::getVertexPos(int argID)
-{
-	fk_Vector		dummy(0.0, 0.0, 0.0);
-
-	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "getVertexPos", 1, "ID Error.");
-		return dummy;
-	}
-
-	return pos[argID];
-}
-
-fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
-{
-	fk_TexCoord		dummy(0.0, 0.0);
-
-	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "getTextureCoord", 1, "ID Error.");
-		return dummy;
-	}
-
-	return texCoord[argID];
+	return samplerSource;
 }

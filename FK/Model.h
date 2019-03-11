@@ -6,6 +6,7 @@
 #include <FK/RenderState.h>
 #include <FK/Angle.h>
 #include <FK/IndexFace.h>
+#include <FK/Texture.h>
 #include <FK/Tree.h>
 #include <memory>
 #include <functional>
@@ -15,8 +16,15 @@ namespace FK {
 	class fk_Shape;
 	class fk_TreeData;
 	class fk_Color;
+	class fk_ShaderBinder;
 
-	typedef std::tuple<unsigned int, std::function<void(void)> >  fk_funcSet;
+	using fk_funcSet = std::tuple<unsigned int, std::function<void(void)> >;
+
+	enum fk_ElementMode {
+		FK_ELEM_NONE,
+		FK_ELEM_MODEL,
+		FK_ELEM_ELEMENT
+	};
 
 	//! モデルを生成、管理するクラス
 	/*!
@@ -937,29 +945,6 @@ namespace FK {
 		 */
 		void	setLineColor(float r, float g, float b);
 
-		//! 基本マテリアル削除関数
-		/*!
-		 *	基本マテリアル設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの基本マテリアルを継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルトマテリアルが採用されます。
-		 */
-		void	deleteMaterial(void);
-
-		//! 頂点色削除関数
-		/*!
-		 *	頂点色設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの頂点色を継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルト頂点色が採用されます。
-		 */
-		void	deletePointColor(void);
-
-		//! 稜線色削除関数
-		/*!
-		 *	稜線色設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの稜線色を継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルト稜線色が採用されます。
-		 */
-		void	deleteLineColor(void);
 		//@}
 
 		//! \name マテリアル属性参照関数
@@ -967,48 +952,22 @@ namespace FK {
 		//! マテリアル参照関数
 		/*!
 		 *	現在モデルに設定されている基本マテリアルを参照します。
-		 *	モデルにマテリアルが設定されていない場合は nullptr を返します。
 		 *
 		 *	\return		基本マテリアルのポインタ
 		 *
-		 *	\sa fk_Material, setMaterial(), getInhMaterial()
+		 *	\sa fk_Material, setMaterial()
 		 */
 		fk_Material *	getMaterial(void);
-
-		//! 継承マテリアル参照関数
-		/*!
-		 *	親子関係を踏まえた基本マテリアルを参照します。
-		 *	当モデルにマテリアルが設定されている場合、そのマテリアルを返します。
-		 *	当モデルにマテリアルが設定されていない場合は、親モデルのマテリアルを返します。
-		 *
-		 *	\return		継承マテリアルのポインタ
-		 *
-		 *	\sa fk_Material, setMaterial(), getMaterial()
-		 */
-		fk_Material *	getInhMaterial(void);
 
 		//! 頂点色参照関数
 		/*!
 		 *	現在モデルに設定されている頂点色を参照します。
-		 *	モデルに頂点色が設定されていない場合は nullptr を返します。
 		 *
 		 *	\return		頂点色のポインタ
 		 *
-		 *	\sa fk_Color, setPointColor(), getInhPointColor()
+		 *	\sa fk_Color, setPointColor()
 		 */
 		fk_Color *	getPointColor(void);
-
-		//! 継承頂点色参照関数
-		/*!
-		 *	親子関係を踏まえた頂点色を参照します。
-		 *	当モデルに頂点色が設定されている場合、その頂点色を返します。
-		 *	当モデルに頂点色が設定されていない場合は、親モデルの頂点色を返します。
-		 *
-		 *	\return		頂点色のポインタ
-		 *
-		 *	\sa fk_Color, setPointColor(), getPointColor()
-		 */
-		fk_Color *	getInhPointColor(void);
 
 		//! 稜線色参照関数
 		/*!
@@ -1017,21 +976,10 @@ namespace FK {
 		 *
 		 *	\return		稜線色のポインタ
 		 *
-		 *	\sa fk_Color, setLineColor(), getInhLineColor()
+		 *	\sa fk_Color, setLineColor()
 		 */
 		fk_Color *	getLineColor(void);
 
-		//! 継承稜線色参照関数
-		/*!
-		 *	親子関係を踏まえた稜線色を参照します。
-		 *	当モデルに稜線色が設定されている場合、その稜線色を返します。
-		 *	当モデルに稜線色が設定されていない場合は、親モデルの稜線色を返します。
-		 *
-		 *	\return		稜線色のポインタ
-		 *
-		 *	\sa fk_Color, setLineColor(), getLineColor()
-		 */
-		fk_Color *	getInhLineColor(void);
 		//@}
 
 		//! \name 描画属性制御関数
@@ -1044,20 +992,10 @@ namespace FK {
 		 *
 		 *	\param[in]	size	頂点描画サイズ
 		 *
-		 *	\sa	getSize(), setWidth()
+		 *	\sa	getPointSize(), setLineWidth()
 		 */
-		void	setSize(const double size);
+		void	setPointSize(const double size);
 
-		//! 稜線描画幅設定関数
-		/*!
-		 *	稜線の描画幅を設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
-		 *
-		 *	\param[in]	width	稜線幅
-		 *
-		 *	\sa	setSize(), getWidth()
-		 */
-		void	setWidth(const double width);
 
 		//! 頂点描画サイズ参照関数
 		/*!
@@ -1065,19 +1003,10 @@ namespace FK {
 		 *
 		 *	\return		頂点描画サイズ
 		 *
-		 *	\sa	setSize()
+		 *	\sa	setPointSize()
 		 */
-		double	getSize(void) const;
+		double	getPointSize(void) const;
 
-		//! 稜線描画幅設定関数
-		/*!
-		 *	稜線の描画幅を取得します。
-		 *
-		 *	\return		稜線幅
-		 *
-		 *	\sa	setWidth()
-		 */
-		double	getWidth(void) const;
 		//@}
 
 		//! \name 描画モード制御関数
@@ -1119,46 +1048,9 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(void) const;
 
-		//! マテリアルモード設定関数
-		/*!
-		 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
-		 *	マテリアルの採用は、以下のような優先順で決定します。
-		 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
-		 *		モデルのマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *	-# fk_Shape の派生クラスにてマテリアルモードが
-		 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *		(fk_Shape::setMaterialMode() を参照して下さい。)
-		 *	-# 各位相要素でのマテリアルモードが、
-		 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
-		 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
-		 *
-		 *	\param[in]	mode
-		 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
-		 *		\arg FK_CHILD_MODE
-		 *		\arg FK_PARENT_MODE
-		 *		\arg FK_NONE_MODE
-		 *
-		 *	\sa getMaterialMode(), fk_Shape::setMaterialMode(),
-		 *		fk_TopologyMaterial::setElemMaterialMode()
-		 */
-		void	setMaterialMode(const fk_MaterialMode mode);
-
-		//! マテリアルモード参照関数
-		/*!
-		 *	モデルのマテリアルモードを取得します。
-		 *
-		 *	\return		マテリアルモード
-		 *
-		 *	\sa setMaterialMode()
-		 */
-		fk_MaterialMode		getMaterialMode(void) const;
-
+		void			setElementMode(const fk_ElementMode mode);
+		fk_ElementMode	getElementMode(void) const;
+		
 		//! ブレンドモード設定関数
 		/*!
 		 *	テクスチャ画像を伴うモデルを表示する場合、
@@ -1229,31 +1121,6 @@ namespace FK {
 		 */
 		fk_BlendMode		getBlendMode(fk_BlendFactor *outSrc = nullptr,
 										 fk_BlendFactor *outDst = nullptr) const;
-
-		//! ピックモード設定関数
-		/*!
-		 *	モデルのピックモードを設定します。
-		 *	ピックモードとは、
-		 *	モデルをピックによる取得操作の対象とするかどうかを制御するものです。
-		 *	ピックモードが有効である場合、モデルはピック取得の候補となります。
-		 *	デフォルトでは無効となっています。
-		 *
-		 *	\param[in]	mode	true である場合、ピックモードが有効となります。
-		 *		false である場合は無効となります。
-		 *
-		 *	\sa fk_Window::getPickModel(), fk_PickData
-		 */
-		void	setPickMode(const bool mode);
-
-		//! ピックモード参照関数
-		/*!
-		 *	現在のピックモードを取得します。
-		 *
-		 *	\return		有効である場合 true を、無効である場合 false を返します。
-		 *
-		 *	\sa setPickMode(), fk_Window::getPickModel(), fk_PickData
-		 */
-		bool	getPickMode(void) const;
 
 		//! スムースモード設定関数
 		/*!
@@ -1326,6 +1193,74 @@ namespace FK {
 		 */
 		fk_DepthMode	getDepthMode(void) const;
 
+		//! テクスチャモード設定関数
+		/*!
+		 *	テクスチャの描画時における描画色処理モードを設定します。
+		 *	これは、ポリゴンに設定されているマテリアルによる発色と、
+		 *	テクスチャ画像の色をどのように混成するかを制御するものです。
+		 *	それぞれのモードの概要と厳密な計算式を以下に記載します。
+		 *	なお、数式中の \f$ C_f \f$ はポリゴン色、
+		 *	\f$ C_\alpha \f$ ポリゴンの透明度、
+		 *	\f$ T_f \f$ はテクスチャピクセル色、
+		 *	\f$ T_\alpha \f$ はテクスチャの透明度を表します。
+		 *
+		 *	- FK_TEX_MODULATE \n
+		 *		この設定では、ポリゴンの色とテクスチャの色を積算します。
+		 *		そのため、光源による陰影効果が生じます。
+		 *		透明度に関しても積算となります。
+		 *		数式として表すと、色と透明度はそれぞれ
+		 *		\f[
+		 *			(C_f T_f, \; C_\alpha T_\alpha)
+		 *		\f]
+		 *		となります。
+		 *
+		 *	- FK_TEX_REPLACE \n
+		 *		この設定では、ポリゴンの色は完全に無視され、
+		 *		テクスチャのピクセル色がそのまま表示されます。
+		 *		そのため、光源による陰影効果が生じません。
+		 *		また、テクスチャ画像の透明度はそのまま描画に反映されます。
+		 *		数式として表すと、色と透明度はそれぞれ
+		 *		\f[
+		 *			(T_f, \; T_\alpha)
+		 *		\f]
+		 *		となります。
+		 *
+		 *	- FK_TEX_DECAL \n
+		 *		この設定では、各ピクセルの透明度に応じて、
+		 *		ポリゴン色とピクセル色の混合が行われます。
+		 *		光源による陰影効果は、ピクセルの透明度が低い場合に強くなります。
+		 *		透明度は、ポリゴンの透明度がそのまま適用されます。
+		 *		これを数式として表すと、色と透明度はそれぞれ
+		 *		\f[
+		 *			(C_f (1-T_\alpha) + T_f T_\alpha, \; C_\alpha)
+		 *		\f]
+		 *		となります。
+		 *
+		 *	- FK_TEX_NONE \n
+		 *		この設定では、 fk_Model での設定は無視し、
+		 *		fk_Texture::setTextureMode() での設定に従います。
+		 *	.
+		 *	デフォルトでは FK_TEX_NONE が設定されています。
+		 *	なお、同様の設定は fk_Texture::setTextureMode() でも行うことが可能で、
+		 *	fk_Model 側で FK_TEX_NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で FK_TEX_NONE が設定されている場合のみ、
+		 *	fk_Texture 側での設定が有効となります。
+		 *
+		 *	\param[in]		mode	モード
+		 *
+		 *	\sa getTextureMode(), fk_Texture::setTextureMode()
+		 */
+		void	setTextureMode(fk_TexMode mode);
+		
+		//! テクスチャモード取得関数
+		/*!
+		 *	現在のテクスチャモードを取得します。
+		 *
+		 *	\return		テクスチャモード
+		 *
+		 *	\sa setTextureMode()
+		 */
+		fk_TexMode		getTextureMode(void);
 		//@}
 
 		//! \name 座標系情報参照関数
@@ -1436,6 +1371,10 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Vector	getInhUpVec(void) const;
+		void		setPickMode(const bool);
+		bool		getPickMode(void) const;
+		void		setMaterialMode(const fk_MaterialMode mode);
+		fk_MaterialMode		getMaterialMode(void) const;
 #endif
 
 		//! 継承オイラー角参照関数
@@ -1649,13 +1588,17 @@ namespace FK {
 		//! \name 描画制御用関数
 		//@{
 
+		//! シェーダー設定関数
+		void				setShader(fk_ShaderBinder *);
+		fk_ShaderBinder		*getShader(void);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 		//! 描画処理事前関数
 		/*!
 		 *	この関数は、
 		 *	描画エンジン内部でモデルが実際に描画される前に自動的に呼び出されます。
 		 *	デフォルトの状態では中身は空ですが、
-		 *	fk_Model クラスの派生クラスを作成した上で、
-		 *	この関数を上書きすることにより、
+		 *	関数オブジェクトまたはラムダ式で上書きすることにより、
 		 *	描画処理前の時点の処理を記述することが可能です。
 		 *	主な利用用途はシェーダプログラミングやデバッグ、
 		 *	あるいは独自形状描画などが考えられます。
@@ -1663,15 +1606,14 @@ namespace FK {
 		 *	本関数を利用するには、FK の描画エンジン内部に精通している必要があります。
 		 *	ソースコードを解析し、内部処理を理解した上で利用することを推奨します。
 		 */
-		virtual void	preShader(void) {};
-
+		//std::function<void(void)>	preShader;
+		
 		//! 描画処理事後関数
 		/*!
 		 *	この関数は、
 		 *	描画エンジン内部でモデルが実際に描画された後に自動的に呼び出されます。
 		 *	デフォルトの状態では中身は空ですが、
-		 *	fk_Model クラスの派生クラスを作成した上で、
-		 *	この関数を上書きすることにより、
+		 *	関数オブジェクトまたはラムダ式で上書きすることにより、
 		 *	描画処理後の時点の処理を記述することが可能です。
 		 *	主な利用用途はシェーダプログラミングやデバッグ、
 		 *	あるいは独自形状描画などが考えられます。
@@ -1679,7 +1621,8 @@ namespace FK {
 		 *	本関数を利用するには、FK の描画エンジン内部に精通している必要があります。
 		 *	ソースコードを解析し、内部処理を理解した上で利用することを推奨します。
 		 */
-		virtual void	postShader(void) {};
+		//std::function<void(void)>	postShader;
+#endif
 		//@}
 
 		//! \name 境界ボリューム自動設定関数
@@ -2002,6 +1945,7 @@ namespace FK {
 
 		//@}
 
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		// カスタムテクスチャ描画用エントリポイント
 		virtual void	connectShader(unsigned int) {};
@@ -2009,32 +1953,33 @@ namespace FK {
 		void	SetTreeDelMode(bool);
 		void	TreePrint(void);
 
-		std::list<fk_funcSet>	preShaderList;
-		std::list<fk_funcSet>	postShaderList;
+		void	setSize(double);
+		double	getSize(void) const;
+		void	setWidth(double);
+		double	getWidth(void) const;
+
 #endif
 
 	private:
-		fk_Material			*material;
-		fk_Color			*pointColor;
-		fk_Color			*lineColor;
+		fk_Material			material;
+		fk_Color			pointColor;
+		fk_Color			lineColor;
 		fk_Shape			*shape;
-		fk_Model			*parent;
+		fk_Model			*parentModel;
 		fk_TreeData			*treeData;
-		bool				materialFlag;
 		fk_DrawMode			drawMode;
-		fk_MaterialMode		materialMode;
+		fk_ElementMode		elemMode;
 		fk_BlendMode		blendMode;
 		fk_BlendFactor		srcFactor;
 		fk_BlendFactor		dstFactor;
 		fk_DepthMode		depthMode;
-		double				drawSize;
-		double				drawWidth;
-		bool				pickFlag;
+		double				pointSize;
 		bool				smoothFlag;
 		bool				reverseFlag;
 		bool				treeFlag;
 		unsigned int		_modelID;
 		bool				treeDelMode;
+		fk_TexMode			texMode;
 
 		fk_HVector			*snapPos;
 		fk_HVector			*snapInhPos;
@@ -2046,6 +1991,8 @@ namespace FK {
 		bool				interStopMode;
 
 		std::list<fk_Model *>	interList;
+
+		fk_ShaderBinder		*shader;
 
 		void				EntryTree(void);
 		void				DeleteTree(void);
@@ -2067,7 +2014,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -2103,7 +2050,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

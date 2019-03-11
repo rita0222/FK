@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -107,7 +107,7 @@ int fk_Window::drawWindow(bool argDrawMode)
 	Fl_Window				*pWin;
 
 	pWin = static_cast<Fl_Window *>(this->parent());
-	if(pWin == NULL) return 0;
+	if(pWin == nullptr) return 0;
 	// rita_ext: ESC キー抑制
 	/*
 	if(Fl::event_inside(pWin) != 0) {
@@ -397,7 +397,7 @@ Fl_Group * fk_Window::GetInhParentWindow(void)
 {
 	Fl_Group	*mainWin = this;
 
-	while(mainWin->parent() != NULL) {
+	while(mainWin->parent() != nullptr) {
 		mainWin = mainWin->parent();
 	}
 
@@ -496,32 +496,6 @@ int fk_Window::getMouseWheelStatus(void)
 	Fl::e_dy = 0;
 
 	return retVal;
-}
-
-void fk_Window::getPickModel(fk_PickData *argPickData, int argPixSize)
-{
-	GetPickData(true, argPickData, argPixSize, -1, -1);
-	return;
-}
-
-void fk_Window::getPickModel(fk_PickData *argPickData, int argPixSize,
-							 int argMouseX, int argMouseY)
-{
-	GetPickData(false, argPickData, argPixSize, argMouseX, argMouseY);
-	return;
-}
-
-void fk_Window::GetPickData(bool argFlag, fk_PickData *argPickData,
-							int argPixSize, int argMouseX, int argMouseY)
-{
-	// if(argPickData == (fk_PickData *)NULL) return;
-
-	if(argFlag == true) {
-		SetPickViewPort(argMouseX, argMouseY);
-	}
-	engine.GetPickData(argPickData, argPixSize, argMouseX, argMouseY);
-
-	return;
 }
 
 void fk_Window::setFrameMode(fk_FrameMode argMode)

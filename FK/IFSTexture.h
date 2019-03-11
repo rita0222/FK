@@ -42,8 +42,6 @@ namespace FK {
 
 	class fk_IFSTexture : public fk_Texture {
 
-		friend class			fk_TextureDraw;
-
 	public:
 
 		//! コンストラクタ
@@ -314,6 +312,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::vector< std::vector<int> > * GetCommonList(void);
+		void	forceUpdateAttr(void);
 #endif
 	   
 	private:
@@ -324,7 +323,9 @@ namespace FK {
 		bool								connectMode;
 
 		void	SetConnectNormal(void);
-		void	MakeDrawIFSFunc(void);
+		void	ShapeUpdate(void);
+		void	TexCoordUpdate(void);
+		void	TexCoordUpdate(int);
 	};
 }
 
@@ -332,7 +333,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -368,7 +369,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

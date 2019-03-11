@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -884,7 +884,6 @@ void fk_Performer::setDrawMode(bool argMode)
 		}
 	} else {
 		for(st i = 1; i < st(objNum); i++) {
-			objModel[i]->setShape(NULL);
 			objModel[i]->setShape(mesh[i-1]);
 		}
 	}
@@ -904,13 +903,13 @@ int fk_Performer::getObjectNum(void)
 
 fk_Model * fk_Performer::getObjectModel(int argID)
 {
-	if(argID < 0 || argID >= objNum) return NULL;
+	if(argID < 0 || argID >= objNum) return nullptr;
 	return objModel[st(argID)];
 }
 
 fk_Model * fk_Performer::getJointModel(int argID)
 {
-	if(argID < 0 || argID >= objNum) return NULL;
+	if(argID < 0 || argID >= objNum) return nullptr;
 	return jointModel[st(argID)];
 }
 
@@ -997,7 +996,6 @@ bool fk_Performer::playMotion(int argMotionID)
 				if(draw_mode == FK_LINEMODE) {
 					objModel[i]->setDrawMode(draw_mode);
 				} else {
-					objModel[i]->setShape(NULL);
 					objModel[i]->setShape(mesh[i-1]);
 				}
 			}
@@ -1027,7 +1025,6 @@ void fk_Performer::stillMotion(int argMotionID, int argFrame)
 				if(draw_mode == FK_LINEMODE) {
 					objModel[i]->setDrawMode(draw_mode);
 				} else {
-					objModel[i]->setShape(NULL);
 					objModel[i]->setShape(mesh[i-1]);
 				}
 			}
@@ -1058,7 +1055,7 @@ void fk_Performer::setAsCamera(fk_Scene *argScn)
 	objModel.push_back(new fk_Model);
 	objName.push_back("<camera>");
 
-	mesh.push_back(NULL);
+	mesh.push_back(nullptr);
 
 	parentTable[1] = 0;
 

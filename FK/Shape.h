@@ -1,17 +1,30 @@
-﻿#ifndef __FK_SHAPEBASE_HEADER__
-#define __FK_SHAPEBASE_HEADER__
+﻿#ifndef __FK_SHAPE_BASE_HEADER__
+#define __FK_SHAPE_BASE_HEADER__
 
 #include <FK/Base.h>
 #include <FK/Palette.h>
 #include <FK/Attribute.h>
+#include <FK/OpenGL.H>
+#include <map>
 
 namespace FK {
+
+	const int FK_SHAPE_ALIVE = 1;
+	const int FK_SHAPE_DEAD = 2;
+
+	using shapeAttrI = std::tuple<int, int, std::vector<int> *>;
+	using shapeAttrF = std::tuple<int, int, std::vector<float> *>;
+
+	using shapeMapI = std::map<std::string, shapeAttrI>;
+	using shapeMapF = std::map<std::string, shapeAttrF>;
+
 	//! 形状データの具体的なデータ構造を表す列挙型
 	enum fk_RealShapeType {
 		FK_SHAPE_IFS,		//!<	fk_IndexFaceSetベース
 		FK_SHAPE_SOLID,		//!<	fk_Solidベース
 		FK_SHAPE_TEXTURE,	//!<	fk_Textureベース
 		FK_SHAPE_POINT,		//!<	fk_Pointベース
+		FK_SHAPE_LINE,		//!<	fk_Lineベース
 		FK_SHAPE_CURVE,		//!<	fk_Curveベース
 		FK_SHAPE_SURFACE,	//!<	fk_Surface ベース
 		FK_SHAPE_LIGHT,		//!<	fk_Lightベース
@@ -21,9 +34,9 @@ namespace FK {
 	//! 形状用基底クラス
 	/*!
 	 *	このクラスは、形状を表すクラスの基底クラスです。
-	 *	クラス自体の主な機能は、マテリアルやパレットの管理です。
+	 *	クラス自体の主な機能は、マテリアルの管理です。
 	 *
-	 *	\sa fk_Material, fk_Palette
+	 *	\sa fk_Material
 	 */
 
 	class fk_Shape: public fk_Attribute {
@@ -175,24 +188,75 @@ namespace FK {
 		 */
 		std::vector<fk_Material> *		getMaterialVector(void);
 
+		void setShaderAttribute(std::string, int, std::vector<int> *);
+		void setShaderAttribute(std::string, int, std::vector<float> *);
+		void setShaderIndex(std::string, std::vector<GLuint> *);
+		void modifyAttribute(std::string);
+		void finishSetVBO(void);
+		virtual void forceUpdateAttr(void);
+		virtual void flushAttr(void);
+		
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		void							SetPaletteData(fk_Palette *pal);
-		void							setPaletteData(fk_Palette *pal);
+		void	SetPaletteData(fk_Palette *pal);
+		void	setPaletteData(fk_Palette *pal);
 
+		void			SetPointVAO(GLuint);
+		void			SetLineVAO(GLuint);
+		void			SetFaceVAO(GLuint);
+		void			SetBoundaryVAO(GLuint);
+		GLuint			GetPointVAO(void);
+		GLuint			GetLineVAO(void);
+		GLuint			GetFaceVAO(void);
+		GLuint			GetBoundaryVAO(void);
+
+		void			DefineVBO(void);
+		void			BindShaderBuffer(std::map<std::string, int> *);
+
+		// シェーダー変数名: 頂点座標
+		static const std::string	vertexName;
+		static const std::string	normalName;
+
+		// シェーダー変数名: 頂点モデル色
+		static const std::string	pointModelColorName;
+		static const std::string	pointElementColorName;
+		static const std::string	pointElementAliveName;
+
+		static const std::string	lineModelColorName;
+		static const std::string	lineElementColorName;
+
+		// シェーダー変数名: テクスチャ座標
+		static const std::string	texCoordName;
+		
 #endif
 
 	private:
 		fk_Palette			*palette;
+		fk_Palette			defaultPalette;
 		fk_MaterialMode		materialMode;
+		GLuint				pointVAO, lineVAO, faceVAO, boundaryVAO;
+
+		shapeMapI 			attrMapI;
+		shapeMapF 			attrMapF;
+
+		bool				vboInitFlg;
+
+		std::map<std::string, bool>		attrModify;
+
+
+		void			DeleteMapI(std::string);
+		void			DeleteMapF(std::string);
+
+	protected:
+		fk_RealShapeType	realType;
 	};
 }
 
-#endif // !__FK_SHAPEBASE_HEADER__
+#endif // !__FK_SHAPE_BASE_HEADER__
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -228,7 +292,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

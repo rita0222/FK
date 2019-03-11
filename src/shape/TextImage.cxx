@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -454,7 +454,6 @@ fk_TextImage::fk_TextImage(void)
 	sendingMode = FK_SENDING_ALL;
 
 	face = new fk_FTFace;
-
 	return;
 }
 
@@ -628,7 +627,7 @@ bool fk_TextImage::send(void)
 {
 	_st		i, endPos, sp;
 
-	sp = static_cast<_st>(sendPos);
+	sp = _st(sendPos);
 	if(sp == charArray.size()) return false;
 
 	switch(sendingMode) {
@@ -653,9 +652,9 @@ bool fk_TextImage::send(void)
 	}
 
 	for(i = sp; i < endPos; i++) {
-		CopyCharImage(static_cast<int>(i));
+		CopyCharImage(int(i));
 	}
-	sendPos = static_cast<int>(endPos);
+	sendPos = int(endPos);
 
 	return true;
 }
@@ -664,7 +663,7 @@ bool fk_TextImage::finish(void)
 {
 	int		i, endPos;
 
-	endPos = static_cast<int>(charArray.size());
+	endPos = int(charArray.size());
 	if(sendPos == endPos) return false;
 
 	for(i = sendPos; i < endPos; i++) {
@@ -714,9 +713,7 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	tmpStr.copyStr(&strData);
 
 	FreeGlyph(&glyphArray);
-	FT_Set_Char_Size(face->face, ptsize << 6, ptsize << 6,
-					 static_cast<FT_UInt>(dpi),
-					 static_cast<FT_UInt>(dpi));
+	FT_Set_Char_Size(face->face, ptsize << 6, ptsize << 6, FT_UInt(dpi), FT_UInt(dpi));
 
 	lineArray.clear();
 	lineMap.clear();
@@ -729,7 +726,7 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	for(lineNum = 0; tmpStr.getLine(&line); lineNum++) {
 		for(i = 0; i < line.getLength(); i++) {
 			glyph = new fk_FTGlyph;
-			glyph->status.Set(face->face, static_cast<FT_UInt>(line.getCode(i)),
+			glyph->status.Set(face->face, FT_UInt(line.getCode(i)),
 							  ptsize, dpi, boldStrength);
 			glyphArray.push_back(glyph);
 			lineMap.push_back(lineNum);
@@ -744,9 +741,9 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	ReCalcCharOffset();
 	InitTextImage();
 	if(sendingMode == FK_SENDING_ALL) {
-		for(i = 0; i < static_cast<int>(charArray.size()); i++) CopyCharImage(i);
+		for(i = 0; i < int(charArray.size()); i++) CopyCharImage(i);
 		ClearCharImages();
-		sendPos = static_cast<int>(charArray.size());
+		sendPos = int(charArray.size());
 	} else {
 		sendPos = 0;
 	}
@@ -769,15 +766,15 @@ void fk_TextImage::MakeColorScale(const fk_Color &argC1,
 								  const fk_Color &argC2,
 								  int *argScale)
 {
-	int		index, i, j;
+	_st		index, i, j;
 	float	val1, val2;
 
 	for(i = 0; i < 256; i++) {
 		for(j = 0; j < 4; j++) {
 			index = i*4 + j;
-			val1 = argC1.col[j] * static_cast<float>(i)/255.0f;
-			val2 = argC2.col[j] * (1.0f - (static_cast<float>(i)/255.0f));
-			argScale[index] = static_cast<int>(256.0f*(val1 + val2));
+			val1 = argC1.col[j] * float(i)/255.0f;
+			val2 = argC2.col[j] * (1.0f - (float(i)/255.0f));
+			argScale[index] = int(256.0f*(val1 + val2));
 			if(argScale[index] >= 256) argScale[index] = 255;
 			if(argScale[index] < 0) argScale[index] = 0;
 		}
@@ -847,9 +844,9 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 			oneImage_h = pBBox->yMax - pBBox->yMin;
 
 			buffer = getGlyphServer()->GetBuffer(fkGlyph->status);
-			buffer->resize(static_cast<_st>(oneImage_w * oneImage_h));
+			buffer->resize(_st(oneImage_w * oneImage_h));
 
-			for(j = 0; j < static_cast<_st>(oneImage_w * oneImage_h); j++) {
+			for(j = 0; j < _st(oneImage_w * oneImage_h); j++) {
 				(*buffer)[j] = slot->bitmap.buffer[j];
 			}
 			FT_Done_Glyph(glyph);
@@ -885,10 +882,10 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 	image_h = upper - under;
 	if(shadowMode == true && image_h != 0) image_h += abs(shadowOffset.h);
 
-	lineRect.set(0, 0, static_cast<int>(image_w - charSkip), static_cast<int>(image_h));
+	lineRect.set(0, 0, int(image_w - charSkip), int(image_h));
 	lineArray.push_back(lineRect);
 
-	return static_cast<int>(upper);
+	return int(upper);
 }
 
 void fk_TextImage::DumpRasterMap(int argUpper,
@@ -912,10 +909,10 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 		pBBox = &(glyph->bbox);
 		localImageBuf = getGlyphServer()->GetBuffer(glyph->status);
 
-		charRect.x = static_cast<int>(glyph->xOffset);
-		charRect.y = static_cast<int>(argUpper - pBBox->yMax);
-		orgImageSize.w = static_cast<int>(pBBox->xMax - pBBox->xMin);
-		orgImageSize.h = static_cast<int>(pBBox->yMax - pBBox->yMin);
+		charRect.x = int(glyph->xOffset);
+		charRect.y = int(argUpper - pBBox->yMax);
+		orgImageSize.w = int(pBBox->xMax - pBBox->xMin);
+		orgImageSize.h = int(pBBox->yMax - pBBox->yMin);
 
 		if(monospaceMode == true) {
 			charRect.w = monospaceSize;
@@ -941,7 +938,7 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 
 			for(j = 0; j < charRect.h; j++) {
 				for(k = 0; k < charRect.w; k++) {
-					pixel = static_cast<_st>(GetPixel(localImageBuf, charRect.w,
+					pixel = _st(GetPixel(localImageBuf, charRect.w,
 													  orgImageSize.w, j, k));
 					if(smoothFlg == true) {
 						setVal = (pixel > 255) ? 255 : pixel;
@@ -949,8 +946,8 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 						setVal = (pixel > 128) ? 255 : 0;
 					}
 					if(setVal != 0) {
-						charImage->setRGBA(static_cast<int>(k) + posOffset.w,
-										   static_cast<int>(j) + posOffset.h,
+						charImage->setRGBA(int(k) + posOffset.w,
+										   int(j) + posOffset.h,
 										   argSBScale[setVal*4],
 										   argSBScale[setVal*4 + 1],
 										   argSBScale[setVal*4 + 2],
@@ -968,9 +965,9 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 		for(j = 0; j < charRect.h; j++) {
 			for(k = 0; k < charRect.w; k++) {
 				/*
-				_st tmpW = static_cast<_st>(orgImageSize.w);
+				_st tmpW = _st(orgImageSize.w);
 				if(monospaceMode == true) {
-					_st w = (k * tmpW)/static_cast<_st>(charRect.w);
+					_st w = (k * tmpW)/_st(charRect.w);
 					_st index = j * tmpW + w;
 					if(tmpW >= w) {
 						pixel = localImageBuf->at(index);
@@ -986,7 +983,7 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 				}
 				*/
 
-				pixel = static_cast<_st>(GetPixel(localImageBuf, charRect.w,
+				pixel = _st(GetPixel(localImageBuf, charRect.w,
 												  orgImageSize.w, j, k));
 
 				if(smoothFlg == true) {
@@ -995,8 +992,8 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 					setVal = (pixel > 128) ? 255 : 0;
 				}
 				if(setVal != 0) {
-					charImage->setRGBA(static_cast<int>(k) + posOffset.w,
-									   static_cast<int>(j) + posOffset.h,
+					charImage->setRGBA(int(k) + posOffset.w,
+									   int(j) + posOffset.h,
 									   argFBScale[setVal*4],
 									   argFBScale[setVal*4 + 1],
 									   argFBScale[setVal*4 + 2],
@@ -1018,20 +1015,20 @@ int fk_TextImage::GetPixel(fk_GlyphBuffer *argBuffer, int argCW, int argIW, int 
 
 	if(monospaceMode == true) {
 		int w = (argK * argIW)/argCW;
-		index = static_cast<_st>(argJ * argIW + w);
+		index = _st(argJ * argIW + w);
 		if(argIW >= w) {
 			pixel = argBuffer->at(index);
 		} else {
 			_st pixel1 = argBuffer->at(index);
 			_st pixel2 = argBuffer->at(index+1);
 			double t = (double(argIW)/double(argCW)) * double(argK) - double(w);
-			pixel = static_cast<_st>((1.0 - t)*double(pixel1) + t * double(pixel2));
+			pixel = _st((1.0 - t)*double(pixel1) + t * double(pixel2));
 		}
 	} else {
-		index = static_cast<_st>(argJ * argIW + argK);
+		index = _st(argJ * argIW + argK);
 		pixel = argBuffer->at(index);
 	}
-	return static_cast<int>(pixel);
+	return int(pixel);
 }
 	
 
@@ -1218,7 +1215,7 @@ void fk_TextImage::ReCalcCharOffset(void)
 	if(charArray.empty() == true) return;
 
 	for(i = 0; i < charArray.size(); i++) {
-		index = static_cast<_st>(lineMap[i]);
+		index = _st(lineMap[i]);
 		charArray[i].x += lineArray[index].x;
 		charArray[i].y += lineArray[index].y;
 	}
@@ -1232,7 +1229,7 @@ void fk_TextImage::InitTextImage(void)
 	int				bgCol[4];
 
 	for(i = 0; i < 4; i++) {
-		bgCol[i] = static_cast<int>(bgColor.col[i] * 256);
+		bgCol[i] = int(bgColor.col[i] * 256);
 		if(bgCol[i] >= 256) bgCol[i] = 255;
 		if(bgCol[i] < 0) bgCol[i] = 0;
 	}
@@ -1244,10 +1241,9 @@ void fk_TextImage::InitTextImage(void)
 
 void fk_TextImage::CopyCharImage(int argID)
 {
-	_st		id = static_cast<_st>(argID);
+	_st		id = _st(argID);
 
 	copyImage(charImages[id], charArray[id].x, charArray[id].y);
-
 	return;
 }
 
@@ -1266,7 +1262,7 @@ bool fk_TextImage::loadStrFile(const string argFileName, fk_StringCode argCode)
 
 int fk_TextImage::getLineNum(void) const
 {
-	return static_cast<int>(lineArray.size());
+	return int(lineArray.size());
 }
 
 int fk_TextImage::getLineCharNum(int argLineID) const
@@ -1279,17 +1275,17 @@ int fk_TextImage::getLineCharNum(int argLineID) const
 		if(argLineID == lineMap[i]) count++;
 		if(argLineID < lineMap[i]) break;
 	}
-	return static_cast<int>(count);
+	return int(count);
 }
 
 int fk_TextImage::getAllCharNum(void) const
 {
-	return static_cast<int>(charArray.size());
+	return int(charArray.size());
 }
 
 int fk_TextImage::getLineWidth(int argID) const
 {
-	_st		id = static_cast<_st>(argID);
+	_st		id = _st(argID);
 
 	if(argID < 0 || id >= lineArray.size()) return -1;
 
@@ -1298,7 +1294,7 @@ int fk_TextImage::getLineWidth(int argID) const
 
 int fk_TextImage::getLineHeight(int argID) const
 {
-	_st		id = static_cast<_st>(argID);
+	_st		id = _st(argID);
 
 	if(argID < 0 || id >= lineArray.size()) return -1;
 
@@ -1307,7 +1303,7 @@ int fk_TextImage::getLineHeight(int argID) const
 
 int fk_TextImage::getLineStartXPos(int argID) const
 {
-	_st		id = static_cast<_st>(argID);
+	_st		id = _st(argID);
 
 	if(argID < 0 || id >= lineArray.size()) return -1;
 
@@ -1316,7 +1312,7 @@ int fk_TextImage::getLineStartXPos(int argID) const
 
 int fk_TextImage::getLineStartYPos(int argID) const
 {
-	_st		id = static_cast<_st>(argID);
+	_st		id = _st(argID);
 
 	if(argID < 0 || id >= lineArray.size()) return -1;
 

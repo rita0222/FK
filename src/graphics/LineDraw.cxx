@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,10 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "LineDraw_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
 #include <FK/LineDraw.H>
 #include <FK/OpenGL.H>
@@ -89,233 +85,168 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
+	: lineShader(nullptr), modelID(0), elemID(0)
 {
-	SetArrayState(false);
+	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
+	delete lineShader;
 	return;
 }
 
-void fk_LineDraw::SetArrayState(bool argState)
+
+void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 {
-	arrayState = argState;
-	return;
-}
+	auto shapeType = argModel->getShape()->getRealShapeType();
+	auto col = &(argModel->getLineColor()->col);
+	auto mode = argModel->getElementMode();
+	auto modelShader = argModel->getShader();
 
-void fk_LineDraw::DrawShapeLine(fk_Model *argObj, bool argPickFlag)
-{
-	fk_MaterialMode	shapeMateMode;
-	fk_MaterialMode	modelMateMode;
-
-	shapeMateMode = argObj->getShape()->getMaterialMode();
-	modelMateMode = argObj->getMaterialMode();
-
-	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argObj->getWidth()));
-
-	if(argPickFlag == true) {
-		DrawShapeLinePick(argObj);
-	} else if(modelMateMode == FK_PARENT_MODE) {
-		if(shapeMateMode == FK_PARENT_MODE) {
-			DrawShapeLineMaterial(argObj);
-		} else if(shapeMateMode == FK_CHILD_MODE) {
-			DrawShapeLineNormal(argObj, false);
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
 		}
-	} else if(modelMateMode == FK_CHILD_MODE) {
-		DrawShapeLineNormal(argObj, true);
-	}
-
-	return;
-}
-
-void fk_LineDraw::DrawBoundaryLine(fk_Model *argObj)
-{
-	fk_IndexFaceSet		*ifsetP = argObj->GetBShape();
-	fk_Color			*modelColor;
-
-	if(argObj->getInterMode() == true &&
-	   argObj->getInterStatus() == true) {
-		modelColor = argObj->getBIntLineColor();
 	} else {
-		modelColor = argObj->getBLineColor();
+		if(lineShader == nullptr) ShaderSetup();
+		else shader = lineShader;
 	}
+	
+	auto parameter = shader->getParameter();
 
-	if(ifsetP == nullptr) return;
-	glDisable(GL_LIGHTING);
-	glLineWidth(static_cast<GLfloat>(argObj->getBLineWidth()));
-	glColor4fv(&modelColor->col[0]);	
+	SetParameter(parameter);
+	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
-	DrawIFSLineSub(ifsetP);
+	shader->ProcPreShader();
 
-	return;
-}
+	switch(mode) {
+	  case FK_ELEM_MODEL:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+		break;
 
-void fk_LineDraw::DrawShapeLinePick(fk_Model *argObj)
-{
-	switch(argObj->getShape()->getRealShapeType()) {
+	  case FK_ELEM_ELEMENT:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
+		break;
+
+	  default:
+		return;
+	}
+	
+	glEnable(GL_LINE_SMOOTH);
+
+	switch(shapeType) {
+	  case FK_SHAPE_LINE:
+		Draw_Line(argModel, parameter);
+		break;
+
 	  case FK_SHAPE_IFS:
-		DrawIFSLinePick(argObj);
-		break;
-
-	  case FK_SHAPE_SOLID:
-		DrawSolidLinePick(argObj);
-		break;
-
-	  case FK_SHAPE_CURVE:
-		DrawCurveLinePick(argObj);
-		break;
-
-	  case FK_SHAPE_SURFACE:
-		DrawSurfaceLinePick(argObj);
+		Draw_IFS(argModel, parameter);
 		break;
 
 	  default:
 		break;
 	}
+
+	shader->ProcPostShader();
 	return;
 }
 
-void fk_LineDraw::DrawSolidLinePick(fk_Model *argObj)
+void fk_LineDraw::ShaderSetup(void)
 {
-	fk_Solid			*solidP;
-	list<fk_Edge *>		*edgeStack;
-	bool				reverseFlag = argObj->getReverseDrawMode();
+	lineShader = new fk_ShaderBinder();
+	shader = lineShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
-	list<fk_Edge *>::iterator			ite;
-	list<fk_Edge *>::reverse_iterator	rite;
+	prog->vertexShaderSource =
+		#include "GLSL/Line_VS.out"
+		;
 
+	prog->fragmentShaderSource =
+		#include "GLSL/Line_FS.out"
+		;
 
-	solidP = static_cast<fk_Solid *>(argObj->getShape());
-	if(solidP->checkDB() == false) return;
-	if(solidP->getNextE(nullptr) == nullptr) return;
-
-	if(solidP->GetECacheStatus() == false) {
-		solidP->MakeECache();
+	if(prog->validate() == false) {
+		fk_Window::printf("Shader Error");
+		fk_Window::putString(prog->getLastError());
 	}
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	ParamInit(prog, param);
 
-	edgeStack = solidP->GetECache();
+	auto progID = prog->getProgramID();
+	
+	modelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ModelColor");
+	elemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ElementColor");
 
-	if(reverseFlag == false) {
-		for(ite = edgeStack->begin(); ite != edgeStack->end(); ++ite) {
-			DrawSolidLinePickElem(*ite);
-		}
-	} else {
-		for(rite = edgeStack->rbegin(); rite != edgeStack->rend(); ++rite) {
-			DrawSolidLinePickElem(*rite);
-		}
-	}
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
 
 	return;
 }
 
-void fk_LineDraw::DrawSolidLinePickElem(fk_Edge *argE)
+void fk_LineDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
 {
-	glPushName(static_cast<GLuint>(argE->getID()*3 + 1));
-	CommonLineDrawFunc(argE, true);
-	glPopName();
-	return;
+	argParam->reserveAttribute(fk_Line::vertexName);
+	argParam->reserveAttribute(fk_Line::lineElementColorName);
+	
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
+	argProg->link();
 }
 
-
-void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
+GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 {
-	fk_IndexFaceSet		*ifsetP;
-	int					ii;
-	int					lineNum;
-	fk_FVector			*pos;
-	int					*lineSet;
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetLineVAO(vao);
+	argShape->DefineVBO();
 
-	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
-	pos = &ifsetP->pos[0];
-	lineNum = static_cast<int>(ifsetP->edgeSet.size())/2;
-	lineSet = &ifsetP->edgeSet[0];
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	for(ii = 0; ii < lineNum; ++ii) {
-		glPushName(static_cast<GLuint>(ii*3 + 1));
-		glBegin(GL_LINE);
-		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii]].x));
-		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii+1]].x));
-		glEnd();
-		glPopName();
-	}
-
-	return;
+	//fk_Window::printf("Line VAO = %d", vao);
+	return vao;
 }
 
-void fk_LineDraw::DrawCurveLinePick(fk_Model *argObj)
+void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
+	fk_Line		*line = dynamic_cast<fk_Line *>(argModel->getShape());
+	GLuint		vao = line->GetLineVAO();
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	curve->makeCache();
-	_st div = static_cast<_st>(curve->getDiv());
-	auto vArray = curve->getPosCache();
-
-	for(_st i = 0; i < div; ++i) {
-		auto vPos1 = &((*vArray)[i]);
-		auto vPos2 = &((*vArray)[i+1]);
-		glPushName(static_cast<GLuint>(i*3 + 1));
-		glBegin(GL_LINE);
-		glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
-		glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
-		glEnd();
-		glPopName();
+	if(vao == 0) {
+		vao = VAOSetup(line);
 	}
-
+	glBindVertexArray(vao);
+	line->BindShaderBuffer(argParam->getAttrTable());
+	glEnable(GL_LINE_SMOOTH);
+	glDrawArrays(GL_LINES, 0, line->getSize()*2);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 	return;
 }
 
-void fk_LineDraw::DrawSurfaceLinePick(fk_Model *argObj)
+void fk_LineDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
-	GLuint count = 0;
+	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
+	GLuint			vao = ifs->GetLineVAO();
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	surf->makeCache();
-	_st div = static_cast<_st>(surf->getDiv());
-	auto vArray = surf->getPosCache();
-
-	for(_st i = 0; i <= div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			auto vPos1 = &((*vArray)[i*(div+1)+j]);
-			auto vPos2 = &((*vArray)[i*(div+1)+j+1]);
-			glPushName(static_cast<GLuint>(count*3 + 1));
-			glBegin(GL_LINE);
-			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
-			glEnd();
-			glPopName();
-			++count;
-		}
+	if(vao == 0) {
+		vao = VAOSetup(ifs);
 	}
-
-	for(_st i = 0; i <= div; ++i) {
-		for(_st j = 0; j < div; ++j) {
-			auto vPos1 = &((*vArray)[j*(div+1)+i]);
-			auto vPos2 = &((*vArray)[(j+1)*(div+1)+i]);
-			glPushName(static_cast<GLuint>(count*3 + 1));
-			glBegin(GL_LINE);
-			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
-			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
-			glEnd();
-			glPopName();
-			++count;
-		}
-	}
+	glBindVertexArray(vao);
+	ifs->BindShaderBuffer(argParam->getAttrTable());
+	ifs->EdgeIBOSetup();
+	glEnable(GL_LINE_SMOOTH);
+	glDrawElements(GL_LINES, GLint(ifs->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 	return;
 }
 
-
-
+/*
 void fk_LineDraw::DrawShapeLineMaterial(fk_Model *argObj)
 {
 	switch(argObj->getShape()->getRealShapeType()) {
@@ -357,9 +288,9 @@ void fk_LineDraw::DrawSolidLineMaterial(fk_Model *argObj)
 
 	edgeStack = solidP->GetECache();
 
-	modelColor = argObj->getInhLineColor();
+	modelColor = argObj->getLineColor();
 	if(modelColor == nullptr) {
-		modelColor = argObj->getInhMaterial()->getAmbient();
+		modelColor = argObj->getMaterial()->getAmbient();
 	}
 
 	oldMateID = -2;
@@ -395,7 +326,8 @@ int fk_LineDraw::DrawSolidLineMaterialElem(fk_Edge *argE,
 	double		trueWidth;
 	fk_Color	*curColor;
 
-
+	FK_UNUSED(argModelColor);
+	
 	retMateID = argOldMateID;
 	switch(argE->getElemMaterialMode()) {
 	  case FK_CHILD_MODE:
@@ -413,11 +345,15 @@ int fk_LineDraw::DrawSolidLineMaterialElem(fk_Edge *argE,
 
 	if(curMateID != argOldMateID) {
 		if(curMateID == FK_UNDEFINED) {
+#ifndef OPENGL4
 			glColor4fv(&argModelColor->col[0]);
+#endif
 			retMateID = FK_UNDEFINED;
 		} else {
 			curColor = (*argMatV)[static_cast<_st>(curMateID)].getAmbient();
+#ifndef OPENGL4			
 			glColor4fv(&curColor->col[0]);
+#endif
 			retMateID = curMateID;
 		}
 	}
@@ -431,9 +367,15 @@ int fk_LineDraw::DrawSolidLineMaterialElem(fk_Edge *argE,
 		glLineWidth(static_cast<GLfloat>(trueWidth));
 	}
 
+#ifndef OPENGL4
 	glBegin(GL_LINES);
+#endif
+
 	CommonLineDrawFunc(argE, false);
+
+#ifndef OPENGL4
 	glEnd();
+#endif
 
 	return retMateID;
 }
@@ -487,16 +429,18 @@ void fk_LineDraw::DrawSolidLineNormal(fk_Model *argObj, bool argFlg)
 	edgeStack = solidP->GetECache();
 
 	if(argFlg == true) {
-		ModelColor = argObj->getInhLineColor();
+		ModelColor = argObj->getLineColor();
 		if(ModelColor == nullptr) {
-			ModelColor = argObj->getInhMaterial()->getAmbient();
+			ModelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		ModelColor = solidP->getMaterial(0)->getAmbient();
 	}
 
+#ifndef OPENGL4
 	glDisable(GL_LIGHTING);
-	glColor4fv(&ModelColor->col[0]);	
+	glColor4fv(&ModelColor->col[0]);
+#endif
 
 	orgWidth = argObj->getWidth();
 
@@ -524,9 +468,15 @@ void fk_LineDraw::DrawSolidLineNormalElem(fk_Edge *argE, double argOrgWidth)
 		glLineWidth(static_cast<GLfloat>(trueWidth));
 	}
 
+#ifndef OPENGL4
 	glBegin(GL_LINES);
+#endif
+
 	CommonLineDrawFunc(argE, false);
+
+#ifndef OPENGL4	
 	glEnd();
+#endif
 }
 
 
@@ -538,16 +488,18 @@ void fk_LineDraw::DrawIFSLineNormal(fk_Model *argObj, bool argFlag)
 	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
 
 	if(argFlag == true) {
-		modelColor = argObj->getInhLineColor();
+		modelColor = argObj->getLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
+			modelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = ifsetP->getMaterial(0)->getAmbient();
 	}
 
+#ifndef OPENGL4
 	glDisable(GL_LIGHTING);
-	glColor4fv(&modelColor->col[0]);	
+	glColor4fv(&modelColor->col[0]);
+#endif
 
 	DrawIFSLineSub(ifsetP);
 
@@ -565,16 +517,20 @@ void fk_LineDraw::DrawIFSLineSub(fk_IndexFaceSet *argIFS)
 	lineSize = static_cast<int>(argIFS->edgeSet.size());
 
 	if(arrayState == true) {
+#ifndef OPENGL4
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, pos);
+#endif		
 		glDrawElements(GL_LINES, lineSize,
 					   GL_UNSIGNED_INT, edgeSet);
 	} else {
+#ifndef OPENGL4
 		glBegin(GL_LINES);
 		for(_st ii = 0; ii < static_cast<_st>(lineSize); ++ii) {
 			glVertex3fv(static_cast<GLfloat *>(&pos[edgeSet[ii]].x));
 		}
 		glEnd();
+#endif
 	}
 	return;
 }
@@ -587,11 +543,17 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 	fk_Half				*lH, *rH;
 	fk_Vertex			*lV, *rV;
 
+	FK_UNUSED(argMode);
+	FK_UNUSED(vPos);
+
 	if((curv = argE->getCurveGeometry()) != nullptr) {
 		curv->makeCache();
 		int div = curv->getDiv();
 		vArray = curv->getPosCache();
 
+		FK_UNUSED(div);
+
+#ifndef OPENGL4
 		if(argMode == false) {
 			glEnd();
 		}
@@ -606,7 +568,8 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 		if(argMode == false) {
 			glBegin(GL_LINES);
 		}
-
+#endif
+		
 	} else {
 
 		rH = argE->getRightHalf();
@@ -616,6 +579,7 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 		rV = rH->getVertex();
 		if(lV == nullptr || rV == nullptr) return;
 
+#ifndef OPENGL4
 		if(argMode == true) {
 			glBegin(GL_LINES);
 		}
@@ -628,6 +592,7 @@ void fk_LineDraw::CommonLineDrawFunc(fk_Edge *argE, bool argMode)
 		if(argMode == true) {
 			glEnd();
 		}
+#endif
 	}
 
 	return;
@@ -639,28 +604,35 @@ void fk_LineDraw::DrawCurveLineNormal(fk_Model *argObj, bool argMode)
 	fk_Color	*modelColor;
 
 	if(argMode == true) {
-		modelColor = argObj->getInhLineColor();
+		modelColor = argObj->getLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
+			modelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = curve->getMaterial(0)->getAmbient();
 	}
 
+#ifndef OPENGL4
 	glDisable(GL_LIGHTING);
 	glColor4fv(&modelColor->col[0]);	
+#endif
 	
 	curve->makeCache();
 	_st div = static_cast<_st>(curve->getDiv());
 	auto vArray = curve->getPosCache();
 
+	FK_UNUSED(div);
+	FK_UNUSED(vArray);
+
+#ifndef OPENGL4
 	glBegin(GL_LINE_STRIP);
 	for(_st i = 0; i < div; ++i) {
 		auto vPos = &((*vArray)[i]);
 		glVertex3dv(static_cast<GLdouble *>(&(vPos->x)));
 	}
 	glEnd();
-
+#endif
+	
 	return;
 }
 
@@ -670,21 +642,27 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 	fk_Color	*modelColor;
 	
 	if(argMode == true) {
-		modelColor = argObj->getInhLineColor();
+		modelColor = argObj->getLineColor();
 		if(modelColor == nullptr) {
-			modelColor = argObj->getInhMaterial()->getAmbient();
+			modelColor = argObj->getMaterial()->getAmbient();
 		}
 	} else {
 		modelColor = surf->getMaterial(0)->getAmbient();
 	}
 
+#ifndef OPENGL4	
 	glDisable(GL_LIGHTING);
 	glColor4fv(&modelColor->col[0]);	
-
+#endif
+	
 	surf->makeCache();
 	_st div = static_cast<_st>(surf->getDiv());
 	auto vArray = surf->getPosCache();
 
+	FK_UNUSED(div);
+	FK_UNUSED(vArray);
+	
+#ifndef OPENGL4
 	for(_st i = 0; i <= div; ++i) {
 		glBegin(GL_LINE_STRIP);
 		for(_st j = 0; j <= div; ++j) {
@@ -702,7 +680,196 @@ void fk_LineDraw::DrawSurfaceLineNormal(fk_Model *argObj, bool argMode)
 		}
 		glEnd();
 	}
+#endif
+
 	return;
 }
 
 #endif
+
+void fk_LineDraw::DrawShapeLinePick(fk_Model *argObj)
+{
+	switch(argObj->getShape()->getRealShapeType()) {
+	  case FK_SHAPE_IFS:
+		DrawIFSLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_SOLID:
+		DrawSolidLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_CURVE:
+		DrawCurveLinePick(argObj);
+		break;
+
+	  case FK_SHAPE_SURFACE:
+		DrawSurfaceLinePick(argObj);
+		break;
+
+	  default:
+		break;
+	}
+	return;
+}
+
+void fk_LineDraw::DrawSolidLinePick(fk_Model *argObj)
+{
+	fk_Solid			*solidP;
+	list<fk_Edge *>		*edgeStack;
+	bool				reverseFlag = argObj->getReverseDrawMode();
+
+	list<fk_Edge *>::iterator			ite;
+	list<fk_Edge *>::reverse_iterator	rite;
+
+
+	solidP = static_cast<fk_Solid *>(argObj->getShape());
+	if(solidP->checkDB() == false) return;
+	if(solidP->getNextE(nullptr) == nullptr) return;
+
+	if(solidP->GetECacheStatus() == false) {
+		solidP->MakeECache();
+	}
+
+#ifndef OPENGL4	
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	edgeStack = solidP->GetECache();
+
+	if(reverseFlag == false) {
+		for(ite = edgeStack->begin(); ite != edgeStack->end(); ++ite) {
+			DrawSolidLinePickElem(*ite);
+		}
+	} else {
+		for(rite = edgeStack->rbegin(); rite != edgeStack->rend(); ++rite) {
+			DrawSolidLinePickElem(*rite);
+		}
+	}
+
+	return;
+}
+
+void fk_LineDraw::DrawSolidLinePickElem(fk_Edge *argE)
+{
+	FK_UNUSED(argE);
+#ifndef OPENGL4	
+	glPushName(static_cast<GLuint>(argE->getID()*3 + 1));
+	CommonLineDrawFunc(argE, true);
+	glPopName();
+#endif
+	return;
+}
+
+
+void fk_LineDraw::DrawIFSLinePick(fk_Model *argObj)
+{
+	fk_IndexFaceSet		*ifsetP;
+	int					ii;
+	int					lineNum;
+	fk_FVector			*pos;
+	int					*lineSet;
+
+	FK_UNUSED(ii);
+	ifsetP = static_cast<fk_IndexFaceSet *>(argObj->getShape());
+
+	pos = &ifsetP->pos[0];
+	lineNum = static_cast<int>(ifsetP->edgeSet.size())/2;
+	lineSet = &ifsetP->edgeSet[0];
+
+#ifndef OPENGL4
+	glDisableClientState(GL_VERTEX_ARRAY);
+	for(ii = 0; ii < lineNum; ++ii) {
+		glPushName(static_cast<GLuint>(ii*3 + 1));
+		glBegin(GL_LINE);
+		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii]].x));
+		glVertex3fv(static_cast<GLfloat *>(&pos[lineSet[2*ii+1]].x));
+		glEnd();
+		glPopName();
+	}
+#endif
+
+	return;
+}
+
+void fk_LineDraw::DrawCurveLinePick(fk_Model *argObj)
+{
+	fk_Curve *curve = static_cast<fk_Curve *>(argObj->getShape());
+
+#ifndef OPENGL4
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	curve->makeCache();
+	_st div = static_cast<_st>(curve->getDiv());
+	auto vArray = curve->getPosCache();
+	FK_UNUSED(div);
+	FK_UNUSED(vArray);
+
+#ifndef OPENGL4
+	for(_st i = 0; i < div; ++i) {
+		auto vPos1 = &((*vArray)[i]);
+		auto vPos2 = &((*vArray)[i+1]);
+		glPushName(static_cast<GLuint>(i*3 + 1));
+		glBegin(GL_LINE);
+		glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+		glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+		glEnd();
+		glPopName();
+	}
+#endif
+
+	return;
+}
+
+void fk_LineDraw::DrawSurfaceLinePick(fk_Model *argObj)
+{
+	fk_Surface *surf = static_cast<fk_Surface *>(argObj->getShape());
+	GLuint count = 0;
+
+	FK_UNUSED(count);
+
+#ifndef OPENGL4
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	surf->makeCache();
+	_st div = static_cast<_st>(surf->getDiv());
+	auto vArray = surf->getPosCache();
+
+	FK_UNUSED(div);
+	FK_UNUSED(vArray);
+
+#ifndef OPENGL4
+	for(_st i = 0; i <= div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			auto vPos1 = &((*vArray)[i*(div+1)+j]);
+			auto vPos2 = &((*vArray)[i*(div+1)+j+1]);
+			glPushName(static_cast<GLuint>(count*3 + 1));
+			glBegin(GL_LINE);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+#endif
+
+#ifndef OPENGL4	
+	for(_st i = 0; i <= div; ++i) {
+		for(_st j = 0; j < div; ++j) {
+			auto vPos1 = &((*vArray)[j*(div+1)+i]);
+			auto vPos2 = &((*vArray)[(j+1)*(div+1)+i]);
+			glPushName(static_cast<GLuint>(count*3 + 1));
+			glBegin(GL_LINE);
+			glVertex3dv(static_cast<GLdouble *>(&(vPos1->x)));
+			glVertex3dv(static_cast<GLdouble *>(&(vPos2->x)));
+			glEnd();
+			glPopName();
+			++count;
+		}
+	}
+#endif
+	return;
+}
+*/

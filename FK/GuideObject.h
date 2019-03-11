@@ -5,7 +5,7 @@
 #include <FK/Model.h>
 
 namespace FK {
-	typedef unsigned int fk_GuideMode;
+	using fk_GuideMode = unsigned int;
 
 	const fk_GuideMode FK_NO_GUIDE = 0x0000;
 	const fk_GuideMode FK_AXIS_X   = 0x0001;
@@ -157,7 +157,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -193,7 +193,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

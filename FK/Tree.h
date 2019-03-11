@@ -26,7 +26,7 @@ namespace FK {
 		virtual ~fk_TreeBaseObject(void) {};
 	};
 
-	typedef std::list<fk_TreeData *>	fk_TList;
+	using fk_TList = std::list<fk_TreeData *>;
 
 
 	//! 木構造用ノードデータクラス
@@ -641,7 +641,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -677,7 +677,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

@@ -1,5 +1,6 @@
 ﻿#include <FK/ShaderParameter.h>
 #include <FK/Matrix.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -42,6 +43,19 @@ void fk_ShaderParameter::setRegister(string argName, fk_Matrix *argValue)
 	matrixTable[argName] = *argValue;
 }
 
+void fk_ShaderParameter::setRegister(string argName, fk_Vector *argValue)
+{
+	vector<float> tmp{float(argValue->x), float(argValue->y), float(argValue->z)};
+	setRegister(argName, &tmp);
+}
+
+void fk_ShaderParameter::setRegister(string argName, fk_HVector *argValue)
+{
+	vector<float> tmp{float(argValue->x), float(argValue->y),
+					  float(argValue->z), float(argValue->w)};
+	setRegister(argName, &tmp);
+}
+
 bool fk_ShaderParameter::removeRegister(string argName)
 {
 	if (floatTable.erase(argName) > 0) return true;
@@ -52,33 +66,33 @@ bool fk_ShaderParameter::removeRegister(string argName)
 	return false;
 }
 
-void fk_ShaderParameter::addAttribute(string argName, int argDim, vector<float> *argValue)
+void fk_ShaderParameter::reserveAttribute(string argName)
 {
-	floatAttributeTable[argName] = tuple<int, vector<float> *>(argDim, argValue);
+	if(attrTable.find(argName) == attrTable.end()) {
+		attrTable[argName] = -1;
+	}
 }
 
-void fk_ShaderParameter::addAttribute(string argName, int argDim, vector<int> *argValue)
+map<string, int> * fk_ShaderParameter::getAttrTable(void)
 {
-	intAttributeTable[argName] = tuple<int, vector<int> *>(argDim, argValue);
+	return &attrTable;
 }
 
-bool fk_ShaderParameter::removeAttribute(string argName)
-{
-	if (floatAttributeTable.erase(argName) > 0) return true;
-	if (intAttributeTable.erase(argName) > 0) return true;
-	return false;
-}
-
-bool fk_ShaderParameter::attachTexture(int argUnit, fk_TextureSampler *argTexture)
+bool fk_ShaderParameter::attachTexture(int argUnit, fk_Texture *argTexture)
 {
 	if (argUnit < 0 || argUnit > 31) return false;
-	textureTable[argUnit] = argTexture;
+	textureTable[argUnit+1] = argTexture;
 	return true;
 }
 
 bool fk_ShaderParameter::detachTexture(int argUnit)
 {
 	return ((textureTable.erase(argUnit) > 0) ? true : false);
+}
+
+void fk_ShaderParameter::clearTexture(void)
+{
+	textureTable.clear();
 }
 
 bool fk_ShaderParameter::Apply(GLuint argProgramID)
@@ -184,30 +198,6 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 		}
 	}
 
-	for(auto pair : floatAttributeTable) {
-		GLint location = GetAttributeLocation(argProgramID, pair.first);
-		if (location >= 0) {
-			int dim = get<0>(pair.second);
-			glEnableVertexAttribArray(GLuint(location));
-			glVertexAttribPointer(GLuint(location), dim, GL_FLOAT, GL_FALSE, 0, 0);
-		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
-			result = false;
-		}
-	}
-
-	for(auto pair : intAttributeTable) {
-		int location = GetAttributeLocation(argProgramID, pair.first);
-		if (location >= 0) {
-			int dim = get<0>(pair.second);
-			glEnableVertexAttribArray(GLuint(location));
-			glVertexAttribPointer(GLuint(location), dim, GL_INT, GL_FALSE, 0, 0);
-		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
-			result = false;
-		}
-	}
-
 	return result;
 }
 
@@ -223,21 +213,21 @@ GLint fk_ShaderParameter::GetLocation(GLuint argProgramID, string argName)
 	return location;
 }
 
-GLint fk_ShaderParameter::GetAttributeLocation(GLuint argProgramID, string argName)
+void fk_ShaderParameter::BindAttr(GLuint argID)
 {
-	if (attributeLocationTable.find(argName) != attributeLocationTable.end()) {
-		return attributeLocationTable[argName];
+	FK_UNUSED(argID);
+	GLuint locID = 0;
+
+	for(auto itr = attrTable.begin(); itr != attrTable.end(); ++itr) {
+		glBindAttribLocation(argID, locID, itr->first.c_str());
+		itr->second = int(locID);
+		locID++;
 	}
-
-	GLint location = glGetAttribLocation(argProgramID, argName.c_str());
-	if (location >= 0) attributeLocationTable[argName] = location;
-
-	return location;
-}
+}			
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -273,7 +263,7 @@ GLint fk_ShaderParameter::GetAttributeLocation(GLuint argProgramID, string argNa
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

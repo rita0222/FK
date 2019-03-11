@@ -1,6 +1,7 @@
 ﻿#ifndef __FK_INDEXFACE_HEADER__
 #define __FK_INDEXFACE_HEADER__
 
+#include <FK/FVecArray.H>
 #include <FK/ParserBase.H>
 #include <FK/ParserData.h>
 #include <list>
@@ -10,14 +11,6 @@ namespace FK {
 	class fk_D3DXAnimation;
 	class fk_BVHBase;
 	class fk_Solid;
-
-	//! インデックスフェースセットの内部データタイプを表す列挙型
-	enum fk_IFType {
-		FK_IF_NONE,			//!<	未定義
-		FK_IF_TRIANGLES,	//!<	3角形集合
-		FK_IF_QUADS,		//!<	4角形集合
-		FK_IF_POLYGON		//!<	任意多角形集合
-	};
 
 	//! インデックスフェースセットによる任意形状を生成、管理するクラス
 	/*!
@@ -73,12 +66,6 @@ namespace FK {
 	 */
 
 	class fk_IndexFaceSet : public fk_ParserData {
-
-		friend class			fk_PointDraw;
-		friend class			fk_LineDraw;
-		friend class			fk_FaceDraw;
-		friend class			fk_TextureDraw;
-		friend class			fk_IFSTexture;
 
 	public:
 
@@ -585,6 +572,14 @@ namespace FK {
 		 */
 		int		getPosSize(void);
 
+		//! 稜線数参照関数
+		/*!
+		 *	形状データの稜線数を取得します。
+		 *
+		 *	\return		稜線数
+		 */
+		int		getEdgeSize(void);
+
 		//! 面数参照関数
 		/*!
 		 *	形状データの面数を取得します。
@@ -637,13 +632,6 @@ namespace FK {
 		 */
 		int		getFaceData(int faceID, int vertexNum);
 
-		//! 面タイプ取得関数
-		/*!
-		 *	形状データの面タイプを取得します。
-		 *
-		 *	\return		面タイプ
-		 */
-		fk_IFType	getFaceType(void);
 
 		//! 面法線ベクトル取得関数
 		/*!
@@ -656,9 +644,9 @@ namespace FK {
 		 *
 		 *	\return		面の法線ベクトル
 		 *
-		 *	\sa setPNorm(), getVNorm()
+		 *	\sa setFaceNorm(), getVertexNorm()
 		 */
-		fk_Vector	getPNorm(int faceID, int order = 0);
+		fk_Vector	getFaceNorm(int faceID, int order = 0);
 
 		//! 頂点法線ベクトル取得関数
 		/*!
@@ -671,24 +659,10 @@ namespace FK {
 		 *
 		 *	\return		頂点の法線ベクトル
 		 *
-		 *	\sa setVNorm(), getPNorm()
+		 *	\sa setVertexNorm(), getFaceNorm()
 		 */
-		fk_Vector	getVNorm(int vertexID, int order = 0);
+		fk_Vector	getVertexNorm(int vertexID, int order = 0);
 
-		//! マテリアルID取得関数
-		/*!
-		 *	面に対して個別に設定してあるマテリアル ID を取得します。
-		 *	マテリアルの個別設定については
-		 *	fk_Shape::setMaterialMode() および
-		 *	fk_Shape::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	faceID		面ID
-		 *
-		 *	\return		マテリアルID
-		 *
-		 *	\sa setElemMaterialID(), fk_Shape
-		 */
-		int		getElemMaterialID(int faceID);
 		//@}
 
 		//! \name 汎用形状操作関数
@@ -697,8 +671,8 @@ namespace FK {
 		//! 頂点移動関数1
 		/*!
 		 *	指定された頂点を移動します。
-		 *	なお、 setVNorm() によって法線ベクトルが設定されていた場合や、
-		 *	setPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
+		 *	なお、 setVertexNorm() によって法線ベクトルが設定されていた場合や、
+		 *	setFaceNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	この関数によって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -717,8 +691,8 @@ namespace FK {
 		//! 頂点移動関数2
 		/*!
 		 *	指定された頂点を移動します。
-		 *	なお、 setVNorm() によって法線ベクトルが設定されていた場合や、
-		 *	setPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
+		 *	なお、 setVertexNorm() によって法線ベクトルが設定されていた場合や、
+		 *	setFaceNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	この関数によって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -738,8 +712,8 @@ namespace FK {
 		//! 頂点移動関数3
 		/*!
 		 *	指定された頂点を移動します。
-		 *	なお、 setVNorm() によって法線ベクトルが設定されていた場合や、
-		 *	setPNorm() によって周辺の面に放線ベクトルが設定されていた場合、
+		 *	なお、 setVertexNorm() によって法線ベクトルが設定されていた場合や、
+		 *	setFaceNorm() によって周辺の面に放線ベクトルが設定されていた場合、
 		 *	この関数によって破棄されます。
 		 *
 		 *	\param[in]	vertexID		頂点ID
@@ -756,7 +730,7 @@ namespace FK {
 		 */
 		bool	moveVPosition(int vertexID, double *array, int order = 0);
 
-		//! 任意形状生成関数
+		//! 任意形状生成関数1
 		/*!
 		 *	与えられたインデックスフェースセット情報から、形状を生成します。
 		 *
@@ -791,6 +765,30 @@ namespace FK {
 						  fk_Vector *posArray,
 						  int order = 0);
 
+		//! 任意形状生成関数2
+		/*!
+		 *	与えられたIFSデータから、形状を生成します。
+		 *
+		 *	\param[in]	faceArray
+		 *		面データ配列。
+		 *		IFSet を vector< vector<int> > 型、
+		 *		polygon を vector<int> 型としたとき、
+		 *		以下のようにして面データを生成していきます。
+		 *
+		 *			polygon.clear();
+		 *			polygon.push_back(頂点ID1);
+		 *			polygon.push_back(頂点ID2);
+		 *				:
+		 *			polygon.push_back(頂点IDn);
+		 *			IFSet.push_back(polygon);
+		 *
+		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
+		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
+		 */
+		void		makeIFSet(std::vector< std::vector<int> > *faceArray,
+							  std::vector<fk_Vector> *posArray,
+							  int order = 0);
+
 		//! 面法線ベクトル設定関数
 		/*!
 		 *	面の法線ベクトルを設定します。
@@ -815,9 +813,9 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 *
-		 *	\sa getPNorm(), setVNorm()
+		 *	\sa getFaceNorm(), setVertexNorm()
 		 */
-		bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
+		bool	setFaceNorm(int faceID, const fk_Vector &norm, int order = 0);
 
 		//! 頂点法線ベクトル設定関数
 		/*!
@@ -843,26 +841,9 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 *
-		 *	\sa getVNorm(), setPNorm()
+		 *	\sa getVertexNorm(), setFaceNorm()
 		 */
-		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
-
-		//! マテリアルID設定関数
-		/*!
-		 *	面に対してマテリアルIDを設定します。
-		 *	マテリアルの個別設定については
-		 *	fk_Shape::setMaterialMode() および
-		 *	fk_Shape::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	faceID		面ID
-		 *
-		 *	\param[in]	materialID	マテリアルID
-		 *
-		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
-		 *
-		 *	\sa getElemMaterialID, fk_Shape
-		 */
-		bool	setElemMaterialID(int faceID, int materialID);
+		bool	setVertexNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
 		//! 法線ベクトル強制計算関数 
 		/*!
@@ -876,9 +857,9 @@ namespace FK {
 		 *	画面が一瞬止まってしまうといった状況が想定されます。
 		 *
 		 *	この関数は、形状中のすべての面と頂点に対して法線ベクトルを強制的に算出します。
-		 *	なお、 setPNorm() や setVNorm() で設定した法線ベクトルは全て破棄されます。
+		 *	なお、 setFaceNorm() や setVertexNorm() で設定した法線ベクトルは全て破棄されます。
 		 *
-		 *	\sa getPNorm(), getVNorm(), setPNorm(), setVNorm()
+		 *	\sa getFaceNorm(), getVertexNorm(), setFaceNorm(), setVertexNorm()
 		 */
 		void	flush(void);
 
@@ -1337,58 +1318,73 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		bool				MakeMesh(std::vector<fk_Vector> *,
-									 std::vector< std::vector<int> > *,
-									 std::vector<int> * = nullptr,
-									 bool = true);
+		bool	MakeMesh(std::vector<fk_Vector> *,
+						 std::vector< std::vector<int> > *, bool = true);
+
 
 		fk_D3DXAnimation *	GetAnimation(void);
 
-		void				PosPrint(std::string);
+		void	DataPrint(void);
+
+		void	EdgeIBOSetup(void);
+		void	FaceIBOSetup(void);
+
+		int		getElemMaterialID(int);
+		bool	setElemMaterialID(int, int);
+		void	forceUpdateAttr(void);
+
+		fk_Vector	getPNorm(int faceID, int order = 0);
+		fk_Vector	getVNorm(int vertexID, int order = 0);
+		bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
+		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
+
+		void	updateAttr(void);
+
+		std::vector<float>	*	GetVertexP(void);
+		std::vector<float>	*	GetNormP(void);
 
 #endif
 
 	private:
 
-		fk_Palette						localPalette;
-		std::vector<fk_FVector>			pos;
-		std::vector<fk_FVector>			timeOrgPos;
-		std::vector<fk_FVector>			vNorm;
-		std::vector<fk_FVector>			pNorm;
-		std::vector<int>				ifs;
-		std::vector<int>				edgeSet;
+		fk_FVecArray					vertexPosition;
+		fk_FVecArray					timeOrgPosition;
+		fk_FVecArray					vertexNormal;
+		fk_FVecArray					faceNormal;
+		std::vector<GLuint>				edgeIndex;
+		std::vector<GLuint>				faceIndex;
 		std::vector< std::vector<int> >	loopStack;
-		bool							modifyFlg;
-		std::vector<char>				vNormFlg;
-		std::vector<char>				pNormFlg;
+		//bool							modifyFlg;
+		//bool							edgeModifyFlg;
 		std::vector<int>				modifyList;
-		std::vector<int>				colorID;
-		bool							colorFlg;
 		fk_D3DXAnimation				*anim;
-
-		int								posSize;
-		int								faceSize;
-		fk_IFType						type;
 
 		bool							cloneFlg;
 		std::list<fk_IndexFaceSet *>	cloneList;
 		fk_IndexFaceSet					*orgIFS;
 
-		void				InitPNorm(void);
-		void				InitVNorm(void);
-		void				ModifyPNorm(void);
-		void				ModifyVNorm(void);
-		void				MakePNorm(int);
+		// 編集があった場合に true, ない場合 false
+		bool				edgeIndexFlg, faceIndexFlg;
+		std::vector<char>	faceNormFlg;
+		std::vector<char>	vertexNormFlg;
 
-		void				ClearPFlg(void);
-		void				ClearVFlg(void);
+		GLuint				edgeIBO, faceIBO;
 
-		fk_Vector			CalcTriNorm(int *);
-		fk_Vector			CalcPolyNorm(int, int *);
+		void				InitFaceNorm(void);
+		void				InitVertexNorm(void);
+
+		void				ModifyFaceNorm(void);
+		void				ModifyVertexNorm(void);
+
+		void				MakeFaceNorm(int);
+
+		void				ResetFaceFlg(void);
+
+		fk_FVector			CalcTriNorm(GLuint *);
+		fk_FVector			CalcPolyNorm(int, int *);
 		void				MakeLoopTable(void);
-		void				MakeEdgeSet(void);
+		void				MakeEdgeSet(std::vector< std::vector<int> > *);
 
-		bool				Init(int, int, int);
 		void				Init(void);
 
 		void				DeleteCloneLink(fk_IndexFaceSet *);
@@ -1402,7 +1398,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -1438,7 +1434,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

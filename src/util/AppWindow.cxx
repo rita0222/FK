@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -196,8 +196,7 @@ fk_AppWindow::fk_AppWindow(void)
 	fk_Material::initDefault();
 
 	light.setShape(&lightShape);
-	light.setMaterial(White);
-	light.getMaterial()->setAmbDiff(1.0, 1.0, 1.0);
+	light.setMaterial(WhiteLight);
 	light.glMoveTo(0.0, 0.0, 0.0);
 	light.glFocus(-1.0, -1.0, -1.0);
 
@@ -207,7 +206,7 @@ fk_AppWindow::fk_AppWindow(void)
 
 	drawWin->setScene(&scene);
 
-	setFPS(60);
+	setFPS(0);
 
 	camera.glMoveTo(0.0, 0.0, 100.0);
 	camera.glFocus(0.0, 0.0, 0.0);
@@ -216,7 +215,7 @@ fk_AppWindow::fk_AppWindow(void)
 	tb = new fk_TrackBall(drawWin, &camera);
 	tbFlag = false;
 	childMode = false;
-	ref_child = NULL;
+	ref_child = nullptr;
 
 	ref_camera = &camera;
 	ref_scene = &scene;
@@ -250,7 +249,7 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 
 	drawWin->setScene(&scene);
 
-	setFPS(60);
+	setFPS(0);
 
 	camera.glMoveTo(0.0, 0.0, 100.0);
 	camera.glFocus(0.0, 0.0, 0.0);
@@ -259,7 +258,7 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 	tb = new fk_TrackBall(drawWin, &camera);
 	tbFlag = false;
 	childMode = true;
-	ref_child = NULL;
+	ref_child = nullptr;
 	argParent.ref_child = this;
 
 	ref_camera = &camera;
@@ -312,10 +311,11 @@ void fk_AppWindow::setBGColor(const fk_Color &argColor)
 
 void fk_AppWindow::setFPS(int argFPS)
 {
-#if defined(_MACOSX_) || defined(_MINGW_)
+/*
+#if defined(_MACOSX_)
 	argFPS = 0;
-#endif //_MACOSX_ || _MINGW_
-
+#endif //_MACOSX_
+*/
 	if(argFPS == 0) {
 		fps = 0;
 		fps_admin.setFrameSkipMode(false);
@@ -433,7 +433,7 @@ void fk_AppWindow::entry(fk_Model &model, fk_GuideObject &argGuide)
 
 void fk_AppWindow::remove(fk_Model &model, fk_GuideObject &argGuide)
 {
-	argGuide.setParent(NULL);
+	argGuide.setParent(nullptr);
 	argGuide.removeScene(ref_scene);
 	ref_scene->removeModel(&model);
 }
@@ -478,7 +478,7 @@ void fk_AppWindow::entry(fk_Model *model, fk_GuideObject *argGuide)
 
 void fk_AppWindow::remove(fk_Model *model, fk_GuideObject *argGuide)
 {
-	argGuide->setParent(NULL);
+	argGuide->setParent(nullptr);
 	argGuide->removeScene(ref_scene);
 	ref_scene->removeModel(model);
 }
@@ -563,7 +563,7 @@ bool fk_AppWindow::update(bool argForceDraw)
 
 	if(fps_admin.getDrawFlag() || fps == 0 || argForceDraw) {
 		drawWin->drawWindow();
-		if(ref_child != NULL) ref_child->drawWin->drawWindow();
+		if(ref_child != nullptr) ref_child->drawWin->drawWindow();
 	}
 	if(Fl::check() == 0) return false;
 
@@ -577,7 +577,7 @@ bool fk_AppWindow::update(bool argForceDraw)
 	}
 
 	if(tbFlag) tb->update();
-	if(ref_child != NULL) {
+	if(ref_child != nullptr) {
 		ref_child->tb->update();
 	}
 
@@ -702,32 +702,6 @@ fk_Vector fk_AppWindow::getPadDirection(int padID, int axisID)
 fk_Input * fk_AppWindow::getPadManager(void)
 {
 	return &input;
-}
-
-bool fk_AppWindow::isModelPicked(fk_Model *model, int pixel, int mouseX, int mouseY)
-{
-	static fk_PickData	pick;
-	const bool orgMode = model->getPickMode();
-
-	if(mouseX == -1 || mouseY == -1) {
-		drawWin->getMousePosition(&mouseX, &mouseY);
-	}
-	if(mouseX == -1 || mouseY == -1) return false;
-
-	model->setPickMode(true);
-	drawWin->getPickModel(&pick, pixel, mouseX, mouseY);
-	model->setPickMode(orgMode);
-
-	for(int i = 0; i < pick.getSize(); i++) {
-		if(pick.getModel(i) == model) return true;
-	}
-
-	return false;
-}
-
-bool fk_AppWindow::isModelPicked(fk_Model &model, int pixel, int mouseX, int mouseY)
-{
-	return this->isModelPicked(&model, pixel, mouseX, mouseY);
 }
 
 void fk_AppWindow::setGuideAxisWidth(double width)

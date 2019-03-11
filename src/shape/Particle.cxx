@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -114,10 +114,7 @@ unsigned int fk_Particle::getCount(void) const
 
 fk_Vector fk_Particle::getPosition(void) const
 {
-	fk_Vector	pos;
-
-	pos = *base->getVertex(id);
-	return pos;
+	return base->getVertex(id);
 }
 
 void fk_Particle::setPosition(const fk_Vector &argVec)
@@ -169,26 +166,30 @@ void fk_Particle::setAccel(double argX, double argY, double argZ)
 	return;
 }
 
-int fk_Particle::getColorID(void) const
-{
-	return base->getColorID(id);
-}
-
 bool fk_Particle::getDrawMode(void) const
 {
 	return base->getDrawMode(id);
-}
-
-void fk_Particle::setColorID(int argID)
-{
-	base->setColorID(id, argID);
-	return;
 }
 
 void fk_Particle::setDrawMode(bool argFlag)
 {
 	base->setDrawMode(id, argFlag);
 	return;
+}
+
+void fk_Particle::setColor(fk_Color argCol)
+{
+	base->setColor(id, &argCol);
+}
+
+void fk_Particle::setColor(fk_Color *argCol)
+{
+	base->setColor(id, argCol);
+}
+
+fk_Color fk_Particle::getColor(void)
+{
+	return base->getColor(id);
 }
 
 void fk_Particle::handle(void)
@@ -210,6 +211,10 @@ fk_ParticleSet::fk_ParticleSet(unsigned int argMax)
 	maxNum = argMax;
 	count = 0;
 	allMode = indivMode = false;
+
+	genMethod = [](fk_Particle *){};
+	allMethod = [](){};
+	indivMethod = [](fk_Particle *){};
 
 	return;
 }
@@ -312,30 +317,7 @@ unsigned int fk_ParticleSet::getMaxSize(void) const
 {
 	return maxNum;
 }
-
-void fk_ParticleSet::setColorPalette(int argID, const fk_Color &argColor)
-{
-	setColorPalette(argID, argColor.col[0], argColor.col[1], argColor.col[2]);
-	return;
-}
-
-void fk_ParticleSet::setColorPalette(int argID,
-									 float argR, float argG, float argB)
-{
-	fk_Material		col;
-
-	col.setAmbient(argR, argG, argB);
-	point->setPalette(col, argID);
-	return;
-}
-
-void fk_ParticleSet::setColorPalette(int argID,
-									 double argR, double argG, double argB)
-{
-	setColorPalette(argID, float(argR), float(argG), float(argB));
-	return;
-}
-
+/*
 void fk_ParticleSet::genMethod(fk_Particle *)
 {
 	return;
@@ -350,6 +332,7 @@ void fk_ParticleSet::indivMethod(fk_Particle *)
 {
 	return;
 }
+*/
 
 void fk_ParticleSet::setAllMode(bool argMode)
 {
@@ -399,3 +382,9 @@ fk_Shape * fk_ParticleSet::getShape(void) const
 {
 	return static_cast<fk_Shape *>(point);
 }
+
+int fk_Particle::getColorID(void) const { return 0; }
+void fk_Particle::setColorID(int) { return; }
+void fk_ParticleSet::setColorPalette(int, const fk_Color &) { return; }
+void fk_ParticleSet::setColorPalette(int, float, float, float) { return; }
+void fk_ParticleSet::setColorPalette(int, double, double, double) { return; }

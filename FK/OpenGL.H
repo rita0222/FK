@@ -2,26 +2,28 @@
 #define __FK_OPENGL_HEADER__
 
 #ifdef _MACOSX_
-#define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+ #ifdef OPENGL4
+  #define GL_SILENCE_DEPRECATION
+  #include <OpenGL/OpenGL.h>
+  #include <OpenGL/gl3.h>
+ #else // OPENGL4
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glu.h>
+ #endif // OpenGL4
 #else // _MACOSX_
-#if defined(WIN32) && !defined(_MINGW_)
-//#define GLEW_STATIC
-#include <windows.h>
-#include <GL/glew.h>
-#endif // WIN32
-#include <GL/gl.h>
-#ifndef NO_GLU_LIBRARY
-#include <GL/glu.h>
-#endif // NO_GLU_LIBRARY
+ #if defined(WIN32) && !defined(_MINGW_)
+  //#define GLEW_STATIC
+  #include <windows.h>
+  #include <GL/glew.h>
+ #endif // WIN32
+ #include <GL/gl.h>
 #endif // _MACOSX_
 
 #endif /* !__FK_OPENGL_HEADER__ */
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -57,7 +59,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

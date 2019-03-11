@@ -1,50 +1,34 @@
 ﻿#ifndef __FK_TEXTURE_DRAW_HEADER__
 #define __FK_TEXTURE_DRAW_HEADER__
 
-#include <FK/OpenGL.H>
-#include <FK/Texture.h>
-#include <vector>
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
 
 namespace FK {
-	
-	class fk_IFSTexture;
-	class fk_ARTexture;
-	class fk_Model;
-
-	class fk_TextureDraw {
-
+	class fk_TextureDraw : public fk_DrawBase {
 	public:
 		fk_TextureDraw(void);
 		virtual ~fk_TextureDraw();
 
-		void	StartUp(void);
-		void	SetArrayState(bool);
-		void	DrawTextureObj(fk_Model *, bool, bool = false);
-		void	ClearTextureMemory(void);
-		void	SetBindMode(bool);
-		bool	GetBindMode(void);
-
-		unsigned long GetUsingTextureMemory(void);
-		static void	ReleaseTexture_(fk_Image *);
-
+		void	DrawShapeTexture(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
 	private:
-		bool							arrayState;
-		bool							bindMode;
-		fk_TexID						oldTexID;
-		static std::vector<GLuint>		texNameArray;
-		static unsigned long			texLoadedSize;
-		static std::vector<fk_Image *>	texImageArray;
+		fk_ShaderBinder		*textureShader;
 
-		void	GenTextureObj(fk_Texture *);
-		void	ReplaceTextureObj(fk_Texture *);
-		void	InitTextureEnv(fk_Texture *);
+		GLuint	modulateID, replaceID, decalID;
+
+		void 	ShaderSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
+		void	PolygonModeSet(void);
 	};
 }
+
 #endif /* !__FK_TEXTURE_DRAW_HEADER__ */
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -80,7 +64,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

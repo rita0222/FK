@@ -3,7 +3,7 @@
 
 namespace FK {
 	//! ブレンドモード型
-	typedef unsigned char	fk_BlendMode;
+	using fk_BlendMode = unsigned char;
 
 	const fk_BlendMode		FK_BLEND_ALPHA_MODE		= 0;	//!< アルファブレンド(デフォルト)
 	const fk_BlendMode		FK_BLEND_NEGATIVE_MODE	= 1;	//!< 反転
@@ -15,7 +15,7 @@ namespace FK {
 	const fk_BlendMode		FK_BLEND_CUSTOM_MODE	= 255;	//!< カスタム
 
 	//! ブレンド係数型
-	typedef unsigned char	fk_BlendFactor;
+	using fk_BlendFactor = unsigned char;
 
 	const fk_BlendFactor	FK_FACTOR_ZERO					= 0;	//! 0
 	const fk_BlendFactor	FK_FACTOR_ONE					= 1;	//! 1
@@ -29,7 +29,7 @@ namespace FK {
 	const fk_BlendFactor	FK_FACTOR_ONE_MINUS_DST_ALPHA	= 9;	//! 1-Da
 
 	//! デプス読み書きモード型
-	typedef unsigned char	fk_DepthMode;
+	using fk_DepthMode = unsigned char;
 
 	const fk_DepthMode		FK_DEPTH_NO_USE			= 0;	//!< デプスバッファの参照も更新せず、常に上書きします
 	const fk_DepthMode		FK_DEPTH_READ			= 1;	//!< デプスバッファを参照し、前後関係のチェックを行います
@@ -41,7 +41,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -77,7 +77,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

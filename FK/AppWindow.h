@@ -3,7 +3,7 @@
 
 #include <FK/Window.h>
 #include <FK/Light.h>
-#include <FK/FrameController.H>
+#include <FK/FrameController.h>
 #include <FK/GuideObject.h>
 #include <FK/TrackBall.h>
 #include <FK/MotionCharactor.h>
@@ -20,7 +20,7 @@ namespace FK {
 		FK_PAD_RIGHT
 	};
 
-	typedef fk_PadDirection fkut_PadDirection;
+	using fkut_PadDirection = fk_PadDirection;
 
 #define FKUT_PAD_UP		FK_PAD_UP
 #define FKUT_PAD_DOWN	FK_PAD_DOWN
@@ -826,64 +826,6 @@ namespace FK {
 		 */
 		void setTrackBallMode(bool mode);
 
-		//! モデルクリック判定関数1
-		/*!
-		 *	マウスでモデルをクリックしているかどうかを判定します。
-		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
-		 *	そのままだと現在のカーソル位置を基準に判定しますが、
-		 *	任意の座標を指定したい場合は、
-		 *	(モデル, 誤差を許容するピクセル数, X 座標, Y 座標)
-		 *	の形式で引数を渡します。
-		 *	カーソルがモデルに重なっている場合は true、
-		 *	いない場合は false を返します。
-		 *
-		 *	\param[in]	model	判定対象モデル。
-		 *	\param[in]	pixel	誤差許容ピクセル数。
-		 *	\param[in]	mouseX
-		 *		判定対象クリック位置のx座標。
-		 *		-1 を指定した場合や省略した場合は、
-		 *		現在のマウスポインタ位置の x 座標が対象となります。
-		 *	\param[in]	mouseY
-		 *		判定対象クリック位置のy座標。
-		 *		-1 を指定した場合や省略した場合は、
-		 *		現在のマウスポインタ位置の y 座標が対象となります。
-		 *
-		 *	\return
-		 *		カーソルがモデルに重なっている場合は true、
-		 *		いない場合は false を返します。
-		 */
-		bool isModelPicked(fk_Model *model, int pixel = 1,
-						   int mouseX = -1, int mouseY = -1);
-
-		//! モデルクリック判定関数2
-		/*!
-		 *	マウスでモデルをクリックしているかどうかを判定します。
-		 *	引数には判定対象としたいモデルを渡します。1 つずつしか判定できません。
-		 *	そのままだと現在のカーソル位置を基準に判定しますが、
-		 *	任意の座標を指定したい場合は、
-		 *	(モデル, 誤差を許容するピクセル数, X 座標, Y 座標)
-		 *	の形式で引数を渡します。
-		 *	カーソルがモデルに重なっている場合は true、
-		 *	いない場合は false を返します。
-		 *
-		 *	\param[in]	model	判定対象モデル。
-		 *	\param[in]	pixel	誤差許容ピクセル数。
-		 *	\param[in]	mouseX
-		 *		判定対象クリック位置のx座標。
-		 *		-1 を指定した場合や省略した場合は、
-		 *		現在のマウスポインタ位置の x 座標が対象となります。
-		 *	\param[in]	mouseY
-		 *		判定対象クリック位置のy座標。
-		 *		-1 を指定した場合や省略した場合は、
-		 *		現在のマウスポインタ位置の y 座標が対象となります。
-		 *
-		 *	\return
-		 *		カーソルがモデルに重なっている場合は true、
-		 *		いない場合は false を返します。
-		 */
-		bool isModelPicked(fk_Model &model, int pixel = 1,
-						   int mouseX = -1, int mouseY = -1);
-
 		//! FPS視点的カメラ制御関数1
 		/*!
 		 *	FPS 視点のゲーム特有の、マウス移動による視点操作処理を行います。
@@ -981,7 +923,6 @@ namespace FK {
 #endif
 
 	private:
-		friend class fk_SpriteModel;
 		friend class fk_ShaderBinder;
 
 		Fl_Window				*mainWin;
@@ -1011,14 +952,14 @@ namespace FK {
 		void ToggleScreen(void);
 	};
 
-	typedef fk_AppWindow fkut_SimpleWindow;
+	using fkut_SimpleWindow = fk_AppWindow;
 }
 
 #endif //!__FK_SIMPLE_WINDOW_HEADER__
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -1054,7 +995,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -606,7 +606,7 @@ void fk_OrthoMatrix::Print(string argStr) const
 	return;
 }
 
-float * fk_OrthoMatrix::GetBuffer(void)
+GLfloat * fk_OrthoMatrix::GetBuffer(void)
 {
 	if(buf == nullptr) buf = new float[16];
 	if(updateStatus == true) {
@@ -742,6 +742,19 @@ bool fk_Matrix::inverse(void)
 	return false;
 }
 
+bool fk_Matrix::covariant(void)
+{
+	m[0][3] = 0.0;
+	m[1][3] = 0.0;
+	m[2][3] = 0.0;
+	m[3][3] = 0.0;
+	if(fk_MatrixInverse(m) == false) {
+		return false;
+	}
+	negate();
+	return true;
+}
+
 // 特異行列判定関数 
 bool fk_Matrix::isSingular(void) const
 {
@@ -785,8 +798,61 @@ void fk_Matrix::makeScale(const fk_Vector &Vec)
 	m[1][1] = Vec.y;
 	m[2][2] = Vec.z;
 
+	updateStatus = true;
 	return;
 }
+
+void fk_Matrix::makePerspective(double argFovy, double argNear, double argFar, double argAspect)
+{
+	MakeZeroMatrix(m);
+	double f = 1.0/tan(argFovy/2.0);
+
+	m[0][0] = f/argAspect;
+	m[1][1] = f;
+	m[2][2] = -(argFar + argNear)/(argFar - argNear);
+	m[2][3] = -(2.0 * argFar * argNear)/(argFar - argNear);
+	m[3][2] = -1.0;
+
+	updateStatus = true;
+	return;
+}
+
+void fk_Matrix::makeFrustum(double argLeft, double argRight,
+							double argBottom, double argTop,
+							double argNear, double argFar)
+{
+	MakeZeroMatrix(m);
+
+	m[0][0] = (2.0 * argNear)/(argRight - argLeft);
+	m[0][2] = (argRight + argLeft)/(argRight - argLeft);
+	m[1][1] = (2.0 * argNear)/(argTop - argBottom);
+	m[1][2] = (argTop + argBottom)/(argTop - argBottom);
+	m[2][2] = -(argFar + argNear)/(argFar - argNear);
+	m[2][3] = -(2.0 * argFar * argNear)/(argFar - argNear);
+	m[3][2] = -1.0;
+
+	updateStatus = true;
+	return;
+}
+
+void fk_Matrix::makeOrtho(double argLeft, double argRight,
+						  double argBottom, double argTop,
+						  double argNear, double argFar)
+{
+	MakeIdentMatrix(m);
+
+	m[0][0] = 2.0/(argRight - argLeft);
+	m[1][1] = 2.0/(argTop - argBottom);
+	m[2][2] = -2.0/(argFar - argNear);
+	m[0][3] = -(argRight + argLeft)/(argRight - argLeft);
+	m[1][3] = -(argTop + argBottom)/(argTop - argBottom);
+	m[2][3] = -(argFar + argNear)/(argFar - argNear);
+
+	updateStatus = true;
+	return;
+}
+
+
 
 // 逆行列出力演算子 
 fk_Matrix fk_Matrix::operator !(void) const

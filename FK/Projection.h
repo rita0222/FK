@@ -1,7 +1,8 @@
 ﻿#ifndef __FK_PROJECTION_HEADER__
 #define __FK_PROJECTION_HEADER__
 
-#include <FK/Base.h>
+#include <functional>
+#include <FK/Matrix.h>
 
 namespace FK {
 	//! 投影法を表す列挙型
@@ -38,13 +39,18 @@ namespace FK {
 		 */
 		fk_ProjectMode	getMode(void) const;
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_Matrix		*GetMatrix(void);
+		std::function<void()>	MakeMat;
+#endif
+
 	private:
 		fk_ProjectMode	Mode;
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-
+		fk_Matrix		ProjM;
 		void			SetMode(fk_ProjectMode);
 
 #endif
@@ -136,7 +142,18 @@ namespace FK {
 		 */
 		void			setFar(double far);
 
-		//! 一括設定関数
+		//! アスペクト比設定関数
+		/*!
+		 *	アスペクト比を明示的に設定する場合に使用します。
+		 *	通常、アスペクト比は自動的に設定されるためこの設定を行う必要はありませんが、
+		 *	あえてウィンドウの縦横比とは異なるアスペクト比を設定したい場合は、
+		 *	この関数を利用して下さい。
+		 *
+		 *	\param[in]	aspect	アスペクト比
+		 */
+		void			setAspect(double aspect);
+
+		//! 一括設定関数1
 		/*!
 		 *	視野角、クリッピング面距離を一括して設定します。
 		 *
@@ -146,7 +163,18 @@ namespace FK {
 		 */
 		void			setAll(double fovy, double near, double far);
 
-		//! 視野角参照関数
+		//! 一括設定関数2
+		/*!
+		 *	視野角、クリッピング面距離、アスペクト比を一括して設定します。
+		 *
+		 *	\param[in]	fovy	視野角。単位は弧度法(ラジアン)です。
+		 *	\param[in]	near	クリッピング近距離面への距離
+		 *	\param[in]	far		クリッピング遠距離面への距離
+		 *	\param[in]	aspect	アスペクト比
+		 */
+		void			setAll(double fovy, double near, double far, double aspect);
+
+//! 視野角参照関数
 		/*!
 		 *	視野角を参照します。
 		 *
@@ -171,9 +199,19 @@ namespace FK {
 		 */
 		double			getFar(void) const;
 
+		//! アスペクト比参照関数
+		/*!
+		 *	アスペクト比を参照します。
+		 *
+		 *	\return		アスペクト比
+		 */
+		double			getAspect(void) const;
+
 	private:
 		double			Fovy;
 		double			Near, Far;
+		double			Aspect;
+		bool			AutoMode;
 	};
 
 	//! 一般透視投影を制御するクラス
@@ -528,7 +566,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -564,7 +602,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

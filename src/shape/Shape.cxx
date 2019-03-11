@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,20 +69,56 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
+
 #include <FK/Shape.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
+const string fk_Shape::vertexName = "fk_Vertex";
+const string fk_Shape::normalName = "fk_Normal";
+const string fk_Shape::pointModelColorName = "fk_PointModelColor";
+const string fk_Shape::pointElementColorName = "fk_PointElementColor";
+const string fk_Shape::pointElementAliveName = "fk_PointElementAlive";
+const string fk_Shape::lineModelColorName = "fk_LineModelColor";
+const string fk_Shape::lineElementColorName = "fk_LineElementColorName";
+const string fk_Shape::texCoordName = "fk_TexCoord";
+
 fk_Shape::fk_Shape(fk_ObjectType argObjType)
+	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
+	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(FK_SHAPE_OTHER)
 {
 	SetObjectType(argObjType);
-	materialMode = FK_NONE_MODE;
 	return;
 }
 
 fk_Shape::~fk_Shape()
 {
+	if(pointVAO != 0) glDeleteBuffers(1, &pointVAO);
+	if(lineVAO != 0) glDeleteBuffers(1, &lineVAO);
+	if(faceVAO != 0) glDeleteBuffers(1, &faceVAO);
+		
+	int tmpID1 = 0;
+	GLuint tmpID2 = 0;
+
+	for(auto p : attrMapI) {
+		tmpID1 = get<0>(p.second);
+		if(tmpID1 != -1) {
+			tmpID2 = GLuint(tmpID1);
+			glDeleteBuffers(1, &tmpID2);
+		}
+	}
+
+	for(auto p : attrMapF) {
+		tmpID1 = get<0>(p.second);
+		if(tmpID1 != -1) {
+			tmpID2 = GLuint(tmpID1);
+			glDeleteBuffers(1, &tmpID2);
+		}
+	}
+
 	return;
 }
 
@@ -163,6 +199,8 @@ vector<fk_Material> * fk_Shape::getMaterialVector(void)
 
 fk_RealShapeType fk_Shape::getRealShapeType(void)
 {
+	return realType;
+/*	
 	switch(getObjectType()) {
 	  case FK_INDEXFACESET:
 	  case FK_BLOCK:
@@ -177,7 +215,6 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_POLYGON:
 	  case FK_POLYLINE:
 	  case FK_CLOSEDLINE:
-	  case FK_LINE:
 		return FK_SHAPE_SOLID;
 
 	  case FK_RECTTEXTURE:
@@ -191,6 +228,9 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 	  case FK_PARTICLESET:
 		return FK_SHAPE_POINT;
 
+	  case FK_LINE:
+		  return FK_SHAPE_LINE;
+		  
 	  case FK_CURVE:
 	  case FK_BEZCURVE:
 	  case FK_BSPLCURVE:
@@ -209,4 +249,171 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 		break;
 	}
 	return FK_SHAPE_OTHER;
+*/
+}
+
+void fk_Shape::SetPointVAO(GLuint argVAO)
+{
+	pointVAO = argVAO;
+}
+
+void fk_Shape::SetLineVAO(GLuint argVAO)
+{
+	lineVAO = argVAO;
+}
+
+void fk_Shape::SetFaceVAO(GLuint argVAO)
+{
+	faceVAO = argVAO;
+}
+
+GLuint fk_Shape::GetPointVAO(void)
+{
+	return pointVAO;
+}
+
+GLuint fk_Shape::GetLineVAO(void)
+{
+	return lineVAO;
+}
+
+GLuint fk_Shape::GetFaceVAO(void)
+{
+	return faceVAO;
+}
+
+void fk_Shape::DeleteMapI(string argName)
+{
+	if(attrMapI.find(argName) != attrMapI.end()) {
+		int tmpID = get<0>(attrMapI[argName]);
+		if(tmpID != -1) {
+			GLuint tmpID2 = GLuint(tmpID);
+			glDeleteBuffers(1, &tmpID2);
+		}
+		attrMapI.erase(argName);
+	}
+}	
+
+void fk_Shape::DeleteMapF(string argName)
+{
+	if(attrMapF.find(argName) != attrMapF.end()) {
+		int tmpID = get<0>(attrMapF[argName]);
+		if(tmpID != -1) {
+			GLuint tmpID2 = GLuint(tmpID);
+			glDeleteBuffers(1, &tmpID2);
+		}
+		attrMapF.erase(argName);
+	}
+}	
+
+void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argValue)
+{
+	int id = -1;
+
+	DeleteMapF(argName);
+	
+	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
+	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
+	attrModify[argName] = true;
+}
+
+void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *argValue)
+{
+	int id = -1;
+
+	DeleteMapI(argName);
+
+	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
+	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
+	attrModify[argName] = true;
+}
+	
+void fk_Shape::DefineVBO(void)
+{
+	if(vboInitFlg == true) return;
+	GLuint tmpUID = 0;
+
+	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+		if(get<0>(itr->second) == -1) {
+			glGenBuffers(1, &tmpUID);
+			get<0>(itr->second) = int(tmpUID);
+		}
+	}
+
+	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+		if(get<0>(itr->second) == -1) {
+			glGenBuffers(1, &tmpUID);
+			get<0>(itr->second) = int(tmpUID);
+		}
+	}
+	return;
+}
+
+void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
+{
+	GLuint loc;
+	_st size;
+	int vbo, dim;
+	vector<float> *fArray;
+	vector<int> *iArray;
+
+	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+		if(argTable->find(itr->first) == argTable->end()) continue;
+		loc = GLuint(argTable->at(itr->first));
+		vbo = get<0>(itr->second);
+		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
+		dim = get<1>(itr->second);
+		glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
+		if(attrModify[itr->first] == true) {
+			iArray = get<2>(itr->second);
+			size = iArray->size();
+			glBufferData(GL_ARRAY_BUFFER,
+						 GLsizeiptr(sizeof(int) * size),
+						 iArray->data(), GL_STATIC_DRAW);
+			attrModify[itr->first] = false;
+		}
+		glEnableVertexAttribArray(loc);
+	}
+
+	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+		if(argTable->find(itr->first) == argTable->end()) continue;
+		loc = GLuint(argTable->at(itr->first));
+		vbo = get<0>(itr->second);
+		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
+		dim = get<1>(itr->second);
+		glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
+		if(attrModify[itr->first] == true) {
+			fArray = get<2>(itr->second);
+			size = fArray->size();
+			glBufferData(GL_ARRAY_BUFFER,
+						 GLsizeiptr(sizeof(float) * size),
+						 fArray->data(), GL_STATIC_DRAW);
+			attrModify[itr->first] = false;
+		}
+		glEnableVertexAttribArray(loc);
+	}
+
+	return;
+}
+
+void fk_Shape::modifyAttribute(string argName)
+{
+	attrModify[argName] = true;
+}
+
+void fk_Shape::forceUpdateAttr(void)
+{
+	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
+		itr->second = true;
+	}
+	vboInitFlg = false;
+}
+
+void fk_Shape::finishSetVBO(void)
+{
+	vboInitFlg = true;
+}
+
+void fk_Shape::flushAttr(void)
+{
 }

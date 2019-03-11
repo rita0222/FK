@@ -10,18 +10,14 @@
 #include <FK/DList.h>
 
 namespace FK {
-
+	class fk_Scene;
+	class fk_Plane;
 	class fk_PointDraw;
 	class fk_LineDraw;
 	class fk_FaceDraw;
 	class fk_TextureDraw;
-	class fk_DisplayLink;
-	class fk_ProjectBase;
-	class fk_Scene;
-	class fk_Plane;
 
 	class fk_GraphicsEngine {
-
 
 	public:
 		fk_GraphicsEngine(void);
@@ -39,24 +35,15 @@ namespace FK {
 		bool				GetWindowPosition(fk_Vector, fk_Vector *);
 		void				GetPickData(fk_PickData *, int, int, int);
 
-
-		void				SetOGLPointerMode(bool);
-		bool				GetOGLPointerMode(void);
-
-		void				SetOGLTextureBindMode(bool);
-		bool				GetOGLTextureBindMode(void);
-
 		bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
 
-		void				ClearTextureMemory(void);
-		unsigned long		GetUsingTextureMemory(void);
 		void				OpenGLInit(void);
 
 		void				SetPickViewPort(int, int, int);
-		void				Draw(bool);
+		void				Draw(void);
 
-		void				StereoDrawPrep(fk_StereoChannel);
-		void				StereoDrawMain(fk_StereoChannel);
+		//void				StereoDrawPrep(fk_StereoChannel);
+		//void				StereoDrawMain(fk_StereoChannel);
 
 	private:
 
@@ -72,35 +59,31 @@ namespace FK {
 		int							wSize;
 		int							hSize;
 		GLuint						selectBuf[FK_PICKDATAMAX*5];
-		bool						arrayState;
 		bool						resizeFlag;
-		bool						textureMode;
 		fk_BlendFactor				srcFactor, dstFactor;
 		bool						depthRead, depthWrite;
 
 		std::vector<fk_Model *>		modelArray;
 
-		fk_Matrix					viewMat;
+		fk_ProjectBase				*curProj;
 		GLint						viewArray[4];
 
 		std::vector<fk_ImType>		snapBuffer;
 
+		fk_Perspective				defProj;
 
-		void				DrawObjs(bool);
-		void				DrawModel(fk_Model *, bool, bool);
-		void				RecalcModelView(void);
-		void				RecalcInhModelView(const fk_Model *);
+		fk_Model					boundaryModel;
+
+		void				DrawObjs(void);
+		void				DrawModel(fk_Model *);
 		void				CurrentDispLinkDraw(void);
-		bool				DefineLight(void);
-		void				LoadModelMatrix(fk_Model *);
-		void				LoadAABBMatrix(fk_Model *);
 
-		void				DrawShapeObj(fk_Model *, bool, bool);
-		void				DrawBoundaryObj(fk_Model *, bool);
+		void				DrawShapeObj(fk_Model *);
+		void				DrawBoundaryLine(fk_Model *);
 
 		void				SetViewPort(void);
-		void				SetProjection(const fk_ProjectBase *);
-		void				SetDefaultProjection(void);
+		void				SetProjection(fk_ProjectBase *);
+		//void				SetDefaultProjection(void);
 
 		void				ApplySceneParameter(bool);
 
@@ -110,28 +93,17 @@ namespace FK {
 
 		unsigned long		GetNow(void);
 
-		void				ViewMatCalc(fk_Matrix *);
+		//void				ViewMatCalc(fk_Matrix *);
 
 		bool				GetViewLinePos(double, double,
 										   fk_Vector *, fk_Vector *);
 
-		void				SetStereoViewPort(fk_StereoChannel);
-		void				RecalcStereoModelView(fk_StereoChannel);
-		void				DrawStereoObjs(bool);
+		//void				SetStereoViewPort(fk_StereoChannel);
+		//void				RecalcStereoModelView(fk_StereoChannel);
+		//void				DrawStereoObjs(bool);
 
 		void				SetBlendMode(fk_Model *model);
 		void				SetDepthMode(fk_DepthMode mode);
-
-#ifdef NO_GLU_LIBRARY
-		void				gluLookAt(GLdouble, GLdouble, GLdouble,
-									  GLdouble, GLdouble, GLdouble,
-									  GLdouble, GLdouble, GLdouble);
-
-		void				gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
-
-		void				gluPickMatrix(GLdouble, GLdouble, GLdouble, GLdouble,
-										  const GLint [4]);
-#endif
 	};
 }
 
@@ -139,7 +111,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -175,7 +147,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

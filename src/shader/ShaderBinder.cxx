@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -77,12 +77,6 @@ using namespace FK;
 
 bool fk_ShaderBinder::isExtensionInitialized = false;
 
-// レンダーターゲットのリスト
-static const GLenum bufs[] = {
-	GL_COLOR_ATTACHMENT0,	// カラーバッファ
-	GL_DEPTH_ATTACHMENT,	// デプステクスチャ
-};
-
 bool fk_ShaderBinder::Initialize()
 {
 #ifdef WIN32
@@ -97,14 +91,17 @@ bool fk_ShaderBinder::Initialize()
 }
 
 fk_ShaderBinder::fk_ShaderBinder()
-	: program(&innerProgram), parameter(&innerParameter),  usingProgram(false)
+	: program(&innerProgram), parameter(&innerParameter),  usingProgram(false), setupFlg(false),
+	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0)
 {
 	isExtensionInitialized = false;
 	Initialize();
+	program->SetParameter(parameter);
 }
 
 fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
-	: usingProgram(false)
+	: usingProgram(false),
+	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -131,6 +128,7 @@ fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
 void fk_ShaderBinder::setParameter(fk_ShaderParameter *argParam)
 {
 	parameter = (argParam != nullptr) ? argParam : &innerParameter;
+	if(program != nullptr) program->SetParameter(parameter);
 	return;
 }
 
@@ -141,28 +139,16 @@ fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
 {
-	GLuint		id = program->getProgramID();
-
-	fk_funcSet	preS = fk_funcSet(id, [&](){ ProcPreShader(); });
-	fk_funcSet	postS = fk_funcSet(id, [&](){ ProcPostShader(); });
-
-	argModel->preShaderList.push_back(preS);
-	argModel->postShaderList.push_back(postS);
+	//argModel->preShader = [&](){ ProcPreShader(); };
+	//argModel->postShader = [&](){ ProcPostShader(); };
+	argModel->setShader(this);
 }
 
 void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 {
-	GLuint id = program->getProgramID();
-
-	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end();) {
-		if(get<0>(*it) == id) it = argModel->preShaderList.erase(it);
-		else ++it;
-	}
-
-	for(auto it = argModel->postShaderList.begin(); it != argModel->postShaderList.end();) {
-		if(get<0>(*it) == id) it = argModel->postShaderList.erase(it);
-		else ++it;
-	}
+	argModel->setShader(nullptr);
+	//argModel->preShader = [](){};
+	//argModel->postShader = [](){};
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
@@ -170,46 +156,68 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	bufW = width;
 	bufH = height;
 
-	// カラーバッファ用のテクスチャを用意する
-	GLuint tmpID;
-	glGenTextures(1, &tmpID);
-	texID = tmpID;
-	glBindTexture(GL_TEXTURE_2D, texID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufW, bufH, 0,
-				 GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
+    static GLfloat verts[] = {
+        -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+    };
+    static GLfloat tc[] = {
+        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+    };
 
-	// デプステクスチャ用のテクスチャを用意する
-	glGenTextures(1, &tmpID);
-	depthTexID = tmpID;
-	glBindTexture(GL_TEXTURE_2D, depthTexID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufW, bufH, 0,
-				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	SetupFBO();
 
-	// フレームバッファオブジェクトを作成する
-	glGenFramebuffers(1, &tmpID);
-	fboID = tmpID;
-	glBindFramebuffer(GL_FRAMEBUFFER, fboID);
+	GLuint handle[2];
+	glGenBuffers(2, handle);
 
-	// フレームバッファオブジェクトにカラーバッファとしてテクスチャを結合する
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-						   GL_TEXTURE_2D, texID, 0);
-	// フレームバッファオブジェクトにデプステクスチャを結合する
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-						   GL_TEXTURE_2D, depthTexID, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
 
-	// フレームバッファオブジェクトの結合を解除する
+	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), tc, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &rectVAO);
+	glBindVertexArray(rectVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0);
+
+	auto prog = getProgram();
+	auto id = prog->getProgramID();
+
+	glBindFragDataLocation(id, 0, "fragment");
+
+	prog->link();
+
+	auto texLocation = glGetUniformLocation(id, "fk_ColorBuf");
+	if(texLocation >= 0) glUniform1i(texLocation, 0);
+}
+
+void fk_ShaderBinder::SetupFBO(void)
+{
+	glGenFramebuffers(1, &fboHandle);
+	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
+
+	glGenTextures(1, &colorBuf);
+	glBindTexture(GL_TEXTURE_2D, colorBuf);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuf, 0);
+
+	GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0};
+	glDrawBuffers(1, drawBuffers);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
 
 void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 {
@@ -218,15 +226,9 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 
 void fk_ShaderBinder::finalizeFrameBufferObject(void)
 {
-	GLuint tmpID;
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	tmpID = fboID;
-	glDeleteFramebuffers(1, &tmpID);
-	tmpID = texID;
-	glDeleteTextures(1, &tmpID);
-	tmpID = depthTexID;
-	glDeleteTextures(1, &tmpID);
+	glDeleteFramebuffers(1, &fboHandle);
+	glDeleteTextures(1, &colorBuf);
 }
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
@@ -290,63 +292,32 @@ void fk_ShaderBinder::ProcPostShader(void)
 
 void fk_ShaderBinder::ProcPreDraw(void)
 {
-	// フレームバッファオブジェクトを結合する
-	glBindFramebuffer(GL_FRAMEBUFFER, fboID);
-	// レンダーターゲットを指定する
-	glDrawBuffers(sizeof bufs / sizeof bufs[0], bufs);
-	// これでFKでの描画内容はFBOにスイッチする
+	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
+	GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0};
+	glDrawBuffers(1, drawBuffers);
 }
 
 void fk_ShaderBinder::ProcPostDraw(void)
 {
-	// レンダーターゲットを元に戻す
-	glDrawBuffer(GL_BACK);
-	// フレームバッファオブジェクトを結合を解除する
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// 透視変換行列を単位行列にする
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	
-	// モデルビュー変換行列を単位行列にする
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// テクスチャマッピングを有効にする
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texID);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, depthTexID);
-
 	ProcPreShader();
-
-	// 正方形を描く
-	glColor3d(1.0, 1.0, 1.0);
-	glBegin(GL_TRIANGLE_FAN);
-	glTexCoord2d(0.0, 0.0);
-	glVertex2d(-1.0, -1.0);
-	glTexCoord2d(1.0, 0.0);
-	glVertex2d(1.0, -1.0);
-	glTexCoord2d(1.0, 1.0);
-	glVertex2d(1.0, 1.0);
-	glTexCoord2d(0.0, 1.0);
-	glVertex2d(-1.0, 1.0);
-	glEnd();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, colorBuf);
+	glBindVertexArray(rectVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	ProcPostShader();
-
-	// テクスチャマッピングを無効にする
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	// opengl
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glFlush();
 }
+
+void fk_ShaderBinder::SetupDone(bool argFlg)
+{
+	setupFlg = argFlg;
+}
+
+bool fk_ShaderBinder::IsSetup(void)
+{
+	return setupFlg;
+}
+

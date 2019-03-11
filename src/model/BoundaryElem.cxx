@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -76,7 +76,9 @@
 #include <FK/Solid.h>
 #include <FK/Vertex.h>
 #include <FK/Point.h>
-#include <FK/Texture.h>
+#include <FK/RectTexture.h>
+#include <FK/TriTexture.h>
+#include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
 #include <FK/Error.H>
 
@@ -174,7 +176,7 @@ double fk_SphereBoundary::GetAdjustPoint(fk_Point *argPoint)
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		V = *(argPoint->getVertex(i));
+		V = argPoint->getVertex(i);
 		len = V.dist();
 		if(lMax < len) lMax = len;
 	}
@@ -327,7 +329,7 @@ fk_Vector fk_AABBBoundary::GetAdjustPoint(fk_Point *argPoint,
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		p = *(argPoint->getVertex(i));
+		p = argPoint->getVertex(i);
 		AdjustVec(&pMax, p, argX, argY, argZ);
 	}
 	return (2.0*pMax);
@@ -502,7 +504,7 @@ fk_Vector fk_OBBBoundary::GetAdjustPoint(fk_Point *argPoint)
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		p = *(argPoint->getVertex(i));
+		p = argPoint->getVertex(i);
 		AdjustVec(&pMax, p);
 	}
 	return (2.0*pMax);
@@ -651,7 +653,7 @@ double fk_CapsuleBoundary::GetAdjustPoint(fk_Point *argPoint,
 
 	iMax = argPoint->getSize();
 	for(i = 0; i < iMax; i++) {
-		p = *(argPoint->getVertex(i));
+		p = argPoint->getVertex(i);
 		len = CalcLen(p, argS, argE);
 		if(lMax < len) lMax = len;
 	}
@@ -750,5 +752,5 @@ double fk_CapsuleBoundary::CalcLen(const fk_Vector &argP,
 	double		t;
 
 	fk_Math::calcClosestPtPtToSeg(argP, argS, argE, &t, &q);
-	return (argP-q).dist();
+	return (argP - q).dist();
 }

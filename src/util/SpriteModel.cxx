@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -80,7 +80,7 @@ fk_SpriteModel::fk_SpriteModel(void) : fk_Model(), fontReady(false)
 {
 	setParent(&pixelBase);
 
-	texShape.setTextureMode(FK_TEX_MODULATE);
+	texShape.setTextureMode(FK_TEX_REPLACE);
 	texShape.setTexRendMode(FK_TEX_REND_SMOOTH);
 	setShape(&texShape);
 
@@ -104,7 +104,7 @@ bool fk_SpriteModel::entryFirst(fk_Window *argWin, fk_Scene *argScn, fk_Model *a
 		return false;
 	}
 
-	if(argCam != NULL) argScn->entryCamera(argCam);
+	if(argCam != nullptr) argScn->entryCamera(argCam);
 
 	MakePixelBase(fk_Dimension(argWin->w(), argWin->h()), argScn);
 	argScn->entryOverlayModel(this);
@@ -114,16 +114,16 @@ bool fk_SpriteModel::entryFirst(fk_Window *argWin, fk_Scene *argScn, fk_Model *a
 
 void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *argScn)
 {
-	fk_Perspective	*pers = NULL;
-	fk_Ortho		*orth = NULL;
-	fk_Frustum		*frus = NULL;
-	fk_ProjectBase	*proj = NULL;
+	fk_Perspective	*pers = nullptr;
+	fk_Ortho		*orth = nullptr;
+	fk_Frustum		*frus = nullptr;
+	fk_ProjectBase	*proj = nullptr;
 
 	double	dW = static_cast<double>(argWinSize.w);
 	double	dH = static_cast<double>(argWinSize.h);
 	double	trueD = (dW < dH) ? dW : dH;
 
-	if(argScn->getCamera() == NULL) return;
+	if(argScn->getCamera() == nullptr) return;
 	pixelBase.setParent(const_cast<fk_Model *>(argScn->getCamera()));
 
 	proj = const_cast<fk_ProjectBase *>(argScn->getProjection());
@@ -297,4 +297,3 @@ void fk_SpriteModel::SetFinalizeMode(void)
 	pixelBase.SetTreeDelMode(false);
 	SetTreeDelMode(false);
 }
-

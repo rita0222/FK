@@ -67,6 +67,8 @@ LIBSRCS		= \
 			TextImage.cxx \
 			Texture.cxx \
 			Topology.cxx \
+			TriTexture.cxx \
+			RectTexture.cxx \
 			UniCode.cxx \
 			VRMLOut.cxx \
 			VRMLParser.cxx \

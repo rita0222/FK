@@ -118,7 +118,7 @@ namespace FK {
 		 *	照射対象物体位置を \f$\mathbf{Q}\f$ としたとき、
 		 *	以下の数式を満たすのであればスポットライトで照射されることになります。
 		 *	\f[
-		 *		\theta \geq \frac{(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}}
+		 *		\cos\theta \geq \frac{(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}}
 		 *		{|(\mathbf{Q} - \mathbf{P})\cdot\mathbf{L}|}
 		 *	\f]
 		 *	なお、デフォルトでは \f$\theta\f$は \f$\frac{\pi}{16}\f$ に設定されています。
@@ -208,11 +208,12 @@ namespace FK {
 		 */
 		double				getSpotExponent(void);
 
+		static const int	MAXLIGHTNUM;
+
 	private:
 		fk_LightType		lightType;
 		double				attenuation[3];
 		double				spotExponent, spotCutOff;
-		fk_Palette			localPal;
 	};
 }
 
@@ -220,7 +221,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -256,7 +257,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

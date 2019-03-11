@@ -390,8 +390,8 @@ namespace FK {
 	
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		float *			GetBuffer(void);
-		void			Print(std::string = "") const;
+		GLfloat *			GetBuffer(void);
+		void				Print(std::string = "") const;
 
 #endif
 
@@ -736,6 +736,20 @@ namespace FK {
 		 */
 		bool			inverse(void);
 
+		//! 反変変換行列化関数
+		/*!
+		 *	現在設定されている行列に対し、正則行列であれば自身を反変変換行列化します。
+		 *	特異(非正則)行列である場合は「失敗」とし、成分値を変更しません。
+		 *	この変換は、法線ベクトルをはじめとする共変ベクトルに対する変換に利用します。
+		 *
+		 *	\return
+		 *		行列が正則である場合、逆行列化して true を返します。
+		 *		特異行列であった場合は、成分値を変更せずに false を返します。
+		 *
+		 *	\sa inverse(), isRegular()
+		 */
+		bool			covariant(void);
+
 		//! 拡大縮小行列生成関数1
 		/*!
 		 *	各座標軸方向への拡大縮小率を個別に設定した行列を生成します。
@@ -755,6 +769,20 @@ namespace FK {
 		 */
 		void			makeScale(const fk_Vector &V);
 
+		//! 透視投影変換行列生成関数
+		/*!
+		 */
+		void			makePerspective(double fovy, 
+										double near, double far,
+										double aspect);
+
+		void			makeFrustum(double left, double right,
+									double bottom, double top,
+									double near, double far);
+
+		void			makeOrtho(double left, double right,
+								  double bottom, double top,
+								  double near, double far);
 		//@}
 
 		//! \name 二項演算子 
@@ -849,7 +877,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -885,7 +913,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace FK {
-	typedef std::vector<int>::size_type		_fk_h_s;
+	using _fk_h_s = std::vector<int>::size_type;
 
 	//! 重複要素に同一IDを与えるための汎用テンプレート
 	/*!
@@ -45,7 +45,7 @@ namespace FK {
 		 *	\return 要素数
 		 */
 		int getSize(void) {
-			return static_cast<int>(array.size());
+			return int(array.size());
 		}
 
 		/*!
@@ -56,7 +56,7 @@ namespace FK {
 		 *	- argV の値がこれまでに格納されたインスタンスの値と等しい場合、
 		 *		そのインスタンスの ID を返します。
 		 *	- argV がこれまでに格納されたどのインスタンスとも値が異なる場合、
-		 *	   	新しい ID を返します。
+		 *		新しい ID を返します。
 		 *
 		 *	\param[in] argV	比較対象インスタンスのアドレス
 		 */
@@ -88,9 +88,9 @@ namespace FK {
 			}
 
 			if(argS == argE) {
-				comp = Compare(argData, array[static_cast<_fk_h_s>(argS)]);
+				comp = Compare(argData, array[_fk_h_s(argS)]);
 				if(comp == 0) {
-					return id[static_cast<_fk_h_s>(argS)];
+					return id[_fk_h_s(argS)];
 				}
 
 				pData = new TYPE();
@@ -98,21 +98,21 @@ namespace FK {
 				if(comp == -1) {
 					array.insert(array.begin()+argS, pData);
 					id.insert(id.begin()+argS,
-							  static_cast<int>(array.size()));
+							  int(array.size()));
 				} else {
 					array.insert(array.begin()+argS+1, pData);
 					id.insert(id.begin()+argS+1,
-							  static_cast<int>(array.size()));
+							  int(array.size()));
 				}
-				return static_cast<int>(array.size());
+				return int(array.size());
 			}
 
 			if(argE - argS == 1) {
 				comp = Compare(argData,
-							   array[static_cast<_fk_h_s>(argS)]);
+							   array[_fk_h_s(argS)]);
 
 				if(comp == 0) {
-					return id[static_cast<_fk_h_s>(argS)];
+					return id[_fk_h_s(argS)];
 				}
 
 				if(comp == -1) {
@@ -120,8 +120,8 @@ namespace FK {
 					*pData = *argData;
 					array.insert(array.begin()+argS, pData);
 					id.insert(id.begin()+argS,
-							  static_cast<int>(array.size()));
-					return static_cast<int>(array.size());
+							  int(array.size()));
+					return int(array.size());
 				}
 
 				return HeapData(argData, argE, argE);
@@ -129,10 +129,10 @@ namespace FK {
 
 			index = (argE-argS)/2 + argS;
 
-			comp = Compare(argData, array[static_cast<_fk_h_s>(index)]);
+			comp = Compare(argData, array[_fk_h_s(index)]);
 
 			if(comp == 0) {
-				return id[static_cast<_fk_h_s>(index)];
+				return id[_fk_h_s(index)];
 			}
 
 			if(comp == -1) {
@@ -163,7 +163,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -199,7 +199,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

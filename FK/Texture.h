@@ -6,14 +6,13 @@
 #include <FK/IndexFace.h>
 
 namespace FK {
-	class fk_MQOParser;
-	class fk_IndexFaceSet;
 
 	//! テクスチャモードを表す列挙型
 	enum fk_TexMode {
 		FK_TEX_MODULATE,	//!< 積算モード
 		FK_TEX_REPLACE,		//!< 画像モード
-		FK_TEX_DECAL		//!< 線形補間モード
+		FK_TEX_DECAL,		//!< 線形補間モード
+		FK_TEX_NONE			//!< 指定なし
 	};
 
 	//! テクスチャ描画品質を表す列挙型
@@ -21,11 +20,18 @@ namespace FK {
 		FK_TEX_REND_NORMAL,	//!< 標準品質
 		FK_TEX_REND_SMOOTH	//!< 高品質
 	};
-
+	
 	//! テクスチャ外周部の描画モードを表す列挙型
 	enum fk_TexWrapMode {
 		FK_TEX_WRAP_REPEAT,		//!< 繰り返し式
 		FK_TEX_WRAP_CLAMP,		//!< 縁部伸張式
+	};
+
+	// フレームバッファのサンプリングソースを表す列挙型
+	enum fk_SamplerSource {
+		FK_TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
+		FK_COLOR_BUFFER,	//!< 画面色情報参照
+		FK_DEPTH_BUFFER,	//!< 画面深度情報参照
 	};
 
 	//! テクスチャ用基底クラス
@@ -38,8 +44,6 @@ namespace FK {
 	 */
 
 	class fk_Texture: public fk_Shape {
-		friend class		fk_TextureDraw;
-
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -200,9 +204,15 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *	.
-		 *	なお、デフォルトでは FK_TEX_MODULATE が設定されています。
+		 *	デフォルトでは FK_TEX_MODULATE が設定されています。
+		 *	なお、同様の設定は fk_Model::setTextureMode() でも行うことが可能で、
+		 *	fk_Model 側で FK_TEX_NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で FK_TEX_NONE が設定されている場合のみ、
+		 *	この fk_Texture 側での設定が有効となります。
 		 *
 		 *	\param[in]		mode	モード
+		 *
+		 *	\sa getTextureMode(), fk_Model::setTextureMode()
 		 */
 		void					setTextureMode(fk_TexMode mode);
 
@@ -303,23 +313,68 @@ namespace FK {
 		 */
 		const fk_ImType *		getImageBuf(void);
 
-	protected:
+		//! テクスチャ参照情報設定関数
+		/*!
+		 *	参照テクスチャが参照する情報を設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- FK_TEXTURE_IMAGE: 
+		 *		コンストラクタで設定した
+		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
+		 *	- FK_COLOR_BUFFER: 
+		 *		描画シーン全体の色値情報を参照先とします。
+		 *	- FK_DEPTH_BUFFER: 
+		 *		描画シーン全体の深度情報を参照先とします。
+		 *	.
+		 *	デフォルトは FK_TEXTURE_IMAGE に設定されています。
+		 *
+		 *	\param[in]	mode
+		 *		テクスチャ参照情報の参照先
+		 *
+		 *	\sa getSamplerSource()
+		 */
+		void setSamplerSource(fk_SamplerSource mode);
+
+		//! テクスチャ参照情報参照関数
+		/*!
+		 *	参照テクスチャが参照する情報を参照します。
+		 *
+		 *	\return		テクスチャ参照情報
+		 */
+		fk_SamplerSource getSamplerSource(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		std::function<void(void)> FaceIBOSetup;
+		bool BindTexture(bool forceLoad);
+		std::function<int(void)> GetFaceSize;
+		std::function<void(void)> StatusUpdate;
+		void Replace(void);
+		
+		static const std::string		texIDName;
+#endif
+
+	protected:
+
+		fk_FVecArray		texCoord;
 
 		void				BaseInit(void);
 		bool				IsLocalImage(void);
 		void				SetLocalImage(void);
-		bool				GetInitFlag(void);
-		void				SetInitFlag(bool);
 
-		std::function<void(void)>	GenTextureObj;
-		std::function<void(void)>	ReplaceSubImage;
-		std::function<void(bool)>	DrawTexture;
-		std::function<void(void)>	DrawPick;
+//		std::function<void(void)>	GenTextureObj;
+//		std::function<void(void)>	ReplaceSubImage;
+//		std::function<void(bool)>	DrawTexture;
+//		std::function<void(void)>	DrawPick;
 
-#endif
-
+/*
+		fk_FVecArray			*vertexPosition;
+		fk_FVecArray			*vertexNormal;
+		fk_FVecArray			*texCoord;
+		std::vector<GLuint>		*faceIndex;		
+		GLuint					faceIBO;
+		bool					faceIndexFlg;
+*/
+		
 	private:
 		fk_Image			*image;
 		fk_Image			localImage;
@@ -327,661 +382,11 @@ namespace FK {
 		fk_TexRendMode		texRendMode;
 		fk_TexWrapMode		texWrapMode;
 		fk_Palette			localPal;
+		fk_SamplerSource	samplerSource;
 
 		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
-		void				MakeObjFunction(void);
-	};
-
-	//! 矩形テクスチャを生成、管理するクラス
-	/*!
-	 *	このクラスは、矩形型のテクスチャを制御する機能を提供します。
-	 *	テクスチャを表示する方法としては、最も簡単なクラスとなります。
-	 *
-	 *	テクスチャ画像を表示する最低限の手順は、以下の通りです。
-	 *	-# 画像を入力する。
-	 *	-# setTextureSize() 関数で大きさを設定する。
-	 *	-# fk_Model に登録する。
-	 *	.
-	 *	あとは、他の形状クラスと同様です。
-	 *
-	 *	矩形の配置は、モデルの方向ベクトルに垂直となり、
-	 *	画像の中心とモデルの中心が一致するように配置されます。
-	 *	また、画像の表側はモデルの後方
-	 *	(初期状態では +z 方向) 側から見た場合に見えるという点に注意して下さい。
-	 *
-	 *	\sa fk_Texture, fk_TriTexture, fk_MeshTexture, fk_IFSTexture
-	 */
-
-	class fk_RectTexture : public fk_Texture {
-
-		friend class		fk_TextureDraw;
-
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	\param[in]	image
-		 *		テクスチャ画像。省略するか nullptr を代入した場合は、
-		 *	   	テクスチャ画像を初期状態では生成しません。
-		 */
-		fk_RectTexture(fk_Image *image = nullptr);
-
-		//! デストラクタ
-		virtual ~fk_RectTexture();
-
-		//! 初期化関数
-		/*!
-		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
-		 */
-		void				init(void);
-
-		//! テクスチャサイズ設定関数
-		/*!
-		 *	矩形テクスチャの大きさを設定します。
-		 *
-		 *	\param[in]	w		横幅
-		 *	\param[in]	h		縦幅
-		 *
-		 *	\return
-		 *		横幅、縦幅のいずれかで 0 以下の値が入力されていた場合、
-		 *		false を返します。設定に成功した場合は true を返します。
-		 */
-		bool				setTextureSize(double w, double h);
-
-		//! テクスチャサイズ参照関数
-		/*!
-		 *	矩形テクスチャの大きさを取得します。
-		 *
-		 *	\return		矩形テクスチャの大きさ
-		 */
-		fk_TexCoord			getTextureSize(void);
-
-		//! リピートモード設定関数
-		/*!
-		 *	リピートモードの設定を行います。
-		 *	リピートモードを有効にすると、画像が縦横に行列上に並んでいる状態になります。
-		 *	並ぶ枚数については、 setRepeatParam() 関数で設定します。
-		 *
-		 *	リピートモードを利用する場合、画像の横幅、縦幅いずれも
-		 *	\f$ 2^n \f$ (n は整数) で表される数値でなければならないという条件があります。
-		 *	(横幅と縦幅は一致している必要はありません。)
-		 *	この条件を満たさなかった場合の動作は保証されません。
-		 *	また、リピートモードを有効とした場合、 setTextureCoord() による
-		 *	画像の切り出しも無効となります。
-		 *
-		 *	\param[in]	mode
-		 *		true であればリピートモードを有効とし、
-		 *		false であれば無効とします。
-		 *
-		 *	\sa setRepeatParam()
-		 */
-		void				setRepeatMode(bool mode);
-
-		//! リピートモード参照関数
-		/*!
-		 *	現在のリピートモードの状態を取得します。
-		 *
-		 *	\return
-		 *		true であればリピートモードが有効であることを意味します。
-		 *		false であれば無効であることを意味します。
-		 *
-		 *	\sa setRepeatMode()
-		 */
-		bool				getRepeatMode(void);
-
-		//! リピートモード枚数設定関数
-		/*!
-		 *	リピートモードでの、縦方向と横方向に並べる枚数を設定します。
-		 *	リピートモードについては setRepeatMode() の説明を参照して下さい。
-		 *
-		 *	なお、枚数は正であれば整数である必要はありません。
-		 *	その場合は、右端と上端の画像が途中で切れます。
-		 *
-		 *	\param[in]	wNum		横方法の枚数
-		 *	\param[in]	hNum		縦方向の枚数
-		 *
-		 *	\sa setRepeatMode()
-		 */
-		void				setRepeatParam(double wNum, double hNum);
-
-		//! リピートモード枚数参照関数
-		/*!
-		 *	リピートモードの、各方向の枚数を取得します。
-		 *
-		 *	\return		各方向の枚数
-		 *
-		 *	\sa setRepeatParam()
-		 */
-		fk_TexCoord			getRepeatParam(void);
-
-		//! 部分抽出設定関数1
-		/*!
-		 *	画像の部分矩形領域を切り出し、その部分をテクスチャ画像とします。
-		 *	領域指定はテクスチャ座標系を用います。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	なお、 setRepeatMode() でリピートモードを有効とした場合、
-		 *	この部分抽出の設定は無効となります。
-		 *
-		 *	\param[in]	sX	抽出左下部分の x 成分
-		 *	\param[in]	sY	抽出左下部分の y 成分
-		 *	\param[in]	eX	抽出右上部分の x 成分
-		 *	\param[in]	eY	抽出右上部分の y 成分
-		 */
-		void				setTextureCoord(double sX, double sY,
-											double eX, double eY);
-
-		//! 部分抽出設定関数2
-		/*!
-		 *	画像の部分矩形領域を切り出し、その部分をテクスチャ画像とします。
-		 *	領域指定はテクスチャ座標系を用います。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	なお、 setRepeatMode() でリピートモードを有効とした場合、
-		 *	この部分抽出の設定は無効となります。
-		 *
-		 *	\param[in]	S	抽出左下部分のテクスチャ座標
-		 *	\param[in]	E	抽出右上部分のテクスチャ座標
-		 */
-		void				setTextureCoord(const fk_TexCoord &S,
-											const fk_TexCoord &E);
-
-		//! 部分抽出参照関数
-		/*!
-		 *	setTextureCoord() 関数によって部分抽出領域を設定した場合、
-		 *	その領域のテクスチャ座標を取得します。
-		 *
-		 *	\param[in]	ID
-		 *		0 であれば左下部のテクスチャ座標を、
-		 *		1 であれば右上部のテクスチャ座標を返します。
-		 *		それ以外の値を入力した場合は、常に (0, 0) を返します。
-		 *
-		 *	\return		左上部、または右上部のテクスチャ座標
-		 *
-		 *	\sa setTextureCoord()
-		 */
-		fk_TexCoord			getTextureCoord(int ID);
-
-	private:
-
-		fk_TexCoord			texSize;
-		bool				repeatFlag;
-		fk_TexCoord			repeatParam;
-		fk_TexCoord			texCoord[2];
-		void				MakeDrawRectFunc(void);
-
-	};
-
-	//! 3角形テクスチャを生成、管理するクラス
-	/*!
-	 *	このクラスは、3角形のテクスチャを制御する機能を提供します。
-	 *
-	 *	3角形テクスチャを生成する大まかな手順は以下のようになります。
-	 *	-# 画像を入力する。
-	 *	-# 各頂点のテクスチャ座標を設定する。
-	 *	-# 各頂点の3次元空間内の位置ベクトルを設定する。
-	 *	.
-	 *	空間上に各頂点を配置する際、頂点の順番が反時計回りになっている側が表面となります。
-	 *	テクスチャ座標系の方は必ずしも反時計回りになっている必要はありませんが、
-	 *	それが時計回りである場合は表示される画像が結果的に裏返ります。
-	 *
-	 *	本クラスでは、1つのインスタンスで制御できる3角形は1枚のみです。
-	 *	複数枚の3角形を1つのインスタンスで制御したい場合は、
-	 *	fk_MeshTexture クラスを用いた方がメモリ使用量や描画速度の効率が良くなります。
-	 *	また、3角形ではなく矩形を扱いたい場合は fk_RectTexture クラスを利用して下さい。
-	 *
-	 *	\sa fk_Texture, fk_RectTexture, fk_MeshTexture, fk_IFSTexture
-	 */
-
-	class fk_TriTexture : public fk_Texture {
-
-		friend class		fk_TextureDraw;
-
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	\param[in]	image
-		 *		テクスチャ画像。省略するか nullptr を代入した場合は、
-		 *	   	テクスチャ画像を初期状態では生成しません。
-		 */
-		fk_TriTexture(fk_Image *image = nullptr);
-
-		//! デストラクタ
-		virtual ~fk_TriTexture();
-
-		//! 初期化関数
-		/*!
-		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
-		 */
-		void				init(void);
-
-		//! テクスチャ座標設定関数1
-		/*!
-		 *	頂点のテクスチャ座標を設定します。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	テクスチャ座標は、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	ID
-		 *		頂点ID。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	x
-		 *		テクスチャ座標の x 成分。0 以上 1 以下である必要があります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	y
-		 *		テクスチャ座標の y 成分。0 以上 1 以下である必要があります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool				setTextureCoord(int ID, double x, double y);
-
-		//! テクスチャ座標設定関数2
-		/*!
-		 *	頂点のテクスチャ座標を設定します。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	テクスチャ座標は、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	ID
-		 *		頂点ID。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	coord
-		 *		テクスチャ座標。各成文は 0 以上 1 以下である必要があります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool				setTextureCoord(int ID, fk_TexCoord coord);
-
-		//! テクスチャ座標取得関数
-		/*!
-		 *	setTextureCoord() で設定したテクスチャ座標を取得します。
-		 *
-		 *	\param[in]	ID		頂点ID。
-		 *		0, 1, 2 のいずれか以外を指定した場合は、
-		 *		常に (0, 0) を返します。
-		 *
-		 *	\return		IDに対応する頂点のテクスチャ座標
-		 */
-		fk_TexCoord			getTextureCoord(int ID);
-
-		//! 頂点位置ベクトル設定関数1
-		/*!
-		 *	頂点の空間中での位置ベクトルを設定します。
-		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	ID
-		 *		頂点ID。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	x	頂点位置ベクトルの x 成分
-		 *	\param[in]	y	頂点位置ベクトルの y 成分
-		 *	\param[in]	z	頂点位置ベクトルの z 成分
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool				setVertexPos(int ID, double x, double y, double z);
-
-		//! 頂点位置ベクトル設定関数2
-		/*!
-		 *	頂点の空間中での位置ベクトルを設定します。
-		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	ID
-		 *		頂点ID。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	pos		頂点位置ベクトル
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool				setVertexPos(int ID, fk_Vector pos);
-
-		//! 頂点位置ベクトル取得関数
-		/*!
-		 *	setTexturePos() で設定したテクスチャ座標を取得します。
-		 *
-		 *	\param[in]	ID		頂点ID。
-		 *		0, 1, 2 のいずれか以外を指定した場合は、
-		 *		常に (0, 0, 0) を返します。
-		 *
-		 *	\return		IDに対応する頂点の位置ベクトル
-		 */
-		fk_Vector			getVertexPos(int ID);
-
-	private:
-		fk_Vector			pos[3];
-		fk_TexCoord			texCoord[3];
-
-		fk_Vector *			getPos(void);
-		fk_TexCoord *		getCoord(void);
-
-		void				MakeDrawTriFunc(void);
-	};
-
-	//! メッシュテクスチャを生成、管理するクラス
-	/*!
-	 *	このクラスは、複数の3角形テクスチャを制御する機能を提供します。
-	 *
-	 *	メッシュテクスチャを生成するおおまかな手順は以下のようになります。
-	 *	-# 画像を入力する。
-	 *	-# 各頂点のテクスチャ座標を設定する。
-	 *	-# 各頂点の3次元空間内の位置ベクトルを設定する。
-	 *	.
-	 *	空間上に各頂点を配置する際、頂点の順番が反時計回りになっている側が表面となります。
-	 *	テクスチャ座標系の方は必ずしも反時計回りになっている必要はありませんが、
-	 *	それが時計回りである場合は表示される画像が結果的に裏返ります。
-	 *
-	 *	本クラスでは、1つのインスタンスで複数枚の3角形テクスチャを扱うことができます。
-	 *	(その分、 fk_TriTexture よりも利用方法はやや複雑になっています。)
-	 *	同様の機能を持つクラスとして、 fk_IFSTexture があります。
-	 *	fk_IFSTexture クラスと比較した、
-	 *	本クラスの長所と短所をまとめると以下のようになります。
-	 *	- 長所
-	 *		- 3角形テクスチャの動的生成が可能である。
-	 *	- 短所
-	 *		- 描画速度は若干劣る。
-	 *		- D3DXファイルの入力に対応していない。
-	 *	.
-	 *	総じて、3角形テクスチャの動的生成を想定する場合は fk_MeshTexture が有用です。
-	 *	それ以外の用途では、 fk_IFSTexture の利用を検討する価値があると言えます。
-	 *
-	 *	\sa fk_Texture, fk_RectTexture, fk_TriTexture, fk_IFSTexture
-	 */
-
-	class fk_MeshTexture : public fk_Texture {
-
-		friend class			fk_TextureDraw;
-
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	\param[in]	image
-		 *		テクスチャ画像。省略するか nullptr を代入した場合は、
-		 *	   	テクスチャ画像を初期状態では生成しません。
-		 */
-		fk_MeshTexture(fk_Image *image = nullptr);
-
-		//! デストラクタ
-		virtual ~fk_MeshTexture();
-
-		//! 初期化関数
-		/*!
-		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
-		 */
-		void			init(void);
-
-		//! 3角形面数設定関数
-		/*!
-		 *	3角形テクスチャ面の枚数を設定します。
-		 *	枚数を変更しても、前に設定した面データは可能な限り保持します。
-		 *
-		 *	\param[in]	num		枚数
-		 *
-		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
-		 */
-		bool			setTriNum(int num);
-
-		//! 3角形面数参照関数
-		/*!
-		 *	3角形テクスチャ面の枚数を取得します。
-		 *
-		 *	\return		枚数
-		 *
-		 *	\sa setTriNum()
-		 */
-		int				getTriNum(void);
-
-		//! テクスチャ座標設定関数1
-		/*!
-		 *	頂点のテクスチャ座標を設定します。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	テクスチャ座標は、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	vID
-		 *		頂点IDを入力します。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	x
-		 *		テクスチャ座標の x 成分。0 以上 1 以下である必要があります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	y
-		 *		テクスチャ座標の y 成分。0 以上 1 以下である必要があります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setTextureCoord(int tID, int vID,
-										double x, double y);
-
-		//! テクスチャ座標設定関数2
-		/*!
-		 *	頂点のテクスチャ座標を設定します。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	テクスチャ座標は、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	vID
-		 *		頂点IDを入力します。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	coord
-		 *		テクスチャ座標。各成文は 0 以上 1 以下である必要があります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setTextureCoord(int tID, int vID, fk_TexCoord coord);
-
-		//! テクスチャ座標配列設定関数1
-		/*!
-		 *	各3角形テクスチャのテクスチャ座標を、配列によって設定します。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	テクスチャ座標は、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	array
-		 *		テクスチャ座標を表す配列へのポインタです。
-		 *		配列の先頭3個分のデータが利用されます。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setTriTextureCoord(int tID,
-										   std::vector<fk_TexCoord> *array);
-
-		//! テクスチャ座標配列設定関数2
-		/*!
-		 *	各3角形テクスチャのテクスチャ座標を、配列によって設定します。
-		 *	テクスチャ座標系については fk_TexCoord の説明を参照して下さい。
-		 *	テクスチャ座標は、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	array
-		 *		テクスチャ座標を表す配列へのポインタです。
-		 *		配列の先頭3個分のデータが利用されます。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setTriTextureCoord(int tID,
-										   fk_TexCoord *array);
-		//! テクスチャ座標参照関数
-		/*!
-		 *	設定されているテクスチャ座標を取得します。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	vID
-		 *		頂点IDを入力します。0, 1, 2 のいずれかになります。
-		 *
-		 *	\return		テクスチャ座標。取得に失敗した場合は常に (0, 0) を返します。
-		 *
-		 *	\sa setTextureCoord(), setTriTextureCoord()
-		 */
-		fk_TexCoord		getTextureCoord(int tID, int vID);
-
-		//! 頂点位置ベクトル設定関数1
-		/*!
-		 *	頂点の空間中での位置ベクトルを設定します。
-		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	vID
-		 *		頂点IDを入力します。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	x	頂点位置ベクトルの x 成分
-		 *	\param[in]	y	頂点位置ベクトルの y 成分
-		 *	\param[in]	z	頂点位置ベクトルの z 成分
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setVertexPos(int tID, int vID,
-									 double x, double y, double z);
-
-		//! 頂点位置ベクトル設定関数2
-		/*!
-		 *	頂点の空間中での位置ベクトルを設定します。
-		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	vID
-		 *		頂点IDを入力します。0, 1, 2 のいずれかになります。
-		 *		それ以外の値を入力した場合はエラーとなり、false を返します。
-		 *
-		 *	\param[in]	pos		頂点位置ベクトル
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setVertexPos(int tID, int vID, fk_Vector pos);
-
-		//! 頂点位置ベクトル配列設定関数1
-		/*!
-		 *	各3角形テクスチャの頂点位置ベクトルを、配列によって設定します。
-		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	array
-		 *		頂点の位置ベクトルを表す配列へのポインタです。
-		 *		配列の先頭3個分のデータが利用されます。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setTriPos(int tID, std::vector<fk_Vector> *array);
-
-		//! 頂点位置ベクトル配列設定関数2
-		/*!
-		 *	各3角形テクスチャの頂点位置ベクトルを、配列によって設定します。
-		 *	位置ベクトルは、一度設定した後でも動的に変更することが可能です。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	array
-		 *		頂点の位置ベクトルを表す配列へのポインタです。
-		 *		配列の先頭3個分のデータが利用されます。
-		 *
-		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
-		 */
-		bool			setTriPos(int tID, fk_Vector *array);
-
-		//! 頂点位置ベクトル参照関数
-		/*!
-		 *	設定されている頂点位置ベクトルを取得します。
-		 *
-		 *	\param[in]	tID
-		 *		3角形面の ID を入力します。
-		 *		ID は 0 から始まる整数値で、最大が枚数から1を引いたものとなります。
-		 *
-		 *	\param[in]	vID
-		 *		頂点IDを入力します。0, 1, 2 のいずれかになります。
-		 *
-		 *	\return		頂点位置ベクトル。取得に失敗した場合は常に (0, 0, 0) を返します。
-		 *
-		 *	\sa setTexturePos(), setTriTexturePos()
-		 */
-		fk_Vector		getVertexPos(int tID, int vID);
-
-		//! fk_IndexFaceSet インスタンスコピー関数
-		/*!
-		 *	現在の形状データを、
-		 *	fk_IndexFaceSet 型のインスタンスにコピーします。
-		 *
-		 *	\param[in]	ifs		fk_IndexFaceSet 型インスタンスのアドレス。
-		 */
-		void			putIndexFaceSet(fk_IndexFaceSet *ifs);
-
-		//! MQOファイル入力関数
-		/*!
-		 *	MQO 形式のファイルからデータを入力します。
-		 *	本関数が入力を行うのは形状データとテクスチャ座標であり、
-		 *	画像データの入力は行いません。
-		 *	画像データ入力は fk_Texture のメンバ関数等を用いて別途行ってください。
-		 *
-		 *	MQOデータには「オブジェクト」という概念があり、
-		 *	1つの形状データが複数のオブジェクトによって構成されていることがあります。
-		 *	この関数では、ファイル名とともにオブジェクト名を指定する必要があります。
-		 *
-		 *	\param[in]	fileName	ファイル名
-		 *
-		 *	\param[in]	objName		オブジェクト名
-		 *
-		 *	\param[in]	contFlg
-		 *		テクスチャ断絶の設定を指定します。これは、テクスチャ座標が不連続な箇所に対し、
-		 *		形状の位相を断絶する操作を行うためのものです。
-		 *		これを true にした場合は断裂操作が行われ、
-		 *		テクスチャ座標が不連続な箇所が幾何的にも不連続となるように表示されます。
-		 *		ほとんどの場合は、断裂操作を行った方が良好な描画結果となります。
-		 *		ただし、断裂操作を行う際に新たな位相要素を生成するため、
-		 *		本来のデータよりも頂点、稜線、面が若干増加する場合があります。
-		 *		false にした場合は、断裂操作を行わずに通常のデータ通り読み込みます。
-		 *
-		 *	\return ファイルの入力に成功した場合 true を、失敗した場合 false を返します。
-		 *
-		 *	\sa fk_IFSTexture::readMQOFile()
-		 */
-		bool			readMQOFile(std::string fileName,
-									std::string objName,
-									bool contFlg = true);
-
-	private:
-		int							triNum;
-		std::vector<fk_Vector>		posArray;
-		std::vector<fk_TexCoord>	coordArray;
-
-		std::vector<fk_Vector> *	getPos(void);
-		std::vector<fk_TexCoord> *	getCoord(void);
-
-		void						MakeDrawMeshFunc(void);
 	};
 }
 
@@ -989,7 +394,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -1025,7 +430,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

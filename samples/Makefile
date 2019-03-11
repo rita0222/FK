@@ -204,7 +204,6 @@ mac:
 	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
 	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S) -L/opt/local/lib" \
 	"SYSLIBS = \
-		-lAR -lARvideo -lARICP \
 		-liconv \
 		-lfltk_gl -lfltk \
 		-lvorbisfile -lvorbis -logg \

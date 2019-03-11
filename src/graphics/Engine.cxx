@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -78,7 +78,6 @@
 #include <FK/Scene.h>
 #include <FK/Light.h>
 #include <FK/Plane.h>
-#include <FK/PickData.h>
 #include <FK/Projection.h>
 #include <FK/PointDraw.H>
 #include <FK/LineDraw.H>
@@ -104,14 +103,15 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	dLinkID = 0;
 	wSize = 0;
 	hSize = 0;
-	arrayState = false;
 	resizeFlag = false;
-	textureMode = false;
 
 	srcFactor = FK_FACTOR_SRC_ALPHA;
 	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
 	depthRead = depthWrite = true;
 
+	boundaryModel.setDrawMode(FK_LINEMODE);
+	boundaryModel.setBMode(FK_B_NONE);
+	boundaryModel.setBDrawToggle(false);
 	return;
 }
 
@@ -137,16 +137,9 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	wSize = argW;
 	hSize = argH;
 	resizeFlag = false;
-	arrayState = true;
-	textureMode = false;
 
-	pointDraw->SetArrayState(arrayState);
-	lineDraw->SetArrayState(arrayState);
-	faceDraw->SetArrayState(arrayState);
-	textureDraw->SetArrayState(arrayState);
-
-	textureDraw->SetBindMode(true);
-
+	defProj.setAll(40.0, 1.0, 6000.0);
+	
 	return;
 }
 
@@ -159,258 +152,57 @@ void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 	return;
 }
 
-void fk_GraphicsEngine::ClearTextureMemory(void)
-{
-	textureDraw->ClearTextureMemory();
-	generalID++;
-	return;
-}
-
-unsigned long fk_GraphicsEngine::GetUsingTextureMemory(void)
-{
-	return textureDraw->GetUsingTextureMemory();
-}
-
 void fk_GraphicsEngine::SetViewPort(void)
 {
-	glViewport(0, 0, wSize, hSize);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
 	if(curDLink == nullptr) {
-		SetDefaultProjection();
+		SetProjection(&defProj);
 	} else {
 		SetProjection(curDLink->getProjection());
 	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
-
 	return;
 }
 
-void fk_GraphicsEngine::SetPickViewPort(int argPixSize, int argX, int argY)
+void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 {
-	GLint	ViewPort[4];
-
-	glViewport(0, 0, wSize, hSize);
-
-	glGetIntegerv(GL_VIEWPORT, &ViewPort[0]);
-	glSelectBuffer(FK_PICKDATAMAX*5, selectBuf);
-	glRenderMode(GL_SELECT);
-	glInitNames();
-	glPushName(0);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPickMatrix(GLdouble(argX),
-				  GLdouble(hSize - argY),
-				  GLdouble(argPixSize),
-				  GLdouble(argPixSize),
-				  ViewPort);
-
-	if(curDLink == nullptr) {
-		SetDefaultProjection();
-	} else {
-		SetProjection(curDLink->getProjection());
+	curProj = argProj;
+	if(curProj->getMode() == FK_PERSPECTIVE_MODE) {
+		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(curProj);
+		pers->setAspect(GLfloat(wSize)/GLfloat(hSize));
 	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
-
-	return;
-}
-
-void fk_GraphicsEngine::SetDefaultProjection(void)
-{
-	double			aspect;
-
-	aspect = static_cast<GLfloat>(wSize)/static_cast<GLfloat>(hSize);
-	gluPerspective(40.0, aspect, 1.0, 6000.0);
-}
-
-
-void fk_GraphicsEngine::SetProjection(const fk_ProjectBase *argProj)
-{
-	fk_ProjectBase	*proj;
-	fk_Perspective	*pers;
-	fk_Frustum		*frus;
-	fk_Ortho		*orth;
-
-	proj = const_cast<fk_ProjectBase *>(argProj);
-
-	switch(argProj->getMode()) {
-	  case FK_PERSPECTIVE_MODE:
-		pers = static_cast<fk_Perspective *>(proj);
-		gluPerspective((180.0 * pers->getFovy())/FK_PI,
-					   static_cast<GLfloat>(wSize)/static_cast<GLfloat>(hSize),
-					   pers->getNear(), pers->getFar());
-		break;
-
-	  case FK_FRUSTUM_MODE:
-		frus = static_cast<fk_Frustum *>(proj);
-		glFrustum(frus->getLeft(), frus->getRight(),
-				  frus->getBottom(), frus->getTop(),
-				  frus->getNear(), frus->getFar());
-		break;
-
-	  case FK_ORTHO_MODE:
-		orth = static_cast<fk_Ortho *>(proj);
-		glOrtho(orth->getLeft(), orth->getRight(),
-				orth->getBottom(), orth->getTop(),
-				orth->getNear(), orth->getFar());
-		break;
-
-	  default:
-		break;
-	}
+	curProj->MakeMat();
+	fk_DrawBase::SetProjectionMatrix(curProj->GetMatrix());
 
 	return;
 }
 
 void fk_GraphicsEngine::OpenGLInit(void)
 {
-	glDisable(GL_LIGHTING);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_ALPHA_TEST);
-	glEnable(GL_NORMALIZE);
-	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	glShadeModel(GL_FLAT);
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0f, 1.0f);
+	glClearDepth(1.0);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
+
+#ifndef OPENGL4
+	glDisable(GL_LIGHTING);
+	glEnable(GL_ALPHA_TEST);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_POINT_SMOOTH);
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	glShadeModel(GL_FLAT);
 	glAlphaFunc(GL_GREATER, 0.01f);
-
-#ifdef NO_GL_POINTER
-	arrayState = false;
-	pointDraw->setArrayState(arrayState);
-	lineDraw->setArrayState(arrayState);
-	faceDraw->setArrayState(arrayState);
-	textureDraw->setArrayState(arrayState);
 #endif
-
-	return;
-}
-
-void fk_GraphicsEngine::SetStereoViewPort(fk_StereoChannel argChannel)
-{
-	glViewport(0, 0, wSize, hSize);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	if(curDLink == nullptr) {
-		SetDefaultProjection();
-	} else {
-		SetProjection(curDLink->getStereoProjection(argChannel));
-	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
-
-	return;
-}
-
-void fk_GraphicsEngine::RecalcStereoModelView(fk_StereoChannel argChannel)
-{
-	if(curDLink != nullptr) {
-		const fk_Model	*camera = curDLink->getStereoCamera(argChannel);
-		if(camera == nullptr) {
-			RecalcInhModelView(curDLink->getCamera());
-		} else {
-			RecalcInhModelView(camera);
-		}
-	}
-
-	return;
-}
-
-void fk_GraphicsEngine::StereoDrawPrep(fk_StereoChannel argChannel)
-{
-	switch(argChannel) {
-	case FK_STEREO_LEFT:
-		glDrawBuffer(GL_BACK_LEFT);
-		break;
-	case FK_STEREO_RIGHT:
-		glDrawBuffer(GL_BACK_RIGHT);
-		break;
-	default:
-		glDrawBuffer(GL_BACK);
-	}
-
-	return;
-}
-
-void fk_GraphicsEngine::StereoDrawMain(fk_StereoChannel argChannel)
-{
-	// どうせ毎回ビューポートを設定するのでリサイズフラグは確実に潰す
-	if(resizeFlag == true || generalID > 2) {
-		resizeFlag = false;
-	}
-
-	ApplySceneParameter(false);
-
-	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
-	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
-	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-	SetStereoViewPort(argChannel);
-	glPushMatrix();
-
-	RecalcStereoModelView(argChannel);
-	DrawStereoObjs(false);
-	glPopMatrix();
-	glFlush();
-
-	return;
-}
-
-void fk_GraphicsEngine::DrawStereoObjs(bool argPickFlg)
-{
-	list<fk_Model *>::iterator	modelP, modelPEnd;
-	list<fk_Model *>			*overlayList;
-	bool						lightFlag;
-
-	if(curDLink == nullptr) return;
-	
-	lightFlag = DefineLight();
-
-	if(argPickFlg == true) modelArray.clear();
-
-	textureDraw->StartUp();
-
-	modelPEnd = curDLink->GetModelList()->end();
-	for(modelP = curDLink->GetModelList()->begin();
-		modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP, lightFlag, argPickFlg);
-	}
-
-	overlayList = curDLink->GetOverlayList();
-	if(overlayList->empty() == true) return;
-
-	if(curDLink->getStereoOverlayMode() == false) {
-		SetViewPort();
-		RecalcModelView();
-	}
-
-	glDisable(GL_DEPTH_TEST);
-	modelPEnd = overlayList->end();
-	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP, lightFlag, argPickFlg);
-	}
-	glEnable(GL_DEPTH_TEST);
-
 	return;
 }
 
@@ -463,7 +255,7 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 	return;
 }
 
-void fk_GraphicsEngine::Draw(bool argPickFlg)
+void fk_GraphicsEngine::Draw(void)
 {
 	// リサイズ時に加えて、マルチウィンドウ時もビューポートを再設定(by rita)
 	if(resizeFlag == true || generalID > 2) {
@@ -471,18 +263,17 @@ void fk_GraphicsEngine::Draw(bool argPickFlg)
 		resizeFlag = false;
 	}
 
+	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	ApplySceneParameter(true);
 
-	// バッファクリア時にステートを戻しておかないといけない（マジかよ）
-	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
-	glClear(static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-	glPushMatrix();
-
-	RecalcModelView();
-	DrawObjs(argPickFlg);
-	glPopMatrix();
-	glFlush();
+	curProj->MakeMat();
+	fk_DrawBase::SetCamera(curDLink->getCamera());
+	fk_DrawBase::SetLight(curDLink->GetLightList(FK_PARALLEL_LIGHT), FK_PARALLEL_LIGHT);
+	fk_DrawBase::SetLight(curDLink->GetLightList(FK_POINT_LIGHT), FK_POINT_LIGHT);
+	fk_DrawBase::SetLight(curDLink->GetLightList(FK_SPOT_LIGHT), FK_SPOT_LIGHT);
+	DrawObjs();
 
 	return;
 }
@@ -493,55 +284,18 @@ void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 	return;
 }
 
-void fk_GraphicsEngine::RecalcModelView(void)
-{
-	if(curDLink != nullptr) {
-		RecalcInhModelView(curDLink->getCamera());
-	}
-
-	return;
-}
-
-void fk_GraphicsEngine::RecalcInhModelView(const fk_Model *argModel)
-{
-	fk_Angle	MAngle(0.0, 0.0, 0.0);
-	fk_Vector	MPos(0.0, 0.0, 0.0);
-
-	if(argModel == nullptr) return;
-
-	MAngle = argModel->getAngle();
-	MPos = argModel->getPosition();
-
-	glRotated(180.0*MAngle.b/FK_PI, 0.0, 0.0, 1.0);
-	glRotated(-180.0*MAngle.p/FK_PI, 1.0, 0.0, 0.0);
-	glRotated(180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
-	glTranslated(-MPos.x, -MPos.y, -MPos.z);
-
-	if(argModel->getParent() != nullptr) {
-		RecalcInhModelView(argModel->getParent());
-	}
-
-	return;
-}
-
-void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
+void fk_GraphicsEngine::DrawObjs(void)
 {
 	list<fk_Model *>::iterator	modelP, modelPEnd;
 	list<fk_Model *>			*overlayList;
-	bool						lightFlag;
 
 	if(curDLink == nullptr) return;
-	lightFlag = DefineLight();
-
-	if(argPickFlg == true) modelArray.clear();
-
-	textureDraw->StartUp();
 
 	modelPEnd = curDLink->GetModelList()->end();
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
 		SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP, lightFlag, argPickFlg);
+		DrawModel(*modelP);
 	}
 
 	overlayList = curDLink->GetOverlayList();
@@ -550,283 +304,104 @@ void fk_GraphicsEngine::DrawObjs(bool argPickFlg)
 	SetDepthMode(FK_DEPTH_NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP, lightFlag, argPickFlg);
+		DrawModel(*modelP);
 	}
 
 	return;
 }
 
-void fk_GraphicsEngine::DrawModel(fk_Model *argModel,
-								  bool argLightFlg,
-								  bool argPickFlg)
+void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 {
-	fk_Shape		*modelShape;
+	if(argModel->getBDrawToggle() == true) DrawBoundaryLine(argModel);
 
-	if(argPickFlg == true) {
-		if(argModel->getPickMode() == false) return;
-		glLoadName(GLuint(modelArray.size()));
-		modelArray.push_back(argModel);
-	}
+	fk_Shape * modelShape = argModel->getShape();
+	if(modelShape == nullptr) return;
 
-	modelShape = argModel->getShape();
-
-	glPushMatrix();
+	modelShape->flushAttr();
+	fk_DrawBase::SetModel(argModel);
 		
-	if(argModel->getBDrawToggle() == true) {
-		if(argModel->getBMode() == FK_B_AABB) {
-			LoadAABBMatrix(argModel);
-			DrawBoundaryObj(argModel, argLightFlg);
-			glPopMatrix();
-			glPushMatrix();
-			LoadModelMatrix(argModel);
-		} else {
-			LoadModelMatrix(argModel);
-			DrawBoundaryObj(argModel, argLightFlg);
-		}
-	} else {
-		LoadModelMatrix(argModel);
-	}
-	
-	if(modelShape == nullptr) {
-		glPopMatrix();
-		return;
-	}
-
 	SetBlendMode(argModel);
-	argModel->preShader();
-	for(auto it = argModel->preShaderList.begin(); it != argModel->preShaderList.end(); ++it) {
-		get<1>(*it)();
-	}
-	
-	if(modelShape->getRealShapeType() == FK_SHAPE_TEXTURE) {
-		if(textureMode == false) {
-			glEnable(GL_TEXTURE_2D);
-			textureMode = true;
-		}
-		textureDraw->DrawTextureObj(argModel, argLightFlg, argPickFlg);
-	} else {
-		DrawShapeObj(argModel, argLightFlg, argPickFlg);
-	}
-
-	argModel->postShader();
-	for(auto it = argModel->postShaderList.begin(); it != argModel->postShaderList.end(); ++it) {
-		get<1>(*it)();
-	}
-
-	glPopMatrix();
+	//argModel->preShader();
+	DrawShapeObj(argModel);
+	//argModel->postShader();
+	modelShape->finishSetVBO();
 
 	return;
 }
 
-bool fk_GraphicsEngine::DefineLight(void)
+void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 {
-	const GLenum		LArray[8] = {
-		GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3,
-		GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7
-	};
+	fk_Vector posS, posE;
+	fk_Matrix mat;
 
-	const int					MaxLNum = 8;
-	int							LightID;
-	list<fk_Model *>::iterator	LightP, LightPEnd;
-	bool						lightFlag;
-	fk_Material					*LightMate;
-	fk_Light					*LightShape;
-	fk_Vector					LightPos, LightDirection;
-	float						LPosArray[4];
+	switch(argModel->getBMode()) {
+	  case FK_B_SPHERE:
+	  case FK_B_AABB:
+		  boundaryModel.glMoveTo(argModel->getInhPosition());
+		  break;
+		  
+	  case FK_B_OBB:
+		  boundaryModel.glMoveTo(argModel->getInhPosition());
+		  boundaryModel.glAngle(argModel->getInhAngle());
+		  break;
 
-	if(curDLink->GetLightList()->size() == 0) {
-		lightFlag = false;
+	  case FK_B_CAPSULE:
+		  mat = argModel->getInhMatrix();
+		  posS = mat * argModel->getCapsuleStartPos();
+		  posE = mat * argModel->getCapsuleEndPos();
+		  boundaryModel.glMoveTo((posS + posE)/2.0);
+		  boundaryModel.glVec(posE - posS);
+		  break;
+		  
+	  default:
+		  return;
+	}
+
+	if(argModel->getInterMode() == true &&
+	   argModel->getInterStatus() == true) {
+		boundaryModel.setLineColor(argModel->getBIntLineColor());
 	} else {
-		lightFlag = true;
-	}
-
-	for(LightID = 0; LightID < MaxLNum; LightID++) {
-		glDisable(LArray[LightID]);
-	}
-
-	if(lightFlag == true) {
-		LightP = curDLink->GetLightList()->begin();
-		LightPEnd = curDLink->GetLightList()->end();
-
-		for(LightID = 0;
-			LightP != LightPEnd && LightID < MaxLNum;
-			++LightP, ++LightID) {
-			LightMate = (*LightP)->getInhMaterial();
-			glLightfv(LArray[LightID], GL_AMBIENT,
-					  &(LightMate->getAmbient()->col[0]));
-			glLightfv(LArray[LightID], GL_DIFFUSE,
-					  &(LightMate->getDiffuse()->col[0]));
-			glLightfv(LArray[LightID], GL_SPECULAR,
-					  &(LightMate->getSpecular()->col[0]));
-
-			LightShape = static_cast<fk_Light *>((*LightP)->getShape());
-
-			switch(LightShape->getLightType()) {
-			  case FK_PARALLEL_LIGHT:
-				LightPos = (*LightP)->getInhVec();
-				LPosArray[0] = static_cast<float>(-LightPos.x);
-				LPosArray[1] = static_cast<float>(-LightPos.y);
-				LPosArray[2] = static_cast<float>(-LightPos.z);
-				LPosArray[3] = 0.0;
-				glLightfv(LArray[LightID], GL_POSITION, LPosArray);
-				break;
-
-			  case FK_POINT_LIGHT:
-				LightPos = (*LightP)->getInhPosition();
-				LPosArray[0] = static_cast<float>(LightPos.x);
-				LPosArray[1] = static_cast<float>(LightPos.y);
-				LPosArray[2] = static_cast<float>(LightPos.z);
-				LPosArray[3] = 1.0;
-				glLightfv(LArray[LightID], GL_POSITION, LPosArray);
-				glLightf(LArray[LightID], GL_LINEAR_ATTENUATION,
-						 static_cast<float>(LightShape->getAttenuation(0)));
-				glLightf(LArray[LightID], GL_QUADRATIC_ATTENUATION,
-						 static_cast<float>(LightShape->getAttenuation(1)));
-				glLightf(LArray[LightID], GL_CONSTANT_ATTENUATION,
-						 static_cast<float>(LightShape->getAttenuation(2)));
-
-				glLightf(LArray[LightID], GL_SPOT_CUTOFF, 180.0);
-
-				break;
-
-			  case FK_SPOT_LIGHT:
-				LightPos = (*LightP)->getInhPosition();
-				LightDirection = (*LightP)->getInhVec();
-				LPosArray[0] = static_cast<float>(LightPos.x);
-				LPosArray[1] = static_cast<float>(LightPos.y);
-				LPosArray[2] = static_cast<float>(LightPos.z);
-				LPosArray[3] = 1.0;
-				glLightfv(LArray[LightID], GL_POSITION, LPosArray);
-				LPosArray[0] = static_cast<float>(LightDirection.x);
-				LPosArray[1] = static_cast<float>(LightDirection.y);
-				LPosArray[2] = static_cast<float>(LightDirection.z);
-				LPosArray[3] = 0.0;
-				glLightfv(LArray[LightID], GL_SPOT_DIRECTION, LPosArray);
-
-				glLightf(LArray[LightID], GL_LINEAR_ATTENUATION,
-						 static_cast<float>(LightShape->getAttenuation(0)));
-				glLightf(LArray[LightID], GL_QUADRATIC_ATTENUATION,
-						 static_cast<float>(LightShape->getAttenuation(1)));
-				glLightf(LArray[LightID], GL_CONSTANT_ATTENUATION,
-						 static_cast<float>(LightShape->getAttenuation(2)));
-				glLightf(LArray[LightID], GL_SPOT_EXPONENT,
-						 static_cast<float>(LightShape->getSpotExponent()));
-				glLightf(LArray[LightID], GL_SPOT_CUTOFF,
-						 static_cast<float>(LightShape->getSpotCutOff()*180.0/FK_PI));
-
-			  default:
-				break;
-			}
-
-			glEnable(LArray[LightID]);
-		}
+		boundaryModel.setLineColor(argModel->getBLineColor());
 	}	
-
-	return lightFlag;
+	boundaryModel.setShape(argModel->GetBShape());
+	boundaryModel.setDrawMode(FK_LINEMODE);
+	DrawModel(&boundaryModel);
+	return;
 }
 
-void fk_GraphicsEngine::DrawShapeObj(fk_Model *argObj,
-									 bool argLightFlag,
-									 bool argPickFlg)
+void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 {
 	fk_DrawMode		DrawMode;
 
-	DrawMode = argObj->getDrawMode();
+	DrawMode = argModel->getDrawMode();
 
+	//fk_Window::printf("DrawMode = %d", DrawMode);
 	if(DrawMode == FK_NONEMODE) return;
 
-	if(textureMode == true) {
-		glDisable(GL_TEXTURE_2D);
-		textureMode = false;
-	}
-
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
-		faceDraw->DrawShapeFace(argObj, argLightFlag, DrawMode, argPickFlg);
+		faceDraw->DrawShapeFace(argModel);
 	}
 
 	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
-		pointDraw->DrawShapePoint(argObj, argPickFlg);
+		pointDraw->DrawShapePoint(argModel);
 	}
 
 	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
-		lineDraw->DrawShapeLine(argObj, argPickFlg);
+		lineDraw->DrawShapeLine(argModel);
 	}
 
-	if(argLightFlag == true) {
-		glEnable(GL_LIGHTING);
-	} else {
-		glDisable(GL_LIGHTING);
+	if((DrawMode & FK_TEXTUREMODE) != FK_NONEMODE) {
+		textureDraw->DrawShapeTexture(argModel);
 	}
 
-	return;
-}
-
-void fk_GraphicsEngine::DrawBoundaryObj(fk_Model *argObj, bool argLightFlag)
-{
-	if(textureMode == true) {
-		glDisable(GL_TEXTURE_2D);
-		textureMode = false;
-	}
-
-	if(argObj->getBMode() == FK_B_CAPSULE) {
-		glPushMatrix();
-		LoadModelMatrix(argObj->GetCapsuleModel());
-	}
-
-	lineDraw->DrawBoundaryLine(argObj);
-
-	if(argObj->getBMode() == FK_B_CAPSULE) {
-		glPopMatrix();
-	}
-
-	if(argLightFlag == true) {
-		glEnable(GL_LIGHTING);
-	} else {
-		glDisable(GL_LIGHTING);
-	}
-
-	return;
-}
-
-
-void fk_GraphicsEngine::LoadModelMatrix(fk_Model *argModel)
-{
-	fk_Angle	MAngle;
-	fk_Vector	MPos;
-
-	MAngle = argModel->getAngle();
-	MPos = argModel->getPosition();
-
-	if(argModel->getParent() != nullptr) {
-		LoadModelMatrix(argModel->getParent());
-	}
-
-	glTranslated(MPos.x, MPos.y, MPos.z);
-	glRotated(-180.0*MAngle.h/FK_PI, 0.0, 1.0, 0.0);
-	glRotated(180.0*MAngle.p/FK_PI, 1.0, 0.0, 0.0);
-	glRotated(-180.0*MAngle.b/FK_PI, 0.0, 0.0, 1.0);
-
-	if(argModel->getScaleMode() == true) {
-		double Scale = argModel->getScale();
-		glScaled(Scale * argModel->getScale(fk_X),
-				 Scale * argModel->getScale(fk_Y),
-				 Scale * argModel->getScale(fk_Z));
-	}
-
-	return;
-}
-
-void fk_GraphicsEngine::LoadAABBMatrix(fk_Model *argModel)
-{
-	fk_Vector MPos = argModel->getInhPosition();
-	double scale = argModel->getInhScale();
-	glTranslated(MPos.x, MPos.y, MPos.z);
-	glScaled(scale, scale, scale);
 	return;
 }
 
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
+	FK_UNUSED(argScene);
+
+#ifndef OPENGL4
 	fk_FogMode		fogMode = argScene->getFogMode();
 
 	if(fogMode == FK_NONE_FOG) {
@@ -875,33 +450,8 @@ void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 	glFogf(GL_FOG_END, static_cast<float>(argScene->getFogLinearEnd()));
 
 	glFogfv(GL_FOG_COLOR, argScene->getFogColor().col);
-
-	return;
-}
-
-void fk_GraphicsEngine::ViewMatCalc(fk_Matrix *argMat)
-{
-	GLdouble	tmp_modelArray[16], projArray[16];
-	fk_Matrix	projMat, modelMat;
-	int			ii, ij;
-
-	glPushMatrix();
-	RecalcModelView();
-
-	glGetIntegerv(GL_VIEWPORT, viewArray);
-	glGetDoublev(GL_PROJECTION_MATRIX, projArray);
-	glGetDoublev(GL_MODELVIEW_MATRIX, tmp_modelArray);
-
-	glPopMatrix();
-
-	for(ii = 0; ii < 4; ii++) {
-		for(ij = 0; ij < 4; ij++) {
-			projMat[ii][ij] = projArray[ij*4+ii];
-			modelMat[ii][ij] = tmp_modelArray[ij*4+ii];
-		}
-	}
-
-	*argMat = projMat * modelMat;
+#endif
+	
 	return;
 }
 
@@ -913,7 +463,7 @@ bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 	double			tmpY;
 	double			diffX, diffY;
 
-	ViewMatCalc(&mat);
+	//ViewMatCalc(&mat);
 	mat.inverse();
 
 	tmpY = static_cast<double>(hSize) - argY - 1.0;
@@ -984,43 +534,14 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 
 	if(generalID > 2) SetViewPort();
 
-	ViewMatCalc(&mat);
+	//ViewMatCalc(&mat);
 	outVec = mat * inVec;
 	if(fabs(outVec.w) < FK_EPS) return false;
 	outVec /= outVec.w;
-	retPos->set(static_cast<double>(viewArray[0]) +
-				static_cast<double>(viewArray[2])*(outVec.x + 1.0)/2.0,
-				static_cast<double>(viewArray[1]) +
-				static_cast<double>(hSize) - 1.0 -
-				static_cast<double>(viewArray[3])*(outVec.y + 1.0)/2.0,
+	retPos->set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
+				double(viewArray[1] + hSize - 1) - double(viewArray[3])*(outVec.y + 1.0)/2.0,
 				(1.0 + outVec.z)/2.0);
 	return true;
-}
-
-void fk_GraphicsEngine::SetOGLPointerMode(bool argFlg)
-{
-	arrayState = argFlg;
-	pointDraw->SetArrayState(arrayState);
-	lineDraw->SetArrayState(arrayState);
-	faceDraw->SetArrayState(arrayState);
-	textureDraw->SetArrayState(arrayState);
-	return;
-}
-
-bool fk_GraphicsEngine::GetOGLPointerMode(void)
-{
-	return arrayState;
-}
-
-void fk_GraphicsEngine::SetOGLTextureBindMode(bool argFlg)
-{
-	textureDraw->SetBindMode(argFlg);
-	return;
-}
-
-bool fk_GraphicsEngine::GetOGLTextureBindMode(void)
-{
-	return textureDraw->GetBindMode();
 }
 
 GLenum GetBlendFactor(fk_BlendFactor factor)
@@ -1066,16 +587,24 @@ void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
 
 void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
 {
-	bool r = (argMode & FK_DEPTH_READ) != 0;
-	bool w = (argMode & FK_DEPTH_WRITE) != 0;
-	if (depthRead != r) {
-		if (r) glEnable(GL_DEPTH_TEST);
-		else glDisable(GL_DEPTH_TEST);
-		depthRead = r;
+	bool readMode = (argMode & FK_DEPTH_READ) != 0;
+	bool writeMode = (argMode & FK_DEPTH_WRITE) != 0;
+
+	if (depthRead != readMode) {
+		if (readMode == true) {
+			glEnable(GL_DEPTH_TEST);
+		} else {
+			glDisable(GL_DEPTH_TEST);
+		}
+		depthRead = readMode;
 	}
-	if (depthWrite != w) {
-		glDepthMask(w ? GL_TRUE : GL_FALSE);
-		depthWrite = w;
+	if (depthWrite != writeMode) {
+		if(writeMode == true) {
+			glDepthMask(GL_TRUE);
+		} else {
+			glDepthMask(GL_FALSE);
+		}
+		depthWrite = writeMode;
 	}
 }
 
@@ -1113,162 +642,5 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 	return true;
 }
-
-void fk_GraphicsEngine::GetPickData(fk_PickData *argPickData,
-									int argPixSize, int argMouseX, int argMouseY)
-{
-	GLint			hits;
-	_st				ii;
-	int				elemID;
-	fk_ObjectType	elemType = FK_BASEOBJECT;
-	double			farDepth, nearDepth;
-
-	if(argPickData == nullptr) return;
-
-	SetPickViewPort(argPixSize, argMouseX, argMouseY);
-	RecalcModelView();
-	DrawObjs(true);
-
-	hits = glRenderMode(GL_RENDER);
-
-	argPickData->ClearData();
-
-	for(ii = 0; ii < static_cast<_st>(hits); ii++) {
-		switch(selectBuf[ii*5 + 4] % 3) {
-		  case 0:
-			elemType = FK_LOOP;
-			break;
-
-		  case 1:
-			elemType = FK_EDGE;
-			break;
-
-		  case 2:
-			elemType = FK_VERTEX;
-			break;
-
-		  default:
-			break;
-		}
-
-		elemID = static_cast<int>(selectBuf[ii*5 + 4]/3);
-		farDepth = static_cast<double>(selectBuf[ii*5 + 1])/0xffffffff;
-		nearDepth = static_cast<double>(selectBuf[ii*5 + 2])/0xffffffff;
-
-		argPickData->PushData(modelArray[selectBuf[ii*5 + 3]],
-							  elemID, elemType, farDepth, nearDepth);
-	}
-
-	SetViewPort();
-
-	return;
-}
-
-
-#ifdef NO_GLU_LIBRARY
-
-void fk_GraphicsEngine::gluLookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez,
-								  GLdouble cx, GLdouble cy, GLdouble cz,
-								  GLdouble upx, GLdouble upy, GLdouble upz)
-{
-	GLdouble	m[16];
-	GLdouble	tmpX[3], tmpY[3], tmpZ[3];
-	GLdouble	mag;
-
-	// Z vector
-	tmpZ[0] = eyex - cx;
-	tmpZ[1] = eyey - cy;
-	tmpZ[2] = eyez - cz;
-	mag = sqrt(tmpZ[0]*tmpZ[0] + tmpZ[1]*tmpZ[1] + tmpZ[2]*tmpZ[2]);
-	if (mag > FK_EPS) {
-		tmpZ[0] /= mag;
-		tmpZ[1] /= mag;
-		tmpZ[2] /= mag;
-	}
-
-	// Y vector
-	tmpY[0] = upx;
-	tmpY[1] = upy;
-	tmpY[2] = upz;
-
-	// X vector = Y cross Z
-	tmpX[0] =  tmpY[1]*tmpZ[2] - tmpY[2]*tmpZ[1];
-	tmpX[1] = -tmpY[0]*tmpZ[2] + tmpY[2]*tmpZ[0];
-	tmpX[2] =  tmpY[0]*tmpZ[1] - tmpY[1]*tmpZ[0];
-
-	// Recompute Y = Z cross X
-	tmpY[0] =  tmpZ[1]*tmpX[2] - tmpZ[2]*tmpX[1];
-	tmpY[1] = -tmpZ[0]*tmpX[2] + tmpZ[2]*tmpX[0];
-	tmpY[2] =  tmpZ[0]*tmpX[1] - tmpZ[1]*tmpX[0];
-
-	mag = sqrt(tmpX[0]*tmpX[0] + tmpX[1]*tmpX[1] + tmpX[2]*tmpX[2]);
-	if (mag > FK_EPS) {
-		tmpX[0] /= mag;
-		tmpX[1] /= mag;
-		tmpX[2] /= mag;
-	}
-
-	mag = sqrt(tmpY[0]*tmpY[0] + tmpY[1]*tmpY[1] + tmpY[2]*tmpY[2]);
-	if (mag > FK_EPS) {
-		tmpY[0] /= mag;
-		tmpY[1] /= mag;
-		tmpY[2] /= mag;
-	}
-
-	m[0] = tmpX[0];	m[4] = tmpX[1];	m[8] = tmpX[2];		m[12] = 0.0;
-	m[1] = tmpY[0];	m[5] = tmpY[1];	m[9] = tmpY[2];		m[13] = 0.0;
-	m[2] = tmpZ[0];	m[6] = tmpZ[1];	m[10] = tmpZ[2];	m[14] = 0.0;
-	m[3] = 0.0;		m[7] = 0.0;		m[11] = 0.0;		m[15] = 1.0;
-
-	glMultMatrixd(m);
-
-	// Translate Eye to Origin
-	glTranslated(-eyex, -eyey, -eyez);
-
-	return;
-}
-
-void fk_GraphicsEngine::gluPerspective(GLdouble argFovy, GLdouble argAspect,
-									   GLdouble argZNear, GLdouble argZFar)
-{
-	GLdouble	xmin, xmax, ymin, ymax;
-
-	ymax = argZNear * tan(argFovy * FK_PI / 360.0);
-	ymin = -ymax;
-
-	xmin = ymin * argAspect;
-	xmax = ymax * argAspect;
-
-	glFrustum(xmin, xmax, ymin, ymax, argZNear, argZFar);
-
-	return;
-}
-
-void fk_GraphicsEngine::gluPickMatrix(GLdouble argX, GLdouble argY,
-									  GLdouble width, GLdouble height,
-									  const GLint viewport[4])
-{
-	GLdouble	m[16];
-	GLdouble	sx, sy;
-	GLdouble	tx, ty;
-
-	sx = static_cast<GLdouble>(viewport[2])/width;
-	sy = static_cast<GLdouble>(viewport[3])/height;
-	tx = (static_cast<GLdouble>(viewport[2]) +
-		  2.0 * (static_cast<GLdouble>(viewport[0]) - argX))/width;
-	ty = (static_cast<GLdouble>(viewport[3]) +
-		  2.0 * (static_cast<GLdouble>(viewport[1]) - argY))/height;
-
-	m[0] = sx;	m[4] = 0.0;	 m[8] = 0.0;   m[12] = tx;
-	m[1] = 0.0;	m[5] = sy;	 m[9] = 0.0;   m[13] = ty;
-	m[2] = 0.0;	m[6] = 0.0;	 m[10] = 1.0;  m[14] = 0.0;
-	m[3] = 0.0;	m[7] = 0.0;	 m[11] = 0.0;  m[15] = 1.0;
-
-	glMultMatrixd(m);
-
-	return;
-}
-
-#endif // NO_GLU_LIBRARY
 
 #endif

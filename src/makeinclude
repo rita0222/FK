@@ -24,7 +24,7 @@ LOADER_D_OPT	= -L. -dynamiclib -lc \
 OPTOPT		= -O
 FKDEF		= -DFK_LIB_SRC
 SYSOPT		=
-GRAMOPT		= -pedantic -std=c++14
+GRAMOPT		= -pedantic -std=c++17
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
@@ -45,7 +45,7 @@ DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
 MACPACK		= $(FKTOP)/../FK_MacPack
 MACINCLUDE	= $(MACPACK)/include
 MACSYSLIB_S	= $(MACPACK)/lib/static
-MACSYSLIB_D	= $(MACPACK)/lib/dynamic
+ACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
 DLPRE		= dylib
 
@@ -159,7 +159,7 @@ ming-g:
 mac:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O3 -pipe" \
-	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"SYSOPT = -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
 	"LFLAGS = " \
 	"FKLIBS = " \
 	"SYSLIBS = " \
@@ -193,7 +193,7 @@ mac-d:
 mac-g:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -g" \
-	"SYSOPT = -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"SYSOPT = -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
 	"LFLAGS = " \
 	"FKLIBS = " \
 	"SYSLIBS = " \
@@ -245,11 +245,13 @@ DEPENDCFLAGS	= $(CFLAGS)
 target : $(LIBRARY)
 
 $(LIBRARY_S) : $(LIBOBJS)
+	$(PRECOM)
 	$(RM) $(LIBRARY_S)
 	$(LOADER_S) $(LIBRARY_S) $(LIBOBJS)
 	$(RANLIB) $(LIBRARY_S)
 
 $(LIBRARY_D) : $(LIBOBJS)
+	$(PRECOM)
 	$(RM) $(LIBRARY_D)
 	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) \
 		-o $(LIBRARY_D) $(LIBOBJS)
@@ -261,7 +263,7 @@ depend:: $(ALLSRCS)
 clean:
 	touch dummy~
 	$(RM) dummy~ $(LIBOBJS) $(LIBBCCOBJS) $(PROGRAM) \
-		Makefile.bak fk2_base.bak *.out core *.core *~ #*# *.exe *.obj
+		Makefile.bak fk2_base.bak *.out GLSL/*.out core *.core *~ #*# *.exe *.obj
 
 ###
 %.o : %.cxx

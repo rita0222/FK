@@ -55,7 +55,6 @@ namespace FK {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-
 		fk_Particle(fk_Point *, int);
 		virtual ~fk_Particle();
 
@@ -163,44 +162,7 @@ namespace FK {
 		 */
 		void			setAccel(double x, double y, double z);
 
-		//! 色 ID 参照関数
-		/*!
-		 *	パーティクルの色 ID を参照します。
-		 *
-		 *	\return		色 ID
-		 *
-		 *	\sa fk_ParticleSet::setColorPalette()
-		 */
-		int				getColorID(void) const;
 
-		//! 色 ID 設定関数
-		/*!
-		 *	パーティクルの色 ID を設定します。
-		 *
-		 *	\param[in]	ID		色 ID
-		 *
-		 *	\sa fk_ParticleSet::setColorPalette()
-		 */
-		void			setColorID(int ID);
-
-		//! 描画有無効参照関数
-		/*!
-		 *	現在の描画状態の有無を参照します。
-		 *
-		 *	\return
-		 *		描画が有効である場合 true を、
-		 *		無効となっている場合 false を返します。
-		 */
-		bool			getDrawMode(void) const;
-
-		//! 描画有無効設定関数
-		/*!
-		 *	現在の描画状態の有無を設定します。
-		 *
-		 *	\param[in]	mode
-		 *		true の場合、描画を有効とします。false の場合無効とします。
-		 */
-		void			setDrawMode(bool mode);
 
 		//! 年齢更新関数
 		/*!
@@ -212,6 +174,17 @@ namespace FK {
 		 *	\sa fk_ParticleSet::handle()
 		 */
 		void			handle(void);
+
+		void			setColor(fk_Color col);
+		void			setColor(fk_Color *col);
+		fk_Color		getColor(void);
+		bool			getDrawMode(void) const;
+		void			setDrawMode(bool mode);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		int				getColorID(void) const;
+		void			setColorID(int ID);
+#endif		
 
 	private:
 		int				id;			// 頂点 ID 
@@ -430,59 +403,6 @@ namespace FK {
 		 */
 		unsigned int	getMaxSize(void) const;
 
-		//! カラーパレット設定1
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	col		色
-		 */
-		void			setColorPalette(int ID, const fk_Color &col);
-
-		//! カラーパレット設定2
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	色成分の最小値は 0、最大値は 1 です。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	R		色のR(赤)成分
-		 *	\param[in]	G		色のG(緑)成分
-		 *	\param[in]	B		色のB(青)成分
-		 */
-		void			setColorPalette(int ID, float R, float G, float B);
-
-		//! カラーパレット設定3
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	色成分の最小値は 0、最大値は 1 です。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	R		色のR(赤)成分
-		 *	\param[in]	G		色のG(緑)成分
-		 *	\param[in]	B		色のB(青)成分
-		 */
-		void			setColorPalette(int ID, double R, double G, double B);
 
 		//! 個別初期化用仮想関数
 		/*!
@@ -494,7 +414,8 @@ namespace FK {
 		 *
 		 *	\param[in]	p		新たに生成されたパーティクルインスタンス
 		 */
-		virtual void	genMethod(fk_Particle *p);
+		//virtual void	genMethod(fk_Particle *p);
+		std::function<void(fk_Particle *)>	genMethod;
 
 		//! 全体動作用仮想関数
 		/*!
@@ -504,7 +425,8 @@ namespace FK {
 		 *	この関数を上書き定義することによって、
 		 *	パーティクル集合に対して様々な制御を行うことができます。
 		 */
-		virtual void	allMethod(void);
+		//virtual void	allMethod(void);
+		std::function<void(void)> allMethod;
 
 		//! 個別動作用仮想関数
 		/*!
@@ -517,7 +439,8 @@ namespace FK {
 		 *
 		 *	\param[in]	p		個別パーティクルインスタンス
 		 */
-		virtual void	indivMethod(fk_Particle *p);
+		//virtual void	indivMethod(fk_Particle *p);
+		std::function<void(fk_Particle *)> indivMethod;
 
 		//! 全体動作モード設定関数
 		/*!
@@ -561,6 +484,12 @@ namespace FK {
 		 */
 		bool			getIndivMode(void) const;
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void			setColorPalette(int ID, const fk_Color &col);
+		void			setColorPalette(int ID, float R, float G, float B);
+		void			setColorPalette(int ID, double R, double G, double B);
+
+#endif
 	private:
 		std::vector<fk_Particle *>	pSet;
 		fk_IDAdmin					*pAdmin;
@@ -576,7 +505,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -612,7 +541,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

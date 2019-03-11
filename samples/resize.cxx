@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -132,7 +132,7 @@ int main(int, char *[])
 		if(fkWindow.winOpenStatus() == false) continue;
 
 		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/100.0);
+		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/2000.0);
 	}
 
 	return 0;

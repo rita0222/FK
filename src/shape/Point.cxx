@@ -1,6 +1,6 @@
-﻿/****************************************************************************
+﻿ /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -72,16 +72,21 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/Point.h>
+//#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
+	realType = FK_SHAPE_POINT;
 	SetObjectType(FK_POINT);
-	SetPaletteData(&localPal);
-	allClear(false);
+	allClear();
 	MakePoint(argVertexSet);
+
+	setShaderAttribute(vertexName, 3, posArray.getP());
+	setShaderAttribute(pointElementColorName, 4, colArray.getP());
+	setShaderAttribute(pointElementAliveName, 1, &aliveArray);
 	return;
 }
 
@@ -92,79 +97,48 @@ fk_Point::~fk_Point()
 
 bool fk_Point::MakePoint(int argNum, fk_Vector *argP)
 {
-	int			i;
-	fk_FVector	tmp;
+	int				i;
 
 	if(argNum < 0) return false;
-	if(argP == nullptr) return true;
+	if(argP == nullptr) return false;
 
-	vec.clear();
-
-	drawMode.clear();
-	drawCount = 0;
-
-	colorID.clear();
-	colorCount = 0;
+	posArray.clear();
+	colArray.clear();
+	aliveArray.clear();
 
 	for(i = 0; i < argNum; i++) {
-		tmp = argP[i];
-		vec.push(tmp);
-		drawMode.push_back(static_cast<char>(true));
-		colorID.push_back(-1);
+		pushVertex(argP[i]);
 	}
+
+	modifyAttribute(vertexName);
+	modifyAttribute(pointElementColorName);
+	modifyAttribute(pointElementAliveName);
 
 	return true;
 }
 
 bool fk_Point::MakePoint(vector<fk_Vector> *argP)
 {
-	_st			i;
-	fk_FVector	tmp;
-
-	vec.clear();
-
-	drawMode.clear();
-	drawCount = 0;
-
-	colorID.clear();
-	colorCount = 0;
-
-	if(argP == nullptr) return true;
-	for(i = 0; i < argP->size(); i++) {
-		tmp = (*argP)[i];
-		vec.push(tmp);
-		drawMode.push_back(static_cast<char>(true));
-		colorID.push_back(-1);
-	}
-
-	return true;
+	if(argP == nullptr) return false;
+	return MakePoint(int(argP->size()), &(argP->at(0)));
 }
 
 int fk_Point::pushVertex(fk_Vector argPos)
 {
-	fk_FVector	tmp;
-	_st			id;
+	posArray.push(argPos);
+	colArray.push(0.0, 0.0, 0.0, 1.0);
+	aliveArray.push_back(FK_SHAPE_ALIVE);
 
-	tmp = argPos;
-	id = static_cast<_st>(vec.push(tmp));
-	if(id == drawMode.size()) {
-		drawMode.push_back(static_cast<char>(true));
-		colorID.push_back(-1);
-	} else {
-		drawMode[id] = static_cast<char>(true);
-		colorID[id] = -1;
-	}
-	return static_cast<int>(id);
+	modifyAttribute(pointElementAliveName);
+
+	return int(aliveArray.size() - 1);
 }
 
 bool fk_Point::setVertex(int argID, fk_Vector argPos)
 {
-	fk_FVector		*p;
-
-	if(vec.isAlive(argID) == false) return false;
-
-	p = vec.at(argID);
-	*p = argPos;
+	if(argID < 0 || argID >= posArray.getSize()) return false;
+	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
+	posArray.set(argID, argPos);
 
 	return true;
 }
@@ -181,96 +155,88 @@ bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)
 
 bool fk_Point::removeVertex(int argID)
 {
-	if(vec.isAlive(argID) == false) return false;
+	if(argID < 0 || argID >= int(aliveArray.size())) return false;
+	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
+	aliveArray[_st(argID)] = FK_SHAPE_DEAD;
 
-	vec.remove(argID);
+	modifyAttribute(pointElementAliveName);
+
 	return true;
 }
 
-fk_FVector * fk_Point::getVertex(int argID)
+fk_Vector fk_Point::getVertex(int argID)
 {
-	if(vec.isAlive(argID) == false) return nullptr;
-	return vec.at(argID);
+	fk_Vector tmp(0.0, 0.0, 0.0);
+	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return tmp;
+	
+	return posArray.getV(argID);
 }
 
 int fk_Point::getSize(void)
 {
-	return vec.size();
+	return int(aliveArray.size());
 }
 
-void fk_Point::setDrawMode(int argID, bool argFlag)
+void fk_Point::allClear(void)
 {
-	_st		id = static_cast<_st>(argID);
+	posArray.clear();
+	colArray.clear();
+	aliveArray.clear();
 
-	if(vec.isAlive(argID) == false) return;
-
-	if(argFlag == false && drawMode[id] == static_cast<char>(true)) {
-		drawCount++;
-		drawMode[id] = static_cast<char>(false);
-	}
-
-	if(argFlag == true && drawMode[id] == static_cast<char>(false)) {
-		drawCount--;
-		drawMode[id] = static_cast<char>(true);
-	}
+	modifyAttribute(vertexName);
+	modifyAttribute(pointElementColorName);
+	modifyAttribute(pointElementAliveName);
 
 	return;
 }
 
-bool fk_Point::getDrawMode(void)
+void fk_Point::setColor(int argID, fk_Color argCol)
 {
-	if(drawCount == 0) return true;
-	return false;
+	if(argID < 0 || argID >= colArray.getSize()) return;
+	colArray.set(argID, argCol);
+	modifyAttribute(pointElementColorName);
+	return;
+}
+
+void fk_Point::setColor(int argID, fk_Color *argCol)
+{
+	if(argID < 0 || argID >= colArray.getSize()) return;
+	colArray.set(argID, *argCol);
+	modifyAttribute(pointElementColorName);
+	return;
+}
+
+fk_Color fk_Point::getColor(int argID)
+{
+	return colArray.get(argID);
+}
+
+void fk_Point::setDrawMode(int argID, bool argMode)
+{
+	if(argID < 0 || argID >= int(aliveArray.size())) return;
+	aliveArray[_st(argID)] = (argMode) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
+	modifyAttribute(pointElementAliveName);
 }
 
 bool fk_Point::getDrawMode(int argID)
 {
-	if(vec.isAlive(argID) == false) return false;
-	//return static_cast<bool>(drawMode[static_cast<_st>(argID)]);
-	return (drawMode[static_cast<_st>(argID)]) ? true : false;
+	if(argID < 0 || argID >= int(aliveArray.size())) return false;
+	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
+	return false;
 }
 
-void fk_Point::setColorID(int argID, int argCol)
+void fk_Point::flushAttr(void)
 {
-	_st		id = static_cast<_st>(argID);
-
-	if(vec.isAlive(argID) == false) return;
-
-	if(argCol >= 0) {
-		if(colorID[id] < 0) {
-			colorCount++;
-		}
-		colorID[id] = argCol;
+	if(posArray.isModify() == true) {
+		modifyAttribute(vertexName);
+		posArray.reset();
 	}
 
-	if(argCol < 0) {
-		if(colorID[id] >= 0) {
-			colorCount--;
-		}
-		colorID[id] = -1;
+	if(colArray.isModify() == true) {
+		modifyAttribute(pointElementColorName);
+		colArray.reset();
 	}
-
-	return;
 }
 
-bool fk_Point::getColorCount(void)
-{
-	return ((colorCount == 0) ? true : false);
-}
-
-int fk_Point::getColorID(int argID)
-{
-	if(vec.isAlive(argID) == false) return -2;
-	return colorID[static_cast<_st>(argID)];
-}
-
-void fk_Point::allClear(bool argMateFlg)
-{
-	vec.clear();
-	drawMode.clear();
-	drawCount = 0;
-	colorCount = 0;
-	if(argMateFlg == true) clearMaterial();
-
-	return;
-}
+void fk_Point::setColorID(int, int) { return; }
+int fk_Point::getColorID(int) { return 0; }

@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -313,9 +313,9 @@ void fk_UniStr::convert(const string &argStr, fk_StringCode argCode)
 	_st				i;
 	fk_UniChar		uniChar;
 
+	clear();
 	switch(argCode) {
 	  case FK_STR_UTF16:
-		clear();
 		for(i = 0; i < argStr.size(); i += 2) {
 			uniChar.setBuffer(static_cast<unsigned char>(argStr[i]),
 							  static_cast<unsigned char>(argStr[i+1]));

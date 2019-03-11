@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -71,7 +71,7 @@
  ****************************************************************************/
 
 #define FK_DEF_SIZETYPE
-#include <FK/Texture.h>
+#include <FK/MeshTexture.h>
 #include <FK/MQOParser.H>
 #include <FK/Error.H>
 
@@ -82,12 +82,39 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
 	SetObjectType(FK_MESHTEXTURE);
-	triNum = 0;
-	posArray.clear();
-	coordArray.clear();
-	setImage(argImage);
-	MakeDrawMeshFunc();
+
+	GetFaceSize = [this]() { return triNum; };
+	StatusUpdate = [this]() {
+		modifyAttribute(vertexName);
+		modifyAttribute(normalName);
+		modifyAttribute(texCoordName);
+	};
+
+	FaceIBOSetup = [this]() {
+		if(faceIBO == 0) {
+			glGenBuffers(1, &faceIBO);
+			faceIndexFlg = true;
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
+		if(faceIndexFlg == true) {
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+						 GLsizei(3*triNum*int(sizeof(GLuint))),
+						 faceIndex.data(), GL_STATIC_DRAW);
+			faceIndexFlg = false;
+		}
+	};
+
+	vertexPosition.setDim(3);
+	vertexNormal.setDim(3);
+	texCoord.setDim(2);
 	
+	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	setShaderAttribute(normalName, 3, vertexNormal.getP());
+	setShaderAttribute(texCoordName, 2, texCoord.getP());
+		
+	init();
+
 	return;
 }
 
@@ -95,74 +122,13 @@ fk_MeshTexture::~fk_MeshTexture()
 {
 	posArray.clear();
 	coordArray.clear();
+	faceIndex.clear();
+	vertexPosition.clear();
+	vertexNormal.clear();
+	texCoord.clear();
 
 	return;
 }
-
-void fk_MeshTexture::MakeDrawMeshFunc(void)
-{
-	DrawTexture = [this](bool) {
-		double				wScale, hScale;
-		_st					ii, ij;
-		fk_Vector			norm;
-
-		const fk_Dimension *imageSize = getImageSize();
-		const fk_Dimension *bufSize = getBufferSize();
-
-		// rita: メッシュ枚数チェックを先に
-		if(triNum <= 0) return;
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
-		hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
-
-		glBegin(GL_TRIANGLES);
-		for(ii = 0; ii < static_cast<_st>(triNum); ++ii) {
-			norm = (posArray[ii*3 + 1] - posArray[ii*3]) ^
-				(posArray[ii*3 + 2] - posArray[ii*3]);
-			if(norm.normalize() == false) {
-				fk_PutError("fk_Window", "DrawMeshTextureObj", 1,
-							"Normal Vector Error.");
-				continue;
-			}
-						
-			glNormal3dv(static_cast<GLdouble *>(&(norm.x)));
-			for(ij = 0; ij < 3; ++ij) {
-				glTexCoord2f(coordArray[ii*3+ij].x * static_cast<float>(wScale),
-							 coordArray[ii*3+ij].y * static_cast<float>(hScale));
-				glVertex3dv(static_cast<GLdouble *>(&(posArray[ii*3+ij].x)));
-			}
-		}
-
-		glEnd();
-	};
-
-	DrawPick = [this]() {
-		_st			ii, ij;
-
-		const fk_Dimension *bufSize = getBufferSize();
-
-		// rita: メッシュ枚数チェックを先に
-		if(triNum <= 0) return;
-
-		if(bufSize == nullptr) return;
-		if(bufSize->w < 64 || bufSize->h < 64) return;
-
-		for(ii = 0; ii < static_cast<_st>(triNum); ++ii) {
-			glPushName(static_cast<GLuint>(ii*3));
-			glBegin(GL_TRIANGLES);
-
-			for(ij = 0; ij < 3; ++ij) {
-				glVertex3dv(static_cast<GLdouble *>(&(posArray[ii*3+ij].x)));
-			}
-
-			glEnd();
-			glPopName();
-		}
-	};
-}			 
 
 void fk_MeshTexture::init(void)
 {
@@ -171,9 +137,112 @@ void fk_MeshTexture::init(void)
 	posArray.clear();
 	coordArray.clear();
 
+	faceIndex.clear();
+	vertexPosition.clear();
+	vertexNormal.clear();
+	texCoord.clear();
+
+	StatusUpdate();
+
+	if(faceIBO != 0) {
+		glDeleteBuffers(1, &faceIBO);
+		faceIBO = 0;
+	}
+	faceIndexFlg = true;
+	
 	return;
 }
 
+void fk_MeshTexture::FaceUpdate(void)
+{
+	_st		oldSize = faceIndex.size();
+	faceIndex.resize(_st(triNum*3));
+	for(_st i = oldSize; i < _st(triNum*3); ++i) {
+		faceIndex[i] = GLuint(i);
+	}
+	faceIndexFlg = true;
+}
+
+
+void fk_MeshTexture::PosUpdate(void)
+{
+	vertexPosition.resize(triNum*3);
+	for(int i = 0; i < triNum*3; ++i) {
+		vertexPosition.set(i, posArray[_st(i)]);
+	}
+	modifyAttribute(vertexName);
+}
+
+void fk_MeshTexture::PosUpdate(int argTID, int argVID)
+{
+	if(vertexPosition.getSize() <= (argTID+1)*3) vertexPosition.resize((argTID+1)*3);
+	vertexPosition.set(argTID*3 + argVID, posArray[_st(argTID*3 + argVID)]);
+	modifyAttribute(vertexName);
+}
+
+void fk_MeshTexture::NormUpdate(void)
+{
+	vertexNormal.resize(triNum*3);
+	for(int i = 0; i < triNum; ++i) {
+		_st tid = _st(i*3);
+		fk_Vector norm = (posArray[tid+1] - posArray[tid]) ^ (posArray[tid+2] - posArray[tid]);
+		if(norm.normalize() == false) continue;
+		for(int j = 0; j < 3; ++j) {
+			vertexNormal.set(i*3 + j, norm);
+		}
+	}
+	modifyAttribute(normalName);
+}
+
+void fk_MeshTexture::NormUpdate(int argTID)
+{
+	if(vertexNormal.getSize() <= (argTID+1)*3) vertexNormal.resize((argTID+1)*3);
+	_st id = _st(argTID*3);
+	fk_Vector norm = (posArray[id+1] - posArray[id]) ^ (posArray[id+2] - posArray[id]);
+	if(norm.normalize() == false) return;
+	for(int i = 0; i < 3; i++) vertexNormal.set(argTID*3 + i, norm);
+	modifyAttribute(normalName);
+}
+
+void fk_MeshTexture::TexCoordUpdate(void)
+{
+	texCoord.resize(triNum*3);
+
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+
+	if(triNum <= 0) return;
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	double wScale = double(imageSize->w)/double(bufSize->w);
+	double hScale = double(imageSize->h)/double(bufSize->h);
+
+	for(int i = 0; i < triNum*3; ++i) {
+		texCoord.set(i, coordArray[_st(i)].x * wScale, coordArray[_st(i)].y * hScale);
+	}
+	modifyAttribute(texCoordName);
+}
+
+void fk_MeshTexture::TexCoordUpdate(int argTID, int argVID)
+{
+	const fk_Dimension *imageSize = getImageSize();
+	const fk_Dimension *bufSize = getBufferSize();
+
+	if(triNum <= 0) return;
+	if(texCoord.getSize() <= (argTID+1)*3) texCoord.resize((argTID+1)*3);
+
+	if(bufSize == nullptr) return;
+	if(bufSize->w < 64 || bufSize->h < 64) return;
+
+	double wScale = double(imageSize->w)/double(bufSize->w);
+	double hScale = double(imageSize->h)/double(bufSize->h);
+	int id = argTID*3 + argVID;
+	
+	texCoord.set(id, coordArray[_st(id)].x * wScale, coordArray[_st(id)].y * hScale);
+	modifyAttribute(texCoordName);
+}
+	
 bool fk_MeshTexture::setTriNum(int argNum)
 {
 	if(argNum < 0) {
@@ -187,9 +256,13 @@ bool fk_MeshTexture::setTriNum(int argNum)
 		posArray.clear();
 		coordArray.clear();
 	} else {
-		posArray.resize(static_cast<_st>(triNum * 3));
-		coordArray.resize(static_cast<_st>(triNum * 3));
+		posArray.resize(_st(triNum * 3));
+		coordArray.resize(_st(triNum * 3));
 	}
+	FaceUpdate();
+	PosUpdate();
+	NormUpdate();
+	TexCoordUpdate();
 
 	return true;
 }
@@ -207,7 +280,9 @@ bool fk_MeshTexture::setVertexPos(int argTID, int argVID,
 		setTriNum(argTID+1);
 	}
 
-	posArray[static_cast<_st>(3*argTID + argVID)].set(argX, argY, argZ);
+	posArray[_st(3*argTID + argVID)].set(argX, argY, argZ);
+	PosUpdate(argTID, argVID);
+	NormUpdate(argTID);
 
 	return true;
 }
@@ -224,14 +299,16 @@ bool fk_MeshTexture::setVertexPos(int argTID, int argVID, fk_Vector argPos)
 		setTriNum(argTID+1);
 	}
 
-	posArray[static_cast<_st>(3*argTID + argVID)] = argPos;
+	posArray[_st(3*argTID + argVID)] = argPos;
+	PosUpdate(argTID, argVID);
+	NormUpdate(argTID);
 
 	return true;
 }
 
 bool fk_MeshTexture::setTriPos(int argTID, vector<fk_Vector> *argTPos)
 {
-	_st		tid = static_cast<_st>(argTID);
+	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
 		fk_PutError("fk_MeshTexture", "setTriPos", 1,
@@ -249,16 +326,18 @@ bool fk_MeshTexture::setTriPos(int argTID, vector<fk_Vector> *argTPos)
 		setTriNum(argTID+1);
 	}
 
-	posArray[tid*3] = (*argTPos)[0];
-	posArray[tid*3 + 1] = (*argTPos)[1];
-	posArray[tid*3 + 2] = (*argTPos)[2];
+	for(_st i = 0; i < 3; ++i) {
+		posArray[tid*3 + i] = (*argTPos)[i];
+		PosUpdate(argTID, int(i));
+	}
+	NormUpdate(argTID);
 
 	return true;
 }
 
 bool fk_MeshTexture::setTriPos(int argTID, fk_Vector *argTPos)
 {
-	_st		tid = static_cast<_st>(argTID);
+	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
 		fk_PutError("fk_MeshTexture", "setTriPos", 3,
@@ -270,10 +349,12 @@ bool fk_MeshTexture::setTriPos(int argTID, fk_Vector *argTPos)
 		setTriNum(argTID+1);
 	}
 
-	posArray[tid*3] = argTPos[0];
-	posArray[tid*3 + 1] = argTPos[1];
-	posArray[tid*3 + 2] = argTPos[2];
-
+	for(_st i = 0; i < 3; ++i) {
+		posArray[tid*3 + i] = argTPos[i];
+		PosUpdate(argTID, int(i));
+	}
+	NormUpdate(argTID);
+			
 	return true;
 }
 
@@ -298,7 +379,9 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 		setTriNum(argTID+1);
 	}
 
-	coordArray[static_cast<_st>(argTID*3 + argVID)].set(argS, argT);
+	coordArray[_st(argTID*3 + argVID)].set(argS, argT);
+	TexCoordUpdate(argTID, argVID);
+
 	return true;
 }
 
@@ -323,14 +406,15 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 		setTriNum(argTID+1);
 	}
 
-	coordArray[static_cast<_st>(argTID*3 + argVID)] = argCoord;
+	coordArray[_st(argTID*3 + argVID)] = argCoord;
+	TexCoordUpdate(argTID, argVID);
 	return true;
 }
 
 bool fk_MeshTexture::setTriTextureCoord(int argTID,
 										vector<fk_TexCoord> *argTCoord)
 {
-	_st		tid = static_cast<_st>(argTID);
+	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
 		fk_PutError("fk_MeshTexture", "setTriTextureCoord", 1,
@@ -348,16 +432,16 @@ bool fk_MeshTexture::setTriTextureCoord(int argTID,
 		setTriNum(argTID+1);
 	}
 
-	coordArray[tid*3] = (*argTCoord)[0];
-	coordArray[tid*3+1] = (*argTCoord)[1];
-	coordArray[tid*3+2] = (*argTCoord)[2];
-
+	for(_st i = 0; i < 3; ++i) {
+		coordArray[tid*3 + i] = (*argTCoord)[i];
+		TexCoordUpdate(argTID, int(i));
+	}
 	return true;
 }
 
 bool fk_MeshTexture::setTriTextureCoord(int argTID, fk_TexCoord *argTCoord)
 {
-	_st		tid = static_cast<_st>(argTID);
+	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
 		fk_PutError("fk_MeshTexture", "setTriTextureCoord", 3,
@@ -369,21 +453,12 @@ bool fk_MeshTexture::setTriTextureCoord(int argTID, fk_TexCoord *argTCoord)
 		setTriNum(argTID+1);
 	}
 
-	coordArray[tid*3] = argTCoord[0];
-	coordArray[tid*3+1] = argTCoord[1];
-	coordArray[tid*3+2] = argTCoord[2];
+	for(_st i = 0; i < 3; ++i) {
+		coordArray[tid*3 + i] = argTCoord[i];
+		TexCoordUpdate(argTID, int(i));
+	}
 
 	return true;
-}
-
-vector<fk_Vector> * fk_MeshTexture::getPos(void)
-{
-	return &posArray;
-}
-
-vector<fk_TexCoord> * fk_MeshTexture::getCoord(void)
-{
-	return &coordArray;
 }
 
 int fk_MeshTexture::getTriNum(void)
@@ -402,7 +477,7 @@ fk_Vector fk_MeshTexture::getVertexPos(int argTID, int argVID)
 		return dummy;
 	}
 
-	return posArray[static_cast<_st>(argTID * 3 + argVID)];
+	return posArray[_st(argTID * 3 + argVID)];
 }
 
 fk_TexCoord fk_MeshTexture::getTextureCoord(int argTID, int argVID)
@@ -416,7 +491,7 @@ fk_TexCoord fk_MeshTexture::getTextureCoord(int argTID, int argVID)
 		return dummy;
 	}
 
-	return coordArray[static_cast<_st>(argTID * 3 + argVID)];
+	return coordArray[_st(argTID * 3 + argVID)];
 }
 
 void fk_MeshTexture::putIndexFaceSet(fk_IndexFaceSet *argIF)
@@ -430,7 +505,7 @@ void fk_MeshTexture::putIndexFaceSet(fk_IndexFaceSet *argIF)
 
 	for(i = 0; i < triNum * 3; i++) {
 		ifset[i] = i;
-		pos[i] = posArray[static_cast<_st>(i)];
+		pos[i] = posArray[_st(i)];
 	}
 
 	argIF->makeIFSet(triNum, 3, ifset, triNum*3, pos, 0);
@@ -448,5 +523,10 @@ bool fk_MeshTexture::readMQOFile(string argFileName, string argObjName,
 
 	mqoParser.SetMeshTexture(this);
 	mqoParser.SetContMode(argContFlg);
-	return mqoParser.ReadMQOFile(argFileName, argObjName, -1, true);
+	if(mqoParser.ReadMQOFile(argFileName, argObjName, -1, true) == false) return false;
+	FaceUpdate();
+	PosUpdate();
+	NormUpdate();
+	TexCoordUpdate();
+	return true;
 }

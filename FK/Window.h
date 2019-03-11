@@ -10,14 +10,14 @@
 
 // for FK Header.
 #include <FK/Engine.H>
-#include <FK/FrameController.H>
+#include <FK/FrameController.h>
 
 // for Graphics Routine
 //! フレーム制御タイプを表す型
-typedef unsigned int fk_FrameMode;
 
 namespace FK {
 
+	using fk_FrameMode = unsigned int;
 
 	const fk_FrameMode FK_DEFAULT_FRAME	= 0x0000;	//!< フレーム制御無効
 	const fk_FrameMode FK_WAIT_FRAME	= 0x0001;	//!< フレーム待機制御
@@ -83,7 +83,7 @@ namespace FK {
 		FK_SW_PRESS			//!< 押しっぱなしの状態
 	};
 
-	typedef fk_SwitchStatus fkut_SwitchStatus;
+	using fkut_SwitchStatus = fk_SwitchStatus;
 
 #define FKUT_SW_RELEASE		FK_SW_RELEASE
 #define FKUT_SW_UP			FK_SW_UP
@@ -386,54 +386,6 @@ namespace FK {
 		 *	\sa getMousePosition(), getMouseStatus()
 		 */
 		int		getMouseWheelStatus(void);
-
-		//! ピックによるモデル選択関数
-		/*!
-		 *	この関数を呼び出すと、
-		 *	プログラムは描画領域にマウスピックが行われるまで一旦停止します。
-		 *	ピックが行われたときに、
-		 *	fk_Solid およびその派生クラスによる形状が表示されていた場合、
-		 *	ピックした付近にあったモデルと位相要素を格納します。
-		 *	格納データの詳細については、 fk_PickData を参照して下さい。
-		 *
-		 *	ピック操作を行わず、任意の投影座標において探索を行いたい場合は、
-		 *	getPickModel(fk_PickData *, int, int, int) を用いてください。
-		 *
-		 *	\param[out]		data
-		 *		モデルと位相要素を格納するための、
-		 *		fk_PickData 型インスタンスのポインタ。
-		 *	\param[in]		pixel
-		 *		選択の際、どの程度の範囲までを取得対象とするかの距離。
-		 *		単位はピクセルとなります。
-		 *
-		 *	\sa getPickModel(fk_PickData *data, int, int, int),
-		 *		fk_PickData, fk_Solid
-		 */
-		void	getPickModel(fk_PickData *data, int pixel);
-
-		//! 任意投影座標でのモデル選択関数
-		/*!
-		 *	この関数は、 fk_Solid およびその派生クラスによる形状が表示されていた場合、
-		 *	指定した投影座標の付近にあったモデルと位相要素を格納します。
-		 *	投影座標についての詳細は、本クラスの概要を参照して下さい。
-		 *	格納データの詳細については、 fk_PickData を参照して下さい。
-		 *
-		 *	ピック操作によってモデルや位相要素を選択したい場合は、
-		 *	getPickModel(fk_PickData *, int) を用いてください。
-		 *
-		 *	\param[out]		data
-		 *		モデルと位相要素を格納するための、
-		 *		fk_PickData 型インスタンスのポインタ。
-		 *	\param[in]		pixel
-		 *		選択の際、どの程度の範囲までを取得対象とするかの距離。
-		 *		単位はピクセルとなります。
-		 *	\param[in]		x		探索対象の投影座標 x 成分
-		 *	\param[in]		y		探索対象の投影座標 y 成分
-		 *
-		 *	\sa getPickModel(fk_PickData *data, int),
-		 *		fk_PickData, fk_Solid
-		 */
-		void	getPickModel(fk_PickData *data, int pixel, int x, int y);
 		//@}
 
 		//! \name フレームレート制御関数
@@ -595,118 +547,6 @@ namespace FK {
 		 */
 		bool	getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
 		//@}
-
-		//! \name グラフィックス処理制御関数
-		//@{
-		//! OpenGL 頂点配列処理制御関数
-		/*!
-		 *	この関数は、OpenGL 環境における頂点配列の使用を制御します。
-		 *	OpenGL には「頂点配列」と呼ばれる仕組みがあり、
-		 *	一般的にはこの機能を用いると描画処理が高速になります。
-		 *	しかし、実行する環境によってはかえって低速になったり、
-		 *	描画に不具合が生じることもあります。
-		 *	そのような場合、この関数を用いて頂点配列を利用しないように、
-		 *	内部処理を切り替えることが可能です。
-		 *	デフォルトでは「有効」となっています。
-		 *
-		 *	\note
-		 *		この関数による設定は、OpenGL 環境においてのみ有効です。
-		 *		Direct3D 版においては設定は意味をなしません。
-		 *
-		 *	\param[in]	mode
-		 *		true の場合、頂点配列処理を有効とします。
-		 *		false の場合は無効とします。
-		 */
-		void	setOGLPointerMode(bool mode);
-
-		//! OpenGL 頂点配列処理参照関数
-		/*!
-		 *	現在の OpenGL 頂点配列処理が有効であるかどうかを参照します。
-		 *	頂点配列についての詳細は setOGLPointerMode() の解説を参照して下さい。
-		 *
-		 *	\note
-		 *		この関数は OpenGL 環境においてのみ有効です。
-		 *		Direct3D 版においては意味のある値を返しません。
-		 *
-		 *	\return
-		 *		頂点配列処理が有効である場合 true を、
-		 *		無効である場合 false を返します。
-		 *
-		 *	\sa setOGLPointerMode()
-		 */
-		bool	getOGLPointerMode(void);
-
-		//! OpenGL テクスチャ切り替え低減処理制御関数
-		/*!
-		 *	この関数は、OpenGL 環境におけるテクスチャ描画処理を制御します。
-		 *	リアルタイム 3DCG の描画処理において、使用するテクスチャの切り替え処理が
-		 *	頻発することはパフォーマンスの低下を招きます。そこで FK の内部処理では、
-		 *	同じテクスチャを続けて使用する際に不要な切り替え処理が発生しないようにしています。
-		 *	しかし、実行する環境によっては描画に不具合が生じることもあります。
-		 *	そのような場合、この関数を用いてテクスチャの切り替え処理をその都度行うように、
-		 *	内部処理を切り替えることが可能です。
-		 *	デフォルトでは切り替え低減処理が「有効」となっています。
-		 *
-		 *	\note
-		 *		この関数による設定は、OpenGL 環境においてのみ有効です。
-		 *		Direct3D 版においては設定は意味をなしません。
-		 *
-		 *	\param[in]	mode
-		 *		true の場合、テクスチャ切り替え低減処理を有効とします。
-		 *		false の場合は無効とします。
-		 */
-		void	setOGLTextureBindMode(bool mode);
-
-		//! OpenGL テクスチャ切り替え低減処理参照関数
-		/*!
-		 *	現在の OpenGL テクスチャ切り替え低減理が有効であるかどうかを参照します。
-		 *	該当処理についての詳細は setOGLTextureBindMode() の解説を参照して下さい。
-		 *
-		 *	\note
-		 *		この関数は OpenGL 環境においてのみ有効です。
-		 *		Direct3D 版においては意味のある値を返しません。
-		 *
-		 *	\return
-		 *		テクスチャ切り替え低減処理が有効である場合 true を、
-		 *		無効である場合 false を返します。
-		 *
-		 *	\sa setOGLTextureBindMode()
-		 */
-		bool	getOGLTextureBindMode(void);
-
-		//! テクスチャメモリ解放関数
-		/*!
-		 *	この関数は、現在確保されているテクスチャメモリの解放を行います。
-		 *
-		 *	アプリケーションの中でテクスチャマッピングを行う際、
-		 *	各テクスチャ画像のキャッシングを行っています。
-		 *	これは、一般的にテクスチャマッピングにおいては同じ画像を再利用する割合が高いため、
-		 *	キャッシングの効率が良いためです。
-		 *	しかし、それは同時にテクスチャの格納によるメモリ使用量増大を意味します。
-		 *	本関数は、確保したメモリを全て解放します。
-		 *	これによりメモリ使用量は減少しますが、
-		 *	テクスチャ画像入力のための処理時間が増加する可能性があります。
-		 */
-		void	clearTextureMemory(void);
-
-		//! テクスチャメモリ使用量取得関数
-		/*!
-		 *	この関数は、現在確保されているテクスチャメモリの使用量を取得します。
-		 *
-		 *	取得できる値は、FK が内部処理によって現時点までにキャッシングを行った
-		 *	テクスチャ画像バッファのトータルサイズです。単位はバイトです。
-		 *	FK では描画効率を優先するため、使用する画像よりも大きなサイズを確保して
-		 *	画像のキャッシングを行っています。また GPU のドライバの設定によっては、
-		 *	実際に GPU 上で占有しているメモリ容量と誤差が生じる場合もあります。
-		 *	アプリケーションが動作するシステムで使用可能な容量を超えてしまうと、
-		 *	正常なテクスチャ描画ができなくなりますので、この関数で使用量を確認し、
-		 *	必要に応じて clearTextureMemory() を使用するのが良いでしょう。
-		 *
-		 *	\return	テクスチャメモリ使用量
-		 *
-		 *	\sa clearTextureMemory()
-		 */
-		unsigned long getUsingTextureMemory(void);
 
 		//! 初期化前処理関数
 		/*!
@@ -1018,10 +858,8 @@ namespace FK {
 		static Fl_Window		*error_win;
 		static Fl_Multi_Browser	*err_browser;
 
-		void					SetPickViewPort(int &, int &);
 		bool					IsInsideWindow(void);
 		Fl_Group *				GetInhParentWindow(void);
-		void					GetPickData(bool, fk_PickData *, int, int, int);
 		void					PushPrevStatus(void);
 	
 		void					draw();	// virtual Function from Fl_Gl_Window class
@@ -1050,7 +888,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -1086,7 +924,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

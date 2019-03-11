@@ -1,14 +1,13 @@
 ﻿#ifndef __FK_POINT_HEADER__
 #define __FK_POINT_HEADER__
 
-#include <FK/Vector.h>
+#include <FK/FVecArray.H>
+#include <FK/ColorArray.H>
 #include <FK/Array.H>
 #include <FK/Shape.h>
 
 namespace FK {
-	class fk_Window;
-
-	//! 点群を生成、管理するクラス
+    //! 点群を生成、管理するクラス
 	/*!
 	 *	このクラスは、形状として点群を制御する機能を提供します。
 	 *	1つのインスタンスで、複数の点を制御することが可能です。
@@ -29,8 +28,6 @@ namespace FK {
 	 */
 
 	class fk_Point: public fk_Shape {
-
-		friend class			fk_PointDraw;
 
 	public:
 
@@ -93,7 +90,8 @@ namespace FK {
 
 		//! 頂点削除関数
 		/*
-		 *	頂点を削除します。
+		 *	頂点を削除します。実際には setDrawMode(ID, false) と同様の意味を持ち、
+		 *	setDrawMode(ID, true) とすれば改めて描画されるようになります。
 		 *
 		 *	\param[in]	ID		頂点ID
 		 *
@@ -103,17 +101,15 @@ namespace FK {
 
 		//! 頂点位置ベクトル取得関数
 		/*!
-		 *	指定した頂点の位置ベクトルのポインタを返します。
-		 *	ベクトルの型は fk_Vector ではなく
-		 *	fk_FVector であることに注意して下さい。
+		 *	指定した頂点の位置ベクトルを返します。
 		 *
 		 *	\param[in]	ID		頂点ID
 		 *
 		 *	\return
-		 *		頂点の位置ベクトルインスタンスへのポインタ。
-		 *		指定した頂点が存在しない場合は nullptr を返します。
+		 *		頂点の位置ベクトル
+		 *		指定した頂点が存在しない場合はゼロベクトルを返します。
 		 */
-		fk_FVector *	getVertex(int ID);
+		fk_Vector getVertex(int ID);
 
 		//! 頂点数取得関数
 		/*!
@@ -134,18 +130,6 @@ namespace FK {
 		 */
 		void			setDrawMode(int ID, bool mode);
 
-		//! 全頂点描画状態参照関数
-		/*!
-		 *	点群全体の描画状況を取得します。
-		 *
-		 *	\return
-		 *		点群中、1つでも描画される状態であれば true を、
-		 *		そうでない場合は false を返します。
-		 *		false を返す場合は、頂点が存在するが全て描画状態が無効である場合と、
-		 *		1個も頂点が存在していない場合の2通りがありえます。
-		 */
-		bool			getDrawMode(void);
-
 		//! 個別頂点描画状態参照関数
 		/*!
 		 *	個別の頂点に対し、描画状況をを取得します。
@@ -158,56 +142,28 @@ namespace FK {
 		 */
 		bool			getDrawMode(int ID);
 
-		//! 描画色設定関数
-		/*!
-		 *	個別の頂点に対し、描画色の ID を設定します。
-		 *	色そのものの設定は、 fk_Shape::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	vID		頂点ID
-		 *	\param[in]	cID		色ID
-		 */
-		void			setColorID(int vID, int cID);
-
-		//! 描画色設定有無参照関数
-		/*!
-		 *	点群の描画色設定の有無を取得します。
-		 *
-		 *	\return
-		 *		1個以上の点に描画色が設定されている場合 true を、
-		 *		1つも描画色が設定されていない場合に false を返します。
-		 */
-		bool			getColorCount(void);
-
-		//! 描画色参照関数
-		/*!
-		 *	個別の頂点の描画色を取得します。
-		 *
-		 *	\param[in]	vID		頂点ID
-		 *
-		 *	\return
-		 *		描画色が設定されている場合はその描画色 ID を返します。
-		 *		描画色が設定されていない場合は -1 を返します。
-		 *		頂点が存在しない場合は -2 を返します。
-		 */
-		int				getColorID(int vID);
+		void			setColor(int vID, fk_Color col);
+		void			setColor(int vID, fk_Color *col);
+		fk_Color		getColor(int vID);
 
 		//! 点群全消去関数
 		/*!
 		 *	全ての頂点に関するデータを消去します。
-		 *
-		 *	\param[in]	matFlag
-		 *		true の場合は、マテリアルパレットも初期化します。
-		 *		false の場合は、マテリアルパレットに関しては消去しません。
 		 */
-		void			allClear(bool matFlag = true);
+		void			allClear(void);
+		
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		void			setColorID(int, int);
+		int				getColorID(int);
+		void			flushAttr(void);
+
+#endif		
 
 	private:
-		fk_Palette				localPal;
-		fk_Array<fk_FVector>	vec;
-		std::vector<char>		drawMode;
-		int						drawCount;
-		std::vector<int>		colorID;
-		int						colorCount;
+		fk_FVecArray		posArray;
+		fk_ColorArray		colArray;
+		std::vector<int>	aliveArray;
 
 		bool	MakePoint(std::vector<fk_Vector> *);
 		bool	MakePoint(int, fk_Vector *);
@@ -218,7 +174,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -254,7 +210,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

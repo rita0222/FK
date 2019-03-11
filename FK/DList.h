@@ -3,6 +3,7 @@
 
 #include <FK/Projection.h>
 #include <FK/Model.h>
+#include <FK/Light.h>
 #include <list>
 
 namespace FK {
@@ -127,7 +128,7 @@ namespace FK {
 		 *
 		 *	\return	カメラモデルのアドレス
 		 */
-		const fk_Model *		getCamera(void) const;
+		fk_Model *				getCamera(void) const;
 
 		//! 投影設定関数
 		/*!
@@ -145,7 +146,7 @@ namespace FK {
 		 *
 		 *	\return 投影設定のアドレス
 		 */
-		const fk_ProjectBase *	getProjection(void) const;
+		fk_ProjectBase *	getProjection(void) const;
 
 		//! \name 立体視モード制御関数
 		//@{
@@ -258,8 +259,10 @@ namespace FK {
 
 	private:
 		std::list<fk_Model *>	modelList;
-		std::list<fk_Model *>	lightList;
 		std::list<fk_Model *>	overlayList;
+		std::list<fk_Model *>	parallelLightList;
+		std::list<fk_Model *>	pointLightList;
+		std::list<fk_Model *>	spotLightList;
 		int						displayID;
 		fk_Model				localCamera;
 		fk_Model				*camera;
@@ -277,7 +280,7 @@ namespace FK {
 		bool					stereoOverlayMode;
 
 		std::list<fk_Model *> *	GetModelList(void);
-		std::list<fk_Model *> *	GetLightList(void);
+		std::list<fk_Model *> *	GetLightList(fk_LightType);
 		std::list<fk_Model *> *	GetOverlayList(void);
 		int						GetID(void) const;
 		int						GetProjChangeStatus(void) const;
@@ -288,7 +291,7 @@ namespace FK {
 
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -324,7 +327,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。

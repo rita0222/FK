@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -147,7 +147,7 @@ void fk_Model::EntryTree(void)
 	treeData = _modelTree.addNewChild(_modelTree.getRoot(), ss.str());
 	thisObject->SetModel(this);
 	treeData->setObject(thisObject);
-	parent = nullptr;
+	parentModel = nullptr;
 
 	return;
 }
@@ -179,7 +179,7 @@ bool fk_Model::setParent(fk_Model *argModel, bool argBindFlg)
 		return true;
 	}
 
-	if(parent != nullptr) deleteParent(argBindFlg);
+	if(parentModel != nullptr) deleteParent(argBindFlg);
 
 	argModel->EntryTree();
 
@@ -187,13 +187,13 @@ bool fk_Model::setParent(fk_Model *argModel, bool argBindFlg)
 	if(treeData == nullptr) return false;
 	if(_modelTree.moveBranch(parentData, treeData) == false) return false;
 
-	parent = argModel;
+	parentModel = argModel;
 
 	if(argBindFlg == true) {
 		tmpPos.set(0.0, 0.0, 0.0, 1.0);
 		tmpVec.set(0.0, 0.0, -1.0, 0.0);
 		tmpUpVec.set(0.0, 1.0, 0.0, 0.0);
-		tmpMat = parent->getInhInvMatrix() * getMatrix();
+		tmpMat = parentModel->getInhInvMatrix() * getMatrix();
 		glMoveTo(tmpMat * tmpPos);
 		glVec(tmpMat * tmpVec);
 		glUpvec(tmpMat * tmpUpVec);
@@ -209,7 +209,7 @@ void fk_Model::deleteParent(bool argBindFlg)
 
 	EntryTree();
 
-	if(parent == nullptr) return;
+	if(parentModel == nullptr) return;
 	if(treeFlag == false) return;
 	if(treeData == nullptr) return;
 
@@ -225,13 +225,13 @@ void fk_Model::deleteParent(bool argBindFlg)
 		glUpvec(tmpMat * tmpUpVec);
 	}
 
-	parent = nullptr;
+	parentModel = nullptr;
 	return;
 }
 
 fk_Model * fk_Model::getParent(void) const
 {
-	return parent;
+	return parentModel;
 }
 
 bool fk_Model::entryChild(fk_Model *argModel, bool argBindFlg)
@@ -247,7 +247,7 @@ bool fk_Model::deleteChild(fk_Model *argModel, bool argBindFlg)
 	fk_Model				*childModel;
 
 	if(argModel == nullptr) return false;
-	if(argModel->parent != this) return false;
+	if(argModel->parentModel != this) return false;
 
 	if((childData = argModel->treeData) == nullptr) return false;
 

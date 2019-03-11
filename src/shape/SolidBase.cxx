@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -99,11 +99,9 @@ void fk_SolidBase::Init(void)
 
 bool fk_SolidBase::MakeMesh(vector<fk_Vector> *vData,
 							vector< vector<int> > *lIndex,
-							vector<int> *MaterialIDSet, bool argSolidFlag)
+							bool argSolidFlag)
 {
 	fk_IFSetHandle		*IFSet;
-	fk_Loop				*Loop;
-	_st					i;
 
 	if(checkDB() == false) return false;
 
@@ -119,6 +117,10 @@ bool fk_SolidBase::MakeMesh(vector<fk_Vector> *vData,
 	delete IFSet;
 
 	AllCacheMake();
+	/*
+	fk_Loop		*Loop;
+	_st			i;
+
 	if(MaterialIDSet == nullptr) return true;
 	if(getPaletteSize() == 0) return true;
 
@@ -128,7 +130,7 @@ bool fk_SolidBase::MakeMesh(vector<fk_Vector> *vData,
 			Loop->setElemMaterialID((*MaterialIDSet)[i]);
 		}
 	}
-
+	*/
 	return true;
 }
 

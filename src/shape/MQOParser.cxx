@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/MQOParser.H>
+#include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
 #include <FK/Tree.h>
 
@@ -345,8 +346,11 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 		}
 
 		meshData->Init();
+		/*
 		if(meshData->MakeMesh(&optVData, &fData,
 							  &cIDData, argSolidFlg) == false) {
+		*/
+		if(meshData->MakeMesh(&optVData, &fData, argSolidFlg) == false) {
 			return false;
 		}
 
@@ -406,7 +410,7 @@ bool fk_MQOParser::ReadLine(ifstream *argIFS,
 			}
 
 			if(startFlg == true) {
-				argOutStr->push_back(static_cast<char>(argBuffer[(*argBufTag)]));
+				argOutStr->push_back(char(argBuffer[(*argBufTag)]));
 			}
 			(*argBufTag)++;
 		}
@@ -460,7 +464,8 @@ bool fk_MQOParser::PushFaceData(string *argLine, int argMateID)
 			for(i = 0; i < vNum; i++) {
 				word = PopWord(argLine, sep);
 				if(IsInteger(word) == false) return false;
-				vIDArray.push_back(Str2Int(word) + 1);
+				//vIDArray.push_back(Str2Int(word) + 1);
+				vIDArray.push_back(Str2Int(word));
 			}
 
 			tmpID = vIDArray[0];
@@ -532,7 +537,7 @@ bool fk_MQOParser::PushMaterialData(string *argLine)
 	while((word = PopWord(argLine, sep)) != "") {
 		if(word == "col") {
 			if(PopWord(argLine, sep) != "(") return false;
-			for(int i = 0; i < 4; i++) {
+			for(_st i = 0; i < 4; i++) {
 				word = PopWord(argLine, sep);
 				if(IsNumeric(word) == false) return false;
 				col.col[i] = Str2Float(word);
@@ -652,7 +657,8 @@ bool fk_MQOParser::CheckIFData(int argVNum)
 
 		for(j = 0; j < fData[i].size(); j++) {
 			id = fData[i][j];
-			if(id <= 0 || id > argVNum) {
+			//if(id <= 0 || id > argVNum) {
+			if(id < 0 || id >= argVNum) {
 				return false;
 			}
 		}
@@ -663,7 +669,7 @@ bool fk_MQOParser::CheckIFData(int argVNum)
 	if(contFlg == true) MakeUniqueVertex4Texture();
 
 	if(meshTexture != nullptr) {
-		meshTexture->setTriNum(static_cast<int>(fNum));
+		meshTexture->setTriNum(int(fNum));
 	}
 
 	return true;
@@ -677,20 +683,22 @@ void fk_MQOParser::OptimizeData(void)
 	int				index, count;
 
 	tmpArray.resize(vData.size());
-	for(i = 0; i < tmpArray.size(); i++) tmpArray[i] = static_cast<char>(false);
+	for(i = 0; i < tmpArray.size(); i++) tmpArray[i] = char(false);
 
 	for(i = 0; i < fData.size(); i++) {
 		for(j = 0; j < fData[i].size(); j++) {
-			index = fData[i][j]-1;
-			if(index < 0 || index >= static_cast<int>(tmpArray.size())) return;
-			tmpArray[static_cast<_st>(index)] = static_cast<char>(true);
+			//index = fData[i][j]-1;
+			index = fData[i][j];
+			if(index < 0 || index >= int(tmpArray.size())) return;
+			tmpArray[_st(index)] = char(true);
 		}
 	}
 
-	count = 1;
+	//count = 1;
+	count = 0;
 	mapArray.resize(tmpArray.size());
 	for(i = 0; i < tmpArray.size(); i++) {
-		if(tmpArray[i] == static_cast<char>(true)) {
+		if(tmpArray[i] == char(true)) {
 			mapArray[i] = count;
 			optVData.push_back(vData[i]);
 			count++;
@@ -701,8 +709,9 @@ void fk_MQOParser::OptimizeData(void)
 
 	for(i = 0; i < fData.size(); i++) {
 		for(j = 0; j < fData[i].size(); j++) {
-			index = fData[i][j]-1;
-			fData[i][j] = mapArray[static_cast<_st>(index)];
+			//index = fData[i][j]-1;
+			index = fData[i][j];
+			fData[i][j] = mapArray[_st(index)];
 		}
 	}
 
@@ -718,14 +727,15 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 	int									newID;
 
 	listSet.resize(optVData.size());
-	newID = static_cast<int>(optVData.size());
+	newID = int(optVData.size());
 
 	for(i = 0; i < fData.size(); i++) {
 		if(fData[i].size() != tData[i].size()) continue;
 
 		for(j = 0; j < fData[i].size(); j++) {
-			index = static_cast<_st>(fData[i][j] - 1);
-			idset.id = static_cast<int>(index);
+			//index = _st(fData[i][j] - 1);
+			index = _st(fData[i][j]);
+			idset.id = int(index);
 
 			coord = tData[i][j];
 			idset.coord = coord;
@@ -735,7 +745,8 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 			} else {
 				for(k = 0; k < listSet[index].size(); k++) {
 					if(idset.coord == listSet[index][k].coord) {
-						fData[i][j] = listSet[index][k].id + 1;
+						//fData[i][j] = listSet[index][k].id + 1;
+						fData[i][j] = listSet[index][k].id;
 						break;
 					}
 				}
@@ -743,8 +754,9 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 					idset.id = newID;
 					listSet[index].push_back(idset);
 					optVData.push_back(optVData[index]);
-					newID++;
+					//newID++;
 					fData[i][j] = newID;
+					newID++;
 				}
 			}
 		}
@@ -775,11 +787,12 @@ void fk_MQOParser::SetMeshTexCoord(void)
 	if(meshTexture == nullptr) return;
 	for(i = 0; i < fData.size(); i++) {
 		for(j = 0; j < 3; j++) {
-			triPos[j] = optVData[static_cast<_st>(fData[i][j]-1)];
+			//triPos[j] = optVData[_st(fData[i][j]-1)];
+			triPos[j] = optVData[_st(fData[i][j])];
 			triCoord[j] = tData[i][j];
 		}
-		meshTexture->setTriPos(static_cast<int>(i), triPos);
-		meshTexture->setTriTextureCoord(static_cast<int>(i), triCoord);
+		meshTexture->setTriPos(int(i), triPos);
+		meshTexture->setTriTextureCoord(int(i), triCoord);
 	}
 	return;
 }
@@ -790,9 +803,7 @@ void fk_MQOParser::SetIFSTexCoord(void)
 
 	for(i = 0; i < tData.size(); i++) {
 		for(j = 0; j < tData[i].size(); j++) {
-			ifsTexture->setTextureCoord(static_cast<int>(i),
-										static_cast<int>(j),
-										tData[i][j]);
+			ifsTexture->setTextureCoord(int(i), int(j), tData[i][j]);
 		}
 	}
 	return;

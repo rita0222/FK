@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -106,7 +106,7 @@ fk_AudioOggBuffer::fk_AudioOggBuffer(void)
 	length = current = 0;
 	startStatus = endStatus = surround = false;
 	refDist = 1.0;
-	ref_model = NULL;
+	ref_model = nullptr;
 	return;
 }
 
@@ -442,7 +442,7 @@ bool fk_AudioOggBuffer::PlayBuffer(void)
 
 	if(surround == true) {
 		alSourcei(source, AL_SOURCE_RELATIVE, AL_FALSE);
-		if(ref_model != NULL) {
+		if(ref_model != nullptr) {
 			sourcePos = ref_model->getInhPosition();
 		}
 		alSource3f(source, AL_POSITION, (float)sourcePos.x, (float)sourcePos.y, (float)sourcePos.z);

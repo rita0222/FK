@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -310,10 +310,7 @@ void fk_GenVector::init(bool argFlag)
 	if(argFlag == true) {
 		v.clear();
 	} else {
-		_st end = static_cast<_st>(size());
-		for(_st i = 0; i < end; ++i) {
-			v[i] = 0.0;
-		}
+		fill(v.begin(), v.end(), 0.0);
 	}
 	return;
 }
