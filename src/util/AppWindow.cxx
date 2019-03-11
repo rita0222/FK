@@ -136,17 +136,6 @@ const static fk_SwitchStatus stArray[4] = {
 	FK_SW_RELEASE
 };
 
-void fk_AppWindow::PushPrevStatus(void)
-{
-	int	i;
-
-	for(i = 0; i < inputCount; ++i) {
-		prevInput[i] = nowInput[i];
-	}
-
-	return;
-}
-
 // スクリーンモードのハンドリング処理
 void fk_AppWindow::ToggleScreen(void)
 {
@@ -220,10 +209,6 @@ fk_AppWindow::fk_AppWindow(void)
 	ref_camera = &camera;
 	ref_scene = &scene;
 
-	inputCount = 0;
-
-	PushPrevStatus();
-
 	return;
 }
 
@@ -264,8 +249,6 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 	ref_camera = &camera;
 	ref_scene = &scene;
 
-	inputCount = 0;
-
 	PushPrevStatus();
 
 	return;
@@ -273,7 +256,6 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 
 fk_AppWindow::~fk_AppWindow(void)
 {
-	input.uninit();
 	drawWin->hide();
 	mainWin->hide();
 
@@ -520,16 +502,6 @@ void fk_AppWindow::open(void)
 	mainWin->show();
 	drawWin->show();
 
-#if defined(WIN32) && !defined(_MINGW_)
-	if(S_OK == input.init(fl_display, fl_xid(mainWin))) {
-		inputCount = input.getJoyCount();
-		input.update();
-		for(int i = 0; i < inputCount; ++i) {
-			prevInput[i] = nowInput[i] = input.getInputStatus(i);
-		}
-	}
-#endif
-
 	fsc.init(mainWin, drawWin);
 
 	return;
@@ -568,13 +540,6 @@ bool fk_AppWindow::update(bool argForceDraw)
 	if(Fl::check() == 0) return false;
 
 	ToggleScreen();
-
-	if(inputCount != 0) {
-		input.update();
-		for(int i = 0; i < inputCount; ++i) {
-			nowInput[i] = input.getInputStatus(i);
-		}
-	}
 
 	if(tbFlag) tb->update();
 	if(ref_child != nullptr) {
@@ -659,49 +624,6 @@ fk_Vector fk_AppWindow::getMousePosition(void)
 	retPos.z = 0.0;
 
 	return retPos;
-}
-
-int fk_AppWindow::getPadCount(void)
-{
-	return inputCount;
-}
-
-fk_SwitchStatus fk_AppWindow::getPadButtonStatus(int padID, int buttonID)
-{
-	//	if(padID > inputCount || buttonID > 32+4) return FK_SW_RELEASE;
-	if(padID > inputCount) return FK_SW_RELEASE;
-
-	switch(buttonID) {
-	case FK_PAD_UP:
-		return GetSwitchStatus(nowInput[padID].up, prevInput[padID].up);
-	case FK_PAD_DOWN:
-		return GetSwitchStatus(nowInput[padID].down, prevInput[padID].down);
-	case FK_PAD_LEFT:
-		return GetSwitchStatus(nowInput[padID].left, prevInput[padID].left);
-	case FK_PAD_RIGHT:
-		return GetSwitchStatus(nowInput[padID].right, prevInput[padID].right);
-	default:
-	  break;	
-	}
-	if(buttonID > 32) return FK_SW_RELEASE;
-	return GetSwitchStatus(nowInput[padID].button[buttonID],
-						   prevInput[padID].button[buttonID]);
-}
-
-fk_Vector fk_AppWindow::getPadDirection(int padID, int axisID)
-{
-	fk_Vector	retVec;
-	if(padID > inputCount || axisID >= 3) return retVec;
-
-	retVec.x = nowInput[padID].x[axisID] * 0.001;
-	retVec.y = nowInput[padID].y[axisID] * 0.001;
-
-	return retVec;
-}
-
-fk_Input * fk_AppWindow::getPadManager(void)
-{
-	return &input;
 }
 
 void fk_AppWindow::setGuideAxisWidth(double width)

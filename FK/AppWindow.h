@@ -9,7 +9,6 @@
 #include <FK/MotionCharactor.h>
 #include <FK/SpriteModel.h>
 #include <FK/Fullscreen.h>
-#include <FK/Input.h>
 
 namespace FK {
 
@@ -800,18 +799,6 @@ namespace FK {
 		void				setCursorState(bool visible, bool center);
 		//@}
 
-		//! \name ゲームパッド状態制御関数
-		//@{
-		// ゲームパッド認識個数取得関数
-		int					getPadCount(void);
-		// ゲームパッドボタン状態取得関数
-		fk_SwitchStatus	getPadButtonStatus(int padID, int buttonID);
-		// ゲームパッド方向キー取得関数
-		fk_Vector			getPadDirection(int padID, int axisID);
-		// ゲームパッド管理オフジェクト取得関数
-		fk_Input *			getPadManager(void);
-		//@}
-
 		//! \name マウス制御支援関数
 		//@{
 
@@ -943,10 +930,6 @@ namespace FK {
 
 		int						fps;
 		bool					tbFlag, childMode;
-
-		fk_Input				input;
-		fk_InputInfo			prevInput[16], nowInput[16];
-		int						inputCount;
 
 		void PushPrevStatus(void);
 		void ToggleScreen(void);

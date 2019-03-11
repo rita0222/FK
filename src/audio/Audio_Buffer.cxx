@@ -70,7 +70,9 @@
  *
  ****************************************************************************/
 
+#ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <FK/Audio.h>
 #include <FK/Error.H>

@@ -2,7 +2,7 @@
 
 source ./vsenv.sh
 
-# VS2017ใธใฎใ‘ในใ’่จญๅฎ
+# VS2017คุคฮฅัฅนค๒ภ฿ฤ๊
 #export VS15_DEVENV_PATH=$VS150COMNTOOLS/../IDE/devenv
 
 ## FK

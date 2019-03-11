@@ -2,7 +2,7 @@ echo "--- Build solutions ---"
 
 source ./vsenv.sh
 
-# VS2015ใธใฎใ‘ในใ’่จญๅฎ
+# VS2015คุคฮฅัฅนค๒ภ฿ฤ๊
 export VS14_DEVENV_PATH=$VS140COMNTOOLS/../IDE/devenv
 
 # cli

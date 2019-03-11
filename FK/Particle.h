@@ -5,6 +5,7 @@
 #include <FK/Vector.h>
 #include <FK/Material.h>
 #include <FK/Attribute.h>
+#include <functional>
 
 namespace FK {
 	class fk_Point;

@@ -160,7 +160,7 @@ fk_FullscreenController::~fk_FullscreenController()
 BOOL fk_FullscreenController::SaveWindowPosition()
 {
 	iWindowNumber = 0;
-	if(EnumWindows(EnumWindowsSaveFunc, nullptr) == 0)	return FALSE;
+	if(EnumWindows(EnumWindowsSaveFunc, NULL) == 0)	return FALSE;
 
 	return TRUE;
 }
@@ -168,7 +168,7 @@ BOOL fk_FullscreenController::SaveWindowPosition()
 // ウインドウ位置再現
 BOOL fk_FullscreenController::LoadWindowPosition()
 {
-	if(EnumWindows(EnumWindowsLoadFunc, nullptr) == 0)	return FALSE;
+	if(EnumWindows(EnumWindowsLoadFunc, NULL) == 0)	return FALSE;
 
 	return TRUE;
 }

@@ -134,8 +134,8 @@ void fk_BVHMotion::init(void)
 		posArray.at(i).clear();
 		rotArray.at(i).clear();
 	}
-	posArray.size();
-	rotArray.size();
+	posArray.clear();
+	rotArray.clear();
 
 	return;
 }
