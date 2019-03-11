@@ -3,7 +3,6 @@ BASENAME	= util
 LIBSRCS		= \
 			Fullscreen.cxx \
 			GuideObject.cxx \
-			Input.cxx \
 			Misc.cxx \
 			MotionCharactor.cxx \
 			MotionData.cxx \

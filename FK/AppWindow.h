@@ -931,7 +931,6 @@ namespace FK {
 		int						fps;
 		bool					tbFlag, childMode;
 
-		void PushPrevStatus(void);
 		void ToggleScreen(void);
 	};
 

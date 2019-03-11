@@ -249,8 +249,6 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 	ref_camera = &camera;
 	ref_scene = &scene;
 
-	PushPrevStatus();
-
 	return;
 }
 
@@ -522,7 +520,6 @@ bool fk_AppWindow::update(bool argForceDraw)
 {
 	if(childMode) return false;
 
-	PushPrevStatus();
 	if(fps != 0) fps_admin.timeRegular();
 
 	if(mainWin->visible() == 0) {
