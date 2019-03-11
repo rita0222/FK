@@ -1,13 +1,12 @@
-//varying変数
-varying vec4 vertexPos;
+#version 410 core
 
-//頂点シェーダ
+layout (location = 0) in vec3 fk_Vertex;
+layout (location = 2) in vec2 fk_TexCoord;
+
+out vec2 varT;
+
 void main(void)
 {
-	//投影変換 (モデルビュー * プロジェクション) * 頂点座標
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-	gl_TexCoord[0] = gl_MultiTexCoord0;
-
-	////各種基本的なベクトルを計算
-	vertexPos = gl_ModelViewMatrix * gl_Vertex;		//視点座標系の頂点位置
+	gl_Position = vec4(fk_Vertex, 1.0);
+	varT = fk_TexCoord;
 }

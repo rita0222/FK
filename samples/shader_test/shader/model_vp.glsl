@@ -1,15 +1,18 @@
-//varying変数
-varying vec3 normal;
-varying vec4 vertexPos;
+#version 410 core
+
+#FKBuildIn
+
+out vec4 varP;
+out vec4 varN;
+out vec2 varT;
 
 //頂点シェーダ
 void main(void)
 {
-	//投影変換 (モデルビュー * プロジェクション) * 頂点座標
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-	gl_TexCoord[0] = gl_MultiTexCoord0;
+	vec4 p = vec4(fk_Vertex, 1.0);
 
-	////各種基本的なベクトルを計算
-	normal = gl_NormalMatrix * gl_Normal;				//法線を視点座標系にする
-	vertexPos = gl_ModelViewMatrix * gl_Vertex;		//視点座標系の頂点位置
+	gl_Position = fk_ModelViewProjectionMatrix * p;
+	varP = fk_ModelMatrix * p;
+	varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
+	varT = fk_TexCoord;
 }
