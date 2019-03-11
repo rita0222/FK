@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-#version 120
-
-//varying変数
-varying vec3 normal;
-varying vec4 vertexPos;
-=======
 #version 410 core
 
 #FKBuildIn
@@ -12,7 +5,6 @@ varying vec4 vertexPos;
 out vec4 varP;
 out vec4 varN;
 out vec2 varT;
->>>>>>> NewOGL
 
 //頂点シェーダ
 void main(void)

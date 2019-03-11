@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-#version 120
-
-//varying変数
-varying vec3 normal;
-varying vec4 vertexPos;
-//out vec4 fragment
-=======
 #version 410 core
 
 #FKBuildIn
@@ -45,30 +37,8 @@ vec3 ParallelSpecular(vec3 argN, vec3 argV)
 	return sum;
 }
 
->>>>>>> NewOGL
-
 void main(void)
 {
-<<<<<<< HEAD
-	////  ambientの計算  ////
-	vec4 ambient = gl_LightSource[0].ambient * gl_FrontMaterial.ambient;
-
-	////  diffuse計算  ////
-	vec3 N = normalize(normal);
-	vec3 L = normalize(gl_LightSource[0].position.xyz);
-	float NdotL = dot(N, L);
-	vec4 diffuse = max(0.0, NdotL) * gl_LightSource[0].diffuse * gl_FrontMaterial.diffuse;
-
-	////  specular計算(Bilnのモデルを使用)  ////
-	vec3 V = -normalize(vertexPos.xyz);
-	vec3 H = normalize(V + L);
-	float NdotH = dot(N, H);
-	float k_specular = pow(max(0.0, NdotH), gl_FrontMaterial.shininess);
-	vec4 specular = k_specular * gl_LightSource[0].specular * gl_FrontMaterial.specular;
-
-	//fragment = ambient + diffuse + specular;
-	gl_FragColor = ambient + diffuse + specular;
-=======
 	vec3 Vn = normalize(varN.xyz);
 	vec3 viewVec = normalize(fk_CameraPosition - varP.xyz);
 
@@ -80,5 +50,4 @@ void main(void)
 
 	vec3 addColor = difSumColor + speSumColor + fk_Material.ambient.rgb;
 	fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
->>>>>>> NewOGL
 }
