@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<VisualStudioProject ProjectType="Visual C++" Version="9.00">
+<VisualStudioProject ProjectType="Visual C++" Version="15.00">
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="x64"/>
 	</Platforms>
 	<Configurations>
-		<Configuration Name="Debug|Win32"></Configuration>
-		<Configuration Name="Release|Win32"></Configuration>
+		<Configuration Name="Debug|x64"></Configuration>
+		<Configuration Name="Release|x64"></Configuration>
   </Configurations>
 </VisualStudioProject>
 

@@ -2,9 +2,6 @@
 
 source ./vsenv.sh
 
-# VS2017へのパスを設定
-#export VS15_DEVENV_PATH=$VS150COMNTOOLS/../IDE/devenv
-
 # FLTK
 "$VS15_DEVENV_PATH" ..\\extlibs\\fltk-1.3.5\\ide\\VisualC2017\\fltk.sln /Build "Release|x64"
 

@@ -1,2 +1,2 @@
-FK ToolKit for Microsoft Visual Studio 2017(Visual C++ 14.1)
-Version 3.1.0.0
+FK ToolKit for Microsoft Visual Studio 2017(Visual C++ 15.9.8)
+Version 4.0.0.0
