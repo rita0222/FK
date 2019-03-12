@@ -1,0 +1,83 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltk", "fltk.lib.vcxproj", "{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681} = {D640A221-F95A-40FF-AC0E-0E8B615C7681}
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377} = {08B82852-90B3-4767-A5D2-F0A4FCCB2377}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkforms", "fltkforms.vcxproj", "{C17BAB42-F00B-4F71-9DF6-A921511C89EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F} = {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkgl", "fltkgl.vcxproj", "{F7974A9C-C255-4385-96BC-E24EE0816F7C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F} = {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkimages", "fltkimages.vcxproj", "{6E8E1663-B88D-4454-ADF2-279666A93306}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F} = {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkjpeg", "jpeg.vcxproj", "{08B82852-90B3-4767-A5D2-F0A4FCCB2377}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkzlib", "zlib.vcxproj", "{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkpng", "libpng.vcxproj", "{D640A221-F95A-40FF-AC0E-0E8B615C7681}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF} = {E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug|x64.Build.0 = Debug|x64
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug|x64.Build.2 = Debug Cairo|x64
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Release|x64.ActiveCfg = Release|x64
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Release|x64.Build.0 = Release|x64
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|x64.Build.0 = Debug|x64
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|x64.Build.2 = Debug Cairo|x64
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release|x64.ActiveCfg = Release|x64
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release|x64.Build.0 = Release|x64
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug|x64.Build.0 = Debug|x64
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug|x64.Build.2 = Debug Cairo|x64
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Release|x64.ActiveCfg = Release|x64
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Release|x64.Build.0 = Release|x64
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug|x64.Build.0 = Debug|x64
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug|x64.Build.2 = Debug Cairo|x64
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Release|x64.ActiveCfg = Release|x64
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Release|x64.Build.0 = Release|x64
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug|x64.Build.0 = Debug|x64
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug|x64.Build.2 = Debug Cairo|x64
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Release|x64.ActiveCfg = Release|x64
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Release|x64.Build.0 = Release|x64
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug|x64.Build.0 = Debug|x64
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug|x64.Build.2 = Debug Cairo|x64
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Release|x64.ActiveCfg = Release|x64
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Release|x64.Build.0 = Release|x64
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug|x64.ActiveCfg = Debug Cairo|x64
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug|x64.Build.0 = Debug|x64
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug|x64.Build.2 = Debug Cairo|x64
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Release|x64.ActiveCfg = Release|x64
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {057FB25D-0685-4DD1-926D-8BE0E5034ADB}
+	EndGlobalSection
+EndGlobal
