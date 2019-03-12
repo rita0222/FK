@@ -1,0 +1,106 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltk", "fltk.lib.vcxproj", "{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681} = {D640A221-F95A-40FF-AC0E-0E8B615C7681}
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377} = {08B82852-90B3-4767-A5D2-F0A4FCCB2377}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkforms", "fltkforms.vcxproj", "{C17BAB42-F00B-4F71-9DF6-A921511C89EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F} = {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkgl", "fltkgl.vcxproj", "{F7974A9C-C255-4385-96BC-E24EE0816F7C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F} = {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkimages", "fltkimages.vcxproj", "{6E8E1663-B88D-4454-ADF2-279666A93306}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F} = {E070AAFC-9D03-41A3-BC7D-30887EA0D50F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkjpeg", "jpeg.vcxproj", "{08B82852-90B3-4767-A5D2-F0A4FCCB2377}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkzlib", "zlib.vcxproj", "{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkpng", "libpng.vcxproj", "{D640A221-F95A-40FF-AC0E-0E8B615C7681}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF} = {E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Cairo|Win32 = Debug Cairo|Win32
+		Debug|Win32 = Debug|Win32
+		Release Cairo|Win32 = Release Cairo|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Debug|Win32.Build.0 = Debug|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Release|Win32.ActiveCfg = Release|Win32
+		{E070AAFC-9D03-41A3-BC7D-30887EA0D50F}.Release|Win32.Build.0 = Release|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|Win32.Build.0 = Debug|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release|Win32.ActiveCfg = Release|Win32
+		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release|Win32.Build.0 = Release|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug|Win32.Build.0 = Debug|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Release|Win32.ActiveCfg = Release|Win32
+		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Release|Win32.Build.0 = Release|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Debug|Win32.Build.0 = Debug|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Release|Win32.ActiveCfg = Release|Win32
+		{6E8E1663-B88D-4454-ADF2-279666A93306}.Release|Win32.Build.0 = Release|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug|Win32.ActiveCfg = Debug|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Debug|Win32.Build.0 = Debug|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Release|Win32.ActiveCfg = Release|Win32
+		{08B82852-90B3-4767-A5D2-F0A4FCCB2377}.Release|Win32.Build.0 = Release|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Debug|Win32.Build.0 = Debug|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Release|Win32.ActiveCfg = Release|Win32
+		{E1D9CE3F-400D-40E8-AD0D-61C29B1847FF}.Release|Win32.Build.0 = Release|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Debug|Win32.Build.0 = Debug|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Release|Win32.ActiveCfg = Release|Win32
+		{D640A221-F95A-40FF-AC0E-0E8B615C7681}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {057FB25D-0685-4DD1-926D-8BE0E5034ADB}
+	EndGlobalSection
+EndGlobal
