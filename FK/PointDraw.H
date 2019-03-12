@@ -20,11 +20,13 @@ namespace FK {
 
 	private:
 
-		fk_ShaderBinder	*pointShader;
-		GLuint			vsModelID, vsElemID, vsIFSID, fsPointID, fsIFSID;
+		fk_ShaderBinder	*modelShader, *elementShader, *ifsShader;
 
 		void	ShaderSetup(void);
-		int		SubroutineSetup(fk_Model *);
+		void	ModelSetup(void);
+		void	ElementSetup(void);
+		void	IFSSetup(void);
+
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
 		void	Draw_Point(fk_Model *, fk_ShaderParameter *, int);
