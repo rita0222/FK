@@ -185,7 +185,7 @@ void fk_PointDraw::ModelSetup(void)
 
 	prog->fragmentShaderSource =
 		#include "GLSL/Point_FS_Point.out"
-		;
+	;
 
 	if(prog->validate() == false) {
 		fk_Window::printf("Shader Error");
