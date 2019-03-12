@@ -161,6 +161,8 @@ void fk_TextureDraw::ShaderSetup(void)
 
 void fk_TextureDraw::ReplaceSetup(void)
 {
+	if(replaceShader != nullptr) delete replaceShader;
+
 	replaceShader = new fk_ShaderBinder();
 	auto prog = replaceShader->getProgram();
 	auto param = replaceShader->getParameter();
@@ -183,6 +185,8 @@ void fk_TextureDraw::ReplaceSetup(void)
 
 void fk_TextureDraw::ModulateSetup(void)
 {
+	if(modulateShader != nullptr) delete modulateShader;
+
 	modulateShader = new fk_ShaderBinder();
 	auto prog = modulateShader->getProgram();
 	auto param = modulateShader->getParameter();
@@ -205,6 +209,8 @@ void fk_TextureDraw::ModulateSetup(void)
 
 void fk_TextureDraw::DecalSetup(void)
 {
+	if(decalShader != nullptr) delete decalShader;
+
 	decalShader = new fk_ShaderBinder();
 	auto prog = decalShader->getProgram();
 	auto param = decalShader->getParameter();
