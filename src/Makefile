@@ -2,10 +2,9 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
-BASE		= base math material shape model scene graphics window util
+BASE		= base math material shape model scene shader graphics window util
 AUDIO		= audio
 OPENCL		= OpenCL
-SHADER		= shader
 AR		= AR
 
 all:
@@ -21,7 +20,7 @@ all:
 	@echo "	Clean:			make clean"
 
 fb:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL); do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) fb TARGET=depend ; \
@@ -29,7 +28,7 @@ fb:
 		cd .. ; done
 
 fb-d:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL); do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) fb-d TARGET=depend ; \
@@ -37,7 +36,7 @@ fb-d:
 		cd .. ; done
 
 fb-g:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER); do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL); do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) fb-g TARGET=depend ; \
@@ -55,7 +54,7 @@ linux:
 mac:
 	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac TARGET=depend ; \
@@ -65,7 +64,7 @@ mac:
 mac-d:
 	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-d TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-d TARGET=depend ; \
@@ -75,7 +74,7 @@ mac-d:
 mac-g:
 	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-g TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-g TARGET=depend ; \
@@ -85,7 +84,7 @@ mac-g:
 mac-gcc:
 	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-gcc TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-gcc TARGET=depend ; \
@@ -95,7 +94,7 @@ mac-gcc:
 mac-gcc-g:
 	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
 	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-gcc-g TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
 		$(MAKE) mac-gcc-g TARGET=depend ; \

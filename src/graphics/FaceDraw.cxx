@@ -70,6 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
+#include <FK/Error.H>
 #include <FK/FaceDraw.H>
 #include <FK/OpenGL.H>
 #include <FK/IndexFace.h>
@@ -165,8 +166,7 @@ void fk_FaceDraw::ShaderSetup(void)
 		;
 	
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_FaceDraw", "ShaderSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);

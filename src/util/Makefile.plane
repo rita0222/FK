@@ -11,23 +11,23 @@ LIBSRCS		= \
 			TrackBall.cxx
 
 FKLINK		= \
-			-lFK3_base.$(VERNAME) \
-			-lFK3_math.$(VERNAME) \
-			-lFK3_material.$(VERNAME) \
-			-lFK3_shape.$(VERNAME) \
-			-lFK3_model.$(VERNAME) \
-			-lFK3_scene.$(VERNAME) \
-			-lFK3_graphics.$(VERNAME) \
-			-lFK3_window.$(VERNAME)
+			-lFK4_base.$(VERNAME) \
+			-lFK4_math.$(VERNAME) \
+			-lFK4_material.$(VERNAME) \
+			-lFK4_shape.$(VERNAME) \
+			-lFK4_model.$(VERNAME) \
+			-lFK4_scene.$(VERNAME) \
+			-lFK4_graphics.$(VERNAME) \
+			-lFK4_window.$(VERNAME)
 
 FKLINK_G	= \
-			-lFK3_base_g.$(VERNAME) \
-			-lFK3_math_g.$(VERNAME) \
-			-lFK3_material_g.$(VERNAME) \
-			-lFK3_shape_g.$(VERNAME) \
-			-lFK3_model_g.$(VERNAME) \
-			-lFK3_scene_g.$(VERNAME) \
-			-lFK3_graphics_g.$(VERNAME) \
-			-lFK3_window_g.$(VERNAME)
+			-lFK4_base_g.$(VERNAME) \
+			-lFK4_math_g.$(VERNAME) \
+			-lFK4_material_g.$(VERNAME) \
+			-lFK4_shape_g.$(VERNAME) \
+			-lFK4_model_g.$(VERNAME) \
+			-lFK4_scene_g.$(VERNAME) \
+			-lFK4_graphics_g.$(VERNAME) \
+			-lFK4_window_g.$(VERNAME)
 
 include ../makeinclude

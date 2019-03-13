@@ -69,11 +69,8 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifdef FK_D3D
-#include "Engine_D3D.cxx"
-#else
-
 #define FK_DEF_SIZETYPE
+#include <FK/Error.H>
 #include <FK/Engine.H>
 #include <FK/Scene.h>
 #include <FK/Light.h>
@@ -375,7 +372,6 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	DrawMode = argModel->getDrawMode();
 
-	//fk_Window::printf("DrawMode = %d", DrawMode);
 	if(DrawMode == FK_NONEMODE) return;
 
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
@@ -642,5 +638,3 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 	return true;
 }
-
-#endif

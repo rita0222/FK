@@ -70,6 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
+#include <FK/Error.H>
 #include <FK/PointDraw.H>
 #include <FK/OpenGL.H>
 #include <FK/Model.h>
@@ -188,8 +189,7 @@ void fk_PointDraw::ModelSetup(void)
 	;
 
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_PointDraw", "ModelSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);
@@ -214,8 +214,7 @@ void fk_PointDraw::ElementSetup(void)
 		;
 
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_PointDraw", "ElementSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);
@@ -240,8 +239,7 @@ void fk_PointDraw::IFSSetup(void)
 		;
 
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_PointDraw", "IFSSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);

@@ -28,73 +28,73 @@ SAMPLEEXE	= $(SAMPLESRCS:cxx=exe)
 SAMPLEAPPS	= $(SAMPLESRCS:cxx=app)
 ALLSRCS		= $(SAMPLESRCS)
 
-VERNAME		= 3.1.1
+VERNAME		= 4.0.0
 
 ###################
 
 FKLIB_S		= \
-			-lFK3_util \
-			-lFK3_window \
-			-lFK3_graphics \
-			-lFK3_scene \
-			-lFK3_model \
-			-lFK3_shape \
-			-lFK3_material \
-			-lFK3_math \
-			-lFK3_base \
+			-lFK4_util \
+			-lFK4_window \
+			-lFK4_graphics \
+			-lFK4_scene \
+			-lFK4_model \
+			-lFK4_shape \
+			-lFK4_material \
+			-lFK4_math \
+			-lFK4_base \
 
 FKLIB_SG		= \
-			-lFK3_util_g \
-			-lFK3_window_g \
-			-lFK3_graphics_g \
-			-lFK3_scene_g \
-			-lFK3_model_g \
-			-lFK3_shape_g \
-			-lFK3_material_g \
-			-lFK3_math_g \
-			-lFK3_base_g \
+			-lFK4_util_g \
+			-lFK4_window_g \
+			-lFK4_graphics_g \
+			-lFK4_scene_g \
+			-lFK4_model_g \
+			-lFK4_shape_g \
+			-lFK4_material_g \
+			-lFK4_math_g \
+			-lFK4_base_g \
 
 FKLIB_D		= \
-			-lFK3_util.$(VERNAME) \
-			-lFK3_window.$(VERNAME) \
-			-lFK3_graphics.$(VERNAME) \
-			-lFK3_scene.$(VERNAME) \
-			-lFK3_model.$(VERNAME) \
-			-lFK3_shape.$(VERNAME) \
-			-lFK3_material.$(VERNAME) \
-			-lFK3_math.$(VERNAME) \
-			-lFK3_base.$(VERNAME) \
+			-lFK4_util.$(VERNAME) \
+			-lFK4_window.$(VERNAME) \
+			-lFK4_graphics.$(VERNAME) \
+			-lFK4_scene.$(VERNAME) \
+			-lFK4_model.$(VERNAME) \
+			-lFK4_shape.$(VERNAME) \
+			-lFK4_material.$(VERNAME) \
+			-lFK4_math.$(VERNAME) \
+			-lFK4_base.$(VERNAME) \
 
 FKLIB_DG		= \
-			-lFK3_util_g.$(VERNAME) \
-			-lFK3_window_g.$(VERNAME) \
-			-lFK3_graphics_g.$(VERNAME) \
-			-lFK3_scene_g.$(VERNAME) \
-			-lFK3_model_g.$(VERNAME) \
-			-lFK3_shape_g.$(VERNAME) \
-			-lFK3_material_g.$(VERNAME) \
-			-lFK3_math_g.$(VERNAME) \
-			-lFK3_base_g.$(VERNAME) \
+			-lFK4_util_g.$(VERNAME) \
+			-lFK4_window_g.$(VERNAME) \
+			-lFK4_graphics_g.$(VERNAME) \
+			-lFK4_scene_g.$(VERNAME) \
+			-lFK4_model_g.$(VERNAME) \
+			-lFK4_shape_g.$(VERNAME) \
+			-lFK4_material_g.$(VERNAME) \
+			-lFK4_math_g.$(VERNAME) \
+			-lFK4_base_g.$(VERNAME) \
 
-FKAUDIO_S	= -lFK3_audio
-FKAUDIO_SG	= -lFK3_audio_g
-FKAUDIO_D	= -lFK3_audio.$(VERNAME)
-FKAUDIO_DG	= -lFK3_audio_g.$(VERNAME)
+FKAUDIO_S	= -lFK4_audio
+FKAUDIO_SG	= -lFK4_audio_g
+FKAUDIO_D	= -lFK4_audio.$(VERNAME)
+FKAUDIO_DG	= -lFK4_audio_g.$(VERNAME)
 
-FKOPENCL_S	= -lFK3_OpenCL
-FKOPENCL_SG	= -lFK3_OpenCL_g
-FKOPENCL_D	= -lFK3_OpenCL.$(VERNAME)
-FKOPENCL_DG	= -lFK3_OpenCL_g.$(VERNAME)
+FKOPENCL_S	= -lFK4_OpenCL
+FKOPENCL_SG	= -lFK4_OpenCL_g
+FKOPENCL_D	= -lFK4_OpenCL.$(VERNAME)
+FKOPENCL_DG	= -lFK4_OpenCL_g.$(VERNAME)
 
-FKSHADER_S	= -lFK3_shader
-FKSHADER_SG	= -lFK3_shader_g
-FKSHADER_D	= -lFK3_shader.$(VERNAME)
-FKSHADER_DG	= -lFK3_shader_g.$(VERNAME)
+FKSHADER_S	= -lFK4_shader
+FKSHADER_SG	= -lFK4_shader_g
+FKSHADER_D	= -lFK4_shader.$(VERNAME)
+FKSHADER_DG	= -lFK4_shader_g.$(VERNAME)
 
-FKAR_S		= -lFK3_AR
-FKAR_SG		= -lFK3_AR_g
-FKAR_D		= -lFK3_AR.$(VERNAME)
-FKAR_DG		= -lFK3_AR_g.$(VERNAME)
+FKAR_S		= -lFK4_AR
+FKAR_SG		= -lFK4_AR_g
+FKAR_D		= -lFK4_AR.$(VERNAME)
+FKAR_DG		= -lFK4_AR_g.$(VERNAME)
 
 FKLINK		= $(FKLIB_S)
 LINK		= $(FKLINK) $(SYSLIBS)

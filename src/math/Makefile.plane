@@ -10,8 +10,12 @@ LIBSRCS		= \
 			Quaternion.cxx \
 			Vector.cxx
 
-FKLINK		= -lFK3_base.$(VERNAME)
+FKLINK		= \
+			-lFK4_base.$(VERNAME) \
+			-lFK4_material.$(VERNAME)
 
-FKLINK_G	= -lFK3_base_g.$(VERNAME)
+FKLINK_G	= \
+			-lFK4_base_g.$(VERNAME) \
+			-lFK4_material_g.$(VERNAME)
 
 include ../makeinclude

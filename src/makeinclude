@@ -3,9 +3,9 @@ SHELL = /bin/sh
 .SUFFIXES : .cxx .o
 .SUFFIXES : .c .o
 
-MAJORVERSION	= 3
-MINORVERSION	= 1
-PATCHVERSION	= 1
+MAJORVERSION	= 4
+MINORVERSION	= 0
+PATCHVERSION	= 0
 VERNAME		= $(MAJORVERSION).$(MINORVERSION).$(PATCHVERSION)
 
 CC		= c++
@@ -45,14 +45,14 @@ DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
 MACPACK		= $(FKTOP)/../FK_MacPack
 MACINCLUDE	= $(MACPACK)/include
 MACSYSLIB_S	= $(MACPACK)/lib/static
-ACSYSLIB_D	= $(MACPACK)/lib/dynamic
+MACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
 DLPRE		= dylib
 
-LIBNAME_S	= libFK3_$(BASENAME).a
-LIBNAME_SG	= libFK3_$(BASENAME)_g.a
-LIBNAME_D	= libFK3_$(BASENAME).$(VERNAME).$(DLPRE)
-LIBNAME_DG	= libFK3_$(BASENAME)_g.$(VERNAME).$(DLPRE)
+LIBNAME_S	= libFK4_$(BASENAME).a
+LIBNAME_SG	= libFK4_$(BASENAME)_g.a
+LIBNAME_D	= libFK4_$(BASENAME).$(VERNAME).$(DLPRE)
+LIBNAME_DG	= libFK4_$(BASENAME)_g.$(VERNAME).$(DLPRE)
 
 LIBRARY_S	= $(STATIC_DIR)/$(LIBNAME_S)
 LIBRARY_SG	= $(STATIC_DIR)/$(LIBNAME_SG)
@@ -109,11 +109,11 @@ fb-d:
 	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
 		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
 	"DEPENDDIRS = $(INCLDIRS)" \
-	"LIBRARY_D = $(DYNAMIC_DIR)/libFK3_$(BASENAME).$(VERNAME).so" \
-	"LIBRARY = $(DYNAMIC_DIR)/libFK3_$(BASENAME).$(VERNAME).so" \
+	"LIBRARY_D = $(DYNAMIC_DIR)/libFK4_$(BASENAME).$(VERNAME).so" \
+	"LIBRARY = $(DYNAMIC_DIR)/libFK4_$(BASENAME).$(VERNAME).so" \
 	"LOADER_D_OPT = -L. -L$(LOCAL)/lib -shared \
 		-Wl,-no-undefined -Wl,-Bsymbolic-functions \
-		-Wl,-gc-sections -Wl,-soname,libFK3_$(BASENAME).$(VERNAME).so" \
+		-Wl,-gc-sections -Wl,-soname,libFK4_$(BASENAME).$(VERNAME).so" \
 	"RANLIB = ranlib"
 
 fb-g:
@@ -172,7 +172,7 @@ mac:
 mac-d:
 	$(MAKE) $(TARGET) \
 	"OPTOPT = -O -pipe" \
-	"SYSOPT = -fPIC -D_MACOSX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"SYSOPT = -fPIC -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
 	"LFLAGS = -L$(DYNAMIC_DIR) -L$(MACSYSLIB_D)" \
 	"FKLIBS = $(FKLINK)" \
 	"SYSLIBS = -lfltk_gl.1.3 -lfltk.1.3 \

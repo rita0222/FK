@@ -176,8 +176,7 @@ void fk_TextureDraw::ReplaceSetup(void)
 		;
 	
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_TextureDraw", "ReplaceSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);
@@ -200,8 +199,7 @@ void fk_TextureDraw::ModulateSetup(void)
 		;
 	
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_TextureDraw", "ModulateSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);
@@ -224,8 +222,7 @@ void fk_TextureDraw::DecalSetup(void)
 		;
 	
 	if(prog->validate() == false) {
-		fk_Window::printf("Shader Error");
-		fk_Window::putString(prog->getLastError());
+		fk_PutError("fk_TextureDraw", "DecalSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);

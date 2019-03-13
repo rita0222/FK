@@ -6,13 +6,13 @@ LIBSRCS		= \
 			Audio_Stream.cxx
 
 FKLINK		= \
-			-lFK3_base.$(VERNAME) \
-			-lFK3_math.$(VERNAME) \
-			-lFK3_model.$(VERNAME)
+			-lFK4_base.$(VERNAME) \
+			-lFK4_math.$(VERNAME) \
+			-lFK4_model.$(VERNAME)
 
 FKLINK_G	= \
-			-lFK3_base_g.$(VERNAME) \
-			-lFK3_math_g.$(VERNAME) \
-			 -lFK3_model_g.$(VERNAME)
+			-lFK4_base_g.$(VERNAME) \
+			-lFK4_math_g.$(VERNAME) \
+			 -lFK4_model_g.$(VERNAME)
 
 include ../makeinclude
