@@ -154,6 +154,30 @@
                            <rows ></>
                         </>
                      </>
+                     <_ tag = 0 id = unpack >
+                        <desc ></>
+                        <comptype >default</>
+                        <ratio >r5</>
+                        <solid >1</>
+                        <path >custom</>
+                        <custpath >#docpath#\Visual Studio 2017\Templates\ProjectTemplates</>
+                        <ifexist >overnewer</>
+                        <if ></>
+                        <srclist >
+                           <rows >
+                              <_ >
+                                 <filename >$prjpath$\FK_ProjectTemplate.zip</>
+                                 <recurse >0</>
+                                 <justfile >1</>
+                                 <emptydir >0</>
+                                 <exclude ></>
+                              </>
+                           </>
+                        </>
+                        <varlist >
+                           <rows ></>
+                        </>
+                     </>
                      <_ id = shcut >
                         <desc ></>
                         <shpath >prog</>
@@ -200,6 +224,23 @@
                   <dlgtext ></>
                   <if ></>
                </>
+               <_ tag = 0 id = regset >
+                  <desc ></>
+                  <root >curuser</>
+                  <subkey >Environment</>
+                  <wow64 >0</>
+                  <if ></>
+                  <reglist >
+                     <rows >
+                        <_ >
+                           <valname >FK_VC17_DIR</>
+                           <regtype >str</>
+                           <value >#setuppath#</>
+                           <if ></>
+                        </>
+                     </>
+                  </>
+               </>
                <_ tag = 0 id = run >
                   <desc >OpenAL Install</>
                   <path >custom</>
@@ -224,7 +265,7 @@
                   </>
                   <head ></>
                   <headtext ></>
-                  <dlgtext ></>
+                  <dlgtext >一度サインインしなおすか、再起動を行ってから利用してください。</>
                   <if ></>
                </>
             </>
