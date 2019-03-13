@@ -2,10 +2,9 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
-BASE		= base math material shape model scene shader graphics window util
+BASE		= base material math shape model scene shader graphics window util
 AUDIO		= audio
 OPENCL		= OpenCL
-AR		= AR
 
 all:
 	@echo "	FreeBSD:		make fb"
@@ -102,7 +101,7 @@ mac-gcc-g:
 		cd .. ; done
 
 clean:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) $(SHADER) $(AR) ; do \
+	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(MAKE) clean -f Makefile.plane ; \
 		$(RM) Makefile ; \
