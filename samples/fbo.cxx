@@ -104,11 +104,11 @@ int main(int, char **)
 	lightModel.glFocus(-1.0, -1.0, -1.0);
 
 	// 球と読み込みデータの設定
-	if(ifsShape.readBMP("shader_test/mqo/00tex_master.BMP") == false) {
+	if(ifsShape.readBMP("fbo_data/mqo/00tex_master.BMP") == false) {
 		fl_alert("tex load err");
 	}
 
-	if(ifsShape.readMQOFile("shader_test/mqo/meka.mqo", "body01") == false) {
+	if(ifsShape.readMQOFile("fbo_data/mqo/meka.mqo", "body01") == false) {
 		fl_alert("ifs load err");
 	}
 	ifsShape.setTexRendMode(FK_TEX_REND_SMOOTH);
@@ -149,13 +149,13 @@ int main(int, char **)
 
 	// 各種シェーダー設定
 	ShaderSetup(&spBinder, &modelDef, Yellow, fk_Vector(-20.0, 0.0, 0.0),
-				"shader_test/shader/model_vp.glsl", "shader_test/shader/model_fp.glsl");
+				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/model_fp.glsl");
 	
 	ShaderSetup(&ifsBinder, &ifsModelDef, White, fk_Vector(20.0, 0.0, 0.0),
-				"shader_test/shader/model_vp.glsl", "shader_test/shader/modelTex_fp.glsl");
+				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/modelTex_fp.glsl");
 
 	FBOSetup(&fboBinder, &fboWindow, float(thresshold)/100.0f,
-			 "shader_test/shader/fbo_vp.glsl", "shader_test/shader/fbo_fp.glsl");
+			 "fbo_data/shader/fbo_vp.glsl", "fbo_data/shader/fbo_fp.glsl");
 	
 
 	while(true) {
