@@ -80,7 +80,9 @@ const string fk_ShaderProgram::buildIn =
 	;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
-	: idProgram(0), idVertex(0), idFragment(0), parameter(nullptr)
+	: idProgram(0),
+	  idVertex(0), idFragment(0), idGeometry(0),
+	  parameter(nullptr)
 {
 	return;
 }
@@ -89,6 +91,7 @@ fk_ShaderProgram::~fk_ShaderProgram()
 {
 	if(idProgram != 0) glDeleteProgram(idProgram);
 	if(idVertex != 0) glDeleteShader(idVertex);
+	if(idGeometry != 0) glDeleteShader(idGeometry);
 	if(idFragment != 0) glDeleteShader(idFragment);
 	return;
 }
@@ -120,6 +123,11 @@ bool fk_ShaderProgram::validate(void)
 		idFragment = 0;
 	}
 
+	if(idGeometry != 0) {
+		glDeleteShader(idGeometry);
+		idGeometry = 0;
+	}
+
 	idVertex = Compile(&vertexShaderSource, GL_VERTEX_SHADER);
 	if(idVertex == 0) {
 		lastError = "ERROR: VertexShader could not create.";
@@ -129,13 +137,21 @@ bool fk_ShaderProgram::validate(void)
 	if(UpdateLastError(idVertex)) return false;
 
 	idFragment = Compile(&fragmentShaderSource, GL_FRAGMENT_SHADER);
-	if(idFragment == 0)
-	{
+	if(idFragment == 0) {
 		lastError = "ERROR: FragmentShader could not create.";
 		return false;
 	}
 		
 	if(UpdateLastError(idFragment)) return false;
+
+	if(geometryShaderSource.empty() == false) {
+		idGeometry = Compile(&geometryShaderSource, GL_GEOMETRY_SHADER);
+		if(idGeometry == 0) {
+			lastError = "ERROR: GeometryShader could not create.";
+			return false;
+		}
+		if(UpdateLastError(idGeometry)) return false;
+	}
 
 	if(idProgram != 0) {
 		glDeleteProgram(idProgram);
@@ -150,6 +166,7 @@ bool fk_ShaderProgram::validate(void)
 
 	glAttachShader(idProgram, idVertex);
 	glAttachShader(idProgram, idFragment);
+	if(idGeometry != 0) glAttachShader(idProgram, idGeometry);
 
 	return true;
 }
@@ -174,6 +191,18 @@ bool fk_ShaderProgram::loadFragmentShader(string argFileName)
 	istreambuf_iterator<char> it(ifs);
 	istreambuf_iterator<char> last;
 	fragmentShaderSource = string(it, last);
+
+	return true;
+}
+
+bool fk_ShaderProgram::loadGeometryShader(string argFileName)
+{
+	ifstream		ifs(argFileName);
+	if(ifs.fail()) return false;
+
+	istreambuf_iterator<char> it(ifs);
+	istreambuf_iterator<char> last;
+	geometryShaderSource = string(it, last);
 
 	return true;
 }

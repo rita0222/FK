@@ -101,7 +101,15 @@ namespace FK {
 		 */
 		bool		readJPG(const std::string filename);
 
-		//! 画像データセット関数
+		//! 画像データセット関数1
+		/*!
+		 *	fk_Image 型の画像データを読み込みます。
+		 *
+		 *	既に画像を読み込み済みの fk_Image をセットします。
+		 */
+		void		setImage(fk_Image *image);
+
+		//! 画像データセット関数2
 		/*!
 		 *	fk_Image 型の画像データを読み込みます。
 		 *

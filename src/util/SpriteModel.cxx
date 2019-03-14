@@ -201,6 +201,13 @@ bool fk_SpriteModel::readJPG(const string argFileName)
 	return true;
 }
 
+void fk_SpriteModel::setImage(fk_Image *argImage)
+{
+	texShape.setImage(argImage);
+	setSpriteSize();
+	return;
+}
+
 void fk_SpriteModel::setImage(fk_Image &argImage)
 {
 	texShape.setImage(&argImage);

@@ -36,6 +36,15 @@ namespace FK {
 		 */
 		std::string fragmentShaderSource;
 
+		//! ジオメトリシェーダーコードメンバー
+		/*!
+		 *	ジオメトリシェーダーのコードの設定や取得を行います。
+		 *	ジオメトリシェーダーのコードを設定する際は、
+		 *	本メンバーに直接コードを書き込むか、
+		 *	loadGeometryShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		std::string geometryShaderSource;
+
 		//! コンストラクタ
 		fk_ShaderProgram(void);
 
@@ -95,12 +104,29 @@ namespace FK {
 		 *	\return
 		 *		入力に成功すれば true を、失敗すれば false を返します。
 		 */
-
 		bool loadFragmentShader(std::string fileName);
+
+		//! ジオメトリシェーダーコード入力関数
+		/*!
+		 *	ジオメトリシェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram::geometryShaderSource メンバーにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool loadGeometryShader(std::string fileName);
 
 		//! シェーダープログラムコンパイルメソッド
 		/*!
-		 *	fk_ShaderProgram::vertexShaderSource, fk_ShaderProgram::fragmentShaderSource
+		 *	fk_ShaderProgram::vertexShaderSource, fk_ShaderProgram::fragmentShaderSource,
+		 *	fk_ShaderProgram::geometryShaderSource 
 		 *	に格納されているコードのコンパイルを行います。
 		 *
 		 *	\return
@@ -128,6 +154,7 @@ namespace FK {
 		GLuint idProgram;
 		GLuint idVertex;
 		GLuint idFragment;
+		GLuint idGeometry;
 		std::string lastError;
 		fk_ShaderParameter *parameter;
 
@@ -135,7 +162,7 @@ namespace FK {
 
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint);
-		void	ReplaceBuildIn(std::string *);
+		void ReplaceBuildIn(std::string *);
 	};	
 }
 #endif
