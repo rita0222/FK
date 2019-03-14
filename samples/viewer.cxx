@@ -81,7 +81,7 @@ int main()
 	fk_IndexFaceSet	shape;
 	fk_Vector		pos[121], moveVec, movePos;
 	int				IFSet[4*100];
-	int				i, j, counter;
+	int				i, j;
 	double			x, y;
 
 	// 各頂点位置の設定
@@ -113,12 +113,11 @@ int main()
 	viewer.setDrawMode(FK_FRONTBACK_POLYMODE | FK_LINEMODE);
 	viewer.setScale(10.0);
 
-	counter = 0;
-	while(viewer.draw() == true) {
+	for(int k = 0; viewer.draw() == true; k += 3) {
 		for(i = 0; i <= 10; i++) {
 			for(j = 0; j <= 10; j++) {
 				// 各頂点の移動量計算
-				moveVec.set(0.0, 0.0, sin(double(counter+j*40)*0.05/FK_PI));
+				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/FK_PI));
 
 				// 各頂点を移動場所を計算
 				movePos = moveVec + pos[i*11 + j];
@@ -127,7 +126,6 @@ int main()
 				shape.moveVPosition(i*11 + j, movePos);
 			}
 		}
-		counter += 10;
 	}
 
 	return 0;

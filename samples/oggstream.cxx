@@ -58,7 +58,7 @@ void bgmPlay(double &argVolume, bool &argFlg)
 
 	fk_System::setcwd();
 
-	if(bgm.open("epoq.ogg") == false) {
+	if(bgm.open("data/epoq.ogg") == false) {
 		fl_alert("BGM Open Error");
 		return;
 	}

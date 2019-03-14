@@ -616,6 +616,8 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 
 	vertexPosition.set(trueID, argPos);
 	modifyList.push_back(trueID);
+	modifyAttribute(vertexName);
+	modifyAttribute(normalName);
 
 	return true;
 }
@@ -630,6 +632,8 @@ bool fk_IndexFaceSet::moveVPosition(int argID,
 
 	vertexPosition.set(trueID, argX, argY, argZ);
 	modifyList.push_back(trueID);
+	modifyAttribute(vertexName);
+	modifyAttribute(normalName);
 
 	return true;
 }
@@ -642,6 +646,8 @@ bool fk_IndexFaceSet::moveVPosition(int argID, double *argPos, int argOrder)
 
 	vertexPosition.set(trueID, argPos[0], argPos[1], argPos[2]);
 	modifyList.push_back(trueID);
+	modifyAttribute(vertexName);
+	modifyAttribute(normalName);
 
 	return true;
 }
@@ -668,6 +674,7 @@ bool fk_IndexFaceSet::setFaceNorm(int argPID, const fk_Vector &argVec, int argOr
 
 	if(trueID < 0 || trueID >= faceNormal.getSize()) return false;
 	faceNormal.set(trueID, argVec);
+	modifyAttribute(normalName);
 	return true;
 }
 
@@ -698,6 +705,7 @@ bool fk_IndexFaceSet::setVertexNorm(int argVID, const fk_Vector &argVec, int arg
 
 	if(trueID < 0 || trueID >= vertexNormal.getSize()) return false;
 	vertexNormal.set(trueID, argVec);
+	modifyAttribute(normalName);
 
 	return true;
 }

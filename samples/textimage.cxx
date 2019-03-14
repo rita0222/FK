@@ -90,7 +90,7 @@ int main (int, char *[])
 	str.convert("FK日本語", FK_STR_UTF8);
 
 	texture.setImage(&textImage);
-	if(textImage.initFont("rm1b.ttf") == false) {
+	if(textImage.initFont("data/rm1b.ttf") == false) {
 		fl_alert("Font Init Error.");
 	}
 
