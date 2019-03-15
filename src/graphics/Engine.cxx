@@ -318,9 +318,7 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 	fk_DrawBase::SetModel(argModel);
 		
 	SetBlendMode(argModel);
-	//argModel->preShader();
 	DrawShapeObj(argModel);
-	//argModel->postShader();
 	modelShape->finishSetVBO();
 
 	return;
