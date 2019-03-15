@@ -158,11 +158,11 @@ namespace FK {
 		std::string lastError;
 		fk_ShaderParameter *parameter;
 
-		static const std::string		buildIn;
+		static std::string		vertexBuildIn, fragmentBuildIn, geometryBuildIn;
 
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint);
-		void ReplaceBuildIn(std::string *);
+		void ReplaceBuildIn(std::string *, GLuint);
 	};	
 }
 #endif

@@ -501,6 +501,7 @@ void fk_AppWindow::open(void)
 	drawWin->show();
 
 	fsc.init(mainWin, drawWin);
+	Fl::check();
 
 	return;
 }

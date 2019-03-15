@@ -14,8 +14,6 @@ private:
 	fk_Model		model;
 	fk_Vector		newVec;
 	
-	
-	
 public:
 	Agent(double, mt19937 &);
 

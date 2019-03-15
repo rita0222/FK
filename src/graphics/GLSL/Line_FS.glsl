@@ -6,5 +6,5 @@ flat in vec4 put_color;
 
 void main()
 {
-    fragment = put_color;
+    fk_Fragment = put_color;
 }

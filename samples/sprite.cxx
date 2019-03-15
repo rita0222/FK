@@ -15,7 +15,7 @@ int main(int, char *[])
 
 	fk_System::setcwd();
 
-	sprite.initFont("rm1b.ttf");
+	sprite.initFont("data/rm1b.ttf");
 	sprite.setPositionLT(-280.0, 230.0);
 	window.entry(&sprite);
 

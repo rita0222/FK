@@ -1,7 +1,9 @@
 #version 410 core
 
-layout (location = 0) in vec3 fk_Vertex;
-layout (location = 2) in vec2 fk_TexCoord;
+#FKBuildIn
+
+//in vec3 fk_Vertex;
+//in vec2 fk_TexCoord;
 
 out vec2 varT;
 

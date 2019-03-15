@@ -8,5 +8,5 @@ flat in int draw_flag;
 void main()
 {
 	if(draw_flag == 2) discard;
-    fragment = put_color;
+    fk_Fragment = put_color;
 }
