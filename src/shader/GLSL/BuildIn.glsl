@@ -58,6 +58,5 @@ in vec4 fk_PointElementColor;
 in vec3 fk_Vertex;
 in vec3 fk_Normal;
 in vec2 fk_TexCoord;
-//in int fk_PointElementAlive;
 
-out vec4 fragment;
+out vec4 fk_Fragment;

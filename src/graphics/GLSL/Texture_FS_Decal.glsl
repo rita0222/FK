@@ -145,5 +145,5 @@ vec4 Decal()
 
 void main()
 {
-	fragment = Decal();
+	fk_Fragment = Decal();
 }

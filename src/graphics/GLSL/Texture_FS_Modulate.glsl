@@ -145,5 +145,5 @@ vec4 Modulate()
 
 void main()
 {
-	fragment = Modulate();
+	fk_Fragment = Modulate();
 }

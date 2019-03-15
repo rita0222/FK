@@ -71,19 +71,47 @@
  ****************************************************************************/
 
 #include <FK/ShaderProgram.h>
+//#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
-const string fk_ShaderProgram::buildIn =
-	#include "GLSL/BuildIn.out"
-	;
+string fk_ShaderProgram::vertexBuildIn;
+string fk_ShaderProgram::fragmentBuildIn;
+string fk_ShaderProgram::geometryBuildIn;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0),
 	  idVertex(0), idFragment(0), idGeometry(0),
 	  parameter(nullptr)
 {
+	if(vertexBuildIn.empty() == true) {
+		vertexBuildIn +=
+			#include "GLSL/Material.out"
+			;
+		vertexBuildIn +=
+			#include "GLSL/Uniform.out"
+			;
+		vertexBuildIn +=
+			#include "GLSL/Attribute.out"
+			;
+	}
+
+	if(fragmentBuildIn.empty() == true) {
+		fragmentBuildIn +=
+			#include "GLSL/Material.out"
+			;
+		fragmentBuildIn +=
+			#include "GLSL/Uniform.out"
+			;
+		fragmentBuildIn +=
+			#include "GLSL/Attribute.out"
+			;
+		fragmentBuildIn +=
+			#include "GLSL/Fragment.out"
+			;
+	}
+	
 	return;
 }
 
@@ -222,7 +250,7 @@ GLuint fk_ShaderProgram::Compile(string *argCode, GLuint argKind)
 	GLuint id = glCreateShader(argKind);
 	if(id == 0) return id;
 
-	ReplaceBuildIn(argCode);
+	ReplaceBuildIn(argCode, argKind);
 	
 	const GLchar *str[1] = {argCode->c_str()};
 
@@ -272,13 +300,37 @@ bool fk_ShaderProgram::UpdateLastError(GLuint argShader)
 	}
 }
 
-void fk_ShaderProgram::ReplaceBuildIn(string *argCode)
+void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 {
 	string	incStr = "#FKBuildIn";
 	string::size_type	pos = 0;
-	while((pos = argCode->find(incStr, pos)) != string::npos) {
-		argCode->replace(pos, incStr.length(), buildIn);
-		pos += buildIn.length();
+	string	*buildIn;
+
+	switch(argKind) {
+	  case GL_VERTEX_SHADER:
+		buildIn = &vertexBuildIn;
+		break;
+		
+	  case GL_FRAGMENT_SHADER:
+		buildIn = &fragmentBuildIn;
+		break;
+		
+	  case GL_GEOMETRY_SHADER:
+		buildIn = &geometryBuildIn;
+		break;
+
+	  default:
+		return;
 	}
+
+	while((pos = argCode->find(incStr, pos)) != string::npos) {
+		auto lineNum = count(argCode->begin(), argCode->begin() + int(pos), '\n');
+		argCode->replace(pos, incStr.length(), *buildIn);
+		pos += buildIn->length();
+		string addLine = "\n#line " + to_string(lineNum+1) + "\n";
+		argCode->insert(pos, addLine);
+		pos += addLine.length();
+	}
+
 	return;
 }

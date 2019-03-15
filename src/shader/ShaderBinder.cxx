@@ -167,6 +167,9 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 
 	SetupFBO();
 
+	auto prog = getProgram();
+	auto id = prog->getProgramID();
+
 	GLuint handle[2];
 	glGenBuffers(2, handle);
 
@@ -182,17 +185,16 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
+	glBindAttribLocation(id, 0, "fk_Vertex");
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(2);
+	glBindAttribLocation(id, 2, "fk_TexCoord");
 
 	glBindVertexArray(0);
 
-	auto prog = getProgram();
-	auto id = prog->getProgramID();
-
-	glBindFragDataLocation(id, 0, "fragment");
+	glBindFragDataLocation(id, 0, "fk_Fragment");
 
 	prog->link();
 

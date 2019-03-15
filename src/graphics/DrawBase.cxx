@@ -111,7 +111,7 @@ const string fk_DrawBase::lightSpotCutOffName = "cut";
 const string fk_DrawBase::lightSpotExponentName = "exp";
 const string fk_DrawBase::lightAttenuationName = "attenuation";
 
-const string fk_DrawBase::fragmentName = "fragment";
+const string fk_DrawBase::fragmentName = "fk_Fragment";
 
 fk_Matrix * fk_DrawBase::projectionMatrix;
 fk_Matrix fk_DrawBase::viewMatrix;

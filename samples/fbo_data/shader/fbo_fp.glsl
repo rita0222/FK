@@ -1,13 +1,12 @@
 #version 410 core
 
-uniform sampler2D fk_ColorBuf;
+#FKBuildIn
 
 uniform float Width;
 uniform float Height;
 uniform float Thresshold;
 
 in vec2 varT;
-out vec4 fragment;
 
 float getMono(vec2 argPos)
 {
@@ -17,7 +16,7 @@ float getMono(vec2 argPos)
 
 //フラグメント
 
-void main(void)
+oid main(void)
 {
 	float dx = 1.0/Width;
 	float dy = 1.0/Height;
@@ -37,8 +36,8 @@ void main(void)
 	float Val = Sx * Sx + Sy * Sy;
 	
 	if(Val > Thresshold) {
-		fragment = vec4(1.0, 1.0, 1.0, 1.0);
+		fk_Fragment = vec4(1.0, 1.0, 1.0, 1.0);
 	} else {
-		fragment = vec4(0.0, 0.0, 0.0, 1.0);
+		fk_Fragment = vec4(0.0, 0.0, 0.0, 1.0);
 	}
 }
