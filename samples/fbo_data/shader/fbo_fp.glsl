@@ -16,7 +16,7 @@ float getMono(vec2 argPos)
 
 //フラグメント
 
-oid main(void)
+void main(void)
 {
 	float dx = 1.0/Width;
 	float dy = 1.0/Height;
