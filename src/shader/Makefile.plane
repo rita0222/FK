@@ -25,5 +25,3 @@ glsl : $(GLSLOUTS)
 
 %.out : %.glsl
 	./GLSL/glsl2out $<
-
-ShaderProgram.o: GLSL/BuildIn.out
