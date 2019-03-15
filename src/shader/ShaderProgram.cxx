@@ -112,6 +112,14 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 			;
 	}
 	
+	if(geometryBuildIn.empty() == true) {
+		geometryBuildIn +=
+			#include "GLSL/Material.out"
+			;
+		geometryBuildIn +=
+			#include "GLSL/Uniform.out"
+			;
+	}
 	return;
 }
 
