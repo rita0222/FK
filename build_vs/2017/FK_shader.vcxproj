@@ -141,6 +141,9 @@
       <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib />
+    <Lib>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
