@@ -13,7 +13,7 @@ mkdir $FKPATH/redist
 
 cp lib_x64/*.lib $FKPATH/lib
 cp ../extlibs/fltk-1.3.5/lib/*.lib $FKPATH/lib
-mv $FKPATH/lib/fltkzlib.lib $FKPATH/lib/fltkz.lib
+#mv $FKPATH/lib/fltkzlib.lib $FKPATH/lib/fltkz.lib
 cp ../extlibs/freetype-2.6/objs/vc2017/x64/freetype26MT.lib $FKPATH/lib/freetype2MT.lib
 cp ../extlibs/libiconv/ReleaseStatic_x64/libiconv_2017Static.lib $FKPATH/lib/libiconv.lib
 cp ../extlibs/libogg-1.3.2/win32/VS2017/bin/x64/Release/libogg_static.lib $FKPATH/lib/libogg.lib

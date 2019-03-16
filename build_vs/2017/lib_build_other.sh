@@ -15,9 +15,9 @@ source ./vsenv.sh
 "$VS15_DEVENV_PATH" ..\\extlibs\\libiconv\\LibIconv_2017.sln /Build "DebugStatic|x64"
 
 # ogg
-"$VS15_DEVENV_PATH" ..\\extlibs\\libogg-1.3.2\\win32\\VS2017\\libogg_static.sln /Build "Release|x64"
-"$VS15_DEVENV_PATH" ..\\extlibs\\libogg-1.3.2\\win32\\VS2017\\libogg_static.sln /Build "Debug|x64"
+"$VS15_DEVENV_PATH" ..\\extlibs\\libogg-1.3.3\\win32\\VS2017\\libogg_static.sln /Build "Release|x64"
+"$VS15_DEVENV_PATH" ..\\extlibs\\libogg-1.3.3\\win32\\VS2017\\libogg_static.sln /Build "Debug|x64"
 
 # vorbis
-"$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.5\\win32\\VS2017\\vorbis_static.sln /Build "Release|x64"
-"$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.5\\win32\\VS2017\\vorbis_static.sln /Build "Debug|x64"
+"$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.6\\win32\\VS2017\\vorbis_static.sln /Build "Release|x64"
+"$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.6\\win32\\VS2017\\vorbis_static.sln /Build "Debug|x64"
