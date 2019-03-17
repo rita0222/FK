@@ -87,7 +87,7 @@
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)lib_$(Platform)\</OutDir>
+    <OutDir>$(SolutionDir)lib\debug\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
     <IncludePath>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;$(IncludePath)</IncludePath>
@@ -97,7 +97,7 @@
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)lib_$(Platform)\</OutDir>
+    <OutDir>$(SolutionDir)lib\release\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;$(IncludePath)</IncludePath>
   </PropertyGroup>
