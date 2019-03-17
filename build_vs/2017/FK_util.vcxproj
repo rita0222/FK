@@ -135,11 +135,10 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4</PreprocessorDefinitions>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeader />
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -161,12 +160,12 @@
       <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeader />
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP %(AdditionalOptions)</AdditionalOptions>
-      <MinimalRebuild />
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Lib />
   </ItemDefinitionGroup>
