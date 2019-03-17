@@ -1,8 +1,8 @@
 ﻿#ifndef __FK_LINE_HEADER__
 #define __FK_LINE_HEADER__
 
-#include <FK/FVecArray.H>
-#include <FK/ColorArray.H>
+#include <FK/FVecArray.h>
+#include <FK/ColorArray.h>
 #include <FK/Solid.h>
 
 namespace FK {

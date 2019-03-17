@@ -1,7 +1,7 @@
 ﻿#ifndef __FK_INDEXFACE_HEADER__
 #define __FK_INDEXFACE_HEADER__
 
-#include <FK/FVecArray.H>
+#include <FK/FVecArray.h>
 #include <FK/ParserBase.H>
 #include <FK/ParserData.h>
 #include <list>

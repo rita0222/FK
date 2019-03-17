@@ -1,8 +1,8 @@
 ﻿#ifndef __FK_POINT_HEADER__
 #define __FK_POINT_HEADER__
 
-#include <FK/FVecArray.H>
-#include <FK/ColorArray.H>
+#include <FK/FVecArray.h>
+#include <FK/ColorArray.h>
 #include <FK/Array.H>
 #include <FK/Shape.h>
 

@@ -70,7 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/FVecArray.H>
+#include <FK/FVecArray.h>
 #include <FK/Material.h>
 
 using namespace std;

@@ -70,7 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/ColorArray.H>
+#include <FK/ColorArray.h>
 
 using namespace std;
 using namespace FK;
