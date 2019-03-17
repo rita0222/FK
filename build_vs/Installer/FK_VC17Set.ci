@@ -166,7 +166,7 @@
                         <srclist >
                            <rows >
                               <_ >
-                                 <filename >$prjpath$\FK_ProjectTemplate.zip</>
+                                 <filename >$prjpath$\FK_C++_Template.zip</>
                                  <recurse >0</>
                                  <justfile >1</>
                                  <emptydir >0</>
