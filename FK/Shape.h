@@ -56,6 +56,69 @@ namespace FK {
 		 */
 		fk_RealShapeType				getRealShapeType(void);
 
+		//! シェーダー内 attribute 変数設定関数1
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を整数型で登録します。
+		 *	浮動小数点型の attribute 変数値を扱う場合は
+		 *	setShaderAttribute(std::string, int, std::vector<float> *)
+		 *	を利用して下さい。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に int, ivec2, ivec3, ivec4 となります。
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		modifyAttribute() を呼んでおく必要があります。
+		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<int> *array);
+
+		//! シェーダー内 attribute 変数設定関数2
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を浮動小数点型で登録します。
+		 *	整数型の attribute 変数値を扱う場合は
+		 *	setShaderAttribute(std::string, int, std::vector<int> *)
+		 *	を利用して下さい。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		modifyAttribute() を呼んでおく必要があります。
+		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<float> *array);
+
+		//! attribute 変数更新関数
+		/*!
+		 *	attribute 変数用データに変更があった場合、
+		 *	この関数を呼ぶ必要があります。この関数が呼ばれると、
+		 *	対象となる attribute 変数用のデータは描画時に CPU から GPU へデータの転送が行われます。
+		 * 	もしこの関数が呼ばれないと、内部データが変更されても描画には反映されません。
+		 *
+		 *	\param[in]	name		対象となる attribute 変数の GLSL 内での変数名
+		 */
+		void modifyAttribute(std::string name);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+
 		//! パレット取得関数
 		/*!
 		 *	パレットのアドレスを取得します。
@@ -105,46 +168,6 @@ namespace FK {
 		 */
 		void							setPalette(fk_Material &mat, int ID);
 
-		//! マテリアルモード設定関数
-		/*!
-		 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
-		 *	マテリアルの採用は、以下のような優先順で決定します。
-		 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
-		 *		モデルのマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *		(fk_Model::setMaterialMode() を参照して下さい。)
-		 *	-# fk_Shape の派生クラスにてマテリアルモードが
-		 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *	-# 各位相要素でのマテリアルモードが、
-		 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
-		 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
-		 *
-		 *	\param[in]	mode
-		 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
-		 *		\arg FK_CHILD_MODE
-		 *		\arg FK_PARENT_MODE
-		 *		\arg FK_NONE_MODE
-		 *
-		 *	\sa getMaterialMode(), fk_Model::setMaterialMode(), fk_TopologyMaterial::setElemMaterialMode()
-		 */
-		void							setMaterialMode(fk_MaterialMode mode);
-
-
-		//! マテリアルモード取得関数
-		/*!
-		 *	マテリアルモードを取得します。
-		 *
-		 *	\return マテリアルモード
-		 *
-		 *	\sa setMaterialMode()
-		 */
-		fk_MaterialMode					getMaterialMode(void);
-
 		//! オブジェクトマテリアル ID 取得関数
 		/*!
 		 *	現在設定されているオブジェクトマテリアルの ID を取得します。
@@ -188,12 +211,45 @@ namespace FK {
 		 */
 		std::vector<fk_Material> *		getMaterialVector(void);
 
-		void setShaderAttribute(std::string, int, std::vector<int> *);
-		void setShaderAttribute(std::string, int, std::vector<float> *);
-		void setShaderIndex(std::string, std::vector<GLuint> *);
-		void modifyAttribute(std::string);
+		//! マテリアルモード設定関数
+		/*!
+		 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
+		 *	マテリアルの採用は、以下のような優先順で決定します。
+		 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
+		 *		モデルのマテリアルが採用されます。
+		 *		FK_NONE_MODE の場合は描画されません。
+		 *		FK_PARENT_MODE の場合は以下の条件に従います。
+		 *		(fk_Model::setMaterialMode() を参照して下さい。)
+		 *	-# fk_Shape の派生クラスにてマテリアルモードが
+		 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
+		 *		FK_NONE_MODE の場合は描画されません。
+		 *		FK_PARENT_MODE の場合は以下の条件に従います。
+		 *	-# 各位相要素でのマテリアルモードが、
+		 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
+		 *		FK_NONE_MODE の場合は描画されません。
+		 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
+		 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
+		 *
+		 *	\param[in]	mode
+		 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
+		 *		\arg FK_CHILD_MODE
+		 *		\arg FK_PARENT_MODE
+		 *		\arg FK_NONE_MODE
+		 *
+		 *	\sa getMaterialMode(), fk_Model::setMaterialMode(), fk_TopologyMaterial::setElemMaterialMode()
+		 */
+		void							setMaterialMode(fk_MaterialMode mode);
 
-#ifndef FK_DOXYGEN_USER_PROCESS
+		//! マテリアルモード取得関数
+		/*!
+		 *	マテリアルモードを取得します。
+		 *
+		 *	\return マテリアルモード
+		 *
+		 *	\sa setMaterialMode()
+		 */
+		fk_MaterialMode					getMaterialMode(void);
+
 		void FinishSetVBO(void);
 		virtual void ForceUpdateAttr(void);
 		virtual void FlushAttr(void);

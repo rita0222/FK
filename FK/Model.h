@@ -20,10 +20,11 @@ namespace FK {
 
 	using fk_funcSet = std::tuple<unsigned int, std::function<void(void)> >;
 
+	//! 描画優先モードを表す列挙型
 	enum fk_ElementMode {
-		FK_ELEM_NONE,
-		FK_ELEM_MODEL,
-		FK_ELEM_ELEMENT
+		FK_ELEM_NONE,		//!<	描画しない
+		FK_ELEM_MODEL,		//!<	モデル設定優先
+		FK_ELEM_ELEMENT		//!<	形状個別要素設定優先
 	};
 
 	//! モデルを生成、管理するクラス
@@ -1017,7 +1018,7 @@ namespace FK {
 		 *	モデルの描画モードを設定します。
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
-		 *	描画モードには以下のようなものがあります。
+		 *	描画モード種類は以下のとおりです。
 		 *	- FK_NONEMODE:				何も描画しません。
 		 *	- FK_POINTMODE:				頂点を描画します。
 		 *	- FK_LINEMODE:				稜線を描画します。
@@ -1048,7 +1049,27 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(void) const;
 
+		//! 要素モード設定関数
+		/*!
+		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
+		 *	モードには以下のものがあります。
+		 *	- FK_ELEM_NONE:		何も描画しません。
+		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
+		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	.
+		 *
+		 *	\param[in]	mode	設定モード
+		 */
 		void			setElementMode(const fk_ElementMode mode);
+
+		//! 要素モード設定関数
+		/*!
+		 *	表示の際の優先モードを取得します。
+		 *
+		 *	\return	設定モード
+		 *
+		 *	\sa setElementMode()
+		 */
 		fk_ElementMode	getElementMode(void) const;
 		
 		//! ブレンドモード設定関数
@@ -1589,7 +1610,26 @@ namespace FK {
 		//@{
 
 		//! シェーダー設定関数
-		void				setShader(fk_ShaderBinder *);
+		/*!
+		 *	この関数は、モデル描画の際のシェーダーを設定するものです。
+		 *	fk_ShaderBinder::bindModel() による設定とまったく同じ挙動となります。
+		 *
+		 *	\param[in]	shader		シェーダープログラム
+		 *
+		 *	\note
+		 *		シェーダーを未設定にし、デフォルトのシェーダーで描画したい場合は、
+		 *		引数に nullptr を入力して下さい。
+		 */
+		void				setShader(fk_ShaderBinder *shader);
+
+		//! シェーダー取得関数
+		/*!
+		 *	setShader() (または fk_ShaderBinder::bindModel())
+		 *	によって設定されたシェーダーを返します。
+		 *
+		 *	\return		シェーダーを返します。
+		 *				シェーダーが設定されていない場合は nullptr を返します。
+		 */
 		fk_ShaderBinder		*getShader(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS

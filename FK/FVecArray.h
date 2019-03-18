@@ -7,7 +7,7 @@ namespace FK {
 
 	class fk_Color;
 
-	//! attribute 変数用ベクトル管理クラス
+	//! シェーダー内 attribute 変数用ベクトル管理クラス
 	/*!
 	 *	このクラスは、シェーダー内の attribute 変数として使用することを念頭においた、
 	 *	ベクトルデータ格納用のクラスです。
@@ -40,8 +40,8 @@ namespace FK {
 		//! 次元設定関数
 		/*!
 		 *	格納するベクトルデータの次元数を設定します。
-		 *	次元は 1 から 4 まで設定が可能で、
-		 *	シェーダープログラム内での型はそれぞれ float, vec2, vec3, vec4 となります。
+		 *	次元は 2 から 4 まで設定が可能で、
+		 *	シェーダープログラム内での型はそれぞれ vec2, vec3, vec4 となります。
 		 *	デフォルトでの次元数は 3 に設定されています。
 		 *
 		 *	\param[in]	dim		次元数
@@ -56,35 +56,341 @@ namespace FK {
 		 */
 		int getDim(void);
 
+		//! 要素数設定関数
+		/*!
+		 *	要素数を設定します。
+		 * 	格納される float 型実数の個数は、ここで指定した要素数と次元の積となります。
+		 *
+		 *	\param[in]	size	要素数
+		 *
+		 *	\sa getSize(), clear(), setDim()
+		 */
+		void resize(int size);
+
+		//! 要素数参照関数
+		/*!
+		 *	現在設定されている要素数を返します。
+		 * 	格納されている float 型実数の個数は、この要素数と次元の積となります。
+		 *
+		 *	\return		要素数
+		 *
+		 *	\sa resize(), clear(), setDim()
+		 */
 		int getSize(void);
-		void resize(int);
+
+		//! データ消去関数
+		/*!
+		 *	現在格納されている要素を全て破棄し、要素数を 0 にします。
+		 *	この関数により次元は変更されません。
+		 *
+		 *	\sa resize(), getSize(), setDim()
+		 */
 		void clear(void);
-		void push(const fk_Vector &);
-		void push(const fk_FVector &);
-		void push(const fk_HVector &);
-		void push(const fk_TexCoord &);
-		void push(const fk_Color &);
-		void push(double, double, double = 0.0, double = 0.0);
-		void push(float, float, float = 0.0f, float = 0.0f);
 
-		bool set(int, const fk_Vector &);
-		bool set(int, const fk_FVector &);
-		bool set(int, const fk_HVector &);
-		bool set(int, const fk_TexCoord &);
-		bool set(int, const fk_Color &);
-		bool set(int, double, double, double = 0.0, double = 0.0);
-		bool set(int, float, float, float = 0.0f, float = 0.0f);
+		//! fk_Vector 型ベクトル追加関数
+		/*!
+		 *	fk_Vector 型変数からデータを追加します。
+		 *	なお、次元数が 2 だった場合は z 成分を破棄します。
+		 *	また、次元数が 4 だった場合は、第 4 成分には 0 が設定されます。
+		 *
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa set(int, const fk_Vector &)
+		 */
+		void push(const fk_Vector &v);
 
-		fk_Vector getV(int);
-		fk_FVector getF(int);
-		fk_HVector getHV(int);
-		fk_TexCoord getT(int);
-		fk_Color getC(int);
+		//! fk_FVector 型ベクトル追加関数
+		/*!
+		 *	fk_FVector 型変数からデータを追加します。
+		 *	なお、次元数が 2 だった場合は z 成分を破棄します。
+		 *	また、次元数が 4 だった場合は、第 4 成分には 0 が設定されます。
+		 *
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa set(int, const fk_FVector &)
+		 */
+		void push(const fk_FVector &v);
 
+		//! fk_HVector 型ベクトル追加関数
+		/*!
+		 *	fk_HVector 型変数からデータを追加します。
+		 *	なお、次元数が 2 だった場合は z,w 成分を、
+		 *	次元数が 3 だった場合は w 成分を破棄します。
+		 *
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa set(int, const fk_HVector &)
+		 */
+		void push(const fk_HVector &v);
+
+		//! fk_TexCoord 型ベクトル追加関数
+		/*!
+		 *	fk_TexCoord 型変数からデータを追加します。
+		 *	なお、次元数が 3,4 だった場合は、それぞれの成分に 0 が設定されます。
+		 *
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa set(int, const fk_TexCoord &)
+		 */
+		void push(const fk_TexCoord &v);
+
+		//! fk_Color 型色値追加関数
+		/*!
+		 *	fk_Color 型変数からデータを追加します。
+		 *	なお、次元数が 2 だった場合は b,a 成分を、
+		 *	次元数が 3 だった場合は a 成分を破棄します。
+		 *
+		 *	\param[in]	c	追加する色値
+		 *
+		 *	\sa set(int, const fk_Color &)
+		 */
+		void push(const fk_Color &c);
+
+		//! ベクトル追加関数1
+		/*!
+		 *	ベクトルを (x, y, z, w) の順番で追加します。
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分には 0 が設定されます。
+		 *	第3,4引数は省略可能です。
+		 *
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *	\param[in]	z	第3成分
+		 *	\param[in]	w	第4成分
+		 */
+		void push(double x, double y, double z = 0.0, double w = 0.0);
+
+		//! ベクトル追加関数2
+		/*!
+		 *	ベクトルを (x, y, z, w) の順番で追加します。
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分には 0 が設定されます。
+		 *	第3,4引数は省略可能です。
+		 *
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *	\param[in]	z	第3成分
+		 *	\param[in]	w	第4成分
+		 */
+		void push(float x, float y, float z = 0.0f, float w = 0.0f);
+
+		//! fk_Vector 型ベクトル設定関数
+		/*!
+		 *	fk_Vector 型変数のデータを設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	なお、次元数が 2 だった場合は z 成分を破棄します。
+		 *	また、次元数が 4 だった場合は、第 4 成分には 0 が設定されます。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa push(const fk_Vector &)
+		 */
+		bool set(int id, const fk_Vector &v);
+
+		//! fk_FVector 型ベクトル設定関数
+		/*!
+		 *	fk_FVector 型変数のデータを設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	なお、次元数が 2 だった場合は z 成分を破棄します。
+		 *	また、次元数が 4 だった場合は、第 4 成分には 0 が設定されます。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa push(const fk_FVector &)
+		 */
+		bool set(int id, const fk_FVector &v);
+
+		//! fk_HVector 型ベクトル設定関数
+		/*!
+		 *	fk_HVector 型変数のデータを設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	なお、次元数が 2 だった場合は z,w 成分を、
+		 *	次元数が 3 だった場合は w 成分を破棄します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa push(const fk_HVector &)
+		 */
+		bool set(int id, const fk_HVector &v);
+
+		//! fk_TexCoord 型ベクトル設定関数
+		/*!
+		 *	fk_TexCoord 型変数のデータを設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	なお、次元数が 3,4 だった場合は、それぞれの成分に 0 が設定されます。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	v	追加するベクトル
+		 *
+		 *	\sa push(const fk_TexCoord &)
+		 */
+		bool set(int id, const fk_TexCoord &v);
+
+		//! fk_Color 型ベクトル設定関数
+		/*!
+		 *	fk_Color 型変数のデータを設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	なお、次元数が 2 だった場合は b,a 成分を、
+		 *	次元数が 3 だった場合は a 成分を破棄します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	c	追加する色値
+		 *
+		 *	\sa push(const fk_Color &)
+		 */
+		bool set(int id, const fk_Color &c);
+
+		//! ベクトル設定関数1
+		/*!
+		 *	ベクトルを (x, y, z, w) の順番で設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分には 0 が設定されます。
+		 *	第3,4引数は省略可能です。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *	\param[in]	z	第3成分
+		 *	\param[in]	w	第4成分
+		 *
+		 *	\sa push(double, double, double, double)
+		 */
+		bool set(int id, double x, double y, double z = 0.0, double w = 0.0);
+
+		//! ベクトル設定関数2
+		/*!
+		 *	ベクトルを (x, y, z, w) の順番で設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分には 0 が設定されます。
+		 *	第3,4引数は省略可能です。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *	\param[in]	z	第3成分
+		 *	\param[in]	w	第4成分
+		 *
+		 *	\sa push(float, float, float, float)
+		 */
+		bool set(int id, float x, float y, float z = 0.0f, float w = 0.0f);
+
+		//! fk_Vector 型取得関数
+		/*!
+		 *	fk_Vector 型で格納データを取得します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *
+		 *	\return		要素データ
+		 *
+		 *	\sa set(int, const fk_Vector &)
+		 */
+		fk_Vector getV(int id);
+
+		//! fk_FVector 型取得関数
+		/*!
+		 *	fk_FVector 型で格納データを取得します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *
+		 *	\return		要素データ
+		 *
+		 *	\sa set(int, const fk_FVector &)
+		 */
+		fk_FVector getF(int id);
+
+		//! fk_HVector 型取得関数
+		/*!
+		 *	fk_HVector 型で格納データを取得します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *
+		 *	\return		要素データ
+		 *
+		 *	\sa set(int, const fk_HVector &)
+		 */
+		fk_HVector getHV(int id);
+
+		//! fk_TexCoord 型取得関数
+		/*!
+		 *	fk_TexCoord 型で格納データを取得します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *
+		 *	\return		要素データ
+		 *
+		 *	\sa set(int, const fk_TexCoord &)
+		 */
+		fk_TexCoord getT(int id);
+
+		//! fk_Color 型取得関数
+		/*!
+		 *	fk_Color 型で格納データを取得します。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *
+		 *	\return		要素データ
+		 *
+		 *	\sa set(int, const fk_Color &)
+		 */
+		fk_Color getC(int id);
+
+		//! データアドレス取得関数
+		/*!
+		 *	データ格納データのアドレスを取得します。
+		 *	本関数は、 fk_Shape::setShaderAttribute(std::string, int, std::vector<float> *)
+		 *	の第3引数に入力することを想定しています。
+		 *
+		 *	\return		アドレス
+		 */
 		std::vector<float> * getP(void);
 
+		//! 全体変更状態取得関数
+		/*!
+		 *	以前に reset() が呼ばれてからのデータ変更有無を取得します。
+		 *
+		 *	\return		変更があった場合 true を、なかった場合 false を返します。
+		 *
+		 *	\sa isModify(int)
+		 */
 		bool	isModify(void);
-		bool	isModify(int);
+
+		//! 個別要素変更状態取得関数
+		/*!
+		 *	以前に reset() が呼ばれてから、個別要素データ変更の有無を取得します。
+		 *
+		 *	\param[in]	id	要素ID
+		 *	
+		 *	\return		変更があった場合 true を、なかった場合 false を返します。
+		 *
+		 *	\sa isModify()
+		 */
+		bool	isModify(int id);
+
+		//! 変更状態初期化関数
+		/*!
+		 *	isModify(), isModify(int) による変更有無情報を初期化します。
+		 *
+		 *	\sa isModify(), isModify(int)
+		 */
 		void	reset(void);
 
 	private:

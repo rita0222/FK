@@ -140,10 +140,51 @@ namespace FK {
 		 */
 		bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
 
+		//! 線分本数取得関数
+		/*!
+		 *	現在登録されている線分の本数を取得します。
+		 *
+		 *	\return	線分の本数
+		 */
 		int			getSize(void);
+
+		//! 初期化関数
+		/*!
+		 *	登録されている全ての線分データを消去します。
+		 */
 		void		allClear(void);
+
+		//! 個別色設定関数1
+		/*!
+		 *	線分の色を個別に設定します。
+		 *	この色設定によって表示するには、
+		 *	fk_Model::setElementMode() で FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	eID		要素ID
+		 *	\param[in]	col		色値
+		 */
 		void		setColor(int eID, fk_Color col);
+
+		//! 個別色設定関数2
+		/*!
+		 *	登録されている線分の色を設定します。
+		 *	この色設定によって表示するには、形状を登録するモデル側で、
+		 *	fk_Model::setElementMode() 関数を用いて
+		 *	FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	eID		要素ID
+		 *	\param[in]	col		色値
+		 */
 		void		setColor(int eID, fk_Color *col);
+
+		//! 個別色取得関数
+		/*!
+		 *	個別に登録されている線分の色を取得します。
+		 *
+		 *	\param[in]	eID		要素ID
+		 *
+		 *	\return	色値
+		 */
 		fk_Color	getColor(int eID);
 
 #ifndef FK_DOXYGEN_USER_PROCESS

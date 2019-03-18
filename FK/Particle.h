@@ -163,8 +163,6 @@ namespace FK {
 		 */
 		void			setAccel(double x, double y, double z);
 
-
-
 		//! 年齢更新関数
 		/*!
 		 *	パーティクルの年齢を更新します。
@@ -176,10 +174,53 @@ namespace FK {
 		 */
 		void			handle(void);
 
+		//! 色設定関数1
+		/*!
+		 *	パーティクルの色を設定します。
+		 *	この色設定によって表示するには、形状を登録するモデル側で、
+		 *	fk_Model::setElementMode() 関数を用いて
+		 *	FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	col		色値
+		 */
 		void			setColor(fk_Color col);
+
+		//! 色設定関数2
+		/*!
+		 *	パーティクルの色を設定します。
+		 *	この色設定によって表示するには、形状を登録するモデル側で、
+		 *	fk_Model::setElementMode() 関数を用いて
+		 *	FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	col		色値
+		 */
 		void			setColor(fk_Color *col);
+
+		//! 色取得関数
+		/*!
+		 *	パーティクルの色を取得します。
+		 *
+		 *	\return		色値
+		 */
 		fk_Color		getColor(void);
+
+		//! 描画有無取得関数
+		/*!
+		 *	現在このパーティクルが描画する状態にあるかどうかを取得します。
+		 *
+		 *	\return		描画されている場合 true を、されていない場合 false を返します。
+		 */
 		bool			getDrawMode(void) const;
+
+		//! 描画有無設定関数
+		/*!
+		 *	このパーティクルの描画状態を設定します。
+		 * 	ここで false を設定してもパーティクル自体が消去されるわけではないことに注意して下さい。
+		 *	パーティクル自体を消去するには fk_ParticleSet::removeParticle()
+		 *	を用いる必要があります。
+		 *
+		 *	\param[in]	mode	描画する場合 true を、しない場合 false を入力します。
+		 */
 		void			setDrawMode(bool mode);
 
 #ifndef FK_DOXYGEN_USER_PROCESS

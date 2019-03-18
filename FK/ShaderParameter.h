@@ -157,16 +157,15 @@ namespace FK {
 		/*!
 		 *	GLSLコード内の参照テクスチャを設定します。
 		 *	ここで設定したテクスチャは、
-		 *	GLSL内では sampler2D 型 uniform 変数として扱われます。
-		 *	複数のテクスチャを設定した場合、
-		 *	GLSLコード内で変数を宣言した順番に割り振られます。
+		 *	GLSL内では sampler2D 型 uniform 変数配列である
+		 *	fk_TexID[] として扱われます。
 		 *
 		 *	\param[in]	unit
 		 *		シェーダー内でのテクスチャ ID を指定します。
-		 *		0 から 31 までを指定することができます。
+		 *		1 から 7 までを指定することができます。
+		 *		この数値が、GLSL内での fk_TexID[unit] に対応することになります。
 		 *		既に使用している ID を用いた場合、
 		 *		前にその ID を用いていたテクスチャの設定は破棄されます。
-		 *		GLSLコード内では、複数の sampler2D 変数に対し ID の若い順に割り振られます。
 		 *
 		 *	\param[in]	texture
 		 *		テクスチャオブジェクト。詳細は fk_Texture を参照して下さい。
@@ -201,7 +200,6 @@ namespace FK {
 	
 	private:
 		GLint GetLocation(GLuint, std::string);
-		//GLint GetAttrLocation(GLuint, std::string);
 
 		std::map<std::string, float> floatTable;
 		std::map<std::string, std::vector<float> > floatArrayTable;

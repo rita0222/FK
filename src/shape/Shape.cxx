@@ -200,56 +200,6 @@ vector<fk_Material> * fk_Shape::getMaterialVector(void)
 fk_RealShapeType fk_Shape::getRealShapeType(void)
 {
 	return realType;
-/*	
-	switch(getObjectType()) {
-	  case FK_INDEXFACESET:
-	  case FK_BLOCK:
-	  case FK_CIRCLE:
-	  case FK_SPHERE:
-	  case FK_PRISM:
-	  case FK_CONE:
-	  case FK_CAPSULE:
-		return FK_SHAPE_IFS;
-
-	  case FK_SOLID:
-	  case FK_POLYGON:
-	  case FK_POLYLINE:
-	  case FK_CLOSEDLINE:
-		return FK_SHAPE_SOLID;
-
-	  case FK_RECTTEXTURE:
-	  case FK_TRITEXTURE:
-	  case FK_MESHTEXTURE:
-	  case FK_IFSTEXTURE:
-	  case FK_ARTEXTURE:
-		return FK_SHAPE_TEXTURE;
-
-	  case FK_POINT:
-	  case FK_PARTICLESET:
-		return FK_SHAPE_POINT;
-
-	  case FK_LINE:
-		  return FK_SHAPE_LINE;
-		  
-	  case FK_CURVE:
-	  case FK_BEZCURVE:
-	  case FK_BSPLCURVE:
-		return FK_SHAPE_CURVE;
-
-	  case FK_SURFACE:
-	  case FK_BEZSURFACE:
-	  case FK_BSPLSURFACE:
-	  case FK_GREGORY:
-		return FK_SHAPE_SURFACE;
-		
-	  case FK_LIGHT:
-		return FK_SHAPE_LIGHT;
-
-	  default:
-		break;
-	}
-	return FK_SHAPE_OTHER;
-*/
 }
 
 void fk_Shape::SetPointVAO(GLuint argVAO)

@@ -781,6 +781,7 @@ namespace FK {
 		static void				clearBrowser(void);
 		//@}
 
+#ifndef FK_DOXYGEN_USER_PROCESS
 		//! \name 立体視モード制御関数
 		//@{
 		//! 立体視モード設定関数
@@ -822,7 +823,8 @@ namespace FK {
 		 */
 		bool	getOGLStereoMode(void);
 		//@}
-
+#endif
+		
 	private:
 
 		fk_Image				snapBuffer;

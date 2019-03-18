@@ -131,7 +131,7 @@ namespace FK {
 
 		//! 個別頂点描画状態参照関数
 		/*!
-		 *	個別の頂点に対し、描画状況をを取得します。
+		 *	個別の頂点に対し、描画状況を取得します。
 		 *
 		 *	\param[in]	ID		頂点ID
 		 *
@@ -141,8 +141,36 @@ namespace FK {
 		 */
 		bool			getDrawMode(int ID);
 
+		//! 個別色設定関数1
+		/*!
+		 *	点の色を個別に設定します。
+		 *	この色設定によって表示するには、
+		 *	fk_Model::setElementMode() で FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	vID		要素ID
+		 *	\param[in]	col		色値
+		 */
 		void			setColor(int vID, fk_Color col);
+
+		//! 個別色設定関数2
+		/*!
+		 *	点の色を個別に設定します。
+		 *	この色設定によって表示するには、
+		 *	fk_Model::setElementMode() で FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	vID		要素ID
+		 *	\param[in]	col		色値
+		 */
 		void			setColor(int vID, fk_Color *col);
+
+		//! 個別色取得関数
+		/*!
+		 *	個別に登録されている点の色を取得します。
+		 *
+		 *	\param[in]	vID		要素ID
+		 *
+		 *	\return	色値
+		 */
 		fk_Color		getColor(int vID);
 
 		//! 点群全消去関数

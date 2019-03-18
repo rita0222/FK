@@ -240,7 +240,27 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(void);
 
+		//! 要素モード設定関数
+		/*!
+		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
+		 *	モードには以下のものがあります。
+		 *	- FK_ELEM_NONE:		何も描画しません。
+		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
+		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	.
+		 *
+		 *	\param[in]	mode	設定モード
+		 */
 		void			setElementMode(fk_ElementMode mode);
+
+		//! 要素モード設定関数
+		/*!
+		 *	表示の際の優先モードを取得します。
+		 *
+		 *	\return	設定モード
+		 *
+		 *	\sa setElementMode()
+		 */
 		fk_ElementMode	getElementMode(void);
 
 		//! 透過処理設定関数
@@ -395,7 +415,30 @@ namespace FK {
 		 */
 		fk_DrawMode		getDrawMode(int ID);
 
+		//! 形状別要素モード設定関数
+		/*!
+		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
+		 *	モードには以下のものがあります。
+		 *	- FK_ELEM_NONE:		何も描画しません。
+		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
+		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	.
+		 *
+		 *	\param[in]	ID		形状 ID
+		 *	\param[in]	mode	設定モード
+		 */
 		void			setElementMode(int ID, fk_ElementMode mode);
+
+		//! 形状別要素モード設定関数
+		/*!
+		 *	表示の際の優先モードを取得します。
+		 *
+		 *	\param[in]	ID		形状 ID
+		 *
+		 *	\return	設定モード
+		 *
+		 *	\sa setElementMode()
+		 */
 		fk_ElementMode	getElementMode(int ID);
 		
 		//! 形状稜線描画幅設定関数
