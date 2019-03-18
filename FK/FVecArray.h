@@ -6,17 +6,56 @@
 namespace FK {
 
 	class fk_Color;
-	
+
+	//! attribute 変数用ベクトル管理クラス
+	/*!
+	 *	このクラスは、シェーダー内の attribute 変数として使用することを念頭においた、
+	 *	ベクトルデータ格納用のクラスです。
+	 *	このクラスは fk_Vector のような各種ベクトル演算は利用できませんが、
+	 *	FK 内で作成した様々なベクトルデータを効率的に格納し、
+	 *	シェーダー側に転送する機能を提供します。
+	 *	なお、内部では全て float 型浮動小数点数として保存されます。
+	 *
+	 *	シェーダー内で attribute 変数として使用するには、大きく4つの処理が必要です。
+	 *
+	 *	-# クラス内の各種設定やデータ格納を行っておく。
+	 *	-# fk_Shape::setShaderAttribute(std::string, int, std::vector<float> *) を用いて
+	 *		シェーダー内の変数名を設定しておく。その際、第3引数の getP() を利用する。
+	 *	-# fk_ShaderParameter::reserveAttribute() により、シェーダー内での変数名を設定する。
+	 *	-# 格納データの変更があったら fk_Shape::modifyAttribute() を呼び出す。
+	 *	.
+	 *
+	 *	\ sa fk_Vector, fk_HVector, fk_TexCoord, fk_Color, fk_Shape, fk_ShaderParameter
+	 */
+
 	class fk_FVecArray {
 
 	public:
+		//! コンストラクタ
 		fk_FVecArray(void);
-		//fk_FVecArray(int);
 
+		//! デストラクタ
 		~fk_FVecArray();
 
-		void setDim(int);
+		//! 次元設定関数
+		/*!
+		 *	格納するベクトルデータの次元数を設定します。
+		 *	次元は 1 から 4 まで設定が可能で、
+		 *	シェーダープログラム内での型はそれぞれ float, vec2, vec3, vec4 となります。
+		 *	デフォルトでの次元数は 3 に設定されています。
+		 *
+		 *	\param[in]	dim		次元数
+		 */
+		void setDim(int dim);
+
+		//! 次元参照関数
+		/*!
+		 *	現在設定されている次元数を参照します。
+		 *
+		 *	\return 次元数
+		 */
 		int getDim(void);
+
 		int getSize(void);
 		void resize(int);
 		void clear(void);

@@ -230,7 +230,7 @@ void fk_Model::setDrawMode(const fk_DrawMode argMode)
 	if(drawMode == argMode) return;
 	drawMode = argMode;
 	if(shape != nullptr) {
-		shape->forceUpdateAttr();
+		shape->ForceUpdateAttr();
 	}
 	return;
 }

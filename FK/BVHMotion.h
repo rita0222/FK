@@ -7,6 +7,7 @@
 
 namespace FK {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
 	class fk_BVHBase : public fk_ParserBase {
 	public:
 		fk_BVHBase(void);
@@ -19,9 +20,8 @@ namespace FK {
 		virtual double getOneFrameTime(void) = 0;
 		virtual fk_Vector getPos(int, int) = 0;
 		virtual fk_Angle getRot(int, int) = 0;
-		
 	};
-
+#endif
 	//! BVH 形式のモーションデータを読み込み、保持するクラス
 	/*!
 	 *	このクラスは BVH 形式のモーションデータを読み込み、制御を行います。

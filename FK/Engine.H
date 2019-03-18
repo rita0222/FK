@@ -4,7 +4,6 @@
 // for FK Header.
 #include <FK/Base.h>
 #include <FK/OpenGL.H>
-#include <FK/PickData.h>
 #include <FK/Matrix.h>
 #include <FK/Image.h>
 #include <FK/DList.h>
@@ -33,7 +32,7 @@ namespace FK {
 		bool				GetProjectPosition(double, double,
 											   double, fk_Vector *);
 		bool				GetWindowPosition(fk_Vector, fk_Vector *);
-		void				GetPickData(fk_PickData *, int, int, int);
+		//void				GetPickData(fk_PickData *, int, int, int);
 
 		bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
 
@@ -58,7 +57,7 @@ namespace FK {
 		int							dLinkID;
 		int							wSize;
 		int							hSize;
-		GLuint						selectBuf[FK_PICKDATAMAX*5];
+		//GLuint						selectBuf[FK_PICKDATAMAX*5];
 		bool						resizeFlag;
 		fk_BlendFactor				srcFactor, dstFactor;
 		bool						depthRead, depthWrite;

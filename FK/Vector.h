@@ -40,6 +40,7 @@ namespace FK {
 	 *	4次元のベクトルを扱う場合は fk_HVector を参照して下さい。
 	 *	成分を float 型として格納する場合は fk_FVector を参照して下さい。
 	 *	任意次元のベクトルを扱う場合は fk_GenVector を参照して下さい。
+	 *
 	 *	\sa fk_Matrix, fk_HVector, fk_FVector, fk_GenVector
 	 */
 

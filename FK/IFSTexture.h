@@ -312,7 +312,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::vector< std::vector<int> > * GetCommonList(void);
-		void	forceUpdateAttr(void);
+		void	ForceUpdateAttr(void);
 #endif
 	   
 	private:

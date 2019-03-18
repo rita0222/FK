@@ -227,7 +227,7 @@ fk_Color fk_Line::getColor(int argID)
 	return colArray.get(argID);
 }
 
-void fk_Line::flushAttr(void)
+void fk_Line::FlushAttr(void)
 {
 	if(posArray.isModify() == true) {
 		modifyAttribute(vertexName);

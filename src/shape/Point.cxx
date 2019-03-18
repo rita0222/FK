@@ -225,7 +225,7 @@ bool fk_Point::getDrawMode(int argID)
 	return false;
 }
 
-void fk_Point::flushAttr(void)
+void fk_Point::FlushAttr(void)
 {
 	if(posArray.isModify() == true) {
 		modifyAttribute(vertexName);

@@ -1331,7 +1331,7 @@ namespace FK {
 
 		int		getElemMaterialID(int);
 		bool	setElemMaterialID(int, int);
-		void	forceUpdateAttr(void);
+		void	ForceUpdateAttr(void);
 
 		fk_Vector	getPNorm(int faceID, int order = 0);
 		fk_Vector	getVNorm(int vertexID, int order = 0);

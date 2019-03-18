@@ -192,11 +192,11 @@ namespace FK {
 		void setShaderAttribute(std::string, int, std::vector<float> *);
 		void setShaderIndex(std::string, std::vector<GLuint> *);
 		void modifyAttribute(std::string);
-		void finishSetVBO(void);
-		virtual void forceUpdateAttr(void);
-		virtual void flushAttr(void);
-		
+
 #ifndef FK_DOXYGEN_USER_PROCESS
+		void FinishSetVBO(void);
+		virtual void ForceUpdateAttr(void);
+		virtual void FlushAttr(void);
 
 		void	SetPaletteData(fk_Palette *pal);
 		void	setPaletteData(fk_Palette *pal);

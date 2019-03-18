@@ -401,7 +401,7 @@ void fk_Shape::modifyAttribute(string argName)
 	attrModify[argName] = true;
 }
 
-void fk_Shape::forceUpdateAttr(void)
+void fk_Shape::ForceUpdateAttr(void)
 {
 	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
 		itr->second = true;
@@ -409,11 +409,11 @@ void fk_Shape::forceUpdateAttr(void)
 	vboInitFlg = false;
 }
 
-void fk_Shape::finishSetVBO(void)
+void fk_Shape::FinishSetVBO(void)
 {
 	vboInitFlg = true;
 }
 
-void fk_Shape::flushAttr(void)
+void fk_Shape::FlushAttr(void)
 {
 }

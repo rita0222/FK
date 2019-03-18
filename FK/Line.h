@@ -147,7 +147,9 @@ namespace FK {
 		void		setColor(int eID, fk_Color *col);
 		fk_Color	getColor(int eID);
 
-		void		flushAttr(void);
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void		FlushAttr(void);
+#endif
 
 	private:
 		fk_FVecArray	posArray;

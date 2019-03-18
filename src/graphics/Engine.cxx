@@ -314,12 +314,12 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 	fk_Shape * modelShape = argModel->getShape();
 	if(modelShape == nullptr) return;
 
-	modelShape->flushAttr();
+	modelShape->FlushAttr();
 	fk_DrawBase::SetModel(argModel);
 		
 	SetBlendMode(argModel);
 	DrawShapeObj(argModel);
-	modelShape->finishSetVBO();
+	modelShape->FinishSetVBO();
 
 	return;
 }

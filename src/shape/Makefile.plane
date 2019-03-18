@@ -46,7 +46,6 @@ LIBSRCS		= \
 			Operation.cxx \
 			ParserBase.cxx \
 			Particle.cxx \
-			PickData.cxx \
 			Point.cxx \
 			Polygon.cxx \
 			Prism.cxx \

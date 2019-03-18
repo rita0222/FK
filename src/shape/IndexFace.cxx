@@ -1719,9 +1719,9 @@ void fk_IndexFaceSet::FaceIBOSetup(void)
 	}
 }
 
-void fk_IndexFaceSet::forceUpdateAttr(void)
+void fk_IndexFaceSet::ForceUpdateAttr(void)
 {
-	fk_Shape::forceUpdateAttr();
+	fk_Shape::ForceUpdateAttr();
 	edgeIndexFlg = true;
 	faceIndexFlg = true;
 }

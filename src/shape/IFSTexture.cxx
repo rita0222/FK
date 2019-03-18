@@ -404,9 +404,9 @@ void fk_IFSTexture::setBVHMotion(fk_BVHBase *argBVH)
 	return;
 }
 
-void fk_IFSTexture::forceUpdateAttr(void)
+void fk_IFSTexture::ForceUpdateAttr(void)
 {
-	fk_Shape::forceUpdateAttr();
-	ifs->forceUpdateAttr();
+	fk_Shape::ForceUpdateAttr();
+	ifs->ForceUpdateAttr();
 	StatusUpdate();
 }
