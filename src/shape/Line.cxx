@@ -77,6 +77,8 @@ using namespace FK;
 
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {
+	posArray.setDim(3);
+	colArray.setDim(4);
 	realType = FK_SHAPE_LINE;
 	SetObjectType(FK_LINE);
 	allClear();
@@ -224,7 +226,7 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 
 fk_Color fk_Line::getColor(int argID)
 {
-	return colArray.get(argID);
+	return colArray.getC(argID);
 }
 
 void fk_Line::FlushAttr(void)

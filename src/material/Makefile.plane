@@ -1,7 +1,6 @@
 BASENAME	= material
 
 LIBSRCS		= \
-			ColorArray.cxx \
 			MatExample.cxx \
 			Material.cxx \
 			Palette.cxx

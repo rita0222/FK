@@ -79,6 +79,8 @@ using namespace FK;
 
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
+	posArray.setDim(3);
+	colArray.setDim(4);
 	realType = FK_SHAPE_POINT;
 	SetObjectType(FK_POINT);
 	allClear();
@@ -208,7 +210,7 @@ void fk_Point::setColor(int argID, fk_Color *argCol)
 
 fk_Color fk_Point::getColor(int argID)
 {
-	return colArray.get(argID);
+	return colArray.getC(argID);
 }
 
 void fk_Point::setDrawMode(int argID, bool argMode)

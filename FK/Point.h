@@ -2,7 +2,6 @@
 #define __FK_POINT_HEADER__
 
 #include <FK/FVecArray.h>
-#include <FK/ColorArray.h>
 #include <FK/Array.H>
 #include <FK/Shape.h>
 
@@ -162,7 +161,7 @@ namespace FK {
 
 	private:
 		fk_FVecArray		posArray;
-		fk_ColorArray		colArray;
+		fk_FVecArray		colArray;
 		std::vector<int>	aliveArray;
 
 		bool	MakePoint(std::vector<fk_Vector> *);
