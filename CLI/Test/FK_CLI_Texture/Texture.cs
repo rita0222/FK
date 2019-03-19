@@ -13,17 +13,12 @@ namespace FK_CLI_Texture
 		{
 			var tex = new fk_MeshTexture();
 
-			if(tex.ReadBMP("samp.bmp") == false) {
+			if(tex.ReadBMP("ferret.bmp") == false) {
 				Console.WriteLine("Image File Read Error.");
 				return;
 			}
 
 			// テクスチャ画像を置く位置の設定
-			tex.TriNum = 4;
-
-
-			// テクスチャ画像を置く位置の設定
-
 			tex.SetVertexPos(0, 0, -100.0, 100.0, 0.0);
 			tex.SetVertexPos(0, 1, -100.0, 0.0, 0.0);
 			tex.SetVertexPos(0, 2, 0.0, 100.0, 0.0);
@@ -54,7 +49,7 @@ namespace FK_CLI_Texture
 			fk_Material.InitDefault();
 			var viewer = new fk_ShapeViewer(600, 600);
 			viewer.Shape = tex;
-			viewer.SetMaterial(0, fk_Material.TrueWhite);
+			viewer.SetMaterial(0, fk_Material.White);
 
 			while(viewer.Draw() == true) { }
 		}

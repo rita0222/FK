@@ -23,7 +23,7 @@ namespace FK_CLI_TextImage
 
 			str.Convert("FK日本語");
 			texture.Image = textImage;
-			if(textImage.InitFont("mona.ttf") == false) {
+			if(textImage.InitFont("rm1b.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
 			textImage.DPI = 96;
