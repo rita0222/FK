@@ -22,5 +22,5 @@ void PointIFSFS()
 void main()
 {
 	pointDrawFunc();
-    fragment = put_color;
+	fk_Fragment = put_color;
 }

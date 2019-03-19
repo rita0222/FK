@@ -164,5 +164,5 @@ vec4 Decal()
 
 void main()
 {
-	fragment = textureRendSelect();
+	fk_Fragment = textureRendSelect();
 }
