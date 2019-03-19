@@ -317,22 +317,6 @@ unsigned int fk_ParticleSet::getMaxSize(void) const
 {
 	return maxNum;
 }
-/*
-void fk_ParticleSet::genMethod(fk_Particle *)
-{
-	return;
-}
-
-void fk_ParticleSet::allMethod(void)
-{
-	return;
-}
-
-void fk_ParticleSet::indivMethod(fk_Particle *)
-{
-	return;
-}
-*/
 
 void fk_ParticleSet::setAllMode(bool argMode)
 {
