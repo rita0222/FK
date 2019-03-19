@@ -21,7 +21,7 @@ namespace FK_CLI_Sprite
 			int count;
 			string str, space;
  
-			if(sprite.InitFont("mona.ttf") == false) {
+			if(sprite.InitFont("rm1b.ttf") == false) {
 				System.Console.WriteLine("Font Error");
 			}
 
