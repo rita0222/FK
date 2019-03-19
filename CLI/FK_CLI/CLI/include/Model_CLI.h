@@ -55,6 +55,13 @@ namespace FK_CLI
 		READ_AND_WRITE	= 3		//!< デプスバッファの参照と書き込みを共に行います(初期値)
 	};
 
+	// 描画優先モード型
+	public enum class fk_ElementMode : unsigned char {
+		NONE = 0, //!< 描画なし
+		MODEL = 1, //!< モデル設定優先
+		ELEMENT = 2 //!< 要素個別設定優先
+	};
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 	public delegate void fk_DrawCallback();
 
@@ -269,7 +276,6 @@ namespace FK_CLI
 			double get();
 		}
 
-
 		//@}
 
 		//! \name 描画制御関連プロパティ
@@ -302,37 +308,18 @@ namespace FK_CLI
 			fk_DrawMode get();
 		}
 
-		//! マテリアルモードプロパティ
+		//! 要素モード関連プロパティ
 		/*!
-		 *	形状中の各要素を描画する際に、
-		 *	どの要素のマテリアルを採用するかというモードの参照・設定を行います。
-		 *	与えられる値は以下の3種類です。
-		 *	- fk_MaterialMode.CHILD
-		 *	- fk_MaterialMode.PARENT
-		 *	- fk_MaterialMode.NONE
-		 *
-		 *	マテリアルの採用は、以下のような優先順で決定します。
-		 *	-# fk_Model のマテリアルモードが fk_MaterialMode.CHILD の場合、
-		 *		モデルのマテリアルが採用されます。
-		 *		fk_MaterialMode.NONE の場合は描画されません。
-		 *		fk_MaterialMode.PARENT の場合は以下の条件に従います。
-		 *	-# fk_Shape の派生クラスにてマテリアルモードが
-		 *		fk_MaterialMode.CHILD になっている場合、形状のマテリアルが採用されます。
-		 *		fk_MaterialMode.NONE の場合は描画されません。
-		 *		fk_MaterialMode.PARENT の場合は以下の条件に従います。
-		 *		(fk_Shape::MaterialMode を参照して下さい。)
-		 *	-# 各位相要素でのマテリアルモードが、
-		 *		fk_MaterialMode.CHILD になっている場合は個別のマテリアルが採用されます。
-		 *		fk_MaterialMode.NONE の場合は描画されません。
-		 *		fk_MaterialMode.PARENT の場合はモデルのマテリアルが採用されます。
-		 *		(fk_TopologyMaterial::MaterialMode を参照して下さい。)
-		 *
-		 *
-		 *	\sa fk_Shape::MaterialMode, fk_TopologyMaterial::MaterialMode
+		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
+		 *	モードには以下のものがあります。
+		 *	- FK_ELEM_NONE:		何も描画しません。
+		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
+		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	.
 		 */
-		property fk_MaterialMode MaterialMode {
-			void set(fk_MaterialMode);
-			fk_MaterialMode get();
+		property fk_ElementMode ElementMode {
+			void set(fk_ElementMode);
+			fk_ElementMode get();
 		}
 
 		//! スムースモードプロパティ

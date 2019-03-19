@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <FK/Particle.h>
+#include <FK/ParticleSet.h>
 #include "Particle_CLI.h"
 #include "Material_CLI.h"
 #include "Shape_CLI.h"

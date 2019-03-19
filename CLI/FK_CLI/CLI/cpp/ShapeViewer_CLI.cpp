@@ -80,6 +80,42 @@ namespace FK_CLI {
 		return static_cast<fk_DrawMode>(GetP()->getDrawMode());
 	}
 
+	void fk_ShapeViewer::ElementMode::set(fk_ElementMode argMode)
+	{
+		switch (argMode) {
+		case fk_ElementMode::NONE:
+			GetP()->setElementMode(::FK::FK_ELEM_NONE);
+			break;
+
+		case fk_ElementMode::MODEL:
+			GetP()->setElementMode(::FK::FK_ELEM_MODEL);
+			break;
+
+		case fk_ElementMode::ELEMENT:
+			GetP()->setElementMode(::FK::FK_ELEM_ELEMENT);
+			break;
+
+		default:
+			break;
+		}
+		return;
+	}
+
+	fk_ElementMode fk_ShapeViewer::ElementMode::get(void)
+	{
+		switch (GetP()->getElementMode()) {
+		case ::FK::FK_ELEM_MODEL:
+			return fk_ElementMode::MODEL;
+
+		case ::FK::FK_ELEM_ELEMENT:
+			return fk_ElementMode::ELEMENT;
+
+		default:
+			break;
+		}
+		return fk_ElementMode::NONE;
+	}
+
 	void fk_ShapeViewer::BlendStatus::set(bool argMode)
 	{
 		GetP()->setBlendStatus(argMode);
@@ -203,6 +239,43 @@ namespace FK_CLI {
 	fk_DrawMode fk_ShapeViewer::GetDrawMode(int argID)
 	{
 		return static_cast<fk_DrawMode>(GetP()->getDrawMode(argID));
+	}
+
+	void fk_ShapeViewer::SetElementMode(int argID, fk_ElementMode argMode)
+	{
+		switch (argMode) {
+		case fk_ElementMode::NONE:
+			GetP()->setElementMode(argID, ::FK::FK_ELEM_NONE);
+			break;
+
+		case fk_ElementMode::MODEL:
+			GetP()->setElementMode(argID, ::FK::FK_ELEM_MODEL);
+			break;
+
+		case fk_ElementMode::ELEMENT:
+			GetP()->setElementMode(argID, ::FK::FK_ELEM_ELEMENT);
+			break;
+
+		default:
+			break;
+		}
+		return;		
+	}
+
+	fk_ElementMode fk_ShapeViewer::GetElementMode(int argID)
+	{
+		switch (GetP()->getElementMode(argID)) {
+		case ::FK::FK_ELEM_MODEL:
+			return fk_ElementMode::MODEL;
+
+		case ::FK::FK_ELEM_ELEMENT:
+			return fk_ElementMode::ELEMENT;
+
+		default:
+			break;
+		}
+
+		return fk_ElementMode::NONE;
 	}
 
 	void fk_ShapeViewer::SetLineWidth(int argID, double argWidth)

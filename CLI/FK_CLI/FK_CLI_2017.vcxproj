@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
+    <ClCompile Include="..\..\src\material\Color.cxx" />
     <ClCompile Include="..\..\src\material\Material.cxx" />
     <ClCompile Include="..\..\src\material\MatExample.cxx" />
     <ClCompile Include="..\..\src\material\Palette.cxx" />
@@ -95,6 +96,7 @@
     <ClCompile Include="..\..\src\shape\Operation.cxx" />
     <ClCompile Include="..\..\src\shape\ParserBase.cxx" />
     <ClCompile Include="..\..\src\shape\Particle.cxx" />
+    <ClCompile Include="..\..\src\shape\ParticleSet.cxx" />
     <ClCompile Include="..\..\src\shape\Point.cxx" />
     <ClCompile Include="..\..\src\shape\Polygon.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />
@@ -215,6 +217,7 @@
     <ClInclude Include="..\..\FK\BVHMotion.h" />
     <ClInclude Include="..\..\FK\Capsule.h" />
     <ClInclude Include="..\..\FK\Circle.h" />
+    <ClInclude Include="..\..\FK\Color.h" />
     <ClInclude Include="..\..\FK\Command.H" />
     <ClInclude Include="..\..\FK\Cone.h" />
     <ClInclude Include="..\..\FK\Curve.h" />
@@ -281,6 +284,7 @@
     <ClInclude Include="..\..\FK\ParserBase.H" />
     <ClInclude Include="..\..\FK\ParserData.h" />
     <ClInclude Include="..\..\FK\Particle.h" />
+    <ClInclude Include="..\..\FK\ParticleSet.h" />
     <ClInclude Include="..\..\FK\Plane.h" />
     <ClInclude Include="..\..\FK\Point.h" />
     <ClInclude Include="..\..\FK\PointDraw.H" />

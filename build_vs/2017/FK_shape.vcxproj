@@ -64,6 +64,7 @@
     <ClCompile Include="..\..\src\shape\Operation.cxx" />
     <ClCompile Include="..\..\src\shape\ParserBase.cxx" />
     <ClCompile Include="..\..\src\shape\Particle.cxx" />
+    <ClCompile Include="..\..\src\shape\ParticleSet.cxx" />
     <ClCompile Include="..\..\src\shape\Point.cxx" />
     <ClCompile Include="..\..\src\shape\Polygon.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />

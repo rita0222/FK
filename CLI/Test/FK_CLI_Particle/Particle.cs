@@ -85,7 +85,9 @@ namespace FK_CLI_Particle
 			viewer.SetDrawMode(3, fk_DrawMode.POLYMODE);
 			viewer.SetShape(2, particle.Shape);
 			viewer.SetDrawMode(2, fk_DrawMode.POINTMODE);
-			viewer.Scale = 10.0;
+            viewer.SetElementMode(2, fk_ElementMode.MODEL);
+            viewer.SetVertexColor(2, new fk_Color(1.0, 0.0, 0.0));
+            viewer.Scale = 10.0;
  
 			while(viewer.Draw() == true) {
 				for(int i = 0; i < 3; ++i) { // 3倍速再生

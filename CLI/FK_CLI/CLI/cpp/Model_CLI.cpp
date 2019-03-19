@@ -183,33 +183,41 @@ namespace FK_CLI {
 		return static_cast<fk_DrawMode>(GetP()->getDrawMode());
 	}
 
-	void fk_Model::MaterialMode::set(fk_MaterialMode argMode)
+	void fk_Model::ElementMode::set(fk_ElementMode argMode)
 	{
-		switch(argMode) {
-			case fk_MaterialMode::PARENT:
-				GetP()->setMaterialMode(::FK::FK_PARENT_MODE);
-				break;
+		switch (argMode) {
+		case fk_ElementMode::NONE:
+			GetP()->setElementMode(::FK::FK_ELEM_NONE);
+			break;
 
-			case fk_MaterialMode::CHILD:
-				GetP()->setMaterialMode(::FK::FK_CHILD_MODE);
-				break;
+		case fk_ElementMode::MODEL:
+			GetP()->setElementMode(::FK::FK_ELEM_MODEL);
+			break;
 
-			default:
-				GetP()->setMaterialMode(::FK::FK_NONE_MODE);
-				break;
+		case fk_ElementMode::ELEMENT:
+			GetP()->setElementMode(::FK::FK_ELEM_ELEMENT);
+			break;
+
+		default:
+			break;
 		}
+		return;
 	}
 
-	fk_MaterialMode fk_Model::MaterialMode::get(void)
+	fk_ElementMode fk_Model::ElementMode::get(void)
 	{
-		switch(GetP()->getMaterialMode()) {
-		case ::FK::FK_PARENT_MODE:
-				return fk_MaterialMode::PARENT;
+		switch (GetP()->getElementMode()) {
+		case ::FK::FK_ELEM_MODEL:
+			return fk_ElementMode::MODEL;
 
-		case ::FK::FK_CHILD_MODE:
-				return fk_MaterialMode::CHILD;
+		case ::FK::FK_ELEM_ELEMENT:
+			return fk_ElementMode::ELEMENT;
+
+		default:
+			break;
 		}
-		return fk_MaterialMode::NONE;
+
+		return fk_ElementMode::NONE;
 	}
 
 	void fk_Model::SmoothMode::set(bool argMode)
