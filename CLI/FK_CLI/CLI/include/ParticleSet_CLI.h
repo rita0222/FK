@@ -243,60 +243,6 @@ namespace FK_CLI
 		 */
 		fk_Particle^ GetNextParticle(fk_Particle^ p);
 
-		//! カラーパレット設定1
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::SetColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	col		色
-		 */
-		void SetColorPalette(int ID, fk_Color^ col);
-
-		//! カラーパレット設定2
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	色成分の最小値は 0、最大値は 1 です。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	R		色のR(赤)成分
-		 *	\param[in]	G		色のG(緑)成分
-		 *	\param[in]	B		色のB(青)成分
-		 */
-		void SetColorPalette(int ID, float R, float G, float B);
-
-		//! カラーパレット設定3
-		/*!
-		 *	パーティクル集合内のカラーパレットに色を設定します。
-		 *	色成分の最小値は 0、最大値は 1 です。
-		 *	ここで設定した色をパーティクルに反映するには、
-		 *	fk_Particle::setColorID() を用います。
-		 *
-		 *	\note
-		 *		既にパーティクルに色 ID が設定されている状態で、
-		 *		カラーパレット側の色を変更した場合、
-		 *		パーティクルの色に即座に反映されます。
-		 *
-		 *	\param[in]	ID		色ID
-		 *	\param[in]	R		色のR(赤)成分
-		 *	\param[in]	G		色のG(緑)成分
-		 *	\param[in]	B		色のB(青)成分
-		 */
-		void SetColorPalette(int ID, double R, double G, double B);
-
 		//! 個別初期化用抽象メソッド
 		/*!
 		 *	このメソッドは、 NewParticle() によってパーティクルが生成されたときに、

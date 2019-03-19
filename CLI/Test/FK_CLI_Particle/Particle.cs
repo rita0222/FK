@@ -19,10 +19,6 @@ namespace FK_CLI_Particle
             MaxSize = 1000;                      // パーティクルの最大数設定
             IndivMode = true;                    // 個別処理 (IndivMethod) を有効にしておく。
 			AllMode = true;                      // 全体処理 (AllMethod) を有効にしておく。
-			for(int i = 0; i < MaxSize; i++) {
-                // 各パーティクルごとの初期色を設定
-				SetColorPalette(i, 0.0, 1.0, 0.6);
-			}
             rand = new Random();                 // 乱数発生器の初期化
 			red = new fk_Color(1.0, 0.0, 0.0);
 			blue = new fk_Color(0.0, 0.0, 0.5);
@@ -38,9 +34,6 @@ namespace FK_CLI_Particle
 			double y = rand.NextDouble()*50.0 - 25.0;
 			double z = rand.NextDouble()*50.0 - 25.0;
             P.Position = new fk_Vector(50.0, y, z);
-
-            // パーティクルの色IDを設定
-            P.ColorID = P.ID;
 		}
 
         // ここの毎ループ時の全体処理を記述する。
@@ -71,15 +64,6 @@ namespace FK_CLI_Particle
 			vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
 			P.Velocity = vec;
 
-            // パーティクルの色を計算。パーティクル速度が
-            // minSpeed ～ maxSpeed の場合は青と赤をブレンドする。
-            double speed = vec.Dist();
-			double t = (speed - minSpeed)/(maxSpeed - minSpeed);
-			if(t > 1.0) t = 1.0;
-			if(t < 0.0) t = 0.0;
-			fk_Color newCol = (1.0 - t)*blue + t*red;  // 色値の線形補間
-			SetColorPalette(P.ID, newCol);
-
             // パーティクルの x 成分が -50 以下になったら消去
             if(pos.x < -50.0) {
 				RemoveParticle(P);
@@ -105,7 +89,7 @@ namespace FK_CLI_Particle
  
 			while(viewer.Draw() == true) {
 				for(int i = 0; i < 3; ++i) { // 3倍速再生
-					//particle.Handle(); // パーティクルを 1 ステップ実行する。
+					particle.Handle(); // パーティクルを 1 ステップ実行する。
 				}
 			}
 

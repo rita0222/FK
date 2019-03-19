@@ -5,6 +5,8 @@
 #include <FK/Particle.h>
 #include "Attribute_CLI.h"
 #include "Vector_CLI.h"
+#include "Material_CLI.h"
+
 
 namespace FK_CLI
 {
@@ -110,9 +112,9 @@ namespace FK_CLI
 		 *
 		 *	\sa fk_ParticleSet::SetColorPalette()
 		 */
-		property int ColorID {
-			int get();
-			void set(int);
+		property fk_Color^ Color {
+			fk_Color^ get();
+			void set(fk_Color^);
 		}
 
 		//! 描画有無効プロパティ

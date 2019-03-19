@@ -64,14 +64,15 @@ namespace FK_CLI {
 		GetP()->setAccel(argAcc);
 	}
 
-	int fk_Particle::ColorID::get(void)
+	fk_Color^ fk_Particle::Color::get(void)
 	{
-		return GetP()->getColorID();
+		return gcnew fk_Color(GetP()->getColor());
 	}
 
-	void fk_Particle::ColorID::set(int argID)
+	void fk_Particle::Color::set(fk_Color^ argColor)
 	{
-		GetP()->setColorID(argID);
+		if (!argColor) return;
+		GetP()->setColor(argColor);
 	}
 
 	bool fk_Particle::DrawMode::get(void)

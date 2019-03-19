@@ -138,22 +138,6 @@ namespace FK_CLI
 		return P;
 	}
 
-	void fk_ParticleSet::SetColorPalette(int argID, fk_Color^ argCol)
-	{
-		if(!argCol) return;
-		GetP()->setColorPalette(argID, *argCol->pCol);
-	}
-
-	void fk_ParticleSet::SetColorPalette(int argID, float argR, float argG, float argB)
-	{
-		GetP()->setColorPalette(argID, argR, argG, argB);
-	}
-
-	void fk_ParticleSet::SetColorPalette(int argID, double argR, double argG, double argB)
-	{
-		GetP()->setColorPalette(argID, argR, argG, argB);
-	}
-
 	void fk_ParticleSet::Handle(void)
 	{
 		if(AllMode == true) {

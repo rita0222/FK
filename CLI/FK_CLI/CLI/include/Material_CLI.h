@@ -25,12 +25,13 @@ namespace FK_CLI
 	internal:
 		bool dFlg;
 		::FK::fk_Color *pCol;
-
 		::FK::fk_Color * GetP(void);
+		static operator ::FK::fk_Color(fk_Color^);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		fk_Color(bool argNewFlg);
+		fk_Color(::FK::fk_Color);
 #endif		
 
 		//! コンストラクタ1

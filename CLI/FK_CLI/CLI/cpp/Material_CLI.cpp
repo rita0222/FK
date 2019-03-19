@@ -13,6 +13,18 @@ namespace FK_CLI {
 		pCol = new ::FK::fk_Color();
 	}
 
+	fk_Color::operator ::FK::fk_Color(fk_Color ^argC)
+	{
+		::FK::fk_Color C(argC->r, argC->g, argC->b, argC->a);
+		return C;
+	}
+
+	fk_Color::fk_Color(::FK::fk_Color argC) : dFlg(true)
+	{
+		pCol = new ::FK::fk_Color();
+		pCol->init(argC.col[0], argC.col[1], argC.col[2], argC.col[3]);
+	}
+
 	fk_Color::fk_Color(bool argNewFlg) : dFlg(argNewFlg)
 	{
 		if(argNewFlg == true) pCol = new ::FK::fk_Color();
