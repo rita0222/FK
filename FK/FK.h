@@ -11,7 +11,7 @@
 #include <FK/Prism.h>
 #include <FK/Cone.h>
 #include <FK/Capsule.h>
-#include <FK/Particle.h>
+#include <FK/ParticleSet.h>
 #include <FK/TextImage.h>
 #include <FK/RectTexture.h>
 #include <FK/TriTexture.h>

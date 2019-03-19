@@ -71,132 +71,181 @@
  ****************************************************************************/
 
 #define FK_DEF_SIZETYPE
-#include <FK/Particle.h>
-#include <FK/Point.h>
+#include <FK/ParticleSet.h>
 #include <FK/IDAdmin.H>
-#include <FK/Shape.h>
+#include <FK/Point.h>
 
 using namespace std;
 using namespace FK;
 
-fk_Particle::fk_Particle(fk_Point *argBase, int argID)
+fk_ParticleSet::fk_ParticleSet(unsigned int argMax)
 {
-	SetObjectType(FK_PARTICLE);
-	base = argBase;
-	id = argID;
-	init();
-	return;
-}
-
-fk_Particle::~fk_Particle()
-{
-	return;
-}
-
-void fk_Particle::init(void)
-{
+	SetObjectType(FK_PARTICLESET);
+	pAdmin = new fk_IDAdmin;
+	pAdmin->Init(0);
+	point = new fk_Point;
+	pSet.clear();
+	maxNum = argMax;
 	count = 0;
-	velocity.set(0.0, 0.0, 0.0);
-	accel.set(0.0, 0.0, 0.0);
-	setDrawMode(true);
+	allMode = indivMode = false;
+
+	genMethod = [](fk_Particle *){};
+	allMethod = [](){};
+	indivMethod = [](fk_Particle *){};
+
 	return;
 }
 
-int fk_Particle::getID(void) const
+fk_ParticleSet::~fk_ParticleSet()
 {
-	return id;
+	_st		i;
+
+	for(i = 0; i < pSet.size(); i++) {
+		delete pSet[i];
+	}
+
+	delete pAdmin;
+	delete point;
+
+	return;
 }
 
-unsigned int fk_Particle::getCount(void) const
+fk_Particle * fk_ParticleSet::newParticle(void)
+{
+	return newParticle(0.0, 0.0, 0.0);
+}
+
+fk_Particle * fk_ParticleSet::newParticle(double argX,
+										  double argY, double argZ)
+{
+	fk_Vector		vec(argX, argY, argZ);
+
+	return newParticle(vec);
+}
+
+fk_Particle * fk_ParticleSet::newParticle(const fk_Vector &argPos)
+{
+	_st				pID;
+	fk_Particle		*p;
+
+	if(maxNum <= static_cast<unsigned int>(pAdmin->GetIDNum())) {
+		return nullptr;
+	}
+
+	pID = static_cast<_st>(pAdmin->CreateID());
+	if(pSet.size() == pID) {
+		p = new fk_Particle(point, point->pushVertex(argPos));
+		pSet.push_back(p);
+	} else {
+		pSet[pID]->init();
+	}
+
+	genMethod(pSet[pID]);
+	return pSet[pID];
+}
+
+bool fk_ParticleSet::removeParticle(fk_Particle *argP)
+{
+	if(argP == nullptr) return false;
+	return removeParticle(argP->getID());
+}
+
+bool fk_ParticleSet::removeParticle(int argID)
+{
+	if(pAdmin->EraseID(argID) == false) return false;
+	pSet[static_cast<_st>(argID)]->setDrawMode(false);
+	return true;
+}
+
+unsigned int fk_ParticleSet::getCount(void) const
 {
 	return count;
 }
 
-fk_Vector fk_Particle::getPosition(void) const
+fk_Particle * fk_ParticleSet::getParticle(int argID) const
 {
-	return base->getVertex(id);
+	if(pAdmin->ExistID(argID) == false) {
+		return nullptr;
+	}
+
+	return pSet[static_cast<_st>(argID)];
 }
 
-void fk_Particle::setPosition(const fk_Vector &argVec)
+fk_Particle * fk_ParticleSet::getNextParticle(fk_Particle *argP) const
 {
-	base->setVertex(id, argVec);
+	if(argP == nullptr) {
+		return getParticle(pAdmin->GetNext(-1));
+	}
+	return getParticle(pAdmin->GetNext(argP->getID()));
+}
+
+unsigned int fk_ParticleSet::getParticleNum(void) const
+{
+	return static_cast<unsigned int>(pAdmin->GetIDNum());
+}
+
+void fk_ParticleSet::setMaxSize(unsigned int argSize)
+{
+	maxNum = argSize;
 	return;
 }
 
-void fk_Particle::setPosition(double argX, double argY, double argZ)
+unsigned int fk_ParticleSet::getMaxSize(void) const
 {
-	fk_Vector		tmp(argX, argY, argZ);
-	setPosition(tmp);
+	return maxNum;
+}
+
+void fk_ParticleSet::setAllMode(bool argMode)
+{
+	allMode = argMode;
 	return;
 }
 
-fk_Vector fk_Particle::getVelocity(void) const
+bool fk_ParticleSet::getAllMode(void) const
 {
-	return velocity;
+	return allMode;
 }
 
-void fk_Particle::setVelocity(const fk_Vector &argVec)
+void fk_ParticleSet::setIndivMode(bool argMode)
 {
-	velocity = argVec;
+	indivMode = argMode;
 	return;
 }
 
-void fk_Particle::setVelocity(double argX, double argY, double argZ)
+bool fk_ParticleSet::getIndivMode(void) const
 {
-	fk_Vector		tmp(argX, argY, argZ);
-	setVelocity(tmp);
-	return;
+	return indivMode;
 }
 
-fk_Vector fk_Particle::getAccel(void) const
+void fk_ParticleSet::handle(void)
 {
-	return accel;
-}
+	fk_Particle		*p;
 
-void fk_Particle::setAccel(const fk_Vector &argVec)
-{
-	accel = argVec;
-	return;
-}
+	if(allMode == true) {
+		allMethod();
+	}
 
-void fk_Particle::setAccel(double argX, double argY, double argZ)
-{
-	fk_Vector		tmp(argX, argY, argZ);
-	setAccel(tmp);
-	return;
-}
+	if(indivMode == true) {
+		for(p = getNextParticle(nullptr); p != nullptr; p = getNextParticle(p)) {
+			indivMethod(p);
+		}
+	}
 
-bool fk_Particle::getDrawMode(void) const
-{
-	return base->getDrawMode(id);
-}
+	for(p = getNextParticle(nullptr); p != nullptr; p = getNextParticle(p)) {
+		p->handle();
+	}
 
-void fk_Particle::setDrawMode(bool argFlag)
-{
-	base->setDrawMode(id, argFlag);
-	return;
-}
-
-void fk_Particle::setColor(fk_Color argCol)
-{
-	base->setColor(id, &argCol);
-}
-
-void fk_Particle::setColor(fk_Color *argCol)
-{
-	base->setColor(id, argCol);
-}
-
-fk_Color fk_Particle::getColor(void)
-{
-	return base->getColor(id);
-}
-
-void fk_Particle::handle(void)
-{
-	velocity += accel;
-	base->setVertex(id, getPosition() + velocity);
 	count++;
-
 	return;
 }
+
+fk_Shape * fk_ParticleSet::getShape(void) const
+{
+	return static_cast<fk_Shape *>(point);
+}
+
+int fk_Particle::getColorID(void) const { return 0; }
+void fk_Particle::setColorID(int) { return; }
+void fk_ParticleSet::setColorPalette(int, const fk_Color &) { return; }
+void fk_ParticleSet::setColorPalette(int, float, float, float) { return; }
+void fk_ParticleSet::setColorPalette(int, double, double, double) { return; }
