@@ -56,7 +56,7 @@ namespace FK_CLI_IFSTex
 
 			win.Open();
 			while(win.Update() == true) {
-				lightModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.01);
+				lightModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
 			}
 		}
 	}
