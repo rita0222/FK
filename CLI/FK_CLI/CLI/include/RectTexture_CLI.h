@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <FK/Texture.h>
+#include <FK/RectTexture.h>
 #include "Texture_CLI.h"
 
 namespace FK_CLI

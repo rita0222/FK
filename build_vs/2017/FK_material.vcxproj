@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\material\ColorArray.cxx" />
     <ClCompile Include="..\..\src\material\Material.cxx" />
     <ClCompile Include="..\..\src\material\MatExample.cxx" />
     <ClCompile Include="..\..\src\material\Palette.cxx" />

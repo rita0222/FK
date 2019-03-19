@@ -10,7 +10,7 @@
    <headlogo >default - 1</>
    <dlgfontsize >s11</>
    <output >$prjpath$</>
-   <exename >setup.exe</>
+   <exename >FK_VC17_.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>

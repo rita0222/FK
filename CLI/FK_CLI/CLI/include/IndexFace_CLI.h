@@ -12,13 +12,6 @@ namespace FK_CLI
 	using namespace System::Collections::Generic;
 
 	ref class fk_Solid;
-	//! インデックスフェースセットの内部データタイプを表す列挙型
-	public enum class fk_IFType {
-		NONE,			//!<	未定義
-		TRIANGLES,		//!<	3角形集合
-		QUADS,			//!<	4角形集合
-		POLYGON			//!<	任意多角形集合
-	};
 			
 	//! インデックスフェースセットによる任意形状を生成、管理するクラス
 	/*!
@@ -104,14 +97,6 @@ namespace FK_CLI
 		 */
 		property int FaceSize {
 			int get();
-		}
-
-		//! 面タイププロパティ
-		/*!
-		 *	形状データの面タイプを参照します。
-		 */
-		property fk_IFType^ FaceType {
-			fk_IFType^ get();
 		}
 
 		//! アニメーション時間プロパティ

@@ -126,13 +126,6 @@ namespace FK_CLI {
 		return M;
 	}
 
-	fk_Material^ fk_Model::InhMaterial::get(void)
-	{
-		fk_Material^ M = gcnew fk_Material();
-		*M->pMat = *GetP()->getInhMaterial();
-		return M;
-	}
-
 	fk_Color^ fk_Model::PointColor::get(void)
 	{
 		fk_Color^ C = gcnew fk_Color();
@@ -144,13 +137,6 @@ namespace FK_CLI {
 	{
 		if(!argC) return;
 		GetP()->setPointColor(argC->pCol);
-	}
-
-	fk_Color^ fk_Model::InhPointColor::get(void)
-	{
-		fk_Color^ C = gcnew fk_Color();
-		*C->pCol = *GetP()->getInhPointColor();
-		return C;
 	}
 
 	void fk_Model::LineColor::set(fk_Color^ argC)
@@ -166,13 +152,6 @@ namespace FK_CLI {
 		return C;
 	}
 	
-	fk_Color^ fk_Model::InhLineColor::get(void)
-	{
-		fk_Color^ C = gcnew fk_Color();
-		*C->pCol = *GetP()->getInhLineColor();
-		return C;
-	}
-
 	void fk_Model::PointSize::set(double argSize)
 	{
 		GetP()->setSize(argSize);
@@ -231,16 +210,6 @@ namespace FK_CLI {
 				return fk_MaterialMode::CHILD;
 		}
 		return fk_MaterialMode::NONE;
-	}
-
-	void fk_Model::PickMode::set(bool argMode)
-	{
-		GetP()->setPickMode(argMode);
-	}
-
-	bool fk_Model::PickMode::get(void)
-	{
-		return GetP()->getPickMode();
 	}
 
 	void fk_Model::SmoothMode::set(bool argMode)
@@ -415,21 +384,6 @@ namespace FK_CLI {
 	{
 		if (!argModel) return false;
 		return ID == argModel->ID;
-	}
-
-	void fk_Model::DeleteMaterial(void)
-	{
-		GetP()->deleteMaterial();
-	}
-
-	void fk_Model::DeletePointColor(void)
-	{
-		GetP()->deletePointColor();
-	}
-
-	void fk_Model::DeleteLineColor(void)
-	{
-		GetP()->deleteLineColor();
 	}
 
 	bool fk_Model::SetParent(fk_Model^ argM, bool argMode)

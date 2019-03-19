@@ -44,31 +44,6 @@ namespace FK_CLI {
 		return GetP()->getFaceSize();
 	}
 
-	fk_IFType^ fk_IndexFaceSet::FaceType::get(void)
-	{
-		fk_IFType^ type = gcnew fk_IFType();
-
-		switch(GetP()->getFaceType()) {
-		case ::FK::FK_IF_TRIANGLES:
-			type = FK_CLI::fk_IFType::NONE;
-			break;
-
-		case ::FK::FK_IF_QUADS:
-			type = FK_CLI::fk_IFType::NONE;
-			break;
-
-		case ::FK::FK_IF_POLYGON:
-			type = FK_CLI::fk_IFType::NONE;
-			break;
-
-		case ::FK::FK_IF_NONE:
-		  default:
-			type = FK_CLI::fk_IFType::NONE;
-			break;
-		}
-		return type;
-	}
-
 	void fk_IndexFaceSet::BVHMotion::set(fk_BVHMotion^ argBVH)
 	{
 		if(!argBVH) return;

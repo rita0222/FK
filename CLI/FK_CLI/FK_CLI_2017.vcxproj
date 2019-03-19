@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\AR\ARDevice.cxx" />
-    <ClCompile Include="..\..\src\AR\ARTexture.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />
@@ -29,6 +27,7 @@
     <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
     <ClCompile Include="..\..\src\graphics\Engine.cxx" />
     <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
@@ -38,6 +37,7 @@
     <ClCompile Include="..\..\src\material\Material.cxx" />
     <ClCompile Include="..\..\src\material\MatExample.cxx" />
     <ClCompile Include="..\..\src\material\Palette.cxx" />
+    <ClCompile Include="..\..\src\math\FVecArray.cxx" />
     <ClCompile Include="..\..\src\math\GenMatrix.cxx" />
     <ClCompile Include="..\..\src\math\GenVector.cxx" />
     <ClCompile Include="..\..\src\math\Math.cxx" />
@@ -55,6 +55,9 @@
     <ClCompile Include="..\..\src\scene\Fog.cxx" />
     <ClCompile Include="..\..\src\scene\Projection.cxx" />
     <ClCompile Include="..\..\src\scene\Scene.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderBinder.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderParameter.cxx" />
+    <ClCompile Include="..\..\src\shader\ShaderProgram.cxx" />
     <ClCompile Include="..\..\src\shape\Attribute.cxx" />
     <ClCompile Include="..\..\src\shape\AttributeData.cxx" />
     <ClCompile Include="..\..\src\shape\BezCurve.cxx" />
@@ -100,11 +103,11 @@
     <ClCompile Include="..\..\src\shape\Operation.cxx" />
     <ClCompile Include="..\..\src\shape\ParserBase.cxx" />
     <ClCompile Include="..\..\src\shape\Particle.cxx" />
-    <ClCompile Include="..\..\src\shape\PickData.cxx" />
     <ClCompile Include="..\..\src\shape\Point.cxx" />
     <ClCompile Include="..\..\src\shape\Polygon.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />
     <ClCompile Include="..\..\src\shape\RDSParser.cxx" />
+    <ClCompile Include="..\..\src\shape\RectTexture.cxx" />
     <ClCompile Include="..\..\src\shape\Reference1.cxx" />
     <ClCompile Include="..\..\src\shape\Reference2.cxx" />
     <ClCompile Include="..\..\src\shape\Reference3.cxx" />
@@ -121,6 +124,7 @@
     <ClCompile Include="..\..\src\shape\TextImage.cxx" />
     <ClCompile Include="..\..\src\shape\Texture.cxx" />
     <ClCompile Include="..\..\src\shape\Topology.cxx" />
+    <ClCompile Include="..\..\src\shape\TriTexture.cxx" />
     <ClCompile Include="..\..\src\shape\UniCode.cxx" />
     <ClCompile Include="..\..\src\shape\Vertex.cxx" />
     <ClCompile Include="..\..\src\shape\VRMLOut.cxx" />
@@ -128,7 +132,6 @@
     <ClCompile Include="..\..\src\util\AppWindow.cxx" />
     <ClCompile Include="..\..\src\util\Fullscreen.cxx" />
     <ClCompile Include="..\..\src\util\GuideObject.cxx" />
-    <ClCompile Include="..\..\src\util\Input.cxx" />
     <ClCompile Include="..\..\src\util\Misc.cxx" />
     <ClCompile Include="..\..\src\util\MotionCharactor.cxx" />
     <ClCompile Include="..\..\src\util\MotionData.cxx" />
@@ -177,7 +180,6 @@
     <ClCompile Include="CLI\cpp\ParticleSet_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Particle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Performer_CLI.cpp" />
-    <ClCompile Include="CLI\cpp\PickData_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Plane_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
@@ -205,9 +207,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\FK\Angle.h" />
     <ClInclude Include="..\..\FK\AppWindow.h" />
-    <ClInclude Include="..\..\FK\ARDevice.h" />
     <ClInclude Include="..\..\FK\Array.H" />
-    <ClInclude Include="..\..\FK\ARTexture.h" />
     <ClInclude Include="..\..\FK\Attribute.h" />
     <ClInclude Include="..\..\FK\AttributeData.H" />
     <ClInclude Include="..\..\FK\Audio.h" />
@@ -233,6 +233,7 @@
     <ClInclude Include="..\..\FK\DataAccess.h" />
     <ClInclude Include="..\..\FK\DataBase.H" />
     <ClInclude Include="..\..\FK\DList.h" />
+    <ClInclude Include="..\..\FK\DrawBase.H" />
     <ClInclude Include="..\..\FK\DrawCache.h" />
     <ClInclude Include="..\..\FK\DXFOut.H" />
     <ClInclude Include="..\..\FK\DXFParser.H" />
@@ -246,8 +247,9 @@
     <ClInclude Include="..\..\FK\FK.h" />
     <ClInclude Include="..\..\FK\FKUT.h" />
     <ClInclude Include="..\..\FK\Fog.h" />
-    <ClInclude Include="..\..\FK\FrameController.H" />
+    <ClInclude Include="..\..\FK\FrameController.h" />
     <ClInclude Include="..\..\FK\Fullscreen.h" />
+    <ClInclude Include="..\..\FK\FVecArray.h" />
     <ClInclude Include="..\..\FK\GenMatrix.h" />
     <ClInclude Include="..\..\FK\GenVector.h" />
     <ClInclude Include="..\..\FK\Gregory.h" />
@@ -261,7 +263,6 @@
     <ClInclude Include="..\..\FK\IFSTexture.h" />
     <ClInclude Include="..\..\FK\Image.h" />
     <ClInclude Include="..\..\FK\IndexFace.h" />
-    <ClInclude Include="..\..\FK\Input.h" />
     <ClInclude Include="..\..\FK\LIAdmin.H" />
     <ClInclude Include="..\..\FK\Light.h" />
     <ClInclude Include="..\..\FK\Line.h" />
@@ -273,6 +274,7 @@
     <ClInclude Include="..\..\FK\MatExample.h" />
     <ClInclude Include="..\..\FK\Math.h" />
     <ClInclude Include="..\..\FK\Matrix.h" />
+    <ClInclude Include="..\..\FK\MeshTexture.h" />
     <ClInclude Include="..\..\FK\Misc.h" />
     <ClInclude Include="..\..\FK\Model.h" />
     <ClInclude Include="..\..\FK\Modify.h" />
@@ -287,16 +289,15 @@
     <ClInclude Include="..\..\FK\ParserBase.H" />
     <ClInclude Include="..\..\FK\ParserData.h" />
     <ClInclude Include="..\..\FK\Particle.h" />
-    <ClInclude Include="..\..\FK\PickData.h" />
     <ClInclude Include="..\..\FK\Plane.h" />
     <ClInclude Include="..\..\FK\Point.h" />
     <ClInclude Include="..\..\FK\PointDraw.H" />
     <ClInclude Include="..\..\FK\Polygon.h" />
     <ClInclude Include="..\..\FK\Prism.h" />
     <ClInclude Include="..\..\FK\Projection.h" />
-    <ClInclude Include="..\..\FK\QtWidget.h" />
     <ClInclude Include="..\..\FK\Quaternion.h" />
     <ClInclude Include="..\..\FK\RDSParser.H" />
+    <ClInclude Include="..\..\FK\RectTexture.h" />
     <ClInclude Include="..\..\FK\Reference.h" />
     <ClInclude Include="..\..\FK\RenderState.h" />
     <ClInclude Include="..\..\FK\Scene.h" />
@@ -319,10 +320,10 @@
     <ClInclude Include="..\..\FK\TextImage.h" />
     <ClInclude Include="..\..\FK\Texture.h" />
     <ClInclude Include="..\..\FK\TextureDraw.H" />
-    <ClInclude Include="..\..\FK\TextureSampler.h" />
     <ClInclude Include="..\..\FK\Topology.h" />
     <ClInclude Include="..\..\FK\TrackBall.h" />
     <ClInclude Include="..\..\FK\Tree.h" />
+    <ClInclude Include="..\..\FK\TriTexture.h" />
     <ClInclude Include="..\..\FK\UniCode.h" />
     <ClInclude Include="..\..\FK\Vector.h" />
     <ClInclude Include="..\..\FK\Vertex.h" />
@@ -368,7 +369,6 @@
     <ClInclude Include="CLI\include\ParticleSet_CLI.h" />
     <ClInclude Include="CLI\include\Particle_CLI.h" />
     <ClInclude Include="CLI\include\Performer_CLI.h" />
-    <ClInclude Include="CLI\include\PickData_CLI.H" />
     <ClInclude Include="CLI\include\Plane_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
@@ -398,7 +398,7 @@
     <ProjectGuid>{80D11C11-E353-464E-8567-51F004A6941F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FKCLI2017</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -491,13 +491,16 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\;$(SolutionDir)..\build_vs\extlibs\glew-2.1.0\include\;$(SolutionDir)..\build_vs\extlibs\fltk-1.3.5\;$(SolutionDir)..\build_vs\extlibs\freetype-2.10.0\include\;$(SolutionDir)..\build_vs\extlibs\libiconv\include\;$(SolutionDir)..\build_vs\extlibs\libogg-1.3.3\include\;$(SolutionDir)..\build_vs\extlibs\libvorbis-1.3.6\include\;$(SolutionDir)..\build_vs\extlibs\OpenAL\include;$(ProjectDir)CLI\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -528,15 +531,18 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\;$(SolutionDir)..\build_vs\extlibs\glew-2.1.0\include\;$(SolutionDir)..\build_vs\extlibs\fltk-1.3.5\;$(SolutionDir)..\build_vs\extlibs\freetype-2.10.0\include\;$(SolutionDir)..\build_vs\extlibs\libiconv\include\;$(SolutionDir)..\build_vs\extlibs\libogg-1.3.3\include\;$(SolutionDir)..\build_vs\extlibs\libvorbis-1.3.6\include\;$(SolutionDir)..\build_vs\extlibs\OpenAL\include;$(ProjectDir)CLI\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

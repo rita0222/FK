@@ -45,11 +45,6 @@ namespace FK_CLI {
 		return GetP()->getSize();
 	}
 		
-	bool fk_Point::ColorCount::get(void)
-	{
-		return GetP()->getColorCount();
-	}
-
 	int fk_Point::PushVertex(fk_Vector^ argPos)
 	{
 		if(!argPos) return -1;
@@ -82,10 +77,10 @@ namespace FK_CLI {
 
 	fk_Vector^ fk_Point::GetVertex(int argID)
 	{
-		::FK::fk_FVector *fV = GetP()->getVertex(argID);
-		return gcnew fk_Vector(static_cast<double>(fV->x),
-							   static_cast<double>(fV->y),
-							   static_cast<double>(fV->z));
+		::FK::fk_Vector fV = GetP()->getVertex(argID);
+		return gcnew fk_Vector(static_cast<double>(fV.x),
+							   static_cast<double>(fV.y),
+							   static_cast<double>(fV.z));
 	}
 				
 	void fk_Point::SetDrawMode(int argID, bool argMode)
@@ -93,11 +88,6 @@ namespace FK_CLI {
 		GetP()->setDrawMode(argID, argMode);
 	}
 		
-	bool fk_Point::GetDrawMode(void)
-	{
-		return GetP()->getDrawMode();
-	}
-
 	bool fk_Point::GetDrawMode(int argID)
 	{
 		return GetP()->getDrawMode(argID);
@@ -113,14 +103,9 @@ namespace FK_CLI {
 		return GetP()->getColorID(argVID);
 	}
 		
-	void fk_Point::AllClear(bool argMatFlag)
-	{
-		GetP()->allClear(argMatFlag);
-	}
-		
 	void fk_Point::AllClear(void)
 	{
-		GetP()->allClear(true);
+		GetP()->allClear();
 	}
 }
 /****************************************************************************

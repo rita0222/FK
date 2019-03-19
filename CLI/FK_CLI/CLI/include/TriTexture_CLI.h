@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <FK/Texture.h>
+#include <FK/TriTexture.h>
 #include "Texture_CLI.h"
 #include "Vector_CLI.h"
 

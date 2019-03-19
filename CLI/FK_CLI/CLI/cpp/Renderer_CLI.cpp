@@ -115,7 +115,7 @@ namespace FK_CLI {
 		}
 
 		PreDraw();
-		pEngine->Draw(false);
+		pEngine->Draw();
 		PostDraw();
 
 		SwapBuffers(hDC);
@@ -154,38 +154,6 @@ namespace FK_CLI {
 
 		ret = pEngine->GetWindowPosition(P, &retPos);
 		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
-		return ret;
-	}
-
-	cli::array<fk_PickData^>^ fk_Renderer::GetPickData(int argX, int argY, int argPixel)
-	{
-		::FK::fk_PickData pick;
-		pEngine->GetPickData(&pick, argPixel, argX, argY);
-		int size = pick.getSize();
-		cli::array<fk_PickData^>^ ret = gcnew cli::array<fk_PickData^>(size);
-		for (int i = 0; i < size; ++i)
-		{
-			fk_Model^ pickedModel = gcnew fk_Model(pick.getModel(i));
-			fk_PickedTopologyType^ pickedType;
-			switch (pick.getType(i))
-			{
-			case ::FK::FK_VERTEX:
-				pickedType = fk_PickedTopologyType::VERTEX;
-				break;
-			case ::FK::FK_EDGE:
-				pickedType = fk_PickedTopologyType::EDGE;
-				break;
-			case ::FK::FK_LOOP:
-				pickedType = fk_PickedTopologyType::LOOP;
-				break;
-			default:
-				pickedType = fk_PickedTopologyType::NONE;
-				break;
-			}
-
-			ret[i] = gcnew fk_PickData(pickedModel, pickedType, pick.getID(i), pick.getFarDepth(i), pick.getNearDepth(i));
-		}
-
 		return ret;
 	}
 }

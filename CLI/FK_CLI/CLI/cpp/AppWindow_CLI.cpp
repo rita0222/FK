@@ -454,21 +454,6 @@ namespace FK_CLI {
 		GetP()->setCursorState(argVisible, argCenter);
 	}
 
-	bool fk_AppWindow::IsModelPicked(fk_Model^ argM, int argP, int argX, int argY)
-	{
-		return GetP()->isModelPicked(argM->GetP(), argP, argX, argY);
-	}
-
-	bool fk_AppWindow::IsModelPicked(fk_Model^ argM, int argP)
-	{
-		return GetP()->isModelPicked(argM->GetP(), argP);
-	}
-
-	bool fk_AppWindow::IsModelPicked(fk_Model^ argM)
-	{
-		return GetP()->isModelPicked(argM->GetP());
-	}
-
 	void fk_AppWindow::ProcMouseView(fk_Model^ argCamera, double argX, double argY, bool argLockSW)
 	{
 		GetP()->procMouseView(argCamera->GetP(), argX, argY, argLockSW);

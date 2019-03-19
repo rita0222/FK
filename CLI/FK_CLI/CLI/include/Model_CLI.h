@@ -178,22 +178,6 @@ namespace FK_CLI
 			void set(fk_Shape^);
 		}
 
-		//! ピックモードプロパティ
-		/*!
-		 *	モデルのピックモードの参照・設定を行います。
-		 *	true の場合有効、false の場合無効となります。
-		 *	ピックモードとは、
-		 *	モデルをピックによる取得操作の対象とするかどうかを制御するものです。
-		 *	ピックモードが有効である場合、モデルはピック取得の候補となります。
-		 *	デフォルトでは無効となっています。
-		 *
-		 *	\sa fk_AppWindow::IsModelPicked()
-		 */
-		property bool PickMode {
-			void set(bool);
-			bool get(void);
-		}
-
 		//! 親モデルプロパティ
 		/*!
 		 *	親モデルの参照・設定を行います。
@@ -230,22 +214,10 @@ namespace FK_CLI
 		 *		テクスチャを描画する際には、テクスチャモードによって混合の仕方が異なりますので、
 		 *		fk_Texture::TextureMode の説明を参照して下さい。
 		 *
-		 *	\sa fk_Material, InhMaterial, LineColor, PointColor, fk_Texture::TextureMode
+		 *	\sa fk_Material, LineColor, PointColor, fk_Texture::TextureMode
 		 */
 		property fk_Material^ Material {
 			void set(fk_Material^);
-			fk_Material^ get();
-		}
-
-		//! 継承マテリアルプロパティ
-		/*!
-		 *	親子関係を踏まえた基本マテリアルを参照します。
-		 *	当モデルにマテリアルが設定されている場合、そのマテリアルを参照します。
-		 *	当モデルにマテリアルが設定されていない場合は、親モデルのマテリアルを参照します。
-		 *
-		 *	\sa fk_Material, Material
-		 */
-		property fk_Material^ InhMaterial {
 			fk_Material^ get();
 		}
 
@@ -254,23 +226,11 @@ namespace FK_CLI
 		 *	現在モデルに設定されている頂点色の参照・設定を行います。
 		 *	モデルに頂点色が設定されていない場合は null となります。
 		 *
-		 *	\sa fk_Color, PointColor, InhPointColor
+		 *	\sa fk_Color, PointColor
 		 */
 		property fk_Color^ PointColor {
 			fk_Color^ get();
 			void set(fk_Color^);
-		}
-
-		//! 継承頂点色プロパティ
-		/*!
-		 *	親子関係を踏まえた頂点色を参照します。
-		 *	当モデルに頂点色が設定されている場合、その頂点色を参照します。
-		 *	当モデルに頂点色が設定されていない場合は、親モデルの頂点色を参照します。
-		 *
-		 *	\sa fk_Color, PointColor
-		 */
-		property fk_Color^ InhPointColor {
-			fk_Color^ get();
 		}
 
 		//! 稜線色プロパティ
@@ -278,23 +238,11 @@ namespace FK_CLI
 		 *	現在モデルに設定されている稜線色の参照・設定を行います。
 		 *	モデルに稜線色が設定されていない場合は null となります。
 		 *
-		 *	\sa fk_Color, InhLineColor
+		 *	\sa fk_Color
 		 */
 		property fk_Color^ LineColor {
 			fk_Color^ get();
 			void set(fk_Color^);
-		}
-
-		//! 継承稜線色プロパティ
-		/*!
-		 *	親子関係を踏まえた稜線色を参照します。
-		 *	当モデルに稜線色が設定されている場合、その稜線色を参照します。
-		 *	当モデルに稜線色が設定されていない場合は、親モデルの稜線色を参照します。
-		 *
-		 *	\sa fk_Color, LineColor
-		 */
-		property fk_Color^ InhLineColor {
-			fk_Color^ get();
 		}
 
 		//! 頂点描画サイズプロパティ
@@ -737,41 +685,6 @@ namespace FK_CLI
 
 		bool Equals(fk_Model^ argModel);
 #endif
-
-		//////////////////////////////////////////////////////////////
-		//! \name マテリアル属性除去メソッド
-		//@{
-
-		//! 基本マテリアル削除メソッド
-		/*!
-		 *	基本マテリアル設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの基本マテリアルを継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルトマテリアルが採用されます。
-		 *
-		 *	\sa Material, InhMaterial
-		 */
-		void DeleteMaterial(void);
-
-		//! 頂点色削除メソッド
-		/*!
-		 *	頂点色設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの頂点色を継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルト頂点色が採用されます。
-		 *
-		 *	\sa PointColor, InhPointColor
-		 */
-		void DeletePointColor(void);
-
-		//! 稜線色削除メソッド
-		/*!
-		 *	稜線色設定を削除します。
-		 *	これにより、親モデルが存在する場合は親モデルの稜線色を継承します。
-		 *	親モデルが存在しない場合は、システムのデフォルト稜線色が採用されます。
-		 *
-		 *	\sa LineColor, InhLineColor
-		 */
-		void DeleteLineColor(void);
-
 		//! \name 親子関係制御メソッド
 		//@{
 
