@@ -125,7 +125,7 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 
 fk_ShaderProgram::~fk_ShaderProgram()
 {
-	if(idProgram != 0) glDeleteProgram(idProgram);
+	if(idProgram != 0) DeleteProgram(idProgram);
 	if(idVertex != 0) DeleteShader(idVertex);
 	if(idGeometry != 0) DeleteShader(idGeometry);
 	if(idFragment != 0) DeleteShader(idFragment);
@@ -190,7 +190,7 @@ bool fk_ShaderProgram::validate(void)
 	}
 
 	if(idProgram != 0) {
-		glDeleteProgram(idProgram);
+		DeleteProgram(idProgram);
 		idProgram = 0;
 	}
 
@@ -347,5 +347,12 @@ void fk_ShaderProgram::DeleteShader(GLuint argID)
 {
 #ifndef FK_CLI_CODE
 	glDeleteShader(argID);
+#endif
+}
+
+void fk_ShaderProgram::DeleteProgram(GLuint argID)
+{
+#ifndef FK_CLI_CODE
+	glDeleteProgram(argID);
 #endif
 }

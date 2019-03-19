@@ -164,6 +164,7 @@ namespace FK {
 		bool UpdateLastError(GLuint);
 		void ReplaceBuildIn(std::string *, GLuint);
 		void DeleteShader(GLuint);
+		void DeleteProgram(GLuint);
 	};	
 }
 #endif

@@ -137,7 +137,6 @@ fk_Dimension fk_Rect::getSize(void)
 		
 fk_Image::fk_Image(int argW, int argH) : texID(0)
 {
-	ReleaseTexture = nullptr;
 	SetObjectType(FK_IMAGE);
 	CreateBuffer(argW, argH, true);
 	
@@ -146,8 +145,7 @@ fk_Image::fk_Image(int argW, int argH) : texID(0)
 
 fk_Image::~fk_Image()
 {
-	if(ReleaseTexture != nullptr) ReleaseTexture(this);
-
+	ReleaseTexture();
 	return;
 }
 
@@ -166,10 +164,20 @@ void fk_Image::init(void)
 	imageBuf.clear();
 	bufPointer = nullptr;
 	SetUpdate(true);
-	if(ReleaseTexture != nullptr) ReleaseTexture(this);
+	ReleaseTexture();
 
 	return;
 }
+
+void fk_Image::ReleaseTexture(void)
+{
+	if(texID != 0) {
+#ifndef FK_CLI_CODE		
+		glDeleteTextures(1, &texID);
+#endif		
+		texID = 0;
+	}
+}	
 
 unsigned int fk_Image::ChgUInt(unsigned char *argBuf, int argOffset) const
 {

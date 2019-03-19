@@ -617,8 +617,6 @@ namespace FK {
 		fk_TexID	GetTexID(void);
 		bool		GetUpdate(void);
 		void		SetUpdate(bool);
-		std::function<void(FK::fk_Image *)> ReleaseTexture;
-
 #endif
 
 	private:
@@ -669,6 +667,7 @@ namespace FK {
 		bool				IsPngData(fk_ImType *) const;
 		fk_ImageStatus		LoadPngFile(const std::string);
 		fk_ImageStatus		LoadPngData(fk_ImType *);
+		void				ReleaseTexture(void);
 	};
 }
 #endif	// __FK_IMAGE_HEADER__
