@@ -108,35 +108,9 @@ void fk_Texture::BaseInit(void)
 	setMaterialMode(FK_PARENT_MODE);
 	setTexRendMode(FK_TEX_REND_NORMAL);
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
-
-	//texCoord.setDim(2);
-
-	//setShaderAttribute(vertexName, 3, vertexPosition.getP());
-	//setShaderAttribute(normalName, 3, vertexNormal.getP());
-	//setShaderAttribute(texCoordName, 2, texCoord.getP());
-
-	//faceIBO = 0;
-	//faceIndexFlg = true;
 	  
 	return;
 }
-/*
-void fk_Texture::_FaceIBOSetup(void)
-{
-	if(faceIBO == 0) {
-		glGenBuffers(1, &faceIBO);
-		faceIndexFlg = true;
-	}
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
-	if(faceIndexFlg == true && faceIndex != nullptr) {
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-					 GLsizei(faceIndex.size()*sizeof(GLuint)),
-					 faceIndex->data(), GL_STATIC_DRAW);
-		faceIndexFlg = false;
-	}
-}
-*/
 
 bool fk_Texture::IsLocalImage(void)
 {

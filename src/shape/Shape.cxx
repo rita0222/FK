@@ -72,7 +72,7 @@
 #define FK_DEF_SIZETYPE
 
 #include <FK/Shape.h>
-#include <FK/Window.h>
+//#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -96,38 +96,23 @@ fk_Shape::fk_Shape(fk_ObjectType argObjType)
 
 fk_Shape::~fk_Shape()
 {
-	if (pointVAO != 0) {
-		if (glIsBuffer(pointVAO) == GL_TRUE) {
-			glDeleteBuffers(1, &pointVAO);
-		}
-	}
-	if (lineVAO != 0) {
-		if (glIsBuffer(lineVAO) == GL_TRUE) {
-			glDeleteBuffers(1, &lineVAO);
-		}
-	}
-	if (faceVAO != 0) {
-		if (glIsBuffer(faceVAO) == GL_TRUE) {
-			glDeleteBuffers(1, &faceVAO);
-		}
-	}
+	if (pointVAO != 0) DeleteBuffer(pointVAO);
+	if (lineVAO != 0) DeleteBuffer(lineVAO);
+	if (faceVAO != 0) DeleteBuffer(faceVAO);
 
-	int tmpID1 = 0;
-	GLuint tmpID2 = 0;
+	int tmpID = 0;
 
 	for (auto p : attrMapI) {
-		tmpID1 = get<0>(p.second);
-		if (tmpID1 != -1) {
-			tmpID2 = GLuint(tmpID1);
-			if (glIsBuffer(tmpID2) == GL_TRUE) glDeleteBuffers(1, &tmpID2);
+		tmpID = get<0>(p.second);
+		if (tmpID != -1) {
+			DeleteBuffer(GLuint(tmpID));
 		}
 	}
 
 	for (auto p : attrMapF) {
-		tmpID1 = get<0>(p.second);
-		if (tmpID1 != -1) {
-			tmpID2 = GLuint(tmpID1);
-			if (glIsBuffer(tmpID2) == GL_TRUE) glDeleteBuffers(1, &tmpID2);
+		tmpID = get<0>(p.second);
+		if (tmpID != -1) {
+			DeleteBuffer(GLuint(tmpID));
 		}
 	}
 	return;
@@ -248,8 +233,7 @@ void fk_Shape::DeleteMapI(string argName)
 	if(attrMapI.find(argName) != attrMapI.end()) {
 		int tmpID = get<0>(attrMapI[argName]);
 		if(tmpID != -1) {
-			GLuint tmpID2 = GLuint(tmpID);
-			glDeleteBuffers(1, &tmpID2);
+			DeleteBuffer(GLuint(tmpID));
 		}
 		attrMapI.erase(argName);
 	}
@@ -260,8 +244,7 @@ void fk_Shape::DeleteMapF(string argName)
 	if(attrMapF.find(argName) != attrMapF.end()) {
 		int tmpID = get<0>(attrMapF[argName]);
 		if(tmpID != -1) {
-			GLuint tmpID2 = GLuint(tmpID);
-			glDeleteBuffers(1, &tmpID2);
+			DeleteBuffer(GLuint(tmpID));
 		}
 		attrMapF.erase(argName);
 	}
@@ -292,19 +275,16 @@ void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *arg
 void fk_Shape::DefineVBO(void)
 {
 	if(vboInitFlg == true) return;
-	GLuint tmpUID = 0;
 
 	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
 		if(get<0>(itr->second) == -1) {
-			glGenBuffers(1, &tmpUID);
-			get<0>(itr->second) = int(tmpUID);
+			get<0>(itr->second) = int(GenBuffer());
 		}
 	}
 
 	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
 		if(get<0>(itr->second) == -1) {
-			glGenBuffers(1, &tmpUID);
-			get<0>(itr->second) = int(tmpUID);
+			get<0>(itr->second) = int(GenBuffer());
 		}
 	}
 	return;
@@ -377,4 +357,17 @@ void fk_Shape::FinishSetVBO(void)
 
 void fk_Shape::FlushAttr(void)
 {
+}
+
+GLuint fk_Shape::GenBuffer(void)
+{
+	GLuint	id;
+
+	glGenBuffers(1, &id);
+	return id;
+}
+
+void fk_Shape::DeleteBuffer(GLuint argID)
+{
+	glDeleteBuffers(1, &argID);
 }

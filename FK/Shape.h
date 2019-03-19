@@ -269,6 +269,9 @@ namespace FK {
 		void			DefineVBO(void);
 		void			BindShaderBuffer(std::map<std::string, int> *);
 
+		static GLuint	GenBuffer(void);
+		static void		DeleteBuffer(GLuint);
+
 		// シェーダー変数名: 頂点座標
 		static const std::string	vertexName;
 		static const std::string	normalName;

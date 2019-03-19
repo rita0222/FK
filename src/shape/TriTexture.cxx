@@ -94,7 +94,7 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 
 	FaceIBOSetup = []() {
 		if(faceIBO == 0) {
-			glGenBuffers(1, &faceIBO);
+			faceIBO = GenBuffer();
 			faceIndexFlg = true;
 		}
 

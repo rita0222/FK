@@ -71,21 +71,20 @@
  ****************************************************************************/
 
 #define FK_DEF_SIZETYPE
-
 #include <map>
 #include <FK/UniCode.h>
 #include <FK/Error.H>
 #include <iconv.h>
 #include <sstream>
 
-#if defined(_FREEBSD_) || defined(_MACOSX_)
-typedef const char **	iconvpp;
-#else
-typedef char **			iconvpp;
-#endif
-
 using namespace std;
 using namespace FK;
+
+#if defined(_MACOSX_) || defined(FK_CLI_CODE)
+using iconvpp = char **;
+#else
+using iconvpp = const char **;
+#endif
 
 namespace FK {
 	class fk_StrStack {
@@ -630,17 +629,10 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_) || defined(_MINGW_) || defined(_LINUX_)
-		if(iconv(argIV, &inBuf,
+		if(iconv(argIV, iconvpp(&inBuf),
 				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
 		}
-#else
-		if(iconv(argIV, static_cast<const char **>(&inBuf),
-				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
-			return false;
-		}
-#endif
 	}
 
 	for(i = 0; i < orgSize - outSize; i += 2) {
@@ -672,17 +664,10 @@ bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
 	inSize = static_cast<size_t>(argStr.size());
 
 	while(0 < inSize) {
-#if defined(FK_CLI_CODE) || defined(_MACOSX_) || defined(_FREEBSD_) || defined(_MINGW_) || defined(_LINUX_)
-		if(iconv(argIV, &inBuf,
+		if(iconv(argIV, iconvpp(&inBuf),
 				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
 			return false;
 		}
-#else
-		if(iconv(argIV, static_cast<const char **>(&inBuf),
-				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
-			return false;
-		}
-#endif
 	}
 
 	_buffer[orgSize - outSize] = '\0';

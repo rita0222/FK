@@ -92,7 +92,7 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 
 	FaceIBOSetup = [this]() {
 		if(faceIBO == 0) {
-			glGenBuffers(1, &faceIBO);
+			faceIBO = GenBuffer();
 			faceIndexFlg = true;
 		}
 
@@ -145,7 +145,7 @@ void fk_MeshTexture::init(void)
 	StatusUpdate();
 
 	if(faceIBO != 0) {
-		glDeleteBuffers(1, &faceIBO);
+		DeleteBuffer(faceIBO);
 		faceIBO = 0;
 	}
 	faceIndexFlg = true;

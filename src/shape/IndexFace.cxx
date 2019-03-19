@@ -184,8 +184,8 @@ fk_IndexFaceSet::~fk_IndexFaceSet()
 	}
 
 	DeleteCloneLink(this);
-	if(edgeIBO != 0) glDeleteBuffers(1, &edgeIBO);
-	if(faceIBO != 0) glDeleteBuffers(1, &faceIBO);
+	if(edgeIBO != 0) DeleteBuffer(edgeIBO);
+	if(faceIBO != 0) DeleteBuffer(faceIBO);
 	return;
 }
 
@@ -1690,7 +1690,7 @@ void fk_IndexFaceSet::cloneShape(fk_IndexFaceSet *argIFS)
 void fk_IndexFaceSet::EdgeIBOSetup(void)
 {
 	if(edgeIBO == 0) {
-		glGenBuffers(1, &edgeIBO);
+		edgeIBO = GenBuffer();
 		edgeIndexFlg = true;
 	}
 
@@ -1706,7 +1706,7 @@ void fk_IndexFaceSet::EdgeIBOSetup(void)
 void fk_IndexFaceSet::FaceIBOSetup(void)
 {
 	if(faceIBO == 0) {
-		glGenBuffers(1, &faceIBO);
+		faceIBO = GenBuffer();
 		faceIndexFlg = true;
 	}
 
