@@ -369,5 +369,7 @@ GLuint fk_Shape::GenBuffer(void)
 
 void fk_Shape::DeleteBuffer(GLuint argID)
 {
+#ifndef FK_CLI_CODE
 	glDeleteBuffers(1, &argID);
+#endif
 }

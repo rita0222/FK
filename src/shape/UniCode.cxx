@@ -80,7 +80,7 @@
 using namespace std;
 using namespace FK;
 
-#if defined(_MACOSX_) || defined(FK_CLI_CODE)
+#if defined(_MACOSX_)
 using iconvpp = char **;
 #else
 using iconvpp = const char **;

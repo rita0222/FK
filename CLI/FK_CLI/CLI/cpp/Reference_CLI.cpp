@@ -188,7 +188,7 @@ namespace FK_CLI {
 	{
 		if(!argV) return nullptr;
 		vector<::FK::fk_Half *> hA = GetP()->getAllHOnV(argV->GetP());
-		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(hA.size());
+		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(int(hA.size()));
 		for(int i = 0; i < int(hA.size()); ++i) {
 			A[i] = gcnew fk_Half(false);
 			A[i]->pBase = hA[i];
@@ -201,7 +201,7 @@ namespace FK_CLI {
 	{
 		if(!argV) return nullptr;
 		vector<::FK::fk_Edge *> eA = GetP()->getAllEOnV(argV->GetP());
-		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(eA.size());
+		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(int(eA.size()));
 		for(int i = 0; i < int(eA.size()); ++i) {
 			A[i] = gcnew fk_Edge(false);
 			A[i]->pBase = eA[i];
@@ -214,7 +214,7 @@ namespace FK_CLI {
 	{
 		if(!argV) return nullptr;
 		vector<::FK::fk_Loop *> lA = GetP()->getAllLOnV(argV->GetP());
-		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(lA.size());
+		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(int(lA.size()));
 		for(int i = 0; i < int(lA.size()); ++i) {
 			A[i] = gcnew fk_Loop(false);
 			A[i]->pBase = lA[i];
@@ -233,7 +233,7 @@ namespace FK_CLI {
 	{
 		if(!argL) return nullptr;
 		vector<::FK::fk_Vertex *> vA = GetP()->getAllVOnL(argL->GetP());
-		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(vA.size());
+		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(int(vA.size()));
 		for(int i = 0; i < int(vA.size()); ++i) {
 			A[i] = gcnew fk_Vertex(false);
 			A[i]->pBase = vA[i];
@@ -246,7 +246,7 @@ namespace FK_CLI {
 	{
 		if(!argL) return nullptr;
 		vector<::FK::fk_Half *> hA = GetP()->getAllHOnL(argL->GetP());
-		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(hA.size());
+		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(int(hA.size()));
 		for(int i = 0; i < int(hA.size()); ++i) {
 			A[i] = gcnew fk_Half(false);
 			A[i]->pBase = hA[i];
@@ -259,7 +259,7 @@ namespace FK_CLI {
 	{
 		if(!argL) return nullptr;
 		vector<::FK::fk_Edge *> eA = GetP()->getAllEOnL(argL->GetP());
-		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(eA.size());
+		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(int(eA.size()));
 		for(int i = 0; i < int(eA.size()); ++i) {
 			A[i] = gcnew fk_Edge(false);
 			A[i]->pBase = eA[i];
@@ -297,7 +297,7 @@ namespace FK_CLI {
 	{
 		if(!argV) return nullptr;
 		vector<::FK::fk_Vertex *> vA = GetP()->getAllNeighborVOnV(argV->GetP());
-		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(vA.size());
+		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(int(vA.size()));
 		for(int i = 0; i < int(vA.size()); ++i) {
 			A[i] = gcnew fk_Vertex(false);
 			A[i]->pBase = vA[i];
@@ -310,7 +310,7 @@ namespace FK_CLI {
 	{
 		if(!argV1 || !argV2) nullptr;
 		vector<::FK::fk_Edge *> eA = GetP()->getEOnVV(argV1->GetP(), argV2->GetP());
-		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(eA.size());
+		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(int(eA.size()));
 		for(int i = 0; i < int(eA.size()); ++i) {
 			A[i] = gcnew fk_Edge(false);
 			A[i]->pBase = eA[i];
@@ -341,7 +341,7 @@ namespace FK_CLI {
 	{
 		if(!argL) return nullptr;
 		vector<::FK::fk_Loop *> lA = GetP()->getAllNeighborLOnL(argL->GetP());
-		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(lA.size());
+		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(int(lA.size()));
 		for(int i = 0; i < int(lA.size()); ++i) {
 			A[i] = gcnew fk_Loop(false);
 			A[i]->pBase = lA[i];
