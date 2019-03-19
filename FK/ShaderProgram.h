@@ -163,6 +163,7 @@ namespace FK {
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint);
 		void ReplaceBuildIn(std::string *, GLuint);
+		void DeleteShader(GLuint);
 	};	
 }
 #endif

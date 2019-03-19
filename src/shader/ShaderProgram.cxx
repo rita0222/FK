@@ -126,9 +126,9 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 fk_ShaderProgram::~fk_ShaderProgram()
 {
 	if(idProgram != 0) glDeleteProgram(idProgram);
-	if(idVertex != 0) glDeleteShader(idVertex);
-	if(idGeometry != 0) glDeleteShader(idGeometry);
-	if(idFragment != 0) glDeleteShader(idFragment);
+	if(idVertex != 0) DeleteShader(idVertex);
+	if(idGeometry != 0) DeleteShader(idGeometry);
+	if(idFragment != 0) DeleteShader(idFragment);
 	return;
 }
 
@@ -150,17 +150,17 @@ bool fk_ShaderProgram::validate(void)
 	}
 
 	if(idVertex != 0) {
-		glDeleteShader(idVertex);
+		DeleteShader(idVertex);
 		idVertex = 0;
 	}
 
 	if(idFragment != 0) {
-		glDeleteShader(idFragment);
+		DeleteShader(idFragment);
 		idFragment = 0;
 	}
 
 	if(idGeometry != 0) {
-		glDeleteShader(idGeometry);
+		DeleteShader(idGeometry);
 		idGeometry = 0;
 	}
 
@@ -341,4 +341,11 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 	}
 
 	return;
+}
+
+void fk_ShaderProgram::DeleteShader(GLuint argID)
+{
+#ifndef FK_CLI_CODE
+	glDeleteShader(argID);
+#endif
 }
