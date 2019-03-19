@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 
 #FKBuildIn
 
@@ -132,5 +132,5 @@ void main()
 	speSumColor *= fk_Material.specular.rgb;
 
 	vec3 addColor = difSumColor + speSumColor + fk_Material.ambient.rgb;
-    fk_Fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+    fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }

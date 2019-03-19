@@ -1,6 +1,9 @@
-#version 330 core
+#version 410 core
 
 #FKBuildIn
+
+subroutine vec4 textureRendType ();
+subroutine uniform textureRendType textureRendSelect;
 
 in vec4 varP;
 in vec4 varN;
@@ -135,6 +138,22 @@ vec3 GetMaterial()
 	return difSumColor + speSumColor + fk_Material.ambient.rgb;
 }
 
+subroutine(textureRendType)
+vec4 Replace()
+{
+	return texture(fk_TexID[0], varT);
+}
+
+subroutine(textureRendType)
+vec4 Modulate()
+{
+	vec3 material = GetMaterial();
+	vec4 texColor = texture(fk_TexID[0], varT);
+	vec3 trueColor = material * texColor.rgb;
+	return vec4(min(vec3(1.0, 1.0, 1.0), trueColor), fk_Material.diffuse.a * texColor.a);
+}
+
+subroutine(textureRendType)
 vec4 Decal()
 {
 	vec3 material = GetMaterial();
@@ -145,5 +164,5 @@ vec4 Decal()
 
 void main()
 {
-	fk_Fragment = Decal();
+	fragment = textureRendSelect();
 }
