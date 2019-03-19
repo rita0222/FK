@@ -79,16 +79,14 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
-	: replaceShader(nullptr), modulateShader(nullptr), decalShader(nullptr)
+	: textureShader(nullptr), modulateID(0), replaceID(0), decalID(0)
 {
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete replaceShader;
-	delete modulateShader;
-	delete decalShader;
+	delete textureShader;
 	return;
 }
 
@@ -97,41 +95,13 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 	auto modelShader = argModel->getShader();
 
 	if(modelShader != nullptr) {
-
 		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 		}
-
 	} else {
-
-		if(replaceShader == nullptr || modulateShader == nullptr || decalShader == nullptr) {
-			ShaderSetup();
-		}
-
-		fk_TexMode texMode = argModel->getTextureMode();
-
-		if(texMode == FK_TEX_NONE) {
-			fk_Texture *texture = dynamic_cast<fk_Texture *>(argModel->getShape());
-			texMode = texture->getTextureMode();
-		}
-
-		switch(texMode) {
-		  case FK_TEX_REPLACE:
-			shader = replaceShader;
-			break;
-
-		  case FK_TEX_MODULATE:
-			shader = modulateShader;
-			break;
-
-		  case FK_TEX_DECAL:
-			shader = decalShader;
-			break;
-
-		  default:
-			return;
-		}
+		if(textureShader == nullptr) ShaderSetup();
+		else shader = textureShader;
 	}
 	
 	PolygonModeSet();
@@ -152,80 +122,34 @@ void fk_TextureDraw::PolygonModeSet(void)
 
 void fk_TextureDraw::ShaderSetup(void)
 {
-	ReplaceSetup();
-	ModulateSetup();
-	DecalSetup();
+	textureShader = new fk_ShaderBinder();
+	shader = textureShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Texture_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Texture_FS.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_TextureDraw", "ShaderSetup", 1, "Shader Compile Error");
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+	
+	modulateID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
+	replaceID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
+	decalID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
 
 	return;
-}
-
-void fk_TextureDraw::ReplaceSetup(void)
-{
-	if(replaceShader != nullptr) delete replaceShader;
-
-	replaceShader = new fk_ShaderBinder();
-	auto prog = replaceShader->getProgram();
-	auto param = replaceShader->getParameter();
-	
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS_Replace.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "ReplaceSetup", 1, "Shader Compile Error");
-	}
-
-	ParamInit(prog, param);
-}
-
-void fk_TextureDraw::ModulateSetup(void)
-{
-	if(modulateShader != nullptr) delete modulateShader;
-
-	modulateShader = new fk_ShaderBinder();
-	auto prog = modulateShader->getProgram();
-	auto param = modulateShader->getParameter();
-	
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS_Modulate.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "ModulateSetup", 1, "Shader Compile Error");
-	}
-
-	ParamInit(prog, param);
-}
-
-void fk_TextureDraw::DecalSetup(void)
-{
-	if(decalShader != nullptr) delete decalShader;
-
-	decalShader = new fk_ShaderBinder();
-	auto prog = decalShader->getProgram();
-	auto param = decalShader->getParameter();
-	
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS_Decal.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "DecalSetup", 1, "Shader Compile Error");
-	}
-
-	ParamInit(prog, param);
 }
 
 void fk_TextureDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -275,6 +199,25 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 
 	shader->ProcPreShader();
 
+	fk_TexMode texMode = argModel->getTextureMode();
+	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
+
+	switch(texMode) {
+	  case FK_TEX_MODULATE:
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
+		break;
+
+	  case FK_TEX_REPLACE:
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &replaceID);
+		break;
+
+	  case FK_TEX_DECAL:
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &decalID);
+		break;
+
+	  default:
+		break;
+	}
 	
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

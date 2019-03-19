@@ -85,59 +85,58 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
-	: modelShader(nullptr), elementShader(nullptr)
+	: lineShader(nullptr), modelID(0), elemID(0)
 {
 	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
-	delete modelShader;
-	delete elementShader;
-
+	delete lineShader;
 	return;
 }
 
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 {
-	auto localShader = argModel->getShader();
+	auto shapeType = argModel->getShape()->getRealShapeType();
+	auto col = &(argModel->getLineColor()->col);
+	auto mode = argModel->getElementMode();
+	auto modelShader = argModel->getShader();
 
-	if(localShader != nullptr) {
-		shader = localShader;
-
+	if(modelShader != nullptr) {
+		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 		}
-
 	} else {
-
-		if(modelShader == nullptr || elementShader == nullptr) ShaderSetup();
-
-		switch(argModel->getElementMode()) {
-		  case FK_ELEM_MODEL:
-			shader = modelShader;
-			break;
-
-		  case FK_ELEM_ELEMENT:
-			shader = elementShader;
-			break;
-
-		  default:
-			return;
-		}
+		if(lineShader == nullptr) ShaderSetup();
+		else shader = lineShader;
 	}
 	
 	auto parameter = shader->getParameter();
 
 	SetParameter(parameter);
-	parameter->setRegister(fk_Shape::lineModelColorName, &(argModel->getLineColor()->col));
+	parameter->setRegister(fk_Shape::lineModelColorName, col);
 
 	shader->ProcPreShader();
+
+	switch(mode) {
+	  case FK_ELEM_MODEL:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+		break;
+
+	  case FK_ELEM_ELEMENT:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
+		break;
+
+	  default:
+		return;
+	}
 	
 	glEnable(GL_LINE_SMOOTH);
 
-	switch(argModel->getShape()->getRealShapeType()) {
+	switch(shapeType) {
 	  case FK_SHAPE_LINE:
 		Draw_Line(argModel, parameter);
 		break;
@@ -156,42 +155,13 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 
 void fk_LineDraw::ShaderSetup(void)
 {
-	ModelSetup();
-	ElementSetup();
-}
-
-void fk_LineDraw::ModelSetup(void)
-{
-	modelShader = new fk_ShaderBinder();
-	auto prog = modelShader->getProgram();
-	auto param = modelShader->getParameter();
+	lineShader = new fk_ShaderBinder();
+	shader = lineShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Line_VS_Model.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Line_FS.out"
-	;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_LineDraw", "ModelSetup", 1, "Shader Compile Error");
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-void fk_LineDraw::ElementSetup(void)
-{
-	if(elementShader != nullptr) delete elementShader;
-
-	elementShader = new fk_ShaderBinder();
-	auto prog = elementShader->getProgram();
-	auto param = elementShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Line_VS_Element.out"
+		#include "GLSL/Line_VS.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -199,10 +169,18 @@ void fk_LineDraw::ElementSetup(void)
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_LineDraw", "ElementSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_LineDraw", "ShaderSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+	
+	modelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ModelColor");
+	elemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ElementColor");
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+
 	return;
 }
 

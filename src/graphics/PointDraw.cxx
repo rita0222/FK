@@ -70,7 +70,6 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/Error.H>
 #include <FK/PointDraw.H>
 #include <FK/OpenGL.H>
 #include <FK/Model.h>
@@ -80,21 +79,20 @@
 #include <FK/Vertex.h>
 #include <FK/Curve.h>
 #include <FK/Surface.h>
+#include <FK/Error.H>
 
 using namespace std;
 using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
-	: modelShader(nullptr), elementShader(nullptr), ifsShader(nullptr)
+	: pointShader(nullptr)
 {
 	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	delete modelShader;
-	delete elementShader;
-	delete ifsShader;
+	delete pointShader;
 	return;
 }
 
@@ -102,41 +100,16 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 {
 	auto	*shape = argModel->getShape();
 	auto	shapeType = shape->getRealShapeType();
-	auto	localShader = argModel->getShader();
-	int		pointNum;
+	auto	modelShader = argModel->getShader();
 
-	switch(shapeType) {
-	  case FK_SHAPE_IFS:
-		pointNum = dynamic_cast<fk_IndexFaceSet *>(shape)->getPosSize();
-		break;
-
-	  case FK_SHAPE_POINT:
-		pointNum = dynamic_cast<fk_Point *>(shape)->getSize();
-		break;
-
-	  default:
-		return;
-	}
-		
-	if(localShader != nullptr) {
-		shader = localShader;
+	if(modelShader != nullptr) {
+		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 		}
 	} else {
-		if(modelShader == nullptr || elementShader == nullptr || ifsShader == nullptr) {
-			ShaderSetup();
-		}
-
-		if(shapeType == FK_SHAPE_IFS) {
-			shader = ifsShader;
-		} else {
-			if(argModel->getElementMode() == FK_ELEM_MODEL) {
-				shader = modelShader;
-			} else {
-				shader = elementShader;
-			}
-		}
+		if(pointShader == nullptr) ShaderSetup();
+		else shader = pointShader;
 	}
 
 	auto parameter = shader->getParameter();
@@ -145,6 +118,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
+	int pointNum = SubroutineSetup(argModel);
+	
 	glPointSize((GLfloat)argModel->getPointSize());
 
 	switch(shapeType) {
@@ -153,6 +128,19 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 		Draw_Point(argModel, parameter, pointNum);
 		break;
 
+/*
+	  case FK_SHAPE_SOLID:
+		DrawSolidPointNormal(argModel, argFlag);
+		break;
+
+	  case FK_SHAPE_CURVE:
+		DrawCurvePointNormal(argModel, argFlag);
+		break;
+		
+	  case FK_SHAPE_SURFACE:
+		DrawSurfacePointNormal(argModel, argFlag);
+		break;
+*/
 	  default:
 		break;
 	}
@@ -164,85 +152,36 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 
 void fk_PointDraw::ShaderSetup(void)
 {
-	ModelSetup();
-	ElementSetup();
-	IFSSetup();
-
-	return;
-}
-
-void fk_PointDraw::ModelSetup(void)
-{
-	if(modelShader != nullptr) delete modelShader;
-	
-	modelShader = new fk_ShaderBinder();
-
- 	auto prog = modelShader->getProgram();
-	auto param = modelShader->getParameter();
+	pointShader = new fk_ShaderBinder();
+	shader = pointShader;
+ 	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Point_VS_Model.out"
-	;
+		#include "GLSL/Point_VS.out"
+		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS_Point.out"
-	;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_PointDraw", "ModelSetup", 1, "Shader Compile Error");
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-void fk_PointDraw::ElementSetup(void)
-{
-	if(elementShader != nullptr) delete elementShader;
-	
-	elementShader = new fk_ShaderBinder();
-
- 	auto prog = elementShader->getProgram();
-	auto param = elementShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Point_VS_Element.out"
-	;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS_Point.out"
+		#include "GLSL/Point_FS.out"
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_PointDraw", "ElementSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_PointDraw", "ShaderSetup", 1, "Shader Compile Error");
 	}
 
 	ParamInit(prog, param);
-	return;
-}
 
-void fk_PointDraw::IFSSetup(void)
-{
-	if(ifsShader != nullptr) delete ifsShader;
-	
-	ifsShader = new fk_ShaderBinder();
+	auto progID = prog->getProgramID();
 
- 	auto prog = ifsShader->getProgram();
-	auto param = ifsShader->getParameter();
+	vsModelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointModelVS");
+	vsElemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointElemVS");
+	vsIFSID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointIFSVS");
+	fsPointID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointPointFS");
+	fsIFSID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointIFSFS");
 
-	prog->vertexShaderSource =
-		#include "GLSL/Point_VS_IFS.out"
-	;
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS_IFS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_PointDraw", "IFSSetup", 1, "Shader Compile Error");
-	}
-
-	ParamInit(prog, param);
 	return;
 }
 
@@ -255,6 +194,40 @@ void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argP
 	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
 	argProg->link();
 }
+
+int fk_PointDraw::SubroutineSetup(fk_Model *argModel)
+{
+	auto shape = argModel->getShape();
+	auto mode = argModel->getElementMode();
+
+	switch(shape->getRealShapeType()) {
+	  case FK_SHAPE_POINT:
+		switch(mode) {
+		  case FK_ELEM_MODEL:
+			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
+			break;
+
+		  case FK_ELEM_ELEMENT:
+			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsElemID);
+			break;
+
+		  default:
+			return 0;
+		}
+		
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
+		return dynamic_cast<fk_Point *>(shape)->getSize();
+
+	  case FK_SHAPE_IFS:
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsIFSID);
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsIFSID);
+		return dynamic_cast<fk_IndexFaceSet *>(shape)->getPosSize();
+
+	  default:
+		break;
+	}
+	return 0;
+}	
 
 GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 {
