@@ -37,6 +37,8 @@ namespace FK_CLI_GenMatrix
 				if(!largeV[0].Equals(largeV[2])) diff++;
 			}
 			Console.WriteLine("Diff Count = " + diff.ToString());
-		}
+            Console.WriteLine("Hit Any Key.");
+            Console.ReadKey();
+        }
 	}
 }
