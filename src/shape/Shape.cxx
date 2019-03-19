@@ -96,29 +96,40 @@ fk_Shape::fk_Shape(fk_ObjectType argObjType)
 
 fk_Shape::~fk_Shape()
 {
-	if(pointVAO != 0) glDeleteBuffers(1, &pointVAO);
-	if(lineVAO != 0) glDeleteBuffers(1, &lineVAO);
-	if(faceVAO != 0) glDeleteBuffers(1, &faceVAO);
-		
+	if (pointVAO != 0) {
+		if (glIsBuffer(pointVAO) == GL_TRUE) {
+			glDeleteBuffers(1, &pointVAO);
+		}
+	}
+	if (lineVAO != 0) {
+		if (glIsBuffer(lineVAO) == GL_TRUE) {
+			glDeleteBuffers(1, &lineVAO);
+		}
+	}
+	if (faceVAO != 0) {
+		if (glIsBuffer(faceVAO) == GL_TRUE) {
+			glDeleteBuffers(1, &faceVAO);
+		}
+	}
+
 	int tmpID1 = 0;
 	GLuint tmpID2 = 0;
 
-	for(auto p : attrMapI) {
+	for (auto p : attrMapI) {
 		tmpID1 = get<0>(p.second);
-		if(tmpID1 != -1) {
+		if (tmpID1 != -1) {
 			tmpID2 = GLuint(tmpID1);
-			glDeleteBuffers(1, &tmpID2);
+			if (glIsBuffer(tmpID2) == GL_TRUE) glDeleteBuffers(1, &tmpID2);
 		}
 	}
 
-	for(auto p : attrMapF) {
+	for (auto p : attrMapF) {
 		tmpID1 = get<0>(p.second);
-		if(tmpID1 != -1) {
+		if (tmpID1 != -1) {
 			tmpID2 = GLuint(tmpID1);
-			glDeleteBuffers(1, &tmpID2);
+			if (glIsBuffer(tmpID2) == GL_TRUE) glDeleteBuffers(1, &tmpID2);
 		}
 	}
-
 	return;
 }
 
