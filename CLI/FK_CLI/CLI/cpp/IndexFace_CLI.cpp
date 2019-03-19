@@ -380,7 +380,7 @@ namespace FK_CLI {
 	{
 		int i;
 		vector<int>	tmpA = GetP()->getFaceData(argFID);
-		cli::array<int>^ retA = gcnew cli::array<int>(tmpA.size());
+		cli::array<int>^ retA = gcnew cli::array<int>(int(tmpA.size()));
 		for(i = 0; i < int(tmpA.size()); ++i) retA[i] = tmpA[i];
 		return retA;
 	}

@@ -217,7 +217,7 @@ namespace FK_CLI {
 	{
 		list<::FK::fk_Vertex *> vList;
 		GetP()->getVertexList(&vList);
-		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(vList.size());
+		cli::array<fk_Vertex^>^ A = gcnew cli::array<fk_Vertex^>(int(vList.size()));
 		int count = 0;
 		for(auto v : vList) {
 			A[count]->pBase = v;
@@ -231,7 +231,7 @@ namespace FK_CLI {
 	{
 		list<::FK::fk_Half *> hList;
 		GetP()->getHalfList(&hList);
-		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(hList.size());
+		cli::array<fk_Half^>^ A = gcnew cli::array<fk_Half^>(int(hList.size()));
 		int count = 0;
 		for(auto h : hList) {
 			A[count]->pBase = h;
@@ -245,7 +245,7 @@ namespace FK_CLI {
 	{
 		list<::FK::fk_Edge *> eList;
 		GetP()->getEdgeList(&eList);
-		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(eList.size());
+		cli::array<fk_Edge^>^ A = gcnew cli::array<fk_Edge^>(int(eList.size()));
 		int count = 0;
 		for(auto e : eList) {
 			A[count]->pBase = e;
@@ -259,7 +259,7 @@ namespace FK_CLI {
 	{
 		list<::FK::fk_Loop *> lList;
 		GetP()->getLoopList(&lList);
-		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(lList.size());
+		cli::array<fk_Loop^>^ A = gcnew cli::array<fk_Loop^>(int(lList.size()));
 		int count = 0;
 		for(auto l : lList) {
 			A[count]->pBase = l;
