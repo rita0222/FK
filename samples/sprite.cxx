@@ -30,6 +30,7 @@ int main(int, char *[])
 	window.setBGColor(0.6, 0.7, 0.8);
 	window.showGuide(FKUT_GRID_XZ);
 	window.setTrackBallMode(true);
+	window.setFPS(60);
 	window.open();
 
 	count = 0;
