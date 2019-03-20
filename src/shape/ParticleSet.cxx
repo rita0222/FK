@@ -81,9 +81,9 @@ using namespace FK;
 fk_ParticleSet::fk_ParticleSet(unsigned int argMax)
 {
 	SetObjectType(FK_PARTICLESET);
-	pAdmin = new fk_IDAdmin;
+	pAdmin = new fk_IDAdmin();
 	pAdmin->Init(0);
-	point = new fk_Point;
+	point = new fk_Point();
 	pSet.clear();
 	maxNum = argMax;
 	count = 0;

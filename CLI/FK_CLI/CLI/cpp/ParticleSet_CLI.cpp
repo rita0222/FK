@@ -83,8 +83,10 @@ namespace FK_CLI
 
 	fk_Particle^ fk_ParticleSet::NewParticle(void)
 	{
+		auto newP = GetP()->newParticle();
+		if (newP == nullptr) return nullptr;
 		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->newParticle();
+		P->pBase = newP;
 		P->dFlg = false;
 		GenMethod(P);
 		return P;
@@ -93,8 +95,10 @@ namespace FK_CLI
 	fk_Particle^ fk_ParticleSet::NewParticle(fk_Vector^ argPos)
 	{
 		if(!argPos) return nullptr;
+		auto newP = GetP()->newParticle();
+		if (newP == nullptr) return nullptr;
 		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->newParticle(argPos);
+		P->pBase = newP;
 		P->dFlg = false;
 		GenMethod(P);
 		return P;
@@ -102,6 +106,8 @@ namespace FK_CLI
 
 	fk_Particle^ fk_ParticleSet::NewParticle(double argX, double argY, double argZ)
 	{
+		auto newP = GetP()->newParticle();
+		if (newP == nullptr) return nullptr;
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = GetP()->newParticle(argX, argY, argZ);
 		P->dFlg = false;
