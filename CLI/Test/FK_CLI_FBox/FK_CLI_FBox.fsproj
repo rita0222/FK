@@ -5,14 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>adc6d57d-1dec-49db-bf5e-f36bdcca2bf0</ProjectGuid>
+    <ProjectGuid>ae5cfa53-7538-479b-8ee0-479687ea5d12</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FK_CLI_FBoid</RootNamespace>
-    <AssemblyName>FK_CLI_FBoid</AssemblyName>
+    <RootNamespace>FK_CLI_FBox</RootNamespace>
+    <AssemblyName>FK_CLI_FBox</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseStandardResourceNames>true</UseStandardResourceNames>
-    <Name>FK_CLI_FBoid</Name>
+    <Name>FK_CLI_FBox</Name>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -47,7 +47,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <Content Include="packages.config" />
-    <Compile Include="FBoid.fs" />
+    <Compile Include="FBox.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
