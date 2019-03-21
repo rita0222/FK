@@ -74,12 +74,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FK_CLI">
-      <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_CLI.dll</HintPath>
-    </Reference>
-    <Reference Include="FK_FormHelper">
-      <HintPath>..\..\FK_CLI_DLL\Release\FK_FormHelper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -144,6 +138,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FK_CLI\FK_CLI_2017.vcxproj">
+      <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
+      <Name>FK_CLI_2017</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FK_FormHelper\FK_FormHelper.csproj">
+      <Project>{f2d34525-5db1-47fc-9718-532bbf28bf4a}</Project>
+      <Name>FK_FormHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FK_FormHelper\FK_FormHelper.csproj">
       <Project>{e4a2c2da-d590-4b71-8219-33a6d074fdc7}</Project>
       <Name>FK_FormHelper</Name>

@@ -109,11 +109,6 @@ namespace FK_FormHelper
             outPos = pos2d;
         }
 
-        public fk_PickData[] GetPickData(int argX, int argY, int argPixel)
-        {
-            return renderer.GetPickData(argX, argY, argPixel);
-        }
-
         protected virtual ITimer MakeTimer()
         {
             return new WinFormTimer();

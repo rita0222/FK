@@ -82,12 +82,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FK_CLI">
-      <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_CLI.dll</HintPath>
-    </Reference>
-    <Reference Include="FK_FormHelper">
-      <HintPath>..\..\..\..\..\..\..\FK_CLI\bin\FK_FormHelper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -133,6 +127,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FK_CLI\FK_CLI_2017.vcxproj">
+      <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
+      <Name>FK_CLI_2017</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FK_FormHelper\FK_FormHelper.csproj">
+      <Project>{f2d34525-5db1-47fc-9718-532bbf28bf4a}</Project>
+      <Name>FK_FormHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

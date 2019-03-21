@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FK_CLI;
-using FK_ShaderPlugin;
+// using FK_ShaderPlugin;
 
 namespace Sample08_04
 {
