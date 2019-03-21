@@ -1,6 +1,15 @@
 #!/usr/bin/env perl
 
-foreach $glslName (@ARGV) {
+use File::Basename 'dirname';
+
+$scriptName = $0;
+$scriptName =~ s/^(\w)(:)/\/cygdrive\/$1/;
+$scriptName =~ s/\\/\//g;
+$dirName = dirname($scriptName);
+
+@fileList = glob("$dirName/*.glsl");
+
+foreach $glslName (@fileList) {
 	next if $glslName !~ /.glsl$/;
 	$outName = $glslName;
 	$outName =~ s/.glsl$/.out/;
@@ -12,7 +21,7 @@ foreach $glslName (@ARGV) {
 	while(<INFILE>) {
 		print OUTFILE $_;
 	}
-	print OUTFILE ")\"\n";
+	print OUTFILE ")\"\n";	
 
 	close(INFILE);
 	close(OUTFILE);

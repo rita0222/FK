@@ -143,6 +143,9 @@
     <Lib>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
+    <PreBuildEvent>
+      <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -163,6 +166,9 @@
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Lib />
+    <PreBuildEvent>
+      <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
