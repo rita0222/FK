@@ -7,7 +7,11 @@ $scriptName =~ s/^(\w)(:)/\/cygdrive\/$1/;
 $scriptName =~ s/\\/\//g;
 $dirName = dirname($scriptName);
 
-@fileList = glob("$dirName/*.glsl");
+if ($#ARGV >= 0) {
+	@fileList = @ARGV;
+} else {
+	@fileList = glob("$dirName/*.glsl");
+}
 
 foreach $glslName (@fileList) {
 	next if $glslName !~ /.glsl$/;
