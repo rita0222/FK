@@ -146,10 +146,6 @@
       <Project>{f2d34525-5db1-47fc-9718-532bbf28bf4a}</Project>
       <Name>FK_FormHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FK_FormHelper\FK_FormHelper.csproj">
-      <Project>{e4a2c2da-d590-4b71-8219-33a6d074fdc7}</Project>
-      <Name>FK_FormHelper</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
