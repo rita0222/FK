@@ -88,13 +88,13 @@ namespace FK_CLI_WpfAppTest
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
-            viewport.PreDraw += (s, ee) =>
+            viewport.PreDraw += () =>
             {
                 camera.GlTranslate(0.0, 0.0, -1.0);
-                blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
+                blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI / 300.0);
                 var cPos = camera.Position;
-                if (cPos.z < -FK.EPS) camera.GlFocus(origin);
-                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
+                if (cPos.z < -FK_CLI.FK.EPS) camera.GlFocus(origin);
+                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI / 500.0);
                 ++count;
                 this.TextBox1.Text = camera.Position.ToString();
             };

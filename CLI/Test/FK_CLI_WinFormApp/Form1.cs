@@ -33,7 +33,7 @@ namespace FK_CLI_WinFormAppTest
             vec.Normalize();
             this.textBox1.Text = vec.ToString();
 
-			mat.MakeRot(FK.PI/6.0, fk_Axis.Z);
+			mat.MakeRot(Math.PI/6.0, fk_Axis.Z);
 			fk_Vector vec2 = mat * vec;			
 
 			this.textBox2.Text = vec2.ToString();			
@@ -115,13 +115,13 @@ namespace FK_CLI_WinFormAppTest
 
             var origin = new fk_Vector(0.0, 0.0, 0.0);
             int count = 0;
-            viewport.PreDraw += (s, e) =>
+            viewport.PreDraw += () =>
             {
                 camera.GlTranslate(0.0, 0.0, -1.0);
-                blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI / 300.0);
-                var cPos = camera.Position;
-                if (cPos.z < -FK.EPS) camera.GlFocus(origin);
-                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI / 500.0);
+                blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI / 300.0);
+                fk_Vector cPos = camera.Position;
+                if (cPos.z < -FK_CLI.FK.EPS) camera.GlFocus(origin);
+                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI / 500.0);
                 ++count;
 				this.textBox1.Text = camera.Position.ToString();
             };
