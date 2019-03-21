@@ -25,6 +25,9 @@
     <Filter Include="ヘッダー ファイル\CLI">
       <UniqueIdentifier>{cc2fe30f-4efc-4e42-86ff-d640af160d70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\FormHelper">
+      <UniqueIdentifier>{c6353ef8-0a7b-4de2-9c0b-4f06e1d15276}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp">
