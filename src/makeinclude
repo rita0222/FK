@@ -42,7 +42,7 @@ FKTOP		= ../..
 STATIC_DIR	= $(FKTOP)/lib/static
 DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
 
-MACPACK		= $(FKTOP)/../FK_MacPack
+MACPACK		= $(FKTOP)/MacPack
 MACINCLUDE	= $(MACPACK)/include
 MACSYSLIB_S	= $(MACPACK)/lib/static
 MACSYSLIB_D	= $(MACPACK)/lib/dynamic

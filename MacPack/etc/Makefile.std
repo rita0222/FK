@@ -1,0 +1,124 @@
+####################
+# Default Target Parameter
+
+PROGRAM		= fk_prog
+TARGET_DIR	= target_dir
+
+####################
+# User Additional Definition for Compile and Link
+
+EXTRA_CFLAGS	=
+EXTRA_LFLAGS	=
+
+####################
+# Shell Definition
+
+SHELL		= /bin/sh
+
+####################
+# Compile System Parameter
+
+CC		= c++
+RM		= /bin/rm -rf
+MAKE		= make
+LOCAL		= /opt/local
+#LOCAL		= /usr/local
+FK_LIB		= /Library/FK_Lib
+FK_STATIC_LIB	= $(FK_LIB)/lib/static
+FK_DYNAMIC_LIB	= $(FK_LIB)/lib/dynamic
+FK_INCLUDE	= $(FK_LIB)/include
+
+OPS		= -std=c++14 -O -pipe
+
+SYSOPS		= -D_MACOSX_
+
+POSTLINK	= $(FK_INCLUDE)/FK/appmake.pl
+
+INCLDIRS	= -I. -I$(FK_INCLUDE)
+
+LFLAGS		= -L$(FK_STATIC_LIB) -fPIC
+
+SYSLIBS		= \
+			-lfltk_gl \
+			-lfltk \
+			-lpng \
+			-ljpeg \
+			-lvorbisfile \
+			-lvorbis \
+			-logg \
+			-liconv \
+			-lfreetype \
+			-lz \
+			-lbz2 \
+			-framework AGL \
+			-framework OpenCL \
+			-framework OpenGL \
+			-framework Cocoa \
+			-framework OpenAL \
+			-framework ApplicationServices \
+			-framework Foundation \
+			-framework AudioToolBox
+
+FKLIB		= \
+			-lFK3_OpenCL \
+			-lFK3_audio \
+			-lFK3_util \
+			-lFK3_window \
+			-lFK3_graphics \
+			-lFK3_scene \
+			-lFK3_model \
+			-lFK3_shape \
+			-lFK3_material \
+			-lFK3_math \
+			-lFK3_base
+
+CFLAGS		= $(EXTRA_CFLAGS) $(OPS) $(SYSOPS) $(INCLDIRS)
+LINK		= $(EXTRA_LFLAGS) $(LFLAGS) $(FKLIB) $(SYSLIBS)
+EXECOPT		= -o $(PROGRAM)
+
+
+####################
+# File List Parser
+
+HEADERS		= $(shell find . -maxdepth 1 -name "*.h" -print)
+CPPSRCS		= $(shell find . -maxdepth 1 -name "*.cpp" -print)
+CXXSRCS		= $(shell find . -maxdepth 1 -name "*.cxx" -print)
+CSRCS		= $(shell find . -maxdepth 1 -name "*.c" -print)
+
+OBJS		= $(CPPSRCS:cpp=o) $(CSRCS:c=o) $(CXXSRCS:cxx=o)
+
+####################
+# Target List
+
+all : $(PROGRAM)
+
+$(PROGRAM) : $(OBJS)
+	$(CC) $(LFLAGS) $(EXECOPT) $(OBJS) $(LINK)
+	$(POSTLINK) $(PROGRAM)
+
+move: $(PROGRAM)
+	mkdir -p $(TARGET_DIR)
+	rm -rf $(TARGET_DIR)/$(PROGRAM).app
+	mv $(PROGRAM).app $(TARGET_DIR)
+
+clean:
+	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).app Makefile.bak \
+	*.out core *.core *~ #*#
+
+####################
+# Suffixes Rules
+
+.SUFFIXES : .cxx .o
+.SUFFIXES : .cpp .o
+.SUFFIXES : .c .o
+
+%.o : %.cxx $(HEADERS)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.o : %.cpp $(HEADERS)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.o : %.c $(HEADERS)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+####################

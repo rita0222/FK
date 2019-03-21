@@ -102,7 +102,7 @@ TARGET		= target
 OUTPUT		= -o $*
 
 FKTOP		= ..
-MACPACK		= $(FKTOP)/../FK_MacPack
+MACPACK		= $(FKTOP)/MacPack
 MACINCLUDE	= $(MACPACK)/include
 MACSYSLIB_S	= $(MACPACK)/lib/static
 MACSYSLIB_D	= $(MACPACK)/lib/dynamic
