@@ -180,7 +180,7 @@ namespace FK_CLI_Ball
 
 			// ### LIGHT ###
 			light.Type = fk_LightType.POINT;
-            light.SetAttenuation(0.01, 0.0, 0.2);
+            //light.SetAttenuation(0.01, 0.0, 0.2);
 			lightModel.Shape = light;
 			lightModel.Material = fk_Material.TrueWhite;
 			lightModel.GlTranslate(-60.0, 60.0, 0.0);
@@ -193,8 +193,7 @@ namespace FK_CLI_Ball
 			// ### GROUND ###
 			groundModel.Shape = ground;
 			groundModel.Material = fk_Material.LightGreen;
-            //groundModel.Material.Specular = new fk_Color(0.0, 0.0, 0.0);
-            //groundModel.Material.Shininess = 80.0f;
+            groundModel.Material.Shininess = 160.0f;
 			groundModel.SmoothMode = true;
 			groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
 
