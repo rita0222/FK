@@ -9,19 +9,22 @@ namespace FK_CLI_Ball
 {
 	public class Ball
 	{
-		private const double	DOWN_ACCEL		= 1.0500;	// 降下時の加速度
-		private const double	RISE_ACCEL		= 1.0530;	// 上昇時の減速度
+		private const double	DOWN_ACCEL		= 0.050;	// 降下時の加速度
+		private const double	RISE_ACCEL		= 0.053;	// 上昇時の減速度
 		private const int		DOWN_MODE		= 0;		// 降下モード
 		private const int		RISE_MODE		= 1;		// 上昇モード
 		private const int		LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
 		private const int		LOD3_HIGH		= 300;		// 三分割距離 (鳥瞰)
 		private const int		LOD4_LOW		= 90;		// 四分割距離 (ブロック)
 		private const int		LOD3_LOW		= 120;		// 三分割距離 (ブロック)
-		private const double	TOP_BALL_POS	= 300.0;	// ボール始点高さ
-		private const double	BTM_BALL_POS	= 18.0;		// ボール跳ね返り高さ
-		private const double	BALL_SIZE		= 12.0;		// ボール半径
+		private const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
+		private const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
+		private const double	BALL_SIZE		= 12.0;     // ボール半径
+        private const int		BOUND_CYCLE		= 6;
+        private const int		VIEW_CHANGE		= 4;
+            
 
-		private int direction;		// ボールの状態(DOWN_MODE or RISE_MODE)
+        private int direction;		// ボールの状態(DOWN_MODE or RISE_MODE)
 		private int	view_mode;		// 視点モード
 		private int	bound_count;	// バウンド回数を数える変数
 		private double y_trs;			// ボールのｙ座標移動量
@@ -30,8 +33,9 @@ namespace FK_CLI_Ball
 		private fk_Sphere BALL3;			// 三分割形状
 		private fk_Sphere BALL4;			// 四分割形状
 
-		public const int LOW_MODE		= 0;		// ブロック視点モード
-		public const int HIGH_MODE		= 1;		// 鳥瞰モード
+		public const int LOW_MODE			= 0;		// ブロック視点モード
+		public const int HIGH_MODE			= 1;		// 鳥瞰モード
+        public const double ROTATE_SPEED	= 0.02;
 
 		public Ball()
 		{
@@ -45,7 +49,7 @@ namespace FK_CLI_Ball
 		public void Init()
 		{
 			direction	= DOWN_MODE;
-			y_trs		= 0.1;
+			y_trs		= 0.0;
 			view_mode	= HIGH_MODE;
 			bound_count	= 1;
 			ball_model.GlMoveTo(0.0, TOP_BALL_POS, 0.0);
@@ -101,12 +105,12 @@ namespace FK_CLI_Ball
 		{
 			switch(direction) {
 				case DOWN_MODE:
-					y_trs *= DOWN_ACCEL;
+					y_trs += DOWN_ACCEL;
 					ball_model.GlTranslate(0.0, -y_trs, 0.0);
 					break;
 
 				case RISE_MODE:
-					y_trs /= RISE_ACCEL;
+					y_trs -= RISE_ACCEL;
 					ball_model.GlTranslate(0.0, y_trs, 0.0);
 					break;
 
@@ -121,7 +125,7 @@ namespace FK_CLI_Ball
 				direction = RISE_MODE;
 			} else if(y_trs < 0.01) {
 				if(direction == RISE_MODE) {
-					if(bound_count % 4 < 2) {
+					if(bound_count % BOUND_CYCLE < VIEW_CHANGE) {
 						view_mode = HIGH_MODE;
 					} else {
 						view_mode = LOW_MODE;
@@ -137,8 +141,8 @@ namespace FK_CLI_Ball
 			LOD(argPos);
 			Bound();
 			Accel();
-			//４回跳ね返ると初期化
-			if(bound_count > 4) Init();
+
+			if(bound_count > BOUND_CYCLE) Init();
 			return view_mode;
 		}
 	}
@@ -154,16 +158,17 @@ namespace FK_CLI_Ball
 			int view_mode = Ball.HIGH_MODE;
 	
 			var ball = new Ball();
-			
+            var lightBall = new fk_Sphere(4, 2.0);
+
 			var viewModel = new fk_Model();
 			var lightModel = new fk_Model();
 			var groundModel = new fk_Model();
 			var blockModel = new fk_Model();
+            var lightBallModel = new fk_Model();
 
 			var light = new fk_Light();
 			var ground = new fk_Circle(4, 100.0);
 			var block = new fk_Block(10.0, 10.0, 10.0);
-
 
 			fk_Material.InitDefault();
 
@@ -175,25 +180,36 @@ namespace FK_CLI_Ball
 
 			// ### LIGHT ###
 			light.Type = fk_LightType.POINT;
-			light.SetAttenuation(0.0, 0.0);
+            light.SetAttenuation(0.01, 0.0, 0.2);
 			lightModel.Shape = light;
-			lightModel.Material = fk_Material.White;
+			lightModel.Material = fk_Material.TrueWhite;
 			lightModel.GlTranslate(-60.0, 60.0, 0.0);
+            lightModel.GlVec(0.0, -1.0, 0.0);
+
+            lightBallModel.Shape = lightBall;
+            lightBallModel.Material = fk_Material.TrueWhite;
+            lightBallModel.GlTranslate(lightModel.InhPosition);
 
 			// ### GROUND ###
 			groundModel.Shape = ground;
 			groundModel.Material = fk_Material.LightGreen;
+            //groundModel.Material.Specular = new fk_Color(0.0, 0.0, 0.0);
+            //groundModel.Material.Shininess = 80.0f;
 			groundModel.SmoothMode = true;
 			groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
 
 			// ### VIEW BLOCK ###
 			blockModel.Shape = block;
 			blockModel.Material = fk_Material.Blue;
+            blockModel.Material.Specular = new fk_Color(1.0, 1.0, 1.0);
+            blockModel.Material.Shininess = 70.0f;
 			blockModel.GlMoveTo(60.0, 30.0, 0.0);
 			blockModel.Parent = groundModel;
 
 			// ### BALL ###
 			ball.Model.Material = fk_Material.Red;
+            ball.Model.Material.Specular = new fk_Color(1.0, 1.0, 1.0);
+            ball.Model.Material.Shininess = 100.0f;
 			ball.Model.SmoothMode = true;
 	
 			// ### Model Entry ###
@@ -201,7 +217,8 @@ namespace FK_CLI_Ball
 			win.Entry(lightModel);
 			win.Entry(ball.Model);
 			win.Entry(groundModel);
-			win.Entry(blockModel); 
+			win.Entry(blockModel);
+            win.Entry(lightBallModel);
 
 			win.Open();
 
@@ -215,18 +232,18 @@ namespace FK_CLI_Ball
 					viewModel.GlMoveTo(0.0, 400.0, 80.0);
 					viewModel.GlFocus(0.0, 30.0, 0.0);
 					viewModel.GlUpvec(0.0, 1.0, 0.0);
-					//win.entry(blockModel);
+					win.Entry(blockModel);
 				} else {
 					// カメラをブロックからの視点にする。
 					viewModel.GlMoveTo(blockModel.InhPosition);
 					viewModel.GlTranslate(0.0, 10.0, 0.0);
 					viewModel.GlFocus(ball.Pos);
 					viewModel.GlUpvec(0.0, 1.0, 0.0);
-					//win.remove(blockModel);
+					win.Remove(blockModel);
 				}
 
 				// 地面をくるくる回転させましょう。
-				groundModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
+				groundModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, Ball.ROTATE_SPEED);
 			}
 		}
 	}
