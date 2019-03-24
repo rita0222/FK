@@ -51,7 +51,7 @@ namespace FK {
 		 *
 		 *	\return		新しい頂点の ID
 		 */
-		int				pushVertex(fk_Vector pos);
+		int				pushVertex(const fk_Vector &pos);
 
 		//! 頂点位置設定関数
 		/*!
@@ -62,7 +62,7 @@ namespace FK {
 		 *
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			setVertex(int ID, fk_Vector pos);
+		bool			setVertex(int ID, const fk_Vector &pos);
 
 		//! 点群生成関数 1
 		/*
@@ -141,7 +141,7 @@ namespace FK {
 		 */
 		bool			getDrawMode(int ID);
 
-		//! 個別色設定関数1
+		//! 個別色設定関数
 		/*!
 		 *	点の色を個別に設定します。
 		 *	この色設定によって表示するには、
@@ -150,18 +150,7 @@ namespace FK {
 		 *	\param[in]	vID		要素ID
 		 *	\param[in]	col		色値
 		 */
-		void			setColor(int vID, fk_Color col);
-
-		//! 個別色設定関数2
-		/*!
-		 *	点の色を個別に設定します。
-		 *	この色設定によって表示するには、
-		 *	fk_Model::setElementMode() で FK_ELEM_ELEMENT を設定しておく必要があります。
-		 *
-		 *	\param[in]	vID		要素ID
-		 *	\param[in]	col		色値
-		 */
-		void			setColor(int vID, fk_Color *col);
+		void			setColor(int vID, const fk_Color &col);
 
 		//! 個別色取得関数
 		/*!

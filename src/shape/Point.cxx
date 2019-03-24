@@ -125,7 +125,7 @@ bool fk_Point::MakePoint(vector<fk_Vector> *argP)
 	return MakePoint(int(argP->size()), &(argP->at(0)));
 }
 
-int fk_Point::pushVertex(fk_Vector argPos)
+int fk_Point::pushVertex(const fk_Vector &argPos)
 {
 	posArray.push(argPos);
 	colArray.push(0.0, 0.0, 0.0, 1.0);
@@ -136,7 +136,7 @@ int fk_Point::pushVertex(fk_Vector argPos)
 	return int(aliveArray.size() - 1);
 }
 
-bool fk_Point::setVertex(int argID, fk_Vector argPos)
+bool fk_Point::setVertex(int argID, const fk_Vector &argPos)
 {
 	if(argID < 0 || argID >= posArray.getSize()) return false;
 	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
@@ -192,18 +192,10 @@ void fk_Point::allClear(void)
 	return;
 }
 
-void fk_Point::setColor(int argID, fk_Color argCol)
+void fk_Point::setColor(int argID, const fk_Color &argCol)
 {
 	if(argID < 0 || argID >= colArray.getSize()) return;
 	colArray.set(argID, argCol);
-	modifyAttribute(pointElementColorName);
-	return;
-}
-
-void fk_Point::setColor(int argID, fk_Color *argCol)
-{
-	if(argID < 0 || argID >= colArray.getSize()) return;
-	colArray.set(argID, *argCol);
 	modifyAttribute(pointElementColorName);
 	return;
 }

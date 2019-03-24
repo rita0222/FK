@@ -180,7 +180,7 @@ namespace FK {
 		 *
 		 *	\param[in]	col		色値
 		 */
-		void			setColor(fk_Color col);
+		void			setColor(const fk_Color &col);
 
 		//! 色設定関数2
 		/*!
