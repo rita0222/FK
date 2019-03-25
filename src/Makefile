@@ -7,48 +7,12 @@ AUDIO		= audio
 OPENCL		= OpenCL
 
 all:
-	@echo "	FreeBSD:		make fb"
-	@echo "	FreeBSD Dynamic:	make fb-d"
-	@echo "	FreeBSD Debug:		make fb-g"
-	@echo "	Linux:			make linux"
 	@echo "	MacOS X:		make mac"
 	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
 	@echo "	Clean:			make clean"
-
-fb:
-	for sd in $(BASE) $(AUDIO) $(OPENCL); do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) fb TARGET=depend ; \
-		$(MAKE) fb ; \
-		cd .. ; done
-
-fb-d:
-	for sd in $(BASE) $(AUDIO) $(OPENCL); do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) fb-d TARGET=depend ; \
-		$(MAKE) fb-d ; \
-		cd .. ; done
-
-fb-g:
-	for sd in $(BASE) $(AUDIO) $(OPENCL); do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) fb-g TARGET=depend ; \
-		$(MAKE) fb-g ; \
-		cd .. ; done
-
-linux:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) linux TARGET=depend ; \
-		$(MAKE) linux ; \
-		cd .. ; done
 
 mac:
 	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..

@@ -64,97 +64,11 @@ LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 
 all:
-	@echo "	FreeBSD:		make fb"
-	@echo "	FreeBSD Dynamic:	make fb-d"
-	@echo "	FreeBSD Debug:		make fb-g"
-	@echo "	Linux:			make linux"
-	@echo "	MinGW:			make ming"
-	@echo "	MinGW Debug:		make ming-g"
 	@echo "	MacOS X:		make mac"
 	@echo "	MacOS X Dynamic:	make mac-d"
 	@echo "	MacOS X Debug:		make mac-g"
 	@echo "	MacOS X gcc:		make mac-gcc"
 	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
-
-fb:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -O -pipe" \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
-		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = " \
-	"FKLIBS = " \
-	"SYSLIBS = " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"LIBRARY = $(LIBRARY_S)" \
-	"RANLIB = ranlib"
-
-fb-d:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -O -pipe" \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPT = -fPIC -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
-		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = -L$(DYNAMIC_DIR)" \
-	"FKLIBS = $(FKLINK)" \
-	"DLPRE = so" \
-	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
-		-lfltk_gl -lfltk \
-		-ljpeg -lpng \
-		-lfreetype -lGL \
-		-lXft -lfontconfig -lXinerama -lpthread \
-		-lXext -lX11 -lz -lbz2 -lm" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"LIBRARY_D = $(DYNAMIC_DIR)/libFK4_$(BASENAME).$(VERNAME).so" \
-	"LIBRARY = $(DYNAMIC_DIR)/libFK4_$(BASENAME).$(VERNAME).so" \
-	"LOADER_D_OPT = -L. -L$(LOCAL)/lib -shared \
-		-Wl,-no-undefined -Wl,-Bsymbolic-functions \
-		-Wl,-gc-sections -Wl,-soname,libFK4_$(BASENAME).$(VERNAME).so" \
-	"RANLIB = ranlib"
-
-fb-g:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -g" \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPT = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
-		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = " \
-	"FKLIBS = " \
-	"SYSLIBS = " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(FKTOP)/../FK_BSDPack/include \
-		-I$(LOCAL)/include -I$(LOCAL)/include/freetype2" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"LIBRARY = $(LIBRARY_G)" \
-	"RANLIB = ranlib"
-
-linux:
-	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++14" \
-	"SYSOPT = -D_LINUX_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(LOCAL)/include" \
-	"DEPENDDIRS = $(INCLDIRS)" \
-	"RANLIB = ranlib"
-
-ming:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = " \
-	"SYSOPT = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
-	"DEPENDDIRS = " \
-	"RANLIB = ranlib"
-
-ming-g:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -g" \
-	"SYSOPT = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I$(FKTOP) -I$(FKTOP)/../FK_MingPack/include" \
-	"DEPENDDIRS = " \
-	"RANLIB = ranlib" \
-	"LIBRARY = $(LIBRARY_G)"
 
 mac:
 	$(MAKE) $(TARGET) \
