@@ -82,11 +82,11 @@ double myRandom(void)
 
 int main(int, char **)
 {
-	fk_ShapeViewer      viewer(600, 600);
+	fk_ShapeViewer      viewer(800, 600);
 	fk_ParticleSet      particle;
 	fk_Prism			prism(40, 15.0, 15.0, 50.0);
 	double				maxSpeed, minSpeed;
-	fk_Vector       	water(-0.2, 0.0, 0.0);
+	fk_Vector       	water(-0.5, 0.0, 0.0);
 	double          	R = 15.0;
 
 	srand((unsigned int)(time(0)));     // 乱数の初期化。
@@ -94,8 +94,8 @@ int main(int, char **)
 	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
 
-	maxSpeed = 0.3;
-	minSpeed = 0.1;
+	maxSpeed = 0.6;
+	minSpeed = 0.3;
 
 	particle.genMethod = [](fk_Particle *p) {
 		p->setPosition(50.0, myRandom()*50.0 - 25.0, myRandom()*50.0 - 25.0);
