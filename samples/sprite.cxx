@@ -30,7 +30,6 @@ int main(int, char *[])
 	window.setBGColor(0.6, 0.7, 0.8);
 	window.showGuide(FKUT_GRID_XZ);
 	window.setTrackBallMode(true);
-	window.setFPS(60);
 	window.open();
 
 	count = 0;
@@ -38,7 +37,7 @@ int main(int, char *[])
 		str = "count = " + std::to_string(count);
 		sprite.drawText(str, true);
 		sprite.setPositionLT(-280.0, 230.0);
-		model.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+		model.glRotateWithVec(origin, fk_Y, FK_PI/120.0);
 		count++;
 	}
 	return 0;
