@@ -25,7 +25,7 @@ public:
 	void			forward(void);
 };
 
-const double Agent::SPEED = 0.01;
+const double Agent::SPEED = 0.03;
 
 // 群衆用クラス
 class Boid {
