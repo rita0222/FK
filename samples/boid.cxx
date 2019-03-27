@@ -25,7 +25,7 @@ public:
 	void			forward(void);
 };
 
-const double Agent::SPEED = 0.03;
+const double Agent::SPEED = 0.05;
 
 // 群衆用クラス
 class Boid {
@@ -214,7 +214,7 @@ int main(int, char **)
 	boid.setWindow(&win);
 
 	// ウィンドウ各種設定
-	win.setSize(600, 600);
+	win.setSize(800, 800);
 	win.setBGColor(0.6, 0.7, 0.8);
 	win.showGuide(FK_GRID_XY);
 	win.setCameraPos(0.0, 0.0, 80.0);
