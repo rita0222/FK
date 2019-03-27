@@ -3,7 +3,6 @@ SHELL	= /bin/sh
 RM	= rm -f
 
 doc:
-	latexmk FK_Setup_Ming
 	latexmk FK_Setup_Mac
 	latexmk FK_Setup_VC
 	latexmk FK_Setup_VS_CLI
