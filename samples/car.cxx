@@ -353,6 +353,7 @@ int main(int, char *[])
 	fk_Color		bgColor(0.2, 0.7, 1.0);
 
 	fk_Model		buildViewModel, birdViewModel;
+	double			speed = 2.0;
 
 	mainWindow.end();
 	fk_Material::initDefault();
@@ -415,8 +416,8 @@ int main(int, char *[])
 			continue;
 		}	  
 
-		carObj.forward(1.0);
-		if(carObj.isRotate() == true) carObj.rotate(FK_PI/200.0);
+		carObj.forward(speed);
+		if(carObj.isRotate() == true) carObj.rotate(speed * FK_PI/200.0);
 
 		buildViewModel.glFocus(carObj.getCarPosition());
 		buildViewModel.glUpvec(0.0, 0.0, 1.0);

@@ -123,23 +123,27 @@ int main(int, char *[])
 
 	window.open();
 
+	double speed = 5.0;
+
 	for(int i = 0; window.update() == true; i++) {
+		double z = camera.getPosition().z;
 
 		// 視点を原点に近づける
-		camera.glTranslate(0.0, 0.0, -1.0);
+		camera.glTranslate(0.0, 0.0, -speed);
         
 		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/300.0);
+		blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, speed * FK_PI/300.0);
+
+		// カメラが 1000 より近くなったら Z 軸回転
+		if(z < 1000.0) {
+			camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Z, speed * FK_PI/500.0);
+		}
 
 		// 視点が原点を越えたら、向きをもう一度原点に向かせる。
-		if(camera.getPosition().z < -FK_EPS) {
+		if(z < -FK_EPS) {
 			camera.glFocus(0.0, 0.0, 0.0);
 		}
 
-		// i が 1000 以上なら、視点をひねっていく
-		if(i >= 1000) {
-			camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Z, FK_PI/500.0);
-		}
 	}
 
 	return 0;
