@@ -164,7 +164,7 @@ void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
 
 void fk_FaceDraw::PhongSetup(void)
 {
-	phongShader = new fk_ShaderBinder();
+	if(phongShader == nullptr) phongShader = new fk_ShaderBinder();
 	auto prog = phongShader->getProgram();
 	auto param = phongShader->getParameter();
 
@@ -187,7 +187,7 @@ void fk_FaceDraw::PhongSetup(void)
 
 void fk_FaceDraw::GouraudSetup(void)
 {
-	gouraudShader = new fk_ShaderBinder();
+	if(gouraudShader == nullptr) gouraudShader = new fk_ShaderBinder();
 	auto prog = gouraudShader->getProgram();
 	auto param = gouraudShader->getParameter();
 

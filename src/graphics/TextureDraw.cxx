@@ -79,14 +79,17 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
-	: textureShader(nullptr), modulateID(0), replaceID(0), decalID(0)
+	: phongShader(nullptr), gouraudShader(nullptr),
+	  modulate_p_ID(0), replace_p_ID(0), decal_p_ID(0),
+	  modulate_g_ID(0), replace_g_ID(0), decal_g_ID(0)
 {
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete textureShader;
+	delete phongShader;
+	delete gouraudShader;
 	return;
 }
 
@@ -100,8 +103,19 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 			ParamInit(shader->getProgram(), shader->getParameter());
 		}
 	} else {
-		if(textureShader == nullptr) ShaderSetup();
-		else shader = textureShader;
+		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
+		switch(argModel->getShadingMode()) {
+		  case FK_SHADING_PHONG:
+			shader = phongShader;
+			break;
+
+		  case FK_SHADING_GOURAUD:
+			shader = gouraudShader;
+			break;
+
+		  default:
+			return;
+		}
 	}
 	
 	PolygonModeSet();
@@ -120,23 +134,23 @@ void fk_TextureDraw::PolygonModeSet(void)
 	glPolygonMode(GL_FRONT, GL_FILL);
 }
 
-void fk_TextureDraw::ShaderSetup(void)
+void fk_TextureDraw::PhongSetup(void)
 {
-	textureShader = new fk_ShaderBinder();
-	shader = textureShader;
+	if(phongShader == nullptr) phongShader = new fk_ShaderBinder();
+	shader = phongShader;
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS.out"
+		#include "GLSL/Texture_Phong_VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS.out"
+		#include "GLSL/Texture_Phong_FS.out"
 		;
 	
 	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_TextureDraw", "PhongSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
@@ -144,13 +158,52 @@ void fk_TextureDraw::ShaderSetup(void)
 
 	auto progID = prog->getProgramID();
 	
-	modulateID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
-	replaceID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
-	decalID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
+	modulate_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
+	replace_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
+	decal_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
 
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulate_p_ID);
 
 	return;
+}
+
+void fk_TextureDraw::GouraudSetup(void)
+{
+	if(gouraudShader == nullptr) gouraudShader = new fk_ShaderBinder();
+	shader = gouraudShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Texture_Gouraud_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Texture_Gouraud_FS.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_TextureDraw", "GouraudSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+	
+	modulate_g_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
+	replace_g_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
+	decal_g_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulate_g_ID);
+
+	return;
+}
+
+void fk_TextureDraw::ShaderSetup(void)
+{
+	PhongSetup();
+	GouraudSetup();
 }
 
 void fk_TextureDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -203,23 +256,53 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
 
-	switch(texMode) {
-	  case FK_TEX_MODULATE:
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulateID);
+	GLuint id = 0;
+
+	switch(argModel->getShadingMode()) {
+	  case FK_SHADING_PHONG:
+		switch(texMode) {
+		  case FK_TEX_MODULATE:
+			id = modulate_p_ID;
+			break;
+
+		  case FK_TEX_REPLACE:
+			id = replace_p_ID;
+			break;
+
+		  case FK_TEX_DECAL:
+			id = decal_p_ID;
+			break;
+
+		  default:
+			break;
+		}
 		break;
 
-	  case FK_TEX_REPLACE:
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &replaceID);
-		break;
+	  case FK_SHADING_GOURAUD:
+		switch(texMode) {
+		  case FK_TEX_MODULATE:
+			id = modulate_g_ID;
+			break;
 
-	  case FK_TEX_DECAL:
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &decalID);
+		  case FK_TEX_REPLACE:
+			id = replace_g_ID;
+			break;
+
+		  case FK_TEX_DECAL:
+			id = decal_g_ID;
+			break;
+
+		  default:
+			break;
+		}
 		break;
 
 	  default:
 		break;
 	}
-	
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &id);
+
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

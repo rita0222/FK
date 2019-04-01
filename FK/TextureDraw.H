@@ -13,11 +13,14 @@ namespace FK {
 		void	DrawShapeTexture(fk_Model *);
 		GLuint	VAOSetup(fk_Shape *);
 	private:
-		fk_ShaderBinder		*textureShader;
+		fk_ShaderBinder		*phongShader, *gouraudShader;
 
-		GLuint	modulateID, replaceID, decalID;
+		GLuint	modulate_p_ID, replace_p_ID, decal_p_ID;
+		GLuint	modulate_g_ID, replace_g_ID, decal_g_ID;
 
 		void 	ShaderSetup(void);
+		void	PhongSetup(void);
+		void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
 		void	PolygonModeSet(void);
