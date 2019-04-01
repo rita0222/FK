@@ -137,6 +137,7 @@ void fk_TextureDraw::ShaderSetup(void)
 	
 	if(prog->validate() == false) {
 		fk_PutError("fk_TextureDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);

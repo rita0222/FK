@@ -170,6 +170,7 @@ void fk_LineDraw::ShaderSetup(void)
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_LineDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);

@@ -27,6 +27,12 @@ namespace FK {
 		FK_ELEM_ELEMENT		//!<	形状個別要素設定優先
 	};
 
+	//! シェーディングモードを表す列挙型
+	enum fk_ShadingMode {
+		FK_SHADING_GOURAUD,	//!<	グーローシェーディング
+		FK_SHADING_PHONG	//!<	フォンシェーディング
+	};
+
 	//! モデルを生成、管理するクラス
 	/*!
 	 *	このクラスは、「モデル」を制御する機能を提供します。
@@ -1071,6 +1077,32 @@ namespace FK {
 		 *	\sa setElementMode()
 		 */
 		fk_ElementMode	getElementMode(void) const;
+
+		//! シェーディングモード設定関数
+		/*!
+		 *	面描画またはテクスチャ描画の際の、
+		 *	シェーディングアルゴリズムを設定します。
+		 *	グーローシェーディングは、各頂点ごとに発色輝度を計算し、
+		 *	頂点以外の面内部は色値の線形補間によって発色輝度を決定します。
+		 *	フォンシェーディングでは、色値ではなく法線ベクトルを補間決定し、
+		 *	面内部の発色は補間法線ベクトルに対し発色輝度を計算します。
+		 *	一般的には、速度重視の場合はグーロー、質重視の場合はフォンを選択します。
+		 *	なお、本館数は面またはテクスチャの描画の際のみに関与するものであり、
+		 *	線や点の描画の際には影響を及ぼしません。
+		 *
+		 *	\param[in]	mode	モード
+		 */
+		void setShadingMode(fk_ShadingMode mode);
+
+		//! シェーディングモード取得関数
+		/*!
+		 *	表示の差異のシェーディングモードを取得します。
+		 *
+		 *	\return		モード
+		 *
+		 *	\sa setShadingMode()
+		 */
+		fk_ShadingMode getShadingMode(void) const;
 		
 		//! ブレンドモード設定関数
 		/*!
@@ -2020,6 +2052,7 @@ namespace FK {
 		unsigned int		_modelID;
 		bool				treeDelMode;
 		fk_TexMode			texMode;
+		fk_ShadingMode		shadingMode;
 
 		fk_HVector			*snapPos;
 		fk_HVector			*snapInhPos;

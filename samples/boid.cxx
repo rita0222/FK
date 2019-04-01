@@ -50,6 +50,7 @@ Agent::Agent(double argSize, mt19937 &argMT)
 	uniform_real_distribution<>	randR(-1.0, 1.0);
 
 	model.setMaterial(Red);
+	model.setShadingMode(FK_SHADING_GOURAUD);
 	// モデルの方向と位置をランダムに設定
 	model.glVec(randR(argMT), randR(argMT), 0.0);
 	model.glMoveTo(randR(argMT)*argSize, randR(argMT)*argSize, 0.0);

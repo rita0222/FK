@@ -14,9 +14,11 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder		*faceShader;
+		fk_ShaderBinder		*phongShader, *gouraudShader;
 
 		void	ShaderSetup(void);
+		void	PhongSetup(void);
+		void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	PolygonModeSet(fk_DrawMode);
 		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);

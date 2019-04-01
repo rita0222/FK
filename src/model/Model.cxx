@@ -89,7 +89,8 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	  treeData(nullptr), drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
 	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
-	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true), texMode(FK_TEX_NONE),
+	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
+	  texMode(FK_TEX_NONE), shadingMode(FK_SHADING_PHONG),
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
 	  interMode(false), interStatus(false), interStopMode(false),
 	  shader(nullptr)
@@ -480,6 +481,16 @@ void fk_Model::setTextureMode(fk_TexMode argMode)
 fk_TexMode fk_Model::getTextureMode(void)
 {
 	return texMode;
+}
+
+void fk_Model::setShadingMode(fk_ShadingMode argMode)
+{
+	shadingMode = argMode;
+}
+
+fk_ShadingMode fk_Model::getShadingMode(void) const
+{
+	return shadingMode;
 }
 
 unsigned int fk_Model::getID(void) const

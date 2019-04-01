@@ -87,14 +87,15 @@ typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
-	: faceShader(nullptr)
+	: phongShader(nullptr), gouraudShader(nullptr)
 {
 	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
-	delete faceShader;
+	delete phongShader;
+	delete gouraudShader;
 	return;
 }
 
@@ -110,8 +111,19 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 			ParamInit(shader->getProgram(), shader->getParameter());
 		}
 	} else {
-		if(faceShader == nullptr) ShaderSetup();
-		else shader = faceShader;
+		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
+		switch(argModel->getShadingMode()) {
+		  case FK_SHADING_PHONG:
+			shader = phongShader;
+			break;
+
+		  case FK_SHADING_GOURAUD:
+			shader = gouraudShader;
+			break;
+
+		  default:
+			return;
+		}
 	}
 
 	PolygonModeSet(drawMode);
@@ -150,27 +162,56 @@ void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
 	}
 }
 
-void fk_FaceDraw::ShaderSetup(void)
+void fk_FaceDraw::PhongSetup(void)
 {
-	faceShader = new fk_ShaderBinder();
-	shader = faceShader;
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	phongShader = new fk_ShaderBinder();
+	auto prog = phongShader->getProgram();
+	auto param = phongShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Face_VS.out"
+		#include "GLSL/Face_Phong_VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS.out"
+		#include "GLSL/Face_Phong_FS.out"
 		;
 	
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_FaceDraw", "PhongSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
 	return;
+}
+
+void fk_FaceDraw::GouraudSetup(void)
+{
+	gouraudShader = new fk_ShaderBinder();
+	auto prog = gouraudShader->getProgram();
+	auto param = gouraudShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Face_Gouraud_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_Gouraud_FS.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "GouraudSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+	return;
+}
+
+void fk_FaceDraw::ShaderSetup(void)
+{
+	PhongSetup();
+	GouraudSetup();
 }
 
 void fk_FaceDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
