@@ -122,7 +122,7 @@ bool fk_Point::MakePoint(int argNum, fk_Vector *argP)
 bool fk_Point::MakePoint(vector<fk_Vector> *argP)
 {
 	if(argP == nullptr) return false;
-	return MakePoint(int(argP->size()), &(argP->at(0)));
+	return MakePoint(int(argP->size()), argP->data());
 }
 
 int fk_Point::pushVertex(const fk_Vector &argPos)
@@ -143,11 +143,6 @@ bool fk_Point::setVertex(int argID, const fk_Vector &argPos)
 	posArray.set(argID, argPos);
 
 	return true;
-}
-
-bool fk_Point::setVertex(int argNum, fk_Vector *argPosArray)
-{
-	return MakePoint(argNum, argPosArray);
 }
 
 bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)

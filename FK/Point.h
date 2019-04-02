@@ -64,19 +64,7 @@ namespace FK {
 		 */
 		bool			setVertex(int ID, const fk_Vector &pos);
 
-		//! 点群生成関数 1
-		/*
-		 *	配列データから点群全体を生成します。
-		 *	関数を呼ぶ前に存在していた点は全て消去されます。
-		 *
-		 *	\param[in]	num		頂点数
-		 *	\param[in]	array	頂点位置ベクトルの配列
-		 *
-		 *	\return		生成に成功すれば true を、失敗すれば false を返します。
-		 */
-		bool			setVertex(int num, fk_Vector *array);
-
-		//! 点群生成関数 2
+		//! 点群生成関数
 		/*
 		 *	配列データから点群全体を生成します。
 		 *	関数を呼ぶ前に存在していた点は全て消去されます。
