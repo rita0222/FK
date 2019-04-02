@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FK_CLI;
 
 namespace FK_CLI_Particle
@@ -10,7 +6,7 @@ namespace FK_CLI_Particle
 	class MyParticle : fk_ParticleSet {
 		private Random rand;
 		private fk_Color red, blue;
-//		private double maxSpeed, minSpeed;
+		private double maxSpeed, minSpeed;
 
         // コンストラクタ。
         // ここに様々な初期設定を記述しておく。
@@ -22,8 +18,8 @@ namespace FK_CLI_Particle
             rand = new Random();                 // 乱数発生器の初期化
 			red = new fk_Color(1.0, 0.0, 0.0);
 			blue = new fk_Color(0.0, 0.0, 0.5);
-//			maxSpeed = 0.3;                      // これより速いパーティクルは全て赤
-//			minSpeed = 0.1;                      // これより遅いパーティクルは全て青
+			maxSpeed = 0.3;                      // これより速いパーティクルは全て赤
+			minSpeed = 0.1;                      // これより遅いパーティクルは全て青
 		}
 		
         // ここにパーティクル生成時の処理を記述する。
