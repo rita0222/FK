@@ -31,3 +31,9 @@ source ./vsenv.sh
 "$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.6\\win32\\VS2017\\vorbis_static.sln /Build "Debug|Win32"
 "$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.6\\win32\\VS2017\\vorbis_static.sln /Build "Release|x64"
 "$VS15_DEVENV_PATH" ..\\extlibs\\libvorbis-1.3.6\\win32\\VS2017\\vorbis_static.sln /Build "Debug|x64"
+
+# glew
+"$VS15_DEVENV_PATH" ..\\extlibs\\glew-2.1.0\\build\\vc12\\glew.sln /Build "Release|Win32"
+"$VS15_DEVENV_PATH" ..\\extlibs\\glew-2.1.0\\build\\vc12\\glew.sln /Build "Debug|Win32"
+"$VS15_DEVENV_PATH" ..\\extlibs\\glew-2.1.0\\build\\vc12\\glew.sln /Build "Release|x64"
+"$VS15_DEVENV_PATH" ..\\extlibs\\glew-2.1.0\\build\\vc12\\glew.sln /Build "Debug|x64"
