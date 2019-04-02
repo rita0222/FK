@@ -1,0 +1,2 @@
+FK ToolKit for Microsoft Visual Studio 2017(Visual C++ 15.9.10)
+Version 4.0.0.0
