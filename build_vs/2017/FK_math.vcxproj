@@ -87,29 +87,30 @@
     <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
+    <IncludePath>..\..;$(SolutionDir)contrib\include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
+    <IncludePath>..\..;$(SolutionDir)contrib\include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
+    <IncludePath>..\..;$(SolutionDir)contrib\include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
+    <IncludePath>..\..;$(SolutionDir)contrib\include;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP </AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)contrib\include;$(ProjectDir)contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -130,7 +131,8 @@
     <ClCompile>
       <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP </AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)contrib\include;$(ProjectDir)contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -152,7 +154,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(ProjectDir)contrib\include;$(ProjectDir)contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -175,7 +178,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(ProjectDir)contrib\include;$(ProjectDir)contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
