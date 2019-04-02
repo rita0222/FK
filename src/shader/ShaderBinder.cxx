@@ -69,7 +69,6 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define GLEW_STATIC
 #include <FK/ShaderBinder.h>
 
 using namespace std;

@@ -73,54 +73,66 @@
     <_ProjectFileVersion>11.0.60610.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)lib_$(Platform)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)lib_$(Platform)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)lib\debug\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)lib\release\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(ProjectDir)..\extlibs\fltk-1.3.5;%(AdditionalIncludeDirectories);$(ProjectDir)..\extlibs\glew-2.1.0\include;..\..;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\extlibs\glew-1.12.0\include;..\extlibs\DirectInput\include;..\extlibs\fltk-1.3.3;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;WIN32;FK_LIB_SRC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP </AdditionalOptions>
     </ClCompile>
     <Lib />
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\extlibs\glew-1.12.0\include;..\extlibs\DirectInput\include;..\extlibs\fltk-1.3.3;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;WIN32;FK_LIB_SRC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP </AdditionalOptions>
     </ClCompile>
     <Lib />
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -128,8 +140,9 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -137,11 +150,12 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP </AdditionalOptions>
     </ClCompile>
     <Lib />
     <Lib>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
     </Lib>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
@@ -154,21 +168,25 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\extlibs\glew-2.1.0\include;..\extlibs\fltk-1.3.5;..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;USING_STATIC_LIBICONV;FK_LIB_SRC;OPENGL4;GLEW_STATIC</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_WARNINGS"  /MP </AdditionalOptions>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Lib />
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

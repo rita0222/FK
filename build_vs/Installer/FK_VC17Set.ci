@@ -1,9 +1,9 @@
 ﻿<project version = 9 civer = 8.4.10 winver = "2.12/6.2.9200" >
    <autorun >0</>
    <autoclose >1</>
-   <compname >FKProj</>
+   <compname >Fine Kernel Project</>
    <produrl ></>
-   <ver >4.0.0b1</>
+   <ver >4.0.0b4</>
    <supurl ></>
    <updurl ></>
    <dlgfont >custom</>
