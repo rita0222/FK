@@ -63,48 +63,6 @@ namespace FK_CLI {
 	fk_TopologyMaterial::!fk_TopologyMaterial()
 	{
 	}
-
-	void fk_TopologyMaterial::MaterialMode::set(fk_MaterialMode argMode)
-	{
-		switch(argMode) {
-		  case fk_MaterialMode::PARENT:
-			GetP()->setElemMaterialMode(::FK::FK_PARENT_MODE);
-			break;
-
-		  case fk_MaterialMode::CHILD:
-			GetP()->setElemMaterialMode(::FK::FK_CHILD_MODE);
-			break;
-
-		  case fk_MaterialMode::NONE:
-			GetP()->setElemMaterialMode(::FK::FK_NONE_MODE);
-			break;
-		}
-	}
-
-	fk_MaterialMode fk_TopologyMaterial::MaterialMode::get(void)
-	{
-		switch(GetP()->getElemMaterialMode()) {
-		case ::FK::FK_PARENT_MODE:
-			return fk_MaterialMode::PARENT;
-
-		case ::FK::FK_CHILD_MODE:
-			return fk_MaterialMode::CHILD;
-
-		  default:
-			break;
-		}
-		return fk_MaterialMode::PARENT;
-	}
-
-	void fk_TopologyMaterial::MaterialID::set(int argID)
-	{
-		GetP()->setElemMaterialID(argID);
-	}
-				
-	int fk_TopologyMaterial::MaterialID::get(void)
-	{
-		return GetP()->getElemMaterialID();
-	}
 }
 /****************************************************************************
  *

@@ -45,6 +45,9 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_ParticleSet(bool argNewFlg);
 #endif
+		delegate void ParticleMethod1(void);
+		delegate void ParticleMethod2(fk_Particle^);
+
 		//! コンストラクタ
 		fk_ParticleSet();
 
@@ -253,7 +256,8 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	p		新たに生成されたパーティクルインスタンス
 		 */
-		virtual void GenMethod(fk_Particle^ p);
+		//virtual void GenMethod(fk_Particle^ p);
+		ParticleMethod2^ GenMethod;
 
 		//! 全体動作用抽象メソッド
 		/*!
@@ -264,7 +268,8 @@ namespace FK_CLI
 		 *	このメソッドを上書き定義することによって、
 		 *	パーティクル集合に対して様々な制御を行うことができます。
 		 */
-		virtual void AllMethod(void);
+		//virtual void AllMethod(void);
+		ParticleMethod1^ AllMethod;
 
 		//! 個別動作用抽象メソッド
 		/*!
@@ -278,7 +283,8 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	p		個別パーティクルインスタンス
 		 */
-		virtual void IndivMethod(fk_Particle^ p);
+		//virtual void IndivMethod(fk_Particle^ p);
+		ParticleMethod2^ IndivMethod;
 	};
 }
 

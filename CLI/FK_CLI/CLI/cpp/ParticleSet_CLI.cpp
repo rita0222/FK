@@ -12,6 +12,11 @@ namespace FK_CLI
 	fk_ParticleSet::fk_ParticleSet() : fk_BaseObject(false)
 	{
 		pBase = new ::FK::fk_ParticleSet();
+		GenMethod = nullptr;
+		AllMethod = nullptr;
+		IndivMethod = nullptr;
+		GetP()->setAllMode(true);
+		GetP()->setIndivMode(true);
 	}
 
 	fk_ParticleSet::fk_ParticleSet(bool argNewFlg) : fk_BaseObject(false)
@@ -19,6 +24,11 @@ namespace FK_CLI
 		if(argNewFlg == true) {
 			pBase = new ::FK::fk_ParticleSet();
 		}
+		GenMethod = nullptr;
+		AllMethod = nullptr;
+		IndivMethod = nullptr;
+		GetP()->setAllMode(true);
+		GetP()->setIndivMode(true);
 	}
 
 	fk_ParticleSet::~fk_ParticleSet()
@@ -88,7 +98,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = newP;
 		P->dFlg = false;
-		GenMethod(P);
+		if(GenMethod != nullptr) GenMethod(P);
 		return P;
 	}
 
@@ -100,7 +110,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = newP;
 		P->dFlg = false;
-		GenMethod(P);
+		if (GenMethod != nullptr) GenMethod(P);
 		return P;
 	}
 
@@ -146,11 +156,11 @@ namespace FK_CLI
 
 	void fk_ParticleSet::Handle(void)
 	{
-		if(AllMode == true) {
+		if(AllMode == true && AllMethod != nullptr) {
 			AllMethod();
 		}
 
-		if(IndivMode == true) {
+		if(IndivMode == true && IndivMethod != nullptr) {
 			fk_Particle^ P;
 
 			for(P = GetNextParticle(nullptr); P != nullptr; P = GetNextParticle(P)) {
@@ -160,7 +170,7 @@ namespace FK_CLI
 
 		GetP()->handle();
 	}
-
+/*
 	void fk_ParticleSet::GenMethod(fk_Particle^)
 	{
 		return;
@@ -175,7 +185,7 @@ namespace FK_CLI
 	{
 		return;
 	}
-
+*/
 }
 /****************************************************************************
  *

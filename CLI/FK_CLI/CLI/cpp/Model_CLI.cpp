@@ -220,6 +220,39 @@ namespace FK_CLI {
 		return fk_ElementMode::NONE;
 	}
 
+	void fk_Model::ShadingMode::set(fk_ShadingMode argMode)
+	{
+		switch(argMode) {
+		case fk_ShadingMode::GOURAUD:
+			GetP()->setShadingMode(::FK::FK_SHADING_GOURAUD);
+			break;
+
+		case fk_ShadingMode::PHONG:
+			GetP()->setShadingMode(::FK::FK_SHADING_PHONG);
+			break;
+		
+		default:
+			break;
+		}
+		return;
+	}
+
+	fk_ShadingMode fk_Model::ShadingMode::get(void)
+	{
+		switch(GetP()->getShadingMode()) {
+		case ::FK::FK_SHADING_GOURAUD:
+			return fk_ShadingMode::GOURAUD;
+
+		case ::FK::FK_SHADING_PHONG:
+			return fk_ShadingMode::PHONG;
+
+		default:
+			break;
+		}
+
+		return fk_ShadingMode::PHONG;
+	}
+
 	void fk_Model::SmoothMode::set(bool argMode)
 	{
 		GetP()->setSmoothMode(argMode);

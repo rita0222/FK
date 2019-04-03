@@ -155,6 +155,7 @@
     <ClCompile Include="CLI\cpp\BVHMotion_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Color_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
     <ClCompile Include="CLI\cpp\DataAccess_CLI.cpp" />
     <ClCompile Include="CLI\cpp\DList_CLI.cpp" />
@@ -178,7 +179,6 @@
     <ClCompile Include="CLI\cpp\Model_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Modify_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Operation_CLI.cpp" />
-    <ClCompile Include="CLI\cpp\Palette_CLI.cpp" />
     <ClCompile Include="CLI\cpp\ParticleSet_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Particle_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Performer_CLI.cpp" />
@@ -346,6 +346,7 @@
     <ClInclude Include="CLI\include\BVHMotion_CLI.h" />
     <ClInclude Include="CLI\include\Capsule_CLI.h" />
     <ClInclude Include="CLI\include\Circle_CLI.h" />
+    <ClInclude Include="CLI\include\Color_CLI.h" />
     <ClInclude Include="CLI\include\Cone_CLI.h" />
     <ClInclude Include="CLI\include\DataAccess_CLI.h" />
     <ClInclude Include="CLI\include\DList_CLI.h" />
@@ -369,7 +370,6 @@
     <ClInclude Include="CLI\include\Model_CLI.h" />
     <ClInclude Include="CLI\include\Modify_CLI.h" />
     <ClInclude Include="CLI\include\Operation_CLI.h" />
-    <ClInclude Include="CLI\include\Palette_CLI.h" />
     <ClInclude Include="CLI\include\ParticleSet_CLI.h" />
     <ClInclude Include="CLI\include\Particle_CLI.h" />
     <ClInclude Include="CLI\include\Performer_CLI.h" />

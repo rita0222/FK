@@ -5,7 +5,7 @@
 #include <FK/Particle.h>
 #include "Attribute_CLI.h"
 #include "Vector_CLI.h"
-#include "Material_CLI.h"
+#include "Color_CLI.h"
 
 
 namespace FK_CLI

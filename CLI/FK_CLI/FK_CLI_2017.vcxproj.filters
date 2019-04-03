@@ -135,9 +135,6 @@
     <ClCompile Include="CLI\cpp\Operation_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="CLI\cpp\Palette_CLI.cpp">
-      <Filter>ソース ファイル\CLI</Filter>
-    </ClCompile>
     <ClCompile Include="CLI\cpp\Particle_CLI.cpp">
       <Filter>ソース ファイル\CLI</Filter>
     </ClCompile>
@@ -585,6 +582,9 @@
     <ClCompile Include="..\..\src\shape\ParticleSet.cxx">
       <Filter>ソース ファイル\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="CLI\cpp\Color_CLI.cpp">
+      <Filter>ソース ファイル\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLI\include\AppWindow_CLI.h">
@@ -690,9 +690,6 @@
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\include\Operation_CLI.h">
-      <Filter>ヘッダー ファイル\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Palette_CLI.h">
       <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
     <ClInclude Include="CLI\include\Particle_CLI.h">
@@ -1153,6 +1150,9 @@
     </ClInclude>
     <ClInclude Include="..\..\FK\ParticleSet.h">
       <Filter>ヘッダー ファイル\CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI\include\Color_CLI.h">
+      <Filter>ヘッダー ファイル\CLI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

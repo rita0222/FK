@@ -93,14 +93,14 @@ namespace FK_CLI {
 		return GetP()->getDrawMode(argID);
 	}
 
-	void fk_Point::SetColorID(int argVID, int argCID)
+	void fk_Point::SetColor(int argVID, fk_Color^ argCol)
 	{
-		GetP()->setColorID(argVID, argCID);
+		GetP()->setColor(argVID, *(argCol->pCol));
 	}
 
-	int fk_Point::GetColorID(int argVID)
+	fk_Color^ fk_Point::GetColor(int argVID)
 	{
-		return GetP()->getColorID(argVID);
+		return gcnew fk_Color(GetP()->getColor(argVID));
 	}
 		
 	void fk_Point::AllClear(void)

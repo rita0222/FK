@@ -4,7 +4,7 @@
 
 #include <FK/Topology.h>
 #include "Attribute_CLI.h"
-#include "Palette_CLI.h"
+#include "Material_CLI.h"
 
 namespace FK_CLI
 {
@@ -78,41 +78,6 @@ namespace FK_CLI
 		~fk_TopologyMaterial();
 		!fk_TopologyMaterial();
 #endif
-		
-		//! マテリアルモードプロパティ
-		/*!
-		 *	各位相要素の描画の際に、
-		 *	個別のマテリアルを利用に関する参照・設定を行います。
-		 *	fk_Solid による形状では、
-		 *	個別マテリアルを有効とするのには以下の条件を満たす必要があります。
-		 *	- fk_Model にてマテリアルモードが fk_MaterialMode.PARENT になっている。
-		 *		(fk_Model::MaterialMode を参照して下さい。)
-		 *	- fk_Solid にてマテリアルモードが fk_MaterialMode.PARENT になっている。
-		 *		(fk_Shape::MaterialMode を参照して下さい。)
-		 *	.
-		 *	上記の条件を満たさない場合、個別のマテリアル設定の有無に関わらず
-		 *	全ての位相要素がモデルに設定されたマテリアルによって描画を行います。
-		 *
-		 *	前述の条件を前提として、位相要素のマテリアルを以下のように設定します。
-		 *		- fk_MaterialMode.CHILD:	個別設定を利用します。
-		 *		- fk_MaterialMode.PARENT:	モデル設定を利用します。
-		 *		- fk_MaterialMode.NONE:		描画を行いません。
-		 */
-		property fk_MaterialMode MaterialMode {
-			fk_MaterialMode get();
-			void set(fk_MaterialMode);
-		}
-
-		//!	マテリアルIDプロパティ
-		/*!
-		 *	位相要素の個別マテリアルの設定である、パレットの ID の参照・設定を行います。
-		 *	パレットに関する解説は
-		 *	fk_Shape::SetPalette() や fk_Shape::PushPalette() を参照して下さい。
-		 */
-		property int MaterialID {
-			int get();
-			void set(int);
-		}
 	};		
 }
 

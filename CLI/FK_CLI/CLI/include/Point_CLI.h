@@ -5,6 +5,7 @@
 #include <FK/Point.h>
 #include "Vector_CLI.h"
 #include "Shape_CLI.h"
+#include "Color_CLI.h"
 
 namespace FK_CLI
 {
@@ -146,13 +147,14 @@ namespace FK_CLI
 
 		//! 描画色設定メソッド
 		/*!
-		 *	個別の頂点に対し、描画色の ID を設定します。
-		 *	色そのものの設定は、 fk_Shape::SetPalette() を参照して下さい。
+		 *	点の色を個別に設定します。
+		 *	この色設定によって表示するには、
+		 *	fk_Model::ElementMode で fk_ElementMode.ELEMENT を設定しておく必要があります。
 		 *
 		 *	\param[in]	vID		頂点ID
-		 *	\param[in]	cID		色ID
+		 *	\param[in]	col		色値
 		 */
-		void		SetColorID(int vID, int cID);
+		void		SetColor(int vID, fk_Color^ col);
 
 		//! 描画色参照メソッド
 		/*!
@@ -160,12 +162,9 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	vID		頂点ID
 		 *
-		 *	\return
-		 *		描画色が設定されている場合はその描画色 ID を返します。
-		 *		描画色が設定されていない場合は -1 を返します。
-		 *		頂点が存在しない場合は -2 を返します。
+		 *	\return 色値
 		 */
-		int			GetColorID(int vID);
+		fk_Color^	GetColor(int vID);
 
 		//! 点群全消去メソッド
 		/*!

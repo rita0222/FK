@@ -10,15 +10,21 @@ namespace FK_CLI
 {
 	using namespace System::Collections::Generic;
 
-	// モデルの描画モードを表す列挙型												
+	//! モデルの描画モードを表す列挙型												
 	public enum class fk_DrawMode : unsigned int {
-		NONEMODE			= 0x0000,					//!< 表示要素なし
-		POINTMODE			= 0x0001,					//!< 頂点描画
-		LINEMODE			= 0x0002,					//!< 稜線描画
-		POLYMODE			= 0x0004,					//!< 面(表側)描画
-		BACK_POLYMODE		= (0x0008 | POLYMODE),	//!< 面(裏側)描画
-		FRONTBACK_POLYMODE	= (0x0010 | POLYMODE),	//!< 面(両面)描画
-		TEXTUREMODE			= 0x0020					//!< テクスチャ描画
+		NONEMODE = 0,								//!< 表示要素なし
+		POINTMODE = 1 << 1,							//!< 頂点描画
+		LINEMODE = 1 << 2,							//!< 稜線描画
+		POLYMODE = 1 << 3,							//!< 面(表側)描画
+		BACK_POLYMODE = ((1 << 4) | POLYMODE),		//!< 面(裏側)描画
+		FRONTBACK_POLYMODE = ((1 << 5) | POLYMODE),	//!< 面(両面)描画
+		TEXTUREMODE = 1 << 6						//!< テクスチャ描画
+	};
+
+	//! シェーディングモードを表す列挙型
+	public enum class fk_ShadingMode : unsigned int {
+		GOURAUD,  //!< グーローシェーディング
+		PHONG     //!< フォンシェーディング
 	};
 
 	//! ブレンドモード型
@@ -57,9 +63,9 @@ namespace FK_CLI
 
 	// 描画優先モード型
 	public enum class fk_ElementMode : unsigned char {
-		NONE = 0, //!< 描画なし
-		MODEL = 1, //!< モデル設定優先
-		ELEMENT = 2 //!< 要素個別設定優先
+		NONE = 0,		//!< 描画なし
+		MODEL = 1,		//!< モデル設定優先
+		ELEMENT = 2		//!< 要素個別設定優先
 	};
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -312,14 +318,33 @@ namespace FK_CLI
 		/*!
 		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
 		 *	モードには以下のものがあります。
-		 *	- FK_ELEM_NONE:		何も描画しません。
-		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
-		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	- fk_ElementMode.NONE: 何も描画しません。
+		 *	- fk_ElementMode.MODEL: モデル設定を優先します。
+		 *	- fk_ElementMode.ELEMENT: 形状内の個別要素設定を優先します。
 		 *	.
 		 */
 		property fk_ElementMode ElementMode {
 			void set(fk_ElementMode);
 			fk_ElementMode get();
+		}
+
+		//! シェーディングモード関連プロパティ
+		/*!
+		 *	面描画またはテクスチャ描画の際の、
+		 *	シェーディングアルゴリズムを設定します。
+		 *	グーローシェーディングは、各頂点ごとに発色輝度を計算し、
+		 *	頂点以外の面内部は色値の線形補間によって発色輝度を決定します。
+		 *	フォンシェーディングでは、色値ではなく法線ベクトルを補間決定し、
+		 *	面内部の発色は補間法線ベクトルに対し発色輝度を計算します。
+		 *	一般的には、速度重視の場合はグーロー、質重視の場合はフォンを選択します。
+		 *	なお、本館数は面またはテクスチャの描画の際のみに関与するものであり、
+		 *	線や点の描画の際には影響を及ぼしません。
+		 *	- fk_ShadingMode.GOURAUD: グーローシェーディング
+		 *	- fk_ShadingMode.PHONG: フォンシェーディング
+		 */
+		property fk_ShadingMode ShadingMode {
+			void set(fk_ShadingMode);
+			fk_ShadingMode get();
 		}
 
 		//! スムースモードプロパティ
