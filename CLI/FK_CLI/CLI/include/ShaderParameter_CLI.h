@@ -1,38 +1,59 @@
-﻿#ifndef __FK_SHADER_PARAMETER_HEADER__
-#define __FK_SHADER_PARAMETER_HEADER__
+﻿#pragma once
 
-#include <FK/Texture.h>
-#include <string>
-#include <map>
+#include <FK/ShaderParameter.h>
+#include "Texture_CLI.h"
+#include "Matrix_CLI.h"
 
-namespace FK {
+//using namespace FK_CLI;
+using namespace System;
+using namespace System::Collections::Generic;
+
+namespace FK_CLI
+{
 	//! シェーダーパラメーター管理クラス
 	/*!
 	 *	このクラスは、シェーダープログラムに対してパラメーターを渡すための機能を提供します。
-	 *	本クラスの機能は、 fk_ShaderBinder クラスの
-	 *	fk_ShaderBinder::getParameter() によってインスタンスを得ることで利用します。
+	 *	本クラスは単独のインスタンスとしてはあまり利用用途はなく、
+	 *	fk_ShaderBinder クラスの fk_ShaderBinder.Parameter
+	 *	プロパティとして利用することがほとんどです。
 	 *
-	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
+	 *	\sa fk_ShaderBinder, fk_ShaderParameter, fk_Texture
 	 */
 
-	class fk_ShaderParameter {
+	public ref class fk_ShaderParameter
+	{
+
+	internal:
+		bool dFlg;
+		::FK::fk_ShaderParameter *pParam;
+		::FK::fk_ShaderParameter * GetP(void);
+
 	public:
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_ShaderParameter(bool);
+		fk_ShaderParameter(::FK::fk_ShaderParameter *);
+#endif
+
 		//! コンストラクタ
 		fk_ShaderParameter();
 
 		//! デストラクタ
-		virtual ~fk_ShaderParameter();
+		~fk_ShaderParameter();
+
+		//! ファイナライザ
+		!fk_ShaderParameter();
 
 		//! エラーメッセージプロパティ
 		/*!
 		 *	シェーダーに関するエラーが生じた場合に、
 		 *	エラーメッセージの文字列をこのプロパティから取得できます。
 		 */
-		std::string getLastError(void);
+		property String^ LastError { String^ get(void); };
 
-		//! float 型 uniform 変数設定関数
+		//! float 型 uniform 変数設定メソッド
 		/*!
-		 *	この関数は、バーテックスシェーダーやフラグメントシェーダーに対し、
+		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
 		 *	float 型の uniform 変数を渡す設定を行います。
 		 *
 		 *	\param[in]	name
@@ -41,12 +62,12 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す値
 		 */
-		void setRegister(std::string name, float value);
+		void Register(String^ name, float value);
 
-		//! float 配列型 uniform 変数設定関数
+		//! float 配列型 uniform 変数設定メソッド
 		/*!
 		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	float 配列型の uniform 変数を渡す設定を行います。
+		 *	float 配列型の uniform 変数を渡す設定を行います。 
 		 *	配列のサイズは 1 から 4 までで、
 		 *	GLSL 内での型は配列サイズが 1 から順に float, vec2, vec3, vec4 となります。
 		 *
@@ -56,9 +77,9 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す配列
 		 */
-		void setRegister(std::string name, std::vector<float> *value);
+		void Register(String^ name, cli::array<float>^ value);
 
-		//! int 型 uniform 変数設定関数
+		//! int 型 uniform 変数設定メソッド
 		/*!
 		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
 		 *	int 型の uniform 変数を渡す設定を行います。
@@ -69,9 +90,9 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す値
 		 */
-		void setRegister(std::string name, int value);
+		void Register(String^ name, int value);
 
-		//! int 配列型 uniform 変数設定関数
+		//! int 配列型 uniform 変数設定メソッド
 		/*!
 		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
 		 *	int 配列型の uniform 変数を渡す設定を行います。
@@ -84,40 +105,13 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す配列
 		 */
-		void setRegister(std::string name, std::vector<int> *value);
-	
-		//! fk_Vector 型 uniform 変数設定関数
+		void Register(String^ name, cli::array<int>^ value);
+		
+		//! 行列型 uniform 変数設定メソッド
 		/*!
 		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	fk_Vector 型の uniform 変数を渡す設定を行います。
-		 *	GLSL コード内での型は vec3 となります。
-		 *
-		 *	\param[in]	name
-		 *		GLSL コード内での変数名
-		 *
-		 *	\param[in]	value
-		 *		uniform 変数に渡す行列
-		 */
-		void setRegister(std::string name, fk_Vector *value);
-
-		//! fk_HVector 型 uniform 変数設定関数
-		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	fk_HVector 型の uniform 変数を渡す設定を行います。
-		 *	GLSL コード内での型は vec4 となります。
-		 *
-		 *	\param[in]	name
-		 *		GLSL コード内での変数名
-		 *
-		 *	\param[in]	value
-		 *		uniform 変数に渡す行列
-		 */
-		void setRegister(std::string name, fk_HVector *value);
-
-		//! fk_Matrix 型 uniform 変数設定関数
-		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	fk_Matrix 型の uniform 変数を渡す設定を行います。
+		 *	行列型の uniform 変数を渡す設定を行います。
+		 *	このメソッドの引数は fk_Matrix 型変数となり、
 		 *	GLSL コード内での型は mat4 となります。
 		 *
 		 *	\param[in]	name
@@ -126,11 +120,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_Matrix *value);
+		void Register(String^ name, fk_Matrix^ value);
 
-		//! uniform 変数解除関数
+		//! uniform 変数解除メソッド
 		/*!
-		 *	各種 setRegister() 関数で設定した uniform 変数を解除します。
+		 *	各種 Register() メソッドで設定した uniform 変数を解除します。
 		 *
 		 *	\param[in]	name
 		 *		GLSL コード内での変数名
@@ -139,43 +133,43 @@ namespace FK {
 		 *		uniform 変数が存在していた場合は解除し true を返します。
 		 *		変数が存在していなかった場合は false を返します。
 		 */
-		bool removeRegister(std::string name);
+		bool Unregister(String^ name);
 
-		//! attribute 変数予約関数
+		//! Attribute 変数予約関数
 		/*!
-		 *	attribute 変数用の名前を予約します。
+		 *	Attribute 変数用の名前を予約します。
 		 *
 		 *	\param[in]	name
 		 *		GLSL コード内での変数名
-		 *
 		 */
-		void reserveAttribute(std::string name);
+		void ReserveAttribute(String^ name);
 
-		//! 参照テクスチャ設定関数
+		//! 参照テクスチャ設定メソッド
 		/*!
 		 *	GLSLコード内の参照テクスチャを設定します。
 		 *	ここで設定したテクスチャは、
-		 *	GLSL内では sampler2D 型 uniform 変数配列である
-		 *	fk_TexID[] として扱われます。
+		 *	GLSL内では sampler2D 型 uniform 変数として扱われます。
+		 *	複数のテクスチャを設定した場合、
+		 *	GLSLコード内で変数を宣言した順番に割り振られます。
 		 *
 		 *	\param[in]	unit
 		 *		シェーダー内でのテクスチャ ID を指定します。
-		 *		1 から 7 までを指定することができます。
-		 *		この数値が、GLSL内での fk_TexID[unit] に対応することになります。
+		 *		0 から 31 までを指定することができます。
 		 *		既に使用している ID を用いた場合、
 		 *		前にその ID を用いていたテクスチャの設定は破棄されます。
+		 *		GLSLコード内では、複数の sampler2D 変数に対し ID の若い順に割り振られます。
 		 *
 		 *	\param[in]	texture
-		 *		テクスチャオブジェクト。詳細は fk_Texture を参照して下さい。
+		 *		テクスチャオブジェクト。詳細は fk_TextureSampler を参照して下さい。
 		 *
 		 *	\return
 		 *		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool attachTexture(int unit, fk_Texture *texture);
+		bool AttachTexture(int unit, fk_Texture^ texture);
 
-		//! 参照テクスチャ解除関数
+		//! 参照テクスチャ解除メソッド
 		/*!
-		 *	attachTexture() メソッドにて設定した参照テクスチャを解除します。
+		 *	AttachTexture() メソッドにて設定した参照テクスチャを解除します。
 		 *
 		 *	\param[in]	unit
 		 *		テクスチャ ID
@@ -183,43 +177,19 @@ namespace FK {
 		 *	\return
 		 *		解除に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool detachTexture(int unit);
+		bool DetachTexture(int unit);
 
 		//! 参照テクスチャ全解除関数
 		/*!
-		 *	attachTexture() メソッドにて設定した参照テクスチャを全て解除します。
+		 *	AttachTexture() メソッドにて設定した参照テクスチャを全て解除します。
 		 */
-		void clearTexture(void);
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		bool Apply(GLuint);
-		void BindAttr(GLuint);
-		std::map<std::string, int> * getAttrTable(void);
-#endif
-	
-	private:
-		GLint GetLocation(GLuint, std::string);
-
-		std::map<std::string, float> floatTable;
-		std::map<std::string, std::vector<float> > floatArrayTable;
-		std::map<std::string, int> intTable;
-		std::map<std::string, std::vector<int> > intArrayTable;
-		std::map<std::string, fk_Matrix> matrixTable;
-		std::map<std::string, int> locationTable;
-
-		std::map<std::string, int> attrTable;
-		std::map<int, fk_Texture *> textureTable;
-
-		std::string lastError;
-		unsigned int lastAppliedId;
+		void ClearTexture(void);
 	};
 }
 
-#endif
-
 /****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2016, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -255,7 +225,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2016, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
