@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Ball", "Test\FK_CLI_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Particle", "Test\FK_CLI_Particle\FK_CLI_Particle.csproj", "{2AFB8365-ABCB-4264-A7CC-AE7B3A0AE4EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Shader", "Test\FK_CLI_Shader\FK_CLI_Shader.csproj", "{0223BDF2-87A8-449F-B032-7A76B99BA813}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -253,6 +255,18 @@ Global
 		{2AFB8365-ABCB-4264-A7CC-AE7B3A0AE4EB}.Release|x64.Build.0 = Release|x64
 		{2AFB8365-ABCB-4264-A7CC-AE7B3A0AE4EB}.Release|x86.ActiveCfg = Release|x86
 		{2AFB8365-ABCB-4264-A7CC-AE7B3A0AE4EB}.Release|x86.Build.0 = Release|x86
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Debug|x64.ActiveCfg = Debug|x64
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Debug|x64.Build.0 = Debug|x64
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Debug|x86.ActiveCfg = Debug|x86
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Debug|x86.Build.0 = Debug|x86
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Release|x64.ActiveCfg = Release|x64
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Release|x64.Build.0 = Release|x64
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Release|x86.ActiveCfg = Release|x86
+		{0223BDF2-87A8-449F-B032-7A76B99BA813}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
