@@ -113,6 +113,9 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
     </Lib>
+    <PreBuildEvent>
+      <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -133,6 +136,9 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
     </Lib>
+    <PreBuildEvent>
+      <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
