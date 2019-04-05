@@ -12,9 +12,10 @@ namespace FK_CLI_Particle
 			var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
             var rand = new Random();                 // 乱数発生器の初期化
 
-            particle.MaxSize = 10000;
+            particle.MaxSize = 1000;
             particle.AllMode = true;
             particle.IndivMode = true;
+            int num = 0;
 
             particle.GenMethod = (P) =>
             {
@@ -31,6 +32,7 @@ namespace FK_CLI_Particle
                     if (rand.NextDouble() < 0.3)
                     {   // 発生確率は 30% (を5回)
                         particle.NewParticle();              // パーティクル生成処理
+                        num++;
                     }
                 }
             };
@@ -44,6 +46,7 @@ namespace FK_CLI_Particle
                 double maxSpeed = 0.6;
                 double r;
 
+                //Console.WriteLine("count A {0}", P.ID);
                 pos = P.Position;        // パーティクル位置取得。
                 pos.z = 0.0;
                 r = pos.Dist();          // |p| を r に代入。
@@ -76,8 +79,9 @@ namespace FK_CLI_Particle
 			viewer.SetPosition(3, 0.0, 0.0, 25.0);
 			viewer.SetDrawMode(3, fk_DrawMode.POLYMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POINTMODE);
             viewer.Scale = 10.0;
- 
-			while(viewer.Draw() == true) {
+
+            while(viewer.Draw())
+            {
                 particle.Handle(); // パーティクルを 1 ステップ実行する。
             }
 		}

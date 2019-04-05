@@ -98,6 +98,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = newP;
 		P->dFlg = false;
+		map.Add(newP->getID(), P);
 		if(GenMethod != nullptr) GenMethod(P);
 		return P;
 	}
@@ -110,6 +111,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = newP;
 		P->dFlg = false;
+		map.Add(newP->getID(), P);
 		if (GenMethod != nullptr) GenMethod(P);
 		return P;
 	}
@@ -121,26 +123,37 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = GetP()->newParticle(argX, argY, argZ);
 		P->dFlg = false;
+		map.Add(newP->getID(), P);
 		GenMethod(P);
 		return P;
 	}
 
 	bool fk_ParticleSet::RemoveParticle(fk_Particle ^argP)
 	{
-		return GetP()->removeParticle(argP->GetP());
+		if (argP == nullptr) return false;
+		int id = argP->GetP()->getID();
+		if (GetP()->removeParticle(argP->GetP()) == true) {
+			map.Remove(id);
+			return true;
+		}
+		return false;
 	}
 
 	bool fk_ParticleSet::RemoveParticle(int argID)
 	{
-		return GetP()->removeParticle(argID);
+		if (GetP()->removeParticle(argID) == true) {
+			map.Remove(argID);
+			return true;
+		}
+		return false;
 	}
 
 	fk_Particle^ fk_ParticleSet::GetParticle(int argID)
 	{
-		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = GetP()->getParticle(argID);
-		P->dFlg = false;
-		return P;
+		if (map.ContainsKey(argID)) {
+			return map[argID];
+		}
+		return nullptr;
 	}
 
 	fk_Particle^ fk_ParticleSet::GetNextParticle(fk_Particle^ argP)
@@ -148,10 +161,13 @@ namespace FK_CLI
 		::FK::fk_Particle *pP = (!argP) ? nullptr : argP->GetP();
 		pP = GetP()->getNextParticle(pP);
 		if(pP == nullptr) return nullptr;
-		fk_Particle^ P = gcnew fk_Particle();
-		P->pBase = pP;
-		P->dFlg = false;
-		return P;
+		if (map.ContainsKey(pP->getID()) == false) {
+			fk_Particle^ P = gcnew fk_Particle();
+			P->pBase = pP;
+			P->dFlg = false;
+			map.Add(pP->getID(), P);
+		}
+		return map[pP->getID()];
 	}
 
 	void fk_ParticleSet::Handle(void)

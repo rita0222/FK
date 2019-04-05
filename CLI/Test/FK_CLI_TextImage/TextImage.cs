@@ -29,14 +29,16 @@ namespace FK_CLI_TextImage
 			textImage.DPI = 96;
 			textImage.PTSize = 96;
 			textImage.LineSkip = 30;
+            textImage.MonospaceMode = true;
+            textImage.MonospaceSize = 96;
 			textImage.ForeColor = new fk_Color(0.5, 1.0, 0.8, 1.0);
 			textImage.BackColor = new fk_Color(0.2, 0.7, 0.8, 0.0);
 			textImage.Align = fk_TextAlign.CENTER;
 			textImage.LoadUniStr(str);
 			texture.TextureSize = new fk_TexCoord(40.0, 10.0);
-			strModel.Material = fk_Material.TrueWhite;
+            texture.TextureMode = fk_TexMode.REPLACE;
 
-			strModel.Shape = texture;
+            strModel.Shape = texture;
 			strModel.GlVec(0.0, 0.0, -1.0);
 			strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, Math.PI/2.0);
 			win.Entry(strModel); 
@@ -44,7 +46,11 @@ namespace FK_CLI_TextImage
 			win.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			while(win.Update() == true) {
-				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/500.0);
+				strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/200.0);
+                if(strModel.Vec.z > 0.0)
+                {
+                    strModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, Math.PI);
+                }
 			}
 		}
 	}

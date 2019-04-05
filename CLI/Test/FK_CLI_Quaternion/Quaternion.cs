@@ -11,7 +11,6 @@ namespace FK_CLI_Quaternion
 	{
 		static void Main(string[] args)
 		{
-
 			var win = new fk_AppWindow();
 			win.Size = new fk_Dimension(500, 500);
 			var model = new fk_Model();
@@ -19,14 +18,13 @@ namespace FK_CLI_Quaternion
 			var cone = new fk_Cone(3, 4.0, 15.0);
 			var pos = new fk_Vector(0.0, 0.0, -15.0);
 
-
 			var angle1 = new fk_Angle(0.0, 0.0, 0.0);
 			var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
 
 			var q1 = new fk_Quaternion();
 			var q2 = new fk_Quaternion();
 			fk_Quaternion q;
-			var poly = new fk_Polyline();
+			var point = new fk_Point();
 
 			fk_Material.InitDefault();
 
@@ -34,10 +32,12 @@ namespace FK_CLI_Quaternion
 			model.Material = fk_Material.Yellow;
 			model.GlAngle(angle1);
 
-			pointM.Shape = poly;
-			pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
+			pointM.Shape = point;
+			pointM.PointColor = new fk_Color(1.0, 0.0, 0.0);
+            pointM.PointSize = 2.0;
 
-			win.BGColor = new fk_Color(0.3, 0.4, 0.5);
+
+            win.BGColor = new fk_Color(0.3, 0.4, 0.5);
 			win.Entry(model);
 			win.Entry(pointM);
 			win.TrackBallMode = true;
@@ -52,7 +52,7 @@ namespace FK_CLI_Quaternion
 				q = fk_Math.QuatInterSphere(q1, q2, t);
 				model.GlAngle(q.Euler);
 				if(t < 1.0) {
-					poly.PushVertex(model.Matrix * pos);
+					point.PushVertex(model.Matrix * pos);
 					t += 0.005;
 				}
 			}

@@ -425,8 +425,8 @@ static bool				cacheMode = false;
 fk_TextImage::fk_TextImage(void)
 {
 	SetObjectType(FK_TEXTIMAGE);
-	setDPI(48);
-	setPTSize(48);
+	setDPI(96);
+	setPTSize(96);
 	setCharSkip(0);
 	setLineSkip(0);
 	setSpaceLineSkip(0);
@@ -713,7 +713,8 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	tmpStr.copyStr(&strData);
 
 	FreeGlyph(&glyphArray);
-	FT_Set_Char_Size(face->face, ptsize << 6, ptsize << 6, FT_UInt(dpi), FT_UInt(dpi));
+	FT_F26Dot6 ptsize_ = ptsize << 6;
+	FT_Set_Char_Size(face->face, ptsize_, ptsize_, FT_UInt(dpi), FT_UInt(dpi));
 
 	lineArray.clear();
 	lineMap.clear();
@@ -869,7 +870,7 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 				image_w += pixelSp + charSkip;
 				break;
 			  default:
-				image_w += pBBox->xMax - pBBox->xMin + charSkip;
+				image_w += (pBBox->xMax - pBBox->xMin + charSkip);
 				break;
 			}
 		}
@@ -881,7 +882,6 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 
 	image_h = upper - under;
 	if(shadowMode == true && image_h != 0) image_h += abs(shadowOffset.h);
-
 	lineRect.set(0, 0, int(image_w - charSkip), int(image_h));
 	lineArray.push_back(lineRect);
 

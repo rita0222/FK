@@ -7,6 +7,9 @@
 #include "Material_CLI.h"
 #include "Shape_CLI.h"
 
+using namespace System;
+using namespace System::Collections::Generic;
+
 namespace FK_CLI
 {
 
@@ -38,6 +41,9 @@ namespace FK_CLI
 	 *	\sa fk_Particle, fk_Point
 	 */
 	public ref class fk_ParticleSet : fk_BaseObject {
+	private:
+		Dictionary<int, fk_Particle^> map;
+		
 	internal:
 		::FK::fk_ParticleSet * GetP(void);
 
