@@ -160,7 +160,6 @@ namespace FK {
 
 		void			setColorID(int, int);
 		int				getColorID(int);
-		//void			FlushAttr(void);
 
 #endif		
 

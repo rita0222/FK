@@ -555,8 +555,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -567,6 +568,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <OmitFramePointers>false</OmitFramePointers>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -591,8 +595,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -602,6 +607,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <AdditionalIncludeDirectories>$(SolutionDir)..\;$(ProjectDir)CLI\include\;$(SolutionDir)..\build_vs\2017\contrib\include;$(SolutionDir)..\build_vs\2017\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

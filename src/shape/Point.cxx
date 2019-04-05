@@ -80,11 +80,11 @@ using namespace FK;
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
 	FlushAttr = [this]() {
-		if(posArray.isModify() == true) {
+		if (posArray.isModify() == true) {
 			modifyAttribute(vertexName);
 			posArray.reset();
 		}
-		if(colArray.isModify() == true) {
+		if (colArray.isModify() == true) {
 			modifyAttribute(pointElementColorName);
 			colArray.reset();
 		}
