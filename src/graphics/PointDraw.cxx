@@ -146,7 +146,6 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 	}
 
 	shader->ProcPostShader();
-
 	return;
 }
 

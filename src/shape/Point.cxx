@@ -220,7 +220,6 @@ void fk_Point::FlushAttr(void)
 		modifyAttribute(vertexName);
 		posArray.reset();
 	}
-
 	if(colArray.isModify() == true) {
 		modifyAttribute(pointElementColorName);
 		colArray.reset();

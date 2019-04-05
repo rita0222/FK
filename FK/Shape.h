@@ -260,11 +260,11 @@ namespace FK {
 		void			SetPointVAO(GLuint);
 		void			SetLineVAO(GLuint);
 		void			SetFaceVAO(GLuint);
-		void			SetBoundaryVAO(GLuint);
+		//void			SetBoundaryVAO(GLuint);
 		GLuint			GetPointVAO(void);
 		GLuint			GetLineVAO(void);
 		GLuint			GetFaceVAO(void);
-		GLuint			GetBoundaryVAO(void);
+		//GLuint		GetBoundaryVAO(void);
 
 		void			DefineVBO(void);
 		void			BindShaderBuffer(std::map<std::string, int> *);

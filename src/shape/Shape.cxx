@@ -357,6 +357,7 @@ void fk_Shape::FinishSetVBO(void)
 
 void fk_Shape::FlushAttr(void)
 {
+	printf("S1\n");
 }
 
 GLuint fk_Shape::GenBuffer(void)
