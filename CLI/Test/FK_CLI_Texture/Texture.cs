@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FK_CLI;
 
 namespace FK_CLI_Texture
@@ -17,6 +13,7 @@ namespace FK_CLI_Texture
 				Console.WriteLine("Image File Read Error.");
 				return;
 			}
+            tex.TextureMode = fk_TexMode.REPLACE;
 
 			// テクスチャ画像を置く位置の設定
 			tex.SetVertexPos(0, 0, -100.0, 100.0, 0.0);
