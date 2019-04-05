@@ -187,10 +187,6 @@ namespace FK {
 		 */
 		fk_Color	getColor(int eID);
 
-#ifndef FK_DOXYGEN_USER_PROCESS
-		void		FlushAttr(void);
-#endif
-
 	private:
 		fk_FVecArray	posArray;
 		fk_FVecArray	colArray;

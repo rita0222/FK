@@ -91,6 +91,10 @@ fk_Shape::fk_Shape(fk_ObjectType argObjType)
 	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(FK_SHAPE_OTHER)
 {
 	SetObjectType(argObjType);
+
+
+	FlushAttr = []() {};
+
 	return;
 }
 
@@ -342,22 +346,9 @@ void fk_Shape::modifyAttribute(string argName)
 	attrModify[argName] = true;
 }
 
-void fk_Shape::ForceUpdateAttr(void)
-{
-	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
-		itr->second = true;
-	}
-	vboInitFlg = false;
-}
-
 void fk_Shape::FinishSetVBO(void)
 {
 	vboInitFlg = true;
-}
-
-void fk_Shape::FlushAttr(void)
-{
-	printf("S1\n");
 }
 
 GLuint fk_Shape::GenBuffer(void)
@@ -373,4 +364,12 @@ void fk_Shape::DeleteBuffer(GLuint argID)
 #ifndef FK_CLI_CODE
 	glDeleteBuffers(1, &argID);
 #endif
+}
+
+void fk_Shape::ForceUpdateAttr(void)
+{
+	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
+		itr->second = true;
+	}
+	vboInitFlg = false;
 }

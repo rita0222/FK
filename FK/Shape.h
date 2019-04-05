@@ -6,6 +6,7 @@
 #include <FK/Attribute.h>
 #include <FK/OpenGL.H>
 #include <map>
+#include <functional>
 
 namespace FK {
 
@@ -252,7 +253,7 @@ namespace FK {
 
 		void FinishSetVBO(void);
 		virtual void ForceUpdateAttr(void);
-		virtual void FlushAttr(void);
+		std::function<void(void)> FlushAttr;
 
 		void	SetPaletteData(fk_Palette *pal);
 		void	setPaletteData(fk_Palette *pal);
@@ -260,11 +261,9 @@ namespace FK {
 		void			SetPointVAO(GLuint);
 		void			SetLineVAO(GLuint);
 		void			SetFaceVAO(GLuint);
-		//void			SetBoundaryVAO(GLuint);
 		GLuint			GetPointVAO(void);
 		GLuint			GetLineVAO(void);
 		GLuint			GetFaceVAO(void);
-		//GLuint		GetBoundaryVAO(void);
 
 		void			DefineVBO(void);
 		void			BindShaderBuffer(std::map<std::string, int> *);
@@ -293,7 +292,7 @@ namespace FK {
 		fk_Palette			*palette;
 		fk_Palette			defaultPalette;
 		fk_MaterialMode		materialMode;
-		GLuint				pointVAO, lineVAO, faceVAO, boundaryVAO;
+		GLuint				pointVAO, lineVAO, faceVAO;
 
 		shapeMapI 			attrMapI;
 		shapeMapF 			attrMapF;

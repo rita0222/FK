@@ -77,6 +77,18 @@ using namespace FK;
 
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 {
+	FlushAttr = [this]() {
+		if(posArray.isModify() == true) {
+			modifyAttribute(vertexName);
+			posArray.reset();
+		}
+
+		if(colArray.isModify() == true) {
+			modifyAttribute(lineElementColorName);
+			colArray.reset();
+		}
+	};
+	
 	posArray.setDim(3);
 	colArray.setDim(4);
 	realType = FK_SHAPE_LINE;
@@ -227,17 +239,4 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 fk_Color fk_Line::getColor(int argID)
 {
 	return colArray.getC(argID);
-}
-
-void fk_Line::FlushAttr(void)
-{
-	if(posArray.isModify() == true) {
-		modifyAttribute(vertexName);
-		posArray.reset();
-	}
-
-	if(colArray.isModify() == true) {
-		modifyAttribute(lineElementColorName);
-		colArray.reset();
-	}
 }

@@ -79,6 +79,17 @@ using namespace FK;
 
 fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 {
+	FlushAttr = [this]() {
+		if(posArray.isModify() == true) {
+			modifyAttribute(vertexName);
+			posArray.reset();
+		}
+		if(colArray.isModify() == true) {
+			modifyAttribute(pointElementColorName);
+			colArray.reset();
+		}
+	};
+
 	posArray.setDim(3);
 	colArray.setDim(4);
 	realType = FK_SHAPE_POINT;
@@ -214,17 +225,6 @@ bool fk_Point::getDrawMode(int argID)
 	return false;
 }
 
-void fk_Point::FlushAttr(void)
-{
-	if(posArray.isModify() == true) {
-		modifyAttribute(vertexName);
-		posArray.reset();
-	}
-	if(colArray.isModify() == true) {
-		modifyAttribute(pointElementColorName);
-		colArray.reset();
-	}
-}
 
 void fk_Point::setColorID(int, int) { return; }
 int fk_Point::getColorID(int) { return 0; }
