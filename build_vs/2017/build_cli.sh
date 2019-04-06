@@ -11,5 +11,3 @@ if [ -z "$ZSH_NAME" ] ; then
 else
 	zsh -x cli_installer.sh
 fi
-
-echo "Completed!"

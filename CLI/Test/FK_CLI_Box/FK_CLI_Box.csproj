@@ -104,9 +104,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FK_CLI\FK_CLI_2017.vcxproj">
+    <ProjectReference Include="..\..\FK_CLI\FK_CLI.vcxproj">
       <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
-      <Name>FK_CLI_2017</Name>
+      <Name>FK_CLI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -129,9 +129,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FK_CLI\FK_CLI_2017.vcxproj">
+    <ProjectReference Include="..\..\FK_CLI\FK_CLI.vcxproj">
       <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
-      <Name>FK_CLI_2017</Name>
+      <Name>FK_CLI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\FK_FormHelper\FK_FormHelper.csproj">
       <Project>{f2d34525-5db1-47fc-9718-532bbf28bf4a}</Project>

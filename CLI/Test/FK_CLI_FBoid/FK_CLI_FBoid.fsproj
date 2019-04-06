@@ -108,8 +108,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FK_CLI\FK_CLI_2017.vcxproj">
-      <Name>FK_CLI_2017</Name>
+    <ProjectReference Include="..\..\FK_CLI\FK_CLI.vcxproj">
+      <Name>FK_CLI</Name>
       <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
       <Private>True</Private>
     </ProjectReference>
