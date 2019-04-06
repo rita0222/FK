@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Ball", "test\FK_Tes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Car", "test\FK_Test_Car\FK_Test_Car.vcxproj", "{7D485EBF-24B2-41BF-BB18-B01BDC5481A1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_FBO", "test\FK_Test_FBO\FK_Test_FBO.vcxproj", "{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -151,6 +153,14 @@ Global
 		{7D485EBF-24B2-41BF-BB18-B01BDC5481A1}.Release|Win32.Build.0 = Release|Win32
 		{7D485EBF-24B2-41BF-BB18-B01BDC5481A1}.Release|x64.ActiveCfg = Release|x64
 		{7D485EBF-24B2-41BF-BB18-B01BDC5481A1}.Release|x64.Build.0 = Release|x64
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Debug|Win32.Build.0 = Debug|Win32
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Debug|x64.ActiveCfg = Debug|x64
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Debug|x64.Build.0 = Debug|x64
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Release|Win32.ActiveCfg = Release|Win32
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Release|Win32.Build.0 = Release|Win32
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Release|x64.ActiveCfg = Release|x64
+		{F9D87C2B-84C2-4DED-9D55-94DBFFBAD3B3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
