@@ -361,8 +361,10 @@ void fk_IndexFaceSet::ModifyFaceNorm(void)
 	}
 
 	// modifyList に従って処理
+	printf("loopStacksize = %zd\n", loopStack.size());
 	for(i = 0; i < modifyList.size(); ++i) {
 		vID = _st(modifyList[i]);
+		printf("vID = %zd\n", vID);
 		for(j = 0; j < loopStack[vID].size(); ++j) {
 			MakeFaceNorm(loopStack[vID][j]);
 		}

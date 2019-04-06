@@ -181,6 +181,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Lib />
     <Lib>
@@ -202,6 +203,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Lib />
     <Lib>
