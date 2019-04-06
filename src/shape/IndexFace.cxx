@@ -151,23 +151,12 @@ void fk_EdgePair::set(int argID1, int argID2)
 
 fk_IndexFaceSet::fk_IndexFaceSet(void)
 	: anim(nullptr), cloneFlg(false), orgIFS(nullptr),
-	  edgeIndexFlg(true), faceIndexFlg(true),
 	  edgeIBO(0), faceIBO(0)
 {
 	SetObjectType(FK_INDEXFACESET);
 	realType = FK_SHAPE_IFS;
-	
-	vertexPosition.clear();
-	timeOrgPosition.clear();
-	vertexNormal.clear();
-	faceNormal.clear();
-	edgeIndex.clear();
-	faceIndex.clear();
-	loopStack.clear();
-	vertexNormFlg.clear();
-	faceNormFlg.clear();
-	modifyList.clear();
-	cloneList.clear();
+
+	Init();
 
 	setShaderAttribute(vertexName, 3, vertexPosition.getP());
 	setShaderAttribute(normalName, 3, vertexNormal.getP());
@@ -215,9 +204,10 @@ void fk_IndexFaceSet::Init(void)
 	faceIndex.clear();
 	edgeIndex.clear();
 	loopStack.clear();
-
 	vertexNormFlg.clear();
 	faceNormFlg.clear();
+	modifyList.clear();
+	cloneList.clear();
 
 	edgeIndexFlg = true;
 	faceIndexFlg = true;
@@ -361,10 +351,8 @@ void fk_IndexFaceSet::ModifyFaceNorm(void)
 	}
 
 	// modifyList に従って処理
-	printf("loopStacksize = %zd\n", loopStack.size());
 	for(i = 0; i < modifyList.size(); ++i) {
 		vID = _st(modifyList[i]);
-		printf("vID = %zd\n", vID);
 		for(j = 0; j < loopStack[vID].size(); ++j) {
 			MakeFaceNorm(loopStack[vID][j]);
 		}
