@@ -313,7 +313,7 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 
 	fk_Shape * modelShape = argModel->getShape();
 	if(modelShape == nullptr) return;
-	modelShape->FlushAttr();
+	//modelShape->FlushAttr();
 	fk_DrawBase::SetModel(argModel);
 	SetBlendMode(argModel);
 	DrawShapeObj(argModel);
@@ -368,6 +368,8 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	DrawMode = argModel->getDrawMode();
 
 	if(DrawMode == FK_NONEMODE) return;
+
+	argModel->getShape()->FlushAttr();
 
 	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
 		faceDraw->DrawShapeFace(argModel);
