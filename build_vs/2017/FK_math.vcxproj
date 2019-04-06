@@ -122,6 +122,7 @@
     <Lib />
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -169,6 +170,8 @@
     <Lib />
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

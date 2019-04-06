@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{2e5df668-488f-4431-ab5e-bcd26534dac6}</ProjectGuid>
+    <ProjectGuid>{7d485ebf-24b2-41bf-bb18-b01bdc5481a1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>FK_Test_Ball</RootNamespace>
+    <RootNamespace>FK_Test_Car</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -235,7 +235,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ball.cxx" />
+    <ClCompile Include="car.cxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

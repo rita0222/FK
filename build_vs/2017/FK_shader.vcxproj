@@ -112,6 +112,7 @@
     <Lib />
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
@@ -138,6 +139,7 @@
     <Lib />
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
