@@ -155,7 +155,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>FK4_audio.lib;FK4_base.lib;FK4_graphics.lib;FK4_material.lib;FK4_math.lib;FK4_model.lib;FK4_scene.lib;FK4_shader.lib;FK4_shape.lib;FK4_util.lib;FK4_window.lib;OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)contrib\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -181,7 +181,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>FK4_audio.lib;FK4_base.lib;FK4_graphics.lib;FK4_material.lib;FK4_math.lib;FK4_model.lib;FK4_scene.lib;FK4_shader.lib;FK4_shape.lib;FK4_util.lib;FK4_window.lib;OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)contrib\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>

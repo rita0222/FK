@@ -29,8 +29,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Box", "test\FK_Test
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Ball", "test\FK_Test_Ball\FK_Test_Ball.vcxproj", "{2E5DF668-488F-4431-AB5E-BCD26534DAC6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Car", "test\FK_Test_Car\FK_Test_Car.vcxproj", "{83B66F42-439A-4D86-8717-5945A0DB3346}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -143,14 +141,6 @@ Global
 		{2E5DF668-488F-4431-AB5E-BCD26534DAC6}.Release|Win32.Build.0 = Release|Win32
 		{2E5DF668-488F-4431-AB5E-BCD26534DAC6}.Release|x64.ActiveCfg = Release|x64
 		{2E5DF668-488F-4431-AB5E-BCD26534DAC6}.Release|x64.Build.0 = Release|x64
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Debug|Win32.ActiveCfg = Debug|Win32
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Debug|Win32.Build.0 = Debug|Win32
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Debug|x64.ActiveCfg = Debug|x64
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Debug|x64.Build.0 = Debug|x64
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Release|Win32.ActiveCfg = Release|Win32
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Release|Win32.Build.0 = Release|Win32
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Release|x64.ActiveCfg = Release|x64
-		{83B66F42-439A-4D86-8717-5945A0DB3346}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
