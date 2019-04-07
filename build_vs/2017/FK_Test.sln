@@ -55,6 +55,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Viewer", "test\FK_T
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Shader", "test\FK_Test_Shader\FK_Test_Shader.vcxproj", "{1A595088-5604-46F1-A8E1-FD2A0229088C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GeomShader", "test\FK_Test_GeomShader\FK_Test_GeomShader.vcxproj", "{78080738-C810-4778-9433-9127EE89F5AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -267,6 +269,14 @@ Global
 		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|Win32.Build.0 = Release|Win32
 		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|x64.ActiveCfg = Release|x64
 		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|x64.Build.0 = Release|x64
+		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|Win32.Build.0 = Debug|Win32
+		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|x64.ActiveCfg = Debug|x64
+		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|x64.Build.0 = Debug|x64
+		{78080738-C810-4778-9433-9127EE89F5AF}.Release|Win32.ActiveCfg = Release|Win32
+		{78080738-C810-4778-9433-9127EE89F5AF}.Release|Win32.Build.0 = Release|Win32
+		{78080738-C810-4778-9433-9127EE89F5AF}.Release|x64.ActiveCfg = Release|x64
+		{78080738-C810-4778-9433-9127EE89F5AF}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
