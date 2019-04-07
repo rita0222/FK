@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IncludePath>$(FK_VC15_DIR)\include;$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(FK_VC15_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>$(FK_VC15_DIR)\lib_x64;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)_x64_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>$(FK_VC15_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>$(FK_VC15_DIR)\lib_x64;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)_x64</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>FK3_shader_d.lib;FK3_util_d.lib;FK3_audio_d.lib;FK3_base_d.lib;FK3_graphics_d.lib;FK3_material_d.lib;FK3_math_d.lib;FK3_model_d.lib;FK3_scene_d.lib;FK3_shape_d.lib;FK3_window_d.lib;fltkgl_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkimages_d.lib;fltkforms_d.lib;fltk_d.lib;fltkz_d.lib;freetype2MT_d.lib;libiconv_d.lib;libvorbisfile_d.lib;libvorbis_d.lib;libogg_d.lib;OpenAL32.lib;glew32s.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>FK3_shader.lib;FK3_util.lib;FK3_audio.lib;FK3_base.lib;FK3_graphics.lib;FK3_material.lib;FK3_math.lib;FK3_model.lib;FK3_scene.lib;FK3_shape.lib;FK3_window.lib;fltkgl.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkforms.lib;fltk.lib;fltkz.lib;freetype2MT.lib;libiconv.lib;libvorbisfile.lib;libvorbis.lib;libogg.lib;OpenAL32.lib;glew32s.lib;glu32.lib;opengl32.lib;imm32.lib;winmm.lib;wsock32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
