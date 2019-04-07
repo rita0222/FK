@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GUI", "test\FK_Test
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_OggStream", "test\FK_Test_OggStream\FK_Test_OggStream.vcxproj", "{BD5BE767-8DD0-4FA9-A9AE-175C536E6982}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Particle", "test\FK_Test_Particle\FK_Test_Particle.vcxproj", "{BD698602-80DF-4AB6-855B-524F24152DA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -197,6 +199,14 @@ Global
 		{BD5BE767-8DD0-4FA9-A9AE-175C536E6982}.Release|Win32.Build.0 = Release|Win32
 		{BD5BE767-8DD0-4FA9-A9AE-175C536E6982}.Release|x64.ActiveCfg = Release|x64
 		{BD5BE767-8DD0-4FA9-A9AE-175C536E6982}.Release|x64.Build.0 = Release|x64
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Debug|Win32.Build.0 = Debug|Win32
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Debug|x64.ActiveCfg = Debug|x64
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Debug|x64.Build.0 = Debug|x64
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Release|Win32.ActiveCfg = Release|Win32
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Release|Win32.Build.0 = Release|Win32
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Release|x64.ActiveCfg = Release|x64
+		{BD698602-80DF-4AB6-855B-524F24152DA2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
