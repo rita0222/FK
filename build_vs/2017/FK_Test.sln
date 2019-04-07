@@ -53,6 +53,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Texture", "test\FK_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Viewer", "test\FK_Test_Viewer\FK_Test_Viewer.vcxproj", "{577ED8D9-9893-4914-99B6-999A2269017C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Shader", "test\FK_Test_Shader\FK_Test_Shader.vcxproj", "{1A595088-5604-46F1-A8E1-FD2A0229088C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -257,6 +259,14 @@ Global
 		{577ED8D9-9893-4914-99B6-999A2269017C}.Release|Win32.Build.0 = Release|Win32
 		{577ED8D9-9893-4914-99B6-999A2269017C}.Release|x64.ActiveCfg = Release|x64
 		{577ED8D9-9893-4914-99B6-999A2269017C}.Release|x64.Build.0 = Release|x64
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Debug|Win32.Build.0 = Debug|Win32
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Debug|x64.ActiveCfg = Debug|x64
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Debug|x64.Build.0 = Debug|x64
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|Win32.ActiveCfg = Release|Win32
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|Win32.Build.0 = Release|Win32
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|x64.ActiveCfg = Release|x64
+		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
