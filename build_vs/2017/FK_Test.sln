@@ -45,6 +45,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Particle", "test\FK
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Resize", "test\FK_Test_Resize\FK_Test_Resize.vcxproj", "{10C94BEE-74F0-4383-BDF0-D757CDF20716}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Sprite", "test\FK_Test_Sprite\FK_Test_Sprite.vcxproj", "{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -217,6 +219,14 @@ Global
 		{10C94BEE-74F0-4383-BDF0-D757CDF20716}.Release|Win32.Build.0 = Release|Win32
 		{10C94BEE-74F0-4383-BDF0-D757CDF20716}.Release|x64.ActiveCfg = Release|x64
 		{10C94BEE-74F0-4383-BDF0-D757CDF20716}.Release|x64.Build.0 = Release|x64
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Debug|Win32.Build.0 = Debug|Win32
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Debug|x64.ActiveCfg = Debug|x64
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Debug|x64.Build.0 = Debug|x64
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Release|Win32.ActiveCfg = Release|Win32
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Release|Win32.Build.0 = Release|Win32
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Release|x64.ActiveCfg = Release|x64
+		{A5BD97AD-89B0-43EB-B688-B300FFA03ECC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
