@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -70,60 +70,96 @@
  *
  ****************************************************************************/
 #include <FK/FK.h>
+#include <FL/Fl_Native_File_Chooser.H>
 
 using namespace std;
 using namespace FK;
 using namespace FK::Material;
 
-int main (int, char *[])
+string imageFileSelect(void)
 {
-	fk_AppWindow	win;
-	fk_TextImage	textImage;
-	fk_RectTexture	texture;
-	fk_UniStr		str;
-	fk_Model		strModel;
+	Fl_Native_File_Chooser	*fc;
+	string					fileName;
+	string					pathName;
 
-	fk_System::setcwd();
-	fk_Material::initDefault();
+	pathName = fk_System::get_cwd();
+	fc = new Fl_Native_File_Chooser();
+	fc->title("Image File Select");
+	fc->filter("*.bmp");
+	if(pathName.empty() == false) fc->directory(pathName.c_str());
+	fc->type(Fl_Native_File_Chooser::BROWSE_FILE);
 
-#ifdef WIN32
-	str.convert("FK日本語", FK_STR_SJIS);
-#else
-	str.convert("FK日本語", FK_STR_UTF8);
-#endif
+	switch(fc->show()) {
 
-	texture.setImage(&textImage);
-	if(textImage.initFont("data/rm1b.ttf") == false) {
-		fl_alert("Font Init Error.");
+	  case -1:
+		fl_alert("%s", fc->errmsg());
+		delete fc;
+		return fileName;
+
+	  case 1:
+		delete fc;
+		return fileName;
+
+	  default:
+		break;
 	}
 
-	textImage.setDPI(96);
-	textImage.setPTSize(96);
-	textImage.setLineSkip(30);
-	textImage.setMonospaceMode(true);
-	textImage.setMonospaceSize(96);
-	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
-	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
-	textImage.setAlign(FK_ALIGN_CENTER);
-	textImage.loadUniStr(&str);
-	texture.setTextureSize(40.0, 10.0);
-	texture.setTextureMode(FK_TEX_REPLACE);
-	strModel.setMaterial(TrueWhite);
+	fileName = fc->filename();
+	delete fc;
+	return fileName;
+}
 
-	strModel.setShape(&texture);
-	strModel.glVec(0.0, 0.0, -1.0);
-	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
 
-	win.entry(&strModel);
-	win.open();
-	win.setCameraPos(0.0, 0.0, 100.0);
-	win.setCameraFocus(0.0, 0.0, 0.0);
+int main(int, char *[])
+{
+	fk_MeshTexture	tex;
+	string			fileName;
+	fk_Material		mat;
 
-	while(win.update() == true) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/100.0);
-		if(strModel.getVec().z > 0.0) {
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI);
-		}
+	fileName = imageFileSelect();
+
+	if(tex.readBMP(fileName) == false) {
+		fl_alert("Image File Read Error.");
+		exit(1);
 	}
+
+	tex.setTriNum(4);
+
+	// テクスチャ画像を置く位置の設定
+	tex.setVertexPos(0, 0, -100.0, 100.0, 0.0);
+	tex.setVertexPos(0, 1, -100.0, 0.0, 0.0);
+	tex.setVertexPos(0, 2, 0.0, 100.0, 0.0);
+	tex.setVertexPos(1, 0, -100.0, -100.0, 0.0);
+	tex.setVertexPos(1, 1, 0.0, -100.0, 0.0);
+	tex.setVertexPos(1, 2, -100.0, 0.0, 0.0);
+	tex.setVertexPos(2, 0, 100.0, -100.0, 0.0);
+	tex.setVertexPos(2, 1, 100.0, 0.0, 0.0);
+	tex.setVertexPos(2, 2, 0.0, -100.0, 0.0);
+	tex.setVertexPos(3, 0, 100.0, 100.0, 0.0);
+	tex.setVertexPos(3, 1, 0.0, 100.0, 0.0);
+	tex.setVertexPos(3, 2, 100.0, 0.0, 0.0);
+
+	// テクスチャ座標の設定
+	tex.setTextureCoord(0, 0, 0.0, 1.0);
+	tex.setTextureCoord(0, 1, 0.0, 0.5);
+	tex.setTextureCoord(0, 2, 0.5, 1.0);
+	tex.setTextureCoord(1, 0, 0.0, 0.0);
+	tex.setTextureCoord(1, 1, 0.5, 0.0);
+	tex.setTextureCoord(1, 2, 0.0, 0.5);
+	tex.setTextureCoord(2, 0, 1.0, 0.0);
+	tex.setTextureCoord(2, 1, 1.0, 0.5);
+	tex.setTextureCoord(2, 2, 0.5, 0.0);
+	tex.setTextureCoord(3, 0, 1.0, 1.0);
+	tex.setTextureCoord(3, 1, 0.5, 1.0);
+	tex.setTextureCoord(3, 2, 1.0, 0.5);
+
+	fk_ShapeViewer	viewer(800, 600);
+
+	mat.setAmbDiff(1.0, 1.0, 1.0);
+	viewer.setShape(&tex);
+	viewer.setMaterial(0, mat);
+
+	while(viewer.draw() == true) { }
+
 	return 0;
 }

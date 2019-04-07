@@ -1,6 +1,6 @@
 ﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -75,55 +75,58 @@ using namespace std;
 using namespace FK;
 using namespace FK::Material;
 
-int main (int, char *[])
+int main()
 {
-	fk_AppWindow	win;
-	fk_TextImage	textImage;
-	fk_RectTexture	texture;
-	fk_UniStr		str;
-	fk_Model		strModel;
+	fk_ShapeViewer	viewer(600, 660);
+	fk_IndexFaceSet	shape;
+	fk_Vector		pos[121], moveVec, movePos;
+	int				IFSet[4*100];
+	int				i, j;
+	double			x, y;
 
-	fk_System::setcwd();
-	fk_Material::initDefault();
-
-#ifdef WIN32
-	str.convert("FK日本語", FK_STR_SJIS);
-#else
-	str.convert("FK日本語", FK_STR_UTF8);
-#endif
-
-	texture.setImage(&textImage);
-	if(textImage.initFont("data/rm1b.ttf") == false) {
-		fl_alert("Font Init Error.");
-	}
-
-	textImage.setDPI(96);
-	textImage.setPTSize(96);
-	textImage.setLineSkip(30);
-	textImage.setMonospaceMode(true);
-	textImage.setMonospaceSize(96);
-	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
-	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
-	textImage.setAlign(FK_ALIGN_CENTER);
-	textImage.loadUniStr(&str);
-	texture.setTextureSize(40.0, 10.0);
-	texture.setTextureMode(FK_TEX_REPLACE);
-	strModel.setMaterial(TrueWhite);
-
-	strModel.setShape(&texture);
-	strModel.glVec(0.0, 0.0, -1.0);
-	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
-
-	win.entry(&strModel);
-	win.open();
-	win.setCameraPos(0.0, 0.0, 100.0);
-	win.setCameraFocus(0.0, 0.0, 0.0);
-
-	while(win.update() == true) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/100.0);
-		if(strModel.getVec().z > 0.0) {
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI);
+	// 各頂点位置の設定
+	for(i = 0; i <= 10; i++) {
+		for(j = 0; j <= 10; j++) {
+			x = double(i - 5);	
+			y = double(j - 5);
+			pos[i*11 + j].set(x, y, (x*x - y*y)/10.0);
 		}
 	}
+
+	// インデックスフェースセットの生成
+	for(i = 0; i < 10; i++) {
+		for(j = 0; j < 10; j++) {
+			IFSet[(i*10 + j)*4 + 0] = i*11 + j;
+			IFSet[(i*10 + j)*4 + 1] = (i+1)*11 + j;
+			IFSet[(i*10 + j)*4 + 2] = (i+1)*11 + j+1;
+			IFSet[(i*10 + j)*4 + 3] = i*11 + j+1;
+		}
+	}
+
+	// 形状の生成
+	shape.makeIFSet(100, 4, IFSet, 121, pos);
+
+	// fk_ShapeViewer へ形状を設定
+	viewer.setShape(0, &shape);
+
+	// 各種設定
+	viewer.setDrawMode(FK_FRONTBACK_POLYMODE | FK_LINEMODE);
+	viewer.setScale(10.0);
+
+	for(int k = 0; viewer.draw() == true; k += 3) {
+		for(i = 0; i <= 10; i++) {
+			for(j = 0; j <= 10; j++) {
+				// 各頂点の移動量計算
+				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/FK_PI));
+
+				// 各頂点を移動場所を計算
+				movePos = moveVec + pos[i*11 + j];
+
+				// 各頂点を実際に移動
+				shape.moveVPosition(i*11 + j, movePos);
+			}
+		}
+	}
+
 	return 0;
 }
