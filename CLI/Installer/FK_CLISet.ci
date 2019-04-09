@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl ></>
-   <ver >4.0.0b1</>
+   <ver >4.0.0b6</>
    <supurl ></>
    <updurl ></>
    <dlgfont >custom</>
@@ -127,6 +127,7 @@
                   <pathadd ></>
                   <enforce >0</>
                   <if ></>
+                  <savepath >0</>
                </>
                <_ id = dlgprog expanded = 2 >
                   <children >
@@ -165,8 +166,8 @@
                         <if ></>
                         <srclist >
                            <rows >
-                              <_ disabled = 1 >
-                                 <filename >$prjpath$\FK_C++_Template.zip</>
+                              <_ >
+                                 <filename >$prjpath$\Template\FK_CLI_Template.zip</>
                                  <recurse >0</>
                                  <justfile >1</>
                                  <emptydir >0</>
@@ -233,7 +234,7 @@
                   <reglist >
                      <rows >
                         <_ >
-                           <valname >FK_CLI17_DIR</>
+                           <valname >FK_CLI_DIR</>
                            <regtype >str</>
                            <value >#setuppath#</>
                            <if ></>
@@ -256,6 +257,17 @@
                   <desc >x64 runtime</>
                   <path >custom</>
                   <name >#setuppath#\redist\vcredist_x64.exe</>
+                  <cmdline >/quiet</>
+                  <work >custom</>
+                  <defwork >#setuppath#\redist</>
+                  <wait >1</>
+                  <runas >norm</>
+                  <if ></>
+               </>
+               <_ tag = 0 id = run >
+                  <desc >x86 runtime</>
+                  <path >custom</>
+                  <name >#setuppath#\redist\vcredist_x86.exe</>
                   <cmdline >/quiet</>
                   <work >custom</>
                   <defwork >#setuppath#\redist</>
