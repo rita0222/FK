@@ -70,92 +70,100 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/Line.h>
+#include <FK/LineBase.h>
 
 using namespace std;
 using namespace FK;
 
-fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
-	: fk_LineBase(argVertexPos)
+fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
 {
-	SetObjectType(FK_LINE);
+	FlushAttr = [this]() {
+		if(posArray.isModify() == true) {
+			modifyAttribute(vertexName);
+			posArray.reset();
+		}
+
+		if(colArray.isModify() == true) {
+			modifyAttribute(lineElementColorName);
+			colArray.reset();
+		}
+	};
+	
+	posArray.setDim(3);
+	colArray.setDim(4);
+	realType = FK_SHAPE_LINE;
+	//SetObjectType(FK_LINE);
+	allClear();
+	MakeLines(argVertexPos);
+
+	setShaderAttribute(vertexName, 3, posArray.getP());
+	setShaderAttribute(lineElementColorName, 4, colArray.getP());
 	return;
 }
 
-fk_Line::~fk_Line()
+fk_LineBase::~fk_LineBase()
 {
 	return;
 }
 
-bool fk_Line::setVertex(int argID, fk_Vector argPos)
+void fk_LineBase::SetPos(int argEID, int argVID, fk_Vector *argV)
 {
-	if(argID != 0 && argID != 1) return false;
-	posArray.resize(2);
-	colArray.resize(2);
-
-	SetPos(0, argID, &argPos);
-	return true;
-}
-
-bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
-{
-	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
-	SetPos(argEID, argVID, &argPos);
-	return true;
-}
-
-void fk_Line::setVertex(fk_Vector *argPosArray)
-{
-	MakeLines(argPosArray);
+	posArray.set(argEID*2 + argVID, *argV);
 	return;
 }
 
-void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
+void fk_LineBase::SetCol(int argEID, int argVID, fk_Color *argC)
 {
-	MakeLines(argPosArray);
+	colArray.set(argEID*2 + argVID, *argC);
 	return;
 }
 
-void fk_Line::pushLine(fk_Vector *argVec)
+void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 {
-	if(argVec == nullptr) return;
-	PushLines(&argVec[0], &argVec[1]);
+	if(argVPos == nullptr) {
+		posArray.clear();
+		colArray.clear();
+		return;
+	}
+
+	fk_Color col(0.0, 0.0, 0.0, 1.0);
+
+	posArray.resize(int(argVPos->size()));
+	colArray.resize(int(argVPos->size()));
+
+	for(int i = 0; i < posArray.getSize(); ++i) {
+		SetPos(i, 0, &(*argVPos)[_st(i*2)]);
+		SetPos(i, 1, &(*argVPos)[_st(i*2+1)]);
+		SetCol(i, 0, &col);
+		SetCol(i, 1, &col);
+	}
 	return;
 }
 
-void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
+void fk_LineBase::MakeLines(fk_Vector *argVPos)
 {
-	PushLines(&argV1, &argV2);
+	if(argVPos == nullptr) {
+		posArray.clear();
+		colArray.clear();
+		return;
+	}
+
+	PushLines(&argVPos[0], &argVPos[1]);
 	return;
 }
 
-bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
+void fk_LineBase::PushLines(fk_Vector *argS, fk_Vector *argE)
 {
-	if(argID < 0 || argID >= getSize()) return false;
-
-	SetPos(argID, 0, &argPos1);
-	SetPos(argID, 1, &argPos2);
-	return true;
+	posArray.push(*argS);
+	posArray.push(*argE);
+	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
+	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-int fk_Line::getSize(void)
+void fk_LineBase::allClear(void)
 {
-	return posArray.getSize()/2;
-}
-
-void fk_Line::setColor(int argID, fk_Color argCol)
-{
-	setColor(argID, &argCol);
-}
-
-void fk_Line::setColor(int argID, fk_Color *argCol)
-{
-	if(argID < 0 || argID >= getSize()) return;
-	SetCol(argID, 0, argCol);
-	SetCol(argID, 1, argCol);
-}
-
-fk_Color fk_Line::getColor(int argID)
-{
-	return colArray.getC(argID*2);
+	posArray.clear();
+	colArray.clear();
+	modifyAttribute(vertexName);
+	modifyAttribute(lineElementColorName);
 }

@@ -4,6 +4,7 @@
 #include <FK/Window.h>
 #include <FK/MatExample.h>
 #include <FK/Line.h>
+#include <FK/Solid.h>
 #include <FK/Texture.h>
 #include <FK/Model.h>
 #include <FK/Light.h>

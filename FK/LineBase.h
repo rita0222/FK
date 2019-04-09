@@ -1,4 +1,48 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_LINE_BASE_HEADER__
+#define __FK_LINE_BASE_HEADER__
+
+#include <FK/FVecArray.h>
+#include <FK/Shape.h>
+
+namespace FK {
+
+	//! 線形状基盤クラス
+	/*!
+	 *	このクラスは、線分集合を表すクラスの共通基盤クラスです。
+	 *	実質的な利用できる機能は allClear() のみとなります。
+	 *
+	 *	\sa fk_Line, fk_Polyline, fk_Closedline
+	 */
+	class fk_LineBase: public fk_Shape {
+
+	public:
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_LineBase(std::vector<fk_Vector> *array = nullptr);
+		virtual ~fk_LineBase();
+#endif
+		//! 初期化関数
+		/*!
+		 *	登録されている全ての線分データを消去します。
+		 */
+		void allClear();
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+	protected:
+		fk_FVecArray	posArray;
+		fk_FVecArray	colArray;
+
+		void MakeLines(std::vector<fk_Vector> *);
+		void MakeLines(fk_Vector *);
+		void PushLines(fk_Vector *, fk_Vector *);
+		void SetPos(int, int, fk_Vector *);
+		void SetCol(int, int, fk_Color *);
+#endif
+	};
+}
+
+#endif // !__FK_LINE_BASE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -69,93 +113,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-#include <FK/Line.h>
-
-using namespace std;
-using namespace FK;
-
-fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
-	: fk_LineBase(argVertexPos)
-{
-	SetObjectType(FK_LINE);
-	return;
-}
-
-fk_Line::~fk_Line()
-{
-	return;
-}
-
-bool fk_Line::setVertex(int argID, fk_Vector argPos)
-{
-	if(argID != 0 && argID != 1) return false;
-	posArray.resize(2);
-	colArray.resize(2);
-
-	SetPos(0, argID, &argPos);
-	return true;
-}
-
-bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
-{
-	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
-	SetPos(argEID, argVID, &argPos);
-	return true;
-}
-
-void fk_Line::setVertex(fk_Vector *argPosArray)
-{
-	MakeLines(argPosArray);
-	return;
-}
-
-void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
-{
-	MakeLines(argPosArray);
-	return;
-}
-
-void fk_Line::pushLine(fk_Vector *argVec)
-{
-	if(argVec == nullptr) return;
-	PushLines(&argVec[0], &argVec[1]);
-	return;
-}
-
-void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
-{
-	PushLines(&argV1, &argV2);
-	return;
-}
-
-bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
-{
-	if(argID < 0 || argID >= getSize()) return false;
-
-	SetPos(argID, 0, &argPos1);
-	SetPos(argID, 1, &argPos2);
-	return true;
-}
-
-int fk_Line::getSize(void)
-{
-	return posArray.getSize()/2;
-}
-
-void fk_Line::setColor(int argID, fk_Color argCol)
-{
-	setColor(argID, &argCol);
-}
-
-void fk_Line::setColor(int argID, fk_Color *argCol)
-{
-	if(argID < 0 || argID >= getSize()) return;
-	SetCol(argID, 0, argCol);
-	SetCol(argID, 1, argCol);
-}
-
-fk_Color fk_Line::getColor(int argID)
-{
-	return colArray.getC(argID*2);
-}

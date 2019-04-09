@@ -37,6 +37,7 @@ LIBSRCS		= \
 			IndexFace.cxx \
 			Light.cxx \
 			Line.cxx \
+			LineBase.cxx \
 			Loop.cxx \
 			MQOOut.cxx \
 			MQOParser.cxx \

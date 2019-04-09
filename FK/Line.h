@@ -1,8 +1,7 @@
 ﻿#ifndef __FK_LINE_HEADER__
 #define __FK_LINE_HEADER__
 
-#include <FK/FVecArray.h>
-#include <FK/Solid.h>
+#include <FK/LineBase.h>
 
 namespace FK {
 	//! 有向線分を生成、管理するクラス
@@ -20,7 +19,7 @@ namespace FK {
 	 *	\sa	fk_Model, fk_Shape
 	 */
 
-	class fk_Line: public fk_Shape {
+	class fk_Line: public fk_LineBase {
 
 	public:
 
@@ -148,12 +147,6 @@ namespace FK {
 		 */
 		int			getSize(void);
 
-		//! 初期化関数
-		/*!
-		 *	登録されている全ての線分データを消去します。
-		 */
-		void		allClear(void);
-
 		//! 個別色設定関数1
 		/*!
 		 *	線分の色を個別に設定します。
@@ -186,16 +179,6 @@ namespace FK {
 		 *	\return	色値
 		 */
 		fk_Color	getColor(int eID);
-
-	private:
-		fk_FVecArray	posArray;
-		fk_FVecArray	colArray;
-
-		void MakeLines(std::vector<fk_Vector> *);
-		void MakeLines(fk_Vector *);
-		void PushLines(fk_Vector *, fk_Vector *);
-		void SetPos(int, int, fk_Vector *);
-		void SetCol(int, int, fk_Color *);
 	};
 }
 #endif // !__FK_LINE_HEADER__
