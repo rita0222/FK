@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+
+foreach(@ARGV) {
+    system("perl -pe 's/\\r\\n/\\n/' -i.bak $_");
+    system("rm $_.bak");
+}
