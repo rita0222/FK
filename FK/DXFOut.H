@@ -1,31 +1,4 @@
-﻿#ifndef __FK_DXF_OUT_HEADER__
-#define __FK_DXF_OUT_HEADER__
-
-namespace FK {
-
-	class fk_Solid;
-	class fk_IndexFaceSet;
-
-	class fk_DXFOut {
-	public:
-
-		fk_DXFOut(fk_Solid *);
-		fk_DXFOut(fk_IndexFaceSet *);
-		virtual ~fk_DXFOut();
-
-		bool	WriteDXFFile(std::string, bool);
-
-	private:
-		fk_Solid		*solid;
-		fk_IndexFaceSet	*ifs;
-		bool			WriteDXFShape_Solid(std::ofstream &, bool);
-		bool			WriteDXFShape_IFS(std::ofstream &, bool);
-	};
-}
-
-#endif // !__FK_DXF_OUT_HEADER__
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -96,3 +69,30 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
+#ifndef __FK_DXF_OUT_HEADER__
+#define __FK_DXF_OUT_HEADER__
+
+namespace FK {
+
+	class fk_Solid;
+	class fk_IndexFaceSet;
+
+	class fk_DXFOut {
+	public:
+
+		fk_DXFOut(fk_Solid *);
+		fk_DXFOut(fk_IndexFaceSet *);
+		virtual ~fk_DXFOut();
+
+		bool	WriteDXFFile(std::string, bool);
+
+	private:
+		fk_Solid		*solid;
+		fk_IndexFaceSet	*ifs;
+		bool			WriteDXFShape_Solid(std::ofstream &, bool);
+		bool			WriteDXFShape_IFS(std::ofstream &, bool);
+	};
+}
+
+#endif // !__FK_DXF_OUT_HEADER__
