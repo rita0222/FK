@@ -31,7 +31,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE.
+ *	POSSIBILITY OF SUCH DAMAGE. 
  *
  ****************************************************************************/
 /****************************************************************************
@@ -69,6 +69,7 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
 
 #ifndef __FK_DISPLAYLIST_HEADER__
 #define __FK_DISPLAYLIST_HEADER__

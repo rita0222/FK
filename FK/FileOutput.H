@@ -1,71 +1,4 @@
-﻿#ifndef __FK_FILEOUTPUT_HEADER__
-#define __FK_FILEOUTPUT_HEADER__
-
-#include <FK/Base.h>
-#include <FK/FileBase.h>
-#include <FK/ParserBase.H>
-
-namespace FK {
-	class fk_Palette;
-	class fk_DataBase;
-	class fk_IDAdmin;
-	class fk_Vertex;
-	class fk_Half;
-	class fk_Edge;
-	class fk_Loop;
-
-	class fk_FileOutput : public fk_ParserBase {
-
-	public:
-		fk_FileOutput(void);
-		virtual ~fk_FileOutput();
-
-		void				SetDataBase(fk_DataBase *);
-		void				SetPalette(fk_Palette *);
-		bool				PutShapeData(std::string, fk_DataFormatMode);
-		bool				PutShapeData(std::ofstream &, fk_DataFormatMode);
-		bool				PutPaletteData(std::string, fk_DataFormatMode);
-		bool				PutPaletteData(std::ofstream &, fk_DataFormatMode);
-
-		void				SetSizeMode(bool);
-
-	private:
-
-		fk_DataBase			*DB;
-		fk_Palette			*palette;
-		bool				sizeMode;
-
-		// for Put Header
-		void				PutHeader(fk_DataFormatMode, std::ofstream &);
-
-		// for Put Shape
-		bool				PutShapeData_(fk_DataFormatMode, std::ofstream &);
-
-		//// for Put Topology Elements
-		void				PutVertexData(fk_DataFormatMode, std::ofstream &, fk_Vertex *);
-		void				PutHalfData(fk_DataFormatMode, std::ofstream &, fk_Half *);
-		void				PutEdgeData(fk_DataFormatMode, std::ofstream &, fk_Edge *);
-		void				PutLoopData(fk_DataFormatMode, std::ofstream &, fk_Loop *);
-
-		//// for Put IDAdmin
-		bool				PutAdminDataFile(fk_DataFormatMode, std::ofstream &,
-											 fk_IDAdmin *,
-											 const std::string & = "");
-		void				PutAdminHeader(fk_DataFormatMode,
-										   std::ofstream &, fk_IDAdmin *,
-										   const std::string & = "");
-		void				PutAdminEraseList(fk_DataFormatMode,
-											  std::ofstream &, int *, int);
-
-		// for Material
-		bool				PutPaletteData_(fk_DataFormatMode, std::ofstream &);
-		bool				PutMaterialData(fk_DataFormatMode, std::ofstream &,
-											fk_Material *);
-	};
-}
-#endif // !__FK_FILEOUTPUT_HEADER__
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -136,3 +69,71 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_FILEOUTPUT_HEADER__
+#define __FK_FILEOUTPUT_HEADER__
+
+#include <FK/Base.h>
+#include <FK/FileBase.h>
+#include <FK/ParserBase.H>
+
+namespace FK {
+	class fk_Palette;
+	class fk_DataBase;
+	class fk_IDAdmin;
+	class fk_Vertex;
+	class fk_Half;
+	class fk_Edge;
+	class fk_Loop;
+
+	class fk_FileOutput : public fk_ParserBase {
+
+	public:
+		fk_FileOutput(void);
+		virtual ~fk_FileOutput();
+
+		void				SetDataBase(fk_DataBase *);
+		void				SetPalette(fk_Palette *);
+		bool				PutShapeData(std::string, fk_DataFormatMode);
+		bool				PutShapeData(std::ofstream &, fk_DataFormatMode);
+		bool				PutPaletteData(std::string, fk_DataFormatMode);
+		bool				PutPaletteData(std::ofstream &, fk_DataFormatMode);
+
+		void				SetSizeMode(bool);
+
+	private:
+
+		fk_DataBase			*DB;
+		fk_Palette			*palette;
+		bool				sizeMode;
+
+		// for Put Header
+		void				PutHeader(fk_DataFormatMode, std::ofstream &);
+
+		// for Put Shape
+		bool				PutShapeData_(fk_DataFormatMode, std::ofstream &);
+
+		//// for Put Topology Elements
+		void				PutVertexData(fk_DataFormatMode, std::ofstream &, fk_Vertex *);
+		void				PutHalfData(fk_DataFormatMode, std::ofstream &, fk_Half *);
+		void				PutEdgeData(fk_DataFormatMode, std::ofstream &, fk_Edge *);
+		void				PutLoopData(fk_DataFormatMode, std::ofstream &, fk_Loop *);
+
+		//// for Put IDAdmin
+		bool				PutAdminDataFile(fk_DataFormatMode, std::ofstream &,
+											 fk_IDAdmin *,
+											 const std::string & = "");
+		void				PutAdminHeader(fk_DataFormatMode,
+										   std::ofstream &, fk_IDAdmin *,
+										   const std::string & = "");
+		void				PutAdminEraseList(fk_DataFormatMode,
+											  std::ofstream &, int *, int);
+
+		// for Material
+		bool				PutPaletteData_(fk_DataFormatMode, std::ofstream &);
+		bool				PutMaterialData(fk_DataFormatMode, std::ofstream &,
+											fk_Material *);
+	};
+}
+#endif // !__FK_FILEOUTPUT_HEADER__
+
+

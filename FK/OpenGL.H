@@ -1,27 +1,4 @@
-﻿#ifndef __FK_OPENGL_HEADER__
-#define __FK_OPENGL_HEADER__
-
-#ifdef _MACOSX_
- #ifdef OPENGL4
-  #define GL_SILENCE_DEPRECATION
-  #include <OpenGL/OpenGL.h>
-  #include <OpenGL/gl3.h>
- #else // OPENGL4
-  #include <OpenGL/gl.h>
-  #include <OpenGL/glu.h>
- #endif // OpenGL4
-#else // _MACOSX_
- #if defined(WIN32) && !defined(_MINGW_)
-  //#define GLEW_STATIC
-  #include <windows.h>
-  #include <GL/glew.h>
- #endif // WIN32
- #include <GL/gl.h>
-#endif // _MACOSX_
-
-#endif /* !__FK_OPENGL_HEADER__ */
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -92,3 +69,27 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_OPENGL_HEADER__
+#define __FK_OPENGL_HEADER__
+
+#ifdef _MACOSX_
+ #ifdef OPENGL4
+  #define GL_SILENCE_DEPRECATION
+  #include <OpenGL/OpenGL.h>
+  #include <OpenGL/gl3.h>
+ #else // OPENGL4
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glu.h>
+ #endif // OpenGL4
+#else // _MACOSX_
+ #if defined(WIN32) && !defined(_MINGW_)
+  //#define GLEW_STATIC
+  #include <windows.h>
+  #include <GL/glew.h>
+ #endif // WIN32
+ #include <GL/gl.h>
+#endif // _MACOSX_
+
+#endif /* !__FK_OPENGL_HEADER__ */
+
+

@@ -1,35 +1,4 @@
-﻿#ifndef __FK_TEXTURE_DRAW_HEADER__
-#define __FK_TEXTURE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-	class fk_TextureDraw : public fk_DrawBase {
-	public:
-		fk_TextureDraw(void);
-		virtual ~fk_TextureDraw();
-
-		void	DrawShapeTexture(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
-	private:
-		fk_ShaderBinder		*phongShader, *gouraudShader;
-
-		GLuint	modulate_p_ID, replace_p_ID, decal_p_ID;
-		GLuint	modulate_g_ID, replace_g_ID, decal_g_ID;
-
-		void 	ShaderSetup(void);
-		void	PhongSetup(void);
-		void	GouraudSetup(void);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
-		void	PolygonModeSet(void);
-	};
-}
-
-#endif /* !__FK_TEXTURE_DRAW_HEADER__ */
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -100,3 +69,35 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_TEXTURE_DRAW_HEADER__
+#define __FK_TEXTURE_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+
+namespace FK {
+	class fk_TextureDraw : public fk_DrawBase {
+	public:
+		fk_TextureDraw(void);
+		virtual ~fk_TextureDraw();
+
+		void	DrawShapeTexture(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
+	private:
+		fk_ShaderBinder		*phongShader, *gouraudShader;
+
+		GLuint	modulate_p_ID, replace_p_ID, decal_p_ID;
+		GLuint	modulate_g_ID, replace_g_ID, decal_g_ID;
+
+		void 	ShaderSetup(void);
+		void	PhongSetup(void);
+		void	GouraudSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
+		void	PolygonModeSet(void);
+	};
+}
+
+#endif /* !__FK_TEXTURE_DRAW_HEADER__ */
+
+

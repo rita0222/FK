@@ -70,6 +70,7 @@
  *
  ****************************************************************************/
 
+
 #ifndef __FK_CLOSEDLINE_HEADER__
 #define __FK_CLOSEDLINE_HEADER__
 

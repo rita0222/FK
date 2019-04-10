@@ -1,54 +1,4 @@
-﻿#ifndef __FK_MQO_OUT_HEADER__
-#define __FK_MQO_OUT_HEADER__
-
-#include <string>
-#include <vector>
-#include <map>
-
-namespace FK {
-
-	class fk_Solid;
-	class fk_Loop;
-	class fk_Vertex;
-	class fk_IndexFaceSet;
-	class fk_Color;
-
-	class fk_MQOOut {
-
-	public:
-
-		fk_MQOOut(void);
-		fk_MQOOut(fk_Solid *);
-		fk_MQOOut(fk_IndexFaceSet *);
-		virtual ~fk_MQOOut();
-
-		void				SetSolid(fk_Solid *);
-		void				SetIndexFaceSet(fk_IndexFaceSet *);
-		bool				WriteMQOFile(std::string);
-
-	private:
-		fk_Solid					*solid;
-		fk_IndexFaceSet				*ifs;
-		std::map<fk_Vertex *, int>	vertIDMap;
-
-		std::vector<std::string>	mBuf;
-		std::vector<std::string>	vBuf;
-		std::vector<std::string>	fBuf;
-
-		void				Init(void);
-		bool				Convert(void);
-		bool				Convert_Solid(void);
-		bool				Convert_IFS(void);
-		void				MakeVertexIDMap_Solid(void);
-		void				MakeVertexIDMap_IFS(void);
-		void				MakeMaterialPalette(int);
-		float				CalcMonotoneLuminance(fk_Color *);
-	};
-}
-
-#endif // !__FK_MQO_OUT_HEADER__
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -119,3 +69,54 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_MQO_OUT_HEADER__
+#define __FK_MQO_OUT_HEADER__
+
+#include <string>
+#include <vector>
+#include <map>
+
+namespace FK {
+
+	class fk_Solid;
+	class fk_Loop;
+	class fk_Vertex;
+	class fk_IndexFaceSet;
+	class fk_Color;
+
+	class fk_MQOOut {
+
+	public:
+
+		fk_MQOOut(void);
+		fk_MQOOut(fk_Solid *);
+		fk_MQOOut(fk_IndexFaceSet *);
+		virtual ~fk_MQOOut();
+
+		void				SetSolid(fk_Solid *);
+		void				SetIndexFaceSet(fk_IndexFaceSet *);
+		bool				WriteMQOFile(std::string);
+
+	private:
+		fk_Solid					*solid;
+		fk_IndexFaceSet				*ifs;
+		std::map<fk_Vertex *, int>	vertIDMap;
+
+		std::vector<std::string>	mBuf;
+		std::vector<std::string>	vBuf;
+		std::vector<std::string>	fBuf;
+
+		void				Init(void);
+		bool				Convert(void);
+		bool				Convert_Solid(void);
+		bool				Convert_IFS(void);
+		void				MakeVertexIDMap_Solid(void);
+		void				MakeVertexIDMap_IFS(void);
+		void				MakeMaterialPalette(int);
+		float				CalcMonotoneLuminance(fk_Color *);
+	};
+}
+
+#endif // !__FK_MQO_OUT_HEADER__
+
+

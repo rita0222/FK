@@ -1,73 +1,4 @@
-﻿#ifndef __FK_POLYGON_HEADER__
-#define __FK_POLYGON_HEADER__
-
-#include <FK/Solid.h>
-
-namespace FK {
-	//! 多角形を生成、管理するクラス
-	/*!
-	 *	このクラスは、形状として多角形を制御する機能を提供します。
-	 *	このクラスによる形状は、多角形の内部も描画します。
-	 *	もし辺のみを描画したい場合は fk_Closedline クラスを利用して下さい。
-	 *
-	 *	描画される面は、基本的には多角形の頂点順番が向かって
-	 *	反時計回りになっている側になります。
-	 *	両面を描画したい場合は fk_Model の setDrawMode() 関数を参照して下さい。
-	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
-	 *	平面でなかった場合に意図している形状と描画形状が異なる場合があります。
-	 *	\sa fk_Solid, fk_Polyline, fk_Closedline
-	 */
-
-	class fk_Polygon: public fk_Solid {
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	引数はシステム内部制御のために利用されるものです。
-		 *	ユーザは引数を省略して定義を行って下さい。
-		 */
-		fk_Polygon(std::vector<fk_Vector> *array = nullptr,
-				   fk_ObjectType = FK_POLYGON);
-
-		//! デストラクタ
-		virtual ~fk_Polygon();
-
-		//! 頂点追加関数
-		/*!
-		 *	頂点を追加します。
-		 *	\param[in] pos 追加頂点の位置ベクトル
-		 */
-		void	pushVertex(fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点の位置を設定します。
-		 *	対象となる頂点がまだ存在していなかった場合、
-		 *	角数を (id+1) まで増加させます。
-		 *	\param[in] ID 頂点ID
-		 *	\param[in] pos 頂点位置ベクトル
-		 */
-		void	setVertex(int ID, fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *	\param[in] size 角数
-		 *	\param[in] array 頂点位置ベクトル配列の先頭アドレス
-		 */
-		void	setVertex(int size, fk_Vector *array);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
-		 */
-		void	setVertex(std::vector<fk_Vector> *array);
-	};
-}
-#endif // !__FK_POLYGON_HEADER__
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -138,3 +69,73 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_POLYGON_HEADER__
+#define __FK_POLYGON_HEADER__
+
+#include <FK/Solid.h>
+
+namespace FK {
+	//! 多角形を生成、管理するクラス
+	/*!
+	 *	このクラスは、形状として多角形を制御する機能を提供します。
+	 *	このクラスによる形状は、多角形の内部も描画します。
+	 *	もし辺のみを描画したい場合は fk_Closedline クラスを利用して下さい。
+	 *
+	 *	描画される面は、基本的には多角形の頂点順番が向かって
+	 *	反時計回りになっている側になります。
+	 *	両面を描画したい場合は fk_Model の setDrawMode() 関数を参照して下さい。
+	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
+	 *	平面でなかった場合に意図している形状と描画形状が異なる場合があります。
+	 *	\sa fk_Solid, fk_Polyline, fk_Closedline
+	 */
+
+	class fk_Polygon: public fk_Solid {
+	public:
+
+		//! コンストラクタ
+		/*!
+		 *	引数はシステム内部制御のために利用されるものです。
+		 *	ユーザは引数を省略して定義を行って下さい。
+		 */
+		fk_Polygon(std::vector<fk_Vector> *array = nullptr,
+				   fk_ObjectType = FK_POLYGON);
+
+		//! デストラクタ
+		virtual ~fk_Polygon();
+
+		//! 頂点追加関数
+		/*!
+		 *	頂点を追加します。
+		 *	\param[in] pos 追加頂点の位置ベクトル
+		 */
+		void	pushVertex(fk_Vector pos);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点の位置を設定します。
+		 *	対象となる頂点がまだ存在していなかった場合、
+		 *	角数を (id+1) まで増加させます。
+		 *	\param[in] ID 頂点ID
+		 *	\param[in] pos 頂点位置ベクトル
+		 */
+		void	setVertex(int ID, fk_Vector pos);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点全部を、指定した配列に入れ替えます。
+		 *	\param[in] size 角数
+		 *	\param[in] array 頂点位置ベクトル配列の先頭アドレス
+		 */
+		void	setVertex(int size, fk_Vector *array);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点全部を、指定した配列に入れ替えます。
+		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
+		 */
+		void	setVertex(std::vector<fk_Vector> *array);
+	};
+}
+#endif // !__FK_POLYGON_HEADER__
+
+

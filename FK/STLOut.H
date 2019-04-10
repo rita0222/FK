@@ -1,30 +1,4 @@
-﻿#ifndef __FK_STL_OUT_HEADER__
-#define __FK_STL_OUT_HEADER__
-
-#include <FK/Base.h>
-
-namespace FK {
-	class fk_Solid;
-	class fk_IndexFaceSet;
-
-	class fk_STLOut {
-	public:
-		fk_STLOut(fk_Solid *);
-		fk_STLOut(fk_IndexFaceSet *);
-		virtual ~fk_STLOut();
-
-		bool	WriteSTLFile(std::string);
-
-	private:
-		fk_Solid		*solid;
-		fk_IndexFaceSet	*ifset;
-		bool			WriteSTLShape_Solid(std::ofstream *);
-		bool			WriteSTLShape_IFS(std::ofstream *);
-	};
-}
-#endif // !__FK_STL_OUT_HEADER__
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -95,3 +69,30 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_STL_OUT_HEADER__
+#define __FK_STL_OUT_HEADER__
+
+#include <FK/Base.h>
+
+namespace FK {
+	class fk_Solid;
+	class fk_IndexFaceSet;
+
+	class fk_STLOut {
+	public:
+		fk_STLOut(fk_Solid *);
+		fk_STLOut(fk_IndexFaceSet *);
+		virtual ~fk_STLOut();
+
+		bool	WriteSTLFile(std::string);
+
+	private:
+		fk_Solid		*solid;
+		fk_IndexFaceSet	*ifset;
+		bool			WriteSTLShape_Solid(std::ofstream *);
+		bool			WriteSTLShape_IFS(std::ofstream *);
+	};
+}
+#endif // !__FK_STL_OUT_HEADER__
+
+

@@ -1,71 +1,4 @@
-﻿#ifndef __FK_TRACKBALL_HEADER__
-#define __FK_TRACKBALL_HEADER__
-
-#include <FK/Window.h>
-#include <FK/Model.h>
-#include <FK/Vector.h>
-#include <FK/Angle.h>
-#include <FL/Fl.H>
-
-namespace FK {
-	
-	//! マウスによる視点操作クラス
-	/*!	
-	 *	このクラスは、マウスでの自由な視点操作を提供します。
-	 */
-	class fk_TrackBall {
-
-	public:
-		//! コンストラクタ
-		fk_TrackBall(fk_Window*, fk_Model* = nullptr);
-
-		//! 操作に使用するマウスボタン
-		fk_MouseButton	lookButton, distButton[2], moveButton;
-		//! 画面外にカーソルが出た場合の判定の有無
-		bool		overCheck;
-		//! カーソル移動量:処理量比率指定
-		double		divPos, divLook;
-		//! ３人称視点制御カーソル移動量:処理量比率指定
-		double		divDist;
-		//! エコーの有無
-		bool		bEcho;
-
-		//! カメラの変更
-		void		setCamera(fk_Model*);
-		//! カメラポインタは渡されているか
-		bool		isSetCamera(void);
-
-		//! ３人称視点注視点変更
-		void		setLookTo(fk_Vector);
-		//! ３人称視点ショートカット制御
-		void		controlLookToSC(void);
-
-		//! ３人称視点位置制御
-		void		controlLookTo(void);
-		//! ３人称視点距離制御
-		void		controlLookToDist(void);
-		//! ３人称視点注視点制御
-		void		controlLookToMove(void);
-
-		//! 位置・距離・注視点をまとめて制御
-		void		update(void);
-
-	private:
-		fk_Window	*fk_win;							// FKウィンドウ
-		fk_Model	*camera;							// カメラ
-		fk_Vector	lookPos;							// ３人称視点注視点
-
-		int			nowX, nowY, oldX, oldY;				// ウィンドウ上座標
-		int			echoX, echoY;
-		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
-	};
-
-	using fkut_TrackBall = fk_TrackBall;
-}
-
-#endif //!__FK_TRACKBALL_HEADER__
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -136,3 +69,71 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_TRACKBALL_HEADER__
+#define __FK_TRACKBALL_HEADER__
+
+#include <FK/Window.h>
+#include <FK/Model.h>
+#include <FK/Vector.h>
+#include <FK/Angle.h>
+#include <FL/Fl.H>
+
+namespace FK {
+	
+	//! マウスによる視点操作クラス
+	/*!	
+	 *	このクラスは、マウスでの自由な視点操作を提供します。
+	 */
+	class fk_TrackBall {
+
+	public:
+		//! コンストラクタ
+		fk_TrackBall(fk_Window*, fk_Model* = nullptr);
+
+		//! 操作に使用するマウスボタン
+		fk_MouseButton	lookButton, distButton[2], moveButton;
+		//! 画面外にカーソルが出た場合の判定の有無
+		bool		overCheck;
+		//! カーソル移動量:処理量比率指定
+		double		divPos, divLook;
+		//! ３人称視点制御カーソル移動量:処理量比率指定
+		double		divDist;
+		//! エコーの有無
+		bool		bEcho;
+
+		//! カメラの変更
+		void		setCamera(fk_Model*);
+		//! カメラポインタは渡されているか
+		bool		isSetCamera(void);
+
+		//! ３人称視点注視点変更
+		void		setLookTo(fk_Vector);
+		//! ３人称視点ショートカット制御
+		void		controlLookToSC(void);
+
+		//! ３人称視点位置制御
+		void		controlLookTo(void);
+		//! ３人称視点距離制御
+		void		controlLookToDist(void);
+		//! ３人称視点注視点制御
+		void		controlLookToMove(void);
+
+		//! 位置・距離・注視点をまとめて制御
+		void		update(void);
+
+	private:
+		fk_Window	*fk_win;							// FKウィンドウ
+		fk_Model	*camera;							// カメラ
+		fk_Vector	lookPos;							// ３人称視点注視点
+
+		int			nowX, nowY, oldX, oldY;				// ウィンドウ上座標
+		int			echoX, echoY;
+		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
+	};
+
+	using fkut_TrackBall = fk_TrackBall;
+}
+
+#endif //!__FK_TRACKBALL_HEADER__
+
+

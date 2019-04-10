@@ -1,40 +1,4 @@
-﻿#ifndef __FK_POINT_DRAW_HEADER__
-#define __FK_POINT_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-	class fk_Model;
-	class fk_Vertex;
-	class fk_Color;
-	class fk_Point;
-	
-	class fk_PointDraw : public fk_DrawBase {
-	public:
-		fk_PointDraw(void);
-		virtual ~fk_PointDraw();
-
-		void	DrawShapePoint(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
-
-	private:
-
-		fk_ShaderBinder	*pointShader;
-		GLuint			vsModelID, vsElemID, vsIFSID, fsPointID, fsIFSID;
-
-		void	ShaderSetup(void);
-		int		SubroutineSetup(fk_Model *);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-
-		void	Draw_Point(fk_Model *, fk_ShaderParameter *, int);
-		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
-	};
-}
-
-#endif /* !__FK_POINT_DRAW_HEADER__ */
-
-/****************************************************************************
+﻿/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -105,3 +69,40 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_POINT_DRAW_HEADER__
+#define __FK_POINT_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+
+namespace FK {
+	class fk_Model;
+	class fk_Vertex;
+	class fk_Color;
+	class fk_Point;
+	
+	class fk_PointDraw : public fk_DrawBase {
+	public:
+		fk_PointDraw(void);
+		virtual ~fk_PointDraw();
+
+		void	DrawShapePoint(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
+
+	private:
+
+		fk_ShaderBinder	*pointShader;
+		GLuint			vsModelID, vsElemID, vsIFSID, fsPointID, fsIFSID;
+
+		void	ShaderSetup(void);
+		int		SubroutineSetup(fk_Model *);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+
+		void	Draw_Point(fk_Model *, fk_ShaderParameter *, int);
+		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
+	};
+}
+
+#endif /* !__FK_POINT_DRAW_HEADER__ */
+
+
