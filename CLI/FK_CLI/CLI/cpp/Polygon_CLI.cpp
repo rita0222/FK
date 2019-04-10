@@ -65,7 +65,7 @@ namespace FK_CLI {
 
 		GetP()->setVertex(&vArray);
 	}
-
+/*
 	::FK::fk_Polyline * fk_Polyline::GetP(void)
 	{
 		return (::FK::fk_Polyline *)(pBase);
@@ -161,6 +161,7 @@ namespace FK_CLI {
 		if(dFlg == true) delete GetP();
 		pBase = nullptr;
 	}
+*/
 }
 
 /****************************************************************************

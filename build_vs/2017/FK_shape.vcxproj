@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\src\shape\BSplSurface.cxx" />
     <ClCompile Include="..\..\src\shape\Capsule.cxx" />
     <ClCompile Include="..\..\src\shape\Circle.cxx" />
+    <ClCompile Include="..\..\src\shape\Closedline.cxx" />
     <ClCompile Include="..\..\src\shape\Command.cxx" />
     <ClCompile Include="..\..\src\shape\Cone.cxx" />
     <ClCompile Include="..\..\src\shape\Curve.cxx" />
@@ -67,6 +68,7 @@
     <ClCompile Include="..\..\src\shape\ParticleSet.cxx" />
     <ClCompile Include="..\..\src\shape\Point.cxx" />
     <ClCompile Include="..\..\src\shape\Polygon.cxx" />
+    <ClCompile Include="..\..\src\shape\Polyline.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />
     <ClCompile Include="..\..\src\shape\RDSParser.cxx" />
     <ClCompile Include="..\..\src\shape\RectTexture.cxx" />
