@@ -11,7 +11,7 @@ LIBSRCS		= \
 			Block.cxx \
 			Capsule.cxx \
 			Circle.cxx \
-			ClosedLine.cxx \
+			Closedline.cxx \
 			Command.cxx \
 			Cone.cxx \
 			Curve.cxx \

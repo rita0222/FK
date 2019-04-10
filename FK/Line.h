@@ -1,7 +1,7 @@
 ﻿#ifndef __FK_LINE_HEADER__
 #define __FK_LINE_HEADER__
 
-#include <FK/LineBase.h>
+#include <FK/LineBase.H>
 
 namespace FK {
 	//! 有向線分を生成、管理するクラス
@@ -38,6 +38,12 @@ namespace FK {
 
 		//! デストラクタ
 		virtual ~fk_Line();
+
+		//! 全消去関数
+		/*!
+		 *	すべてのデータを消去します。
+		 */
+		void allClear(void);
 
 		//! 単独線分端点位置設定関数
 		/*!
@@ -169,16 +175,6 @@ namespace FK {
 		 *	\param[in]	col		色値
 		 */
 		void		setColor(int eID, fk_Color *col);
-
-		//! 個別色取得関数
-		/*!
-		 *	個別に登録されている線分の色を取得します。
-		 *
-		 *	\param[in]	eID		要素ID
-		 *
-		 *	\return	色値
-		 */
-		fk_Color	getColor(int eID);
 	};
 }
 #endif // !__FK_LINE_HEADER__

@@ -70,7 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/LineBase.h>
+#include <FK/LineBase.H>
 
 using namespace std;
 using namespace FK;
@@ -92,7 +92,7 @@ fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
 	posArray.setDim(3);
 	colArray.setDim(4);
 	realType = FK_SHAPE_LINE;
-	allClear();
+	AllClear();
 	MakeLines(argVertexPos);
 
 	setShaderAttribute(vertexName, 3, posArray.getP());
@@ -105,7 +105,7 @@ fk_LineBase::~fk_LineBase()
 	return;
 }
 
-void fk_LineBase::allClear(void)
+void fk_LineBase::AllClear(void)
 {
 	posArray.clear();
 	colArray.clear();
@@ -118,10 +118,20 @@ void fk_LineBase::SetPos(int argEID, int argVID, fk_Vector *argV)
 	return;
 }
 
+fk_Vector fk_LineBase::GetPos(int argEID, int argVID)
+{
+	return posArray.getV(argEID*2 + argVID);
+}
+
 void fk_LineBase::SetCol(int argEID, int argVID, fk_Color *argC)
 {
 	colArray.set(argEID*2 + argVID, *argC);
 	return;
+}
+
+fk_Color fk_LineBase::GetCol(int argEID, int argVID)
+{
+	return colArray.getC(argEID*2 + argVID);
 }
 
 void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
@@ -168,13 +178,13 @@ void fk_LineBase::PushLines(fk_Vector *argS, fk_Vector *argE)
 
 void fk_LineBase::Resize(int argSize)
 {
-	posArray.resize(_st(argSize*2));
-	colArray.resize(_st(argSize*2));
+	posArray.resize(argSize*2);
+	colArray.resize(argSize*2);
 }
 
 int fk_LineBase::Size(void)
 {
-	return int(posArray.size()/2);
+	return int(posArray.getSize()/2);
 }
 
 void fk_LineBase::Touch(void)

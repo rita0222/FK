@@ -73,7 +73,7 @@
 #ifndef __FK_POLYLINE_HEADER__
 #define __FK_POLYLINE_HEADER__
 
-#include <FK/LineBase.h>
+#include <FK/LineBase.H>
 
 namespace FK {
 
@@ -99,6 +99,12 @@ namespace FK {
 		//! デストラクタ
 		virtual ~fk_Polyline();
 
+		//! 全消去関数
+		/*!
+		 *	すべてのデータを消去します。
+		 */
+		void allClear(void);
+
 		//! 頂点追加関数
 		/*!
 		 *	頂点を追加します。
@@ -122,18 +128,12 @@ namespace FK {
 		/*!
 		 *	頂点全部を、指定した配列に入れ替えます。
 		 *
-		 *	\param[in] size 角数
-		 *	\param[in] array 頂点位置ベクトル配列の先頭アドレス
-		 */
-		void	setVertex(int size, fk_Vector *array);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *
 		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
 		 */
 		void	setVertex(std::vector<fk_Vector> *array);
+
+	private:
+		int num;
 	};
 }
 

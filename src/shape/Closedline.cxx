@@ -69,75 +69,96 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
+#include <FK/Closedline.h>
 
-#ifndef __FK_CLOSEDLINE_HEADER__
-#define __FK_CLOSEDLINE_HEADER__
+using namespace std;
+using namespace FK;
 
-#include <FK/LineBase.h>
-
-namespace FK {
-
-	//! 多角形(辺のみ)を生成、管理するクラス
-	/*!
-	 *	このクラスは閉じたポリライン、つまり多角形の辺のみを制御する機能を提供します。
-	 *	このクラスの利用方法は実質的に fk_Polygon クラスと同一で、
-	 *	描画が辺のみとなるという点だけが異なります。
-	 *
-	 *	各線分を接続せず独立して制御したい場合は fk_Line を、
-	 *	始点と終点を接続せず折れ線形状を表現したい場合は fk_Polyline を利用して下さい。
-	 *	
-	 *	\sa fk_Polygon, fk_Line, fk_Polyline
-	 */
-	class fk_Closedline: public fk_LineBase {
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
-		 *	省略した場合や nullptr が入力された場合は、
-		 *	初期状態として頂点が存在しない状態となります。
-		 */
-		fk_Closedline(std::vector<fk_Vector> *array = nullptr);
-
-		//! デストラクタ
-		virtual ~fk_Closedline();
-
-		//! 頂点追加関数
-		/*!
-		 *	頂点を追加します。
-		 *
-		 *	\param[in] pos 追加頂点の位置ベクトル
-		 */
-		void	pushVertex(fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点の位置を設定します。
-		 *	対象となる頂点がまだ存在していなかった場合、
-		 *	頂点数を (id+1) まで増加させます。
-		 *
-		 *	\param[in] ID 頂点ID
-		 *	\param[in] pos 頂点位置ベクトル
-		 */
-		void	setVertex(int ID, fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *
-		 *	\param[in] size 角数
-		 *	\param[in] array 頂点位置ベクトル配列の先頭アドレス
-		 */
-		void	setVertex(int size, fk_Vector *array);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
-		 */
-		void	setVertex(std::vector<fk_Vector> *array);
-	};
+fk_Closedline::fk_Closedline(vector<fk_Vector> *argVertexSet)
+	: num(0)
+{
+	SetObjectType(FK_POLYLINE);
+	setVertex(argVertexSet);
+	return;
 }
 
-#endif // !__FK_CLOSEDLINE_HEADER__
+fk_Closedline::~fk_Closedline()
+{
+	return;
+}
+
+void fk_Closedline::allClear(void)
+{
+	AllClear();
+	Touch();
+	num = 0;
+}
+
+void fk_Closedline::pushVertex(fk_Vector argPos)
+{
+	fk_Vector S, V;
+	switch(num) {
+	  case 0:
+		Resize(1);
+		SetPos(0, 0, &argPos);
+		break;
+
+	  case 1:
+		SetPos(0, 1, &argPos);
+		break;
+
+	  case 2:
+		S = GetPos(0, 0);
+		V = GetPos(0, 1);
+		PushLines(&V, &argPos);
+		PushLines(&argPos, &S);
+		break;
+		
+	  default:
+		S = GetPos(0, 0);
+		V = GetPos(Size()-1, 0);
+		SetPos(Size()-1, 1, &argPos);
+		PushLines(&argPos, &S);
+		break;
+	}
+	num++;
+	Touch();
+}
+
+void fk_Closedline::setVertex(int argID, fk_Vector argPos)
+{
+	if(argID < 0 || argID >= num) return;
+	SetPos(argID, 0, &argPos);
+	if(argID == 0) {
+		SetPos(num-1, 1, &argPos);
+	} else {
+		SetPos(argID-1, 1, &argPos);
+	}
+	Touch();
+}
+
+void fk_Closedline::setVertex(vector<fk_Vector> *argPosArray)
+{
+	allClear();
+	if(argPosArray == nullptr) return;
+	if(argPosArray->empty() == true) return;
+	if(argPosArray->size() == 1) {
+		pushVertex(argPosArray->at(1));
+		return;
+	}
+
+	vector<fk_Vector>	array;
+
+	for(_st i = 0; i < argPosArray->size(); ++i) {
+		array.push_back(argPosArray->at(i));
+		if(i != 0 && i != argPosArray->size()-1) {
+			array.push_back(argPosArray->at(i));
+		}
+	}
+	array.push_back(argPosArray->back());
+	array.push_back(argPosArray->front());
+	MakeLines(&array);
+
+	return;
+}

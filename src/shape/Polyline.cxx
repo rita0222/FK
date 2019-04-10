@@ -69,13 +69,14 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Polygon.h>
+#define FK_DEF_SIZETYPE
+#include <FK/Polyline.h>
 
 using namespace std;
 using namespace FK;
 
 fk_Polyline::fk_Polyline(vector<fk_Vector> *argVertexSet)
-	: startFlg(false)
+	: num(0)
 {
 	SetObjectType(FK_POLYLINE);
 	setVertex(argVertexSet);
@@ -87,10 +88,16 @@ fk_Polyline::~fk_Polyline()
 	return;
 }
 
+void fk_Polyline::allClear(void)
+{
+	AllClear();
+	Touch();
+	num = 0;
+}
+
 void fk_Polyline::pushVertex(fk_Vector argPos)
 {
-	int size = Size();
-	switch(size) {
+	switch(num) {
 	  case 0:
 		Resize(1);
 		SetPos(0, 0, &argPos);
@@ -105,51 +112,39 @@ void fk_Polyline::pushVertex(fk_Vector argPos)
 		PushLines(&V, &argPos);
 		break;
 	}
+	num++;
 	Touch();
 }
 
 void fk_Polyline::setVertex(int argID, fk_Vector argPos)
 {
-	fk_Vertex		*curV;
-
-	curV = getVData(argID + 1);
-	if(curV == nullptr) {
-		pushPolygonVertex(argPos, true);
-	} else {
-		moveVertex(curV, argPos);
-	}
-
-	return;
-}
-
-void fk_Polyline::setVertex(int argNum, fk_Vector *argPosArray)
-{
-	makePolygon(argNum, argPosArray, true);
-
-	return;
+	if(argID < 0 || argID > Size()) return;
+	if(argID != 0) SetPos(argID-1, 1, &argPos);
+	if(argID != Size()) SetPos(argID, 0, &argPos);
+	Touch();
 }
 
 void fk_Polyline::setVertex(vector<fk_Vector> *argPosArray)
 {
 	allClear();
-	startFlg = false;
 	if(argPosArray == nullptr) return;
-	if(argPosArray.empty() == true) return;
-	if(argPosArray.size() == 1) {
-		startFlg = true;
-		startPos = argPosArray->at(0);
+	if(argPosArray->empty() == true) return;
+	if(argPosArray->size() == 1) {
+		pushVertex(argPosArray->at(0));
+		num = 1;
 		return;
 	}
 
 	vector<fk_Vector>	array;
 
-	for(_st i = 0; i < argVertexSet->size(); ++i) {
-		array.push_back(argVertexSet->at(i));
-		if(i != 0 && i != argVertexSet->size()-1) {
-			array.push_back(argVertexSet->at(i));
+	for(_st i = 0; i < argPosArray->size(); ++i) {
+		array.push_back(argPosArray->at(i));
+		if(i != 0 && i != argPosArray->size()-1) {
+			array.push_back(argPosArray->at(i));
 		}
 	}
 	MakeLines(&array);
-
+	num = int(argPosArray->size());
 	return;
 }
+

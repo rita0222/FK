@@ -6,27 +6,13 @@
 
 namespace FK {
 
-	//! 線形状基盤クラス
-	/*!
-	 *	このクラスは、線分集合を表すクラスの共通基盤クラスです。
-	 *	実質的な利用できる機能は allClear() のみとなります。
-	 *
-	 *	\sa fk_Line, fk_Polyline, fk_Closedline
-	 */
 	class fk_LineBase: public fk_Shape {
 
 	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
+
 		fk_LineBase(std::vector<fk_Vector> *array = nullptr);
 		virtual ~fk_LineBase();
-#endif
-		//! 初期化関数
-		/*!
-		 *	登録されている全ての線分データを消去します。
-		 */
-		void allClear();
 
-#ifndef FK_DOXYGEN_USER_PROCESS
 	protected:
 		void MakeLines(std::vector<fk_Vector> *);
 		void MakeLines(fk_Vector *);
@@ -36,12 +22,14 @@ namespace FK {
 		void Resize(int);
 		int Size(void);
 		fk_Vector GetLast(void);
+		fk_Vector GetPos(int, int);
+		fk_Color GetCol(int, int);
 		void Touch(void);
+		void AllClear();
 
 	private:
 		fk_FVecArray	posArray;
 		fk_FVecArray	colArray;
-#endif
 	};
 }
 

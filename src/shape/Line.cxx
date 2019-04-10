@@ -87,6 +87,12 @@ fk_Line::~fk_Line()
 	return;
 }
 
+void fk_Line::allClear(void)
+{
+	AllClear();
+	return;
+}
+
 bool fk_Line::setVertex(int argID, fk_Vector argPos)
 {
 	if(argID != 0 && argID != 1) return false;
@@ -145,7 +151,7 @@ bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
 
 int fk_Line::getSize(void)
 {
-	return posArray.getSize()/2;
+	return Size();
 }
 
 void fk_Line::setColor(int argID, fk_Color argCol)
@@ -160,9 +166,4 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 	SetCol(argID, 0, argCol);
 	SetCol(argID, 1, argCol);
 	Touch();
-}
-
-fk_Color fk_Line::getColor(int argID)
-{
-	return colArray.getC(argID*2);
 }
