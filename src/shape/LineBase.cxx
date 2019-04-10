@@ -92,7 +92,6 @@ fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
 	posArray.setDim(3);
 	colArray.setDim(4);
 	realType = FK_SHAPE_LINE;
-	//SetObjectType(FK_LINE);
 	allClear();
 	MakeLines(argVertexPos);
 
@@ -104,6 +103,13 @@ fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
 fk_LineBase::~fk_LineBase()
 {
 	return;
+}
+
+void fk_LineBase::allClear(void)
+{
+	posArray.clear();
+	colArray.clear();
+	Touch();
 }
 
 void fk_LineBase::SetPos(int argEID, int argVID, fk_Vector *argV)
@@ -131,7 +137,7 @@ void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 	posArray.resize(int(argVPos->size()));
 	colArray.resize(int(argVPos->size()));
 
-	for(int i = 0; i < posArray.getSize(); ++i) {
+	for(int i = 0; i < posArray.getSize()/2; ++i) {
 		SetPos(i, 0, &(*argVPos)[_st(i*2)]);
 		SetPos(i, 1, &(*argVPos)[_st(i*2+1)]);
 		SetCol(i, 0, &col);
@@ -160,10 +166,35 @@ void fk_LineBase::PushLines(fk_Vector *argS, fk_Vector *argE)
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-void fk_LineBase::allClear(void)
+void fk_LineBase::Resize(int argSize)
 {
-	posArray.clear();
-	colArray.clear();
+	posArray.resize(_st(argSize*2));
+	colArray.resize(_st(argSize*2));
+}
+
+int fk_LineBase::Size(void)
+{
+	return int(posArray.size()/2);
+}
+
+void fk_LineBase::Touch(void)
+{
 	modifyAttribute(vertexName);
 	modifyAttribute(lineElementColorName);
+}
+
+fk_Vector fk_LineBase::GetLast(void)
+{
+	int size = Size();
+	switch(size) {
+	  case 0:
+		return fk_Vector(0.0, 0.0, 0.0);
+
+	  case 1:
+		return posArray.getV(1);
+
+	  default:
+		break;
+	}
+	return posArray.getV(posArray.getSize()-1);
 }

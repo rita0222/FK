@@ -69,100 +69,87 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-#include <FK/Line.h>
+#include <FK/Polygon.h>
 
 using namespace std;
 using namespace FK;
 
-fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
-	: fk_LineBase(argVertexPos)
+fk_Polyline::fk_Polyline(vector<fk_Vector> *argVertexSet)
+	: startFlg(false)
 {
-	SetObjectType(FK_LINE);
+	SetObjectType(FK_POLYLINE);
+	setVertex(argVertexSet);
 	return;
 }
 
-fk_Line::~fk_Line()
+fk_Polyline::~fk_Polyline()
 {
 	return;
 }
 
-bool fk_Line::setVertex(int argID, fk_Vector argPos)
+void fk_Polyline::pushVertex(fk_Vector argPos)
 {
-	if(argID != 0 && argID != 1) return false;
-	Resize(1);
-	SetPos(0, argID, &argPos);
+	int size = Size();
+	switch(size) {
+	  case 0:
+		Resize(1);
+		SetPos(0, 0, &argPos);
+		break;
+
+	  case 1:
+		SetPos(0, 1, &argPos);
+		break;
+
+	  default:
+		fk_Vector V = GetLast();
+		PushLines(&V, &argPos);
+		break;
+	}
 	Touch();
-	return true;
 }
 
-bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
+void fk_Polyline::setVertex(int argID, fk_Vector argPos)
 {
-	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
-	SetPos(argEID, argVID, &argPos);
-	Touch();
-	return true;
-}
+	fk_Vertex		*curV;
 
-void fk_Line::setVertex(fk_Vector *argPosArray)
-{
-	MakeLines(argPosArray);
-	Touch();
+	curV = getVData(argID + 1);
+	if(curV == nullptr) {
+		pushPolygonVertex(argPos, true);
+	} else {
+		moveVertex(curV, argPos);
+	}
+
 	return;
 }
 
-void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
+void fk_Polyline::setVertex(int argNum, fk_Vector *argPosArray)
 {
-	MakeLines(argPosArray);
-	Touch();
+	makePolygon(argNum, argPosArray, true);
+
 	return;
 }
 
-void fk_Line::pushLine(fk_Vector *argVec)
+void fk_Polyline::setVertex(vector<fk_Vector> *argPosArray)
 {
-	if(argVec == nullptr) return;
-	PushLines(&argVec[0], &argVec[1]);
-	Touch();
+	allClear();
+	startFlg = false;
+	if(argPosArray == nullptr) return;
+	if(argPosArray.empty() == true) return;
+	if(argPosArray.size() == 1) {
+		startFlg = true;
+		startPos = argPosArray->at(0);
+		return;
+	}
+
+	vector<fk_Vector>	array;
+
+	for(_st i = 0; i < argVertexSet->size(); ++i) {
+		array.push_back(argVertexSet->at(i));
+		if(i != 0 && i != argVertexSet->size()-1) {
+			array.push_back(argVertexSet->at(i));
+		}
+	}
+	MakeLines(&array);
+
 	return;
-}
-
-void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
-{
-	PushLines(&argV1, &argV2);
-	Touch();
-	return;
-}
-
-bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
-{
-	if(argID < 0 || argID >= getSize()) return false;
-
-	SetPos(argID, 0, &argPos1);
-	SetPos(argID, 1, &argPos2);
-	Touch();
-	return true;
-}
-
-int fk_Line::getSize(void)
-{
-	return posArray.getSize()/2;
-}
-
-void fk_Line::setColor(int argID, fk_Color argCol)
-{
-	setColor(argID, &argCol);
-	Touch();
-}
-
-void fk_Line::setColor(int argID, fk_Color *argCol)
-{
-	if(argID < 0 || argID >= getSize()) return;
-	SetCol(argID, 0, argCol);
-	SetCol(argID, 1, argCol);
-	Touch();
-}
-
-fk_Color fk_Line::getColor(int argID)
-{
-	return colArray.getC(argID*2);
 }

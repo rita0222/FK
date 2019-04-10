@@ -11,6 +11,7 @@ LIBSRCS		= \
 			Block.cxx \
 			Capsule.cxx \
 			Circle.cxx \
+			ClosedLine.cxx \
 			Command.cxx \
 			Cone.cxx \
 			Curve.cxx \
@@ -50,6 +51,7 @@ LIBSRCS		= \
 			ParticleSet.cxx \
 			Point.cxx \
 			Polygon.cxx \
+			Polyline.cxx \
 			Prism.cxx \
 			RDSParser.cxx \
 			Reference1.cxx \

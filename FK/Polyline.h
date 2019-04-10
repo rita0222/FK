@@ -69,100 +69,72 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-#include <FK/Line.h>
 
-using namespace std;
-using namespace FK;
+#ifndef __FK_POLYLINE_HEADER__
+#define __FK_POLYLINE_HEADER__
 
-fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
-	: fk_LineBase(argVertexPos)
-{
-	SetObjectType(FK_LINE);
-	return;
+#include <FK/LineBase.h>
+
+namespace FK {
+
+	//! ポリラインを生成、管理するクラス
+	/*!
+	 *	このクラスは、形状としてポリライン(折れ線)を制御する機能を提供します。
+	 *	各線分を接続せず独立して制御したい場合は fk_Line を、
+	 *	始点と終点を自動的に接続した多角形形状を表現したい場合は fk_ClosedLine を利用して下さい。
+	 *
+	 *	\sa fk_Line, fk_Closedline
+	 */
+	class fk_Polyline: public fk_LineBase {
+	public:
+
+		//! コンストラクタ
+		/*!
+		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
+		 *	省略した場合や nullptr が入力された場合は、
+		 *	初期状態として頂点が存在しない状態となります。
+		 */
+		fk_Polyline(std::vector<fk_Vector> *array = nullptr);
+
+		//! デストラクタ
+		virtual ~fk_Polyline();
+
+		//! 頂点追加関数
+		/*!
+		 *	頂点を追加します。
+		 *
+		 *	\param[in] pos 追加頂点の位置ベクトル
+		 */
+		void	pushVertex(fk_Vector pos);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点の位置を設定します。
+		 *	対象となる頂点がまだ存在していなかった場合、
+		 *	頂点数を (id+1) まで増加させます。
+		 *
+		 *	\param[in] ID 頂点ID
+		 *	\param[in] pos 頂点位置ベクトル
+		 */
+		void	setVertex(int ID, fk_Vector pos);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点全部を、指定した配列に入れ替えます。
+		 *
+		 *	\param[in] size 角数
+		 *	\param[in] array 頂点位置ベクトル配列の先頭アドレス
+		 */
+		void	setVertex(int size, fk_Vector *array);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点全部を、指定した配列に入れ替えます。
+		 *
+		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
+		 */
+		void	setVertex(std::vector<fk_Vector> *array);
+	};
 }
 
-fk_Line::~fk_Line()
-{
-	return;
-}
-
-bool fk_Line::setVertex(int argID, fk_Vector argPos)
-{
-	if(argID != 0 && argID != 1) return false;
-	Resize(1);
-	SetPos(0, argID, &argPos);
-	Touch();
-	return true;
-}
-
-bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
-{
-	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
-	SetPos(argEID, argVID, &argPos);
-	Touch();
-	return true;
-}
-
-void fk_Line::setVertex(fk_Vector *argPosArray)
-{
-	MakeLines(argPosArray);
-	Touch();
-	return;
-}
-
-void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
-{
-	MakeLines(argPosArray);
-	Touch();
-	return;
-}
-
-void fk_Line::pushLine(fk_Vector *argVec)
-{
-	if(argVec == nullptr) return;
-	PushLines(&argVec[0], &argVec[1]);
-	Touch();
-	return;
-}
-
-void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
-{
-	PushLines(&argV1, &argV2);
-	Touch();
-	return;
-}
-
-bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
-{
-	if(argID < 0 || argID >= getSize()) return false;
-
-	SetPos(argID, 0, &argPos1);
-	SetPos(argID, 1, &argPos2);
-	Touch();
-	return true;
-}
-
-int fk_Line::getSize(void)
-{
-	return posArray.getSize()/2;
-}
-
-void fk_Line::setColor(int argID, fk_Color argCol)
-{
-	setColor(argID, &argCol);
-	Touch();
-}
-
-void fk_Line::setColor(int argID, fk_Color *argCol)
-{
-	if(argID < 0 || argID >= getSize()) return;
-	SetCol(argID, 0, argCol);
-	SetCol(argID, 1, argCol);
-	Touch();
-}
-
-fk_Color fk_Line::getColor(int argID)
-{
-	return colArray.getC(argID*2);
-}
+#endif // !__FK_POLYLINE_HEADER__

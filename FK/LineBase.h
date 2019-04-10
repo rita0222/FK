@@ -28,14 +28,19 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 	protected:
-		fk_FVecArray	posArray;
-		fk_FVecArray	colArray;
-
 		void MakeLines(std::vector<fk_Vector> *);
 		void MakeLines(fk_Vector *);
 		void PushLines(fk_Vector *, fk_Vector *);
 		void SetPos(int, int, fk_Vector *);
 		void SetCol(int, int, fk_Color *);
+		void Resize(int);
+		int Size(void);
+		fk_Vector GetLast(void);
+		void Touch(void);
+
+	private:
+		fk_FVecArray	posArray;
+		fk_FVecArray	colArray;
 #endif
 	};
 }

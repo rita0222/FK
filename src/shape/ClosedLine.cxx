@@ -69,100 +69,119 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-#include <FK/Line.h>
+#include <FK/Polygon.h>
 
 using namespace std;
 using namespace FK;
 
-fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
-	: fk_LineBase(argVertexPos)
+fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet,
+					   fk_ObjectType argObjType)
 {
-	SetObjectType(FK_LINE);
+	SetObjectType(argObjType);
+
+	allClear();
+
+	if(argVertexSet != nullptr) {
+		makePolygon(argVertexSet, false);
+	}
+
 	return;
 }
 
-fk_Line::~fk_Line()
+fk_Polygon::~fk_Polygon()
 {
 	return;
 }
 
-bool fk_Line::setVertex(int argID, fk_Vector argPos)
+void fk_Polygon::pushVertex(fk_Vector argPos)
 {
-	if(argID != 0 && argID != 1) return false;
-	Resize(1);
-	SetPos(0, argID, &argPos);
-	Touch();
-	return true;
-}
-
-bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
-{
-	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
-	SetPos(argEID, argVID, &argPos);
-	Touch();
-	return true;
-}
-
-void fk_Line::setVertex(fk_Vector *argPosArray)
-{
-	MakeLines(argPosArray);
-	Touch();
+	pushPolygonVertex(argPos, false);
 	return;
 }
 
-void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
+
+void fk_Polygon::setVertex(int argID, fk_Vector argPos)
 {
-	MakeLines(argPosArray);
-	Touch();
+	fk_Vertex		*curV;
+
+	curV = getVData(argID+1);
+	if(curV == nullptr) {
+		pushPolygonVertex(argPos, false);
+	} else {
+		moveVertex(curV, argPos);
+	}
+	   
 	return;
 }
 
-void fk_Line::pushLine(fk_Vector *argVec)
+void fk_Polygon::setVertex(int argNum, fk_Vector *argPosArray)
 {
-	if(argVec == nullptr) return;
-	PushLines(&argVec[0], &argVec[1]);
-	Touch();
+	makePolygon(argNum, argPosArray, false);
+
 	return;
 }
 
-void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
+void fk_Polygon::setVertex(vector<fk_Vector> *argPosArray)
 {
-	PushLines(&argV1, &argV2);
-	Touch();
+	makePolygon(argPosArray, false);
+
 	return;
 }
 
-bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
+fk_Polyline::fk_Polyline(vector<fk_Vector> *argVertexSet)
 {
-	if(argID < 0 || argID >= getSize()) return false;
-
-	SetPos(argID, 0, &argPos1);
-	SetPos(argID, 1, &argPos2);
-	Touch();
-	return true;
+	SetObjectType(FK_POLYLINE);
+	makePolygon(argVertexSet, true);
+	return;
 }
 
-int fk_Line::getSize(void)
+fk_Polyline::~fk_Polyline()
 {
-	return posArray.getSize()/2;
+	return;
 }
 
-void fk_Line::setColor(int argID, fk_Color argCol)
+void fk_Polyline::pushVertex(fk_Vector argPos)
 {
-	setColor(argID, &argCol);
-	Touch();
+	pushPolygonVertex(argPos, true);
+
+	return;
 }
 
-void fk_Line::setColor(int argID, fk_Color *argCol)
+void fk_Polyline::setVertex(int argID, fk_Vector argPos)
 {
-	if(argID < 0 || argID >= getSize()) return;
-	SetCol(argID, 0, argCol);
-	SetCol(argID, 1, argCol);
-	Touch();
+	fk_Vertex		*curV;
+
+	curV = getVData(argID + 1);
+	if(curV == nullptr) {
+		pushPolygonVertex(argPos, true);
+	} else {
+		moveVertex(curV, argPos);
+	}
+
+	return;
 }
 
-fk_Color fk_Line::getColor(int argID)
+void fk_Polyline::setVertex(int argNum, fk_Vector *argPosArray)
 {
-	return colArray.getC(argID*2);
+	makePolygon(argNum, argPosArray, true);
+
+	return;
+}
+
+void fk_Polyline::setVertex(vector<fk_Vector> *argPosArray)
+{
+	makePolygon(argPosArray, true);
+
+	return;
+}
+
+fk_Closedline::fk_Closedline(vector<fk_Vector> *argVertexSet)
+	: fk_Polygon(argVertexSet, FK_CLOSEDLINE)
+{
+	return;
+}
+
+fk_Closedline::~fk_Closedline()
+{
+	return;
 }
