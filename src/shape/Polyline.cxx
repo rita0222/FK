@@ -76,7 +76,7 @@ using namespace std;
 using namespace FK;
 
 fk_Polyline::fk_Polyline(vector<fk_Vector> *argVertexSet)
-	: num(0)
+	: fk_LineBase(nullptr), num(0)
 {
 	SetObjectType(FK_POLYLINE);
 	setVertex(argVertexSet);

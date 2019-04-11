@@ -20,7 +20,7 @@ namespace FK_CLI_Quaternion
 			var q1 = new fk_Quaternion();
 			var q2 = new fk_Quaternion();
 			fk_Quaternion q;
-			var point = new fk_Point();
+			var point = new fk_Polyline();
 
 			fk_Material.InitDefault();
 
@@ -29,9 +29,7 @@ namespace FK_CLI_Quaternion
 			model.GlAngle(angle1);
 
 			pointM.Shape = point;
-			pointM.PointColor = new fk_Color(1.0, 0.0, 0.0);
-            pointM.PointSize = 2.0;
-
+			pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
 
             win.BGColor = new fk_Color(0.3, 0.4, 0.5);
 			win.Entry(model);

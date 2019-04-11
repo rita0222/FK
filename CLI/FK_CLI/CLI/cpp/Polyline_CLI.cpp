@@ -108,16 +108,18 @@ namespace FK_CLI {
 		GetP()->allClear();
 	}
 
-	void fk_Polyline::PushVertex(fk_Vector^ argPos)
-	{
-		if(!argPos) return;
-		GetP()->pushVertex(argPos);
-	}
-
 	void fk_Polyline::SetVertex(int argVID, fk_Vector^ argPos)
 	{
 		if(!argPos) return;
-		GetP()->setVertex(argVID, argPos);
+		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
+		GetP()->setVertex(argVID, V);
+	}
+
+	void fk_Polyline::PushVertex(fk_Vector^ argPos)
+	{
+		if(!argPos) return;
+		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
+		GetP()->pushVertex(V);
 	}
 
 	void fk_Polyline::SetVertex(IEnumerable<fk_Vector^>^ argArray)
