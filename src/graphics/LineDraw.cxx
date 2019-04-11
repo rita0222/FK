@@ -211,7 +211,7 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 
 void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_Line		*line = dynamic_cast<fk_Line *>(argModel->getShape());
+	fk_LineBase	*line = dynamic_cast<fk_LineBase *>(argModel->getShape());
 	GLuint		vao = line->GetLineVAO();
 
 	if(vao == 0) {
@@ -220,7 +220,7 @@ void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)
 	glBindVertexArray(vao);
 	line->BindShaderBuffer(argParam->getAttrTable());
 	glEnable(GL_LINE_SMOOTH);
-	glDrawArrays(GL_LINES, 0, line->getSize()*2);
+	glDrawArrays(GL_LINES, 0, line->Size()*2);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	return;

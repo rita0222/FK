@@ -76,6 +76,8 @@
 
 #include <FK/ShapeViewer.h>
 #include <FK/Polygon.h>
+#include <FK/Polyline.h>
+#include <FK/Closedline.h>
 #include <FK/Point.h>
 #include <FK/Line.h>
 #include <FK/Block.h>

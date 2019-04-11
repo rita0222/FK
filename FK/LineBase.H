@@ -83,6 +83,7 @@ namespace FK {
 
 		fk_LineBase(std::vector<fk_Vector> *array = nullptr);
 		virtual ~fk_LineBase();
+		int Size(void);
 
 	protected:
 		void MakeLines(std::vector<fk_Vector> *);
@@ -91,7 +92,6 @@ namespace FK {
 		void SetPos(int, int, fk_Vector *);
 		void SetCol(int, int, fk_Color *);
 		void Resize(int);
-		int Size(void);
 		fk_Vector GetLast(void);
 		fk_Vector GetPos(int, int);
 		fk_Color GetCol(int, int);
