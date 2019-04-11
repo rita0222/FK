@@ -69,76 +69,67 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#include "Closedline_CLI.h"
 
+namespace FK_CLI {
 
-#ifndef __FK_CLOSEDLINE_HEADER__
-#define __FK_CLOSEDLINE_HEADER__
+	using namespace std;
+	using namespace System::Collections::Generic;
+	
+	::FK::fk_Closedline * fk_Closedline::GetP(void)
+	{
+		return (::FK::fk_Closedline *)(pBase);
+	}
 
-#include <FK/LineBase.H>
+	fk_Closedline::fk_Closedline() : fk_Shape(false)
+	{
+		pBase = new ::FK::fk_Closedline();
+	}
 
-namespace FK {
+	fk_Closedline::fk_Closedline(bool argNewFlg) : fk_Shape(false)
+	{
+		if(argNewFlg == true) pBase = new ::FK::fk_Closedline();
+	}
 
-	//! 多角形(辺のみ)を生成、管理するクラス
-	/*!
-	 *	このクラスは閉じたポリライン、つまり多角形の辺のみを制御する機能を提供します。
-	 *	このクラスの利用方法は実質的に fk_Polygon クラスと同一で、
-	 *	描画が辺のみとなるという点だけが異なります。
-	 *
-	 *	各線分を接続せず独立して制御したい場合は fk_Line を、
-	 *	始点と終点を接続せず折れ線形状を表現したい場合は fk_Polyline を利用して下さい。
-	 *	
-	 *	\sa fk_Polygon, fk_Line, fk_Polyline
-	 */
-	class fk_Closedline: public fk_LineBase {
-	public:
+	fk_Closedline::~fk_Closedline()
+	{
+		this->!fk_Closedline();
+	}
 
-		//! コンストラクタ
-		/*!
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
-		 *	省略した場合や nullptr が入力された場合は、
-		 *	初期状態として頂点が存在しない状態となります。
-		 */
-		fk_Closedline(std::vector<fk_Vector> *array = nullptr);
+	fk_Closedline::!fk_Closedline()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
 
-		//! デストラクタ
-		virtual ~fk_Closedline();
+	void fk_Closedline::AllClear(void)
+	{
+		GetP()->allClear();
+	}
 
-		//! 全消去関数
-		/*!
-		 *	すべてのデータを消去します。
-		 */
-		void allClear(void);
+	void fk_Closedline::SetVertex(int argVID, fk_Vector^ argPos)
+	{
+		if(!argPos) return;
+		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
+		GetP()->setVertex(argVID, V);
+	}
 
-		//! 頂点追加関数
-		/*!
-		 *	頂点を追加します。
-		 *
-		 *	\param[in] pos 追加頂点の位置ベクトル
-		 */
-		void	pushVertex(fk_Vector pos);
+	void fk_Closedline::PushVertex(fk_Vector^ argPos)
+	{
+		if(!argPos) return;
+		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
+		GetP()->pushVertex(V);
+	}
 
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点の位置を設定します。
-		 *	対象となる頂点がまだ存在していなかった場合、
-		 *	頂点数を (id+1) まで増加させます。
-		 *
-		 *	\param[in] ID 頂点ID
-		 *	\param[in] pos 頂点位置ベクトル
-		 */
-		void	setVertex(int ID, fk_Vector pos);
+	void fk_Closedline::SetVertex(IEnumerable<fk_Vector^>^ argArray)
+	{
+		if(!argArray) return;
+		vector<::FK::fk_Vector> vArray;
 
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
-		 */
-		void	setVertex(std::vector<fk_Vector> *array);
-
-	private:
-		int num;
-	};
+		for each (fk_Vector^ pos in argArray) {
+			vArray.push_back(pos);
+		}
+		GetP()->setVertex(&vArray);
+	}
 }
-
-#endif // !__FK_CLOSEDLINE_HEADER__

@@ -612,6 +612,9 @@
     <ClInclude Include="CLI\include\Polyline_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="CLI\include\Closedline_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
@@ -1191,6 +1194,9 @@
       <Filter>Source\CLI</Filter>
     </ClCompile>
     <ClCompile Include="CLI\cpp\Polyline_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\Closedline_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>

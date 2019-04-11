@@ -161,6 +161,7 @@
     <ClInclude Include="CLI\include\BVHMotion_CLI.h" />
     <ClInclude Include="CLI\include\Capsule_CLI.h" />
     <ClInclude Include="CLI\include\Circle_CLI.h" />
+    <ClInclude Include="CLI\include\Closedline_CLI.h" />
     <ClInclude Include="CLI\include\Color_CLI.h" />
     <ClInclude Include="CLI\include\Cone_CLI.h" />
     <ClInclude Include="CLI\include\DataAccess_CLI.h" />
@@ -357,6 +358,7 @@
     <ClCompile Include="CLI\cpp\BVHMotion_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Capsule_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Circle_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Closedline_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Color_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
     <ClCompile Include="CLI\cpp\DataAccess_CLI.cpp" />
