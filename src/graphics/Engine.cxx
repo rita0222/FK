@@ -456,27 +456,29 @@ bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 	double			tmpY;
 	double			diffX, diffY;
 
-	//ViewMatCalc(&mat);
+	mat = *(curProj->GetMatrix()) * curDLink->getCamera()->getInhInvMatrix();
 	mat.inverse();
 
-	tmpY = static_cast<double>(hSize) - argY - 1.0;
-	diffX = argX - static_cast<double>(viewArray[0]);
-	diffY = tmpY - static_cast<double>(viewArray[1]);
+	glGetIntegerv(GL_VIEWPORT, viewArray);
 
-	inVec.x = diffX*2.0/static_cast<double>(viewArray[2]) - 1.0;
-	inVec.y = diffY*2.0/static_cast<double>(viewArray[3]) - 1.0;
+	tmpY = double(hSize) - argY - 1.0;
+	diffX = argX - double(viewArray[0]);
+	diffY = tmpY - double(viewArray[1]);
+
+	inVec.x = diffX*2.0/double(viewArray[2]) - 1.0;
+	inVec.y = diffY*2.0/double(viewArray[3]) - 1.0;
 	inVec.w = 1.0;
 
 	inVec.z = -1.0;
 	outVec = mat * inVec;
+
 	if(fabs(outVec.w) < FK_EPS) return false;
 	retS->set(outVec.x/outVec.w, outVec.y/outVec.w, outVec.z/outVec.w);
-
+	
 	inVec.z = 1.0;
 	outVec = mat * inVec;
 	if(fabs(outVec.w) < FK_EPS) return false;
 	retE->set(outVec.x/outVec.w, outVec.y/outVec.w, outVec.z/outVec.w);
-
 	return true;
 }
 
@@ -527,7 +529,8 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 
 	if(generalID > 2) SetViewPort();
 
-	//ViewMatCalc(&mat);
+	glGetIntegerv(GL_VIEWPORT, viewArray);
+	mat = *(curProj->GetMatrix()) * curDLink->getCamera()->getInhInvMatrix();
 	outVec = mat * inVec;
 	if(fabs(outVec.w) < FK_EPS) return false;
 	outVec /= outVec.w;
