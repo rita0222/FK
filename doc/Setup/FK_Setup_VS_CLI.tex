@@ -16,13 +16,13 @@ Fine Kernel ToolKit システム (Visual Studio CLI 版) \\
 	セットアップマニュアル \\ ~ \\
 FineKernel Project \\
 \end{Large}
-(2018/09/18版)
+(2019/04/11版)
 \end{center}
 
 \section{Visual Studio のバージョンについて}
 Fine Kernel ToolKit システム(以下 FK)は 
-C\# や F\# などの .NET Framework 対応言語から利用可能な CLI バージョンを提供している。
-現在は Visual Studio(以下 VS) 2015, 2017 をサポートしている。
+C\# や F\# などの .NET Framework 対応言語から利用可能な「CLI版」を提供している。
+現時点では Visual Studio(以下 VS) 2017 をサポートしている。
 本マニュアルでは、VS2017 Community を前提に記述していく。
 
 \section{前準備}
@@ -39,11 +39,11 @@ Visual Studio 2017 Community (以下「VS」)のインストール方法は以�
  \item まず、下記URLにアクセスする。
   \begin{screen}
   \begin{center}
-	\verb+https://www.visualstudio.com/jp/downloads+
+	\verb+https://visualstudio.microsoft.com/jp/downloads/+
   \end{center}
   \end{screen}
 
- \item ページの左側にある Visual Studio 2017 Community の欄の「無償ダウンロード」を選択する。
+ \item ページ内にある Visual Studio 2017 欄内の「コミュニティ」を選択する。
 
  \item ダウンロードされるインストーラを起動する。
 
@@ -112,6 +112,8 @@ C\# で FK のプログラミングを行うには、FK CLI版をインストー
 その場合は「詳細情報」をクリックして「実行」を選択する。あとは基本的に指示通りに
 インストールを進めればよい。
 
+インストールが終わった後、一度サインアウトか再起動を行っておくこと。
+
 \section{開発の手順}
 
 VS 上で FK を用いた C\# の開発は、まず「プロジェクト」を作成するところから
@@ -129,18 +131,9 @@ VS 上で FK を用いた C\# の開発は、まず「プロジェクト」を�
  \item 「新しいプロジェクト」ダイアログの左側で「テンプレート」→「Visual C\#」
 	(または「テンプレート」→「その他の言語」→「Visual C\#」) を選択する。
 
- \item 同ダイアログの右側で「コンソールアプリ(.NET Framework)」を選択する。
-	(「コンソールアプリ (.NET Core)」を\underline{選択しない}ように注意すること。)
+ \item 同ダイアログの右側で「FK\_CLI\_Template」を選択する。
 
  \item 名前を適当に入力し、場所の欄にプログラムソース等を置くフォルダを指定する。
-
- \item ソリューションエクスプローラー上の「参照」を右クリックし、
-	「参照の追加」を選択する。
-
- \item 「参照マネージャー」ダイアログの右下にある「参照」ボタンを押す。
-
- \item Cドライブの「FK\_CLI」フォルダ→「bin」フォルダの中にある「FK\_CLI.dll」を選択し、
-	「追加」ボタンを押す。
 
  \item 「OK」ボタンを押す。
 
@@ -150,10 +143,13 @@ VS 上で FK を用いた C\# の開発は、まず「プロジェクト」を�
 
 \section{ビルドと実行}
 
-コードを記述したら、メニューの「ビルド」→「ソリューションのビルド」を選択することで
+上記手順で作成したプロジェクトには、最初から「Program.cs」にサンプルコードが
+記述されている。その状態でメニューの「ビルド」→「ソリューションのビルド」を選択することで
 ビルド(コンパイル)ができる。その後、メニューの「デバッグ」→「デバッグの開始」で実行できる。
 ショートカットキーは、ビルドが F6、実行は F5 が割り当てられることが多いが、
 その他のショートカットが割り当てられることもあるので、メニューで確認しておくこと。
+
+ビルドと実行の方法が確認できたら、Program.cs の内容を書き換えて開発を行っていく。
 
 \section{開発の中断と再開}
 
@@ -170,57 +166,6 @@ VS を修了すればよい。
 	そのフォルダの中にある「sln」ファイルを選択する。
 \end{itemize}
 
-\section{FK CLI 検証用プログラムコード}
-以下に、検証用のプログラムコードを示す。
-ビルドに成功すると、黄色い立方体が回転するアニメーションが表示される。\\ ~
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FK_CLI; // この行を忘れないこと。
-
-namespace fk_CLI1 // ここには自分が作成したプロジェクト名が入る。
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // マテリアルの初期化
-            fk_Material.InitDefault();
-
-            // ウィンドウの生成と設定
-            var win = new fk_AppWindow();
-            win.Size = new fk_Dimension(800, 800);
-            win.BGColor = new fk_Color(0.3, 0.6, 0.8);
-
-            // 立方体モデルの生成と設定
-            var model = new fk_Model();
-            model.Shape = new fk_Block(10.0, 10.0, 10.0);
-            model.Material = fk_Material.Yellow;
-
-            // 立方体モデルをウィンドウに登録
-            win.Entry(model);
-
-            // ウィンドウの表示
-            win.Open();
-
-            // メインループ
-            while(win.Update() == true)
-            {
-                // 立方体の回転
-                model.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.01);
-            }
-        }
-    }
-}
-\end{verbatim}
-\end{small}
-\end{breakbox}
-
 \section{開発に関する諸注意}
 \subsection{ファイル読み込み処理を行うプログラムを実行する場合}
 プログラム上から画像や形状データなどを読み込むプログラムを作成した場合、
@@ -235,13 +180,27 @@ Windows フォームや WPF を利用している場合は、FK\_FormHelper.dll 
 \begin{enumerate}
 \item .NET Framework 4.5 以降
 \item OpenAL(本パッケージインストール先の redist フォルダに収録)
-\item Visual C++ 2013 再頒布可能パッケージ(本パッケージインストール先の redist フォルダに収録)
+\item Visual C++ 2017 再頒布可能パッケージ(本パッケージインストール先の redist フォルダに収録)
 \end{enumerate}
 
 .NET Framework 4.5 は Windows Update か Microsoft のサイトから、
-OpenAL と Visual C++ 2013 再頒布可能パッケージは、
+OpenAL と Visual C++ 2017 再頒布可能パッケージは、
 本パッケージインストール先の redist フォルダに収録されている、
 oalinst.exe と vcredist\_x86.exe を実行することでインストール可能である。
 成果物を配布する際にはこのことを周知しておく必要がある。
+
+\subsection{デバッグ用ライブラリの利用}
+FK CLI 版が内部で利用している「C++/CLI」という技術はやや不安定な面があり、
+時折途中で処理が止まってしまうことがある。
+そのような場合、以下の手順で「デバッグ版」を利用することで、動作が正常となる場合がある。
+\begin{enumerate}
+ \item VS で「プロジェクトエクスプローラー」を表示する。
+ \item 該当プロジェクトの「参照」から「FK\_CLI」を削除する。
+ \item メニューの「プロジェクト」→「参照の追加」を選択する。
+ \item 表示される「参照マネージャー」というダイアログで、下側の「参照」というボタンを押す。
+ \item FK\_CLIフォルダ(通常はCドライブ直下)の下の
+	「bin」→「x86」→「FK\_CLI\_d.dll」というファイルを選択する。
+\end{enumerate}
+以上の手順で、実行時に通常版ではなくデバッグ版を参照するようになる。
 
 \end{document}
