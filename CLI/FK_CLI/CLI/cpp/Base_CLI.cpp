@@ -1,27 +1,6 @@
-﻿#include "Base_CLI.h"
-namespace FK_CLI {
-	
-	fk_BaseObject::fk_BaseObject(bool argNewFlg) : dFlg(true)
-	{
-		if(argNewFlg == true) pBase = nullptr;
-	}
-		
-	fk_BaseObject::~fk_BaseObject()
-	{
-		this->!fk_BaseObject();
-	}
-
-	fk_BaseObject::!fk_BaseObject()
-	{
-		if(pBase == nullptr) return;
-		if(dFlg == true) delete pBase;
-		pBase = nullptr;
-	}
-}
-
-/****************************************************************************
+﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -57,7 +36,7 @@ namespace FK_CLI {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -90,3 +69,25 @@ namespace FK_CLI {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#include "Base_CLI.h"
+namespace FK_CLI {
+	
+	fk_BaseObject::fk_BaseObject(bool argNewFlg) : dFlg(true)
+	{
+		if(argNewFlg == true) pBase = nullptr;
+	}
+		
+	fk_BaseObject::~fk_BaseObject()
+	{
+		this->!fk_BaseObject();
+	}
+
+	fk_BaseObject::!fk_BaseObject()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete pBase;
+		pBase = nullptr;
+	}
+}
+
+

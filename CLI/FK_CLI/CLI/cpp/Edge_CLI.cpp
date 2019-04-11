@@ -69,60 +69,49 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Cone_CLI.h"
+
+#include "Edge_CLI.h"
+#include "Half_CLI.h"
 
 namespace FK_CLI {
 
-	::FK::fk_Cone * fk_Cone::GetP(void)
+	::FK::fk_Edge * fk_Edge::GetP(void)
 	{
-		return (::FK::fk_Cone *)(pBase);
+		return (::FK::fk_Edge *)(pBase);
 	}
 
-	fk_Cone::fk_Cone() : fk_IndexFaceSet(false)
+	fk_Edge::fk_Edge(bool argNewFlg) : fk_TopologyMaterial(false)
 	{
-		pBase = new ::FK::fk_Cone();
 	}
 
-	fk_Cone::fk_Cone(bool argNewFlg) : fk_IndexFaceSet(false)
+	fk_Edge::~fk_Edge()
 	{
-		if(argNewFlg == true) {
-			pBase = new ::FK::fk_Cone();
-		}
-				
 	}
 
-	fk_Cone::fk_Cone(int argDiv, double argRad, double argHeight)
-		: fk_IndexFaceSet(false)
+	fk_Half^ fk_Edge::LeftHalf::get()
 	{
-		pBase = new ::FK::fk_Cone(argDiv, argRad, argHeight);
+		fk_Half^ H = gcnew fk_Half(false);
+		H->pBase = GetP()->getLeftHalf();
+		H->dFlg = false;
+		return H;
+	}
+  
+	fk_Half^ fk_Edge::RightHalf::get()
+	{
+		fk_Half^ H = gcnew fk_Half(false);
+		H->pBase = GetP()->getRightHalf();
+		H->dFlg = false;
+		return H;
 	}
 
-	fk_Cone::~fk_Cone()
+	double fk_Edge::DrawWidth::get()
 	{
-		this->!fk_Cone();
+		return GetP()->getDrawWidth();
 	}
 
-	fk_Cone::!fk_Cone()
+	void fk_Edge::DrawWidth::set(double argW)
 	{
-		if(pBase == nullptr) return;
-		if(dFlg == true) delete GetP();
-		pBase = nullptr;
-	}
-
-	void fk_Cone::SetDivide(int argDiv)
-	{
-		GetP()->setDivide(argDiv);
-	}
-
-	void fk_Cone::SetRadius(double argRad)
-	{
-		GetP()->setRadius(argRad);
-	}
-
-	void fk_Cone::SetHeight(double argHeight)
-	{
-		GetP()->setHeight(argHeight);
+		GetP()->setDrawWidth(argW);
 	}
 }
-
 
