@@ -74,7 +74,8 @@
 #pragma once
 
 #include <FK/Line.h>
-#include "Solid_CLI.h"
+#include "Shape_CLI.h"
+#include "Vector_CLI.h"
 
 namespace FK_CLI
 {
@@ -94,7 +95,7 @@ namespace FK_CLI
 	 *
 	 *	\sa	fk_Solid, fk_Model, fk_Shape
 	 */
-	public ref class fk_Line : fk_Solid {
+	public ref class fk_Line : fk_Shape {
 	internal:
 		::FK::fk_Line * GetP(void);
 
@@ -110,6 +111,12 @@ namespace FK_CLI
 
 		//! ファイナライザ
 		!fk_Line();
+
+		//! 全消去メソッド
+		/*!
+		 *	すべてのデータを消去します。
+		 */
+		void	AllClear(void);
 
 		//! 単独線分追加メソッド1
 		/*!
@@ -200,5 +207,3 @@ namespace FK_CLI
 		void SetVertex(IEnumerable<fk_Vector^>^ array);
 	};
 }
-
-

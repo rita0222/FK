@@ -191,6 +191,7 @@
     <ClInclude Include="CLI\include\Plane_CLI.h" />
     <ClInclude Include="CLI\include\Point_CLI.h" />
     <ClInclude Include="CLI\include\Polygon_CLI.h" />
+    <ClInclude Include="CLI\include\Polyline_CLI.h" />
     <ClInclude Include="CLI\include\Prism_CLI.h" />
     <ClInclude Include="CLI\include\Projection_CLI.h" />
     <ClInclude Include="CLI\include\Quaternion_CLI.h" />
@@ -360,7 +361,7 @@
     <ClCompile Include="CLI\cpp\Cone_CLI.cpp" />
     <ClCompile Include="CLI\cpp\DataAccess_CLI.cpp" />
     <ClCompile Include="CLI\cpp\DList_CLI.cpp" />
-    <ClCompile Include="CLI\cpp\Edeg_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Edge_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Fog_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GenMatrix_CLI.cpp" />
     <ClCompile Include="CLI\cpp\GenVector_CLI.cpp" />
@@ -386,6 +387,7 @@
     <ClCompile Include="CLI\cpp\Plane_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Point_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Polygon_CLI.cpp" />
+    <ClCompile Include="CLI\cpp\Polyline_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Prism_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Projection_CLI.cpp" />
     <ClCompile Include="CLI\cpp\Quaternion_CLI.cpp" />

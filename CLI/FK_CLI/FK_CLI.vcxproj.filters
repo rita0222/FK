@@ -609,6 +609,9 @@
     <ClInclude Include="CLI\include\Vertex_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="CLI\include\Polyline_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
@@ -1040,9 +1043,6 @@
     <ClCompile Include="CLI\cpp\DList_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="CLI\cpp\Edeg_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
     <ClCompile Include="CLI\cpp\Fog_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
@@ -1185,6 +1185,12 @@
       <Filter>Source\CLI</Filter>
     </ClCompile>
     <ClCompile Include="CLI\cpp\Vertex_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\Edge_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\Polyline_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>

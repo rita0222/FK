@@ -81,12 +81,12 @@ namespace FK_CLI {
 		return (::FK::fk_Line *)(pBase);
 	}
 
-	fk_Line::fk_Line() : fk_Solid(false)
+	fk_Line::fk_Line() : fk_Shape(false)
 	{
 		pBase = new ::FK::fk_Line();
 	}
 
-	fk_Line::fk_Line(bool argNewFlg) : fk_Solid(false)
+	fk_Line::fk_Line(bool argNewFlg) : fk_Shape(false)
 	{
 		if(argNewFlg == true) pBase = new ::FK::fk_Line();
 	}
@@ -101,6 +101,11 @@ namespace FK_CLI {
 		if(pBase == nullptr) return;
 		if(dFlg == true) delete GetP();
 		pBase = nullptr;
+	}
+
+	void fk_Line::AllClear(void)
+	{
+		GetP()->allClear();
 	}
 
 	void fk_Line::PushLine(IEnumerable<fk_Vector^>^ argArray)
@@ -152,4 +157,3 @@ namespace FK_CLI {
 		GetP()->setVertex(&vArray);
 	}
 }
-

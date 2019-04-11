@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace FK_FormHelper
 {
@@ -11,13 +6,13 @@ namespace FK_FormHelper
     {
         public FocusablePanel()
         {
-            this.SetStyle(ControlStyles.Selectable, true);
-            this.TabStop = true;
+            SetStyle(ControlStyles.Selectable, true);
+            TabStop = true;
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            this.Focus();
+            Focus();
             base.OnMouseDown(e);
         }
 
