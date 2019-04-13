@@ -56,6 +56,7 @@
     <ClCompile Include="..\..\src\shape\IndexFace.cxx" />
     <ClCompile Include="..\..\src\shape\Light.cxx" />
     <ClCompile Include="..\..\src\shape\Line.cxx" />
+    <ClCompile Include="..\..\src\shape\LineBase.cxx" />
     <ClCompile Include="..\..\src\shape\Loop.cxx" />
     <ClCompile Include="..\..\src\shape\MassProperty.cxx" />
     <ClCompile Include="..\..\src\shape\MeshTexture.cxx" />
