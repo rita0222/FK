@@ -331,7 +331,7 @@ namespace FK {
 
 		GLuint		rectVAO, fboHandle;
 		GLuint		colorBuf, depthBuf;
-		GLuint		colorLoc, depthLoc;
+		GLint		colorLoc, depthLoc;
 
 		void ProcPreDraw(void);
 		void ProcPostDraw(void);
