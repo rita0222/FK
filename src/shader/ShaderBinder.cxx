@@ -299,7 +299,7 @@ void fk_ShaderBinder::ProcPreShader(void)
 
 void fk_ShaderBinder::ProcPostShader(void)
 {
-	if (usingProgram) {
+	if (usingProgram == true) {
 		glUseProgram(0);
 		usingProgram = false;
 	}
