@@ -329,7 +329,7 @@ namespace FK {
 		GLint	bufW;
 		GLint	bufH;
 
-		GLuint		rectVAO, fboHandle, colorBuf;
+		GLuint		rectVAO, fboHandle, colorBuf, depthBuf;
 
 		void ProcPreDraw(void);
 		void ProcPostDraw(void);
