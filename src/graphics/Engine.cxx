@@ -151,6 +151,7 @@ void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 
 void fk_GraphicsEngine::SetViewPort(void)
 {
+	glViewport(0, 0, wSize, hSize);
 	if(curDLink == nullptr) {
 		SetProjection(&defProj);
 	} else {
