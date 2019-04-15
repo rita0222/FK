@@ -117,7 +117,7 @@ int main(int, char **)
 
 	// スプライト設定
 
-	if(sprite.initFont("data/rm1b.ttf") == false) {
+	if(sprite.initFont("fbo_data/rm1b.ttf") == false) {
 		fl_alert("Font Init Error");
 	}
 	sprite.setPositionLT(SP_X, SP_Y);
