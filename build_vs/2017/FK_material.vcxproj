@@ -24,6 +24,12 @@
     <ClCompile Include="..\..\src\material\MatExample.cxx" />
     <ClCompile Include="..\..\src\material\Palette.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\Color.h" />
+    <ClInclude Include="..\..\FK\Material.h" />
+    <ClInclude Include="..\..\FK\MatExample.h" />
+    <ClInclude Include="..\..\FK\Palette.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9190A403-11DA-4EF9-8BC2-DD0F13E6FA59}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>

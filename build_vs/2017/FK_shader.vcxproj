@@ -23,6 +23,11 @@
     <ClCompile Include="..\..\src\shader\ShaderParameter.cxx" />
     <ClCompile Include="..\..\src\shader\ShaderProgram.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\ShaderBinder.h" />
+    <ClInclude Include="..\..\FK\ShaderParameter.h" />
+    <ClInclude Include="..\..\FK\ShaderProgram.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{20CEA45E-407A-429E-AC8F-0B3073AA3870}</ProjectGuid>
     <RootNamespace>FK2_shader</RootNamespace>

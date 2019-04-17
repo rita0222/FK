@@ -25,6 +25,13 @@
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\Base.h" />
+    <ClInclude Include="..\..\FK\Error.H" />
+    <ClInclude Include="..\..\FK\IDAdmin.H" />
+    <ClInclude Include="..\..\FK\System.h" />
+    <ClInclude Include="..\..\FK\Tree.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1B953C98-382B-4942-8F1A-C74174A446A4}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>

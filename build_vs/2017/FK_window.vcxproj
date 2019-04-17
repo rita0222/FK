@@ -23,6 +23,10 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx" />
     <ClCompile Include="..\..\src\window\Window_fltk.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\ShapeViewer.h" />
+    <ClInclude Include="..\..\FK\Window.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{38444BEC-0DEF-4FF5-9D5E-748FD7DBC4B5}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>

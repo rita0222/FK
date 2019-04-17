@@ -27,6 +27,15 @@
     <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\DrawBase.H" />
+    <ClInclude Include="..\..\FK\Engine.H" />
+    <ClInclude Include="..\..\FK\FaceDraw.H" />
+    <ClInclude Include="..\..\FK\FrameController.h" />
+    <ClInclude Include="..\..\FK\LineDraw.H" />
+    <ClInclude Include="..\..\FK\PointDraw.H" />
+    <ClInclude Include="..\..\FK\TextureDraw.H" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{541B0751-8E82-4FA9-98D7-AC7E67C9E844}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>
