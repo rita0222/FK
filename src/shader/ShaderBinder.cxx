@@ -342,24 +342,27 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	ProcPreShader();
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindVertexArray(rectVAO);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
 	/*
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
 	*/
-	glBindVertexArray(rectVAO);
 	//glEnableVertexAttribArray(0);
 	//glEnableVertexAttribArray(2);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-	ProcPostShader();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	/*
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	*/
-	glFlush();
+	glBindVertexArray(0);
+	ProcPostShader();
+	glFinish();
+	//glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(2);
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
