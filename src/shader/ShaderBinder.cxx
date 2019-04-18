@@ -356,16 +356,16 @@ void fk_ShaderBinder::ProcPostShader(void)
 
 void fk_ShaderBinder::ProcPreDraw(void)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
 	glDrawBuffers(1, drawBuffers);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
 }
 
 void fk_ShaderBinder::ProcPostDraw(void)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	//glReadBuffer(GL_COLOR_ATTACHMENT0);
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
