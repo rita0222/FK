@@ -78,7 +78,8 @@ bool fk_ShaderBinder::isExtensionInitialized = false;
 string fk_ShaderBinder::fboVertexCode;
 string fk_ShaderBinder::fboGeometryCode;
 
-static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+//static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+static const GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
 
 bool fk_ShaderBinder::Initialize()
 {
@@ -356,7 +357,7 @@ void fk_ShaderBinder::ProcPostShader(void)
 void fk_ShaderBinder::ProcPreDraw(void)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
-	glDrawBuffers(2, drawBuffers);
+	glDrawBuffers(1, drawBuffers);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
@@ -365,7 +366,7 @@ void fk_ShaderBinder::ProcPreDraw(void)
 void fk_ShaderBinder::ProcPostDraw(void)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	ProcPreShader();
+	//glReadBuffer(GL_COLOR_ATTACHMENT0);
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glActiveTexture(GL_TEXTURE0);
@@ -373,6 +374,7 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
 
+	ProcPreShader();
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 	ProcPostShader();

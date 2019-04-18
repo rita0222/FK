@@ -249,6 +249,12 @@
   <ItemGroup>
     <ClCompile Include="fbo.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fbo_data\shader\fbo_fp.glsl" />
+    <None Include="Resources\fbo_data\shader\modelTex_fp.glsl" />
+    <None Include="Resources\fbo_data\shader\model_fp.glsl" />
+    <None Include="Resources\fbo_data\shader\model_vp.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
