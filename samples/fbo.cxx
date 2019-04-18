@@ -32,14 +32,13 @@ void ShaderSetup(fk_ShaderBinder *argBinder, fk_Model *argModel, fk_Material arg
 }
 
 // FBOシェーダー設定
-void FBOSetup(fk_ShaderBinder *argBinder, fk_Window *argWindow,
-			  float argTH, string argVP, string argFP)
+void FBOSetup(fk_ShaderBinder *argBinder, fk_Window *argWindow, float argTH, string argFP)
 {
-	argBinder->getProgram()->loadVertexShader(argVP);
-	argBinder->getProgram()->loadFragmentShader(argFP);
+	auto prog = argBinder->getProgram();
+
+	argBinder->initializeFrameBufferObject(WIN_W, WIN_H);
+	prog->loadFragmentShader(argFP);
 	if(argBinder->getProgram()->validate()) {
-		argBinder->initializeFrameBufferObject(WIN_W, WIN_H);
-		argBinder->getParameter()->setRegister("tex0", 0);
 		argBinder->getParameter()->setRegister("Width", float(WIN_W));
 		argBinder->getParameter()->setRegister("Height", float(WIN_H));
 		argBinder->getParameter()->setRegister("Thresshold", argTH);
@@ -155,7 +154,7 @@ int main(int, char **)
 				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/modelTex_fp.glsl");
 
 	FBOSetup(&fboBinder, &fboWindow, float(thresshold)/100.0f,
-			 "fbo_data/shader/fbo_vp.glsl", "fbo_data/shader/fbo_fp.glsl");
+			 "fbo_data/shader/fbo_fp.glsl");
 	
 
 	while(true) {

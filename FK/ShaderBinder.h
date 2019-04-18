@@ -312,6 +312,8 @@ namespace FK {
 		void ProcPostShader(void);
 		void SetupDone(bool = true);
 		bool IsSetup(void);
+
+		void LoadFBOShader(void);
 #endif
 	
 	private:
@@ -332,6 +334,9 @@ namespace FK {
 		GLuint		rectVAO, fboHandle;
 		GLuint		colorBuf, depthBuf;
 		GLint		colorLoc, depthLoc;
+		bool		isFBO;
+
+		static std::string	fboVertexCode, fboGeometryCode;
 
 		void ProcPreDraw(void);
 		void ProcPostDraw(void);

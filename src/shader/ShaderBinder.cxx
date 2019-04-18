@@ -75,9 +75,10 @@ using namespace std;
 using namespace FK;
 
 bool fk_ShaderBinder::isExtensionInitialized = false;
+string fk_ShaderBinder::fboVertexCode;
+string fk_ShaderBinder::fboGeometryCode;
 
-//static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
-static const GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
 
 bool fk_ShaderBinder::Initialize()
 {
@@ -89,12 +90,26 @@ bool fk_ShaderBinder::Initialize()
 	isExtensionInitialized = true;
 #endif
 
+	if(fboVertexCode.empty() == true) {
+		fboVertexCode +=
+			#include "GLSL/FBO_Vertex.out"
+			;
+	}
+
+	if(fboGeometryCode.empty() == true) {
+		fboGeometryCode +=
+			#include "GLSL/FBO_Geom.out"
+			;
+	}
+
 	return isExtensionInitialized;
 }
 
 fk_ShaderBinder::fk_ShaderBinder()
-	: program(&innerProgram), parameter(&innerParameter),  usingProgram(false), setupFlg(false),
-	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0)
+	: program(&innerProgram), parameter(&innerParameter),
+	  usingProgram(false), setupFlg(false),
+	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
+	  colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0), isFBO(false)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -103,7 +118,8 @@ fk_ShaderBinder::fk_ShaderBinder()
 
 fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
 	: usingProgram(false),
-	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0)
+	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
+	  colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0), isFBO(false)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -153,78 +169,64 @@ void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 	//argModel->postShader = [](){};
 }
 
+void fk_ShaderBinder::LoadFBOShader(void)
+{
+	program->vertexShaderSource = fboVertexCode;
+	program->geometryShaderSource = fboGeometryCode;
+}
+
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 {
 	bufW = width;
 	bufH = height;
+	LoadFBOShader();
 
-    static GLfloat verts[3*6] = {
-        -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
-    };
-
-	static GLfloat tc[2*6] = {
-        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
-    };
-
+	isFBO = true;
+/*
+    static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
 	SetupFBO();
 
-	auto prog = getProgram();
-	auto id = prog->getProgramID();
+	GLuint handle;
+	glGenBuffers(1, &handle);
 
-	static GLuint handle[2];
-	glGenBuffers(2, handle);
-
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), tc, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &rectVAO);
 	glBindVertexArray(rectVAO);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
+	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
-	glBindAttribLocation(id, 0, "fk_Vertex");
-	glBindAttribLocation(id, 2, "fk_TexCoord");
-	glBindFragDataLocation(id, 0, "fk_Fragment");
+	auto id = program->getProgramID();
 
-	prog->link();
+	glBindAttribLocation(id, 0, "fk_Vertex");
+	glBindFragDataLocation(id, 0, "fk_Fragment");
+	program->link();
 
 	colorLoc = glGetUniformLocation(id, "fk_ColorBuf");
 	depthLoc = glGetUniformLocation(id, "fk_DepthBuf");
 	if(colorLoc >= 0) glUniform1i(colorLoc, 0);
 	if(depthLoc >= 0) glUniform1i(depthLoc, 1);
+*/
+
 }
 
 void fk_ShaderBinder::SetupFBO(void)
 {
 	glGenTextures(1, &colorBuf);
-	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	glBindTexture(GL_TEXTURE_2D, 0);
-/*
+
 	glGenTextures(1, &depthBuf);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glActiveTexture(GL_TEXTURE1);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufW, bufH, 0,
 				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -232,20 +234,21 @@ void fk_ShaderBinder::SetupFBO(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
-*/
 
+	// こっちの方が速いらしいが、うまくいかない
+/*
 	glGenRenderbuffers(1, &depthBuf);
 	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, bufW, bufH);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
-
+*/	
 	glGenFramebuffers(1, &fboHandle);
 	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuf, 0);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, colorBuf, 0);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
+	//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
 	
 	//glDrawBuffers(1, drawBuffers);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -262,15 +265,40 @@ void fk_ShaderBinder::finalizeFrameBufferObject(void)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDeleteFramebuffers(1, &fboHandle);
 	glDeleteTextures(1, &colorBuf);
-	//glDeleteTextures(1, &depthBuf);
-	glDeleteRenderbuffers(1, &depthBuf);
+	glDeleteTextures(1, &depthBuf);
 }
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
-	if(argWin == nullptr) return;
+	if(argWin == nullptr || isFBO == false) return;
+	auto id = program->getProgramID();
 
-	GLuint		id = program->getProgramID();
+	SetupFBO();
+
+	GLuint handle;
+	glGenBuffers(1, &handle);
+
+	static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &rectVAO);
+	glBindVertexArray(rectVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+	glBindAttribLocation(id, 0, "fk_Vertex");
+	glBindFragDataLocation(id, 0, "fk_Fragment");
+	program->link();
+
+	colorLoc = glGetUniformLocation(id, "fk_ColorBuf");
+	depthLoc = glGetUniformLocation(id, "fk_DepthBuf");
+	if(colorLoc >= 0) glUniform1i(colorLoc, 0);
+	if(depthLoc >= 0) glUniform1i(depthLoc, 1);
 
 	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
 	fk_funcSet	postD = fk_funcSet(id, [&](){ ProcPostDraw(); });
@@ -328,8 +356,7 @@ void fk_ShaderBinder::ProcPostShader(void)
 void fk_ShaderBinder::ProcPreDraw(void)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
-	glViewport(0, 0, bufW, bufH);
-	glDrawBuffers(1, drawBuffers);
+	glDrawBuffers(2, drawBuffers);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
@@ -338,31 +365,23 @@ void fk_ShaderBinder::ProcPreDraw(void)
 void fk_ShaderBinder::ProcPostDraw(void)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, bufW, bufH);
 	ProcPreShader();
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindVertexArray(rectVAO);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	/*
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	*/
-	//glEnableVertexAttribArray(0);
-	//glEnableVertexAttribArray(2);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindVertexArray(rectVAO);
+	glDrawArrays(GL_POINTS, 0, 1);
+	ProcPostShader();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	/*
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	*/
-	glBindVertexArray(0);
-	ProcPostShader();
-	glFinish();
-	//glDisableVertexAttribArray(0);
-	//glDisableVertexAttribArray(2);
+
+	glFlush();
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
