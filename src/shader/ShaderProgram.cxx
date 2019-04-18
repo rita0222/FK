@@ -71,7 +71,7 @@
  ****************************************************************************/
 
 #include <FK/ShaderProgram.h>
-//#include <FK/Window.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
