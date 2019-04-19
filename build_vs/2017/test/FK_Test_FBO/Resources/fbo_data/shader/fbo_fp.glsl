@@ -1,12 +1,8 @@
 #version 410 core
 
-uniform sampler2D fk_ColorBuf;
-uniform float Width;
-uniform float Height;
-uniform float Thresshold;
+#FKBuildIn
 
-in vec2 fk_FBOTexCoord;
-out vec4 fk_Fragment;
+uniform float Thresshold;
 
 float getMono(vec2 argPos)
 {
@@ -18,8 +14,8 @@ float getMono(vec2 argPos)
 
 void main(void)
 {
-	float dx = 1.0/Width;
-	float dy = 1.0/Height;
+	float dx = 1.0/fk_FBOSize.x;
+	float dy = 1.0/fk_FBOSize.y;
 
 	float c_00 = getMono(fk_FBOTexCoord + vec2(-dx, -dy));
 	float c_01 = getMono(fk_FBOTexCoord + vec2(0, -dy));

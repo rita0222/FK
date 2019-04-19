@@ -39,11 +39,7 @@ void FBOSetup(fk_ShaderBinder *argBinder, fk_Window *argWindow, float argTH, str
 	argBinder->initializeFrameBufferObject(WIN_W, WIN_H);
 	prog->loadFragmentShader(argFP);
 	if(argBinder->getProgram()->validate()) {
-		auto param = argBinder->getParameter();
-		param->setRegister("Width", float(WIN_W));
-		param->setRegister("Height", float(WIN_H));
-		param->setRegister("Thresshold", argTH);
-		//param->setRegister("tex0", 0);
+		argBinder->getParameter()->setRegister("Thresshold", argTH);
 		argBinder->bindWindow(argWindow);
 	} else {
 		fk_Window::printf("Shader Error (FBO Side)");
