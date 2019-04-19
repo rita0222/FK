@@ -36,6 +36,6 @@ void main(void)
 	} else {
 		fk_Fragment = vec4(0.0, 0.0, 0.0, 1.0);
 	}
-	//fk_Fragment = texture(fk_ColorBuf, fk_FBOTexCoord);
+	//fk_Fragment = vec4(texture(fk_ColorBuf, fk_FBOTexCoord).rgb, 1.0);
 	//fk_Fragment = vec4(fk_FBOTexCoord.x, fk_FBOTexCoord.y, 0.0, 1.0);
 }
