@@ -228,7 +228,7 @@ void fk_ShaderBinder::SetupFBO(void)
 {
 	glGenTextures(1, &colorBuf);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -260,8 +260,8 @@ void fk_ShaderBinder::SetupFBO(void)
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, colorBuf, 0);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
 	
-	//glDrawBuffers(2, drawBuffers);
-	glDrawBuffers(1, drawBuffers);
+	glDrawBuffers(2, drawBuffers);
+	//glDrawBuffers(1, drawBuffers);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
@@ -366,8 +366,8 @@ void fk_ShaderBinder::ProcPostShader(void)
 void fk_ShaderBinder::ProcPreDraw(void)
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
-	glDrawBuffers(1, drawBuffers);
-	//glDrawBuffers(2, drawBuffers);
+	glDrawBuffers(2, drawBuffers);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
@@ -382,11 +382,10 @@ void fk_ShaderBinder::ProcPostDraw(void)
 
 	glDrawBuffer(GL_BACK);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClear(GL_COLOR_BUFFER_BIT);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, depthBuf);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, depthBuf);
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 
@@ -394,8 +393,8 @@ void fk_ShaderBinder::ProcPostDraw(void)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glFlush();
 }
