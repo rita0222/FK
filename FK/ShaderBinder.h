@@ -333,8 +333,6 @@ namespace FK {
 
 		GLuint		rectVAO, fboHandle;
 		GLuint		colorBuf, depthBuf;
-		GLint		colorLoc, depthLoc;
-		bool		isFBO;
 
 		static std::string	fboVertexCode, fboGeometryCode;
 

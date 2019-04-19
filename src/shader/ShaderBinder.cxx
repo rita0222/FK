@@ -110,7 +110,7 @@ fk_ShaderBinder::fk_ShaderBinder()
 	: program(&innerProgram), parameter(&innerParameter),
 	  usingProgram(false), setupFlg(false),
 	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
-	  colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0), isFBO(false)
+	  colorBuf(0), depthBuf(0)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -120,7 +120,7 @@ fk_ShaderBinder::fk_ShaderBinder()
 fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
 	: usingProgram(false),
 	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
-	  colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0), isFBO(false)
+	  colorBuf(0), depthBuf(0)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -182,7 +182,6 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	bufH = height;
 	LoadFBOShader();
 
-	isFBO = true;
 /*
     static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
 	SetupFBO();
@@ -271,7 +270,7 @@ void fk_ShaderBinder::finalizeFrameBufferObject(void)
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
-	if(argWin == nullptr || isFBO == false) return;
+	if(argWin == nullptr || bufW <= 0 || bufH <= 0) return;
 	auto id = program->getProgramID();
 
 	SetupFBO();
@@ -298,12 +297,7 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 
 	parameter->setRegister("fk_ColorBuf", 0);
 	parameter->setRegister("fk_DepthBuf", 1);
-/*
-	colorLoc = glGetUniformLocation(id, "fk_ColorBuf");
-	depthLoc = glGetUniformLocation(id, "fk_DepthBuf");
-	if(colorLoc >= 0) glUniform1i(colorLoc, 0);
-	if(depthLoc >= 0) glUniform1i(depthLoc, 1);
-*/
+
 	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
 	fk_funcSet	postD = fk_funcSet(id, [&](){ ProcPostDraw(); });
 	argWin->preDrawList.push_back(preD);
@@ -370,6 +364,7 @@ void fk_ShaderBinder::ProcPreDraw(void)
 void fk_ShaderBinder::ProcPostDraw(void)
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
 	ProcPreShader();
 
 	glDrawBuffer(GL_BACK);
@@ -378,10 +373,11 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
+
 	ProcPostShader();
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE1);

@@ -219,6 +219,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void SetParameter(fk_ShaderParameter *);
+		void SetFBOMode(bool);
 #endif
 
 	private:
@@ -228,8 +229,9 @@ namespace FK {
 		GLuint idGeometry;
 		std::string lastError;
 		fk_ShaderParameter *parameter;
+		bool fboMode;
 
-		static std::string		vertexBuildIn, fragmentBuildIn, geometryBuildIn;
+		static std::string		vertexBuildIn, fragmentBuildIn, geometryBuildIn, fboBuildIn;
 
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint);
