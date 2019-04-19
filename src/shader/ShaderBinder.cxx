@@ -84,8 +84,8 @@ bool fk_ShaderBinder::isExtensionInitialized = false;
 string fk_ShaderBinder::fboVertexCode;
 string fk_ShaderBinder::fboGeometryCode;
 
-//static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
-static const GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+//static const GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
 
 bool fk_ShaderBinder::Initialize()
 {
@@ -256,11 +256,11 @@ void fk_ShaderBinder::SetupFBO(void)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
 
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuf, 0);
-	//glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, colorBuf, 0);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
 	
-	glDrawBuffers(1, drawBuffers);
+	//glDrawBuffers(2, drawBuffers);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
@@ -365,7 +365,7 @@ void fk_ShaderBinder::ProcPostShader(void)
 void fk_ShaderBinder::ProcPreDraw(void)
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
-	glDrawBuffers(1, drawBuffers);
+	glDrawBuffers(2, drawBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
