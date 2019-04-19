@@ -314,6 +314,12 @@ namespace FK {
 		bool IsSetup(void);
 
 		void LoadFBOShader(void);
+
+		static const std::string colorBufName;
+		static const std::string depthBufName;
+		static const std::string fboTexCoordName;
+		static const std::string fboSizeName;
+		
 #endif
 	
 	private:
@@ -333,6 +339,7 @@ namespace FK {
 
 		GLuint		rectVAO, fboHandle;
 		GLuint		colorBuf, depthBuf;
+		std::vector<float>	fboSize;
 
 		static std::string	fboVertexCode, fboGeometryCode;
 

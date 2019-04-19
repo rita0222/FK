@@ -70,9 +70,15 @@
  *
  ****************************************************************************/
 #include <FK/ShaderBinder.h>
+#include <FK/DrawBase.H>
 
 using namespace std;
 using namespace FK;
+
+const string fk_ShaderBinder::colorBufName = "fk_ColorBuf";
+const string fk_ShaderBinder::depthBufName = "fk_DepthBuf";
+const string fk_ShaderBinder::fboTexCoordName = "fk_FBOTexCoord";
+const string fk_ShaderBinder::fboSizeName = "fk_FBOSize";
 
 bool fk_ShaderBinder::isExtensionInitialized = false;
 string fk_ShaderBinder::fboVertexCode;
@@ -174,6 +180,7 @@ void fk_ShaderBinder::LoadFBOShader(void)
 {
 	program->vertexShaderSource = fboVertexCode;
 	program->geometryShaderSource = fboGeometryCode;
+	program->SetFBOMode(true);
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
@@ -181,6 +188,9 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	bufW = width;
 	bufH = height;
 	LoadFBOShader();
+	fboSize.clear();
+	fboSize.push_back(float(bufW));
+	fboSize.push_back(float(bufH));
 
 /*
     static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
@@ -291,12 +301,13 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
-	glBindAttribLocation(id, 0, "fk_Vertex");
-	glBindFragDataLocation(id, 0, "fk_Fragment");
+	glBindAttribLocation(id, 0, fk_Shape::vertexName.c_str());
+	glBindFragDataLocation(id, 0, fk_DrawBase::fragmentName.c_str());
 	program->link();
 
-	parameter->setRegister("fk_ColorBuf", 0);
-	parameter->setRegister("fk_DepthBuf", 1);
+	parameter->setRegister(colorBufName, 0);
+	parameter->setRegister(depthBufName, 1);
+	parameter->setRegister(fboSizeName, &fboSize);
 
 	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
 	fk_funcSet	postD = fk_funcSet(id, [&](){ ProcPostDraw(); });
