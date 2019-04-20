@@ -240,11 +240,11 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 
 void fk_ShaderBinder::finalizeFrameBufferObject(void)
 {
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &fboHandle);
-	glDeleteTextures(1, &colorBuf);
-	glDeleteTextures(1, &depthBuf);
+	//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	if (fboHandle != 0) glDeleteFramebuffers(1, &fboHandle);
+	if(colorBuf != 0) glDeleteTextures(1, &colorBuf);
+	if(depthBuf != 0) glDeleteTextures(1, &depthBuf);
 }
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
