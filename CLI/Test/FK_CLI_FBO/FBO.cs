@@ -5,6 +5,7 @@ namespace FK_CLI_FBO
 {
     class FBO
     {
+        static int MODE;
         const int WIN_W = 512;
         const int WIN_H = 512;
         const double SP_X = -((double)(WIN_W/2) - 10.0);
@@ -49,8 +50,11 @@ namespace FK_CLI_FBO
 
         static void Main(string[] args)
         {
+            MODE = 2;
             var mat = new fk_Material();
-            var window = new fk_AppWindow();
+            var normalWindow = new fk_AppWindow();
+            var edgeWindow = new fk_AppWindow();
+            var depthWindow = new fk_AppWindow();
             var lightModel = new fk_Model();
             var light = new fk_Light();
 
@@ -98,19 +102,31 @@ namespace FK_CLI_FBO
             sprite.SetPositionLT(SP_X, SP_Y);
 
             // 各モデルをディスプレイリストに登録
-            window.BGColor = new fk_Color(0.5, 0.5, 0.5);
-            window.Entry(lightModel);
-            window.Entry(modelDef);
-            window.Entry(ifsModelDef);
+            normalWindow.BGColor = new fk_Color(0.5, 0.5, 0.5);
+            normalWindow.Entry(lightModel);
+            normalWindow.Entry(modelDef);
+            normalWindow.Entry(ifsModelDef);
 
             // 視点の位置と姿勢を設定
-            window.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
-            window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
-            window.Entry(sprite);
+            normalWindow.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
+            normalWindow.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+            normalWindow.Entry(sprite);
 
             // ウィンドウ生成 (シェーダー設定の前に行う必要がある。)
-            window.Open();
-            window.TrackBallMode = true;
+            normalWindow.Open();
+            normalWindow.TrackBallMode = true;
+            normalWindow.ShowGuide();
+
+            edgeWindow.Scene = normalWindow.Scene;
+            depthWindow.Scene = normalWindow.Scene;
+
+            if(MODE == 1)
+            {
+                edgeWindow.Open();
+            } else
+            {
+                depthWindow.Open();
+            }
 
             // 各種シェーダー設定
             ShaderSetup(spBinder, modelDef, fk_Material.Yellow,
@@ -119,18 +135,24 @@ namespace FK_CLI_FBO
             ShaderSetup(ifsBinder, ifsModelDef, fk_Material.White,
                 new fk_Vector(20.0, 0.0, 0.0), "shader/model_vp.glsl", "shader/modelTex_fp.glsl");
 
-            FBOSetup(edgeBinder, window, (float)thresshold / 100.0f, "shader/fbo_edge.glsl");
+            FBOSetup(edgeBinder, edgeWindow, (float)thresshold / 100.0f, "shader/fbo_edge.glsl");
+            FBOSetup(depthBinder, depthWindow, 0.0f, "shader/fbo_depth.glsl");
 
-            //FBOSetup(depthBinder, window, 0.0f, "shader/fbo_depth.glsl");
-
-            while(window.Update())
+            while(normalWindow.Update())
             {
+                if (MODE == 1)
+                {
+                    if (edgeWindow.Update() == false) break;
+                } else
+                {
+                    if (depthWindow.Update() == false) break;
+                }
                 // エッジ抽出用閾値の変更
-                if (window.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.PRESS))
+                if (normalWindow.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.PRESS))
                 {
                     ++thresshold;
                 }
-                if (window.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.PRESS))
+                if (normalWindow.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.PRESS))
                 {
                     if (thresshold > 0) --thresshold;
                 }
@@ -141,7 +163,8 @@ namespace FK_CLI_FBO
                 // 光源回転
                 lightModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.05);
 
-                sprite.DrawText(((double)thresshold / 100.0).ToString(), true);
+                string outStr = string.Format("{0:0.00}", (double)thresshold / 100.0);
+                sprite.DrawText(outStr, true);
                 sprite.SetPositionLT(SP_X, SP_Y);
             }
         }
