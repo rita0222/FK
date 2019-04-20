@@ -94,7 +94,7 @@ namespace FK_CLI {
 	fk_ShaderBinder::!fk_ShaderBinder()
 	{
 		if (pB == nullptr) return;
-		delete pB;
+		//delete pB;
 		pB = nullptr;
 	}
 

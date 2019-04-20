@@ -137,7 +137,7 @@ fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *
 
 fk_ShaderBinder::~fk_ShaderBinder()
 {
-	finalizeFrameBufferObject();
+	//finalizeFrameBufferObject();
 }
 
 void fk_ShaderBinder::setProgram(fk_ShaderProgram *argProg)
@@ -240,8 +240,8 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 
 void fk_ShaderBinder::finalizeFrameBufferObject(void)
 {
-	//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	if (bufW > 0 && bufH > 0) {
 		glDeleteFramebuffers(1, &fboHandle);
 		glDeleteTextures(1, &colorBuf);
