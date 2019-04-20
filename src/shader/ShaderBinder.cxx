@@ -222,6 +222,9 @@ void fk_ShaderBinder::SetupFBO(void)
 */
 	glGenFramebuffers(1, &fboHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
+	glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, bufW);
+	glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, bufH);
+	glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 2);
 
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuf, 0);
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
@@ -344,6 +347,7 @@ void fk_ShaderBinder::ProcPreDraw(void)
 
 void fk_ShaderBinder::ProcPostDraw(void)
 {
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
 
@@ -352,16 +356,16 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, colorBuf);
-
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	glBindTexture(GL_TEXTURE_2D, colorBuf);
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, depthBuf);
-
 	glReadBuffer(GL_DEPTH_ATTACHMENT);
+	glBindTexture(GL_TEXTURE_2D, depthBuf);
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
 
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
