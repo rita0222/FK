@@ -262,7 +262,7 @@ void fk_GraphicsEngine::Draw(void)
 	}
 
 	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	ApplySceneParameter(true);
 

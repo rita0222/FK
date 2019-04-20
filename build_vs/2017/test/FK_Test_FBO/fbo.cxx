@@ -158,8 +158,8 @@ int main(int, char **)
 				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/modelTex_fp.glsl");
 
 	FBOSetup(&edgeBinder, &edgeWindow, float(thresshold)/100.0f,
-//			 "fbo_data/shader/fbo_edge.glsl");
-			 "fbo_data/shader/fbo_color.glsl");
+			 "fbo_data/shader/fbo_edge.glsl");
+//			 "fbo_data/shader/fbo_color.glsl");
 
 	FBOSetup(&depthBinder, &depthWindow, 0.0f, "fbo_data/shader/fbo_depth.glsl");
 
