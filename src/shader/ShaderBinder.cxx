@@ -338,7 +338,6 @@ void fk_ShaderBinder::ProcPreDraw(void)
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
-//	glFlush();
 }
 
 void fk_ShaderBinder::ProcPostDraw(void)
@@ -352,17 +351,16 @@ void fk_ShaderBinder::ProcPostDraw(void)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-#ifdef WIN32
+
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
-#endif
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-#ifdef WIN32
+
 	glReadBuffer(GL_DEPTH_ATTACHMENT);
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
-#endif
+
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 
@@ -372,8 +370,6 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-//	glFlush();
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
