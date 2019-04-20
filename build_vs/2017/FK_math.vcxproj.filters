@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\math\FVecArray.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\GenMatrix.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\GenVector.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Math.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Plane.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Quaternion.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{6123b39a-ee56-4531-824c-0c2c65945719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{20804675-f779-4f83-885d-c46e998a59e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\FVecArray.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\GenMatrix.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\GenVector.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Math.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Matrix.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Plane.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Quaternion.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Vertex.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
