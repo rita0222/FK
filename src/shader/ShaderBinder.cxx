@@ -359,8 +359,12 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glDrawArrays(GL_POINTS, 0, 1);
 	
 	//glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
-	glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
+
+	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
+
+	glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH,
+					  GL_DEPTH_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_LINEAR);
 
 	ProcPostShader();
 
