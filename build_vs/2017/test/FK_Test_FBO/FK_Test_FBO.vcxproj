@@ -250,7 +250,9 @@
     <ClCompile Include="fbo.cxx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\fbo_data\shader\fbo_fp.glsl" />
+    <None Include="Resources\fbo_data\shader\fbo_color.glsl" />
+    <None Include="Resources\fbo_data\shader\fbo_depth.glsl" />
+    <None Include="Resources\fbo_data\shader\fbo_edge.glsl" />
     <None Include="Resources\fbo_data\shader\modelTex_fp.glsl" />
     <None Include="Resources\fbo_data\shader\model_fp.glsl" />
     <None Include="Resources\fbo_data\shader\model_vp.glsl" />
