@@ -48,7 +48,8 @@ void FBOSetup(fk_ShaderBinder *argBinder, fk_Window *argWindow, float argTH, str
 }
 
 // ウィンドウの再描画と状況把握
-WinStatus WindowUpdate(Fl_Window *argMainWin, fk_Window *argBaseWin, fk_Window *argFBOWin)
+WinStatus WindowUpdate(Fl_Window *argMainWin, fk_Window *argBaseWin,
+					   fk_Window *argEdgeWin, fk_Window *argDepthWin)
 {
 	if(argMainWin->visible() == 0) {
 		if(Fl::wait() == 0) {
@@ -59,10 +60,12 @@ WinStatus WindowUpdate(Fl_Window *argMainWin, fk_Window *argBaseWin, fk_Window *
 	}
 
 	if(argBaseWin->drawWindow() == 0) return BREAK;;
-	if(argFBOWin->drawWindow() == 0) return BREAK;
+	if(argEdgeWin->drawWindow() == 0) return BREAK;
+	if(argDepthWin->drawWindow() == 0) return BREAK;
 	if(Fl::check() == 0) return BREAK;
 	if(argBaseWin->winOpenStatus() == false) return CONTINUE;
-	if(argFBOWin->winOpenStatus() == false) return CONTINUE;
+	if(argEdgeWin->winOpenStatus() == false) return CONTINUE;
+	if(argDepthWin->winOpenStatus() == false) return CONTINUE;
 
 	return NORMAL;
 }
@@ -71,13 +74,14 @@ int main(int, char **)
 {
 	fk_System::setcwd();
 
-	Fl_Window		mainWindow(WIN_W*2, WIN_H, "Shader Test");
+	Fl_Window		mainWindow(WIN_W*3, WIN_H, "Shader Test");
 	fk_Model		camera, lightModel;
 	fk_Material		mat;
 	fk_Light		light;
 	fk_Scene		scene;
 	fk_Window		baseWindow(0, 0, WIN_W, WIN_H);
-	fk_Window		fboWindow(WIN_W, 0, WIN_W, WIN_H);
+	fk_Window		edgeWindow(WIN_W, 0, WIN_W, WIN_H);
+	fk_Window		depthWindow(WIN_W*2, 0, WIN_W, WIN_H);
 
 	fk_GuideObject	guide;
 	fk_TrackBall	tb(&baseWindow, &camera);
@@ -88,7 +92,7 @@ int main(int, char **)
 	fk_SpriteModel	sprite;
 
 	fk_Model		modelDef, ifsModelDef;
-	fk_ShaderBinder spBinder, ifsBinder, fboBinder;
+	fk_ShaderBinder spBinder, ifsBinder, edgeBinder, depthBinder;
 	int				thresshold = 80;
 
 	mainWindow.end();
@@ -130,7 +134,8 @@ int main(int, char **)
 
 	// ウィンドウへディスプレイリストを登録
 	baseWindow.setScene(&scene);
-	fboWindow.setScene(&scene);
+	edgeWindow.setScene(&scene);
+	depthWindow.setScene(&scene);
 
 	// 視点の位置と姿勢を設定
 	camera.glMoveTo(0.0, 0.0, 100.0);
@@ -141,7 +146,8 @@ int main(int, char **)
 	// ウィンドウ生成 (シェーダー設定の前に行う必要がある。)
 	mainWindow.show();
 	baseWindow.show();
-	fboWindow.show();
+	edgeWindow.show();
+	depthWindow.show();
 	Fl::check();
 
 	// 各種シェーダー設定
@@ -151,14 +157,16 @@ int main(int, char **)
 	ShaderSetup(&ifsBinder, &ifsModelDef, White, fk_Vector(20.0, 0.0, 0.0),
 				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/modelTex_fp.glsl");
 
-	FBOSetup(&fboBinder, &fboWindow, float(thresshold)/100.0f,
-			 "fbo_data/shader/fbo_fp.glsl");
-	
+	FBOSetup(&edgeBinder, &edgeWindow, float(thresshold)/100.0f,
+			 "fbo_data/shader/fbo_edge.glsl");
+
+	FBOSetup(&depthBinder, &depthWindow, 0.0f, "fbo_data/shader/fbo_depth.glsl");
 
 	while(true) {
 
 		// シーン描画
-		switch(WindowUpdate(&mainWindow, &baseWindow, &fboWindow)) {
+		switch(WindowUpdate(&mainWindow, &baseWindow,
+							&edgeWindow, &depthWindow)) {
 		  case BREAK:
 			// プログラム終了
 			return 0;
@@ -181,7 +189,7 @@ int main(int, char **)
 		}			
 		
 		// FBOシェーダーに閾値を送信
-		fboBinder.getParameter()->setRegister("Thresshold", float(thresshold)/100.0f);
+		edgeBinder.getParameter()->setRegister("Thresshold", float(thresshold)/100.0f);
 
 		// 光源回転
 		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.05);
