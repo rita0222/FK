@@ -351,19 +351,14 @@ void fk_ShaderBinder::ProcPostDraw(void)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	//glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	//glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
 
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
-	
-
-	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
-
 	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH,
 	//				  GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_LINEAR);
 
