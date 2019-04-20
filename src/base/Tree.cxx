@@ -123,7 +123,7 @@ fk_TreeData * fk_TreeData::getChild(fk_TreeData *argPrev)
 
 	if(argPrev == nullptr) {
 		if(children.empty() == true) return nullptr;
-		return *(children.begin());
+		return children.front();
 	}
 
 	ite = find(children.begin(), children.end(), argPrev);
