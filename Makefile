@@ -40,7 +40,7 @@ mac-all:
 	cd lib/static; $(RM) lib*
 	cd src; $(MAKE) mac
 	cd src; $(MAKE) clean
-	cd src; $(MAKE) mac-d
+	cd src; $(MAKE) mac-g
 
 document:
 	cd doc; $(MAKE) doc MAKE=$(MAKE)
