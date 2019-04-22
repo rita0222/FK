@@ -108,22 +108,18 @@ void fk_DataBase::AllClear(void)
 	lAdmin.Init(1);
 
 	while(!vSet.empty()) {
-		delete vSet.back();
 		vSet.pop_back();
 	}
 
 	while(!hSet.empty()) {
-		delete hSet.back();
 		hSet.pop_back();
 	}
 
 	while(!eSet.empty()) {
-		delete eSet.back();
 		eSet.pop_back();
 	}
 
 	while(!lSet.empty()) {
-		delete lSet.back();
 		lSet.pop_back();
 	}
 
@@ -244,14 +240,14 @@ void fk_DataBase::HSetClone(vector<fk_Half *> *argHSet)
 			continue;
 		}
 
-		newH->vertex = GetVData(orgH->vertex->getID());
-		newH->nextHalf = GetHData(orgH->nextHalf->getID());
-		newH->prevHalf = GetHData(orgH->prevHalf->getID());
-		newH->parentEdge = GetEData(orgH->parentEdge->getID());
-		if(orgH->parentLoop == nullptr) {
-			newH->parentLoop = nullptr;
+		newH->vertex = orgH->vertex;
+		newH->nextHalf = orgH->nextHalf;
+		newH->prevHalf = orgH->prevHalf;
+		newH->parentEdge = orgH->parentEdge;
+		if(orgH->parentLoop == FK_UNDEFINED) {
+			newH->parentLoop = FK_UNDEFINED;
 		} else {
-			newH->parentLoop = GetLData(orgH->parentLoop->getID());
+			newH->parentLoop = orgH->parentLoop;
 		}
 	}
 
@@ -271,8 +267,8 @@ void fk_DataBase::ESetClone(vector<fk_Edge *> *argESet)
 
 		newE->CloneMaterial(orgE);
 
-		newE->rightHalf = GetHData(orgE->rightHalf->getID());
-		newE->leftHalf = GetHData(orgE->leftHalf->getID());
+		newE->rightHalf = orgE->rightHalf;
+		newE->leftHalf = orgE->leftHalf;
 	}
 
 	return;
@@ -291,7 +287,7 @@ void fk_DataBase::LSetClone(vector<fk_Loop *> *argLSet)
 
 		newL->CloneMaterial(orgL);
 
-		newL->oneHalf = GetHData(orgL->oneHalf->getID());
+		newL->oneHalf = orgL->oneHalf;
 		newL->norm = orgL->norm;
 		newL->normFlag = orgL->normFlag;
 	}

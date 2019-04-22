@@ -81,7 +81,7 @@ using namespace FK;
 fk_Half * fk_ReferenceL1::getOneHOnV(fk_Vertex *argV) const
 {
 	if(argV == nullptr) return nullptr;
-	return argV->getOneHalf();
+	return (getHData(argV->getOneHalf()));
 }
 
 fk_Edge * fk_ReferenceL1::getOneEOnV(fk_Vertex *argV) const
@@ -89,9 +89,9 @@ fk_Edge * fk_ReferenceL1::getOneEOnV(fk_Vertex *argV) const
 	fk_Half *tmpH;
 
 	if(argV == nullptr) return nullptr;
-	tmpH = argV->getOneHalf();
+	tmpH = getHData(argV->getOneHalf());
 	if(tmpH == nullptr) return nullptr;
-	return tmpH->getParentEdge();
+	return getEData(tmpH->getParentEdge()->getID());
 }
 
 fk_Vertex * fk_ReferenceL1::getVOnH(fk_Half *argH) const

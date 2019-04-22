@@ -149,17 +149,17 @@ namespace FK {
 		fk_IDAdmin			eAdmin;		// 稜線 ID 管理オブジェクト
 		fk_IDAdmin			lAdmin;		// ループ ID 管理オブジェクト
 
-		std::vector<fk_Vertex *>	vSet;
-		std::vector<fk_Half *>		hSet;
-		std::vector<fk_Edge *>		eSet;
-		std::vector<fk_Loop *>		lSet;
+		std::vector<fk_Vertex>	vSet;
+		std::vector<fk_Half>		hSet;
+		std::vector<fk_Edge>		eSet;
+		std::vector<fk_Loop>		lSet;
 
 		void				ResizeData(fk_DataBase *);
 		void				ResizeData(int, int, int, int);
-		void				VSetClone(std::vector<fk_Vertex *> *);
-		void				HSetClone(std::vector<fk_Half *> *);
-		void				ESetClone(std::vector<fk_Edge *> *);
-		void				LSetClone(std::vector<fk_Loop *> *);
+		void				VSetClone(std::vector<fk_Vertex> *);
+		void				HSetClone(std::vector<fk_Half> *);
+		void				ESetClone(std::vector<fk_Edge> *);
+		void				LSetClone(std::vector<fk_Loop> *);
 
 		bool				VCompare(fk_DataBase *);
 		bool				HCompare(fk_DataBase *);

@@ -72,7 +72,7 @@
 #ifndef __FK_MASSPROPERTY_HEADER__
 #define __FK_MASSPROPERTY_HEADER__
 
-#include <FK/DataAccess.h>
+#include <FK/Reference.h>
 
 namespace FK {
 	//! マスプロパティ用クラス
@@ -81,7 +81,7 @@ namespace FK {
 	 *	出力するための機能を提供します。
 	 */
 
-	class fk_MassProperty : public fk_DataAccess {
+	class fk_MassProperty : public fk_ReferenceL3 {
 
 	private:
 	protected:

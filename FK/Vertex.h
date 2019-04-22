@@ -89,13 +89,12 @@ namespace FK {
 	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
 	 *	派生クラスのうち、ID 管理については fk_Topology,
-	 *	個別マテリアル設定については fk_TopologyMaterial,
 	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
 	 *	\sa fk_Solid, fk_Half, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
 	 */
 
-	class fk_Vertex : public fk_TopologyMaterial {
+	class fk_Vertex : public fk_Topology {
 
 		friend class		fk_Operation;
 		friend class		fk_DataBase;

@@ -74,7 +74,8 @@
 #ifndef __FK_DATA_ACCESS_HEADER__
 #define __FK_DATA_ACCESS_HEADER__
 
-#include <FK/Reference.h>
+#include <FK/ParserData.h>
+#include <FK/DataBase.H>
 #include <list>
 
 namespace FK {
@@ -88,7 +89,7 @@ namespace FK {
 	 *
 	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Loop
 	 */
-	class fk_DataAccess : public fk_ReferenceL3 {
+	class fk_DataAccess : public fk_ParserData {
 
 		friend class		fk_Solid;
 

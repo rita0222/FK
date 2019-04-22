@@ -74,7 +74,8 @@
 
 #include <FK/Base.h>
 #include <FK/Attribute.h>
-#include <FK/Palette.h>
+#include <FK/DataBase.H>
+//#include <FK/Palette.h>
 
 namespace FK {
 	
@@ -101,7 +102,7 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Topology(void);
+		fk_Topology(fk_DataBase *);
 		//! デストラクタ
 		virtual ~fk_Topology();
 
@@ -128,6 +129,7 @@ namespace FK {
 		int					ID;
 		bool				ariveFlg;
 		fk_TopologyType		type;
+		const fk_DataBase	*DB;
 		void				SetType(fk_TopologyType);
 	
 	protected:
@@ -141,84 +143,6 @@ namespace FK {
 		void				MakeElem(int);
 		bool				CloneElem(fk_Topology *);
 #endif
-	};
-
-
-	//! 位相要素個別マテリアル管理クラス
-	/*!
-	 *	このクラスは、 fk_Solid における位相要素について、
-	 *	個別にマテリアルを管理する機能を提供します。
-	 *
-	 *	fk_Solid による1つの形状内で、
-	 *	各位相要素について別々にマテリアルを設定したい場合は、
-	 *	このクラスのメンバ関数を用います。
-	 *
-	 *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_Shape, fk_Model
-	 */
-	class fk_TopologyMaterial : public fk_Topology {
-
-		friend class		fk_DataBase;
-
-	private:
-		int					mateID;
-		fk_MaterialMode		mateMode;
-
-		void				CloneMaterial(fk_TopologyMaterial *);
-
-	public:
-		//! コンストラクタ
-		fk_TopologyMaterial(void);
-
-		//! デストラクタ
-		virtual ~fk_TopologyMaterial();
-
-		//! マテリアルモード設定関数
-		/*!
-		 *	各位相要素の描画の際に、個別のマテリアルを利用するかどうかを設定します。
-		 *	fk_Solid による形状では、
-		 *	個別マテリアルを有効とするのには以下の条件を満たす必要があります。
-		 *	- fk_Model にてマテリアルモードが FK_PARENT_MODE になっている。
-		 *		(fk_Model::setMaterialMode() を参照して下さい。)
-		 *	- fk_Solid にてマテリアルモードが FK_PARENT_MODE になっている。
-		 *		(fk_Shape::setMaterialMode() を参照して下さい。)
-		 *	.
-		 *	上記の条件を満たさない場合、個別のマテリアル設定の有無に関わらず
-		 *	全ての位相要素がモデルに設定されたマテリアルによって描画を行います。
-		 *
-		 *	\param[in] mode
-		 *		前述の条件を前提として、位相要素のマテリアルを以下のように設定します。
-		 *		\arg FK_CHILD_MODE		個別設定を利用します。
-		 *		\arg FK_PARENT_MODE		モデル設定を利用します。
-		 *		\arg FK_NONE_MODE		描画を行いません。
-		 */
-		void				setElemMaterialMode(fk_MaterialMode mode);
-
-		//!	マテリアルID設定関数
-		/*!
-		 *	位相要素の個別マテリアルを、パレットの ID によって設定します。
-		 *	パレットに関する解説は
-		 *	fk_Shape::setPalette() や fk_Shape::pushPalette() を参照して下さい。
-		 *
-		 *	\param[in] ID	マテリアルの ID
-		 */
-		void				setElemMaterialID(int ID);
-
-		//! マテリアルモード参照関数
-		/*!
-		 *	現在のマテリアルモードを参照します。
-		 *
-		 *	\return マテリアルモード
-		 */
-		fk_MaterialMode		getElemMaterialMode(void);
-
-		//! マテリアル ID 参照関数
-		/*!
-		 *	現在のマテリアル ID を参照します。
-		 *
-		 *	\return マテリアル ID
-		 */
-		int					getElemMaterialID(void);
-
 	};
 }
 

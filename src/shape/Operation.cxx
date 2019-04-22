@@ -236,7 +236,7 @@ bool fk_Operation::DeleteVertex(fk_Vertex *argV)
 
 	if(checkDB() == false) return false;
 	if(argV == nullptr) return false;
-	if(argV->getOneHalf() != nullptr) {
+	if(argV->getOneHalf() != FK_UNDEFINED) {
 		fk_PutError("fk_Operation", "DeleteVertex", 1,
 					"Vertex Connection Error.");
 		return false;
@@ -331,7 +331,7 @@ fk_Edge * fk_Operation::MakeEdge1(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half			*newH1, *newH2;
 
 	// 両方が独立頂点かどうかのチェック 
-	if(argV1->getOneHalf() != nullptr || argV2->getOneHalf() != nullptr) {
+	if(argV1->getOneHalf() != FK_UNDEFINED || argV2->getOneHalf() != FK_UNDEFINED) {
 		fk_PutError("fk_Operation", "MakeEdge1", 1,
 					"Vertex Topology Error.");
 		return nullptr;
@@ -384,8 +384,8 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half			*newH1, *newH2;
 
 	// v1 が接続頂点、v2 が独立頂点になっているかどうかのチェック 
-	if(argV1->getOneHalf() == nullptr ||
-	   argV2->getOneHalf() != nullptr) {
+	if(argV1->getOneHalf() == FK_UNDEFINED ||
+	   argV2->getOneHalf() != FK_UNDEFINED) {
 		fk_PutError("fk_Operation", "MakeEdge2", 1,
 					"Vertex Topology Error.");
 		return nullptr;
@@ -478,8 +478,8 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half		*newH1, *newH2;
 
 	// v1, v2 が接続頂点かどうかのチェック 
-	if(argV1->getOneHalf() == nullptr ||
-	   argV2->getOneHalf() == nullptr) {
+	if(argV1->getOneHalf() == FK_UNDEFINED ||
+	   argV2->getOneHalf() == FK_UNDEFINED) {
 		fk_PutError("fk_Operation", "MakeEdge3", 1,
 					"Vertex Topology Error.");
 		return nullptr;
@@ -662,7 +662,7 @@ bool fk_Operation::DeleteEdge2(fk_Half *argH)
 	aloneV->SetOneHalf(nullptr);
 	prevH->SetNextHalf(nextH);
 	nextH->SetPrevHalf(prevH);
-	if(conV->getOneHalf() == argH) {
+	if(conV->getOneHalf() == argH->getID()) {
 		conV->SetOneHalf(nextH);
 		v1ParentFlag = true;
 	} else {
@@ -724,7 +724,7 @@ bool fk_Operation::DeleteEdge3(fk_Edge *argE)
 	// lV まわり設定 
 	lPrevH->SetNextHalf(lNextH);
 	lNextH->SetPrevHalf(lPrevH);
-	if(lV->getOneHalf() == lH) {
+	if(lV->getOneHalf() == lH->getID()) {
 		lV->SetOneHalf(lNextH);
 		lVParentFlag = true;
 	} else {
@@ -734,7 +734,7 @@ bool fk_Operation::DeleteEdge3(fk_Edge *argE)
 	// rV まわり設定 
 	rPrevH->SetNextHalf(rNextH);
 	rNextH->SetPrevHalf(rPrevH);
-	if(rV->getOneHalf() == rH) {
+	if(rV->getOneHalf() == rH->getID()) {
 		rV->SetOneHalf(rNextH);
 		rVParentFlag = true;
 	} else {
@@ -1041,14 +1041,14 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 	rPrevH->SetNextHalf(rNextH);
 	rNextH->SetPrevHalf(rPrevH);
 
-	if(lV->getOneHalf() == lH) {
+	if(lV->getOneHalf() == lH->getID()) {
 		lV->SetOneHalf(lNextH);
 		lVPFlag = true;
 	} else {
 		lVPFlag = false;
 	}
 
-	if(rV->getOneHalf() == rH) {
+	if(rV->getOneHalf() == rH->getID()) {
 		rV->SetOneHalf(rNextH);
 		rVPFlag = true;
 	} else {
@@ -1192,7 +1192,7 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	}
 	newV->SetOneHalf(orgH1);
 
-	if(v1->getOneHalf() == orgH1) v1->SetOneHalf(newH1);
+	if(v1->getOneHalf() == orgH1->getID()) v1->SetOneHalf(newH1);
 
 	v1->UndefNormal();
 	v2->UndefNormal();
@@ -1252,7 +1252,7 @@ bool fk_Operation::UniteEdge(fk_Vertex *argV)
 		return false;
 	}
 
-	remainH = argV->getOneHalf();
+	remainH = getHData(argV->getOneHalf());
 	remainMateH = getMateHOnH(remainH);
 	delH = remainH->getPrevHalf();
 	delMateH = remainMateH->getNextHalf();
@@ -1297,7 +1297,7 @@ bool fk_Operation::UniteEdge(fk_Vertex *argV)
 	nextH->SetPrevHalf(remainMateH);
 	remainH->SetVertex(v1);
 
-	if(v1->getOneHalf() == delH) v1->SetOneHalf(remainH);
+	if(v1->getOneHalf() == delH->getID()) v1->SetOneHalf(remainH);
 
 	delVID = argV->getID();
 	delEID = delE->getID();

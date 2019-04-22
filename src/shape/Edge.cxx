@@ -94,45 +94,43 @@ fk_Edge::~fk_Edge()
 void fk_Edge::Init(int argID)
 {
 	InitTopology(argID, FK_EDGE_TYPE);
-	leftHalf = nullptr;
-	rightHalf = nullptr;
+	leftHalf = FK_UNDEFINED;
+	rightHalf = FK_UNDEFINED;
 	curv = nullptr;
 	width = -1.0;
 
 	return;
 }
 
-fk_Half * fk_Edge::getLeftHalf(void) const
+int fk_Edge::getLeftHalf(void) const
 {
 	return leftHalf;
 }
 
-fk_Half * fk_Edge::getRightHalf(void) const
+int fk_Edge::getRightHalf(void) const
 {
 	return rightHalf;
 }
 
-fk_Half * fk_Edge::SetLeftHalf(fk_Half *argHf)
+int fk_Edge::SetLeftHalf(fk_Half *argHf)
 {
-	fk_Half *retHf = leftHalf;
-	leftHalf = argHf;
+	int retHf = leftHalf;
+	leftHalf = argHf->getID();
 
 	return retHf;
 }
 
-fk_Half * fk_Edge::SetRightHalf(fk_Half *argHf)
+int fk_Edge::SetRightHalf(fk_Half *argHf)
 {
-	fk_Half *retHf = rightHalf;
-	rightHalf = argHf;
+	int retHf = rightHalf;
+	rightHalf = argHf->getID();
 
 	return retHf;
 }
 
 void fk_Edge::SwapHalf(void)
 {
-	fk_Half		*tmpH;
-
-	tmpH = rightHalf;
+	int tmpH = rightHalf;
 	rightHalf = leftHalf;
 	leftHalf = tmpH;
 	return;
@@ -161,11 +159,11 @@ void fk_Edge::Print(void) const
 	fk_PutError(ss.str());
 	ss.clear();
 	
-	ss << "\tlH = " << leftHalf->getID();
+	ss << "\tlH = " << leftHalf;
 	fk_PutError(ss.str());
 	ss.clear();
 
-	ss << "\trH = " << rightHalf->getID();
+	ss << "\trH = " << rightHalf;
 	fk_PutError(ss.str());
 	ss.clear();
 
@@ -179,8 +177,8 @@ bool fk_Edge::Check(void) const
 	bool			retBool = true;
 	stringstream	ss;
 
-	if(leftHalf != nullptr) {
-		if(leftHalf->getParentEdge() != this) {
+	if(leftHalf != FK_UNDEFINED) {
+		if(leftHalf->getParentEdge() != getID()) {
 			ss << "Edge[" << getID() << "] ... leftH[";
 			ss << leftHalf->getID() << "] ERROR!!";
 			fk_PutError("fk_Edge", "Check", 1, ss.str());

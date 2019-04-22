@@ -95,8 +95,6 @@ namespace FK {
 
 #endif
 
-
-
 	//! ソリッドモデルのループ位相を管理するクラス
 	/*!
 	 *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
@@ -105,7 +103,6 @@ namespace FK {
 	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
 	 *	派生クラスのうち、ID 管理については fk_Topology,
-	 *	個別マテリアル設定については fk_TopologyMaterial,
 	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
 	 *	ループに対して、幾何形状として曲面データを設定することができます。
@@ -114,7 +111,7 @@ namespace FK {
 	 *		fk_TopologyMaterial, fk_Attribute, fk_Surface
 	 */
 
-	class fk_Loop : public fk_TopologyMaterial {
+	class fk_Loop : public fk_Topology {
 
 		friend class	fk_Operation;
 		friend class	fk_DataBase;
@@ -134,13 +131,13 @@ namespace FK {
 
 		//! 接続半稜線取得関数
 		/*!
-		 *	このループを構成する半稜線のうちの1つを取得します。
+		 *	このループを構成する半稜線のうちの1つのIDを取得します。
 		 *	条件を満たす全ての半稜線を得たい場合は、
 		 *	fk_ReferenceL2::getAllHOnL() 関数を用いて下さい。
 		 *
-		 *	\return このループを構成する半稜線を表す fk_Half 型インスタンスのアドレス。
+		 *	\return このループを構成する半稜線を表す ID。
 		 */
-		fk_Half *					getOneHalf(void) const;
+		int		getOneHalf(void) const;
 
 		//! 法線ベクトル取得関数
 		/*!
@@ -244,7 +241,7 @@ namespace FK {
 											fk_Vector * = nullptr);
 #endif
 	private:
-		fk_Half						*oneHalf;
+		int							oneHalf;
 		fk_Vector					norm;
 		bool						normFlag, errorFlag;
 		bool						tesselateFlag, tesselateMode;
@@ -253,10 +250,10 @@ namespace FK {
 		std::vector<int>			tesselateIndex;
 		int							ifsID;
 
-		bool					SetNormal(void);
-		void					ModifyLoop(void);
-		fk_Half *				SetOneHalf(fk_Half *);
-		void					MakeTesselateData(void);
+		bool	SetNormal(void);
+		void	ModifyLoop(void);
+		int		SetOneHalf(fk_Half);
+		void	MakeTesselateData(void);
 	};
 }
 

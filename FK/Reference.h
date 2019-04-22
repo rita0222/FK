@@ -73,7 +73,7 @@
 #define __FK_REFERENCE_HEADER__
 
 #include <FK/Edge.h>
-#include <FK/ParserData.h>
+#include <FK/DataAccess.h>
 
 #include <vector>
 
@@ -141,7 +141,7 @@ namespace FK {
 	 *	\sa fk_ReferenceL2, fk_ReferenceL3, fk_DataAccess, fk_Operation, fk_Modify, fk_Solid
 	 */
 
-	class fk_ReferenceL1 : public fk_ParserData {
+	class fk_ReferenceL1 : public fk_DataAccess {
 	public:
 
 		//! \name 頂点に関連する関数
