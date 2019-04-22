@@ -128,15 +128,15 @@ namespace FK {
 
 		//! 接続半稜線取得関数
 		/*!
-		 *	この頂点を始点とする半稜線のうちの1つを取得します。
+		 *	この頂点を始点とする半稜線のうちの1つのIDを取得します。
 		 *	条件を満たす全ての半稜線を得たい場合は、
 		 *	fk_ReferenceL2::getAllHOnV() 関数を用いて下さい。
 		 *
 		 *	\return
-		 *		この頂点を始点とする半稜線を表す fk_Half 型インスタンスのアドレス。
-		 *		対象となる半稜線が存在しない場合は nullptr を返します。
+		 *		この頂点を始点とする半稜線を表す ID。
+		 *		対象となる半稜線が存在しない場合は FK_UNDEFINED を返します。
 		 */
-		fk_Half *	getOneHalf(void) const;
+		int		getOneHalf(void) const;
 
 		//! 法線ベクトル取得関数
 		/*!
@@ -180,10 +180,10 @@ namespace FK {
 
 	private:
 		fk_Vector	position;
-		fk_Vector	*normal;
+		fk_Vector	normal;
 		bool		normCalcFlag;
 		bool		normFailFlag;
-		fk_Half 	*oneHalf;
+		int 		oneHalf;
 		double		size;
 
 		void		CalcNormal(void);

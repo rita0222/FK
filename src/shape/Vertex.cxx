@@ -92,15 +92,13 @@ fk_Vertex::fk_Vertex(int argID)
 
 fk_Vertex::~fk_Vertex()
 {
-	delete normal;
 	return;
 }
 
 void fk_Vertex::Init(int argID)
 {
 	InitTopology(argID, FK_VERTEX_TYPE);
-	oneHalf = nullptr;
-	normal = nullptr;
+	oneHalf = FK_UNDEFINED;
 	UndefNormal();
 	size = -1.0;
 
@@ -124,7 +122,7 @@ void fk_Vertex::SetPosition(fk_Vector argPos)
 	return;
 }
 
-fk_Half * fk_Vertex::getOneHalf(void) const
+int fk_Vertex::getOneHalf(void) const
 {
 	return oneHalf;
 }
