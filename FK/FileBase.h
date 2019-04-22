@@ -1,29 +1,6 @@
-﻿#ifndef __FK_FILEBASE_HEADER__
-#define __FK_FILEBASE_HEADER__
-
-namespace FK {
-	//! 独自ファイル形式のフォーマットを表す列挙型
-	enum fk_DataFormatMode {
-		FK_TEXT_FILE,		//!< テキスト形式
-		FK_BINARY_FILE,		//!< バイナリ形式
-		FK_ERROR_FILE		//!< 形式エラー
-	};
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-	static const int FK_FILE_MASK = 89567243;
-	static const int FK_FILE_CURRENT_MAJOR_VERSION = 2;
-	static const int FK_FILE_CURRENT_MINOR_VERSION = 0;
-	static const int FK_FILE_CURRENT_SUBMINOR_VERSION = 1;
-
-#endif
-}
-
-#endif /* !__FK_FILEBASE_HEADER__ */
-
-/****************************************************************************
+﻿/****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -59,7 +36,7 @@ namespace FK {
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -92,3 +69,26 @@ namespace FK {
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
+#ifndef __FK_FILEBASE_HEADER__
+#define __FK_FILEBASE_HEADER__
+
+namespace FK {
+	//! 独自ファイル形式のフォーマットを表す列挙型
+	enum fk_DataFormatMode {
+		FK_TEXT_FILE,		//!< テキスト形式
+		FK_BINARY_FILE,		//!< バイナリ形式
+		FK_ERROR_FILE		//!< 形式エラー
+	};
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+	static const int FK_FILE_MASK = 89567243;
+	static const int FK_FILE_CURRENT_MAJOR_VERSION = 2;
+	static const int FK_FILE_CURRENT_MINOR_VERSION = 0;
+	static const int FK_FILE_CURRENT_SUBMINOR_VERSION = 1;
+
+#endif
+}
+
+#endif /* !__FK_FILEBASE_HEADER__ */
