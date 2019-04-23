@@ -81,7 +81,8 @@ using namespace FK;
 
 fk_Half::fk_Half(int argID)
 {
-	Init(argID);
+	DB = nullptr;
+	SetID(argID);
 }
 
 fk_Half::~fk_Half()
@@ -99,47 +100,48 @@ fk_Half::fk_Half(const fk_Half &argHf)
 	parentLoop = argHf.parentLoop;
 }
 
-void fk_Half::Init(int argID)
+void fk_Half::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argID, FK_HALF_TYPE);
-	vertex = nullptr;
-	parentEdge = nullptr;
-	nextHalf = nullptr;
-	prevHalf = nullptr;
-	parentLoop = nullptr;
+	InitTopology(argDB, argID, FK_HALF_TYPE);
+	vertex = FK_UNDEFINED;
+	parentEdge = FK_UNDEFINED;
+	nextHalf = FK_UNDEFINED;
+	prevHalf = FK_UNDEFINED;
+	parentLoop = FK_UNDEFINED;
 
 	return;
 }
 
-fk_Vertex *fk_Half::getVertex(void) const
+int fk_Half::getVertex(void) const
 {
 	return vertex;
 }
 
-fk_Half *fk_Half::getNextHalf(void) const
+int fk_Half::getNextHalf(void) const
 {
 	return nextHalf;
 }
 
-fk_Half *fk_Half::getPrevHalf(void) const
+int fk_Half::getPrevHalf(void) const
 {
 	return prevHalf;
 }
 
-fk_Edge *fk_Half::getParentEdge(void) const
+int fk_Half::getParentEdge(void) const
 {
 	return parentEdge;
 }
 
-fk_Loop *fk_Half::getParentLoop(void) const
+int fk_Half::getParentLoop(void) const
 {
 	return parentLoop;
 }
 
 bool fk_Half::isLeft(void) const
 {
-	if(parentEdge != nullptr) {
-		if(parentEdge->getLeftHalf() == this) {
+	if(DB == nullptr) return false;
+	if(parentEdge != FK_UNDEFINED) {
+		if(DB->GetEData(parentEdge)->getLeftHalf() == getID()) {
 			return true;
 		}
 	}
@@ -149,8 +151,9 @@ bool fk_Half::isLeft(void) const
 
 bool fk_Half::isRight(void) const
 {
-	if(parentEdge != nullptr) {
-		if(parentEdge->getRightHalf() == this) {
+	if(DB == nullptr) return false;
+	if(parentEdge != FK_UNDEFINED) {
+		if(DB->GetEData(parentEdge)->getRightHalf() == getID()) {
 			return true;
 		}
 	}
@@ -158,42 +161,37 @@ bool fk_Half::isRight(void) const
 	return false;
 }
 
-fk_Vertex *fk_Half::SetVertex(fk_Vertex *argVx)
+int fk_Half::SetVertex(int argVx)
 {
-	fk_Vertex *retVx = vertex;
-
+	int retVx = vertex;
 	vertex = argVx;
 	return retVx;
 }
 
-fk_Half *fk_Half::SetNextHalf(fk_Half *argHf)
+int fk_Half::SetNextHalf(int argHf)
 {
-	fk_Half *retHf = nextHalf;
-
+	int retHf = nextHalf;
 	nextHalf = argHf;
 	return retHf;
 }
 
-fk_Half *fk_Half::SetPrevHalf(fk_Half *argHf)
+int fk_Half::SetPrevHalf(int argHf)
 {
-	fk_Half *retHf = prevHalf;
-
+	int retHf = prevHalf;
 	prevHalf = argHf;
 	return retHf;
 }
 
-fk_Edge *fk_Half::SetParentEdge(fk_Edge *argEd)
+int fk_Half::SetParentEdge(int argEd)
 {
-	fk_Edge *retEd = parentEdge;
-
+	int retEd = parentEdge;
 	parentEdge = argEd;
 	return retEd;
 }
 
-fk_Loop *fk_Half::SetParentLoop(fk_Loop *argLp)
+int fk_Half::SetParentLoop(int argLp)
 {
-	fk_Loop *retLp = parentLoop;
-
+	int retLp = parentLoop;
 	parentLoop = argLp;
 	return retLp;
 }
@@ -207,34 +205,34 @@ void fk_Half::Print(void) const
 	fk_PutError(ss.str());
 	ss.clear();
 	
-	ss << "\tv = " << vertex->getID();
+	ss << "\tv = " << vertex;
 	fk_PutError(ss.str());
 	ss.clear();
 
-	if(nextHalf == nullptr) {
-		ss << "\tnH = nullptr";
+	if(nextHalf == FK_UNDEFINED) {
+		ss << "\tnH = UNDEF";
 	} else {
-		ss << "\tnH = " << nextHalf->getID();
+		ss << "\tnH = " << nextHalf;
 	}
 	fk_PutError(ss.str());
 	ss.clear();
 
-	if(prevHalf == nullptr) {
-		ss << "\tpH = nullptr";
+	if(prevHalf == FK_UNDEFINED) {
+		ss << "\tpH = UNDEF";
 	} else {
-		ss << "\tpH = " << prevHalf->getID();
+		ss << "\tpH = " << prevHalf;
 	}
 	fk_PutError(ss.str());
 	ss.clear();
 
-	ss << "\tpE = " << parentEdge->getID();
+	ss << "\tpE = " << parentEdge;
 	fk_PutError(ss.str());
 	ss.clear();
 
-	if(parentLoop == nullptr) {
-		ss << "\tpL = nullptr";
+	if(parentLoop == FK_UNDEFINED) {
+		ss << "\tpL = UNDEF";
 	} else {
-		ss << "\tpL = " << parentLoop->getID();
+		ss << "\tpL = " << parentLoop;
 	}
 	fk_PutError(ss.str());
 	ss.clear();
@@ -249,19 +247,21 @@ bool fk_Half::Check(void) const
 	bool			retBool = true;
 	stringstream	ss;
 	
-	if(nextHalf != nullptr) {
-		if(nextHalf->getPrevHalf() != this) {
+	if(DB == nullptr) return false;
+
+	if(nextHalf != FK_UNDEFINED) {
+		if(DB->GetHData(nextHalf)->getPrevHalf() != getID()) {
 			ss << "Half[" << getID() << "] ... next[";
-			ss << nextHalf->getID() << "] ERROR!!";
+			ss << nextHalf << "] ERROR!!";
 			fk_PutError("fk_Half", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
 
-	if(prevHalf != nullptr) {
-		if(prevHalf->getNextHalf() != this) {
+	if(prevHalf != FK_UNDEFINED) {
+		if(DB->GetHData(prevHalf)->getNextHalf() != getID()) {
 			ss << "Half[" << getID() << "] ... prev[";
-			ss << prevHalf->getID() << "] ERROR!!";
+			ss << prevHalf << "] ERROR!!";
 			fk_PutError("fk_Half", "Check", 2, ss.str());
 			retBool = false;
 		}
@@ -272,21 +272,22 @@ bool fk_Half::Check(void) const
 
 bool fk_Half::Compare(fk_Half *argH) const
 {
+	if(DB == nullptr) return false;
 	if(argH == nullptr) return false;
 	if(argH == this) return true;
 	if(getID() != argH->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;
 
-	if(vertex->getID() != argH->vertex->getID()) return false;
-	if(nextHalf->getID() != argH->nextHalf->getID()) return false;
-	if(prevHalf->getID() != argH->prevHalf->getID()) return false;
-	if(parentEdge->getID() != argH->parentEdge->getID()) return false;
+	if(vertex != argH->vertex) return false;
+	if(nextHalf != argH->nextHalf) return false;
+	if(prevHalf != argH->prevHalf) return false;
+	if(parentEdge != argH->parentEdge) return false;
 
-	if(parentLoop == nullptr && argH->parentLoop == nullptr) {
+	if(parentLoop == FK_UNDEFINED && argH->parentLoop == FK_UNDEFINED) {
 		return true;
-	} else if(parentLoop == nullptr || argH->parentLoop == nullptr) {
+	} else if(parentLoop == FK_UNDEFINED || argH->parentLoop == FK_UNDEFINED) {
 		return false;
 	}
-	if(parentLoop->getID() == argH->parentLoop->getID()) return true;
+	if(parentLoop == argH->parentLoop) return true;
 	return false;
 }

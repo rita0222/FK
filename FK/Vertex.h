@@ -179,7 +179,7 @@ namespace FK {
 		double		size;
 
 		void		CalcNormal(void);
-		void		SetOneHalf(fk_Half *);
+		void		SetOneHalf(int);
 		void		UndefNormal(void);
 		void		SetPosition(fk_Vector);
 		void		SetNormal(const fk_Vector &);

@@ -249,7 +249,7 @@ namespace FK {
 
 		bool	SetNormal(void);
 		void	ModifyLoop(void);
-		int		SetOneHalf(fk_Half);
+		int		SetOneHalf(int);
 		void	MakeTesselateData(void);
 	};
 }

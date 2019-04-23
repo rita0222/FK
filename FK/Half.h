@@ -181,11 +181,11 @@ namespace FK {
 		int			parentEdge;
 		int			parentLoop;
 
-		int			SetVertex(fk_Vertex *);
-		int			SetNextHalf(fk_Half *);
-		int			SetPrevHalf(fk_Half *);
-		int			SetParentEdge(fk_Edge *);
-		int			SetParentLoop(fk_Loop *);
+		int			SetVertex(int);
+		int			SetNextHalf(int);
+		int			SetPrevHalf(int);
+		int			SetParentEdge(int);
+		int			SetParentLoop(int);
 	};
 }
 #endif // !__FK_HALF_HEADER__

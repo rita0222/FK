@@ -197,8 +197,8 @@ namespace FK {
 
 		double		width;
 
-		int  	SetLeftHalf(fk_Half *);
-		int		SetRightHalf(fk_Half *);
+		int  	SetLeftHalf(int);
+		int		SetRightHalf(int);
 
 		void		SwapHalf(void);
 	};

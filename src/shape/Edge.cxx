@@ -112,19 +112,17 @@ int fk_Edge::getRightHalf(void) const
 	return rightHalf;
 }
 
-int fk_Edge::SetLeftHalf(fk_Half *argHf)
+int fk_Edge::SetLeftHalf(int argHf)
 {
 	int retHf = leftHalf;
-	leftHalf = argHf->getID();
-
+	leftHalf = argHf;
 	return retHf;
 }
 
-int fk_Edge::SetRightHalf(fk_Half *argHf)
+int fk_Edge::SetRightHalf(int argHf)
 {
 	int retHf = rightHalf;
-	rightHalf = argHf->getID();
-
+	rightHalf = argHf;
 	return retHf;
 }
 
