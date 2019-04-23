@@ -119,16 +119,9 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Edge(int);
+		fk_Edge(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Edge();
-
-		//! 初期化関数
-		/*!
-		 *	この関数は、稜線位相の初期化を行います。
-		 *	通常、ユーザがこの関数を利用することはありません。
-		 */
-		void		Init(int);
 
 		//! 左側半稜線取得関数
 		/*!
@@ -190,6 +183,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
+		void		Init(fk_DataBase *, int);
 		void		Print(void) const;
 		bool		Check(void) const;
 		bool		Compare(fk_Edge *) const;

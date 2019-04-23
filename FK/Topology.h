@@ -102,7 +102,7 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Topology(fk_DataBase *);
+		fk_Topology(void);
 		//! デストラクタ
 		virtual ~fk_Topology();
 
@@ -129,18 +129,17 @@ namespace FK {
 		int					ID;
 		bool				ariveFlg;
 		fk_TopologyType		type;
-		const fk_DataBase	*DB;
 		void				SetType(fk_TopologyType);
 	
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		fk_DataBase			*DB;
 		void				SetID(int);
-		void				InitTopology(int, fk_TopologyType);
+		void				InitTopology(fk_DataBase *, int, fk_TopologyType);
 
 
 		void				DeleteElem(void);
-		void				MakeElem(int);
 		bool				CloneElem(fk_Topology *);
 #endif
 	};

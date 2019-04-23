@@ -81,8 +81,8 @@ using namespace FK;
 
 fk_Edge::fk_Edge(int argID)
 {
-	Init(argID);
-
+	DB = nullptr;
+	SetID(argID);
 	return;
 }
 
@@ -91,9 +91,9 @@ fk_Edge::~fk_Edge()
 	return;
 }
 
-void fk_Edge::Init(int argID)
+void fk_Edge::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argID, FK_EDGE_TYPE);
+	InitTopology(argDB, argID, FK_EDGE_TYPE);
 	leftHalf = FK_UNDEFINED;
 	rightHalf = FK_UNDEFINED;
 	curv = nullptr;
@@ -177,19 +177,21 @@ bool fk_Edge::Check(void) const
 	bool			retBool = true;
 	stringstream	ss;
 
+	if(DB == nullptr) return false;
+
 	if(leftHalf != FK_UNDEFINED) {
-		if(leftHalf->getParentEdge() != getID()) {
+		if(DB->GetHData(leftHalf)->getParentEdge() != getID()) {
 			ss << "Edge[" << getID() << "] ... leftH[";
-			ss << leftHalf->getID() << "] ERROR!!";
+			ss << leftHalf << "] ERROR!!";
 			fk_PutError("fk_Edge", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
 
-	if(rightHalf != nullptr) {
-		if(rightHalf->getParentEdge() != this) {
+	if(rightHalf != FK_UNDEFINED) {
+		if(DB->GetHData(rightHalf)->getParentEdge() != getID()) {
 			ss << "Edge[" << getID() << "] ... rightH[";
-			ss << rightHalf->getID() << "] ERROR!!";
+			ss << rightHalf << "] ERROR!!";
 			fk_PutError("fk_Edge", "Check", 2, ss.str());
 			retBool = false;
 		}
@@ -200,13 +202,15 @@ bool fk_Edge::Check(void) const
 
 bool fk_Edge::Compare(fk_Edge *argE) const
 {
+	if(DB == nullptr) return false;
 	if(argE == nullptr) return false;
 	if(argE == this) return true;
+	if(DB != argE->DB) return false;
 	if(getID() != argE->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;
 
-	if(leftHalf->getID() != argE->leftHalf->getID()) return false;
-	if(rightHalf->getID() != argE->rightHalf->getID()) return false;
+	if(leftHalf != argE->leftHalf) return false;
+	if(rightHalf != argE->rightHalf) return false;
 	return true;
 }
 

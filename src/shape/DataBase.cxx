@@ -162,22 +162,22 @@ void fk_DataBase::ResizeData(int argVNum, int argHNum,
 
 	orgSize = vSet.size();
 	vSet.resize(_st(argVNum));
-	for(i = orgSize; i < _st(argVNum); ++i) vSet[i].Init(int(i+1));
+	for(i = orgSize; i < _st(argVNum); ++i) vSet[i].Init(this, int(i+1));
 	for(i = _st(argVNum); i < orgSize; ++i) vSet.pop_back();
 
 	orgSize = hSet.size();
 	hSet.resize(_st(argHNum));
-	for(i = orgSize; i < _st(argHNum); ++i) hSet[i].Init(int(i+1));
+	for(i = orgSize; i < _st(argHNum); ++i) hSet[i].Init(this, int(i+1));
 	for(i = _st(argHNum); i < orgSize; ++i) hSet.pop_back();
 
 	orgSize = eSet.size();
 	eSet.resize(_st(argENum));
-	for(i = orgSize; i < _st(argENum); ++i) eSet[i].Init(int(i+1));
+	for(i = orgSize; i < _st(argENum); ++i) eSet[i].Init(this, int(i+1));
 	for(i = _st(argENum); i < orgSize; ++i) eSet.pop_back();
 		
 	orgSize = lSet.size();
 	lSet.resize(_st(argLNum));
-	for(i = orgSize; i < _st(argLNum); ++i) lSet[i].Init(int(i+1));
+	for(i = orgSize; i < _st(argLNum); ++i) lSet[i].Init(this, int(i+1));
 	for(i = _st(argLNum); i < orgSize; ++i) lSet.pop_back();
 
 	return;
@@ -360,9 +360,9 @@ fk_Vertex * fk_DataBase::GetNewVertex(void)
 	int newID = vAdmin.CreateID();
 	if(int(vSet.size())== newID - 1) {
 		vSet.resize(vSet.size()+1);
-		vSet.back().Init(newID);
+		vSet.back().Init(this, newID);
 	} else {
-		vSet[_st(newID-1)].Init(newID);
+		vSet[_st(newID-1)].Init(this, newID);
 	}
 
 	return &vSet[_st(newID-1)];
@@ -376,9 +376,9 @@ fk_Vertex * fk_DataBase::GetNewVertex(int argID)
 
 	if(int(vSet.size()) == argID - 1) {
 		vSet.resize(vSet.size()+1);
-		vSet.back().Init(argID);
+		vSet.back().Init(this, argID);
 	} else {
-		vSet[_st(argID-1)].Init(argID);
+		vSet[_st(argID-1)].Init(this, argID);
 	}
 
 	return &vSet[_st(argID-1)];
@@ -390,9 +390,9 @@ fk_Half * fk_DataBase::GetNewHalf(void)
 
 	if(int(hSet.size()) == newID - 1) {
 		hSet.resize(hSet.size()+1);
-		hSet.back().Init(newID);
+		hSet.back().Init(this, newID);
 	} else {
-		hSet[_st(newID-1)].Init(newID);
+		hSet[_st(newID-1)].Init(this, newID);
 	}
 
 	return &hSet[_st(newID-1)];
@@ -406,9 +406,9 @@ fk_Half * fk_DataBase::GetNewHalf(int argID)
 
 	if(int(hSet.size()) == argID - 1) {
 		hSet.resize(hSet.size()+1);
-		hSet.back().Init(argID);
+		hSet.back().Init(this, argID);
 	} else {
-		hSet[_st(argID-1)].Init(argID);
+		hSet[_st(argID-1)].Init(this, argID);
 	}
 
 	return &hSet[_st(argID-1)];
@@ -420,9 +420,9 @@ fk_Edge * fk_DataBase::GetNewEdge(void)
 
 	if(int(eSet.size()) == newID - 1) {
 		eSet.resize(eSet.size()+1);
-		eSet.back().MakeElem(newID);
+		eSet.back().Init(this, newID);
 	} else {
-		eSet[_st(newID-1)].MakeElem(newID);
+		eSet[_st(newID-1)].Init(this, newID);
 	}
 
 	return &eSet[_st(newID-1)];
@@ -436,9 +436,9 @@ fk_Edge * fk_DataBase::GetNewEdge(int argID)
 
 	if(int(eSet.size()) == argID - 1) {
 		eSet.resize(eSet.size()+1);
-		eSet.back().MakeElem(argID);
+		eSet.back().Init(this, argID);
 	} else {
-		eSet[_st(argID-1)].MakeElem(argID);
+		eSet[_st(argID-1)].Init(this, argID);
 	}
 
 	return &eSet[_st(argID-1)];
@@ -449,9 +449,9 @@ fk_Loop * fk_DataBase::GetNewLoop(void)
 	int newID = lAdmin.CreateID();
 	if(int(lSet.size()) == newID - 1) {
 		lSet.resize(lSet.size()+1);
-		lSet.back().MakeElem(newID);
+		lSet.back().Init(this, newID);
 	} else {
-		lSet[_st(newID-1)].MakeElem(newID);
+		lSet[_st(newID-1)].Init(this, newID);
 	}
 
 	return &lSet[_st(newID-1)];
@@ -465,9 +465,9 @@ fk_Loop * fk_DataBase::GetNewLoop(int argID)
 
 	if(int(lSet.size()) == argID - 1) {
 		lSet.resize(lSet.size()+1);
-		lSet.back().MakeElem(argID);
+		lSet.back().Init(this, argID);
 	} else {
-		lSet[_st(argID-1)].MakeElem(argID);
+		lSet[_st(argID-1)].Init(this, argID);
 	}
 
 	return &lSet[_st(argID-1)];

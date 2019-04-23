@@ -98,8 +98,6 @@ namespace FK {
 
 		friend class		fk_Operation;
 		friend class		fk_DataBase;
-		friend class		fk_FileInput;
-		friend class		fk_FileOutput;
 		friend class		fk_IFSetHandle;
 
 	public:
@@ -107,13 +105,6 @@ namespace FK {
 		fk_Vertex(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Vertex();
-
-		//! 初期化関数
-		/*!
-		 *	この関数は、頂点位相の初期化を行います。
-		 *	通常、ユーザがこの関数を利用することはありません。
-		 */
-		void		Init(int);
 
 		//! 位置ベクトル取得関数
 		/*!
@@ -166,6 +157,8 @@ namespace FK {
 		void		setDrawSize(double size);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+
+		void		Init(fk_DataBase *, int);
 
 		fk_Vector *	GetPositionP(void);
 		fk_Vector *	GetNormalP(void);

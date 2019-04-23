@@ -102,19 +102,12 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Half(int);
+		fk_Half(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Half();
 
 		// コピーコンストラクタ
 		fk_Half(const fk_Half &);
-
-		//! 初期化関数
-		/*!
-		 *	この関数は、半稜線位相の初期化を行います。
-		 *	通常、ユーザがこの関数を利用することはありません。
-		 */
-		void		Init(int);
 
 		//! 始点頂点位相取得関数
 		/*!
@@ -175,6 +168,7 @@ namespace FK {
 		bool		isRight(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		void		Init(fk_DataBase *, int);
 		void		Print(void) const;
 		bool		Check(void) const;
 		bool		Compare(fk_Half *) const;

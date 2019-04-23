@@ -121,13 +121,9 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Loop(int);
+		fk_Loop(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Loop();
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		void						Init(int);
-#endif
 
 		//! 接続半稜線取得関数
 		/*!
@@ -227,6 +223,7 @@ namespace FK {
 		fk_Surface *				getSurfGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		void						Init(fk_DataBase *, int);
 		std::vector<fk_Vector> *	GetTesselatePos(void);
 		std::vector<fk_Vertex *> *	GetTesselateVertex(void);
 		std::vector<int> *			GetTesselateIndex(void);

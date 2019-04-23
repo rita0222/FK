@@ -95,9 +95,9 @@ fk_Vertex::~fk_Vertex()
 	return;
 }
 
-void fk_Vertex::Init(int argID)
+void fk_Vertex::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argID, FK_VERTEX_TYPE);
+	InitTopology(argDB, argID, FK_VERTEX_TYPE);
 	oneHalf = FK_UNDEFINED;
 	UndefNormal();
 	size = -1.0;
