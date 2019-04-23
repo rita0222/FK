@@ -112,36 +112,41 @@ void fk_Half::Init(fk_DataBase *argDB, int argID)
 	return;
 }
 
-int fk_Half::getVertex(void) const
+fk_Vertex * fk_Half::getVertex(void) const
 {
-	return vertex;
+	if(DB == nullptr) return nullptr;
+	return DB->GetVData(vertex);
 }
 
-int fk_Half::getNextHalf(void) const
+fk_Half * fk_Half::getNextHalf(void) const
 {
-	return nextHalf;
+	if(DB == nullptr) return nullptr;
+	return DB->GetHData(nextHalf);
 }
 
-int fk_Half::getPrevHalf(void) const
+fk_Half * fk_Half::getPrevHalf(void) const
 {
-	return prevHalf;
+	if(DB == nullptr) return nullptr;
+	return DB->GetHData(prevHalf);
 }
 
-int fk_Half::getParentEdge(void) const
+fk_Edge * fk_Half::getParentEdge(void) const
 {
-	return parentEdge;
+	if(DB == nullptr) return nullptr;
+	return DB->GetEData(parentEdge);
 }
 
-int fk_Half::getParentLoop(void) const
+fk_Loop * fk_Half::getParentLoop(void) const
 {
-	return parentLoop;
+	if(DB == nullptr) return nullptr;
+	return DB->GetLData(parentLoop);
 }
 
 bool fk_Half::isLeft(void) const
 {
 	if(DB == nullptr) return false;
 	if(parentEdge != FK_UNDEFINED) {
-		if(DB->GetEData(parentEdge)->getLeftHalf() == getID()) {
+		if(DB->GetEData(parentEdge)->getLeftHalf() == this) {
 			return true;
 		}
 	}
@@ -153,7 +158,7 @@ bool fk_Half::isRight(void) const
 {
 	if(DB == nullptr) return false;
 	if(parentEdge != FK_UNDEFINED) {
-		if(DB->GetEData(parentEdge)->getRightHalf() == getID()) {
+		if(DB->GetEData(parentEdge)->getRightHalf() == this) {
 			return true;
 		}
 	}
@@ -250,7 +255,7 @@ bool fk_Half::Check(void) const
 	if(DB == nullptr) return false;
 
 	if(nextHalf != FK_UNDEFINED) {
-		if(DB->GetHData(nextHalf)->getPrevHalf() != getID()) {
+		if(DB->GetHData(nextHalf)->getPrevHalf() != this) {
 			ss << "Half[" << getID() << "] ... next[";
 			ss << nextHalf << "] ERROR!!";
 			fk_PutError("fk_Half", "Check", 1, ss.str());
@@ -259,7 +264,7 @@ bool fk_Half::Check(void) const
 	}
 
 	if(prevHalf != FK_UNDEFINED) {
-		if(DB->GetHData(prevHalf)->getNextHalf() != getID()) {
+		if(DB->GetHData(prevHalf)->getNextHalf() != this) {
 			ss << "Half[" << getID() << "] ... prev[";
 			ss << prevHalf << "] ERROR!!";
 			fk_PutError("fk_Half", "Check", 2, ss.str());

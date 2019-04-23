@@ -102,14 +102,16 @@ void fk_Edge::Init(fk_DataBase *argDB, int argID)
 	return;
 }
 
-int fk_Edge::getLeftHalf(void) const
+fk_Half * fk_Edge::getLeftHalf(void) const
 {
-	return leftHalf;
+	if(DB == nullptr) return nullptr;
+	return DB->GetHData(leftHalf);
 }
 
-int fk_Edge::getRightHalf(void) const
+fk_Half * fk_Edge::getRightHalf(void) const
 {
-	return rightHalf;
+	if(DB == nullptr) return nullptr;
+	return DB->GetHData(rightHalf);
 }
 
 int fk_Edge::SetLeftHalf(int argHf)
@@ -178,7 +180,7 @@ bool fk_Edge::Check(void) const
 	if(DB == nullptr) return false;
 
 	if(leftHalf != FK_UNDEFINED) {
-		if(DB->GetHData(leftHalf)->getParentEdge() != getID()) {
+		if(DB->GetHData(leftHalf)->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... leftH[";
 			ss << leftHalf << "] ERROR!!";
 			fk_PutError("fk_Edge", "Check", 1, ss.str());
@@ -187,7 +189,7 @@ bool fk_Edge::Check(void) const
 	}
 
 	if(rightHalf != FK_UNDEFINED) {
-		if(DB->GetHData(rightHalf)->getParentEdge() != getID()) {
+		if(DB->GetHData(rightHalf)->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... rightH[";
 			ss << rightHalf << "] ERROR!!";
 			fk_PutError("fk_Edge", "Check", 2, ss.str());

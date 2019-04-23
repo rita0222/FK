@@ -127,13 +127,13 @@ namespace FK {
 
 		//! 接続半稜線取得関数
 		/*!
-		 *	このループを構成する半稜線のうちの1つのIDを取得します。
+		 *	このループを構成する半稜線のうちの1つを取得します。
 		 *	条件を満たす全ての半稜線を得たい場合は、
 		 *	fk_ReferenceL2::getAllHOnL() 関数を用いて下さい。
 		 *
-		 *	\return このループを構成する半稜線を表す ID。
+		 *	\return このループを構成する半稜線を表すインスタンス
 		 */
-		int		getOneHalf(void) const;
+		fk_Half * getOneHalf(void) const;
 
 		//! 法線ベクトル取得関数
 		/*!
@@ -144,7 +144,7 @@ namespace FK {
 		 *
 		 *	\return 法線ベクトルのアドレス。算出できなかった場合は nullptr を返します。
 		 */
-		fk_Vector *					getNormal(void);
+		fk_Vector * getNormal(void);
 
 		//! 頂点数取得関数
 		/*!
@@ -154,7 +154,7 @@ namespace FK {
 		 *
 		 *	\sa fk_ReferenceL2::getVNumOnL()
 		 */
-		int							getVNum(void) const;
+		int getVNum(void) const;
 
 		//! テセレーション設定関数
 		/*!
@@ -174,7 +174,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Operation::setTesselateMode()
 		 */
-		void						setTesselateMode(bool mode);
+		void setTesselateMode(bool mode);
 
 		//! テセレーション設定取得関数
 		/*!
@@ -185,7 +185,7 @@ namespace FK {
 		 *
 		 *	\sa isTesselated(), fk_Operation::getTesselateMode()
 		 */
-		bool						getTesselateMode(void);
+		bool getTesselateMode(void);
 
 		//! テセレーション状態参照関数
 		/*!
@@ -200,7 +200,7 @@ namespace FK {
 		 *
 		 *	\sa getTesselateMode()
 		 */
-		bool						isTesselated(void);
+		bool isTesselated(void);
 
 		//! 幾何曲面形状設定関数
 		/*!
@@ -210,7 +210,7 @@ namespace FK {
 		 *
 		 *	\param[in] surface	幾何曲面インスタンスのアドレス
 		 */
-		void						setSurfGeometry(fk_Surface *surface);
+		void setSurfGeometry(fk_Surface *surface);
 
 		//! 幾何曲面形状取得関数
 		/*!
@@ -220,7 +220,7 @@ namespace FK {
 		 *		自由曲面インスタンスのアドレス。
 		 *		設定されていなかった場合は nullptr を返します。
 		 */
-		fk_Surface *				getSurfGeometry(void);
+		fk_Surface * getSurfGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void						Init(fk_DataBase *, int);

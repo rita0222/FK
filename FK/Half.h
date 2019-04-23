@@ -111,45 +111,45 @@ namespace FK {
 
 		//! 始点頂点位相取得関数
 		/*!
-		 *	この半稜線が始点としている頂点の ID を取得します。
+		 *	この半稜線が始点としている頂点を取得します。
 		 *
-		 *	\return 始点頂点位相 ID
+		 *	\return 始点頂点位相インスタンス
 		 */
-		int		getVertex(void) const;
+		fk_Vertex * getVertex(void) const;
 
 		//! 後半稜線位相取得関数
 		/*!
-		 *	半稜線の接続関係において、この半稜線の後にあたる半稜線 ID を取得します。
+		 *	半稜線の接続関係において、この半稜線の後にあたる半稜線を取得します。
 		 *
-		 *	\return 後の半稜線位相を表す ID
+		 *	\return 後の半稜線位相を表すインスタンス
 		 */
-		int		getNextHalf(void) const;
+		fk_Half * getNextHalf(void) const;
 
 		//! 前半稜線位相取得関数
 		/*!
-		 *	半稜線の接続関係において、この半稜線の前にあたる半稜線 ID を取得します。
+		 *	半稜線の接続関係において、この半稜線の前にあたる半稜線を取得します。
 		 *
-		 *	\return 前の半稜線位相を表す ID
+		 *	\return 前の半稜線位相を表すインスタンス
 		 */
-		int		getPrevHalf(void) const;
+		fk_Half * getPrevHalf(void) const;
 
 		//! 稜線位相取得関数
 		/*!
-		 *	この半稜線が属している稜線位相 ID を取得します。
+		 *	この半稜線が属している稜線を取得します。
 		 *
-		 *	\return 稜線位相を表す ID
+		 *	\return 稜線位相を表すインスタンス
 		 */
-		int		getParentEdge(void) const;
+		fk_Edge * getParentEdge(void) const;
 
 		//! ループ位相取得関数
 		/*!
-		 *	この半稜線が属しているループ位相 ID を取得します。
+		 *	この半稜線が属しているループを取得します。
 		 *
 		 *	\return
-		 *		ループ位相を表す ID。
-		 *		半稜線がループに属していない場合は FK_UNDEFINED を返します。
+		 *		ループ位相を表すインスタンス。
+		 *		半稜線がループに属していない場合は nullptr を返します。
 		 */
-		int		getParentLoop(void) const;
+		fk_Loop * getParentLoop(void) const;
 
 		//! 左側判定関数
 		/*!

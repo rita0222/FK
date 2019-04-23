@@ -149,7 +149,7 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 		if(nullFlg == true &&
 		   loopH->getParentLoop() != nullptr) {
 			for(i = 0; i < halfStack.size(); i++) {
-				halfStack[i]->SetParentLoop(loopStack[i]);
+				halfStack[i]->SetParentLoop(loopStack[i]->getID());
 			}
 			DeleteLoopObj(newL);
 			fk_PutError("fk_Operation", "SetLoop", 2,
@@ -159,7 +159,7 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 
 		if(mateH->getParentLoop() == newL) {
 			for(i = 0; i < halfStack.size(); i++) {
-				halfStack[i]->SetParentLoop(loopStack[i]);
+				halfStack[i]->SetParentLoop(loopStack[i]->getID());
 			}
 			if(nullFlg == true) {
 				DeleteLoopObj(newL);
@@ -168,12 +168,12 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 		}
 
 		loopStack.push_back(loopH->getParentLoop());
-		loopH->SetParentLoop(newL);
+		loopH->SetParentLoop(newL->getID());
 		halfStack.push_back(loopH);
 		nextH = loopH->getNextHalf();
 		if(nextH->getPrevHalf() != loopH) {
 			for(i = 0; i < halfStack.size(); i++) {
-				halfStack[i]->SetParentLoop(loopStack[i]);
+				halfStack[i]->SetParentLoop(loopStack[i]->getID());
 			}
 			if(nullFlg == true) {
 				DeleteLoopObj(newL);
@@ -185,9 +185,9 @@ fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 		loopH = nextH;
 	}
 
-	argH->SetParentLoop(newL);
+	argH->SetParentLoop(newL->getID());
 
-	newL->SetOneHalf(argH);
+	newL->SetOneHalf(argH->getID());
 	newL->ModifyLoop();
 
 	return newL;
@@ -236,7 +236,7 @@ bool fk_Operation::DeleteVertex(fk_Vertex *argV)
 
 	if(checkDB() == false) return false;
 	if(argV == nullptr) return false;
-	if(argV->getOneHalf() != FK_UNDEFINED) {
+	if(argV->getOneHalf() != nullptr) {
 		fk_PutError("fk_Operation", "DeleteVertex", 1,
 					"Vertex Connection Error.");
 		return false;
@@ -331,7 +331,7 @@ fk_Edge * fk_Operation::MakeEdge1(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half			*newH1, *newH2;
 
 	// 両方が独立頂点かどうかのチェック 
-	if(argV1->getOneHalf() != FK_UNDEFINED || argV2->getOneHalf() != FK_UNDEFINED) {
+	if(argV1->getOneHalf() != nullptr || argV2->getOneHalf() != nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge1", 1,
 					"Vertex Topology Error.");
 		return nullptr;
@@ -346,21 +346,21 @@ fk_Edge * fk_Operation::MakeEdge1(fk_Vertex *argV1, fk_Vertex *argV2,
 		GetNewHalfObj() : GetNewHalfObj(argH2ID);
 
 	// 新稜線の半稜線設定 
-	newE->SetLeftHalf(newH1);
-	newE->SetRightHalf(newH2);
+	newE->SetLeftHalf(newH1->getID());
+	newE->SetRightHalf(newH2->getID());
 
 	// 以下、新半稜線の属性設定 
-	newH1->SetVertex(argV1);
-	newH1->SetParentEdge(newE);
-	newH1->SetPrevHalf(newH2);
-	newH1->SetNextHalf(newH2);
-	argV1->SetOneHalf(newH1);
+	newH1->SetVertex(argV1->getID());
+	newH1->SetParentEdge(newE->getID());
+	newH1->SetPrevHalf(newH2->getID());
+	newH1->SetNextHalf(newH2->getID());
+	argV1->SetOneHalf(newH1->getID());
 
-	newH2->SetVertex(argV2);
-	newH2->SetParentEdge(newE);
-	newH2->SetPrevHalf(newH1);
-	newH2->SetNextHalf(newH1);
-	argV2->SetOneHalf(newH2);
+	newH2->SetVertex(argV2->getID());
+	newH2->SetParentEdge(newE->getID());
+	newH2->SetPrevHalf(newH1->getID());
+	newH2->SetNextHalf(newH1->getID());
+	argV2->SetOneHalf(newH2->getID());
 
 	if(historyMode == true) {
 		history.Open(MAKEE1);
@@ -384,8 +384,7 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half			*newH1, *newH2;
 
 	// v1 が接続頂点、v2 が独立頂点になっているかどうかのチェック 
-	if(argV1->getOneHalf() == FK_UNDEFINED ||
-	   argV2->getOneHalf() != FK_UNDEFINED) {
+	if(argV1->getOneHalf() == nullptr || argV2->getOneHalf() != nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge2", 1,
 					"Vertex Topology Error.");
 		return nullptr;
@@ -423,23 +422,23 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 		GetNewHalfObj() : GetNewHalfObj(argH2ID);
 
 	// 新稜線の半稜線設定 
-	newE->SetLeftHalf(newH1);
-	newE->SetRightHalf(newH2);
+	newE->SetLeftHalf(newH1->getID());
+	newE->SetRightHalf(newH2->getID());
 
 	// v1 まわり設定 
-	newH1->SetVertex(argV1);
-	newH1->SetParentEdge(newE);
-	newH1->SetPrevHalf(argH1);
-	newH1->SetNextHalf(newH2);
-	argH1->SetNextHalf(newH1);
+	newH1->SetVertex(argV1->getID());
+	newH1->SetParentEdge(newE->getID());
+	newH1->SetPrevHalf(argH1->getID());
+	newH1->SetNextHalf(newH2->getID());
+	argH1->SetNextHalf(newH1->getID());
 
 	// v2 まわり設定 
-	newH2->SetVertex(argV2);
-	newH2->SetParentEdge(newE);
-	newH2->SetPrevHalf(newH1);
-	newH2->SetNextHalf(argH2);
-	argH2->SetPrevHalf(newH2);
-	argV2->SetOneHalf(newH2);
+	newH2->SetVertex(argV2->getID());
+	newH2->SetParentEdge(newE->getID());
+	newH2->SetPrevHalf(newH1->getID());
+	newH2->SetNextHalf(argH2->getID());
+	argH2->SetPrevHalf(newH2->getID());
+	argV2->SetOneHalf(newH2->getID());
 
 	if(lrFlag == false) {
 		// V1 → V2 の半稜線が右側の場合 
@@ -450,7 +449,7 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 	if(v1ParentFlag == true) {
 		// V1 の親半稜線が newH1 の場合 
 
-		argV1->SetOneHalf(newH1);
+		argV1->SetOneHalf(newH1->getID());
 	}
 
 	if(historyMode == true) {
@@ -478,8 +477,7 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 	fk_Half		*newH1, *newH2;
 
 	// v1, v2 が接続頂点かどうかのチェック 
-	if(argV1->getOneHalf() == FK_UNDEFINED ||
-	   argV2->getOneHalf() == FK_UNDEFINED) {
+	if(argV1->getOneHalf() == nullptr || argV2->getOneHalf() == nullptr) {
 		fk_PutError("fk_Operation", "MakeEdge3", 1,
 					"Vertex Topology Error.");
 		return nullptr;
@@ -524,33 +522,33 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 		GetNewHalfObj() : GetNewHalfObj(argH2ID);
 
 	// 新稜線の半稜線設定 
-	newE->SetLeftHalf(newH1);
-	newE->SetRightHalf(newH2);
+	newE->SetLeftHalf(newH1->getID());
+	newE->SetRightHalf(newH2->getID());
 
 	// v1 まわり設定 
-	newH1->SetVertex(argV1);
-	newH1->SetParentEdge(newE);
-	newH1->SetPrevHalf(argH1_1);
-	newH1->SetNextHalf(argH2_2);
-	argH1_1->SetNextHalf(newH1);
-	argH2_2->SetPrevHalf(newH1);
+	newH1->SetVertex(argV1->getID());
+	newH1->SetParentEdge(newE->getID());
+	newH1->SetPrevHalf(argH1_1->getID());
+	newH1->SetNextHalf(argH2_2->getID());
+	argH1_1->SetNextHalf(newH1->getID());
+	argH2_2->SetPrevHalf(newH1->getID());
 
 	// v2 まわり設定 
-	newH2->SetVertex(argV2);
-	newH2->SetParentEdge(newE);
-	newH2->SetPrevHalf(argH2_1);
-	newH2->SetNextHalf(argH1_2);
-	argH2_1->SetNextHalf(newH2);
-	argH1_2->SetPrevHalf(newH2);
+	newH2->SetVertex(argV2->getID());
+	newH2->SetParentEdge(newE->getID());
+	newH2->SetPrevHalf(argH2_1->getID());
+	newH2->SetNextHalf(argH1_2->getID());
+	argH2_1->SetNextHalf(newH2->getID());
+	argH1_2->SetPrevHalf(newH2->getID());
 
 	if(v1PFlag == true) {
 		// V1 の半親稜線を newH1 にするとき 
-		argV1->SetOneHalf(newH1);
+		argV1->SetOneHalf(newH1->getID());
 	}
 
 	if(v2PFlag == true) {
 		// V2 の半親稜線を newH2 にするとき 
-		argV2->SetOneHalf(newH2);
+		argV2->SetOneHalf(newH2->getID());
 	}
 
 	if(historyMode == true) {
@@ -608,8 +606,8 @@ bool fk_Operation::DeleteEdge1(fk_Edge *argE)
 	lV = lH->getVertex();
 	rV = rH->getVertex();
 
-	lV->SetOneHalf(nullptr);
-	rV->SetOneHalf(nullptr);
+	lV->SetOneHalf(FK_UNDEFINED);
+	rV->SetOneHalf(FK_UNDEFINED);
 
 	eID = argE->getID();
 	lHID = lH->getID();
@@ -659,11 +657,11 @@ bool fk_Operation::DeleteEdge2(fk_Half *argH)
 		lrFlag = false;
 	}
 
-	aloneV->SetOneHalf(nullptr);
-	prevH->SetNextHalf(nextH);
-	nextH->SetPrevHalf(prevH);
-	if(conV->getOneHalf() == argH->getID()) {
-		conV->SetOneHalf(nextH);
+	aloneV->SetOneHalf(FK_UNDEFINED);
+	prevH->SetNextHalf(nextH->getID());
+	nextH->SetPrevHalf(prevH->getID());
+	if(conV->getOneHalf() == argH) {
+		conV->SetOneHalf(nextH->getID());
 		v1ParentFlag = true;
 	} else {
 		v1ParentFlag = false;
@@ -722,20 +720,20 @@ bool fk_Operation::DeleteEdge3(fk_Edge *argE)
 	rPHID = rPrevH->getID();
 
 	// lV まわり設定 
-	lPrevH->SetNextHalf(lNextH);
-	lNextH->SetPrevHalf(lPrevH);
-	if(lV->getOneHalf() == lH->getID()) {
-		lV->SetOneHalf(lNextH);
+	lPrevH->SetNextHalf(lNextH->getID());
+	lNextH->SetPrevHalf(lPrevH->getID());
+	if(lV->getOneHalf() == lH) {
+		lV->SetOneHalf(lNextH->getID());
 		lVParentFlag = true;
 	} else {
 		lVParentFlag = false;
 	}
 
 	// rV まわり設定 
-	rPrevH->SetNextHalf(rNextH);
-	rNextH->SetPrevHalf(rPrevH);
-	if(rV->getOneHalf() == rH->getID()) {
-		rV->SetOneHalf(rNextH);
+	rPrevH->SetNextHalf(rNextH->getID());
+	rNextH->SetPrevHalf(rPrevH->getID());
+	if(rV->getOneHalf() == rH) {
+		rV->SetOneHalf(rNextH->getID());
 		rVParentFlag = true;
 	} else {
 		rVParentFlag = false;
@@ -816,7 +814,7 @@ bool fk_Operation::DeleteLoop(fk_Loop *argL)
 			return false;
 		}
 
-		loopH->SetParentLoop(nullptr);
+		loopH->SetParentLoop(FK_UNDEFINED);
 		loopH->getVertex()->UndefNormal();
 		loopH = loopH->getNextHalf();
 	}
@@ -826,7 +824,7 @@ bool fk_Operation::DeleteLoop(fk_Loop *argL)
 					"Parent Loop Error.");
 		return false;
 	} else {
-		oneH->SetParentLoop(nullptr);
+		oneH->SetParentLoop(FK_UNDEFINED);
 	}
 
 	loopID = argL->getID();
@@ -902,41 +900,41 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 		GetNewHalfObj() : GetNewHalfObj(argRHID);
 
 	// 新稜線の属性設定 
-	newE->SetLeftHalf(newLH);
-	newE->SetRightHalf(newRH);
+	newE->SetLeftHalf(newLH->getID());
+	newE->SetRightHalf(newRH->getID());
 
 	// 新半稜線の属性設定 (ループ以外) 
-	newLH->SetVertex(lV);
-	newLH->SetNextHalf(argNextH);
-	newLH->SetPrevHalf(argPrevH);
-	newLH->SetParentEdge(newE);
+	newLH->SetVertex(lV->getID());
+	newLH->SetNextHalf(argNextH->getID());
+	newLH->SetPrevHalf(argPrevH->getID());
+	newLH->SetParentEdge(newE->getID());
 
-	newRH->SetVertex(rV);
-	newRH->SetNextHalf(oldNextH);
-	newRH->SetPrevHalf(oldPrevH);
-	newRH->SetParentEdge(newE);
-	newRH->SetParentLoop(curL);
+	newRH->SetVertex(rV->getID());
+	newRH->SetNextHalf(oldNextH->getID());
+	newRH->SetPrevHalf(oldPrevH->getID());
+	newRH->SetParentEdge(newE->getID());
+	newRH->SetParentLoop(curL->getID());
 
 	// 旧半稜線の属性再設定 (ループ以外) 
-	argPrevH->SetNextHalf(newLH);
-	argNextH->SetPrevHalf(newLH);
-	oldPrevH->SetNextHalf(newRH);
-	oldNextH->SetPrevHalf(newRH);
+	argPrevH->SetNextHalf(newLH->getID());
+	argNextH->SetPrevHalf(newLH->getID());
+	oldPrevH->SetNextHalf(newRH->getID());
+	oldNextH->SetPrevHalf(newRH->getID());
 	
 	if(lVPFlag == true) {
-		lV->SetOneHalf(newLH);
+		lV->SetOneHalf(newLH->getID());
 	}
 
 	if(rVPFlag == true) {
-		rV->SetOneHalf(newRH);
+		rV->SetOneHalf(newRH->getID());
 	}
 
 	// 旧ループが保持する半稜線情報を再設定 
 	uniRLOneHID = curL->getOneHalf()->getID();
 	if(rLOneH == nullptr) {
-		curL->SetOneHalf(newRH);
+		curL->SetOneHalf(newRH->getID());
 	} else {
-		curL->SetOneHalf(rLOneH);
+		curL->SetOneHalf(rLOneH->getID());
 	}
 
 	curL->ModifyLoop();
@@ -949,7 +947,7 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 	}
 
 	if(lLOneH != nullptr) {
-		newL->SetOneHalf(lLOneH);
+		newL->SetOneHalf(lLOneH->getID());
 	}
 
 	UndefVNorm(lV);
@@ -1036,20 +1034,20 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 	pHID = lPrevH->getID();
 	nHID = rNextH->getID();
 
-	lPrevH->SetNextHalf(lNextH);
-	lNextH->SetPrevHalf(lPrevH);
-	rPrevH->SetNextHalf(rNextH);
-	rNextH->SetPrevHalf(rPrevH);
+	lPrevH->SetNextHalf(lNextH->getID());
+	lNextH->SetPrevHalf(lPrevH->getID());
+	rPrevH->SetNextHalf(rNextH->getID());
+	rNextH->SetPrevHalf(rPrevH->getID());
 
-	if(lV->getOneHalf() == lH->getID()) {
-		lV->SetOneHalf(lNextH);
+	if(lV->getOneHalf() == lH) {
+		lV->SetOneHalf(lNextH->getID());
 		lVPFlag = true;
 	} else {
 		lVPFlag = false;
 	}
 
-	if(rV->getOneHalf() == rH->getID()) {
-		rV->SetOneHalf(rNextH);
+	if(rV->getOneHalf() == rH) {
+		rV->SetOneHalf(rNextH->getID());
 		rVPFlag = true;
 	} else {
 		rVPFlag = false;
@@ -1070,8 +1068,8 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 	}
 
 	if(argNewRL1H != nullptr) {
-		rL->SetOneHalf(argNewRL1H);
 		uniRLOneHID = argNewRL1H->getID();
+		rL->SetOneHalf(uniRLOneHID);
 	} else {
 		uniRLOneHID = rL->getOneHalf()->getID();
 	}
@@ -1154,11 +1152,11 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 
 	// 稜線情報の設定 
 	if(argNewEFlag == true) {
-		newE->SetLeftHalf(newH1);
-		newE->SetRightHalf(newH2);
+		newE->SetLeftHalf(newH1->getID());
+		newE->SetRightHalf(newH2->getID());
 	} else {
-		newE->SetLeftHalf(newH2);
-		newE->SetRightHalf(newH1);
+		newE->SetLeftHalf(newH2->getID());
+		newE->SetRightHalf(newH1->getID());
 	}
 
 	// 新半稜線情報の設定 

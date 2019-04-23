@@ -125,19 +125,19 @@ namespace FK {
 
 		//! 左側半稜線取得関数
 		/*!
-		 *	この稜線に属する「左側」にあたる半稜線 ID を取得します。
+		 *	この稜線に属する「左側」にあたる半稜線を取得します。
 		 *
-		 *	\return 「左側」にあたる半稜線を表す ID
+		 *	\return 「左側」にあたる半稜線を表すインスタンス
 		 */
-		int		getLeftHalf(void) const;
+		fk_Half * getLeftHalf(void) const;
 
 		//! 右側半稜線取得関数
 		/*!
-		 *	この稜線に属する「右側」にあたる半稜線 ID を取得します。
+		 *	この稜線に属する「右側」にあたる半稜線を取得します。
 		 *
-		 *	\return 「右側」にあたる半稜線を表す ID
+		 *	\return 「右側」にあたる半稜線を表すインスタンス
 		 */
-		int		getRightHalf(void) const;
+		fk_Half * getRightHalf(void) const;
 
 		//! 描画線幅取得関数
 		/*!

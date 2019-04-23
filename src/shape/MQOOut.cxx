@@ -106,7 +106,6 @@ bool fk_MQOOut::Convert_Solid(void)
 	vector<fk_Vertex *>		*tesseVertexArray;
 	vector<int>				*tesseIDArray;
 	_st						i;
-	int						curMate = -1;
 	stringstream			ss;
 	
 	if(solid->checkDB() == false) return false;
@@ -119,9 +118,6 @@ bool fk_MQOOut::Convert_Solid(void)
 		curL != nullptr;
 		curL = solid->getNextL(curL)) {
 
-		if(mBuf.empty() == false) {
-			curMate = curL->getElemMaterialID();
-		}
 		startH = curH = curL->getOneHalf();
 		tmpFaceArray.clear();
 		do {
@@ -138,7 +134,7 @@ bool fk_MQOOut::Convert_Solid(void)
 			ss << "3 V(" << tmpFaceArray[2];
 			ss << " " << tmpFaceArray[1];
 			ss << " " << tmpFaceArray[0];
-			ss << ") M(" << curMate << ")";
+			ss << ")";
 			fBuf.push_back(ss.str());
 
 			break;
@@ -149,7 +145,7 @@ bool fk_MQOOut::Convert_Solid(void)
 			ss << " " << tmpFaceArray[2];
 			ss << " " << tmpFaceArray[1];
 			ss << " " << tmpFaceArray[0];
-			ss << ") M(" << curMate << ")";
+			ss << ")";
 			fBuf.push_back(ss.str());
 			break;
 
@@ -161,7 +157,6 @@ bool fk_MQOOut::Convert_Solid(void)
 
 			tesseVertexArray = curL->GetTesselateVertex();
 			tesseIDArray = curL->GetTesselateIndex();
-
 			for(i = 0; i < tesseIDArray->size(); i++) {
 				curV = tesseVertexArray->at(static_cast<_st>(tesseIDArray->at(i)));
 				tmpFaceArray.push_back(vertIDMap[curV]);
@@ -172,7 +167,7 @@ bool fk_MQOOut::Convert_Solid(void)
 				ss << "3 V(" << tmpFaceArray[i+2];
 				ss << " " << tmpFaceArray[i+1];
 				ss << " " << tmpFaceArray[i];
-				ss << ") M(" << curMate << ")";
+				ss << ")";
 				fBuf.push_back(ss.str());
 			}
 

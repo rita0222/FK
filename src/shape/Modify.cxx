@@ -113,7 +113,7 @@ fk_Loop * fk_Modify::removeVertexInLoop(fk_Vertex *argVx)
 
 	connectE = getAllEOnV(argVx);
 	connectL = getAllLOnV(argVx);
-	remainH = getHData(argVx->getOneHalf())->getNextHalf();
+	remainH = argVx->getOneHalf()->getNextHalf();
 
 	for(i = 0; i < connectL.size(); i++) {
 		if(deleteLoop(connectL[i]) == false) {

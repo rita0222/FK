@@ -207,9 +207,10 @@ void fk_Loop::Init(fk_DataBase *argDB, int argID)
 	return;
 }
 
-int fk_Loop::getOneHalf(void) const
+fk_Half * fk_Loop::getOneHalf(void) const
 {
-	return oneHalf;
+	if(DB == nullptr) return nullptr;
+	return DB->GetHData(oneHalf);
 }
 
 int fk_Loop::SetOneHalf(int argHf)
@@ -238,8 +239,8 @@ bool fk_Loop::SetNormal(void)
 			return false;
 		}
 
-		posArray.push_back(DB->GetVData(curH->getVertex())->getPosition());
-		curH = DB->GetHData(curH->getNextHalf());
+		posArray.push_back(curH->getVertex()->getPosition());
+		curH = curH->getNextHalf();
 	} while(curH != DB->GetHData(oneHalf));
 
 	posArray.push_back(posArray[0]);
@@ -298,9 +299,7 @@ int fk_Loop::getVNum(void) const
 	if(oneHalf == FK_UNDEFINED) return -1;
 
 	curH = DB->GetHData(oneHalf);
-	for(countH = DB->GetHData(curH->getNextHalf());
-		countH != curH;
-		countH = DB->GetHData(countH->getNextHalf())) {
+	for(countH = curH->getNextHalf(); countH != curH; countH = countH->getNextHalf()) {
 		retNum++;
 	}
 
@@ -336,11 +335,12 @@ void fk_Loop::Print(void) const
 
 bool fk_Loop::Check(void) const
 {
-	int				curH, prevH;
+	fk_Half			*curH, *prevH;
 	stringstream	ss;
 
+	if(DB == nullptr) return false;
 
-	if(DB->GetHData(oneHalf)->getParentLoop() != getID()) {
+	if(DB->GetHData(oneHalf)->getParentLoop() != this) {
 		ss << "Loop[" << getID() << "] ... Half[";
 		ss << oneHalf << "] ERROR";
 
@@ -348,31 +348,31 @@ bool fk_Loop::Check(void) const
 		return false;
 	}
 
-	curH = DB->GetHData(oneHalf)->getNextHalf();
-	prevH = oneHalf;
+	prevH = DB->GetHData(oneHalf);
+	curH = prevH->getNextHalf();
 
-	if(DB->GetHData(curH)->getPrevHalf() != prevH) {
+	if(curH->getPrevHalf() != prevH) {
 		ss << "Loop[" << getID() << "] ... Half[";
-		ss << curH << "] ERROR";
+		ss << curH->getID() << "] ERROR";
 		fk_PutError("fk_Loop", "Check", 2, ss.str());
 		return false;
 	}
 
-	while(curH != oneHalf) {
+	while(curH != DB->GetHData(oneHalf)) {
 
-		if(DB->GetHData(curH)->getParentLoop() != getID()) {
+		if(curH->getParentLoop() != this) {
 			ss << "Loop[" << getID() << "] ... Half[";
-			ss << curH << "] ERROR";
+			ss << curH->getID() << "] ERROR";
 			fk_PutError("fk_Loop", "Check", 3, ss.str());
 			return false;
 		}
 
 		prevH = curH;
-		curH = DB->GetHData(curH)->getNextHalf();
+		curH = curH->getNextHalf();
 
-		if(DB->GetHData(curH)->getPrevHalf() != prevH) {
+		if(curH->getPrevHalf() != prevH) {
 			ss << "Loop[" << getID() << "] ... Half[";
-			ss << curH << "] ERROR";
+			ss << curH->getID() << "] ERROR";
 			fk_PutError("fk_Loop", "Check", 4, ss.str());
 			return false;
 		}
@@ -434,12 +434,12 @@ bool fk_Loop::getTesselateMode(void)
 
 void fk_Loop::MakeTesselateData(void)
 {
-	fk_Half				*curH;
-	int					i;
-	int					curID, prevID, nextID, prev2ID;
-	list<int>			loopVID;
-	int					loopCount;
-	fk_Vector			tmpVec[5], tmpPos[2], curV, prevV, prev2V, nextV;
+	fk_Half		*curH;
+	int			i;
+	int			curID, prevID, nextID, prev2ID;
+	list<int>	loopVID;
+	int			loopCount;
+	fk_Vector	tmpVec[5], tmpPos[2], curV, prevV, prev2V, nextV;
 
 	if(tesselateMode == false) return;
 	if(getNormal() == nullptr) return;
@@ -447,8 +447,8 @@ void fk_Loop::MakeTesselateData(void)
 	tesselateIndex.clear();
 	tesselateVertex.clear();
 
-	if(oneHalf == nullptr) return;
-	curH = oneHalf;
+	if(oneHalf == FK_UNDEFINED) return;
+	curH = DB->GetHData(oneHalf);
 	do {
 		if(curH == nullptr) {
 			tesselateIndex.clear();
@@ -458,7 +458,7 @@ void fk_Loop::MakeTesselateData(void)
 
 		tesselateVertex.push_back(curH->getVertex());
 		curH = curH->getNextHalf();
-	} while(curH != oneHalf);
+	} while(curH != DB->GetHData(oneHalf));
 
 	if(tesselateVertex.size() <= 2) {
 		tesselateIndex.clear();
@@ -553,12 +553,12 @@ fk_LoopCrossStatus fk_Loop::IsCross(const fk_Vector &argS,
 									const fk_Vector &argE,
 									fk_Vector *retR)
 {
-	fk_Vector		V[3], R;
-	fk_Half			*curH;
+	fk_Vector	V[3], R;
+	fk_Half		*curH;
 
 
 	if(getVNum() != 3) return FK_LOOP_ERROR_CROSS;
-	curH = oneHalf;
+	curH = DB->GetHData(oneHalf);
 	for(int i = 0; i < 3; i++) {
 		if(curH == nullptr) return FK_LOOP_ERROR_CROSS;
 		V[i] = curH->getVertex()->getPosition();
