@@ -180,8 +180,9 @@ static int GetNextID(list<int> *argList, int argID)
 }
 
 fk_Loop::fk_Loop(int argID)
-{
-	Init(argID);
+{	
+	DB = nullptr;
+	SetID(argID);
 
 	return;
 }
@@ -191,10 +192,10 @@ fk_Loop::~fk_Loop()
 	return;
 }
 
-void fk_Loop::Init(int argID)
+void fk_Loop::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argID, FK_LOOP_TYPE);
-	oneHalf = nullptr;
+	InitTopology(argDB, argID, FK_LOOP_TYPE);
+	oneHalf = FK_UNDEFINED;
 	norm.set(0.0, 0.0, 0.0);
 	normFlag = errorFlag = tesselateFlag = false;
 	tesselateMode = true;
@@ -206,15 +207,14 @@ void fk_Loop::Init(int argID)
 	return;
 }
 
-fk_Half * fk_Loop::getOneHalf(void) const
+int fk_Loop::getOneHalf(void) const
 {
 	return oneHalf;
 }
 
-fk_Half * fk_Loop::SetOneHalf(fk_Half *argHf)
+int fk_Loop::SetOneHalf(int argHf)
 {
-	fk_Half *retHf = oneHalf;
-
+	int retHf = oneHalf;
 	oneHalf = argHf;
 	return retHf;
 }
@@ -226,10 +226,11 @@ bool fk_Loop::SetNormal(void)
 	_st					i;
 	fk_Vector			sumNorm;
 
+	if(DB == nullptr) return false;
 	posArray.clear();
 	normArray.clear();
-	if(oneHalf == nullptr) return false;
-	curH = oneHalf;
+	if(oneHalf == FK_UNDEFINED) return false;
+	curH = DB->GetHData(oneHalf);
 	
 	do {
 		if(curH == nullptr) {
@@ -237,9 +238,9 @@ bool fk_Loop::SetNormal(void)
 			return false;
 		}
 
-		posArray.push_back(curH->getVertex()->getPosition());
-		curH = curH->getNextHalf();
-	} while(curH != oneHalf);
+		posArray.push_back(DB->GetVData(curH->getVertex())->getPosition());
+		curH = DB->GetHData(curH->getNextHalf());
+	} while(curH != DB->GetHData(oneHalf));
 
 	posArray.push_back(posArray[0]);
 	posArray.push_back(posArray[1]);
@@ -290,14 +291,16 @@ fk_Vector * fk_Loop::getNormal(void)
 int fk_Loop::getVNum(void) const
 {
 	int			retNum = 1;
-	fk_Half		*countH = nullptr;
+	fk_Half		*curH, *countH;
 
+	if(DB == nullptr) return -1;
 	if(errorFlag == true) return -1;
-	if(oneHalf == nullptr) return -1;
+	if(oneHalf == FK_UNDEFINED) return -1;
 
-	for(countH = oneHalf->getNextHalf();
-		countH != oneHalf;
-		countH = countH->getNextHalf()) {
+	curH = DB->GetHData(oneHalf);
+	for(countH = DB->GetHData(curH->getNextHalf());
+		countH != curH;
+		countH = DB->GetHData(countH->getNextHalf())) {
 		retNum++;
 	}
 
@@ -320,10 +323,10 @@ void fk_Loop::Print(void) const
 	fk_PutError(ss.str());
 
 	ss.clear();
-	if(oneHalf != nullptr) {
-		ss << "\t1H = " << oneHalf->getID();
+	if(oneHalf != FK_UNDEFINED) {
+		ss << "\t1H = " << oneHalf;
 	} else {
-		ss << "\t1H = nullptr";
+		ss << "\t1H = UNDEF";
 	}
 	fk_PutError(ss.str());
 	fk_PutError("}");
@@ -333,44 +336,43 @@ void fk_Loop::Print(void) const
 
 bool fk_Loop::Check(void) const
 {
-	fk_Half			*curH, *prevH;
+	int				curH, prevH;
 	stringstream	ss;
 
 
-	if(oneHalf->getParentLoop() != this) {
+	if(DB->GetHData(oneHalf)->getParentLoop() != getID()) {
 		ss << "Loop[" << getID() << "] ... Half[";
-		ss << oneHalf->getID() << "] ERROR";
+		ss << oneHalf << "] ERROR";
 
 		fk_PutError("fk_Loop", "Check", 1, ss.str());
 		return false;
 	}
 
-	curH = oneHalf->getNextHalf();
+	curH = DB->GetHData(oneHalf)->getNextHalf();
 	prevH = oneHalf;
 
-	if(curH->getPrevHalf() != prevH) {
+	if(DB->GetHData(curH)->getPrevHalf() != prevH) {
 		ss << "Loop[" << getID() << "] ... Half[";
-		ss << curH->getID() << "] ERROR";
-
+		ss << curH << "] ERROR";
 		fk_PutError("fk_Loop", "Check", 2, ss.str());
 		return false;
 	}
 
 	while(curH != oneHalf) {
 
-		if(curH->getParentLoop() != this) {
+		if(DB->GetHData(curH)->getParentLoop() != getID()) {
 			ss << "Loop[" << getID() << "] ... Half[";
-			ss << curH->getID() << "] ERROR";
+			ss << curH << "] ERROR";
 			fk_PutError("fk_Loop", "Check", 3, ss.str());
 			return false;
 		}
 
 		prevH = curH;
-		curH = curH->getNextHalf();
+		curH = DB->GetHData(curH)->getNextHalf();
 
-		if(curH->getPrevHalf() != prevH) {
+		if(DB->GetHData(curH)->getPrevHalf() != prevH) {
 			ss << "Loop[" << getID() << "] ... Half[";
-			ss << curH->getID() << "] ERROR";
+			ss << curH << "] ERROR";
 			fk_PutError("fk_Loop", "Check", 4, ss.str());
 			return false;
 		}
@@ -381,18 +383,19 @@ bool fk_Loop::Check(void) const
 
 bool fk_Loop::Compare(fk_Loop *argL) const
 {
+	if(DB == nullptr) return false;
 	if(argL == nullptr) return false;
 	if(argL == this) return true;
 	if(getID() != argL->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;
 
-	if(oneHalf == nullptr && argL->oneHalf == nullptr) {
+	if(oneHalf == FK_UNDEFINED && argL->oneHalf == FK_UNDEFINED) {
 		return true;
-	} else if(oneHalf == nullptr || argL->oneHalf == nullptr) {
+	} else if(oneHalf == FK_UNDEFINED || argL->oneHalf == FK_UNDEFINED) {
 		return false;
 	}
 
-	if(oneHalf->getID() == argL->oneHalf->getID()) return true;
+	if(oneHalf == argL->oneHalf) return true;
 	return false;
 }
 

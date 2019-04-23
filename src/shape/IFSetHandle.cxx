@@ -266,7 +266,7 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 	fk_Edge			*existE;
 	fk_Half			*newH, *mateH;
 	fk_Vector		tmpVec;
-	fk_Vertex		*tmpRV, *tmpLV;
+	int				tmpRV, tmpLV;
 	stringstream	ss;
 	
 	// 頂点が存在するかどうかの判定 
@@ -297,26 +297,26 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 
 		edgeCount[newH->getParentEdge()] = 1;
 	} else {
-		HalfStock1->push_back(existE->getLeftHalf());
+		HalfStock1->push_back(DB->GetHData(existE->getLeftHalf()));
 
 		if(argSolidFlag == false) {
-			HalfStock2->push_back(existE->getRightHalf());
+			HalfStock2->push_back(DB->GetHData(existE->getRightHalf()));
 		}
 
-		edgeCount[existE]++;
+		edgeCount[existE->getID()]++;
 
-		if(edgeCount[existE] > 2) {
+		if(edgeCount[existE->getID()] > 2) {
 			ss << "Edge ID ... " << existE->getID() << endl;
 
-			tmpRV = existE->getRightHalf()->getVertex();
-			tmpLV = existE->getLeftHalf()->getVertex();
-			ss << "VID ... " << tmpRV->getID() << ", " << tmpLV->getID() << endl;
+			tmpRV = DB->GetHData(existE->getRightHalf())->getVertex();
+			tmpLV = DB->GetHData(existE->getLeftHalf())->getVertex();
+			ss << "VID ... " << tmpRV << ", " << tmpLV << endl;
 
-			tmpVec = tmpRV->getPosition();
+			tmpVec = DB->GetVData(tmpRV)->getPosition();
 			ss << "RPosition ... (";
 			ss << tmpVec.x << ", " << tmpVec.y << ", " << tmpVec.z << "), ";
 
-			tmpVec = tmpLV->getPosition();
+			tmpVec = DB->GetVData(tmpLV)->getPosition();
 			ss << "LPosition ... (";
 			ss << tmpVec.x << ", " << tmpVec.y << ", " << tmpVec.z << ")" << endl;
 			
@@ -336,7 +336,7 @@ bool fk_IFSetHandle::RefineTopology(void)
 
 	for(CurHalf = DB->GetNextH(nullptr);
 		CurHalf != nullptr; CurHalf = DB->GetNextH(CurHalf)) {
-		if(CurHalf->getNextHalf() == nullptr) {
+		if(CurHalf->getNextHalf() == FK_UNDEFINED) {
 			if(SearchUndefLoop(CurHalf) == false) return false;
 		}
 	}
@@ -349,15 +349,16 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 	fk_Half		*startH, *curH, *nextH, *tmpH;
 	fk_Edge		*parentEdge;
 	fk_Half		*mateHalf;
-	fk_Vertex	*mateVertex;
+	int			mateVertex;
 	int			halfCount;
 
 	startH = curH = argHalf;
 	nextH = nullptr;
 	while(nextH != startH) {
-		parentEdge = curH->getParentEdge();
-		mateHalf = (parentEdge->getRightHalf() == curH) ?
-			parentEdge->getLeftHalf() : parentEdge->getRightHalf();
+		parentEdge = DB->GetEData(curH->getParentEdge());
+		mateHalf = (DB->GetHData(parentEdge->getRightHalf()) == curH) ?
+			DB->GetHData(parentEdge->getLeftHalf()) :
+			DB->GetHData(parentEdge->getRightHalf());
 		mateVertex = mateHalf->getVertex();
 	
 		halfCount = 0;
@@ -365,7 +366,7 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 		for(tmpH = DB->GetNextH(nullptr);
 			tmpH != nullptr; tmpH = DB->GetNextH(tmpH)) {
 			if(tmpH->getVertex() == mateVertex &&
-			   tmpH->getPrevHalf() == nullptr) {
+			   tmpH->getPrevHalf() == FK_UNDEFINED) {
 				nextH = tmpH;
 				halfCount++;
 			}
@@ -377,8 +378,8 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 			return false;
 		}
 
-		curH->SetNextHalf(nextH);
-		nextH->SetPrevHalf(curH);
+		curH->SetNextHalf(nextH->getID());
+		nextH->SetPrevHalf(curH->getID());
 		curH = nextH;
 	}
 
@@ -398,7 +399,7 @@ bool fk_IFSetHandle::DB_Check(void)
 	else return true;
 }
 
-int fk_IFSetHandle::GetEdgeCountNum(fk_Edge *argEdge)
+int fk_IFSetHandle::GetEdgeCountNum(int argEdge)
 {
 	auto p = edgeCount.find(argEdge);
 
