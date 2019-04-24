@@ -71,8 +71,6 @@
  ****************************************************************************/
 #include <FK/Solid.h>
 #include <FK/DataBase.H>
-#include <FK/FileInput.H>
-#include <FK/FileOutput.H>
 #include <FK/SMFParser.H>
 #include <FK/SRFParser.H>
 #include <FK/STLParser.H>
@@ -331,29 +329,6 @@ bool fk_Solid::writeMQOFile(string argFileName)
 	retFlg = mqoOut->WriteMQOFile(argFileName);
 	delete mqoOut;
 	return retFlg;
-}
-
-bool fk_Solid::writeData(string argFileName, fk_DataFormatMode argMode)
-{
-	fk_FileOutput	fileOutput;
-
-	fileOutput.SetDataBase(SolidDB);
-	return(fileOutput.PutShapeData(argFileName, argMode));
-}
-
-bool fk_Solid::readData(string argFileName, bool argSizeMode)
-{
-	fk_FileInput	fileInput;
-
-	fileInput.SetDataBase(SolidDB);
-	fileInput.SetSizeMode(argSizeMode);
-	AllCacheClear();
-	if(fileInput.GetShapeData(argFileName) == false) {
-		SolidDB->AllClear();
-		return false;
-	}
-
-	return true;
 }
 
 void fk_Solid::PrintMat(string argTag)

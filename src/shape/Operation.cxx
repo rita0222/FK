@@ -1160,27 +1160,27 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	}
 
 	// 新半稜線情報の設定 
-	newH1->SetVertex(v1);
-	newH2->SetVertex(newV);
+	newH1->SetVertex(v1->getID());
+	newH2->SetVertex(newV->getID());
 
-	newH1->SetParentEdge(newE);
-	newH2->SetParentEdge(newE);
+	newH1->SetParentEdge(newE->getID());
+	newH2->SetParentEdge(newE->getID());
 
-	newH1->SetParentLoop(l1);
-	newH2->SetParentLoop(l2);
+	newH1->SetParentLoop(l1->getID());
+	newH2->SetParentLoop(l2->getID());
 
-	newH1->SetNextHalf(orgH1);
-	newH1->SetPrevHalf(orgPrevH);
-	newH2->SetNextHalf(orgNextH);
-	newH2->SetPrevHalf(orgH2);
+	newH1->SetNextHalf(orgH1->getID());
+	newH1->SetPrevHalf(orgPrevH->getID());
+	newH2->SetNextHalf(orgNextH->getID());
+	newH2->SetPrevHalf(orgH2->getID());
 
 	// その他の半稜線の接続関係設定 
 
-	orgH1->SetPrevHalf(newH1);
-	orgH2->SetNextHalf(newH2);
-	orgPrevH->SetNextHalf(newH1);
-	orgNextH->SetPrevHalf(newH2);
-	orgH1->SetVertex(newV);
+	orgH1->SetPrevHalf(newH1->getID());
+	orgH2->SetNextHalf(newH2->getID());
+	orgPrevH->SetNextHalf(newH1->getID());
+	orgNextH->SetPrevHalf(newH2->getID());
+	orgH1->SetVertex(newV->getID());
 
 	// 新頂点情報の設定 
 	if(argPos != nullptr) {
@@ -1188,19 +1188,19 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	} else {
 		newV->SetPosition((v1->getPosition() + v2->getPosition())/2.0);
 	}
-	newV->SetOneHalf(orgH1);
+	newV->SetOneHalf(orgH1->getID());
 
-	if(v1->getOneHalf() == orgH1->getID()) v1->SetOneHalf(newH1);
+	if(v1->getOneHalf() == orgH1) v1->SetOneHalf(newH1->getID());
 
 	v1->UndefNormal();
 	v2->UndefNormal();
 
 	if(argL1PFlag == true && l1 != nullptr) {
-		l1->SetOneHalf(newH1);
+		l1->SetOneHalf(newH1->getID());
 	}
 
 	if(argL2PFlag == true && l2 != nullptr) {
-		l2->SetOneHalf(newH2);
+		l2->SetOneHalf(newH2->getID());
 	}
 
 	if(l1 != nullptr) l1->ModifyLoop();
@@ -1250,7 +1250,7 @@ bool fk_Operation::UniteEdge(fk_Vertex *argV)
 		return false;
 	}
 
-	remainH = getHData(argV->getOneHalf());
+	remainH = argV->getOneHalf();
 	remainMateH = getMateHOnH(remainH);
 	delH = remainH->getPrevHalf();
 	delMateH = remainMateH->getNextHalf();
@@ -1277,25 +1277,25 @@ bool fk_Operation::UniteEdge(fk_Vertex *argV)
 
 	if(delH == l1->getOneHalf()) {
 		l1PFlag = true;
-		l1->SetOneHalf(remainH);
+		l1->SetOneHalf(remainH->getID());
 	} else {
 		l1PFlag = false;
 	}
 
 	if(delMateH == l2->getOneHalf()) {
 		l2PFlag = true;
-		l2->SetOneHalf(remainMateH);
+		l2->SetOneHalf(remainMateH->getID());
 	} else {
 		l2PFlag = false;
 	}
 
-	remainH->SetPrevHalf(prevH);
-	prevH->SetNextHalf(remainH);
-	remainMateH->SetNextHalf(nextH);
-	nextH->SetPrevHalf(remainMateH);
-	remainH->SetVertex(v1);
+	remainH->SetPrevHalf(prevH->getID());
+	prevH->SetNextHalf(remainH->getID());
+	remainMateH->SetNextHalf(nextH->getID());
+	nextH->SetPrevHalf(remainMateH->getID());
+	remainH->SetVertex(v1->getID());
 
-	if(v1->getOneHalf() == delH->getID()) v1->SetOneHalf(remainH);
+	if(v1->getOneHalf() == delH) v1->SetOneHalf(remainH->getID());
 
 	delVID = argV->getID();
 	delEID = delE->getID();
@@ -1359,17 +1359,17 @@ void fk_Operation::NegateBody(void)
 	for(curE = getNextE(nullptr);
 		curE != nullptr;
 		curE = getNextE(curE)) {
-		curE->getRightHalf()->SetNextHalf(rNext[i]);
-		curE->getRightHalf()->SetPrevHalf(rPrev[i]);
-		curE->getLeftHalf()->SetNextHalf(lNext[i]);
-		curE->getLeftHalf()->SetPrevHalf(lPrev[i]);
+		curE->getRightHalf()->SetNextHalf(rNext[i]->getID());
+		curE->getRightHalf()->SetPrevHalf(rPrev[i]->getID());
+		curE->getLeftHalf()->SetNextHalf(lNext[i]->getID());
+		curE->getLeftHalf()->SetPrevHalf(lPrev[i]->getID());
 		i++;
 	}
 
 	for(curL = getNextL(nullptr);
 		curL != nullptr;
 		curL = getNextL(curL)) {
-		curL->SetOneHalf(getMateHOnH(curL->getOneHalf()));
+		curL->SetOneHalf(getMateHOnH(curL->getOneHalf())->getID());
 	}
 
 	if(historyMode == true) {
