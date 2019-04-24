@@ -127,29 +127,6 @@ namespace FK_CLI
 			fk_TopologyType get();
 		}
 	};
-
-	//! 位相要素個別マテリアル管理クラス
-	/*!
-	 *	このクラスは、 fk_Solid における位相要素について、
-	 *	個別にマテリアルを管理する機能を提供します。
-	 *
-	 *	fk_Solid による1つの形状内で、
-	 *	各位相要素について別々にマテリアルを設定したい場合は、
-	 *	このクラスのプロパティを用います。
-	 *
-	 *	\sa fk_Solid, fk_Vertex, fk_Edge, fk_Loop, fk_Topology, fk_Shape, fk_Model
-	 */
-	public ref class fk_TopologyMaterial : fk_Topology {
-	internal:
-		::FK::fk_TopologyMaterial * GetP(void);
-
-	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_TopologyMaterial(bool argNewFlg);
-		~fk_TopologyMaterial();
-		!fk_TopologyMaterial();
-#endif
-	};		
 }
 
 

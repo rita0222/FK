@@ -43,8 +43,6 @@
     <ClCompile Include="..\..\src\shape\DXFOut.cxx" />
     <ClCompile Include="..\..\src\shape\DXFParser.cxx" />
     <ClCompile Include="..\..\src\shape\Edge.cxx" />
-    <ClCompile Include="..\..\src\shape\FileInput.cxx" />
-    <ClCompile Include="..\..\src\shape\FileOutput.cxx" />
     <ClCompile Include="..\..\src\shape\Gregory.cxx" />
     <ClCompile Include="..\..\src\shape\Half.cxx" />
     <ClCompile Include="..\..\src\shape\History.cxx" />

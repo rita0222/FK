@@ -79,7 +79,7 @@ namespace FK_CLI {
 		return (::FK::fk_Loop *)(pBase);
 	}
 
-	fk_Loop::fk_Loop(bool argNewFlg) : fk_TopologyMaterial(false)
+	fk_Loop::fk_Loop(bool argNewFlg) : fk_Topology(false)
 	{
 	}
 

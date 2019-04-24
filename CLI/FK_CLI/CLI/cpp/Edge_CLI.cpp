@@ -80,7 +80,7 @@ namespace FK_CLI {
 		return (::FK::fk_Edge *)(pBase);
 	}
 
-	fk_Edge::fk_Edge(bool argNewFlg) : fk_TopologyMaterial(false)
+	fk_Edge::fk_Edge(bool argNewFlg) : fk_Topology(false)
 	{
 	}
 

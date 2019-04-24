@@ -101,7 +101,7 @@ namespace FK_CLI
 	 *
 	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
 	 */
-	public ref class fk_Edge : fk_TopologyMaterial {
+	public ref class fk_Edge : fk_Topology {
 	internal:
 		::FK::fk_Edge * GetP(void);
 

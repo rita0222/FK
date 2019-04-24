@@ -114,25 +114,5 @@ namespace FK_CLI {
 		}
 		return fk_TopologyType::UNDEFINED;
 	}
-
-	///////////////////////////////////////////////////////////////////////
-	
-	::FK::fk_TopologyMaterial * fk_TopologyMaterial::GetP(void)
-	{
-		return (::FK::fk_TopologyMaterial *)(pBase);
-	}
-
-	fk_TopologyMaterial::fk_TopologyMaterial(bool argNewFlg) : fk_Topology(false)
-	{
-	}
-
-	fk_TopologyMaterial::~fk_TopologyMaterial()
-	{
-		this->!fk_TopologyMaterial();
-	}
-
-	fk_TopologyMaterial::!fk_TopologyMaterial()
-	{
-	}
 }
 

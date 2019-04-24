@@ -79,7 +79,7 @@ namespace FK_CLI {
 		return (::FK::fk_Vertex *)(pBase);
 	}
 
-	fk_Vertex::fk_Vertex(bool argNewFlg) : fk_TopologyMaterial(false)
+	fk_Vertex::fk_Vertex(bool argNewFlg) : fk_Topology(false)
 	{
 	}
 

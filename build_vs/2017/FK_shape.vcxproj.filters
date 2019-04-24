@@ -73,12 +73,6 @@
     <ClCompile Include="..\..\src\shape\Edge.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\FileInput.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\FileOutput.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Gregory.cxx">
       <Filter>Source</Filter>
     </ClCompile>
