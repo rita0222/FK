@@ -121,17 +121,19 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
-	switch(mode) {
-	  case FK_ELEM_MODEL:
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
-		break;
+	if(shader == lineShader) {
+		switch(mode) {
+		  case FK_ELEM_MODEL:
+			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+			break;
 
-	  case FK_ELEM_ELEMENT:
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
-		break;
+		  case FK_ELEM_ELEMENT:
+			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
+			break;
 
-	  default:
-		return;
+		  default:
+			return;
+		}
 	}
 	
 	glEnable(GL_LINE_SMOOTH);
