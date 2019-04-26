@@ -130,6 +130,7 @@ namespace FK_CLI
 		fk_Particle(bool argNewFlg);
 		fk_Particle();
 		~fk_Particle();
+		!fk_Particle();
 #endif
 
 		//! ID プロパティ
