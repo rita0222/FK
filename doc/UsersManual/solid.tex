@@ -507,15 +507,13 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	true を返す。V に稜線が接続されている場合はエラーとなり false
 	を返し、V 自体は消去しない。
 
-\myfig{Fig:Euler01}{./Fig/Euler01.eps}{width=8truecm}
-	{makeVertex ・ removeVertex}{0mm}
+\myfig{Fig:Euler01}{./Fig/Euler01.eps}{width=8truecm}{makeVertex と removeVertex}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}bool moveVertex(fk\_Vertex *V, fk\_Vector P)}
 	V を 位置座標 P へ移動する。成功すれば true を返す。V が存在
 	しない場合はエラーとなり false を返す。
 
-\myfig{Fig:Euler02}{./Fig/Euler02.eps}{width=10truecm}
-	{moveVertex}{0mm}
+\myfig{Fig:Euler02}{./Fig/Euler02.eps}{width=10truecm}{moveVertex}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Edge * makeEdge(
 	fk\_Vertex *V1, fk\_Vertex *V2, \\ \hspace*{4.4cm}
@@ -556,8 +554,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
    	未定義稜線 E1 を削除する。成功すれば true を返す。
 	E1 が未定義稜線で無い場合 false を返して何もしない。
 
-\myfig{Fig:Euler03}{./Fig/Euler03.eps}{width=10truecm}
-	{makeEdge ・ deleteEdge}{0mm}
+\myfig{Fig:Euler03}{./Fig/Euler03.eps}{width=10truecm}{makeEdge と deleteEdge}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Loop * makeLoop(fk\_Half *H1)}
 	未定義半稜線 H1 が属するループを作成する。
@@ -569,8 +566,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	空洞になる。成功すれば true を返し、失敗した場合は false を
 	返す。
 
-\myfig{Fig:Euler04}{./Fig/Euler04.eps}{width=8truecm}
-	{makeLoop ・ deleteLoop}{0mm}
+\myfig{Fig:Euler04}{./Fig/Euler04.eps}{width=8truecm}{makeLoop と deleteLoop}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Edge *
 	separateLoop(fk\_Half *H1, fk\_Half *H2)}
@@ -586,8 +582,7 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	両側のループを統合する。成功すれば true を返す。
 	E1 が両側にループを持つ稜線でない場合はエラーになり false が返る。
 
-\myfig{Fig:Euler05}{./Fig/Euler05.eps}{width=8truecm}
-	{separateLoop ・ uniteLoop}{0mm}
+\myfig{Fig:Euler05}{./Fig/Euler05.eps}{width=8truecm}{separateLoop と uniteLoop}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Vertex * separateEdge(fk\_Edge *E1)}
 	任意稜線 E1 を分割し、新たな頂点を稜線の両端点の

@@ -1123,7 +1123,7 @@ FKでは、モデル同士の干渉や衝突を検出する機能を利用する
 干渉・衝突判定を行うことが多い。このときの簡略化形状を
 \textbf{境界ボリューム}と呼ぶ。図\ref{fig:boundary}に境界ボリュームのイメージ図を示す。
 
-\myfig{fig:boundary}{./Fig/Boundary.eps}{scale=1.0,clip}
+\myfig{fig:boundary}{./Fig/Boundary.eps}{width=8truecm}
 	{境界ボリューム}{0mm}
 
 以下、FKで利用可能な境界ボリュームを紹介する。
@@ -1145,7 +1145,7 @@ AABB では図形を直方体で囲み、その直方体同士で判定を行う
 注意が必要である。それは、物体が回転した場合に AABB の大きさも変化するためである。
 その様子を図\ref{fig:aabb}に示す。
 
-\myfig{fig:aabb}{./Fig/AABB.eps}{scale=1.0,clip}
+\myfig{fig:aabb}{./Fig/AABB.eps}{width=5truecm}
 	{回転によるAABBの変化}{0mm}
 
 \subsection{有向境界ボックス (OBB)}
@@ -1156,7 +1156,7 @@ AABB では図形を直方体で囲み、その直方体同士で判定を行う
 非常に扱いやすい境界ボリュームである。
 図\ref{fig:obb}にモデルの回転と追従するボックスの様子を示す。
 
-\myfig{fig:obb}{./Fig/OBB.eps}{scale=1.0,clip}
+\myfig{fig:obb}{./Fig/OBB.eps}{width=5truecm}
 	{モデル回転に追従するOBB}{0mm}
 
 しかしながら、OBBの干渉判定処理は実際にはかなり複雑であり、
@@ -1169,7 +1169,7 @@ AABB では図形を直方体で囲み、その直方体同士で判定を行う
 モデルが回転した場合は、OBBと同様に方向は追従する。図\ref{fig:capsule}は、
 カプセル型境界ボリュームがモデルの回転に追従する様子である。
 
-\myfig{fig:capsule}{./Fig/Capsule.eps}{scale=1.0,clip}
+\myfig{fig:capsule}{./Fig/Capsule.eps}{width=5truecm}
 	{カプセル型の境界ボリューム}{0mm}
 
 カプセル型は、形状は複雑に感じられるが、干渉判定の処理速度は OBB よりもかなり高速である。
