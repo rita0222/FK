@@ -4,7 +4,7 @@ RM		= rm -f
 MAINNAME	= FK_UsersManual
 
 doc:
-	cd Fig; ../../com/svg2eps -i *.svg
+	cd Fig; ../../com/svg2eps *.svg
 	latexmk $(MAINNAME)
 	cp $(MAINNAME).pdf ../Output
 

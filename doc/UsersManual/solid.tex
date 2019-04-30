@@ -16,8 +16,8 @@ Half-Edge 構造では、「頂点」「稜線」「半稜線」「ループ」�
 よって形状を構成すると考える。図 \ref{fig:HalfEdge1} が示す形状に対する
 各要素の解説を表 \ref{tbl:HalfEdge1} に示す。
 
-\myfig{fig:HalfEdge1}{./Fig/HalfEdge1.eps}{scale=0.8,clip}
-	{Half-Edge 構造での各要素}{-5mm}
+\myfig{fig:HalfEdge1}{./Fig/HalfEdge1.eps}{width=10truecm}
+	{Half-Edge 構造での各要素}{0mm}
 
 \begin{table}[H]
 \caption{Half-Edge 構造位相要素の解説}
@@ -507,15 +507,15 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	true を返す。V に稜線が接続されている場合はエラーとなり false
 	を返し、V 自体は消去しない。
 
-\myfig{Fig:Euler01}{./Fig/Euler01.eps}{scale=0.6,clip}
-	{makeVertex ・ removeVertex}{-5mm}
+\myfig{Fig:Euler01}{./Fig/Euler01.eps}{width=8truecm}
+	{makeVertex ・ removeVertex}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}bool moveVertex(fk\_Vertex *V, fk\_Vector P)}
 	V を 位置座標 P へ移動する。成功すれば true を返す。V が存在
 	しない場合はエラーとなり false を返す。
 
-\myfig{Fig:Euler02}{./Fig/Euler02.eps}{scale=0.6,clip}
-	{moveVertex}{-5mm}
+\myfig{Fig:Euler02}{./Fig/Euler02.eps}{width=10truecm}
+	{moveVertex}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Edge * makeEdge(
 	fk\_Vertex *V1, fk\_Vertex *V2, \\ \hspace*{4.4cm}
@@ -556,8 +556,8 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
    	未定義稜線 E1 を削除する。成功すれば true を返す。
 	E1 が未定義稜線で無い場合 false を返して何もしない。
 
-\myfig{Fig:Euler03}{./Fig/Euler03.eps}{scale=0.6,clip}
-	{makeEdge ・ deleteEdge}{-5mm}
+\myfig{Fig:Euler03}{./Fig/Euler03.eps}{width=10truecm}
+	{makeEdge ・ deleteEdge}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Loop * makeLoop(fk\_Half *H1)}
 	未定義半稜線 H1 が属するループを作成する。
@@ -569,8 +569,8 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	空洞になる。成功すれば true を返し、失敗した場合は false を
 	返す。
 
-\myfig{Fig:Euler04}{./Fig/Euler04.eps}{scale=0.6,clip}
-	{makeLoop ・ deleteLoop}{-5mm}
+\myfig{Fig:Euler04}{./Fig/Euler04.eps}{width=8truecm}
+	{makeLoop ・ deleteLoop}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Edge *
 	separateLoop(fk\_Half *H1, fk\_Half *H2)}
@@ -586,8 +586,8 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	両側のループを統合する。成功すれば true を返す。
 	E1 が両側にループを持つ稜線でない場合はエラーになり false が返る。
 
-\myfig{Fig:Euler05}{./Fig/Euler05.eps}{scale=0.6,clip}
-	{separateLoop ・ uniteLoop}{-5mm}
+\myfig{Fig:Euler05}{./Fig/Euler05.eps}{width=8truecm}
+	{separateLoop ・ uniteLoop}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Vertex * separateEdge(fk\_Edge *E1)}
 	任意稜線 E1 を分割し、新たな頂点を稜線の両端点の
@@ -599,23 +599,23 @@ fk\_Solid クラスは単にそれらのメンバ関数を継承しているだ�
 	稜線にする。成功すれば true を返す。V1 に接続されている
 	稜線が2本でない場合はエラーとなり false が返る。
 
-\myfig{Fig:Euler06}{./Fig/Euler06.eps}{scale=0.6,clip}
-	{separateEdge ・ uniteEdge}{-5mm}
+\myfig{Fig:Euler06}{./Fig/Euler06.eps}{width=8truecm}
+	{separateEdge ・ uniteEdge}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}fk\_Loop * removeVertexInLoop(fk\_Vertex *V)}
 	頂点 V と V に接続している全ての稜線を削除し、1つの大きな
 	ループを生成する。成功すれば新たなループを返し、
 	失敗した場合は nullptr を返す。
 
-\myfig{Fig:Euler07}{./Fig/Euler07.eps}{scale=0.6,clip}
-	{removeVertexInLoop}{-5mm}
+\myfig{Fig:Euler07}{./Fig/Euler07.eps}{width=8truecm}
+	{removeVertexInLoop}{0mm}
 
  \subsubsection*{\hspace*{0.6cm}bool contractEdge(fk\_Edge *E)}
 	稜線 E の両端点を接合し、E を削除する。成功すれば true を、
 	失敗すれば false を返す。
 
-\myfig{Fig:Euler08}{./Fig/Euler08.eps}{scale=0.6,clip}
-	{contractEdge}{-5mm}
+\myfig{Fig:Euler08}{./Fig/Euler08.eps}{width=8truecm}
+	{contractEdge}{0mm}
 
  \subsubsection{\hspace*{0.6cm}bool checkContract(fk\_Edge *E)}
 	稜線 E に対し contractEdge() 関数が成功する状態のときに
