@@ -114,7 +114,8 @@
       <AdditionalOptions>/IGNORE:4049,4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"</Command>
+      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"
+copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -142,7 +143,8 @@
       <AdditionalOptions>/IGNORE:4049,4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"</Command>
+      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"
+copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -175,7 +177,8 @@
       <AdditionalOptions>/IGNORE:4049,4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"</Command>
+      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"
+copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -208,7 +211,8 @@
       <AdditionalOptions>/IGNORE:4049,4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"</Command>
+      <Command>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"
+copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
