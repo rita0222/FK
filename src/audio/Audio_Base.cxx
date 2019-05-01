@@ -89,17 +89,18 @@
 using namespace std;
 using namespace FK;
 
+static fk_IDAdmin audioIDAdmin(0);
+
 static fk_IDAdmin * getAdmin(void)
 {
-	static fk_IDAdmin audioIDAdmin(0);
 	return &audioIDAdmin;
 }
 
 static bool					initStatus = false;
-static ALCcontext			*alContext = nullptr;
+static ALCcontext		*alContext = nullptr;
+static int					sourceNum = 0;
 
 fk_Model *fk_AudioBase::listenerCamera = nullptr;
-
 
 static bool ALInit(void)
 {
@@ -226,15 +227,17 @@ fk_AudioBase::fk_AudioBase(void)
 	ref_model = nullptr;
 
 	init();
-
 	return;
 }
 
 fk_AudioBase::~fk_AudioBase()
 {
-	if(source_id != -1) getAdmin()->EraseID(source_id);
-	if(getAdmin()->GetIDNum() != 0) return;
-
+	if(source_id != -1) {
+		getAdmin()->EraseID(source_id);
+		sourceNum--;
+	}
+	if(sourceNum != 0) return;
+	
 	if(initStatus) {
 		if(!ALExit()) {
 			cerr << "ALExit() error." << endl;
@@ -264,6 +267,7 @@ bool fk_AudioBase::getInit(void)
 void fk_AudioBase::CreateID(void)
 {
 	source_id = getAdmin()->CreateID();
+	++sourceNum;
 	alGenSources(1, &source);
 	alSourcef(source, AL_GAIN, ALfloat(gain));
 	alSourcei(source, AL_SOURCE_RELATIVE, AL_TRUE);
@@ -274,6 +278,7 @@ void fk_AudioBase::EraseID(void)
 {
 	getAdmin()->EraseID(source_id);
 	source_id = -1;
+	if(sourceNum > 0) sourceNum--;
 	return;
 }
 

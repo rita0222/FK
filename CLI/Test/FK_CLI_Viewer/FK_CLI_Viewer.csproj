@@ -96,4 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /b /v /y "$(SolutionDir)contrib\bin\$(PlatformName)\*.dll" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
