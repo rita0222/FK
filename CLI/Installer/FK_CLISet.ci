@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.0.0 b07</>
+   <ver >4.0.0 b08</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
@@ -138,7 +138,7 @@
                         <solid >1</>
                         <path >inst</>
                         <custpath ></>
-                        <ifexist >overnewer</>
+                        <ifexist >over</>
                         <if ></>
                         <srclist >
                            <rows rel = unpack >
@@ -162,7 +162,7 @@
                         <solid >1</>
                         <path >custom</>
                         <custpath >#docpath#\Visual Studio 2017\Templates\ProjectTemplates</>
-                        <ifexist >overnewer</>
+                        <ifexist >over</>
                         <if ></>
                         <srclist >
                            <rows >
@@ -241,17 +241,6 @@
                         </>
                      </>
                   </>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >OpenAL Install</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\oalinst.exe</>
-                  <cmdline >/SILENT</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
-                  <if ></>
                </>
                <_ tag = 0 id = run >
                   <desc >x64 runtime</>

@@ -24,7 +24,7 @@ cp $INPATH/x64/Debug/FK_FormHelper.dll $OUTPATH/bin/x64/FK_FormHelper_d.dll
 cp ./doc/License.txt $OUTPATH/doc
 cp ./doc/Version_CLI.txt $OUTPATH/doc/Version.txt
 #cp ../../build_vs/extlibs/OpenAL/redist/*.exe $OUTPATH/redist
-cp ./bin/x86/* $OUTPATH/bin/x86
-cp ./bin/x64/* $OUTPATH/bin/x64
+cp ../contrib/bin/x86/* $OUTPATH/bin/x86
+cp ../contrib/bin/x64/* $OUTPATH/bin/x64
 cp "$VS150COMNTOOLS\\VC\\Redist\\MSVC\\14.16.27012\\vcredist_x86.exe" $OUTPATH/redist
 cp "$VS150COMNTOOLS\\VC\\Redist\\MSVC\\14.16.27012\\vcredist_x64.exe" $OUTPATH/redist
