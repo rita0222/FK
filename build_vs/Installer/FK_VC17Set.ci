@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl ></>
-   <ver >4.0.0b4</>
+   <ver >4.0.0b08</>
    <supurl ></>
    <updurl ></>
    <dlgfont >custom</>
@@ -127,6 +127,7 @@
                   <pathadd ></>
                   <enforce >0</>
                   <if ></>
+                  <savepath >0</>
                </>
                <_ id = dlgprog expanded = 2 >
                   <children >
@@ -240,17 +241,6 @@
                         </>
                      </>
                   </>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >OpenAL Install</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\oalinst.exe</>
-                  <cmdline >/SILENT</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
-                  <if ></>
                </>
                <_ id = dlgfin >
                   <desc ></>
