@@ -138,7 +138,7 @@
                         <solid >1</>
                         <path >inst</>
                         <custpath ></>
-                        <ifexist >overnewer</>
+                        <ifexist >over</>
                         <if ></>
                         <srclist >
                            <rows rel = unpack >
@@ -162,12 +162,12 @@
                         <solid >1</>
                         <path >custom</>
                         <custpath >#docpath#\Visual Studio 2017\Templates\ProjectTemplates</>
-                        <ifexist >overnewer</>
+                        <ifexist >over</>
                         <if ></>
                         <srclist >
                            <rows >
                               <_ >
-                                 <filename >$prjpath$\FK_C++_Template.zip</>
+                                 <filename >$prjpath$\Template\FK_C++_Template.zip</>
                                  <recurse >0</>
                                  <justfile >1</>
                                  <emptydir >0</>
@@ -282,6 +282,10 @@
                   <varlist >
                      <rows ></>
                   </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
                </>
                <_ id = dlguprog expanded = 2 >
                   <children >
@@ -296,6 +300,11 @@
                   <varlist >
                      <rows ></>
                   </>
+                  <auto >1</>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
                </>
                <_ id = dlgundel >
                   <desc ></>
@@ -305,6 +314,10 @@
                   <varlist >
                      <rows ></>
                   </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
                </>
                <_ id = dlgufin >
                   <desc ></>
@@ -314,6 +327,11 @@
                   <varlist >
                      <rows ></>
                   </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <feedback ></>
+                  <if ></>
                </>
             </>
             <unicon >uninstall</>
