@@ -79,6 +79,8 @@
 #include "Shape_CLI.h"
 #include "Model_CLI.h"
 
+using namespace System::Collections::Generic;
+
 namespace FK_CLI
 {
 	//! 簡易形状表示システム用クラス
@@ -118,6 +120,8 @@ namespace FK_CLI
 	 *	\sa fk_AppWindow
 	 */
 	public ref class fk_ShapeViewer : fk_BaseObject {
+	private:
+		Dictionary<int, fk_Shape ^> map;
 	internal:
 		::FK::fk_ShapeViewer * GetP(void);
 

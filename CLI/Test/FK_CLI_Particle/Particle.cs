@@ -82,16 +82,12 @@ namespace FK_CLI_Particle
 			viewer.SetDrawMode(3, fk_DrawMode.POLYMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POINTMODE);
             viewer.Scale = 10.0;
 
-            if(GC.TryStartNoGCRegion(15728640))
+            //GC.TryStartNoGCRegion(15728640);
+            while (viewer.Draw())
             {
-                while (viewer.Draw())
-                {
-                    particle.Handle(); // パーティクルを 1 ステップ実行する。
-                    Console.WriteLine($"GC:{GC.CollectionCount(0)} {GC.GetTotalMemory(false):#,##byte}");
-                }
+                particle.Handle(); // パーティクルを 1 ステップ実行する。
+                //Console.WriteLine($"GC:{GC.CollectionCount(0)} {GC.GetTotalMemory(false):#,##byte}");
             }
-
-
 		}
 	}
 }
