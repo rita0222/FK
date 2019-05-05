@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.0.0 b08</>
+   <ver >4.0.0b08</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
@@ -225,44 +225,58 @@
                   <dlgtext ></>
                   <if ></>
                </>
-               <_ tag = 0 id = regset >
-                  <desc ></>
-                  <root >curuser</>
-                  <subkey >Environment</>
-                  <wow64 >0</>
-                  <if ></>
-                  <reglist >
-                     <rows >
-                        <_ >
-                           <valname >FK_CLI_DIR</>
-                           <regtype >str</>
-                           <value >#setuppath#</>
-                           <if ></>
+               <_ tag = 0 id = dlgprog expanded = 2 >
+                  <children >
+                     <_ tag = 0 id = regset >
+                        <desc ></>
+                        <root >curuser</>
+                        <subkey >Environment</>
+                        <wow64 >0</>
+                        <if ></>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >FK_CLI_DIR</>
+                                 <regtype >str</>
+                                 <value >#setuppath#</>
+                                 <if ></>
+                              </>
+                           </>
                         </>
                      </>
+                     <_ tag = 0 id = run >
+                        <desc >x64 runtime</>
+                        <path >custom</>
+                        <name >#setuppath#\redist\vcredist_x64.exe</>
+                        <cmdline >/quiet</>
+                        <work >custom</>
+                        <defwork >#setuppath#\redist</>
+                        <wait >1</>
+                        <runas >norm</>
+                        <if ></>
+                     </>
+                     <_ tag = 0 id = run >
+                        <desc >x86 runtime</>
+                        <path >custom</>
+                        <name >#setuppath#\redist\vcredist_x86.exe</>
+                        <cmdline >/quiet</>
+                        <work >custom</>
+                        <defwork >#setuppath#\redist</>
+                        <wait >1</>
+                        <runas >norm</>
+                        <if ></>
+                     </>
                   </>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >x64 runtime</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\vcredist_x64.exe</>
-                  <cmdline >/quiet</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
+                  <desc ></>
+                  <auto >1</>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext >完了のメッセージが出るまでしばらくお待ち下さい。</>
+                  <headlogo ></>
                   <if ></>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >x86 runtime</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\vcredist_x86.exe</>
-                  <cmdline >/quiet</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
-                  <if ></>
+                  <varlist >
+                     <rows ></>
+                  </>
                </>
                <_ id = dlgfin >
                   <desc ></>
