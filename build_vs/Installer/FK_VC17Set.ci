@@ -129,7 +129,7 @@
                   <if ></>
                   <savepath >0</>
                </>
-               <_ id = dlgprog expanded = 0 >
+               <_ id = dlgprog expanded = 2 >
                   <children >
                      <_ tag = 0 id = unpack >
                         <desc ></>
@@ -226,7 +226,15 @@
                   </>
                   <head ></>
                   <headtext ></>
-                  <dlgtext >一度サインインしなおすか、再起動を行ってから利用してください。</>
+                  <dlgtext >インストール終了後、サインアウトか再起動を行ってください。
+サインアウトする場合は、この後の再起動ダイアログで「いいえ」を選択してください。</>
+                  <if ></>
+               </>
+               <_ tag = 0 id = exit >
+                  <desc ></>
+                  <extype >rebconf</>
+                  <code >1</>
+                  <msg ></>
                   <if ></>
                </>
             </>
