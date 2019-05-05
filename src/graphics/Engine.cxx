@@ -191,6 +191,7 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
+	glEnable(GL_MULTISAMPLE);
 
 #ifndef OPENGL4
 	glDisable(GL_LIGHTING);
