@@ -52,7 +52,7 @@ namespace FK_CLI_FBO
         {
             // 1: カラーバッファからのエッジ抽出
             // 2: デプスマップ
-            MODE = 1;
+            MODE = 2;
 
             var mat = new fk_Material();
             var normalWindow = new fk_AppWindow();

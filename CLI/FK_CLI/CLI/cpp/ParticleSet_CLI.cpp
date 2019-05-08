@@ -243,10 +243,6 @@ namespace FK_CLI
 
 	void fk_ParticleSet::Handle(void)
 	{
-		for each(KeyValuePair<int, fk_Particle^> p in map) {
-			GC::KeepAlive(p.Value);
-		}
-
 		if(AllMode == true && AllMethod != nullptr) {
 			AllMethod();
 		}

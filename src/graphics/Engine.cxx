@@ -192,6 +192,7 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
 	glEnable(GL_MULTISAMPLE);
+	glClearDepth(1.0);
 	//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
 #ifndef OPENGL4
