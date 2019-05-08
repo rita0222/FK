@@ -1,5 +1,7 @@
 ﻿using System;
 using FK_CLI;
+using System.Runtime;
+using System.Threading;
 
 namespace FK_CLI_Particle
 {
@@ -80,9 +82,11 @@ namespace FK_CLI_Particle
 			viewer.SetDrawMode(3, fk_DrawMode.POLYMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POINTMODE);
             viewer.Scale = 10.0;
 
-            while(viewer.Draw())
+            //GC.TryStartNoGCRegion(15728640);
+            while (viewer.Draw())
             {
                 particle.Handle(); // パーティクルを 1 ステップ実行する。
+                //Console.WriteLine($"GC:{GC.CollectionCount(0)} {GC.GetTotalMemory(false):#,##byte}");
             }
 		}
 	}

@@ -101,6 +101,7 @@ namespace FK_CLI {
 		if(pBase == nullptr) return;
 		if(dFlg == true) delete GetP();
 		pBase = nullptr;
+		map.Clear();
 	}
 
 	fk_ShapeViewer::!fk_ShapeViewer()
@@ -111,6 +112,7 @@ namespace FK_CLI {
 			delete GetP();
 		}
 		pBase = nullptr;
+		map.Clear();
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -118,21 +120,20 @@ namespace FK_CLI {
 	void fk_ShapeViewer::WindowSize::set(fk_Dimension^ argD)
 	{
 		if(!argD) return;
-		GetP()->setWindowSize(argD->pDim->w, argD->pDim->h);
+		GetP()->setWindowSize(argD->pDim->w, argD->pDim->h);		
 	}
 
 	void fk_ShapeViewer::Shape::set(fk_Shape^ argShape)
 	{
 		if(!argShape) return;
 		GetP()->setShape(argShape->GetP());
+		map[0] = argShape;
 	}
 
 	fk_Shape^ fk_ShapeViewer::Shape::get()
 	{
-		fk_Shape^ S = gcnew fk_Shape(false);
-		S->pBase = GetP()->getShape();
-		S->dFlg = false;
-		return S;
+		if (map.ContainsKey(0) == false) return nullptr;
+		return map[0];
 	}
 
 	int fk_ShapeViewer::ModelNum::get(void)
@@ -285,20 +286,23 @@ namespace FK_CLI {
 	void fk_ShapeViewer::SetShape(int argID, fk_Shape^ argShape)
 	{
 		if(!argShape) return;
+		map[argID] = argShape;
 		GetP()->setShape(argID, argShape->GetP());
 	}
 
 	fk_Shape^ fk_ShapeViewer::GetShape(int argID)
 	{
-		fk_Shape^ S = gcnew fk_Shape(false);
-		S->pBase = GetP()->getShape(argID);
-		S->dFlg = false;
-		return S;
+		//fk_Shape^ S = gcnew fk_Shape(false);
+		//S->pBase = GetP()->getShape(argID);
+		//S->dFlg = false;
+		if (map.ContainsKey(argID) == false) return nullptr;
+		return map[argID];
 	}
 
 	void fk_ShapeViewer::ClearModel(void)
 	{
 		GetP()->clearModel();
+		map.Clear();
 	}
 
 	void fk_ShapeViewer::SetDrawMode(int argID, fk_DrawMode argMode)
@@ -456,5 +460,3 @@ namespace FK_CLI {
 		return GetP()->snapImage(argImage->GetP());
 	}
 }
-
-

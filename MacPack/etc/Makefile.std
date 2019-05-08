@@ -28,7 +28,7 @@ FK_STATIC_LIB	= $(FK_LIB)/lib/static
 FK_DYNAMIC_LIB	= $(FK_LIB)/lib/dynamic
 FK_INCLUDE	= $(FK_LIB)/include
 
-OPS		= -std=c++14 -O -pipe
+OPS		= -std=c++17 -O -pipe
 
 SYSOPS		= -D_MACOSX_
 

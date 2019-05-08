@@ -25,8 +25,6 @@ LIBSRCS		= \
 			DataBase.cxx \
 			DrawCache.cxx \
 			Edge.cxx \
-			FileInput.cxx \
-			FileOutput.cxx \
 			Gregory.cxx \
 			HRCParser.cxx \
 			Half.cxx \

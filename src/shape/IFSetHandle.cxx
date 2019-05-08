@@ -170,18 +170,18 @@ fk_Half * fk_IFSetHandle::MakeNewEdge(int vID1, int vID2,
 	newH2 = DB->GetNewHalf();
 
 	// 親子関係の設定 
-	newE->SetRightHalf(newH1);
-	newE->SetLeftHalf(newH2);
-	newH1->SetParentEdge(newE);
-	newH2->SetParentEdge(newE);
+	newE->SetRightHalf(newH1->getID());
+	newE->SetLeftHalf(newH2->getID());
+	newH1->SetParentEdge(newE->getID());
+	newH2->SetParentEdge(newE->getID());
 
 	// 半稜線に対する頂点の設定 
-	newH1->SetVertex(DB->GetVData(vID1));
-	newH2->SetVertex(DB->GetVData(vID2));
+	newH1->SetVertex(vID1);
+	newH2->SetVertex(vID2);
 
 	// 頂点に対する半稜線の設定 
-	DB->GetVData(vID1)->SetOneHalf(newH1);
-	DB->GetVData(vID2)->SetOneHalf(newH2);
+	DB->GetVData(vID1)->SetOneHalf(newH1->getID());
+	DB->GetVData(vID2)->SetOneHalf(newH2->getID());
 
 	// VPair へ接続関係を登録 
 	VPair->insert(fk_IFS_Entry(vID1, newE));
@@ -190,13 +190,11 @@ fk_Half * fk_IFSetHandle::MakeNewEdge(int vID1, int vID2,
 	return newH1;
 }
 
-void fk_IFSetHandle::MakeNewLoop(vector<fk_Half *> *HalfSet, bool argFlg)
+void fk_IFSetHandle::MakeNewLoop(vector<fk_Half *> *argHalfSet, bool argFlg)
 {
-	vector<fk_Half *>::iterator		halfI;
-	fk_Half							*startH, *curH, *prevH, *lastH;
-	fk_Loop							*newL;
+	fk_Half		*startH, *prevH;
+	fk_Loop		*newL;
 
-	lastH = nullptr;
 	// 新位相要素の生成 
 	if(argFlg == true) {
 		newL = DB->GetNewLoop();
@@ -204,23 +202,22 @@ void fk_IFSetHandle::MakeNewLoop(vector<fk_Half *> *HalfSet, bool argFlg)
 		newL = nullptr;
 	}
 
-	startH = *(HalfSet->begin());
+	startH = argHalfSet->front();
 	prevH = startH;
 
-	// ループ上の半稜線に接続関係を設定 
-	for(halfI = HalfSet->begin() + 1; halfI != HalfSet->end(); ++halfI) {
-		curH = *halfI;
-		curH->SetPrevHalf(prevH);
-		prevH->SetNextHalf(curH);
-		curH->SetParentLoop(newL);
-		prevH = curH;
-		lastH = curH;
+	// ループ上の半稜線に接続関係を設定
+	for(auto halfI = argHalfSet->begin(); halfI != argHalfSet->end(); ++halfI) {
+		auto curH = *halfI;
+		curH->SetPrevHalf(prevH->getID());
+		prevH->SetNextHalf(curH->getID());
+		curH->SetParentLoop(newL->getID());
+		prevH = &(*curH);
 	}
 
-	startH->SetPrevHalf(lastH);
-	lastH->SetNextHalf(startH);
-	startH->SetParentLoop(newL);
-	if(argFlg == true) newL->SetOneHalf(startH);
+	startH->SetPrevHalf(prevH->getID());
+	prevH->SetNextHalf(startH->getID());
+	startH->SetParentLoop(newL->getID());
+	if(argFlg == true) newL->SetOneHalf(startH->getID());
 
 	return;
 }
@@ -297,7 +294,7 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 			HalfStock2->push_back(mateH);
 		}
 
-		edgeCount[newH->getParentEdge()] = 1;
+		edgeCount[newH->getParentEdge()->getID()] = 1;
 	} else {
 		HalfStock1->push_back(existE->getLeftHalf());
 
@@ -305,9 +302,9 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 			HalfStock2->push_back(existE->getRightHalf());
 		}
 
-		edgeCount[existE]++;
+		edgeCount[existE->getID()]++;
 
-		if(edgeCount[existE] > 2) {
+		if(edgeCount[existE->getID()] > 2) {
 			ss << "Edge ID ... " << existE->getID() << endl;
 
 			tmpRV = existE->getRightHalf()->getVertex();
@@ -366,8 +363,7 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 
 		for(tmpH = DB->GetNextH(nullptr);
 			tmpH != nullptr; tmpH = DB->GetNextH(tmpH)) {
-			if(tmpH->getVertex() == mateVertex &&
-			   tmpH->getPrevHalf() == nullptr) {
+			if(tmpH->getVertex() == mateVertex && tmpH->getPrevHalf() == nullptr) {
 				nextH = tmpH;
 				halfCount++;
 			}
@@ -379,8 +375,8 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 			return false;
 		}
 
-		curH->SetNextHalf(nextH);
-		nextH->SetPrevHalf(curH);
+		curH->SetNextHalf(nextH->getID());
+		nextH->SetPrevHalf(curH->getID());
 		curH = nextH;
 	}
 
@@ -400,7 +396,7 @@ bool fk_IFSetHandle::DB_Check(void)
 	else return true;
 }
 
-int fk_IFSetHandle::GetEdgeCountNum(fk_Edge *argEdge)
+int fk_IFSetHandle::GetEdgeCountNum(int argEdge)
 {
 	auto p = edgeCount.find(argEdge);
 

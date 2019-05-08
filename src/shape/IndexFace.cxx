@@ -149,6 +149,24 @@ void fk_EdgePair::set(int argID1, int argID2)
 
 //////////////////////////////////////////////////////////////////////////////
 
+const static double vParam[8][3] = {
+	{0.5, 0.5, 0.5},
+	{-0.5, 0.5, 0.5},
+	{0.5, -0.5, 0.5},
+	{-0.5, -0.5, 0.5},
+	{0.5, 0.5, -0.5},
+	{-0.5, 0.5, -0.5},
+	{0.5, -0.5, -0.5},
+	{-0.5, -0.5, -0.5}
+};
+
+const static int vertexTable[6][4] = {
+	{0, 1, 3, 2}, {4, 6 ,7, 5},
+	{2, 6, 4, 0}, {1, 5, 7, 3},
+	{0, 4, 5, 1}, {2, 3, 7, 6}
+};
+
+
 fk_IndexFaceSet::fk_IndexFaceSet(void)
 	: anim(nullptr), cloneFlg(false), orgIFS(nullptr),
 	  edgeIBO(0), faceIBO(0)
@@ -935,23 +953,6 @@ void fk_IndexFaceSet::makeBlock(double argX, double argY, double argZ)
 	vector<int>				loop;
 	vector< vector<int> >	ifs;
 
-	const static double vParam[8][3] = {
-		{0.5, 0.5, 0.5},
-		{-0.5, 0.5, 0.5},
-		{0.5, -0.5, 0.5},
-		{-0.5, -0.5, 0.5},
-		{0.5, 0.5, -0.5},
-		{-0.5, 0.5, -0.5},
-		{0.5, -0.5, -0.5},
-		{-0.5, -0.5, -0.5}
-	};
-
-	static int vertexTable[6][4] = {
-		{0, 1, 3, 2}, {4, 6 ,7, 5},
-		{2, 6, 4, 0}, {1, 5, 7, 3},
-		{0, 4, 5, 1}, {2, 3, 7, 6}
-	};
-
 	fk_Vector vec;
 	for(int i = 0; i < 6; ++i) {
 		loop.clear();
@@ -971,12 +972,15 @@ void fk_IndexFaceSet::makeBlock(double argX, double argY, double argZ)
 void fk_IndexFaceSet::setBlockSize(double argX, double argY, double argZ)
 
 {
-	for(int i = 0; i < vertexPosition.getSize(); ++i) {
-		fk_Vector pos = vertexPosition.getV(i);
-		pos.x = (pos.x > 0.0) ? argX * 0.5 : -argX * 0.5;
-		pos.y = (pos.y > 0.0) ? argY * 0.5 : -argY * 0.5;
-		pos.z = (pos.z > 0.0) ? argZ * 0.5 : -argZ * 0.5;
-		moveVPosition(i, pos);
+	fk_Vector pos;
+
+	for(int i = 0; i < 6; ++i) {
+		for (int j = 0; j < 4; j++) {
+			pos.x = vParam[vertexTable[i][j]][0] * argX;
+			pos.y = vParam[vertexTable[i][j]][1] * argY;
+			pos.z = vParam[vertexTable[i][j]][2] * argZ;
+			moveVPosition(i*4+j, pos);
+		}
 	}
 
 	return;

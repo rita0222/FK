@@ -26,6 +26,13 @@
     <ClCompile Include="..\..\src\model\Model.cxx" />
     <ClCompile Include="..\..\src\model\ModelTree.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\Boundary.h" />
+    <ClInclude Include="..\..\FK\BoundaryElem.H" />
+    <ClInclude Include="..\..\FK\BVHMotion.h" />
+    <ClInclude Include="..\..\FK\MatAdmin.h" />
+    <ClInclude Include="..\..\FK\Model.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{68729992-08E3-44C7-8592-BF26975E0BF3}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>

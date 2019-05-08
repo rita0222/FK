@@ -71,19 +71,20 @@
  ****************************************************************************/
 
 #include <FK/ShaderProgram.h>
-//#include <FK/Window.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
 string fk_ShaderProgram::vertexBuildIn;
-string fk_ShaderProgram::fragmentBuildIn;
 string fk_ShaderProgram::geometryBuildIn;
+string fk_ShaderProgram::fragmentBuildIn;
+string fk_ShaderProgram::fboBuildIn;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0),
 	  idVertex(0), idFragment(0), idGeometry(0),
-	  parameter(nullptr)
+	  parameter(nullptr), fboMode(false)
 {
 	if(vertexBuildIn.empty() == true) {
 		vertexBuildIn +=
@@ -94,6 +95,15 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 			;
 		vertexBuildIn +=
 			#include "GLSL/Attribute.out"
+			;
+	}
+
+	if(geometryBuildIn.empty() == true) {
+		geometryBuildIn +=
+			#include "GLSL/Material.out"
+			;
+		geometryBuildIn +=
+			#include "GLSL/Uniform.out"
 			;
 	}
 
@@ -111,15 +121,13 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 			#include "GLSL/Fragment.out"
 			;
 	}
-	
-	if(geometryBuildIn.empty() == true) {
-		geometryBuildIn +=
-			#include "GLSL/Material.out"
-			;
-		geometryBuildIn +=
-			#include "GLSL/Uniform.out"
+
+	if(fboBuildIn.empty() == true) {
+		fboBuildIn +=
+			#include "GLSL/FBO_BuildIn.out"
 			;
 	}
+	
 	return;
 }
 
@@ -135,6 +143,11 @@ fk_ShaderProgram::~fk_ShaderProgram()
 void fk_ShaderProgram::SetParameter(fk_ShaderParameter *argP)
 {
 	parameter = argP;
+}
+
+void fk_ShaderProgram::SetFBOMode(bool argMode)
+{
+	fboMode = argMode;
 }
 
 bool fk_ShaderProgram::validate(void)
@@ -319,14 +332,14 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		buildIn = &vertexBuildIn;
 		break;
 		
-	  case GL_FRAGMENT_SHADER:
-		buildIn = &fragmentBuildIn;
-		break;
-		
 	  case GL_GEOMETRY_SHADER:
 		buildIn = &geometryBuildIn;
 		break;
 
+	  case GL_FRAGMENT_SHADER:
+		buildIn = (fboMode == true) ? &fboBuildIn : &fragmentBuildIn;
+		break;
+		
 	  default:
 		return;
 	}

@@ -95,7 +95,8 @@ namespace FK {
 		GLuint			vsModelID, vsElemID, vsIFSID, fsPointID, fsIFSID;
 
 		void	ShaderSetup(void);
-		int		SubroutineSetup(fk_Model *);
+		void	SubroutineSetup(fk_Model *);
+		int		GetPointNum(fk_Model *);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
 		void	Draw_Point(fk_Model *, fk_ShaderParameter *, int);

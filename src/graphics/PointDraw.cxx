@@ -118,7 +118,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
-	int pointNum = SubroutineSetup(argModel);
+	int pointNum = GetPointNum(argModel);
+	if(shader == pointShader) SubroutineSetup(argModel);
 	
 	glPointSize((GLfloat)argModel->getPointSize());
 
@@ -195,7 +196,7 @@ void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argP
 	argProg->link();
 }
 
-int fk_PointDraw::SubroutineSetup(fk_Model *argModel)
+void fk_PointDraw::SubroutineSetup(fk_Model *argModel)
 {
 	auto shape = argModel->getShape();
 	auto mode = argModel->getElementMode();
@@ -212,20 +213,39 @@ int fk_PointDraw::SubroutineSetup(fk_Model *argModel)
 			break;
 
 		  default:
-			return 0;
+			return;
 		}
 		
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
-		return dynamic_cast<fk_Point *>(shape)->getSize();
+		return;
 
 	  case FK_SHAPE_IFS:
 		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsIFSID);
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsIFSID);
+		return;
+
+	  default:
+		break;
+	}
+
+	return;
+}
+
+int fk_PointDraw::GetPointNum(fk_Model *argModel)
+{
+	auto shape = argModel->getShape();
+
+	switch(shape->getRealShapeType()) {
+	  case FK_SHAPE_POINT:
+		return dynamic_cast<fk_Point *>(shape)->getSize();
+
+	  case FK_SHAPE_IFS:
 		return dynamic_cast<fk_IndexFaceSet *>(shape)->getPosSize();
 
 	  default:
 		break;
 	}
+
 	return 0;
 }	
 

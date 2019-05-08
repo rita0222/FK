@@ -256,52 +256,54 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
 
-	GLuint id = 0;
+	if(shader == phongShader || shader == gouraudShader) {
+		GLuint id = 0;
 
-	switch(argModel->getShadingMode()) {
-	  case FK_SHADING_PHONG:
-		switch(texMode) {
-		  case FK_TEX_MODULATE:
-			id = modulate_p_ID;
+		switch(argModel->getShadingMode()) {
+		  case FK_SHADING_PHONG:
+			switch(texMode) {
+			  case FK_TEX_MODULATE:
+				id = modulate_p_ID;
+				break;
+
+			  case FK_TEX_REPLACE:
+				id = replace_p_ID;
+				break;
+
+			  case FK_TEX_DECAL:
+				id = decal_p_ID;
+				break;
+
+			  default:
+				break;
+			}
 			break;
 
-		  case FK_TEX_REPLACE:
-			id = replace_p_ID;
-			break;
+		  case FK_SHADING_GOURAUD:
+			switch(texMode) {
+			  case FK_TEX_MODULATE:
+				id = modulate_g_ID;
+				break;
 
-		  case FK_TEX_DECAL:
-			id = decal_p_ID;
+			  case FK_TEX_REPLACE:
+				id = replace_g_ID;
+				break;
+
+			  case FK_TEX_DECAL:
+				id = decal_g_ID;
+				break;
+
+			  default:
+				break;
+			}
 			break;
 
 		  default:
 			break;
 		}
-		break;
 
-	  case FK_SHADING_GOURAUD:
-		switch(texMode) {
-		  case FK_TEX_MODULATE:
-			id = modulate_g_ID;
-			break;
-
-		  case FK_TEX_REPLACE:
-			id = replace_g_ID;
-			break;
-
-		  case FK_TEX_DECAL:
-			id = decal_g_ID;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  default:
-		break;
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &id);
 	}
-
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &id);
 
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

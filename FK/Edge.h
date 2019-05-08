@@ -103,7 +103,6 @@ namespace FK {
 	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
 	 *	派生クラスのうち、ID 管理については fk_Topology,
-	 *	個別マテリアル設定については fk_TopologyMaterial,
 	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
 	 *	稜線に対して、幾何形状として曲線データを設定することができます。
@@ -112,42 +111,33 @@ namespace FK {
 	 *		fk_TopologyMaterial, fk_Attribute, fk_Curve, fk_BezCurve, fk_BSplCurve
 	 */
 
-	class fk_Edge : public fk_TopologyMaterial {
+	class fk_Edge : public fk_Topology {
 
 		friend class		fk_Operation;
 		friend class		fk_DataBase;
-		friend class		fk_FileInput;
-		friend class		fk_FileOutput;
 		friend class		fk_IFSetHandle;
 
 	public:
 		//! コンストラクタ
-		fk_Edge(int);
+		fk_Edge(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Edge();
-
-		//! 初期化関数
-		/*!
-		 *	この関数は、稜線位相の初期化を行います。
-		 *	通常、ユーザがこの関数を利用することはありません。
-		 */
-		void		Init(int);
 
 		//! 左側半稜線取得関数
 		/*!
 		 *	この稜線に属する「左側」にあたる半稜線を取得します。
 		 *
-		 *	\return 「左側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
+		 *	\return 「左側」にあたる半稜線を表すインスタンス
 		 */
-		fk_Half *	getLeftHalf(void) const;
+		fk_Half * getLeftHalf(void) const;
 
 		//! 右側半稜線取得関数
 		/*!
 		 *	この稜線に属する「右側」にあたる半稜線を取得します。
 		 *
-		 *	\return 「右側」にあたる半稜線を表す fk_Half 型インスタンスのアドレス。
+		 *	\return 「右側」にあたる半稜線を表すインスタンス
 		 */
-		fk_Half *	getRightHalf(void) const;
+		fk_Half * getRightHalf(void) const;
 
 		//! 描画線幅取得関数
 		/*!
@@ -193,6 +183,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
+		void		Init(fk_DataBase *, int);
 		void		Print(void) const;
 		bool		Check(void) const;
 		bool		Compare(fk_Edge *) const;
@@ -200,14 +191,14 @@ namespace FK {
 #endif
 
 	private:
-		fk_Half		*leftHalf;
-		fk_Half		*rightHalf;
+		int		leftHalf;
+		int		rightHalf;
 		fk_Curve	*curv;
 
 		double		width;
 
-		fk_Half *  	SetLeftHalf(fk_Half *);
-		fk_Half *	SetRightHalf(fk_Half *);
+		int  	SetLeftHalf(int);
+		int		SetRightHalf(int);
 
 		void		SwapHalf(void);
 	};

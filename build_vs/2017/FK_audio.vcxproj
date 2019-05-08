@@ -23,6 +23,9 @@
     <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\Audio.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EBF4A69F-3AA4-4826-B8FC-36B6D77E8C3A}</ProjectGuid>
     <RootNamespace>FK2_audio</RootNamespace>

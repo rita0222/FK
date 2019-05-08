@@ -70,13 +70,22 @@
  *
  ****************************************************************************/
 #include <FK/ShaderBinder.h>
+#include <FK/DrawBase.H>
 
 using namespace std;
 using namespace FK;
 
+const string fk_ShaderBinder::colorBufName = "fk_ColorBuf";
+const string fk_ShaderBinder::depthBufName = "fk_DepthBuf";
+const string fk_ShaderBinder::fboTexCoordName = "fk_FBOTexCoord";
+const string fk_ShaderBinder::fboSizeName = "fk_FBOSize";
+
 bool fk_ShaderBinder::isExtensionInitialized = false;
+string fk_ShaderBinder::fboVertexCode;
+string fk_ShaderBinder::fboGeometryCode;
 
 static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+//static const GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
 
 bool fk_ShaderBinder::Initialize()
 {
@@ -88,12 +97,26 @@ bool fk_ShaderBinder::Initialize()
 	isExtensionInitialized = true;
 #endif
 
+	if(fboVertexCode.empty() == true) {
+		fboVertexCode +=
+			#include "GLSL/FBO_Vertex.out"
+			;
+	}
+
+	if(fboGeometryCode.empty() == true) {
+		fboGeometryCode +=
+			#include "GLSL/FBO_Geom.out"
+			;
+	}
+
 	return isExtensionInitialized;
 }
 
 fk_ShaderBinder::fk_ShaderBinder()
-	: program(&innerProgram), parameter(&innerParameter),  usingProgram(false), setupFlg(false),
-	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0)
+	: program(&innerProgram), parameter(&innerParameter),
+	  usingProgram(false), setupFlg(false),
+	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
+	  colorBuf(0), depthBuf(0)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -102,7 +125,8 @@ fk_ShaderBinder::fk_ShaderBinder()
 
 fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
 	: usingProgram(false),
-	  bufW(0), bufH(0), rectVAO(0), fboHandle(0), colorBuf(0), depthBuf(0), colorLoc(0), depthLoc(0)
+	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
+	  colorBuf(0), depthBuf(0)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -113,6 +137,7 @@ fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *
 
 fk_ShaderBinder::~fk_ShaderBinder()
 {
+	//finalizeFrameBufferObject();
 }
 
 void fk_ShaderBinder::setProgram(fk_ShaderProgram *argProg)
@@ -140,86 +165,48 @@ fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
 {
-	//argModel->preShader = [&](){ ProcPreShader(); };
-	//argModel->postShader = [&](){ ProcPostShader(); };
 	argModel->setShader(this);
 }
 
 void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 {
 	argModel->setShader(nullptr);
-	//argModel->preShader = [](){};
-	//argModel->postShader = [](){};
+}
+
+void fk_ShaderBinder::LoadFBOShader(void)
+{
+	program->vertexShaderSource = fboVertexCode;
+	program->geometryShaderSource = fboGeometryCode;
+	program->SetFBOMode(true);
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 {
 	bufW = width;
 	bufH = height;
-
-    static GLfloat verts[] = {
-        -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, -1.0f, 1.0f, 0.0f
-    };
-    static GLfloat tc[] = {
-        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
-    };
-
-	SetupFBO();
-
-	auto prog = getProgram();
-	auto id = prog->getProgramID();
-
-	GLuint handle[2];
-	glGenBuffers(2, handle);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), tc, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &rectVAO);
-	glBindVertexArray(rectVAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[0]);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-	glBindAttribLocation(id, 0, "fk_Vertex");
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle[1]);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(2);
-	glBindAttribLocation(id, 2, "fk_TexCoord");
-
-	glBindVertexArray(0);
-
-	glBindFragDataLocation(id, 0, "fk_Fragment");
-
-	prog->link();
-
-	colorLoc = glGetUniformLocation(id, "fk_ColorBuf");
-	depthLoc = glGetUniformLocation(id, "fk_DepthBuf");
-	if(colorLoc >= 0) glUniform1i(colorLoc, 0);
-	if(depthLoc >= 0) glUniform1i(depthLoc, 1);
+	LoadFBOShader();
+	fboSize.clear();
+	fboSize.push_back(float(bufW));
+	fboSize.push_back(float(bufH));
 }
 
 void fk_ShaderBinder::SetupFBO(void)
 {
+	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &colorBuf);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	glActiveTexture(GL_TEXTURE1);
 	glGenTextures(1, &depthBuf);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufW, bufH, 0,
-				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, bufW, bufH, 0,
+				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -232,17 +219,23 @@ void fk_ShaderBinder::SetupFBO(void)
 	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, bufW, bufH);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
-*/	
+*/
 	glGenFramebuffers(1, &fboHandle);
-	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
 
+#ifdef WIN32	
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, bufW);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, bufH);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 2);
+#endif
+	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuf, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, colorBuf, 0);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
 	
-	//glDrawBuffers(1, drawBuffers);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 
@@ -253,17 +246,45 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 
 void fk_ShaderBinder::finalizeFrameBufferObject(void)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &fboHandle);
-	glDeleteTextures(1, &colorBuf);
-	glDeleteTextures(1, &depthBuf);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	if (bufW > 0 && bufH > 0) {
+		glDeleteFramebuffers(1, &fboHandle);
+		glDeleteTextures(1, &colorBuf);
+		glDeleteTextures(1, &depthBuf);
+	}
 }
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
-	if(argWin == nullptr) return;
+	if(argWin == nullptr || bufW <= 0 || bufH <= 0) return;
+	auto id = program->getProgramID();
 
-	GLuint		id = program->getProgramID();
+	SetupFBO();
+
+	GLuint handle;
+	glGenBuffers(1, &handle);
+
+	static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &rectVAO);
+	glBindVertexArray(rectVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+	glBindAttribLocation(id, 0, fk_Shape::vertexName.c_str());
+	glBindFragDataLocation(id, 0, fk_DrawBase::fragmentName.c_str());
+	program->link();
+
+	parameter->setRegister(colorBufName, 0);
+	parameter->setRegister(depthBufName, 1);
+	parameter->setRegister(fboSizeName, &fboSize);
 
 	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
 	fk_funcSet	postD = fk_funcSet(id, [&](){ ProcPostDraw(); });
@@ -320,33 +341,44 @@ void fk_ShaderBinder::ProcPostShader(void)
 
 void fk_ShaderBinder::ProcPreDraw(void)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, fboHandle);
-	glDrawBuffers(2, drawBuffers);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
+	glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
+	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
 	}
 }
 
 void fk_ShaderBinder::ProcPostDraw(void)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
+
 	ProcPreShader();
 	glDrawBuffer(GL_BACK);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	glActiveTexture(GL_TEXTURE0);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
 	glActiveTexture(GL_TEXTURE1);
+	glReadBuffer(GL_DEPTH_ATTACHMENT);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
 
 	glBindVertexArray(rectVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawArrays(GL_POINTS, 0, 1);
+
 	ProcPostShader();
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glFlush();
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
@@ -358,4 +390,3 @@ bool fk_ShaderBinder::IsSetup(void)
 {
 	return setupFlg;
 }
-

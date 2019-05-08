@@ -58,8 +58,6 @@
     <ClInclude Include="..\..\FK\Error.H" />
     <ClInclude Include="..\..\FK\FaceDraw.H" />
     <ClInclude Include="..\..\FK\FileBase.h" />
-    <ClInclude Include="..\..\FK\FileInput.H" />
-    <ClInclude Include="..\..\FK\FileOutput.H" />
     <ClInclude Include="..\..\FK\FK.h" />
     <ClInclude Include="..\..\FK\FKUT.h" />
     <ClInclude Include="..\..\FK\Fog.h" />
@@ -283,8 +281,6 @@
     <ClCompile Include="..\..\src\shape\DXFOut.cxx" />
     <ClCompile Include="..\..\src\shape\DXFParser.cxx" />
     <ClCompile Include="..\..\src\shape\Edge.cxx" />
-    <ClCompile Include="..\..\src\shape\FileInput.cxx" />
-    <ClCompile Include="..\..\src\shape\FileOutput.cxx" />
     <ClCompile Include="..\..\src\shape\Gregory.cxx" />
     <ClCompile Include="..\..\src\shape\Half.cxx" />
     <ClCompile Include="..\..\src\shape\History.cxx" />
@@ -526,6 +522,7 @@
       </IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/IGNORE:4049,4075,4098,4099,4248 %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
@@ -557,6 +554,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/IGNORE:4049,4075,4098,4099,4248 %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
@@ -597,6 +595,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/IGNORE:4049,4075,4098,4099,4248 %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
@@ -636,6 +635,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/IGNORE:4049,4075,4098,4099,4248 %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out

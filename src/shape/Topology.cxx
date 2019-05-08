@@ -78,6 +78,7 @@ fk_Topology::fk_Topology(void)
 	ID = -1;
 	ariveFlg = false;
 	type = FK_UNDEFINED_TYPE;
+	DB = nullptr;
 
 	return;
 }
@@ -87,13 +88,13 @@ fk_Topology::~fk_Topology()
 	return;
 }
 
-void fk_Topology::InitTopology(int argID, fk_TopologyType argType)
+void fk_Topology::InitTopology(fk_DataBase *argDB, int argID, fk_TopologyType argType)
 {
 	DeleteElem();
+	DB = argDB;
 	SetType(argType);
-	MakeElem(argID);
+	SetID(argID);
 }
-
 
 void fk_Topology::SetType(fk_TopologyType argType)
 {
@@ -127,60 +128,12 @@ void fk_Topology::DeleteElem(void)
 	return;
 }
 
-void fk_Topology::MakeElem(int argID)
-{
-	SetID(argID);
-	return;
-}
-
 bool fk_Topology::CloneElem(fk_Topology *argTP)
 {
+	DB = argTP->DB;
 	ID = argTP->ID;
 	ariveFlg = argTP->ariveFlg;
 
 	if(ID == FK_UNDEFINED) return false;
 	return true;
 }
-
-////////////////////////////////////////////////////////////////////////
-
-fk_TopologyMaterial::fk_TopologyMaterial(void)
-{
-	mateID = FK_UNDEFINED;
-	mateMode = FK_CHILD_MODE;
-}
-
-fk_TopologyMaterial::~fk_TopologyMaterial()
-{
-	return;
-}
-
-void fk_TopologyMaterial::setElemMaterialMode(fk_MaterialMode argMode)
-{
-	mateMode = argMode;
-	return;
-}
-
-void fk_TopologyMaterial::setElemMaterialID(int argID)
-{
-	mateID = argID;
-	return;
-}
-
-fk_MaterialMode fk_TopologyMaterial::getElemMaterialMode(void)
-{
-	return mateMode;
-}
-
-int fk_TopologyMaterial::getElemMaterialID(void)
-{
-	return mateID;
-}
-
-void fk_TopologyMaterial::CloneMaterial(fk_TopologyMaterial *argMat)
-{
-	mateMode = argMat->mateMode;
-	mateID = argMat->mateID;
-	return;
-}
-

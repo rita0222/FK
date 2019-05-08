@@ -108,20 +108,20 @@ namespace FK {
 		bool				ExistLoop(fk_Loop *) const;
 		bool				ExistLoop(int) const;
 
-		fk_Vertex *			GetVData(int) const;
-		fk_Half *			GetHData(int) const;
-		fk_Edge *			GetEData(int) const;
-		fk_Loop *			GetLData(int) const;
+		fk_Vertex *			GetVData(int);
+		fk_Half *			GetHData(int);
+		fk_Edge *			GetEData(int);
+		fk_Loop *			GetLData(int);
 
-		fk_Vertex *			GetNextV(fk_Vertex *) const;
-		fk_Half *			GetNextH(fk_Half *) const;
-		fk_Edge *			GetNextE(fk_Edge *) const;
-		fk_Loop *			GetNextL(fk_Loop *) const;
+		fk_Vertex *			GetNextV(fk_Vertex *);
+		fk_Half *			GetNextH(fk_Half *);
+		fk_Edge *			GetNextE(fk_Edge *);
+		fk_Loop *			GetNextL(fk_Loop *);
 
-		fk_Vertex *			GetLastV(void) const;
-		fk_Half *			GetLastH(void) const;
-		fk_Edge *			GetLastE(void) const;
-		fk_Loop *			GetLastL(void) const;
+		fk_Vertex *			GetLastV(void);
+		fk_Half *			GetLastH(void);
+		fk_Edge *			GetLastE(void);
+		fk_Loop *			GetLastL(void);
 
 		int					GetVNum(void) const;
 		int					GetHNum(void) const;
@@ -149,17 +149,17 @@ namespace FK {
 		fk_IDAdmin			eAdmin;		// 稜線 ID 管理オブジェクト
 		fk_IDAdmin			lAdmin;		// ループ ID 管理オブジェクト
 
-		std::vector<fk_Vertex *>	vSet;
-		std::vector<fk_Half *>		hSet;
-		std::vector<fk_Edge *>		eSet;
-		std::vector<fk_Loop *>		lSet;
+		std::vector<fk_Vertex>		vSet;
+		std::vector<fk_Half>		hSet;
+		std::vector<fk_Edge>		eSet;
+		std::vector<fk_Loop>		lSet;
 
 		void				ResizeData(fk_DataBase *);
 		void				ResizeData(int, int, int, int);
-		void				VSetClone(std::vector<fk_Vertex *> *);
-		void				HSetClone(std::vector<fk_Half *> *);
-		void				ESetClone(std::vector<fk_Edge *> *);
-		void				LSetClone(std::vector<fk_Loop *> *);
+		void				VSetClone(std::vector<fk_Vertex> *);
+		void				HSetClone(std::vector<fk_Half> *);
+		void				ESetClone(std::vector<fk_Edge> *);
+		void				LSetClone(std::vector<fk_Loop> *);
 
 		bool				VCompare(fk_DataBase *);
 		bool				HCompare(fk_DataBase *);

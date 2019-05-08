@@ -90,6 +90,12 @@ namespace FK_CLI {
 
 	fk_Particle::~fk_Particle()
 	{
+		this->!fk_Particle();
+	}
+
+	fk_Particle::!fk_Particle()
+	{
+		pBase = nullptr;
 	}
 
 	int fk_Particle::ID::get(void)

@@ -31,5 +31,5 @@ mkdir -p $FKPATH/include/FK
 cp ../../FK/*.[h,H] $FKPATH/include/FK
 
 # misc
-cp -r contrib/redist $FKPATH
 cp -r contrib/doc $FKPATH
+cp -r contrib/dll $FKPATH

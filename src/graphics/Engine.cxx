@@ -191,6 +191,8 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
+	glEnable(GL_MULTISAMPLE);
+	//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
 #ifndef OPENGL4
 	glDisable(GL_LIGHTING);
@@ -262,7 +264,7 @@ void fk_GraphicsEngine::Draw(void)
 	}
 
 	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	ApplySceneParameter(true);
 

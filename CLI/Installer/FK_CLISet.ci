@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.0.0 b06</>
+   <ver >4.0.0b08</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
@@ -129,16 +129,16 @@
                   <if ></>
                   <savepath >0</>
                </>
-               <_ id = dlgprog expanded = 2 >
+               <_ id = dlgprog expanded = 0 >
                   <children >
                      <_ tag = 0 id = unpack >
-                        <desc ></>
+                        <desc >システムインストール</>
                         <comptype >default</>
                         <ratio >r5</>
                         <solid >1</>
                         <path >inst</>
                         <custpath ></>
-                        <ifexist >overnewer</>
+                        <ifexist >over</>
                         <if ></>
                         <srclist >
                            <rows rel = unpack >
@@ -156,13 +156,13 @@
                         </>
                      </>
                      <_ tag = 0 id = unpack >
-                        <desc ></>
+                        <desc >プロジェクトテンプレートインストール</>
                         <comptype >default</>
                         <ratio >r5</>
                         <solid >1</>
                         <path >custom</>
                         <custpath >#docpath#\Visual Studio 2017\Templates\ProjectTemplates</>
-                        <ifexist >overnewer</>
+                        <ifexist >over</>
                         <if ></>
                         <srclist >
                            <rows >
@@ -179,37 +179,47 @@
                            <rows ></>
                         </>
                      </>
-                     <_ id = shcut >
-                        <desc ></>
-                        <shpath >prog</>
-                        <shfile >#lunname#</>
-                        <path >inst</>
-                        <file >uninstall.exe</>
-                        <icon ></>
-                        <cmdline ></>
-                        <comment ></>
-                        <work >inst</>
-                        <defwork ></>
-                        <runas >norm</>
-                        <runasadmin >1</>
-                        <if ></>
+                     <_ id = uninstexe >
+                        <desc >アンインストーラー作成</>
                      </>
-                     <_ tag = 0 id = shlist >
-                        <desc ></>
-                        <shlist >
-                           <rows ></>
+                     <_ tag = 0 id = regset >
+                        <desc >レジストリ書き込み</>
+                        <root >curuser</>
+                        <subkey >Environment</>
+                        <wow64 >0</>
+                        <if ></>
+                        <reglist >
+                           <rows >
+                              <_ >
+                                 <valname >FK_CLI_DIR</>
+                                 <regtype >str</>
+                                 <value >#setuppath#</>
+                                 <if ></>
+                              </>
+                           </>
                         </>
                      </>
-                     <_ id = uninstexe >
-                        <desc ></>
+                     <_ tag = 0 id = run >
+                        <desc >x86 runtime インストール</>
+                        <path >custom</>
+                        <name >#setuppath#\redist\vcredist_x86.exe</>
+                        <cmdline >/quiet</>
+                        <work >custom</>
+                        <defwork >#setuppath#\redist</>
+                        <wait >1</>
+                        <runas >norm</>
+                        <if ></>
                      </>
-                     <_ id = unar >
-                        <desc ></>
-                        <name ></>
-                        <path >inst</>
-                        <ifile ></>
-                        <estsize ></>
-                        <forcu >0</>
+                     <_ tag = 0 id = run >
+                        <desc >x64 runtime インストール</>
+                        <path >custom</>
+                        <name >#setuppath#\redist\vcredist_x64.exe</>
+                        <cmdline >/quiet</>
+                        <work >custom</>
+                        <defwork >#setuppath#\redist</>
+                        <wait >1</>
+                        <runas >norm</>
+                        <if ></>
                      </>
                   </>
                   <desc >Go into the item for viewing unpacking actions.</>
@@ -225,56 +235,6 @@
                   <dlgtext ></>
                   <if ></>
                </>
-               <_ tag = 0 id = regset >
-                  <desc ></>
-                  <root >curuser</>
-                  <subkey >Environment</>
-                  <wow64 >0</>
-                  <if ></>
-                  <reglist >
-                     <rows >
-                        <_ >
-                           <valname >FK_CLI_DIR</>
-                           <regtype >str</>
-                           <value >#setuppath#</>
-                           <if ></>
-                        </>
-                     </>
-                  </>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >OpenAL Install</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\oalinst.exe</>
-                  <cmdline >/SILENT</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
-                  <if ></>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >x64 runtime</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\vcredist_x64.exe</>
-                  <cmdline >/quiet</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
-                  <if ></>
-               </>
-               <_ tag = 0 id = run >
-                  <desc >x86 runtime</>
-                  <path >custom</>
-                  <name >#setuppath#\redist\vcredist_x86.exe</>
-                  <cmdline >/quiet</>
-                  <work >custom</>
-                  <defwork >#setuppath#\redist</>
-                  <wait >1</>
-                  <runas >norm</>
-                  <if ></>
-               </>
                <_ id = dlgfin >
                   <desc ></>
                   <buttons >c</>
@@ -288,7 +248,15 @@
                   </>
                   <head ></>
                   <headtext ></>
-                  <dlgtext >一度サインインしなおすか、再起動を行ってから利用してください。</>
+                  <dlgtext >インストール終了後、サインアウトか再起動を行ってください。
+サインアウトする場合は、この後の再起動ダイアログで「いいえ」を選択してください。</>
+                  <if ></>
+               </>
+               <_ tag = 0 id = exit >
+                  <desc ></>
+                  <extype >rebconf</>
+                  <code >1</>
+                  <msg ></>
                   <if ></>
                </>
             </>

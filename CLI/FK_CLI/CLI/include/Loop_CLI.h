@@ -98,7 +98,7 @@ namespace FK_CLI
 	 *		fk_TopologyMaterial, fk_Attribute, fk_Surface
 	 */
 
-	public ref class fk_Loop : fk_TopologyMaterial {
+	public ref class fk_Loop : fk_Topology {
 	internal:
 		::FK::fk_Loop * GetP(void);
 

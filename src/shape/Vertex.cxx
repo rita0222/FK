@@ -85,22 +85,21 @@ static const fk_Vector fk_VInitPos(0.0, 0.0, 0.0);
 
 fk_Vertex::fk_Vertex(int argID)
 {
-	Init(argID);
+	DB = nullptr;
+	SetID(argID);
 
 	return;
 }
 
 fk_Vertex::~fk_Vertex()
 {
-	delete normal;
 	return;
 }
 
-void fk_Vertex::Init(int argID)
+void fk_Vertex::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argID, FK_VERTEX_TYPE);
-	oneHalf = nullptr;
-	normal = nullptr;
+	InitTopology(argDB, argID, FK_VERTEX_TYPE);
+	oneHalf = FK_UNDEFINED;
 	UndefNormal();
 	size = -1.0;
 
@@ -126,10 +125,11 @@ void fk_Vertex::SetPosition(fk_Vector argPos)
 
 fk_Half * fk_Vertex::getOneHalf(void) const
 {
-	return oneHalf;
+	if(DB == nullptr) return nullptr;
+	return DB->GetHData(oneHalf);
 }
 
-void fk_Vertex::SetOneHalf(fk_Half *argHalf)
+void fk_Vertex::SetOneHalf(int argHalf)
 {
 	oneHalf = argHalf;
 }
@@ -143,30 +143,30 @@ void fk_Vertex::CalcNormal(void)
 	vector<fk_Vector>		VecArray;
 	_st						i;
 
+	if(DB == nullptr) return;
 	if(normCalcFlag == true) return;
 	if(normFailFlag == true) return;
 
-	if(oneHalf == nullptr) {
+	if(oneHalf == FK_UNDEFINED) {
 		normFailFlag = true;
-		if(normal != nullptr) normal->set(0.0, 0.0, 1.0);
+		normal.set(0.0, 0.0, 1.0);
 		return;
 	}
 
-	curH = startH = oneHalf;
+	curH = startH = DB->GetHData(oneHalf);
 	VecArray.clear();
 	do {
 		if(curH->getParentLoop() != nullptr) {
 			tmpVector = curH->getParentLoop()->getNormal();
 			if(tmpVector == nullptr) {
 				normFailFlag = true;
-				if(normal != nullptr) normal->set(0.0, 0.0, 1.0);
+				normal.set(0.0, 0.0, 1.0);
 				return;
 			}
 			VecArray.push_back(*tmpVector);
 		}
 		curE = curH->getParentEdge();
-		mateH = (curE->getRightHalf() == curH) ? curE->getLeftHalf() :
-			curE->getRightHalf();
+		mateH = (curE->getRightHalf() == curH) ? curE->getLeftHalf() : curE->getRightHalf();
 
 		if(mateH->getNextHalf() == nullptr) {
 			normFailFlag = true;
@@ -179,7 +179,7 @@ void fk_Vertex::CalcNormal(void)
 
 	if(VecArray.empty() == true) {
 		normFailFlag = true;
-		if(normal != nullptr) normal->set(0.0, 0.0, 1.0);
+		normal.set(0.0, 0.0, 1.0);
 		return;
 	}
 
@@ -190,11 +190,7 @@ void fk_Vertex::CalcNormal(void)
 	if(tmpNormal.normalize() == true) {
 		normCalcFlag = true;
 		normFailFlag = false;
-		if(normal == nullptr) {
-			normal = new fk_Vector(tmpNormal);
-		} else {
-			*normal = tmpNormal;
-		}
+		normal = tmpNormal;
 
 	} else {
 		normCalcFlag = false;
@@ -207,14 +203,13 @@ void fk_Vertex::CalcNormal(void)
 fk_Vector fk_Vertex::getNormal(void)
 {
 	CalcNormal();
-	if(normal == nullptr) normal = new fk_Vector(0.0, 0.0, 1.0);
-	return *normal;
+	return normal;
 }	 
 
 fk_Vector * fk_Vertex::GetNormalP(void)
 {
 	CalcNormal();
-	return normal;
+	return &normal;
 }
 
 void fk_Vertex::UndefNormal(void)
@@ -227,12 +222,8 @@ void fk_Vertex::UndefNormal(void)
 void fk_Vertex::SetNormal(const fk_Vector &argVec)
 {
 	UndefNormal();
-	if(normal == nullptr) {
-		normal = new fk_Vector(argVec);
-	} else {
-		*normal = argVec;
-	}
-	if(normal->normalize() == false) {
+	normal = argVec;
+	if(normal.normalize() == false) {
 		normFailFlag = true;
 	} else {
 		normCalcFlag = true;
@@ -263,17 +254,17 @@ void fk_Vertex::Print(void) const
 	ss << "\tpos = ";
 	ss << "(" << position.x << ", " << position.y << ", " << position.z << ")";
 	
-	if(normCalcFlag == true && normal != nullptr) {
+	if(normCalcFlag == true) {
 		ss << "\tnorm = (";
-		ss << normal->x << ", " << normal->y << ", " << normal->z << ")";
+		ss << normal.x << ", " << normal.y << ", " << normal.z << ")";
 	} else {
 		ss << "\tnorm = (nullptr)";
 	}
 
-	if(oneHalf == nullptr) {
-		ss << "\toneH = nullptr";
+	if(oneHalf == FK_UNDEFINED) {
+		ss << "\toneH = UNDEF";
 	} else {
-		ss << "\tpH = " << oneHalf->getID();
+		ss << "\tpH = " << oneHalf;
 	}
 	ss << "}";
 	fk_PutError(ss.str());
@@ -285,10 +276,11 @@ bool fk_Vertex::Check(void) const
 {
 	stringstream	ss;
 
-	if(oneHalf != nullptr) {
-		if(oneHalf->getVertex() != this) {
+	if(DB == nullptr) return false;
+	if(oneHalf != FK_UNDEFINED) {
+		if(DB->GetHData(oneHalf)->getVertex() != this) {
 			ss << "Vertex[" << getID();
-			ss << "] ... Half[" << oneHalf->getID();
+			ss << "] ... Half[" << oneHalf;
 			ss << "] ERROR";
 			fk_PutError("fk_Vertex", "Check", 1, ss.str());
 			return false;
@@ -306,12 +298,12 @@ bool fk_Vertex::Compare(fk_Vertex *argV) const
 	if(getID() == FK_UNDEFINED) return true;
 
 	if(position != argV->position) return false;
-	if(oneHalf == nullptr && argV->oneHalf == nullptr) {
+	if(oneHalf == FK_UNDEFINED && argV->oneHalf == FK_UNDEFINED) {
 		return true;
-	} else if(oneHalf == nullptr || argV->oneHalf == nullptr) {
+	} else if(oneHalf == FK_UNDEFINED || argV->oneHalf == FK_UNDEFINED) {
 		return false;
 	}
 
-	if(oneHalf->getID() == argV->oneHalf->getID()) return true;
+	if(oneHalf == argV->oneHalf) return true;
 	return false;
 }	

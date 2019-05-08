@@ -95,8 +95,6 @@ namespace FK {
 
 #endif
 
-
-
 	//! ソリッドモデルのループ位相を管理するクラス
 	/*!
 	 *	このクラスは、 fk_Solid によるソリッドモデルにおいて、
@@ -105,7 +103,6 @@ namespace FK {
 	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
 	 *	派生クラスのうち、ID 管理については fk_Topology,
-	 *	個別マテリアル設定については fk_TopologyMaterial,
 	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
 	 *	ループに対して、幾何形状として曲面データを設定することができます。
@@ -114,7 +111,7 @@ namespace FK {
 	 *		fk_TopologyMaterial, fk_Attribute, fk_Surface
 	 */
 
-	class fk_Loop : public fk_TopologyMaterial {
+	class fk_Loop : public fk_Topology {
 
 		friend class	fk_Operation;
 		friend class	fk_DataBase;
@@ -124,13 +121,9 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Loop(int);
+		fk_Loop(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Loop();
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		void						Init(int);
-#endif
 
 		//! 接続半稜線取得関数
 		/*!
@@ -138,9 +131,9 @@ namespace FK {
 		 *	条件を満たす全ての半稜線を得たい場合は、
 		 *	fk_ReferenceL2::getAllHOnL() 関数を用いて下さい。
 		 *
-		 *	\return このループを構成する半稜線を表す fk_Half 型インスタンスのアドレス。
+		 *	\return このループを構成する半稜線を表すインスタンス
 		 */
-		fk_Half *					getOneHalf(void) const;
+		fk_Half * getOneHalf(void) const;
 
 		//! 法線ベクトル取得関数
 		/*!
@@ -151,7 +144,7 @@ namespace FK {
 		 *
 		 *	\return 法線ベクトルのアドレス。算出できなかった場合は nullptr を返します。
 		 */
-		fk_Vector *					getNormal(void);
+		fk_Vector * getNormal(void);
 
 		//! 頂点数取得関数
 		/*!
@@ -161,7 +154,7 @@ namespace FK {
 		 *
 		 *	\sa fk_ReferenceL2::getVNumOnL()
 		 */
-		int							getVNum(void) const;
+		int getVNum(void) const;
 
 		//! テセレーション設定関数
 		/*!
@@ -181,7 +174,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Operation::setTesselateMode()
 		 */
-		void						setTesselateMode(bool mode);
+		void setTesselateMode(bool mode);
 
 		//! テセレーション設定取得関数
 		/*!
@@ -192,7 +185,7 @@ namespace FK {
 		 *
 		 *	\sa isTesselated(), fk_Operation::getTesselateMode()
 		 */
-		bool						getTesselateMode(void);
+		bool getTesselateMode(void);
 
 		//! テセレーション状態参照関数
 		/*!
@@ -207,7 +200,7 @@ namespace FK {
 		 *
 		 *	\sa getTesselateMode()
 		 */
-		bool						isTesselated(void);
+		bool isTesselated(void);
 
 		//! 幾何曲面形状設定関数
 		/*!
@@ -217,7 +210,7 @@ namespace FK {
 		 *
 		 *	\param[in] surface	幾何曲面インスタンスのアドレス
 		 */
-		void						setSurfGeometry(fk_Surface *surface);
+		void setSurfGeometry(fk_Surface *surface);
 
 		//! 幾何曲面形状取得関数
 		/*!
@@ -227,9 +220,10 @@ namespace FK {
 		 *		自由曲面インスタンスのアドレス。
 		 *		設定されていなかった場合は nullptr を返します。
 		 */
-		fk_Surface *				getSurfGeometry(void);
+		fk_Surface * getSurfGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
+		void						Init(fk_DataBase *, int);
 		std::vector<fk_Vector> *	GetTesselatePos(void);
 		std::vector<fk_Vertex *> *	GetTesselateVertex(void);
 		std::vector<int> *			GetTesselateIndex(void);
@@ -244,7 +238,7 @@ namespace FK {
 											fk_Vector * = nullptr);
 #endif
 	private:
-		fk_Half						*oneHalf;
+		int							oneHalf;
 		fk_Vector					norm;
 		bool						normFlag, errorFlag;
 		bool						tesselateFlag, tesselateMode;
@@ -253,10 +247,10 @@ namespace FK {
 		std::vector<int>			tesselateIndex;
 		int							ifsID;
 
-		bool					SetNormal(void);
-		void					ModifyLoop(void);
-		fk_Half *				SetOneHalf(fk_Half *);
-		void					MakeTesselateData(void);
+		bool	SetNormal(void);
+		void	ModifyLoop(void);
+		int		SetOneHalf(int);
+		void	MakeTesselateData(void);
 	};
 }
 

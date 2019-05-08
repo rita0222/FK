@@ -73,7 +73,6 @@
 #define __FK_SOLID_HEADER__
 
 #include <FK/SolidBase.h>
-#include <FK/FileBase.h>
 
 namespace FK {
 	class fk_DataBase;
@@ -477,21 +476,6 @@ namespace FK {
 										 std::string objName,
 										 int materialID,
 										 bool solidFlg = true);
-
-		//! 独自形式ファイル入力関数
-		/*!
-		 *	独自形式のファイルからデータを入力します。
-		 *
-		 *	\param[in]	fileName		ファイル名
-		 *
-		 *	\param[in]	sizeMode
-		 *		旧バージョンとの互換性のために存在する引数です。
-		 *		通常は true とするか、省略して下さい。
-		 *
-		 *	\return		成功すれば true を、失敗すれば false を返します。
-		 */
-		bool				readData(std::string fileName,
-									 bool sizeMode = true);
 		//@}
 
 		//! \name ファイル出力関数
@@ -581,17 +565,6 @@ namespace FK {
 		 */
 		bool				writeMQOFile(std::string fileName);
 
-		//! 独自形式ファイル出力関数
-		/*!
-		 *	独自形式で形状データを出力します。
-		 *
-		 *	\param[in]	fileName		ファイル名
-		 *	\param[in]	mode			フォーマットモード
-		 *
-		 *	\return		成功すれば true を、失敗すれば false を返します。
-		 */
-		bool				writeData(std::string fileName,
-									  fk_DataFormatMode mode = FK_BINARY_FILE);
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS

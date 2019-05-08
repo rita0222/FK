@@ -89,18 +89,15 @@ namespace FK {
 	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
 	 *
 	 *	派生クラスのうち、ID 管理については fk_Topology,
-	 *	個別マテリアル設定については fk_TopologyMaterial,
 	 *	属性設定については fk_Attribute を参照して下さい。
 	 *
 	 *	\sa fk_Solid, fk_Half, fk_Edge, fk_Loop, fk_Topology, fk_TopologyMaterial, fk_Attribute
 	 */
 
-	class fk_Vertex : public fk_TopologyMaterial {
+	class fk_Vertex : public fk_Topology {
 
 		friend class		fk_Operation;
 		friend class		fk_DataBase;
-		friend class		fk_FileInput;
-		friend class		fk_FileOutput;
 		friend class		fk_IFSetHandle;
 
 	public:
@@ -108,13 +105,6 @@ namespace FK {
 		fk_Vertex(int = FK_UNDEFINED);
 		//! デストラクタ
 		virtual ~fk_Vertex();
-
-		//! 初期化関数
-		/*!
-		 *	この関数は、頂点位相の初期化を行います。
-		 *	通常、ユーザがこの関数を利用することはありません。
-		 */
-		void		Init(int);
 
 		//! 位置ベクトル取得関数
 		/*!
@@ -133,7 +123,7 @@ namespace FK {
 		 *	fk_ReferenceL2::getAllHOnV() 関数を用いて下さい。
 		 *
 		 *	\return
-		 *		この頂点を始点とする半稜線を表す fk_Half 型インスタンスのアドレス。
+		 *		この頂点を始点とする半稜線を表すインスタンス。
 		 *		対象となる半稜線が存在しない場合は nullptr を返します。
 		 */
 		fk_Half *	getOneHalf(void) const;
@@ -168,6 +158,8 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
+		void		Init(fk_DataBase *, int);
+
 		fk_Vector *	GetPositionP(void);
 		fk_Vector *	GetNormalP(void);
 		void		Print(void) const;
@@ -180,14 +172,14 @@ namespace FK {
 
 	private:
 		fk_Vector	position;
-		fk_Vector	*normal;
+		fk_Vector	normal;
 		bool		normCalcFlag;
 		bool		normFailFlag;
-		fk_Half 	*oneHalf;
+		int 		oneHalf;
 		double		size;
 
 		void		CalcNormal(void);
-		void		SetOneHalf(fk_Half *);
+		void		SetOneHalf(int);
 		void		UndefNormal(void);
 		void		SetPosition(fk_Vector);
 		void		SetNormal(const fk_Vector &);

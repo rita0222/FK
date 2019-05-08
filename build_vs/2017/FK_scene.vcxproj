@@ -24,6 +24,12 @@
     <ClCompile Include="..\..\src\scene\Projection.cxx" />
     <ClCompile Include="..\..\src\scene\Scene.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\DList.h" />
+    <ClInclude Include="..\..\FK\Fog.h" />
+    <ClInclude Include="..\..\FK\Projection.h" />
+    <ClInclude Include="..\..\FK\Scene.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A209D3A8-3255-4C9D-94CD-3209FAFE3A28}</ProjectGuid>
     <RootNamespace>FK2_base</RootNamespace>

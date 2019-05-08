@@ -28,6 +28,16 @@
     <ClCompile Include="..\..\src\util\SpriteModel.cxx" />
     <ClCompile Include="..\..\src\util\TrackBall.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\AppWindow.h" />
+    <ClInclude Include="..\..\FK\Fullscreen.h" />
+    <ClInclude Include="..\..\FK\GuideObject.h" />
+    <ClInclude Include="..\..\FK\Misc.h" />
+    <ClInclude Include="..\..\FK\MotionCharactor.h" />
+    <ClInclude Include="..\..\FK\MotionData.H" />
+    <ClInclude Include="..\..\FK\SpriteModel.h" />
+    <ClInclude Include="..\..\FK\TrackBall.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3DDE0711-909C-41BF-AAD7-9324E003BA1E}</ProjectGuid>
     <RootNamespace>FK2_util</RootNamespace>

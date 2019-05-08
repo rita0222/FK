@@ -169,7 +169,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = newP;
 		P->dFlg = false;
-		map.Add(newP->getID(), P);
+		map[newP->getID()] = P;
 		if(GenMethod != nullptr) GenMethod(P);
 		return P;
 	}
@@ -182,7 +182,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = newP;
 		P->dFlg = false;
-		map.Add(newP->getID(), P);
+		map[newP->getID()] = P;
 		if (GenMethod != nullptr) GenMethod(P);
 		return P;
 	}
@@ -194,7 +194,7 @@ namespace FK_CLI
 		fk_Particle^ P = gcnew fk_Particle();
 		P->pBase = GetP()->newParticle(argX, argY, argZ);
 		P->dFlg = false;
-		map.Add(newP->getID(), P);
+		map[newP->getID()] = P;
 		GenMethod(P);
 		return P;
 	}
@@ -236,13 +236,17 @@ namespace FK_CLI
 			fk_Particle^ P = gcnew fk_Particle();
 			P->pBase = pP;
 			P->dFlg = false;
-			map.Add(pP->getID(), P);
+			map[pP->getID()] = P;
 		}
 		return map[pP->getID()];
 	}
 
 	void fk_ParticleSet::Handle(void)
 	{
+		for each(KeyValuePair<int, fk_Particle^> p in map) {
+			GC::KeepAlive(p.Value);
+		}
+
 		if(AllMode == true && AllMethod != nullptr) {
 			AllMethod();
 		}

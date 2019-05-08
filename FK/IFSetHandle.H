@@ -105,8 +105,8 @@ namespace FK {
 		bool			RefineTopology(void);
 
 	private:
-		fk_DataBase *				DB;
-		std::map<fk_Edge *, int>	edgeCount;
+		fk_DataBase *		DB;
+		std::map<int, int>	edgeCount;
 
 		bool		DB_Check(void);
 		fk_Edge *	CheckExistEdge(int, int, fk_IFS_EdgeSet *);
@@ -118,7 +118,7 @@ namespace FK {
 								std::vector<fk_Half *> *,
 								std::vector<fk_Half *> *, bool);
 		bool		SearchUndefLoop(fk_Half *);
-		int			GetEdgeCountNum(fk_Edge *);
+		int			GetEdgeCountNum(int);
 	};
 }
 
