@@ -65,7 +65,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /e /y /i "$(ProjectDir)\Resources\*.*" "$(TargetDir)"
-copy /b /v /y "$(FK_CLI_DIR)\bin\$(PlatformName)\OpenAL32.dll" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /s /e /y /i "$(ProjectDir)Resources\*.*" "$(TargetDir)"
+xcopy /s /e /y /i "$(FK_CLI_DIR)\dll\$(PlatformName)\*.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
