@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.0.0b08</>
+   <ver >4.0.0b09</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
@@ -129,7 +129,7 @@
                   <if ></>
                   <savepath >0</>
                </>
-               <_ id = dlgprog expanded = 0 >
+               <_ id = dlgprog expanded = 2 >
                   <children >
                      <_ tag = 0 id = unpack >
                         <desc >システムインストール</>
@@ -182,6 +182,14 @@
                      <_ id = uninstexe >
                         <desc >アンインストーラー作成</>
                      </>
+                     <_ tag = 0 id = unar >
+                        <desc ></>
+                        <name ></>
+                        <estsize ></>
+                        <path >inst</>
+                        <ifile ></>
+                        <forcu >0</>
+                     </>
                      <_ tag = 0 id = regset >
                         <desc >レジストリ書き込み</>
                         <root >curuser</>
@@ -199,6 +207,22 @@
                            </>
                         </>
                      </>
+                  </>
+                  <desc >Go into the item for viewing unpacking actions.</>
+                  <auto >1</>
+                  <buttons >nc</>
+                  <design >left</>
+                  <headlogo ></>
+                  <varlist >
+                     <rows ></>
+                  </>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext ></>
+                  <if ></>
+               </>
+               <_ tag = 0 id = dlgprog expanded = 2 >
+                  <children >
                      <_ tag = 0 id = run >
                         <desc >x86 runtime インストール</>
                         <path >custom</>
@@ -222,18 +246,16 @@
                         <if ></>
                      </>
                   </>
-                  <desc >Go into the item for viewing unpacking actions.</>
+                  <desc ></>
                   <auto >1</>
-                  <buttons >nc</>
-                  <design >left</>
+                  <head ></>
+                  <headtext ></>
+                  <dlgtext >実行に必要なランタイムをインストールしています。この処理には数十秒かかることがあります。</>
                   <headlogo ></>
+                  <if ></>
                   <varlist >
                      <rows ></>
                   </>
-                  <head ></>
-                  <headtext ></>
-                  <dlgtext ></>
-                  <if ></>
                </>
                <_ id = dlgfin >
                   <desc ></>

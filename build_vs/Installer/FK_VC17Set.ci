@@ -199,6 +199,14 @@
                      <_ id = uninstexe >
                         <desc ></>
                      </>
+                     <_ tag = 0 id = unar >
+                        <desc ></>
+                        <name ></>
+                        <estsize ></>
+                        <path >inst</>
+                        <ifile ></>
+                        <forcu >0</>
+                     </>
                   </>
                   <desc >Go into the item for viewing unpacking actions.</>
                   <auto >1</>
