@@ -83,7 +83,7 @@ string fk_ShaderProgram::fboBuildIn;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0),
-	  idVertex(0), idFragment(0), idGeometry(0),
+	  idVertex(0), idFragment(0), idGeometry(0), idTessCtrl(0), idTessEval(0),
 	  parameter(nullptr), fboMode(false)
 {
 	if(vertexBuildIn.empty() == true) {
@@ -137,6 +137,9 @@ fk_ShaderProgram::~fk_ShaderProgram()
 	if(idVertex != 0) DeleteShader(idVertex);
 	if(idGeometry != 0) DeleteShader(idGeometry);
 	if(idFragment != 0) DeleteShader(idFragment);
+	if(idTessCtrl != 0) DeleteShader(idTessCtrl);
+	if(idTessEval != 0) DeleteShader(idTessEval);
+
 	return;
 }
 
@@ -177,6 +180,16 @@ bool fk_ShaderProgram::validate(void)
 		idGeometry = 0;
 	}
 
+	if(idTessCtrl != 0) {
+		DeleteShader(idTessCtrl);
+		idTessCtrl = 0;
+	}
+
+	if(idTessEval != 0) {
+		DeleteShader(idTessEval);
+		idTessEval = 0;
+	}
+
 	idVertex = Compile(&vertexShaderSource, GL_VERTEX_SHADER);
 	if(idVertex == 0) {
 		lastError = "ERROR: VertexShader could not create.";
@@ -202,6 +215,24 @@ bool fk_ShaderProgram::validate(void)
 		if(UpdateLastError(idGeometry)) return false;
 	}
 
+	if(tessCtrlShaderSource.empty() == false) {
+		idTessCtrl = Compile(&tessCtrlShaderSource, GL_TESS_CONTROL_SHADER);
+		if(idTessCtrl == 0) {
+			lastError = "ERROR: TessCtrlShader could not create.";
+			return false;
+		}
+		if(UpdateLastError(idTessCtrl)) return false;
+	}
+
+	if(tessEvalShaderSource.empty() == false) {
+		idTessEval = Compile(&tessEvalShaderSource, GL_TESS_EVALUATION_SHADER);
+		if(idTessEval == 0) {
+			lastError = "ERROR: TessEvalShader could not create.";
+			return false;
+		}
+		if(UpdateLastError(idTessEval)) return false;
+	}
+
 	if(idProgram != 0) {
 		DeleteProgram(idProgram);
 		idProgram = 0;
@@ -216,6 +247,8 @@ bool fk_ShaderProgram::validate(void)
 	glAttachShader(idProgram, idVertex);
 	glAttachShader(idProgram, idFragment);
 	if(idGeometry != 0) glAttachShader(idProgram, idGeometry);
+	if(idTessCtrl != 0) glAttachShader(idProgram, idTessCtrl);
+	if(idTessEval != 0) glAttachShader(idProgram, idTessEval);
 
 	return true;
 }
@@ -252,6 +285,30 @@ bool fk_ShaderProgram::loadGeometryShader(string argFileName)
 	istreambuf_iterator<char> it(ifs);
 	istreambuf_iterator<char> last;
 	geometryShaderSource = string(it, last);
+
+	return true;
+}
+
+bool fk_ShaderProgram::loadTessCtrlShader(string argFileName)
+{
+	ifstream		ifs(argFileName);
+	if(ifs.fail()) return false;
+
+	istreambuf_iterator<char> it(ifs);
+	istreambuf_iterator<char> last;
+	tessCtrlShaderSource = string(it, last);
+
+	return true;
+}
+
+bool fk_ShaderProgram::loadTessEvalShader(string argFileName)
+{
+	ifstream		ifs(argFileName);
+	if(ifs.fail()) return false;
+
+	istreambuf_iterator<char> it(ifs);
+	istreambuf_iterator<char> last;
+	tessEvalShaderSource = string(it, last);
 
 	return true;
 }

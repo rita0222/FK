@@ -116,6 +116,9 @@ namespace FK {
 		 */
 		std::string geometryShaderSource;
 
+		std::string tessCtrlShaderSource;
+		std::string tessEvalShaderSource;
+
 		//! コンストラクタ
 		fk_ShaderProgram(void);
 
@@ -194,6 +197,10 @@ namespace FK {
 		 */
 		bool loadGeometryShader(std::string fileName);
 
+
+		bool loadTessCtrlShader(std::string fileName);
+		bool loadTessEvalShader(std::string fileName);
+
 		//! シェーダープログラムコンパイルメソッド
 		/*!
 		 *	fk_ShaderProgram::vertexShaderSource, fk_ShaderProgram::fragmentShaderSource,
@@ -227,6 +234,9 @@ namespace FK {
 		GLuint idVertex;
 		GLuint idFragment;
 		GLuint idGeometry;
+		GLuint idTessCtrl;
+		GLuint idTessEval;
+		
 		std::string lastError;
 		fk_ShaderParameter *parameter;
 		bool fboMode;
