@@ -195,7 +195,9 @@ void fk_ShaderBinder::SetupFBO(void)
 	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &colorBuf);
 	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, bufW, bufH, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, bufW, bufH, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -205,6 +207,8 @@ void fk_ShaderBinder::SetupFBO(void)
 	glActiveTexture(GL_TEXTURE1);
 	glGenTextures(1, &depthBuf);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, bufW, bufH, 0,
 				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -343,6 +347,7 @@ void fk_ShaderBinder::ProcPreDraw(void)
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_DEPTH_BUFFER_BIT);
 	glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("FBO Error");
@@ -351,7 +356,7 @@ void fk_ShaderBinder::ProcPreDraw(void)
 
 void fk_ShaderBinder::ProcPostDraw(void)
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
+ 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
 
@@ -359,6 +364,7 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glDrawBuffer(GL_BACK);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
