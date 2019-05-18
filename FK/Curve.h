@@ -155,17 +155,18 @@ namespace FK {
 		 */
 		int		getDiv(void);
 
+
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	makeCache(void);
+		//void	makeCache(void);
 #endif
 
 	private:
 		int							div;
-		std::vector<fk_Vector>		posCache;
-		std::vector<fk_Vector>		diffCache;
+		//std::vector<fk_Vector>		posCache;
+		//std::vector<fk_Vector>		diffCache;
 
-		std::vector<fk_Vector> *	getPosCache(void);
-		std::vector<fk_Vector> * 	getDiffCache(void);
+		//std::vector<fk_Vector> *	getPosCache(void);
+		//std::vector<fk_Vector> * 	getDiffCache(void);
 	};
 }
 

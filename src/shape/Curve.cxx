@@ -74,13 +74,10 @@
 using namespace std;
 using namespace FK;
 
-fk_Curve::fk_Curve(void) :
-	changeFlg(true), div(-1)
+fk_Curve::fk_Curve(void) : changeFlg(true), div(-1)
 {
 	realType = FK_SHAPE_CURVE;
 	SetObjectType(FK_CURVE);
-	posCache.clear();
-	diffCache.clear();
 
 	return;
 }
@@ -90,16 +87,6 @@ fk_Curve::~fk_Curve(void)
 	return;
 }
 	
-vector<fk_Vector> * fk_Curve::getPosCache(void)
-{
-	return &posCache;
-}
-
-vector<fk_Vector> * fk_Curve::getDiffCache(void)
-{
-	return &diffCache;
-}
-
 void fk_Curve::setDiv(int argDiv)
 {
 	if(argDiv < 1) return;
@@ -114,23 +101,4 @@ void fk_Curve::setDiv(int argDiv)
 int fk_Curve::getDiv(void)
 {
 	return div;
-}
-
-void fk_Curve::makeCache(void)
-{
-	double		t;
-	int			i;
-
-	if(div <= 0 || changeFlg == false) return;
-
-	posCache.clear();
-	diffCache.clear();
-	for(i = 0; i <= div; i++) {
-		t = static_cast<double>(i)/static_cast<double>(div);
-		posCache.push_back(pos(t));
-		diffCache.push_back(diff(t));
-	}
-
-	changeFlg = false;
-	return;
 }

@@ -132,7 +132,7 @@ namespace FK {
 		/*!
 		 *	形状の各頂点に対応した attribute 変数値を整数型で登録します。
 		 *	浮動小数点型の attribute 変数値を扱う場合は
-		 *	setShaderAttribute(std::string, int, std::vector<float> *)
+		 *	setShaderAttribute(std::string, int, std::vector<float> *, bool)
 		 *	を利用して下さい。
 		 *
 		 *	ここで登録する要素数は形状の頂点数、
@@ -145,19 +145,29 @@ namespace FK {
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータのポインタ。
 		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *	\param[in]	self
+		 *		この引数が true の場合、
+		 *		GPUに転送するデータ領域はインスタンスの内部に新たに確保されます。
+		 *		その場合は本関数を使用後、array で指定した領域は解放しても問題ありません。
+		 *		ただし、領域確保とデータコピーのため動作は遅くなります。
+		 *		この引数が false の場合は、
+		 *		GPUに転送するデータ領域として array をそのまま利用するため、
+		 *		本関数利用後に array を解放するとプログラムが異常終了する恐れがあります。
+		 *		本引数を省略した場合は false を指定したことと同義となります。
 		 *
 		 *	\note
 		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
 		 *		modifyAttribute() を呼んでおく必要があります。
 		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
 		 */
-		void setShaderAttribute(std::string name, int dim, std::vector<int> *array);
+		void setShaderAttribute(std::string name, int dim,
+								std::vector<int> *array, bool self = false);
 
 		//! シェーダー内 attribute 変数設定関数2
 		/*!
 		 *	形状の各頂点に対応した attribute 変数値を浮動小数点型で登録します。
 		 *	整数型の attribute 変数値を扱う場合は
-		 *	setShaderAttribute(std::string, int, std::vector<int> *)
+		 *	setShaderAttribute(std::string, int, std::vector<int> *, bool)
 		 *	を利用して下さい。
 		 *
 		 *	ここで登録する要素数は形状の頂点数、
@@ -170,13 +180,23 @@ namespace FK {
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータのポインタ。
 		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *	\param[in]	self
+		 *		この引数が true の場合、
+		 *		GPUに転送するデータ領域はインスタンスの内部に新たに確保されます。
+		 *		その場合は本関数を使用後、array で指定した領域は解放しても問題ありません。
+		 *		ただし、領域確保とデータコピーのため動作は遅くなります。
+		 *		この引数が false の場合は、
+		 *		GPUに転送するデータ領域として array をそのまま利用するため、
+		 *		本関数利用後に array を解放するとプログラムが異常終了する恐れがあります。
+		 *		本引数を省略した場合は false を指定したことと同義となります。
 		 *
 		 *	\note
 		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
 		 *		modifyAttribute() を呼んでおく必要があります。
 		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
 		 */
-		void setShaderAttribute(std::string name, int dim, std::vector<float> *array);
+		void setShaderAttribute(std::string name, int dim,
+								std::vector<float> *array, bool self = false);
 
 		//! attribute 変数更新関数
 		/*!
@@ -372,6 +392,8 @@ namespace FK {
 
 		std::map<std::string, bool>		attrModify;
 
+		std::map<std::string, std::vector<int> *>	intSelf;
+		std::map<std::string, std::vector<float> *> floatSelf;
 
 		void			DeleteMapI(std::string);
 		void			DeleteMapF(std::string);
