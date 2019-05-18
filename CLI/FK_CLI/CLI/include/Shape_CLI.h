@@ -114,6 +114,67 @@ namespace FK_CLI
 		property fk_RealShapeType^ RealShapeType {
 			fk_RealShapeType^ get();
 		}
+
+		//! シェーダー内 attribute 変数設定メソッド1
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を整数型で登録します。
+		 *	浮動小数点型の attribute 変数値を扱う場合は
+		 *	SetShaderAttribute(string, int, IEnumerable<float>^)
+		 *	を利用して下さい。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に int, ivec2, ivec3, ivec4 となります。
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータ。
+		 *		このコレクションのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		ModifyAttribute() を呼んでおく必要があります。
+		 *		ModifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 */
+		void SetShaderAttribute(String^ name, int dim, IEnumerable<int>^ array);
+
+		//! シェーダー内 attribute 変数設定メソッド2
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を浮動小数点型で登録します。
+		 *	整数型の attribute 変数値を扱う場合は
+		 *	SetShaderAttribute(string, int, IEnumerable<int>^)
+		 *	を利用して下さい。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータ。
+		 *		このコレクションのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		ModifyAttribute() を呼んでおく必要があります。
+		 *		ModifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 */
+		void SetShaderAttribute(String^ name, int dim, IEnumerable<float>^ array);
+
+		//! attribute 変数更新関数
+		/*!
+		 *	attribute 変数用データに変更があった場合、
+		 *	この関数を呼ぶ必要があります。この関数が呼ばれると、
+		 *	対象となる attribute 変数用のデータは描画時に CPU から GPU へデータの転送が行われます。
+		 * 	もしこの関数が呼ばれないと、内部データが変更されても描画には反映されません。
+		 *
+		 *	\param[in]	name		対象となる attribute 変数の GLSL 内での変数名
+		 */
+		void ModifyAttribute(String^ name);
 	};
 }
 

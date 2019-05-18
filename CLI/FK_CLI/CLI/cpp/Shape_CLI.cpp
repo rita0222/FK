@@ -70,8 +70,13 @@
  *
  ****************************************************************************/
 #include "Shape_CLI.h"
+#include <msclr/marshal_cppstd.h>
 
 namespace FK_CLI {
+
+	using namespace std;
+	using namespace msclr::interop;
+	using namespace System::Collections::Generic;
 
 	::FK::fk_Shape * fk_Shape::GetP(void)
 	{
@@ -129,5 +134,11 @@ namespace FK_CLI {
 		}
 		return type;
 	}
+
+	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<int>^ argArray)
+	{
+
+	}
+
 }
 
