@@ -202,7 +202,6 @@ namespace FK_CLI {
 			if (argDim == 4) array.push_back(float(v->w));
 		}
 		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
-
 	}
 }
 

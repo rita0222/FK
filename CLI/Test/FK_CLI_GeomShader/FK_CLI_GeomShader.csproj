@@ -38,9 +38,6 @@
     <StartupObject>FK_CLI_GeomShader.GeomShader</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FK_CLI">
-      <HintPath>$(FK_CLI_DIR)\bin\x86\FK_CLI.dll</HintPath>
-    </Reference>
     <Reference Include="FK_FormHelper">
       <HintPath>$(FK_CLI_DIR)\bin\x86\FK_FormHelper.dll</HintPath>
     </Reference>
@@ -62,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FK_CLI\FK_CLI.vcxproj">
+      <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
+      <Name>FK_CLI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
