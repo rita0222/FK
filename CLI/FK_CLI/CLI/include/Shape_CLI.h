@@ -136,7 +136,6 @@ namespace FK_CLI
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータ。
 		 *		このコレクションのサイズは、形状の頂点数と次元数の積以上である必要があります。
-		 *
 		 *	\note
 		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
 		 *		ModifyAttribute() を呼んでおく必要があります。
@@ -161,7 +160,6 @@ namespace FK_CLI
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータ。
 		 *		このコレクションのサイズは、形状の頂点数と次元数の積以上である必要があります。
-		 *
 		 *	\note
 		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
 		 *		ModifyAttribute() を呼んでおく必要があります。
