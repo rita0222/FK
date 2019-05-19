@@ -140,5 +140,28 @@ namespace FK_CLI {
 
 	}
 
+	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<float>^ argArray)
+	{
+
+	}
+
+	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<fk_Vector^>^ argArray)
+	{
+
+	}
+
+	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<fk_TexCoord^>^ argArray)
+	{
+
+	}
+
+	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<fk_HVector^>^ argArray)
+	{
+
+	}
+	void fk_Shape::ModifyAttribute(String^ argName)
+	{
+
+	}
 }
 

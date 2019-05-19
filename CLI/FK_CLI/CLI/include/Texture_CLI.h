@@ -76,6 +76,7 @@
 #include <FK/Texture.h>
 #include "Shape_CLI.h"
 #include "Image_CLI.h"
+#include "TexCoord_CLI.h"
 #include <string>
 
 namespace FK_CLI
@@ -99,100 +100,6 @@ namespace FK_CLI
 		CLAMP		//!<	縁部伸張式
 	};
 
-	//! テクスチャ座標を管理するクラス
-	/*!
-	 *	このクラスは、テクスチャ座標に関する基本的な機能を提供します。
-	 *
-	 *	テクスチャ座標系とは、画像のピクセルサイズにかかわらず左下を (0, 0)、
-	 *	右上端を (1, 1) として、画像の任意の位置をパラメータとして表す座標系のことです。
-	 *	例えば、画像の中心は (0.5, 0,5) として表されます。
-	 *	テクスチャ座標系では、横方向が x 成分、縦方向が y 成分となります。
-	 *
-	 *	\sa fk_TriTexture, fk_MeshTexture, fk_IFSTexture
-	 */
-	public ref class fk_TexCoord {
-	internal:
-		double x_, y_;
-		static operator ::FK::fk_TexCoord (fk_TexCoord^);
-
-	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_TexCoord(::FK::fk_TexCoord);
-#endif
-
-		//! コンストラクタ1
-		/*!
-		 *	(0, 0) として生成します。
-		 */
-		fk_TexCoord();
-
-		//! コンストラクタ2
-		/*!
-		 *	引数で成分を設定します。
-		 *
-		 *	\param[in]	x	x成分
-		 *	\param[in]	y	y成分
-		 */
-		fk_TexCoord(double x, double y);
-
-		//! デストラクタ
-		~fk_TexCoord();
-
-		//! x 成分プロパティ
-		property double x {
-			double get();
-			void set(double v);
-		}
-		
-		//! y 成分プロパティ
-		property double y {
-			double get();
-			void set(double v);
-		}
-
-		//////////////////// 比較演算子		
-
-		//! 同値比較メソッド1
-		/*!
-		 *	2つのテクスチャ座標か同値どうかを判定します。
-		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
-		 *	異なるインスタンスで同値かどうかを判定する場合はこのメソッドを利用して下さい。
-		 *
-		 *	\param[in]	T	同値かどうかを判定するテクスチャ座標
-		 *
-		 *	\return		同値であれば true を、そうでなければ false を返します。
-		 */
-		bool Equals(fk_TexCoord^ T);
-
-		//! 同値比較メソッド2
-		/*!
-		 *	2つのテクスチャ座標か同値どうかを判定します。
-		 *	単純に == 演算子を用いた場合はインスタンスが同一であるかどうかの判定となるため、
-		 *	異なるインスタンスで同値かどうかを判定する場合はこのメソッドを利用して下さい。
-		 *
-		 *	\param[in]	O	同値かどうかを判定するテクスチャ座標
-		 *
-		 *	\return		同値であれば true を、そうでなければ false を返します。
-		 */
-		virtual bool Equals(Object^ O) override;
-
-		//! 成分設定メソッド
-		/*!
-		 *	各成分を設定します。
-		 *
-		 *	\param[in]	x	x成分の値
-		 *	\param[in]	y	y成分の値
-		 */
-		void Set(double x, double y);
-
-		//! 文字列出力メソッド
-		/*!
-		 *	現在のテクスチャ座標成分値を文字列として出力します。
-		 *
-		 *	\return		成分値の文字列
-		 */
-		String^ ToString() override;
-	};
 
 	//! テクスチャ用基底クラス
 	/*!

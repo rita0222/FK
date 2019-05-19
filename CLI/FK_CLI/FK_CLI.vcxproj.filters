@@ -609,6 +609,9 @@
     <ClInclude Include="CLI\include\Closedline_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="CLI\include\TexCoord_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
@@ -1185,6 +1188,9 @@
       <Filter>Source\CLI</Filter>
     </ClCompile>
     <ClCompile Include="CLI\cpp\Closedline_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI\cpp\TexCoord_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>

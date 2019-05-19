@@ -75,9 +75,13 @@
 
 #include <FK/Shape.h>
 #include "Attribute_CLI.h"
+#include "Vector_CLI.h"
+#include "TexCoord_CLI.h"
 
 namespace FK_CLI
 {
+	using namespace System::Collections::Generic;
+
 	//! 形状データの具体的なデータ構造を表す列挙型
 	public enum class fk_RealShapeType {
 		IFS,		//!<	fk_IndexFaceSetベース
@@ -164,6 +168,10 @@ namespace FK_CLI
 		 *		ModifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
 		 */
 		void SetShaderAttribute(String^ name, int dim, IEnumerable<float>^ array);
+
+		void SetShaderAttribute(String^ name, int dim, IEnumerable<fk_Vector^>^ array);
+		void SetShaderAttribute(String^ name, int dim, IEnumerable<fk_TexCoord^>^ array);
+		void SetShaderAttribute(String^ name, int dim, IEnumerable<fk_HVector^>^ array);
 
 		//! attribute 変数更新関数
 		/*!
