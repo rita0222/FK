@@ -137,30 +137,71 @@ namespace FK_CLI {
 
 	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<int>^ argArray)
 	{
-
+		if (argName == nullptr || argArray == nullptr || argDim < 1 || argDim > 4) return;
+		vector<int> array;
+		for each (int x in argArray) array.push_back(x);
+		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
 	}
 
 	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<float>^ argArray)
 	{
+		if (argName == nullptr || argArray == nullptr || argDim < 1 || argDim > 4) return;
+		vector<float> array;
+		for each (float x in argArray) array.push_back(x);
+		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
+	}
 
+	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<double>^ argArray)
+	{
+		if (argName == nullptr || argArray == nullptr || argDim < 1 || argDim > 4) return;
+		vector<float> array;
+		for each (double x in argArray) array.push_back(float(x));
+		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
 	}
 
 	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<fk_Vector^>^ argArray)
 	{
-
+		if (argName == nullptr || argArray == nullptr || argDim < 1 || argDim > 4) return;
+		vector<float> array;
+		for each (fk_Vector^ v in argArray) {
+			array.push_back(float(v->x));
+			if (argDim == 1) continue;
+			array.push_back(float(v->y));
+			if (argDim == 2) continue;
+			array.push_back(float(v->z));
+			if (argDim == 4) array.push_back(0.0f);
+		}
+		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
 	}
 
 	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<fk_TexCoord^>^ argArray)
 	{
-
+		if (argName == nullptr || argArray == nullptr || argDim < 2 || argDim > 4) return;
+		vector<float> array;
+		for each (fk_TexCoord^ v in argArray) {
+			array.push_back(float(v->x));
+			if (argDim == 1) continue;
+			array.push_back(float(v->y));
+			if (argDim == 2) continue;
+			array.push_back(0.0f);
+			if (argDim == 4) array.push_back(0.0f);
+		}
+		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
 	}
 
 	void fk_Shape::SetShaderAttribute(String^ argName, int argDim, IEnumerable<fk_HVector^>^ argArray)
 	{
-
-	}
-	void fk_Shape::ModifyAttribute(String^ argName)
-	{
+		if (argName == nullptr || argArray == nullptr || argDim < 2 || argDim > 4) return;
+		vector<float> array;
+		for each (fk_HVector^ v in argArray) {
+			array.push_back(float(v->x));
+			if (argDim == 1) continue;
+			array.push_back(float(v->y));
+			if (argDim == 2) continue;
+			array.push_back(float(v->z));
+			if (argDim == 4) array.push_back(float(v->w));
+		}
+		GetP()->setShaderAttribute(marshal_as<string>(argName), argDim, &array, true);
 
 	}
 }
