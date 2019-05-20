@@ -266,7 +266,7 @@ void fk_Shape::DeleteMapF(string argName)
 void fk_Shape::setShaderAttribute(string argName, int argDim,
 								  vector<int> *argValue, bool argSelf)
 {
-	if(argValue == nullptr) return;
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
 	int id = -1;
 
 	DeleteMapF(argName);
@@ -292,7 +292,7 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 void fk_Shape::setShaderAttribute(string argName, int argDim,
 								  vector<float> *argValue, bool argSelf)
 {
-	if(argValue == nullptr) return;
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
 	int id = -1;
 
 	DeleteMapI(argName);
@@ -320,6 +320,61 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 	attrModify[argName] = true;
 }
 	
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<fk_Vector> *argValue)
+{
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
+	vector<float> array;
+
+	for(_st i = 0; i < argValue->size(); ++i) {
+		array.push_back(float(argValue->at(i).x));
+		if(argDim == 1) continue;
+		array.push_back(float(argValue->at(i).y));
+		if(argDim == 2) continue;
+		array.push_back(float(argValue->at(i).z));
+		if(argDim == 4) array.push_back(0.0f);
+	}
+
+	setShaderAttribute(argName, argDim, &array, true);
+}
+	
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<fk_TexCoord> *argValue)
+{
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
+	vector<float> array;
+
+	for(_st i = 0; i < argValue->size(); ++i) {
+		array.push_back(float(argValue->at(i).x));
+		if(argDim == 1) continue;
+		array.push_back(float(argValue->at(i).y));
+		if(argDim == 2) continue;
+		array.push_back(0.0f);
+		if(argDim == 4) array.push_back(0.0f);
+	}
+
+	setShaderAttribute(argName, argDim, &array, true);
+}
+
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<fk_HVector> *argValue)
+{
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
+	vector<float> array;
+
+	for(_st i = 0; i < argValue->size(); ++i) {
+		array.push_back(float(argValue->at(i).x));
+		if(argDim == 1) continue;
+		array.push_back(float(argValue->at(i).y));
+		if(argDim == 2) continue;
+		array.push_back(float(argValue->at(i).z));
+		if(argDim == 4) array.push_back(float(argValue->at(i).w));
+	}
+
+	setShaderAttribute(argName, argDim, &array, true);
+}
+	
+
 void fk_Shape::DefineVBO(void)
 {
 	if(vboInitFlg == true) return;

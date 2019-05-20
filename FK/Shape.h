@@ -75,6 +75,7 @@
 #include <FK/Base.h>
 #include <FK/Palette.h>
 #include <FK/Attribute.h>
+#include <FK/Vector.h>
 #include <FK/OpenGL.H>
 #include <map>
 #include <functional>
@@ -131,20 +132,21 @@ namespace FK {
 		//! シェーダー内 attribute 変数設定関数1
 		/*!
 		 *	形状の各頂点に対応した attribute 変数値を整数型で登録します。
-		 *	浮動小数点型の attribute 変数値を扱う場合は
-		 *	setShaderAttribute(std::string, int, std::vector<float> *, bool)
-		 *	を利用して下さい。
 		 *
 		 *	ここで登録する要素数は形状の頂点数、
 		 *	厳密にはデータ要素数よりも多数である必要があります。
 		 *
-		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
 		 *	\param[in]	dim
 		 *		変数の次元数で、1から4まで設定することができます。
 		 *		GLSL内での型は、1から順に int, ivec2, ivec3, ivec4 となります。
+		 *
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータのポインタ。
 		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
 		 *	\param[in]	self
 		 *		この引数が true の場合、
 		 *		GPUに転送するデータ領域はインスタンスの内部に新たに確保されます。
@@ -156,9 +158,11 @@ namespace FK {
 		 *		本引数を省略した場合は false を指定したことと同義となります。
 		 *
 		 *	\note
-		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
-		 *		modifyAttribute() を呼んでおく必要があります。
-		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 *	   	ここで設定した attribute 変数用データに変更があった場合で、
+		 *		self が false だった場合は、
+		 *		再度本関数を呼ぶよりも modifyAttribute() を呼ぶ方が高速に処理が行えます。
+		 *		self が true だった場合は、 modifyAttribute() を呼んでも
+		 *		変更は反映されませんので、再度本関数を呼び出す必要があります。
 		 */
 		void setShaderAttribute(std::string name, int dim,
 								std::vector<int> *array, bool self = false);
@@ -166,20 +170,21 @@ namespace FK {
 		//! シェーダー内 attribute 変数設定関数2
 		/*!
 		 *	形状の各頂点に対応した attribute 変数値を浮動小数点型で登録します。
-		 *	整数型の attribute 変数値を扱う場合は
-		 *	setShaderAttribute(std::string, int, std::vector<int> *, bool)
-		 *	を利用して下さい。
 		 *
 		 *	ここで登録する要素数は形状の頂点数、
 		 *	厳密にはデータ要素数よりも多数である必要があります。
 		 *
-		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
 		 *	\param[in]	dim
 		 *		変数の次元数で、1から4まで設定することができます。
 		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータのポインタ。
 		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
 		 *	\param[in]	self
 		 *		この引数が true の場合、
 		 *		GPUに転送するデータ領域はインスタンスの内部に新たに確保されます。
@@ -191,12 +196,97 @@ namespace FK {
 		 *		本引数を省略した場合は false を指定したことと同義となります。
 		 *
 		 *	\note
-		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
-		 *		modifyAttribute() を呼んでおく必要があります。
-		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 *	   	ここで設定した attribute 変数用データに変更があった場合で、
+		 *		self が false だった場合は、
+		 *		再度本関数を呼ぶよりも modifyAttribute() を呼ぶ方が高速に処理が行えます。
+		 *		self が true だった場合は、 modifyAttribute() を呼んでも
+		 *		変更は反映されませんので、再度本関数を呼び出す必要があります。
 		 */
 		void setShaderAttribute(std::string name, int dim,
 								std::vector<float> *array, bool self = false);
+
+		//! シェーダー内 attribute 変数設定関数3
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を fk_Vector 型で登録します。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *		1 を指定した場合、y,z 成分は無視されます。
+		 *		2 を指定した場合、z 成分は無視されます。
+		 *		4 を指定した場合、第4成分 (w成分) は 0 となります。
+		 *
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		再度本関数を呼び出す必要があります。
+		 *		modifyAttribute() を呼び出しても変更は反映されないので、注意して下さい。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<fk_Vector> *array);
+
+		//! シェーダー内 attribute 変数設定関数4
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を fk_TexCoord 型で登録します。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *		1 を指定した場合、y 成分は無視されます。
+		 *		3,4 を指定した場合、第3,4成分 (z,w成分) は 0 となります。
+		 *
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		再度本関数を呼び出す必要があります。
+		 *		modifyAttribute() を呼び出しても変更は反映されないので、注意して下さい。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<fk_TexCoord> *array);
+
+		//! シェーダー内 attribute 変数設定関数5
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を fk_HVector 型で登録します。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *		1 を指定した場合は y,z,w 成分は無視されます。
+		 *		2 を指定した場合は z,w 成分は無視されます。
+		 *		3 を指定した場合は、w 成分は無視されま。
+		 *
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		再度本関数を呼び出す必要があります。
+		 *		modifyAttribute() を呼び出しても変更は反映されないので、注意して下さい。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<fk_HVector> *array);
 
 		//! attribute 変数更新関数
 		/*!
@@ -206,6 +296,13 @@ namespace FK {
 		 * 	もしこの関数が呼ばれないと、内部データが変更されても描画には反映されません。
 		 *
 		 *	\param[in]	name		対象となる attribute 変数の GLSL 内での変数名
+		 *
+		 *	\note
+		 *		本関数は、 setShaderAttribute(std::string, int, std::vector<int> *, bool) または
+		 *		setShaderAttribute(std::string, int, std::vector<float> *, bool) で
+		 *		第4引数に false を用いた場合のみに有効です。
+		 *		第4引数に true を用いた場合や、その他の形式の attribute 変数設定に対しては、
+		 *		本関数によって変更反映を行うことはできません。
 		 */
 		void modifyAttribute(std::string name);
 
