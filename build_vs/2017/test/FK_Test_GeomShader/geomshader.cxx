@@ -62,6 +62,7 @@ int main(int, char *[])
 	// 形状側での Attribute 変数登録
 	point.setShaderAttribute("pointVec", 2, vecCopy.getP());
 	//point.setShaderAttribute("pointVec", 2, vecCopy.getP(), true);
+	point.setShaderAttribute("pointVec", 2, &vecArray);
 
 	model.setShape(&point);
 	model.setPointColor(1.0, 0.0, 0.0);
@@ -88,8 +89,9 @@ int main(int, char *[])
 			vecCopy.set(int(i), vecArray[i]);
 		}
 		// Attribute 変数データを GPU に送信するための設定
-		point.modifyAttribute("pointVec");
+		//point.modifyAttribute("pointVec");
 		//point.setShaderAttribute("pointVec", 2, vecCopy.getP(), true);
+		point.setShaderAttribute("pointVec", 2, &vecArray);
 	}
 	
 	return 0;
