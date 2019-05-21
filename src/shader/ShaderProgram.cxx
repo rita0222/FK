@@ -370,7 +370,8 @@ bool fk_ShaderProgram::UpdateLastError(GLuint argShader)
 			lastError = "ERROR: Could not allocate InfoLog buffer.";
 		}
 
-		if(lastError.find("ERROR") != string::npos) return true;
+		if(lastError.find("ERROR") != string::npos ||
+		   lastError.find("error") != string::npos) return true;
 		return false;
 	} else {
 		lastError.clear();

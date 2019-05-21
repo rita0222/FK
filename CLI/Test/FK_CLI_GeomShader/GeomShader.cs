@@ -65,7 +65,7 @@ namespace FK_CLI_GeomShader
             program.LoadGeometryShader("shader/geom_gs.glsl");
             program.LoadFragmentShader("shader/geom_fs.glsl");
 
-            if(program.Validate())
+            if(program.Validate() == true)
             {
                 shader.BindModel(model);
                 shader.Parameter.ReserveAttribute("pointVec");
