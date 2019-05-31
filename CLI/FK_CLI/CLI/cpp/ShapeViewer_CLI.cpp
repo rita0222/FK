@@ -188,6 +188,38 @@ namespace FK_CLI {
 		return fk_ElementMode::NONE;
 	}
 
+	void fk_ShapeViewer::ShadingMode::set(fk_ShadingMode argMode)
+	{
+		switch (argMode) {
+		case fk_ShadingMode::PHONG:
+			GetP()->setShadingMode(::FK::FK_SHADING_PHONG);
+			break;
+
+		case fk_ShadingMode::GOURAUD:
+			GetP()->setShadingMode(::FK::FK_SHADING_GOURAUD);
+			break;
+
+		default:
+			break;
+		}
+		return;
+	}
+
+	fk_ShadingMode fk_ShapeViewer::ShadingMode::get(void)
+	{
+		switch (GetP()->getShadingMode()) {
+		case ::FK::FK_SHADING_PHONG:
+			return fk_ShadingMode::PHONG;
+
+		case ::FK::FK_SHADING_GOURAUD:
+			return fk_ShadingMode::GOURAUD;
+
+		default:
+			break;
+		}
+		return fk_ShadingMode::PHONG;
+	}
+
 	void fk_ShapeViewer::BlendStatus::set(bool argMode)
 	{
 		GetP()->setBlendStatus(argMode);
@@ -353,14 +385,36 @@ namespace FK_CLI {
 		return fk_ElementMode::NONE;
 	}
 
-	void fk_ShapeViewer::SetLineWidth(int argID, double argWidth)
+	void fk_ShapeViewer::SetShadingMode(int argID, fk_ShadingMode argMode)
 	{
-		GetP()->setLineWidth(argID, argWidth);
+		switch (argMode) {
+		case fk_ShadingMode::PHONG:
+			GetP()->setShadingMode(argID, ::FK::FK_SHADING_PHONG);
+			break;
+
+		case fk_ShadingMode::GOURAUD:
+			GetP()->setShadingMode(argID, ::FK::FK_SHADING_GOURAUD);
+			break;
+
+		default:
+			break;
+		}
+		return;
 	}
 
-	double fk_ShapeViewer::GetLineWidth(int argID)
+	fk_ShadingMode fk_ShapeViewer::GetShadingMode(int argID)
 	{
-		return GetP()->getLineWidth(argID);
+		switch (GetP()->getShadingMode(argID)) {
+		case ::FK::FK_SHADING_PHONG:
+			return fk_ShadingMode::PHONG;
+
+		case ::FK::FK_SHADING_GOURAUD:
+			return fk_ShadingMode::GOURAUD;
+
+		default:
+			break;
+		}
+		return fk_ShadingMode::PHONG;
 	}
 
 	void fk_ShapeViewer::SetPointSize(int argID, double argSize)
