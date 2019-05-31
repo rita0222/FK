@@ -341,6 +341,28 @@ namespace FK {
 		 */
 		fk_ShadingMode getShadingMode(void);
 
+		//! スムースモード設定関数
+		/*!
+		 *	モデルのスムースモードを設定します。
+		 *	詳細は fk_Model::setSmoothMode() を参照して下さい。
+		 *
+		 *	\param[in]	mode	true である場合、スムースモードを有効とします。
+		 *		false である場合無効とします。
+		 *
+		 *	\sa fk_Model::setSmoothMode()
+		 */
+		void setSmoothMode(bool mode);
+
+		//! スムースモード参照関数
+		/*!
+		 *	現在のモデルのスムースモードを取得します。
+		 *
+		 *	\return		有効である場合 true を、無効である場合 false を返します。
+		 *
+		 *	\sa setSmoothMode(bool)
+		 */
+		bool getSmoothMode(void);
+
 		//! 透過処理設定関数
 		/*!
 		 *	描画の際、透過処理を有効とするかどうかを設定します。
@@ -543,6 +565,34 @@ namespace FK {
 		 */
 		fk_ShadingMode getShadingMode(int ID);
 
+
+		//! スムースモード設定関数
+		/*!
+		 *	指定した ID 形状のスムースモードを設定します。
+		 *	詳細は fk_Model::setSmoothMode() を参照して下さい。
+		 *
+		 *	\param[in]	ID			形状ID
+		 *
+		 *	\param[in]	mode	true である場合、スムースモードを有効とします。
+		 *		false である場合無効とします。
+		 *
+		 *	\sa fk_Model::setSmoothMode()
+		 */
+		void setSmoothMode(int ID, bool mode);
+
+		//! スムースモード参照関数
+		/*!
+		 *	指定した ID 形状のスムースモードを取得します。
+		 *
+		 *	\param[in]	ID			形状ID
+		 *
+		 *	\return		有効である場合 true を、無効である場合 false を返します。
+		 *
+		 *	\sa setSmoothMode(int, bool)
+		 */
+		bool getSmoothMode(int ID);
+
+		
 		//! 形状頂点描画サイズ設定関数
 		/*!
 		 *	形状に対し、頂点描画サイズを設定します。

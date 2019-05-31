@@ -1184,6 +1184,34 @@ fk_ShadingMode fk_ShapeViewer::getShadingMode(int argID)
 	return model->getShadingMode();
 }	
 
+void fk_ShapeViewer::setSmoothMode(bool argMode)
+{
+	for(auto model : modelArray) {
+		model->setSmoothMode(argMode);
+	}
+	return;
+}
+
+void fk_ShapeViewer::setSmoothMode(int argID, bool argMode)
+{
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->setSmoothMode(argMode);
+	return;
+}
+
+bool fk_ShapeViewer::getSmoothMode(void)
+{
+	if(modelArray.empty() == true) return false;
+	return modelArray[0]->getSmoothMode();
+}
+
+bool fk_ShapeViewer::getSmoothMode(int argID)
+{
+	fk_Model	*model = GetModel(argID);
+	if(model == nullptr) return false;
+	return model->getSmoothMode();
+}	
+
 void fk_ShapeViewer::setBlendStatus(bool argMode)
 {
 	scene.setBlendStatus(argMode);
