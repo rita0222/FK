@@ -73,8 +73,7 @@
  \item 62 行目で、視点位置を \((0, 0, -1)\) 移動している。
  \item 63 行目で、直方体 (と子モデルである線分) を Y 軸中心に
 	回転させている。回転角度は、\(\pi/300 = 0.6 ^{\circ}\) である。
-	ここにある「FK.PI」は FK のプログラム上で円周率を用いる場合に利用するものであるが、
-	C\# の標準機能にある「Math.PI」を用いても問題はない。
+	ここにある「Math.PI」は C\# で利用できる円周率を表す。
  \item 65 行目で、もし視点が原点を越えてしまった場合に注視点を
 	原点に向かせるようにしている。
  \item 66 行目で、描画カウント i が 1000 を超えた場合に
@@ -145,10 +144,10 @@
 60: 
 61:             for(i = 0; win.Update() == true; i++) {
 62:                 camera.GlTranslate(0.0, 0.0, -1.0);
-63:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/300.0);
+63:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/300.0);
 64:                 var cPos = camera.Position;
 65:                 if(cPos.z < -FK.EPS) camera.GlFocus(origin);
-66:                 if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, FK.PI/500.0);
+66:                 if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI/500.0);
 67:             }
 68:         }
 69:     }
@@ -216,9 +215,9 @@ C\# 版のコードと比較することで大体の F\# の文法を把握で�
 50:     while win.Update() = true do
 51:         incr i
 52:         camera.GlTranslate(0.0, 0.0, -1.0) |> ignore
-53:         blockModel.GlRotateWithVec(org, fk_Axis.Y, FK.PI/300.0) |> ignore
+53:         blockModel.GlRotateWithVec(org, fk_Axis.Y, Math.PI/300.0) |> ignore
 54:         if camera.Position.z < 0.0 then camera.GlFocus(org) |> ignore
-55:         if !i >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, FK.PI/500.0) |> ignore
+55:         if !i >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, Math.PI/500.0) |> ignore
 \end{verbatim}
 \end{small}
 \end{breakbox}
@@ -437,7 +436,7 @@ LOD 処理はわかりやすくするために露骨に変化が見られるが�
 184:             groundModel.Shape = ground;
 185:             groundModel.Material = fk_Material.LightGreen;
 186:             groundModel.SmoothMode = true;
-187:             groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -FK.PI/2.0);
+187:             groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
 188: 
 189:             // ### VIEW BLOCK ###
 190:             blockModel.Shape = block;
@@ -1045,7 +1044,7 @@ F\#版
 45:             for(int counter = 0; viewer.Draw() == true; counter += 10) {
 46:                 for(i = 0; i <= 10; i++) {
 47:                     for(j = 0; j <= 10; j++) {
-48:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/FK.PI));
+48:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/Math.PI));
 49:                         movePos = moveVec + pos[i*11+j];
 50:                         shape.MoveVPosition(i*11+j, movePos);
 51:                     }
@@ -1502,7 +1501,7 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 182: 
 183:             while(win.Update())
 184:             {
-185:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+185:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
 186: 
 187:                 // 上矢印キーで BGM 音量アップ
 188:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true)
@@ -1622,7 +1621,7 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 55:                 sprite.SetPositionLT(-240.0, 230.0);
 56: 
 57:                 // 立方体を回転させる
-58:                 model.GlRotateWithVec(origin, fk_Axis.Y, FK.PI/360.0);
+58:                 model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
 59:             }
 60:         }
 61:     }
@@ -1673,7 +1672,7 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 22: 
 23:             // オイラー角の初期値設定
 24:             var angle1 = new fk_Angle(0.0, 0.0, 0.0);
-25:             var angle2 = new fk_Angle(FK.PI/2.0, FK.PI/2.0 - 0.01, 0.0);
+25:             var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
 26: 
 27:             // 四元数変数作成
 28:             var q1 = new fk_Quaternion();
