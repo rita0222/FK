@@ -320,6 +320,27 @@ namespace FK {
 		 */
 		fk_ElementMode getElementMode(void);
 
+		//! シェーディングモード設定関数
+		/*!
+		 *	描画の際のシェーディングモードを設定します。
+		 *	詳細は fk_Model::setShadingMode() を参照して下さい。
+		 *
+		 *	\param[in]	mode		シェーディグモード
+		 *
+		 *	\sa fk_Model::setShadingMode(), setShadingMode(int, fk_ShadingMode)
+		 */
+		void setShadingMode(fk_ShadingMode mode);
+
+		//! シェーディングモード参照関数
+		/*!
+		 *	現在設定されているシェーディングモードを取得します。
+		 *
+		 *	\return	シェーディングモード
+		 *
+		 *	\sa setShadingMode(fk_ShadingMode)
+		 */
+		fk_ShadingMode getShadingMode(void);
+
 		//! 透過処理設定関数
 		/*!
 		 *	描画の際、透過処理を有効とするかどうかを設定します。
@@ -342,17 +363,6 @@ namespace FK {
 		 */
 		bool getBlendStatus(void);
 
-		//! シェーディングモード設定関数
-		/*!
-		 *	描画の際のシェーディングモードを設定します。
-		 *	詳細は fk_Model::setShadingMode() を参照して下さい。
-		 */
-		void setShadingMode(fk_ShadingMode mode);
-
-		//! シェーディングモード参照関数
-		/*!
-		 */
-		fk_ShadingMode getShadingMode(void) const;
 
 		//! 背景色設定関数1
 		/*!
@@ -510,28 +520,28 @@ namespace FK {
 		 */
 		fk_ElementMode getElementMode(int ID);
 		
-		//! 形状稜線描画幅設定関数
+		//! シェーディングモード設定関数
 		/*!
-		 *	形状に対し、稜線の描画幅を設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
+		 *	描画の際のシェーディングモードを設定します。
+		 *	詳細は fk_Model::setShadingMode() を参照して下さい。
 		 *
-		 *	\param[in]	ID		形状ID
-		 *	\param[in]	width	描画幅
+		 *	\param[in]	ID			形状ID
+		 *	\param[in]	mode		シェーディグモード
+		 *
+		 *	\sa fk_Model::setShadingMode(), setShadingMode(int, fk_ShadingMode)
 		 */
-		void setLineWidth(int ID, double width);
+		void setShadingMode(int ID, fk_ShadingMode mode);
 
-		//! 形状稜線描画幅参照関数
+		//! シェーディングモード参照関数
 		/*!
-		 *	形状の稜線描画幅を取得します。
-		 *	単位はピクセルです。
+		 *	現在設定されているシェーディングモードを取得します。
 		 *
-		 *	\param[in]	ID		形状ID
+		 *	\param[in]	ID			形状ID
 		 *
-		 *	\return		描画幅
-		 *
-		 *	\sa setLineWidth()
+		 *	\return シェーディングモード
+		 *	\sa setShadingMode(fk_ShadingMode)
 		 */
-		double getLineWidth(int ID);
+		fk_ShadingMode getShadingMode(int ID);
 
 		//! 形状頂点描画サイズ設定関数
 		/*!
@@ -938,6 +948,9 @@ namespace FK {
 		int		getFrameInterval(void);
 		int		getSkipFrame(void);
 		virtual bool shapeProcess(fk_Solid *shape);
+		void setLineWidth(int ID, double width);
+		double getLineWidth(int ID);
+
 #endif
 
 	private:
@@ -1004,6 +1017,8 @@ namespace FK {
 		void				SetMaterial(int, fk_ShapeGUIMenuItem,
 										double, double, double);
 		void				SetDrawMode(void);
+
+		fk_Model *			GetModel(int);
 	};
 }
 

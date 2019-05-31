@@ -300,6 +300,13 @@ fk_ShapeViewer::~fk_ShapeViewer()
 	return;
 }
 
+fk_Model * fk_ShapeViewer::GetModel(int argID)
+{
+	if(IDMap.find(argID) == IDMap.end()) return nullptr;
+	return modelArray[_st(IDMap[argID])];
+}
+	
+
 void fk_ShapeViewer::InitValue(void)
 {
 	mainWindow = nullptr;
@@ -588,8 +595,7 @@ void fk_ShapeViewer::ModelInit(int argIndex, fk_Shape *argShape)
 		vertexColor.push_back(vColP);
 
 	} else {
-		trueID = _st(IDMap[argIndex]);
-		localModel = modelArray[trueID];
+		localModel = GetModel(argIndex);
 	}
 
 	if(argShape == nullptr) {
@@ -1086,13 +1092,8 @@ void fk_ShapeViewer::setDrawMode(fk_DrawMode argMode)
 
 void fk_ShapeViewer::setDrawMode(int argID, fk_DrawMode argMode)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->setDrawMode(argMode);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->setDrawMode(argMode);
 	return;
 }
 
@@ -1128,8 +1129,8 @@ void fk_ShapeViewer::SetDrawMode(void)
 
 void fk_ShapeViewer::setElementMode(fk_ElementMode argMode)
 {
-	for(_st i = 0; i < modelArray.size(); i++) {
-		modelArray[i]->setElementMode(argMode);
+	for(auto model : modelArray) {
+		model->setElementMode(argMode);
 	}
 
 	return;
@@ -1137,13 +1138,8 @@ void fk_ShapeViewer::setElementMode(fk_ElementMode argMode)
 
 void fk_ShapeViewer::setElementMode(int argID, fk_ElementMode argMode)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->setElementMode(argMode);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->setElementMode(argMode);
 	return;
 }
 
@@ -1155,15 +1151,39 @@ fk_ElementMode fk_ShapeViewer::getElementMode(void)
 
 fk_ElementMode fk_ShapeViewer::getElementMode(int argID)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return FK_ELEM_NONE;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
+	fk_Model	*model = GetModel(argID);
+	if(model == nullptr) return FK_ELEM_NONE;
 	return model->getElementMode();
 }
-	
+
+void fk_ShapeViewer::setShadingMode(fk_ShadingMode argMode)
+{
+	for(auto model : modelArray) {
+		model->setShadingMode(argMode);
+	}
+	return;
+}
+
+void fk_ShapeViewer::setShadingMode(int argID, fk_ShadingMode argMode)
+{
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->setShadingMode(argMode);
+	return;
+}
+
+fk_ShadingMode fk_ShapeViewer::getShadingMode(void)
+{
+	if(modelArray.empty() == true) return FK_SHADING_PHONG;
+	return modelArray[0]->getShadingMode();
+}
+
+fk_ShadingMode fk_ShapeViewer::getShadingMode(int argID)
+{
+	fk_Model	*model = GetModel(argID);
+	if(model == nullptr) return FK_SHADING_PHONG;
+	return model->getShadingMode();
+}	
+
 void fk_ShapeViewer::setBlendStatus(bool argMode)
 {
 	scene.setBlendStatus(argMode);
@@ -1292,13 +1312,8 @@ void fk_ShapeViewer::setAxisMode(bool argMode)
 
 void fk_ShapeViewer::setPosition(int argID, fk_Vector argPos)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->glMoveTo(argPos);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->glMoveTo(argPos);
 	return;
 }
 
@@ -1350,13 +1365,8 @@ void fk_ShapeViewer::setVertexColor(int argID, fk_Color argCol)
 
 void fk_ShapeViewer::setAngle(int argID, fk_Angle argAngle)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->glAngle(argAngle);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->glAngle(argAngle);
 	return;
 }
 
@@ -1371,13 +1381,8 @@ void fk_ShapeViewer::setAngle(int argID,
 
 void fk_ShapeViewer::setVec(int argID, fk_Vector argVec)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->glVec(argVec);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->glVec(argVec);
 	return;
 }
 
@@ -1391,13 +1396,8 @@ void fk_ShapeViewer::setVec(int argID, double argX, double argY, double argZ)
 
 void fk_ShapeViewer::setUpvec(int argID, fk_Vector argVec)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->glUpvec(argVec);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->glUpvec(argVec);
 	return;
 }
 
@@ -1411,25 +1411,15 @@ void fk_ShapeViewer::setUpvec(int argID, double argX, double argY, double argZ)
 
 void fk_ShapeViewer::setLineWidth(int argID, double argW)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->setWidth(argW);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->setWidth(argW);
 	return;
 }
 
 void fk_ShapeViewer::setPointSize(int argID, double argS)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	model->setSize(argS);
+	fk_Model	*model = GetModel(argID);
+	if(model != nullptr) model->setSize(argS);
 	return;
 }
 
@@ -1458,12 +1448,8 @@ fk_DrawMode fk_ShapeViewer::getDrawMode(void)
 
 fk_DrawMode fk_ShapeViewer::getDrawMode(int argID)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return FK_NONEMODE;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
+	fk_Model	*model = GetModel(argID);
+	if(model == nullptr) return FK_NONEMODE;
 	return model->getDrawMode();
 }
 
@@ -1538,26 +1524,16 @@ fk_Vector fk_ShapeViewer::getCenter(void)
 	return -(modelArray[0]->getInhPosition());
 }
 
-double fk_ShapeViewer::getLineWidth(int argID)
+double fk_ShapeViewer::getLineWidth(int)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return -1.0;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	return model->getWidth();
+	return -1.0;
 }
 
 double fk_ShapeViewer::getPointSize(int argID)
 {
-	_st			trueID;
-	fk_Model	*model;
-
-	if(IDMap.find(argID) == IDMap.end()) return -1.0;
-	trueID = _st(IDMap[argID]);
-	model = modelArray[trueID];
-	return model->getWidth();
+	fk_Model	*model = GetModel(argID);
+	if(model == nullptr) return -1.0;
+	return model->getPointSize();
 }
 
 bool fk_ShapeViewer::shapeProcess(fk_Solid *)
