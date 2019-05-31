@@ -219,17 +219,27 @@ namespace FK_CLI
 		}
 
 		// 要素モード設定プロパティ
-/*!
-* 登録されている全ての形状の要素モードを設定します。
-* 要素モードとは、モデル設定と形状個別要素設定のどちらを採用するかを設定するものです。
-*	モードには以下のものがあります。
-*	- fk_Element.NONE:		何も描画しません。
-*	- fk_Element.MODEL:	モデル設定を優先します。
-*	- fk_Element.ELEMENT:	形状内の個別要素設定を優先します。
-*/
+		/*!
+		 * 登録されている全ての形状の要素モードを設定します。
+		 * 要素モードとは、モデル設定と形状個別要素設定のどちらを採用するかを設定するものです。
+		 *	モードには以下のものがあります。
+		 *	- fk_Element.NONE:		何も描画しません。
+		 *	- fk_Element.MODEL:	モデル設定を優先します。
+		 *	- fk_Element.ELEMENT:	形状内の個別要素設定を優先します。
+		 */
 		property fk_ElementMode ElementMode {
 			fk_ElementMode get();
 			void set(fk_ElementMode);
+		}
+
+		// シェーディングモード設定プロパティ
+		/*!
+		 * 登録されている全ての形状のシェーディングモードを設定します。
+		 * シェーディングモードの詳細は fk_Model::ShadingMode を参照してください。
+		 */		
+		property fk_ShadingMode ShadingMode {
+			fk_ShadingMode get();
+			void set(fk_ShadingMode);
 		}
 
 		//! 透過処理プロパティ
@@ -468,28 +478,28 @@ namespace FK_CLI
 		 */
 		fk_ElementMode	GetElementMode(int ID);		//! 要素モード設定関数
 
-		//! 形状稜線描画幅設定メソッド
+		//! シェーディングモード設定関数
 		/*!
-		 *	形状に対し、稜線の描画幅を設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
+		 *	描画の際のシェーディングモードを設定します。
+		 *	詳細は fk_Model::ShadingMode を参照して下さい。
 		 *
-		 *	\param[in]	ID		形状ID
-		 *	\param[in]	width	描画幅
+		 *	\param[in]	ID			形状ID
+		 *	\param[in]	mode		シェーディグモード
+		 *
+		 *	\sa fk_Model::ShadingMode, ShadingMode
 		 */
-		void		SetLineWidth(int ID, double width);
+		void SetShadingMode(int ID, fk_ShadingMode mode);
 
-		//! 形状稜線描画幅参照メソッド
+		//! シェーディングモード参照関数
 		/*!
-		 *	形状の稜線描画幅を取得します。
-		 *	単位はピクセルです。
+		 *	現在設定されているシェーディングモードを取得します。
 		 *
-		 *	\param[in]	ID		形状ID
+		 *	\param[in]	ID			形状ID
 		 *
-		 *	\return		描画幅
-		 *
-		 *	\sa GetLineWidth()
+		 *	\return シェーディングモード
+		 *	\sa SetShadingMode(fk_ShadingMode)
 		 */
-		double		GetLineWidth(int ID);
+		fk_ShadingMode GetShadingMode(int ID);
 
 		//! 形状頂点描画サイズ設定メソッド
 		/*!

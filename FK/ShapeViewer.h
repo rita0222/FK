@@ -550,7 +550,7 @@ namespace FK {
 		 *	\param[in]	ID			形状ID
 		 *	\param[in]	mode		シェーディグモード
 		 *
-		 *	\sa fk_Model::setShadingMode(), setShadingMode(int, fk_ShadingMode)
+		 *	\sa fk_Model::setShadingMode(), setShadingMode(fk_ShadingMode)
 		 */
 		void setShadingMode(int ID, fk_ShadingMode mode);
 
