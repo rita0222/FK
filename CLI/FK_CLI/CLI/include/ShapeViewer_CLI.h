@@ -242,6 +242,16 @@ namespace FK_CLI
 			void set(fk_ShadingMode);
 		}
 
+		// スムースモード設定プロパティ
+		/*!
+		 * 登録されている全ての形状のスムースモードを設定します。
+		 * スムースモードの詳細は fk_Model::SmoothMode を参照してください。
+		 */
+		property bool SmoothMode {
+			bool get();
+			void set(bool);
+		}
+
 		//! 透過処理プロパティ
 		/*!
 		 *	描画の際、透過処理を有効とするかどうかの参照・設定を行います。
@@ -500,6 +510,32 @@ namespace FK_CLI
 		 *	\sa SetShadingMode(fk_ShadingMode)
 		 */
 		fk_ShadingMode GetShadingMode(int ID);
+
+		//! スムースモード設定関数
+		/*!
+		 *	指定した ID 形状のスムースモードを設定します。
+		 *	詳細は fk_Model::SmoothMode を参照して下さい。
+		 *
+		 *	\param[in]	ID			形状ID
+		 *
+		 *	\param[in]	mode	true である場合、スムースモードを有効とします。
+		 *		false である場合無効とします。
+		 *
+		 *	\sa fk_Model::SmoothMode
+		 */
+		void SetSmoothMode(int ID, bool mode);
+
+		//! スムースモード参照関数
+		/*!
+		 *	指定した ID 形状のスムースモードを取得します。
+		 *
+		 *	\param[in]	ID			形状ID
+		 *
+		 *	\return		有効である場合 true を、無効である場合 false を返します。
+		 *
+		 *	\sa SetSmoothMode(int, bool)
+		 */
+		bool GetSmoothMode(int ID);
 
 		//! 形状頂点描画サイズ設定メソッド
 		/*!
