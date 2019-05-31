@@ -342,6 +342,18 @@ namespace FK {
 		 */
 		bool getBlendStatus(void);
 
+		//! シェーディングモード設定関数
+		/*!
+		 *	描画の際のシェーディングモードを設定します。
+		 *	詳細は fk_Model::setShadingMode() を参照して下さい。
+		 */
+		void setShadingMode(fk_ShadingMode mode);
+
+		//! シェーディングモード参照関数
+		/*!
+		 */
+		fk_ShadingMode getShadingMode(void) const;
+
 		//! 背景色設定関数1
 		/*!
 		 *	描画領域の背景色を設定します。
