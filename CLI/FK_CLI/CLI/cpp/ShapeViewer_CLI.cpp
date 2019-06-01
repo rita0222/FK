@@ -319,6 +319,11 @@ namespace FK_CLI {
 		return GetP()->getScale();
 	}
 
+	void fk_ShapeViewer::FPS::set(int argFPS)
+	{
+		GetP()->setFPS(argFPS);
+	}
+
 	//////////////////////////////////////////////////////////////////////
 
 	bool fk_ShapeViewer::Draw(void)

@@ -59,6 +59,7 @@ namespace TestProject
 			// ビューワーの設定
 			viewer.SetShape(0, ifs);
 			viewer.Scale = 10.0;
+            viewer.FPS = 60;
             fk_Material.InitDefault();
             var material = new fk_Material(fk_Material.Yellow);
             material.Specular = new fk_Color(0.0, 0.0, 0.0);

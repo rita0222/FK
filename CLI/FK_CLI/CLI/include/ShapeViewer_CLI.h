@@ -356,7 +356,19 @@ namespace FK_CLI
 			double get();
 			void set(double);
 		}
-		
+
+		//! FPS 設定プロパティ
+		/*!
+		 *	update()をコールした際に調整するFPSを指定します。
+		 *	FPS(Frame Per Second)とは、1秒間中で画面更新が行われる回数の単位です。
+		 *	この値を 0 に設定した場合は、FPS制御を行いません。
+		 *	デフォルトは 0 です。
+		 */
+
+		property int FPS {
+			void set(int);
+		}
+
 		//! \name 描画処理・描画領域制御メソッド
 		//@{
 
