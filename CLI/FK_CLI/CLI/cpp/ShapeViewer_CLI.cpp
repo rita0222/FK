@@ -220,6 +220,17 @@ namespace FK_CLI {
 		return fk_ShadingMode::PHONG;
 	}
 
+	void fk_ShapeViewer::SmoothMode::set(bool argMode)
+	{
+		GetP()->setSmoothMode(argMode);
+		return;
+	}
+
+	bool fk_ShapeViewer::SmoothMode::get(void)
+	{
+		return GetP()->getSmoothMode();
+	}
+
 	void fk_ShapeViewer::BlendStatus::set(bool argMode)
 	{
 		GetP()->setBlendStatus(argMode);
@@ -308,6 +319,11 @@ namespace FK_CLI {
 		return GetP()->getScale();
 	}
 
+	void fk_ShapeViewer::Material::set(fk_Material^ argM)
+	{
+		if (argM == nullptr) return;
+		//GetP()->setMaterial(argM->GetP());
+	}
 	//////////////////////////////////////////////////////////////////////
 
 	bool fk_ShapeViewer::Draw(void)
@@ -415,6 +431,17 @@ namespace FK_CLI {
 			break;
 		}
 		return fk_ShadingMode::PHONG;
+	}
+
+	void fk_ShapeViewer::SetSmoothMode(int argID, bool argMode)
+	{
+		GetP()->setSmoothMode(argID, argMode);
+		return;
+	}
+
+	bool fk_ShapeViewer::GetSmoothMode(int argID)
+	{
+		return GetP()->getSmoothMode(argID);
 	}
 
 	void fk_ShapeViewer::SetPointSize(int argID, double argSize)

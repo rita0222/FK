@@ -152,6 +152,14 @@ namespace FK_CLI
 		 */
 		fk_Color(float R, float G, float B, float A);
 
+		//! コンストラクタ6
+		/*!
+		 *	他の fk_Color 型インスタンスより値をコピーしてインスンタスを生成します。
+		 *
+		 *	\param[in]	color	別の fk_Color 型インスタンス
+		 */
+		fk_Color(fk_Color^ color);
+
 		//! デストラクタ
 		~fk_Color();
 

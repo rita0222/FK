@@ -125,8 +125,19 @@ namespace FK_CLI
 #ifndef FK_DOXYGEN_USER_PROCESS		
 		 fk_Material(bool argNewFlg);
 #endif
-		 //! コンストラクタ
+		 //! コンストラクタ1
+		 /*!
+		  *	概要に述べた初期値に従ってインスタンスの生成を行います。
+		  */
 		 fk_Material();
+		 
+		 //! コンストラクタ2
+		 /*!
+		  *	他の fk_Material 型インスタンスより値をコピーしてインスンタスを生成します。
+		  *
+		  *	\param[in]	mat	別の fk_Material 型インスタンス
+		  */
+		 fk_Material(fk_Material^ mat);
 
 		 //! デストラクタ
 		 ~fk_Material();

@@ -89,6 +89,16 @@ namespace FK_CLI {
 		if(argNewFlg == true) pMat = new ::FK::fk_Material();
 	}
 
+	fk_Material::fk_Material(fk_Material^ argM) : dFlg(true)
+	{
+		if (argM == nullptr) {
+			fk_Material();
+			return;
+		}
+		::FK::fk_Material *pM = argM->GetP();
+		pMat = new ::FK::fk_Material(*pM);
+	}
+
 	fk_Material::~fk_Material()
 	{
 		this->!fk_Material();

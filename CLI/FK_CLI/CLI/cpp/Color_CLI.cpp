@@ -123,6 +123,12 @@ namespace FK_CLI {
 		pCol->init(argR, argG, argB, argA);
 	}
 
+	fk_Color::fk_Color(fk_Color^ argC) : dFlg(true)
+	{
+		pCol = new ::FK::fk_Color();
+		pCol->init(argC->r, argC->g, argC->b, argC->a);
+	}
+
 	fk_Color::~fk_Color()
 	{
 		this->!fk_Color();
