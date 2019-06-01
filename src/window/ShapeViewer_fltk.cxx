@@ -450,14 +450,14 @@ void fk_ShapeViewer::LightInit(void)
 
 	lightModel[0].setShape(&light);
 	lightModel[0].setMaterial(mat);
-	lightModel[0].glFocus(-1.0, -1.0, 0.0);
+	lightModel[0].glFocus(0.0, 0.0, -1.0);
 
-	lightModel[1].setShape(&light);
-	lightModel[1].setMaterial(mat);
-	lightModel[1].glFocus(1.0, -1.0, 0.0);
+	//lightModel[1].setShape(&light);
+	//lightModel[1].setMaterial(mat);
+	//lightModel[1].glFocus(1.0, -1.0, 0.0);
 
 	scene.entryModel(&lightModel[0]);
-	scene.entryModel(&lightModel[1]);
+	//scene.entryModel(&lightModel[1]);
 
 	return;
 }
@@ -649,7 +649,7 @@ void fk_ShapeViewer::ModelInit(int argIndex, fk_Shape *argShape)
 void fk_ShapeViewer::RotateLight(double argAngle)
 {
 	lightModel[0].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, argAngle);
-	lightModel[1].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, argAngle);
+	//lightModel[1].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, argAngle);
 
 	return;
 }
@@ -1631,7 +1631,7 @@ void fk_ShapeViewer::SetFinalizeMode(void)
 		modelArray[i]->SetTreeDelMode(false);
 	}
 	lightModel[0].SetTreeDelMode(false);
-	lightModel[1].SetTreeDelMode(false);
+	//lightModel[1].SetTreeDelMode(false);
 	camera.SetTreeDelMode(false);
 	axisModel.SetTreeDelMode(false);
 
