@@ -319,11 +319,6 @@ namespace FK_CLI {
 		return GetP()->getScale();
 	}
 
-	void fk_ShapeViewer::Material::set(fk_Material^ argM)
-	{
-		if (argM == nullptr) return;
-		//GetP()->setMaterial(argM->GetP());
-	}
 	//////////////////////////////////////////////////////////////////////
 
 	bool fk_ShapeViewer::Draw(void)

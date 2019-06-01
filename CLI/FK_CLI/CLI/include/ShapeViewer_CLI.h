@@ -265,43 +265,6 @@ namespace FK_CLI
 			bool get();
 			void set(bool);
 		}
-
-		//! マテリアル設定プロパティ
-		/*!
-		 *	全ての形状に対し、面のマテリアルを設定します。
-		 */
-		property fk_Material^ Material {
-			fk_Material^ get();
-			void set(fk_Material^);
-		}
-
-		//! 形状頂点描画サイズ設定プロパティ
-		/*!
-		 *	全ての形状に対し、頂点描画サイズを設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
-		 */
-		property double PointSize {
-			double get();
-			void set(double);
-		}
-
-		//! 形状頂点描画色設定プロパティ
-		/*!
-		 *	全ての形状に対し、頂点の描画色を設定します。
-		 */
-		property fk_Color^ VertexColor {
-			fk_Color^ get();
-			void set(fk_Color^);
-		}
-
-		//! 形状稜線描画色設定プロパティ
-		/*!
-		 *	全ての形状に対し、稜線の描画色を設定します。
-		 */
-		property fk_Color^ EdgeColor {
-			fk_Color^ get();
-			void set(fk_Color^);
-		}
 		
 		//! 背景色プロパティ
 		/*!

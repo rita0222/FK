@@ -62,6 +62,7 @@ namespace TestProject
             fk_Material.InitDefault();
             var material = new fk_Material(fk_Material.Yellow);
             material.Specular = new fk_Color(0.0, 0.0, 0.0);
+            viewer.SetMaterial(0, material);
             viewer.DrawMode = fk_DrawMode.LINEMODE | fk_DrawMode.POLYMODE;
 
 			// 表示処理
