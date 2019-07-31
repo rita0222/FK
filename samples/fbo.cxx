@@ -18,16 +18,18 @@ enum WinStatus {
 void ShaderSetup(fk_ShaderBinder *argBinder, fk_Model *argModel, fk_Material argMat,
 				 fk_Vector argPos, string argVP, string argFP)
 {
+	auto prog = argBinder->getProgram();
+
 	argModel->setMaterial(argMat);
 	argModel->setSmoothMode(true);
 	argModel->glMoveTo(argPos);
-	argBinder->getProgram()->loadVertexShader(argVP);
-	argBinder->getProgram()->loadFragmentShader(argFP);
-	if(argBinder->getProgram()->validate()) {
+	prog->loadVertexShader(argVP);
+	prog->loadFragmentShader(argFP);
+	if(prog->validate()) {
 		argBinder->bindModel(argModel);
 	} else {
 		fk_Window::printf("Shader Error (Original Side)");
-		fk_Window::putString(argBinder->getProgram()->getLastError());
+		fk_Window::putString(prog->getLastError());
 	} 
 }
 
@@ -38,7 +40,7 @@ void FBOSetup(fk_ShaderBinder *argBinder, fk_Window *argWindow, float argTH, str
 
 	argBinder->initializeFrameBufferObject(WIN_W, WIN_H);
 	prog->loadFragmentShader(argFP);
-	if(argBinder->getProgram()->validate()) {
+	if(prog->validate()) {
 		argBinder->getParameter()->setRegister("Thresshold", argTH);
 		argBinder->bindWindow(argWindow);
 	} else {
