@@ -76,6 +76,9 @@
 #include <FK/ShaderParameter.h>
 
 namespace FK {
+
+	using fk_KeyPair = std::pair<std::string, std::string>;
+	
 	//! シェーダープログラム格納クラス
 	/*!
 	 *	このクラスは、シェーダーのプログラムソースを格納するための機能を提供します。
@@ -227,6 +230,8 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void SetParameter(fk_ShaderParameter *);
 		void SetFBOMode(bool);
+
+		void FindBuildIn(void);
 #endif
 
 	private:
@@ -241,14 +246,22 @@ namespace FK {
 		fk_ShaderParameter *parameter;
 		bool fboMode;
 
-		static std::string		vertexBuildIn, fragmentBuildIn, geometryBuildIn, fboBuildIn;
+		static std::string vertexBuildIn;
+		static std::string fragmentBuildIn;
+		static std::string geometryBuildIn;
+		static std::string fboBuildIn;
+
+		static std::vector<fk_KeyPair>	uniformStack;
+		static std::vector<fk_KeyPair>	attributeStack;
 
 		GLuint Compile(std::string *, GLuint);
-		bool UpdateLastError(GLuint);
+		bool UpdateLastError(GLuint, std::string);
 		void ReplaceBuildIn(std::string *, GLuint);
 		void DeleteShader(GLuint);
 		void DeleteProgram(GLuint);
-	};	
+
+		void MakeBuildInStack(std::string *, std::vector<fk_KeyPair> *, std::string);
+	};
 }
 #endif
 

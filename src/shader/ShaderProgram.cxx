@@ -72,6 +72,7 @@
 
 #include <FK/ShaderProgram.h>
 #include <FK/Window.h>
+#include <regex>
 
 using namespace std;
 using namespace FK;
@@ -80,15 +81,32 @@ string fk_ShaderProgram::vertexBuildIn;
 string fk_ShaderProgram::geometryBuildIn;
 string fk_ShaderProgram::fragmentBuildIn;
 string fk_ShaderProgram::fboBuildIn;
+vector<fk_KeyPair>	fk_ShaderProgram::uniformStack;
+vector<fk_KeyPair>	fk_ShaderProgram::attributeStack;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0),
 	  idVertex(0), idFragment(0), idGeometry(0), idTessCtrl(0), idTessEval(0),
 	  parameter(nullptr), fboMode(false)
 {
+	if(uniformStack.empty() == true) {
+		string uniformStr =
+			#include "GLSL/Uniform.out"
+			;
+		MakeBuildInStack(&uniformStr, &uniformStack, "uniform");
+	}
+
+	if(attributeStack.empty() == true)
+	{
+		string attributeStr =
+			#include "GLSL/Attribute.out"
+			;
+		MakeBuildInStack(&attributeStr, &attributeStack, "in");
+	}
+	
 	if(vertexBuildIn.empty() == true) {
 		vertexBuildIn +=
-			#include "GLSL/Material.out"
+			#include "GLSL/Struct.out"
 			;
 		vertexBuildIn +=
 			#include "GLSL/Uniform.out"
@@ -97,10 +115,11 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 			#include "GLSL/Attribute.out"
 			;
 	}
+					
 
 	if(geometryBuildIn.empty() == true) {
 		geometryBuildIn +=
-			#include "GLSL/Material.out"
+			#include "GLSL/Struct.out"
 			;
 		geometryBuildIn +=
 			#include "GLSL/Uniform.out"
@@ -109,7 +128,7 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 
 	if(fragmentBuildIn.empty() == true) {
 		fragmentBuildIn +=
-			#include "GLSL/Material.out"
+			#include "GLSL/Struct.out"
 			;
 		fragmentBuildIn +=
 			#include "GLSL/Uniform.out"
@@ -196,7 +215,7 @@ bool fk_ShaderProgram::validate(void)
 		return false;
 	}
 
-	if(UpdateLastError(idVertex)) return false;
+	if(UpdateLastError(idVertex, "VertexShader")) return false;
 
 	idFragment = Compile(&fragmentShaderSource, GL_FRAGMENT_SHADER);
 	if(idFragment == 0) {
@@ -204,7 +223,7 @@ bool fk_ShaderProgram::validate(void)
 		return false;
 	}
 		
-	if(UpdateLastError(idFragment)) return false;
+	if(UpdateLastError(idFragment, "FragmentShader")) return false;
 
 	if(geometryShaderSource.empty() == false) {
 		idGeometry = Compile(&geometryShaderSource, GL_GEOMETRY_SHADER);
@@ -212,7 +231,7 @@ bool fk_ShaderProgram::validate(void)
 			lastError = "ERROR: GeometryShader could not create.";
 			return false;
 		}
-		if(UpdateLastError(idGeometry)) return false;
+		if(UpdateLastError(idGeometry, "GeometryShader")) return false;
 	}
 
 	if(tessCtrlShaderSource.empty() == false) {
@@ -221,7 +240,7 @@ bool fk_ShaderProgram::validate(void)
 			lastError = "ERROR: TessCtrlShader could not create.";
 			return false;
 		}
-		if(UpdateLastError(idTessCtrl)) return false;
+		if(UpdateLastError(idTessCtrl, "TessControlShader")) return false;
 	}
 
 	if(tessEvalShaderSource.empty() == false) {
@@ -230,7 +249,7 @@ bool fk_ShaderProgram::validate(void)
 			lastError = "ERROR: TessEvalShader could not create.";
 			return false;
 		}
-		if(UpdateLastError(idTessEval)) return false;
+		if(UpdateLastError(idTessEval, "TessEvalShader")) return false;
 	}
 
 	if(idProgram != 0) {
@@ -354,9 +373,10 @@ bool fk_ShaderProgram::link(void)
 	return true;
 }
 
-bool fk_ShaderProgram::UpdateLastError(GLuint argShader)
+bool fk_ShaderProgram::UpdateLastError(GLuint argShader, string argType)
 {
 	GLsizei bufSize;
+	string tmpError;
 
 	glGetShaderiv(argShader, GL_INFO_LOG_LENGTH, &bufSize);
 	if (bufSize > 1) {
@@ -364,14 +384,25 @@ bool fk_ShaderProgram::UpdateLastError(GLuint argShader)
 		if (infoLog != nullptr) {
 			GLsizei length;
 			glGetShaderInfoLog(argShader, bufSize, &length, infoLog);
-			lastError = infoLog;
+			tmpError = infoLog;
 			free(infoLog);
+
+			regex lineRegex(R"((.*?)\n)");
+			smatch lineMatch;
+			auto ite = tmpError.cbegin();
+			auto end = tmpError.cend();
+			while(regex_search(ite, end, lineMatch, lineRegex)) {
+				lastError += argType + ":" + lineMatch.str();
+				ite = lineMatch[0].second;
+			}
 		} else {
 			lastError = "ERROR: Could not allocate InfoLog buffer.";
 		}
 
 		if(lastError.find("ERROR") != string::npos ||
-		   lastError.find("error") != string::npos) return true;
+		   lastError.find("error") != string::npos) {
+			return true;
+		}
 		return false;
 	} else {
 		lastError.clear();
@@ -426,4 +457,27 @@ void fk_ShaderProgram::DeleteProgram(GLuint argID)
 #ifndef FK_CLI_CODE
 	glDeleteProgram(argID);
 #endif
+}
+
+void fk_ShaderProgram::MakeBuildInStack(string *argFile,
+										vector<fk_KeyPair> *argStack,
+										string argTypeName)
+{
+	regex lineRegex(R"((.*?)\n)");
+	regex sepRegex(R"(^\s*(\w+)\s+(\w+)\s+(\w+)(\[.*\])?;\s*$)");
+	smatch lineMatch, sepMatch;
+
+	auto ite = argFile->cbegin();
+	auto end = argFile->cend();
+
+	while(regex_search(ite, end, lineMatch, lineRegex)) {
+		string lineStr = lineMatch.str();
+		if(regex_match(lineStr, sepMatch, sepRegex)) {
+			if(sepMatch[1] == argTypeName) {
+				argStack->push_back(fk_KeyPair(sepMatch[2], sepMatch[3]));
+			}
+		}
+		ite = lineMatch[0].second;
+	}
+			
 }
