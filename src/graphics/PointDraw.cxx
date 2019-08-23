@@ -113,8 +113,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 	}
 
 	auto parameter = shader->getParameter();
-	SetParameter(parameter);
-	parameter->setRegister(fk_Shape::pointModelColorName, &(argModel->getPointColor()->col));
+	SetParameter(shader->getProgram(), parameter);
+	parameter->setRegister(fk_Shape::pointModelColorName, &(argModel->getPointColor()->col), true);
 
 	shader->ProcPreShader();
 

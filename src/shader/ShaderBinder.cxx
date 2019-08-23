@@ -121,18 +121,7 @@ fk_ShaderBinder::fk_ShaderBinder()
 	isExtensionInitialized = false;
 	Initialize();
 	program->SetParameter(parameter);
-}
-
-fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
-	: usingProgram(false),
-	  bufW(0), bufH(0), rectVAO(0), fboHandle(0),
-	  colorBuf(0), depthBuf(0)
-{
-	isExtensionInitialized = false;
-	Initialize();
-
-	setProgram(argProg);
-	setParameter(argParam);
+	parameter->SetProgram(program);
 }
 
 fk_ShaderBinder::~fk_ShaderBinder()
@@ -140,22 +129,9 @@ fk_ShaderBinder::~fk_ShaderBinder()
 	//finalizeFrameBufferObject();
 }
 
-void fk_ShaderBinder::setProgram(fk_ShaderProgram *argProg)
-{
-	program = (argProg != nullptr) ? argProg : &innerProgram;
-	return;
-}
-
 fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
 {
 	return program;
-}
-
-void fk_ShaderBinder::setParameter(fk_ShaderParameter *argParam)
-{
-	parameter = (argParam != nullptr) ? argParam : &innerParameter;
-	if(program != nullptr) program->SetParameter(parameter);
-	return;
 }
 
 fk_ShaderParameter * fk_ShaderBinder::getParameter(void)

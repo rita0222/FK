@@ -81,8 +81,8 @@ string fk_ShaderProgram::vertexBuildIn;
 string fk_ShaderProgram::geometryBuildIn;
 string fk_ShaderProgram::fragmentBuildIn;
 string fk_ShaderProgram::fboBuildIn;
-vector<fk_KeyPair>	fk_ShaderProgram::uniformStack;
-vector<fk_KeyPair>	fk_ShaderProgram::attributeStack;
+vector<fk_BuildInKey>	fk_ShaderProgram::uniformStack;
+vector<fk_BuildInKey>	fk_ShaderProgram::attributeStack;
 
 fk_ShaderProgram::fk_ShaderProgram(void)
 	: idProgram(0),
@@ -93,7 +93,7 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 		string uniformStr =
 			#include "GLSL/Uniform.out"
 			;
-		MakeBuildInStack(&uniformStr, &uniformStack, "uniform");
+		MakeBuildInStack(&uniformStr, &uniformStack);
 	}
 
 	if(attributeStack.empty() == true)
@@ -101,19 +101,21 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 		string attributeStr =
 			#include "GLSL/Attribute.out"
 			;
-		MakeBuildInStack(&attributeStr, &attributeStack, "in");
+		MakeBuildInStack(&attributeStr, &attributeStack);
 	}
 	
 	if(vertexBuildIn.empty() == true) {
 		vertexBuildIn +=
 			#include "GLSL/Struct.out"
 			;
+/*
 		vertexBuildIn +=
 			#include "GLSL/Uniform.out"
 			;
 		vertexBuildIn +=
 			#include "GLSL/Attribute.out"
 			;
+*/
 	}
 					
 
@@ -121,21 +123,25 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 		geometryBuildIn +=
 			#include "GLSL/Struct.out"
 			;
+/*
 		geometryBuildIn +=
 			#include "GLSL/Uniform.out"
 			;
+*/
 	}
 
 	if(fragmentBuildIn.empty() == true) {
 		fragmentBuildIn +=
 			#include "GLSL/Struct.out"
 			;
+/*
 		fragmentBuildIn +=
 			#include "GLSL/Uniform.out"
 			;
 		fragmentBuildIn +=
 			#include "GLSL/Attribute.out"
 			;
+*/
 		fragmentBuildIn +=
 			#include "GLSL/Fragment.out"
 			;
@@ -170,6 +176,18 @@ void fk_ShaderProgram::SetParameter(fk_ShaderParameter *argP)
 void fk_ShaderProgram::SetFBOMode(bool argMode)
 {
 	fboMode = argMode;
+}
+
+bool fk_ShaderProgram::GetUniformStatus(string argKey)
+{
+	if(uniformStatus.find(argKey) == uniformStatus.end()) return false;
+	return uniformStatus[argKey];
+}
+
+bool fk_ShaderProgram::GetAttributeStatus(string argKey)
+{
+	if(attributeStatus.find(argKey) == attributeStatus.end()) return false;
+	return attributeStatus[argKey];
 }
 
 bool fk_ShaderProgram::validate(void)
@@ -414,34 +432,68 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 {
 	string	incStr = "#FKBuildIn";
 	string::size_type	pos = 0;
-	string	*buildIn;
+	string	buildIn;
 
 	switch(argKind) {
 	  case GL_VERTEX_SHADER:
-		buildIn = &vertexBuildIn;
+		buildIn = vertexBuildIn;
+		//fk_Window::putString("----VERTEX Shader----");
 		break;
 		
 	  case GL_GEOMETRY_SHADER:
-		buildIn = &geometryBuildIn;
+		buildIn = geometryBuildIn;
+		//fk_Window::putString("----GEOMETRY Shader----");
 		break;
 
 	  case GL_FRAGMENT_SHADER:
-		buildIn = (fboMode == true) ? &fboBuildIn : &fragmentBuildIn;
+		buildIn = (fboMode == true) ? fboBuildIn : fragmentBuildIn;
+		//fk_Window::putString("----FRAGMENT Shader----");
 		break;
 		
 	  default:
 		return;
 	}
 
+	string tmpStr;
+	for(auto pair : uniformStack) {
+		if(argCode->find(pair.first) != string::npos) {
+			uniformStatus[pair.first] = true;
+			tmpStr += pair.second;
+			//fk_Window::printf("FOUND: %s", pair.first.c_str());
+		} else {
+			if(uniformStatus.find(pair.first) == uniformStatus.end()) {
+				uniformStatus[pair.first] = false;
+			}
+		}
+	}
+	//fk_Window::putString(tmpStr);
+	buildIn += tmpStr;
+
+	tmpStr.clear();
+	for(auto pair : attributeStack) {
+		if(argCode->find(pair.first) != string::npos) {
+			attributeStatus[pair.first] = true;
+			tmpStr += pair.second;
+			//fk_Window::printf("FOUND: %s", pair.first.c_str());
+		} else {
+			if(attributeStatus.find(pair.first) == attributeStatus.end()) {
+				attributeStatus[pair.first] = false;
+			}
+		}
+	}
+	//fk_Window::putString(tmpStr);
+	buildIn += tmpStr;
+
 	while((pos = argCode->find(incStr, pos)) != string::npos) {
 		auto lineNum = count(argCode->begin(), argCode->begin() + int(pos), '\n');
-		argCode->replace(pos, incStr.length(), *buildIn);
-		pos += buildIn->length();
+		argCode->replace(pos, incStr.length(), buildIn);
+		pos += buildIn.length();
 		string addLine = "\n#line " + to_string(lineNum+1) + "\n";
 		argCode->insert(pos, addLine);
 		pos += addLine.length();
 	}
 
+	//fk_Window::putString(*argCode);
 	return;
 }
 
@@ -459,9 +511,8 @@ void fk_ShaderProgram::DeleteProgram(GLuint argID)
 #endif
 }
 
-void fk_ShaderProgram::MakeBuildInStack(string *argFile,
-										vector<fk_KeyPair> *argStack,
-										string argTypeName)
+void fk_ShaderProgram::MakeBuildInStack(string *argFile, vector<fk_BuildInKey> *argStack)
+
 {
 	regex lineRegex(R"((.*?)\n)");
 	regex sepRegex(R"(^\s*(\w+)\s+(\w+)\s+(\w+)(\[.*\])?;\s*$)");
@@ -473,11 +524,8 @@ void fk_ShaderProgram::MakeBuildInStack(string *argFile,
 	while(regex_search(ite, end, lineMatch, lineRegex)) {
 		string lineStr = lineMatch.str();
 		if(regex_match(lineStr, sepMatch, sepRegex)) {
-			if(sepMatch[1] == argTypeName) {
-				argStack->push_back(fk_KeyPair(sepMatch[2], sepMatch[3]));
-			}
+			argStack->push_back(fk_BuildInKey(sepMatch[3], lineStr));
 		}
 		ite = lineMatch[0].second;
 	}
-			
 }

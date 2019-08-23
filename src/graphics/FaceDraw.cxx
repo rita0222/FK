@@ -129,7 +129,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	PolygonModeSet(drawMode);
 
 	auto parameter = shader->getParameter();
-	SetParameter(parameter);
+	SetParameter(shader->getProgram(), parameter);
 
 	shader->ProcPreShader();
 
