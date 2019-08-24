@@ -98,36 +98,14 @@ namespace FK_CLI {
 		pB = nullptr;
 	}
 
-	fk_ShaderBinder::fk_ShaderBinder(fk_ShaderProgram^ argProg, fk_ShaderParameter^ argParam)
-	{
-		if (argProg != nullptr && argParam != nullptr) {
-			pB = new ::FK::fk_ShaderBinder(argProg->GetP(), argParam->GetP());
-		}
-		else {
-			pB = new ::FK::fk_ShaderBinder();
-		}
-	}
-
 	fk_ShaderProgram^ fk_ShaderBinder::Program::get(void)
 	{
 		return gcnew fk_ShaderProgram(pB->getProgram());
 	}
 
-	void fk_ShaderBinder::Program::set(fk_ShaderProgram^ argProg)
-	{
-		if (argProg == nullptr) return;
-		pB->setProgram(argProg->GetP());
-	}
-
 	fk_ShaderParameter^ fk_ShaderBinder::Parameter::get(void)
 	{
 		return gcnew fk_ShaderParameter(pB->getParameter());
-	}
-
-	void fk_ShaderBinder::Parameter::set(fk_ShaderParameter^ argParam)
-	{
-		if (argParam == nullptr) return;
-		pB->setParameter(argParam->GetP());
 	}
 
 	void fk_ShaderBinder::BindModel(fk_Model^ argModel)

@@ -114,25 +114,11 @@ namespace FK_CLI
 	   ::FK::fk_ShaderBinder * GetP(void);
 
 	public:
-		//! コンストラクタ1
+		//! コンストラクタ
 		/*!
 		 *	インスタンスを生成します。
-		 *	シェーダープログラムおよびシェーダーパラメーターは何も設定されません。
 		 */
 		fk_ShaderBinder();
-
-		//! コンストラクタ2
-		/*!
-		 *	インスタンスを生成する際に、
-		 *	プログラムとパラメーターを初期設定するコンストラクタです。
-		 *
-		 *	\param[in]	prog
-		 *		シェーダープログラム
-		 *
-		 *	\param[in]	param
-		 *		シェーダーパラメーター
-		 */
-		fk_ShaderBinder(fk_ShaderProgram^ prog, fk_ShaderParameter^ param);
 
 		//! デストラクタ
 		~fk_ShaderBinder();
@@ -147,7 +133,6 @@ namespace FK_CLI
 		 */
 		property fk_ShaderProgram^ Program {
 			fk_ShaderProgram^ get(void);
-			void set(fk_ShaderProgram^);
 		};
 
 		//! シェーダーパラメータープロパティ
@@ -157,7 +142,6 @@ namespace FK_CLI
 		 */
 		property fk_ShaderParameter^ Parameter {
 			fk_ShaderParameter^ get(void);
-			void set(fk_ShaderParameter^);
 		};
 
 		//! シェーダーモデル連携設定メソッド
