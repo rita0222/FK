@@ -116,8 +116,8 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 	
 	auto parameter = shader->getParameter();
 
-	SetParameter(shader->getProgram(), parameter);
-	parameter->setRegister(fk_Shape::lineModelColorName, col, true);
+	SetParameter(parameter);
+	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
 
 	shader->ProcPreShader();
 

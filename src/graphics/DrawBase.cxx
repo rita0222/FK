@@ -186,49 +186,48 @@ void fk_DrawBase::SetLight(list<fk_Model *> *argList, fk_LightType argType)
 	return;
 }
 
-void fk_DrawBase::SetParameter(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
-	SetMatrixParam(argProg, argParam);
-	SetMaterialParam(argProg, argParam);
-	SetLightParam(argProg, argParam, FK_PARALLEL_LIGHT);
-	SetLightParam(argProg, argParam, FK_POINT_LIGHT);
-	SetLightParam(argProg, argParam, FK_SPOT_LIGHT);
+	SetMatrixParam(argParam);
+	SetMaterialParam(argParam);
+	SetLightParam(argParam, FK_PARALLEL_LIGHT);
+	SetLightParam(argParam, FK_POINT_LIGHT);
+	SetLightParam(argParam, FK_SPOT_LIGHT);
 	return;
 }
 
-void fk_DrawBase::SetMatrixParam(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+void fk_DrawBase::SetMatrixParam(fk_ShaderParameter *argParam)
 {
-	FK_UNUSED(argProg);
-	argParam->setRegister(projectionMatrixName, projectionMatrix, true);
-	argParam->setRegister(viewMatrixName, &viewMatrix, true);
-	argParam->setRegister(modelMatrixName, &modelMatrix, true);
-	argParam->setRegister(modelViewMatrixName, &modelViewMatrix, true);
-	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix, true);
-	argParam->setRegister(normalModelMatrixName, &normalModelMatrix, true);
-	argParam->setRegister(normalModelViewMatrixName, &normalModelViewMatrix, true);
-	argParam->setRegister(cameraPositionName, &cameraPosition, true);
+	argParam->setRegister(projectionMatrixName, projectionMatrix, projectionMatrixName);
+	argParam->setRegister(viewMatrixName, &viewMatrix, viewMatrixName);
+	argParam->setRegister(modelMatrixName, &modelMatrix, modelMatrixName);
+	argParam->setRegister(modelViewMatrixName, &modelViewMatrix, modelViewMatrixName);
+	argParam->setRegister(modelViewProjectionMatrixName, &modelViewProjectionMatrix,
+						  modelViewProjectionMatrixName);
+	argParam->setRegister(normalModelMatrixName, &normalModelMatrix,
+						  normalModelMatrixName);
+	argParam->setRegister(normalModelViewMatrixName, &normalModelViewMatrix,
+						  normalModelViewMatrixName);
+	argParam->setRegister(cameraPositionName, &cameraPosition, cameraPositionName);
 	return;
 }
 
-void fk_DrawBase::SetMaterialParam(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+void fk_DrawBase::SetMaterialParam(fk_ShaderParameter *argParam)
 {
-	FK_UNUSED(argProg);
 	argParam->setRegister(modelMaterialName + "." + diffuseName,
-						  &(modelMaterial->getDiffuse()->col));
+						  &(modelMaterial->getDiffuse()->col), modelMaterialName);
 	argParam->setRegister(modelMaterialName + "." + ambientName,
-						  &(modelMaterial->getAmbient()->col));
+						  &(modelMaterial->getAmbient()->col), modelMaterialName);
 	argParam->setRegister(modelMaterialName + "." + specularName,
-						  &(modelMaterial->getSpecular()->col));
+						  &(modelMaterial->getSpecular()->col), modelMaterialName);
 	argParam->setRegister(modelMaterialName + "." + shininessName,
-						  modelMaterial->getShininess());
+						  modelMaterial->getShininess(), modelMaterialName);
 						  
 	return;
 }
 
-void fk_DrawBase::SetLightParam(fk_ShaderProgram *argProg,
-								fk_ShaderParameter *argParam, fk_LightType argType)
+void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argType)
 {
-	FK_UNUSED(argProg);
 	int lightID = 0;
 	fk_Vector tmp;
 	list<fk_Model *> *list;
@@ -267,36 +266,36 @@ void fk_DrawBase::SetLightParam(fk_ShaderProgram *argProg,
 
 		if(argType != FK_PARALLEL_LIGHT) {
 			tmp = model->getInhPosition();
-			argParam->setRegister(nameBase + "." + lightPositionName, &tmp);
+			argParam->setRegister(nameBase + "." + lightPositionName, &tmp, lightName);
 		}
 
 		if(argType != FK_POINT_LIGHT) {
 			tmp = model->getInhVec();
-			argParam->setRegister(nameBase + "." + lightVecName, &tmp);
+			argParam->setRegister(nameBase + "." + lightVecName, &tmp, lightName);
 		}
 
 		argParam->setRegister(nameBase + "." + lightDiffuseName,
-							  &(model->getMaterial()->getDiffuse()->col));
+							  &(model->getMaterial()->getDiffuse()->col), lightName);
 		argParam->setRegister(nameBase + "." + lightSpecularName,
-							  &(model->getMaterial()->getSpecular()->col));
+							  &(model->getMaterial()->getSpecular()->col), lightName);
 
 		if(argType == FK_SPOT_LIGHT) {
 			argParam->setRegister(nameBase + "." + lightSpotCutOffName,
-								  float(light->getSpotCutOff()));
+								  float(light->getSpotCutOff()), lightName);
 			argParam->setRegister(nameBase + "." + lightSpotExponentName,
-								  float(light->getSpotExponent()));
+								  float(light->getSpotExponent()), lightName);
 		}
 
 		if(argType != FK_PARALLEL_LIGHT) {
 			attenuation[0] = float(light->getAttenuation(0));
 			attenuation[1] = float(light->getAttenuation(1));
 			attenuation[2] = float(light->getAttenuation(2));
-			argParam->setRegister(nameBase + "." + lightAttenuationName, &attenuation);
+			argParam->setRegister(nameBase + "." + lightAttenuationName, &attenuation, lightName);
 		}
 
 		++lightID;
 		if(lightID >= fk_Light::MAXLIGHTNUM) break;
 	}
 
-	argParam->setRegister(numName, lightID, true);
+	argParam->setRegister(numName, lightID, numName);
 }

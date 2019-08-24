@@ -24,48 +24,48 @@ string fk_ShaderParameter::getLastError(void)
 	return lastError;
 }
 
-void fk_ShaderParameter::setRegister(string argName, float argValue, bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, float argValue, string argKey)
 {
-	if(argBuildInMode == true && prog->GetUniformStatus(argName) == false) return;
+	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
 	floatTable[argName] = argValue;
 }
 
-void fk_ShaderParameter::setRegister(string argName, vector<float> *argValue,
-									 bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, vector<float> *argValue, string argKey)
 {
-	if(argBuildInMode == true && prog->GetUniformStatus(argName) == false) return;
+	
+	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
 	floatArrayTable[argName] = *argValue;
 }
 
-void fk_ShaderParameter::setRegister(string argName, int argValue, bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, int argValue, string argKey)
 {
-	if(argBuildInMode == true && prog->GetUniformStatus(argName) == false) return;
+	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
 	intTable[argName] = argValue;
 }
 
-void fk_ShaderParameter::setRegister(string argName, vector<int> *argValue, bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, vector<int> *argValue, string argKey)
 {
-	if(argBuildInMode == true && prog->GetUniformStatus(argName) == false) return;
+	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
 	intArrayTable[argName] = *argValue;
 }
 
-void fk_ShaderParameter::setRegister(string argName, fk_Matrix *argValue, bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, fk_Matrix *argValue, string argKey)
 {
-	if(argBuildInMode == true && prog->GetUniformStatus(argName) == false) return;
+	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
 	matrixTable[argName] = *argValue;
 }
 
-void fk_ShaderParameter::setRegister(string argName, fk_Vector *argValue, bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, fk_Vector *argValue, string argKey)
 {
 	vector<float> tmp{float(argValue->x), float(argValue->y), float(argValue->z)};
-	setRegister(argName, &tmp, argBuildInMode);
+	setRegister(argName, &tmp, argKey);
 }
 
-void fk_ShaderParameter::setRegister(string argName, fk_HVector *argValue, bool argBuildInMode)
+void fk_ShaderParameter::setRegister(string argName, fk_HVector *argValue, string argKey)
 {
 	vector<float> tmp{float(argValue->x), float(argValue->y),
 					  float(argValue->z), float(argValue->w)};
-	setRegister(argName, &tmp, argBuildInMode);
+	setRegister(argName, &tmp, argKey);
 }
 
 bool fk_ShaderParameter::removeRegister(string argName)

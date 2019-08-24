@@ -112,7 +112,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す値
 		 */
-		void setRegister(std::string name, float value, bool = false);
+		void setRegister(std::string name, float value, std::string = "");
 
 		//! float 配列型 uniform 変数設定関数
 		/*!
@@ -126,7 +126,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す配列
 		 */
-		void setRegister(std::string name, std::vector<float> *value, bool = false);
+		void setRegister(std::string name, std::vector<float> *value, std::string = "");
 
 		//! int 型 uniform 変数設定関数
 		/*!
@@ -138,7 +138,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す値
 		 */
-		void setRegister(std::string name, int value, bool = false);
+		void setRegister(std::string name, int value, std::string = "");
 
 		//! int 配列型 uniform 変数設定関数
 		/*!
@@ -152,7 +152,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す配列
 		 */
-		void setRegister(std::string name, std::vector<int> *value, bool = false);
+		void setRegister(std::string name, std::vector<int> *value, std::string = "");
 	
 		//! fk_Vector 型 uniform 変数設定関数
 		/*!
@@ -165,7 +165,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_Vector *value, bool = false);
+		void setRegister(std::string name, fk_Vector *value, std::string = "");
 
 		//! fk_HVector 型 uniform 変数設定関数
 		/*!
@@ -178,7 +178,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_HVector *value, bool = false);
+		void setRegister(std::string name, fk_HVector *value, std::string = "");
 
 		//! fk_Matrix 型 uniform 変数設定関数
 		/*!
@@ -191,7 +191,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_Matrix *value, bool = false);
+		void setRegister(std::string name, fk_Matrix *value, std::string = "");
 
 		//! uniform 変数解除関数
 		/*!

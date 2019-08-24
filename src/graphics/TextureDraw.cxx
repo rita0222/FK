@@ -121,7 +121,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 	PolygonModeSet();
 
 	auto parameter = shader->getParameter();
-	SetParameter(shader->getProgram(), parameter);
+	SetParameter(parameter);
 
 	Draw_Texture(argModel, parameter);
 	return;
