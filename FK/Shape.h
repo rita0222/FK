@@ -473,6 +473,9 @@ namespace FK {
 
 		// シェーダー変数名: テクスチャ座標
 		static const std::string	texCoordName;
+
+		// シェーダー変数名: 制御点座標
+		static const std::string	ctrlPosName;
 		
 #endif
 

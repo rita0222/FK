@@ -69,102 +69,144 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#define FK_DEF_SIZETYPE
+#include <FK/CurveDraw.H>
+#include <FK/OpenGL.H>
+#include <FK/Model.h>
+#include <FK/Curve.h>
+#include <FK/Surface.h>
+#include <FK/Solid.h>
+#include <FK/IndexFace.h>
+#include <FK/Vertex.h>
+#include <FK/Half.h>
+#include <FK/Error.H>
 
+using namespace std;
+using namespace FK;
 
-#ifndef __FK_CURVE_HEADER__
-#define __FK_CURVE_HEADER__
-
-#include <FK/Vector.h>
-#include <FK/Shape.h>
-#include <FK/FVecArray.h>
-
-namespace FK {
-
-	class fk_Window;
-
-	//! 曲線用純粋仮想クラス
-	/*!
-	 *	このクラスは、自由曲線用の純粋仮想クラスです。
-	 *	このクラスを継承することによって、
-	 *	ユーザは任意の自由曲線形式を fk_Edge に追加することができます。
-	 *	fk_BezCurve と fk_BSplCurve はこのクラスを継承しています。
-	 *	自由曲線は、以下の条件を満たす必要があります。
-	 *	- パラメータ空間が [0, 1] である。
-	 *	- パラメータ空間中のあらゆるパラメータで曲線上の点を算出できる。
-	 *	- パラメータ空間中のあらゆるパラメータで曲線上の微分ベクトルを算出できる。
-	 *	- 曲線の始点と終点の位置ベクトルが、稜線 (fk_Edge) の始点、終点と一致している。
-	 *
-	 *	\sa fk_Edge, fk_BezCurve, fk_BSplCurve, fk_Surface
-	 */
-	class fk_Curve : public fk_Shape {
-
-	protected:
-
-		//! 修正告知用フラグ
-		/*!
-		 *	この変数は、派生クラスにおいて曲線形状を変更した状況となったとき、
-		 *	値を true に変更して下さい。
-		 *	描画データキャッシュが生成された時点で再び false に戻されます。
-		 */
-		bool				changeFlg;
-
-	public:
-
-		//! コンストラクタ
-		fk_Curve(void);
-
-		//! デストラクタ
-		virtual ~fk_Curve();
- 
-		//! 曲線点位置ベクトル算出関数
-		/*!
-		 *	曲線上の点の位置ベクトルを算出する純粋仮想関数です。
-		 *	派生クラスにおいて実際に実装する必要があります。
-		 *
-		 *	\param[in]	t	曲線パラメータ
-		 *
-		 *	\return		曲線点の位置ベクトル
-		 */
-		virtual fk_Vector	pos(double t) = 0;
-
-		//! 曲線微分ベクトル算出関数
-		/*!
-		 *	曲線上の点の微分ベクトルを算出する純粋仮想関数です。
-		 *	派生クラスにおいて実際に実装する必要があります。
-		 *
-		 *	\param[in]	t	曲線パラメータ
-		 *
-		 *	\return		曲線点の微分ベクトル
-		 */
-		virtual fk_Vector	diff(double t) = 0;
-
-		//! 曲線キャッシュ分割数設定関数
-		/*!
-		 *	描画する際の曲線の分割数を設定します。
-		 *	本関数は、派生クラスにおいて再定義する必要はありません。
-		 *
-		 *	\param[in]	div		分割数。
-		 */
-		void	setDiv(int div);
-	
-		//! 曲線キャッシュ分割数参照関数
-		/*!
-		 *	描画する際の曲線の分割数を参照します。
-		 *	本関数は、派生クラスにおいて再定義する必要はありません。
-		 *
-		 *	\return		分割数
-		 */
-		int		getDiv(void);
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		int		getCtrlPos(void);
-		//void	makeCache(void);
-#endif
-
-	protected:
-		int	div;
-		fk_FVecArray	ctrlPos;
-	};
+fk_CurveDraw::fk_CurveDraw(void)
+	: curveShader(nullptr), modelID(0), elemID(0)
+{
+	return;
 }
 
-#endif	// __FK_CURVE_HEADER__
+fk_CurveDraw::~fk_CurveDraw()
+{
+	delete curveShader;
+	return;
+}
+
+
+void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
+{
+	auto shapeType = argModel->getShape()->getRealShapeType();
+	auto col = &(argModel->getLineColor()->col);
+	auto mode = argModel->getElementMode();
+	auto modelShader = argModel->getShader();
+
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
+		}
+	} else {
+		if(curveShader == nullptr) ShaderSetup();
+		else shader = curveShader;
+	}
+	
+	auto parameter = shader->getParameter();
+
+	SetParameter(parameter);
+	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
+
+	shader->ProcPreShader();
+
+	if(shader == curveShader) {
+		switch(mode) {
+		  case FK_ELEM_MODEL:
+			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
+			break;
+
+		  case FK_ELEM_ELEMENT:
+			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
+			break;
+
+		  default:
+			return;
+		}
+	}
+	
+	glEnable(GL_LINE_SMOOTH);
+
+	Draw_Curve(argModel, parameter);
+
+	shader->ProcPostShader();
+	return;
+}
+
+void fk_CurveDraw::ShaderSetup(void)
+{
+	curveShader = new fk_ShaderBinder();
+	shader = curveShader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Curve_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Curve_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_CurveDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+
+	return;
+}
+
+void fk_CurveDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+{
+	argParam->reserveAttribute(fk_Curve::ctrlPosName);
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
+	argProg->link();
+}
+
+GLuint fk_CurveDraw::VAOSetup(fk_Shape *argShape)
+{
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetLineVAO(vao);
+	argShape->DefineVBO();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	return vao;
+}
+
+void fk_CurveDraw::Draw_Cuve(fk_Model *argModel, fk_ShaderParameter *argParam)
+{
+	fk_Cufve	*curve = dynamic_cast<fk_Curve *>(argModel->getShape());
+	GLuint		vao = curve->GetLineVAO();
+
+	if(vao == 0) {
+		vao = VAOSetup(curve);
+	}
+	glBindVertexArray(vao);
+	curve->BindShaderBuffer(argParam->getAttrTable());
+	glEnable(GL_LINE_SMOOTH);
+	glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
+	glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	return;
+}

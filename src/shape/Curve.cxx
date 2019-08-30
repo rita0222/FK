@@ -102,3 +102,9 @@ int fk_Curve::getDiv(void)
 {
 	return div;
 }
+
+int fk_Curve::getCtrlPos(void)
+{
+	return ctrlPos.getSize();
+}
+

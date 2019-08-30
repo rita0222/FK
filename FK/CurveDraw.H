@@ -69,102 +69,31 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_CURVE_DRAW_HEADER__
+#define __FK_CURVE_DRAW_HEADER__
 
-
-#ifndef __FK_CURVE_HEADER__
-#define __FK_CURVE_HEADER__
-
-#include <FK/Vector.h>
-#include <FK/Shape.h>
-#include <FK/FVecArray.h>
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
 
 namespace FK {
 
-	class fk_Window;
-
-	//! 曲線用純粋仮想クラス
-	/*!
-	 *	このクラスは、自由曲線用の純粋仮想クラスです。
-	 *	このクラスを継承することによって、
-	 *	ユーザは任意の自由曲線形式を fk_Edge に追加することができます。
-	 *	fk_BezCurve と fk_BSplCurve はこのクラスを継承しています。
-	 *	自由曲線は、以下の条件を満たす必要があります。
-	 *	- パラメータ空間が [0, 1] である。
-	 *	- パラメータ空間中のあらゆるパラメータで曲線上の点を算出できる。
-	 *	- パラメータ空間中のあらゆるパラメータで曲線上の微分ベクトルを算出できる。
-	 *	- 曲線の始点と終点の位置ベクトルが、稜線 (fk_Edge) の始点、終点と一致している。
-	 *
-	 *	\sa fk_Edge, fk_BezCurve, fk_BSplCurve, fk_Surface
-	 */
-	class fk_Curve : public fk_Shape {
-
-	protected:
-
-		//! 修正告知用フラグ
-		/*!
-		 *	この変数は、派生クラスにおいて曲線形状を変更した状況となったとき、
-		 *	値を true に変更して下さい。
-		 *	描画データキャッシュが生成された時点で再び false に戻されます。
-		 */
-		bool				changeFlg;
-
+	class fk_CurveDraw : public fk_DrawBase {
 	public:
+		fk_CurveDraw(void);
+		virtual ~fk_CurveDraw();
 
-		//! コンストラクタ
-		fk_Curve(void);
+		void	DrawShapeCurve(fk_Model *);
+		GLuint	VAOSetup(fk_Shape *);
 
-		//! デストラクタ
-		virtual ~fk_Curve();
- 
-		//! 曲線点位置ベクトル算出関数
-		/*!
-		 *	曲線上の点の位置ベクトルを算出する純粋仮想関数です。
-		 *	派生クラスにおいて実際に実装する必要があります。
-		 *
-		 *	\param[in]	t	曲線パラメータ
-		 *
-		 *	\return		曲線点の位置ベクトル
-		 */
-		virtual fk_Vector	pos(double t) = 0;
+	private:
+		fk_ShaderBinder		*curveShader;
 
-		//! 曲線微分ベクトル算出関数
-		/*!
-		 *	曲線上の点の微分ベクトルを算出する純粋仮想関数です。
-		 *	派生クラスにおいて実際に実装する必要があります。
-		 *
-		 *	\param[in]	t	曲線パラメータ
-		 *
-		 *	\return		曲線点の微分ベクトル
-		 */
-		virtual fk_Vector	diff(double t) = 0;
+		GLuint	modelID, elemID;
+		void	ShaderSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
-		//! 曲線キャッシュ分割数設定関数
-		/*!
-		 *	描画する際の曲線の分割数を設定します。
-		 *	本関数は、派生クラスにおいて再定義する必要はありません。
-		 *
-		 *	\param[in]	div		分割数。
-		 */
-		void	setDiv(int div);
-	
-		//! 曲線キャッシュ分割数参照関数
-		/*!
-		 *	描画する際の曲線の分割数を参照します。
-		 *	本関数は、派生クラスにおいて再定義する必要はありません。
-		 *
-		 *	\return		分割数
-		 */
-		int		getDiv(void);
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		int		getCtrlPos(void);
-		//void	makeCache(void);
-#endif
-
-	protected:
-		int	div;
-		fk_FVecArray	ctrlPos;
+ 		void	Draw_Curve(fk_Model *, fk_ShaderParameter *);
 	};
 }
 
-#endif	// __FK_CURVE_HEADER__
+#endif /* !__FK_CURVE_DRAW_HEADER__ */
