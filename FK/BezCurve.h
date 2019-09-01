@@ -218,20 +218,19 @@ namespace FK {
 		 */
 		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
 		void	DebugMode(bool);
+#endif
+		
 	private:
-		int										deg;
-		std::vector<fk_Vector>					ctrlPos;
-		std::vector<std::vector<fk_Vector> >	divPos;
-		bool									debugMode;
-
-		void			MakeDiv(double);
-		double			CrossZero(fk_Vector &, fk_Vector &);
-		bool			CrossCH(std::vector<fk_Vector> *, double *, double *);
-		void			CrossFunc(std::vector<fk_Vector> *,
-								  double, double, std::vector<double> *);
-		void			CheckCross(std::vector<fk_Vector> *, std::vector<double> *,
-								   std::vector<double> *, double);
+		int		deg;
+		
+		void MakeDiv(double, std::vector<std::vector<fk_Vector> > &);
+		double CrossZero(fk_Vector &, fk_Vector &);
+		bool CrossCH(std::vector<fk_Vector> *, double *, double *);
+		void CrossFunc(std::vector<fk_Vector> *, double, double, std::vector<double> *);
+		void CheckCross(std::vector<fk_Vector> *, std::vector<double> *,
+						std::vector<double> *, double);
 	};
 }
 

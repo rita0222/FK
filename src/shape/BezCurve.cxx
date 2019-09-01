@@ -81,7 +81,6 @@ fk_BezCurve::fk_BezCurve(void)
 	SetObjectType(FK_BEZCURVE);
 
 	setDegree(3);
-	debugMode = false;
 	return;
 }
 
@@ -105,8 +104,7 @@ bool fk_BezCurve::setDegree(int argDeg)
 	}
 
 	deg = argDeg;
-	ctrlPos.resize(static_cast<_st>(deg+1));
-	divPos.clear();
+	ctrlPos.resize(deg+1);
 	changeFlg = true;
 	return true;
 }
@@ -117,7 +115,7 @@ bool fk_BezCurve::setCtrl(int argID, const fk_Vector &argVec)
 		return false;
 	}
 
-	ctrlPos[static_cast<_st>(argID)] = argVec;
+	ctrlPos.set(argID, argVec);
 	changeFlg = true;
 	return true;
 }
@@ -135,7 +133,7 @@ fk_Vector fk_BezCurve::getCtrl(int argID)
 		return dummy;
 	}
 
-	return ctrlPos[static_cast<_st>(argID)];
+	return ctrlPos.getV(argID);
 }
 
 fk_Vector fk_BezCurve::pos(double t)
@@ -169,8 +167,8 @@ fk_Vector fk_BezCurve::pos(double t)
 		return vec;
 	}	
 
-	for(_st i = 0; i <= static_cast<_st>(deg); i++) {
-		vec += ctrlPos[i]*tmp[i];
+	for(int i = 0; i <= deg; ++i) {
+		vec += ctrlPos.getV(i) * tmp[i];
 	}
 
 	return vec;
@@ -204,34 +202,34 @@ fk_Vector fk_BezCurve::diff(double t)
 		return vec;
 	}	
 
-	for(_st i = 0; i < static_cast<_st>(deg); i++) {
-		vec += (ctrlPos[i+1] - ctrlPos[i])*tmp[i];
+	for(int i = 0; i < deg; ++i) {
+		vec += (ctrlPos.getV(i+1) - ctrlPos.getV(i)) * tmp[i];
 	}
 
 	return (vec*double(deg));
 }
 
-void fk_BezCurve::MakeDiv(double argT)
+void fk_BezCurve::MakeDiv(double argT, vector<vector<fk_Vector> > &argDivPos)
 {
 	_st i, j, d;
 
 	d = _st(deg);
 
-	if(divPos.empty() == true) {
-		divPos.resize(d+1);
+	if(argDivPos.empty() == true) {
+		argDivPos.resize(d+1);
 
 		for(i = 0; i <= d; ++i) {
-			divPos[i].resize(d+1-i);
+			argDivPos[i].resize(d+1-i);
 		}
 	}
 
 	for(i = 0; i <= d; ++i) {
-		divPos[0][i] = ctrlPos[i];
+		argDivPos[0][i] = ctrlPos.getV(int(i));
 	}
 
 	for(i = 1; i <= d; ++i) {
 		for(j = 0; j <= d - i; ++j) {
-			divPos[i][j] = (1.0 - argT) * divPos[i-1][j] + argT * divPos[i-1][j+1];
+			argDivPos[i][j] = (1.0 - argT) * argDivPos[i-1][j] + argT * argDivPos[i-1][j+1];
 		}
 	}
 	return;
@@ -240,6 +238,7 @@ void fk_BezCurve::MakeDiv(double argT)
 bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 {
 	_st		i, d;
+	vector<vector<fk_Vector> > divPos;
 
 	if(argP == nullptr) return false;
 	if(argT < FK_EPS || argT > 1.0 - FK_EPS) return false;
@@ -247,7 +246,7 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 	d = _st(deg);
 	argP->clear();
 
-	MakeDiv(argT);
+	MakeDiv(argT, divPos);
 	for(i = 0; i <= d; ++i) argP->push_back(divPos[i][0]);
 	for(i = 1; i <= d; ++i) argP->push_back(divPos[d-i][i]);
 	return true;
@@ -390,11 +389,6 @@ void fk_BezCurve::CheckCross(vector<fk_Vector> *argC, vector<double> *argTmpA,
 	}
 }
 
-void fk_BezCurve::DebugMode(bool argMode)
-{
-	debugMode = argMode;
-}
-
 void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> *argA)
 {
 	vector<fk_Vector>	ctrl;
@@ -407,8 +401,8 @@ void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> 
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
 
-	for(_st i = 0; i < ctrlPos.size(); ++i) {
-		ctrl.push_back(m * (ctrlPos[i] - argS));
+	for(int i = 0; i < ctrlPos.getSize(); ++i) {
+		ctrl.push_back(m * (ctrlPos.getV(i) - argS));
 	}
 	
 	argA->clear();
@@ -428,8 +422,8 @@ void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
 
-	for(_st i = 0; i < ctrlPos.size(); ++i) {
-		ctrl.push_back(m * ((argM * ctrlPos[i]) - argS));
+	for(int i = 0; i < ctrlPos.getSize(); ++i) {
+		ctrl.push_back(m * ((argM * ctrlPos.getV(i)) - argS));
 	}
 	
 	argA->clear();
