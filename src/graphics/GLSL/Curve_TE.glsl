@@ -1,6 +1,6 @@
 #version 410 core
 
-#FK_BuildIn
+#FKBuildIn
 
 layout( isolines ) in;
 
@@ -20,5 +20,5 @@ void main()
 
 	vec3 p = p0 * b0 + p1 * b1 + p2 * b2 + p3 * b3;
 
-	gl_Position = fk_ModelViewProjectionMatrix * p;
+	gl_Position = fk_ModelViewProjectionMatrix * vec4(p, 1.0);
 }

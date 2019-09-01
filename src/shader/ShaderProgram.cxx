@@ -80,6 +80,8 @@ using namespace FK;
 string fk_ShaderProgram::vertexBuildIn;
 string fk_ShaderProgram::geometryBuildIn;
 string fk_ShaderProgram::fragmentBuildIn;
+string fk_ShaderProgram::tessCtrlBuildIn;
+string fk_ShaderProgram::tessEvalBuildIn;
 string fk_ShaderProgram::fboBuildIn;
 vector<fk_BuildInKey>	fk_ShaderProgram::uniformStack;
 vector<fk_BuildInKey>	fk_ShaderProgram::attributeStack;
@@ -108,44 +110,34 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 		vertexBuildIn +=
 			#include "GLSL/Struct.out"
 			;
-/*
-		vertexBuildIn +=
-			#include "GLSL/Uniform.out"
-			;
-		vertexBuildIn +=
-			#include "GLSL/Attribute.out"
-			;
-*/
 	}
-					
 
 	if(geometryBuildIn.empty() == true) {
 		geometryBuildIn +=
 			#include "GLSL/Struct.out"
 			;
-/*
-		geometryBuildIn +=
-			#include "GLSL/Uniform.out"
-			;
-*/
 	}
 
 	if(fragmentBuildIn.empty() == true) {
 		fragmentBuildIn +=
 			#include "GLSL/Struct.out"
 			;
-/*
-		fragmentBuildIn +=
-			#include "GLSL/Uniform.out"
-			;
-		fragmentBuildIn +=
-			#include "GLSL/Attribute.out"
-			;
-*/
 		fragmentBuildIn +=
 			#include "GLSL/Fragment.out"
 			;
 	}
+
+	if(tessCtrlBuildIn.empty() == true) {
+		tessCtrlBuildIn +=
+			#include "GLSL/Struct.out"
+			;
+	}			
+
+	if(tessEvalBuildIn.empty() == true) {
+		tessEvalBuildIn +=
+			#include "GLSL/Struct.out"
+			;
+	}			
 
 	if(fboBuildIn.empty() == true) {
 		fboBuildIn +=
@@ -450,6 +442,16 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		//fk_Window::putString("----FRAGMENT Shader----");
 		break;
 		
+	  case GL_TESS_CONTROL_SHADER:
+		buildIn = tessCtrlBuildIn;
+		//fk_Window::putString("----TESS CTRL Shader----");
+		break;
+
+	  case GL_TESS_EVALUATION_SHADER:
+		buildIn = tessEvalBuildIn;
+		//fk_Window::putString("----TESS EVAL Shader----");
+		break;
+
 	  default:
 		return;
 	}
@@ -493,7 +495,10 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		pos += addLine.length();
 	}
 
-	//fk_Window::putString(*argCode);
+	if(argKind == GL_TESS_CONTROL_SHADER ||
+	   argKind == GL_TESS_EVALUATION_SHADER) {
+		fk_Window::putString(*argCode);
+	}
 	return;
 }
 

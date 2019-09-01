@@ -298,6 +298,8 @@ namespace FK {
 		static std::string vertexBuildIn;
 		static std::string fragmentBuildIn;
 		static std::string geometryBuildIn;
+		static std::string tessCtrlBuildIn;
+		static std::string tessEvalBuildIn;
 		static std::string fboBuildIn;
 
 		static std::vector<fk_BuildInKey>	uniformStack;
