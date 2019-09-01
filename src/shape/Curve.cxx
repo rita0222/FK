@@ -74,8 +74,9 @@
 using namespace std;
 using namespace FK;
 
-fk_Curve::fk_Curve(void) : changeFlg(true), div(-1)
+fk_Curve::fk_Curve(void) : div(128)
 {
+	ctrlPos.clear();
 	realType = FK_SHAPE_CURVE;
 	SetObjectType(FK_CURVE);
 	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
@@ -88,7 +89,56 @@ fk_Curve::~fk_Curve(void)
 	return;
 }
 
+void fk_Curve::init(void)
+{
+	ctrlPos.clear();
+}
+
+bool fk_Curve::setCtrl(int argID, fk_Vector *argPos)
+{
+	if(argID < 0 || argID >= ctrlPos.getSize() || argPos == nullptr) return false;
+	ctrlPos.set(argID, *argPos);
+	modifyAttribute(ctrlPosName);
+
+	return true;
+}
+
+bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
+{
+	if(argID < 0 || argID >= ctrlPos.getSize()) return false;
+	ctrlPos.set(argID, argPos);
+	modifyAttribute(ctrlPosName);
+
+	return true;
+}
+
+fk_Vector fk_Curve::getCtrl(int argID)
+{
+	return ctrlPos.getV(argID);
+}
+
 int fk_Curve::getCtrlSize(void)
 {
 	return ctrlPos.getSize();
+}
+
+void fk_Curve::setDiv(int argDiv)
+{
+	if(argDiv <= 0) return;
+	div = argDiv;
+}
+
+int fk_Curve::getDiv(void)
+{
+	return div;
+}
+
+fk_Vector fk_Curve::pos(double)
+{
+	return fk_Vector();
+}
+
+fk_Vector fk_Curve::diff(double)
+{
+	return fk_Vector();
 }

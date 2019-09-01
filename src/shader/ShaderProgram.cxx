@@ -494,11 +494,12 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		argCode->insert(pos, addLine);
 		pos += addLine.length();
 	}
-
+/*
 	if(argKind == GL_TESS_CONTROL_SHADER ||
 	   argKind == GL_TESS_EVALUATION_SHADER) {
 		fk_Window::putString(*argCode);
 	}
+*/
 	return;
 }
 

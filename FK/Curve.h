@@ -80,33 +80,18 @@
 
 namespace FK {
 
-	class fk_Window;
-
 	//! 曲線用純粋仮想クラス
 	/*!
-	 *	このクラスは、自由曲線用の純粋仮想クラスです。
-	 *	このクラスを継承することによって、
-	 *	ユーザは任意の自由曲線形式を fk_Edge に追加することができます。
+	 *	このクラスは、自由曲線用のクラスです。
 	 *	fk_BezCurve と fk_BSplCurve はこのクラスを継承しています。
 	 *	自由曲線は、以下の条件を満たす必要があります。
 	 *	- パラメータ空間が [0, 1] である。
 	 *	- パラメータ空間中のあらゆるパラメータで曲線上の点を算出できる。
 	 *	- パラメータ空間中のあらゆるパラメータで曲線上の微分ベクトルを算出できる。
-	 *	- 曲線の始点と終点の位置ベクトルが、稜線 (fk_Edge) の始点、終点と一致している。
 	 *
-	 *	\sa fk_Edge, fk_BezCurve, fk_BSplCurve, fk_Surface
+	 *	\sa fk_BezCurve, fk_BSplCurve, fk_Surface
 	 */
 	class fk_Curve : public fk_Shape {
-
-	protected:
-
-		//! 修正告知用フラグ
-		/*!
-		 *	この変数は、派生クラスにおいて曲線形状を変更した状況となったとき、
-		 *	値を true に変更して下さい。
-		 *	描画データキャッシュが生成された時点で再び false に戻されます。
-		 */
-		bool				changeFlg;
 
 	public:
 
@@ -115,37 +100,112 @@ namespace FK {
 
 		//! デストラクタ
 		virtual ~fk_Curve();
- 
+
+		//! 初期化用関数
+		/*!
+		 *	この関数は、曲線を初期状態にします。
+		 */
+		virtual void init(void);
+
+		//! 制御点設定関数1
+		/*!
+		 *	曲線の制御点位置ベクトルを設定します。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *	\param[in]	pos	制御点位置ベクトル
+		 *
+		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool setCtrl(int ID, fk_Vector *pos);
+
+		//! 制御点設定関数2
+		/*!
+		 *	曲線の制御点位置ベクトルを設定します。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *	\param[in]	pos	制御点位置ベクトル
+		 *
+		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool setCtrl(int ID, fk_Vector pos);
+
+		//! 制御点取得関数
+		/*!
+		 *	曲線の制御点位置ベクトルを取得します。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *
+		 *	\return	指定した制御点の位置ベクトル。
+		 *		指定した制御点が存在しない場合は零ベクトルを返します。
+		 */
+		fk_Vector getCtrl(int ID);
+
+		//! 制御点数設定関数
+		/*!
+		 *	曲線の制御点数を設定します。負数が指定された場合は無視します。
+		 *
+		 *	\param[in]	num	制御点数
+		 */
+		void setCtrlSize(int num);
+
+		//! 制御点数取得関数
+		/*!
+		 *	曲線の制御点数を取得します。
+		 *
+		 *	\return	制御点数
+		 */
+		int	getCtrlSize(void);
+
+
+		//! 分割数設定関数
+		/*!
+		 *	描画時の分割数を設定します。
+		 *	デフォルトでは 128 に設定されています。
+		 *
+		 *	\param[in]	num	分割数
+		 */
+		void setDiv(int num);
+
+		//! 分割数取得関数
+		/*!
+		 *	描画時の分割数を取得します。
+		 *
+		 *	\return	分割数
+		 */
+		int getDiv(void);
+
 		//! 曲線点位置ベクトル算出関数
 		/*!
-		 *	曲線上の点の位置ベクトルを算出する純粋仮想関数です。
+		 *	曲線上の点の位置ベクトルを算出する仮想関数です。
 		 *	派生クラスにおいて実際に実装する必要があります。
 		 *
 		 *	\param[in]	t	曲線パラメータ
 		 *
 		 *	\return		曲線点の位置ベクトル
 		 */
-		virtual fk_Vector	pos(double t) = 0;
+		virtual fk_Vector	pos(double t);
 
 		//! 曲線微分ベクトル算出関数
 		/*!
-		 *	曲線上の点の微分ベクトルを算出する純粋仮想関数です。
+		 *	曲線上の点の微分ベクトルを算出する仮想関数です。
 		 *	派生クラスにおいて実際に実装する必要があります。
 		 *
 		 *	\param[in]	t	曲線パラメータ
 		 *
 		 *	\return		曲線点の微分ベクトル
 		 */
-		virtual fk_Vector	diff(double t) = 0;
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		int		getCtrlSize(void);
-		//void	makeCache(void);
-#endif
+		virtual fk_Vector	diff(double t);
 
 	protected:
-		int	div;
+		//! 制御点配列
+		/*!
+		 *	この変数は制御点情報を格納しておくものであり、
+		 *	派生クラス内で設定や参照が可能です。
+		 */
 		fk_FVecArray	ctrlPos;
+
+	private:
+		int div;
 	};
 }
 

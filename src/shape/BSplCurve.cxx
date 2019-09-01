@@ -109,7 +109,6 @@ bool fk_BSplCurve::setOrdinate(int argOrd)
 	ord = argOrd;
 	ctrlPos.clear();
 	num = 0;
-	changeFlg = true;
 
 	return true;
 }
@@ -118,38 +117,9 @@ bool fk_BSplCurve::setNum(int argNum)
 {
 	if(argNum < ord) return false;
 	num = argNum;
-	ctrlPos.resize(static_cast<_st>(num));
-	for(_st i = 0; i < static_cast<_st>(num); i++) {
-		ctrlPos[i].init();
-	}
+	ctrlPos.resize(num);
 	UpdateKnot(ord, num, knotVec);
-	changeFlg = true;
 
-	return true;
-}
-
-
-bool fk_BSplCurve::setCtrl(int argID, const fk_Vector &argCtrl)
-{
-	if(argID < 0 || argID >= num) {
-		return false;
-	}
-
-	ctrlPos[static_cast<_st>(argID)] = argCtrl;
-	changeFlg = true;
-	return true;
-}
-
-bool fk_BSplCurve::setCtrl(vector<fk_Vector> *argCtrlArray)
-{
-	if(num == 0 || static_cast<int>(argCtrlArray->size()) != num) {
-		return false;
-	}
-
-	for(_st i = 0; i < static_cast<_st>(num); i++) {
-		ctrlPos[i] = argCtrlArray->at(i);
-	}
-	changeFlg = true;
 	return true;
 }
 
@@ -163,23 +133,14 @@ int fk_BSplCurve::getNum(void)
 	return num;
 }
 
-fk_Vector fk_BSplCurve::getCtrl(int argID)
-{
-	if(argID < 0 || argID >= num) {
-		return fk_Vector(0.0, 0.0, 0.0);
-	}
-
-	return ctrlPos[static_cast<_st>(argID)];
-}
-
 fk_Vector fk_BSplCurve::pos(double t)
 {
 	fk_Vector	retPos(0.0, 0.0, 0.0);
-	_st			i;
+	int			i;
 
 	if(num == 0) return retPos;
-	for(i = 0; i < static_cast<_st>(num); i++) {
-		retPos += PosBasis(static_cast<int>(i), ord, t, knotVec) * ctrlPos[i];
+	for(i = 0; i < num; i++) {
+		retPos += PosBasis(i, ord, t, knotVec) * ctrlPos.getV(i);
 	}
 
 	return retPos;
@@ -191,15 +152,12 @@ fk_Vector fk_BSplCurve::diff(double t)
 
 	if(num == 0) return retVec;
 	if(IsSame(t, 0.0)) {
-		retVec = double(ord-1) * (ctrlPos[1] - ctrlPos[0]);
+		retVec = double(ord-1) * (ctrlPos.getV(1) - ctrlPos.getV(0));
 	} else if(IsSame(t, 1.0)) {
-		retVec = double(ord-1) *
-			(ctrlPos[static_cast<_st>(num-1)] -
-			 ctrlPos[static_cast<_st>(num-2)]);
+		retVec = double(ord-1) * (ctrlPos.getV(num-1) - ctrlPos.getV(num-2));
 	} else {
-		for(_st i = 0; i < static_cast<_st>(num); i++) {
-			retVec += DiffBasis(static_cast<int>(i), ord, t, knotVec) *
-						ctrlPos[i];
+		for(int i = 0; i < num; i++) {
+			retVec += DiffBasis(i, ord, t, knotVec) * ctrlPos.getV(i);
 		}
 	}
 

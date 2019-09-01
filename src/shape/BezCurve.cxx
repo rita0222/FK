@@ -105,36 +105,12 @@ bool fk_BezCurve::setDegree(int argDeg)
 
 	deg = argDeg;
 	ctrlPos.resize(deg+1);
-	changeFlg = true;
-	return true;
-}
-
-bool fk_BezCurve::setCtrl(int argID, const fk_Vector &argVec)
-{
-	if(argID < 0 || argID > deg) {
-		return false;
-	}
-
-	ctrlPos.set(argID, argVec);
-	changeFlg = true;
-	modifyAttribute(ctrlPosName);
 	return true;
 }
 
 int fk_BezCurve::getDegree(void)
 {
 	return deg;
-}
-
-fk_Vector fk_BezCurve::getCtrl(int argID)
-{
-	fk_Vector	dummy(0.0, 0.0, 0.0);
-
-	if(argID < 0 || argID > deg) {
-		return dummy;
-	}
-
-	return ctrlPos.getV(argID);
 }
 
 fk_Vector fk_BezCurve::pos(double t)
