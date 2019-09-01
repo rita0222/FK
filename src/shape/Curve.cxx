@@ -78,6 +78,7 @@ fk_Curve::fk_Curve(void) : changeFlg(true), div(-1)
 {
 	realType = FK_SHAPE_CURVE;
 	SetObjectType(FK_CURVE);
+	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
 
 	return;
 }
@@ -91,4 +92,3 @@ int fk_Curve::getCtrlSize(void)
 {
 	return ctrlPos.getSize();
 }
-

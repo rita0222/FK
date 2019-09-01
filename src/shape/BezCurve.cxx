@@ -117,6 +117,7 @@ bool fk_BezCurve::setCtrl(int argID, const fk_Vector &argVec)
 
 	ctrlPos.set(argID, argVec);
 	changeFlg = true;
+	modifyAttribute(ctrlPosName);
 	return true;
 }
 

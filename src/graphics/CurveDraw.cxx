@@ -85,7 +85,7 @@ using namespace std;
 using namespace FK;
 
 fk_CurveDraw::fk_CurveDraw(void)
-	: curveShader(nullptr), modelID(0), elemID(0)
+	: curveShader(nullptr)
 {
 	return;
 }
@@ -100,7 +100,7 @@ fk_CurveDraw::~fk_CurveDraw()
 void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
 {
 	auto col = &(argModel->getLineColor()->col);
-	auto mode = argModel->getElementMode();
+	//auto mode = argModel->getElementMode();
 	auto modelShader = argModel->getShader();
 
 	if(modelShader != nullptr) {
@@ -120,21 +120,6 @@ void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
-	if(shader == curveShader) {
-		switch(mode) {
-		  case FK_ELEM_MODEL:
-			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
-			break;
-
-		  case FK_ELEM_ELEMENT:
-			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
-			break;
-
-		  default:
-			return;
-		}
-	}
-	
 	glEnable(GL_LINE_SMOOTH);
 
 	Draw_Curve(argModel, parameter);
@@ -208,8 +193,12 @@ void fk_CurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam)
 	glBindVertexArray(vao);
 	curve->BindShaderBuffer(argParam->getAttrTable());
 	glEnable(GL_LINE_SMOOTH);
-	glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
-	glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
+
+	//glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
+	glPatchParameteri(GL_PATCH_VERTICES, 4);
+	//glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
+	glDrawArrays(GL_PATCHES, 0, 4);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	return;
