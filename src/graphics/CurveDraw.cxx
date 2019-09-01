@@ -142,11 +142,11 @@ void fk_CurveDraw::ShaderSetup(void)
 	prog->fragmentShaderSource =
 		#include "GLSL/Curve_FS.out"
 		;
-
+/*
 	prog->tessCtrlShaderSource =
 		#include "GLSL/Curve_TC.out"
 		;
-
+*/
 	prog->tessEvalShaderSource =
 		#include "GLSL/Curve_TE.out"
 		;
@@ -186,6 +186,7 @@ void fk_CurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
 	fk_Curve	*curve = dynamic_cast<fk_Curve *>(argModel->getShape());
 	GLuint		vao = curve->GetLineVAO();
+	GLfloat		tessOut[4] = {1.0f, float(curve->getDiv()), 1.0f, 1.0f};
 
 	if(vao == 0) {
 		vao = VAOSetup(curve);
@@ -194,6 +195,7 @@ void fk_CurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam)
 	curve->BindShaderBuffer(argParam->getAttrTable());
 	glEnable(GL_LINE_SMOOTH);
 
+	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	//glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
 	glPatchParameteri(GL_PATCH_VERTICES, 4);
 	//glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
