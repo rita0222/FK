@@ -99,7 +99,6 @@ fk_CurveDraw::~fk_CurveDraw()
 
 void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
 {
-	auto shapeType = argModel->getShape()->getRealShapeType();
 	auto col = &(argModel->getLineColor()->col);
 	auto mode = argModel->getElementMode();
 	auto modelShader = argModel->getShader();
@@ -159,15 +158,20 @@ void fk_CurveDraw::ShaderSetup(void)
 		#include "GLSL/Curve_FS.out"
 		;
 
+	prog->tessCtrlShaderSource =
+		#include "GLSL/Curve_TC.out"
+		;
+
+	prog->tessEvalShaderSource =
+		#include "GLSL/Curve_TE.out"
+		;
+
 	if(prog->validate() == false) {
 		fk_PutError("fk_CurveDraw", "ShaderSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
 	return;
 }
 
@@ -193,9 +197,9 @@ GLuint fk_CurveDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_CurveDraw::Draw_Cuve(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_CurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
-	fk_Cufve	*curve = dynamic_cast<fk_Curve *>(argModel->getShape());
+	fk_Curve	*curve = dynamic_cast<fk_Curve *>(argModel->getShape());
 	GLuint		vao = curve->GetLineVAO();
 
 	if(vao == 0) {

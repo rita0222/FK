@@ -88,6 +88,7 @@ namespace FK {
 	class fk_LineDraw;
 	class fk_FaceDraw;
 	class fk_TextureDraw;
+	class fk_CurveDraw;
 
 	class fk_GraphicsEngine {
 
@@ -123,6 +124,7 @@ namespace FK {
 		fk_LineDraw					*lineDraw;
 		fk_FaceDraw					*faceDraw;
 		fk_TextureDraw				*textureDraw;
+		fk_CurveDraw				*curveDraw;
 
 		unsigned int				winID;
 		fk_DisplayLink				*curDLink;

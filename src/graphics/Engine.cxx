@@ -80,6 +80,7 @@
 #include <FK/LineDraw.H>
 #include <FK/FaceDraw.H>
 #include <FK/TextureDraw.H>
+#include <FK/CurveDraw.H>
 #include <FK/Error.H>
 
 using namespace std;
@@ -93,6 +94,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	lineDraw = new fk_LineDraw;
 	faceDraw = new fk_FaceDraw;
 	textureDraw = new fk_TextureDraw;
+	curveDraw = new fk_CurveDraw;
 
 	winID = 0;
 	curDLink = nullptr;
@@ -118,6 +120,7 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 	delete lineDraw;
 	delete faceDraw;
 	delete textureDraw;
+	delete curveDraw;
 
 	snapBuffer.clear();
 
@@ -389,6 +392,10 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((DrawMode & FK_TEXTUREMODE) != FK_NONEMODE) {
 		textureDraw->DrawShapeTexture(argModel);
+	}
+
+	if((DrawMode & FK_CURVEMODE) != FK_NONEMODE) {
+		curveDraw->DrawShapeCurve(argModel);
 	}
 
 	return;

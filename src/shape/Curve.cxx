@@ -86,24 +86,8 @@ fk_Curve::~fk_Curve(void)
 {
 	return;
 }
-	
-void fk_Curve::setDiv(int argDiv)
-{
-	if(argDiv < 1) return;
 
-	if(argDiv != div) {
-		changeFlg = true;
-		div = argDiv;
-	}
-	return;
-}
-
-int fk_Curve::getDiv(void)
-{
-	return div;
-}
-
-int fk_Curve::getCtrlPos(void)
+int fk_Curve::getCtrlSize(void)
 {
 	return ctrlPos.getSize();
 }

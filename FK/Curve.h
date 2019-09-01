@@ -138,26 +138,8 @@ namespace FK {
 		 */
 		virtual fk_Vector	diff(double t) = 0;
 
-		//! 曲線キャッシュ分割数設定関数
-		/*!
-		 *	描画する際の曲線の分割数を設定します。
-		 *	本関数は、派生クラスにおいて再定義する必要はありません。
-		 *
-		 *	\param[in]	div		分割数。
-		 */
-		void	setDiv(int div);
-	
-		//! 曲線キャッシュ分割数参照関数
-		/*!
-		 *	描画する際の曲線の分割数を参照します。
-		 *	本関数は、派生クラスにおいて再定義する必要はありません。
-		 *
-		 *	\return		分割数
-		 */
-		int		getDiv(void);
-
 #ifndef FK_DOXYGEN_USER_PROCESS
-		int		getCtrlPos(void);
+		int		getCtrlSize(void);
 		//void	makeCache(void);
 #endif
 

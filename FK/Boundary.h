@@ -100,6 +100,8 @@ namespace FK {
 	const fk_DrawMode	FK_BACK_POLYMODE		= ((1 << 4) | FK_POLYMODE);
 	const fk_DrawMode	FK_FRONTBACK_POLYMODE	= ((1 << 5) | FK_POLYMODE);
 	const fk_DrawMode	FK_TEXTUREMODE			= 1 << 6;
+	const fk_DrawMode	FK_CURVEMODE			= 1 << 7;
+	const fk_DrawMode	FK_SURFACEMODE			= 1 << 8;
 
 	//! 境界ボリュームを管理するクラス
 	/*!
