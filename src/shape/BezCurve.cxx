@@ -101,6 +101,8 @@ bool fk_BezCurve::setDegree(int argDeg)
 	}
 
 	deg = argDeg;
+	setCtrlSize(deg+1);
+	
 	return true;
 }
 

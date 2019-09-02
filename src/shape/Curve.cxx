@@ -74,7 +74,7 @@
 using namespace std;
 using namespace FK;
 
-fk_Curve::fk_Curve(void) : div(128)
+fk_Curve::fk_Curve(void) : div(128), size(0)
 {
 	ctrlPos.clear();
 	realType = FK_SHAPE_CURVE;
@@ -96,18 +96,35 @@ void fk_Curve::init(void)
 
 bool fk_Curve::setCtrl(int argID, fk_Vector *argPos)
 {
-	if(argID < 0 || argID >= ctrlPos.getSize() || argPos == nullptr) return false;
+	if(argID < 0 || argID >= size || argPos == nullptr) return false;
 	ctrlPos.set(argID, *argPos);
 	modifyAttribute(ctrlPosName);
 
+	ctrlPoint.setVertex(argID, *argPos);
+	if(argID > 0) {
+		ctrlLine.changeLine(argID-1, ctrlPos.getV(argID-1), ctrlPos.getV(argID));
+	}
+	
+	if(argID < size - 1) {
+		ctrlLine.changeLine(argID, ctrlPos.getV(argID), ctrlPos.getV(argID+1));
+	}
 	return true;
 }
 
 bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
 {
-	if(argID < 0 || argID >= ctrlPos.getSize()) return false;
+	if(argID < 0 || argID >= size) return false;
 	ctrlPos.set(argID, argPos);
 	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, argPos);
+	if(argID != 0) {
+		ctrlLine.changeLine(argID-1, ctrlPos.getV(argID-1), ctrlPos.getV(argID));
+	}
+	
+	if(argID != size - 1) {
+		ctrlLine.changeLine(argID, ctrlPos.getV(argID), ctrlPos.getV(argID+1));
+	}
 
 	return true;
 }
@@ -119,12 +136,22 @@ fk_Vector fk_Curve::getCtrl(int argID)
 
 int fk_Curve::getCtrlSize(void)
 {
-	return ctrlPos.getSize();
+	return size;
 }
 
 void fk_Curve::setCtrlSize(int argNum)
 {
-	ctrlPos.resize(argNum);
+	fk_Vector	zero(0.0, 0.0, 0.0);
+
+	if(ctrlPos.getSize() < argNum) ctrlPos.resize(argNum);
+	size = argNum;
+	ctrlPoint.allClear();
+	ctrlLine.allClear();
+	for(int i = 0; i < argNum - 1; i++) {
+		ctrlPoint.pushVertex(zero);
+		ctrlLine.pushLine(zero, zero);
+	}
+	ctrlPoint.pushVertex(zero);
 }
 
 void fk_Curve::setDiv(int argDiv)
@@ -146,4 +173,14 @@ fk_Vector fk_Curve::pos(double)
 fk_Vector fk_Curve::diff(double)
 {
 	return fk_Vector();
+}
+
+fk_Line * fk_Curve::GetLine(void)
+{
+	return &ctrlLine;
+}
+
+fk_Point * fk_Curve::GetPoint(void)
+{
+	return &ctrlPoint;
 }

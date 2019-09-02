@@ -75,6 +75,7 @@
 #include <FK/Scene.h>
 #include <FK/Light.h>
 #include <FK/Plane.h>
+#include <FK/Curve.h>
 #include <FK/Projection.h>
 #include <FK/PointDraw.H>
 #include <FK/LineDraw.H>
@@ -387,7 +388,12 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	}
 
 	if((DrawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
-		lineDraw->DrawShapeLine(argModel);
+		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_CURVE) {
+			fk_Curve *curve = dynamic_cast<fk_Curve *>(argModel->getShape());
+			lineDraw->DrawShapeLine(argModel, curve->GetLine());
+		} else {
+			lineDraw->DrawShapeLine(argModel);
+		}
 	}
 
 	if((DrawMode & fk_DrawMode::TEXTURE) != fk_DrawMode::NONE) {

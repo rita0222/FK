@@ -97,12 +97,13 @@ fk_LineDraw::~fk_LineDraw()
 }
 
 
-void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
+void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 {
-	auto shapeType = argModel->getShape()->getRealShapeType();
+	fk_Shape * shape = (argShape == nullptr) ? argModel->getShape() : argShape;
+	auto shapeType = shape->getRealShapeType();
 	auto col = &(argModel->getLineColor()->col);
 	auto mode = argModel->getElementMode();
-	auto modelShader = argModel->getShader();
+	auto modelShader = (argShape == nullptr) ? argModel->getShader() : nullptr;
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
@@ -139,11 +140,11 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel)
 
 	switch(shapeType) {
 	  case FK_SHAPE_LINE:
-		Draw_Line(argModel, parameter);
+		Draw_Line(dynamic_cast<fk_LineBase *>(shape), parameter);
 		break;
 
 	  case FK_SHAPE_IFS:
-		Draw_IFS(argModel, parameter);
+		Draw_IFS(dynamic_cast<fk_IndexFaceSet *>(shape), parameter);
 		break;
 
 	  default:
@@ -210,36 +211,34 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_LineDraw::Draw_Line(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_LineDraw::Draw_Line(fk_LineBase *argLine, fk_ShaderParameter *argParam)
 {
-	fk_LineBase	*line = dynamic_cast<fk_LineBase *>(argModel->getShape());
-	GLuint		vao = line->GetLineVAO();
+	GLuint vao = argLine->GetLineVAO();
 
 	if(vao == 0) {
-		vao = VAOSetup(line);
+		vao = VAOSetup(argLine);
 	}
 	glBindVertexArray(vao);
-	line->BindShaderBuffer(argParam->getAttrTable());
+	argLine->BindShaderBuffer(argParam->getAttrTable());
 	glEnable(GL_LINE_SMOOTH);
-	glDrawArrays(GL_LINES, 0, line->Size()*2);
+	glDrawArrays(GL_LINES, 0, argLine->Size()*2);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	return;
 }
 
-void fk_LineDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam)
 {
-	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
-	GLuint			vao = ifs->GetLineVAO();
+	GLuint vao = argIFS->GetLineVAO();
 
 	if(vao == 0) {
-		vao = VAOSetup(ifs);
+		vao = VAOSetup(argIFS);
 	}
 	glBindVertexArray(vao);
-	ifs->BindShaderBuffer(argParam->getAttrTable());
-	ifs->EdgeIBOSetup();
+	argIFS->BindShaderBuffer(argParam->getAttrTable());
+	argIFS->EdgeIBOSetup();
 	glEnable(GL_LINE_SMOOTH);
-	glDrawElements(GL_LINES, GLint(ifs->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_LINES, GLint(argIFS->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

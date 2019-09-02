@@ -75,8 +75,9 @@
 #define __FK_CURVE_HEADER__
 
 #include <FK/Vector.h>
-#include <FK/Shape.h>
 #include <FK/FVecArray.h>
+#include <FK/Line.h>
+#include <FK/Point.h>
 
 namespace FK {
 
@@ -195,7 +196,10 @@ namespace FK {
 		 *	\return		曲線点の微分ベクトル
 		 */
 		virtual fk_Vector	diff(double t);
-
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_Line * GetLine(void);
+		fk_Point * GetPoint(void);
+#endif
 	protected:
 		//! 制御点配列
 		/*!
@@ -206,6 +210,10 @@ namespace FK {
 
 	private:
 		int div;
+		int size;
+
+		fk_Line	 ctrlLine;
+		fk_Point ctrlPoint;
 	};
 }
 
