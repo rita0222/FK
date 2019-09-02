@@ -181,6 +181,7 @@ void fk_Model::setMaterial(const fk_Material &argMate)
 
 void fk_Model::setPointColor(fk_Color *argColor)
 {
+	if(argColor == nullptr) return;
 	setPointColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
@@ -193,6 +194,7 @@ void fk_Model::setPointColor(float argR, float argG, float argB)
 
 void fk_Model::setLineColor(fk_Color *argColor)
 {
+	if(argColor == nullptr) return;
 	setLineColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
@@ -200,6 +202,18 @@ void fk_Model::setLineColor(fk_Color *argColor)
 void fk_Model::setLineColor(float argR, float argG, float argB)
 {
 	lineColor.set(argR, argG, argB);
+	return;
+}
+
+void fk_Model::setCurveColor(fk_Color *argColor)
+{
+	if(argColor == nullptr) return;
+	setCurveColor(argColor->getR(), argColor->getG(), argColor->getB());
+	return;
+}
+void fk_Model::setCurveColor(float argR, float argG, float argB)
+{
+	curveColor.set(argR, argG, argB);
 	return;
 }
 
@@ -221,6 +235,11 @@ fk_Color * fk_Model::getPointColor(void)
 fk_Color * fk_Model::getLineColor(void)
 {
 	return &lineColor;
+}
+
+fk_Color * fk_Model::getCurveColor(void)
+{
+	return &curveColor;
 }
 
 void fk_Model::setDrawMode(const fk_DrawMode argMode)

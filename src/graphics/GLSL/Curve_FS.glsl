@@ -4,5 +4,5 @@
 
 void main()
 {
-	fk_Fragment = fk_LineModelColor;
+	fk_Fragment = fk_CurveModelColor;
 }

@@ -963,7 +963,8 @@ namespace FK {
 		 *
 		 *	\note
 		 *		稜線の色は setLineColor(), 
-		 *		頂点の色は setPointColor() を利用して設定して下さい。
+		 *		頂点の色は setPointColor(),
+		 *		曲線の色は setCurveColor() を利用して設定して下さい。
 		 *		個別位相要素のマテリアルとの制御については、
 		 *		setMaterialMode() を参照して下さい。
 		 *		テクスチャを描画する際には、テクスチャモードによって混合の仕方が異なりますので、
@@ -1023,6 +1024,30 @@ namespace FK {
 		 */
 		void	setLineColor(float r, float g, float b);
 
+		//! 曲線色設定関数1
+		/*!
+		 *	モデルの曲線色を設定します。
+		 *	曲線は、光源による陰影の影響はなく、常に設定色で表示されます。
+		 *
+		 *	\param[in]	col		曲線色のポインタ
+		 *
+		 *	\sa fk_Color
+		 */
+		void	setCurveColor(fk_Color *col);
+
+		//! 曲線色設定関数2
+		/*!
+		 *	モデルの曲線色を設定します。
+		 *	曲線は、光源による陰影の影響はなく、常に設定色で表示されます。
+		 *	各色要素は 0 から 1 までの値を取ります。
+		 *	それ以外の値が与えられた場合、0 以下なら 0 に、1 以上なら 1 に丸められます。
+		 *
+		 *	\param[in]	r		曲線色の赤要素
+		 *	\param[in]	g		曲線色の緑要素
+		 *	\param[in]	b		曲線色の青要素
+		 */
+		void	setCurveColor(float r, float g, float b);
+
 		//@}
 
 		//! \name マテリアル属性参照関数
@@ -1050,13 +1075,23 @@ namespace FK {
 		//! 稜線色参照関数
 		/*!
 		 *	現在モデルに設定されている稜線色を参照します。
-		 *	モデルに稜線色が設定されていない場合は nullptr を返します。
 		 *
 		 *	\return		稜線色のポインタ
 		 *
 		 *	\sa fk_Color, setLineColor()
 		 */
 		fk_Color *	getLineColor(void);
+
+		//! 曲線色参照関数
+		/*!
+		 *	現在モデルに設定されている曲線色を参照します。
+		 *
+		 *	\return		曲線色のポインタ
+		 *
+		 *	\sa fk_Color, setCurveColor()
+		 */
+		fk_Color *	getCurveColor(void);
+		
 
 		//@}
 
@@ -2107,6 +2142,7 @@ namespace FK {
 		fk_Material			material;
 		fk_Color			pointColor;
 		fk_Color			lineColor;
+		fk_Color			curveColor;
 		fk_Shape			*shape;
 		fk_Model			*parentModel;
 		fk_TreeData			*treeData;

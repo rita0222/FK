@@ -471,6 +471,8 @@ namespace FK {
 		static const std::string	lineModelColorName;
 		static const std::string	lineElementColorName;
 
+		static const std::string	curveModelColorName;
+
 		// シェーダー変数名: テクスチャ座標
 		static const std::string	texCoordName;
 

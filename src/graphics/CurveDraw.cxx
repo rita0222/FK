@@ -99,7 +99,7 @@ fk_CurveDraw::~fk_CurveDraw()
 
 void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
 {
-	auto col = &(argModel->getLineColor()->col);
+	auto col = &(argModel->getCurveColor()->col);
 	auto modelShader = argModel->getShader();
 
 	if(modelShader != nullptr) {
@@ -115,7 +115,7 @@ void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
 	auto parameter = shader->getParameter();
 
 	SetParameter(parameter);
-	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
+	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
 	if(argModel->getShape()->getObjectType() == FK_BEZCURVE) {
 		fk_BezCurve *curve = dynamic_cast<fk_BezCurve *>(argModel->getShape());
 		parameter->setRegister(fk_Shape::degreeName, curve->getDegree(), fk_Shape::degreeName);
