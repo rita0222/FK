@@ -71,19 +71,20 @@
  ****************************************************************************/
 #include <FK/DrawMode.h>
 
-using namespace FK;
+namespace FK {
+	
+	fk_DrawMode operator | (fk_DrawMode argL, fk_DrawMode argR) {
+		return static_cast<fk_DrawMode>(static_cast<unsigned int>(argL) |
+										static_cast<unsigned int>(argR));
+	}
 
-fk_DrawMode operator | (fk_DrawMode argL, fk_DrawMode argR) {
-	return static_cast<fk_DrawMode>(static_cast<unsigned int>(argL) |
-									static_cast<unsigned int>(argR));
-}
+	fk_DrawMode operator & (fk_DrawMode argL, fk_DrawMode argR) {
+		return static_cast<fk_DrawMode>(static_cast<unsigned int>(argL) &
+										static_cast<unsigned int>(argR));
+	}
 
-fk_DrawMode operator & (fk_DrawMode argL, fk_DrawMode argR) {
-	return static_cast<fk_DrawMode>(static_cast<unsigned int>(argL) &
-									static_cast<unsigned int>(argR));
-}
-
-fk_DrawMode operator ^ (fk_DrawMode argL, fk_DrawMode argR) {
-	return static_cast<fk_DrawMode>(static_cast<unsigned int>(argL) ^
-									static_cast<unsigned int>(argR));
+	fk_DrawMode operator ^ (fk_DrawMode argL, fk_DrawMode argR) {
+		return static_cast<fk_DrawMode>(static_cast<unsigned int>(argL) ^
+										static_cast<unsigned int>(argR));
+	}
 }

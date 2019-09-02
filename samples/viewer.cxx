@@ -110,7 +110,7 @@ int main()
 	viewer.setShape(0, &shape);
 
 	// 各種設定
-	viewer.setDrawMode(FK_FRONTBACK_POLYMODE | FK_LINEMODE);
+	viewer.setDrawMode(fk_DrawMode::FRONTBACK_FACE | fk_DrawMode::LINE);
 	viewer.setScale(10.0);
 
 	for(int k = 0; viewer.draw() == true; k += 3) {
