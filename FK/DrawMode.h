@@ -76,24 +76,33 @@
 
 namespace FK {
 
+	//! 描画モードを表す列挙型
 	enum class fk_DrawMode : unsigned int {
-		NONE			= 0,
-		POINT 			= 1 << 1,
-		LINE 			= 1 << 2,
-		FACE 			= 1 << 3,
-		BACK_FACE		= ((1 << 4) | FACE),
-		FRONTBACK_FACE	= ((1 << 5) | FACE),
-		TEXTURE			= 1 << 6,
-		CURVE_LINE		= 1 << 7,
-		CURVE_POINT		= 1 << 8,
-		SURFACE			= 1 << 9,
-		SURFACE_LINE	= 1 << 10,
-		SURFACE_POINT	= 1 << 11,
+		NONE			= 0,					//!< 何も表示しない
+		POINT 			= 1 << 1,				//!< 点描画
+		LINE 			= 1 << 2,				//!< 線描画
+		FACE 			= 1 << 3,				//!< 面描画 (表面のみ)
+		BACK_FACE		= ((1 << 4) | FACE),	//!< 裏面描画
+		FRONTBACK_FACE	= ((1 << 5) | FACE),	//!< 表裏面描画
+		TEXTURE			= 1 << 6,				//!< テクスチャー描画
+		CURVE_LINE		= 1 << 7,				//!< 曲線描画
+		CURVE_POINT		= 1 << 8,				//!< 曲線点描画
+		SURFACE			= 1 << 9,				//!< 曲面描画
+		SURFACE_LINE	= 1 << 10,				//!< 曲面グリッド線描画
+		SURFACE_POINT	= 1 << 11				//!< 曲面表面点描画
 	};
 
 	fk_DrawMode operator | (fk_DrawMode argL, fk_DrawMode argR);
 	fk_DrawMode operator & (fk_DrawMode argL, fk_DrawMode argR);
 	fk_DrawMode operator ^ (fk_DrawMode argL, fk_DrawMode argR);
+
+	const fk_DrawMode FK_NONEMODE = fk_DrawMode::NONE;
+	const fk_DrawMode FK_POINTMODE = fk_DrawMode::POINT;
+	const fk_DrawMode FK_LINEMODE = fk_DrawMode::LINE;
+	const fk_DrawMode FK_POLYMODE = fk_DrawMode::FACE;
+	const fk_DrawMode FK_BACK_POLYMODE = fk_DrawMode::BACK_FACE;
+	const fk_DrawMode FK_FRONTBACK_POLYMODE = fk_DrawMode::FRONTBACK_FACE;
+	const fk_DrawMode FK_TEXTUREMODE = fk_DrawMode::TEXTURE;
 }
 
 #endif // !__FK_BOUNDARY_HEADER__
