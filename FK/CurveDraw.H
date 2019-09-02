@@ -88,7 +88,7 @@ namespace FK {
 	private:
 		fk_ShaderBinder		*curveShader;
 
-		//GLuint	modelID, elemID;
+		GLuint	bezier2_ID, bezier3_ID, bezier4_ID;
 		void	ShaderSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 

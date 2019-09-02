@@ -15,6 +15,7 @@ uniform int fk_PointLightNum;
 uniform int fk_SpotLightNum;
 uniform vec4 fk_LineModelColor;
 uniform vec4 fk_PointModelColor;
+uniform int fk_Degree;
 uniform sampler2D fk_TexID[TEXTURENUM];
 uniform sampler2D fk_ColorBuf;
 uniform sampler2D fk_DepthBuf;

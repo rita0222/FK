@@ -122,6 +122,11 @@ int fk_Curve::getCtrlSize(void)
 	return ctrlPos.getSize();
 }
 
+void fk_Curve::setCtrlSize(int argNum)
+{
+	ctrlPos.resize(argNum);
+}
+
 void fk_Curve::setDiv(int argDiv)
 {
 	if(argDiv <= 0) return;

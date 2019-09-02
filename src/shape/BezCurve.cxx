@@ -79,21 +79,18 @@ using namespace FK;
 fk_BezCurve::fk_BezCurve(void)
 {
 	SetObjectType(FK_BEZCURVE);
-
+	setCtrlSize(5);
 	setDegree(3);
 	return;
 }
 
 fk_BezCurve::~fk_BezCurve()
 {
-	ctrlPos.clear();
-
 	return;
 }
 
 void fk_BezCurve::init(void)
 {
-	ctrlPos.clear();
 	setDegree(3);
 }
 
@@ -104,7 +101,6 @@ bool fk_BezCurve::setDegree(int argDeg)
 	}
 
 	deg = argDeg;
-	ctrlPos.resize(deg+1);
 	return true;
 }
 
