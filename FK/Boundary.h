@@ -75,6 +75,7 @@
 #define __FK_BOUNDARY_HEADER__
 
 #include <FK/MatAdmin.h>
+#include <FK/DrawMode.h>
 
 namespace FK {
 
@@ -90,7 +91,7 @@ namespace FK {
 		FK_B_CAPSULE,		//!<	カプセル型
 		FK_B_NONE			//!<	未定義境界
 	};
-
+/*
 	using fk_DrawMode = unsigned int;
 
 	const fk_DrawMode	FK_NONEMODE 			= 0;
@@ -102,7 +103,8 @@ namespace FK {
 	const fk_DrawMode	FK_TEXTUREMODE			= 1 << 6;
 	const fk_DrawMode	FK_CURVEMODE			= 1 << 7;
 	const fk_DrawMode	FK_SURFACEMODE			= 1 << 8;
-
+*/
+	
 	//! 境界ボリュームを管理するクラス
 	/*!
 	 *	このクラスは、モデルの干渉判定や衝突判定を行うための

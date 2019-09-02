@@ -108,7 +108,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
 	depthRead = depthWrite = true;
 
-	boundaryModel.setDrawMode(FK_LINEMODE);
+	boundaryModel.setDrawMode(fk_DrawMode::LINE);
 	boundaryModel.setBMode(FK_B_NONE);
 	boundaryModel.setBDrawToggle(false);
 	return;
@@ -363,7 +363,7 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 		boundaryModel.setLineColor(argModel->getBLineColor());
 	}	
 	boundaryModel.setShape(argModel->GetBShape());
-	boundaryModel.setDrawMode(FK_LINEMODE);
+	boundaryModel.setDrawMode(fk_DrawMode::LINE);
 	DrawModel(&boundaryModel);
 	return;
 }
@@ -374,27 +374,27 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	DrawMode = argModel->getDrawMode();
 
-	if(DrawMode == FK_NONEMODE) return;
+	if(DrawMode == fk_DrawMode::NONE) return;
 
 	argModel->getShape()->FlushAttr();
 
-	if((DrawMode & FK_POLYMODE) != FK_NONEMODE) {
+	if((DrawMode & fk_DrawMode::FACE) != fk_DrawMode::NONE) {
 		faceDraw->DrawShapeFace(argModel);
 	}
 
-	if((DrawMode & FK_POINTMODE) != FK_NONEMODE) {
+	if((DrawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
 		pointDraw->DrawShapePoint(argModel);
 	}
 
-	if((DrawMode & FK_LINEMODE) != FK_NONEMODE) {
+	if((DrawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
 		lineDraw->DrawShapeLine(argModel);
 	}
 
-	if((DrawMode & FK_TEXTUREMODE) != FK_NONEMODE) {
+	if((DrawMode & fk_DrawMode::TEXTURE) != fk_DrawMode::NONE) {
 		textureDraw->DrawShapeTexture(argModel);
 	}
 
-	if((DrawMode & FK_CURVEMODE) != FK_NONEMODE) {
+	if((DrawMode & fk_DrawMode::CURVE_LINE) != fk_DrawMode::NONE) {
 		curveDraw->DrawShapeCurve(argModel);
 	}
 

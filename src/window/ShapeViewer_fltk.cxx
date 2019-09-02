@@ -436,7 +436,7 @@ void fk_ShapeViewer::InitFlag(void)
 	moveFlag = false;
 	oldMoveFlag = false;
 
-	drawMode = FK_POLYMODE | FK_LINEMODE | FK_POINTMODE;
+	drawMode = fk_DrawMode::FACE | fk_DrawMode::LINE | fk_DrawMode::POINT;
 	return;
 }
 
@@ -544,13 +544,13 @@ void fk_ShapeViewer::SetSceneFlg(fk_ShapeGUIMenuItem argStatus)
 {
 	switch(argStatus) {
 	  case FK_SV_GUI_POLYDRAW:
-		drawMode ^= FK_POLYMODE;
+		drawMode = drawMode ^ fk_DrawMode::FACE;
 		break;
 	  case FK_SV_GUI_EDGEDRAW:
-		drawMode ^= FK_LINEMODE;
+		drawMode = drawMode ^ fk_DrawMode::LINE;
 		break;
 	  case FK_SV_GUI_VERTEXDRAW:
-		drawMode ^= FK_POINTMODE;
+		drawMode = drawMode ^ fk_DrawMode::POINT;
 		break;
 	  default:
 		return;
@@ -1108,15 +1108,15 @@ void fk_ShapeViewer::SetDrawMode(void)
 
 	mP->flags = mE->flags = mV->flags = FL_MENU_TOGGLE;
 
-	if((drawMode & FK_POLYMODE) != FK_NONEMODE) {
+	if((drawMode & fk_DrawMode::FACE) != fk_DrawMode::NONE) {
 		mP->flags |= FL_MENU_VALUE;
 	}
 
-	if((drawMode & FK_LINEMODE) != FK_NONEMODE) {
+	if((drawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
 		mE->flags |= FL_MENU_VALUE;
 	}
 
-	if((drawMode & FK_POINTMODE) != FK_NONEMODE) {
+	if((drawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
 		mV->flags |= FL_MENU_VALUE;
 	}
 
@@ -1468,7 +1468,7 @@ fk_Shape * fk_ShapeViewer::getShape(int argID)
 fk_DrawMode fk_ShapeViewer::getDrawMode(void)
 {
 	if(modelArray.empty() == true) {
-		return FK_NONEMODE;
+		return fk_DrawMode::NONE;
 	}
 
 	return modelArray[0]->getDrawMode();
@@ -1477,7 +1477,7 @@ fk_DrawMode fk_ShapeViewer::getDrawMode(void)
 fk_DrawMode fk_ShapeViewer::getDrawMode(int argID)
 {
 	fk_Model	*model = GetModel(argID);
-	if(model == nullptr) return FK_NONEMODE;
+	if(model == nullptr) return fk_DrawMode::NONE;
 	return model->getDrawMode();
 }
 

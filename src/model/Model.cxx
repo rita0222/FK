@@ -86,7 +86,7 @@ static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
 	: fk_Boundary(FK_MODEL), shape(nullptr), parentModel(nullptr),
-	  treeData(nullptr), drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
+	  treeData(nullptr), drawMode(fk_DrawMode::NONE), elemMode(FK_ELEM_MODEL),
 	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
 	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
@@ -97,9 +97,6 @@ fk_Model::fk_Model(fk_Shape *argShape)
 {
 	setBlendMode(FK_BLEND_ALPHA_MODE);
 	setShape(argShape);
-
-	//preShader = [](){};
-	//postShader = [](){};
 
 	return;
 }
@@ -137,13 +134,13 @@ void fk_Model::setShape(fk_Shape *argShape)
 		switch(type) {
 		  case FK_POINT:
 		  case FK_PARTICLESET:
-			drawMode = FK_POINTMODE;
+			drawMode = fk_DrawMode::POINT;
 			break;
 
 		  case FK_LINE:
 		  case FK_POLYLINE:
 		  case FK_CLOSEDLINE:
-			drawMode = FK_LINEMODE;
+			drawMode = fk_DrawMode::LINE;
 			break;
 			 
 		  case FK_POLYGON:
@@ -155,7 +152,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case FK_CAPSULE:
 		  case FK_SOLID:
 		  case FK_INDEXFACESET:
-			drawMode = FK_POLYMODE;
+			drawMode = fk_DrawMode::FACE;
 			break;
 
 		  case FK_RECTTEXTURE:
@@ -163,11 +160,11 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case FK_MESHTEXTURE:
 		  case FK_IFSTEXTURE:
 		  case FK_ARTEXTURE:
-			drawMode = FK_TEXTUREMODE;
+			drawMode = fk_DrawMode::TEXTURE;
 			break;
 
 		  default:
-			drawMode = FK_NONEMODE;
+			drawMode = fk_DrawMode::NONE;
 			break;
 		}
 	}
