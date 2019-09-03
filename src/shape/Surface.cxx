@@ -138,12 +138,12 @@ fk_Vector fk_Surface::getCtrl(int argID)
 	return ctrlPos.getV(argID);
 }
 
-int fk_Curve::getCtrlSize(void)
+int fk_Surface::getCtrlSize(void)
 {
 	return size;
 }
 
-void fk_Curve::setCtrlSize(int argNum)
+void fk_Surface::setCtrlSize(int argNum)
 {
 	fk_Vector	zero(0.0, 0.0, 0.0);
 

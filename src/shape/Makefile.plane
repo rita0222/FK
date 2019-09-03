@@ -5,7 +5,6 @@ LIBSRCS		= \
 			AttributeData.cxx \
 			BSplBase.cxx \
 			BSplCurve.cxx \
-			BSplSurface.cxx \
 			BezCurve.cxx \
 			BezSurface.cxx \
 			Block.cxx \

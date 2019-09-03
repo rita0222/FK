@@ -76,7 +76,7 @@
 using namespace std;
 using namespace FK;
 
-fk_Line まだ未実装
+//fk_Line まだ未実装
 
 fk_BezSurface::fk_BezSurface(void)
 {

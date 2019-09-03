@@ -146,7 +146,6 @@ namespace FK {
 		FK_BSPLCURVE,		//!<	fk_BSplCurve 型
 		FK_SURFACE,			//!<	fk_Surface 型
 		FK_BEZSURFACE,		//!<	fk_BezSurface 型
-		FK_BSPLSURFACE,		//!<	fk_BSplSurface 型
 		FK_GREGORY,			//!<	fk_Gregory 型
 		FK_IMAGE,			//!<	fk_Image 型
 		FK_TEXCOORD,		//!<	fk_TexCoord 型

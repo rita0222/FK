@@ -106,7 +106,6 @@
 #include <FK/BezCurve.h>
 #include <FK/BSplCurve.h>
 #include <FK/Gregory.h>
-#include <FK/BSplSurface.h>
 #include <FK/System.h>
 #include <FK/AppWindow.h>
 #include <FK/SpriteModel.h>

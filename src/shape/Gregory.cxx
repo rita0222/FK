@@ -207,7 +207,6 @@ void fk_Gregory::init(void)
 {
 	for(_st i = 0; i < 20; i++) ctrl[i].init();
 	bez.init();
-	changeFlg = true;
 	return;
 }
 
@@ -218,7 +217,6 @@ bool fk_Gregory::setBoundary(int argUV, int argID, const fk_Vector &argPos)
 
 	ctrl[_st(mapID)] = argPos;
 	bez.setCtrl(mapID % 4, mapID/4, argPos);
-	changeFlg = true;
 	
 	return true;
 }
@@ -230,7 +228,6 @@ bool fk_Gregory::setCtrl(int argUV, int argID, const fk_Vector &argPos)
 
 	ctrl[_st(mapID)] = argPos;
 	if(argID == 0 || argID == 3) bez.setCtrl(mapID % 4, mapID/4, argPos);
-	changeFlg = true;
 	return true;
 }
 
