@@ -149,18 +149,6 @@ namespace FK {
 		 */
 		bool	setCtrl(int uID, int vID, const fk_Vector &pos);
 
-		//! 制御点一斉設定関数
-		/*!
-		 *	曲面の制御点位置ベクトルを、vector 配列を用いて一斉に設定します。
-		 *	設定の際、制御点数は setNum() によって設定しておく必要があり、
-		 *	配列のサイズは上記の積と一致していなければなりません。
-		 *
-		 *	\param[in]	array	制御点の vector 配列のポインタ
-		 *
-		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool	setCtrl(std::vector<fk_Vector> *array);	
-
 		//! u方向位数参照関数
 		/*!
 		 *	曲面の u 方向の位数を参照します。
@@ -240,7 +228,6 @@ namespace FK {
 	private:
 		int						uOrd, vOrd;
 		int						uNum, vNum;
-		std::vector<fk_Vector>	ctrlPos;
 		std::vector<double>		uKnot, vKnot;
 		std::vector<double>		tmpU, tmpV;
 	};

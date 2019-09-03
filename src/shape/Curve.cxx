@@ -165,16 +165,6 @@ int fk_Curve::getDiv(void)
 	return div;
 }
 
-fk_Vector fk_Curve::pos(double)
-{
-	return fk_Vector();
-}
-
-fk_Vector fk_Curve::diff(double)
-{
-	return fk_Vector();
-}
-
 fk_Line * fk_Curve::GetLine(void)
 {
 	return &ctrlLine;

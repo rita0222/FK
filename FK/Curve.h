@@ -141,14 +141,6 @@ namespace FK {
 		 */
 		fk_Vector getCtrl(int ID);
 
-		//! 制御点数設定関数
-		/*!
-		 *	曲線の制御点数を設定します。負数が指定された場合は無視します。
-		 *
-		 *	\param[in]	num	制御点数
-		 */
-		void setCtrlSize(int num);
-
 		//! 制御点数取得関数
 		/*!
 		 *	曲線の制御点数を取得します。
@@ -156,7 +148,6 @@ namespace FK {
 		 *	\return	制御点数
 		 */
 		int	getCtrlSize(void);
-
 
 		//! 分割数設定関数
 		/*!
@@ -177,25 +168,26 @@ namespace FK {
 
 		//! 曲線点位置ベクトル算出関数
 		/*!
-		 *	曲線上の点の位置ベクトルを算出する仮想関数です。
+		 *	曲線上の点の位置ベクトルを算出する純粋仮想関数です。
 		 *	派生クラスにおいて実際に実装する必要があります。
 		 *
 		 *	\param[in]	t	曲線パラメータ
 		 *
 		 *	\return		曲線点の位置ベクトル
 		 */
-		virtual fk_Vector	pos(double t);
+		virtual fk_Vector	pos(double t) = 0;
 
 		//! 曲線微分ベクトル算出関数
 		/*!
-		 *	曲線上の点の微分ベクトルを算出する仮想関数です。
+		 *	曲線上の点の微分ベクトルを算出する純粋仮想関数です。
 		 *	派生クラスにおいて実際に実装する必要があります。
 		 *
 		 *	\param[in]	t	曲線パラメータ
 		 *
 		 *	\return		曲線点の微分ベクトル
 		 */
-		virtual fk_Vector	diff(double t);
+		virtual fk_Vector	diff(double t) = 0;
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Line * GetLine(void);
 		fk_Point * GetPoint(void);
@@ -207,6 +199,14 @@ namespace FK {
 		 *	派生クラス内で設定や参照が可能です。
 		 */
 		fk_FVecArray	ctrlPos;
+
+		//! 制御点数設定関数
+		/*!
+		 *	曲線の制御点数を設定します。負数が指定された場合は無視します。
+		 *
+		 *	\param[in]	num	制御点数
+		 */
+		void setCtrlSize(int num);
 
 	private:
 		int div;

@@ -79,6 +79,8 @@ using namespace std;
 using namespace FK;
 using namespace FK::BSplBase;
 
+//fk_Line まだ未実装
+
 fk_BSplSurface::fk_BSplSurface(void)
 {
 	SetObjectType(FK_BSPLSURFACE);
@@ -88,7 +90,6 @@ fk_BSplSurface::fk_BSplSurface(void)
 
 fk_BSplSurface::~fk_BSplSurface()
 {
-	ctrlPos.clear();
 	uKnot.clear();
 	vKnot.clear();
 	return;
@@ -110,8 +111,6 @@ bool fk_BSplSurface::setOrdinate(int argUOrd, int argVOrd)
 
 	uOrd = argUOrd;
 	vOrd = argVOrd;
-	ctrlPos.clear();
-	changeFlg = true;
 	return true;
 }
 	
@@ -119,44 +118,33 @@ bool fk_BSplSurface::setNum(int argUNum, int argVNum)
 {
 	if(argUNum < uOrd || argVNum < vOrd) return false;
 
+	if(argUNum * argVNum > 32) return false;
+	
 	uNum = argUNum;
 	vNum = argVNum;
+
 	UpdateKnot(uOrd, uNum, uKnot);
 	UpdateKnot(vOrd, vNum, vKnot);
+	
+	setCtrlSize(uNum*vNum);
+	ctrlLine.allClear();
 
-	ctrlPos.resize(static_cast<_st>(uNum*vNum));
-	for(_st i = 0; i < static_cast<_st>(uNum*vNum); i++) {
-		ctrlPos[i].init();
-	}
+	fk_Vector zero(0.0, 0.0, 0.0);
 
+	for(int i = 0; i < uNum*vNum; i++) fk_Surface::setCtrl(i, &zero);
+	for(int i = 0; i < 2 * uNum * vNum - uNum - vNum; i++) ctrlLine.pushLine(zero, zero);
 	return true;
 }
 
 bool fk_BSplSurface::setCtrl(int argUID, int argVID,
 							 const fk_Vector &argPos)
 {
-	_st	index;
-
 	if(argUID < 0 || argUID >= uNum ||
 	   argVID < 0 || argVID >= vNum) {
 		return false;
 	}
 
-	index = static_cast<_st>(argVID*uNum + argUID);
-
-	ctrlPos[index] = argPos;
-	changeFlg = true;
-	return true;
-}
-
-bool fk_BSplSurface::setCtrl(vector<fk_Vector> *argArray)
-{
-	if(ctrlPos.size() != argArray->size()) return false;
-
-	for(_st i = 0; i < static_cast<_st>(ctrlPos.size()); i++) {
-		ctrlPos[i] = argArray->at(i);
-	}
-	changeFlg = true;
+	fk_Surface::setCtrl(argVID*uNum + argUID, argPos);
 	return true;
 }
 
@@ -187,28 +175,29 @@ fk_Vector fk_BSplSurface::getCtrl(int argUID, int argVID)
 		return fk_Vector(0.0, 0.0, 0.0);
 	}
 
-	return ctrlPos[static_cast<_st>(argVID*uNum + argUID)];
+	return ctrlPos.getV(argVID*uNum + argUID);
 }
 
 fk_Vector fk_BSplSurface::pos(double argU, double argV)
 {
 	fk_Vector	retPos(0.0, 0.0, 0.0);
-	_st			i, j, index;
+	_st			i, j;
+	int			index;
 
-	tmpU.resize(static_cast<_st>(uNum));
-	tmpV.resize(static_cast<_st>(vNum));
+	tmpU.resize(_st(uNum));
+	tmpV.resize(_st(vNum));
 	
-	for(i = 0; i < static_cast<_st>(uNum); i++) {
-		tmpU[i] = PosBasis(static_cast<int>(i), uOrd, argU, uKnot);
+	for(i = 0; i < _st(uNum); i++) {
+		tmpU[i] = PosBasis(int(i), uOrd, argU, uKnot);
 	}
-	for(i = 0; i < static_cast<_st>(vNum); i++) {
-		tmpV[i] = PosBasis(static_cast<int>(i), vOrd, argV, vKnot);
+	for(i = 0; i < _st(vNum); i++) {
+		tmpV[i] = PosBasis(int(i), vOrd, argV, vKnot);
 	}
 
-	for(i = 0; i < static_cast<_st>(vNum); i++) {
-		for(j = 0; j < static_cast<_st>(uNum); j++) {
-			index = i*static_cast<_st>(uNum) + j;
-			retPos += tmpU[j]*tmpV[i]*ctrlPos[index];
+	for(i = 0; i < _st(vNum); i++) {
+		for(j = 0; j < _st(uNum); j++) {
+			index = int(i)*uNum + int(j);
+			retPos += tmpU[j]*tmpV[i]*ctrlPos.getV(index);
 		}
 	}
 
@@ -226,7 +215,7 @@ fk_Vector fk_BSplSurface::uDeriv(double argU, double argV)
 
 	for(int i = 0; i < uNum; i++) {
 		for(int j = 0; j < vNum; j++) {
-			vC.setCtrl(j, ctrlPos[static_cast<_st>(j*uNum + i)]);
+			vC.setCtrl(j, ctrlPos.getV(j*uNum + i));
 		}
 		uC.setCtrl(i, vC.pos(argV));
 	}
@@ -245,7 +234,7 @@ fk_Vector fk_BSplSurface::vDeriv(double argU, double argV)
 
 	for(int j = 0; j < vNum; j++) {
 		for(int i = 0; i < uNum; i++) {
-			uC.setCtrl(i, ctrlPos[static_cast<_st>(j*uNum + i)]);
+			uC.setCtrl(i, ctrlPos.getV(j*uNum + i));
 		}
 		vC.setCtrl(j, uC.pos(argU));
 	}

@@ -76,13 +76,12 @@
 using namespace std;
 using namespace FK;
 
-fk_Surface::fk_Surface(void) :
-	changeFlg(true), div(-1)
+fk_Surface::fk_Surface(void) : div(16), size(0)
 {
+	ctrlPos.clear();
 	realType = FK_SHAPE_SURFACE;
 	SetObjectType(FK_SURFACE);
-	posCache.clear();
-	normCache.clear();
+	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
 
 	return;
 }
@@ -92,30 +91,66 @@ fk_Surface::~fk_Surface(void)
 	return;
 }
 
-vector<fk_Vector> * fk_Surface::getPosCache(void)
-{
-	return &posCache;
-}
-
-vector<fk_Vector> * fk_Surface::getNormCache(void)
-{
-	return &normCache;
-}
-
 void fk_Surface::setDiv(int argDiv)
 {
-	if(argDiv < 1) return;
-
-	if(argDiv != div) {
-		changeFlg = true;
-		div = argDiv;
-	}
-	return;
+	if(argDiv <= 0) return;
+	div = argDiv;
 }
 
 int fk_Surface::getDiv(void)
 {
 	return div;
+}
+
+fk_Line * fk_Surface::GetLine(void)
+{
+	return &ctrlLine;
+}
+
+fk_Point * fk_Surface::GetPoint(void)
+{
+	return &ctrlPoint;
+}
+
+bool fk_Surface::setCtrl(int argID, fk_Vector *argPos)
+{
+	if(argID < 0 || argID >= size || argPos == nullptr) return false;
+	ctrlPos.set(argID, *argPos);
+	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, *argPos);
+	return true;
+}
+
+bool fk_Surface::setCtrl(int argID, fk_Vector argPos)
+{
+	if(argID < 0 || argID >= size) return false;
+	ctrlPos.set(argID, argPos);
+	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, argPos);
+
+	return true;
+}
+
+fk_Vector fk_Surface::getCtrl(int argID)
+{
+	return ctrlPos.getV(argID);
+}
+
+int fk_Curve::getCtrlSize(void)
+{
+	return size;
+}
+
+void fk_Curve::setCtrlSize(int argNum)
+{
+	fk_Vector	zero(0.0, 0.0, 0.0);
+
+	if(ctrlPos.getSize() < argNum) ctrlPos.resize(argNum);
+	size = argNum;
+	ctrlPoint.allClear();
+	for(int i = 0; i < argNum; i++) ctrlPoint.pushVertex(zero);
 }
 
 fk_Vector fk_Surface::norm(double argU, double argV)
@@ -130,54 +165,4 @@ fk_Vector fk_Surface::norm(double argU, double argV)
 	}
 
 	return nVec;
-}
-
-void fk_Surface::makeCache(void)
-{
-	if(div <= 0) return;
-
-	makePosCache();
-	makeNormCache();
-	changeFlg = false;
-	return;
-}
-
-void fk_Surface::makePosCache(void)
-{
-	double		u, v;
-	int			i, j;
-
-	if(changeFlg == false) return;
-
-	posCache.clear();
-
-	for(i = 0; i <= div; i++) {
-		v = static_cast<double>(i)/static_cast<double>(div);
-		for(j = 0; j <= div; j++) {
-			u = static_cast<double>(j)/static_cast<double>(div);
-			posCache.push_back(pos(u, v));
-		}
-	}
-
-	return;
-}
-
-void fk_Surface::makeNormCache(void)
-{
-	int			i, j;
-	fk_Vector	tmpV1, tmpV2, tmpV3, tmpNorm;
-
-	if(changeFlg == false) return;
-
-	normCache.clear();
-
-	for(i = 0; i <= div; i++) {
-		double v = static_cast<double>(i)/static_cast<double>(div);
-		for(j = 0; j <= div; j++) {
-			double u = static_cast<double>(j)/static_cast<double>(div);
-			normCache.push_back(norm(u, v));
-		}
-	}
-
-	return;
 }

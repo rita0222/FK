@@ -76,6 +76,8 @@
 using namespace std;
 using namespace FK;
 
+fk_Line まだ未実装
+
 fk_BezSurface::fk_BezSurface(void)
 {
 	SetObjectType(FK_BEZSURFACE);
@@ -205,7 +207,6 @@ bool fk_BezSurface::setDegree(int argUD, int argVD)
 	for(_st i = 0; i < static_cast<_st>((uDeg+1)*(vDeg+1)); i++) {
 		ctrlPos[i].set(0.0, 0.0, 0.0);
 	}
-	changeFlg = true;
 	return true;
 }
 
@@ -216,7 +217,6 @@ bool fk_BezSurface::setCtrl(int argUID, int argVID,
 	   argVID < 0 || argVID > vDeg) return false;
 
 	ctrlPos[static_cast<_st>((vDeg+1)*argVID + argUID)] = argPos;
-	changeFlg = true;
 	return true;
 }
 
