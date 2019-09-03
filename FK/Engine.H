@@ -124,7 +124,8 @@ namespace FK {
 		fk_LineDraw					*lineDraw;
 		fk_FaceDraw					*faceDraw;
 		fk_TextureDraw				*textureDraw;
-		fk_CurveDraw				*curveDraw;
+		fk_CurveDraw				*curveLineDraw;
+		fk_CurveDraw				*curvePointDraw;
 
 		unsigned int				winID;
 		fk_DisplayLink				*curDLink;
@@ -132,7 +133,6 @@ namespace FK {
 		int							dLinkID;
 		int							wSize;
 		int							hSize;
-		//GLuint						selectBuf[FK_PICKDATAMAX*5];
 		bool						resizeFlag;
 		fk_BlendFactor				srcFactor, dstFactor;
 		bool						depthRead, depthWrite;

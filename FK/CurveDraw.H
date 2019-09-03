@@ -79,7 +79,7 @@ namespace FK {
 
 	class fk_CurveDraw : public fk_DrawBase {
 	public:
-		fk_CurveDraw(void);
+		fk_CurveDraw(int);
 		virtual ~fk_CurveDraw();
 
 		void	DrawShapeCurve(fk_Model *);
@@ -87,8 +87,8 @@ namespace FK {
 
 	private:
 		fk_ShaderBinder		*curveShader;
-
 		GLuint	bezier2_ID, bezier3_ID, bezier4_ID;
+		int		mode;
 		void	ShaderSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 

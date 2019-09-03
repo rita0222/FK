@@ -84,8 +84,8 @@
 using namespace std;
 using namespace FK;
 
-fk_CurveDraw::fk_CurveDraw(void)
-	: curveShader(nullptr), bezier2_ID(0), bezier3_ID(0), bezier4_ID(0)
+fk_CurveDraw::fk_CurveDraw(int argMode)
+	: curveShader(nullptr), bezier2_ID(0), bezier3_ID(0), bezier4_ID(0), mode(argMode)
 {
 	return;
 }
@@ -145,10 +145,17 @@ void fk_CurveDraw::ShaderSetup(void)
 	prog->fragmentShaderSource =
 		#include "GLSL/Curve_FS.out"
 		;
-	prog->tessEvalShaderSource =
-		#include "GLSL/BezCurve_TE.out"
-		;
 
+	if(mode == 1) {
+		prog->tessEvalShaderSource =
+			#include "GLSL/BezCurve_Line_TE.out"
+			;
+	} else {
+		prog->tessEvalShaderSource =
+			#include "GLSL/BezCurve_Point_TE.out"
+			;
+	}
+	
 	if(prog->validate() == false) {
 		fk_PutError("fk_CurveDraw", "ShaderSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());

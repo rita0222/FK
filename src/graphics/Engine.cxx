@@ -95,7 +95,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	lineDraw = new fk_LineDraw;
 	faceDraw = new fk_FaceDraw;
 	textureDraw = new fk_TextureDraw;
-	curveDraw = new fk_CurveDraw;
+	curveLineDraw = new fk_CurveDraw(1);
+	curvePointDraw = new fk_CurveDraw(2);
 
 	winID = 0;
 	curDLink = nullptr;
@@ -121,7 +122,8 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 	delete lineDraw;
 	delete faceDraw;
 	delete textureDraw;
-	delete curveDraw;
+	delete curveLineDraw;
+	delete curvePointDraw;
 
 	snapBuffer.clear();
 
@@ -408,7 +410,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	}
 
 	if((drawMode & fk_DrawMode::CURVE_LINE) != fk_DrawMode::NONE) {
-		curveDraw->DrawShapeCurve(argModel);
+		curveLineDraw->DrawShapeCurve(argModel);
+	}
+
+	if((drawMode & fk_DrawMode::CURVE_POINT) != fk_DrawMode::NONE) {
+		curvePointDraw->DrawShapeCurve(argModel);
 	}
 
 	return;
