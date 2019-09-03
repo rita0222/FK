@@ -86,7 +86,7 @@ namespace FK {
 		fk_PointDraw(void);
 		virtual ~fk_PointDraw();
 
-		void	DrawShapePoint(fk_Model *);
+		void	DrawShapePoint(fk_Model *, fk_Shape * = nullptr);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
@@ -96,11 +96,11 @@ namespace FK {
 
 		void	ShaderSetup(void);
 		void	SubroutineSetup(fk_Model *);
-		int		GetPointNum(fk_Model *);
+		int		GetPointNum(fk_Shape *);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
-		void	Draw_Point(fk_Model *, fk_ShaderParameter *, int);
-		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
+		void	Draw_Point(fk_Shape *, fk_ShaderParameter *, int);
+		//void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
 	};
 }
 

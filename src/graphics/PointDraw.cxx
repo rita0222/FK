@@ -96,11 +96,11 @@ fk_PointDraw::~fk_PointDraw()
 	return;
 }
 
-void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
+void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 {
-	auto	*shape = argModel->getShape();
-	auto	shapeType = shape->getRealShapeType();
-	auto	modelShader = argModel->getShader();
+	fk_Shape *shape = (argShape == nullptr) ? argModel->getShape() : argShape;
+	auto shapeType = shape->getRealShapeType();
+	auto modelShader = (argShape == nullptr) ? argModel->getShader() : nullptr;
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
@@ -119,7 +119,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
-	int pointNum = GetPointNum(argModel);
+	int pointNum = GetPointNum(shape);
 	if(shader == pointShader) SubroutineSetup(argModel);
 	
 	glPointSize((GLfloat)argModel->getPointSize());
@@ -127,22 +127,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel)
 	switch(shapeType) {
 	  case FK_SHAPE_POINT:
 	  case FK_SHAPE_IFS:
-		Draw_Point(argModel, parameter, pointNum);
+		Draw_Point(shape, parameter, pointNum);
 		break;
-
-/*
-	  case FK_SHAPE_SOLID:
-		DrawSolidPointNormal(argModel, argFlag);
-		break;
-
-	  case FK_SHAPE_CURVE:
-		DrawCurvePointNormal(argModel, argFlag);
-		break;
-		
-	  case FK_SHAPE_SURFACE:
-		DrawSurfacePointNormal(argModel, argFlag);
-		break;
-*/
 	  default:
 		break;
 	}
@@ -232,16 +218,14 @@ void fk_PointDraw::SubroutineSetup(fk_Model *argModel)
 	return;
 }
 
-int fk_PointDraw::GetPointNum(fk_Model *argModel)
+int fk_PointDraw::GetPointNum(fk_Shape *argShape)
 {
-	auto shape = argModel->getShape();
-
-	switch(shape->getRealShapeType()) {
+	switch(argShape->getRealShapeType()) {
 	  case FK_SHAPE_POINT:
-		return dynamic_cast<fk_Point *>(shape)->getSize();
+		return dynamic_cast<fk_Point *>(argShape)->getSize();
 
 	  case FK_SHAPE_IFS:
-		return dynamic_cast<fk_IndexFaceSet *>(shape)->getPosSize();
+		return dynamic_cast<fk_IndexFaceSet *>(argShape)->getPosSize();
 
 	  default:
 		break;
@@ -265,15 +249,13 @@ GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-
-void fk_PointDraw::Draw_Point(fk_Model *argModel, fk_ShaderParameter *argParam, int argSize)
+void fk_PointDraw::Draw_Point(fk_Shape *argShape, fk_ShaderParameter *argParam, int argSize)
 {
-	fk_Shape	*shape = argModel->getShape();
-	GLuint 		vao = shape->GetPointVAO();
+	GLuint vao = argShape->GetPointVAO();
 
-	if(vao == 0) vao = VAOSetup(shape);
+	if(vao == 0) vao = VAOSetup(argShape);
 	glBindVertexArray(vao);
-	shape->BindShaderBuffer(argParam->getAttrTable());
+	argShape->BindShaderBuffer(argParam->getAttrTable());
 	glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

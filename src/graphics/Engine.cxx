@@ -371,36 +371,43 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 
 void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 {
-	fk_DrawMode		DrawMode;
+	if(argModel == nullptr) return;
 
-	DrawMode = argModel->getDrawMode();
+	auto drawMode = argModel->getDrawMode();
+	if(drawMode == fk_DrawMode::NONE) return;
 
-	if(DrawMode == fk_DrawMode::NONE) return;
+	auto realType = argModel->getShape()->getRealShapeType();
+
+	fk_Curve *curve = (realType == FK_SHAPE_CURVE) ?
+		dynamic_cast<fk_Curve *>(argModel->getShape()) : nullptr;
 
 	argModel->getShape()->FlushAttr();
 
-	if((DrawMode & fk_DrawMode::FACE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_DrawMode::FACE) != fk_DrawMode::NONE) {
 		faceDraw->DrawShapeFace(argModel);
 	}
 
-	if((DrawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
-		pointDraw->DrawShapePoint(argModel);
+	if((drawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
+		if(curve != nullptr) {
+			pointDraw->DrawShapePoint(argModel, curve->GetPoint());
+		} else {
+			pointDraw->DrawShapePoint(argModel);
+		}
 	}
 
-	if((DrawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
-		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_CURVE) {
-			fk_Curve *curve = dynamic_cast<fk_Curve *>(argModel->getShape());
+	if((drawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
+		if(curve != nullptr) {
 			lineDraw->DrawShapeLine(argModel, curve->GetLine());
 		} else {
 			lineDraw->DrawShapeLine(argModel);
 		}
 	}
 
-	if((DrawMode & fk_DrawMode::TEXTURE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_DrawMode::TEXTURE) != fk_DrawMode::NONE) {
 		textureDraw->DrawShapeTexture(argModel);
 	}
 
-	if((DrawMode & fk_DrawMode::CURVE_LINE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_DrawMode::CURVE_LINE) != fk_DrawMode::NONE) {
 		curveDraw->DrawShapeCurve(argModel);
 	}
 
