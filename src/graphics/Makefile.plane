@@ -8,6 +8,7 @@ LIBSRCS		= \
 			FrameController.cxx \
 			LineDraw.cxx \
 			PointDraw.cxx \
+			SurfaceDraw.cxx \
 			TextureDraw.cxx
 
 FKLINK		= \

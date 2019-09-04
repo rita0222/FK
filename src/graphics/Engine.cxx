@@ -76,12 +76,14 @@
 #include <FK/Light.h>
 #include <FK/Plane.h>
 #include <FK/Curve.h>
+#include <FK/Surface.h>
 #include <FK/Projection.h>
 #include <FK/PointDraw.H>
 #include <FK/LineDraw.H>
 #include <FK/FaceDraw.H>
 #include <FK/TextureDraw.H>
 #include <FK/CurveDraw.H>
+#include <FK/SurfaceDraw.H>
 #include <FK/Error.H>
 
 using namespace std;
@@ -97,6 +99,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	textureDraw = new fk_TextureDraw;
 	curveLineDraw = new fk_CurveDraw(1);
 	curvePointDraw = new fk_CurveDraw(2);
+	surfaceDraw = new fk_SurfaceDraw(1);
 
 	winID = 0;
 	curDLink = nullptr;
@@ -124,6 +127,7 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 	delete textureDraw;
 	delete curveLineDraw;
 	delete curvePointDraw;
+	delete surfaceDraw;
 
 	snapBuffer.clear();
 
@@ -380,8 +384,21 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	auto realType = argModel->getShape()->getRealShapeType();
 
-	fk_Curve *curve = (realType == FK_SHAPE_CURVE) ?
-		dynamic_cast<fk_Curve *>(argModel->getShape()) : nullptr;
+	fk_Curve *curve = nullptr;
+	fk_Surface *surface = nullptr;
+
+	switch(realType) {
+	  case FK_SHAPE_CURVE:
+		curve = dynamic_cast<fk_Curve *>(argModel->getShape());
+		break;
+
+	  case FK_SHAPE_SURFACE:
+		surface = dynamic_cast<fk_Surface *>(argModel->getShape());
+		break;
+
+	  default:
+		break;
+	}
 
 	argModel->getShape()->FlushAttr();
 
@@ -392,6 +409,8 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	if((drawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
 		if(curve != nullptr) {
 			pointDraw->DrawShapePoint(argModel, curve->GetPoint());
+		} else if(surface != nullptr) {
+			pointDraw->DrawShapePoint(argModel, surface->GetPoint());
 		} else {
 			pointDraw->DrawShapePoint(argModel);
 		}
@@ -400,6 +419,8 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	if((drawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
 		if(curve != nullptr) {
 			lineDraw->DrawShapeLine(argModel, curve->GetLine());
+		} else if(surface != nullptr) {
+			lineDraw->DrawShapeLine(argModel, surface->GetLine());
 		} else {
 			lineDraw->DrawShapeLine(argModel);
 		}
