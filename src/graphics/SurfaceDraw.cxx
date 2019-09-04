@@ -83,6 +83,9 @@ fk_SurfaceDraw::fk_SurfaceDraw(int argMode)
 	: surfaceShader(nullptr), bezier2_ID(0), bezier3_ID(0), bezier4_ID(0), mode(argMode)
 {
 	FK_UNUSED(mode);
+	FK_UNUSED(bezier2_ID);
+	FK_UNUSED(bezier3_ID);
+	FK_UNUSED(bezier4_ID);
 	return;
 }
 
@@ -138,30 +141,11 @@ void fk_SurfaceDraw::ShaderSetup(void)
 	prog->fragmentShaderSource =
 		#include "GLSL/Surface_FS.out"
 		;
-/*
-	switch(mode) {
-	  case 1:
-		prog->tessEvalShaderSource =
-			#include "GLSL/BezSurface_Face_TE.out"
-			;
-		break;
 
-	  case 2:
-		prog->tessEvalShaderSource =
-			#include "GLSL/BezSurface_LINE_TE.out"
-			;
-		break;
+	prog->tessEvalShaderSource =
+		#include "GLSL/BezSurface_Face_TE.out"
+		;
 
-	  case 3:
-		prog->tessEvalShaderSource =
-			#include "GLSL/BezSurface_POINT_TE.out"
-			;
-		break;
-
-	  default:
-		break;
-	}
-*/
 	if(prog->validate() == false) {
 		fk_PutError("fk_SurfaceDraw", "ShaderSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
@@ -169,14 +153,14 @@ void fk_SurfaceDraw::ShaderSetup(void)
 
 	ParamInit(prog, param);
 
+/*
 	auto progID = prog->getProgramID();
-
 	bezier2_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier2");
 	bezier3_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier3");
 	bezier4_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier4");
 
 	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezier3_ID);
-
+*/
 	return;
 }
 
@@ -215,12 +199,11 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argPar
 	}
 	glBindVertexArray(vao);
 	surf->BindShaderBuffer(argParam->getAttrTable());
-	glEnable(GL_LINE_SMOOTH);
 
 	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
 	glPatchParameteri(GL_PATCH_VERTICES, surf->getCtrlSize());
-
+/*
 	if(argModel->getShape()->getObjectType() == FK_BEZSURFACE) {
 		fk_BezSurface *bez = dynamic_cast<fk_BezSurface *>(surf);
 		switch(bez->getDegree()) {
@@ -242,7 +225,7 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argPar
 			return;
 		}
 	}
-	
+*/
 	glDrawArrays(GL_PATCHES, 0, surf->getCtrlSize());
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

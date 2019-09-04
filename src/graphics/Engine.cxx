@@ -438,6 +438,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		curvePointDraw->DrawShapeCurve(argModel);
 	}
 
+	if((drawMode & fk_DrawMode::SURFACE) != fk_DrawMode::NONE) {
+		surfaceDraw->DrawShapeSurface(argModel);
+	}
+
+
 	return;
 }
 
