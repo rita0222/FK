@@ -110,6 +110,10 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 		else shader = surfaceShader;
 	}
 	
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT, GL_FILL);
+
 	auto parameter = shader->getParameter();
 
 	SetParameter(parameter);
@@ -189,7 +193,7 @@ GLuint fk_SurfaceDraw::VAOSetup(fk_Shape *argShape)
 void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argParam)
 {
 	fk_Surface	*surf = dynamic_cast<fk_Surface *>(argModel->getShape());
-	GLuint		vao = surf->GetLineVAO();
+	GLuint		vao = surf->GetFaceVAO();
 	GLfloat		div = float(surf->getDiv());
 	GLfloat		tessOut[4] = {div, div, div, div};
 	GLfloat		tessIn[2] = {div, div};
