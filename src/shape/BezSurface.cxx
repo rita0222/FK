@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/BezSurface.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -192,8 +193,10 @@ void fk_BezSurface::init(void)
 {
 	deg = 3;
 	setCtrlSize(25);
+	setCtrlNum(16);
 	fk_Vector zero;
-	for(int i = 0; i < 2*deg*(deg-1); i++) ctrlLine.pushLine(zero, zero);
+
+	for(int i = 0; i < 2*deg*(deg+1); i++) ctrlLine.pushLine(zero, zero);
 	return;
 }
 
@@ -203,10 +206,15 @@ bool fk_BezSurface::setDegree(int argDeg)
 
 	deg = argDeg;
 	fk_Vector zero(0.0, 0.0, 0.0);
-	for(int i = 0; i < 25; i++) fk_Surface::setCtrl(i, zero);
+	for(int i = 0; i < (deg+1)*(deg+1); i++) fk_Surface::setCtrl(i, zero);
 	ctrlLine.allClear();
-	for(int i = 0; i < 2*deg*(deg-1); i++) ctrlLine.pushLine(zero, zero);
+	for(int i = 0; i < 2*deg*(deg+1); i++) ctrlLine.pushLine(zero, zero);
 	return true;
+}
+
+int fk_BezSurface::getDegree(void)
+{
+	return deg;
 }
 
 bool fk_BezSurface::setCtrl(int argUID, int argVID,
@@ -255,7 +263,7 @@ fk_Vector fk_BezSurface::uDeriv(double argU, double argV)
 	for(int i = 0; i <= deg-1; i++) {
 		for(int j = 0; j <= deg; j++) {
 			fk_Vector dV = ctrlPos.getV(GetID(i+1, j)) - ctrlPos.getV(GetID(i, j));
-			retV += u[i]*v[j]*dV;
+			retV += u[i] * v[j] * dV;
 		}
 	}
 
@@ -302,10 +310,10 @@ int fk_BezSurface::GetLID(int argU, int argV, int argD)
 		return deg * argV + argU - 1;
 
 	  case 3:
-		return (deg+1)*(deg+1) + deg * argU + argV;
+		return (deg+1) * deg + deg * argU + argV;
 
 	  case 4:
-		return (deg+1)*(deg+1) + deg * argU + argV - 1;
+		return (deg+1) * deg + deg * argU + argV - 1;
 
 	  default:
 		break;
@@ -315,24 +323,29 @@ int fk_BezSurface::GetLID(int argU, int argV, int argD)
 
 void fk_BezSurface::SetLine(int argU, int argV, const fk_Vector &argP)
 {
+	int LID, VID;
 	if(argU < deg) {
-		ctrlLine.changeLine(GetLID(argU, argV, 1),
-							argP, ctrlPos.getV(GetID(argU + 1, argV)));
+		LID = GetLID(argU, argV, 1);
+		VID = GetID(argU + 1, argV);
+		ctrlLine.changeLine(LID, argP, ctrlPos.getV(VID));
 	}
 
 	if(argU > 0) {
-		ctrlLine.changeLine(GetLID(argU, argV, 2),
-							ctrlPos.getV(GetID(argU - 1, argV)), argP);
+		LID = GetLID(argU, argV, 2);
+		VID = GetID(argU - 1, argV);
+		ctrlLine.changeLine(LID, ctrlPos.getV(VID), argP);
 	}
 
 	if(argV < deg) {
-		ctrlLine.changeLine(GetLID(argU, argV, 3),
-							argP, ctrlPos.getV(GetID(argU, argV + 1)));
+		LID = GetLID(argU, argV, 3);
+		VID = GetID(argU, argV + 1);
+		ctrlLine.changeLine(LID, argP, ctrlPos.getV(VID));
 	}
 
 	if(argV > 0) {
-		ctrlLine.changeLine(GetLID(argU, argV, 4),
-							ctrlPos.getV(GetID(argU, argV - 1)), argP);
+		LID = GetLID(argU, argV, 4);
+		VID = GetID(argU, argV - 1);
+		ctrlLine.changeLine(LID, ctrlPos.getV(VID), argP);
 	}
 	return;
 }

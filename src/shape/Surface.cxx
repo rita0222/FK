@@ -143,12 +143,20 @@ int fk_Surface::getCtrlSize(void)
 	return size;
 }
 
-void fk_Surface::setCtrlSize(int argNum)
+void fk_Surface::setCtrlSize(int argSize)
 {
 	fk_Vector	zero(0.0, 0.0, 0.0);
 
-	if(ctrlPos.getSize() < argNum) ctrlPos.resize(argNum);
-	size = argNum;
+	if(ctrlPos.getSize() < argSize) ctrlPos.resize(argSize);
+	size = argSize;
+	ctrlPoint.allClear();
+	ctrlLine.allClear();
+}
+
+void fk_Surface::setCtrlNum(int argNum)
+{
+	fk_Vector zero(0.0, 0.0, 0.0);
+
 	ctrlPoint.allClear();
 	for(int i = 0; i < argNum; i++) ctrlPoint.pushVertex(zero);
 }

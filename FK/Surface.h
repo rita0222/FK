@@ -237,6 +237,16 @@ namespace FK {
 		 */
 		fk_Vector getCtrl(int ID);
 
+		//! 制御点最大サイズ設定関数
+		/*!
+		 *	曲面の制御点最大サイズを設定します。負数が指定された場合は無視します。
+		 *	通常はこの関数ではなく、
+		 *	各派生クラスで定義されている次数設定関数を用います。
+		 *
+		 *	\param[in]	num	制御点数
+		 */
+		void setCtrlSize(int num);
+
 		//! 制御点数設定関数
 		/*!
 		 *	曲面の制御点数を設定します。負数が指定された場合は無視します。
@@ -245,7 +255,7 @@ namespace FK {
 		 *
 		 *	\param[in]	num	制御点数
 		 */
-		void setCtrlSize(int num);
+		void setCtrlNum(int num);
 
 	private:
 		int	div;
