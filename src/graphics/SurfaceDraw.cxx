@@ -177,7 +177,7 @@ GLuint fk_SurfaceDraw::VAOSetup(fk_Shape *argShape)
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-	argShape->SetLineVAO(vao);
+	argShape->SetFaceVAO(vao);
 	argShape->DefineVBO();
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
