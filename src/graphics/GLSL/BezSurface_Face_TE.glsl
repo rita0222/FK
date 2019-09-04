@@ -59,14 +59,15 @@ void main()
 	float	uu = 1.0 - u;
 	float	vv = 1.0 - v;
 
-	vec3 cP00 = gl_in[0].gl_Position.xyz;
-	vec3 cP10 = gl_in[1].gl_Position.xyz;
-	vec3 CP01 = gl_in[4].gl_Position.xyz;
-	vec3 CP11 = gl_in[5].gl_Position.xyz;
+	vec3 cP00 = vec3(-30.0, -30.0, 0.0);
+	vec3 cP10 = vec3(30.0, -30.0, 0.0);
+	vec3 CP01 = vec3(-30.0, 30.0, 0.0);
+	vec3 CP11 = vec3(30.0, 30.0, 0.0);
 	
 	vec3 pos = CP00 * uu * vv + CP10 * u * vv + CP01 * uu * v + CP11 * u * v;
-	vec3 norm = normalize(cross(CP10 - CP00, CP01 - CP00));
+	vec3 norm = vec3(0.0, 0.0, 1.0);
 	varP = fk_ModelMatrix * vec4(pos, 1.0);
 	varN = fk_NormalMatrix * vec4(norm, 0.0);
-	gl_Position = fk_ModelViewProjectionMatrix * vec4(pos, 1.0);
+	//gl_Position = fk_ModelViewProjectionMatrix * vec4(pos, 1.0);
+	gl_Position = vec4(u, v, 0.0, 1.0);
 }
