@@ -151,6 +151,10 @@ void fk_CurveDraw::ShaderSetup(void)
 			;
 	}
 	
+	prog->geometryShaderSource =
+		#include "GLSL/Surface_GS.out"
+		;
+	
 	if(prog->validate() == false) {
 		fk_PutError("fk_CurveDraw", "ShaderSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());

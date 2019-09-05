@@ -146,6 +146,14 @@ void fk_SurfaceDraw::ShaderSetup(void)
 		#include "GLSL/Surface_FS.out"
 		;
 
+//	prog->tessCtrlShaderSource =
+//		#include "GLSL/Surface_TC.out"
+//		;
+
+//	prog->geometryShaderSource =
+//		#include "GLSL/Surface_GS.out"
+//		;
+	
 	prog->tessEvalShaderSource =
 		#include "GLSL/BezSurface_Face_TE.out"
 		;
