@@ -100,6 +100,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	curveLineDraw = new fk_CurveDraw(1);
 	curvePointDraw = new fk_CurveDraw(2);
 	surfaceDraw = new fk_SurfaceDraw(1);
+	surfaceLineDraw = new fk_SurfaceDraw(2);
+	surfacePointDraw = new fk_SurfaceDraw(3);
 
 	winID = 0;
 	curDLink = nullptr;
@@ -128,6 +130,8 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 	delete curveLineDraw;
 	delete curvePointDraw;
 	delete surfaceDraw;
+	delete surfaceLineDraw;
+	delete surfacePointDraw;
 
 	snapBuffer.clear();
 
@@ -430,16 +434,26 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		textureDraw->DrawShapeTexture(argModel);
 	}
 
-	if((drawMode & fk_DrawMode::CURVE_LINE) != fk_DrawMode::NONE) {
-		curveLineDraw->DrawShapeCurve(argModel);
+	if((drawMode & fk_DrawMode::GEOM_LINE) != fk_DrawMode::NONE) {
+		if(curve != nullptr) {
+			curveLineDraw->DrawShapeCurve(argModel);
+		} else if(surface != nullptr) {
+			surfaceLineDraw->DrawShapeSurface(argModel);
+		}
 	}
 
-	if((drawMode & fk_DrawMode::CURVE_POINT) != fk_DrawMode::NONE) {
-		curvePointDraw->DrawShapeCurve(argModel);
+	if((drawMode & fk_DrawMode::GEOM_POINT) != fk_DrawMode::NONE) {
+		if(curve != nullptr) {
+			curvePointDraw->DrawShapeCurve(argModel);
+		} else if(surface != nullptr) {
+			surfacePointDraw->DrawShapeSurface(argModel);
+		}
 	}
 
-	if((drawMode & fk_DrawMode::SURFACE) != fk_DrawMode::NONE) {
-		surfaceDraw->DrawShapeSurface(argModel);
+	if((drawMode & fk_DrawMode::GEOM_FACE) != fk_DrawMode::NONE) {
+		if(surface != nullptr) {
+			surfaceDraw->DrawShapeSurface(argModel);
+		}
 	}
 
 

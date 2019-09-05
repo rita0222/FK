@@ -128,6 +128,8 @@ namespace FK {
 		fk_CurveDraw				*curveLineDraw;
 		fk_CurveDraw				*curvePointDraw;
 		fk_SurfaceDraw				*surfaceDraw;
+		fk_SurfaceDraw				*surfacePointDraw;
+		fk_SurfaceDraw				*surfaceLineDraw;
 
 		unsigned int				winID;
 		fk_DisplayLink				*curDLink;

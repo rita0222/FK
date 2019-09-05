@@ -85,11 +85,9 @@ namespace FK {
 		BACK_FACE		= ((1 << 4) | FACE),	//!< 裏面描画
 		FRONTBACK_FACE	= ((1 << 5) | FACE),	//!< 表裏面描画
 		TEXTURE			= 1 << 6,				//!< テクスチャー描画
-		CURVE_LINE		= 1 << 7,				//!< 曲線描画
-		CURVE_POINT		= 1 << 8,				//!< 曲線点描画
-		SURFACE			= 1 << 9,				//!< 曲面描画
-		SURFACE_LINE	= 1 << 10,				//!< 曲面グリッド線描画
-		SURFACE_POINT	= 1 << 11				//!< 曲面表面点描画
+		GEOM_LINE		= 1 << 7,				//!< 曲線・曲面グリッド描画
+		GEOM_POINT		= 1 << 8,				//!< 曲線・曲面点描画
+		GEOM_FACE		= 1 << 9,				//!< 曲面描画
 	};
 
 	fk_DrawMode operator | (fk_DrawMode argL, fk_DrawMode argR);

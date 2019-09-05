@@ -98,6 +98,7 @@ fk_SurfaceDraw::~fk_SurfaceDraw()
 
 void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 {
+	auto col = &(argModel->getCurveColor()->col);
 	auto modelShader = argModel->getShader();
 
 	if(modelShader != nullptr) {
@@ -115,7 +116,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 	auto parameter = shader->getParameter();
 
 	SetParameter(parameter);
-
+	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
 	if(argModel->getShape()->getObjectType() == FK_BEZSURFACE) {
 		fk_BezSurface *surf = dynamic_cast<fk_BezSurface *>(argModel->getShape());
 		parameter->setRegister(fk_Shape::degreeName, surf->getDegree(), fk_Shape::degreeName);
@@ -140,13 +141,47 @@ void fk_SurfaceDraw::ShaderSetup(void)
 		#include "GLSL/Surface_VS.out"
 		;
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Surface_FS.out"
-		;
+	switch(mode) {
 
-	prog->tessEvalShaderSource =
-		#include "GLSL/BezSurface_Face_TE.out"
-		;
+	  case 1: // Face
+		prog->fragmentShaderSource =
+			#include "GLSL/Surface_FS.out"
+			;
+
+		prog->tessEvalShaderSource =
+			#include "GLSL/BezSurface_Face_TE.out"
+			;
+
+		break;
+
+	  case 2: // Line
+		prog->fragmentShaderSource =
+			#include "GLSL/Surface_Line_FS.out"
+			;
+
+		prog->tessEvalShaderSource =
+			#include "GLSL/BezSurface_Line_TE.out"
+			;
+
+		prog->geometryShaderSource =
+			#include "GLSL/Surface_Line_GS.out"
+			;
+
+		break;
+		
+	  case 3: // Point
+		prog->fragmentShaderSource =
+			#include "GLSL/Surface_Line_FS.out"
+			;
+
+		prog->tessEvalShaderSource =
+			#include "GLSL/BezSurface_Point_TE.out"
+			;
+		break;
+
+	  default:
+		break;
+	}
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_SurfaceDraw", "ShaderSetup", 1, "Shader Compile Error");

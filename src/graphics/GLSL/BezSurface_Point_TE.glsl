@@ -2,7 +2,7 @@
 
 #FKBuildIn
 
-layout( quads, equal_spacing, ccw ) in;
+layout( quads, equal_spacing, ccw, point_mode ) in;
 
 out vec4 varP;
 out vec4 varN;
