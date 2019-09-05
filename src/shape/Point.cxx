@@ -93,7 +93,7 @@ fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 	posArray.setDim(3);
 	colArray.setDim(4);
 	realType = FK_SHAPE_POINT;
-	SetObjectType(FK_POINT);
+	SetObjectType(fk_Type::POINT);
 	allClear();
 	MakePoint(argVertexSet);
 

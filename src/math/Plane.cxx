@@ -75,7 +75,7 @@
 using namespace FK;
 
 fk_Plane::fk_Plane(void)
-	: fk_BaseObject(FK_PLANE)
+	: fk_BaseObject(fk_Type::PLANE)
 {
 	base.set(0.0, 0.0, 0.0);
 	uVec.set(1.0, 0.0, 0.0);

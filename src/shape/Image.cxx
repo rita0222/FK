@@ -137,7 +137,7 @@ fk_Dimension fk_Rect::getSize(void)
 		
 fk_Image::fk_Image(int argW, int argH) : texID(0)
 {
-	SetObjectType(FK_IMAGE);
+	SetObjectType(fk_Type::IMAGE);
 	CreateBuffer(argW, argH, true);
 	
 	return;

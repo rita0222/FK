@@ -116,7 +116,7 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_Shape(fk_ObjectType = FK_SHAPE);
+		fk_Shape(fk_Type = fk_Type::SHAPE);
 		//! デストラクタ
 		virtual ~fk_Shape();
 

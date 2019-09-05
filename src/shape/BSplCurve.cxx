@@ -79,7 +79,7 @@ using namespace FK::BSplBase;
 
 fk_BSplCurve::fk_BSplCurve(void)
 {
-	SetObjectType(FK_BSPLCURVE);
+	SetObjectType(fk_Type::BSPLCURVE);
 	init();
 	return;
 }

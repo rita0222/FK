@@ -78,14 +78,14 @@ using namespace std;
 using namespace FK;
 
 fk_Color::fk_Color(float argR, float argG, float argB, float argA)
-	: fk_BaseObject(FK_COLOR)
+	: fk_BaseObject(fk_Type::COLOR)
 {
 	init(argR, argG, argB, argA);
 }
 
 
 fk_Color::fk_Color(double argR, double argG, double argB, double argA)
-	: fk_BaseObject(FK_COLOR)
+	: fk_BaseObject(fk_Type::COLOR)
 {
 	init(argR, argG, argB, argA);
 }
@@ -135,7 +135,7 @@ double fk_Color::clamp(double argX)
 }
 
 fk_Color::fk_Color(const fk_Color &argColor)
-	: fk_BaseObject(FK_COLOR)
+	: fk_BaseObject(fk_Type::COLOR)
 {
 	init(argColor.col[0], argColor.col[1], argColor.col[2], argColor.col[3]);
 }

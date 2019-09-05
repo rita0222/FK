@@ -84,7 +84,7 @@ bool fk_RectTexture::faceIndexFlg = false;
 fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
-	SetObjectType(FK_RECTTEXTURE);
+	SetObjectType(fk_Type::RECTTEXTURE);
 	GetFaceSize = []() { return 2; };
 	StatusUpdate = [this]() {
 		SizeUpdate();

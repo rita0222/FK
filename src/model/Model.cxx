@@ -85,7 +85,7 @@ using mi = list<fk_Model *>::iterator;
 static unsigned int		_globalModelID = 1;
 
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(FK_MODEL), shape(nullptr), parentModel(nullptr),
+	: fk_Boundary(fk_Type::MODEL), shape(nullptr), parentModel(nullptr),
 	  treeData(nullptr), drawMode(fk_DrawMode::NONE), elemMode(FK_ELEM_MODEL),
 	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
@@ -129,37 +129,37 @@ void fk_Model::setShape(fk_Shape *argShape)
 		drawModeFlag = false;
 	}
 
-	fk_ObjectType type = argShape->getObjectType();
+	fk_Type type = argShape->getObjectType();
 	if(drawModeFlag == true) {
 		switch(type) {
-		  case FK_POINT:
-		  case FK_PARTICLESET:
+		  case fk_Type::POINT:
+		  case fk_Type::PARTICLESET:
 			drawMode = fk_DrawMode::POINT;
 			break;
 
-		  case FK_LINE:
-		  case FK_POLYLINE:
-		  case FK_CLOSEDLINE:
+		  case fk_Type::LINE:
+		  case fk_Type::POLYLINE:
+		  case fk_Type::CLOSEDLINE:
 			drawMode = fk_DrawMode::LINE;
 			break;
 			 
-		  case FK_POLYGON:
-		  case FK_BLOCK:
-		  case FK_CIRCLE:
-		  case FK_SPHERE:
-		  case FK_PRISM:
-		  case FK_CONE:
-		  case FK_CAPSULE:
-		  case FK_SOLID:
-		  case FK_INDEXFACESET:
+		  case fk_Type::POLYGON:
+		  case fk_Type::BLOCK:
+		  case fk_Type::CIRCLE:
+		  case fk_Type::SPHERE:
+		  case fk_Type::PRISM:
+		  case fk_Type::CONE:
+		  case fk_Type::CAPSULE:
+		  case fk_Type::SOLID:
+		  case fk_Type::INDEXFACESET:
 			drawMode = fk_DrawMode::FACE;
 			break;
 
-		  case FK_RECTTEXTURE:
-		  case FK_TRITEXTURE:
-		  case FK_MESHTEXTURE:
-		  case FK_IFSTEXTURE:
-		  case FK_ARTEXTURE:
+		  case fk_Type::RECTTEXTURE:
+		  case fk_Type::TRITEXTURE:
+		  case fk_Type::MESHTEXTURE:
+		  case fk_Type::IFSTEXTURE:
+		  case fk_Type::ARTEXTURE:
 			drawMode = fk_DrawMode::TEXTURE;
 			break;
 

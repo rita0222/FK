@@ -80,7 +80,7 @@ using namespace std;
 using namespace FK;
 
 fk_Material::fk_Material()
-	: fk_BaseObject(FK_MATERIAL)
+	: fk_BaseObject(fk_Type::MATERIAL)
 {
 	init();
 }
@@ -94,7 +94,7 @@ void fk_Material::init(void)
 }
 
 fk_Material::fk_Material(const fk_Material &argMat)
-	: fk_BaseObject(FK_MATERIAL)
+	: fk_BaseObject(fk_Type::MATERIAL)
 {
 	ambient = argMat.ambient;
 	diffuse = argMat.diffuse;

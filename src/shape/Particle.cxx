@@ -81,7 +81,7 @@ using namespace FK;
 
 fk_Particle::fk_Particle(fk_Point *argBase, int argID)
 {
-	SetObjectType(FK_PARTICLE);
+	SetObjectType(fk_Type::PARTICLE);
 	base = argBase;
 	id = argID;
 	init();

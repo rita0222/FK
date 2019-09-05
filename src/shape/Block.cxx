@@ -75,7 +75,7 @@ using namespace FK;
 
 fk_Block::fk_Block(double argX, double argY, double argZ)
 {
-	SetObjectType(FK_BLOCK);
+	SetObjectType(fk_Type::BLOCK);
 	makeBlock(argX, argY, argZ);
 	return;
 }

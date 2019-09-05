@@ -84,7 +84,7 @@ bool fk_TriTexture::faceIndexFlg = false;
 fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
-	SetObjectType(FK_TRITEXTURE);
+	SetObjectType(fk_Type::TRITEXTURE);
 	GetFaceSize = []() { return 1; };
 	StatusUpdate = [this]() {
 		PosUpdate();

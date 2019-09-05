@@ -84,7 +84,7 @@ static fk_IDAdmin & fk_DLManager(void)
 }
 
 fk_DisplayLink::fk_DisplayLink(void)
-	: fk_BaseObject(FK_DISPLAYLINK)
+	: fk_BaseObject(fk_Type::DISPLAYLINK)
 {
 	camera = &localCamera;
 	displayID = fk_DLManager().CreateID();

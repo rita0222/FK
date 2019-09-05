@@ -81,7 +81,7 @@ using namespace FK;
 
 fk_Gregory::fk_Gregory(void)
 {
-	SetObjectType(FK_GREGORY);
+	SetObjectType(fk_Type::GREGORY);
 	init();
 	return;
 }

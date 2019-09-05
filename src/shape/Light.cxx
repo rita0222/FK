@@ -78,7 +78,7 @@ const int fk_Light::MAXLIGHTNUM = 8;
 fk_Light::fk_Light(fk_LightType argType)
 {
 	realType = FK_SHAPE_LIGHT;
-	SetObjectType(FK_LIGHT);
+	SetObjectType(fk_Type::LIGHT);
 	setLightType(argType);
 	attenuation[0] = attenuation[1] = 0.0;
 	attenuation[2] = 1.0;

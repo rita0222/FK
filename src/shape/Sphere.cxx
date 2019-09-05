@@ -75,7 +75,7 @@ using namespace FK;
 
 fk_Sphere::fk_Sphere(int argDiv, double argRad)
 {
-	SetObjectType(FK_SPHERE);
+	SetObjectType(fk_Type::SPHERE);
 	makeSphere(argDiv, argRad);
 	return;
 }

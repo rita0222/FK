@@ -81,7 +81,7 @@ using namespace FK;
 fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
-	SetObjectType(FK_MESHTEXTURE);
+	SetObjectType(fk_Type::MESHTEXTURE);
 
 	GetFaceSize = [this]() { return triNum; };
 	StatusUpdate = [this]() {

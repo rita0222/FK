@@ -75,7 +75,7 @@ using namespace FK;
 
 fk_Circle::fk_Circle(int argDiv, double argRad)
 {
-	SetObjectType(FK_CIRCLE);
+	SetObjectType(fk_Type::CIRCLE);
 	makeCircle(argDiv, argRad);
 }
 

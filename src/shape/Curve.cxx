@@ -78,7 +78,7 @@ fk_Curve::fk_Curve(void) : div(128), size(0)
 {
 	ctrlPos.clear();
 	realType = FK_SHAPE_CURVE;
-	SetObjectType(FK_CURVE);
+	SetObjectType(fk_Type::CURVE);
 	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
 
 	return;

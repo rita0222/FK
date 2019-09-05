@@ -91,20 +91,20 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 
 	switch(Mode) {
 	  case FK_NONE_PROJ_MODE:
-		SetObjectType(FK_PROJECTBASE);
+		SetObjectType(fk_Type::PROJECTBASE);
 		MakeMat = [&] { ProjM.init(); };
 		break;
 
 	  case FK_PERSPECTIVE_MODE:
-		SetObjectType(FK_PERSPECTIVE);
+		SetObjectType(fk_Type::PERSPECTIVE);
 		break;
 
 	  case FK_FRUSTUM_MODE:
-		SetObjectType(FK_FRUSTUM);
+		SetObjectType(fk_Type::FRUSTUM);
 		break;
 
 	  case FK_ORTHO_MODE:
-		SetObjectType(FK_ORTHO);
+		SetObjectType(fk_Type::ORTHO);
 		break;
 
 	  default:

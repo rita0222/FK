@@ -81,7 +81,7 @@ using namespace FK;
 
 fk_BezSurface::fk_BezSurface(void)
 {
-	SetObjectType(FK_BEZSURFACE);
+	SetObjectType(fk_Type::BEZSURFACE);
 	init();
 	return;
 }

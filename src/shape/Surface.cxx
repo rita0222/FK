@@ -80,7 +80,7 @@ fk_Surface::fk_Surface(void) : div(16), size(0)
 {
 	ctrlPos.clear();
 	realType = FK_SHAPE_SURFACE;
-	SetObjectType(FK_SURFACE);
+	SetObjectType(fk_Type::SURFACE);
 	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
 
 	return;

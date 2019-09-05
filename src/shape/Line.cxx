@@ -78,7 +78,7 @@ using namespace FK;
 fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
 	: fk_LineBase(argVertexPos)
 {
-	SetObjectType(FK_LINE);
+	SetObjectType(fk_Type::LINE);
 	return;
 }
 

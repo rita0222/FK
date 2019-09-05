@@ -89,7 +89,7 @@ inline bool AlmostEqual(double x, double y)
 	return(AlmostZero(x - y));
 }
 
-fk_MatrixAdmin::fk_MatrixAdmin(fk_ObjectType argType)
+fk_MatrixAdmin::fk_MatrixAdmin(fk_Type argType)
 	: fk_BaseObject(argType)
 {
 	Position.set(0.0, 0.0, 0.0);

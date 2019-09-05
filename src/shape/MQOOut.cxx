@@ -110,7 +110,7 @@ bool fk_MQOOut::Convert_Solid(void)
 	
 	if(solid->checkDB() == false) return false;
 
-	MakeMaterialPalette(FK_SOLID);
+	MakeMaterialPalette(fk_Type::SOLID);
 	MakeVertexIDMap_Solid();
 	fBuf.clear();
 
@@ -208,7 +208,7 @@ bool fk_MQOOut::Convert_IFS(void)
 	int				curMate = -1;
 	stringstream	ss;
 
-	MakeMaterialPalette(FK_INDEXFACESET);
+	MakeMaterialPalette(fk_Type::INDEXFACESET);
 	MakeVertexIDMap_IFS();
 	fBuf.clear();
 
@@ -271,7 +271,7 @@ float fk_MQOOut::CalcMonotoneLuminance(fk_Color *col)
 	return maximum;
 }
 
-void fk_MQOOut::MakeMaterialPalette(int argType)
+void fk_MQOOut::MakeMaterialPalette(fk_Type argType)
 {
 	int				i, j, mateNum;
 	fk_Material		*tmpMate;
@@ -280,17 +280,17 @@ void fk_MQOOut::MakeMaterialPalette(int argType)
 	stringstream	ss;
 	
 	mBuf.clear();
-	if(argType == FK_SOLID) {
+	if(argType == fk_Type::SOLID) {
 		mateNum = solid->getPaletteSize();
-	} else if(argType == FK_INDEXFACESET) {
+	} else if(argType == fk_Type::INDEXFACESET) {
 		mateNum = ifs->getPaletteSize();
 	} else {
 		return;
 	}
 	for(i = 0; i < mateNum; ++i) {
-		if(argType == FK_SOLID) {
+		if(argType == fk_Type::SOLID) {
 			tmpMate = solid->getMaterial(i);
-		} else if(argType == FK_INDEXFACESET) {
+		} else if(argType == fk_Type::INDEXFACESET) {
 			tmpMate = ifs->getMaterial(i);
 		} else {
 			break;

@@ -125,7 +125,7 @@ namespace FK {
 	public:
 
 		//! コンストラクタ
-		fk_MatrixAdmin(fk_ObjectType = FK_MATRIXADMIN);
+		fk_MatrixAdmin(fk_Type = fk_Type::MATRIXADMIN);
 
 		//! デストラクタ
 		virtual ~fk_MatrixAdmin();

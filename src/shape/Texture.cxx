@@ -80,7 +80,7 @@ using namespace FK;
 const string fk_Texture::texIDName = "fk_TexID";
 
 fk_Texture::fk_Texture(fk_Image *argImage)
-	: fk_Shape(FK_TEXTURE),
+	: fk_Shape(fk_Type::TEXTURE),
 	  image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
 {
 	GetFaceSize = []() { return 0; };

@@ -150,7 +150,7 @@ static fk_StringCode	defCode = FK_STR_UTF16;
 
 
 fk_UniChar::fk_UniChar(int argCode)
-	: fk_BaseObject(FK_UNICHAR)
+	: fk_BaseObject(fk_Type::UNICHAR)
 {
 	setCode(argCode);
 	return;
@@ -216,7 +216,7 @@ char fk_UniChar::getAscii(void)
 }
 
 fk_UniStr::fk_UniStr(void)
-	: fk_BaseObject(FK_UNISTR)
+	: fk_BaseObject(fk_Type::UNISTR)
 {
 	clear();
 	return;

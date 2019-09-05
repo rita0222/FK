@@ -78,7 +78,7 @@ using namespace FK;
 fk_Closedline::fk_Closedline(vector<fk_Vector> *argVertexSet)
 	: num(0)
 {
-	SetObjectType(FK_POLYLINE);
+	SetObjectType(fk_Type::POLYLINE);
 	setVertex(argVertexSet);
 	return;
 }

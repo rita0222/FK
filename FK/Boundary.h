@@ -152,7 +152,7 @@ namespace FK {
 	public:
 
 		//! コンストラクタ
-		fk_Boundary(fk_ObjectType);
+		fk_Boundary(fk_Type);
 
 		//! デストラクタ
 		virtual ~fk_Boundary();

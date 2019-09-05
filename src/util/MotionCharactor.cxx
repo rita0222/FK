@@ -196,9 +196,9 @@ void fk_Performer::init()
 	for(st i = 0; i < mesh.size(); i++) {
 		countCache[mesh[i]]--;
 		if(countCache[mesh[i]] == 0) {
-			if(mesh[i]->getObjectType() == FK_IFSTEXTURE) {
+			if(mesh[i]->getObjectType() == fk_Type::IFSTEXTURE) {
 				delete (fk_IFSTexture *)mesh[i];
-			} else if(mesh[i]->getObjectType() == FK_INDEXFACESET) {
+			} else if(mesh[i]->getObjectType() == fk_Type::INDEXFACESET) {
 				delete (fk_IndexFaceSet *)mesh[i];
 			} else {
 				delete mesh[i];

@@ -75,7 +75,7 @@ using namespace FK;
 
 fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight)
 {
-	SetObjectType(FK_CONE);
+	SetObjectType(fk_Type::CONE);
 	makeCone(argDiv, argRadius, argHeight);
 	return;
 }

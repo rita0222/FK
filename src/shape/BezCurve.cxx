@@ -78,7 +78,7 @@ using namespace FK;
 
 fk_BezCurve::fk_BezCurve(void)
 {
-	SetObjectType(FK_BEZCURVE);
+	SetObjectType(fk_Type::BEZCURVE);
 	setCtrlSize(5);
 	setDegree(3);
 	return;

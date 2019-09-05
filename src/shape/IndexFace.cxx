@@ -171,7 +171,7 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	: anim(nullptr), cloneFlg(false), orgIFS(nullptr),
 	  edgeIBO(0), faceIBO(0)
 {
-	SetObjectType(FK_INDEXFACESET);
+	SetObjectType(fk_Type::INDEXFACESET);
 	realType = FK_SHAPE_IFS;
 
 	Init();

@@ -274,7 +274,7 @@ void fk_ShapeViewer::SetMaterial(int argID, fk_ShapeGUIMenuItem index,
 }
 
 fk_ShapeViewer::fk_ShapeViewer(int argW, int argH)
-	: fk_BaseObject(FK_SHAPEVIEWER)
+	: fk_BaseObject(fk_Type::SHAPEVIEWER)
 {
 	fk_Material::initDefault();
 
@@ -604,26 +604,26 @@ void fk_ShapeViewer::ModelInit(int argIndex, fk_Shape *argShape)
 	}
 
 	switch(argShape->getObjectType()) {
-	  case FK_RECTTEXTURE:
-	  case FK_TRITEXTURE:
-	  case FK_MESHTEXTURE:
-	  case FK_IFSTEXTURE:
+	  case fk_Type::RECTTEXTURE:
+	  case fk_Type::TRITEXTURE:
+	  case fk_Type::MESHTEXTURE:
+	  case fk_Type::IFSTEXTURE:
 		localModel->setShape(argShape);
 		break;
 
-	  case FK_SOLID:
-	  case FK_POLYGON:
-	  case FK_POLYLINE:
-	  case FK_CLOSEDLINE:
-	  case FK_POINT:
-	  case FK_CIRCLE:
-	  case FK_SPHERE:
-	  case FK_PRISM:
-	  case FK_CONE:
-	  case FK_LIGHT:
-	  case FK_INDEXFACESET:
-	  case FK_BLOCK:
-	  case FK_LINE:
+	  case fk_Type::SOLID:
+	  case fk_Type::POLYGON:
+	  case fk_Type::POLYLINE:
+	  case fk_Type::CLOSEDLINE:
+	  case fk_Type::POINT:
+	  case fk_Type::CIRCLE:
+	  case fk_Type::SPHERE:
+	  case fk_Type::PRISM:
+	  case fk_Type::CONE:
+	  case fk_Type::LIGHT:
+	  case fk_Type::INDEXFACESET:
+	  case fk_Type::BLOCK:
+	  case fk_Type::LINE:
 
 		localModel->setShape(argShape);
 		localModel->setMaterial(mat);
@@ -776,24 +776,24 @@ bool fk_ShapeViewer::MenuSelect(void)
 		if(shape == nullptr) break;
 
 		switch(shape->getObjectType()) {
-		  case FK_SOLID:
-		  case FK_POLYGON:
-		  case FK_LINE:
-		  case FK_POLYLINE:
-		  case FK_CLOSEDLINE:
-		  case FK_POINT:
+		  case fk_Type::SOLID:
+		  case fk_Type::POLYGON:
+		  case fk_Type::LINE:
+		  case fk_Type::POLYLINE:
+		  case fk_Type::CLOSEDLINE:
+		  case fk_Type::POINT:
 			solid = static_cast<fk_Solid *>(shape);
 			if(solid->writeVRMLFile(fileName, polyMaterial[0]) == false) {
 				fl_alert("%s: Can't Write.", fileName.c_str());
 			}
 			break;
 
-		  case FK_INDEXFACESET:
-		  case FK_BLOCK:
-		  case FK_CIRCLE:
-		  case FK_SPHERE:
-		  case FK_PRISM:
-		  case FK_CONE:
+		  case fk_Type::INDEXFACESET:
+		  case fk_Type::BLOCK:
+		  case fk_Type::CIRCLE:
+		  case fk_Type::SPHERE:
+		  case fk_Type::PRISM:
+		  case fk_Type::CONE:
 			ifset = static_cast<fk_IndexFaceSet *>(shape);
 			if(ifset->writeVRMLFile(fileName, polyMaterial[0]) == false) {
 				fl_alert("%s: Can't Write.", fileName.c_str());

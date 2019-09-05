@@ -73,7 +73,7 @@
 
 using namespace FK;
 
-fk_Boundary::fk_Boundary(fk_ObjectType argType)
+fk_Boundary::fk_Boundary(fk_Type argType)
 	: fk_MatrixAdmin(argType), bMode(FK_B_NONE), bDrawToggle(false),
 	  bLineColor(nullptr), bIntLineColor(nullptr), bLineWidth(1.0),
 	  bSphereRad(0.0), bAABBSize(nullptr), bOBBSize(nullptr),

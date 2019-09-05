@@ -75,7 +75,7 @@ using namespace FK;
 
 fk_Scene::fk_Scene(void)
 {
-	SetObjectType(FK_SCENE);
+	SetObjectType(fk_Type::SCENE);
 	setBGColor(0.0f, 0.0f, 0.0f);
 	setBlendStatus(false);
 	return;

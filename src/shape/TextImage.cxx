@@ -424,7 +424,7 @@ static bool				cacheMode = false;
 
 fk_TextImage::fk_TextImage(void)
 {
-	SetObjectType(FK_TEXTIMAGE);
+	SetObjectType(fk_Type::TEXTIMAGE);
 	setDPI(96);
 	setPTSize(96);
 	setCharSkip(0);

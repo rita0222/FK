@@ -237,13 +237,13 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 			if(argVPFlg == true) {
 				SetViewPort();
 			}
-			if(curDLink->getObjectType() == FK_SCENE) {
+			if(curDLink->getObjectType() == fk_Type::SCENE) {
 				scene = static_cast<fk_Scene *>(curDLink);
 				scene->GetFogChangeStatus();
 				fogStatus = true;
 			}
 		} else {
-			if(curDLink->getObjectType() == FK_SCENE) {
+			if(curDLink->getObjectType() == fk_Type::SCENE) {
 				scene = static_cast<fk_Scene *>(curDLink);
 				fogStatus = scene->GetFogChangeStatus();
 			}

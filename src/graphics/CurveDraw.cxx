@@ -111,7 +111,7 @@ void fk_CurveDraw::DrawShapeCurve(fk_Model *argModel)
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
-	if(argModel->getShape()->getObjectType() == FK_BEZCURVE) {
+	if(argModel->getShape()->getObjectType() == fk_Type::BEZCURVE) {
 		fk_BezCurve *curve = dynamic_cast<fk_BezCurve *>(argModel->getShape());
 		parameter->setRegister(fk_Shape::degreeName, curve->getDegree(), fk_Shape::degreeName);
 	}
@@ -207,7 +207,7 @@ void fk_CurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam)
 	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
 
-	if(argModel->getShape()->getObjectType() == FK_BEZCURVE) {
+	if(argModel->getShape()->getObjectType() == fk_Type::BEZCURVE) {
 		fk_BezCurve *bez = dynamic_cast<fk_BezCurve *>(curve);
 		switch(bez->getDegree()) {
 		  case 2:

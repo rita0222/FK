@@ -117,7 +117,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
-	if(argModel->getShape()->getObjectType() == FK_BEZSURFACE) {
+	if(argModel->getShape()->getObjectType() == fk_Type::BEZSURFACE) {
 		fk_BezSurface *surf = dynamic_cast<fk_BezSurface *>(argModel->getShape());
 		parameter->setRegister(fk_Shape::degreeName, surf->getDegree(), fk_Shape::degreeName);
 	}
