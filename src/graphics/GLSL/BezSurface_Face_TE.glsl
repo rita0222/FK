@@ -2,7 +2,7 @@
 
 #FKBuildIn
 
-layout( quads, equal_spacing, cw ) in;
+layout( quads, equal_spacing, ccw ) in;
 
 out vec4 varP;
 out vec4 varN;
@@ -54,7 +54,7 @@ void main()
 	}
 	
 	vec4 P = vec4(pos, 1.0);
-	vec4 N = vec4(normalize(cross(dV, dU)), 0.0);
+	vec4 N = vec4(normalize(cross(dU, dV)), 0.0);
 
 	varP = fk_ModelMatrix * P;
 	varN = fk_ModelMatrix * N;
