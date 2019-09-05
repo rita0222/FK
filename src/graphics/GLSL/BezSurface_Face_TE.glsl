@@ -7,7 +7,7 @@ layout( quads, equal_spacing, ccw ) in;
 out vec4 varP;
 out vec4 varN;
 
-void bezier(out float[4] b, out float[4] db, float t)
+void bezier(out float[5] b, out float[5] db, float t)
 {
 	float ot = 1.0 - t;
 	b[0] = ot * ot * ot;
@@ -23,11 +23,11 @@ void bezier(out float[4] b, out float[4] db, float t)
 
 void main()
 {
-	vec3	cP[16];
-	float	bu[4], bv[4], dbu[4], dbv[4];
+	vec3	cP[25];
+	float	bu[5], bv[5], dbu[5], dbv[5];
 	int i, j, k;
 
-	for(i = 0; i < 16; i++) {
+	for(i = 0; i < (fk_Degree + 1) * (fk_Degree + 1); i++) {
 		cP[i] = gl_in[i].gl_Position.xyz;
 	}
 
@@ -44,9 +44,9 @@ void main()
 	vec3 dV = vec3(0.0, 0.0, 0.0);
 
 
-	for(i = 0; i < 4; i++) {
-		for(j = 0; j < 4; j++) {
-			int k = i*4+j;
+	for(i = 0; i <= fk_Degree; i++) {
+		for(j = 0; j <= fk_Degree; j++) {
+			int k = i*(fk_Degree + 1)+j;
 			pos += bu[i] * bv[j] * cP[k];
 			dU += dbu[i] * bv[j] * cP[k];
 			dV += bu[i] * dbv[j] * cP[k];

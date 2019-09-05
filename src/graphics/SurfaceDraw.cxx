@@ -109,10 +109,8 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 		if(surfaceShader == nullptr) ShaderSetup();
 		else shader = surfaceShader;
 	}
-	
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT, GL_FILL);
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	auto parameter = shader->getParameter();
 
