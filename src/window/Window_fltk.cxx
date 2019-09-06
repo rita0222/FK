@@ -244,22 +244,22 @@ bool fk_Window::snapImage(string argFName, fk_ImageType argType, fk_SnapProcMode
 {
 	redraw();
 #ifdef WIN32
-	if(argMode == FK_SNAP_WIN32_GDI) {
+	if(argMode == fk_SnapProcMode::WIN32_GDI) {
 		if(SnapImageGDI(&snapBuffer) == false) return false;
 	}
 #else
-	argMode = FK_SNAP_GL_FRONT;
+	argMode = fk_SnapProcMode::FRONT;
 #endif
-	if(argMode != FK_SNAP_WIN32_GDI) {
+	if(argMode != fk_SnapProcMode::WIN32_GDI) {
 		if(engine.SnapImage(&snapBuffer, argMode) == false) return false;
 	}
 
 	switch(argType) {
-	  case FK_IMAGE_PNG:
+	  case fk_ImageType::PNG:
 		return snapBuffer.writePNG(argFName, false);
-	  case FK_IMAGE_JPG:
+	  case fk_ImageType::JPG:
 		return snapBuffer.writeJPG(argFName);
-	  case FK_IMAGE_BMP:
+	  case fk_ImageType::BMP:
 	  default:
 		break;
 	}
@@ -270,11 +270,11 @@ bool fk_Window::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 {
 	redraw();
 #ifdef WIN32
-	if(argMode == FK_SNAP_WIN32_GDI) {
+	if(argMode == fk_SnapProcMode::WIN32_GDI) {
 		return SnapImageGDI(argImage);
 	}
 #else
-	argMode = FK_SNAP_GL_FRONT;
+	argMode = fk_SnapProcMode::FRONT;
 #endif
 	return engine.SnapImage(argImage, argMode);
 }

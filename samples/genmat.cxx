@@ -89,7 +89,7 @@ int main(int, char *[])
 	const int		COUNT = 50;
 	int				i, j, c, diff;
 
-	fk_SetErrorMode(FK_ERR_INTERACTIVE);
+	fk_SetErrorMode(fk_ErrorMode::INTERACTIVE);
 
 	srand((unsigned int)(time(0)));
 

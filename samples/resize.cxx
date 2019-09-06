@@ -84,7 +84,7 @@ int main(int, char *[])
 	fk_Scene		Scene;
 	fk_Window		fkWindow(0, 0, 300, 300);
 
-	fk_SetErrorMode(FK_ERR_OUT_CONSOLE_INTERACTIVE);
+	fk_SetErrorMode(fk_ErrorMode::OUT_CONSOLE_INTERACTIVE);
 	MainWindow.end();
 	fk_Material::initDefault();
 

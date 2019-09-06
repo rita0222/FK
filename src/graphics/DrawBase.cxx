@@ -167,15 +167,15 @@ void fk_DrawBase::SetModel(fk_Model *argModel)
 void fk_DrawBase::SetLight(list<fk_Model *> *argList, fk_LightType argType)
 {
 	switch(argType) {
-	  case FK_PARALLEL_LIGHT:
+	  case fk_LightType::PARALLEL:
 		  parallelLightList = argList;
 		  return;
 
-	  case FK_POINT_LIGHT:
+	  case fk_LightType::POINT:
 		  pointLightList = argList;
 		  return;
 		  
-	  case FK_SPOT_LIGHT:
+	  case fk_LightType::SPOT:
 		  spotLightList = argList;
 		  return;
 
@@ -190,9 +190,9 @@ void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
 	SetMatrixParam(argParam);
 	SetMaterialParam(argParam);
-	SetLightParam(argParam, FK_PARALLEL_LIGHT);
-	SetLightParam(argParam, FK_POINT_LIGHT);
-	SetLightParam(argParam, FK_SPOT_LIGHT);
+	SetLightParam(argParam, fk_LightType::PARALLEL);
+	SetLightParam(argParam, fk_LightType::POINT);
+	SetLightParam(argParam, fk_LightType::SPOT);
 	return;
 }
 
@@ -236,19 +236,19 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 	vector<float>	attenuation(3);
 
 	switch(argType) {
-	  case FK_PARALLEL_LIGHT:
+	  case fk_LightType::PARALLEL:
 		  list = parallelLightList;
 		  lightName = parallelLightName;
 		  numName = parallelLightNumName;
 		  break;
 
-	  case FK_POINT_LIGHT:
+	  case fk_LightType::POINT:
 		  list = pointLightList;
 		  lightName = pointLightName;
 		  numName = pointLightNumName;
 		  break;
 
-	  case FK_SPOT_LIGHT:
+	  case fk_LightType::SPOT:
 		  list = spotLightList;
 		  lightName = spotLightName;
 		  numName = spotLightNumName;
@@ -264,12 +264,12 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 
 		string nameBase = lightName + "[" + to_string(lightID) + "]";
 
-		if(argType != FK_PARALLEL_LIGHT) {
+		if(argType != fk_LightType::PARALLEL) {
 			tmp = model->getInhPosition();
 			argParam->setRegister(nameBase + "." + lightPositionName, &tmp, lightName);
 		}
 
-		if(argType != FK_POINT_LIGHT) {
+		if(argType != fk_LightType::POINT) {
 			tmp = model->getInhVec();
 			argParam->setRegister(nameBase + "." + lightVecName, &tmp, lightName);
 		}
@@ -279,14 +279,14 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 		argParam->setRegister(nameBase + "." + lightSpecularName,
 							  &(model->getMaterial()->getSpecular()->col), lightName);
 
-		if(argType == FK_SPOT_LIGHT) {
+		if(argType == fk_LightType::SPOT) {
 			argParam->setRegister(nameBase + "." + lightSpotCutOffName,
 								  float(light->getSpotCutOff()), lightName);
 			argParam->setRegister(nameBase + "." + lightSpotExponentName,
 								  float(light->getSpotExponent()), lightName);
 		}
 
-		if(argType != FK_PARALLEL_LIGHT) {
+		if(argType != fk_LightType::PARALLEL) {
 			attenuation[0] = float(light->getAttenuation(0));
 			attenuation[1] = float(light->getAttenuation(1));
 			attenuation[2] = float(light->getAttenuation(2));

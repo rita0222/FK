@@ -76,10 +76,10 @@
 
 namespace FK {
 	//! 光源タイプを表す列挙型
-	enum fk_LightType {
-		FK_PARALLEL_LIGHT,		//!< 平行光源
-		FK_POINT_LIGHT,			//!< 点光源
-		FK_SPOT_LIGHT			//!< スポットライト
+	enum class fk_LightType {
+		PARALLEL,	//!< 平行光源
+		POINT,		//!< 点光源
+		SPOT		//!< スポットライト
 	};
 
 
@@ -128,7 +128,7 @@ namespace FK {
 		 *
 		 *	\param[in]	type		光源タイプ
 		 */
-		fk_Light(fk_LightType type = FK_PARALLEL_LIGHT);
+		fk_Light(fk_LightType type = fk_LightType::PARALLEL);
 
 		//! デストラクタ
 		virtual ~fk_Light();

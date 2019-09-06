@@ -284,10 +284,18 @@ void fk_GraphicsEngine::Draw(void)
 	ApplySceneParameter(true);
 
 	curProj->MakeMat();
+
 	fk_DrawBase::SetCamera(curDLink->getCamera());
-	fk_DrawBase::SetLight(curDLink->GetLightList(FK_PARALLEL_LIGHT), FK_PARALLEL_LIGHT);
-	fk_DrawBase::SetLight(curDLink->GetLightList(FK_POINT_LIGHT), FK_POINT_LIGHT);
-	fk_DrawBase::SetLight(curDLink->GetLightList(FK_SPOT_LIGHT), FK_SPOT_LIGHT);
+
+	fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::PARALLEL),
+						  fk_LightType::PARALLEL);
+
+	fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::POINT),
+						  fk_LightType::POINT);
+
+	fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::SPOT),
+						  fk_LightType::SPOT);
+
 	DrawObjs();
 
 	return;
@@ -687,7 +695,7 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 	if(static_cast<int>(snapBuffer.size()) != 3*wSize*hSize) {
 		snapBuffer.resize(static_cast<_st>(3*wSize*hSize));
 	}
-	if(argMode == FK_SNAP_GL_FRONT) {
+	if(argMode == fk_SnapProcMode::FRONT) {
 		glReadBuffer(GL_FRONT);
 	} else {
 		glReadBuffer(GL_BACK);

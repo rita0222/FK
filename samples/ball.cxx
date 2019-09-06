@@ -264,7 +264,7 @@ int main(int, char *[])
 	viewModel.glUpvec(0.0, 1.0, 0.0);
 
 	// ### LIGHT ###
-	light.setLightType(FK_POINT_LIGHT);
+	light.setLightType(fk_LightType::POINT);
 	light.setAttenuation(0.0, 0.0);
 	lightModel.setShape(&light);
 	lightModel.setMaterial(WhiteLight);

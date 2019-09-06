@@ -17,7 +17,7 @@ int main(int, char **)
 	// 初期化。カーネルファイル名とカーネル関数名。
 	// デバッグモードにしたければ第3引数にtrueを追加。
 
-	fk_SetErrorMode(FK_ERR_CONSOLE_INTERACTIVE);
+	fk_SetErrorMode(fk_ErrorMode::CONSOLE_INTERACTIVE);
 	if(opencl.deviceInit("oclsamp.cl", "fk_OpenCL", false) == false) {
 		cerr << "Dev Init Error." << endl;
 		return 1;

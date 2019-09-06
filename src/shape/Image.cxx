@@ -219,7 +219,7 @@ fk_ImageStatus fk_Image::CreateImg(const string argFile)
 
 	if(argFile == "") {
 		imageSize.w = imageSize.h = 0;
-		return FK_IMAGE_OK;
+		return fk_ImageStatus::OK;
 	}
 
 	if(IsBmpFile(argFile) == true) {
@@ -229,17 +229,17 @@ fk_ImageStatus fk_Image::CreateImg(const string argFile)
 		SetUpdate(true);
 		fk_ImageStatus status = LoadBmpFile(argFile);
 		switch(status) {
-		  case FK_IMAGE_OPENERROR:
-		  case FK_IMAGE_DATAERROR:
-		  case FK_IMAGE_READERROR:
+		  case fk_ImageStatus::OPENERROR:
+		  case fk_ImageStatus::DATAERROR:
+		  case fk_ImageStatus::READERROR:
 			return status;
 		  default:
 			break;
 		}
-		return FK_IMAGE_OK;
+		return fk_ImageStatus::OK;
 	}
 
-	return FK_IMAGE_DATAERROR;
+	return fk_ImageStatus::DATAERROR;
 }
 
 void fk_Image::CreateBuffer(bool argInitFlg)
@@ -254,7 +254,7 @@ fk_ImageStatus fk_Image::CreateImg(fk_ImType *argBuffer)
 
 	if(argBuffer == nullptr) {
 		imageSize.w = imageSize.h = 0;
-		return FK_IMAGE_OK;
+		return fk_ImageStatus::OK;
 	}
 
 	if(IsBmpData(argBuffer) == true) {
@@ -263,17 +263,17 @@ fk_ImageStatus fk_Image::CreateImg(fk_ImType *argBuffer)
 
 		fk_ImageStatus status = LoadBmpData(argBuffer);
 		switch(status) {
-		  case FK_IMAGE_OPENERROR:
-		  case FK_IMAGE_DATAERROR:
-		  case FK_IMAGE_READERROR:
+		  case fk_ImageStatus::OPENERROR:
+		  case fk_ImageStatus::DATAERROR:
+		  case fk_ImageStatus::READERROR:
 			return status;
 		  default:
 			break;
 		}
-		return FK_IMAGE_OK;
+		return fk_ImageStatus::OK;
 	}
 
-	return FK_IMAGE_DATAERROR;
+	return fk_ImageStatus::DATAERROR;
 }
 
 void fk_Image::CreateBuffer(const fk_Dimension argDim, bool argInitFlg)
@@ -292,8 +292,8 @@ void fk_Image::CreateBuffer(int argW, int argH, bool argInitFlg)
 		return;
 	}
 
-	tmpBufSizeW = GetFixVal(FK_FIX_LARGE, argW);
-	tmpBufSizeH = GetFixVal(FK_FIX_LARGE, argH);
+	tmpBufSizeW = GetFixVal(fk_ImageFix::FIX_LARGE, argW);
+	tmpBufSizeH = GetFixVal(fk_ImageFix::FIX_LARGE, argH);
 
 	if(tmpBufSizeW != bufSize.w || tmpBufSizeH != bufSize.h) {
 		init();
@@ -651,61 +651,61 @@ int fk_Image::GetFixVal(fk_ImageFix argFix, int argSize) const
 	int		trueVal = 0;
 
 	switch(argFix) {
-	  case FK_FIX_SMALL:
+	  case fk_ImageFix::FIX_SMALL:
 		for(trueVal = 64; trueVal <= 65536; trueVal *= 2) {
 			if(trueVal*2 > argSize) break;
 		}
 
 		break;
 
-	  case FK_FIX_LARGE:
+	  case fk_ImageFix::FIX_LARGE:
 		for(trueVal = 64; trueVal <= 65536; trueVal *= 2) {
 			if(trueVal >= argSize) break;
 		}
 
 		break;
 
-	  case FK_FIX_64:
+	  case fk_ImageFix::FIX_64:
 		trueVal = 64;
 		break;
 
-	  case FK_FIX_128:
+	  case fk_ImageFix::FIX_128:
 		trueVal = 128;
 		break;
 
-	  case FK_FIX_256:
+	  case fk_ImageFix::FIX_256:
 		trueVal = 256;
 		break;
 
-	  case FK_FIX_512:
+	  case fk_ImageFix::FIX_512:
 		trueVal = 512;
 		break;
 
-	  case FK_FIX_1024:
+	  case fk_ImageFix::FIX_1024:
 		trueVal = 1024;
 		break;
 
-	  case FK_FIX_2048:
+	  case fk_ImageFix::FIX_2048:
 		trueVal = 2048;
 		break;
 
-	  case FK_FIX_4096:
+	  case fk_ImageFix::FIX_4096:
 		trueVal = 4096;
 		break;
 
-	  case FK_FIX_8192:
+	  case fk_ImageFix::FIX_8192:
 		trueVal = 8192;
 		break;
 
-	  case FK_FIX_16384:
+	  case fk_ImageFix::FIX_16384:
 		trueVal = 16384;
 		break;
 
-	  case FK_FIX_32768:
+	  case fk_ImageFix::FIX_32768:
 		trueVal = 32768;
 		break;
 
-	  case FK_FIX_65536:
+	  case fk_ImageFix::FIX_65536:
 		trueVal = 65536;
 		break;
 

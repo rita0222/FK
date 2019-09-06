@@ -698,8 +698,8 @@ namespace FK {
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool	snapImage(std::string fileName,
-						  fk_ImageType format = FK_IMAGE_BMP,
-						  fk_SnapProcMode mode = FK_SNAP_GL_FRONT);
+						  fk_ImageType format = fk_ImageType::BMP,
+						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
 		//! 描画画像データ出力関数
 		/*!
@@ -716,7 +716,7 @@ namespace FK {
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool	snapImage(fk_Image *image,
-						  fk_SnapProcMode mode = FK_SNAP_GL_FRONT);
+						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 		//@}
 
 		//! \name 時間参照関数

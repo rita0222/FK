@@ -92,42 +92,42 @@ using fk_TexID = GLuint;
 namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-	enum fk_ImageStatus {
-		FK_IMAGE_OK,
-		FK_IMAGE_OPENERROR,
-		FK_IMAGE_DATAERROR,
-		FK_IMAGE_READERROR
+	enum class fk_ImageStatus {
+		OK,
+		OPENERROR,
+		DATAERROR,
+		READERROR
 	};
 
-	enum fk_ImageFix {
-		FK_FIX_LARGE,
-		FK_FIX_SMALL,
-		FK_FIX_64,
-		FK_FIX_128,
-		FK_FIX_256,
-		FK_FIX_512,
-		FK_FIX_1024,
-		FK_FIX_2048,
-		FK_FIX_4096,
-		FK_FIX_8192,
-		FK_FIX_16384,
-		FK_FIX_32768,
-		FK_FIX_65536
+	enum class fk_ImageFix {
+		FIX_LARGE,
+		FIX_SMALL,
+		FIX_64,
+		FIX_128,
+		FIX_256,
+		FIX_512,
+		FIX_1024,
+		FIX_2048,
+		FIX_4096,
+		FIX_8192,
+		FIX_16384,
+		FIX_32768,
+		FIX_65536
 	};
 #endif
 
 	//! 画像フォーマットを表す列挙型
-	enum fk_ImageType {
-		FK_IMAGE_BMP,		//!< Windows Bitmap (BMP) 形式
-		FK_IMAGE_PNG,		//!< PNG 形式
-		FK_IMAGE_JPG		//!< JPEG 形式
+	enum class fk_ImageType {
+		BMP,	//!< Windows Bitmap (BMP) 形式
+		PNG,	//!< PNG 形式
+		JPG		//!< JPEG 形式
 	};
 
 	//! 画像取り込み方法を表す列挙型
-	enum fk_SnapProcMode {
-		FK_SNAP_GL_FRONT,	//!< OpenGL フロントバッファ
-		FK_SNAP_GL_BACK,	//!< OpenGL バックバッファ
-		FK_SNAP_WIN32_GDI	//!< Win32 GDI (Windows プラットフォームのみ対応)
+	enum class fk_SnapProcMode {
+		FRONT,		//!< OpenGL フロントバッファ
+		BACK,		//!< OpenGL バックバッファ
+		WIN32_GDI	//!< Win32 GDI (Windows プラットフォームのみ対応)
 	};
 
 	//! 画像サイズを表すクラス

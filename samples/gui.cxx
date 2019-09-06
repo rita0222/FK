@@ -424,7 +424,7 @@ int main(int, char *[])
 					// VRML ファイルではなかったら
 					fl_alert("%s is not VRML2.0 file.", fileName.c_str());
 				} else {
-					shapeModel.setMaterialMode(FK_PARENT_MODE);
+					shapeModel.setMaterialMode(fk_MaterialMode::PARENT);
 				}
 			}
 		}

@@ -109,7 +109,7 @@ namespace FK {
 		bool				GetWindowPosition(fk_Vector, fk_Vector *);
 		//void				GetPickData(fk_PickData *, int, int, int);
 
-		bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
+		bool				SnapImage(fk_Image *, fk_SnapProcMode = fk_SnapProcMode::FRONT);
 
 		void				OpenGLInit(void);
 

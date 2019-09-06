@@ -905,8 +905,8 @@ namespace FK {
 		 *	\sa fk_Window::snapImage(std::string, fk_ImageType, fk_SnapProcMode)
 		 */
 		bool snapImage(std::string fileName,
-					   fk_ImageType format = FK_IMAGE_BMP,
-					   fk_SnapProcMode mode = FK_SNAP_GL_FRONT);
+					   fk_ImageType format = fk_ImageType::BMP,
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
 		//! 描画画像データ出力関数
 		/*!
@@ -927,7 +927,7 @@ namespace FK {
 		 */
 
 		bool snapImage(fk_Image *image,
-					   fk_SnapProcMode mode = FK_SNAP_GL_FRONT);
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 		//@}
 
 		//! \name メッセージ出力制御関数

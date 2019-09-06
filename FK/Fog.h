@@ -78,18 +78,18 @@
 namespace FK {
 
 	//! 霧効果の減衰関数を表す列挙型
-	enum fk_FogMode {
-		FK_LINEAR_FOG,		//!< 線形式
-		FK_EXP_FOG,			//!< 指数式
-		FK_EXP2_FOG,		//!< 指数(2乗)式
-		FK_NONE_FOG			//!< 無効
+	enum class fk_FogMode {
+		LINEAR,	//!< 線形式
+		EXP,	//!< 指数式
+		EXP2,	//!< 指数(2乗)式
+		NONE	//!< 無効
 	};
 
 	//! 霧効果のオプションを表す列挙型
-	enum fk_FogOption {
-		FK_FASTEST_FOG,		//!< 速度優先
-		FK_NICEST_FOG,		//!< 質優先
-		FK_NOOPTION_FOG		//!< 指定なし
+	enum class fk_FogOption {
+		FASTEST,	//!< 速度優先
+		NICEST,		//!< 質優先
+		NOOPTION	//!< 指定なし
 	};
 
 	//! シーン中の霧効果を制御するクラス

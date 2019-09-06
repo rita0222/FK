@@ -126,17 +126,17 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
 			fk_Light *light = dynamic_cast<fk_Light *>(argModel->getShape());
 			switch(light->getLightType()) {
-			  case FK_PARALLEL_LIGHT:
+			  case fk_LightType::PARALLEL:
 				  parallelLightList.remove(argModel);
 				  parallelLightList.push_front(argModel);
 				  break;
 
-			  case FK_POINT_LIGHT:
+			  case fk_LightType::POINT:
 				  pointLightList.remove(argModel);
 				  pointLightList.push_front(argModel);
 				  break;
 
-			  case FK_SPOT_LIGHT:
+			  case fk_LightType::SPOT:
 				  spotLightList.remove(argModel);
 				  spotLightList.push_front(argModel);
 				  break;
@@ -222,13 +222,13 @@ list<fk_Model *> * fk_DisplayLink::GetModelList(void)
 list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 {
 	switch(argType) {
-	  case FK_PARALLEL_LIGHT:
+	  case fk_LightType::PARALLEL:
 		  return &parallelLightList;
 
-	  case FK_POINT_LIGHT:
+	  case fk_LightType::POINT:
 		  return &pointLightList;
 
-	  case FK_SPOT_LIGHT:
+	  case fk_LightType::SPOT:
 		  return &spotLightList;
 
 	  default:
