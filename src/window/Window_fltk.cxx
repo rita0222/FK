@@ -84,7 +84,7 @@ using namespace FK;
 
 Fl_Window *			fk_Window::putWin = nullptr;
 Fl_Multi_Browser *	fk_Window::browser = nullptr;
-fk_PutStrMode		fk_Window::putStrMode = FK_PUTSTR_BROWSER;
+fk_PutStrMode		fk_Window::putStrMode = fk_PutStrMode::BROWSER;
 ofstream			fk_Window::putStrOFS;
 int					fk_Window::winNum = 0;
 Fl_Window *			fk_Window::error_win = nullptr;
@@ -363,25 +363,25 @@ void fk_Window::printf(const char *argFormat, ...)
 void fk_Window::putString(const string &argStr)
 {
 	switch(putStrMode) {
-	  case FK_PUTSTR_CONSOLE:
+	  case fk_PutStrMode::CONSOLE:
 		cout << argStr << endl;
 		return;
 
-	  case FK_PUTSTR_ERR_CONSOLE:
+	  case fk_PutStrMode::ERR_CONSOLE:
 		cerr << argStr << endl;
 		return;
 
-	  case FK_PUTSTR_BROWSER:
+	  case fk_PutStrMode::BROWSER:
 		PutBrowser(argStr);
 		return;
 
-	  case FK_PUTSTR_FILE:
+	  case fk_PutStrMode::FILE:
 		if(putStrOFS.is_open() == true) {
 			putStrOFS << argStr << endl;
 		}
 		return;
 
-	  case FK_PUTSTR_NONE:
+	  case fk_PutStrMode::NONE:
 	  default:
 		break;
 	}

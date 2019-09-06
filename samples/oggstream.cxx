@@ -39,10 +39,10 @@ int main(int, char *[])
 	while(window.update() == true) {
 		blockModel.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
 
-		if(window.getKeyStatus('Z') == FK_SW_DOWN && volume < 1.0) {
+		if(window.getKeyStatus('Z') == fk_Switch::DOWN && volume < 1.0) {
 			volume += 0.1;
 		}
-		if(window.getKeyStatus('X') == FK_SW_DOWN && volume > 0.0) {
+		if(window.getKeyStatus('X') == fk_Switch::DOWN && volume > 0.0) {
 			volume -= 0.1;
 		}
 	}

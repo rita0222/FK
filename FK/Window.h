@@ -95,72 +95,71 @@ namespace FK {
 	const fk_FrameMode FK_SKIP_FRAME	= 0x0002;	//!< フレーム間引き制御
 
 	//! 特殊キーを表す列挙型
-	enum fk_SpecialKey {
-		FK_SHIFT_R,		//!< 右シフトキー
-		FK_SHIFT_L,		//!< 左シフトキー
-		FK_CTRL_R,		//!< 右コントロールキー
-		FK_CTRL_L,		//!< 左コントロールキー
-		FK_ALT_R,		//!< 右オルトキー
-		FK_ALT_L,		//!< 左オルトキー
-		FK_ENTER,		//!< エンター(改行、リターン)キー
-		FK_BACKSPACE,	//!< バックスペース(後退)キー
-		FK_DELETE,		//!< デリート(削除)キー
-		FK_CAPS_LOCK,	//!< キャップスロックキー
-		FK_TAB,			//!< タブキー
-		FK_PAGE_UP,		//!< ページアップキー
-		FK_PAGE_DOWN,	//!< ページダウンキー
-		FK_HOME,		//!< ホームキー
-		FK_END,			//!< エンドキー
-		FK_INSERT,		//!< インサートキー
-		FK_LEFT,		//!< 左矢印キー
-		FK_RIGHT,		//!< 右矢印キー
-		FK_UP,			//!< 上矢印キー
-		FK_DOWN,		//!< 下矢印キー
-		FK_F1,			//!< F1 ファンクションキー
-		FK_F2,			//!< F2 ファンクションキー
-		FK_F3,			//!< F3 ファンクションキー
-		FK_F4,			//!< F4 ファンクションキー
-		FK_F5,			//!< F5 ファンクションキー
-		FK_F6,			//!< F6 ファンクションキー
-		FK_F7,			//!< F7 ファンクションキー
-		FK_F8,			//!< F8 ファンクションキー
-		FK_F9,			//!< F9 ファンクションキー
-		FK_F10,			//!< F10 ファンクションキー
-		FK_F11,			//!< F11 ファンクションキー
-		FK_F12			//!< F12 ファンクションキー
+	enum class fk_SpecialKey {
+		SHIFT_R,	//!< 右シフトキー
+		SHIFT_L,	//!< 左シフトキー
+		CTRL_R,		//!< 右コントロールキー
+		CTRL_L,		//!< 左コントロールキー
+		ALT_R,		//!< 右オルトキー
+		ALT_L,		//!< 左オルトキー
+		ENTER,		//!< エンター(改行、リターン)キー
+		BACKSPACE,	//!< バックスペース(後退)キー
+		DELETE,		//!< デリート(削除)キー
+		CAPS_LOCK,	//!< キャップスロックキー
+		TAB,		//!< タブキー
+		PAGE_UP,	//!< ページアップキー
+		PAGE_DOWN,	//!< ページダウンキー
+		HOME,		//!< ホームキー
+		END,		//!< エンドキー
+		INSERT,		//!< インサートキー
+		LEFT,		//!< 左矢印キー
+		RIGHT,		//!< 右矢印キー
+		UP,			//!< 上矢印キー
+		DOWN,		//!< 下矢印キー
+		F1,			//!< F1 ファンクションキー
+		F2,			//!< F2 ファンクションキー
+		F3,			//!< F3 ファンクションキー
+		F4,			//!< F4 ファンクションキー
+		F5,			//!< F5 ファンクションキー
+		F6,			//!< F6 ファンクションキー
+		F7,			//!< F7 ファンクションキー
+		F8,			//!< F8 ファンクションキー
+		F9,			//!< F9 ファンクションキー
+		F10,		//!< F10 ファンクションキー
+		F11,		//!< F11 ファンクションキー
+		F12			//!< F12 ファンクションキー
 	};
 
 	//! マウスボタンを表す列挙型
-	enum fk_MouseButton {
-		FK_MOUSE1,		//!< マウス左クリック(第1ボタン)
-		FK_MOUSE2,		//!< マウス中クリック、あるいはホイールクリック(第2ボタン)
-		FK_MOUSE3		//!< マウス右クリック(第3ボタン)
+	enum class fk_MouseButton {
+		M1,		//!< マウス左クリック(第1ボタン)
+		M2,		//!< マウス中クリック、あるいはホイールクリック(第2ボタン)
+		M3		//!< マウス右クリック(第3ボタン)
 	};
 
 	//! メッセージ出力タイプを表す列挙型
-	enum fk_PutStrMode {
-		FK_PUTSTR_NONE,			//!< 出力なし
-		FK_PUTSTR_CONSOLE,		//!< コンソール標準出力
-		FK_PUTSTR_ERR_CONSOLE,	//!< コンソールエラー出力
-		FK_PUTSTR_BROWSER,		//!< 専用ブラウザ出力
-		FK_PUTSTR_FILE			//!< ファイル出力
+	enum class fk_PutStrMode {
+		NONE,			//!< 出力なし
+		CONSOLE,		//!< コンソール標準出力
+		ERR_CONSOLE,	//!< コンソールエラー出力
+		BROWSER,		//!< 専用ブラウザ出力
+		FILE			//!< ファイル出力
 	};
 
 	//! ボタン系デバイス状態を表す列挙型
-	enum fk_SwitchStatus {
-		FK_SW_RELEASE,		//!< 離しっぱなしの状態
-		FK_SW_UP,			//!< 離した瞬間
-		FK_SW_DOWN,			//!< 押した瞬間
-		FK_SW_PRESS			//!< 押しっぱなしの状態
+	enum class fk_Switch {
+		RELEASE,	//!< 離しっぱなしの状態
+		UP,			//!< 離した瞬間
+		DOWN,		//!< 押した瞬間
+		PRESS		//!< 押しっぱなしの状態
 	};
 
-	using fkut_SwitchStatus = fk_SwitchStatus;
+	using fkut_SwitchStatus = fk_Switch;
 
-#define FKUT_SW_RELEASE		FK_SW_RELEASE
-#define FKUT_SW_UP			FK_SW_UP
-#define FKUT_SW_DOWN		FK_SW_DOWN
-#define FKUT_SW_PRESS		FK_SW_PRESS
-
+	const fk_Switch FKUT_SW_RELEASE = fk_Switch::RELEASE;
+	const fk_Switch FKUT_SW_UP = fk_Switch::UP;
+	const fk_Switch FKUT_SW_DOWN = fk_Switch::DOWN;
+	const fk_Switch FKUT_SW_PRESS = fk_Switch::PRESS;
 
 	//! FLTK 用シーン描画ウィジェットクラス
 	/*!
@@ -290,7 +289,7 @@ namespace FK {
 		 *		キーを表す文字。ここには、スペース(' ') や数字 ('1') なども含みます。
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -308,7 +307,7 @@ namespace FK {
 		 *
 		 *	\sa getSpecialKeyStatus()
 		 */
-		bool	getKeyStatus(char key, fk_SwitchStatus status, bool insideFlag = true);
+		bool	getKeyStatus(char key, fk_Switch status, bool insideFlag = true);
 	
 		//! 特殊キー状態取得関数
 		/*!
@@ -330,7 +329,7 @@ namespace FK {
 		 *		キーを表す文字。
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については ::fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -349,7 +348,7 @@ namespace FK {
 		 *	\sa getKeyStatus()
 		 */
 		bool	getSpecialKeyStatus(fk_SpecialKey key,
-									fk_SwitchStatus status, bool insideFlag = true);
+									fk_Switch status, bool insideFlag = true);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getKeyStatus(char key, bool insideFlag = true);
@@ -424,7 +423,7 @@ namespace FK {
 		 *	\param[in]	button		マウスボタンの種類
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については ::fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -435,7 +434,7 @@ namespace FK {
 		 *		キーが status で指定した状態を満たしていれば true を、
 		 *		そうでなければ false を返します。
 		 */
-		bool	getMouseStatus(fk_MouseButton button, fk_SwitchStatus status,
+		bool	getMouseStatus(fk_MouseButton button, fk_Switch status,
 							   bool insideFlag = true);
 
 #ifndef FK_DOXYGEN_USER_PROCESS

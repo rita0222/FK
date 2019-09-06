@@ -963,7 +963,7 @@ void fk_ShapeViewer::DragShape(void)
 	double		tmpX, tmpY;
 
 	if(viewWin == nullptr) return;
-	if(viewWin->getMouseStatus(FK_MOUSE1) == true) {
+	if(viewWin->getMouseStatus(fk_MouseButton::M1) == true) {
 		moveFlag = true;
 		double oldX = mouseX;
 		double oldY = mouseY;
@@ -984,19 +984,19 @@ void fk_ShapeViewer::KeyHandle(void)
 	if(viewWin == nullptr) return;
 
 	if(viewWin->getKeyStatus(' ', false) == true) {
-		if(viewWin->getSpecialKeyStatus(FK_SHIFT_R, false) == true ||
-		   viewWin->getSpecialKeyStatus(FK_SHIFT_L, false) == true) {
+		if(viewWin->getSpecialKeyStatus(fk_SpecialKey::SHIFT_R, false) == true ||
+		   viewWin->getSpecialKeyStatus(fk_SpecialKey::SHIFT_L, false) == true) {
 			setScale(getScale()/1.005);
 		} else {
 			setScale(getScale()*1.005);
 		}
 	}
 
-	if(viewWin->getSpecialKeyStatus(FK_LEFT, false) == true) {
+	if(viewWin->getSpecialKeyStatus(fk_SpecialKey::LEFT, false) == true) {
 		setHead(getHead() - 0.02);
 	}
 
-	if(viewWin->getSpecialKeyStatus(FK_RIGHT, false) == true) {
+	if(viewWin->getSpecialKeyStatus(fk_SpecialKey::RIGHT, false) == true) {
 		setHead(getHead() + 0.02);
 	}
 

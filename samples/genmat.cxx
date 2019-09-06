@@ -120,7 +120,7 @@ int main(int, char *[])
 
 		if(largeV[0] != largeV[2]) diff++;
 	}
-	fk_Window::setPutStrMode(FK_PUTSTR_CONSOLE);
+	fk_Window::setPutStrMode(fk_PutStrMode::CONSOLE);
 	fk_Window::putString("Diff Count = " + to_string(diff));
 
 	return 0;

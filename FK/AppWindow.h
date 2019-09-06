@@ -758,7 +758,7 @@ namespace FK {
 		 *		スペースキーの状態を取得したい場合は「' '」と入力します。
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlg
 		 *		true だった場合、
@@ -771,12 +771,12 @@ namespace FK {
 		 *
 		 *	\sa getSpecialKeyStatus(), update()
 		 */
-		bool	getKeyStatus(char keyChar, fk_SwitchStatus status, bool insideFlg = false);
+		bool	getKeyStatus(char keyChar, fk_Switch status, bool insideFlg = false);
 
 		//! 特殊キー状態取得関数
 		/*!
 		 *	特殊キーの入力状態を検出します。
-		 *	引数として、検出したいキーに対応した ::fk_SpecialKey 型の値を入力します。
+		 *	引数として、検出したいキーに対応した fk_SpecialKey 型の値を入力します。
 		 *	例えば、上矢印キーの状態を取得したい場合には「FK_UP」を入力します。
 		 *	通常キーの状態取得は getKeyStatus() を使います。
 		 *
@@ -784,7 +784,7 @@ namespace FK {
 		 *		状態を取得したいキーに対応した値。
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlg
 		 *		true だった場合、
@@ -801,11 +801,11 @@ namespace FK {
 		 *	\sa getKeyStatus(), update()
 		 */
 		bool	getSpecialKeyStatus(fk_SpecialKey keyCode,
-									fk_SwitchStatus status, bool insideFlg = false);
+									fk_Switch status, bool insideFlg = false);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_SwitchStatus	getSpecialKeyStatus(fk_SpecialKey keyCode);
-		fk_SwitchStatus	getKeyStatus(char keyChar);
+		fk_Switch	getSpecialKeyStatus(fk_SpecialKey keyCode);
+		fk_Switch	getKeyStatus(char keyChar);
 #endif
 		//@}
 
@@ -815,12 +815,12 @@ namespace FK {
 		//! マウスボタン状態取得関数
 		/*!
 		 *	マウスボタンのクリック状態を検出します。
-		 *	マウスボタンの種類については、 ::fk_MouseButton の項目を参照して下さい。
+		 *	マウスボタンの種類については、 fk_MouseButton の項目を参照して下さい。
 		 *
 		 *	\param[in]		buttonCode		マウスボタンの種類
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -832,10 +832,10 @@ namespace FK {
 		 *		そうでなければ false を返します。
 		 */
 		bool	getMouseStatus(fk_MouseButton buttonCode,
-							   fk_SwitchStatus status, bool insideFlag);
+							   fk_Switch status, bool insideFlag);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_SwitchStatus		getMouseStatus(fk_MouseButton buttonCode);
+		fk_Switch		getMouseStatus(fk_MouseButton buttonCode);
 #endif	
 
 		//! マウスポインタ位置取得関数

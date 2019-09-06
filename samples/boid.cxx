@@ -224,13 +224,13 @@ int main(int, char **)
 
 	while(win.update() == true) {
 		// Sキーで「Separate(分離)」を OFF に
-		bool sMode = win.getKeyStatus('S', FK_SW_RELEASE);
+		bool sMode = win.getKeyStatus('S', fk_Switch::RELEASE);
 
 		// Aキーで「Alignment(整列)」を OFF に
-		bool aMode = win.getKeyStatus('A', FK_SW_RELEASE);
+		bool aMode = win.getKeyStatus('A', fk_Switch::RELEASE);
 
 		// Cキーで「Cohesion(結合)」を OFF に
-		bool cMode = win.getKeyStatus('C', FK_SW_RELEASE);
+		bool cMode = win.getKeyStatus('C', fk_Switch::RELEASE);
 
 		// 群集の前進処理
 		boid.forward(sMode, aMode, cMode);

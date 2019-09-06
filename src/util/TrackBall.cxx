@@ -92,10 +92,10 @@ fk_TrackBall::fk_TrackBall(fk_Window *p_fk_win, fk_Model *p_camera)
 	echoX = 0;
 	echoY = 0;
 
-	lookButton = FK_MOUSE3;
-	distButton[0] = FK_MOUSE1;
-	distButton[1] = FK_MOUSE3;
-	moveButton = FK_MOUSE2;
+	lookButton = fk_MouseButton::M3;
+	distButton[0] = fk_MouseButton::M1;
+	distButton[1] = fk_MouseButton::M3;
+	moveButton = fk_MouseButton::M2;
 
 	bEcho = false;
 
@@ -165,13 +165,16 @@ void fk_TrackBall::controlLookToDist()
 {
 	static fk_Vector	prePos;
 	prePos = camera->getPosition();
-	bool bShiftState = fk_win->getSpecialKeyStatus(FK_SHIFT_L, false) || fk_win->getSpecialKeyStatus(FK_SHIFT_R, false);
+	bool bShiftState =
+		fk_win->getSpecialKeyStatus(fk_SpecialKey::SHIFT_L, false) ||
+		fk_win->getSpecialKeyStatus(fk_SpecialKey::SHIFT_R, false);
 
 	camera->loTranslate(0.0, 0.0, fk_win->getMouseWheelStatus()*5.0);
 	if((lookPos - camera->getPosition()).dist() < 5.0) camera->glMoveTo(prePos);
 
 	// 初回クリック時
-	if( (fk_win->getMouseStatus(distButton[0], overCheck) & fk_win->getMouseStatus(distButton[1], overCheck) & !distClick)
+	if( (fk_win->getMouseStatus(distButton[0], overCheck) &
+		 fk_win->getMouseStatus(distButton[1], overCheck) & !distClick)
 		|| (bShiftState & fk_win->getMouseStatus(lookButton, overCheck) & !distClick) ) {
 		fk_win->getMousePosition(&oldX, &oldY, overCheck);
 		distClick = true;
