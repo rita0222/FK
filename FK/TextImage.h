@@ -84,17 +84,17 @@ namespace FK {
 	class fk_FTFace;
 
 	//! 文字列板の文字列配置を表す列挙型
-	enum fk_TextAlign {
-		FK_ALIGN_LEFT,		//!< 左寄せ
-		FK_ALIGN_CENTER,	//!< 中寄せ
-		FK_ALIGN_RIGHT		//!< 右寄せ
+	enum class fk_TextAlign {
+		LEFT,	//!< 左寄せ
+		CENTER,	//!< 中寄せ
+		RIGHT	//!< 右寄せ
 	};
 
 	//! 文字列板の文字送りモードを表す列挙型
-	enum fk_TextSendingMode {
-		FK_SENDING_ALL,		//!< 全体一括
-		FK_SENDING_CHAR,	//!< 文字単位
-		FK_SENDING_LINE		//!< 行単位
+	enum class fk_TextSendingMode {
+		ALL,	//!< 全体一括
+		CHAR,	//!< 文字単位
+		LINE	//!< 行単位
 	};
 
 
@@ -704,7 +704,7 @@ namespace FK {
 		 *	setMinLineWidth() によって画像の横幅をあらかじめ設定した場合などは、
 		 *	行の横幅が画像の横幅に満たない状況が生じます。
 		 *	このような行に対し、本関数でどちら側に寄るのかを設定します。
-		 *	デフォルトは FK_ALIGN_LEFT 、つまり左寄せとなっています。
+		 *	デフォルトは fk_TextAlign::LEFT 、つまり左寄せとなっています。
 		 *
 		 *	\param[in]	align		アライメント
 		 *
@@ -803,7 +803,7 @@ namespace FK {
 		 *	\return		文字列板生成に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool	loadStrFile(const std::string fileName,
-							fk_StringCode code = FK_STR_UTF16);
+							fk_StringCode code = fk_StringCode::UTF16);
 		//@}
 
 		//! \name 文字列入力後情報参照関数
@@ -956,9 +956,9 @@ namespace FK {
 		 *
 		 *	\param[in]	mode
 		 *		文字送りモード。以下の値が設定できます。
-		 *		- FK_SENDING_CHAR: 一文字ずつ送るモード。
-		 *		- FK_SENDING_LINE: 一行ずつ送るモード。
-		 *		- FK_SENDING_ALL: 文字送りを無効とするモード。
+		 *		- fk_TextSendingMode::CHAR: 一文字ずつ送るモード。
+		 *		- fk_TextSendingMode::LINE: 一行ずつ送るモード。
+		 *		- fk_TextSendingMode::ALL: 文字送りを無効とするモード。
 		 *
 		 *	\sa send(), finish(), clear()
 		 */

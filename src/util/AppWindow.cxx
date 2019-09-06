@@ -264,7 +264,7 @@ fk_AppWindow::~fk_AppWindow(void)
 
 void fk_AppWindow::setWindowName(const std::string &name)
 {
-	mainWin->label(fk_Code::utf8(name.c_str(), FK_STR_SJIS));
+	mainWin->label(name.c_str());
 	return;
 }
 
@@ -311,7 +311,7 @@ void fk_AppWindow::setTrackBallMode(bool mode)
 	tbFlag = mode;
 }
 
-void fk_AppWindow::showGuide(fk_GuideMode mode)
+void fk_AppWindow::showGuide(fk_Guide mode)
 {
 	guide.entryScene(ref_scene, mode);
 }

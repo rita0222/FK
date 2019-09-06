@@ -74,14 +74,15 @@
 
 #include <functional>
 #include <FK/Matrix.h>
+#include <FK/Math.h>
 
 namespace FK {
 	//! 投影法を表す列挙型
-	enum fk_ProjectMode {
-		FK_NONE_PROJ_MODE,		//!< 指定なし
-		FK_PERSPECTIVE_MODE,	//!< 対称透視投影法
-		FK_FRUSTUM_MODE,		//!< 一般透視投影法
-		FK_ORTHO_MODE			//!< 平行投影法
+	enum class fk_ProjectMode {
+		NONE,			//!< 指定なし
+		PERSPECTIVE,	//!< 対称透視投影法
+		FRUSTUM,		//!< 一般透視投影法
+		ORTHO			//!< 平行投影法
 	};
 
 
@@ -97,7 +98,7 @@ namespace FK {
 	public:
 
 		//! コンストラクタ
-		fk_ProjectBase(fk_ProjectMode = FK_NONE_PROJ_MODE);
+		fk_ProjectBase(fk_ProjectMode = fk_ProjectMode::NONE);
 
 		//! デストラクタ
 		virtual ~fk_ProjectBase();
@@ -176,7 +177,7 @@ namespace FK {
 		 *	\param[in]	near	クリッピング近距離面への距離
 		 *	\param[in]	far		クリッピング遠距離面への距離
 		 */
-		fk_Perspective(double fovy = 2.0*FK_PI/9.0,
+		fk_Perspective(double fovy = 2.0 * fk_Math::PI/9.0,
 					   double near = 1.0,
 					   double far = 6000.0);
 

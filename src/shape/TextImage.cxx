@@ -450,8 +450,8 @@ fk_TextImage::fk_TextImage(void)
 	bgColor.init(0.0, 0.0, 0.0, 1.0);
 	shadowColor.init(0.0, 0.0, 0.0, 1.0);
 
-	alignMode = FK_ALIGN_LEFT;
-	sendingMode = FK_SENDING_ALL;
+	alignMode = fk_TextAlign::LEFT;
+	sendingMode = fk_TextSendingMode::ALL;
 
 	face = new fk_FTFace;
 	return;
@@ -631,15 +631,15 @@ bool fk_TextImage::send(void)
 	if(sp == charArray.size()) return false;
 
 	switch(sendingMode) {
-	  case FK_SENDING_ALL:
+	  case fk_TextSendingMode::ALL:
 		endPos = charArray.size();
 		break;
 
-	  case FK_SENDING_CHAR:
+	  case fk_TextSendingMode::CHAR:
 		endPos = sp + 1;
 		break;
 
-	  case FK_SENDING_LINE:
+	  case fk_TextSendingMode::LINE:
 
 		for(i = sp + 1; i < charArray.size(); i++) {
 			if(lineMap[sp] != lineMap[i]) break;
@@ -741,7 +741,7 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	CalcTextOffset();
 	ReCalcCharOffset();
 	InitTextImage();
-	if(sendingMode == FK_SENDING_ALL) {
+	if(sendingMode == fk_TextSendingMode::ALL) {
 		for(i = 0; i < int(charArray.size()); i++) CopyCharImage(i);
 		ClearCharImages();
 		sendPos = int(charArray.size());
@@ -1175,15 +1175,15 @@ void fk_TextImage::CalcTextOffset(void)
 		curH = lineArray[lineID].h;
 
 		switch(alignMode) {
-		  case FK_ALIGN_LEFT:
+		  case fk_TextAlign::LEFT:
 			xOffset = leftOffset;
 			break;
 
-		  case FK_ALIGN_CENTER:
+		  case fk_TextAlign::CENTER:
 			xOffset = (trueWidth - curW)/2 + leftOffset;
 			break;
 
-		  case FK_ALIGN_RIGHT:
+		  case fk_TextAlign::RIGHT:
 			xOffset = trueWidth - curW + leftOffset;
 			break;
 

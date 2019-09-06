@@ -132,7 +132,7 @@ namespace FK {
 		 *		}
 		 *
 		 *	ここでの比較は、各成分の比較において
-		 *	FK_MATRIX_EPS までの数値誤差を許容しています。
+		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 *	次元数が異なる場合は、無条件に偽となります。
 		 */
 		bool	operator ==(const fk_GenMatrix &) const;
@@ -148,7 +148,7 @@ namespace FK {
 		 *		}
 		 *
 		 *	ここでの比較は、各成分の比較において
-		 *	FK_MATRIX_EPS までの数値誤差を許容しています。
+		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 *	次元数が異なる場合は、無条件に真となります。
 		 */
 		bool	operator !=(const fk_GenMatrix &) const;

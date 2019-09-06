@@ -78,7 +78,7 @@ using namespace FK;
 
 static int dCmp(double a, double b)
 {
-	if(fabs(a - b) < FK_VECTOREPS) {
+	if(fabs(a - b) < fk_Vector::VECTOREPS) {
 		return 0;
 	}
 
@@ -127,7 +127,7 @@ fk_Vector & fk_Vector::operator -(void) const
 bool fk_Vector::operator ==(const fk_Vector &v) const
 {
 	fk_Vector tmp(v.x - x, v.y - y, v.z - z);
-	if(tmp.dist2() < FK_VECTOREPS) {
+	if(tmp.dist2() < VECTOREPS) {
 		return true;
 	}
 	return false;
@@ -136,7 +136,7 @@ bool fk_Vector::operator ==(const fk_Vector &v) const
 bool fk_Vector::operator !=(const fk_Vector &v) const
 {
 	fk_Vector tmp(v.x - x, v.y - y, v.z - z);
-	if(tmp.dist2() < FK_VECTOREPS) {
+	if(tmp.dist2() < VECTOREPS) {
 		return false;
 	}
 	return true;
@@ -346,7 +346,7 @@ bool fk_Vector::isZero(void) const
 {
 	double	d = dist2();
 
-	if(d < FK_VECTOREPS) return true;
+	if(d < VECTOREPS) return true;
 	return false;
 }
 
@@ -355,7 +355,7 @@ bool fk_Vector::normalize(void)
 	double	dd = dist2();
 	double	d;
 
-	if(dd < FK_VECTOREPS) {
+	if(dd < VECTOREPS) {
 		return false;
 	}
 	d = sqrt(dd);
@@ -373,7 +373,7 @@ fk_Vector fk_Vector::proj(const fk_Vector &argV) const
 	double		d;
 
 	d = argV.dist2();
-	if(d < FK_EPS) return ans;
+	if(d < VECTOREPS) return ans;
 
 	ans = (((*this) * argV)/d) * argV;
 	return ans;
@@ -431,7 +431,7 @@ fk_HVector::fk_HVector(const fk_HVector &argHVec)
 bool fk_HVector::operator ==(const fk_HVector &a) const
 {
 	if(a.getV() == this->getV() &&
-	   a.w - w < FK_VECTOREPS && a.w - w > -FK_VECTOREPS) {
+	   a.w - w < VECTOREPS && a.w - w > -VECTOREPS) {
 		return true;
 	} else {
 		return false;
@@ -441,7 +441,7 @@ bool fk_HVector::operator ==(const fk_HVector &a) const
 bool fk_HVector::operator !=(const fk_HVector &a) const
 {
 	if(a.getV() == this->getV() &&
-	   a.w - w < FK_VECTOREPS && a.w - w > -FK_VECTOREPS) {
+	   a.w - w < VECTOREPS && a.w - w > -VECTOREPS) {
 		return false;
 	} else {
 		return true;
@@ -663,7 +663,7 @@ fk_TexCoord & fk_TexCoord::operator =(const fk_TexCoord &argCoord)
 bool fk_TexCoord::operator ==(const fk_TexCoord &c) const
 {
 	fk_TexCoord	tmp(c.x - x, c.y - y);
-	if(tmp.x * tmp.x + tmp.y * tmp.y < float(FK_VECTOREPS)) return true;
+	if(tmp.x * tmp.x + tmp.y * tmp.y < float(fk_Vector::VECTOREPS)) return true;
 	return false;
 }
 

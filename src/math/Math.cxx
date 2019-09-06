@@ -82,7 +82,7 @@ bool fk_Math::isOnLine(const fk_Vector &argA,
 
 	tmpVec = (argP - argA) ^ (argP - argB);
 
-	if(tmpVec.dist2() < FK_EPS) return true;
+	if(tmpVec.dist2() < EPS) return true;
 	return false;
 }
 
@@ -103,7 +103,7 @@ bool fk_Math::isOnLineSegment(const fk_Vector &argA,
 	vec1.normalize();
 	vec2.normalize();
 
-	if(vec1 * vec2 < -1.0 + FK_EPS) return true;
+	if(vec1 * vec2 < -1.0 + EPS) return true;
 	return false;
 }
 
@@ -163,14 +163,14 @@ bool fk_Math::isCrossLineSegment(const fk_Vector &argA,
 
 	if(mat.inverse() == true) {
 		tmpVec1 = mat * tmpVec0;
-		if(fabs(tmpVec1.z) > FK_EPS) return false;
+		if(fabs(tmpVec1.z) > EPS) return false;
 
 		if(argOpenFlg == true) {
-			if(tmpVec1.x > -FK_EPS && tmpVec1.x < 1.0 + FK_EPS &&
-			   tmpVec1.y > -FK_EPS && tmpVec1.y < 1.0 + FK_EPS) return true;
+			if(tmpVec1.x > -EPS && tmpVec1.x < 1.0 + EPS &&
+			   tmpVec1.y > -EPS && tmpVec1.y < 1.0 + EPS) return true;
 		} else {
-			if(tmpVec1.x > FK_EPS && tmpVec1.x < 1.0 - FK_EPS &&
-			   tmpVec1.y > FK_EPS && tmpVec1.y < 1.0 - FK_EPS) return true;
+			if(tmpVec1.x > EPS && tmpVec1.x < 1.0 - EPS &&
+			   tmpVec1.y > EPS && tmpVec1.y < 1.0 - EPS) return true;
 		}
 
 		return false;
@@ -182,15 +182,15 @@ bool fk_Math::isCrossLineSegment(const fk_Vector &argA,
 	tmpVec1.normalize();
 
 	inner = tmpVec0 * tmpVec1;
-	if(inner < -1.0 + FK_EPS) return true;
-	if(inner < 1.0 - FK_EPS) return false;
+	if(inner < -1.0 + EPS) return true;
+	if(inner < 1.0 - EPS) return false;
 
 	tmpVec0 = argA - argD;
 	tmpVec1 = argB - argD;
 	tmpVec0.normalize();
 	tmpVec1.normalize();
 
-	if(tmpVec0 * tmpVec1 < -1.0 + FK_EPS) return true;
+	if(tmpVec0 * tmpVec1 < -1.0 + EPS) return true;
 
 	return false;
 }
@@ -259,7 +259,7 @@ fk_Quaternion fk_Math::quatInterSphere(const fk_Quaternion &argQ1,
 
 	theta = acos(prod);
 	sinTheta = sin(theta);
-	if(fabs(sinTheta) < FK_VECTOREPS) {
+	if(fabs(sinTheta) < fk_Vector::VECTOREPS) {
 		q3 = quatInterLinear(argQ1, argQ2, argT);
 	} else {
 		q3 = (sin(theta * (1.0 - argT))/sinTheta) * q1
@@ -286,17 +286,17 @@ double fk_Math::calcClosestPtSegToSeg(const fk_Vector &p1, const fk_Vector &q1,
 	double a = d1*d1;
 	double e = d2*d2;
 	double f = d2*r;
-	if(a < FK_EPS && e < FK_EPS) {
+	if(a < EPS && e < EPS) {
 		*s = *t = 0.0;
 		*c1 = p1;
 		*c2 = p2;
-	} else if(a < FK_EPS) {
+	} else if(a < EPS) {
 		*s = 0.0;
 		*t = f/e;
 		*t = clamp(*t, 0.0, 1.0);
 	} else {
 		double c = d1*r;
-		if(e < FK_EPS) {
+		if(e < EPS) {
 			*t = 0.0;
 			*s = clamp(-c/a, 0.0, 1.0);
 		} else {
@@ -358,8 +358,8 @@ bool fk_Math::calcCrossLineAndTri(const fk_Vector &argP,
 
 	if(argR != nullptr) argR->set(R.x, R.y, R.z);
 
-	if(R.x <= -FK_EPS || R.y <= -FK_EPS || R.x + R.y >= 1.0 + FK_EPS ||
-	   R.z <= -FK_EPS || R.z >= 1.0 + FK_EPS) {
+	if(R.x <= -EPS || R.y <= -EPS || R.x + R.y >= 1.0 + EPS ||
+	   R.z <= -EPS || R.z >= 1.0 + EPS) {
 		return false;
 	}
 

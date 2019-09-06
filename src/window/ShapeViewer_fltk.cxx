@@ -91,7 +91,7 @@
 using namespace std;
 using namespace FK;
 
-static fk_ShapeGUIMenuItem	globalMenuStatus = FK_SV_GUI_NONE;
+static fk_ShapeGUIMenuItem	globalMenuStatus = fk_ShapeGUIMenuItem::NONE;
 static bool					globalMenuValue = true;
 
 namespace FK {
@@ -148,43 +148,43 @@ static void LocalMenuToggle(Fl_Widget *argW, void *)
 	if(mItem == nullptr) return;
 	labelString = mItem->label();
 	if(labelString == "&WRLOpen") {
-		globalMenuStatus = FK_SV_GUI_WRLOPEN;
+		globalMenuStatus = fk_ShapeGUIMenuItem::WRLOPEN;
 	} else if(labelString == "S&TLOpen") {
-		globalMenuStatus = FK_SV_GUI_STLOPEN;
+		globalMenuStatus = fk_ShapeGUIMenuItem::STLOPEN;
 	} else if(labelString == "D&XFOpen") {
-		globalMenuStatus = FK_SV_GUI_DXFOPEN;
+		globalMenuStatus = fk_ShapeGUIMenuItem::DXFOPEN;
 	} else if(labelString == "WRL&Save") {
-		globalMenuStatus = FK_SV_GUI_WRLSAVE;
+		globalMenuStatus = fk_ShapeGUIMenuItem::WRLSAVE;
 	} else if(labelString == "STLSave") {
-		globalMenuStatus = FK_SV_GUI_STLSAVE;
+		globalMenuStatus = fk_ShapeGUIMenuItem::STLSAVE;
 	} else if(labelString == "&ImageSnap") {
-		globalMenuStatus = FK_SV_GUI_IMAGESNAP;
+		globalMenuStatus = fk_ShapeGUIMenuItem::IMAGESNAP;
 	} else if(labelString == "&Quit") {
-		globalMenuStatus = FK_SV_GUI_QUIT;
+		globalMenuStatus = fk_ShapeGUIMenuItem::QUIT;
 	} else if(labelString == "&PolyDraw") {
-		globalMenuStatus = FK_SV_GUI_POLYDRAW;
+		globalMenuStatus = fk_ShapeGUIMenuItem::POLYDRAW;
 	} else if(labelString == "&EdgeDraw") {
-		globalMenuStatus = FK_SV_GUI_EDGEDRAW;
+		globalMenuStatus = fk_ShapeGUIMenuItem::EDGEDRAW;
 	} else if(labelString == "&VertexDraw") {
-		globalMenuStatus = FK_SV_GUI_VERTEXDRAW;
+		globalMenuStatus = fk_ShapeGUIMenuItem::VERTEXDRAW;
 	} else if(labelString == "&AxisDraw") {
-		globalMenuStatus = FK_SV_GUI_AXISDRAW;
+		globalMenuStatus = fk_ShapeGUIMenuItem::AXISDRAW;
 	} else if(labelString == "LightRotate") {
-		globalMenuStatus = FK_SV_GUI_LIGHTROTATE;
+		globalMenuStatus = fk_ShapeGUIMenuItem::LIGHTROTATE;
 	} else if(labelString == "Ambient") {
-		globalMenuStatus = FK_SV_GUI_AMBIENT;
+		globalMenuStatus = fk_ShapeGUIMenuItem::AMBIENT;
 	} else if(labelString == "Diffuse") {
-		globalMenuStatus = FK_SV_GUI_DIFFUSE;
+		globalMenuStatus = fk_ShapeGUIMenuItem::DIFFUSE;
 	} else if(labelString == "Specular") {
-		globalMenuStatus = FK_SV_GUI_SPECULAR;
+		globalMenuStatus = fk_ShapeGUIMenuItem::SPECULAR;
 	} else if(labelString == "Emission") {
-		globalMenuStatus = FK_SV_GUI_EMISSION;
+		globalMenuStatus = fk_ShapeGUIMenuItem::EMISSION;
 	} else if(labelString == "Shininess") {
-		globalMenuStatus = FK_SV_GUI_SHININESS;
+		globalMenuStatus = fk_ShapeGUIMenuItem::SHININESS;
 	} else if(labelString == "VertexColor") {
-		globalMenuStatus = FK_SV_GUI_VERTEXCOLOR;
+		globalMenuStatus = fk_ShapeGUIMenuItem::VERTEXCOLOR;
 	} else if(labelString == "EdgeColor") {
-		globalMenuStatus = FK_SV_GUI_EDGECOLOR;
+		globalMenuStatus = fk_ShapeGUIMenuItem::EDGECOLOR;
 	}
 
  	globalMenuValue = (mItem->value() != 0) ? true : false;
@@ -202,32 +202,32 @@ void fk_ShapeViewer::GetMaterial(int argID, fk_ShapeGUIMenuItem index,
 	// Index によってマテリアルの各種属性を (R, G, B) に代入
 
 	switch(index) {
-	  case FK_SV_GUI_AMBIENT:
+	  case fk_ShapeGUIMenuItem::AMBIENT:
 		*r = polyMaterial[id]->getAmbient()->getR();
 		*g = polyMaterial[id]->getAmbient()->getG();
 		*b = polyMaterial[id]->getAmbient()->getB();
 		break;
-	  case FK_SV_GUI_DIFFUSE:
+	  case fk_ShapeGUIMenuItem::DIFFUSE:
 		*r = polyMaterial[id]->getDiffuse()->getR();
 		*g = polyMaterial[id]->getDiffuse()->getG();
 		*b = polyMaterial[id]->getDiffuse()->getB();
 		break;
-	  case FK_SV_GUI_SPECULAR:
+	  case fk_ShapeGUIMenuItem::SPECULAR:
 		*r = polyMaterial[id]->getSpecular()->getR();
 		*g = polyMaterial[id]->getSpecular()->getG();
 		*b = polyMaterial[id]->getSpecular()->getB();
 		break;
-	  case FK_SV_GUI_EMISSION:
+	  case fk_ShapeGUIMenuItem::EMISSION:
 		*r = polyMaterial[id]->getEmission()->getR();
 		*g = polyMaterial[id]->getEmission()->getG();
 		*b = polyMaterial[id]->getEmission()->getB();
 		break;
-	  case FK_SV_GUI_EDGECOLOR:
+	  case fk_ShapeGUIMenuItem::EDGECOLOR:
 		*r = edgeColor[id]->getR();
 		*g = edgeColor[id]->getG();
 		*b = edgeColor[id]->getB();
 		break;
-	  case FK_SV_GUI_VERTEXCOLOR:
+	  case fk_ShapeGUIMenuItem::VERTEXCOLOR:
 		*r = vertexColor[id]->getR();
 		*g = vertexColor[id]->getG();
 		*b = vertexColor[id]->getB();
@@ -248,22 +248,22 @@ void fk_ShapeViewer::SetMaterial(int argID, fk_ShapeGUIMenuItem index,
 	// Index によって (R, G, B) を各種マテリアルに設定 
 
 	switch(index) {
-	  case FK_SV_GUI_AMBIENT:
+	  case fk_ShapeGUIMenuItem::AMBIENT:
 		polyMaterial[id]->setAmbient(r, g, b);
 		break;
-	  case FK_SV_GUI_DIFFUSE:
+	  case fk_ShapeGUIMenuItem::DIFFUSE:
 		polyMaterial[id]->setDiffuse(r, g, b);
 		break;
-	  case FK_SV_GUI_SPECULAR:
+	  case fk_ShapeGUIMenuItem::SPECULAR:
 		polyMaterial[id]->setSpecular(r, g, b);
 		break;
-	  case FK_SV_GUI_EMISSION:
+	  case fk_ShapeGUIMenuItem::EMISSION:
 		polyMaterial[id]->setEmission(r, g, b);
 		break;
-	  case FK_SV_GUI_EDGECOLOR:
+	  case fk_ShapeGUIMenuItem::EDGECOLOR:
 		edgeColor[id]->set(r, g, b);
 		break;
-	  case FK_SV_GUI_VERTEXCOLOR:
+	  case fk_ShapeGUIMenuItem::VERTEXCOLOR:
 		vertexColor[id]->set(r, g, b);
 		break;
 	  default:
@@ -364,7 +364,7 @@ void fk_ShapeViewer::InitGUI(void)
 	gui->menuBar = new Fl_Menu_Bar(0, 0, allWinSize.w, 30);
 	gui->menuBar->menu(menuTable);
 	gui->menuBar->callback(LocalMenuToggle);
-	globalMenuStatus = FK_SV_GUI_NONE;
+	globalMenuStatus = fk_ShapeGUIMenuItem::NONE;
 
 	gui->ortGroup = new Fl_Group(groupPos.w, groupPos.h, 215, 240); {
 
@@ -375,8 +375,8 @@ void fk_ShapeViewer::InitGUI(void)
 											  groupPos.h + 20,
 											  140, 20, "Head Angle");
 		gui->headSlider->type(FL_HOR_NICE_SLIDER);	// ナイスなスライダー
-		gui->headSlider->minimum(-FK_PI);	// 最小値は -3.14
-		gui->headSlider->maximum(FK_PI);	// 最高値は 3.14
+		gui->headSlider->minimum(-fk_Math::PI);	// 最小値は -3.14
+		gui->headSlider->maximum(fk_Math::PI);	// 最高値は 3.14
 		gui->headSlider->value(0.0);		// 初期値は 0
 		gui->headSlider->labelsize(12);		// ラベル文字のサイズを 12pt に
 		gui->headSlider->textsize(12);		// カウンタのサイズも 12 に e
@@ -386,8 +386,8 @@ void fk_ShapeViewer::InitGUI(void)
 											   groupPos.h + 75,
 											   140, 20, "Pitch Angle");
 		gui->pitchSlider->type(FL_HOR_NICE_SLIDER);
-		gui->pitchSlider->minimum(-FK_PI);
-		gui->pitchSlider->maximum(FK_PI);
+		gui->pitchSlider->minimum(-fk_Math::PI);
+		gui->pitchSlider->maximum(fk_Math::PI);
 		gui->pitchSlider->value(0.0);
 		gui->pitchSlider->labelsize(12);
 		gui->pitchSlider->textsize(12);
@@ -397,8 +397,8 @@ void fk_ShapeViewer::InitGUI(void)
 											  groupPos.h + 130,
 											  140, 20, "Bank Angle");
 		gui->bankSlider->type(FL_HOR_NICE_SLIDER);
-		gui->bankSlider->minimum(-FK_PI);
-		gui->bankSlider->maximum(FK_PI);
+		gui->bankSlider->minimum(-fk_Math::PI);
+		gui->bankSlider->maximum(fk_Math::PI);
 		gui->bankSlider->value(0.0);
 		gui->bankSlider->labelsize(12);
 		gui->bankSlider->textsize(12);
@@ -487,9 +487,7 @@ void fk_ShapeViewer::AxisInit(void)
 
 	axisModel.setShape(&axisLine);
 	axisModel.setParent(&parentModel);
-	//axisLine.setMaterialMode(FK_PARENT_MODE);
-	//axisModel.setMaterialMode(FK_PARENT_MODE);
-	axisModel.setElementMode(FK_ELEM_ELEMENT);
+	axisModel.setElementMode(fk_ElementMode::ELEMENT);
 	scene.entryModel(&axisModel);
 	axisFlag = true;
 	return;
@@ -543,13 +541,13 @@ void fk_ShapeViewer::SetAllMaterial(void)
 void fk_ShapeViewer::SetSceneFlg(fk_ShapeGUIMenuItem argStatus)
 {
 	switch(argStatus) {
-	  case FK_SV_GUI_POLYDRAW:
+	  case fk_ShapeGUIMenuItem::POLYDRAW:
 		drawMode = drawMode ^ fk_DrawMode::FACE;
 		break;
-	  case FK_SV_GUI_EDGEDRAW:
+	  case fk_ShapeGUIMenuItem::EDGEDRAW:
 		drawMode = drawMode ^ fk_DrawMode::LINE;
 		break;
-	  case FK_SV_GUI_VERTEXDRAW:
+	  case fk_ShapeGUIMenuItem::VERTEXDRAW:
 		drawMode = drawMode ^ fk_DrawMode::POINT;
 		break;
 	  default:
@@ -648,8 +646,7 @@ void fk_ShapeViewer::ModelInit(int argIndex, fk_Shape *argShape)
 
 void fk_ShapeViewer::RotateLight(double argAngle)
 {
-	lightModel[0].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, argAngle);
-	//lightModel[1].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, argAngle);
+	lightModel[0].glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, argAngle);
 
 	return;
 }
@@ -699,14 +696,14 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 	switch(globalMenuStatus) {
 
-	  case FK_SV_GUI_NONE:
+	  case fk_ShapeGUIMenuItem::NONE:
 		break;
 
-	  case FK_SV_GUI_QUIT:
-		globalMenuStatus = FK_SV_GUI_NONE;
+	  case fk_ShapeGUIMenuItem::QUIT:
+		globalMenuStatus = fk_ShapeGUIMenuItem::NONE;
 		return false;
 
-	  case FK_SV_GUI_WRLOPEN:
+	  case fk_ShapeGUIMenuItem::WRLOPEN:
 		fileName = CommonFileChooser("*.wrl",
 									 Fl_Native_File_Chooser::BROWSE_FILE,
 									 "VRML2.0 File Select");
@@ -724,7 +721,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 		break;
 
-	  case FK_SV_GUI_STLOPEN:
+	  case fk_ShapeGUIMenuItem::STLOPEN:
 		fileName = CommonFileChooser("*.stl",
 									 Fl_Native_File_Chooser::BROWSE_FILE,
 									 "STL File Select");
@@ -740,7 +737,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 		break;
 
-	  case FK_SV_GUI_DXFOPEN:
+	  case fk_ShapeGUIMenuItem::DXFOPEN:
 		fileName = CommonFileChooser("*.dxf",
 									 Fl_Native_File_Chooser::BROWSE_FILE,
 									 "DXF File Select");
@@ -756,7 +753,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 		break;
 
-	  case FK_SV_GUI_WRLSAVE:
+	  case fk_ShapeGUIMenuItem::WRLSAVE:
 
 		fileName = CommonFileChooser("*",
 									 Fl_Native_File_Chooser::BROWSE_SAVE_FILE,
@@ -806,7 +803,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 		break;
 
-	  case FK_SV_GUI_STLSAVE:
+	  case fk_ShapeGUIMenuItem::STLSAVE:
 		fileName = CommonFileChooser("*",
 									 Fl_Native_File_Chooser::BROWSE_SAVE_FILE,
 									 "Save File Select");
@@ -832,7 +829,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 
 		break;
 
-	  case FK_SV_GUI_IMAGESNAP:
+	  case fk_ShapeGUIMenuItem::IMAGESNAP:
 		fileName = CommonFileChooser("*",
 									 Fl_Native_File_Chooser::BROWSE_SAVE_FILE,
 									 "Save Image File Select");
@@ -858,17 +855,17 @@ bool fk_ShapeViewer::MenuSelect(void)
 		}
 		break;
 
-	  case FK_SV_GUI_POLYDRAW:
-	  case FK_SV_GUI_EDGEDRAW:
-	  case FK_SV_GUI_VERTEXDRAW:
+	  case fk_ShapeGUIMenuItem::POLYDRAW:
+	  case fk_ShapeGUIMenuItem::EDGEDRAW:
+	  case fk_ShapeGUIMenuItem::VERTEXDRAW:
 		SetSceneFlg(globalMenuStatus);
 		break;
 
-	  case FK_SV_GUI_LIGHTROTATE:
+	  case fk_ShapeGUIMenuItem::LIGHTROTATE:
 		lightFlag = globalMenuValue;
 		break;
 
-	  case FK_SV_GUI_AXISDRAW:
+	  case fk_ShapeGUIMenuItem::AXISDRAW:
 		if(globalMenuValue == true) {
 			scene.entryModel(&axisModel);
 			axisFlag = true;
@@ -878,12 +875,12 @@ bool fk_ShapeViewer::MenuSelect(void)
 		}
 		break;
 
-	  case FK_SV_GUI_AMBIENT:
-	  case FK_SV_GUI_DIFFUSE:
-	  case FK_SV_GUI_SPECULAR:
-	  case FK_SV_GUI_EMISSION:
-	  case FK_SV_GUI_EDGECOLOR:
-	  case FK_SV_GUI_VERTEXCOLOR:
+	  case fk_ShapeGUIMenuItem::AMBIENT:
+	  case fk_ShapeGUIMenuItem::DIFFUSE:
+	  case fk_ShapeGUIMenuItem::SPECULAR:
+	  case fk_ShapeGUIMenuItem::EMISSION:
+	  case fk_ShapeGUIMenuItem::EDGECOLOR:
+	  case fk_ShapeGUIMenuItem::VERTEXCOLOR:
 
 		GetMaterial(0, globalMenuStatus, &colR, &colG, &colB);
 		fl_color_chooser("Material Set", colR, colG, colB);
@@ -894,7 +891,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 		SetAllMaterial();
 		break;
 
-	  case FK_SV_GUI_SHININESS:
+	  case fk_ShapeGUIMenuItem::SHININESS:
 
 		ss.clear();
 		shininess = polyMaterial[0]->getShininess();
@@ -912,7 +909,7 @@ bool fk_ShapeViewer::MenuSelect(void)
 	  default:
 		break;
 	}
-	globalMenuStatus = FK_SV_GUI_NONE;
+	globalMenuStatus = fk_ShapeGUIMenuItem::NONE;
 	return true;
 
 }
@@ -1014,7 +1011,7 @@ bool fk_ShapeViewer::draw(void)
 	}
 
 	if(lightFlag == true) {
-		RotateLight(FK_PI/100.0);
+		RotateLight(fk_Math::PI/100.0);
 	}
 
 	if(changeFlag == true) {
@@ -1145,14 +1142,14 @@ void fk_ShapeViewer::setElementMode(int argID, fk_ElementMode argMode)
 
 fk_ElementMode fk_ShapeViewer::getElementMode(void)
 {
-	if(modelArray.empty() == true) return FK_ELEM_NONE;
+	if(modelArray.empty() == true) return fk_ElementMode::NONE;
 	return modelArray[0]->getElementMode();
 }
 
 fk_ElementMode fk_ShapeViewer::getElementMode(int argID)
 {
 	fk_Model	*model = GetModel(argID);
-	if(model == nullptr) return FK_ELEM_NONE;
+	if(model == nullptr) return fk_ElementMode::NONE;
 	return model->getElementMode();
 }
 
@@ -1173,14 +1170,14 @@ void fk_ShapeViewer::setShadingMode(int argID, fk_ShadingMode argMode)
 
 fk_ShadingMode fk_ShapeViewer::getShadingMode(void)
 {
-	if(modelArray.empty() == true) return FK_SHADING_PHONG;
+	if(modelArray.empty() == true) return fk_ShadingMode::PHONG;
 	return modelArray[0]->getShadingMode();
 }
 
 fk_ShadingMode fk_ShapeViewer::getShadingMode(int argID)
 {
 	fk_Model	*model = GetModel(argID);
-	if(model == nullptr) return FK_SHADING_PHONG;
+	if(model == nullptr) return fk_ShadingMode::PHONG;
 	return model->getShadingMode();
 }	
 
@@ -1259,12 +1256,12 @@ void fk_ShapeViewer::setHead(double argVal)
 	int		div;
 	double	trueVal;
 
-	div = static_cast<int>(argVal / (2.0*FK_PI));
-	trueVal = argVal - static_cast<double>(div)*(2.0*FK_PI);
-	if(trueVal >= FK_PI) {
-		trueVal -= 2.0*FK_PI;
-	} else if(trueVal <= -FK_PI) {
-		trueVal += 2.0*FK_PI;
+	div = static_cast<int>(argVal / (2.0*fk_Math::PI));
+	trueVal = argVal - static_cast<double>(div)*(2.0*fk_Math::PI);
+	if(trueVal >= fk_Math::PI) {
+		trueVal -= 2.0*fk_Math::PI;
+	} else if(trueVal <= -fk_Math::PI) {
+		trueVal += 2.0*fk_Math::PI;
 	}
 
 	Fl::focus(gui->headSlider);
@@ -1277,12 +1274,12 @@ void fk_ShapeViewer::setPitch(double argVal)
 	int		div;
 	double	trueVal;
 
-	div = static_cast<int>(argVal / (2.0*FK_PI));
-	trueVal = argVal - static_cast<double>(div)*(2.0*FK_PI);
-	if(trueVal >= FK_PI) {
-		trueVal -= 2.0*FK_PI;
-	} else if(trueVal <= -FK_PI) {
-		trueVal += 2.0*FK_PI;
+	div = static_cast<int>(argVal / (2.0*fk_Math::PI));
+	trueVal = argVal - static_cast<double>(div)*(2.0*fk_Math::PI);
+	if(trueVal >= fk_Math::PI) {
+		trueVal -= 2.0*fk_Math::PI;
+	} else if(trueVal <= -fk_Math::PI) {
+		trueVal += 2.0*fk_Math::PI;
 	}
 
 	Fl::focus(gui->pitchSlider);
@@ -1295,12 +1292,12 @@ void fk_ShapeViewer::setBank(double argVal)
 	int		div;
 	double	trueVal;
 
-	div = static_cast<int>(argVal / (2.0*FK_PI));
-	trueVal = argVal - static_cast<double>(div)*(2.0*FK_PI);
-	if(trueVal >= FK_PI) {
-		trueVal -= 2.0*FK_PI;
-	} else if(trueVal <= -FK_PI) {
-		trueVal += 2.0*FK_PI;
+	div = static_cast<int>(argVal / (2.0*fk_Math::PI));
+	trueVal = argVal - static_cast<double>(div)*(2.0*fk_Math::PI);
+	if(trueVal >= fk_Math::PI) {
+		trueVal -= 2.0*fk_Math::PI;
+	} else if(trueVal <= -fk_Math::PI) {
+		trueVal += 2.0*fk_Math::PI;
 	}
 
 	Fl::focus(gui->bankSlider);
@@ -1483,7 +1480,7 @@ fk_DrawMode fk_ShapeViewer::getDrawMode(int argID)
 
 fk_FrameMode fk_ShapeViewer::getFrameMode(void)
 {
-	if(viewWin == nullptr) return FK_DEFAULT_FRAME;
+	if(viewWin == nullptr) return fk_FrameMode::DEFAULT;
 	return viewWin->getFrameMode();
 }
 

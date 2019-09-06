@@ -84,13 +84,13 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	enum fk_LoopCrossStatus {
-		FK_LOOP_FRONT_CROSS,
-		FK_LOOP_BACK_CROSS,
-		FK_LOOP_ONEDGE_CROSS,
-		FK_LOOP_ONFACE_CROSS,
-		FK_LOOP_NO_CROSS,
-		FK_LOOP_ERROR_CROSS
+	enum class fk_LoopCrossStatus {
+		FRONT,
+		BACK,
+		ONEDGE,
+		ONFACE,
+		NO,
+		ERROR,
 	};
 
 #endif

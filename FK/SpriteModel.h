@@ -332,7 +332,7 @@ namespace FK {
 		 *
 		 *	\sa initFont(), drawText(const std::string, bool, fk_StringCode)
 		 */
-		void		drawText(const std::string str, fk_StringCode code = FK_STR_SJIS);
+		void		drawText(const std::string str, fk_StringCode code = fk_StringCode::SJIS);
 
 		//! 初期化設定付き文字列表示関数
 		/*!
@@ -356,7 +356,8 @@ namespace FK {
 		 *
 		 *	\sa initFont(), drawText(const std::string, fk_StringCode)
 		 */
-		void		drawText(const std::string str, bool mode, fk_StringCode code = FK_STR_SJIS);
+		void		drawText(const std::string str, bool mode,
+							 fk_StringCode code = fk_StringCode::SJIS);
 
 		//! 文字列消去関数
 		/*!

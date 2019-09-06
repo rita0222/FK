@@ -132,7 +132,7 @@ int main(int, char *[])
 		if(fkWindow.winOpenStatus() == false) continue;
 
 		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/100.0);
+		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
 	}
 
 	return 0;

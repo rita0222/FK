@@ -123,11 +123,11 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 
 	if(shader == lineShader) {
 		switch(mode) {
-		  case FK_ELEM_MODEL:
+		  case fk_ElementMode::MODEL:
 			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &modelID);
 			break;
 
-		  case FK_ELEM_ELEMENT:
+		  case fk_ElementMode::ELEMENT:
 			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &elemID);
 			break;
 
@@ -139,11 +139,11 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 	glEnable(GL_LINE_SMOOTH);
 
 	switch(shapeType) {
-	  case FK_SHAPE_LINE:
+	  case fk_RealShapeType::LINE:
 		Draw_Line(dynamic_cast<fk_LineBase *>(shape), parameter);
 		break;
 
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		Draw_IFS(dynamic_cast<fk_IndexFaceSet *>(shape), parameter);
 		break;
 

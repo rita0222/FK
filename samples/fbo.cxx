@@ -114,7 +114,7 @@ int main(int, char **)
 	if(ifsShape.readMQOFile("fbo_data/mqo/meka.mqo", "body01") == false) {
 		fl_alert("ifs load err");
 	}
-	ifsShape.setTexRendMode(FK_TEX_REND_SMOOTH);
+	ifsShape.setTexRendMode(fk_TexRendMode::SMOOTH);
 	modelDef.setShape(&sph);
 	ifsModelDef.setShape(&ifsShape);
 
@@ -194,7 +194,7 @@ int main(int, char **)
 		edgeBinder.getParameter()->setRegister("Thresshold", float(thresshold)/100.0f);
 
 		// 光源回転
-		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.05);
+		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.05);
 
 		sprite.drawText(to_string(double(thresshold)/100.0), true);
 		sprite.setPositionLT(SP_X, SP_Y);

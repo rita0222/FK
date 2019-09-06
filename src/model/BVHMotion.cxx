@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <stack>
 #include <FK/BVHMotion.h>
+#include <FK/Math.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -417,18 +418,18 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 				tmpUpVec.set(0.0, 1.0, 0.0);
 				for(int k = static_cast<int>(rotStack.size())-1; k >= 0; k--) {
 					switch(rotStack[static_cast<_st>(k)]) {
-					  case fk_X:
-						rotMat.makeRot(tmpAngle.p, fk_X);
+					  case fk_Axis::X:
+						rotMat.makeRot(tmpAngle.p, fk_Axis::X);
 						tmpVec *= rotMat;
 						tmpUpVec *= rotMat;
 						break;
-					  case fk_Y:
-						rotMat.makeRot(tmpAngle.h, fk_Y);
+					  case fk_Axis::Y:
+						rotMat.makeRot(tmpAngle.h, fk_Axis::Y);
 						tmpVec *= rotMat;
 						tmpUpVec *= rotMat;
 						break;
-					  case fk_Z:
-						rotMat.makeRot(tmpAngle.b, fk_Z);
+					  case fk_Axis::Z:
+						rotMat.makeRot(tmpAngle.b, fk_Axis::Z);
 						tmpVec *= rotMat;
 						tmpUpVec *= rotMat;
 						break;
@@ -457,16 +458,16 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 				posArray[static_cast<_st>(frameFormat[i].first)][j].z = tmpArray[i];
 				break;
 			  case BVH_XROT:
-				tmpAngle.p = tmpArray[i]*FK_PI/180.0;
-				rotStack.push_back(fk_X);
+				tmpAngle.p = tmpArray[i]*fk_Math::PI/180.0;
+				rotStack.push_back(fk_Axis::X);
 				break;
 			  case BVH_YROT:
-				tmpAngle.h = tmpArray[i]*FK_PI/180.0;
-				rotStack.push_back(fk_Y);
+				tmpAngle.h = tmpArray[i]*fk_Math::PI/180.0;
+				rotStack.push_back(fk_Axis::Y);
 				break;
 			  case BVH_ZROT:
-				tmpAngle.b = tmpArray[i]*FK_PI/180.0;
-				rotStack.push_back(fk_Z);
+				tmpAngle.b = tmpArray[i]*fk_Math::PI/180.0;
+				rotStack.push_back(fk_Axis::Z);
 				break;
 			  default:
 				break;
@@ -478,18 +479,18 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 		tmpUpVec.set(0.0, 1.0, 0.0);
 		for(int k = static_cast<int>(rotStack.size())-1; k >= 0; k--) {
 			switch(rotStack[static_cast<_st>(k)]) {
-			  case fk_X:
-				rotMat.makeRot(tmpAngle.p, fk_X);
+			  case fk_Axis::X:
+				rotMat.makeRot(tmpAngle.p, fk_Axis::X);
 				tmpVec *= rotMat;
 				tmpUpVec *= rotMat;
 				break;
-			  case fk_Y:
-				rotMat.makeRot(tmpAngle.h, fk_Y);
+			  case fk_Axis::Y:
+				rotMat.makeRot(tmpAngle.h, fk_Axis::Y);
 				tmpVec *= rotMat;
 				tmpUpVec *= rotMat;
 				break;
-			  case fk_Z:
-				rotMat.makeRot(tmpAngle.b, fk_Z);
+			  case fk_Axis::Z:
+				rotMat.makeRot(tmpAngle.b, fk_Axis::Z);
 				tmpVec *= rotMat;
 				tmpUpVec *= rotMat;
 				break;

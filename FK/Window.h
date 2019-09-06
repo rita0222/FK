@@ -84,15 +84,19 @@
 #include <FK/FrameController.h>
 
 // for Graphics Routine
-//! フレーム制御タイプを表す型
 
 namespace FK {
 
-	using fk_FrameMode = unsigned int;
+	//! フレーム制御タイプを表す型
+	enum class fk_FrameMode : unsigned int {
+		DEFAULT	= 0,		//!< フレーム制御無効
+		WAIT	= 1 << 0,	//!< フレーム待機制御
+		SKIP	= 1 << 1,	//!< フレーム間引き制御
+	};
 
-	const fk_FrameMode FK_DEFAULT_FRAME	= 0x0000;	//!< フレーム制御無効
-	const fk_FrameMode FK_WAIT_FRAME	= 0x0001;	//!< フレーム待機制御
-	const fk_FrameMode FK_SKIP_FRAME	= 0x0002;	//!< フレーム間引き制御
+	fk_FrameMode operator | (fk_FrameMode argL, fk_FrameMode argR);
+	fk_FrameMode operator & (fk_FrameMode argL, fk_FrameMode argR);
+	fk_FrameMode operator ^ (fk_FrameMode argL, fk_FrameMode argR);
 
 	//! 特殊キーを表す列挙型
 	enum class fk_SpecialKey {
@@ -153,13 +157,6 @@ namespace FK {
 		DOWN,		//!< 押した瞬間
 		PRESS		//!< 押しっぱなしの状態
 	};
-
-	using fkut_SwitchStatus = fk_Switch;
-
-	const fk_Switch FKUT_SW_RELEASE = fk_Switch::RELEASE;
-	const fk_Switch FKUT_SW_UP = fk_Switch::UP;
-	const fk_Switch FKUT_SW_DOWN = fk_Switch::DOWN;
-	const fk_Switch FKUT_SW_PRESS = fk_Switch::PRESS;
 
 	//! FLTK 用シーン描画ウィジェットクラス
 	/*!
@@ -279,7 +276,7 @@ namespace FK {
 		 *
 		 *		fk_Window		win;
 		 *
-		 *		if(win.getKeyStatus('a', FK_SW_PRESS, true) == true) {
+		 *		if(win.getKeyStatus('a', fk_Switch::PRESS, true) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -317,7 +314,7 @@ namespace FK {
 		 *
 		 *		fk_Window		win;
 		 *
-		 *		if(win.getSpecialKeyStatus(FK_RIGHT, true) == true) {
+		 *		if(win.getSpecialKeyStatus(fk_SpecialKey::RIGHT, true) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -414,7 +411,7 @@ namespace FK {
 		 *
 		 *		fk_Window		win;
 		 *
-		 *		if(win.getMouseStatus(FK_MOUSE1, FK_SW_PRESS) == true) {
+		 *		if(win.getMouseStatus(fk_MouseButton::M1, fk_Switch::PRESS) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -483,16 +480,16 @@ namespace FK {
 		 *		この制御を「スキップモード」と言います。
 		 *	.
 		 *	モードには、以下の3種類が指定できます。
-		 *	- FK_DEFAULT_FRAME: 制御を行いません。
-		 *	- FK_WAIT_FRAME: ウェイトモードを有効にします。
-		 *	- FK_SKIP_FRAME: スキップモードを有効にします。
+		 *	- fk_FrameMode::DEFAULT: 制御を行いません。
+		 *	- fk_FrameMode::WAIT: ウェイトモードを有効にします。
+		 *	- fk_FrameMode::SKIP: スキップモードを有効にします。
 		 *	.
-		 *	なお、FK_WAIT_FRAME と FK_SKIP_FRAME は同時に指定することが可能です。
+		 *	なお、fk_FrameMode::WAIT と fk_FrameMode::SKIP は同時に指定することが可能です。
 		 *	その場合は、以下のようにビット論理和演算子を利用します。
 		 *
 		 *		fk_Window	win;
 		 *
-		 *		win.setFrameMode(FK_WAIT_FRAME | FK_SKIP_FRAME);
+		 *		win.setFrameMode(fk_FrameMode::WAIT | fk_FrameMode::SKIP);
 		 *
 		 *	\param[in]	mode		制御モード
 		 *
@@ -746,20 +743,20 @@ namespace FK {
 		/*!
 		 *	この関数は、メッセージ出力のモードを設定します。
 		 *	モードには、以下のようなものがあります。
-		 *	- FK_PUTSTR_BROWSER:
+		 *	- fk_PutStrMode::BROWSER:
 		 *		メッセージ出力用ブラウザに出力します。デフォルトはこの値となっています。
-		 *	- FK_PUTSTR_CONSOLE:
+		 *	- fk_PutStrMode::CONSOLE:
 		 *		コンソールの標準出力に出力します。
-		 *	- FK_PUTSTR_ERR_CONSOLE:
+		 *	- fk_PutStrMode::ERR_CONSOLE:
 		 *		コンソールのエラー出力に出力します。
-		 *	- FK_PUTSTR_FILE: setPutFile() 関数で指定したファイルに出力します。
-		 *	- FK_PUTSTR_NONE: 出力を行いません。
+		 *	- fk_PutStrMode::FILE: setPutFile() 関数で指定したファイルに出力します。
+		 *	- fk_PutStrMode::NONE: 出力を行いません。
 		 *
 		 *	\note
 		 *		本関数は static 関数なので、
 		 *		以下のように記述することでインスタンスの生成なしに利用することができます。
 		 *
-		 *			fk_Window::setPutStrMode(FK_PUTSTR_CONSOLE);
+		 *			fk_Window::setPutStrMode(fk_PutStrMode::CONSOLE);
 		 *
 		 *	\param[in]	mode	出力モード
 		 *
@@ -781,7 +778,7 @@ namespace FK {
 		//! メッセージ出力用ファイル設定関数
 		/*!
 		 *	この関数は、メッセージ出力のモードにおいてファイル出力
-		 *	(FK_PUTSTR_FILE) を指定したときの、出力ファイル名を設定するものです。
+		 *	(fk_PutStrMode::FILE) を指定したときの、出力ファイル名を設定するものです。
 		 *
 		 *	\note
 		 *		本関数は static 関数なので、

@@ -105,11 +105,11 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 	} else {
 		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
 		switch(argModel->getShadingMode()) {
-		  case FK_SHADING_PHONG:
+		  case fk_ShadingMode::PHONG:
 			shader = phongShader;
 			break;
 
-		  case FK_SHADING_GOURAUD:
+		  case fk_ShadingMode::GOURAUD:
 			shader = gouraudShader;
 			break;
 
@@ -254,23 +254,23 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	shader->ProcPreShader();
 
 	fk_TexMode texMode = argModel->getTextureMode();
-	if(texMode == FK_TEX_NONE) texMode = texture->getTextureMode();
+	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
 
 	if(shader == phongShader || shader == gouraudShader) {
 		GLuint id = 0;
 
 		switch(argModel->getShadingMode()) {
-		  case FK_SHADING_PHONG:
+		  case fk_ShadingMode::PHONG:
 			switch(texMode) {
-			  case FK_TEX_MODULATE:
+			  case fk_TexMode::MODULATE:
 				id = modulate_p_ID;
 				break;
 
-			  case FK_TEX_REPLACE:
+			  case fk_TexMode::REPLACE:
 				id = replace_p_ID;
 				break;
 
-			  case FK_TEX_DECAL:
+			  case fk_TexMode::DECAL:
 				id = decal_p_ID;
 				break;
 
@@ -279,17 +279,17 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 			}
 			break;
 
-		  case FK_SHADING_GOURAUD:
+		  case fk_ShadingMode::GOURAUD:
 			switch(texMode) {
-			  case FK_TEX_MODULATE:
+			  case fk_TexMode::MODULATE:
 				id = modulate_g_ID;
 				break;
 
-			  case FK_TEX_REPLACE:
+			  case fk_TexMode::REPLACE:
 				id = replace_g_ID;
 				break;
 
-			  case FK_TEX_DECAL:
+			  case fk_TexMode::DECAL:
 				id = decal_g_ID;
 				break;
 

@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/BezSurface.h>
+#include <FK/Math.h>
 #include <FK/Window.h>
 
 using namespace std;

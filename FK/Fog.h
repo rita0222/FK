@@ -117,28 +117,28 @@ namespace FK {
 		 *	霧効果の減衰関数を設定します。設定できる関数の種類は以下のとおりです。
 		 *	各数式中の \f$ z \f$ はカメラからの距離を意味します。
 		 *
-		 *	- FK_LINEAR_FOG \n
+		 *	- fk_FogMode::LINEAR \n
 		 *		減衰関数として線形式を設定します。具体的には以下の数式を用います。
 		 *		\f[
 		 *			\frac{E-z}{E-S}
 		 *		\f]
 		 *		式中の \f$ E, S \f$ は setFogLinearMap() で設定します。
-		 *	- FK_EXP_FOG \n
+		 *	- fk_FogMode::EXP \n
 		 *		減衰関数として指数式を設定します。具体的には以下の数式を用います。
 		 *		\f[
 		 *			e^{-dz}
 		 *		\f]
 		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
-		 *	- FK_EXP2_FOG \n
+		 *	- fk_FogMode::EXP2 \n
 		 *		減衰関数として指数(2乗)式を設定します。具体的には以下の数式を用います。
 		 *		\f[
 		 *			e^{-\left(dz\right)^2}
 		 *		\f]
 		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
-		 *	- FK_NONE_FOG \n
+		 *	- fk_FogMode::NONE \n
 		 *		この値を設定した場合、霧効果を無効にします。
 		 *	.
-		 *	デフォルトでは FK_NONE_FOG が設定されています。
+		 *	デフォルトでは fk_FogMode::NONE が設定されています。
 		 *
 		 *	\param[in] mode		減衰関数を表す値
 		 */
@@ -150,14 +150,14 @@ namespace FK {
 		 *	実際の効果の程度についてはハードウェアやOSに依存します。
 		 *	設定できるオプションの種類は以下のとおりです。
 		 *
-		 *	- FK_FASTEST_FOG \n
+		 *	- fk_FogOption::FASTEST \n
 		 *		処理の際に、実行速度を優先します。
-		 *	- FK_NICEST_FOG \n
+		 *	- fk_FogOption::NICEST \n
 		 *		処理の際に、品質を優先します。
-		 *	- FK_NOOPTION_FOG \n
+		 *	- fk_FogOption::NOOPTION \n
 		 *		特に優先度を設定しません。
 		 *	.
-		 *	デフォルトでは FK_NOOPTION_FOG が設定されています。
+		 *	デフォルトでは fk_FogOption::NOOPTION が設定されています。
 		 *
 		 *	\param[in] opt	オプションを表す値
 		 */

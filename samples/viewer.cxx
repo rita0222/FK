@@ -117,7 +117,7 @@ int main()
 		for(i = 0; i <= 10; i++) {
 			for(j = 0; j <= 10; j++) {
 				// 各頂点の移動量計算
-				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/FK_PI));
+				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/fk_Math::PI));
 
 				// 各頂点を移動場所を計算
 				movePos = moveVec + pos[i*11 + j];

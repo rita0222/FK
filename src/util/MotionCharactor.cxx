@@ -153,15 +153,15 @@ bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 		objModel[i]->glMoveTo(argOrg->objModel[i]->getPosition());
 		objModel[i]->glAngle(argOrg->objModel[i]->getAngle());
 		objModel[i]->setScale(argOrg->objModel[i]->getScale());
-		objModel[i]->setScale(argOrg->objModel[i]->getScale(fk_X),
-								argOrg->objModel[i]->getScale(fk_Y),
-								argOrg->objModel[i]->getScale(fk_Z));
+		objModel[i]->setScale(argOrg->objModel[i]->getScale(fk_Axis::X),
+								argOrg->objModel[i]->getScale(fk_Axis::Y),
+								argOrg->objModel[i]->getScale(fk_Axis::Z));
 		jointModel[i]->glMoveTo(argOrg->jointModel[i]->getPosition());
 		jointModel[i]->glAngle(argOrg->jointModel[i]->getAngle());
 		jointModel[i]->setScale(argOrg->jointModel[i]->getScale());
-		jointModel[i]->setScale(argOrg->jointModel[i]->getScale(fk_X),
-								argOrg->jointModel[i]->getScale(fk_Y),
-								argOrg->jointModel[i]->getScale(fk_Z));
+		jointModel[i]->setScale(argOrg->jointModel[i]->getScale(fk_Axis::X),
+								argOrg->jointModel[i]->getScale(fk_Axis::Y),
+								argOrg->jointModel[i]->getScale(fk_Axis::Z));
 	}
 	if(parentConnect) {
 		for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
@@ -175,9 +175,9 @@ bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 	absParent.glMoveTo(argOrg->absParent.getPosition());
 	absParent.glAngle(argOrg->absParent.getAngle());
 	absParent.setScale(argOrg->absParent.getScale());
-	absParent.setScale(argOrg->absParent.getScale(fk_X),
-						argOrg->absParent.getScale(fk_Y),
-						argOrg->absParent.getScale(fk_Z));
+	absParent.setScale(argOrg->absParent.getScale(fk_Axis::X),
+						argOrg->absParent.getScale(fk_Axis::Y),
+						argOrg->absParent.getScale(fk_Axis::Z));
 
 	return true;
 }
@@ -450,7 +450,7 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 				if(texTable[st(matTable[i-1])] != -1) {
 					mesh[i-1] = new fk_IFSTexture;
 					((fk_IFSTexture *)mesh[i-1])->setImage(texImage[st(texTable[st(matTable[i-1])])]);
-					((fk_IFSTexture *)mesh[i-1])->setTexRendMode(FK_TEX_REND_SMOOTH);
+					((fk_IFSTexture *)mesh[i-1])->setTexRendMode(fk_TexRendMode::SMOOTH);
 
 					if(!((fk_IFSTexture *)mesh[i-1])->readMQOFile(argFileName, objName[i])) {
 						fk_PutError("MQO File Read Error.");

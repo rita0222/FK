@@ -77,7 +77,7 @@ fk_Topology::fk_Topology(void)
 {
 	ID = -1;
 	ariveFlg = false;
-	type = FK_UNDEFINED_TYPE;
+	type = fk_TopologyType::UNDEFINED;
 	DB = nullptr;
 
 	return;

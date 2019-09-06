@@ -71,6 +71,7 @@
  ****************************************************************************/
 #include <FK/MatAdmin.h>
 #include <FK/Quaternion.h>
+#include <FK/Math.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -80,7 +81,7 @@ using namespace FK;
 
 inline bool AlmostZero(double x)
 {
-	if(x < FK_MATRIX_EPS && x > -FK_MATRIX_EPS) return true;
+	if(x < fk_Vector::MATRIXEPS && x > -fk_Vector::MATRIXEPS) return true;
 	return false;
 }
 
@@ -166,16 +167,16 @@ void fk_MatrixAdmin::AddAngle(fk_Angle *argBaseAng,
 							  const fk_Angle *argAddAng) const
 {
 	argBaseAng->h += argAddAng->h;
-	if(argBaseAng->h < -FK_PI) argBaseAng->h += FK_PI;
-	else if(argBaseAng->h > FK_PI) argBaseAng->h -= FK_PI;
+	if(argBaseAng->h < -fk_Math::PI) argBaseAng->h += fk_Math::PI;
+	else if(argBaseAng->h > fk_Math::PI) argBaseAng->h -= fk_Math::PI;
 
 	argBaseAng->p += argAddAng->p;
-	if(argBaseAng->p < -FK_PI) argBaseAng->p += FK_PI;
-	else if(argBaseAng->p > FK_PI) argBaseAng->p -= FK_PI;
+	if(argBaseAng->p < -fk_Math::PI) argBaseAng->p += fk_Math::PI;
+	else if(argBaseAng->p > fk_Math::PI) argBaseAng->p -= fk_Math::PI;
 
 	argBaseAng->b += argAddAng->b;
-	if(argBaseAng->b < -FK_PI) argBaseAng->b += FK_PI;
-	else if(argBaseAng->b > FK_PI) argBaseAng->b -= FK_PI;
+	if(argBaseAng->b < -fk_Math::PI) argBaseAng->b += fk_Math::PI;
+	else if(argBaseAng->b > fk_Math::PI) argBaseAng->b -= fk_Math::PI;
 
 	return;
 }
@@ -237,7 +238,7 @@ fk_OrthoMatrix fk_MatrixAdmin::getInvBaseMatrix(void) const
 
 bool fk_MatrixAdmin::setScale(const double argScale)
 {
-	if(fabs(argScale) < FK_EPS) {
+	if(fabs(argScale) < fk_Math::EPS) {
 		fk_PutError("fk_MatrixAdmin", "setScale", 1,
 					"Zero Scale Error.");
 		return false;
@@ -253,20 +254,20 @@ bool fk_MatrixAdmin::setScale(const double argScale)
 
 bool fk_MatrixAdmin::setScale(const double argScale, const fk_Axis argAxis)
 {
-	if(fabs(argScale) < FK_EPS) {
+	if(fabs(argScale) < fk_Math::EPS) {
 		fk_PutError("fk_MatrixAdmin", "setScale", 2,
 					"Zero Scale Error.");
 		return false;
 	}
 
 	switch(argAxis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		xScale = argScale;
 		break;
-	  case fk_Y:
+	  case fk_Axis::Y:
 		yScale = argScale;
 		break;
-	  case fk_Z:
+	  case fk_Axis::Z:
 		zScale = argScale;
 		break;
 	  default:
@@ -282,7 +283,7 @@ bool fk_MatrixAdmin::setScale(const double argScale, const fk_Axis argAxis)
 bool fk_MatrixAdmin::setScale(const double argX, const double argY,
 							  const double argZ)
 {
-	if(fabs(argX) < FK_EPS || fabs(argY) < FK_EPS || fabs(argZ) < FK_EPS) {
+	if(fabs(argX) < fk_Math::EPS || fabs(argY) < fk_Math::EPS || fabs(argZ) < fk_Math::EPS) {
 		fk_PutError("fk_MatrixAdmin", "setScale", 3,
 					"Zero Scale Error.");
 		return false;
@@ -299,7 +300,7 @@ bool fk_MatrixAdmin::setScale(const double argX, const double argY,
 
 bool fk_MatrixAdmin::prdScale(const double argScale)
 {
-	if(fabs(argScale * Scale) < FK_EPS) {
+	if(fabs(argScale * Scale) < fk_Math::EPS) {
 		fk_PutError("fk_MatrixAdmin", "prdScale", 1,
 					"Zero Scale Error.");
 		return false;
@@ -315,8 +316,8 @@ bool fk_MatrixAdmin::prdScale(const double argScale)
 bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 {
 	switch(argAxis) {
-	  case fk_X:
-		if(fabs(xScale * argScale) < FK_EPS) {
+	  case fk_Axis::X:
+		if(fabs(xScale * argScale) < fk_Math::EPS) {
 			fk_PutError("fk_MatrixAdmin", "prdScale", 2,
 						"Zero Scale Error.");
 			return false;
@@ -324,8 +325,8 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 
 		xScale *= argScale;
 		break;
-	  case fk_Y:
-		if(fabs(yScale * argScale) < FK_EPS) {
+	  case fk_Axis::Y:
+		if(fabs(yScale * argScale) < fk_Math::EPS) {
 			fk_PutError("fk_MatrixAdmin", "prdScale", 2,
 						"Zero Scale Error.");
 			return false;
@@ -333,8 +334,8 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 
 		yScale *= argScale;
 		break;
-	  case fk_Z:
-		if(fabs(zScale * argScale) < FK_EPS) {
+	  case fk_Axis::Z:
+		if(fabs(zScale * argScale) < fk_Math::EPS) {
 			fk_PutError("fk_MatrixAdmin", "prdScale", 2,
 						"Zero Scale Error.");
 			return false;
@@ -355,9 +356,9 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 bool fk_MatrixAdmin::prdScale(const double argX, const double argY,
 							  const double argZ)
 {
-	if(fabs(xScale * argX) < FK_EPS ||
-	   fabs(yScale * argY) < FK_EPS ||
-	   fabs(zScale * argZ) < FK_EPS) {
+	if(fabs(xScale * argX) < fk_Math::EPS ||
+	   fabs(yScale * argY) < fk_Math::EPS ||
+	   fabs(zScale * argZ) < fk_Math::EPS) {
 		fk_PutError("fk_MatrixAdmin", "prdScale", 3,
 					"Zero Scale Error.");
 		return false;
@@ -381,11 +382,11 @@ double fk_MatrixAdmin::getScale(void) const
 double fk_MatrixAdmin::getScale(const fk_Axis argAxis) const
 {
 	switch(argAxis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		return xScale;
-	  case fk_Y:
+	  case fk_Axis::Y:
 		return yScale;
-	  case fk_Z:
+	  case fk_Axis::Z:
 		return zScale;
 	}
 	return 0.0;
@@ -801,7 +802,7 @@ bool fk_MatrixAdmin::glUpvec(fk_Vector argUpv)
 		return false;
 	}
 
-	if(fabs(argUpv * fk_Vector(Vec)) <= 1.0 - FK_EPS) {
+	if(fabs(argUpv * fk_Vector(Vec)) <= 1.0 - fk_Math::EPS) {
 		UpVec = argUpv;
 		UpdateMatrix(true);
 	} else {
@@ -830,7 +831,7 @@ bool fk_MatrixAdmin::loUpvec(fk_Vector argUpv)
 		return false;
 	}
 
-	if(fabs(tmp * fk_Vector(Vec)) <= 1.0 - FK_EPS) {
+	if(fabs(tmp * fk_Vector(Vec)) <= 1.0 - fk_Math::EPS) {
 		UpVec = tmp;
 	} else {
 		fk_PutError("fk_MatrixAdmin", "loUpvec", 2,
@@ -976,13 +977,13 @@ void fk_MatrixAdmin::VectorToHeadPitch(fk_Angle *retAngle,
 
 	retAngle->p = asin(tmpVec.y);
 
-	if(fabs(tmpVec.z) < FK_EPS) {
-		if(fabs(tmpVec.x) < FK_EPS) {
+	if(fabs(tmpVec.z) < fk_Math::EPS) {
+		if(fabs(tmpVec.x) < fk_Math::EPS) {
 			retAngle->h = 0.0;
 		} else if(tmpVec.x > 0.0) {
-			retAngle->h = FK_PI/2.0;
+			retAngle->h = fk_Math::PI/2.0;
 		} else {
-			retAngle->h = -FK_PI/2.0;
+			retAngle->h = -fk_Math::PI/2.0;
 		}
 	} else {
 		retAngle->h = atan2(tmpVec.x, -tmpVec.z);
@@ -1000,27 +1001,27 @@ void fk_MatrixAdmin::VectorToAngle(fk_Angle *retAngle,
 
 	VectorToHeadPitch(retAngle, argDirecVec);
 
-	Mx.makeRot(-retAngle->p, fk_X);
-	My.makeRot(retAngle->h, fk_Y);
+	Mx.makeRot(-retAngle->p, fk_Axis::X);
+	My.makeRot(retAngle->h, fk_Axis::Y);
 	
 	tmpUpVec = Mx * My * (*argUpVec);
 
-	if(fabs(tmpUpVec.y) < FK_EPS) {
-		if(fabs(tmpUpVec.x) < FK_EPS) {
+	if(fabs(tmpUpVec.y) < fk_Math::EPS) {
+		if(fabs(tmpUpVec.x) < fk_Math::EPS) {
 			retAngle->b = 0.0;
 		} else if(tmpUpVec.x > 0.0) {
-			retAngle->b = FK_PI/2.0;
+			retAngle->b = fk_Math::PI/2.0;
 		} else {
-			retAngle->b = -FK_PI/2.0;
+			retAngle->b = -fk_Math::PI/2.0;
 		}
 	} else {
 		retAngle->b = atan2(tmpUpVec.x, tmpUpVec.y);
 	}
 
-	if(retAngle->b < -FK_PI) {
-		retAngle->b += FK_PI;
-	} else if(retAngle->b > FK_PI) {
-		retAngle->b -= FK_PI;
+	if(retAngle->b < -fk_Math::PI) {
+		retAngle->b += fk_Math::PI;
+	} else if(retAngle->b > fk_Math::PI) {
+		retAngle->b -= fk_Math::PI;
 	}
 
 	return;

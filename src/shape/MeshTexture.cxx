@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/MeshTexture.h>
 #include <FK/MQOParser.H>
+#include <FK/Math.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -368,8 +369,8 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 		return false;
 	}
 
-	if(argS < -FK_EPS || argS > 1.0 + FK_EPS ||
-	   argT < -FK_EPS || argT > 1.0 + FK_EPS) {
+	if(argS < -fk_Math::EPS || argS > 1.0 + fk_Math::EPS ||
+	   argT < -fk_Math::EPS || argT > 1.0 + fk_Math::EPS) {
 		fk_PutError("fk_MeshTexture", "setTextureCoord", 2,
 					"Texture Coord Error.");
 		return false;
@@ -395,8 +396,8 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 		return false;
 	}
 
-	if(argCoord.x < -FK_EPS || argCoord.x > 1.0 + FK_EPS ||
-	   argCoord.y < -FK_EPS || argCoord.y > 1.0 + FK_EPS) {
+	if(argCoord.x < -fk_Math::EPS || argCoord.x > 1.0 + fk_Math::EPS ||
+	   argCoord.y < -fk_Math::EPS || argCoord.y > 1.0 + fk_Math::EPS) {
 		fk_PutError("fk_MeshTexture", "setTextureCoord", 4,
 					"Texture Coord Error.");
 		return false;

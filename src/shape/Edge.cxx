@@ -93,7 +93,7 @@ fk_Edge::~fk_Edge()
 
 void fk_Edge::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argDB, argID, FK_EDGE_TYPE);
+	InitTopology(argDB, argID, fk_TopologyType::EDGE);
 	leftHalf = FK_UNDEFINED;
 	rightHalf = FK_UNDEFINED;
 	curv = nullptr;

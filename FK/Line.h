@@ -228,7 +228,7 @@ namespace FK {
 		/*!
 		 *	線分の色を個別に設定します。
 		 *	この色設定によって表示するには、
-		 *	fk_Model::setElementMode() で FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *	fk_Model::setElementMode() で fk_ElementMode::ELEMENT を設定しておく必要があります。
 		 *
 		 *	\param[in]	eID		要素ID
 		 *	\param[in]	col		色値
@@ -240,7 +240,7 @@ namespace FK {
 		 *	登録されている線分の色を設定します。
 		 *	この色設定によって表示するには、形状を登録するモデル側で、
 		 *	fk_Model::setElementMode() 関数を用いて
-		 *	FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *	fk_ElementMode::ELEMENT を設定しておく必要があります。
 		 *
 		 *	\param[in]	eID		要素ID
 		 *	\param[in]	col		色値

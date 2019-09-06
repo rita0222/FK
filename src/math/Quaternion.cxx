@@ -89,13 +89,13 @@ static fk_Angle & VectorToHeadPitch(const fk_Vector &argVec)
 
 	retAngle.p = asin(tmpVec.y);
 
-	if(fabs(tmpVec.z) < FK_EPS) {
-		if(fabs(tmpVec.x) < FK_EPS) {
+	if(fabs(tmpVec.z) < fk_Math::EPS) {
+		if(fabs(tmpVec.x) < fk_Math::EPS) {
 			retAngle.h = 0.0;
 		} else if(tmpVec.x > 0.0) {
-			retAngle.h = FK_PI/2.0;
+			retAngle.h = fk_Math::PI/2.0;
 		} else {
-			retAngle.h = -FK_PI/2.0;
+			retAngle.h = -fk_Math::PI/2.0;
 		}
 	} else {
 		retAngle.h = atan2(tmpVec.x, -tmpVec.z);
@@ -120,22 +120,22 @@ static fk_Angle & VectorToAngle(const fk_Vector &argDirecVec,
 	
 	tmpUpVec = Qx * Qy * argUpVec;
 
-	if(fabs(tmpUpVec.y) < FK_VECTOREPS) {
-		if(fabs(tmpUpVec.x) < FK_VECTOREPS) {
+	if(fabs(tmpUpVec.y) < fk_Vector::VECTOREPS) {
+		if(fabs(tmpUpVec.x) < fk_Vector::VECTOREPS) {
 			retAngle.b = 0.0;
 		} else if(tmpUpVec.x > 0.0) {
-			retAngle.b = FK_PI/2.0;
+			retAngle.b = fk_Math::PI/2.0;
 		} else {
-			retAngle.b = -FK_PI/2.0;
+			retAngle.b = -fk_Math::PI/2.0;
 		}
 	} else {
 		retAngle.b = atan2(tmpUpVec.x, tmpUpVec.y);
 	}
 
-	if(retAngle.b < -FK_PI) {
-		retAngle.b += FK_PI;
-	} else if(retAngle.b > FK_PI) {
-		retAngle.b -= FK_PI;
+	if(retAngle.b < -fk_Math::PI) {
+		retAngle.b += fk_Math::PI;
+	} else if(retAngle.b > fk_Math::PI) {
+		retAngle.b -= fk_Math::PI;
 	}
 
 	return retAngle;
@@ -198,7 +198,7 @@ void fk_Quaternion::setRotate(double argTheta, const fk_Vector &argV)
 {
 	double		dist = argV.dist();
 
-	if(dist < FK_VECTOREPS) return;
+	if(dist < fk_Vector::VECTOREPS) return;
 
 	s = cos(argTheta/2.0);
 	v = argV * sin(argTheta/2.0)/dist;
@@ -255,7 +255,7 @@ bool fk_Quaternion::normalize(void)
 {
 	double	tmp_abs;
 	double	tmp_norm = norm();
-	if(tmp_norm < FK_VECTOREPS) return false;
+	if(tmp_norm < fk_Vector::VECTOREPS) return false;
 	tmp_abs = sqrt(tmp_norm);
 	s /= tmp_abs;
 	v /= tmp_abs;
@@ -271,7 +271,7 @@ void fk_Quaternion::conj(void)
 bool fk_Quaternion::inverse(void)
 {
 	double	tmp_norm = norm();
-	if(tmp_norm < FK_VECTOREPS) return false;
+	if(tmp_norm < fk_Vector::VECTOREPS) return false;
 	conj();
 	*this /= tmp_norm;
 	return true;
@@ -293,7 +293,7 @@ fk_Quaternion & fk_Quaternion::operator !(void) const
 	static fk_Quaternion tmpQ;
 	double	tmp_norm = norm();
 
-	if(tmp_norm < FK_VECTOREPS) {
+	if(tmp_norm < fk_Vector::VECTOREPS) {
 		tmpQ = *this;
 	} else {
 		tmpQ.s = s/tmp_norm;
@@ -370,13 +370,13 @@ fk_Quaternion & fk_Quaternion::operator -=(const fk_Quaternion &argQ)
 
 bool fk_Quaternion::operator ==(const fk_Quaternion &argQ) const
 {
-	if(fabs(s - argQ.s) < FK_VECTOREPS && v == argQ.v) return true;
+	if(fabs(s - argQ.s) < fk_Vector::VECTOREPS && v == argQ.v) return true;
 	return false;
 }
 
 bool fk_Quaternion::operator !=(const fk_Quaternion &argQ) const
 {
-	if(fabs(s - argQ.s) < FK_VECTOREPS && v == argQ.v) return false;
+	if(fabs(s - argQ.s) < fk_Vector::VECTOREPS && v == argQ.v) return false;
 	return true;
 }
 

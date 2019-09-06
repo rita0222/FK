@@ -75,6 +75,7 @@
 #include <FK/Tree.h>
 #include <FK/Quaternion.h>
 #include <FK/BoundaryElem.H>
+#include <FK/Math.h>
 #include <algorithm>
 
 using namespace std;
@@ -84,18 +85,35 @@ using mi = list<fk_Model *>::iterator;
 
 static unsigned int		_globalModelID = 1;
 
+namespace FK {
+	fk_DepthMode operator | (fk_DepthMode argL, fk_DepthMode argR) {
+		return static_cast<fk_DepthMode>(static_cast<unsigned int>(argL) |
+										static_cast<unsigned int>(argR));
+	}
+
+	fk_DepthMode operator & (fk_DepthMode argL, fk_DepthMode argR) {
+		return static_cast<fk_DepthMode>(static_cast<unsigned int>(argL) &
+										static_cast<unsigned int>(argR));
+	}
+
+	fk_DepthMode operator ^ (fk_DepthMode argL, fk_DepthMode argR) {
+		return static_cast<fk_DepthMode>(static_cast<unsigned int>(argL) ^
+										static_cast<unsigned int>(argR));
+	}
+}
+
 fk_Model::fk_Model(fk_Shape *argShape)
 	: fk_Boundary(fk_Type::MODEL), shape(nullptr), parentModel(nullptr),
-	  treeData(nullptr), drawMode(fk_DrawMode::NONE), elemMode(FK_ELEM_MODEL),
-	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
+	  treeData(nullptr), drawMode(fk_DrawMode::NONE), elemMode(fk_ElementMode::MODEL),
+	  depthMode(fk_DepthMode::READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
 	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
-	  texMode(FK_TEX_NONE), shadingMode(FK_SHADING_PHONG),
+	  texMode(fk_TexMode::NONE), shadingMode(fk_ShadingMode::PHONG),
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
 	  interMode(false), interStatus(false), interStopMode(false),
 	  shader(nullptr)
 {
-	setBlendMode(FK_BLEND_ALPHA_MODE);
+	setBlendMode(fk_BlendMode::ALPHA);
 	setShape(argShape);
 
 	return;
@@ -275,42 +293,42 @@ void fk_Model::setBlendMode(const fk_BlendMode argMode,
 							const fk_BlendFactor argDstFactor)
 {
 	switch(argMode) {
-	  case FK_BLEND_ALPHA_MODE:
-		srcFactor = FK_FACTOR_SRC_ALPHA;
-		dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+	  case fk_BlendMode::ALPHA:
+		srcFactor = fk_BlendFactor::SRC_ALPHA;
+		dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
 		break;
 
-	  case FK_BLEND_NEGATIVE_MODE:
-		srcFactor = FK_FACTOR_ONE_MINUS_DST_COLOR;
-		dstFactor = FK_FACTOR_ZERO;
+	  case fk_BlendMode::NEGATIVE:
+		srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
+		dstFactor = fk_BlendFactor::ZERO;
 		break;
 
-	  case FK_BLEND_ADDITION_MODE:
-		srcFactor = FK_FACTOR_ONE;
-		dstFactor = FK_FACTOR_ONE;
+	  case fk_BlendMode::ADDITION:
+		srcFactor = fk_BlendFactor::ONE;
+		dstFactor = fk_BlendFactor::ONE;
 		break;
 
-	  case FK_BLEND_SCREEN_MODE:
-		srcFactor = FK_FACTOR_SRC_ALPHA;
-		dstFactor = FK_FACTOR_ONE;
+	  case fk_BlendMode::SCREEN:
+		srcFactor = fk_BlendFactor::SRC_ALPHA;
+		dstFactor = fk_BlendFactor::ONE;
 		break;
 
-	  case FK_BLEND_LIGHTEN_MODE:
-		srcFactor = FK_FACTOR_ONE_MINUS_DST_COLOR;
-		dstFactor = FK_FACTOR_ONE;
+	  case fk_BlendMode::LIGHTEN:
+		srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
+		dstFactor = fk_BlendFactor::ONE;
 		break;
 
-	  case FK_BLEND_MULTIPLY_MODE:
-		srcFactor = FK_FACTOR_ZERO;
-		dstFactor = FK_FACTOR_SRC_COLOR;
+	  case fk_BlendMode::MULTIPLY:
+		srcFactor = fk_BlendFactor::ZERO;
+		dstFactor = fk_BlendFactor::SRC_COLOR;
 		break;
 
-	  case FK_BLEND_NONE_MODE:
-		srcFactor = FK_FACTOR_ONE;
-		dstFactor = FK_FACTOR_ZERO;
+	  case fk_BlendMode::NONE:
+		srcFactor = fk_BlendFactor::ONE;
+		dstFactor = fk_BlendFactor::ZERO;
 		break;
 
-	  case FK_BLEND_CUSTOM_MODE:
+	  case fk_BlendMode::CUSTOM:
 		srcFactor = argSrcFactor;
 		dstFactor = argDstFactor;
 		break;
@@ -425,7 +443,7 @@ double fk_Model::getInhScale(void) const
 
 void fk_Model::setPointSize(const double argSize)
 {
-	if(argSize <= FK_EPS) return;
+	if(argSize <= fk_Math::EPS) return;
 	pointSize = argSize;
 	return;
 }
@@ -546,7 +564,7 @@ bool fk_Model::restore(double argT)
 	fk_Quaternion		qOrg, qNew, qRet;
 
 	if(snapFlag == false) return false;
-	if(argT < FK_EPS || argT > 1.0 + FK_EPS) return false;
+	if(argT < fk_Math::EPS || argT > 1.0 + fk_Math::EPS) return false;
 
 	qOrg.makeEuler(*snapAngle);
 	qNew.makeEuler(Angle);

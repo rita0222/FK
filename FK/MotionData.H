@@ -78,7 +78,7 @@
 
 namespace FK {
 
-	enum fk_MotionInterType {
+	enum class fk_MotionInterType {
 		LINEAR,
 		SPHERE,
 		POWER,
@@ -136,9 +136,9 @@ namespace FK {
 		std::vector<fk_Vector>			scaleArray;
 
 		fk_Vector		getInterVec(const fk_Vector &, const fk_Vector &,
-									double, fk_MotionInterType = LINEAR);
+									double, fk_MotionInterType = fk_MotionInterType::LINEAR);
 		fk_Quaternion	getInterQ(const fk_Quaternion &, const fk_Quaternion &,
-								  double, fk_MotionInterType = LINEAR);
+								  double, fk_MotionInterType = fk_MotionInterType::LINEAR);
 	};
 }
 

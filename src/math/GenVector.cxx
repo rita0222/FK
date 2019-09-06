@@ -153,7 +153,7 @@ bool fk_GenVector::operator ==(const fk_GenVector &argVec) const
 
 	if(size() != argVec.size()) return false;
 	tmp = *this - argVec;
-	if(tmp.norm2() < FK_VECTOREPS) return true;
+	if(tmp.norm2() < fk_Vector::VECTOREPS) return true;
 	return false;
 }
 
@@ -163,7 +163,7 @@ bool fk_GenVector::operator !=(const fk_GenVector &argVec) const
 
 	if(size() != argVec.size()) return true;
 	tmp = *this - argVec;
-	if(tmp.norm2() < FK_VECTOREPS) return false;
+	if(tmp.norm2() < fk_Vector::VECTOREPS) return false;
 	return true;
 }
 
@@ -212,7 +212,7 @@ fk_GenVector & fk_GenVector::operator /=(double d)
 	_st		i;
 	_st		end = static_cast<_st>(size());
 
-	if(fabs(d) < FK_VECTOREPS) return *this;
+	if(fabs(d) < fk_Vector::VECTOREPS) return *this;
 	for(i = 0; i < end; ++i) {
 		v[i] /= d;
 	}
@@ -296,7 +296,7 @@ bool fk_GenVector::normalize(void)
 	_st			i;
 	_st			end;
 
-	if(len < FK_VECTOREPS) return false;
+	if(len < fk_Vector::VECTOREPS) return false;
 	end = static_cast<_st>(size());
 	for(i = 0; i < end; ++i) {
 		v[i] /= len;
@@ -319,7 +319,7 @@ bool fk_GenVector::isZero(void) const
 {
 	double		d = norm2();
 
-	if(d < FK_VECTOREPS) return true;
+	if(d < fk_Vector::VECTOREPS) return true;
 	return false;
 }
 
@@ -573,7 +573,7 @@ namespace FK {
 		_st				i;
 		_st				size = static_cast<_st>(v.size());
 
-		if(d < FK_VECTOREPS) return v;
+		if(d < fk_Vector::VECTOREPS) return v;
 		for(i = 0; i < size; ++i) {
 			retVec.v[i] /= d;
 		}

@@ -123,7 +123,7 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 	if(argModel == nullptr) return;
 
 	if(argModel->getShape() != nullptr) {
-		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
+		if(argModel->getShape()->getRealShapeType() == fk_RealShapeType::LIGHT) {
 			fk_Light *light = dynamic_cast<fk_Light *>(argModel->getShape());
 			switch(light->getLightType()) {
 			  case fk_LightType::PARALLEL:
@@ -179,7 +179,7 @@ void fk_DisplayLink::entryOverlayModel(fk_Model *argModel)
 	if(argModel == nullptr) return;
 
 	if(argModel->getShape() != nullptr) {
-		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
+		if(argModel->getShape()->getRealShapeType() == fk_RealShapeType::LIGHT) {
 			return;
 		}
 	}
@@ -258,17 +258,17 @@ void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 	if(argProj == nullptr) return;
 
 	switch(argProj->getMode()) {
-	  case FK_PERSPECTIVE_MODE:
+	  case fk_ProjectMode::PERSPECTIVE:
 		perspective = *(static_cast<fk_Perspective *>(argProj));
 		proj = &perspective;
 		break;
 
-	  case FK_FRUSTUM_MODE:
+	  case fk_ProjectMode::FRUSTUM:
 		frustum = *(static_cast<fk_Frustum *>(argProj));
 		proj = &frustum;
 		break;
 
-	  case FK_ORTHO_MODE:
+	  case fk_ProjectMode::ORTHO:
 		ortho = *(static_cast<fk_Ortho *>(argProj));
 		proj = &ortho;
 		break;
@@ -321,17 +321,17 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 	}
 
 	switch(argProj->getMode()) {
-	  case FK_PERSPECTIVE_MODE:
+	  case fk_ProjectMode::PERSPECTIVE:
 		stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
 		stereoProj[index] = &stereoPers[index];
 		break;
 
-	  case FK_FRUSTUM_MODE:
+	  case fk_ProjectMode::FRUSTUM:
 		stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
 		stereoProj[index] = &stereoFrus[index];
 		break;
 
-	  case FK_ORTHO_MODE:
+	  case fk_ProjectMode::ORTHO:
 		stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
 		stereoProj[index] = &stereoOrtho[index];
 		break;

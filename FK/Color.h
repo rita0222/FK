@@ -78,8 +78,6 @@
 
 namespace FK {
 
-	const float FK_COLOR_EPS = 0.0001f;
-
 	//! RGB色を管理するクラス
 	/*!
 	 *	このクラスは、RGBA法による色を管理、制御する機能を提供します。
@@ -95,6 +93,8 @@ namespace FK {
 	 */
 	class fk_Color : public fk_BaseObject {
 	public:
+
+		static constexpr float EPS = 0.0001f;
 
 		//! 色要素配列
 		/*!
@@ -129,7 +129,7 @@ namespace FK {
 		//! 比較等号演算子
 		/*!
 		 *	この等号演算子では、各色要素の差が
-		 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
+		 *	fk_Color::EPS (現バージョンでは 0.0001) 内の誤差内であれば
 		 *	等しいと判断します。
 		 */
 		friend bool operator ==(fk_Color left, fk_Color right);

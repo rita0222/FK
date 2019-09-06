@@ -113,11 +113,11 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	} else {
 		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
 		switch(argModel->getShadingMode()) {
-		  case FK_SHADING_PHONG:
+		  case fk_ShadingMode::PHONG:
 			shader = phongShader;
 			break;
 
-		  case FK_SHADING_GOURAUD:
+		  case fk_ShadingMode::GOURAUD:
 			shader = gouraudShader;
 			break;
 
@@ -134,7 +134,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	shader->ProcPreShader();
 
 	switch(shapeType) {
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		Draw_IFS(argModel, parameter);
 		break;
 

@@ -91,7 +91,7 @@ const string fk_Shape::degreeName = "fk_Degree";
 
 fk_Shape::fk_Shape(fk_Type argObjType)
 	: palette(&defaultPalette), materialMode(fk_MaterialMode::NONE),
-	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(FK_SHAPE_OTHER)
+	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(fk_RealShapeType::OTHER)
 {
 	SetObjectType(argObjType);
 

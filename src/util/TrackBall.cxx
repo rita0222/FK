@@ -140,8 +140,9 @@ void fk_TrackBall::controlLookTo()
 	// クリック継続時
 	} else if(fk_win->getMouseStatus(lookButton, overCheck) & lookClick) {
 		fk_win->getMousePosition(&nowX, &nowY, overCheck);
-		camera->glRotateWithVec(lookPos, fk_Y, (double)(oldX - nowX)/divLook);
-		camera->glRotateWithVec(lookPos, lookPos+(camera->getVec()^camera->getUpVec()), (double)(oldY - nowY)/divLook);
+		camera->glRotateWithVec(lookPos, fk_Axis::Y, (double)(oldX - nowX)/divLook);
+		camera->glRotateWithVec(lookPos, lookPos + (camera->getVec() ^ camera->getUpVec()),
+								double(oldY - nowY)/divLook);
 		echoX = oldX - nowX;
 		echoY = oldY - nowY;
 		oldX = nowX;
@@ -150,8 +151,9 @@ void fk_TrackBall::controlLookTo()
 	} else {
 		lookClick = false;
 		if(bEcho) {
-			camera->glRotateWithVec(lookPos, fk_Y, (double)echoX/divLook);
-			camera->glRotateWithVec(lookPos, lookPos+(camera->getVec()^camera->getUpVec()), (double)echoY/divLook);
+			camera->glRotateWithVec(lookPos, fk_Axis::Y, double(echoX)/divLook);
+			camera->glRotateWithVec(lookPos, lookPos + (camera->getVec() ^ camera->getUpVec()),
+									double(echoY)/divLook);
 		}
 	}
 	// 注視点を向き続ける
@@ -228,25 +230,28 @@ void fk_TrackBall::controlLookToSC()
 	prevDist = camera->getPosition().dist();
 
 	if(fk_win->getKeyStatus('2', false) || Fl::get_key(FL_KP+'2')) {
-		camera->glMoveTo(cos(FK_PI/2.0)*prevDist, 0.0, sin(FK_PI/2.0)*prevDist);
+		camera->glMoveTo(cos(fk_Math::PI/2.0)*prevDist, 0.0, sin(fk_Math::PI/2.0)*prevDist);
 	} else if(fk_win->getKeyStatus('3', false) || Fl::get_key(FL_KP+'3')) {
-		camera->glMoveTo(cos(FK_PI/4.0)*prevDist, 0.0, sin(FK_PI/4.0)*prevDist);
+		camera->glMoveTo(cos(fk_Math::PI/4.0)*prevDist, 0.0, sin(fk_Math::PI/4.0)*prevDist);
 	} else if(fk_win->getKeyStatus('6', false) || Fl::get_key(FL_KP+'6')) {
 		camera->glMoveTo(cos(0.0)*prevDist, 0.0, sin(0.0)*prevDist);
 	} else if(fk_win->getKeyStatus('9', false) || Fl::get_key(FL_KP+'9')) {
-		camera->glMoveTo(cos(-FK_PI/4.0)*prevDist, 0.0, sin(-FK_PI/4.0)*prevDist);
+		camera->glMoveTo(cos(-fk_Math::PI/4.0)*prevDist, 0.0, sin(-fk_Math::PI/4.0)*prevDist);
 	} else if(fk_win->getKeyStatus('8', false) || Fl::get_key(FL_KP+'8')) {
-		camera->glMoveTo(cos(-FK_PI/2.0)*prevDist, 0.0, sin(-FK_PI/2.0)*prevDist);
+		camera->glMoveTo(cos(-fk_Math::PI/2.0)*prevDist, 0.0, sin(-fk_Math::PI/2.0)*prevDist);
 	} else if(fk_win->getKeyStatus('7', false) || Fl::get_key(FL_KP+'7')) {
-		camera->glMoveTo(cos(-FK_PI*3.0/4.0)*prevDist, 0.0, sin(-FK_PI*3.0/4.0)*prevDist);
+		camera->glMoveTo(cos(-fk_Math::PI*3.0/4.0)*prevDist, 0.0,
+						 sin(-fk_Math::PI*3.0/4.0)*prevDist);
 	} else if(fk_win->getKeyStatus('4', false) || Fl::get_key(FL_KP+'4')) {
-		camera->glMoveTo(cos(-FK_PI)*prevDist, 0.0, sin(-FK_PI)*prevDist);
+		camera->glMoveTo(cos(-fk_Math::PI)*prevDist, 0.0, sin(-fk_Math::PI)*prevDist);
 	} else if(fk_win->getKeyStatus('1', false) || Fl::get_key(FL_KP+'1')) {
-		camera->glMoveTo(cos(FK_PI*3.0/4.0)*prevDist, 0.0, sin(FK_PI*3.0/4.0)*prevDist);
+		camera->glMoveTo(cos(fk_Math::PI*3.0/4.0)*prevDist, 0.0,
+						 sin(fk_Math::PI*3.0/4.0)*prevDist);
 	} else if(fk_win->getKeyStatus('5', false) || Fl::get_key(FL_KP+'5')) {
 		camera->glMoveTo(0.0, prevDist, 0.0);
 	} else if(fk_win->getKeyStatus('0', false) || Fl::get_key(FL_KP+'0')) {
-		fk_Vector	tmpVec(cos(FK_PI*3.0/4.0)*prevDist, 0.66*prevDist, sin(FK_PI*3.0/4.0)*prevDist);
+		fk_Vector	tmpVec(cos(fk_Math::PI*3.0/4.0)*prevDist, 0.66*prevDist,
+						   sin(fk_Math::PI*3.0/4.0)*prevDist);
 		tmpVec.normalize();
 		camera->glMoveTo(tmpVec*prevDist);
 	}

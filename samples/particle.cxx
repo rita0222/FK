@@ -131,7 +131,7 @@ int main(int, char **)
 
 		double speed = vec.dist();
 		double t = (speed - minSpeed)/(maxSpeed - minSpeed);
-		double h = FK_PI*4.0/3.0 + min(1.0, max(0.0, t)) * FK_PI*2.0/3.0;
+		double h = fk_Math::PI*4.0/3.0 + min(1.0, max(0.0, t)) * fk_Math::PI*2.0/3.0;
 		col.setHSV(h, 1.0, 1.0);
 		p->setColor(col);
 		// パーティクルの x 座標が -50 以下になったら消去。
@@ -142,7 +142,7 @@ int main(int, char **)
 
 	viewer.setShape(2, particle.getShape());
 	viewer.setDrawMode(2, fk_DrawMode::POINT);
-	viewer.setElementMode(2, FK_ELEM_ELEMENT);
+	viewer.setElementMode(2, fk_ElementMode::ELEMENT);
 	viewer.setPointSize(2, 3.0);
 
 	viewer.setShape(3, &prism);

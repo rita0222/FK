@@ -102,7 +102,7 @@ fk_Half::fk_Half(const fk_Half &argHf)
 
 void fk_Half::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argDB, argID, FK_HALF_TYPE);
+	InitTopology(argDB, argID, fk_TopologyType::HALF);
 	vertex = FK_UNDEFINED;
 	parentEdge = FK_UNDEFINED;
 	nextHalf = FK_UNDEFINED;

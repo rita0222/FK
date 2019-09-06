@@ -95,9 +95,9 @@ namespace FK {
 							  fk_Material *, bool);
 
 	private:
-		enum fk_VRMLOutMode {
-			FK_VRML_NONE,
-			FK_VRML_INTR
+		enum class fk_VRMLOutMode {
+			NONE,
+			INTR
 		};
 
 		fk_Solid		*solid;

@@ -163,12 +163,12 @@ void fk_Gregory::BezSet(double argU, double argV)
 
 fk_Vector fk_Gregory::pos(double argU, double argV)
 {
-	if(fabs(argU) < FK_EPS) {
-		if(fabs(argV) < FK_EPS) return ctrl[0];
-		if(fabs(1.0 - argV) < FK_EPS) return ctrl[12];
-	} else if(fabs(1.0 - argU) < FK_EPS) {
-		if(fabs(argV) < FK_EPS) return ctrl[3];
-		if(fabs(1.0 - argV) < FK_EPS) return ctrl[15];
+	if(fabs(argU) < fk_Math::EPS) {
+		if(fabs(argV) < fk_Math::EPS) return ctrl[0];
+		if(fabs(1.0 - argV) < fk_Math::EPS) return ctrl[12];
+	} else if(fabs(1.0 - argU) < fk_Math::EPS) {
+		if(fabs(argV) < fk_Math::EPS) return ctrl[3];
+		if(fabs(1.0 - argV) < fk_Math::EPS) return ctrl[15];
 	}
 
 	BezSet(argU, argV);
@@ -177,12 +177,12 @@ fk_Vector fk_Gregory::pos(double argU, double argV)
 
 fk_Vector fk_Gregory::uDeriv(double argU, double argV)
 {
-	if(fabs(argU) < FK_EPS) {
-		if(fabs(argV) < FK_EPS) return (3.0 * (ctrl[1] - ctrl[0]));
-		if(fabs(1.0 - argV) < FK_EPS) return (3.0 * (ctrl[13] - ctrl[12]));
-	} else if(fabs(1.0 - argU) < FK_EPS) {
-		if(fabs(argV) < FK_EPS) return (3.0 * (ctrl[3] - ctrl[2]));
-		if(fabs(1.0 - argV) < FK_EPS) return (3.0 * (ctrl[15] - ctrl[14]));
+	if(fabs(argU) < fk_Math::EPS) {
+		if(fabs(argV) < fk_Math::EPS) return (3.0 * (ctrl[1] - ctrl[0]));
+		if(fabs(1.0 - argV) < fk_Math::EPS) return (3.0 * (ctrl[13] - ctrl[12]));
+	} else if(fabs(1.0 - argU) < fk_Math::EPS) {
+		if(fabs(argV) < fk_Math::EPS) return (3.0 * (ctrl[3] - ctrl[2]));
+		if(fabs(1.0 - argV) < fk_Math::EPS) return (3.0 * (ctrl[15] - ctrl[14]));
 	}
 
 	BezSet(argU, argV);
@@ -191,12 +191,12 @@ fk_Vector fk_Gregory::uDeriv(double argU, double argV)
 	
 fk_Vector fk_Gregory::vDeriv(double argU, double argV)
 {
-	if(fabs(argU) < FK_EPS) {
-		if(fabs(argV) < FK_EPS) return (3.0 * (ctrl[4] - ctrl[0]));
-		if(fabs(1.0 - argV) < FK_EPS) return (3.0 * (ctrl[12] - ctrl[8]));
-	} else if(fabs(1.0 - argU) < FK_EPS) {
-		if(fabs(argV) < FK_EPS) return (3.0 * (ctrl[7] - ctrl[3]));
-		if(fabs(1.0 - argV) < FK_EPS) return (3.0 * (ctrl[15] - ctrl[11]));
+	if(fabs(argU) < fk_Math::EPS) {
+		if(fabs(argV) < fk_Math::EPS) return (3.0 * (ctrl[4] - ctrl[0]));
+		if(fabs(1.0 - argV) < fk_Math::EPS) return (3.0 * (ctrl[12] - ctrl[8]));
+	} else if(fabs(1.0 - argU) < fk_Math::EPS) {
+		if(fabs(argV) < fk_Math::EPS) return (3.0 * (ctrl[7] - ctrl[3]));
+		if(fabs(1.0 - argV) < fk_Math::EPS) return (3.0 * (ctrl[15] - ctrl[11]));
 	}
 
 	BezSet(argU, argV);

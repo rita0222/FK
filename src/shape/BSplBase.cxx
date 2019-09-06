@@ -71,19 +71,19 @@
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
 #include <FK/BSplBase.H>
-#include <FK/Base.h>
+#include <FK/Math.h>
 
 using namespace std;
 using namespace FK;
 
 bool BSplBase::IsSame(double a, double b)
 {
-	return ((a + FK_EPS) > b && (a - FK_EPS) < b);
+	return ((a + fk_Math::EPS) > b && (a - fk_Math::EPS) < b);
 }
 
 bool BSplBase::IsBig(double a, double b)
 {
-	return ((a + FK_EPS) >= b);
+	return ((a + fk_Math::EPS) >= b);
 }
 
 bool BSplBase::UpdateKnot(int o, int n, vector<double> &knotVec)

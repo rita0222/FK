@@ -79,30 +79,30 @@
 namespace FK {
 
 	//! テクスチャモードを表す列挙型
-	enum fk_TexMode {
-		FK_TEX_MODULATE,	//!< 積算モード
-		FK_TEX_REPLACE,		//!< 画像モード
-		FK_TEX_DECAL,		//!< 線形補間モード
-		FK_TEX_NONE			//!< 指定なし
+	enum class fk_TexMode {
+		MODULATE,	//!< 積算モード
+		REPLACE,		//!< 画像モード
+		DECAL,		//!< 線形補間モード
+		NONE			//!< 指定なし
 	};
 
 	//! テクスチャ描画品質を表す列挙型
-	enum fk_TexRendMode {
-		FK_TEX_REND_NORMAL,	//!< 標準品質
-		FK_TEX_REND_SMOOTH	//!< 高品質
+	enum class fk_TexRendMode {
+		NORMAL,	//!< 標準品質
+		SMOOTH	//!< 高品質
 	};
 	
 	//! テクスチャ外周部の描画モードを表す列挙型
-	enum fk_TexWrapMode {
-		FK_TEX_WRAP_REPEAT,		//!< 繰り返し式
-		FK_TEX_WRAP_CLAMP,		//!< 縁部伸張式
+	enum class fk_TexWrapMode {
+		REPEAT,		//!< 繰り返し式
+		CLAMP,		//!< 縁部伸張式
 	};
 
 	// フレームバッファのサンプリングソースを表す列挙型
-	enum fk_SamplerSource {
-		FK_TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
-		FK_COLOR_BUFFER,	//!< 画面色情報参照
-		FK_DEPTH_BUFFER,	//!< 画面深度情報参照
+	enum class fk_SamplerSource {
+		TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
+		COLOR_BUFFER,	//!< 画面色情報参照
+		DEPTH_BUFFER,	//!< 画面深度情報参照
 	};
 
 	//! テクスチャ用基底クラス
@@ -243,7 +243,7 @@ namespace FK {
 		 *	\f$ T_f \f$ はテクスチャピクセル色、
 		 *	\f$ T_\alpha \f$ はテクスチャの透明度を表します。
 		 *
-		 *	- FK_TEX_MODULATE \n
+		 *	- fk_TexMode::MODULATE \n
 		 *		この設定では、ポリゴンの色とテクスチャの色を積算します。
 		 *		そのため、光源による陰影効果が生じます。
 		 *		透明度に関しても積算となります。
@@ -253,7 +253,7 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *
-		 *	- FK_TEX_REPLACE \n
+		 *	- fk_TexMode::REPLACE \n
 		 *		この設定では、ポリゴンの色は完全に無視され、
 		 *		テクスチャのピクセル色がそのまま表示されます。
 		 *		そのため、光源による陰影効果が生じません。
@@ -264,7 +264,7 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *
-		 *	- FK_TEX_DECAL \n
+		 *	- fk_TexMode::DECAL \n
 		 *		この設定では、各ピクセルの透明度に応じて、
 		 *		ポリゴン色とピクセル色の混合が行われます。
 		 *		光源による陰影効果は、ピクセルの透明度が低い場合に強くなります。
@@ -275,10 +275,10 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *	.
-		 *	デフォルトでは FK_TEX_MODULATE が設定されています。
+		 *	デフォルトでは fk_TexMode::MODULATE が設定されています。
 		 *	なお、同様の設定は fk_Model::setTextureMode() でも行うことが可能で、
-		 *	fk_Model 側で FK_TEX_NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
-		 *	fk_Model 側で FK_TEX_NONE が設定されている場合のみ、
+		 *	fk_Model 側で fk_TexMode::NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で fk_TexMode::NONE が設定されている場合のみ、
 		 *	この fk_Texture 側での設定が有効となります。
 		 *
 		 *	\param[in]		mode	モード
@@ -301,10 +301,10 @@ namespace FK {
 		/*!
 		 *	テクスチャの描画品質を設定します。
 		 *	設定可能なモードは以下の通りです。
-		 *	- FK_TEX_REND_NORMAL: 標準品質。描画速度を優先します。
-		 *	- FK_TEX_REND_SMOOTH: 高品質。画質を優先します。
+		 *	- fk_TexRendMode::NORMAL: 標準品質。描画速度を優先します。
+		 *	- fk_TexRendMode::SMOOTH: 高品質。画質を優先します。
 		 *	.
-		 *	なお、デフォルトでは FK_TEX_REND_NORMAL が設定されています。
+		 *	なお、デフォルトでは fk_TexRendMode::NORMAL が設定されています。
 		 *
 		 *	\param[in]	mode	品質モード
 		 */
@@ -325,10 +325,10 @@ namespace FK {
 		 *	テクスチャ描画の際、外周部についてどのように描画するかを設定します。
 		 *	設定できる種類は以下のとおりです。
 		 *
-		 *	- FK_TEX_WRAP_REPEAT: 内部の画像を繰り返して描画していきます。
-		 *	- FK_TEX_WRAP_CLAMP: 縁部の色値を伸張して描画します。
+		 *	- fk_TexWrapMode::REPEAT: 内部の画像を繰り返して描画していきます。
+		 *	- fk_TexWrapMode::CLAMP: 縁部の色値を伸張して描画します。
 		 *	.
-		 *	なお、デフォルトでは FK_TEX_WRAP_REPEAT に設定されています。
+		 *	なお、デフォルトでは fk_TexWrapMode::REPEAT に設定されています。
 		 *
 		 *	\param[in]	mode	外周部モード
 		 */
@@ -389,15 +389,15 @@ namespace FK {
 		 *	参照テクスチャが参照する情報を設定します。
 		 *	設定できる種類は以下のとおりです。
 		 *
-		 *	- FK_TEXTURE_IMAGE: 
+		 *	- fk_SamplerSource::TEXTURE_IMAGE: 
 		 *		コンストラクタで設定した
 		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
-		 *	- FK_COLOR_BUFFER: 
+		 *	- fk_SamplerSource::COLOR_BUFFER: 
 		 *		描画シーン全体の色値情報を参照先とします。
-		 *	- FK_DEPTH_BUFFER: 
+		 *	- fk_SamplerSource::DEPTH_BUFFER: 
 		 *		描画シーン全体の深度情報を参照先とします。
 		 *	.
-		 *	デフォルトは FK_TEXTURE_IMAGE に設定されています。
+		 *	デフォルトは fk_SamplerSource::TEXTURE_IMAGE に設定されています。
 		 *
 		 *	\param[in]	mode
 		 *		テクスチャ参照情報の参照先

@@ -81,7 +81,7 @@ using namespace FK;
 // 0 との比較関数 (実数用) 
 inline bool AlmostZero(double x)
 {
-	if(x < FK_MATRIX_EPS && x > -FK_MATRIX_EPS) return true;
+	if(x < fk_Vector::MATRIXEPS && x > -fk_Vector::MATRIXEPS) return true;
 	else return false;
 }
 
@@ -201,7 +201,7 @@ static bool fk_LUDecomposition(double Mat[4][4], int index[4])
 		index[j] = iMax;
 
 		if(AlmostZero(Mat[j][j]) == true) {
-			Mat[j][j] = FK_MATRIX_EPS2;
+			Mat[j][j] = fk_Vector::MATRIXEPS2;
 		}
 
 		if(j != 3) {
@@ -517,17 +517,17 @@ void fk_OrthoMatrix::makeRot(double Angle, fk_Axis Axis)
 	double cosValue = cos(Angle);
 
 	switch(Axis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		m[1][1] =  cosValue; m[1][2] = -sinValue;
 		m[2][1] =  sinValue; m[2][2] =	cosValue;
 		break;
 
-	  case fk_Y:
+	  case fk_Axis::Y:
 		m[0][0] =  cosValue; m[0][2] =	sinValue;
 		m[2][0] = -sinValue; m[2][2] =	cosValue;
 		break;
 
-	  case fk_Z:
+	  case fk_Axis::Z:
 		m[0][0] =  cosValue; m[0][1] = -sinValue;
 		m[1][0] =  sinValue; m[1][1] =	cosValue;
 		break;
@@ -568,9 +568,9 @@ void fk_OrthoMatrix::makeEuler(double h, double p, double b)
 {
 	fk_OrthoMatrix	hM, pM, bM;
 
-	hM.makeRot(-h, fk_Y);
-	pM.makeRot(p, fk_X);
-	bM.makeRot(-b, fk_Z);
+	hM.makeRot(-h, fk_Axis::Y);
+	pM.makeRot(p, fk_Axis::X);
+	bM.makeRot(-b, fk_Axis::Z);
 
 	*this = hM * pM * bM;
 

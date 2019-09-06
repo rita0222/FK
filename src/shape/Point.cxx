@@ -92,7 +92,7 @@ fk_Point::fk_Point(vector<fk_Vector> *argVertexSet)
 
 	posArray.setDim(3);
 	colArray.setDim(4);
-	realType = FK_SHAPE_POINT;
+	realType = fk_RealShapeType::POINT;
 	SetObjectType(fk_Type::POINT);
 	allClear();
 	MakePoint(argVertexSet);
@@ -140,7 +140,7 @@ int fk_Point::pushVertex(const fk_Vector &argPos)
 {
 	posArray.push(argPos);
 	colArray.push(0.0, 0.0, 0.0, 1.0);
-	aliveArray.push_back(FK_SHAPE_ALIVE);
+	aliveArray.push_back(fk_Shape::ALIVE);
 
 	modifyAttribute(pointElementAliveName);
 
@@ -150,7 +150,7 @@ int fk_Point::pushVertex(const fk_Vector &argPos)
 bool fk_Point::setVertex(int argID, const fk_Vector &argPos)
 {
 	if(argID < 0 || argID >= posArray.getSize()) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
+	if(aliveArray[_st(argID)] == fk_Shape::DEAD) return false;
 	posArray.set(argID, argPos);
 
 	return true;
@@ -164,8 +164,8 @@ bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)
 bool fk_Point::removeVertex(int argID)
 {
 	if(argID < 0 || argID >= int(aliveArray.size())) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return false;
-	aliveArray[_st(argID)] = FK_SHAPE_DEAD;
+	if(aliveArray[_st(argID)] == fk_Shape::DEAD) return false;
+	aliveArray[_st(argID)] = fk_Shape::DEAD;
 
 	modifyAttribute(pointElementAliveName);
 
@@ -175,7 +175,7 @@ bool fk_Point::removeVertex(int argID)
 fk_Vector fk_Point::getVertex(int argID)
 {
 	fk_Vector tmp(0.0, 0.0, 0.0);
-	if(aliveArray[_st(argID)] == FK_SHAPE_DEAD) return tmp;
+	if(aliveArray[_st(argID)] == fk_Shape::DEAD) return tmp;
 	
 	return posArray.getV(argID);
 }
@@ -214,14 +214,14 @@ fk_Color fk_Point::getColor(int argID)
 void fk_Point::setDrawMode(int argID, bool argMode)
 {
 	if(argID < 0 || argID >= int(aliveArray.size())) return;
-	aliveArray[_st(argID)] = (argMode) ? FK_SHAPE_ALIVE : FK_SHAPE_DEAD;
+	aliveArray[_st(argID)] = (argMode) ? fk_Shape::ALIVE : fk_Shape::DEAD;
 	modifyAttribute(pointElementAliveName);
 }
 
 bool fk_Point::getDrawMode(int argID)
 {
 	if(argID < 0 || argID >= int(aliveArray.size())) return false;
-	if(aliveArray[_st(argID)] == FK_SHAPE_ALIVE) return true;
+	if(aliveArray[_st(argID)] == fk_Shape::ALIVE) return true;
 	return false;
 }
 

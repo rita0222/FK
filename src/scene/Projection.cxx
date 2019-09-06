@@ -90,20 +90,20 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 	Mode = argMode;
 
 	switch(Mode) {
-	  case FK_NONE_PROJ_MODE:
+	  case fk_ProjectMode::NONE:
 		SetObjectType(fk_Type::PROJECTBASE);
 		MakeMat = [&] { ProjM.init(); };
 		break;
 
-	  case FK_PERSPECTIVE_MODE:
+	  case fk_ProjectMode::PERSPECTIVE:
 		SetObjectType(fk_Type::PERSPECTIVE);
 		break;
 
-	  case FK_FRUSTUM_MODE:
+	  case fk_ProjectMode::FRUSTUM:
 		SetObjectType(fk_Type::FRUSTUM);
 		break;
 
-	  case FK_ORTHO_MODE:
+	  case fk_ProjectMode::ORTHO:
 		SetObjectType(fk_Type::ORTHO);
 		break;
 
@@ -125,7 +125,7 @@ fk_ProjectMode fk_ProjectBase::getMode(void) const
 }
 
 fk_Perspective::fk_Perspective(double argFovy, double argNear, double argFar)
-	: fk_ProjectBase(FK_PERSPECTIVE_MODE)
+	: fk_ProjectBase(fk_ProjectMode::PERSPECTIVE)
 {
 	MakeMat = [&] { ProjM.makePerspective(Fovy, Near, Far, Aspect); };
 	AutoMode = true;
@@ -135,7 +135,7 @@ fk_Perspective::fk_Perspective(double argFovy, double argNear, double argFar)
 }
 
 fk_Perspective::fk_Perspective(const fk_Perspective &argPers)
-	: fk_ProjectBase(FK_PERSPECTIVE_MODE)
+	: fk_ProjectBase(fk_ProjectMode::PERSPECTIVE)
 {
 	MakeMat = [&] { ProjM.makePerspective(Fovy, Near, Far, Aspect); };
 	AutoMode = true;
@@ -149,7 +149,7 @@ fk_Perspective::~fk_Perspective()
 
 fk_Perspective & fk_Perspective::operator =(const fk_Perspective &argPers)
 {
-	SetMode(FK_PERSPECTIVE_MODE);
+	SetMode(fk_ProjectMode::PERSPECTIVE);
 	AutoMode = argPers.AutoMode;
 	setAll(argPers.Fovy, argPers.Near, argPers.Far, argPers.Aspect);
 
@@ -158,7 +158,7 @@ fk_Perspective & fk_Perspective::operator =(const fk_Perspective &argPers)
 
 void fk_Perspective::setFovy(double argFovy)
 {
-	if(argFovy <= 0.0 || argFovy > FK_PI) {
+	if(argFovy <= 0.0 || argFovy > fk_Math::PI) {
 		fk_PutError("fk_Perspective", "setFovy", 1, "Fovy Angle Error.");
 		return;
 	}
@@ -242,7 +242,7 @@ double fk_Perspective::getAspect(void) const
 fk_Frustum::fk_Frustum(double argLeft, double argRight,
 					   double argBottom, double argTop,
 					   double argNear, double argFar)
-	: fk_ProjectBase(FK_FRUSTUM_MODE)
+	: fk_ProjectBase(fk_ProjectMode::FRUSTUM)
 {
 	MakeMat = [&] { ProjM.makeFrustum(Left, Right, Bottom, Top, Near, Far); };
 	setAll(argLeft, argRight, argBottom, argTop, argNear, argFar);
@@ -250,7 +250,7 @@ fk_Frustum::fk_Frustum(double argLeft, double argRight,
 }
 
 fk_Frustum::fk_Frustum(const fk_Frustum &argFrustum)
-	: fk_ProjectBase(FK_FRUSTUM_MODE)
+	: fk_ProjectBase(fk_ProjectMode::FRUSTUM)
 {
 	MakeMat = [&] { ProjM.makeFrustum(Left, Right, Bottom, Top, Near, Far); };
 	setAll(argFrustum.Left, argFrustum.Right,
@@ -266,7 +266,7 @@ fk_Frustum::~fk_Frustum()
 
 fk_Frustum & fk_Frustum::operator =(const fk_Frustum &argFrustum)
 {
-	SetMode(FK_FRUSTUM_MODE);
+	SetMode(fk_ProjectMode::FRUSTUM);
 	setAll(argFrustum.Left, argFrustum.Right,
 		   argFrustum.Bottom, argFrustum.Top,
 		   argFrustum.Near, argFrustum.Far);
@@ -356,7 +356,7 @@ double fk_Frustum::getFar(void) const
 fk_Ortho::fk_Ortho(double argLeft, double argRight,
 				   double argBottom, double argTop,
 				   double argNear, double argFar)
-	: fk_ProjectBase(FK_ORTHO_MODE)
+	: fk_ProjectBase(fk_ProjectMode::ORTHO)
 {
 	MakeMat = [&] { ProjM.makeOrtho(Left, Right, Bottom, Top, Near, Far); };
 	setAll(argLeft, argRight, argBottom, argTop, argNear, argFar);
@@ -364,7 +364,7 @@ fk_Ortho::fk_Ortho(double argLeft, double argRight,
 }
 
 fk_Ortho::fk_Ortho(const fk_Ortho &argOrtho)
-	: fk_ProjectBase(FK_ORTHO_MODE)
+	: fk_ProjectBase(fk_ProjectMode::ORTHO)
 {
 	MakeMat = [&] { ProjM.makeOrtho(Left, Right, Bottom, Top, Near, Far); };
 	setAll(argOrtho.Left, argOrtho.Right,
@@ -379,7 +379,7 @@ fk_Ortho::~fk_Ortho()
 
 fk_Ortho & fk_Ortho::operator =(const fk_Ortho &argOrtho)
 {
-	SetMode(FK_ORTHO_MODE);
+	SetMode(fk_ProjectMode::ORTHO);
 	setAll(argOrtho.Left, argOrtho.Right,
 		   argOrtho.Bottom, argOrtho.Top,
 		   argOrtho.Near, argOrtho.Far);

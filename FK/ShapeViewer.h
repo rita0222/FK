@@ -85,27 +85,27 @@
 namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	enum fk_ShapeGUIMenuItem {
-		FK_SV_GUI_NONE,
-		FK_SV_GUI_WRLOPEN,
-		FK_SV_GUI_STLOPEN,
-		FK_SV_GUI_DXFOPEN,
-		FK_SV_GUI_WRLSAVE,
-		FK_SV_GUI_STLSAVE,
-		FK_SV_GUI_IMAGESNAP,
-		FK_SV_GUI_QUIT,
-		FK_SV_GUI_POLYDRAW,
-		FK_SV_GUI_EDGEDRAW,
-		FK_SV_GUI_VERTEXDRAW,
-		FK_SV_GUI_LIGHTROTATE,
-		FK_SV_GUI_AXISDRAW,
-		FK_SV_GUI_AMBIENT,
-		FK_SV_GUI_DIFFUSE,
-		FK_SV_GUI_SPECULAR,
-		FK_SV_GUI_EMISSION,
-		FK_SV_GUI_SHININESS,
-		FK_SV_GUI_VERTEXCOLOR,
-		FK_SV_GUI_EDGECOLOR
+	enum class fk_ShapeGUIMenuItem {
+		NONE,
+		WRLOPEN,
+		STLOPEN,
+		DXFOPEN,
+		WRLSAVE,
+		STLSAVE,
+		IMAGESNAP,
+		QUIT,
+		POLYDRAW,
+		EDGEDRAW,
+		VERTEXDRAW,
+		LIGHTROTATE,
+		AXISDRAW,
+		AMBIENT,
+		DIFFUSE,
+		SPECULAR,
+		EMISSION,
+		SHININESS,
+		VERTEXCOLOR,
+		EDGECOLOR
 	};
 
 	class fk_GUI_;
@@ -263,12 +263,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- FK_NONEMODE:				何も描画しません。
-		 *	- FK_POINTMODE:				頂点を描画します。
-		 *	- FK_LINEMODE:				稜線を描画します。
-		 *	- FK_POLYMODE:				面の表を描画します。
-		 *	- FK_BACK_POLYMODE:			面の裏を描画します。
-		 *	- FK_FRONTBACK_POLYMODE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::NONE:			何も描画しません。
+		 *	- fk_DrawMode::POINT:			頂点を描画します。
+		 *									曲線・曲面の場合は制御点を描画します。
+		 *	- fk_DrawMode::LINE:			稜線を描画します。
+		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_DrawMode::FACE:			面の表を描画します。
+		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
+		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
+		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -276,7 +282,7 @@ namespace FK {
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(FK_POINTMODE | FK_LINEMODE | FK_POLYMODE);
+		 *		viewer.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
 		 *
 		 *	個別の形状に対して別々の描画モードを設定する場合は、
 		 *	setDrawMode(int, fk_DrawMode) を利用して下さい。
@@ -301,9 +307,9 @@ namespace FK {
 		/*!
 		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
 		 *	モードには以下のものがあります。
-		 *	- FK_ELEM_NONE:		何も描画しません。
-		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
-		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	- fk_ElementMode::NONE:		何も描画しません。
+		 *	- fk_ElementMode::MODEL:	モデル設定を優先します。
+		 *	- fk_ElementMode::ELEMENT:	形状内の個別要素設定を優先します。
 		 *	.
 		 *
 		 *	\param[in]	mode	設定モード
@@ -479,12 +485,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- FK_NONEMODE:				何も描画しません。
-		 *	- FK_POINTMODE:				頂点を描画します。
-		 *	- FK_LINEMODE:				稜線を描画します。
-		 *	- FK_POLYMODE:				面の表を描画します。
-		 *	- FK_BACK_POLYMODE:			面の裏を描画します。
-		 *	- FK_FRONTBACK_POLYMODE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::NONE:			何も描画しません。
+		 *	- fk_DrawMode::POINT:			頂点を描画します。
+		 *									曲線・曲面の場合は制御点を描画します。
+		 *	- fk_DrawMode::LINE:			稜線を描画します。
+		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_DrawMode::FACE:			面の表を描画します。
+		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
+		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
+		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -492,7 +504,7 @@ namespace FK {
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(0, FK_POINTMODE | FK_LINEMODE | FK_POLYMODE);
+		 *		viewer.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
 		 *
 		 *	全ての形状に対しての描画モードを設定する場合は、
 		 *	setDrawMode(fk_DrawMode) を利用して下さい。
@@ -520,9 +532,9 @@ namespace FK {
 		/*!
 		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
 		 *	モードには以下のものがあります。
-		 *	- FK_ELEM_NONE:		何も描画しません。
-		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
-		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	- fk_ElementMode::NONE:		何も描画しません。
+		 *	- fk_ElementMode::MODEL:	モデル設定を優先します。
+		 *	- fk_ElementMode::ELEMENT:	形状内の個別要素設定を優先します。
 		 *	.
 		 *
 		 *	\param[in]	ID		形状 ID

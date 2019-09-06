@@ -90,7 +90,7 @@ using namespace FK;
 
 fk_Solid::fk_Solid(void)
 {
-	realType = FK_SHAPE_SOLID;
+	realType = fk_RealShapeType::SOLID;
 	SolidDB = new fk_DataBase;
 
 	SetObjectType(fk_Type::SOLID);

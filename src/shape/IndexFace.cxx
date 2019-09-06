@@ -172,7 +172,7 @@ fk_IndexFaceSet::fk_IndexFaceSet(void)
 	  edgeIBO(0), faceIBO(0)
 {
 	SetObjectType(fk_Type::INDEXFACESET);
-	realType = FK_SHAPE_IFS;
+	realType = fk_RealShapeType::IFS;
 
 	Init();
 
@@ -993,15 +993,15 @@ void fk_IndexFaceSet::setBlockSize(double argSize, fk_Axis argAxis)
 	pos.y = fabs(pos.y) * 2.0;
 	pos.z = fabs(pos.z) * 2.0;
 	switch(argAxis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		pos.x = argSize;
 		break;
 		
-	  case fk_Y:
+	  case fk_Axis::Y:
 		pos.y = argSize;
 		break;
 		
-	  case fk_Z:
+	  case fk_Axis::Z:
 		pos.z = argSize;
 		break;
 
@@ -1025,15 +1025,15 @@ void fk_IndexFaceSet::setBlockScale(double argScale, fk_Axis argAxis)
 	pos.y = fabs(pos.y) * 2.0;
 	pos.z = fabs(pos.z) * 2.0;
 	switch(argAxis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		pos.x *= argScale;
 		break;
 		
-	  case fk_Y:
+	  case fk_Axis::Y:
 		pos.y *= argScale;
 		break;
 		
-	  case fk_Z:
+	  case fk_Axis::Z:
 		pos.z *= argScale;
 		break;
 
@@ -1066,7 +1066,7 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 	vecArray[_st(argDiv*4)].set(0.0, 0.0, 0.0);
 
 	for(int i = 0; i < 4 * argDiv; ++i) {
-		theta = (double(i) * FK_PI)/(double(argDiv*2));
+		theta = (double(i) * fk_Math::PI)/(double(argDiv*2));
 		vecArray[_st(i)].set(cos(theta) * argRadius,
 							 sin(theta) * argRadius, 0.0);
 	}
@@ -1140,7 +1140,7 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	xz_radius.resize(div*2 - 1);
 
 	for(i = 0; i < div*2 - 1; ++i) {
-		xz_radius[i] = argRadius*sin(double(i+1)*FK_PI/double(div*2));
+		xz_radius[i] = argRadius*sin(double(i+1)*fk_Math::PI/double(div*2));
 	}
 
 	vecArray.front().set(0.0, argRadius, 0.0);
@@ -1149,8 +1149,8 @@ void fk_IndexFaceSet::makeSphere(int argDiv, double argRadius)
 	for(i = 0; i < div*2 - 1; ++i) {
 		for(j = 0; j < div*4; ++j) {
 			index = i*div*4 + j + 1;
-			theta1 = double(j)*FK_PI/double(div*2);
-			theta2 = double(i+1)*FK_PI/double(div*2);
+			theta1 = double(j)*fk_Math::PI/double(div*2);
+			theta2 = double(i+1)*fk_Math::PI/double(div*2);
 			vecArray[index].set(xz_radius[i] * cos(theta1),
 								argRadius * cos(theta2),
 								xz_radius[i] * sin(theta1));
@@ -1253,7 +1253,7 @@ void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
 	vecArray[4*div+1].set(0.0, 0.0, -argHeight);
 
 	for(_st j = 0; j < div; ++j) {
-		double theta = (double(j*2) * FK_PI)/double(div);
+		double theta = (double(j*2) * fk_Math::PI)/double(div);
 
 		// 底面
 		vecArray[j].set(cos(theta) * argBottom,
@@ -1343,7 +1343,7 @@ void fk_IndexFaceSet::setPrismTopRadius(double argTop)
 	div = (vertexPosition.getSize()-2)/4;
 	z = vertexPosition.getV(2*div).z;
 	for(i = 0; i < div; ++i) {
-		theta = (double(i*2) * FK_PI)/double(div);
+		theta = (double(i*2) * fk_Math::PI)/double(div);
 		vec.set(cos(theta) * argTop, sin(theta) * argTop, z);
 		moveVPosition(2*div+i, vec);
 		moveVPosition(3*div+i, vec);
@@ -1361,7 +1361,7 @@ void fk_IndexFaceSet::setPrismBottomRadius(double argBottom)
 
 	div = (vertexPosition.getSize()-2)/4;
 	for(i = 0; i < div; ++i) {
-		theta = (double(i*2) * FK_PI)/double(div);
+		theta = (double(i*2) * fk_Math::PI)/double(div);
 		vec.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
 		moveVPosition(i, vec);
 		moveVPosition(div+i, vec);
@@ -1399,7 +1399,7 @@ void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight)
 	vecArray[3*div].set(0.0, 0.0, 0.0);
 
 	for(_st j = 0; j < div; ++j) {
-		double theta = (double(j*2) * FK_PI)/double(div);
+		double theta = (double(j*2) * fk_Math::PI)/double(div);
 		vecArray[j].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 		vecArray[div+j] = vecArray[j];
 		vecArray[2*div+j].set(0.0, 0.0, -argHeight);
@@ -1455,7 +1455,7 @@ void fk_IndexFaceSet::setConeRadius(double argRadius)
 
 	div = (vertexPosition.getSize()-1)/3;
 	for(int i = 0; i < div; ++i) {
-		theta = (double(i*2) * FK_PI)/double(div);
+		theta = (double(i*2) * fk_Math::PI)/double(div);
 		vec.set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 		moveVPosition(i, vec);
 		moveVPosition(div+i, vec);
@@ -1487,7 +1487,7 @@ void fk_IndexFaceSet::MakeCapsuleVec(vector<fk_Vector> *argVec, int argDiv,
 	xy_radius.resize(div*2);
 
 	for(i = 0; i < div; ++i) {
-		xy_radius[i] = argRad*sin(double(i+1)*FK_PI/double(div*2));
+		xy_radius[i] = argRad*sin(double(i+1)*fk_Math::PI/double(div*2));
 		xy_radius[(2*div-1) - i] = xy_radius[i];
 	}
 
@@ -1497,8 +1497,8 @@ void fk_IndexFaceSet::MakeCapsuleVec(vector<fk_Vector> *argVec, int argDiv,
 	for(i = 0; i < div; ++i) {
 		for(j = 0; j < div*4; ++j) {
 			index1 = i*div*4 + j + 1;
-			theta1 = double(j)*FK_PI/double(div*2);
-			theta2 = double(i+1)*FK_PI/double(div*2);
+			theta1 = double(j)*fk_Math::PI/double(div*2);
+			theta2 = double(i+1)*fk_Math::PI/double(div*2);
 			argVec->at(index1).set(xy_radius[i] * cos(theta1),
 								   xy_radius[i] * sin(theta1),
 								   argRad * cos(theta2) + len);
@@ -1509,8 +1509,8 @@ void fk_IndexFaceSet::MakeCapsuleVec(vector<fk_Vector> *argVec, int argDiv,
 	for(i = div; i < div*2; ++i) {
 		for(j = 0; j < div*4; ++j) {
 			index1 = i*div*4 + j + 1;
-			theta1 = double(j)*FK_PI/double(div*2);
-			theta2 = double(i)*FK_PI/double(div*2);
+			theta1 = double(j)*fk_Math::PI/double(div*2);
+			theta2 = double(i)*fk_Math::PI/double(div*2);
 			argVec->at(index1).set(xy_radius[i] * cos(theta1),
 								   xy_radius[i] * sin(theta1),
 								   argRad * cos(theta2) - len);

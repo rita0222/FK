@@ -631,10 +631,10 @@ bool fk_Image::setColor(int argX, int argY, const fk_Color &argCol)
 	}
 
 	offset = _st(GetOffset(argX, argY));
-	imageBuf[offset] = fk_ImType((double(argCol.getR()) + FK_EPS)*255.0);
-	imageBuf[offset+1] = fk_ImType((double(argCol.getG()) + FK_EPS)*255.0);
-	imageBuf[offset+2] = fk_ImType((double(argCol.getB()) + FK_EPS)*255.0);
-	imageBuf[offset+3] = fk_ImType((double(argCol.getA()) + FK_EPS)*255.0);
+	imageBuf[offset] = fk_ImType((double(argCol.getR()) + fk_Math::EPS)*255.0);
+	imageBuf[offset+1] = fk_ImType((double(argCol.getG()) + fk_Math::EPS)*255.0);
+	imageBuf[offset+2] = fk_ImType((double(argCol.getB()) + fk_Math::EPS)*255.0);
+	imageBuf[offset+3] = fk_ImType((double(argCol.getA()) + fk_Math::EPS)*255.0);
 
 	SetUpdate(true);
 
@@ -740,10 +740,10 @@ void fk_Image::SetTexID(const fk_TexID argID)
 
 void fk_Image::fillColor(const fk_Color &argCol)
 {
-	fillColor(int((double(argCol.getR()) + FK_EPS)*255.0),
-			  int((double(argCol.getG()) + FK_EPS)*255.0),
-			  int((double(argCol.getB()) + FK_EPS)*255.0),
-			  int((double(argCol.getA()) + FK_EPS)*255.0));
+	fillColor(int((double(argCol.getR()) + fk_Math::EPS)*255.0),
+			  int((double(argCol.getG()) + fk_Math::EPS)*255.0),
+			  int((double(argCol.getB()) + fk_Math::EPS)*255.0),
+			  int((double(argCol.getA()) + fk_Math::EPS)*255.0));
 	return;
 }
 

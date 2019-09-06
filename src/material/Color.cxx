@@ -72,6 +72,7 @@
 #define FK_DEF_SIZETYPE
 
 #include <FK/Color.h>
+#include <FK/Math.h>
 #include <sstream>
 
 using namespace std;
@@ -157,10 +158,10 @@ namespace FK {
 		b = argA.col[2] - argB.col[2];
 		a = argA.col[3] - argB.col[3];
 
-		return(fabs((float)r) < FK_COLOR_EPS &&
-			   fabs((float)g) < FK_COLOR_EPS &&
-			   fabs((float)b) < FK_COLOR_EPS &&
-			   fabs((float)a) < FK_COLOR_EPS);
+		return(fabs((float)r) < fk_Color::EPS &&
+			   fabs((float)g) < fk_Color::EPS &&
+			   fabs((float)b) < fk_Color::EPS &&
+			   fabs((float)a) < fk_Color::EPS);
 	}
 }
 
@@ -175,7 +176,7 @@ fk_Color & fk_Color::operator *=(double argD)
 
 fk_Color & fk_Color::operator /=(double argD)
 {
-	if(fabs(argD) < FK_COLOR_EPS) return *this;
+	if(fabs(argD) < EPS) return *this;
 
 	for(_st i = 0; i < 3; i++) {
 		col[i] = clamp(col[i] / float(argD));
@@ -223,11 +224,11 @@ void fk_Color::setHSV(double argH, double argS, double argV)
 	double	f, p, q, t, H_r;
 	int		H, H_n;
 
-	H_n = int(floor(argH/(2.0*FK_PI)));
-	H_r = argH - (double(H_n) * 2.0 * FK_PI);
-	H = int(floor(H_r * 3.0 / FK_PI));
+	H_n = int(floor(argH/(2.0*fk_Math::PI)));
+	H_r = argH - (double(H_n) * 2.0 * fk_Math::PI);
+	H = int(floor(H_r * 3.0 / fk_Math::PI));
 
-	f = 3.0*H_r/FK_PI - H;
+	f = 3.0*H_r/fk_Math::PI - H;
 	p = argV*(1.0 - argS);
 	q = argV*(1.0 - f*argS);
 	t = argV*(1.0 - (1.0 - f)*argS);
@@ -316,7 +317,7 @@ namespace FK {
 					
 	fk_Color	operator /(const fk_Color &argC, double argD)
 	{
-		if(fabs(argD) < FK_COLOR_EPS) return argC;
+		if(fabs(argD) < fk_Color::EPS) return argC;
 
 		fk_Color	tmp(fk_Color::clamp(argC.col[0] / float(argD)),
 						fk_Color::clamp(argC.col[1] / float(argD)),

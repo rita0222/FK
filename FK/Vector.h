@@ -83,13 +83,11 @@ using GLfloat = float;
 #endif
 
 namespace FK {
-	const double FK_VECTOREPS = 1.0e-12;	//!< ベクトル演算誤差基準値
-
 	//! 座標軸を表す列挙型
-	enum fk_Axis {
-		fk_X,	//!<	x軸
-		fk_Y,	//!<	y軸
-		fk_Z	//!<	z軸
+	enum class fk_Axis {
+		X,	//!<	x軸
+		Y,	//!<	y軸
+		Z	//!<	z軸
 	};
 
 	class fk_OrthoMatrix;
@@ -118,6 +116,10 @@ namespace FK {
 	class fk_Vector {
 
 	public:
+		static constexpr double VECTOREPS = 1.0e-12;	//!< ベクトル演算誤差基準値
+		static constexpr double MATRIXEPS = 1.0e-12;	//!< 行列演算用誤差1
+		static constexpr double MATRIXEPS2 = 1.0e-16;	//!< 行列演算用誤差2
+
 		double	x;	//!<	x成分
 		double	y;	//!<	y成分
 		double	z;	//!<	z成分
@@ -187,11 +189,11 @@ namespace FK {
 		/*!
 		 *	この演算子では、以下のように処理を行います。
 		 *	-#	x成分において、左が大きい場合は真、右が大きい場合は偽とする。
-		 *		x成分が FK_EPS による誤差許容の上で等しい場合、次の処理に移る。
+		 *		x成分が fk_Vector::VECTOREPS による誤差許容の上で等しい場合、次の処理に移る。
 		 *	-#	y成分において、左が大きい場合は真、右が大きい場合は偽とする。
-		 *		y成分が FK_EPS による誤差許容の上で等しい場合、次の処理に移る。
+		 *		y成分が fk_Vector::VECTOREPS による誤差許容の上で等しい場合、次の処理に移る。
 		 *	-#	z成分において、左が大きい場合は真、右が大きい場合は偽とする。
-		 *		z成分が FK_EPS による誤差許容の上で等しい場合、偽とする。
+		 *		z成分が fk_Vector::VECTOREPS による誤差許容の上で等しい場合、偽とする。
 		 *	.
 		 *	この演算子は数学的な意味はありませんが、整列化の際に有用となります。
 		 */
@@ -201,11 +203,11 @@ namespace FK {
 		/*!
 		 *	この演算子では、以下のように処理を行います。
 		 *	-#	x成分において、右が大きい場合は真、左が大きい場合は偽とする。
-		 *		x成分が FK_EPS による誤差許容の上で等しい場合、次の処理に移る。
+		 *		x成分が fk_Vector::VECTOREPS による誤差許容の上で等しい場合、次の処理に移る。
 		 *	-#	y成分において、右が大きい場合は真、左が大きい場合は偽とする。
-		 *		y成分が FK_EPS による誤差許容の上で等しい場合、次の処理に移る。
+		 *		y成分が fk_Vector::VECTOREPS による誤差許容の上で等しい場合、次の処理に移る。
 		 *	-#	z成分において、右が大きい場合は真、左が大きい場合は偽とする。
-		 *		z成分が FK_EPS による誤差許容の上で等しい場合、偽とする。
+		 *		z成分が fk_Vector::VECTOREPS による誤差許容の上で等しい場合、偽とする。
 		 *	.
 		 *	この演算子は数学的な意味はありませんが、整列化の際に有用となります。
 		 */

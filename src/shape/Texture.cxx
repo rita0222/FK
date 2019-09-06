@@ -81,12 +81,12 @@ const string fk_Texture::texIDName = "fk_TexID";
 
 fk_Texture::fk_Texture(fk_Image *argImage)
 	: fk_Shape(fk_Type::TEXTURE),
-	  image(nullptr), samplerSource(FK_TEXTURE_IMAGE)
+	  image(nullptr), samplerSource(fk_SamplerSource::TEXTURE_IMAGE)
 {
 	GetFaceSize = []() { return 0; };
 	StatusUpdate = []() {};
 	FaceIBOSetup = []() {};
-	realType = FK_SHAPE_TEXTURE;
+	realType = fk_RealShapeType::TEXTURE;
 	SetPaletteData(&localPal);
 	BaseInit();
 	setImage(argImage);
@@ -104,10 +104,10 @@ void fk_Texture::BaseInit(void)
 	setImage(nullptr);
 	clearMaterial();
 	AttrInit();
-	setTextureMode(FK_TEX_MODULATE);
+	setTextureMode(fk_TexMode::MODULATE);
 	setMaterialMode(fk_MaterialMode::PARENT);
-	setTexRendMode(FK_TEX_REND_NORMAL);
-	setTexWrapMode(FK_TEX_WRAP_REPEAT);
+	setTexRendMode(fk_TexRendMode::NORMAL);
+	setTexWrapMode(fk_TexWrapMode::REPEAT);
 	  
 	return;
 }
@@ -302,8 +302,9 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 	glBindTexture(GL_TEXTURE_2D, id);
 
-	GLint tmpWrapModeGl = (getTexWrapMode() == FK_TEX_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP_TO_EDGE;
-	GLint tmpRendMode = (getTexRendMode() == FK_TEX_REND_NORMAL) ? GL_NEAREST : GL_LINEAR;
+	GLint tmpWrapModeGl = (getTexWrapMode() == fk_TexWrapMode::REPEAT)
+		? GL_REPEAT : GL_CLAMP_TO_EDGE;
+	GLint tmpRendMode = (getTexRendMode() == fk_TexRendMode::NORMAL) ? GL_NEAREST : GL_LINEAR;
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
@@ -312,7 +313,7 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 	if (loaded == false || forceLoad == true) {
 		switch(samplerSource) {
-		  case FK_TEXTURE_IMAGE:
+		  case fk_SamplerSource::TEXTURE_IMAGE:
 /*
 			if(loaded == false) {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
@@ -327,12 +328,12 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 			break;
 			
-		  case FK_COLOR_BUFFER:
+		  case fk_SamplerSource::COLOR_BUFFER:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 			break;
 
-		  case FK_DEPTH_BUFFER:
+		  case fk_SamplerSource::DEPTH_BUFFER:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
 						 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 			break;
@@ -342,7 +343,7 @@ bool fk_Texture::BindTexture(bool forceLoad)
 		}
 	}
 
-	if (samplerSource != FK_TEXTURE_IMAGE) {
+	if (samplerSource != fk_SamplerSource::TEXTURE_IMAGE) {
 		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufSize->w, bufSize->h);
 	}
 

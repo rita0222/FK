@@ -119,12 +119,12 @@ int fk_Window::drawWindow(bool argDrawMode)
 
 		PushPrevStatus();
 
-		if(frameMode != FK_DEFAULT_FRAME) {
+		if(frameMode != fk_FrameMode::DEFAULT) {
 			unsigned long time;
 
 			frameTime = getNow();
 
-			if((frameMode & FK_SKIP_FRAME) != FK_DEFAULT_FRAME) {
+			if((frameMode & fk_FrameMode::SKIP) != fk_FrameMode::DEFAULT) {
 				time = prevTime + frameInterval * static_cast<unsigned long>(skipCount);
 				if(time < frameTime) {
 					skipCount++;
@@ -134,7 +134,7 @@ int fk_Window::drawWindow(bool argDrawMode)
 				}
 			}
 
-			if((frameMode & FK_WAIT_FRAME) != FK_DEFAULT_FRAME) {
+			if((frameMode & fk_FrameMode::WAIT) != fk_FrameMode::DEFAULT) {
 				time = prevTime + frameInterval;
 				while(time > frameTime + ONE_FRAME_TIME) {
 					Fl::wait(static_cast<double>(time - frameTime - ONE_FRAME_TIME)/1000.0);
@@ -150,7 +150,7 @@ int fk_Window::drawWindow(bool argDrawMode)
 			redraw();
 		}
 
-		if(frameMode != FK_DEFAULT_FRAME) {
+		if(frameMode != fk_FrameMode::DEFAULT) {
 			prevTime = frameTime;
 		}
 	}
@@ -501,7 +501,7 @@ int fk_Window::getMouseWheelStatus(void)
 void fk_Window::setFrameMode(fk_FrameMode argMode)
 {
 	frameMode = argMode;
-	if(argMode != FK_DEFAULT_FRAME) prevTime = getNow();
+	if(argMode != fk_FrameMode::DEFAULT) prevTime = getNow();
 
 	return;
 }

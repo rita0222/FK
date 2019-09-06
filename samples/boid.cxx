@@ -50,7 +50,7 @@ Agent::Agent(double argSize, mt19937 &argMT)
 	uniform_real_distribution<>	randR(-1.0, 1.0);
 
 	model.setMaterial(Red);
-	model.setShadingMode(FK_SHADING_GOURAUD);
+	model.setShadingMode(fk_ShadingMode::GOURAUD);
 	// モデルの方向と位置をランダムに設定
 	model.glVec(randR(argMT), randR(argMT), 0.0);
 	model.glMoveTo(randR(argMT)*argSize, randR(argMT)*argSize, 0.0);
@@ -217,7 +217,7 @@ int main(int, char **)
 	// ウィンドウ各種設定
 	win.setSize(800, 800);
 	win.setBGColor(0.6, 0.7, 0.8);
-	win.showGuide(FK_GRID_XY);
+	win.showGuide(fk_Guide::GRID_XY);
 	win.setCameraPos(0.0, 0.0, 80.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
 	win.open();

@@ -204,7 +204,7 @@ namespace FK {
 		/*!
 		 *	点の色を個別に設定します。
 		 *	この色設定によって表示するには、
-		 *	fk_Model::setElementMode() で FK_ELEM_ELEMENT を設定しておく必要があります。
+		 *	fk_Model::setElementMode() で fk_ElementMode::ELEMENT を設定しておく必要があります。
 		 *
 		 *	\param[in]	vID		要素ID
 		 *	\param[in]	col		色値

@@ -194,7 +194,7 @@ fk_Loop::~fk_Loop()
 
 void fk_Loop::Init(fk_DataBase *argDB, int argID)
 {
-	InitTopology(argDB, argID, FK_LOOP_TYPE);
+	InitTopology(argDB, argID, fk_TopologyType::LOOP);
 	oneHalf = FK_UNDEFINED;
 	norm.set(0.0, 0.0, 0.0);
 	normFlag = errorFlag = tesselateFlag = false;
@@ -490,7 +490,7 @@ void fk_Loop::MakeTesselateData(void)
 		tmpVec[3] = nextV - prevV;
 		tmpVec[4] = tmpVec[0] ^ tmpVec[1];
 
-		if(norm * tmpVec[4] > FK_EPS) {
+		if(norm * tmpVec[4] > fk_Math::EPS) {
 			tmpPos[0] = prevV + tmpVec[3] * TESS_DELTA;
 			tmpPos[1] = nextV - tmpVec[3] * TESS_DELTA;
 
@@ -557,26 +557,26 @@ fk_LoopCrossStatus fk_Loop::IsCross(const fk_Vector &argS,
 	fk_Half		*curH;
 
 
-	if(getVNum() != 3) return FK_LOOP_ERROR_CROSS;
+	if(getVNum() != 3) return fk_LoopCrossStatus::ERROR;
 	curH = DB->GetHData(oneHalf);
 	for(int i = 0; i < 3; i++) {
-		if(curH == nullptr) return FK_LOOP_ERROR_CROSS;
+		if(curH == nullptr) return fk_LoopCrossStatus::ERROR;
 		V[i] = curH->getVertex()->getPosition();
 		curH = curH->getNextHalf();
 	}
 
 	if(fk_Math::calcCrossLineAndTri(argS, argE,
 									V[0], V[1], V[2], &R) == false) {
-		return FK_LOOP_NO_CROSS;
+		return fk_LoopCrossStatus::NO;
 	}
 
 	if(retR != nullptr) retR->set(R.x, R.y, R.z);
 
-	if(R.x <= FK_EPS) return FK_LOOP_ONEDGE_CROSS;
-	if(R.y <= FK_EPS) return FK_LOOP_ONEDGE_CROSS;
-	if(R.x + R.y >= 1.0 - FK_EPS) return FK_LOOP_ONEDGE_CROSS;
-	if(R.z <= FK_EPS || R.z >= 1.0 - FK_EPS) return FK_LOOP_ONFACE_CROSS;
+	if(R.x <= fk_Math::EPS) return fk_LoopCrossStatus::ONEDGE;
+	if(R.y <= fk_Math::EPS) return fk_LoopCrossStatus::ONEDGE;
+	if(R.x + R.y >= 1.0 - fk_Math::EPS) return fk_LoopCrossStatus::ONEDGE;
+	if(R.z <= fk_Math::EPS || R.z >= 1.0 - fk_Math::EPS) return fk_LoopCrossStatus::ONFACE;
 
-	if(*getNormal() * (argE - argS) < 0.0) return FK_LOOP_FRONT_CROSS;
-	return FK_LOOP_BACK_CROSS;
+	if(*getNormal() * (argE - argS) < 0.0) return fk_LoopCrossStatus::FRONT;
+	return fk_LoopCrossStatus::BACK;
 }

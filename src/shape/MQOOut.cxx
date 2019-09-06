@@ -302,7 +302,7 @@ void fk_MQOOut::MakeMaterialPalette(fk_Type argType)
 		tmpSpe = CalcMonotoneLuminance(tmpMate->getSpecular());
 
 		baseCol = *(tmpMate->getDiffuse());
-		if(tmpDif > FK_COLOR_EPS) {
+		if(tmpDif > fk_Color::EPS) {
 			for(j = 0; j < 3; ++j) {
 				float tmp = baseCol.col[_st(j)] / tmpDif;
 				baseCol.col[_st(j)] = (tmp < 1.0f) ? tmp : 1.0f;

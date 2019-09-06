@@ -93,7 +93,7 @@ namespace FK {
 	fk_DrawMode operator | (fk_DrawMode argL, fk_DrawMode argR);
 	fk_DrawMode operator & (fk_DrawMode argL, fk_DrawMode argR);
 	fk_DrawMode operator ^ (fk_DrawMode argL, fk_DrawMode argR);
-
+/*
 	const fk_DrawMode FK_NONEMODE = fk_DrawMode::NONE;
 	const fk_DrawMode FK_POINTMODE = fk_DrawMode::POINT;
 	const fk_DrawMode FK_LINEMODE = fk_DrawMode::LINE;
@@ -101,6 +101,7 @@ namespace FK {
 	const fk_DrawMode FK_BACK_POLYMODE = fk_DrawMode::BACK_FACE;
 	const fk_DrawMode FK_FRONTBACK_POLYMODE = fk_DrawMode::FRONTBACK_FACE;
 	const fk_DrawMode FK_TEXTUREMODE = fk_DrawMode::TEXTURE;
+*/
 }
 
 #endif // !__FK_BOUNDARY_HEADER__

@@ -71,6 +71,7 @@
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
 #include <FK/BezCurve.h>
+#include <FK/Math.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -216,7 +217,7 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 	vector<vector<fk_Vector> > divPos;
 
 	if(argP == nullptr) return false;
-	if(argT < FK_EPS || argT > 1.0 - FK_EPS) return false;
+	if(argT < fk_Math::EPS || argT > 1.0 - fk_Math::EPS) return false;
 
 	d = _st(deg);
 	argP->clear();
@@ -230,7 +231,7 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 		
 double fk_BezCurve::CrossZero(fk_Vector &argA, fk_Vector &argB)
 {
-	if(fabs(argA.y - argB.y) < FK_EPS) return -1.0;
+	if(fabs(argA.y - argB.y) < fk_Math::EPS) return -1.0;
 	
 	if((argA.y >= 0.0 && argB.y < 0.0) ||
 	   (argA.y < 0.0 && argB.y >= 0.0)) {
@@ -306,12 +307,12 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 
 	if(CrossCH(&clip, &min_n, &max_n) == false) return;
 
-	for(j = 0; j < 4 && max_n - min_n > FK_EPS; ++j) {
+	for(j = 0; j < 4 && max_n - min_n > fk_Math::EPS; ++j) {
 
 		t1 = (min_n - min_o)/(max_o - min_o);
 		t2 = (max_n - min_n)/(max_o - min_n);
 		
-		if(t1 < FK_EPS && t2 > 1.0 - FK_EPS) break;
+		if(t1 < fk_Math::EPS && t2 > 1.0 - fk_Math::EPS) break;
 
 		curv.split(t1, &tmpClip);
 		

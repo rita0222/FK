@@ -173,10 +173,10 @@ void fk_AudioOggBuffer::ReadBuffer(OggVorbis_File *argVF)
 	length = 0;
 
 	for(count = 0;; count++) {
-		buffer.resize((count+1)*FK_OV_BUFSIZE);
+		buffer.resize((count+1)*fk_AudioBase::BUFSIZE);
 		chunkTime.push_back(ov_time_tell(argVF));
-		size = static_cast<ALsizei>(ov_read(argVF, &buffer[count*FK_OV_BUFSIZE],
-											static_cast<int>(FK_OV_BUFSIZE * sizeof(char)),
+		size = static_cast<ALsizei>(ov_read(argVF, &buffer[count*fk_AudioBase::BUFSIZE],
+											static_cast<int>(fk_AudioBase::BUFSIZE * sizeof(char)),
 											_ENDIAN, 2, 1, &tmpCurrent));
 
 		if(size <= 0) break;
@@ -184,7 +184,7 @@ void fk_AudioOggBuffer::ReadBuffer(OggVorbis_File *argVF)
 		length++;
 		if(count == 0) MakeOVInfo(argVF);
 	}
-	buffer.resize(count * FK_OV_BUFSIZE);
+	buffer.resize(count * fk_AudioBase::BUFSIZE);
 	chunkTime.resize(count);
 
 	return;
@@ -344,8 +344,8 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 	chunkSize.clear();
 	length = 0;
 
-	count = static_cast<unsigned int>(argSize / FK_OV_BUFSIZE);
-	adjust = static_cast<ALsizei>(argSize % FK_OV_BUFSIZE);
+	count = static_cast<unsigned int>(argSize / fk_AudioBase::BUFSIZE);
+	adjust = static_cast<ALsizei>(argSize % fk_AudioBase::BUFSIZE);
 
 	buffer.resize(argSize);
 	argIFS.read((char *)(&buffer[0]), sizeof(char) * argSize);
@@ -357,13 +357,13 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 	}
 
 	for(unsigned int i = 0; i < count; i++) {
-		chunkTime.push_back(double(i*FK_OV_BUFSIZE)/(double)bytePerSec);
-		chunkSize.push_back(FK_OV_BUFSIZE);
+		chunkTime.push_back(double(i*fk_AudioBase::BUFSIZE)/(double)bytePerSec);
+		chunkSize.push_back(fk_AudioBase::BUFSIZE);
 		length++;
 	}
 
 	if(adjust != 0) {
-		chunkTime.push_back(double(count*FK_OV_BUFSIZE)/(double)bytePerSec);
+		chunkTime.push_back(double(count*fk_AudioBase::BUFSIZE)/(double)bytePerSec);
 		chunkSize.push_back(adjust);
 		length++;
 	}
@@ -408,7 +408,7 @@ void fk_AudioOggBuffer::StartQueue(bool argInitFlg)
 	for(unsigned int i = 0; i < queueSize && current < length; i++) {
 		alGenBuffers(1, &bufferID);
 		alBufferData(bufferID, format,
-					 &buffer[current*FK_OV_BUFSIZE],
+					 &buffer[current*fk_AudioBase::BUFSIZE],
 					 ALsizei(chunkSize[current]),
 					 static_cast<ALsizei>(rate));
 		alSourceQueueBuffers(source, 1, &bufferID);
@@ -482,7 +482,7 @@ bool fk_AudioOggBuffer::PlayBuffer(void)
 		}
 
 		alBufferData(bufferID, format,
-					 &buffer[current*FK_OV_BUFSIZE],
+					 &buffer[current*fk_AudioBase::BUFSIZE],
 					 chunkSize[current], rate);
 		alSourceQueueBuffers(source, 1, &bufferID);
 		current++;

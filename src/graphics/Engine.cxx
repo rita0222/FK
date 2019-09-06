@@ -111,8 +111,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	hSize = 0;
 	resizeFlag = false;
 
-	srcFactor = FK_FACTOR_SRC_ALPHA;
-	dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+	srcFactor = fk_BlendFactor::SRC_ALPHA;
+	dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
 	depthRead = depthWrite = true;
 
 	boundaryModel.setDrawMode(fk_DrawMode::LINE);
@@ -177,7 +177,7 @@ void fk_GraphicsEngine::SetViewPort(void)
 void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 {
 	curProj = argProj;
-	if(curProj->getMode() == FK_PERSPECTIVE_MODE) {
+	if(curProj->getMode() == fk_ProjectMode::PERSPECTIVE) {
 		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(curProj);
 		pers->setAspect(GLfloat(wSize)/GLfloat(hSize));
 	}
@@ -278,7 +278,7 @@ void fk_GraphicsEngine::Draw(void)
 		resizeFlag = false;
 	}
 
-	SetDepthMode(FK_DEPTH_READ_AND_WRITE);
+	SetDepthMode(fk_DepthMode::READ_AND_WRITE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	ApplySceneParameter(true);
@@ -324,7 +324,7 @@ void fk_GraphicsEngine::DrawObjs(void)
 	overlayList = curDLink->GetOverlayList();
 	if(overlayList->empty() == true) return;
 
-	SetDepthMode(FK_DEPTH_NO_USE);
+	SetDepthMode(fk_DepthMode::NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
 		DrawModel(*modelP);
@@ -400,11 +400,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	fk_Surface *surface = nullptr;
 
 	switch(realType) {
-	  case FK_SHAPE_CURVE:
+	  case fk_RealShapeType::CURVE:
 		curve = dynamic_cast<fk_Curve *>(argModel->getShape());
 		break;
 
-	  case FK_SHAPE_SURFACE:
+	  case fk_RealShapeType::SURFACE:
 		surface = dynamic_cast<fk_Surface *>(argModel->getShape());
 		break;
 
@@ -550,12 +550,12 @@ bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 	inVec.z = -1.0;
 	outVec = mat * inVec;
 
-	if(fabs(outVec.w) < FK_EPS) return false;
+	if(fabs(outVec.w) < fk_Math::EPS) return false;
 	retS->set(outVec.x/outVec.w, outVec.y/outVec.w, outVec.z/outVec.w);
 	
 	inVec.z = 1.0;
 	outVec = mat * inVec;
-	if(fabs(outVec.w) < FK_EPS) return false;
+	if(fabs(outVec.w) < fk_Math::EPS) return false;
 	retE->set(outVec.x/outVec.w, outVec.y/outVec.w, outVec.z/outVec.w);
 	return true;
 }
@@ -610,7 +610,7 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 	glGetIntegerv(GL_VIEWPORT, viewArray);
 	mat = *(curProj->GetMatrix()) * curDLink->getCamera()->getInhInvMatrix();
 	outVec = mat * inVec;
-	if(fabs(outVec.w) < FK_EPS) return false;
+	if(fabs(outVec.w) < fk_Math::EPS) return false;
 	outVec /= outVec.w;
 	retPos->set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
 				double(viewArray[1] + hSize - 1) - double(viewArray[3])*(outVec.y + 1.0)/2.0,
@@ -621,25 +621,25 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 GLenum GetBlendFactor(fk_BlendFactor factor)
 {
 	switch (factor) {
-	case FK_FACTOR_ZERO:
+	case fk_BlendFactor::ZERO:
 		return GL_ZERO;
-	case FK_FACTOR_ONE:
+	case fk_BlendFactor::ONE:
 		return GL_ONE;
-	case FK_FACTOR_SRC_COLOR:
+	case fk_BlendFactor::SRC_COLOR:
 		return GL_SRC_COLOR;
-	case FK_FACTOR_ONE_MINUS_SRC_COLOR:
+	case fk_BlendFactor::ONE_MINUS_SRC_COLOR:
 		return GL_ONE_MINUS_SRC_ALPHA;
-	case FK_FACTOR_DST_COLOR:
+	case fk_BlendFactor::DST_COLOR:
 		return GL_DST_COLOR;
-	case FK_FACTOR_ONE_MINUS_DST_COLOR:
+	case fk_BlendFactor::ONE_MINUS_DST_COLOR:
 		return GL_ONE_MINUS_DST_COLOR;
-	case FK_FACTOR_SRC_ALPHA:
+	case fk_BlendFactor::SRC_ALPHA:
 		return GL_SRC_ALPHA;
-	case FK_FACTOR_ONE_MINUS_SRC_ALPHA:
+	case fk_BlendFactor::ONE_MINUS_SRC_ALPHA:
 		return GL_ONE_MINUS_SRC_ALPHA;
-	case FK_FACTOR_DST_ALPHA:
+	case fk_BlendFactor::DST_ALPHA:
 		return GL_DST_ALPHA;
-	case FK_FACTOR_ONE_MINUS_DST_ALPHA:
+	case fk_BlendFactor::ONE_MINUS_DST_ALPHA:
 		return GL_ONE_MINUS_DST_ALPHA;
 	default:
 		return GL_ONE;
@@ -661,8 +661,8 @@ void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
 
 void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
 {
-	bool readMode = (argMode & FK_DEPTH_READ) != 0;
-	bool writeMode = (argMode & FK_DEPTH_WRITE) != 0;
+	bool readMode = ((argMode & fk_DepthMode::READ) != fk_DepthMode::NO_USE);
+	bool writeMode = ((argMode & fk_DepthMode::WRITE) != fk_DepthMode::NO_USE);
 
 	if (depthRead != readMode) {
 		if (readMode == true) {

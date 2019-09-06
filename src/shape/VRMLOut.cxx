@@ -117,7 +117,7 @@ bool fk_VRMLOut::WriteVRMLFile(string argFileName, fk_Material *argMaterial,
 
 	WriteVRMLHeader(ofs);
 	WriteVRMLShape(ofs, argMaterial, triFlag, nullptr, nullptr);
-	WriteVRMLFooter(ofs, FK_VRML_NONE);
+	WriteVRMLFooter(ofs, fk_VRMLOutMode::NONE);
 
 	ofs.close();
 
@@ -136,7 +136,7 @@ bool fk_VRMLOut::WriteVRMLFile(string argFileName,
 
 	WriteVRMLHeader(ofs);
 	WriteVRMLShape(ofs, argMaterial, triFlag, argTime, argPos);
-	WriteVRMLFooter(ofs, FK_VRML_INTR);
+	WriteVRMLFooter(ofs, fk_VRMLOutMode::INTR);
 
 	ofs.close();
 
@@ -437,7 +437,7 @@ void fk_VRMLOut::WriteVRMLFooter(ofstream &argOFS, fk_VRMLOutMode argMode)
 
 	outStr.erase();
 
-	if(argMode == FK_VRML_INTR) {
+	if(argMode == fk_VRMLOutMode::INTR) {
 		tab = "\t\t";
 		outStr += tab + "DEF TS TimeSensor {\n";
 		tab = "\t\t\t";
@@ -450,7 +450,7 @@ void fk_VRMLOut::WriteVRMLFooter(ofstream &argOFS, fk_VRMLOutMode argMode)
 	outStr += "\t]\n";
 	outStr += "}\n";
 
-	if(argMode == FK_VRML_INTR) {
+	if(argMode == fk_VRMLOutMode::INTR) {
 		outStr += "ROUTE CI.value_changed TO C.point\n";
 		outStr += "ROUTE TS.fraction_changed TO CI.set_fraction\n";
 	}
