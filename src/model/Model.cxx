@@ -268,7 +268,7 @@ fk_ElementMode fk_Model::getElementMode(void) const
 }
 
 void fk_Model::setMaterialMode(const fk_MaterialMode) {}
-fk_MaterialMode fk_Model::getMaterialMode(void) const { return FK_PARENT_MODE; }
+fk_MaterialMode fk_Model::getMaterialMode(void) const { return fk_MaterialMode::PARENT; }
 
 void fk_Model::setBlendMode(const fk_BlendMode argMode,
 							const fk_BlendFactor argSrcFactor,

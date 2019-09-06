@@ -166,19 +166,19 @@ fk_EdgeStatus fk_ReferenceL1::getEdgeStatus(fk_Edge *argE) const
 {
 	fk_Loop *rL, *lL;
 
-	if(argE == nullptr) return FK_NONE_EDGE;
+	if(argE == nullptr) return fk_EdgeStatus::NONE;
 	rL = argE->getRightHalf()->getParentLoop();
 	lL = argE->getLeftHalf()->getParentLoop();
 
 	if(rL == nullptr && lL == nullptr) {
-		return FK_UNDEF_EDGE;
+		return fk_EdgeStatus::UNDEF;
 	}
 
 	if(rL != nullptr && lL != nullptr) {
-		return FK_BOTHDEF_EDGE;
+		return fk_EdgeStatus::BOTH;
 	}
 
-	return FK_HALFDEF_EDGE;
+	return fk_EdgeStatus::HALF;
 }
 
 fk_Vertex * fk_ReferenceL1::getOneVOnL(fk_Loop *argL) const

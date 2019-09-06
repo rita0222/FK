@@ -90,7 +90,7 @@ const string fk_Shape::ctrlPosName = "fk_CtrlPos";
 const string fk_Shape::degreeName = "fk_Degree";
 
 fk_Shape::fk_Shape(fk_Type argObjType)
-	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
+	: palette(&defaultPalette), materialMode(fk_MaterialMode::NONE),
 	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(FK_SHAPE_OTHER)
 {
 	SetObjectType(argObjType);
@@ -160,21 +160,21 @@ void fk_Shape::clearMaterial(void)
 void fk_Shape::setObjMaterialID(int argID)
 {
 	palette->setObjMaterialID(argID);
-	materialMode = FK_CHILD_MODE;
+	materialMode = fk_MaterialMode::CHILD;
 	return;
 }
 
 void fk_Shape::pushPalette(fk_Material &argMat)
 {
 	palette->pushPalette(&argMat);
-	materialMode = FK_PARENT_MODE;
+	materialMode = fk_MaterialMode::PARENT;
 	return;
 }
 
 void fk_Shape::setPalette(fk_Material &argMat, int argID)
 {
 	palette->setPalette(&argMat, argID);
-	materialMode = FK_PARENT_MODE;
+	materialMode = fk_MaterialMode::PARENT;
 	return;
 }
 

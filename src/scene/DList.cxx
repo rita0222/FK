@@ -295,9 +295,9 @@ int fk_DisplayLink::GetProjChangeStatus(void) const
 void fk_DisplayLink::entryStereoCamera(fk_StereoChannel channel,
 									   fk_Model *argModel)
 {
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		stereoCamera[0] = argModel;
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		stereoCamera[1] = argModel;
 	}
 }
@@ -307,9 +307,9 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 {
 	int index;
 
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		index = 0;
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		index = 1;
 	} else {
 		return;
@@ -343,9 +343,9 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 
 const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel channel)
 {
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		return stereoCamera[0];
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		return stereoCamera[1];
 	}
 	return nullptr;
@@ -353,9 +353,9 @@ const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel channel)
 
 const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel channel)
 {
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		return stereoProj[0];
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		return stereoProj[1];
 	}
 	return nullptr;

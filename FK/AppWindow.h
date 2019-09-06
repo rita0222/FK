@@ -85,20 +85,6 @@
 
 namespace FK {
 
-	enum fk_PadDirection {
-		FK_PAD_UP = 32,
-		FK_PAD_DOWN,
-		FK_PAD_LEFT,
-		FK_PAD_RIGHT
-	};
-
-	using fkut_PadDirection = fk_PadDirection;
-
-#define FKUT_PAD_UP		FK_PAD_UP
-#define FKUT_PAD_DOWN	FK_PAD_DOWN
-#define FKUT_PAD_LEFT	FK_PAD_LEFT
-#define FKUT_PAD_RIGHT	FK_PAD_RIGHT
-
 	//! アプリケーションウィンドウクラス
 	/*!
 	 *	このクラスは、

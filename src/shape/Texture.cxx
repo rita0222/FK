@@ -105,7 +105,7 @@ void fk_Texture::BaseInit(void)
 	clearMaterial();
 	AttrInit();
 	setTextureMode(FK_TEX_MODULATE);
-	setMaterialMode(FK_PARENT_MODE);
+	setMaterialMode(fk_MaterialMode::PARENT);
 	setTexRendMode(FK_TEX_REND_NORMAL);
 	setTexWrapMode(FK_TEX_WRAP_REPEAT);
 	  
