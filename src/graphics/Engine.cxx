@@ -116,7 +116,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	depthRead = depthWrite = true;
 
 	boundaryModel.setDrawMode(fk_DrawMode::LINE);
-	boundaryModel.setBMode(FK_B_NONE);
+	boundaryModel.setBMode(fk_BoundaryMode::NONE);
 	boundaryModel.setBDrawToggle(false);
 	return;
 }
@@ -345,17 +345,17 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 	fk_Matrix mat;
 
 	switch(argModel->getBMode()) {
-	  case FK_B_SPHERE:
-	  case FK_B_AABB:
+	  case fk_BoundaryMode::SPHERE:
+	  case fk_BoundaryMode::AABB:
 		  boundaryModel.glMoveTo(argModel->getInhPosition());
 		  break;
 		  
-	  case FK_B_OBB:
+	  case fk_BoundaryMode::OBB:
 		  boundaryModel.glMoveTo(argModel->getInhPosition());
 		  boundaryModel.glAngle(argModel->getInhAngle());
 		  break;
 
-	  case FK_B_CAPSULE:
+	  case fk_BoundaryMode::CAPSULE:
 		  mat = argModel->getInhMatrix();
 		  posS = mat * argModel->getCapsuleStartPos();
 		  posE = mat * argModel->getCapsuleEndPos();

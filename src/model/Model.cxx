@@ -594,23 +594,23 @@ bool fk_Model::isInter(fk_Model *argModel)
 	if(argModel == nullptr) return false;
 
 	switch(getBMode()) {
-	  case FK_B_SPHERE:
+	  case fk_BoundaryMode::SPHERE:
 		retStatus = IsBSInter(argModel);
 		break;
 
-	  case FK_B_AABB:
+	  case fk_BoundaryMode::AABB:
 		retStatus = IsAABBInter(argModel);
 		break;
 
-	  case FK_B_OBB:
+	  case fk_BoundaryMode::OBB:
 		retStatus = IsOBBInter(argModel);
 		break;
 
-	  case FK_B_CAPSULE:
+	  case fk_BoundaryMode::CAPSULE:
 		retStatus = IsCapsuleInter(argModel);
 		break;
 
-	  case FK_B_NONE:
+	  case fk_BoundaryMode::NONE:
 	  default:
 		break;
 	}

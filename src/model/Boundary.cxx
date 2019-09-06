@@ -74,7 +74,7 @@
 using namespace FK;
 
 fk_Boundary::fk_Boundary(fk_Type argType)
-	: fk_MatrixAdmin(argType), bMode(FK_B_NONE), bDrawToggle(false),
+	: fk_MatrixAdmin(argType), bMode(fk_BoundaryMode::NONE), bDrawToggle(false),
 	  bLineColor(nullptr), bIntLineColor(nullptr), bLineWidth(1.0),
 	  bSphereRad(0.0), bAABBSize(nullptr), bOBBSize(nullptr),
 	  bCapSPos(nullptr), bCapEPos(nullptr), bCapRad(0.0),
@@ -285,19 +285,19 @@ double fk_Boundary::getBLineWidth(void)
 fk_IndexFaceSet * fk_Boundary::GetBShape(void)
 {
 	switch(bMode) {
-	  case FK_B_SPHERE:
+	  case fk_BoundaryMode::SPHERE:
 		return bSphere;
 
-	  case FK_B_AABB:
+	  case fk_BoundaryMode::AABB:
 		return bAABB;
 
-	  case FK_B_OBB:
+	  case fk_BoundaryMode::OBB:
 		return bOBB;
 
-	  case FK_B_CAPSULE:
+	  case fk_BoundaryMode::CAPSULE:
 		return bCapsule;
 
-	  case FK_B_NONE:
+	  case fk_BoundaryMode::NONE:
 	  default:
 		break;
 	}
