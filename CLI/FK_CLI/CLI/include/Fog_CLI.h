@@ -80,17 +80,17 @@ namespace FK_CLI
 {
 	//! 霧効果の減衰関数を表す列挙型
 	public enum class fk_FogMode {
-		LINEAR_FOG,		//!< 線形式
-		EXP_FOG,		//!< 指数式
-		EXP2_FOG,		//!< 指数(2乗)式
-		NONE_FOG		//!< 無効
+		LINEAR,		//!< 線形式
+		EXP,		//!< 指数式
+		EXP2,		//!< 指数(2乗)式
+		NONE,		//!< 無効
 	};
 
 	//! 霧効果のオプションを表す列挙型
 	public enum class fk_FogOption {
-		FASTEST_FOG,	//!< 速度優先
-		NICEST_FOG,		//!< 質優先
-		NOOPTION_FOG	//!< 指定なし
+		FASTEST,	//!< 速度優先
+		NICEST,		//!< 質優先
+		NOOPTION	//!< 指定なし
 	};
 
 	//! シーン中の霧効果を制御するクラス
@@ -117,7 +117,7 @@ namespace FK_CLI
 		 *	霧効果の減衰関数の設定や参照を行います。設定できる関数の種類は以下のとおりです。
 		 *	各数式中の \f$ z \f$ はカメラからの距離を意味します。
 		 *
-		 *	- fk_FogMode.LINEAR_FOG \n
+		 *	- fk_FogMode.LINEAR \n
 		 *		減衰関数として線形式を設定します。具体的には以下の数式を用います。
 		 *		\f[
 		 *			\frac{E-z}{E-S}
@@ -125,24 +125,24 @@ namespace FK_CLI
 		 *		式中の \f$ E, S \f$ は
 		 *		fk_Fog::FogLinearEnd, fk_Fog::FogLinearStart プロパティで設定します。
 		 *
-		 *	- fk_FogMode.EXP_FOG \n
+		 *	- fk_FogMode.EXP \n
 		 *		減衰関数として指数式を設定します。具体的には以下の数式を用います。
 		 *		\f[
 		 *			e^{-dz}
 		 *		\f]
 		 *		式中の \f$ d \f$ は fk_Fog::FogDensity プロパティで設定します。
 		 *
-		 *	- fk_FogMode.EXP2_FOG \n
+		 *	- fk_FogMode.EXP2 \n
 		 *		減衰関数として指数(2乗)式を設定します。具体的には以下の数式を用います。
 		 *		\f[
 		 *			e^{-\left(dz\right)^2}
 		 *		\f]
 		 *		式中の \f$ d \f$ は fk_Fog::FogDensity プロパティで設定します。
 		 *
-		 *	- fk_FogMode.NONE_FOG \n
+		 *	- fk_FogMode.NONE \n
 		 *		この値を設定した場合、霧効果を無効にします。
 		 *	.
-		 *	デフォルトでは fk_FogMode.NONE_FOG が設定されています。
+		 *	デフォルトでは fk_FogMode.NONE が設定されています。
 		 */
 		property fk_FogMode FogMode {
 			void set(fk_FogMode);
@@ -155,14 +155,14 @@ namespace FK_CLI
 		 *	実際の効果の程度についてはハードウェアやOSに依存します。
 		 *	設定できるオプションの種類は以下のとおりです。
 		 *
-		 *	- fk_FogOption.FASTEST_FOG \n
+		 *	- fk_FogOption.FASTEST \n
 		 *		処理の際に、実行速度を優先します。
-		 *	- fk_FogOption.FK_NICEST_FOG \n
+		 *	- fk_FogOption.FK_NICEST \n
 		 *		処理の際に、品質を優先します。
-		 *	- fk_FogOption.NOOPTION_FOG \n
+		 *	- fk_FogOption.NOOPTION \n
 		 *		特に優先度を設定しません。
 		 *	.
-		 *	デフォルトでは fk_FogOption.NOOPTION_FOG が設定されています。
+		 *	デフォルトでは fk_FogOption.NOOPTION が設定されています。
 		 */
 		property fk_FogOption FogOption {
 			void set(fk_FogOption);

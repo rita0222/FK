@@ -104,15 +104,15 @@ namespace FK_CLI {
 	{
 		switch(argType) {
 		  case fk_LightType::PARALLEL:
-			GetP()->setLightType(::FK::fk_LightType::FK_PARALLEL_LIGHT);
+			GetP()->setLightType(::FK::fk_LightType::PARALLEL);
 			break;
 				
 		  case fk_LightType::POINT:
-			GetP()->setLightType(::FK::fk_LightType::FK_POINT_LIGHT);
+			GetP()->setLightType(::FK::fk_LightType::POINT);
 			break;
 
 		  case fk_LightType::SPOT:
-			GetP()->setLightType(::FK::fk_LightType::FK_SPOT_LIGHT);
+			GetP()->setLightType(::FK::fk_LightType::SPOT);
 			break;
 		}
 	}
@@ -120,13 +120,13 @@ namespace FK_CLI {
 	fk_LightType fk_Light::Type::get(void)
 	{
 		switch(GetP()->getLightType()) {
-		case ::FK::fk_LightType::FK_PARALLEL_LIGHT:
+		case ::FK::fk_LightType::PARALLEL:
 			return fk_LightType::PARALLEL;
 				
-		case ::FK::fk_LightType::FK_POINT_LIGHT:
+		case ::FK::fk_LightType::POINT:
 			return fk_LightType::POINT;
 				
-		case ::FK::fk_LightType::FK_SPOT_LIGHT:
+		case ::FK::fk_LightType::SPOT:
 			return fk_LightType::SPOT;
 		}
 		return fk_LightType::PARALLEL;

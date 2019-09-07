@@ -89,16 +89,16 @@ namespace FK_CLI {
 	fk_BoundaryMode fk_Boundary::BMode::get()
 	{
 		switch(GetP()->getBMode()) {
-		case ::FK::FK_B_SPHERE:
+		case ::FK::fk_BoundaryMode::SPHERE:
 			return FK_CLI::fk_BoundaryMode::SPHERE;
 
-		case ::FK::FK_B_AABB:
+		case ::FK::fk_BoundaryMode::AABB:
 			return FK_CLI::fk_BoundaryMode::AABB;
 
-		case ::FK::FK_B_OBB:
+		case ::FK::fk_BoundaryMode::OBB:
 			return FK_CLI::fk_BoundaryMode::OBB;
 
-		case ::FK::FK_B_CAPSULE:
+		case ::FK::fk_BoundaryMode::CAPSULE:
 			return FK_CLI::fk_BoundaryMode::CAPSULE;
 
 		  default:
@@ -111,23 +111,23 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case FK_CLI::fk_BoundaryMode::SPHERE:
-			GetP()->setBMode(::FK::FK_B_SPHERE);
+			GetP()->setBMode(::FK::fk_BoundaryMode::SPHERE);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::AABB:
-			GetP()->setBMode(::FK::FK_B_AABB);
+			GetP()->setBMode(::FK::fk_BoundaryMode::AABB);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::OBB:
-			GetP()->setBMode(::FK::FK_B_OBB);
+			GetP()->setBMode(::FK::fk_BoundaryMode::OBB);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::CAPSULE:
-			GetP()->setBMode(::FK::FK_B_CAPSULE);
+			GetP()->setBMode(::FK::fk_BoundaryMode::CAPSULE);
 			break;
 
 		  case FK_CLI::fk_BoundaryMode::NONE:
-			GetP()->setBMode(::FK::FK_B_NONE);
+			GetP()->setBMode(::FK::fk_BoundaryMode::NONE);
 			break;
 
 		  default:

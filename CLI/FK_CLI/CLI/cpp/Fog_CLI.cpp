@@ -90,20 +90,20 @@ namespace FK_CLI {
 	void fk_Fog::FogMode::set(fk_FogMode argMode)
 	{
 		switch(argMode) {
-		  case fk_FogMode::LINEAR_FOG:
-			GetP()->setFogMode(::FK::FK_LINEAR_FOG);
+		  case fk_FogMode::LINEAR:
+			GetP()->setFogMode(::FK::fk_FogMode::LINEAR);
 			break;
 				
-		  case fk_FogMode::EXP_FOG:
-			GetP()->setFogMode(::FK::FK_EXP_FOG);
+		  case fk_FogMode::EXP:
+			GetP()->setFogMode(::FK::fk_FogMode::EXP);
 			break;
 				
-		  case fk_FogMode::EXP2_FOG:
-			GetP()->setFogMode(::FK::FK_EXP2_FOG);
+		  case fk_FogMode::EXP2:
+			GetP()->setFogMode(::FK::fk_FogMode::EXP2);
 			break;
 
 		  default:
-			GetP()->setFogMode(::FK::FK_NONE_FOG);
+			GetP()->setFogMode(::FK::fk_FogMode::NONE);
 			break;
 		}
 	}
@@ -111,34 +111,34 @@ namespace FK_CLI {
 	fk_FogMode fk_Fog::FogMode::get(void)
 	{
 		switch(GetP()->getFogMode()) {
-		case ::FK::FK_LINEAR_FOG:
-			return fk_FogMode::LINEAR_FOG;
+		case ::FK::fk_FogMode::LINEAR:
+			return fk_FogMode::LINEAR;
 
-		case ::FK::FK_EXP_FOG:
-			return fk_FogMode::EXP_FOG;
+		case ::FK::fk_FogMode::EXP:
+			return fk_FogMode::EXP;
 
-		case ::FK::FK_EXP2_FOG:
-			return fk_FogMode::EXP2_FOG;
+		case ::FK::fk_FogMode::EXP2:
+			return fk_FogMode::EXP2;
 
 		  default:
 			break;
 		}
-		return fk_FogMode::NONE_FOG;
+		return fk_FogMode::NONE;
 	}
 			   
 	void fk_Fog::FogOption::set(fk_FogOption argOpt)
 	{
 		switch(argOpt) {
-		  case fk_FogOption::FASTEST_FOG:
-			GetP()->setFogOption(::FK::FK_FASTEST_FOG);
+		  case fk_FogOption::FASTEST:
+			GetP()->setFogOption(::FK::fk_FogMode::FASTEST);
 			break;
 
-		  case fk_FogOption::NICEST_FOG:
-			GetP()->setFogOption(::FK::FK_NICEST_FOG);
+		  case fk_FogOption::NICEST:
+			GetP()->setFogOption(::FK::fk_FogMode::NICEST);
 			break;
 
 		  default:
-			GetP()->setFogOption(::FK::FK_NOOPTION_FOG);
+			GetP()->setFogOption(::FK::fk_FogMode::NOOPTION);
 			break;
 		}
 	}
@@ -146,16 +146,16 @@ namespace FK_CLI {
 	fk_FogOption fk_Fog::FogOption::get(void)
 	{
 		switch(GetP()->getFogOption()) {
-		case ::FK::FK_FASTEST_FOG:
-			return fk_FogOption::FASTEST_FOG;
+		case ::FK::fk_FogMode::FASTEST:
+			return fk_FogOption::FASTEST;
 				
-		case ::FK::FK_NICEST_FOG:
-			return fk_FogOption::NICEST_FOG;
+		case ::FK::fk_FogMode::NICEST:
+			return fk_FogOption::NICEST;
 
 		  default:
 			break;
 		}
-		return fk_FogOption::NOOPTION_FOG;
+		return fk_FogOption::NOOPTION;
 	}
 
 	void fk_Fog::FogDensity::set(double argD)

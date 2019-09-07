@@ -262,15 +262,15 @@ namespace FK_CLI {
 	{
 		switch(argAlign) {
 		  case fk_TextAlign::LEFT:
-			GetP()->setAlign(::FK::FK_ALIGN_LEFT);
+			GetP()->setAlign(::FK::fk_TextAlign::LEFT);
 			break;
 
 		  case fk_TextAlign::CENTER:
-			GetP()->setAlign(::FK::FK_ALIGN_CENTER);
+			GetP()->setAlign(::FK::fk_TextAlign::CENTER);
 			break;
 
 		  case fk_TextAlign::RIGHT:
-			GetP()->setAlign(::FK::FK_ALIGN_RIGHT);
+			GetP()->setAlign(::FK::fk_TextAlign::RIGHT);
 			break;
 
 		  default:
@@ -281,13 +281,13 @@ namespace FK_CLI {
 	fk_TextAlign fk_TextImage::Align::get(void)
 	{
 		switch(GetP()->getAlign()) {
-		case ::FK::FK_ALIGN_LEFT:
+		case ::FK::fk_TextAlign::LEFT:
 			return fk_TextAlign::LEFT;
 
-		case ::FK::FK_ALIGN_CENTER:
+		case ::FK::fk_TextAlign::CENTER:
 			return fk_TextAlign::CENTER;
 
-		case ::FK::FK_ALIGN_RIGHT:
+		case ::FK::fk_TextAlign::RIGHT:
 			return fk_TextAlign::RIGHT;
 
 		  default:
@@ -331,15 +331,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TextSendingMode::ALL:
-			GetP()->setSendingMode(::FK::FK_SENDING_ALL);
+			GetP()->setSendingMode(::FK::fk_TextSendingMode::ALL);
 			break;
 
 		  case fk_TextSendingMode::CHAR:
-			GetP()->setSendingMode(::FK::FK_SENDING_CHAR);
+			GetP()->setSendingMode(::FK::fk_TextSendingMode::CHAR);
 			break;
 
 		  case fk_TextSendingMode::LINE:
-			GetP()->setSendingMode(::FK::FK_SENDING_LINE);
+			GetP()->setSendingMode(::FK::fk_TextSendingMode::LINE);
 			break;
 
 		  default:
@@ -350,13 +350,13 @@ namespace FK_CLI {
 	fk_TextSendingMode fk_TextImage::SendingMode::get(void)
 	{
 		switch(GetP()->getSendingMode()) {
-		case ::FK::FK_SENDING_ALL:
+		case ::FK::fk_TextSendingMode::ALL:
 			return fk_TextSendingMode::ALL;
 
-		case ::FK::FK_SENDING_CHAR:
+		case ::FK::fk_TextSendingMode::CHAR:
 			return fk_TextSendingMode::CHAR;
 
-		case ::FK::FK_SENDING_LINE:
+		case ::FK::fk_TextSendingMode::LINE:
 			return fk_TextSendingMode::LINE;
 			
 		  default:
@@ -423,7 +423,8 @@ namespace FK_CLI {
 	bool fk_TextImage::LoadStrFile(String^ argFileName)
 	{
 		if(!argFileName) return false;
-		return GetP()->loadStrFile(marshal_as<string>(argFileName), ::FK::FK_STR_UTF8);
+		return GetP()->loadStrFile(marshal_as<string>(argFileName),
+			::FK::fk_StringCode::UTF8);
 	}
 
 	int fk_TextImage::GetLineCharNum(int argNum)

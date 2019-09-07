@@ -145,24 +145,24 @@ namespace FK_CLI {
 	{
 		switch(argCode) {
 		  case fk_StringCode::UTF16:
-			return ::FK::FK_STR_UTF16;
+			return ::FK::fk_StringCode::UTF16;
 
 		  case fk_StringCode::UTF8:
-			return ::FK::FK_STR_UTF8;
+			return ::FK::fk_StringCode::UTF8;
 
 		  case fk_StringCode::JIS:
-			return ::FK::FK_STR_JIS;
+			return ::FK::fk_StringCode::JIS;
 
 		  case fk_StringCode::SJIS:
-			return ::FK::FK_STR_SJIS;
+			return ::FK::fk_StringCode::SJIS;
 
 		  case fk_StringCode::EUC:
-			return ::FK::FK_STR_EUC;
+			return ::FK::fk_StringCode::EUC;
 
 		  default:
 			break;
 		}
-		return ::FK::FK_STR_UTF16;
+		return ::FK::fk_StringCode::UTF16;
 	}
 
 	fk_UniStr::fk_UniStr() : fk_BaseObject(false)
@@ -220,7 +220,7 @@ namespace FK_CLI {
 	bool fk_UniStr::ReadFile(String^ argFileName)
 	{
 		if(!argFileName) return false;
-		return GetP()->readFile(marshal_as<string>(argFileName), ::FK::FK_STR_SJIS);
+		return GetP()->readFile(marshal_as<string>(argFileName), ::FK::fk_StringCode::SJIS);
 	}
 
 	void fk_UniStr::CopyStr(fk_UniStr^ argStr)
@@ -238,7 +238,7 @@ namespace FK_CLI {
 	void fk_UniStr::Convert(String^ argStr)
 	{
 		if(!argStr) return;
-		GetP()->convert(marshal_as<string>(argStr), ::FK::FK_STR_SJIS);
+		GetP()->convert(marshal_as<string>(argStr), ::FK::fk_StringCode::SJIS);
 	}
 
 	int fk_UniStr::GetCode(int argNum)

@@ -127,7 +127,7 @@ namespace FK_CLI {
 		
 	void fk_GuideObject::EntryScene(fk_Scene ^argS, fk_GuideMode argMode)
 	{
-		GetP()->entryScene(argS->GetP(), int(argMode));
+		GetP()->entryScene(argS->GetP(), static_cast<::FK::fk_Guide>(argMode));
 	}
 		
 	void fk_GuideObject::RemoveScene(fk_Scene ^argS)

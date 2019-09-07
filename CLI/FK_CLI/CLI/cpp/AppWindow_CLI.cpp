@@ -392,9 +392,7 @@ namespace FK_CLI {
 		
 	void fk_AppWindow::ShowGuide(fk_GuideMode argMode)
 	{
-		unsigned int mode = static_cast<unsigned int>(argMode);
-		::FK::fk_Guide gMode = static_cast<::FK::fk_Guide>(mode);
-		GetP()->showGuide(gMode);
+		GetP()->showGuide(static_cast<::FK::fk_Guide>(argMode));
 	}
 
 	void fk_AppWindow::HideGuide(void)
