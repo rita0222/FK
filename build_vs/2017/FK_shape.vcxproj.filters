@@ -22,9 +22,6 @@
     <ClCompile Include="..\..\src\shape\BSplCurve.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\BSplSurface.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Capsule.cxx">
       <Filter>Source</Filter>
     </ClCompile>
@@ -251,9 +248,6 @@
     <ClInclude Include="..\..\FK\BSplCurve.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\BSplSurface.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\Capsule.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -300,15 +294,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Edge.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\FileBase.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\FileInput.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\FileOutput.H">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Gregory.h">

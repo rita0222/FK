@@ -90,7 +90,7 @@ namespace FK {
 		ONEDGE,
 		ONFACE,
 		NO,
-		ERROR,
+		ERR,
 	};
 
 #endif

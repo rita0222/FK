@@ -19,6 +19,9 @@
     <ClCompile Include="..\..\src\model\ModelTree.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\model\DrawMode.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -42,6 +45,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Model.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\DrawMode.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

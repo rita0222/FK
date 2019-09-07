@@ -259,7 +259,7 @@ bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, bool argInsideFlag)
 	  case fk_SpecialKey::BACKSPACE:
 		if(Fl::get_key(FL_BackSpace) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::DELETE:
+	  case fk_SpecialKey::DEL:
 		if(Fl::get_key(FL_Delete) != 0) return true;
 		else return false;
 	  case fk_SpecialKey::CAPS_LOCK:

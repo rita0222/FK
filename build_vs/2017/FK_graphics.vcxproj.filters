@@ -22,6 +22,12 @@
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -51,6 +57,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\TextureDraw.H">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\CurveDraw.H">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\SurfaceDraw.H">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

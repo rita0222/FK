@@ -557,10 +557,10 @@ fk_LoopCrossStatus fk_Loop::IsCross(const fk_Vector &argS,
 	fk_Half		*curH;
 
 
-	if(getVNum() != 3) return fk_LoopCrossStatus::ERROR;
+	if(getVNum() != 3) return fk_LoopCrossStatus::ERR;
 	curH = DB->GetHData(oneHalf);
 	for(int i = 0; i < 3; i++) {
-		if(curH == nullptr) return fk_LoopCrossStatus::ERROR;
+		if(curH == nullptr) return fk_LoopCrossStatus::ERR;
 		V[i] = curH->getVertex()->getPosition();
 		curH = curH->getNextHalf();
 	}

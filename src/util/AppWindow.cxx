@@ -683,7 +683,7 @@ void fk_AppWindow::procMouseView(fk_Model *camera, double spinX, double spinY, b
 	nowY = po.y;
 	diffX = nowX - prevX;
 	diffY = nowY - prevY;
-	camera->glRotateWithVec(camera->getPosition(), fk_Y, -diffX*spinX);
+	camera->glRotateWithVec(camera->getPosition(), fk_Axis::Y, -diffX*spinX);
 	camera->glRotateWithVec(camera->getPosition(), camera->getPosition()+(camera->getVec()^camera->getUpVec()), -diffY*spinY);
 	if(lockSW == true){
 		SetCursorPos(prevX, prevY);
