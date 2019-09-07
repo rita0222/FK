@@ -132,8 +132,8 @@ module FK_Boid =
 
     win.Open()
     while win.Update() = true do
-        let sMode = win.GetKeyStatus('s', fk_SwitchStatus.RELEASE)
-        let aMode = win.GetKeyStatus('a', fk_SwitchStatus.RELEASE)
-        let cMode = win.GetKeyStatus('c', fk_SwitchStatus.RELEASE)
+        let sMode = win.GetKeyStatus('s', fk_Switch.RELEASE)
+        let aMode = win.GetKeyStatus('a', fk_Switch.RELEASE)
+        let cMode = win.GetKeyStatus('c', fk_Switch.RELEASE)
         boid.Forward(sMode, aMode, cMode)
         

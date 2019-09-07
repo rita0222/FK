@@ -189,13 +189,13 @@ namespace FK_CLI {
 	void fk_SpriteModel::DrawText(String^ argStr)
 	{
 		if(!argStr) return;
-		GetP()->drawText(marshal_as<string>(argStr), ::FK::FK_STR_SJIS);
+		GetP()->drawText(marshal_as<string>(argStr), ::FK::fk_StringCode::SJIS);
 	}
 
 	void fk_SpriteModel::DrawText(String^ argStr, bool argMode)
 	{
 		if(!argStr) return;
-		GetP()->drawText(marshal_as<string>(argStr), argMode, ::FK::FK_STR_SJIS);
+		GetP()->drawText(marshal_as<string>(argStr), argMode, ::FK::fk_StringCode::SJIS);
 	}
 
 	void fk_SpriteModel::ClearText(void)

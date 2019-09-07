@@ -76,10 +76,10 @@ namespace FK_CLI_Audio
 			while(win.Update()) {
 				blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
 
-				if(win.GetKeyStatus('Z', fk_SwitchStatus.DOWN) == true && volume < 1.0) {
+				if(win.GetKeyStatus('Z', fk_Switch.DOWN) == true && volume < 1.0) {
 					volume += 0.1;
 				}
-				if(win.GetKeyStatus('X', fk_SwitchStatus.DOWN) == true && volume > 0.0) {
+				if(win.GetKeyStatus('X', fk_Switch.DOWN) == true && volume > 0.0) {
 					volume -= 0.1;
 				}
 

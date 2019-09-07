@@ -151,11 +151,11 @@ namespace FK_CLI_FBO
                     if (depthWindow.Update() == false) break;
                 }
                 // エッジ抽出用閾値の変更
-                if (normalWindow.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.PRESS))
+                if (normalWindow.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_Switch.PRESS))
                 {
                     ++thresshold;
                 }
-                if (normalWindow.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.PRESS))
+                if (normalWindow.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_Switch.PRESS))
                 {
                     if (thresshold > 0) --thresshold;
                 }

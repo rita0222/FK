@@ -99,7 +99,7 @@ namespace FK_CLI
 	};
 
 	//! ブレンドモード型
-	public enum class fk_BlendMode : unsigned char {
+	public enum class fk_BlendMode : unsigned int {
 		ALPHA_MODE		= 0,	//!< アルファブレンド(デフォルト)
 		NEGATIVE_MODE	= 1,	//!< 反転
 		ADDITION_MODE	= 2,	//!< 加算
@@ -111,7 +111,7 @@ namespace FK_CLI
 	};
 
 	//! ブレンド係数型
-	public enum class fk_BlendFactor : unsigned char {
+	public enum class fk_BlendFactor : unsigned int {
 		ZERO				= 0,	//! 0
 		ONE					= 1,	//! 1
 		SRC_COLOR			= 2,	//! Sr,Sg,Sb
@@ -125,7 +125,7 @@ namespace FK_CLI
 	};
 
 	//! デプス読み書きモード型
-	public enum class fk_DepthMode : unsigned char {
+	public enum class fk_DepthMode : unsigned int {
 		NO_USE			= 0,	//!< デプスバッファの参照も更新せず、常に上書きします
 		READ			= 1,	//!< デプスバッファを参照し、前後関係のチェックを行います
 		WRITE			= 2,	//!< デプスバッファに書き込みを行い、更新します
@@ -133,7 +133,7 @@ namespace FK_CLI
 	};
 
 	// 描画優先モード型
-	public enum class fk_ElementMode : unsigned char {
+	public enum class fk_ElementMode : unsigned int {
 		NONE = 0,		//!< 描画なし
 		MODEL = 1,		//!< モデル設定優先
 		ELEMENT = 2		//!< 要素個別設定優先

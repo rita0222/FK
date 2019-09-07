@@ -33,7 +33,6 @@
     <ClInclude Include="..\..\FK\BoundaryElem.H" />
     <ClInclude Include="..\..\FK\BSplBase.H" />
     <ClInclude Include="..\..\FK\BSplCurve.h" />
-    <ClInclude Include="..\..\FK\BSplSurface.h" />
     <ClInclude Include="..\..\FK\BVHMotion.h" />
     <ClInclude Include="..\..\FK\Capsule.h" />
     <ClInclude Include="..\..\FK\Circle.h" />
@@ -42,6 +41,7 @@
     <ClInclude Include="..\..\FK\Command.H" />
     <ClInclude Include="..\..\FK\Cone.h" />
     <ClInclude Include="..\..\FK\Curve.h" />
+    <ClInclude Include="..\..\FK\CurveDraw.H" />
     <ClInclude Include="..\..\FK\D3DXAnimation.H" />
     <ClInclude Include="..\..\FK\D3DXData.H" />
     <ClInclude Include="..\..\FK\D3DXParser.H" />
@@ -51,15 +51,14 @@
     <ClInclude Include="..\..\FK\DList.h" />
     <ClInclude Include="..\..\FK\DrawBase.H" />
     <ClInclude Include="..\..\FK\DrawCache.h" />
+    <ClInclude Include="..\..\FK\DrawMode.h" />
     <ClInclude Include="..\..\FK\DXFOut.H" />
     <ClInclude Include="..\..\FK\DXFParser.H" />
     <ClInclude Include="..\..\FK\Edge.h" />
     <ClInclude Include="..\..\FK\Engine.H" />
     <ClInclude Include="..\..\FK\Error.H" />
     <ClInclude Include="..\..\FK\FaceDraw.H" />
-    <ClInclude Include="..\..\FK\FileBase.h" />
     <ClInclude Include="..\..\FK\FK.h" />
-    <ClInclude Include="..\..\FK\FKUT.h" />
     <ClInclude Include="..\..\FK\Fog.h" />
     <ClInclude Include="..\..\FK\FrameController.h" />
     <ClInclude Include="..\..\FK\Fullscreen.h" />
@@ -133,6 +132,7 @@
     <ClInclude Include="..\..\FK\STLParser.H" />
     <ClInclude Include="..\..\FK\SubDivision.H" />
     <ClInclude Include="..\..\FK\Surface.h" />
+    <ClInclude Include="..\..\FK\SurfaceDraw.H" />
     <ClInclude Include="..\..\FK\System.h" />
     <ClInclude Include="..\..\FK\TextImage.h" />
     <ClInclude Include="..\..\FK\Texture.h" />
@@ -226,12 +226,14 @@
     <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
+    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
     <ClCompile Include="..\..\src\graphics\Engine.cxx" />
     <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
     <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
     <ClCompile Include="..\..\src\material\Color.cxx" />
     <ClCompile Include="..\..\src\material\Material.cxx" />
@@ -248,6 +250,7 @@
     <ClCompile Include="..\..\src\model\Boundary.cxx" />
     <ClCompile Include="..\..\src\model\BoundaryElem.cxx" />
     <ClCompile Include="..\..\src\model\BVHMotion.cxx" />
+    <ClCompile Include="..\..\src\model\DrawMode.cxx" />
     <ClCompile Include="..\..\src\model\MatAdmin.cxx" />
     <ClCompile Include="..\..\src\model\Model.cxx" />
     <ClCompile Include="..\..\src\model\ModelTree.cxx" />

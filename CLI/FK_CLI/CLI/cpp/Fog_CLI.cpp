@@ -130,15 +130,15 @@ namespace FK_CLI {
 	{
 		switch(argOpt) {
 		  case fk_FogOption::FASTEST:
-			GetP()->setFogOption(::FK::fk_FogMode::FASTEST);
+			GetP()->setFogOption(::FK::fk_FogOption::FASTEST);
 			break;
 
 		  case fk_FogOption::NICEST:
-			GetP()->setFogOption(::FK::fk_FogMode::NICEST);
+			GetP()->setFogOption(::FK::fk_FogOption::NICEST);
 			break;
 
 		  default:
-			GetP()->setFogOption(::FK::fk_FogMode::NOOPTION);
+			GetP()->setFogOption(::FK::fk_FogOption::NOOPTION);
 			break;
 		}
 	}
@@ -146,10 +146,10 @@ namespace FK_CLI {
 	fk_FogOption fk_Fog::FogOption::get(void)
 	{
 		switch(GetP()->getFogOption()) {
-		case ::FK::fk_FogMode::FASTEST:
+		case ::FK::fk_FogOption::FASTEST:
 			return fk_FogOption::FASTEST;
 				
-		case ::FK::fk_FogMode::NICEST:
+		case ::FK::fk_FogOption::NICEST:
 			return fk_FogOption::NICEST;
 
 		  default:

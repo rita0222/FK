@@ -121,15 +121,15 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TexMode::MODULATE:
-			GetP()->setTextureMode(::FK::FK_TEX_MODULATE);
+			GetP()->setTextureMode(::FK::fk_TexMode::MODULATE);
 			break;
 
 		  case fk_TexMode::REPLACE:
-			GetP()->setTextureMode(::FK::FK_TEX_REPLACE);
+			GetP()->setTextureMode(::FK::fk_TexMode::REPLACE);
 			break;
 				
 		  case fk_TexMode::DECAL:
-			GetP()->setTextureMode(::FK::FK_TEX_DECAL);
+			GetP()->setTextureMode(::FK::fk_TexMode::DECAL);
 			break;
 
 		  default:
@@ -140,13 +140,13 @@ namespace FK_CLI {
 	fk_TexMode fk_Texture::TextureMode::get(void)
 	{
 		switch(GetP()->getTextureMode()) {
-		case ::FK::FK_TEX_MODULATE:
+		case ::FK::fk_TexMode::MODULATE:
 			return fk_TexMode::MODULATE;
 
-		case ::FK::FK_TEX_REPLACE:
+		case ::FK::fk_TexMode::REPLACE:
 			return fk_TexMode::REPLACE;
 
-		case ::FK::FK_TEX_DECAL:
+		case ::FK::fk_TexMode::DECAL:
 			return fk_TexMode::DECAL;
 
 		  default:
@@ -159,11 +159,11 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TexRendMode::NORMAL:
-			GetP()->setTexRendMode(::FK::FK_TEX_REND_NORMAL);
+			GetP()->setTexRendMode(::FK::fk_TexRendMode::NORMAL);
 			break;
 
 		  case fk_TexRendMode::SMOOTH:
-			GetP()->setTexRendMode(::FK::FK_TEX_REND_SMOOTH);
+			GetP()->setTexRendMode(::FK::fk_TexRendMode::SMOOTH);
 			break;
 
 		  default:
@@ -174,10 +174,10 @@ namespace FK_CLI {
 	fk_TexRendMode fk_Texture::RendMode::get(void)
 	{
 		switch(GetP()->getTexRendMode()) {
-		case ::FK::FK_TEX_REND_NORMAL:
+		case ::FK::fk_TexRendMode::NORMAL:
 			return fk_TexRendMode::NORMAL;
 
-		case ::FK::FK_TEX_REND_SMOOTH:
+		case ::FK::fk_TexRendMode::SMOOTH:
 			return fk_TexRendMode::SMOOTH;
 
 		  default:
@@ -190,11 +190,11 @@ namespace FK_CLI {
 	{
 		switch(argMode) {
 		  case fk_TexWrapMode::REPEAT:
-			GetP()->setTexWrapMode(::FK::FK_TEX_WRAP_REPEAT);
+			GetP()->setTexWrapMode(::FK::fk_TexWrapMode::REPEAT);
 			break;
 
 		  case fk_TexWrapMode::CLAMP:
-			GetP()->setTexWrapMode(::FK::FK_TEX_WRAP_CLAMP);
+			GetP()->setTexWrapMode(::FK::fk_TexWrapMode::CLAMP);
 			break;
 
 		  default:
@@ -205,10 +205,10 @@ namespace FK_CLI {
 	fk_TexWrapMode fk_Texture::WrapMode::get(void)
 	{
 		switch(GetP()->getTexWrapMode()) {
-		case ::FK::FK_TEX_WRAP_REPEAT:
+		case ::FK::fk_TexWrapMode::REPEAT:
 			return fk_TexWrapMode::REPEAT;
 
-		case ::FK::FK_TEX_WRAP_CLAMP:
+		case ::FK::fk_TexWrapMode::CLAMP:
 			return fk_TexWrapMode::CLAMP;
 
 		  default:

@@ -189,7 +189,7 @@ namespace FK_CLI_Boid
 
 			while(win.Update() == true)
             {
-                boid.Forward(win.GetKeyStatus(' ', fk_SwitchStatus.RELEASE));
+                boid.Forward(win.GetKeyStatus(' ', fk_Switch.RELEASE));
 			}
 
 		}

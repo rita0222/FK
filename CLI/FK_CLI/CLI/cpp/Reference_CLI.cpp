@@ -200,21 +200,21 @@ namespace FK_CLI {
 
 	fk_EdgeStatus fk_Reference::GetEdgeStatus(fk_Edge^ argE)
 	{
-		if(!argE) return fk_EdgeStatus::NONE_EDGE;
+		if(!argE) return fk_EdgeStatus::NONE;
 		switch(GetP()->getEdgeStatus(argE->GetP())) {
-		case ::FK::FK_UNDEF_EDGE:
-			return fk_EdgeStatus::UNDEF_EDGE;
+		case ::FK::fk_EdgeStatus::UNDEF:
+			return fk_EdgeStatus::UNDEF;
 
-		case ::FK::FK_HALFDEF_EDGE:
-			return fk_EdgeStatus::HALFDEF_EDGE;
+		case ::FK::fk_EdgeStatus::HALF:
+			return fk_EdgeStatus::HALF;
 
-		case ::FK::FK_BOTHDEF_EDGE:
-			return fk_EdgeStatus::BOTHDEF_EDGE;
+		case ::FK::fk_EdgeStatus::BOTH:
+			return fk_EdgeStatus::BOTH;
 
 		  default:
 			break;
 		}
-		return fk_EdgeStatus::NONE_EDGE;
+		return fk_EdgeStatus::NONE;
 	}
 
 	fk_Vertex^ fk_Reference::GetOneVOnL(fk_Loop^ argL)

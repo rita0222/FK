@@ -82,10 +82,10 @@ namespace FK_CLI
 	
 	//! 稜線状態を表す列挙型
 	public enum class fk_EdgeStatus {
-		NONE_EDGE,		//!< 位相の不整合
-		UNDEF_EDGE,		//!< 未定義稜線
-		HALFDEF_EDGE,	//!< 半定義稜線
-		BOTHDEF_EDGE	//!< 両定義稜線
+		NONE,	//!< 位相の不整合
+		UNDEF,	//!< 未定義稜線
+		HALF,	//!< 半定義稜線
+		BOTH	//!< 両定義稜線
 	};
 
 	//! ソリッドモデルの稜線位相を管理するクラス

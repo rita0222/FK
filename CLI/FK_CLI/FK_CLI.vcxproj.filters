@@ -63,9 +63,6 @@
     <ClInclude Include="..\..\FK\BSplCurve.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\BSplSurface.h">
-      <Filter>Header\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\BVHMotion.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
@@ -135,13 +132,7 @@
     <ClInclude Include="..\..\FK\FaceDraw.H">
       <Filter>Header\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\FileBase.h">
-      <Filter>Header\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\FK.h">
-      <Filter>Header\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\FKUT.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Fog.h">
@@ -611,6 +602,15 @@
     </ClInclude>
     <ClInclude Include="CLI\include\TexCoord_CLI.h">
       <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\CurveDraw.H">
+      <Filter>Header\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\DrawMode.h">
+      <Filter>Header\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\SurfaceDraw.H">
+      <Filter>Header\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1189,6 +1189,15 @@
     </ClCompile>
     <ClCompile Include="CLI\cpp\TexCoord_CLI.cpp">
       <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\DrawMode.cxx">
+      <Filter>Source\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

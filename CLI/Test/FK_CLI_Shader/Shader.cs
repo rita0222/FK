@@ -97,12 +97,12 @@ namespace FK_CLI_Shader
             while (window.Update())
             {
                 lightModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.01);
-                if(window.GetKeyStatus(' ', fk_SwitchStatus.PRESS))
+                if(window.GetKeyStatus(' ', fk_Switch.PRESS))
                 {
                     shockModel.Scale = shockModel.Scale + 0.01;
                 }
 
-                if(window.GetSpecialKeyStatus(fk_SpecialKey.ENTER, fk_SwitchStatus.DOWN))
+                if(window.GetSpecialKeyStatus(fk_SpecialKey.ENTER, fk_Switch.DOWN))
                 {
                     shockModel.Scale = 0.01;
                 }

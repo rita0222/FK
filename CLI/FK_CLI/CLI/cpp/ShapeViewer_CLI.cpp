@@ -143,8 +143,7 @@ namespace FK_CLI {
 
 	void fk_ShapeViewer::DrawMode::set(fk_DrawMode argMode)
 	{
-		unsigned int mode = static_cast<unsigned int>(argMode);
-		GetP()->setDrawMode(mode);
+		GetP()->setDrawMode(static_cast<::FK::fk_DrawMode>(argMode));
 	}
 
 	fk_DrawMode fk_ShapeViewer::DrawMode::get(void)
@@ -156,15 +155,15 @@ namespace FK_CLI {
 	{
 		switch (argMode) {
 		case fk_ElementMode::NONE:
-			GetP()->setElementMode(::FK::FK_ELEM_NONE);
+			GetP()->setElementMode(::FK::fk_ElementMode::NONE);
 			break;
 
 		case fk_ElementMode::MODEL:
-			GetP()->setElementMode(::FK::FK_ELEM_MODEL);
+			GetP()->setElementMode(::FK::fk_ElementMode::MODEL);
 			break;
 
 		case fk_ElementMode::ELEMENT:
-			GetP()->setElementMode(::FK::FK_ELEM_ELEMENT);
+			GetP()->setElementMode(::FK::fk_ElementMode::ELEMENT);
 			break;
 
 		default:
@@ -176,10 +175,10 @@ namespace FK_CLI {
 	fk_ElementMode fk_ShapeViewer::ElementMode::get(void)
 	{
 		switch (GetP()->getElementMode()) {
-		case ::FK::FK_ELEM_MODEL:
+		case ::FK::fk_ElementMode::MODEL:
 			return fk_ElementMode::MODEL;
 
-		case ::FK::FK_ELEM_ELEMENT:
+		case ::FK::fk_ElementMode::ELEMENT:
 			return fk_ElementMode::ELEMENT;
 
 		default:
@@ -192,11 +191,11 @@ namespace FK_CLI {
 	{
 		switch (argMode) {
 		case fk_ShadingMode::PHONG:
-			GetP()->setShadingMode(::FK::FK_SHADING_PHONG);
+			GetP()->setShadingMode(::FK::fk_ShadingMode::PHONG);
 			break;
 
 		case fk_ShadingMode::GOURAUD:
-			GetP()->setShadingMode(::FK::FK_SHADING_GOURAUD);
+			GetP()->setShadingMode(::FK::fk_ShadingMode::GOURAUD);
 			break;
 
 		default:
@@ -208,10 +207,10 @@ namespace FK_CLI {
 	fk_ShadingMode fk_ShapeViewer::ShadingMode::get(void)
 	{
 		switch (GetP()->getShadingMode()) {
-		case ::FK::FK_SHADING_PHONG:
+		case ::FK::fk_ShadingMode::PHONG:
 			return fk_ShadingMode::PHONG;
 
-		case ::FK::FK_SHADING_GOURAUD:
+		case ::FK::fk_ShadingMode::GOURAUD:
 			return fk_ShadingMode::GOURAUD;
 
 		default:
@@ -355,8 +354,7 @@ namespace FK_CLI {
 
 	void fk_ShapeViewer::SetDrawMode(int argID, fk_DrawMode argMode)
 	{
-		unsigned int mode = static_cast<unsigned int>(argMode);
-		GetP()->setDrawMode(argID, mode);
+		GetP()->setDrawMode(argID, static_cast<::FK::fk_DrawMode>(argMode));
 	}
 
 	fk_DrawMode fk_ShapeViewer::GetDrawMode(int argID)
@@ -368,15 +366,15 @@ namespace FK_CLI {
 	{
 		switch (argMode) {
 		case fk_ElementMode::NONE:
-			GetP()->setElementMode(argID, ::FK::FK_ELEM_NONE);
+			GetP()->setElementMode(argID, ::FK::fk_ElementMode::NONE);
 			break;
 
 		case fk_ElementMode::MODEL:
-			GetP()->setElementMode(argID, ::FK::FK_ELEM_MODEL);
+			GetP()->setElementMode(argID, ::FK::fk_ElementMode::MODEL);
 			break;
 
 		case fk_ElementMode::ELEMENT:
-			GetP()->setElementMode(argID, ::FK::FK_ELEM_ELEMENT);
+			GetP()->setElementMode(argID, ::FK::fk_ElementMode::ELEMENT);
 			break;
 
 		default:
@@ -388,10 +386,10 @@ namespace FK_CLI {
 	fk_ElementMode fk_ShapeViewer::GetElementMode(int argID)
 	{
 		switch (GetP()->getElementMode(argID)) {
-		case ::FK::FK_ELEM_MODEL:
+		case ::FK::fk_ElementMode::MODEL:
 			return fk_ElementMode::MODEL;
 
-		case ::FK::FK_ELEM_ELEMENT:
+		case ::FK::fk_ElementMode::ELEMENT:
 			return fk_ElementMode::ELEMENT;
 
 		default:
@@ -405,11 +403,11 @@ namespace FK_CLI {
 	{
 		switch (argMode) {
 		case fk_ShadingMode::PHONG:
-			GetP()->setShadingMode(argID, ::FK::FK_SHADING_PHONG);
+			GetP()->setShadingMode(argID, ::FK::fk_ShadingMode::PHONG);
 			break;
 
 		case fk_ShadingMode::GOURAUD:
-			GetP()->setShadingMode(argID, ::FK::FK_SHADING_GOURAUD);
+			GetP()->setShadingMode(argID, ::FK::fk_ShadingMode::GOURAUD);
 			break;
 
 		default:
@@ -421,10 +419,10 @@ namespace FK_CLI {
 	fk_ShadingMode fk_ShapeViewer::GetShadingMode(int argID)
 	{
 		switch (GetP()->getShadingMode(argID)) {
-		case ::FK::FK_SHADING_PHONG:
+		case ::FK::fk_ShadingMode::PHONG:
 			return fk_ShadingMode::PHONG;
 
-		case ::FK::FK_SHADING_GOURAUD:
+		case ::FK::fk_ShadingMode::GOURAUD:
 			return fk_ShadingMode::GOURAUD;
 
 		default:
@@ -521,13 +519,13 @@ namespace FK_CLI {
 		string fileName = marshal_as<string>(argFileName);
 		switch(argFormat) {
 		  case fk_ImageType::BMP:
-			return GetP()->snapImage(fileName, ::FK::FK_IMAGE_BMP);
+			return GetP()->snapImage(fileName, ::FK::fk_ImageType::BMP);
 
 		  case fk_ImageType::PNG:
-			return GetP()->snapImage(fileName, ::FK::FK_IMAGE_PNG);
+			return GetP()->snapImage(fileName, ::FK::fk_ImageType::PNG);
 
 		  case fk_ImageType::JPG:
-			return GetP()->snapImage(fileName, ::FK::FK_IMAGE_JPG);
+			return GetP()->snapImage(fileName, ::FK::fk_ImageType::JPG);
 
 		  default:
 			break;

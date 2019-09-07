@@ -345,7 +345,7 @@ namespace FK_CLI {
 
 	void fk_Model::DepthMode::set(fk_DepthMode argMode)
 	{
-		GetP()->setDepthMode(static_cast<::FK::fk_DeptnMode>(argMode));
+		GetP()->setDepthMode(static_cast<::FK::fk_DepthMode>(argMode));
 	}
 
 	fk_DepthMode fk_Model::DepthMode::get(void)
@@ -358,11 +358,11 @@ namespace FK_CLI {
 		if (argMode == fk_BlendMode::CUSTOM_MODE) {
 			::FK::fk_BlendFactor src, dst;
 			GetP()->getBlendMode(&src, &dst);
-			GetP()->setBlendMode(::FK::FK_BLEND_CUSTOM_MODE, src, dst);
+			GetP()->setBlendMode(::FK::fk_BlendMode::CUSTOM, src, dst);
 			return;
 		}
 
-		GetP()->setBlendMode(static_cast<unsigned char>(argMode));
+		GetP()->setBlendMode(static_cast<::FK::fk_BlendMode>(argMode));
 	}
 
 	fk_BlendMode fk_Model::BlendMode::get(void)
@@ -374,8 +374,8 @@ namespace FK_CLI {
 	{
 		::FK::fk_BlendFactor src, dst;
 		GetP()->getBlendMode(&src, &dst);
-		src = static_cast<unsigned char>(argMode);
-		GetP()->setBlendMode(::FK::FK_BLEND_CUSTOM_MODE, src, dst);
+		src = static_cast<::FK::fk_BlendFactor>(argMode);
+		GetP()->setBlendMode(::FK::fk_BlendMode::CUSTOM, src, dst);
 	}
 
 	fk_BlendFactor fk_Model::BlendSrcFactor::get(void)
@@ -389,8 +389,8 @@ namespace FK_CLI {
 	{
 		::FK::fk_BlendFactor src, dst;
 		GetP()->getBlendMode(&src, &dst);
-		dst = static_cast<unsigned char>(argMode);
-		GetP()->setBlendMode(::FK::FK_BLEND_CUSTOM_MODE, src, dst);
+		dst = static_cast<::FK::fk_BlendFactor>(argMode);
+		GetP()->setBlendMode(::FK::fk_BlendMode::CUSTOM, src, dst);
 	}
 
 	fk_BlendFactor fk_Model::BlendDstFactor::get(void)
