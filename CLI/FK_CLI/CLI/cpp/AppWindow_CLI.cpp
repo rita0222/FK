@@ -86,126 +86,126 @@ namespace FK_CLI {
 	{
 		switch(argK) {
 		  case fk_SpecialKey::SHIFT_R:
-			return FK_SHIFT_R;
+			return ::FK::fk_SpecialKey::SHIFT_R;
 				
 		  case fk_SpecialKey::SHIFT_L:
-			return FK_SHIFT_L;
+			return ::FK::fk_SpecialKey::SHIFT_L;
 				
 		  case fk_SpecialKey::CTRL_R:
-			return FK_CTRL_R;
+			return ::FK::fk_SpecialKey::CTRL_R;
 				
 		  case fk_SpecialKey::CTRL_L:
-			return FK_CTRL_L;
+			return ::FK::fk_SpecialKey::CTRL_L;
 				
 		  case fk_SpecialKey::ALT_R:
-			return FK_ALT_R;
+			return ::FK::fk_SpecialKey::ALT_R;
 				
 		  case fk_SpecialKey::ALT_L:
-			return FK_ALT_L;
+			return ::FK::fk_SpecialKey::ALT_L;
 				
 		  case fk_SpecialKey::ENTER:
-			return FK_ENTER;
+			return ::FK::fk_SpecialKey::ENTER;
 				
 		  case fk_SpecialKey::BACKSPACE:
-			return FK_BACKSPACE;
+			return ::FK::fk_SpecialKey::BACKSPACE;
 				
 		  case fk_SpecialKey::DELETEKEY:
-			return FK_DELETE;
+			return ::FK::fk_SpecialKey::DEL;
 				
 		  case fk_SpecialKey::CAPS_LOCK:
-			return FK_CAPS_LOCK;
+			return ::FK::fk_SpecialKey::CAPS_LOCK;
 				
 		  case fk_SpecialKey::TAB:
-			return FK_TAB;
+			return ::FK::fk_SpecialKey::TAB;
 				
 		  case fk_SpecialKey::PAGE_UP:
-			return FK_PAGE_UP;
+			return ::FK::fk_SpecialKey::PAGE_UP;
 				
 		  case fk_SpecialKey::PAGE_DOWN:
-			return FK_PAGE_DOWN;
+			return ::FK::fk_SpecialKey::PAGE_DOWN;
 				
 		  case fk_SpecialKey::HOME:
-			return FK_HOME;
+			return ::FK::fk_SpecialKey::HOME;
 				
 		  case fk_SpecialKey::END:
-			return FK_END;
+			return ::FK::fk_SpecialKey::END;
 				
 		  case fk_SpecialKey::INSERT:
-			return FK_INSERT;
+			return ::FK::fk_SpecialKey::INSERT;
 				
 		  case fk_SpecialKey::LEFT:
-			return FK_LEFT;
+			return ::FK::fk_SpecialKey::LEFT;
 				
 		  case fk_SpecialKey::RIGHT:
-			return FK_RIGHT;
+			return ::FK::fk_SpecialKey::RIGHT;
 				
 		  case fk_SpecialKey::UP:
-			return FK_UP;
+			return ::FK::fk_SpecialKey::UP;
 				
 		  case fk_SpecialKey::DOWN:
-			return FK_DOWN;
+			return ::FK::fk_SpecialKey::DOWN;
 				
 		  case fk_SpecialKey::F1:
-			return FK_F1;
+			return ::FK::fk_SpecialKey::F1;
 				
 		  case fk_SpecialKey::F2:
-			return FK_F2;
+			return ::FK::fk_SpecialKey::F2;
 				
 		  case fk_SpecialKey::F3:
-			return FK_F3;
+			return ::FK::fk_SpecialKey::F3;
 				
 		  case fk_SpecialKey::F4:
-			return FK_F4;
+			return ::FK::fk_SpecialKey::F4;
 				
 		  case fk_SpecialKey::F5:
-			return FK_F5;
+			return ::FK::fk_SpecialKey::F5;
 				
 		  case fk_SpecialKey::F6:
-			return FK_F6;
+			return ::FK::fk_SpecialKey::F6;
 				
 		  case fk_SpecialKey::F7:
-			return FK_F7;
+			return ::FK::fk_SpecialKey::F7;
 				
 		  case fk_SpecialKey::F8:
-			return FK_F8;
+			return ::FK::fk_SpecialKey::F8;
 				
 		  case fk_SpecialKey::F9:
-			return FK_F9;
+			return ::FK::fk_SpecialKey::F9;
 				
 		  case fk_SpecialKey::F10:
-			return FK_F10;
+			return ::FK::fk_SpecialKey::F10;
 				
 		  case fk_SpecialKey::F11:
-			return FK_F11;
+			return ::FK::fk_SpecialKey::F11;
 				
 		  case fk_SpecialKey::F12:
-			return FK_F12;
+			return ::FK::fk_SpecialKey::F12;
 				
 		  default:
 			break;
 		}
-		return FK_ENTER;
+		return ::FK::fk_SpecialKey::ENTER;
 	}
 
-	::FK::fk_SwitchStatus fk_AppWindow::GetSS(fk_SwitchStatus argSS)
+	::FK::fk_Switch fk_AppWindow::GetSS(fk_Switch argSS)
 	{
 		switch(argSS) {
-		  case fk_SwitchStatus::RELEASE:
-			return FK_SW_RELEASE;
+		  case fk_Switch::RELEASE:
+			return ::FK::fk_Switch::RELEASE;
 				
-		  case fk_SwitchStatus::UP:
-			return FK_SW_UP;
+		  case fk_Switch::UP:
+			return ::FK::fk_Switch::UP;
 				
-		  case fk_SwitchStatus::DOWN:
-			return FK_SW_DOWN;
+		  case fk_Switch::DOWN:
+			return ::FK::fk_Switch::DOWN;
 				
-		  case fk_SwitchStatus::PRESS:
-			return FK_SW_PRESS;
+		  case fk_Switch::PRESS:
+			return ::FK::fk_Switch::PRESS;
 				
 		  default:
 			break;
 		}
-		return FK_SW_RELEASE;
+		return ::FK::fk_Switch::RELEASE;
 	}
 
 	fk_AppWindow::fk_AppWindow()
@@ -384,12 +384,17 @@ namespace FK_CLI {
 		
 	void fk_AppWindow::ShowGuide(void)
 	{
-		GetP()->showGuide(FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
+		GetP()->showGuide(::FK::fk_Guide::AXIS_X |
+			::FK::fk_Guide::AXIS_Y |
+			::FK::fk_Guide::AXIS_Z |
+			::FK::fk_Guide::GRID_XZ);
 	}
 		
 	void fk_AppWindow::ShowGuide(fk_GuideMode argMode)
 	{
-		GetP()->showGuide(int(argMode));
+		unsigned int mode = static_cast<unsigned int>(argMode);
+		::FK::fk_Guide gMode = static_cast<::FK::fk_Guide>(mode);
+		GetP()->showGuide(gMode);
 	}
 
 	void fk_AppWindow::HideGuide(void)
@@ -462,7 +467,7 @@ namespace FK_CLI {
 		GetP()->clearModel(false);
 	}
 
-	bool fk_AppWindow::GetKeyStatus(wchar_t argK, fk_SwitchStatus argStatus)
+	bool fk_AppWindow::GetKeyStatus(wchar_t argK, fk_Switch argStatus)
 	{
 		wchar_t tmpWBuf[2];
 		char tmpBuf[2];
@@ -474,7 +479,7 @@ namespace FK_CLI {
 		return GetP()->getKeyStatus(tmpBuf[0], GetSS(argStatus));
 	}
 
-	bool fk_AppWindow::GetKeyStatus(wchar_t argK, fk_SwitchStatus argStatus, bool argInFlg)
+	bool fk_AppWindow::GetKeyStatus(wchar_t argK, fk_Switch argStatus, bool argInFlg)
 	{
 		wchar_t tmpWBuf[2];
 		char tmpBuf[2];
@@ -487,30 +492,30 @@ namespace FK_CLI {
 	}
 
 	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode,
-										   fk_SwitchStatus argStatus, bool argInFlg)
+										   fk_Switch argStatus, bool argInFlg)
 	{
 		return GetP()->getSpecialKeyStatus(GetSK(keyCode), GetSS(argStatus), argInFlg);
 	}
 		
-	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus argStatus)
+	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_Switch argStatus)
 	{
 		return GetP()->getSpecialKeyStatus(GetSK(keyCode), GetSS(argStatus), false);
 	}
 			
-	bool fk_AppWindow::GetMouseStatus(fk_MouseButton argB, fk_SwitchStatus argSS, bool argInFlg)
+	bool fk_AppWindow::GetMouseStatus(fk_MouseButton argB, fk_Switch argSS, bool argInFlg)
 	{
 		::FK::fk_MouseButton	b;
 		switch(argB) {
-		  case fk_MouseButton::MOUSE1:
-			b = FK_MOUSE1;
+		case fk_MouseButton::MOUSE1:
+			b = ::FK::fk_MouseButton::M1;
 			break;
 				
-		  case fk_MouseButton::MOUSE2:
-			b = FK_MOUSE2;
+		case fk_MouseButton::MOUSE2:
+			b = ::FK::fk_MouseButton::M2;
 			break;
 				
-		  case fk_MouseButton::MOUSE3:
-			b = FK_MOUSE3;
+		case fk_MouseButton::MOUSE3:
+			b = ::FK::fk_MouseButton::M3;
 			break;
 
 		  default:

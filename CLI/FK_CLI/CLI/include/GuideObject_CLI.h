@@ -81,15 +81,14 @@
 namespace FK_CLI {
 
 	//! fk_GuideObject での座標軸と座標平面を表す列挙型
-	public enum class fk_GuideMode : int {
-		NO_GUIDE = 0x0000,	//!< 表示なし
-		AXIS_X   = 0x0001,	//!< x軸
-		AXIS_Y   = 0x0002,	//!< y軸
-		AXIS_Z   = 0x0004,	//!< z軸
-		GRID_XZ  = 0x0008,	//!< xz平面
-		GRID_XY  = 0x0010,	//!< xy平面
-		GRID_YZ  = 0x0020,	//!< yz平面
-		ALL_GUIDE = AXIS_X | AXIS_Y | AXIS_Z | GRID_XZ | GRID_XY | GRID_YZ	//!< 全要素
+	public enum class fk_GuideMode : unsigned int {
+		NO_GUIDE = 0,	//!< 表示なし
+		AXIS_X   = 1 << 1,	//!< x軸
+		AXIS_Y   = 1 << 2,	//!< y軸
+		AXIS_Z   = 1 << 3,	//!< z軸
+		GRID_XZ  = 1 << 4,	//!< xz平面
+		GRID_XY  = 1 << 5,	//!< xy平面
+		GRID_YZ  = 1 << 6	//!< yz平面
 	};
 		
 	//! 座標系可視化支援クラス

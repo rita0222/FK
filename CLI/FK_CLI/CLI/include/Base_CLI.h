@@ -155,6 +155,7 @@
 #pragma once
 
 #include <FK/Base.h>
+#include <FK/Math.h>
 
 namespace FK_CLI {
 	using namespace System;
@@ -165,8 +166,8 @@ namespace FK_CLI {
 	 */
 	public ref class FK {
 	public:
-		literal double PI = _FK_PI_DEFINE_;		//!< 円周率
-		literal double EPS = _FK_EPS_DEFINE_;	//!< 数値演算用誤差値
+		literal double PI = ::FK::fk_Math::PI;		//!< 円周率
+		literal double EPS = ::FK::fk_Math::EPS;	//!< 数値演算用誤差値
 	};
 
 	//! FK の各クラスの基盤となる基本クラス

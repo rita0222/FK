@@ -265,7 +265,6 @@
     <ClCompile Include="..\..\src\shape\Block.cxx" />
     <ClCompile Include="..\..\src\shape\BSplBase.cxx" />
     <ClCompile Include="..\..\src\shape\BSplCurve.cxx" />
-    <ClCompile Include="..\..\src\shape\BSplSurface.cxx" />
     <ClCompile Include="..\..\src\shape\Capsule.cxx" />
     <ClCompile Include="..\..\src\shape\Circle.cxx" />
     <ClCompile Include="..\..\src\shape\Closedline.cxx" />

@@ -755,9 +755,6 @@
     <ClCompile Include="..\..\src\shape\BSplCurve.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\BSplSurface.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Capsule.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>

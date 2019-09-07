@@ -94,19 +94,19 @@ namespace FK_CLI {
 	fk_TopologyType fk_Topology::Type::get(void)
 	{
 		switch(GetP()->getType()) {
-		case ::FK::FK_VERTEX_TYPE:
+		case ::FK::fk_TopologyType::VERTEX:
 			return fk_TopologyType::VERTEX;
 				
-		case ::FK::FK_HALF_TYPE:
+		case ::FK::fk_TopologyType::HALF:
 			return fk_TopologyType::HALF;
 				
-		case ::FK::FK_EDGE_TYPE:
+		case ::FK::fk_TopologyType::EDGE:
 			return fk_TopologyType::EDGE;
 				
-		case ::FK::FK_LOOP_TYPE:
+		case ::FK::fk_TopologyType::LOOP:
 			return fk_TopologyType::LOOP;
 				
-		case ::FK::FK_INDEXFACE_TYPE:
+		case ::FK::fk_TopologyType::INDEXFACE:
 			return fk_TopologyType::INDEXFACE;
 				
 		  default:

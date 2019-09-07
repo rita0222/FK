@@ -103,13 +103,13 @@ namespace FK_CLI {
 	fk_ProjectMode fk_ProjectBase::Mode::get(void)
 	{
 		switch(GetP()->getMode()) {
-		case ::FK::FK_PERSPECTIVE_MODE:
+		case ::FK::fk_ProjectMode::PERSPECTIVE:
 			return fk_ProjectMode::PERSPECTIVE_MODE;
 
-		case ::FK::FK_FRUSTUM_MODE:
+		case ::FK::fk_ProjectMode::FRUSTUM:
 			return fk_ProjectMode::FRUSTUM_MODE;
 
-		case ::FK::FK_ORTHO_MODE:
+		case ::FK::fk_ProjectMode::ORTHO:
 			return fk_ProjectMode::ORTHO_MODE;
 
 		  default:

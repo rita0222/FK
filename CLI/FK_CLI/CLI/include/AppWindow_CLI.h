@@ -124,12 +124,14 @@ namespace FK_CLI
 	};
 
 	//! ボタン系デバイス状態を表す列挙型
-	 public enum class fk_SwitchStatus {
+	public enum class fk_Switch {
 		RELEASE,	//!< 離しっぱなしの状態
 		UP,			//!< 離した瞬間
 		DOWN,		//!< 押した瞬間
 		PRESS		//!< 押しっぱなしの状態
 	};
+
+	//using fk_SwitchStatus = fk_Switch;
 
 	//! アプリケーションウィンドウクラス
 	/*!
@@ -160,7 +162,7 @@ namespace FK_CLI
 
 		::FK::fk_AppWindow * GetP(void);
 		::FK::fk_SpecialKey GetSK(fk_SpecialKey);
-		::FK::fk_SwitchStatus GetSS(fk_SwitchStatus);
+		::FK::fk_Switch GetSS(fk_Switch);
 
 	public:
 		//! コンストラクタ
@@ -666,7 +668,7 @@ namespace FK_CLI
 		 *
 		 *	以下のコードは、「A」キーが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetKeyStatus('a', fk_SwitchStatus.PRESS, false) == true) {
+		 *		if(Window.GetKeyStatus('a', fk_Switch.PRESS, false) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -676,7 +678,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	status
 		 *		取得したい状態を指定します。
-		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *		種類については FK_CLI::fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -689,7 +691,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetSpecialKeyStatus(), Update()
 		 */
-		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status, bool insideFlag);
+		bool GetKeyStatus(wchar_t key, fk_Switch status, bool insideFlag);
 
 		//! 通常キー状態取得メソッド2
 		/*!
@@ -698,12 +700,12 @@ namespace FK_CLI
 		 *	検出したい文字をシングルクォーテーションで囲って指定します。
 		 *	'A' や 'X' などとします。
 		 *	入力できない特殊キーには getSpecialKeyStatus() を使います。
-		 *	なお、本メソッドは GetKeyStatus(wchar_t, fk_SwitchStatus, bool) にて
+		 *	なお、本メソッドは GetKeyStatus(wchar_t, fk_Switch, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
 		 *	以下のコードは、「A」キーが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetKeyStatus('a', fk_SwitchStatus.PRESS) == true) {
+		 *		if(Window.GetKeyStatus('a', fk_Switch.PRESS) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -713,7 +715,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	status
 		 *		取得したい状態を指定します。
-		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *		種類については FK_CLI::fk_Switch を参照してください。
 		 *
 		 *	\return
 		 *		キーが status で指定した状態を満たしていれば true を、
@@ -721,7 +723,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetSpecialKeyStatus(), Update()
 		 */
-		bool GetKeyStatus(wchar_t key, fk_SwitchStatus status);
+		bool GetKeyStatus(wchar_t key, fk_Switch status);
 
 		//! 特殊キー状態取得メソッド1
 		/*!
@@ -732,7 +734,7 @@ namespace FK_CLI
 		 *
 		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_SwitchStatus.PRESS, false) == true) {
+		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_Switch.PRESS, false) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -741,7 +743,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	status
 		 *		取得したい状態を指定します。
-		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *		種類については FK_CLI::fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -758,7 +760,7 @@ namespace FK_CLI
 		 *	\sa GetKeyStatus(), Update()
 		 */
 		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
-								 fk_SwitchStatus status, bool insideFlag);
+								 fk_Switch status, bool insideFlag);
 		
 		//! 特殊キー状態取得メソッド2
 		/*!
@@ -766,12 +768,12 @@ namespace FK_CLI
 		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
 		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
 		 *	通常キーの状態取得は GetKeyStatus() を使います。
-		 *	なお、本メソッドは GetSpecialKeyStatus(fk_SpecialKey, fk_SwitchStatus, bool) にて
+		 *	なお、本メソッドは GetSpecialKeyStatus(fk_SpecialKey, fk_Switch, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
 		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_SwitchStatus.PRESS) == true) {
+		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_Switch.PRESS) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -780,7 +782,7 @@ namespace FK_CLI
 		 *
 		 *	\param[in]	status
 		 *		取得したい状態を指定します。
-		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *		種類については FK_CLI::fk_Switch を参照してください。
 		 *
 		 *	\return
 		 *		キーが status で指定した状態を満たしていれば true を、
@@ -791,7 +793,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetKeyStatus(), Update()
 		 */
-		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_SwitchStatus status);
+		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_Switch status);
 		//@}
 
 		//! \name マウス状態取得メソッド
@@ -804,14 +806,14 @@ namespace FK_CLI
 		 *
 		 *	以下のコードは、マウス左ボタンが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetMouseStatus(fk_MouseButton.MOUSE1, fk_SwitchStatus.PRESS, false) == true) {
+		 *		if(Window.GetMouseStatus(fk_MouseButton.MOUSE1, fk_Switch.PRESS, false) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *	\param[in]		buttonCode		マウスボタンの種類
 		 *
 		 *	\param[in]	status
 		 *		取得したい状態を指定します。
-		 *		種類については FK_CLI::fk_SwitchStatus を参照してください。
+		 *		種類については FK_CLI::fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -822,7 +824,7 @@ namespace FK_CLI
 		 *		ボタンが status で指定した状態を満たしていれば true を、
 		 *		そうでなければ false を返します。
 		 */
-		bool GetMouseStatus(fk_MouseButton buttonCode, fk_SwitchStatus status, bool insideFlag);
+		bool GetMouseStatus(fk_MouseButton buttonCode, fk_Switch status, bool insideFlag);
 		
 		//! マウスカーソル表示制御メソッド
 		/*!

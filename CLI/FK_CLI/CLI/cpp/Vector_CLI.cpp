@@ -81,19 +81,19 @@ namespace FK_CLI {
 
 		switch(argAxis) {
 		  case FK_CLI::fk_Axis::X:
-			tmpAxis	= ::FK::fk_X;
+			tmpAxis	= ::FK::fk_Axis::X;
 			break;
 				
 		  case FK_CLI::fk_Axis::Y:
-			tmpAxis = ::FK::fk_Y;
+			tmpAxis = ::FK::fk_Axis::Y;
 			break;
 
 		  case FK_CLI::fk_Axis::Z:
-			tmpAxis = ::FK::fk_Z;
+			tmpAxis = ::FK::fk_Axis::Z;
 			break;
 
 		  default:
-			tmpAxis = ::FK::fk_X;
+			tmpAxis = ::FK::fk_Axis::X;
 			break;
 		}
 		return tmpAxis;
