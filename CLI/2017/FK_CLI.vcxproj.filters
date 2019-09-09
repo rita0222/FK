@@ -396,213 +396,6 @@
     <ClInclude Include="..\..\FK\Window.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
-    <ClInclude Include="CLI\include\AppWindow_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Attribute_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\AudioBase_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\AudioOggBuffer_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\AudioStream_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\AudioWavBuffer_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Base_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Block_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Boundary_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\BVHMotion_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Capsule_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Circle_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Color_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Cone_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\DataAccess_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\DList_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Edge_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Fog_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\GenMatrix_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\GenVector_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\GuideObject_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Half_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\IFSTexture_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Image_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\IndexFace_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Light_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Line_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Loop_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\MatAdmin_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Material_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Math_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Matrix_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\MeshTexture_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Model_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Modify_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Operation_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Particle_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\ParticleSet_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Performer_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Plane_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Point_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Polygon_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Prism_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Projection_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Quaternion_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\RectTexture_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Reference_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Renderer_CLI.H">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Scene_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\ShaderBinder_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\ShaderParameter_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\ShaderProgram_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\ShaderProgram_New_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Shape_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\ShapeViewer_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Solid_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\SolidBase_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Sphere_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\SpriteModel_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\TextImage_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Texture_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Topology_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\TriTexture_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\UniCode_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Vector_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Vertex_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Polyline_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\Closedline_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
-    <ClInclude Include="CLI\include\TexCoord_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\CurveDraw.H">
       <Filter>Header\Base</Filter>
     </ClInclude>
@@ -611,6 +404,213 @@
     </ClInclude>
     <ClInclude Include="..\..\FK\SurfaceDraw.H">
       <Filter>Header\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\AppWindow_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Attribute_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\AudioBase_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\AudioOggBuffer_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\AudioStream_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\AudioWavBuffer_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Base_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Block_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Boundary_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\BVHMotion_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Capsule_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Circle_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Closedline_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Color_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Cone_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\DataAccess_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\DList_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Edge_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Fog_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\GenMatrix_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\GenVector_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\GuideObject_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Half_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\IFSTexture_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Image_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\IndexFace_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Light_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Line_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Loop_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\MatAdmin_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Material_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Math_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Matrix_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\MeshTexture_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Model_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Modify_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Operation_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Particle_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\ParticleSet_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Performer_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Plane_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Point_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Polygon_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Polyline_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Prism_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Projection_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Quaternion_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\RectTexture_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Reference_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Renderer_CLI.H">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Scene_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\ShaderBinder_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\ShaderParameter_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\ShaderProgram_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\ShaderProgram_New_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Shape_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\ShapeViewer_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Solid_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\SolidBase_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Sphere_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\SpriteModel_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\TexCoord_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\TextImage_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Texture_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Topology_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\TriTexture_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\UniCode_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Vector_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Vertex_CLI.h">
+      <Filter>Header\CLI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -983,213 +983,6 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="CLI\cpp\AppWindow_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\AssemblyInfo.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Attribute_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\AudioBase_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\AudioOggBuffer_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\AudioStream_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\AudioWavBuffer_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Base_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Block_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Boundary_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\BVHMotion_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Capsule_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Circle_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Color_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Cone_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\DataAccess_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\DList_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Fog_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\GenMatrix_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\GenVector_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\GuideObject_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Half_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\IFSTexture_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Image_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\IndexFace_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Light_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Line_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Loop_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\MatAdmin_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Material_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Math_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Matrix_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\MeshTexture_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Model_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Modify_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Operation_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Particle_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\ParticleSet_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Performer_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Plane_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Point_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Polygon_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Prism_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Projection_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Quaternion_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\RectTexture_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Reference_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Renderer_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Scene_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\ShaderBinder_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\ShaderParameter_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\ShaderProgram_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Shape_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\ShapeViewer_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Solid_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\SolidBase_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Sphere_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\SpriteModel_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\TextImage_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Texture_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Topology_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\TriTexture_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\UniCode_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Vector_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Vertex_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Edge_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Polyline_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\Closedline_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="CLI\cpp\TexCoord_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\graphics\CurveDraw.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
@@ -1198,6 +991,213 @@
     </ClCompile>
     <ClCompile Include="..\..\src\model\DrawMode.cxx">
       <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\AppWindow_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\AssemblyInfo.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Attribute_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\AudioBase_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\AudioOggBuffer_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\AudioStream_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\AudioWavBuffer_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Base_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Block_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Boundary_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\BVHMotion_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Capsule_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Circle_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Closedline_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Color_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Cone_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\DataAccess_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\DList_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Edge_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Fog_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\GenMatrix_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\GenVector_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\GuideObject_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Half_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\IFSTexture_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Image_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\IndexFace_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Light_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Line_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Loop_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\MatAdmin_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Material_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Math_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Matrix_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\MeshTexture_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Model_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Modify_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Operation_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Particle_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\ParticleSet_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Performer_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Plane_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Point_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Polygon_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Polyline_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Prism_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Projection_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Quaternion_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\RectTexture_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Reference_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Renderer_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Scene_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\ShaderBinder_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\ShaderParameter_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\ShaderProgram_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Shape_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\ShapeViewer_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Solid_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\SolidBase_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Sphere_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\SpriteModel_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\TexCoord_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\TextImage_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Texture_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Topology_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\TriTexture_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\UniCode_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Vector_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Vertex_CLI.cpp">
+      <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
