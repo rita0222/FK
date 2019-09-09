@@ -93,7 +93,7 @@
   </PropertyGroup>
   <Import Project="$(FSharpTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>copy /b /v /y "$(SolutionDir)contrib\bin\$(PlatformName)\*.dll" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>copy /b /v /y "$(SolutionDir)..\contrib\bin\$(PlatformName)\*.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -108,7 +108,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\..\FK_CLI\FK_CLI.vcxproj">
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FK_CLI.vcxproj">
       <Name>FK_CLI</Name>
       <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
       <Private>True</Private>
