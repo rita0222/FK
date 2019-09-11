@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\model\Boundary.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\BoundaryElem.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\BVHMotion.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\MatAdmin.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\Model.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\ModelTree.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\model\DrawMode.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{12e058a1-7c9e-4e04-9f01-2fe5c45d541d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{2917d15f-2963-4c10-b22d-545d9f128028}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\Boundary.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\BoundaryElem.H">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\BVHMotion.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\MatAdmin.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Model.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\DrawMode.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
