@@ -512,7 +512,7 @@
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2017\contrib\include;$(SolutionDir)..\..\build_vs\2017\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2019\contrib\include;$(SolutionDir)..\..\build_vs\2019\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <OmitFramePointers>false</OmitFramePointers>
@@ -545,7 +545,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2017\contrib\include;$(SolutionDir)..\..\build_vs\2017\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2019\contrib\include;$(SolutionDir)..\..\build_vs\2019\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -579,7 +579,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2017\contrib\include;$(SolutionDir)..\..\build_vs\2017\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2019\contrib\include;$(SolutionDir)..\..\build_vs\2019\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <OmitFramePointers>false</OmitFramePointers>
@@ -621,7 +621,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2017\contrib\include;$(SolutionDir)..\..\build_vs\2017\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\;$(ProjectDir)..\FK_CLI\include\;$(SolutionDir)..\..\build_vs\2019\contrib\include;$(SolutionDir)..\..\build_vs\2019\contrib\include\iconv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>

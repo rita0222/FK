@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_CLI", "FK_CLI.vcxproj", "{80D11C11-E353-464E-8567-51F004A6941F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_FormHelper_2017", "..\FK_FormHelper\FK_FormHelper_2017.csproj", "{F2D34525-5DB1-47FC-9718-532BBF28BF4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_FormHelper_2019", "..\FK_FormHelper\FK_FormHelper_2019.csproj", "{F2D34525-5DB1-47FC-9718-532BBF28BF4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
