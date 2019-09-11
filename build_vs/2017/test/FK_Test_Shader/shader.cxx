@@ -37,7 +37,7 @@ int main(int, char **)
 	// モデルの読み込み
 	if(!ifsShape.readBMP("mqo/00tex_master.BMP")) fl_alert("tex load err");
 	if(!ifsShape.readMQOFile("mqo/meka.mqo", "body01")) fl_alert("ifs load err");
-	ifsShape.setTexRendMode(FK_TEX_REND_SMOOTH);
+	ifsShape.setTexRendMode(fk_TexRendMode::SMOOTH);
 
 	window.open();
 	if(window.update() == false) return 0;
@@ -79,7 +79,7 @@ int main(int, char **)
 	sphShockModel.setMaterial(Red);
 	sphShockModel.setSmoothMode(true);
 	sphShockModel.setScale(0.01);
-	sphShockModel.setBlendMode(FK_BLEND_ADDITION_MODE);
+	sphShockModel.setBlendMode(fk_BlendMode::ADDITION);
 	shockBinder.getProgram()->loadVertexShader("shader/shockSph_vp.glsl");
 	shockBinder.getProgram()->loadFragmentShader("shader/shockSph_fp.glsl");
 	if(shockBinder.getProgram()->validate()) {
@@ -91,15 +91,15 @@ int main(int, char **)
 
 	while(window.update()) {
 		// 光源を回転させる。
-		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.01);
+		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.01);
 
 		// スペースキーで、衝撃波を大きくする。
-		if(window.getKeyStatus(' ', FK_SW_PRESS) == true) {
+		if(window.getKeyStatus(' ', fk_Switch::PRESS) == true) {
 			sphShockModel.setScale(sphShockModel.getScale()+0.1);
 		}
 
 		// エンターキーで衝撃波の初期化。
-		if(window.getSpecialKeyStatus(FK_ENTER, FK_SW_DOWN) == true) {
+		if(window.getSpecialKeyStatus(fk_SpecialKey::ENTER, fk_Switch::DOWN) == true) {
 			sphShockModel.setScale(0.01);
 		}
 	}

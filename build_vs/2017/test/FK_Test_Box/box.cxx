@@ -132,15 +132,15 @@ int main(int, char *[])
 		camera.glTranslate(0.0, 0.0, -speed);
         
 		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, speed * FK_PI/300.0);
+		blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, speed * fk_Math::PI/300.0);
 
 		// カメラが 1000 より近くなったら Z 軸回転
 		if(z < 1000.0) {
-			camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Z, speed * FK_PI/500.0);
+			camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Z, speed * fk_Math::PI/500.0);
 		}
 
 		// 視点が原点を越えたら、向きをもう一度原点に向かせる。
-		if(z < -FK_EPS) {
+		if(z < -fk_Math::EPS) {
 			camera.glFocus(0.0, 0.0, 0.0);
 		}
 

@@ -236,10 +236,10 @@ bool Car::isRotate(void)
 
 	// サーキットの外にでた場合、回転する。
 	// 車の方向ベクトルと、壁の法線ベクトルとの内積がマイナスのときに回転
-	if(carPos.x > CIRCUITX	&& carVec * (-XVec)	< -FK_EPS) return true;
-	if(carPos.x < -CIRCUITX && carVec * XVec	< -FK_EPS) return true;
-	if(carPos.y > CIRCUITY	&& carVec * (-YVec)	< -FK_EPS) return true;
-	if(carPos.y < -CIRCUITY && carVec * YVec	< -FK_EPS) return true;
+	if(carPos.x > CIRCUITX	&& carVec * (-XVec)	< -fk_Math::EPS) return true;
+	if(carPos.x < -CIRCUITX && carVec * XVec	< -fk_Math::EPS) return true;
+	if(carPos.y > CIRCUITY	&& carVec * (-YVec)	< -fk_Math::EPS) return true;
+	if(carPos.y < -CIRCUITY && carVec * YVec	< -fk_Math::EPS) return true;
 
 	return false;
 }
@@ -415,7 +415,7 @@ int main(int, char *[])
 		}	  
 
 		carObj.forward(speed);
-		if(carObj.isRotate() == true) carObj.rotate(speed * FK_PI/200.0);
+		if(carObj.isRotate() == true) carObj.rotate(speed * fk_Math::PI/200.0);
 
 		buildViewModel.glFocus(carObj.getCarPosition());
 		buildViewModel.glUpvec(0.0, 0.0, 1.0);

@@ -29,7 +29,7 @@ int main(int, char *[])
 	window.setSize(1000, 800);
 	window.setBGColor(0.6, 0.7, 0.8);
 	window.open();
-	window.showGuide(FK_GRID_XZ);
+	window.showGuide(fk_Guide::GRID_XZ);
 
 	volume = 0.5;
 	endFlg = false;
@@ -37,12 +37,12 @@ int main(int, char *[])
 	th = thread(bgmPlay, ref(volume), ref(endFlg));
 
 	while(window.update() == true) {
-		blockModel.glRotateWithVec(origin, fk_Y, FK_PI/360.0);
+		blockModel.glRotateWithVec(origin, fk_Axis::Y, fk_Math::PI/360.0);
 
-		if(window.getKeyStatus('Z') == FK_SW_DOWN && volume < 1.0) {
+		if(window.getKeyStatus('Z') == fk_Switch::DOWN && volume < 1.0) {
 			volume += 0.1;
 		}
-		if(window.getKeyStatus('X') == FK_SW_DOWN && volume > 0.0) {
+		if(window.getKeyStatus('X') == fk_Switch::DOWN && volume > 0.0) {
 			volume -= 0.1;
 		}
 	}

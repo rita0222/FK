@@ -43,7 +43,7 @@ int main(int, char *[])
 
 	window.setSize(800, 800);
 	window.setBGColor(0.6, 0.7, 0.8);
-	window.showGuide(FK_GRID_XY);
+	window.showGuide(fk_Guide::GRID_XY);
 	window.setCameraPos(0.0, 0.0, 80.0);
 	window.setCameraFocus(0.0, 0.0, 0.0);
 	window.open();

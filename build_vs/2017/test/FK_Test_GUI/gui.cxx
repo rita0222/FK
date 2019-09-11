@@ -118,8 +118,8 @@ GUISet::GUISet(void)
 	// ヘディング角用スライダー各種設定
 	headSlider = new Fl_Value_Slider(130, 330, 180, 20, "Head Angle");
 	headSlider->type(FL_HOR_NICE_SLIDER);	// ナイスなスライダー
-	headSlider->minimum(-FK_PI);			// 最小値は -3.14
-	headSlider->maximum(FK_PI);				// 最高値は 3.14
+	headSlider->minimum(-fk_Math::PI);			// 最小値は -3.14
+	headSlider->maximum(fk_Math::PI);				// 最高値は 3.14
 	headSlider->value(0.0);					// 初期値は 0
 	headSlider->labelsize(12);				// ラベル文字のサイズを 12pt に
 	headSlider->textsize(12);				// カウンタのサイズも 12 に
@@ -127,8 +127,8 @@ GUISet::GUISet(void)
 	// ピッチ角用スライダー各種設定
 	pitchSlider = new Fl_Value_Slider(130, 370, 180, 20, "Pitch Angle");
 	pitchSlider->type(FL_HOR_NICE_SLIDER);
-	pitchSlider->minimum(-FK_PI);
-	pitchSlider->maximum(FK_PI);
+	pitchSlider->minimum(-fk_Math::PI);
+	pitchSlider->maximum(fk_Math::PI);
 	pitchSlider->value(0.0);
 	pitchSlider->labelsize(12);
 	pitchSlider->textsize(12);
@@ -398,8 +398,8 @@ int main(int, char *[])
 		if(viewWin.winOpenStatus() == false) continue;
 
 		// ライトを Y 軸中心に回転
-		lightModel[0].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/100.0);
-		lightModel[1].glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/100.0);
+		lightModel[0].glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
+		lightModel[1].glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
 
 		// スライダーやローラーに従ってソリッドモデルの姿勢と大きさを決定
 		shapeModel.glAngle(gui.getHead(), gui.getPitch(), 0.0);
@@ -424,7 +424,7 @@ int main(int, char *[])
 					// VRML ファイルではなかったら
 					fl_alert("%s is not VRML2.0 file.", fileName.c_str());
 				} else {
-					shapeModel.setMaterialMode(FK_PARENT_MODE);
+					shapeModel.setMaterialMode(fk_MaterialMode::PARENT);
 				}
 			}
 		}

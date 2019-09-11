@@ -57,7 +57,7 @@ void CylMake(fk_IFSTexture *argIFS)
 
 		for(int i = 0; i <= divW; i++) {
 			int id = vID(i, j, divW);
-			double theta = FK_PI * 2.0 * double(i)/double(divW);
+			double theta = fk_Math::PI * 2.0 * double(i)/double(divW);
 			double sin1 = sin(theta);
 			double cos1 = cos(theta);
 			pos[_st(id)] = fk_Vector(sin1 * radius, h1, cos1 * radius);
@@ -132,13 +132,13 @@ int main(int, char **)
 
 	window.setSize(WIN_W, WIN_H);
 	fk_InitMaterial();
-	fk_SetErrorMode(FK_ERR_BROWSER_INTERACTIVE);
+	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
 
 	if(ifsShape.readPNG("image/poe.png") == false) {
 		fl_alert("tex load err");
 	}
 
-	ifsShape.setTexRendMode(FK_TEX_REND_SMOOTH);
+	ifsShape.setTexRendMode(fk_TexRendMode::SMOOTH);
 	CylMake(&ifsShape);
 
 	ifsModel.setShape(&ifsShape);
@@ -183,7 +183,7 @@ int main(int, char **)
 	vector<float>	scale = {scaleCoord.x, scaleCoord.y};
 	parameter->setRegister("scale", &scale);
 	for(int count = 0; window.update() == true; count++) {
-		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.01);
+		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.01);
 		sprite.drawText(to_string(count), true);
 		sprite.setPositionLT(SP_X, SP_Y);
 

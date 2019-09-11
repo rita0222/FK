@@ -87,9 +87,9 @@ int main (int, char *[])
 	fk_Material::initDefault();
 
 #ifdef WIN32
-	str.convert("FK日本語", FK_STR_SJIS);
+	str.convert("FK日本語", fk_StringCode::SJIS);
 #else
-	str.convert("FK日本語", FK_STR_UTF8);
+	str.convert("FK日本語", fk_StringCode::UTF8);
 #endif
 
 	texture.setImage(&textImage);
@@ -104,15 +104,15 @@ int main (int, char *[])
 	textImage.setMonospaceSize(96);
 	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
 	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
-	textImage.setAlign(FK_ALIGN_CENTER);
+	textImage.setAlign(fk_TextAlign::CENTER);
 	textImage.loadUniStr(&str);
 	texture.setTextureSize(40.0, 10.0);
-	texture.setTextureMode(FK_TEX_REPLACE);
+	texture.setTextureMode(fk_TexMode::REPLACE);
 	strModel.setMaterial(TrueWhite);
 
 	strModel.setShape(&texture);
 	strModel.glVec(0.0, 0.0, -1.0);
-	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI/2.0);
+	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI/2.0);
 
 	win.entry(&strModel);
 	win.open();
@@ -120,9 +120,9 @@ int main (int, char *[])
 	win.setCameraFocus(0.0, 0.0, 0.0);
 
 	while(win.update() == true) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/100.0);
+		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/100.0);
 		if(strModel.getVec().z > 0.0) {
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_X, FK_PI);
+			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI);
 		}
 	}
 	return 0;
