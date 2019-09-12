@@ -123,10 +123,10 @@ linux:
 	"SYSLIBS = -liconv_hook \
 		-lopenal -lvorbisfile -lvorbis -logg \
 		-lfltk_images -lfltk_forms -lfltk_gl -lfltk \
-		-ljpeg -lpng -lfreetype -lGL -lpthread \
+		-ljpeg -lpng -lfreetype -lGL -lpthread -lOpenCL \
 		-lXext -lX11 -lz -lm" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)"
+	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKLIB_S) $(FKSHADER_S)"
 
 mac:
 	$(MAKE) $(TARGET) \

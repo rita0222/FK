@@ -89,6 +89,9 @@ const string fk_Shape::texCoordName = "fk_TexCoord";
 const string fk_Shape::ctrlPosName = "fk_CtrlPos";
 const string fk_Shape::degreeName = "fk_Degree";
 
+const int fk_Shape::ALIVE;
+const int fk_Shape::DEAD;
+
 fk_Shape::fk_Shape(fk_Type argObjType)
 	: palette(&defaultPalette), materialMode(fk_MaterialMode::NONE),
 	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(fk_RealShapeType::OTHER)
