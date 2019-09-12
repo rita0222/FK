@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("UNITCOM PC")]
 [assembly: AssemblyProduct("FK_CLI_Template")]
-[assembly: AssemblyCopyright("Copyright © UNITCOM PC 2019")]
+[assembly: AssemblyCopyright("Copyright © FK Project 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

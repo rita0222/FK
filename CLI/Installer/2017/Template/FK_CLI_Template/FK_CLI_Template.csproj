@@ -39,10 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FK_CLI">
-      <HintPath>$(FK_CLI_DIR)\bin\x86\FK_CLI.dll</HintPath>
+      <HintPath>$(FK_CLI17_DIR)\bin\$(PlatformName)\FK_CLI.dll</HintPath>
     </Reference>
     <Reference Include="FK_FormHelper">
-      <HintPath>$(FK_CLI_DIR)\bin\x86\FK_FormHelper.dll</HintPath>
+      <HintPath>$(FK_CLI17_DIR)\bin\$(PlatformName)\FK_FormHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,6 +66,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /s /e /y /i "$(ProjectDir)Resources\*.*" "$(TargetDir)"
-xcopy /s /e /y /i "$(FK_CLI_DIR)\dll\$(PlatformName)\*.dll" "$(TargetDir)"</PostBuildEvent>
+xcopy /s /e /y /i "$(FK_CLI17_DIR)\dll\$(PlatformName)\*.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

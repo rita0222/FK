@@ -1,9 +1,9 @@
-﻿<project version = 9 civer = 8.4.10 winver = "2.12/6.2.9200" >
+﻿<project version = 9 civer = 8.4.11 winver = "2.12/6.2.9200" >
    <autorun >0</>
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.0.0b11</>
+   <ver >4.0.1</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
@@ -17,7 +17,7 @@
    <lang >japanese</>
    <addlang ></>
    <selfextr >1</>
-   <instpath >C:\FK_CLI</>
+   <instpath >C:\FK_CLI17</>
    <voltype >nolimit</>
    <volsize ></>
    <volpattern >disk%i.pak</>
@@ -143,7 +143,7 @@
                         <srclist >
                            <rows rel = unpack >
                               <_ >
-                                 <filename >$prjpath$\FK_CLI\*</>
+                                 <filename >$prjpath$\FK_CLI17\*</>
                                  <recurse >1</>
                                  <justfile >0</>
                                  <emptydir >0</>
@@ -199,7 +199,7 @@
                         <reglist >
                            <rows >
                               <_ >
-                                 <valname >FK_CLI_DIR</>
+                                 <valname >FK_CLI17_DIR</>
                                  <regtype >str</>
                                  <value >#setuppath#</>
                                  <if ></>

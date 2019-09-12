@@ -2,7 +2,7 @@
 
 source ./vsenv.sh
 
-OUTPATH="./FK_CLI"
+OUTPATH="./FK_CLI17"
 INPATH="../../2017/FK_CLI_DLL"
 
 rm -rf $OUTPATH
