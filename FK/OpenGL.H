@@ -81,12 +81,13 @@
   #include <OpenGL/gl.h>
   #include <OpenGL/glu.h>
  #endif // OpenGL4
-#else // _MACOSX_
+#else // !_MACOSX_
  #if defined(WIN32) && !defined(_MINGW_)
   //#define GLEW_STATIC
   #include <windows.h>
   #include <GL/glew.h>
  #endif // WIN32
+ #define GL_GLEXT_PROTOTYPES
  #include <GL/gl.h>
 #endif // _MACOSX_
 

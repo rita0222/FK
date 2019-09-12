@@ -7,9 +7,8 @@ all:
 	@echo "	macOS:			make mac"
 	@echo "	macOS Dynamic:		make mac-d"
 	@echo "	macOS Debug:		make mac-g"
-	@echo "	macOS gcc:		make mac-gcc"
-	@echo "	macOS gcc Debug:	make mac-gcc-g"
 	@echo "	macOS All:		make mac-all"
+	@echo "	Linux:			make linux"
 	@echo "	Clean:			make clean"
 	@echo "	Document:		make document"
 	@echo "	Doc Clean:		make doc-clean"
@@ -41,6 +40,10 @@ mac-all:
 	cd src; $(MAKE) mac
 	cd src; $(MAKE) clean
 	cd src; $(MAKE) mac-g
+
+linux:
+	cd src; $(MAKE) linux
+	cd samples; $(MAKE) linux
 
 document:
 	cd doc; $(MAKE) doc MAKE=$(MAKE)

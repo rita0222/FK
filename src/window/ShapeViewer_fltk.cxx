@@ -567,6 +567,7 @@ void fk_ShapeViewer::ModelInit(int argIndex, fk_Shape *argShape)
 	fk_Material	*matP;
 	fk_Color	*eColP, *vColP;
 
+	FK_UNUSED(trueID);
 	mat = Material::Yellow;
 	eCol.set(0.0, 0.0, 1.0);
 	vCol.set(0.0, 1.0, 0.0);

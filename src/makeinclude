@@ -64,11 +64,10 @@ LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 
 all:
-	@echo "	MacOS X:		make mac"
-	@echo "	MacOS X Dynamic:	make mac-d"
-	@echo "	MacOS X Debug:		make mac-g"
-	@echo "	MacOS X gcc:		make mac-gcc"
-	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
+	@echo "	macOS:			make mac"
+	@echo "	macOS Dynamic:		make mac-d"
+	@echo "	macOS Debug:		make mac-g"
+	@echo "	Linux:			make linux"
 
 mac:
 	$(MAKE) $(TARGET) \
@@ -119,38 +118,17 @@ mac-g:
 	"LIBRARY = $(LIBRARY_SG)" \
 	"RANLIB = ranlib"
 
-mac-gcc:
+linux:
 	$(MAKE) $(TARGET) \
-	"CC = g++-mp-6" \
-	"LINKCC = g++-mp-6" \
-	"GRAMOPT = -std=c++14" \
-	"OPTOPT = -O -pipe" \
-	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
+	"OPTOPT = -O3 -pipe" \
+	"SYSOPT = -D_LINUX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
 	"LFLAGS = " \
 	"FKLIBS = " \
 	"SYSLIBS = " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
-	"DEPENDCFLAGS = -D_MACOSX_" \
+	"INCLDIRS = -I. -I$(FKTOP) -I/usr/include/freetype2" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I/usr/include/freetype2" \
+	"DEPENDCFLAGS = -D_LINUX_" \
 	"LIBRARY = $(LIBRARY_S)" \
-	"RANLIB = ranlib"
-
-mac-gcc-g:
-	$(MAKE) $(TARGET) \
-	"CC = g++-mp-6" \
-	"LINKCC = g++-mp-6" \
-	"OPTOPT = -g" \
-	"GRAMOPT = -std=c++14" \
-	"SYSOPT = -D_MACOSX_ -D_MAC_GCC_ -DNO_GLU_LIBRARY -DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"LFLAGS = " \
-	"FKLIBS = " \
-	"SYSLIBS = " \
-	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
-	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
-	"DEPENDCFLAGS = -D_MACOSX_" \
-	"LIBRARY_S = $(LIBRARY_SG)" \
-	"LIBRARY_D = $(LIBRARY_DG)" \
-	"LIBRARY = $(LIBRARY_SG)" \
 	"RANLIB = ranlib"
 
 CFLAGS 		= $(OPS) $(FKDEF) $(SYSOPT) $(INCLDIRS)

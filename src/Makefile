@@ -7,11 +7,10 @@ AUDIO		= audio
 OPENCL		= OpenCL
 
 all:
-	@echo "	MacOS X:		make mac"
-	@echo "	MacOS X Dynamic:	make mac-d"
-	@echo "	MacOS X Debug:		make mac-g"
-	@echo "	MacOS X gcc:		make mac-gcc"
-	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
+	@echo "	macOS:			make mac"
+	@echo "	macOS Dynamic:		make mac-d"
+	@echo "	macOS Debug:		make mac-g"
+	@echo "	Linux:			make linux"
 	@echo "	Clean:			make clean"
 
 mac:
@@ -44,24 +43,14 @@ mac-g:
 		$(MAKE) mac-g ; \
 		cd .. ; done
 
-mac-gcc:
-	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-gcc TARGET=glsl ; cd ..
+linux:
+	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) linux TARGET=glsl ; cd ..
+	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) linux TARGET=glsl ; cd ..
 	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
 		cd $$sd ; \
 		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) mac-gcc TARGET=depend ; \
-		$(MAKE) mac-gcc ; \
-		cd .. ; done
-
-mac-gcc-g:
-	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-gcc-g TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) mac-gcc-g TARGET=depend ; \
-		$(MAKE) mac-gcc-g ; \
+		$(MAKE) linux TARGET=depend ; \
+		$(MAKE) linux ; \
 		cd .. ; done
 
 clean:

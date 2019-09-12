@@ -277,8 +277,8 @@ void fk_D3DXFrameAnimation::SetTime(double argTime)
 	fk_Quaternion	q;
 	fk_Angle		angle;
 	fk_Vector		scaleV, transV;
-	int				rID, sID, tID;
-	double			rDiv, sDiv, tDiv;
+	int				rID = 0, sID = 0, tID = 0;
+	double			rDiv = 0.0, sDiv = 0.0, tDiv = 0.0;
 
 	LinearDiv(argTime, &rotKey, &rID, &rDiv);
 	LinearDiv(argTime, &scaleKey, &sID, &sDiv);

@@ -77,7 +77,7 @@
 #include <FK/Error.H>
 
 #if defined(_FREEBSD_) || defined(_LINUX_)
-#include <freetype2/ft2build.h>
+#include <ft2build.h>
 #elif defined(_MSC_VER) || defined(_MACOSX_)
 #include <ft2build.h>
 #else
