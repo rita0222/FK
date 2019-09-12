@@ -229,6 +229,14 @@ bool fk_BezSurface::setCtrl(int argUID, int argVID,
 	return true;
 }
 
+fk_Vector fk_BezSurface::getCtrl(int argUID, int argVID)
+{
+	if(argUID < 0 || argUID > deg ||
+	   argVID < 0 || argVID > deg) return fk_Vector(0.0, 0.0, 0.0);
+
+	return fk_Surface::getCtrl(GetID(argUID, argVID));
+}
+
 fk_Vector fk_BezSurface::pos(double argU, double argV)
 {
 	fk_Vector	retP(0.0, 0.0, 0.0);
