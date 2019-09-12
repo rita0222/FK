@@ -81,7 +81,7 @@ namespace FK_CLI_Shader
             var shockModel = new fk_Model();
             shockModel.Shape = sphere;
             shockModel.Scale = 0.01;
-            shockModel.BlendMode = fk_BlendMode.ADDITION_MODE;
+            shockModel.BlendMode = fk_BlendMode.ADDITION;
             shockBinder.Program.LoadVertexShader("shader/shockSph_vp.glsl");
             shockBinder.Program.LoadFragmentShader("shader/shockSph_fp.glsl");
             if(shockBinder.Program.Validate())

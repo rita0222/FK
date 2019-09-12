@@ -154,6 +154,7 @@
     <ClInclude Include="..\FK_CLI\include\AudioStream_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\AudioWavBuffer_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Base_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\BezSurface_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Block_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Boundary_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\BVHMotion_CLI.h" />
@@ -352,6 +353,7 @@
     <ClCompile Include="..\FK_CLI\cpp\AudioStream_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\AudioWavBuffer_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Base_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\BezSurface_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Block_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Boundary_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\BVHMotion_CLI.cpp" />
