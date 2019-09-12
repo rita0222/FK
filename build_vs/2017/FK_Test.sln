@@ -61,6 +61,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_MultiTex", "test\FK
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_BlockSize", "test\FK_Test_BlockSize\FK_Test_BlockSize.vcxproj", "{40670F7A-40F3-45DB-8934-14E579761C27}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_BezSurf", "test\FK_Test_BezSurf\FK_Test_BezSurf.vcxproj", "{B3B04A72-B598-48AC-AC1F-90B793F84B43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -297,6 +299,14 @@ Global
 		{40670F7A-40F3-45DB-8934-14E579761C27}.Release|Win32.Build.0 = Release|Win32
 		{40670F7A-40F3-45DB-8934-14E579761C27}.Release|x64.ActiveCfg = Release|x64
 		{40670F7A-40F3-45DB-8934-14E579761C27}.Release|x64.Build.0 = Release|x64
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Debug|Win32.Build.0 = Debug|Win32
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Debug|x64.ActiveCfg = Debug|x64
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Debug|x64.Build.0 = Debug|x64
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Release|Win32.ActiveCfg = Release|Win32
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Release|Win32.Build.0 = Release|Win32
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Release|x64.ActiveCfg = Release|x64
+		{B3B04A72-B598-48AC-AC1F-90B793F84B43}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
