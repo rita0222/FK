@@ -37,7 +37,7 @@ namespace FK_CLI_Viewer
 
 			shape.MakeIFSet(SIZE*SIZE, 4, IFSet, (SIZE+1)*(SIZE+1), pos);
 			viewer.Shape = shape;
-			viewer.DrawMode = fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE;
+			viewer.DrawMode = fk_DrawMode.FRONTBACK_FACE | fk_DrawMode.LINE;
 			viewer.Scale = 10.0;
 
 			for(int counter = 0; viewer.Draw() == true; counter += 10) {

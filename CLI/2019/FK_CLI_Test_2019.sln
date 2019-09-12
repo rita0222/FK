@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "Test\TestPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_FormHelper_2019", "..\FK_FormHelper\FK_FormHelper_2019.csproj", "{F2D34525-5DB1-47FC-9718-532BBF28BF4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_BezSurface", "Test\FK_CLI_BezSurface\FK_CLI_BezSurface.csproj", "{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -328,6 +330,18 @@ Global
 		{F2D34525-5DB1-47FC-9718-532BBF28BF4A}.Release|x64.Build.0 = Release|x64
 		{F2D34525-5DB1-47FC-9718-532BBF28BF4A}.Release|x86.ActiveCfg = Release|x86
 		{F2D34525-5DB1-47FC-9718-532BBF28BF4A}.Release|x86.Build.0 = Release|x86
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Debug|x64.ActiveCfg = Debug|x64
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Debug|x64.Build.0 = Debug|x64
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Debug|x86.ActiveCfg = Debug|x86
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Debug|x86.Build.0 = Debug|x86
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Release|x64.ActiveCfg = Release|x64
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Release|x64.Build.0 = Release|x64
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Release|x86.ActiveCfg = Release|x86
+		{15AD9DF8-790E-4EB5-81C5-CF0B68FAB136}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

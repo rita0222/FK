@@ -83,13 +83,16 @@ namespace FK_CLI
 
 	//! モデルの描画モードを表す列挙型												
 	public enum class fk_DrawMode : unsigned int {
-		NONEMODE = 0,								//!< 表示要素なし
-		POINTMODE = 1 << 1,							//!< 頂点描画
-		LINEMODE = 1 << 2,							//!< 稜線描画
-		POLYMODE = 1 << 3,							//!< 面(表側)描画
-		BACK_POLYMODE = ((1 << 4) | POLYMODE),		//!< 面(裏側)描画
-		FRONTBACK_POLYMODE = ((1 << 5) | POLYMODE),	//!< 面(両面)描画
-		TEXTUREMODE = 1 << 6						//!< テクスチャ描画
+		NONE = 0,							//!< 表示要素なし
+		POINT = 1 << 1,						//!< 頂点描画
+		LINE = 1 << 2,						//!< 稜線描画
+		FACE = 1 << 3,						//!< 面(表側)描画
+		BACK_FACE = ((1 << 4) | FACE),		//!< 面(裏側)描画
+		FRONTBACK_FACE = ((1 << 5) | FACE),	//!< 面(両面)描画
+		TEXTURE = 1 << 6,					//!< テクスチャ描画
+		GEOM_LINE = 1 << 7,					//!< 曲線・曲面グリッド描画
+		GEOM_POINT = 1 << 8,				//!< 曲線・曲面点描画
+		GEOM_FACE = 1 << 9					//!< 曲面描画
 	};
 
 	//! シェーディングモードを表す列挙型
@@ -100,14 +103,14 @@ namespace FK_CLI
 
 	//! ブレンドモード型
 	public enum class fk_BlendMode : unsigned int {
-		ALPHA_MODE		= 0,	//!< アルファブレンド(デフォルト)
-		NEGATIVE_MODE	= 1,	//!< 反転
-		ADDITION_MODE	= 2,	//!< 加算
-		SCREEN_MODE		= 3,	//!< スクリーン
-		LIGHTEN_MODE	= 4,	//!< 比較(明)
-		MULTIPLY_MODE	= 5,	//!< 乗算
-		NONE_MODE		= 128,	//!< ブレンドなし
-		CUSTOM_MODE		= 255	//!< カスタム
+		ALPHA		= 0,	//!< アルファブレンド(デフォルト)
+		NEGATIVE	= 1,	//!< 反転
+		ADDITION	= 2,	//!< 加算
+		SCREEN		= 3,	//!< スクリーン
+		LIGHTEN     = 4,	//!< 比較(明)
+		MULTIPLY	= 5,	//!< 乗算
+		NONE		= 128,	//!< ブレンドなし
+		CUSTOM		= 255	//!< カスタム
 	};
 
 	//! ブレンド係数型
@@ -292,13 +295,14 @@ namespace FK_CLI
 		 *
 		 *	\note
 		 *		稜線の色は fk_Model::LineColor プロパティ、
-		 *		頂点の色は fk_Model::PointColor プロパティを利用して設定して下さい。
+		 *		頂点の色は fk_Model::PointColor プロパティ、
+		 *		曲線の色は fk_Model::CurveColor プロパティを利用して設定して下さい。
 		 *		個別位相要素のマテリアルとの制御については、
 		 *		MaterialMode プロパティの説明を参照して下さい。
 		 *		テクスチャを描画する際には、テクスチャモードによって混合の仕方が異なりますので、
 		 *		fk_Texture::TextureMode の説明を参照して下さい。
 		 *
-		 *	\sa fk_Material, LineColor, PointColor, fk_Texture::TextureMode
+		 *	\sa fk_Material, LineColor, PointColor, CurveColor, fk_Texture::TextureMode
 		 */
 		property fk_Material^ Material {
 			void set(fk_Material^);
@@ -308,7 +312,6 @@ namespace FK_CLI
 		//! 頂点色プロパティ
 		/*!
 		 *	現在モデルに設定されている頂点色の参照・設定を行います。
-		 *	モデルに頂点色が設定されていない場合は null となります。
 		 *
 		 *	\sa fk_Color, PointColor
 		 */
@@ -320,11 +323,21 @@ namespace FK_CLI
 		//! 稜線色プロパティ
 		/*!
 		 *	現在モデルに設定されている稜線色の参照・設定を行います。
-		 *	モデルに稜線色が設定されていない場合は null となります。
 		 *
 		 *	\sa fk_Color
 		 */
 		property fk_Color^ LineColor {
+			fk_Color^ get();
+			void set(fk_Color^);
+		}
+
+		//! 曲線色プロパティ
+		/*!
+		 *	現在モデルに設定されている曲線色の参照・設定を行います。
+		 *
+		 *	\sa fk_Color
+		 */
+		property fk_Color^ CurveColor {
 			fk_Color^ get();
 			void set(fk_Color^);
 		}
@@ -364,13 +377,16 @@ namespace FK_CLI
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- fk_DrawMode.NONEMODE:				何も描画しません。
-		 *	- fk_DrawMode.POINTMODE:			頂点を描画します。
-		 *	- fk_DrawMode.LINEMODE:				稜線を描画します。
-		 *	- fk_DrawMode.POLYMODE:				面の表を描画します。
-		 *	- fk_DrawMode.BACK_POLYMODE:		面の裏を描画します。
-		 *	- fk_DrawMode.FRONTBACK_POLYMODE:	面の表と裏を描画します。
-		 *	- fk_DrawMode.TEXTUREMODE:			テクスチャを描画します。
+		 *	- fk_DrawMode.NONE:				何も描画しません。
+		 *	- fk_DrawMode.POINT:			頂点を描画します。
+		 *	- fk_DrawMode.LINE:				稜線を描画します。
+		 *	- fk_DrawMode.FACE:				面の表を描画します。
+		 *	- fk_DrawMode.BACK_FACE:		面の裏を描画します。
+		 *	- fk_DrawMode.FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_DrawMode.TEXTURE:			テクスチャを描画します。
+		 *	- fk_DrawMode.GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_DrawMode.GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_DrawMode.GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -378,7 +394,7 @@ namespace FK_CLI
 		 *
 		 *		fk_Model		model;
 		 *		
-		 *		model.DrawMode = fk_DrawMode.POINTMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POLYMODE;
+		 *		model.DrawMode = fk_DrawMode.POINT | fk_DrawMode.LINE | fk_DrawMode.FACE;
 		 */
 		property fk_DrawMode DrawMode {
 			void set(fk_DrawMode);
@@ -467,15 +483,15 @@ namespace FK_CLI
 		*	ブレンドモードの設定は、一般的な設定をプリセットの中から選択するか、
 		*	カスタムモードを選択した上で、入力ピクセルと出力ピクセルに対する係数を
 		*	個別に指定するかのどちらかによって行います。与えられる値は以下の 8 種類です。
-		*	- fk_BlendMode.ALPHA_MODE:		通常のアルファブレンドです。初期値です。
-		*	- fk_BlendMode.NEGATIVE_MODE:	反転ブレンドです。
-		*	- fk_BlendMode.ADDITION_MODE:	加算ブレンドです。
-		*	- fk_BlendMode.SCREEN_MODE:		アルファ付き加算ブレンドです。
-		*	- fk_BlendMode.LIGHTEN_MODE:	入出力ピクセルのうち明るい方を採用するブレンドです。
-		*	- fk_BlendMode.MULTIPLY_MODE:	乗算ブレンドです。
-		*	- fk_BlendMode.NONE_MODE:		ブレンドを行いません。
-		*									fk_Scene 側の設定によらずブレンドを無効にします。
-		*	- fk_BlendMode.CUSTOM_MODE:		カスタムモードです。
+		*	- fk_BlendMode.ALPHA:		通常のアルファブレンドです。初期値です。
+		*	- fk_BlendMode.NEGATIVE:	反転ブレンドです。
+		*	- fk_BlendMode.ADDITION:	加算ブレンドです。
+		*	- fk_BlendMode.SCREEN:		アルファ付き加算ブレンドです。
+		*	- fk_BlendMode.LIGHTEN:	    入出力ピクセルのうち明るい方を採用するブレンドです。
+		*	- fk_BlendMode.MULTIPLY:	乗算ブレンドです。
+		*	- fk_BlendMode.NONE:		ブレンドを行いません。
+		*								fk_Scene 側の設定によらずブレンドを無効にします。
+		*	- fk_BlendMode.CUSTOM:		カスタムモードです。
 		*									fk_Model::BlendSrcFactor, fk_Model::BlendDstFactor
 		*									プロパティにて指定した係数を用いた計算式でブレンドします。
 		*/

@@ -223,6 +223,19 @@ namespace FK_CLI {
 		return C;
 	}
 	
+	void fk_Model::CurveColor::set(fk_Color^ argC)
+	{
+		if (!argC) return;
+		GetP()->setCurveColor(argC->pCol);
+	}
+
+	fk_Color^ fk_Model::CurveColor::get(void)
+	{
+		fk_Color^ C = gcnew fk_Color();
+		*C->pCol = *GetP()->getCurveColor();
+		return C;
+	}
+
 	void fk_Model::PointSize::set(double argSize)
 	{
 		GetP()->setSize(argSize);
@@ -355,7 +368,7 @@ namespace FK_CLI {
 
 	void fk_Model::BlendMode::set(fk_BlendMode argMode)
 	{
-		if (argMode == fk_BlendMode::CUSTOM_MODE) {
+		if (argMode == fk_BlendMode::CUSTOM) {
 			::FK::fk_BlendFactor src, dst;
 			GetP()->getBlendMode(&src, &dst);
 			GetP()->setBlendMode(::FK::fk_BlendMode::CUSTOM, src, dst);
