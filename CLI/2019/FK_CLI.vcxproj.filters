@@ -612,6 +612,9 @@
     <ClInclude Include="..\FK_CLI\include\Vertex_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\BezSurface_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\FK\appmake.pl">
@@ -1211,6 +1214,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
       <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\BezSurface_CLI.cpp">
+      <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -150,5 +150,3 @@ namespace FK_CLI
 		void SetScale(double scale);
 	};
 }
-
-

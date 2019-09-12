@@ -244,5 +244,3 @@ namespace FK_CLI
 		void		AllClear(void);
 	};
 }
-
-

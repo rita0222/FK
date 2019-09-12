@@ -745,5 +745,3 @@ namespace FK_CLI
 		bool WriteJPG(String^ fileName);
 	};
 }
-
-

@@ -753,4 +753,3 @@ namespace FK_CLI {
 		return GetP()->glMoveTo(argX, argY, argZ);
 	}
 }
-
