@@ -93,103 +93,6 @@ fk_BezSurface::~fk_BezSurface()
 	return;
 }
 
-double fk_BezSurface::bezier(int argN, int argI, double argT)
-{
-	double		t = argT;
-	double		ret = 0.0;
-
-	switch(argN) {
-	  case 1:
-		switch(argI) {
-		  case 0:
-			ret = 1.0 - t;
-			break;
-
-		  case 1:
-			ret = t;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case 2:
-		switch(argI) {
-		  case 0:
-			ret = (1.0 - t)*(1.0 - t);
-			break;
-
-		  case 1:
-			ret = 2.0 * (1.0 - t) * t;
-			break;
-
-		  case 2:
-			ret = t * t;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case 3:
-		switch(argI) {
-		  case 0:
-			ret = (1.0 - t)*(1.0 - t)*(1.0 - t);
-			break;
-
-		  case 1:
-			ret = 3.0 * (1.0 - t)*(1.0 - t)*t;
-			break;
-
-		  case 2:
-			ret = 3.0 * (1.0 - t)*t*t;
-			break;
-
-		  case 3:
-			ret = t*t*t;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case 4:
-		switch(argI) {
-		  case 0:
-			ret = (1.0 - t)*(1.0 - t)*(1.0 - t)*(1.0 - t);
-			break;
-
-		  case 1:
-			ret = 4.0 * (1.0 - t)*(1.0 - t)*(1.0 - t)*t;
-			break;
-
-		  case 2:
-			ret = 6.0 * (1.0 - t)*(1.0 - t)*t*t;
-			break;
-
-		  case 3:
-			ret = 4.0 * (1.0 - t)*t*t*t;
-			break;
-
-		  case 4:
-			ret = t*t*t*t;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  default:
-		break;
-	}
-
-	return ret;
-}
-
 void fk_BezSurface::init(void)
 {
 	deg = 3;
@@ -243,8 +146,8 @@ fk_Vector fk_BezSurface::pos(double argU, double argV)
 	double		u[5], v[5];
 
 	for(int i = 0; i <= deg; i++) {
-		u[i] = bezier(deg, i, argU);
-		v[i] = bezier(deg, i, argV);
+		u[i] = Bezier(deg, i, argU);
+		v[i] = Bezier(deg, i, argV);
 	}
 
 	for(int i = 0; i <= deg; i++) {
@@ -262,11 +165,11 @@ fk_Vector fk_BezSurface::uDeriv(double argU, double argV)
 	double		u[4], v[5];
 
 	for(int i = 0; i <= deg-1; i++) {
-		u[i] = bezier(deg-1, i, argU);
+		u[i] = Bezier(deg-1, i, argU);
 	}
 
 	for(int i = 0; i <= deg; i++) {
-		v[i] = bezier(deg, i, argV);
+		v[i] = Bezier(deg, i, argV);
 	}
 
 	for(int i = 0; i <= deg-1; i++) {
@@ -285,11 +188,11 @@ fk_Vector fk_BezSurface::vDeriv(double argU, double argV)
 	double		u[5], v[4];
 
 	for(int i = 0; i <= deg; i++) {
-		u[i] = bezier(deg, i, argU);
+		u[i] = Bezier(deg, i, argU);
 	}
 
 	for(int i = 0; i <= deg-1; i++) {
-		v[i] = bezier(deg-1, i, argV);
+		v[i] = Bezier(deg-1, i, argV);
 	}
 
 	for(int i = 0; i <= deg; i++) {

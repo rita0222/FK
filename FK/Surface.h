@@ -80,11 +80,11 @@
 namespace FK {
 
 	//! 曲面の uv 方向を表す列挙型
-	enum class fk_SurfDirection {
-		U_S,	//!< u側(v始点側)
-		U_E,	//!< u側(v終点側)
-		V_S,	//!< v側(u始点側)
-		V_E		//!< v側(u終点側)
+	enum class fk_SurfDirection : int {
+		U_S = 0,	//!< u側(v始点側)
+		U_E = 1,	//!< u側(v終点側)
+		V_S = 2,	//!< v側(u始点側)
+		V_E = 3		//!< v側(u終点側)
 	};
 	
 	//! 曲面用純粋仮想クラス
@@ -256,6 +256,10 @@ namespace FK {
 		 *	\param[in]	num	制御点数
 		 */
 		void setCtrlNum(int num);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		double	Bezier(int, int, double);
+#endif
 
 	private:
 		int	div;

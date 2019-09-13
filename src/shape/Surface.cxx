@@ -174,3 +174,100 @@ fk_Vector fk_Surface::norm(double argU, double argV)
 
 	return nVec;
 }
+
+double fk_Surface::Bezier(int argN, int argI, double argT)
+{
+	double		t = argT;
+	double		ret = 0.0;
+
+	switch(argN) {
+	  case 1:
+		switch(argI) {
+		  case 0:
+			ret = 1.0 - t;
+			break;
+
+		  case 1:
+			ret = t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case 2:
+		switch(argI) {
+		  case 0:
+			ret = (1.0 - t)*(1.0 - t);
+			break;
+
+		  case 1:
+			ret = 2.0 * (1.0 - t) * t;
+			break;
+
+		  case 2:
+			ret = t * t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case 3:
+		switch(argI) {
+		  case 0:
+			ret = (1.0 - t)*(1.0 - t)*(1.0 - t);
+			break;
+
+		  case 1:
+			ret = 3.0 * (1.0 - t)*(1.0 - t)*t;
+			break;
+
+		  case 2:
+			ret = 3.0 * (1.0 - t)*t*t;
+			break;
+
+		  case 3:
+			ret = t*t*t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case 4:
+		switch(argI) {
+		  case 0:
+			ret = (1.0 - t)*(1.0 - t)*(1.0 - t)*(1.0 - t);
+			break;
+
+		  case 1:
+			ret = 4.0 * (1.0 - t)*(1.0 - t)*(1.0 - t)*t;
+			break;
+
+		  case 2:
+			ret = 6.0 * (1.0 - t)*(1.0 - t)*t*t;
+			break;
+
+		  case 3:
+			ret = 4.0 * (1.0 - t)*t*t*t;
+			break;
+
+		  case 4:
+			ret = t*t*t*t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  default:
+		break;
+	}
+
+	return ret;
+}

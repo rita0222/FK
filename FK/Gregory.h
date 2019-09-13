@@ -81,6 +81,34 @@ namespace FK {
 	/*!
 	 *	このクラスは、形状として Gregory 曲面を制御する機能を提供します。
 	 *	u,v 両方向で 3 次式のみに対応しています。
+	 *
+	 *	Gregory 曲面の境界線や制御点は以下の図のような構成を持っています。
+	 *	\image html Gregory.png "Gregory曲面の構成"
+	 *
+	 *	以降、この図に基づいて各要素を解説していきます。
+	 *
+	 *	Gregory 曲面の境界は以下のような 4 本の 3 次 Bezier 曲線により構成されています。
+	 *	- fk_SurfDirection::U_S: u 方向 v 始点側曲線
+	 *	- fk_SurfDirection::U_E: u 方向 v 終点側曲線
+	 *	- fk_SurfDirection::V_S: v 方向 u 終点側曲線
+	 *	- fk_SurfDirection::V_E: v 方向 u 終点側曲線
+	 *	.
+	 *	これらの境界線を構成する制御点を「境界制御点」と呼び、
+	 *	図中の「C」で構成されている制御点にあたります。
+	 *	これらの点位置は setCurveCtrl() で設定が可能で、
+	 *	「曲線名」と「ID」によって指定します。
+	 *	図中の境界制御点の一番目が曲線名、二番目が ID にあたります。
+	 *	4隅の制御点については指定方法が 2 種類あります。
+	 *	例えば、図の左上の制御点は
+	 *	setCurveCtrl(fk_SurfDirection::U_E, 0, V) と
+	 *	setCurveCtrl(fk_SurfDirection::V_S, 3, V) の両方の指定方法があります。
+	 *
+	 *	Gregory 曲面は境界制御点の他に、流れベクトルを制御する
+	 *	「流れベクトル制御点」があり、図中の「D」で構成されている点にあたります。
+	 *	これらの制御点の位置を変更しても境界線は変化しませんが、
+	 *	曲面境界部分の流れベクトル(偏微分ベクトル)が変化します。
+	 *	流れベクトルを適切に設定すると、
+	 *	隣り合う曲面が境界部分で折れ曲がらず滑らかに接続することができます。
 	 */
 
 	class fk_Gregory : public fk_Surface {
@@ -123,16 +151,27 @@ namespace FK {
 		 */
 		bool setDerivCtrl(fk_SurfDirection cID, int vID, const fk_Vector &pos);
 
-		//! 制御点参照関数
+		//! 境界制御点参照関数
 		/*!
-		 *	曲面の制御点位置ベクトルを参照します。
+		 *	曲面の境界制御点位置ベクトルを参照します。
 		 *
-		 *	\param[in]	uID	制御点のu方向ID
-		 *	\param[in]	vID	制御点のv方向ID
+		 *	\param[in] cID	境界線種類
+		 *	\param[in] vID	制御点のv方向ID
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 */
-		fk_Vector getCtrl(int uID, int vID);
+		fk_Vector getCurveCtrl(fk_SurfDirection cID, int vID);
+
+		//! 流れベクトル制御点参照関数
+		/*!
+		 *	曲面の流れベクトル制御点位置ベクトルを参照します。
+		 *
+		 *	\param[in] cID	境界線種類
+		 *	\param[in] vID	制御点のv方向ID
+		 *
+		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 */
+		fk_Vector getDerivCtrl(fk_SurfDirection cID, int vID);
 
 		//! 曲面点算出関数
 		/*!
@@ -168,11 +207,16 @@ namespace FK {
 		fk_Vector		vDeriv(double u, double v);
 
 	private:
-		int		deg;
-		double	bezier(int, int, double);
-		void SetLine(int, int, const fk_Vector &);
-		int GetID(int, int);
-		int GetLID(int, int, int);
+		static std::vector< std::vector< std::tuple<int, int, bool> >	> CLinePos;
+		
+		int GetCID(fk_SurfDirection, int);
+		int GetDID(fk_SurfDirection, int);
+		void SetCLine(fk_SurfDirection, int, const fk_Vector &);
+		void SetDLine(fk_SurfDirection, int, const fk_Vector &);
+		fk_Vector GetIntC(double, double, int, int);
+		void MakeBezier(fk_Vector [4][4], double, double);
+
+		void MakeCLinePos(void);
 	};
 }
 

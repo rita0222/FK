@@ -178,7 +178,6 @@ namespace FK {
 
 	private:
 		int		deg;
-		double	bezier(int, int, double);
 		void SetLine(int, int, const fk_Vector &);
 		int GetID(int, int);
 		int GetLID(int, int, int);
