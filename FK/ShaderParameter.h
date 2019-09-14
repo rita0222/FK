@@ -77,6 +77,8 @@
 #include <map>
 
 namespace FK {
+	class fk_ShaderProgram;
+
 	//! シェーダーパラメーター管理クラス
 	/*!
 	 *	このクラスは、シェーダープログラムに対してパラメーターを渡すための機能を提供します。
@@ -85,8 +87,6 @@ namespace FK {
 	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
 	 */
-	class fk_ShaderProgram;
-
 	class fk_ShaderParameter {
 	public:
 		//! コンストラクタ
