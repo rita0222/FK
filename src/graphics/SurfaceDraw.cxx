@@ -80,12 +80,8 @@ using namespace std;
 using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(int argMode)
-	: surfaceShader(nullptr), bezier2_ID(0), bezier3_ID(0), bezier4_ID(0), mode(argMode)
+	: surfaceShader(nullptr), mode(argMode), bezID(0), gregID(0)
 {
-	FK_UNUSED(mode);
-	FK_UNUSED(bezier2_ID);
-	FK_UNUSED(bezier3_ID);
-	FK_UNUSED(bezier4_ID);
 	return;
 }
 
@@ -117,12 +113,18 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
+
 	if(argModel->getShape()->getObjectType() == fk_Type::BEZSURFACE) {
-		fk_BezSurface *surf = dynamic_cast<fk_BezSurface *>(argModel->getShape());
-		parameter->setRegister(fk_Shape::degreeName, surf->getDegree(), fk_Shape::degreeName);
+		fk_BezSurface *bezSurf = dynamic_cast<fk_BezSurface *>(argModel->getShape());
+		parameter->setRegister(fk_Shape::degreeName, bezSurf->getDegree(), fk_Shape::degreeName);
+	} else {
+		// Gregory Surface
+		parameter->setRegister(fk_Shape::degreeName, 3, fk_Shape::degreeName);
 	}
 
 	shader->ProcPreShader();
+
+	if(mode == 1) SubroutineSetup(argModel);
 
 	Draw_Surface(argModel, parameter);
 
@@ -149,7 +151,7 @@ void fk_SurfaceDraw::ShaderSetup(void)
 			;
 
 		prog->tessEvalShaderSource =
-			#include "GLSL/BezSurface_Face_TE.out"
+			#include "GLSL/Surface_Face_TE.out"
 			;
 
 		break;
@@ -160,7 +162,7 @@ void fk_SurfaceDraw::ShaderSetup(void)
 			;
 
 		prog->tessEvalShaderSource =
-			#include "GLSL/BezSurface_Line_TE.out"
+			#include "GLSL/Surface_Line_TE.out"
 			;
 
 		prog->geometryShaderSource =
@@ -175,7 +177,7 @@ void fk_SurfaceDraw::ShaderSetup(void)
 			;
 
 		prog->tessEvalShaderSource =
-			#include "GLSL/BezSurface_Point_TE.out"
+			#include "GLSL/Surface_Point_TE.out"
 			;
 		break;
 
@@ -190,14 +192,17 @@ void fk_SurfaceDraw::ShaderSetup(void)
 
 	ParamInit(prog, param);
 
-/*
-	auto progID = prog->getProgramID();
-	bezier2_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier2");
-	bezier3_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier3");
-	bezier4_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier4");
+	if(mode == 1) {
+		auto progID = prog->getProgramID();
 
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezier3_ID);
-*/
+		bezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
+		gregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
+
+		fk_Window::printf("(bez, greg) = (%d, %d)", bezID, gregID);
+
+		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
+	}
+
 	return;
 }
 
@@ -240,32 +245,27 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argPar
 	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
 	glPatchParameteri(GL_PATCH_VERTICES, surf->getCtrlSize());
-/*
-	if(argModel->getShape()->getObjectType() == FK_BEZSURFACE) {
-		fk_BezSurface *bez = dynamic_cast<fk_BezSurface *>(surf);
-		switch(bez->getDegree()) {
-		  case 2:
-			glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezier2_ID);
-			break;
-
-		  case 3:
-			glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezier3_ID);
-			break;
-
-		  case 4:
-			glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezier4_ID);
-			break;
-
-		  default:
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindVertexArray(0);
-			return;
-		}
-	}
-*/
 	glDrawArrays(GL_PATCHES, 0, surf->getCtrlSize());
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	return;
+}
+
+void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel)
+{
+	switch(argModel->getShape()->getObjectType()) {
+	  case fk_Type::BEZSURFACE:
+		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
+		return;
+
+	  case fk_Type::GREGORY:
+		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &gregID);
+		return;
+
+	  default:
+		break;
+	}
+
 	return;
 }

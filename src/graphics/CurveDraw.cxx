@@ -143,11 +143,11 @@ void fk_CurveDraw::ShaderSetup(void)
 
 	if(mode == 1) {
 		prog->tessEvalShaderSource =
-			#include "GLSL/BezCurve_Line_TE.out"
+			#include "GLSL/Curve_Line_TE.out"
 			;
 	} else {
 		prog->tessEvalShaderSource =
-			#include "GLSL/BezCurve_Point_TE.out"
+			#include "GLSL/Curve_Point_TE.out"
 			;
 	}
 	

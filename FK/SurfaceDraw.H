@@ -87,9 +87,11 @@ namespace FK {
 
 	private:
 		fk_ShaderBinder		*surfaceShader;
-		GLuint	bezier2_ID, bezier3_ID, bezier4_ID;
-		int		mode;
+		int 				mode;
+		GLuint				bezID, gregID;
+		
 		void	ShaderSetup(void);
+		void	SubroutineSetup(fk_Model *);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
  		void	Draw_Surface(fk_Model *, fk_ShaderParameter *);

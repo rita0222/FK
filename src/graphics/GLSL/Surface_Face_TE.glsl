@@ -2,6 +2,9 @@
 
 #FKBuildIn
 
+subroutine void surfType (out vec4, out vec4);
+subroutine uniform surfType surfSelect;
+
 layout( quads, equal_spacing, ccw ) in;
 
 out vec4 varP;
@@ -21,7 +24,8 @@ void bezier(out float[5] b, out float[5] db, float t)
 	db[3] = 3.0 * t * t;
 }
 
-void main()
+subroutine(surfType)
+void BezSurf(out vec4 outP, out vec4 outN)
 {
 	vec3	cP[25];
 	float	bu[5], bv[5], dbu[5], dbv[5];
@@ -43,7 +47,6 @@ void main()
 	vec3 dU = vec3(0.0, 0.0, 0.0);
 	vec3 dV = vec3(0.0, 0.0, 0.0);
 
-
 	for(i = 0; i <= fk_Degree; i++) {
 		for(j = 0; j <= fk_Degree; j++) {
 			int k = i*(fk_Degree + 1)+j;
@@ -53,8 +56,23 @@ void main()
 		}
 	}
 	
-	vec4 P = vec4(pos, 1.0);
-	vec4 N = vec4(normalize(cross(dU, dV)), 0.0);
+	outP = vec4(pos, 1.0);
+	outN = vec4(normalize(cross(dU, dV)), 0.0);
+}
+
+subroutine(surfType)
+void GregSurf(out vec4 outP, out vec4 outN)
+{
+	outP = vec4(0.0, 0.0, 0.0, 1.0);
+	outN = vec4(0.0, 0.0, 0.0, 0.0);
+}
+
+void main()
+{
+	vec4 P = vec4(0.0, 0.0, 0.0, 0.0);
+	vec4 N = vec4(0.0, 0.0, 0.0, 0.0);
+
+	surfSelect(P, N);
 
 	varP = fk_ModelMatrix * P;
 	varN = fk_ModelMatrix * N;
