@@ -197,9 +197,6 @@ void fk_SurfaceDraw::ShaderSetup(void)
 
 		bezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
 		gregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-
-		fk_Window::printf("(bez, greg) = (%d, %d)", bezID, gregID);
-
 		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
 	}
 

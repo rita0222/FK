@@ -81,6 +81,7 @@ namespace FK_CLI_Particle
 			viewer.SetPosition(3, 0.0, 0.0, 25.0);
 			viewer.SetDrawMode(3, fk_DrawMode.FACE | fk_DrawMode.LINE | fk_DrawMode.POINT);
             viewer.Scale = 10.0;
+            viewer.FPS = 0;
 
             //GC.TryStartNoGCRegion(15728640);
             while (viewer.Draw())
