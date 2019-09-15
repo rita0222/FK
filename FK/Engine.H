@@ -88,6 +88,8 @@ namespace FK {
 	class fk_LineDraw;
 	class fk_FaceDraw;
 	class fk_TextureDraw;
+	class fk_CurveDraw;
+	class fk_SurfaceDraw;
 
 	class fk_GraphicsEngine {
 
@@ -107,7 +109,7 @@ namespace FK {
 		bool				GetWindowPosition(fk_Vector, fk_Vector *);
 		//void				GetPickData(fk_PickData *, int, int, int);
 
-		bool				SnapImage(fk_Image *, fk_SnapProcMode = FK_SNAP_GL_FRONT);
+		bool				SnapImage(fk_Image *, fk_SnapProcMode = fk_SnapProcMode::FRONT);
 
 		void				OpenGLInit(void);
 
@@ -123,6 +125,11 @@ namespace FK {
 		fk_LineDraw					*lineDraw;
 		fk_FaceDraw					*faceDraw;
 		fk_TextureDraw				*textureDraw;
+		fk_CurveDraw				*curveLineDraw;
+		fk_CurveDraw				*curvePointDraw;
+		fk_SurfaceDraw				*surfaceDraw;
+		fk_SurfaceDraw				*surfacePointDraw;
+		fk_SurfaceDraw				*surfaceLineDraw;
 
 		unsigned int				winID;
 		fk_DisplayLink				*curDLink;
@@ -130,7 +137,6 @@ namespace FK {
 		int							dLinkID;
 		int							wSize;
 		int							hSize;
-		//GLuint						selectBuf[FK_PICKDATAMAX*5];
 		bool						resizeFlag;
 		fk_BlendFactor				srcFactor, dstFactor;
 		bool						depthRead, depthWrite;

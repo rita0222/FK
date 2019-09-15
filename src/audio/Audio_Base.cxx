@@ -72,6 +72,7 @@
 #include <FK/Audio.h>
 #include <FK/Error.H>
 #include <FK/Model.h>
+#include <FK/Math.h>
 
 #include <iostream>
 #include <vector>
@@ -214,7 +215,7 @@ bool ALSleep (ALfloat duration)
 
 fk_AudioBase::fk_AudioBase(void)
 {
-	queueSize = FK_OV_DEFAULT_QUEUE_SIZE;
+	queueSize = DEFAULT_QUEUE_SIZE;
 	format = AL_FORMAT_STEREO16;
 	rate = 0;
 	source_id = -1;
@@ -323,7 +324,7 @@ bool fk_AudioBase::getLoopMode(void)
 
 void fk_AudioBase::setLoopArea(double argST, double argED)
 {
-	if(argST < -FK_EPS || argST > argED) return;
+	if(argST < -fk_Math::EPS || argST > argED) return;
 	loopStartTime = (argST < 0.0) ? 0.0 : argST;
 	loopEndTime = argED;
 	loopMode = true;

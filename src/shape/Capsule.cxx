@@ -75,7 +75,7 @@ using namespace FK;
 
 fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
 {
-	SetObjectType(FK_CAPSULE);
+	SetObjectType(fk_Type::CAPSULE);
 
 	cap_div = argDiv;
 	cap_len = argLen;

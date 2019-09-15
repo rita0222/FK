@@ -73,39 +73,44 @@
 #define __FK_RENDER_STATE_HEADER__
 
 namespace FK {
-	//! ブレンドモード型
-	using fk_BlendMode = unsigned char;
+	//! ブレンドモード列挙型
+	enum class fk_BlendMode {
+		ALPHA,		//!< アルファブレンド(デフォルト)
+		NEGATIVE,	//!< 反転
+		ADDITION,	//!< 加算
+		SCREEN,		//!< スクリーン
+		LIGHTEN,	//!< 比較(明)
+		MULTIPLY,	//!< 乗算
+		NONE,		//!< ブレンドなし
+		CUSTOM,		//!< カスタム
+	};
 
-	const fk_BlendMode		FK_BLEND_ALPHA_MODE		= 0;	//!< アルファブレンド(デフォルト)
-	const fk_BlendMode		FK_BLEND_NEGATIVE_MODE	= 1;	//!< 反転
-	const fk_BlendMode		FK_BLEND_ADDITION_MODE	= 2;	//!< 加算
-	const fk_BlendMode		FK_BLEND_SCREEN_MODE	= 3;	//!< スクリーン
-	const fk_BlendMode		FK_BLEND_LIGHTEN_MODE	= 4;	//!< 比較(明)
-	const fk_BlendMode		FK_BLEND_MULTIPLY_MODE	= 5;	//!< 乗算
-	const fk_BlendMode		FK_BLEND_NONE_MODE		= 128;	//!< ブレンドなし
-	const fk_BlendMode		FK_BLEND_CUSTOM_MODE	= 255;	//!< カスタム
+	//! ブレンド係数列挙型
 
-	//! ブレンド係数型
-	using fk_BlendFactor = unsigned char;
+	enum class fk_BlendFactor {
+		ZERO,					//! 0
+		ONE,					//! 1
+		SRC_COLOR,				//! Sr,Sg,Sb
+		ONE_MINUS_SRC_COLOR,	//! 1-Sr,Sg,Sb
+		DST_COLOR,				//! Dr,Dg,Db
+		ONE_MINUS_DST_COLOR,	//! 1-Dr,Dg,Db
+		SRC_ALPHA,				//! Sa
+		ONE_MINUS_SRC_ALPHA,	//! 1-Sa
+		DST_ALPHA,				//! Da
+		ONE_MINUS_DST_ALPHA,	//! 1-Da
+	};
 
-	const fk_BlendFactor	FK_FACTOR_ZERO					= 0;	//! 0
-	const fk_BlendFactor	FK_FACTOR_ONE					= 1;	//! 1
-	const fk_BlendFactor	FK_FACTOR_SRC_COLOR				= 2;	//! Sr,Sg,Sb
-	const fk_BlendFactor	FK_FACTOR_ONE_MINUS_SRC_COLOR	= 3;	//! 1-Sr,Sg,Sb
-	const fk_BlendFactor	FK_FACTOR_DST_COLOR				= 4;	//! Dr,Dg,Db
-	const fk_BlendFactor	FK_FACTOR_ONE_MINUS_DST_COLOR	= 5;	//! 1-Dr,Dg,Db
-	const fk_BlendFactor	FK_FACTOR_SRC_ALPHA				= 6;	//! Sa
-	const fk_BlendFactor	FK_FACTOR_ONE_MINUS_SRC_ALPHA	= 7;	//! 1-Sa
-	const fk_BlendFactor	FK_FACTOR_DST_ALPHA				= 8;	//! Da
-	const fk_BlendFactor	FK_FACTOR_ONE_MINUS_DST_ALPHA	= 9;	//! 1-Da
+	//! デプス読み書きモード列挙型
+	enum class fk_DepthMode : unsigned int {
+		NO_USE = 0,						//!< デプスバッファの参照も更新せず、常に上書きします
+		READ = 1,						//!< デプスバッファを参照し、前後関係のチェックを行います
+		WRITE = 2,						//!< デプスバッファに書き込みを行い、更新します
+		READ_AND_WRITE = READ | WRITE,	//!< デプスバッファの参照と書き込みを共に行います(初期値)
+	};
 
-	//! デプス読み書きモード型
-	using fk_DepthMode = unsigned char;
-
-	const fk_DepthMode		FK_DEPTH_NO_USE			= 0;	//!< デプスバッファの参照も更新せず、常に上書きします
-	const fk_DepthMode		FK_DEPTH_READ			= 1;	//!< デプスバッファを参照し、前後関係のチェックを行います
-	const fk_DepthMode		FK_DEPTH_WRITE			= 2;	//!< デプスバッファに書き込みを行い、更新します
-	const fk_DepthMode		FK_DEPTH_READ_AND_WRITE	= 3;	//!< デプスバッファの参照と書き込みを共に行います(初期値)
+	fk_DepthMode operator | (fk_DepthMode argL, fk_DepthMode argR);
+	fk_DepthMode operator & (fk_DepthMode argL, fk_DepthMode argR);
+	fk_DepthMode operator ^ (fk_DepthMode argL, fk_DepthMode argR);
 }
 
 #endif // __FK_RENDER_STATE_HEADER__

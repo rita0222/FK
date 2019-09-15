@@ -108,7 +108,7 @@ bool fk_SphereBoundary::isCollision(const fk_Vector &argOldP1,
 	B = argOldP2 - argOldP1;
 	A = argNewP2 - argNewP1 - B;
 	distA2 = A.dist2();
-	if(distA2 < FK_EPS) {
+	if(distA2 < fk_Math::EPS) {
 		*argTime = 0.0;
 		return true;
 	}
@@ -124,16 +124,16 @@ bool fk_SphereBoundary::isCollision(const fk_Vector &argOldP1,
 double fk_SphereBoundary::getAdjustRadius(fk_Shape *argShape)
 {
 	switch(argShape->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		return GetAdjustIFS(static_cast<fk_IndexFaceSet *>(argShape));
 
-	  case FK_SHAPE_SOLID:
+	  case fk_RealShapeType::SOLID:
 		return GetAdjustSolid(static_cast<fk_Solid *>(argShape));
 
-	  case FK_SHAPE_POINT:
+	  case fk_RealShapeType::POINT:
 		return GetAdjustPoint(static_cast<fk_Point *>(argShape));
 
-	  case FK_SHAPE_TEXTURE:
+	  case fk_RealShapeType::TEXTURE:
 		return GetAdjustTexture(static_cast<fk_Texture *>(argShape));
 
 	  default:
@@ -195,14 +195,14 @@ double fk_SphereBoundary::GetAdjustTexture(fk_Texture *argTexture)
 	double			len, lMax = 0.0;
 
 	switch(argTexture->getObjectType()) {
-	  case FK_RECTTEXTURE:
+	  case fk_Type::RECTTEXTURE:
 		rTex = static_cast<fk_RectTexture *>(argTexture);
 		tc = rTex->getTextureSize();
 		x = tc.x/2.0;
 		y = tc.y/2.0;
 		return(sqrt(x*x + y*y));
 
-	  case FK_TRITEXTURE:
+	  case fk_Type::TRITEXTURE:
 		tTex = static_cast<fk_TriTexture *>(argTexture);
 		for(i = 0; i < 3; i++) {
 			v = tTex->getVertexPos(i);
@@ -211,10 +211,10 @@ double fk_SphereBoundary::GetAdjustTexture(fk_Texture *argTexture)
 		}
 		return lMax;
 
-	  case FK_MESHTEXTURE:
+	  case fk_Type::MESHTEXTURE:
 		return GetAdjustMeshTexture(static_cast<fk_MeshTexture *>(argTexture));
 
-	  case FK_IFSTEXTURE:
+	  case fk_Type::IFSTEXTURE:
 		ifsTex = static_cast<fk_IFSTexture *>(argTexture);
 		return GetAdjustIFS(ifsTex->getIFS());
 
@@ -269,16 +269,16 @@ fk_Vector fk_AABBBoundary::getAdjustSize(fk_Shape *argShape, fk_Matrix argMat)
 	Z_.normalize();
 
 	switch(argShape->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		return GetAdjustIFS(static_cast<fk_IndexFaceSet *>(argShape), X_, Y_, Z_);
 
-	  case FK_SHAPE_SOLID:
+	  case fk_RealShapeType::SOLID:
 		return GetAdjustSolid(static_cast<fk_Solid *>(argShape), X_, Y_, Z_);
 
-	  case FK_SHAPE_POINT:
+	  case fk_RealShapeType::POINT:
 		return GetAdjustPoint(static_cast<fk_Point *>(argShape), X_, Y_, Z_);
 
-	  case FK_SHAPE_TEXTURE:
+	  case fk_RealShapeType::TEXTURE:
 		return GetAdjustTexture(static_cast<fk_Texture *>(argShape), X_, Y_, Z_);
 
 	  default:
@@ -348,14 +348,14 @@ fk_Vector fk_AABBBoundary::GetAdjustTexture(fk_Texture *argTexture,
 	fk_Vector		p, pMax;
 
 	switch(argTexture->getObjectType()) {
-	  case FK_RECTTEXTURE:
+	  case fk_Type::RECTTEXTURE:
 		rTex = static_cast<fk_RectTexture *>(argTexture);
 		tc = rTex->getTextureSize();
 		p.set(tc.x, tc.y, 0.0);
 		AdjustVec(&pMax, p, argX, argY, argZ);
 		return(pMax);
 
-	  case FK_TRITEXTURE:
+	  case fk_Type::TRITEXTURE:
 		tTex = static_cast<fk_TriTexture *>(argTexture);
 		for(i = 0; i < 3; i++) {
 			p = tTex->getVertexPos(i);
@@ -363,10 +363,10 @@ fk_Vector fk_AABBBoundary::GetAdjustTexture(fk_Texture *argTexture,
 		}
 		return (2.0*pMax);
 
-	  case FK_MESHTEXTURE:
+	  case fk_Type::MESHTEXTURE:
 		return GetAdjustMeshTexture(static_cast<fk_MeshTexture *>(argTexture), argX, argY, argZ);
 
-	  case FK_IFSTEXTURE:
+	  case fk_Type::IFSTEXTURE:
 		ifsTex = static_cast<fk_IFSTexture *>(argTexture);
 		return GetAdjustIFS(ifsTex->getIFS(), argX, argY, argZ);
 
@@ -436,7 +436,7 @@ bool fk_OBBBoundary::isInter(const fk_Vector A[3],
 	for(i = 0; i < 3; i++) {
 		for(j = 0; j < 3; j++) {
 			N = A[i] ^ B[j];
-			if(N.dist2() < FK_EPS) continue;
+			if(N.dist2() < fk_Math::EPS) continue;
 			N.normalize();
 			r = 0.0;
 			for(k = 0; k < 3; k++) {
@@ -453,16 +453,16 @@ bool fk_OBBBoundary::isInter(const fk_Vector A[3],
 fk_Vector fk_OBBBoundary::getAdjustSize(fk_Shape *argShape)
 {
 	switch(argShape->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		return GetAdjustIFS(static_cast<fk_IndexFaceSet *>(argShape));
 
-	  case FK_SHAPE_SOLID:
+	  case fk_RealShapeType::SOLID:
 		return GetAdjustSolid(static_cast<fk_Solid *>(argShape));
 
-	  case FK_SHAPE_POINT:
+	  case fk_RealShapeType::POINT:
 		return GetAdjustPoint(static_cast<fk_Point *>(argShape));
 
-	  case FK_SHAPE_TEXTURE:
+	  case fk_RealShapeType::TEXTURE:
 		return GetAdjustTexture(static_cast<fk_Texture *>(argShape));
 
 	  default:
@@ -520,14 +520,14 @@ fk_Vector fk_OBBBoundary::GetAdjustTexture(fk_Texture *argTexture)
 	fk_Vector		p, pMax;
 
 	switch(argTexture->getObjectType()) {
-	  case FK_RECTTEXTURE:
+	  case fk_Type::RECTTEXTURE:
 		rTex = static_cast<fk_RectTexture *>(argTexture);
 		tc = rTex->getTextureSize();
 		p.x = tc.x;
 		p.y = tc.y;
 		return(p);
 
-	  case FK_TRITEXTURE:
+	  case fk_Type::TRITEXTURE:
 		tTex = static_cast<fk_TriTexture *>(argTexture);
 		for(i = 0; i < 3; i++) {
 			p = tTex->getVertexPos(i);
@@ -535,10 +535,10 @@ fk_Vector fk_OBBBoundary::GetAdjustTexture(fk_Texture *argTexture)
 		}
 		return (2.0*pMax);
 
-	  case FK_MESHTEXTURE:
+	  case fk_Type::MESHTEXTURE:
 		return GetAdjustMeshTexture(static_cast<fk_MeshTexture *>(argTexture));
 
-	  case FK_IFSTEXTURE:
+	  case fk_Type::IFSTEXTURE:
 		ifsTex = static_cast<fk_IFSTexture *>(argTexture);
 		return GetAdjustIFS(ifsTex->getIFS());
 
@@ -585,7 +585,7 @@ bool fk_CapsuleBoundary::isInter(const fk_Vector &argS1,
 	l = fk_Math::calcClosestPtSegToSeg(argS1, argE1, argS2, argE2,
 									   &s, &t, &P, &Q);
 
-	if(l < argR1 + argR2 + FK_EPS) return true;
+	if(l < argR1 + argR2 + fk_Math::EPS) return true;
 	return false;
 }
 
@@ -593,16 +593,16 @@ double fk_CapsuleBoundary::getAdjustRadius(fk_Shape *argShape,
 										   const fk_Vector &argS, const fk_Vector &argE)
 {
 	switch(argShape->getRealShapeType()) {
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		return GetAdjustIFS(static_cast<fk_IndexFaceSet *>(argShape), argS, argE);
 
-	  case FK_SHAPE_SOLID:
+	  case fk_RealShapeType::SOLID:
 		return GetAdjustSolid(static_cast<fk_Solid *>(argShape), argS, argE);
 
-	  case FK_SHAPE_POINT:
+	  case fk_RealShapeType::POINT:
 		return GetAdjustPoint(static_cast<fk_Point *>(argShape), argS, argE);
 
-	  case FK_SHAPE_TEXTURE:
+	  case fk_RealShapeType::TEXTURE:
 		return GetAdjustTexture(static_cast<fk_Texture *>(argShape), argS, argE);
 
 	  default:
@@ -667,16 +667,16 @@ double fk_CapsuleBoundary::GetAdjustTexture(fk_Texture *argTexture,
 	fk_IFSTexture *ifsTex;
 
 	switch(argTexture->getObjectType()) {
-	  case FK_RECTTEXTURE:
+	  case fk_Type::RECTTEXTURE:
 		return GetAdjustRectTexture(static_cast<fk_RectTexture *>(argTexture), argS, argE);
 
-	  case FK_TRITEXTURE:
+	  case fk_Type::TRITEXTURE:
 		return GetAdjustTriTexture(static_cast<fk_TriTexture *>(argTexture), argS, argE);
 
-	  case FK_MESHTEXTURE:
+	  case fk_Type::MESHTEXTURE:
 		return GetAdjustMeshTexture(static_cast<fk_MeshTexture *>(argTexture), argS, argE);
 
-	  case FK_IFSTEXTURE:
+	  case fk_Type::IFSTEXTURE:
 		ifsTex = static_cast<fk_IFSTexture *>(argTexture);
 		return GetAdjustIFS(ifsTex->getIFS(), argS, argE);
 

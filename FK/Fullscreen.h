@@ -140,7 +140,7 @@ namespace FK {
 #define MAX_NAMELENGTH		512
 #define MAX_WINDOWNUMBER	128
 
-		enum{
+		enum class fk_FullscreenMode {
 			SCMODE_FULLSCREEN,				// フルスクリーンモード
 			SCMODE_WINDOW					// ウインドウモード
 		};

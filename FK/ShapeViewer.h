@@ -85,27 +85,27 @@
 namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-	enum fk_ShapeGUIMenuItem {
-		FK_SV_GUI_NONE,
-		FK_SV_GUI_WRLOPEN,
-		FK_SV_GUI_STLOPEN,
-		FK_SV_GUI_DXFOPEN,
-		FK_SV_GUI_WRLSAVE,
-		FK_SV_GUI_STLSAVE,
-		FK_SV_GUI_IMAGESNAP,
-		FK_SV_GUI_QUIT,
-		FK_SV_GUI_POLYDRAW,
-		FK_SV_GUI_EDGEDRAW,
-		FK_SV_GUI_VERTEXDRAW,
-		FK_SV_GUI_LIGHTROTATE,
-		FK_SV_GUI_AXISDRAW,
-		FK_SV_GUI_AMBIENT,
-		FK_SV_GUI_DIFFUSE,
-		FK_SV_GUI_SPECULAR,
-		FK_SV_GUI_EMISSION,
-		FK_SV_GUI_SHININESS,
-		FK_SV_GUI_VERTEXCOLOR,
-		FK_SV_GUI_EDGECOLOR
+	enum class fk_ShapeGUIMenuItem {
+		NONE,
+		WRLOPEN,
+		STLOPEN,
+		DXFOPEN,
+		WRLSAVE,
+		STLSAVE,
+		IMAGESNAP,
+		QUIT,
+		POLYDRAW,
+		EDGEDRAW,
+		VERTEXDRAW,
+		LIGHTROTATE,
+		AXISDRAW,
+		AMBIENT,
+		DIFFUSE,
+		SPECULAR,
+		EMISSION,
+		SHININESS,
+		VERTEXCOLOR,
+		EDGECOLOR
 	};
 
 	class fk_GUI_;
@@ -186,7 +186,7 @@ namespace FK {
 		 *		そうでない場合に false を返します。
 		 *		これは例えば、ウィンドウが閉じられた場合などがそれに当たります。
 		 */
-		bool	draw(void);
+		bool draw(void);
 
 		//! 描画領域サイズ変更関数
 		/*!
@@ -195,7 +195,7 @@ namespace FK {
 		 *	\param[in]	w	描画領域横幅
 		 *	\param[in]	h	描画領域縦幅
 		 */
-		void	setWindowSize(int w, int h);
+		void setWindowSize(int w, int h);
 
 		//@}
 
@@ -211,7 +211,7 @@ namespace FK {
 		 *
 		 *	\param[in]	shape	形状インスタンス
 		 */
-		void		setShape(fk_Shape *shape);
+		void setShape(fk_Shape *shape);
 
 		//! ID付き形状設定関数
 		/*!
@@ -224,7 +224,7 @@ namespace FK {
 		 *	\param[in]	ID		形状 ID
 		 *	\param[in]	shape	形状インスタンス
 		 */
-		void		setShape(int ID, fk_Shape *shape);
+		void setShape(int ID, fk_Shape *shape);
 
 		//! 形状参照関数
 		/*!
@@ -236,7 +236,7 @@ namespace FK {
 		 *		形状インスタンスを返します。
 		 *		指定した ID の形状インスタンスが存在しない場合は、nullptr を返します。
 		 */
-		fk_Shape *	getShape(int ID = 0);
+		fk_Shape * getShape(int ID = 0);
 
 		//! 形状設定数参照関数
 		/*!
@@ -244,29 +244,14 @@ namespace FK {
 		 *
 		 *	\return		形状個数
 		 */
-		int		getModelNum(void);
+		int getModelNum(void);
 
 		//! 形状設定初期化関数
 		/*!
 		 *	現在設定されている全ての形状情報を消去します。
 		 */
-		void	clearModel(void);
+		void clearModel(void);
 
-		//! 形状設定時処理関数
-		/*!
-		 *	この関数は、 setShape() やファイルからの形状入力が行われた際に、
-		 *	自動的に呼び出されます。
-		 *	呼び出された際に、引数には形状インスタンスが入ります。
-		 *	このクラスは仮想関数となっており、
-		 *	fk_ShapeViewer の派生クラスにおいてこの関数を再定義することにより、
-		 *	形状設定やファイル入力時に形状に対して修正や分析などを行うことが可能となります。
-		 *
-		 *	\param[in]	shape	形状インスタンス
-		 *
-		 *	\return
-		 *		現バージョンでは特に意味はありません。
-		 */
-		virtual bool	shapeProcess(fk_Solid *shape);
 		//@}
 
 		//! \name 全体描画属性制御関数
@@ -278,12 +263,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- FK_NONEMODE:				何も描画しません。
-		 *	- FK_POINTMODE:				頂点を描画します。
-		 *	- FK_LINEMODE:				稜線を描画します。
-		 *	- FK_POLYMODE:				面の表を描画します。
-		 *	- FK_BACK_POLYMODE:			面の裏を描画します。
-		 *	- FK_FRONTBACK_POLYMODE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::NONE:			何も描画しません。
+		 *	- fk_DrawMode::POINT:			頂点を描画します。
+		 *									曲線・曲面の場合は制御点を描画します。
+		 *	- fk_DrawMode::LINE:			稜線を描画します。
+		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_DrawMode::FACE:			面の表を描画します。
+		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
+		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
+		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -291,7 +282,7 @@ namespace FK {
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(FK_POINTMODE | FK_LINEMODE | FK_POLYMODE);
+		 *		viewer.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
 		 *
 		 *	個別の形状に対して別々の描画モードを設定する場合は、
 		 *	setDrawMode(int, fk_DrawMode) を利用して下さい。
@@ -300,7 +291,7 @@ namespace FK {
 		 *
 		 *	\sa setDrawMode(int, fk_DrawMode), fk_Model::setDrawMode()
 		 */
-		void	setDrawMode(fk_DrawMode mode);
+		void setDrawMode(fk_DrawMode mode);
 
 		//! 描画モード参照関数
 		/*!
@@ -310,20 +301,20 @@ namespace FK {
 		 *
 		 *	\sa setDrawMode(fk_DrawMode)
 		 */
-		fk_DrawMode		getDrawMode(void);
+		fk_DrawMode getDrawMode(void);
 
 		//! 要素モード設定関数
 		/*!
 		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
 		 *	モードには以下のものがあります。
-		 *	- FK_ELEM_NONE:		何も描画しません。
-		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
-		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	- fk_ElementMode::NONE:		何も描画しません。
+		 *	- fk_ElementMode::MODEL:	モデル設定を優先します。
+		 *	- fk_ElementMode::ELEMENT:	形状内の個別要素設定を優先します。
 		 *	.
 		 *
 		 *	\param[in]	mode	設定モード
 		 */
-		void			setElementMode(fk_ElementMode mode);
+		void setElementMode(fk_ElementMode mode);
 
 		//! 要素モード設定関数
 		/*!
@@ -333,7 +324,50 @@ namespace FK {
 		 *
 		 *	\sa setElementMode()
 		 */
-		fk_ElementMode	getElementMode(void);
+		fk_ElementMode getElementMode(void);
+
+		//! シェーディングモード設定関数
+		/*!
+		 *	描画の際のシェーディングモードを設定します。
+		 *	詳細は fk_Model::setShadingMode() を参照して下さい。
+		 *
+		 *	\param[in]	mode		シェーディグモード
+		 *
+		 *	\sa fk_Model::setShadingMode(), setShadingMode(int, fk_ShadingMode)
+		 */
+		void setShadingMode(fk_ShadingMode mode);
+
+		//! シェーディングモード参照関数
+		/*!
+		 *	現在設定されているシェーディングモードを取得します。
+		 *
+		 *	\return	シェーディングモード
+		 *
+		 *	\sa setShadingMode(fk_ShadingMode)
+		 */
+		fk_ShadingMode getShadingMode(void);
+
+		//! スムースモード設定関数
+		/*!
+		 *	モデルのスムースモードを設定します。
+		 *	詳細は fk_Model::setSmoothMode() を参照して下さい。
+		 *
+		 *	\param[in]	mode	true である場合、スムースモードを有効とします。
+		 *		false である場合無効とします。
+		 *
+		 *	\sa fk_Model::setSmoothMode()
+		 */
+		void setSmoothMode(bool mode);
+
+		//! スムースモード参照関数
+		/*!
+		 *	現在のモデルのスムースモードを取得します。
+		 *
+		 *	\return		有効である場合 true を、無効である場合 false を返します。
+		 *
+		 *	\sa setSmoothMode(bool)
+		 */
+		bool getSmoothMode(void);
 
 		//! 透過処理設定関数
 		/*!
@@ -345,7 +379,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Scene::setBlendStatus(), getBlendStatus()
 		 */
-		void			setBlendStatus(bool mode);
+		void setBlendStatus(bool mode);
 
 		//! 透過処理参照関数
 		/*!
@@ -355,7 +389,8 @@ namespace FK {
 		 *
 		 *	\sa setBlendStatus()
 		 */
-		bool			getBlendStatus(void);
+		bool getBlendStatus(void);
+
 
 		//! 背景色設定関数1
 		/*!
@@ -365,7 +400,7 @@ namespace FK {
 		 *
 		 *	\sa setBGColor(float, float, float), fk_Color, getBGColor()
 		 */
-		void	setBGColor(fk_Color col);
+		void setBGColor(fk_Color col);
 
 		//! 背景色設定関数2
 		/*!
@@ -379,7 +414,7 @@ namespace FK {
 		 *
 		 *	\sa setBGColor(fk_Color), getBGColor()
 		 */
-		void	setBGColor(float r, float g, float b);
+		void setBGColor(float r, float g, float b);
 
 		//! 背景色参照関数
 		/*!
@@ -389,7 +424,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Color, setBGColor(fk_Color) setBGColor(float, float, float)
 		 */
-		fk_Color		getBGColor(void);
+		fk_Color getBGColor(void);
 
 		//! 座標軸描画設定関数
 		/*!
@@ -399,7 +434,7 @@ namespace FK {
 		 *
 		 *	\sa setAxisScale(), getAxisMode()
 		 */
-		void			setAxisMode(bool mode);
+		void setAxisMode(bool mode);
 
 		//! 座標軸描画参照関数
 		/*!
@@ -409,7 +444,7 @@ namespace FK {
 		 *
 		 *	\sa setAxisMode()
 		 */
-		bool			getAxisMode(void);
+		bool getAxisMode(void);
 
 		//! 座標軸大きさ設定関数
 		/*!
@@ -418,7 +453,7 @@ namespace FK {
 		 *
 		 *	\param[in]	scale	大きさ
 		 */
-		void	setAxisScale(double scale);
+		void setAxisScale(double scale);
 
 		//! 座標軸大きさ参照関数
 		/*!
@@ -428,7 +463,7 @@ namespace FK {
 		 *
 		 *	\sa setAxisScale()
 		 */
-		double	getAxisScale(void);
+		double getAxisScale(void);
 
 
 
@@ -438,7 +473,7 @@ namespace FK {
 		 *
 		 *	\return		中心の位置ベクトル
 		 */
-		fk_Vector	getCenter(void);
+		fk_Vector getCenter(void);
 		//@}
 
 		//! \name 形状個別描画属性・マテリアル設定関数
@@ -450,12 +485,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- FK_NONEMODE:				何も描画しません。
-		 *	- FK_POINTMODE:				頂点を描画します。
-		 *	- FK_LINEMODE:				稜線を描画します。
-		 *	- FK_POLYMODE:				面の表を描画します。
-		 *	- FK_BACK_POLYMODE:			面の裏を描画します。
-		 *	- FK_FRONTBACK_POLYMODE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::NONE:			何も描画しません。
+		 *	- fk_DrawMode::POINT:			頂点を描画します。
+		 *									曲線・曲面の場合は制御点を描画します。
+		 *	- fk_DrawMode::LINE:			稜線を描画します。
+		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_DrawMode::FACE:			面の表を描画します。
+		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
+		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
+		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -463,7 +504,7 @@ namespace FK {
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(0, FK_POINTMODE | FK_LINEMODE | FK_POLYMODE);
+		 *		viewer.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
 		 *
 		 *	全ての形状に対しての描画モードを設定する場合は、
 		 *	setDrawMode(fk_DrawMode) を利用して下さい。
@@ -473,7 +514,7 @@ namespace FK {
 		 *
 		 *	\sa setDrawMode(fk_DrawMode), fk_Model::setDrawMode()
 		 */
-		void	setDrawMode(int ID, fk_DrawMode mode);
+		void setDrawMode(int ID, fk_DrawMode mode);
 
 		//! 個別形状描画モード参照関数
 		/*!
@@ -485,21 +526,21 @@ namespace FK {
 		 *
 		 *	\sa setDrawMode(int, fk_DrawMode)
 		 */
-		fk_DrawMode		getDrawMode(int ID);
+		fk_DrawMode getDrawMode(int ID);
 
 		//! 形状別要素モード設定関数
 		/*!
 		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
 		 *	モードには以下のものがあります。
-		 *	- FK_ELEM_NONE:		何も描画しません。
-		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
-		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	- fk_ElementMode::NONE:		何も描画しません。
+		 *	- fk_ElementMode::MODEL:	モデル設定を優先します。
+		 *	- fk_ElementMode::ELEMENT:	形状内の個別要素設定を優先します。
 		 *	.
 		 *
 		 *	\param[in]	ID		形状 ID
 		 *	\param[in]	mode	設定モード
 		 */
-		void			setElementMode(int ID, fk_ElementMode mode);
+		void setElementMode(int ID, fk_ElementMode mode);
 
 		//! 形状別要素モード設定関数
 		/*!
@@ -511,31 +552,59 @@ namespace FK {
 		 *
 		 *	\sa setElementMode()
 		 */
-		fk_ElementMode	getElementMode(int ID);
+		fk_ElementMode getElementMode(int ID);
 		
-		//! 形状稜線描画幅設定関数
+		//! シェーディングモード設定関数
 		/*!
-		 *	形状に対し、稜線の描画幅を設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
+		 *	描画の際のシェーディングモードを設定します。
+		 *	詳細は fk_Model::setShadingMode() を参照して下さい。
 		 *
-		 *	\param[in]	ID		形状ID
-		 *	\param[in]	width	描画幅
+		 *	\param[in]	ID			形状ID
+		 *	\param[in]	mode		シェーディグモード
+		 *
+		 *	\sa fk_Model::setShadingMode(), setShadingMode(fk_ShadingMode)
 		 */
-		void	setLineWidth(int ID, double width);
+		void setShadingMode(int ID, fk_ShadingMode mode);
 
-		//! 形状稜線描画幅参照関数
+		//! シェーディングモード参照関数
 		/*!
-		 *	形状の稜線描画幅を取得します。
-		 *	単位はピクセルです。
+		 *	現在設定されているシェーディングモードを取得します。
 		 *
-		 *	\param[in]	ID		形状ID
+		 *	\param[in]	ID			形状ID
 		 *
-		 *	\return		描画幅
-		 *
-		 *	\sa setLineWidth()
+		 *	\return シェーディングモード
+		 *	\sa setShadingMode(fk_ShadingMode)
 		 */
-		double	getLineWidth(int ID);
+		fk_ShadingMode getShadingMode(int ID);
 
+
+		//! スムースモード設定関数
+		/*!
+		 *	指定した ID 形状のスムースモードを設定します。
+		 *	詳細は fk_Model::setSmoothMode() を参照して下さい。
+		 *
+		 *	\param[in]	ID			形状ID
+		 *
+		 *	\param[in]	mode	true である場合、スムースモードを有効とします。
+		 *		false である場合無効とします。
+		 *
+		 *	\sa fk_Model::setSmoothMode()
+		 */
+		void setSmoothMode(int ID, bool mode);
+
+		//! スムースモード参照関数
+		/*!
+		 *	指定した ID 形状のスムースモードを取得します。
+		 *
+		 *	\param[in]	ID			形状ID
+		 *
+		 *	\return		有効である場合 true を、無効である場合 false を返します。
+		 *
+		 *	\sa setSmoothMode(int, bool)
+		 */
+		bool getSmoothMode(int ID);
+
+		
 		//! 形状頂点描画サイズ設定関数
 		/*!
 		 *	形状に対し、頂点描画サイズを設定します。
@@ -544,7 +613,7 @@ namespace FK {
 		 *	\param[in]	ID		形状ID
 		 *	\param[in]	size	描画サイズ
 		 */
-		void	setPointSize(int ID, double size);
+		void setPointSize(int ID, double size);
 
 		//! 形状頂点描画サイズ参照関数
 		/*!
@@ -557,7 +626,7 @@ namespace FK {
 		 *
 		 *	\sa setPointSize()
 		 */
-		double	getPointSize(int ID);
+		double getPointSize(int ID);
 
 		//! 形状マテリアル設定関数
 		/*!
@@ -568,7 +637,7 @@ namespace FK {
 		 *
 		 *	\sa setEdgeColor(), setVertexColor(), fk_Material
 		 */
-		void	setMaterial(int ID, fk_Material mat);
+		void setMaterial(int ID, fk_Material mat);
 
 		//! 形状稜線描画色設定関数
 		/*!
@@ -579,7 +648,7 @@ namespace FK {
 		 *
 		 *	\sa setMaterial(), setVertexColor(), fk_Color
 		 */
-		void	setEdgeColor(int ID, fk_Color col);
+		void setEdgeColor(int ID, fk_Color col);
 
 		//! 形状頂点描画色設定関数
 		/*!
@@ -590,7 +659,7 @@ namespace FK {
 		 *
 		 *	\sa setMaterial(), setEdgeColor(), fk_Color
 		 */
-		void	setVertexColor(int ID, fk_Color col);
+		void setVertexColor(int ID, fk_Color col);
 
 		//@}
 
@@ -607,7 +676,7 @@ namespace FK {
 		 *
 		 *	\sa setPitch(), setBank(), setScale(), fk_Angle
 		 */
-		void	setHead(double angle);
+		void setHead(double angle);
 
 		//! カメラヘッド角参照関数
 		/*!
@@ -617,7 +686,7 @@ namespace FK {
 		 *
 		 *	\sa setHead()
 		 */
-		double	getHead(void);
+		double getHead(void);
 
 		//! カメラピッチ角設定関数
 		/*!
@@ -629,7 +698,7 @@ namespace FK {
 		 *
 		 *	\sa setHead(), setBank(), setScale(), fk_Angle
 		 */
-		void	setPitch(double angle);
+		void setPitch(double angle);
 
 		//! カメラピッチ角参照関数
 		/*!
@@ -639,7 +708,7 @@ namespace FK {
 		 *
 		 *	\sa setPitch()
 		 */
-		double	getPitch(void);
+		double getPitch(void);
 
 		//! カメラバンク角設定関数
 		/*!
@@ -651,7 +720,7 @@ namespace FK {
 		 *
 		 *	\sa setHead(), setPitch(), setScale(), fk_Angle
 		 */
-		void	setBank(double angle);
+		void setBank(double angle);
 
 		//! カメラバンク角参照関数
 		/*!
@@ -661,7 +730,7 @@ namespace FK {
 		 *
 		 *	\sa setBank()
 		 */
-		double	getBank(void);
+		double getBank(void);
 
 		//! カメラ倍率設定関数
 		/*!
@@ -671,7 +740,7 @@ namespace FK {
 		 *
 		 *	\sa setHead(), setPicth(), setBank()
 		 */
-		void	setScale(double scale);
+		void setScale(double scale);
 
 		//! カメラ倍率参照関数
 		/*!
@@ -681,7 +750,7 @@ namespace FK {
 		 *
 		 *	\sa setScale()
 		 */
-		double	getScale(void);
+		double getScale(void);
 
 		//@}
 
@@ -699,7 +768,7 @@ namespace FK {
 		 *		setAngle(int, fk_Angle), setVec(int, fk_Vector),
 		 *		setUpvec(int, fk_Vector)
 		 */
-		void	setPosition(int ID, fk_Vector pos);
+		void setPosition(int ID, fk_Vector pos);
 
 		//! 形状位置設定関数2
 		/*!
@@ -714,7 +783,7 @@ namespace FK {
 		 *		setAngle(int, fk_Angle), setVec(int, fk_Vector),
 		 *		setUpvec(int, fk_Vector)
 		 */
-		void	setPosition(int ID, double x, double y, double z);
+		void setPosition(int ID, double x, double y, double z);
 
 		//! 形状姿勢設定関数1
 		/*!
@@ -728,7 +797,7 @@ namespace FK {
 		 *		setPosition(int, fk_Vector), setVec(int, fk_Vector),
 		 *		setUpvec(int, fk_Vector)
 		 */
-		void	setAngle(int ID, fk_Angle angle);
+		void setAngle(int ID, fk_Angle angle);
 
 		//! 形状姿勢設定関数2
 		/*!
@@ -745,7 +814,7 @@ namespace FK {
 		 *		setPosition(int, fk_Vector), setVec(int, fk_Vector),
 		 *		setUpvec(int, fk_Vector)
 		 */
-		void	setAngle(int ID, double h, double p, double b);
+		void setAngle(int ID, double h, double p, double b);
 
 		//! 形状方向ベクトル設定関数1
 		/*!
@@ -759,7 +828,7 @@ namespace FK {
 		 *		setPosition(int, fk_Vector), setAngle(int, fk_Angle),
 		 *		setUpvec(int, fk_Vector)
 		 */
-		void	setVec(int ID, fk_Vector vec);
+		void setVec(int ID, fk_Vector vec);
 
 		//! 形状方向ベクトル設定関数2
 		/*!
@@ -775,7 +844,7 @@ namespace FK {
 		 *		setPosition(int, fk_Vector), setAngle(int, fk_Angle),
 		 *		setUpvec(int, fk_Vector)
 		 */
-		void	setVec(int ID, double x, double y, double z);
+		void setVec(int ID, double x, double y, double z);
 
 		//! 形状アップベクトル設定関数1
 		/*!
@@ -789,7 +858,7 @@ namespace FK {
 		 *		setPosition(int, fk_Vector), setAngle(int, fk_Angle),
 		 *		setVec(int, fk_Vector)
 		 */
-		void	setUpvec(int ID, fk_Vector vec);
+		void setUpvec(int ID, fk_Vector vec);
 
 		//! 形状アップベクトル設定関数2
 		/*!
@@ -805,7 +874,7 @@ namespace FK {
 		 *		setPosition(int, fk_Vector), setAngle(int, fk_Angle),
 		 *		setVec(int, fk_Vector)
 		 */
-		void	setUpvec(int ID, double x, double y, double z);
+		void setUpvec(int ID, double x, double y, double z);
 		//@}
 
 		//! \name フレームレート制御関数
@@ -819,7 +888,7 @@ namespace FK {
 		 *
 		 *	\param[in]		fps			FPS値
 		 */
-		void	setFPS(int fps);
+		void setFPS(int fps);
 		//@}
 
 		//! \name 描画画像取り込み関数
@@ -847,9 +916,9 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::snapImage(std::string, fk_ImageType, fk_SnapProcMode)
 		 */
-		bool	snapImage(std::string fileName,
-						  fk_ImageType format = FK_IMAGE_BMP,
-						  fk_SnapProcMode mode = FK_SNAP_GL_FRONT);
+		bool snapImage(std::string fileName,
+					   fk_ImageType format = fk_ImageType::BMP,
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
 		//! 描画画像データ出力関数
 		/*!
@@ -869,8 +938,8 @@ namespace FK {
 		 *	\sa fk_Window::snapImage(fk_Image *, fk_SnapProcMode)
 		 */
 
-		bool	snapImage(fk_Image *image,
-						  fk_SnapProcMode mode = FK_SNAP_GL_FRONT);
+		bool snapImage(fk_Image *image,
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 		//@}
 
 		//! \name メッセージ出力制御関数
@@ -883,7 +952,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::setPutStrMode()
 		 */
-		void	setPutStrMode(const fk_PutStrMode mode);
+		void setPutStrMode(const fk_PutStrMode mode);
 
 		//! メッセージ出力モード参照関数
 		/*!
@@ -892,7 +961,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::getPutStrMode()
 		 */
-		fk_PutStrMode	getPutStrMode(void);
+		fk_PutStrMode getPutStrMode(void);
 
 		//! メッセージ出力用ファイル設定関数
 		/*!
@@ -901,7 +970,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::setPutFile()
 		 */
-		bool	setPutFile(const std::string &str);
+		bool setPutFile(const std::string &str);
 
 		//! メッセージ出力文字列設定関数
 		/*!
@@ -910,7 +979,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::putString()
 		 */
-		void	putString(const std::string &str);
+		void putString(const std::string &str);
 
 #ifndef FK_CLI_CODE
 		//! メッセージ出力書式付き設定関数
@@ -920,7 +989,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::printf()
 		 */
-		void	printf(const char *format, ...);
+		void printf(const char *format, ...);
 #endif
 
 		//! メッセージ出力用ブラウザ初期化関数
@@ -930,7 +999,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::clearBrowser()
 		 */
-		void	clearBrowser(void);
+		void clearBrowser(void);
 		//@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -940,6 +1009,10 @@ namespace FK {
 		void	setFrameInterval(int ms);
 		int		getFrameInterval(void);
 		int		getSkipFrame(void);
+		virtual bool shapeProcess(fk_Solid *shape);
+		void setLineWidth(int ID, double width);
+		double getLineWidth(int ID);
+
 #endif
 
 	private:
@@ -1006,6 +1079,8 @@ namespace FK {
 		void				SetMaterial(int, fk_ShapeGUIMenuItem,
 										double, double, double);
 		void				SetDrawMode(void);
+
+		fk_Model *			GetModel(int);
 	};
 }
 

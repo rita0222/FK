@@ -356,12 +356,12 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 
 		if(matFlg == true) {
 			if(meshData->getPaletteSize() == 0) {
-				meshData->setMaterialMode(FK_CHILD_MODE);
+				meshData->setMaterialMode(fk_MaterialMode::NONE);
 			} else {
-				meshData->setMaterialMode(FK_PARENT_MODE);
+				meshData->setMaterialMode(fk_MaterialMode::PARENT);
 			}
 		} else {
-			meshData->setMaterialMode(FK_CHILD_MODE);
+			meshData->setMaterialMode(fk_MaterialMode::CHILD);
 		}
 	}
 

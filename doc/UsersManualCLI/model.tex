@@ -704,22 +704,22 @@ GlAngle メソッドの効果的な使用法の1つとして、姿勢の初期�
 オイラー角による制御は、GlAngle メソッドよりもむしろローカル座標系メソッドである
 LoAngle で真骨頂を発揮する。LoAngle メソッドでは、先に述べた LoFocus メソッドと
 非常によく似た機能を持つが、バンク角の要素を持つために LoFocus よりも
-応用性は高い。ここにその機能を羅列してみる。(FK.PI は円周率である。)
+応用性は高い。ここにその機能を羅列してみる。(Math.PI は円周率である。)
 \\
 \begin{breakbox}
 \begin{verbatim}
-        model.LoAngle(FK.PI, 0.0, 0.0);              // 後ろを向く。
-        model.LoAngle(FK.PI/2.0, 0.0, 0.0);          // 右を向く。
-        model.LoAngle(-FK.PI/2.0, 0.0, 0.0);         // 左を向く。
-        model.LoAngle(0.0, FK.PI/2.0, 0.0);          // 上を向く。
-        model.LoAngle(0.0, -FK.PI/2.0, 0.0);         // 下を向く。
-        model.LoAngle(FK.PI/2.0, FK.PI/4.0, 0.0);    // 右上を向く。
-        model.LoAngle(-FK.PI/4.0, FK.PI/4.0, 0.0);   // 左前上方を向く。
-        model.LoAngle(FK.PI/100.0, 0.0, 0.0);        // わずかに右を向く。
-        model.LoAngle(0.0, FK.PI/100.0, 0.0);        // わずかに上を向く。
-        model.LoAngle(0.0, 0.0, FK.PI);              // 視線を軸に半回転。
-        model.LoAngle(0.0, 0.0, FK.PI/2.0);          // モデルを右に傾ける。
-        model.LoAngle(0.0, 0.0, FK.PI/100.0);        // わずかに右に傾ける。
+        model.LoAngle(Math.PI, 0.0, 0.0);              // 後ろを向く。
+        model.LoAngle(Math.PI/2.0, 0.0, 0.0);          // 右を向く。
+        model.LoAngle(-Math.PI/2.0, 0.0, 0.0);         // 左を向く。
+        model.LoAngle(0.0, Math.PI/2.0, 0.0);          // 上を向く。
+        model.LoAngle(0.0, -Math.PI/2.0, 0.0);         // 下を向く。
+        model.LoAngle(Math.PI/2.0, Math.PI/4.0, 0.0);    // 右上を向く。
+        model.LoAngle(-Math.PI/4.0, Math.PI/4.0, 0.0);   // 左前上方を向く。
+        model.LoAngle(Math.PI/100.0, 0.0, 0.0);        // わずかに右を向く。
+        model.LoAngle(0.0, Math.PI/100.0, 0.0);        // わずかに上を向く。
+        model.LoAngle(0.0, 0.0, Math.PI);              // 視線を軸に半回転。
+        model.LoAngle(0.0, 0.0, Math.PI/2.0);          // モデルを右に傾ける。
+        model.LoAngle(0.0, 0.0, Math.PI/100.0);        // わずかに右に傾ける。
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -776,7 +776,7 @@ GlRotate メソッドは、大きく2つの機能を持っている。次の引�
         var pos = new fk_Vector(0.0, 0.0, 0.0);
                 :
                 :
-        model.GlRotate(pos, fk_Axis.X, FK.PI/4.0);
+        model.GlRotate(pos, fk_Axis.X, Math.PI/4.0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -795,7 +795,7 @@ GlRotate メソッドは、大きく2つの機能を持っている。次の引�
 \begin{breakbox}
 \begin{verbatim}
         for(int i = 0; i < 200; i++) {
-            model.GlRotate(100.0, 50.0, 0.0, 50.0, 100.0, 0.0, FK.PI/100.0);
+            model.GlRotate(100.0, 50.0, 0.0, 50.0, 100.0, 0.0, Math.PI/100.0);
                         :
                         :
         }

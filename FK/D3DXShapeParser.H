@@ -83,9 +83,9 @@ namespace FK {
 
 	class fk_IFSTexture;
 
-	enum fk_D3DX_VecMode {
-		FK_D3DX_V_MODE,
-		FK_D3DX_T_MODE
+	enum class fk_D3DX_VecMode {
+		V_MODE,
+		T_MODE
 	};
 
 	class fk_D3DXShapeParser : public fk_ParserBase {

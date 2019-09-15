@@ -153,15 +153,15 @@ bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 		objModel[i]->glMoveTo(argOrg->objModel[i]->getPosition());
 		objModel[i]->glAngle(argOrg->objModel[i]->getAngle());
 		objModel[i]->setScale(argOrg->objModel[i]->getScale());
-		objModel[i]->setScale(argOrg->objModel[i]->getScale(fk_X),
-								argOrg->objModel[i]->getScale(fk_Y),
-								argOrg->objModel[i]->getScale(fk_Z));
+		objModel[i]->setScale(argOrg->objModel[i]->getScale(fk_Axis::X),
+								argOrg->objModel[i]->getScale(fk_Axis::Y),
+								argOrg->objModel[i]->getScale(fk_Axis::Z));
 		jointModel[i]->glMoveTo(argOrg->jointModel[i]->getPosition());
 		jointModel[i]->glAngle(argOrg->jointModel[i]->getAngle());
 		jointModel[i]->setScale(argOrg->jointModel[i]->getScale());
-		jointModel[i]->setScale(argOrg->jointModel[i]->getScale(fk_X),
-								argOrg->jointModel[i]->getScale(fk_Y),
-								argOrg->jointModel[i]->getScale(fk_Z));
+		jointModel[i]->setScale(argOrg->jointModel[i]->getScale(fk_Axis::X),
+								argOrg->jointModel[i]->getScale(fk_Axis::Y),
+								argOrg->jointModel[i]->getScale(fk_Axis::Z));
 	}
 	if(parentConnect) {
 		for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
@@ -175,9 +175,9 @@ bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 	absParent.glMoveTo(argOrg->absParent.getPosition());
 	absParent.glAngle(argOrg->absParent.getAngle());
 	absParent.setScale(argOrg->absParent.getScale());
-	absParent.setScale(argOrg->absParent.getScale(fk_X),
-						argOrg->absParent.getScale(fk_Y),
-						argOrg->absParent.getScale(fk_Z));
+	absParent.setScale(argOrg->absParent.getScale(fk_Axis::X),
+						argOrg->absParent.getScale(fk_Axis::Y),
+						argOrg->absParent.getScale(fk_Axis::Z));
 
 	return true;
 }
@@ -196,9 +196,9 @@ void fk_Performer::init()
 	for(st i = 0; i < mesh.size(); i++) {
 		countCache[mesh[i]]--;
 		if(countCache[mesh[i]] == 0) {
-			if(mesh[i]->getObjectType() == FK_IFSTEXTURE) {
+			if(mesh[i]->getObjectType() == fk_Type::IFSTEXTURE) {
 				delete (fk_IFSTexture *)mesh[i];
-			} else if(mesh[i]->getObjectType() == FK_INDEXFACESET) {
+			} else if(mesh[i]->getObjectType() == fk_Type::INDEXFACESET) {
 				delete (fk_IndexFaceSet *)mesh[i];
 			} else {
 				delete mesh[i];
@@ -450,7 +450,7 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 				if(texTable[st(matTable[i-1])] != -1) {
 					mesh[i-1] = new fk_IFSTexture;
 					((fk_IFSTexture *)mesh[i-1])->setImage(texImage[st(texTable[st(matTable[i-1])])]);
-					((fk_IFSTexture *)mesh[i-1])->setTexRendMode(FK_TEX_REND_SMOOTH);
+					((fk_IFSTexture *)mesh[i-1])->setTexRendMode(fk_TexRendMode::SMOOTH);
 
 					if(!((fk_IFSTexture *)mesh[i-1])->readMQOFile(argFileName, objName[i])) {
 						fk_PutError("MQO File Read Error.");
@@ -875,7 +875,7 @@ void fk_Performer::removeScene(fk_Scene *argScene)
 void fk_Performer::setDrawMode(bool argMode)
 {
 	if(!argMode) {
-		draw_mode = FK_LINEMODE;
+		draw_mode = fk_DrawMode::LINE;
 		for(st i = 1; i < st(objNum); i++) {
 			if(texTable[st(matTable[i-1])] != -1) {
 				objModel[i]->setShape(((fk_IFSTexture *)mesh[i-1])->getIFS());
@@ -993,7 +993,7 @@ bool fk_Performer::playMotion(int argMotionID)
 		if(i == 0) continue;
 		if(ret == 1) {
 			if(!visibleInfo[i]) {
-				if(draw_mode == FK_LINEMODE) {
+				if(draw_mode == fk_DrawMode::LINE) {
 					objModel[i]->setDrawMode(draw_mode);
 				} else {
 					objModel[i]->setShape(mesh[i-1]);
@@ -1002,7 +1002,7 @@ bool fk_Performer::playMotion(int argMotionID)
 			visibleInfo[i] = true;
 		} else if(ret == -1) {
 			if(visibleInfo[i]) {
-				objModel[i]->setDrawMode(FK_NONEMODE);
+				objModel[i]->setDrawMode(fk_DrawMode::NONE);
 			}
 			visibleInfo[i] = false;
 		}
@@ -1022,7 +1022,7 @@ void fk_Performer::stillMotion(int argMotionID, int argFrame)
 		if(i == 0) continue;
 		if(ret == 1) {
 			if(!visibleInfo[i]) {
-				if(draw_mode == FK_LINEMODE) {
+				if(draw_mode == fk_DrawMode::LINE) {
 					objModel[i]->setDrawMode(draw_mode);
 				} else {
 					objModel[i]->setShape(mesh[i-1]);
@@ -1031,7 +1031,7 @@ void fk_Performer::stillMotion(int argMotionID, int argFrame)
 			visibleInfo[i] = true;
 		} else if(ret == -1) {
 			if(visibleInfo[i]) {
-				objModel[i]->setDrawMode(FK_NONEMODE);
+				objModel[i]->setDrawMode(fk_DrawMode::NONE);
 			}
 			visibleInfo[i] = false;
 		}

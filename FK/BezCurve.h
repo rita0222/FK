@@ -116,17 +116,6 @@ namespace FK {
 		 */
 		bool	setDegree(int deg);
 
-		//! 制御点設定関数
-		/*!
-		 *	曲線の制御点位置ベクトルを設定します。
-		 *
-		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
-		 *	\param[in]	pos	制御点位置ベクトル
-		 *
-		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool	setCtrl(int ID, const fk_Vector &pos);
-
 		//! 次数参照関数
 		/*!
 		 *	曲線の次数を参照します。
@@ -134,16 +123,6 @@ namespace FK {
 		 *	\return 次数
 		 */
 		int		getDegree(void);	
-
-		//! 制御点参照関数
-		/*!
-		 *	曲線の制御点位置ベクトルを参照します。
-		 *
-		 *	\param[in]	ID	制御点 ID
-		 *
-		 *	\return	制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
-		 */
-		fk_Vector	getCtrl(int ID);
 
 		//! 曲線算出関数
 		/*!
@@ -218,20 +197,15 @@ namespace FK {
 		 */
 		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
 
-		void	DebugMode(bool);
 	private:
-		int										deg;
-		std::vector<fk_Vector>					ctrlPos;
-		std::vector<std::vector<fk_Vector> >	divPos;
-		bool									debugMode;
-
-		void			MakeDiv(double);
-		double			CrossZero(fk_Vector &, fk_Vector &);
-		bool			CrossCH(std::vector<fk_Vector> *, double *, double *);
-		void			CrossFunc(std::vector<fk_Vector> *,
-								  double, double, std::vector<double> *);
-		void			CheckCross(std::vector<fk_Vector> *, std::vector<double> *,
-								   std::vector<double> *, double);
+		int		deg;
+		
+		void MakeDiv(double, std::vector<std::vector<fk_Vector> > &);
+		double CrossZero(fk_Vector &, fk_Vector &);
+		bool CrossCH(std::vector<fk_Vector> *, double *, double *);
+		void CrossFunc(std::vector<fk_Vector> *, double, double, std::vector<double> *);
+		void CheckCross(std::vector<fk_Vector> *, std::vector<double> *,
+						std::vector<double> *, double);
 	};
 }
 

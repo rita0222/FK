@@ -1,9 +1,9 @@
-﻿<project version = 9 civer = 8.4.10 winver = "2.12/6.2.9200" >
+﻿<project version = 9 civer = 8.4.11 winver = "2.12/6.2.9200" >
    <autorun >0</>
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl ></>
-   <ver >4.0.0 b08</>
+   <ver >4.0.0 b12</>
    <supurl ></>
    <updurl ></>
    <dlgfont >custom</>
@@ -198,6 +198,14 @@
                      </>
                      <_ id = uninstexe >
                         <desc ></>
+                     </>
+                     <_ tag = 0 id = unar >
+                        <desc ></>
+                        <name ></>
+                        <estsize ></>
+                        <path >inst</>
+                        <ifile ></>
+                        <forcu >0</>
                      </>
                   </>
                   <desc >Go into the item for viewing unpacking actions.</>

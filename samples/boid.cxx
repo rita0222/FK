@@ -50,7 +50,7 @@ Agent::Agent(double argSize, mt19937 &argMT)
 	uniform_real_distribution<>	randR(-1.0, 1.0);
 
 	model.setMaterial(Red);
-	model.setShadingMode(FK_SHADING_GOURAUD);
+	model.setShadingMode(fk_ShadingMode::GOURAUD);
 	// モデルの方向と位置をランダムに設定
 	model.glVec(randR(argMT), randR(argMT), 0.0);
 	model.glMoveTo(randR(argMT)*argSize, randR(argMT)*argSize, 0.0);
@@ -217,20 +217,20 @@ int main(int, char **)
 	// ウィンドウ各種設定
 	win.setSize(800, 800);
 	win.setBGColor(0.6, 0.7, 0.8);
-	win.showGuide(FK_GRID_XY);
+	win.showGuide(fk_Guide::GRID_XY);
 	win.setCameraPos(0.0, 0.0, 80.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
 	win.open();
 
 	while(win.update() == true) {
 		// Sキーで「Separate(分離)」を OFF に
-		bool sMode = win.getKeyStatus('S', FK_SW_RELEASE);
+		bool sMode = win.getKeyStatus('S', fk_Switch::RELEASE);
 
 		// Aキーで「Alignment(整列)」を OFF に
-		bool aMode = win.getKeyStatus('A', FK_SW_RELEASE);
+		bool aMode = win.getKeyStatus('A', fk_Switch::RELEASE);
 
 		// Cキーで「Cohesion(結合)」を OFF に
-		bool cMode = win.getKeyStatus('C', FK_SW_RELEASE);
+		bool cMode = win.getKeyStatus('C', fk_Switch::RELEASE);
 
 		// 群集の前進処理
 		boid.forward(sMode, aMode, cMode);

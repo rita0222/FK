@@ -75,6 +75,7 @@
 #define __FK_BOUNDARY_HEADER__
 
 #include <FK/MatAdmin.h>
+#include <FK/DrawMode.h>
 
 namespace FK {
 
@@ -83,24 +84,14 @@ namespace FK {
 	class fk_IndexFaceSet;
 
 	//! 境界ボリュームのタイプを表す列挙型
-	enum fk_BoundaryMode {
-		FK_B_SPHERE,		//!<	境界球
-		FK_B_AABB,			//!<	軸平行境界ボックス (Axis Aligned Bounding Box)
-		FK_B_OBB,			//!<	有向境界ボックス (Oriented Bounding Box)
-		FK_B_CAPSULE,		//!<	カプセル型
-		FK_B_NONE			//!<	未定義境界
+	enum class fk_BoundaryMode {
+		SPHERE,		//!<	境界球
+		AABB,		//!<	軸平行境界ボックス (Axis Aligned Bounding Box)
+		OBB,		//!<	有向境界ボックス (Oriented Bounding Box)
+		CAPSULE,	//!<	カプセル型
+		NONE		//!<	未定義境界
 	};
-
-	using fk_DrawMode = unsigned int;
-
-	const fk_DrawMode	FK_NONEMODE 			= 0;
-	const fk_DrawMode 	FK_POINTMODE 			= 1 << 1;
-	const fk_DrawMode	FK_LINEMODE 			= 1 << 2;
-	const fk_DrawMode	FK_POLYMODE 			= 1 << 3;
-	const fk_DrawMode	FK_BACK_POLYMODE		= ((1 << 4) | FK_POLYMODE);
-	const fk_DrawMode	FK_FRONTBACK_POLYMODE	= ((1 << 5) | FK_POLYMODE);
-	const fk_DrawMode	FK_TEXTUREMODE			= 1 << 6;
-
+	
 	//! 境界ボリュームを管理するクラス
 	/*!
 	 *	このクラスは、モデルの干渉判定や衝突判定を行うための
@@ -148,7 +139,7 @@ namespace FK {
 	public:
 
 		//! コンストラクタ
-		fk_Boundary(fk_ObjectType);
+		fk_Boundary(fk_Type);
 
 		//! デストラクタ
 		virtual ~fk_Boundary();

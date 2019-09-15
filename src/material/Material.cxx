@@ -80,7 +80,7 @@ using namespace std;
 using namespace FK;
 
 fk_Material::fk_Material()
-	: fk_BaseObject(FK_MATERIAL)
+	: fk_BaseObject(fk_Type::MATERIAL)
 {
 	init();
 }
@@ -94,7 +94,7 @@ void fk_Material::init(void)
 }
 
 fk_Material::fk_Material(const fk_Material &argMat)
-	: fk_BaseObject(FK_MATERIAL)
+	: fk_BaseObject(fk_Type::MATERIAL)
 {
 	ambient = argMat.ambient;
 	diffuse = argMat.diffuse;
@@ -114,7 +114,7 @@ fk_Material & fk_Material::operator =(const fk_Material &argMat)
 
 void fk_Material::setAlpha(float argA)
 {
-	if(argA < -FK_COLOR_EPS || argA > 1.0f + FK_COLOR_EPS) {
+	if(argA < -fk_Color::EPS || argA > 1.0f + fk_Color::EPS) {
 		fk_PutError("fk_Material", "setAlpha", 1,
 					"Alpha Value Error.");
 		return;
@@ -196,7 +196,7 @@ void fk_Material::setAmbDiff(double argR, double argG, double argB, double argA)
 
 void fk_Material::setShininess(float argS)
 {
-	if(argS < -FK_COLOR_EPS || argS > 128.0f + FK_COLOR_EPS) {
+	if(argS < -fk_Color::EPS || argS > 128.0f + fk_Color::EPS) {
 		fk_PutError("fk_Material", "setShininess", 1,
 					"Shininess Value Error.");
 		return;
@@ -220,7 +220,7 @@ namespace FK {
 	bool operator ==(fk_Material argA, fk_Material argB)
 	{
 		float sh = argA.shininess - argB.shininess;
-		return(fabs((float)sh) < FK_COLOR_EPS &&
+		return(fabs((float)sh) < fk_Color::EPS &&
 			   argA.ambient == argB.ambient &&
 			   argA.diffuse == argB.diffuse &&
 			   argA.specular == argB.specular);

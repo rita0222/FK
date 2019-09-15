@@ -180,7 +180,7 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 	memset(&DeviceMode, 0, sizeof(DeviceMode));
 
 	// フルスクリーンにするですよ
-	if(iFlag == SCMODE_FULLSCREEN){
+	if (iFlag == int(fk_FullscreenMode::SCMODE_FULLSCREEN)) {
 
 		// 現在の色数を取得
 		HDC hDC = GetDC(hWnd);
@@ -234,7 +234,7 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 	}
 
 	// 元の画面モードに戻すですよ
-	if(iFlag == SCMODE_WINDOW) {
+	if(iFlag == int(fk_FullscreenMode::SCMODE_WINDOW)) {
 		ChangeDisplaySettings(nullptr, 0);
 		// 常に最前面設定を解除
 		SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
@@ -335,7 +335,7 @@ bool fk_FullscreenController::changeToFullscreen()
 		nWndW = pFkWnd->w();	nWndH = pFkWnd->h();
 		// 解像度変更
 		pFlWnd->fullscreen();	// Fl_Windowのフルスクリーン(ラベルバー消去)
-		if(ChangeScreen(hFlWnd, SCMODE_FULLSCREEN, nWndW, nWndH) == TRUE) {
+		if(ChangeScreen(hFlWnd, int(fk_FullscreenMode::SCMODE_FULLSCREEN), nWndW, nWndH) == TRUE) {
 			pFlWnd->resize(0, 0, fscW, fscH);	// リサイズ
 			pFlWnd->color(FL_BLACK);
 			pFkWnd->resizeWindow((fscW-nWndW)/2, (fscH-nWndH)/2, nWndW, nWndH);
@@ -362,7 +362,7 @@ void fk_FullscreenController::changeToWindow()
 	if(mode == true) {
 		pFlWnd->fullscreen_off(nWndX, nWndY, nWndW, nWndH);
 		pFkWnd->resizeWindow(0, 0, nWndW, nWndH);
-		ChangeScreen(hFlWnd, SCMODE_WINDOW, nWndW, nWndH);
+		ChangeScreen(hFlWnd, int(fk_FullscreenMode::SCMODE_WINDOW), nWndW, nWndH);
 		LoadWindowPosition();
 
 		mode = false;

@@ -73,18 +73,18 @@
 #define __FK_SURFACE_HEADER__
 
 #include <FK/Vector.h>
-#include <FK/Shape.h>
+#include <FK/FVecArray.h>
+#include <FK/Line.h>
+#include <FK/Point.h>
 
 namespace FK {
 
-	class fk_Window;
-
 	//! 曲面の uv 方向を表す列挙型
-	enum fk_SurfDirection : int {
-		FK_SURF_U_S = 0,	//!< u側(v始点側)
-		FK_SURF_U_E = 1,	//!< u側(v終点側)
-		FK_SURF_V_S = 2,	//!< v側(u始点側)
-		FK_SURF_V_E = 3	//!< v側(u終点側)
+	enum class fk_SurfDirection : int {
+		U_S = 0,	//!< u側(v始点側)
+		U_E = 1,	//!< u側(v終点側)
+		V_S = 2,	//!< v側(u始点側)
+		V_E = 3		//!< v側(u終点側)
 	};
 	
 	//! 曲面用純粋仮想クラス
@@ -105,16 +105,6 @@ namespace FK {
 	 */ 
 
 	class fk_Surface : public fk_Shape {
-
-	protected:
-
-		//! 修正告知用フラグ
-		/*!
-		 *	この変数は、派生クラスにおいて曲面形状を変更した状況となったとき、
-		 *	値を true に変更して下さい。
-		 *	描画データキャッシュが生成された時点で再び false に戻されます。
-		 */
-		bool				changeFlg;
 
 	public:
 
@@ -172,7 +162,7 @@ namespace FK {
 		 */
 		fk_Vector	norm(double u, double v);
 
-		//! 曲面キャッシュ分割数設定関数
+		//! 曲面分割数設定関数
 		/*!
 		 *	描画する際の曲面の分割数を設定します。
 		 *	本関数は、派生クラスにおいて再定義する必要はありません。
@@ -181,7 +171,7 @@ namespace FK {
 		 */
 		void	setDiv(int div);
 	
-		//! 曲面キャッシュ分割数参照関数
+		//! 曲面分割数参照関数
 		/*!
 		 *	描画する際の曲面の分割数を参照します。
 		 *	本関数は、派生クラスにおいて再定義する必要はありません。
@@ -190,24 +180,93 @@ namespace FK {
 		 */
 		int		getDiv(void);
 
+
+		//! 制御点数取得関数
+		/*!
+		 *	曲面の制御点数を取得します。
+		 *
+		 *	\return	制御点数
+		 */
+		int	getCtrlSize(void);
+
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	makeCache(void);
+		fk_Line * GetLine(void);
+		fk_Point * GetPoint(void);
+#endif
+
+	protected:
+		fk_FVecArray	ctrlPos;
+		fk_Line			ctrlLine;
+
+		//! 制御点設定関数1
+		/*!
+		 *	曲面の制御点位置ベクトルを設定します。
+		 *	通常はこの関数ではなく、
+		 *	各派生クラスで定義されている制御点設定関数を用います。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *	\param[in]	pos	制御点位置ベクトル
+		 *
+		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool setCtrl(int ID, fk_Vector *pos);
+
+		//! 制御点設定関数2
+		/*!
+		 *	曲面の制御点位置ベクトルを設定します。
+		 *	通常はこの関数ではなく、
+		 *	各派生クラスで定義されている制御点設定関数を用います。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *	\param[in]	pos	制御点位置ベクトル
+		 *
+		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool setCtrl(int ID, fk_Vector pos);
+
+		//! 制御点取得関数
+		/*!
+		 *	曲面の制御点位置ベクトルを取得します。
+		 *	通常はこの関数ではなく、
+		 *	各派生クラスで定義されている制御点取得関数を用います。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *
+		 *	\return	指定した制御点の位置ベクトル。
+		 *		指定した制御点が存在しない場合は零ベクトルを返します。
+		 */
+		fk_Vector getCtrl(int ID);
+
+		//! 制御点最大サイズ設定関数
+		/*!
+		 *	曲面の制御点最大サイズを設定します。負数が指定された場合は無視します。
+		 *	通常はこの関数ではなく、
+		 *	各派生クラスで定義されている次数設定関数を用います。
+		 *
+		 *	\param[in]	num	制御点数
+		 */
+		void setCtrlSize(int num);
+
+		//! 制御点数設定関数
+		/*!
+		 *	曲面の制御点数を設定します。負数が指定された場合は無視します。
+		 *	通常はこの関数ではなく、
+		 *	各派生クラスで定義されている次数設定関数を用います。
+		 *
+		 *	\param[in]	num	制御点数
+		 */
+		void setCtrlNum(int num);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		double	Bezier(int, int, double);
 #endif
 
 	private:
-		int							div;
-		//bool						smoothFlg;
-		std::vector<fk_Vector>		posCache;
-		std::vector<fk_Vector>		normCache;
+		int	div;
+		int size;
 
-		std::vector<fk_Vector> *	getPosCache(void);
-		std::vector<fk_Vector> * 	getNormCache(void);
-
-		void				makePosCache(void);
-		void				makeNormCache(void);
+		fk_Point		ctrlPoint;
 	};
 }
 
 #endif	// __FK_SURFACE_HEADER__
-
-

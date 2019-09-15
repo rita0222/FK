@@ -74,6 +74,24 @@
 
 using namespace FK;
 
+namespace FK {
+	
+	fk_Guide operator | (fk_Guide argL, fk_Guide argR) {
+		return static_cast<fk_Guide>(static_cast<unsigned int>(argL) |
+									 static_cast<unsigned int>(argR));
+	}
+
+	fk_Guide operator & (fk_Guide argL, fk_Guide argR) {
+		return static_cast<fk_Guide>(static_cast<unsigned int>(argL) &
+									 static_cast<unsigned int>(argR));
+	}
+
+	fk_Guide operator ^ (fk_Guide argL, fk_Guide argR) {
+		return static_cast<fk_Guide>(static_cast<unsigned int>(argL) ^
+									 static_cast<unsigned int>(argR));
+	}
+}
+
 fk_GuideObject::fk_GuideObject(void)
 {
 	axis[0].pushLine(fk_Vector(0.0, 0.0, 0.0), fk_Vector(1.0, 0.0, 0.0));
@@ -86,8 +104,8 @@ fk_GuideObject::fk_GuideObject(void)
 		axisModel[i].setShape(&axis[i]);
 		gridModel[i].setShape(&grid);
 	}
-	gridModel[1].glAngle(0.0, FK_PI*0.5, 0.0);
-	gridModel[2].glAngle(0.0, 0.0, FK_PI*0.5);
+	gridModel[1].glAngle(0.0, fk_Math::PI*0.5, 0.0);
+	gridModel[2].glAngle(0.0, 0.0, fk_Math::PI*0.5);
 
 	setAxisWidth(4.0);
 	setGridWidth(1.0);
@@ -121,7 +139,7 @@ void fk_GuideObject::setGridWidth(double argWidth)
 
 void fk_GuideObject::setScale(double argScale)
 {
-	if(argScale < FK_EPS) return;
+	if(argScale < fk_Math::EPS) return;
 
 	scale = argScale;
 
@@ -164,48 +182,48 @@ void fk_GuideObject::setParent(fk_Model *argModel)
 	return;
 }
 
-void fk_GuideObject::entryScene(fk_Scene *scene, fk_GuideMode mode)
+void fk_GuideObject::entryScene(fk_Scene *scene, fk_Guide mode)
 {
-	if((mode & FK_AXIS_X) != FK_NO_GUIDE) {
+	if((mode & fk_Guide::AXIS_X) != fk_Guide::NO_GUIDE) {
 		scene->entryModel(&axisModel[0]);
 	}
-	if((mode & FK_AXIS_Y) != FK_NO_GUIDE) {
+	if((mode & fk_Guide::AXIS_Y) != fk_Guide::NO_GUIDE) {
 		scene->entryModel(&axisModel[1]);
 	}
-	if((mode & FK_AXIS_Z) != FK_NO_GUIDE) {
+	if((mode & fk_Guide::AXIS_Z) != fk_Guide::NO_GUIDE) {
 		scene->entryModel(&axisModel[2]);
 	}
-	if((mode & FK_GRID_XZ) != FK_NO_GUIDE) {
+	if((mode & fk_Guide::GRID_XZ) != fk_Guide::NO_GUIDE) {
 		scene->entryModel(&gridModel[0]);
 	}
-	if((mode & FK_GRID_XY) != FK_NO_GUIDE) {
+	if((mode & fk_Guide::GRID_XY) != fk_Guide::NO_GUIDE) {
 		scene->entryModel(&gridModel[1]);
 	}
-	if((mode & FK_GRID_YZ) != FK_NO_GUIDE) {
+	if((mode & fk_Guide::GRID_YZ) != fk_Guide::NO_GUIDE) {
 		scene->entryModel(&gridModel[2]);
 	}
 
 	return;
 }
 
-void fk_GuideObject::removeScene(fk_Scene *scene, fk_GuideMode mode)
+void fk_GuideObject::removeScene(fk_Scene *scene, fk_Guide mode)
 {
-	if((mode & FK_AXIS_X) != FK_NO_GUIDE || mode == FK_NO_GUIDE) {
+	if((mode & fk_Guide::AXIS_X) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
 		scene->removeModel(&axisModel[0]);
 	}
-	if((mode & FK_AXIS_Y) != FK_NO_GUIDE || mode == FK_NO_GUIDE) {
+	if((mode & fk_Guide::AXIS_Y) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
 		scene->removeModel(&axisModel[1]);
 	}
-	if((mode & FK_AXIS_Z) != FK_NO_GUIDE || mode == FK_NO_GUIDE) {
+	if((mode & fk_Guide::AXIS_Z) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
 		scene->removeModel(&axisModel[2]);
 	}
-	if((mode & FK_GRID_XZ) != FK_NO_GUIDE || mode == FK_NO_GUIDE) {
+	if((mode & fk_Guide::GRID_XZ) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
 		scene->removeModel(&gridModel[0]);
 	}
-	if((mode & FK_GRID_XY) != FK_NO_GUIDE || mode == FK_NO_GUIDE) {
+	if((mode & fk_Guide::GRID_XY) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
 		scene->removeModel(&gridModel[1]);
 	}
-	if((mode & FK_GRID_YZ) != FK_NO_GUIDE || mode == FK_NO_GUIDE) {
+	if((mode & fk_Guide::GRID_YZ) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
 		scene->removeModel(&gridModel[2]);
 	}
 }

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\util\AppWindow.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Fullscreen.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\GuideObject.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\Misc.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\MotionCharactor.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\MotionData.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\SpriteModel.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\TrackBall.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header">
+      <UniqueIdentifier>{f300b96b-8333-4d03-b7fb-692a1c7c8911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{e245a6de-83ef-4469-acd2-e6de75ff6c03}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\FK\AppWindow.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Fullscreen.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\GuideObject.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Misc.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\MotionCharactor.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\MotionData.H">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\SpriteModel.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\TrackBall.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

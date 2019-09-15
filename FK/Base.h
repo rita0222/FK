@@ -110,73 +110,68 @@ namespace FK {
 
 	const int FK_MAJOR_VERSION = 4;
 	const int FK_MINOR_VERSION = 0;
-	const int FK_SUBMINOR_VERSION = 0;
+	const int FK_SUBMINOR_VERSION = 1;
 
 #define _FK_UNDEFINED_DEFINE_ -1
-#define _FK_EPS_DEFINE_ 1.0e-8
-#define _FK_PI_DEFINE_ 3.1415926535897932
 
 	const int FK_UNDEFINED = _FK_UNDEFINED_DEFINE_;
-	const double FK_EPS = _FK_EPS_DEFINE_;	//!< 数値演算用誤差値
-	const double FK_PI = _FK_PI_DEFINE_;	//!< 円周率
 
 	//! オブジェクトインスタンスのタイプを表す列挙型
-	enum fk_ObjectType {
-		FK_BASEOBJECT,		//!<	fk_BaseObject 型
-		FK_MATRIXADMIN,		//!<	fk_MatrixAdmin 型
-		FK_MODEL,			//!<	fk_Model 型
-		FK_DISPLAYLINK,		//!<	fk_DisplayLink 型
-		FK_SCENE,			//!<	fk_Scene 型
-		FK_SHAPE,			//!<	fk_Shape 型
-		FK_POLYGON,			//!<	fk_Polygon 型
-		FK_LINE,			//!<	fk_Line 型
-		FK_POLYLINE,		//!<	fk_Polyline 型
-		FK_POINT,			//!<	fk_Point 型
-		FK_CIRCLE,			//!<	fk_Circle 型
-		FK_SPHERE,			//!<	fk_Sphere 型
-		FK_BLOCK,			//!<	fk_Block 型
-		FK_CLOSEDLINE,		//!<	fk_Closedline 型
-		FK_PRISM,			//!<	fk_Prism 型
-		FK_CAPSULE,			//!<	fk_Capsule 型
-		FK_CONE,			//!<	fk_Cone 型
-		FK_INDEXFACESET,	//!<	fk_IndexFaceSet 型
-		FK_LIGHT,			//!<	fk_Light 型
-		FK_CURVE,			//!<	fk_Curve 型
-		FK_BEZCURVE,		//!<	fk_BezCurve 型
-		FK_BSPLCURVE,		//!<	fk_BSplCurve 型
-		FK_SURFACE,			//!<	fk_Surface 型
-		FK_BEZSURFACE,		//!<	fk_BezSurface 型
-		FK_BSPLSURFACE,		//!<	fk_BSplSurface 型
-		FK_GREGORY,			//!<	fk_Gregory 型
-		FK_IMAGE,			//!<	fk_Image 型
-		FK_TEXCOORD,		//!<	fk_TexCoord 型
-		FK_TEXTURE,			//!<	fk_Texture 型
-		FK_RECTTEXTURE,		//!<	fk_RectTexture 型
-		FK_TRITEXTURE,		//!<	fk_TriTexture 型
-		FK_MESHTEXTURE,		//!<	fk_MeshTexture 型
-		FK_IFSTEXTURE,		//!<	fk_IFSTexture 型
-		FK_ARTEXTURE,		//!<	fk_ARTexture 型
-		FK_UNICHAR,			//!<	fk_UniChar 型
-		FK_UNISTR,			//!<	fk_UniStr 型
-		FK_TEXTIMAGE,		//!<	fk_TextImage 型
-		FK_COLOR,			//!<	fk_Color 型
-		FK_MATERIAL,		//!<	fk_Material 型
-		FK_PALETTE,			//!<	fk_Palette 型
-		FK_PLANE,			//!<	fk_Plane 型
-		FK_WINDOW,			//!<	fk_Window 型
-		FK_PICKDATA,		//!<	fk_PickData 型
-		FK_PROJECTBASE,		//!<	fk_ProjectBase 型
-		FK_PERSPECTIVE,		//!<	fk_Perspective 型
-		FK_FRUSTUM,			//!<	fk_Frustum 型
-		FK_ORTHO,			//!<	fk_Ortho 型
-		FK_VERTEX,			//!<	fk_Vertex 型
-		FK_HALF,			//!<	fk_Half 型
-		FK_EDGE,			//!<	fk_Edge 型
-		FK_LOOP,			//!<	fk_Loop 型
-		FK_SOLID,			//!<	fk_Solid 型
-		FK_SHAPEVIEWER,		//!<	fk_ShapeViewer 型
-		FK_PARTICLE,		//!<	fk_Particle 型
-		FK_PARTICLESET		//!<	fk_ParticleSet 型
+	enum class fk_Type {
+		BASEOBJECT,		//!<	fk_BaseObject 型
+		MATRIXADMIN,	//!<	fk_MatrixAdmin 型
+		MODEL,			//!<	fk_Model 型
+		DISPLAYLINK,	//!<	fk_DisplayLink 型
+		SCENE,			//!<	fk_Scene 型
+		SHAPE,			//!<	fk_Shape 型
+		POLYGON,		//!<	fk_Polygon 型
+		LINE,			//!<	fk_Line 型
+		POLYLINE,		//!<	fk_Polyline 型
+		POINT,			//!<	fk_Point 型
+		CIRCLE,			//!<	fk_Circle 型
+		SPHERE,			//!<	fk_Sphere 型
+		BLOCK,			//!<	fk_Block 型
+		CLOSEDLINE,		//!<	fk_Closedline 型
+		PRISM,			//!<	fk_Prism 型
+		CAPSULE,		//!<	fk_Capsule 型
+		CONE,			//!<	fk_Cone 型
+		INDEXFACESET,	//!<	fk_IndexFaceSet 型
+		LIGHT,			//!<	fk_Light 型
+		CURVE,			//!<	fk_Curve 型
+		BEZCURVE,		//!<	fk_BezCurve 型
+		BSPLCURVE,		//!<	fk_BSplCurve 型
+		SURFACE,		//!<	fk_Surface 型
+		BEZSURFACE,		//!<	fk_BezSurface 型
+		GREGORY,		//!<	fk_Gregory 型
+		IMAGE,			//!<	fk_Image 型
+		TEXCOORD,		//!<	fk_TexCoord 型
+		TEXTURE,		//!<	fk_Texture 型
+		RECTTEXTURE,	//!<	fk_RectTexture 型
+		TRITEXTURE,		//!<	fk_TriTexture 型
+		MESHTEXTURE,	//!<	fk_MeshTexture 型
+		IFSTEXTURE,		//!<	fk_IFSTexture 型
+		ARTEXTURE,		//!<	fk_ARTexture 型
+		UNICHAR,		//!<	fk_UniChar 型
+		UNISTR,			//!<	fk_UniStr 型
+		TEXTIMAGE,		//!<	fk_TextImage 型
+		COLOR,			//!<	fk_Color 型
+		MATERIAL,		//!<	fk_Material 型
+		PALETTE,		//!<	fk_Palette 型
+		PLANE,			//!<	fk_Plane 型
+		WINDOW,			//!<	fk_Window 型
+		PICKDATA,		//!<	fk_PickData 型
+		PROJECTBASE,	//!<	fk_ProjectBase 型
+		PERSPECTIVE,	//!<	fk_Perspective 型
+		FRUSTUM,		//!<	fk_Frustum 型
+		ORTHO,			//!<	fk_Ortho 型
+		VERTEX,			//!<	fk_Vertex 型
+		HALF,			//!<	fk_Half 型
+		EDGE,			//!<	fk_Edge 型
+		LOOP,			//!<	fk_Loop 型
+		SOLID,			//!<	fk_Solid 型
+		SHAPEVIEWER,	//!<	fk_ShapeViewer 型
+		PARTICLE,		//!<	fk_Particle 型
+		PARTICLESET		//!<	fk_ParticleSet 型
 	};
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -220,7 +215,7 @@ namespace FK {
 	/*!
 	 *	このクラスは、FKのユーザが利用する大半のクラスの基底クラスとなっています。
 	 *	主に、インスタンスの型を管理するための機能を提供します。
-	 *	\sa fk_ObjectType
+	 *	\sa fk_Type
 	 */
 	class fk_BaseObject {
 
@@ -229,21 +224,21 @@ namespace FK {
 		/*!
 		 *	\param[in] type インスタンスのタイプ
 		 */
-		fk_BaseObject(fk_ObjectType type = FK_BASEOBJECT);
+		fk_BaseObject(fk_Type type = fk_Type::BASEOBJECT);
 
 		//! タイプ取得関数
 		/*!
 		 *	インスタンスのタイプを取得します。
 		 *	\return インスタンスのタイプ
 		 */
-		fk_ObjectType	getObjectType(void) const;
+		fk_Type	getObjectType(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void			SetObjectType(const fk_ObjectType type);
+		void			SetObjectType(const fk_Type type);
 #endif
 
 	private:
-		fk_ObjectType	ObjectType;
+		fk_Type			ObjectType;
 
 	};
 

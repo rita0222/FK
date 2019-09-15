@@ -18,16 +18,18 @@ enum WinStatus {
 void ShaderSetup(fk_ShaderBinder *argBinder, fk_Model *argModel, fk_Material argMat,
 				 fk_Vector argPos, string argVP, string argFP)
 {
+	auto prog = argBinder->getProgram();
+
 	argModel->setMaterial(argMat);
 	argModel->setSmoothMode(true);
 	argModel->glMoveTo(argPos);
-	argBinder->getProgram()->loadVertexShader(argVP);
-	argBinder->getProgram()->loadFragmentShader(argFP);
-	if(argBinder->getProgram()->validate()) {
+	prog->loadVertexShader(argVP);
+	prog->loadFragmentShader(argFP);
+	if(prog->validate()) {
 		argBinder->bindModel(argModel);
 	} else {
 		fk_Window::printf("Shader Error (Original Side)");
-		fk_Window::putString(argBinder->getProgram()->getLastError());
+		fk_Window::putString(prog->getLastError());
 	} 
 }
 
@@ -38,7 +40,7 @@ void FBOSetup(fk_ShaderBinder *argBinder, fk_Window *argWindow, float argTH, str
 
 	argBinder->initializeFrameBufferObject(WIN_W, WIN_H);
 	prog->loadFragmentShader(argFP);
-	if(argBinder->getProgram()->validate()) {
+	if(prog->validate()) {
 		argBinder->getParameter()->setRegister("Thresshold", argTH);
 		argBinder->bindWindow(argWindow);
 	} else {
@@ -112,7 +114,7 @@ int main(int, char **)
 	if(ifsShape.readMQOFile("fbo_data/mqo/meka.mqo", "body01") == false) {
 		fl_alert("ifs load err");
 	}
-	ifsShape.setTexRendMode(FK_TEX_REND_SMOOTH);
+	ifsShape.setTexRendMode(fk_TexRendMode::SMOOTH);
 	modelDef.setShape(&sph);
 	ifsModelDef.setShape(&ifsShape);
 
@@ -181,10 +183,10 @@ int main(int, char **)
 		}
 		
 		// エッジ抽出用閾値の変更
-		if(baseWindow.getSpecialKeyStatus(FK_UP, false) == true) {
+		if(baseWindow.getSpecialKeyStatus(fk_SpecialKey::UP, false) == true) {
 			++thresshold;
 		}
-		if(baseWindow.getSpecialKeyStatus(FK_DOWN, false) == true) {
+		if(baseWindow.getSpecialKeyStatus(fk_SpecialKey::DOWN, false) == true) {
 			if(thresshold > 0) --thresshold;
 		}			
 		
@@ -192,7 +194,7 @@ int main(int, char **)
 		edgeBinder.getParameter()->setRegister("Thresshold", float(thresshold)/100.0f);
 
 		// 光源回転
-		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, 0.05);
+		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.05);
 
 		sprite.drawText(to_string(double(thresshold)/100.0), true);
 		sprite.setPositionLT(SP_X, SP_Y);

@@ -896,12 +896,12 @@ SetSpotCutOff() と SetSpotExponent() というメソッドで設定する。
 \\
 \begin{screen}
 \begin{verbatim}
-        spot.SetSpotCutOff(FK.PI/6.0);
+        spot.SetSpotCutOff(Math.PI/6.0);
         spot.SetSpotExponent(0.00001);
 \end{verbatim}
 \end{screen}
 ~ \\
-SetSpotCutOff() の引数は弧度法による角度を入力する。FK.PI は
+SetSpotCutOff() の引数は弧度法による角度を入力する。Math.PI は
 円周率を表すので、例の場合は \(\pi/6 = 30^{\circ}\) となる。
 
 なお、ここまで触れなかったが光源の大事な要素として色がある。

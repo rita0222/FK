@@ -75,14 +75,12 @@
 #include <FK/Base.h>
 #include <FK/Palette.h>
 #include <FK/Attribute.h>
+#include <FK/Vector.h>
 #include <FK/OpenGL.H>
 #include <map>
 #include <functional>
 
 namespace FK {
-
-	const int FK_SHAPE_ALIVE = 1;
-	const int FK_SHAPE_DEAD = 2;
 
 	using shapeAttrI = std::tuple<int, int, std::vector<int> *>;
 	using shapeAttrF = std::tuple<int, int, std::vector<float> *>;
@@ -91,16 +89,16 @@ namespace FK {
 	using shapeMapF = std::map<std::string, shapeAttrF>;
 
 	//! 形状データの具体的なデータ構造を表す列挙型
-	enum fk_RealShapeType {
-		FK_SHAPE_IFS,		//!<	fk_IndexFaceSetベース
-		FK_SHAPE_SOLID,		//!<	fk_Solidベース
-		FK_SHAPE_TEXTURE,	//!<	fk_Textureベース
-		FK_SHAPE_POINT,		//!<	fk_Pointベース
-		FK_SHAPE_LINE,		//!<	fk_Lineベース
-		FK_SHAPE_CURVE,		//!<	fk_Curveベース
-		FK_SHAPE_SURFACE,	//!<	fk_Surface ベース
-		FK_SHAPE_LIGHT,		//!<	fk_Lightベース
-		FK_SHAPE_OTHER		//!<	その他
+	enum class fk_RealShapeType {
+		IFS,		//!<	fk_IndexFaceSetベース
+		SOLID,		//!<	fk_Solidベース
+		TEXTURE,	//!<	fk_Textureベース
+		POINT,		//!<	fk_Pointベース
+		LINE,		//!<	fk_Lineベース
+		CURVE,		//!<	fk_Curveベース
+		SURFACE,	//!<	fk_Surface ベース
+		LIGHT,		//!<	fk_Lightベース
+		OTHER		//!<	その他
 	};
 
 	//! 形状用基底クラス
@@ -114,8 +112,11 @@ namespace FK {
 	class fk_Shape: public fk_Attribute {
 
 	public:
+		static const int ALIVE = 1;
+		static const int DEAD = 0;
+
 		//! コンストラクタ
-		fk_Shape(fk_ObjectType = FK_SHAPE);
+		fk_Shape(fk_Type = fk_Type::SHAPE);
 		//! デストラクタ
 		virtual ~fk_Shape();
 
@@ -131,52 +132,161 @@ namespace FK {
 		//! シェーダー内 attribute 変数設定関数1
 		/*!
 		 *	形状の各頂点に対応した attribute 変数値を整数型で登録します。
-		 *	浮動小数点型の attribute 変数値を扱う場合は
-		 *	setShaderAttribute(std::string, int, std::vector<float> *)
-		 *	を利用して下さい。
 		 *
 		 *	ここで登録する要素数は形状の頂点数、
 		 *	厳密にはデータ要素数よりも多数である必要があります。
 		 *
-		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
 		 *	\param[in]	dim
 		 *		変数の次元数で、1から4まで設定することができます。
 		 *		GLSL内での型は、1から順に int, ivec2, ivec3, ivec4 となります。
+		 *
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータのポインタ。
 		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
 		 *
+		 *	\param[in]	self
+		 *		この引数が true の場合、
+		 *		GPUに転送するデータ領域はインスタンスの内部に新たに確保されます。
+		 *		その場合は本関数を使用後、array で指定した領域は解放しても問題ありません。
+		 *		ただし、領域確保とデータコピーのため動作は遅くなります。
+		 *		この引数が false の場合は、
+		 *		GPUに転送するデータ領域として array をそのまま利用するため、
+		 *		本関数利用後に array を解放するとプログラムが異常終了する恐れがあります。
+		 *		本引数を省略した場合は false を指定したことと同義となります。
+		 *
 		 *	\note
-		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
-		 *		modifyAttribute() を呼んでおく必要があります。
-		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 *	   	ここで設定した attribute 変数用データに変更があった場合で、
+		 *		self が false だった場合は、
+		 *		再度本関数を呼ぶよりも modifyAttribute() を呼ぶ方が高速に処理が行えます。
+		 *		self が true だった場合は、 modifyAttribute() を呼んでも
+		 *		変更は反映されませんので、再度本関数を呼び出す必要があります。
 		 */
-		void setShaderAttribute(std::string name, int dim, std::vector<int> *array);
+		void setShaderAttribute(std::string name, int dim,
+								std::vector<int> *array, bool self = false);
 
 		//! シェーダー内 attribute 変数設定関数2
 		/*!
 		 *	形状の各頂点に対応した attribute 変数値を浮動小数点型で登録します。
-		 *	整数型の attribute 変数値を扱う場合は
-		 *	setShaderAttribute(std::string, int, std::vector<int> *)
-		 *	を利用して下さい。
 		 *
 		 *	ここで登録する要素数は形状の頂点数、
 		 *	厳密にはデータ要素数よりも多数である必要があります。
 		 *
-		 *	\param[in]	name		GLSL内での変数名
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
 		 *	\param[in]	dim
 		 *		変数の次元数で、1から4まで設定することができます。
 		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\param[in]	self
+		 *		この引数が true の場合、
+		 *		GPUに転送するデータ領域はインスタンスの内部に新たに確保されます。
+		 *		その場合は本関数を使用後、array で指定した領域は解放しても問題ありません。
+		 *		ただし、領域確保とデータコピーのため動作は遅くなります。
+		 *		この引数が false の場合は、
+		 *		GPUに転送するデータ領域として array をそのまま利用するため、
+		 *		本関数利用後に array を解放するとプログラムが異常終了する恐れがあります。
+		 *		本引数を省略した場合は false を指定したことと同義となります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合で、
+		 *		self が false だった場合は、
+		 *		再度本関数を呼ぶよりも modifyAttribute() を呼ぶ方が高速に処理が行えます。
+		 *		self が true だった場合は、 modifyAttribute() を呼んでも
+		 *		変更は反映されませんので、再度本関数を呼び出す必要があります。
+		 */
+		void setShaderAttribute(std::string name, int dim,
+								std::vector<float> *array, bool self = false);
+
+		//! シェーダー内 attribute 変数設定関数3
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を fk_Vector 型で登録します。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *		1 を指定した場合、y,z 成分は無視されます。
+		 *		2 を指定した場合、z 成分は無視されます。
+		 *		4 を指定した場合、第4成分 (w成分) は 0 となります。
+		 *
 		 *	\param[in]	array
 		 *		attribute 変数として転送するデータのポインタ。
 		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
 		 *
 		 *	\note
 		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
-		 *		modifyAttribute() を呼んでおく必要があります。
-		 *		modifyAttribute() を呼ぶまでは、データの変更が実際の描画には反映されません。
+		 *		再度本関数を呼び出す必要があります。
+		 *		modifyAttribute() を呼び出しても変更は反映されないので、注意して下さい。
 		 */
-		void setShaderAttribute(std::string name, int dim, std::vector<float> *array);
+		void setShaderAttribute(std::string name, int dim, std::vector<fk_Vector> *array);
+
+		//! シェーダー内 attribute 変数設定関数4
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を fk_TexCoord 型で登録します。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *		1 を指定した場合、y 成分は無視されます。
+		 *		3,4 を指定した場合、第3,4成分 (z,w成分) は 0 となります。
+		 *
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		再度本関数を呼び出す必要があります。
+		 *		modifyAttribute() を呼び出しても変更は反映されないので、注意して下さい。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<fk_TexCoord> *array);
+
+		//! シェーダー内 attribute 変数設定関数5
+		/*!
+		 *	形状の各頂点に対応した attribute 変数値を fk_HVector 型で登録します。
+		 *
+		 *	ここで登録する要素数は形状の頂点数、
+		 *	厳密にはデータ要素数よりも多数である必要があります。
+		 *
+		 *	\param[in]	name
+		 *		GLSL内での変数名
+		 *
+		 *	\param[in]	dim
+		 *		変数の次元数で、1から4まで設定することができます。
+		 *		GLSL内での型は、1から順に float, vec2, vec3, vec4 となります。
+		 *		1 を指定した場合は y,z,w 成分は無視されます。
+		 *		2 を指定した場合は z,w 成分は無視されます。
+		 *		3 を指定した場合は、w 成分は無視されま。
+		 *
+		 *	\param[in]	array
+		 *		attribute 変数として転送するデータのポインタ。
+		 *		このコンテナのサイズは、形状の頂点数と次元数の積以上である必要があります。
+		 *
+		 *	\note
+		 *	   	ここで設定した attribute 変数用データに変更があった場合は、
+		 *		再度本関数を呼び出す必要があります。
+		 *		modifyAttribute() を呼び出しても変更は反映されないので、注意して下さい。
+		 */
+		void setShaderAttribute(std::string name, int dim, std::vector<fk_HVector> *array);
 
 		//! attribute 変数更新関数
 		/*!
@@ -186,142 +296,31 @@ namespace FK {
 		 * 	もしこの関数が呼ばれないと、内部データが変更されても描画には反映されません。
 		 *
 		 *	\param[in]	name		対象となる attribute 変数の GLSL 内での変数名
+		 *
+		 *	\note
+		 *		本関数は、 setShaderAttribute(std::string, int, std::vector<int> *, bool) または
+		 *		setShaderAttribute(std::string, int, std::vector<float> *, bool) で
+		 *		第4引数に false を用いた場合のみに有効です。
+		 *		第4引数に true を用いた場合や、その他の形式の attribute 変数設定に対しては、
+		 *		本関数によって変更反映を行うことはできません。
 		 */
 		void modifyAttribute(std::string name);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-
-		//! パレット取得関数
-		/*!
-		 *	パレットのアドレスを取得します。
-		 *
-		 *	\return	パレット
-		 */
+		// 廃止関数群
 		fk_Palette *					getPaletteData(void);
-
-		//! パレット初期化関数
-		/*!
-		 *	現在設定されているパレットを初期化します。
-		 *
-		 *	\sa fk_Palette::clearMaterial()
-		 */
 		void							clearMaterial(void);
-
-		//! オブジェクトマテリアル ID 設定関数
-		/*!
-		 *	オブジェクトマテリアルの ID を設定します。
-		 *
-		 *	\param[in]	ID		オブジェクトマテリアルの ID。
-		 *
-		 *	\sa getObjMaterialID()
-		 *	\sa fk_Palette::setObjMaterialID()
-		 */
 		void							setObjMaterialID(int ID);
-
-		//! マテリアル追加関数
-		/*!
-		 *	パレットにマテリアルを新たに追加します。
-		 *
-		 *	\param[in]	mat		追加するマテリアル変数のアドレス
-		 *
-		 *	\sa fk_Palette::pushPalette(), setPalette()
-		 */
 		void							pushPalette(fk_Material &mat);
-
-		//! マテリアル設定関数
-		/*!
-		 *	パレットに対し、対応する ID でマテリアルを設定します。
-		 *	詳細な仕様は fk_Palette::setPalette() を参照して下さい。
-		 *
-		 *	\param[in]	mat		設定するマテリアル
-		 *	\param[in]	ID		マテリアルID
-		 *
-		 *	\sa fk_Palette::setPalette(), pushPalette()
-		 */
 		void							setPalette(fk_Material &mat, int ID);
-
-		//! オブジェクトマテリアル ID 取得関数
-		/*!
-		 *	現在設定されているオブジェクトマテリアルの ID を取得します。
-		 *
-		 *	\return オブジェクトマテリアルの ID
-		 *
-		 *	\sa setObjMaterialID(), fk_Palette::getObjMaterialID()
-		 */
 		int								getObjMaterialID(void);
-
-		//! パレット中のマテリアル格納数取得関数
-		/*!
-		 *	現在パレットに格納されているマテリアルの数を返します。
-		 *
-		 *	\return マテリアル数
-		 *
-		 *	\sa pushPalette(), setPalette(), getMaterial(), fk_Palette::getPaletteSize()
-		 */
 		int								getPaletteSize(void);
-
-		//! マテリアル取得関数
-		/*!
-		 *	指定された id に対応するマテリアルのポインタを返します。
-		 *	id に対応するマテリアルがパレット中にない場合は、
-		 * 	デフォルト状態のマテリアルインスタンスへのポインタを返します。
-		 *
-		 *	\return マテリアルのポインタ
-		 *
-		 *	\sa pushPalette(), setPalette(), getPaletteSize(), fk_Palette::getMaterial()
-		 */
 		fk_Material *					getMaterial(int id);
-
-		//! マテリアル配列取得関数
-		/*!
-		 *	パレットに格納されているマテリアルを、
-		 *	STL の vector 配列へのポインタとして返します。
-		 *
-		 *	\return マテリアル配列
-		 *
-		 *	\sa getMaterial(), fk_Palette::getMaterialVector()
-		 */
 		std::vector<fk_Material> *		getMaterialVector(void);
-
-		//! マテリアルモード設定関数
-		/*!
-		 *	形状中の各要素を描画する際に、どの要素のマテリアルを採用するかを設定します。
-		 *	マテリアルの採用は、以下のような優先順で決定します。
-		 *	-# fk_Model のマテリアルモードが FK_CHILD_MODE の場合、
-		 *		モデルのマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *		(fk_Model::setMaterialMode() を参照して下さい。)
-		 *	-# fk_Shape の派生クラスにてマテリアルモードが
-		 *		FK_CHILD_MODE になっている場合、形状のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合は以下の条件に従います。
-		 *	-# 各位相要素でのマテリアルモードが、
-		 *		FK_CHILD_MODE になっている場合は個別のマテリアルが採用されます。
-		 *		FK_NONE_MODE の場合は描画されません。
-		 *		FK_PARENT_MODE の場合はモデルのマテリアルが採用されます。
-		 *		(fk_TopologyMaterial::setElemMaterialMode() を参照して下さい。)
-		 *
-		 *	\param[in]	mode
-		 *		マテリアルモードを設定します。与えられる値は以下の3種類です。
-		 *		\arg FK_CHILD_MODE
-		 *		\arg FK_PARENT_MODE
-		 *		\arg FK_NONE_MODE
-		 *
-		 *	\sa getMaterialMode(), fk_Model::setMaterialMode(), fk_TopologyMaterial::setElemMaterialMode()
-		 */
 		void							setMaterialMode(fk_MaterialMode mode);
-
-		//! マテリアルモード取得関数
-		/*!
-		 *	マテリアルモードを取得します。
-		 *
-		 *	\return マテリアルモード
-		 *
-		 *	\sa setMaterialMode()
-		 */
 		fk_MaterialMode					getMaterialMode(void);
 
+		// 非公開関数群
 		void FinishSetVBO(void);
 		virtual void ForceUpdateAttr(void);
 		std::function<void(void)> FlushAttr;
@@ -354,9 +353,15 @@ namespace FK {
 		static const std::string	lineModelColorName;
 		static const std::string	lineElementColorName;
 
+		static const std::string	curveModelColorName;
+
 		// シェーダー変数名: テクスチャ座標
 		static const std::string	texCoordName;
-		
+
+		// シェーダー変数名: 曲線曲面
+		static const std::string	ctrlPosName;
+		static const std::string	degreeName;		
+
 #endif
 
 	private:
@@ -372,6 +377,8 @@ namespace FK {
 
 		std::map<std::string, bool>		attrModify;
 
+		std::map<std::string, std::vector<int> *>	intSelf;
+		std::map<std::string, std::vector<float> *> floatSelf;
 
 		void			DeleteMapI(std::string);
 		void			DeleteMapF(std::string);

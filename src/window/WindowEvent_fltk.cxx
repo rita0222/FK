@@ -119,12 +119,12 @@ int fk_Window::drawWindow(bool argDrawMode)
 
 		PushPrevStatus();
 
-		if(frameMode != FK_DEFAULT_FRAME) {
+		if(frameMode != fk_FrameMode::DEFAULT) {
 			unsigned long time;
 
 			frameTime = getNow();
 
-			if((frameMode & FK_SKIP_FRAME) != FK_DEFAULT_FRAME) {
+			if((frameMode & fk_FrameMode::SKIP) != fk_FrameMode::DEFAULT) {
 				time = prevTime + frameInterval * static_cast<unsigned long>(skipCount);
 				if(time < frameTime) {
 					skipCount++;
@@ -134,7 +134,7 @@ int fk_Window::drawWindow(bool argDrawMode)
 				}
 			}
 
-			if((frameMode & FK_WAIT_FRAME) != FK_DEFAULT_FRAME) {
+			if((frameMode & fk_FrameMode::WAIT) != fk_FrameMode::DEFAULT) {
 				time = prevTime + frameInterval;
 				while(time > frameTime + ONE_FRAME_TIME) {
 					Fl::wait(static_cast<double>(time - frameTime - ONE_FRAME_TIME)/1000.0);
@@ -150,7 +150,7 @@ int fk_Window::drawWindow(bool argDrawMode)
 			redraw();
 		}
 
-		if(frameMode != FK_DEFAULT_FRAME) {
+		if(frameMode != fk_FrameMode::DEFAULT) {
 			prevTime = frameTime;
 		}
 	}
@@ -195,7 +195,7 @@ bool fk_Window::getKeyStatus(char argKey, bool argInsideFlag)
 	return false;
 }
 
-bool fk_Window::getKeyStatus(char argKey, fk_SwitchStatus argStatus, bool argInsideFlag)
+bool fk_Window::getKeyStatus(char argKey, fk_Switch argStatus, bool argInsideFlag)
 {
 	bool		tmpStatus = getKeyStatus(argKey, argInsideFlag);
 
@@ -204,18 +204,18 @@ bool fk_Window::getKeyStatus(char argKey, fk_SwitchStatus argStatus, bool argIns
 	}
 
 	switch(argStatus) {
-	  case FK_SW_RELEASE:
+	  case fk_Switch::RELEASE:
 		return !(tmpStatus);
 		
-	  case FK_SW_UP:
+	  case fk_Switch::UP:
 		if(keyStatus[argKey] == true && tmpStatus == false) return true;
 		return false;
 
-	  case FK_SW_DOWN:
+	  case fk_Switch::DOWN:
 		if(keyStatus[argKey] == false && tmpStatus == true) return true;
 		return false;
 
-	  case FK_SW_PRESS:
+	  case fk_Switch::PRESS:
 		return tmpStatus;
 
 	  default:
@@ -235,100 +235,100 @@ bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, bool argInsideFlag)
 	}
 
 	switch(argKey) {
-	  case FK_SHIFT_R:
+	  case fk_SpecialKey::SHIFT_R:
 		if(Fl::get_key(FL_Shift_R) != 0) return true;
 		else return false;
-	  case FK_SHIFT_L:
+	  case fk_SpecialKey::SHIFT_L:
 		if(Fl::get_key(FL_Shift_L) != 0) return true;
 		else return false;
-	  case FK_CTRL_R:
+	  case fk_SpecialKey::CTRL_R:
 		if(Fl::get_key(FL_Control_R) != 0) return true;
 		else return false;
-	  case FK_CTRL_L:
+	  case fk_SpecialKey::CTRL_L:
 		if(Fl::get_key(FL_Control_L) != 0) return true;
 		else return false;
-	  case FK_ALT_R:
+	  case fk_SpecialKey::ALT_R:
 		if(Fl::get_key(FL_Alt_R) != 0) return true;
 		else return false;
-	  case FK_ALT_L:
+	  case fk_SpecialKey::ALT_L:
 		if(Fl::get_key(FL_Alt_L) != 0) return true;
 		else return false;
-	  case FK_ENTER:
+	  case fk_SpecialKey::ENTER:
 		if(Fl::get_key(FL_Enter) != 0) return true;
 		else return false;
-	  case FK_BACKSPACE:
+	  case fk_SpecialKey::BACKSPACE:
 		if(Fl::get_key(FL_BackSpace) != 0) return true;
 		else return false;
-	  case FK_DELETE:
+	  case fk_SpecialKey::DEL:
 		if(Fl::get_key(FL_Delete) != 0) return true;
 		else return false;
-	  case FK_CAPS_LOCK:
+	  case fk_SpecialKey::CAPS_LOCK:
 		if(Fl::get_key(FL_Caps_Lock) != 0) return true;
 		else return false;
-	  case FK_TAB:
+	  case fk_SpecialKey::TAB:
 		if(Fl::get_key(FL_Tab) != 0) return true;
 		else return false;
-	  case FK_PAGE_UP:
+	  case fk_SpecialKey::PAGE_UP:
 		if(Fl::get_key(FL_Page_Up) != 0) return true;
 		else return false;
-	  case FK_PAGE_DOWN:
+	  case fk_SpecialKey::PAGE_DOWN:
 		if(Fl::get_key(FL_Page_Down) != 0) return true;
 		else return false;
-	  case FK_HOME:
+	  case fk_SpecialKey::HOME:
 		if(Fl::get_key(FL_Home) != 0) return true;
 		else return false;
-	  case FK_END:
+	  case fk_SpecialKey::END:
 		if(Fl::get_key(FL_End) != 0) return true;
 		else return false;
-	  case FK_INSERT:
+	  case fk_SpecialKey::INSERT:
 		if(Fl::get_key(FL_Insert) != 0) return true;
 		else return false;
-	  case FK_LEFT:
+	  case fk_SpecialKey::LEFT:
 		if(Fl::get_key(FL_Left) != 0) return true;
 		else return false;
-	  case FK_RIGHT:
+	  case fk_SpecialKey::RIGHT:
 		if(Fl::get_key(FL_Right) != 0) return true;
 		else return false;
-	  case FK_UP:
+	  case fk_SpecialKey::UP:
 		if(Fl::get_key(FL_Up) != 0) return true;
 		else return false;
-	  case FK_DOWN:
+	  case fk_SpecialKey::DOWN:
 		if(Fl::get_key(FL_Down) != 0) return true;
 		else return false;
-	  case FK_F1:
+	  case fk_SpecialKey::F1:
 		if(Fl::get_key(FL_F+1) != 0) return true;
 		else return false;
-	  case FK_F2:
+	  case fk_SpecialKey::F2:
 		if(Fl::get_key(FL_F+2) != 0) return true;
 		else return false;
-	  case FK_F3:
+	  case fk_SpecialKey::F3:
 		if(Fl::get_key(FL_F+3) != 0) return true;
 		else return false;
-	  case FK_F4:
+	  case fk_SpecialKey::F4:
 		if(Fl::get_key(FL_F+4) != 0) return true;
 		else return false;
-	  case FK_F5:
+	  case fk_SpecialKey::F5:
 		if(Fl::get_key(FL_F+5) != 0) return true;
 		else return false;
-	  case FK_F6:
+	  case fk_SpecialKey::F6:
 		if(Fl::get_key(FL_F+6) != 0) return true;
 		else return false;
-	  case FK_F7:
+	  case fk_SpecialKey::F7:
 		if(Fl::get_key(FL_F+7) != 0) return true;
 		else return false;
-	  case FK_F8:
+	  case fk_SpecialKey::F8:
 		if(Fl::get_key(FL_F+8) != 0) return true;
 		else return false;
-	  case FK_F9:
+	  case fk_SpecialKey::F9:
 		if(Fl::get_key(FL_F+9) != 0) return true;
 		else return false;
-	  case FK_F10:
+	  case fk_SpecialKey::F10:
 		if(Fl::get_key(FL_F+10) != 0) return true;
 		else return false;
-	  case FK_F11:
+	  case fk_SpecialKey::F11:
 		if(Fl::get_key(FL_F+11) != 0) return true;
 		else return false;
-	  case FK_F12:
+	  case fk_SpecialKey::F12:
 		if(Fl::get_key(FL_F+12) != 0) return true;
 		else return false;
 	  default:
@@ -338,7 +338,7 @@ bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, bool argInsideFlag)
 	return false;
 }
 
-bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, fk_SwitchStatus argStatus,
+bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, fk_Switch argStatus,
 									bool argInsideFlag)
 {
 	bool		tmpStatus = getSpecialKeyStatus(argKey, argInsideFlag);
@@ -348,18 +348,18 @@ bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, fk_SwitchStatus argSta
 	}
 
 	switch(argStatus) {
-	  case FK_SW_RELEASE:
+	  case fk_Switch::RELEASE:
 		return !(tmpStatus);
 		
-	  case FK_SW_UP:
+	  case fk_Switch::UP:
 		if(specialKeyStatus[argKey] == true && tmpStatus == false) return true;
 		return false;
 
-	  case FK_SW_DOWN:
+	  case fk_Switch::DOWN:
 		if(specialKeyStatus[argKey] == false && tmpStatus == true) return true;
 		return false;
 
-	  case FK_SW_PRESS:
+	  case fk_Switch::PRESS:
 		return tmpStatus;
 
 	  default:
@@ -445,13 +445,13 @@ bool fk_Window::getMouseStatus(fk_MouseButton argButton, bool argInsideFlag)
 
 	switch(argButton) {
 
-	  case FK_MOUSE1:
+	  case fk_MouseButton::M1:
 		if(Fl::event_state(FL_BUTTON1) != 0) return true;
 		else return false;
-	  case FK_MOUSE2:
+	  case fk_MouseButton::M2:
 		if(Fl::event_state(FL_BUTTON2) != 0) return true;
 		else return false;
-	  case FK_MOUSE3:
+	  case fk_MouseButton::M3:
 		if(Fl::event_state(FL_BUTTON3) != 0) return true;
 		else return false;
 	  default:
@@ -461,7 +461,7 @@ bool fk_Window::getMouseStatus(fk_MouseButton argButton, bool argInsideFlag)
 }
 
 bool fk_Window::getMouseStatus(fk_MouseButton argButton,
-							   fk_SwitchStatus argStatus, bool argInsideFlag)
+							   fk_Switch argStatus, bool argInsideFlag)
 {
 	bool	tmpStatus = getMouseStatus(argButton, argInsideFlag);
 
@@ -470,18 +470,18 @@ bool fk_Window::getMouseStatus(fk_MouseButton argButton,
 	}
 
 	switch(argStatus) {
-	  case FK_SW_RELEASE:
+	  case fk_Switch::RELEASE:
 		return !(tmpStatus);
 		
-	  case FK_SW_UP:
+	  case fk_Switch::UP:
 		if(mouseStatus[argButton] == true && tmpStatus == false) return true;
 		return false;
 
-	  case FK_SW_DOWN:
+	  case fk_Switch::DOWN:
 		if(mouseStatus[argButton] == false && tmpStatus == true) return true;
 		return false;
 
-	  case FK_SW_PRESS:
+	  case fk_Switch::PRESS:
 		return tmpStatus;
 
 	  default:
@@ -501,7 +501,7 @@ int fk_Window::getMouseWheelStatus(void)
 void fk_Window::setFrameMode(fk_FrameMode argMode)
 {
 	frameMode = argMode;
-	if(argMode != FK_DEFAULT_FRAME) prevTime = getNow();
+	if(argMode != fk_FrameMode::DEFAULT) prevTime = getNow();
 
 	return;
 }

@@ -96,7 +96,7 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 		ifs->FaceIBOSetup();
 	};
 
-	SetObjectType(FK_IFSTEXTURE);
+	SetObjectType(fk_Type::IFSTEXTURE);
 	ifs = new fk_IndexFaceSet;
 	coordArray.clear();
 	commonList.clear();

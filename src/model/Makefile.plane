@@ -4,6 +4,7 @@ LIBSRCS		= \
 			BVHMotion.cxx \
 			Boundary.cxx \
 			BoundaryElem.cxx \
+			DrawMode.cxx \
 			MatAdmin.cxx \
 			Model.cxx \
 			ModelTree.cxx

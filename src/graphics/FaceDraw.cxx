@@ -113,11 +113,11 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	} else {
 		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
 		switch(argModel->getShadingMode()) {
-		  case FK_SHADING_PHONG:
+		  case fk_ShadingMode::PHONG:
 			shader = phongShader;
 			break;
 
-		  case FK_SHADING_GOURAUD:
+		  case fk_ShadingMode::GOURAUD:
 			shader = gouraudShader;
 			break;
 
@@ -134,7 +134,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	shader->ProcPreShader();
 
 	switch(shapeType) {
-	  case FK_SHAPE_IFS:
+	  case fk_RealShapeType::IFS:
 		Draw_IFS(argModel, parameter);
 		break;
 
@@ -148,10 +148,10 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 
 void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
 {
-	if((argDMode & FK_FRONTBACK_POLYMODE) == FK_FRONTBACK_POLYMODE) {
+	if((argDMode & fk_DrawMode::FRONTBACK_FACE) == fk_DrawMode::FRONTBACK_FACE) {
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	} else if((argDMode & FK_BACK_POLYMODE) == FK_BACK_POLYMODE) {
+	} else if((argDMode & fk_DrawMode::BACK_FACE) == fk_DrawMode::BACK_FACE) {
 		glCullFace(GL_FRONT);
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_BACK, GL_FILL);

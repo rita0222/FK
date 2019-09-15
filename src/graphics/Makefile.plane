@@ -1,12 +1,14 @@
 BASENAME	= graphics
 
 LIBSRCS		= \
+			CurveDraw.cxx \
 			DrawBase.cxx \
 			Engine.cxx \
 			FaceDraw.cxx \
 			FrameController.cxx \
 			LineDraw.cxx \
 			PointDraw.cxx \
+			SurfaceDraw.cxx \
 			TextureDraw.cxx
 
 FKLINK		= \

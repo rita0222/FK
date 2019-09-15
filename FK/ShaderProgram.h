@@ -76,6 +76,9 @@
 #include <FK/ShaderParameter.h>
 
 namespace FK {
+
+	using fk_BuildInKey = std::pair<std::string, std::string>;
+	
 	//! シェーダープログラム格納クラス
 	/*!
 	 *	このクラスは、シェーダーのプログラムソースを格納するための機能を提供します。
@@ -103,7 +106,7 @@ namespace FK {
 		 *	フラグメント(ピクセル)シェーダーのコードの設定や取得を行います。
 		 *	フラグメントシェーダーのコードを設定する際は、
 		 *	本メンバーに直接コードを書き込むか、
-		 *	loadVertexShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 *	loadFragmentShader() 関数でコードが格納されているファイル名を指定して下さい。
 		 */
 		std::string fragmentShaderSource;
 
@@ -115,6 +118,24 @@ namespace FK {
 		 *	loadGeometryShader() 関数でコードが格納されているファイル名を指定して下さい。
 		 */
 		std::string geometryShaderSource;
+
+		//! テッセレーション制御コードメンバー
+		/*!
+		 *	テッセレーション制御シェーダーのコードの設定や取得を行います。
+		 *	テッセレーション制御シェーダーのコードを設定する際は、
+		 *	本メンバーに直接コードを書き込むか、
+		 *	loadTessCtrlShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		std::string tessCtrlShaderSource;
+
+		//! テッセレーション評価シェーダーコードメンバー
+		/*!
+		 *	テッセレーション評価シェーダーのコードの設定や取得を行います。
+		 *	テッセレーション評価シェーダーのコードを設定する際は、
+		 *	本メンバーに直接コードを書き込むか、
+		 *	loadTessEvalShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		std::string tessEvalShaderSource;
 
 		//! コンストラクタ
 		fk_ShaderProgram(void);
@@ -194,10 +215,46 @@ namespace FK {
 		 */
 		bool loadGeometryShader(std::string fileName);
 
+
+		//! テッセレーション制御シェーダーコード入力関数
+		/*!
+		 *	テッセレーション評価シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram::tessCtrlShaderSource メンバーにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool loadTessCtrlShader(std::string fileName);
+
+		//! テッセレーション評価シェーダーコード入力関数
+		/*!
+		 *	テッセレーション評価シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram::tessEvalShaderSource メンバーにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool loadTessEvalShader(std::string fileName);
+
 		//! シェーダープログラムコンパイルメソッド
 		/*!
 		 *	fk_ShaderProgram::vertexShaderSource, fk_ShaderProgram::fragmentShaderSource,
-		 *	fk_ShaderProgram::geometryShaderSource 
+		 *	fk_ShaderProgram::geometryShaderSource,
+		 *	fk_ShaderProgram::tessCtrlShaderSource, fk_ShaderProgram::tessEvalShaderSource
 		 *	に格納されているコードのコンパイルを行います。
 		 *
 		 *	\return
@@ -220,6 +277,10 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void SetParameter(fk_ShaderParameter *);
 		void SetFBOMode(bool);
+
+		bool GetUniformStatus(std::string);
+		bool GetAttributeStatus(std::string);
+
 #endif
 
 	private:
@@ -227,18 +288,34 @@ namespace FK {
 		GLuint idVertex;
 		GLuint idFragment;
 		GLuint idGeometry;
+		GLuint idTessCtrl;
+		GLuint idTessEval;
+		
 		std::string lastError;
 		fk_ShaderParameter *parameter;
 		bool fboMode;
 
-		static std::string		vertexBuildIn, fragmentBuildIn, geometryBuildIn, fboBuildIn;
+		static std::string vertexBuildIn;
+		static std::string fragmentBuildIn;
+		static std::string geometryBuildIn;
+		static std::string tessCtrlBuildIn;
+		static std::string tessEvalBuildIn;
+		static std::string fboBuildIn;
+
+		static std::vector<fk_BuildInKey>	uniformStack;
+		static std::vector<fk_BuildInKey>	attributeStack;
+
+		std::map<std::string, bool>		uniformStatus;
+		std::map<std::string, bool>		attributeStatus;
 
 		GLuint Compile(std::string *, GLuint);
-		bool UpdateLastError(GLuint);
+		bool UpdateLastError(GLuint, std::string);
 		void ReplaceBuildIn(std::string *, GLuint);
 		void DeleteShader(GLuint);
 		void DeleteProgram(GLuint);
-	};	
+
+		void MakeBuildInStack(std::string *, std::vector<fk_BuildInKey> *);
+	};
 }
 #endif
 

@@ -182,7 +182,7 @@ void fk_AudioStream::StartQueue(bool argInitFlg)
 	for(unsigned int i = 0; i < queueSize; i++) {
 
 		size = static_cast<ALsizei>(ov_read(vf, &buffer[0],
-											static_cast<int>(FK_OV_BUFSIZE*sizeof(char)),
+											static_cast<int>(fk_AudioBase::BUFSIZE*sizeof(char)),
 											_ENDIAN, 2, 1, &current));
 
 		if(size <= 0) {
@@ -245,7 +245,7 @@ bool fk_AudioStream::PlayStream(void)
 			continue;
 		}
 
-		ogg_int64_t length = static_cast<ogg_int64_t>(FK_OV_BUFSIZE*sizeof(char));
+		ogg_int64_t length = static_cast<ogg_int64_t>(fk_AudioBase::BUFSIZE*sizeof(char));
 		nowTime = ov_time_tell(vf);
 		bool need_rewind = false;
 		if (loopMode && loopEndTime > 0.0)

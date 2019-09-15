@@ -78,11 +78,12 @@
 namespace FK {
 
 	//! マテリアルモード型
-	using fk_MaterialMode = unsigned char;
 
-	const fk_MaterialMode	FK_NONE_MODE = 0;		//!< 不描画モード
-	const fk_MaterialMode	FK_CHILD_MODE = 1;		//!< 個別設定モード
-	const fk_MaterialMode	FK_PARENT_MODE = 2;		//!< モデル設定モード
+	enum class fk_MaterialMode {
+		NONE,		//!< 不描画モード
+		CHILD,		//!< 個別設定モード
+		PARENT		//!< モデル設定モード
+	};
 
 	//! マテリアルパレットを管理するクラス
 	/*!

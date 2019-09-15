@@ -84,6 +84,7 @@ namespace FK {
 	class fk_Model;
 	class fk_Shape;
 	class fk_ShaderBinder;
+	class fk_ShaderProgram;
 	class fk_ShaderParameter;
 	
 	class fk_DrawBase {

@@ -285,10 +285,10 @@ namespace FK {
 		 *	稜線 E の位相状態を返します。
 		 *	位相状態には、以下のものがあります。
 		 *
-		 *	- FK_UNDEF_EDGE: 未定義稜線。左右両側のループが存在しません。
-		 *	- FK_HALFDEF_EDGE: 半定義稜線。左右いずれか一方のループが存在します。
-		 *	- FK_BOTHDEF_EDGE: 両定義稜線。左右両側のループが存在します。
-		 *	- FK_NONE_EDGE: 位相不整合。位相構造が正常状態ではありません。
+		 *	- fk_EdgeStatus::UNDEF: 未定義稜線。左右両側のループが存在しません。
+		 *	- fk_EdgeStatus::HALF: 半定義稜線。左右いずれか一方のループが存在します。
+		 *	- fk_EdgeStatus::BOTH: 両定義稜線。左右両側のループが存在します。
+		 *	- fk_EdgeStatus::NONE: 位相不整合。位相構造が正常状態ではありません。
 		 *
 		 *	\param[in]	E		稜線位相
 		 *

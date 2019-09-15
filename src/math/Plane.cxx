@@ -71,11 +71,12 @@
  ****************************************************************************/
 #include <FK/Plane.h>
 #include <FK/Matrix.h>
+#include <FK/Math.h>
 
 using namespace FK;
 
 fk_Plane::fk_Plane(void)
-	: fk_BaseObject(FK_PLANE)
+	: fk_BaseObject(fk_Type::PLANE)
 {
 	base.set(0.0, 0.0, 0.0);
 	uVec.set(1.0, 0.0, 0.0);
@@ -104,7 +105,7 @@ bool fk_Plane::setPosNormal(const fk_Vector &argBase,
 	base = argBase;
 	norm = argNorm;
 	norm.normalize();
-	if(fabs(norm.z) > 1.0 - FK_EPS) {
+	if(fabs(norm.z) > 1.0 - fk_Math::EPS) {
 		// 法線ベクトルが z 軸に平行
 
 		uVec.set(1.0, 0.0, 0.0);
@@ -137,7 +138,7 @@ bool fk_Plane::set3Pos(const fk_Vector &argPos1,
 	tmpU = argPos2 - argPos1;
 	tmpV = argPos3 - argPos1;
 
-	if((tmpU ^ tmpV).dist2() < FK_EPS) return false;
+	if((tmpU ^ tmpV).dist2() < fk_Math::EPS) return false;
 	tmpU.normalize();
 	tmpV.normalize();
 	base = argPos1;
@@ -153,7 +154,7 @@ bool fk_Plane::setPosUVVec(const fk_Vector &argBase,
 						   const fk_Vector &argUVec,
 						   const fk_Vector &argVVec)
 {
-	if((argUVec ^ argVVec).dist2() < FK_EPS) return false;
+	if((argUVec ^ argVVec).dist2() < fk_Math::EPS) return false;
 	base = argBase;
 	uVec = argUVec;
 	uVec.normalize();
@@ -213,7 +214,7 @@ fk_Vector fk_Plane::getPos(double argU, double argV)
 
 bool fk_Plane::isParallel(const fk_Vector &argVec)
 {
-	if(fabs(norm * argVec) < FK_EPS) return true;
+	if(fabs(norm * argVec) < fk_Math::EPS) return true;
 	return false;
 }
 
@@ -224,7 +225,7 @@ bool fk_Plane::isParallel(const fk_Plane &argPlane)
 
 bool fk_Plane::isVertical(const fk_Vector &argVec)
 {
-	if((norm ^ argVec).dist2() < FK_EPS) return true;
+	if((norm ^ argVec).dist2() < fk_Math::EPS) return true;
 	return false;
 }
 

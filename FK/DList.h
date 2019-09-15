@@ -82,9 +82,9 @@
 namespace FK {
 
 	//! 立体視出力を制御する際に用いる列挙型
-	enum fk_StereoChannel {
-		FK_STEREO_LEFT,			//!< 左目側
-		FK_STEREO_RIGHT			//!< 右目側
+	enum class fk_StereoChannel {
+		LEFT,	//!< 左目側
+		RIGHT	//!< 右目側
 	};
 
 	//!	ディスプレイリストを制御するクラス

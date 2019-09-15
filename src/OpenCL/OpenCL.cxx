@@ -318,7 +318,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 	cl_platform_id	*clPlatformIDs;			// プラットフォームの数が不定なので、最初はアドレスのみ
 	cl_int			ciErrNum;				// OpenCL関数実行時のエラーチェック用int
 	
-	fk_SetErrorMode(FK_ERR_BROWSER_INTERACTIVE);
+	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
 
 	*argID = nullptr;
  

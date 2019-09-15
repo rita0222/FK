@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <FK/D3DXData.H>
 #include <FK/Tree.h>
+#include <FK/Math.h>
 
 using namespace std;
 using namespace FK;
@@ -246,13 +247,13 @@ void fk_D3DXFrameAnimation::LinearDiv(double argTime, vector<double> *argArray,
 	startTime = argArray->front();
 	endTime = argArray->back();
 
-	if(startTime + FK_EPS > argTime) {
+	if(startTime + fk_Math::EPS > argTime) {
 		*retID = 0;
 		*retDiv = 0.0;
 		return;
 	}
 
-	if(endTime - FK_EPS < argTime) {
+	if(endTime - fk_Math::EPS < argTime) {
 		*retID = static_cast<int>(argArray->size())-1;
 		*retDiv = 0.0;
 		return;
@@ -276,8 +277,8 @@ void fk_D3DXFrameAnimation::SetTime(double argTime)
 	fk_Quaternion	q;
 	fk_Angle		angle;
 	fk_Vector		scaleV, transV;
-	int				rID, sID, tID;
-	double			rDiv, sDiv, tDiv;
+	int				rID = 0, sID = 0, tID = 0;
+	double			rDiv = 0.0, sDiv = 0.0, tDiv = 0.0;
 
 	LinearDiv(argTime, &rotKey, &rID, &rDiv);
 	LinearDiv(argTime, &scaleKey, &sID, &sDiv);
@@ -328,8 +329,8 @@ double fk_D3DXFrameAnimation::GetStartTime(void)
 	if(scaleKey.empty() == false) sS = scaleKey[0];
 	if(transKey.empty() == false) tS = transKey[0];
 
-	if(rS > sS + FK_EPS || rS < sS - FK_EPS ||
-	   rS > tS + FK_EPS || rS < tS - FK_EPS) {
+	if(rS > sS + fk_Math::EPS || rS < sS - fk_Math::EPS ||
+	   rS > tS + fk_Math::EPS || rS < tS - fk_Math::EPS) {
 		return -1.0;
 	}
 
@@ -510,7 +511,7 @@ void fk_D3DXFrame::SetTime(double argTime)
 	if(anim == nullptr) return;
 
 	startTime = anim->GetStartTime();
-	if(startTime < -FK_EPS || argTime < startTime - FK_EPS) {
+	if(startTime < -fk_Math::EPS || argTime < startTime - fk_Math::EPS) {
 		SetUpMatrix();
 		return;
 	}

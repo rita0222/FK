@@ -135,29 +135,6 @@ namespace FK {
 		 */
 		bool	setNum(int num);
 
-		//! 制御点設定関数(個別)
-		/*!
-		 *	曲線の制御点位置ベクトルを設定します。
-		 *
-		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
-		 *	\param[in]	pos	制御点位置ベクトル
-		 *
-		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool	setCtrl(int ID, const fk_Vector &pos);
-
-		//! 制御点設定関数(配列)
-		/*!
-		 *	曲線の制御点位置ベクトルを、vector 配列を用いて一斉に設定します。
-		 *	設定の際、制御点数は setNum() によって設定しておく必要があり、
-		 *	配列のサイズは上記と一致していなければなりません。
-		 *
-		 *	\param[in]	array	制御点の vector 配列のポインタ
-		 *
-		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool	setCtrl(std::vector<fk_Vector> *array);	
-
 		// 位数参照関数
 		/*!
 		 *	曲線の位数を参照します。
@@ -173,16 +150,6 @@ namespace FK {
 		 *	\return	制御点数
 		 */
 		int		getNum(void);
-
-		//! 制御点参照関数
-		/*!
-		 *	曲線の制御点位置ベクトルを参照します。
-		 *
-		 *	\param[in]	ID	制御点 ID
-		 *
-		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
-		 */
-		fk_Vector	getCtrl(int ID);
 
 		//! 曲線算出関数
 		/*!
@@ -212,7 +179,6 @@ namespace FK {
 
 		int						ord;
 		int						num;
-		std::vector<fk_Vector>	ctrlPos;
 		std::vector<double>		knotVec;
 	};
 }

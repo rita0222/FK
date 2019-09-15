@@ -84,7 +84,7 @@ bool fk_TriTexture::faceIndexFlg = false;
 fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
-	SetObjectType(FK_TRITEXTURE);
+	SetObjectType(fk_Type::TRITEXTURE);
 	GetFaceSize = []() { return 1; };
 	StatusUpdate = [this]() {
 		PosUpdate();
@@ -170,8 +170,8 @@ bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
 		return false;
 	}
 
-	if(argS < -FK_EPS || argS > 1.0 + FK_EPS ||
-	   argT < -FK_EPS || argT > 1.0 + FK_EPS) {
+	if(argS < -fk_Math::EPS || argS > 1.0 + fk_Math::EPS ||
+	   argT < -fk_Math::EPS || argT > 1.0 + fk_Math::EPS) {
 		fk_PutError("fk_TriTexture", "setTextureCoord", 2,
 					"Texture Coord Error.");
 		return false;
@@ -190,8 +190,8 @@ bool fk_TriTexture::setTextureCoord(int argID, fk_TexCoord argCoord)
 		return false;
 	}
 
-	if(argCoord.x < -FK_EPS || argCoord.x > 1.0 + FK_EPS ||
-	   argCoord.y < -FK_EPS || argCoord.y > 1.0 + FK_EPS) {
+	if(argCoord.x < -fk_Math::EPS || argCoord.x > 1.0 + fk_Math::EPS ||
+	   argCoord.y < -fk_Math::EPS || argCoord.y > 1.0 + fk_Math::EPS) {
 		fk_PutError("fk_TriTexture", "setTextureCoord", 4,
 					"Texture Coord Error.");
 		return false;

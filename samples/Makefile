@@ -13,7 +13,7 @@ LODER		= $(AR) $(AROPS)
 LOCAL		= /usr/local
 OPTLOCAL	= /opt/local
 OPTOPT		= -O
-GRAMOPT		= -pedantic -std=c++14
+GRAMOPT		= -pedantic -std=c++17
 WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
 			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
 EXTOPT		= -Werror
@@ -28,7 +28,7 @@ SAMPLEEXE	= $(SAMPLESRCS:cxx=exe)
 SAMPLEAPPS	= $(SAMPLESRCS:cxx=app)
 ALLSRCS		= $(SAMPLESRCS)
 
-VERNAME		= 4.0.0
+VERNAME		= 4.0.1
 
 ###################
 
@@ -109,93 +109,24 @@ MACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
 
 all:
-	@echo "	FreeBSD:		make fb"
-	@echo "	FreeBSD Dynamic:	make fb-d"
-	@echo "	FreeBSD Debug:		make fb-g"
 	@echo "	Linux:			make linux"
-	@echo "	MingW:			make ming"
-	@echo "	MacOS X:		make mac"
-	@echo "	MacOS X Dynamic:	make mac-d"
-	@echo "	MacOS X Debug:		make mac-g"
-	@echo "	MacOS X gcc:		make mac-gcc"
-	@echo "	MacOS X gcc Debug:	make mac-gcc-g"
-
-fb:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -O -pipe" \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
-		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"INCLDIRS = -I. -I.. -I../../FK_BSDPack/include -I$(LOCAL)/include" \
-	"LFLAGS = -L../lib/static -L../../FK_BSDPack/lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
-		-lfltk_gl -lfltk \
-		-ljpeg -lpng \
-		-lfreetype -lGL \
-		-lXft -lfontconfig -lXinerama -lpthread \
-		-lXext -lX11 -lz -lbz2 -lm" \
-	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)"
-
-fb-d:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = -O -pipe" \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY -DGL_GLEXT_PROTOTYPES \
-		-DHAVE_NANOSLEEP -DHAVE_TIME_H" \
-	"INCLDIRS = -I. -I.. -I../../FK_BSDPack/include -I$(LOCAL)/include" \
-	"LFLAGS = -L../lib/dynamic -L../../FK_BSDPack/lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
-		-lfltk_gl -lfltk \
-		-ljpeg -lpng \
-		-lfreetype -lGL \
-		-lXft -lfontconfig -lXinerama -lpthread \
-		-lXext -lX11 -lz -lbz2 -lm" \
-	"FKLINK = $(FKAUDIO_D) $(FKOPENCL_D) $(FKSHADER_D) $(FKLIB_D)"
-
-fb-g:
-	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++1y" \
-	"OPTOPT = -g" \
-	"SYSOPS = -D_FREEBSD_ -DNO_GLU_LIBRARY" \
-	"INCLDIRS = -I. -I.. -I../../FK_BSDPack/include -I$(LOCAL)/include" \
-	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv -lopenal -lOpenCL -lvorbisfile -lvorbis -logg \
-		-lfltk_images -lfltk_forms -lfltk_gl -lfltk \
-		-ljpeg -lpng \
-		-lfreetype -lGL \
-		-lXft -lfontconfig -lXinerama -lpthread \
-		-lXext -lX11 -lz -lbz2 -lm" \
-	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_G)"
+	@echo "	macOS:			make mac"
+	@echo "	macOS Dynamic:		make mac-d"
+	@echo "	macOS Debug:		make mac-g"
 
 linux:
 	$(MAKE) $(TARGET) \
-	"GRAMOPT = -pedantic -std=c++14" \
+	"GRAMOPT = -pedantic -std=c++17" \
 	"SYSOPS = -D_LINUX_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I$(LOCAL)/include" \
-	"LFLAGS = -L../lib -L../../lib -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv \
+	"LFLAGS = -L../lib/static -L$(LOCAL)/lib" \
+	"SYSLIBS = -liconv_hook \
 		-lopenal -lvorbisfile -lvorbis -logg \
 		-lfltk_images -lfltk_forms -lfltk_gl -lfltk \
-		-ljpeg -lpng -lfreetype -lGL -lpthread \
+		-ljpeg -lpng -lfreetype -lGL -lpthread -lOpenCL \
 		-lXext -lX11 -lz -lm" \
-	"RANLIB = ranlib"
-
-ming:
-	$(MAKE) $(TARGET) \
-	"OPTOPT = " \
-	"SYSOPS = -DWIN32 -D_MINGW_ -mwindows" \
-	"INCLDIRS = -I.. -I../../FK_MingPack/include" \
-	"LFLAGS = -L../lib -L../../FK_MingPack/lib \
-		-Wl,--enable-auto-import" \
-	"SYSLIBS = -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_images \
-		-lfltk_forms -lfltk \
-		-lfreetype -liconv \
-		-lOpenAL32 -lvorbisfile -lvorbis -logg -lz \
-		-lwinmm -lole32 -luuid -lglu32 -lopengl32 \
-		-limm32 -lgdi32 -lcomctl32 -lwsock32 -lsupc++" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKLIB_S) $(FKLIB_S)"
+	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKLIB_S) $(FKSHADER_S)"
 
 mac:
 	$(MAKE) $(TARGET) \
@@ -264,47 +195,6 @@ mac-g:
 	"FKLINK = $(FKOPENCL_SG) $(FKAUDIO_SG) $(FKSHADER_SG) $(FKLIB_SG)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
-
-mac-gcc:
-	$(MAKE) $(TARGET) \
-	"CC = g++-mp-6" \
-	"LINKCC = g++-mp-6" \
-	"OPTOPT = -O -pipe" \
-	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
-	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
-		-framework ApplicationServices \
-		-framework OpenCL \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"RANLIB = ranlib" \
-	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
-	"SAMPLE = $(SAMPLEAPPS)"
-
-mac-gcc-g:
-	$(MAKE) $(TARGET) \
-	"CC = g++-mp-6" \
-	"LINKCC = g++-mp-6" \
-	"OPTOPT = -g" \
-	"SYSOPS = -D_MACOSX_" \
-	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
-	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
-		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
-		-framework ApplicationServices \
-		-framework Foundation \
-		-framework AudioToolBox" \
-	"RANLIB = ranlib" \
-	"FKLINK = $(FKOPENCL_SG) $(FKAUDIO_SG) $(FKSHADER_SG) $(FKLIB_SG)" \
-	"SAMPLE = $(SAMPLEAPPS)"
 
 CFLAGS = $(OPS) $(SYSOPS) $(INCLDIRS)
 

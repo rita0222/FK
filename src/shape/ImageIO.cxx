@@ -169,17 +169,17 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 	unsigned int		paletteSize;
 
 	if(ifs.fail()) {
-		return FK_IMAGE_OPENERROR;
+		return fk_ImageStatus::OPENERROR;
 	}
 
 	if(GetBmpFileHeader(ifs, bmpFileHeader) == false) {
 		ifs.close();
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	if(GetBmpInfoHeader(ifs, bmpInfoHeader) == false) {
 		ifs.close();
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	paletteSize = ChgUInt(bmpFileHeader, 10) - 54;
@@ -194,14 +194,14 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 				 static_cast<streamsize>(sizeof(fk_ImType) * paletteSize));
 		if(ifs.bad()) {
 			rgbQuad.clear();
-			return FK_IMAGE_DATAERROR;
+			return fk_ImageStatus::DATAERROR;
 		}
 	} else {
 		rgbQuad.clear();
 	}
 
 	tmpSize = GetOneBufferSize(static_cast<int>(bmpType), bmpSize.w);
-	if(tmpSize < 0) return FK_IMAGE_DATAERROR;
+	if(tmpSize < 0) return fk_ImageStatus::DATAERROR;
 
 	tmpBuffer.resize(static_cast<_st>(tmpSize));
 
@@ -214,7 +214,7 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 			ifs.close();
 			rgbQuad.clear();
 			tmpBuffer.clear();
-			return FK_IMAGE_DATAERROR;
+			return fk_ImageStatus::DATAERROR;
 		}
 
 		for(x = 0; x < bmpSize.w; x++) {
@@ -227,7 +227,7 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 	rgbQuad.clear();
 	tmpBuffer.clear();
 
-	return FK_IMAGE_OK;
+	return fk_ImageStatus::OK;
 }
 
 fk_ImageStatus fk_Image::LoadBmpData(fk_ImType *argBuffer)
@@ -263,7 +263,7 @@ fk_ImageStatus fk_Image::LoadBmpData(fk_ImType *argBuffer)
 	}
 
 	tmpSize = GetOneBufferSize(static_cast<int>(bmpType), bmpSize.w);
-	if(tmpSize < 0) return FK_IMAGE_DATAERROR;
+	if(tmpSize < 0) return fk_ImageStatus::DATAERROR;
 
 	for(y = bmpSize.h - 1, count = 0; y >= 0; y--, count++) {
 
@@ -274,7 +274,7 @@ fk_ImageStatus fk_Image::LoadBmpData(fk_ImType *argBuffer)
 		}
 	}
 
-	return FK_IMAGE_OK;
+	return fk_ImageStatus::OK;
 }
 
 void fk_Image::SetRGBA4Bmp(int argX, int argY,
@@ -359,10 +359,10 @@ fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 	int					y;
 	int					bitSize;
 
-	if(imageBuf.empty() == true) return FK_IMAGE_DATAERROR;
+	if(imageBuf.empty() == true) return fk_ImageStatus::DATAERROR;
 
 	if(ofs.fail()) {
-		return FK_IMAGE_OPENERROR;
+		return fk_ImageStatus::OPENERROR;
 	}
 
 	wSize = imageSize.w;
@@ -400,7 +400,7 @@ fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 	bmpInfoHeader.clear();
 	bmpBuffer.clear();
 
-	return FK_IMAGE_OK;
+	return fk_ImageStatus::OK;
 }
 
 void fk_Image::MakeBmpFileHeader(int argW, int argH, int argBitSize,
@@ -504,7 +504,7 @@ void fk_Image::MakeBmpBuffer(int argY, int argW,
 
 bool fk_Image::readBMP(const string argFName)
 {
-	if(CreateImg(argFName) != FK_IMAGE_OK) {
+	if(CreateImg(argFName) != fk_ImageStatus::OK) {
 		return false;
 	}
 
@@ -513,7 +513,7 @@ bool fk_Image::readBMP(const string argFName)
 
 bool fk_Image::readBMPData(fk_ImType *argBuffer)
 {
-	if(CreateImg(argBuffer) != FK_IMAGE_OK) {
+	if(CreateImg(argBuffer) != fk_ImageStatus::OK) {
 		return false;
 	}
 
@@ -522,7 +522,7 @@ bool fk_Image::readBMPData(fk_ImType *argBuffer)
 
 bool fk_Image::writeBMP(const string argFName, const bool argTransFlg)
 {
-	if(SaveBmpFile(argFName, argTransFlg) != FK_IMAGE_OK) {
+	if(SaveBmpFile(argFName, argTransFlg) != fk_ImageStatus::OK) {
 		return false;
 	}
 
@@ -572,25 +572,25 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	_st				trueX, trueY;
 	png_bytepp		tmpBuffer;
 
-	if(png_sig_cmp(argBuffer, 0, 4)) return FK_IMAGE_DATAERROR;
+	if(png_sig_cmp(argBuffer, 0, 4)) return fk_ImageStatus::DATAERROR;
 
 	// PNG構造体の初期化
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
 	if(png_ptr == nullptr) {
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// PNG情報構造体の初期化
 	info_ptr = png_create_info_struct(png_ptr);
 	if(info_ptr == nullptr) {
 		png_destroy_read_struct(&png_ptr, nullptr, nullptr);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	if(setjmp(png_jmpbuf(png_ptr))) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	png_set_read_fn(png_ptr, &argBuffer,
@@ -612,7 +612,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	// 16bit-depthのPNGは除外
 	if(depth == 16){
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// 画像サイズの取得
@@ -626,7 +626,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	// テンポラリイメージデータのメモリを取得
 	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == nullptr) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		return FK_IMAGE_READERROR;
+		return fk_ImageStatus::READERROR;
 	}
 	for(png_uint_32 i = 0; i < trueY; i++) {
 		// 1 ラインのテンポラリメモリを取得
@@ -637,7 +637,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 			}
 			free(tmpBuffer);
 			png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-			return FK_IMAGE_READERROR;
+			return fk_ImageStatus::READERROR;
 		}
 	}
 	// pngの内容を読み込み
@@ -646,7 +646,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	// pngの読込終了
 	png_read_end(png_ptr, info_ptr);
 
-	fk_ImageStatus result = FK_IMAGE_OK;
+	fk_ImageStatus result = fk_ImageStatus::OK;
 
 	// フルカラー(RGB)
 	if(type == PNG_COLOR_TYPE_RGB) {
@@ -739,7 +739,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 	}
 	// 想定外フォーマット
 	else {
-		result = FK_IMAGE_DATAERROR;
+		result = fk_ImageStatus::DATAERROR;
 	}
 
 	// メモリの解放
@@ -763,26 +763,26 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 
 	// ファイルの読込
 	if((fp = fopen(argFName.c_str(), "rb")) == nullptr) {
-		return FK_IMAGE_OPENERROR;
+		return fk_ImageStatus::OPENERROR;
 	}
 
 	// ヘッダの読込(4バイト)
 	if(fread(sig, 1, 4, fp) != 4) {
 		fclose(fp);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// PNGファイルであるかどうかをチェック
 	if(png_sig_cmp(sig, 0, 4)) {
 		fclose(fp);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// PNG構造体の初期化
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if(png_ptr == nullptr) {
 		fclose(fp);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// PNG情報構造体の初期化
@@ -790,13 +790,13 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	if(info_ptr == nullptr) {
 		png_destroy_read_struct(&png_ptr, nullptr, nullptr);
 		fclose(fp);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	if(setjmp(png_jmpbuf(png_ptr))) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		fclose(fp);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// ファイルポインタのセット
@@ -821,7 +821,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	if(depth == 16){
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		fclose(fp);
-		return FK_IMAGE_DATAERROR;
+		return fk_ImageStatus::DATAERROR;
 	}
 
 	// 画像サイズの取得
@@ -836,7 +836,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	if((tmpBuffer = static_cast<png_bytepp>(malloc(trueY * sizeof(png_bytep)))) == nullptr) {
 		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 		fclose(fp);
-		return FK_IMAGE_READERROR;
+		return fk_ImageStatus::READERROR;
 	}
 	for(png_uint_32 i = 0; i < trueY; i++) {
 		// 1 ラインのテンポラリメモリを取得
@@ -848,7 +848,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 			free(tmpBuffer);
 			png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 			fclose(fp);
-			return FK_IMAGE_READERROR;
+			return fk_ImageStatus::READERROR;
 		}
 	}
 	// pngの内容を読み込み
@@ -860,7 +860,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	// ファイルを閉じる
 	fclose(fp);
 
-	fk_ImageStatus result = FK_IMAGE_OK;
+	fk_ImageStatus result = fk_ImageStatus::OK;
 
 	// フルカラー(RGB)
 	if(type == PNG_COLOR_TYPE_RGB) {
@@ -953,7 +953,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 	}
 	// 想定外フォーマット
 	else {
-		result = FK_IMAGE_DATAERROR;
+		result = fk_ImageStatus::DATAERROR;
 	}
 
 	// メモリの解放
@@ -968,7 +968,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 
 bool fk_Image::readPNG(const string argFName)
 {
-	if(LoadPngFile(argFName) != FK_IMAGE_OK) {
+	if(LoadPngFile(argFName) != fk_ImageStatus::OK) {
 		return false;
 	}
 
@@ -977,7 +977,7 @@ bool fk_Image::readPNG(const string argFName)
 
 bool fk_Image::readPNGData(fk_ImType *argBuffer)
 {
-	if(LoadPngData(argBuffer) != FK_IMAGE_OK) {
+	if(LoadPngData(argBuffer) != fk_ImageStatus::OK) {
 		return false;
 	}
 

@@ -84,7 +84,7 @@ static fk_IDAdmin & fk_DLManager(void)
 }
 
 fk_DisplayLink::fk_DisplayLink(void)
-	: fk_BaseObject(FK_DISPLAYLINK)
+	: fk_BaseObject(fk_Type::DISPLAYLINK)
 {
 	camera = &localCamera;
 	displayID = fk_DLManager().CreateID();
@@ -123,20 +123,20 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 	if(argModel == nullptr) return;
 
 	if(argModel->getShape() != nullptr) {
-		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
+		if(argModel->getShape()->getRealShapeType() == fk_RealShapeType::LIGHT) {
 			fk_Light *light = dynamic_cast<fk_Light *>(argModel->getShape());
 			switch(light->getLightType()) {
-			  case FK_PARALLEL_LIGHT:
+			  case fk_LightType::PARALLEL:
 				  parallelLightList.remove(argModel);
 				  parallelLightList.push_front(argModel);
 				  break;
 
-			  case FK_POINT_LIGHT:
+			  case fk_LightType::POINT:
 				  pointLightList.remove(argModel);
 				  pointLightList.push_front(argModel);
 				  break;
 
-			  case FK_SPOT_LIGHT:
+			  case fk_LightType::SPOT:
 				  spotLightList.remove(argModel);
 				  spotLightList.push_front(argModel);
 				  break;
@@ -179,7 +179,7 @@ void fk_DisplayLink::entryOverlayModel(fk_Model *argModel)
 	if(argModel == nullptr) return;
 
 	if(argModel->getShape() != nullptr) {
-		if(argModel->getShape()->getRealShapeType() == FK_SHAPE_LIGHT) {
+		if(argModel->getShape()->getRealShapeType() == fk_RealShapeType::LIGHT) {
 			return;
 		}
 	}
@@ -222,13 +222,13 @@ list<fk_Model *> * fk_DisplayLink::GetModelList(void)
 list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 {
 	switch(argType) {
-	  case FK_PARALLEL_LIGHT:
+	  case fk_LightType::PARALLEL:
 		  return &parallelLightList;
 
-	  case FK_POINT_LIGHT:
+	  case fk_LightType::POINT:
 		  return &pointLightList;
 
-	  case FK_SPOT_LIGHT:
+	  case fk_LightType::SPOT:
 		  return &spotLightList;
 
 	  default:
@@ -258,17 +258,17 @@ void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 	if(argProj == nullptr) return;
 
 	switch(argProj->getMode()) {
-	  case FK_PERSPECTIVE_MODE:
+	  case fk_ProjectMode::PERSPECTIVE:
 		perspective = *(static_cast<fk_Perspective *>(argProj));
 		proj = &perspective;
 		break;
 
-	  case FK_FRUSTUM_MODE:
+	  case fk_ProjectMode::FRUSTUM:
 		frustum = *(static_cast<fk_Frustum *>(argProj));
 		proj = &frustum;
 		break;
 
-	  case FK_ORTHO_MODE:
+	  case fk_ProjectMode::ORTHO:
 		ortho = *(static_cast<fk_Ortho *>(argProj));
 		proj = &ortho;
 		break;
@@ -295,9 +295,9 @@ int fk_DisplayLink::GetProjChangeStatus(void) const
 void fk_DisplayLink::entryStereoCamera(fk_StereoChannel channel,
 									   fk_Model *argModel)
 {
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		stereoCamera[0] = argModel;
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		stereoCamera[1] = argModel;
 	}
 }
@@ -307,9 +307,9 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 {
 	int index;
 
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		index = 0;
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		index = 1;
 	} else {
 		return;
@@ -321,17 +321,17 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 	}
 
 	switch(argProj->getMode()) {
-	  case FK_PERSPECTIVE_MODE:
+	  case fk_ProjectMode::PERSPECTIVE:
 		stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
 		stereoProj[index] = &stereoPers[index];
 		break;
 
-	  case FK_FRUSTUM_MODE:
+	  case fk_ProjectMode::FRUSTUM:
 		stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
 		stereoProj[index] = &stereoFrus[index];
 		break;
 
-	  case FK_ORTHO_MODE:
+	  case fk_ProjectMode::ORTHO:
 		stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
 		stereoProj[index] = &stereoOrtho[index];
 		break;
@@ -343,9 +343,9 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 
 const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel channel)
 {
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		return stereoCamera[0];
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		return stereoCamera[1];
 	}
 	return nullptr;
@@ -353,9 +353,9 @@ const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel channel)
 
 const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel channel)
 {
-	if(channel == FK_STEREO_LEFT) {
+	if(channel == fk_StereoChannel::LEFT) {
 		return stereoProj[0];
-	} else if(channel == FK_STEREO_RIGHT) {
+	} else if(channel == fk_StereoChannel::RIGHT) {
 		return stereoProj[1];
 	}
 	return nullptr;

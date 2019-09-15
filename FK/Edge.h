@@ -82,17 +82,17 @@ namespace FK {
 	class fk_Curve;
 
 	//! 稜線状態を表す列挙型
-	enum fk_EdgeStatus {
-		FK_NONE_EDGE,		//!< 位相の不整合
-		FK_UNDEF_EDGE,		//!< 未定義稜線
-		FK_HALFDEF_EDGE,	//!< 半定義稜線
-		FK_BOTHDEF_EDGE		//!< 両定義稜線
+	enum class fk_EdgeStatus {
+		NONE,	//!< 位相の不整合
+		UNDEF,	//!< 未定義稜線
+		HALF,	//!< 半定義稜線
+		BOTH	//!< 両定義稜線
 	};
 
 	//! 幾何曲線の種類を表す列挙型
-	enum fk_CurveType {
-		FK_BEZ_CURVE,		//!< Bezier 曲線
-		FK_BSPL_CURVE		//!< B-Spline 曲線
+	enum class fk_CurveType {
+		BEZ,	//!< Bezier 曲線
+		BSPL	//!< B-Spline 曲線
 	};
 
 	//! ソリッドモデルの稜線位相を管理するクラス

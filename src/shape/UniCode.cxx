@@ -80,7 +80,7 @@
 using namespace std;
 using namespace FK;
 
-#if defined(_MACOSX_)
+#if defined(_MACOSX_) || defined(_LINUX_)
 using iconvpp = char **;
 #else
 using iconvpp = const char **;
@@ -146,11 +146,11 @@ static fk_StrStack * getStrStack(void)
 	return &strStack;
 }
 
-static fk_StringCode	defCode = FK_STR_UTF16;
+static fk_StringCode	defCode = fk_StringCode::UTF16;
 
 
 fk_UniChar::fk_UniChar(int argCode)
-	: fk_BaseObject(FK_UNICHAR)
+	: fk_BaseObject(fk_Type::UNICHAR)
 {
 	setCode(argCode);
 	return;
@@ -216,7 +216,7 @@ char fk_UniChar::getAscii(void)
 }
 
 fk_UniStr::fk_UniStr(void)
-	: fk_BaseObject(FK_UNISTR)
+	: fk_BaseObject(fk_Type::UNISTR)
 {
 	clear();
 	return;
@@ -274,7 +274,7 @@ bool fk_UniStr::fgetLine(FILE *argFP, fk_StringCode argCode)
 	if(argFP == nullptr) return false;
 	if(feof(argFP) != 0) return false;
 
-	if(argCode == FK_STR_UTF16) {
+	if(argCode == fk_StringCode::UTF16) {
 		return fgetLine_UTF16(argFP);
 	}
 
@@ -295,7 +295,7 @@ bool fk_UniStr::fgetLine(ifstream *argIFS, fk_StringCode argCode)
 	if(argIFS == nullptr) return false;
 	if(argIFS->eof() == true) return false;
 
-	if(argCode == FK_STR_UTF16) {
+	if(argCode == fk_StringCode::UTF16) {
 		return fgetLine_UTF16(argIFS);
 	}
 
@@ -314,7 +314,7 @@ void fk_UniStr::convert(const string &argStr, fk_StringCode argCode)
 
 	clear();
 	switch(argCode) {
-	  case FK_STR_UTF16:
+	  case fk_StringCode::UTF16:
 		for(i = 0; i < argStr.size(); i += 2) {
 			uniChar.setBuffer(static_cast<unsigned char>(argStr[i]),
 							  static_cast<unsigned char>(argStr[i+1]));
@@ -322,19 +322,19 @@ void fk_UniStr::convert(const string &argStr, fk_StringCode argCode)
 		}
 		break;
 
-	  case FK_STR_JIS:
+	  case fk_StringCode::JIS:
 		getStrConverter()->convertJIS(argStr, this);
 		break;
 
-	  case FK_STR_SJIS:
+	  case fk_StringCode::SJIS:
 		getStrConverter()->convertSJIS(argStr, this);
 		break;
 
-	  case FK_STR_EUC:
+	  case fk_StringCode::EUC:
 		getStrConverter()->convertEUC(argStr, this);
 		break;
 
-	  case FK_STR_UTF8:
+	  case fk_StringCode::UTF8:
 		getStrConverter()->convertUTF8(argStr, this);
 		break;
 
@@ -860,23 +860,23 @@ void fk_StrConverter::convert_UTF8(const string &argStr, string *outStr, fk_Stri
 	if(outStr == nullptr) return;
 
 	switch(argCode) {
-	  case FK_STR_JIS:
+	  case fk_StringCode::JIS:
 		ConvertJIS_UTF8(argStr, outStr);
 		break;
 
-	  case FK_STR_SJIS:
+	  case fk_StringCode::SJIS:
 		ConvertSJIS_UTF8(argStr, outStr);
 		break;
 
-	  case FK_STR_EUC:
+	  case fk_StringCode::EUC:
 		ConvertEUC_UTF8(argStr, outStr);
 		break;
 
-	  case FK_STR_UTF16:
+	  case fk_StringCode::UTF16:
 		ConvertUTF16_UTF8(argStr, outStr);
 		break;
 
-	  case FK_STR_UTF8:
+	  case fk_StringCode::UTF8:
 		*outStr = argStr;
 		break;
 
@@ -932,23 +932,23 @@ void fk_StrConverter::convert_SJIS(const string &argStr, string *outStr, fk_Stri
 	if(outStr == nullptr) return;
 
 	switch(argCode) {
-	  case FK_STR_JIS:
+	  case fk_StringCode::JIS:
 		ConvertJIS_SJIS(argStr, outStr);
 		break;
 
-	  case FK_STR_EUC:
+	  case fk_StringCode::EUC:
 		ConvertEUC_SJIS(argStr, outStr);
 		break;
 
-	  case FK_STR_UTF8:
+	  case fk_StringCode::UTF8:
 		ConvertUTF8_SJIS(argStr, outStr);
 		break;
 
-	  case FK_STR_UTF16:
+	  case fk_StringCode::UTF16:
 		ConvertUTF16_SJIS(argStr, outStr);
 		break;
 
-	  case FK_STR_SJIS:
+	  case fk_StringCode::SJIS:
 		*outStr = argStr;
 		break;
 

@@ -73,19 +73,19 @@
 
 using namespace FK;
 
-fk_BaseObject::fk_BaseObject(fk_ObjectType argObjType)
+fk_BaseObject::fk_BaseObject(fk_Type argObjType)
 {
 	ObjectType = argObjType;
 	return;
 }
 
-void fk_BaseObject::SetObjectType(const fk_ObjectType argObjType)
+void fk_BaseObject::SetObjectType(const fk_Type argObjType)
 {
 	ObjectType = argObjType;
 	return;
 }
 
-fk_ObjectType fk_BaseObject::getObjectType(void) const
+fk_Type fk_BaseObject::getObjectType(void) const
 {
 	return ObjectType;
 }

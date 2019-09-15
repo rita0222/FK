@@ -78,6 +78,7 @@
 #include <FK/Edge.h>
 #include <FK/Loop.h>
 #include <FK/SubDivision.H>
+#include <FK/Math.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -673,13 +674,13 @@ void fk_Modify::setBlockSize(double argSize, fk_Axis argAxis)
 	scaleX = scaleY = scaleZ = 1.0;
 
 	switch(argAxis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		scaleX = argSize/(basePos.x * 2.0);
 		break;
-	  case fk_Y:
+	  case fk_Axis::Y:
 		scaleY = argSize/(basePos.y * 2.0);
 		break;
-	  case fk_Z:
+	  case fk_Axis::Z:
 		scaleZ = argSize/(basePos.z * 2.0);
 		break;
 	  default:
@@ -716,13 +717,13 @@ void fk_Modify::setBlockScale(double argScale, fk_Axis argAxis)
 	scaleX = scaleY = scaleZ = 1.0;
 
 	switch(argAxis) {
-	  case fk_X:
+	  case fk_Axis::X:
 		scaleX = argScale;
 		break;
-	  case fk_Y:
+	  case fk_Axis::Y:
 		scaleY = argScale;
 		break;
-	  case fk_Z:
+	  case fk_Axis::Z:
 		scaleZ = argScale;
 		break;
 	  default:
@@ -779,7 +780,7 @@ void fk_Modify::makeCircle(int argDiv, double argRadius)
 	VecArray[0].set(0.0, 0.0, 0.0);
 
 	for(i = 0; i < 4 * div; i++) {
-		theta = (static_cast<double>(i) * FK_PI)/(static_cast<double>(div*2));
+		theta = (static_cast<double>(i) * fk_Math::PI)/(static_cast<double>(div*2));
 		VecArray[i+1].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 	}
 
@@ -885,7 +886,7 @@ void fk_Modify::makeSphere(int argDiv, double argRadius)
 
 	for(i = 0; i < argDiv*2 - 1; i++) {
 		ii = static_cast<_st>(i);
-		xz_radius[ii] = argRadius*sin(static_cast<double>(i+1)*FK_PI/(argDiv*2.0));
+		xz_radius[ii] = argRadius*sin(static_cast<double>(i+1)*fk_Math::PI/(argDiv*2.0));
 	}
 
 	VecArray.front().set(0.0, argRadius, 0.0);
@@ -897,8 +898,8 @@ void fk_Modify::makeSphere(int argDiv, double argRadius)
 			ii = static_cast<_st>(i);
 			jj = static_cast<_st>(index);
 
-			theta1 = static_cast<double>(j)*FK_PI/(argDiv*2.0);
-			theta2 = static_cast<double>(i+1)*FK_PI/(argDiv*2.0);
+			theta1 = static_cast<double>(j)*fk_Math::PI/(argDiv*2.0);
+			theta2 = static_cast<double>(i+1)*fk_Math::PI/(argDiv*2.0);
 			VecArray[jj].set(xz_radius[ii] * cos(theta1),
 							 argRadius * cos(theta2),
 							 xz_radius[ii] * sin(theta1));
@@ -1033,7 +1034,7 @@ void fk_Modify::makePrism(int argDiv, double argTop, double argBottom,
 	VecArray[static_cast<_st>(argDiv + 1)].set(0.0, 0.0, -argHeight);
 
 	for(i = 0; i < argDiv; i++) {
-		theta = (static_cast<double>(i*2) * FK_PI)/static_cast<double>(argDiv);
+		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(argDiv);
 		VecArray[static_cast<_st>(i+1)].set(cos(theta) * argBottom,
 						  sin(theta) * argBottom, 0.0);
 		VecArray[static_cast<_st>(argDiv+i+2)].set(cos(theta) * argTop, 
@@ -1125,7 +1126,7 @@ void fk_Modify::setPrismTopRadius(double argTop)
 	z = getVData(div+3)->getPosition().z;
 	for(i = 0; i < div; i++) {
 		v = getVData(div+i+3);
-		theta = (static_cast<double>(i*2) * FK_PI)/static_cast<double>(div);
+		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(div);
 		pos.set(cos(theta) * argTop, sin(theta) * argTop, z);
 		moveVertex(v, pos);
 	}
@@ -1144,7 +1145,7 @@ void fk_Modify::setPrismBottomRadius(double argBottom)
 	div = getVNum()/2 - 1;
 	for(i = 0; i < div; i++) {
 		v = getVData(i+2);
-		theta = (static_cast<double>(i*2) * FK_PI)/static_cast<double>(div);
+		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(div);
 		pos.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
 		moveVertex(v, pos);
 	}
@@ -1188,7 +1189,7 @@ void fk_Modify::makeCone(int argDiv, double argRadius, double argHeight)
 	VecArray[1].set(0.0, 0.0, -argHeight);
 
 	for(i = 0; i < argDiv; i++) {
-		theta = (static_cast<double>(i*2) * FK_PI)/static_cast<double>(argDiv);
+		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(argDiv);
 		VecArray[static_cast<_st>(i+2)].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 	}
 
@@ -1248,7 +1249,7 @@ void fk_Modify::setConeRadius(double argRadius)
 	div = getVNum()-2;
 	for(i = 0; i < div; i++) {
 		v = getVData(i+3);
-		theta = (static_cast<double>(i*2) * FK_PI)/static_cast<double>(div);
+		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(div);
 		pos.set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 		moveVertex(v, pos);
 	}

@@ -75,8 +75,8 @@ using namespace FK;
 
 fk_Fog::fk_Fog(void)
 {
-	setFogMode(FK_NONE_FOG);
-	setFogOption(FK_NOOPTION_FOG);
+	setFogMode(fk_FogMode::NONE);
+	setFogOption(fk_FogOption::NOOPTION);
 	setFogDensity(0.35);
 	setFogLinearMap(1.0, 5.0);
 	setFogColor(0.5, 0.5, 0.5, 1.0);

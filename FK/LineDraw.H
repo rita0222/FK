@@ -82,7 +82,7 @@ namespace FK {
 		fk_LineDraw(void);
 		virtual ~fk_LineDraw();
 
-		void	DrawShapeLine(fk_Model *);
+		void	DrawShapeLine(fk_Model *, fk_Shape * = nullptr);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
@@ -92,8 +92,8 @@ namespace FK {
 		void	ShaderSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
- 		void	Draw_Line(fk_Model *, fk_ShaderParameter *);
- 		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
+ 		void	Draw_Line(fk_LineBase *, fk_ShaderParameter *);
+ 		void	Draw_IFS(fk_IndexFaceSet *, fk_ShaderParameter *);
 	};
 }
 #endif /* !__FK_LINE_DRAW_HEADER__ */

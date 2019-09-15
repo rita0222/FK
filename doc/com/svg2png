@@ -12,14 +12,14 @@ foreach $svgName (@ARGV) {
 	$pngName =~ s/.svg$/.png/;
 
 	if($opts{"i"} == 1) {
-	    $com = "inkscape --export-area-drawing --file=";
+	    $com = "inkscape --export-area-drawing --export-dpi=144 --file=";
 	    $com .= $svgName;
 	    $com .= " --export-png=";
 	    $com .= $pngName;
 	} else {
-	    $com = "rsvg-convert ";
+	    $com = "convert -trim -density 600 -resize 1024x ";
 	    $com .= $svgName;
-	    $com .= " -z 0.8 --format=png -o ";
+	    $com .= " ";
 	    $com .= $pngName;
 	}
 	if(!(-f $pngName)) {

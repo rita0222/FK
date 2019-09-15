@@ -85,7 +85,7 @@ static fk_Material * dummyMat()
 }
 
 fk_Palette::fk_Palette(void)
-	: fk_BaseObject(FK_PALETTE)
+	: fk_BaseObject(fk_Type::PALETTE)
 {
 	clearMaterial();
 	return;

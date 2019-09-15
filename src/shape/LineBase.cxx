@@ -91,7 +91,7 @@ fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
 	
 	posArray.setDim(3);
 	colArray.setDim(4);
-	realType = FK_SHAPE_LINE;
+	realType = fk_RealShapeType::LINE;
 	AllClear();
 	MakeLines(argVertexPos);
 

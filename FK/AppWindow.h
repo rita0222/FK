@@ -85,20 +85,6 @@
 
 namespace FK {
 
-	enum fk_PadDirection {
-		FK_PAD_UP = 32,
-		FK_PAD_DOWN,
-		FK_PAD_LEFT,
-		FK_PAD_RIGHT
-	};
-
-	using fkut_PadDirection = fk_PadDirection;
-
-#define FKUT_PAD_UP		FK_PAD_UP
-#define FKUT_PAD_DOWN	FK_PAD_DOWN
-#define FKUT_PAD_LEFT	FK_PAD_LEFT
-#define FKUT_PAD_RIGHT	FK_PAD_RIGHT
-
 	//! アプリケーションウィンドウクラス
 	/*!
 	 *	このクラスは、
@@ -288,14 +274,13 @@ namespace FK {
 		//! グリッド・軸設定関数
 		/*!
 		 *	画面内の座標系を表すグリッドと軸を指定します。
-		 *	FK_AXIS_X, FK_AXIS_Y, FK_AXIS_Zがそれぞれの軸を、
-		 *	FK_GRID_XZ, FK_GRID_XY, 
-		 *	FK_GRID_YZがそれぞれの平面を表すグリッドに対応します。
+		 *	fk_Guide::AXIS_X, fk_Guide::AXIS_Y, fk_Guide::AXIS_Z がそれぞれの軸を、
+		 *	fk_Guide::GRID_XZ, fk_Guide::GRID_XY, 
+		 *	fk_Guide::GRID_YZ がそれぞれの平面を表すグリッドに対応します。
 		 *	複数の要素を指定したい場合は | (ビットOR演算子)で区切って指定できます。
-		 *	FK_NO_GUIDEで全て非表示に、
-		 *	FK_ALL_GUIDEで全ての軸・グリッドを表示します。
+		 *	fk_Guide::NO_GUIDE で全て非表示にします。
 		 *	引数を省略した場合は、XYZの各軸とXZ平面のグリッドを表示します。
-		 *	デフォルトでは全て非表示(FK_NO_GUIDE)です。
+		 *	デフォルトでは全て非表示 (fk_Guide::NO_GUIDE) です。
 		 *
 		 *	\param[in]		mode
 		 *		表示するグリッド・軸の指定。複数を表示する場合は、
@@ -304,13 +289,16 @@ namespace FK {
 		 *	\sa hideGuide(), setGuideAxisWidth(), setGuideGridWidth(),
 		 *		setGuideScale(), setGuideNum(), fk_GuideMode
 		 */
-		void showGuide(fk_GuideMode mode =
-					   FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
+		void showGuide(fk_Guide mode =
+					   fk_Guide::AXIS_X |
+					   fk_Guide::AXIS_Y |
+					   fk_Guide::AXIS_Z |
+					   fk_Guide::GRID_XZ);
 
 		//! グリッド・軸消去関数
 		/*!
 		 *	showGuide() で表示した軸とグリッドを消去します。
-		 *	showGuide(FK_NO_GUIDE) と等価です。
+		 *	showGuide(fk_Guide::NO_GUIDE) と等価です。
 		 *
 		 *	\sa showGuide()
 		 */
@@ -758,7 +746,7 @@ namespace FK {
 		 *		スペースキーの状態を取得したい場合は「' '」と入力します。
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlg
 		 *		true だった場合、
@@ -771,20 +759,20 @@ namespace FK {
 		 *
 		 *	\sa getSpecialKeyStatus(), update()
 		 */
-		bool	getKeyStatus(char keyChar, fk_SwitchStatus status, bool insideFlg = false);
+		bool	getKeyStatus(char keyChar, fk_Switch status, bool insideFlg = false);
 
 		//! 特殊キー状態取得関数
 		/*!
 		 *	特殊キーの入力状態を検出します。
-		 *	引数として、検出したいキーに対応した ::fk_SpecialKey 型の値を入力します。
-		 *	例えば、上矢印キーの状態を取得したい場合には「FK_UP」を入力します。
+		 *	引数として、検出したいキーに対応した fk_SpecialKey 型の値を入力します。
+		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey::UP」を入力します。
 		 *	通常キーの状態取得は getKeyStatus() を使います。
 		 *
 		 *	\param[in]	keyCode
 		 *		状態を取得したいキーに対応した値。
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlg
 		 *		true だった場合、
@@ -801,11 +789,11 @@ namespace FK {
 		 *	\sa getKeyStatus(), update()
 		 */
 		bool	getSpecialKeyStatus(fk_SpecialKey keyCode,
-									fk_SwitchStatus status, bool insideFlg = false);
+									fk_Switch status, bool insideFlg = false);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_SwitchStatus	getSpecialKeyStatus(fk_SpecialKey keyCode);
-		fk_SwitchStatus	getKeyStatus(char keyChar);
+		fk_Switch	getSpecialKeyStatus(fk_SpecialKey keyCode);
+		fk_Switch	getKeyStatus(char keyChar);
 #endif
 		//@}
 
@@ -815,12 +803,12 @@ namespace FK {
 		//! マウスボタン状態取得関数
 		/*!
 		 *	マウスボタンのクリック状態を検出します。
-		 *	マウスボタンの種類については、 ::fk_MouseButton の項目を参照して下さい。
+		 *	マウスボタンの種類については、 fk_MouseButton の項目を参照して下さい。
 		 *
 		 *	\param[in]		buttonCode		マウスボタンの種類
 		 *
 		 *	\param[in]	status
-		 *		取得したい状態を指定します。種類については ::fk_SwitchStatus を参照してください。
+		 *		取得したい状態を指定します。種類については fk_Switch を参照してください。
 		 *
 		 *	\param[in]	insideFlag
 		 *		true だった場合、
@@ -832,10 +820,10 @@ namespace FK {
 		 *		そうでなければ false を返します。
 		 */
 		bool	getMouseStatus(fk_MouseButton buttonCode,
-							   fk_SwitchStatus status, bool insideFlag);
+							   fk_Switch status, bool insideFlag);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_SwitchStatus		getMouseStatus(fk_MouseButton buttonCode);
+		fk_Switch		getMouseStatus(fk_MouseButton buttonCode);
 #endif	
 
 		//! マウスポインタ位置取得関数

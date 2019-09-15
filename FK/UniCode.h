@@ -80,12 +80,12 @@ namespace FK {
 	class fk_StrConverterBase;
 
 	//! 日本語文字コードを表す列挙型
-	enum fk_StringCode {
-		FK_STR_UTF16,	//!< Unicode (UTF-16)
-		FK_STR_UTF8,	//!< Unicode (UTF-8)
-		FK_STR_JIS,		//!< ISO-2022-JIS (JISコード)
-		FK_STR_SJIS,	//!< Shift-JIS (SJISコード)
-		FK_STR_EUC		//!< EUC
+	enum class fk_StringCode {
+		UTF16,	//!< Unicode (UTF-16)
+		UTF8,	//!< Unicode (UTF-8)
+		JIS,	//!< ISO-2022-JIS (JISコード)
+		SJIS,	//!< Shift-JIS (SJISコード)
+		EUC		//!< EUC
 	};
 
 	//! Unicode の文字を表すクラス
@@ -284,7 +284,7 @@ namespace FK {
 		 *
 		 *	\sa getLine(), readFile()
 		 */
-		bool	fgetLine(FILE *fp, fk_StringCode code = FK_STR_UTF16);
+		bool	fgetLine(FILE *fp, fk_StringCode code = fk_StringCode::UTF16);
 
 		//! ファイル一行分取得関数2
 		/*!
@@ -314,7 +314,7 @@ namespace FK {
 		 *	\sa getLine(), readFile()
 		 */
 
-		bool	fgetLine(std::ifstream *ifs, fk_StringCode code = FK_STR_UTF16);
+		bool	fgetLine(std::ifstream *ifs, fk_StringCode code = fk_StringCode::UTF16);
 		//! ファイル全体取得関数
 		/*!
 		 *	テキストファイル全体を格納します。
@@ -333,7 +333,7 @@ namespace FK {
 		 *	\sa fgetLine(), copyStr()
 		 */
 		bool	readFile(const std::string fileName,
-						 fk_StringCode code = FK_STR_UTF16);
+						 fk_StringCode code = fk_StringCode::UTF16);
 
 		//! 文字列コピー関数
 		/*!
@@ -354,7 +354,7 @@ namespace FK {
 		 *	以下のように直接コードに記述することも可能です。
 		 *
 		 *		fk_UniStr	str;
-		 *		str.convert("サンプル", FK_STR_SJIS);
+		 *		str.convert("サンプル", fk_StringCode::SJIS);
 		 *
 		 *	printf 形式の書式付きで生成したい場合は、 printf() を利用して下さい。
 		 *
@@ -381,7 +381,7 @@ namespace FK {
 		 *		fk_UniStr	str[10];
 		 *
 		 *		for(int i = 0; i < 10; i++) {
-		 *			str[i].printf(FK_STR_SJIS, "%dです", i);
+		 *			str[i].printf(fk_StringCode::SJIS, "%dです", i);
 		 *		}
 		 *
 		 *	\param[in]	code

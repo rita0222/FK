@@ -121,7 +121,7 @@ namespace FK {
 		//! 比較等号演算子
 		/*!
 		 *	この等号演算子では、各色要素の差が
-		 *	FK_COLOR_EPS(現バージョンでは 0.0001) 内の誤差内であれば
+		 *	fk_Color::EPS (現バージョンでは 0.0001) 内の誤差内であれば
 		 *	等しいと判断します。
 		 */
 		friend bool operator==(fk_Material left, fk_Material right);

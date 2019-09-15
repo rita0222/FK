@@ -130,19 +130,19 @@ public:
 };
 #endif
 
-const static fk_SwitchStatus stArray[4] = {
-	FK_SW_UP,
-	FK_SW_DOWN,
-	FK_SW_RELEASE
+const static fk_Switch stArray[4] = {
+	fk_Switch::UP,
+	fk_Switch::DOWN,
+	fk_Switch::RELEASE
 };
 
 // スクリーンモードのハンドリング処理
 void fk_AppWindow::ToggleScreen(void)
 {
 	// ALT+ENTERでフルスクリーンとウィンドウモードを切り替え
-	if(getSpecialKeyStatus(FK_ALT_L) >= FK_SW_DOWN
-	|| getSpecialKeyStatus(FK_ALT_R) >= FK_SW_DOWN) {
-		if(getSpecialKeyStatus(FK_ENTER) == FK_SW_DOWN) {
+	if(getSpecialKeyStatus(fk_SpecialKey::ALT_L) >= fk_Switch::DOWN
+	|| getSpecialKeyStatus(fk_SpecialKey::ALT_R) >= fk_Switch::DOWN) {
+		if(getSpecialKeyStatus(fk_SpecialKey::ENTER) == fk_Switch::DOWN) {
 			if(fsc.isFullscreen() == true) {
 				fsc.changeToWindow();
 			} else {
@@ -264,7 +264,7 @@ fk_AppWindow::~fk_AppWindow(void)
 
 void fk_AppWindow::setWindowName(const std::string &name)
 {
-	mainWin->label(fk_Code::utf8(name.c_str(), FK_STR_SJIS));
+	mainWin->label(name.c_str());
 	return;
 }
 
@@ -311,7 +311,7 @@ void fk_AppWindow::setTrackBallMode(bool mode)
 	tbFlag = mode;
 }
 
-void fk_AppWindow::showGuide(fk_GuideMode mode)
+void fk_AppWindow::showGuide(fk_Guide mode)
 {
 	guide.entryScene(ref_scene, mode);
 }
@@ -547,67 +547,67 @@ bool fk_AppWindow::update(bool argForceDraw)
 	return true;
 }
 
-fk_SwitchStatus GetSwitchStatus(bool now, bool pre)
+fk_Switch GetSwitchStatus(bool now, bool pre)
 {
 	switch((int)now*2 + (int)pre) {
 	case 0:
-		return FK_SW_RELEASE;
+		return fk_Switch::RELEASE;
 	case 1:
-		return FK_SW_UP;
+		return fk_Switch::UP;
 	case 2:
-		return FK_SW_DOWN;
+		return fk_Switch::DOWN;
 	case 3:
-		return FK_SW_PRESS;
+		return fk_Switch::PRESS;
 	default:
-		return FK_SW_RELEASE;
+		return fk_Switch::RELEASE;
 	}
 }
 
-bool fk_AppWindow::getKeyStatus(char argKey, fk_SwitchStatus argStatus, bool argInsideFlg)
+bool fk_AppWindow::getKeyStatus(char argKey, fk_Switch argStatus, bool argInsideFlg)
 {
 	return drawWin->getKeyStatus(argKey, argStatus, argInsideFlg);
 }
 
-fk_SwitchStatus fk_AppWindow::getKeyStatus(char argKey)
+fk_Switch fk_AppWindow::getKeyStatus(char argKey)
 {
 	//return GetSwitchStatus(drawWin->getKeyStatus(argKey, false), prevKeySt[(int)argKey]);
 
 	for(int i = 0; i < 3; ++i) {
 		if(getKeyStatus(argKey, stArray[i], false) == true) return stArray[i];
 	}
-	return FK_SW_PRESS;
+	return fk_Switch::PRESS;
 }
 
 bool fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey argKey,
-									   fk_SwitchStatus argStatus, bool argInsideFlg)
+									   fk_Switch argStatus, bool argInsideFlg)
 {
 	return drawWin->getSpecialKeyStatus(argKey, argStatus, argInsideFlg);
 }
 
-fk_SwitchStatus fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey argKey)
+fk_Switch fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey argKey)
 {
 	//return GetSwitchStatus(drawWin->getSpecialKeyStatus(argKey, false), prevSPKeySt[(int)argKey]);
 
 	for(int i = 0; i < 3; ++i) {
 		if(getSpecialKeyStatus(argKey, stArray[i], false) == true) return stArray[i];
 	}
-	return FK_SW_PRESS;
+	return fk_Switch::PRESS;
 }
 
 bool fk_AppWindow::getMouseStatus(fk_MouseButton argButton,
-								  fk_SwitchStatus argStatus, bool argInsideFlg)
+								  fk_Switch argStatus, bool argInsideFlg)
 {
 	return drawWin->getMouseStatus(argButton, argStatus, argInsideFlg);
 }
 
-fk_SwitchStatus fk_AppWindow::getMouseStatus(fk_MouseButton argButton)
+fk_Switch fk_AppWindow::getMouseStatus(fk_MouseButton argButton)
 {
 	//return GetSwitchStatus(drawWin->getMouseStatus(argButton, false), prevMouseSt[(int)argButton]);
 
 	for(int i = 0; i < 3; ++i) {
 		if(getMouseStatus(argButton, stArray[i], false) == true) return stArray[i];
 	}
-	return FK_SW_PRESS;
+	return fk_Switch::PRESS;
 }
 
 fk_Vector fk_AppWindow::getMousePosition(void)
@@ -683,7 +683,7 @@ void fk_AppWindow::procMouseView(fk_Model *camera, double spinX, double spinY, b
 	nowY = po.y;
 	diffX = nowX - prevX;
 	diffY = nowY - prevY;
-	camera->glRotateWithVec(camera->getPosition(), fk_Y, -diffX*spinX);
+	camera->glRotateWithVec(camera->getPosition(), fk_Axis::Y, -diffX*spinX);
 	camera->glRotateWithVec(camera->getPosition(), camera->getPosition()+(camera->getVec()^camera->getUpVec()), -diffY*spinY);
 	if(lockSW == true){
 		SetCursorPos(prevX, prevY);

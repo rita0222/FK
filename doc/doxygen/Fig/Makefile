@@ -11,7 +11,7 @@ clean:
 doc: $(PNGFILE) $(EPSFILE)
 
 %.png : %.svg
-	../../com/svg2png $<
+	../../com/svg2png -i $<
 
 %.eps : %.svg
 	../../com/svg2eps $<

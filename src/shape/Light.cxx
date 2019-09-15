@@ -70,6 +70,7 @@
  *
  ****************************************************************************/
 #include <FK/Light.h>
+#include <FK/Math.h>
 
 using namespace FK;
 
@@ -77,13 +78,13 @@ const int fk_Light::MAXLIGHTNUM = 8;
 
 fk_Light::fk_Light(fk_LightType argType)
 {
-	realType = FK_SHAPE_LIGHT;
-	SetObjectType(FK_LIGHT);
+	realType = fk_RealShapeType::LIGHT;
+	SetObjectType(fk_Type::LIGHT);
 	setLightType(argType);
 	attenuation[0] = attenuation[1] = 0.0;
 	attenuation[2] = 1.0;
 	spotExponent = 0.0;
-	spotCutOff = FK_PI/16.0;
+	spotCutOff = fk_Math::PI/16.0;
 
 	return;
 }
@@ -107,24 +108,24 @@ fk_LightType fk_Light::getLightType(void)
 
 void fk_Light::setAttenuation(double argK_l, double argK_q, double argK_c)
 {
-	attenuation[0] = (argK_l < FK_EPS) ? 0.0 : argK_l;
-	attenuation[1] = (argK_q < FK_EPS) ? 0.0 : argK_q;
-	attenuation[2] = (argK_c < FK_EPS) ? 0.0 : argK_c;
+	attenuation[0] = (argK_l < fk_Math::EPS) ? 0.0 : argK_l;
+	attenuation[1] = (argK_q < fk_Math::EPS) ? 0.0 : argK_q;
+	attenuation[2] = (argK_c < fk_Math::EPS) ? 0.0 : argK_c;
 
 	return;
 }
 
 void fk_Light::setSpotExponent(double argExp)
 {
-	spotExponent = (argExp < FK_EPS) ? 0.0 : argExp;
+	spotExponent = (argExp < fk_Math::EPS) ? 0.0 : argExp;
 
 	return;
 }
 
 void fk_Light::setSpotCutOff(double argCurAngle)
 {
-	if(argCurAngle > FK_PI/2.0) spotCutOff = FK_EPS;
-	else if(argCurAngle < FK_EPS) spotCutOff = 0.0;
+	if(argCurAngle > fk_Math::PI/2.0) spotCutOff = fk_Math::EPS;
+	else if(argCurAngle < fk_Math::EPS) spotCutOff = 0.0;
 	else spotCutOff = argCurAngle;
 
 	return;

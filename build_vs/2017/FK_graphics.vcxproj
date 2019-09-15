@@ -19,21 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
     <ClCompile Include="..\..\src\graphics\Engine.cxx" />
     <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
     <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\FK\CurveDraw.H" />
     <ClInclude Include="..\..\FK\DrawBase.H" />
     <ClInclude Include="..\..\FK\Engine.H" />
     <ClInclude Include="..\..\FK\FaceDraw.H" />
     <ClInclude Include="..\..\FK\FrameController.h" />
     <ClInclude Include="..\..\FK\LineDraw.H" />
     <ClInclude Include="..\..\FK\PointDraw.H" />
+    <ClInclude Include="..\..\FK\SurfaceDraw.H" />
     <ClInclude Include="..\..\FK\TextureDraw.H" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

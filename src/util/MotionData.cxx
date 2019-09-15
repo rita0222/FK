@@ -98,21 +98,23 @@ void fk_PerformerMotion::init(void)
 	return;
 }
 
-fk_Vector fk_PerformerMotion::getInterVec(const fk_Vector &vecA, const fk_Vector &vecB, double t, fk_MotionInterType argType)
+fk_Vector fk_PerformerMotion::getInterVec(const fk_Vector &vecA,
+										  const fk_Vector &vecB, double t,
+										  fk_MotionInterType argType)
 {
 	if(vecA == vecB) return vecA;
 
 	switch(argType) {
-	case LINEAR:
+	  case fk_MotionInterType::LINEAR:
 		return (1.0-t)*vecA + t*vecB;
-	case SPHERE:
-		return pow(cos(t*FK_PI/2.0), 2)*vecA + pow(sin(t*FK_PI/2.0), 2)*vecB;
-	case POWER:
+	  case fk_MotionInterType::SPHERE:
+		return pow(cos(t*fk_Math::PI/2.0), 2)*vecA + pow(sin(t*fk_Math::PI/2.0), 2)*vecB;
+	  case fk_MotionInterType::POWER:
 		return (1.0-pow(t, 3))*vecA + pow(t, 3)*vecB;
-	case REV_POWER:
+	  case fk_MotionInterType::REV_POWER:
 		return pow(1.0-t, 3)*vecA + (1.0-pow(1.0-t, 3))*vecB;
-	case FREEZE:
-	case HIDE:		// <----------------------------------------------------オブジェクトのすげ替え対応のため追加
+	  case fk_MotionInterType::FREEZE:
+	  case fk_MotionInterType::HIDE:
 		return vecB;
 	default:
 		break;
@@ -121,38 +123,50 @@ fk_Vector fk_PerformerMotion::getInterVec(const fk_Vector &vecA, const fk_Vector
 	return fk_Vector();
 }
 
-fk_Quaternion fk_PerformerMotion::getInterQ(const fk_Quaternion &qA, const fk_Quaternion &qB, double t, fk_MotionInterType argType)
+fk_Quaternion fk_PerformerMotion::getInterQ(const fk_Quaternion &qA,
+											const fk_Quaternion &qB,
+											double t, fk_MotionInterType argType)
 {
 	if(qA == qB) return qA;
 
 	switch(argType) {
-	case LINEAR:
-	case SPHERE:
+	  case fk_MotionInterType::LINEAR:
+	  case fk_MotionInterType::SPHERE:
 		return fk_Math::quatInterSphere(qA, qB, t);
-	case POWER:
+	  case fk_MotionInterType::POWER:
 		return fk_Math::quatInterSphere(qA, qB, pow(t, 3));
-	case REV_POWER:
+	  case fk_MotionInterType::REV_POWER:
 		return fk_Math::quatInterSphere(qA, qB, (1.0-pow(1.0-t, 3)));
-	case FREEZE:
-	case HIDE:		// <----------------------------------------------------オブジェクトのすげ替え対応のため追加
+	  case fk_MotionInterType::FREEZE:
+	  case fk_MotionInterType::HIDE:
 		return qB;
-	default:
+	  default:
 		return fk_Quaternion();
 	}
 }
 
 // スケールなし
-void fk_PerformerMotion::pushKeyFrame(const fk_Quaternion &argQ, const fk_Vector &argBasePos, int argFrame, fk_MotionInterType argType, int argKeyPos)
+void fk_PerformerMotion::pushKeyFrame(const fk_Quaternion &argQ,
+									  const fk_Vector &argBasePos,
+									  int argFrame,
+									  fk_MotionInterType argType, int argKeyPos)
 {
 	pushKeyFrame(argQ, argBasePos, fk_Vector(1.0, 1.0, 1.0), argFrame, argType, argKeyPos);
 }
-bool fk_PerformerMotion::changeKeyFrame(int argKeyID, const fk_Quaternion &argQ, const fk_Vector &argBasePos, int argFrame, fk_MotionInterType argType)
+
+bool fk_PerformerMotion::changeKeyFrame(int argKeyID, const fk_Quaternion &argQ,
+										const fk_Vector &argBasePos, int argFrame,
+										fk_MotionInterType argType)
 {
-	return changeKeyFrame(argKeyID, argQ, argBasePos, fk_Vector(1.0, 1.0, 1.0), argFrame, argType);
+	return changeKeyFrame(argKeyID, argQ, argBasePos,
+						  fk_Vector(1.0, 1.0, 1.0), argFrame, argType);
 }
+
 // スケールあり
-void fk_PerformerMotion::pushKeyFrame(const fk_Quaternion &argQ, const fk_Vector &argBasePos, const fk_Vector &argScale,
-								   int argFrame, fk_MotionInterType argType, int argKeyPos)
+void fk_PerformerMotion::pushKeyFrame(const fk_Quaternion &argQ,
+									  const fk_Vector &argBasePos,
+									  const fk_Vector &argScale,
+									  int argFrame, fk_MotionInterType argType, int argKeyPos)
 {
 	if(argKeyPos == -1) {
 		qArray.push_back(argQ);
@@ -169,8 +183,9 @@ void fk_PerformerMotion::pushKeyFrame(const fk_Quaternion &argQ, const fk_Vector
 	}
 	return;
 }
-bool fk_PerformerMotion::changeKeyFrame(int argKeyID, const fk_Quaternion &argQ, const fk_Vector &argBasePos, const fk_Vector &argScale,
-									 int argFrame, fk_MotionInterType argType)
+bool fk_PerformerMotion::changeKeyFrame(int argKeyID, const fk_Quaternion &argQ,
+										const fk_Vector &argBasePos, const fk_Vector &argScale,
+										int argFrame, fk_MotionInterType argType)
 {
 	if(argKeyID >= getTotalKeyNum()) return false;
 
@@ -264,20 +279,25 @@ int fk_PerformerMotion::setFrameState(int argFrame, fk_Model *argModel)
 		}
 		argModel->setScale(scaleArray[nowKey-1].x, scaleArray[nowKey-1].y, scaleArray[nowKey-1].z);
 	} else if(nowKey != 0) {
-       	q = getInterQ(qArray[nowKey-1], qArray[nowKey], (double)(stepFrame+1)/(double)frameArray[nowKey], interTypeArray[nowKey]);
+       	q = getInterQ(qArray[nowKey-1], qArray[nowKey],
+					  double(stepFrame+1)/double(frameArray[nowKey]), interTypeArray[nowKey]);
 		argModel->glVec(q*dirV);
 		argModel->glUpvec(q*upV);
 		if(isBaseMotion()) {
 			argModel->glMoveTo(getInterVec(basePosArray[nowKey-1], basePosArray[nowKey],
-				(double)(stepFrame+1)/(double)frameArray[nowKey], interTypeArray[nowKey]));//-basePosArray[0]);
+										   double(stepFrame+1)/double(frameArray[nowKey]),
+										   interTypeArray[nowKey]));
 		}
-		sc = getInterVec(scaleArray[nowKey-1], scaleArray[nowKey], (double)(stepFrame)/(double)frameArray[nowKey], interTypeArray[nowKey]);
+		sc = getInterVec(scaleArray[nowKey-1], scaleArray[nowKey],
+						 double(stepFrame)/double(frameArray[nowKey]), interTypeArray[nowKey]);
 		argModel->setScale(sc.x, sc.y, sc.z);
 	} else {
 		static fk_Quaternion	nowQ;
 		static fk_Vector		nowSc;
 		nowQ.makeEuler(argModel->getAngle());
-		nowSc.set(argModel->getScale(fk_X), argModel->getScale(fk_Y), argModel->getScale(fk_Z));
+		nowSc.set(argModel->getScale(fk_Axis::X),
+				  argModel->getScale(fk_Axis::Y),
+				  argModel->getScale(fk_Axis::Z));
 
        	q = getInterQ(nowQ, qArray[nowKey], (double)(stepFrame+1)/(double)frameArray[nowKey]);
 		argModel->glVec(q*dirV);
@@ -286,11 +306,12 @@ int fk_PerformerMotion::setFrameState(int argFrame, fk_Model *argModel)
 			argModel->glMoveTo(getInterVec(argModel->getPosition(), basePosArray[nowKey],
 				(double)(stepFrame+1)/(double)frameArray[nowKey]));//-basePosArray[0]);
 		}
-		sc = getInterVec(nowSc, scaleArray[nowKey], (double)(stepFrame)/(double)frameArray[nowKey], interTypeArray[nowKey]);
+		sc = getInterVec(nowSc, scaleArray[nowKey],
+						 double(stepFrame)/double(frameArray[nowKey]), interTypeArray[nowKey]);
 		argModel->setScale(sc.x, sc.y, sc.z);
 	}
 
-	if(interTypeArray[nowKey] == HIDE) {
+	if(interTypeArray[nowKey] == fk_MotionInterType::HIDE) {
 		return -1;
 	}
 

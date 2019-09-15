@@ -226,7 +226,8 @@ fk_Half * fk_SubDivision::findStarthalf(fk_Modify *s, fk_Loop *l)
 {
 	fk_Half *h = l->getOneHalf();
 
-	while(s->getEdgeStatus(h->getParentEdge()) != FK_BOTHDEF_EDGE || s->getAllHOnV(h->getVertex()).size() <= 2)
+	while(s->getEdgeStatus(h->getParentEdge()) != fk_EdgeStatus::BOTH ||
+		  s->getAllHOnV(h->getVertex()).size() <= 2)
 		h = h->getNextHalf();
 
 	return h;

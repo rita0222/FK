@@ -92,16 +92,16 @@ namespace FK {
 	using fk_funcSet = std::tuple<unsigned int, std::function<void(void)> >;
 
 	//! 描画優先モードを表す列挙型
-	enum fk_ElementMode {
-		FK_ELEM_NONE,		//!<	描画しない
-		FK_ELEM_MODEL,		//!<	モデル設定優先
-		FK_ELEM_ELEMENT		//!<	形状個別要素設定優先
+	enum class fk_ElementMode {
+		NONE,		//!<	描画しない
+		MODEL,		//!<	モデル設定優先
+		ELEMENT		//!<	形状個別要素設定優先
 	};
 
 	//! シェーディングモードを表す列挙型
-	enum fk_ShadingMode {
-		FK_SHADING_GOURAUD,	//!<	グーローシェーディング
-		FK_SHADING_PHONG	//!<	フォンシェーディング
+	enum class fk_ShadingMode {
+		GOURAUD,	//!<	グーローシェーディング
+		PHONG		//!<	フォンシェーディング
 	};
 
 	//! モデルを生成、管理するクラス
@@ -963,7 +963,8 @@ namespace FK {
 		 *
 		 *	\note
 		 *		稜線の色は setLineColor(), 
-		 *		頂点の色は setPointColor() を利用して設定して下さい。
+		 *		頂点の色は setPointColor(),
+		 *		曲線の色は setCurveColor() を利用して設定して下さい。
 		 *		個別位相要素のマテリアルとの制御については、
 		 *		setMaterialMode() を参照して下さい。
 		 *		テクスチャを描画する際には、テクスチャモードによって混合の仕方が異なりますので、
@@ -1023,6 +1024,30 @@ namespace FK {
 		 */
 		void	setLineColor(float r, float g, float b);
 
+		//! 曲線色設定関数1
+		/*!
+		 *	モデルの曲線色を設定します。
+		 *	曲線は、光源による陰影の影響はなく、常に設定色で表示されます。
+		 *
+		 *	\param[in]	col		曲線色のポインタ
+		 *
+		 *	\sa fk_Color
+		 */
+		void	setCurveColor(fk_Color *col);
+
+		//! 曲線色設定関数2
+		/*!
+		 *	モデルの曲線色を設定します。
+		 *	曲線は、光源による陰影の影響はなく、常に設定色で表示されます。
+		 *	各色要素は 0 から 1 までの値を取ります。
+		 *	それ以外の値が与えられた場合、0 以下なら 0 に、1 以上なら 1 に丸められます。
+		 *
+		 *	\param[in]	r		曲線色の赤要素
+		 *	\param[in]	g		曲線色の緑要素
+		 *	\param[in]	b		曲線色の青要素
+		 */
+		void	setCurveColor(float r, float g, float b);
+
 		//@}
 
 		//! \name マテリアル属性参照関数
@@ -1050,13 +1075,23 @@ namespace FK {
 		//! 稜線色参照関数
 		/*!
 		 *	現在モデルに設定されている稜線色を参照します。
-		 *	モデルに稜線色が設定されていない場合は nullptr を返します。
 		 *
 		 *	\return		稜線色のポインタ
 		 *
 		 *	\sa fk_Color, setLineColor()
 		 */
 		fk_Color *	getLineColor(void);
+
+		//! 曲線色参照関数
+		/*!
+		 *	現在モデルに設定されている曲線色を参照します。
+		 *
+		 *	\return		曲線色のポインタ
+		 *
+		 *	\sa fk_Color, setCurveColor()
+		 */
+		fk_Color *	getCurveColor(void);
+		
 
 		//@}
 
@@ -1096,13 +1131,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モード種類は以下のとおりです。
-		 *	- FK_NONEMODE:				何も描画しません。
-		 *	- FK_POINTMODE:				頂点を描画します。
-		 *	- FK_LINEMODE:				稜線を描画します。
-		 *	- FK_POLYMODE:				面の表を描画します。
-		 *	- FK_BACK_POLYMODE:			面の裏を描画します。
-		 *	- FK_FRONTBACK_POLYMODE:	面の表と裏を描画します。
-		 *	- FK_TEXTUREMODE:			テクスチャを描画します。
+		 *	- fk_DrawMode::NONE:			何も描画しません。
+		 *	- fk_DrawMode::POINT:			頂点を描画します。
+		 *									曲線・曲面の場合は制御点を描画します。
+		 *	- fk_DrawMode::LINE:			稜線を描画します。
+		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_DrawMode::FACE:			面の表を描画します。
+		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
+		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
+		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -1110,7 +1150,7 @@ namespace FK {
 		 *
 		 *		fk_Model		model;
 		 *		
-		 *		model.setDrawMode(FK_POINTMODE | FK_LINEMODE | FK_POLYMODE);
+		 *		model.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
 		 *
 		 *	\param[in]	mode	描画モード
 		 */
@@ -1130,9 +1170,9 @@ namespace FK {
 		/*!
 		 *	形状表示の際、モデル設定と形状個別要素設定のどちらを採用するかを設定します。
 		 *	モードには以下のものがあります。
-		 *	- FK_ELEM_NONE:		何も描画しません。
-		 *	- FK_ELEM_MODEL:	モデル設定を優先します。
-		 *	- FK_ELEM_ELEMENT:	形状内の個別要素設定を優先します。
+		 *	- fk_ElementMode::NONE:		何も描画しません。
+		 *	- fk_ElementMode::MODEL:	モデル設定を優先します。
+		 *	- fk_ElementMode::ELEMENT:	形状内の個別要素設定を優先します。
 		 *	.
 		 *
 		 *	\param[in]	mode	設定モード
@@ -1190,46 +1230,46 @@ namespace FK {
 		 *
 		 *	\param[in]	mode
 		 *		ブレンドモードを設定します。与えられる値は以下の8種類です。
-		 *		- FK_BLEND_ALPHA_MODE:		通常のアルファブレンドです。初期値です。
-		 *		- FK_BLEND_NEGATIVE_MODE:	反転ブレンドです。
-		 *		- FK_BLEND_ADDITION_MODE:	加算ブレンドです。
-		 *		- FK_BLEND_SCREEN_MODE:		アルファ付き加算ブレンドです。
-		 *		- FK_BLEND_LIGHTEN_MODE:	入出力ピクセルのうち明るい方を採用するブレンドです。
-		 *		- FK_BLEND_MULTIPLY_MODE:	乗算ブレンドです。
-		 *		- FK_BLEND_NONE_MODE:		ブレンドを行いません。
+		 *		- fk_BlendMode::ALPHA:		通常のアルファブレンドです。初期値です。
+		 *		- fk_BlendMode::NEGATIVE:	反転ブレンドです。
+		 *		- fk_BlendMode::ADDITION:	加算ブレンドです。
+		 *		- fk_BlendMode::SCREEN:		アルファ付き加算ブレンドです。
+		 *		- fk_BlendMode::LIGHTEN:	入出力ピクセルのうち明るい方を採用するブレンドです。
+		 *		- fk_BlendMode::MULTIPLY:	乗算ブレンドです。
+		 *		- fk_BlendMode::NONE:		ブレンドを行いません。
 		 *									fk_Scene 側の設定によらずブレンドを無効にします。
-		 *		- FK_BLEND_CUSTOM_MODE:		カスタムモードです。第 2,3 引数にて指定した
+		 *		- fk_BlendMode::CUSTOM:		カスタムモードです。第 2,3 引数にて指定した
 		 *									係数を用いた計算式でブレンドします。
 		 *
 		 *	\param[in]	srcFactor
 		 *		入力ピクセルに対する係数を設定します。
-		 *		mode に FK_BLEND_CUSTOM_MODE を指定した場合のみ有効です。
+		 *		mode に fk_BlendMode::CUSTOM を指定した場合のみ有効です。
 		 *		それ以外のモードでは省略可能です。
 		 *		本関数の仕様は OpenGL 関数の glBlendFunc() に準拠します。
 		 *		詳細は glBlendFunc() の情報を参照して下さい。
 		 *		与えられる値は以下の10種類で、
-		 *		それぞれの「FK_FACTOR」を「GL」に置き換えた GLenum 型の値に対応します。
-		 *		- FK_FACTOR_ZERO
-		 *		- FK_FACTOR_ONE
-		 *		- FK_FACTOR_SRC_COLOR
-		 *		- FK_FACTOR_ONE_MINUS_SRC_COLOR
-		 *		- FK_FACTOR_DST_COLOR
-		 *		- FK_FACTOR_ONE_MINUS_DST_COLOR
-		 *		- FK_FACTOR_SRC_ALPHA
-		 *		- FK_FACTOR_ONE_MINUS_SRC_ALPHA
-		 *		- FK_FACTOR_DST_ALPHA
-		 *		- FK_FACTOR_ONE_MINUS_DST_ALPHA
+		 *		それぞれの値に「GL」に置き換えた GLenum 型の値に対応します。
+		 *		- fk_BlendFactor::ZERO
+		 *		- fk_BlendFactor::ONE
+		 *		- fk_BlendFactor::SRC_COLOR
+		 *		- fk_BlendFactor::ONE_MINUS_SRC_COLOR
+		 *		- fk_BlendFactor::DST_COLOR
+		 *		- fk_BlendFactor::ONE_MINUS_DST_COLOR
+		 *		- fk_BlendFactor::SRC_ALPHA
+		 *		- fk_BlendFactor::ONE_MINUS_SRC_ALPHA
+		 *		- fk_BlendFactor::DST_ALPHA
+		 *		- fk_BlendFactor::ONE_MINUS_DST_ALPHA
 		 *
 		 *	\param[in]	dstFactor
 		 *		出力ピクセルに対する係数を設定します。
-		 *		mode に FK_CUSTOM_BLEND_MODE を指定した場合のみ有効です。
+		 *		mode に fk_BlendFactor::CUSTOM を指定した場合のみ有効です。
 		 *		それ以外のモードでは省略可能です。与えられる値は srcFactor と同様です。
 		 *
 		 *	\sa getBlendMode(), fk_Scene::setBlendStatus(), fk_Scene::getBlendStatus()
 		 */
 		void	setBlendMode(const fk_BlendMode mode,
-							 const fk_BlendFactor srcFactor = FK_FACTOR_SRC_ALPHA,
-							 const fk_BlendFactor dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA);
+							 const fk_BlendFactor srcFactor = fk_BlendFactor::SRC_ALPHA,
+							 const fk_BlendFactor dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA);
 
 		//! ブレンドモード参照関数
 		/*!
@@ -1299,11 +1339,11 @@ namespace FK {
 		 *
 		 *	\param[in]	mode
 		 *		前後関係の処理モードを設定します。与えられる値は以下の4種類です。
-		 *		- FK_DEPTH_NO_USE:			前後関係の参照も更新も行わず、常に上書きします。
-		 *		- FK_DEPTH_READ:			前後関係を参照してチェックします。
-		 *		- FK_DEPTH_WRITE:			前後関係を更新して後続の描画に影響するようにします。
-		 *		- FK_DEPTH_READ_AND_WRITE:	前後関係を参照しつつ更新します。
-		 *									FK_DEPTH_READ | FK_DEPTH_WRITE と等価です。初期値です。
+		 *		- fk_DepthMode::NO_USE:			前後関係の参照も更新も行わず、常に上書きします。
+		 *		- fk_DepthMode::READ:			前後関係を参照してチェックします。
+		 *		- fk_DepthMode::WRITE:			前後関係を更新して後続の描画に影響するようにします。
+		 *		- fk_DepthMode::READ_AND_WRITE:	前後関係を参照しつつ更新します。
+		 *					fk_DepthMode::READ | fk_DepthMode::WRITE と等価です。初期値です。
 		 */
 		void	setDepthMode(const fk_DepthMode mode);
 
@@ -1328,7 +1368,7 @@ namespace FK {
 		 *	\f$ T_f \f$ はテクスチャピクセル色、
 		 *	\f$ T_\alpha \f$ はテクスチャの透明度を表します。
 		 *
-		 *	- FK_TEX_MODULATE \n
+		 *	- fk_TexMode::MODULATE \n
 		 *		この設定では、ポリゴンの色とテクスチャの色を積算します。
 		 *		そのため、光源による陰影効果が生じます。
 		 *		透明度に関しても積算となります。
@@ -1338,7 +1378,7 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *
-		 *	- FK_TEX_REPLACE \n
+		 *	- fk_TexMode::REPLACE \n
 		 *		この設定では、ポリゴンの色は完全に無視され、
 		 *		テクスチャのピクセル色がそのまま表示されます。
 		 *		そのため、光源による陰影効果が生じません。
@@ -1349,7 +1389,7 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *
-		 *	- FK_TEX_DECAL \n
+		 *	- fk_TexMode::DECAL \n
 		 *		この設定では、各ピクセルの透明度に応じて、
 		 *		ポリゴン色とピクセル色の混合が行われます。
 		 *		光源による陰影効果は、ピクセルの透明度が低い場合に強くなります。
@@ -1360,14 +1400,15 @@ namespace FK {
 		 *		\f]
 		 *		となります。
 		 *
-		 *	- FK_TEX_NONE \n
+		 *	- fk_TexMode::NONE \n
 		 *		この設定では、 fk_Model での設定は無視し、
 		 *		fk_Texture::setTextureMode() での設定に従います。
 		 *	.
-		 *	デフォルトでは FK_TEX_NONE が設定されています。
+		 *	デフォルトでは fk_TexMode::NONE が設定されています。
 		 *	なお、同様の設定は fk_Texture::setTextureMode() でも行うことが可能で、
-		 *	fk_Model 側で FK_TEX_NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
-		 *	fk_Model 側で FK_TEX_NONE が設定されている場合のみ、
+		 *	fk_Model 側で fk_TexMode::NONE 以外が設定されている場合は
+		 *	fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で fk_TexMode::NONE が設定されている場合のみ、
 		 *	fk_Texture 側での設定が有効となります。
 		 *
 		 *	\param[in]		mode	モード
@@ -1646,7 +1687,7 @@ namespace FK {
 		 *	最後の子モデルが引数として渡されたとき、nullptr を返します。
 		 *
 		 *	以下のコードは、「parent」の全ての子モデルに対し、
-		 *	描画モードを FK_LINEMODE に設定する例です。
+		 *	描画モードを fk_DrawMode::LINE に設定する例です。
 		 *
 		 *		fk_Model	parentModel, *childModel;
 		 *		
@@ -1654,7 +1695,7 @@ namespace FK {
 		 *			childModel != nullptr;
 		 *			childModel = parentModel.foreachChild(childModel)) {
 		 *		
-		 *			childModel->setDrawMode(FK_LINEMODE);
+		 *			childModel->setDrawMode(fk_DrawMode::LINE);
 		 *		}
 		 *
 		 *	\param[in]		model		順番に渡す子モデルインスタンスのポインタ
@@ -2107,6 +2148,7 @@ namespace FK {
 		fk_Material			material;
 		fk_Color			pointColor;
 		fk_Color			lineColor;
+		fk_Color			curveColor;
 		fk_Shape			*shape;
 		fk_Model			*parentModel;
 		fk_TreeData			*treeData;

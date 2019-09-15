@@ -110,7 +110,7 @@ bool fk_D3DXShapeParser::ReadMeshData(fk_TreeData *argData, ifstream &argIFS)
 		return false;
 	}
 
-	if(ReadVectorData(argIFS, FK_D3DX_V_MODE) == false) {
+	if(ReadVectorData(argIFS, fk_D3DX_VecMode::V_MODE) == false) {
 		fk_PutError("fk_D3DXShapeParser", "ReadMeshData", 2);
 		return false;
 	}
@@ -158,7 +158,7 @@ bool fk_D3DXShapeParser::ReadVectorData(ifstream &argIFS, fk_D3DX_VecMode argMod
 	if(IsInteger(word) == false) return false;
 	vNum = Str2Int(word);
 
-	if(argMode == FK_D3DX_V_MODE) {
+	if(argMode == fk_D3DX_VecMode::V_MODE) {
 		for(i = 0; i < vNum; i++) {
 			if(GetVector(argIFS, &line, &tmpVec) == false) return false;
 			vData.push_back(tmpVec);

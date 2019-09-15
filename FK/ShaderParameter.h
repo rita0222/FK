@@ -77,6 +77,8 @@
 #include <map>
 
 namespace FK {
+	class fk_ShaderProgram;
+
 	//! シェーダーパラメーター管理クラス
 	/*!
 	 *	このクラスは、シェーダープログラムに対してパラメーターを渡すための機能を提供します。
@@ -85,7 +87,6 @@ namespace FK {
 	 *
 	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
 	 */
-
 	class fk_ShaderParameter {
 	public:
 		//! コンストラクタ
@@ -103,8 +104,7 @@ namespace FK {
 
 		//! float 型 uniform 変数設定関数
 		/*!
-		 *	この関数は、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	float 型の uniform 変数を渡す設定を行います。
+		 *	この関数は、シェーダーに対し float 型の uniform 変数を渡す設定を行います。
 		 *
 		 *	\param[in]	name
 		 *		GLSL コード内での変数名
@@ -112,12 +112,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す値
 		 */
-		void setRegister(std::string name, float value);
+		void setRegister(std::string name, float value, std::string = "");
 
 		//! float 配列型 uniform 変数設定関数
 		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	float 配列型の uniform 変数を渡す設定を行います。
+		 *	このメソッドは、シェーダーに対し float 配列型の uniform 変数を渡す設定を行います。
 		 *	配列のサイズは 1 から 4 までで、
 		 *	GLSL 内での型は配列サイズが 1 から順に float, vec2, vec3, vec4 となります。
 		 *
@@ -127,12 +126,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す配列
 		 */
-		void setRegister(std::string name, std::vector<float> *value);
+		void setRegister(std::string name, std::vector<float> *value, std::string = "");
 
 		//! int 型 uniform 変数設定関数
 		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	int 型の uniform 変数を渡す設定を行います。
+		 *	このメソッドは、シェーダーに対し int 型の uniform 変数を渡す設定を行います。
 		 *
 		 *	\param[in]	name
 		 *		GLSL コード内での変数名
@@ -140,12 +138,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す値
 		 */
-		void setRegister(std::string name, int value);
+		void setRegister(std::string name, int value, std::string = "");
 
 		//! int 配列型 uniform 変数設定関数
 		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	int 配列型の uniform 変数を渡す設定を行います。
+		 *	このメソッドは、シェーダーに対し int 配列型の uniform 変数を渡す設定を行います。
 		 *	配列のサイズは 1 から 4 までで、
 		 *	GLSL 内での型は配列サイズが 1 から順に int, ivec2, ivec3, ivec4 となります。
 		 *
@@ -155,12 +152,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す配列
 		 */
-		void setRegister(std::string name, std::vector<int> *value);
+		void setRegister(std::string name, std::vector<int> *value, std::string = "");
 	
 		//! fk_Vector 型 uniform 変数設定関数
 		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	fk_Vector 型の uniform 変数を渡す設定を行います。
+		 *	このメソッドは、シェーダーに対し fk_Vector 型の uniform 変数を渡す設定を行います。
 		 *	GLSL コード内での型は vec3 となります。
 		 *
 		 *	\param[in]	name
@@ -169,12 +165,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_Vector *value);
+		void setRegister(std::string name, fk_Vector *value, std::string = "");
 
 		//! fk_HVector 型 uniform 変数設定関数
 		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	fk_HVector 型の uniform 変数を渡す設定を行います。
+		 *	このメソッドは、シェーダーに対し fk_HVector 型の uniform 変数を渡す設定を行います。
 		 *	GLSL コード内での型は vec4 となります。
 		 *
 		 *	\param[in]	name
@@ -183,12 +178,11 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_HVector *value);
+		void setRegister(std::string name, fk_HVector *value, std::string = "");
 
 		//! fk_Matrix 型 uniform 変数設定関数
 		/*!
-		 *	このメソッドは、バーテックスシェーダーやフラグメントシェーダーに対し、
-		 *	fk_Matrix 型の uniform 変数を渡す設定を行います。
+		 *	このメソッドは、シェーダーに対し fk_Matrix 型の uniform 変数を渡す設定を行います。
 		 *	GLSL コード内での型は mat4 となります。
 		 *
 		 *	\param[in]	name
@@ -197,7 +191,7 @@ namespace FK {
 		 *	\param[in]	value
 		 *		uniform 変数に渡す行列
 		 */
-		void setRegister(std::string name, fk_Matrix *value);
+		void setRegister(std::string name, fk_Matrix *value, std::string = "");
 
 		//! uniform 変数解除関数
 		/*!
@@ -266,6 +260,8 @@ namespace FK {
 		bool Apply(GLuint);
 		void BindAttr(GLuint);
 		std::map<std::string, int> * getAttrTable(void);
+		void SetProgram(fk_ShaderProgram *);
+		fk_ShaderProgram * GetProgram(void);
 #endif
 	
 	private:
@@ -283,6 +279,8 @@ namespace FK {
 
 		std::string lastError;
 		unsigned int lastAppliedId;
+
+		fk_ShaderProgram	*prog;
 	};
 }
 

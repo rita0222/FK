@@ -264,7 +264,7 @@ int main(int, char *[])
 	viewModel.glUpvec(0.0, 1.0, 0.0);
 
 	// ### LIGHT ###
-	light.setLightType(FK_POINT_LIGHT);
+	light.setLightType(fk_LightType::POINT);
 	light.setAttenuation(0.0, 0.0);
 	lightModel.setShape(&light);
 	lightModel.setMaterial(WhiteLight);
@@ -282,7 +282,7 @@ int main(int, char *[])
 	LightGreen.setShininess(80.0);
 	groundModel.setMaterial(LightGreen);
 	groundModel.setSmoothMode(true);
-	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_X, -FK_PI/2.0);
+	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/2.0);
 
 	// ### VIEW BLOCK ###
 	blockModel.setShape(&block);
@@ -330,7 +330,7 @@ int main(int, char *[])
 		}
 
 		// 地面をくるくる回転させましょう。
-		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, ROTATE_SPEED);
+		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, ROTATE_SPEED);
 	}
 
 	return 0;

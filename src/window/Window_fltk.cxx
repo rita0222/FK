@@ -84,11 +84,29 @@ using namespace FK;
 
 Fl_Window *			fk_Window::putWin = nullptr;
 Fl_Multi_Browser *	fk_Window::browser = nullptr;
-fk_PutStrMode		fk_Window::putStrMode = FK_PUTSTR_BROWSER;
+fk_PutStrMode		fk_Window::putStrMode = fk_PutStrMode::BROWSER;
 ofstream			fk_Window::putStrOFS;
 int					fk_Window::winNum = 0;
 Fl_Window *			fk_Window::error_win = nullptr;
 Fl_Multi_Browser *	fk_Window::err_browser = nullptr;
+
+namespace FK {
+	
+	fk_FrameMode operator | (fk_FrameMode argL, fk_FrameMode argR) {
+		return static_cast<fk_FrameMode>(static_cast<unsigned int>(argL) |
+										 static_cast<unsigned int>(argR));
+	}
+
+	fk_FrameMode operator & (fk_FrameMode argL, fk_FrameMode argR) {
+		return static_cast<fk_FrameMode>(static_cast<unsigned int>(argL) &
+										 static_cast<unsigned int>(argR));
+	}
+
+	fk_FrameMode operator ^ (fk_FrameMode argL, fk_FrameMode argR) {
+		return static_cast<fk_FrameMode>(static_cast<unsigned int>(argL) ^
+										 static_cast<unsigned int>(argR));
+	}
+}
 
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0])
@@ -99,7 +117,7 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	GLWinYPosition = argY;
 	GLWinWSize = argW;
 	GLWinHSize = argH;
-	setFrameMode(FK_DEFAULT_FRAME);
+	setFrameMode(fk_FrameMode::DEFAULT);
 	winNum++;
 	//mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_ACCUM | FL_STENCIL | FL_DEPTH | FL_OPENGL3);
 	mode(FL_RGB |
@@ -244,22 +262,22 @@ bool fk_Window::snapImage(string argFName, fk_ImageType argType, fk_SnapProcMode
 {
 	redraw();
 #ifdef WIN32
-	if(argMode == FK_SNAP_WIN32_GDI) {
+	if(argMode == fk_SnapProcMode::WIN32_GDI) {
 		if(SnapImageGDI(&snapBuffer) == false) return false;
 	}
 #else
-	argMode = FK_SNAP_GL_FRONT;
+	argMode = fk_SnapProcMode::FRONT;
 #endif
-	if(argMode != FK_SNAP_WIN32_GDI) {
+	if(argMode != fk_SnapProcMode::WIN32_GDI) {
 		if(engine.SnapImage(&snapBuffer, argMode) == false) return false;
 	}
 
 	switch(argType) {
-	  case FK_IMAGE_PNG:
+	  case fk_ImageType::PNG:
 		return snapBuffer.writePNG(argFName, false);
-	  case FK_IMAGE_JPG:
+	  case fk_ImageType::JPG:
 		return snapBuffer.writeJPG(argFName);
-	  case FK_IMAGE_BMP:
+	  case fk_ImageType::BMP:
 	  default:
 		break;
 	}
@@ -270,11 +288,11 @@ bool fk_Window::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 {
 	redraw();
 #ifdef WIN32
-	if(argMode == FK_SNAP_WIN32_GDI) {
+	if(argMode == fk_SnapProcMode::WIN32_GDI) {
 		return SnapImageGDI(argImage);
 	}
 #else
-	argMode = FK_SNAP_GL_FRONT;
+	argMode = fk_SnapProcMode::FRONT;
 #endif
 	return engine.SnapImage(argImage, argMode);
 }
@@ -363,25 +381,25 @@ void fk_Window::printf(const char *argFormat, ...)
 void fk_Window::putString(const string &argStr)
 {
 	switch(putStrMode) {
-	  case FK_PUTSTR_CONSOLE:
+	  case fk_PutStrMode::CONSOLE:
 		cout << argStr << endl;
 		return;
 
-	  case FK_PUTSTR_ERR_CONSOLE:
+	  case fk_PutStrMode::ERR_CONSOLE:
 		cerr << argStr << endl;
 		return;
 
-	  case FK_PUTSTR_BROWSER:
+	  case fk_PutStrMode::BROWSER:
 		PutBrowser(argStr);
 		return;
 
-	  case FK_PUTSTR_FILE:
+	  case fk_PutStrMode::FILE:
 		if(putStrOFS.is_open() == true) {
 			putStrOFS << argStr << endl;
 		}
 		return;
 
-	  case FK_PUTSTR_NONE:
+	  case fk_PutStrMode::NONE:
 	  default:
 		break;
 	}

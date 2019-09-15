@@ -74,13 +74,12 @@
 using namespace std;
 using namespace FK;
 
-fk_Curve::fk_Curve(void) :
-	changeFlg(true), div(-1)
+fk_Curve::fk_Curve(void) : div(128), size(0)
 {
-	realType = FK_SHAPE_CURVE;
-	SetObjectType(FK_CURVE);
-	posCache.clear();
-	diffCache.clear();
+	ctrlPos.clear();
+	realType = fk_RealShapeType::CURVE;
+	SetObjectType(fk_Type::CURVE);
+	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
 
 	return;
 }
@@ -89,26 +88,76 @@ fk_Curve::~fk_Curve(void)
 {
 	return;
 }
-	
-vector<fk_Vector> * fk_Curve::getPosCache(void)
+
+void fk_Curve::init(void)
 {
-	return &posCache;
+	ctrlPos.clear();
 }
 
-vector<fk_Vector> * fk_Curve::getDiffCache(void)
+bool fk_Curve::setCtrl(int argID, fk_Vector *argPos)
 {
-	return &diffCache;
+	if(argID < 0 || argID >= size || argPos == nullptr) return false;
+	ctrlPos.set(argID, *argPos);
+	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, *argPos);
+	if(argID > 0) {
+		ctrlLine.changeLine(argID-1, ctrlPos.getV(argID-1), ctrlPos.getV(argID));
+	}
+	
+	if(argID < size - 1) {
+		ctrlLine.changeLine(argID, ctrlPos.getV(argID), ctrlPos.getV(argID+1));
+	}
+	return true;
+}
+
+bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
+{
+	if(argID < 0 || argID >= size) return false;
+	ctrlPos.set(argID, argPos);
+	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, argPos);
+	if(argID != 0) {
+		ctrlLine.changeLine(argID-1, ctrlPos.getV(argID-1), ctrlPos.getV(argID));
+	}
+	
+	if(argID != size - 1) {
+		ctrlLine.changeLine(argID, ctrlPos.getV(argID), ctrlPos.getV(argID+1));
+	}
+
+	return true;
+}
+
+fk_Vector fk_Curve::getCtrl(int argID)
+{
+	return ctrlPos.getV(argID);
+}
+
+int fk_Curve::getCtrlSize(void)
+{
+	return size;
+}
+
+void fk_Curve::setCtrlSize(int argNum)
+{
+	fk_Vector	zero(0.0, 0.0, 0.0);
+
+	if(ctrlPos.getSize() < argNum) ctrlPos.resize(argNum);
+	size = argNum;
+	ctrlPoint.allClear();
+	ctrlLine.allClear();
+	for(int i = 0; i < argNum - 1; i++) {
+		ctrlPoint.pushVertex(zero);
+		ctrlLine.pushLine(zero, zero);
+	}
+	ctrlPoint.pushVertex(zero);
 }
 
 void fk_Curve::setDiv(int argDiv)
 {
-	if(argDiv < 1) return;
-
-	if(argDiv != div) {
-		changeFlg = true;
-		div = argDiv;
-	}
-	return;
+	if(argDiv <= 0) return;
+	div = argDiv;
 }
 
 int fk_Curve::getDiv(void)
@@ -116,21 +165,12 @@ int fk_Curve::getDiv(void)
 	return div;
 }
 
-void fk_Curve::makeCache(void)
+fk_Line * fk_Curve::GetLine(void)
 {
-	double		t;
-	int			i;
+	return &ctrlLine;
+}
 
-	if(div <= 0 || changeFlg == false) return;
-
-	posCache.clear();
-	diffCache.clear();
-	for(i = 0; i <= div; i++) {
-		t = static_cast<double>(i)/static_cast<double>(div);
-		posCache.push_back(pos(t));
-		diffCache.push_back(diff(t));
-	}
-
-	changeFlg = false;
-	return;
+fk_Point * fk_Curve::GetPoint(void)
+{
+	return &ctrlPoint;
 }

@@ -80,8 +80,8 @@ fk_SpriteModel::fk_SpriteModel(void) : fk_Model(), fontReady(false)
 {
 	setParent(&pixelBase);
 
-	texShape.setTextureMode(FK_TEX_REPLACE);
-	texShape.setTexRendMode(FK_TEX_REND_SMOOTH);
+	texShape.setTextureMode(fk_TexMode::REPLACE);
+	texShape.setTexRendMode(fk_TexRendMode::SMOOTH);
 	setShape(&texShape);
 
 	absMate.setAmbDiff(1.0, 1.0, 1.0);
@@ -128,7 +128,7 @@ void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *arg
 
 	proj = const_cast<fk_ProjectBase *>(argScn->getProjection());
 
-	if(proj->getMode() == FK_PERSPECTIVE_MODE) {
+	if(proj->getMode() == fk_ProjectMode::PERSPECTIVE) {
 		pers = dynamic_cast<fk_Perspective *>(proj);
 		double halfFovy = pers->getFovy()*0.5;
 		double nearPut = pers->getNear()+distPut;
@@ -137,14 +137,14 @@ void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *arg
 		pixelBase.setScale((nearPut*tan(halfFovy)*2.0/trueD),
 						   (nearPut*tan(halfFovy)*2.0/trueD), 1.0);
 
-	} else if(argScn->getProjection()->getMode() == FK_ORTHO_MODE){
+	} else if(argScn->getProjection()->getMode() == fk_ProjectMode::ORTHO){
 		orth = dynamic_cast<fk_Ortho *>(proj);
 
 		pixelBase.glMoveTo(0.0, 0.0, -(orth->getNear()+distPut));
 		pixelBase.setScale((orth->getRight() - orth->getLeft())/trueD,
 						   (orth->getTop() - orth->getBottom())/trueD, 1.0);
 
-	} else if(argScn->getProjection()->getMode() == FK_FRUSTUM_MODE) {
+	} else if(argScn->getProjection()->getMode() == fk_ProjectMode::FRUSTUM) {
 		frus = dynamic_cast<fk_Frustum *>(proj);
 
 		double nearPut = frus->getNear();
@@ -231,7 +231,7 @@ bool fk_SpriteModel::initFont(const string argFontFile)
 	text.setPTSize(18);
 	text.setForeColor(1.0, 1.0, 1.0, 1.0);
 	text.setBackColor(0.0, 0.0, 0.0, 0.5);
-	text.setAlign(FK_ALIGN_CENTER);
+	text.setAlign(fk_TextAlign::CENTER);
 
 	setImage(text);
 
@@ -267,13 +267,13 @@ void fk_SpriteModel::drawText(const string argStr, fk_StringCode argCode)
 
 void fk_SpriteModel::setSpriteSmoothMode(bool flag)
 {
-	if(flag) texShape.setTexRendMode(FK_TEX_REND_SMOOTH);
-	else texShape.setTexRendMode(FK_TEX_REND_NORMAL);
+	if(flag) texShape.setTexRendMode(fk_TexRendMode::SMOOTH);
+	else texShape.setTexRendMode(fk_TexRendMode::NORMAL);
 }
 
 bool fk_SpriteModel::getSpriteSmoothMode(void)
 {
-	if(texShape.getTexRendMode() == FK_TEX_REND_SMOOTH) return true;
+	if(texShape.getTexRendMode() == fk_TexRendMode::SMOOTH) return true;
 	return false;
 }
 

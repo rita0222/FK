@@ -110,14 +110,14 @@ int main()
 	viewer.setShape(0, &shape);
 
 	// 各種設定
-	viewer.setDrawMode(FK_FRONTBACK_POLYMODE | FK_LINEMODE);
+	viewer.setDrawMode(fk_DrawMode::FRONTBACK_FACE | fk_DrawMode::LINE);
 	viewer.setScale(10.0);
 
 	for(int k = 0; viewer.draw() == true; k += 3) {
 		for(i = 0; i <= 10; i++) {
 			for(j = 0; j <= 10; j++) {
 				// 各頂点の移動量計算
-				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/FK_PI));
+				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/fk_Math::PI));
 
 				// 各頂点を移動場所を計算
 				movePos = moveVec + pos[i*11 + j];

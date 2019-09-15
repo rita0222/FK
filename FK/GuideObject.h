@@ -76,27 +76,21 @@
 #include <FK/Model.h>
 
 namespace FK {
-	using fk_GuideMode = unsigned int;
+	// 座標ガイドを表す列挙型
+	enum class fk_Guide : unsigned int {
+		NO_GUIDE = 0, 		//!< ガイドなし
+		AXIS_X   = 1 << 1,	//!< x 軸
+		AXIS_Y   = 1 << 2,	//!< y 軸
+		AXIS_Z   = 1 << 3,	//!< z 軸
+		GRID_XZ  = 1 << 4,	//!< xz 平面
+		GRID_XY  = 1 << 5,	//!< xy 平面
+		GRID_YZ  = 1 << 6,	//!< yz 平面
+	};
 
-	const fk_GuideMode FK_NO_GUIDE = 0x0000;
-	const fk_GuideMode FK_AXIS_X   = 0x0001;
-	const fk_GuideMode FK_AXIS_Y   = 0x0002;
-	const fk_GuideMode FK_AXIS_Z   = 0x0004;
-	const fk_GuideMode FK_GRID_XZ  = 0x0008;
-	const fk_GuideMode FK_GRID_XY  = 0x0010;
-	const fk_GuideMode FK_GRID_YZ  = 0x0020;
-	const fk_GuideMode FK_ALL_GUIDE
-	= FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ | FK_GRID_XY | FK_GRID_YZ;
-
-#define FKUT_NO_GUIDE	FK_NO_GUIDE
-#define FKUT_AXIS_X		FK_AXIS_X
-#define FKUT_AXIS_Y		FK_AXIS_Y
-#define FKUT_AXIS_Z		FK_AXIS_Z
-#define FKUT_GRID_XZ	FK_GRID_XZ
-#define FKUT_GRID_XY	FK_GRID_XY
-#define FKUT_GRID_YZ	FK_GRID_YZ
-#define FKUT_ALL_GUIDE	FK_ALL_GUIDE
-
+	fk_Guide operator | (fk_Guide, fk_Guide);
+	fk_Guide operator & (fk_Guide, fk_Guide);
+	fk_Guide operator ^ (fk_Guide, fk_Guide);
+	
 	class fk_Scene;
 
 	//! 座標系可視化支援クラス
@@ -188,7 +182,7 @@ namespace FK {
 		 *
 		 *		fk_GuideObject	gobj;
 		 *
-		 *		gobj.entryScene(scene, FK_AXIS_X | FK_AXIS_Z | FK_GRID_XZ);
+		 *		gobj.entryScene(scene, fk_Guide::AXIS_X | fk_Guide::AXIS_Z | fk_Guide::GRID_XZ);
 		 *
 		 *	\param[in]	scene		登録するシーンインスタンスのポインタ。
 		 *	\param[in]	mode		登録する要素。
@@ -196,7 +190,11 @@ namespace FK {
 		 *	\sa removeScene()
 		 */
 		void	entryScene(fk_Scene *scene,
-						   fk_GuideMode mode = FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
+						   fk_Guide mode =
+						   fk_Guide::AXIS_X |
+						   fk_Guide::AXIS_Y |
+						   fk_Guide::AXIS_Z |
+						   fk_Guide::GRID_XZ);
 
 		//! シーン登録解除関数
 		/*!
@@ -208,7 +206,7 @@ namespace FK {
 		 *
 		 *	\sa entryScene()
 		 */
-		void	removeScene(fk_Scene *scene, fk_GuideMode mode = FK_NO_GUIDE);
+		void	removeScene(fk_Scene *scene, fk_Guide mode = fk_Guide::NO_GUIDE);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void	SetFinalizeMode(void);

@@ -98,7 +98,7 @@ namespace FK {
 		 *	ユーザは引数を省略して定義を行って下さい。
 		 */
 		fk_Polygon(std::vector<fk_Vector> *array = nullptr,
-				   fk_ObjectType = FK_POLYGON);
+				   fk_Type = fk_Type::POLYGON);
 
 		//! デストラクタ
 		virtual ~fk_Polygon();

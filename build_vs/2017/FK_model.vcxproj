@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\src\model\Boundary.cxx" />
     <ClCompile Include="..\..\src\model\BoundaryElem.cxx" />
     <ClCompile Include="..\..\src\model\BVHMotion.cxx" />
+    <ClCompile Include="..\..\src\model\DrawMode.cxx" />
     <ClCompile Include="..\..\src\model\MatAdmin.cxx" />
     <ClCompile Include="..\..\src\model\Model.cxx" />
     <ClCompile Include="..\..\src\model\ModelTree.cxx" />
@@ -30,6 +31,7 @@
     <ClInclude Include="..\..\FK\Boundary.h" />
     <ClInclude Include="..\..\FK\BoundaryElem.H" />
     <ClInclude Include="..\..\FK\BVHMotion.h" />
+    <ClInclude Include="..\..\FK\DrawMode.h" />
     <ClInclude Include="..\..\FK\MatAdmin.h" />
     <ClInclude Include="..\..\FK\Model.h" />
   </ItemGroup>

@@ -106,14 +106,13 @@ namespace FK {
 		 *	現状では、2,3,4のいずれかのみ以外は設定できません。
 		 *	この関数の実行後、全ての制御点の位置ベクトルは原点になります。
 		 *
-		 *	\param[in]	uDeg	u方向字数
-		 *	\param[in]	vDeg	v方向次数
+		 *	\param[in]	deg	次数
 		 *
 		 *	\return 次数設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool			setDegree(int uDeg, int vDeg);
+		bool			setDegree(int deg);
 
-		//! 制御点設定関数
+		//! 制御点設定関数1
 		/*!
 		 *	曲面の制御点位置ベクトルを設定します。
 		 *
@@ -125,21 +124,13 @@ namespace FK {
 		 */
 		bool			setCtrl(int uID, int vID, const fk_Vector &pos);
 
-		//! u方向次数参照関数
+		//! 次数参照関数
 		/*!
-		 *	曲面のu方向次数を参照します。
+		 *	曲面の次数を参照します。
 		 *
-		 *	\return	u方向次数
+		 *	\return	次数
 		 */
-		int				getUDegree(void);	
-
-		//! v方向次数参照関数
-		/*!
-		 *	曲面のv方向次数を参照します。
-		 *
-		 *	\return	v方向次数
-		 */
-		int				getVDegree(void);	
+		int				getDegree(void);	
 
 		//! 制御点参照関数
 		/*!
@@ -186,9 +177,10 @@ namespace FK {
 		fk_Vector		vDeriv(double u, double v);
 
 	private:
-		int						uDeg, vDeg;
-		std::vector<fk_Vector>	ctrlPos;
-		double					bezier(int, int, double);
+		int		deg;
+		void SetLine(int, int, const fk_Vector &);
+		int GetID(int, int);
+		int GetLID(int, int, int);
 	};
 }
 

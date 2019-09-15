@@ -75,6 +75,7 @@
 #include <FK/D3DXData.H>
 #include <FK/D3DXShapeParser.H>
 #include <FK/BVHMotion.h>
+#include <FK/Math.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -496,7 +497,7 @@ void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 
 			weight = tmpSkinData->GetWeight(static_cast<int>(j));
 
-			if(weight > FK_EPS) {
+			if(weight > fk_Math::EPS) {
 				skinMap.SetFrame(frameData[i]);
 				skinMap.SetWeight(weight);
 				mapData[static_cast<_st>(vID)].push_back(skinMap);

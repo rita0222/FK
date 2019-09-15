@@ -69,18 +69,46 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+
+
 #ifndef __FK_GREGORY_HEADER__
 #define __FK_GREGORY_HEADER__
 
-#include <FK/BezSurface.h>
+#include <FK/Surface.h>
 
 namespace FK {
 	//! Gregory 曲面を生成、管理するクラス
 	/*!
 	 *	このクラスは、形状として Gregory 曲面を制御する機能を提供します。
-	 *	次数は u,v 両方で 3 次式で固定となります。
-	 *	制御点を直接指定する方法の他に、
-	 *	他の Gregory 曲面と G1 連続性を保証する接続を行う機能が提供されています。
+	 *	u,v 両方向で 3 次式のみに対応しています。
+	 *
+	 *	Gregory 曲面の境界線や制御点は以下の図のような構成を持っています。
+	 *	\image html Gregory.png "Gregory曲面の構成"
+	 *
+	 *	以降、この図に基づいて各要素を解説していきます。
+	 *
+	 *	Gregory 曲面の境界は以下のような 4 本の 3 次 Bezier 曲線により構成されています。
+	 *	- fk_SurfDirection::U_S: u 方向 v 始点側曲線
+	 *	- fk_SurfDirection::U_E: u 方向 v 終点側曲線
+	 *	- fk_SurfDirection::V_S: v 方向 u 終点側曲線
+	 *	- fk_SurfDirection::V_E: v 方向 u 終点側曲線
+	 *	.
+	 *	これらの境界線を構成する制御点を「境界制御点」と呼び、
+	 *	図中の「C」で構成されている制御点にあたります。
+	 *	これらの点位置は setCurveCtrl() で設定が可能で、
+	 *	「曲線名」と「ID」によって指定します。
+	 *	図中の境界制御点の一番目が曲線名、二番目が ID にあたります。
+	 *	4隅の制御点については指定方法が 2 種類あります。
+	 *	例えば、図の左上の制御点は
+	 *	setCurveCtrl(fk_SurfDirection::U_E, 0, V) と
+	 *	setCurveCtrl(fk_SurfDirection::V_S, 3, V) の両方の指定方法があります。
+	 *
+	 *	Gregory 曲面は境界制御点の他に、流れベクトルを制御する
+	 *	「流れベクトル制御点」があり、図中の「D」で構成されている点にあたります。
+	 *	これらの制御点の位置を変更しても境界線は変化しませんが、
+	 *	曲面境界部分の流れベクトル(偏微分ベクトル)が変化します。
+	 *	流れベクトルを適切に設定すると、
+	 *	隣り合う曲面が境界部分で折れ曲がらず滑らかに接続することができます。
 	 */
 
 	class fk_Gregory : public fk_Surface {
@@ -92,6 +120,58 @@ namespace FK {
 
 		//! デストラクタ
 		virtual ~fk_Gregory();
+
+		//! 初期化用関数
+		/*!
+		 *	この関数は、曲面を初期状態(全ての制御点が原点にある状態)にします。
+		 */
+		void			init(void);
+
+		//! 境界制御点設定関数
+		/*!
+		 *	境界線の制御点位置ベクトルを設定します。
+		 *
+		 *	\param[in] cID	設定を行う境界線の種類
+		 *	\param[in] vID	制御点 ID。先頭は 0 になります。
+		 *	\param[in] pos	制御点位置ベクトル
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool setCurveCtrl(fk_SurfDirection cID, int vID, const fk_Vector &pos);
+
+		//! 偏微分制御点設定関数
+		/*!
+		 *	境界偏微分制御点位置ベクトルを設定します。
+		 *
+		 *	\param[in] cID	設定を行う境界線の種類
+		 *	\param[in] vID	制御点 ID。1, 2 のいずれかになります。
+		 *	\param[in] pos	制御点位置ベクトル
+		 *
+		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool setDerivCtrl(fk_SurfDirection cID, int vID, const fk_Vector &pos);
+
+		//! 境界制御点参照関数
+		/*!
+		 *	曲面の境界制御点位置ベクトルを参照します。
+		 *
+		 *	\param[in] cID	境界線種類
+		 *	\param[in] vID	制御点のv方向ID
+		 *
+		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 */
+		fk_Vector getCurveCtrl(fk_SurfDirection cID, int vID);
+
+		//! 流れベクトル制御点参照関数
+		/*!
+		 *	曲面の流れベクトル制御点位置ベクトルを参照します。
+		 *
+		 *	\param[in] cID	境界線種類
+		 *	\param[in] vID	制御点のv方向ID
+		 *
+		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
+		 */
+		fk_Vector getDerivCtrl(fk_SurfDirection cID, int vID);
 
 		//! 曲面点算出関数
 		/*!
@@ -126,157 +206,18 @@ namespace FK {
 		 */
 		fk_Vector		vDeriv(double u, double v);
 
-		//! 初期化用関数
-		/*!
-		 *	この関数は、曲線を初期状態(3次式、全ての制御点が原点にある状態)にします。
-		 */
-		void	init(void);
-
-		//! 境界上制御点設定関数
-		/*!
-		 *	Gregory 曲面の境界線の制御点位置ベクトルを設定します。
-		 *	なお、Gregory 曲面の四隅にあたる制御点は、
-		 *	u 方向側からも v 方向側も指定が可能です。
-		 *
-		 *	\param[in] uv	境界線のIDを指定します。
-		 *					0 が u側でv始点側、1 がu側でv終点側、
-		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
-		 *	\param[in] ID	境界線制御点のIDを指定します。
-		 *					曲線の始点は0で、
-		 *					続く制御点のIDが 1,2,3 となります。
-		 *	\param[in] pos	制御点位置ベクトル
-		 *
-		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-		 *
-		 *	\sa setCtrl(), getBoundary(), FK::fk_SurfDirection
-		 */
-		bool	setBoundary(int uv, int ID, const fk_Vector &pos);
-
-		//! 内部制御点設定関数
-		/*!
-		 *	Gregory 曲面の内部制御点の位置ベクトルを設定します。
-		 *	ID は、隣接する境界線の制御点 ID と一致します。
-		 *
-		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
-		 *					0 が u側でv始点側、1 がu側でv終点側、
-		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
-		 *	\param[in] ID	境界線制御点のIDを指定します。
-		 *					0から3まで指定でき、
-		 *					0と3の場合は隣接する境界線の制御点を制御します。
-		 *	\param[in] pos	制御点位置ベクトル
-		 *
-		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
-		 *
-		 *	\sa setBoundary(), getCtrl(), FK::fk_SurfDirection
-		 */
-		bool	setCtrl(int uv, int ID, const fk_Vector &pos);
-
-		//! 境界上制御点参照関数
-		/*!
-		 *	Gregory 曲面の境界線の制御点位置ベクトルを参照します。
-		 *
-		 *	\param[in] uv	境界線のIDを指定します。
-		 *					0 が u側でv始点側、1 がu側でv終点側、
-		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
-		 *	\param[in] ID	境界線制御点のIDを指定します。
-		 *					曲線の始点は0で、
-		 *					続く制御点のIDが 1,2,3 となります。
-		 *
-		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
-		 *
-		 *	\sa setBoundary(), FK::fk_SurfDirection
-		 */
-		fk_Vector	getBoundary(int uv, int ID);
-
-		//! 内部制御点参照関数
-		/*!
-		 *	Gregory 曲面の内部制御点の位置ベクトルを参照します。
-		 *
-		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
-		 *					0 が u側でv始点側、1 がu側でv終点側、
-		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
-		 *	\param[in] ID	境界線制御点のIDを指定します。
-		 *					0から3まで指定でき、
-		 *					0と3の場合は隣接する境界線の制御点を返します。
-		 *
-		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
-		 *
-		 *	\sa setCtrl(), FK::fk_SurfDirection
-		 */
-		fk_Vector	getCtrl(int uv, int ID);
-
-		//! 内部制御点自動設定関数
-		/*!
-		 *	現在の境界曲線情報より、内部制御点を自動的に設定します。
-		 *	このとき、内部制御点は境界上の偏微分ベクトルが線形補間となるように設定されます。
-		 *
-		 *	\sa adjustCtrl(int), setBoundary(), getBoundary(), setCtrl(), getCtrl()
-		 */
-		void	adjustCtrl(void);
-
-		//! 境界別内部制御点自動設定関数
-		/*!
-		 *	特定の境界線に対し、現在の境界曲線情報より内部制御点を自動的に設定します。
-		 *	このとき、内部制御点は境界上の偏微分ベクトルが線形補間となるように設定されます。
-		 *
-		 *	\param[in] uv	指定する制御点に隣接する境界曲線のIDを指定します。
-		 *					0 が u側でv始点側、1 がu側でv終点側、
-		 *					2 が v側でu始点側、3 がv側でu終点側です。
-		 *					この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
-		 *
-		 *	\sa adjustCtrl(void), setBoundary(), getBoundary(), setCtrl(), getCtrl()
-		 */
-		void	adjustCtrl(int uv);
-
-		//! 隣接曲面G1連続接続関数
-		/*!
-		 *	隣接する曲面と G1 連続性を持つように制御点位置を移動します。
-		 *	隣接する境界線のうち、両端点については一致している必要があります。
-		 *	その他の制御点については、 surf 側の制御点に従って補正が行われます。
-		 *
-		 *	\param[in] surf		隣接曲面。
-		 *						隣接している境界線の両端点が一致している必要があります。
-		 *
-		 *	\param[in] thisUV	接続する境界曲線の ID を指定します。
-		 *						0 が u側でv始点側、1 がu側でv終点側、
-		 *						2 が v側でu始点側、3 がv側でu終点側です。
-		 *						この部分は、 FK::fk_SurfDirection 型で指定することも可能です。
-		 *
-		 *	\param[in] otherUV	surf 側の接続境界曲線 ID を指定します。
-		 *						IDの指定方法は thisUV と同様です。
-		 *
-		 *	\param[in] d		自身と surf の境界が同じ方向になる場合 true を、
-		 *						逆方向になる場合 false を代入します。
-		 *
-		 *	\param[in] mode		連続性を C1 とするか G1 とするかを設定します。
-		 *						C1 連続とは、境界上の偏微分ベクトルが全て連続であることです。
-		 *						一方、G1 連続とは境界上の接平面が連続であることです。
-		 *						G1 連続は必ずしも偏微分ベクトルが連続である必要はありません。
-		 *						
-		 *						true の場合、C1 連続性を持つように制御点を移動します。
-		 *						false の場合、G1 連続性を持つように制御点を移動します。
-		 *
-		 *	\return		接続に成功した場合 true を、失敗した場合 false を返します。
-		 *
-		 *	\sa setBoundary(), setCtrl(), adjustCtrl()
-		 */
-		bool	connect(fk_Gregory *surf, int thisUV, int otherUV, bool d, bool mode = false);
-		
 	private:
-		fk_BezSurface	bez;
-		fk_Vector		ctrl[20];
+		static std::vector< std::vector< std::tuple<int, int, bool> >	> CLinePos;
+		
+		int GetCID(fk_SurfDirection, int);
+		int GetDID(fk_SurfDirection, int);
+		void SetCLine(fk_SurfDirection, int, const fk_Vector &);
+		void SetDLine(fk_SurfDirection, int, const fk_Vector &);
+		fk_Vector GetIntC(double, double, int, int);
+		void MakeBezier(fk_Vector [4][4], double, double);
 
-		int		MapID(bool, int, int);
-		void	BezSet(double, double);
-		void	C1Connect(int, fk_Vector *);
-		void	G1Connect(int, fk_Vector *);
+		void MakeCLinePos(void);
 	};
 }
 
-#endif	// __FK_GREGORY_HEADER__
-
-
+#endif	// __FK_BEZSURFACE_HEADER__

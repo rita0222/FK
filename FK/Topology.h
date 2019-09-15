@@ -75,19 +75,17 @@
 #include <FK/Base.h>
 #include <FK/Attribute.h>
 #include <FK/DataBase.H>
-//#include <FK/Palette.h>
 
 namespace FK {
 	
-	using fk_TopologyType = char;
-
-	const fk_TopologyType	FK_VERTEX_TYPE = 1;
-	const fk_TopologyType	FK_HALF_TYPE = 2;
-	const fk_TopologyType	FK_EDGE_TYPE = 3;
-	const fk_TopologyType	FK_LOOP_TYPE = 4;
-	const fk_TopologyType	FK_INDEXFACE_TYPE = 6;
-	const fk_TopologyType	FK_UNDEFINED_TYPE = -1;
-
+	enum class fk_TopologyType {
+		VERTEX,
+		HALF,
+		EDGE,
+		LOOP,
+		INDEXFACE,
+		UNDEFINED,
+	};
 
 	//! ソリッドモデル位相要素用基底クラス
 	/*!
@@ -116,12 +114,12 @@ namespace FK {
 		/*!
 		 *	位相タイプを返します。返り値は以下のいずれかとなります。
 		 *
-		 *	\retval FK_VERTEX_TYPE		頂点を表します。
-		 *	\retval FK_HALF_TYPE		半稜線を表します。
-		 *	\retval FK_EDGE_TYPE		稜線を表します。
-		 *	\retval FK_LOOP_TYPE		ループを表します。
-		 *	\retval FK_INDEXFACE_TYPE	インデックスフェースセットを表します。
-		 *	\retval FK_UNDEFINED_TYPE	未定義な位相要素を表します。
+		 *	\retval fk_TopologyType::VERTEX		頂点を表します。
+		 *	\retval fk_TopologyType::HALF		半稜線を表します。
+		 *	\retval fk_TopologyType::EDGE		稜線を表します。
+		 *	\retval fk_TopologyType::LOOP		ループを表します。
+		 *	\retval fk_TopologyType::INDEXFACE	インデックスフェースセットを表します。
+		 *	\retval fk_TopologyType::UNDEFINED	未定義な位相要素を表します。
 		 */
 		fk_TopologyType		getType(void) const;
 

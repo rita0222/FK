@@ -83,12 +83,18 @@ const string fk_Shape::pointModelColorName = "fk_PointModelColor";
 const string fk_Shape::pointElementColorName = "fk_PointElementColor";
 const string fk_Shape::pointElementAliveName = "fk_PointElementAlive";
 const string fk_Shape::lineModelColorName = "fk_LineModelColor";
-const string fk_Shape::lineElementColorName = "fk_LineElementColorName";
+const string fk_Shape::lineElementColorName = "fk_LineElementColor";
+const string fk_Shape::curveModelColorName = "fk_CurveModelColor";
 const string fk_Shape::texCoordName = "fk_TexCoord";
+const string fk_Shape::ctrlPosName = "fk_CtrlPos";
+const string fk_Shape::degreeName = "fk_Degree";
 
-fk_Shape::fk_Shape(fk_ObjectType argObjType)
-	: palette(&defaultPalette), materialMode(FK_NONE_MODE),
-	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(FK_SHAPE_OTHER)
+const int fk_Shape::ALIVE;
+const int fk_Shape::DEAD;
+
+fk_Shape::fk_Shape(fk_Type argObjType)
+	: palette(&defaultPalette), materialMode(fk_MaterialMode::NONE),
+	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(fk_RealShapeType::OTHER)
 {
 	SetObjectType(argObjType);
 
@@ -119,6 +125,15 @@ fk_Shape::~fk_Shape()
 			DeleteBuffer(GLuint(tmpID));
 		}
 	}
+
+	for (auto p : intSelf) {
+		delete p.second;
+	}
+
+	for (auto p : floatSelf) {
+		delete p.second;
+	}
+
 	return;
 }
 
@@ -148,21 +163,21 @@ void fk_Shape::clearMaterial(void)
 void fk_Shape::setObjMaterialID(int argID)
 {
 	palette->setObjMaterialID(argID);
-	materialMode = FK_CHILD_MODE;
+	materialMode = fk_MaterialMode::CHILD;
 	return;
 }
 
 void fk_Shape::pushPalette(fk_Material &argMat)
 {
 	palette->pushPalette(&argMat);
-	materialMode = FK_PARENT_MODE;
+	materialMode = fk_MaterialMode::PARENT;
 	return;
 }
 
 void fk_Shape::setPalette(fk_Material &argMat, int argID)
 {
 	palette->setPalette(&argMat, argID);
-	materialMode = FK_PARENT_MODE;
+	materialMode = fk_MaterialMode::PARENT;
 	return;
 }
 
@@ -254,28 +269,118 @@ void fk_Shape::DeleteMapF(string argName)
 	}
 }	
 
-void fk_Shape::setShaderAttribute(string argName, int argDim, vector<int> *argValue)
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<int> *argValue, bool argSelf)
 {
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
 	int id = -1;
 
 	DeleteMapF(argName);
 	
 	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
-	attrMapI[argName] = shapeAttrI(id, argDim, argValue);
+
+	if(argSelf == true) {
+		vector<int> *array;
+		if(intSelf.find(argName) == intSelf.end()) {
+			array = new vector<int>();
+			intSelf[argName] = array;
+		} else {
+			array = intSelf[argName];
+		}
+		*array = *argValue;
+		attrMapI[argName] = shapeAttrI(id, argDim, array);
+	} else {
+		attrMapI[argName] = shapeAttrI(id, argDim, argValue);
+	}
 	attrModify[argName] = true;
 }
 
-void fk_Shape::setShaderAttribute(string argName, int argDim, vector<float> *argValue)
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<float> *argValue, bool argSelf)
 {
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
 	int id = -1;
 
 	DeleteMapI(argName);
 
 	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
-	attrMapF[argName] = shapeAttrF(id, argDim, argValue);
+	if(floatSelf.find(argName) == floatSelf.end()) {
+		
+	}
+
+	if(argSelf == true) {
+		vector<float> *array;
+		if(floatSelf.find(argName) == floatSelf.end()) {
+			array = new vector<float>();
+			floatSelf[argName] = array;
+		} else {
+			array = floatSelf[argName];
+		}
+		
+		*array = *argValue;
+		attrMapF[argName] = shapeAttrF(id, argDim, array);
+	} else {
+		attrMapF[argName] = shapeAttrF(id, argDim, argValue);
+	}
+	
 	attrModify[argName] = true;
 }
 	
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<fk_Vector> *argValue)
+{
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
+	vector<float> array;
+
+	for(_st i = 0; i < argValue->size(); ++i) {
+		array.push_back(float(argValue->at(i).x));
+		if(argDim == 1) continue;
+		array.push_back(float(argValue->at(i).y));
+		if(argDim == 2) continue;
+		array.push_back(float(argValue->at(i).z));
+		if(argDim == 4) array.push_back(0.0f);
+	}
+
+	setShaderAttribute(argName, argDim, &array, true);
+}
+	
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<fk_TexCoord> *argValue)
+{
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
+	vector<float> array;
+
+	for(_st i = 0; i < argValue->size(); ++i) {
+		array.push_back(float(argValue->at(i).x));
+		if(argDim == 1) continue;
+		array.push_back(float(argValue->at(i).y));
+		if(argDim == 2) continue;
+		array.push_back(0.0f);
+		if(argDim == 4) array.push_back(0.0f);
+	}
+
+	setShaderAttribute(argName, argDim, &array, true);
+}
+
+void fk_Shape::setShaderAttribute(string argName, int argDim,
+								  vector<fk_HVector> *argValue)
+{
+	if(argValue == nullptr || argDim < 1 || argDim > 4) return;
+	vector<float> array;
+
+	for(_st i = 0; i < argValue->size(); ++i) {
+		array.push_back(float(argValue->at(i).x));
+		if(argDim == 1) continue;
+		array.push_back(float(argValue->at(i).y));
+		if(argDim == 2) continue;
+		array.push_back(float(argValue->at(i).z));
+		if(argDim == 4) array.push_back(float(argValue->at(i).w));
+	}
+
+	setShaderAttribute(argName, argDim, &array, true);
+}
+	
+
 void fk_Shape::DefineVBO(void)
 {
 	if(vboInitFlg == true) return;

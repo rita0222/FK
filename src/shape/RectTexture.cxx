@@ -84,7 +84,7 @@ bool fk_RectTexture::faceIndexFlg = false;
 fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	: fk_Texture(argImage)
 {
-	SetObjectType(FK_RECTTEXTURE);
+	SetObjectType(fk_Type::RECTTEXTURE);
 	GetFaceSize = []() { return 2; };
 	StatusUpdate = [this]() {
 		SizeUpdate();
@@ -201,7 +201,7 @@ void fk_RectTexture::TexCoordUpdate(void)
 
 bool fk_RectTexture::setTextureSize(double argX, double argY)
 {
-	if(argX < -FK_EPS || argY < -FK_EPS) {
+	if(argX < -fk_Math::EPS || argY < -fk_Math::EPS) {
 		return false;
 	}
 
@@ -242,10 +242,10 @@ fk_TexCoord fk_RectTexture::getRepeatParam(void)
 void fk_RectTexture::setTextureCoord(double argSU, double argSV,
 									 double argEU, double argEV)
 {
-	if(argSU < -FK_EPS || argSU > 1.0 + FK_EPS ||
-	   argSV < -FK_EPS || argSV > 1.0 + FK_EPS ||
-	   argEU < -FK_EPS || argEU > 1.0 + FK_EPS ||
-	   argEV < -FK_EPS || argEV > 1.0 + FK_EPS) {
+	if(argSU < -fk_Math::EPS || argSU > 1.0 + fk_Math::EPS ||
+	   argSV < -fk_Math::EPS || argSV > 1.0 + fk_Math::EPS ||
+	   argEU < -fk_Math::EPS || argEU > 1.0 + fk_Math::EPS ||
+	   argEV < -fk_Math::EPS || argEV > 1.0 + fk_Math::EPS) {
 		fk_PutError("fk_RectTexture", "setTextureCoord", 1,
 					"Texture Coord Error.");
 		return;
@@ -262,10 +262,10 @@ void fk_RectTexture::setTextureCoord(double argSU, double argSV,
 void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
 									 const fk_TexCoord &argE)
 {
-	if(argS.x < -FK_EPS || argS.x > 1.0 + FK_EPS ||
-	   argS.y < -FK_EPS || argS.y > 1.0 + FK_EPS ||
-	   argE.x < -FK_EPS || argE.x > 1.0 + FK_EPS ||
-	   argE.y < -FK_EPS || argE.y > 1.0 + FK_EPS) {
+	if(argS.x < -fk_Math::EPS || argS.x > 1.0 + fk_Math::EPS ||
+	   argS.y < -fk_Math::EPS || argS.y > 1.0 + fk_Math::EPS ||
+	   argE.x < -fk_Math::EPS || argE.x > 1.0 + fk_Math::EPS ||
+	   argE.y < -fk_Math::EPS || argE.y > 1.0 + fk_Math::EPS) {
 		fk_PutError("fk_RectTexture", "setTextureCoord", 2,
 					"Texture Coord Error.");
 		return;

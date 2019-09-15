@@ -75,6 +75,7 @@
 #include <FK/Tree.h>
 #include <FK/Quaternion.h>
 #include <FK/BoundaryElem.H>
+#include <FK/Math.h>
 #include <algorithm>
 
 using namespace std;
@@ -84,22 +85,36 @@ using mi = list<fk_Model *>::iterator;
 
 static unsigned int		_globalModelID = 1;
 
+namespace FK {
+	fk_DepthMode operator | (fk_DepthMode argL, fk_DepthMode argR) {
+		return static_cast<fk_DepthMode>(static_cast<unsigned int>(argL) |
+										static_cast<unsigned int>(argR));
+	}
+
+	fk_DepthMode operator & (fk_DepthMode argL, fk_DepthMode argR) {
+		return static_cast<fk_DepthMode>(static_cast<unsigned int>(argL) &
+										static_cast<unsigned int>(argR));
+	}
+
+	fk_DepthMode operator ^ (fk_DepthMode argL, fk_DepthMode argR) {
+		return static_cast<fk_DepthMode>(static_cast<unsigned int>(argL) ^
+										static_cast<unsigned int>(argR));
+	}
+}
+
 fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(FK_MODEL), shape(nullptr), parentModel(nullptr),
-	  treeData(nullptr), drawMode(FK_NONEMODE), elemMode(FK_ELEM_MODEL),
-	  depthMode(FK_DEPTH_READ_AND_WRITE), pointSize(1.0),
+	: fk_Boundary(fk_Type::MODEL), shape(nullptr), parentModel(nullptr),
+	  treeData(nullptr), drawMode(fk_DrawMode::NONE), elemMode(fk_ElementMode::MODEL),
+	  depthMode(fk_DepthMode::READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
 	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
-	  texMode(FK_TEX_NONE), shadingMode(FK_SHADING_PHONG),
+	  texMode(fk_TexMode::NONE), shadingMode(fk_ShadingMode::PHONG),
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
 	  interMode(false), interStatus(false), interStopMode(false),
 	  shader(nullptr)
 {
-	setBlendMode(FK_BLEND_ALPHA_MODE);
+	setBlendMode(fk_BlendMode::ALPHA);
 	setShape(argShape);
-
-	//preShader = [](){};
-	//postShader = [](){};
 
 	return;
 }
@@ -132,42 +147,42 @@ void fk_Model::setShape(fk_Shape *argShape)
 		drawModeFlag = false;
 	}
 
-	fk_ObjectType type = argShape->getObjectType();
+	fk_Type type = argShape->getObjectType();
 	if(drawModeFlag == true) {
 		switch(type) {
-		  case FK_POINT:
-		  case FK_PARTICLESET:
-			drawMode = FK_POINTMODE;
+		  case fk_Type::POINT:
+		  case fk_Type::PARTICLESET:
+			drawMode = fk_DrawMode::POINT;
 			break;
 
-		  case FK_LINE:
-		  case FK_POLYLINE:
-		  case FK_CLOSEDLINE:
-			drawMode = FK_LINEMODE;
+		  case fk_Type::LINE:
+		  case fk_Type::POLYLINE:
+		  case fk_Type::CLOSEDLINE:
+			drawMode = fk_DrawMode::LINE;
 			break;
 			 
-		  case FK_POLYGON:
-		  case FK_BLOCK:
-		  case FK_CIRCLE:
-		  case FK_SPHERE:
-		  case FK_PRISM:
-		  case FK_CONE:
-		  case FK_CAPSULE:
-		  case FK_SOLID:
-		  case FK_INDEXFACESET:
-			drawMode = FK_POLYMODE;
+		  case fk_Type::POLYGON:
+		  case fk_Type::BLOCK:
+		  case fk_Type::CIRCLE:
+		  case fk_Type::SPHERE:
+		  case fk_Type::PRISM:
+		  case fk_Type::CONE:
+		  case fk_Type::CAPSULE:
+		  case fk_Type::SOLID:
+		  case fk_Type::INDEXFACESET:
+			drawMode = fk_DrawMode::FACE;
 			break;
 
-		  case FK_RECTTEXTURE:
-		  case FK_TRITEXTURE:
-		  case FK_MESHTEXTURE:
-		  case FK_IFSTEXTURE:
-		  case FK_ARTEXTURE:
-			drawMode = FK_TEXTUREMODE;
+		  case fk_Type::RECTTEXTURE:
+		  case fk_Type::TRITEXTURE:
+		  case fk_Type::MESHTEXTURE:
+		  case fk_Type::IFSTEXTURE:
+		  case fk_Type::ARTEXTURE:
+			drawMode = fk_DrawMode::TEXTURE;
 			break;
 
 		  default:
-			drawMode = FK_NONEMODE;
+			drawMode = fk_DrawMode::NONE;
 			break;
 		}
 	}
@@ -184,6 +199,7 @@ void fk_Model::setMaterial(const fk_Material &argMate)
 
 void fk_Model::setPointColor(fk_Color *argColor)
 {
+	if(argColor == nullptr) return;
 	setPointColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
@@ -196,6 +212,7 @@ void fk_Model::setPointColor(float argR, float argG, float argB)
 
 void fk_Model::setLineColor(fk_Color *argColor)
 {
+	if(argColor == nullptr) return;
 	setLineColor(argColor->getR(), argColor->getG(), argColor->getB());
 	return;
 }
@@ -203,6 +220,18 @@ void fk_Model::setLineColor(fk_Color *argColor)
 void fk_Model::setLineColor(float argR, float argG, float argB)
 {
 	lineColor.set(argR, argG, argB);
+	return;
+}
+
+void fk_Model::setCurveColor(fk_Color *argColor)
+{
+	if(argColor == nullptr) return;
+	setCurveColor(argColor->getR(), argColor->getG(), argColor->getB());
+	return;
+}
+void fk_Model::setCurveColor(float argR, float argG, float argB)
+{
+	curveColor.set(argR, argG, argB);
 	return;
 }
 
@@ -224,6 +253,11 @@ fk_Color * fk_Model::getPointColor(void)
 fk_Color * fk_Model::getLineColor(void)
 {
 	return &lineColor;
+}
+
+fk_Color * fk_Model::getCurveColor(void)
+{
+	return &curveColor;
 }
 
 void fk_Model::setDrawMode(const fk_DrawMode argMode)
@@ -252,49 +286,49 @@ fk_ElementMode fk_Model::getElementMode(void) const
 }
 
 void fk_Model::setMaterialMode(const fk_MaterialMode) {}
-fk_MaterialMode fk_Model::getMaterialMode(void) const { return FK_PARENT_MODE; }
+fk_MaterialMode fk_Model::getMaterialMode(void) const { return fk_MaterialMode::PARENT; }
 
 void fk_Model::setBlendMode(const fk_BlendMode argMode,
 							const fk_BlendFactor argSrcFactor,
 							const fk_BlendFactor argDstFactor)
 {
 	switch(argMode) {
-	  case FK_BLEND_ALPHA_MODE:
-		srcFactor = FK_FACTOR_SRC_ALPHA;
-		dstFactor = FK_FACTOR_ONE_MINUS_SRC_ALPHA;
+	  case fk_BlendMode::ALPHA:
+		srcFactor = fk_BlendFactor::SRC_ALPHA;
+		dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
 		break;
 
-	  case FK_BLEND_NEGATIVE_MODE:
-		srcFactor = FK_FACTOR_ONE_MINUS_DST_COLOR;
-		dstFactor = FK_FACTOR_ZERO;
+	  case fk_BlendMode::NEGATIVE:
+		srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
+		dstFactor = fk_BlendFactor::ZERO;
 		break;
 
-	  case FK_BLEND_ADDITION_MODE:
-		srcFactor = FK_FACTOR_ONE;
-		dstFactor = FK_FACTOR_ONE;
+	  case fk_BlendMode::ADDITION:
+		srcFactor = fk_BlendFactor::ONE;
+		dstFactor = fk_BlendFactor::ONE;
 		break;
 
-	  case FK_BLEND_SCREEN_MODE:
-		srcFactor = FK_FACTOR_SRC_ALPHA;
-		dstFactor = FK_FACTOR_ONE;
+	  case fk_BlendMode::SCREEN:
+		srcFactor = fk_BlendFactor::SRC_ALPHA;
+		dstFactor = fk_BlendFactor::ONE;
 		break;
 
-	  case FK_BLEND_LIGHTEN_MODE:
-		srcFactor = FK_FACTOR_ONE_MINUS_DST_COLOR;
-		dstFactor = FK_FACTOR_ONE;
+	  case fk_BlendMode::LIGHTEN:
+		srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
+		dstFactor = fk_BlendFactor::ONE;
 		break;
 
-	  case FK_BLEND_MULTIPLY_MODE:
-		srcFactor = FK_FACTOR_ZERO;
-		dstFactor = FK_FACTOR_SRC_COLOR;
+	  case fk_BlendMode::MULTIPLY:
+		srcFactor = fk_BlendFactor::ZERO;
+		dstFactor = fk_BlendFactor::SRC_COLOR;
 		break;
 
-	  case FK_BLEND_NONE_MODE:
-		srcFactor = FK_FACTOR_ONE;
-		dstFactor = FK_FACTOR_ZERO;
+	  case fk_BlendMode::NONE:
+		srcFactor = fk_BlendFactor::ONE;
+		dstFactor = fk_BlendFactor::ZERO;
 		break;
 
-	  case FK_BLEND_CUSTOM_MODE:
+	  case fk_BlendMode::CUSTOM:
 		srcFactor = argSrcFactor;
 		dstFactor = argDstFactor;
 		break;
@@ -409,7 +443,7 @@ double fk_Model::getInhScale(void) const
 
 void fk_Model::setPointSize(const double argSize)
 {
-	if(argSize <= FK_EPS) return;
+	if(argSize <= fk_Math::EPS) return;
 	pointSize = argSize;
 	return;
 }
@@ -530,7 +564,7 @@ bool fk_Model::restore(double argT)
 	fk_Quaternion		qOrg, qNew, qRet;
 
 	if(snapFlag == false) return false;
-	if(argT < FK_EPS || argT > 1.0 + FK_EPS) return false;
+	if(argT < fk_Math::EPS || argT > 1.0 + fk_Math::EPS) return false;
 
 	qOrg.makeEuler(*snapAngle);
 	qNew.makeEuler(Angle);
@@ -578,23 +612,23 @@ bool fk_Model::isInter(fk_Model *argModel)
 	if(argModel == nullptr) return false;
 
 	switch(getBMode()) {
-	  case FK_B_SPHERE:
+	  case fk_BoundaryMode::SPHERE:
 		retStatus = IsBSInter(argModel);
 		break;
 
-	  case FK_B_AABB:
+	  case fk_BoundaryMode::AABB:
 		retStatus = IsAABBInter(argModel);
 		break;
 
-	  case FK_B_OBB:
+	  case fk_BoundaryMode::OBB:
 		retStatus = IsOBBInter(argModel);
 		break;
 
-	  case FK_B_CAPSULE:
+	  case fk_BoundaryMode::CAPSULE:
 		retStatus = IsCapsuleInter(argModel);
 		break;
 
-	  case FK_B_NONE:
+	  case fk_BoundaryMode::NONE:
 	  default:
 		break;
 	}

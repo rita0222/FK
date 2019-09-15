@@ -77,9 +77,6 @@
 
 namespace FK {
 
-	const double FK_MATRIX_EPS = 1.0e-12;	//!< 行列演算用誤差1
-	const double FK_MATRIX_EPS2 = 1.0e-16;	//!< 行列演算用誤差2
-
 	//! 4元正方直交行列を管理するクラス
 	/*!
 	 *	このクラスは、4元正方直交行列に関する様々な機能を提供します。
@@ -209,7 +206,7 @@ namespace FK {
 		 *		}
 		 *
 		 *	ここでの比較は、各成分の比較において
-		 *	FK_MATRIX_EPS までの数値誤差を許容しています。
+		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
 		bool	operator ==(const fk_OrthoMatrix &) const;
 
@@ -224,7 +221,7 @@ namespace FK {
 		 *		}
 		 *
 		 *	ここでの比較は、各成分の比較において
-		 *	FK_MATRIX_EPS までの数値誤差を許容しています。
+		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
 		bool	operator !=(const fk_OrthoMatrix &) const;
 		//@}
@@ -673,7 +670,7 @@ namespace FK {
 		 *		}
 		 *
 		 *	ここでの比較は、各成分の比較において
-		 *	FK_MATRIX_EPS までの数値誤差を許容しています。
+		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
 		bool	operator ==(const fk_Matrix &) const;
 
@@ -688,7 +685,7 @@ namespace FK {
 		 *		}
 		 *
 		 *	ここでの比較は、各成分の比較において
-		 *	FK_MATRIX_EPS までの数値誤差を許容しています。
+		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
 		bool	operator !=(const fk_Matrix &) const;
 

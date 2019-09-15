@@ -208,7 +208,7 @@ bool fk_ErrorData::GetMode(void) const
 
 fk_ErrorDataBase::fk_ErrorDataBase(void)
 {
-	mode = FK_ERR_NONE;
+	mode = fk_ErrorMode::NONE;
 	DataBase.clear();
 	fileMode = false;
 	errorBrowser = nullptr;
@@ -250,7 +250,7 @@ void fk_ErrorDataBase::PutError(const string argClass, const string argFunc,
 {
 	fk_ErrorData	*data;
 
-	if(mode == FK_ERR_NONE) return;
+	if(mode == fk_ErrorMode::NONE) return;
 
 	data = new fk_ErrorData();
 
@@ -258,11 +258,11 @@ void fk_ErrorDataBase::PutError(const string argClass, const string argFunc,
 	DataBase.push_back(data);
 
 	switch(mode) {
-	  case FK_ERR_INTERACTIVE:
-	  case FK_ERR_CONSOLE_INTERACTIVE:
-	  case FK_ERR_OUT_CONSOLE_INTERACTIVE:
-	  case FK_ERR_BROWSER_INTERACTIVE:
-	  case FK_ERR_FILE:
+	  case fk_ErrorMode::INTERACTIVE:
+	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::BROWSER_INTERACTIVE:
+	  case fk_ErrorMode::FILE:
 		Print();
 		break;
 
@@ -278,7 +278,7 @@ void fk_ErrorDataBase::PutError(const string argClass,
 {
 	fk_ErrorData	*data;
 
-	if(mode == FK_ERR_NONE) return;
+	if(mode == fk_ErrorMode::NONE) return;
 
 	data = new fk_ErrorData();
 
@@ -286,11 +286,11 @@ void fk_ErrorDataBase::PutError(const string argClass,
 	DataBase.push_back(data);
 
 	switch(mode) {
-	  case FK_ERR_INTERACTIVE:
-	  case FK_ERR_CONSOLE_INTERACTIVE:
-	  case FK_ERR_OUT_CONSOLE_INTERACTIVE:
-	  case FK_ERR_BROWSER_INTERACTIVE:
-	  case FK_ERR_FILE:
+	  case fk_ErrorMode::INTERACTIVE:
+	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::BROWSER_INTERACTIVE:
+	  case fk_ErrorMode::FILE:
 		Print();
 		break;
 
@@ -305,7 +305,7 @@ void fk_ErrorDataBase::PutError(const string argMessage)
 {
 	fk_ErrorData	*data;
 
-	if(mode == FK_ERR_NONE) return;
+	if(mode == fk_ErrorMode::NONE) return;
 
 	data = new fk_ErrorData();
 
@@ -313,11 +313,11 @@ void fk_ErrorDataBase::PutError(const string argMessage)
 	DataBase.push_back(data);
 
 	switch(mode) {
-	  case FK_ERR_INTERACTIVE:
-	  case FK_ERR_CONSOLE_INTERACTIVE:
-	  case FK_ERR_OUT_CONSOLE_INTERACTIVE:
-	  case FK_ERR_BROWSER_INTERACTIVE:
-	  case FK_ERR_FILE:
+	  case fk_ErrorMode::INTERACTIVE:
+	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::BROWSER_INTERACTIVE:
+	  case fk_ErrorMode::FILE:
 		Print();
 		break;
 
@@ -366,7 +366,7 @@ bool fk_ErrorDataBase::Print(void)
 	string			outStr;
 	stringstream	ss;
 
-	if(mode == FK_ERR_NONE) return false;
+	if(mode == fk_ErrorMode::NONE) return false;
 	if(IsEmpty() == true) return false;
 
 	data = DataBase.front();
@@ -385,27 +385,27 @@ bool fk_ErrorDataBase::Print(void)
 	delete data;
 
 	switch(mode) {
-	  case FK_ERR_INTERACTIVE:
-	  case FK_ERR_QUEUE:
+	  case fk_ErrorMode::INTERACTIVE:
+	  case fk_ErrorMode::QUEUE:
 		if(errorBrowser != nullptr) errorBrowser->PutAlert(outStr.c_str());
 		break;
 
-	  case FK_ERR_CONSOLE_INTERACTIVE:
-	  case FK_ERR_CONSOLE_QUEUE:
+	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::CONSOLE_QUEUE:
 		cerr << outStr << endl;
 		break;
 
-	  case FK_ERR_OUT_CONSOLE_INTERACTIVE:
-	  case FK_ERR_OUT_CONSOLE_QUEUE:
+	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
+	  case fk_ErrorMode::OUT_CONSOLE_QUEUE:
 		cout << outStr << endl;
 		break;
 
-	  case FK_ERR_BROWSER_INTERACTIVE:
-	  case FK_ERR_BROWSER_QUEUE:
+	  case fk_ErrorMode::BROWSER_INTERACTIVE:
+	  case fk_ErrorMode::BROWSER_QUEUE:
 		if(errorBrowser != nullptr) errorBrowser->PutBrowser(outStr);
 		break;
 
-	  case FK_ERR_FILE:
+	  case fk_ErrorMode::FILE:
 		if(fileMode == true) {
 			ofs << outStr << endl;
 		}

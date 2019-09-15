@@ -81,7 +81,7 @@ using namespace FK;
 // 0 との比較関数 (実数用) 
 inline bool AlmostZero(double x)
 {
-	if(x < FK_MATRIX_EPS && x > -FK_MATRIX_EPS) return true;
+	if(x < fk_Vector::MATRIXEPS && x > -fk_Vector::MATRIXEPS) return true;
 	return false;
 }
 
@@ -198,7 +198,7 @@ static bool LUDecomposition(_st deg, vector<double> &mat,
 		index[j] = static_cast<int>(iMax);
 
 		if(AlmostZero(mat[j*deg+j]) == true) {
-			mat[j*deg+j] = FK_MATRIX_EPS2;
+			mat[j*deg+j] = fk_Vector::MATRIXEPS2;
 		}
 
 		if(j != deg-1) {

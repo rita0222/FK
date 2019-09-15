@@ -75,6 +75,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <FK/Base.h>
 
 namespace FK {
 
@@ -112,7 +113,7 @@ namespace FK {
 		bool				Convert_IFS(void);
 		void				MakeVertexIDMap_Solid(void);
 		void				MakeVertexIDMap_IFS(void);
-		void				MakeMaterialPalette(int);
+		void				MakeMaterialPalette(fk_Type);
 		float				CalcMonotoneLuminance(fk_Color *);
 	};
 }

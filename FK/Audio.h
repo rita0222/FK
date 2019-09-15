@@ -87,9 +87,6 @@
 struct OggVorbis_File;
 
 namespace FK {
-	const unsigned int FK_OV_BUFSIZE = 4096;
-	const unsigned int FK_OV_DEFAULT_QUEUE_SIZE = 64;
-
 	class fk_Model;
 
 	//! オーディオ基底クラス
@@ -119,6 +116,8 @@ namespace FK {
 	class fk_AudioBase {
 
 	public:
+		static const unsigned int BUFSIZE = 4096;
+		static const unsigned int DEFAULT_QUEUE_SIZE = 64;
 
 		//! コンストラクタ
 		fk_AudioBase(void);
@@ -726,7 +725,7 @@ namespace FK {
 		OggVorbis_File	*vf;
 		bool			ovOpenStatus;
 		int				current;
-		char			buffer[FK_OV_BUFSIZE];
+		char			buffer[fk_AudioBase::BUFSIZE];
 		double			nowTime;
 
 		void			StartQueue(bool);

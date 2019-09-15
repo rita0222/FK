@@ -74,8 +74,7 @@
 using namespace std;
 using namespace FK;
 
-fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet,
-					   fk_ObjectType argObjType)
+fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet, fk_Type argObjType)
 {
 	SetObjectType(argObjType);
 

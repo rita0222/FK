@@ -571,7 +571,7 @@ bool fk_Operation::deleteEdge(fk_Edge *argE)
 	fk_Half		*lHalf, *rHalf;
 
 	if(checkDB() == false) return false;
-	if(getEdgeStatus(argE) != FK_UNDEF_EDGE) {
+	if(getEdgeStatus(argE) != fk_EdgeStatus::UNDEF) {
 		fk_PutError("fk_Operation", "deleteEdge", 1,
 					"No UndefEdge Error.");
 		return false;

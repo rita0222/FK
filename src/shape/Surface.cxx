@@ -76,13 +76,12 @@
 using namespace std;
 using namespace FK;
 
-fk_Surface::fk_Surface(void) :
-	changeFlg(true), div(-1)
+fk_Surface::fk_Surface(void) : div(16), size(0)
 {
-	realType = FK_SHAPE_SURFACE;
-	SetObjectType(FK_SURFACE);
-	posCache.clear();
-	normCache.clear();
+	ctrlPos.clear();
+	realType = fk_RealShapeType::SURFACE;
+	SetObjectType(fk_Type::SURFACE);
+	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
 
 	return;
 }
@@ -92,30 +91,74 @@ fk_Surface::~fk_Surface(void)
 	return;
 }
 
-vector<fk_Vector> * fk_Surface::getPosCache(void)
-{
-	return &posCache;
-}
-
-vector<fk_Vector> * fk_Surface::getNormCache(void)
-{
-	return &normCache;
-}
-
 void fk_Surface::setDiv(int argDiv)
 {
-	if(argDiv < 1) return;
-
-	if(argDiv != div) {
-		changeFlg = true;
-		div = argDiv;
-	}
-	return;
+	if(argDiv <= 0) return;
+	div = argDiv;
 }
 
 int fk_Surface::getDiv(void)
 {
 	return div;
+}
+
+fk_Line * fk_Surface::GetLine(void)
+{
+	return &ctrlLine;
+}
+
+fk_Point * fk_Surface::GetPoint(void)
+{
+	return &ctrlPoint;
+}
+
+bool fk_Surface::setCtrl(int argID, fk_Vector *argPos)
+{
+	if(argID < 0 || argID >= size || argPos == nullptr) return false;
+	ctrlPos.set(argID, *argPos);
+	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, *argPos);
+	return true;
+}
+
+bool fk_Surface::setCtrl(int argID, fk_Vector argPos)
+{
+	if(argID < 0 || argID >= size) return false;
+	ctrlPos.set(argID, argPos);
+	modifyAttribute(ctrlPosName);
+
+	ctrlPoint.setVertex(argID, argPos);
+
+	return true;
+}
+
+fk_Vector fk_Surface::getCtrl(int argID)
+{
+	return ctrlPos.getV(argID);
+}
+
+int fk_Surface::getCtrlSize(void)
+{
+	return size;
+}
+
+void fk_Surface::setCtrlSize(int argSize)
+{
+	fk_Vector	zero(0.0, 0.0, 0.0);
+
+	if(ctrlPos.getSize() < argSize) ctrlPos.resize(argSize);
+	size = argSize;
+	ctrlPoint.allClear();
+	ctrlLine.allClear();
+}
+
+void fk_Surface::setCtrlNum(int argNum)
+{
+	fk_Vector zero(0.0, 0.0, 0.0);
+
+	ctrlPoint.allClear();
+	for(int i = 0; i < argNum; i++) ctrlPoint.pushVertex(zero);
 }
 
 fk_Vector fk_Surface::norm(double argU, double argV)
@@ -132,52 +175,99 @@ fk_Vector fk_Surface::norm(double argU, double argV)
 	return nVec;
 }
 
-void fk_Surface::makeCache(void)
+double fk_Surface::Bezier(int argN, int argI, double argT)
 {
-	if(div <= 0) return;
+	double		t = argT;
+	double		ret = 0.0;
 
-	makePosCache();
-	makeNormCache();
-	changeFlg = false;
-	return;
-}
+	switch(argN) {
+	  case 1:
+		switch(argI) {
+		  case 0:
+			ret = 1.0 - t;
+			break;
 
-void fk_Surface::makePosCache(void)
-{
-	double		u, v;
-	int			i, j;
+		  case 1:
+			ret = t;
+			break;
 
-	if(changeFlg == false) return;
-
-	posCache.clear();
-
-	for(i = 0; i <= div; i++) {
-		v = static_cast<double>(i)/static_cast<double>(div);
-		for(j = 0; j <= div; j++) {
-			u = static_cast<double>(j)/static_cast<double>(div);
-			posCache.push_back(pos(u, v));
+		  default:
+			break;
 		}
+		break;
+
+	  case 2:
+		switch(argI) {
+		  case 0:
+			ret = (1.0 - t)*(1.0 - t);
+			break;
+
+		  case 1:
+			ret = 2.0 * (1.0 - t) * t;
+			break;
+
+		  case 2:
+			ret = t * t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case 3:
+		switch(argI) {
+		  case 0:
+			ret = (1.0 - t)*(1.0 - t)*(1.0 - t);
+			break;
+
+		  case 1:
+			ret = 3.0 * (1.0 - t)*(1.0 - t)*t;
+			break;
+
+		  case 2:
+			ret = 3.0 * (1.0 - t)*t*t;
+			break;
+
+		  case 3:
+			ret = t*t*t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case 4:
+		switch(argI) {
+		  case 0:
+			ret = (1.0 - t)*(1.0 - t)*(1.0 - t)*(1.0 - t);
+			break;
+
+		  case 1:
+			ret = 4.0 * (1.0 - t)*(1.0 - t)*(1.0 - t)*t;
+			break;
+
+		  case 2:
+			ret = 6.0 * (1.0 - t)*(1.0 - t)*t*t;
+			break;
+
+		  case 3:
+			ret = 4.0 * (1.0 - t)*t*t*t;
+			break;
+
+		  case 4:
+			ret = t*t*t*t;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  default:
+		break;
 	}
 
-	return;
-}
-
-void fk_Surface::makeNormCache(void)
-{
-	int			i, j;
-	fk_Vector	tmpV1, tmpV2, tmpV3, tmpNorm;
-
-	if(changeFlg == false) return;
-
-	normCache.clear();
-
-	for(i = 0; i <= div; i++) {
-		double v = static_cast<double>(i)/static_cast<double>(div);
-		for(j = 0; j <= div; j++) {
-			double u = static_cast<double>(j)/static_cast<double>(div);
-			normCache.push_back(norm(u, v));
-		}
-	}
-
-	return;
+	return ret;
 }

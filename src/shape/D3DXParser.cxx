@@ -303,7 +303,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 				}
 			} else if(meshModeFlg == true) {
 				if(CheckProperty(data, "MeshTextureCoords") == true) {
-					if(shape->ReadVectorData(ifs, FK_D3DX_T_MODE) == false) {
+					if(shape->ReadVectorData(ifs, fk_D3DX_VecMode::T_MODE) == false) {
 						ifs.close();
 						fk_PutError("fk_D3DXParser", "ReadData", 3);
 						return false;
