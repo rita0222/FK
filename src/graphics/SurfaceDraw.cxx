@@ -188,6 +188,7 @@ void fk_SurfaceDraw::ShaderSetup(void)
 	if(prog->validate() == false) {
 		fk_PutError("fk_SurfaceDraw", "ShaderSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		//fk_Window::putString(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
