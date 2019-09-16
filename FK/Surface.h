@@ -80,7 +80,7 @@
 namespace FK {
 
 	//! 曲面の uv 方向を表す列挙型
-	enum class fk_SurfDirection : int {
+	enum class fk_UV : int {
 		U_S = 0,	//!< u側(v始点側)
 		U_E = 1,	//!< u側(v終点側)
 		V_S = 2,	//!< v側(u始点側)

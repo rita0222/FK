@@ -88,20 +88,20 @@ namespace FK {
 	 *	以降、この図に基づいて各要素を解説していきます。
 	 *
 	 *	Gregory 曲面の境界は以下のような 4 本の 3 次 Bezier 曲線により構成されています。
-	 *	- fk_SurfDirection::U_S: u 方向 v 始点側曲線
-	 *	- fk_SurfDirection::U_E: u 方向 v 終点側曲線
-	 *	- fk_SurfDirection::V_S: v 方向 u 終点側曲線
-	 *	- fk_SurfDirection::V_E: v 方向 u 終点側曲線
+	 *	- fk_UV::U_S: u 方向 v 始点側曲線
+	 *	- fk_UV::U_E: u 方向 v 終点側曲線
+	 *	- fk_UV::V_S: v 方向 u 終点側曲線
+	 *	- fk_UV::V_E: v 方向 u 終点側曲線
 	 *	.
 	 *	これらの境界線を構成する制御点を「境界制御点」と呼び、
 	 *	図中の「C」で構成されている制御点にあたります。
-	 *	これらの点位置は setCurveCtrl() で設定が可能で、
+	 *	これらの点位置は setBoundary() で設定が可能で、
 	 *	「曲線名」と「ID」によって指定します。
 	 *	図中の境界制御点の一番目が曲線名、二番目が ID にあたります。
 	 *	4隅の制御点については指定方法が 2 種類あります。
 	 *	例えば、図の左上の制御点は
-	 *	setCurveCtrl(fk_SurfDirection::U_E, 0, V) と
-	 *	setCurveCtrl(fk_SurfDirection::V_S, 3, V) の両方の指定方法があります。
+	 *	setBoundary(fk_UV::U_E, 0, V) と
+	 *	setBoundary(fk_UV::V_S, 3, V) の両方の指定方法があります。
 	 *
 	 *	Gregory 曲面は境界制御点の他に、流れベクトルを制御する
 	 *	「流れベクトル制御点」があり、図中の「D」で構成されている点にあたります。
@@ -131,48 +131,99 @@ namespace FK {
 		/*!
 		 *	境界線の制御点位置ベクトルを設定します。
 		 *
-		 *	\param[in] cID	設定を行う境界線の種類
+		 *	\param[in] uv	設定を行う境界線の種類
 		 *	\param[in] vID	制御点 ID。先頭は 0 になります。
 		 *	\param[in] pos	制御点位置ベクトル
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool setCurveCtrl(fk_SurfDirection cID, int vID, const fk_Vector &pos);
+		bool setBoundary(fk_UV uv, int vID, const fk_Vector &pos);
 
-		//! 偏微分制御点設定関数
+		//! 流れベクトル制御点設定関数
 		/*!
-		 *	境界偏微分制御点位置ベクトルを設定します。
+		 *	流れベクトル制御点位置ベクトルを設定します。
 		 *
-		 *	\param[in] cID	設定を行う境界線の種類
+		 *	\param[in] uv	設定を行う境界線の種類
 		 *	\param[in] vID	制御点 ID。1, 2 のいずれかになります。
 		 *	\param[in] pos	制御点位置ベクトル
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool setDerivCtrl(fk_SurfDirection cID, int vID, const fk_Vector &pos);
+		bool setDerivative(fk_UV uv, int vID, const fk_Vector &pos);
 
 		//! 境界制御点参照関数
 		/*!
 		 *	曲面の境界制御点位置ベクトルを参照します。
 		 *
-		 *	\param[in] cID	境界線種類
+		 *	\param[in] uv	境界線種類
 		 *	\param[in] vID	制御点のv方向ID
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 */
-		fk_Vector getCurveCtrl(fk_SurfDirection cID, int vID);
+		fk_Vector getBoundary(fk_UV uv, int vID);
 
 		//! 流れベクトル制御点参照関数
 		/*!
 		 *	曲面の流れベクトル制御点位置ベクトルを参照します。
 		 *
-		 *	\param[in] cID	境界線種類
+		 *	\param[in] uv	境界線種類
 		 *	\param[in] vID	制御点のv方向ID
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 */
-		fk_Vector getDerivCtrl(fk_SurfDirection cID, int vID);
+		fk_Vector getDerivative(fk_UV uv, int vID);
 
+		//! 流れベクトル制御点自動設定関数
+		/*!
+		 *	現在の境界曲線情報より、流れベクトル制御点を自動的に設定します。
+		 *	このとき、内部制御点は境界上の流れベクトルが線形補間となるように設定されます。
+		 *
+		 *	\sa adjustDerivative(fk_UV), setBoundary(), setDerivative(), connect()
+		 */
+		void	adjustDerivative(void);
+
+		//! 境界別流れベクトル制御点自動設定関数
+		/*!
+		 *	特定の境界線に対し、現在の境界曲線情報より流れベクトル制御点を自動的に設定します。
+		 *	このとき、流れベクトル制御点は境界上の流れベクトルが線形補間となるように設定されます。
+		 *
+		 *	\param[in] uv	指定する制御点に隣接する境界曲線を指定します。
+		 *
+		 *	\sa adjustDerivative(void), setBoundary(), setDerivative(), connect()
+		 */
+		void	adjustDerivative(fk_UV uv);
+
+		//! 隣接曲面G1連続接続関数
+		/*!
+		 *	隣接する曲面と G1 連続性を持つように制御点位置を移動します。
+		 *	隣接する境界線のうち、両端点については一致している必要があります。
+		 *	その他の制御点については、 surf 側の制御点に従って補正が行われます。
+		 *
+		 *	\param[in] surf		隣接曲面。
+		 *						隣接している境界線の両端点が一致している必要があります。
+		 *
+		 *	\param[in] thisUV	接続する境界曲線を指定します。
+		 *
+		 *	\param[in] otherUV	surf 側の接続境界曲線を指定します。
+		 *
+		 *	\param[in] d		自身と surf の境界が同じ方向になる場合 true を、
+		 *						逆方向になる場合 false を代入します。
+		 *
+		 *	\param[in] mode		連続性を C1 とするか G1 とするかを設定します。
+		 *						C1 連続とは、境界上の流れベクトルが全て連続であることです。
+		 *						一方、G1 連続とは境界上の接平面が連続であることです。
+		 *						G1 連続は必ずしも流れベクトルが連続である必要はありません。
+		 *						
+		 *						true の場合、C1 連続性を持つように制御点を移動します。
+		 *						false の場合、G1 連続性を持つように制御点を移動します。
+		 *
+		 *	\return		接続に成功した場合 true を、失敗した場合 false を返します。
+		 *
+		 *	\sa setBoundary(), setDerivative(), adjustDerivative(void), adjustDerivative(fk_UV)
+		 */
+		bool	connect(fk_Gregory *surf, fk_UV thisUV, fk_UV otherUV,
+						bool d, bool mode = false);
+		
 		//! 曲面点算出関数
 		/*!
 		 *	パラメータに対応する曲面上の点の位置ベクトルを返します。
@@ -207,16 +258,14 @@ namespace FK {
 		fk_Vector		vDeriv(double u, double v);
 
 	private:
-		static std::vector< std::vector< std::tuple<int, int, bool> >	> CLinePos;
-		
-		int GetCID(fk_SurfDirection, int);
-		int GetDID(fk_SurfDirection, int);
-		void SetCLine(fk_SurfDirection, int, const fk_Vector &);
-		void SetDLine(fk_SurfDirection, int, const fk_Vector &);
-		fk_Vector GetIntC(double, double, int, int);
-		void MakeBezier(fk_Vector [4][4], double, double);
+		fk_Vector boundary[4][4];
+		fk_Vector deriv[4][4];
+		fk_Vector bezier[4][4];
 
-		void MakeCLinePos(void);
+		int GetBID(fk_UV, int);
+		int GetDID(fk_UV, int);
+		void C1Connect(fk_UV, fk_Vector *);
+		void G1Connect(fk_UV, fk_Vector *);
 	};
 }
 
