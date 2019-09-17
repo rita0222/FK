@@ -81,7 +81,7 @@ using namespace FK;
 
 fk_Gregory::fk_Gregory(void)
 {
-	SetObjectType(fk_Type::BEZSURFACE);
+	SetObjectType(fk_Type::GREGORY);
 	init();
 	return;
 }
@@ -94,14 +94,14 @@ fk_Gregory::~fk_Gregory()
 
 void fk_Gregory::init(void)
 {
-	setCtrlSize(20);
+	setCtrlSize(25);
 	setCtrlNum(20);
 	fk_Vector zero;
 
 	ctrlLine.allClear();
-	for(int i = 0; i < 20; ++i) ctrlLine.pushLine(zero, zero);
-	for(int i = 0; i < 4; ++i) {
-		for(int j = 0; j < 4; ++j) {
+	//for(int i = 0; i < 20; ++i) ctrlLine.pushLine(zero, zero);
+	for(int i = 0; i <= 3; ++i) {
+		for(int j = 0; j <= 3; ++j) {
 			boundary[i][j] = zero;
 			deriv[i][j] = zero;
 			bezier[i][j] = zero;
@@ -223,80 +223,53 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 
 	boundary[_st(argUV)][_st(argVID)] = argV;
 
-	switch(argVID) {
-	  case 0:
-		switch(argUV) {
-		  case fk_UV::U_S:
+	switch(argUV) {
+	  case fk_UV::U_S:
+		switch(argVID) {
+		  case 0:
 			boundary[_st(fk_UV::V_S)][0] = argV;
 			bezier[0][0] = argV;
 			break;
 
-		  case fk_UV::U_E:
-			boundary[_st(fk_UV::V_S)][3] = argV;
-			bezier[3][0] = argV;
-			break;
-
-		  case fk_UV::V_S:
-			boundary[_st(fk_UV::U_S)][0] = argV;
-			bezier[0][0] = argV;
-			break;
-
-		  case fk_UV::V_E:
-			boundary[_st(fk_UV::U_S)][3] = argV;
-			bezier[0][3] = argV;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case 1:
-		switch(argUV) {
-		  case fk_UV::U_S:
+		  case 1:
 			deriv[_st(fk_UV::V_S)][0] = argV;
 			bezier[0][1] = argV;
 			break;
 
-		  case fk_UV::U_E:
-			deriv[_st(fk_UV::V_S)][3] = argV;
-			bezier[3][1] = argV;
-			break;
-
-		  case fk_UV::V_S:
-			deriv[_st(fk_UV::U_S)][0] = argV;
-			bezier[1][0] = argV;
-			break;
-
-		  case fk_UV::V_E:
-			deriv[_st(fk_UV::U_S)][3] = argV;
-			bezier[1][3] = argV;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case 2:
-		switch(argUV) {
-		  case fk_UV::U_S:
+		  case 2:
 			deriv[_st(fk_UV::V_E)][0] = argV;
 			bezier[0][2] = argV;
 			break;
 
-		  case fk_UV::U_E:
+		  case 3:
+			boundary[_st(fk_UV::V_E)][0] = argV;
+			bezier[0][3] = argV;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case fk_UV::U_E:
+		switch(argVID) {
+		  case 0:
+			boundary[_st(fk_UV::V_S)][3] = argV;
+			bezier[3][0] = argV;
+			break;
+
+		  case 1:
+			deriv[_st(fk_UV::V_S)][3] = argV;
+			bezier[3][1] = argV;
+			break;
+
+		  case 2:
 			deriv[_st(fk_UV::V_E)][3] = argV;
 			bezier[3][2] = argV;
 			break;
 
-		  case fk_UV::V_S:
-			deriv[_st(fk_UV::U_E)][0] = argV;
-			bezier[2][0] = argV;
-			break;
-
-		  case fk_UV::V_E:
-			deriv[_st(fk_UV::U_E)][3] = argV;
+		  case 3:
+			boundary[_st(fk_UV::V_E)][3] = argV;
 			bezier[3][3] = argV;
 			break;
 
@@ -304,25 +277,52 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 			break;
 		}
 		break;
-		
-	  case 3:
-		switch(argUV) {
-		  case fk_UV::U_S:
-			boundary[_st(fk_UV::V_E)][0] = argV;
-			bezier[0][3] = argV;
+
+	  case fk_UV::V_S:
+		switch(argVID) {
+		  case 0:
+			boundary[_st(fk_UV::U_S)][0] = argV;
+			bezier[0][0] = argV;
 			break;
 
-		  case fk_UV::U_E:
-			boundary[_st(fk_UV::V_E)][3] = argV;
-			bezier[3][3] = argV;
+		  case 1:
+			deriv[_st(fk_UV::U_S)][0] = argV;
+			bezier[1][0] = argV;
 			break;
 
-		  case fk_UV::V_S:
+		  case 2:
+			deriv[_st(fk_UV::U_E)][0] = argV;
+			bezier[2][0] = argV;
+			break;
+
+		  case 3:
 			boundary[_st(fk_UV::U_E)][0] = argV;
 			bezier[3][0] = argV;
 			break;
 
-		  case fk_UV::V_E:
+		  default:
+			break;
+		}
+		break;
+
+	  case fk_UV::V_E:
+		switch(argVID) {
+		  case 0:
+			boundary[_st(fk_UV::U_S)][3] = argV;
+			bezier[0][3] = argV;
+			break;
+
+		  case 1:
+			deriv[_st(fk_UV::U_S)][3] = argV;
+			bezier[1][3] = argV;
+			break;
+
+		  case 2:
+			deriv[_st(fk_UV::U_E)][3] = argV;
+			bezier[2][3] = argV;
+			break;
+
+		  case 3:
 			boundary[_st(fk_UV::U_E)][3] = argV;
 			bezier[3][3] = argV;
 			break;
@@ -335,7 +335,7 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 	  default:
 		break;
 	}
-
+	
 	setCtrl(GetBID(argUV, argVID), argV);
 
 	return true;
@@ -450,7 +450,7 @@ bool fk_Gregory::connect(fk_Gregory *argSurf,
 	argSurf->adjustDerivative(argOtherUV);
 	
 	// 相手側曲面から制御点情報を取得
-	for(i = 0; i < 4; i++) {
+	for(i = 0; i <= 3; ++i) {
 		index = (argNegateFlg == true) ? i : 3-i;
 		oC[i] = argSurf->getBoundary(argOtherUV, index);
 		oC[i+4] = argSurf->getDerivative(argOtherUV, index);

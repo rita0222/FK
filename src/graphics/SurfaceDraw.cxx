@@ -124,7 +124,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
-	if(mode == 1) SubroutineSetup(argModel);
+	SubroutineSetup(argModel);
 
 	Draw_Surface(argModel, parameter);
 
@@ -193,13 +193,11 @@ void fk_SurfaceDraw::ShaderSetup(void)
 
 	ParamInit(prog, param);
 
-	if(mode == 1) {
-		auto progID = prog->getProgramID();
+	auto progID = prog->getProgramID();
 
-		bezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-		gregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
-	}
+	bezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
+	gregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
+	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
 
 	return;
 }
