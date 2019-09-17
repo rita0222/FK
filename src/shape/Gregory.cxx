@@ -79,6 +79,22 @@
 using namespace std;
 using namespace FK;
 
+const static int BIDTable[4][4] = {
+	{0, 1, 2, 3},
+	{4, 5, 6, 7},
+	{0, 8, 9, 4},
+	{3, 10, 11, 7}
+};
+
+const static int DIDTable[4][4] = {
+	{8, 12, 13, 10},
+	{9, 14, 15, 11},
+	{1, 16, 17, 5},
+	{2, 18, 19, 6}
+};
+
+static vector< vector< vector<_st> > > DerivTable, BoundTable;
+
 fk_Gregory::fk_Gregory(void)
 {
 	SetObjectType(fk_Type::GREGORY);
@@ -92,14 +108,80 @@ fk_Gregory::~fk_Gregory()
 	return;
 }
 
+void fk_Gregory::MakeTable(void)
+{
+	DerivTable.clear();
+	BoundTable.clear();
+	
+	vector< vector<_st> > array;
+
+	array.clear();
+	array.push_back({2, 1});
+	array.push_back({0, 1});
+	array.push_back({0, 2});
+	array.push_back({3, 1});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({2, 2});
+	array.push_back({1, 1});
+	array.push_back({1, 2});
+	array.push_back({3, 2});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 1});
+	array.push_back({2, 1});
+	array.push_back({2, 2});
+	array.push_back({1, 1});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 2});
+	array.push_back({3, 1});
+	array.push_back({3, 2});
+	array.push_back({1, 2});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({2, 0, 0, 0});
+	array.push_back({2, 0, 0, 1});
+	array.push_back({3, 0, 0, 2});
+	array.push_back({3, 0, 0, 3});
+	BoundTable.push_back(array);
+	
+	array.clear();
+	array.push_back({2, 3, 3, 0});
+	array.push_back({2, 3, 3, 1});
+	array.push_back({3, 3, 3, 2});
+	array.push_back({3, 3, 3, 3});
+	BoundTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 0, 0, 0});
+	array.push_back({0, 0, 1, 0});
+	array.push_back({1, 0, 2, 0});
+	array.push_back({1, 0, 3, 0});
+	BoundTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 3, 0, 3});
+	array.push_back({0, 3, 1, 3});
+	array.push_back({1, 3, 2, 3});
+	array.push_back({1, 3, 3, 3});
+	BoundTable.push_back(array);
+}		
+
 void fk_Gregory::init(void)
 {
 	setCtrlSize(25);
 	setCtrlNum(20);
 	fk_Vector zero;
 
+	if(DerivTable.empty()) MakeTable();
+
 	ctrlLine.allClear();
-	//for(int i = 0; i < 20; ++i) ctrlLine.pushLine(zero, zero);
+	for(int i = 0; i < 20; ++i) ctrlLine.pushLine(zero, zero);
 	for(int i = 0; i <= 3; ++i) {
 		for(int j = 0; j <= 3; ++j) {
 			boundary[i][j] = zero;
@@ -109,234 +191,21 @@ void fk_Gregory::init(void)
 	}
 }
 
-int fk_Gregory::GetBID(fk_UV argUV, int argID)
-{
-	switch(argUV) {
-	  case fk_UV::U_S:
-		return argID;
-
-	  case fk_UV::U_E:
-		return argID + 4;
-
-	  case fk_UV::V_S:
-		switch(argID) {
-		  case 0:
-			return 0;
-
-		  case 3:
-			return 4;
-
-		  default:
-			return argID + 7;
-		}
-
-	  case fk_UV::V_E:
-		switch(argID) {
-		  case 0:
-			return 3;
-
-		  case 3:
-			return 7;
-
-		  default:
-			return argID + 9;
-		}
-
-	  default:
-		break;
-	}
-	return -1;
-}
-
-int fk_Gregory::GetDID(fk_UV argUV, int argID)
-{
-	switch(argUV) {
-	  case fk_UV::U_S:
-		switch(argID) {
-		  case 0:
-			return 8;
-		  case 1:
-			return 12;
-		  case 2:
-			return 13;
-		  case 3:
-			return 10;
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_UV::U_E:
-		switch(argID) {
-		  case 0:
-			return 9;
-		  case 1:
-			return 14;
-		  case 2:
-			return 15;
-		  case 3:
-			return 11;
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_UV::V_S:
-		switch(argID) {
-		  case 0:
-			return 1;
-		  case 1:
-			return 16;
-		  case 2:
-			return 17;
-		  case 3:
-			return 5;
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_UV::V_E:
-		switch(argID) {
-		  case 0:
-			return 2;
-		  case 1:
-			return 18;
-		  case 2:
-			return 19;
-		  case 3:
-			return 6;
-		  default:
-			break;
-		}
-		break;
-
-	  default:
-		break;
-	}
-	return -1;
-}
-
 bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 {
 	if(_st(argUV) > 3 || argVID < 0 || argVID > 3) return false;
 
 	boundary[_st(argUV)][_st(argVID)] = argV;
 
-	switch(argUV) {
-	  case fk_UV::U_S:
-		switch(argVID) {
-		  case 0:
-			boundary[_st(fk_UV::V_S)][0] = argV;
-			bezier[0][0] = argV;
-			break;
-
-		  case 1:
-			deriv[_st(fk_UV::V_S)][0] = argV;
-			bezier[0][1] = argV;
-			break;
-
-		  case 2:
-			deriv[_st(fk_UV::V_E)][0] = argV;
-			bezier[0][2] = argV;
-			break;
-
-		  case 3:
-			boundary[_st(fk_UV::V_E)][0] = argV;
-			bezier[0][3] = argV;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_UV::U_E:
-		switch(argVID) {
-		  case 0:
-			boundary[_st(fk_UV::V_S)][3] = argV;
-			bezier[3][0] = argV;
-			break;
-
-		  case 1:
-			deriv[_st(fk_UV::V_S)][3] = argV;
-			bezier[3][1] = argV;
-			break;
-
-		  case 2:
-			deriv[_st(fk_UV::V_E)][3] = argV;
-			bezier[3][2] = argV;
-			break;
-
-		  case 3:
-			boundary[_st(fk_UV::V_E)][3] = argV;
-			bezier[3][3] = argV;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_UV::V_S:
-		switch(argVID) {
-		  case 0:
-			boundary[_st(fk_UV::U_S)][0] = argV;
-			bezier[0][0] = argV;
-			break;
-
-		  case 1:
-			deriv[_st(fk_UV::U_S)][0] = argV;
-			bezier[1][0] = argV;
-			break;
-
-		  case 2:
-			deriv[_st(fk_UV::U_E)][0] = argV;
-			bezier[2][0] = argV;
-			break;
-
-		  case 3:
-			boundary[_st(fk_UV::U_E)][0] = argV;
-			bezier[3][0] = argV;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_UV::V_E:
-		switch(argVID) {
-		  case 0:
-			boundary[_st(fk_UV::U_S)][3] = argV;
-			bezier[0][3] = argV;
-			break;
-
-		  case 1:
-			deriv[_st(fk_UV::U_S)][3] = argV;
-			bezier[1][3] = argV;
-			break;
-
-		  case 2:
-			deriv[_st(fk_UV::U_E)][3] = argV;
-			bezier[2][3] = argV;
-			break;
-
-		  case 3:
-			boundary[_st(fk_UV::U_E)][3] = argV;
-			bezier[3][3] = argV;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  default:
-		break;
+	vector<_st>	v = BoundTable[_st(argUV)][_st(argVID)];
+	if(argVID == 0 || argVID == 3) {
+		boundary[v[0]][v[1]] = argV;
+	} else {
+		deriv[v[0]][v[1]] = argV;
 	}
 	
-	setCtrl(GetBID(argUV, argVID), argV);
+	bezier[v[2]][v[3]] = argV;
+	setCtrl(BIDTable[_st(argUV)][argVID], argV);
 
 	return true;
 }
@@ -351,63 +220,14 @@ bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
 {
 	if(_st(argUV) > 3 || argVID < 0 || argVID > 3) return false;
 
-	switch(argVID) {
-	  case 1:
-	  case 2:
-		deriv[_st(argUV)][_st(argVID)] = argV;
-		setCtrl(GetDID(argUV, argVID), argV);
-		return true;
-
-	  case 0:
-		switch(argUV) {
-		  case fk_UV::U_S:
-			setBoundary(fk_UV::V_S, 1, argV);
-			break;
-
-		  case fk_UV::U_E:
-			setBoundary(fk_UV::V_S, 2, argV);
-			break;
-
-		  case fk_UV::V_S:
-			setBoundary(fk_UV::U_S, 1, argV);
-			break;
-
-		  case fk_UV::V_E:
-			setBoundary(fk_UV::U_S, 2, argV);
-			break;
-
-		  default:
-			return false;
-		}
-		return true;
-
-	  case 3:
-		switch(argUV) {
-		  case fk_UV::U_S:
-			setBoundary(fk_UV::V_E, 1, argV);
-			break;
-
-		  case fk_UV::U_E:
-			setBoundary(fk_UV::V_E, 2, argV);
-			break;
-
-		  case fk_UV::V_S:
-			setBoundary(fk_UV::U_E, 1, argV);
-			break;
-
-		  case fk_UV::V_E:
-			setBoundary(fk_UV::U_E, 2, argV);
-			break;
-
-		  default:
-			return false;
-		}
-		return true;
-
-	  default:
-		break;
+	vector<_st> v = DerivTable[_st(argUV)][_st(argVID)];
+	if(argVID == 1 || argVID == 2) {
+		deriv[v[0]][v[1]] = argV;
+		setCtrl(DIDTable[_st(argUV)][argVID], argV);
+	} else {
+		setBoundary(fk_UV(v[0]), int(v[1]), argV);
 	}
-	return false;
+	return true;
 }
 	
 fk_Vector fk_Gregory::getDerivative(fk_UV argUV, int argID)

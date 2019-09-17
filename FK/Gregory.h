@@ -262,11 +262,10 @@ namespace FK {
 		fk_Vector deriv[4][4];
 		fk_Vector bezier[4][4];
 
-		int GetBID(fk_UV, int);
-		int GetDID(fk_UV, int);
 		void C1Connect(fk_UV, fk_Vector *);
 		void G1Connect(fk_UV, fk_Vector *);
 		void MakeBezier(double, double);
+		void MakeTable(void);
 	};
 }
 

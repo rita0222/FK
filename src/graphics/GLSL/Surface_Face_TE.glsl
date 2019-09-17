@@ -55,10 +55,10 @@ void GregSurf(out vec3[25] argCP)
 	argCP[11] = gl_in[11].gl_Position.xyz;
 
 	if((u < EPS || ou < EPS) && (v < EPS || ov < EPS)) {
-		argCP[5] = vec3(0.0, 0.0, 0.0);
-		argCP[6] = vec3(0.0, 0.0, 0.0);
-		argCP[9] = vec3(0.0, 0.0, 0.0);
-		argCP[10] = vec3(0.0, 0.0, 0.0);
+		argCP[5] = gl_in[12].gl_Position.xyz;
+		argCP[6] = gl_in[13].gl_Position.xyz;
+		argCP[9] = gl_in[14].gl_Position.xyz;
+		argCP[10] = gl_in[15].gl_Position.xyz;
 	} else {
 		vec3 U = gl_in[12].gl_Position.xyz;
 		vec3 V = gl_in[16].gl_Position.xyz;
