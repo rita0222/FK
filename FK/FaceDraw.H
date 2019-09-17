@@ -91,7 +91,7 @@ namespace FK {
 		void	PhongSetup(void);
 		void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void	PolygonModeSet(fk_DrawMode);
+		void	PolygonModeSet(fk_Draw);
 		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
 	};
 }

@@ -104,7 +104,7 @@ namespace FK {
 
 fk_Model::fk_Model(fk_Shape *argShape)
 	: fk_Boundary(fk_Type::MODEL), shape(nullptr), parentModel(nullptr),
-	  treeData(nullptr), drawMode(fk_DrawMode::NONE), elemMode(fk_ElementMode::MODEL),
+	  treeData(nullptr), drawMode(fk_Draw::NONE), elemMode(fk_ElementMode::MODEL),
 	  depthMode(fk_DepthMode::READ_AND_WRITE), pointSize(1.0),
 	  smoothFlag(false), reverseFlag(false),
 	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
@@ -152,13 +152,13 @@ void fk_Model::setShape(fk_Shape *argShape)
 		switch(type) {
 		  case fk_Type::POINT:
 		  case fk_Type::PARTICLESET:
-			drawMode = fk_DrawMode::POINT;
+			drawMode = fk_Draw::POINT;
 			break;
 
 		  case fk_Type::LINE:
 		  case fk_Type::POLYLINE:
 		  case fk_Type::CLOSEDLINE:
-			drawMode = fk_DrawMode::LINE;
+			drawMode = fk_Draw::LINE;
 			break;
 			 
 		  case fk_Type::POLYGON:
@@ -170,7 +170,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case fk_Type::CAPSULE:
 		  case fk_Type::SOLID:
 		  case fk_Type::INDEXFACESET:
-			drawMode = fk_DrawMode::FACE;
+			drawMode = fk_Draw::FACE;
 			break;
 
 		  case fk_Type::RECTTEXTURE:
@@ -178,11 +178,11 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case fk_Type::MESHTEXTURE:
 		  case fk_Type::IFSTEXTURE:
 		  case fk_Type::ARTEXTURE:
-			drawMode = fk_DrawMode::TEXTURE;
+			drawMode = fk_Draw::TEXTURE;
 			break;
 
 		  default:
-			drawMode = fk_DrawMode::NONE;
+			drawMode = fk_Draw::NONE;
 			break;
 		}
 	}
@@ -260,7 +260,7 @@ fk_Color * fk_Model::getCurveColor(void)
 	return &curveColor;
 }
 
-void fk_Model::setDrawMode(const fk_DrawMode argMode)
+void fk_Model::setDrawMode(const fk_Draw argMode)
 {
 	if(drawMode == argMode) return;
 	drawMode = argMode;
@@ -270,7 +270,7 @@ void fk_Model::setDrawMode(const fk_DrawMode argMode)
 	return;
 }
 
-fk_DrawMode fk_Model::getDrawMode(void) const
+fk_Draw fk_Model::getDrawMode(void) const
 {
 	return drawMode;
 }

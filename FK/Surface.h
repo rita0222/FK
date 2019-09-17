@@ -258,7 +258,7 @@ namespace FK {
 		void setCtrlNum(int num);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		double	Bezier(int, int, double);
+		double	Bernstein(int, int, double);
 #endif
 
 	private:

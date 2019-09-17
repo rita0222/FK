@@ -266,6 +266,7 @@ namespace FK {
 		int GetDID(fk_UV, int);
 		void C1Connect(fk_UV, fk_Vector *);
 		void G1Connect(fk_UV, fk_Vector *);
+		void MakeBezier(double, double);
 	};
 }
 

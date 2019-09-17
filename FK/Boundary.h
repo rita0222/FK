@@ -173,7 +173,7 @@ namespace FK {
 		 *
 		 *	\sa setBMode(), fk_Model::isInter()
 		 */
-		fk_BoundaryMode			getBMode(void);
+		fk_BoundaryMode	getBMode(void);
 		//@}
 
 		//! \name 境界球制御関数

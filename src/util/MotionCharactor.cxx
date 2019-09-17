@@ -875,7 +875,7 @@ void fk_Performer::removeScene(fk_Scene *argScene)
 void fk_Performer::setDrawMode(bool argMode)
 {
 	if(!argMode) {
-		draw_mode = fk_DrawMode::LINE;
+		draw_mode = fk_Draw::LINE;
 		for(st i = 1; i < st(objNum); i++) {
 			if(texTable[st(matTable[i-1])] != -1) {
 				objModel[i]->setShape(((fk_IFSTexture *)mesh[i-1])->getIFS());
@@ -993,7 +993,7 @@ bool fk_Performer::playMotion(int argMotionID)
 		if(i == 0) continue;
 		if(ret == 1) {
 			if(!visibleInfo[i]) {
-				if(draw_mode == fk_DrawMode::LINE) {
+				if(draw_mode == fk_Draw::LINE) {
 					objModel[i]->setDrawMode(draw_mode);
 				} else {
 					objModel[i]->setShape(mesh[i-1]);
@@ -1002,7 +1002,7 @@ bool fk_Performer::playMotion(int argMotionID)
 			visibleInfo[i] = true;
 		} else if(ret == -1) {
 			if(visibleInfo[i]) {
-				objModel[i]->setDrawMode(fk_DrawMode::NONE);
+				objModel[i]->setDrawMode(fk_Draw::NONE);
 			}
 			visibleInfo[i] = false;
 		}
@@ -1022,7 +1022,7 @@ void fk_Performer::stillMotion(int argMotionID, int argFrame)
 		if(i == 0) continue;
 		if(ret == 1) {
 			if(!visibleInfo[i]) {
-				if(draw_mode == fk_DrawMode::LINE) {
+				if(draw_mode == fk_Draw::LINE) {
 					objModel[i]->setDrawMode(draw_mode);
 				} else {
 					objModel[i]->setShape(mesh[i-1]);
@@ -1031,7 +1031,7 @@ void fk_Performer::stillMotion(int argMotionID, int argFrame)
 			visibleInfo[i] = true;
 		} else if(ret == -1) {
 			if(visibleInfo[i]) {
-				objModel[i]->setDrawMode(fk_DrawMode::NONE);
+				objModel[i]->setDrawMode(fk_Draw::NONE);
 			}
 			visibleInfo[i] = false;
 		}

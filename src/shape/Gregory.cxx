@@ -533,3 +533,137 @@ void fk_Gregory::G1Connect(fk_UV argUV, fk_Vector *argOC)
 
 	return;
 }
+
+void fk_Gregory::MakeBezier(double argU, double argV)
+{
+	double u = argU;
+	double v = argV;
+	double ou = 1.0 - argU;
+	double ov = 1.0 - argV;
+	
+	bezier[1][1] = (u * deriv[0][1] + v * deriv[2][1])/(u + v);
+	bezier[1][2] = (ou * deriv[0][2] + v * deriv[3][1])/(ou + v);
+	bezier[2][1] = (u * deriv[1][1] + ov * deriv[2][2])/(u + ov);
+	bezier[2][2] = (ou * deriv[1][2] + ov * deriv[3][2])/(ou + ov);
+}
+	
+
+
+fk_Vector fk_Gregory::pos(double argU, double argV)
+{
+	double u = argU;
+	double v = argV;
+	double ou = 1.0 - argU;
+	double ov = 1.0 - argV;
+	fk_Vector retP(0.0, 0.0, 0.0);
+	double	uA[4], vA[4];
+
+	if(u < fk_Math::EPS) {
+		if(v < fk_Math::EPS) {
+			return boundary[0][0];
+		} else if(ov < fk_Math::EPS) {
+			return boundary[1][0];
+		}
+	} else if(ou < fk_Math::EPS) {
+		if(v < fk_Math::EPS) {
+			return boundary[0][3];
+		} else if(ov < fk_Math::EPS) {
+			return boundary[1][3];
+		}
+	}
+
+	MakeBezier(u, v);
+
+	for(int i = 0; i <= 3; ++i) {
+		uA[i] = Bernstein(3, i, u);
+		vA[i] = Bernstein(3, i, v);
+	}
+
+	for(int i = 0; i <= 3; ++i) {
+		for(int j = 0; j <= 3; ++j) {
+			retP += uA[i] * vA[j] * bezier[i][j];
+		}
+	}
+
+	return retP;
+}
+
+fk_Vector fk_Gregory::uDeriv(double argU, double argV)
+{
+	double u = argU;
+	double v = argV;
+	double ou = 1.0 - argU;
+	double ov = 1.0 - argV;
+	fk_Vector retV(0.0, 0.0, 0.0);
+	double	uA[3], vA[4];
+
+	if(u < fk_Math::EPS) {
+		if(v < fk_Math::EPS) {
+			return 3.0 * (boundary[0][1] - boundary[0][0]);
+		} else if(ov < fk_Math::EPS) {
+			return 3.0 * (boundary[1][1] - boundary[1][0]);
+		}
+	} else if(ou < fk_Math::EPS) {
+		if(v < fk_Math::EPS) {
+			return 3.0 * (boundary[0][3] - boundary[0][2]);
+		} else if(ov < fk_Math::EPS) {
+			return 3.0 * (boundary[1][3] - boundary[1][2]);
+		}
+	}
+
+	MakeBezier(u, v);
+
+	for(int i = 0; i <= 3; ++i) {
+		if(i != 3) uA[i] = Bernstein(2, i, u);
+		vA[i] = Bernstein(3, i, v);
+	}
+
+	for(int i = 0; i <= 3; ++i) {
+		for(int j = 0; j <= 2; ++j) {
+			fk_Vector dU = bezier[i][j+1] - bezier[i][j];
+			retV += uA[j] * vA[i] * dU;
+		}
+	}
+
+	return retV;
+}
+
+fk_Vector fk_Gregory::vDeriv(double argU, double argV)
+{
+	double u = argU;
+	double v = argV;
+	double ou = 1.0 - argU;
+	double ov = 1.0 - argV;
+	fk_Vector retV(0.0, 0.0, 0.0);
+	double	uA[4], vA[3];
+
+	if(u < fk_Math::EPS) {
+		if(v < fk_Math::EPS) {
+			return 3.0 * (boundary[2][1] - boundary[2][0]);
+		} else if(ov < fk_Math::EPS) {
+			return 3.0 * (boundary[2][3] - boundary[2][2]);
+		}
+	} else if(ou < fk_Math::EPS) {
+		if(v < fk_Math::EPS) {
+			return 3.0 * (boundary[3][1] - boundary[3][0]);
+		} else if(ov < fk_Math::EPS) {
+			return 3.0 * (boundary[3][3] - boundary[3][2]);
+		}
+	}
+
+	MakeBezier(u, v);
+
+	for(int i = 0; i <= 3; ++i) {
+		uA[i] = Bernstein(3, i, u);
+		if(i != 3) vA[i] = Bernstein(2, i, v);
+	}
+
+	for(int i = 0; i <= 2; ++i) {
+		for(int j = 0; j <= 3; ++j) {
+			fk_Vector dV = bezier[i+1][j] - bezier[i][j];
+			retV += uA[j] * vA[i] * dV;
+		}
+	}
+
+	return retV;
+}

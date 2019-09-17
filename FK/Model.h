@@ -1131,18 +1131,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モード種類は以下のとおりです。
-		 *	- fk_DrawMode::NONE:			何も描画しません。
-		 *	- fk_DrawMode::POINT:			頂点を描画します。
-		 *									曲線・曲面の場合は制御点を描画します。
-		 *	- fk_DrawMode::LINE:			稜線を描画します。
-		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
-		 *	- fk_DrawMode::FACE:			面の表を描画します。
-		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
-		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
-		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
-		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
-		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
-		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
+		 *	- fk_Draw::NONE:			何も描画しません。
+		 *	- fk_Draw::POINT:			頂点を描画します。
+		 *								曲線・曲面の場合は制御点を描画します。
+		 *	- fk_Draw::LINE:			稜線を描画します。
+		 *								曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_Draw::FACE:			面の表を描画します。
+		 *	- fk_Draw::BACK_FACE:		面の裏を描画します。
+		 *	- fk_Draw::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_Draw::TEXTURE:			テクスチャを描画します。
+		 *	- fk_Draw::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_Draw::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_Draw::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -1150,11 +1150,11 @@ namespace FK {
 		 *
 		 *		fk_Model		model;
 		 *		
-		 *		model.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
+		 *		model.setDrawMode(fk_Draw::POINT | fk_Draw::LINE | fk_Draw::FACE);
 		 *
 		 *	\param[in]	mode	描画モード
 		 */
-		void	setDrawMode(const fk_DrawMode mode);
+		void	setDrawMode(const fk_Draw mode);
 
 		//! 描画モード参照関数
 		/*!
@@ -1164,7 +1164,7 @@ namespace FK {
 		 *
 		 *	\sa setDrawMode()
 		 */
-		fk_DrawMode		getDrawMode(void) const;
+		fk_Draw		getDrawMode(void) const;
 
 		//! 要素モード設定関数
 		/*!
@@ -1687,7 +1687,7 @@ namespace FK {
 		 *	最後の子モデルが引数として渡されたとき、nullptr を返します。
 		 *
 		 *	以下のコードは、「parent」の全ての子モデルに対し、
-		 *	描画モードを fk_DrawMode::LINE に設定する例です。
+		 *	描画モードを fk_Draw::LINE に設定する例です。
 		 *
 		 *		fk_Model	parentModel, *childModel;
 		 *		
@@ -1695,7 +1695,7 @@ namespace FK {
 		 *			childModel != nullptr;
 		 *			childModel = parentModel.foreachChild(childModel)) {
 		 *		
-		 *			childModel->setDrawMode(fk_DrawMode::LINE);
+		 *			childModel->setDrawMode(fk_Draw::LINE);
 		 *		}
 		 *
 		 *	\param[in]		model		順番に渡す子モデルインスタンスのポインタ
@@ -2152,7 +2152,7 @@ namespace FK {
 		fk_Shape			*shape;
 		fk_Model			*parentModel;
 		fk_TreeData			*treeData;
-		fk_DrawMode			drawMode;
+		fk_Draw				drawMode;
 		fk_ElementMode		elemMode;
 		fk_BlendMode		blendMode;
 		fk_BlendFactor		srcFactor;

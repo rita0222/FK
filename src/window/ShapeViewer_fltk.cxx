@@ -436,7 +436,7 @@ void fk_ShapeViewer::InitFlag(void)
 	moveFlag = false;
 	oldMoveFlag = false;
 
-	drawMode = fk_DrawMode::FACE | fk_DrawMode::LINE | fk_DrawMode::POINT;
+	drawMode = fk_Draw::FACE | fk_Draw::LINE | fk_Draw::POINT;
 	return;
 }
 
@@ -542,13 +542,13 @@ void fk_ShapeViewer::SetSceneFlg(fk_ShapeGUIMenuItem argStatus)
 {
 	switch(argStatus) {
 	  case fk_ShapeGUIMenuItem::POLYDRAW:
-		drawMode = drawMode ^ fk_DrawMode::FACE;
+		drawMode = drawMode ^ fk_Draw::FACE;
 		break;
 	  case fk_ShapeGUIMenuItem::EDGEDRAW:
-		drawMode = drawMode ^ fk_DrawMode::LINE;
+		drawMode = drawMode ^ fk_Draw::LINE;
 		break;
 	  case fk_ShapeGUIMenuItem::VERTEXDRAW:
-		drawMode = drawMode ^ fk_DrawMode::POINT;
+		drawMode = drawMode ^ fk_Draw::POINT;
 		break;
 	  default:
 		return;
@@ -1080,7 +1080,7 @@ void fk_ShapeViewer::setShape(fk_Shape *argShape)
 	return;
 }
 
-void fk_ShapeViewer::setDrawMode(fk_DrawMode argMode)
+void fk_ShapeViewer::setDrawMode(fk_Draw argMode)
 {
 	drawMode = argMode;
 	SetDrawMode();
@@ -1088,7 +1088,7 @@ void fk_ShapeViewer::setDrawMode(fk_DrawMode argMode)
 	return;
 }
 
-void fk_ShapeViewer::setDrawMode(int argID, fk_DrawMode argMode)
+void fk_ShapeViewer::setDrawMode(int argID, fk_Draw argMode)
 {
 	fk_Model	*model = GetModel(argID);
 	if(model != nullptr) model->setDrawMode(argMode);
@@ -1106,15 +1106,15 @@ void fk_ShapeViewer::SetDrawMode(void)
 
 	mP->flags = mE->flags = mV->flags = FL_MENU_TOGGLE;
 
-	if((drawMode & fk_DrawMode::FACE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
 		mP->flags |= FL_MENU_VALUE;
 	}
 
-	if((drawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::LINE) != fk_Draw::NONE) {
 		mE->flags |= FL_MENU_VALUE;
 	}
 
-	if((drawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::POINT) != fk_Draw::NONE) {
 		mV->flags |= FL_MENU_VALUE;
 	}
 
@@ -1463,19 +1463,19 @@ fk_Shape * fk_ShapeViewer::getShape(int argID)
 	return modelArray[_st(IDMap[argID])]->getShape();
 }
 
-fk_DrawMode fk_ShapeViewer::getDrawMode(void)
+fk_Draw fk_ShapeViewer::getDrawMode(void)
 {
 	if(modelArray.empty() == true) {
-		return fk_DrawMode::NONE;
+		return fk_Draw::NONE;
 	}
 
 	return modelArray[0]->getDrawMode();
 }
 
-fk_DrawMode fk_ShapeViewer::getDrawMode(int argID)
+fk_Draw fk_ShapeViewer::getDrawMode(int argID)
 {
 	fk_Model	*model = GetModel(argID);
-	if(model == nullptr) return fk_DrawMode::NONE;
+	if(model == nullptr) return fk_Draw::NONE;
 	return model->getDrawMode();
 }
 

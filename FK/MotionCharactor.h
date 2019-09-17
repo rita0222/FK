@@ -379,7 +379,7 @@ namespace FK {
 		std::vector<int>								nowFrame, maxFrame;
 
 		std::deque<bool>	visibleInfo;
-		fk_DrawMode			draw_mode;
+		fk_Draw				draw_mode;
 
 		int			prevPlayMotionID, loopCnt;
 

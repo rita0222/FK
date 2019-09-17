@@ -146,8 +146,8 @@ fk_Vector fk_BezSurface::pos(double argU, double argV)
 	double		u[5], v[5];
 
 	for(int i = 0; i <= deg; i++) {
-		u[i] = Bezier(deg, i, argU);
-		v[i] = Bezier(deg, i, argV);
+		u[i] = Bernstein(deg, i, argU);
+		v[i] = Bernstein(deg, i, argV);
 	}
 
 	for(int i = 0; i <= deg; i++) {
@@ -165,11 +165,11 @@ fk_Vector fk_BezSurface::uDeriv(double argU, double argV)
 	double		u[4], v[5];
 
 	for(int i = 0; i <= deg-1; i++) {
-		u[i] = Bezier(deg-1, i, argU);
+		u[i] = Bernstein(deg-1, i, argU);
 	}
 
 	for(int i = 0; i <= deg; i++) {
-		v[i] = Bezier(deg, i, argV);
+		v[i] = Bernstein(deg, i, argV);
 	}
 
 	for(int i = 0; i <= deg-1; i++) {
@@ -188,11 +188,11 @@ fk_Vector fk_BezSurface::vDeriv(double argU, double argV)
 	double		u[5], v[4];
 
 	for(int i = 0; i <= deg; i++) {
-		u[i] = Bezier(deg, i, argU);
+		u[i] = Bernstein(deg, i, argU);
 	}
 
 	for(int i = 0; i <= deg-1; i++) {
-		v[i] = Bezier(deg-1, i, argV);
+		v[i] = Bernstein(deg-1, i, argV);
 	}
 
 	for(int i = 0; i <= deg; i++) {

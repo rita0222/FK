@@ -146,12 +146,12 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 	return;
 }
 
-void fk_FaceDraw::PolygonModeSet(fk_DrawMode argDMode)
+void fk_FaceDraw::PolygonModeSet(fk_Draw argDMode)
 {
-	if((argDMode & fk_DrawMode::FRONTBACK_FACE) == fk_DrawMode::FRONTBACK_FACE) {
+	if((argDMode & fk_Draw::FRONTBACK_FACE) == fk_Draw::FRONTBACK_FACE) {
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	} else if((argDMode & fk_DrawMode::BACK_FACE) == fk_DrawMode::BACK_FACE) {
+	} else if((argDMode & fk_Draw::BACK_FACE) == fk_Draw::BACK_FACE) {
 		glCullFace(GL_FRONT);
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_BACK, GL_FILL);

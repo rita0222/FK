@@ -115,7 +115,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
 	depthRead = depthWrite = true;
 
-	boundaryModel.setDrawMode(fk_DrawMode::LINE);
+	boundaryModel.setDrawMode(fk_Draw::LINE);
 	boundaryModel.setBMode(fk_BoundaryMode::NONE);
 	boundaryModel.setBDrawToggle(false);
 	return;
@@ -382,7 +382,7 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 		boundaryModel.setLineColor(argModel->getBLineColor());
 	}	
 	boundaryModel.setShape(argModel->GetBShape());
-	boundaryModel.setDrawMode(fk_DrawMode::LINE);
+	boundaryModel.setDrawMode(fk_Draw::LINE);
 	DrawModel(&boundaryModel);
 	return;
 }
@@ -392,7 +392,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	if(argModel == nullptr) return;
 
 	auto drawMode = argModel->getDrawMode();
-	if(drawMode == fk_DrawMode::NONE) return;
+	if(drawMode == fk_Draw::NONE) return;
 
 	auto realType = argModel->getShape()->getRealShapeType();
 
@@ -414,11 +414,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	argModel->getShape()->FlushAttr();
 
-	if((drawMode & fk_DrawMode::FACE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
 		faceDraw->DrawShapeFace(argModel);
 	}
 
-	if((drawMode & fk_DrawMode::POINT) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
 			pointDraw->DrawShapePoint(argModel, curve->GetPoint());
 		} else if(surface != nullptr) {
@@ -428,7 +428,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		}
 	}
 
-	if((drawMode & fk_DrawMode::LINE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
 			lineDraw->DrawShapeLine(argModel, curve->GetLine());
 		} else if(surface != nullptr) {
@@ -438,11 +438,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		}
 	}
 
-	if((drawMode & fk_DrawMode::TEXTURE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
 		textureDraw->DrawShapeTexture(argModel);
 	}
 
-	if((drawMode & fk_DrawMode::GEOM_LINE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::GEOM_LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
 			curveLineDraw->DrawShapeCurve(argModel);
 		} else if(surface != nullptr) {
@@ -450,7 +450,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		}
 	}
 
-	if((drawMode & fk_DrawMode::GEOM_POINT) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::GEOM_POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
 			curvePointDraw->DrawShapeCurve(argModel);
 		} else if(surface != nullptr) {
@@ -458,7 +458,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		}
 	}
 
-	if((drawMode & fk_DrawMode::GEOM_FACE) != fk_DrawMode::NONE) {
+	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
 		if(surface != nullptr) {
 			surfaceDraw->DrawShapeSurface(argModel);
 		}

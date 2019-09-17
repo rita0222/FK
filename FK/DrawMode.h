@@ -77,7 +77,7 @@
 namespace FK {
 
 	//! 描画モードを表す列挙型
-	enum class fk_DrawMode : unsigned int {
+	enum class fk_Draw : unsigned int {
 		NONE			= 0,					//!< 何も表示しない
 		POINT 			= 1 << 1,				//!< 点描画
 		LINE 			= 1 << 2,				//!< 線描画
@@ -90,9 +90,9 @@ namespace FK {
 		GEOM_FACE		= 1 << 9,				//!< 曲面描画
 	};
 
-	fk_DrawMode operator | (fk_DrawMode argL, fk_DrawMode argR);
-	fk_DrawMode operator & (fk_DrawMode argL, fk_DrawMode argR);
-	fk_DrawMode operator ^ (fk_DrawMode argL, fk_DrawMode argR);
+	fk_Draw operator | (fk_Draw argL, fk_Draw argR);
+	fk_Draw operator & (fk_Draw argL, fk_Draw argR);
+	fk_Draw operator ^ (fk_Draw argL, fk_Draw argR);
 /*
 	const fk_DrawMode FK_NONEMODE = fk_DrawMode::NONE;
 	const fk_DrawMode FK_POINTMODE = fk_DrawMode::POINT;

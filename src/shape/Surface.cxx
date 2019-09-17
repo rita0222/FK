@@ -175,7 +175,7 @@ fk_Vector fk_Surface::norm(double argU, double argV)
 	return nVec;
 }
 
-double fk_Surface::Bezier(int argN, int argI, double argT)
+double fk_Surface::Bernstein(int argN, int argI, double argT)
 {
 	double		t = argT;
 	double		ret = 0.0;

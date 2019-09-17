@@ -263,18 +263,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- fk_DrawMode::NONE:			何も描画しません。
-		 *	- fk_DrawMode::POINT:			頂点を描画します。
-		 *									曲線・曲面の場合は制御点を描画します。
-		 *	- fk_DrawMode::LINE:			稜線を描画します。
-		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
-		 *	- fk_DrawMode::FACE:			面の表を描画します。
-		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
-		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
-		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
-		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
-		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
-		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
+		 *	- fk_Draw::NONE:			何も描画しません。
+		 *	- fk_Draw::POINT:			頂点を描画します。
+		 *								曲線・曲面の場合は制御点を描画します。
+		 *	- fk_Draw::LINE:			稜線を描画します。
+		 *								曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_Draw::FACE:			面の表を描画します。
+		 *	- fk_Draw::BACK_FACE:		面の裏を描画します。
+		 *	- fk_Draw::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_Draw::TEXTURE:			テクスチャを描画します。
+		 *	- fk_Draw::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_Draw::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_Draw::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -282,16 +282,16 @@ namespace FK {
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
+		 *		viewer.setDrawMode(fk_Draw::POINT | fk_Draw::LINE | fk_Draw::FACE);
 		 *
 		 *	個別の形状に対して別々の描画モードを設定する場合は、
-		 *	setDrawMode(int, fk_DrawMode) を利用して下さい。
+		 *	setDrawMode(int, fk_Draw) を利用して下さい。
 		 *
 		 *	\param[in]	mode	描画モード
 		 *
-		 *	\sa setDrawMode(int, fk_DrawMode), fk_Model::setDrawMode()
+		 *	\sa setDrawMode(int, fk_Draw), fk_Model::setDrawMode()
 		 */
-		void setDrawMode(fk_DrawMode mode);
+		void setDrawMode(fk_Draw mode);
 
 		//! 描画モード参照関数
 		/*!
@@ -299,9 +299,9 @@ namespace FK {
 		 *
 		 *	\return		描画モード
 		 *
-		 *	\sa setDrawMode(fk_DrawMode)
+		 *	\sa setDrawMode(fk_Draw)
 		 */
-		fk_DrawMode getDrawMode(void);
+		fk_Draw getDrawMode(void);
 
 		//! 要素モード設定関数
 		/*!
@@ -485,18 +485,18 @@ namespace FK {
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- fk_DrawMode::NONE:			何も描画しません。
-		 *	- fk_DrawMode::POINT:			頂点を描画します。
-		 *									曲線・曲面の場合は制御点を描画します。
-		 *	- fk_DrawMode::LINE:			稜線を描画します。
-		 *									曲線・曲面の場合は制御点を結ぶポリラインを描画します。
-		 *	- fk_DrawMode::FACE:			面の表を描画します。
-		 *	- fk_DrawMode::BACK_FACE:		面の裏を描画します。
-		 *	- fk_DrawMode::FRONTBACK_FACE:	面の表と裏を描画します。
-		 *	- fk_DrawMode::TEXTURE:			テクスチャを描画します。
-		 *	- fk_DrawMode::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
-		 *	- fk_DrawMode::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
-		 *	- fk_DrawMode::GEOM_FACE:		曲面を描画します。
+		 *	- fk_Draw::NONE:			何も描画しません。
+		 *	- fk_Draw::POINT:			頂点を描画します。
+		 *								曲線・曲面の場合は制御点を描画します。
+		 *	- fk_Draw::LINE:			稜線を描画します。
+		 *								曲線・曲面の場合は制御点を結ぶポリラインを描画します。
+		 *	- fk_Draw::FACE:			面の表を描画します。
+		 *	- fk_Draw::BACK_FACE:		面の裏を描画します。
+		 *	- fk_Draw::FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_Draw::TEXTURE:			テクスチャを描画します。
+		 *	- fk_Draw::GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_Draw::GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_Draw::GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -504,17 +504,17 @@ namespace FK {
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(fk_DrawMode::POINT | fk_DrawMode::LINE | fk_DrawMode::FACE);
+		 *		viewer.setDrawMode(fk_Draw::POINT | fk_Draw::LINE | fk_Draw::FACE);
 		 *
 		 *	全ての形状に対しての描画モードを設定する場合は、
-		 *	setDrawMode(fk_DrawMode) を利用して下さい。
+		 *	setDrawMode(fk_Draw) を利用して下さい。
 		 *
 		 *	\param[in]	ID		形状 ID
 		 *	\param[in]	mode	描画モード
 		 *
-		 *	\sa setDrawMode(fk_DrawMode), fk_Model::setDrawMode()
+		 *	\sa setDrawMode(fk_Draw), fk_Model::setDrawMode()
 		 */
-		void setDrawMode(int ID, fk_DrawMode mode);
+		void setDrawMode(int ID, fk_Draw mode);
 
 		//! 個別形状描画モード参照関数
 		/*!
@@ -524,9 +524,9 @@ namespace FK {
 		 *
 		 *	\return		描画モード
 		 *
-		 *	\sa setDrawMode(int, fk_DrawMode)
+		 *	\sa setDrawMode(int, fk_Draw)
 		 */
-		fk_DrawMode getDrawMode(int ID);
+		fk_Draw getDrawMode(int ID);
 
 		//! 形状別要素モード設定関数
 		/*!
@@ -1039,7 +1039,7 @@ namespace FK {
 		bool				materialFlag;
 		bool				moveFlag;
 		bool				oldMoveFlag;
-		fk_DrawMode			drawMode;
+		fk_Draw				drawMode;
 		bool				axisFlag;
 
 		// FK Object
