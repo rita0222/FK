@@ -180,77 +180,17 @@ setAmbient メンバ関数や setDiffuse 関数と同様の使用法なのだが
 グローバルな変数として利用できる。大抵の場合、これで事が足りるだろう。
 なお、このマテリアルを羅列した表を付録 A に掲載しておく。参照して、
 適宜使用してほしい。
-\section{マテリアルパレット (fk\_Palette)} \label{sec:mat_palette}
-FK では、1つのモデルに対して単一のマテリアルを設定するのは
-容易に行うことができるが、実際には複数のマテリアルを利用したい場合も
-よくある。例えば、ある条件を満たす面のみ異なる色で表示したい場合などである。
-このようなとき、「マテリアルパレット」と呼ばれる仕組みを利用する。
-ここでいう「パレット」とは、水彩や油彩で用いられるときのパレットの
-ことであり、同じような役割を果たす。
 
-大別すると、複数のマテリアル利用の実現は以下の 2 ステップで行う。
-\begin{enumerate}
- \item 利用するマテリアルを、パレット用変数に保管する。
- \item 形状中の各位相要素(点、線、面)に対し、どのマテリアルを使うのかを
-	番号で指定する。
-\end{enumerate}
-ここでは、まずパレットを準備する段階について述べる。形状中でのマテリアル指定に
-ついては、
-\ref{subsec:ifs_palette} 節および
-\ref{subsec:solid_matid} 節で詳しく述べる。
-
-マテリアルパレットを準備するには、fk\_Palette 型の変数を定義する。
+使い方は，以下のように \verb+FK::Material+ 名前空間を利用すればよい。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Palette      palette;
+        model.setMaterial(FK::Material::Yellow);
+
+        // using namespace FK; をしておくと、「FK」を省略できる。
+        model.setMaterial(Material::Yellow);
+
+        // using namespace FK::Material; をしておくと、「FK::Material」を省略できる。
+        model.setMaterial(Yellow);
 \end{verbatim}
 \end{screen}
-~ \\
-パレットにマテリアルを登録するには、setPalette 関数を用いる。
-\\
-\begin{screen}
-\begin{verbatim}
-        fk_Material     mat1, mat2;
-        fk_Palette      palette;
-                :
-        palette.setPalette(&mat1, 1);
-        palette.setPalette(&mat2, 2);
-\end{verbatim}
-\end{screen}
-~ \\
-setPalette 関数では、1番目の引数に対象となるマテリアルを表す
-fk\_Material 型の変数のポインタを、2番目の引数にはマテリアル
-を表すための固有の ID を代入する。形状中の各位相要素に対しては、
-この ID を指定することになる。例えば、上記例の場合は
-マテリアル ID として「1」を指定した位相要素に対し、mat1 に
-入っていたマテリアルの色に描画されることになる。
-
-なお、格納されたマテリアルは上書きが可能である。
-setPalette の2番目の引数に、以前利用した ID を再び利用した場合、
-前に登録されたマテリアルは消去され、新たに登録されたマテリアルに
-上書きされる。結果として、描画時には新しいマテリアルが反映されることになる。
-
-fk\_Palette クラスには、他にも以下のようなメンバ関数がある。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{fk\_Material * getMaterial(int id)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パレットに格納されている、ID が id であるマテリアルを
-		取得する。もし id に相当するマテリアルがなかった場合は
-		nullptr を返す。
-	\end{tabular} \\ \\
-
-\> \textbf{int getMaterialSize(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されているマテリアルの個数を返す。
-	\end{tabular} \\ \\
-
-\> \textbf{vector\(<\)fk\_Material\(>\) * getMaterialVector(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されているマテリアル全てを、
-		STL の vector 配列型で返す。
-		なお、ここで得られた配列中を編集してはならない。
-	\end{tabular} \\ \\
-\end{tabbing}
-
