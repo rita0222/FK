@@ -41,16 +41,23 @@ void GregSurf(out vec3[25] argCP)
 	float ou = 1.0 - u;
 	float ov = 1.0 - v;
 
+	// U_S
 	argCP[0] = gl_in[0].gl_Position.xyz;
 	argCP[1] = gl_in[1].gl_Position.xyz;
 	argCP[2] = gl_in[2].gl_Position.xyz;
 	argCP[3] = gl_in[3].gl_Position.xyz;
+
+	// U_E
 	argCP[12] = gl_in[4].gl_Position.xyz;
 	argCP[13] = gl_in[5].gl_Position.xyz;
 	argCP[14] = gl_in[6].gl_Position.xyz;
 	argCP[15] = gl_in[7].gl_Position.xyz;
+
+	// V_S
 	argCP[4] = gl_in[8].gl_Position.xyz;
 	argCP[8] = gl_in[9].gl_Position.xyz;
+
+	// V_E
 	argCP[7] = gl_in[10].gl_Position.xyz;
 	argCP[11] = gl_in[11].gl_Position.xyz;
 
@@ -60,18 +67,22 @@ void GregSurf(out vec3[25] argCP)
 		argCP[9] = gl_in[14].gl_Position.xyz;
 		argCP[10] = gl_in[15].gl_Position.xyz;
 	} else {
+		// (1, 1) = (u, v)
 		vec3 U = gl_in[12].gl_Position.xyz;
 		vec3 V = gl_in[16].gl_Position.xyz;
 		argCP[5] = (u * U + v * V)/(u + v);
 
+		// (1, 2) = (ou, v)
 		U = gl_in[13].gl_Position.xyz;
 		V = gl_in[18].gl_Position.xyz;
 		argCP[6] = (ou * U + v * V)/(ou + v);
 
+		// (2, 1) = (u, ov)
 		U = gl_in[14].gl_Position.xyz;
 		V = gl_in[17].gl_Position.xyz;
 		argCP[9] = (u * U + ov * V)/(u + ov);
 
+		// (2, 2) = (ou, ov)
 		U = gl_in[15].gl_Position.xyz;
 		V = gl_in[19].gl_Position.xyz;
 		argCP[10] = (ou * U + ov * V)/(ou + ov);
