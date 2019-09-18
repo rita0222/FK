@@ -338,15 +338,15 @@ fk_Vector fk_Gregory::pos(double argU, double argV)
 
 	if(u < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return boundary[0][0];
+			return boundary[_st(fk_UV::U_S)][0];
 		} else if(ov < fk_Math::EPS) {
-			return boundary[1][0];
+			return boundary[_st(fk_UV::U_E)][0];
 		}
 	} else if(ou < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return boundary[0][3];
+			return boundary[_st(fk_UV::U_S)][3];
 		} else if(ov < fk_Math::EPS) {
-			return boundary[1][3];
+			return boundary[_st(fk_UV::U_E)][3];
 		}
 	}
 
@@ -359,7 +359,7 @@ fk_Vector fk_Gregory::pos(double argU, double argV)
 
 	for(int i = 0; i <= 3; ++i) {
 		for(int j = 0; j <= 3; ++j) {
-			retP += uA[i] * vA[j] * bezier[i][j];
+			retP += uA[j] * vA[i] * bezier[i][j];
 		}
 	}
 
@@ -374,6 +374,7 @@ fk_Vector fk_Gregory::uDeriv(double argU, double argV)
 	double ov = 1.0 - argV;
 	fk_Vector retV(0.0, 0.0, 0.0);
 	double	uA[3], vA[4];
+
 
 	if(u < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {

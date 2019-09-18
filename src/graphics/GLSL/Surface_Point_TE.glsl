@@ -91,7 +91,7 @@ void main()
 	for(i = 0; i <= fk_Degree; i++) {
 		for(j = 0; j <= fk_Degree; j++) {
 			int k = i*(fk_Degree + 1)+j;
-			pos += bu[i] * bv[j] * cP[k];
+			pos += bu[j] * bv[i] * cP[k];
 		}
 	}
 	

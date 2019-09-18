@@ -110,14 +110,14 @@ void main()
 	for(i = 0; i <= fk_Degree; i++) {
 		for(j = 0; j <= fk_Degree; j++) {
 			int k = i*(fk_Degree + 1)+j;
-			pos += bu[i] * bv[j] * cP[k];
-			dU += dbu[i] * bv[j] * cP[k];
-			dV += bu[i] * dbv[j] * cP[k];
+			pos += bu[j] * bv[i] * cP[k];
+			dU += dbu[j] * bv[i] * cP[k];
+			dV += bu[j] * dbv[i] * cP[k];
 		}
 	}
 
 	vec4 P = vec4(pos, 1.0);
-	vec4 N = vec4(normalize(cross(dV, dU)), 0.0);
+	vec4 N = vec4(normalize(cross(dU, dV)), 0.0);
 
 	varP = fk_ModelMatrix * P;
 	varN = fk_ModelMatrix * N;

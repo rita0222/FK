@@ -207,7 +207,7 @@ fk_Vector fk_BezSurface::vDeriv(double argU, double argV)
 
 int fk_BezSurface::GetID(int argU, int argV)
 {
-	return (deg + 1) * argU + argV;
+	return (deg + 1) * argV + argU;
 }
 
 // +u = 1, -u = 2, +v = 3, -v = 4
