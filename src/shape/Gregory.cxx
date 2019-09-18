@@ -95,6 +95,9 @@ const static int DIDTable[4][4] = {
 
 static vector< vector< vector<_st> > > DerivTable, BoundTable;
 
+using line_ = tuple<int, bool, fk_UV, int>;
+static vector< vector< vector<line_> > > BLineTable, DLineTable;
+
 fk_Gregory::fk_Gregory(void)
 {
 	SetObjectType(fk_Type::GREGORY);
@@ -107,70 +110,6 @@ fk_Gregory::~fk_Gregory()
 	ctrlPos.clear();
 	return;
 }
-
-void fk_Gregory::MakeTable(void)
-{
-	DerivTable.clear();
-	BoundTable.clear();
-	
-	vector< vector<_st> > array;
-
-	array.clear();
-	array.push_back({2, 1});
-	array.push_back({0, 1});
-	array.push_back({0, 2});
-	array.push_back({3, 1});
-	DerivTable.push_back(array);
-
-	array.clear();
-	array.push_back({2, 2});
-	array.push_back({1, 1});
-	array.push_back({1, 2});
-	array.push_back({3, 2});
-	DerivTable.push_back(array);
-
-	array.clear();
-	array.push_back({0, 1});
-	array.push_back({2, 1});
-	array.push_back({2, 2});
-	array.push_back({1, 1});
-	DerivTable.push_back(array);
-
-	array.clear();
-	array.push_back({0, 2});
-	array.push_back({3, 1});
-	array.push_back({3, 2});
-	array.push_back({1, 2});
-	DerivTable.push_back(array);
-
-	array.clear();
-	array.push_back({2, 0, 0, 0});
-	array.push_back({2, 0, 0, 1});
-	array.push_back({3, 0, 0, 2});
-	array.push_back({3, 0, 0, 3});
-	BoundTable.push_back(array);
-	
-	array.clear();
-	array.push_back({2, 3, 3, 0});
-	array.push_back({2, 3, 3, 1});
-	array.push_back({3, 3, 3, 2});
-	array.push_back({3, 3, 3, 3});
-	BoundTable.push_back(array);
-
-	array.clear();
-	array.push_back({0, 0, 0, 0});
-	array.push_back({0, 0, 1, 0});
-	array.push_back({1, 0, 2, 0});
-	array.push_back({1, 0, 3, 0});
-	BoundTable.push_back(array);
-
-	array.clear();
-	array.push_back({0, 3, 0, 3});
-	array.push_back({0, 3, 1, 3});
-	array.push_back({1, 3, 2, 3});
-	array.push_back({1, 3, 3, 3});
-	BoundTable.push_back(array);
-}		
 
 void fk_Gregory::init(void)
 {
@@ -207,6 +146,15 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 	bezier[v[2]][v[3]] = argV;
 	setCtrl(BIDTable[_st(argUV)][argVID], argV);
 
+	vector<line_> lineSet = BLineTable[_st(argUV)][_st(argVID)];
+	for(auto line : lineSet) {
+		int lineID = get<0>(line);
+		_st segID = _st(get<2>(line));
+		_st ctrlID = _st(get<3>(line));
+		fk_Vector oP = (get<1>(line)) ? boundary[segID][ctrlID] : deriv[segID][ctrlID];
+		ctrlLine.changeLine(lineID, argV, oP);
+	}
+
 	return true;
 }
 
@@ -227,6 +175,16 @@ bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
 	} else {
 		setBoundary(fk_UV(v[0]), int(v[1]), argV);
 	}
+
+	vector<line_> lineSet = DLineTable[_st(argUV)][_st(argVID)];
+	for(auto line : lineSet) {
+		int lineID = get<0>(line);
+		_st segID = _st(get<2>(line));
+		_st ctrlID = _st(get<3>(line));
+		fk_Vector oP = (get<1>(line)) ? boundary[segID][ctrlID] : deriv[segID][ctrlID];
+		ctrlLine.changeLine(lineID, argV, oP);
+	}
+
 	return true;
 }
 	
@@ -487,3 +445,273 @@ fk_Vector fk_Gregory::vDeriv(double argU, double argV)
 
 	return retV;
 }
+
+
+void fk_Gregory::MakeTable(void)
+{
+	DerivTable.clear();
+	BoundTable.clear();
+	BLineTable.clear();
+	DLineTable.clear();
+	
+	vector< vector<_st> > array;
+
+	array.clear();
+	array.push_back({2, 1});
+	array.push_back({0, 1});
+	array.push_back({0, 2});
+	array.push_back({3, 1});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({2, 2});
+	array.push_back({1, 1});
+	array.push_back({1, 2});
+	array.push_back({3, 2});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 1});
+	array.push_back({2, 1});
+	array.push_back({2, 2});
+	array.push_back({1, 1});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 2});
+	array.push_back({3, 1});
+	array.push_back({3, 2});
+	array.push_back({1, 2});
+	DerivTable.push_back(array);
+
+	array.clear();
+	array.push_back({2, 0, 0, 0});
+	array.push_back({2, 0, 0, 1});
+	array.push_back({3, 0, 0, 2});
+	array.push_back({3, 0, 0, 3});
+	BoundTable.push_back(array);
+	
+	array.clear();
+	array.push_back({2, 3, 3, 0});
+	array.push_back({2, 3, 3, 1});
+	array.push_back({3, 3, 3, 2});
+	array.push_back({3, 3, 3, 3});
+	BoundTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 0, 0, 0});
+	array.push_back({0, 0, 1, 0});
+	array.push_back({1, 0, 2, 0});
+	array.push_back({1, 0, 3, 0});
+	BoundTable.push_back(array);
+
+	array.clear();
+	array.push_back({0, 3, 0, 3});
+	array.push_back({0, 3, 1, 3});
+	array.push_back({1, 3, 2, 3});
+	array.push_back({1, 3, 3, 3});
+	BoundTable.push_back(array);
+
+	vector<line_> lineSet;
+	vector< vector<line_> > segment;
+
+	// Boundary::U_S[0]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 1));
+	lineSet.push_back(make_tuple(6, true, fk_UV::V_S, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::U_S[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 0));
+	lineSet.push_back(make_tuple(1, true, fk_UV::U_S, 2));
+	lineSet.push_back(make_tuple(12, false, fk_UV::U_S, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::U_S[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(1, true, fk_UV::U_S, 1));
+	lineSet.push_back(make_tuple(2, true, fk_UV::U_S, 3));
+	lineSet.push_back(make_tuple(13, false, fk_UV::U_S, 2));
+	segment.push_back(lineSet);
+	
+	// Boundary::U_S[3]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(2, true, fk_UV::U_S, 2));
+	lineSet.push_back(make_tuple(9, true, fk_UV::V_E, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::U_S
+	BLineTable.push_back(segment);
+	segment.clear();
+	
+	// Boundary::U_E[0]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(3, true, fk_UV::U_E, 1));
+	lineSet.push_back(make_tuple(8, true, fk_UV::V_S, 2));
+	segment.push_back(lineSet);
+
+	// Boundary::U_E[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(3, true, fk_UV::U_E, 0));
+	lineSet.push_back(make_tuple(4, true, fk_UV::U_E, 2));
+	lineSet.push_back(make_tuple(14, false, fk_UV::U_E, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::U_E[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(4, true, fk_UV::U_E, 1));
+	lineSet.push_back(make_tuple(5, true, fk_UV::U_E, 3));
+	lineSet.push_back(make_tuple(15, false, fk_UV::U_E, 2));
+	segment.push_back(lineSet);
+	
+	// Boundary::U_E[3]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(5, true, fk_UV::U_E, 2));
+	lineSet.push_back(make_tuple(11, true, fk_UV::V_E, 2));
+	segment.push_back(lineSet);
+
+	// Boundary::U_E
+	BLineTable.push_back(segment);
+	segment.clear();
+	
+	// Boundary::V_S[0]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 1));
+	lineSet.push_back(make_tuple(6, true, fk_UV::V_S, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::V_S[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(6, true, fk_UV::V_S, 0));
+	lineSet.push_back(make_tuple(7, true, fk_UV::V_S, 2));
+	lineSet.push_back(make_tuple(16, false, fk_UV::V_S, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::V_S[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(7, true, fk_UV::V_S, 1));
+	lineSet.push_back(make_tuple(8, true, fk_UV::V_S, 3));
+	lineSet.push_back(make_tuple(17, false, fk_UV::V_S, 2));
+	segment.push_back(lineSet);
+	
+	// Boundary::V_S[3]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(3, true, fk_UV::U_E, 1));
+	lineSet.push_back(make_tuple(8, true, fk_UV::V_S, 2));
+	segment.push_back(lineSet);
+
+	// Boundary::V_S
+	BLineTable.push_back(segment);
+	segment.clear();
+
+	// Boundary::V_E[0]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(2, true, fk_UV::V_S, 2));
+	lineSet.push_back(make_tuple(9, true, fk_UV::V_E, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::V_E[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(9, true, fk_UV::V_E, 0));
+	lineSet.push_back(make_tuple(10, true, fk_UV::V_E, 2));
+	lineSet.push_back(make_tuple(18, false, fk_UV::V_E, 1));
+	segment.push_back(lineSet);
+
+	// Boundary::V_E[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(10, true, fk_UV::V_E, 1));
+	lineSet.push_back(make_tuple(11, true, fk_UV::V_E, 3));
+	lineSet.push_back(make_tuple(19, false, fk_UV::V_E, 2));
+	segment.push_back(lineSet);
+	
+	// Boundary::V_E[3]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(5, true, fk_UV::U_E, 2));
+	lineSet.push_back(make_tuple(11, true, fk_UV::V_E, 2));
+	segment.push_back(lineSet);
+
+	// Boundary::V_E
+	BLineTable.push_back(segment);
+	segment.clear();
+
+	// Derivative::U_S[0]
+	segment.push_back(BLineTable[_st(fk_UV::V_S)][1]);
+
+	// Derivative::U_S[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(12, true, fk_UV::U_S, 1));
+	segment.push_back(lineSet);
+
+	// Derivative::U_S[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(13, true, fk_UV::U_S, 2));
+	segment.push_back(lineSet);
+	
+	// Derivative::U_S[3]
+	segment.push_back(BLineTable[_st(fk_UV::V_E)][1]);
+
+	// Derivative::U_S
+	DLineTable.push_back(segment);
+	segment.clear();
+
+	// Derivative::U_E[0]
+	segment.push_back(BLineTable[_st(fk_UV::V_S)][2]);
+
+	// Derivative::U_E[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(14, true, fk_UV::U_E, 1));
+	segment.push_back(lineSet);
+
+	// Derivative::U_E[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(15, true, fk_UV::U_E, 2));
+	segment.push_back(lineSet);
+	
+	// Derivative::U_E[3]
+	segment.push_back(BLineTable[_st(fk_UV::V_E)][2]);
+
+	// Derivative::U_E
+	DLineTable.push_back(segment);
+	segment.clear();
+
+	// Derivative::V_S[0]
+	segment.push_back(BLineTable[_st(fk_UV::U_S)][1]);
+
+	// Derivative::V_S[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(16, true, fk_UV::V_S, 1));
+	segment.push_back(lineSet);
+
+	// Derivative::V_S[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(17, true, fk_UV::V_S, 2));
+	segment.push_back(lineSet);
+	
+	// Derivative::V_S[3]
+	segment.push_back(BLineTable[_st(fk_UV::U_E)][1]);
+
+	// Derivative::V_S
+	DLineTable.push_back(segment);
+	segment.clear();
+
+	// Derivative::V_E[0]
+	segment.push_back(BLineTable[_st(fk_UV::U_S)][2]);
+
+	// Derivative::V_E[1]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(18, true, fk_UV::V_E, 1));
+	segment.push_back(lineSet);
+
+	// Derivative::V_E[2]
+	lineSet.clear();
+	lineSet.push_back(make_tuple(19, true, fk_UV::V_E, 2));
+	segment.push_back(lineSet);
+	
+	// Derivative::V_E[3]
+	segment.push_back(BLineTable[_st(fk_UV::U_E)][2]);
+
+	// Derivative::U_E
+	DLineTable.push_back(segment);
+	segment.clear();
+}		

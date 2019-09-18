@@ -129,9 +129,13 @@ bool fk_TrackBall::isSetCamera()
 }
 
 // ３人称視点位置制御
-void fk_TrackBall::controlLookTo()
+void fk_TrackBall::ControlLookTo()
 {
 	// 初回クリック時
+	fk_Vector cameraV = camera->getVec();
+	fk_Vector cameraU = camera->getUpVec();
+	fk_Vector cameraX = cameraV ^ cameraU;
+
 	if(fk_win->getMouseStatus(lookButton, overCheck) & !lookClick) {
 		fk_win->getMousePosition(&oldX, &oldY, overCheck);
 		lookClick = true;
@@ -140,9 +144,11 @@ void fk_TrackBall::controlLookTo()
 	// クリック継続時
 	} else if(fk_win->getMouseStatus(lookButton, overCheck) & lookClick) {
 		fk_win->getMousePosition(&nowX, &nowY, overCheck);
-		camera->glRotateWithVec(lookPos, fk_Axis::Y, (double)(oldX - nowX)/divLook);
-		camera->glRotateWithVec(lookPos, lookPos + (camera->getVec() ^ camera->getUpVec()),
-								double(oldY - nowY)/divLook);
+		double divX = double(oldX - nowX)/divLook;
+		double divY = double(oldY - nowY)/divLook;
+		camera->glRotateWithVec(lookPos, lookPos + cameraU, divX);
+		camera->glRotateWithVec(lookPos, lookPos + cameraX, divY);
+
 		echoX = oldX - nowX;
 		echoY = oldY - nowY;
 		oldX = nowX;
@@ -151,9 +157,8 @@ void fk_TrackBall::controlLookTo()
 	} else {
 		lookClick = false;
 		if(bEcho) {
-			camera->glRotateWithVec(lookPos, fk_Axis::Y, double(echoX)/divLook);
-			camera->glRotateWithVec(lookPos, lookPos + (camera->getVec() ^ camera->getUpVec()),
-									double(echoY)/divLook);
+			camera->glRotateWithVec(lookPos, lookPos + cameraU, double(echoX)/divLook);
+			camera->glRotateWithVec(lookPos, lookPos + cameraX, double(echoY)/divLook);
 		}
 	}
 	// 注視点を向き続ける
@@ -163,7 +168,7 @@ void fk_TrackBall::controlLookTo()
 }
 
 // ３人称視点距離制御
-void fk_TrackBall::controlLookToDist()
+void fk_TrackBall::ControlLookToDist()
 {
 	static fk_Vector	prePos;
 	prePos = camera->getPosition();
@@ -181,14 +186,20 @@ void fk_TrackBall::controlLookToDist()
 		fk_win->getMousePosition(&oldX, &oldY, overCheck);
 		distClick = true;
 	// クリック継続時
-	} else if( (fk_win->getMouseStatus(distButton[0], overCheck) & fk_win->getMouseStatus(distButton[1], overCheck) & distClick)
-		|| (bShiftState & fk_win->getMouseStatus(lookButton, overCheck) & distClick) ) {
+	} else if( (fk_win->getMouseStatus(distButton[0], overCheck) &
+				fk_win->getMouseStatus(distButton[1], overCheck) & distClick)
+			   || (bShiftState & fk_win->getMouseStatus(lookButton, overCheck) & distClick) ) {
 		fk_win->getMousePosition(&nowX, &nowY, overCheck);
-		camera->loTranslate(0.0, 0.0, (double)(nowY - oldY)/divPos + (double)(oldX - nowX)/divPos);	// 左右ドラッグでズーム操作を可能にした
+
+		// 左右ドラッグでズーム操作を可能にした
+		camera->loTranslate(0.0, 0.0,
+							(double)(nowY - oldY)/divPos + (double)(oldX - nowX)/divPos);
+
 		if((lookPos - camera->getPosition()).dist() < divDist) camera->glMoveTo(prePos);
 		fk_win->getMousePosition(&oldX, &oldY, overCheck);
-	// リリース時
+
 	} else {
+		// リリース時
 		distClick = false;
 	}
 	// 注視点を向き続ける
@@ -198,7 +209,7 @@ void fk_TrackBall::controlLookToDist()
 }
 
 // ３人称視点注視点制御
-void fk_TrackBall::controlLookToMove()
+void fk_TrackBall::ControlLookToMove()
 {
 	// 初回クリック時
 	if(fk_win->getMouseStatus(moveButton, overCheck) & !moveClick) {
@@ -223,48 +234,9 @@ void fk_TrackBall::controlLookToMove()
 	return;
 }
 
-// ３人称視点ショートカット制御
-void fk_TrackBall::controlLookToSC()
-{
-	static double prevDist;
-	prevDist = camera->getPosition().dist();
-
-	if(fk_win->getKeyStatus('2', false) || Fl::get_key(FL_KP+'2')) {
-		camera->glMoveTo(cos(fk_Math::PI/2.0)*prevDist, 0.0, sin(fk_Math::PI/2.0)*prevDist);
-	} else if(fk_win->getKeyStatus('3', false) || Fl::get_key(FL_KP+'3')) {
-		camera->glMoveTo(cos(fk_Math::PI/4.0)*prevDist, 0.0, sin(fk_Math::PI/4.0)*prevDist);
-	} else if(fk_win->getKeyStatus('6', false) || Fl::get_key(FL_KP+'6')) {
-		camera->glMoveTo(cos(0.0)*prevDist, 0.0, sin(0.0)*prevDist);
-	} else if(fk_win->getKeyStatus('9', false) || Fl::get_key(FL_KP+'9')) {
-		camera->glMoveTo(cos(-fk_Math::PI/4.0)*prevDist, 0.0, sin(-fk_Math::PI/4.0)*prevDist);
-	} else if(fk_win->getKeyStatus('8', false) || Fl::get_key(FL_KP+'8')) {
-		camera->glMoveTo(cos(-fk_Math::PI/2.0)*prevDist, 0.0, sin(-fk_Math::PI/2.0)*prevDist);
-	} else if(fk_win->getKeyStatus('7', false) || Fl::get_key(FL_KP+'7')) {
-		camera->glMoveTo(cos(-fk_Math::PI*3.0/4.0)*prevDist, 0.0,
-						 sin(-fk_Math::PI*3.0/4.0)*prevDist);
-	} else if(fk_win->getKeyStatus('4', false) || Fl::get_key(FL_KP+'4')) {
-		camera->glMoveTo(cos(-fk_Math::PI)*prevDist, 0.0, sin(-fk_Math::PI)*prevDist);
-	} else if(fk_win->getKeyStatus('1', false) || Fl::get_key(FL_KP+'1')) {
-		camera->glMoveTo(cos(fk_Math::PI*3.0/4.0)*prevDist, 0.0,
-						 sin(fk_Math::PI*3.0/4.0)*prevDist);
-	} else if(fk_win->getKeyStatus('5', false) || Fl::get_key(FL_KP+'5')) {
-		camera->glMoveTo(0.0, prevDist, 0.0);
-	} else if(fk_win->getKeyStatus('0', false) || Fl::get_key(FL_KP+'0')) {
-		fk_Vector	tmpVec(cos(fk_Math::PI*3.0/4.0)*prevDist, 0.66*prevDist,
-						   sin(fk_Math::PI*3.0/4.0)*prevDist);
-		tmpVec.normalize();
-		camera->glMoveTo(tmpVec*prevDist);
-	}
-
-	// 注視点を向き続ける
-	// camera->glFocus(lookPos);
-
-	return;
-}
-
 void  fk_TrackBall::update(void)
 {
-	controlLookToMove();
-	controlLookToDist();
-	controlLookTo();
+	ControlLookToMove();
+	ControlLookToDist();
+	ControlLookTo();
 }

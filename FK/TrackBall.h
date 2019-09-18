@@ -83,55 +83,96 @@ namespace FK {
 	//! マウスによる視点操作クラス
 	/*!	
 	 *	このクラスは、マウスでの自由な視点操作を提供します。
+	 *	本クラスの機能は fk_AppWindow 内で用いられており、
+	 *	fk_AppWindow を利用する場合は本クラスを直接利用する必要はありません。
+	 *	fk_Window を利用する場合で、
+	 *	fk_AppWindow と同様のカメラ制御を行いたい場合に利用して下さい。
+	 *
+	 *	このクラスによって実現できる機能は以下の通りです。
+	 *	- 右マウスボタンでドラッグ操作を行うと、オービット操作を行うことができます。
+	 *		オービット操作とは、カメラが注視点を中心に回転することです。
+	 *	- 中マウスボタン (近年の大抵のマウスではホイールを押し込むことを意味します)
+	 *		でドラッグ操作を行うと、注視点とカメラ自体が操作に沿って移動します。
+	 *	- ホイール操作を行うと、カメラのズームイン・アウトが行えます。
+	 *	.
+	 *	上記の操作は全て update() を行うことにより自動的に処理します。
+	 *	利用者は、シーンの再描画と共に本クラスインスタンスの update()
+	 *	呼ぶだけでよく、その他の処理は必要ありません。
+	 *
+	 *	\sa fk_Window, fk_AppWindow
 	 */
 	class fk_TrackBall {
 
 	public:
 		//! コンストラクタ
-		fk_TrackBall(fk_Window*, fk_Model* = nullptr);
+		/*!
+		 *	\param[in]	win		カメラ制御を行うウィンドウ
+		 *	\param[in]	camera	カメラ用モデル。後から setCamera() で変更が可能です。
+		 */
+		fk_TrackBall(fk_Window *win, fk_Model *camera = nullptr);
 
-		//! 操作に使用するマウスボタン
-		fk_MouseButton	lookButton, distButton[2], moveButton;
-		//! 画面外にカーソルが出た場合の判定の有無
-		bool		overCheck;
-		//! カーソル移動量:処理量比率指定
-		double		divPos, divLook;
-		//! ３人称視点制御カーソル移動量:処理量比率指定
-		double		divDist;
-		//! エコーの有無
-		bool		bEcho;
+		//! カメラモデル設定関数
+		/*!
+		 *	制御用のカメラモデルを設定します。
+		 *
+		 *	\param[in]	camera	カメラ用モデル
+		 */
+		void		setCamera(fk_Model *camera);
 
-		//! カメラの変更
-		void		setCamera(fk_Model*);
-		//! カメラポインタは渡されているか
+		//! カメラ設定有無参照関数
+		/*!
+		 *	カメラモデル設定の有無を参照します。
+		 *
+		 *	\return カメラが設定されている場合 true を、
+		 *		設定されていない場合 false を返します。
+		 */
 		bool		isSetCamera(void);
 
-		//! ３人称視点注視点変更
-		void		setLookTo(fk_Vector);
-		//! ３人称視点ショートカット制御
-		void		controlLookToSC(void);
+		//! カメラ注視点変更関数
+		/*!
+		 *	設定されているカメラモデルの注視点を変更します。
+		 *
+		 *	\param[in]	pos		注視点位置ベクトル
+		 */
+		
+		void		setLookTo(fk_Vector pos);
 
-		//! ３人称視点位置制御
-		void		controlLookTo(void);
-		//! ３人称視点距離制御
-		void		controlLookToDist(void);
-		//! ３人称視点注視点制御
-		void		controlLookToMove(void);
-
-		//! 位置・距離・注視点をまとめて制御
+		//! 状態更新関数
+		/*!
+		 *	現在のデバイスの状態を検出し、カメラの位置・方向情報を更新します。
+		 *	基本的な本クラスの利用方法は、シーン再描画と共に本関数を呼ぶだけであり、
+		 *	他にすることはほとんどありません。
+		 */
 		void		update(void);
 
 	private:
+		void		ControlLookTo(void);
+		void		ControlLookToDist(void);
+		void		ControlLookToMove(void);
+
 		fk_Window	*fk_win;							// FKウィンドウ
 		fk_Model	*camera;							// カメラ
 		fk_Vector	lookPos;							// ３人称視点注視点
+		// 操作に使用するマウスボタン
+		fk_MouseButton	lookButton, distButton[2], moveButton;
+
+		// 画面外にカーソルが出た場合の判定の有無
+		bool		overCheck;
+		// カーソル移動量:処理量比率指定
+		double		divPos, divLook;
+		// ３人称視点制御カーソル移動量:処理量比率指定
+		double		divDist;
+		// エコーの有無
+		bool		bEcho;
 
 		int			nowX, nowY, oldX, oldY;				// ウィンドウ上座標
 		int			echoX, echoY;
 		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
 	};
 
-	using fkut_TrackBall = fk_TrackBall;
+	//using fkut_TrackBall = fk_TrackBall;
+
+
 }
 
 #endif //!__FK_TRACKBALL_HEADER__
