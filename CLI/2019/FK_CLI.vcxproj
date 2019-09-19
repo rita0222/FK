@@ -218,13 +218,6 @@
     <ClInclude Include="..\FK_CLI\include\Vertex_CLI.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\FK\appmake.pl" />
-    <None Include="..\..\FK\commove.pl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\FK\ComBase.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Buffer.cxx" />
     <ClCompile Include="..\..\src\audio\Audio_Stream.cxx" />

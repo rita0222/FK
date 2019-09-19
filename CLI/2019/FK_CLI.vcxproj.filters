@@ -614,19 +614,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\FK\appmake.pl">
-      <Filter>Header\Base</Filter>
-    </None>
-    <None Include="..\..\FK\commove.pl">
-      <Filter>Header\Base</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\FK\ComBase.txt">
-      <Filter>Header\Base</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\FK_CLI\cpp\AppWindow_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>

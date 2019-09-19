@@ -214,6 +214,26 @@ namespace FK_CLI {
 		*Q->pQuat = ::FK::fk_Math::quatInterSphere(*argQ1->pQuat, *argQ2->pQuat, argT);
 		return Q;
 	}
+
+	unsigned int fk_Math::rand(void)
+	{
+		return ::FK::fk_Math::rand();
+	}
+
+	int fk_Math::rand(int argMin, int argMax)
+	{
+		return ::FK::fk_Math::rand(argMin, argMax);
+	}
+
+	double fk_Math::drand(void)
+	{
+		return ::FK::fk_Math::drand();
+	}
+
+	double fk_Math::drand(double argMin, double argMax)
+	{
+		return ::FK::fk_Math::drand(argMin, argMax);
+	}
 }
 
 

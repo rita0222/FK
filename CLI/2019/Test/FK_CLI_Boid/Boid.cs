@@ -8,16 +8,12 @@ namespace FK_CLI_Boid
 		private fk_Model model;
 		private fk_Vector newVec;
 
-		public Agent(double argSize, Random argRand)
+		public Agent(double argSize)
 		{
 			model = new fk_Model();
 			model.Material = fk_Material.Red;
-			model.GlVec(argRand.NextDouble()*2.0 - 1.0,
-                        argRand.NextDouble()*2.0 - 1.0,
-                        0.0);
-			model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
-                           argRand.NextDouble() * argSize * 2.0 - argSize,
-                           0.0);
+			model.GlVec(fk_Math.drand(-1.0, 1.0), fk_Math.drand(-1.0, 1.0), 0.0);
+            model.GlMoveTo(fk_Math.drand(-argSize, argSize), fk_Math.drand(-argSize, argSize), 0.0);
 		}
 
 		public fk_Vector Pos
@@ -70,8 +66,6 @@ namespace FK_CLI_Boid
 
 		public Boid(int argNum)
 		{
-			var rand = new Random();
-
 			fk_Material.InitDefault();
 			cone = new fk_Cone(16, 0.4, 1.0);
 			if(argNum < 0) return;
@@ -79,7 +73,7 @@ namespace FK_CLI_Boid
 
 			for(int i = 0; i < argNum; ++i)
             {
-				agent[i] = new Agent(AREASIZE, rand);
+				agent[i] = new Agent(AREASIZE);
 				agent[i].Shape = cone;
 			}
 
@@ -178,12 +172,13 @@ namespace FK_CLI_Boid
 
 			boid.SetWindow(win);
 
-			win.Size = new fk_Dimension(600, 600);
+			win.Size = new fk_Dimension(800, 800);
 			win.BGColor = new fk_Color(0.6, 0.7, 0.8);
 			win.ShowGuide(fk_GuideMode.GRID_XY);
 			win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
 			win.FPS = 0;
+            win.TrackBallMode = true;
 
 			win.Open();
 
