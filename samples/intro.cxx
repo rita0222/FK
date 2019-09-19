@@ -6,7 +6,7 @@ int main(int, char **)
 {
 	fk_Block		block(10.0, 20.0, 15.0);
 	fk_Model		model;
-	fk_AppWindow	fk_win;
+	fk_AppWindow	window;
 
 	// 色パレットの初期化
 	fk_Material::initDefault();			 
@@ -18,19 +18,19 @@ int main(int, char **)
 	model.setMaterial(Material::Yellow);
 
 	// カメラの位置と方向を設定
-	fk_win.setCameraPos(0.0, 0.0, 100.0);
-	fk_win.setCameraFocus(0.0, 0.0, 0.0);
+	window.setCameraPos(0.0, 0.0, 100.0);
+	window.setCameraFocus(0.0, 0.0, 0.0);
 
 	// ウィンドウにモデルを登録
-	fk_win.entry(&model);
+	window.entry(&model);
 
 	// ウィンドウのサイズを設定
-	fk_win.setSize(600, 600);
+	window.setSize(600, 600);
 
 	// ウィンドウを開く
-	fk_win.open();
+	window.open();
 
-	while(fk_win.update() == true) {
+	while(window.update() == true) {
 
 		// 直方体を Y 軸を中心に回転させる。
 		model.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.01);

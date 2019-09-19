@@ -223,35 +223,26 @@ MQO ファイル名が「sample.mqo」、
 述べているスムースシェーディングの制御に対応している。
 
 fk\_IFSTexture クラスが持つその他のメンバ関数として、以下のようなものがある。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{bool init(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		テクスチャデータ及び形状データの初期化を行う。
-	\end{tabular} \\ \\
+\begin{description}
+ \item[bool init(void)] ~ \\
+	テクスチャデータ及び形状データの初期化を行う。\\ ~
 
-\> \textbf{fk\_TexCoord getTextureCoord(int triID, int vID)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		三角形 ID が triID、頂点 ID が vID である頂点に
-		設定されているテクスチャ座標を返す。
-	\end{tabular} \\ \\
+ \item[fk\_TexCoord getTextureCoord(int triID, int vID)] ~ \\
+	三角形 ID が triID、頂点 ID が vID である頂点に
+	設定されているテクスチャ座標を返す。\\ ~
 
-\> \textbf{void setTextureCoord(int triID, int vID, fk\_TexCoord coord)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		三角形 ID が triID、頂点 ID が vID である頂点に
-		coord をテクスチャ座標として設定する。
-	\end{tabular} \\ \\
+ \item[void setTextureCoord(int triID, int vID, fk\_TexCoord coord)] ~ \\
+	三角形 ID が triID、頂点 ID が vID である頂点に
+	coord をテクスチャ座標として設定する。\\ ~
 
-\> \textbf{fk\_IndexFaceSet * getIFS(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		fk\_IFSTexture クラスは、形状データとして
-		内部では fk\_IndexFaceSet クラスによる変数を保持しており、
-		その中に形状データを格納している。この関数は、
-		その変数へのポインタを返すものである。
-		これを利用すると、頂点の移動なども fk\_IndexFaceSet の
-		機能を用いて可能となる。
-	\end{tabular}
-\end{tabbing}
+ \item[fk\_IndexFaceSet * getIFS(void)] ~ \\
+	fk\_IFSTexture クラスは、形状データとして
+	内部では fk\_IndexFaceSet クラスによる変数を保持しており、
+	その中に形状データを格納している。この関数は、
+	その変数へのポインタを返すものである。
+	これを利用すると、頂点の移動なども fk\_IndexFaceSet の
+	機能を用いて可能となる。
+\end{description}
 
 \subsection{メッシュテクスチャ}
 最後に、「メッシュテクスチャ」を紹介する。メッシュテクスチャは、
@@ -346,14 +337,14 @@ fk\_IndexFaceSet 型の形状として出力することが可能である。
         fk_RectTexture  texture;
                 :
                 :
-        texture.setTexRendMode(FK_TEX_REND_SMOOTH);
+        texture.setTexRendMode(fk_TexRendMode::SMOOTH);
 \end{verbatim}
 \end{screen}
 ~ \\
-モードは、通常モードである「FK\_TEX\_REND\_NORMAL」と、
+モードは、通常モードである「fk\_TexRendMode::NORMAL」と、
 アンチエイリアシング処理で高品質なレンダリングを行う
-「FK\_TEX\_REND\_SMOOTH」が指定できる。デフォルトでは
-通常モード(FK\_TEX\_REND\_NORMAL)となっている。
+「fk\_TexRendMode::SMOOTH」が指定できる。デフォルトでは
+通常モード(fk\_TexRendMode::NORMAL)となっている。
 
 上記の例は矩形テクスチャで行っているが、
 fk\_RectTexture, fk\_TriTexture, fk\_IFSTexture のいずれの型でも
@@ -394,196 +385,138 @@ fk\_RectTexture に画像情報を反映させるプログラムである。
 \end{breakbox}
 ~ \\
 fk\_Image クラスのメンバ関数を以下に羅列する。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void init(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像情報を初期化する。
-	\end{tabular} \\ \\
+\begin{description}
+ \item[void init(void)] ~ \\
+	画像情報を初期化する。\\ ~
 
-\> \textbf{bool readBMP(const string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ファイル名が fileName である Windows Bitmap 形式の
-		画像ファイルを読み込む。成功すれば true を、
-		失敗すれば false を返す。
-	\end{tabular} \\ \\
+ \item[bool readBMP(const string fileName)] ~ \\
+	ファイル名が fileName である Windows Bitmap 形式の
+	画像ファイルを読み込む。成功すれば true を、
+	失敗すれば false を返す。\\ ~
 
-\> \textbf{bool readPNG(const string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ファイル名が fileName である PNG 形式の
-		画像ファイルを読み込む。成功すれば true を、
-		失敗すれば false を返す。
-	\end{tabular} \\ \\
+ \item[bool readPNG(const string fileName)] ~ \\
+	ファイル名が fileName である PNG 形式の
+	画像ファイルを読み込む。成功すれば true を、
+	失敗すれば false を返す。\\ ~
 
-\> \textbf{bool readJPG(const string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ファイル名が fileName である JPEG 形式の
-		画像ファイルを読み込む。成功すれば true を、
-		失敗すれば false を返す。
-	\end{tabular} \\ \\
+ \item[bool readJPG(const string fileName)] ~ \\
+	ファイル名が fileName である JPEG 形式の
+	画像ファイルを読み込む。成功すれば true を、
+	失敗すれば false を返す。\\ ~
 
-\> \textbf{bool readBMPData(fk\_ImType *buffer)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		buffer に Windows Bitmap 形式のデータが格納されている
-		という仮定のもと、readBMP() 関数と同様の挙動を行う。
-	\end{tabular} \\ \\
+ \item[bool readBMPData(fk\_ImType *buffer)] ~ \\
+	buffer に Windows Bitmap 形式のデータが格納されている
+	という仮定のもと、readBMP() 関数と同様の挙動を行う。\\ ~
 
-\> \textbf{bool readPNGData(fk\_ImType *buffer)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		buffer に PNG 形式のデータが格納されている
-		という仮定のもと、readPNG() 関数と同様の挙動を行う。
-	\end{tabular} \\ \\
+ \item[bool readPNGData(fk\_ImType *buffer)] ~ \\
+	buffer に PNG 形式のデータが格納されている
+	という仮定のもと、readPNG() 関数と同様の挙動を行う。\\ ~
 
-\> \textbf{bool writeBMP(const string fileName, bool transFlag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されている画像情報を、Windows Bitmap 形式で
-		ファイル名が fileName であるファイルに書き出す。
-		transFlag を true にすると、透過情報を付加した
-		32bit データとして出力し、false の場合通常の
-		フルカラー 24bit 形式で出力する。
-		書き出しに成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+ \item[bool writeBMP(const string fileName, bool transFlag)] ~ \\
+	現在格納されている画像情報を、Windows Bitmap 形式で
+	ファイル名が fileName であるファイルに書き出す。
+	transFlag を true にすると、透過情報を付加した
+	32bit データとして出力し、false の場合通常の
+	フルカラー 24bit 形式で出力する。
+	書き出しに成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool writePNG(const string fileName, bool transFlag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されている画像情報を、PNG 形式で
-		ファイル名が fileName であるファイルに書き出す。
-		transFlag を true にすると、透過情報も合わせて出力する。
-		false の場合は透過情報を削除したファイルを生成する。
-		書き出しに成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+ \item[bool writePNG(const string fileName, bool transFlag)] ~ \\
+	現在格納されている画像情報を、PNG 形式で
+	ファイル名が fileName であるファイルに書き出す。
+	transFlag を true にすると、透過情報も合わせて出力する。
+	false の場合は透過情報を削除したファイルを生成する。
+	書き出しに成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool writeJPG(const string fileName, int quality)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されている画像情報を、JPEG 形式で
-		ファイル名が fileName であるファイルに書き出す。
-		quality は 0 から 100 までの整数値を入力し、
-		画像品質を設定する。
-		数値が低いほど圧縮率は高いが画像品質は低くなる。
-		数値が高いほど圧縮率は悪くなるが画像品質は良くなる。
-		書き出しに成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+ \item[bool writeJPG(const string fileName, int quality)] ~ \\
+	現在格納されている画像情報を、JPEG 形式で
+	ファイル名が fileName であるファイルに書き出す。
+	quality は 0 から 100 までの整数値を入力し、
+	画像品質を設定する。
+	数値が低いほど圧縮率は高いが画像品質は低くなる。
+	数値が高いほど圧縮率は悪くなるが画像品質は良くなる。
+	書き出しに成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{void newImage(int w, int h)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像の大きさを横幅 w, 縦幅 h に設定する。これまでに
-		保存されていた画像情報は失われる。
-	\end{tabular} \\ \\
+ \item[void newImage(int w, int h)] ~ \\
+	画像の大きさを横幅 w, 縦幅 h に設定する。これまでに
+	保存されていた画像情報は失われる。\\ ~
 
-\> \textbf{void copyImage(const fk\_Image *image)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		image の画像情報をコピーする。
-	\end{tabular} \\ \\
+ \item[void copyImage(const fk\_Image *image)] ~ \\
+		image の画像情報をコピーする。\\ ~
 
-\> \textbf{void copyImage(const fk\_Image *image, int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[void copyImage(const fk\_Image *image, int x, int y)] ~ \\
 		現在の画像に対し、image の画像情報を
 		左上が \((x, y)\) となる位置に上書きを行う。
 		image はコピー先の中に完全に包含されている必要があり、
-		はみ出てしまう場合には上書きは行われない。
-	\end{tabular} \\ \\
+		はみ出てしまう場合には上書きは行われない。\\ ~
 
-\> \textbf{void subImage(const fk\_Image *image, int x, int y, int w, int h)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[void subImage(const fk\_Image *image, int x, int y, int w, int h)] ~ \\
 		元画像 image に対し、
 		左上が \((x, y)\)、横幅 w, 縦幅 h となるような
 		部分画像をコピーする。
 		x, y, w, h に不適切な値が与えられた場合は、
-		コピーを行わない。
-	\end{tabular} \\ \\
+		コピーを行わない。\\ ~
 
-\> \textbf{int getWidth(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像の横幅を int 型で返す。
-	\end{tabular} \\ \\
+ \item[int getWidth(void)] ~ \\
+		画像の横幅を int 型で返す。\\ ~
 
-\> \textbf{int getHeight(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像の縦幅を int 型で返す。
-	\end{tabular} \\ \\
+ \item[int getHeight(void)] ~ \\
+		画像の縦幅を int 型で返す。\\ ~
 
-\> \textbf{int getR(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の赤要素の値を int 型で返す。
-	\end{tabular} \\ \\
+ \item[int getR(int x, int y)] ~ \\
+		(x, y) の位置にある画素の赤要素の値を int 型で返す。\\ ~
 
-\> \textbf{int getG(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の緑要素の値を int 型で返す。
-	\end{tabular} \\ \\
+ \item[int getG(int x, int y)] ~ \\
+		(x, y) の位置にある画素の緑要素の値を int 型で返す。\\ ~
 
-\> \textbf{int getB(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の青要素の値を int 型で返す。
-	\end{tabular} \\ \\
+ \item[int getB(int x, int y)] ~ \\
+		(x, y) の位置にある画素の青要素の値を int 型で返す。\\ ~
 
-\> \textbf{int getA(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の透明度要素の値を int 型で返す。
-	\end{tabular} \\ \\
+ \item[int getA(int x, int y)] ~ \\
+		(x, y) の位置にある画素の透明度要素の値を int 型で返す。\\ ~
 
-\> \textbf{fk\_Color getColor(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の色要素を fk\_Color 型で返す。
-	\end{tabular} \\ \\
+ \item[fk\_Color getColor(int x, int y)] ~ \\
+		(x, y) の位置にある画素の色要素を fk\_Color 型で返す。\\ ~
 
-\> \textbf{bool setRGBA(int x, int y, int r, int g, int b, int a)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setRGBA(int x, int y, int r, int g, int b, int a)] ~ \\
 		(x, y) の位置にある画素に対し、
 		赤、緑、青、透明度をそれぞれ r, g, b, a に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool setRGB(int x, int y, int r, int g, int b)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setRGB(int x, int y, int r, int g, int b)] ~ \\
 		(x, y) の位置にある画素に対し、
 		赤、緑、青をそれぞれ r, g, b に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool setR(int x, int y, int r)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setR(int x, int y, int r)] ~ \\
 		(x, y) の位置にある画素に対し、
 		赤要素を r に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool setG(int x, int y, int g)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setG(int x, int y, int g)] ~ \\
 		(x, y) の位置にある画素に対し、
 		緑要素を g に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool setB(int x, int y, int b)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setB(int x, int y, int b)] ~ \\
 		(x, y) の位置にある画素に対し、
 		青要素を b に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool setA(int x, int y, int a)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setA(int x, int y, int a)] ~ \\
 		(x, y) の位置にある画素に対し、
 		透明度要素を a に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{bool setColor(int x, int y, const fk\_Color \&col)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[bool setColor(int x, int y, const fk\_Color \&col)] ~ \\
 		(x, y) の位置にある画素に対し、
 		色要素を col が表す色に設定する。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+		成功すれば true を、失敗すれば false を返す。\\ ~
 
-\> \textbf{void fillColor(const fk\_Color \&col)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像中の全てのピクセルの色要素を col が表わす色に設定する。
-	\end{tabular} \\ \\
+ \item[void fillColor(const fk\_Color \&col)] ~ \\
+		画像中の全てのピクセルの色要素を col が表わす色に設定する。\\ ~
 
-\> \textbf{void fillColor(int r, int g, int b, int a)} \\
-	\> \> \begin{tabular}{p{15cm}}
+ \item[void fillColor(int r, int g, int b, int a)] ~ \\
 		画像中の全てのピクセルの色要素を、r を赤、b を青、
 		b を緑、a を透明度として設定する。
-	\end{tabular}
-\end{tabbing}
+\end{description}
+

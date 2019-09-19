@@ -1,9 +1,11 @@
-\chapter{色、マテリアル、パレット} \label{chap:material} ~
+\chapter{色とマテリアル} \label{chap:material} ~
 
 この章では fk\_Material と呼ばれる立体の色属性を司るクラスの使用法
 を述べる。この章に書かれていることは、のちに立体の色属性を設定するために
-必要なものとなる。また、複数のマテリアルを管理するための「パレット」
-についても解説する。
+必要なものとなる。
+%また、複数のマテリアルを管理するための「パレット」
+%についても解説する。
+
 \section{色の基本 (fk\_Color)}
 まず、色の構成に関しての記述から始めよう。光による色の3元色は、
 赤、緑、青である。これらの色の組合せによって、ディスプレイで
@@ -181,16 +183,12 @@ setAmbient メンバ関数や setDiffuse 関数と同様の使用法なのだが
 なお、このマテリアルを羅列した表を付録 A に掲載しておく。参照して、
 適宜使用してほしい。
 
-使い方は，以下のように \verb+FK::Material+ 名前空間を利用すればよい。
+これらの使い方は，以下のように \verb+FK::Material+ 名前空間を利用すればよい。
 \\
 \begin{screen}
 \begin{verbatim}
-        model.setMaterial(FK::Material::Yellow);
+using namespace FK;
 
-        // using namespace FK; をしておくと、「FK」を省略できる。
-        model.setMaterial(Material::Yellow);
-
-        // using namespace FK::Material; をしておくと、「FK::Material」を省略できる。
-        model.setMaterial(Yellow);
+model.setMaterial(Material::Yellow);
 \end{verbatim}
 \end{screen}

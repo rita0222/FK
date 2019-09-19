@@ -173,8 +173,8 @@ void fk_TrackBall::ControlLookToDist()
 	static fk_Vector	prePos;
 	prePos = camera->getPosition();
 	bool bShiftState =
-		fk_win->getSpecialKeyStatus(fk_SpecialKey::SHIFT_L, false) ||
-		fk_win->getSpecialKeyStatus(fk_SpecialKey::SHIFT_R, false);
+		fk_win->getSpecialKeyStatus(fk_Key::SHIFT_L, false) ||
+		fk_win->getSpecialKeyStatus(fk_Key::SHIFT_R, false);
 
 	camera->loTranslate(0.0, 0.0, fk_win->getMouseWheelStatus()*5.0);
 	if((lookPos - camera->getPosition()).dist() < 5.0) camera->glMoveTo(prePos);

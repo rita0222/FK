@@ -12,7 +12,7 @@
 形状が、モデルのステータスであることは重要な意味を持つ。もし、モデルに
 不変の形状が存在してしまうなら、そのモデルの形状を変化させる手段は
 直接形状を変化させる以外にない。しかし、ある条件によってモデルの持つ
-形状を\bou{入れ換えたい}と思うことはよくあることである。
+形状を「入れ換えたい」と思うことはよくあることである。
 
 例えば、視点から遠くにあるオブジェクトが大変細かなディティールで表現
 されていたとしても、処理速度の面から考えれば明らかに無駄である。
@@ -132,14 +132,13 @@ fk\_Material 型のオブジェクトを用いる。
 \\
 \begin{screen}
 \begin{verbatim}
-        model.setMaterial(Green);
+        model.setMaterial(Material::Green);
 \end{verbatim}
 \end{screen}
 ~ \\
 このとき、(setShape 関数とは異なり)値は実際に model の中に確保された
 メモリー内に全てコピーされるので、マテリアルオブジェクトが途中で
-消滅してしまっても問題はない。なお、一度設定した色を初期化したい
-場合には deleteMaterial(void) 関数を呼ぶとよい。
+消滅してしまっても問題はない。
 
 \section{描画モードと描画状態の制御} \label{sec:drawmode}
 モデルに与えられた形状が例えば球 (fk\_Sphere) であった場合
@@ -154,7 +153,7 @@ fk\_Material 型のオブジェクトを用いる。
         fk_Model        SphereModel;
 
         SphereModel.setShape(&Sphere);
-        SphereModel.setDrawMode(FK_LINEMODE);
+        SphereModel.setDrawMode(fk_Draw::LINE);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -165,19 +164,23 @@ fk\_Material 型のオブジェクトを用いる。
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-FK\_POINTMODE & 形状の頂点を描画する。\\ \hline
-FK\_LINEMODE & 形状の稜線を描画する。\\ \hline
-FK\_POLYMODE & 形状の面のうち、表面のみを描画する。\\ \hline
-FK\_BACK\_POLYMODE & 形状の面のうち、裏面のみを描画する。\\ \hline
-FK\_FRONTBACK\_POLYMODE & 形状の面のうち、表裏両面を描画する。\\ \hline
+fk\_Draw::POINT & 形状の頂点を描画する。\\ \hline
+fk\_Draw::LINE & 形状の稜線を描画する。\\ \hline
+fk\_Draw::FACE & 形状の面のうち、表面のみを描画する。\\ \hline
+fk\_Draw::BACK\_FACE & 形状の面のうち、裏面のみを描画する。\\ \hline
+fk\_Draw::FRONTBACK\_FACE & 形状の面のうち、表裏両面を描画する。\\ \hline
+fk\_Draw::TEXTURE & テクスチャを描画する。\\ \hline
+fk\_Draw::GEOM\_POINT & 曲線や曲面の点描画を行う。\\ \hline
+fk\_Draw::GEOM\_LINE & 曲線や曲面グリッド線を描画する。\\ \hline
+fk\_Draw::GEOM\_FACE & 曲面を描画する。\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-点表示したい場合は FK\_POINTMODE、ワイヤーフレーム表示したい場合は
-FK\_LINEMODE、面表示したい場合は FK\_POLYMODE を引数として与えることで、
+点表示したい場合は fk\_Draw::POINT、ワイヤーフレーム表示したい場合は
+fk\_Draw::LINE、面表示したい場合は fk\_Draw::FACE を引数として与えることで、
 モデルの表示を切り替えることができる。ただし、形状が fk\_Point で
-ある場合に FK\_LINEMODE を与えたり、fk\_Line である場合に FK\_POLYMODE
+ある場合に fk\_Draw::LINE を与えたり、fk\_Line である場合に fk\_Draw::FACE
 を与えるといったような、表示状態が解釈できないような場合は何も
 表示されなくなるので注意が必要である。
 
@@ -192,12 +195,12 @@ FK\_LINEMODE、面表示したい場合は FK\_POLYMODE を引数として与え
         fk_Scene        Scene;
 
         Solid.setShape(&Sphere);
-        Solid.setDrawMode(FK_POLYMODE | FK_LINEMODE);
+        Solid.setDrawMode(fk_Draw::FACE | fk_Draw::LINE);
         Scene.entryModel(&Solid);
 \end{verbatim}
 \end{breakbox}
 ~ \\
-なお、FK\_POINTMODE と FK\_LINEMODE では光源設定は意味がない。
+なお、fk\_Draw::POINT と fk\_Draw::LINE では光源設定は意味がない。
 線や点に対する色設定に関しては、\ref{sec:pointlinemat} を参照してほしい。
 
 \section{線や点の色付け(マテリアル)} \label{sec:pointlinemat}
@@ -214,7 +217,7 @@ RGB を表すfloat 型の実数3個のいずれかを代入する。次の例は
 
         fk_Material::initDefault();
         Model.setShape(&Shape);
-        Model.setDrawMode(FK_POLYMODE | FK_LINEMODE | FK_POINTMODE);
+        Model.setDrawMode(fk_Draw::FACE | fk_Draw::LINE | fk_Draw::POINT);
         Model.setMaterial(Yellow);     
         Model.setLineColor(1.0, 0.0, 0.0);
         Model.setPointColor(0.0, 1.0, 0.0);
@@ -222,7 +225,7 @@ RGB を表すfloat 型の実数3個のいずれかを代入する。次の例は
 \end{breakbox}
 
 \section{線の太さや点の大きさの制御} \label{sec:widthsize}
-描画モードで FK\_POINTMODE か FK\_LINEMODE を選択した場合、
+描画モードで fk\_Draw::POINT か fk\_Draw::LINE を選択した場合、
 デフォルトでは描画される点の pixel における大きさ、線の幅は
 ともに 1 に設定されている。これをもっと大きく(太く)したい場合は、
 それぞれ setSize()、setWidth() メンバ関数を用いることで実現できる。
@@ -235,7 +238,7 @@ RGB を表すfloat 型の実数3個のいずれかを代入する。次の例は
         fk_Model        Model;
 
         Model.setShape(&Sphere);
-        Model.setDrawMode(FK_POINTMODE | FK_LINEMODE);
+        Model.setDrawMode(fk_Draw::POINT | fk_Draw::LINE);
         Model.setSize(3.0);
         Model.setWidth(5.0);
 \end{verbatim}
@@ -265,30 +268,32 @@ true を与えることによってそのモデルはスムースシェーディ
 \end{screen}
 ~ \\
 なお、この設定は後述するモデル間の継承関係の影響を受けない。
-\section{ピックモード}
-FK システムでは、第 \ref{chap:window} 章で詳しく後述するが
-ピックによるオブジェクトの選択が可能である。このとき、どの
-モデルに対してピック選択の候補とするかを制御することが可能である。
-全てのモデルを闇雲に候補にした場合、ピック時に動作が非常に遅くなる
-可能性があるので、必要なモデルのみを候補にすべきである。
 
-モデルに対してピック候補にするには、次のように setPickMode() メンバ関数で
-引数に true を与えればよい。
-\\
-\begin{screen}
-\begin{verbatim}
-        fk_Model        Model;
+% \section{ピックモード}
+% FK システムでは、第 \ref{chap:window} 章で詳しく後述するが
+% ピックによるオブジェクトの選択が可能である。このとき、どの
+% モデルに対してピック選択の候補とするかを制御することが可能である。
+% 全てのモデルを闇雲に候補にした場合、ピック時に動作が非常に遅くなる
+% 可能性があるので、必要なモデルのみを候補にすべきである。
+% 
+% モデルに対してピック候補にするには、次のように setPickMode() メンバ関数で
+% 引数に true を与えればよい。
+% \\
+% \begin{screen}
+% \begin{verbatim}
+%         fk_Model        Model;
+% 
+%         Model.setPickMode(true);
+% \end{verbatim}
+% \end{screen}
+% ~ \\
+% 引数に false を与えれば、そのモデルはピック選択の候補から外される。
+% デフォルトでは false になっているため、明示的に setPickMode(true) を
+% 呼ばない限りはモデルがピック候補になることはない。
+% 
+% この設定もスムースシェーディングと同様に、モデル間の継承関係の影響を
+% 受けない。
 
-        Model.setPickMode(true);
-\end{verbatim}
-\end{screen}
-~ \\
-引数に false を与えれば、そのモデルはピック選択の候補から外される。
-デフォルトでは false になっているため、明示的に setPickMode(true) を
-呼ばない限りはモデルがピック候補になることはない。
-
-この設定もスムースシェーディングと同様に、モデル間の継承関係の影響を
-受けない。
 \section{モデルの位置と姿勢}
 通常 3 次元のアプリケーションを作成する場合には、とても厄介な座標変換に
 悩まされる。これは、平行移動や回転を行列によって表現し、それらの合成
@@ -453,17 +458,14 @@ fk\_Angle 型は、オイラー角を表現するクラスである。位置と�
 \section{平行移動による制御}
 モデルの方向を変化させず、モデルを移動させる手段として、fk\_Model クラス
 では 6 種類のメンバ関数を用意している。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void glTranslate(fk\_Vector); \\
-\> void glTranslate(double, double, double); \\
-\> void loTranslate(fk\_Vector); \\
-\> void loTranslate(double, double, double); \\
-\> void glMoveTo(fk\_Vector); \\
-\> void glMoveTo(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[void glTranslate(fk\_Vector);]
+\item[void glTranslate(double, double, double);]
+\item[void loTranslate(fk\_Vector);]
+\item[void loTranslate(double, double, double);]
+\item[void glMoveTo(fk\_Vector);]
+\item[void glMoveTo(double, double, double);]
+\end{description}
 \subsection{glTranslate}
 glTranslate 関数は、モデルの移動ベクトルをグローバル座標系で
 与えるためのメンバ関数である。例えば、
@@ -575,21 +577,19 @@ FK システムにおいて、モデルの姿勢を制御する手法は大別�
 (Primitive) である。
 
 この節では次の 8 種類のメンバ関数を紹介する。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void glFocus(fk\_Vector); \\
-\> void glFocus(double, double, double); \\
-\> void loFocus(fk\_Vector); \\
-\> void loFocus(double, double, double); \\
-\> void glVec(fk\_Vector); \\
-\> void glVec(double, double, double); \\
-\> void glUpvec(fk\_Vector); \\
-\> void glUpvec(double, double, double); \\
-\> void loUpvec(fk\_Vector); \\
-\> void loUpvec(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[void glFocus(fk\_Vector);]
+\item[void glFocus(double, double, double);]
+\item[void loFocus(fk\_Vector);]
+\item[void loFocus(double, double, double);]
+\item[void glVec(fk\_Vector);]
+\item[void glVec(double, double, double);]
+\item[void glUpvec(fk\_Vector);]
+\item[void glUpvec(double, double, double);]
+\item[void loUpvec(fk\_Vector);]
+\item[void loUpvec(double, double, double);]
+\end{description}
+
 このうち、多重定義されている関数は移動関数群と同じように fk\_Vector によるか、
 3 次元ベクトルを表す 3 つの実数を代入するかの違いでしかないので、
 実質的には 4 種類となる。
@@ -625,15 +625,15 @@ loFocus 関数は、glFocus のローカル座標系版である。lo 関数群�
 \\
 \begin{breakbox}
 \begin{verbatim}
-        model.loFocus(0.0, 0.0, 1.0);          // 後ろを向く。
-        model.loFocus(1.0, 0.0, 0.0);           // 右を向く。
-        model.loFocus(-1.0, 0.0, 0.0);          // 左を向く。
-        model.loFocus(0.0, 1.0, 0.0);           // 上を向く。
-        model.loFocus(0.0, -1.0, 0.0);          // 下を向く。
-        model.loFocus(1.0, 1.0, 0.0);           // 右上を向く。
-        model.loFocus(-1.0, 1.0, -1.0);          // 左前上方を向く。
-        model.loFocus(0.01, 0.0, -1.0);          // わずかに右を向く。
-        model.loFocus(0.0, 0.01, -1.0);          // わずかに上を向く。
+        model.loFocus(0.0, 0.0, 1.0);       // 後ろを向く。
+        model.loFocus(1.0, 0.0, 0.0);       // 右を向く。
+        model.loFocus(-1.0, 0.0, 0.0);      // 左を向く。
+        model.loFocus(0.0, 1.0, 0.0);       // 上を向く。
+        model.loFocus(0.0, -1.0, 0.0);      // 下を向く。
+        model.loFocus(1.0, 1.0, 0.0);       // 右上を向く。
+        model.loFocus(-1.0, 1.0, -1.0);     // 左前上方を向く。
+        model.loFocus(0.01, 0.0, -1.0);     // わずかに右を向く。
+        model.loFocus(0.0, 0.01, -1.0);     // わずかに上を向く。
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -671,15 +671,12 @@ loFocus 関数は、glFocus のローカル座標系版である。lo 関数群�
 \section{オイラー角による姿勢の制御}
 この節では、オイラー角による制御を提供する 4 種類の関数に関しての
 紹介が記述されている。4 つの関数は、次に示す通りである。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void glAngle(fk\_Angle); \\
-\> void glAngle(double, double, double); \\
-\> void loAngle(fk\_Angle); \\
-\> void loAngle(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[void glAngle(fk\_Angle);]
+\item[void glAngle(double, double, double);]
+\item[void loAngle(fk\_Angle);]
+\item[void loAngle(double, double, double);]
+\end{description}
 それぞれ多重定義がなされているが、3 つの実数を引数にとる2つの関数は
 これまでのようにベクトルを意味しているのではなくオイラー角の 3 要素を
 示しており、3 つの引数はそれぞれヘディング角、ピッチ角、バンク角を
@@ -745,41 +742,18 @@ loAngle で真骨頂を発揮する。loAngle 関数では、先に述べた loF
 \\
 \begin{breakbox}
 \begin{verbatim}
-    // 後ろを向く
-    model.loAngle(fk_Math::PI, 0.0, 0.0);              
-
-    // 右を向く
-    model.loAngle(fk_Math::PI/2.0, 0.0, 0.0);          
-
-    // 左を向く
-    model.loAngle(-fk_Math::PI/2.0, 0.0, 0.0);
-
-    // 上を向く
-    model.loAngle(0.0, fk_Math::PI/2.0, 0.0);
-
-    // 下を向く
-    model.loAngle(0.0, -fk_Math::PI/2.0, 0.0);
-
-    // 右上を向く
-    model.loAngle(fk_Math::PI/2.0, fk_Math::PI/4.0, 0.0);
-
-    // 左前上方を向く
-    model.loAngle(-fk_Math::PI/4.0, fk_Math::PI/4.0, 0.0);
-
-    // わずかに右を向く
-    model.loAngle(fk_Math::PI/100.0, 0.0, 0.0);
-
-    // わずかに上を向く
-    model.loAngle(0.0, fk_Math::PI/100.0, 0.0);
-
-    // 視線を軸に半回転。
-    model.loAngle(0.0, 0.0, fk_Math::PI);
-
-    // モデルを右に傾ける。
-    model.loAngle(0.0, 0.0, fk_Math::PI/2.0);
-
-    // わずかに右に傾ける。
-    model.loAngle(0.0, 0.0, fk_Math::PI/100.0);
+    model.loAngle(fk_Math::PI, 0.0, 0.0);                      // 後ろを向く
+    model.loAngle(fk_Math::PI/2.0, 0.0, 0.0);                  // 右を向く
+    model.loAngle(-fk_Math::PI/2.0, 0.0, 0.0);                 // 左を向く
+    model.loAngle(0.0, fk_Math::PI/2.0, 0.0);                  // 上を向く
+    model.loAngle(0.0, -fk_Math::PI/2.0, 0.0);                 // 下を向く
+    model.loAngle(fk_Math::PI/2.0, fk_Math::PI/4.0, 0.0);      // 右上を向く
+    model.loAngle(-fk_Math::PI/4.0, fk_Math::PI/4.0, 0.0);     // 左前上方を向く
+    model.loAngle(fk_Math::PI/100.0, 0.0, 0.0);                // わずかに右を向く
+    model.loAngle(0.0, fk_Math::PI/100.0, 0.0);                // わずかに上を向く
+    model.loAngle(0.0, 0.0, fk_Math::PI);                      // 視線を軸に半回転。
+    model.loAngle(0.0, 0.0, fk_Math::PI/2.0);                  // モデルを右に傾ける。
+    model.loAngle(0.0, 0.0, fk_Math::PI/100.0);                // わずかに右に傾ける。
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -793,36 +767,25 @@ loFocus と比較してみてほしい。この loAngle の特徴は、回転を
 前節のオイラー角による制御が姿勢を定義するためのものであるならば、
 ここで述べる関数群は位置を回転によって制御するためのものといえる。
 ここで述べられる関数は全部で 16 種類ある。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void glRotate(fk\_Vector, fk\_Axis, double); \\
-\> void glRotate(double, double, double, fk\_Axis, double); \\
-\\
-\> void glRotate(fk\_Vector, fk\_Vector, double); \\
-\> void glRotate(double, double, double, double, double, double, double); \\
-\\
-\> void loRotate(fk\_Vector, fk\_Axis, double); \\
-\> void loRotate(double, double, double, fk\_Axis, double); \\
-\\
-\> void loRotate(fk\_Vector, fk\_Vector, double); \\
-\> void loRotate(double, double, double, double, double, double, double); \\
-\\
-\> void glRotateWithVec(fk\_Vector, fk\_Axis, double); \\
-\> void glRotateWithVec(double, double, double, fk\_Axis, double); \\
-\\
-\> void glRotateWithVec(fk\_Vector, fk\_Vector, double); \\
-\> void glRotateWithVec(double, double, double,
-	double, double, double, double); \\
-\\
-\> void loRotateWithVec(fk\_Vector, fk\_Axis, double); \\
-\> void loRotateWithVec(double, double, double, fk\_Axis, double); \\
-\\
-\> void loRotateWithVec(fk\_Vector, fk\_Vector, double); \\
-\> void loRotateWithVec(double, double, double,
-	double, double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[void glRotate(fk\_Vector, fk\_Axis, double);]
+\item[void glRotate(double, double, double, fk\_Axis, double);]
+\item[void glRotate(fk\_Vector, fk\_Vector, double);]
+\item[void glRotate(double, double, double, double, double, double, double);]
+\item[void loRotate(fk\_Vector, fk\_Axis, double);]
+\item[void loRotate(double, double, double, fk\_Axis, double);]
+\item[void loRotate(fk\_Vector, fk\_Vector, double);]
+\item[void loRotate(double, double, double, double, double, double, double);]
+\item[void glRotateWithVec(fk\_Vector, fk\_Axis, double);]
+\item[void glRotateWithVec(double, double, double, fk\_Axis, double);]
+\item[void glRotateWithVec(fk\_Vector, fk\_Vector, double);]
+\item[void glRotateWithVec(double, double, double, double, double, double, double);]
+\item[void loRotateWithVec(fk\_Vector, fk\_Axis, double);]
+\item[void loRotateWithVec(double, double, double, fk\_Axis, double);]
+\item[void loRotateWithVec(fk\_Vector, fk\_Vector, double);]
+\item[void loRotateWithVec(double, double, double, double, double, double, double);]
+\end{description}
+
 この関数群も、実質 8 種類の関数が
 引数として fk\_Vector 型をとるものと 3 つの実数をとるもので
 多重定義がなされている。行間なく記されているもの同士が対応している。
@@ -836,13 +799,13 @@ glRotate 関数は、大きく2つの機能を持っている。次の引数を�
         fk_Vector pos(0.0, 0.0, 0.0);
                 :
                 :
-        model.glRotate(pos, fk_X, fk_Math::PI/4.0);
+        model.glRotate(pos, fk_Axis::X, fk_Math::PI/4.0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
 このうち、最初の引数には回転の中心となる軸上の点を指定する。例の場合は
 原点を指定している。次の引数は回転軸をどの軸に平行な直線にするかを指定
-するもので、fk\_X、fk\_Y、fk\_Z から選択する。最後の引数は
+するもので、fk\_Axis::X、fk\_Axis::Y、fk\_Axis::Z から選択する。最後の引数は
 回転角を弧度法で入力する。中心は原点でなくてもよい。
 
 一方ベクトル2つと実数1つを引数に取る場合には、glRotate 関数は
@@ -884,9 +847,9 @@ loRotateWithVec は、loAngle 関数と多くの機能が重複している。�
 \begin{tabular}{|c|c|}
 \hline
 RotateWithVec による表現 & loAngle による表現 \\ \hline \hline
-loRotateWithVec(origin, fk\_X, angle) & loAngle(0.0, angle, 0.0) \\ \hline
-loRotateWithVec(origin, fk\_Y, angle) & loAngle(angle, 0.0, 0.0) \\ \hline
-loRotateWithVec(origin, fk\_Z, angle) & loAngle(0.0, 0.0, angle) \\ \hline
+loRotateWithVec(origin, fk\_Axis::X, angle) & loAngle(0.0, angle, 0.0) \\ \hline
+loRotateWithVec(origin, fk\_Axis::Y, angle) & loAngle(angle, 0.0, 0.0) \\ \hline
+loRotateWithVec(origin, fk\_Axis::Z, angle) & loAngle(0.0, 0.0, angle) \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -896,18 +859,15 @@ loRotateWithVec(origin, fk\_Z, angle) & loAngle(0.0, 0.0, angle) \\ \hline
 \section{モデルの拡大縮小}
 FK システムでは、モデルに対して拡大や縮小を行うことが可能であり、
 次のようなメンバ関数が提供されている。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void setScale(double); \\
-\> void setScale(double, fk\_Axis); \\
-\> void setScale(double, double, double); \\
-\\
-\> void prdScale(double); \\
-\> void prdScale(double, fk\_Axis); \\
-\> void prdScale(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[void setScale(double);]
+\item[void setScale(double, fk\_Axis);]
+\item[void setScale(double, double, double);]
+\item[void prdScale(double);]
+\item[void prdScale(double, fk\_Axis);]
+\item[void prdScale(double, double, double);]
+\end{description}
+
 setScale() メンバ関数はモデルの絶対倍率を設定するための関数である。
 引数として double 1個のみをとる関数は、モデルの拡大や縮小を単純に
 行う。fk\_Axis を引数にとる場合、指定された軸方向に対して拡大や
@@ -917,9 +877,9 @@ setScale() メンバ関数はモデルの絶対倍率を設定するための関
 \begin{verbatim}
         fk_Model        Model;
 
-        Model.setScale(2.0, fk_X);      // X 方向に 2 倍に拡大
-        Model.setScale(0.4, fk_Y);      // Y 方向に 0.4 倍に縮小
-        Model.setScale(2.5, fk_Z);      // Z 方向に 2.5 倍に拡大
+        Model.setScale(2.0, fk_Axis::X);      // X 方向に 2 倍に拡大
+        Model.setScale(0.4, fk_Axis::Y);      // Y 方向に 0.4 倍に縮小
+        Model.setScale(2.5, fk_Axis::Z);      // Z 方向に 2.5 倍に拡大
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -940,13 +900,12 @@ setScale() は、現在のモデルの拡大率に対して相対的な拡大率
 prdScale() を用いる。引数の意味は setScale() と同様である。
 
 また、現在の拡大率を調べたい場合は次のような拡大率が用意されている。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> double getScale(void); \\
-\> double getScale(fk\_Axis); \\
-\end{tabbing}
-\end{bf}
+
+\begin{description}
+\item[double getScale(void);]
+\item[double getScale(fk\_Axis);]
+\end{description}
+
 引数がない場合、全体の拡大率が返る。fk\_Axis 型の引数を入れた場合、
 その引数が示す軸方向の拡大率が返る。
 
@@ -1120,52 +1079,39 @@ modelB は元の位置・姿勢を保つ。2番目の引数に「false」を指�
 
 \subsection{親子関係に関する関数} 
 以下に、親子関係に関する fk\_Model のメンバ関数を羅列する。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void setParent(fk\_Model *p, bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
+
+\begin{description}
+\item[void setParent(fk\_Model *p, bool flag)] ~ \\
 		p を親モデルとして設定する。flag が true の場合、
 		設定後も元モデルのグローバル座標系での位置・姿勢が
 		変化しない。false の場合は、元の位置・姿勢が p の
 		相対的な位置・姿勢として扱われる。2 番目の引数を
-		省略した場合、false と同じとなる。
-	\end{tabular} \\ \\
+		省略した場合、false と同じとなる。\\
 
-\> \textbf{void deleteParent(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
+\item[void deleteParent(bool flag)] ~ \\
 		設定してあった親モデルとの関係を解除する。
 		元々親モデルが設定されていなかった場合は何も起こらない。
-		flag に関しては、setParent() 関数と同様。
-	\end{tabular} \\ \\
+		flag に関しては、setParent() 関数と同様。\\
 
-\> \textbf{void entryChild(fk\_Model *c, bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
+\item[void entryChild(fk\_Model *c, bool flag)] ~ \\
 		c を子モデルの1つとして設定する。
-		flag に関しては、setParent() 関数と同様。
-	\end{tabular} \\ \\
+		flag に関しては、setParent() 関数と同様。\\
 
-\> \textbf{void deleteChild(fk\_Model *c, bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
+\item[void deleteChild(fk\_Model *c, bool flag)] ~ \\
 		c が子モデルであった場合、親子関係を解除する。
 		c が子モデルではなかった場合は何も起こらない。
-		flag に関しては、setParent() 関数と同様。
-	\end{tabular} \\ \\
+		flag に関しては、setParent() 関数と同様。\\
 
-\> \textbf{void deleteChildren(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
+\item[void deleteChildren(bool flag)] ~ \\
 		自身に設定されている全ての子モデルに対し、
 		親子関係を解除する。
-		flag に関しては、setParent() 関数と同様。
-	\end{tabular} \\ \\
+		flag に関しては、setParent() 関数と同様。\\
 
-\> \textbf{fk\_Model * getParent(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
+\item[fk\_Model * getParent(void)] ~ \\
 		自身に設定されている親モデルを返す。
-		親モデルが設定されていない場合、nullptrを返す。
-	\end{tabular} \\ \\
+		親モデルが設定されていない場合、nullptrを返す。\\
 
-\> \textbf{fk\_Model * foreachChild(fk\_Model *c)} \\
-	\> \> \begin{tabular}{p{15cm}}
+\item[fk\_Model * foreachChild(fk\_Model *c)] ~ \\
 		自身に設定されている子モデルを順番に返す。
 		まず c に nullptr が入力されたとき、最初に設定された子モデル
 		が返る。ただし、子モデルが登録されていなかった場合は
@@ -1175,8 +1121,7 @@ xx \= xxxx \= \kill
 		2番目に設定された子モデルが返ってくる。このようにして、
 		設定されている子モデルを順番に参照することができる。
 		最後の子モデルが引数に入力されたとき、nullptr が返る。
-	\end{tabular}
-\end{tabbing}
+\end{description}
 
 \section{干渉・衝突判定}
 ゲームのようなアプリケーションの場合、物体同士の衝突を検出することは重要な処理である。
@@ -1276,7 +1221,7 @@ AABB では図形を直方体で囲み、その直方体同士で判定を行う
 \\
 \begin{breakbox}
 \begin{verbatim}
-    modelA.setBMode(FK_B_OBB);
+    modelA.setBMode(fk_BoundaryMode::OBB);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -1287,10 +1232,10 @@ setBMode() の引数の種類は、以下の通りである。
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-FK\_B\_SPHERE & 境界球 \\ \hline
-FK\_B\_AABB & 軸平行境界ボックス (AABB) \\ \hline
-FK\_B\_OBB & 有向境界ボックス (OBB) \\ \hline
-FK\_B\_CAPSULE & カプセル型 \\ \hline
+fk\_BoundaryMode::SPHERE & 境界球 \\ \hline
+fk\_BoundaryMode::AABB & 軸平行境界ボックス (AABB) \\ \hline
+fk\_BoundaryMode::OBB & 有向境界ボックス (OBB) \\ \hline
+fk\_BoundaryMode::CAPSULE & カプセル型 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}

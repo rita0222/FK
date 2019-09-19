@@ -99,7 +99,7 @@ namespace FK {
 	fk_FrameMode operator ^ (fk_FrameMode argL, fk_FrameMode argR);
 
 	//! 特殊キーを表す列挙型
-	enum class fk_SpecialKey {
+	enum class fk_Key {
 		SHIFT_R,	//!< 右シフトキー
 		SHIFT_L,	//!< 左シフトキー
 		CTRL_R,		//!< 右コントロールキー
@@ -314,11 +314,11 @@ namespace FK {
 		 *
 		 *		fk_Window		win;
 		 *
-		 *		if(win.getSpecialKeyStatus(fk_SpecialKey::RIGHT, true) == true) {
+		 *		if(win.getSpecialKeyStatus(fk_Key::RIGHT, true) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
-		 *	特殊キーの種類については、 ::fk_SpecialKey の項目を参照して下さい。
+		 *	特殊キーの種類については、 ::fk_Key の項目を参照して下さい。
 		 *
 		 *	標準キーの状態については、 getKeyStatus() を用いてください。
 		 *
@@ -344,12 +344,12 @@ namespace FK {
 		 *
 		 *	\sa getKeyStatus()
 		 */
-		bool	getSpecialKeyStatus(fk_SpecialKey key,
+		bool	getSpecialKeyStatus(fk_Key key,
 									fk_Switch status, bool insideFlag = true);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getKeyStatus(char key, bool insideFlag = true);
-		bool	getSpecialKeyStatus(fk_SpecialKey key, bool insideFlag = true);
+		bool	getSpecialKeyStatus(fk_Key key, bool insideFlag = true);
 #endif
 
 		//! 最終押下キー取得関数
@@ -904,7 +904,7 @@ namespace FK {
 		char					lastKey;
 
 		std::map<char, bool>			keyStatus;
-		std::map<fk_SpecialKey, bool>	specialKeyStatus;
+		std::map<fk_Key, bool>	specialKeyStatus;
 		std::map<fk_MouseButton, bool>	mouseStatus;
 	
 		fk_FrameMode			frameMode;

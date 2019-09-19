@@ -183,10 +183,10 @@ int main(int, char **)
 		}
 		
 		// エッジ抽出用閾値の変更
-		if(baseWindow.getSpecialKeyStatus(fk_SpecialKey::UP, false) == true) {
+		if(baseWindow.getSpecialKeyStatus(fk_Key::UP, false) == true) {
 			++thresshold;
 		}
-		if(baseWindow.getSpecialKeyStatus(fk_SpecialKey::DOWN, false) == true) {
+		if(baseWindow.getSpecialKeyStatus(fk_Key::DOWN, false) == true) {
 			if(thresshold > 0) --thresshold;
 		}			
 		

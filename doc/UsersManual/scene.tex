@@ -143,15 +143,15 @@ FK システムでは、シーン全体に霧効果を出す機能がサポー�
 \begin{verbatim}
         fk_Scene        scene;
 
-        scene.setFogMode(FK_LINEAR_FOG);
-        scene.setFogOption(FK_FASTEST_FOG);
+        scene.setFogMode(fk_FogMode::LINEAR);
+        scene.setFogOption(fk_FogOption::FASTEST);
         scene.setFogLinearMap(0.0, 400.0);
         scene.setFogColor(0.3, 0.4, 1.0, 0.0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
 まず、setFogMode() によって減衰関数を指定する。通常は、例にあるように
-FK\_LINEAR\_FOG を指定すれば良い。
+fk\_FogMode::LINEAR を指定すれば良い。
 
 次に、setFogOption() でオプションを指定する。これは \ref{subsec:scenefogref} 節
 で述べるような3種類があるので、目的に応じて適切に設定する。
@@ -165,21 +165,7 @@ FK\_LINEAR\_FOG を指定すれば良い。
 以上の項目を設定するだけで、シーンに霧効果を出すことが可能となる。
 より詳細な設定が必要な場合は、次節を参照すること。
 \subsection{霧効果の詳細な利用方法} \label{subsec:scenefogref}
-霧効果に関連する機能として、
-次のような fk\_Scene のメンバ関数群が提供されている。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void setFogMode(fk\_FogMode); \\
-\> void setFogOption(fk\_FogOption); \\
-\> void setFogDensity(double); \\
-\> void setFogLinearMap(double, double); \\
-\> void setFogColor(fk\_Color); \\
-\> void setFogColor(float, float, float, float); \\
-\> void setFogColor(double, double, double, double); \\
-\end{tabbing}
-\end{bf}
-以下に、各関数の解説を述べる。
+霧効果に関連する機能として、各関数の解説を述べる。
 \begin{description}
  \item[\hspace*{0.6cm}void setFogMode(fk\_FogMode mode)] ~ \\
 	霧による減衰の関数を設定する。以下のような項目が入力できる。
@@ -187,14 +173,14 @@ xxxxxxx \= \kill
 	\begin{center}
 	\begin{tabular}{|c|p{7cm}|}
 	\hline
-	FK\_LINEAR\_FOG & 減衰関数として \(\dfrac{E - z}{E - S}\) が
+	fk\_FogMode::LINEAR & 減衰関数として \(\dfrac{E - z}{E - S}\) が
 		選択される。\\ \hline
-	FK\_EXP\_FOG & 減衰関数として \(e^{-dz}\) が選択される。\\ \hline
-	FK\_EXP2\_FOG & 減衰関数として \(e^{-(dz)^2}\) が選択される。\\ \hline
-	FK\_NONE\_FOG & 霧効果を無効とする。\\ \hline
+	fk\_FogMode::EXP & 減衰関数として \(e^{-dz}\) が選択される。\\ \hline
+	fk\_FogMode::EXP2 & 減衰関数として \(e^{-(dz)^2}\) が選択される。\\ \hline
+	fk\_FogMode::NONE & 霧効果を無効とする。\\ \hline
 	\end{tabular}
 	\end{center}
-	なお、デフォルトでは FK\_NONE\_FOG が選択されている。
+	なお、デフォルトでは fk\_FogMode::NONE が選択されている。\\
 
  \item[\hspace*{0.6cm}void setFogOption(fk\_FogOption opt)] ~ \\
 	霧効果における描画オプションを設定する。以下のような項目が
@@ -202,24 +188,24 @@ xxxxxxx \= \kill
 	\begin{center}
 	\begin{tabular}{|c|p{7cm}|}
 	\hline
-	FK\_FASTEST\_FOG & 描画の際に、速度を優先する。\\ \hline
-	FK\_NICEST\_FOG & 描画の際に、精細さを優先する。\\ \hline
-	FK\_NOOPTION\_FOG & 特にオプションを設定しない。\\ \hline
+	fk\_FogOption::FASTEST & 描画の際に、速度を優先する。\\ \hline
+	fk\_FogOption::NICEST & 描画の際に、精細さを優先する。\\ \hline
+	fk\_FogOption::NOOPTION & 特にオプションを設定しない。\\ \hline
 	\end{tabular}
 	\end{center}
-	なお、デフォルトでは FK\_NOOPTION\_FOG が選択されている。
+	なお、デフォルトでは fk\_FogOption::NOOPTION が選択されている。\\
 
  \item[\hspace*{0.6cm}void setFogDensity(double d)] ~ \\
-	減衰関数として FK\_EXP\_FOG (\(e^{-dz}\)) 及び
-	及び FK\_EXP2\_FOG (\(e^{-(dz)^2}\)) が選択された際の、	
+	減衰関数として fk\_FogMode::EXP (\(e^{-dz}\)) 及び
+	及び fk\_FogMode::EXP2 (\(e^{-(dz)^2}\)) が選択された際の、	
 	減衰指数係数 \(d\) を設定する。ここで、\(z\) はカメラから
-	対象地点への距離を指す。
+	対象地点への距離を指す。\\
 
  \item[\hspace*{0.6cm}void setFogLinearMap(double S, double E)] ~ \\
 	減衰関数として FK\_LINEAR\_FOG (\(\dfrac{E - z}{E - S}\)) が
 	選択された際の、減衰線形係数 \(S, E\) を設定する。もっと
 	平易に述べると、霧効果が現れる最初の距離 \(S\) と、
-	霧で何も見えなくなる距離 \(E\) を設定する。
+	霧で何も見えなくなる距離 \(E\) を設定する。\\
 
  \item[\hspace*{0.6cm}void setFogColor(fk\_Color col)]
  \item[\hspace*{0.6cm}void setFogColor(float R, float G, float B, float A)]
@@ -244,103 +230,95 @@ xxxxxxx \= \kill
 
 基本的には、通常のモデル登録と同様の手順でオーバーレイモデルを登録することができる。
 オーバーレイモデルを扱うメンバ関数は、以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void entryOverlayModel(fk\_Model *model)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		モデルをオーバーレイモデルとしてシーンに登録する。
-		「model」が既にオーバーレイモデルとして登録されていた場合は、
-		そのモデルが最前面に移動する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void entryOverlayModel(fk\_Model *model)] ~ \\
+	モデルをオーバーレイモデルとしてシーンに登録する。
+	「model」が既にオーバーレイモデルとして登録されていた場合は、
+	そのモデルが最前面に移動する。\\
 
-\> \textbf{void removeOverlayModel(fk\_Model *model)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		「model」がオーバーレイモデルとして登録されていた場合、
-		リストから削除する。
-	\end{tabular} \\ \\
+\item[void removeOverlayModel(fk\_Model *model)] ~ \\
+	「model」がオーバーレイモデルとして登録されていた場合、
+	リストから削除する。\\
 
-\> \textbf{void clearOverlayModel(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		全ての登録されているオーバーレイモデルを解除する。
-	\end{tabular}
-\end{tabbing}
+\item[void clearOverlayModel(void)] ~ \\
+	全ての登録されているオーバーレイモデルを解除する。
+\end{description}
 
-
-\section{立体視の制御}
-
-FKシステムではOpenGLの拡張機能を利用し、立体視画像を出力することが可能である。
-立体視を利用するには「Quad Buffer」と呼ばれる機能をサポートするビデオカードと、
-120Hzの高周波数出力が可能なディスプレイ、およびシャッター式の眼鏡が必要である。
-これらの環境を満たしてさえいれば、FKシステムを利用しているプログラムに対してわずか
-数行を書き足すだけで、立体視画像を出力するプログラムに拡張することができる。
-
-立体視機能を有効にするには、fk\_Windowクラスのオブジェクトに対して
-setOGLStereoMode()メンバ関数を呼び出す必要がある。引数にtrueを渡すことで
-有効化できるが、前述したハードウェア要件を満たすビデオカードが認識できない場合、
-プログラムはその時点で強制終了してしまう。現時点では事前に立体視対応を判定する手段を
-FKシステムでは提供していないので注意すること。
-
-fk\_Sceneクラスでは、立体視表現のために左目と右目を表すカメラモデルを
-追加で設定することができるようになっている。射影変換の設定もカメラモデルごとに
-別個の設定を持つことができるため、両眼視差の厳密な微調整が可能である。
-これら立体視表現のためのメンバ関数は以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void entryStereoCamera(fk\_StereoChannel channel, fk\_Model *model)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		モデルを左目、あるいは右目のカメラモデルとしてシーンに登録する。
-		「channel」には、「FK\_STEREO\_LEFT」か「FK\_STEREO\_RIGHT」の
-		どちらかを指定する。
-	\end{tabular} \\ \\
-
-\> \textbf{void setStereoProjection(fk\_StereoChannel channel, fk\_Projection *proj)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		左目、あるいは右目の射影設定を変更する。「channel」の指定は前述の通りである。
-		「proj」にはfk\_Perspective、fk\_Ortho、fk\_Frustumクラスの
-		オブジェクトのポインタを指定する。詳細はリファレンスマニュアルを参照のこと。
-	\end{tabular} \\ \\
-
-\> \textbf{const fk\_Model * getStereoCamera(fk\_StereoChannel channel)} \\
-\> \textbf{const fk\_ProjectBase * getStereoProjection(fk\_StereoChannel channel)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		立体視用に設定したカメラモデル、または射影設定を取得する。
-		「channel」の指定は前述の通りである。
-	\end{tabular} \\ \\
-
-\> \textbf{void clearStereo(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		全ての立体視関連の設定を初期化する。左右のカメラモデルと射影設定は、
-		通常のカメラに設定されているものと同一になる。
-	\end{tabular}
-\end{tabbing}
-
-左右のカメラに対しては、通常のカメラモデルを親としたモデルを設定すると、
-視差を保ったまま通常のカメラの移動や回転が反映されるので便利である。
-以下に立体視の設定を施すコーディングの一例を示す。
-\\
-\begin{breakbox}
-\begin{verbatim}
-        fk_Window  window;
-        fk_Scene   scene;
-        fk_Model   camera, camL, camR;
-
-        // 立体視の有効化
-        window.setOGLStereoMode(true);
-        // 通常のカメラをセット
-        scene.entryCamera(&camera);
-        // 左右のカメラを通常カメラの子としてセット
-        camL.setParent(&camera);
-        camR.setParent(&camera);
-        // 左右それぞれの位置を中心から左右にずらす
-        camL.glTranslate(-10.0, 0.0, 0.0);
-        camR.glTranslate( 10.0, 0.0, 0.0);
-        // 両眼が同じ場所を注視するように向きをセット
-        camL.glFocus(0.0, 0.0, -10.0);
-        camR.glFocus(0.0, 0.0, -10.0);
-\end{verbatim}
-\end{breakbox}
-~ \\
-以上のように設定した上で通常のカメラを制御すれば、左右のカメラも連動して動作する。
-ただし、これだけでは射影設定がデフォルトのままであるため、厳密な立体視表現には
-不十分である。より立体感を追求するには、左右のカメラに異なる一般透視投影を用いて
-微調整を行う必要がある。立体視の原理、技法に関しては関連書籍を参照すること。
+% \section{立体視の制御}
+% 
+% FKシステムではOpenGLの拡張機能を利用し、立体視画像を出力することが可能である。
+% 立体視を利用するには「Quad Buffer」と呼ばれる機能をサポートするビデオカードと、
+% 120Hzの高周波数出力が可能なディスプレイ、およびシャッター式の眼鏡が必要である。
+% これらの環境を満たしてさえいれば、FKシステムを利用しているプログラムに対してわずか
+% 数行を書き足すだけで、立体視画像を出力するプログラムに拡張することができる。
+% 
+% 立体視機能を有効にするには、fk\_Windowクラスのオブジェクトに対して
+% setOGLStereoMode()メンバ関数を呼び出す必要がある。引数にtrueを渡すことで
+% 有効化できるが、前述したハードウェア要件を満たすビデオカードが認識できない場合、
+% プログラムはその時点で強制終了してしまう。現時点では事前に立体視対応を判定する手段を
+% FKシステムでは提供していないので注意すること。
+% 
+% fk\_Sceneクラスでは、立体視表現のために左目と右目を表すカメラモデルを
+% 追加で設定することができるようになっている。射影変換の設定もカメラモデルごとに
+% 別個の設定を持つことができるため、両眼視差の厳密な微調整が可能である。
+% これら立体視表現のためのメンバ関数は以下の通りである。
+% \begin{tabbing}
+% xx \= xxxx \= \kill
+% \> \textbf{void entryStereoCamera(fk\_StereoChannel channel, fk\_Model *model)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		モデルを左目、あるいは右目のカメラモデルとしてシーンに登録する。
+% 		「channel」には、「FK\_STEREO\_LEFT」か「FK\_STEREO\_RIGHT」の
+% 		どちらかを指定する。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{void setStereoProjection(fk\_StereoChannel channel, fk\_Projection *proj)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		左目、あるいは右目の射影設定を変更する。「channel」の指定は前述の通りである。
+% 		「proj」にはfk\_Perspective、fk\_Ortho、fk\_Frustumクラスの
+% 		オブジェクトのポインタを指定する。詳細はリファレンスマニュアルを参照のこと。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{const fk\_Model * getStereoCamera(fk\_StereoChannel channel)} \\
+% \> \textbf{const fk\_ProjectBase * getStereoProjection(fk\_StereoChannel channel)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		立体視用に設定したカメラモデル、または射影設定を取得する。
+% 		「channel」の指定は前述の通りである。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{void clearStereo(void)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		全ての立体視関連の設定を初期化する。左右のカメラモデルと射影設定は、
+% 		通常のカメラに設定されているものと同一になる。
+% 	\end{tabular}
+% \end{tabbing}
+% 
+% 左右のカメラに対しては、通常のカメラモデルを親としたモデルを設定すると、
+% 視差を保ったまま通常のカメラの移動や回転が反映されるので便利である。
+% 以下に立体視の設定を施すコーディングの一例を示す。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%         fk_Window  window;
+%         fk_Scene   scene;
+%         fk_Model   camera, camL, camR;
+% 
+%         // 立体視の有効化
+%         window.setOGLStereoMode(true);
+%         // 通常のカメラをセット
+%         scene.entryCamera(&camera);
+%         // 左右のカメラを通常カメラの子としてセット
+%         camL.setParent(&camera);
+%         camR.setParent(&camera);
+%         // 左右それぞれの位置を中心から左右にずらす
+%         camL.glTranslate(-10.0, 0.0, 0.0);
+%         camR.glTranslate( 10.0, 0.0, 0.0);
+%         // 両眼が同じ場所を注視するように向きをセット
+%         camL.glFocus(0.0, 0.0, -10.0);
+%         camR.glFocus(0.0, 0.0, -10.0);
+% \end{verbatim}
+% \end{breakbox}
+% ~ \\
+% 以上のように設定した上で通常のカメラを制御すれば、左右のカメラも連動して動作する。
+% ただし、これだけでは射影設定がデフォルトのままであるため、厳密な立体視表現には
+% 不十分である。より立体感を追求するには、左右のカメラに異なる一般透視投影を用いて
+% 微調整を行う必要がある。立体視の原理、技法に関しては関連書籍を参照すること。

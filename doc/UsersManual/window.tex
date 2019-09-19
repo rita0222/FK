@@ -97,7 +97,8 @@ fk\_AppWindow には座標軸やグリッドを表示する機能が備わって
 \\
 \begin{screen}
 \begin{verbatim}
-    window.showGuide(FK_AXIS_X | FK_AXIS_Y | FK_AXIS_Z | FK_GRID_XZ);
+    window.showGuide(fk_Guide::AXIS_X | fk_Guide::AXIS_Y |
+                     fk_Guide::AXIS_Z | fk_Guide::GRID_XZ);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -109,12 +110,12 @@ showGuide() で指定できる項目は以下の通りである。
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-FK\_AXIS\_X & \(x\)軸 \\ \hline
-FK\_AXIS\_Y & \(y\)軸 \\ \hline
-FK\_AXIS\_Z & \(z\)軸 \\ \hline
-FK\_GRID\_XY & \(xy\) 平面上のグリッド \\ \hline
-FK\_GRID\_YZ & \(yz\) 平面上のグリッド \\ \hline
-FK\_GRID\_XZ & \(xz\) 平面上のグリッド \\ \hline
+fk\_Guide::AXIS\_X & \(x\)軸 \\ \hline
+fk\_Guide::AXIS\_Y & \(y\)軸 \\ \hline
+fk\_Guide::AXIS\_Z & \(z\)軸 \\ \hline
+fk\_Guide::GRID\_XY & \(xy\) 平面上のグリッド \\ \hline
+fk\_Guide::GRID\_YZ & \(yz\) 平面上のグリッド \\ \hline
+fk\_Guide::GRID\_XZ & \(xz\) 平面上のグリッド \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -123,33 +124,23 @@ FK\_GRID\_XZ & \(xz\) 平面上のグリッド \\ \hline
 
 座標軸の長さやグリッドの幅、数などは以下の関数によって制御可能である。
 
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{hideGuide()} \\
-	\> \> \begin{tabular}{p{15cm}}
-		座標軸・グリッドを消去する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[hideGuide()] ~ \\
+	座標軸・グリッドを消去する。\\
 
-\> \textbf{setGuideAxisWidth(double w)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		座標軸の線幅を w に設定する。
-	\end{tabular} \\ \\
+\item[setGuideAxisWidth(double w)] ~ \\
+	座標軸の線幅を w に設定する。\\
 
-\> \textbf{setGuideGridWidth(double w)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		グリッドの線幅を w に設定する。
-	\end{tabular} \\ \\
+\item[setGuideGridWidth(double w)] ~ \\
+	グリッドの線幅を w に設定する。\\
 
-\> \textbf{setGuideScale(double s)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		グリッドの幅を s に設定する。
-	\end{tabular} \\ \\
+\item[setGuideScale(double s)] ~ \\
+	グリッドの幅を s に設定する。\\
 
-\> \textbf{setGuideNum(int n)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		グリッドの分割数を n に設定する。
-	\end{tabular}
-\end{tabbing}
+\item[setGuideNum(int n)] ~ \\
+	グリッドの分割数を n に設定する。
+\end{description}
+
 \section{デバイス情報の取得} \label{sec:device}
 fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、fk\_AppWindow クラスは
 様々なメンバ関数を提供している。ここでは、それらの使用法を説明する。
@@ -160,7 +151,7 @@ fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、
 \\
 \begin{screen}
 \begin{verbatim}
-        if(window.getKeyStatus('g', FK_SW_PRESS) == true) {
+        if(window.getKeyStatus('g', fk_Switch::PRESS) == true) {
                 :       // キーが押された時の処理を行う。
         }
 \end{verbatim}
@@ -176,17 +167,17 @@ fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-FK\_SW\_RELEASE & 離しっぱなしの状態 \\ \hline
-FK\_SW\_UP & 離した瞬間 \\ \hline
-FK\_SW\_DOWN & 押した瞬間 \\ \hline
-FK\_SW\_PRESS & 押しっぱなしの状態 \\ \hline
+fk\_Switch::RELEASE & 離しっぱなしの状態 \\ \hline
+fk\_Switch::UP & 離した瞬間 \\ \hline
+fk\_Switch::DOWN & 押した瞬間 \\ \hline
+fk\_Switch::PRESS & 押しっぱなしの状態 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
 上記のサンプルプログラムは「押した状態にあるかどうか」を検知するものであるが、
-「押した瞬間」であるかどうかを検知する場合は「FK\_SW\_PRESS」のかわりに
-「FK\_SW\_DOWN」を第2引数に入力する。
+「押した瞬間」であるかどうかを検知する場合は「fk\_Switch::PRESS」のかわりに
+「fk\_Switch::DOWN」を第2引数に入力する。
 
 \subsection{getSpecialKeyStatus() 関数}
 この関数は、文字ではない特殊キーが押されているか
@@ -195,7 +186,7 @@ FK\_SW\_PRESS & 押しっぱなしの状態 \\ \hline
 \\
 \begin{screen}
 \begin{verbatim}
-        if(window.getSpecialKeyStatus(FK_SHIFT_L, FK_SW_PRESS) == true) {
+        if(window.getSpecialKeyStatus(fk_Key::SHIFT_L, fk_Switch::PRESS) == true) {
                 :       // キーが押されている時の処理を行う。
         }
 \end{verbatim}
@@ -208,31 +199,30 @@ FK\_SW\_PRESS & 押しっぱなしの状態 \\ \hline
 \caption{特殊キーと引数値の対応}
 \label{tbl:fkSpecialKey}
 \begin{center}
-\begin{tabular}{|p{3cm}|p{3cm}||p{3cm}|p{3cm}|}
+\begin{tabular}{|p{4.5truecm}|p{3truecm}||p{4.5truecm}|p{3truecm}|}
 \hline
 引数名 & 対応特殊キー & 引数名 & 対応特殊キー \\ \hline \hline
-FK\_SHIFT\_R	& 右シフトキー &
-	FK\_CAPS\_LOCK	& Caps Lock キー \\ \hline
-FK\_SHIFT\_L	& 左シフトキー &
-	FK\_PAGE\_UP	& Page Up キー \\ \hline
-FK\_CTRL\_R	& 右コントロールキー &
-	FK\_PAGE\_DOWN	& Page Down キー \\ \hline
-FK\_CTRL\_L	& 左コントロールキー &
-	FK\_HOME	& Home キー \\ \hline
-FK\_ALT\_R	& 右 ALT キー &
-	FK\_END		& End キー \\ \hline
-FK\_ALT\_L	& 左 ALT キー &
-	FK\_INSERT	& Insert キー \\ \hline
-FK\_ENTER	& 改行キー &
-	FK\_RIGHT	& 右矢印キー \\ \hline
-FK\_BACKSPACE	& Back Space キー &
-	FK\_LEFT	& 左矢印キー \\ \hline
-FK\_DELETE	& Del キー &
-	FK\_UP		& 上矢印キー \\ \hline
-FK\_TAB		& Tab キー &
-	FK\_DOWN	& 下矢印キー \\ \hline
-FK\_F1 〜 FK\_F12 & F1 〜 F12 キー &
-		& \\ \hline
+fk\_Key::SHIFT\_R	& 右シフトキー &
+fk\_Key::CAPS\_LOCK	& Caps Lock キー \\ \hline
+fk\_Key::SHIFT\_L	& 左シフトキー &
+fk\_Key::PAGE\_UP	& Page Up キー \\ \hline
+fk\_Key::CTRL\_R	& 右コントロールキー &
+fk\_Key::PAGE\_DOWN	& Page Down キー \\ \hline
+fk\_Key::CTRL\_L	& 左コントロールキー &
+fk\_Key::HOME		& Home キー \\ \hline
+fk\_Key::ALT\_R		& 右 ALT キー &
+fk\_Key::END		& End キー \\ \hline
+fk\_Key::ALT\_L		& 左 ALT キー &
+fk\_Key::INSERT		& Insert キー \\ \hline
+fk\_Key::ENTER		& 改行キー &
+fk\_Key::RIGHT		& 右矢印キー \\ \hline
+fk\_Key::BACKSPACE	& Back Space キー &
+fk\_Key::LEFT		& 左矢印キー \\ \hline
+fk\_Key::DELETE		& Del キー &
+fk\_Key::UP		& 上矢印キー \\ \hline
+fk\_Key::TAB		& Tab キー &
+fk\_Key::DOWN		& 下矢印キー \\ \hline
+fk\_Key::F1 〜 fk\_Key::F12 & F1 〜 F12 キー & & \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -259,14 +249,14 @@ fk\_AppWindow 上にあるかどうかを条件に加えるフラグである。
 
 \subsection*{getMouseStatus() 関数}
 この関数は、現在マウスボタンが押されているかどうかを調べる時に使用する。
-引数値として左ボタンが FK\_MOUSE1、中ボタンが FK\_MOUSE2、右ボタンが
-FK\_MOUSE3 に対応しており、
+引数値として左ボタンが fk\_MouseButton::M1、中ボタンが fk\_MouseButton::M2、右ボタンが
+fk\_MouseButton::M3 に対応しており、
 \\
 \begin{breakbox}
 \begin{verbatim}
         fk_AppWindow       window;
 
-        if(window.getMouseStatus(FK_MOUSE1, FK_SW_PRESS) == true) {
+        if(window.getMouseStatus(fk_MouseButton::M1, fk_Switch::PRESS) == true) {
                 :       // 左ボタンが押されている。
                 :
         }
@@ -538,29 +528,30 @@ Fl::check() を用いる。
         mainWindow.show();      
         window.show();
         while(true) {
-                // メインウィンドウが開いているかどうかのチェック
-                if(mainWindow.visible() == 0) {
-                        // 開いていなかった (最小化の状態の) 場合
-                        if(Fl::wait() == 0) {
-                                // 終了命令がでた場合
-                                break;
-                        } else {
-                                // そのままループの最初に戻る
-                                continue;
-                        }
+            // メインウィンドウが開いているかどうかのチェック
+            if(mainWindow.visible() == 0) {
+                // 開いていなかった (最小化の状態の) 場合
+                if(Fl::wait() == 0) {
+                    // 終了命令がでた場合
+                    break;
+                } else {
+                    // そのままループの最初に戻る
+                    continue;
                 }
-                // 描画処理
-                if(window.drawWindow() == 0) break;
+            }
+            // 描画処理
+            if(window.drawWindow() == 0) break;
 
-                // FLTK から重大なエラーの報告がないかをチェック
-                if(Fl::check() == 0) break;
+            // FLTK から重大なエラーの報告がないかをチェック
+            if(Fl::check() == 0) break;
 
-                // fk_Window が描画できる状態になっているかをチェック
-                if(window.winOpenStatus() == false) continue;
-                        :
-                        :       // モデルの制御
-                        :
-        }       
+            // fk_Window が描画できる状態になっているかをチェック
+            if(window.winOpenStatus() == false) continue;
+                :
+                :   // モデルの制御
+                :
+            }
+        }
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -580,48 +571,41 @@ fk\_AppWindow と共通である。
 fk\_Window に表示されている状態を、画像ファイルや画像データに取り込みたい
 場合は、snapImage() というメンバ関数を利用する。
 仕様は以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{bool snapImage(string fileName,
-	fk\_ImageType type, fk\_SnapProcMode mode)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在ウィンドウに表示されている画像を、
-		指定した画像形式で fileName にあるファイル名で保存する。
-		type は以下の3種類のうちいずれかを指定する。
-		\begin{itemize}
-		 \item FK\_IMAGE\_BMP (Windows Bitmap 形式)
-		 \item FK\_IMAGE\_PNG (PNG 形式)
-		 \item FK\_IMAGE\_JPG (JPEG 形式)
-		\end{itemize}
-		また、mode はどの画像バッファから情報を取得するかを指定する物で、
-		以下の 3 種類のいずれかを指定する。
-		\begin{itemize}
-		 \item FK\_SNAP\_GL\_FRONT (OpenGL フロントバッファ)
-		 \item FK\_SNAP\_GL\_BACK (OpenGL バックバッファ)
-		 \item FK\_SNAP\_WIN32\_GDI
-		 (Windows GDI バッファ、Windows 上でのみ有効)
-		 \item FK\_SNAP\_D3D\_WINDOW
-		(Direct3D バッファ、Direct3D版のみ有効)
-		\end{itemize}
 
-		type と mode はデフォルト引数が設定されており、
-		省略可能である。省略した場合、type は FK\_IMAGE\_BMP、
-		mode は FK\_SNAP\_GL\_FRONT となる。
+\begin{description}
+ \item[bool snapImage(string fileName, fk\_ImageType type, fk\_SnapProcMode mode)] ~ \\
+現在ウィンドウに表示されている画像を、
+指定した画像形式で fileName にあるファイル名で保存する。
+type は以下のいずれかを指定する。
+\begin{itemize}
+ \item fk\_ImageType::BMP (Windows Bitmap 形式)
+ \item fk\_ImageType::PNG (PNG 形式)、
+ \item fk\_ImageType::JPG (JPEG 形式)
+\end{itemize}
 
-		出力に成功すれば true を、失敗すれば false を返す。
+また、mode はどの画像バッファから情報を取得するかを指定する物で、
+以下のいずれかを設定する。
+\begin{itemize}
+ \item fk\_SnapProcMode::FRONT (OpenGL フロントバッファ)
+ \item fk\_SnapProcMode::BACK (OpenGL バックバッファ)
+ \item fk\_SnapProcMode::WIN32\_GDI (Windows のみ)
+\end{itemize}
 
-	\end{tabular} \\ \\
-\> \textbf{bool snapImage(fk\_Image *image, fk\_SnapProcMode mode)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在ウィンドウに表示されている画像を、
-		fk\_Image 型の変数に格納する。mode に関しては
-		上記のファイル出力の場合と同様である。
-		また、mode はデフォルト引数が設定されており、
-		省略可能である。省略した場合 mode は FK\_SNAP\_GL\_FRONT となる。
+type と mode はデフォルト引数が設定されており、
+省略可能である。省略した場合、type は fk\_ImageType::BMP、
+mode は fk\_SnapProcMode::FRONT となる。
 
-		出力に成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
-\end{tabbing}
+出力に成功すれば true を、失敗すれば false を返す。\\
+
+\item[bool snapImage(fk\_Image *image, fk\_SnapProcMode mode)] ~ \\
+現在ウィンドウに表示されている画像を、
+fk\_Image 型の変数に格納する。mode に関しては
+上記のファイル出力の場合と同様である。
+また、mode はデフォルト引数が設定されており、
+省略可能である。省略した場合 mode は fk\_SnapProcMode::FRONT となる。
+
+出力に成功すれば true を、失敗すれば false を返す。
+\end{description}
 
 引数としてファイル名を取る物と fk\_Image 型(のポインタ)変数を取るものがある。
 前者は、指定されたファイル名で指定した形式で保存するものである。
@@ -634,8 +618,8 @@ xx \= xxxx \= \kill
         fk_Window       win(0, 0, 300, 300);
         fk_Image        image;
 
-        win.snapImage("image.bmp", FK_IMAGE_BMP, FK_SNAP_GL_BACK);
-        win.image(&image, FK_SNAP_GL_BACK);
+        win.snapImage("image.bmp", fk_ImageType::BMP, fk_SnapProcMode::BACK);
+        win.snapImage(&image, fk_SnapProcMode::BACK);
 \end{verbatim}
 \end{screen}
 
@@ -692,230 +676,230 @@ resizeWindow() というメンバ関数を利用する。この関数は、引�
 \end{verbatim}
 \end{breakbox}
 
-\subsection{ピック選択の利用法} \label{subsec:pickexam}
-FK システムでは、ピックによるオブジェクト及びその中の要素の取得が可能である。
-この機能を利用するには、fk\_Window の getPickModel() メンバ関数と
-fk\_PickData クラスを用いる。実際の仕様を述べる前に、次の実装例を
-参照してほしい。この例は、選択されたモデルのマテリアルを
-赤に設定し、さらにピックされた位相要素の ID を表示するプログラムである。
-\\
-\begin{breakbox}
-\begin{verbatim}
-        fk_Model        models[100];
-        fk_Window       window;
-        fk_PickData     pickData;
-        int             i;
-
-        for(i = 0; i < 100; i++) models[i].setPickMode(true);
-                :
-                :
-                :
-        window.getPickModel(&pickData, 5);
-        for(i = 0; i < pickData.getSize(); i++) {
-                pickData.getModel(i)->setMaterial(Red);
-                fl_alert("GET ID = %d", pickData.getID(i));
-        }
-\end{verbatim}
-\end{breakbox}
-~ \\
-最初の setPickMode() 関数は、モデルに対してピックによる選択候補に
-するかどうかを設定するための関数であり、true によって選択候補となる
-\footnote{第 \ref{chap:model} 章の「ピックモード」の節を参照。}。
-そして、fk\_Window::getPickModel() が呼び出された時点で
-アプリケーションはマウスによる入力待ち状態に入る。ここで、fk\_Window 内の
-オブジェクトをクリックすると pickData 中にクリックされたオブジェクトの
-情報が格納される。getPickModel の2個目の引数はピックによる判定基準の
-広さで、例の場合はクリックした場所から 5 ピクセル分離れたところまでに
-オブジェクトがあるかどうかを判定している。
-
-次に、fk\_PickData の getSize() メンバ関数を用いて実際に取得された
-データの個数を調べる。getModel() 関数は選択されたオブジェクトの
-モデルポインタを返している。getID() 関数は、選択されたオブジェクトの
-位相要素の ID を返している。稜線が密集している箇所や、ループ同士の
-境界付近をピックした場合には、複数の位相要素がピックによって選択
-された候補になり得る。そのような場合、2個以上の取得情報が
-fk\_PickData 中に格納されることになる。getSize() は、まさに
-その個数を示し、getID() の引数には格納されている順番の番号
-(配列で言うところの添字)を入れることによって実際の ID を
-得る。もし選択すべき位相要素が1個でなければならないので
-あれば、ユーザがなんらかの方法で取得候補から実際に選択する
-位相要素を選べるような仕組みを準備する必要があるだろう。
-
-ところで、fk\_PickData で得られる位相情報は ID であり、
-実際の位相要素オブジェクトではない。そこで、例えばピックされた
-頂点の位置を変更したい場合には fk\_Solid から ID に対応する
-頂点オブジェクトを得なければならない。これを実際に記述すると
-次のようになる。この中に出てくる getType() 関数については、
-第 \ref{subsec:picktype} 節で詳しく述べる。
-\\
-\begin{breakbox}
-\begin{verbatim}
-        fk_Model        model;
-        fk_Solid        solid;
-        fk_Vertex       *vertex;
-        fk_Window       window;
-        fk_PickData     pickData;
-        int             i;
-        fk_Vector       moveVec(10.0, 0.0, 0.0);
-
-        model.setShape(&solid);
-        model.setPickMode(true);
-                :
-                :
-        window.getPickModel(&pickData, 5);
-        for(i = 0; i < pickData.getSize(); i++) {
-                if(pickData.getType(i) == FK_VERTEX) {
-                        vertex = solid.getVData(pickData.getID(i));
-                        solid.moveVertex(vertex, moveVec);
-                }
-        }
-\end{verbatim}
-\end{breakbox}
-
-\subsection{待ち制御と随時処理の選択}
-前節では、ピックによる選択時に画面描画が静止していることを
-前提とした例及び利用法を述べた。CAD や CG 作成のためのアプリケーションでは、
-このような処理が頻繁に利用されることが予測できる。しかし、ピック選択は
-必ずしも画面が静止した状態のみで扱われるとは限らない。例えば、ゲームの
-ようなインタラクティブなアプリケーションでこの機能を利用する場合は、
-常に画面が更新されている状態でピック選択を行いたい場面もありえる。
-FK システムでは、そのような需要に対応できるように getPickModel() に
-2種類の機能を持っている。第1の機能は前節で紹介した待ち制御による
-ピック選択である。第2の機能として、ここで紹介する随時処理のピック選択
-がある。
-
-前節で紹介した getPickModel() メンバ関数は、まとめると
-次のような機能を持っていることになる。
-\begin{enumerate}
- \item マウスによるピックが行われるまで、画面の更新を静止する。
- \item ピックされた時点で、そのマウス座標を取得する。
- \item マウス座標を元にして、選択されたモデル及び位相要素を算出する。
- \item fk\_PickData 中に得られた情報を格納する。
-\end{enumerate}
-従って、随時処理を実現するには上の機能のうち1番目と2番目を省略すれば
-よいことになる。それには、getPickModel() に対してあらかじめマウス座標を
-入力する必要がある。これに対応するため、getPickModel() メンバ関数は
-次のように多重定義されている。
-\begin{description}
- \item[\hspace*{1cm}getPickModel(fk\_PickData *, int)]
- \item[\hspace*{1cm}getPickModel(fk\_PickData *, int, int, int)]
-\end{description}
-後者の定義において、3番目と4番目にはマウス座標である。後者の
-getPickModel() 関数は次のような機能を持っている。
-\begin{enumerate}
- \item 入力されたマウス座標を元にして、選択されたモデル及び位相要素を算出する。
- \item fk\_PickData 中に得られた情報を格納する。
-\end{enumerate}
-つまり、システム中で(計算時間以外には)待ち状態は存在しないため、
-インタラクティブなアプリケーションに対応することができる。次の例は、
-やはりピックしたモデルを赤くするプログラムであるが、今度は随時処理で
-それを行っている。
-\\
-\begin{breakbox}
-\begin{verbatim}
-        fk_Model        models[100];
-        fk_Window       window;
-        fk_PickData     pickData;
-        int             i;
-        int             mouseX, mouseY;
-
-        for(i = 0; i < 100; i++) models[i].setPickMode(true);
-                :
-        while(window.drawWindow() != 0) {
-                        :
-                if(window.getMouseStatus(FK_MOUSE1) == true) {
-                        window.getMousePosition(&mouseX, &mouseY);
-                        window.getPickModel(&pickData, 5, mouseX, mouseY);
-                        for(i = 0; i < pickData.getSize(); i++) {
-                                pickData.getModel(i)->setMaterial(Red);
-                        }
-                }
-        }
-\end{verbatim}
-\end{breakbox}
-
-\subsection{ピック対象位相の選択と制御} \label{subsec:picktype}
-これまで述べてきたピック選択の対象となる位相要素は、
-面 (Loop)、線 (Edge)、点 (Vertex) のいずれかである。
-どれが選択の対象となるのかは、実際に描画されているか否かに依存する。
-例えば、面と線が描画されている状態であれば、面や線がピック選択の
-対象になるが、点は含まれないことになる。
-
-しかし、特定の位相要素のみを対象にしたい場合や、描画されていない位相要素も
-ピック選択の対象にしたいというケースは十分考えられる。この節では、
-このような機能を実現する方法を述べる。
-
-まず最初に紹介するのが fk\_Model クラスの setDrawMode() メンバ関数である。
-本来この関数は、モデルのどの位相要素を描画するか、いわゆる描画モードを
-制御するための関数であるが、ここで設定した値はそのまま
-ピック選択にも適用される。このことから、
-描画要素とピック選択要素は必ず一致しているように思えるかもしれない。
-しかし、実際には描画要素とピック選択要素を変更することは可能である。
-なぜならば、描画のタイミングとピック選択のタイミングは\bou{同時ではない}
-からである。次のプログラムは、ピック選択のタイミングだけ描画モードを
-変更し、実際に描画されている以外の位相要素を選択対象にしている例である。
-\\
-\begin{breakbox}
-\begin{verbatim}
-        fk_Window       fk_win;
-        fk_Model        model;
-        fk_DrawMode     drawMode; // 描画モード保存用変数
-        fk_PickData     pickData;
-
-        // 面と線を描画
-        model.setDrawMode(FK_POLYMODE | FK_LINEMODE);
-        while(true) {
-                        :
-                        :
-                // 描画のタイミング
-                if(win.drawWindow() == 0) break;
-                if(Fl::check() == 0) break;
-
-                // 描画モードの保存
-                drawMode = model.getDrawMode();
-
-                // 描画モードの再設定
-                // ここでは、線と点をピック選択対象とする。
-                model.setDrawMode(FK_LINEMODE | FK_POINTMODE);
-
-                // ピック選択のタイミング
-                fk_win.getPickModel(&pickData, 5);
-
-                // 描画モードを、元に戻す。
-                model.setDrawMode(drawMode);
-                        :
-                        :
-        }
-\end{verbatim}
-\end{breakbox}
-~ \\
-ここでは待ち制御による例を挙げたが、もちろん随時処理でも同様の方法が
-利用可能である。
-
-上記の方法を用いることで、ある程度位相の選択は可能となるが、
-2種以上の位相要素を選択対象としたい場合には、ピック選択後に
-どの位相要素なのかを判定する必要がある。そのような場合は、
-fk\_PickData の getType() メンバ関数を用いればよい。
-この関数は、getID() と同様にインデックスを表す整数値を引数にとり、
-そのインデックスが示す位相要素のタイプを fk\_ObjectType 型で返す。
-返り値の対応は以下の表 \ref{tbl:picktype} のとおりである。
-
-\begin{table}[H]
-\caption{ピック選択の位相と返り値の対応}
-\label{tbl:picktype}
-\begin{center}
-\begin{tabular}{|c|l|}
-\hline
-タイプ & 返り値 \\ \hline \hline
-点 & FK\_VERTEX \\ \hline
-線 & FK\_EDGE \\ \hline
-面 & FK\_LOOP \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-具体的な利用方法は、既に \ref{subsec:pickexam} 節の最後にある
-サンプル例のとおりなので、そちらを参照してほしい。
+% \subsection{ピック選択の利用法} \label{subsec:pickexam}
+% FK システムでは、ピックによるオブジェクト及びその中の要素の取得が可能である。
+% この機能を利用するには、fk\_Window の getPickModel() メンバ関数と
+% fk\_PickData クラスを用いる。実際の仕様を述べる前に、次の実装例を
+% 参照してほしい。この例は、選択されたモデルのマテリアルを
+% 赤に設定し、さらにピックされた位相要素の ID を表示するプログラムである。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%         fk_Model        models[100];
+%         fk_Window       window;
+%         fk_PickData     pickData;
+%         int             i;
+% 
+%         for(i = 0; i < 100; i++) models[i].setPickMode(true);
+%                 :
+%                 :
+%                 :
+%         window.getPickModel(&pickData, 5);
+%         for(i = 0; i < pickData.getSize(); i++) {
+%                 pickData.getModel(i)->setMaterial(Red);
+%                 fl_alert("GET ID = %d", pickData.getID(i));
+%         }
+% \end{verbatim}
+% \end{breakbox}
+% ~ \\
+% 最初の setPickMode() 関数は、モデルに対してピックによる選択候補に
+% するかどうかを設定するための関数であり、true によって選択候補となる
+% \footnote{第 \ref{chap:model} 章の「ピックモード」の節を参照。}。
+% そして、fk\_Window::getPickModel() が呼び出された時点で
+% アプリケーションはマウスによる入力待ち状態に入る。ここで、fk\_Window 内の
+% オブジェクトをクリックすると pickData 中にクリックされたオブジェクトの
+% 情報が格納される。getPickModel の2個目の引数はピックによる判定基準の
+% 広さで、例の場合はクリックした場所から 5 ピクセル分離れたところまでに
+% オブジェクトがあるかどうかを判定している。
+% 
+% 次に、fk\_PickData の getSize() メンバ関数を用いて実際に取得された
+% データの個数を調べる。getModel() 関数は選択されたオブジェクトの
+% モデルポインタを返している。getID() 関数は、選択されたオブジェクトの
+% 位相要素の ID を返している。稜線が密集している箇所や、ループ同士の
+% 境界付近をピックした場合には、複数の位相要素がピックによって選択
+% された候補になり得る。そのような場合、2個以上の取得情報が
+% fk\_PickData 中に格納されることになる。getSize() は、まさに
+% その個数を示し、getID() の引数には格納されている順番の番号
+% (配列で言うところの添字)を入れることによって実際の ID を
+% 得る。もし選択すべき位相要素が1個でなければならないので
+% あれば、ユーザがなんらかの方法で取得候補から実際に選択する
+% 位相要素を選べるような仕組みを準備する必要があるだろう。
+% 
+% ところで、fk\_PickData で得られる位相情報は ID であり、
+% 実際の位相要素オブジェクトではない。そこで、例えばピックされた
+% 頂点の位置を変更したい場合には fk\_Solid から ID に対応する
+% 頂点オブジェクトを得なければならない。これを実際に記述すると
+% 次のようになる。この中に出てくる getType() 関数については、
+% 第 \ref{subsec:picktype} 節で詳しく述べる。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%         fk_Model        model;
+%         fk_Solid        solid;
+%         fk_Vertex       *vertex;
+%         fk_Window       window;
+%         fk_PickData     pickData;
+%         int             i;
+%         fk_Vector       moveVec(10.0, 0.0, 0.0);
+% 
+%         model.setShape(&solid);
+%         model.setPickMode(true);
+%                 :
+%                 :
+%         window.getPickModel(&pickData, 5);
+%         for(i = 0; i < pickData.getSize(); i++) {
+%                 if(pickData.getType(i) == FK_VERTEX) {
+%                         vertex = solid.getVData(pickData.getID(i));
+%                         solid.moveVertex(vertex, moveVec);
+%                 }
+%         }
+% \end{verbatim}
+% \end{breakbox}
+% 
+% \subsection{待ち制御と随時処理の選択}
+% 前節では、ピックによる選択時に画面描画が静止していることを
+% 前提とした例及び利用法を述べた。CAD や CG 作成のためのアプリケーションでは、
+% このような処理が頻繁に利用されることが予測できる。しかし、ピック選択は
+% 必ずしも画面が静止した状態のみで扱われるとは限らない。例えば、ゲームの
+% ようなインタラクティブなアプリケーションでこの機能を利用する場合は、
+% 常に画面が更新されている状態でピック選択を行いたい場面もありえる。
+% FK システムでは、そのような需要に対応できるように getPickModel() に
+% 2種類の機能を持っている。第1の機能は前節で紹介した待ち制御による
+% ピック選択である。第2の機能として、ここで紹介する随時処理のピック選択
+% がある。
+% 
+% 前節で紹介した getPickModel() メンバ関数は、まとめると
+% 次のような機能を持っていることになる。
+% \begin{enumerate}
+%  \item マウスによるピックが行われるまで、画面の更新を静止する。
+%  \item ピックされた時点で、そのマウス座標を取得する。
+%  \item マウス座標を元にして、選択されたモデル及び位相要素を算出する。
+%  \item fk\_PickData 中に得られた情報を格納する。
+% \end{enumerate}
+% 従って、随時処理を実現するには上の機能のうち1番目と2番目を省略すれば
+% よいことになる。それには、getPickModel() に対してあらかじめマウス座標を
+% 入力する必要がある。これに対応するため、getPickModel() メンバ関数は
+% 次のように多重定義されている。
+% \begin{description}
+%  \item[\hspace*{1truecm}getPickModel(fk\_PickData *, int)]
+%  \item[\hspace*{1truecm}getPickModel(fk\_PickData *, int, int, int)]
+% \end{description}
+% 後者の定義において、3番目と4番目にはマウス座標である。後者の
+% getPickModel() 関数は次のような機能を持っている。
+% \begin{enumerate}
+%  \item 入力されたマウス座標を元にして、選択されたモデル及び位相要素を算出する。
+%  \item fk\_PickData 中に得られた情報を格納する。
+% \end{enumerate}
+% つまり、システム中で(計算時間以外には)待ち状態は存在しないため、
+% インタラクティブなアプリケーションに対応することができる。次の例は、
+% やはりピックしたモデルを赤くするプログラムであるが、今度は随時処理で
+% それを行っている。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%         fk_Model        models[100];
+%         fk_Window       window;
+%         fk_PickData     pickData;
+%         int             i;
+%         int             mouseX, mouseY;
+% 
+%         for(i = 0; i < 100; i++) models[i].setPickMode(true);
+%                 :
+%         while(window.drawWindow() != 0) {
+%                     :
+%             if(window.getMouseStatus(fk_MouseButton::M1) == true) {
+%                 window.getMousePosition(&mouseX, &mouseY);
+%                 window.getPickModel(&pickData, 5, mouseX, mouseY);
+%                     for(i = 0; i < pickData.getSize(); i++) {
+%                         pickData.getModel(i)->setMaterial(Red);
+%                     }
+%             }
+%         }
+% \end{verbatim}
+% \end{breakbox}
+% 
+% \subsection{ピック対象位相の選択と制御} \label{subsec:picktype}
+% これまで述べてきたピック選択の対象となる位相要素は、
+% 面 (Loop)、線 (Edge)、点 (Vertex) のいずれかである。
+% どれが選択の対象となるのかは、実際に描画されているか否かに依存する。
+% 例えば、面と線が描画されている状態であれば、面や線がピック選択の
+% 対象になるが、点は含まれないことになる。
+% 
+% しかし、特定の位相要素のみを対象にしたい場合や、描画されていない位相要素も
+% ピック選択の対象にしたいというケースは十分考えられる。この節では、
+% このような機能を実現する方法を述べる。
+% 
+% まず最初に紹介するのが fk\_Model クラスの setDrawMode() メンバ関数である。
+% 本来この関数は、モデルのどの位相要素を描画するか、いわゆる描画モードを
+% 制御するための関数であるが、ここで設定した値はそのまま
+% ピック選択にも適用される。このことから、
+% 描画要素とピック選択要素は必ず一致しているように思えるかもしれない。
+% しかし、実際には描画要素とピック選択要素を変更することは可能である。
+% なぜならば、描画のタイミングとピック選択のタイミングは\bou{同時ではない}
+% からである。次のプログラムは、ピック選択のタイミングだけ描画モードを
+% 変更し、実際に描画されている以外の位相要素を選択対象にしている例である。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%         fk_Window       fk_win;
+%         fk_Model        model;
+%         fk_DrawMode     drawMode; // 描画モード保存用変数
+%         fk_PickData     pickData;
+% 
+%         // 面と線を描画
+%         model.setDrawMode(FK_POLYMODE | FK_LINEMODE);
+%         while(true) {
+%                     :
+%                     :
+%             // 描画のタイミング
+%             if(win.drawWindow() == 0) break;
+%             if(Fl::check() == 0) break;
+% 
+%             // 描画モードの保存
+%             drawMode = model.getDrawMode();
+% 
+%             // 描画モードの再設定
+%             // ここでは、線と点をピック選択対象とする。
+%             model.setDrawMode(FK_LINEMODE | FK_POINTMODE);
+% 
+%             // ピック選択のタイミング
+%             fk_win.getPickModel(&pickData, 5);
+% 
+%             // 描画モードを、元に戻す。
+%             model.setDrawMode(drawMode);
+%                     :
+%                     :
+%         }
+% \end{verbatim}
+% \end{breakbox}
+% ~ \\
+% ここでは待ち制御による例を挙げたが、もちろん随時処理でも同様の方法が
+% 利用可能である。
+% 
+% 上記の方法を用いることで、ある程度位相の選択は可能となるが、
+% 2種以上の位相要素を選択対象としたい場合には、ピック選択後に
+% どの位相要素なのかを判定する必要がある。そのような場合は、
+% fk\_PickData の getType() メンバ関数を用いればよい。
+% この関数は、getID() と同様にインデックスを表す整数値を引数にとり、
+% そのインデックスが示す位相要素のタイプを fk\_ObjectType 型で返す。
+% 返り値の対応は以下の表 \ref{tbl:picktype} のとおりである。
+% 
+% \begin{table}[H]
+% \caption{ピック選択の位相と返り値の対応}
+% \label{tbl:picktype}
+% \begin{center}
+% \begin{tabular}{|c|l|}
+% \hline
+% タイプ & 返り値 \\ \hline \hline
+% 点 & FK\_VERTEX \\ \hline
+% 線 & FK\_EDGE \\ \hline
+% 面 & FK\_LOOP \\ \hline
+% \end{tabular}
+% \end{center}
+% \end{table}
+% 
+% 具体的な利用方法は、既に \ref{subsec:pickexam} 節の最後にある
+% サンプル例のとおりなので、そちらを参照してほしい。
 
 \subsection{テクスチャメモリの解放}
 テクスチャマッピングを行う際、何度も画像の切り替えを行っていると
@@ -931,63 +915,47 @@ fk\_PickData の getType() メンバ関数を用いればよい。
 \subsection{メッセージ出力} \label{subsec:winmessage}
 fk\_Window には、メッセージを出力する機能として以下のようなメンバ関数が
 提供されている。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void setPutStrMode(fk\_PutStrMode mode)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		メッセージを出力する際の、出力方法を指定する。
-		引数として選択できるものは、以下のとおり。
-		\begin{center}
-		\begin{tabular}{|c|p{8cm}|}
-		\hline
-		値 & 意味 \\ \hline
-		FK\_PUTSTR\_BROWSER &
-			メッセージ出力用ブラウザに出力する。
-			デフォルトはこの値となっている。\\ \hline
-		FK\_PUTSTR\_CONSOLE &
-			標準出力に出力する。\\ \hline
-		FK\_PUTSTR\_ERR\_CONSOLE &
-			エラー出力に出力する。\\ \hline
-		FK\_PUTSTR\_FILE &
-			setPutFile() 関数で指定したファイルに出力する。\\ \hline
-		FK\_PUTSTR\_NONE &
-			出力を行わない。\\ \hline
-		\end{tabular}
-		\end{center}
-	\end{tabular} \\ \\
-\> \textbf{fk\_PutStrMode getPutStrMode(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在のメッセージ出力モードを返す。
-	\end{tabular} \\ \\
-
-\> \textbf{bool setPutFile(string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		メッセージ出力のモードとして「FK\_PUTSTR\_FILE」を指定した
-		場合の出力先となるファイル名を指定する。
-		この関数が呼ばれた時点で、
-		指定したファイルが存在していなかった場合は新規に
-		空ファイルが作成される。既に存在していた場合は、
-		その中身を消去せずに最後部分から後にメッセージを出力する。
-		ファイル書き込みの準備に成功した場合 true を、
-		失敗した場合に false を返す。
-	\end{tabular} \\ \\
-
-\> \textbf{void putString(string message)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		message の内容を出力する。
-	\end{tabular} \\ \\
-
-\> \textbf{void printf(char *format, ...)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		標準のprintf関数に準拠した書式指定に従って
-		文字列を出力する。
-	\end{tabular} \\ \\
-
-\> \textbf{void clearBrowser(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		メッセージ出力用ブラウザの内容を消去する。
+\begin{description}
+ \item[void setPutStrMode(fk\_PutStrMode mode)] ~ \\
+	メッセージを出力する際の、出力方法を指定する。
+	引数として選択できるものは、以下のとおり。
+	\begin{center}
+	\begin{tabular}{|c|l|}
+	\hline
+	値 & 意味 \\ \hline
+	fk\_PutStrMode::BROWSER & メッセージ出力用ブラウザに出力する。\\ \hline
+	fk\_PutStrMode::CONSOLE & 標準出力に出力する。\\ \hline
+	fk\_PutStrMode::ERR\_CONSOLE & エラー出力に出力する。\\ \hline
+	fk\_PutStrMode::FILE & setPutFile() 関数で指定したファイルに出力する。\\ \hline
+	fk\_PutStrMode::NONE & 出力を行わない。\\ \hline
 	\end{tabular}
-\end{tabbing}
+	\end{center}
+	デフォルトは fk\_PutStrMode::BROWSER となっている。\\
+
+\item[fk\_PutStrMode getPutStrMode(void)] ~ \\
+	現在のメッセージ出力モードを返す。\\
+
+\item[bool setPutFile(string fileName)] ~ \\
+	メッセージ出力のモードとして「fk\_PutStrMode::FILE」を指定した
+	場合の出力先となるファイル名を指定する。
+	この関数が呼ばれた時点で、
+	指定したファイルが存在していなかった場合は新規に
+	空ファイルが作成される。既に存在していた場合は、
+	その中身を消去せずに最後部分から後にメッセージを出力する。
+	ファイル書き込みの準備に成功した場合 true を、
+	失敗した場合に false を返す。\\
+
+\item[void putString(string message)] ~ \\
+	message の内容を出力する。\\
+
+\item[void printf(char *format, ...)] ~ \\
+	標準のprintf関数に準拠した書式指定に従って
+	文字列を出力する。\\
+
+\item[void clearBrowser(void)] ~ \\
+	メッセージ出力用ブラウザの内容を消去する。
+\end{description}
+
 デフォルトの出力ブラウザを利用してメッセージを出力する場合は、
 単に putString() 関数あるいは printf() 関数を利用すればよい。
 以下のプログラムは、printf() を用いたサンプルである。\\ ~

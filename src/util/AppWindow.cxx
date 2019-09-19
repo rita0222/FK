@@ -140,9 +140,9 @@ const static fk_Switch stArray[4] = {
 void fk_AppWindow::ToggleScreen(void)
 {
 	// ALT+ENTERでフルスクリーンとウィンドウモードを切り替え
-	if(getSpecialKeyStatus(fk_SpecialKey::ALT_L) >= fk_Switch::DOWN
-	|| getSpecialKeyStatus(fk_SpecialKey::ALT_R) >= fk_Switch::DOWN) {
-		if(getSpecialKeyStatus(fk_SpecialKey::ENTER) == fk_Switch::DOWN) {
+	if(getSpecialKeyStatus(fk_Key::ALT_L) >= fk_Switch::DOWN
+	|| getSpecialKeyStatus(fk_Key::ALT_R) >= fk_Switch::DOWN) {
+		if(getSpecialKeyStatus(fk_Key::ENTER) == fk_Switch::DOWN) {
 			if(fsc.isFullscreen() == true) {
 				fsc.changeToWindow();
 			} else {
@@ -578,13 +578,13 @@ fk_Switch fk_AppWindow::getKeyStatus(char argKey)
 	return fk_Switch::PRESS;
 }
 
-bool fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey argKey,
+bool fk_AppWindow::getSpecialKeyStatus(fk_Key argKey,
 									   fk_Switch argStatus, bool argInsideFlg)
 {
 	return drawWin->getSpecialKeyStatus(argKey, argStatus, argInsideFlg);
 }
 
-fk_Switch fk_AppWindow::getSpecialKeyStatus(fk_SpecialKey argKey)
+fk_Switch fk_AppWindow::getSpecialKeyStatus(fk_Key argKey)
 {
 	//return GetSwitchStatus(drawWin->getSpecialKeyStatus(argKey, false), prevSPKeySt[(int)argKey]);
 

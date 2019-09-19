@@ -182,7 +182,7 @@ setVertex() 関数を用いて代入することである。
 \begin{breakbox}
 \begin{verbatim}
         fk_Line         ln;
-       fk_Vector       vec1, vec2, vecArray[2];
+        fk_Vector       vec1, vec2, vecArray[2];
 
         vec1.set(0.0, 1.0, 0.0);
         vec2.set(1.0, 0.0, 0.0);
@@ -203,12 +203,21 @@ fk\_Line における線分情報の全削除は、fk\_Polyline と同様に all
 使用法は同様である。ただし、このクラスで定義されたオブジェクトは、
 平面として存在する。つまり、厚さのない1枚の板として存在することになる。
 
-fk\_Polyline や fk\_Closedline と唯一異なる点は、fk\_Polygon は
-面の向き、すなわち法線ベクトルを保持するという点である。これは、
-FK システムの中で自動的に計算が行われる。与えられている頂点が
-同一平面上にない場合、近似的な法線ベクトルが与えられる。
+fk\_Polygon による多角形の生成は、以下のように std::vector を用いて行う。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Polygon poly;
+        std::vector<fk_Vector> pos;
 
-なお、頂点情報の全削除は fk\_Polyline と同様に allClear() を用いればよい。
+        pos.push_back(fk_Vector(0.0, 10.0, 0.0));
+        pos.push_back(fk_Vector(-10.0, 0.0, 0.0));
+        pos.push_back(fk_Vector(10.0, 0.0, 0.0));
+
+        poly.setVertex(&pos);
+\end{verbatim}
+\end{breakbox}
+
 \section{円 (fk\_Circle)}
 fk\_Circle クラスは、ステータスとして半径と分割数を持つ。
 fk\_Circle クラスのオブジェクトは、実際には多角形の集合
@@ -400,7 +409,7 @@ fk\_Circle クラスと同様なので、そちらのマニュアルを参照し
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Prism prism(5, 20.0, 30.0, 40.0);
+        fk_Prism prism(5, 20.0, 30.0, 40.0, false);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -414,24 +423,21 @@ fk\_Circle クラスと同様なので、そちらのマニュアルを参照し
 正 20 角形くらいでかなり円柱らしくなる。あとは、リアリティとパフォーマンスに
 よって各自で調整してほしい。
 
+なお、コンストラクタの最後の引数は「スムースシェーディング」の有無の設定で、
+true の場合は側面が円柱らしい雰囲気となる。
+逆に false の場合は各面の境界が明瞭になり、角柱らしい雰囲気となる。
+
 次に述べる関数で、fk\_Prism クラスの形状をいつでも動的に変形できる。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void setTopRadius(double r)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		上面半径を r に変更する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void setTopRadius(double r)]~ \\
+	上面半径を r に変更する。\\
 
-\> \textbf{void setBottomRadius(double r)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		底面半径を r に変更する。
-	\end{tabular} \\ \\
+\item[void setBottomRadius(double r)] ~ \\
+	底面半径を r に変更する。\\
 
-\> \textbf{void setHeight(double h)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		高さを h に変更する。
-	\end{tabular}
-\end{tabbing}
+\item[void setHeight(double h)] ~ \\
+	高さを h に変更する。
+\end{description}
 
 \section{正多角錐・円錐 (fk\_Cone)}
 fk\_Cone は正多角錐や円錐を生成するためのクラスである。
@@ -440,28 +446,24 @@ fk\_Cone は正多角錐や円錐を生成するためのクラスである。
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Cone cone(5, 20.0, 40.0);
+        fk_Cone cone(5, 20.0, 40.0, false);
 \end{verbatim}
 \end{screen}
 ~ \\
 「半径」に関しては前節の fk\_Prism 中の解説を参照してほしい。
+また、最後の引数は fk\_Prism と同様にスムースシェーディングの有無の設定である。
+
 円錐を生成するには、やはり初期値の角数を大きくすればよいが、あまり大きな
 値を指定すると表示速度が遅くなるので注意が必要である。
-
 なお、以下のメンバ関数によって形状をいつでも動的に変形することが可能である。
 
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void setRadius(double r)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		底面半径を r に変更する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void setRadius(double r)] ~ \\
+	底面半径を r に変更する。\\
 
-\> \textbf{void setHeight(double h)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		高さを h に変更する。
-	\end{tabular}
-\end{tabbing}
+\item[void setHeight(double h)] ~ \\
+	高さを h に変更する。
+\end{description}
 
 \section{インデックスフェースセット (fk\_IndexFaceSet)}
 インデックスフェースセットは、これまでに述べたような球や角錐のような
@@ -702,100 +704,78 @@ fk\_IndexFaceSet クラスは、他の形状を表すクラスと違って
 ファイルから情報を読み取ることも多いので、入力後に頂点や面の
 情報を取得する場面が考えられる。そこで、fk\_IndexFaceSet クラスでは
 以下に示す4種類の情報取得メンバ関数が用意されている。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{int getPosSize(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		形状の頂点数を返す。
-	\end{tabular} \\ \\
+\begin{description}
+\item[int getPosSize(void)] ~ \\
+	形状の頂点数を返す。\\
 
-\> \textbf{int getFaceSize(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		形状の面数を返す。
-	\end{tabular} \\ \\
+\item[int getFaceSize(void)] ~ \\
+	形状の面数を返す。\\
 
-\> \textbf{fk\_Vector getPosVec(int vID)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		インデックスが vID である頂点の位置ベクトルを返す。
-		頂点のインデックスは 0 から順番に始まるもので、
-		頂点数を vNum とすると 0 から (vNum-1) まで
-		の頂点が存在することになる。もし vID に対応する
-		頂点が存在しなかった場合、零ベクトルが返される。
-	\end{tabular} \\ \\
+\item[fk\_Vector getPosVec(int vID)] ~ \\
+	インデックスが vID である頂点の位置ベクトルを返す。
+	頂点のインデックスは 0 から順番に始まるもので、
+	頂点数を vNum とすると 0 から (vNum-1) まで
+	の頂点が存在することになる。もし vID に対応する
+	頂点が存在しなかった場合、零ベクトルが返される。\\
 
-\> \textbf{vector\(<\)int\(>\) getFaceData(int fID)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		インデックスが fID である面の頂点インデックス情報を返す。
-		面のインデックスは 0 から順番に始まるもので、
-		面数を fNum とすると 0 から (fNum-1) まで
-		の面が存在することになる。また、返り値の
-		vector\(<\)int\(>\) は STL と呼ばれる C++ の機能によるもので、
-		詳細は第 \ref{chap:easygen} 章を参照してほしい。
-		この中に、参照した面を構成する頂点のインデックスが
-		入力されて返される。もし fID に対応する面が存在しない場合、
-		中身が空状態のオブジェクトが返される。
-	\end{tabular}
-\end{tabbing}
+\item[vector\(<\)int\(>\) getFaceData(int fID)] ~ \\
+	インデックスが fID である面の頂点インデックス情報を返す。
+	面のインデックスは 0 から順番に始まるもので、
+	面数を fNum とすると 0 から (fNum-1) まで
+	の面が存在することになる。また、返り値の
+	vector\(<\)int\(>\) は STL と呼ばれる C++ の機能によるもので、
+	詳細は第 \ref{chap:easygen} 章を参照してほしい。
+	この中に、参照した面を構成する頂点のインデックスが
+	入力されて返される。もし fID に対応する面が存在しない場合、
+	中身が空状態のオブジェクトが返される。\\
+\end{description}
+
 また、以下の3種類の方法で各頂点を移動することも可能である。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{bool moveVPosition(int vID, fk\_Vector pos)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		インデックスが vID である頂点の位置ベクトルを、
-		pos に変更し、true を返す。
-		もし vID に対応する頂点が存在しなかった場合、false を返す。
-	\end{tabular} \\ \\
 
-\> \textbf{bool moveVPosition(int vID, double x, double y, double z)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		インデックスが vID である頂点の位置ベクトルを、
-		\((x, y, z)\) に変更し、true を返す。もし vID に対応する
-		頂点が存在しなかった場合、false を返す。
-	\end{tabular} \\ \\
+\begin{description}
+\item[bool moveVPosition(int vID, fk\_Vector pos)] ~ \\
+	インデックスが vID である頂点の位置ベクトルを、
+	pos に変更し、true を返す。
+	もし vID に対応する頂点が存在しなかった場合、false を返す。\\
 
-\> \textbf{bool moveVPosition(int vID, double *p)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		インデックスが vID である頂点の位置ベクトルを、
-		\verb+(p[0], p[1], p[2])+ に変更する。
-		もし vID に対応する頂点が存在しなかった場合、false を返す。
-	\end{tabular}
-\end{tabbing}
+\item[bool moveVPosition(int vID, double x, double y, double z)] ~ \\
+	インデックスが vID である頂点の位置ベクトルを、
+	\((x, y, z)\) に変更し、true を返す。もし vID に対応する
+	頂点が存在しなかった場合、false を返す。\\
+
+\item[bool moveVPosition(int vID, double *p)] ~ \\
+	インデックスが vID である頂点の位置ベクトルを、
+	\verb+(p[0], p[1], p[2])+ に変更する。
+	もし vID に対応する頂点が存在しなかった場合、false を返す。
+
+\end{description}
 
 \subsection{形状データの各種ファイルへの出力}
 fk\_IndexFaceSet クラスでは、形状データをファイルに出力することが可能である。
 現在サポートされている形式は VRML、STL、DXF、MQO の 4 種類である。
 それぞれの出力関数の仕様は以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{bool writeVRMLFile(string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		形状データを VRML 2.0 形式で出力する。
-		「fileName」は出力ファイル名を指定する。
-		成功すれば true、失敗した場合は false を返す。
-	\end{tabular} \\ \\
+\begin{description}
+\item[bool writeVRMLFile(string fileName)] ~ \\
+	形状データを VRML 2.0 形式で出力する。
+	「fileName」は出力ファイル名を指定する。
+	成功すれば true、失敗した場合は false を返す。\\
 
-\> \textbf{bool writeSTLFile(string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		形状データを STL 形式で出力する。
-		「fileName」は出力ファイル名を指定する。
-		成功すれば true、失敗した場合は false を返す。
-	\end{tabular} \\ \\
+\item[bool writeSTLFile(string fileName)] ~ \\
+	形状データを STL 形式で出力する。
+	「fileName」は出力ファイル名を指定する。
+	成功すれば true、失敗した場合は false を返す。\\
 
-\> \textbf{bool writeDXFFile(string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		形状データを DXF 形式で出力する。
-		「fileName」は出力ファイル名を指定する。
-		成功すれば true、失敗した場合は false を返す。
-	\end{tabular} \\ \\
+\item[bool writeDXFFile(string fileName)] ~ \\
+	形状データを DXF 形式で出力する。
+	「fileName」は出力ファイル名を指定する。
+	成功すれば true、失敗した場合は false を返す。\\
 
-\> \textbf{bool writeMQOFile(string fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		形状データを MQO 形式で出力する。
-		「fileName」は出力ファイル名を指定する。
-		成功すれば true、失敗した場合は false を返す。
-		なお、オブジェクト名は「obj1」が自動的に付与される。		
-	\end{tabular}
-\end{tabbing}
+\item[bool writeMQOFile(string fileName)] ~ \\
+	形状データを MQO 形式で出力する。
+	「fileName」は出力ファイル名を指定する。
+	成功すれば true、失敗した場合は false を返す。
+	なお、オブジェクト名は「obj1」が自動的に付与される。
+\end{description}
 
 \section{光源 (fk\_Light)}
 この光源クラスのみ、他の fk\_Shape の派生クラスとは性質が異なる。その他の
@@ -835,9 +815,9 @@ xx \= xxxx \= \kill
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Light parallel(FK_PARALLEL_LIGHT);
-        fk_Light point(FK_POINT_LIGHT);
-        fk_Light spot(FK_SPOT_LIGHT);
+        fk_Light parallel(fk_LightType::PARALLEL);
+        fk_Light point(fk_LightType::POINT);
+        fk_Light spot(fk_LightType::SPOT);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -869,12 +849,12 @@ setSpotCutOff() と setSpotExponent() というメンバ関数で設定する。
 \\
 \begin{screen}
 \begin{verbatim}
-        spot.setSpotCutOff(FK_PI/6.0);
+        spot.setSpotCutOff(fk_Math::PI/6.0);
         spot.setSpotExponent(0.00001);
 \end{verbatim}
 \end{screen}
 ~ \\
-setSpotCutOff() の引数は弧度法による角度を入力する。FK\_PI は
+setSpotCutOff() の引数は弧度法による角度を入力する。fk\_Math::PI は
 円周率を表すので、例の場合は \(\pi/6 = 30^{\circ}\) となる。
 
 なお、ここまで触れなかったが光源の大事な要素として色がある。
@@ -897,212 +877,147 @@ fk\_Shape クラスの派生クラスではなく、形状を直接表すもの�
 \subsection{fk\_Particle クラス}
 fk\_Particle クラスは、パーティクル単体を表すクラスで、
 次のようなメンバ関数が用意されている。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void init(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルを初期化する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void init(void)] ~ \\
+	パーティクルを初期化する。\\
 
-\> \textbf{int getID(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの ID を取得する。
-	\end{tabular} \\ \\
+\item[int getID(void)] ~ \\
+	パーティクルの ID を取得する。\\
 
-\> \textbf{unsigned int getCount(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの年齢を取得する。
-	\end{tabular} \\ \\
+\item[unsigned int getCount(void)] ~ \\
+	パーティクルの年齢を取得する。\\
 
-\> \textbf{fk\_Vector getPosition(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの現在位置を取得する。
-	\end{tabular} \\ \\
+\item[fk\_Vector getPosition(void)] ~ \\
+	パーティクルの現在位置を取得する。\\
 
-\> \textbf{void setPosition(fk\_Vector pos)} \\
-\> \textbf{void setPosition(double x, double y, double z)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの位置を pos または (x,y,z) に設定する。
-	\end{tabular} \\ \\
+\item[void setPosition(fk\_Vector pos)]
+\item[void setPosition(double x, double y, double z)] ~ \\
+	パーティクルの位置を pos または (x,y,z) に設定する。\\
 
-\> \textbf{fk\_Vector getVelocity(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの速度ベクトルを取得する。この値が有効なのは、
-		setVelocity() 関数か setAccel() 関数を利用したときのみである。
-	\end{tabular} \\ \\
+\item[fk\_Vector getVelocity(void)] ~ \\
+	パーティクルの速度ベクトルを取得する。この値が有効なのは、
+	setVelocity() 関数か setAccel() 関数を利用したときのみである。\\
 
-\> \textbf{void setVelocity(fk\_Vector vel)} \\
-\> \textbf{void setVelocity(double x, double y, double y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの速度ベクトルを vel または (x,y,z) に設定する。
-	\end{tabular} \\ \\
+\item[void setVelocity(fk\_Vector vel)]
+\item[void setVelocity(double x, double y, double y)] ~ \\
+	パーティクルの速度ベクトルを vel または (x,y,z) に設定する。\\
 
-\> \textbf{fk\_Vector getAccel(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの加速度ベクトルを取得する。この値が有効なのは、
-		setAccel() 関数を利用したときのみである。
-	\end{tabular} \\ \\
+\item[fk\_Vector getAccel(void)] ~ \\
+	パーティクルの加速度ベクトルを取得する。この値が有効なのは、
+	setAccel() 関数を利用したときのみである。\\
 
-\> \textbf{void setAccel(fk\_Vector acc)} \\
-\> \textbf{void setAccel(double x, double y, double z)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの加速度ベクトルを
-		acc または (x,y,z) に設定する。
-	\end{tabular} \\ \\
+\item[void setAccel(fk\_Vector acc)]
+\item[void setAccel(double x, double y, double z)] ~ \\
+	パーティクルの加速度ベクトルを
+	acc または (x,y,z) に設定する。\\
 
-\> \textbf{int getColorID(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの色 ID を取得する。
-	\end{tabular} \\ \\
+\item[int getColorID(void)]
+	パーティクルの色 ID を取得する。\\
 
-\> \textbf{void setColorID(int)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの色 ID を設定する。
-	\end{tabular} \\ \\
+\item[void setColorID(int)] ~ \\
+	パーティクルの色 ID を設定する。\\
 
-\> \textbf{bool getDrawMode(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在の描画状態を取得する。
-	\end{tabular} \\ \\
+\item[bool getDrawMode(void)] ~ \\
+	現在の描画状態を取得する。\\
 
-\> \textbf{void setDrawMode(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		描画状態を設定する。true ならば描画有効、
-		false ならば無効となる。
-	\end{tabular}
-\end{tabbing}
+\item[void setDrawMode(bool flag)] ~ \\
+	描画状態を設定する。true ならば描画有効、false ならば無効となる。
+\end{description}
+
 \subsection{fk\_ParticleSet クラス} 
 fk\_ParticleSet クラスは、パーティクルの集合を表すクラスである。
 このクラスは、他のクラスの様に直接利用するものではなく、このクラスを
 継承させて仮想関数を上書きする形で利用する。まず、上書きすることになる
 仮想関数を紹介する。
 \subsubsection{fk\_ParticleSet クラスの仮想関数}
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void genMethod(fk\_Particle *p)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの生成時に、パーティクルに対して
-		行う処理を記述する。p には、新たに生成された
-		パーティクルオブジェクトが入っている。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void genMethod(fk\_Particle *p)] ~ \\
+	パーティクルの生成時に、パーティクルに対して
+	行う処理を記述する。p には、新たに生成された
+	パーティクルオブジェクトが入っている。\\
 
-\> \textbf{void allMethod(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		毎ループ時に行う全体処理を記述する。
-	\end{tabular} \\ \\
+\item[void allMethod(void)] ~ \\
+	毎ループ時に行う全体処理を記述する。\\
 
-\> \textbf{void indivMethod(fk\_Particle *p)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		毎ループ時の各パーティクルに個別に行う処理を記述する。
-		p には、操作対象となるパーティクルオブジェクトが入っている。
-	\end{tabular}
-\end{tabbing}
+\item[void indivMethod(fk\_Particle *p)] ~ \\
+	毎ループ時の各パーティクルに個別に行う処理を記述する。
+	p には、操作対象となるパーティクルオブジェクトが入っている。
+\end{description}
 \subsubsection{fk\_ParticleSet クラスの通常のメンバ関数}
 また、fk\_ParticleSet クラスは他にも以下のようなメンバ関数を持っている。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void setAllMode(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		allMethod() 関数による処理の有効化/無効化を設定する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void setAllMode(bool flag)] ~ \\
+	allMethod() 関数による処理の有効化/無効化を設定する。\\
 
-\> \textbf{void setIndivMode(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		indivMethod() 関数による処理の有効化/無効化を設定する。
-	\end{tabular} \\ \\
+\item[void setIndivMode(bool flag)] ~ \\
+	indivMethod() 関数による処理の有効化/無効化を設定する。\\
 
-\> \textbf{void handle(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		実際に処理を 1 ステップ実行する。
-	\end{tabular} \\ \\
+\item[void handle(void)] ~ \\
+	実際に処理を 1 ステップ実行する。\\
 
-\> \textbf{fk\_Shape * getShape(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルを表す fk\_Shape オブジェクトを返す。
-	\end{tabular} \\ \\
+\item[fk\_Shape * getShape(void)] ~ \\
+	パーティクルを表す fk\_Shape オブジェクトを返す。\\
 
-\> \textbf{fk\_Particle * newParticle(void)} \\
-\> \textbf{fk\_Particle * newParticle(fk\_Vector pos)} \\
-\> \textbf{fk\_Particle * newParticle(double x, double y, double z)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルを新たに生成する。初期位置を引数で設定することも
-		可能である。新たに生成されたパーティクルオブジェクトを返す。
-	\end{tabular} \\ \\
+\item[fk\_Particle * newParticle(void)]
+\item[fk\_Particle * newParticle(fk\_Vector pos)]
+\item[fk\_Particle * newParticle(double x, double y, double z)] ~ \\
+	パーティクルを新たに生成する。初期位置を引数で設定することも
+	可能である。新たに生成されたパーティクルオブジェクトを返す。\\
 
-\> \textbf{bool removeParticle(fk\_Particle *p)} \\
-\> \textbf{bool removeParticle(int)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルを消去する。引数として、パーティクルオブジェクト
-		そのものと ID の2種類がある。通常は true を返すが、
-		対象となるパーティクルが存在しなかった場合や、
-		すでに消去されたパーティクルだった場合は false を返す。
-	\end{tabular} \\ \\
+\item[bool removeParticle(fk\_Particle *p)]
+\item[bool removeParticle(int)] ~ \\
+	パーティクルを消去する。引数として、パーティクルオブジェクト
+	そのものと ID の2種類がある。通常は true を返すが、
+	対象となるパーティクルが存在しなかった場合や、
+	すでに消去されたパーティクルだった場合は false を返す。\\
 
-\> \textbf{unsigned int getCount(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクル集合の年齢を取得する。
-	\end{tabular} \\ \\
+\item[unsigned int getCount(void)] ~ \\
+	パーティクル集合の年齢を取得する。\\
 
-\> \textbf{unsigned int getParticleNum(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現状でのパーティクル個数を取得する。
-	\end{tabular} \\ \\
+\item[unsigned int getParticleNum(void)] ~ \\
+	現状でのパーティクル個数を取得する。\\
 
-\> \textbf{fk\_Particle * getParticle(int)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ID を入力し、その ID を持つパーティクルを取得する。
-		ID に相当するパーティクルが存在していない場合は nullptr を返す。
-	\end{tabular} \\ \\
+\item[fk\_Particle * getParticle(int)] ~ \\
+	ID を入力し、その ID を持つパーティクルを取得する。
+	ID に相当するパーティクルが存在していない場合は nullptr を返す。\\
 
-\> \textbf{fk\_Particle * getNextParticle(fk\_Particle *)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		allMethod 中で全パーティクルを取得する際に利用する。
-		引数の種類によって、以下のようにパーティクルを返す。
-		\begin{enumerate}
-		 \item 引数が nullptr の場合は、
-			ID が最も小さなパーティクルを返す。
-		 \item 引数が最大の ID を持つパーティクルの場合は、
-			nullptr を返す。
-		 \item 引数がそれ以外の場合は、入力パーティクル ID よりも
-			大きな ID を持つものの中で最も小さな ID を持つ
-			パーティクルを返す。
-		\end{enumerate}
-		例えば、allMethod 中で全てのパーティクルの平均座標ベクトルを
-		求めるには、
-		以下のように記述すればよい。(fk\_ParticleSet クラスの
-		派生クラス名を「MyParticle」とする。)
-	\end{tabular} \\
-	\> \> \begin{tabular}{p{15cm}}
-		\begin{screen}
-		\begin{verbatim}
-		        void MyParticle::allMethod(void)
-		        {
-		            fk_Particle   *p;
-		            fk_Vector     vec(0.0, 0.0, 0.0);
-
+\item[fk\_Particle * getNextParticle(fk\_Particle *)] ~ \\
+	allMethod 中で全パーティクルを取得する際に利用する。
+	引数の種類によって、以下のようにパーティクルを返す。
+	\begin{enumerate}
+	 \item 引数が nullptr の場合は、ID が最も小さなパーティクルを返す。
+	 \item 引数が最大の ID を持つパーティクルの場合は、nullptr を返す。
+	 \item 引数がそれ以外の場合は、入力パーティクル ID よりも
+		大きな ID を持つものの中で最も小さな ID を持つパーティクルを返す。
+	\end{enumerate}
+	例えば、allMethod 中で全てのパーティクルの平均座標ベクトルを
+	求めるには、
+	以下のように記述すればよい。(fk\_ParticleSet クラスの
+	派生クラス名を「MyParticle」とする。) \\
+	\begin{screen}
+	\begin{verbatim}
+	        void MyParticle::allMethod(void)
+	        {
+	            fk_Particle   *p;
+	            fk_Vector     vec(0.0, 0.0, 0.0);
 		            p = getNextParticle(nullptr);
-		            while(p != nullptr) {
-		                vec += p->getPosition();
-		                p = getNextParticle(p);
-		            }
-		            vec /= double(getParticleNum());
-		        }
-		\end{verbatim}
-		\end{screen}
-	\end{tabular} \\ \\
+	            while(p != nullptr) {
+	                vec += p->getPosition();
+	                p = getNextParticle(p);
+	            }
+	            vec /= double(getParticleNum());
+	        }
+	\end{verbatim}
+	\end{screen} \\
 
-\> \textbf{void setMaxSize(unsigned int)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パーティクルの最大個数を設定する。パーティクル個数が設定した
-		最大値に達した場合、newParticle() を呼んでも新たに
-		生成されない。
-	\end{tabular} \\ \\
+\item[void setMaxSize(unsigned int)] ~ \\
+	パーティクルの最大個数を設定する。パーティクル個数が設定した
+	最大値に達した場合、newParticle() を呼んでも新たに
+	生成されない。\\
 
-\> \textbf{void setColorPalette(int ID, double r, double g, double b)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		色パレットに色を設定する。
-	\end{tabular}
-\end{tabbing}
+\item[void setColorPalette(int ID, double r, double g, double b)] ~ \\
+	色パレットに色を設定する。
+\end{description}
 
 \section{D3DX形式中のアニメーション動作} \label{sec:d3dxanimation}
 fk\_IndexFaceSet クラスや、

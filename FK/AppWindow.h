@@ -764,8 +764,8 @@ namespace FK {
 		//! 特殊キー状態取得関数
 		/*!
 		 *	特殊キーの入力状態を検出します。
-		 *	引数として、検出したいキーに対応した fk_SpecialKey 型の値を入力します。
-		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey::UP」を入力します。
+		 *	引数として、検出したいキーに対応した fk_Key 型の値を入力します。
+		 *	例えば、上矢印キーの状態を取得したい場合には「fk_Key::UP」を入力します。
 		 *	通常キーの状態取得は getKeyStatus() を使います。
 		 *
 		 *	\param[in]	keyCode
@@ -788,11 +788,11 @@ namespace FK {
 		 *
 		 *	\sa getKeyStatus(), update()
 		 */
-		bool	getSpecialKeyStatus(fk_SpecialKey keyCode,
+		bool	getSpecialKeyStatus(fk_Key keyCode,
 									fk_Switch status, bool insideFlg = false);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Switch	getSpecialKeyStatus(fk_SpecialKey keyCode);
+		fk_Switch	getSpecialKeyStatus(fk_Key keyCode);
 		fk_Switch	getKeyStatus(char keyChar);
 #endif
 		//@}

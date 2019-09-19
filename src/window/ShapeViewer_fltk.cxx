@@ -982,19 +982,19 @@ void fk_ShapeViewer::KeyHandle(void)
 	if(viewWin == nullptr) return;
 
 	if(viewWin->getKeyStatus(' ', false) == true) {
-		if(viewWin->getSpecialKeyStatus(fk_SpecialKey::SHIFT_R, false) == true ||
-		   viewWin->getSpecialKeyStatus(fk_SpecialKey::SHIFT_L, false) == true) {
+		if(viewWin->getSpecialKeyStatus(fk_Key::SHIFT_R, false) == true ||
+		   viewWin->getSpecialKeyStatus(fk_Key::SHIFT_L, false) == true) {
 			setScale(getScale()/1.005);
 		} else {
 			setScale(getScale()*1.005);
 		}
 	}
 
-	if(viewWin->getSpecialKeyStatus(fk_SpecialKey::LEFT, false) == true) {
+	if(viewWin->getSpecialKeyStatus(fk_Key::LEFT, false) == true) {
 		setHead(getHead() - 0.02);
 	}
 
-	if(viewWin->getSpecialKeyStatus(fk_SpecialKey::RIGHT, false) == true) {
+	if(viewWin->getSpecialKeyStatus(fk_Key::RIGHT, false) == true) {
 		setHead(getHead() + 0.02);
 	}
 

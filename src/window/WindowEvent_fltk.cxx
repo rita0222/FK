@@ -224,7 +224,7 @@ bool fk_Window::getKeyStatus(char argKey, fk_Switch argStatus, bool argInsideFla
 	return false;
 }
 	
-bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, bool argInsideFlag)
+bool fk_Window::getSpecialKeyStatus(fk_Key argKey, bool argInsideFlag)
 {
 	if(specialKeyStatus.find(argKey) == specialKeyStatus.end()) {
 		specialKeyStatus[argKey] = false;
@@ -235,100 +235,100 @@ bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, bool argInsideFlag)
 	}
 
 	switch(argKey) {
-	  case fk_SpecialKey::SHIFT_R:
+	  case fk_Key::SHIFT_R:
 		if(Fl::get_key(FL_Shift_R) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::SHIFT_L:
+	  case fk_Key::SHIFT_L:
 		if(Fl::get_key(FL_Shift_L) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::CTRL_R:
+	  case fk_Key::CTRL_R:
 		if(Fl::get_key(FL_Control_R) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::CTRL_L:
+	  case fk_Key::CTRL_L:
 		if(Fl::get_key(FL_Control_L) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::ALT_R:
+	  case fk_Key::ALT_R:
 		if(Fl::get_key(FL_Alt_R) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::ALT_L:
+	  case fk_Key::ALT_L:
 		if(Fl::get_key(FL_Alt_L) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::ENTER:
+	  case fk_Key::ENTER:
 		if(Fl::get_key(FL_Enter) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::BACKSPACE:
+	  case fk_Key::BACKSPACE:
 		if(Fl::get_key(FL_BackSpace) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::DEL:
+	  case fk_Key::DEL:
 		if(Fl::get_key(FL_Delete) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::CAPS_LOCK:
+	  case fk_Key::CAPS_LOCK:
 		if(Fl::get_key(FL_Caps_Lock) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::TAB:
+	  case fk_Key::TAB:
 		if(Fl::get_key(FL_Tab) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::PAGE_UP:
+	  case fk_Key::PAGE_UP:
 		if(Fl::get_key(FL_Page_Up) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::PAGE_DOWN:
+	  case fk_Key::PAGE_DOWN:
 		if(Fl::get_key(FL_Page_Down) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::HOME:
+	  case fk_Key::HOME:
 		if(Fl::get_key(FL_Home) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::END:
+	  case fk_Key::END:
 		if(Fl::get_key(FL_End) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::INSERT:
+	  case fk_Key::INSERT:
 		if(Fl::get_key(FL_Insert) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::LEFT:
+	  case fk_Key::LEFT:
 		if(Fl::get_key(FL_Left) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::RIGHT:
+	  case fk_Key::RIGHT:
 		if(Fl::get_key(FL_Right) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::UP:
+	  case fk_Key::UP:
 		if(Fl::get_key(FL_Up) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::DOWN:
+	  case fk_Key::DOWN:
 		if(Fl::get_key(FL_Down) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F1:
+	  case fk_Key::F1:
 		if(Fl::get_key(FL_F+1) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F2:
+	  case fk_Key::F2:
 		if(Fl::get_key(FL_F+2) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F3:
+	  case fk_Key::F3:
 		if(Fl::get_key(FL_F+3) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F4:
+	  case fk_Key::F4:
 		if(Fl::get_key(FL_F+4) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F5:
+	  case fk_Key::F5:
 		if(Fl::get_key(FL_F+5) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F6:
+	  case fk_Key::F6:
 		if(Fl::get_key(FL_F+6) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F7:
+	  case fk_Key::F7:
 		if(Fl::get_key(FL_F+7) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F8:
+	  case fk_Key::F8:
 		if(Fl::get_key(FL_F+8) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F9:
+	  case fk_Key::F9:
 		if(Fl::get_key(FL_F+9) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F10:
+	  case fk_Key::F10:
 		if(Fl::get_key(FL_F+10) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F11:
+	  case fk_Key::F11:
 		if(Fl::get_key(FL_F+11) != 0) return true;
 		else return false;
-	  case fk_SpecialKey::F12:
+	  case fk_Key::F12:
 		if(Fl::get_key(FL_F+12) != 0) return true;
 		else return false;
 	  default:
@@ -338,7 +338,7 @@ bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, bool argInsideFlag)
 	return false;
 }
 
-bool fk_Window::getSpecialKeyStatus(fk_SpecialKey argKey, fk_Switch argStatus,
+bool fk_Window::getSpecialKeyStatus(fk_Key argKey, fk_Switch argStatus,
 									bool argInsideFlag)
 {
 	bool		tmpStatus = getSpecialKeyStatus(argKey, argInsideFlag);
