@@ -741,22 +741,45 @@ glAngle 関数の効果的な使用法の1つとして、姿勢の初期化が�
 オイラー角による制御は、glAngle 関数よりもむしろローカル座標系関数である
 loAngle で真骨頂を発揮する。loAngle 関数では、先に述べた loFocus 関数と
 非常によく似た機能を持つが、バンク角の要素を持つために loFocus よりも
-応用性は高い。ここにその機能を羅列してみる。(FK\_PI は円周率である。)
+応用性は高い。ここにその機能を羅列してみる。(fk\_Math::PI は円周率である。)
 \\
 \begin{breakbox}
 \begin{verbatim}
-        model.loAngle(FK_PI, 0.0, 0.0);              // 後ろを向く。
-        model.loAngle(FK_PI/2.0, 0.0, 0.0);          // 右を向く。
-        model.loAngle(-FK_PI/2.0, 0.0, 0.0);         // 左を向く。
-        model.loAngle(0.0, FK_PI/2.0, 0.0);          // 上を向く。
-        model.loAngle(0.0, -FK_PI/2.0, 0.0);         // 下を向く。
-        model.loAngle(FK_PI/2.0, FK_PI/4.0, 0.0);    // 右上を向く。
-        model.loAngle(-FK_PI/4.0, FK_PI/4.0, 0.0);   // 左前上方を向く。
-        model.loAngle(FK_PI/100.0, 0.0, 0.0);        // わずかに右を向く。
-        model.loAngle(0.0, FK_PI/100.0, 0.0);        // わずかに上を向く。
-        model.loAngle(0.0, 0.0, FK_PI);              // 視線を軸に半回転。
-        model.loAngle(0.0, 0.0, FK_PI/2.0);          // モデルを右に傾ける。
-        model.loAngle(0.0, 0.0, FK_PI/100.0);        // わずかに右に傾ける。
+    // 後ろを向く
+    model.loAngle(fk_Math::PI, 0.0, 0.0);              
+
+    // 右を向く
+    model.loAngle(fk_Math::PI/2.0, 0.0, 0.0);          
+
+    // 左を向く
+    model.loAngle(-fk_Math::PI/2.0, 0.0, 0.0);
+
+    // 上を向く
+    model.loAngle(0.0, fk_Math::PI/2.0, 0.0);
+
+    // 下を向く
+    model.loAngle(0.0, -fk_Math::PI/2.0, 0.0);
+
+    // 右上を向く
+    model.loAngle(fk_Math::PI/2.0, fk_Math::PI/4.0, 0.0);
+
+    // 左前上方を向く
+    model.loAngle(-fk_Math::PI/4.0, fk_Math::PI/4.0, 0.0);
+
+    // わずかに右を向く
+    model.loAngle(fk_Math::PI/100.0, 0.0, 0.0);
+
+    // わずかに上を向く
+    model.loAngle(0.0, fk_Math::PI/100.0, 0.0);
+
+    // 視線を軸に半回転。
+    model.loAngle(0.0, 0.0, fk_Math::PI);
+
+    // モデルを右に傾ける。
+    model.loAngle(0.0, 0.0, fk_Math::PI/2.0);
+
+    // わずかに右に傾ける。
+    model.loAngle(0.0, 0.0, fk_Math::PI/100.0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -813,7 +836,7 @@ glRotate 関数は、大きく2つの機能を持っている。次の引数を�
         fk_Vector pos(0.0, 0.0, 0.0);
                 :
                 :
-        model.glRotate(pos, fk_X, FK_PI/4.0);
+        model.glRotate(pos, fk_X, fk_Math::PI/4.0);
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -832,7 +855,7 @@ glRotate 関数は、大きく2つの機能を持っている。次の引数を�
 \begin{breakbox}
 \begin{verbatim}
         for(int i = 0; i < 200; i++) {
-                model.glRotate(100.0, 50.0, 0.0, 50.0, 100.0, 0.0, FK_PI/100.0);
+                model.glRotate(100.0, 50.0, 0.0, 50.0, 100.0, 0.0, fk_Math::PI/100.0);
                         :
                         :
         }

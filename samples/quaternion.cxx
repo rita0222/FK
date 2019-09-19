@@ -69,87 +69,52 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#include <FK/FK.h>
 
+using namespace FK;
+using namespace FK::Material;
 
-#ifndef __FK_CONE_HEADER__
-#define __FK_CONE_HEADER__
+int main(int, char *[])
+{
+	fk_AppWindow win;
+	fk_Model model;
+	fk_Model pointM;
+	fk_Cone cone(3, 4.0, 15.0);
+	fk_Vector pos(0.0, 0.0, -15.0);
+	fk_Angle angle1(0.0, 0.0, 0.0);
+	fk_Angle angle2(fk_Math::PI/2.0, fk_Math::PI/2.0 - 0.01, 0.0);
 
-#include <FK/IndexFace.h>
+	fk_Quaternion q1, q2, q;
+	fk_Polyline point;
 
-namespace FK {
+	fk_Material::initDefault();
 
-	//! 正多角錐・円錐を生成、管理するクラス
-	/*!
-	 *	このクラスは、形状として正多角錐や円錐を制御する機能を提供します。
-	 *	円錐は、分割数の多い正多角錐として生成します。
-	 *	通常、分割数が 20 を超える程度でほとんど円錐と見分けがつかなくなります。
-	 *	配置は、底面の中心が原点となり、
-	 *	頂点が -z 方向、底面が +z 方向となります。
-	 *
-	 *	設定できる要素は角数、底面半径、高さの3要素です。
-	 *	底面半径とは、面を構成する正多角形の外接円半径を指します。
-	 *
-	 *	このクラスは、実質的には fk_IndexFaceSet クラスの派生クラスであり、
-	 *	生成後に fk_IndexFaceSet クラスの機能によって頂点を移動することが可能です。
-	 *	\sa fk_IndexFaceSet, fk_Shape, fk_Model, fk_Prism
-	 */
+	model.setShape(&cone);
+	model.setMaterial(Material::Yellow);
+	model.glAngle(angle1);
 
-	class fk_Cone: public fk_IndexFaceSet {
-	public:
+	pointM.setShape(&point);
+	pointM.setLineColor(1.0, 0.0, 0.0);
 
-		//! コンストラクタ
-		/*!
-		 *	\param[in]	div		角数
-		 *	\param[in]	rad		底面半径
-		 *	\param[in]	height	高さ
-		 *	\param[in]	smooth	
-		 *					true の場合、側面を滑らかにレンダリングし、
-		 *					擬似的な円錐として表示します。
-		 *					false の場合は側面を独立した平面としてレンダリングし、
-		 *					角錐として表示します。
-		 */
-		fk_Cone(int div = 3, double rad = 1.0, double height = 1.0, bool smooth = false);
+	win.setSize(800, 800);
+	win.setBGColor(0.3, 0.4, 0.5);
+	win.entry(&model);
+	win.entry(&pointM);
+	win.setTrackBallMode(true);
+	win.showGuide();
+	win.open();
+	q1.makeEuler(angle1);
+	q2.makeEuler(angle2);
 
-		//! デストラクタ
-		virtual ~fk_Cone();
+	double t = 0.0;
 
-		//! スムースモード設定関数
-		/*!
-		 *	角錐として描画するか、擬似的な円錐として描画するかを設定します。
-		 *	底面自体はどちらであっても多角形として描画します。
-		 *
-		 *	\param[in]	smooth
-		 *					true の場合、側面を滑らかにレンダリングし、
-		 *					擬似的な円錐として表示します。
-		 *					false の場合は側面を独立した平面としてレンダリングし、
-		 *					角錐として表示します。
-		 */
-		void	setSmoothMode(bool smooth);
-		
-		//! 角数設定関数
-		/*!
-		 *	角数を変更します。
-		 *
-		 *	\param[in]	div	角数
-		 */		
-		void	setDivide(int div);
-
-		//! 底面半径設定関数
-		/*!
-		 *	底面半径を設定します。
-		 *
-		 *	\param[in]	rad	底面半径
-		 */
-		void	setRadius(double rad);
-
-		//! 高さ設定関数
-		/*!
-		 *	高さを設定します。
-		 *
-		 *	\param[in]	height	高さ
-		 */
-		void	setHeight(double height);
-	};
+	while(win.update() == true) {
+		q = fk_Math::quatInterSphere(q1, q2, t);
+		model.glAngle(q.getEuler());
+		if(t < 1.0) {
+			point.pushVertex(model.getMatrix() * pos);
+			t += 0.005;
+		}
+	}
+	return 0;
 }
-
-#endif // !__FK_CONE_HEADER__

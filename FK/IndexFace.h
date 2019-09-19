@@ -1263,13 +1263,18 @@ namespace FK {
 		 *
 		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
-		 *	\param[in]	div		角数
-		 *	\param[in]	rad		底面半径
-		 *	\param[in]	height	高さ
+		 *	\param[in]	div			角数
+		 *	\param[in]	rad			底面半径
+		 *	\param[in]	height		高さ
+		 *	\param[in]	smoothMode 
+		 *					true の場合、側面を滑らかにレンダリングし、
+		 *					擬似的な円錐として表示します。
+		 *					false の場合は側面を独立した平面としてレンダリングし、
+		 *					角錐として表示します。
 		 *
 		 *	\sa fk_Cone
 		 */
-		void	makeCone(int div, double rad, double height);
+		void	makeCone(int div, double rad, double height, bool smoothMode = true);
 
 		//! 正多角錐(円錐)角数設定関数
 		/*!
@@ -1440,6 +1445,7 @@ namespace FK {
 		std::vector<char>	vertexNormFlg;
 
 		GLuint				edgeIBO, faceIBO;
+		bool				smoothMode;
 
 		void				InitFaceNorm(void);
 		void				InitVertexNorm(void);

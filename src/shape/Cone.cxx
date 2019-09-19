@@ -73,10 +73,10 @@
 
 using namespace FK;
 
-fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight)
+fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight, bool argSmoothMode)
 {
 	SetObjectType(fk_Type::CONE);
-	makeCone(argDiv, argRadius, argHeight);
+	makeCone(argDiv, argRadius, argHeight, argSmoothMode);
 	return;
 }
 

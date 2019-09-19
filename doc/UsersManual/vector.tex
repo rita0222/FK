@@ -329,8 +329,8 @@ makeRot 関数は、2つ目の引数に \(x\) 軸を表す fk\_X、
 \(y\) 軸を表す fk\_Y、\(z\) 軸を表す fk\_Z の
 いずれかをとる。最初の引数である実数値は弧度法
 (rad ラジアン)として扱われる。\(180^\circ = \pi \: rad\) である。
-FK システムでは \(\pi\) を表す定義値として FK\_PI を提供している。
-したがって、たとえば 90 度は \verb+FK_PI/2.0+ と表せばよい。
+FK システムでは \(\pi\) を表す定義値として fk\_Math::PI を提供している。
+したがって、たとえば 90 度は \verb+fk_Math::PI/2.0+ と表せばよい。
 
 makeEuler 関数は引数にそれぞれ順に heading 角、pitch 角、bank 角を
 与える。単位は makeRot 関数と同様に弧度法である。fk\_Angle 型は、
@@ -398,7 +398,7 @@ fk\_Matrix 型の持つ代入演算子は、単純代入演算子として `=' �
 \begin{verbatim}
         fk_Matrix mat;
 
-        mat.makeEuler(FK_PI/2.0, FK_PI/4.0, FK_PI/6.0);
+        mat.makeEuler(fk_Math::PI/2.0, fk_Math::PI/4.0, fk_Math::PI/6.0);
         printf("mat[1][0] = %lf\n", mat[1][0]);
 \end{verbatim}
 \end{screen}
