@@ -141,13 +141,13 @@ int main(int, char **)
 	}; 
 
 	viewer.setShape(2, particle.getShape());
-	viewer.setDrawMode(2, fk_DrawMode::POINT);
+	viewer.setDrawMode(2, fk_Draw::POINT);
 	viewer.setElementMode(2, fk_ElementMode::ELEMENT);
 	viewer.setPointSize(2, 3.0);
 
 	viewer.setShape(3, &prism);
 	viewer.setPosition(3, 0.0, 0.0, 25.0);
-	viewer.setDrawMode(3, fk_DrawMode::LINE | fk_DrawMode::FACE);
+	viewer.setDrawMode(3, fk_Draw::LINE | fk_Draw::FACE);
 	viewer.setVertexColor(3, fk_Color(0.0, 1.0, 0.0));
 	viewer.setEdgeColor(3, fk_Color(0.0, 0.0, 1.0));
 

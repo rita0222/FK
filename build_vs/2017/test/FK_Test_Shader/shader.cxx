@@ -99,7 +99,7 @@ int main(int, char **)
 		}
 
 		// エンターキーで衝撃波の初期化。
-		if(window.getSpecialKeyStatus(fk_SpecialKey::ENTER, fk_Switch::DOWN) == true) {
+		if(window.getSpecialKeyStatus(fk_Key::ENTER, fk_Switch::DOWN) == true) {
 			sphShockModel.setScale(0.01);
 		}
 	}
