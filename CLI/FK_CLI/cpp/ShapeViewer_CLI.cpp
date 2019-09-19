@@ -141,14 +141,14 @@ namespace FK_CLI {
 		return GetP()->getModelNum();
 	}
 
-	void fk_ShapeViewer::DrawMode::set(fk_DrawMode argMode)
+	void fk_ShapeViewer::DrawMode::set(fk_Draw argMode)
 	{
-		GetP()->setDrawMode(static_cast<::FK::fk_DrawMode>(argMode));
+		GetP()->setDrawMode(static_cast<::FK::fk_Draw>(argMode));
 	}
 
-	fk_DrawMode fk_ShapeViewer::DrawMode::get(void)
+	fk_Draw fk_ShapeViewer::DrawMode::get(void)
 	{
-		return static_cast<fk_DrawMode>(GetP()->getDrawMode());
+		return static_cast<fk_Draw>(GetP()->getDrawMode());
 	}
 
 	void fk_ShapeViewer::ElementMode::set(fk_ElementMode argMode)
@@ -352,14 +352,14 @@ namespace FK_CLI {
 		map.Clear();
 	}
 
-	void fk_ShapeViewer::SetDrawMode(int argID, fk_DrawMode argMode)
+	void fk_ShapeViewer::SetDrawMode(int argID, fk_Draw argMode)
 	{
-		GetP()->setDrawMode(argID, static_cast<::FK::fk_DrawMode>(argMode));
+		GetP()->setDrawMode(argID, static_cast<::FK::fk_Draw>(argMode));
 	}
 
-	fk_DrawMode fk_ShapeViewer::GetDrawMode(int argID)
+	fk_Draw fk_ShapeViewer::GetDrawMode(int argID)
 	{
-		return static_cast<fk_DrawMode>(GetP()->getDrawMode(argID));
+		return static_cast<fk_Draw>(GetP()->getDrawMode(argID));
 	}
 
 	void fk_ShapeViewer::SetElementMode(int argID, fk_ElementMode argMode)

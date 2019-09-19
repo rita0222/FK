@@ -102,7 +102,7 @@ namespace FK_CLI_Shader
                     shockModel.Scale = shockModel.Scale + 0.01;
                 }
 
-                if(window.GetSpecialKeyStatus(fk_SpecialKey.ENTER, fk_Switch.DOWN))
+                if(window.GetSpecialKeyStatus(fk_Key.ENTER, fk_Switch.DOWN))
                 {
                     shockModel.Scale = 0.01;
                 }

@@ -81,7 +81,7 @@
 
 namespace FK_CLI
 {
-	public enum class fk_SpecialKey {
+	public enum class fk_Key {
 		SHIFT_R,	//!< 右シフトキー
 		SHIFT_L,	//!< 左シフトキー
 		CTRL_R,		//!< 右コントロールキー
@@ -118,9 +118,9 @@ namespace FK_CLI
 
 	//! マウスボタンを表す列挙型
 	public enum class fk_MouseButton {
-		MOUSE1,		//!< マウス左クリック(第1ボタン)
-		MOUSE2,		//!< マウス中クリック、あるいはホイールクリック(第2ボタン)
-		MOUSE3		//!< マウス右クリック(第3ボタン)
+		M1,		//!< マウス左クリック(第1ボタン)
+		M2,		//!< マウス中クリック、あるいはホイールクリック(第2ボタン)
+		M3		//!< マウス右クリック(第3ボタン)
 	};
 
 	//! ボタン系デバイス状態を表す列挙型
@@ -161,7 +161,7 @@ namespace FK_CLI
 		ShaderCallback^ postDrawRight;
 
 		::FK::fk_AppWindow * GetP(void);
-		::FK::fk_SpecialKey GetSK(fk_SpecialKey);
+		::FK::fk_Key GetSK(fk_Key);
 		::FK::fk_Switch GetSS(fk_Switch);
 
 	public:
@@ -728,13 +728,13 @@ namespace FK_CLI
 		//! 特殊キー状態取得メソッド1
 		/*!
 		 *	特殊キーの入力状態を検出します。
-		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
-		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
+		 *	引数として、検出したいキーに対応した FK_CLI::fk_Key 型の値を入力します。
+		 *	例えば、上矢印キーの状態を取得したい場合には「fk_Key.UP」を入力します。
 		 *	通常キーの状態取得は GetKeyStatus() を使います。
 		 *
 		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_Switch.PRESS, false) == true) {
+		 *		if(Window.GetSpecialKeyStatus(fk_Key.F1, fk_Switch.PRESS, false) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -759,21 +759,21 @@ namespace FK_CLI
 		 *
 		 *	\sa GetKeyStatus(), Update()
 		 */
-		bool GetSpecialKeyStatus(fk_SpecialKey keyCode,
+		bool GetSpecialKeyStatus(fk_Key keyCode,
 								 fk_Switch status, bool insideFlag);
 		
 		//! 特殊キー状態取得メソッド2
 		/*!
 		 *	特殊キーの入力状態を検出します。
-		 *	引数として、検出したいキーに対応した FK_CLI::fk_SpecialKey 型の値を入力します。
-		 *	例えば、上矢印キーの状態を取得したい場合には「fk_SpecialKey.UP」を入力します。
+		 *	引数として、検出したいキーに対応した FK_CLI::fk_Key 型の値を入力します。
+		 *	例えば、上矢印キーの状態を取得したい場合には「fk_Key.UP」を入力します。
 		 *	通常キーの状態取得は GetKeyStatus() を使います。
-		 *	なお、本メソッドは GetSpecialKeyStatus(fk_SpecialKey, fk_Switch, bool) にて
+		 *	なお、本メソッドは GetSpecialKeyStatus(fk_Key, fk_Switch, bool) にて
 		 *	第三引数に false を入力した場合と挙動は同一です。
 		 *
 		 *	以下のコードは、「F1」キーが押されているかどうかを検出します。
 		 *
-		 *		if(Window.GetSpecialKeyStatus(fk_SpecialKey.F1, fk_Switch.PRESS) == true) {
+		 *		if(Window.GetSpecialKeyStatus(fk_Key.F1, fk_Switch.PRESS) == true) {
 		 *			// 押されている場合の処理
 		 *		}
 		 *
@@ -793,7 +793,7 @@ namespace FK_CLI
 		 *
 		 *	\sa GetKeyStatus(), Update()
 		 */
-		bool GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_Switch status);
+		bool GetSpecialKeyStatus(fk_Key keyCode, fk_Switch status);
 		//@}
 
 		//! \name マウス状態取得メソッド

@@ -82,109 +82,109 @@ namespace FK_CLI {
 		return pWin;
 	}
 	
-	::FK::fk_SpecialKey fk_AppWindow::GetSK(fk_SpecialKey argK)
+	::FK::fk_Key fk_AppWindow::GetSK(fk_Key argK)
 	{
 		switch(argK) {
-		  case fk_SpecialKey::SHIFT_R:
-			return ::FK::fk_SpecialKey::SHIFT_R;
+		  case fk_Key::SHIFT_R:
+			return ::FK::fk_Key::SHIFT_R;
 				
-		  case fk_SpecialKey::SHIFT_L:
-			return ::FK::fk_SpecialKey::SHIFT_L;
+		  case fk_Key::SHIFT_L:
+			return ::FK::fk_Key::SHIFT_L;
 				
-		  case fk_SpecialKey::CTRL_R:
-			return ::FK::fk_SpecialKey::CTRL_R;
+		  case fk_Key::CTRL_R:
+			return ::FK::fk_Key::CTRL_R;
 				
-		  case fk_SpecialKey::CTRL_L:
-			return ::FK::fk_SpecialKey::CTRL_L;
+		  case fk_Key::CTRL_L:
+			return ::FK::fk_Key::CTRL_L;
 				
-		  case fk_SpecialKey::ALT_R:
-			return ::FK::fk_SpecialKey::ALT_R;
+		  case fk_Key::ALT_R:
+			return ::FK::fk_Key::ALT_R;
 				
-		  case fk_SpecialKey::ALT_L:
-			return ::FK::fk_SpecialKey::ALT_L;
+		  case fk_Key::ALT_L:
+			return ::FK::fk_Key::ALT_L;
 				
-		  case fk_SpecialKey::ENTER:
-			return ::FK::fk_SpecialKey::ENTER;
+		  case fk_Key::ENTER:
+			return ::FK::fk_Key::ENTER;
 				
-		  case fk_SpecialKey::BACKSPACE:
-			return ::FK::fk_SpecialKey::BACKSPACE;
+		  case fk_Key::BACKSPACE:
+			return ::FK::fk_Key::BACKSPACE;
 				
-		  case fk_SpecialKey::DELETEKEY:
-			return ::FK::fk_SpecialKey::DEL;
+		  case fk_Key::DELETEKEY:
+			return ::FK::fk_Key::DEL;
 				
-		  case fk_SpecialKey::CAPS_LOCK:
-			return ::FK::fk_SpecialKey::CAPS_LOCK;
+		  case fk_Key::CAPS_LOCK:
+			return ::FK::fk_Key::CAPS_LOCK;
 				
-		  case fk_SpecialKey::TAB:
-			return ::FK::fk_SpecialKey::TAB;
+		  case fk_Key::TAB:
+			return ::FK::fk_Key::TAB;
 				
-		  case fk_SpecialKey::PAGE_UP:
-			return ::FK::fk_SpecialKey::PAGE_UP;
+		  case fk_Key::PAGE_UP:
+			return ::FK::fk_Key::PAGE_UP;
 				
-		  case fk_SpecialKey::PAGE_DOWN:
-			return ::FK::fk_SpecialKey::PAGE_DOWN;
+		  case fk_Key::PAGE_DOWN:
+			return ::FK::fk_Key::PAGE_DOWN;
 				
-		  case fk_SpecialKey::HOME:
-			return ::FK::fk_SpecialKey::HOME;
+		  case fk_Key::HOME:
+			return ::FK::fk_Key::HOME;
 				
-		  case fk_SpecialKey::END:
-			return ::FK::fk_SpecialKey::END;
+		  case fk_Key::END:
+			return ::FK::fk_Key::END;
 				
-		  case fk_SpecialKey::INSERT:
-			return ::FK::fk_SpecialKey::INSERT;
+		  case fk_Key::INSERT:
+			return ::FK::fk_Key::INSERT;
 				
-		  case fk_SpecialKey::LEFT:
-			return ::FK::fk_SpecialKey::LEFT;
+		  case fk_Key::LEFT:
+			return ::FK::fk_Key::LEFT;
 				
-		  case fk_SpecialKey::RIGHT:
-			return ::FK::fk_SpecialKey::RIGHT;
+		  case fk_Key::RIGHT:
+			return ::FK::fk_Key::RIGHT;
 				
-		  case fk_SpecialKey::UP:
-			return ::FK::fk_SpecialKey::UP;
+		  case fk_Key::UP:
+			return ::FK::fk_Key::UP;
 				
-		  case fk_SpecialKey::DOWN:
-			return ::FK::fk_SpecialKey::DOWN;
+		  case fk_Key::DOWN:
+			return ::FK::fk_Key::DOWN;
 				
-		  case fk_SpecialKey::F1:
-			return ::FK::fk_SpecialKey::F1;
+		  case fk_Key::F1:
+			return ::FK::fk_Key::F1;
 				
-		  case fk_SpecialKey::F2:
-			return ::FK::fk_SpecialKey::F2;
+		  case fk_Key::F2:
+			return ::FK::fk_Key::F2;
 				
-		  case fk_SpecialKey::F3:
-			return ::FK::fk_SpecialKey::F3;
+		  case fk_Key::F3:
+			return ::FK::fk_Key::F3;
 				
-		  case fk_SpecialKey::F4:
-			return ::FK::fk_SpecialKey::F4;
+		  case fk_Key::F4:
+			return ::FK::fk_Key::F4;
 				
-		  case fk_SpecialKey::F5:
-			return ::FK::fk_SpecialKey::F5;
+		  case fk_Key::F5:
+			return ::FK::fk_Key::F5;
 				
-		  case fk_SpecialKey::F6:
-			return ::FK::fk_SpecialKey::F6;
+		  case fk_Key::F6:
+			return ::FK::fk_Key::F6;
 				
-		  case fk_SpecialKey::F7:
-			return ::FK::fk_SpecialKey::F7;
+		  case fk_Key::F7:
+			return ::FK::fk_Key::F7;
 				
-		  case fk_SpecialKey::F8:
-			return ::FK::fk_SpecialKey::F8;
+		  case fk_Key::F8:
+			return ::FK::fk_Key::F8;
 				
-		  case fk_SpecialKey::F9:
-			return ::FK::fk_SpecialKey::F9;
+		  case fk_Key::F9:
+			return ::FK::fk_Key::F9;
 				
-		  case fk_SpecialKey::F10:
-			return ::FK::fk_SpecialKey::F10;
+		  case fk_Key::F10:
+			return ::FK::fk_Key::F10;
 				
-		  case fk_SpecialKey::F11:
-			return ::FK::fk_SpecialKey::F11;
+		  case fk_Key::F11:
+			return ::FK::fk_Key::F11;
 				
-		  case fk_SpecialKey::F12:
-			return ::FK::fk_SpecialKey::F12;
+		  case fk_Key::F12:
+			return ::FK::fk_Key::F12;
 				
 		  default:
 			break;
 		}
-		return ::FK::fk_SpecialKey::ENTER;
+		return ::FK::fk_Key::ENTER;
 	}
 
 	::FK::fk_Switch fk_AppWindow::GetSS(fk_Switch argSS)
@@ -489,13 +489,13 @@ namespace FK_CLI {
 		return GetP()->getKeyStatus(tmpBuf[0], GetSS(argStatus), argInFlg);
 	}
 
-	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode,
+	bool fk_AppWindow::GetSpecialKeyStatus(fk_Key keyCode,
 										   fk_Switch argStatus, bool argInFlg)
 	{
 		return GetP()->getSpecialKeyStatus(GetSK(keyCode), GetSS(argStatus), argInFlg);
 	}
 		
-	bool fk_AppWindow::GetSpecialKeyStatus(fk_SpecialKey keyCode, fk_Switch argStatus)
+	bool fk_AppWindow::GetSpecialKeyStatus(fk_Key keyCode, fk_Switch argStatus)
 	{
 		return GetP()->getSpecialKeyStatus(GetSK(keyCode), GetSS(argStatus), false);
 	}
@@ -504,15 +504,15 @@ namespace FK_CLI {
 	{
 		::FK::fk_MouseButton	b;
 		switch(argB) {
-		case fk_MouseButton::MOUSE1:
+		case fk_MouseButton::M1:
 			b = ::FK::fk_MouseButton::M1;
 			break;
 				
-		case fk_MouseButton::MOUSE2:
+		case fk_MouseButton::M2:
 			b = ::FK::fk_MouseButton::M2;
 			break;
 				
-		case fk_MouseButton::MOUSE3:
+		case fk_MouseButton::M3:
 			b = ::FK::fk_MouseButton::M3;
 			break;
 

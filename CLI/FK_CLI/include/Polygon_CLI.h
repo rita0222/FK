@@ -74,7 +74,7 @@
 #pragma once
 
 #include <FK/Polygon.h>
-#include "Solid_CLI.h"
+#include "IndexFace_CLI.h"
 
 namespace FK_CLI
 {
@@ -94,7 +94,7 @@ namespace FK_CLI
 	 *
 	 *	\sa fk_Solid, fk_Polyline, fk_Closedline
 	 */
-	public ref class fk_Polygon : fk_Solid {
+	public ref class fk_Polygon : fk_IndexFaceSet {
 	internal:
 		::FK::fk_Polygon * GetP(void);
 
@@ -122,25 +122,6 @@ namespace FK_CLI
 		//! ファイナライザ
 		!fk_Polygon();
 
-		//! 頂点追加メソッド
-		/*!
-		 *	頂点を追加します。
-		 *
-		 *	\param[in] pos 追加頂点の位置ベクトル
-		 */
-		void PushVertex(fk_Vector^ pos);
-
-		//! 頂点位置設定メソッド
-		/*!
-		 *	頂点の位置を設定します。
-		 *	対象となる頂点がまだ存在していなかった場合、
-		 *	角数を (id+1) まで増加させます。
-		 *
-		 *	\param[in] ID 頂点ID
-		 *	\param[in] pos 頂点位置ベクトル
-		 */
-		void SetVertex(int ID, fk_Vector^ pos);
-
 		//! 頂点位置設定メソッド
 		/*!
 		 *	頂点全部を、指定した配列に入れ替えます。
@@ -150,5 +131,3 @@ namespace FK_CLI
 		void SetVertex(IEnumerable<fk_Vector^>^ array);
 	};		
 }
-
-

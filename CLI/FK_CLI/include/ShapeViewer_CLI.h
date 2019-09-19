@@ -192,13 +192,13 @@ namespace FK_CLI
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- fk_DrawMode.NONEMODE:				何も描画しません。
-		 *	- fk_DrawMode.POINTMODE:			頂点を描画します。
-		 *	- fk_DrawMode.LINEMODE:				稜線を描画します。
-		 *	- fk_DrawMode.POLYMODE:				面の表を描画します。
-		 *	- fk_DrawMode.BACK_POLYMODE:		面の裏を描画します。
-		 *	- fk_DrawMode.FRONTBACK_POLYMODE:	面の表と裏を描画します。
-		 *	- fk_DrawMode.TEXTUREMODE:			テクスチャを描画します。
+		 *	- fk_Draw .NONEMODE:				何も描画しません。
+		 *	- fk_Draw .POINTMODE:			頂点を描画します。
+		 *	- fk_Draw .LINEMODE:				稜線を描画します。
+		 *	- fk_Draw .POLYMODE:				面の表を描画します。
+		 *	- fk_Draw .BACK_POLYMODE:		面の裏を描画します。
+		 *	- fk_Draw .FRONTBACK_POLYMODE:	面の表と裏を描画します。
+		 *	- fk_Draw .TEXTUREMODE:			テクスチャを描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -206,16 +206,16 @@ namespace FK_CLI
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.DrawMode = fk_DrawMode.POINTMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POLYMODE;
+		 *		viewer.DrawMode = fk_Draw.POINTMODE | fk_Draw.LINEMODE | fk_Draw.POLYMODE;
 		 *
 		 *	個別の形状に対して別々の描画モードを設定する場合は、
-		 *	SetDrawMode(int, fk_DrawMode) を利用して下さい。
+		 *	SetDrawMode(int, fk_Draw) を利用して下さい。
 		 *
-		 *	\sa SetDrawMode(int, fk_DrawMode), fk_Model::DrawMode
+		 *	\sa SetDrawMode(int, fk_Draw), fk_Model::DrawMode
 		 */
-		property fk_DrawMode DrawMode {
-			fk_DrawMode get();
-			void set(fk_DrawMode);
+		property fk_Draw DrawMode {
+			fk_Draw get();
+			void set(fk_Draw);
 		}
 
 		// 要素モード設定プロパティ
@@ -438,13 +438,13 @@ namespace FK_CLI
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- fk_DrawMode.NONEMODE:				何も描画しません。
-		 *	- fk_DrawMode.POINTMODE:			頂点を描画します。
-		 *	- fk_DrawMode.LINEMODE:				稜線を描画します。
-		 *	- fk_DrawMode.POLYMODE:				面の表を描画します。
-		 *	- fk_DrawMode.BACK_POLYMODE:		面の裏を描画します。
-		 *	- fk_DrawMode.FRONTBACK_POLYMODE:	面の表と裏を描画します。
-		 *	- fk_DrawMode.TEXTUREMODE:			テクスチャを描画します。
+		 *	- fk_Draw.NONEMODE:				何も描画しません。
+		 *	- fk_Draw.POINTMODE:			頂点を描画します。
+		 *	- fk_Draw.LINEMODE:				稜線を描画します。
+		 *	- fk_Draw.POLYMODE:				面の表を描画します。
+		 *	- fk_Draw.BACK_POLYMODE:		面の裏を描画します。
+		 *	- fk_Draw.FRONTBACK_POLYMODE:	面の表と裏を描画します。
+		 *	- fk_Draw.TEXTUREMODE:			テクスチャを描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -452,7 +452,7 @@ namespace FK_CLI
 		 *
 		 *		fk_ShapeViewer	viewer;
 		 *
-		 *		viewer.setDrawMode(1, fk_DrawMode.POINTMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POLYMODE);
+		 *		viewer.setDrawMode(1, fk_Draw.POINTMODE | fk_Draw.LINEMODE | fk_Draw.POLYMODE);
 		 *
 		 *	全ての形状に対しての描画モードを設定する場合は、
 		 *	fk_ShapeViewer::DrawMode プロパティを利用して下さい。
@@ -462,7 +462,7 @@ namespace FK_CLI
 		 *
 		 *	\sa DrawMode, fk_Model::DrawMode
 		 */
-		void		SetDrawMode(int ID, fk_DrawMode mode);
+		void		SetDrawMode(int ID, fk_Draw mode);
 		
 		//! 描画モード参照メソッド
 		/*!
@@ -470,9 +470,9 @@ namespace FK_CLI
 		 *
 		 *	\return		描画モード
 		 *
-		 *	\sa SetDrawMode(int, fk_DrawMode)
+		 *	\sa SetDrawMode(int, fk_Draw)
 		 */
-		fk_DrawMode	GetDrawMode(int ID);
+		fk_Draw	GetDrawMode(int ID);
 
 		//! 形状別要素モード設定関数
 		/*!

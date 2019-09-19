@@ -256,14 +256,14 @@ namespace FK_CLI {
 		return GetP()->getWidth();
 	}
 
-	void fk_Model::DrawMode::set(fk_DrawMode argMode)
+	void fk_Model::DrawMode::set(fk_Draw argMode)
 	{
-		GetP()->setDrawMode(static_cast<::FK::fk_DrawMode>(argMode));
+		GetP()->setDrawMode(static_cast<::FK::fk_Draw>(argMode));
 	}
 
-	fk_DrawMode fk_Model::DrawMode::get(void)
+	fk_Draw fk_Model::DrawMode::get(void)
 	{
-		return static_cast<fk_DrawMode>(GetP()->getDrawMode());
+		return static_cast<fk_Draw>(GetP()->getDrawMode());
 	}
 
 	void fk_Model::ElementMode::set(fk_ElementMode argMode)

@@ -74,12 +74,12 @@ namespace FK_CLI_Particle
             };
 
 			viewer.SetShape(2, particle.Shape);
-			viewer.SetDrawMode(2, fk_DrawMode.POINT);
+			viewer.SetDrawMode(2, fk_Draw.POINT);
             viewer.SetElementMode(2, fk_ElementMode.ELEMENT);
 
             viewer.SetShape(3, prism);
 			viewer.SetPosition(3, 0.0, 0.0, 25.0);
-			viewer.SetDrawMode(3, fk_DrawMode.FACE | fk_DrawMode.LINE | fk_DrawMode.POINT);
+			viewer.SetDrawMode(3, fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT);
             viewer.Scale = 10.0;
             viewer.FPS = 0;
 

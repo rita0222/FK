@@ -567,9 +567,6 @@
     <ClInclude Include="..\FK_CLI\include\ShaderProgram_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
-    <ClInclude Include="..\FK_CLI\include\ShaderProgram_New_CLI.h">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
     <ClInclude Include="..\FK_CLI\include\Shape_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>

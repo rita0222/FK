@@ -42,12 +42,7 @@ namespace FK_CLI_BezSurface
             model.SmoothMode = true;
             model.PointSize = 5.0;
             model.Shape = surf;
-            model.DrawMode =
-                fk_DrawMode.GEOM_LINE |
-                fk_DrawMode.GEOM_FACE |
-                fk_DrawMode.LINE |
-                fk_DrawMode.POINT;
-
+            model.DrawMode = fk_Draw.GEOM_LINE | fk_Draw.GEOM_FACE | fk_Draw.LINE | fk_Draw.POINT;
             window.Entry(model);
 
             while (window.Update()) { }

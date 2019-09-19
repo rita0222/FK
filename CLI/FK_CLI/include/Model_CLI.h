@@ -82,7 +82,7 @@ namespace FK_CLI
 	using namespace System::Collections::Generic;
 
 	//! モデルの描画モードを表す列挙型												
-	public enum class fk_DrawMode : unsigned int {
+	public enum class fk_Draw : unsigned int {
 		NONE = 0,							//!< 表示要素なし
 		POINT = 1 << 1,						//!< 頂点描画
 		LINE = 1 << 2,						//!< 稜線描画
@@ -377,16 +377,16 @@ namespace FK_CLI
 		 *	描画モードとは、
 		 *	面、稜線、頂点のそれぞれを描画するかどうかを制御するものです。
 		 *	描画モードには以下のようなものがあります。
-		 *	- fk_DrawMode.NONE:				何も描画しません。
-		 *	- fk_DrawMode.POINT:			頂点を描画します。
-		 *	- fk_DrawMode.LINE:				稜線を描画します。
-		 *	- fk_DrawMode.FACE:				面の表を描画します。
-		 *	- fk_DrawMode.BACK_FACE:		面の裏を描画します。
-		 *	- fk_DrawMode.FRONTBACK_FACE:	面の表と裏を描画します。
-		 *	- fk_DrawMode.TEXTURE:			テクスチャを描画します。
-		 *	- fk_DrawMode.GEOM_LINE:		曲線や、曲面グリッド線を描画します。
-		 *	- fk_DrawMode.GEOM_POINT:		曲線上や曲面上の分割点を描画します。
-		 *	- fk_DrawMode.GEOM_FACE:		曲面を描画します。
+		 *	- fk_Draw.NONE:				何も描画しません。
+		 *	- fk_Draw.POINT:			頂点を描画します。
+		 *	- fk_Draw.LINE:				稜線を描画します。
+		 *	- fk_Draw.FACE:				面の表を描画します。
+		 *	- fk_Draw.BACK_FACE:		面の裏を描画します。
+		 *	- fk_Draw.FRONTBACK_FACE:	面の表と裏を描画します。
+		 *	- fk_Draw.TEXTURE:			テクスチャを描画します。
+		 *	- fk_Draw.GEOM_LINE:		曲線や、曲面グリッド線を描画します。
+		 *	- fk_Draw.GEOM_POINT:		曲線上や曲面上の分割点を描画します。
+		 *	- fk_Draw.GEOM_FACE:		曲面を描画します。
 		 *	.
 		 *	これらの描画モードは、
 		 *	ビット論理和を用いて複数のものを同時に指定することが可能です。
@@ -394,11 +394,11 @@ namespace FK_CLI
 		 *
 		 *		fk_Model		model;
 		 *		
-		 *		model.DrawMode = fk_DrawMode.POINT | fk_DrawMode.LINE | fk_DrawMode.FACE;
+		 *		model.DrawMode = fk_Draw.POINT | fk_Draw.LINE | fk_Draw.FACE;
 		 */
-		property fk_DrawMode DrawMode {
-			void set(fk_DrawMode);
-			fk_DrawMode get();
+		property fk_Draw DrawMode {
+			void set(fk_Draw);
+			fk_Draw get();
 		}
 
 		//! 要素モード関連プロパティ
