@@ -12,7 +12,6 @@ namespace FK_CLI_Particle
 			var viewer = new fk_ShapeViewer(600, 600);
 			var particle = new fk_ParticleSet();
 			var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
-            var rand = new Random();                 // 乱数発生器の初期化
 
             particle.MaxSize = 1000;
             particle.AllMode = true;
@@ -22,8 +21,8 @@ namespace FK_CLI_Particle
             particle.GenMethod = (P) =>
             {
                 // 生成時の位置を(ランダムに)設定
-                double y = rand.NextDouble() * 50.0 - 25.0;
-                double z = rand.NextDouble() * 50.0 - 25.0;
+                double y = fk_Math.drand(-25.0, 25.0);
+                double z = fk_Math.drand(-25.0, 25.0);
                 P.Position = new fk_Vector(50.0, y, z);
             };
 
@@ -31,7 +30,7 @@ namespace FK_CLI_Particle
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    if (rand.NextDouble() < 0.3)
+                    if (fk_Math.drand() < 0.3)
                     {   // 発生確率は 30% (を5回)
                         particle.NewParticle();              // パーティクル生成処理
                         num++;
@@ -74,13 +73,14 @@ namespace FK_CLI_Particle
             };
 
 			viewer.SetShape(2, particle.Shape);
-			viewer.SetDrawMode(2, fk_DrawMode.POINT);
+			viewer.SetDrawMode(2, fk_Draw.POINT);
             viewer.SetElementMode(2, fk_ElementMode.ELEMENT);
 
             viewer.SetShape(3, prism);
 			viewer.SetPosition(3, 0.0, 0.0, 25.0);
-			viewer.SetDrawMode(3, fk_DrawMode.FACE | fk_DrawMode.LINE | fk_DrawMode.POINT);
+			viewer.SetDrawMode(3, fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT);
             viewer.Scale = 10.0;
+            viewer.FPS = 0;
 
             //GC.TryStartNoGCRegion(15728640);
             while (viewer.Draw())

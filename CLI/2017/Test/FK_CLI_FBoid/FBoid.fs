@@ -16,13 +16,9 @@ type Agent(argID:int) = class
     member this.Shape with get() = model.Shape
                       and set(s:fk_Shape) = model.Shape <- s 
 
-    member this.Init(argSize: double, argRand: Random) =
-        model.GlVec(argRand.NextDouble()*2.0 - 1.0,
-                    argRand.NextDouble()*2.0 - 1.0,
-                    0.0) |> ignore
-        model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
-                       argRand.NextDouble() * argSize * 2.0 - argSize,
-                       0.0) |> ignore
+    member this.Init(argSize: double) =
+        model.GlVec(fk_Math.drand(-1.0, 1.0), fk_Math.drand(-1.0, 1.0), 0.0) |> ignore
+        model.GlMoveTo(fk_Math.drand(-argSize, argSize), fk_Math.drand(-argSize, argSize), 0.0) |> ignore
 
     member this.Entry(argWin: fk_AppWindow) =
         argWin.Entry(model)
@@ -37,7 +33,6 @@ type Boid(argNum) = class
     do
         fk_Material.InitDefault()
 
-    let rand = new Random()
     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
     let cone = new fk_Cone(16, 0.4, 1.0)
     let AREASIZE = 15.0
@@ -47,7 +42,7 @@ type Boid(argNum) = class
     let paramLA = 3.0
     let paramLB = 5.0
     do
-        agent |> Array.iter (fun a -> a.Init(AREASIZE, rand))
+        agent |> Array.iter (fun a -> a.Init(AREASIZE))
         agent |> Array.iter (fun a -> a.Shape <- cone)
 
     member this.SetWindow(argWin: fk_AppWindow) =
@@ -123,12 +118,13 @@ module FK_Boid =
 
     boid.SetWindow(win)
 
-    win.Size <- new fk_Dimension(600, 600)
+    win.Size <- new fk_Dimension(800, 800)
     win.BGColor <- new fk_Color(0.6, 0.7, 0.8)
     win.ShowGuide(fk_GuideMode.GRID_XY)
     win.CameraPos <- new fk_Vector(0.0, 0.0, 80.0)
     win.CameraFocus <- new fk_Vector(0.0, 0.0, 0.0)
     win.FPS <- 0
+    win.TrackBallMode <- true
 
     win.Open()
     while win.Update() = true do
