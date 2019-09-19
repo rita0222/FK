@@ -432,6 +432,48 @@ namespace FK {
 											 double t);
 
 		//@}
+
+		//! \name 乱数関数
+		//@{
+		//! 一様整数乱数取得関数
+		/*!
+		 *	任意の正の整数から一様乱数を取得します。
+		 *
+		 *	\return 乱数値
+		 */
+		static unsigned int rand(void);
+
+		//! 範囲付一様整数乱数取得関数
+		/*!
+		 *	\f$ m \leqq r < M\f$ を満たす一様整数乱数 r を取得します。
+		 *
+		 *	\param[in]	m		乱数最小値
+		 *	\param[in]	M		乱数最大値。ただし、M は乱数範囲に含まれません。
+		 *
+		 *	\return 乱数値
+		 */
+		static int rand(int m, int M);
+
+		//! 一様実数乱数取得関数
+		/*!
+		 *	0 以上 1 未満となる一様実数乱数を取得します。
+		 *
+		 *	\return	乱数値
+		 */
+		static double drand(void);
+		
+		//! 範囲付一様実数乱数取得関数
+		/*!
+		 *	\f$ m \leqq r < M\f$ を満たす一様実数乱数 r を取得します。
+		 *
+		 *	\param[in]	m		乱数最小値
+		 *	\param[in]	M		乱数最大値。ただし、M は乱数範囲に含まれません。
+		 *
+		 *	\return 乱数値
+		 */
+		static double drand(double m, double M);
+		//@}
+
 	};
 }
 

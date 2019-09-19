@@ -71,8 +71,19 @@
  ****************************************************************************/
 #include <FK/Math.h>
 #include <FK/Matrix.h>
+#include <random>
 
 using namespace FK;
+using namespace std;
+
+static random_device *rd = nullptr;
+static mt19937 *mt = nullptr;
+
+static void randInit(void)
+{
+	if(rd == nullptr) rd = new random_device();
+	if(mt == nullptr) mt = new mt19937((*rd)());
+}
 
 bool fk_Math::isOnLine(const fk_Vector &argA,
 					   const fk_Vector &argB,
@@ -365,3 +376,38 @@ bool fk_Math::calcCrossLineAndTri(const fk_Vector &argP,
 
 	return true;
 }
+
+unsigned int fk_Math::rand(void)
+{
+	randInit();
+
+	return (unsigned int)((*mt)());
+}
+
+int fk_Math::rand(int argMin, int argMax)
+{
+	randInit();
+
+	if(argMin >= argMax) return argMin;
+	uniform_int_distribution<> dist(argMin, argMax-1);
+	return dist((*mt));
+}
+
+double fk_Math::drand(void)
+{
+	randInit();
+
+	uniform_real_distribution<> dist(0.0, 1.0);
+	return dist((*mt));
+}
+
+double fk_Math::drand(double argMin, double argMax)
+{
+	randInit();
+
+	if(argMin >= argMax) return argMin;
+	uniform_real_distribution<> dist(argMin, argMax);
+	return dist((*mt));
+}
+
+   
