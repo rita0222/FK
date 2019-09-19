@@ -63,6 +63,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_BlockSize", "test\F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_BezSurf", "test\FK_Test_BezSurf\FK_Test_BezSurf.vcxproj", "{6558D0CA-113E-4137-8490-520F02FE6CE5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Gregory", "test\FK_Test_Gregory\FK_Test_Gregory.vcxproj", "{C8267B4C-943F-42FA-92EF-0AFB727689C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -307,6 +309,14 @@ Global
 		{6558D0CA-113E-4137-8490-520F02FE6CE5}.Release|Win32.Build.0 = Release|Win32
 		{6558D0CA-113E-4137-8490-520F02FE6CE5}.Release|x64.ActiveCfg = Release|x64
 		{6558D0CA-113E-4137-8490-520F02FE6CE5}.Release|x64.Build.0 = Release|x64
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Debug|Win32.Build.0 = Debug|Win32
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Debug|x64.ActiveCfg = Debug|x64
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Debug|x64.Build.0 = Debug|x64
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Release|Win32.ActiveCfg = Release|Win32
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Release|Win32.Build.0 = Release|Win32
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Release|x64.ActiveCfg = Release|x64
+		{C8267B4C-943F-42FA-92EF-0AFB727689C8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
