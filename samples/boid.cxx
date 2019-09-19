@@ -102,7 +102,7 @@ Boid::Boid(int argNum)
 
 	// 形状インスタンス生成
 	fk_Material::initDefault();
-	cone = new fk_Cone(16, 0.4, 1.0);
+	cone = new fk_Cone(16, 0.4, 1.0, true);
 	if(argNum < 0) return;
 
 	// エージェントインスタンスの作成
@@ -220,6 +220,7 @@ int main(int, char **)
 	win.showGuide(fk_Guide::GRID_XY);
 	win.setCameraPos(0.0, 0.0, 80.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
+	win.setTrackBallMode(true);
 	win.open();
 
 	while(win.update() == true) {
