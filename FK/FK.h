@@ -105,6 +105,7 @@
 #include <FK/BVHMotion.h>
 #include <FK/BezCurve.h>
 #include <FK/BSplCurve.h>
+#include <FK/BezSurface.h>
 #include <FK/Gregory.h>
 #include <FK/System.h>
 #include <FK/AppWindow.h>
