@@ -72,7 +72,7 @@
 #ifndef __FK_POLYGON_HEADER__
 #define __FK_POLYGON_HEADER__
 
-#include <FK/Solid.h>
+#include <FK/IndexFace.h>
 
 namespace FK {
 	//! 多角形を生成、管理するクラス
@@ -85,55 +85,53 @@ namespace FK {
 	 *	反時計回りになっている側になります。
 	 *	両面を描画したい場合は fk_Model の setDrawMode() 関数を参照して下さい。
 	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
-	 *	平面でなかった場合に意図している形状と描画形状が異なる場合があります。
-	 *	\sa fk_Solid, fk_Polyline, fk_Closedline
+	 *	同一平面上にある凸多角形を前提としています。
+	 *	その条件を満たしていない場合の描画結果は保証されません。
+	 *
+	 *	\sa fk_IndexFaceSet, fk_Polyline, fk_Closedline
 	 */
 
-	class fk_Polygon: public fk_Solid {
+	class fk_Polygon: public fk_IndexFaceSet {
 	public:
 
 		//! コンストラクタ
 		/*!
-		 *	引数はシステム内部制御のために利用されるものです。
-		 *	ユーザは引数を省略して定義を行って下さい。
+		 *	詳細は setVertex(std::vector<fk_Vector> *) を参照して下さい。
+		 *	引数を省略した場合、初期状態は空となります。
+		 *
+		 *	\param[in]	posArray	多角形頂点配列
 		 */
-		fk_Polygon(std::vector<fk_Vector> *array = nullptr,
-				   fk_Type = fk_Type::POLYGON);
+		fk_Polygon(std::vector<fk_Vector> *posArray = nullptr);
 
 		//! デストラクタ
 		virtual ~fk_Polygon();
 
-		//! 頂点追加関数
+		//! 形状生成関数1
 		/*!
-		 *	頂点を追加します。
-		 *	\param[in] pos 追加頂点の位置ベクトル
+		 *	多角形 (ポリゴン) を生成します。
+		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
+		 *	現時点では凸多角形のみサポートしており、
+		 *	非凸多角形が入力された場合の動作は保証されません。
+		 *
+		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
+		 *
+		 *	\param[in]	posArray	多角形頂点配列
 		 */
-		void	pushVertex(fk_Vector pos);
+		void	setVertex(std::vector<fk_Vector> *posArray);
 
-		//! 頂点位置設定関数
+		//! 形状生成関数2
 		/*!
-		 *	頂点の位置を設定します。
-		 *	対象となる頂点がまだ存在していなかった場合、
-		 *	角数を (id+1) まで増加させます。
-		 *	\param[in] ID 頂点ID
-		 *	\param[in] pos 頂点位置ベクトル
+		 *	多角形 (ポリゴン) を生成します。
+		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
+		 *	現時点では凸多角形のみサポートしており、
+		 *	非凸多角形が入力された場合の動作は保証されません。
+		 *
+		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
+		 *
+		 *	\param[in]	num			頂点数
+		 *	\param[in]	posArray	多角形頂点配列
 		 */
-		void	setVertex(int ID, fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *	\param[in] size 角数
-		 *	\param[in] array 頂点位置ベクトル配列の先頭アドレス
-		 */
-		void	setVertex(int size, fk_Vector *array);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
-		 */
-		void	setVertex(std::vector<fk_Vector> *array);
+		void	setVertex(int num, fk_Vector *posArray);
 	};
 }
 #endif // !__FK_POLYGON_HEADER__

@@ -101,9 +101,14 @@ namespace FK {
 		 *	\param[in]	top		上面半径
 		 *	\param[in]	bottom	底面半径
 		 *	\param[in]	height	高さ
+		 *	\param[in]	smooth	
+		 *					true の場合、側面を滑らかにレンダリングし、
+		 *					擬似的な円柱として表示します。
+		 *					false の場合は側面を独立した平面としてレンダリングし、
+		 *					角柱として表示します。
 		 */
 		fk_Prism(int div = 3, double top = 1.0,
-				 double bottom = 1.0, double height = 1.0);
+				 double bottom = 1.0, double height = 1.0, bool smooth = false);
 
 		//! デストラクタ
 		virtual ~fk_Prism();

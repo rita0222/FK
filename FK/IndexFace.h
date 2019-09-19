@@ -936,6 +936,36 @@ namespace FK {
 
 		//@}
 
+		//! \name 多角形形状制御関数
+		//@{
+		//! 多角形生成関数1
+		/*!
+		 *	多角形 (ポリゴン) を生成します。
+		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
+		 *	現時点では凸多角形のみサポートしており、
+		 *	非凸多角形が入力された場合の動作は保証されません。
+		 *
+		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
+		 *
+		 *	\param[in]	posArray	多角形頂点配列
+		 */
+		void makePolygon(std::vector<fk_Vector> *posArray);
+
+		//! 多角形生成関数2
+		/*!
+		 *	多角形 (ポリゴン) を生成します。
+		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
+		 *	現時点では凸多角形のみサポートしており、
+		 *	非凸多角形が入力された場合の動作は保証されません。
+		 *
+		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
+		 *
+		 *	\param[in]	num			頂点数
+		 *	\param[in]	posArray	多角形頂点配列
+		 */
+		void makePolygon(int num, fk_Vector *posArray);
+		//@}
+
 		//! \name 直方体形状制御関数
 		//@{
 		//! 直方体生成関数
@@ -1185,14 +1215,20 @@ namespace FK {
 		 *
 		 *	この関数を呼ぶ前に生成されていた形状や各種属性は破棄されます。
 		 *
-		 *	\param[in]	div		角数
-		 *	\param[in]	top		上面半径
-		 *	\param[in]	bottom	底面半径
-		 *	\param[in]	height	高さ
+		 *	\param[in]	div			角数
+		 *	\param[in]	top			上面半径
+		 *	\param[in]	bottom		底面半径
+		 *	\param[in]	height		高さ
+		 *	\param[in]	smoothMode 
+		 *					true の場合、側面を滑らかにレンダリングし、
+		 *					擬似的な円錐として表示します。
+		 *					false の場合は側面を独立した平面としてレンダリングし、
+		 *					角錐として表示します。
 		 *
 		 *	\sa fk_Prism
 		 */
-		void	makePrism(int div, double top, double bottom, double height);
+		void	makePrism(int div, double top,
+						  double bottom, double height, bool smoothMode = false);
 
 		//! 正多角柱(円柱)角数設定関数
 		/*!

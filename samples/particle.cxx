@@ -84,7 +84,7 @@ int main(int, char **)
 {
 	fk_ShapeViewer      viewer(800, 600);
 	fk_ParticleSet      particle;
-	fk_Prism			prism(40, 15.0, 15.0, 50.0);
+	fk_Prism			prism(32, 15.0, 15.0, 50.0, false);
 	double				maxSpeed, minSpeed;
 	fk_Vector       	water(-0.5, 0.0, 0.0);
 	double          	R = 15.0;

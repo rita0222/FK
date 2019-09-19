@@ -74,14 +74,12 @@
 using namespace std;
 using namespace FK;
 
-fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet, fk_Type argObjType)
+fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet)
 {
-	SetObjectType(argObjType);
-
-	allClear();
+	SetObjectType(fk_Type::POLYGON);
 
 	if(argVertexSet != nullptr) {
-		makePolygon(argVertexSet, false);
+		makePolygon(argVertexSet);
 	}
 
 	return;
@@ -92,37 +90,15 @@ fk_Polygon::~fk_Polygon()
 	return;
 }
 
-void fk_Polygon::pushVertex(fk_Vector argPos)
+void fk_Polygon::setVertex(vector<fk_Vector> *argArray)
 {
-	pushPolygonVertex(argPos, false);
+	makePolygon(argArray);
 	return;
 }
 
-
-void fk_Polygon::setVertex(int argID, fk_Vector argPos)
+void fk_Polygon::setVertex(int argNum, fk_Vector *argArray)
 {
-	fk_Vertex		*curV;
-
-	curV = getVData(argID+1);
-	if(curV == nullptr) {
-		pushPolygonVertex(argPos, false);
-	} else {
-		moveVertex(curV, argPos);
-	}
-	   
-	return;
-}
-
-void fk_Polygon::setVertex(int argNum, fk_Vector *argPosArray)
-{
-	makePolygon(argNum, argPosArray, false);
-
-	return;
-}
-
-void fk_Polygon::setVertex(vector<fk_Vector> *argPosArray)
-{
-	makePolygon(argPosArray, false);
+	makePolygon(argNum, argArray);
 
 	return;
 }

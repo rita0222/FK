@@ -949,6 +949,60 @@ bool fk_IndexFaceSet::writeMQOFile(string argFileName)
 	return retFlg;
 }
 
+void fk_IndexFaceSet::makePolygon(vector<fk_Vector> *argArray)
+{
+	if(argArray == nullptr) return;
+
+	fk_Vector center;
+	vector<int> loop;
+	vector< vector<int> > ifs;
+	vector<fk_Vector> array = *argArray;
+
+	_st vSize = argArray->size();
+
+	for(auto &v : array) center += v;
+	center /= double(vSize);
+	array.push_back(center);
+
+	for(int i = 0; i < int(vSize); i++) {
+		int id0 = i;
+		int id1 = (i == int(vSize - 1)) ? 0 : i+1;
+		loop.clear();
+		loop.push_back(int(vSize));
+		loop.push_back(id0);
+		loop.push_back(id1);
+		ifs.push_back(loop);
+	}
+	MakeMesh(&array, &ifs);
+}
+
+void fk_IndexFaceSet::makePolygon(int argNum, fk_Vector *argArray)
+{
+	fk_Vector center;
+	vector<int> loop;
+	vector< vector<int> > ifs;
+	vector<fk_Vector> array;
+
+	for(int i = 0; i < argNum; ++i) array.push_back(argArray[i]);
+	_st vSize = array.size();
+
+	for(auto &v : array) center += v;
+	center /= double(vSize);
+	array.push_back(center);
+
+	for(int i = 0; i < int(vSize); i++) {
+		int id0 = i;
+		int id1 = (i == int(vSize - 1)) ? 0 : i+1;
+		loop.clear();
+		loop.push_back(int(vSize));
+		loop.push_back(id0);
+		loop.push_back(id1);
+		ifs.push_back(loop);
+	}
+	MakeMesh(&array, &ifs);
+}
+
+
 void fk_IndexFaceSet::makeBlock(double argX, double argY, double argZ)
 {
 	vector<fk_Vector>		pos;
@@ -1238,21 +1292,23 @@ void fk_IndexFaceSet::setSphereScale(double argScale)
 }
 
 void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
-								double argHeight)
+								double argHeight, bool argSmoothMode)
 {
 	fk_IFSetHandle			IFSet;
 	vector<fk_Vector>		vecArray;
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
 
+	smoothMode = argSmoothMode;
 	_st div = _st(argDiv);
-	vecArray.resize(div*4+2);
+	_st vSize = (smoothMode == true) ? 4 * div + 2 : 6 * div + 2;
+	vecArray.resize(vSize);
 
 	// 底面中心
-	vecArray[4*div].set(0.0, 0.0, 0.0);
+	vecArray[vSize - 2].set(0.0, 0.0, 0.0);
 
 	// 上面中心
-	vecArray[4*div+1].set(0.0, 0.0, -argHeight);
+	vecArray[vSize - 1].set(0.0, 0.0, -argHeight);
 
 	for(_st j = 0; j < div; ++j) {
 		double theta = (double(j*2) * fk_Math::PI)/double(div);
@@ -1261,23 +1317,27 @@ void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
 		vecArray[j].set(cos(theta) * argBottom,
 						sin(theta) * argBottom, 0.0);
 
+		// 上面
+		vecArray[div+j].set(cos(theta) * argTop,
+							sin(theta) * argTop, -argHeight);
+
 		// 側面底側
-		vecArray[div+j] = vecArray[j];
+		vecArray[2*div+j] = vecArray[j];
+		if(smoothMode == false) vecArray[4*div+j] = vecArray[j];
 
 		// 側面上側
-		vecArray[2*div+j].set(cos(theta) * argTop,
-							  sin(theta) * argTop, -argHeight);
-		// 上面
-		vecArray[3*div+j] = vecArray[2*div+j];
+		vecArray[3*div+j] = vecArray[div+j];
+		if(smoothMode == false) vecArray[5*div+j] = vecArray[div+j];
 	}
 
 	IFArray.clear();
 
+	int margin = (smoothMode == true) ? 0 : argDiv * 2;
 	for(_st j = 0; j < div; ++j) {
 		int i = int(j);
 		// 底面
 		IDArray.clear();
-		IDArray.push_back(argDiv*4);
+		IDArray.push_back(int(vSize - 2));
 		IDArray.push_back(i);
 		if(i == argDiv - 1) {
 			IDArray.push_back(0);
@@ -1288,31 +1348,32 @@ void fk_IndexFaceSet::makePrism(int argDiv, double argTop, double argBottom,
 
 		// 上面
 		IDArray.clear();
-		IDArray.push_back(4*argDiv+1);
+		IDArray.push_back(int(vSize - 1));
 		if(i == argDiv-1) {
-			IDArray.push_back(3*argDiv);
+			IDArray.push_back(argDiv);
 		} else {
-			IDArray.push_back(3*argDiv+i+1);
+			IDArray.push_back(argDiv+i+1);
 		}
-		IDArray.push_back(3*argDiv+i);
-
+		IDArray.push_back(argDiv+i);
 		IFArray.push_back(IDArray);
 
 		// 側面
-		int id1, id2;
+		int id_d_0, id_d_1, id_u_0, id_u_1;
+
+		id_d_0 = 2*argDiv + i;
+		id_d_1 = 2*argDiv + i + 1 + margin;
+		id_u_0 = 3*argDiv + i;
+		id_u_1 = 3*argDiv + i + 1 + margin;
 		if(i == argDiv - 1) {
-			id1 = argDiv+1;
-			id2 = 2*argDiv+1;
-		} else {
-			id1 = argDiv+i+1;
-			id2 = 2*argDiv+i+1;
+			id_d_1 -= argDiv;
+			id_u_1 -= argDiv;
 		}
 		
 		IDArray.clear();
-		IDArray.push_back(id1);
-		IDArray.push_back(argDiv+i);
-		IDArray.push_back(2*argDiv+i);
-		IDArray.push_back(id2);
+		IDArray.push_back(id_d_0);
+		IDArray.push_back(id_u_0);
+		IDArray.push_back(id_u_1);
+		IDArray.push_back(id_d_1);
 		IFArray.push_back(IDArray);
 	}
 	MakeMesh(&vecArray, &IFArray);
@@ -1331,7 +1392,7 @@ void fk_IndexFaceSet::setPrismDivide(int argDiv)
 	bottom = vertexPosition.getV(0).x;
 	height = -vertexPosition.getV(2*div).z;
 
-	makePrism(argDiv, top, bottom, height);
+	makePrism(argDiv, top, bottom, height, smoothMode);
 	return;
 }
 
@@ -1342,13 +1403,15 @@ void fk_IndexFaceSet::setPrismTopRadius(double argTop)
 	double		theta, z;
 	fk_Vector	vec;
 
-	div = (vertexPosition.getSize()-2)/4;
-	z = vertexPosition.getV(2*div).z;
+	int vSize = vertexPosition.getSize();
+	div = (smoothMode == true) ? (vSize - 2)/4 : (vSize - 2)/6;
+	z = vertexPosition.getV(vSize-1).z;
 	for(i = 0; i < div; ++i) {
 		theta = (double(i*2) * fk_Math::PI)/double(div);
 		vec.set(cos(theta) * argTop, sin(theta) * argTop, z);
-		moveVPosition(2*div+i, vec);
+		moveVPosition(div+i, vec);
 		moveVPosition(3*div+i, vec);
+		if(smoothMode == false) moveVPosition(5*div+i, vec);
 	}
 
 	return;
@@ -1361,12 +1424,14 @@ void fk_IndexFaceSet::setPrismBottomRadius(double argBottom)
 	double		theta;
 	fk_Vector	vec;
 
-	div = (vertexPosition.getSize()-2)/4;
+	int vSize = vertexPosition.getSize();
+	div = (smoothMode == true) ? (vSize - 2)/4 : (vSize - 2)/6;
 	for(i = 0; i < div; ++i) {
 		theta = (double(i*2) * fk_Math::PI)/double(div);
 		vec.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
 		moveVPosition(i, vec);
-		moveVPosition(div+i, vec);
+		moveVPosition(2*div+i, vec);
+		if(smoothMode == false) moveVPosition(4*div+i, vec);
 	}
 
 	return;
@@ -1377,20 +1442,22 @@ void fk_IndexFaceSet::setPrismHeight(double argHeight)
 	int			i, div;
 	fk_Vector	vec;
 
-	div = (vertexPosition.getSize()-2)/4;
+	int vSize = vertexPosition.getSize();
+	div = (smoothMode == true) ? (vSize - 2)/4 : (vSize - 2)/6;
 	for(i = 0; i < div; ++i) {
-		vec = vertexPosition.getV(2*div+i);
+		vec = vertexPosition.getV(div+i);
 		vec.z = -argHeight;
-		moveVPosition(2*div+i, vec);
+		moveVPosition(div+i, vec);
 		moveVPosition(3*div+i, vec);
+		if(smoothMode == false) moveVPosition(5*div+i, vec);
 	}
 	vec.set(0.0, 0.0, -argHeight);
-	moveVPosition(4*div+1, vec);
+	moveVPosition(vSize-1, vec);
 
 	return;
 }
 
-void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight, bool argSmooth)
+void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight, bool argSmoothMode)
 {
 	vector<fk_Vector>		vecArray;
 	vector<int>				IDArray;
@@ -1398,7 +1465,7 @@ void fk_IndexFaceSet::makeCone(int argDiv, double argRadius, double argHeight, b
 	_st						div = _st(argDiv);
 	int						topID, leftID, rightID, margin;
 
-	smoothMode = argSmooth;
+	smoothMode = argSmoothMode;
 	_st centerID = (smoothMode) ? 3*div : 4*div;
 	vecArray.resize(centerID+1);
 	vecArray[centerID].set(0.0, 0.0, 0.0);

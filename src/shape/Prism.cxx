@@ -73,11 +73,11 @@
 
 using namespace FK;
 
-fk_Prism::fk_Prism(int argDiv,
-				   double argTop, double argBottom, double argHeight)
+fk_Prism::fk_Prism(int argDiv, double argTop,
+				   double argBottom, double argHeight, bool argSmoothMode)
 {
 	SetObjectType(fk_Type::PRISM);
-	makePrism(argDiv, argTop, argBottom, argHeight);
+	makePrism(argDiv, argTop, argBottom, argHeight, argSmoothMode);
 	return;
 }
 

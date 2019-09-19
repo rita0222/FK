@@ -79,7 +79,7 @@ int main(int, char *[])
 	fk_AppWindow win;
 	fk_Model model;
 	fk_Model pointM;
-	fk_Cone cone(3, 4.0, 15.0);
+	fk_Cone cone(3, 4.0, 15.0, false);
 	fk_Vector pos(0.0, 0.0, -15.0);
 	fk_Angle angle1(0.0, 0.0, 0.0);
 	fk_Angle angle2(fk_Math::PI/2.0, fk_Math::PI/2.0 - 0.01, 0.0);
