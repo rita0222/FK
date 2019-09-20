@@ -215,22 +215,22 @@ namespace FK_CLI {
 		return Q;
 	}
 
-	unsigned int fk_Math::rand(void)
+	unsigned int fk_Math::Rand(void)
 	{
 		return ::FK::fk_Math::rand();
 	}
 
-	int fk_Math::rand(int argMin, int argMax)
+	int fk_Math::Rand(int argMin, int argMax)
 	{
 		return ::FK::fk_Math::rand(argMin, argMax);
 	}
 
-	double fk_Math::drand(void)
+	double fk_Math::DRand(void)
 	{
 		return ::FK::fk_Math::drand();
 	}
 
-	double fk_Math::drand(double argMin, double argMax)
+	double fk_Math::DRand(double argMin, double argMax)
 	{
 		return ::FK::fk_Math::drand(argMin, argMax);
 	}

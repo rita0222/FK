@@ -505,7 +505,7 @@ namespace FK_CLI
 		 *
 		 *	\return 乱数値
 		 */
-		static unsigned int rand(void);
+		static unsigned int Rand(void);
 
 		//! 範囲付一様整数乱数取得メソッド
 		/*!
@@ -516,7 +516,7 @@ namespace FK_CLI
 		 *
 		 *	\return 乱数値
 		 */
-		static int rand(int m, int M);
+		static int Rand(int m, int M);
 
 		//! 一様実数乱数取得メソッド
 		/*!
@@ -524,7 +524,7 @@ namespace FK_CLI
 		 *
 		 *	\return	乱数値
 		 */
-		static double drand(void);
+		static double DRand(void);
 
 		//! 範囲付一様実数乱数取得メソッド
 		/*!
@@ -535,7 +535,7 @@ namespace FK_CLI
 		 *
 		 *	\return 乱数値
 		 */
-		static double drand(double m, double M);
+		static double DRand(double m, double M);
 		//@}
 	};
 }

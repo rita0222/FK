@@ -17,8 +17,8 @@ type Agent(argID:int) = class
                       and set(s:fk_Shape) = model.Shape <- s 
 
     member this.Init(argSize: double) =
-        model.GlVec(fk_Math.drand(-1.0, 1.0), fk_Math.drand(-1.0, 1.0), 0.0) |> ignore
-        model.GlMoveTo(fk_Math.drand(-argSize, argSize), fk_Math.drand(-argSize, argSize), 0.0) |> ignore
+        model.GlVec(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0) |> ignore
+        model.GlMoveTo(fk_Math.DRand(-argSize, argSize), fk_Math.DRand(-argSize, argSize), 0.0) |> ignore
 
     member this.Entry(argWin: fk_AppWindow) =
         argWin.Entry(model)
