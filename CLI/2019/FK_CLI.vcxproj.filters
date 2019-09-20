@@ -615,6 +615,12 @@
     <ClInclude Include="..\..\FK\Time.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Time_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Gregory_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\FK_CLI\cpp\AppWindow_CLI.cpp">
@@ -1207,6 +1213,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\base\Time.cxx">
       <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Time_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Gregory_CLI.cpp">
+      <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

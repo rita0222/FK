@@ -170,6 +170,7 @@
     <ClInclude Include="..\FK_CLI\include\Fog_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenMatrix_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenVector_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\Gregory_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GuideObject_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Half_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\IFSTexture_CLI.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\FK_CLI\include\TexCoord_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\TextImage_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Texture_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\Time_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Topology_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\TriTexture_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\UniCode_CLI.h" />
@@ -369,6 +371,7 @@
     <ClCompile Include="..\FK_CLI\cpp\Fog_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenMatrix_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenVector_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\Gregory_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GuideObject_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Half_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\IFSTexture_CLI.cpp" />
@@ -411,6 +414,7 @@
     <ClCompile Include="..\FK_CLI\cpp\TexCoord_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\TextImage_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Texture_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\Time_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Topology_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\TriTexture_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\UniCode_CLI.cpp" />
