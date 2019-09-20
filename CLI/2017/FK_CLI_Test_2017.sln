@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "Test\TestPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_BezSurface", "Test\FK_CLI_BezSurface\FK_CLI_BezSurface.csproj", "{88A7F454-F18B-4E4C-947E-E2FF94494058}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Gregory", "Test\FK_CLI_Gregory\FK_CLI_Gregory.csproj", "{719BB7C0-1B44-4C04-843D-1EE1891E77C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -336,6 +338,18 @@ Global
 		{88A7F454-F18B-4E4C-947E-E2FF94494058}.Release|x64.Build.0 = Release|x64
 		{88A7F454-F18B-4E4C-947E-E2FF94494058}.Release|x86.ActiveCfg = Release|x86
 		{88A7F454-F18B-4E4C-947E-E2FF94494058}.Release|x86.Build.0 = Release|x86
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Debug|x64.ActiveCfg = Debug|x64
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Debug|x64.Build.0 = Debug|x64
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Debug|x86.ActiveCfg = Debug|x86
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Debug|x86.Build.0 = Debug|x86
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x64.ActiveCfg = Release|x64
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x64.Build.0 = Release|x64
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x86.ActiveCfg = Release|x86
+		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

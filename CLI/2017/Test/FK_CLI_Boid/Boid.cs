@@ -12,8 +12,8 @@ namespace FK_CLI_Boid
 		{
 			model = new fk_Model();
 			model.Material = fk_Material.Red;
-			model.GlVec(fk_Math.drand(-1.0, 1.0), fk_Math.drand(-1.0, 1.0), 0.0);
-            model.GlMoveTo(fk_Math.drand(-argSize, argSize), fk_Math.drand(-argSize, argSize), 0.0);
+			model.GlVec(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0);
+            model.GlMoveTo(fk_Math.DRand(-argSize, argSize), fk_Math.DRand(-argSize, argSize), 0.0);
 		}
 
 		public fk_Vector Pos

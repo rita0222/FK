@@ -21,8 +21,8 @@ namespace FK_CLI_Particle
             particle.GenMethod = (P) =>
             {
                 // 生成時の位置を(ランダムに)設定
-                double y = fk_Math.drand(-25.0, 25.0);
-                double z = fk_Math.drand(-25.0, 25.0);
+                double y = fk_Math.DRand(-25.0, 25.0);
+                double z = fk_Math.DRand(-25.0, 25.0);
                 P.Position = new fk_Vector(50.0, y, z);
             };
 
@@ -30,7 +30,7 @@ namespace FK_CLI_Particle
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    if (fk_Math.drand() < 0.3)
+                    if (fk_Math.DRand() < 0.3)
                     {   // 発生確率は 30% (を5回)
                         particle.NewParticle();              // パーティクル生成処理
                         num++;
