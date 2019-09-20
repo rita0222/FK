@@ -1,4 +1,6 @@
-﻿/*	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+﻿/****************************************************************************
+ *
+ *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -184,8 +186,7 @@ void Car::init(void)
 	birdModel.setParent(&carModel);
 
 	carModel.glMoveTo(CIRCUITX, CIRCUITY, 0.0);
-	carModel.glVec(0.0, -1.0, 0.0);
-	carModel.glUpvec(0.0, 0.0, 1.0);
+	carModel.glAngle(0.0, -fk_Math::PI/2.0, fk_Math::PI);
 
 	return;
 }

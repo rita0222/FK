@@ -74,7 +74,7 @@ int main(int, char *[])
 
 	surf[1]->setBoundary(fk_UV::V_S, 0, surf[0]->getBoundary(fk_UV::V_E, 0));
 	surf[1]->setBoundary(fk_UV::V_S, 3, surf[0]->getBoundary(fk_UV::V_E, 3));
-	if(surf[1]->connect(surf[0], fk_UV::V_S, fk_UV::V_E, true, true) == false) fl_alert("NG");
+	if(surf[1]->connect(surf[0], fk_UV::V_S, fk_UV::V_E, true, false) == false) fl_alert("NG");
 
 	lightModel->setShape(light);
 	lightModel->setMaterial(Material::TrueWhite);

@@ -1,5 +1,8 @@
 #include <FK/Time.h>
+
+#ifndef FK_CLI_CODE
 #include <thread>
+#endif
 
 using namespace std;
 using namespace std::chrono;
@@ -43,13 +46,21 @@ double fk_Time::lapTime(void)
 void fk_Time::sleep(double argSec)
 {
 	if(argSec < 0.0) return;
+#ifdef FK_CLI_CODE
+	System::Threading::Thread::Sleep(int(argSec * 1000.0));
+#else
 	this_thread::sleep_for(microseconds(int(argSec * 1000000.0)));
+#endif
 }
 
 void fk_Time::usleep(double argSec)
 {
 	if(argSec < 0.0) return;
+#ifdef FK_CLI_CODE
+	System::Threading::Thread::Sleep(int(argSec / 1000.0));
+#else
 	this_thread::sleep_for(microseconds(int(argSec)));
+#endif
 }
 
 double fk_Time::now(void)

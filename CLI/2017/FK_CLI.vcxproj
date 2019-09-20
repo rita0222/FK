@@ -137,6 +137,7 @@
     <ClInclude Include="..\..\FK\TextImage.h" />
     <ClInclude Include="..\..\FK\Texture.h" />
     <ClInclude Include="..\..\FK\TextureDraw.H" />
+    <ClInclude Include="..\..\FK\Time.h" />
     <ClInclude Include="..\..\FK\Topology.h" />
     <ClInclude Include="..\..\FK\TrackBall.h" />
     <ClInclude Include="..\..\FK\Tree.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="..\..\src\base\Error.cxx" />
     <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
     <ClCompile Include="..\..\src\base\System.cxx" />
+    <ClCompile Include="..\..\src\base\Time.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
     <ClCompile Include="..\..\src\graphics\CurveDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />

@@ -16,6 +16,9 @@
     <ClCompile Include="..\..\src\base\Tree.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\base\Time.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -39,6 +42,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Tree.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Time.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

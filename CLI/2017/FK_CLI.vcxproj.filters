@@ -615,6 +615,9 @@
     <ClInclude Include="..\FK_CLI\include\BezSurface_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\FK\Time.h">
+      <Filter>Header\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
@@ -1204,6 +1207,9 @@
     </ClCompile>
     <ClCompile Include="..\FK_CLI\cpp\BezSurface_CLI.cpp">
       <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\base\Time.cxx">
+      <Filter>Source\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
