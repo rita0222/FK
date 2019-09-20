@@ -23,6 +23,7 @@
     <ClCompile Include="..\..\src\base\Error.cxx" />
     <ClCompile Include="..\..\src\base\IDAdmin.cxx" />
     <ClCompile Include="..\..\src\base\System.cxx" />
+    <ClCompile Include="..\..\src\base\Time.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +31,7 @@
     <ClInclude Include="..\..\FK\Error.H" />
     <ClInclude Include="..\..\FK\IDAdmin.H" />
     <ClInclude Include="..\..\FK\System.h" />
+    <ClInclude Include="..\..\FK\Time.h" />
     <ClInclude Include="..\..\FK\Tree.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
