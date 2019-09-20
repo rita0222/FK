@@ -100,7 +100,7 @@ namespace FK {
 
 	public:
 		//! コンストラクタ
-		fk_FrameController(unsigned long dwFps = 60, bool bFrameSkip = true);
+		fk_FrameController(int dwFps = 60, bool bFrameSkip = true);
 		//! デストラクタ
 		~fk_FrameController();
 
@@ -119,7 +119,7 @@ namespace FK {
 		 *	デフォルトでは 60FPS になっています。
 		 *	\param[in] time	キープしたいフレームレート。
 		 */
-		void setFPS(unsigned long time);
+		void setFPS(int time);
 
 		//! フレームスキップモード設定関数
 		/*!
@@ -168,15 +168,15 @@ namespace FK {
 		 */
 		unsigned long getFrameRate(void);
 
-		static unsigned long	getNow(void);
+		//static unsigned long	getNow(void);
 
 	private:
-		unsigned long nowTime;
+		double nowTime;
 
-		unsigned long m_dwLastMinitues;
+		double m_dwLastMinitues;
 		unsigned long m_dwFrameRate;
 		unsigned long m_dwSkipRate;
-		float m_fFrameTime;
+		double m_fFrameTime;
 		bool m_bDrawFlag;
 		bool m_bFrameSkip;
 		

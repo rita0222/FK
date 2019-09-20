@@ -1004,11 +1004,6 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void	SetFinalizeMode(void);
-		void	setFrameMode(fk_FrameMode mode);
-		fk_FrameMode	getFrameMode(void);
-		void	setFrameInterval(int ms);
-		int		getFrameInterval(void);
-		int		getSkipFrame(void);
 		virtual bool shapeProcess(fk_Solid *shape);
 		void setLineWidth(int ID, double width);
 		double getLineWidth(int ID);

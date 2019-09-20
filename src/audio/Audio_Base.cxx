@@ -73,9 +73,12 @@
 #include <FK/Error.H>
 #include <FK/Model.h>
 #include <FK/Math.h>
+#include <FK/Time.h>
 
 #include <iostream>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 #include <vorbis/vorbisfile.h>
 
@@ -97,9 +100,9 @@ static fk_IDAdmin * getAdmin(void)
 	return &audioIDAdmin;
 }
 
-static bool					initStatus = false;
-static ALCcontext		*alContext = nullptr;
-static int					sourceNum = 0;
+static bool			initStatus = false;
+static ALCcontext	*alContext = nullptr;
+static int			sourceNum = 0;
 
 fk_Model *fk_AudioBase::listenerCamera = nullptr;
 
@@ -133,6 +136,7 @@ static bool ALExit(void)
 {
 	ALCdevice *device;
 
+
 	if(!alcMakeContextCurrent(nullptr)) {
 		return false;
 	}
@@ -148,68 +152,6 @@ static bool ALExit(void)
 	}
 
 	alContext = nullptr;
-	return true;
-}
-
-#if HAVE_NANOSLEEP && HAVE_TIME_H
-#include <time.h>
-#include <errno.h>
-#elif HAVE_USLEEP && HAVE_UNISTD_H
-#include <unistd.h>
-#elif WIN32
-#include <windows.h>
-#else
-#include <time.h>
-#include <errno.h>
-//#error No way to sleep on this platform
-#endif
-
-bool ALSleep (ALfloat duration)
-{
-	if(duration < 0) {
-		return false;
-	}
-
-	{
-		ALuint seconds = (ALuint) duration;
-		ALfloat rest = duration - (ALfloat) seconds;
-
-#if HAVE_NANOSLEEP && HAVE_TIME_H
-
-		ALuint microSecs = (ALuint) (rest * 1000000);
-		struct timespec t, remainingTime;
-		t.tv_sec = (time_t) seconds;
-		t.tv_nsec = ((long) microSecs) * 1000;
-
-		/* At least the interaction of nanosleep and signals is specified! */
-		while(nanosleep (&t, &remainingTime) < 0) {
-			if(errno != EINTR) {
-				return false;
-			}
-			/* If we received a signal, let's try again with the remaining time. */
-			t.tv_sec = remainingTime.tv_sec;
-			t.tv_nsec = remainingTime.tv_nsec;
-		}
-
-#elif HAVE_USLEEP && HAVE_UNISTD_H
-
-		while (seconds > 0) {
-			usleep (1000000);
-			seconds--;
-		}
-		usleep ((unsigned int) (rest * 1000000));
-
-#elif WIN32
-
-		while(seconds > 0) {
-			Sleep(1000);
-			seconds--;
-		}
-		Sleep((DWORD)(rest*1000));
-
-#endif
-
-	}
 	return true;
 }
 
@@ -359,7 +301,7 @@ void fk_AudioBase::MakeOVInfo(OggVorbis_File *argVF)
 
 void fk_AudioBase::sleep(double argTime)
 {
-	ALSleep(float(argTime));
+	fk_Time::sleep(argTime);
 	return;
 }
 

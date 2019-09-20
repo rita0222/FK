@@ -90,24 +90,6 @@ int					fk_Window::winNum = 0;
 Fl_Window *			fk_Window::error_win = nullptr;
 Fl_Multi_Browser *	fk_Window::err_browser = nullptr;
 
-namespace FK {
-	
-	fk_FrameMode operator | (fk_FrameMode argL, fk_FrameMode argR) {
-		return static_cast<fk_FrameMode>(static_cast<unsigned int>(argL) |
-										 static_cast<unsigned int>(argR));
-	}
-
-	fk_FrameMode operator & (fk_FrameMode argL, fk_FrameMode argR) {
-		return static_cast<fk_FrameMode>(static_cast<unsigned int>(argL) &
-										 static_cast<unsigned int>(argR));
-	}
-
-	fk_FrameMode operator ^ (fk_FrameMode argL, fk_FrameMode argR) {
-		return static_cast<fk_FrameMode>(static_cast<unsigned int>(argL) ^
-										 static_cast<unsigned int>(argR));
-	}
-}
-
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0])
 {
@@ -117,9 +99,8 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	GLWinYPosition = argY;
 	GLWinWSize = argW;
 	GLWinHSize = argH;
-	setFrameMode(fk_FrameMode::DEFAULT);
 	winNum++;
-	//mode(FL_RGB | FL_DOUBLE | FL_ALPHA | FL_ACCUM | FL_STENCIL | FL_DEPTH | FL_OPENGL3);
+
 	mode(FL_RGB |
 		 FL_DOUBLE |
 		 FL_ALPHA |

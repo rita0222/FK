@@ -70,57 +70,17 @@
  *
  ****************************************************************************/
 #include <FK/FrameController.h>
+#include <FK/Time.h>
 #include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace FK;
-
-#ifndef WIN32
-
-static bool _SleepMP (float duration)
-{
-	if(duration < 0) {
-		return false;
-	}
-
-	unsigned int seconds = static_cast<unsigned int>(duration);
-	float rest = duration - static_cast<float>(seconds);
-
-#if defined(_FREEBSD_) || defined(_MACOSX_) || defined(_LINUX_)
-
-	unsigned int microSecs = (unsigned int) (rest * 1000000);
-	struct timespec t, remainingTime;
-	t.tv_sec = (time_t) seconds;
-	t.tv_nsec = ((long) microSecs) * 1000;
-	
-	while(nanosleep (&t, &remainingTime) < 0) {
-		if(errno != EINTR) {
-			return false;
-		}
-		t.tv_sec = remainingTime.tv_sec;
-		t.tv_nsec = remainingTime.tv_nsec;
-	}
-
-#else
-
-	while(seconds > 0) {
-		Sleep(1000);
-		seconds--;
-	}
-	Sleep((DWORD)(rest*1000));
-
-#endif
-
-	return true;
-}
-
-#endif
 
 //======================================================
 //コンストラクタ
 //======================================================
-fk_FrameController::fk_FrameController(unsigned long dwFps, bool bFrameSkip)
+fk_FrameController::fk_FrameController(int dwFps, bool bFrameSkip)
 {
-	//memset(this,0,sizeof(fk_FrameController));
 	m_bInit = true;
 	m_bDrawFlag = false;
 	m_bFrameSkip = bFrameSkip;
@@ -129,9 +89,6 @@ fk_FrameController::fk_FrameController(unsigned long dwFps, bool bFrameSkip)
 	m_dwFrameCount = 0;
 	m_dwSkipCount = 0;
 	setFPS(dwFps);
-#if defined(WIN32) && !defined(_MINGW_)
-	timeBeginPeriod(1);
-#endif
 }
 
 
@@ -140,18 +97,11 @@ fk_FrameController::fk_FrameController(unsigned long dwFps, bool bFrameSkip)
 //======================================================
 fk_FrameController::~fk_FrameController()
 {
-#if defined(WIN32) && !defined(_MINGW_)
-	timeEndPeriod(1);
-#endif
 }
 
 void fk_FrameController::SleepOneMSec(void)
 {
-#if defined(WIN32) && !defined(_MINGW_)
-	Sleep(1);
-#else
-	//Fl::wait(0.001);
-#endif
+	fk_Time::sleep(0.0001);
 	return;
 }
 
@@ -160,10 +110,8 @@ void fk_FrameController::SleepOneMSec(void)
 //======================================================
 void fk_FrameController::timeRegular()
 {
-	unsigned long		tmpTime;
-
 	m_dwFrameCount++;
-	nowTime = getNow();
+	nowTime = fk_Time::now();
 
 	if(m_bInit == true) {
 		m_dwLastMinitues = nowTime;
@@ -172,28 +120,22 @@ void fk_FrameController::timeRegular()
 		return;
 	}
 
-	tmpTime = static_cast<unsigned long>(static_cast<float>(m_dwFrameCount + 1) * m_fFrameTime);
-	if(m_bFrameSkip == true && nowTime  > tmpTime + m_dwLastMinitues) {
+	double tmpTime = double(m_dwFrameCount + 1) * m_fFrameTime;
+	if(m_bFrameSkip == true && nowTime > tmpTime + m_dwLastMinitues) {
 		m_bDrawFlag = false;
 		m_dwSkipCount++;
 	} else {
-		tmpTime = static_cast<unsigned long>(static_cast<float>(m_dwFrameCount) * m_fFrameTime);
-		unsigned long dwTime = tmpTime + m_dwLastMinitues;
-#ifdef WIN32
-		while(getNow() < dwTime) {
+		tmpTime = double(m_dwFrameCount) * m_fFrameTime;
+		double dwTime = tmpTime + m_dwLastMinitues;
+		while(fk_Time::now() < dwTime) {
 			SleepOneMSec();
 		}
-#else
-		unsigned long now;
-		if((now = getNow()) <= dwTime) {
-            _SleepMP(0.001f*float(dwTime-now));
-        }
-#endif
 		m_bDrawFlag = true;
 	}
 
-	if(getNow() - m_dwLastMinitues >= 1000) {
-		m_dwLastMinitues = getNow();
+	double nowTime_ = fk_Time::now();
+	if(nowTime_ - m_dwLastMinitues >= 1.0) {
+		m_dwLastMinitues = nowTime_;
 		m_dwFrameRate = m_dwFrameCount;
 		m_dwFrameCount = 0;
 		m_dwSkipRate = m_dwSkipCount;
@@ -214,9 +156,10 @@ void fk_FrameController::measure()
 		return;
 	}
 
-	if (getNow() - m_dwLastMinitues >= 1000)
+	double now_ = fk_Time::now();
+	if (now_ - m_dwLastMinitues >= 1.0)
 	{
-		m_dwLastMinitues = getNow();
+		m_dwLastMinitues = now_;
 		m_dwFrameRate = m_dwFrameCount;
 		m_dwFrameCount = 0;
 		m_dwSkipRate = m_dwSkipCount;
@@ -235,9 +178,9 @@ void fk_FrameController::setFrameSkipMode(bool bFrameSkip)
 //======================================================
 //ここでFPSを設定する。
 //======================================================
-void fk_FrameController::setFPS(unsigned long fps)
+void fk_FrameController::setFPS(int fps)
 {
-	m_fFrameTime = 1000.0f / static_cast<float>(fps);
+	m_fFrameTime = 1.0 / double(fps);
 }
 
 
@@ -263,28 +206,4 @@ unsigned long fk_FrameController::getSkipRate()
 bool fk_FrameController::getDrawFlag()
 {
 	return m_bDrawFlag;
-}
-
-unsigned long fk_FrameController::getNow(void)
-{
-
-#if defined(WIN32) && !defined(_MINGW_)
-
-	return static_cast<unsigned long>(timeGetTime());
-
-#else
-	//struct rusage		tmp_t;
-	struct timeval		tv;
-	unsigned long		retVal;
-
-	//getrusage(RUSAGE_SELF, &tmp_t);
-	//tv = tmp_t.ru_utime;
-
-	gettimeofday(&tv, nullptr);
-	retVal = static_cast<unsigned long>((tv.tv_sec % 16777216) * 1000);
-	retVal += static_cast<unsigned long>(tv.tv_usec/1000);
-
-	return retVal;
-
-#endif
 }

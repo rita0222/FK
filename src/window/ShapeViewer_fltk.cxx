@@ -1220,7 +1220,7 @@ bool fk_ShapeViewer::getBlendStatus(void)
 {
 	return scene.getBlendStatus();
 }
-
+/*
 void fk_ShapeViewer::setFrameMode(fk_FrameMode argMode)
 {
 	if(viewWin == nullptr) return;
@@ -1234,7 +1234,7 @@ void fk_ShapeViewer::setFrameInterval(int argInterval)
 	viewWin->setFrameInterval(argInterval);
 	return;
 }
-
+*/
 void fk_ShapeViewer::setBGColor(fk_Color argColor)
 {
 	scene.setBGColor(argColor);
@@ -1478,7 +1478,7 @@ fk_Draw fk_ShapeViewer::getDrawMode(int argID)
 	if(model == nullptr) return fk_Draw::NONE;
 	return model->getDrawMode();
 }
-
+/*
 fk_FrameMode fk_ShapeViewer::getFrameMode(void)
 {
 	if(viewWin == nullptr) return fk_FrameMode::DEFAULT;
@@ -1496,16 +1496,17 @@ int fk_ShapeViewer::getSkipFrame(void)
 	if(viewWin == nullptr) return 0;
 	return viewWin->getSkipFrame();
 }
+*/
 
 void fk_ShapeViewer::setFPS(int argFPS)
 {
-	if(argFPS == 0) {
+	if(argFPS <= 0) {
 		fps = 0;
 		fps_admin.setFrameSkipMode(false);
 	} else {
 		fps = argFPS;
 		fps_admin.setFrameSkipMode(true);
-		fps_admin.setFPS((unsigned long)(argFPS));
+		fps_admin.setFPS(argFPS);
 	}
 }
 
@@ -1635,4 +1636,3 @@ void fk_ShapeViewer::SetFinalizeMode(void)
 
 	return;
 }
-

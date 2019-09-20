@@ -291,18 +291,13 @@ void fk_AppWindow::setBGColor(const fk_Color &argColor)
 
 void fk_AppWindow::setFPS(int argFPS)
 {
-/*
-#if defined(_MACOSX_)
-	argFPS = 0;
-#endif //_MACOSX_
-*/
 	if(argFPS == 0) {
 		fps = 0;
 		fps_admin.setFrameSkipMode(false);
 	} else {
 		fps = argFPS;
 		fps_admin.setFrameSkipMode(true);
-		fps_admin.setFPS((unsigned long)(argFPS));
+		fps_admin.setFPS(argFPS);
 	}
 }
 

@@ -5,6 +5,7 @@ LIBSRCS 	= \
 			Error.cxx \
 			IDAdmin.cxx \
 			System.cxx \
+			Time.cxx \
 			Tree.cxx
 
 FKLINK		=

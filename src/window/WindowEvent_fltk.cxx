@@ -103,8 +103,7 @@ void fk_Window::PushPrevStatus(void)
 
 int fk_Window::drawWindow(bool argDrawMode)
 {
-	const unsigned long		ONE_FRAME_TIME = 25;
-	Fl_Window				*pWin;
+	Fl_Window *pWin;
 
 	pWin = static_cast<Fl_Window *>(this->parent());
 	if(pWin == nullptr) return 0;
@@ -116,42 +115,12 @@ int fk_Window::drawWindow(bool argDrawMode)
 	*/
 
 	if(argDrawMode == true) {
-
 		PushPrevStatus();
-
-		if(frameMode != fk_FrameMode::DEFAULT) {
-			unsigned long time;
-
-			frameTime = getNow();
-
-			if((frameMode & fk_FrameMode::SKIP) != fk_FrameMode::DEFAULT) {
-				time = prevTime + frameInterval * static_cast<unsigned long>(skipCount);
-				if(time < frameTime) {
-					skipCount++;
-					return 1;
-				} else {
-					skipCount = 1;
-				}
-			}
-
-			if((frameMode & fk_FrameMode::WAIT) != fk_FrameMode::DEFAULT) {
-				time = prevTime + frameInterval;
-				while(time > frameTime + ONE_FRAME_TIME) {
-					Fl::wait(static_cast<double>(time - frameTime - ONE_FRAME_TIME)/1000.0);
-					frameTime = getNow();
-				}
-			}
-		}
-
 		if(fps != 0) {
 			fps_admin.timeRegular();
 		}
 		if(fps_admin.getDrawFlag() || fps == 0) {
 			redraw();
-		}
-
-		if(frameMode != fk_FrameMode::DEFAULT) {
-			prevTime = frameTime;
 		}
 	}
 
@@ -428,11 +397,6 @@ bool fk_Window::IsInsideWindow(void)
 	return true;
 }
 
-unsigned long fk_Window::getNow(void)
-{
-	return fk_FrameController::getNow();
-}
-
 bool fk_Window::getMouseStatus(fk_MouseButton argButton, bool argInsideFlag)
 {
 	if(mouseStatus.find(argButton) == mouseStatus.end()) {
@@ -498,45 +462,15 @@ int fk_Window::getMouseWheelStatus(void)
 	return retVal;
 }
 
-void fk_Window::setFrameMode(fk_FrameMode argMode)
-{
-	frameMode = argMode;
-	if(argMode != fk_FrameMode::DEFAULT) prevTime = getNow();
-
-	return;
-}
-
-fk_FrameMode fk_Window::getFrameMode(void)
-{
-	return frameMode;
-}
-
-void fk_Window::setFrameInterval(int argInterval)
-{
-	if(argInterval < 0) return;
-	frameInterval = static_cast<unsigned long>(argInterval);
-	return;
-}
-
-int fk_Window::getFrameInterval(void)
-{
-	return static_cast<int>(frameInterval);
-}
-
-int fk_Window::getSkipFrame(void)
-{
-	return (skipCount - 1);
-}
-
 void fk_Window::setFPS(int argFPS)
 {
-	if(argFPS == 0) {
+	if(argFPS <= 0) {
 		fps = 0;
 		fps_admin.setFrameSkipMode(false);
 	} else {
 		fps = argFPS;
 		fps_admin.setFrameSkipMode(true);
-		fps_admin.setFPS((unsigned long)(argFPS));
+		fps_admin.setFPS(argFPS);
 	}
 }
 

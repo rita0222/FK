@@ -87,17 +87,6 @@
 
 namespace FK {
 
-	//! フレーム制御タイプを表す型
-	enum class fk_FrameMode : unsigned int {
-		DEFAULT	= 0,		//!< フレーム制御無効
-		WAIT	= 1 << 0,	//!< フレーム待機制御
-		SKIP	= 1 << 1,	//!< フレーム間引き制御
-	};
-
-	fk_FrameMode operator | (fk_FrameMode argL, fk_FrameMode argR);
-	fk_FrameMode operator & (fk_FrameMode argL, fk_FrameMode argR);
-	fk_FrameMode operator ^ (fk_FrameMode argL, fk_FrameMode argR);
-
 	//! 特殊キーを表す列挙型
 	enum class fk_Key {
 		SHIFT_R,	//!< 右シフトキー
@@ -467,89 +456,6 @@ namespace FK {
 		 */
 		void	setFPS(int fps);
 
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-		//! フレームレート制御方法指定関数
-		/*!
-		 *	この関数は、フレームレートを制御するためのモードを指定します。
-		 *	「フレームレート」とは、1秒間あたりの画面更新回数のことです。
-		 *	フレームレートの制御には、以下の2種類があります。
-		 *	- フレームレートが高すぎる場合に、一定のフレームレート以上が出ないようにする。
-		 *		この制御を「ウェイトモード」と言います。
-		 *	- フレームレートが低すぎる場合に、画面更新をスキップする。
-		 *		この制御を「スキップモード」と言います。
-		 *	.
-		 *	モードには、以下の3種類が指定できます。
-		 *	- fk_FrameMode::DEFAULT: 制御を行いません。
-		 *	- fk_FrameMode::WAIT: ウェイトモードを有効にします。
-		 *	- fk_FrameMode::SKIP: スキップモードを有効にします。
-		 *	.
-		 *	なお、fk_FrameMode::WAIT と fk_FrameMode::SKIP は同時に指定することが可能です。
-		 *	その場合は、以下のようにビット論理和演算子を利用します。
-		 *
-		 *		fk_Window	win;
-		 *
-		 *		win.setFrameMode(fk_FrameMode::WAIT | fk_FrameMode::SKIP);
-		 *
-		 *	\param[in]	mode		制御モード
-		 *
-		 *	\sa setFrameInterval(), getSkipFrame()
-		 */
-		void	setFrameMode(fk_FrameMode mode);
-
-		//! フレームレート制御方法参照関数
-		/*!
-		 *	現在のフレームレート制御方法を取得します。
-		 *
-		 *	\return		制御モードを返します。
-		 *
-		 *	\sa setFrameMode()
-		 */
-		fk_FrameMode	getFrameMode(void);
-
-		//! フレーム間時間設定関数
-		/*!
-		 *	この関数は、フレームレート制御の「ウェイトモード」および
-		 *	「スキップモード」における、
-		 *	フレーム間時間の設定を行います。
-		 *	「フレーム間時間」とは、
-		 *	あるフレームが表示されてから次のフレームが表示されるまでの時間のことです。
-		 *	例えば秒間60フレームとしたい場合は、
-		 *	フレーム間時間は \f$\frac{1}{60} = 0.01666\cdots\f$ となります。
-		 *	なお、本関数では指定はミリ秒(1000分の1秒)単位で行い、
-		 *	型は int 型となります。従って、前述した秒間60フレームの場合は
-		 *	「16」または「17」を指定することになります。
-		 *
-		 *	\param[in]	ms		フレーム間時間。単位はミリ秒です。
-		 *
-		 *	\sa setFrameMode() getSkipFrame()
-		 */
-		void	setFrameInterval(int ms);
-
-		//! フレーム間時間参照関数
-		/*!
-		 *	現在設定されているフレーム間時間を参照します。
-		 *
-		 *	\return		フレーム間時間を返します。単位はミリ秒です。
-		 *
-		 *	\sa setFrameInterval()
-		 */
-		int		getFrameInterval(void);
-
-		//! スキップフレーム数参照関数
-		/*!
-		 *	フレーム制御で「スキップモード」を用いている場合に、
-		 *	現在表示されているフレームとその前のフレームの間に、
-		 *	何枚分のフレームが描画スキップされたかを参照します。
-		 *
-		 *	\return		スキップされたフレーム枚数
-		 *
-		 *	\sa setFrameMode(), setFrameInterval()
-		 */
-		int		getSkipFrame(void);
-
-#endif
-
 		//@}
 
 		//! \name 投影座標・空間座標変換関数
@@ -907,9 +813,8 @@ namespace FK {
 		std::map<fk_Key, bool>	specialKeyStatus;
 		std::map<fk_MouseButton, bool>	mouseStatus;
 	
-		fk_FrameMode			frameMode;
-		unsigned long			frameTime, prevTime;
-		unsigned long			frameInterval;
+		double					frameTime, prevTime;
+		double					frameInterval;
 		int						skipCount;
 
 		fk_FrameController		fps_admin;

@@ -112,6 +112,7 @@
 #include <FK/SpriteModel.h>
 #include <FK/MotionCharactor.h>
 #include <FK/ShaderBinder.h>
+#include <FK/Time.h>
 
 #ifndef FK_NO_FLTK
 
