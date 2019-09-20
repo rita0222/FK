@@ -104,22 +104,13 @@ namespace FK {
 		//! デストラクタ
 		~fk_FrameController();
 
-		//! フレームレート計測関数
-		/*!
-		 *	この関数をコールしてから、次にコールされるまでを 1 フレームとして扱い、
-		 *	その処理時間を計測します。時間調整はせずに、最速で処理を返します。
-		 *	ゲームのメインループ中で 1 度だけ呼ぶようにしてください。
-		 *	timeRegular() とは排他的な関係になるので、両方を同時に利用することは避けてください。
-		 */
-		void measure(void);
-
 		//! フレームレート指定関数
 		/*!
 		 *	timeRegular() で時間調整をする際に目標とするフレームレートを指定します。
 		 *	デフォルトでは 60FPS になっています。
-		 *	\param[in] time	キープしたいフレームレート。
+		 *	\param[in] fps	キープしたいフレームレート。
 		 */
-		void setFPS(int time);
+		void setFPS(int fps);
 
 		//! フレームスキップモード設定関数
 		/*!
@@ -148,7 +139,6 @@ namespace FK {
 		 *	この関数をコールしてから、次にコールされるまでを 1 フレームとして扱い、
 		 *	その間が setFPS() で指定したフレームレートになるよう時間調整を行います。
 		 *	ゲームのメインループ中で 1 度だけ呼ぶようにしてください。
-		 *	measure() とは排他的な関係になるので、両方を同時に利用することは避けてください。
 		 */
 		void timeRegular(void);
 
@@ -167,8 +157,6 @@ namespace FK {
 		 *	\return フレームレート。
 		 */
 		unsigned long getFrameRate(void);
-
-		//static unsigned long	getNow(void);
 
 	private:
 		double nowTime;

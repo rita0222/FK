@@ -143,30 +143,6 @@ void fk_FrameController::timeRegular()
 	}
 }
 
-//==================================================
-//最大フレームレートを測定します。
-//==================================================
-void fk_FrameController::measure()
-{
-	m_dwFrameCount++;
-	m_bDrawFlag = true;
-	if (m_bInit == true) {
-		m_dwLastMinitues = nowTime;
-		m_bInit = false;
-		return;
-	}
-
-	double now_ = fk_Time::now();
-	if (now_ - m_dwLastMinitues >= 1.0)
-	{
-		m_dwLastMinitues = now_;
-		m_dwFrameRate = m_dwFrameCount;
-		m_dwFrameCount = 0;
-		m_dwSkipRate = m_dwSkipCount;
-		m_dwSkipCount = 0;
-	}	
-}
-
 //======================================================
 //フレームスキップをするかしないかを設定します。
 //======================================================
