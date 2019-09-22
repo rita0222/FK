@@ -73,18 +73,16 @@
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 int main(int, char *[])
 {
-	Fl_Window		MainWindow(300, 300, "FK TEST");
+	Fl_Window		MainWindow(300, 300, "RESIZE TEST");
 	fk_Model		Camera, BlockModel, LightModel;
 	fk_Light		Light;
 	fk_Block		Block(50.0, 70.0, 40.0);
 	fk_Scene		Scene;
 	fk_Window		fkWindow(0, 0, 300, 300);
 
-	fk_SetErrorMode(fk_ErrorMode::OUT_CONSOLE_INTERACTIVE);
 	MainWindow.end();
 	fk_Material::initDefault();
 
@@ -92,13 +90,13 @@ int main(int, char *[])
 
 	// 照明の設定
 	LightModel.setShape(&Light);
-	LightModel.setMaterial(White);
+	LightModel.setMaterial(Material::White);
 	LightModel.glMoveTo(0.0, 0.0, 0.0);
 	LightModel.glFocus(-1.0, -1.0, -1.0);
 
 	// 直方体の設定
 	BlockModel.setShape(&Block);
-	BlockModel.setMaterial(Yellow);
+	BlockModel.setMaterial(Material::Yellow);
 
 	// 各モデルをディスプレイリストに登録
 	Scene.entryCamera(&Camera);
@@ -132,7 +130,7 @@ int main(int, char *[])
 		if(fkWindow.winOpenStatus() == false) continue;
 
 		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/200.0);
+		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
 	}
 
 	return 0;

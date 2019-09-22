@@ -74,36 +74,27 @@
 using namespace FK;
 using namespace FK::Material;
 
-const double	DOWN_ACCEL		= 0.050;	// 降下時の加速度
-const double	RISE_ACCEL		= 0.053;	// 上昇時の減速度
-const int		DOWN_MODE		= 0;		// 降下モード
-const int		RISE_MODE		= 1;		// 上昇モード
-const int		LOW_MODE		= 0;		// ブロック視点モード
-const int		HIGH_MODE		= 1;		// 鳥瞰モード
-const int		LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
-const int		LOD3_HIGH		= 300;		// 三分割距離 (鳥瞰)
-const int		LOD4_LOW		= 90;		// 四分割距離 (ブロック)
-const int		LOD3_LOW		= 120;		// 三分割距離 (ブロック)
-const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
-const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
-const double	BALL_SIZE		= 12.0;		// ボール半径
-const double	ROTATE_SPEED	= 0.02;		// 地面回転速度
-const int		BOUND_CYCLE		= 6;		// 視点初期化周期
-const int		VIEW_CHANGE		= 4;		// 視点切り替えタイミング
-
 class Ball {
 
-private:
-	int			direction;		// ボールの状態(DOWN_MODE or RISE_MODE)
-	int			view_mode;		// 視点モード
-	int			bound_count;	// バウンド回数を数える変数
-	double		y_trs;			// ボールのｙ座標移動量
-	fk_Model	ball_model;		// ボールのモデル
-	fk_Sphere	BALL2;			// 二分割形状
-	fk_Sphere	BALL3;			// 三分割形状
-	fk_Sphere	BALL4;			// 四分割形状
-
 public:
+
+	static constexpr double	DOWN_ACCEL	= 0.050;	// 降下時の加速度
+	static constexpr double	RISE_ACCEL	= 0.053;	// 上昇時の減速度
+	static constexpr int	DOWN_MODE	= 0;		// 降下モード
+	static constexpr int	RISE_MODE	= 1;		// 上昇モード
+	static constexpr int	LOW_MODE	= 0;		// ブロック視点モード
+	static constexpr int	HIGH_MODE	= 1;		// 鳥瞰モード
+	static constexpr int	LOD4_HIGH	= 200;		// 四分割距離 (鳥瞰)
+	static constexpr int	LOD3_HIGH	= 300;		// 三分割距離 (鳥瞰)
+	static constexpr int	LOD4_LOW	= 90;		// 四分割距離 (ブロック)
+	static constexpr int	LOD3_LOW	= 120;		// 三分割距離 (ブロック)
+	static constexpr double	TOP_POS		= 400.0;	// ボール始点高さ
+	static constexpr double	BTM_POS		= 12.0;		// ボール跳ね返り高さ
+	static constexpr double	BALL_SIZE	= 12.0;		// ボール半径
+	static constexpr double	ROTATE		= 0.02;		// 地面回転速度
+	static constexpr int	BOUND_CYCLE	= 6;		// 視点初期化周期
+	static constexpr int	VIEW_CHANGE	= 4;		// 視点切り替えタイミング
+
 
 	Ball(void);
 	void		init(void);
@@ -113,6 +104,17 @@ public:
 	void		accel(void);
 	void		bound(void);
 	int			draw(fk_Vector);
+
+private:
+	int			direction;		// ボールの状態(DOWN_MODE or RISE_MODE)
+	int			view_mode;		// 視点モード
+	int			bound_count;	// バウンド回数を数える変数
+	double		y_trs;			// ボールのｙ座標移動量
+	fk_Model	ball_model;		// ボールのモデル
+	fk_Sphere	ball2;			// 二分割形状
+	fk_Sphere	ball3;			// 三分割形状
+	fk_Sphere	ball4;			// 四分割形状
+
 };
 
 // コンストラクタ
@@ -128,15 +130,15 @@ void Ball::init(void)
 	y_trs		= 0.0;
 	view_mode	= HIGH_MODE;
 	bound_count	= 1;
-	BALL2.setRadius(BALL_SIZE);
-	BALL2.setDivide(6);
-	BALL3.setRadius(BALL_SIZE);
-	BALL3.setDivide(8);
-	BALL4.setRadius(BALL_SIZE);
-	BALL4.setDivide(10);
+	ball2.setRadius(BALL_SIZE);
+	ball2.setDivide(6);
+	ball3.setRadius(BALL_SIZE);
+	ball3.setDivide(8);
+	ball4.setRadius(BALL_SIZE);
+	ball4.setDivide(10);
 
-	ball_model.glMoveTo(0.0, TOP_BALL_POS, 0.0);
-	ball_model.setShape(&BALL2);
+	ball_model.glMoveTo(0.0, TOP_POS, 0.0);
+	ball_model.setShape(&ball2);
 }
 
 // fk_Model を返す関数
@@ -161,22 +163,22 @@ void Ball::lod(fk_Vector pos){
 	  case HIGH_MODE:
 
 		if(Distance < LOD4_HIGH) {
-			ball_model.setShape(&BALL4);
+			ball_model.setShape(&ball4);
 		} else if(Distance < LOD3_HIGH) {
-			ball_model.setShape(&BALL3);
+			ball_model.setShape(&ball3);
 		} else {
-			ball_model.setShape(&BALL2);
+			ball_model.setShape(&ball2);
 		}
 		break;
 
 	  case LOW_MODE:
 
 		if(Distance < LOD4_LOW) {
-			ball_model.setShape(&BALL4);
+			ball_model.setShape(&ball4);
 		} else if(Distance < LOD3_LOW) {
-			ball_model.setShape(&BALL3);
+			ball_model.setShape(&ball3);
 		} else {
-			ball_model.setShape(&BALL2);
+			ball_model.setShape(&ball2);
 		}
 		break;
 
@@ -211,7 +213,7 @@ void Ball::accel(void)
 // ボールの跳ね返り判定をする関数
 void Ball::bound(void)
 {
-	if(ball_model.getPosition().y < BTM_BALL_POS) {
+	if(ball_model.getPosition().y < BTM_POS) {
 		direction = RISE_MODE;
 	} else if(y_trs < 0.01) {
 		if(direction == RISE_MODE) {
@@ -240,7 +242,7 @@ int Ball::draw(fk_Vector pos)
 
 int main(int, char *[])
 {
-	int				view_mode = HIGH_MODE;
+	int				view_mode = Ball::HIGH_MODE;
 	Ball			ball;
 	fk_Sphere		lightBall(4, 2.0);
 	fk_Model		viewModel, groundModel, blockModel, lightModel, lightBallModel;
@@ -253,7 +255,6 @@ int main(int, char *[])
 	fk_AppWindow	win;
 	win.setSize(800, 800);
 	win.setScene(&scene);
-	win.setFPS(0);
 
 	// ### Material 初期化 ###
 	fk_Material::initDefault();
@@ -315,7 +316,7 @@ int main(int, char *[])
 		// ボールを弾ませて, カメラの状態を取得。
 		view_mode = ball.draw(viewModel.getPosition());
 
-		if(view_mode == HIGH_MODE) {
+		if(view_mode == Ball::HIGH_MODE) {
 			// カメラを上からの視点にする。
 			viewModel.glMoveTo(0.0, 400.0, 80.0);
 			viewModel.glFocus(0.0, 30.0, 0.0);
@@ -331,7 +332,7 @@ int main(int, char *[])
 		}
 
 		// 地面をくるくる回転させましょう。
-		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, ROTATE_SPEED);
+		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, Ball::ROTATE);
 	}
 
 	return 0;

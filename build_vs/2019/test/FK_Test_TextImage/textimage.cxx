@@ -71,9 +71,7 @@
  ****************************************************************************/
 #include <FK/FK.h>
 
-using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 int main (int, char *[])
 {
@@ -108,22 +106,25 @@ int main (int, char *[])
 	textImage.loadUniStr(&str);
 	texture.setTextureSize(40.0, 10.0);
 	texture.setTextureMode(fk_TexMode::REPLACE);
-	strModel.setMaterial(TrueWhite);
+	strModel.setMaterial(Material::TrueWhite);
 
 	strModel.setShape(&texture);
 	strModel.glVec(0.0, 0.0, -1.0);
 	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI/2.0);
 
 	win.entry(&strModel);
+	win.setFPS(60);
 	win.open();
 	win.setCameraPos(0.0, 0.0, 100.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
 
 	while(win.update() == true) {
 		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/100.0);
+		/*
 		if(strModel.getVec().z > 0.0) {
 			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI);
 		}
+		*/
 	}
 	return 0;
 }

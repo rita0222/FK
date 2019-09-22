@@ -80,7 +80,6 @@
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 class GUISet {
 private:
@@ -348,22 +347,19 @@ int main(int, char *[])
 
 	mainWindow.end();
 
-#ifdef _MACOSX_
 	fk_System::setcwd();
-#endif
-
 	fk_Material::initDefault();
 
 	// 光源の設定。今回は二つの平行光源
 	lightModel[0].setShape(&light);
 	lightModel[1].setShape(&light);
-	lightModel[0].setMaterial(White);
-	lightModel[1].setMaterial(White);
+	lightModel[0].setMaterial(Material::White);
+	lightModel[1].setMaterial(Material::White);
 	lightModel[0].glFocus(-1.0, -1.0, 0.0);
 	lightModel[1].glFocus(1.0, -1.0, 0.0);
 
 	// ソリッドモデルの初期マテリアルに Yellow を用いる。
-	material = Yellow;
+	material = Material::Yellow;
 	shapeModel.setShape(&shape);
 	shapeModel.setMaterial(material);
 

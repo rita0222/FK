@@ -72,14 +72,7 @@
 #include <FK/FK.h>
 #include <FK/GenMatrix.h>
 
-using namespace std;
 using namespace FK;
-using namespace FK::Material;
-
-double myRandom(void)
-{
-	return double(rand())/double(RAND_MAX);
-}
 
 int main(int, char *[])
 {
@@ -88,12 +81,6 @@ int main(int, char *[])
 	const int		DEG = 50;
 	const int		COUNT = 50;
 	int				i, j, c, diff;
-
-	fk_SetErrorMode(fk_ErrorMode::INTERACTIVE);
-
-	srand((unsigned int)(time(0)));
-
-	for(i = 0; i < 100; i++) myRandom();
 
 	largeV[0].resize(DEG);
 	largeV[1].resize(DEG);
@@ -105,23 +92,19 @@ int main(int, char *[])
 	for(c = 0; c < COUNT; c++) {
 
 		for(i = 0; i < DEG; i++) {
-			largeV[0].set(i, myRandom());
+			largeV[0].set(i, fk_Math::drand());
 			for(j = 0; j < DEG; j++) {
-				largeM[0].set(i, j, myRandom());
+				largeM[0].set(i, j, fk_Math::drand());
 			}
 		}
 		largeV[1] = largeM[0] * largeV[0];
 		largeM[1] = !largeM[0];
 		largeV[2] = largeM[1] * largeV[1];
 
-		//		largeV[0].Print("lV0");
-		//		largeV[1].Print("lV1");
-		//		largeV[2].Print("lV2");
-
 		if(largeV[0] != largeV[2]) diff++;
 	}
 	fk_Window::setPutStrMode(fk_PutStrMode::CONSOLE);
-	fk_Window::putString("Diff Count = " + to_string(diff));
+	fk_Window::putString("Diff Count = " + std::to_string(diff));
 
 	return 0;
 }

@@ -84,7 +84,11 @@ int main (int, char *[])
 	fk_System::setcwd();
 	fk_Material::initDefault();
 
+#ifdef WIN32
+	str.convert("FK日本語", fk_StringCode::SJIS);
+#else
 	str.convert("FK日本語", fk_StringCode::UTF8);
+#endif
 
 	texture.setImage(&textImage);
 	if(textImage.initFont("data/rm1b.ttf") == false) {

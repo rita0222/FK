@@ -1,7 +1,6 @@
 ﻿#include <FK/FK.h>
 
 using namespace FK;
-using namespace FK::Material;
 
 int main(int, char *[])
 {
@@ -21,7 +20,7 @@ int main(int, char *[])
 
 	model.setShape(&block);
 	model.glMoveTo(0.0, 6.0, 0.0);
-	model.setMaterial(Yellow);
+	model.setMaterial(Material::Yellow);
 	window.entry(&model);
 
 	window.setCameraPos(0.0, 5.0, 20.0);
