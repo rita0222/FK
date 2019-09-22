@@ -1,6 +1,6 @@
-\chapter{ベクトル、行列、四元数(クォータニオン)} \label{chap:vector} ~
+\chapter{ベクトル、行列、四元数(クォータニオン)} \label{chap:math} ~
 
-この章では、ベクトル、行列、四元数といった数学的基本クラスの
+この章では、ベクトル、行列、四元数、乱数といった数学的基本クラスの
 利用方法を紹介する。
 
 \section{3次元ベクトル}
@@ -678,39 +678,43 @@ fk\_Quaternion 型の代入演算子 ` = ' は、fk\_Vector の場合と同様�
 同義の情報を持つことを意味する。fk\_Quaternion には、fk\_Angle と
 相互変換を行うためのメンバ関数が用意されている。以下にその仕様を述べる。
 
-\subsubsection*{void makeEuler(const fk\_Angle angle)}
-angle が示すオイラー角と同義の四元数を設定する。
+\begin{description}
+\item[void makeEuler(const fk\_Angle angle)] ~ \\
+angle が示すオイラー角と同義の四元数を設定する。\\
 
-\subsubsection*{void makeEuler(double h, double p, double b)}
+\item[void makeEuler(double h, double p, double b)] ~ \\
 h をヘディング角、p をピッチ角、b をバンク角とするオイラー角と
-同義の四元数を設定する。
+同義の四元数を設定する。\\
 
-\subsubsection*{fk\_Angle getEuler(void)}
+\item[fk\_Angle getEuler(void)] ~ \\
 同義となるオイラー角を返す。
+\end{description}
 
 \subsection{各種メンバ関数}
 fk\_Quaternion には、これまで挙げた他にも以下のようなメンバ関数がある。
 なお、文中では四元数自身を \(\bq = s + xi + yj + zk\) と想定する。
 
-\subsubsection*{double norm(void)}
-ノルム \(|\bq|^2 = s^2 + x^2 + y^2 + z^2\) を返す。
+\begin{description}
+\item[double norm(void)] ~ \\
+ノルム \(|\bq|^2 = s^2 + x^2 + y^2 + z^2\) を返す。\\
 
-\subsubsection*{double abs(void)}
-絶対値 \(|\bq| = \sqrt{s^2 + x^2 + y^2 + z^2}\) を返す。
+\item[double abs(void)] ~ \\
+絶対値 \(|\bq| = \sqrt{s^2 + x^2 + y^2 + z^2}\) を返す。\\
 
-\subsubsection*{bool normalize(void)}
+\item[bool normalize(void)] ~ \\
 自身の正規化四元数 \(\frac{\bq}{|\bq|}\) を求め、自身に上書きし true を返す。
-ただし、成分が全て 0 であった場合は値を変更せずに false を返す。
+ただし、成分が全て 0 であった場合は値を変更せずに false を返す。\\
 
-\subsubsection*{bool inverse(void)}
+\item[bool inverse(void)] ~ \\
 自身の逆元 \(\bq^{-1}\)を求め、自身に上書きし true を返す。
-ただし、成分が全て 0 であった場合は値を変更せずに false を返す。
+ただし、成分が全て 0 であった場合は値を変更せずに false を返す。\\
 
-\subsubsection*{void conj(void)}
-自身の共役 \(\overline{\bq}\)を求め、自身に上書きする。
+\item[void conj(void)] ~ \\
+自身の共役 \(\overline{\bq}\)を求め、自身に上書きする。\\
 
-\subsubsection*{fk\_Matrix conv(void)}
+\item[fk\_Matrix conv(void)] ~ \\
 自身が表わす回転変換と同義の行列を返す。
+\end{description}
 
 \subsection{補間関数}
 四元数の最大の特徴は姿勢の補間である。あるオイラー角から別のオイラー角への
@@ -719,8 +723,9 @@ fk\_Quaternion には、これまで挙げた他にも以下のようなメン�
 
 補間四元数を求めるために、FK では以下の2種類の関数が用意されている。
 
-\subsubsection*{fk\_Quaternion \quad fk\_Math::quatInterLinear(
-fk\_Quaternion q1, fk\_Quaternion q2, double t)}
+\begin{description}
+\item[fk\_Quaternion fk\_Math::quatInterLinear(
+fk\_Quaternion q1, fk\_Quaternion q2, double t)] ~ \\
 q1 と q2 に対し、単純線形補間を行った結果を返す。t は 0 から 1 までの
 パラメータで、0 の場合 q1、1 の場合 q2 と完全に一致する。
 補間処理は以下の式に基づく。
@@ -728,8 +733,8 @@ q1 と q2 に対し、単純線形補間を行った結果を返す。t は 0 �
 	\bq(t) = (1 - t)\bq_1 + t\bq_2
 \]
 
-\subsubsection*{fk\_Quaternion \quad fk\_Math::quatInterSphere(
-fk\_Quaternion q1, fk\_Quaternion q2, double t)}
+\item[fk\_Quaternion fk\_Math::quatInterSphere(
+fk\_Quaternion q1, fk\_Quaternion q2, double t)] ~ \\
 q1 と q2 に対し、球面線形補間を行った結果を返す。t は 0 から 1 までの
 パラメータで、0 の場合 q1、1 の場合 q2 と完全に一致する。
 補間処理は以下の式に基づく。
@@ -742,3 +747,22 @@ q1 と q2 に対し、球面線形補間を行った結果を返す。t は 0 �
 演算そのものは単純線形補間の方が高速である。
 しかし単純線形補間では、状況によっては不安定な結果を示す場合がある。
 このような現象が許容できない場合には、球面線形補間による処理が有効である。
+\end{description}
+
+\section{乱数}
+乱数の取得は様々なプログラムで必要となるものであるが、
+FK では以下のような簡便な一様乱数取得用関数を提供している。
+
+\begin{description}
+\item[unsigned int fk\_Math::rand()] ~ \\
+	0 以上の一様乱数整数値を取得する。\\
+
+\item[int fk\_Math::rand(int m, int M)] ~ \\
+	\(m \leqq r < M\) を満たす一様乱数整数値 r を取得する。\\
+
+\item[double fk\_Math::drand()] ~ \\
+	0 以上 1 未満の一様乱数実数を取得する。\\
+
+\item[double fk\_Math::drand(double m, double M)] ~ \\
+	\(m \leqq r < M\) を満たす一様乱数実数値 r を取得する。
+\end{description}
