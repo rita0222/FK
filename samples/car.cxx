@@ -76,11 +76,22 @@ using namespace std;
 using namespace FK;
 using namespace FK::Material;
 
-const double	BUILDWIDTH	= 25.0;		// 建物幅の基本単位
-const double	CIRCUITX	= 150.0;	// コースの X 方向幅
-const double	CIRCUITY	= 250.0;	// コースの Y 方向幅
-
 class Car {
+
+public:
+	static constexpr double	BUILDWIDTH	= 25.0;		// 建物幅の基本単位
+	static constexpr double	CIRCUITX	= 150.0;	// コースの X 方向幅
+	static constexpr double	CIRCUITY	= 250.0;	// コースの Y 方向幅
+
+	Car(void) {}		// コンストラクタ
+
+	void		init(void);
+	void		entryScene(fk_Scene *, bool);	
+	fk_Vector	getCarPosition(void);
+	fk_Model *	getBirdModel(void);
+	void		forward(double);
+	bool		isRotate(void);
+	void		rotate(double);
 
 private:
 	fk_Model	carModel;		// 車全体モデル
@@ -92,18 +103,6 @@ private:
 	fk_Block	body;			// 車体形状
 	fk_Circle	tire;			// タイヤ形状
 	fk_Sphere	driver;			// 運転者形状
-
-public:
-	Car(void) {}		// コンストラクタ
-
-	void		init(void);
-	void		entryScene(fk_Scene *, bool);	
-	fk_Vector	getCarPosition(void);
-	fk_Model *	getBirdModel(void);
-	void		forward(double);
-	bool		isRotate(void);
-	void		rotate(double);
-
 };
 
 class Build {
@@ -237,10 +236,10 @@ bool Car::isRotate(void)
 
 	// サーキットの外にでた場合、回転する。
 	// 車の方向ベクトルと、壁の法線ベクトルとの内積がマイナスのときに回転
-	if(carPos.x > CIRCUITX	&& carVec * (-XVec)	< -fk_Math::EPS) return true;
-	if(carPos.x < -CIRCUITX && carVec * XVec	< -fk_Math::EPS) return true;
-	if(carPos.y > CIRCUITY	&& carVec * (-YVec)	< -fk_Math::EPS) return true;
-	if(carPos.y < -CIRCUITY && carVec * YVec	< -fk_Math::EPS) return true;
+	if(carPos.x > Car::CIRCUITX	&& carVec * (-XVec)	< -fk_Math::EPS) return true;
+	if(carPos.x < -Car::CIRCUITX && carVec * XVec	< -fk_Math::EPS) return true;
+	if(carPos.y > Car::CIRCUITY	&& carVec * (-YVec)	< -fk_Math::EPS) return true;
+	if(carPos.y < -Car::CIRCUITY && carVec * YVec	< -fk_Math::EPS) return true;
 
 	return false;
 }
@@ -257,7 +256,7 @@ Build::Build(void)
 
 void Build::makeBuild(fk_Vector argPos, double argHeight, fk_Material &argMat)
 {
-	buildShape.setSize(BUILDWIDTH, BUILDWIDTH, argHeight);
+	buildShape.setSize(Car::BUILDWIDTH, Car::BUILDWIDTH, argHeight);
 	buildModel.glMoveTo(argPos.x, argPos.y, argHeight/2.0);
 	buildModel.setMaterial(argMat);
 }
@@ -326,13 +325,9 @@ void World::entryScene(fk_Scene *scene)
 {
 	scene->entryModel(&groundModel);
 
-	for(fk_Model *m : lightModels) {
-		scene->entryModel(m);
-	}
+	for(fk_Model *m : lightModels) scene->entryModel(m);
 
-	for(Build *b : builds) {
-		scene->entryModel(b->getModel());
-	}
+	for(Build *b : builds) scene->entryModel(b->getModel());
 
 	return;
 }
@@ -344,7 +339,7 @@ int main(int, char *[])
 
 	Car				carObj;
 	World			worldObj;
-	Fl_Window		mainWindow(1240, 420, "FK TEST");
+	Fl_Window		mainWindow(1240, 420, "MultiWindow Test");
 	fk_Scene		carViewScene, buildViewScene, birdViewScene;
 	fk_Window		carViewWindow(10, 10, 400, 400);
 	fk_Window		buildViewWindow(420, 10, 400, 400);

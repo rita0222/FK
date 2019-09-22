@@ -72,7 +72,6 @@
 #include <FK/FK.h>
 
 using namespace FK;
-using namespace FK::Material;
 
 int main(int, char *[])
 {
@@ -90,7 +89,7 @@ int main(int, char *[])
 
 	// 直方体の設定
 	blockModel.setShape(&block);
-	blockModel.setMaterial(Yellow);
+	blockModel.setMaterial(Material::Yellow);
 
 	// 線分の設定
 	pos[0].set(0.0, 100.0, 0.0);

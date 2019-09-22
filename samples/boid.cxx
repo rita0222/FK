@@ -1,21 +1,17 @@
 ﻿#include <FK/FK.h>
-#include <random>
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 // エージェント用クラス
 class Agent {
 
 private:
-	static const double		SPEED;
-
 	fk_Model		model;
 	fk_Vector		newVec;
 	
 public:
-	Agent(double, mt19937 &);
+	Agent(void);
 
 	fk_Vector		getPos(void);
 	void			setVec(fk_Vector);
@@ -23,14 +19,13 @@ public:
 	void			setShape(fk_Shape *);
 	void			entry(fk_AppWindow *);
 	void			forward(void);
+	static constexpr double SPEED = 0.05;
+	static constexpr double AREASIZE = 15.0;
 };
-
-const double Agent::SPEED = 0.05;
 
 // 群衆用クラス
 class Boid {
 private:
-	const double	AREASIZE = 15.0;
 	vector<Agent *>	agent;
 	fk_Cone			*cone;
 	double			paramA, paramB, paramC, paramLA, paramLB;
@@ -45,15 +40,13 @@ public:
 };
 
 // コンストラクタ
-Agent::Agent(double argSize, mt19937 &argMT)
+Agent::Agent(void)
 {
-	uniform_real_distribution<>	randR(-1.0, 1.0);
-
-	model.setMaterial(Red);
-	model.setShadingMode(fk_ShadingMode::GOURAUD);
+	model.setMaterial(Material::Red);
 	// モデルの方向と位置をランダムに設定
-	model.glVec(randR(argMT), randR(argMT), 0.0);
-	model.glMoveTo(randR(argMT)*argSize, randR(argMT)*argSize, 0.0);
+	model.glVec(fk_Math::drand(-1.0, 1.0), fk_Math::drand(-1.0, 1.0), 0.0);
+	model.glMoveTo(fk_Math::drand(-AREASIZE, AREASIZE),
+				   fk_Math::drand(-AREASIZE, AREASIZE), 0.0);
 }
 
 // 位置取得
@@ -96,10 +89,6 @@ void Agent::forward()
 // 群集のコンストラクタ
 Boid::Boid(int argNum)
 {
-	// -1 〜 1 までの乱数発生器生成
-	random_device				rnd;
-	mt19937						mt(rnd());
-
 	// 形状インスタンス生成
 	fk_Material::initDefault();
 	cone = new fk_Cone(16, 0.4, 1.0, true);
@@ -107,7 +96,7 @@ Boid::Boid(int argNum)
 
 	// エージェントインスタンスの作成
 	for(int i = 0; i < argNum; ++i) {
-		Agent *newAgent = new Agent(AREASIZE, mt);
+		Agent *newAgent = new Agent();
 		newAgent->setShape(cone);
 		agent.push_back(newAgent);
 	}
@@ -123,9 +112,7 @@ Boid::Boid(int argNum)
 // 群集のデストラクタ
 Boid::~Boid()
 {
-	for(auto M : agent) {
-		delete M;
-	}
+	for(auto M : agent) delete M;
 	delete cone;
 }	
 
@@ -142,9 +129,7 @@ void Boid::setParam(double argA, double argB, double argC, double argLA, double 
 // ウィンドウへのエージェント登録メソッド
 void Boid::setWindow(fk_AppWindow *argWin)
 {
-	for(auto M : agent) {
-		M->entry(argWin);
-	}
+	for(auto M : agent) M->entry(argWin);
 }
 
 // 各エージェント動作メソッド
@@ -189,11 +174,11 @@ void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 		}
 
 		// 領域の外側に近づいたら方向修正
-		if(fabs(p.x) > AREASIZE && p.x * v.x > 0.0 && fabs(v.x) > 0.01) {
-			v.x -= v.x * (fabs(p.x) - AREASIZE)*0.2;
+		if(fabs(p.x) > Agent::AREASIZE && p.x * v.x > 0.0 && fabs(v.x) > 0.01) {
+			v.x -= v.x * (fabs(p.x) - Agent::AREASIZE)*0.2;
 		}
-		if(fabs(p.y) > AREASIZE && p.y * v.y > 0.0 && fabs(v.y) > 0.01) {
-			v.y -= v.y * (fabs(p.y) - AREASIZE)*0.2;
+		if(fabs(p.y) > Agent::AREASIZE && p.y * v.y > 0.0 && fabs(v.y) > 0.01) {
+			v.y -= v.y * (fabs(p.y) - Agent::AREASIZE)*0.2;
 		}
 
 		// 最終的な方向ベクトル演算結果を代入
@@ -202,9 +187,7 @@ void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 	}
 
 	// 全エージェントを前進
-	for(auto M : agent) {
-		M->forward();
-	}
+	for(auto M : agent) M->forward();
 }
 
 int main(int, char **)
