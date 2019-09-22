@@ -99,59 +99,64 @@
 15: 
 16:             // ウィンドウ生成
 17:             var win = new fk_AppWindow();
-18: 
-19:             // 組込マテリアル初期化
-20:             fk_Material.InitDefault();
-21: 
-22:             // 直方体モデル生成
-23:             var blockModel = new fk_Model();
-24:             var block = new fk_Block(50.0, 70.0, 40.0);
-25:             blockModel.Shape = block;
-26:             blockModel.Material = fk_Material.Yellow;
-27:             win.Entry(blockModel);
-28: 
-29:             // 線分モデル生成
-30:             var pos = new fk_Vector[4];
-31:             pos[0] = new fk_Vector(0.0, 100.0, 0.0);
-32:             pos[1] = new fk_Vector(100.0, 0.0, 0.0);
-33:             pos[2] = -pos[0];
-34:             pos[3] = -pos[1];
-35:             var line = new fk_Line[2];
-36:             var lineModel = new fk_Model[2];
-37:             for(i = 0; i < 2; i++) {
-38:                 line[i] = new fk_Line();
-39:                 line[i].PushLine(pos[2*i], pos[2*i + 1]);
-40:                 lineModel[i] = new fk_Model();
-41:                 lineModel[i].Shape = line[i];
-42:                 lineModel[i].Parent = blockModel;
-43:                 win.Entry(lineModel[i]);
-44:             }
-45: 
-46:             lineModel[0].LineColor = new fk_Color(1.0, 0.0, 0.0);
-47:             lineModel[1].LineColor = new fk_Color(0.0, 1.0, 0.0);
-48: 
-49:             // カメラモデル生成
-50:             var camera = new fk_Model();
-51:             camera.GlMoveTo(0.0, 0.0, 2000.0);
-52:             camera.GlFocus(0.0, 0.0, 0.0);
-53:             camera.GlUpvec(0.0, 1.0, 0.0);
-54:             win.CameraModel = camera;
-55: 
-56:             // ウィンドウ生成
-57:             win.Open();
-58: 
-59:             var origin = new fk_Vector(0.0, 0.0, 0.0);
-60: 
-61:             for(i = 0; win.Update() == true; i++) {
-62:                 camera.GlTranslate(0.0, 0.0, -1.0);
-63:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/300.0);
-64:                 var cPos = camera.Position;
-65:                 if(cPos.z < -FK.EPS) camera.GlFocus(origin);
-66:                 if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI/500.0);
-67:             }
-68:         }
-69:     }
-70: }
+18:             fk_Material.InitDefault();
+19: 
+20:             // 光源生成
+21:             var light = new fk_Light();
+22:             var lightModel = new fk_Model();
+23:             lightModel.Material = fk_Material.TrueWhite;
+24:             lightModel.GlMoveTo(0.0, 0.0, 0.0);
+25:             lightModel.GlFocus(-1.0, -1.0, -1.0);
+26:             win.Entry(lightModel);
+27: 
+28:             // 直方体モデル生成
+29:             var blockModel = new fk_Model();
+30:             var block = new fk_Block(50.0, 70.0, 40.0);
+31:             blockModel.Shape = block;
+32:             blockModel.Material = fk_Material.Yellow;
+33:             win.Entry(blockModel);
+34: 
+35:             // 線分モデル生成
+36:             fk_Vector[] pos = new fk_Vector[4];
+37:             pos[0] = new fk_Vector(0.0, 100.0, 0.0);
+38:             pos[1] = new fk_Vector(100.0, 0.0, 0.0);
+39:             pos[2] = -pos[0];
+40:             pos[3] = -pos[1];
+41:             fk_Line[] line = new fk_Line[2];
+42:             fk_Model[] lineModel = new fk_Model[2];
+43:             for(i = 0; i < 2; i++) {
+44:                 line[i] = new fk_Line();
+45:                 line[i].PushLine(pos[2*i], pos[2*i + 1]);
+46:                 lineModel[i] = new fk_Model();
+47:                 lineModel[i].Shape = line[i];
+48:                 lineModel[i].Parent = blockModel;
+49:                 win.Entry(lineModel[i]);
+50:             }
+51: 
+52:             lineModel[0].LineColor = new fk_Color(1.0, 0.0, 0.0);
+53:             lineModel[1].LineColor = new fk_Color(0.0, 1.0, 0.0);
+54: 
+55:             // カメラモデル生成
+56:             var camera = new fk_Model();
+57:             camera.GlMoveTo(0.0, 0.0, 2000.0);
+58:             camera.GlFocus(0.0, 0.0, 0.0);
+59:             camera.GlUpvec(0.0, 1.0, 0.0);
+60:             win.CameraModel = camera;
+61:             win.Open();
+62: 
+63:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+64: 
+65:             for(i = 0; win.Update() == true; i++) {
+66:                 camera.GlTranslate(0.0, 0.0, -1.0);
+67:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/300.0);
+68:                 var cPos = camera.Position;
+69:                 if(cPos.z < -0.00001) camera.GlFocus(origin);
+70:                 if(i >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI/500.0);
+71:             }
+72:         }
+73:     }
+74: }
+
 \end{verbatim}
 \end{small}
 \end{breakbox}
