@@ -2,8 +2,7 @@
 
 この章では fk\_Material と呼ばれる立体の色属性を司るクラスの使用法
 を述べる。この章に書かれていることは、のちに立体の色属性を設定するために
-必要なものとなる。また、複数のマテリアルを管理するための「パレット」
-についても解説する。
+必要なものとなる。
 \section{色の基本 (fk\_Color)}
 まず、色の構成に関しての記述から始めよう。光による色の3元色は、
 赤、緑、青である。これらの色の組合せによって、ディスプレイで
@@ -169,92 +168,17 @@ Diffuse や Emission の値も低い場合は、その物体は墨のように�
 \\
 \begin{screen}
 \begin{verbatim}
-        var mat1 = new fk_Material();
-        var mat2 = new fk_Material();
+    var mat1 = new fk_Material();
+    var mat2 = new fk_Material();
 
-        // Ambient と Diffuse どちらが先でも結果は一緒である。
-        mat1.Ambient = mat1.Diffuse = new fk_Color(1.0, 1.0, 0.0);    // 黄色いマテリアル
-        mat2.Diffuse = mat2.Ambient = new fk_Color(1.0, 0.0, 1.0);    // マゼンタのマテリアル
+    // Ambient と Diffuse どちらが先でも結果は一緒である。
+    mat1.Ambient = mat1.Diffuse = new fk_Color(1.0, 1.0, 0.0); // 黄色いマテリアル
+    mat2.Diffuse = mat2.Ambient = new fk_Color(1.0, 0.0, 1.0); // マゼンタのマテリアル
 \end{verbatim}
 \end{screen}
-\\
+\\ ~ \\
 もうひとつの手段は、あらかじめ準備されているマテリアルを使用して
 しまうことである。全部で 40 種類あるこれらのマテリアル群は、どれも
 グローバルな変数として利用できる。大抵の場合、これで事が足りるだろう。
 なお、このマテリアルを羅列した表を付録 A に掲載しておく。参照して、
 適宜使用してほしい。
-\section{マテリアルパレット (fk\_Palette)} \label{sec:mat_palette}
-FK では、1つのモデルに対して単一のマテリアルを設定するのは
-容易に行うことができるが、実際には複数のマテリアルを利用したい場合も
-よくある。例えば、ある条件を満たす面のみ異なる色で表示したい場合などである。
-このようなとき、「マテリアルパレット」と呼ばれる仕組みを利用する。
-ここでいう「パレット」とは、水彩や油彩で用いられるときのパレットの
-ことであり、同じような役割を果たす。
-
-大別すると、複数のマテリアル利用の実現は以下の 2 ステップで行う。
-\begin{enumerate}
- \item 利用するマテリアルを、パレット用変数に保管する。
- \item 形状中の各位相要素(点、線、面)に対し、どのマテリアルを使うのかを
-	番号で指定する。
-\end{enumerate}
-ここでは、まずパレットを準備する段階について述べる。形状中でのマテリアル指定に
-ついては、
-\ref{subsec:ifs_palette} 節および
-\ref{subsec:solid_matid} 節で詳しく述べる。
-
-マテリアルパレットを準備するには、fk\_Palette 型の変数を定義する。
-\\
-\begin{screen}
-\begin{verbatim}
-        var palette = new fk_Palette();
-\end{verbatim}
-\end{screen}
-~ \\
-パレットにマテリアルを登録するには、SetPalette 関数を用いる。
-\\
-\begin{screen}
-\begin{verbatim}
-        var mat1 = new fk_Material();
-        var mat2 = new fk_Material();
-        var palette = new fk_Palette();
-                :
-        palette.SetPalette(mat1, 1);
-        palette.SetPalette(mat2, 2);
-\end{verbatim}
-\end{screen}
-~ \\
-SetPalette 関数では、1番目の引数に対象となるマテリアルを表す
-fk\_Material 型の変数を、2番目の引数にはマテリアル
-を表すための固有の ID を代入する。形状中の各位相要素に対しては、
-この ID を指定することになる。例えば、上記例の場合は
-マテリアル ID として「1」を指定した位相要素に対し、mat1 に
-入っていたマテリアルの色に描画されることになる。
-
-なお、格納されたマテリアルは上書きが可能である。
-SetPalette の2番目の引数に、以前利用した ID を再び利用した場合、
-前に登録されたマテリアルは消去され、新たに登録されたマテリアルに
-上書きされる。結果として、描画時には新しいマテリアルが反映されることになる。
-
-fk\_Palette クラスには、他にも以下のようなメソッドやプロパティがある。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{fk\_Material GetMaterial(int id)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		パレットに格納されている、ID が id であるマテリアルを
-		取得する。もし id に相当するマテリアルがなかった場合は
-		null を返す。
-	\end{tabular} \\ \\
-
-\> \textbf{int Size \{ get; \} } \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されているマテリアルの個数を返す。
-	\end{tabular} \\ \\
-
-\> \textbf{fk\_Material [] MaterialVector \{ get; \} } \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されているマテリアル全てを、
-		fk\_Material の配列型で返す。
-		なお、ここで得られた配列中を編集してはならない。
-	\end{tabular} \\ \\
-\end{tabbing}
-

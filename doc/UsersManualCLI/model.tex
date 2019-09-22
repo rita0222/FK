@@ -122,7 +122,7 @@ fk\_Material 型のインスタンスを用いる。
         var model = new fk_Model();
 
         model.Shape = sphere;
-        model.DrawMode = fk_DrawMode.LINEMODE;
+        model.DrawMode = fk_Draw.LINE;
 \end{verbatim}
 \end{breakbox}
 ~ \\
@@ -133,22 +133,21 @@ fk\_Material 型のインスタンスを用いる。
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-fk\_DrawMode.POINTMODE & 形状の頂点を描画する。\\ \hline
-fk\_DrawMode.LINEMODE & 形状の稜線を描画する。\\ \hline
-fk\_DrawMode.POLYMODE & 形状の面のうち、表面のみを描画する。\\ \hline
-fk\_DrawMode.BACK\_POLYMODE & 形状の面のうち、裏面のみを描画する。\\ \hline
-fk\_DrawMode.FRONTBACK\_POLYMODE & 形状の面のうち、表裏両面を描画する。\\ \hline
-fk\_DrawMode.TEXTUREMODE & テクスチャ画像を描画する。\\ \hline
+fk\_Draw.POINT & 形状の頂点を描画する。\\ \hline
+fk\_Draw.LINE & 形状の稜線を描画する。\\ \hline
+fk\_Draw.FACE & 形状の面のうち、表面のみを描画する。\\ \hline
+fk\_Draw.BACK\_FACE & 形状の面のうち、裏面のみを描画する。\\ \hline
+fk\_Draw.FRONTBACK\_FACE & 形状の面のうち、表裏両面を描画する。\\ \hline
+fk\_Draw.TEXTURE & テクスチャ画像を描画する。\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-点表示したい場合は fk\_DrawMode.POINTMODE、ワイヤーフレーム表示したい場合は
-fk\_DrawMode.LINEMODE、面表示したい場合は FK\_POLYMODE を引数として与えることで、
+点表示したい場合は fk\_Draw.POINT、ワイヤーフレーム表示したい場合は
+fk\_Draw.LINE、面表示したい場合は fk\_Draw.FACE を引数として与えることで、
 モデルの表示を切り替えることができる。ただし、形状が fk\_Point で
-ある場合に fk\_DrawMode.LINEMODE を与えたり、
-fk\_Line である場合に fk\_DrawMode.POLYMODE
-を与えるといったような、表示状態が解釈できないような場合は何も
+ある場合に fk\_Draw.LINE を与えたり、
+fk\_Line である場合に fk\_Draw.FACE を与えるといったような、表示状態が解釈できないような場合は何も
 表示されなくなるので注意が必要である。
 
 また、この描画モードは1つのモデルに対して複数のモードを同時に設定することが
@@ -159,11 +158,11 @@ fk\_Line である場合に fk\_DrawMode.POLYMODE
 \begin{verbatim}
         var model = new fk_Model();
 
-        model.DrawMode = fk_DrawMode.POLYMODE | fk_DrawMode.LINEMODE;
+        model.DrawMode = fk_Draw.FACE | fk_Draw.LINE;
 \end{verbatim}
 \end{breakbox}
 ~ \\
-なお、fk\_DrawMode.POINTMODE と fk\_DrawMode.LINEMODE では光源設定は意味がない。
+なお、fk\_Draw.POINT と fk\_Draw.LINE では光源設定は意味がない。
 線や点に対する色設定に関しては、\ref{sec:pointlinemat} を参照してほしい。
 
 \section{線や点の色付け(マテリアル)} \label{sec:pointlinemat}
@@ -179,7 +178,7 @@ fk\_Line である場合に fk\_DrawMode.POLYMODE
     
     model.Shape = sphere;
     fk_Material.InitDefault();
-    model.DrawMode = fk_DrawMode.POLYMODE | fk_DrawMode.LINEMODE | fk_DrawMode.POINTMODE;
+    model.DrawMode = fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT;
     model.Material = fk_Material.Yellow;
     model.LineColor = new fk_Color(1.0, 0.0, 0.0);
     model.PointColor = new fk_Color(0.0, 1.0, 0.0);
@@ -187,7 +186,7 @@ fk\_Line である場合に fk\_DrawMode.POLYMODE
 \end{breakbox}
 
 \section{線の太さや点の大きさの制御} \label{sec:widthsize}
-描画モードで fk\_DrawMode.POINTMODE か fk\_DrawMode.LINEMODE を選択した場合、
+描画モードで fk\_Draw.POINT か fk\_Draw.LINE を選択した場合、
 デフォルトでは描画される点のピクセルにおける大きさ、線の幅は
 ともに 1 に設定されている。これをもっと大きく(太く)したい場合は、
 それぞれ PointSize、LineWidth プロパティを用いることで実現できる。
@@ -200,7 +199,7 @@ fk\_Line である場合に fk\_DrawMode.POLYMODE
         var model = new fk_Model();
 
         model.Shape = sphere;
-        model.DrawMode = fk_DrawMode.POINTMODE | fk_DrawMode.LINEMODE;
+        model.DrawMode = fk_Draw.POINT | fk_Draw.LINE;
         model.PointSize = 3.0;
         model.LineWidth = 5.0;
 \end{verbatim}
@@ -418,17 +417,15 @@ fk\_Angle 型は、オイラー角を表現するクラスである。位置と�
 \section{平行移動による制御}
 モデルの方向を変化させず、モデルを移動させる手段として、fk\_Model クラス
 では 6 種類のメソッドを用意している。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void GlTranslate(fk\_Vector); \\
-\> void GlTranslate(double, double, double); \\
-\> void LoTranslate(fk\_Vector); \\
-\> void LoTranslate(double, double, double); \\
-\> void GlMoveTo(fk\_Vector); \\
-\> void GlMoveTo(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[GlTranslate(fk\_Vector)]
+\item[GlTranslate(double, double, double)]
+\item[LoTranslate(fk\_Vector)]
+\item[LoTranslate(double, double, double)]
+\item[GlMoveTo(fk\_Vector)]
+\item[GlMoveTo(double, double, double)]
+\end{description}
+
 \subsection{GlTranslate}
 GlTranslate メソッドは、モデルの移動ベクトルをグローバル座標系で
 与えるためのメソッドである。例えば、
@@ -539,21 +536,19 @@ FK システムにおいて、モデルの姿勢を制御する手法は大別�
 メソッドを紹介する。3 種類のうち、この手法がもっとも直接的である。
 
 この節では次の 8 種類のメソッドを紹介する。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> GlFocus(fk\_Vector); \\
-\> GlFocus(double, double, double); \\
-\> LoFocus(fk\_Vector); \\
-\> LoFocus(double, double, double); \\
-\> GlVec(fk\_Vector); \\
-\> GlVec(double, double, double); \\
-\> GlUpvec(fk\_Vector); \\
-\> GlUpvec(double, double, double); \\
-\> LoUpvec(fk\_Vector); \\
-\> LoUpvec(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[GlFocus(fk\_Vector)]
+\item[GlFocus(double, double, double)]
+\item[LoFocus(fk\_Vector)]
+\item[LoFocus(double, double, double)]
+\item[GlVec(fk\_Vector)]
+\item[GlVec(double, double, double)]
+\item[GlUpvec(fk\_Vector)]
+\item[GlUpvec(double, double, double)]
+\item[LoUpvec(fk\_Vector)]
+\item[LoUpvec(double, double, double)]
+\end{description}
+
 このうち、多重定義されているメソッドは移動メソッド群と同じように fk\_Vector によるか、
 3 次元ベクトルを表す 3 つの実数を代入するかの違いでしかないので、
 実質的には 4 種類となる。
@@ -642,15 +637,13 @@ LoFocus メソッドは、GlFocus のローカル座標系版である。Lo メ�
 \section{オイラー角による姿勢の制御}
 この節では、オイラー角による制御を提供する 4 種類のメソッドに関しての
 紹介が記述されている。4 つのメソッドは、次に示す通りである。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> void GlAngle(fk\_Angle); \\
-\> void GlAngle(double, double, double); \\
-\> void LoAngle(fk\_Angle); \\
-\> void LoAngle(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[GlAngle(fk\_Angle)]
+\item[GlAngle(double, double, double)]
+\item[LoAngle(fk\_Angle)]
+\item[LoAngle(double, double, double)]
+\end{description}
+
 それぞれ多重定義がなされているが、3 つの実数を引数にとる2つのメソッドは
 これまでのようにベクトルを意味しているのではなくオイラー角の 3 要素を
 示しており、3 つの引数はそれぞれヘディング角、ピッチ角、バンク角を
@@ -734,34 +727,32 @@ LoFocus と比較してみてほしい。この LoAngle メソッドの特徴は
 前節のオイラー角による制御が姿勢を定義するためのものであるならば、
 ここで述べるメソッド群は位置を回転によって制御するためのものといえる。
 ここで述べられるメソッドは全部で 16 種類ある。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> GlRotate(fk\_Vector, fk\_Axis, double); \\
-\> GlRotate(double, double, double, fk\_Axis, double); \\
-\\
-\> GlRotate(fk\_Vector, fk\_Vector, double); \\
-\> GlRotate(double, double, double, double, double, double, double); \\
-\\
-\> LoRotate(fk\_Vector, fk\_Axis, double); \\
-\> LoRotate(double, double, double, fk\_Axis, double); \\
-\\
-\> LoRotate(fk\_Vector, fk\_Vector, double); \\
-\> LoRotate(double, double, double, double, double, double, double); \\
-\\
-\> GlRotateWithVec(fk\_Vector, fk\_Axis, double); \\
-\> GlRotateWithVec(double, double, double, fk\_Axis, double); \\
-\\
-\> GlRotateWithVec(fk\_Vector, fk\_Vector, double); \\
-\> GlRotateWithVec(double, double, double, double, double, double, double); \\
-\\
-\> LoRotateWithVec(fk\_Vector, fk\_Axis, double); \\
-\> LoRotateWithVec(double, double, double, fk\_Axis, double); \\
-\\
-\> LoRotateWithVec(fk\_Vector, fk\_Vector, double); \\
-\> LoRotateWithVec(double, double, double, double, double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[GlRotate(fk\_Vector, fk\_Axis, double)]
+\item[GlRotate(double, double, double, fk\_Axis, double)] ~ \\
+
+\item[GlRotate(fk\_Vector, fk\_Vector, double)]
+\item[GlRotate(double, double, double, double, double, double, double)] ~ \\
+
+\item[LoRotate(fk\_Vector, fk\_Axis, double)]
+\item[LoRotate(double, double, double, fk\_Axis, double)] ~ \\
+
+\item[LoRotate(fk\_Vector, fk\_Vector, double)]
+\item[LoRotate(double, double, double, double, double, double, double)] ~ \\
+
+\item[GlRotateWithVec(fk\_Vector, fk\_Axis, double)]
+\item[GlRotateWithVec(double, double, double, fk\_Axis, double)] ~ \\
+
+\item[GlRotateWithVec(fk\_Vector, fk\_Vector, double)]
+\item[GlRotateWithVec(double, double, double, double, double, double, double)] ~ \\
+
+\item[LoRotateWithVec(fk\_Vector, fk\_Axis, double)]
+\item[LoRotateWithVec(double, double, double, fk\_Axis, double)] ~ \\
+
+\item[LoRotateWithVec(fk\_Vector, fk\_Vector, double)]
+\item[LoRotateWithVec(double, double, double, double, double, double, double)]
+\end{description}
+
 このメソッド群も、実質 8 種類のメソッドが
 引数として fk\_Vector 型をとるものと 3 つの実数をとるもので
 多重定義がなされている。行間なく記されているもの同士が対応している。
@@ -838,18 +829,16 @@ LoRotateWithVec(origin, fk\_Axis.Z, angle) & LoAngle(0.0, 0.0, angle) \\ \hline
 \section{モデルの拡大縮小}
 FK システムでは、モデルに対して拡大や縮小を行うことが可能であり、
 次のようなメソッドが提供されている。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> SetScale(double); \\
-\> SetScale(double, fk\_Axis); \\
-\> SetScale(double, double, double); \\
-\\
-\> PrdScale(double); \\
-\> PrdScale(double, fk\_Axis); \\
-\> PrdScale(double, double, double); \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[SetScale(double)]
+\item[SetScale(double, fk\_Axis)]
+\item[SetScale(double, double, double)] ~ \\
+
+\item[PrdScale(double)]
+\item[PrdScale(double, fk\_Axis)]
+\item[PrdScale(double, double, double)]
+\end{description}
+
 SetScale() メソッドはモデルの絶対倍率を設定するためのメソッドである。
 引数として double 1個のみをとるメソッドは、モデルの拡大や縮小を単純に
 行う。fk\_Axis を引数にとる場合、指定された軸方向に対して拡大や
@@ -1057,45 +1046,34 @@ modelB は元の位置・姿勢を保つ。2番目の引数に「false」を指�
 
 \subsection{親子関係に関するメソッド} 
 以下に、親子関係に関する fk\_Model のメソッドを羅列する。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{SetParent(fk\_Model m, bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		m を親モデルとして設定する。flag が true の場合、
-		設定後も元モデルのグローバル座標系での位置・姿勢が
-		変化しない。false の場合は、元の位置・姿勢が m の
-		相対的な位置・姿勢として扱われる。2 番目の引数を
-		省略した場合、false と同じとなる。
-	\end{tabular} \\ \\
+\begin{description}
+\item[SetParent(fk\_Model m, bool flag)] ~ \\
+	m を親モデルとして設定する。flag が true の場合、
+	設定後も元モデルのグローバル座標系での位置・姿勢が
+	変化しない。false の場合は、元の位置・姿勢が m の
+	相対的な位置・姿勢として扱われる。2 番目の引数を
+	省略した場合、false と同じとなる。\\
 
-\> \textbf{DeleteParent(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		設定してあった親モデルとの関係を解除する。
-		元々親モデルが設定されていなかった場合は何も起こらない。
-		flag に関しては、SetParent() メソッドと同様。
-	\end{tabular} \\ \\
+\item[DeleteParent(bool flag)] ~ \\
+	設定してあった親モデルとの関係を解除する。
+	元々親モデルが設定されていなかった場合は何も起こらない。
+	flag に関しては、SetParent() メソッドと同様。\\
 
-\> \textbf{EntryChild(fk\_Model m, bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		m を子モデルの1つとして設定する。
-		flag に関しては、SetParent() メソッドと同様。
-	\end{tabular} \\ \\
+\item[EntryChild(fk\_Model m, bool flag)] ~ \\
+	m を子モデルの1つとして設定する。
+	flag に関しては、SetParent() メソッドと同様。\\
 
-\> \textbf{DeleteChild(fk\_Model m, bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		m が子モデルであった場合、親子関係を解除する。
-		m が子モデルではなかった場合は何も起こらない。
-		flag に関しては、SetParent() メソッドと同様。
-	\end{tabular} \\ \\
+\item[DeleteChild(fk\_Model m, bool flag)] ~ \\
+	m が子モデルであった場合、親子関係を解除する。
+	m が子モデルではなかった場合は何も起こらない。
+	flag に関しては、SetParent() メソッドと同様。\\
 
-\> \textbf{DeleteChildren(bool flag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		自身に設定されている全ての子モデルに対し、
-		親子関係を解除する。
-		flag に関しては、SetParent() メソッドと同様。
-	\end{tabular} \\ \\
+\item[DeleteChildren(bool flag)] ~ \\
+	自身に設定されている全ての子モデルに対し、
+	親子関係を解除する。
+	flag に関しては、SetParent() メソッドと同様。
 
-\end{tabbing}
+\end{description}
 
 \section{干渉・衝突判定}
 ゲームのようなアプリケーションの場合、物体同士の衝突を検出することは重要な処理である。

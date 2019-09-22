@@ -224,35 +224,26 @@ MQO ファイル名が「sample.mqo」、
 述べているスムースシェーディングの制御に対応している。
 
 fk\_IFSTexture クラスが持つその他のメソッドとして、以下のようなものがある。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void Init()} \\
-	\> \> \begin{tabular}{p{15cm}}
-		テクスチャデータ及び形状データの初期化を行うメソッド。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void Init()] ~ \\
+	テクスチャデータ及び形状データの初期化を行うメソッド。\\
 
-\> \textbf{fk\_TexCoord GetTextureCoord(int triID, int vID)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		三角形 ID が triID、頂点 ID が vID である頂点に
-		設定されているテクスチャ座標を返すメソッド。
-	\end{tabular} \\ \\
+\item[fk\_TexCoord GetTextureCoord(int triID, int vID)] ~ \\
+	三角形 ID が triID、頂点 ID が vID である頂点に
+	設定されているテクスチャ座標を返すメソッド。\\
 
-\> \textbf{void SetTextureCoord(int triID, int vID, fk\_TexCoord coord)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		三角形 ID が triID、頂点 ID が vID である頂点に
-		coord をテクスチャ座標として設定する。
-	\end{tabular} \\ \\
+\item[void SetTextureCoord(int triID, int vID, fk\_TexCoord coord)] ~ \\
+	三角形 ID が triID、頂点 ID が vID である頂点に
+	coord をテクスチャ座標として設定する。\\
 
-\> \textbf{fk\_IndexFaceSet IFS)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		fk\_IFSTexture クラスは、形状データとして
-		内部では fk\_IndexFaceSet クラスによる変数を保持しており、
-		その中に形状データを格納している。このプロパティは、
-		そのインスタンスを取得するものである。
-		頂点の移動などは、このインスタンスを介して fk\_IndexFaceSet の
-		機能を用いて可能となる。
-	\end{tabular}
-\end{tabbing}
+\item[fk\_IndexFaceSet IFS)] ~ \\
+	fk\_IFSTexture クラスは、形状データとして
+	内部では fk\_IndexFaceSet クラスによる変数を保持しており、
+	その中に形状データを格納している。このプロパティは、
+	そのインスタンスを取得するものである。
+	頂点の移動などは、このインスタンスを介して fk\_IndexFaceSet の
+	機能を用いて可能となる。
+\end{description}
 
 \subsection{メッシュテクスチャ}
 最後に、「メッシュテクスチャ」を紹介する。メッシュテクスチャは、
@@ -395,170 +386,121 @@ fk\_RectTexture に画像情報を反映させるプログラムである。
 \end{breakbox}
 ~ \\
 fk\_Image クラスの主要なメソッドやプロパティを以下に羅列する。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void Init()} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像情報を初期化するメソッド。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void Init()] ~ \\
+	画像情報を初期化するメソッド。\\
 
-\> \textbf{bool ReadBMP(String fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ファイル名が fileName である Windows Bitmap 形式の
-		画像ファイルを読み込むメソッド。成功すれば true を、
-		失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool ReadBMP(String fileName)] ~ \\
+	ファイル名が fileName である Windows Bitmap 形式の
+	画像ファイルを読み込むメソッド。成功すれば true を、
+	失敗すれば false を返す。\\
 
-\> \textbf{bool ReadPNG(String fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ファイル名が fileName である PNG 形式の
-		画像ファイルを読み込むメソッド。成功すれば true を、
-		失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool ReadPNG(String fileName)] ~ \\
+	ファイル名が fileName である PNG 形式の
+	画像ファイルを読み込むメソッド。成功すれば true を、
+	失敗すれば false を返す。\\
 
-\> \textbf{bool ReadJPG(String fileName)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		ファイル名が fileName である JPEG 形式の
-		画像ファイルを読み込むメソッド。成功すれば true を、
-		失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool ReadJPG(String fileName)] ~ \\
+	ファイル名が fileName である JPEG 形式の
+	画像ファイルを読み込むメソッド。成功すれば true を、
+	失敗すれば false を返す。\\
 
-\> \textbf{bool WriteBMP(String fileName, bool transFlag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されている画像情報を、Windows Bitmap 形式で
-		ファイル名が fileName であるファイルに書き出すメソッド。
-		transFlag を true にすると、透過情報を付加した
-		32bit データとして出力し、false の場合通常の
-		フルカラー 24bit 形式で出力する。
-		書き出しに成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool WriteBMP(String fileName, bool transFlag)] ~ \\
+	現在格納されている画像情報を、Windows Bitmap 形式で
+	ファイル名が fileName であるファイルに書き出すメソッド。
+	transFlag を true にすると、透過情報を付加した
+	32bit データとして出力し、false の場合通常の
+	フルカラー 24bit 形式で出力する。
+	書き出しに成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool WritePNG(String fileName, bool transFlag)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されている画像情報を、PNG 形式で
-		ファイル名が fileName であるファイルに書き出すメソッド。
-		transFlag を true にすると、透過情報も合わせて出力する。
-		false の場合は透過情報を削除したファイルを生成する。
-		書き出しに成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool WritePNG(String fileName, bool transFlag)] ~ \\
+	現在格納されている画像情報を、PNG 形式で
+	ファイル名が fileName であるファイルに書き出すメソッド。
+	transFlag を true にすると、透過情報も合わせて出力する。
+	false の場合は透過情報を削除したファイルを生成する。
+	書き出しに成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool WriteJPG(String fileName, int quality)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在格納されている画像情報を、JPEG 形式で
-		ファイル名が fileName であるファイルに書き出すメソッド。
-		quality は 0 から 100 までの整数値を入力し、
-		画像品質を設定する。
-		数値が低いほど圧縮率は高いが画像品質は低くなる。
-		数値が高いほど圧縮率は悪くなるが画像品質は良くなる。
-		書き出しに成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool WriteJPG(String fileName, int quality)] ~ \\
+	現在格納されている画像情報を、JPEG 形式で
+	ファイル名が fileName であるファイルに書き出すメソッド。
+	quality は 0 から 100 までの整数値を入力し、
+	画像品質を設定する。
+	数値が低いほど圧縮率は高いが画像品質は低くなる。
+	数値が高いほど圧縮率は悪くなるが画像品質は良くなる。
+	書き出しに成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{void NewImage(int w, int h)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像の大きさを横幅 w, 縦幅 h に設定するメソッド。これまでに
-		保存されていた画像情報は失われる。
-	\end{tabular} \\ \\
+\item[void NewImage(int w, int h)] ~ \\
+	画像の大きさを横幅 w, 縦幅 h に設定するメソッド。これまでに
+	保存されていた画像情報は失われる。\\
 
-\> \textbf{void CopyImage(const fk\_Image image)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		image の画像情報をコピーするメソッド。
-	\end{tabular} \\ \\
+\item[void CopyImage(const fk\_Image image)] ~ \\
+	image の画像情報をコピーするメソッド。\\
 
-\> \textbf{void CopyImage(const fk\_Image image, int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		現在の画像に対し、image の画像情報を
-		左上が \((x, y)\) となる位置に上書きを行うメソッド。
-		image はコピー先の中に完全に包含されている必要があり、
-		はみ出てしまう場合には上書きは行われない。
-	\end{tabular} \\ \\
+\item[void CopyImage(const fk\_Image image, int x, int y)] ~ \\
+	現在の画像に対し、image の画像情報を
+	左上が \((x, y)\) となる位置に上書きを行うメソッド。
+	image はコピー先の中に完全に包含されている必要があり、
+	はみ出てしまう場合には上書きは行われない。\\
 
-\> \textbf{void SubImage(const fk\_Image image, int x, int y, int w, int h)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		元画像 image に対し、
-		左上が \((x, y)\)、横幅 w, 縦幅 h となるような
-		部分画像をコピーするメソッド。
-		x, y, w, h に不適切な値が与えられた場合は、
-		コピーを行わない。
-	\end{tabular} \\ \\
+\item[void SubImage(const fk\_Image image, int x, int y, int w, int h)] ~ \\
+	元画像 image に対し、
+	左上が \((x, y)\)、横幅 w, 縦幅 h となるような
+	部分画像をコピーするメソッド。
+	x, y, w, h に不適切な値が与えられた場合は、
+	コピーを行わない。\\
 
-\> \textbf{fk\_Dimension Size)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像の縦横幅を得るプロパティ。
-	\end{tabular} \\ \\
+\item[fk\_Dimension Size] ~ \\
+	画像の縦横幅を得るプロパティ。\\
 
-\> \textbf{int GetR(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の赤要素の値を int 型で返すメソッド。
-	\end{tabular} \\ \\
+\item[int GetR(int x, int y)] ~ \\
+	(x, y) の位置にある画素の赤要素の値を int 型で返すメソッド。\\
 
-\> \textbf{int GetG(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の緑要素の値を int 型で返すメソッド。
-	\end{tabular} \\ \\
+\item[int GetG(int x, int y)] ~ \\
+	(x, y) の位置にある画素の緑要素の値を int 型で返すメソッド。\\
 
-\> \textbf{int GetB(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の青要素の値を int 型で返すメソッド。
-	\end{tabular} \\ \\
+\item[int GetB(int x, int y)] ~ \\
+	(x, y) の位置にある画素の青要素の値を int 型で返すメソッド。\\
 
-\> \textbf{int GetA(int x, int y)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素の透明度要素の値を int 型で返すメソッド。
-	\end{tabular} \\ \\
+\item[int GetA(int x, int y)] ~ \\
+	(x, y) の位置にある画素の透明度要素の値を int 型で返すメソッド。\\
 
-\> \textbf{bool SetRGBA(int x, int y, int r, int g, int b, int a)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		赤、緑、青、透明度をそれぞれ r, g, b, a に設定するメソッド。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool SetRGBA(int x, int y, int r, int g, int b, int a)] ~ \\
+	(x, y) の位置にある画素に対し、
+	赤、緑、青、透明度をそれぞれ r, g, b, a に設定するメソッド。
+	成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool SetRGB(int x, int y, int r, int g, int b)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		赤、緑、青をそれぞれ r, g, b に設定するメソッド。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool SetRGB(int x, int y, int r, int g, int b)] ~ \\
+	(x, y) の位置にある画素に対し、
+	赤、緑、青をそれぞれ r, g, b に設定するメソッド。
+	成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool SetR(int x, int y, int r)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		赤要素を r に設定するメソッド。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool SetR(int x, int y, int r)] ~ \\
+	(x, y) の位置にある画素に対し、
+	赤要素を r に設定するメソッド。
+	成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool SetG(int x, int y, int g)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		緑要素を g に設定するメソッド。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool SetG(int x, int y, int g)] ~ \\
+	(x, y) の位置にある画素に対し、
+	緑要素を g に設定するメソッド。
+	成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool SetB(int x, int y, int b)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		青要素を b に設定するメソッド。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool SetB(int x, int y, int b)] ~ \\
+	(x, y) の位置にある画素に対し、
+	青要素を b に設定するメソッド。
+	成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{bool SetA(int x, int y, int a)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		(x, y) の位置にある画素に対し、
-		透明度要素を a に設定するメソッド。
-		成功すれば true を、失敗すれば false を返す。
-	\end{tabular} \\ \\
+\item[bool SetA(int x, int y, int a)] ~ \\
+	(x, y) の位置にある画素に対し、
+	透明度要素を a に設定するメソッド。
+	成功すれば true を、失敗すれば false を返す。\\
 
-\> \textbf{void FillColor(fk\_Color col)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像中の全てのピクセルの色要素を col が表わす色に設定するメソッド。
-	\end{tabular} \\ \\
+\item[void FillColor(fk\_Color col)] ~ \\
+	画像中の全てのピクセルの色要素を col が表わす色に設定するメソッド。\\
 
-\> \textbf{void FillColor(int r, int g, int b, int a)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		画像中の全てのピクセルの色要素を、r を赤、b を青、
-		b を緑、a を透明度として設定するメソッド。
-	\end{tabular}
-\end{tabbing}
+\item[void FillColor(int r, int g, int b, int a)] ~ \\
+	画像中の全てのピクセルの色要素を、r を赤、b を青、
+	b を緑、a を透明度として設定するメソッド。\\
+\end{description}
 
 また、以下のようにすることで、
 fk\_Colol 型によって画素色値の参照や設定を行うことができる。

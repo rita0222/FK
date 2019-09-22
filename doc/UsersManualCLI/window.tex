@@ -200,8 +200,8 @@ fk\_AppWindow には座標軸やグリッドを表示する機能が備わって
 \\
 \begin{screen}
 \begin{verbatim}
-    window.ShowGuide(fk_GuideMode.AXIS_X | fk_GuideMode.AXIS_Y |
-                     fk_GuideMode.AXIS_Z | fk_GuideMode.GRID_XZ);
+    window.ShowGuide(fk_Guide.AXIS_X | fk_Guide.AXIS_Y |
+                     fk_Guide.AXIS_Z | fk_Guide.GRID_XZ);
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -213,12 +213,12 @@ showGuide() で指定できる項目は以下の通りである。
 \begin{center}
 \begin{tabular}{|c|l|}
 \hline
-fk\_GuideMode.AXIS\_X & \(x\)軸 \\ \hline
-fk\_GuideMode.AXIS\_Y & \(y\)軸 \\ \hline
-fk\_GuideMode.AXIS\_Z & \(z\)軸 \\ \hline
-fk\_GuideMode.GRID\_XY & \(xy\) 平面上のグリッド \\ \hline
-fk\_GuideMode.GRID\_YZ & \(yz\) 平面上のグリッド \\ \hline
-fk\_GuideMode.GRID\_XZ & \(xz\) 平面上のグリッド \\ \hline
+fk\_Guide.AXIS\_X & \(x\)軸 \\ \hline
+fk\_Guide.AXIS\_Y & \(y\)軸 \\ \hline
+fk\_Guide.AXIS\_Z & \(z\)軸 \\ \hline
+fk\_Guide.GRID\_XY & \(xy\) 平面上のグリッド \\ \hline
+fk\_Guide.GRID\_YZ & \(yz\) 平面上のグリッド \\ \hline
+fk\_Guide.GRID\_XZ & \(xz\) 平面上のグリッド \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -227,33 +227,23 @@ fk\_GuideMode.GRID\_XZ & \(xz\) 平面上のグリッド \\ \hline
 
 座標軸の長さやグリッドの幅、数などは以下のメソッドやプロパティによって制御可能である。
 
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{HideGuide() メソッド} \\
-	\> \> \begin{tabular}{p{15cm}}
-		座標軸・グリッドを消去する。
-	\end{tabular} \\ \\
+\begin{description}
+\item[HideGuide() メソッド] ~ \\
+	座標軸・グリッドを消去する。\\
 
-\> \textbf{double AxisWidth プロパティ} \\
-	\> \> \begin{tabular}{p{15cm}}
-		座標軸の線幅を w に設定する。
-	\end{tabular} \\ \\
+\item[double AxisWidth プロパティ] ~ \\
+	座標軸の線幅を w に設定する。\\
 
-\> \textbf{double GridWidth プロパティ)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		グリッドの線幅を w に設定する。
-	\end{tabular} \\ \\
+\item[double GridWidth プロパティ] ~ \\
+	グリッドの線幅を w に設定する。\\
 
-\> \textbf{double GuideScale プロパティ} \\
-	\> \> \begin{tabular}{p{15cm}}
-		グリッドの幅を s に設定する。
-	\end{tabular} \\ \\
+\item[double GuideScale プロパティ] ~ \\
+	グリッドの幅を s に設定する。\\
 
-\> \textbf{int GuideNum プロパティ)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		グリッドの分割数を n に設定する。
-	\end{tabular}
-\end{tabbing}
+\item[int GuideNum プロパティ] ~ \\
+	グリッドの分割数を n に設定する。
+\end{description}
+
 \section{デバイス情報の取得} \label{sec:device}
 fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、fk\_AppWindow クラスは
 様々なメソッドを提供している。ここでは、それらの使用法を説明する。
@@ -264,7 +254,7 @@ fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、
 \\
 \begin{screen}
 \begin{verbatim}
-        if(window.GetKeyStatus('g', fk_SwitchStatus.PRESS) == true) {
+        if(window.GetKeyStatus('g', fk_Switch.PRESS) == true) {
                 :       // キーが押された時の処理を行う。
         }
 \end{verbatim}
@@ -276,21 +266,21 @@ fk\_AppWindow 上でのマウスやキーボードの状態を調べるため、
 
 \begin{table}[H]
 \caption{キーの状態設定}
-\label{tbl:fkSwitchStatus}
+\label{tbl:fkSwitch}
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline
-fk\_SwitchStatus.RELEASE & 離しっぱなしの状態 \\ \hline
-fk\_SwitchStatus.UP & 離した瞬間 \\ \hline
-fk\_SwitchStatus.DOWN & 押した瞬間 \\ \hline
-fk\_SwitchStatus.PRESS & 押しっぱなしの状態 \\ \hline
+fk\_Switch.RELEASE & 離しっぱなしの状態 \\ \hline
+fk\_Switch.UP & 離した瞬間 \\ \hline
+fk\_Switch.DOWN & 押した瞬間 \\ \hline
+fk\_Switch.PRESS & 押しっぱなしの状態 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
 上記のサンプルプログラムは「押した状態にあるかどうか」を検知するものであるが、
-「押した瞬間」であるかどうかを検知する場合は「fk\_SwitchStatus.PRESS」のかわりに
-「fk\_SwitchStatus.DOWN」を第2引数に入力する。
+「押した瞬間」であるかどうかを検知する場合は「fk\_Switch.PRESS」のかわりに
+「fk\_Switch.DOWN」を第2引数に入力する。
 
 \subsection{GetSpecialKeyStatus() メソッド}
 このメソッドは、文字ではない特殊キーが押されているか
@@ -299,7 +289,7 @@ fk\_SwitchStatus.PRESS & 押しっぱなしの状態 \\ \hline
 \\
 \begin{screen}
 \begin{verbatim}
-        if(window.GetSpecialKeyStatus(FK_SHIFT_L, FK_SW_PRESS) == true) {
+        if(window.GetSpecialKeyStatus(fk_Key.SHIFT_L, fk_Switch.PRESS) == true) {
                 :       // キーが押されている時の処理を行う。
         }
 \end{verbatim}
@@ -316,27 +306,27 @@ fk\_SwitchStatus.PRESS & 押しっぱなしの状態 \\ \hline
 \begin{tabular}{|l|l||l|l|}
 \hline
 引数名 & 対応特殊キー & 引数名 & 対応特殊キー \\ \hline \hline
-fk\_SpecialKey.SHIFT\_R	& 右シフトキー &
-	fk\_SpecialKey.CAPS\_LOCK	& Caps Lock キー \\ \hline
-fk\_SpecialKey.SHIFT\_L	& 左シフトキー &
-	fk\_SpecialKey.PAGE\_UP	& Page Up キー \\ \hline
-fk\_SpecialKey.CTRL\_R	& 右コントロールキー &
-	fk\_SpecialKey.PAGE\_DOWN	& Page Down キー \\ \hline
-fk\_SpecialKey.CTRL\_L	& 左コントロールキー &
-	fk\_SpecialKey.HOME	& Home キー \\ \hline
-fk\_SpecialKey.ALT\_R	& 右 ALT キー &
-	fk\_SpecialKey.END		& End キー \\ \hline
-fk\_SpecialKey.ALT\_L	& 左 ALT キー &
-	fk\_SpecialKey.INSERT	& Insert キー \\ \hline
-fk\_SpecialKey.ENTER	& 改行キー &
-	fk\_SpecialKey.RIGHT	& 右矢印キー \\ \hline
-fk\_SpecialKey.BACKSPACE	& Back Space キー &
-	fk\_SpecialKey.LEFT	& 左矢印キー \\ \hline
-fk\_SpecialKey.DELETE	& Del キー &
-	fk\_SpecialKey.UP		& 上矢印キー \\ \hline
-fk\_SpecialKey.TAB		& Tab キー &
-	fk\_SpecialKey.DOWN	& 下矢印キー \\ \hline
-fk\_SpecialKey.F1 〜 fk\_SpecialKey.F12 & F1 〜 F12 キー &
+fk\_Key.SHIFT\_R	& 右シフトキー &
+	fk\_Key.CAPS\_LOCK	& Caps Lock キー \\ \hline
+fk\_Key.SHIFT\_L	& 左シフトキー &
+	fk\_Key.PAGE\_UP	& Page Up キー \\ \hline
+fk\_Key.CTRL\_R	& 右コントロールキー &
+	fk\_Key.PAGE\_DOWN	& Page Down キー \\ \hline
+fk\_Key.CTRL\_L	& 左コントロールキー &
+	fk\_Key.HOME	& Home キー \\ \hline
+fk\_Key.ALT\_R	& 右 ALT キー &
+	fk\_Key.END		& End キー \\ \hline
+fk\_Key.ALT\_L	& 左 ALT キー &
+	fk\_Key.INSERT	& Insert キー \\ \hline
+fk\_Key.ENTER	& 改行キー &
+	fk\_Key.RIGHT	& 右矢印キー \\ \hline
+fk\_Key.BACKSPACE	& Back Space キー &
+	fk\_Key.LEFT	& 左矢印キー \\ \hline
+fk\_Key.DELETE	& Del キー &
+	fk\_Key.UP		& 上矢印キー \\ \hline
+fk\_Key.TAB		& Tab キー &
+	fk\_Key.DOWN	& 下矢印キー \\ \hline
+fk\_Key.F1 〜 fk\_Key.F12 & F1 〜 F12 キー &
 		& \\ \hline
 \end{tabular}
 \end{small}
@@ -372,7 +362,7 @@ FK\_MOUSE3 に対応しており、
 \begin{verbatim}
         var window = new fk_AppWindow();
 
-        if(window.GetMouseStatus(FK_MOUSE1, fk_SwitchStatus.PRESS) == true) {
+        if(window.GetMouseStatus(FK_MOUSE1, fk_Switch.PRESS) == true) {
                 :       // 左ボタンが押されている。
                 :
         }

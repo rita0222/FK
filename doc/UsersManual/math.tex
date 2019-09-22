@@ -405,45 +405,47 @@ fk\_Matrix 型の持つ代入演算子は、単純代入演算子として `=' �
 \subsection{その他のメンバ関数}
 以下に、fk\_Matrix で用いられる主要なメンバ関数を紹介する。
 
-\subsubsection*{void init(void)}
-自身を単位行列にする。
+\begin{description}
+\item[void init(void)] ~ \\
+自身を単位行列にする。\\
 
-\subsubsection*{void set(int r, int c, double a)}
-行番号が r、列番号が c に対応する成分の値を a に設定する。
+\item[void set(int r, int c, double a)] ~ \\
+行番号が r、列番号が c に対応する成分の値を a に設定する。\\
 
-\subsubsection*{void setRow(int r, fk\_Vector v)}
-\subsubsection*{void setRow(int r, fk\_HVector v)}
-行番号が r である行ベクトルを v の各成分値に設定する。
+\item[void setRow(int r, fk\_Vector v)]
+\item[void setRow(int r, fk\_HVector v)] ~ \\
+行番号が r である行ベクトルを v の各成分値に設定する。\\
 
-\subsubsection*{void setCol(int c, fk\_Vector v)}
-\subsubsection*{void setCol(int c, fk\_HVector v)}
-列番号が c である列ベクトルを v に設定する。
+\item[void setCol(int c, fk\_Vector v)]
+\item[void setCol(int c, fk\_HVector v)] ~ \\
+列番号が c である列ベクトルを v に設定する。\\
 
-\subsubsection*{fk\_HVector getRow(int r)}
-行番号が r である行ベクトルを取得する。
+\item[fk\_HVector getRow(int r)] ~ \\
+行番号が r である行ベクトルを取得する。\\
 
-\subsubsection*{fk\_HVector getCol(int c)}
-列番号が c である列ベクトルを取得する。
+\item[fk\_HVector getCol(int c)] ~ \\
+列番号が c である列ベクトルを取得する。\\
 
-\subsubsection*{bool isSingular(void)}
+\item[bool isSingular(void)] ~ \\
 自身が特異行列であるかどうかを判定する。
 特異行列とは、逆行列が存在しない行列のことである。
-特異行列である場合は true を、そうでない場合は false を返す。
+特異行列である場合は true を、そうでない場合は false を返す。\\
 
-\subsubsection*{bool isRegular(void)}
+\item[bool isRegular(void)] ~ \\
 自身が正則行列であるかどうかを判定する。
 正則行列とは、逆行列が存在する行列のことである。
 (つまり、「非正則行列」と「特異行列」はまったく同じ意味になる。)
-正則行列である場合は true を、そうでない場合は false を返す。
+正則行列である場合は true を、そうでない場合は false を返す。\\
 
-\subsubsection*{bool inverse(void)}
+\item[bool inverse(void)] ~ \\
 自身が正則行列であった場合、
 自身を逆行列と入れ替えて true を返す。
-特異行列であった場合は、false を返し自身は変化しない。
+特異行列であった場合は、false を返し自身は変化しない。\\
 
-\subsubsection*{void negate(void)}
+\item[void negate(void)] ~ \\
 自身を転置する。転置とは、
 行列の行と列を入れ替える操作のことである。
+\end{description}
 
 \subsection{4次元ベクトル}
 fk\_Matrix は 4 行 4 列の正方行列であるため、本来であれば、
@@ -555,27 +557,29 @@ fk\_Quaternion クラスは、デフォルトコンストラクタとして何�
 
 設定用のメンバ関数としては、以下のようなものがある。
 
-\subsubsection*{void init(void)}
+\begin{description}
+\item[void init(void)] ~ \\
 初期化のためのメンバ関数で、デフォルトコンストラクタと同様にスカラー部が 1、
-ベクトル部に零ベクトルが設定される。
+ベクトル部に零ベクトルが設定される。\\
 
-\subsubsection*{void set(double t, const fk\_Vector \&v)}
-設定のためのメンバ関数で、t がスカラー部、v がベクトル部に対応している。
+\item[void set(double t, const fk\_Vector \&v)] ~ \\
+設定のためのメンバ関数で、t がスカラー部、v がベクトル部に対応している。\\
 
-\subsubsection*{void set(double s, double x, double y, double z)}
-設定のためのメンバ関数で、四元数の各成分が順に対応している。
+\item[void set(double s, double x, double y, double z)] ~ \\
+設定のためのメンバ関数で、四元数の各成分が順に対応している。\\
 
-\subsubsection*{void setRotate(double theta, const fk\_Vector \&v)}
+\item[void setRotate(double theta, const fk\_Vector \&v)] ~ \\
 角度を theta、回転軸を v とするような回転変換を表わす四元数を生成する。
 実際に四元数に代入される値は、theta を \(\theta\)、
 v を \(\bV\) としたとき、
 スカラー部が \(\cos\frac{\theta}{2}\)、
-ベクトル部が \(\frac{\bV}{|\bV|}\sin\frac{\theta}{2}\) となる。
+ベクトル部が \(\frac{\bV}{|\bV|}\sin\frac{\theta}{2}\) となる。\\
 
-\subsubsection*{void setRotate(double theta, double x, double y, double z)}
+\item[void setRotate(double theta, double x, double y, double z)] ~ \\
 角度を theta, 回転軸を \((x, y, z)\) とするような
 回転変換を表わす四元数を生成する。
 ベクトル部の引数が実数となる以外は、前述の setRotate と同様である。
+\end{description}
 
 \subsection{比較演算子}
 fk\_Quaternion 型は、比較演算子として `\verb+==+' と `\verb+!=+' を

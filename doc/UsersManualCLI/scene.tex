@@ -141,8 +141,8 @@ FK システムでは、シーン全体に霧効果を出す機能がサポー�
 \begin{verbatim}
         var scene = new fk_Scene();
 
-        scene.FogMode = fk_FogMode.LINEAR_FOG;
-        scene.FogOption = fk_FogOption.FASTEST_FOG;
+        scene.FogMode = fk_FogMode.LINEAR;
+        scene.FogOption = fk_FogOption.FASTEST;
         scene.FogLinearStart = 0.0;
         scene.FogLinearEnd = 400.0;
         scene.FogColor = new fk_Color(0.3, 0.4, 1.0, 0.0);
@@ -166,20 +166,18 @@ FogLinearEnd プロパティの数値が霧によって何も見えなくなる�
 \subsection{霧効果の詳細な利用方法} \label{subsec:scenefogref}
 霧効果に関連する機能として、
 次のような fk\_Scene のプロパティ群が提供されている。
-\begin{bf}
-\begin{tabbing}
-xxxxxxx \= \kill
-\> fk\_FogMode FogMode; \\
-\> fk\_FogOption FogOption; \\
-\> double FogDensity; \\
-\> double FogLinearStart; \\
-\> double FogLinearEnd; \\
-\> fk\_Color FogColor; \\
-\end{tabbing}
-\end{bf}
+\begin{description}
+\item[fk\_FogMode FogMode]
+\item[fk\_FogOption FogOption]
+\item[double FogDensity]
+\item[double FogLinearStart]
+\item[double FogLinearEnd]
+\item[fk\_Color FogColor]
+\end{description}
+
 以下に、各プロパティの解説を述べる。
 \begin{description}
- \item[\hspace*{0.6cm}fk\_FogMode FogMode] ~ \\
+ \item[fk\_FogMode FogMode] ~ \\
 	霧による減衰の関数を設定する。以下のような項目が入力できる。
 	各数値の設定はその他の設定関数を参照すること。
 	\begin{center}
@@ -187,40 +185,40 @@ xxxxxxx \= \kill
 	\hline
 	fk\_FogMode.LINEAR\_FOG & 減衰関数として \(\dfrac{E - z}{E - S}\) が
 		選択される。\\ \hline
-	fk\_FogMode.EXP\_FOG & 減衰関数として \(e^{-dz}\) が選択される。\\ \hline
-	fk\_FogMode.EXP2\_FOG & 減衰関数として \(e^{-(dz)^2}\) が選択される。\\ \hline
-	fk\_FogMode.NONE\_FOG & 霧効果を無効とする。\\ \hline
+	fk\_FogMode.EXP & 減衰関数として \(e^{-dz}\) が選択される。\\ \hline
+	fk\_FogMode.EXP2 & 減衰関数として \(e^{-(dz)^2}\) が選択される。\\ \hline
+	fk\_FogMode.NONE & 霧効果を無効とする。\\ \hline
 	\end{tabular}
 	\end{center}
-	なお、デフォルトでは fk\_FogMode.NONE\_FOG が選択されている。
+	なお、デフォルトでは fk\_FogMode.NONE が選択されている。\\
 
- \item[\hspace*{0.6cm}fk\_FogOption FogOption] ~ \\
+ \item[fk\_FogOption FogOption] ~ \\
 	霧効果における描画オプションを設定する。以下のような項目が
 	入力できる。
 	\begin{center}
 	\begin{tabular}{|c|p{7cm}|}
 	\hline
-	fk\_FogOption.FASTEST\_FOG & 描画の際に、速度を優先する。\\ \hline
-	fk\_FogOption.NICEST\_FOG & 描画の際に、精細さを優先する。\\ \hline
-	fk\_FogOption.NOOPTION\_FOG & 特にオプションを設定しない。\\ \hline
+	fk\_FogOption.FASTEST & 描画の際に、速度を優先する。\\ \hline
+	fk\_FogOption.NICEST & 描画の際に、精細さを優先する。\\ \hline
+	fk\_FogOption.NOOPTION & 特にオプションを設定しない。\\ \hline
 	\end{tabular}
 	\end{center}
-	なお、デフォルトでは fk\_FogOption.NOOPTION\_FOG が選択されている。
+	なお、デフォルトでは fk\_FogOption.NOOPTION\_FOG が選択されている。\\
 
- \item[\hspace*{0.6cm}double FogDensity] ~ \\
-	減衰関数として fk\_FogMode.EXP\_FOG (\(e^{-dz}\)) 
-	及び fk\_FogMode.EXP2\_FOG (\(e^{-(dz)^2}\)) が選択された際の、	
+ \item[double FogDensity] ~ \\
+	減衰関数として fk\_FogMode.EXP (\(e^{-dz}\)) 
+	及び fk\_FogMode.EXP2 (\(e^{-(dz)^2}\)) が選択された際の、	
 	減衰指数係数 \(d\) を設定する。ここで、\(z\) はカメラから
-	対象地点への距離を指す。
+	対象地点への距離を指す。\\
 
- \item[\hspace*{0.6cm}double FogLinearStart]
- \item[\hspace*{0.6cm}double FogLinearEnd] ~ \\
-	減衰関数として fk\_FogMode.LINEAR\_FOG (\(\dfrac{E - z}{E - S}\)) が
+ \item[double FogLinearStart]
+ \item[double FogLinearEnd] ~ \\
+	減衰関数として fk\_FogMode.LINEAR (\(\dfrac{E - z}{E - S}\)) が
 	選択された際の、減衰線形係数 \(S, E\) を設定する。もっと
 	平易に述べると、霧効果が現れる最初の距離 \(S\) と、
-	霧で何も見えなくなる距離 \(E\) を設定する。
+	霧で何も見えなくなる距離 \(E\) を設定する。\\
 
- \item[\hspace*{0.6cm}fk\_Color FogColor] ~ \\
+ \item[fk\_Color FogColor] ~ \\
 	霧の色を設定する。大抵の場合、背景色と同一の色を指定し、
 	透過度は 0 にしておく。
 \end{description}
@@ -240,26 +238,21 @@ xxxxxxx \= \kill
 
 基本的には、通常のモデル登録と同様の手順でオーバーレイモデルを登録することができる。
 オーバーレイモデルを扱うメンバ関数は、以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void EntryOverlayModel(fk\_Model model)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		モデルをオーバーレイモデルとしてシーンに登録する。
-		「model」が既にオーバーレイモデルとして登録されていた場合は、
-		そのモデルが最前面に移動する。
-	\end{tabular} \\ \\
+\begin{description}
 
-\> \textbf{void RemoveOverlayModel(fk\_Model model)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		「model」がオーバーレイモデルとして登録されていた場合、
-		リストから削除する。
-	\end{tabular} \\ \\
+\item[void EntryOverlayModel(fk\_Model model)] ~ \\
+	モデルをオーバーレイモデルとしてシーンに登録する。
+	「model」が既にオーバーレイモデルとして登録されていた場合は、
+	そのモデルが最前面に移動する。\\
 
-\> \textbf{void ClearOverlayModel(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		全ての登録されているオーバーレイモデルを解除する。
-	\end{tabular}
-\end{tabbing}
+\item[void RemoveOverlayModel(fk\_Model model)] ~ \\
+	「model」がオーバーレイモデルとして登録されていた場合、
+	リストから削除する。\\
+
+\item[void ClearOverlayModel(void)] ~ \\
+	全ての登録されているオーバーレイモデルを解除する。
+
+\end{description}
 
 \if0
 \section{立体視の制御}
@@ -280,35 +273,27 @@ fk\_Sceneクラスでは、立体視表現のために左目と右目を表す�
 追加で設定することができるようになっている。射影変換の設定もカメラモデルごとに
 別個の設定を持つことができるため、両眼視差の厳密な微調整が可能である。
 これら立体視表現のためのメンバ関数は以下の通りである。
-\begin{tabbing}
-xx \= xxxx \= \kill
-\> \textbf{void entryStereoCamera(fk\_StereoChannel channel, fk\_Model *model)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		モデルを左目、あるいは右目のカメラモデルとしてシーンに登録する。
-		「channel」には、「FK\_STEREO\_LEFT」か「FK\_STEREO\_RIGHT」の
-		どちらかを指定する。
-	\end{tabular} \\ \\
 
-\> \textbf{void setStereoProjection(fk\_StereoChannel channel, fk\_Projection *proj)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		左目、あるいは右目の射影設定を変更する。「channel」の指定は前述の通りである。
-		「proj」にはfk\_Perspective、fk\_Ortho、fk\_Frustumクラスの
-		オブジェクトのポインタを指定する。詳細はリファレンスマニュアルを参照のこと。
-	\end{tabular} \\ \\
+\begin{description}
+\item[void entryStereoCamera(fk\_StereoChannel channel, fk\_Model *model)] ~ \\
+	モデルを左目、あるいは右目のカメラモデルとしてシーンに登録する。
+	「channel」には、「FK\_STEREO\_LEFT」か「FK\_STEREO\_RIGHT」の
+	どちらかを指定する。\\
 
-\> \textbf{const fk\_Model * getStereoCamera(fk\_StereoChannel channel)} \\
-\> \textbf{const fk\_ProjectBase * getStereoProjection(fk\_StereoChannel channel)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		立体視用に設定したカメラモデル、または射影設定を取得する。
-		「channel」の指定は前述の通りである。
-	\end{tabular} \\ \\
+\item[void setStereoProjection(fk\_StereoChannel channel, fk\_Projection *proj)] ~ \\
+	左目、あるいは右目の射影設定を変更する。「channel」の指定は前述の通りである。
+	「proj」にはfk\_Perspective、fk\_Ortho、fk\_Frustumクラスの
+	オブジェクトのポインタを指定する。詳細はリファレンスマニュアルを参照のこと。
 
-\> \textbf{void clearStereo(void)} \\
-	\> \> \begin{tabular}{p{15cm}}
-		全ての立体視関連の設定を初期化する。左右のカメラモデルと射影設定は、
-		通常のカメラに設定されているものと同一になる。
-	\end{tabular}
-\end{tabbing}
+\item[const fk\_Model * getStereoCamera(fk\_StereoChannel channel)]
+\item[const fk\_ProjectBase * getStereoProjection(fk\_StereoChannel channel)] ~ \\
+	立体視用に設定したカメラモデル、または射影設定を取得する。
+	「channel」の指定は前述の通りである。\\
+
+\item[void clearStereo(void)] ~ \\
+	全ての立体視関連の設定を初期化する。左右のカメラモデルと射影設定は、
+	通常のカメラに設定されているものと同一になる。
+\end{description}
 
 左右のカメラに対しては、通常のカメラモデルを親としたモデルを設定すると、
 視差を保ったまま通常のカメラの移動や回転が反映されるので便利である。

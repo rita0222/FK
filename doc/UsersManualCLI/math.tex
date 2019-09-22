@@ -1,6 +1,6 @@
-\chapter{ベクトル、行列、四元数(クォータニオン)} \label{chap:vector} ~
+\chapter{ベクトル、行列、四元数(クォータニオン)} \label{chap:math} ~
 
-この章では、ベクトル、行列、四元数といった数学的基本クラスの
+この章では、ベクトル、行列、四元数、乱数といった数学的基本クラスの
 利用方法を紹介する。
 
 \section{3次元ベクトル}
@@ -408,45 +408,47 @@ fk\_Matrix 型においても、代入処理における挙動は fk\_Vector 型
 \subsection{その他のメソッド}
 以下に、fk\_Matrix で用いられる主要なメソッドを紹介する。
 
-\subsubsection*{void Init()}
-自身を単位行列にする。
+\begin{description}
+\item[void Init()] ~ \\
+自身を単位行列にする。\\
 
-\subsubsection*{void Set(int r, int c, double a)}
-行番号が r、列番号が c に対応する成分の値を a に設定する。
+\item[void Set(int r, int c, double a)] ~ \\
+行番号が r、列番号が c に対応する成分の値を a に設定する。\\
 
-\subsubsection*{void SetRow(int r, fk\_Vector v)}
-\subsubsection*{void SetRow(int r, fk\_HVector v)}
-行番号が r である行ベクトルを v の各成分値に設定する。
+\item[void SetRow(int r, fk\_Vector v)]
+\item[void SetRow(int r, fk\_HVector v)] ~ \\
+行番号が r である行ベクトルを v の各成分値に設定する。\\
 
-\subsubsection*{void SetCol(int c, fk\_Vector v)}
-\subsubsection*{void SetCol(int c, fk\_HVector v)}
-列番号が c である列ベクトルを v に設定する。
+\item[void SetCol(int c, fk\_Vector v)]
+\item[void SetCol(int c, fk\_HVector v)] ~ \\
+列番号が c である列ベクトルを v に設定する。\\
 
-\subsubsection*{fk\_HVector GetRow(int r)}
-行番号が r である行ベクトルを取得する。
+\item[fk\_HVector GetRow(int r)] ~ \\
+行番号が r である行ベクトルを取得する。\\
 
-\subsubsection*{fk\_HVector GetCol(int c)}
-列番号が c である列ベクトルを取得する。
+\item[fk\_HVector GetCol(int c)] ~ \\
+列番号が c である列ベクトルを取得する。\\
 
-\subsubsection*{bool IsSingular(void)}
+\item[bool IsSingular(void)] ~ \\
 自身が特異行列であるかどうかを判定する。
 特異行列とは、逆行列が存在しない行列のことである。
-特異行列である場合は true を、そうでない場合は false を返す。
+特異行列である場合は true を、そうでない場合は false を返す。\\
 
-\subsubsection*{bool IsRegular(void)}
+\item[bool IsRegular(void)] ~ \\
 自身が正則行列であるかどうかを判定する。
 正則行列とは、逆行列が存在する行列のことである。
 (つまり、「非正則行列」と「特異行列」はまったく同じ意味になる。)
-正則行列である場合は true を、そうでない場合は false を返す。
+正則行列である場合は true を、そうでない場合は false を返す。\\
 
-\subsubsection*{bool Inverse(void)}
+\item[bool Inverse(void)] ~ \\
 自身が正則行列であった場合、
 自身を逆行列と入れ替えて true を返す。
-特異行列であった場合は、false を返し自身は変化しない。
+特異行列であった場合は、false を返し自身は変化しない。\\
 
-\subsubsection*{void Negate(void)}
+\item[void Negate(void)] ~ \\
 自身を転置する。転置とは、
 行列の行と列を入れ替える操作のことである。
+\end{description}
 
 \subsection{4次元ベクトル}
 fk\_Matrix は 4 行 4 列の正方行列であるため、本来であれば、
@@ -558,27 +560,29 @@ fk\_Quaternion クラスは、デフォルトコンストラクタとして何�
 
 設定用のメソッドとしては、以下のようなものがある。
 
-\subsubsection*{void init(void)}
+\begin{description}
+\item[void init(void)] ~ \\
 初期化のためのメソッドで、デフォルトコンストラクタと同様にスカラー部が 1、
-ベクトル部に零ベクトルが設定される。
+ベクトル部に零ベクトルが設定される。\\
 
-\subsubsection*{void set(double t, const fk\_Vector \&v)}
-設定のためのメソッドで、t がスカラー部、v がベクトル部に対応している。
+\item[void set(double t, const fk\_Vector \&v)] ~ \\
+設定のためのメソッドで、t がスカラー部、v がベクトル部に対応している。\\
 
-\subsubsection*{void set(double s, double x, double y, double z)}
-設定のためのメソッドで、四元数の各成分が順に対応している。
+\item[void set(double s, double x, double y, double z)] ~ \\
+設定のためのメソッドで、四元数の各成分が順に対応している。\\
 
-\subsubsection*{void setRotate(double theta, const fk\_Vector \&v)}
+\item[void setRotate(double theta, const fk\_Vector \&v)] ~ \\
 角度を theta、回転軸を v とするような回転変換を表わす四元数を生成する。
 実際に四元数に代入される値は、theta を \(\theta\)、
 v を \(\bV\) としたとき、
 スカラー部が \(\cos\frac{\theta}{2}\)、
-ベクトル部が \(\frac{\bV}{|\bV|}\sin\frac{\theta}{2}\) となる。
+ベクトル部が \(\frac{\bV}{|\bV|}\sin\frac{\theta}{2}\) となる。\\
 
-\subsubsection*{void setRotate(double theta, double x, double y, double z)}
+\item[void setRotate(double theta, double x, double y, double z)] ~ \\
 角度を theta, 回転軸を \((x, y, z)\) とするような
 回転変換を表わす四元数を生成する。
 ベクトル部の引数が実数となる以外は、前述の setRotate と同様である。
+\end{description}
 
 \subsection{比較演算子}
 fk\_Quaternion 型は、比較演算子として `\verb+==+' と `\verb+!=+' を
@@ -681,39 +685,43 @@ fk\_Quaternion 型の代入演算子 ` = ' は、fk\_Vector の場合と同様�
 同義の情報を持つことを意味する。fk\_Quaternion には、fk\_Angle と
 相互変換を行うためのメソッドが用意されている。以下にその仕様を述べる。
 
-\subsubsection*{void makeEuler(const fk\_Angle angle)}
-angle が示すオイラー角と同義の四元数を設定する。
+\begin{description}
+\item[void makeEuler(const fk\_Angle angle)] ~ \\
+angle が示すオイラー角と同義の四元数を設定する。\\
 
-\subsubsection*{void makeEuler(double h, double p, double b)}
+\item[void makeEuler(double h, double p, double b)] ~ \\
 h をヘディング角、p をピッチ角、b をバンク角とするオイラー角と
-同義の四元数を設定する。
+同義の四元数を設定する。\\
 
-\subsubsection*{fk\_Angle getEuler(void)}
+\item[fk\_Angle getEuler(void)] ~ \\
 同義となるオイラー角を返す。
+\end{description}
 
 \subsection{各種メソッド}
 fk\_Quaternion には、これまで挙げた他にも以下のようなメソッドがある。
 なお、文中では四元数自身を \(\bq = s + xi + yj + zk\) と想定する。
 
-\subsubsection*{double norm(void)}
-ノルム \(|\bq|^2 = s^2 + x^2 + y^2 + z^2\) を返す。
+\begin{description}
+\item[double norm(void)] ~ \\
+ノルム \(|\bq|^2 = s^2 + x^2 + y^2 + z^2\) を返す。\\
 
-\subsubsection*{double abs(void)}
-絶対値 \(|\bq| = \sqrt{s^2 + x^2 + y^2 + z^2}\) を返す。
+\item[double abs(void)] ~ \\
+絶対値 \(|\bq| = \sqrt{s^2 + x^2 + y^2 + z^2}\) を返す。\\
 
-\subsubsection*{bool normalize(void)}
+\item[bool normalize(void)] ~ \\
 自身の正規化四元数 \(\frac{\bq}{|\bq|}\) を求め、自身に上書きし true を返す。
-ただし、成分が全て 0 であった場合は値を変更せずに false を返す。
+ただし、成分が全て 0 であった場合は値を変更せずに false を返す。\\
 
-\subsubsection*{bool inverse(void)}
+\item[bool inverse(void)] ~ \\
 自身の逆元 \(\bq^{-1}\)を求め、自身に上書きし true を返す。
-ただし、成分が全て 0 であった場合は値を変更せずに false を返す。
+ただし、成分が全て 0 であった場合は値を変更せずに false を返す。\\
 
-\subsubsection*{void conj(void)}
-自身の共役 \(\overline{\bq}\)を求め、自身に上書きする。
+\item[void conj(void)] ~ \\
+自身の共役 \(\overline{\bq}\)を求め、自身に上書きする。\\
 
-\subsubsection*{fk\_Matrix conv(void)}
+\item[fk\_Matrix conv(void)] ~ \\
 自身が表わす回転変換と同義の行列を返す。
+\end{description}
 
 \subsection{補間メソッド}
 四元数の最大の特徴は姿勢の補間である。あるオイラー角から別のオイラー角への
@@ -722,8 +730,9 @@ fk\_Quaternion には、これまで挙げた他にも以下のようなメソ�
 
 補間四元数を求めるために、FK では以下の2種類のメソッドが用意されている。
 
-\subsubsection*{fk\_Quaternion \quad fk\_Math::quatInterLinear(
-fk\_Quaternion q1, fk\_Quaternion q2, double t)}
+\begin{description}
+\item[fk\_Quaternion \quad fk\_Math.QuatInterLinear(
+fk\_Quaternion q1, fk\_Quaternion q2, double t)] ~ \\
 q1 と q2 に対し、単純線形補間を行った結果を返す。t は 0 から 1 までの
 パラメータで、0 の場合 q1、1 の場合 q2 と完全に一致する。
 補間処理は以下の式に基づく。
@@ -731,8 +740,8 @@ q1 と q2 に対し、単純線形補間を行った結果を返す。t は 0 �
 	\bq(t) = (1 - t)\bq_1 + t\bq_2
 \]
 
-\subsubsection*{fk\_Quaternion \quad fk\_Math::quatInterSphere(
-fk\_Quaternion q1, fk\_Quaternion q2, double t)}
+\item[fk\_Quaternion \quad fk\_Math.QuatInterSphere(
+fk\_Quaternion q1, fk\_Quaternion q2, double t)] ~ \\
 q1 と q2 に対し、球面線形補間を行った結果を返す。t は 0 から 1 までの
 パラメータで、0 の場合 q1、1 の場合 q2 と完全に一致する。
 補間処理は以下の式に基づく。
@@ -745,3 +754,22 @@ q1 と q2 に対し、球面線形補間を行った結果を返す。t は 0 �
 演算そのものは単純線形補間の方が高速である。
 しかし単純線形補間では、状況によっては不安定な結果を示す場合がある。
 このような現象が許容できない場合には、球面線形補間による処理が有効である。
+\end{description}
+
+\section{乱数}
+乱数の取得は様々なプログラムで必要となるものであるが、
+FK では以下のような簡便な一様乱数取得用関数を提供している。
+
+\begin{description}
+\item[unsigned int fk\_Math.Rand()] ~ \\
+	0 以上の一様乱数整数値を取得する。\\
+
+\item[int fk\_Math.Rand(int m, int M)] ~ \\
+	\(m \leqq r < M\) を満たす一様乱数整数値 r を取得する。\\
+
+\item[double fk\_Math.DRand()] ~ \\
+	0 以上 1 未満の一様乱数実数を取得する。\\
+
+\item[double fk\_Math.DRand(double m, double M)] ~ \\
+	\(m \leqq r < M\) を満たす一様乱数実数値 r を取得する。
+\end{description}
