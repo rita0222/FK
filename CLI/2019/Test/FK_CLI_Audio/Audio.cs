@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Threading;
 using FK_CLI;
 
 namespace FK_CLI_Audio
