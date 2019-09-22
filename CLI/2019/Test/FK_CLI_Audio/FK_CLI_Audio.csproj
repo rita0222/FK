@@ -94,6 +94,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FK_Audio\FK_Audio_2019.csproj">
+      <Project>{a5970028-19de-4cc8-8025-ad3470304148}</Project>
+      <Name>FK_Audio_2019</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\FK_CLI.vcxproj">
       <Project>{80d11c11-e353-464e-8567-51f004a6941f}</Project>
       <Name>FK_CLI</Name>

@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_BezSurface", "Test\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_CLI_Gregory", "Test\FK_CLI_Gregory\FK_CLI_Gregory.csproj", "{719BB7C0-1B44-4C04-843D-1EE1891E77C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FK_Audio_2017", "..\FK_Audio\FK_Audio_2017.csproj", "{A5970028-19DE-4CC8-8025-AD3470304148}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -350,6 +352,16 @@ Global
 		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x64.Build.0 = Release|x64
 		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x86.ActiveCfg = Release|x86
 		{719BB7C0-1B44-4C04-843D-1EE1891E77C9}.Release|x86.Build.0 = Release|x86
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Debug|x64.ActiveCfg = Debug|x64
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Debug|x64.Build.0 = Debug|x64
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Debug|x86.ActiveCfg = Debug|x86
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Debug|x86.Build.0 = Debug|x86
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Release|Any CPU.ActiveCfg = Release|x86
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Release|x64.ActiveCfg = Release|x64
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Release|x64.Build.0 = Release|x64
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Release|x86.ActiveCfg = Release|x86
+		{A5970028-19DE-4CC8-8025-AD3470304148}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
