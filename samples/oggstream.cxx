@@ -4,7 +4,6 @@
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 void bgmPlay(double &, bool &);
 
@@ -20,7 +19,7 @@ int main(int, char *[])
 	
 	blockModel.setShape(&block);
 	blockModel.glMoveTo(3.0, 3.0, 0.0);
-	blockModel.setMaterial(Yellow);
+	blockModel.setMaterial(Material::Yellow);
 	window.entry(blockModel);
 
 	window.setCameraPos(0.0, 1.0, 20.0);
@@ -30,6 +29,7 @@ int main(int, char *[])
 	window.setBGColor(0.6, 0.7, 0.8);
 	window.open();
 	window.showGuide(fk_Guide::GRID_XZ);
+	window.setTrackBallMode(true);
 
 	volume = 0.5;
 	endFlg = false;
@@ -54,7 +54,6 @@ int main(int, char *[])
 void bgmPlay(double &argVolume, bool &argFlg)
 {
 	fk_AudioStream			bgm;
-	chrono::milliseconds 	ns(50);
 
 	fk_System::setcwd();
 
@@ -68,7 +67,7 @@ void bgmPlay(double &argVolume, bool &argFlg)
 	while(argFlg == false) {
 		bgm.setGain(argVolume);
 		bgm.play();
-		this_thread::sleep_for(ns);
+		fk_Time::sleep(0.05);
 	}
 	return;
 }

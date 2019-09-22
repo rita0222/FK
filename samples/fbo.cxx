@@ -2,17 +2,13 @@
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 const int WIN_W = 512; // ウィンドウ横幅
 const int WIN_H = 512; // ウィンドウ縦幅
-const double SP_X = -(double(WIN_W/2) - 10.0);
-const double SP_Y = double(WIN_H/2) - 10.0;
 
 enum WinStatus {
 	NORMAL, CONTINUE, BREAK
 };
-
 
 // 通常モデルのシェーダー設定
 void ShaderSetup(fk_ShaderBinder *argBinder, fk_Model *argModel, fk_Material argMat,
@@ -96,13 +92,16 @@ int main(int, char **)
 	fk_Model		modelDef, ifsModelDef;
 	fk_ShaderBinder spBinder, ifsBinder, edgeBinder, depthBinder;
 	int				thresshold = 80;
+	const double 	SP_X = -(double(WIN_W/2) - 10.0);
+	const double 	SP_Y = double(WIN_H/2) - 10.0;
+
 
 	mainWindow.end();
 	fk_InitMaterial();
 
 	// 照明の設定
 	lightModel.setShape(&light);
-	lightModel.setMaterial(TrueWhite);
+	lightModel.setMaterial(Material::TrueWhite);
 	lightModel.glMoveTo(0.0, 0.0, 0.0);
 	lightModel.glFocus(-1.0, -1.0, -1.0);
 
@@ -153,10 +152,10 @@ int main(int, char **)
 	Fl::check();
 
 	// 各種シェーダー設定
-	ShaderSetup(&spBinder, &modelDef, Yellow, fk_Vector(-20.0, 0.0, 0.0),
+	ShaderSetup(&spBinder, &modelDef, Material::Yellow, fk_Vector(-20.0, 0.0, 0.0),
 				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/model_fp.glsl");
 	
-	ShaderSetup(&ifsBinder, &ifsModelDef, White, fk_Vector(20.0, 0.0, 0.0),
+	ShaderSetup(&ifsBinder, &ifsModelDef, Material::White, fk_Vector(20.0, 0.0, 0.0),
 				"fbo_data/shader/model_vp.glsl", "fbo_data/shader/modelTex_fp.glsl");
 
 	FBOSetup(&edgeBinder, &edgeWindow, float(thresshold)/100.0f,

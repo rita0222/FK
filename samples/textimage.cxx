@@ -71,9 +71,7 @@
  ****************************************************************************/
 #include <FK/FK.h>
 
-using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 int main (int, char *[])
 {
@@ -104,7 +102,7 @@ int main (int, char *[])
 	textImage.loadUniStr(&str);
 	texture.setTextureSize(40.0, 10.0);
 	texture.setTextureMode(fk_TexMode::REPLACE);
-	strModel.setMaterial(TrueWhite);
+	strModel.setMaterial(Material::TrueWhite);
 
 	strModel.setShape(&texture);
 	strModel.glVec(0.0, 0.0, -1.0);

@@ -74,7 +74,6 @@
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
 
 string imageFileSelect(void)
 {

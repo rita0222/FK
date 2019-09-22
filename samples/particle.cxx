@@ -73,12 +73,6 @@
 
 using namespace std;
 using namespace FK;
-using namespace FK::Material;
-
-double myRandom(void)
-{
-	return double(rand())/double(RAND_MAX);
-}
 
 int main(int, char **)
 {
@@ -89,7 +83,6 @@ int main(int, char **)
 	fk_Vector       	water(-0.5, 0.0, 0.0);
 	double          	R = 15.0;
 
-	srand((unsigned int)(time(0)));     // 乱数の初期化。
 	particle.setMaxSize(1000);   // パーティクルの最大数設定。
 	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
 	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
@@ -98,12 +91,12 @@ int main(int, char **)
 	minSpeed = 0.3;
 
 	particle.genMethod = [](fk_Particle *p) {
-		p->setPosition(50.0, myRandom()*50.0 - 25.0, myRandom()*50.0 - 25.0);
+		p->setPosition(50.0, fk_Math::drand(-25.0, 25.0), fk_Math::drand(-25.0, 25.0));
 	};
 
 	particle.allMethod = [&](void) {
 		for(int i = 0; i < 5; i++) {
-			if(myRandom() < 0.3) {
+			if(fk_Math::drand() < 0.3) {
 				// 新たなパーティクルを生成。
 				// 生成時に genMethod() が呼ばれる。
 				particle.newParticle();
@@ -152,7 +145,6 @@ int main(int, char **)
 	viewer.setEdgeColor(3, fk_Color(0.0, 0.0, 1.0));
 
 	viewer.setScale(10.0);
-	//viewer.setAxisMode(false);
 
 	for(int i = 0; viewer.draw() == true; i++) {
 		particle.handle(); // パーティクルを 1 ステップ実行する。
