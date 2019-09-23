@@ -81,7 +81,7 @@ using namespace FK;
 
 inline bool AlmostZero(double x)
 {
-	if(x < fk_Vector::MATRIXEPS && x > -fk_Vector::MATRIXEPS) return true;
+	if(x < fk_Vector::MATRIXEPS2 && x > -fk_Vector::MATRIXEPS2) return true;
 	return false;
 }
 
@@ -802,7 +802,7 @@ bool fk_MatrixAdmin::glUpvec(fk_Vector argUpv)
 		return false;
 	}
 
-	if(fabs(argUpv * fk_Vector(Vec)) <= 1.0 - fk_Math::EPS) {
+	if(fabs(argUpv * fk_Vector(Vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
 		UpVec = argUpv;
 		UpdateMatrix(true);
 	} else {
@@ -831,7 +831,7 @@ bool fk_MatrixAdmin::loUpvec(fk_Vector argUpv)
 		return false;
 	}
 
-	if(fabs(tmp * fk_Vector(Vec)) <= 1.0 - fk_Math::EPS) {
+	if(fabs(tmp * fk_Vector(Vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
 		UpVec = tmp;
 	} else {
 		fk_PutError("fk_MatrixAdmin", "loUpvec", 2,
@@ -977,8 +977,8 @@ void fk_MatrixAdmin::VectorToHeadPitch(fk_Angle *retAngle,
 
 	retAngle->p = asin(tmpVec.y);
 
-	if(fabs(tmpVec.z) < fk_Math::EPS) {
-		if(fabs(tmpVec.x) < fk_Math::EPS) {
+	if(fabs(tmpVec.z) < fk_Vector::MATRIXEPS) {
+		if(fabs(tmpVec.x) < fk_Vector::MATRIXEPS) {
 			retAngle->h = 0.0;
 		} else if(tmpVec.x > 0.0) {
 			retAngle->h = fk_Math::PI/2.0;
@@ -1006,8 +1006,8 @@ void fk_MatrixAdmin::VectorToAngle(fk_Angle *retAngle,
 	
 	tmpUpVec = Mx * My * (*argUpVec);
 
-	if(fabs(tmpUpVec.y) < fk_Math::EPS) {
-		if(fabs(tmpUpVec.x) < fk_Math::EPS) {
+	if(fabs(tmpUpVec.y) < fk_Vector::MATRIXEPS) {
+		if(fabs(tmpUpVec.x) < fk_Vector::MATRIXEPS) {
 			retAngle->b = 0.0;
 		} else if(tmpUpVec.x > 0.0) {
 			retAngle->b = fk_Math::PI/2.0;

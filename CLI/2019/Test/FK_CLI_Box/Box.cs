@@ -54,6 +54,7 @@ namespace FK_CLI_Box
 			win.Open();
 
 			var origin = new fk_Vector(0.0, 0.0, 0.0);
+            bool negate = false;
 
 			for(int count = 0; win.Update() == true; count++) {
                 // カメラ前進
@@ -63,10 +64,14 @@ namespace FK_CLI_Box
                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/300.0);
 
                 // カメラの注視点を原点に向ける
-				camera.GlFocus(origin);
+                if (camera.Position.z < 0.0 && negate == false)
+                {
+                    camera.GlFocus(origin);
+                    negate = true;
+                }
 
                 // カウンターが1000を上回ったらカメラをz軸中心に回転
-                if (count >= 1000) camera.LoRotateWithVec(origin, fk_Axis.Z, Math.PI/500.0);
+                if (count >= 1000) camera.LoAngle(new fk_Angle(0.0, 0.0, Math.PI/500.0));
 			}
 		}
 	}
