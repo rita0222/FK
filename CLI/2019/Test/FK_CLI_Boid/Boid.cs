@@ -52,7 +52,7 @@ namespace FK_CLI_Boid
 		public void Forward()
 		{
 			model.GlVec(newVec);
-			model.LoTranslate(0.0, 0.0, -0.05);
+			model.LoTranslate(0.0, 0.0, -0.1);
 		}
 	}
 

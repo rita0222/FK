@@ -5,39 +5,39 @@ namespace FK_CLI_Ball
 {
 	public class Ball
 	{
-		private const double	DOWN_ACCEL		= 0.050;	// 降下時の加速度
-		private const double	RISE_ACCEL		= 0.053;	// 上昇時の減速度
-		private const int		DOWN_MODE		= 0;		// 降下モード
-		private const int		RISE_MODE		= 1;		// 上昇モード
-		private const int		LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
-		private const int		LOD3_HIGH		= 300;		// 三分割距離 (鳥瞰)
-		private const int		LOD4_LOW		= 90;		// 四分割距離 (ブロック)
-		private const int		LOD3_LOW		= 120;		// 三分割距離 (ブロック)
-		private const double	TOP_BALL_POS	= 400.0;	// ボール始点高さ
-		private const double	BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
-		private const double	BALL_SIZE		= 12.0;     // ボール半径
-        private const int		BOUND_CYCLE		= 6;
-        private const int		VIEW_CHANGE		= 4;
-            
+		private const double DOWN_ACCEL		= 0.050;	// 降下時の加速度
+		private const double RISE_ACCEL		= 0.053;	// 上昇時の減速度
+		private const int	 DOWN_MODE		= 0;		// 降下モード
+		private const int	 RISE_MODE		= 1;		// 上昇モード
+		private const int	 LOD4_HIGH		= 200;		// 四分割距離 (鳥瞰)
+		private const int	 LOD3_HIGH		= 300;		// 三分割距離 (鳥瞰)
+		private const int	 LOD4_LOW		= 90;		// 四分割距離 (ブロック)
+		private const int	 LOD3_LOW		= 120;		// 三分割距離 (ブロック)
+		private const double TOP_BALL_POS	= 400.0;	// ボール始点高さ
+		private const double BTM_BALL_POS	= 12.0;		// ボール跳ね返り高さ
+		private const double BALL_SIZE		= 12.0;     // ボール半径
+        private const int	 BOUND_CYCLE	= 6;        // 繰り返しあたりのバウンド回数
+        private const int	 VIEW_CHANGE	= 4;        // 視点変更タイミング
 
-        private int direction;		// ボールの状態(DOWN_MODE or RISE_MODE)
-		private int	view_mode;		// 視点モード
-		private int	bound_count;	// バウンド回数を数える変数
-		private double y_trs;			// ボールのｙ座標移動量
-		private fk_Model ball_model;		// ボールのモデル
-		private fk_Sphere BALL2;			// 二分割形状
-		private fk_Sphere BALL3;			// 三分割形状
-		private fk_Sphere BALL4;			// 四分割形状
+        private int direction;       // ボールの状態(DOWN_MODE or RISE_MODE)
+        private int	view_mode;		 // 視点モード
+		private int	bound_count;	 // バウンド回数を数える変数
+		private double y_trs;        // ボールのｙ座標移動量
+        private fk_Model ball_model;
+        private fk_Sphere ball_2;	 // 2分割形状
+		private fk_Sphere ball_3;	 // 3分割形状
+		private fk_Sphere ball_4;	 // 4分割形状
 
 		public const int LOW_MODE			= 0;		// ブロック視点モード
 		public const int HIGH_MODE			= 1;		// 鳥瞰モード
-        public const double ROTATE_SPEED	= 0.02;
+        public const double ROTATE_SPEED	= 0.02;     // 回転速度
 
-		public Ball()
+
+        public Ball()
 		{
-			BALL2 = new fk_Sphere(6, BALL_SIZE);
-			BALL3 = new fk_Sphere(8, BALL_SIZE);
-			BALL4 = new fk_Sphere(10, BALL_SIZE);
+			ball_2 = new fk_Sphere(6, BALL_SIZE);
+			ball_3 = new fk_Sphere(8, BALL_SIZE);
+			ball_4 = new fk_Sphere(10, BALL_SIZE);
 			ball_model = new fk_Model();
 			Init();
 		}
@@ -49,18 +49,16 @@ namespace FK_CLI_Ball
 			view_mode	= HIGH_MODE;
 			bound_count	= 1;
 			ball_model.GlMoveTo(0.0, TOP_BALL_POS, 0.0);
-			ball_model.Shape = BALL2;
-		}
+			ball_model.Shape = ball_2;
 
-		public fk_Model Model
-		{
-			get
-			{
-				return ball_model;
-			}
-		}
+            ball_model.Material = fk_Material.Red;
+            ball_model.Material.Specular = new fk_Color(1.0, 1.0, 1.0);
+            ball_model.Material.Shininess = 100.0f;
+            ball_model.SmoothMode = true;
+        }
 
-		public fk_Vector Pos
+ 
+        public fk_Vector Pos
 		{
 			get
 			{
@@ -68,27 +66,35 @@ namespace FK_CLI_Ball
 			}
 		}
 
+        public fk_Model Model
+        {
+            get
+            {
+                return ball_model;
+            }
+        }
+
 		public void LOD(fk_Vector argPos)
 		{
 			double	Distance = (ball_model.Position - argPos).Dist();
 			switch(view_mode) {
 				case HIGH_MODE:
 					if(Distance < LOD4_HIGH) {
-						ball_model.Shape = BALL4;
+						ball_model.Shape = ball_4;
 					} else if(Distance < LOD3_HIGH) {
-						ball_model.Shape = BALL3;
+						ball_model.Shape = ball_3;
 					} else {
-						ball_model.Shape = BALL2;
+						ball_model.Shape = ball_2;
 					}
 					break;
 
 				case LOW_MODE:
 					if(Distance < LOD4_LOW) {
-						ball_model.Shape = BALL4;
+						ball_model.Shape = ball_4;
 					} else if(Distance < LOD3_LOW) {
-						ball_model.Shape = BALL3;
+						ball_model.Shape = ball_3;
 					} else {
-						ball_model.Shape = BALL2;
+						ball_model.Shape = ball_2;
 					}
 					break;
 
@@ -147,7 +153,9 @@ namespace FK_CLI_Ball
 	{
 		static void Main(string[] args)
 		{
-			var win = new fk_AppWindow();
+            fk_Material.InitDefault();
+
+            var win = new fk_AppWindow();
 			win.Size = new fk_Dimension(600, 600);
 			win.ClearModel(false); // デフォルト光源消去
 
@@ -166,7 +174,6 @@ namespace FK_CLI_Ball
 			var ground = new fk_Circle(4, 100.0);
 			var block = new fk_Block(10.0, 10.0, 10.0);
 
-			fk_Material.InitDefault();
 
 			// ### VIEW POINT ###
 			// 上の方から見た視点
@@ -201,11 +208,7 @@ namespace FK_CLI_Ball
 			blockModel.GlMoveTo(60.0, 30.0, 0.0);
 			blockModel.Parent = groundModel;
 
-			// ### BALL ###
-			ball.Model.Material = fk_Material.Red;
-            ball.Model.Material.Specular = new fk_Color(1.0, 1.0, 1.0);
-            ball.Model.Material.Shininess = 100.0f;
-			ball.Model.SmoothMode = true;
+
 	
 			// ### Model Entry ###
 			win.CameraModel = viewModel;
