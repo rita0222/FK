@@ -81,7 +81,7 @@
 namespace FK_CLI {
 
 	//! fk_GuideObject での座標軸と座標平面を表す列挙型
-	public enum class fk_GuideMode : unsigned int {
+	public enum class fk_Guide : unsigned int {
 		NO_GUIDE = 0,	//!< 表示なし
 		AXIS_X   = 1 << 1,	//!< x軸
 		AXIS_Y   = 1 << 2,	//!< y軸
@@ -181,16 +181,16 @@ namespace FK_CLI {
 		 *		fk_GuideObject	gobj = new fk_GuideObject();
 		 *
 		 *		gobj.EntryScene(scene,
-		 *						fk_GuideMode.AXIS_X |
-		 *						fk_GuideMode.AXIS_Z |
-		 *						fk_GuideMode.GRID_XZ);
+		 *						fk_Guide.AXIS_X |
+		 *						fk_Guide.AXIS_Z |
+		 *						fk_Guide.GRID_XZ);
 		 *
 		 *	\param[in]	scene		登録するシーンインスタンスのポインタ。
 		 *	\param[in]	mode		登録する要素。
 		 *
 		 *	\sa RemoveScene()
 		 */
-		void EntryScene(fk_Scene^ scene, fk_GuideMode mode);
+		void EntryScene(fk_Scene^ scene, fk_Guide mode);
 
 		//! シーン登録解除メソッド
 		/*!

@@ -35,7 +35,7 @@ namespace FK_CLI_IFSTex
 
 			win.BGColor = new fk_Color(0.5, 0.5, 0.5);
 			win.Entry(lightModel);
-			win.ShowGuide(fk_GuideMode.GRID_XZ);
+			win.ShowGuide(fk_Guide.GRID_XZ);
 			win.TrackBallMode = true;
 
 			spModel.Shape = sph;

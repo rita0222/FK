@@ -263,7 +263,7 @@ namespace FK_CLI {
 
 	fk_AppWindow::!fk_AppWindow()
 	{
-		delete pWin;
+		//delete pWin;
 		pWin = nullptr;
 	}
 
@@ -390,7 +390,7 @@ namespace FK_CLI {
 			::FK::fk_Guide::GRID_XZ);
 	}
 		
-	void fk_AppWindow::ShowGuide(fk_GuideMode argMode)
+	void fk_AppWindow::ShowGuide(fk_Guide argMode)
 	{
 		GetP()->showGuide(static_cast<::FK::fk_Guide>(argMode));
 	}

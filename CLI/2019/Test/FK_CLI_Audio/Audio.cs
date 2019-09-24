@@ -64,7 +64,7 @@ namespace FK_CLI_Audio
             argWin.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
             argWin.Size = new fk_Dimension(600, 600);
             argWin.BGColor = new fk_Color(0.6, 0.7, 0.8);
-            argWin.ShowGuide(fk_GuideMode.GRID_XZ);
+            argWin.ShowGuide(fk_Guide.GRID_XZ);
             argWin.TrackBallMode = true;
             argWin.FPS = 60;
         }

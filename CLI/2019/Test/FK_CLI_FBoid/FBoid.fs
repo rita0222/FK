@@ -120,7 +120,7 @@ module FK_Boid =
 
     win.Size <- new fk_Dimension(800, 800)
     win.BGColor <- new fk_Color(0.6, 0.7, 0.8)
-    win.ShowGuide(fk_GuideMode.GRID_XY)
+    win.ShowGuide(fk_Guide.GRID_XY)
     win.CameraPos <- new fk_Vector(0.0, 0.0, 80.0)
     win.CameraFocus <- new fk_Vector(0.0, 0.0, 0.0)
     win.FPS <- 0

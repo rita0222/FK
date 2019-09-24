@@ -630,9 +630,9 @@ namespace FK_CLI
 		 *		表示するグリッド・軸の指定。複数を表示する場合は、
 		 *		ビットOR演算を利用して並べて指定できます。
 		 *
-		 *	\sa HideGuide(), AxisWidth, GridWidth, GuideScale, GuideNum, fk_GuideMode
+		 *	\sa HideGuide(), AxisWidth, GridWidth, GuideScale, GuideNum, fk_Guide
 		 */
-		void ShowGuide(fk_GuideMode mode);
+		void ShowGuide(fk_Guide mode);
 
 		//! グリッド・軸設定メソッド2
 		/*!
@@ -641,14 +641,14 @@ namespace FK_CLI
 		 *	表示する座標軸およびグリッド面を細かく指定したい場合は、
 		 *	ShowGuide(bool) を利用してください。
 		 *
-		 *	\sa HideGuide(), AxisWidth, GridWidth, GuideScale, GuideNum, fk_GuideMode
+		 *	\sa HideGuide(), AxisWidth, GridWidth, GuideScale, GuideNum, fk_Guide
 		 */
 		void ShowGuide(void);
 
 		//! グリッド・軸消去メソッド
 		/*!
 		 *	ShowGuide() で表示した軸とグリッドを消去します。
-		 *	ShowGuide( fk_GuideMode.NO_GUIDE ) と等価です。
+		 *	ShowGuide( fk_Guide.NO_GUIDE ) と等価です。
 		 *
 		 *	\sa ShowGuide()
 		 */

@@ -40,7 +40,7 @@ namespace FK_CLI_GeomShader
             var window = new fk_AppWindow();
             window.Size = new fk_Dimension(800, 800);
             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
-            window.ShowGuide(fk_GuideMode.GRID_XY);
+            window.ShowGuide(fk_Guide.GRID_XY);
             window.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
             window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
             window.Open();

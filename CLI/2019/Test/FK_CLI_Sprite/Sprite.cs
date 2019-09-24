@@ -36,7 +36,7 @@ namespace FK_CLI_Sprite
 			window.Size = new fk_Dimension(800, 600);
 			window.BGColor = new fk_Color(0.6, 0.7, 0.8);
 			window.Open();
-			window.ShowGuide(fk_GuideMode.GRID_XZ);
+			window.ShowGuide(fk_Guide.GRID_XZ);
  
 			count = 0;
 			while(window.Update() == true) {
