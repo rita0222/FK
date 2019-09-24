@@ -98,7 +98,7 @@ namespace FK {
 	class fk_Math {
 	public:
 		static constexpr double EPS = 1.0e-8; 				//!< 数値演算用誤差値
-		static constexpr double PI = 3.1415923535897932; 	//!< 円周率
+		static constexpr double PI = 3.1415926535897932; 	//!< 円周率
 
 		//! \name 基本数値演算関数
 		//@{
