@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using FK_CLI;
 
 namespace FK_CLI_Gregory
