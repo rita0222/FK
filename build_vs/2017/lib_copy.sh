@@ -1,6 +1,6 @@
 #!/bin/sh
 
-FKPATH="../Installer/FK_VC17"
+FKPATH="../Installer/2017/FK_VC17"
 FK32R="$FKPATH/lib/Win32/Release"
 FK32D="$FKPATH/lib/Win32/Debug"
 FK64R="$FKPATH/lib/x64/Release"
