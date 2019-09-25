@@ -13,8 +13,10 @@ mkdir -p $OUTPATH/dll/x64
 mkdir $OUTPATH/doc
 mkdir $OUTPATH/redist
 cp $INPATH/Win32/Release/FK_CLI.dll $OUTPATH/bin/x86
+cp $INPATH/Win32/Release/FK_Audio.dll $OUTPATH/bin/x86
 cp $INPATH/Win32/Release/FK_FormHelper.dll $OUTPATH/bin/x86
 cp $INPATH/x64/Release/FK_CLI.dll $OUTPATH/bin/x64
+cp $INPATH/x64/Release/FK_Audio.dll $OUTPATH/bin/x64
 cp $INPATH/x64/Release/FK_FormHelper.dll $OUTPATH/bin/x64
 
 cp ./doc/License.txt $OUTPATH/doc

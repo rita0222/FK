@@ -41,6 +41,9 @@
     <Reference Include="FK_CLI">
       <HintPath>$(FK_CLI17_DIR)\bin\$(PlatformName)\FK_CLI.dll</HintPath>
     </Reference>
+    <Reference Include="FK_Audio">
+      <HintPath>$(FK_CLI17_DIR)\bin\$(PlatformName)\FK_Audio.dll</HintPath>
+    </Reference>
     <Reference Include="FK_FormHelper">
       <HintPath>$(FK_CLI17_DIR)\bin\$(PlatformName)\FK_FormHelper.dll</HintPath>
     </Reference>
