@@ -3,7 +3,7 @@
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.0.1</>
+   <ver >4.1.0</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
@@ -349,7 +349,7 @@
    </>
    <updateroot sorttype = 0 >
       <children >
-         <update id = update expanded = 0 >
+         <update id = update expanded = 2 >
             <children >
                <_ tag = 0 id = varset >
                   <desc ></>
