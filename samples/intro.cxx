@@ -33,7 +33,7 @@ int main(int, char **)
 	while(window.update() == true) {
 
 		// 直方体を Y 軸を中心に回転させる。
-		model.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.01);
+		model.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/180.0);
 	}
 	return 0;
 }

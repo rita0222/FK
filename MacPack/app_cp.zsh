@@ -23,7 +23,7 @@ pkgbuild \
 	--root ./Package \
 	--identifier jp.gamescience.fk \
 	--install-location /Library \
-	--version 4.1.0
+	--version 4.1.0 \
 	--ownership preserve \
 	--scripts ./script \
 	tmpInst.pkg

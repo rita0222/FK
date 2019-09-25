@@ -28,7 +28,7 @@ SAMPLEEXE	= $(SAMPLESRCS:cxx=exe)
 SAMPLEAPPS	= $(SAMPLESRCS:cxx=app)
 ALLSRCS		= $(SAMPLESRCS)
 
-VERNAME		= 4.0.1
+VERNAME		= 4.1.0
 
 ###################
 

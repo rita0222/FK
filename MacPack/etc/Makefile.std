@@ -39,38 +39,42 @@ INCLDIRS	= -I. -I$(FK_INCLUDE)
 LFLAGS		= -L$(FK_STATIC_LIB) -fPIC
 
 SYSLIBS		= \
+			-liconv \
 			-lfltk_gl \
 			-lfltk \
-			-lpng \
-			-ljpeg \
 			-lvorbisfile \
 			-lvorbis \
 			-logg \
-			-liconv \
+			-lpng \
+			-ljpeg \
 			-lfreetype \
 			-lz \
 			-lbz2 \
+			-framework QTKit \
+			-framework CoreVideo \
 			-framework AGL \
-			-framework OpenCL \
 			-framework OpenGL \
 			-framework Cocoa \
 			-framework OpenAL \
 			-framework ApplicationServices \
+			-framework OpenCL \
 			-framework Foundation \
+			-framework Accelerate \
 			-framework AudioToolBox
 
 FKLIB		= \
-			-lFK3_OpenCL \
-			-lFK3_audio \
-			-lFK3_util \
-			-lFK3_window \
-			-lFK3_graphics \
-			-lFK3_scene \
-			-lFK3_model \
-			-lFK3_shape \
-			-lFK3_material \
-			-lFK3_math \
-			-lFK3_base
+			-lFK4_OpenCL \
+			-lFK4_audio \
+			-lFK4_shader \
+			-lFK4_util \
+			-lFK4_window \
+			-lFK4_graphics \
+			-lFK4_scene \
+			-lFK4_model \
+			-lFK4_shape \
+			-lFK4_material \
+			-lFK4_math \
+			-lFK4_base
 
 CFLAGS		= $(EXTRA_CFLAGS) $(OPS) $(SYSOPS) $(INCLDIRS)
 LINK		= $(EXTRA_LFLAGS) $(LFLAGS) $(FKLIB) $(SYSLIBS)
