@@ -7,13 +7,15 @@ namespace FK_CLI_Boid
 	{
 		private fk_Model model;
 		private fk_Vector newVec;
+        private const double SPEED = 0.05;
+        public const double AREASIZE = 15.0;
 
-		public Agent(double argSize)
+		public Agent()
 		{
 			model = new fk_Model();
 			model.Material = fk_Material.Red;
 			model.GlVec(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0);
-            model.GlMoveTo(fk_Math.DRand(-argSize, argSize), fk_Math.DRand(-argSize, argSize), 0.0);
+            model.GlMoveTo(fk_Math.DRand(-AREASIZE, AREASIZE), fk_Math.DRand(-AREASIZE, AREASIZE), 0.0);
 		}
 
 		public fk_Vector Pos
@@ -52,7 +54,7 @@ namespace FK_CLI_Boid
 		public void Forward()
 		{
 			model.GlVec(newVec);
-			model.LoTranslate(0.0, 0.0, -0.1);
+			model.LoTranslate(0.0, 0.0, -SPEED);
 		}
 	}
 
@@ -60,7 +62,6 @@ namespace FK_CLI_Boid
     {
 		private Agent [] agent;
 		private fk_Cone cone;
-		private const double AREASIZE = 15.0;
 
 		private double paramA, paramB, paramC, paramLA, paramLB;
 
@@ -73,7 +74,7 @@ namespace FK_CLI_Boid
 
 			for(int i = 0; i < argNum; ++i)
             {
-				agent[i] = new Agent(AREASIZE);
+				agent[i] = new Agent();
 				agent[i].Shape = cone;
 			}
 
@@ -101,10 +102,10 @@ namespace FK_CLI_Boid
 			}
 		}
 
-		public void Forward(bool argGMode)
+		public void Forward(bool argSMode, bool argAMode, bool argCMode)
 		{
 			var gVec = new fk_Vector();
-			fk_Vector diff = new fk_Vector();
+			var diff = new fk_Vector();
 			fk_Vector [] pArray = new fk_Vector[agent.Length];
 			fk_Vector [] vArray = new fk_Vector[agent.Length];
 
@@ -127,30 +128,35 @@ namespace FK_CLI_Boid
 					if(i == j) continue;
 					diff = p - pArray[j];
 					double dist = diff.Dist();
-					if(dist < paramLA)
+
+                    // 分離 (Separation) 処理
+                    if (dist < paramLA && argSMode == true)
                     {
 						v += paramA * diff / (dist*dist);
 					}
 
-					if(dist < paramLB)
+                    // 整列 (Alignment) 処理
+					if(dist < paramLB && argAMode == true)
                     {
 						v += paramB * vArray[j];
 					}
 				}
 
-				if(argGMode == true)
+                // 結合 (Cohesion) 処理
+				if(argCMode == true)
                 {
 					v += paramC * (gVec - pArray[i]);
 				}
 
-                if(Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01)
+                // 領域の外側に近づいたら方向修正
+                if (Math.Abs(p.x) > Agent.AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01)
                 {
-					v.x -= v.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
+					v.x -= v.x * (Math.Abs(pArray[i].x) - Agent.AREASIZE)*0.2;
 				}
 
-				if(Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01)
+				if(Math.Abs(p.y) > Agent.AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01)
                 {
-					v.y -= v.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
+					v.y -= v.y * (Math.Abs(pArray[i].y) - Agent.AREASIZE)*0.2;
 				}
 
 				v.z = 0.0;
@@ -184,9 +190,18 @@ namespace FK_CLI_Boid
 
 			while(win.Update() == true)
             {
-                boid.Forward(win.GetKeyStatus(' ', fk_Switch.RELEASE));
-			}
+                // Sキーで「Separate(分離)」を無効に
+                bool sMode = win.GetKeyStatus('S', fk_Switch.RELEASE);
 
+                // Aキーで「Alignment(整列)」を無効に
+                bool aMode = win.GetKeyStatus('A', fk_Switch.RELEASE);
+
+                // Cキーで「Cohesion(結合)」を無効に
+                bool cMode = win.GetKeyStatus('C', fk_Switch.RELEASE);
+
+                // 群集の前進処理
+                boid.Forward(sMode, aMode, cMode);
+			}
 		}
 	}
 }
