@@ -164,7 +164,7 @@ bool fk_Point::setVertex(vector<fk_Vector> *argPosArray)
 bool fk_Point::removeVertex(int argID)
 {
 	if(argID < 0 || argID >= int(aliveArray.size())) return false;
-	if(aliveArray[_st(argID)] == fk_Shape::DEAD) return false;
+	if(aliveArray[_st(argID)] == fk_Shape::DEAD) return true;
 	aliveArray[_st(argID)] = fk_Shape::DEAD;
 
 	modifyAttribute(pointElementAliveName);

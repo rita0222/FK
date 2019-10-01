@@ -11,7 +11,7 @@ flat in int draw_flag;
 subroutine(pointDrawType)
 void PointPointFS()
 {
-	if(draw_flag == 2) discard;
+	if(draw_flag == 0) discard;
 }
 
 subroutine(pointDrawType)
