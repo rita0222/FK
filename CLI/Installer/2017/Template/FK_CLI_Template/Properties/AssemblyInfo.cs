@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("FK_CLI_Template")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("UNITCOM PC")]
+[assembly: AssemblyCompany("FK Project")]
 [assembly: AssemblyProduct("FK_CLI_Template")]
 [assembly: AssemblyCopyright("Copyright © FK Project 2019")]
 [assembly: AssemblyTrademark("")]
