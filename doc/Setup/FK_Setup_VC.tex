@@ -1,33 +1,29 @@
-\documentclass[a4j]{jarticle}
+\documentclass[a4paper]{jsarticle}
 
-\textwidth=480pt
-\textheight=680pt
-\topmargin=0pt
-\headheight=0pt
-\headsep=3pt
-\oddsidemargin=-20pt
-\evensidemargin=-20pt
+\usepackage{ascmac}
+\usepackage{boites}
+
+\textwidth=520pt
+\textheight=710pt
+\oddsidemargin=-32pt
+\evensidemargin=-32pt
+\topmargin=-60pt
 
 \begin{document}
 \begin{center}
 {\Large Fine Kernel ToolKit システム (Windows C++ 版) \\
 	セットアップマニュアル} \\ ~ \\
 {\Large FineKernel Project} \\
-(2019/05/06版)
+(2019/10/03版)
 \end{center}
-
 
 \section{Visual Studio のバージョンについて}
 Windows における Fine Kernel ToolKit システム C++ 版(以下 FK)は 
-Visual Studio 2017(以下 VS) 上において、
+Visual Studio 2019(以下「VS19」) または Visual Studio 2017 (以下「VS17」)上において、
 ほとんど同様の操作で開発を行うことができる。
 本マニュアルではこれらのバージョンについてまとめて解説を行っているが、
 メニューの項目名などが微妙に異なる場合がある。
 その場合は適宜読み替えること。
-
-また VS には、
-通常の製品版の他に無償で使用できる Community Edition が存在するが、
-こちらのバージョンも問題なく使用できる。
 
 \section{FK システムのセットアップ}
 VS のインストールが完了したら、FK のセットアップを以下の手順で行う。
@@ -40,11 +36,13 @@ VS のインストールが完了したら、FK のセットアップを以下�
     http://sourceforge.jp/projects/fktoolkit/releases/
 \end{verbatim}
 
-VS C++ 版は「FK\_VC17」から
-始まるファイル名になっているので、必要なものを選択すること。
+VS19 の C++ 版は「FK\_VC19」、
+VS17 の C++ 版は「FK\_VC17」から始まるファイル名になっているので、
+必要なものを選択すること。
 
 \item インストーラを起動し、指示に従ってインストールする。
-標準の設定では ``\verb+C:\FK_VC17+'' という名称のフォルダにインストールされる。
+標準の設定では VS19 版は ``\verb+C:\FK_VC19+''、
+VS17 版は ``\verb+C:\FK_VC17+''、 という名称のフォルダにインストールされる。
 インストール後、一度サインアウトか再起動を行う必要がある。
 
 \end{enumerate}
@@ -59,6 +57,30 @@ VS では、アプリケーションを作成する際には「プロジェク�
 FK のセットアップが正常に完了した場合は、
 「プロジェクトウィザード」を利用することで簡易に設定を済ませることができる。
 以下にその手順を述べる。
+
+\subsection{VS19の場合}
+\begin{enumerate}
+ \item VS19 を起動し、「新しいプロジェクトの作成」を選択する。
+
+ \item 列挙されているテンプレートの中から「FK\_C++\_Template」を選択し「次へ」を押す。
+	(大抵の場合、リストの最後に配置されている。)
+
+ \item 「プロジェクト名」に作成したいプロジェクトの名前を入力し，
+	「場所」にプロジェクト全体を置きたいフォルダを指定し、「作成」を押す。
+	数秒から数十秒程度でプロジェクトが作成される。
+
+ \item 「表示」メニューから「ソリューションエクスプローラー」を選び、
+	「ソリューションエクスプローラー」ダイアログを表示しておく。
+	この中の「ソースファイル」ある「main.cpp」をダブルクリックすると、
+	サンプルコードを編集することができる。
+
+\end{enumerate}
+
+この手順で、プロジェクトの作成と設定が完了する。実際にはプロジェクト自体に加えて、
+その上位に位置する「ソリューション」と呼ばれるファイルも同時に作成される。
+VS で作成したプロジェクトを開く場合は、ソリューションを通じて行う。
+
+\subsection{VS17の場合}
 
 \begin{enumerate}
  \item VS を起動し、
