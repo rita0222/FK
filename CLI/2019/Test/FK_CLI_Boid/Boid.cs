@@ -3,13 +3,15 @@ using FK_CLI;
 
 namespace FK_CLI_Boid
 {
+    // エージェント用クラス
 	class Agent
 	{
 		private fk_Model model;
 		private fk_Vector newVec;
-        private const double SPEED = 0.05;
-        public const double AREASIZE = 15.0;
+        private const double SPEED = 0.05;   // 速度設定値
+        public const double AREASIZE = 15.0; // 移動領域の広さ設定値
 
+        // コンストラクタ
 		public Agent()
 		{
 			model = new fk_Model();
@@ -18,6 +20,7 @@ namespace FK_CLI_Boid
             model.GlMoveTo(fk_Math.DRand(-AREASIZE, AREASIZE), fk_Math.DRand(-AREASIZE, AREASIZE), 0.0);
 		}
 
+        // 位置ベクトル用プロパティ
 		public fk_Vector Pos
 		{
 			get
@@ -26,6 +29,7 @@ namespace FK_CLI_Boid
 			}
 		}
 
+        // 方向ベクトル用プロパティ
 		public fk_Vector Vec
 		{
 			set
@@ -38,6 +42,7 @@ namespace FK_CLI_Boid
 			}
 		}
 
+        // 形状参照プロパティ
 		public fk_Shape Shape
 		{
 			set
@@ -46,11 +51,13 @@ namespace FK_CLI_Boid
 			}
 		}
 
+        // ウィンドウへのモデル登録
 		public void Entry(fk_AppWindow argWin)
 		{
 			argWin.Entry(model);
 		}
 
+        // 前進処理
 		public void Forward()
 		{
 			model.GlVec(newVec);
@@ -58,10 +65,11 @@ namespace FK_CLI_Boid
 		}
 	}
 
+    // 群衆用クラス
 	class Boid
     {
-		private Agent [] agent;
-		private fk_Cone cone;
+		private Agent [] agent; // エージェント用配列
+		private fk_Cone cone;   // 形状 (円錐)
 
 		private double paramA, paramB, paramC, paramLA, paramLB;
 
@@ -102,13 +110,15 @@ namespace FK_CLI_Boid
 			}
 		}
 
-		public void Forward(bool argSMode, bool argAMode, bool argCMode)
+        // 群集の更新処理
+		public void Update(bool argSMode, bool argAMode, bool argCMode)
 		{
 			var gVec = new fk_Vector();
 			var diff = new fk_Vector();
 			fk_Vector [] pArray = new fk_Vector[agent.Length];
 			fk_Vector [] vArray = new fk_Vector[agent.Length];
 
+            // 位置ベクトルと速度ベクトルのコピー
 			for(int i = 0; i < agent.Length; i++)
             {
 				pArray[i] = agent[i].Pos;
@@ -116,8 +126,8 @@ namespace FK_CLI_Boid
 				gVec += pArray[i];
 			}
 
+            // 群集重心の算出
 			gVec /= (double)(agent.Length);
-
 
 			for(int i = 0; i < agent.Length; i++)
             {
@@ -178,12 +188,12 @@ namespace FK_CLI_Boid
 
 			boid.SetWindow(win);
 
+            // ウィンドウ各種設定
 			win.Size = new fk_Dimension(800, 800);
 			win.BGColor = new fk_Color(0.6, 0.7, 0.8);
 			win.ShowGuide(fk_Guide.GRID_XY);
 			win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
 			win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
-			win.FPS = 0;
             win.TrackBallMode = true;
 
 			win.Open();
@@ -199,8 +209,8 @@ namespace FK_CLI_Boid
                 // Cキーで「Cohesion(結合)」を無効に
                 bool cMode = win.GetKeyStatus('C', fk_Switch.RELEASE);
 
-                // 群集の前進処理
-                boid.Forward(sMode, aMode, cMode);
+                // 群集の更新処理
+                boid.Update(sMode, aMode, cMode);
 			}
 		}
 	}

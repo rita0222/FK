@@ -7,14 +7,10 @@ namespace FK_CLI_Particle
 	{
 		static void Main(string[] args)
 		{
-			var viewer = new fk_ShapeViewer(600, 600);
-			var particle = new fk_ParticleSet();
-			var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
-
+            var particle = new fk_ParticleSet();
             particle.MaxSize = 1000;
             particle.AllMode = true;
             particle.IndivMode = true;
-            int num = 0;
 
             particle.GenMethod = (P) =>
             {
@@ -31,7 +27,6 @@ namespace FK_CLI_Particle
                     if (fk_Math.DRand() < 0.3)
                     {   // 発生確率は 30% (を5回)
                         particle.NewParticle();              // パーティクル生成処理
-                        num++;
                     }
                 }
             };
@@ -56,6 +51,7 @@ namespace FK_CLI_Particle
                 vec = water + ((R * R * R) / 2.0) * (tmp1 - tmp2);
                 P.Velocity = vec;
 
+                // パーティクルの色を計算
                 double speed = vec.Dist();
                 double t = (speed - minSpeed) / (maxSpeed - minSpeed);
                 double h = Math.PI * 4.0 / 3.0 + Math.Min(1.0, Math.Max(0.0, t)) * Math.PI * 2.0 / 3.0;
@@ -70,17 +66,38 @@ namespace FK_CLI_Particle
                 }
             };
 
-			viewer.SetShape(2, particle.Shape);
-			viewer.SetDrawMode(2, fk_Draw.POINT);
-            viewer.SetElementMode(2, fk_ElementMode.ELEMENT);
+            fk_Material.InitDefault();
 
-            viewer.SetShape(3, prism);
-			viewer.SetPosition(3, 0.0, 0.0, 25.0);
-			viewer.SetDrawMode(3, fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT);
-            viewer.Scale = 10.0;
-            viewer.FPS = 0;
+            // ウィンドウ設定
+            var window = new fk_AppWindow();
+            window.Size = new fk_Dimension(800, 800);
+            window.BGColor = new fk_Color(0.0, 0.0, 0.0);
+            window.TrackBallMode = true;
 
-            while (viewer.Draw())
+            // パーティクルモデル設定
+            var particleModel = new fk_Model();
+            particleModel.Shape = particle.Shape;
+            particleModel.DrawMode = fk_Draw.POINT;
+            particleModel.ElementMode = fk_ElementMode.ELEMENT;
+            particleModel.PointSize = 5.0;
+            window.Entry(particleModel);
+
+            // 内部円柱設定
+            var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
+            var prismModel = new fk_Model();
+            prismModel.Shape = prism;
+            prismModel.GlMoveTo(0.0, 0.0, 25.0);
+            prismModel.DrawMode = fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT;
+            prismModel.Material = fk_Material.Yellow;
+            prismModel.LineColor = new fk_Color(0.0, 0.0, 1.0);
+            prismModel.PointColor = new fk_Color(0.0, 1.0, 0.0);
+            window.Entry(prismModel);
+
+            // ウィンドウ生成
+            window.Open();
+
+            // メインループ
+            while (window.Update())
             {
                 particle.Handle(); // パーティクルを 1 ステップ実行する。
             }
