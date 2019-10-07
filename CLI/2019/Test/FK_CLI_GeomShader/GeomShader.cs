@@ -26,63 +26,87 @@ namespace FK_CLI_GeomShader
             return argV;
         }
 
-        static void Main(string[] args)
+        static fk_AppWindow WindowSetup()
         {
-            var model = new fk_Model();
-            var point = new fk_Point();
-            var shader = new fk_ShaderBinder();
-            var posArray = new fk_Vector[4];
-            var vecArray = new fk_Vector[4];
-
-            fk_Material.InitDefault();
-
-            // ウィンドウ生成
             var window = new fk_AppWindow();
+
             window.Size = new fk_Dimension(800, 800);
             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
             window.ShowGuide(fk_Guide.GRID_XY);
             window.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
             window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
             window.Open();
+            return window;
+        }
 
-            for(int i = 0; i < posArray.Length; i++)
+        static void PointSetup(fk_Point argPoint, fk_Vector [] argPArray, fk_Vector [] argVArray)
+        {
+            for (int i = 0; i < argPArray.Length; i++)
             {
-                posArray[i] = new fk_Vector(GetRand(-AREA, AREA), GetRand(-AREA, AREA), 0.0);
-                vecArray[i] = new fk_Vector(GetRand(-1.0, 1.0), GetRand(-1.0, 1.0), 0.0);
-                vecArray[i].Normalize();
+                argPArray[i] = new fk_Vector(GetRand(-AREA, AREA), GetRand(-AREA, AREA), 0.0);
+                argVArray[i] = new fk_Vector(GetRand(-1.0, 1.0), GetRand(-1.0, 1.0), 0.0);
+                argVArray[i].Normalize();
             }
-            point.SetVertex(posArray);
-            point.SetShaderAttribute("pointVec", 2, vecArray);
+            argPoint.SetVertex(argPArray);
+            argPoint.SetShaderAttribute("pointVec", 2, argVArray);
+        }
 
-            model.Shape = point;
-            model.PointColor = new fk_Color(1.0, 0.0, 0.0);
-            model.PointSize = 5.0;
+        static void ModelSetup(fk_Model argModel, fk_Point argPoint)
+        {
+            argModel.Shape = argPoint;
+            argModel.PointColor = new fk_Color(1.0, 0.0, 0.0);
+            argModel.PointSize = 5.0;
+        }
 
-            window.Entry(model);
+        static void ShaderSetup(fk_Model argModel)
+        {
+            var shader = new fk_ShaderBinder();
 
             var program = shader.Program;
             program.LoadVertexShader("shader/geom_vs.glsl");
             program.LoadGeometryShader("shader/geom_gs.glsl");
             program.LoadFragmentShader("shader/geom_fs.glsl");
 
-            if(program.Validate() == true)
+            if (program.Validate() == true)
             {
-                shader.BindModel(model);
+                shader.BindModel(argModel);
                 shader.Parameter.ReserveAttribute("pointVec");
-            } else
+            }
+            else
             {
                 Console.WriteLine(program.LastError);
             }
+        }
+
+        static void PointUpdate(fk_Point argPoint, fk_Vector [] argPArray, fk_Vector [] argVArray)
+        {
+            for (int i = 0; i < argPArray.Length; i++)
+            {
+                argPArray[i] = PointMove(argPArray[i], argVArray[i]);
+                argVArray[i] = VecChange(argPArray[i], argVArray[i]);
+                argPoint.SetVertex(i, argPArray[i]);
+            }
+            argPoint.SetShaderAttribute("pointVec", 2, argVArray);
+        }
+
+        static void Main(string[] args)
+        {
+            var model = new fk_Model();
+            var point = new fk_Point();
+            var posArray = new fk_Vector[4];
+            var vecArray = new fk_Vector[4];
+
+            fk_Material.InitDefault();
+
+            var window = WindowSetup();
+            PointSetup(point, posArray, vecArray);
+            ModelSetup(model, point);
+            window.Entry(model);
+            ShaderSetup(model);
 
             while (window.Update())
             {
-                for(int i = 0; i < posArray.Length; i++)
-                {
-                    posArray[i] = PointMove(posArray[i], vecArray[i]);
-                    vecArray[i] = VecChange(posArray[i], vecArray[i]);
-                    point.SetVertex(i, posArray[i]);
-                }
-                point.SetShaderAttribute("pointVec", 2, vecArray);
+                PointUpdate(point, posArray, vecArray);
             }
         }
     }
