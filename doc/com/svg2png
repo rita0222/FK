@@ -1,6 +1,8 @@
 #! /usr/bin/env perl
 
 use Getopt::Std;
+use Cwd 'getcwd';
+my $cur_dir = getcwd . '/';
 
 %opts = ();
 
@@ -13,14 +15,14 @@ foreach $svgName (@ARGV) {
 
 	if($opts{"i"} == 1) {
 	    $com = "inkscape --export-area-drawing --export-dpi=144 --file=";
-	    $com .= $svgName;
+	    $com .= $cur_dir . $svgName;
 	    $com .= " --export-png=";
-	    $com .= $pngName;
+	    $com .= $cur_dir . $pngName;
 	} else {
 	    $com = "convert -trim -density 600 -resize 1024x ";
-	    $com .= $svgName;
+	    $com .= $cur_dir . $svgName;
 	    $com .= " ";
-	    $com .= $pngName;
+	    $com .= $cur_dir . $pngName;
 	}
 	if(!(-f $pngName)) {
 		system($com);
