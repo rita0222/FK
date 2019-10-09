@@ -82,14 +82,8 @@
 #include <vector>
 
 #include <vorbis/vorbisfile.h>
-
-#ifdef _MACOSX_
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
 #include <AL/al.h>
 #include <AL/alc.h>
-#endif
 
 #ifdef __BIG_ENDIAN__
 const int _ENDIAN = 1;

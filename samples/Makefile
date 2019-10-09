@@ -137,18 +137,18 @@ mac:
 	"SYSLIBS = \
 		-liconv \
 		-lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
+		-lopenal -lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework QTKit \
 		-framework CoreVideo \
 		-framework AGL \
 		-framework OpenGL \
 		-framework Cocoa \
-		-framework OpenAL \
 		-framework ApplicationServices \
 		-framework OpenCL \
 		-framework Foundation \
 		-framework Accelerate \
+		-framework CoreAudio \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
 	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
@@ -183,13 +183,18 @@ mac-g:
 	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
 	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
 	"SYSLIBS = -liconv -lfltk_gl -lfltk \
-		-lvorbisfile -lvorbis -logg \
+		-lopenal -lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
-		-framework AGL -framework OpenGL \
-		-framework Cocoa -framework OpenAL \
+		-framework QTKit \
+		-framework CoreVideo \
+		-framework AGL \
+		-framework OpenGL \
+		-framework Cocoa \
 		-framework ApplicationServices \
 		-framework OpenCL \
 		-framework Foundation \
+		-framework Accelerate \
+		-framework CoreAudio \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
 	"FKLINK = $(FKOPENCL_SG) $(FKAUDIO_SG) $(FKSHADER_SG) $(FKLIB_SG)" \

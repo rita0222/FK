@@ -79,14 +79,8 @@
 #include <vector>
 
 #include <vorbis/vorbisfile.h>
-
-#ifdef _MACOSX_
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
 #include <AL/al.h>
 #include <AL/alc.h>
-#endif
 
 using namespace std;
 using namespace FK;
