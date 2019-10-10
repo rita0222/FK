@@ -34,4 +34,4 @@ productbuild \
 	fk_Installer.pkg
 
 rm tmpInst.pkg
-rm -rf Package
+#rm -rf Package

@@ -1,13 +1,12 @@
 %!PS-Adobe-3.0 EPSF-3.0
-%%Creator: cairo 1.14.8 (http://cairographics.org)
-%%CreationDate: Wed Oct  9 08:58:56 2019
+%%Creator: cairo 1.16.0 (https://cairographics.org)
+%%CreationDate: Thu Oct 10 09:31:20 2019
 %%Pages: 1
 %%DocumentData: Clean7Bit
 %%LanguageLevel: 2
-%%BoundingBox: 0 -1 159 62
+%%BoundingBox: 0 0 159 62
 %%EndComments
 %%BeginProlog
-save
 50 dict begin
 /q { gsave } bind def
 /Q { grestore } bind def
@@ -31,9 +30,6 @@ save
 /W* { eoclip } bind def
 /BT { } bind def
 /ET { } bind def
-/pdfmark where { pop globaldict /?pdfmark /exec load put }
-    { globaldict begin /?pdfmark /pop load def /pdfmark
-    /cleartomark load def end } ifelse
 /BDC { mark 3 1 roll /BDC pdfmark } bind def
 /EMC { mark /EMC pdfmark } bind def
 /cairo_store_point { /cairo_point_y exch def /cairo_point_x exch def } def
@@ -58,42 +54,51 @@ save
 /g { setgray } bind def
 /rg { setrgbcolor } bind def
 /d1 { setcachedevice } bind def
+/cairo_data_source {
+  CairoDataIndex CairoData length lt
+    { CairoData CairoDataIndex get /CairoDataIndex CairoDataIndex 1 add def }
+    { () } ifelse
+} def
+/cairo_flush_ascii85_file { cairo_ascii85_file status { cairo_ascii85_file flushfile } if } def
+/cairo_image { image cairo_flush_ascii85_file } def
+/cairo_imagemask { imagemask cairo_flush_ascii85_file } def
 %%EndProlog
 %%BeginSetup
 %%EndSetup
 %%Page: 1 1
 %%BeginPageSetup
-%%PageBoundingBox: 0 -1 159 62
+%%PageBoundingBox: 0 0 159 62
 %%EndPageSetup
-q 0 -1 159 63 rectclip q
+q 0 0 159 62 rectclip
+1 0 0 -1 0 62 cm q
 0 g
-30.375 60.375 m 39.191 42.511 l 58.906 39.644 l 44.641 25.738 l 48.008 
-6.105 l 30.375 15.375 l 12.742 6.105 l 16.109 25.738 l 1.844 39.644 l 21.559
- 42.511 l h
-30.375 60.375 m f
+30.375 0.848 m 39.191 18.711 l 58.906 21.578 l 44.641 35.484 l 48.008 55.117
+ l 30.375 45.848 l 12.742 55.117 l 16.109 35.484 l 1.844 21.578 l 21.559
+ 18.711 l h
+30.375 0.848 m f
 0.75 w
 0 J
 0 j
 [] 0.0 d
-4 M q 1 0 0 -1 0 61.222332 cm
+4 M q 1 0 0 1 0 0 cm
 30.375 0.848 m 39.191 18.711 l 58.906 21.578 l 44.641 35.484 l 48.008 55.117
  l 30.375 45.848 l 12.742 55.117 l 16.109 35.484 l 1.844 21.578 l 21.559
  18.711 l h
 30.375 0.848 m S Q
-127.875 60.375 m 136.691 42.511 l 156.406 39.644 l 142.141 25.738 l 145.508
- 6.105 l 127.875 15.375 l 110.242 6.105 l 113.609 25.738 l 99.344 39.644
- l 119.059 42.511 l h
-127.875 60.375 m f
-q 1 0 0 -1 0 61.222332 cm
+127.875 0.848 m 136.691 18.711 l 156.406 21.578 l 142.141 35.484 l 145.508
+ 55.117 l 127.875 45.848 l 110.242 55.117 l 113.609 35.484 l 99.344 21.578
+ l 119.059 18.711 l h
+127.875 0.848 m f
+q 1 0 0 1 0 0 cm
 127.875 0.848 m 136.691 18.711 l 156.406 21.578 l 142.141 35.484 l 145.508
  55.117 l 127.875 45.848 l 110.242 55.117 l 113.609 35.484 l 99.344 21.578
  l 119.059 18.711 l h
 127.875 0.848 m S Q
 [ 1.5 0.75] 0 d
-q 1 0 0 -1 0 61.222332 cm
+q 1 0 0 1 0 0 cm
 0.375 0.848 60 56.25 re S Q
 [ 1.5 0.75] 0 d
-q 1 0 0 -1 0 61.222332 cm
+q 1 0 0 1 0 0 cm
 157.875 30.848 m 157.875 47.414 144.445 60.848 127.875 60.848 c 111.305
  60.848 97.875 47.414 97.875 30.848 c 97.875 14.277 111.305 0.848 127.875
  0.848 c 144.445 0.848 157.875 14.277 157.875 30.848 c h
@@ -101,5 +106,5 @@ q 1 0 0 -1 0 61.222332 cm
 Q Q
 showpage
 %%Trailer
-end restore
+end
 %%EOF
