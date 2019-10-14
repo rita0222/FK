@@ -5,10 +5,8 @@ namespace FK_CLI_Shader
 {
     class Program
     {
-        static void Main(string[] args)
+        static fk_AppWindow SetupWindow()
         {
-            fk_Material.InitDefault();
-
             var window = new fk_AppWindow();
             window.Size = new fk_Dimension(800, 600);
             window.ClearModel();
@@ -17,40 +15,50 @@ namespace FK_CLI_Shader
             window.TrackBallMode = true;
             window.BGColor = new fk_Color(0.5, 0.5, 0.5);
 
+            return window;
+        }
+
+        static fk_Model SetupLight(fk_AppWindow argWin)
+        {
             var lightModel = new fk_Model();
             var light = new fk_Light();
             lightModel.Shape = light;
             lightModel.Material = fk_Material.TrueWhite;
             lightModel.GlMoveTo(0.0, 0.0, 0.0);
             lightModel.GlFocus(-1.0, -1.0, -1.0);
-            window.Entry(lightModel);
+            argWin.Entry(lightModel);
+            return lightModel;
+        }
 
-            window.Open();
-            if (window.Update() == false) return;
-
+        static fk_Model SphereSetup(fk_Sphere argSphere)
+        {
             var spBinder = new fk_ShaderBinder();
-            var modelDef = new fk_Model();
-            var sphere = new fk_Sphere(8, 7.0);
-            modelDef.Shape = sphere;
-            modelDef.Material = fk_Material.Yellow;
-            modelDef.SmoothMode = true;
-            modelDef.GlMoveTo(-20.0, 0.0, 0.0);
+            var model = new fk_Model();
+            model.Shape = argSphere;
+            model.Material = fk_Material.Yellow;
+            model.SmoothMode = true;
+            model.GlMoveTo(-20.0, 0.0, 0.0);
             spBinder.Program.LoadVertexShader("shader/model_vp.glsl");
             spBinder.Program.LoadFragmentShader("shader/model_fp.glsl");
 
             if (spBinder.Program.Validate())
             {
-                spBinder.BindModel(modelDef);
+                spBinder.BindModel(model);
             }
             else
             {
                 Console.WriteLine("Shader Error 1");
             }
 
-            window.Entry(modelDef);
+            return model;
+        }
 
+        static fk_Model IFSSetup()
+        {
             var ifsBinder = new fk_ShaderBinder();
             var ifsShape = new fk_IFSTexture();
+            var model = new fk_Model();
+
             if (!ifsShape.ReadBMP("mqo/00tex_master.BMP"))
             {
                 Console.WriteLine("Tex Load Error");
@@ -60,38 +68,61 @@ namespace FK_CLI_Shader
                 Console.WriteLine("IFS Load Error");
             }
 
-            var ifsModelDef = new fk_Model();
-            ifsModelDef.Shape = ifsShape;
-            ifsModelDef.Material = fk_Material.White;
-            ifsModelDef.SmoothMode = true;
-            ifsModelDef.GlMoveTo(20.0, 0.0, 0.0);
+            model.Shape = ifsShape;
+            model.Material = fk_Material.White;
+            model.SmoothMode = true;
+            model.GlMoveTo(20.0, 0.0, 0.0);
             ifsBinder.Program.LoadVertexShader("shader/model_vp.glsl");
             ifsBinder.Program.LoadFragmentShader("shader/modelTex_fp.glsl");
             if (ifsBinder.Program.Validate())
             {
-                ifsBinder.BindModel(ifsModelDef);
+                ifsBinder.BindModel(model);
             }
             else
             {
                 Console.WriteLine("Shader Error 2");
             }
-            window.Entry(ifsModelDef);
 
+            return model;
+        }
+
+        static fk_Model ShockSetup(fk_Sphere argSphere)
+        {
             var shockBinder = new fk_ShaderBinder();
-            var shockModel = new fk_Model();
-            shockModel.Shape = sphere;
-            shockModel.Scale = 0.01;
-            shockModel.BlendMode = fk_BlendMode.ADDITION;
+            var model = new fk_Model();
+            model.Shape = argSphere;
+            model.Scale = 0.01;
+            model.BlendMode = fk_BlendMode.ADDITION;
             shockBinder.Program.LoadVertexShader("shader/shockSph_vp.glsl");
             shockBinder.Program.LoadFragmentShader("shader/shockSph_fp.glsl");
-            if(shockBinder.Program.Validate())
+            if (shockBinder.Program.Validate())
             {
-                shockBinder.BindModel(shockModel);
+                shockBinder.BindModel(model);
             }
             else
             {
                 Console.WriteLine("Shader Error 3");
             }
+
+            return model;
+        }
+
+        static void Main(string[] args)
+        {
+            fk_Material.InitDefault();
+
+            var window = SetupWindow();
+            var lightModel = SetupLight(window);
+
+            window.Open();
+            if (window.Update() == false) return;
+
+            var sphere = new fk_Sphere(8, 7.0);
+
+            window.Entry(SphereSetup(sphere));
+            window.Entry(IFSSetup());
+
+            var shockModel = ShockSetup(sphere);
             window.Entry(shockModel);
 
             while (window.Update())

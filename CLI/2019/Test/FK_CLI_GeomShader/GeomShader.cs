@@ -7,12 +7,6 @@ namespace FK_CLI_GeomShader
     {
         const double AREA = 20.0;
         const double SPEED = 0.1;
-        static Random rnd = new Random();
-
-        static double GetRand(double argMin, double argMax)
-        {
-            return (argMin + (argMax - argMin) * rnd.NextDouble());
-        }
 
         static fk_Vector PointMove(fk_Vector argP, fk_Vector argV)
         {
@@ -43,8 +37,8 @@ namespace FK_CLI_GeomShader
         {
             for (int i = 0; i < argPArray.Length; i++)
             {
-                argPArray[i] = new fk_Vector(GetRand(-AREA, AREA), GetRand(-AREA, AREA), 0.0);
-                argVArray[i] = new fk_Vector(GetRand(-1.0, 1.0), GetRand(-1.0, 1.0), 0.0);
+                argPArray[i] = new fk_Vector(fk_Math.DRand(-AREA, AREA), fk_Math.DRand(-AREA, AREA), 0.0);
+                argVArray[i] = new fk_Vector(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0);
                 argVArray[i].Normalize();
             }
             argPoint.SetVertex(argPArray);
