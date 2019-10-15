@@ -5,13 +5,14 @@ namespace FK_CLI_Particle
 {
 	class Program
 	{
-		static void Main(string[] args)
-		{
+        static fk_ParticleSet ParticleSetup()
+        {
             var particle = new fk_ParticleSet();
-            particle.MaxSize = 1000;
-            particle.AllMode = true;
-            particle.IndivMode = true;
+            particle.MaxSize = 1000; // パーティクル最大数
+            particle.AllMode = true; // AllMethod() の有効化
+            particle.IndivMode = true; // IndivMethod() の有効化
 
+            // パーティクル生成時処理をラムダ式で設定
             particle.GenMethod = (P) =>
             {
                 // 生成時の位置を(ランダムに)設定
@@ -20,6 +21,7 @@ namespace FK_CLI_Particle
                 P.Position = new fk_Vector(50.0, y, z);
             };
 
+            // パーティクル全体処理をラムダ式で設定
             particle.AllMethod = () =>
             {
                 for (int i = 0; i < 5; i++)
@@ -31,6 +33,7 @@ namespace FK_CLI_Particle
                 }
             };
 
+            // パーティクル個別処理をラムダ式で設定
             particle.IndivMethod = (P) =>
             {
                 fk_Vector pos, vec, tmp1, tmp2;
@@ -66,23 +69,36 @@ namespace FK_CLI_Particle
                 }
             };
 
-            fk_Material.InitDefault();
+            // Main() にインスタンスを返す。
+            return particle;
+        }
 
-            // ウィンドウ設定
+        static fk_AppWindow WindowSetup()
+        {
             var window = new fk_AppWindow();
             window.Size = new fk_Dimension(800, 800);
             window.BGColor = new fk_Color(0.0, 0.0, 0.0);
             window.TrackBallMode = true;
+            return window;
+        }
 
-            // パーティクルモデル設定
-            var particleModel = new fk_Model();
-            particleModel.Shape = particle.Shape;
-            particleModel.DrawMode = fk_Draw.POINT;
-            particleModel.ElementMode = fk_ElementMode.ELEMENT;
-            particleModel.PointSize = 5.0;
-            window.Entry(particleModel);
+        static void ParticleModelSetup(fk_ParticleSet argParticle, fk_AppWindow argWindow)
+        {
+            var model = new fk_Model();
+            model.Shape = argParticle.Shape;
+            model.DrawMode = fk_Draw.POINT;
 
-            // 内部円柱設定
+            // パーティクルごとに色を変えたい場合の設定
+            model.ElementMode = fk_ElementMode.ELEMENT;
+
+            // パーティクル描画の際の大きさ (ピクセル)
+            model.PointSize = 5.0;
+
+            argWindow.Entry(model);
+        }
+
+        static void PrismSetup(fk_AppWindow argWindow)
+        {
             var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
             var prismModel = new fk_Model();
             prismModel.Shape = prism;
@@ -91,7 +107,24 @@ namespace FK_CLI_Particle
             prismModel.Material = fk_Material.Yellow;
             prismModel.LineColor = new fk_Color(0.0, 0.0, 1.0);
             prismModel.PointColor = new fk_Color(0.0, 1.0, 0.0);
-            window.Entry(prismModel);
+            argWindow.Entry(prismModel);
+        }
+
+        static void Main(string[] args)
+		{
+            fk_Material.InitDefault();
+
+            // パーティクルセットの生成
+            var particle = ParticleSetup();
+
+            // ウィンドウ設定
+            var window = WindowSetup();
+
+            // パーティクルモデル設定
+            ParticleModelSetup(particle, window);
+
+            // 内部円柱設定
+            PrismSetup(window);
 
             // ウィンドウ生成
             window.Open();
