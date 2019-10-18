@@ -17,7 +17,8 @@ namespace FK_CLI_Boid
 			model = new fk_Model();
 			model.Material = fk_Material.Red;
 			model.GlVec(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0);
-            model.GlMoveTo(fk_Math.DRand(-AREASIZE, AREASIZE), fk_Math.DRand(-AREASIZE, AREASIZE), 0.0);
+            model.GlMoveTo(fk_Math.DRand(-AREASIZE, AREASIZE),
+						   fk_Math.DRand(-AREASIZE, AREASIZE), 0.0);
 		}
 
         // 位置ベクトル用プロパティ

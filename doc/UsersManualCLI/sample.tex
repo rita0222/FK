@@ -219,269 +219,6 @@ C\# 版のコードと比較することで大体の F\# の文法を把握で�
 \end{small}
 \end{breakbox}
 
-\section{LOD 処理とカメラ切り替え}
-次のサンプルは、ボールが弾む様子を描いたプログラムである。このプログラムを
-実行すると、ボールが2回弾む間は鳥瞰的なカメラ視点だが、その後に青色の
-ブロックからボールを見る視点に切り替わる。プログラムのおおまかな流れは
-自分で解析して頂きたいが、ここでは最初のサンプルにはなかった概念に
-関して説明する。
-
-まず、10 行目にて Ball クラスを定義し、この中で fk\_Model や fk\_Sphere の
-インスタンスを管理している。本マニュアルでは C\# の文法については触れないため、
-クラスの詳細については別の文献を参照して頂きたいが、自作のクラスを作成する際の
-参考となるであろう。
-
-
-29 〜 31 行目にて球を分割数を変えて 3 種類定義しているが、これは
-71 行目からの LOD() メソッド内で Ball の実際の形状を動的に選択できるように
-するためである。「LOD (Level Of Detail) 処理」とは、視点とオブジェクトの
-距離によって形状の精密さを動的に変化させるテクニックである。たとえば、
-多くのポリゴンでできている形状は精密で迫力があるが、視点から
-とても遠くて非常に小さく表示されているような場合は無駄に処理されている
-ことになる。そこで、遠くにあって小さく表示されている場合は粗い形状を
-表示して処理の高速化を計るのが LOD 処理の目的である。このサンプルの
-LOD 処理はわかりやすくするために露骨に変化が見られるが、実際に
-プログラムを作成するときはわかりにくくなるように視点距離との関係を
-調整すべきである。
-\\
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
-  1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using FK_CLI;
-  7: 
-  8: namespace FK_CLI_Ball
-  9: {
- 10:     public class Ball
- 11:     {
- 12:         private const double    DOWN_ACCEL      = 0.05;     // 降下時の加速度
- 13:         private const double    RISE_ACCEL      = 0.053;    // 上昇時の減速度
- 14:         private const int       DOWN_MODE       = 0;        // 降下モード
- 15:         private const int       RISE_MODE       = 1;        // 上昇モード
- 16:         private const int       LOD4_HIGH       = 200;      // 四分割距離 (鳥瞰)
- 17:         private const int       LOD3_HIGH       = 300;      // 三分割距離 (鳥瞰)
- 18:         private const int       LOD4_LOW        = 90;       // 四分割距離 (ブロック)
- 19:         private const int       LOD3_LOW        = 120;      // 三分割距離 (ブロック)
- 20:         private const double    TOP_BALL_POS    = 300.0;    // ボール始点高さ
- 21:         private const double    BTM_BALL_POS    = 18.0;     // ボール跳ね返り高さ
- 22:         private const double    BALL_SIZE       = 12.0;     // ボール半径
- 23: 
- 24:         private int direction;          // ボールの状態(DOWN_MODE or RISE_MODE)
- 25:         private int view_mode;          // 視点モード
- 26:         private int bound_count;        // バウンド回数を数える変数
- 27:         private double y_trs;           // ボールのｙ座標移動量
- 28:         private fk_Model ball_model;    // ボールのモデル
- 29:         private fk_Sphere BALL2;        // 二分割形状
- 30:         private fk_Sphere BALL3;        // 三分割形状
- 31:         private fk_Sphere BALL4;        // 四分割形状
- 32: 
- 33:         public const int LOW_MODE       = 0;        // ブロック視点モード
- 34:         public const int HIGH_MODE      = 1;        // 鳥瞰モード
- 35: 
- 36:         public Ball()
- 37:         {
- 38:             BALL2 = new fk_Sphere(6, BALL_SIZE);
- 39:             BALL3 = new fk_Sphere(8, BALL_SIZE);
- 40:             BALL4 = new fk_Sphere(10, BALL_SIZE);
- 41:             ball_model = new fk_Model();
- 42:             Init();
- 43:         }
- 44: 
- 45:         public void Init()
- 46:         {
- 47:             direction   = DOWN_MODE;
- 48:             y_trs       = 0.1;
- 49:             view_mode   = HIGH_MODE;
- 50:             bound_count = 1;
- 51:             ball_model.GlMoveTo(0.0, TOP_BALL_POS, 0.0);
- 52:             ball_model.Shape = BALL2;
- 53:         }
- 54: 
- 55:         public fk_Model Model
- 56:         {
- 57:             get
- 58:             {
- 59:                 return ball_model;
- 60:             }
- 61:         }
- 62: 
- 63:         public fk_Vector Pos
- 64:         {
- 65:             get
- 66:             {
- 67:                 return ball_model.Position;
- 68:             }
- 69:         }
- 70: 
- 71:         public void LOD(fk_Vector argPos)
- 72:         {
- 73:             double  Distance = (ball_model.Position - argPos).Dist();
- 74:             switch(view_mode) {
- 75:                 case HIGH_MODE:
- 76:                     if(Distance < LOD4_HIGH) {
- 77:                         ball_model.Shape = BALL4;
- 78:                     } else if(Distance < LOD3_HIGH) {
- 79:                         ball_model.Shape = BALL3;
- 80:                     } else {
- 81:                         ball_model.Shape = BALL2;
- 82:                     }
- 83:                     break;
- 84: 
- 85:                 case LOW_MODE:
- 86:                     if(Distance < LOD4_LOW) {
- 87:                         ball_model.Shape = BALL4;
- 88:                     } else if(Distance < LOD3_LOW) {
- 89:                         ball_model.Shape = BALL3;
- 90:                     } else {
- 91:                         ball_model.Shape = BALL2;
- 92:                     }
- 93:                     break;
- 94: 
- 95:                 default:
- 96:                     break;
- 97:             }
- 98:         }
- 99: 
-100:         public void Accel()
-101:         {
-102:             switch(direction) {
-103:                 case DOWN_MODE:
-104:                     y_trs += DOWN_ACCEL;
-105:                     ball_model.GlTranslate(0.0, -y_trs, 0.0);
-106:                     break;
-107: 
-108:                 case RISE_MODE:
-109:                     y_trs -= RISE_ACCEL;
-110:                     ball_model.GlTranslate(0.0, y_trs, 0.0);
-111:                     break;
-112: 
-113:                 default:
-114:                     break;
-115:             }
-116:         }
-117: 
-118:         public void Bound()
-119:         {
-120:             if(ball_model.Position.y < BTM_BALL_POS) {
-121:                 direction = RISE_MODE;
-122:             } else if(y_trs < 0.01) {
-123:                 if(direction == RISE_MODE) {
-124:                     if(bound_count % 4 < 2) {
-125:                         view_mode = HIGH_MODE;
-126:                     } else {
-127:                         view_mode = LOW_MODE;
-128:                     }
-129:                     bound_count++;
-130:                 }
-131:                 direction = DOWN_MODE;
-132:             }
-133:         }
-134: 
-135:         public int Draw(fk_Vector argPos)
-136:         {
-137:             LOD(argPos);
-138:             Bound();
-139:             Accel();
-140:             //４回跳ね返ると初期化
-141:             if(bound_count > 4) Init();
-142:             return view_mode;
-143:         }
-144:     }
-145: 
-146:     class Program
-147:     {
-148:         static void Main(string[] args)
-149:         {
-150:             var win = new fk_AppWindow();
-151:             win.Size = new fk_Dimension(600, 600);
-152:             win.ClearModel(false); // デフォルト光源消去
-153: 
-154:             int view_mode = Ball.HIGH_MODE;
-155:     
-156:             var ball = new Ball();
-157:             
-158:             var viewModel = new fk_Model();
-159:             var lightModel = new fk_Model();
-160:             var groundModel = new fk_Model();
-161:             var blockModel = new fk_Model();
-162: 
-163:             var light = new fk_Light();
-164:             var ground = new fk_Circle(4, 100.0);
-165:             var block = new fk_Block(10.0, 10.0, 10.0);
-166: 
-167: 
-168:             fk_Material.InitDefault();
-169: 
-170:             // ### VIEW POINT ###
-171:             // 上の方から見た視点
-172:             viewModel.GlMoveTo(0.0, 400.0, 80.0);
-173:             viewModel.GlFocus(0.0, 30.0, 0.0);
-174:             viewModel.GlUpvec(0.0, 1.0, 0.0);
-175: 
-176:             // ### LIGHT ###
-177:             light.Type = fk_LightType.POINT;
-178:             light.SetAttenuation(0.0, 0.0);
-179:             lightModel.Shape = light;
-180:             lightModel.Material = fk_Material.White;
-181:             lightModel.GlTranslate(-60.0, 60.0, 0.0);
-182: 
-183:             // ### GROUND ###
-184:             groundModel.Shape = ground;
-185:             groundModel.Material = fk_Material.LightGreen;
-186:             groundModel.SmoothMode = true;
-187:             groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
-188: 
-189:             // ### VIEW BLOCK ###
-190:             blockModel.Shape = block;
-191:             blockModel.Material = fk_Material.Blue;
-192:             blockModel.GlMoveTo(60.0, 30.0, 0.0);
-193:             blockModel.Parent = groundModel;
-194: 
-195:             // ### BALL ###
-196:             ball.Model.Material = fk_Material.Red;
-197:             ball.Model.SmoothMode = true;
-198:     
-199:             // ### Model Entry ###
-200:             win.CameraModel = viewModel;
-201:             win.Entry(lightModel);
-202:             win.Entry(ball.Model);
-203:             win.Entry(groundModel);
-204:             win.Entry(blockModel); 
-205: 
-206:             win.Open();
-207: 
-208:             while(win.Update() == true) {
-209: 
-210:                 // ボールを弾ませて, カメラの状態を取得。
-211:                 view_mode = ball.Draw(viewModel.Position);
-212: 
-213:                 if(view_mode == Ball.HIGH_MODE) {
-214:                     // カメラを上からの視点にする。
-215:                     viewModel.GlMoveTo(0.0, 400.0, 80.0);
-216:                     viewModel.GlFocus(0.0, 30.0, 0.0);
-217:                     viewModel.GlUpvec(0.0, 1.0, 0.0);
-218:                 } else {
-219:                     // カメラをブロックからの視点にする。
-220:                     viewModel.GlMoveTo(blockModel.InhPosition);
-221:                     viewModel.GlTranslate(0.0, 10.0, 0.0);
-222:                     viewModel.GlFocus(ball.Pos);
-223:                     viewModel.GlUpvec(0.0, 1.0, 0.0);
-224:                 }
-225: 
-226:                 // 地面をくるくる回転させましょう。
-227:                 groundModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
-228:             }
-229:         }
-230:     }
-231: }
-\end{verbatim}
-\end{small}
-\end{breakbox}
-
 \section{Boid アルゴリズムによる群集シミュレーション}
 Boid アルゴリズムとは、群集シミュレーションを実現するための最も基本的なアルゴリズムである。
 このアルゴリズムでは、群を構成する各エージェントは以下の3つの動作規則を持つ。
@@ -551,220 +288,223 @@ C\#版
 \begin{small}
 \begin{verbatim}
   1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using FK_CLI;
-  7: 
-  8: namespace FK_CLI_Boid
-  9: {
- 10:     // エージェント用クラス
- 11:     class Agent
- 12:     {
- 13:         private fk_Model model;
- 14:         private fk_Vector newVec;
- 15: 
- 16:         public Agent(double argSize, Random argRand)
- 17:         {
- 18:             // コンストラクタ
- 19:             // 各モデルの位置と方向をランダムに設定する。
- 20:             model = new fk_Model();
- 21:             model.Material = fk_Material.Red;
- 22:             model.GlVec(argRand.NextDouble()*2.0 - 1.0, argRand.NextDouble()*2.0 - 1.0, 0.0);
- 23:             model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
- 24:                            argRand.NextDouble() * argSize * 2.0 - argSize, 0.0);
- 25:         }
- 26: 
- 27:         // 位置ベクトルプロパティ
- 28:         public fk_Vector Pos
- 29:         {
- 30:             get
- 31:             {
- 32:                 return model.Position;
- 33:             }
- 34:         }
- 35: 
- 36:         // 方向ベクトルプロパティ
- 37:         public fk_Vector Vec
- 38:         {
- 39:             set
- 40:             {
- 41:                 newVec = value;
- 42:             }
- 43:             get
- 44:             {
- 45:                 return model.Vec;
- 46:             }
- 47:         }
- 48: 
- 49:         // 形状インスタンスプロパティ
- 50:         public fk_Shape Shape
- 51:         {
- 52:             set
- 53:             {
- 54:                 model.Shape = value;
- 55:             }
- 56:         }
- 57: 
- 58:         // ウィンドウ登録メソッド
- 59:         public void Entry(fk_AppWindow argWin)
- 60:         {
- 61:             argWin.Entry(model);
- 62:         }
- 63: 
- 64:         // 前進メソッド
- 65:         public void Forward()
- 66:         {
- 67:             model.GlVec(newVec);
- 68:             model.LoTranslate(0.0, 0.0, -0.05);
- 69:         }
- 70:     }
- 71: 
- 72:     // 群衆用クラス
- 73:     class Boid {
- 74:         private Agent [] agent;
- 75:         private fk_Cone cone;
- 76:         private const int IAREA = 15;
- 77:         private const double AREASIZE = (double)(IAREA);
- 78: 
- 79:         private double paramA, paramB, paramC, paramLA, paramLB;
- 80: 
- 81:         // コンストラクタ
- 82:         public Boid(int argNum)
- 83:         {
- 84:             // 乱数発生器の初期化
- 85:             var rand = new Random();
- 86: 
- 87:             // 形状インスタンスの性生
- 88:             fk_Material.InitDefault();
- 89:             cone = new fk_Cone(16, 0.4, 1.0);
- 90:             if(argNum < 0) return;
- 91: 
- 92:             // エージェント配列作成
- 93:             agent = new Agent[argNum];
- 94: 
- 95:             // エージェントインスタンスの作成
- 96:             for(int i = 0; i < argNum; ++i) {
- 97:                 agent[i] = new Agent(AREASIZE, rand);
- 98:                 agent[i].Shape = cone;
- 99:             }
-100: 
-101:             // 各種パラメータ設定
-102:             paramA = 0.2;
-103:             paramB = 0.02;
-104:             paramC = 0.01;
-105:             paramLA = 3.0;
-106:             paramLB = 5.0;
-107:         }
-108: 
-109:         // パラメータ設定メソッド
-110:         public void SetParam(double argA, double argB, double argC,
-111:                              double argLA, double argLB)
-112:         {
-113:             paramA = argA;
-114:             paramB = argB;
-115:             paramC = argC;
-116:             paramLA = argLA;
-117:             paramLB = argLB;
-118:         }
-119: 
-120:         // ウィンドウへのエージェント登録メソッド
-121:         public void SetWindow(fk_AppWindow argWin)
-122:         {
-123:             foreach(Agent M in agent) {
-124:                 M.Entry(argWin);
-125:             }
-126:         }
-127: 
-128:         // 各エージェント動作メソッド
-129:         public void Forward(bool argSMode, bool argAMode, bool argCMode)
-130:         {
-131:             var gVec = new fk_Vector();
-132:             fk_Vector diff = new fk_Vector();
-133:             fk_Vector [] pArray = new fk_Vector[agent.Length]; // 位置ベクトル格納用配列
-134:             fk_Vector [] vArray = new fk_Vector[agent.Length]; // 方向ベクトル格納用配列
-135: 
-136:             // 全体の重心計算
-137:             for(int i = 0; i < agent.Length; i++) {
-138:                 pArray[i] = agent[i].Pos;
-139:                 vArray[i] = agent[i].Vec;
-140:                 gVec += pArray[i];
-141:             }
-142:             gVec /= (double)(agent.Length);
-143: 
-144:             // エージェントごとの動作算出演算
-145:             for(int i = 0; i < agent.Length; i++) {
-146:                 fk_Vector vec = new fk_Vector(vArray[i]);
-147: 
-148:                 for(int j = 0; j < agent.Length; j++) {
-149:                     if(i == j) continue;
-150:                     diff = pArray[i] - pArray[j];
-151:                     double dist = diff.Dist();
-152: 
-153:                     // 分離 (Separation) 処理
-154:                     if(dist < paramLA && argSMode) {
-155:                         vec += paramA * diff / (dist*dist);
-156:                     }
-157: 
-158:                     // 整列 (Alignment) 処理
-159:                     if(dist < paramLB && argAMode) {
-160:                         vec += paramB * vArray[j];
-161:                     }
-162:                 }
-163: 
-164:                 // 結合 (Cohesion) 処理 (スペースキーが押されていたら無効化)
-165:                 if(argCMode == true) {
-166:                     vec += paramC * (gVec - pArray[i]);
-167:                 }
-168: 
-169:                 // 領域の外側に近づいたら方向修正
-170:                 if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
-171:                     vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
-172:                 }
-173:                 if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
-174:                     vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
-175:                 }
+  2: using FK_CLI;
+  3: 
+  4: namespace FK_CLI_Boid
+  5: {
+  6:     // エージェント用クラス
+  7:     class Agent
+  8:     {
+  9:         private fk_Model model;
+ 10:         private fk_Vector newVec;
+ 11:         private const double SPEED = 0.05;   // 速度設定値
+ 12:         public const double AREASIZE = 15.0; // 移動領域の広さ設定値
+ 13: 
+ 14:         // コンストラクタ
+ 15:         public Agent()
+ 16:         {
+ 17:             model = new fk_Model();
+ 18:             model.Material = fk_Material.Red;
+ 19:             model.GlVec(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0);
+ 20:             model.GlMoveTo(fk_Math.DRand(-AREASIZE, AREASIZE),
+ 21:                            fk_Math.DRand(-AREASIZE, AREASIZE), 0.0);
+ 22:         }
+ 23: 
+ 24:         // 位置ベクトル用プロパティ
+ 25:         public fk_Vector Pos
+ 26:         {
+ 27:             get
+ 28:             {
+ 29:                 return model.Position;
+ 30:             }
+ 31:         }
+ 32: 
+ 33:         // 方向ベクトル用プロパティ
+ 34:         public fk_Vector Vec
+ 35:         {
+ 36:             set
+ 37:             {
+ 38:                 newVec = value;
+ 39:             }
+ 40:             get
+ 41:             {
+ 42:                 return model.Vec;
+ 43:             }
+ 44:         }
+ 45: 
+ 46:         // 形状参照プロパティ
+ 47:         public fk_Shape Shape
+ 48:         {
+ 49:             set
+ 50:             {
+ 51:                 model.Shape = value;
+ 52:             }
+ 53:         }
+ 54: 
+ 55:         // ウィンドウへのモデル登録
+ 56:         public void Entry(fk_AppWindow argWin)
+ 57:         {
+ 58:             argWin.Entry(model);
+ 59:         }
+ 60: 
+ 61:         // 前進処理
+ 62:         public void Forward()
+ 63:         {
+ 64:             model.GlVec(newVec);
+ 65:             model.LoTranslate(0.0, 0.0, -SPEED);
+ 66:         }
+ 67:     }
+ 68: 
+ 69:     // 群衆用クラス
+ 70:     class Boid
+ 71:     {
+ 72:         private Agent [] agent; // エージェント用配列
+ 73:         private fk_Cone cone;   // 形状 (円錐)
+ 74: 
+ 75:         private double paramA, paramB, paramC, paramLA, paramLB;
+ 76: 
+ 77:         public Boid(int argNum)
+ 78:         {
+ 79:             fk_Material.InitDefault();
+ 80:             cone = new fk_Cone(16, 0.4, 1.0);
+ 81:             if(argNum < 0) return;
+ 82:             agent = new Agent[argNum];
+ 83: 
+ 84:             for(int i = 0; i < argNum; ++i)
+ 85:             {
+ 86:                 agent[i] = new Agent();
+ 87:                 agent[i].Shape = cone;
+ 88:             }
+ 89: 
+ 90:             paramA = 0.2;
+ 91:             paramB = 0.02;
+ 92:             paramC = 0.01;
+ 93:             paramLA = 3.0;
+ 94:             paramLB = 5.0;
+ 95:         }
+ 96: 
+ 97:         public void SetParam(double argA, double argB, double argC, double argLA, double argLB)
+ 98:         {
+ 99:             paramA = argA;
+100:             paramB = argB;
+101:             paramC = argC;
+102:             paramLA = argLA;
+103:             paramLB = argLB;
+104:         }
+105: 
+106:         public void SetWindow(fk_AppWindow argWin)
+107:         {
+108:             foreach(Agent M in agent)
+109:             {
+110:                 M.Entry(argWin);
+111:             }
+112:         }
+113: 
+114:         // 群集の更新処理
+115:         public void Update(bool argSMode, bool argAMode, bool argCMode)
+116:         {
+117:             var gVec = new fk_Vector();
+118:             var diff = new fk_Vector();
+119:             fk_Vector [] pArray = new fk_Vector[agent.Length];
+120:             fk_Vector [] vArray = new fk_Vector[agent.Length];
+121: 
+122:             // 位置ベクトルと速度ベクトルのコピー
+123:             for(int i = 0; i < agent.Length; i++)
+124:             {
+125:                 pArray[i] = agent[i].Pos;
+126:                 vArray[i] = agent[i].Vec;
+127:                 gVec += pArray[i];
+128:             }
+129: 
+130:             // 群集重心の算出
+131:             gVec /= (double)(agent.Length);
+132: 
+133:             for(int i = 0; i < agent.Length; i++)
+134:             {
+135:                 fk_Vector p = new fk_Vector(pArray[i]);
+136:                 fk_Vector v = new fk_Vector(vArray[i]);
+137:                 for(int j = 0; j < agent.Length; j++)
+138:                 {
+139:                     if(i == j) continue;
+140:                     diff = p - pArray[j];
+141:                     double dist = diff.Dist();
+142: 
+143:                     // 分離 (Separation) 処理
+144:                     if (dist < paramLA && argSMode == true)
+145:                     {
+146:                         v += paramA * diff / (dist*dist);
+147:                     }
+148: 
+149:                     // 整列 (Alignment) 処理
+150:                     if(dist < paramLB && argAMode == true)
+151:                     {
+152:                         v += paramB * vArray[j];
+153:                     }
+154:                 }
+155: 
+156:                 // 結合 (Cohesion) 処理
+157:                 if(argCMode == true)
+158:                 {
+159:                     v += paramC * (gVec - pArray[i]);
+160:                 }
+161: 
+162:                 // 領域の外側に近づいたら方向修正
+163:                 if (Math.Abs(p.x) > Agent.AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01)
+164:                 {
+165:                     v.x -= v.x * (Math.Abs(pArray[i].x) - Agent.AREASIZE)*0.2;
+166:                 }
+167: 
+168:                 if(Math.Abs(p.y) > Agent.AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01)
+169:                 {
+170:                     v.y -= v.y * (Math.Abs(pArray[i].y) - Agent.AREASIZE)*0.2;
+171:                 }
+172: 
+173:                 v.z = 0.0;
+174:                 agent[i].Vec = v;
+175:             }
 176: 
-177:                 // 最終的な方向ベクトル演算結果を代入
-178:                 vec.z = 0.0;
-179:                 agent[i].Vec = vec;
-180:             }
-181: 
-182:             // 全エージェントを前進
-183:             foreach(Agent M in agent) {
-184:                 M.Forward();
-185:             }
-186:         }
-187:     }
-188: 
-189:     class Program {
-190:         static void Main(string[] args)
-191:         {
-192:             var win = new fk_AppWindow();
-193:             var boid = new Boid(200);
-194: 
-195:             boid.SetWindow(win);
-196: 
-197:             win.Size = new fk_Dimension(600, 600);
-198:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
-199:             win.ShowGuide(fk_GuideMode.GRID_XY);
-200:             win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
-201:             win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
-202:             win.FPS = 0;
-203: 
-204:             win.Open();
-205: 
-206:             while(win.Update() == true) {
-207:                 bool sMode = win.GetKeyStatus('S', fk_SwitchStatus.RELEASE);
-208:                 bool aMode = win.GetKeyStatus('A', fk_SwitchStatus.RELEASE);
-209:                 bool cMode = win.GetKeyStatus('C', fk_SwitchStatus.RELEASE);
-210:                 boid.Forward(sMode, aMode, cMode);
-211:             }
+177:             foreach(Agent M in agent) {
+178:                 M.Forward();
+179:             }
+180:         }
+181:     }
+182: 
+183:     class Program
+184:     {
+185:         static void Main(string[] args)
+186:         {
+187:             var win = new fk_AppWindow();
+188:             var boid = new Boid(200);
+189: 
+190:             boid.SetWindow(win);
+191: 
+192:             // ウィンドウ各種設定
+193:             win.Size = new fk_Dimension(800, 800);
+194:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
+195:             win.ShowGuide(fk_Guide.GRID_XY);
+196:             win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
+197:             win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+198:             win.TrackBallMode = true;
+199: 
+200:             win.Open();
+201: 
+202:             while(win.Update() == true)
+203:             {
+204:                 // Sキーで「Separate(分離)」を無効に
+205:                 bool sMode = win.GetKeyStatus('S', fk_Switch.RELEASE);
+206: 
+207:                 // Aキーで「Alignment(整列)」を無効に
+208:                 bool aMode = win.GetKeyStatus('A', fk_Switch.RELEASE);
+209: 
+210:                 // Cキーで「Cohesion(結合)」を無効に
+211:                 bool cMode = win.GetKeyStatus('C', fk_Switch.RELEASE);
 212: 
-213:         }
-214:     }
-215: }
+213:                 // 群集の更新処理
+214:                 boid.Update(sMode, aMode, cMode);
+215:             }
+216:         }
+217:     }
+218: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
