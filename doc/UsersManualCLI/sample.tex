@@ -549,41 +549,38 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 詳細解説
 \end{center}
 \begin{itemize}
- \item 10 〜 88 行目は、fk\_ParticleSet クラスを継承した「MyParticle」という
-	クラスを定義している。
-	継承したクラスに対し、GenMethod()、AllMethod()、IndivMethod() の
-	各メソッドを再定義(上書き)することで、パーティクルの挙動を制御することなる。
+ \item 8〜75行目でパーティクルに対する各種設定を行っている。
+	10行目でパーティクル用インスタンスを生成し、
+	11〜13行目で各種設定を行っている。
 
- \item 17 〜 31 行目は MyParticle クラスのコンストラクタである。ここで、
-	パーティクルの初期設定を行う。
-
- \item 19 行目の MaxSize プロパティは fk\_ParticleSet クラスのメンバで、
+ \item 11 行目の MaxSize プロパティは fk\_ParticleSet クラスのメンバで、
 	パーティクル個数の最大値を設定する。もしパーティクルの個数が
 	この値と等しくなったときは、NewParticle() メソッドを呼んでも
 	パーティクルは新たに生成されなくなる。
 
- \item 20,21 行目はそれぞれ個別処理、全体処理に対するモード設定である。
+ \item 12,13 行目はそれぞれ個別処理、全体処理に対するモード設定である。
 	ここで true に設定しない場合、IndivMethod() や AllMethod() の
 	記述は無視される。
 
- \item 22 〜 25 行目は、各パーティクルの色パレットを設定しているものである。
-	今回は、パーティクル ID と色 ID を完全に一対一対応することにし、
-	パーティクルの個数だけ色を用意している。
-
- \item 35 〜 44 行目では、新たにパーティクルが生成された際の処理を記述する。
+ \item 16 〜 22 行目では、新たにパーティクルが生成された際の処理を記述する。
 	引数の P に新パーティクルのインスタンスが入っており、これに対して
-	様々な設定を行う。40 行目では初期位置を、43 行目では色 ID を設定
-	している。
+	様々な設定を行う。今回のサンプルでは初期位置設定を行っている。
 
- \item 47 〜 54 行目では、AllMethod() メソッドを再定義している。
+	ここにある GenMethod() や AllMethod(), IndivMethod() は
+	fk\_Particle 型を引数に持つ void 型のメソッドか、
+	またはラムダ式で設定を行うことができる。
+	今回のサンプルではラムダ式を用いている。
+	ラムダ式についての詳細は C\# に関する一般的な書籍を参照されたい。
+
+ \item 25 〜 34 行目では、AllMethod() メソッドを再定義している。
 	AllMethod() メソッドには、パーティクル集合全体に対しての処理を記述する。
 	ここではランダムにパーティクルの生成を行っているだけであるが、
 	パーティクル全体に対して一括の処理を記述することもできる。
 
- \item 57 〜 88 行目では、IndivMethod() メソッドを再定義している。
+ \item 37 〜 71 行目では、IndivMethod() メソッドを再定義している。
 	IndivMethod 関数には、個別のパーティクルに対する処理を記述する。
 
- \item IndivMethod() 中では、64 〜 72 行目で速度ベクトルの設定を行っている。
+ \item IndivMethod() 中では、52 〜 55 行目で速度ベクトルの設定を行っている。
 	中心が原点で、\(z\) 軸に平行な半径 \(R\) の円柱の周囲を
 	速度 \((-V_x, 0, 0)\) の水流が流れているとする。このとき、各地点
 	\((x, y, z)\) での水流を表す偏微分方程式は以下のようなものである。
@@ -598,14 +595,14 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 		\bV = (-V_x, 0, 0), \qquad
 		\bP = (x, y, 0), \qquad r = |\bP|
 	\end{equation}
-	である。今回は、\(\bV = (0.2, 0, 0)\)(60行目の「water」変数)、
-	\(R = 15\)(61行目の「R」変数) として算出している。この式から、
-	各パーティクルの速度ベクトルを算出し、72 行目で設定している。
+	である。今回は、\(\bV = (0.2, 0, 0)\)(40行目の「water」変数)、
+	\(R = 15\)(41行目の「R」変数) として算出している。この式から、
+	各パーティクルの速度ベクトルを算出し、55 行目で設定している。
 
  \item パーティクルの色は、速度が minSpeed 未満の場合は青、
 	maxSpeed 以上の場合は赤とし、その中間の場合は
 	赤色と青色をブレンドした色となるように設定している。
-	その色値の算出と設定を 76 〜 81 行目で行っている。
+	その色値の算出と設定を 58 〜 64 行目で行っている。
 	パーティクルの速度 \(s\) が \(m < s < M\) を満たすとき、
 	\begin{equation}
 		t = \frac{s - m}{M - m}
@@ -616,20 +613,20 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 	\end{equation}
 	という式で色値\(C\)を決定している。
 
- \item 84 〜 86 行目でパーティクル削除判定を行っている。
+ \item 67 〜 70 行目でパーティクル削除判定を行っている。
 	パーティクルが \(x = -50\) よりも左へ流れてしまった場合には
-	85 行目で削除を行っている。
+	69 行目で削除を行っている。
 
- \item 99,102 行目では、パーティクル集合を fk\_ShapeViewer で表示するために
-	SetShape() メソッドを用いている。それぞれを別 ID として登録することで、
-	2つの形状を同時に表示できる。
+ \item パーティクル集合を表示するには、89 行目にあるように
+	fk\_ParticleSet クラスの Shape プロパティを
+	fk\_Model の Shape プロパティに代入する必要がある。
 
- \item 108 行目にあるように、Handle() メソッドを用いることで
+ \item 136 行目にあるように、Handle() メソッドを用いることで
 	パーティクル全体に 1 ステップ処理が行われる。その際には、設定した
 	速度や加速度にしたがって各パーティクルが移動する。特に再設定
 	しない限り、加速度は処理終了後も保存される。
 	今回のプログラムではパーティクルの加速度は一切設定していないため、
-	IndivMethod() メソッド内の 72 行目の速度設定のみが
+	IndivMethod() メソッド内の 55 行目の速度設定のみが
 	パーティクルの動作を決定する要因となる。
 
 \end{itemize}
@@ -637,7 +634,146 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
-
+  1: using System;
+  2: using FK_CLI;
+  3: 
+  4: namespace FK_CLI_Particle
+  5: {
+  6:     class Program
+  7:     {
+  8:         static fk_ParticleSet ParticleSetup()
+  9:         {
+ 10:             var particle = new fk_ParticleSet();
+ 11:             particle.MaxSize = 1000; // パーティクル最大数
+ 12:             particle.AllMode = true; // AllMethod() の有効化
+ 13:             particle.IndivMode = true; // IndivMethod() の有効化
+ 14: 
+ 15:             // パーティクル生成時処理をラムダ式で設定
+ 16:             particle.GenMethod = (P) =>
+ 17:             {
+ 18:                 // 生成時の位置を(ランダムに)設定
+ 19:                 double y = fk_Math.DRand(-25.0, 25.0);
+ 20:                 double z = fk_Math.DRand(-25.0, 25.0);
+ 21:                 P.Position = new fk_Vector(50.0, y, z);
+ 22:             };
+ 23: 
+ 24:             // パーティクル全体処理をラムダ式で設定
+ 25:             particle.AllMethod = () =>
+ 26:             {
+ 27:                 for (int i = 0; i < 5; i++)
+ 28:                 {
+ 29:                     if (fk_Math.DRand() < 0.3)
+ 30:                     {   // 発生確率は 30% (を5回)
+ 31:                         particle.NewParticle();              // パーティクル生成処理
+ 32:                     }
+ 33:                 }
+ 34:             };
+ 35: 
+ 36:             // パーティクル個別処理をラムダ式で設定
+ 37:             particle.IndivMethod = (P) =>
+ 38:             {
+ 39:                 fk_Vector pos, vec, tmp1, tmp2;
+ 40:                 var water = new fk_Vector(-0.5, 0.0, 0.0);
+ 41:                 double R = 15.0;
+ 42:                 double minSpeed = 0.3;
+ 43:                 double maxSpeed = 0.6;
+ 44:                 double r;
+ 45: 
+ 46:                 //Console.WriteLine("count A {0}", P.ID);
+ 47:                 pos = P.Position;        // パーティクル位置取得。
+ 48:                 pos.z = 0.0;
+ 49:                 r = pos.Dist();          // |p| を r に代入。
+ 50: 
+ 51:                 // パーティクルの速度ベクトルを計算
+ 52:                 tmp1 = water / (r * r * r);
+ 53:                 tmp2 = ((3.0 * (water * pos)) / (r * r * r * r * r)) * pos;
+ 54:                 vec = water + ((R * R * R) / 2.0) * (tmp1 - tmp2);
+ 55:                 P.Velocity = vec;
+ 56: 
+ 57:                 // パーティクルの色を計算
+ 58:                 double speed = vec.Dist();
+ 59:                 double s = (speed - minSpeed) / (maxSpeed - minSpeed);
+ 60:                 double t = Math.Min(1.0, Math.Max(0.0, s));
+ 61:                 double h = Math.PI * (4.0 + 2.0 * t)/3.0;
+ 62:                 var col = new fk_Color();
+ 63:                 col.SetHSV(h, 1.0, 1.0);
+ 64:                 P.Color = col;
+ 65: 
+ 66:                 // パーティクルの x 成分が -50 以下になったら消去
+ 67:                 if (pos.x < -50.0)
+ 68:                 {
+ 69:                     particle.RemoveParticle(P);
+ 70:                 }
+ 71:             };
+ 72: 
+ 73:             // Main() にインスタンスを返す。
+ 74:             return particle;
+ 75:         }
+ 76: 
+ 77:         static fk_AppWindow WindowSetup()
+ 78:         {
+ 79:             var window = new fk_AppWindow();
+ 80:             window.Size = new fk_Dimension(800, 800);
+ 81:             window.BGColor = new fk_Color(0.0, 0.0, 0.0);
+ 82:             window.TrackBallMode = true;
+ 83:             return window;
+ 84:         }
+ 85: 
+ 86:         static void ParticleModelSetup(fk_ParticleSet argParticle, fk_AppWindow argWindow)
+ 87:         {
+ 88:             var model = new fk_Model();
+ 89:             model.Shape = argParticle.Shape;
+ 90:             model.DrawMode = fk_Draw.POINT;
+ 91: 
+ 92:             // パーティクルごとに色を変えたい場合の設定
+ 93:             model.ElementMode = fk_ElementMode.ELEMENT;
+ 94: 
+ 95:             // パーティクル描画の際の大きさ (ピクセル)
+ 96:             model.PointSize = 5.0;
+ 97: 
+ 98:             argWindow.Entry(model);
+ 99:         }
+100: 
+101:         static void PrismSetup(fk_AppWindow argWindow)
+102:         {
+103:             var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
+104:             var prismModel = new fk_Model();
+105:             prismModel.Shape = prism;
+106:             prismModel.GlMoveTo(0.0, 0.0, 25.0);
+107:             prismModel.DrawMode = fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT;
+108:             prismModel.Material = fk_Material.Yellow;
+109:             prismModel.LineColor = new fk_Color(0.0, 0.0, 1.0);
+110:             prismModel.PointColor = new fk_Color(0.0, 1.0, 0.0);
+111:             argWindow.Entry(prismModel);
+112:         }
+113: 
+114:         static void Main(string[] args)
+115:         {
+116:             fk_Material.InitDefault();
+117: 
+118:             // パーティクルセットの生成
+119:             var particle = ParticleSetup();
+120: 
+121:             // ウィンドウ設定
+122:             var window = WindowSetup();
+123: 
+124:             // パーティクルモデル設定
+125:             ParticleModelSetup(particle, window);
+126: 
+127:             // 内部円柱設定
+128:             PrismSetup(window);
+129: 
+130:             // ウィンドウ生成
+131:             window.Open();
+132: 
+133:             // メインループ
+134:             while (window.Update())
+135:             {
+136:                 particle.Handle(); // パーティクルを 1 ステップ実行する。
+137:             }
+138:         }
+139:     }
+140: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
