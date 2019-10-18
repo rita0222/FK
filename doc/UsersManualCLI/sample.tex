@@ -152,69 +152,98 @@
 \end{verbatim}
 \end{small}
 \end{breakbox}
-~
+\section{形状の簡易表示とアニメーション} \label{sec:sampleviewer}
 
-また、以下のソースコードは、同様のプログラムを F\# で記述したものである。
-C\# 版のコードと比較することで大体の F\# の文法を把握できるだろう。\\ ~
+次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。
+
+\begin{itemize}
+ \item 21 〜 27 行目で 11 行 11 列の行列として並んでいる状態の
+	座標を計算している。その際、\(z = \dfrac{x^2 - y^2}{10}\)
+	として \(z\) 成分は計算されている。
+
+ \item 29 〜 36 行目でインデックスフェースセットを表す
+	配列を作成している。インデックスフェースセットに関しては、
+	第 \ref{sec:solidGen1} 節を参照すること。
+
+ \item 38 行目で実際に形状を生成する。この部分の解説も、
+	第 \ref{sec:solidGen1} 節に記述がある。
+
+ \item 39 行目では、作成した形状を描画形状として登録している。
+	今回は登録する形状が一つだけなので Shape プロパティに代入することで登録を
+	行っているが、複数の形状を同時に表示したい場合は fk\_ShapeViewer クラスの
+	SetShape() メソッドを用いるとよい。
+
+ \item 40 行目では、表裏の両面及び稜線を描画するように設定している。
+
+ \item 43 行目では for ループ中で描画が行われるよう記述されている。
+	これにより、44 〜 50 行目が実行される度に描画処理が行われるようになる。
+
+ \item 46 行目では、アニメーションの際の頂点移動量が計算されている。
+	移動は \(z\) 方向のみ行われ、移動量は
+	\(\sin\frac{counter + 10j}{5\pi}\)である。counter はループの度に
+	43 行目で 10 ずつ追加されているので、描画の度に移動量が異なる
+	ことになる。
+
+ \item 47 行目で初期位置に移動量が足され、48 行目で実際に各頂点を移動している。
+\end{itemize}
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
- 1: open System
- 2: open FK_CLI
+ 1: using System;
+ 2: using FK_CLI;
  3: 
- 4: module FK_Box =
- 5: 
- 6:     // ウィンドウ生成
- 7:     let win = new fk_AppWindow()
- 8: 
- 9:     // マテリアル初期化
-10:     fk_Material.InitDefault()
+ 4: namespace FK_CLI_Viewer
+ 5: {
+ 6:     class Viewer
+ 7:     {
+ 8:         static void Main(string[] args)
+ 9:         {
+10:             const int SIZE = 40;
 11: 
-12:     // 直方体モデル生成
-13:     let blockModel = new fk_Model()
-14:     let block = new fk_Block(50.0, 70.0, 40.0)
-15:     blockModel.Shape <- block
-16:     blockModel.Material <- fk_Material.Yellow
-17:     win.Entry(blockModel)
-18: 
-19:     // 線分モデル生成
-20:     let pos : fk_Vector array = Array.init 4 (fun i -> new fk_Vector())
-21:     pos.[0].Set(0.0, 100.0, 0.0)
-22:     pos.[1].Set(100.0, 0.0, 0.0)
-23:     pos.[2] <- -pos.[0]
-24:     pos.[3] <- -pos.[1]
-25: 
-26:     let line : fk_Line array = Array.init 2 (fun i -> new fk_Line())
-27:     let lineModel : fk_Model array = Array.init 2 (fun i -> new fk_Model())
+12:             var viewer = new fk_ShapeViewer(600, 600);
+13:             var shape = new fk_IndexFaceSet();
+14:             var pos = new fk_Vector[(SIZE+1)*(SIZE+1)];
+15:             var moveVec = new fk_Vector();
+16:             var movePos = new fk_Vector();
+17:             var IFSet = new int[4*SIZE*SIZE];
+18:             int i, j;
+19:             double x, y;
+20: 
+21:             for(i = 0; i <= SIZE; ++i) {
+22:                 for(j = 0; j <= SIZE; ++j) {
+23:                     x = (double)(i - SIZE/2);
+24:                     y = (double)(j - SIZE/2);
+25:                     pos[i*(SIZE+1)+j] = new fk_Vector(x, y, (x*x - y*y)/(double)SIZE);
+26:                 }
+27:             }
 28: 
-29:     for i = 0 to 1 do
-30:         line.[i].PushLine(pos.[2*i], pos.[2*i + 1])
-31:         lineModel.[i].Shape <- line.[i]
-32:         lineModel.[i].Parent <- blockModel
-33:         win.Entry(lineModel.[i])
-34: 
-35:     lineModel.[0].LineColor <- new fk_Color(1.0, 0.0, 0.0)
-36:     lineModel.[1].LineColor <- new fk_Color(0.0, 1.0, 0.0)
+29:             for(i = 0; i < SIZE; i++) {
+30:                 for(j = 0; j < SIZE; j++) {
+31:                     IFSet[(i*SIZE + j)*4 + 0] = i*(SIZE+1) + j;
+32:                     IFSet[(i*SIZE + j)*4 + 1] = (i+1)*(SIZE+1) + j;
+33:                     IFSet[(i*SIZE + j)*4 + 2] = (i+1)*(SIZE+1) + j+1;
+34:                     IFSet[(i*SIZE + j)*4 + 3] = i*(SIZE+1) + j+1;
+35:                 }
+36:             }
 37: 
-38:     // カメラモデル生成
-39:     let camera = new fk_Model()
-40:     camera.GlMoveTo(0.0, 0.0, 2000.0) |> ignore
-41:     camera.GlFocus(0.0, 0.0, 0.0) |> ignore
-42:     camera.GlUpvec(0.0, 1.0, 0.0) |> ignore
-43:     win.CameraModel <- camera
-44: 
-45:     // ウィンドウ生成
-46:     win.Open()
-47: 
-48:     let org = new fk_Vector(0.0, 0.0, 0.0)
-49:     let count = ref 0
-50:     while win.Update() = true do
-51:         incr count
-52:         camera.GlTranslate(0.0, 0.0, -1.0) |> ignore
-53:         blockModel.GlRotateWithVec(org, fk_Axis.Y, Math.PI/300.0) |> ignore
-54:         camera.GlFocus(org) |> ignore
-55:         if !count >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, Math.PI/300.0) |> ignore
+38:             shape.MakeIFSet(SIZE*SIZE, 4, IFSet, (SIZE+1)*(SIZE+1), pos);
+39:             viewer.Shape = shape;
+40:             viewer.DrawMode = fk_Draw.FRONTBACK_FACE | fk_Draw.LINE;
+41:             viewer.Scale = 10.0;
+42: 
+43:             for(int counter = 0; viewer.Draw() == true; counter += 10) {
+44:                 for(i = 0; i <= SIZE; i++) {
+45:                     for(j = 0; j <= SIZE; j++) {
+46:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/Math.PI));
+47:                         movePos = moveVec + pos[i*(SIZE+1)+j];
+48:                         shape.MoveVPosition(i*(SIZE+1)+j, movePos);
+49:                     }
+50:                 }
+51:             }
+52:         }
+53:     }
+54: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
@@ -270,20 +299,12 @@ Boid アルゴリズムとは、群集シミュレーションを実現するた
 \end{equation}
 \end{description}
 
-以下、C\# と F\# によるサンプルプログラムを掲載する。
+以下、C\# によるサンプルプログラムを掲載する。
 これらついての詳細な解説は割愛するが、
 各エージェントを表す「Agent」クラスと、群を表す「Boid」クラスを構築することにより、
 メインループがかなりシンプルになっていることがわかる。また、
 「S」「A」「C」キーを押すと、それぞれ「分離」「整列」「結合」規則を無効にするように
-なっているので、各規則がどのようにエージェントの動作に影響しているかがわかるだろう。
-
-F\# は C\# に比べるとかなりコンパクトなコードになっている。
-F\# は、配列やリストに対しての各種操作で強力な機能を持つ文法となっており、
-今回のようなシミュレーションプログラムの記述には大きな威力を発揮することがわかる。
-
-\begin{center}
-C\#版
-\end{center}
+なっているので、各規則がどのようにエージェントの動作に影響しているかがわかるだろう。\\ ~
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
@@ -508,291 +529,6 @@ C\#版
 \end{verbatim}
 \end{small}
 \end{breakbox}
-\begin{center}
-F\#版
-\end{center}
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
-  1: open System
-  2: open FK_CLI
-  3: 
-  4: // エージェント用クラス
-  5: type Agent(argID:int) = class
-  6:     // コンストラクタ
-  7:     let model = new fk_Model()
-  8:     let newVec = new fk_Vector()
-  9:     let id = argID
- 10: 
- 11:     do
- 12:         model.Material <- fk_Material.Red
- 13: 
- 14:     // (ここまでがコンストラクタ)
- 15: 
- 16:     // ID プロパティ
- 17:     member this.ID with get() = id
- 18: 
- 19:     // 位置ベクトルプロパティ
- 20:     member this.Pos with get() = model.Position
- 21: 
- 22:     // 方向ベクトルプロパティ
- 23:     member this.Vec with get() = model.Vec
- 24:                     and set(v:fk_Vector) = newVec.Set(v.x, v.y, v.z)
- 25: 
- 26:     // 形状プロパティ
- 27:     member this.Shape with get() = model.Shape
- 28:                       and set(s:fk_Shape) = model.Shape <- s 
- 29: 
- 30:     // 初期化メソッド
- 31:     member this.Init(argSize: double, argRand: Random) =
- 32:         model.GlVec(argRand.NextDouble()*2.0 - 1.0,
- 33:                     argRand.NextDouble()*2.0 - 1.0,
- 34:                     0.0) |> ignore
- 35:         model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
- 36:                        argRand.NextDouble() * argSize * 2.0 - argSize,
- 37:                        0.0) |> ignore
- 38: 
- 39:     // ウィンドウ登録メソッド
- 40:     member this.Entry(argWin: fk_AppWindow) =
- 41:         argWin.Entry(model)
- 42: 
- 43:     // 前進メソッド
- 44:     member this.Forward() =
- 45:         model.GlVec(newVec) |> ignore
- 46:         model.LoTranslate(0.0, 0.0, -0.05) |> ignore
- 47:         model.GlMoveTo(this.Pos.x, this.Pos.y, 0.0) |> ignore
- 48: end;;
- 49: 
- 50: // 群集クラス
- 51: type Boid(argNum) = class
- 52:     // コンストラクタ
- 53:     do
- 54:         fk_Material.InitDefault()
- 55: 
- 56:     // 乱数発生器生成
- 57:     let rand = new Random()
- 58: 
- 59:     // エージェント配列生成
- 60:     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
- 61: 
- 62:     // 形状生成
- 63:     let cone = new fk_Cone(16, 0.4, 1.0)
- 64: 
- 65:     // 各種パラメータ設定
- 66:     let IAREA = 15
- 67:     let AREASIZE = double(IAREA)
- 68:     let paramA = 0.2
- 69:     let paramB = 0.02
- 70:     let paramC = 0.01
- 71:     let paramLA = 3.0
- 72:     let paramLB = 5.0
- 73:     do
- 74:         // 各エージェントの初期化
- 75:         agent |> Array.iter (fun a -> a.Init(AREASIZE, rand))
- 76:         agent |> Array.iter (fun a -> a.Shape <- cone)
- 77: 
- 78:     // (ここまでがコンストラクタ)
- 79: 
- 80:     // ウィンドウ登録メソッド
- 81:     member this.SetWindow(argWin: fk_AppWindow) =
- 82:         agent |> Array.iter (fun a -> a.Entry(argWin))
- 83: 
- 84:     // 各エージェント動作メソッド
- 85:     member this.Forward(argSMode: bool, argAMode: bool, argCMode: bool) =
- 86:         let pA = agent |> Array.map (fun a -> a.Pos) // 位置ベクトル配列
- 87:         let vA = agent |> Array.map (fun a -> a.Vec) // 方向ベクトル配列
- 88:         let iA = agent |> Array.map (fun a -> a.ID)  // ID配列
- 89:         let vArray = Array.zip3 pA vA iA             // 結合リスト作成
- 90: 
- 91:         let newV0 = vArray |> Array.map (fun (p1, v1, i) ->
- 92:             let mutable tmpV = v1
- 93:             for j = 0 to vArray.Length - 1 do
- 94:                 if i <> j then
- 95:                     let diff = p1 - pA.[j]
- 96:                     let dist = diff.Dist()
- 97:                     // 分離ルール
- 98:                     if dist < paramLA && argSMode then
- 99:                         tmpV <- tmpV + paramA * diff / (dist*dist)
-100: 
-101:                     // 整列ルール
-102:                     if dist < paramLB && argAMode then
-103:                         tmpV <- tmpV + paramB * vA.[j]
-104:             tmpV
-105:         )
-106: 
-107:         // 重心計算
-108:         let gVec = (Array.reduce (fun x y -> x + y) pA) / (double pA.Length)
-109: 
-110:         // 結合ルール
-111:         let calcG (p, v) = v + paramB * (gVec - p)
-112:         let newV1 =
-113:             if argCMode then
-114:                 Array.zip pA newV0 |> Array.map calcG
-115:             else
-116:                 Array.copy newV0
-117: 
-118:         // 領域外判定用メソッド
-119:         let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
-120:         let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
-121: 
-122:         // 反転メソッド
-123:         let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
-124: 
-125:         // 領域の外側に近づいたら方向修正するメソッド
-126:         let xNegate (p:fk_Vector, v:fk_Vector) =
-127:             if xOut (p, v) then
-128:                 new fk_Vector(vNegate(p.x, v.x), v.y, 0.0)
-129:             else
-130:                 v
-131: 
-132:         let yNegate (p: fk_Vector, v:fk_Vector) =
-133:             if yOut (p, v) then
-134:                 new fk_Vector(v.x, vNegate(p.y, v.y), 0.0)
-135:             else
-136:                 v
-137: 
-138:         // 方向修正を行ったエージェントリストを取得
-139:         let newV2 = Array.zip pA newV1 |> Array.map xNegate
-140:         let newV3 = Array.zip pA newV2 |> Array.map yNegate
-141: 
-142:         // エージェントに新速度設定
-143:         let newAgent = Array.zip agent newV3
-144:         newAgent |> Array.iter (fun (a, v) -> (a.Vec <- v))
-145: 
-146:         // エージェント前進
-147:         agent |> Array.iter (fun a -> a.Forward())
-148: 
-149: end;;
-150: 
-151: 
-152: module FK_Boid =
-153:     let win = new fk_AppWindow()
-154:     let boid = new Boid(150)
-155: 
-156:     boid.SetWindow(win)
-157: 
-158:     win.Size <- new fk_Dimension(600, 600)
-159:     win.BGColor <- new fk_Color(0.6, 0.7, 0.8)
-160:     win.ShowGuide(fk_GuideMode.GRID_XY)
-161:     win.CameraPos <- new fk_Vector(0.0, 0.0, 80.0)
-162:     win.CameraFocus <- new fk_Vector(0.0, 0.0, 0.0)
-163:     win.FPS <- 0
-164: 
-165:     win.Open()
-166:     while win.Update() = true do
-167:         let sMode = win.GetKeyStatus('s', fk_SwitchStatus.RELEASE)
-168:         let aMode = win.GetKeyStatus('a', fk_SwitchStatus.RELEASE)
-169:         let cMode = win.GetKeyStatus('c', fk_SwitchStatus.RELEASE)
-170:         boid.Forward(sMode, aMode, cMode)
-\end{verbatim}
-\end{small}
-\end{breakbox}
-
-\section{形状の簡易表示とアニメーション} \label{sec:sampleviewer}
-
-次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。
-
-このサンプルプログラムでは、23〜40行目がメッシュ形状を生成する処理を記述し、
-45〜53行目がアニメーションを実現している処理となっている。
-
-
-\begin{center}
-詳細解説
-\end{center}
-
-\begin{itemize}
- \item 23 〜 28 行目で 11 行 11 列の行列として並んでいる状態の
-	座標を計算している。その際、\(z = \dfrac{x^2 - y^2}{10}\)
-	として \(z\) 成分は計算されている。
-
- \item 次に、31 〜 38 行目でインデックスフェースセットを表す
-	配列を作成している。インデックスフェースセットに関しては、
-	第 \ref{sec:solidGen1} 節を参照すること。
-
- \item 40 行目で実際に形状を生成する。この部分の解説も、
-	第 \ref{sec:solidGen1} 節に記述がある。
-
- \item 41 行目では、作成した形状を描画形状として登録している。
-	今回は登録する形状が一つだけなので Shape プロパティに代入することで登録を
-	行っているが、複数の形状を同時に表示したい場合は fk\_ShapeViewer クラスの
-	SetShape() メソッドを用いるとよい。
-
- \item 42,43 行目では、表裏の両面及び稜線を描画するように設定している。
-
- \item 45 行目では for ループ中で描画が行われるよう記述されている。
-	これにより、46 〜 52 行目が実行される度に描画処理が行われるようになる。
-
- \item 48 行目では、アニメーションの際の頂点移動量が計算されている。
-	移動は \(z\) 方向のみ行われ、移動量は
-	\(\sin\frac{counter + 10j}{5\pi}\)である。counter はループの度に
-	45 行目で 10 ずつ追加されているので、描画の度に移動量が異なる
-	ことになる。
-
- \item 49 行目で初期位置に移動量が足され、50 行目で実際に各頂点を移動している。
-\end{itemize}
-
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
- 1: using System;
- 2: using System.Collections.Generic;
- 3: using System.Linq;
- 4: using System.Text;
- 5: using System.Threading.Tasks;
- 6: using FK_CLI;
- 7: 
- 8: namespace FK_CLI_Viewer
- 9: {
-10:     class Program
-11:     {
-12:         static void Main(string[] args)
-13:         {
-14:             var viewer = new fk_ShapeViewer(600, 600);
-15:             var shape = new fk_IndexFaceSet();
-16:             var pos = new fk_Vector[121];
-17:             var moveVec = new fk_Vector();
-18:             var movePos = new fk_Vector();
-19:             var IFSet = new int[4*100];
-20:             int i, j;
-21:             double x, y;
-22: 
-23:             for(i = 0; i <= 10; ++i) {
-24:                 for(j = 0; j <= 10; ++j) {
-25:                     x = (double)(i-5);
-26:                     y = (double)(j-5);
-27:                     pos[i*11+j] = new fk_Vector(x, y, (x*x - y*y)/10.0);
-28:                 }
-29:             }
-30: 
-31:             for(i = 0; i < 10; i++) {
-32:                 for(j = 0; j < 10; j++) {
-33:                     IFSet[(i*10 + j)*4 + 0] = i*11 + j;
-34:                     IFSet[(i*10 + j)*4 + 1] = (i+1)*11 + j;
-35:                     IFSet[(i*10 + j)*4 + 2] = (i+1)*11 + j+1;
-36:                     IFSet[(i*10 + j)*4 + 3] = i*11 + j+1;
-37:                 }
-38:             }
-39: 
-40:             shape.MakeIFSet(100, 4, IFSet, 121, pos);
-41:             viewer.Shape = shape;
-42:             viewer.DrawMode = fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE;
-43:             viewer.Scale = 10.0;
-44: 
-45:             for(int counter = 0; viewer.Draw() == true; counter += 10) {
-46:                 for(i = 0; i <= 10; i++) {
-47:                     for(j = 0; j <= 10; j++) {
-48:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/Math.PI));
-49:                         movePos = moveVec + pos[i*11+j];
-50:                         shape.MoveVPosition(i*11+j, movePos);
-51:                     }
-52:                 }
-53:             }
-54:         }
-55:     }
-56: }
-\end{verbatim}
-\end{small}
-\end{breakbox}
 
 \section{パーティクルアニメーション}
 パーティクルアニメーションとは、粒子の移動によって気流や水流などを
@@ -901,125 +637,10 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
-  1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using FK_CLI;
-  7: 
-  8: namespace FK_CLI_Particle
-  9: {
- 10:     class MyParticle : fk_ParticleSet {
- 11:         private Random rand;
- 12:         private fk_Color red, blue;
- 13:         private double maxSpeed, minSpeed;
- 14: 
- 15:         // コンストラクタ。
- 16:         // ここに様々な初期設定を記述しておく。
- 17:         public MyParticle()
- 18:         {
- 19:             MaxSize = 1000;                      // パーティクルの最大数設定
- 20:             IndivMode = true;                    // 個別処理 (IndivMethod) を有効にしておく。
- 21:             AllMode = true;                      // 全体処理 (AllMethod) を有効にしておく。
- 22:             for(int i = 0; i < MaxSize; i++) {
- 23:                 // 各パーティクルごとの初期色を設定
- 24:                 SetColorPalette(i, 0.0, 1.0, 0.6);
- 25:             }
- 26:             rand = new Random();                 // 乱数発生器の初期化
- 27:             red = new fk_Color(1.0, 0.0, 0.0);
- 28:             blue = new fk_Color(0.0, 0.0, 0.5);
- 29:             maxSpeed = 0.3;                      // これより速いパーティクルは全て赤
- 30:             minSpeed = 0.1;                      // これより遅いパーティクルは全て青
- 31:         }
- 32:         
- 33:         // ここにパーティクル生成時の処理を記述する。
- 34:         // 引数 P には新たなパーティクルインスタンスが入る。
- 35:         public override void GenMethod(fk_Particle P)
- 36:         {
- 37:             // 生成時の位置を(ランダムに)設定
- 38:             double y = rand.NextDouble()*50.0 - 25.0;
- 39:             double z = rand.NextDouble()*50.0 - 25.0;
- 40:             P.Position = new fk_Vector(50.0, y, z);
- 41: 
- 42:             // パーティクルの色IDを設定
- 43:             P.ColorID = P.ID;
- 44:         }
- 45: 
- 46:         // ここの毎ループ時の全体処理を記述する。
- 47:         public override void AllMethod()
- 48:         {
- 49:             for(int i = 0; i < 5; i++) {
- 50:                 if(rand.NextDouble() < 0.3) {   // 発生確率は 30% (を5回)
- 51:                     NewParticle();              // パーティクル生成処理
- 52:                 }
- 53:             }
- 54:         }
- 55: 
- 56:         // ここに毎ループ時のパーティクル個別処理を記述する。
- 57:         public override void IndivMethod(fk_Particle P)
- 58:         {
- 59:             fk_Vector pos, vec, tmp1, tmp2;
- 60:             var water = new fk_Vector(-0.2, 0.0, 0.0);
- 61:             double R = 15.0;
- 62:             double r;
- 63: 
- 64:             pos = P.Position;        // パーティクル位置取得。
- 65:             pos.z = 0.0;
- 66:             r = pos.Dist();          // |p| を r に代入。
- 67: 
- 68:             // パーティクルの速度ベクトルを計算
- 69:             tmp1 = water/(r*r*r);
- 70:             tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
- 71:             vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
- 72:             P.Velocity = vec;
- 73: 
- 74:             // パーティクルの色を計算。パーティクル速度が
- 75:             // minSpeed ～ maxSpeed の場合は青と赤をブレンドする。
- 76:             double speed = vec.Dist();
- 77:             double t = (speed - minSpeed)/(maxSpeed - minSpeed);
- 78:             if(t > 1.0) t = 1.0;
- 79:             if(t < 0.0) t = 0.0;
- 80:             fk_Color newCol = (1.0 - t)*blue + t*red;  // 色値の線形補間
- 81:             SetColorPalette(P.ID, newCol);
- 82: 
- 83:             // パーティクルの x 成分が -50 以下になったら消去
- 84:             if(pos.x < -50.0) {
- 85:                 RemoveParticle(P);
- 86:             }
- 87:         } 
- 88:     }           
- 89: 
- 90: 
- 91:     class Program
- 92:     {
- 93:         static void Main(string[] args)
- 94:         {
- 95:             fk_ShapeViewer viewer = new fk_ShapeViewer(600, 600);
- 96:             MyParticle particle = new MyParticle();
- 97:             fk_Prism prism = new fk_Prism(40, 15.0, 15.0, 50.0);
- 98: 
- 99:             viewer.SetShape(1, prism);
-100:             viewer.SetPosition(1, 0.0, 0.0, 25.0);
-101:             viewer.SetDrawMode(1, fk_DrawMode.POLYMODE);
-102:             viewer.SetShape(2, particle.Shape);
-103:             viewer.SetDrawMode(2, fk_DrawMode.POINTMODE);
-104:             viewer.Scale = 10.0;
-105:  
-106:             while(viewer.Draw() == true) {
-107:                 for(int i = 0; i < 3; ++i) { // 3倍速再生
-108:                     particle.Handle(); // パーティクルを 1 ステップ実行する。
-109:                 }
-110:             }
-111: 
-112:         }
-113:     }
-114: }
+
 \end{verbatim}
 \end{small}
 \end{breakbox}
-
-
 
 \section{音再生}
 

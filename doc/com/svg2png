@@ -1,32 +1,33 @@
 #! /usr/bin/env perl
 
 use Getopt::Std;
-use Cwd 'getcwd';
-my $cur_dir = getcwd . '/';
 
 %opts = ();
 
-getopts ("ir", \%opts);
+getopts ("i:r", \%opts);
 
 foreach $svgName (@ARGV) {
 	next if $svgName !~ /.svg$/;
 	$pngName = $svgName;
 	$pngName =~ s/.svg$/.png/;
 
-	if($opts{"i"} == 1) {
-	    $com = "inkscape --export-area-drawing --export-dpi=144 --file=";
-	    $com .= $cur_dir . $svgName;
-	    $com .= " --export-png=";
-	    $com .= $cur_dir . $pngName;
+	if(exists $opts{"r"}) {
+		$com = "rsvg-convert ";
+		$com .= $svgName;
+		$com .= " -z 0.8 --format=png -o ";
+		$com .= $pngName;
 	} else {
-	    $com = "convert -trim -density 600 -resize 1024x ";
-	    $com .= $cur_dir . $svgName;
-	    $com .= " ";
-	    $com .= $cur_dir . $pngName;
+		$com = "inkscape --export-area-drawing --file=";
+		$com .= $svgName;
+		$com .= " --export-png=";
+		$com .= $pngName;
+		if(exists $opts{"i"}) {
+			$com .= " --export-dpi=";
+			$com .= $opts{"i"};
+		}
 	}
-	if(!(-f $pngName)) {
-		system($com);
-	}	
+		
+	system($com);
 }
 
 0;

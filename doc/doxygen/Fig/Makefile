@@ -12,7 +12,7 @@ clean:
 doc: $(PNGFILE)
 
 %.png : %.svg
-	../../com/svg2png -i $<
+	../../com/svg2png -i 144 $<
 
 %.eps : %.svg
 	../../com/svg2eps $<

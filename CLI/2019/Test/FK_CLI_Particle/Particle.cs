@@ -56,8 +56,9 @@ namespace FK_CLI_Particle
 
                 // パーティクルの色を計算
                 double speed = vec.Dist();
-                double t = (speed - minSpeed) / (maxSpeed - minSpeed);
-                double h = Math.PI * 4.0 / 3.0 + Math.Min(1.0, Math.Max(0.0, t)) * Math.PI * 2.0 / 3.0;
+                double s = (speed - minSpeed) / (maxSpeed - minSpeed);
+				double t = Math.Min(1.0, Math.Max(0.0, s));
+                double h = Math.PI * (4.0 + 2.0 * t)/3.0;
                 var col = new fk_Color();
                 col.SetHSV(h, 1.0, 1.0);
                 P.Color = col;
