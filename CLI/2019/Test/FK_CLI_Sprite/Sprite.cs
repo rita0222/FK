@@ -25,7 +25,7 @@ namespace FK_CLI_Sprite
 			}
 
             // 文字盤の表示位置設定
-			sprite.SetPositionLT(-240.0, 230.0);
+			sprite.SetPositionLT(-330.0, 240.0);
 
             // 文字盤のフォントを等幅に設定
 			sprite.Text.MonospaceMode = true;
@@ -59,6 +59,9 @@ namespace FK_CLI_Sprite
 
                 // 文字列を文字盤に入力
 				sprite.DrawText(str, true);
+
+                // 文字盤表示位置の再設定
+                sprite.SetPositionLT(-330.0, 240.0);
 
 				model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
 				count++;

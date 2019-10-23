@@ -28,7 +28,7 @@ namespace FK_CLI_Particle
                 {
                     if (fk_Math.DRand() < 0.3)
                     {   // 発生確率は 30% (を5回)
-                        particle.NewParticle();              // パーティクル生成処理
+                        particle.NewParticle(); // パーティクル生成処理
                     }
                 }
             };
