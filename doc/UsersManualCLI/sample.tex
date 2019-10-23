@@ -780,259 +780,154 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 
 \section{音再生}
 
-FK では音再生用の機能として fk\_AudioWavBuffer, fk\_AudioOggBuffer, fk\_AudioStream の
-3種のクラスが用意されている。詳細はここでは解説しないが、fk\_AudioWavBuffer は WAV 形式の音データを、
-fk\_AudioOggBuffer と fk\_AudioStream は Ogg-Vorbis 形式の音データを入力できる。
-また、fk\_AudioWavBuffer と fk\_AudioOggBuffer は入力時にデータ全てをメモリ上に展開するのに対し、
-fk\_AudioStream はストリーミング再生を行う仕様となっている。
-サンプルプログラムでは、さらに「MyBGM」と「MySE」という2種のクラスを作成し、
-より容易に音再生処理を制御できるように工夫している。
+FK では音再生用のクラスとして幾つかのクラスが用意されているが、
+そのうちユーザーが簡易に用いることを想定したクラスは fk\_Sound, fk\_BGM の2つである。
 
-「MyBGM」クラスは BGM (Back Ground Music) を再生するためのクラスで、
-コンストラクタで BGM ファイルの指定、
-Start() で再生開始、Gain プロパティで音量制御というシンプルなものとなっている。
+fk\_BGM クラスは音楽 (Back Ground Music) を再生するためのクラスで、
+基本的な利用はまずコンストラクタで BGM ファイルを指定し、
+その後 Start() で再生開始、Gain プロパティで音量制御というシンプルなものとなっている。
 
-「MySE」は効果音(Sound Effect, 以下「SE」)を再生するためのものである。
+fk\_Sound は効果音(Sound Effect, 以下「SE」)を再生するためのものである。
 SE は BGM とは異なり任意のタイミングで再生が開始となること、
 複数の SE が同時に発生することがあること、リピート再生が行われないことなどの
-差異があるため、BGM とは別クラスとして作成してある。
+差異があるため、BGM とは別クラスとなっている。
 このクラスの機能としては、コンストラクタで入力する SE のファイル数、
 LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始というものとなっている。
 
-近年のリアルタイム 3DCG と音を同時に扱うプログラムでは、
-音再生の安定性を向上するため、音再生処理はメインループとは別のスレッドにして、
-マルチスレッドプログラムによって制御することが多い。
-今回紹介するプログラムも、C\# でマルチスレッドを行うための仕組みの一つである
-「Task」という仕組みを利用している。Task に関する解説はここでは割愛するが、
-このサンプルにある機能で十分な場合はこれをコピーして利用しても差し支えない。
-また、より高機能を必要とする場合は MyBGM や MySE クラスをさらに拡張して用いるとよいだろう。
+両クラスとも、使用終了時やプログラムの終了時には「StopStatus」プロパティに
+true を代入する必要がある。これを行わないと、プログラムが正常に終了しない可能性があるので
+注意すること。
 \\ ~
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
   1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using System.Threading;
-  7: using FK_CLI;
-  8: 
-  9: namespace FK_CLI_Audio
- 10: {
- 11:     // BGM用クラス
- 12:     class MyBGM : IDisposable
- 13:     {
- 14:         public bool EndStatus { get; set; } // 終了指示用プロパティ
- 15:         private fk_AudioStream bgm;
- 16:         private bool openStatus;
- 17: 
- 18:         // コンストラクタ 引数は音源ファイル名 (Ogg 形式)
- 19:         public MyBGM(string argFileName)
- 20:         {
- 21:             EndStatus = false;
- 22:             bgm = new fk_AudioStream();
- 23:             openStatus = bgm.Open(argFileName);
- 24:             if(openStatus == false)
- 25:             {
- 26:                 Console.WriteLine("Audio File Open Error.");
- 27:             }
- 28:         }
- 29: 
- 30:         // BGM再生処理
- 31:         public void Start()
- 32:         {
- 33:             if(openStatus == false) return;
- 34:             bgm.LoopMode = true;
- 35:             bgm.Gain = 0.5;
- 36:             while(EndStatus == false)
- 37:             {
- 38:                 bgm.Play();
- 39:                 Thread.Sleep(50);
- 40:             }
- 41:         }
- 42: 
- 43:         // 音量用プロパティ
- 44:         public double Gain
- 45:         {
- 46:             set
- 47:             {
- 48:                 bgm.Gain = value;
- 49:             }
- 50:         }
- 51: 
- 52:         // スレッド終了時処理
- 53:         public void Dispose()
- 54:         {
- 55:             bgm.Dispose();
- 56:         }
- 57:     }
- 58: 
- 59:     // Sound Effect (SE) 用クラス
- 60:     class MySE : IDisposable
- 61:     {
- 62:         public bool EndStatus { get; set; } // 終了指示用プロパティ
- 63:         private fk_AudioWavBuffer [] se;
- 64:         private bool [] openStatus;
- 65:         private bool [] playStatus;
- 66: 
- 67:         // コンストラクタ 引数は音源の個数
- 68:         public MySE(int argNum)
- 69:         {
- 70:             EndStatus = false;
- 71:             if(argNum < 1) return;
- 72:             se = new fk_AudioWavBuffer [argNum];
- 73:             openStatus = new bool [argNum];
- 74:             playStatus = new bool [argNum];
- 75: 
- 76:             for(int i = 0; i < argNum; i++)
- 77:             {
- 78:                 se[i] = new fk_AudioWavBuffer();
- 79:                 openStatus[i] = false;
- 80:                 playStatus[i] = false;
- 81:             }
- 82:         }
- 83: 
- 84:         // SE音源読み込みメソッド (WAV 形式)
- 85:         public bool LoadData(int argID, string argFileName)
- 86:         {
- 87:             if(argID < 0 || argID >= se.Length)
- 88:             {
- 89:                 return false;
- 90:             }
- 91: 
- 92:             openStatus[argID] = se[argID].Open(argFileName);
- 93:             if(openStatus[argID] == false)
- 94:             {
- 95:                 Console.WriteLine("Audio File ({0}) Open Error.", argFileName);
+  2: using FK_CLI;
+  3: 
+  4: namespace FK_CLI_Audio
+  5: {
+  6:     class Program
+  7:     {
+  8:         static void Main(string[] args)
+  9:         {
+ 10:             // マテリアル初期化
+ 11:             fk_Material.InitDefault();
+ 12: 
+ 13:             // ウィンドウの各種設定
+ 14:             var win = new fk_AppWindow();
+ 15:             WindowSetup(win);
+ 16: 
+ 17:             // 立方体の各種設定
+ 18:             var blockModel = new fk_Model();
+ 19:             BlockSetup(blockModel, win);
+ 20: 
+ 21:             // BGM用変数の作成
+ 22:             var bgm = new fk_BGM("epoq.ogg");
+ 23:             double volume = 0.5;
+ 24: 
+ 25:             // SE用変数の作成
+ 26:             var se = new fk_Sound(2);
+ 27:             // 音源読み込み (IDは0番)
+ 28:             se.LoadData(0, "MIDTOM2.wav");
+ 29:             // 音源読み込み (IDは1番)
+ 30:             se.LoadData(1, "SDCRKRM.wav");
+ 31: 
+ 32:             // ウィンドウ表示
+ 33:             win.Open();
+ 34: 
+ 35:             // BGM再生スタート
+ 36:             bgm.Start();
+ 37: 
+ 38:             // SE出力スタンバイ
+ 39:             se.Start();
+ 40: 
+ 41:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+ 42:             while (win.Update())
+ 43:             {
+ 44:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI / 360.0);
+ 45: 
+ 46:                 // volume値の変更
+ 47:                 volume = ChangeVolume(volume, win);
+ 48:                 bgm.Gain = volume;
+ 49: 
+ 50:                 // SE再生
+ 51:                 PlaySE(se, win);
+ 52:             }
+ 53: 
+ 54:             // BGM変数とSE変数に終了を指示
+ 55:             // (最後にこれをやらないといつまでも再生が止まらずプログラムが終了しません)
+ 56:             bgm.StopStatus = true;
+ 57:             se.StopStatus = true;
+ 58:         }
+ 59: 
+ 60:         // ウィンドウ設定メソッド
+ 61:         static void WindowSetup(fk_AppWindow argWin)
+ 62:         {
+ 63:             argWin.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
+ 64:             argWin.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
+ 65:             argWin.Size = new fk_Dimension(600, 600);
+ 66:             argWin.BGColor = new fk_Color(0.6, 0.7, 0.8);
+ 67:             argWin.ShowGuide(fk_Guide.GRID_XZ);
+ 68:             argWin.TrackBallMode = true;
+ 69:             argWin.FPS = 60;
+ 70:         }
+ 71: 
+ 72:         // 立方体モデル設定メソッド
+ 73:         static void BlockSetup(fk_Model argModel, fk_AppWindow argWin)
+ 74:         {
+ 75:             // 立方体の各種設定
+ 76:             var block = new fk_Block(1.0, 1.0, 1.0);
+ 77:             argModel.Shape = block;
+ 78:             argModel.GlMoveTo(3.0, 3.0, 0.0);
+ 79:             argModel.Material = fk_Material.Yellow;
+ 80:             argWin.Entry(argModel);
+ 81:         }
+ 82: 
+ 83:         // 音量調整メソッド
+ 84:         static double ChangeVolume(double argVol, fk_AppWindow argWin)
+ 85:         {
+ 86:             double tmpV = argVol;
+ 87: 
+ 88:             // 上矢印キーで BGM 音量アップ
+ 89:             if (argWin.GetSpecialKeyStatus(fk_Key.UP, fk_Switch.DOWN) == true)
+ 90:             {
+ 91:                 tmpV += 0.1;
+ 92:                 if (tmpV > 1.0)
+ 93:                 {
+ 94:                     tmpV = 1.0;
+ 95:                 }
  96:             }
- 97:             se[argID].LoopMode = false;
- 98:             se[argID].Gain = 0.5;
- 99:             return true;
-100:         }
-101: 
-102:         // SE開始メソッド
-103:         public void StartSE(int argID)
-104:         {
-105:             if(argID < 0 || argID >= se.Length) return;
-106:             playStatus[argID] = true;
-107:             se[argID].Seek(0.0);
+ 97: 
+ 98:             // 下矢印キーで BGM 音量ダウン
+ 99:             if (argWin.GetSpecialKeyStatus(fk_Key.DOWN, fk_Switch.DOWN) == true)
+100:             {
+101:                 tmpV -= 0.1;
+102:                 if (tmpV < 0.0)
+103:                 {
+104:                     tmpV = 0.0;
+105:                 }
+106:             }
+107:             return tmpV;
 108:         }
 109: 
-110:         // SE再生処理
-111:         public void Start()
+110:         // SE再生(トリガー)メソッド
+111:         static void PlaySE(fk_Sound argSE, fk_AppWindow argWin)
 112:         {
-113:             int i;
-114: 
-115:             for(i = 0; i < se.Length; i++)
-116:             {
-117:                 if(openStatus[i] == false) return;
-118:             }
-119: 
-120:             while(EndStatus == false)
+113:             // Z キーで 0 番の SE を再生開始
+114:             if (argWin.GetKeyStatus('Z', fk_Switch.DOWN) == true)
+115:             {
+116:                 argSE.StartSound(0);
+117:             }
+118: 
+119:             // X キーで 1 番の SE を再生開始
+120:             if (argWin.GetKeyStatus('X', fk_Switch.DOWN) == true)
 121:             {
-122:                 for(i = 0; i < se.Length; i++)
-123:                 {
-124:                     if(playStatus[i] == true)
-125:                     {
-126:                         playStatus[i] = se[i].Play();
-127:                     }
-128:                 }
-129:                 Thread.Sleep(10);
-130:             }
-131:         }
-132: 
-133:         // スレッド終了時処理
-134:         public void Dispose()
-135:         {
-136:             for(int i = 0; i < se.Length; i++)
-137:             {
-138:                 se[i].Dispose();
-139:             }
-140:         }
-141:     }
-142: 
-143:     class Program
-144:     {
-145:         static void Main(string[] args)
-146:         {
-147:             // 組込マテリアル初期化
-148:             fk_Material.InitDefault();          
-149: 
-150:             // ウィンドウの各種設定
-151:             var win = new fk_AppWindow();
-152:             win.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
-153:             win.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
-154:             win.Size = new fk_Dimension(600, 600);
-155:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
-156:             win.ShowGuide(fk_GuideMode.GRID_XZ);
-157: 
-158:             // 立方体の各種設定
-159:             var block = new fk_Block(1.0, 1.0, 1.0);
-160:             var blockModel = new fk_Model();
-161:             blockModel.Shape = block;
-162:             blockModel.GlMoveTo(3.0, 3.0, 0.0);
-163:             blockModel.Material = fk_Material.Yellow;
-164:             win.Entry(blockModel);
-165: 
-166:             // BGMの各種設定
-167:             var bgm = new MyBGM("epoq.ogg");
-168:             var bgmTask = new Task(bgm.Start);
-169:             double volume = 0.5;
-170:             
-171:             // SEの各種設定
-172:             var se = new MySE(2);
-173:             var seTask = new Task(se.Start);
-174:             se.LoadData(0, "MIDTOM2.wav");
-175:             se.LoadData(1, "SDCRKRM.wav");
-176: 
-177:             win.Open();
-178:             bgmTask.Start(); // BGM スレッド開始
-179:             seTask.Start();  // SE スレッド開始
-180: 
-181:             var origin = new fk_Vector(0.0, 0.0, 0.0);
-182: 
-183:             while(win.Update())
-184:             {
-185:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
-186: 
-187:                 // 上矢印キーで BGM 音量アップ
-188:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true)
-189:                 {
-190:                     if(volume < 1.0) volume += 0.1;
-191:                 }
-192: 
-193:                 // 下矢印キーで BGM 音量ダウン
-194:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true)
-195:                 {
-196:                     if(volume > 0.0) volume -= 0.1;
-197:                 }
-198: 
-199:                 // Z キーで 0 番の SE を再生開始
-200:                 if(win.GetKeyStatus('Z', fk_SwitchStatus.DOWN) == true)
-201:                 {
-202:                     se.StartSE(0);
-203:                 }
-204: 
-205:                 // X キーで 1 番の SE を再生開始
-206:                 if(win.GetKeyStatus('X', fk_SwitchStatus.DOWN) == true)
-207:                 {
-208:                     se.StartSE(1);
-209:                 }
-210: 
-211:                 bgm.Gain = volume;
-212:             }
-213: 
-214:             // BGM 変数と SE 変数に終了を指示
-215:             bgm.EndStatus = true;
-216:             se.EndStatus = true;
-217: 
-218:             // BGM, SE 両スレッドが終了するまで待機
-219:             Task.WaitAll(new[] { bgmTask, seTask });
-220:         }
-221:     }
-222: }
+122:                 argSE.StartSound(1);
+123:             }
+124:         }
+125:     }
+126: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
@@ -1042,90 +937,106 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 文字列表示のサンプルを示す。ここではフォントファイルとして
 「rm1b.ttf」というファイル名のフォントデータを利用している。
 これはビルド時に生成される exe ファイルと同一の場所に置かれている必要がある。
+フォントを設定するには 23 行目にあるように InitFont() メソッドを用いる。
 
-29,30 行目で Text プロパティに様々な設定を行っているが、
+31, 34 行目で Text プロパティに様々な設定を行っているが、
 この Text プロパティは fk\_TextImage 型であり、fk\_TextImage が持つ様々な設定を
 変更することで色やフォントサイズなど、様々な設定を変更することができる。
+詳細はリファレンスマニュアルのクラスの説明を参照のこと。
 
-55行目の SetPositionLT() メソッドは表示位置を指定するものである。
-文字列設定の度に位置の再設定を行っている理由は、
-文字列を表すテクスチャ画像の幅が変更されたときに再設定を行わないと、
+28 行目の SetPositionLT() メソッドは表示位置を指定するものである。
+この SetPositionLT() は 64 行目でもメインループの度に位置の再設定を行っているが、
+その理由は文字列を表すテクスチャ画像の幅が変更されたときに再設定を行わないと、
 表示位置がずれてしまうためである。
 表示文字列が変更されていない場合や、
 文字列テクスチャの幅が変わっていないことが保証されている場合は、
-このメソッドを呼ぶ必要はない。\\ ~
+メインループ中にこのメソッドを呼ぶ必要はない。
+実際、今回のサンプルでは(等幅設定を行い、描画文字数が変化しないことから)
+文字盤の画像幅は終始変動しないため、
+64 行目をコメントアウトしても正常に動作するが、
+等幅設定を用いない場合などは文字列の変更の際に幅変動も伴うので、
+このメソッドを呼ばないと表示が適切になされない場合がある。
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
  1: using System;
- 2: using System.Collections.Generic;
- 3: using System.Linq;
- 4: using System.Text;
- 5: using System.Threading.Tasks;
- 6: using FK_CLI;
- 7: 
- 8: namespace FK_CLI_Sprite
- 9: {
-10:     class Program
-11:     {
-12:         static void Main(string[] args)
-13:         {
-14:             fk_Material.InitDefault();
+ 2: using FK_CLI;
+ 3: 
+ 4: namespace FK_CLI_Sprite
+ 5: {
+ 6:     class Program
+ 7:     {
+ 8:         static void Main(string[] args)
+ 9:         {
+10:             var window = new fk_AppWindow();
+11:             fk_Material.InitDefault();
+12:             
+13:             // 文字盤用変数の生成
+14:             var sprite = new fk_SpriteModel();
 15: 
-16:             // 各種変数生成
-17:             var window = new fk_AppWindow();
-18:             var sprite = new fk_SpriteModel();
-19:             var block = new fk_Block(1.0, 1.0, 1.0);
-20:             var model = new fk_Model();
-21:             var origin = new fk_Vector(0.0, 0.0, 0.0);
-22: 
-23:             // フォントデータ入力
-24:             if(sprite.InitFont("rm1b.ttf") == false) {
-25:                 Console.WriteLine("Font Error");
-26:             }
-27: 
-28:             // フォント設定
-29:             sprite.Text.MonospaceMode = true;
-30:             sprite.Text.MonospaceSize = 12;
-31:             window.Entry(sprite);
+16:             var block = new fk_Block(1.0, 1.0, 1.0);
+17:             var model = new fk_Model();
+18:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+19:             int count;
+20:             string str, space;
+21:  
+22:             // 文字盤に対するフォントの読み込み
+23:             if(sprite.InitFont("rm1b.ttf") == false) {
+24:                 Console.WriteLine("Font Error");
+25:             }
+26: 
+27:             // 文字盤の表示位置設定
+28:             sprite.SetPositionLT(-330.0, 240.0);
+29: 
+30:             // 文字盤のフォントを等幅に設定
+31:             sprite.Text.MonospaceMode = true;
 32: 
-33:             // 立方体設定
-34:             model.Shape = block;
-35:             model.GlMoveTo(0.0, 6.0, 0.0);
-36:             model.Material = fk_Material.Yellow;
-37:             window.Entry(model);
-38: 
-39:             // ウィンドウ設定
-40:             window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
-41:             window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
-42:             window.Size = new fk_Dimension(800, 600);
-43:             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
-44:             window.ShowGuide(fk_GuideMode.GRID_XZ);
-45:             window.Open();
-46:  
-47:             for(int count = 0;  window.Update() == true; count++) {
-48:                 // 文字列生成
-49:                 string str = "count = " + count.ToString();
-50: 
-51:                 // 文字列をスプライトに設定
-52:                 sprite.DrawText(str, true);
-53: 
-54:                 // スプライト配置設定
-55:                 sprite.SetPositionLT(-240.0, 230.0);
+33:             // 文字盤の(等幅)サイズを設定
+34:             sprite.Text.MonospaceSize = 12;
+35:             window.Entry(sprite);
+36:  
+37:             model.Shape = block;
+38:             model.GlMoveTo(0.0, 6.0, 0.0);
+39:             model.Material = fk_Material.Yellow;
+40:             window.Entry(model);
+41:             window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
+42:             window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
+43:             window.Size = new fk_Dimension(800, 600);
+44:             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
+45:             window.TrackBallMode = true;
+46:             window.Open();
+47:             window.ShowGuide(fk_Guide.GRID_XZ);
+48:  
+49:             count = 0;
+50:             while(window.Update() == true) {
+51:                 // 数値の桁数によりスペースの個数を調整
+52:                 if (count < 10) space = "   ";
+53:                 else if(count < 100) space = "  ";
+54:                 else if(count < 1000) space = " ";
+55:                 else space = "";
 56: 
-57:                 // 立方体を回転させる
-58:                 model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
-59:             }
-60:         }
-61:     }
-62: }
+57:                 // 「count = 数値」の文字列を生成
+58:                 str = "count = " + space + count.ToString();
+59: 
+60:                 // 文字列を文字盤に入力
+61:                 sprite.DrawText(str, true);
+62: 
+63:                 // 文字盤表示位置の再設定
+64:                 sprite.SetPositionLT(-330.0, 240.0);
+65: 
+66:                 model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
+67:                 count++;
+68:             }
+69:         }
+70:     }
+71: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
 
 \section{四元数}
-この節では、第\ref{sec:quaternion}節で紹介した四元数を用いて、
+この節では、第\ref{sec:quaternion}節で紹介した四元数(クォータニオン)を用いて、
 姿勢補間を行うサンプルプログラムを示す。
 3DCGのプログラミングでは、ベクトル、行列、オイラー角、四元数といった多くの
 代数要素を扱う必要があるが、このサンプルプログラムはそれらの利用方法を
@@ -1135,83 +1046,78 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 四元数の成分を直接扱うことは現実的ではなく、
 通常はオイラー角を介して制御を行う。
 このサンプルプログラムでも、まず2種類の姿勢を angle1, angle2 という変数で
-設定(24,25行目)してから、それを四元数に変換(52,53行目)している。
-そして、59行目で球面線形補間を行った四元数を算出し、
-それを62行目でモデルの姿勢として設定している。\\ ~
+設定(18,19行目)してから、それを四元数に変換(45,46行目)している。
+そして、52行目で球面線形補間を行った四元数を算出し、
+それを55行目でモデルの姿勢として設定している。\\ ~
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
  1: using System;
- 2: using System.Collections.Generic;
- 3: using System.Linq;
- 4: using System.Text;
- 5: using System.Threading.Tasks;
- 6: using FK_CLI;
- 7: 
- 8: namespace FK_CLI_Quaternion
- 9: {
-10:     class Program
-11:     {
-12:         static void Main(string[] args)
-13:         {
-14:             // 各種変数生成
-15:             fk_Material.InitDefault();
-16:             var win = new fk_AppWindow();
-17:             var model = new fk_Model();
-18:             var pointM = new fk_Model();
-19:             var cone = new fk_Cone(3, 4.0, 15.0);
-20:             var pos = new fk_Vector(0.0, 0.0, -15.0);
-21:             var poly = new fk_Polyline();
-22: 
-23:             // オイラー角の初期値設定
-24:             var angle1 = new fk_Angle(0.0, 0.0, 0.0);
-25:             var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
-26: 
-27:             // 四元数変数作成
-28:             var q1 = new fk_Quaternion();
-29:             var q2 = new fk_Quaternion();
-30:             fk_Quaternion q;
-31: 
-32:             // 三角錐モデルの設定
-33:             model.Shape = cone;
-34:             model.Material = fk_Material.Yellow;
-35:             model.GlAngle(angle1);
-36: 
-37:             // 軌跡用ポリラインモデルの設定
-38:             pointM.Shape = poly;
-39:             pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
-40: 
-41:             // ウィンドウ設定
-42:             win.Size = new fk_Dimension(500, 500);
-43:             win.BGColor = new fk_Color(0.3, 0.4, 0.5);
-44:             win.Entry(model);
-45:             win.Entry(pointM);
-46:             win.TrackBallMode = true;
-47:             win.ShowGuide();
-48: 
-49:             win.Open();
-50: 
-51:             // オイラー角の初期値を四元数に設定
-52:             q1.Euler = angle1;
-53:             q2.Euler = angle2;
-54: 
-55:             for(int i = 0;  win.Update() == true; i++) {
-56:                 double t = i / 200.0;
-57:                 if(t < 1.0) {
-58:                     // パラメータ t で球面線形補間
-59:                     q = fk_Math.QuatInterSphere(q1, q2, t);
-60: 
-61:                     // q をモデルの姿勢(オイラー角)に変換
-62:                     model.GlAngle(q.Euler);
-63: 
-64:                     // 軌跡用に点を追加
-65:                     poly.PushVertex(model.Matrix * pos);
-66:                 }
-67:             }
-68:         }
-69:     }
-70: }
+ 2: using FK_CLI;
+ 3: 
+ 4: namespace FK_CLI_Quaternion
+ 5: {
+ 6:     class Program
+ 7:     {
+ 8:         static void Main(string[] args)
+ 9:         {
+10:             var win = new fk_AppWindow();
+11:             win.Size = new fk_Dimension(800, 800);
+12:             var model = new fk_Model();
+13:             var pointM = new fk_Model();
+14:             var cone = new fk_Cone(3, 4.0, 15.0);
+15:             var pos = new fk_Vector(0.0, 0.0, -15.0);
+16: 
+17:             // オイラー角用変数の生成
+18:             var angle1 = new fk_Angle(0.0, 0.0, 0.0);
+19:             var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
+20: 
+21:             // 四元数用変数の生成
+22:             var q1 = new fk_Quaternion();
+23:             var q2 = new fk_Quaternion();
+24:             fk_Quaternion q;
+25: 
+26:             // 角錐頂点の軌跡用
+27:             var point = new fk_Polyline();
+28: 
+29:             fk_Material.InitDefault();
+30: 
+31:             model.Shape = cone;
+32:             model.Material = fk_Material.Yellow;
+33:             model.GlAngle(angle1); // モデルのオイラー角を (0, 0, 0) に
+34: 
+35:             pointM.Shape = point;
+36:             pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
+37: 
+38:             win.BGColor = new fk_Color(0.7, 0.8, 0.9);
+39:             win.Entry(model);
+40:             win.Entry(pointM);
+41:             win.TrackBallMode = true;
+42:             win.ShowGuide();
+43:             win.Open();
+44: 
+45:             q1.Euler = angle1; // q1 にオイラー角 (0, 0, 0) を意味する四元数を設定
+46:             q2.Euler = angle2; // q2 にオイラー角 (π/2, π/2-0.01, 0) を意味する四元数を設定
+47: 
+48:             double t = 0.0;
+49: 
+50:             while(win.Update() == true) {
+51:                 // q に q1 と q2 を球面補間した値を設定
+52:                 q = fk_Math.QuatInterSphere(q1, q2, t);
+53: 
+54:                 // モデルの姿勢を q に設定
+55:                 model.GlAngle(q.Euler);
+56: 
+57:                 // 頂点軌跡の追加
+58:                 if(t < 1.0) {
+59:                     point.PushVertex(model.Matrix * pos);
+60:                     t += 0.005;
+61:                 }
+62:             }
+63:         }
+64:     }
+65: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
