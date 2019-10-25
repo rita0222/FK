@@ -8,157 +8,149 @@
 
 \begin{itemize}
  \item 1 行目の include 文は、FK システムを使用する場合に必ず記述する。
- \item 5 行目において、メインウィンドウを生成している。
- \item 6 行目において、視点 (camera)、直方体 (blockModel)、
-	照明 (lightModel)、線分2本 (lineModel[2]) を定義している。
- \item 8 〜 10 行目で、それぞれのオブジェクトの形状情報を生成している。
- \item 11 行目でシーンを、12 行目で FK システムのウィンドウを
-	生成している。
- \item 15 行目で、fk\_Window のメインウィンドウへの登録を完了している。
- \item 16 行目で標準マテリアルの初期化を行っている。標準マテリアルを
-	使用したい場合は、プログラムの最初にこの
+
+ \item 3 行目の using 文を書いておくと、名前空間「FK」を省略することができる。
+	using を用いない場合は、FK のクラス名の前には「\verb+FK::+」を
+	追加する必要がある。
+
+ \item 7 行目において、メインウィンドウを生成している。
+
+ \item 8 行目において、視点 (camera)、直方体 (blockModel)、
+	線分2本 (lineModel[2]) 用の変数を定義している。
+
+ \item 10 行目は線分形状、11 行目は直方体形状を作成するための変数を作成している。
+
+ \item 14 行目の記述は、最初から準備されている「標準マテリアル」を用いるための準備である。
+	標準マテリアルを使用したい場合は、プログラムの最初にこの
 	fk\_Material::initDefault() 関数を呼ぶ。
- \item 19 〜 22 行目まで、照明の設定を行っている。この場合は、
-	\((1000, 1000, 1000)\) から原点へ向けて平行光源が設定される。
- \item 25 行目で blockModel に block の形状情報をリンクしている。
- \item 29 〜 36 行目で、線分形状を生成し lineModel[] にリンクしている。
-	35 行目では \&pos[0] を代入することによって pos[0] と pos[1] が、
-	36 行目では \&pos[2] を代入することによって pos[2] と pos[3] が
+
+ \item 17 行目にて、ウィンドウのサイズをピクセル単位で指定している。
+
+ \item 20 行目で、blockModel に block の形状情報をリンクしている。
+
+ \item 21 行目で、blockModel へのマテリアルとして Material::Yellow を設定している。
+
+ \item 24 〜 31 行目で、線分形状を生成し lineModel[] にリンクしている。
+	28 行目では \&pos[0] を代入することによって pos[0] と pos[1] が、
+	29 行目では \&pos[2] を代入することによって pos[2] と pos[3] が
 	それぞれ線分の端点となる。
- \item 39、40 行目で、線分に対して色設定を行っている。
+
+ \item 34,35 行目で、線分に対して色設定を行っている。
 	どのような形状であっても、線に対して色を設定する場合は
 	setLineColor() を用いる。
- \item 43、44 行目で、線分を直方体の子モデルに設定している。これにより、
+
+ \item 38,39 行目で、線分を直方体の子モデルに設定している。これにより、
 	直方体を移動すると線分も追従して移動していくようになる。
- \item 47 〜 51 行目で、各モデルをシーンへ登録している。
- \item 54 行目で、シーンをウィンドウへ登録している。
-	これにより、window.drawWindow() によってシーンの
-	中身が描画されるようになる。
- \item 57 〜 59 行目で、視点の位置を設定している。この場合は、位置を
-	\((0, 0, 2000)\)、方向を原点に向け、ウィンドウの上方向が
+
+ \item 42 〜 44 行目で、視点の位置を設定している。この場合は、位置を
+	\((0, 0, 2000)\)、視線方向を原点に向け、カメラの上方向(アップベクトル)が
 	\((0, 1, 0)\) になるように設定している。
- \item 62 行目でメインウィンドウを、63 行目で FK システムのウィンドウを
-	開いている。
- \item 67 〜 73 行目は、ウィンドウが開いているか閉じているか(アイコン化
-	されているか)を判定し、閉じている場合は描画処理を行わないように
-	なっている。
- \item 75 行目にて実際に描画を行っている。
- \item 75 〜 77 行目では、プログラムを終了するかどうかを判定している。
-	画面上で「ESC」ボタンが押されていたり、ウィンドウが強制的に
-	閉じられたかどうかの判定はここで行っている。
-	ここを含め、67 〜 77 行目の記述は、FK システムでは常套の手段として
-	用いられる記述である。
- \item 80 行目で、視点位置を \((0, 0, -1)\) 移動している。
- \item 83 行目で、直方体 (と子モデルである線分) を Y 軸中心に
-	回転させている。回転角度は、\(\pi/300 = 0.6 ^{\circ}\) である。
- \item 86 〜 88 行目で、もし視点が原点を越えてしまった場合に注視点を
-	原点に向かせるようにしている。
- \item 90 〜 94 行目で、描画カウント i が 1000 を超えた場合に
+
+ \item 47 行目でカメラの登録を、48 〜 50 行目で、各モデルをウィンドウへ登録している。
+
+ \item 52 行目でウィンドウを開いている。この処理を行わないと、
+	fk\_AppWindow 型の変数を用意しても表示はされないので注意が必要である。
+
+ \item 56 行目の for 文中にある window.update() が実際に表示を行う処理である。
+	ウィンドウが正常に描画された場合は true が返るため、
+	ループが継続する。ウィンドウが閉じられていた場合、
+	false が返ってくるので for 文を抜けることになる。
+
+ \item 60 行目で、視点位置を \(-z\) 方向に speed の数値分移動させている。
+
+ \item 63 行目で、直方体 (と子モデルである線分) を Y 軸中心に
+	回転させている。回転角度は、speed に \(\pi/300 = 0.6 ^{\circ}\) を
+	掛け合わせた角度である。
+
+
+ \item 66 〜 68 行目で、カメラの \(z\) 座標が 1000 未満になる場合に、
 	視点にひねりを加えている。
+
+ \item 71 〜 73 行目で、もし視点が原点を越えてしまった場合に注視点を
+	原点に向かせるようにしている。
+
 \end{itemize}
 
 \begin{breakbox}
 \begin{verbatim}
-  1: #include <FK/FK.h>
-  2: 
-  3: int main(int argc, char *argv[])
-  4: {
-  5:     Fl_Window       mainWindow(620, 620, "FK TEST");
-  6:     fk_Model        camera, blockModel, lightModel, lineModel[2];
-  7:     fk_Vector       pos[4];
-  8:     fk_Line         line[2];
-  9:     fk_Light        light;
- 10:     fk_Block        block(50.0, 70.0, 40.0);
- 11:     fk_Scene        scene;
- 12:     fk_Window       window(10, 10, 600, 600);
- 13:     int             i = 0;
- 14: 
- 15:     mainWindow.end();
- 16:     fk_Material::initDefault();
- 17: 
- 18:     // 照明の設定
- 19:     lightModel.setShape(&light);
- 20:     lightModel.setMaterial(White);
- 21:     lightModel.glMoveTo(0.0, 0.0, 0.0);
- 22:     lightModel.glFocus(-1.0, -1.0, -1.0);
- 23: 
- 24:     // 直方体の設定
- 25:     blockModel.setShape(&block);
- 26:     blockModel.setMaterial(Yellow);
- 27: 
- 28:     // 線分の設定
- 29:     pos[0].set(0.0, 100.0, 0.0);
- 30:     pos[1].set(100.0, 0.0, 0.0);
- 31:     pos[2] = -pos[0];
- 32:     pos[3] = -pos[1];
- 33:     line[0].setVertex(&pos[0]);
- 34:     line[1].setVertex(&pos[2]);
- 35:     lineModel[0].setShape(&line[0]);
- 36:     lineModel[1].setShape(&line[1]);
- 37: 
- 38:     // 線分の色設定
- 39:     lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
- 40:     lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
- 41: 
- 42:     // 直方体を線分の親モデルに設定
- 43:     lineModel[0].setParent(&blockModel);
- 44:     lineModel[1].setParent(&blockModel);
- 45: 
- 46:     // 各モデルをディスプレイリストに登録
- 47:     scene.entryCamera(&camera);
- 48:     scene.entryModel(&blockModel);
- 49:     scene.entryModel(&lightModel);
- 50:     scene.entryModel(&lineModel[0]);
- 51:     scene.entryModel(&lineModel[1]);
- 52: 
- 53:     // ウィンドウへディスプレイリストを登録
- 54:     window.setScene(&scene);
- 55: 
- 56:     // 視点の位置と姿勢を設定
- 57:     camera.glMoveTo(0.0, 0.0, 2000.0);
- 58:     camera.glFocus(0.0, 0.0, 0.0);
- 59:     camera.glUpvec(0.0, 1.0, 0.0);
- 60: 
- 61:     i = 0;
- 62:     mainWindow.show();
- 63:     window.show();
- 64: 
- 65:     while(true) {
- 66: 
- 67:         if(mainWindow.visible() == 0) {
- 68:             if(Fl::wait() == 0) {
- 69:                 break;
- 70:             } else {
- 71:                 continue;
- 72:             }
- 73:         }
- 74: 
- 75:         if(window.drawWindow() == 0) break;
- 76:         if(Fl::check() == 0) break;
- 77:         if(window.winOpenStatus() == false) continue;
- 78: 
- 79:         // 視点を原点に近づける
- 80:         camera.glTranslate(0.0, 0.0, -0.1);
- 81: 
- 82:         // 直方体(と子モデルの線分)を Y 軸中心に回転
- 83:         blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Y, FK_PI/300.0);
- 84: 
- 85:         // 視点が原点を越えたら、向きをもう1度原点に向かせる。
- 86:         if(camera.getPosition().z < -FK_EPS) {
- 87:             camera.glFocus(0.0, 0.0, 0.0);
- 88:         }
- 89: 
- 90:         if(i >= 1000) {
- 91:             // i が 1000 以上なら、視点をひねっていく
- 92:             camera.loRotateWithVec(0.0, 0.0, 0.0,
- 93:                                    fk_Z, FK_PI/500.0);
- 94:         }
- 95: 
- 96:         i++;
- 97:     }
- 98: 
- 99:     return 0;
-100: }
+ 1: #include <FK/FK.h>
+ 2: 
+ 3: using namespace FK;
+ 4: 
+ 5: int main(int, char *[])
+ 6: {
+ 7:     fk_AppWindow    window;
+ 8:     fk_Model        camera, blockModel, lineModel[2];
+ 9:     fk_Vector       pos[4];
+10:     fk_Line         line[2];
+11:     fk_Block        block(50.0, 70.0, 40.0);
+12: 
+13:     // マテリアルの初期化
+14:     fk_Material::initDefault();
+15: 
+16:     // ウィンドウ設定
+17:     window.setSize(800, 800);
+18: 
+19:     // 直方体の設定
+20:     blockModel.setShape(&block);
+21:     blockModel.setMaterial(Material::Yellow);
+22: 
+23:     // 線分の設定
+24:     pos[0].set(0.0, 100.0, 0.0);
+25:     pos[1].set(100.0, 0.0, 0.0);
+26:     pos[2] = -pos[0];
+27:     pos[3] = -pos[1];
+28:     line[0].setVertex(&pos[0]);
+29:     line[1].setVertex(&pos[2]);
+30:     lineModel[0].setShape(&line[0]);
+31:     lineModel[1].setShape(&line[1]);
+32: 
+33:     // 線分の色設定
+34:     lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
+35:     lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
+36: 
+37:     // 直方体を線分の親モデルに設定
+38:     lineModel[0].setParent(&blockModel);
+39:     lineModel[1].setParent(&blockModel);
+40: 
+41:     // 視点の位置と姿勢を設定
+42:     camera.glMoveTo(0.0, 0.0, 2000.0);
+43:     camera.glFocus(0.0, 0.0, 0.0);
+44:     camera.glUpvec(0.0, 1.0, 0.0);
+45: 
+46:     // 各モデルをウィンドウに登録
+47:     window.setCameraModel(&camera);
+48:     window.entry(&blockModel);
+49:     window.entry(&lineModel[0]);
+50:     window.entry(&lineModel[1]);
+51: 
+52:     window.open();
+53: 
+54:     double speed = 5.0;
+55: 
+56:     for(int i = 0; window.update() == true; i++) {
+57:         double z = camera.getPosition().z;
+58: 
+59:         // 視点を原点に近づける
+60:         camera.glTranslate(0.0, 0.0, -speed);
+61:         
+62:         // 直方体(と子モデルの線分)を Y 軸中心に回転
+63:         blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, speed * fk_Math::PI/300.0);
+64: 
+65:         // カメラが 1000 より近くなったら Z 軸回転
+66:         if(z < 1000.0) {
+67:             camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Z, speed * fk_Math::PI/500.0);
+68:         }
+69: 
+70:         // 視点が原点を越えたら、向きをもう一度原点に向かせる。
+71:         if(z < -fk_Math::EPS) {
+72:             camera.glFocus(0.0, 0.0, 0.0);
+73:         }
+74: 
+75:     }
+76: 
+77:     return 0;
+78: }
 \end{verbatim}
 \end{breakbox}
 

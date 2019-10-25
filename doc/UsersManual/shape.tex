@@ -133,7 +133,7 @@ fk\_Point クラスの利用法は、fk\_Polyline クラスとまったく同一
 \\
 \begin{screen}
 \begin{verbatim}
-        fk_Line ln;
+        fk_Line line;
 \end{verbatim}
 \end{screen}
 ~ \\
@@ -145,23 +145,23 @@ setVertex() 関数を用いて代入することである。
 \begin{breakbox}
 \begin{verbatim}
         fk_Vector vec[2];
-        fk_Line ln;
+        fk_Line line;
 
         vec[0].set(1.0, 1.0, 1.0);
         vec[1].set(-1.0, 1.0, 1.0);
 
-        ln.setVertex(vec);
+        line.setVertex(vec);
 \end{verbatim}
 \end{breakbox}
 ~ \\
-このような記述で、ln は (1, 1, 1) と (-1, 1, 1) を結ぶ線分を
+このような記述で、\verb+line+ は (1, 1, 1) と (-1, 1, 1) を結ぶ線分を
 表現することになる。
 値の代入をしなおすことも可能である。
 それにはやはり setVertex メンバ関数を使用すればよい。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_Line ln;
+        fk_Line line;
         fk_Vector a, b;
 
         a.set(1.0, 1.0, 1.0);
@@ -181,16 +181,16 @@ setVertex() 関数を用いて代入することである。
 \\
 \begin{breakbox}
 \begin{verbatim}
-        fk_Line         ln;
+        fk_Line         line;
         fk_Vector       vec1, vec2, vecArray[2];
 
         vec1.set(0.0, 1.0, 0.0);
         vec2.set(1.0, 0.0, 0.0);
-        ln.pushLine(vec1, vec2);        // 2つの fk_Vector を使う方法
+        line.pushLine(vec1, vec2);        // 2つの fk_Vector を使う方法
 
         vecArray[0].set(0.0, 0.0, 1.0);
         vecArray[1].set(0.0, 0.0, -1.0);
-        ln.pushLine(vecArray);          // fk_Vector の配列を使う方法
+        line.pushLine(vecArray);          // fk_Vector の配列を使う方法
 \end{verbatim}
 \end{breakbox}
 ~ \\
