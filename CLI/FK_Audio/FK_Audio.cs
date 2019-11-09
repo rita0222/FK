@@ -153,5 +153,17 @@ namespace FK_CLI
 			}
             Task.WaitAll(new[] { task });
 		}
-	}
+
+		public void SetGain(int argID, double argGain)
+		{
+            if (argID < 0 || argID >= se.Length) return;
+            se[argID].Gain = argGain;
+        }
+
+        public double GetGain(int argID)
+        {
+            if (argID < 0 || argID >= se.Length) return -1.0;
+            return se[argID].Gain;
+        }
+    }
 }
