@@ -152,332 +152,98 @@
 \end{verbatim}
 \end{small}
 \end{breakbox}
-~
+\section{形状の簡易表示とアニメーション} \label{sec:sampleviewer}
 
-また、以下のソースコードは、同様のプログラムを F\# で記述したものである。
-C\# 版のコードと比較することで大体の F\# の文法を把握できるだろう。\\ ~
+次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。
+
+\begin{itemize}
+ \item 21 〜 27 行目で 11 行 11 列の行列として並んでいる状態の
+	座標を計算している。その際、\(z = \dfrac{x^2 - y^2}{10}\)
+	として \(z\) 成分は計算されている。
+
+ \item 29 〜 36 行目でインデックスフェースセットを表す
+	配列を作成している。インデックスフェースセットに関しては、
+	第 \ref{sec:solidGen1} 節を参照すること。
+
+ \item 38 行目で実際に形状を生成する。この部分の解説も、
+	第 \ref{sec:solidGen1} 節に記述がある。
+
+ \item 39 行目では、作成した形状を描画形状として登録している。
+	今回は登録する形状が一つだけなので Shape プロパティに代入することで登録を
+	行っているが、複数の形状を同時に表示したい場合は fk\_ShapeViewer クラスの
+	SetShape() メソッドを用いるとよい。
+
+ \item 40 行目では、表裏の両面及び稜線を描画するように設定している。
+
+ \item 43 行目では for ループ中で描画が行われるよう記述されている。
+	これにより、44 〜 50 行目が実行される度に描画処理が行われるようになる。
+
+ \item 46 行目では、アニメーションの際の頂点移動量が計算されている。
+	移動は \(z\) 方向のみ行われ、移動量は
+	\(\sin\frac{counter + 10j}{5\pi}\)である。counter はループの度に
+	43 行目で 10 ずつ追加されているので、描画の度に移動量が異なる
+	ことになる。
+
+ \item 47 行目で初期位置に移動量が足され、48 行目で実際に各頂点を移動している。
+\end{itemize}
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
- 1: open System
- 2: open FK_CLI
+ 1: using System;
+ 2: using FK_CLI;
  3: 
- 4: module FK_Box =
- 5: 
- 6:     // ウィンドウ生成
- 7:     let win = new fk_AppWindow()
- 8: 
- 9:     // マテリアル初期化
-10:     fk_Material.InitDefault()
+ 4: namespace FK_CLI_Viewer
+ 5: {
+ 6:     class Viewer
+ 7:     {
+ 8:         static void Main(string[] args)
+ 9:         {
+10:             const int SIZE = 40;
 11: 
-12:     // 直方体モデル生成
-13:     let blockModel = new fk_Model()
-14:     let block = new fk_Block(50.0, 70.0, 40.0)
-15:     blockModel.Shape <- block
-16:     blockModel.Material <- fk_Material.Yellow
-17:     win.Entry(blockModel)
-18: 
-19:     // 線分モデル生成
-20:     let pos : fk_Vector array = Array.init 4 (fun i -> new fk_Vector())
-21:     pos.[0].Set(0.0, 100.0, 0.0)
-22:     pos.[1].Set(100.0, 0.0, 0.0)
-23:     pos.[2] <- -pos.[0]
-24:     pos.[3] <- -pos.[1]
-25: 
-26:     let line : fk_Line array = Array.init 2 (fun i -> new fk_Line())
-27:     let lineModel : fk_Model array = Array.init 2 (fun i -> new fk_Model())
+12:             var viewer = new fk_ShapeViewer(600, 600);
+13:             var shape = new fk_IndexFaceSet();
+14:             var pos = new fk_Vector[(SIZE+1)*(SIZE+1)];
+15:             var moveVec = new fk_Vector();
+16:             var movePos = new fk_Vector();
+17:             var IFSet = new int[4*SIZE*SIZE];
+18:             int i, j;
+19:             double x, y;
+20: 
+21:             for(i = 0; i <= SIZE; ++i) {
+22:                 for(j = 0; j <= SIZE; ++j) {
+23:                     x = (double)(i - SIZE/2);
+24:                     y = (double)(j - SIZE/2);
+25:                     pos[i*(SIZE+1)+j] = new fk_Vector(x, y, (x*x - y*y)/(double)SIZE);
+26:                 }
+27:             }
 28: 
-29:     for i = 0 to 1 do
-30:         line.[i].PushLine(pos.[2*i], pos.[2*i + 1])
-31:         lineModel.[i].Shape <- line.[i]
-32:         lineModel.[i].Parent <- blockModel
-33:         win.Entry(lineModel.[i])
-34: 
-35:     lineModel.[0].LineColor <- new fk_Color(1.0, 0.0, 0.0)
-36:     lineModel.[1].LineColor <- new fk_Color(0.0, 1.0, 0.0)
+29:             for(i = 0; i < SIZE; i++) {
+30:                 for(j = 0; j < SIZE; j++) {
+31:                     IFSet[(i*SIZE + j)*4 + 0] = i*(SIZE+1) + j;
+32:                     IFSet[(i*SIZE + j)*4 + 1] = (i+1)*(SIZE+1) + j;
+33:                     IFSet[(i*SIZE + j)*4 + 2] = (i+1)*(SIZE+1) + j+1;
+34:                     IFSet[(i*SIZE + j)*4 + 3] = i*(SIZE+1) + j+1;
+35:                 }
+36:             }
 37: 
-38:     // カメラモデル生成
-39:     let camera = new fk_Model()
-40:     camera.GlMoveTo(0.0, 0.0, 2000.0) |> ignore
-41:     camera.GlFocus(0.0, 0.0, 0.0) |> ignore
-42:     camera.GlUpvec(0.0, 1.0, 0.0) |> ignore
-43:     win.CameraModel <- camera
-44: 
-45:     // ウィンドウ生成
-46:     win.Open()
-47: 
-48:     let org = new fk_Vector(0.0, 0.0, 0.0)
-49:     let count = ref 0
-50:     while win.Update() = true do
-51:         incr count
-52:         camera.GlTranslate(0.0, 0.0, -1.0) |> ignore
-53:         blockModel.GlRotateWithVec(org, fk_Axis.Y, Math.PI/300.0) |> ignore
-54:         camera.GlFocus(org) |> ignore
-55:         if !count >= 1000 then camera.LoRotateWithVec(org, fk_Axis.Z, Math.PI/300.0) |> ignore
-\end{verbatim}
-\end{small}
-\end{breakbox}
-
-\section{LOD 処理とカメラ切り替え}
-次のサンプルは、ボールが弾む様子を描いたプログラムである。このプログラムを
-実行すると、ボールが2回弾む間は鳥瞰的なカメラ視点だが、その後に青色の
-ブロックからボールを見る視点に切り替わる。プログラムのおおまかな流れは
-自分で解析して頂きたいが、ここでは最初のサンプルにはなかった概念に
-関して説明する。
-
-まず、10 行目にて Ball クラスを定義し、この中で fk\_Model や fk\_Sphere の
-インスタンスを管理している。本マニュアルでは C\# の文法については触れないため、
-クラスの詳細については別の文献を参照して頂きたいが、自作のクラスを作成する際の
-参考となるであろう。
-
-
-29 〜 31 行目にて球を分割数を変えて 3 種類定義しているが、これは
-71 行目からの LOD() メソッド内で Ball の実際の形状を動的に選択できるように
-するためである。「LOD (Level Of Detail) 処理」とは、視点とオブジェクトの
-距離によって形状の精密さを動的に変化させるテクニックである。たとえば、
-多くのポリゴンでできている形状は精密で迫力があるが、視点から
-とても遠くて非常に小さく表示されているような場合は無駄に処理されている
-ことになる。そこで、遠くにあって小さく表示されている場合は粗い形状を
-表示して処理の高速化を計るのが LOD 処理の目的である。このサンプルの
-LOD 処理はわかりやすくするために露骨に変化が見られるが、実際に
-プログラムを作成するときはわかりにくくなるように視点距離との関係を
-調整すべきである。
-\\
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
-  1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using FK_CLI;
-  7: 
-  8: namespace FK_CLI_Ball
-  9: {
- 10:     public class Ball
- 11:     {
- 12:         private const double    DOWN_ACCEL      = 0.05;     // 降下時の加速度
- 13:         private const double    RISE_ACCEL      = 0.053;    // 上昇時の減速度
- 14:         private const int       DOWN_MODE       = 0;        // 降下モード
- 15:         private const int       RISE_MODE       = 1;        // 上昇モード
- 16:         private const int       LOD4_HIGH       = 200;      // 四分割距離 (鳥瞰)
- 17:         private const int       LOD3_HIGH       = 300;      // 三分割距離 (鳥瞰)
- 18:         private const int       LOD4_LOW        = 90;       // 四分割距離 (ブロック)
- 19:         private const int       LOD3_LOW        = 120;      // 三分割距離 (ブロック)
- 20:         private const double    TOP_BALL_POS    = 300.0;    // ボール始点高さ
- 21:         private const double    BTM_BALL_POS    = 18.0;     // ボール跳ね返り高さ
- 22:         private const double    BALL_SIZE       = 12.0;     // ボール半径
- 23: 
- 24:         private int direction;          // ボールの状態(DOWN_MODE or RISE_MODE)
- 25:         private int view_mode;          // 視点モード
- 26:         private int bound_count;        // バウンド回数を数える変数
- 27:         private double y_trs;           // ボールのｙ座標移動量
- 28:         private fk_Model ball_model;    // ボールのモデル
- 29:         private fk_Sphere BALL2;        // 二分割形状
- 30:         private fk_Sphere BALL3;        // 三分割形状
- 31:         private fk_Sphere BALL4;        // 四分割形状
- 32: 
- 33:         public const int LOW_MODE       = 0;        // ブロック視点モード
- 34:         public const int HIGH_MODE      = 1;        // 鳥瞰モード
- 35: 
- 36:         public Ball()
- 37:         {
- 38:             BALL2 = new fk_Sphere(6, BALL_SIZE);
- 39:             BALL3 = new fk_Sphere(8, BALL_SIZE);
- 40:             BALL4 = new fk_Sphere(10, BALL_SIZE);
- 41:             ball_model = new fk_Model();
- 42:             Init();
- 43:         }
- 44: 
- 45:         public void Init()
- 46:         {
- 47:             direction   = DOWN_MODE;
- 48:             y_trs       = 0.1;
- 49:             view_mode   = HIGH_MODE;
- 50:             bound_count = 1;
- 51:             ball_model.GlMoveTo(0.0, TOP_BALL_POS, 0.0);
- 52:             ball_model.Shape = BALL2;
- 53:         }
- 54: 
- 55:         public fk_Model Model
- 56:         {
- 57:             get
- 58:             {
- 59:                 return ball_model;
- 60:             }
- 61:         }
- 62: 
- 63:         public fk_Vector Pos
- 64:         {
- 65:             get
- 66:             {
- 67:                 return ball_model.Position;
- 68:             }
- 69:         }
- 70: 
- 71:         public void LOD(fk_Vector argPos)
- 72:         {
- 73:             double  Distance = (ball_model.Position - argPos).Dist();
- 74:             switch(view_mode) {
- 75:                 case HIGH_MODE:
- 76:                     if(Distance < LOD4_HIGH) {
- 77:                         ball_model.Shape = BALL4;
- 78:                     } else if(Distance < LOD3_HIGH) {
- 79:                         ball_model.Shape = BALL3;
- 80:                     } else {
- 81:                         ball_model.Shape = BALL2;
- 82:                     }
- 83:                     break;
- 84: 
- 85:                 case LOW_MODE:
- 86:                     if(Distance < LOD4_LOW) {
- 87:                         ball_model.Shape = BALL4;
- 88:                     } else if(Distance < LOD3_LOW) {
- 89:                         ball_model.Shape = BALL3;
- 90:                     } else {
- 91:                         ball_model.Shape = BALL2;
- 92:                     }
- 93:                     break;
- 94: 
- 95:                 default:
- 96:                     break;
- 97:             }
- 98:         }
- 99: 
-100:         public void Accel()
-101:         {
-102:             switch(direction) {
-103:                 case DOWN_MODE:
-104:                     y_trs += DOWN_ACCEL;
-105:                     ball_model.GlTranslate(0.0, -y_trs, 0.0);
-106:                     break;
-107: 
-108:                 case RISE_MODE:
-109:                     y_trs -= RISE_ACCEL;
-110:                     ball_model.GlTranslate(0.0, y_trs, 0.0);
-111:                     break;
-112: 
-113:                 default:
-114:                     break;
-115:             }
-116:         }
-117: 
-118:         public void Bound()
-119:         {
-120:             if(ball_model.Position.y < BTM_BALL_POS) {
-121:                 direction = RISE_MODE;
-122:             } else if(y_trs < 0.01) {
-123:                 if(direction == RISE_MODE) {
-124:                     if(bound_count % 4 < 2) {
-125:                         view_mode = HIGH_MODE;
-126:                     } else {
-127:                         view_mode = LOW_MODE;
-128:                     }
-129:                     bound_count++;
-130:                 }
-131:                 direction = DOWN_MODE;
-132:             }
-133:         }
-134: 
-135:         public int Draw(fk_Vector argPos)
-136:         {
-137:             LOD(argPos);
-138:             Bound();
-139:             Accel();
-140:             //４回跳ね返ると初期化
-141:             if(bound_count > 4) Init();
-142:             return view_mode;
-143:         }
-144:     }
-145: 
-146:     class Program
-147:     {
-148:         static void Main(string[] args)
-149:         {
-150:             var win = new fk_AppWindow();
-151:             win.Size = new fk_Dimension(600, 600);
-152:             win.ClearModel(false); // デフォルト光源消去
-153: 
-154:             int view_mode = Ball.HIGH_MODE;
-155:     
-156:             var ball = new Ball();
-157:             
-158:             var viewModel = new fk_Model();
-159:             var lightModel = new fk_Model();
-160:             var groundModel = new fk_Model();
-161:             var blockModel = new fk_Model();
-162: 
-163:             var light = new fk_Light();
-164:             var ground = new fk_Circle(4, 100.0);
-165:             var block = new fk_Block(10.0, 10.0, 10.0);
-166: 
-167: 
-168:             fk_Material.InitDefault();
-169: 
-170:             // ### VIEW POINT ###
-171:             // 上の方から見た視点
-172:             viewModel.GlMoveTo(0.0, 400.0, 80.0);
-173:             viewModel.GlFocus(0.0, 30.0, 0.0);
-174:             viewModel.GlUpvec(0.0, 1.0, 0.0);
-175: 
-176:             // ### LIGHT ###
-177:             light.Type = fk_LightType.POINT;
-178:             light.SetAttenuation(0.0, 0.0);
-179:             lightModel.Shape = light;
-180:             lightModel.Material = fk_Material.White;
-181:             lightModel.GlTranslate(-60.0, 60.0, 0.0);
-182: 
-183:             // ### GROUND ###
-184:             groundModel.Shape = ground;
-185:             groundModel.Material = fk_Material.LightGreen;
-186:             groundModel.SmoothMode = true;
-187:             groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
-188: 
-189:             // ### VIEW BLOCK ###
-190:             blockModel.Shape = block;
-191:             blockModel.Material = fk_Material.Blue;
-192:             blockModel.GlMoveTo(60.0, 30.0, 0.0);
-193:             blockModel.Parent = groundModel;
-194: 
-195:             // ### BALL ###
-196:             ball.Model.Material = fk_Material.Red;
-197:             ball.Model.SmoothMode = true;
-198:     
-199:             // ### Model Entry ###
-200:             win.CameraModel = viewModel;
-201:             win.Entry(lightModel);
-202:             win.Entry(ball.Model);
-203:             win.Entry(groundModel);
-204:             win.Entry(blockModel); 
-205: 
-206:             win.Open();
-207: 
-208:             while(win.Update() == true) {
-209: 
-210:                 // ボールを弾ませて, カメラの状態を取得。
-211:                 view_mode = ball.Draw(viewModel.Position);
-212: 
-213:                 if(view_mode == Ball.HIGH_MODE) {
-214:                     // カメラを上からの視点にする。
-215:                     viewModel.GlMoveTo(0.0, 400.0, 80.0);
-216:                     viewModel.GlFocus(0.0, 30.0, 0.0);
-217:                     viewModel.GlUpvec(0.0, 1.0, 0.0);
-218:                 } else {
-219:                     // カメラをブロックからの視点にする。
-220:                     viewModel.GlMoveTo(blockModel.InhPosition);
-221:                     viewModel.GlTranslate(0.0, 10.0, 0.0);
-222:                     viewModel.GlFocus(ball.Pos);
-223:                     viewModel.GlUpvec(0.0, 1.0, 0.0);
-224:                 }
-225: 
-226:                 // 地面をくるくる回転させましょう。
-227:                 groundModel.GlRotateWithVec(0.0, 0.0, 0.0, fk_Axis.Y, 0.02);
-228:             }
-229:         }
-230:     }
-231: }
+38:             shape.MakeIFSet(SIZE*SIZE, 4, IFSet, (SIZE+1)*(SIZE+1), pos);
+39:             viewer.Shape = shape;
+40:             viewer.DrawMode = fk_Draw.FRONTBACK_FACE | fk_Draw.LINE;
+41:             viewer.Scale = 10.0;
+42: 
+43:             for(int counter = 0; viewer.Draw() == true; counter += 10) {
+44:                 for(i = 0; i <= SIZE; i++) {
+45:                     for(j = 0; j <= SIZE; j++) {
+46:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/Math.PI));
+47:                         movePos = moveVec + pos[i*(SIZE+1)+j];
+48:                         shape.MoveVPosition(i*(SIZE+1)+j, movePos);
+49:                     }
+50:                 }
+51:             }
+52:         }
+53:     }
+54: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
@@ -533,523 +299,233 @@ Boid アルゴリズムとは、群集シミュレーションを実現するた
 \end{equation}
 \end{description}
 
-以下、C\# と F\# によるサンプルプログラムを掲載する。
+以下、C\# によるサンプルプログラムを掲載する。
 これらついての詳細な解説は割愛するが、
 各エージェントを表す「Agent」クラスと、群を表す「Boid」クラスを構築することにより、
 メインループがかなりシンプルになっていることがわかる。また、
 「S」「A」「C」キーを押すと、それぞれ「分離」「整列」「結合」規則を無効にするように
-なっているので、各規則がどのようにエージェントの動作に影響しているかがわかるだろう。
-
-F\# は C\# に比べるとかなりコンパクトなコードになっている。
-F\# は、配列やリストに対しての各種操作で強力な機能を持つ文法となっており、
-今回のようなシミュレーションプログラムの記述には大きな威力を発揮することがわかる。
-
-\begin{center}
-C\#版
-\end{center}
+なっているので、各規則がどのようにエージェントの動作に影響しているかがわかるだろう。\\ ~
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
   1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using FK_CLI;
-  7: 
-  8: namespace FK_CLI_Boid
-  9: {
- 10:     // エージェント用クラス
- 11:     class Agent
- 12:     {
- 13:         private fk_Model model;
- 14:         private fk_Vector newVec;
- 15: 
- 16:         public Agent(double argSize, Random argRand)
- 17:         {
- 18:             // コンストラクタ
- 19:             // 各モデルの位置と方向をランダムに設定する。
- 20:             model = new fk_Model();
- 21:             model.Material = fk_Material.Red;
- 22:             model.GlVec(argRand.NextDouble()*2.0 - 1.0, argRand.NextDouble()*2.0 - 1.0, 0.0);
- 23:             model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
- 24:                            argRand.NextDouble() * argSize * 2.0 - argSize, 0.0);
- 25:         }
- 26: 
- 27:         // 位置ベクトルプロパティ
- 28:         public fk_Vector Pos
- 29:         {
- 30:             get
- 31:             {
- 32:                 return model.Position;
- 33:             }
- 34:         }
- 35: 
- 36:         // 方向ベクトルプロパティ
- 37:         public fk_Vector Vec
- 38:         {
- 39:             set
- 40:             {
- 41:                 newVec = value;
- 42:             }
- 43:             get
- 44:             {
- 45:                 return model.Vec;
- 46:             }
- 47:         }
- 48: 
- 49:         // 形状インスタンスプロパティ
- 50:         public fk_Shape Shape
- 51:         {
- 52:             set
- 53:             {
- 54:                 model.Shape = value;
- 55:             }
- 56:         }
- 57: 
- 58:         // ウィンドウ登録メソッド
- 59:         public void Entry(fk_AppWindow argWin)
- 60:         {
- 61:             argWin.Entry(model);
- 62:         }
- 63: 
- 64:         // 前進メソッド
- 65:         public void Forward()
- 66:         {
- 67:             model.GlVec(newVec);
- 68:             model.LoTranslate(0.0, 0.0, -0.05);
- 69:         }
- 70:     }
- 71: 
- 72:     // 群衆用クラス
- 73:     class Boid {
- 74:         private Agent [] agent;
- 75:         private fk_Cone cone;
- 76:         private const int IAREA = 15;
- 77:         private const double AREASIZE = (double)(IAREA);
- 78: 
- 79:         private double paramA, paramB, paramC, paramLA, paramLB;
- 80: 
- 81:         // コンストラクタ
- 82:         public Boid(int argNum)
- 83:         {
- 84:             // 乱数発生器の初期化
- 85:             var rand = new Random();
- 86: 
- 87:             // 形状インスタンスの性生
- 88:             fk_Material.InitDefault();
- 89:             cone = new fk_Cone(16, 0.4, 1.0);
- 90:             if(argNum < 0) return;
- 91: 
- 92:             // エージェント配列作成
- 93:             agent = new Agent[argNum];
- 94: 
- 95:             // エージェントインスタンスの作成
- 96:             for(int i = 0; i < argNum; ++i) {
- 97:                 agent[i] = new Agent(AREASIZE, rand);
- 98:                 agent[i].Shape = cone;
- 99:             }
-100: 
-101:             // 各種パラメータ設定
-102:             paramA = 0.2;
-103:             paramB = 0.02;
-104:             paramC = 0.01;
-105:             paramLA = 3.0;
-106:             paramLB = 5.0;
-107:         }
-108: 
-109:         // パラメータ設定メソッド
-110:         public void SetParam(double argA, double argB, double argC,
-111:                              double argLA, double argLB)
-112:         {
-113:             paramA = argA;
-114:             paramB = argB;
-115:             paramC = argC;
-116:             paramLA = argLA;
-117:             paramLB = argLB;
-118:         }
-119: 
-120:         // ウィンドウへのエージェント登録メソッド
-121:         public void SetWindow(fk_AppWindow argWin)
-122:         {
-123:             foreach(Agent M in agent) {
-124:                 M.Entry(argWin);
-125:             }
-126:         }
-127: 
-128:         // 各エージェント動作メソッド
-129:         public void Forward(bool argSMode, bool argAMode, bool argCMode)
-130:         {
-131:             var gVec = new fk_Vector();
-132:             fk_Vector diff = new fk_Vector();
-133:             fk_Vector [] pArray = new fk_Vector[agent.Length]; // 位置ベクトル格納用配列
-134:             fk_Vector [] vArray = new fk_Vector[agent.Length]; // 方向ベクトル格納用配列
-135: 
-136:             // 全体の重心計算
-137:             for(int i = 0; i < agent.Length; i++) {
-138:                 pArray[i] = agent[i].Pos;
-139:                 vArray[i] = agent[i].Vec;
-140:                 gVec += pArray[i];
-141:             }
-142:             gVec /= (double)(agent.Length);
-143: 
-144:             // エージェントごとの動作算出演算
-145:             for(int i = 0; i < agent.Length; i++) {
-146:                 fk_Vector vec = new fk_Vector(vArray[i]);
-147: 
-148:                 for(int j = 0; j < agent.Length; j++) {
-149:                     if(i == j) continue;
-150:                     diff = pArray[i] - pArray[j];
-151:                     double dist = diff.Dist();
-152: 
-153:                     // 分離 (Separation) 処理
-154:                     if(dist < paramLA && argSMode) {
-155:                         vec += paramA * diff / (dist*dist);
-156:                     }
-157: 
-158:                     // 整列 (Alignment) 処理
-159:                     if(dist < paramLB && argAMode) {
-160:                         vec += paramB * vArray[j];
-161:                     }
-162:                 }
-163: 
-164:                 // 結合 (Cohesion) 処理 (スペースキーが押されていたら無効化)
-165:                 if(argCMode == true) {
-166:                     vec += paramC * (gVec - pArray[i]);
-167:                 }
-168: 
-169:                 // 領域の外側に近づいたら方向修正
-170:                 if(Math.Abs(pArray[i].x) > AREASIZE && pArray[i].x * vArray[i].x > 0.0) {
-171:                     vec.x -= vec.x * (Math.Abs(pArray[i].x) - AREASIZE)*0.2;
-172:                 }
-173:                 if(Math.Abs(pArray[i].y) > AREASIZE && pArray[i].y * vArray[i].y > 0.0) {
-174:                     vec.y -= vec.y * (Math.Abs(pArray[i].y) - AREASIZE)*0.2;
-175:                 }
-176: 
-177:                 // 最終的な方向ベクトル演算結果を代入
-178:                 vec.z = 0.0;
-179:                 agent[i].Vec = vec;
-180:             }
-181: 
-182:             // 全エージェントを前進
-183:             foreach(Agent M in agent) {
-184:                 M.Forward();
-185:             }
-186:         }
-187:     }
-188: 
-189:     class Program {
-190:         static void Main(string[] args)
-191:         {
-192:             var win = new fk_AppWindow();
-193:             var boid = new Boid(200);
-194: 
-195:             boid.SetWindow(win);
-196: 
-197:             win.Size = new fk_Dimension(600, 600);
-198:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
-199:             win.ShowGuide(fk_GuideMode.GRID_XY);
-200:             win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
-201:             win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
-202:             win.FPS = 0;
-203: 
-204:             win.Open();
-205: 
-206:             while(win.Update() == true) {
-207:                 bool sMode = win.GetKeyStatus('S', fk_SwitchStatus.RELEASE);
-208:                 bool aMode = win.GetKeyStatus('A', fk_SwitchStatus.RELEASE);
-209:                 bool cMode = win.GetKeyStatus('C', fk_SwitchStatus.RELEASE);
-210:                 boid.Forward(sMode, aMode, cMode);
-211:             }
-212: 
-213:         }
-214:     }
-215: }
-\end{verbatim}
-\end{small}
-\end{breakbox}
-\begin{center}
-F\#版
-\end{center}
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
-  1: open System
-  2: open FK_CLI
+  2: using FK_CLI;
   3: 
-  4: // エージェント用クラス
-  5: type Agent(argID:int) = class
-  6:     // コンストラクタ
-  7:     let model = new fk_Model()
-  8:     let newVec = new fk_Vector()
-  9:     let id = argID
- 10: 
- 11:     do
- 12:         model.Material <- fk_Material.Red
+  4: namespace FK_CLI_Boid
+  5: {
+  6:     // エージェント用クラス
+  7:     class Agent
+  8:     {
+  9:         private fk_Model model;
+ 10:         private fk_Vector newVec;
+ 11:         private const double SPEED = 0.05;   // 速度設定値
+ 12:         public const double AREASIZE = 15.0; // 移動領域の広さ設定値
  13: 
- 14:     // (ここまでがコンストラクタ)
- 15: 
- 16:     // ID プロパティ
- 17:     member this.ID with get() = id
- 18: 
- 19:     // 位置ベクトルプロパティ
- 20:     member this.Pos with get() = model.Position
- 21: 
- 22:     // 方向ベクトルプロパティ
- 23:     member this.Vec with get() = model.Vec
- 24:                     and set(v:fk_Vector) = newVec.Set(v.x, v.y, v.z)
- 25: 
- 26:     // 形状プロパティ
- 27:     member this.Shape with get() = model.Shape
- 28:                       and set(s:fk_Shape) = model.Shape <- s 
- 29: 
- 30:     // 初期化メソッド
- 31:     member this.Init(argSize: double, argRand: Random) =
- 32:         model.GlVec(argRand.NextDouble()*2.0 - 1.0,
- 33:                     argRand.NextDouble()*2.0 - 1.0,
- 34:                     0.0) |> ignore
- 35:         model.GlMoveTo(argRand.NextDouble() * argSize * 2.0 - argSize,
- 36:                        argRand.NextDouble() * argSize * 2.0 - argSize,
- 37:                        0.0) |> ignore
- 38: 
- 39:     // ウィンドウ登録メソッド
- 40:     member this.Entry(argWin: fk_AppWindow) =
- 41:         argWin.Entry(model)
- 42: 
- 43:     // 前進メソッド
- 44:     member this.Forward() =
- 45:         model.GlVec(newVec) |> ignore
- 46:         model.LoTranslate(0.0, 0.0, -0.05) |> ignore
- 47:         model.GlMoveTo(this.Pos.x, this.Pos.y, 0.0) |> ignore
- 48: end;;
- 49: 
- 50: // 群集クラス
- 51: type Boid(argNum) = class
- 52:     // コンストラクタ
- 53:     do
- 54:         fk_Material.InitDefault()
- 55: 
- 56:     // 乱数発生器生成
- 57:     let rand = new Random()
- 58: 
- 59:     // エージェント配列生成
- 60:     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
- 61: 
- 62:     // 形状生成
- 63:     let cone = new fk_Cone(16, 0.4, 1.0)
- 64: 
- 65:     // 各種パラメータ設定
- 66:     let IAREA = 15
- 67:     let AREASIZE = double(IAREA)
- 68:     let paramA = 0.2
- 69:     let paramB = 0.02
- 70:     let paramC = 0.01
- 71:     let paramLA = 3.0
- 72:     let paramLB = 5.0
- 73:     do
- 74:         // 各エージェントの初期化
- 75:         agent |> Array.iter (fun a -> a.Init(AREASIZE, rand))
- 76:         agent |> Array.iter (fun a -> a.Shape <- cone)
- 77: 
- 78:     // (ここまでがコンストラクタ)
- 79: 
- 80:     // ウィンドウ登録メソッド
- 81:     member this.SetWindow(argWin: fk_AppWindow) =
- 82:         agent |> Array.iter (fun a -> a.Entry(argWin))
+ 14:         // コンストラクタ
+ 15:         public Agent()
+ 16:         {
+ 17:             model = new fk_Model();
+ 18:             model.Material = fk_Material.Red;
+ 19:             model.GlVec(fk_Math.DRand(-1.0, 1.0), fk_Math.DRand(-1.0, 1.0), 0.0);
+ 20:             model.GlMoveTo(fk_Math.DRand(-AREASIZE, AREASIZE),
+ 21:                            fk_Math.DRand(-AREASIZE, AREASIZE), 0.0);
+ 22:         }
+ 23: 
+ 24:         // 位置ベクトル用プロパティ
+ 25:         public fk_Vector Pos
+ 26:         {
+ 27:             get
+ 28:             {
+ 29:                 return model.Position;
+ 30:             }
+ 31:         }
+ 32: 
+ 33:         // 方向ベクトル用プロパティ
+ 34:         public fk_Vector Vec
+ 35:         {
+ 36:             set
+ 37:             {
+ 38:                 newVec = value;
+ 39:             }
+ 40:             get
+ 41:             {
+ 42:                 return model.Vec;
+ 43:             }
+ 44:         }
+ 45: 
+ 46:         // 形状参照プロパティ
+ 47:         public fk_Shape Shape
+ 48:         {
+ 49:             set
+ 50:             {
+ 51:                 model.Shape = value;
+ 52:             }
+ 53:         }
+ 54: 
+ 55:         // ウィンドウへのモデル登録
+ 56:         public void Entry(fk_AppWindow argWin)
+ 57:         {
+ 58:             argWin.Entry(model);
+ 59:         }
+ 60: 
+ 61:         // 前進処理
+ 62:         public void Forward()
+ 63:         {
+ 64:             model.GlVec(newVec);
+ 65:             model.LoTranslate(0.0, 0.0, -SPEED);
+ 66:         }
+ 67:     }
+ 68: 
+ 69:     // 群衆用クラス
+ 70:     class Boid
+ 71:     {
+ 72:         private Agent [] agent; // エージェント用配列
+ 73:         private fk_Cone cone;   // 形状 (円錐)
+ 74: 
+ 75:         private double paramA, paramB, paramC, paramLA, paramLB;
+ 76: 
+ 77:         public Boid(int argNum)
+ 78:         {
+ 79:             fk_Material.InitDefault();
+ 80:             cone = new fk_Cone(16, 0.4, 1.0);
+ 81:             if(argNum < 0) return;
+ 82:             agent = new Agent[argNum];
  83: 
- 84:     // 各エージェント動作メソッド
- 85:     member this.Forward(argSMode: bool, argAMode: bool, argCMode: bool) =
- 86:         let pA = agent |> Array.map (fun a -> a.Pos) // 位置ベクトル配列
- 87:         let vA = agent |> Array.map (fun a -> a.Vec) // 方向ベクトル配列
- 88:         let iA = agent |> Array.map (fun a -> a.ID)  // ID配列
- 89:         let vArray = Array.zip3 pA vA iA             // 結合リスト作成
- 90: 
- 91:         let newV0 = vArray |> Array.map (fun (p1, v1, i) ->
- 92:             let mutable tmpV = v1
- 93:             for j = 0 to vArray.Length - 1 do
- 94:                 if i <> j then
- 95:                     let diff = p1 - pA.[j]
- 96:                     let dist = diff.Dist()
- 97:                     // 分離ルール
- 98:                     if dist < paramLA && argSMode then
- 99:                         tmpV <- tmpV + paramA * diff / (dist*dist)
-100: 
-101:                     // 整列ルール
-102:                     if dist < paramLB && argAMode then
-103:                         tmpV <- tmpV + paramB * vA.[j]
-104:             tmpV
-105:         )
-106: 
-107:         // 重心計算
-108:         let gVec = (Array.reduce (fun x y -> x + y) pA) / (double pA.Length)
-109: 
-110:         // 結合ルール
-111:         let calcG (p, v) = v + paramB * (gVec - p)
-112:         let newV1 =
-113:             if argCMode then
-114:                 Array.zip pA newV0 |> Array.map calcG
-115:             else
-116:                 Array.copy newV0
-117: 
-118:         // 領域外判定用メソッド
-119:         let xOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.x) > AREASIZE && p.x * v.x > 0.0
-120:         let yOut (p:fk_Vector, v:fk_Vector) = Math.Abs(p.y) > AREASIZE && p.y * v.y > 0.0
+ 84:             for(int i = 0; i < argNum; ++i)
+ 85:             {
+ 86:                 agent[i] = new Agent();
+ 87:                 agent[i].Shape = cone;
+ 88:             }
+ 89: 
+ 90:             paramA = 0.2;
+ 91:             paramB = 0.02;
+ 92:             paramC = 0.01;
+ 93:             paramLA = 3.0;
+ 94:             paramLB = 5.0;
+ 95:         }
+ 96: 
+ 97:         public void SetParam(double argA, double argB, double argC, double argLA, double argLB)
+ 98:         {
+ 99:             paramA = argA;
+100:             paramB = argB;
+101:             paramC = argC;
+102:             paramLA = argLA;
+103:             paramLB = argLB;
+104:         }
+105: 
+106:         public void SetWindow(fk_AppWindow argWin)
+107:         {
+108:             foreach(Agent M in agent)
+109:             {
+110:                 M.Entry(argWin);
+111:             }
+112:         }
+113: 
+114:         // 群集の更新処理
+115:         public void Update(bool argSMode, bool argAMode, bool argCMode)
+116:         {
+117:             var gVec = new fk_Vector();
+118:             var diff = new fk_Vector();
+119:             fk_Vector [] pArray = new fk_Vector[agent.Length];
+120:             fk_Vector [] vArray = new fk_Vector[agent.Length];
 121: 
-122:         // 反転メソッド
-123:         let vNegate (p:double, v:double) = v - v * (Math.Abs(p) - AREASIZE) * 0.2
-124: 
-125:         // 領域の外側に近づいたら方向修正するメソッド
-126:         let xNegate (p:fk_Vector, v:fk_Vector) =
-127:             if xOut (p, v) then
-128:                 new fk_Vector(vNegate(p.x, v.x), v.y, 0.0)
-129:             else
-130:                 v
-131: 
-132:         let yNegate (p: fk_Vector, v:fk_Vector) =
-133:             if yOut (p, v) then
-134:                 new fk_Vector(v.x, vNegate(p.y, v.y), 0.0)
-135:             else
-136:                 v
-137: 
-138:         // 方向修正を行ったエージェントリストを取得
-139:         let newV2 = Array.zip pA newV1 |> Array.map xNegate
-140:         let newV3 = Array.zip pA newV2 |> Array.map yNegate
-141: 
-142:         // エージェントに新速度設定
-143:         let newAgent = Array.zip agent newV3
-144:         newAgent |> Array.iter (fun (a, v) -> (a.Vec <- v))
-145: 
-146:         // エージェント前進
-147:         agent |> Array.iter (fun a -> a.Forward())
+122:             // 位置ベクトルと速度ベクトルのコピー
+123:             for(int i = 0; i < agent.Length; i++)
+124:             {
+125:                 pArray[i] = agent[i].Pos;
+126:                 vArray[i] = agent[i].Vec;
+127:                 gVec += pArray[i];
+128:             }
+129: 
+130:             // 群集重心の算出
+131:             gVec /= (double)(agent.Length);
+132: 
+133:             for(int i = 0; i < agent.Length; i++)
+134:             {
+135:                 fk_Vector p = new fk_Vector(pArray[i]);
+136:                 fk_Vector v = new fk_Vector(vArray[i]);
+137:                 for(int j = 0; j < agent.Length; j++)
+138:                 {
+139:                     if(i == j) continue;
+140:                     diff = p - pArray[j];
+141:                     double dist = diff.Dist();
+142: 
+143:                     // 分離 (Separation) 処理
+144:                     if (dist < paramLA && argSMode == true)
+145:                     {
+146:                         v += paramA * diff / (dist*dist);
+147:                     }
 148: 
-149: end;;
-150: 
-151: 
-152: module FK_Boid =
-153:     let win = new fk_AppWindow()
-154:     let boid = new Boid(150)
+149:                     // 整列 (Alignment) 処理
+150:                     if(dist < paramLB && argAMode == true)
+151:                     {
+152:                         v += paramB * vArray[j];
+153:                     }
+154:                 }
 155: 
-156:     boid.SetWindow(win)
-157: 
-158:     win.Size <- new fk_Dimension(600, 600)
-159:     win.BGColor <- new fk_Color(0.6, 0.7, 0.8)
-160:     win.ShowGuide(fk_GuideMode.GRID_XY)
-161:     win.CameraPos <- new fk_Vector(0.0, 0.0, 80.0)
-162:     win.CameraFocus <- new fk_Vector(0.0, 0.0, 0.0)
-163:     win.FPS <- 0
-164: 
-165:     win.Open()
-166:     while win.Update() = true do
-167:         let sMode = win.GetKeyStatus('s', fk_SwitchStatus.RELEASE)
-168:         let aMode = win.GetKeyStatus('a', fk_SwitchStatus.RELEASE)
-169:         let cMode = win.GetKeyStatus('c', fk_SwitchStatus.RELEASE)
-170:         boid.Forward(sMode, aMode, cMode)
-\end{verbatim}
-\end{small}
-\end{breakbox}
-
-\section{形状の簡易表示とアニメーション} \label{sec:sampleviewer}
-
-次のサンプルは、fk\_ShapeViewer クラスの典型的な利用法を示したものである。
-
-このサンプルプログラムでは、23〜40行目がメッシュ形状を生成する処理を記述し、
-45〜53行目がアニメーションを実現している処理となっている。
-
-
-\begin{center}
-詳細解説
-\end{center}
-
-\begin{itemize}
- \item 23 〜 28 行目で 11 行 11 列の行列として並んでいる状態の
-	座標を計算している。その際、\(z = \dfrac{x^2 - y^2}{10}\)
-	として \(z\) 成分は計算されている。
-
- \item 次に、31 〜 38 行目でインデックスフェースセットを表す
-	配列を作成している。インデックスフェースセットに関しては、
-	第 \ref{sec:solidGen1} 節を参照すること。
-
- \item 40 行目で実際に形状を生成する。この部分の解説も、
-	第 \ref{sec:solidGen1} 節に記述がある。
-
- \item 41 行目では、作成した形状を描画形状として登録している。
-	今回は登録する形状が一つだけなので Shape プロパティに代入することで登録を
-	行っているが、複数の形状を同時に表示したい場合は fk\_ShapeViewer クラスの
-	SetShape() メソッドを用いるとよい。
-
- \item 42,43 行目では、表裏の両面及び稜線を描画するように設定している。
-
- \item 45 行目では for ループ中で描画が行われるよう記述されている。
-	これにより、46 〜 52 行目が実行される度に描画処理が行われるようになる。
-
- \item 48 行目では、アニメーションの際の頂点移動量が計算されている。
-	移動は \(z\) 方向のみ行われ、移動量は
-	\(\sin\frac{counter + 10j}{5\pi}\)である。counter はループの度に
-	45 行目で 10 ずつ追加されているので、描画の度に移動量が異なる
-	ことになる。
-
- \item 49 行目で初期位置に移動量が足され、50 行目で実際に各頂点を移動している。
-\end{itemize}
-
-\begin{breakbox}
-\begin{small}
-\begin{verbatim}
- 1: using System;
- 2: using System.Collections.Generic;
- 3: using System.Linq;
- 4: using System.Text;
- 5: using System.Threading.Tasks;
- 6: using FK_CLI;
- 7: 
- 8: namespace FK_CLI_Viewer
- 9: {
-10:     class Program
-11:     {
-12:         static void Main(string[] args)
-13:         {
-14:             var viewer = new fk_ShapeViewer(600, 600);
-15:             var shape = new fk_IndexFaceSet();
-16:             var pos = new fk_Vector[121];
-17:             var moveVec = new fk_Vector();
-18:             var movePos = new fk_Vector();
-19:             var IFSet = new int[4*100];
-20:             int i, j;
-21:             double x, y;
-22: 
-23:             for(i = 0; i <= 10; ++i) {
-24:                 for(j = 0; j <= 10; ++j) {
-25:                     x = (double)(i-5);
-26:                     y = (double)(j-5);
-27:                     pos[i*11+j] = new fk_Vector(x, y, (x*x - y*y)/10.0);
-28:                 }
-29:             }
-30: 
-31:             for(i = 0; i < 10; i++) {
-32:                 for(j = 0; j < 10; j++) {
-33:                     IFSet[(i*10 + j)*4 + 0] = i*11 + j;
-34:                     IFSet[(i*10 + j)*4 + 1] = (i+1)*11 + j;
-35:                     IFSet[(i*10 + j)*4 + 2] = (i+1)*11 + j+1;
-36:                     IFSet[(i*10 + j)*4 + 3] = i*11 + j+1;
-37:                 }
-38:             }
-39: 
-40:             shape.MakeIFSet(100, 4, IFSet, 121, pos);
-41:             viewer.Shape = shape;
-42:             viewer.DrawMode = fk_DrawMode.FRONTBACK_POLYMODE | fk_DrawMode.LINEMODE;
-43:             viewer.Scale = 10.0;
-44: 
-45:             for(int counter = 0; viewer.Draw() == true; counter += 10) {
-46:                 for(i = 0; i <= 10; i++) {
-47:                     for(j = 0; j <= 10; j++) {
-48:                         moveVec.Set(0.0, 0.0, Math.Sin((double)(counter + j*40)*0.05/Math.PI));
-49:                         movePos = moveVec + pos[i*11+j];
-50:                         shape.MoveVPosition(i*11+j, movePos);
-51:                     }
-52:                 }
-53:             }
-54:         }
-55:     }
-56: }
+156:                 // 結合 (Cohesion) 処理
+157:                 if(argCMode == true)
+158:                 {
+159:                     v += paramC * (gVec - pArray[i]);
+160:                 }
+161: 
+162:                 // 領域の外側に近づいたら方向修正
+163:                 if (Math.Abs(p.x) > Agent.AREASIZE && p.x * v.x > 0.0 && Math.Abs(v.x) > 0.01)
+164:                 {
+165:                     v.x -= v.x * (Math.Abs(pArray[i].x) - Agent.AREASIZE)*0.2;
+166:                 }
+167: 
+168:                 if(Math.Abs(p.y) > Agent.AREASIZE && p.y * v.y > 0.0 && Math.Abs(v.y) > 0.01)
+169:                 {
+170:                     v.y -= v.y * (Math.Abs(pArray[i].y) - Agent.AREASIZE)*0.2;
+171:                 }
+172: 
+173:                 v.z = 0.0;
+174:                 agent[i].Vec = v;
+175:             }
+176: 
+177:             foreach(Agent M in agent) {
+178:                 M.Forward();
+179:             }
+180:         }
+181:     }
+182: 
+183:     class Program
+184:     {
+185:         static void Main(string[] args)
+186:         {
+187:             var win = new fk_AppWindow();
+188:             var boid = new Boid(200);
+189: 
+190:             boid.SetWindow(win);
+191: 
+192:             // ウィンドウ各種設定
+193:             win.Size = new fk_Dimension(800, 800);
+194:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
+195:             win.ShowGuide(fk_Guide.GRID_XY);
+196:             win.CameraPos = new fk_Vector(0.0, 0.0, 80.0);
+197:             win.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
+198:             win.TrackBallMode = true;
+199: 
+200:             win.Open();
+201: 
+202:             while(win.Update() == true)
+203:             {
+204:                 // Sキーで「Separate(分離)」を無効に
+205:                 bool sMode = win.GetKeyStatus('S', fk_Switch.RELEASE);
+206: 
+207:                 // Aキーで「Alignment(整列)」を無効に
+208:                 bool aMode = win.GetKeyStatus('A', fk_Switch.RELEASE);
+209: 
+210:                 // Cキーで「Cohesion(結合)」を無効に
+211:                 bool cMode = win.GetKeyStatus('C', fk_Switch.RELEASE);
+212: 
+213:                 // 群集の更新処理
+214:                 boid.Update(sMode, aMode, cMode);
+215:             }
+216:         }
+217:     }
+218: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
@@ -1073,41 +549,38 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 詳細解説
 \end{center}
 \begin{itemize}
- \item 10 〜 88 行目は、fk\_ParticleSet クラスを継承した「MyParticle」という
-	クラスを定義している。
-	継承したクラスに対し、GenMethod()、AllMethod()、IndivMethod() の
-	各メソッドを再定義(上書き)することで、パーティクルの挙動を制御することなる。
+ \item 8〜75行目でパーティクルに対する各種設定を行っている。
+	10行目でパーティクル用インスタンスを生成し、
+	11〜13行目で各種設定を行っている。
 
- \item 17 〜 31 行目は MyParticle クラスのコンストラクタである。ここで、
-	パーティクルの初期設定を行う。
-
- \item 19 行目の MaxSize プロパティは fk\_ParticleSet クラスのメンバで、
+ \item 11 行目の MaxSize プロパティは fk\_ParticleSet クラスのメンバで、
 	パーティクル個数の最大値を設定する。もしパーティクルの個数が
 	この値と等しくなったときは、NewParticle() メソッドを呼んでも
 	パーティクルは新たに生成されなくなる。
 
- \item 20,21 行目はそれぞれ個別処理、全体処理に対するモード設定である。
+ \item 12,13 行目はそれぞれ個別処理、全体処理に対するモード設定である。
 	ここで true に設定しない場合、IndivMethod() や AllMethod() の
 	記述は無視される。
 
- \item 22 〜 25 行目は、各パーティクルの色パレットを設定しているものである。
-	今回は、パーティクル ID と色 ID を完全に一対一対応することにし、
-	パーティクルの個数だけ色を用意している。
-
- \item 35 〜 44 行目では、新たにパーティクルが生成された際の処理を記述する。
+ \item 16 〜 22 行目では、新たにパーティクルが生成された際の処理を記述する。
 	引数の P に新パーティクルのインスタンスが入っており、これに対して
-	様々な設定を行う。40 行目では初期位置を、43 行目では色 ID を設定
-	している。
+	様々な設定を行う。今回のサンプルでは初期位置設定を行っている。
 
- \item 47 〜 54 行目では、AllMethod() メソッドを再定義している。
+	ここにある GenMethod() や AllMethod(), IndivMethod() は
+	fk\_Particle 型を引数に持つ void 型のメソッドか、
+	またはラムダ式で設定を行うことができる。
+	今回のサンプルではラムダ式を用いている。
+	ラムダ式についての詳細は C\# に関する一般的な書籍を参照されたい。
+
+ \item 25 〜 34 行目では、AllMethod() メソッドを再定義している。
 	AllMethod() メソッドには、パーティクル集合全体に対しての処理を記述する。
 	ここではランダムにパーティクルの生成を行っているだけであるが、
 	パーティクル全体に対して一括の処理を記述することもできる。
 
- \item 57 〜 88 行目では、IndivMethod() メソッドを再定義している。
+ \item 37 〜 71 行目では、IndivMethod() メソッドを再定義している。
 	IndivMethod 関数には、個別のパーティクルに対する処理を記述する。
 
- \item IndivMethod() 中では、64 〜 72 行目で速度ベクトルの設定を行っている。
+ \item IndivMethod() 中では、52 〜 55 行目で速度ベクトルの設定を行っている。
 	中心が原点で、\(z\) 軸に平行な半径 \(R\) の円柱の周囲を
 	速度 \((-V_x, 0, 0)\) の水流が流れているとする。このとき、各地点
 	\((x, y, z)\) での水流を表す偏微分方程式は以下のようなものである。
@@ -1122,14 +595,14 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 		\bV = (-V_x, 0, 0), \qquad
 		\bP = (x, y, 0), \qquad r = |\bP|
 	\end{equation}
-	である。今回は、\(\bV = (0.2, 0, 0)\)(60行目の「water」変数)、
-	\(R = 15\)(61行目の「R」変数) として算出している。この式から、
-	各パーティクルの速度ベクトルを算出し、72 行目で設定している。
+	である。今回は、\(\bV = (0.2, 0, 0)\)(40行目の「water」変数)、
+	\(R = 15\)(41行目の「R」変数) として算出している。この式から、
+	各パーティクルの速度ベクトルを算出し、55 行目で設定している。
 
  \item パーティクルの色は、速度が minSpeed 未満の場合は青、
 	maxSpeed 以上の場合は赤とし、その中間の場合は
 	赤色と青色をブレンドした色となるように設定している。
-	その色値の算出と設定を 76 〜 81 行目で行っている。
+	その色値の算出と設定を 58 〜 64 行目で行っている。
 	パーティクルの速度 \(s\) が \(m < s < M\) を満たすとき、
 	\begin{equation}
 		t = \frac{s - m}{M - m}
@@ -1140,20 +613,20 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 	\end{equation}
 	という式で色値\(C\)を決定している。
 
- \item 84 〜 86 行目でパーティクル削除判定を行っている。
+ \item 67 〜 70 行目でパーティクル削除判定を行っている。
 	パーティクルが \(x = -50\) よりも左へ流れてしまった場合には
-	85 行目で削除を行っている。
+	69 行目で削除を行っている。
 
- \item 99,102 行目では、パーティクル集合を fk\_ShapeViewer で表示するために
-	SetShape() メソッドを用いている。それぞれを別 ID として登録することで、
-	2つの形状を同時に表示できる。
+ \item パーティクル集合を表示するには、89 行目にあるように
+	fk\_ParticleSet クラスの Shape プロパティを
+	fk\_Model の Shape プロパティに代入する必要がある。
 
- \item 108 行目にあるように、Handle() メソッドを用いることで
+ \item 136 行目にあるように、Handle() メソッドを用いることで
 	パーティクル全体に 1 ステップ処理が行われる。その際には、設定した
 	速度や加速度にしたがって各パーティクルが移動する。特に再設定
 	しない限り、加速度は処理終了後も保存される。
 	今回のプログラムではパーティクルの加速度は一切設定していないため、
-	IndivMethod() メソッド内の 72 行目の速度設定のみが
+	IndivMethod() メソッド内の 55 行目の速度設定のみが
 	パーティクルの動作を決定する要因となる。
 
 \end{itemize}
@@ -1162,380 +635,299 @@ fk\_ParticleSet クラスは、これまで紹介したクラスとはやや利�
 \begin{small}
 \begin{verbatim}
   1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using FK_CLI;
-  7: 
-  8: namespace FK_CLI_Particle
-  9: {
- 10:     class MyParticle : fk_ParticleSet {
- 11:         private Random rand;
- 12:         private fk_Color red, blue;
- 13:         private double maxSpeed, minSpeed;
+  2: using FK_CLI;
+  3: 
+  4: namespace FK_CLI_Particle
+  5: {
+  6:     class Program
+  7:     {
+  8:         static fk_ParticleSet ParticleSetup()
+  9:         {
+ 10:             var particle = new fk_ParticleSet();
+ 11:             particle.MaxSize = 1000; // パーティクル最大数
+ 12:             particle.AllMode = true; // AllMethod() の有効化
+ 13:             particle.IndivMode = true; // IndivMethod() の有効化
  14: 
- 15:         // コンストラクタ。
- 16:         // ここに様々な初期設定を記述しておく。
- 17:         public MyParticle()
- 18:         {
- 19:             MaxSize = 1000;                      // パーティクルの最大数設定
- 20:             IndivMode = true;                    // 個別処理 (IndivMethod) を有効にしておく。
- 21:             AllMode = true;                      // 全体処理 (AllMethod) を有効にしておく。
- 22:             for(int i = 0; i < MaxSize; i++) {
- 23:                 // 各パーティクルごとの初期色を設定
- 24:                 SetColorPalette(i, 0.0, 1.0, 0.6);
- 25:             }
- 26:             rand = new Random();                 // 乱数発生器の初期化
- 27:             red = new fk_Color(1.0, 0.0, 0.0);
- 28:             blue = new fk_Color(0.0, 0.0, 0.5);
- 29:             maxSpeed = 0.3;                      // これより速いパーティクルは全て赤
- 30:             minSpeed = 0.1;                      // これより遅いパーティクルは全て青
- 31:         }
- 32:         
- 33:         // ここにパーティクル生成時の処理を記述する。
- 34:         // 引数 P には新たなパーティクルインスタンスが入る。
- 35:         public override void GenMethod(fk_Particle P)
- 36:         {
- 37:             // 生成時の位置を(ランダムに)設定
- 38:             double y = rand.NextDouble()*50.0 - 25.0;
- 39:             double z = rand.NextDouble()*50.0 - 25.0;
- 40:             P.Position = new fk_Vector(50.0, y, z);
- 41: 
- 42:             // パーティクルの色IDを設定
- 43:             P.ColorID = P.ID;
- 44:         }
+ 15:             // パーティクル生成時処理をラムダ式で設定
+ 16:             particle.GenMethod = (P) =>
+ 17:             {
+ 18:                 // 生成時の位置を(ランダムに)設定
+ 19:                 double y = fk_Math.DRand(-25.0, 25.0);
+ 20:                 double z = fk_Math.DRand(-25.0, 25.0);
+ 21:                 P.Position = new fk_Vector(50.0, y, z);
+ 22:             };
+ 23: 
+ 24:             // パーティクル全体処理をラムダ式で設定
+ 25:             particle.AllMethod = () =>
+ 26:             {
+ 27:                 for (int i = 0; i < 5; i++)
+ 28:                 {
+ 29:                     if (fk_Math.DRand() < 0.3)
+ 30:                     {   // 発生確率は 30% (を5回)
+ 31:                         particle.NewParticle();              // パーティクル生成処理
+ 32:                     }
+ 33:                 }
+ 34:             };
+ 35: 
+ 36:             // パーティクル個別処理をラムダ式で設定
+ 37:             particle.IndivMethod = (P) =>
+ 38:             {
+ 39:                 fk_Vector pos, vec, tmp1, tmp2;
+ 40:                 var water = new fk_Vector(-0.5, 0.0, 0.0);
+ 41:                 double R = 15.0;
+ 42:                 double minSpeed = 0.3;
+ 43:                 double maxSpeed = 0.6;
+ 44:                 double r;
  45: 
- 46:         // ここの毎ループ時の全体処理を記述する。
- 47:         public override void AllMethod()
- 48:         {
- 49:             for(int i = 0; i < 5; i++) {
- 50:                 if(rand.NextDouble() < 0.3) {   // 発生確率は 30% (を5回)
- 51:                     NewParticle();              // パーティクル生成処理
- 52:                 }
- 53:             }
- 54:         }
- 55: 
- 56:         // ここに毎ループ時のパーティクル個別処理を記述する。
- 57:         public override void IndivMethod(fk_Particle P)
- 58:         {
- 59:             fk_Vector pos, vec, tmp1, tmp2;
- 60:             var water = new fk_Vector(-0.2, 0.0, 0.0);
- 61:             double R = 15.0;
- 62:             double r;
- 63: 
- 64:             pos = P.Position;        // パーティクル位置取得。
- 65:             pos.z = 0.0;
- 66:             r = pos.Dist();          // |p| を r に代入。
- 67: 
- 68:             // パーティクルの速度ベクトルを計算
- 69:             tmp1 = water/(r*r*r);
- 70:             tmp2 = ((3.0 * (water * pos))/(r*r*r*r*r)) * pos;
- 71:             vec = water + ((R*R*R)/2.0) * (tmp1 - tmp2);
- 72:             P.Velocity = vec;
- 73: 
- 74:             // パーティクルの色を計算。パーティクル速度が
- 75:             // minSpeed ～ maxSpeed の場合は青と赤をブレンドする。
- 76:             double speed = vec.Dist();
- 77:             double t = (speed - minSpeed)/(maxSpeed - minSpeed);
- 78:             if(t > 1.0) t = 1.0;
- 79:             if(t < 0.0) t = 0.0;
- 80:             fk_Color newCol = (1.0 - t)*blue + t*red;  // 色値の線形補間
- 81:             SetColorPalette(P.ID, newCol);
- 82: 
- 83:             // パーティクルの x 成分が -50 以下になったら消去
- 84:             if(pos.x < -50.0) {
- 85:                 RemoveParticle(P);
- 86:             }
- 87:         } 
- 88:     }           
- 89: 
- 90: 
- 91:     class Program
- 92:     {
- 93:         static void Main(string[] args)
- 94:         {
- 95:             fk_ShapeViewer viewer = new fk_ShapeViewer(600, 600);
- 96:             MyParticle particle = new MyParticle();
- 97:             fk_Prism prism = new fk_Prism(40, 15.0, 15.0, 50.0);
- 98: 
- 99:             viewer.SetShape(1, prism);
-100:             viewer.SetPosition(1, 0.0, 0.0, 25.0);
-101:             viewer.SetDrawMode(1, fk_DrawMode.POLYMODE);
-102:             viewer.SetShape(2, particle.Shape);
-103:             viewer.SetDrawMode(2, fk_DrawMode.POINTMODE);
-104:             viewer.Scale = 10.0;
-105:  
-106:             while(viewer.Draw() == true) {
-107:                 for(int i = 0; i < 3; ++i) { // 3倍速再生
-108:                     particle.Handle(); // パーティクルを 1 ステップ実行する。
-109:                 }
-110:             }
-111: 
+ 46:                 //Console.WriteLine("count A {0}", P.ID);
+ 47:                 pos = P.Position;        // パーティクル位置取得。
+ 48:                 pos.z = 0.0;
+ 49:                 r = pos.Dist();          // |p| を r に代入。
+ 50: 
+ 51:                 // パーティクルの速度ベクトルを計算
+ 52:                 tmp1 = water / (r * r * r);
+ 53:                 tmp2 = ((3.0 * (water * pos)) / (r * r * r * r * r)) * pos;
+ 54:                 vec = water + ((R * R * R) / 2.0) * (tmp1 - tmp2);
+ 55:                 P.Velocity = vec;
+ 56: 
+ 57:                 // パーティクルの色を計算
+ 58:                 double speed = vec.Dist();
+ 59:                 double s = (speed - minSpeed) / (maxSpeed - minSpeed);
+ 60:                 double t = Math.Min(1.0, Math.Max(0.0, s));
+ 61:                 double h = Math.PI * (4.0 + 2.0 * t)/3.0;
+ 62:                 var col = new fk_Color();
+ 63:                 col.SetHSV(h, 1.0, 1.0);
+ 64:                 P.Color = col;
+ 65: 
+ 66:                 // パーティクルの x 成分が -50 以下になったら消去
+ 67:                 if (pos.x < -50.0)
+ 68:                 {
+ 69:                     particle.RemoveParticle(P);
+ 70:                 }
+ 71:             };
+ 72: 
+ 73:             // Main() にインスタンスを返す。
+ 74:             return particle;
+ 75:         }
+ 76: 
+ 77:         static fk_AppWindow WindowSetup()
+ 78:         {
+ 79:             var window = new fk_AppWindow();
+ 80:             window.Size = new fk_Dimension(800, 800);
+ 81:             window.BGColor = new fk_Color(0.0, 0.0, 0.0);
+ 82:             window.TrackBallMode = true;
+ 83:             return window;
+ 84:         }
+ 85: 
+ 86:         static void ParticleModelSetup(fk_ParticleSet argParticle, fk_AppWindow argWindow)
+ 87:         {
+ 88:             var model = new fk_Model();
+ 89:             model.Shape = argParticle.Shape;
+ 90:             model.DrawMode = fk_Draw.POINT;
+ 91: 
+ 92:             // パーティクルごとに色を変えたい場合の設定
+ 93:             model.ElementMode = fk_ElementMode.ELEMENT;
+ 94: 
+ 95:             // パーティクル描画の際の大きさ (ピクセル)
+ 96:             model.PointSize = 5.0;
+ 97: 
+ 98:             argWindow.Entry(model);
+ 99:         }
+100: 
+101:         static void PrismSetup(fk_AppWindow argWindow)
+102:         {
+103:             var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
+104:             var prismModel = new fk_Model();
+105:             prismModel.Shape = prism;
+106:             prismModel.GlMoveTo(0.0, 0.0, 25.0);
+107:             prismModel.DrawMode = fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT;
+108:             prismModel.Material = fk_Material.Yellow;
+109:             prismModel.LineColor = new fk_Color(0.0, 0.0, 1.0);
+110:             prismModel.PointColor = new fk_Color(0.0, 1.0, 0.0);
+111:             argWindow.Entry(prismModel);
 112:         }
-113:     }
-114: }
+113: 
+114:         static void Main(string[] args)
+115:         {
+116:             fk_Material.InitDefault();
+117: 
+118:             // パーティクルセットの生成
+119:             var particle = ParticleSetup();
+120: 
+121:             // ウィンドウ設定
+122:             var window = WindowSetup();
+123: 
+124:             // パーティクルモデル設定
+125:             ParticleModelSetup(particle, window);
+126: 
+127:             // 内部円柱設定
+128:             PrismSetup(window);
+129: 
+130:             // ウィンドウ生成
+131:             window.Open();
+132: 
+133:             // メインループ
+134:             while (window.Update())
+135:             {
+136:                 particle.Handle(); // パーティクルを 1 ステップ実行する。
+137:             }
+138:         }
+139:     }
+140: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
 
-
-
 \section{音再生}
 
-FK では音再生用の機能として fk\_AudioWavBuffer, fk\_AudioOggBuffer, fk\_AudioStream の
-3種のクラスが用意されている。詳細はここでは解説しないが、fk\_AudioWavBuffer は WAV 形式の音データを、
-fk\_AudioOggBuffer と fk\_AudioStream は Ogg-Vorbis 形式の音データを入力できる。
-また、fk\_AudioWavBuffer と fk\_AudioOggBuffer は入力時にデータ全てをメモリ上に展開するのに対し、
-fk\_AudioStream はストリーミング再生を行う仕様となっている。
-サンプルプログラムでは、さらに「MyBGM」と「MySE」という2種のクラスを作成し、
-より容易に音再生処理を制御できるように工夫している。
+FK では音再生用のクラスとして幾つかのクラスが用意されているが、
+そのうちユーザーが簡易に用いることを想定したクラスは fk\_Sound, fk\_BGM の2つである。
 
-「MyBGM」クラスは BGM (Back Ground Music) を再生するためのクラスで、
-コンストラクタで BGM ファイルの指定、
-Start() で再生開始、Gain プロパティで音量制御というシンプルなものとなっている。
+fk\_BGM クラスは音楽 (Back Ground Music) を再生するためのクラスで、
+基本的な利用はまずコンストラクタで BGM ファイルを指定し、
+その後 Start() で再生開始、Gain プロパティで音量制御というシンプルなものとなっている。
 
-「MySE」は効果音(Sound Effect, 以下「SE」)を再生するためのものである。
+fk\_Sound は効果音(Sound Effect, 以下「SE」)を再生するためのものである。
 SE は BGM とは異なり任意のタイミングで再生が開始となること、
 複数の SE が同時に発生することがあること、リピート再生が行われないことなどの
-差異があるため、BGM とは別クラスとして作成してある。
+差異があるため、BGM とは別クラスとなっている。
 このクラスの機能としては、コンストラクタで入力する SE のファイル数、
 LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始というものとなっている。
 
-近年のリアルタイム 3DCG と音を同時に扱うプログラムでは、
-音再生の安定性を向上するため、音再生処理はメインループとは別のスレッドにして、
-マルチスレッドプログラムによって制御することが多い。
-今回紹介するプログラムも、C\# でマルチスレッドを行うための仕組みの一つである
-「Task」という仕組みを利用している。Task に関する解説はここでは割愛するが、
-このサンプルにある機能で十分な場合はこれをコピーして利用しても差し支えない。
-また、より高機能を必要とする場合は MyBGM や MySE クラスをさらに拡張して用いるとよいだろう。
+両クラスとも、使用終了時やプログラムの終了時には「StopStatus」プロパティに
+true を代入する必要がある。これを行わないと、プログラムが正常に終了しない可能性があるので
+注意すること。
 \\ ~
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
   1: using System;
-  2: using System.Collections.Generic;
-  3: using System.Linq;
-  4: using System.Text;
-  5: using System.Threading.Tasks;
-  6: using System.Threading;
-  7: using FK_CLI;
-  8: 
-  9: namespace FK_CLI_Audio
- 10: {
- 11:     // BGM用クラス
- 12:     class MyBGM : IDisposable
- 13:     {
- 14:         public bool EndStatus { get; set; } // 終了指示用プロパティ
- 15:         private fk_AudioStream bgm;
- 16:         private bool openStatus;
- 17: 
- 18:         // コンストラクタ 引数は音源ファイル名 (Ogg 形式)
- 19:         public MyBGM(string argFileName)
- 20:         {
- 21:             EndStatus = false;
- 22:             bgm = new fk_AudioStream();
- 23:             openStatus = bgm.Open(argFileName);
- 24:             if(openStatus == false)
- 25:             {
- 26:                 Console.WriteLine("Audio File Open Error.");
- 27:             }
- 28:         }
- 29: 
- 30:         // BGM再生処理
- 31:         public void Start()
- 32:         {
- 33:             if(openStatus == false) return;
- 34:             bgm.LoopMode = true;
- 35:             bgm.Gain = 0.5;
- 36:             while(EndStatus == false)
- 37:             {
- 38:                 bgm.Play();
- 39:                 Thread.Sleep(50);
- 40:             }
- 41:         }
- 42: 
- 43:         // 音量用プロパティ
- 44:         public double Gain
- 45:         {
- 46:             set
- 47:             {
- 48:                 bgm.Gain = value;
- 49:             }
- 50:         }
- 51: 
- 52:         // スレッド終了時処理
- 53:         public void Dispose()
- 54:         {
- 55:             bgm.Dispose();
- 56:         }
- 57:     }
- 58: 
- 59:     // Sound Effect (SE) 用クラス
- 60:     class MySE : IDisposable
- 61:     {
- 62:         public bool EndStatus { get; set; } // 終了指示用プロパティ
- 63:         private fk_AudioWavBuffer [] se;
- 64:         private bool [] openStatus;
- 65:         private bool [] playStatus;
- 66: 
- 67:         // コンストラクタ 引数は音源の個数
- 68:         public MySE(int argNum)
- 69:         {
- 70:             EndStatus = false;
- 71:             if(argNum < 1) return;
- 72:             se = new fk_AudioWavBuffer [argNum];
- 73:             openStatus = new bool [argNum];
- 74:             playStatus = new bool [argNum];
- 75: 
- 76:             for(int i = 0; i < argNum; i++)
- 77:             {
- 78:                 se[i] = new fk_AudioWavBuffer();
- 79:                 openStatus[i] = false;
- 80:                 playStatus[i] = false;
- 81:             }
- 82:         }
- 83: 
- 84:         // SE音源読み込みメソッド (WAV 形式)
- 85:         public bool LoadData(int argID, string argFileName)
- 86:         {
- 87:             if(argID < 0 || argID >= se.Length)
- 88:             {
- 89:                 return false;
- 90:             }
- 91: 
- 92:             openStatus[argID] = se[argID].Open(argFileName);
- 93:             if(openStatus[argID] == false)
- 94:             {
- 95:                 Console.WriteLine("Audio File ({0}) Open Error.", argFileName);
+  2: using FK_CLI;
+  3: 
+  4: namespace FK_CLI_Audio
+  5: {
+  6:     class Program
+  7:     {
+  8:         static void Main(string[] args)
+  9:         {
+ 10:             // マテリアル初期化
+ 11:             fk_Material.InitDefault();
+ 12: 
+ 13:             // ウィンドウの各種設定
+ 14:             var win = new fk_AppWindow();
+ 15:             WindowSetup(win);
+ 16: 
+ 17:             // 立方体の各種設定
+ 18:             var blockModel = new fk_Model();
+ 19:             BlockSetup(blockModel, win);
+ 20: 
+ 21:             // BGM用変数の作成
+ 22:             var bgm = new fk_BGM("epoq.ogg");
+ 23:             double volume = 0.5;
+ 24: 
+ 25:             // SE用変数の作成
+ 26:             var se = new fk_Sound(2);
+ 27:             // 音源読み込み (IDは0番)
+ 28:             se.LoadData(0, "MIDTOM2.wav");
+ 29:             // 音源読み込み (IDは1番)
+ 30:             se.LoadData(1, "SDCRKRM.wav");
+ 31: 
+ 32:             // ウィンドウ表示
+ 33:             win.Open();
+ 34: 
+ 35:             // BGM再生スタート
+ 36:             bgm.Start();
+ 37: 
+ 38:             // SE出力スタンバイ
+ 39:             se.Start();
+ 40: 
+ 41:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+ 42:             while (win.Update())
+ 43:             {
+ 44:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI / 360.0);
+ 45: 
+ 46:                 // volume値の変更
+ 47:                 volume = ChangeVolume(volume, win);
+ 48:                 bgm.Gain = volume;
+ 49: 
+ 50:                 // SE再生
+ 51:                 PlaySE(se, win);
+ 52:             }
+ 53: 
+ 54:             // BGM変数とSE変数に終了を指示
+ 55:             // (最後にこれをやらないといつまでも再生が止まらずプログラムが終了しません)
+ 56:             bgm.StopStatus = true;
+ 57:             se.StopStatus = true;
+ 58:         }
+ 59: 
+ 60:         // ウィンドウ設定メソッド
+ 61:         static void WindowSetup(fk_AppWindow argWin)
+ 62:         {
+ 63:             argWin.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
+ 64:             argWin.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
+ 65:             argWin.Size = new fk_Dimension(600, 600);
+ 66:             argWin.BGColor = new fk_Color(0.6, 0.7, 0.8);
+ 67:             argWin.ShowGuide(fk_Guide.GRID_XZ);
+ 68:             argWin.TrackBallMode = true;
+ 69:             argWin.FPS = 60;
+ 70:         }
+ 71: 
+ 72:         // 立方体モデル設定メソッド
+ 73:         static void BlockSetup(fk_Model argModel, fk_AppWindow argWin)
+ 74:         {
+ 75:             // 立方体の各種設定
+ 76:             var block = new fk_Block(1.0, 1.0, 1.0);
+ 77:             argModel.Shape = block;
+ 78:             argModel.GlMoveTo(3.0, 3.0, 0.0);
+ 79:             argModel.Material = fk_Material.Yellow;
+ 80:             argWin.Entry(argModel);
+ 81:         }
+ 82: 
+ 83:         // 音量調整メソッド
+ 84:         static double ChangeVolume(double argVol, fk_AppWindow argWin)
+ 85:         {
+ 86:             double tmpV = argVol;
+ 87: 
+ 88:             // 上矢印キーで BGM 音量アップ
+ 89:             if (argWin.GetSpecialKeyStatus(fk_Key.UP, fk_Switch.DOWN) == true)
+ 90:             {
+ 91:                 tmpV += 0.1;
+ 92:                 if (tmpV > 1.0)
+ 93:                 {
+ 94:                     tmpV = 1.0;
+ 95:                 }
  96:             }
- 97:             se[argID].LoopMode = false;
- 98:             se[argID].Gain = 0.5;
- 99:             return true;
-100:         }
-101: 
-102:         // SE開始メソッド
-103:         public void StartSE(int argID)
-104:         {
-105:             if(argID < 0 || argID >= se.Length) return;
-106:             playStatus[argID] = true;
-107:             se[argID].Seek(0.0);
+ 97: 
+ 98:             // 下矢印キーで BGM 音量ダウン
+ 99:             if (argWin.GetSpecialKeyStatus(fk_Key.DOWN, fk_Switch.DOWN) == true)
+100:             {
+101:                 tmpV -= 0.1;
+102:                 if (tmpV < 0.0)
+103:                 {
+104:                     tmpV = 0.0;
+105:                 }
+106:             }
+107:             return tmpV;
 108:         }
 109: 
-110:         // SE再生処理
-111:         public void Start()
+110:         // SE再生(トリガー)メソッド
+111:         static void PlaySE(fk_Sound argSE, fk_AppWindow argWin)
 112:         {
-113:             int i;
-114: 
-115:             for(i = 0; i < se.Length; i++)
-116:             {
-117:                 if(openStatus[i] == false) return;
-118:             }
-119: 
-120:             while(EndStatus == false)
+113:             // Z キーで 0 番の SE を再生開始
+114:             if (argWin.GetKeyStatus('Z', fk_Switch.DOWN) == true)
+115:             {
+116:                 argSE.StartSound(0);
+117:             }
+118: 
+119:             // X キーで 1 番の SE を再生開始
+120:             if (argWin.GetKeyStatus('X', fk_Switch.DOWN) == true)
 121:             {
-122:                 for(i = 0; i < se.Length; i++)
-123:                 {
-124:                     if(playStatus[i] == true)
-125:                     {
-126:                         playStatus[i] = se[i].Play();
-127:                     }
-128:                 }
-129:                 Thread.Sleep(10);
-130:             }
-131:         }
-132: 
-133:         // スレッド終了時処理
-134:         public void Dispose()
-135:         {
-136:             for(int i = 0; i < se.Length; i++)
-137:             {
-138:                 se[i].Dispose();
-139:             }
-140:         }
-141:     }
-142: 
-143:     class Program
-144:     {
-145:         static void Main(string[] args)
-146:         {
-147:             // 組込マテリアル初期化
-148:             fk_Material.InitDefault();          
-149: 
-150:             // ウィンドウの各種設定
-151:             var win = new fk_AppWindow();
-152:             win.CameraPos = new fk_Vector(0.0, 1.0, 20.0);
-153:             win.CameraFocus = new fk_Vector(0.0, 1.0, 0.0);
-154:             win.Size = new fk_Dimension(600, 600);
-155:             win.BGColor = new fk_Color(0.6, 0.7, 0.8);
-156:             win.ShowGuide(fk_GuideMode.GRID_XZ);
-157: 
-158:             // 立方体の各種設定
-159:             var block = new fk_Block(1.0, 1.0, 1.0);
-160:             var blockModel = new fk_Model();
-161:             blockModel.Shape = block;
-162:             blockModel.GlMoveTo(3.0, 3.0, 0.0);
-163:             blockModel.Material = fk_Material.Yellow;
-164:             win.Entry(blockModel);
-165: 
-166:             // BGMの各種設定
-167:             var bgm = new MyBGM("epoq.ogg");
-168:             var bgmTask = new Task(bgm.Start);
-169:             double volume = 0.5;
-170:             
-171:             // SEの各種設定
-172:             var se = new MySE(2);
-173:             var seTask = new Task(se.Start);
-174:             se.LoadData(0, "MIDTOM2.wav");
-175:             se.LoadData(1, "SDCRKRM.wav");
-176: 
-177:             win.Open();
-178:             bgmTask.Start(); // BGM スレッド開始
-179:             seTask.Start();  // SE スレッド開始
-180: 
-181:             var origin = new fk_Vector(0.0, 0.0, 0.0);
-182: 
-183:             while(win.Update())
-184:             {
-185:                 blockModel.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
-186: 
-187:                 // 上矢印キーで BGM 音量アップ
-188:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.UP, fk_SwitchStatus.DOWN) == true)
-189:                 {
-190:                     if(volume < 1.0) volume += 0.1;
-191:                 }
-192: 
-193:                 // 下矢印キーで BGM 音量ダウン
-194:                 if(win.GetSpecialKeyStatus(fk_SpecialKey.DOWN, fk_SwitchStatus.DOWN) == true)
-195:                 {
-196:                     if(volume > 0.0) volume -= 0.1;
-197:                 }
-198: 
-199:                 // Z キーで 0 番の SE を再生開始
-200:                 if(win.GetKeyStatus('Z', fk_SwitchStatus.DOWN) == true)
-201:                 {
-202:                     se.StartSE(0);
-203:                 }
-204: 
-205:                 // X キーで 1 番の SE を再生開始
-206:                 if(win.GetKeyStatus('X', fk_SwitchStatus.DOWN) == true)
-207:                 {
-208:                     se.StartSE(1);
-209:                 }
-210: 
-211:                 bgm.Gain = volume;
-212:             }
-213: 
-214:             // BGM 変数と SE 変数に終了を指示
-215:             bgm.EndStatus = true;
-216:             se.EndStatus = true;
-217: 
-218:             // BGM, SE 両スレッドが終了するまで待機
-219:             Task.WaitAll(new[] { bgmTask, seTask });
-220:         }
-221:     }
-222: }
+122:                 argSE.StartSound(1);
+123:             }
+124:         }
+125:     }
+126: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
@@ -1545,90 +937,106 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 文字列表示のサンプルを示す。ここではフォントファイルとして
 「rm1b.ttf」というファイル名のフォントデータを利用している。
 これはビルド時に生成される exe ファイルと同一の場所に置かれている必要がある。
+フォントを設定するには 23 行目にあるように InitFont() メソッドを用いる。
 
-29,30 行目で Text プロパティに様々な設定を行っているが、
+31, 34 行目で Text プロパティに様々な設定を行っているが、
 この Text プロパティは fk\_TextImage 型であり、fk\_TextImage が持つ様々な設定を
 変更することで色やフォントサイズなど、様々な設定を変更することができる。
+詳細はリファレンスマニュアルのクラスの説明を参照のこと。
 
-55行目の SetPositionLT() メソッドは表示位置を指定するものである。
-文字列設定の度に位置の再設定を行っている理由は、
-文字列を表すテクスチャ画像の幅が変更されたときに再設定を行わないと、
+28 行目の SetPositionLT() メソッドは表示位置を指定するものである。
+この SetPositionLT() は 64 行目でもメインループの度に位置の再設定を行っているが、
+その理由は文字列を表すテクスチャ画像の幅が変更されたときに再設定を行わないと、
 表示位置がずれてしまうためである。
 表示文字列が変更されていない場合や、
 文字列テクスチャの幅が変わっていないことが保証されている場合は、
-このメソッドを呼ぶ必要はない。\\ ~
+メインループ中にこのメソッドを呼ぶ必要はない。
+実際、今回のサンプルでは(等幅設定を行い、描画文字数が変化しないことから)
+文字盤の画像幅は終始変動しないため、
+64 行目をコメントアウトしても正常に動作するが、
+等幅設定を用いない場合などは文字列の変更の際に幅変動も伴うので、
+このメソッドを呼ばないと表示が適切になされない場合がある。
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
  1: using System;
- 2: using System.Collections.Generic;
- 3: using System.Linq;
- 4: using System.Text;
- 5: using System.Threading.Tasks;
- 6: using FK_CLI;
- 7: 
- 8: namespace FK_CLI_Sprite
- 9: {
-10:     class Program
-11:     {
-12:         static void Main(string[] args)
-13:         {
-14:             fk_Material.InitDefault();
+ 2: using FK_CLI;
+ 3: 
+ 4: namespace FK_CLI_Sprite
+ 5: {
+ 6:     class Program
+ 7:     {
+ 8:         static void Main(string[] args)
+ 9:         {
+10:             var window = new fk_AppWindow();
+11:             fk_Material.InitDefault();
+12:             
+13:             // 文字盤用変数の生成
+14:             var sprite = new fk_SpriteModel();
 15: 
-16:             // 各種変数生成
-17:             var window = new fk_AppWindow();
-18:             var sprite = new fk_SpriteModel();
-19:             var block = new fk_Block(1.0, 1.0, 1.0);
-20:             var model = new fk_Model();
-21:             var origin = new fk_Vector(0.0, 0.0, 0.0);
-22: 
-23:             // フォントデータ入力
-24:             if(sprite.InitFont("rm1b.ttf") == false) {
-25:                 Console.WriteLine("Font Error");
-26:             }
-27: 
-28:             // フォント設定
-29:             sprite.Text.MonospaceMode = true;
-30:             sprite.Text.MonospaceSize = 12;
-31:             window.Entry(sprite);
+16:             var block = new fk_Block(1.0, 1.0, 1.0);
+17:             var model = new fk_Model();
+18:             var origin = new fk_Vector(0.0, 0.0, 0.0);
+19:             int count;
+20:             string str, space;
+21:  
+22:             // 文字盤に対するフォントの読み込み
+23:             if(sprite.InitFont("rm1b.ttf") == false) {
+24:                 Console.WriteLine("Font Error");
+25:             }
+26: 
+27:             // 文字盤の表示位置設定
+28:             sprite.SetPositionLT(-330.0, 240.0);
+29: 
+30:             // 文字盤のフォントを等幅に設定
+31:             sprite.Text.MonospaceMode = true;
 32: 
-33:             // 立方体設定
-34:             model.Shape = block;
-35:             model.GlMoveTo(0.0, 6.0, 0.0);
-36:             model.Material = fk_Material.Yellow;
-37:             window.Entry(model);
-38: 
-39:             // ウィンドウ設定
-40:             window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
-41:             window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
-42:             window.Size = new fk_Dimension(800, 600);
-43:             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
-44:             window.ShowGuide(fk_GuideMode.GRID_XZ);
-45:             window.Open();
-46:  
-47:             for(int count = 0;  window.Update() == true; count++) {
-48:                 // 文字列生成
-49:                 string str = "count = " + count.ToString();
-50: 
-51:                 // 文字列をスプライトに設定
-52:                 sprite.DrawText(str, true);
-53: 
-54:                 // スプライト配置設定
-55:                 sprite.SetPositionLT(-240.0, 230.0);
+33:             // 文字盤の(等幅)サイズを設定
+34:             sprite.Text.MonospaceSize = 12;
+35:             window.Entry(sprite);
+36:  
+37:             model.Shape = block;
+38:             model.GlMoveTo(0.0, 6.0, 0.0);
+39:             model.Material = fk_Material.Yellow;
+40:             window.Entry(model);
+41:             window.CameraPos = new fk_Vector(0.0, 5.0, 20.0);
+42:             window.CameraFocus = new fk_Vector(0.0, 5.0, 0.0);
+43:             window.Size = new fk_Dimension(800, 600);
+44:             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
+45:             window.TrackBallMode = true;
+46:             window.Open();
+47:             window.ShowGuide(fk_Guide.GRID_XZ);
+48:  
+49:             count = 0;
+50:             while(window.Update() == true) {
+51:                 // 数値の桁数によりスペースの個数を調整
+52:                 if (count < 10) space = "   ";
+53:                 else if(count < 100) space = "  ";
+54:                 else if(count < 1000) space = " ";
+55:                 else space = "";
 56: 
-57:                 // 立方体を回転させる
-58:                 model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
-59:             }
-60:         }
-61:     }
-62: }
+57:                 // 「count = 数値」の文字列を生成
+58:                 str = "count = " + space + count.ToString();
+59: 
+60:                 // 文字列を文字盤に入力
+61:                 sprite.DrawText(str, true);
+62: 
+63:                 // 文字盤表示位置の再設定
+64:                 sprite.SetPositionLT(-330.0, 240.0);
+65: 
+66:                 model.GlRotateWithVec(origin, fk_Axis.Y, Math.PI/360.0);
+67:                 count++;
+68:             }
+69:         }
+70:     }
+71: }
 \end{verbatim}
 \end{small}
 \end{breakbox}
 
 \section{四元数}
-この節では、第\ref{sec:quaternion}節で紹介した四元数を用いて、
+この節では、第\ref{sec:quaternion}節で紹介した四元数(クォータニオン)を用いて、
 姿勢補間を行うサンプルプログラムを示す。
 3DCGのプログラミングでは、ベクトル、行列、オイラー角、四元数といった多くの
 代数要素を扱う必要があるが、このサンプルプログラムはそれらの利用方法を
@@ -1638,83 +1046,78 @@ LoadData() で SE ファイルの指定、StartSE() で各 SE の再生開始と
 四元数の成分を直接扱うことは現実的ではなく、
 通常はオイラー角を介して制御を行う。
 このサンプルプログラムでも、まず2種類の姿勢を angle1, angle2 という変数で
-設定(24,25行目)してから、それを四元数に変換(52,53行目)している。
-そして、59行目で球面線形補間を行った四元数を算出し、
-それを62行目でモデルの姿勢として設定している。\\ ~
+設定(18,19行目)してから、それを四元数に変換(45,46行目)している。
+そして、52行目で球面線形補間を行った四元数を算出し、
+それを55行目でモデルの姿勢として設定している。\\ ~
 
 \begin{breakbox}
 \begin{small}
 \begin{verbatim}
  1: using System;
- 2: using System.Collections.Generic;
- 3: using System.Linq;
- 4: using System.Text;
- 5: using System.Threading.Tasks;
- 6: using FK_CLI;
- 7: 
- 8: namespace FK_CLI_Quaternion
- 9: {
-10:     class Program
-11:     {
-12:         static void Main(string[] args)
-13:         {
-14:             // 各種変数生成
-15:             fk_Material.InitDefault();
-16:             var win = new fk_AppWindow();
-17:             var model = new fk_Model();
-18:             var pointM = new fk_Model();
-19:             var cone = new fk_Cone(3, 4.0, 15.0);
-20:             var pos = new fk_Vector(0.0, 0.0, -15.0);
-21:             var poly = new fk_Polyline();
-22: 
-23:             // オイラー角の初期値設定
-24:             var angle1 = new fk_Angle(0.0, 0.0, 0.0);
-25:             var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
-26: 
-27:             // 四元数変数作成
-28:             var q1 = new fk_Quaternion();
-29:             var q2 = new fk_Quaternion();
-30:             fk_Quaternion q;
-31: 
-32:             // 三角錐モデルの設定
-33:             model.Shape = cone;
-34:             model.Material = fk_Material.Yellow;
-35:             model.GlAngle(angle1);
-36: 
-37:             // 軌跡用ポリラインモデルの設定
-38:             pointM.Shape = poly;
-39:             pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
-40: 
-41:             // ウィンドウ設定
-42:             win.Size = new fk_Dimension(500, 500);
-43:             win.BGColor = new fk_Color(0.3, 0.4, 0.5);
-44:             win.Entry(model);
-45:             win.Entry(pointM);
-46:             win.TrackBallMode = true;
-47:             win.ShowGuide();
-48: 
-49:             win.Open();
-50: 
-51:             // オイラー角の初期値を四元数に設定
-52:             q1.Euler = angle1;
-53:             q2.Euler = angle2;
-54: 
-55:             for(int i = 0;  win.Update() == true; i++) {
-56:                 double t = i / 200.0;
-57:                 if(t < 1.0) {
-58:                     // パラメータ t で球面線形補間
-59:                     q = fk_Math.QuatInterSphere(q1, q2, t);
-60: 
-61:                     // q をモデルの姿勢(オイラー角)に変換
-62:                     model.GlAngle(q.Euler);
-63: 
-64:                     // 軌跡用に点を追加
-65:                     poly.PushVertex(model.Matrix * pos);
-66:                 }
-67:             }
-68:         }
-69:     }
-70: }
+ 2: using FK_CLI;
+ 3: 
+ 4: namespace FK_CLI_Quaternion
+ 5: {
+ 6:     class Program
+ 7:     {
+ 8:         static void Main(string[] args)
+ 9:         {
+10:             var win = new fk_AppWindow();
+11:             win.Size = new fk_Dimension(800, 800);
+12:             var model = new fk_Model();
+13:             var pointM = new fk_Model();
+14:             var cone = new fk_Cone(3, 4.0, 15.0);
+15:             var pos = new fk_Vector(0.0, 0.0, -15.0);
+16: 
+17:             // オイラー角用変数の生成
+18:             var angle1 = new fk_Angle(0.0, 0.0, 0.0);
+19:             var angle2 = new fk_Angle(Math.PI/2.0, Math.PI/2.0 - 0.01, 0.0);
+20: 
+21:             // 四元数用変数の生成
+22:             var q1 = new fk_Quaternion();
+23:             var q2 = new fk_Quaternion();
+24:             fk_Quaternion q;
+25: 
+26:             // 角錐頂点の軌跡用
+27:             var point = new fk_Polyline();
+28: 
+29:             fk_Material.InitDefault();
+30: 
+31:             model.Shape = cone;
+32:             model.Material = fk_Material.Yellow;
+33:             model.GlAngle(angle1); // モデルのオイラー角を (0, 0, 0) に
+34: 
+35:             pointM.Shape = point;
+36:             pointM.LineColor = new fk_Color(1.0, 0.0, 0.0);
+37: 
+38:             win.BGColor = new fk_Color(0.7, 0.8, 0.9);
+39:             win.Entry(model);
+40:             win.Entry(pointM);
+41:             win.TrackBallMode = true;
+42:             win.ShowGuide();
+43:             win.Open();
+44: 
+45:             q1.Euler = angle1; // q1 にオイラー角 (0, 0, 0) を意味する四元数を設定
+46:             q2.Euler = angle2; // q2 にオイラー角 (π/2, π/2-0.01, 0) を意味する四元数を設定
+47: 
+48:             double t = 0.0;
+49: 
+50:             while(win.Update() == true) {
+51:                 // q に q1 と q2 を球面補間した値を設定
+52:                 q = fk_Math.QuatInterSphere(q1, q2, t);
+53: 
+54:                 // モデルの姿勢を q に設定
+55:                 model.GlAngle(q.Euler);
+56: 
+57:                 // 頂点軌跡の追加
+58:                 if(t < 1.0) {
+59:                     point.PushVertex(model.Matrix * pos);
+60:                     t += 0.005;
+61:                 }
+62:             }
+63:         }
+64:     }
+65: }
 \end{verbatim}
 \end{small}
 \end{breakbox}

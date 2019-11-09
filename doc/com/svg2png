@@ -4,27 +4,30 @@ use Getopt::Std;
 
 %opts = ();
 
-getopts ("ir", \%opts);
+getopts ("i:r", \%opts);
 
 foreach $svgName (@ARGV) {
 	next if $svgName !~ /.svg$/;
 	$pngName = $svgName;
 	$pngName =~ s/.svg$/.png/;
 
-	if($opts{"i"} == 1) {
-	    $com = "inkscape --export-area-drawing --export-dpi=144 --file=";
-	    $com .= $svgName;
-	    $com .= " --export-png=";
-	    $com .= $pngName;
+	if(exists $opts{"r"}) {
+		$com = "rsvg-convert ";
+		$com .= $svgName;
+		$com .= " -z 0.8 --format=png -o ";
+		$com .= $pngName;
 	} else {
-	    $com = "convert -trim -density 600 -resize 1024x ";
-	    $com .= $svgName;
-	    $com .= " ";
-	    $com .= $pngName;
+		$com = "inkscape --export-area-drawing --file=";
+		$com .= $svgName;
+		$com .= " --export-png=";
+		$com .= $pngName;
+		if(exists $opts{"i"}) {
+			$com .= " --export-dpi=";
+			$com .= $opts{"i"};
+		}
 	}
-	if(!(-f $pngName)) {
-		system($com);
-	}	
+		
+	system($com);
 }
 
 0;

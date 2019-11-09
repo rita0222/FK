@@ -1,6 +1,8 @@
 #! /usr/bin/env perl
 
 use Getopt::Std;
+use Cwd 'getcwd';
+my $cur_dir = getcwd . '/';
 
 %opts = ();
 
@@ -13,14 +15,14 @@ foreach $svgName (@ARGV) {
 
 	if($opts{"i"} == 1) {
 	    $com = "inkscape --file=";
-	    $com .= $svgName;
+	    $com .= $cur_dir . $svgName;
 	    $com .= " --export-eps=";
-	    $com .= $epsName;
+	    $com .= $cur_dir . $epsName;
 	} else {
 	    $com = "rsvg-convert ";
-	    $com .= $svgName;
+	    $com .= $cur_dir . $svgName;
 	    $com .= " -z 0.8 --format=ps -o ";
-	    $com .= $epsName;
+	    $com .= $cur_dir .  $epsName;
 	}
 
 	if(!(-f $epsName)) {

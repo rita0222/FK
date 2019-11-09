@@ -5,17 +5,14 @@ namespace FK_CLI_Particle
 {
 	class Program
 	{
-		static void Main(string[] args)
-		{
-			var viewer = new fk_ShapeViewer(600, 600);
-			var particle = new fk_ParticleSet();
-			var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
+        static fk_ParticleSet ParticleSetup()
+        {
+            var particle = new fk_ParticleSet();
+            particle.MaxSize = 1000; // パーティクル最大数
+            particle.AllMode = true; // AllMethod() の有効化
+            particle.IndivMode = true; // IndivMethod() の有効化
 
-            particle.MaxSize = 1000;
-            particle.AllMode = true;
-            particle.IndivMode = true;
-            int num = 0;
-
+            // パーティクル生成時処理をラムダ式で設定
             particle.GenMethod = (P) =>
             {
                 // 生成時の位置を(ランダムに)設定
@@ -24,18 +21,19 @@ namespace FK_CLI_Particle
                 P.Position = new fk_Vector(50.0, y, z);
             };
 
+            // パーティクル全体処理をラムダ式で設定
             particle.AllMethod = () =>
             {
                 for (int i = 0; i < 5; i++)
                 {
                     if (fk_Math.DRand() < 0.3)
                     {   // 発生確率は 30% (を5回)
-                        particle.NewParticle();              // パーティクル生成処理
-                        num++;
+                        particle.NewParticle(); // パーティクル生成処理
                     }
                 }
             };
 
+            // パーティクル個別処理をラムダ式で設定
             particle.IndivMethod = (P) =>
             {
                 fk_Vector pos, vec, tmp1, tmp2;
@@ -56,9 +54,11 @@ namespace FK_CLI_Particle
                 vec = water + ((R * R * R) / 2.0) * (tmp1 - tmp2);
                 P.Velocity = vec;
 
+                // パーティクルの色を計算
                 double speed = vec.Dist();
-                double t = (speed - minSpeed) / (maxSpeed - minSpeed);
-                double h = Math.PI * 4.0 / 3.0 + Math.Min(1.0, Math.Max(0.0, t)) * Math.PI * 2.0 / 3.0;
+                double s = (speed - minSpeed) / (maxSpeed - minSpeed);
+				double t = Math.Min(1.0, Math.Max(0.0, s));
+                double h = Math.PI * (4.0 + 2.0 * t)/3.0;
                 var col = new fk_Color();
                 col.SetHSV(h, 1.0, 1.0);
                 P.Color = col;
@@ -70,17 +70,68 @@ namespace FK_CLI_Particle
                 }
             };
 
-			viewer.SetShape(2, particle.Shape);
-			viewer.SetDrawMode(2, fk_Draw.POINT);
-            viewer.SetElementMode(2, fk_ElementMode.ELEMENT);
+            // Main() にインスタンスを返す。
+            return particle;
+        }
 
-            viewer.SetShape(3, prism);
-			viewer.SetPosition(3, 0.0, 0.0, 25.0);
-			viewer.SetDrawMode(3, fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT);
-            viewer.Scale = 10.0;
-            viewer.FPS = 0;
+        static fk_AppWindow WindowSetup()
+        {
+            var window = new fk_AppWindow();
+            window.Size = new fk_Dimension(800, 800);
+            window.BGColor = new fk_Color(0.0, 0.0, 0.0);
+            window.TrackBallMode = true;
+            return window;
+        }
 
-            while (viewer.Draw())
+        static void ParticleModelSetup(fk_ParticleSet argParticle, fk_AppWindow argWindow)
+        {
+            var model = new fk_Model();
+            model.Shape = argParticle.Shape;
+            model.DrawMode = fk_Draw.POINT;
+
+            // パーティクルごとに色を変えたい場合の設定
+            model.ElementMode = fk_ElementMode.ELEMENT;
+
+            // パーティクル描画の際の大きさ (ピクセル)
+            model.PointSize = 5.0;
+
+            argWindow.Entry(model);
+        }
+
+        static void PrismSetup(fk_AppWindow argWindow)
+        {
+            var prism = new fk_Prism(40, 15.0, 15.0, 50.0);
+            var prismModel = new fk_Model();
+            prismModel.Shape = prism;
+            prismModel.GlMoveTo(0.0, 0.0, 25.0);
+            prismModel.DrawMode = fk_Draw.FACE | fk_Draw.LINE | fk_Draw.POINT;
+            prismModel.Material = fk_Material.Yellow;
+            prismModel.LineColor = new fk_Color(0.0, 0.0, 1.0);
+            prismModel.PointColor = new fk_Color(0.0, 1.0, 0.0);
+            argWindow.Entry(prismModel);
+        }
+
+        static void Main(string[] args)
+		{
+            fk_Material.InitDefault();
+
+            // パーティクルセットの生成
+            var particle = ParticleSetup();
+
+            // ウィンドウ設定
+            var window = WindowSetup();
+
+            // パーティクルモデル設定
+            ParticleModelSetup(particle, window);
+
+            // 内部円柱設定
+            PrismSetup(window);
+
+            // ウィンドウ生成
+            window.Open();
+
+            // メインループ
+            while (window.Update())
             {
                 particle.Handle(); // パーティクルを 1 ステップ実行する。
             }

@@ -4,13 +4,11 @@ RM		= rm -f
 MAINNAME	= FK_Tutorial
 
 doc:
-	cd Fig; ../../com/svg2eps *.svg
 	latexmk $(MAINNAME)
 	cp $(MAINNAME).pdf ../Output
 
 clean:
 	$(RM) *.dvi *.log *.aux *.toc *.out *.lof *.lot *.bbl \
 		*.blg *.fls *.fdb_latexmk *.synctex.gz *.pdf *~
-	cd Fig; $(RM) *.eps
 
 ####################
