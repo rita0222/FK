@@ -9,6 +9,7 @@ BASECOPYDIR	= ../Output/FK_Ref_Base
 CLICOPYDIR	= ../Output/FK_Ref_CLI
 
 doc:
+	cd Fig; $(MAKE) doc
 	doxygen $(BASECONFFILE)
 	doxygen $(CLICONFFILE)
 	rm -rf $(BASECOPYDIR)
@@ -18,5 +19,6 @@ doc:
 
 clean:
 	$(RM) $(BASEREFDIR) $(CLIREFDIR) *~
+	cd Fig; $(MAKE) clean
 
 ####################

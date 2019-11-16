@@ -1,34 +1,42 @@
 #! /usr/bin/env perl
 
 use Getopt::Std;
-use Cwd 'getcwd';
-my $cur_dir = getcwd . '/';
 
 %opts = ();
 
-getopts ("ir", \%opts);
+getopts ("r", \%opts);
 
 foreach $svgName (@ARGV) {
 	next if $svgName !~ /.svg$/;
 	$epsName = $svgName;
 	$epsName =~ s/.svg$/.eps/;
 
-	if($opts{"i"} == 1) {
-	    $com = "inkscape --file=";
-	    $com .= $cur_dir . $svgName;
-	    $com .= " --export-eps=";
-	    $com .= $cur_dir . $epsName;
+	if($opts{"r"} == 1) {
+		$com = &rsvg($svgName, $epsName);
 	} else {
-	    $com = "rsvg-convert ";
-	    $com .= $cur_dir . $svgName;
-	    $com .= " -z 0.8 --format=ps -o ";
-	    $com .= $cur_dir .  $epsName;
+		$com = &inkscape($svgName, $epsName);
 	}
 
-	if(!(-f $epsName)) {
-		system($com);
-	}	
+	system($com);
 }
 
 0;
+
+sub inkscape {
+	($svgName_, $epsName_) = @_;
+	$com_ = "inkscape --file=";
+	$com_ .= $svgName_;
+	$com_ .= " --export-eps=";
+	$com_ .= $epsName_;
+	return ($com_);
+}
+
+sub rsvg {
+	($svgName_, $epsName_) = @_;
+	$com_ = "rsvg-convert ";
+	$com_ .= $svgName_;
+	$com_ .= " -z 0.8 --format=ps -o ";
+	$com_ .= $epsName_;
+	return ($com_);
+}
 

@@ -8,8 +8,11 @@ EPSFILE = $(SVGFILE:.svg=.eps)
 clean:
 	$(RM) *.eps *.png
 
-#doc: $(PNGFILE) $(EPSFILE)
-doc: $(PNGFILE)
+#doc: $(PNGFILE)
+doc: $(PNGFILE) $(EPSFILE)
+
+.SUFFIXES : .svg .png
+.SUFFIXES : .svg .eps
 
 %.png : %.svg
 	../../com/svg2png -i 144 $<
