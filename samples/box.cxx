@@ -142,7 +142,6 @@ int main(int, char *[])
 		if(z < -fk_Math::EPS) {
 			camera.glFocus(0.0, 0.0, 0.0);
 		}
-
 	}
 
 	return 0;
