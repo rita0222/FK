@@ -117,6 +117,7 @@ bool fk_BSplCurve::setNum(int argNum)
 {
 	if(argNum < ord) return false;
 	num = argNum;
+	setCtrlSize(num);
 	ctrlPos.resize(num);
 	UpdateKnot(ord, num, knotVec);
 
