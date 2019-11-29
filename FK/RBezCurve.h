@@ -71,197 +71,111 @@
  ****************************************************************************/
 
 
-#ifndef __FK_BASE_HEADER__
-#define __FK_BASE_HEADER__
+#ifndef __FK_RBEZCURVE_HEADER__
+#define __FK_RBEZCURVE_HEADER__
 
-#if defined(_MINGW_)
-#ifdef hypot
-#undef hypot
-#endif
-#endif
+#include <FK/Curve.h>
+#include <FK/Matrix.h>
 
-#include <cstdio>
-#include <string>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <string.h>
-#include <vector>
-
-#if !defined(WIN32) || defined(_MINGW_)
-
-#include <sys/types.h>
-#include <sys/time.h>
-
-#else
-
-#pragma warning(disable : 4786)
-#define snprintf _snprintf
-#define vsnprintf _vsnprintf
-
-#endif	// !WIN32 || _CYGWIN_GCC_
-
-#define FK_UNUSED(x)	(void)(x)
-
-//! Fine Kernel Toolkit 名前空間
 namespace FK {
 
-	const int FK_MAJOR_VERSION = 4;
-	const int FK_MINOR_VERSION = 0;
-	const int FK_SUBMINOR_VERSION = 1;
-
-#define _FK_UNDEFINED_DEFINE_ -1
-
-	const int FK_UNDEFINED = _FK_UNDEFINED_DEFINE_;
-
-	//! オブジェクトインスタンスのタイプを表す列挙型
-	enum class fk_Type {
-		BASEOBJECT,		//!<	fk_BaseObject 型
-		MATRIXADMIN,	//!<	fk_MatrixAdmin 型
-		MODEL,			//!<	fk_Model 型
-		DISPLAYLINK,	//!<	fk_DisplayLink 型
-		SCENE,			//!<	fk_Scene 型
-		SHAPE,			//!<	fk_Shape 型
-		POLYGON,		//!<	fk_Polygon 型
-		LINE,			//!<	fk_Line 型
-		POLYLINE,		//!<	fk_Polyline 型
-		POINT,			//!<	fk_Point 型
-		CIRCLE,			//!<	fk_Circle 型
-		SPHERE,			//!<	fk_Sphere 型
-		BLOCK,			//!<	fk_Block 型
-		CLOSEDLINE,		//!<	fk_Closedline 型
-		PRISM,			//!<	fk_Prism 型
-		CAPSULE,		//!<	fk_Capsule 型
-		CONE,			//!<	fk_Cone 型
-		INDEXFACESET,	//!<	fk_IndexFaceSet 型
-		LIGHT,			//!<	fk_Light 型
-		CURVE,			//!<	fk_Curve 型
-		BEZCURVE,		//!<	fk_BezCurve 型
-		RBEZCURVE,		//!<	fk_RBezCurve 型
-		BSPLCURVE,		//!<	fk_BSplCurve 型
-		SURFACE,		//!<	fk_Surface 型
-		BEZSURFACE,		//!<	fk_BezSurface 型
-		GREGORY,		//!<	fk_Gregory 型
-		IMAGE,			//!<	fk_Image 型
-		TEXCOORD,		//!<	fk_TexCoord 型
-		TEXTURE,		//!<	fk_Texture 型
-		RECTTEXTURE,	//!<	fk_RectTexture 型
-		TRITEXTURE,		//!<	fk_TriTexture 型
-		MESHTEXTURE,	//!<	fk_MeshTexture 型
-		IFSTEXTURE,		//!<	fk_IFSTexture 型
-		ARTEXTURE,		//!<	fk_ARTexture 型
-		UNICHAR,		//!<	fk_UniChar 型
-		UNISTR,			//!<	fk_UniStr 型
-		TEXTIMAGE,		//!<	fk_TextImage 型
-		COLOR,			//!<	fk_Color 型
-		MATERIAL,		//!<	fk_Material 型
-		PALETTE,		//!<	fk_Palette 型
-		PLANE,			//!<	fk_Plane 型
-		WINDOW,			//!<	fk_Window 型
-		PICKDATA,		//!<	fk_PickData 型
-		PROJECTBASE,	//!<	fk_ProjectBase 型
-		PERSPECTIVE,	//!<	fk_Perspective 型
-		FRUSTUM,		//!<	fk_Frustum 型
-		ORTHO,			//!<	fk_Ortho 型
-		VERTEX,			//!<	fk_Vertex 型
-		HALF,			//!<	fk_Half 型
-		EDGE,			//!<	fk_Edge 型
-		LOOP,			//!<	fk_Loop 型
-		SOLID,			//!<	fk_Solid 型
-		SHAPEVIEWER,	//!<	fk_ShapeViewer 型
-		PARTICLE,		//!<	fk_Particle 型
-		PARTICLESET		//!<	fk_ParticleSet 型
-	};
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-#ifdef NO_GL_LIBRARY
-
-	enum GLenum {
-		GL_COLOR_INDEX,
-		GL_STENCIL_INDEX,
-		GL_DEPTH_INDEX,
-		GL_RED,
-		GL_GREEN,
-		GL_BLUE,
-		GL_ALPHA,
-		GL_LUMINANCE,
-		GL_LUMINANCE_ALPHA,
-		GL_RGB,
-		GL_BGR,
-		GL_RGBA,
-		GL_BGRA,
-		GL_ABGR_EXT,
-		GL_UNSIGNED_BYTE,
-		GL_BYTE,
-		GL_UNSIGNED_SHORT,
-		GL_SHORT,
-		GL_UNSIGNED_INT,
-		GL_INT,
-		GL_FLOAT,
-		GL_BITMAP
-	};
-
-	using GLint = int;
-	using GLuint = unsigned int;
-	using GLfloat = float;
-
-#endif
-
-#endif
-
-	//! FK の各クラスの基盤となる基本クラス
+	//! 有理 Bezier 曲線を生成、管理するクラス
 	/*!
-	 *	このクラスは、FKのユーザが利用する大半のクラスの基底クラスとなっています。
-	 *	主に、インスタンスの型を管理するための機能を提供します。
-	 *	\sa fk_Type
+	 *	このクラスは、形状として有理 Bezier 曲線を制御する機能を提供します。
+	 *	初期状態は 3 次式で、制御点が全て原点にある状態となります。
+	 *	現状では、2,3,4次式のいずれかのみしか生成できません。
 	 */
-	class fk_BaseObject {
+
+	class fk_RBezCurve : public fk_Curve {
 
 	public:
 		//! コンストラクタ
-		/*!
-		 *	\param[in] type インスタンスのタイプ
-		 */
-		fk_BaseObject(fk_Type type = fk_Type::BASEOBJECT);
+		fk_RBezCurve(void);
 
-		//! タイプ取得関数
-		/*!
-		 *	インスタンスのタイプを取得します。
-		 *	\return インスタンスのタイプ
-		 */
-		fk_Type	getObjectType(void) const;
+		//! デストラクタ
+		virtual ~fk_RBezCurve();
 
-#ifndef FK_DOXYGEN_USER_PROCESS
-		void			SetObjectType(const fk_Type type);
-#endif
+		//! 初期化用関数
+		/*!
+		 *	この関数は、曲線を初期状態にします。
+		 *	初期状態とは、次数は 3 で、全ての制御点が原点にあり、
+		 *	全ての重み値が 1 である状態のことです。
+		 */
+		void	init(void);
+
+		//! 次数設定関数
+		/*!
+		 *	この関数は、曲線の次数を設定します。
+		 *	現状では、2,3,4のいずれかのみ以外は設定できません。
+		 *	次数が増加した場合は、これまで保持されていた制御点位置ベクトルは保持され、
+		 *	新たな制御点は原点に配置されます。
+		 *	次数が減少した場合は、末尾の制御点が消失しますが、
+		 *	存続している制御点の位置ベクトルは保持されます。
+		 *
+		 *	\param[in]	deg	次数
+		 *
+		 *	\return	次数設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool	setDegree(int deg);
+
+		//! 次数参照関数
+		/*!
+		 *	曲線の次数を参照します。
+		 *
+		 *	\return 次数
+		 */
+		int		getDegree(void);
+
+		//! 制御点重み値設定関数
+		/*!
+		 *	制御点の重み値を設定します。
+		 *
+		 *	\param[in]	ID		設定する制御点の ID。先頭は 0 になります。
+		 *	\param[in]	weight	制御点重み値
+		 *
+		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		bool	setWeight(int ID, double weight);
+
+		//! 制御点重み値取得関数
+		/*!
+		 *	制御点の重み値を取得します。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *
+		 *	\return	指定した制御点の重み値。
+		 *		指定した制御点が存在しない場合は 0 を返します。
+		 */
+		double	getWeight(int ID);
+
+		//! 曲線算出関数
+		/*!
+		 *	パラメータに対応する曲線上の点の位置ベクトルを返します。
+		 *	有理 Bezier 曲線の幾何的定義ではパラメータの定義域は 0 から 1 までですが、
+		 *	本関数はそれ以外の範囲であっても式の演算結果を返します。
+		 *
+		 *	\param[in]	t	曲線上のパラメータ
+		 *
+		 *	\return 曲線上の点の位置ベクトル
+		 */
+		fk_Vector	pos(double t);
+
+		//! 曲線1階微分ベクトル算出関数
+		/*!
+		 *	パラメータに対応する曲線上の点の1階微分ベクトルを返します。
+		 *	有理 Bezier 曲線の幾何的定義ではパラメータの定義域は 0 から 1 までですが、
+		 *	本関数はそれ以外の範囲であっても式の演算結果を返します。
+		 *
+		 *	\param[in]	t	曲線上のパラメータ
+		 *
+		 *	\return 曲線上の点の1階微分ベクトル
+		 */
+		fk_Vector	diff(double t);
 
 	private:
-		fk_Type			ObjectType;
-
+		int		deg;
+		std::vector<double>	w;
 	};
-
-#ifdef FK_DEF_STD_NAMESPACE
-	using namespace std;
-#endif
-
-#ifdef FK_DEF_SIZETYPE
-	using _st = std::vector<int>::size_type;
-#endif
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-	class fk_Noncopyable {
-	private:
-		void operator =(const fk_Noncopyable&) {};
-		fk_Noncopyable(const fk_Noncopyable&) {};
-
-	public:
-		fk_Noncopyable(void) {};
-	};
-#endif
-
 }
 
-#endif /* !__FK_BASE_HEADER__ */
+#endif	// __FK_RBEZCURVE_HEADER__

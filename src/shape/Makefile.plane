@@ -50,6 +50,7 @@ LIBSRCS		= \
 			Polygon.cxx \
 			Polyline.cxx \
 			Prism.cxx \
+			RBezCurve.cxx \
 			RDSParser.cxx \
 			Reference1.cxx \
 			Reference2.cxx \
