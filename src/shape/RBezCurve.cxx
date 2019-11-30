@@ -82,7 +82,16 @@ fk_RBezCurve::fk_RBezCurve(void)
 	SetObjectType(fk_Type::RBEZCURVE);
 	w.clear();
 	setCtrlSize(5);
+	w.resize(5);
+	fw.resize(5);
+	for(_st i = 0; i < 5; i++) {
+		w[i] = 1.0;
+		fw[i] = 1.0f;
+	}
+
 	setDegree(3);
+	setShaderAttribute(weightName, 1, &fw);
+	
 	return;
 }
 
@@ -104,7 +113,6 @@ bool fk_RBezCurve::setDegree(int argDeg)
 
 	deg = argDeg;
 	setCtrlSize(deg+1);
-	w.resize(_st(deg+1));
 	
 	return true;
 }
@@ -118,13 +126,14 @@ bool fk_RBezCurve::setWeight(int argID, double argWeight)
 {
 	if(argID < 0 || argID > getDegree()) return false;
 	w[_st(argID)] = argWeight;
+	fw[_st(argID)] = float(argWeight);
 	return true;
 }
 
 double fk_RBezCurve::getWeight(int argID)
 {
 	if(argID < 0 || argID > getDegree()) return 0.0;
-	return w[_st(argID)];
+	return double(w[_st(argID)]);
 }
 
 

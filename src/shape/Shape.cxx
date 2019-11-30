@@ -88,6 +88,7 @@ const string fk_Shape::curveModelColorName = "fk_CurveModelColor";
 const string fk_Shape::texCoordName = "fk_TexCoord";
 const string fk_Shape::ctrlPosName = "fk_CtrlPos";
 const string fk_Shape::degreeName = "fk_Degree";
+const string fk_Shape::weightName = "fk_Weight";
 
 const int fk_Shape::ALIVE;
 const int fk_Shape::DEAD;
