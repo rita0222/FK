@@ -175,6 +175,11 @@ namespace FK {
 	private:
 		int		deg;
 		std::vector<double>	w;
+
+		fk_Vector	PosBasis(double);
+		fk_Vector	PosDiff(double);
+		double		WeightBasis(double);
+		double		WeightDiff(double);
 	};
 }
 

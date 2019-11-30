@@ -127,10 +127,11 @@ double fk_RBezCurve::getWeight(int argID)
 	return w[_st(argID)];
 }
 
-fk_Vector fk_RBezCurve::pos(double t)
+
+fk_Vector fk_RBezCurve::PosBasis(double t)
 {
 	fk_Vector	vec(0.0, 0.0, 0.0);
-	double		tmp[5], sumW = 0.0;
+	double		tmp[5];
 
 	switch(deg) {
 	  case 2:
@@ -159,14 +160,50 @@ fk_Vector fk_RBezCurve::pos(double t)
 	}	
 
 	for(int i = 0; i <= deg; ++i) {
-		vec += ctrlPos.getV(i) * tmp[i] * w[i];
-		sumW += tmp[i] * w[i];
+		vec += ctrlPos.getV(i) * tmp[i] * w[_st(i)];
 	}
 
-	return vec / sumW;
+	return vec;
 }
 
-fk_Vector fk_RBezCurve::diff(double t)
+double fk_RBezCurve::WeightBasis(double t)
+{
+	double		tmp[5], sumW = 0.0;
+
+	switch(deg) {
+	  case 2:
+		tmp[0] = (1.0 - t)*(1.0 - t);
+		tmp[1] = 2.0 * (1.0 - t) * t;
+		tmp[2] = t * t;
+		break;
+
+	  case 3:
+		tmp[0] = (1.0 - t)*(1.0 - t)*(1.0 - t);
+		tmp[1] = 3.0 * (1.0 - t)*(1.0 - t)*t;
+		tmp[2] = 3.0 * (1.0 - t)*t*t;
+		tmp[3] = t*t*t;
+		break;
+
+	  case 4:
+		tmp[0] = (1.0 - t)*(1.0 - t)*(1.0 - t)*(1.0 - t);
+		tmp[1] = 4.0 * (1.0 - t)*(1.0 - t)*(1.0 - t)*t;
+		tmp[2] = 6.0 * (1.0 - t)*(1.0 - t)*t*t;
+		tmp[3] = 4.0 * (1.0 - t)*t*t*t;
+		tmp[4] = t*t*t*t;
+		break;
+
+	  default:
+		return 0.0;
+	}	
+
+	for(int i = 0; i <= deg; ++i) {
+		sumW += tmp[i] * w[_st(i)];
+	}
+
+	return sumW;
+}
+
+fk_Vector fk_RBezCurve::PosDiff(double t)
 {
 	fk_Vector	vec(0.0, 0.0, 0.0);
 	double		tmp[4];
@@ -199,4 +236,53 @@ fk_Vector fk_RBezCurve::diff(double t)
 	}
 
 	return (vec*double(deg));
+}
+
+double fk_RBezCurve::WeightDiff(double t)
+{
+	double		tmp[4], sumW = 0.0;
+
+	switch(deg) {
+	  case 2:
+		tmp[0] = 1.0 - t;
+		tmp[1] = t;
+		break;
+
+	  case 3:
+		tmp[0] = (1.0 - t)*(1.0 - t);
+		tmp[1] = 2.0 * (1.0 - t) * t;
+		tmp[2] = t * t;
+		break;
+
+	  case 4:
+		tmp[0] = (1.0 - t)*(1.0 - t)*(1.0 - t);
+		tmp[1] = 3.0 * (1.0 - t)*(1.0 - t)*t;
+		tmp[2] = 3.0 * (1.0 - t)*t*t;
+		tmp[3] = t*t*t;
+		break;
+
+	  default:
+		return 0.0;
+	}	
+
+	for(int i = 0; i < deg; ++i) {
+		sumW += tmp[i] * (w[_st(i+1)] - w[_st(i)]);
+	}
+
+	return (sumW * double(deg));
+}
+
+fk_Vector fk_RBezCurve::pos(double t)
+{
+	return PosBasis(t) / WeightBasis(t);
+}
+
+fk_Vector fk_RBezCurve::diff(double t)
+{
+	fk_Vector C = PosBasis(t);
+	fk_Vector dC = PosDiff(t);
+	double s = WeightBasis(t);
+	double ds = WeightDiff(t);
+
+	return (dC/s) - (ds * C)/(s * s);
 }
