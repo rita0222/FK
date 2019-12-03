@@ -84,6 +84,7 @@ fk_RBezCurve::fk_RBezCurve(void)
 	setCtrlSize(5);
 	w.resize(5);
 	fw.resize(5);
+	wCtrl.resize(5);
 	for(_st i = 0; i < 5; i++) {
 		w[i] = 1.0;
 		fw[i] = 1.0f;
@@ -122,11 +123,27 @@ int fk_RBezCurve::getDegree(void)
 	return deg;
 }
 
+bool fk_RBezCurve::setCtrl(int argID, fk_Vector *argPos)
+{
+	if(fk_Curve::setCtrl(argID, argPos) == false) return false;
+	wCtrl[_st(argID)] = w[_st(argID)] * (*argPos);
+	return true;
+}
+
+bool fk_RBezCurve::setCtrl(int argID, fk_Vector argPos)
+{
+	if(fk_Curve::setCtrl(argID, argPos) == false) return false;
+	wCtrl[_st(argID)] = w[_st(argID)] * argPos;
+	return true;
+}
+
 bool fk_RBezCurve::setWeight(int argID, double argWeight)
 {
 	if(argID < 0 || argID > getDegree()) return false;
-	w[_st(argID)] = argWeight;
-	fw[_st(argID)] = float(argWeight);
+	_st i = _st(argID);
+	w[i] = argWeight;
+	fw[i] = float(argWeight);
+	wCtrl[i] = getCtrl(argID) * argWeight;
 	return true;
 }
 
@@ -168,8 +185,8 @@ fk_Vector fk_RBezCurve::PosBasis(double t)
 		return vec;
 	}	
 
-	for(int i = 0; i <= deg; ++i) {
-		vec += ctrlPos.getV(i) * tmp[i] * w[_st(i)];
+	for(_st i = 0; i <= _st(deg); ++i) {
+		vec += wCtrl[i] * tmp[i];
 	}
 
 	return vec;
@@ -205,8 +222,8 @@ double fk_RBezCurve::WeightBasis(double t)
 		return 0.0;
 	}	
 
-	for(int i = 0; i <= deg; ++i) {
-		sumW += tmp[i] * w[_st(i)];
+	for(_st i = 0; i <= _st(deg); ++i) {
+		sumW += w[i] * tmp[i];
 	}
 
 	return sumW;
@@ -240,8 +257,8 @@ fk_Vector fk_RBezCurve::PosDiff(double t)
 		return vec;
 	}	
 
-	for(int i = 0; i < deg; ++i) {
-		vec += (ctrlPos.getV(i+1) - ctrlPos.getV(i)) * tmp[i];
+	for(_st i = 0; i < _st(deg); ++i) {
+		vec += (wCtrl[i+1] - wCtrl[i]) * tmp[i];
 	}
 
 	return (vec*double(deg));
@@ -274,10 +291,9 @@ double fk_RBezCurve::WeightDiff(double t)
 		return 0.0;
 	}	
 
-	for(int i = 0; i < deg; ++i) {
-		sumW += tmp[i] * (w[_st(i+1)] - w[_st(i)]);
+	for(_st i = 0; i < _st(deg); ++i) {
+		sumW += (w[i+1] - w[i]) * tmp[i];
 	}
-
 	return (sumW * double(deg));
 }
 

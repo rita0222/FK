@@ -117,7 +117,7 @@ namespace FK {
 		 *
 		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool setCtrl(int ID, fk_Vector *pos);
+		virtual bool setCtrl(int ID, fk_Vector *pos);
 
 		//! 制御点設定関数2
 		/*!
@@ -128,7 +128,7 @@ namespace FK {
 		 *
 		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool setCtrl(int ID, fk_Vector pos);
+		virtual bool setCtrl(int ID, fk_Vector pos);
 
 		//! 制御点取得関数
 		/*!

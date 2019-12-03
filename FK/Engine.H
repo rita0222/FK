@@ -88,7 +88,7 @@ namespace FK {
 	class fk_LineDraw;
 	class fk_FaceDraw;
 	class fk_TextureDraw;
-	class fk_CurveDraw;
+	class fk_BezCurveDraw;
 	class fk_SurfaceDraw;
 
 	class fk_GraphicsEngine {
@@ -125,8 +125,8 @@ namespace FK {
 		fk_LineDraw					*lineDraw;
 		fk_FaceDraw					*faceDraw;
 		fk_TextureDraw				*textureDraw;
-		fk_CurveDraw				*curveLineDraw;
-		fk_CurveDraw				*curvePointDraw;
+		fk_BezCurveDraw				*bezCurveLineDraw;
+		fk_BezCurveDraw				*bezCurvePointDraw;
 		fk_SurfaceDraw				*surfaceDraw;
 		fk_SurfaceDraw				*surfacePointDraw;
 		fk_SurfaceDraw				*surfaceLineDraw;

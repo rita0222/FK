@@ -82,7 +82,7 @@
 #include <FK/LineDraw.H>
 #include <FK/FaceDraw.H>
 #include <FK/TextureDraw.H>
-#include <FK/CurveDraw.H>
+#include <FK/BezCurveDraw.H>
 #include <FK/SurfaceDraw.H>
 #include <FK/Error.H>
 
@@ -97,8 +97,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	lineDraw = new fk_LineDraw;
 	faceDraw = new fk_FaceDraw;
 	textureDraw = new fk_TextureDraw;
-	curveLineDraw = new fk_CurveDraw(1);
-	curvePointDraw = new fk_CurveDraw(2);
+	bezCurveLineDraw = new fk_BezCurveDraw(1);
+	bezCurvePointDraw = new fk_BezCurveDraw(2);
 	surfaceDraw = new fk_SurfaceDraw(1);
 	surfaceLineDraw = new fk_SurfaceDraw(2);
 	surfacePointDraw = new fk_SurfaceDraw(3);
@@ -127,8 +127,8 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 	delete lineDraw;
 	delete faceDraw;
 	delete textureDraw;
-	delete curveLineDraw;
-	delete curvePointDraw;
+	delete bezCurveLineDraw;
+	delete bezCurvePointDraw;
 	delete surfaceDraw;
 	delete surfaceLineDraw;
 	delete surfacePointDraw;
@@ -444,7 +444,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			curveLineDraw->DrawShapeCurve(argModel);
+			bezCurveLineDraw->DrawShapeCurve(argModel);
 		} else if(surface != nullptr) {
 			surfaceLineDraw->DrawShapeSurface(argModel);
 		}
@@ -452,7 +452,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			curvePointDraw->DrawShapeCurve(argModel);
+			bezCurvePointDraw->DrawShapeCurve(argModel);
 		} else if(surface != nullptr) {
 			surfacePointDraw->DrawShapeSurface(argModel);
 		}

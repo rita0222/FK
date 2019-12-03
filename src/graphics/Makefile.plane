@@ -1,7 +1,7 @@
 BASENAME	= graphics
 
 LIBSRCS		= \
-			CurveDraw.cxx \
+			BezCurveDraw.cxx \
 			DrawBase.cxx \
 			Engine.cxx \
 			FaceDraw.cxx \
