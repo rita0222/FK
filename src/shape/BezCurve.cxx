@@ -86,6 +86,7 @@ fk_BezCurve::fk_BezCurve(void)
 	setDegree(3);
 
 	setShaderAttribute(weightName, 1, const_cast<vector<float> *>(&dummyW));
+	modifyAttribute(weightName);
 	return;
 }
 

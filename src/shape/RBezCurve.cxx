@@ -92,6 +92,7 @@ fk_RBezCurve::fk_RBezCurve(void)
 
 	setDegree(3);
 	setShaderAttribute(weightName, 1, &fw);
+	modifyAttribute(weightName);
 	
 	return;
 }
@@ -144,6 +145,7 @@ bool fk_RBezCurve::setWeight(int argID, double argWeight)
 	w[i] = argWeight;
 	fw[i] = float(argWeight);
 	wCtrl[i] = getCtrl(argID) * argWeight;
+	modifyAttribute(weightName);
 	return true;
 }
 
