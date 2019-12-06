@@ -104,6 +104,7 @@
 #include <FK/Error.H>
 #include <FK/BVHMotion.h>
 #include <FK/BezCurve.h>
+#include <FK/RBezCurve.h>
 #include <FK/BSplCurve.h>
 #include <FK/BezSurface.h>
 #include <FK/Gregory.h>

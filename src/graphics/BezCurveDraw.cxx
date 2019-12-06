@@ -74,13 +74,17 @@
 #include <FK/OpenGL.H>
 #include <FK/Model.h>
 #include <FK/BezCurve.h>
+#include <FK/RBezCurve.h>
 #include <FK/Error.H>
 
 using namespace std;
 using namespace FK;
 
 fk_BezCurveDraw::fk_BezCurveDraw(int argMode)
-	: curveShader(nullptr), bezier2_ID(0), bezier3_ID(0), bezier4_ID(0), mode(argMode)
+	: curveShader(nullptr),
+	  bezier2_ID(0), bezier3_ID(0), bezier4_ID(0),
+	  rBezier2_ID(0), rBezier3_ID(0), rBezier4_ID(0),
+	  mode(argMode)
 {
 	return;
 }
@@ -90,7 +94,6 @@ fk_BezCurveDraw::~fk_BezCurveDraw()
 	delete curveShader;
 	return;
 }
-
 
 void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel)
 {
@@ -111,9 +114,17 @@ void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel)
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
-	if(argModel->getShape()->getObjectType() == fk_Type::BEZCURVE) {
-		fk_BezCurve *curve = dynamic_cast<fk_BezCurve *>(argModel->getShape());
-		parameter->setRegister(fk_Shape::degreeName, curve->getDegree(), fk_Shape::degreeName);
+
+	auto type = argModel->getShape()->getObjectType();
+
+	if(type == fk_Type::BEZCURVE) {
+		fk_BezCurve *bez = dynamic_cast<fk_BezCurve *>(argModel->getShape());
+		parameter->setRegister(fk_Shape::degreeName, bez->getDegree(), fk_Shape::degreeName);
+	} else if(type == fk_Type::RBEZCURVE) {
+		fk_RBezCurve *rBez = dynamic_cast<fk_RBezCurve *>(argModel->getShape());
+		parameter->setRegister(fk_Shape::degreeName, rBez->getDegree(), fk_Shape::degreeName);
+	} else {
+		return;
 	}
 
 	shader->ProcPreShader();
@@ -164,6 +175,10 @@ void fk_BezCurveDraw::ShaderSetup(void)
 	bezier3_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier3");
 	bezier4_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "bezier4");
 
+	rBezier2_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "rBezier2");
+	rBezier3_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "rBezier3");
+	rBezier4_ID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "rBezier4");
+
 	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezier3_ID);
 
 	return;
@@ -207,7 +222,8 @@ void fk_BezCurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argPara
 	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
 
-	if(argModel->getShape()->getObjectType() == fk_Type::BEZCURVE) {
+	auto type = curve->getObjectType();
+	if(type == fk_Type::BEZCURVE) {
 		fk_BezCurve *bez = dynamic_cast<fk_BezCurve *>(curve);
 		switch(bez->getDegree()) {
 		  case 2:
@@ -227,7 +243,27 @@ void fk_BezCurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argPara
 			glBindVertexArray(0);
 			return;
 		}
-	}
+	} else if(type == fk_Type::RBEZCURVE) {
+		fk_RBezCurve *rBez = dynamic_cast<fk_RBezCurve *>(curve);
+		switch(rBez->getDegree()) {
+		  case 2:
+			glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &rBezier2_ID);
+			break;
+			
+		  case 3:
+			glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &rBezier3_ID);
+			break;
+
+		  case 4:
+			glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &rBezier4_ID);
+			break;
+
+		  default:
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+			return;
+		}
+	}		
 	
 	glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
 

@@ -1,5 +1,10 @@
 #!/usr/bin/env zsh
 
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 version" 1>&2
+    exit 1
+fi
+
 rm -rf Package
 
 mkdir Package
@@ -23,7 +28,7 @@ pkgbuild \
 	--root ./Package \
 	--identifier jp.gamescience.fk \
 	--install-location /Library \
-	--version 4.1.2 \
+	--version $1 \
 	--ownership preserve \
 	--scripts ./script \
 	tmpInst.pkg

@@ -77,11 +77,15 @@
 using namespace std;
 using namespace FK;
 
+const vector<float> fk_BezCurve::dummyW = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
 fk_BezCurve::fk_BezCurve(void)
 {
 	SetObjectType(fk_Type::BEZCURVE);
 	setCtrlSize(5);
 	setDegree(3);
+
+	setShaderAttribute(weightName, 1, const_cast<vector<float> *>(&dummyW));
 	return;
 }
 

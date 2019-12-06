@@ -4,3 +4,4 @@ in vec3 fk_Vertex;
 in vec3 fk_Normal;
 in vec2 fk_TexCoord;
 in vec3 fk_CtrlPos;
+in float fk_Weight;
