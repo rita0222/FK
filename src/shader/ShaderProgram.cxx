@@ -141,6 +141,9 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 
 	if(fboBuildIn.empty() == true) {
 		fboBuildIn +=
+			#include "GLSL/Struct.out"
+			;
+		fboBuildIn +=
 			#include "GLSL/FBO_BuildIn.out"
 			;
 	}
