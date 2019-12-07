@@ -88,7 +88,6 @@ const string fk_Shape::curveModelColorName = "fk_CurveModelColor";
 const string fk_Shape::texCoordName = "fk_TexCoord";
 const string fk_Shape::ctrlPosName = "fk_CtrlPos";
 const string fk_Shape::degreeName = "fk_Degree";
-const string fk_Shape::weightName = "fk_Weight";
 
 const int fk_Shape::ALIVE;
 const int fk_Shape::DEAD;
@@ -305,9 +304,6 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 	DeleteMapI(argName);
 
 	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
-	if(floatSelf.find(argName) == floatSelf.end()) {
-		
-	}
 
 	if(argSelf == true) {
 		vector<float> *array;

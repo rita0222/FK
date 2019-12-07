@@ -76,10 +76,11 @@ using namespace FK;
 
 fk_Curve::fk_Curve(void) : div(128), size(0)
 {
-	ctrlPos.clear();
 	realType = fk_RealShapeType::CURVE;
 	SetObjectType(fk_Type::CURVE);
-	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
+	ctrlPos.setDim(4);
+	ctrlPos.clear();
+	setShaderAttribute(ctrlPosName, 4, ctrlPos.getP());
 
 	return;
 }
@@ -92,23 +93,6 @@ fk_Curve::~fk_Curve(void)
 void fk_Curve::init(void)
 {
 	ctrlPos.clear();
-}
-
-bool fk_Curve::setCtrl(int argID, fk_Vector *argPos)
-{
-	if(argID < 0 || argID >= size || argPos == nullptr) return false;
-	ctrlPos.set(argID, *argPos);
-	modifyAttribute(ctrlPosName);
-
-	ctrlPoint.setVertex(argID, *argPos);
-	if(argID > 0) {
-		ctrlLine.changeLine(argID-1, ctrlPos.getV(argID-1), ctrlPos.getV(argID));
-	}
-	
-	if(argID < size - 1) {
-		ctrlLine.changeLine(argID, ctrlPos.getV(argID), ctrlPos.getV(argID+1));
-	}
-	return true;
 }
 
 bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
@@ -129,9 +113,25 @@ bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
 	return true;
 }
 
+bool fk_Curve::setWeight(int argID, double argW)
+{
+	if(argID < 0 || argID >= size) return false;
+	fk_HVector v = ctrlPos.getV(argID);
+	v.w = argW;
+	ctrlPos.set(argID, v);
+	modifyAttribute(ctrlPosName);
+
+	return true;
+}
+
 fk_Vector fk_Curve::getCtrl(int argID)
 {
 	return ctrlPos.getV(argID);
+}
+
+double fk_Curve::getWeight(int argID)
+{
+	return ctrlPos.getHV(argID).w;
 }
 
 int fk_Curve::getCtrlSize(void)

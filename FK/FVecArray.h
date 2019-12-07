@@ -324,15 +324,48 @@ namespace FK {
 		 */
 		bool set(int id, const fk_Color &c);
 
-		//! ベクトル設定関数1
+		//! 2次元ベクトル設定関数1
+		/*!
+		 *	ベクトルを (x, y) の順番で設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分は変更しません。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *
+		 *	\sa push(double, double)
+		 */
+		bool set(int id, double x, double y);
+
+		//! 3次元ベクトル設定関数1
+		/*!
+		 *	ベクトルを (x, y, z) の順番で設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分は変更しません。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *	\param[in]	z	第3成分
+		 *
+		 *	\sa push(double, double, double)
+		 */
+		bool set(int id, double x, double y, double z);
+
+		//! 4次元ベクトル設定関数1
 		/*!
 		 *	ベクトルを (x, y, z, w) の順番で設定します。
 		 *	もし id が現在の要素数以上となっていた場合は、
 		 *	内部で自動的に resize(id+1) が呼び出されます。
 		 *
 		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
-		 *	次元数が引数の個数より少なかった場合、指定されなかった成分には 0 が設定されます。
-		 *	第3,4引数は省略可能です。
 		 *
 		 *	\param[in]	id	要素 ID
 		 *	\param[in]	x	第1成分
@@ -342,17 +375,49 @@ namespace FK {
 		 *
 		 *	\sa push(double, double, double, double)
 		 */
-		bool set(int id, double x, double y, double z = 0.0, double w = 0.0);
+		bool set(int id, double x, double y, double z, double w);
 
-		//! ベクトル設定関数2
+		//! 2次元ベクトル設定関数2
+		/*!
+		 *	ベクトルを (x, y) の順番で設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分は変更しません。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *
+		 *	\sa push(float, float)
+		 */
+		bool set(int id, float x, float y);
+
+		//! 3次元ベクトル設定関数2
+		/*!
+		 *	ベクトルを (x, y, z) の順番で設定します。
+		 *	もし id が現在の要素数以上となっていた場合は、
+		 *	内部で自動的に resize(id+1) が呼び出されます。
+		 *
+		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
+		 *	次元数が引数の個数より少なかった場合、指定されなかった成分は変更しません。
+		 *
+		 *	\param[in]	id	要素 ID
+		 *	\param[in]	x	第1成分
+		 *	\param[in]	y	第2成分
+		 *	\param[in]	z	第3成分
+		 *
+		 *	\sa push(float, float, float)
+		 */
+		bool set(int id, float x, float y, float z);
+
+		//! 4次元ベクトル設定関数2
 		/*!
 		 *	ベクトルを (x, y, z, w) の順番で設定します。
 		 *	もし id が現在の要素数以上となっていた場合は、
 		 *	内部で自動的に resize(id+1) が呼び出されます。
 		 *
 		 *	次元数が引数の個数より多かった場合は超過した成分を破棄します。
-		 *	次元数が引数の個数より少なかった場合、指定されなかった成分には 0 が設定されます。
-		 *	第3,4引数は省略可能です。
 		 *
 		 *	\param[in]	id	要素 ID
 		 *	\param[in]	x	第1成分
@@ -362,7 +427,7 @@ namespace FK {
 		 *
 		 *	\sa push(float, float, float, float)
 		 */
-		bool set(int id, float x, float y, float z = 0.0f, float w = 0.0f);
+		bool set(int id, float x, float y, float z, float w);
 
 		//! fk_Vector 型取得関数
 		/*!

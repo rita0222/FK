@@ -83,17 +83,10 @@ fk_RBezCurve::fk_RBezCurve(void)
 	w.clear();
 	setCtrlSize(5);
 	w.resize(5);
-	fw.resize(5);
 	wCtrl.resize(5);
-	for(_st i = 0; i < 5; i++) {
-		w[i] = 1.0;
-		fw[i] = 1.0f;
-	}
+	for(int i = 0; i < 5; ++i) setWeight(i, 1.0);
 
 	setDegree(3);
-	setShaderAttribute(weightName, 1, &fw);
-	modifyAttribute(weightName);
-	
 	return;
 }
 
@@ -124,13 +117,6 @@ int fk_RBezCurve::getDegree(void)
 	return deg;
 }
 
-bool fk_RBezCurve::setCtrl(int argID, fk_Vector *argPos)
-{
-	if(fk_Curve::setCtrl(argID, argPos) == false) return false;
-	wCtrl[_st(argID)] = w[_st(argID)] * (*argPos);
-	return true;
-}
-
 bool fk_RBezCurve::setCtrl(int argID, fk_Vector argPos)
 {
 	if(fk_Curve::setCtrl(argID, argPos) == false) return false;
@@ -140,12 +126,10 @@ bool fk_RBezCurve::setCtrl(int argID, fk_Vector argPos)
 
 bool fk_RBezCurve::setWeight(int argID, double argWeight)
 {
-	if(argID < 0 || argID > getDegree()) return false;
+	if(fk_Curve::setWeight(argID, argWeight) == false) return false;
 	_st i = _st(argID);
 	w[i] = argWeight;
-	fw[i] = float(argWeight);
 	wCtrl[i] = getCtrl(argID) * argWeight;
-	modifyAttribute(weightName);
 	return true;
 }
 

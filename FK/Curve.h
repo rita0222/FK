@@ -108,17 +108,6 @@ namespace FK {
 		 */
 		virtual void init(void);
 
-		//! 制御点設定関数1
-		/*!
-		 *	曲線の制御点位置ベクトルを設定します。
-		 *
-		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
-		 *	\param[in]	pos	制御点位置ベクトル
-		 *
-		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		virtual bool setCtrl(int ID, fk_Vector *pos);
-
 		//! 制御点設定関数2
 		/*!
 		 *	曲線の制御点位置ベクトルを設定します。
@@ -130,7 +119,18 @@ namespace FK {
 		 */
 		virtual bool setCtrl(int ID, fk_Vector pos);
 
-		//! 制御点取得関数
+		//! 制御点重み値設定関数
+		/*!
+		 *	曲線の制御点重み値を設定します。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *	\param[in]	w	制御点の重み値
+		 *
+		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
+		 */
+		virtual bool setWeight(int ID, double w);
+		
+		//! 制御点位置取得関数
 		/*!
 		 *	曲線の制御点位置ベクトルを取得します。
 		 *
@@ -140,6 +140,17 @@ namespace FK {
 		 *		指定した制御点が存在しない場合は零ベクトルを返します。
 		 */
 		fk_Vector getCtrl(int ID);
+
+		//! 制御点重み値取得関数
+		/*!
+		 *	曲線の制御点重み値を取得します。
+		 *
+		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
+		 *
+		 *	\return	指定した制御点の重み値。
+		 *		指定した制御点が存在しない場合は 0 を返します。
+		 */
+		double getWeight(int ID);
 
 		//! 制御点数取得関数
 		/*!

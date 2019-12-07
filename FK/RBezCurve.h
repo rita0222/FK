@@ -126,18 +126,7 @@ namespace FK {
 		 */
 		int		getDegree(void);
 
-		//! 制御点設定関数1
-		/*!
-		 *	曲線の制御点位置ベクトルを設定します。
-		 *
-		 *	\param[in]	ID	設定する制御点の ID。先頭は 0 になります。
-		 *	\param[in]	pos	制御点位置ベクトル
-		 *
-		 *	\return	設定に成功した場合 true、失敗した場合 false を返します。
-		 */
-		bool setCtrl(int ID, fk_Vector *pos);
-
-		//! 制御点設定関数2
+		//! 制御点設定関数
 		/*!
 		 *	曲線の制御点位置ベクトルを設定します。
 		 *
@@ -197,7 +186,6 @@ namespace FK {
 	private:
 		int		deg;
 		std::vector<double>		w;
-		std::vector<float>		fw;
 		std::vector<fk_Vector>	wCtrl;
 
 		fk_Vector	PosBasis(double);

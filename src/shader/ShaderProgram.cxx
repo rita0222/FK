@@ -432,27 +432,22 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 	switch(argKind) {
 	  case GL_VERTEX_SHADER:
 		buildIn = vertexBuildIn;
-		//fk_Window::putString("----VERTEX Shader----");
 		break;
 		
 	  case GL_GEOMETRY_SHADER:
 		buildIn = geometryBuildIn;
-		//fk_Window::putString("----GEOMETRY Shader----");
 		break;
 
 	  case GL_FRAGMENT_SHADER:
 		buildIn = (fboMode == true) ? fboBuildIn : fragmentBuildIn;
-		//fk_Window::putString("----FRAGMENT Shader----");
 		break;
 		
 	  case GL_TESS_CONTROL_SHADER:
 		buildIn = tessCtrlBuildIn;
-		//fk_Window::putString("----TESS CTRL Shader----");
 		break;
 
 	  case GL_TESS_EVALUATION_SHADER:
 		buildIn = tessEvalBuildIn;
-		//fk_Window::putString("----TESS EVAL Shader----");
 		break;
 
 	  default:
@@ -464,14 +459,12 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		if(argCode->find(pair.first) != string::npos) {
 			uniformStatus[pair.first] = true;
 			tmpStr += pair.second;
-			//fk_Window::printf("FOUND: %s", pair.first.c_str());
 		} else {
 			if(uniformStatus.find(pair.first) == uniformStatus.end()) {
 				uniformStatus[pair.first] = false;
 			}
 		}
 	}
-	//fk_Window::putString(tmpStr);
 	buildIn += tmpStr;
 
 	tmpStr.clear();
@@ -479,14 +472,12 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		if(argCode->find(pair.first) != string::npos) {
 			attributeStatus[pair.first] = true;
 			tmpStr += pair.second;
-			//fk_Window::printf("FOUND: %s", pair.first.c_str());
 		} else {
 			if(attributeStatus.find(pair.first) == attributeStatus.end()) {
 				attributeStatus[pair.first] = false;
 			}
 		}
 	}
-	//fk_Window::putString(tmpStr);
 	buildIn += tmpStr;
 
 	while((pos = argCode->find(incStr, pos)) != string::npos) {
@@ -497,12 +488,6 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		argCode->insert(pos, addLine);
 		pos += addLine.length();
 	}
-/*
-	if(argKind == GL_TESS_CONTROL_SHADER ||
-	   argKind == GL_TESS_EVALUATION_SHADER) {
-		fk_Window::putString(*argCode);
-	}
-*/
 	return;
 }
 

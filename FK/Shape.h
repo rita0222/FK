@@ -361,7 +361,6 @@ namespace FK {
 		// シェーダー変数名: 曲線曲面
 		static const std::string	ctrlPosName;
 		static const std::string	degreeName;		
-		static const std::string	weightName;
 
 #endif
 

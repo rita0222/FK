@@ -201,7 +201,6 @@ namespace FK {
 
 	private:
 		int		deg;
-		static const std::vector<float> dummyW;
 		
 		void MakeDiv(double, std::vector<std::vector<fk_Vector> > &);
 		double CrossZero(fk_Vector &, fk_Vector &);

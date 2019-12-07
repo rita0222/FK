@@ -190,6 +190,33 @@ bool fk_FVecArray::set(int argID, const fk_Color &argC)
 	return set(argID, argC.col[0], argC.col[1], argC.col[2], argC.col[3]);
 }
 
+bool fk_FVecArray::set(int argID, double argX, double argY)
+{
+	if(argID < 0 || argID >= size) return false;
+
+	_st	id = _st(argID*dim);
+	array[id] = float(argX);
+	array[id+1] = float(argY);
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
+	return true;
+}
+
+bool fk_FVecArray::set(int argID, double argX, double argY, double argZ)
+{
+	if(argID < 0 || argID >= size) return false;
+
+	_st	id = _st(argID*dim);
+	array[id] = float(argX);
+	array[id+1] = float(argY);
+	if(dim >= 3) array[id+2] = float(argZ);
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
+	return true;
+}
+
 bool fk_FVecArray::set(int argID, double argX, double argY, double argZ, double argW)
 {
 	if(argID < 0 || argID >= size) return false;
@@ -199,6 +226,33 @@ bool fk_FVecArray::set(int argID, double argX, double argY, double argZ, double 
 	array[id+1] = float(argY);
 	if(dim >= 3) array[id+2] = float(argZ);
 	if(dim == 4) array[id+3] = float(argW);
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
+	return true;
+}
+
+bool fk_FVecArray::set(int argID, float argX, float argY)
+{
+	if(argID < 0 || argID >= size) return false;
+
+	_st	id = _st(argID*dim);
+	array[id] = argX;
+	array[id+1] = argY;
+	elemFlg[_st(argID)] = true;
+	allFlg = true;
+
+	return true;
+}
+
+bool fk_FVecArray::set(int argID, float argX, float argY, float argZ)
+{
+	if(argID < 0 || argID >= size) return false;
+
+	_st	id = _st(argID*dim);
+	array[id] = argX;
+	array[id+1] = argY;
+	if(dim >= 3) array[id+2] = argZ;
 	elemFlg[_st(argID)] = true;
 	allFlg = true;
 

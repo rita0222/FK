@@ -78,10 +78,11 @@ using namespace FK;
 
 fk_Surface::fk_Surface(void) : div(16), size(0)
 {
-	ctrlPos.clear();
 	realType = fk_RealShapeType::SURFACE;
 	SetObjectType(fk_Type::SURFACE);
-	setShaderAttribute(ctrlPosName, 3, ctrlPos.getP());
+	ctrlPos.setDim(4);
+	ctrlPos.clear();
+	setShaderAttribute(ctrlPosName, 4, ctrlPos.getP());
 
 	return;
 }
