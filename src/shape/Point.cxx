@@ -142,6 +142,8 @@ int fk_Point::pushVertex(const fk_Vector &argPos)
 	colArray.push(0.0, 0.0, 0.0, 1.0);
 	aliveArray.push_back(fk_Shape::ALIVE);
 
+	modifyAttribute(vertexName);
+	modifyAttribute(pointElementColorName);
 	modifyAttribute(pointElementAliveName);
 
 	return int(aliveArray.size() - 1);
@@ -152,6 +154,8 @@ bool fk_Point::setVertex(int argID, const fk_Vector &argPos)
 	if(argID < 0 || argID >= posArray.getSize()) return false;
 	if(aliveArray[_st(argID)] == fk_Shape::DEAD) return false;
 	posArray.set(argID, argPos);
+
+	modifyAttribute(vertexName);
 
 	return true;
 }
