@@ -36,7 +36,7 @@ pkgbuild \
 productbuild \
 	--distribution ./script/distribution.xml \
 	--package-path . \
-	fk_Installer.pkg
+	fk_Mac_$1.pkg
 
 rm tmpInst.pkg
 #rm -rf Package
