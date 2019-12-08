@@ -44,8 +44,8 @@ namespace FK_CLI_RBez
             {
                 if (window.GetSpecialKeyStatus(fk_Key.RIGHT, fk_Switch.PRESS)) h += 0.1;
                 if (window.GetSpecialKeyStatus(fk_Key.LEFT, fk_Switch.PRESS)) h -= 0.1;
-                if (window.GetSpecialKeyStatus(fk_Key.UP, fk_Switch.PRESS)) w += 0.1;
-                if (window.GetSpecialKeyStatus(fk_Key.DOWN, fk_Switch.PRESS)) w -= 0.1;
+                if (window.GetSpecialKeyStatus(fk_Key.UP, fk_Switch.PRESS)) w += 0.01;
+                if (window.GetSpecialKeyStatus(fk_Key.DOWN, fk_Switch.PRESS)) w -= 0.01;
 
                 curv.SetCtrl(1, new fk_Vector(0.0, h, 0.0));
                 curv.SetWeight(1, w);
