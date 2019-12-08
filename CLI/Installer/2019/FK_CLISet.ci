@@ -1,9 +1,9 @@
-﻿<project version = 9 civer = 8.4.10 winver = "2.12/6.2.9200" >
+﻿<project version = 9 civer = 8.5.5 winver = "2.12/6.2.9200" >
    <autorun >0</>
    <autoclose >1</>
    <compname >Fine Kernel Project</>
    <produrl >https://gamescience.jp/FK/</>
-   <ver >4.1.2</>
+   <ver >4.1.4</>
    <supurl >https://gamescience.jp/FK/</>
    <updurl >https://osdn.net/projects/fktoolkit/releases/</>
    <dlgfont >custom</>
