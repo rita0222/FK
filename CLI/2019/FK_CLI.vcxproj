@@ -489,21 +489,21 @@
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -511,7 +511,7 @@
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -543,8 +543,9 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+
+perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -575,8 +576,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+
+perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -617,8 +619,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+
+perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -658,8 +661,9 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+
+perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
