@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\FK\Audio.h" />
     <ClInclude Include="..\..\FK\Base.h" />
     <ClInclude Include="..\..\FK\BezCurve.h" />
+    <ClInclude Include="..\..\FK\BezCurveDraw.H" />
     <ClInclude Include="..\..\FK\BezSurface.h" />
     <ClInclude Include="..\..\FK\Block.h" />
     <ClInclude Include="..\..\FK\Boundary.h" />
@@ -41,7 +42,6 @@
     <ClInclude Include="..\..\FK\Command.H" />
     <ClInclude Include="..\..\FK\Cone.h" />
     <ClInclude Include="..\..\FK\Curve.h" />
-    <ClInclude Include="..\..\FK\CurveDraw.H" />
     <ClInclude Include="..\..\FK\D3DXAnimation.H" />
     <ClInclude Include="..\..\FK\D3DXData.H" />
     <ClInclude Include="..\..\FK\D3DXParser.H" />
@@ -112,6 +112,7 @@
     <ClInclude Include="..\..\FK\Prism.h" />
     <ClInclude Include="..\..\FK\Projection.h" />
     <ClInclude Include="..\..\FK\Quaternion.h" />
+    <ClInclude Include="..\..\FK\RBezCurve.h" />
     <ClInclude Include="..\..\FK\RDSParser.H" />
     <ClInclude Include="..\..\FK\RectTexture.h" />
     <ClInclude Include="..\..\FK\Reference.h" />
@@ -230,7 +231,7 @@
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Time.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
-    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\BezCurveDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
     <ClCompile Include="..\..\src\graphics\Engine.cxx" />
     <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
@@ -314,6 +315,7 @@
     <ClCompile Include="..\..\src\shape\Polygon.cxx" />
     <ClCompile Include="..\..\src\shape\Polyline.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />
+    <ClCompile Include="..\..\src\shape\RBezCurve.cxx" />
     <ClCompile Include="..\..\src\shape\RDSParser.cxx" />
     <ClCompile Include="..\..\src\shape\RectTexture.cxx" />
     <ClCompile Include="..\..\src\shape\Reference1.cxx" />
@@ -356,6 +358,7 @@
     <ClCompile Include="..\FK_CLI\cpp\AudioStream_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\AudioWavBuffer_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Base_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\BezCurve_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\BezSurface_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Block_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Boundary_CLI.cpp" />

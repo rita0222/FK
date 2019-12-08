@@ -145,6 +145,6 @@ namespace FK_CLI {
 	
 	fk_Vector^ fk_BezCurve::Diff(double argT)
 	{
-		return gcnew fk_Vector(GetP()->norm(argT));
+		return gcnew fk_Vector(GetP()->diff(argT));
 	}
 }
