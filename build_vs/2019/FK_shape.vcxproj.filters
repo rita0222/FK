@@ -217,6 +217,9 @@
     <ClCompile Include="..\..\src\shape\VRMLParser.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\shape\RBezCurve.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -435,6 +438,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\VRMLParser.H">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\RBezCurve.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

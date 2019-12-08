@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\BezCurveDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
     <ClCompile Include="..\..\src\graphics\Engine.cxx" />
     <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
@@ -30,7 +30,7 @@
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\FK\CurveDraw.H" />
+    <ClInclude Include="..\..\FK\BezCurveDraw.H" />
     <ClInclude Include="..\..\FK\DrawBase.H" />
     <ClInclude Include="..\..\FK\Engine.H" />
     <ClInclude Include="..\..\FK\FaceDraw.H" />

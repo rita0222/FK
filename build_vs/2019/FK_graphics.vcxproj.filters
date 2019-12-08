@@ -22,10 +22,10 @@
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx">
+    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx">
+    <ClCompile Include="..\..\src\graphics\BezCurveDraw.cxx">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,10 +59,10 @@
     <ClInclude Include="..\..\FK\TextureDraw.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\CurveDraw.H">
+    <ClInclude Include="..\..\FK\SurfaceDraw.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\SurfaceDraw.H">
+    <ClInclude Include="..\..\FK\BezCurveDraw.H">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
