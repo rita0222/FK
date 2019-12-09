@@ -159,8 +159,7 @@ namespace FK_CLI
 		/*!
 		 *	曲線の制御点位置ベクトルを参照します。
 		 *
-		 *	\param[in]	uID	制御点の ID
-		 *	\param[in]	vID	制御点のv方向ID
+		 *	\param[in]	ID	制御点の ID
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 */
