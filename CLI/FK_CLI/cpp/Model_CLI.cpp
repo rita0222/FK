@@ -116,7 +116,7 @@ namespace FK_CLI {
 	fk_Model::fk_Model(): fk_Boundary(false), shape(nullptr)
 	{
 		MakeNativeModel();
-		modelList->Add(this);
+		modelList->AddLast(this);
 	}
 
 	fk_Model::fk_Model(bool argNewFlg) : fk_Boundary(false), shape(nullptr)
@@ -124,7 +124,7 @@ namespace FK_CLI {
 		if (argNewFlg) {
 			MakeNativeModel();
 		}
-		modelList->Add(this);
+		modelList->AddLast(this);
 	}
 
 	fk_Model::fk_Model(::FK::fk_Model *argUnmanagedPtr) : fk_Boundary(false), shape(nullptr)
@@ -136,7 +136,7 @@ namespace FK_CLI {
 			dFlg = false;
 		}
 
-		modelList->Add(this);
+		modelList->AddLast(this);
 	}
 
 	fk_Model::~fk_Model()

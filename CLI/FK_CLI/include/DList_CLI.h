@@ -77,6 +77,7 @@
 #include "Base_CLI.h"
 #include "Model_CLI.h"
 #include "Projection_CLI.h"
+#using <System.dll>
 
 namespace FK_CLI
 {
@@ -116,8 +117,8 @@ namespace FK_CLI
 	 */
 	public ref class fk_DisplayLink : fk_BaseObject {
 	internal:
-		List<fk_Model^>^ modelList;
-		List<fk_Model^>^ overlayList;
+		LinkedList<fk_Model^>^ modelList;
+		LinkedList<fk_Model^>^ overlayList;
 		fk_Model^ _camera;
 		fk_Model^ _lCamera;
 		fk_Model^ _rCamera;

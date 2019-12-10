@@ -92,8 +92,8 @@ namespace FK_CLI {
 	}
 
 	fk_DisplayLink::fk_DisplayLink(bool argNewFlg)
-		: fk_BaseObject(false), modelList(gcnew List<fk_Model^>()),
-		  overlayList(gcnew List<fk_Model^>()),
+		: fk_BaseObject(false), modelList(gcnew LinkedList<fk_Model^>()),
+		  overlayList(gcnew LinkedList<fk_Model^>()),
 		  _camera(nullptr), _rCamera(nullptr), _lCamera(nullptr),
 		  _proj(nullptr), _rProj(nullptr), _lProj(nullptr)
 	{
@@ -266,7 +266,7 @@ namespace FK_CLI {
 	{
 		if(!argM) return;
 		GetP()->entryModel(argM->GetP());
-		if(modelList->Contains(argM) == false) modelList->Add(argM);
+		if(modelList->Contains(argM) == false) modelList->AddLast(argM);
 	}			
 
 	void fk_DisplayLink::RemoveModel(fk_Model ^argM)
@@ -288,7 +288,7 @@ namespace FK_CLI {
 	{
 		if(!argM) return;
 		GetP()->entryOverlayModel(argM->GetP());
-		if(overlayList->Contains(argM) == false) overlayList->Add(argM);
+		if(overlayList->Contains(argM) == false) overlayList->AddLast(argM);
 	}
 		
 	void fk_DisplayLink::RemoveOverlayModel(fk_Model^ argM)

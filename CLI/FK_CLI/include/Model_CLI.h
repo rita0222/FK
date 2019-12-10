@@ -76,6 +76,7 @@
 #include <FK/Model.h>
 #include "Boundary_CLI.h"
 #include "Shape_CLI.h"
+#using <System.dll>
 
 namespace FK_CLI
 {
@@ -212,7 +213,7 @@ namespace FK_CLI
 	public ref class fk_Model : fk_Boundary {
 	internal:
 
-		static List<fk_Model^>^ modelList = gcnew List<fk_Model^>();
+		static LinkedList<fk_Model^>^ modelList = gcnew LinkedList<fk_Model^>();
 		fk_Shape^ shape;
 		fk_DrawCallback^ preShader;
 		fk_DrawCallback^ postShader;
