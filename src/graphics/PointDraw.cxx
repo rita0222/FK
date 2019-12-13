@@ -190,6 +190,9 @@ void fk_PointDraw::SubroutineSetup(fk_Model *argModel)
 
 	switch(shape->getRealShapeType()) {
 	  case fk_RealShapeType::POINT:
+	  case fk_RealShapeType::CURVE:
+	  case fk_RealShapeType::SURFACE:
+
 		switch(mode) {
 		  case fk_ElementMode::MODEL:
 			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
