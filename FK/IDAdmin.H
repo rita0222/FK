@@ -79,9 +79,6 @@ namespace FK {
 
 	class fk_IDAdmin {
 
-		friend class	fk_FileInput;
-		friend class	fk_FileOutput;
-
 	public:
 		fk_IDAdmin(int = 1);
 		virtual ~fk_IDAdmin();

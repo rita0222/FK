@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  *
  *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
  *
@@ -31,7 +31,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE. 
+ *	POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 /****************************************************************************
@@ -70,114 +70,65 @@
  *
  ****************************************************************************/
 
+#define FK_DEF_SIZETYPE
+#include <FK/Graph.h>
 
-#ifndef __FK_DATABASE_HEADER__
-#define __FK_DATABASE_HEADER__
+using namespace std;
+using namespace FK;
 
-#include <FK/IDAdmin.H>
-#include <vector>
-
-namespace FK {
-	class fk_Vertex;
-	class fk_Half;
-	class fk_Edge;
-	class fk_Loop;
-
-	class fk_DataBase {
-
-		friend class		fk_DataAccess;
-		friend class		fk_IFSetHandle;
-
-	public:
-		
-		fk_DataBase(void);		// コンストラクタ
-		virtual ~fk_DataBase();	// デストラクタ
-
-		void				AllClear(void);
-		void				CloneData(fk_DataBase *);
-		bool				Compare(fk_DataBase *);
-
-		bool				ExistVertex(fk_Vertex *) const;
-		bool				ExistVertex(int) const;
-		bool				ExistHalf(fk_Half *) const;
-		bool				ExistHalf(int) const;
-		bool				ExistEdge(fk_Edge *) const;
-		bool				ExistEdge(int) const;
-		bool				ExistLoop(fk_Loop *) const;
-		bool				ExistLoop(int) const;
-
-		fk_Vertex *			GetVData(int);
-		fk_Half *			GetHData(int);
-		fk_Edge *			GetEData(int);
-		fk_Loop *			GetLData(int);
-
-		fk_Vertex *			GetNextV(fk_Vertex *);
-		fk_Half *			GetNextH(fk_Half *);
-		fk_Edge *			GetNextE(fk_Edge *);
-		fk_Loop *			GetNextL(fk_Loop *);
-
-		fk_Vertex *			GetLastV(void);
-		fk_Half *			GetLastH(void);
-		fk_Edge *			GetLastE(void);
-		fk_Loop *			GetLastL(void);
-
-		int					GetVNum(void) const;
-		int					GetHNum(void) const;
-		int					GetENum(void) const;
-		int					GetLNum(void) const;
-
-		void				VPrint(int = FK_UNDEFINED) const;
-		void				HPrint(int = FK_UNDEFINED) const;
-		void				EPrint(int = FK_UNDEFINED) const;
-		void				LPrint(int = FK_UNDEFINED) const;
-
-		void				AllPrint(void) const;
-
-		bool				VCheck(int = FK_UNDEFINED) const;
-		bool				HCheck(int = FK_UNDEFINED) const;
-		bool				ECheck(int = FK_UNDEFINED) const;
-		bool				LCheck(int = FK_UNDEFINED) const;
-
-		bool				AllCheck(void) const;
-
-	private:
-
-		fk_IDAdmin			vAdmin;		// 頂点 ID 管理オブジェクト
-		fk_IDAdmin			hAdmin;		// 半稜線 ID 管理オブジェクト
-		fk_IDAdmin			eAdmin;		// 稜線 ID 管理オブジェクト
-		fk_IDAdmin			lAdmin;		// ループ ID 管理オブジェクト
-
-		std::vector<fk_Vertex>		vSet;
-		std::vector<fk_Half>		hSet;
-		std::vector<fk_Edge>		eSet;
-		std::vector<fk_Loop>		lSet;
-
-		void				ResizeData(fk_DataBase *);
-		void				ResizeData(int, int, int, int);
-		void				VSetClone(std::vector<fk_Vertex> *);
-		void				HSetClone(std::vector<fk_Half> *);
-		void				ESetClone(std::vector<fk_Edge> *);
-		void				LSetClone(std::vector<fk_Loop> *);
-
-		bool				VCompare(fk_DataBase *);
-		bool				HCompare(fk_DataBase *);
-		bool				ECompare(fk_DataBase *);
-		bool				LCompare(fk_DataBase *);
-
-		fk_Vertex *			GetNewVertex(void);
-		fk_Vertex *			GetNewVertex(int);
-		fk_Half *			GetNewHalf(void);
-		fk_Half *			GetNewHalf(int);
-		fk_Edge *			GetNewEdge(void);
-		fk_Edge *			GetNewEdge(int);
-		fk_Loop *			GetNewLoop(void);
-		fk_Loop *			GetNewLoop(int);
-
-		bool				DeleteVertex(int);
-		bool				DeleteHalf(int);
-		bool				DeleteEdge(int);
-		bool				DeleteLoop(int);
-	};
+fk_Graph::fk_Graph(void)
+{
+	vertexShape = new fk_Point();
+	edgeShape = new fk_Line();
+	edgeAdmin = new fk_IDAdmin(0);
+	return;
 }
 
-#endif // !__FK_DATABASE_HEADER__
+fk_Graph::~fk_Graph()
+{
+	delete vertexShape;
+	delete edgeShape;
+	delete edgeAdmin;
+
+	return;
+}
+
+void fk_Graph::setNodeSize(int argSize)
+{
+	if(argSize < 0) return;
+
+	if(argSize == 0) node.clear();
+	else node.resize(_st(argSize));
+
+	return;
+}
+
+int fk_Graph::getNodeSize(void)
+{
+	return int(node.size());
+}
+
+void fk_Graph::setNodePosition(int argID, fk_Vector argPos)
+{
+	if(argID < 0 || argID >= getNodeSize()) return;
+	node[_st(argID)] = argPos;
+}
+
+fk_Vector fk_Graph::getNodePosition(int argID)
+{
+	if(argID < 0 || argID >= getNodeSize()) return fk_Vector();
+	return node[_st(argID)];
+}
+
+int fk_Graph::makeEdge(int argID1, int argID2)
+{
+	FK_UNUSED(argID1);
+	FK_UNUSED(argID2);
+	return 0;
+}
+
+fk_EdgePair fk_Graph::getEdge(int argID)
+{
+	FK_UNUSED(argID);
+	return fk_EdgePair();
+}

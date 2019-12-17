@@ -115,8 +115,6 @@ namespace FK {
 
 		friend class	fk_Operation;
 		friend class	fk_DataBase;
-		friend class	fk_FileInput;
-		friend class	fk_FileOutput;
 		friend class	fk_IFSetHandle;
 
 	public:

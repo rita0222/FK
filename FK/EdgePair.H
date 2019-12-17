@@ -69,115 +69,22 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-
-#ifndef __FK_DATABASE_HEADER__
-#define __FK_DATABASE_HEADER__
-
-#include <FK/IDAdmin.H>
-#include <vector>
+#ifndef __FK_EDGEPAIR_HEADER__
+#define __FK_EDGEPAIR_HEADER__
 
 namespace FK {
-	class fk_Vertex;
-	class fk_Half;
-	class fk_Edge;
-	class fk_Loop;
-
-	class fk_DataBase {
-
-		friend class		fk_DataAccess;
-		friend class		fk_IFSetHandle;
-
+	class fk_EdgePair {
 	public:
+		int id[2];
+
+		fk_EdgePair();
 		
-		fk_DataBase(void);		// コンストラクタ
-		virtual ~fk_DataBase();	// デストラクタ
+		bool	operator ==(const fk_EdgePair &) const;
+		bool	operator >(const fk_EdgePair &) const;
+		bool	operator <(const fk_EdgePair &) const;
 
-		void				AllClear(void);
-		void				CloneData(fk_DataBase *);
-		bool				Compare(fk_DataBase *);
-
-		bool				ExistVertex(fk_Vertex *) const;
-		bool				ExistVertex(int) const;
-		bool				ExistHalf(fk_Half *) const;
-		bool				ExistHalf(int) const;
-		bool				ExistEdge(fk_Edge *) const;
-		bool				ExistEdge(int) const;
-		bool				ExistLoop(fk_Loop *) const;
-		bool				ExistLoop(int) const;
-
-		fk_Vertex *			GetVData(int);
-		fk_Half *			GetHData(int);
-		fk_Edge *			GetEData(int);
-		fk_Loop *			GetLData(int);
-
-		fk_Vertex *			GetNextV(fk_Vertex *);
-		fk_Half *			GetNextH(fk_Half *);
-		fk_Edge *			GetNextE(fk_Edge *);
-		fk_Loop *			GetNextL(fk_Loop *);
-
-		fk_Vertex *			GetLastV(void);
-		fk_Half *			GetLastH(void);
-		fk_Edge *			GetLastE(void);
-		fk_Loop *			GetLastL(void);
-
-		int					GetVNum(void) const;
-		int					GetHNum(void) const;
-		int					GetENum(void) const;
-		int					GetLNum(void) const;
-
-		void				VPrint(int = FK_UNDEFINED) const;
-		void				HPrint(int = FK_UNDEFINED) const;
-		void				EPrint(int = FK_UNDEFINED) const;
-		void				LPrint(int = FK_UNDEFINED) const;
-
-		void				AllPrint(void) const;
-
-		bool				VCheck(int = FK_UNDEFINED) const;
-		bool				HCheck(int = FK_UNDEFINED) const;
-		bool				ECheck(int = FK_UNDEFINED) const;
-		bool				LCheck(int = FK_UNDEFINED) const;
-
-		bool				AllCheck(void) const;
-
-	private:
-
-		fk_IDAdmin			vAdmin;		// 頂点 ID 管理オブジェクト
-		fk_IDAdmin			hAdmin;		// 半稜線 ID 管理オブジェクト
-		fk_IDAdmin			eAdmin;		// 稜線 ID 管理オブジェクト
-		fk_IDAdmin			lAdmin;		// ループ ID 管理オブジェクト
-
-		std::vector<fk_Vertex>		vSet;
-		std::vector<fk_Half>		hSet;
-		std::vector<fk_Edge>		eSet;
-		std::vector<fk_Loop>		lSet;
-
-		void				ResizeData(fk_DataBase *);
-		void				ResizeData(int, int, int, int);
-		void				VSetClone(std::vector<fk_Vertex> *);
-		void				HSetClone(std::vector<fk_Half> *);
-		void				ESetClone(std::vector<fk_Edge> *);
-		void				LSetClone(std::vector<fk_Loop> *);
-
-		bool				VCompare(fk_DataBase *);
-		bool				HCompare(fk_DataBase *);
-		bool				ECompare(fk_DataBase *);
-		bool				LCompare(fk_DataBase *);
-
-		fk_Vertex *			GetNewVertex(void);
-		fk_Vertex *			GetNewVertex(int);
-		fk_Half *			GetNewHalf(void);
-		fk_Half *			GetNewHalf(int);
-		fk_Edge *			GetNewEdge(void);
-		fk_Edge *			GetNewEdge(int);
-		fk_Loop *			GetNewLoop(void);
-		fk_Loop *			GetNewLoop(int);
-
-		bool				DeleteVertex(int);
-		bool				DeleteHalf(int);
-		bool				DeleteEdge(int);
-		bool				DeleteLoop(int);
-	};
+		void	set(int, int);
+	};		
 }
 
-#endif // !__FK_DATABASE_HEADER__
+#endif

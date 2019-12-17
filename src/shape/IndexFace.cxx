@@ -73,6 +73,7 @@
 #define FK_DEF_SIZETYPE
 #include <algorithm>
 #include <FK/IndexFace.h>
+#include <FK/EdgePair.H>
 #include <FK/Solid.h>
 #include <FK/D3DXAnimation.H>
 #include <FK/D3DXParser.H>
@@ -94,60 +95,6 @@
 
 using namespace std;
 using namespace FK;
-
-namespace FK {
-	class fk_EdgePair {
-	public:
-		int id[2];
-
-		fk_EdgePair();
-		
-		bool	operator ==(const fk_EdgePair &) const;
-		bool	operator >(const fk_EdgePair &) const;
-		bool	operator <(const fk_EdgePair &) const;
-
-		void	set(int, int);
-	};		
-}
-
-fk_EdgePair::fk_EdgePair()
-{
-	id[0] = id[1] = -1;
-}
-
-bool fk_EdgePair::operator ==(const fk_EdgePair &argE) const
-{
-	return (id[0] == argE.id[0] && id[1] == argE.id[1]);
-}
-
-bool fk_EdgePair::operator >(const fk_EdgePair &argE) const
-{
-	if(id[0] > argE.id[0]) return true;
-	if(id[0] < argE.id[0]) return false;
-	if(id[1] > argE.id[1]) return true;
-	return false;
-}
-
-bool fk_EdgePair::operator <(const fk_EdgePair &argE) const
-{
-	if(id[0] < argE.id[0]) return true;
-	if(id[0] > argE.id[0]) return false;
-	if(id[1] < argE.id[1]) return true;
-	return false;
-}
-
-void fk_EdgePair::set(int argID1, int argID2)
-{
-	if(argID1 < argID2) {
-		id[0] = argID1;
-		id[1] = argID2;
-	} else {
-		id[0] = argID2;
-		id[1] = argID1;
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////
 
 const static double vParam[8][3] = {
 	{0.5, 0.5, 0.5},
