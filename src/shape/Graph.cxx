@@ -99,8 +99,15 @@ void fk_Graph::setNodeSize(int argSize)
 {
 	if(argSize < 0) return;
 
-	if(argSize == 0) node.clear();
-	else node.resize(_st(argSize));
+	if(argSize == 0) {
+		node.clear();
+		conS.clear();
+		conE.clear();
+	} else {
+		node.resize(_st(argSize));
+		conS.resize(_st(argSize));
+		conE.resize(_st(argSize));
+	}
 
 	fk_Vector origin;
 
@@ -121,8 +128,8 @@ void fk_Graph::setNodePosition(int argID, fk_Vector argPos)
 	node[_st(argID)] = argPos;
 	vertexShape->setVertex(argID, argPos);
 
-	for(auto e : conS[_st(argID)]) edgeShape->setVertex(e.id[1], 0, argPos);
-	for(auto e : conE[_st(argID)]) edgeShape->setVertex(e.id[1], 1, argPos);
+	for(auto &e : conS[_st(argID)]) edgeShape->setVertex(e.id[1], 0, argPos);
+	for(auto &e : conE[_st(argID)]) edgeShape->setVertex(e.id[1], 1, argPos);
 }
 
 fk_Vector fk_Graph::getNodePosition(int argID)
