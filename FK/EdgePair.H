@@ -77,7 +77,8 @@ namespace FK {
 	public:
 		int id[2];
 
-		fk_EdgePair();
+		fk_EdgePair(void);
+		fk_EdgePair(int, int);
 		
 		bool	operator ==(const fk_EdgePair &) const;
 		bool	operator >(const fk_EdgePair &) const;

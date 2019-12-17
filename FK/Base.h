@@ -172,7 +172,8 @@ namespace FK {
 		SOLID,			//!<	fk_Solid 型
 		SHAPEVIEWER,	//!<	fk_ShapeViewer 型
 		PARTICLE,		//!<	fk_Particle 型
-		PARTICLESET		//!<	fk_ParticleSet 型
+		PARTICLESET,	//!<	fk_ParticleSet 型
+		GRAPH			//!<	fk_Graph 型
 	};
 
 #ifndef FK_DOXYGEN_USER_PROCESS

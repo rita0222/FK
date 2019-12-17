@@ -77,6 +77,7 @@
 #include <FK/Plane.h>
 #include <FK/Curve.h>
 #include <FK/Surface.h>
+#include <FK/Graph.h>
 #include <FK/Projection.h>
 #include <FK/PointDraw.H>
 #include <FK/LineDraw.H>
@@ -398,6 +399,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	fk_Curve *curve = nullptr;
 	fk_Surface *surface = nullptr;
+	fk_Graph *graph = nullptr;
 
 	switch(realType) {
 	  case fk_RealShapeType::CURVE:
@@ -406,6 +408,10 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	  case fk_RealShapeType::SURFACE:
 		surface = dynamic_cast<fk_Surface *>(argModel->getShape());
+		break;
+
+	  case fk_RealShapeType::GRAPH:
+		graph = dynamic_cast<fk_Graph *>(argModel->getShape());
 		break;
 
 	  default:
@@ -423,6 +429,8 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 			pointDraw->DrawShapePoint(argModel, curve->GetPoint());
 		} else if(surface != nullptr) {
 			pointDraw->DrawShapePoint(argModel, surface->GetPoint());
+		} else if(graph != nullptr) {
+			pointDraw->DrawShapePoint(argModel, graph->GetVertexShape());
 		} else {
 			pointDraw->DrawShapePoint(argModel);
 		}
@@ -433,6 +441,8 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 			lineDraw->DrawShapeLine(argModel, curve->GetLine());
 		} else if(surface != nullptr) {
 			lineDraw->DrawShapeLine(argModel, surface->GetLine());
+		} else if(graph != nullptr) {
+			lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape());
 		} else {
 			lineDraw->DrawShapeLine(argModel);
 		}

@@ -79,6 +79,7 @@
 #include <FK/Vertex.h>
 #include <FK/Curve.h>
 #include <FK/Surface.h>
+#include <FK/Graph.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -192,6 +193,7 @@ void fk_PointDraw::SubroutineSetup(fk_Model *argModel)
 	  case fk_RealShapeType::POINT:
 	  case fk_RealShapeType::CURVE:
 	  case fk_RealShapeType::SURFACE:
+	  case fk_RealShapeType::GRAPH:
 
 		switch(mode) {
 		  case fk_ElementMode::MODEL:

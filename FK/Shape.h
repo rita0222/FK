@@ -90,14 +90,15 @@ namespace FK {
 
 	//! 形状データの具体的なデータ構造を表す列挙型
 	enum class fk_RealShapeType {
-		IFS,		//!<	fk_IndexFaceSetベース
-		SOLID,		//!<	fk_Solidベース
-		TEXTURE,	//!<	fk_Textureベース
-		POINT,		//!<	fk_Pointベース
-		LINE,		//!<	fk_Lineベース
-		CURVE,		//!<	fk_Curveベース
+		IFS,		//!<	fk_IndexFaceSet ベース
+		SOLID,		//!<	fk_Solid ベース
+		TEXTURE,	//!<	fk_Texture ベース
+		POINT,		//!<	fk_Point ベース
+		LINE,		//!<	fk_Line ベース
+		CURVE,		//!<	fk_Curve ベース
 		SURFACE,	//!<	fk_Surface ベース
-		LIGHT,		//!<	fk_Lightベース
+		LIGHT,		//!<	fk_Light ベース
+		GRAPH,		//!<	fk_Graph ベース
 		OTHER		//!<	その他
 	};
 

@@ -78,6 +78,8 @@ using namespace FK;
 
 fk_Graph::fk_Graph(void)
 {
+	realType = fk_RealShapeType::GRAPH;
+	SetObjectType(fk_Type::GRAPH);
 	vertexShape = new fk_Point();
 	edgeShape = new fk_Line();
 	edgeAdmin = new fk_IDAdmin(0);
@@ -100,6 +102,11 @@ void fk_Graph::setNodeSize(int argSize)
 	if(argSize == 0) node.clear();
 	else node.resize(_st(argSize));
 
+	fk_Vector origin;
+
+	while(argSize > vertexShape->getSize()) vertexShape->pushVertex(origin);
+	for(int i = argSize; i < vertexShape->getSize(); ++i) vertexShape->removeVertex(i);
+
 	return;
 }
 
@@ -112,6 +119,10 @@ void fk_Graph::setNodePosition(int argID, fk_Vector argPos)
 {
 	if(argID < 0 || argID >= getNodeSize()) return;
 	node[_st(argID)] = argPos;
+	vertexShape->setVertex(argID, argPos);
+
+	for(auto e : conS[_st(argID)]) edgeShape->setVertex(e.id[1], 0, argPos);
+	for(auto e : conE[_st(argID)]) edgeShape->setVertex(e.id[1], 1, argPos);
 }
 
 fk_Vector fk_Graph::getNodePosition(int argID)
@@ -120,15 +131,56 @@ fk_Vector fk_Graph::getNodePosition(int argID)
 	return node[_st(argID)];
 }
 
+bool fk_Graph::isConnect(int argID1, int argID2)
+{
+	if(argID1 < 0 || argID1 >= getNodeSize() ||
+	   argID2 < 0 || argID2 >= getNodeSize()) return false;
+
+	for(fk_EdgePair e : conS[_st(argID1)]) {
+		if(e.id[0] == argID2) return true;
+	}
+
+	for(fk_EdgePair e : conE[_st(argID1)]) {
+		if(e.id[0] == argID2) return true;
+	}
+
+	return false;
+}
+
 int fk_Graph::makeEdge(int argID1, int argID2)
 {
-	FK_UNUSED(argID1);
-	FK_UNUSED(argID2);
+	if(argID1 < 0 || argID1 >= getNodeSize() ||
+	   argID2 < 0 || argID2 >= getNodeSize()) return -2;
+
+	if(isConnect(argID1, argID2)) return -1;
+	
+	int newID = edgeAdmin->CreateID();
+	if(newID == int(edge.size())) edge.resize(_st(newID+1));
+	edge[_st(newID)].set(argID1, argID2);
+
+	conS[_st(argID1)].push_back(fk_EdgePair(argID2, newID));
+	conE[_st(argID2)].push_back(fk_EdgePair(argID1, newID));
+
+	edgeShape->pushLine(node[_st(argID1)], node[_st(argID2)]);
+
 	return 0;
 }
 
 fk_EdgePair fk_Graph::getEdge(int argID)
 {
-	FK_UNUSED(argID);
-	return fk_EdgePair();
+	if(argID < 0 || argID >= int(edge.size())) {
+		return fk_EdgePair();
+	}
+
+	return edge[_st(argID)];
+}
+
+fk_Point * fk_Graph::GetVertexShape(void)
+{
+	return vertexShape;
+}
+
+fk_Line * fk_Graph::GetEdgeShape(void)
+{
+	return edgeShape;
 }

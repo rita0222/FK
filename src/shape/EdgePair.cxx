@@ -80,6 +80,12 @@ fk_EdgePair::fk_EdgePair()
 	id[0] = id[1] = -1;
 }
 
+fk_EdgePair::fk_EdgePair(int argID1, int argID2)
+{
+	id[0] = argID1;
+	id[1] = argID2;
+}
+
 bool fk_EdgePair::operator ==(const fk_EdgePair &argE) const
 {
 	return (id[0] == argE.id[0] && id[1] == argE.id[1]);

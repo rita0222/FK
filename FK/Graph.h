@@ -97,15 +97,20 @@ namespace FK {
 		int			makeEdge(int, int);
 		fk_EdgePair	getEdge(int);
 
+		bool		isConnect(int, int);
+
+		fk_Point *	GetVertexShape(void);
+		fk_Line *	GetEdgeShape(void);
+
 	private:
 
 		fk_Point	*vertexShape;
 		fk_Line		*edgeShape;
 		fk_IDAdmin	*edgeAdmin;
 
-		std::vector<fk_Vector>			node;
-		std::vector< std::list<int> >	connect;
-		std::vector<fk_EdgePair>		edge;
+		std::vector<fk_Vector>					node;
+		std::vector< std::list<fk_EdgePair> >	conS, conE;
+		std::vector<fk_EdgePair>				edge;
 	};
 }
 
