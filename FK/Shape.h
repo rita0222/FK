@@ -353,6 +353,7 @@ namespace FK {
 
 		static const std::string	lineModelColorName;
 		static const std::string	lineElementColorName;
+		static const std::string	lineElementAliveName;
 
 		static const std::string	curveModelColorName;
 

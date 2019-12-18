@@ -97,6 +97,7 @@ fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
 
 	setShaderAttribute(vertexName, 3, posArray.getP());
 	setShaderAttribute(lineElementColorName, 4, colArray.getP());
+	setShaderAttribute(lineElementAliveName, 1, &aliveArray);
 	return;
 }
 
@@ -109,6 +110,7 @@ void fk_LineBase::AllClear(void)
 {
 	posArray.clear();
 	colArray.clear();
+	aliveArray.clear();
 	Touch();
 }
 
@@ -134,11 +136,23 @@ fk_Color fk_LineBase::GetCol(int argEID, int argVID)
 	return colArray.getC(argEID*2 + argVID);
 }
 
+void fk_LineBase::SetAlive(int argEID, bool argMode)
+{
+	int mode = (argMode == true) ? fk_Shape::ALIVE : fk_Shape::DEAD;
+	aliveArray[_st(argEID*2)] = aliveArray[_st(argEID*2)+1] = mode;
+}
+
+bool fk_LineBase::GetAlive(int argEID)
+{
+	return ((aliveArray[_st(argEID*2)] == fk_Shape::ALIVE) ? true : false);
+}
+
 void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 {
 	if(argVPos == nullptr) {
 		posArray.clear();
 		colArray.clear();
+		aliveArray.clear();
 		return;
 	}
 
@@ -146,12 +160,14 @@ void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 
 	posArray.resize(int(argVPos->size()));
 	colArray.resize(int(argVPos->size()));
+	aliveArray.resize(argVPos->size());
 
 	for(int i = 0; i < posArray.getSize()/2; ++i) {
 		SetPos(i, 0, &(*argVPos)[_st(i*2)]);
 		SetPos(i, 1, &(*argVPos)[_st(i*2+1)]);
 		SetCol(i, 0, &col);
 		SetCol(i, 1, &col);
+		SetAlive(i, true);
 	}
 	return;
 }
@@ -161,6 +177,7 @@ void fk_LineBase::MakeLines(fk_Vector *argVPos)
 	if(argVPos == nullptr) {
 		posArray.clear();
 		colArray.clear();
+		aliveArray.clear();
 		return;
 	}
 
@@ -174,12 +191,15 @@ void fk_LineBase::PushLines(fk_Vector *argS, fk_Vector *argE)
 	posArray.push(*argE);
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
 	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
+	aliveArray.push_back(fk_Shape::ALIVE);
+	aliveArray.push_back(fk_Shape::ALIVE);
 }
 
 void fk_LineBase::Resize(int argSize)
 {
 	posArray.resize(argSize*2);
 	colArray.resize(argSize*2);
+	aliveArray.resize(_st(argSize*2));
 }
 
 int fk_LineBase::Size(void)
@@ -191,6 +211,7 @@ void fk_LineBase::Touch(void)
 {
 	modifyAttribute(vertexName);
 	modifyAttribute(lineElementColorName);
+	modifyAttribute(lineElementAliveName);
 }
 
 fk_Vector fk_LineBase::GetLast(void)

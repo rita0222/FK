@@ -95,6 +95,10 @@ namespace FK {
 
 		void		ConnectEdge(bool, fk_GraphEdge *);
 
+		std::list<fk_GraphEdge *>	getAllEdge(void);
+		std::list<fk_GraphEdge *>	getStartEdge(void);
+		std::list<fk_GraphEdge *>	getEndEdge(void);
+
 	private:
 
 		int			ID;

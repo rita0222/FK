@@ -151,3 +151,26 @@ bool fk_GraphNode::isConnect(int argID)
 
 	return false;
 }
+
+list<fk_GraphEdge *> fk_GraphNode::getAllEdge(void)
+{
+	return edgeAll;
+}
+
+list<fk_GraphEdge *> fk_GraphNode::getStartEdge(void)
+{
+	list<fk_GraphEdge *> ret;
+
+	ret.splice(ret.end(), edgeS);
+	ret.splice(ret.end(), edgeB);
+	return ret;
+}
+
+list<fk_GraphEdge *> fk_GraphNode::getEndEdge(void)
+{
+	list<fk_GraphEdge *> ret;
+
+	ret.splice(ret.end(), edgeE);
+	ret.splice(ret.end(), edgeB);
+	return ret;
+}

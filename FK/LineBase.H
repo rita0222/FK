@@ -91,16 +91,19 @@ namespace FK {
 		void PushLines(fk_Vector *, fk_Vector *);
 		void SetPos(int, int, fk_Vector *);
 		void SetCol(int, int, fk_Color *);
+		void SetAlive(int, bool);
 		void Resize(int);
 		fk_Vector GetLast(void);
 		fk_Vector GetPos(int, int);
 		fk_Color GetCol(int, int);
+		bool GetAlive(int);
 		void Touch(void);
 		void AllClear();
 
 	private:
-		fk_FVecArray	posArray;
-		fk_FVecArray	colArray;
+		fk_FVecArray		posArray;
+		fk_FVecArray		colArray;
+		std::vector<int>	aliveArray;
 	};
 }
 

@@ -84,6 +84,7 @@ const string fk_Shape::pointElementColorName = "fk_PointElementColor";
 const string fk_Shape::pointElementAliveName = "fk_PointElementAlive";
 const string fk_Shape::lineModelColorName = "fk_LineModelColor";
 const string fk_Shape::lineElementColorName = "fk_LineElementColor";
+const string fk_Shape::lineElementAliveName = "fk_LineElementAlive";
 const string fk_Shape::curveModelColorName = "fk_CurveModelColor";
 const string fk_Shape::texCoordName = "fk_TexCoord";
 const string fk_Shape::ctrlPosName = "fk_CtrlPos";
