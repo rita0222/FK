@@ -81,23 +81,71 @@
 
 namespace FK {
 
+	//! グラフ構造を制御するクラス
+	/*!
+	 *	このクラスは、グラフ構造を制御する機能を提供します。
+	 */
+
 	class fk_Graph : public fk_Shape {
 
 	public:
 
+		//! コンストラクタ
 		fk_Graph(void);
+
+		//! デストラクタ
 		~fk_Graph();
 
-		void		setNodeSize(int);
+		//! ノード数設定関数
+		/*!
+		 *	\param[in]	num		ノード数
+		 */
+		void		setNodeSize(int num);
+
+		//! ノード数取得関数
+		/*!
+		 *	\return		ノード数
+		 */
 		int			getNodeSize(void);
 
-		void		setNodePosition(int, fk_Vector);
-		fk_Vector	getNodePosition(int);
+		//!	ノード位置設定関数
+		/*!
+		 *	\param[in]	ID		ノードID
+		 *	\param[in]	pos		ノード位置ベクトル
+		 */
+		void		setNodePosition(int ID, fk_Vector pos);
 
-		int			makeEdge(int, int);
-		fk_EdgePair	getEdge(int);
+		//! ノード位置取得関数
+		/*!
+		 *	\return		ノード位置ベクトル
+		 */
+		fk_Vector	getNodePosition(int ID);
 
-		bool		isConnect(int, int);
+		//!	辺生成関数
+		/*!
+		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
+		 *						辺が経路を表す場合は、有向辺は一方通行を表します。
+		 *	\param[in]	ID1		辺の始点となるノード ID
+		 *	\param[in]	ID2		辺の終点となるノード ID
+		 */
+		int			makeEdge(bool mode, int ID1, int ID2);
+
+		//! 辺情報取得関数
+		/*!
+		 *	\param[in]	ID		辺 ID
+		 *
+		 *	\return		辺情報
+		 */
+		fk_EdgePair	getEdge(int ID);
+
+		//! 辺存在確認関数
+		/*!
+		 *	\param[in]	ID1		辺の頂点となるノード ID。
+		 *	\param[in]	ID2		辺の頂点となるノード ID。
+		 *
+		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
+		 */
+		bool		isConnect(int ID1, int ID2);
 
 		fk_Point *	GetVertexShape(void);
 		fk_Line *	GetEdgeShape(void);
