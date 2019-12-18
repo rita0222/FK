@@ -89,16 +89,13 @@ namespace FK {
 	public:
 
 		//! コンストラクタ
-		fk_Graph(void);
-
-		//! デストラクタ
-		~fk_Graph();
-
-		//! ノード数設定関数
 		/*!
 		 *	\param[in]	num		ノード数
 		 */
-		void setNodeSize(int num);
+		fk_Graph(int num);
+
+		//! デストラクタ
+		~fk_Graph();
 
 		//! ノード数取得関数
 		/*!

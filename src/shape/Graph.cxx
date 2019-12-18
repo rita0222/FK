@@ -77,13 +77,17 @@
 using namespace std;
 using namespace FK;
 
-fk_Graph::fk_Graph(void)
+fk_Graph::fk_Graph(int argNum)
 {
+	fk_Vector origin;
+
 	realType = fk_RealShapeType::GRAPH;
 	SetObjectType(fk_Type::GRAPH);
 	nodeShape = new fk_Point();
 	edgeShape = new fk_Line();
 	edgeAdmin = new fk_IDAdmin(0);
+	NodeResize(argNum);
+	for(int i = 0; i < argNum; ++i) nodeShape->pushVertex(origin);
 	return;
 }
 
@@ -95,19 +99,6 @@ fk_Graph::~fk_Graph()
 
 	for(auto v : node) delete v;
 	for(auto e : edge) delete e;
-	return;
-}
-
-void fk_Graph::setNodeSize(int argSize)
-{
-	fk_Vector origin;
-
-	if(argSize < 0) return;
-	NodeResize(argSize);
-
-	while(argSize > nodeShape->getSize()) nodeShape->pushVertex(origin);
-	for(int i = argSize; i < nodeShape->getSize(); ++i) nodeShape->removeVertex(i);
-
 	return;
 }
 
