@@ -70,50 +70,39 @@
  *
  ****************************************************************************/
 
-#ifndef __FK_GRAPH_HEADER__
-#define __FK_GRAPH_HEADER__
+#ifndef __FK_GRAPH_NODE_HEADER__
+#define __FK_GRAPH_NODE_HEADER__
 
-#include <FK/GraphNode.h>
-#include <FK/Point.h>
-#include <FK/Line.h>
+#include <list>
 #include <FK/EdgePair.H>
-#include <FK/IDAdmin.H>
+#include <FK/Vector.h>
+#include <FK/Attribute.h>
 
 namespace FK {
 
-	class fk_Graph : public fk_Shape {
+	class fk_GraphNode : public fk_Attribute {
 
 	public:
+		fk_GraphNode(int);
+		~fk_GraphNode();
 
-		fk_Graph(void);
-		~fk_Graph();
+		int			getID(void);
+		void		setPosition(fk_Vector *);
+		fk_Vector *	getPosition(void);
+		std::list<fk_EdgePair>	* getEdgePair(bool);
 
-		void		setNodeSize(int);
-		int			getNodeSize(void);
+		bool		isConnect(int);
+		bool		isConnect(bool, int);
 
-		void		setNodePosition(int, fk_Vector);
-		fk_Vector	getNodePosition(int);
-
-		int			makeEdge(int, int);
-		fk_EdgePair	getEdge(int);
-
-		bool		isConnect(int, int);
-
-		fk_Point *	GetVertexShape(void);
-		fk_Line *	GetEdgeShape(void);
+		void		ConnectEdge(bool, int, int);
 
 	private:
 
-		fk_Point	*vertexShape;
-		fk_Line		*edgeShape;
-		fk_IDAdmin	*edgeAdmin;
-
-		std::vector<fk_GraphNode *>	node;
-		std::vector<fk_EdgePair>	edge;
-
-		void		NodeResize(int);
+		int			id;
+		fk_Vector	position;
+		std::list<fk_EdgePair>	edgeS;
+		std::list<fk_EdgePair>	edgeE;
 	};
 }
-
 
 #endif

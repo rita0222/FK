@@ -31,7 +31,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE. 
+ *	POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 /****************************************************************************
@@ -70,50 +70,59 @@
  *
  ****************************************************************************/
 
-#ifndef __FK_GRAPH_HEADER__
-#define __FK_GRAPH_HEADER__
-
+#define FK_DEF_SIZETYPE
 #include <FK/GraphNode.h>
-#include <FK/Point.h>
-#include <FK/Line.h>
-#include <FK/EdgePair.H>
-#include <FK/IDAdmin.H>
 
-namespace FK {
+using namespace std;
+using namespace FK;
 
-	class fk_Graph : public fk_Shape {
-
-	public:
-
-		fk_Graph(void);
-		~fk_Graph();
-
-		void		setNodeSize(int);
-		int			getNodeSize(void);
-
-		void		setNodePosition(int, fk_Vector);
-		fk_Vector	getNodePosition(int);
-
-		int			makeEdge(int, int);
-		fk_EdgePair	getEdge(int);
-
-		bool		isConnect(int, int);
-
-		fk_Point *	GetVertexShape(void);
-		fk_Line *	GetEdgeShape(void);
-
-	private:
-
-		fk_Point	*vertexShape;
-		fk_Line		*edgeShape;
-		fk_IDAdmin	*edgeAdmin;
-
-		std::vector<fk_GraphNode *>	node;
-		std::vector<fk_EdgePair>	edge;
-
-		void		NodeResize(int);
-	};
+fk_GraphNode::fk_GraphNode(int argID)
+{
+	id = argID;
+	return;
 }
 
+fk_GraphNode::~fk_GraphNode()
+{
+	return;
+}
 
-#endif
+void fk_GraphNode::setPosition(fk_Vector *argPos)
+{
+	position = *argPos;
+}
+
+fk_Vector * fk_GraphNode::getPosition(void)
+{
+	return &position;
+}
+
+list<fk_EdgePair> * fk_GraphNode::getEdgePair(bool argMode)
+{
+	return ((argMode == true) ? &edgeS : &edgeE);
+}
+
+void fk_GraphNode::ConnectEdge(bool argMode, int argVID, int argEID)
+{
+	if(argMode == true) {
+		edgeS.push_back(fk_EdgePair(argVID, argEID));
+	} else {
+		edgeE.push_back(fk_EdgePair(argVID, argEID));
+	}
+	return;
+}
+
+bool fk_GraphNode::isConnect(bool argMode, int argID)
+{
+	list<fk_EdgePair>	&edgeList = (argMode == true) ? edgeS : edgeE;
+
+	for(auto &e : edgeList) {
+		if(e.id[0] == argID) return true;
+	}
+	return false;
+}
+
+bool fk_GraphNode::isConnect(int argID)
+{
+	return (isConnect(true, argID) || isConnect(false, argID));
+}

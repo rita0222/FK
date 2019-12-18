@@ -92,24 +92,16 @@ fk_Graph::~fk_Graph()
 	delete edgeShape;
 	delete edgeAdmin;
 
+	for(auto v : node) delete v;
 	return;
 }
 
 void fk_Graph::setNodeSize(int argSize)
 {
-	if(argSize < 0) return;
-
-	if(argSize == 0) {
-		node.clear();
-		conS.clear();
-		conE.clear();
-	} else {
-		node.resize(_st(argSize));
-		conS.resize(_st(argSize));
-		conE.resize(_st(argSize));
-	}
-
 	fk_Vector origin;
+
+	if(argSize < 0) return;
+	NodeResize(argSize);
 
 	while(argSize > vertexShape->getSize()) vertexShape->pushVertex(origin);
 	for(int i = argSize; i < vertexShape->getSize(); ++i) vertexShape->removeVertex(i);
@@ -125,17 +117,22 @@ int fk_Graph::getNodeSize(void)
 void fk_Graph::setNodePosition(int argID, fk_Vector argPos)
 {
 	if(argID < 0 || argID >= getNodeSize()) return;
-	node[_st(argID)] = argPos;
+	node[_st(argID)]->setPosition(&argPos);
 	vertexShape->setVertex(argID, argPos);
 
-	for(auto &e : conS[_st(argID)]) edgeShape->setVertex(e.id[1], 0, argPos);
-	for(auto &e : conE[_st(argID)]) edgeShape->setVertex(e.id[1], 1, argPos);
+	for(auto &e : *(node[_st(argID)]->getEdgePair(true))) {
+		edgeShape->setVertex(e.id[1], 0, argPos);
+	}
+
+	for(auto &e : *(node[_st(argID)]->getEdgePair(false))) {
+		edgeShape->setVertex(e.id[1], 1, argPos);
+	}
 }
 
 fk_Vector fk_Graph::getNodePosition(int argID)
 {
 	if(argID < 0 || argID >= getNodeSize()) return fk_Vector();
-	return node[_st(argID)];
+	return *(node[_st(argID)]->getPosition());
 }
 
 bool fk_Graph::isConnect(int argID1, int argID2)
@@ -143,15 +140,7 @@ bool fk_Graph::isConnect(int argID1, int argID2)
 	if(argID1 < 0 || argID1 >= getNodeSize() ||
 	   argID2 < 0 || argID2 >= getNodeSize()) return false;
 
-	for(fk_EdgePair e : conS[_st(argID1)]) {
-		if(e.id[0] == argID2) return true;
-	}
-
-	for(fk_EdgePair e : conE[_st(argID1)]) {
-		if(e.id[0] == argID2) return true;
-	}
-
-	return false;
+	return node[_st(argID1)]->isConnect(argID2);
 }
 
 int fk_Graph::makeEdge(int argID1, int argID2)
@@ -165,11 +154,12 @@ int fk_Graph::makeEdge(int argID1, int argID2)
 	if(newID == int(edge.size())) edge.resize(_st(newID+1));
 	edge[_st(newID)].set(argID1, argID2);
 
-	conS[_st(argID1)].push_back(fk_EdgePair(argID2, newID));
-	conE[_st(argID2)].push_back(fk_EdgePair(argID1, newID));
+	node[_st(argID1)]->ConnectEdge(true, argID2, newID);
+	node[_st(argID2)]->ConnectEdge(false, argID1, newID);
 
-	edgeShape->pushLine(node[_st(argID1)], node[_st(argID2)]);
-
+	edgeShape->pushLine(*node[_st(argID1)]->getPosition(),
+						*node[_st(argID2)]->getPosition());
+	
 	return 0;
 }
 
@@ -190,4 +180,20 @@ fk_Point * fk_Graph::GetVertexShape(void)
 fk_Line * fk_Graph::GetEdgeShape(void)
 {
 	return edgeShape;
+}
+
+void fk_Graph::NodeResize(int argSize)
+{
+	int oldSize = int(node.size());
+	
+	for(_st i = _st(argSize); i < _st(oldSize); ++i) {
+		delete node[i];
+		node[i] = nullptr;
+	}
+
+	if(oldSize > argSize) node.resize(_st(argSize));
+
+	for(int i = oldSize; i < argSize; ++i) {
+		node.push_back(new fk_GraphNode(i));
+	}
 }
