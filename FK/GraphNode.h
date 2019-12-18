@@ -74,35 +74,37 @@
 #define __FK_GRAPH_NODE_HEADER__
 
 #include <list>
-#include <FK/EdgePair.H>
-#include <FK/Vector.h>
-#include <FK/Attribute.h>
+#include <FK/GraphEdge.h>
+#include <FK/Point.h>
+#include <FK/Line.h>
 
 namespace FK {
 
 	class fk_GraphNode : public fk_Attribute {
 
 	public:
-		fk_GraphNode(int);
+		fk_GraphNode(int, fk_Point *, fk_Line *);
 		~fk_GraphNode();
 
 		int			getID(void);
 		void		setPosition(fk_Vector *);
 		fk_Vector *	getPosition(void);
-		std::list<fk_EdgePair>	* getEdgePair(bool);
 
 		bool		isConnect(int);
 		bool		isConnect(bool, int);
 
-		void		ConnectEdge(bool, bool, int, int);
+		void		ConnectEdge(bool, fk_GraphEdge *);
 
 	private:
 
-		int			id;
+		int			ID;
 		fk_Vector	position;
-		std::list<fk_EdgePair>	edgeS; // 始点稜線
-		std::list<fk_EdgePair>	edgeE; // 終点稜線
-		std::list<fk_EdgePair>	edgeB; // 無向稜線
+		std::list<fk_GraphEdge *>	edgeS; // 始点稜線
+		std::list<fk_GraphEdge *>	edgeE; // 終点稜線
+		std::list<fk_GraphEdge *>	edgeB; // 無向稜線
+
+		fk_Point	*nodeShape;
+		fk_Line		*edgeShape;
 	};
 }
 

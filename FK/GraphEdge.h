@@ -31,7 +31,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE.
+ *	POSSIBILITY OF SUCH DAMAGE. 
  *
  ****************************************************************************/
 /****************************************************************************
@@ -70,82 +70,26 @@
  *
  ****************************************************************************/
 
-#define FK_DEF_SIZETYPE
-#include <FK/GraphNode.h>
+#ifndef __FK_GRAPH_EDGE_HEADER__
+#define __FK_GRAPH_EDGE_HEADER__
 
-using namespace std;
-using namespace FK;
+#include <FK/Attribute.h>
 
-fk_GraphNode::fk_GraphNode(int argID, fk_Point *argPoint, fk_Line *argLine)
-{
-	ID = argID;
-	nodeShape = argPoint;
-	edgeShape = argLine;
-	return;
+namespace FK {
+
+	class fk_GraphEdge : public fk_Attribute {
+
+	public:
+		fk_GraphEdge(int, int, int);
+		~fk_GraphEdge();
+
+		int		getID(void);
+		int		getNode(bool);
+
+	private:
+		int		edgeID;
+		int		nodeID[2];
+	};
 }
 
-fk_GraphNode::~fk_GraphNode()
-{
-	return;
-}
-
-void fk_GraphNode::setPosition(fk_Vector *argPos)
-{
-	position = *argPos;
-	nodeShape->setVertex(ID, position);
-}
-
-fk_Vector * fk_GraphNode::getPosition(void)
-{
-	return &position;
-}
-
-void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
-{
-	if(argMode == true) {
-		edgeB.push_back(argEdge);
-	} else {
-		if(argEdge->getNode(true) == ID) {
-			edgeS.push_back(argEdge);
-		} else {
-			edgeE.push_back(argEdge);
-		}
-	}
-	return;
-}
-
-bool fk_GraphNode::isConnect(bool argMode, int argID)
-{
-	for(auto e : edgeB) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	if(argMode == true) {
-		for(auto e : edgeS) {
-			if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-		}
-	} else {
-		for(auto e : edgeE) {
-			if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-		}
-	}
-
-	return false;
-}
-
-bool fk_GraphNode::isConnect(int argID)
-{
-	for(auto e : edgeB) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	for(auto e : edgeS) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	for(auto e : edgeE) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	return false;
-}
+#endif

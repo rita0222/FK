@@ -26,6 +26,7 @@ LIBSRCS		= \
 			Edge.cxx \
 			EdgePair.cxx \
 			Graph.cxx \
+			GraphEdge.cxx \
 			GraphNode.cxx \
 			Gregory.cxx \
 			HRCParser.cxx \

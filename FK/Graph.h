@@ -74,8 +74,6 @@
 #define __FK_GRAPH_HEADER__
 
 #include <FK/GraphNode.h>
-#include <FK/Point.h>
-#include <FK/Line.h>
 #include <FK/EdgePair.H>
 #include <FK/IDAdmin.H>
 
@@ -100,26 +98,19 @@ namespace FK {
 		/*!
 		 *	\param[in]	num		ノード数
 		 */
-		void		setNodeSize(int num);
+		void setNodeSize(int num);
 
 		//! ノード数取得関数
 		/*!
 		 *	\return		ノード数
 		 */
-		int			getNodeSize(void);
+		int getNodeSize(void);
 
-		//!	ノード位置設定関数
-		/*!
-		 *	\param[in]	ID		ノードID
-		 *	\param[in]	pos		ノード位置ベクトル
-		 */
-		void		setNodePosition(int ID, fk_Vector pos);
-
-		//! ノード位置取得関数
+		//! ノード取得関数
 		/*!
 		 *	\return		ノード位置ベクトル
 		 */
-		fk_Vector	getNodePosition(int ID);
+		fk_GraphNode * getNode(int ID);
 
 		//!	辺生成関数
 		/*!
@@ -128,7 +119,7 @@ namespace FK {
 		 *	\param[in]	ID1		辺の始点となるノード ID
 		 *	\param[in]	ID2		辺の終点となるノード ID
 		 */
-		int			makeEdge(bool mode, int ID1, int ID2);
+		fk_GraphEdge * makeEdge(bool mode, int ID1, int ID2);
 
 		//! 辺情報取得関数
 		/*!
@@ -136,7 +127,7 @@ namespace FK {
 		 *
 		 *	\return		辺情報
 		 */
-		fk_EdgePair	getEdge(int ID);
+		fk_GraphEdge * getEdge(int ID);
 
 		//! 辺存在確認関数
 		/*!
@@ -145,22 +136,21 @@ namespace FK {
 		 *
 		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
 		 */
-		bool		isConnect(int ID1, int ID2);
+		bool isConnect(int ID1, int ID2);
 
-		fk_Point *	GetVertexShape(void);
-		fk_Line *	GetEdgeShape(void);
+		fk_Point * GetVertexShape(void);
+		fk_Line * GetEdgeShape(void);
 
 	private:
 
-		fk_Point	*vertexShape;
+		fk_Point	*nodeShape;
 		fk_Line		*edgeShape;
 		fk_IDAdmin	*edgeAdmin;
 
 		std::vector<fk_GraphNode *>	node;
-		std::vector<fk_EdgePair>	edge;
+		std::vector<fk_GraphEdge *>	edge;
 
-		void		NodeResize(int);
-		void		MakeEdge_(bool, int, int);
+		void NodeResize(int);
 	};
 }
 

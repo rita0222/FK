@@ -72,6 +72,7 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/Graph.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -80,7 +81,7 @@ fk_Graph::fk_Graph(void)
 {
 	realType = fk_RealShapeType::GRAPH;
 	SetObjectType(fk_Type::GRAPH);
-	vertexShape = new fk_Point();
+	nodeShape = new fk_Point();
 	edgeShape = new fk_Line();
 	edgeAdmin = new fk_IDAdmin(0);
 	return;
@@ -88,11 +89,12 @@ fk_Graph::fk_Graph(void)
 
 fk_Graph::~fk_Graph()
 {
-	delete vertexShape;
+	delete nodeShape;
 	delete edgeShape;
 	delete edgeAdmin;
 
 	for(auto v : node) delete v;
+	for(auto e : edge) delete e;
 	return;
 }
 
@@ -103,8 +105,8 @@ void fk_Graph::setNodeSize(int argSize)
 	if(argSize < 0) return;
 	NodeResize(argSize);
 
-	while(argSize > vertexShape->getSize()) vertexShape->pushVertex(origin);
-	for(int i = argSize; i < vertexShape->getSize(); ++i) vertexShape->removeVertex(i);
+	while(argSize > nodeShape->getSize()) nodeShape->pushVertex(origin);
+	for(int i = argSize; i < nodeShape->getSize(); ++i) nodeShape->removeVertex(i);
 
 	return;
 }
@@ -114,25 +116,10 @@ int fk_Graph::getNodeSize(void)
 	return int(node.size());
 }
 
-void fk_Graph::setNodePosition(int argID, fk_Vector argPos)
+fk_GraphNode * fk_Graph::getNode(int argID)
 {
-	if(argID < 0 || argID >= getNodeSize()) return;
-	node[_st(argID)]->setPosition(&argPos);
-	vertexShape->setVertex(argID, argPos);
-
-	for(auto &e : *(node[_st(argID)]->getEdgePair(true))) {
-		edgeShape->setVertex(e.id[1], 0, argPos);
-	}
-
-	for(auto &e : *(node[_st(argID)]->getEdgePair(false))) {
-		edgeShape->setVertex(e.id[1], 1, argPos);
-	}
-}
-
-fk_Vector fk_Graph::getNodePosition(int argID)
-{
-	if(argID < 0 || argID >= getNodeSize()) return fk_Vector();
-	return *(node[_st(argID)]->getPosition());
+	if(argID < 0 || argID >= getNodeSize()) return nullptr;
+	return node[_st(argID)];
 }
 
 bool fk_Graph::isConnect(int argID1, int argID2)
@@ -143,44 +130,41 @@ bool fk_Graph::isConnect(int argID1, int argID2)
 	return node[_st(argID1)]->isConnect(argID2);
 }
 
-int fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
+fk_GraphEdge * fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
 {
 	if(argID1 < 0 || argID1 >= getNodeSize() ||
-	   argID2 < 0 || argID2 >= getNodeSize()) return -2;
+	   argID2 < 0 || argID2 >= getNodeSize()) return nullptr;
 
-	if(isConnect(argID1, argID2)) return -1;
-
-	MakeEdge_(argMode, argID1, argID2);
-	
-	return 0;
-}
-
-void fk_Graph::MakeEdge_(bool argMode, int argID1, int argID2)
-{
 	int newID = edgeAdmin->CreateID();
-	if(newID == int(edge.size())) edge.resize(_st(newID+1));
-	edge[_st(newID)].set(argID1, argID2);
 
-	node[_st(argID1)]->ConnectEdge(argMode, true, argID2, newID);
-	node[_st(argID2)]->ConnectEdge(argMode, false, argID1, newID);
-
-	edgeShape->pushLine(*node[_st(argID1)]->getPosition(),
-						*node[_st(argID2)]->getPosition());
-}
-
-
-fk_EdgePair fk_Graph::getEdge(int argID)
-{
-	if(argID < 0 || argID >= int(edge.size())) {
-		return fk_EdgePair();
+	fk_GraphEdge *e = new fk_GraphEdge(newID, argID1, argID2);
+	if(newID == int(edge.size())) {
+		edge.push_back(e);
+	} else {
+		edge[_st(newID)] = e;
 	}
 
+	node[_st(argID1)]->ConnectEdge(argMode, e);
+	node[_st(argID2)]->ConnectEdge(argMode, e);
+
+	fk_Vector V1, V2;
+
+	V1 = *node[_st(argID1)]->getPosition();
+	V2 = *node[_st(argID2)]->getPosition();
+	edgeShape->pushLine(V1, V2);
+
+	return e;
+}
+
+fk_GraphEdge * fk_Graph::getEdge(int argID)
+{
+	if(argID < 0 || argID >= int(edge.size())) return nullptr;
 	return edge[_st(argID)];
 }
 
 fk_Point * fk_Graph::GetVertexShape(void)
 {
-	return vertexShape;
+	return nodeShape;
 }
 
 fk_Line * fk_Graph::GetEdgeShape(void)
@@ -200,6 +184,6 @@ void fk_Graph::NodeResize(int argSize)
 	if(oldSize > argSize) node.resize(_st(argSize));
 
 	for(int i = oldSize; i < argSize; ++i) {
-		node.push_back(new fk_GraphNode(i));
+		node.push_back(new fk_GraphNode(i, nodeShape, edgeShape));
 	}
 }

@@ -70,82 +70,30 @@
  *
  ****************************************************************************/
 
-#define FK_DEF_SIZETYPE
-#include <FK/GraphNode.h>
+#include <FK/GraphEdge.h>
 
 using namespace std;
 using namespace FK;
 
-fk_GraphNode::fk_GraphNode(int argID, fk_Point *argPoint, fk_Line *argLine)
+fk_GraphEdge::fk_GraphEdge(int argEID, int argVID1, int argVID2)
 {
-	ID = argID;
-	nodeShape = argPoint;
-	edgeShape = argLine;
+	edgeID = argEID;
+	nodeID[0] = argVID1;
+	nodeID[1] = argVID2;
+}
+
+fk_GraphEdge::~fk_GraphEdge()
+{
 	return;
 }
 
-fk_GraphNode::~fk_GraphNode()
+int fk_GraphEdge::getID(void)
 {
-	return;
+	return edgeID;
 }
 
-void fk_GraphNode::setPosition(fk_Vector *argPos)
+int fk_GraphEdge::getNode(bool argMode)
 {
-	position = *argPos;
-	nodeShape->setVertex(ID, position);
-}
-
-fk_Vector * fk_GraphNode::getPosition(void)
-{
-	return &position;
-}
-
-void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
-{
-	if(argMode == true) {
-		edgeB.push_back(argEdge);
-	} else {
-		if(argEdge->getNode(true) == ID) {
-			edgeS.push_back(argEdge);
-		} else {
-			edgeE.push_back(argEdge);
-		}
-	}
-	return;
-}
-
-bool fk_GraphNode::isConnect(bool argMode, int argID)
-{
-	for(auto e : edgeB) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	if(argMode == true) {
-		for(auto e : edgeS) {
-			if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-		}
-	} else {
-		for(auto e : edgeE) {
-			if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-		}
-	}
-
-	return false;
-}
-
-bool fk_GraphNode::isConnect(int argID)
-{
-	for(auto e : edgeB) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	for(auto e : edgeS) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	for(auto e : edgeE) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	return false;
+	if(argMode == true) return nodeID[0];
+	return nodeID[1];
 }
