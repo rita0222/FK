@@ -150,20 +150,19 @@ int fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
 
 	if(isConnect(argID1, argID2)) return -1;
 
-	MakeEdge_(argID1, argID2);
-	if(argMode == true) MakeEdge_(argID2, argID1);
+	MakeEdge_(argMode, argID1, argID2);
 	
 	return 0;
 }
 
-void fk_Graph::MakeEdge_(int argID1, int argID2)
+void fk_Graph::MakeEdge_(bool argMode, int argID1, int argID2)
 {
 	int newID = edgeAdmin->CreateID();
 	if(newID == int(edge.size())) edge.resize(_st(newID+1));
 	edge[_st(newID)].set(argID1, argID2);
 
-	node[_st(argID1)]->ConnectEdge(true, argID2, newID);
-	node[_st(argID2)]->ConnectEdge(false, argID1, newID);
+	node[_st(argID1)]->ConnectEdge(argMode, true, argID2, newID);
+	node[_st(argID2)]->ConnectEdge(argMode, false, argID1, newID);
 
 	edgeShape->pushLine(*node[_st(argID1)]->getPosition(),
 						*node[_st(argID2)]->getPosition());

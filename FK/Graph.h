@@ -160,7 +160,7 @@ namespace FK {
 		std::vector<fk_EdgePair>	edge;
 
 		void		NodeResize(int);
-		void		MakeEdge_(int, int);
+		void		MakeEdge_(bool, int, int);
 	};
 }
 

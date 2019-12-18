@@ -94,14 +94,15 @@ namespace FK {
 		bool		isConnect(int);
 		bool		isConnect(bool, int);
 
-		void		ConnectEdge(bool, int, int);
+		void		ConnectEdge(bool, bool, int, int);
 
 	private:
 
 		int			id;
 		fk_Vector	position;
-		std::list<fk_EdgePair>	edgeS;
-		std::list<fk_EdgePair>	edgeE;
+		std::list<fk_EdgePair>	edgeS; // 始点稜線
+		std::list<fk_EdgePair>	edgeE; // 終点稜線
+		std::list<fk_EdgePair>	edgeB; // 無向稜線
 	};
 }
 

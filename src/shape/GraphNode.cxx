@@ -102,9 +102,11 @@ list<fk_EdgePair> * fk_GraphNode::getEdgePair(bool argMode)
 	return ((argMode == true) ? &edgeS : &edgeE);
 }
 
-void fk_GraphNode::ConnectEdge(bool argMode, int argVID, int argEID)
+void fk_GraphNode::ConnectEdge(bool argDMode, bool argSEMode, int argVID, int argEID)
 {
-	if(argMode == true) {
+	if(argDMode == true) {
+		edgeB.push_back(fk_EdgePair(argVID, argEID));
+	} else if(argSEMode == true) {
 		edgeS.push_back(fk_EdgePair(argVID, argEID));
 	} else {
 		edgeE.push_back(fk_EdgePair(argVID, argEID));
@@ -114,15 +116,36 @@ void fk_GraphNode::ConnectEdge(bool argMode, int argVID, int argEID)
 
 bool fk_GraphNode::isConnect(bool argMode, int argID)
 {
-	list<fk_EdgePair>	&edgeList = (argMode == true) ? edgeS : edgeE;
-
-	for(auto &e : edgeList) {
+	for(auto &e : edgeB) {
 		if(e.id[0] == argID) return true;
 	}
+
+	if(argMode == true) {
+		for(auto &e : edgeS) {
+			if(e.id[0] == argID) return true;
+		}
+	} else {
+		for(auto &e : edgeE) {
+			if(e.id[0] == argID) return true;
+		}
+	}
+
 	return false;
 }
 
 bool fk_GraphNode::isConnect(int argID)
 {
-	return (isConnect(true, argID) || isConnect(false, argID));
+	for(auto &e : edgeB) {
+		if(e.id[0] == argID) return true;
+	}
+
+	for(auto &e : edgeS) {
+		if(e.id[0] == argID) return true;
+	}
+
+	for(auto &e : edgeE) {
+		if(e.id[0] == argID) return true;
+	}
+
+	return false;
 }
