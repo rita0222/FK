@@ -93,6 +93,14 @@ void fk_GraphNode::setPosition(fk_Vector *argPos)
 {
 	position = *argPos;
 	nodeShape->setVertex(ID, position);
+
+	for(auto e : edgeAll) {
+		if(e->getNode(true) == ID) {
+			edgeShape->setVertex(e->getID(), 0, position);
+		} else {
+			edgeShape->setVertex(e->getID(), 1, position);
+		}
+	}
 }
 
 fk_Vector * fk_GraphNode::getPosition(void)
@@ -102,6 +110,8 @@ fk_Vector * fk_GraphNode::getPosition(void)
 
 void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
 {
+	edgeAll.push_back(argEdge);
+
 	if(argMode == true) {
 		edgeB.push_back(argEdge);
 	} else {
@@ -135,15 +145,7 @@ bool fk_GraphNode::isConnect(bool argMode, int argID)
 
 bool fk_GraphNode::isConnect(int argID)
 {
-	for(auto e : edgeB) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	for(auto e : edgeS) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
-	}
-
-	for(auto e : edgeE) {
+	for(auto e : edgeAll) {
 		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
 	}
 

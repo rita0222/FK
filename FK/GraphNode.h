@@ -102,6 +102,7 @@ namespace FK {
 		std::list<fk_GraphEdge *>	edgeS; // 始点稜線
 		std::list<fk_GraphEdge *>	edgeE; // 終点稜線
 		std::list<fk_GraphEdge *>	edgeB; // 無向稜線
+		std::list<fk_GraphEdge *>	edgeAll;
 
 		fk_Point	*nodeShape;
 		fk_Line		*edgeShape;
