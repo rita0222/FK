@@ -157,13 +157,28 @@ list<fk_GraphEdge *> fk_GraphNode::getAllEdge(void)
 	return edgeAll;
 }
 
+void fk_GraphNode::getAllEdge(list<fk_GraphEdge *> *argList)
+{
+	if(argList == nullptr) return;
+	argList->clear();
+	copy(edgeAll.begin(), edgeAll.end(), back_inserter(*argList));
+}
+
 list<fk_GraphEdge *> fk_GraphNode::getStartEdge(void)
 {
 	list<fk_GraphEdge *> ret;
 
-	ret.splice(ret.end(), edgeS);
-	ret.splice(ret.end(), edgeB);
+	copy(edgeS.begin(), edgeS.end(), back_inserter(ret));
+	copy(edgeB.begin(), edgeB.end(), back_inserter(ret));
 	return ret;
+}
+
+void fk_GraphNode::getStartEdge(list<fk_GraphEdge *> *argList)
+{
+	if(argList == nullptr) return;
+	argList->clear();
+	copy(edgeS.begin(), edgeS.end(), back_inserter(*argList));
+	copy(edgeB.begin(), edgeB.end(), back_inserter(*argList));
 }
 
 list<fk_GraphEdge *> fk_GraphNode::getEndEdge(void)
@@ -173,4 +188,37 @@ list<fk_GraphEdge *> fk_GraphNode::getEndEdge(void)
 	ret.splice(ret.end(), edgeE);
 	ret.splice(ret.end(), edgeB);
 	return ret;
+}
+
+void fk_GraphNode::getEndEdge(list<fk_GraphEdge *> *argList)
+{
+	if(argList == nullptr) return;
+	argList->clear();
+	copy(edgeE.begin(), edgeE.end(), back_inserter(*argList));
+	copy(edgeB.begin(), edgeB.end(), back_inserter(*argList));
+}
+
+string fk_GraphNode::print(void)
+{
+	string outStr;
+
+	for(auto e : edgeB) {
+		outStr += "B = (" + to_string(e->getID()) + ", ";
+		outStr += to_string(e->getNode(true)) + ", ";
+		outStr += to_string(e->getNode(false)) + ")\n";
+	}
+	
+	for(auto e : edgeS) {
+		outStr += "S = (" + to_string(e->getID()) + ", ";
+		outStr += to_string(e->getNode(true)) + ", ";
+		outStr += to_string(e->getNode(false)) + ")\n";
+	}
+	
+	for(auto e : edgeE) {
+		outStr += "E = (" + to_string(e->getID()) + ", ";
+		outStr += to_string(e->getNode(true)) + ", ";
+		outStr += to_string(e->getNode(false)) + ")\n";
+	}
+	
+	return outStr;
 }

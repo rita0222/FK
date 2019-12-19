@@ -74,6 +74,7 @@
 #define __FK_GRAPH_NODE_HEADER__
 
 #include <list>
+#include <string>
 #include <FK/GraphEdge.h>
 #include <FK/Point.h>
 #include <FK/Line.h>
@@ -96,8 +97,15 @@ namespace FK {
 		void		ConnectEdge(bool, fk_GraphEdge *);
 
 		std::list<fk_GraphEdge *>	getAllEdge(void);
+		void	getAllEdge(std::list<fk_GraphEdge *> *);
+
 		std::list<fk_GraphEdge *>	getStartEdge(void);
+		void	getStartEdge(std::list<fk_GraphEdge *> *);
+
 		std::list<fk_GraphEdge *>	getEndEdge(void);
+		void	getEndEdge(std::list<fk_GraphEdge *> *);
+
+		std::string	print(void);
 
 	private:
 
