@@ -71,6 +71,7 @@
  ****************************************************************************/
 
 #include <FK/GraphEdge.h>
+#include <FK/Graph.h>
 
 using namespace std;
 using namespace FK;

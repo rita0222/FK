@@ -72,15 +72,15 @@
 
 #define FK_DEF_SIZETYPE
 #include <FK/GraphNode.h>
+#include <FK/Graph.h>
 
 using namespace std;
 using namespace FK;
 
-fk_GraphNode::fk_GraphNode(int argID, fk_Point *argPoint, fk_Line *argLine)
+fk_GraphNode::fk_GraphNode(int argID, fk_Graph *argGraph)
 {
 	ID = argID;
-	nodeShape = argPoint;
-	edgeShape = argLine;
+	baseGraph = argGraph;
 	return;
 }
 
@@ -92,8 +92,9 @@ fk_GraphNode::~fk_GraphNode()
 void fk_GraphNode::setPosition(fk_Vector *argPos)
 {
 	position = *argPos;
-	nodeShape->setVertex(ID, position);
+	baseGraph->GetVertexShape()->setVertex(ID, position);
 
+	auto edgeShape = baseGraph->GetEdgeShape();
 	for(auto e : edgeAll) {
 		if(e->getNode(true) == ID) {
 			edgeShape->setVertex(e->getID(), 0, position);
@@ -122,6 +123,14 @@ void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
 		}
 	}
 	return;
+}
+
+void fk_GraphNode::DeleteEdge(fk_GraphEdge *argEdge)
+{
+	edgeAll.remove(argEdge);
+	edgeB.remove(argEdge);
+	edgeS.remove(argEdge);
+	edgeE.remove(argEdge);
 }
 
 bool fk_GraphNode::isConnect(bool argMode, int argID)

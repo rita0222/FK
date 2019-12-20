@@ -109,6 +109,14 @@ namespace FK {
 		 */
 		fk_GraphNode * getNode(int ID);
 
+		//! 辺情報取得関数
+		/*!
+		 *	\param[in]	ID		辺 ID
+		 *
+		 *	\return		辺情報
+		 */
+		fk_GraphEdge * getEdge(int ID);
+
 		//!	辺生成関数
 		/*!
 		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
@@ -118,13 +126,12 @@ namespace FK {
 		 */
 		fk_GraphEdge * makeEdge(bool mode, int ID1, int ID2);
 
-		//! 辺情報取得関数
+		//! 辺削除関数
 		/*!
-		 *	\param[in]	ID		辺 ID
 		 *
-		 *	\return		辺情報
 		 */
-		fk_GraphEdge * getEdge(int ID);
+		bool deleteEdge(int ID);
+		bool deleteEdge(fk_GraphEdge *);
 
 		//! 辺存在確認関数
 		/*!

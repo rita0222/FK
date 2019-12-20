@@ -81,10 +81,12 @@
 
 namespace FK {
 
+	class fk_Graph;
+
 	class fk_GraphNode : public fk_Attribute {
 
 	public:
-		fk_GraphNode(int, fk_Point *, fk_Line *);
+		fk_GraphNode(int, fk_Graph *);
 		~fk_GraphNode();
 
 		int			getID(void);
@@ -95,6 +97,7 @@ namespace FK {
 		bool		isConnect(bool, int);
 
 		void		ConnectEdge(bool, fk_GraphEdge *);
+		void		DeleteEdge(fk_GraphEdge *);
 
 		std::list<fk_GraphEdge *>	getAllEdge(void);
 		void	getAllEdge(std::list<fk_GraphEdge *> *);
@@ -116,8 +119,7 @@ namespace FK {
 		std::list<fk_GraphEdge *>	edgeB; // 無向稜線
 		std::list<fk_GraphEdge *>	edgeAll;
 
-		fk_Point	*nodeShape;
-		fk_Line		*edgeShape;
+		fk_Graph 	*baseGraph;
 	};
 }
 

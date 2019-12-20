@@ -129,8 +129,11 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
 	int newID = edgeAdmin->CreateID();
 
 	fk_GraphEdge *e = new fk_GraphEdge(newID, argID1, argID2);
+	fk_Vector V1, V2;
+
 	if(newID == int(edge.size())) {
 		edge.push_back(e);
+		edgeShape->pushLine(V1, V2);
 	} else {
 		edge[_st(newID)] = e;
 	}
@@ -138,12 +141,11 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
 	node[_st(argID1)]->ConnectEdge(argMode, e);
 	node[_st(argID2)]->ConnectEdge(argMode, e);
 
-	fk_Vector V1, V2;
-
 	V1 = *node[_st(argID1)]->getPosition();
 	V2 = *node[_st(argID2)]->getPosition();
-	edgeShape->pushLine(V1, V2);
 
+	edgeShape->changeLine(newID, V1, V2);
+	edgeShape->setDrawMode(newID, true);
 	return e;
 }
 
@@ -175,6 +177,23 @@ void fk_Graph::NodeResize(int argSize)
 	if(oldSize > argSize) node.resize(_st(argSize));
 
 	for(int i = oldSize; i < argSize; ++i) {
-		node.push_back(new fk_GraphNode(i, nodeShape, edgeShape));
+		node.push_back(new fk_GraphNode(i, this));
 	}
+}
+
+bool fk_Graph::deleteEdge(int argID)
+{
+	fk_GraphEdge *e = getEdge(argID);
+	if(e == nullptr) return false;
+
+	auto v1 = getNode(e->getNode(true));
+	auto v2 = getNode(e->getNode(false));
+	if(v1->isConnect(argID) == false || v2->isConnect(argID) == false) return false;
+	v1->DeleteEdge(e);
+	v2->DeleteEdge(e);
+	edgeAdmin->EraseID(argID);
+	edge[_st(argID)] = nullptr;
+	edgeShape->setDrawMode(argID, false);
+
+	return true;
 }
