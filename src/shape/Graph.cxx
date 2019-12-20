@@ -189,7 +189,7 @@ bool fk_Graph::deleteEdge(int argID)
 
 	auto v1 = getNode(e->getNode(true));
 	auto v2 = getNode(e->getNode(false));
-	if(v1->isConnect(argID) == false || v2->isConnect(argID) == false) return false;
+	if(v1->isConnect(v2->getID()) == false || v2->isConnect(v1->getID()) == false) return false;
 	v1->DeleteEdge(e);
 	v2->DeleteEdge(e);
 	edgeAdmin->EraseID(argID);

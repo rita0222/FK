@@ -89,6 +89,11 @@ fk_GraphNode::~fk_GraphNode()
 	return;
 }
 
+int fk_GraphNode::getID(void)
+{
+	return ID;
+}
+
 void fk_GraphNode::setPosition(fk_Vector *argPos)
 {
 	position = *argPos;
