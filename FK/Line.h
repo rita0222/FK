@@ -224,6 +224,29 @@ namespace FK {
 		 */
 		int			getSize(void);
 
+		//! 線分描画制御関数
+		/*!
+		 *	個別の線分に対し、描画の有無を設定します。
+		 *
+		 *	\param[in]	ID		線分ID
+		 *
+		 *	\param[in]	mode
+		 *		true であれば描画を有効に、false であれば無効にします。
+		 */
+		void			setDrawMode(int ID, bool mode);
+
+		//! 個別線分描画状態参照関数
+		/*!
+		 *	個別の線分に対し、描画状況を取得します。
+		 *
+		 *	\param[in]	ID		線分ID
+		 *
+		 *	\return
+		 *		描画が有効であれば true を、無効であれば false を返します。
+		 *		指定した ID を持つ線分が存在しなかった場合も false を返します。
+		 */
+		bool			getDrawMode(int ID);
+
 		//! 個別色設定関数1
 		/*!
 		 *	線分の色を個別に設定します。

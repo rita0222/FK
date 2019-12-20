@@ -167,3 +167,16 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 	SetCol(argID, 1, argCol);
 	Touch();
 }
+
+void fk_Line::setDrawMode(int argID, bool argMode)
+{
+	if(argID < 0 || argID >= getSize()) return;
+	SetAlive(argID, argMode);
+}
+
+bool fk_Line::getDrawMode(int argID)
+{
+	if(argID < 0 || argID >= getSize()) return false;
+	return GetAlive(argID);
+}
+

@@ -88,8 +88,9 @@ namespace FK {
 	private:
 		fk_ShaderBinder		*lineShader;
 
-		GLuint	modelID, elemID;
+		GLuint	vsModelID, vsElemID, vsIFSID, fsLineID, fsIFSID;
 		void	ShaderSetup(void);
+		void	SubroutineSetup(fk_Model *);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
  		void	Draw_Line(fk_LineBase *, fk_ShaderParameter *);
