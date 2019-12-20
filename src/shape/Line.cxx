@@ -98,7 +98,6 @@ bool fk_Line::setVertex(int argID, fk_Vector argPos)
 	if(argID != 0 && argID != 1) return false;
 	Resize(1);
 	SetPos(0, argID, &argPos);
-	Touch();
 	return true;
 }
 
@@ -106,21 +105,18 @@ bool fk_Line::setVertex(int argEID, int argVID, fk_Vector argPos)
 {
 	if(argEID < 0 || argEID >= getSize() || argVID < 0 || argVID > 1) return false;
 	SetPos(argEID, argVID, &argPos);
-	Touch();
 	return true;
 }
 
 void fk_Line::setVertex(fk_Vector *argPosArray)
 {
 	MakeLines(argPosArray);
-	Touch();
 	return;
 }
 
 void fk_Line::setVertex(vector<fk_Vector> *argPosArray)
 {
 	MakeLines(argPosArray);
-	Touch();
 	return;
 }
 
@@ -128,14 +124,12 @@ void fk_Line::pushLine(fk_Vector *argVec)
 {
 	if(argVec == nullptr) return;
 	PushLines(&argVec[0], &argVec[1]);
-	Touch();
 	return;
 }
 
 void fk_Line::pushLine(fk_Vector argV1, fk_Vector argV2)
 {
 	PushLines(&argV1, &argV2);
-	Touch();
 	return;
 }
 
@@ -145,7 +139,6 @@ bool fk_Line::changeLine(int argID, fk_Vector argPos1, fk_Vector argPos2)
 
 	SetPos(argID, 0, &argPos1);
 	SetPos(argID, 1, &argPos2);
-	Touch();
 	return true;
 }
 
@@ -157,7 +150,6 @@ int fk_Line::getSize(void)
 void fk_Line::setColor(int argID, fk_Color argCol)
 {
 	setColor(argID, &argCol);
-	Touch();
 }
 
 void fk_Line::setColor(int argID, fk_Color *argCol)
@@ -165,7 +157,6 @@ void fk_Line::setColor(int argID, fk_Color *argCol)
 	if(argID < 0 || argID >= getSize()) return;
 	SetCol(argID, 0, argCol);
 	SetCol(argID, 1, argCol);
-	Touch();
 }
 
 void fk_Line::setDrawMode(int argID, bool argMode)
