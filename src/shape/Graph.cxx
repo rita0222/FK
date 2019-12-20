@@ -135,6 +135,7 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
 		edge.push_back(e);
 		edgeShape->pushLine(V1, V2);
 	} else {
+		if(edge[_st(newID)] != nullptr) delete edge[_st(newID)];
 		edge[_st(newID)] = e;
 	}
 
@@ -192,6 +193,7 @@ bool fk_Graph::deleteEdge(int argID)
 	v1->DeleteEdge(e);
 	v2->DeleteEdge(e);
 	edgeAdmin->EraseID(argID);
+	delete edge[_st(argID)];
 	edge[_st(argID)] = nullptr;
 	edgeShape->setDrawMode(argID, false);
 
