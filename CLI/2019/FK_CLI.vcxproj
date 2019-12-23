@@ -55,6 +55,7 @@
     <ClInclude Include="..\..\FK\DXFOut.H" />
     <ClInclude Include="..\..\FK\DXFParser.H" />
     <ClInclude Include="..\..\FK\Edge.h" />
+    <ClInclude Include="..\..\FK\EdgePair.H" />
     <ClInclude Include="..\..\FK\Engine.H" />
     <ClInclude Include="..\..\FK\Error.H" />
     <ClInclude Include="..\..\FK\FaceDraw.H" />
@@ -65,6 +66,9 @@
     <ClInclude Include="..\..\FK\FVecArray.h" />
     <ClInclude Include="..\..\FK\GenMatrix.h" />
     <ClInclude Include="..\..\FK\GenVector.h" />
+    <ClInclude Include="..\..\FK\Graph.h" />
+    <ClInclude Include="..\..\FK\GraphEdge.h" />
+    <ClInclude Include="..\..\FK\GraphNode.h" />
     <ClInclude Include="..\..\FK\Gregory.h" />
     <ClInclude Include="..\..\FK\GuideObject.h" />
     <ClInclude Include="..\..\FK\Half.h" />
@@ -290,6 +294,10 @@
     <ClCompile Include="..\..\src\shape\DXFOut.cxx" />
     <ClCompile Include="..\..\src\shape\DXFParser.cxx" />
     <ClCompile Include="..\..\src\shape\Edge.cxx" />
+    <ClCompile Include="..\..\src\shape\EdgePair.cxx" />
+    <ClCompile Include="..\..\src\shape\Graph.cxx" />
+    <ClCompile Include="..\..\src\shape\GraphEdge.cxx" />
+    <ClCompile Include="..\..\src\shape\GraphNode.cxx" />
     <ClCompile Include="..\..\src\shape\Gregory.cxx" />
     <ClCompile Include="..\..\src\shape\Half.cxx" />
     <ClCompile Include="..\..\src\shape\History.cxx" />

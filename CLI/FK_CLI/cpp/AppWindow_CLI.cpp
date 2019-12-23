@@ -569,6 +569,34 @@ namespace FK_CLI {
 		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}
+
+	bool fk_AppWindow::SnapImage(String^ argFileName)
+	{
+		return GetP()->snapImage(marshal_as<string>(argFileName));
+	}
+
+	bool fk_AppWindow::SnapImage(String^ argFileName, fk_ImageType argFormat)
+	{
+		string fileName = marshal_as<string>(argFileName);
+		switch (argFormat) {
+		case fk_ImageType::BMP:
+			return GetP()->snapImage(fileName, ::FK::fk_ImageType::BMP);
+
+		case fk_ImageType::PNG:
+			return GetP()->snapImage(fileName, ::FK::fk_ImageType::PNG);
+
+		case fk_ImageType::JPG:
+			return GetP()->snapImage(fileName, ::FK::fk_ImageType::JPG);
+
+		default:
+			break;
+		}
+		return false;
+	}
+
+	bool fk_AppWindow::SnapImage(fk_Image^ argImage)
+	{
+		if (!argImage) return false;
+		return GetP()->snapImage(argImage->GetP());
+	}
 }
-
-

@@ -916,6 +916,48 @@ namespace FK_CLI
 		bool	GetWindowPosition(fk_Vector^ pos_3D, fk_Vector^ pos_2D);
 		//@}
 
+		//! \name スクリーンショットメソッド
+		//@{
+
+		//! 描画画像ファイル出力メソッド
+		/*!
+		 *	この関数は、描画領域に表示されている画像を、画像ファイルとして出力します。
+		 *
+		 *	\param[in]	fileName	画像ファイル名
+		 *
+		 *	\return
+		 *		出力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool	SnapImage(String^ fileName);
+
+		//! 形式指定付描画画像ファイル出力メソッド
+		/*!
+		 *	この関数は、描画領域に表示されている画像を、画像ファイルとして出力します。
+		 *
+		 *	\param[in]	fileName	画像ファイル名
+		 *	\param[in]	format
+		 *		画像ファイルのフォーマット。
+		 *		現在利用可能なフォーマットは、
+		 *		fk_ImageType の解説を参照して下さい。
+		 *
+		 *	\return
+		 *		出力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool	SnapImage(String^ fileName, fk_ImageType format);
+
+		//! 描画画像データ出力関数
+		/*!
+		 *	この関数は、描画領域に表示されている画像を、
+		 *	fk_Image 型のインスタンスに出力します。
+		 *
+		 *	\param[in]	image		画像データ出力先インスタンス
+		 *
+		 *	\return
+		 *		出力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool	SnapImage(fk_Image^ image);
+
+		//@}
 #ifndef FK_DOXYGEN_USER_PROCESS
 		event fk_DrawCallback^ PreInit;
 		event fk_DrawCallback^ PostInit;
