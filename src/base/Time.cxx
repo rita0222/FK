@@ -1,4 +1,4 @@
-#include <FK/Time.h>
+﻿#include <FK/Time.h>
 
 #ifndef FK_CLI_CODE
 #include <thread>
