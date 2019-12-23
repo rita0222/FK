@@ -220,6 +220,18 @@
     <ClCompile Include="..\..\src\shape\RBezCurve.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\shape\Graph.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\GraphEdge.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\GraphNode.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\EdgePair.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -441,6 +453,15 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\RBezCurve.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Graph.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\GraphEdge.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\GraphNode.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
