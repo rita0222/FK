@@ -966,6 +966,50 @@ namespace FK {
 		bool	getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
 		//@}
 
+		//! \name スクリーンショット関数
+		//@{
+
+		//! 描画画像ファイル出力関数
+		/*!
+		 *	この関数は、描画領域に表示されている画像を、画像ファイルとして出力します。
+		 *
+		 *	\param[in]	fileName	画像ファイル名
+		 *	\param[in]	format
+		 *		画像ファイルのフォーマット。
+		 *		現在利用可能なフォーマットは、
+		 *		fk_ImageType の解説を参照して下さい。
+		 *	\param[in]	mode
+		 *		画像の取込先となるグラフィックスデバイス名。
+		 *		取り込みがうまく動作しない場合は、
+		 *		この引数の値を変更してください。
+		 *
+		 *	\return
+		 *		出力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool	snapImage(std::string fileName,
+						  fk_ImageType format = fk_ImageType::BMP,
+						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
+
+		//! 描画画像データ出力関数
+		/*!
+		 *	この関数は、描画領域に表示されている画像を、
+		 *	fk_Image 型のインスタンスに出力します。
+		 *
+		 *	\param[in]	image		画像データ出力先インスタンス
+		 *	\param[in]	mode
+		 *		画像の取込先となるグラフィックスデバイス名。
+		 *		取り込みがうまく動作しない場合は、
+		 *		この引数の値を変更してください。
+		 *
+		 *	\return
+		 *		出力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool	snapImage(fk_Image *image,
+						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
+
+		//@}
+
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void		SetFinalizeMode(void);
 #endif

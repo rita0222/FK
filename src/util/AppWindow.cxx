@@ -81,6 +81,7 @@
 
 using namespace FK;
 using namespace FK::Material;
+using namespace std;
 
 #ifdef FK_CLI_CODE
 class InnerWindow : public ::fk_Window
@@ -734,4 +735,14 @@ bool fk_AppWindow::getProjectPosition(double argX, double argY,
 bool fk_AppWindow::getWindowPosition(fk_Vector argPos_3D, fk_Vector *argPos_2D)
 {
 	return drawWin->getWindowPosition(argPos_3D, argPos_2D);
+}
+
+bool fk_AppWindow::snapImage(string argFileName, fk_ImageType argFormat, fk_SnapProcMode argMode)
+{
+	return drawWin->snapImage(argFileName, argFormat, argMode);
+}
+
+bool fk_AppWindow::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
+{
+	return drawWin->snapImage(argImage, argMode);
 }
