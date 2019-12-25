@@ -101,7 +101,7 @@ void fk_GraphNode::setPosition(fk_Vector *argPos)
 
 	auto edgeShape = baseGraph->GetEdgeShape();
 	for(auto e : edgeAll) {
-		if(e->getNode(true) == ID) {
+		if(e->getNode(true) == this) {
 			edgeShape->setVertex(e->getID(), 0, position);
 		} else {
 			edgeShape->setVertex(e->getID(), 1, position);
@@ -121,7 +121,7 @@ void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
 	if(argMode == true) {
 		edgeB.push_back(argEdge);
 	} else {
-		if(argEdge->getNode(true) == ID) {
+		if(argEdge->getNode(true) == this) {
 			edgeS.push_back(argEdge);
 		} else {
 			edgeE.push_back(argEdge);
@@ -138,29 +138,35 @@ void fk_GraphNode::DeleteEdge(fk_GraphEdge *argEdge)
 	edgeE.remove(argEdge);
 }
 
-bool fk_GraphNode::isConnect(bool argMode, int argID)
+bool fk_GraphNode::isConnect(bool argMode, fk_GraphNode *argV)
 {
+	if(argV == nullptr) return false;
+	if(this->baseGraph != argV->baseGraph) return false;
+
 	for(auto e : edgeB) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
+		if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 	}
 
 	if(argMode == true) {
 		for(auto e : edgeS) {
-			if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
+			if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 		}
 	} else {
 		for(auto e : edgeE) {
-			if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
+			if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 		}
 	}
 
 	return false;
 }
 
-bool fk_GraphNode::isConnect(int argID)
+bool fk_GraphNode::isConnect(fk_GraphNode *argV)
 {
+	if(argV == nullptr) return false;
+	if(this->baseGraph != argV->baseGraph) return false;
+
 	for(auto e : edgeAll) {
-		if(e->getNode(true) == argID || e->getNode(false) == argID) return true;
+		if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 	}
 
 	return false;
@@ -218,20 +224,20 @@ string fk_GraphNode::print(void)
 
 	for(auto e : edgeB) {
 		outStr += "B = (" + to_string(e->getID()) + ", ";
-		outStr += to_string(e->getNode(true)) + ", ";
-		outStr += to_string(e->getNode(false)) + ")\n";
+		outStr += to_string(e->getNode(true)->getID()) + ", ";
+		outStr += to_string(e->getNode(false)->getID()) + ")\n";
 	}
 	
 	for(auto e : edgeS) {
 		outStr += "S = (" + to_string(e->getID()) + ", ";
-		outStr += to_string(e->getNode(true)) + ", ";
-		outStr += to_string(e->getNode(false)) + ")\n";
+		outStr += to_string(e->getNode(true)->getID()) + ", ";
+		outStr += to_string(e->getNode(false)->getID()) + ")\n";
 	}
 	
 	for(auto e : edgeE) {
 		outStr += "E = (" + to_string(e->getID()) + ", ";
-		outStr += to_string(e->getNode(true)) + ", ";
-		outStr += to_string(e->getNode(false)) + ")\n";
+		outStr += to_string(e->getNode(true)->getID()) + ", ";
+		outStr += to_string(e->getNode(false)->getID()) + ")\n";
 	}
 	
 	return outStr;

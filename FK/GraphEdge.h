@@ -77,18 +77,20 @@
 
 namespace FK {
 
+	class fk_GraphNode;
+
 	class fk_GraphEdge : public fk_Attribute {
 
 	public:
-		fk_GraphEdge(int, int, int);
+		fk_GraphEdge(int, fk_GraphNode *, fk_GraphNode *);
 		~fk_GraphEdge();
 
-		int		getID(void);
-		int		getNode(bool);
+		int				getID(void);
+		fk_GraphNode *	getNode(bool);
 
 	private:
-		int		edgeID;
-		int		nodeID[2];
+		int				edgeID;
+		fk_GraphNode *	node[2];
 	};
 }
 

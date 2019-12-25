@@ -76,11 +76,11 @@
 using namespace std;
 using namespace FK;
 
-fk_GraphEdge::fk_GraphEdge(int argEID, int argVID1, int argVID2)
+fk_GraphEdge::fk_GraphEdge(int argEID, fk_GraphNode *argV1, fk_GraphNode *argV2)
 {
 	edgeID = argEID;
-	nodeID[0] = argVID1;
-	nodeID[1] = argVID2;
+	node[0] = argV1;
+	node[1] = argV2;
 }
 
 fk_GraphEdge::~fk_GraphEdge()
@@ -93,8 +93,8 @@ int fk_GraphEdge::getID(void)
 	return edgeID;
 }
 
-int fk_GraphEdge::getNode(bool argMode)
+fk_GraphNode * fk_GraphEdge::getNode(bool argMode)
 {
-	if(argMode == true) return nodeID[0];
-	return nodeID[1];
+	if(argMode == true) return node[0];
+	return node[1];
 }

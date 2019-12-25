@@ -121,17 +121,16 @@ namespace FK {
 		/*!
 		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
 		 *						辺が経路を表す場合は、有向辺は一方通行を表します。
-		 *	\param[in]	ID1		辺の始点となるノード ID
-		 *	\param[in]	ID2		辺の終点となるノード ID
+		 *	\param[in]	v1		辺の始点となるノード。
+		 *	\param[in]	v2		辺の終点となるノード。
 		 */
-		fk_GraphEdge * makeEdge(bool mode, int ID1, int ID2);
+		fk_GraphEdge * makeEdge(bool mode, fk_GraphNode *v1, fk_GraphNode *v2);
 
 		//! 辺削除関数
 		/*!
 		 *
 		 */
-		bool deleteEdge(int ID);
-		bool deleteEdge(fk_GraphEdge *);
+		bool deleteEdge(fk_GraphEdge *e);
 
 		//! 辺存在確認関数
 		/*!
@@ -140,7 +139,7 @@ namespace FK {
 		 *
 		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
 		 */
-		bool isConnect(int ID1, int ID2);
+		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
 
 		fk_Point * GetVertexShape(void);
 		fk_Line * GetEdgeShape(void);

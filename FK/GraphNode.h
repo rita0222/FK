@@ -93,11 +93,8 @@ namespace FK {
 		void		setPosition(fk_Vector *);
 		fk_Vector *	getPosition(void);
 
-		bool		isConnect(int);
-		bool		isConnect(bool, int);
-
-		void		ConnectEdge(bool, fk_GraphEdge *);
-		void		DeleteEdge(fk_GraphEdge *);
+		bool		isConnect(fk_GraphNode *);
+		bool		isConnect(bool, fk_GraphNode *);
 
 		std::list<fk_GraphEdge *>	getAllEdge(void);
 		void	getAllEdge(std::list<fk_GraphEdge *> *);
@@ -110,6 +107,9 @@ namespace FK {
 
 		std::string	print(void);
 
+		void		ConnectEdge(bool, fk_GraphEdge *);
+		void		DeleteEdge(fk_GraphEdge *);
+
 	private:
 
 		int			ID;
@@ -117,9 +117,9 @@ namespace FK {
 		std::list<fk_GraphEdge *>	edgeS; // 始点稜線
 		std::list<fk_GraphEdge *>	edgeE; // 終点稜線
 		std::list<fk_GraphEdge *>	edgeB; // 無向稜線
-		std::list<fk_GraphEdge *>	edgeAll;
+		std::list<fk_GraphEdge *>	edgeAll; // 全稜線
 
-		fk_Graph 	*baseGraph;
+		fk_Graph 	*baseGraph;	// 元グラフインスタンス
 	};
 }
 

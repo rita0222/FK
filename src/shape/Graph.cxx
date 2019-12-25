@@ -113,22 +113,30 @@ fk_GraphNode * fk_Graph::getNode(int argID)
 	return node[_st(argID)];
 }
 
-bool fk_Graph::isConnect(int argID1, int argID2)
+bool fk_Graph::isConnect(fk_GraphNode *argV1, fk_GraphNode *argV2)
 {
-	if(argID1 < 0 || argID1 >= getNodeSize() ||
-	   argID2 < 0 || argID2 >= getNodeSize()) return false;
+	if(argV1 == nullptr || argV2 == nullptr) return false;
 
-	return node[_st(argID1)]->isConnect(argID2);
+	int ID1 = argV1->getID();
+	int ID2 = argV2->getID();
+
+	if(ID1 < 0 || ID1 >= getNodeSize() || ID2 < 0 || ID2 >= getNodeSize()) return false;
+
+	return argV1->isConnect(argV2);
 }
 
-fk_GraphEdge * fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
+fk_GraphEdge * fk_Graph::makeEdge(bool argMode, fk_GraphNode *argV1, fk_GraphNode *argV2)
 {
-	if(argID1 < 0 || argID1 >= getNodeSize() ||
-	   argID2 < 0 || argID2 >= getNodeSize()) return nullptr;
+	if(argV1 == nullptr || argV2 == nullptr) return nullptr;
+
+	int ID1 = argV1->getID();
+	int ID2 = argV2->getID();
+
+	if(ID1 < 0 || ID1 >= getNodeSize() || ID2 < 0 || ID2 >= getNodeSize()) return nullptr;
 
 	int newID = edgeAdmin->CreateID();
 
-	fk_GraphEdge *e = new fk_GraphEdge(newID, argID1, argID2);
+	fk_GraphEdge *e = new fk_GraphEdge(newID, argV1, argV2);
 	fk_Vector V1, V2;
 
 	if(newID == int(edge.size())) {
@@ -139,11 +147,11 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, int argID1, int argID2)
 		edge[_st(newID)] = e;
 	}
 
-	node[_st(argID1)]->ConnectEdge(argMode, e);
-	node[_st(argID2)]->ConnectEdge(argMode, e);
+	argV1->ConnectEdge(argMode, e);
+	argV2->ConnectEdge(argMode, e);
 
-	V1 = *node[_st(argID1)]->getPosition();
-	V2 = *node[_st(argID2)]->getPosition();
+	V1 = *(argV1->getPosition());
+	V2 = *(argV2->getPosition());
 
 	edgeShape->changeLine(newID, V1, V2);
 	edgeShape->setDrawMode(newID, true);
@@ -182,20 +190,21 @@ void fk_Graph::NodeResize(int argSize)
 	}
 }
 
-bool fk_Graph::deleteEdge(int argID)
+bool fk_Graph::deleteEdge(fk_GraphEdge *argE)
 {
-	fk_GraphEdge *e = getEdge(argID);
-	if(e == nullptr) return false;
+	if(argE == nullptr) return false;
+	if(argE != edge[_st(argE->getID())]) return false;
+	int ID = argE->getID();
 
-	auto v1 = getNode(e->getNode(true));
-	auto v2 = getNode(e->getNode(false));
-	if(v1->isConnect(v2->getID()) == false || v2->isConnect(v1->getID()) == false) return false;
-	v1->DeleteEdge(e);
-	v2->DeleteEdge(e);
-	edgeAdmin->EraseID(argID);
-	delete edge[_st(argID)];
-	edge[_st(argID)] = nullptr;
-	edgeShape->setDrawMode(argID, false);
+	auto v1 = argE->getNode(true);
+	auto v2 = argE->getNode(false);
+	if(v1->isConnect(v2) == false || v2->isConnect(v1) == false) return false;
+	v1->DeleteEdge(argE);
+	v2->DeleteEdge(argE);
+	edgeAdmin->EraseID(ID);
+	delete argE;
+	edge[_st(ID)] = nullptr;
+	edgeShape->setDrawMode(ID, false);
 
 	return true;
 }
