@@ -83,33 +83,135 @@ namespace FK {
 
 	class fk_Graph;
 
+	//! グラフ構造のノードを制御するクラス
+	/*!
+	 *	このクラスは、グラフ構造におけるノードを制御する機能を提供します。
+	 */
 	class fk_GraphNode : public fk_Attribute {
 
 	public:
+#ifndef FK_DOXYGEN_USER_PROCESS
 		fk_GraphNode(int, fk_Graph *);
 		~fk_GraphNode();
+#endif
+		
+		//! ID 取得関数
+		/*!
+		 *	\return		ID
+		 */
+		int getID(void);
 
-		int			getID(void);
-		void		setPosition(fk_Vector *);
-		fk_Vector *	getPosition(void);
+		//! 位置ベクトル設定関数
+		/*!
+		 *	ノードの位置ベクトルを設定します。
+		 *
+		 *	\param[in]	pos		位置ベクトル
+		 */
+		void setPosition(fk_Vector *pos);
 
-		bool		isConnect(fk_GraphNode *);
-		bool		isConnect(bool, fk_GraphNode *);
+		//! 位置ベクトル取得関数
+		/*!
+		 *	ノードの位置ベクトルを取得します。
+		 *
+		 *	\return		位置ベクトル
+		 */
+		fk_Vector * getPosition(void);
 
-		std::list<fk_GraphEdge *>	getAllEdge(void);
-		void	getAllEdge(std::list<fk_GraphEdge *> *);
+		//! 接続ノード確認関数
+		/*!
+		 *	指定したノードとの間に辺が存在するかどうかを判定します。
+		 *	辺の方向も考慮したい場合は isConnect(bool, fk_GraphNode *) を使用して下さい。
+		 *
+		 *	\param[in]	node	接続を確認するノード
+		 *
+		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
+		 */
+		bool isConnect(fk_GraphNode *node);
 
-		std::list<fk_GraphEdge *>	getStartEdge(void);
-		void	getStartEdge(std::list<fk_GraphEdge *> *);
+		//! 方向判定付き接続ノード確認関数
+		/*!
+		 *	指定したノードとの間に、指定した方向の辺が存在するかどうかを判定します。
+		 *	isConnect(fk_GraphNode *) の場合は何かしらの辺が存在すれば true を返しますが、
+		 *	こちらの関数では辺の方向を指定することができます。
+		 * 	mode が true のときは、this インスタンスから node への経路が存在する場合のみに
+		 *	true を返します。そのため、辺が存在していたとしても、
+		 *	node から this への一方通行辺だった場合は false を返します。
+		 *	mode が false の場合は this インスタンスが終点側の場合に true を返します。
+		 *  間の辺が双方向辺だった場合は、mode の値にかかわらず true を返します。
+		 *
+		 *	\param[in]	mode	辺の向きを指定します。
+		 *	\param[in]	node	接続を確認するノード。
+		 *
+		 *	\return	指定した方向への辺が存在する場合 true を、存在しない場合 false を返します。
+		 */
+		bool isConnect(bool mode, fk_GraphNode *node);
 
-		std::list<fk_GraphEdge *>	getEndEdge(void);
-		void	getEndEdge(std::list<fk_GraphEdge *> *);
+		//! 全接続辺取得関数1
+		/*!
+		 *	現在ノードに接続している全ての辺を取得します。
+		 *
+		 *	\return		接続辺の list 集合。
+		 */
+		std::list<fk_GraphEdge *> getAllEdge(void);
 
+		//! 全接続辺取得関数2
+		/*!
+		 *	現在ノードに接続している全ての辺を取得します。
+		 *
+		 *	\param[out]		list	接続辺の list 集合。
+		 */
+		void getAllEdge(std::list<fk_GraphEdge *> *list);
+
+		//! 始点接続辺取得関数1
+		/*!
+		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	- 双方向辺。
+		 *	- 一方通行辺のうち、このノードが始点となっている辺。
+		 *	.
+		 *
+		 *	\return		接続辺の list 集合。
+		 */
+		std::list<fk_GraphEdge *> getStartEdge(void);
+
+		//! 始点接続辺取得関数2
+		/*!
+		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	- 双方向辺。
+		 *	- 一方通行辺のうち、このノードが始点となっている辺。
+		 *	.
+		 *
+		 *	\param[out]		list	接続辺の list 集合。
+		 */
+		void getStartEdge(std::list<fk_GraphEdge *> *list);
+
+		//! 終点接続辺取得関数1
+		/*!
+		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	- 双方向辺。
+		 *	- 一方通行辺のうち、このノードが終点となっている辺。
+		 *	.
+		 *
+		 *	\return		接続辺の list 集合。
+		 */
+		std::list<fk_GraphEdge *> getEndEdge(void);
+
+		//! 終点接続辺取得関数2
+		/*!
+		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	- 双方向辺。
+		 *	- 一方通行辺のうち、このノードが終点となっている辺。
+		 *	.
+		 *
+		 *	\param[out]		list	接続辺の list 集合。
+		 */
+		void getEndEdge(std::list<fk_GraphEdge *> *list);
+
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 		std::string	print(void);
-
 		void		ConnectEdge(bool, fk_GraphEdge *);
 		void		DeleteEdge(fk_GraphEdge *);
-
+#endif
 	private:
 
 		int			ID;

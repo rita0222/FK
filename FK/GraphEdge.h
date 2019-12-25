@@ -79,14 +79,33 @@ namespace FK {
 
 	class fk_GraphNode;
 
+	//! グラフ構造の辺を制御するクラス
+	/*!
+	 *	このクラスは、グラフ構造における辺を制御する機能を提供します。
+	 */
 	class fk_GraphEdge : public fk_Attribute {
 
 	public:
+#ifndef FK_DOXYGEN_USER_PROCESS
 		fk_GraphEdge(int, fk_GraphNode *, fk_GraphNode *);
 		~fk_GraphEdge();
+#endif
 
-		int				getID(void);
-		fk_GraphNode *	getNode(bool);
+		//! ID 取得関数
+		/*!
+		 *	\return		ID
+		 */
+		int getID(void);
+
+		//! ノード取得関数
+		/*!
+		 *	稜線の端点にあたるノードを取得します。
+		 *
+		 *	\param[in]	mode	true の場合始点を、false の場合終点を返します。
+		 *
+		 *	\return		端点ノード
+		 */
+		fk_GraphNode * getNode(bool mode);
 
 	private:
 		int				edgeID;

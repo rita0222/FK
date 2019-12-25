@@ -109,8 +109,8 @@
 namespace FK {
 
 	const int FK_MAJOR_VERSION = 4;
-	const int FK_MINOR_VERSION = 0;
-	const int FK_SUBMINOR_VERSION = 1;
+	const int FK_MINOR_VERSION = 1;
+	const int FK_SUBMINOR_VERSION = 6;
 
 #define _FK_UNDEFINED_DEFINE_ -1
 

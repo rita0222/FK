@@ -107,6 +107,11 @@ int fk_Graph::getNodeSize(void)
 	return int(node.size());
 }
 
+int fk_Graph::getMaxEdgeID(void)
+{
+	return edgeAdmin->GetMaxID();
+}
+	
 fk_GraphNode * fk_Graph::getNode(int argID)
 {
 	if(argID < 0 || argID >= getNodeSize()) return nullptr;

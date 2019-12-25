@@ -103,6 +103,12 @@ namespace FK {
 		 */
 		int getNodeSize(void);
 
+		//! 辺ID最大値取得関数
+		/*!
+		 *	\return		最大ID
+		 */
+		int getMaxEdgeID(void);
+
 		//! ノード取得関数
 		/*!
 		 *	\return		ノード位置ベクトル
@@ -134,8 +140,8 @@ namespace FK {
 
 		//! 辺存在確認関数
 		/*!
-		 *	\param[in]	ID1		辺の頂点となるノード ID。
-		 *	\param[in]	ID2		辺の頂点となるノード ID。
+		 *	\param[in]	v1		辺の頂点となるノード。
+		 *	\param[in]	v2		辺の頂点となるノード。
 		 *
 		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
 		 */
