@@ -87,11 +87,11 @@ namespace FK {
 	/*!
 	 *	このクラスは、グラフ構造におけるノードを制御する機能を提供します。
 	 */
-	class fk_GraphNode : public fk_Attribute {
+	class fk_GraphNode {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphNode(int, fk_Graph *);
+		fk_GraphNode(unsigned int, fk_Graph *);
 		~fk_GraphNode();
 #endif
 		
@@ -99,7 +99,7 @@ namespace FK {
 		/*!
 		 *	\return		ID
 		 */
-		int getID(void);
+		unsigned int getID(void);
 
 		//! 位置ベクトル設定関数
 		/*!
@@ -116,6 +116,14 @@ namespace FK {
 		 *	\return		位置ベクトル
 		 */
 		fk_Vector * getPosition(void);
+
+		//! 位置変更回数取得関数
+		/*!
+		 *	これまでのノード位置変更回数を取得します。
+		 *
+		 *	\return		変更回数
+		 */
+		unsigned int getGeneration(void);
 
 		//! 接続ノード確認関数
 		/*!
@@ -206,22 +214,49 @@ namespace FK {
 		 */
 		void getEndEdge(std::list<fk_GraphEdge *> *list);
 
+		std::list<fk_GraphNode *> getNextNode(void);
+		void getNextNode(std::list<fk_GraphNode *> *list);
+
+		void setIntCost(int value);
+		void setIntCost(unsigned int ID, int value);
+		void setDoubleCost(double value);
+		void setDoubleCost(unsigned int ID, double value);
+
+		int getIntCost(unsigned int ID = 0);
+		double getDoubleCost(unsigned int ID = 0);
+
+		void clearIntCost(void);
+		void clearIntCost(unsigned int ID);
+		void clearDoubleCost(void);
+		void clearDoubleCost(unsigned int ID);
+
+		bool isDoneIntCost(void);
+		bool isDoneIntCost(unsigned int ID);
+		bool isDoneDoubleCost(void);
+		bool isDoneDoubleCost(unsigned int ID);
+
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::string	print(void);
-		void		ConnectEdge(bool, fk_GraphEdge *);
-		void		DeleteEdge(fk_GraphEdge *);
+		void ConnectEdge(bool, fk_GraphEdge *);
+		void DeleteEdge(fk_GraphEdge *);
+		bool IsBase(fk_Graph *);
 #endif
 	private:
 
-		int			ID;
-		fk_Vector	position;
-		std::list<fk_GraphEdge *>	edgeS; // 始点稜線
-		std::list<fk_GraphEdge *>	edgeE; // 終点稜線
-		std::list<fk_GraphEdge *>	edgeB; // 無向稜線
-		std::list<fk_GraphEdge *>	edgeAll; // 全稜線
+		unsigned int ID;
+		fk_Vector position;
+		unsigned int generation;
 
-		fk_Graph 	*baseGraph;	// 元グラフインスタンス
+		std::list<fk_GraphEdge *> edgeS; // 始点稜線
+		std::list<fk_GraphEdge *> edgeE; // 終点稜線
+		std::list<fk_GraphEdge *> edgeB; // 無向稜線
+		std::list<fk_GraphEdge *> edgeAll; // 全稜線
+ 
+		std::vector< std::tuple<bool, int> > intCost;
+		std::vector< std::tuple<bool, double> > doubleCost;
+
+		fk_Graph *baseGraph;	// 元グラフインスタンス
 	};
 }
 

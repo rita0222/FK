@@ -73,29 +73,37 @@
 #ifndef __FK_GRAPH_EDGE_HEADER__
 #define __FK_GRAPH_EDGE_HEADER__
 
-#include <FK/Attribute.h>
+#include <FK/Base.h>
 
 namespace FK {
 
 	class fk_GraphNode;
 
+	enum class fk_CostType {
+		INT,
+		DOUBLE,
+		LENGTH
+	};
+
 	//! グラフ構造の辺を制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造における辺を制御する機能を提供します。
 	 */
-	class fk_GraphEdge : public fk_Attribute {
+	class fk_GraphEdge {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphEdge(int, fk_GraphNode *, fk_GraphNode *);
+		fk_GraphEdge(unsigned int, fk_GraphNode *, fk_GraphNode *);
 		~fk_GraphEdge();
 #endif
 
 		//! ID 取得関数
 		/*!
+		 *	稜線の ID を取得します。
+		 *
 		 *	\return		ID
 		 */
-		int getID(void);
+		unsigned int getID(void);
 
 		//! ノード取得関数
 		/*!
@@ -107,9 +115,42 @@ namespace FK {
 		 */
 		fk_GraphNode * getNode(bool mode);
 
+		void setLengthMode(bool mode);
+		bool getLengthMode(void);
+
+		double getLength(void);
+		
+		//! 整数型コストID上限設定関数
+		void setCostMaxID(fk_CostType type, unsigned int max);
+		unsigned int getCostMaxID(fk_CostType type);
+
+		//! 整数型コスト設定関数
+		/*!
+		 *
+		 */
+		void setIntCost(int cost);
+		void setIntCost(unsigned int ID, int cost);
+
+		void setDoubleCost(double cost);
+		void setDoubleCost(unsigned int ID, double cost);
+
+		int getIntCost(void);
+		int getIntCost(unsigned int ID);
+
+		double getDoubleCost(void);
+		double getDoubleCost(unsigned int ID);
+
 	private:
-		int				edgeID;
-		fk_GraphNode *	node[2];
+		unsigned int edgeID;
+		fk_GraphNode *node[2];
+		unsigned int generation[2];
+
+		bool lengthMode;
+		double length;
+		std::vector<int> intCost;
+		std::vector<double> doubleCost;
+
+		void UpdateLength(void);
 	};
 }
 

@@ -92,7 +92,7 @@ namespace FK {
 		/*!
 		 *	\param[in]	num		ノード数
 		 */
-		fk_Graph(int num);
+		fk_Graph(unsigned int num);
 
 		//! デストラクタ
 		~fk_Graph();
@@ -101,19 +101,21 @@ namespace FK {
 		/*!
 		 *	\return		ノード数
 		 */
-		int getNodeSize(void);
+		unsigned int getNodeSize(void);
 
 		//! 辺ID最大値取得関数
 		/*!
 		 *	\return		最大ID
 		 */
-		int getMaxEdgeID(void);
+		unsigned int getMaxEdgeID(void);
 
 		//! ノード取得関数
 		/*!
-		 *	\return		ノード位置ベクトル
+		 *	\param[in]	ID		ノード ID
+		 *
+		 *	\return		ノード
 		 */
-		fk_GraphNode * getNode(int ID);
+		fk_GraphNode * getNode(unsigned int ID);
 
 		//! 辺情報取得関数
 		/*!
@@ -121,7 +123,7 @@ namespace FK {
 		 *
 		 *	\return		辺情報
 		 */
-		fk_GraphEdge * getEdge(int ID);
+		fk_GraphEdge * getEdge(unsigned int ID);
 
 		//!	辺生成関数
 		/*!
@@ -147,19 +149,48 @@ namespace FK {
 		 */
 		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
 
+		void setCostMode(fk_CostType type, unsigned int costID = 0);
+		void setCostMode(unsigned int tableID, fk_CostType type, unsigned int costID = 0);
+
+		void setStart(fk_GraphNode *node);
+		void setStart(unsigned int tableID, fk_GraphNode *node);
+
+		void addGoal(fk_GraphNode *node);
+		void addGoal(unsigned int tableID, fk_GraphNode *node);
+
+		void makeCostTable(unsigned int tableID);
+		
+#ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Point * GetVertexShape(void);
 		fk_Line * GetEdgeShape(void);
+		void TablePrint(void);
+		void CostPrint(fk_CostType, unsigned int);
+#endif
 
 	private:
+		class fk_GraphCostTable {
+		public:
+			fk_GraphCostTable(void);
+			~fk_GraphCostTable();
+			
+			fk_GraphNode *start;
+			std::list<fk_GraphNode *> goal;
+			fk_CostType type;
+			unsigned int costID;
+			std::list<fk_GraphNode *> waitList;
 
-		fk_Point	*nodeShape;
-		fk_Line		*edgeShape;
-		fk_IDAdmin	*edgeAdmin;
+			std::string print(void);
+		};
+
+		fk_Point *nodeShape;
+		fk_Line *edgeShape;
+		fk_IDAdmin *edgeAdmin;
 
 		std::vector<fk_GraphNode *>	node;
 		std::vector<fk_GraphEdge *>	edge;
 
-		void NodeResize(int);
+		std::vector<fk_GraphCostTable> table;
+		void NodeResize(unsigned int);
 	};
 }
 

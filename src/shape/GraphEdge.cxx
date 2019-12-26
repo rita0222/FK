@@ -70,17 +70,28 @@
  *
  ****************************************************************************/
 
+#define FK_DEF_SIZETYPE
 #include <FK/GraphEdge.h>
 #include <FK/Graph.h>
 
 using namespace std;
 using namespace FK;
 
-fk_GraphEdge::fk_GraphEdge(int argEID, fk_GraphNode *argV1, fk_GraphNode *argV2)
+fk_GraphEdge::fk_GraphEdge(unsigned int argEID, fk_GraphNode *argV1, fk_GraphNode *argV2)
 {
 	edgeID = argEID;
 	node[0] = argV1;
 	node[1] = argV2;
+
+	intCost.clear();
+	intCost.push_back(0);
+	doubleCost.clear();
+	doubleCost.push_back(0.0);
+	lengthMode = true;
+	length = (*node[0]->getPosition() - *node[1]->getPosition()).dist();
+	generation[0] = node[0]->getGeneration();
+	generation[1] = node[1]->getGeneration();
+	
 }
 
 fk_GraphEdge::~fk_GraphEdge()
@@ -88,7 +99,7 @@ fk_GraphEdge::~fk_GraphEdge()
 	return;
 }
 
-int fk_GraphEdge::getID(void)
+unsigned int fk_GraphEdge::getID(void)
 {
 	return edgeID;
 }
@@ -97,4 +108,112 @@ fk_GraphNode * fk_GraphEdge::getNode(bool argMode)
 {
 	if(argMode == true) return node[0];
 	return node[1];
+}
+
+void fk_GraphEdge::setLengthMode(bool argMode)
+{
+	lengthMode = argMode;
+}
+
+bool fk_GraphEdge::getLengthMode(void)
+{
+	return lengthMode;
+}
+
+void fk_GraphEdge::UpdateLength(void)
+{
+	if(node[0]->getGeneration() != generation[0] ||
+	   node[1]->getGeneration() != generation[1]) {
+		length = (*node[0]->getPosition() - *node[1]->getPosition()).dist();
+		generation[0] = node[0]->getGeneration();
+		generation[1] = node[1]->getGeneration();
+	}
+}
+
+double fk_GraphEdge::getLength(void)
+{
+	UpdateLength();
+	return length;
+}
+
+void fk_GraphEdge::setCostMaxID(fk_CostType argType, unsigned int argMax)
+{
+	unsigned int max = (argMax < 1) ? 1 : argMax;
+	switch(argType) {
+	  case fk_CostType::INT:
+		intCost.resize(max);
+		break;
+
+	  case fk_CostType::DOUBLE:
+		doubleCost.resize(max);
+		break;
+
+	  default:
+		break;
+	}
+}
+
+
+unsigned int fk_GraphEdge::getCostMaxID(fk_CostType argType)
+{
+	switch(argType) {
+	  case fk_CostType::INT:
+		if(intCost.empty()) return 0;
+		return (unsigned int)(intCost.size() - 1);
+
+	  case fk_CostType::DOUBLE:
+		if(doubleCost.empty()) return 0;
+		return (unsigned int)(doubleCost.size() - 1);
+
+	  default:
+		break;
+	}
+
+	return 0;
+}
+
+void fk_GraphEdge::setIntCost(int argCost)
+{
+	intCost[0] = argCost;
+}
+
+void fk_GraphEdge::setIntCost(unsigned int argID, int argCost)
+{
+	if(argID >= intCost.size()) return;
+
+	intCost[argID] = argCost;
+}
+
+void fk_GraphEdge::setDoubleCost(double argCost)
+{
+	doubleCost[0] = argCost;
+}
+
+void fk_GraphEdge::setDoubleCost(unsigned int argID, double argCost)
+{
+	if(argID >= doubleCost.size()) return;
+
+	doubleCost[argID] = argCost;
+}
+
+int fk_GraphEdge::getIntCost(void)
+{
+	return intCost[0];
+}
+
+int fk_GraphEdge::getIntCost(unsigned int argID)
+{
+	if(argID >= intCost.size()) return 0;
+	return intCost[argID];
+}
+
+double fk_GraphEdge::getDoubleCost(void)
+{
+	return doubleCost[0];
+}
+
+double fk_GraphEdge::getDoubleCost(unsigned int argID)
+{
+	if(argID >= doubleCost.size()) return 0.0;
+	return doubleCost[argID];
 }
