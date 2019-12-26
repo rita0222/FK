@@ -83,6 +83,11 @@ namespace FK {
 	/*!
 	 *	このクラスは、グラフ構造を制御する機能を提供します。
 	 */
+	enum class fk_GraphCostStatus {
+		CONTINUE,
+		FINISH,
+		ERROR
+	};
 
 	class fk_Graph : public fk_Shape {
 
@@ -149,8 +154,9 @@ namespace FK {
 		 */
 		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
 
-		void setCostMode(fk_CostType type, unsigned int costID = 0);
-		void setCostMode(unsigned int tableID, fk_CostType type, unsigned int costID = 0);
+		void setCostMode(fk_CostType type, bool backMode, unsigned int costID = 0);
+		void setCostMode(unsigned int tableID, fk_CostType type,
+						 bool backMode, unsigned int costID = 0);
 
 		void setStart(fk_GraphNode *node);
 		void setStart(unsigned int tableID, fk_GraphNode *node);
@@ -158,7 +164,8 @@ namespace FK {
 		void addGoal(fk_GraphNode *node);
 		void addGoal(unsigned int tableID, fk_GraphNode *node);
 
-		void makeCostTable(unsigned int tableID);
+		bool initCostTable(unsigned int tableID);
+		fk_GraphCostStatus updateCostTable(unsigned int tableID);
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Point * GetVertexShape(void);
@@ -177,7 +184,8 @@ namespace FK {
 			std::list<fk_GraphNode *> goal;
 			fk_CostType type;
 			unsigned int costID;
-			std::list<fk_GraphNode *> waitList;
+			std::list<fk_GraphNode *> queueList;
+			bool backMode;
 
 			std::string print(void);
 		};
@@ -186,11 +194,14 @@ namespace FK {
 		fk_Line *edgeShape;
 		fk_IDAdmin *edgeAdmin;
 
-		std::vector<fk_GraphNode *>	node;
-		std::vector<fk_GraphEdge *>	edge;
+		std::vector<fk_GraphNode *>	nodeArray;
+		std::vector<fk_GraphEdge *>	edgeArray;
 
-		std::vector<fk_GraphCostTable> table;
+		std::vector<fk_GraphCostTable> tableArray;
+
 		void NodeResize(unsigned int);
+		void DoubleUpdate(unsigned int, fk_GraphCostTable *, fk_GraphEdge *, fk_GraphNode *);
+		void IntUpdate(unsigned int, fk_GraphCostTable *, fk_GraphEdge *, fk_GraphNode *);
 	};
 }
 

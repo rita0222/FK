@@ -97,14 +97,14 @@ fk_Graph::~fk_Graph()
 	delete edgeShape;
 	delete edgeAdmin;
 
-	for(auto v : node) delete v;
-	for(auto e : edge) delete e;
+	for(auto v : nodeArray) delete v;
+	for(auto e : edgeArray) delete e;
 	return;
 }
 
 unsigned int fk_Graph::getNodeSize(void)
 {
-	return (unsigned int)node.size();
+	return (unsigned int)nodeArray.size();
 }
 
 unsigned int fk_Graph::getMaxEdgeID(void)
@@ -115,7 +115,7 @@ unsigned int fk_Graph::getMaxEdgeID(void)
 fk_GraphNode * fk_Graph::getNode(unsigned int argID)
 {
 	if(argID >= getNodeSize()) return nullptr;
-	return node[argID];
+	return nodeArray[argID];
 }
 
 bool fk_Graph::isConnect(fk_GraphNode *argV1, fk_GraphNode *argV2)
@@ -144,12 +144,12 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, fk_GraphNode *argV1, fk_GraphNod
 	fk_GraphEdge *e = new fk_GraphEdge(newID, argV1, argV2);
 	fk_Vector V1, V2;
 
-	if(newID == edge.size()) {
-		edge.push_back(e);
+	if(newID == edgeArray.size()) {
+		edgeArray.push_back(e);
 		edgeShape->pushLine(V1, V2);
 	} else {
-		if(edge[_st(newID)] != nullptr) delete edge[_st(newID)];
-		edge[_st(newID)] = e;
+		if(edgeArray[newID] != nullptr) delete edgeArray[newID];
+		edgeArray[newID] = e;
 	}
 
 	argV1->ConnectEdge(argMode, e);
@@ -165,8 +165,8 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, fk_GraphNode *argV1, fk_GraphNod
 
 fk_GraphEdge * fk_Graph::getEdge(unsigned int argID)
 {
-	if(argID >= edge.size()) return nullptr;
-	return edge[argID];
+	if(argID >= edgeArray.size()) return nullptr;
+	return edgeArray[argID];
 }
 
 fk_Point * fk_Graph::GetVertexShape(void)
@@ -181,24 +181,24 @@ fk_Line * fk_Graph::GetEdgeShape(void)
 
 void fk_Graph::NodeResize(unsigned int argSize)
 {
-	unsigned int oldSize = (unsigned int)node.size();
+	unsigned int oldSize = (unsigned int)nodeArray.size();
 	
 	for(unsigned int i = argSize; i < oldSize; ++i) {
-		delete node[i];
-		node[i] = nullptr;
+		delete nodeArray[i];
+		nodeArray[i] = nullptr;
 	}
 
-	if(oldSize > argSize) node.resize(argSize);
+	if(oldSize > argSize) nodeArray.resize(argSize);
 
 	for(unsigned int i = oldSize; i < argSize; ++i) {
-		node.push_back(new fk_GraphNode(i, this));
+		nodeArray.push_back(new fk_GraphNode(i, this));
 	}
 }
 
 bool fk_Graph::deleteEdge(fk_GraphEdge *argE)
 {
 	if(argE == nullptr) return false;
-	if(argE != edge[_st(argE->getID())]) return false;
+	if(argE != edgeArray[argE->getID()]) return false;
 	unsigned int ID = argE->getID();
 
 	auto v1 = argE->getNode(true);
@@ -208,23 +208,24 @@ bool fk_Graph::deleteEdge(fk_GraphEdge *argE)
 	v2->DeleteEdge(argE);
 	edgeAdmin->EraseID(int(ID));
 	delete argE;
-	edge[ID] = nullptr;
+	edgeArray[ID] = nullptr;
 	edgeShape->setDrawMode(int(ID), false);
 
 	return true;
 }
 
-void fk_Graph::setCostMode(fk_CostType argType, unsigned int argCostID)
+void fk_Graph::setCostMode(fk_CostType argType, bool argBackMode, unsigned int argCostID)
 {
-	setCostMode(0, argType, argCostID);
+	setCostMode(0, argType, argBackMode, argCostID);
 }
 
 void fk_Graph::setCostMode(unsigned int argTableID, fk_CostType argType,
-						   unsigned int argCostID)
+						   bool argBackMode, unsigned int argCostID)
 {
-	if(argTableID >= table.size()) table.resize(argTableID + 1);
-	table[argTableID].type = argType;
-	table[argTableID].costID = argCostID;
+	if(argTableID >= tableArray.size()) tableArray.resize(argTableID + 1);
+	tableArray[argTableID].type = argType;
+	tableArray[argTableID].costID = argCostID;
+	tableArray[argTableID].backMode = argBackMode;
 }
 
 void fk_Graph::setStart(fk_GraphNode *argNode)
@@ -236,8 +237,8 @@ void fk_Graph::setStart(unsigned int argTableID, fk_GraphNode *argNode)
 {
 	if(argNode == nullptr) return;
 	if(argNode->IsBase(this) == false) return;
-	if(argTableID >= table.size()) table.resize(argTableID + 1);
-	table[argTableID].start = argNode;
+	if(argTableID >= tableArray.size()) tableArray.resize(argTableID + 1);
+	tableArray[argTableID].start = argNode;
 }
 
 void fk_Graph::addGoal(fk_GraphNode *argNode)
@@ -249,15 +250,15 @@ void fk_Graph::addGoal(unsigned int argTableID, fk_GraphNode *argNode)
 {
 	if(argNode == nullptr) return;
 	if(argNode->IsBase(this) == false) return;
-	if(argTableID >= table.size()) table.resize(argTableID + 1);
-	table[argTableID].goal.push_back(argNode);
+	if(argTableID >= tableArray.size()) tableArray.resize(argTableID + 1);
+	tableArray[argTableID].goal.push_back(argNode);
 }
 
 void fk_Graph::TablePrint(void)
 {
-	for(_st i = 0; i < table.size(); ++i) {
+	for(_st i = 0; i < tableArray.size(); ++i) {
 		fk_Window::printf("Table[%d] : ", i);
-		fk_Window::putString(table[i].print());
+		fk_Window::putString(tableArray[i].print());
 	}
 }		
 
@@ -267,54 +268,141 @@ fk_Graph::fk_GraphCostTable::fk_GraphCostTable(void)
 	goal.clear();
 	type = fk_CostType::LENGTH;
 	costID = 0;
-	waitList.clear();
+	queueList.clear();
 }
 
 fk_Graph::fk_GraphCostTable::~fk_GraphCostTable()
 {
 }
 
-void fk_Graph::makeCostTable(unsigned int argID)
+bool fk_Graph::initCostTable(unsigned int argID)
 {
-	if(table.size() <= argID) return;
-	fk_GraphCostTable *t = &table[argID];
-	if(t->start == nullptr) return;
-	t->start->setDoubleCost(0.0);
-	t->waitList.push_back(t->start);
+	if(tableArray.size() <= argID) return false;
+	fk_GraphCostTable *tbl = &tableArray[argID];
+	if(tbl->start == nullptr) return false;
+	if(tbl->backMode == true && tbl->goal.empty() == true) return false;
 
-	list<fk_GraphEdge *> edgeList;
+	list<fk_GraphNode *> *queue = &tbl->queueList;
+	queue->clear();
 
-	while(t->waitList.empty() == false) {
-		fk_GraphNode *cur = t->waitList.front();
-		t->waitList.pop_front();
-
-		cur->getStartEdge(&edgeList);
-		for(fk_GraphEdge *e : edgeList) {
-			fk_GraphNode *n = (e->getNode(true) == cur) ?
-				e->getNode(false) : e->getNode(true);
-			double cost = cur->getDoubleCost() + e->getLength();
-
-			if(cost < n->getDoubleCost() || n->isDoneDoubleCost() == false) {
-				n->setDoubleCost(cost);
-				auto p = t->waitList.begin();
-				if(p != t->waitList.end()) {
-					while(p != t->waitList.end() && (*p)->getDoubleCost() < cost) ++p;
-					t->waitList.insert(p, n);
-				} else {
-					t->waitList.push_back(n);
-				}
+	if(tbl->type == fk_CostType::INT) {
+		for(auto node : nodeArray) node->clearIntCost(argID);
+		if(tbl->backMode == true) {
+			for(auto node : tbl->goal) {
+				node->setIntCost(argID, 0);
+				queue->push_back(node);
 			}
+		} else {
+			tbl->start->setIntCost(argID, 0);
+			queue->push_back(tbl->start);
+		}
+	} else {
+		for(auto node : nodeArray) node->clearDoubleCost(argID);
+		if(tbl->backMode == true) {
+			for(auto node : tbl->goal) {
+				node->setDoubleCost(argID, 0.0);
+				queue->push_back(node);
+			}
+		} else {
+			tbl->start->setDoubleCost(argID, 0.0);
+			queue->push_back(tbl->start);
 		}
 	}
-}		
+
+	return true;
+}
+
+fk_GraphCostStatus fk_Graph::updateCostTable(unsigned int argID)
+{
+	if(tableArray.size() <= argID) return fk_GraphCostStatus::ERROR;
+	fk_GraphCostTable *tbl = &tableArray[argID];
+	if(tbl->start == nullptr) return fk_GraphCostStatus::ERROR;
+	if(tbl->backMode == true && tbl->goal.empty() == true) return fk_GraphCostStatus::ERROR;
+
+	list<fk_GraphNode *> *queue = &tbl->queueList;
+
+	if(queue->empty()) return fk_GraphCostStatus::FINISH;
+
+	fk_GraphNode *cur = queue->front();
+	queue->pop_front();
+
+	list<fk_GraphEdge *> edgeList;
+	if(tbl->backMode == true) {
+		cur->getEndEdge(&edgeList);
+	} else {
+		cur->getStartEdge(&edgeList);
+	}
+		
+	if(tbl->type == fk_CostType::INT) {
+		for(fk_GraphEdge *edge : edgeList) IntUpdate(argID, tbl, edge, cur);
+	} else {
+		for(fk_GraphEdge *edge : edgeList) DoubleUpdate(argID, tbl, edge, cur);
+	}
+	if(queue->empty()) return fk_GraphCostStatus::FINISH;
+	return fk_GraphCostStatus::CONTINUE;
+}
+
+void fk_Graph::IntUpdate(unsigned int argID,
+						 fk_GraphCostTable *argTable,
+						 fk_GraphEdge *argEdge,
+						 fk_GraphNode *argNode)
+{
+	list<fk_GraphNode *> *queue = &argTable->queueList;
+
+	fk_GraphNode *next = (argEdge->getNode(true) == argNode) ?
+		argEdge->getNode(false) : argEdge->getNode(true);
+
+	int cost = argNode->getIntCost(argID) + argEdge->getIntCost(argTable->costID);
+
+	if(cost < next->getIntCost(argID) || next->isDoneIntCost(argID) == false) {
+		next->setIntCost(argID, cost);
+		auto p = queue->begin();
+		if(p != queue->end()) {
+			while(p != queue->end() && (*p)->getIntCost(argID) < cost) ++p;
+			queue->insert(p, next);
+		} else {
+			queue->push_back(next);
+		}
+	}
+}
+
+void fk_Graph::DoubleUpdate(unsigned int argID,
+							fk_GraphCostTable *argTable,
+							fk_GraphEdge *argEdge,
+							fk_GraphNode *argNode)
+{
+	list<fk_GraphNode *> *queue = &argTable->queueList;
+
+	fk_GraphNode *next = (argEdge->getNode(true) == argNode) ?
+		argEdge->getNode(false) : argEdge->getNode(true);
+
+	double cost = (argTable->type == fk_CostType::DOUBLE) ?
+		argNode->getDoubleCost(argID) + argEdge->getDoubleCost(argTable->costID) :
+		argNode->getDoubleCost(argID) + argEdge->getLength();
+
+	if(cost < next->getDoubleCost(argID) || next->isDoneDoubleCost(argID) == false) {
+		next->setDoubleCost(argID, cost);
+		auto p = queue->begin();
+		if(p != queue->end()) {
+			while(p != queue->end() && (*p)->getDoubleCost(argID) < cost) ++p;
+			queue->insert(p, next);
+		} else {
+			queue->push_back(next);
+		}
+	}
+}
+
+	
+
+
 
 void fk_Graph::CostPrint(fk_CostType argType, unsigned int argID)
 {
-	for(auto n : node) {
+	for(auto node : nodeArray) {
 		if(argType == fk_CostType::INT) {
-			fk_Window::printf("Node[%d] = %f", n->getID(), n->getIntCost(argID));
+			fk_Window::printf("Node[%d] = %f", node->getID(), node->getIntCost(argID));
 		} else {
-			fk_Window::printf("Node[%d] = %f", n->getID(), n->getDoubleCost(argID));
+			fk_Window::printf("Node[%d] = %f", node->getID(), node->getDoubleCost(argID));
 		}
 	}
 }

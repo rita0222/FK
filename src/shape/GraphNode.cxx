@@ -217,8 +217,8 @@ list<fk_GraphEdge *> fk_GraphNode::getEndEdge(void)
 {
 	list<fk_GraphEdge *> ret;
 
-	ret.splice(ret.end(), edgeE);
-	ret.splice(ret.end(), edgeB);
+	copy(edgeE.begin(), edgeE.end(), back_inserter(ret));
+	copy(edgeB.begin(), edgeB.end(), back_inserter(ret));
 	return ret;
 }
 
