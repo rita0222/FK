@@ -31,7 +31,7 @@
  *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
  *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE. 
+ *	POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
 /****************************************************************************
@@ -70,123 +70,162 @@
  *
  ****************************************************************************/
 
-#ifndef __FK_GRAPH_HEADER__
-#define __FK_GRAPH_HEADER__
-
+#define FK_DEF_SIZETYPE
 #include <FK/CostTable.H>
-#include <FK/IDAdmin.H>
+#include <FK/Window.h>
 
-namespace FK {
+using namespace std;
+using namespace FK;
 
-	//! グラフ構造を制御するクラス
-	/*!
-	 *	このクラスは、グラフ構造を制御する機能を提供します。
-	 */
-	enum class fk_GraphCostStatus {
-		CONTINUE,
-		FINISH,
-		ERROR
-	};
-
-	class fk_Graph : public fk_Shape {
-
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	\param[in]	num		ノード数
-		 */
-		fk_Graph(unsigned int num);
-
-		//! デストラクタ
-		~fk_Graph();
-
-		//! ノード数取得関数
-		/*!
-		 *	\return		ノード数
-		 */
-		unsigned int getNodeSize(void);
-
-		//! 辺ID最大値取得関数
-		/*!
-		 *	\return		最大ID
-		 */
-		unsigned int getMaxEdgeID(void);
-
-		//! ノード取得関数
-		/*!
-		 *	\param[in]	ID		ノード ID
-		 *
-		 *	\return		ノード
-		 */
-		fk_GraphNode * getNode(unsigned int ID);
-
-		//! 辺情報取得関数
-		/*!
-		 *	\param[in]	ID		辺 ID
-		 *
-		 *	\return		辺情報
-		 */
-		fk_GraphEdge * getEdge(unsigned int ID);
-
-		//!	辺生成関数
-		/*!
-		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
-		 *						辺が経路を表す場合は、有向辺は一方通行を表します。
-		 *	\param[in]	v1		辺の始点となるノード。
-		 *	\param[in]	v2		辺の終点となるノード。
-		 */
-		fk_GraphEdge * makeEdge(bool mode, fk_GraphNode *v1, fk_GraphNode *v2);
-
-		//! 辺削除関数
-		/*!
-		 *
-		 */
-		bool deleteEdge(fk_GraphEdge *e);
-
-		//! 辺存在確認関数
-		/*!
-		 *	\param[in]	v1		辺の頂点となるノード。
-		 *	\param[in]	v2		辺の頂点となるノード。
-		 *
-		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
-		 */
-		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
-
-		void setCostMode(unsigned int tableID, bool backMode,
-						 fk_CostType type, unsigned int edgeCostID = 0);
-
-		void setStart(unsigned int tableID, fk_GraphNode *node);
-		void addGoal(unsigned int tableID, fk_GraphNode *node);
-
-		bool initCostTable(unsigned int tableID);
-		fk_GraphCostStatus updateCostTable(unsigned int tableID);
-		
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Point * GetVertexShape(void);
-		fk_Line * GetEdgeShape(void);
-		void TablePrint(void);
-		void CostPrint(unsigned int);
-		void CostPrint(fk_CostType, unsigned int);
-#endif
-
-	private:
-		fk_Point *nodeShape;
-		fk_Line *edgeShape;
-		fk_IDAdmin *edgeAdmin;
-
-		std::vector<fk_GraphNode *>	nodeArray;
-		std::vector<fk_GraphEdge *>	edgeArray;
-		std::vector<fk_CostTable *> tableArray;
-
-		unsigned int intCostMax, doubleCostMax;
-
-		void NodeResize(unsigned int);
-		void TableReady(unsigned int);
-		void DoubleUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
-		void IntUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
-	};
+fk_CostTable::fk_CostTable(void)
+{
+	start = nullptr;
+	goal.clear();
+	type = fk_CostType::LENGTH;
+	nodeCostID = edgeCostID = 0;
+	queueList.clear();
+	backMode = true;
 }
 
+fk_CostTable::~fk_CostTable()
+{
+}
 
-#endif
+void fk_CostTable::setTable(fk_CostType argType, bool argMode,
+							unsigned int argNodeID, unsigned int argEdgeID)
+{
+	type = argType;
+	backMode = argMode;
+	nodeCostID = argNodeID;
+	edgeCostID = argEdgeID;
+}
+
+fk_CostType fk_CostTable::getType(void)
+{
+	return type;
+}
+
+bool fk_CostTable::getMode(void)
+{
+	return backMode;
+}
+
+unsigned int fk_CostTable::getNodeCostID(void)
+{
+	return nodeCostID;
+}
+
+unsigned int fk_CostTable::getEdgeCostID(void)
+{
+	return edgeCostID;
+}
+
+void fk_CostTable::setStart(fk_GraphNode *argStart)
+{
+	start = argStart;
+}
+
+fk_GraphNode * fk_CostTable::getStart(void)
+{
+	return start;
+}
+
+void fk_CostTable::addGoal(fk_GraphNode *argGoal)
+{
+	goal.push_back(argGoal);
+}
+
+void fk_CostTable::clearGoal(void)
+{
+	goal.clear();
+}
+
+list<fk_GraphNode *> * fk_CostTable::getGoal(void)
+{
+	return &goal;
+}
+
+void fk_CostTable::queueClear(void)
+{
+	queueList.clear();
+}
+
+void fk_CostTable::addQueue(fk_GraphNode *argNode)
+{
+	queueList.push_back(argNode);
+}
+
+bool fk_CostTable::isQueueEmpty(void)
+{
+	return queueList.empty();
+}
+
+fk_GraphNode * fk_CostTable::queuePopFront(void)
+{
+	if(queueList.empty()) return nullptr;
+	fk_GraphNode *ret = queueList.front();
+	queueList.pop_front();
+	return ret;
+}
+
+void fk_CostTable::insertIntQueue(fk_GraphNode *argNode, unsigned int argID, int argCost)
+{
+	argNode->setIntCost(argID, argCost);
+	auto p = queueList.begin();
+	if(p != queueList.end()) {
+		while(p != queueList.end() && (*p)->getIntCost(argID) < argCost) ++p;
+		queueList.insert(p, argNode);
+	} else {
+		queueList.push_back(argNode);
+	}
+}
+
+void fk_CostTable::insertDoubleQueue(fk_GraphNode *argNode, unsigned int argID, double argCost)
+{
+	argNode->setDoubleCost(argID, argCost);
+	auto p = queueList.begin();
+	if(p != queueList.end()) {
+		while(p != queueList.end() && (*p)->getDoubleCost(argID) < argCost) ++p;
+		queueList.insert(p, argNode);
+	} else {
+		queueList.push_back(argNode);
+	}
+}
+
+string fk_CostTable::print(void)
+{
+	string outStr;
+
+	outStr += "S = ";
+	outStr += (start == nullptr) ? "NULL" : to_string(start->getID());
+	outStr += + ",\n";
+	outStr += "G =";
+	for(auto n : goal) {
+		outStr += " " + to_string(n->getID()) + ",";
+	}
+	outStr += "\n";
+	outStr += "Type = ";
+	switch(type)
+	{
+	  case fk_CostType::INT:
+		outStr += "INT";
+		break;
+
+	  case fk_CostType::DOUBLE:
+		outStr += "DOUBLE";
+		break;
+
+	  case fk_CostType::LENGTH:
+		outStr += "LENGTH";
+		break;
+
+	  default:
+		outStr += "NONE";
+		break;
+	}
+	outStr += ",\n";
+	outStr += "(nodeCost, edgeCost) = (";
+	outStr += to_string(nodeCostID) + ", " + to_string(edgeCostID) + ")\n";
+
+	return outStr;
+}

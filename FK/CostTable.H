@@ -70,123 +70,56 @@
  *
  ****************************************************************************/
 
-#ifndef __FK_GRAPH_HEADER__
-#define __FK_GRAPH_HEADER__
+#ifndef __FK_COST_TABLE_HEADER__
+#define __FK_COST_TABLE_HEADER__
 
-#include <FK/CostTable.H>
-#include <FK/IDAdmin.H>
+#include <FK/GraphNode.h>
 
 namespace FK {
 
-	//! グラフ構造を制御するクラス
-	/*!
-	 *	このクラスは、グラフ構造を制御する機能を提供します。
-	 */
-	enum class fk_GraphCostStatus {
+	enum class fk_CostStatus {
 		CONTINUE,
 		FINISH,
 		ERROR
 	};
 
-	class fk_Graph : public fk_Shape {
-
+	class fk_CostTable {
 	public:
+		fk_CostTable(void);
+		~fk_CostTable();
 
-		//! コンストラクタ
-		/*!
-		 *	\param[in]	num		ノード数
-		 */
-		fk_Graph(unsigned int num);
+		std::string print(void);
 
-		//! デストラクタ
-		~fk_Graph();
+		void setTable(fk_CostType, bool, unsigned int, unsigned int);
 
-		//! ノード数取得関数
-		/*!
-		 *	\return		ノード数
-		 */
-		unsigned int getNodeSize(void);
+		fk_CostType getType(void);
+		bool getMode(void);
+		unsigned int getNodeCostID(void);
+		unsigned int getEdgeCostID(void);
 
-		//! 辺ID最大値取得関数
-		/*!
-		 *	\return		最大ID
-		 */
-		unsigned int getMaxEdgeID(void);
+		void setStart(fk_GraphNode *);
+		fk_GraphNode * getStart(void);
 
-		//! ノード取得関数
-		/*!
-		 *	\param[in]	ID		ノード ID
-		 *
-		 *	\return		ノード
-		 */
-		fk_GraphNode * getNode(unsigned int ID);
+		void addGoal(fk_GraphNode *);
+		void clearGoal(void);
+		std::list<fk_GraphNode *> * getGoal(void);
 
-		//! 辺情報取得関数
-		/*!
-		 *	\param[in]	ID		辺 ID
-		 *
-		 *	\return		辺情報
-		 */
-		fk_GraphEdge * getEdge(unsigned int ID);
+		void queueClear(void);
+		void addQueue(fk_GraphNode *);
+		bool isQueueEmpty(void);
+		fk_GraphNode * queuePopFront(void);
 
-		//!	辺生成関数
-		/*!
-		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
-		 *						辺が経路を表す場合は、有向辺は一方通行を表します。
-		 *	\param[in]	v1		辺の始点となるノード。
-		 *	\param[in]	v2		辺の終点となるノード。
-		 */
-		fk_GraphEdge * makeEdge(bool mode, fk_GraphNode *v1, fk_GraphNode *v2);
-
-		//! 辺削除関数
-		/*!
-		 *
-		 */
-		bool deleteEdge(fk_GraphEdge *e);
-
-		//! 辺存在確認関数
-		/*!
-		 *	\param[in]	v1		辺の頂点となるノード。
-		 *	\param[in]	v2		辺の頂点となるノード。
-		 *
-		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
-		 */
-		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
-
-		void setCostMode(unsigned int tableID, bool backMode,
-						 fk_CostType type, unsigned int edgeCostID = 0);
-
-		void setStart(unsigned int tableID, fk_GraphNode *node);
-		void addGoal(unsigned int tableID, fk_GraphNode *node);
-
-		bool initCostTable(unsigned int tableID);
-		fk_GraphCostStatus updateCostTable(unsigned int tableID);
+		void insertIntQueue(fk_GraphNode *, unsigned int, int);
+		void insertDoubleQueue(fk_GraphNode *, unsigned int, double);
 		
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Point * GetVertexShape(void);
-		fk_Line * GetEdgeShape(void);
-		void TablePrint(void);
-		void CostPrint(unsigned int);
-		void CostPrint(fk_CostType, unsigned int);
-#endif
-
 	private:
-		fk_Point *nodeShape;
-		fk_Line *edgeShape;
-		fk_IDAdmin *edgeAdmin;
-
-		std::vector<fk_GraphNode *>	nodeArray;
-		std::vector<fk_GraphEdge *>	edgeArray;
-		std::vector<fk_CostTable *> tableArray;
-
-		unsigned int intCostMax, doubleCostMax;
-
-		void NodeResize(unsigned int);
-		void TableReady(unsigned int);
-		void DoubleUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
-		void IntUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
+		fk_GraphNode *start;
+		std::list<fk_GraphNode *> goal;
+		fk_CostType type;
+		unsigned int edgeCostID, nodeCostID;
+		std::list<fk_GraphNode *> queueList;
+		bool backMode;
 	};
 }
-
 
 #endif

@@ -13,6 +13,7 @@ LIBSRCS		= \
 			Closedline.cxx \
 			Command.cxx \
 			Cone.cxx \
+			CostTable.cxx \
 			Curve.cxx \
 			D3DXAnimation.cxx \
 			D3DXData.cxx \
