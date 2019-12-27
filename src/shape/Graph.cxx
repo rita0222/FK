@@ -235,6 +235,12 @@ void fk_Graph::setCostMode(unsigned int argTableID, bool argBackMode,
 	}
 }
 
+unsigned int fk_Graph::getNodeCostID(unsigned int argTableID)
+{
+	if(argTableID >= tableArray.size()) return 0;
+	return tableArray[argTableID]->getNodeCostID();
+}
+
 void fk_Graph::setStart(unsigned int argTableID, fk_GraphNode *argNode)
 {
 	if(argNode == nullptr) return;

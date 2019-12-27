@@ -156,6 +156,8 @@ namespace FK {
 		void setCostMode(unsigned int tableID, bool backMode,
 						 fk_CostType type, unsigned int edgeCostID = 0);
 
+		unsigned int getNodeCostID(unsigned int tableID);
+
 		void setStart(unsigned int tableID, fk_GraphNode *node);
 		void addGoal(unsigned int tableID, fk_GraphNode *node);
 
