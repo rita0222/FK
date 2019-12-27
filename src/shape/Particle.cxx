@@ -184,7 +184,7 @@ void fk_Particle::setColor(const fk_Color &argCol)
 
 void fk_Particle::setColor(fk_Color *argCol)
 {
-	base->setColor(id, *argCol);
+	base->setColor(id, argCol);
 }
 
 fk_Color fk_Particle::getColor(void)

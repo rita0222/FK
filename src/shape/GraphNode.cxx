@@ -71,18 +71,14 @@
  ****************************************************************************/
 
 #define FK_DEF_SIZETYPE
-#include <FK/GraphNode.h>
 #include <FK/Graph.h>
 
 using namespace std;
 using namespace FK;
 
 fk_GraphNode::fk_GraphNode(unsigned int argID, fk_Graph *argGraph)
+	: ID(argID), generation(0), baseGraph(argGraph)
 {
-	ID = argID;
-	baseGraph = argGraph;
-	generation = 0;
-
 	clearIntCost(0);
 	clearDoubleCost(0);
 	
@@ -366,6 +362,16 @@ double fk_GraphNode::getDoubleCost(unsigned int argID)
 bool fk_GraphNode::IsBase(fk_Graph *argBase)
 {
 	return (argBase == baseGraph);
+}
+
+void fk_GraphNode::setColor(fk_Color argC)
+{
+	baseGraph->GetVertexShape()->setColor(int(ID), argC);
+}
+
+void fk_GraphNode::setColor(fk_Color *argC)
+{
+	baseGraph->GetVertexShape()->setColor(int(ID), *argC);
 }
 
 string fk_GraphNode::print(void)

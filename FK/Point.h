@@ -122,7 +122,7 @@ namespace FK {
 		 *
 		 *	\return		新しい頂点の ID
 		 */
-		int				pushVertex(const fk_Vector &pos);
+		int pushVertex(const fk_Vector &pos);
 
 		//! 頂点位置設定関数
 		/*!
@@ -133,7 +133,7 @@ namespace FK {
 		 *
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			setVertex(int ID, const fk_Vector &pos);
+		bool setVertex(int ID, const fk_Vector &pos);
 
 		//! 点群生成関数
 		/*
@@ -144,7 +144,7 @@ namespace FK {
 		 *
 		 *	\return		生成に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			setVertex(std::vector<fk_Vector> *array);
+		bool setVertex(std::vector<fk_Vector> *array);
 
 		//! 頂点削除関数
 		/*
@@ -155,7 +155,7 @@ namespace FK {
 		 *
 		 *	\return		削除に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			removeVertex(int ID);
+		bool removeVertex(int ID);
 
 		//! 頂点位置ベクトル取得関数
 		/*!
@@ -175,7 +175,7 @@ namespace FK {
 		 *
 		 *	\return		頂点数
 		 */
-		int				getSize(void);
+		int getSize(void);
 
 		//! 頂点描画制御関数
 		/*!
@@ -186,7 +186,7 @@ namespace FK {
 		 *	\param[in]	mode
 		 *		true であれば描画を有効に、false であれば無効にします。
 		 */
-		void			setDrawMode(int ID, bool mode);
+		void setDrawMode(int ID, bool mode);
 
 		//! 個別頂点描画状態参照関数
 		/*!
@@ -198,9 +198,9 @@ namespace FK {
 		 *		描画が有効であれば true を、無効であれば false を返します。
 		 *		指定した ID を持つ頂点が存在しなかった場合も false を返します。
 		 */
-		bool			getDrawMode(int ID);
+		bool getDrawMode(int ID);
 
-		//! 個別色設定関数
+		//! 個別色設定関数1
 		/*!
 		 *	点の色を個別に設定します。
 		 *	この色設定によって表示するには、
@@ -209,7 +209,18 @@ namespace FK {
 		 *	\param[in]	vID		要素ID
 		 *	\param[in]	col		色値
 		 */
-		void			setColor(int vID, const fk_Color &col);
+		void setColor(int vID, fk_Color col);
+
+		//! 個別色設定関数2
+		/*!
+		 *	点の色を個別に設定します。
+		 *	この色設定によって表示するには、
+		 *	fk_Model::setElementMode() で fk_ElementMode::ELEMENT を設定しておく必要があります。
+		 *
+		 *	\param[in]	vID		要素ID
+		 *	\param[in]	col		色値
+		 */
+		void setColor(int vID, fk_Color *col);
 
 		//! 個別色取得関数
 		/*!
@@ -219,28 +230,28 @@ namespace FK {
 		 *
 		 *	\return	色値
 		 */
-		fk_Color		getColor(int vID);
+		fk_Color getColor(int vID);
 
 		//! 点群全消去関数
 		/*!
 		 *	全ての頂点に関するデータを消去します。
 		 */
-		void			allClear(void);
+		void allClear(void);
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		void			setColorID(int, int);
-		int				getColorID(int);
+		void setColorID(int, int);
+		int getColorID(int);
 
 #endif		
 
 	private:
-		fk_FVecArray		posArray;
-		fk_FVecArray		colArray;
-		std::vector<int>	aliveArray;
+		fk_FVecArray posArray;
+		fk_FVecArray colArray;
+		std::vector<int> aliveArray;
 
-		bool	MakePoint(std::vector<fk_Vector> *);
-		bool	MakePoint(int, fk_Vector *);
+		bool MakePoint(std::vector<fk_Vector> *);
+		bool MakePoint(int, fk_Vector *);
 	};
 }
 

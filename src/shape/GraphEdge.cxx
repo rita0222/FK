@@ -71,15 +71,17 @@
  ****************************************************************************/
 
 #define FK_DEF_SIZETYPE
-#include <FK/GraphEdge.h>
 #include <FK/Graph.h>
 
 using namespace std;
 using namespace FK;
 
-fk_GraphEdge::fk_GraphEdge(unsigned int argEID, fk_GraphNode *argV1, fk_GraphNode *argV2)
+fk_GraphEdge::fk_GraphEdge(unsigned int argEID,
+						   fk_GraphNode *argV1,
+						   fk_GraphNode *argV2,
+						   fk_Graph *argGraph) :
+	edgeID(argEID), lengthMode(true), baseGraph(argGraph)
 {
-	edgeID = argEID;
 	node[0] = argV1;
 	node[1] = argV2;
 
@@ -87,11 +89,9 @@ fk_GraphEdge::fk_GraphEdge(unsigned int argEID, fk_GraphNode *argV1, fk_GraphNod
 	intCost.push_back(0);
 	doubleCost.clear();
 	doubleCost.push_back(0.0);
-	lengthMode = true;
 	length = (*node[0]->getPosition() - *node[1]->getPosition()).dist();
 	generation[0] = node[0]->getGeneration();
 	generation[1] = node[1]->getGeneration();
-	
 }
 
 fk_GraphEdge::~fk_GraphEdge()
@@ -216,4 +216,14 @@ double fk_GraphEdge::getDoubleCost(unsigned int argID)
 {
 	if(argID >= doubleCost.size()) return 0.0;
 	return doubleCost[argID];
+}
+
+void fk_GraphEdge::setColor(fk_Color argC)
+{
+	baseGraph->GetEdgeShape()->setColor(int(edgeID), &argC);
+}
+
+void fk_GraphEdge::setColor(fk_Color *argC)
+{
+	baseGraph->GetEdgeShape()->setColor(int(edgeID), argC);
 }

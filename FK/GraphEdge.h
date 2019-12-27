@@ -73,11 +73,12 @@
 #ifndef __FK_GRAPH_EDGE_HEADER__
 #define __FK_GRAPH_EDGE_HEADER__
 
-#include <FK/Base.h>
+#include <FK/Color.h>
 
 namespace FK {
 
 	class fk_GraphNode;
+	class fk_Graph;
 
 	enum class fk_CostType {
 		INT,
@@ -93,7 +94,7 @@ namespace FK {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphEdge(unsigned int, fk_GraphNode *, fk_GraphNode *);
+		fk_GraphEdge(unsigned int, fk_GraphNode *, fk_GraphNode *, fk_Graph *);
 		~fk_GraphEdge();
 #endif
 
@@ -140,6 +141,9 @@ namespace FK {
 		double getDoubleCost(void);
 		double getDoubleCost(unsigned int ID);
 
+		void setColor(fk_Color col);
+		void setColor(fk_Color *col);
+
 	private:
 		unsigned int edgeID;
 		fk_GraphNode *node[2];
@@ -149,6 +153,8 @@ namespace FK {
 		double length;
 		std::vector<int> intCost;
 		std::vector<double> doubleCost;
+
+		fk_Graph *baseGraph;
 
 		void UpdateLength(void);
 	};

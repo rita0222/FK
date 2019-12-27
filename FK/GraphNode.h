@@ -235,6 +235,8 @@ namespace FK {
 		bool isDoneDoubleCost(void);
 		bool isDoneDoubleCost(unsigned int ID);
 
+		void setColor(fk_Color col);
+		void setColor(fk_Color *col);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::string	print(void);

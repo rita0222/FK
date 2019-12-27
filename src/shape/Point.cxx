@@ -202,10 +202,19 @@ void fk_Point::allClear(void)
 	return;
 }
 
-void fk_Point::setColor(int argID, const fk_Color &argCol)
+void fk_Point::setColor(int argID, fk_Color argCol)
 {
 	if(argID < 0 || argID >= colArray.getSize()) return;
 	colArray.set(argID, argCol);
+	modifyAttribute(pointElementColorName);
+	return;
+}
+
+void fk_Point::setColor(int argID, fk_Color *argCol)
+{
+	if(argCol == nullptr) return;
+	if(argID < 0 || argID >= colArray.getSize()) return;
+	colArray.set(argID, *argCol);
 	modifyAttribute(pointElementColorName);
 	return;
 }

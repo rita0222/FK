@@ -143,7 +143,7 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, fk_GraphNode *argV1, fk_GraphNod
 
 	unsigned int newID = (unsigned int)edgeAdmin->CreateID();
 
-	fk_GraphEdge *e = new fk_GraphEdge(newID, argV1, argV2);
+	fk_GraphEdge *e = new fk_GraphEdge(newID, argV1, argV2, this);
 	fk_Vector V1, V2;
 
 	if(newID == edgeArray.size()) {
