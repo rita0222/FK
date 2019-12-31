@@ -89,7 +89,7 @@ fk_GraphEdge::fk_GraphEdge(unsigned int argEID,
 	intCost.push_back(0);
 	doubleCost.clear();
 	doubleCost.push_back(0.0);
-	length = (*node[0]->getPosition() - *node[1]->getPosition()).dist();
+	length = (node[0]->getPosition() - node[1]->getPosition()).dist();
 	generation[0] = node[0]->getGeneration();
 	generation[1] = node[1]->getGeneration();
 }
@@ -124,7 +124,7 @@ void fk_GraphEdge::UpdateLength(void)
 {
 	if(node[0]->getGeneration() != generation[0] ||
 	   node[1]->getGeneration() != generation[1]) {
-		length = (*node[0]->getPosition() - *node[1]->getPosition()).dist();
+		length = (node[0]->getPosition() - node[1]->getPosition()).dist();
 		generation[0] = node[0]->getGeneration();
 		generation[1] = node[1]->getGeneration();
 	}

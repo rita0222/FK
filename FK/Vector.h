@@ -134,9 +134,11 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_Vector(const fk_Vector &);
+		fk_Vector(const fk_Vector &&);
 
 		//! コピーコンストラクタ
 		fk_Vector(const fk_FVector &);
+		fk_Vector(const fk_FVector &&);
 
 		//! デストラクタ
 		virtual ~fk_Vector() {}
@@ -232,9 +234,11 @@ namespace FK {
 
 		//! 単純代入演算子
 		fk_Vector &			operator =(const fk_Vector &);
+		fk_Vector &			operator =(const fk_Vector &&);
 
 		//! fk_FVector 型からの単純代入演算子
 		fk_Vector &			operator =(const fk_FVector &);
+		fk_Vector &			operator =(const fk_FVector &&);
 
 		//! 実数積代入演算子
 		/*!
@@ -405,6 +409,7 @@ namespace FK {
 		 *	\sa perp(), dist(), dist2()
 		 */
 		fk_Vector		proj(const fk_Vector &Q) const;
+		fk_Vector		proj(const fk_Vector &&Q) const;
 
 		//! 射影垂直成分ベクトル算出関数
 		/*!
@@ -416,6 +421,7 @@ namespace FK {
 		 *	\sa proj()
 		 */
 		fk_Vector		perp(const fk_Vector &Q) const;
+		fk_Vector		perp(const fk_Vector &&Q) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -563,6 +569,7 @@ namespace FK {
 		 *	\param[in]	w	同次座標値
 		 */
 		fk_HVector(const fk_Vector &v, double w = 1.0);
+		fk_HVector(const fk_Vector &&v, double w = 1.0);
 
 		//! コンストラクタ3
 		/*!
@@ -578,6 +585,7 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_HVector(const fk_HVector &);
+		fk_HVector(const fk_HVector &&);
 
 		//! \name 比較演算子
 		//@{
@@ -618,12 +626,14 @@ namespace FK {
 
 		//! 単純代入演算子
 		fk_HVector &	operator =(const fk_HVector &);
+		fk_HVector &	operator =(const fk_HVector &&);
 
 		//! 単純代入演算子
 		/*!
 		 *	この代入演算子において、同次座標成分は 1 に設定されます。
 		 */
 		fk_HVector &	operator =(const fk_Vector &);
+		fk_HVector &	operator =(const fk_Vector &&);
 
 		//! 行列変換代入演算子1
 		/*!
@@ -665,6 +675,7 @@ namespace FK {
 		 *	\param[in]	v	3次元ベクトル
 		 */
 		void		set(const fk_Vector &v);
+		void		set(const fk_Vector &&v);
 
 		//! fk_Vector による設定関数2
 		/*!
@@ -675,6 +686,7 @@ namespace FK {
 		 *	\param[in]	w	同次座標値
 		 */
 		void		set(const fk_Vector &v, double w);
+		void		set(const fk_Vector &&v, double w);
 
 		//! 数値による設定関数1
 		/*!
@@ -822,6 +834,7 @@ namespace FK {
 
 		//! コピーコンストラクタ1
 		fk_FVector(const fk_FVector &);
+		fk_FVector(const fk_FVector &&);
 
 		//! コピーコンストラクタ2
 		/*!
@@ -829,6 +842,7 @@ namespace FK {
 		 *	浮動小数点精度が double 相当から float 相当まで落ちます。
 		 */
 		fk_FVector(const fk_Vector &);
+		fk_FVector(const fk_Vector &&);
 
 		//! 代入演算子
 		/*!
@@ -836,6 +850,7 @@ namespace FK {
 		 *	浮動小数点精度が double 相当から float 相当まで落ちます。
 		 */
 		fk_FVector &	operator =(const fk_Vector &);
+		fk_FVector &	operator =(const fk_Vector &&);
 	};
 
 	//! テクスチャ座標を管理するクラス

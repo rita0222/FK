@@ -112,9 +112,9 @@ void fk_GraphNode::setPosition(fk_Vector *argPos)
 }
 
 
-fk_Vector * fk_GraphNode::getPosition(void)
+fk_Vector & fk_GraphNode::getPosition(void)
 {
-	return &position;
+	return position;
 }
 
 unsigned int fk_GraphNode::getGeneration(void)

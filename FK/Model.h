@@ -1705,7 +1705,7 @@ namespace FK {
 		 *
 		 *	\sa entryChild(), deleteChild(), deleteChildren()
 		 */
-		fk_Model *	foreachChild(fk_Model *model);
+		fk_Model * foreachChild(fk_Model *model);
 
 		//@}
 
@@ -1719,7 +1719,7 @@ namespace FK {
 		 *
 		 *	\sa restore(void), restore(double), setInterStopMode()
 		 */
-		void	snapShot(void);
+		void snapShot(void);
 
 		//! 位置・姿勢復元関数
 		/*!
@@ -1729,7 +1729,7 @@ namespace FK {
 		 *
 		 *	\sa	restore(double), snapShot(), setInterStopMode()
 		 */
-		bool	restore(void);
+		bool restore(void);
 
 		//! 位置・姿勢途中復元関数
 		/*!
@@ -1746,7 +1746,7 @@ namespace FK {
 		 *
 		 *	\sa	snapShot(), restore(void), isCollision()
 		 */
-		bool	restore(double t);
+		bool restore(double t);
 
 		//@}
 
@@ -1764,7 +1764,7 @@ namespace FK {
 		 *		シェーダーを未設定にし、デフォルトのシェーダーで描画したい場合は、
 		 *		引数に nullptr を入力して下さい。
 		 */
-		void				setShader(fk_ShaderBinder *shader);
+		void setShader(fk_ShaderBinder *shader);
 
 		//! シェーダー取得関数
 		/*!
@@ -1774,7 +1774,7 @@ namespace FK {
 		 *	\return		シェーダーを返します。
 		 *				シェーダーが設定されていない場合は nullptr を返します。
 		 */
-		fk_ShaderBinder		*getShader(void);
+		fk_ShaderBinder * getShader(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		//! 描画処理事前関数

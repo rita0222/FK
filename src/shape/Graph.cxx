@@ -157,8 +157,8 @@ fk_GraphEdge * fk_Graph::makeEdge(bool argMode, fk_GraphNode *argV1, fk_GraphNod
 	argV1->ConnectEdge(argMode, e);
 	argV2->ConnectEdge(argMode, e);
 
-	V1 = *(argV1->getPosition());
-	V2 = *(argV2->getPosition());
+	V1 = argV1->getPosition();
+	V2 = argV2->getPosition();
 
 	edgeShape->changeLine(int(newID), V1, V2);
 	edgeShape->setDrawMode(int(newID), true);

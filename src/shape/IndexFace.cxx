@@ -302,8 +302,6 @@ void fk_IndexFaceSet::InitFaceNorm(void)
 
 void fk_IndexFaceSet::ModifyFaceNorm(void)
 {
-	_st		i, j, vID;
-
 	// 形状が定義されていない場合
 	if(faceIndex.empty() == true) return;
 
@@ -318,9 +316,9 @@ void fk_IndexFaceSet::ModifyFaceNorm(void)
 	}
 
 	// modifyList に従って処理
-	for(i = 0; i < modifyList.size(); ++i) {
-		vID = _st(modifyList[i]);
-		for(j = 0; j < loopStack[vID].size(); ++j) {
+	for(_st i = 0; i < modifyList.size(); ++i) {
+		_st vID = _st(modifyList[i]);
+		for(_st j = 0; j < loopStack[vID].size(); ++j) {
 			MakeFaceNorm(loopStack[vID][j]);
 		}
 	}
@@ -333,18 +331,16 @@ void fk_IndexFaceSet::ModifyFaceNorm(void)
 
 void fk_IndexFaceSet::MakeFaceNorm(int argID)
 {
-	_st			id = _st(argID);
-	_st			j;
-	fk_FVector	v;
+	_st id = _st(argID);
 
 	if(faceNormFlg[id] == char(false)) return;
 
-	v = CalcTriNorm(&faceIndex[id*3]);
-	faceNormal.set(int(id), v);
+	fk_FVector v = CalcTriNorm(&faceIndex[id*3]);
+	faceNormal.set(argID, v);
 	faceNormFlg[id] = char(false);
 
 	if(vertexNormal.getSize() != 0) {
-		for(j = id*3; j < id*3 + 3; ++j) {
+		for(_st j = id*3; j < id*3 + 3; ++j) {
 			vertexNormFlg[faceIndex[j]] = char(true);
 		}
 	}
@@ -370,9 +366,6 @@ void fk_IndexFaceSet::InitVertexNorm(void)
 
 void fk_IndexFaceSet::ModifyVertexNorm(void)
 {
-	fk_Vector		norm, tmpV;
-	_st				i, j, loopID;
-
 	// 形状が定義されていない場合
 	if(faceIndex.empty()) return;
 
@@ -384,13 +377,12 @@ void fk_IndexFaceSet::ModifyVertexNorm(void)
 	// 面法線情報を再計算
 	ModifyFaceNorm();
 
-	for(i = 0; i < _st(vertexPosition.getSize()); ++i) {
+	fk_Vector norm;
+	for(_st i = 0; i < _st(vertexPosition.getSize()); ++i) {
 		if(vertexNormFlg[i] == char(true)) {
 			norm.init();
-			for(j = 0; j < loopStack[i].size(); ++j) {
-				loopID = _st(loopStack[i][j]);
-				tmpV = faceNormal.getV(int(loopID));
-				norm += tmpV;
+			for(_st j = 0; j < loopStack[i].size(); ++j) {
+				norm += faceNormal.getV(loopStack[i][j]);
 			}
 			norm.normalize();
 			vertexNormal.set(int(i), norm);
@@ -413,8 +405,7 @@ fk_FVector fk_IndexFaceSet::CalcTriNorm(GLuint *argIF)
 
 	retNorm = (triV[1] - triV[0]) ^ (triV[2] - triV[1]);
 	retNorm.normalize();
-
-	return static_cast<fk_FVector>(retNorm);
+	return retNorm;
 }
 
 fk_FVector fk_IndexFaceSet::CalcPolyNorm(int argNum, int *argIF)

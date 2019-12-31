@@ -100,7 +100,21 @@ fk_Vector::fk_Vector(const fk_Vector &argVec)
 	z = argVec.z;
 }
 
+fk_Vector::fk_Vector(const fk_Vector &&argVec)
+{
+	x = argVec.x;
+	y = argVec.y;
+	z = argVec.z;
+}
+
 fk_Vector::fk_Vector(const fk_FVector &argFVec)
+{
+	x = double(argFVec.x);
+	y = double(argFVec.y);
+	z = double(argFVec.z);
+}
+
+fk_Vector::fk_Vector(const fk_FVector &&argFVec)
 {
 	x = double(argFVec.x);
 	y = double(argFVec.y);
@@ -142,38 +156,6 @@ bool fk_Vector::operator !=(const fk_Vector &v) const
 	return true;
 }
 
-bool fk_Vector::operator >(const fk_Vector &v) const
-{
-	int			status;
-
-	status = dCmp(x, v.x);
-	switch(status) {
-	  case 1:
-		return true;
-	  case -1:
-		return false;
-	}
-
-	status = dCmp(y, v.y);
-	switch(status) {
-	  case 1:
-		return true;
-	  case -1:
-		return false;
-	}
-
-	status = dCmp(z, v.z);
-	switch(status) {
-	  case 1:
-		return true;
-	  case -1:
-		return false;
-	}
-
-	return false;
-}
-
-
 bool fk_Vector::operator <(const fk_Vector &v) const
 {
 	int			status;
@@ -205,70 +187,21 @@ bool fk_Vector::operator <(const fk_Vector &v) const
 	return false;
 }
 
+bool fk_Vector::operator >(const fk_Vector &v) const
+{
+	return (v < *this);
+}
+
 
 bool fk_Vector::operator >=(const fk_Vector &v) const
 {
-	int			status;
-
-	status = dCmp(x, v.x);
-	switch(status) {
-	  case 1:
-		return true;
-	  case -1:
-		return false;
-	}
-
-	status = dCmp(y, v.y);
-	switch(status) {
-	  case 1:
-		return true;
-	  case -1:
-		return false;
-	}
-
-	status = dCmp(z, v.z);
-	switch(status) {
-	  case 1:
-		return true;
-	  case -1:
-		return false;
-	}
-
-	return true;
+	return !(*this < v);
 }
-
 
 bool fk_Vector::operator <=(const fk_Vector &v) const
 {
-	int			status;
-
-	status = dCmp(x, v.x);
-	switch(status) {
-	  case -1:
-		return true;
-	  case 1:
-		return false;
-	}
-
-	status = dCmp(y, v.y);
-	switch(status) {
-	  case -1:
-		return true;
-	  case 1:
-		return false;
-	}
-
-	status = dCmp(z, v.z);
-	switch(status) {
-	  case -1:
-		return true;
-	  case 1:
-		return false;
-	}
-
-	return true;
+	return !(*this > v);
 }
-
 
 fk_Vector & fk_Vector::operator =(const fk_Vector &tmp)
 {
@@ -279,7 +212,25 @@ fk_Vector & fk_Vector::operator =(const fk_Vector &tmp)
 	return *this;
 }
 
+fk_Vector & fk_Vector::operator =(const fk_Vector &&tmp)
+{
+	x = tmp.x;
+	y = tmp.y;
+	z = tmp.z;
+
+	return *this;
+}
+
 fk_Vector & fk_Vector::operator =(const fk_FVector &tmp)
+{
+	x = double(tmp.x);
+	y = double(tmp.y);
+	z = double(tmp.z);
+
+	return *this;
+}
+
+fk_Vector & fk_Vector::operator =(const fk_FVector &&tmp)
 {
 	x = double(tmp.x);
 	y = double(tmp.y);
@@ -379,7 +330,24 @@ fk_Vector fk_Vector::proj(const fk_Vector &argV) const
 	return ans;
 }
 
+fk_Vector fk_Vector::proj(const fk_Vector &&argV) const
+{
+	fk_Vector	ans;
+	double		d;
+
+	d = argV.dist2();
+	if(d < VECTOREPS) return ans;
+
+	ans = (((*this) * argV)/d) * argV;
+	return ans;
+}
+
 fk_Vector fk_Vector::perp(const fk_Vector &argV) const
+{
+	return ((*this) - proj(argV));
+}
+
+fk_Vector fk_Vector::perp(const fk_Vector &&argV) const
 {
 	return ((*this) - proj(argV));
 }
@@ -416,6 +384,12 @@ fk_HVector::fk_HVector(const fk_Vector &p, double dw)
 	return;
 }
 
+fk_HVector::fk_HVector(const fk_Vector &&p, double dw)
+{
+	set(p.x, p.y, p.z, dw);
+	return;
+}
+
 fk_HVector::fk_HVector(double argX, double argY, double argZ, double argW)
 {
 	set(argX, argY, argZ, argW);
@@ -423,6 +397,12 @@ fk_HVector::fk_HVector(double argX, double argY, double argZ, double argW)
 }
 
 fk_HVector::fk_HVector(const fk_HVector &argHVec)
+	: fk_Vector(argHVec.x, argHVec.y, argHVec.z)
+{
+	w = argHVec.w;
+}
+
+fk_HVector::fk_HVector(const fk_HVector &&argHVec)
 	: fk_Vector(argHVec.x, argHVec.y, argHVec.z)
 {
 	w = argHVec.w;
@@ -458,7 +438,27 @@ fk_HVector & fk_HVector::operator =(const fk_HVector &tmp)
 	return *this;
 }
 
+fk_HVector & fk_HVector::operator =(const fk_HVector &&tmp)
+{
+	x = tmp.x;
+	y = tmp.y;
+	z = tmp.z;
+	w = tmp.w;
+
+	return *this;
+}
+
 fk_HVector & fk_HVector::operator =(const fk_Vector &tmp)
+{
+	x = tmp.x;
+	y = tmp.y;
+	z = tmp.z;
+	w = 1.0;
+
+	return *this;
+}
+
+fk_HVector & fk_HVector::operator =(const fk_Vector &&tmp)
 {
 	x = tmp.x;
 	y = tmp.y;
@@ -476,7 +476,23 @@ void fk_HVector::set(const fk_Vector &a)
 	w = 1.0;
 }
 
+void fk_HVector::set(const fk_Vector &&a)
+{
+	x = a.x;
+	y = a.y;
+	z = a.z;
+	w = 1.0;
+}
+
 void fk_HVector::set(const fk_Vector &a, double weight)
+{
+	x = a.x;
+	y = a.y;
+	z = a.z;
+	w = weight;
+}
+
+void fk_HVector::set(const fk_Vector &&a, double weight)
 {
 	x = a.x;
 	y = a.y;
@@ -569,6 +585,13 @@ fk_FVector::fk_FVector(const fk_FVector &v)
 	z = v.z;
 }
 
+fk_FVector::fk_FVector(const fk_FVector &&v)
+{
+	x = v.x;
+	y = v.y;
+	z = v.z;
+}
+
 fk_FVector::fk_FVector(const fk_Vector &v)
 {
 	x = float(v.x);
@@ -576,7 +599,23 @@ fk_FVector::fk_FVector(const fk_Vector &v)
 	z = float(v.z);
 }
 
+fk_FVector::fk_FVector(const fk_Vector &&v)
+{
+	x = float(v.x);
+	y = float(v.y);
+	z = float(v.z);
+}
+
 fk_FVector & fk_FVector::operator =(const fk_Vector &v)
+{
+	x = float(v.x);
+	y = float(v.y);
+	z = float(v.z);
+
+	return *this;
+}
+
+fk_FVector & fk_FVector::operator =(const fk_Vector &&v)
 {
 	x = float(v.x);
 	y = float(v.y);

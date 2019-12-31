@@ -115,7 +115,7 @@ namespace FK {
 		 *
 		 *	\return		位置ベクトル
 		 */
-		fk_Vector * getPosition(void);
+		fk_Vector & getPosition(void);
 
 		//! 位置変更回数取得関数
 		/*!
