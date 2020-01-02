@@ -41,6 +41,7 @@
     <ClInclude Include="..\..\FK\Color.h" />
     <ClInclude Include="..\..\FK\Command.H" />
     <ClInclude Include="..\..\FK\Cone.h" />
+    <ClInclude Include="..\..\FK\CostTable.H" />
     <ClInclude Include="..\..\FK\Curve.h" />
     <ClInclude Include="..\..\FK\D3DXAnimation.H" />
     <ClInclude Include="..\..\FK\D3DXData.H" />
@@ -249,6 +250,7 @@
     <ClCompile Include="..\..\src\material\Material.cxx" />
     <ClCompile Include="..\..\src\material\MatExample.cxx" />
     <ClCompile Include="..\..\src\material\Palette.cxx" />
+    <ClCompile Include="..\..\src\math\Angle.cxx" />
     <ClCompile Include="..\..\src\math\FVecArray.cxx" />
     <ClCompile Include="..\..\src\math\GenMatrix.cxx" />
     <ClCompile Include="..\..\src\math\GenVector.cxx" />
@@ -283,6 +285,7 @@
     <ClCompile Include="..\..\src\shape\Closedline.cxx" />
     <ClCompile Include="..\..\src\shape\Command.cxx" />
     <ClCompile Include="..\..\src\shape\Cone.cxx" />
+    <ClCompile Include="..\..\src\shape\CostTable.cxx" />
     <ClCompile Include="..\..\src\shape\Curve.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXAnimation.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXData.cxx" />

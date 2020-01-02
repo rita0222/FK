@@ -639,6 +639,9 @@
     <ClInclude Include="..\..\FK\GraphNode.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\FK\CostTable.H">
+      <Filter>Header\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\FK_CLI\cpp\AppWindow_CLI.cpp">
@@ -1257,6 +1260,12 @@
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\GraphNode.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Angle.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\shape\CostTable.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
   </ItemGroup>

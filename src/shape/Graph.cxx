@@ -261,7 +261,7 @@ void fk_Graph::TablePrint(void)
 {
 	for(_st i = 0; i < tableArray.size(); ++i) {
 		if(tableArray[i] == nullptr) continue;
-		fk_Window::printf("Table[%d] : ", i);
+		fk_Window::putString("Table[" + to_string(i) + "] :");
 		fk_Window::putString(tableArray[i]->print());
 	}
 }		
@@ -376,23 +376,29 @@ void fk_Graph::CostPrint(unsigned int argID)
 
 	fk_CostType type = tableArray[argID]->getType();
 	unsigned int nodeID = tableArray[argID]->getNodeCostID();
+	string str;
 	
 	for(auto node : nodeArray) {
+		str = "Node[" + to_string(node->getID()) + "] = ";
 		if(type == fk_CostType::INT) {
-			fk_Window::printf("Node[%d] = %d", node->getID(), node->getIntCost(nodeID));
+			str += to_string(node->getIntCost(nodeID));
 		} else {
-			fk_Window::printf("Node[%d] = %f", node->getID(), node->getDoubleCost(nodeID));
+			str += to_string(node->getDoubleCost(nodeID));
 		}
+		fk_Window::putString(str);
 	}
 }
 
 void fk_Graph::CostPrint(fk_CostType argType, unsigned int argID)
 {
+	string str;
 	for(auto node : nodeArray) {
+		str = "Node[" + to_string(node->getID()) + "] = ";
 		if(argType == fk_CostType::INT) {
-			fk_Window::printf("Node[%d] = %d", node->getID(), node->getIntCost(argID));
+			str += to_string(node->getIntCost(argID));
 		} else {
-			fk_Window::printf("Node[%d] = %f", node->getID(), node->getDoubleCost(argID));
+			str += to_string(node->getDoubleCost(argID));
 		}
+		fk_Window::putString(str);
 	}
 }
