@@ -401,19 +401,14 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 {
 	GLuint loc;
 	_st size;
-	int vbo, dim;
-	vector<float> *fArray;
-	vector<int> *iArray;
 
 	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
 		if(argTable->find(itr->first) == argTable->end()) continue;
+		auto [vbo, dim, iArray] = itr->second;
 		loc = GLuint(argTable->at(itr->first));
-		vbo = get<0>(itr->second);
 		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
-		dim = get<1>(itr->second);
 		glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
 		if(attrModify[itr->first] == true) {
-			iArray = get<2>(itr->second);
 			size = iArray->size();
 			glBufferData(GL_ARRAY_BUFFER,
 						 GLsizeiptr(sizeof(int) * size),
@@ -425,13 +420,11 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 
 	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
 		if(argTable->find(itr->first) == argTable->end()) continue;
+		auto [vbo, dim, fArray] = itr->second;
 		loc = GLuint(argTable->at(itr->first));
-		vbo = get<0>(itr->second);
 		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
-		dim = get<1>(itr->second);
 		glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
 		if(attrModify[itr->first] == true) {
-			fArray = get<2>(itr->second);
 			size = fArray->size();
 			glBufferData(GL_ARRAY_BUFFER,
 						 GLsizeiptr(sizeof(float) * size),

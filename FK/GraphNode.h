@@ -217,13 +217,10 @@ namespace FK {
 		std::list<fk_GraphNode *> getNextNode(void);
 		void getNextNode(std::list<fk_GraphNode *> *list);
 
-		void setIntCost(int value);
 		void setIntCost(unsigned int ID, int value);
-		void setDoubleCost(double value);
 		void setDoubleCost(unsigned int ID, double value);
-
-		int getIntCost(unsigned int ID = 0);
-		double getDoubleCost(unsigned int ID = 0);
+		int getIntCost(unsigned int ID);
+		double getDoubleCost(unsigned int ID);
 
 		void clearIntCost(void);
 		void clearIntCost(unsigned int ID);

@@ -147,11 +147,8 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 	setCtrl(BIDTable[_st(argUV)][argVID], argV);
 
 	vector<line_> lineSet = BLineTable[_st(argUV)][_st(argVID)];
-	for(auto line : lineSet) {
-		int lineID = get<0>(line);
-		_st segID = _st(get<2>(line));
-		_st ctrlID = _st(get<3>(line));
-		fk_Vector oP = (get<1>(line)) ? boundary[segID][ctrlID] : deriv[segID][ctrlID];
+	for(auto [lineID, flg, segID, ctrlID] : lineSet) {
+		fk_Vector oP = (flg) ? boundary[_st(segID)][ctrlID] : deriv[_st(segID)][ctrlID];
 		ctrlLine.changeLine(lineID, argV, oP);
 	}
 
@@ -177,11 +174,8 @@ bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
 	}
 
 	vector<line_> lineSet = DLineTable[_st(argUV)][_st(argVID)];
-	for(auto line : lineSet) {
-		int lineID = get<0>(line);
-		_st segID = _st(get<2>(line));
-		_st ctrlID = _st(get<3>(line));
-		fk_Vector oP = (get<1>(line)) ? boundary[segID][ctrlID] : deriv[segID][ctrlID];
+	for(auto [lineID, flg, segID, ctrlID] : lineSet) {
+		fk_Vector oP = (flg) ? boundary[_st(segID)][ctrlID] : deriv[_st(segID)][ctrlID];
 		ctrlLine.changeLine(lineID, argV, oP);
 	}
 

@@ -274,12 +274,10 @@ void fk_GraphNode::clearIntCost(unsigned int argID)
 		_st cur = intCost.size();
 		intCost.resize(_st(argID)+1);
 		for(_st i = cur; i < intCost.size() - 1; ++i) {
-			get<0>(intCost[i]) = false;
-			get<1>(intCost[i]) = 0;
+			intCost[i] = {false, 0};
 		}
 	}
-	get<0>(intCost[argID]) = false;
-	get<1>(intCost[argID]) = 0;
+	intCost[argID] = {false, 0};
 }
 
 void fk_GraphNode::clearDoubleCost(void)
@@ -293,12 +291,10 @@ void fk_GraphNode::clearDoubleCost(unsigned int argID)
 		_st cur = doubleCost.size();
 		doubleCost.resize(_st(argID)+1);
 		for(_st i = cur; i < doubleCost.size() - 1; ++i) {
-			get<0>(doubleCost[i]) = false;
-			get<1>(doubleCost[i]) = 0.0;
+			doubleCost[i] = {false, 0.0};
 		}
 	}
-	get<0>(doubleCost[argID]) = false;
-	get<1>(doubleCost[argID]) = 0.0;
+	doubleCost[argID] = {false, 0.0};
 }
 
 bool fk_GraphNode::isDoneIntCost(void)
@@ -323,28 +319,16 @@ bool fk_GraphNode::isDoneDoubleCost(unsigned int argID)
 	return get<0>(doubleCost[argID]);
 }
 
-void fk_GraphNode::setIntCost(int argValue)
-{
-	setIntCost(0, argValue);
-}
-
 void fk_GraphNode::setIntCost(unsigned int argID, int argValue)
 {
 	if(intCost.size() <= argID) clearIntCost(argID);
-	get<0>(intCost[argID]) = true;
-	get<1>(intCost[argID]) = argValue;
-}
-
-void fk_GraphNode::setDoubleCost(double argValue)
-{
-	setDoubleCost(0, argValue);
+	intCost[argID] = {true, argValue};
 }
 
 void fk_GraphNode::setDoubleCost(unsigned int argID, double argValue)
 {
 	if(doubleCost.size() <= argID) clearDoubleCost(argID);
-	get<0>(doubleCost[argID]) = true;
-	get<1>(doubleCost[argID]) = argValue;
+	doubleCost[argID] = {true, argValue};
 }
 
 int fk_GraphNode::getIntCost(unsigned int argID)
