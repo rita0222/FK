@@ -152,7 +152,7 @@ namespace FK {
 		 *
 		 *		v2 = -v1;
 		 */
-		fk_Vector &			operator -(void) const;
+		fk_Vector & operator -(void) const;
 
 		//@}
 
@@ -171,7 +171,7 @@ namespace FK {
 		 *
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 */
-		bool				operator ==(const fk_Vector &) const;
+		bool operator ==(const fk_Vector &) const;
 
 		//! 異値比較演算子 
 		/*!
@@ -185,7 +185,7 @@ namespace FK {
 		 *
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 */
-		bool				operator !=(const fk_Vector &) const;
+		bool operator !=(const fk_Vector &) const;
 
 		//! 右不等号演算子 
 		/*!

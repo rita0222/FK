@@ -638,37 +638,27 @@ namespace FK {
 
 	fk_Vector operator +(const fk_Vector &a, const fk_Vector &b)
 	{
-		fk_Vector tmp(a.x + b.x, a.y + b.y, a.z + b.z);
-
-		return(tmp);
+		return (fk_Vector(a) += b);
 	}
 
 	fk_Vector operator -(const fk_Vector &a, const fk_Vector &b)
 	{
-		fk_Vector tmp(a.x - b.x, a.y - b.y, a.z - b.z);
-
-		return(tmp);
+		return (fk_Vector(a) -= b);
 	}
 
 	fk_Vector operator *(const fk_Vector &a, double t)
 	{
-		fk_Vector tmp(a.x * t, a.y * t, a.z * t);
-
-		return(tmp);
+		return (fk_Vector(a) *= t);
 	}
 
 	fk_Vector operator *(double t, const fk_Vector &a)
 	{
-		fk_Vector tmp(a.x * t, a.y * t, a.z * t);
-
-		return(tmp);
+		return (fk_Vector(a) *= t);
 	}
 
 	fk_Vector operator /(const fk_Vector &a, double t)
 	{
-		fk_Vector tmp(a.x / t, a.y / t, a.z / t);
-
-		return(tmp);
+		return (fk_Vector(a) /= t);
 	}
 
 	fk_Vector operator ^(const fk_Vector &a, const fk_Vector &b)
