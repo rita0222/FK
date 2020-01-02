@@ -512,28 +512,29 @@ void fk_Gregory::MakeTable(void)
 
 	// Boundary::U_S[0]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 1));
-	lineSet.push_back(make_tuple(6, true, fk_UV::V_S, 1));
+	//lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 1));
+	lineSet.push_back({0, true, fk_UV::U_S, 1});
+	lineSet.push_back({6, true, fk_UV::V_S, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::U_S[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 0));
-	lineSet.push_back(make_tuple(1, true, fk_UV::U_S, 2));
-	lineSet.push_back(make_tuple(12, false, fk_UV::U_S, 1));
+	lineSet.push_back({0, true, fk_UV::U_S, 0});
+	lineSet.push_back({1, true, fk_UV::U_S, 2});
+	lineSet.push_back({12, false, fk_UV::U_S, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::U_S[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(1, true, fk_UV::U_S, 1));
-	lineSet.push_back(make_tuple(2, true, fk_UV::U_S, 3));
-	lineSet.push_back(make_tuple(13, false, fk_UV::U_S, 2));
+	lineSet.push_back({1, true, fk_UV::U_S, 1});
+	lineSet.push_back({2, true, fk_UV::U_S, 3});
+	lineSet.push_back({13, false, fk_UV::U_S, 2});
 	segment.push_back(lineSet);
 	
 	// Boundary::U_S[3]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(2, true, fk_UV::U_S, 2));
-	lineSet.push_back(make_tuple(9, true, fk_UV::V_E, 1));
+	lineSet.push_back({2, true, fk_UV::U_S, 2});
+	lineSet.push_back({9, true, fk_UV::V_E, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::U_S
@@ -542,28 +543,28 @@ void fk_Gregory::MakeTable(void)
 	
 	// Boundary::U_E[0]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(3, true, fk_UV::U_E, 1));
-	lineSet.push_back(make_tuple(8, true, fk_UV::V_S, 2));
+	lineSet.push_back({3, true, fk_UV::U_E, 1});
+	lineSet.push_back({8, true, fk_UV::V_S, 2});
 	segment.push_back(lineSet);
 
 	// Boundary::U_E[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(3, true, fk_UV::U_E, 0));
-	lineSet.push_back(make_tuple(4, true, fk_UV::U_E, 2));
-	lineSet.push_back(make_tuple(14, false, fk_UV::U_E, 1));
+	lineSet.push_back({3, true, fk_UV::U_E, 0});
+	lineSet.push_back({4, true, fk_UV::U_E, 2});
+	lineSet.push_back({14, false, fk_UV::U_E, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::U_E[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(4, true, fk_UV::U_E, 1));
-	lineSet.push_back(make_tuple(5, true, fk_UV::U_E, 3));
-	lineSet.push_back(make_tuple(15, false, fk_UV::U_E, 2));
+	lineSet.push_back({4, true, fk_UV::U_E, 1});
+	lineSet.push_back({5, true, fk_UV::U_E, 3});
+	lineSet.push_back({15, false, fk_UV::U_E, 2});
 	segment.push_back(lineSet);
 	
 	// Boundary::U_E[3]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(5, true, fk_UV::U_E, 2));
-	lineSet.push_back(make_tuple(11, true, fk_UV::V_E, 2));
+	lineSet.push_back({5, true, fk_UV::U_E, 2});
+	lineSet.push_back({11, true, fk_UV::V_E, 2});
 	segment.push_back(lineSet);
 
 	// Boundary::U_E
@@ -572,28 +573,28 @@ void fk_Gregory::MakeTable(void)
 	
 	// Boundary::V_S[0]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(0, true, fk_UV::U_S, 1));
-	lineSet.push_back(make_tuple(6, true, fk_UV::V_S, 1));
+	lineSet.push_back({0, true, fk_UV::U_S, 1});
+	lineSet.push_back({6, true, fk_UV::V_S, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::V_S[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(6, true, fk_UV::V_S, 0));
-	lineSet.push_back(make_tuple(7, true, fk_UV::V_S, 2));
-	lineSet.push_back(make_tuple(16, false, fk_UV::V_S, 1));
+	lineSet.push_back({6, true, fk_UV::V_S, 0});
+	lineSet.push_back({7, true, fk_UV::V_S, 2});
+	lineSet.push_back({16, false, fk_UV::V_S, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::V_S[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(7, true, fk_UV::V_S, 1));
-	lineSet.push_back(make_tuple(8, true, fk_UV::V_S, 3));
-	lineSet.push_back(make_tuple(17, false, fk_UV::V_S, 2));
+	lineSet.push_back({7, true, fk_UV::V_S, 1});
+	lineSet.push_back({8, true, fk_UV::V_S, 3});
+	lineSet.push_back({17, false, fk_UV::V_S, 2});
 	segment.push_back(lineSet);
 	
 	// Boundary::V_S[3]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(3, true, fk_UV::U_E, 1));
-	lineSet.push_back(make_tuple(8, true, fk_UV::V_S, 2));
+	lineSet.push_back({3, true, fk_UV::U_E, 1});
+	lineSet.push_back({8, true, fk_UV::V_S, 2});
 	segment.push_back(lineSet);
 
 	// Boundary::V_S
@@ -602,28 +603,28 @@ void fk_Gregory::MakeTable(void)
 
 	// Boundary::V_E[0]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(2, true, fk_UV::V_S, 2));
-	lineSet.push_back(make_tuple(9, true, fk_UV::V_E, 1));
+	lineSet.push_back({2, true, fk_UV::V_S, 2});
+	lineSet.push_back({9, true, fk_UV::V_E, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::V_E[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(9, true, fk_UV::V_E, 0));
-	lineSet.push_back(make_tuple(10, true, fk_UV::V_E, 2));
-	lineSet.push_back(make_tuple(18, false, fk_UV::V_E, 1));
+	lineSet.push_back({9, true, fk_UV::V_E, 0});
+	lineSet.push_back({10, true, fk_UV::V_E, 2});
+	lineSet.push_back({18, false, fk_UV::V_E, 1});
 	segment.push_back(lineSet);
 
 	// Boundary::V_E[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(10, true, fk_UV::V_E, 1));
-	lineSet.push_back(make_tuple(11, true, fk_UV::V_E, 3));
-	lineSet.push_back(make_tuple(19, false, fk_UV::V_E, 2));
+	lineSet.push_back({10, true, fk_UV::V_E, 1});
+	lineSet.push_back({11, true, fk_UV::V_E, 3});
+	lineSet.push_back({19, false, fk_UV::V_E, 2});
 	segment.push_back(lineSet);
 	
 	// Boundary::V_E[3]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(5, true, fk_UV::U_E, 2));
-	lineSet.push_back(make_tuple(11, true, fk_UV::V_E, 2));
+	lineSet.push_back({5, true, fk_UV::U_E, 2});
+	lineSet.push_back({11, true, fk_UV::V_E, 2});
 	segment.push_back(lineSet);
 
 	// Boundary::V_E
@@ -635,12 +636,12 @@ void fk_Gregory::MakeTable(void)
 
 	// Derivative::U_S[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(12, true, fk_UV::U_S, 1));
+	lineSet.push_back({12, true, fk_UV::U_S, 1});
 	segment.push_back(lineSet);
 
 	// Derivative::U_S[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(13, true, fk_UV::U_S, 2));
+	lineSet.push_back({13, true, fk_UV::U_S, 2});
 	segment.push_back(lineSet);
 	
 	// Derivative::U_S[3]
@@ -655,12 +656,12 @@ void fk_Gregory::MakeTable(void)
 
 	// Derivative::U_E[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(14, true, fk_UV::U_E, 1));
+	lineSet.push_back({14, true, fk_UV::U_E, 1});
 	segment.push_back(lineSet);
 
 	// Derivative::U_E[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(15, true, fk_UV::U_E, 2));
+	lineSet.push_back({15, true, fk_UV::U_E, 2});
 	segment.push_back(lineSet);
 	
 	// Derivative::U_E[3]
@@ -675,12 +676,12 @@ void fk_Gregory::MakeTable(void)
 
 	// Derivative::V_S[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(16, true, fk_UV::V_S, 1));
+	lineSet.push_back({16, true, fk_UV::V_S, 1});
 	segment.push_back(lineSet);
 
 	// Derivative::V_S[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(17, true, fk_UV::V_S, 2));
+	lineSet.push_back({17, true, fk_UV::V_S, 2});
 	segment.push_back(lineSet);
 	
 	// Derivative::V_S[3]
@@ -695,12 +696,12 @@ void fk_Gregory::MakeTable(void)
 
 	// Derivative::V_E[1]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(18, true, fk_UV::V_E, 1));
+	lineSet.push_back({18, true, fk_UV::V_E, 1});
 	segment.push_back(lineSet);
 
 	// Derivative::V_E[2]
 	lineSet.clear();
-	lineSet.push_back(make_tuple(19, true, fk_UV::V_E, 2));
+	lineSet.push_back({19, true, fk_UV::V_E, 2});
 	segment.push_back(lineSet);
 	
 	// Derivative::V_E[3]
