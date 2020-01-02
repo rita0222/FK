@@ -78,16 +78,17 @@
 
 namespace FK {
 
+	//! グラフのコスト算出状況を表す列挙型
+	enum class fk_CostStatus {
+		CONTINUE,	//!<	途中段階状態
+		FINISH,		//!<	完了状態
+		ERROR		//!<	エラー
+	};
+
 	//! グラフ構造を制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造を制御する機能を提供します。
 	 */
-	enum class fk_GraphCostStatus {
-		CONTINUE,
-		FINISH,
-		ERROR
-	};
-
 	class fk_Graph : public fk_Shape {
 
 	public:
@@ -100,6 +101,9 @@ namespace FK {
 
 		//! デストラクタ
 		~fk_Graph();
+
+		//! \name 情報参照関数
+		//@{
 
 		//! ノード数取得関数
 		/*!
@@ -129,21 +133,6 @@ namespace FK {
 		 */
 		fk_GraphEdge * getEdge(unsigned int ID);
 
-		//!	辺生成関数
-		/*!
-		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
-		 *						辺が経路を表す場合は、有向辺は一方通行を表します。
-		 *	\param[in]	v1		辺の始点となるノード。
-		 *	\param[in]	v2		辺の終点となるノード。
-		 */
-		fk_GraphEdge * makeEdge(bool mode, fk_GraphNode *v1, fk_GraphNode *v2);
-
-		//! 辺削除関数
-		/*!
-		 *
-		 */
-		bool deleteEdge(fk_GraphEdge *e);
-
 		//! 辺存在確認関数
 		/*!
 		 *	\param[in]	v1		辺の頂点となるノード。
@@ -153,16 +142,129 @@ namespace FK {
 		 */
 		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
 
+		//@}
+
+		//! \name 接続変更関数
+		//@{
+
+		//!	辺生成関数
+		/*!
+		 *	2点のノード間に辺を作成します。
+		 *	なお、既に2点間に辺が存在する場合でも、エラーとならずに新たに辺を追加生成します。
+		 *
+		 *	\param[in]	mode	true の場合有向、false の場合無向となります。
+		 *						辺が経路を表す場合は、有向辺は一方通行を表します。
+		 *	\param[in]	v1		辺の始点となるノード。
+		 *	\param[in]	v2		辺の終点となるノード。
+		 *
+		 *	\return
+		 *			接続した辺のインスタンスを返します。
+		 *			作成に失敗した場合は nullptr を返します。
+		 */
+		fk_GraphEdge * makeEdge(bool mode, fk_GraphNode *v1, fk_GraphNode *v2);
+
+		//! 辺削除関数
+		/*!
+		 *	辺を削除します。
+		 *
+		 *	\param[in]	e		削除する辺のインスタンス
+		 *
+		 *	\return		削除に成功した場合 true を、失敗した場合 false を返します。
+		 */
+		bool deleteEdge(fk_GraphEdge *e);
+
+		//@}
+
+		//! \name 経路コスト制御関数
+		//@{
+
+		//! コストモード設定関数
+		/*!
+		 *	コストテーブルに対し、モードを設定します。
+		 *
+		 *	\param[in]	tableID		コストテーブル ID
+		 *
+		 *	\param[in]	backMode	true の場合は目標ノード側から、
+		 *							false の場合出発ノード側からコストを算出します。
+		 *
+		 *	\param[in]	type		コスト値のタイプを設定します。
+		 *							- fk_CostType::INT \n
+		 *								コストが int 型となります。
+		 *							- fk_CostType::DOUBLE \n
+		 *								コストが double 型となります。
+		 *							- fk_CostType::LENGTH \n
+		 *								コストは辺の長さとなり、
+		 *								内部では double 型として扱われます。
+		 *							.
+		 *
+		 *	\param[in]	edgeCostID 	利用する辺のコスト値 ID を指定します。
+		 *							type で fk_CostType::LENGTH を指定していた場合、
+		 *							この値は無視されます。
+		 */
 		void setCostMode(unsigned int tableID, bool backMode,
 						 fk_CostType type, unsigned int edgeCostID = 0);
 
+		//! ノード内コストID参照関数
+		/*!
+		 *	コストテーブルに対応するノード内コストIDを参照します。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *
+		 *	\return		ノード内コストID
+		 */
 		unsigned int getNodeCostID(unsigned int tableID);
 
+		//! 出発ノード設定関数
+		/*!
+		 *	出発ノードを指定します。
+		 *	既に別の出発ノードが設定されていた場合は、新たに設定したノードに更新されます。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *	\param[in]	node		ノードインスタンス
+		 */
 		void setStart(unsigned int tableID, fk_GraphNode *node);
+
+		//! 目標ノード追加関数
+		/*!
+		 *	目標ノードを追加します。
+		 *	目標ノードは一つのコストテーブルに対し複数設定することができます。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *	\param[in]	node		目標ノードインスタンス
+		 */
 		void addGoal(unsigned int tableID, fk_GraphNode *node);
 
+		//! コストテーブル初期化関数
+		/*!
+		 *	コストテーブルを初期化します。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *
+		 *	\return		初期化に成功したら true を、失敗したら false を返します。
+		 *				setCostMode() による設定が行われていないコストテーブルだった場合は
+		 *				false を返します。
+		 */
 		bool initCostTable(unsigned int tableID);
-		fk_GraphCostStatus updateCostTable(unsigned int tableID);
+
+		//! コストテーブル更新関数
+		/*!
+		 *	各ノードに対し、コスト算出を一段階進めます。
+		 *	全てのノードのコスト値を完全にするには、
+		 *	fk_CostStatus::FINISH が返されるまで繰り返し本関数を呼び出す必要があります。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *
+		 *	\return		現在のコスト算出状況を返します。
+		 *				- fk_CostStatus::CONTINUE \n
+		 *					コスト算出がまだ途中段階であることを意味します。
+		 *				- fk_CostStatus::FINISH \n
+		 *					コスト算出が完了したことを意味します。
+		 *				- fk_CostStatus::ERROR \n
+		 *					グラフ内のコスト算出に関する情報が不完全であることを意味します。
+		 */
+		fk_CostStatus updateCostTable(unsigned int tableID);
+
+		//@}
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Point * GetVertexShape(void);

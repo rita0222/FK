@@ -81,12 +81,6 @@
 
 namespace FK {
 
-	enum class fk_CostStatus {
-		CONTINUE,
-		FINISH,
-		ERROR
-	};
-
 	class fk_CostTable {
 	public:
 		fk_CostTable(void);

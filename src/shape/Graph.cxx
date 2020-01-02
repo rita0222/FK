@@ -305,17 +305,17 @@ bool fk_Graph::initCostTable(unsigned int argID)
 	return true;
 }
 
-fk_GraphCostStatus fk_Graph::updateCostTable(unsigned int argID)
+fk_CostStatus fk_Graph::updateCostTable(unsigned int argID)
 {
-	if(tableArray.size() <= argID) return fk_GraphCostStatus::ERROR;
+	if(tableArray.size() <= argID) return fk_CostStatus::ERROR;
 	fk_CostTable *tbl = tableArray[argID];
-	if(tbl == nullptr) return fk_GraphCostStatus::ERROR;
-	if(tbl->getStart() == nullptr) return fk_GraphCostStatus::ERROR;
+	if(tbl == nullptr) return fk_CostStatus::ERROR;
+	if(tbl->getStart() == nullptr) return fk_CostStatus::ERROR;
 	if(tbl->getMode() == true && tbl->getGoal()->empty() == true) {
-		return fk_GraphCostStatus::ERROR;
+		return fk_CostStatus::ERROR;
 	}
 
-	if(tbl->isQueueEmpty()) return fk_GraphCostStatus::FINISH;
+	if(tbl->isQueueEmpty()) return fk_CostStatus::FINISH;
 
 	fk_GraphNode *cur = tbl->queuePopFront();
 
@@ -331,8 +331,10 @@ fk_GraphCostStatus fk_Graph::updateCostTable(unsigned int argID)
 	} else {
 		for(fk_GraphEdge *edge : edgeList) DoubleUpdate(tbl, edge, cur);
 	}
-	if(tbl->isQueueEmpty()) return fk_GraphCostStatus::FINISH;
-	return fk_GraphCostStatus::CONTINUE;
+
+	if(tbl->isQueueEmpty()) return fk_CostStatus::FINISH;
+
+	return fk_CostStatus::CONTINUE;
 }
 
 void fk_Graph::IntUpdate(fk_CostTable *argTable,
