@@ -104,8 +104,7 @@ static fk_Angle & VectorToHeadPitch(const fk_Vector &argVec)
 	return retAngle;
 }
 
-static fk_Angle & VectorToAngle(const fk_Vector &argDirecVec,
-								const fk_Vector &argUpVec)
+static fk_Angle & VectorToAngle(const fk_Vector &argDirecVec, const fk_Vector &argUpVec)
 {
 	static fk_Angle	retAngle;
 	const fk_Vector	axisX(1.0, 0.0, 0.0);
@@ -159,6 +158,12 @@ fk_Quaternion::fk_Quaternion(const double argTheta, const fk_Vector &argV)
 }
 
 fk_Quaternion::fk_Quaternion(const fk_Quaternion &argQ)
+{
+	set(argQ.s, argQ.v.x, argQ.v.y, argQ.v.z);
+	return;
+}
+
+fk_Quaternion::fk_Quaternion(const fk_Quaternion &&argQ)
 {
 	set(argQ.s, argQ.v.x, argQ.v.y, argQ.v.z);
 	return;
@@ -305,23 +310,25 @@ fk_Quaternion & fk_Quaternion::operator !(void) const
 
 fk_Quaternion & fk_Quaternion::operator ~(void) const
 {
-	static fk_Quaternion tmpQ;
-
-	tmpQ.s = s;
-	tmpQ.v = -v;
+	static fk_Quaternion tmpQ(s, -v);
 	return tmpQ;
 }
 
 fk_Quaternion & fk_Quaternion::operator -(void) const
 {
-	static fk_Quaternion tmpQ;
-
-	tmpQ.s = -s;
-	tmpQ.v = -v;
+	static fk_Quaternion tmpQ(-s, -v);
 	return tmpQ;
 }
 
 fk_Quaternion & fk_Quaternion::operator =(const fk_Quaternion &argQ)
+{
+	s = argQ.s;
+	v = argQ.v;
+
+	return *this;
+}
+
+fk_Quaternion & fk_Quaternion::operator =(const fk_Quaternion &&argQ)
 {
 	s = argQ.s;
 	v = argQ.v;
@@ -339,8 +346,7 @@ fk_Quaternion & fk_Quaternion::operator *=(double argD)
 
 fk_Quaternion & fk_Quaternion::operator /=(double argD)
 {
-	s /= argD;
-	v /= argD;
+	*this = *this / argD;
 
 	return *this;
 }
@@ -354,16 +360,14 @@ fk_Quaternion & fk_Quaternion::operator *=(const fk_Quaternion &argQ)
 
 fk_Quaternion & fk_Quaternion::operator +=(const fk_Quaternion &argQ)
 {
-	s += argQ.s;
-	v += argQ.v;
+	*this = *this + argQ;
 
 	return *this;
 }
 
 fk_Quaternion & fk_Quaternion::operator -=(const fk_Quaternion &argQ)
 {
-	s -= argQ.s;
-	v -= argQ.v;
+	*this = *this - argQ;
 
 	return *this;
 }
@@ -376,81 +380,52 @@ bool fk_Quaternion::operator ==(const fk_Quaternion &argQ) const
 
 bool fk_Quaternion::operator !=(const fk_Quaternion &argQ) const
 {
-	if(fabs(s - argQ.s) < fk_Vector::VECTOREPS && v == argQ.v) return false;
-	return true;
+	return !(*this == argQ);
 }
 
 // friend 宣言による外部関数化した二項演算子
 namespace FK {
-	fk_Quaternion operator *(const fk_Quaternion &argQ1,
-							 const fk_Quaternion &argQ2)
+	fk_Quaternion operator *(const fk_Quaternion &argQ1, const fk_Quaternion &argQ2)
 	{
-		fk_Quaternion	q;
-
-		q.s = (argQ1.s * argQ2.s) - (argQ1.v * argQ2.v);
-		q.v = (argQ1.s * argQ2.v) + (argQ2.s * argQ1.v) + (argQ1.v ^ argQ2.v);
-
-		return q;
+		return fk_Quaternion((argQ1.s * argQ2.s) - (argQ1.v * argQ2.v),
+							 (argQ1.s * argQ2.v) + (argQ2.s * argQ1.v) + (argQ1.v ^ argQ2.v));
 	}
 
 	fk_Quaternion operator +(const fk_Quaternion &argQ1,
 							 const fk_Quaternion &argQ2)
 	{
-		fk_Quaternion q;
-
-		q.s = argQ1.s + argQ2.s;
-		q.v = argQ1.v + argQ2.v;
-
-		return q;
+		return fk_Quaternion(argQ1.s + argQ2.s, argQ1.v + argQ2.v);
 	}
 
 	fk_Quaternion operator -(const fk_Quaternion &argQ1,
 							 const fk_Quaternion &argQ2)
 	{
-		fk_Quaternion q;
-
-		q.s = argQ1.s - argQ2.s;
-		q.v = argQ1.v - argQ2.v;
-
-		return q;
+		return fk_Quaternion(argQ1.s - argQ2.s, argQ1.v - argQ2.v);
 	}
 
 	fk_Quaternion operator *(const fk_Quaternion &argQ, double argD)
 	{
-		fk_Quaternion q;
-
-		q.s = argQ.s * argD;
-		q.v = argQ.v * argD;
-		return q;
+		return fk_Quaternion(argQ.s * argD, argQ.v * argD);
 	}
 
 	fk_Quaternion operator *(double argD, const fk_Quaternion &argQ)
 	{
-		fk_Quaternion q;
-
-		q.s = argQ.s * argD;
-		q.v = argQ.v * argD;
-		return q;
+		return fk_Quaternion(argQ.s * argD, argQ.v * argD);
 	}
 
 	fk_Quaternion operator /(const fk_Quaternion &argQ, double argD)
 	{
-		fk_Quaternion q;
-
-		q.s = argQ.s / argD;
-		q.v = argQ.v / argD;
-		return q;
+		return fk_Quaternion(argQ.s / argD, argQ.v / argD);
 	}
 
 	fk_Vector operator *(const fk_Quaternion &argQ, const fk_Vector &argV)
 	{
-		fk_Vector v, tmpV1, tmpV2, tmpV3;
+		fk_Vector tmpV1, tmpV2, tmpV3;
 
 		tmpV1 = ((argQ.s*argQ.s) - argQ.v.dist2()) * argV;
 		tmpV2 = 2.0 * argQ.s * (argQ.v ^ argV);
 		tmpV3 = 2.0 * (argQ.v * argV) * argQ.v;
-		v = tmpV1 + tmpV2 + tmpV3;
-		return v;
+		return (tmpV1 + tmpV2 + tmpV3);
 	}
 
 	double operator ^(const fk_Quaternion &argQ1, const fk_Quaternion &argQ2)

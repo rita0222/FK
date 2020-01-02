@@ -158,6 +158,7 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_Quaternion(const fk_Quaternion &);
+		fk_Quaternion(const fk_Quaternion &&);
 
 		//! \name 単項演算子
 		//@{
@@ -177,7 +178,7 @@ namespace FK {
 		 *		\f$-\mathbf{q}\f$ による変換もまったく同じ回転となります。
 		 *		逆回転変換を行う四元数を求めたい場合は、共役を利用して下さい。
 		 */
-		fk_Quaternion &		operator -(void) const;
+		fk_Quaternion & operator -(void) const;
 
 		//! 単項共役演算子
 		/*!
@@ -196,7 +197,7 @@ namespace FK {
 		 *
 		 *	\sa conj()
 		 */
-		fk_Quaternion &		operator ~(void) const;
+		fk_Quaternion & operator ~(void) const;
 
 		//! 単項逆元演算子
 		/*!
@@ -217,7 +218,7 @@ namespace FK {
 		 *
 		 *	\sa norm(), inverse()
 		 */
-		fk_Quaternion &		operator !(void) const;
+		fk_Quaternion & operator !(void) const;
 
 		//@}
 
@@ -236,7 +237,7 @@ namespace FK {
 		 *
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 */
-		bool				operator ==(const fk_Quaternion &) const;
+		bool operator ==(const fk_Quaternion &) const;
 
 		//! 異値比較演算子 
 		/*!
@@ -250,7 +251,7 @@ namespace FK {
 		 *
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 */
-		bool				operator !=(const fk_Quaternion &) const;
+		bool operator !=(const fk_Quaternion &) const;
 
 		//@}
 
@@ -258,7 +259,8 @@ namespace FK {
 		//@{
 
 		//! 単純代入演算子
-		fk_Quaternion &		operator =(const fk_Quaternion &);
+		fk_Quaternion & operator =(const fk_Quaternion &);
+		fk_Quaternion & operator =(const fk_Quaternion &&);
 
 		//! 積代入演算子
 		/*!
@@ -276,7 +278,7 @@ namespace FK {
 		 *		\f$ \mathbf{q}_2\mathbf{q}_1 \f$ を
 		 *		\f$ \mathbf{q}_1 \f$ に代入したいときは、この演算子は利用できません。
 		 */
-		fk_Quaternion &		operator *=(const fk_Quaternion &);
+		fk_Quaternion & operator *=(const fk_Quaternion &);
 
 		//! スカラー倍代入演算子
 		/*!
@@ -289,7 +291,7 @@ namespace FK {
 		 *
 		 *		q *= 2.0;
 		 */
-		fk_Quaternion &		operator *=(double);
+		fk_Quaternion & operator *=(double);
 
 		//! スカラー商代入演算子
 		/*!
@@ -302,7 +304,7 @@ namespace FK {
 		 *
 		 *		q /= 2.0;
 		 */
-		fk_Quaternion &		operator /=(double);
+		fk_Quaternion & operator /=(double);
 
 		//! 単項和代入演算子
 		/*!
@@ -315,7 +317,7 @@ namespace FK {
 		 *
 		 *		q1 = q1 + q2;
 		 */
-		fk_Quaternion &		operator +=(const fk_Quaternion &);
+		fk_Quaternion & operator +=(const fk_Quaternion &);
 
 		//! 単項差代入演算子
 		/*!
@@ -328,7 +330,7 @@ namespace FK {
 		 *
 		 *		q1 = q1 - q2;
 		 */
-		fk_Quaternion &		operator -=(const fk_Quaternion &);
+		fk_Quaternion & operator -=(const fk_Quaternion &);
 
 		//@}
 
@@ -540,21 +542,21 @@ namespace FK {
 
 		//! \name 二項演算子
 		//@{
-		friend fk_Quaternion	operator *(const fk_Quaternion &,
+		friend fk_Quaternion operator *(const fk_Quaternion &,
 										   const fk_Quaternion &);
-		friend fk_Quaternion	operator +(const fk_Quaternion &,
+		friend fk_Quaternion operator +(const fk_Quaternion &,
 										   const fk_Quaternion &);
-		friend fk_Quaternion	operator -(const fk_Quaternion &,
+		friend fk_Quaternion operator -(const fk_Quaternion &,
 										   const fk_Quaternion &);
 
-		friend fk_Quaternion	operator *(const fk_Quaternion &, double);
-		friend fk_Quaternion	operator *(double, const fk_Quaternion &);
-		friend fk_Quaternion	operator /(const fk_Quaternion &, double);
+		friend fk_Quaternion operator *(const fk_Quaternion &, double);
+		friend fk_Quaternion operator *(double, const fk_Quaternion &);
+		friend fk_Quaternion operator /(const fk_Quaternion &, double);
 
-		friend fk_Vector		operator *(const fk_Quaternion &,
+		friend fk_Vector operator *(const fk_Quaternion &,
 										   const fk_Vector &);
 
-		friend double			operator ^(const fk_Quaternion &,
+		friend double operator ^(const fk_Quaternion &,
 										   const fk_Quaternion &);
 		//@}
 	};
@@ -584,7 +586,7 @@ namespace FK {
 	 *	四元数の積は、四元数を回転変換として考えたとき、合成変換を生成することを意味します。
 	 *	なお、四元数の積は交換法則は成り立ちません。
 	 */
-	fk_Quaternion	operator *(const fk_Quaternion &, const fk_Quaternion &);
+	fk_Quaternion operator *(const fk_Quaternion &, const fk_Quaternion &);
 
 	//! 四元数和二項演算子
 	/*!
@@ -594,7 +596,7 @@ namespace FK {
 	 *
 	 *		q = q1 + q2;
 	 */
-	fk_Quaternion	operator +(const fk_Quaternion &, const fk_Quaternion &);
+	fk_Quaternion operator +(const fk_Quaternion &, const fk_Quaternion &);
 
 	//! 四元数差二項演算子
 	/*!
@@ -604,7 +606,7 @@ namespace FK {
 	 *
 	 *		q = q1 - q2;
 	 */
-	fk_Quaternion	operator -(const fk_Quaternion &, const fk_Quaternion &);
+	fk_Quaternion operator -(const fk_Quaternion &, const fk_Quaternion &);
 
 	//! 四元数スカラー倍二項演算子1
 	/*!
@@ -616,7 +618,7 @@ namespace FK {
 	 *
 	 *	なお、四元数と実数の順番は逆でも構いません。
 	 */
-	fk_Quaternion	operator *(const fk_Quaternion &, double);
+	fk_Quaternion operator *(const fk_Quaternion &, double);
 
 	//! 四元数スカラー倍二項演算子2
 	/*!
@@ -628,7 +630,7 @@ namespace FK {
 	 *
 	 *	なお、四元数と実数の順番は逆でも構いません。
 	 */
-	fk_Quaternion	operator *(double, const fk_Quaternion &);
+	fk_Quaternion operator *(double, const fk_Quaternion &);
 
 	//! 四元数スカラー商二項演算子
 	/*!
@@ -638,7 +640,7 @@ namespace FK {
 	 *
 	 *		q2 = q1 / d;
 	 */
-	fk_Quaternion	operator /(const fk_Quaternion &, double);
+	fk_Quaternion operator /(const fk_Quaternion &, double);
 
 	//! 四元数ベクトル変換二項演算子
 	/*!
@@ -655,7 +657,7 @@ namespace FK {
 	 *
 	 *		v2 = q * v1;
 	 */
-	fk_Vector		operator *(const fk_Quaternion &, const fk_Vector &);
+	fk_Vector operator *(const fk_Quaternion &, const fk_Vector &);
 
 	//! 四元数内積二項演算子
 	/*!
@@ -680,7 +682,7 @@ namespace FK {
 	 *		C++ の仕様上あまり演算子としての優先度が高くありません。
 	 *		そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
 	 */
-	double			operator ^(const fk_Quaternion &, const fk_Quaternion &);
+	double operator ^(const fk_Quaternion &, const fk_Quaternion &);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 	fk_Quaternion fk_Q_Inter_Linear(const fk_Quaternion &,
