@@ -199,7 +199,7 @@ namespace FK {
 		 *	.
 		 *	この演算子は数学的な意味はありませんが、整列化の際に有用となります。
 		 */
-		bool				operator >(const fk_Vector &) const;
+		bool operator >(const fk_Vector &) const;
 
 		//! 左不等号演算子 
 		/*!
@@ -213,19 +213,19 @@ namespace FK {
 		 *	.
 		 *	この演算子は数学的な意味はありませんが、整列化の際に有用となります。
 		 */
-		bool				operator <(const fk_Vector &) const;
+		bool operator <(const fk_Vector &) const;
 
 		//! 等価右不等号演算子
 		/*!
 		 *	右不等号演算子とほぼ同一ですが、全ての成分が等しい場合には真を返します。
 		 */
-		bool				operator >=(const fk_Vector &) const;
+		bool operator >=(const fk_Vector &) const;
 
 		//! 等価左不等号演算子
 		/*!
 		 *	左不等号演算子とほぼ同一ですが、全ての成分が等しい場合には真を返します。
 		 */
-		bool				operator <=(const fk_Vector &) const;
+		bool operator <=(const fk_Vector &) const;
 
 		//@}
 
@@ -233,12 +233,12 @@ namespace FK {
 		//@{
 
 		//! 単純代入演算子
-		fk_Vector &			operator =(const fk_Vector &);
-		fk_Vector &			operator =(const fk_Vector &&);
+		fk_Vector & operator =(const fk_Vector &);
+		fk_Vector & operator =(const fk_Vector &&);
 
 		//! fk_FVector 型からの単純代入演算子
-		fk_Vector &			operator =(const fk_FVector &);
-		fk_Vector &			operator =(const fk_FVector &&);
+		fk_Vector & operator =(const fk_FVector &);
+		fk_Vector & operator =(const fk_FVector &&);
 
 		//! 実数積代入演算子
 		/*!
@@ -251,7 +251,7 @@ namespace FK {
 		 *
 		 *		V *= 2.0;
 		 */
-		fk_Vector &			operator *=(double);
+		fk_Vector & operator *=(double);
 
 		//! 実数商代入演算子
 		/*!
@@ -266,7 +266,7 @@ namespace FK {
 		 *
 		 *	なお、d が 0 であった場合は V の値を変更しません。
 		 */
-		fk_Vector &			operator /=(double);
+		fk_Vector & operator /=(double);
 
 		//! 単項和代入演算子
 		/*!
@@ -279,7 +279,7 @@ namespace FK {
 		 *
 		 *		V1 = V1 + V2;
 		 */
-		fk_Vector &			operator +=(const fk_Vector &);
+		fk_Vector & operator +=(const fk_Vector &);
 
 		//! 単項差代入演算子
 		/*!
@@ -292,7 +292,20 @@ namespace FK {
 		 *
 		 *		V1 = V1 - V2;
 		 */
-		fk_Vector &			operator -=(const fk_Vector &);
+		fk_Vector & operator -=(const fk_Vector &);
+
+		//! 単項外積代入演算子
+		/*!
+		 *	以下のコードは、V1 と V2 の外積ベクトルを V1 に代入します。
+		 *	V1、V2 はいずれも fk_Vector 型の変数です。
+		 *
+		 *		V1 ^= V2;
+		 *
+		 *	上記コードは、以下のコードと同義です。
+		 *
+		 *		V1 = V1 ^ V2;
+		 */
+		fk_Vector & operator ^=(const fk_Vector &);
 
 		//! 行列変換代入演算子1
 		/*!
@@ -308,7 +321,7 @@ namespace FK {
 		 *	演算の際、fk_Vector は fk_HVector に変換されます。
 		 *	変換の際の同次座標は 1 に設定されます。
 		 */
-		fk_Vector &			operator *=(const fk_Matrix &);
+		fk_Vector & operator *=(const fk_Matrix &);
 
 		//! 行列変換代入演算子2
 		/*!
@@ -324,7 +337,7 @@ namespace FK {
 		 *	演算の際、fk_Vector は fk_HVector に変換されます。
 		 *	変換の際の同次座標は 1 に設定されます。
 		 */
-		fk_Vector &			operator *=(const fk_OrthoMatrix &);
+		fk_Vector & operator *=(const fk_OrthoMatrix &);
 		//@}
 
 		//! \name メンバ関数
@@ -337,7 +350,7 @@ namespace FK {
 		 *	\param[in]	y	y成分の値
 		 *	\param[in]	z	z成分の値
 		 */
-		virtual void	set(double x, double y, double z = 0.0);
+		virtual void set(double x, double y, double z = 0.0);
 
 		//! ベクトル長さ算出関数
 		/*!
@@ -349,7 +362,7 @@ namespace FK {
 		 *
 		 *	\return	ベクトルの長さ
 		 */
-		double			dist(void) const;
+		double dist(void) const;
 
 		//! ベクトル長さ平方算出関数
 		/*!
@@ -362,7 +375,7 @@ namespace FK {
 		 *	平方根演算がない分、 dist() と比べて若干高速です。
 		 *	\return ベクトルの長さの平方
 		 */
-		double			dist2(void) const;
+		double dist2(void) const;
 
 		//! 正規化関数
 		/*!
@@ -378,19 +391,19 @@ namespace FK {
 		 *	「失敗」は、元のベクトルが零ベクトルである場合に限ります。
 		 *	\sa dist()
 		 */
-		bool			normalize(void);
+		bool normalize(void);
 
 		//! 初期化関数
 		/*!
 		 *	零ベクトルに初期化を行います。
 		 */
-		virtual void	init(void);
+		virtual void init(void);
 
 		//! 零ベクトル判定関数
 		/*!
 		 *	\return 零ベクトルである場合 true を、そうでない場合 false を返します。
 		 */
-		bool			isZero(void) const;
+		bool isZero(void) const;
 
 		//! 射影ベクトル算出関数
 		/*!
@@ -408,8 +421,8 @@ namespace FK {
 		 *	\return			射影ベクトル
 		 *	\sa perp(), dist(), dist2()
 		 */
-		fk_Vector		proj(const fk_Vector &Q) const;
-		fk_Vector		proj(const fk_Vector &&Q) const;
+		fk_Vector proj(const fk_Vector &Q) const;
+		fk_Vector proj(const fk_Vector &&Q) const;
 
 		//! 射影垂直成分ベクトル算出関数
 		/*!
@@ -420,26 +433,26 @@ namespace FK {
 		 *	\return			射影垂直成分ベクトル
 		 *	\sa proj()
 		 */
-		fk_Vector		perp(const fk_Vector &Q) const;
-		fk_Vector		perp(const fk_Vector &&Q) const;
+		fk_Vector perp(const fk_Vector &Q) const;
+		fk_Vector perp(const fk_Vector &&Q) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
 		virtual std::string	OutStr(void) const;
-		virtual void		Print(void) const;
-		virtual void		Print(std::string) const;
+		virtual void Print(void) const;
+		virtual void Print(std::string) const;
 
 #endif
 
 		//! \name 二項演算子
 		//@{
-		friend double		operator *(const fk_Vector &, const fk_Vector &);
-		friend fk_Vector	operator +(const fk_Vector &, const fk_Vector &);
-		friend fk_Vector	operator -(const fk_Vector &, const fk_Vector &);
-		friend fk_Vector	operator *(const fk_Vector &, double);
-		friend fk_Vector	operator *(double, const fk_Vector &);
-		friend fk_Vector	operator /(const fk_Vector &, double);
-		friend fk_Vector	operator ^(const fk_Vector &, const fk_Vector &);
+		friend double operator *(const fk_Vector &, const fk_Vector &);
+		friend fk_Vector operator +(const fk_Vector &, const fk_Vector &);
+		friend fk_Vector operator -(const fk_Vector &, const fk_Vector &);
+		friend fk_Vector operator *(const fk_Vector &, double);
+		friend fk_Vector operator *(double, const fk_Vector &);
+		friend fk_Vector operator /(const fk_Vector &, double);
+		friend fk_Vector operator ^(const fk_Vector &, const fk_Vector &);
 		//@}
 	};
 
@@ -460,7 +473,7 @@ namespace FK {
 	 *
 	 *	なお、内積は交換法則が成り立ちます。
 	 */
-	double		operator *(const fk_Vector &, const fk_Vector &);
+	double operator *(const fk_Vector &, const fk_Vector &);
 
 	//! ベクトル和二項演算子
 	/*!
@@ -471,7 +484,7 @@ namespace FK {
 	 *
 	 *	なお、和演算は交換法則が成り立ちます。
 	 */
-	fk_Vector	operator +(const fk_Vector &, const fk_Vector &);
+	fk_Vector operator +(const fk_Vector &, const fk_Vector &);
 
 	//! ベクトル差二項演算子
 	/*!
@@ -482,7 +495,7 @@ namespace FK {
 	 *
 	 *	なお、差演算は交換法則が成り立ちません。
 	 */
-	fk_Vector	operator -(const fk_Vector &, const fk_Vector &);
+	fk_Vector operator -(const fk_Vector &, const fk_Vector &);
 
 	//! 実数倍二項演算子1
 	/*!
@@ -493,7 +506,7 @@ namespace FK {
 	 *
 	 *	なお、ベクトルと実数の順番は逆でも構いません。
 	 */
-	fk_Vector	operator *(const fk_Vector &, double);
+	fk_Vector operator *(const fk_Vector &, double);
 
 	//! 実数倍二項演算子2
 	/*!
@@ -504,7 +517,7 @@ namespace FK {
 	 *
 	 *	なお、ベクトルと実数の順番は逆でも構いません。
 	 */
-	fk_Vector	operator *(double, const fk_Vector &);
+	fk_Vector operator *(double, const fk_Vector &);
 
 	//! 実数商二項演算子
 	/*!
@@ -513,7 +526,7 @@ namespace FK {
 	 *
 	 *		V2 = V1/d;
 	 */
-	fk_Vector	operator /(const fk_Vector &, double);
+	fk_Vector operator /(const fk_Vector &, double);
 
 	//! 外積二項演算子
 	/*!
@@ -543,7 +556,7 @@ namespace FK {
 	 *	C++ の仕様上あまり演算子としての優先度が高くありません。
 	 *	そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
 	 */
-	fk_Vector	operator ^(const fk_Vector &, const fk_Vector &);
+	fk_Vector operator ^(const fk_Vector &, const fk_Vector &);
 
 	//! 4次元ベクトルを管理するクラス
 	/*!
@@ -603,7 +616,7 @@ namespace FK {
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 *	なお、同次座標成分の比較も含まれます。
 		 */
-		bool			operator ==(const fk_HVector &) const;
+		bool operator ==(const fk_HVector &) const;
 
 		//! 異値比較演算子 
 		/*!
@@ -618,22 +631,22 @@ namespace FK {
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 *	なお、同次座標成分の比較も含まれます。
 		 */
-		bool			operator !=(const fk_HVector &) const;
+		bool operator !=(const fk_HVector &) const;
 		//@}
 
 		//! \name 代入演算子 
 		//@{
 
 		//! 単純代入演算子
-		fk_HVector &	operator =(const fk_HVector &);
-		fk_HVector &	operator =(const fk_HVector &&);
+		fk_HVector & operator =(const fk_HVector &);
+		fk_HVector & operator =(const fk_HVector &&);
 
 		//! 単純代入演算子
 		/*!
 		 *	この代入演算子において、同次座標成分は 1 に設定されます。
 		 */
-		fk_HVector &	operator =(const fk_Vector &);
-		fk_HVector &	operator =(const fk_Vector &&);
+		fk_HVector & operator =(const fk_Vector &);
+		fk_HVector & operator =(const fk_Vector &&);
 
 		//! 行列変換代入演算子1
 		/*!
@@ -646,7 +659,7 @@ namespace FK {
 		 *
 		 *		V = M * V;
 		 */
-		fk_HVector &	operator *=(const fk_Matrix &);
+		fk_HVector & operator *=(const fk_Matrix &);
 
 		//! 行列変換代入演算子2
 		/*!
@@ -659,7 +672,7 @@ namespace FK {
 		 *
 		 *		V = M * V;
 		 */
-		fk_HVector &	operator *=(const fk_OrthoMatrix &);
+		fk_HVector & operator *=(const fk_OrthoMatrix &);
 
 		//@}
 
@@ -674,8 +687,8 @@ namespace FK {
 		 *	既に w 成分に 1 以外の値が入っていた場合でも、1 に設定されます。
 		 *	\param[in]	v	3次元ベクトル
 		 */
-		void		set(const fk_Vector &v);
-		void		set(const fk_Vector &&v);
+		void set(const fk_Vector &v);
+		void set(const fk_Vector &&v);
 
 		//! fk_Vector による設定関数2
 		/*!
@@ -685,8 +698,8 @@ namespace FK {
 		 *	\param[in]	v	3次元ベクトル
 		 *	\param[in]	w	同次座標値
 		 */
-		void		set(const fk_Vector &v, double w);
-		void		set(const fk_Vector &&v, double w);
+		void set(const fk_Vector &v, double w);
+		void set(const fk_Vector &&v, double w);
 
 		//! 数値による設定関数1
 		/*!
@@ -697,7 +710,7 @@ namespace FK {
 		 *	\param[in]	y	y成分値
 		 *	\param[in]	z	z成分値
 		 */
-		void		set(double x, double y, double z = 0.0);
+		void set(double x, double y, double z = 0.0);
 
 		//! 数値による設定関数2
 		/*!
@@ -707,7 +720,7 @@ namespace FK {
 		 *	\param[in]	z	z成分値
 		 *	\param[in]	w	同次座標値
 		 */
-		void		set(double x, double y, double z, double w);
+		void set(double x, double y, double z, double w);
 
 		//! 同次座標設定関数
 		/*!
@@ -715,55 +728,55 @@ namespace FK {
 		 *	その他の成分については値を変更しません。
 		 *	\param[in]	w	同次座標値
 		 */
-		void		setw(double w);
+		void setw(double w);
 
 		//! 3次元ベクトル取得関数
 		/*!
 		 *	3次元ベクトル部を返します。
 		 *	\return 3次元ベクトル
 		 */
-		fk_Vector	getV(void) const;
+		fk_Vector getV(void) const;
 
 		//! 同次座標値取得関数
 		/*!
 		 *	同次座標値を取得します。
 		 *	\return 同次座標値
 		 */
-		double		getw(void) const;
+		double getw(void) const;
 
 		//! 位置ベクトル設定関数
 		/*!
 		 *	このベクトルを、位置ベクトルとして扱えるようにします。
 		 *	この関数は、同次座標に 1 を設定することと同義です。
 		 */
-		void		ispos(void);
+		void ispos(void);
 
 		//! 方向ベクトル設定関数
 		/*!
 		 *	このベクトルを、方向ベクトルとして扱えるようにします。
 		 *	この関数は、同次座標に 0 を設定することと同義です。
 		 */
-		void		isvec(void);
+		void isvec(void);
 
 		//! 初期化関数
 		/*!
 		 *	4次元ベクトルを (0, 0, 0, 1) に設定します。
 		 */
-		void		init(void);
+		void init(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		std::string		OutStr(void) const;
-		void			Print(void) const;
-		void			Print(std::string) const;
+		std::string OutStr(void) const;
+		void Print(void) const;
+		void Print(std::string) const;
 
 #endif
 
 		//! \name 二項演算子
 		//@{
-		friend double		operator *(const fk_HVector &, const fk_HVector &);
-		friend fk_HVector	operator *(const fk_Matrix &, const fk_HVector &);
-		friend fk_HVector	operator *(const fk_OrthoMatrix &, const fk_HVector &);
+		friend double operator *(const fk_HVector &, const fk_HVector &);
+		friend fk_HVector operator *(const fk_Matrix &, const fk_HVector &);
+		friend fk_HVector operator *(const fk_OrthoMatrix &, const fk_HVector &);
 		//@}
 	};
 
@@ -779,7 +792,7 @@ namespace FK {
 	 *	なお、内積は交換法則が成り立ちます。
 	 *	同次座標成分については、内積値の算出には利用しません。
 	 */
-	double		operator *(const fk_HVector &, const fk_HVector &);
+	double operator *(const fk_HVector &, const fk_HVector &);
 
 	//! 行列変換二項演算子1
 	/*!
@@ -792,7 +805,7 @@ namespace FK {
 	 *	FK では行列体系として MV 系を採用しており、
 	 *	行列のベクトル変換の際には行列が左側、ベクトルが右側である必要があります。
 	 */
-	fk_HVector	operator *(const fk_Matrix &, const fk_HVector &);
+	fk_HVector operator *(const fk_Matrix &, const fk_HVector &);
 
 	//! 行列変換二項演算子2
 	/*!
@@ -805,7 +818,7 @@ namespace FK {
 	 *	FK では行列体系として MV 系を採用しており、
 	 *	行列のベクトル変換の際には行列が左側、ベクトルが右側である必要があります。
 	 */
-	fk_HVector	operator *(const fk_OrthoMatrix &, const fk_HVector &);
+	fk_HVector operator *(const fk_OrthoMatrix &, const fk_HVector &);
 
 
 	//! 単精度浮動小数点型3次元ベクトルを管理するクラス
@@ -825,9 +838,9 @@ namespace FK {
 
 	class fk_FVector {
 	public:
-		float	x;	//!<	x成分
-		float	y;	//!<	y成分
-		float	z;	//!<	z成分
+		float x;	//!<	x成分
+		float y;	//!<	y成分
+		float z;	//!<	z成分
 
 		//! コンストラクタ
 		fk_FVector(void);
@@ -849,8 +862,8 @@ namespace FK {
 		 *	fk_Vector 型からの変換のため、
 		 *	浮動小数点精度が double 相当から float 相当まで落ちます。
 		 */
-		fk_FVector &	operator =(const fk_Vector &);
-		fk_FVector &	operator =(const fk_Vector &&);
+		fk_FVector & operator =(const fk_Vector &);
+		fk_FVector & operator =(const fk_Vector &&);
 	};
 
 	//! テクスチャ座標を管理するクラス
@@ -869,8 +882,8 @@ namespace FK {
 
 	public:
 
-		float	x;	//!<	x成分
-		float	y;	//!<	y成分
+		float x;	//!<	x成分
+		float y;	//!<	y成分
 
 		//! コンストラクタ
 		/*!
@@ -885,7 +898,7 @@ namespace FK {
 		//! 代入演算子
 		fk_TexCoord & operator =(const fk_TexCoord &);
 
-		//! 等号比較演算子
+		//! 同値比較演算子
 		/*!
 		 *	fk_TexCoord では、以下のように記述することで、
 		 *	c1 と c2 が等しいかどうかを判断できます。
@@ -897,7 +910,21 @@ namespace FK {
 		 *
 		 *	ここでの比較は、ある程度の計算誤差を許容します。
 		 */
-		bool	operator ==(const fk_TexCoord &) const;
+		bool operator ==(const fk_TexCoord &) const;
+
+		//! 異値比較演算子
+		/*!
+		 *	fk_TexCoord では、以下のように記述することで、
+		 *	c1 と c2 が等しくないかどうかを判断できます。
+		 *
+		 *		if(c1 != c2) {
+		 *			:
+		 *			:
+		 *		}
+		 *
+		 *	ここでの比較は、ある程度の計算誤差を許容します。
+		 */
+		bool operator !=(const fk_TexCoord &) const;
 
 		//! 成分設定関数
 		/*!
@@ -906,7 +933,7 @@ namespace FK {
 		 *	\param[in]	x	x成分の値
 		 *	\param[in]	y	y成分の値
 		 */
-		void	set(double x, double y);
+		void set(double x, double y);
 	};
 }
 

@@ -82,7 +82,7 @@ using namespace FK;
 inline bool AlmostZero(double x)
 {
 	if(x < fk_Vector::MATRIXEPS && x > -fk_Vector::MATRIXEPS) return true;
-	else return false;
+	return false;
 }
 
 
@@ -93,21 +93,19 @@ inline bool AlmostEqual(double x, double y)
 }
 
 // 行列展開用関数 (retHVector = Mat*argHVector) 
-void fk_OrthoMatrix::MultVec(fk_HVector &retHVector,
-							const fk_HVector &argHVector) const
+void fk_OrthoMatrix::MultVec(fk_HVector &retHVector, const fk_HVector &argHVector) const
 {
-	int			i, j;
-	double		Vec[4];
-	double		Ret[4];
+	double Vec[4];
+	double Ret[4];
 
 	Vec[0] = argHVector.x;
 	Vec[1] = argHVector.y;
 	Vec[2] = argHVector.z;
 	Vec[3] = argHVector.w;
 
-	for(i = 0; i < 4; ++i) {
+	for(int i = 0; i < 4; ++i) {
 		Ret[i] = 0.0;
-		for(j = 0; j < 4; ++j) {
+		for(int j = 0; j < 4; ++j) {
 			Ret[i] += Vec[j]*m[i][j];
 		}
 	}
@@ -119,10 +117,8 @@ void fk_OrthoMatrix::MultVec(fk_HVector &retHVector,
 // 単位行列生成用 static 関数 
 static void MakeIdentMatrix(double Mat[4][4])
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			if(i == j) Mat[i][j] = 1.0;
 			else Mat[i][j] = 0.0;
 		}
@@ -132,10 +128,8 @@ static void MakeIdentMatrix(double Mat[4][4])
 // 零行列生成用 static 関数 
 static void MakeZeroMatrix(double Mat[4][4])
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			Mat[i][j] = 0.0;
 		}
 	}
@@ -144,17 +138,16 @@ static void MakeZeroMatrix(double Mat[4][4])
 // 逆行列演算 LU 分解関数 1 
 static bool fk_LUDecomposition(double Mat[4][4], int index[4])
 {
-	int		i, iMax, j, k;
+	int		iMax;
 	double	big, dum, sum, tmp;
 	double	vv[4];
-	
 	
 	// Get Scaling Information.;
 
 	iMax = 0;
-	for(i = 0; i < 4; ++i) {
+	for(int i = 0; i < 4; ++i) {
 		big = 0.0;
-		for(j = 0; j < 4; ++j) {
+		for(int j = 0; j < 4; ++j) {
 			tmp = fabs(Mat[i][j]);
 			if(tmp > big) big = tmp;
 		}
@@ -166,19 +159,19 @@ static bool fk_LUDecomposition(double Mat[4][4], int index[4])
 	
 	// Crout's Algorithm ';
 
-	for(j = 0; j < 4; ++j) {
-		for(i = 0; i < j; ++i) {
+	for(int j = 0; j < 4; ++j) {
+		for(int i = 0; i < j; ++i) {
 			sum = Mat[i][j];
-			for(k = 0; k < i; ++k) {
+			for(int k = 0; k < i; ++k) {
 				sum -= Mat[i][k]*Mat[k][j];
 			}
 			Mat[i][j] = sum;
 		}
 	
 		big = 0.0;
-		for(i = j; i < 4; ++i) {
+		for(int i = j; i < 4; ++i) {
 			sum = Mat[i][j];
-			for(k = 0; k < j; ++k) {
+			for(int k = 0; k < j; ++k) {
 				sum -= Mat[i][k]*Mat[k][j];
 			}
 			Mat[i][j] = sum;
@@ -190,7 +183,7 @@ static bool fk_LUDecomposition(double Mat[4][4], int index[4])
 		}
 		if(j != iMax) {
 			// Row Exchange;
-			for(k = 0; k < 4; ++k) {
+			for(int k = 0; k < 4; ++k) {
 				dum = Mat[iMax][k];
 				Mat[iMax][k] = Mat[j][k];
 				Mat[j][k] = dum;
@@ -206,39 +199,35 @@ static bool fk_LUDecomposition(double Mat[4][4], int index[4])
 
 		if(j != 3) {
 			dum = 1.0/(Mat[j][j]);
-			for(i = j+1; i < 4; ++i) Mat[i][j] *= dum;
+			for(int i = j+1; i < 4; ++i) Mat[i][j] *= dum;
 		}
 	}
 	return true;
 }
 
 // 逆行列演算 LU 分解関数 2 
-static void fk_LUBackSubsutitution(double mat[4][4], 
-								   int index[4], double vector[4])
+static void fk_LUBackSubsutitution(double mat[4][4], int index[4], double vector[4])
 {
-	int		i, ip, j;
-	bool	iFlg;
-	double	sum;
-	
-	iFlg = false;
+	bool	iFlg = false;
+	double	sum = 0;
 
-	for(i = 0; i < 4; ++i) {
+	for(int i = 0; i < 4; ++i) {
 		// Forward Subsutitution;
-		ip = index[i];
+		int ip = index[i];
 		sum = vector[ip];
 		vector[ip] = vector[i];
 		if(iFlg == false) {
-			for(j = 0; j < i; ++j) {
+			for(int j = 0; j < i; ++j) {
 				sum -= mat[i][j]*vector[j];
 			}
 		} else if(AlmostZero(sum) == true) iFlg = true;
 		vector[i] = sum;
 	}
 	
-	for(i = 3; i >= 0; --i) {
+	for(int i = 3; i >= 0; --i) {
 		// Backward Subsutitution;
 		sum = vector[i];
-		for(j = i+1; j < 4; ++j) sum -= mat[i][j]*vector[j];
+		for(int j = i+1; j < 4; ++j) sum -= mat[i][j]*vector[j];
 		vector[i] = sum/mat[i][i];
 	}
 }
@@ -247,25 +236,25 @@ static void fk_LUBackSubsutitution(double mat[4][4],
 static bool fk_MatrixInverse(double mat[4][4])
 {
 	double	dummy[4][4], vector[4];
-	int		i, j, index[4];
+	int		index[4];
 	
 	if(fk_LUDecomposition(mat, index) == false) return false;
 
-	for(i = 0; i < 4; ++i) {
+	for(int i = 0; i < 4; ++i) {
 		if(AlmostZero(mat[i][i]) == true) {
 			return false;
 		}
 	}
 
-	for(j = 0; j < 4; ++j) {
-		for(i = 0; i < 4; ++i) vector[i] = 0.0;
+	for(int j = 0; j < 4; ++j) {
+		for(int i = 0; i < 4; ++i) vector[i] = 0.0;
 		vector[j] = 1.0;
 		fk_LUBackSubsutitution(mat, index, vector);
-		for(i = 0; i < 4; ++i) dummy[i][j] = vector[i];
+		for(int i = 0; i < 4; ++i) dummy[i][j] = vector[i];
 	}
 	
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) mat[i][j] = dummy[i][j];
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) mat[i][j] = dummy[i][j];
 	}
 
 	return true;
@@ -274,10 +263,9 @@ static bool fk_MatrixInverse(double mat[4][4])
 // 直交行列用逆行列演算 
 static void fk_OrthoMatrixInverse(double mat[4][4])
 {
-	double	t[3], tmp;
-	int		i, j;
+	double	t[3];
 
-	for(i = 0; i < 3; ++i) {
+	for(int i = 0; i < 3; ++i) {
 		t[i] = mat[i][3];
 	}
 
@@ -285,9 +273,9 @@ static void fk_OrthoMatrixInverse(double mat[4][4])
 	mat[1][3] = -mat[0][1]*t[0] - mat[1][1]*t[1] - mat[2][1]*t[2];
 	mat[2][3] = -mat[0][2]*t[0] - mat[1][2]*t[1] - mat[2][2]*t[2];
 
-	for(i = 1; i < 3; ++i) {
-		for(j = 0; j < i; ++j) {
-			tmp = mat[i][j];
+	for(int i = 1; i < 3; ++i) {
+		for(int j = 0; j < i; ++j) {
+			double tmp = mat[i][j];
 			mat[i][j] = mat[j][i];
 			mat[j][i] = tmp;
 		}
@@ -300,10 +288,8 @@ static void fk_OrthoMatrixInverse(double mat[4][4])
 // 行列複写 (m1 = m2) 
 static void CopyMatrix(double m1[4][4], const double m2[4][4])
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			m1[i][j] = m2[i][j];
 		}
 	}
@@ -312,10 +298,8 @@ static void CopyMatrix(double m1[4][4], const double m2[4][4])
 // 行列和 (m1 += m2) 
 static void AddMatrix(double m1[4][4], const double m2[4][4])
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			m1[i][j] += m2[i][j];
 		}
 	}
@@ -325,10 +309,8 @@ static void AddMatrix(double m1[4][4], const double m2[4][4])
 // 行列差 (m1 -= m2) 
 static void SubMatrix(double m1[4][4], const double m2[4][4])
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			m1[i][j] -= m2[i][j];
 		}
 	}
@@ -339,14 +321,11 @@ static void SubMatrix(double m1[4][4], const double m2[4][4])
 static void MultMatrix(double m1[4][4],
 					   const double m2[4][4], const double m3[4][4])
 {
-	int		i, j, k;
-
-
 	MakeZeroMatrix(m1);
 
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
-			for(k = 0; k < 4; ++k) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
+			for(int k = 0; k < 4; ++k) {
 				m1[i][j] += m2[i][k] * m3[k][j];
 			}
 		}
@@ -365,6 +344,12 @@ fk_OrthoMatrix::fk_OrthoMatrix(void)
 
 // コピーコンストラクタ 
 fk_OrthoMatrix::fk_OrthoMatrix(const fk_OrthoMatrix &ArgMat)
+	: buf(nullptr), updateStatus(true)
+{
+	CopyMatrix(m, ArgMat.m);
+}
+
+fk_OrthoMatrix::fk_OrthoMatrix(const fk_OrthoMatrix &&ArgMat)
 	: buf(nullptr), updateStatus(true)
 {
 	CopyMatrix(m, ArgMat.m);
@@ -494,12 +479,9 @@ bool fk_OrthoMatrix::inverse(void)
 
 void fk_OrthoMatrix::negate(void)
 {
-	int			i, j;
-	double		tmp;
-
-	for(i = 1; i < 4; ++i) {
-		for(j = 0; j < i; ++j) {
-			tmp = m[i][j];
+	for(int i = 1; i < 4; ++i) {
+		for(int j = 0; j < i; ++j) {
+			double tmp = m[i][j];
 			m[i][j] = m[j][i];
 			m[j][i] = tmp;
 		}
@@ -586,7 +568,6 @@ void fk_OrthoMatrix::makeEuler(const fk_Angle &argAngle)
 
 void fk_OrthoMatrix::Print(string argStr) const
 {
-	int				i, j;
 	stringstream	ss;
 
 	if(argStr.size() == 0) {
@@ -596,9 +577,9 @@ void fk_OrthoMatrix::Print(string argStr) const
 	}
 
 	ss.clear();
-	for(i = 0; i < 4; ++i) {
+	for(int i = 0; i < 4; ++i) {
 		ss << "t| ";
-		for(j = 0; j < 4; ++j) ss << m[i][j] << " ";
+		for(int j = 0; j < 4; ++j) ss << m[i][j] << " ";
 		ss << "|";
 		if(i != 3) ss << endl;
 	}
@@ -635,10 +616,8 @@ double * fk_OrthoMatrix::operator [](int index)
 // 比較演算子 
 bool fk_OrthoMatrix::operator ==(const fk_OrthoMatrix &Mat) const
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			if(AlmostEqual(m[i][j], Mat.m[i][j]) == false) return false;
 		}
 	}
@@ -648,10 +627,8 @@ bool fk_OrthoMatrix::operator ==(const fk_OrthoMatrix &Mat) const
 
 bool fk_OrthoMatrix::operator !=(const fk_OrthoMatrix &Mat) const
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			if(AlmostEqual(m[i][j], Mat.m[i][j]) == false) return true;
 		}
 	}
@@ -661,6 +638,14 @@ bool fk_OrthoMatrix::operator !=(const fk_OrthoMatrix &Mat) const
 
 // 代入演算子 
 fk_OrthoMatrix & fk_OrthoMatrix::operator =(const fk_OrthoMatrix &ArgMat)
+{
+	CopyMatrix(m, ArgMat.m);
+
+	updateStatus = true;
+	return *this;
+}
+
+fk_OrthoMatrix & fk_OrthoMatrix::operator =(const fk_OrthoMatrix &&ArgMat)
 {
 	CopyMatrix(m, ArgMat.m);
 
@@ -681,18 +666,17 @@ fk_OrthoMatrix & fk_OrthoMatrix::operator *=(const fk_OrthoMatrix &ArgMat)
 
 fk_Vector & fk_Vector::operator *=(const fk_OrthoMatrix &argMat)
 {
-	fk_HVector	tmp1, tmp2;
-	tmp1 = *this;
-	argMat.MultVec(tmp2, tmp1);
-	*this = tmp2;
+	fk_HVector v(*this);
+	fk_HVector vh;
 
+	argMat.MultVec(vh, v);
+	*this = fk_Vector(vh);
 	return *this;
 }
 
 fk_HVector & fk_HVector::operator *=(const fk_OrthoMatrix &argMat)
 {
-	fk_HVector	tmp = *this;
-	argMat.MultVec(*this, tmp);
+	argMat.MultVec(*this, fk_HVector(*this));
 	return *this;
 }
 
@@ -732,6 +716,12 @@ fk_Matrix::fk_Matrix(const fk_Matrix &argMat)
 	CopyMatrix(m, argMat.m);
 }
 
+fk_Matrix::fk_Matrix(const fk_Matrix &&argMat)
+	: fk_OrthoMatrix()
+{
+	CopyMatrix(m, argMat.m);
+}
+
 // 逆行列演算関数 
 bool fk_Matrix::inverse(void)
 {
@@ -758,14 +748,13 @@ bool fk_Matrix::covariant(void)
 // 特異行列判定関数 
 bool fk_Matrix::isSingular(void) const
 {
-	int			i;
 	double		mat[4][4];
 	int			index[4];
 
 	CopyMatrix(mat, m);
 
 	if(fk_LUDecomposition(mat, index) == false) return true;
-	for(i = 0; i < 4; ++i) {
+	for(int i = 0; i < 4; ++i) {
 		if(AlmostZero(mat[i][i]) == true) {
 			return true;
 		}
@@ -866,10 +855,8 @@ fk_Matrix fk_Matrix::operator !(void) const
 // 比較演算子 
 bool fk_Matrix::operator ==(const fk_Matrix &Mat) const
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
 			if(AlmostEqual(m[i][j], Mat.m[i][j]) == false) return false;
 		}
 	}
@@ -879,15 +866,7 @@ bool fk_Matrix::operator ==(const fk_Matrix &Mat) const
 
 bool fk_Matrix::operator !=(const fk_Matrix &Mat) const
 {
-	int		i, j;
-
-	for(i = 0; i < 4; ++i) {
-		for(j = 0; j < 4; ++j) {
-			if(AlmostEqual(m[i][j], Mat.m[i][j]) == false) return true;
-		}
-	}
-
-	return false;
+	return !(*this == Mat);
 }
 
 // 代入演算子 
@@ -897,7 +876,19 @@ fk_Matrix & fk_Matrix::operator =(const fk_Matrix &ArgMat)
 	return *this;
 }
 
+fk_Matrix & fk_Matrix::operator =(const fk_Matrix &&ArgMat)
+{
+	CopyMatrix(m, ArgMat.m);
+	return *this;
+}
+
 fk_Matrix & fk_Matrix::operator =(const fk_OrthoMatrix &ArgMat)
+{
+	CopyMatrix(m, ArgMat.m);
+	return *this;
+}
+
+fk_Matrix & fk_Matrix::operator =(const fk_OrthoMatrix &&ArgMat)
 {
 	CopyMatrix(m, ArgMat.m);
 	return *this;
@@ -1063,10 +1054,9 @@ namespace FK {
 	fk_Matrix operator *(double d, const fk_Matrix &m)
 	{
 		fk_Matrix	Ret;
-		int			i, j;
 
-		for(i = 0; i < 4; ++i) {
-			for(j = 0; j < 4; ++j) {
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 4; ++j) {
 				Ret.m[i][j] = d*m.m[i][j];
 			}
 		}
@@ -1077,10 +1067,9 @@ namespace FK {
 	fk_Matrix operator *(const fk_Matrix &m, double d)
 	{
 		fk_Matrix	Ret;
-		int			i, j;
 
-		for(i = 0; i < 4; ++i) {
-			for(j = 0; j < 4; ++j) {
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 4; ++j) {
 				Ret.m[i][j] = d*m.m[i][j];
 			}
 		}
@@ -1107,40 +1096,4 @@ fk_Vector fk_DivideVec(const fk_Vector &orgVec,
 
 	retVec = mat * orgVec;
 	return retVec;
-}
-
-fk_Angle::fk_Angle(double argH, double argP, double argB)
-{
-	h = argH;
-	p = argP;
-	b = argB;
-	return;
-}
-
-void fk_Angle::set(double argH, double argP, double argB)
-{
-	h = argH;
-	p = argP;
-	b = argB;
-	return;
-}
-
-void fk_Angle::Print(void)
-{
-	stringstream	ss;
-
-	ss << "Angle = (" << h << ", " << p << ", " << b << ")";
-	fk_PutError("fk_Angle", "Print", 1, ss.str());
-
-	return;
-}
-
-void fk_Angle::Print(string argStr)
-{
-	stringstream	ss;
-	
-	ss << "Angle(" << argStr << ") = (" << h << ", " << p << ", " << b << ")";
-	fk_PutError("fk_Angle", "Print", 2, ss.str());
-
-	return;
 }

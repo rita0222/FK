@@ -149,11 +149,7 @@ bool fk_Vector::operator ==(const fk_Vector &v) const
 
 bool fk_Vector::operator !=(const fk_Vector &v) const
 {
-	fk_Vector tmp(v.x - x, v.y - y, v.z - z);
-	if(tmp.dist2() < VECTOREPS) {
-		return false;
-	}
-	return true;
+	return !(*this == v);
 }
 
 bool fk_Vector::operator <(const fk_Vector &v) const
@@ -241,37 +237,31 @@ fk_Vector & fk_Vector::operator =(const fk_FVector &&tmp)
 
 fk_Vector & fk_Vector::operator *=(double d)
 {
-	x *= d;
-	y *= d;
-	z *= d;
-
+	*this = *this * d;
 	return *this;
 }
 
 fk_Vector & fk_Vector::operator /=(double d)
 {
-	x /= d;
-	y /= d;
-	z /= d;
-
+	*this = *this / d;
 	return *this;
 }
 
 fk_Vector & fk_Vector::operator +=(const fk_Vector &a)
 {
-	x += a.x;
-	y += a.y;
-	z += a.z;
-
+	*this = *this + a;
 	return *this;
 }
 
 fk_Vector & fk_Vector::operator -=(const fk_Vector &a)
 {
-	x -= a.x;
-	y -= a.y;
-	z -= a.z;
+	*this = *this - a;
+	return *this;
+}
 
+fk_Vector & fk_Vector::operator ^=(const fk_Vector &a)
+{
+	*this = *this ^ a;
 	return *this;
 }
 
@@ -282,7 +272,7 @@ double fk_Vector::dist(void) const
 
 double fk_Vector::dist2(void) const
 {
-	return(x*x + y*y + z*z);
+	return((*this) * (*this));
 }
 
 void fk_Vector::init(void)
@@ -304,17 +294,12 @@ bool fk_Vector::isZero(void) const
 bool fk_Vector::normalize(void)
 {
 	double	dd = dist2();
-	double	d;
 
 	if(dd < VECTOREPS) {
 		return false;
 	}
-	d = sqrt(dd);
 
-	x /= d;
-	y /= d;
-	z /= d;
-
+	*this /= sqrt(dd);
 	return true;
 }
 
@@ -420,12 +405,7 @@ bool fk_HVector::operator ==(const fk_HVector &a) const
 
 bool fk_HVector::operator !=(const fk_HVector &a) const
 {
-	if(a.getV() == this->getV() &&
-	   a.w - w < VECTOREPS && a.w - w > -VECTOREPS) {
-		return false;
-	} else {
-		return true;
-	}
+	return !(*this == a);
 }
 
 fk_HVector & fk_HVector::operator =(const fk_HVector &tmp)
@@ -518,8 +498,7 @@ void fk_HVector::set(double dx, double dy, double dz, double dw)
 
 fk_Vector fk_HVector::getV(void) const
 {
-	fk_Vector p(x, y, z);
-	return(p);
+	return fk_Vector(x, y, z);
 }	 
 
 void fk_HVector::setw(double dw)
@@ -628,37 +607,37 @@ fk_FVector & fk_FVector::operator =(const fk_Vector &&v)
 namespace FK {
 	double operator *(const fk_Vector &a, const fk_Vector &b)
 	{
-		return(a.x*b.x + a.y*b.y + a.z*b.z);
+		return (a.x*b.x + a.y*b.y + a.z*b.z);
 	}
 
 	double operator *(const fk_HVector &a, const fk_HVector &b)
 	{
-		return(a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w);
+		return (a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w);
 	}
 
 	fk_Vector operator +(const fk_Vector &a, const fk_Vector &b)
 	{
-		return (fk_Vector(a) += b);
+		return fk_Vector(a.x + b.x, a.y + b.y, a.z + b.z);
 	}
 
 	fk_Vector operator -(const fk_Vector &a, const fk_Vector &b)
 	{
-		return (fk_Vector(a) -= b);
+		return fk_Vector(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 
 	fk_Vector operator *(const fk_Vector &a, double t)
 	{
-		return (fk_Vector(a) *= t);
+		return fk_Vector(a.x * t, a.y * t, a.z * t);
 	}
 
 	fk_Vector operator *(double t, const fk_Vector &a)
 	{
-		return (fk_Vector(a) *= t);
+		return (a * t);
 	}
 
 	fk_Vector operator /(const fk_Vector &a, double t)
 	{
-		return (fk_Vector(a) /= t);
+		return (a * (1.0/t));
 	}
 
 	fk_Vector operator ^(const fk_Vector &a, const fk_Vector &b)
@@ -696,10 +675,15 @@ bool fk_TexCoord::operator ==(const fk_TexCoord &c) const
 	return false;
 }
 
+bool fk_TexCoord::operator !=(const fk_TexCoord &c) const
+{
+	return !(*this == c);
+}
+
 void fk_TexCoord::set(double argX, double argY)
 {
-	x = static_cast<float>(argX);
-	y = static_cast<float>(argY);
+	x = float(argX);
+	y = float(argY);
 	return;
 }
 

@@ -109,9 +109,9 @@ namespace FK {
 	 *	\sa fk_Matrix, fk_GenMatrix, fk_Vector, fk_HVector, fk_Angle
 	 */
 	class fk_OrthoMatrix {
-		friend class	fk_Matrix;
-		friend class	fk_Vector;
-		friend class	fk_HVector;
+		friend class fk_Matrix;
+		friend class fk_Vector;
+		friend class fk_HVector;
 
 	public:
 
@@ -123,7 +123,7 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_OrthoMatrix(const fk_OrthoMatrix &);
-
+		fk_OrthoMatrix(const fk_OrthoMatrix &&);
 
 		//! デストラクタ
 		~fk_OrthoMatrix();
@@ -139,7 +139,7 @@ namespace FK {
 		 *
 		 *	このとき、M_org は変化しません。
 		 */
-		fk_OrthoMatrix	operator !(void) const;
+		fk_OrthoMatrix operator !(void) const;
 
 		//! 成分参照演算子
 		/*!
@@ -188,7 +188,7 @@ namespace FK {
 		 *		直交行列であることが保証できない操作を行う場合は、
 		 *		fk_OrthoMatrix ではなく fk_Matrix を用いてください。
 		 */
-		double *		operator [](int);
+		double * operator [](int);
 
 		//@}
 
@@ -208,7 +208,7 @@ namespace FK {
 		 *	ここでの比較は、各成分の比較において
 		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
-		bool	operator ==(const fk_OrthoMatrix &) const;
+		bool operator ==(const fk_OrthoMatrix &) const;
 
 		//! 異値比較演算子
 		/*!
@@ -223,14 +223,15 @@ namespace FK {
 		 *	ここでの比較は、各成分の比較において
 		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
-		bool	operator !=(const fk_OrthoMatrix &) const;
+		bool operator !=(const fk_OrthoMatrix &) const;
 		//@}
 
 		//! \name 代入演算子 
 		//@{
 
 		//! 単純代入演算子
-		fk_OrthoMatrix &		operator =(const fk_OrthoMatrix &);
+		fk_OrthoMatrix & operator =(const fk_OrthoMatrix &);
+		fk_OrthoMatrix & operator =(const fk_OrthoMatrix &&);
 
 		//! 行列積代入演算子
 		/*!
@@ -248,7 +249,7 @@ namespace FK {
 		 *		\f$ \mathbf{M}_2\mathbf{M}_1 \f$ を
 		 *		\f$ \mathbf{M}_1 \f$ に代入したいときには、この演算子は利用できません。
 		 */
-		fk_OrthoMatrix &		operator *=(const fk_OrthoMatrix &);
+		fk_OrthoMatrix & operator *=(const fk_OrthoMatrix &);
 
 		//@}
 
@@ -258,7 +259,7 @@ namespace FK {
 		/*!
 		 *	行列を単位行列に初期化します。
 		 */
-		void			init(void);
+		void init(void);
 
 		//! 成分設定関数
 		/*!
@@ -278,7 +279,7 @@ namespace FK {
 		 *		直交行列であることが保証できない操作を行う場合は、
 		 *		fk_OrthoMatrix ではなく fk_Matrix を用いてください。
 		 */
-		void			set(int row, int col, double value);
+		void set(int row, int col, double value);
 
 		//! 行ベクトル成分設定関数1
 		/*!
@@ -299,7 +300,7 @@ namespace FK {
 		 *	\param[in]	row		行番号
 		 *	\param[in]	V		行ベクトル
 		 */
-		void			setRow(int row, const fk_Vector &V);
+		void setRow(int row, const fk_Vector &V);
 
 		//! 行ベクトル成分設定関数2
 		/*!
@@ -320,7 +321,7 @@ namespace FK {
 		 *	\param[in]	row		行番号
 		 *	\param[in]	V		行ベクトル
 		 */
-		void			setRow(int row, const fk_HVector &V);
+		void setRow(int row, const fk_HVector &V);
 
 		//! 列ベクトル成分設定関数1
 		/*!
@@ -341,7 +342,7 @@ namespace FK {
 		 *	\param[in]	col		行番号
 		 *	\param[in]	V		行ベクトル
 		 */
-		void			setCol(int col, const fk_Vector &V);
+		void setCol(int col, const fk_Vector &V);
 	
 		//! 列ベクトル成分設定関数2
 		/*!
@@ -362,7 +363,7 @@ namespace FK {
 		 *	\param[in]	col		行番号
 		 *	\param[in]	V		行ベクトル
 		 */
-		void			setCol(int col, const fk_HVector &V);
+		void setCol(int col, const fk_HVector &V);
 
 		//! 行ベクトル成分取得関数
 		/*!
@@ -373,7 +374,7 @@ namespace FK {
 		 *
 		 *	\return 行ベクトル
 		 */
-		fk_HVector		getRow(int row);
+		fk_HVector getRow(int row);
 
 		//! 列ベクトル成分取得関数
 		/*!
@@ -384,7 +385,7 @@ namespace FK {
 		 *
 		 *	\return 列ベクトル
 		 */
-		fk_HVector		getCol(int col);
+		fk_HVector getCol(int col);
 
 		//! 逆行列化関数
 		/*!
@@ -397,7 +398,7 @@ namespace FK {
 		 *	\note
 		 *		直交行列の場合、この関数は negate() でもまったく同様に動作します。
 		 */
-		bool			inverse(void);
+		bool inverse(void);
 
 		//! 転置化関数
 		/*!
@@ -406,7 +407,7 @@ namespace FK {
 		 *	\note
 		 *		直交行列の場合、この関数は inverse() でもまったく同様に動作します。
 		 */
-		void			negate(void);
+		void negate(void);
 
 		//! 座標軸回転行列生成関数
 		/*!
@@ -415,7 +416,7 @@ namespace FK {
 		 *	\param[in]	rad		回転角。単位は弧度法(ラジアン)です。
 		 *	\param[in]	axis	座標軸。 fk_X, fk_Y, fk_Z のいずれかになります。
 		 */
-		void			makeRot(double rad, fk_Axis axis);
+		void makeRot(double rad, fk_Axis axis);
 
 		//! 平行移動行列生成関数1
 		/*!
@@ -425,7 +426,7 @@ namespace FK {
 		 *	\param[in]	y	移動ベクトルの y 成分
 		 *	\param[in]	z	移動ベクトルの z 成分
 		 */
-		void			makeTrans(double x, double y, double z);	
+		void makeTrans(double x, double y, double z);	
 
 		//! 平行移動行列生成関数2
 		/*!
@@ -433,7 +434,7 @@ namespace FK {
 		 *
 		 *	\param[in]	V	移動ベクトル
 		 */
-		void			makeTrans(const fk_Vector &V);
+		void makeTrans(const fk_Vector &V);
 
 		//! オイラー角回転行列生成関数1
 		/*!
@@ -444,7 +445,7 @@ namespace FK {
 		 *	\param[in]	p	ピッチ角
 		 *	\param[in]	b	バンク角
 		 */
-		void			makeEuler(double h, double p, double b);
+		void makeEuler(double h, double p, double b);
 
 		//! オイラー角回転行列生成関数2
 		/*!
@@ -453,28 +454,26 @@ namespace FK {
 		 *
 		 *	\param[in]	angle	オイラー角
 		 */
-		void			makeEuler(const fk_Angle &angle);
+		void makeEuler(const fk_Angle &angle);
 		//@}
 	
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		GLfloat *			GetBuffer(void);
-		void				Print(std::string = "") const;
+		GLfloat * GetBuffer(void);
+		void Print(std::string = "") const;
 
 #endif
 
 		//! \name 二項演算子
 		//@{
-		friend fk_HVector		operator *(const fk_OrthoMatrix &,
-										   const fk_HVector &);
-		friend fk_OrthoMatrix	operator *(const fk_OrthoMatrix &,
-										   const fk_OrthoMatrix &);
-		friend fk_Matrix	operator *(const fk_Matrix &, const fk_OrthoMatrix &);
-		friend fk_Matrix	operator *(const fk_OrthoMatrix &, const fk_Matrix &);
-		friend fk_Matrix	operator +(const fk_Matrix &, const fk_OrthoMatrix &);
-		friend fk_Matrix	operator +(const fk_OrthoMatrix &, const fk_Matrix &);
-		friend fk_Matrix	operator -(const fk_Matrix &, const fk_OrthoMatrix &);
-		friend fk_Matrix	operator -(const fk_OrthoMatrix &, const fk_Matrix &);
+		friend fk_HVector operator *(const fk_OrthoMatrix &, const fk_HVector &);
+		friend fk_OrthoMatrix operator *(const fk_OrthoMatrix &, const fk_OrthoMatrix &);
+		friend fk_Matrix operator *(const fk_Matrix &, const fk_OrthoMatrix &);
+		friend fk_Matrix operator *(const fk_OrthoMatrix &, const fk_Matrix &);
+		friend fk_Matrix operator +(const fk_Matrix &, const fk_OrthoMatrix &);
+		friend fk_Matrix operator +(const fk_OrthoMatrix &, const fk_Matrix &);
+		friend fk_Matrix operator -(const fk_Matrix &, const fk_OrthoMatrix &);
+		friend fk_Matrix operator -(const fk_OrthoMatrix &, const fk_Matrix &);
 		//@}
 
 	protected:
@@ -483,8 +482,8 @@ namespace FK {
 
 		double	m[4][4];
 		float	*buf;
-		bool	updateStatus;
-		void	MultVec(fk_HVector &, const fk_HVector &) const;
+		bool updateStatus;
+		void MultVec(fk_HVector &, const fk_HVector &) const;
 
 #endif
 	};
@@ -501,8 +500,8 @@ namespace FK {
 	 *	FK では行列体系として MV 系を採用しており、
 	 *	行列のベクトル変換の際には行列が左側、ベクトルが右側である必要があります。
 	 */
-	fk_HVector		operator *(const fk_OrthoMatrix &,
-							   const fk_HVector &);
+	fk_HVector operator *(const fk_OrthoMatrix &, const fk_HVector &);
+
 	//! 行列積二項演算子1
 	/*!
 	 *	直交行列 M1, M2 の行列積 M3 を求めるには、
@@ -516,8 +515,7 @@ namespace FK {
 	 *	\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
 	 *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
 	 */
-	fk_OrthoMatrix	operator *(const fk_OrthoMatrix &,
-							   const fk_OrthoMatrix &);
+	fk_OrthoMatrix operator *(const fk_OrthoMatrix &, const fk_OrthoMatrix &);
 
 	//! 行列積二項演算子2
 	/*!
@@ -532,7 +530,7 @@ namespace FK {
 	 *	\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
 	 *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
 	 */
-	fk_Matrix	operator *(const fk_Matrix &, const fk_OrthoMatrix &);
+	fk_Matrix operator *(const fk_Matrix &, const fk_OrthoMatrix &);
 
 	//! 行列積二項演算子3
 	/*!
@@ -547,7 +545,7 @@ namespace FK {
 	 *	\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
 	 *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
 	 */
-	fk_Matrix	operator *(const fk_OrthoMatrix &, const fk_Matrix &);
+	fk_Matrix operator *(const fk_OrthoMatrix &, const fk_Matrix &);
 
 	//! 行列和二項演算子1
 	/*!
@@ -560,7 +558,7 @@ namespace FK {
 	 *	\note
 	 *	行列和は交換法則が成り立ちます。
 	 */
-	fk_Matrix	operator +(const fk_Matrix &, const fk_OrthoMatrix &);
+	fk_Matrix operator +(const fk_Matrix &, const fk_OrthoMatrix &);
 
 	//! 行列和二項演算子2
 	/*!
@@ -573,7 +571,7 @@ namespace FK {
 	 *	\note
 	 *	行列和は交換法則が成り立ちます。
 	 */
-	fk_Matrix	operator +(const fk_OrthoMatrix &, const fk_Matrix &);
+	fk_Matrix operator +(const fk_OrthoMatrix &, const fk_Matrix &);
 
 	//! 行列差二項演算子1
 	/*!
@@ -586,7 +584,7 @@ namespace FK {
 	 *	\note
 	 *	行列差は交換法則が成り立ちません。
 	 */
-	fk_Matrix	operator -(const fk_Matrix &, const fk_OrthoMatrix &);
+	fk_Matrix operator -(const fk_Matrix &, const fk_OrthoMatrix &);
 
 	//! 行列差二項演算子2
 	/*!
@@ -599,8 +597,7 @@ namespace FK {
 	 *	\note
 	 *	行列差は交換法則が成り立ちません。
 	 */
-	fk_Matrix	operator -(const fk_OrthoMatrix &, const fk_Matrix &);
-
+	fk_Matrix operator -(const fk_OrthoMatrix &, const fk_Matrix &);
 
 
 	//! 一般4元正方行列を管理するクラス
@@ -628,8 +625,8 @@ namespace FK {
 	 */
 	class fk_Matrix : public fk_OrthoMatrix {
 
-		friend class	fk_Vector;
-		friend class	fk_HVector;
+		friend class fk_Vector;
+		friend class fk_HVector;
 
 	public:
 
@@ -641,6 +638,7 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_Matrix(const fk_Matrix &);
+		fk_Matrix(const fk_Matrix &&);
 
 		//! \name 単項演算子
 		//@{
@@ -653,7 +651,7 @@ namespace FK {
 		 *	このとき、M_org は変化しません。
 		 *	もし M_org が特異行列であった場合は、M_new は M_org と同値となります。
 		 */
-		fk_Matrix		operator !(void) const;
+		fk_Matrix operator !(void) const;
 
 		//@}
 
@@ -672,7 +670,7 @@ namespace FK {
 		 *	ここでの比較は、各成分の比較において
 		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
-		bool	operator ==(const fk_Matrix &) const;
+		bool operator ==(const fk_Matrix &) const;
 
 		//! 異値比較演算子
 		/*!
@@ -687,7 +685,7 @@ namespace FK {
 		 *	ここでの比較は、各成分の比較において
 		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
-		bool	operator !=(const fk_Matrix &) const;
+		bool operator !=(const fk_Matrix &) const;
 
 		//@}
 
@@ -695,10 +693,12 @@ namespace FK {
 		//@{
 
 		//! 単純代入演算子
-		fk_Matrix &		operator =(const fk_Matrix &);
+		fk_Matrix & operator =(const fk_Matrix &);
+		fk_Matrix & operator =(const fk_Matrix &&);
 
 		//! fk_OrthoMatrix 型からの単純代入演算子
-		fk_Matrix &		operator =(const fk_OrthoMatrix &);
+		fk_Matrix & operator =(const fk_OrthoMatrix &);
+		fk_Matrix & operator =(const fk_OrthoMatrix &&);
 
 		//! 行列和代入演算子1
 		/*!
@@ -711,14 +711,14 @@ namespace FK {
 		 *
 		 *		M1 = M1 + M2;
 		 */
-		fk_Matrix &		operator +=(const fk_Matrix &);
+		fk_Matrix & operator +=(const fk_Matrix &);
 
 		//! 行列和代入演算子2
 		/*!
 		 *	「行列和代入演算子1」と同義ですが、
 		 *	右辺が fk_OrthoMatrix 型の場合に対応する演算子です。
 		 */
-		fk_Matrix &		operator +=(const fk_OrthoMatrix &);
+		fk_Matrix & operator +=(const fk_OrthoMatrix &);
 
 		//! 行列差代入演算子1
 		/*!
@@ -731,14 +731,14 @@ namespace FK {
 		 *
 		 *		M1 = M1 - M2;
 		 */
-		fk_Matrix &		operator -=(const fk_Matrix &);
+		fk_Matrix & operator -=(const fk_Matrix &);
 
 		//! 行列差代入演算子2
 		/*!
 		 *	「行列差代入演算子1」と同義ですが、
 		 *	右辺が fk_OrthoMatrix 型の場合に対応する演算子です。
 		 */
-		fk_Matrix &		operator -=(const fk_OrthoMatrix &);
+		fk_Matrix & operator -=(const fk_OrthoMatrix &);
 
 		//! 行列積代入演算子1
 		/*!
@@ -756,14 +756,14 @@ namespace FK {
 		 *	\f$ \mathbf{M}_2\mathbf{M}_1 \f$ を
 		 *	\f$ \mathbf{M}_1 \f$ に代入したいときには、この演算子は利用できません。
 		 */
-		fk_Matrix &		operator *=(const fk_Matrix &);
+		fk_Matrix & operator *=(const fk_Matrix &);
 
 		//! 行列積代入演算子2
 		/*!
 		 *	「行列積代入演算子1」と同義ですが、
 		 *	右辺が fk_OrthoMatrix 型の場合に対応する演算子です。
 		 */
-		fk_Matrix &		operator *=(const fk_OrthoMatrix &);
+		fk_Matrix & operator *=(const fk_OrthoMatrix &);
 
 		//@}
 
@@ -777,7 +777,7 @@ namespace FK {
 		 *	\return 正則であれば true を、そうでなければ false を返します。
 		 *	\sa inverse(), isSingular()
 		 */
-		bool			isRegular(void) const;
+		bool isRegular(void) const;
 
 		//! 特異判定関数
 		/*!
@@ -789,7 +789,7 @@ namespace FK {
 		 *
 		 *	\sa inverse(), isRegular()
 		 */
-		bool			isSingular(void) const;
+		bool isSingular(void) const;
 
 		//! 逆行列化関数
 		/*!
@@ -802,7 +802,7 @@ namespace FK {
 		 *
 		 *	\sa isRegular(), isSingular()
 		 */
-		bool			inverse(void);
+		bool inverse(void);
 
 		//! 反変変換行列化関数
 		/*!
@@ -816,7 +816,7 @@ namespace FK {
 		 *
 		 *	\sa inverse(), isRegular()
 		 */
-		bool			covariant(void);
+		bool covariant(void);
 
 		//! 拡大縮小行列生成関数1
 		/*!
@@ -826,7 +826,7 @@ namespace FK {
 		 *	\param[in]	y	y方向の拡大縮小率
 		 *	\param[in]	z	z方向の拡大縮小率
 		 */
-		void			makeScale(double x, double y, double z);
+		void makeScale(double x, double y, double z);
 
 		//! 拡大縮小行列生成関数2
 		/*!
@@ -835,32 +835,32 @@ namespace FK {
 		 *
 		 *	\param[in]	V	拡大縮小率ベクトル
 		 */
-		void			makeScale(const fk_Vector &V);
+		void makeScale(const fk_Vector &V);
 
 		//! 透視投影変換行列生成関数
 		/*!
 		 */
-		void			makePerspective(double fovy, 
+		void makePerspective(double fovy, 
 										double near, double far,
 										double aspect);
 
-		void			makeFrustum(double left, double right,
+		void makeFrustum(double left, double right,
 									double bottom, double top,
 									double near, double far);
 
-		void			makeOrtho(double left, double right,
+		void makeOrtho(double left, double right,
 								  double bottom, double top,
 								  double near, double far);
 		//@}
 
 		//! \name 二項演算子 
 		//@{
-		friend fk_HVector	operator *(const fk_Matrix &, const fk_HVector &);
-		friend fk_Matrix	operator *(const fk_Matrix &, const fk_Matrix &);
-		friend fk_Matrix	operator *(double, const fk_Matrix &);
-		friend fk_Matrix	operator *(const fk_Matrix &, double);
-		friend fk_Matrix	operator +(const fk_Matrix &, const fk_Matrix &);
-		friend fk_Matrix	operator -(const fk_Matrix &, const fk_Matrix &);
+		friend fk_HVector operator *(const fk_Matrix &, const fk_HVector &);
+		friend fk_Matrix operator *(const fk_Matrix &, const fk_Matrix &);
+		friend fk_Matrix operator *(double, const fk_Matrix &);
+		friend fk_Matrix operator *(const fk_Matrix &, double);
+		friend fk_Matrix operator +(const fk_Matrix &, const fk_Matrix &);
+		friend fk_Matrix operator -(const fk_Matrix &, const fk_Matrix &);
 		//@}
 	};
 
@@ -875,7 +875,7 @@ namespace FK {
 	 *	FK では行列体系として MV 系を採用しており、
 	 *	行列のベクトル変換の際には行列が左側、ベクトルが右側である必要があります。
 	 */
-	fk_HVector	operator *(const fk_Matrix &, const fk_HVector &);
+	fk_HVector operator *(const fk_Matrix &, const fk_HVector &);
 
 	//! 行列積二項演算子
 	/*!
@@ -890,7 +890,7 @@ namespace FK {
 	 *		\f$ \mathbf{M}_1\mathbf{M}_2 \f$ と
 	 *		\f$ \mathbf{M}_2\mathbf{M}_1 \f$ は一般的に結果が異なります。
 	 */
-	fk_Matrix	operator *(const fk_Matrix &, const fk_Matrix &);
+	fk_Matrix operator *(const fk_Matrix &, const fk_Matrix &);
 
 	//! 行列実数倍二項演算子1
 	/*!
@@ -901,7 +901,7 @@ namespace FK {
 	 *
 	 *	なお、行列と実数の順番は逆でも構いません。
 	 */
-	fk_Matrix	operator *(double, const fk_Matrix &);
+	fk_Matrix operator *(double, const fk_Matrix &);
 
 	//! 行列実数倍二項演算子2
 	/*!
@@ -912,7 +912,7 @@ namespace FK {
 	 *
 	 *	なお、行列と実数の順番は逆でも構いません。
 	 */
-	fk_Matrix	operator *(const fk_Matrix &, double);
+	fk_Matrix operator *(const fk_Matrix &, double);
 
 	//! 行列和二項演算子
 	/*!
@@ -925,7 +925,7 @@ namespace FK {
 	 *	\note
 	 *		行列和は交換法則が成り立ちます。
 	 */
-	fk_Matrix	operator +(const fk_Matrix &, const fk_Matrix &);
+	fk_Matrix operator +(const fk_Matrix &, const fk_Matrix &);
 
 	//! 行列差二項演算子
 	/*!
@@ -938,7 +938,7 @@ namespace FK {
 	 *	\note
 	 *		行列差は交換法則が成り立ちません。
 	 */
-	fk_Matrix	operator -(const fk_Matrix &, const fk_Matrix &);
+	fk_Matrix operator -(const fk_Matrix &, const fk_Matrix &);
 }
 
 #endif	/* !__FK_MATRIX_HEADER__ */

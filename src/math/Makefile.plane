@@ -1,6 +1,7 @@
 BASENAME	= math
 
 LIBSRCS		= \
+			Angle.cxx \
 			FVecArray.cxx \
 			GenMatrix.cxx \
 			GenVector.cxx \

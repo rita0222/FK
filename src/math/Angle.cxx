@@ -69,96 +69,77 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#include <FK/Angle.h>
+#include <FK/Error.H>
+#include <sstream>
 
+using namespace std;
+using namespace FK;
 
-#ifndef __FK_ANGLE_HEADER__
-#define __FK_ANGLE_HEADER__
-
-#include <FK/Base.h>
-
-namespace FK {
-
-	//! オイラー角を表すクラス
-	/*!
-	 *	オイラー角は、3次元での姿勢を表す方法の一つで、
-	 *	空間中の全ての姿勢を表現することが可能です。
-	 *	FK におけるオイラー角は Z-X-Y 座標系を意味します。
-	 *	ヘディング角を h、ピッチ角を p、バンク角を b としたとき、
-	 *	このオイラー角は以下の回転変換と同意です。
-	 *	\f[
-	 *		R_y(-h) \cdot R_x(p) \cdot R_z(-b)
-	 *	\f]
-	 *	角度の単位はすべて弧度法(ラジアン)です。
-	 */
-
-	class fk_Angle {
-	public:
-
-		double h; //!< ヘディング角
-		double p; //!< ピッチ角
-		double b; //!< バンク角
-
-		//! コンストラクタ
-		/*!
-		 *	引数としてヘディング角、ピッチ角、バンク角を入力します。
-		 *	単位は弧度法(ラジアン)です。
-		 *
-		 *	\param[in]	h	ヘディング角
-		 *	\param[in]	p	ピッチ角
-		 *	\param[in]	b	バンク角
-		 */
-		fk_Angle(double h = 0.0, double p = 0.0, double b = 0.0);
-
-		//! コピーコンストラクタ
-		fk_Angle(const fk_Angle &);
-		fk_Angle(const fk_Angle &&);
-
-		//! 同値比較演算子 
-		/*!
-		 *	fk_Angle では、以下のように記述することで、
-		 *	a1 と a2 が等しいかどうかを判断できます。
-		 *
-		 *		if(a1 == a2) {
-		 *			:
-		 *			:
-		 *		}
-		 *
-		 *	ここでの比較は、ある程度の計算誤差を許容します。
-		 */
-		bool operator ==(const fk_Angle &) const;
-
-		//! 異値比較演算子 
-		/*!
-		 *	fk_Angle では、以下のように記述することで、
-		 *	a1 と a2 が等しくないかどうかを判断できます。
-		 *
-		 *		if(a1 != a2) {
-		 *			:
-		 *			:
-		 *		}
-		 *
-		 *	ここでの比較は、ある程度の計算誤差を許容します。
-		 */
-		bool operator !=(const fk_Angle &) const;
-
-		//! 単純代入演算子
-		fk_Angle & operator =(const fk_Angle &);
-		fk_Angle & operator =(const fk_Angle &&);
-
-		//! 設定用関数
-		/*!
-		 *	\param[in]	h	ヘディング角
-		 *	\param[in]	p	ピッチ角
-		 *	\param[in]	b	バンク角
-		 */
-		void set(double h, double p, double b);
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-		void Print(void);
-		void Print(std::string);
-#endif
-
-	};
+fk_Angle::fk_Angle(double argH, double argP, double argB)
+{
+	h = argH;
+	p = argP;
+	b = argB;
+	return;
 }
 
-#endif // !__FK_ANGLE_HEADER__
+fk_Angle::fk_Angle(const fk_Angle &argAngle)
+{
+	h = argAngle.h;
+	p = argAngle.p;
+	b = argAngle.b;
+	return;
+}
+
+fk_Angle::fk_Angle(const fk_Angle &&argAngle)
+{
+	h = argAngle.h;
+	p = argAngle.p;
+	b = argAngle.b;
+	return;
+}
+
+fk_Angle & fk_Angle::operator =(const fk_Angle &tmp)
+{
+	h = tmp.h;
+	p = tmp.p;
+	b = tmp.b;
+	return *this;
+}
+
+fk_Angle & fk_Angle::operator =(const fk_Angle &&tmp)
+{
+	h = tmp.h;
+	p = tmp.p;
+	b = tmp.b;
+	return *this;
+}
+
+void fk_Angle::set(double argH, double argP, double argB)
+{
+	h = argH;
+	p = argP;
+	b = argB;
+	return;
+}
+
+void fk_Angle::Print(void)
+{
+	stringstream	ss;
+
+	ss << "Angle = (" << h << ", " << p << ", " << b << ")";
+	fk_PutError("fk_Angle", "Print", 1, ss.str());
+
+	return;
+}
+
+void fk_Angle::Print(string argStr)
+{
+	stringstream	ss;
+	
+	ss << "Angle(" << argStr << ") = (" << h << ", " << p << ", " << b << ")";
+	fk_PutError("fk_Angle", "Print", 2, ss.str());
+
+	return;
+}
