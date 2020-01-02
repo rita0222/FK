@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\math\Angle.cxx" />
     <ClCompile Include="..\..\src\math\FVecArray.cxx" />
     <ClCompile Include="..\..\src\math\GenMatrix.cxx" />
     <ClCompile Include="..\..\src\math\GenVector.cxx" />

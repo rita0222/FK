@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\src\shape\Closedline.cxx" />
     <ClCompile Include="..\..\src\shape\Command.cxx" />
     <ClCompile Include="..\..\src\shape\Cone.cxx" />
+    <ClCompile Include="..\..\src\shape\CostTable.cxx" />
     <ClCompile Include="..\..\src\shape\Curve.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXAnimation.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXData.cxx" />
@@ -110,6 +111,7 @@
     <ClInclude Include="..\..\FK\Closedline.h" />
     <ClInclude Include="..\..\FK\Command.H" />
     <ClInclude Include="..\..\FK\Cone.h" />
+    <ClInclude Include="..\..\FK\CostTable.H" />
     <ClInclude Include="..\..\FK\Curve.h" />
     <ClInclude Include="..\..\FK\D3DXAnimation.H" />
     <ClInclude Include="..\..\FK\D3DXData.H" />

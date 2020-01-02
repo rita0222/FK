@@ -25,6 +25,9 @@
     <ClCompile Include="..\..\src\math\Vector.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\math\Angle.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

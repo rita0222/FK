@@ -75,6 +75,10 @@
 
 #include <FK/GraphNode.h>
 
+#ifdef ERROR
+#undef ERROR
+#endif
+
 namespace FK {
 
 	enum class fk_CostStatus {

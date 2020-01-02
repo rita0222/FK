@@ -232,6 +232,9 @@
     <ClCompile Include="..\..\src\shape\EdgePair.cxx">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\shape\CostTable.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -462,6 +465,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\GraphNode.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\CostTable.H">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
