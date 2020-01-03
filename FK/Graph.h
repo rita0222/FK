@@ -201,8 +201,54 @@ namespace FK {
 		 *							type で fk_CostType::LENGTH を指定していた場合、
 		 *							この値は無視されます。
 		 */
+
+		//! コストテーブル生成関数
+		/*!
+		 *	コストテーブルを作成します。
+		 *	指定した ID で既に作成済であった場合は false を返し、初期化は行いません。
+		 *
+		 *	\param[in]	tableID		コストテーブル ID
+		 *
+		 *	\param[in]	type		コスト値のタイプを設定します。
+		 *							- fk_CostType::INT \n
+		 *								コストが int 型となります。
+		 *							- fk_CostType::DOUBLE \n
+		 *								コストが double 型となります。
+		 *							- fk_CostType::LENGTH \n
+		 *								コストは辺の長さとなり、
+		 *								内部では double 型として扱われます。
+		 *							.
+		 *
+		 *	\return		作成に成功すれば true を、失敗すれば false を返します。
+		 */
 		bool makeCostTable(unsigned int tableID, fk_CostType type);
-		bool setCostDirection(unsigned int tableID, fk_CostDirection mode);
+
+		//! コスト算出方向指定関数
+		/*!
+		 *	コストの算出方向を指定します。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *
+		 *	\param[in]	direction	コストを出発ノード側から算出する場合は
+		 *							fk_CostDirection::FORWARD を指定します。
+		 *							コストを目標ノード側から算出する場合は
+		 *							fk_CostDirection::BACK を指定します。
+		 *
+		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool setCostDirection(unsigned int tableID, fk_CostDirection direction);
+
+		//! 辺コストID対応指定関数
+		/*!
+		 *	コストテーブルに対し、コスト値算出に利用する辺のコストIDを指定します。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *
+		 *	\param[in]	edgeCostID 	利用する辺のコスト値 ID を指定します。
+		 *							makeCostTable() の第2引数に
+		 *							fk_CostType::LENGTH を指定していた場合、
+		 *							この値は無視されます。
+		 */
 		bool setEdgeCostID(unsigned int tableID, unsigned int edgeCostID);
 
 		//! ノード内コストID参照関数
