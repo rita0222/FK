@@ -84,30 +84,42 @@ fk_CostTable::fk_CostTable(void)
 	type = fk_CostType::LENGTH;
 	nodeCostID = edgeCostID = 0;
 	queueList.clear();
-	backMode = true;
+	direction = fk_CostDirection::BACK;
 }
 
 fk_CostTable::~fk_CostTable()
 {
 }
 
-void fk_CostTable::setTable(fk_CostType argType, bool argMode,
-							unsigned int argNodeID, unsigned int argEdgeID)
+void fk_CostTable::setType(fk_CostType argType)
 {
 	type = argType;
-	backMode = argMode;
-	nodeCostID = argNodeID;
-	edgeCostID = argEdgeID;
 }
+
+void fk_CostTable::setDirection(fk_CostDirection argD)
+{
+	direction = argD;
+}
+
+void fk_CostTable::setNodeCostID(unsigned int argID)
+{
+	nodeCostID = argID;
+}
+
+void fk_CostTable::setEdgeCostID(unsigned int argID)
+{
+	edgeCostID = argID;
+}
+
 
 fk_CostType fk_CostTable::getType(void)
 {
 	return type;
 }
 
-bool fk_CostTable::getMode(void)
+fk_CostDirection fk_CostTable::getDirection(void)
 {
-	return backMode;
+	return direction;
 }
 
 unsigned int fk_CostTable::getNodeCostID(void)

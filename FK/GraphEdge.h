@@ -86,6 +86,11 @@ namespace FK {
 		LENGTH
 	};
 
+	enum class fk_CostDirection {
+		FORWARD,
+		BACK
+	};
+
 	//! グラフ構造の辺を制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造における辺を制御する機能を提供します。

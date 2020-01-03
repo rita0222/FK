@@ -88,10 +88,13 @@ namespace FK {
 
 		std::string print(void);
 
-		void setTable(fk_CostType, bool, unsigned int, unsigned int);
+		void setType(fk_CostType);
+		void setDirection(fk_CostDirection);
+		void setNodeCostID(unsigned int);
+		void setEdgeCostID(unsigned int);
 
 		fk_CostType getType(void);
-		bool getMode(void);
+		fk_CostDirection getDirection(void);
 		unsigned int getNodeCostID(void);
 		unsigned int getEdgeCostID(void);
 
@@ -116,7 +119,7 @@ namespace FK {
 		fk_CostType type;
 		unsigned int edgeCostID, nodeCostID;
 		std::list<fk_GraphNode *> queueList;
-		bool backMode;
+		fk_CostDirection direction;
 	};
 }
 

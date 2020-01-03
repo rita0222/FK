@@ -201,8 +201,9 @@ namespace FK {
 		 *							type で fk_CostType::LENGTH を指定していた場合、
 		 *							この値は無視されます。
 		 */
-		void setCostMode(unsigned int tableID, bool backMode,
-						 fk_CostType type, unsigned int edgeCostID = 0);
+		bool makeCostTable(unsigned int tableID, fk_CostType type);
+		bool setCostDirection(unsigned int tableID, fk_CostDirection mode);
+		bool setEdgeCostID(unsigned int tableID, unsigned int edgeCostID);
 
 		//! ノード内コストID参照関数
 		/*!
@@ -286,7 +287,7 @@ namespace FK {
 		unsigned int intCostMax, doubleCostMax;
 
 		void NodeResize(unsigned int);
-		void TableReady(unsigned int);
+		bool TableReady(unsigned int);
 		void DoubleUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
 		void IntUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
 	};

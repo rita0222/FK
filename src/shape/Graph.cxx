@@ -216,23 +216,49 @@ bool fk_Graph::deleteEdge(fk_GraphEdge *argE)
 	return true;
 }
 
-void fk_Graph::TableReady(unsigned int argID)
+bool fk_Graph::TableReady(unsigned int argID)
 {
+	if(argID < tableArray.size()) {
+		if(tableArray[argID] != nullptr) return false;
+	}
+
 	while(argID >= tableArray.size()) tableArray.push_back(nullptr);
-	if(tableArray[argID] == nullptr) tableArray[argID] = new fk_CostTable();
+	tableArray[argID] = new fk_CostTable();
+	return true;
 }
 
-void fk_Graph::setCostMode(unsigned int argTableID, bool argBackMode,
-						   fk_CostType argType, unsigned int argCostID)
+bool fk_Graph::makeCostTable(unsigned int argTableID, fk_CostType argType)
 {
-	TableReady(argTableID);
+	if(TableReady(argTableID) == false) return false;
+	fk_CostTable *table = tableArray[argTableID];
+
+	table->setType(argType);
 	if(argType == fk_CostType::INT) {
-		tableArray[argTableID]->setTable(argType, argBackMode, intCostMax, argCostID);
+		table->setNodeCostID(intCostMax);
 		++intCostMax;
 	} else {
-		tableArray[argTableID]->setTable(argType, argBackMode, doubleCostMax, argCostID);
+		table->setNodeCostID(doubleCostMax);
 		++doubleCostMax;
 	}
+	return true;
+}
+
+bool fk_Graph::setCostDirection(unsigned int argTableID, fk_CostDirection argD)
+{
+	if(argTableID >= tableArray.size()) return false;
+	if(tableArray[argTableID] == nullptr) return false;
+
+	tableArray[argTableID]->setDirection(argD);
+	return true;
+}
+
+bool fk_Graph::setEdgeCostID(unsigned int argTableID, unsigned int argEdgeID)
+{
+	if(argTableID >= tableArray.size()) return false;
+	if(tableArray[argTableID] == nullptr) return false;
+
+	tableArray[argTableID]->setEdgeCostID(argEdgeID);
+	return true;
 }
 
 unsigned int fk_Graph::getNodeCostID(unsigned int argTableID)
@@ -272,7 +298,9 @@ bool fk_Graph::initCostTable(unsigned int argID)
 	fk_CostTable *tbl = tableArray[argID];
 	if(tbl == nullptr) return false;
 	if(tbl->getStart() == nullptr) return false;
-	if(tbl->getMode() == true && tbl->getGoal()->empty() == true) return false;
+	if(tbl->getDirection() == fk_CostDirection::BACK && tbl->getGoal()->empty() == true) {
+		return false;
+	}
 
 	tbl->queueClear();
 
@@ -280,7 +308,7 @@ bool fk_Graph::initCostTable(unsigned int argID)
 
 	if(tbl->getType() == fk_CostType::INT) {
 		for(auto node : nodeArray) node->clearIntCost(costID);
-		if(tbl->getMode() == true) {
+		if(tbl->getDirection() == fk_CostDirection::BACK) {
 			for(auto node : *(tbl->getGoal())) {
 				node->setIntCost(costID, 0);
 				tbl->addQueue(node);
@@ -291,7 +319,7 @@ bool fk_Graph::initCostTable(unsigned int argID)
 		}
 	} else {
 		for(auto node : nodeArray) node->clearDoubleCost(costID);
-		if(tbl->getMode() == true) {
+		if(tbl->getDirection() == fk_CostDirection::BACK) {
 			for(auto node : *(tbl->getGoal())) {
 				node->setDoubleCost(costID, 0.0);
 				tbl->addQueue(node);
@@ -311,7 +339,7 @@ fk_CostStatus fk_Graph::updateCostTable(unsigned int argID)
 	fk_CostTable *tbl = tableArray[argID];
 	if(tbl == nullptr) return fk_CostStatus::ERROR;
 	if(tbl->getStart() == nullptr) return fk_CostStatus::ERROR;
-	if(tbl->getMode() == true && tbl->getGoal()->empty() == true) {
+	if(tbl->getDirection() == fk_CostDirection::BACK && tbl->getGoal()->empty() == true) {
 		return fk_CostStatus::ERROR;
 	}
 
@@ -320,7 +348,7 @@ fk_CostStatus fk_Graph::updateCostTable(unsigned int argID)
 	fk_GraphNode *cur = tbl->queuePopFront();
 
 	list<fk_GraphEdge *> edgeList;
-	if(tbl->getMode() == true) {
+	if(tbl->getDirection() == fk_CostDirection::BACK) {
 		cur->getEndEdge(&edgeList);
 	} else {
 		cur->getStartEdge(&edgeList);
