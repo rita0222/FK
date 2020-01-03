@@ -388,7 +388,7 @@ namespace FK_CLI
 		}
 		
 		//! \name カメラ制御メソッド
-		//@{
+		///@{
 
 		//! カメラ初期化メソッド
 		/*!
@@ -398,10 +398,11 @@ namespace FK_CLI
 		 *	\sa		CameraModel
 		 */
 		void SetCameraDefault(void);
-		//@}
+		///@}
 
 		//! \name シーン制御メソッド
-		//@{
+		///@{
+
 		//! シーン設定メソッド
 		/*!
 		 *	ウィンドウに対して、別の fk_Scene のオブジェクトをセットします。
@@ -558,10 +559,11 @@ namespace FK_CLI
 		 *	\sa ClearModel(bool)
 		 */
 		void ClearModel(void);
-		//@}
+		///@}
 
 		//! \name 描画制御メソッド
-		//@{
+		///@{
+
 		//! ウィンドウ生成メソッド
 		/*!
 		 *	ウィンドウを開いて表示します。
@@ -611,10 +613,10 @@ namespace FK_CLI
 		 *	\sa Open(), Close(), FPS
 		 */
 		bool Update(void);
-		//@}
+		///@}
 
 		//! \name グリッド・座標軸表示設定メソッド
-		//@{
+		///@{
 
 		//! グリッド・軸設定メソッド1
 		/*!
@@ -653,10 +655,10 @@ namespace FK_CLI
 		 *	\sa ShowGuide()
 		 */
 		void HideGuide(void);
-		//@}
+		///@}
 
 		//! \name キーボード状態取得メソッド
-		//@{
+		///@{
 
 		//! 通常キー状態取得メソッド1
 		/*!
@@ -794,10 +796,10 @@ namespace FK_CLI
 		 *	\sa GetKeyStatus(), Update()
 		 */
 		bool GetSpecialKeyStatus(fk_Key keyCode, fk_Switch status);
-		//@}
+		///@}
 
 		//! \name マウス状態取得メソッド
-		//@{
+		///@{
 
 		//! マウスボタン状態取得メソッド
 		/*!
@@ -853,10 +855,10 @@ namespace FK_CLI
 		 *		false の場合は固定しません。
 		 */
 		void ProcMouseView(fk_Model^ camera, double x, double y, bool lockSW);
-		//@}
+		///@}
 
 		//! \name 投影座標・空間座標変換メソッド
-		//@{
+		///@{
 
 		//! 投影平面から任意平面への射影点算出メソッド
 		/*!
@@ -914,10 +916,10 @@ namespace FK_CLI
 		 *		fk_Perspective, fk_Ortho, fk_Frustum
 		 */
 		bool	GetWindowPosition(fk_Vector^ pos_3D, fk_Vector^ pos_2D);
-		//@}
+		///@}
 
 		//! \name スクリーンショットメソッド
-		//@{
+		///@{
 
 		//! 描画画像ファイル出力メソッド
 		/*!
@@ -957,7 +959,7 @@ namespace FK_CLI
 		 */
 		bool	SnapImage(fk_Image^ image);
 
-		//@}
+		///@}
 #ifndef FK_DOXYGEN_USER_PROCESS
 		event fk_DrawCallback^ PreInit;
 		event fk_DrawCallback^ PostInit;

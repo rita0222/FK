@@ -191,7 +191,7 @@ namespace FK_CLI
 		virtual bool Equals(Object^ O) override;
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 単項マイナス演算子
 		/*!
@@ -229,10 +229,10 @@ namespace FK_CLI
 		 */
 		static fk_Quaternion^ operator~(fk_Quaternion^ argQ);
 
-		//@}
+		///@}
 
 		//! \name 二項演算子
-		//@{
+		///@{
 
 		//! 四元数積二項演算子
 		/*!
@@ -356,10 +356,10 @@ namespace FK_CLI
 		 *		そのため、括弧を適切に使用しないと本来の意図と異なる結果を生じるおそれがあります。
 		 */
 		static double operator^(fk_Quaternion^ Q1, fk_Quaternion^ Q2);
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 積代入演算子
 		/*!
@@ -431,7 +431,7 @@ namespace FK_CLI
 		 */
 		static void operator -= (fk_Quaternion^ Q1, fk_Quaternion^ Q2);
 
-		//@}
+		///@}
 		//////////////////// 
 
 		//! 四元数スカラー部成分プロパティ

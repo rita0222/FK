@@ -212,7 +212,7 @@ namespace FK_CLI
 		}					
 
 		//! \name 再生制御メソッド
-		//@{
+		///@{
 
 		//! オーディオデータ読み込みメソッド
 		/*!
@@ -315,10 +315,10 @@ namespace FK_CLI
 		 */
 		void Pause(void);
 
-		//@}
+		///@}
 		
 		//! \name ループ再生制御メソッド
-		//@{
+		///@{
 
 		//! ループエリア設定メソッド
 		/*!
@@ -354,10 +354,10 @@ namespace FK_CLI
 		 *	\sa LoopMode, SetLoopArea(), GetLoopStartTime()
 		 */
 		double GetLoopEndTime(void);
-		//@}
+		///@}
 
 		//! \name システム全体初期化・制御メソッド
-		//@{
+		///@{
 
 		//! オーディオシステム初期化メソッド
 		/*!
@@ -404,10 +404,10 @@ namespace FK_CLI
 		 *	\sa Stop(), End()
 		 */
 		static void Sleep(double time);
-		//@}
+		///@}
 
 		//! \name サラウンドリスナー制御メソッド
-		//@{
+		///@{
 
 		//! サラウンドリスナー同期モデル設定メソッド
 		/*!
@@ -439,7 +439,7 @@ namespace FK_CLI
 		 *	\sa SetListenerModel(fk_Model^)
 		 */
 		static fk_Model^ GetListenerModel(void);
-		//@}
+		///@}
 	};
 }
 

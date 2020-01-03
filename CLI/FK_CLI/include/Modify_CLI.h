@@ -120,7 +120,7 @@ namespace FK_CLI
 		~fk_Modify();
 #endif
 		//! \name 位相操作メソッド
-		//@{
+		///@{
 
 		//! 頂点削除メソッド
 		/*!
@@ -264,10 +264,10 @@ namespace FK_CLI
 		 *	\return		削除可能であれば true を、不可能であれば false を返します。
 		 */
 		bool CheckContract(fk_Edge ^E);
-		//@}
+		///@}
 
 		//! \name 多角形生成メソッド
-		//@{
+		///@{
 
 		//! 多角形生成メソッド1
 		/*!
@@ -381,10 +381,10 @@ namespace FK_CLI
 		 *		つまり、多角形の始点と新規追加点の間に稜線を生成します。
 		 */
 		void PushPolygonVertex(fk_Vector ^pos, bool openFlg);
-		//@}
+		///@}
 
 		//! \name 頂点群生成メソッド
-		//@{
+		///@{
 
 		//! 頂点群生成メソッド
 		/*!
@@ -405,10 +405,10 @@ namespace FK_CLI
 		 */
 		fk_Vertex^ PushPointVertex(fk_Vector ^pos);
 
-		//@}
+		///@}
 
 		//! \name 線分生成メソッド
-		//@{
+		///@{
 
 		//! 線分群生成メソッド
 		/*!
@@ -485,10 +485,10 @@ namespace FK_CLI
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool ChangeLine(int edgeID, fk_Vector^ pos1, fk_Vector^ pos2);
-		//@}
+		///@}
 
 		//! \name 直方体形状生成メソッド
-		//@{
+		///@{
 
 		//! 直方体生成メソッド
 		/*!
@@ -592,10 +592,10 @@ namespace FK_CLI
 		 *	\sa MakeBlock(), fk_Block
 		 */
 		void SetBlockScale(double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name 円形状生成メソッド
-		//@{
+		///@{
 
 		//! 円形状生成メソッド
 		/*!
@@ -657,10 +657,10 @@ namespace FK_CLI
 		 *	\sa MakeCircle(), fk_Circle
 		 */
 		void SetCircleScale(double scale);
-		//@}
+		///@}
 
 		//! \name 球形状制御メソッド
-		//@{
+		///@{
 
 		//! 球形状生成メソッド
 		/*!
@@ -720,10 +720,10 @@ namespace FK_CLI
 		 *	\sa MakeSphere(), fk_Sphere
 		 */
 		void SetSphereScale(double scale);
-		//@}
+		///@}
 
 		//! \name 正多角柱(円柱)形状制御メソッド
-		//@{
+		///@{
 
 		//! 正多角柱(円柱)形状生成メソッド
 		/*!
@@ -799,10 +799,10 @@ namespace FK_CLI
 		 *	\sa MakePrism(), fk_Prism
 		 */
 		void SetPrismHeight(double height);
-		//@}
+		///@}
 
 		//! \name 正多角錐(円錐)形状制御メソッド
-		//@{
+		///@{
 
 		//! 正多角錐(円錐)形状生成メソッド
 		/*!
@@ -864,10 +864,10 @@ namespace FK_CLI
 		 *	\sa MakeCone(), fk_Cone
 		 */
 		void SetConeHeight(double height);
-		//@}
+		///@}
 
 		//! \name 頂点移動メソッド
-		//@{
+		///@{
 
 		//! 頂点移動メソッド1-1
 		/*!
@@ -926,10 +926,11 @@ namespace FK_CLI
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
 		bool MoveVPosition(int vertexID, double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name 細分割曲面生成メソッド
-		//@{
+		///@{
+
 		//! 細分割曲面生成メソッド
 		/*!
 		 *	このメソッドは、細分割曲面 (Subdivision Surface) 手法に基づいた面分割を行います。
@@ -940,7 +941,7 @@ namespace FK_CLI
 		 *	\param[in]	count		分割回数。
 		 */
 		void SubDivShape(int count);
-		//@}
+		///@}
 	};
 }
 

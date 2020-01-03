@@ -531,7 +531,7 @@ namespace FK_CLI {
 		}
 		
 		//! \name フォント関連メソッド
-		//@{
+		///@{
 
 		//! フォント情報入力メソッド
 		/*!
@@ -554,10 +554,10 @@ namespace FK_CLI {
 		 *		プログラムの配布時には必ずライセンスの確認を行ってください。
 		 */
 		bool	InitFont(String^ fontFileName);
-		//@}
+		///@}
 
 		//! \name 文字配置事前設定関連メソッド
-		//@{
+		///@{
 		
 		//! オフセット設定メソッド
 		/*!
@@ -623,10 +623,10 @@ namespace FK_CLI {
 		 *	\sa SetOffset()
 		 */
 		int		GetRightOffset(void);
-		//@}
+		///@}
 
 		//! \name 文字列入力メソッド
-		//@{
+		///@{
 
 		//! 文字列データ入力メソッド
 		/*!
@@ -760,10 +760,10 @@ namespace FK_CLI {
 		 */
 		int		GetLineStartYPos(int num);
 
-		//@}
+		///@}
 
 		//! \name 文字送り関連メソッド
-		//@{
+		///@{
 
 		//! 文字送り実行メソッド
 		/*!
@@ -808,10 +808,10 @@ namespace FK_CLI {
 		 *	\sa SendingMode, Send(), Finish()
 		 */
 		bool	Clear(void);
-		//@}
+		///@}
 
 		//! \name キャッシュ関連メソッド
-		//@{
+		///@{
 
 		//! キャッシュ初期化メソッド
 		/*!
@@ -821,7 +821,7 @@ namespace FK_CLI {
 		 *	\sa CacheMode
 		 */
 		static void	ClearCache(void);
-		//@}
+		///@}
 	};
 }
 

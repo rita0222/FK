@@ -370,7 +370,7 @@ namespace FK_CLI
 		}
 
 		//! \name 描画処理・描画領域制御メソッド
-		//@{
+		///@{
 
 		//! 描画更新メソッド
 		/*!
@@ -427,10 +427,10 @@ namespace FK_CLI
 		 */
 		void		ClearModel(void);
 
-		//@}
+		///@}
 		
 		//! \name 形状個別描画属性・マテリアル設定メソッド
-		//@{
+		///@{
 
 		//! 個別形状描画モード設定メソッド
 		/*!
@@ -605,10 +605,10 @@ namespace FK_CLI
 		 */
 		void		SetVertexColor(int ID, fk_Color^ col);
 
-		//@}
+		///@}
 
 		//! \name カメラ角度・倍率制御メソッド
-		//@{
+		///@{
 
 		//! 形状位置設定メソッド1
 		/*!
@@ -729,10 +729,10 @@ namespace FK_CLI
 		 */
 		void		SetUpvec(int ID, double x, double y, double z);
 
-		//@}
+		///@}
 
 		//! \name 描画画像取り込みメソッド
-		//@{
+		///@{
 
 		//! 描画画像ファイル出力メソッド
 		/*!
@@ -761,7 +761,7 @@ namespace FK_CLI
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool		SnapImage(fk_Image^ image);
-		//@}
+		///@}
 	};
 }
 

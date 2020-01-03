@@ -369,7 +369,7 @@ namespace FK_CLI {
 		static void operator *=(fk_Matrix^ M1, fk_Matrix^ M2);
 
 		//! \name 成分参照・取得系メソッド
-		//@{
+		///@{
 
 		//! 単位行列化メソッド
 		/*!
@@ -504,10 +504,10 @@ namespace FK_CLI {
 		 */
 		fk_HVector^ GetCol(int col);
 
-		//@}
+		///@}
 
 		//! \name 逆行列・転置系メソッド
-		//@{
+		///@{
 
 		//! 逆行列化メソッド
 		/*!
@@ -568,11 +568,10 @@ namespace FK_CLI {
 		 */
 		bool IsSingular();
 
-		//@}
+		///@}
 
 		//! \name 変換行列生成系メソッド
-		//@{
-
+		///@{
 
 		//! 座標軸回転行列生成メソッド
 		/*!

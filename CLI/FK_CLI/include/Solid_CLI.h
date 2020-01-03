@@ -199,7 +199,8 @@ namespace FK_CLI
 		bool CompareShape(fk_Solid^ solid);
 
 		//! \name ファイル入力メソッド
-		//@{
+		///@{
+
 		//! SMFファイル入力メソッド
 		/*!
 		 *	SMF形式のファイルからデータを入力します。

@@ -103,7 +103,7 @@ namespace FK_CLI
 #endif
 		
 		//! \name 頂点に関連するメソッド
-		//@{
+		///@{
 
 		//! 頂点接続半稜線参照メソッド
 		/*!
@@ -210,10 +210,10 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetOneLOnV(fk_Vertex^ V);
 
-		//@}
+		///@}
 
 		//! \name 半稜線に関連するメソッド
-		//@{
+		///@{
 
 		//! 半稜線接続頂点参照メソッド
 		/*!
@@ -256,10 +256,10 @@ namespace FK_CLI
 		 */
 		fk_Loop^			GetParentLOnH(fk_Half^ H);
 
-		//@}
+		///@}
 	
 		//! \name 稜線に関連するメソッド
-		//@{
+		///@{
 
 		//! 右側頂点参照メソッド
 		/*!
@@ -339,10 +339,10 @@ namespace FK_CLI
 		 */
 		fk_EdgeStatus		GetEdgeStatus(fk_Edge^ E);
 
-		//@}
+		///@}
 	
 		//! \name ループに関連するメソッド
-		//@{
+		///@{
 
 		//! ループ所属頂点参照メソッド
 		/*!
@@ -464,7 +464,7 @@ namespace FK_CLI
 		 *	\return		L に隣接するループの配列
 		 */
 		cli::array<fk_Loop^>^	GetAllNeighborLOnL(fk_Loop^ L);
-		//@}
+		///@}
 	};
 }
 

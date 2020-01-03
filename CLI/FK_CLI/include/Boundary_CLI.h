@@ -251,7 +251,7 @@ namespace FK_CLI
 		}
 		
 		//! \name カプセル型制御メソッド
-		//@{
+		///@{
 
 		//! カプセル型設定メソッド
 		/*!
@@ -308,7 +308,7 @@ namespace FK_CLI
 		 *	\sa	SetCapsule(), fk_Model::AdjustCapsule()
 		 */
 		fk_Vector^ GetCapsuleEndPos(void);
-		//@}
+		///@}
 	};
 }
 

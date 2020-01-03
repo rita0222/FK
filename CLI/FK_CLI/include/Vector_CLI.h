@@ -180,7 +180,7 @@ namespace FK_CLI
 		}
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 単項マイナス演算子 
 		/*!
@@ -190,10 +190,10 @@ namespace FK_CLI
 		 */
 		static fk_Vector^ operator-(fk_Vector^);
 
-		//@}
+		///@}
 
 		//! \name 二項演算子
-		//@{
+		///@{
 		
 		//! 内積二項演算子
 		/*!
@@ -297,10 +297,10 @@ namespace FK_CLI
 		 */
 		static fk_Vector^ operator^(fk_Vector^, fk_Vector^);
 
-		//@}
+		///@}
 		
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 実数積代入演算子
 		/*!
@@ -356,7 +356,7 @@ namespace FK_CLI
 		 */
 		static void operator -= (fk_Vector^, fk_Vector^);
 
-		//@}
+		///@}
 
 		//! 同値比較メソッド1
 		/*!

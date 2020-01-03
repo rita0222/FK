@@ -291,7 +291,7 @@ namespace FK_CLI
 		}
 		
 		//! \name 拡大縮小関連メソッド
-		//@{
+		///@{
 
 		//! 軸方向絶対倍率設定メソッド
 		/*!
@@ -399,10 +399,10 @@ namespace FK_CLI
 		 *		PrdScale(double, fk_Axis), PrdScale(double, double, double), Scale
 		 */
 		double GetScale(fk_Axis axis);
-		//@}
+		///@}
 		
 		//! \name 姿勢制御メソッド
-		//@{
+		///@{
 
 		//! グローバル座標系注視点設定メソッド1
 		/*!
@@ -691,7 +691,7 @@ namespace FK_CLI
 		 *	\sa GlAngle(), LoFocus(), LoUpvec(), fk_Angle
 		 */
 		bool LoAngle(double h, double p, double b);
-		//@}
+		///@}
 	};
 };
 

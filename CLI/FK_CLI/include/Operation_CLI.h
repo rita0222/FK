@@ -161,7 +161,7 @@ namespace FK_CLI
 		}
 		
 		//! \name オイラー操作メソッド
-		//@{
+		///@{
 
 		//! 頂点生成メソッド
 		/*!
@@ -433,10 +433,10 @@ namespace FK_CLI
 		 *	この操作の逆操作はこのメソッド自身となります。
 		 */
 		void		NegateBody(void);
-		//@}
+		///@}
 
 		//! \name 履歴操作メソッド
-		//@{
+		///@{
 
 		//! 履歴マーク設定メソッド
 		/*!
@@ -515,7 +515,7 @@ namespace FK_CLI
 		 *	\sa UndoHistory()
 		 */
 		bool		RedoHistory(void);
-		//@}
+		///@}
 	};
 }
 

@@ -214,7 +214,7 @@ namespace FK_CLI
 		}
 
 		//! \name 二項演算子
-		//@{
+		///@{
 
 		//! 色要素和二項演算子
 		/*!
@@ -276,10 +276,10 @@ namespace FK_CLI
 		 */
 		static fk_Color^ operator/(fk_Color^, double);
 
-		//@}
+		///@}
 
 		//! \name 代入演算子
-		//@{
+		///@{
 		
 		//! 実数積代入演算子
 		/*!
@@ -344,7 +344,7 @@ namespace FK_CLI
 		 */
 		static void operator -= (fk_Color^, fk_Color^);
 
-		//@}
+		///@}
 		
 		//! 同値比較メソッド1
 		/*!

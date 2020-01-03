@@ -169,7 +169,7 @@ namespace FK_CLI
 		bool CloneCharactor(fk_Performer^ perf);
 
 		//! \name データ入力メソッド
-		//@{
+		///@{
 
 		//! MQO オブジェクト読み込みメソッド
 		/*!
@@ -207,10 +207,10 @@ namespace FK_CLI
 		 */
 		bool LoadMotionData(String^ filename);
 
-		//@}
+		///@}
 
 		//! \name シーン登録制御メソッド
-		//@{
+		///@{
 
 		//! シーン登録解除メソッド
 		/*!
@@ -224,10 +224,10 @@ namespace FK_CLI
 		 */
 		void RemoveScene(fk_Scene^ scene);
 
-		//@}
+		///@}
 
 		//! \name 各種オブジェクト取得メソッド
-		//@{
+		///@{
 
 		//! ベースモデル取得メソッド
 		/*!
@@ -281,10 +281,10 @@ namespace FK_CLI
 		 *	\sa GetBaseModel(), GetObjectModel()
 		 */
 		fk_Model^ GetJointModel(int id);
-		//@}
+		///@}
 
 		//! \name モーション再生制御メソッド
-		//@{
+		///@{
 
 		//! モーション再生位置取得メソッド
 		/*!
@@ -356,7 +356,7 @@ namespace FK_CLI
 		 *		終端に到達していたら true、していなかったら false が返ります。
 		 */
 		bool IsMotionFinished(int id);
-		//@}
+		///@}
 	};
 }
 

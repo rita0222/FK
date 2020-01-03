@@ -241,7 +241,7 @@ namespace FK_CLI
 		!fk_Model();
 
 		//! \name 基本情報プロパティ
-		//@{
+		///@{
 
 		//! ID プロパティ
 		/*!
@@ -283,10 +283,10 @@ namespace FK_CLI
 			fk_Model^ get();
 		}
 
-		//@}
+		///@}
 
 		//! \name 色・マテリアル関連プロパティ
-		//@{
+		///@{
 		
 		//! マテリアルプロパティ
 		/*!
@@ -367,10 +367,10 @@ namespace FK_CLI
 			double get();
 		}
 
-		//@}
+		///@}
 
 		//! \name 描画制御関連プロパティ
-		//@{
+		///@{
 
 		//! 描画モードプロパティ
 		/*!
@@ -551,7 +551,7 @@ namespace FK_CLI
 			fk_BlendFactor get(void);
 		}
 
-		//@}
+		///@}
 
 		//! \name 位置・姿勢・行列関連プロパティ
 
@@ -682,10 +682,10 @@ namespace FK_CLI
 			fk_Matrix^ get();
 		}
 
-		//@}
+		///@}
 
 		//! \name 干渉・衝突判定関連プロパティ
-		//@{
+		///@{
 
 		//! 干渉継続モード設定メソッド
 		/*!
@@ -767,7 +767,7 @@ namespace FK_CLI
 			bool get();
 		}
 
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -786,7 +786,7 @@ namespace FK_CLI
 		bool Equals(fk_Model^ argModel);
 #endif
 		//! \name 親子関係制御メソッド
-		//@{
+		///@{
 
 		//! 親モデル設定メソッド1
 		/*!
@@ -953,10 +953,10 @@ namespace FK_CLI
 		 *	\sa EntryChild(), DeleteChild()
 		 */
 		void DeleteChildren(void);
-		//@}
+		///@}
 
 		//! \name 状態保存制御メソッド
-		//@{
+		///@{
 
 		//! 位置・姿勢保存メソッド
 		/*!
@@ -993,10 +993,10 @@ namespace FK_CLI
 		 *	\sa	SnapShot(), Restore(void), IsCollision()
 		 */
 		bool Restore(double t);
-		//@}
+		///@}
 
 		//! \name 境界ボリューム自動設定メソッド
-		//@{
+		///@{
 
 		//! 境界球自動設定メソッド
 		/*!
@@ -1085,10 +1085,10 @@ namespace FK_CLI
 		 *		fk_Boundary::GetCapsuleEndPos()
 		 */
 		void AdjustCapsule(fk_Vector^ S, fk_Vector^ E);
-		//@}
+		///@}
 
 		//! \name 干渉判定・衝突判定メソッド
-		//@{
+		///@{
 
 		//! モデル間干渉判定メソッド
 		/*!
@@ -1174,10 +1174,10 @@ namespace FK_CLI
 		 * \sa IsInter(), InterMode, InterStatus
 		 */
 		void ResetInter(void);
-		//@}
+		///@}
 
 		//! \name 干渉自動停止制御メソッド
-		//@{
+		///@{
 
 		//! 干渉自動停止モデル登録メソッド
 		/*!
@@ -1216,11 +1216,11 @@ namespace FK_CLI
 		 *	\sa	InterStopMode, EntryInterModel(), DeleteInterModel()
 		 */
 		void ClearInterModel(void);
-		//@}
+		///@}
 
 		//////////////////////////////////////////////////////////////
 		//! \name 回転制御メソッド
-		//@{
+		///@{
 
 		//! グローバル座標系座標軸回転メソッド1
 		/*!
@@ -1691,10 +1691,10 @@ namespace FK_CLI
 		 */
 		bool LoRotateWithVec(double Ax, double Ay, double Az,
 							 double Bx, double By, double Bz, double theta);
-		//@}
+		///@}
 
 		//! \name 位置制御メソッド
-		//@{
+		///@{
 
 		//! グローバル座標系平行移動メソッド1
 		/*!
@@ -1801,7 +1801,7 @@ namespace FK_CLI
 		 *	\sa GlTranslate(double, double, double), LoTranslate(double, double, double)
 		 */
 		bool GlMoveTo(double x, double y, double z);
-		//@}
+		///@}
 	};
 }
 

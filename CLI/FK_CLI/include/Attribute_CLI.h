@@ -97,7 +97,7 @@ namespace FK_CLI
 #endif
 		
 		//! \name 属性設定用メソッド
-		//@{
+		///@{
 
 		//! キーが int 型、値が int 型である属性設定メソッド
 		/*!
@@ -188,10 +188,10 @@ namespace FK_CLI
 		 *	\sa GetAttrSS(), ExistAttrSS(), DeleteAttrSS()
 		 */
 		bool SetAttrSS(String ^key, String^ value);
-		//@}
+		///@}
 
 		//! \name 属性取得用メソッド
-		//@{
+		///@{
 
 		//! キーが int 型、値が int 型である属性参照メソッド
 		/*!
@@ -265,10 +265,11 @@ namespace FK_CLI
 		 *	\sa SetAttrSS(), ExistAttrSS(), DeleteAttrSS()
 		 */
 		String^ GetAttrSS(String^ key);
-		//@}
+		///@}
 		
 		//! \name 属性存在参照メソッド
-		//@{
+		///@{
+
 		//! キーが int 型、値が int 型である属性存在参照メソッド
 		/*!
 		 *	キーが int 型、値が int 型である属性に対し、
@@ -359,9 +360,10 @@ namespace FK_CLI
 		 */
 		bool ExistAttrSS(String^ key);
 
-		//@}
+		///@}
 		//! \name 属性消去メソッド
-		//@{	
+		///@{	
+
 		//! キーが int 型、値が int 型である属性消去メソッド
 		/*!
 		 *	キーが int 型、値が int 型である属性に対し、
@@ -451,7 +453,7 @@ namespace FK_CLI
 		 *	\sa SetAttrSS(), GetAttrSS(), ExistAttrSS()
 		 */
 		bool DeleteAttrSS(String^ key);
-		//@}
+		///@}
 	};
 }
 

@@ -193,7 +193,7 @@ namespace FK_CLI
 		}
 
 		//! \name 形状ファイル・形状データ入力メソッド
-		//@{
+		///@{
 
 		//! SMFファイル入力メソッド
 		/*!
@@ -1197,10 +1197,10 @@ namespace FK_CLI
 		 */
 		bool ReadD3DXFile(String^ fileName, String^ objName, int materialID);
 
-		//@}
+		///@}
 
 		//! \name 形状ファイル・形状データ出力メソッド
-		//@{
+		///@{
 		
 		//! VRML ファイル出力メソッド1-1
 		/*!
@@ -1375,10 +1375,10 @@ namespace FK_CLI
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
 		bool WriteMQOFile(String^ fileName);
-		//@}
+		///@}
 
 		//! \name 形状情報参照メソッド
-		//@{
+		///@{
 
 		//! 頂点位置ベクトル参照メソッド
 		/*!
@@ -1499,10 +1499,10 @@ namespace FK_CLI
 		 */
 		int GetElemMaterialID(int faceID);
 
-		//@}
+		///@}
 		
 		//! \name 形状操作メソッド
-		//@{
+		///@{
 		
 		//! 頂点移動メソッド1-1
 		/*!
@@ -1837,10 +1837,10 @@ namespace FK_CLI
 		 */
 		void Flush(void);
 
-		//@}
+		///@}
 		
 		//! \name 直方体形状制御メソッド
-		//@{
+		///@{
 
 		//! 直方体生成メソッド
 		/*!
@@ -1944,10 +1944,10 @@ namespace FK_CLI
 		 *	\sa MakeBlock(), fk_Block
 		 */
 		void SetBlockScale(double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name 円形状制御メソッド
-		//@{
+		///@{
 
 		//! 円形状生成メソッド
 		/*!
@@ -2009,10 +2009,10 @@ namespace FK_CLI
 		 *	\sa MakeCircle(), fk_Circle
 		 */
 		void SetCircleScale(double scale);
-		//@}
+		///@}
 
 		//! \name 球形状制御メソッド
-		//@{
+		///@{
 
 		//! 球形状生成メソッド
 		/*!
@@ -2073,10 +2073,10 @@ namespace FK_CLI
 		 *	\sa MakeSphere(), fk_Sphere
 		 */
 		void SetSphereScale(double scale);
-		//@}
+		///@}
 
 		//! \name 正多角柱(円柱)形状制御メソッド
-		//@{
+		///@{
 
 		//! 正多角柱(円柱)形状生成メソッド
 		/*!
@@ -2153,10 +2153,10 @@ namespace FK_CLI
 		 *	\sa MakePrism(), fk_Prism
 		 */
 		void SetPrismHeight(double height);
-		//@}
+		///@}
 
 		//! \name 正多角錐(円錐)形状制御メソッド
-		//@{
+		///@{
 
 		//! 正多角錐(円錐)形状生成メソッド
 		/*!
@@ -2218,10 +2218,10 @@ namespace FK_CLI
 		 *	\sa MakeCone(), fk_Cone
 		 */
 		void SetConeHeight(double height);
-		//@}
+		///@}
 
 		//! \name カプセル型形状制御メソッド
-		//@{
+		///@{
 
 		//! カプセル型形状生成メソッド
 		/*!
@@ -2256,10 +2256,10 @@ namespace FK_CLI
 		 *	\sa MakeCapsule(), fk_Capsule
 		 */
 		void SetCapsuleSize(double len, double rad);
-		//@}
+		///@}
 
 		//! \name 形状コピー操作メソッド
-		//@{
+		///@{
 
 		//! fk_Solid 出力メソッド
 		/*!
@@ -2282,7 +2282,7 @@ namespace FK_CLI
 		 *	\param[in]		ifs		複写元インスタンス
 		 */
 		void CloneShape(fk_IndexFaceSet^ ifs);
-		//@}
+		///@}
 	};
 }
 

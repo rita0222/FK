@@ -146,7 +146,7 @@ namespace FK_CLI
 		bool CheckTopology(void);
 
 		//! \name 位相要素存在判定
-		//@{
+		///@{
 
 		//! 頂点位相要素存在判定メソッド1
 		/*!
@@ -227,10 +227,10 @@ namespace FK_CLI
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
 		bool ExistLoop(int ID);
-		//@}
+		///@}
 
 		//! \name 位相要素参照
-		//@{
+		///@{
 
 		//! 頂点位相要素参照メソッド
 		/*!
@@ -396,10 +396,11 @@ namespace FK_CLI
 		 *		形状中にループが存在しなかった場合は、null を返します。
 		 */
 		fk_Loop^ GetLastL(void);
-		//@}
+		///@}
 
 		//! \name 位相要素格納コンテナ取得
-		//@{
+		///@{
+
 		//! 頂点コンテナ取得メソッド
 		/*!
 		 *	形状中の頂点要素を全て格納した array 型コンテナを取得します。
@@ -464,8 +465,8 @@ namespace FK_CLI
 		 *	\sa GetNextL(), LNum
 		 */
 		cli::array<fk_Loop^>^ GetLoopArray(void);
-		//@}
+		///@}
 	};
-	}
+}
 
 

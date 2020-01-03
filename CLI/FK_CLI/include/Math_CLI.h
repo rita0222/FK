@@ -103,7 +103,7 @@ namespace FK_CLI
 	public:
 
 		//! \name 基本数値演算メソッド
-		//@{
+		///@{
 
 		//! 数値範囲制限メソッド
 		/*!
@@ -119,10 +119,11 @@ namespace FK_CLI
 		 *		\f$a > max\f$ である場合は max を返します。
 		 */
 		static double Clamp(double a, double min, double max);
-		//@}
+		///@}
 
 		//! \name 幾何的演算メソッド
-		//@{
+		///@{
+
 		//! 直線上判定メソッド
 		/*!
 		 *	頂点 \f$\mathbf{P}\f$ が、
@@ -422,10 +423,10 @@ namespace FK_CLI
 		 *		x 成分、y 成分、z 成分とする fk_Vector 型の変数を返します。
 		 */
 		static fk_Vector^ DivideVec(fk_Vector^ V, fk_Vector^ A, fk_Vector^ B, fk_Vector^ C);
-		//@}
+		///@}
 
 		//! \name 四元数補間メソッド
-		//@{
+		///@{
 
 		//! 四元数単純線形補間メソッド
 		/*!
@@ -496,9 +497,10 @@ namespace FK_CLI
 		static fk_Quaternion^ QuatInterSphere(fk_Quaternion^ Q1,
 											 fk_Quaternion^ Q2,
 											 double t);
-		//@}
+		///@}
 		//! \name 乱数メソッド
-		//@{
+		///@{
+
 		//! 一様整数乱数取得メソッド
 		/*!
 		 *	任意の正の整数から一様乱数を取得します。
@@ -536,7 +538,7 @@ namespace FK_CLI
 		 *	\return 乱数値
 		 */
 		static double DRand(double m, double M);
-		//@}
+		///@}
 	};
 }
 
