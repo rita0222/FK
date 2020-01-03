@@ -222,7 +222,8 @@ namespace FK {
 		fk_ProjectBase *	getProjection(void) const;
 
 		//! \name 立体視モード制御関数
-		//@{
+		///@{
+
 		//! 立体視用カメラモデル登録関数
 		/*!
 		 *	立体視モードで使用するカメラモデルをディスプレイリストに登録します。
@@ -324,7 +325,7 @@ namespace FK {
 		 *	\sa fk_DisplayLink, setOGLStereoOverlayMode()
 		 */
 		bool	getStereoOverlayMode(void);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void	SetFinalizeMode(void);

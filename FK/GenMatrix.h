@@ -104,7 +104,7 @@ namespace FK {
 		fk_GenMatrix(const fk_GenMatrix &);
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 逆行列取得演算子
 		/*!
@@ -116,10 +116,10 @@ namespace FK {
 		 *	もし M_org が特異行列であった場合は、M_new は M_org と同値となります。
 		 */
 		fk_GenMatrix	operator !(void) const;
-		//@}
+		///@}
 
 		//! \name 比較演算子
-		//@{
+		///@{
 
 		//! 同値比較演算子
 		/*!
@@ -153,10 +153,11 @@ namespace FK {
 		 */
 		bool	operator !=(const fk_GenMatrix &) const;
 
-		//@}
+		///@}
 
 		//! \name 代入演算子
-		//@{
+		///@{
+
 		//! 単純代入演算子
 		fk_GenMatrix &		operator =(const fk_GenMatrix &);
 
@@ -209,10 +210,11 @@ namespace FK {
 		 *		M1 と M2 の次元数が異なる場合は、M1 は変化しません。
 		 */
 		fk_GenMatrix &		operator *=(const fk_GenMatrix &);
-		//@}
+		///@}
 
 		//! \name メンバ関数
-		//@{
+		///@{
+
 		//! 初期化関数
 		/*!
 		 *	行列を、引数の値に従って初期化を行います。
@@ -311,12 +313,12 @@ namespace FK {
 #endif
 
 		//! \name 二項演算子 
-		//@{
+		///@{
 		friend fk_GenVector	operator *(const fk_GenMatrix &, const fk_GenVector &);
 		friend fk_GenMatrix	operator +(const fk_GenMatrix &, const fk_GenMatrix &);
 		friend fk_GenMatrix	operator -(const fk_GenMatrix &, const fk_GenMatrix &);
 		friend fk_GenMatrix	operator *(const fk_GenMatrix &, const fk_GenMatrix &);
-		//@}
+		///@}
 	
 	private:
 		std::vector<double>					m;

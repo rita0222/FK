@@ -117,7 +117,7 @@ namespace FK {
 		~fk_AppWindow(void);
 
 		//! \name ウィンドウの各種設定関数
-		//@{
+		///@{
 
 		//! ウィンドウタイトル設定関数
 		/*!
@@ -211,10 +211,10 @@ namespace FK {
 		 *	\sa toFullscreen()
 		 */
 		void toWindow(void);
-		//@}
+		///@}
 
 		//! \name 描画制御関数
-		//@{
+		///@{
 
 		//! ウィンドウ生成関数
 		/*!
@@ -266,11 +266,12 @@ namespace FK {
 		 *	\param[in]		fps			FPS値
 		 */
 		void setFPS(int fps);
-		//@}
+		///@}
 
 
 		//! \name グリッド・座標軸表示設定関数
-		//@{
+		///@{
+
 		//! グリッド・軸設定関数
 		/*!
 		 *	画面内の座標系を表すグリッドと軸を指定します。
@@ -347,10 +348,10 @@ namespace FK {
 		 *	\sa showGuide(), setGuideGridWidth(), setGuideScale()
 		 */
 		void setGuideNum(int num);
-		//@}
+		///@}
 
 		//! \name カメラ制御関数
-		//@{
+		///@{
 
 		//! カメラ位置設定関数1
 		/*!
@@ -436,10 +437,11 @@ namespace FK {
 		 *			getCameraModel()
 		 */
 		void		setCameraDefault(void);
-		//@}
+		///@}
 
 		//! \name シーン制御関数
-		//@{
+		///@{
+
 		//! シーン設定関数1
 		/*!
 		 *	ウィンドウに対して、別の fk_Scene のオブジェクトをセットします。
@@ -727,11 +729,11 @@ namespace FK {
 		 *		省略あるいは false を渡した場合は、完全なクリアとなります。
 		 */
 		void clearModel(bool defCameraAndLight = false);
-		//@}
+		///@}
 
 
 		//! \name キーボード状態取得関数
-		//@{
+		///@{
 
 		//! 通常キー状態取得関数
 		/*!
@@ -795,10 +797,10 @@ namespace FK {
 		fk_Switch	getSpecialKeyStatus(fk_Key keyCode);
 		fk_Switch	getKeyStatus(char keyChar);
 #endif
-		//@}
+		///@}
 
 		//! \name マウス状態取得関数
-		//@{
+		///@{
 
 		//! マウスボタン状態取得関数
 		/*!
@@ -858,10 +860,10 @@ namespace FK {
 		 *		この関数は Windows 環境のみ対応しています。
 		 */
 		void				setCursorState(bool visible, bool center);
-		//@}
+		///@}
 
 		//! \name マウス制御支援関数
-		//@{
+		///@{
 
 		//! トラックボールモード制御関数
 		/*!
@@ -901,10 +903,10 @@ namespace FK {
 		 */
 		void procMouseView(fk_Model &camera, double spinX,
 						   double spinY, bool lockSW);
-		//@}
+		///@}
 
 		//! \name 投影座標・空間座標変換関数
-		//@{
+		///@{
 
 		//! 投影平面から任意平面への射影点算出関数
 		/*!
@@ -964,10 +966,10 @@ namespace FK {
 		 *		fk_Perspective, fk_Ortho, fk_Frustum
 		 */
 		bool	getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
-		//@}
+		///@}
 
 		//! \name スクリーンショット関数
-		//@{
+		///@{
 
 		//! 描画画像ファイル出力関数
 		/*!
@@ -1007,7 +1009,7 @@ namespace FK {
 		bool	snapImage(fk_Image *image,
 						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
-		//@}
+		///@}
 
 
 #ifndef FK_DOXYGEN_USER_PROCESS

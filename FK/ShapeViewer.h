@@ -165,7 +165,7 @@ namespace FK {
 		virtual ~fk_ShapeViewer();
 
 		//! \name 描画処理・描画領域制御関数
-		//@{
+		///@{
 
 		//! 描画更新関数
 		/*!
@@ -197,10 +197,11 @@ namespace FK {
 		 */
 		void setWindowSize(int w, int h);
 
-		//@}
+		///@}
 
 		//! \name 形状制御関数
-		//@{
+		///@{
+
 		//! 単独形状設定関数
 		/*!
 		 *	形状を描画対象として設定します。
@@ -252,10 +253,10 @@ namespace FK {
 		 */
 		void clearModel(void);
 
-		//@}
+		///@}
 
 		//! \name 全体描画属性制御関数
-		//@{
+		///@{
 
 		//! 描画モード設定関数
 		/*!
@@ -474,10 +475,10 @@ namespace FK {
 		 *	\return		中心の位置ベクトル
 		 */
 		fk_Vector getCenter(void);
-		//@}
+		///@}
 
 		//! \name 形状個別描画属性・マテリアル設定関数
-		//@{
+		///@{
 
 		//! 個別形状描画モード設定関数
 		/*!
@@ -661,10 +662,10 @@ namespace FK {
 		 */
 		void setVertexColor(int ID, fk_Color col);
 
-		//@}
+		///@}
 
 		//! \name カメラ角度・倍率制御関数
-		//@{
+		///@{
 
 		//! カメラヘッド角設定関数
 		/*!
@@ -752,10 +753,10 @@ namespace FK {
 		 */
 		double getScale(void);
 
-		//@}
+		///@}
 
 		//! \name 形状位置・姿勢制御関数
-		//@{
+		///@{
 
 		//! 形状位置設定関数1
 		/*!
@@ -875,10 +876,11 @@ namespace FK {
 		 *		setVec(int, fk_Vector)
 		 */
 		void setUpvec(int ID, double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name フレームレート制御関数
-		//@{
+		///@{
+
 		//! FPS設定関数
 		/*!
 		 *	update()をコールした際に調整するFPSを指定します。
@@ -889,11 +891,10 @@ namespace FK {
 		 *	\param[in]		fps			FPS値
 		 */
 		void setFPS(int fps);
-		//@}
+		///@}
 
 		//! \name 描画画像取り込み関数
-		//@{
-
+		///@{
 
 		//! 描画画像ファイル出力関数
 		/*!
@@ -940,10 +941,10 @@ namespace FK {
 
 		bool snapImage(fk_Image *image,
 					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
-		//@}
+		///@}
 
 		//! \name メッセージ出力制御関数
-		//@{
+		///@{
 
 		//! メッセージ出力モード設定関数
 		/*!
@@ -1000,7 +1001,7 @@ namespace FK {
 		 *	\sa fk_Window::clearBrowser()
 		 */
 		void clearBrowser(void);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void	SetFinalizeMode(void);

@@ -131,7 +131,7 @@ namespace FK {
 		virtual ~fk_MatrixAdmin();
 
 		//! \name 状態参照関数
-		//@{
+		///@{
 
 		//! 位置ベクトル取得関数
 		/*!
@@ -253,10 +253,10 @@ namespace FK {
 		 */
 		fk_OrthoMatrix	getInvBaseMatrix(void) const;
 
-		//@}
+		///@}
 
 		//! \name 拡大縮小関連関数
-		//@{
+		///@{
 
 		//! 全体絶対倍率設定関数
 		/*!
@@ -394,10 +394,10 @@ namespace FK {
 		 */
 		bool			getScaleMode(void) const;
 
-		//@}
+		///@}
 
 		//! \name 回転制御関数
-		//@{
+		///@{
 
 		//! グローバル座標系座標軸回転関数1
 		/*!
@@ -853,10 +853,10 @@ namespace FK {
 		 */
 		bool	loRotateWithVec_(double Ax, double Ay, double Az,
 								 double Bx, double By, double Bz, double theta);
-		//@}
+		///@}
 
 		//! \name 位置制御関数
-		//@{
+		///@{
 
 		//! グローバル座標系平行移動関数1
 		/*!
@@ -971,10 +971,10 @@ namespace FK {
 		 */
 		bool	glMoveTo_(double x, double y, double z);
 
-		//@}
+		///@}
 
 		//! \name 姿勢制御関数
-		//@{
+		///@{
 
 		//! グローバル座標系注視点設定関数1
 		/*!
@@ -1264,7 +1264,7 @@ namespace FK {
 		 */
 		bool			loAngle(double h, double p, double b);
 
-		//@}
+		///@}
 
 	protected:
 

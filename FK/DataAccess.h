@@ -125,7 +125,7 @@ namespace FK {
 		void				printTopology(void);
 
 		//! \name 位相要素存在判定
-		//@{
+		///@{
 
 		//! 頂点位相要素存在判定関数1
 		/*!
@@ -206,10 +206,10 @@ namespace FK {
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
 		bool				existLoop(int ID) const;
-		//@}
+		///@}
 
 		//! \name 位相要素参照
-		//@{
+		///@{
 
 		//! 頂点位相要素参照関数
 		/*!
@@ -386,10 +386,11 @@ namespace FK {
 		 *		形状中にループが存在しなかった場合は、nullptr を返します。
 		 */
 		fk_Loop *			getLastL(void) const;
-		//@}
+		///@}
 
 		//! \name 位相要素数参照
-		//@{
+		///@{
+
 		//! 頂点数参照関数
 		/*!
 		 *	形状中の頂点数を返します。
@@ -421,10 +422,10 @@ namespace FK {
 		 *	\return ループ数
 		 */
 		int					getLNum(void) const;
-		//@}
+		///@}
 
 		//! \name 位相要素格納コンテナ取得
-		//@{
+		///@{
 
 		//! 頂点コンテナ取得関数
 		/*!
@@ -490,7 +491,7 @@ namespace FK {
 		 *	\sa getNextL(), getLNum()
 		 */
 		void				getLoopList(std::list<fk_Loop *> *list);
-		//@}
+		///@}
 
 	private:
 		fk_DataBase			*ope_DB;

@@ -97,7 +97,8 @@ namespace FK {
 		virtual ~fk_Attribute();
 
 		//! \name 属性設定用関数
-		//@{
+		///@{
+
 		//! キーが int 型、値が int 型である属性設定関数
 		/*!
 		 *	キーを int 型、値を int 型とする属性を設定します。
@@ -187,10 +188,10 @@ namespace FK {
 		 *	\sa getAttrSS(), existAttrSS(), deleteAttrSS()
 		 */
 		bool	setAttrSS(const std::string key, const std::string value);
-		//@}
+		///@}
 
 		//! \name 属性取得用関数
-		//@{
+		///@{
 
 		//! キーが int 型、値が int 型である属性参照関数
 		/*!
@@ -264,10 +265,10 @@ namespace FK {
 		 *	\sa setAttrSS(), existAttrSS(), deleteAttrSS()
 		 */
 		std::string		getAttrSS(const std::string key) const;
-		//@}
+		///@}
 
 		//! \name 属性存在参照関数
-		//@{
+		///@{
 
 		//! キーが int 型、値が int 型である属性存在参照関数
 		/*!
@@ -358,10 +359,10 @@ namespace FK {
 		 *	\sa setAttrSS(), getAttrSS(), deleteAttrSS()
 		 */
 		bool	existAttrSS(const std::string key) const;
-		//@}
+		///@}
 
 		//! \name 属性消去関数
-		//@{
+		///@{
 
 		//! キーが int 型、値が int 型である属性消去関数
 		/*!
@@ -452,7 +453,7 @@ namespace FK {
 		 *	\sa setAttrSS(), getAttrSS(), existAttrSS()
 		 */
 		bool	deleteAttrSS(const std::string key);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 

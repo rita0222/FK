@@ -148,7 +148,7 @@ namespace FK {
 
 
 		//! \name フォント関連関数
-		//@{
+		///@{
 
 		//! フォント情報入力関数
 		/*!
@@ -346,10 +346,10 @@ namespace FK {
 		 *	\sa setShadowColor(fk_Color), fk_Color
 		 */
 		fk_Color	getShadowColor(void) const;
-		//@}
+		///@}
 
 		//! \name 描画属性関連関数
-		//@{
+		///@{
 
 		//! 文字色設定関数1
 		/*!
@@ -482,11 +482,11 @@ namespace FK {
 #endif
 
 	
-		//@}
+		///@}
 
 		//! \name 文字配置事前設定関連関数
+		///@{
 
-		//@{
 		//! 等幅表示設定関数
 		/*!
 		 * 	文字の等幅表示設定を行います。
@@ -758,10 +758,10 @@ namespace FK {
 		 */
 		int		getMinLineWidth(void) const;
 
-		//@}
+		///@}
 
 		//! \name 文字列入力関数
-		//@{
+		///@{
 
 		//! 文字列データ入力関数
 		/*!
@@ -804,10 +804,10 @@ namespace FK {
 		 */
 		bool	loadStrFile(const std::string fileName,
 							fk_StringCode code = fk_StringCode::UTF16);
-		//@}
+		///@}
 
 		//! \name 文字列入力後情報参照関数
-		//@{
+		///@{
 
 		//! 行数参照関数
 		/*!
@@ -933,10 +933,10 @@ namespace FK {
 		 */
 		int		getLineStartYPos(int num) const;
 
-		//@}
+		///@}
 
 		//! \name 文字送り関連関数
-		//@{
+		///@{
 	
 		//! 文字送りモード設定関数
 		/*!
@@ -1018,10 +1018,11 @@ namespace FK {
 		 */
 		bool	clear(void);
 
-		//@}
+		///@}
 
 		//! \name キャッシュ関連関数
-		//@{
+		///@{
+
 		//! キャッシュ機能制御関数
 		/*!
 		 *	この関数は、フォントデータのキャッシュの制御を行います。
@@ -1073,7 +1074,7 @@ namespace FK {
 		 *	\sa setCacheMode()
 		 */
 		static void		clearCache(void);
-		//@}
+		///@}
 
 	private:
 

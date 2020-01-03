@@ -144,7 +144,7 @@ namespace FK {
 		virtual ~fk_Vector() {}
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 単項マイナス演算子 
 		/*!
@@ -154,10 +154,10 @@ namespace FK {
 		 */
 		fk_Vector & operator -(void) const;
 
-		//@}
+		///@}
 
 		//! \name 比較演算子
-		//@{
+		///@{
 
 		//! 同値比較演算子 
 		/*!
@@ -227,10 +227,10 @@ namespace FK {
 		 */
 		bool operator <=(const fk_Vector &) const;
 
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 単純代入演算子
 		fk_Vector & operator =(const fk_Vector &);
@@ -338,10 +338,10 @@ namespace FK {
 		 *	変換の際の同次座標は 1 に設定されます。
 		 */
 		fk_Vector & operator *=(const fk_OrthoMatrix &);
-		//@}
+		///@}
 
 		//! \name メンバ関数
-		//@{
+		///@{
 
 		//! 成分設定関数1
 		/*!
@@ -445,7 +445,8 @@ namespace FK {
 #endif
 
 		//! \name 二項演算子
-		//@{
+		///@{
+
 		friend double operator *(const fk_Vector &, const fk_Vector &);
 		friend fk_Vector operator +(const fk_Vector &, const fk_Vector &);
 		friend fk_Vector operator -(const fk_Vector &, const fk_Vector &);
@@ -453,7 +454,8 @@ namespace FK {
 		friend fk_Vector operator *(double, const fk_Vector &);
 		friend fk_Vector operator /(const fk_Vector &, double);
 		friend fk_Vector operator ^(const fk_Vector &, const fk_Vector &);
-		//@}
+
+		///@}
 	};
 
 
@@ -601,7 +603,7 @@ namespace FK {
 		fk_HVector(const fk_HVector &&);
 
 		//! \name 比較演算子
-		//@{
+		///@{
 
 		//! 同値比較演算子 
 		/*!
@@ -632,10 +634,10 @@ namespace FK {
 		 *	なお、同次座標成分の比較も含まれます。
 		 */
 		bool operator !=(const fk_HVector &) const;
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 単純代入演算子
 		fk_HVector & operator =(const fk_HVector &);
@@ -674,10 +676,10 @@ namespace FK {
 		 */
 		fk_HVector & operator *=(const fk_OrthoMatrix &);
 
-		//@}
+		///@}
 
 		//! \name メンバ関数
-		//@{
+		///@{
 
 		//! fk_Vector による設定関数1
 		/*!
@@ -773,11 +775,13 @@ namespace FK {
 #endif
 
 		//! \name 二項演算子
-		//@{
+		///@{
+
 		friend double operator *(const fk_HVector &, const fk_HVector &);
 		friend fk_HVector operator *(const fk_Matrix &, const fk_HVector &);
 		friend fk_HVector operator *(const fk_OrthoMatrix &, const fk_HVector &);
-		//@}
+
+		///@}
 	};
 
 

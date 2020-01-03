@@ -145,7 +145,7 @@ namespace FK {
 		virtual ~fk_Boundary();
 
 		//! \name 境界ボリューム選択制御関数
-		//@{
+		///@{
 
 		//! 境界ボリューム選択関数
 		/*!
@@ -174,10 +174,10 @@ namespace FK {
 		 *	\sa setBMode(), fk_Model::isInter()
 		 */
 		fk_BoundaryMode	getBMode(void);
-		//@}
+		///@}
 
 		//! \name 境界球制御関数
-		//@{
+		///@{
 
 		//! 境界球半径設定関数
 		/*!
@@ -200,10 +200,10 @@ namespace FK {
 		 *	\sa setSphere(), fk_Model::adjustSphere()
 		 */
 		double		getSphere(void);
-		//@}
+		///@}
 
 		//! \name 軸平行境界ボックス (AABB) 制御関数
-		//@{
+		///@{
 
 		//! 軸平行境界ボックス (AABB) サイズ設定関数1
 		/*!
@@ -241,10 +241,10 @@ namespace FK {
 		 *	\sa setAABBSize(double, double, double), setAABBSize(fk_Vector), fk_Model::adjustAABB()
 		 */
 		fk_Vector	getAABBSize(void);
-		//@}
+		///@}
 
 		//! \name 有向境界ボックス (OBB) 制御関数
-		//@{
+		///@{
 
 		//! 有向境界ボックス (OBB) サイズ設定関数1
 		/*!
@@ -281,10 +281,10 @@ namespace FK {
 		 *	\sa setOBBSize(double, double, double), setOBBSize(fk_Vector), fk_Model::adjustOBB()
 		 */
 		fk_Vector	getOBBSize(void);
-		//@}
+		///@}
 
 		//! \name カプセル型制御関数
-		//@{
+		///@{
 
 		//! カプセル型設定関数
 		/*!
@@ -341,10 +341,10 @@ namespace FK {
 		 *	\sa	setCapsule(), fk_Model::adjustCapsule()
 		 */
 		fk_Vector	getCapsuleEndPos(void);
-		//@}
+		///@}
 
 		//! \name 境界ボリューム描画制御関数
-		//@{
+		///@{
 
 		//! 境界ボリューム描画有無設定関数
 		/*!
@@ -434,7 +434,7 @@ namespace FK {
 		 *	\sa setBLineWidth()
 		 */
 		double		getBLineWidth(void);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_IndexFaceSet *		GetBShape(void);

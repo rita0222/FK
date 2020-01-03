@@ -115,7 +115,7 @@ namespace FK {
 		virtual ~fk_Modify();
 
 		//! \name 位相操作関数
-		//@{
+		///@{
 
 		//! 頂点削除関数
 		/*!
@@ -206,10 +206,10 @@ namespace FK {
 		 *	\return		削除可能であれば true を、不可能であれば false を返します。
 		 */
 		bool		checkContract(fk_Edge *E);
-		//@}
+		///@}
 
 		//! \name 多角形生成関数
-		//@{
+		///@{
 
 		//! 多角形生成関数1
 		/*!
@@ -340,10 +340,11 @@ namespace FK {
 		 *		つまり、多角形の始点と新規追加点の間に稜線を生成します。
 		 */
 		void		pushPolygonVertex(fk_Vector pos, bool openFlg);
-		//@}
+		///@}
 
 		//! \name 頂点群生成関数
-		//@{
+		///@{
+
 		//! 頂点群生成関数1
 		/*!
 		 *	与えられた位置ベクトル配列による頂点群を生成します。
@@ -372,10 +373,11 @@ namespace FK {
 		 *	\return		新規に生成された頂点位相のインスタンスを返します。
 		 */
 		fk_Vertex *	pushPointVertex(fk_Vector pos);
-		//@}
+		///@}
 
 		//! \name 線分生成関数
-		//@{
+		///@{
+
 		//! 線分群生成関数1
 		/*!
 		 *	与えられた位置ベクトル配列を元に、線分群を生成します。
@@ -466,10 +468,11 @@ namespace FK {
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool		changeLine(int edgeID, fk_Vector pos1, fk_Vector pos2);
-		//@}
+		///@}
 
 		//! \name 直方体形状生成関数
-		//@{
+		///@{
+
 		//! 直方体生成関数
 		/*!
 		 *	直方体を生成します。
@@ -572,10 +575,11 @@ namespace FK {
 		 *	\sa makeBlock(), fk_Block
 		 */
 		void		setBlockScale(double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name 円形状生成関数
-		//@{
+		///@{
+
 		//! 円形状生成関数
 		/*!
 		 *	円形状を生成します。
@@ -636,10 +640,11 @@ namespace FK {
 		 *	\sa makeCircle(), fk_Circle
 		 */
 		void		setCircleScale(double scale);
-		//@}
+		///@}
 
 		//! \name 球形状制御関数
-		//@{
+		///@{
+
 		//! 球形状生成関数
 		/*!
 		 *	球形状を生成します。
@@ -698,10 +703,11 @@ namespace FK {
 		 *	\sa makeSphere(), fk_Sphere
 		 */
 		void		setSphereScale(double scale);
-		//@}
+		///@}
 
 		//! \name 正多角柱(円柱)形状制御関数
-		//@{
+		///@{
+
 		//! 正多角柱(円柱)形状生成関数
 		/*!
 		 *	正多角柱(円柱)を生成します。
@@ -777,10 +783,11 @@ namespace FK {
 		 *	\sa makePrism(), fk_Prism
 		 */
 		void		setPrismHeight(double height);
-		//@}
+		///@}
 
 		//! \name 正多角錐(円錐)形状制御関数
-		//@{
+		///@{
+
 		//! 正多角錐(円錐)形状生成関数
 		/*!
 		 *	正多角錐(円錐)を生成します。
@@ -841,10 +848,11 @@ namespace FK {
 		 *	\sa makeCone(), fk_Cone
 		 */
 		void		setConeHeight(double height);
-		//@}
+		///@}
 
 		//! \name 頂点移動関数
-		//@{
+		///@{
+
 		//! 頂点移動関数1
 		/*!
 		 *	指定された頂点を移動します。
@@ -883,10 +891,11 @@ namespace FK {
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
 		bool		moveVPosition(int vertexID, double *array, int order = 0);
-		//@}
+		///@}
 
 		//! \name 細分割曲面生成関数
-		//@{
+		///@{
+
 		//! 細分割曲面生成関数
 		/*!
 		 *	この関数は、細分割曲面 (Subdivision Surface) 手法に基づいた面分割を行います。
@@ -898,7 +907,7 @@ namespace FK {
 		 */
 		void subdivShape(int count);
 
-		//@}
+		///@}
 
 	private:
 		bool		CheckLoop4Cont(fk_Half *);

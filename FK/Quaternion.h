@@ -161,7 +161,7 @@ namespace FK {
 		fk_Quaternion(const fk_Quaternion &&);
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 単項マイナス演算子
 		/*!
@@ -220,10 +220,10 @@ namespace FK {
 		 */
 		fk_Quaternion & operator !(void) const;
 
-		//@}
+		///@}
 
 		//! \name 比較演算子
-		//@{
+		///@{
 
 		//! 同値比較演算子 
 		/*!
@@ -253,10 +253,10 @@ namespace FK {
 		 */
 		bool operator !=(const fk_Quaternion &) const;
 
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 単純代入演算子
 		fk_Quaternion & operator =(const fk_Quaternion &);
@@ -332,10 +332,10 @@ namespace FK {
 		 */
 		fk_Quaternion & operator -=(const fk_Quaternion &);
 
-		//@}
+		///@}
 
 		//! \name メンバ関数
-		//@{
+		///@{
 
 		//! 初期化関数
 		/*!
@@ -538,27 +538,21 @@ namespace FK {
 		 */
 		fk_Matrix &	conv(void) const;
 
-		//@}
+		///@}
 
 		//! \name 二項演算子
-		//@{
-		friend fk_Quaternion operator *(const fk_Quaternion &,
-										   const fk_Quaternion &);
-		friend fk_Quaternion operator +(const fk_Quaternion &,
-										   const fk_Quaternion &);
-		friend fk_Quaternion operator -(const fk_Quaternion &,
-										   const fk_Quaternion &);
+		///@{
 
+		friend fk_Quaternion operator *(const fk_Quaternion &, const fk_Quaternion &);
+		friend fk_Quaternion operator +(const fk_Quaternion &, const fk_Quaternion &);
+		friend fk_Quaternion operator -(const fk_Quaternion &, const fk_Quaternion &);
 		friend fk_Quaternion operator *(const fk_Quaternion &, double);
 		friend fk_Quaternion operator *(double, const fk_Quaternion &);
 		friend fk_Quaternion operator /(const fk_Quaternion &, double);
+		friend fk_Vector operator *(const fk_Quaternion &, const fk_Vector &);
+		friend double operator ^(const fk_Quaternion &, const fk_Quaternion &);
 
-		friend fk_Vector operator *(const fk_Quaternion &,
-										   const fk_Vector &);
-
-		friend double operator ^(const fk_Quaternion &,
-										   const fk_Quaternion &);
-		//@}
+		///@}
 	};
 
 	//! 四元数積二項演算子

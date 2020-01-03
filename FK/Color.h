@@ -361,13 +361,16 @@ namespace FK {
 		static float	clamp(float x);
 
 		//! \name 二項演算子
-		//@{
-		friend fk_Color	operator +(const fk_Color &, const fk_Color &);
-		friend fk_Color	operator -(const fk_Color &, const fk_Color &);
-		friend fk_Color	operator *(const fk_Color &, double);
-		friend fk_Color	operator *(double, const fk_Color &);
-		friend fk_Color	operator /(const fk_Color &, double);
-		//@}
+		///@{
+
+		friend fk_Color operator +(const fk_Color &, const fk_Color &);
+		friend fk_Color operator -(const fk_Color &, const fk_Color &);
+		friend fk_Color operator *(const fk_Color &, double);
+		friend fk_Color operator *(double, const fk_Color &);
+		friend fk_Color operator /(const fk_Color &, double);
+		
+		///@}
+
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::string		OutStr(void);
 #endif
@@ -432,6 +435,8 @@ namespace FK {
 	 *	1 を超える場合はその成分を 1 とします。
 	 */
 	fk_Color	operator /(const fk_Color &, double);
+
+	///@}
 }
 
 #endif // __FK_COLOR_HEADER__

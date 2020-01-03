@@ -98,7 +98,7 @@ namespace FK {
 		~fk_Time();
 
 		//! \name ラップタイム機能
-		//@{
+		///@{
 
 		//! 時間計測開始関数
 		/*!
@@ -140,10 +140,10 @@ namespace FK {
 		 */
 		double lapTime(void);
 
-		//@}
+		///@}
 
 		//! \name プログラム稼働時間取得機能
-		//@{
+		///@{
 
 		//! プログラム稼働時間取得関数
 		/*!
@@ -157,10 +157,10 @@ namespace FK {
 		 */
 		static double now(void);
 
-		//@}
+		///@}
 
 		//! \name スリープ機能
-		//@{
+		///@{
 
 		//! 秒単位スリープ関数
 		/*!
@@ -186,7 +186,7 @@ namespace FK {
 		 */
 
 		static void usleep(double time);
-		//@}
+		///@}
 
 	private:
 

@@ -116,8 +116,7 @@ namespace FK {
 		virtual ~fk_Scene();
 
 		//! \name 背景色制御関数
-
-		//@{
+		///@{
 
 		//! 背景色設定関数1
 		/*!
@@ -152,10 +151,10 @@ namespace FK {
 		 *	\sa fk_Color, setBGColor(fk_Color), setBGColor(float, float, float)
 		 */
 		fk_Color		getBGColor(void);
-		//@}
+		///@}
 
 		//! \name 透過処理制御関数
-		//@{
+		///@{
 
 		//! 透過処理設定関数
 		/*!
@@ -192,7 +191,7 @@ namespace FK {
 		 *	\sa setBlendStatus()
 		 */
 		bool			getBlendStatus(void);
-		//@}
+		///@}
 
 	private:
 		fk_Color		bgColor;

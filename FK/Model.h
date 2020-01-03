@@ -190,7 +190,7 @@ namespace FK {
 		unsigned int	getID(void) const;
 
 		//! \name 回転制御関数
-		//@{
+		///@{
 
 		//! グローバル座標系座標軸回転関数1
 		/*!
@@ -773,10 +773,10 @@ namespace FK {
 		 */
 		bool	loRotateWithVec(double Ax, double Ay, double Az,
 								double Bx, double By, double Bz, double theta);
-		//@}
+		///@}
 
 		//! \name 位置制御関数
-		//@{
+		///@{
 
 		//! グローバル座標系平行移動関数1
 		/*!
@@ -924,10 +924,10 @@ namespace FK {
 		 *		fk_MatrixAdmin::glMoveTo_(double, double, double)
 		 */
 		bool	glMoveTo(double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name 形状データ制御関数
-		//@{
+		///@{
 
 		//! 形状設定関数
 		/*!
@@ -951,10 +951,11 @@ namespace FK {
 		 */
 		fk_Shape *	getShape(void) const;
 
-		//@}
+		///@}
 
 		//! \name マテリアル属性設定関数
-		//@{
+		///@{
+
 		//! マテリアル設定関数
 		/*!
 		 *	モデルの基本マテリアルを設定します。
@@ -1048,10 +1049,11 @@ namespace FK {
 		 */
 		void	setCurveColor(float r, float g, float b);
 
-		//@}
+		///@}
 
 		//! \name マテリアル属性参照関数
-		//@{
+		///@{
+
 		//! マテリアル参照関数
 		/*!
 		 *	現在モデルに設定されている基本マテリアルを参照します。
@@ -1093,10 +1095,10 @@ namespace FK {
 		fk_Color *	getCurveColor(void);
 		
 
-		//@}
+		///@}
 
 		//! \name 描画属性制御関数
-		//@{
+		///@{
 
 		//! 頂点描画サイズ設定関数
 		/*!
@@ -1120,10 +1122,10 @@ namespace FK {
 		 */
 		double	getPointSize(void) const;
 
-		//@}
+		///@}
 
 		//! \name 描画モード制御関数
-		//@{
+		///@{
 
 		//! 描画モード設定関数
 		/*!
@@ -1426,10 +1428,10 @@ namespace FK {
 		 *	\sa setTextureMode()
 		 */
 		fk_TexMode		getTextureMode(void);
-		//@}
+		///@}
 
 		//! \name 座標系情報参照関数
-		//@{
+		///@{
 
 		//! 継承変換行列取得関数
 		/*!
@@ -1565,10 +1567,10 @@ namespace FK {
 		 *		getInhAngle(), fk_MatrixAdmin::getScale()
 		 */
 		double	getInhScale(void) const;
-		//@}
+		///@}
 
 		//! \name 親子関係制御関数
-		//@{
+		///@{
 
 		//! 親モデル設定関数
 		/*!
@@ -1707,10 +1709,10 @@ namespace FK {
 		 */
 		fk_Model * foreachChild(fk_Model *model);
 
-		//@}
+		///@}
 
 		//! \name 状態保存制御関数
-		//@{
+		///@{
 
 		//! 位置・姿勢保存関数
 		/*!
@@ -1748,10 +1750,10 @@ namespace FK {
 		 */
 		bool restore(double t);
 
-		//@}
+		///@}
 
 		//! \name 描画制御用関数
-		//@{
+		///@{
 
 		//! シェーダー設定関数
 		/*!
@@ -1807,10 +1809,10 @@ namespace FK {
 		 */
 		//std::function<void(void)>	postShader;
 #endif
-		//@}
+		///@}
 
 		//! \name 境界ボリューム自動設定関数
-		//@{
+		///@{
 
 		//! 境界球自動設定関数
 		/*!
@@ -1903,10 +1905,10 @@ namespace FK {
 		 *		fk_Boundary::getCapsuleEndPos()
 		 */
 		void	adjustCapsule(fk_Vector S, fk_Vector E);
-		//@}
+		///@}
 
 		//! \name 干渉判定・衝突判定関数
-		//@{
+		///@{
 
 		//! モデル間干渉判定関数
 		/*!
@@ -2030,10 +2032,11 @@ namespace FK {
 		 * \sa isInter(), setInterMode(), getInterStatus()
 		 */
 		void	resetInter(void);
-		//@}
+		///@}
 
 		//! \name 干渉自動停止制御関数
-		//@{
+		///@{
+
 		//! 干渉自動停止モード設定関数
 		/*!
 		 *	この関数は、干渉自動停止モードの有無効を設定します。
@@ -2127,7 +2130,7 @@ namespace FK {
 		 */
 		void	clearInterModel(void);
 
-		//@}
+		///@}
 
 
 #ifndef FK_DOXYGEN_USER_PROCESS

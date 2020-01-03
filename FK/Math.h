@@ -101,7 +101,7 @@ namespace FK {
 		static constexpr double PI = 3.1415926535897932; 	//!< 円周率
 
 		//! \name 基本数値演算関数
-		//@{
+		///@{
 
 		//! 数値範囲制限関数
 		/*!
@@ -117,10 +117,11 @@ namespace FK {
 		 *		\f$a > max\f$ である場合は max を返します。
 		 */
 		static double clamp(double a, double min, double max);
-		//@}
+		///@}
 
 		//! \name 幾何的演算関数
-		//@{
+		///@{
+
 		//! 直線上判定関数
 		/*!
 		 *	頂点 \f$\mathbf{P}\f$ が、
@@ -355,10 +356,10 @@ namespace FK {
 								   const fk_Vector &B,
 								   const fk_Vector &C);
 
-		//@}
+		///@}
 
 		//! \name 四元数補間関数
-		//@{
+		///@{
 
 		//! 四元数単純線形補間関数
 		/*!
@@ -431,10 +432,11 @@ namespace FK {
 											 const fk_Quaternion &q2,
 											 double t);
 
-		//@}
+		///@}
 
 		//! \name 乱数関数
-		//@{
+		///@{
+
 		//! 一様整数乱数取得関数
 		/*!
 		 *	任意の正の整数から一様乱数を取得します。
@@ -472,7 +474,7 @@ namespace FK {
 		 *	\return 乱数値
 		 */
 		static double drand(double m, double M);
-		//@}
+		///@}
 
 	};
 }

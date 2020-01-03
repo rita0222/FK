@@ -203,7 +203,7 @@ namespace FK {
 
 
 		//! \name シーン制御関数
-		//@{
+		///@{
 
 		//! シーン登録関数
 		/*!
@@ -212,10 +212,11 @@ namespace FK {
 		 *	\param[in]	scene		シーンインスタンス
 		 */
 		void	setScene(fk_Scene *scene);
-		//@}
+		///@}
 
 		//! \name イベント・デバイス制御関数
-		//@{
+		///@{
+
 		//! 描画更新関数
 		/*!
 		 *	画面の描画を行います。
@@ -442,10 +443,11 @@ namespace FK {
 		 *	\sa getMousePosition(), getMouseStatus()
 		 */
 		int		getMouseWheelStatus(void);
-		//@}
+		///@}
 
 		//! \name フレームレート制御関数
-		//@{
+		///@{
+
 		/*!
 		 *	drawWindow() をコールした際に調整する FPS を指定します。
 		 *	FPS(Frame Per Second)とは、1秒間中で画面更新が行われる回数の単位です。
@@ -456,10 +458,10 @@ namespace FK {
 		 */
 		void	setFPS(int fps);
 
-		//@}
+		///@}
 
 		//! \name 投影座標・空間座標変換関数
-		//@{
+		///@{
 
 		//! 投影平面から任意平面への射影点算出関数
 		/*!
@@ -519,7 +521,7 @@ namespace FK {
 		 *		fk_Perspective, fk_Ortho, fk_Frustum
 		 */
 		bool	getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
-		//@}
+		///@}
 
 		//! 初期化前処理関数
 		/*!
@@ -568,7 +570,7 @@ namespace FK {
 		 *	代表的な用途として、特殊デバイスの情報取得などがあります。
 		 */
 		virtual void	postDraw(void) {}
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		virtual void	preDrawLeft(void) {}
@@ -581,7 +583,7 @@ namespace FK {
 #endif
 
 		//! \name 描画画像取り込み関数
-		//@{
+		///@{
 
 		//! 描画画像ファイル出力関数
 		/*!
@@ -620,10 +622,10 @@ namespace FK {
 		 */
 		bool	snapImage(fk_Image *image,
 						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
-		//@}
+		///@}
 
 		//! \name 時間参照関数
-		//@{
+		///@{
 
 		//! 現時点システム時間参照関数
 		/*!
@@ -640,10 +642,10 @@ namespace FK {
 		 *	\return		現在のシステム時間
 		 */
 		static unsigned long	getNow(void);
-		//@}
+		///@}
 
 		//! \name メッセージ出力制御関数
-		//@{
+		///@{
 
 		//! メッセージ出力モード設定関数
 		/*!
@@ -752,11 +754,12 @@ namespace FK {
 		 *	\sa setPutStrMode(), putString(), printf()
 		 */
 		static void				clearBrowser(void);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		//! \name 立体視モード制御関数
-		//@{
+		///@{
+
 		//! 立体視モード設定関数
 		/*!
 		 *	ウィンドウに対して立体視モードを設定します。
@@ -795,7 +798,7 @@ namespace FK {
 		 *	\sa fk_DisplayLink, setOGLStereoMode()
 		 */
 		bool	getOGLStereoMode(void);
-		//@}
+		///@}
 #endif
 		
 	private:

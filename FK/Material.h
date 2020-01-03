@@ -141,7 +141,7 @@ namespace FK {
 		void		init(void);
 
 		//! \name 設定用関数
-		//@{
+		///@{
 
 		//! 環境反射係数設定関数1
 		/*!
@@ -302,10 +302,10 @@ namespace FK {
 		 *	\param[in] a A(透過)要素
 		 */
 		void		setAmbDiff(double r, double g, double b, double a = 1.0);
-		//@}
+		///@}
 
 		//! \name 参照用関数
-		//@{
+		///@{
 
 		//! 環境反射係数参照関数
 		/*!
@@ -387,7 +387,7 @@ namespace FK {
 		 *	\sa fk_Scene::setBlendStatus()
 		 */
 		void		setAlpha(double a);
-		//@}
+		///@}
 
 		//! デフォルトマテリアル初期化関数
 		/*!

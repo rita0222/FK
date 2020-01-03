@@ -129,7 +129,7 @@ namespace FK {
 		~fk_OrthoMatrix();
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 逆行列取得演算子
 		/*!
@@ -190,10 +190,10 @@ namespace FK {
 		 */
 		double * operator [](int);
 
-		//@}
+		///@}
 
 		//! \name 比較演算子 
-		//@{
+		///@{
 
 		//! 同値比較演算子
 		/*!
@@ -224,10 +224,10 @@ namespace FK {
 		 *	fk_Vector::MATRIXEPS までの数値誤差を許容しています。
 		 */
 		bool operator !=(const fk_OrthoMatrix &) const;
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 単純代入演算子
 		fk_OrthoMatrix & operator =(const fk_OrthoMatrix &);
@@ -251,10 +251,10 @@ namespace FK {
 		 */
 		fk_OrthoMatrix & operator *=(const fk_OrthoMatrix &);
 
-		//@}
+		///@}
 
 		//! \name メンバ関数
-		//@{
+		///@{
 		//! 単位行列化関数
 		/*!
 		 *	行列を単位行列に初期化します。
@@ -455,7 +455,7 @@ namespace FK {
 		 *	\param[in]	angle	オイラー角
 		 */
 		void makeEuler(const fk_Angle &angle);
-		//@}
+		///@}
 	
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -465,7 +465,7 @@ namespace FK {
 #endif
 
 		//! \name 二項演算子
-		//@{
+		///@{
 		friend fk_HVector operator *(const fk_OrthoMatrix &, const fk_HVector &);
 		friend fk_OrthoMatrix operator *(const fk_OrthoMatrix &, const fk_OrthoMatrix &);
 		friend fk_Matrix operator *(const fk_Matrix &, const fk_OrthoMatrix &);
@@ -474,7 +474,7 @@ namespace FK {
 		friend fk_Matrix operator +(const fk_OrthoMatrix &, const fk_Matrix &);
 		friend fk_Matrix operator -(const fk_Matrix &, const fk_OrthoMatrix &);
 		friend fk_Matrix operator -(const fk_OrthoMatrix &, const fk_Matrix &);
-		//@}
+		///@}
 
 	protected:
 
@@ -641,7 +641,7 @@ namespace FK {
 		fk_Matrix(const fk_Matrix &&);
 
 		//! \name 単項演算子
-		//@{
+		///@{
 		//! 逆行列取得演算子
 		/*!
 		 *	以下のコードは、M_org の逆行列を M_new に代入します。
@@ -653,10 +653,10 @@ namespace FK {
 		 */
 		fk_Matrix operator !(void) const;
 
-		//@}
+		///@}
 
 		//! \name 比較演算子 
-		//@{
+		///@{
 		//! 同値比較演算子
 		/*!
 		 *	fk_Matrix では、以下のように記述することで、
@@ -687,10 +687,10 @@ namespace FK {
 		 */
 		bool operator !=(const fk_Matrix &) const;
 
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 単純代入演算子
 		fk_Matrix & operator =(const fk_Matrix &);
@@ -765,10 +765,10 @@ namespace FK {
 		 */
 		fk_Matrix & operator *=(const fk_OrthoMatrix &);
 
-		//@}
+		///@}
 
 		//! \name メンバ関数
-		//@{
+		///@{
 
 		//! 正則判定関数
 		/*!
@@ -840,28 +840,28 @@ namespace FK {
 		//! 透視投影変換行列生成関数
 		/*!
 		 */
-		void makePerspective(double fovy, 
-										double near, double far,
-										double aspect);
+		void makePerspective(double fovy,  double near, double far, double aspect);
 
 		void makeFrustum(double left, double right,
-									double bottom, double top,
-									double near, double far);
+						 double bottom, double top,
+						 double near, double far);
 
 		void makeOrtho(double left, double right,
-								  double bottom, double top,
-								  double near, double far);
-		//@}
+					   double bottom, double top,
+					   double near, double far);
+		///@}
 
-		//! \name 二項演算子 
-		//@{
+		//! \name 二項演算子
+		///@{
+
 		friend fk_HVector operator *(const fk_Matrix &, const fk_HVector &);
 		friend fk_Matrix operator *(const fk_Matrix &, const fk_Matrix &);
 		friend fk_Matrix operator *(double, const fk_Matrix &);
 		friend fk_Matrix operator *(const fk_Matrix &, double);
 		friend fk_Matrix operator +(const fk_Matrix &, const fk_Matrix &);
 		friend fk_Matrix operator -(const fk_Matrix &, const fk_Matrix &);
-		//@}
+
+		///@}
 	};
 
 	//! ベクトル変換二項演算子

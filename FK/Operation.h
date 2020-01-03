@@ -144,7 +144,7 @@ namespace FK {
 		virtual ~fk_Operation();
 
 		//! \name オイラー操作関数
-		//@{
+		///@{
 
 		//! 頂点生成関数
 		/*!
@@ -401,10 +401,10 @@ namespace FK {
 		 */
 		void			negateBody(void);
 
-		//@}
+		///@}
 
 		//! \name 履歴操作関数
-		//@{
+		///@{
 
 		//! 履歴保存モード設定関数
 		/*!
@@ -513,10 +513,10 @@ namespace FK {
 		 *	\sa undoHistory()
 		 */
 		bool			redoHistory(void);
-		//@}
+		///@}
 
 		//! \name テセレーション制御関数
-		//@{
+		///@{
 
 		//! 形状全体テセレーション設定関数
 		/*!
@@ -545,7 +545,7 @@ namespace FK {
 		 *	\return		直近の setTesselateMode() 関数による設定値を返します。
 		 */
 		bool			getTesselateMode(void);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void			PrintHistorySize(void);

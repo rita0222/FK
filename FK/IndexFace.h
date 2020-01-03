@@ -157,7 +157,8 @@ namespace FK {
 		void				cloneShape(fk_IndexFaceSet *ifs);
 
 		//! \name ファイル・データ入力関数
-		//@{
+		///@{
+
 		//! SMFファイル入力関数
 		/*!
 		 *	SMF形式のファイルからデータを入力します。
@@ -544,10 +545,11 @@ namespace FK {
 							 int materialID,
 							 bool solidFlg = true);
 
-		//@}
+		///@}
 
 		//! \name ファイル出力関数
-		//@{
+		///@{
+
 		//! VRML ファイル出力関数1
 		/*!
 		 *	VRML (VRML2.0) 形式で形状データを出力します。
@@ -630,10 +632,10 @@ namespace FK {
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
 		bool	writeMQOFile(std::string fileName);
-		//@}
+		///@}
 
 		//! \name 形状情報参照関数
-		//@{
+		///@{
 
 		//! 頂点数参照関数
 		/*!
@@ -734,10 +736,10 @@ namespace FK {
 		 */
 		fk_Vector	getVertexNorm(int vertexID, int order = 0);
 
-		//@}
+		///@}
 
 		//! \name 汎用形状操作関数
-		//@{
+		///@{
 
 		//! 頂点移動関数1
 		/*!
@@ -934,10 +936,11 @@ namespace FK {
 		 */
 		void	flush(void);
 
-		//@}
+		///@}
 
 		//! \name 多角形形状制御関数
-		//@{
+		///@{
+
 		//! 多角形生成関数1
 		/*!
 		 *	多角形 (ポリゴン) を生成します。
@@ -964,10 +967,11 @@ namespace FK {
 		 *	\param[in]	posArray	多角形頂点配列
 		 */
 		void makePolygon(int num, fk_Vector *posArray);
-		//@}
+		///@}
 
 		//! \name 直方体形状制御関数
-		//@{
+		///@{
+
 		//! 直方体生成関数
 		/*!
 		 *	直方体を生成します。
@@ -1070,10 +1074,11 @@ namespace FK {
 		 *	\sa makeBlock(), fk_Block
 		 */
 		void	setBlockScale(double x, double y, double z);
-		//@}
+		///@}
 
 		//! \name 円形状制御関数
-		//@{
+		///@{
+
 		//! 円形状生成関数
 		/*!
 		 *	円形状を生成します。
@@ -1134,10 +1139,11 @@ namespace FK {
 		 *	\sa makeCircle(), fk_Circle
 		 */
 		void	setCircleScale(double scale);
-		//@}
+		///@}
 
 		//! \name 球形状制御関数
-		//@{
+		///@{
+
 		//! 球形状生成関数
 		/*!
 		 *	球形状を生成します。
@@ -1197,10 +1203,11 @@ namespace FK {
 		 *	\sa makeSphere(), fk_Sphere
 		 */
 		void	setSphereScale(double scale);
-		//@}
+		///@}
 
 		//! \name 正多角柱(円柱)形状制御関数
-		//@{
+		///@{
+
 		//! 正多角柱(円柱)形状生成関数
 		/*!
 		 *	正多角柱(円柱)を生成します。
@@ -1281,10 +1288,11 @@ namespace FK {
 		 *	\sa makePrism(), fk_Prism
 		 */
 		void	setPrismHeight(double height);
-		//@}
+		///@}
 
 		//! \name 正多角錐(円錐)形状制御関数
-		//@{
+		///@{
+
 		//! 正多角錐(円錐)形状生成関数
 		/*!
 		 *	正多角錐(円錐)を生成します。
@@ -1350,10 +1358,11 @@ namespace FK {
 		 *	\sa makeCone(), fk_Cone
 		 */
 		void	setConeHeight(double height);
-		//@}
+		///@}
 
 		//! \name カプセル型形状制御関数
-		//@{
+		///@{
+
 		//! カプセル型形状生成関数
 		/*!
 		 *	カプセル型を生成します。
@@ -1387,10 +1396,10 @@ namespace FK {
 		 *	\sa makeCapsule(), fk_Capsule
 		 */
 		void	setCapsuleSize(double len, double rad);
-		//@}
+		///@}
 
 		//! \name その他
-		//@{
+		///@{
 
 		//! fk_Solid 出力関数
 		/*!
@@ -1426,7 +1435,7 @@ namespace FK {
 		 *	\sa setAnimationTime(), readD3DXFile(), fk_BVHMotion
 		 */
 		void	setBVHMotion(fk_BVHBase *bvh);
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 

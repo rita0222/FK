@@ -103,7 +103,7 @@ namespace FK {
 		~fk_Graph();
 
 		//! \name 情報参照関数
-		//@{
+		///@{
 
 		//! ノード数取得関数
 		/*!
@@ -142,10 +142,10 @@ namespace FK {
 		 */
 		bool isConnect(fk_GraphNode *v1, fk_GraphNode *v2);
 
-		//@}
+		///@}
 
 		//! \name 接続変更関数
-		//@{
+		///@{
 
 		//!	辺生成関数
 		/*!
@@ -173,34 +173,10 @@ namespace FK {
 		 */
 		bool deleteEdge(fk_GraphEdge *e);
 
-		//@}
+		///@}
 
 		//! \name 経路コスト制御関数
-		//@{
-
-		//! コストモード設定関数
-		/*!
-		 *	コストテーブルに対し、モードを設定します。
-		 *
-		 *	\param[in]	tableID		コストテーブル ID
-		 *
-		 *	\param[in]	backMode	true の場合は目標ノード側から、
-		 *							false の場合出発ノード側からコストを算出します。
-		 *
-		 *	\param[in]	type		コスト値のタイプを設定します。
-		 *							- fk_CostType::INT \n
-		 *								コストが int 型となります。
-		 *							- fk_CostType::DOUBLE \n
-		 *								コストが double 型となります。
-		 *							- fk_CostType::LENGTH \n
-		 *								コストは辺の長さとなり、
-		 *								内部では double 型として扱われます。
-		 *							.
-		 *
-		 *	\param[in]	edgeCostID 	利用する辺のコスト値 ID を指定します。
-		 *							type で fk_CostType::LENGTH を指定していた場合、
-		 *							この値は無視されます。
-		 */
+		///@{
 
 		//! コストテーブル生成関数
 		/*!
@@ -311,7 +287,7 @@ namespace FK {
 		 */
 		fk_CostStatus updateCostTable(unsigned int tableID);
 
-		//@}
+		///@}
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Point * GetVertexShape(void);

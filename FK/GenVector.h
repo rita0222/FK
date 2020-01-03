@@ -131,7 +131,7 @@ namespace FK {
 		fk_GenVector(const fk_HVector &);
 
 		//! \name 単項演算子
-		//@{
+		///@{
 
 		//! 単項マイナス演算子 
 		/*!
@@ -143,10 +143,10 @@ namespace FK {
 		 */
 		fk_GenVector &	operator -(void) const;
 
-		//@}
+		///@}
 
 		//! \name 比較演算子
-		//@{
+		///@{
 
 		//! 同値比較演算子 
 		/*!
@@ -178,10 +178,10 @@ namespace FK {
 		 */
 		bool			operator !=(const fk_GenVector &) const;
 
-		//@}
+		///@}
 
 		//! \name 代入演算子 
-		//@{
+		///@{
 
 		//! 単純代入演算子
 		fk_GenVector &	operator =(const fk_GenVector &);
@@ -265,10 +265,10 @@ namespace FK {
 		 */
 		fk_GenVector &	operator *=(const fk_GenMatrix &);
 
-		//@}
+		///@}
 	
 		//! \name メンバ関数
-		//@{
+		///@{
 
 		//! 次元数設定関数
 		/*!
@@ -611,7 +611,8 @@ namespace FK {
 #endif
 
 		//! \name 二項演算子
-		//@{
+		///@{
+
 		friend double		operator *(const fk_GenVector &, const fk_GenVector &);
 		friend fk_GenVector	operator +(const fk_GenVector &, const fk_GenVector &);
 		friend fk_GenVector	operator -(const fk_GenVector &, const fk_GenVector &);
@@ -619,7 +620,8 @@ namespace FK {
 		friend fk_GenVector	operator *(double, const fk_GenVector &);
 		friend fk_GenVector	operator /(const fk_GenVector &, double);
 		friend fk_GenVector	operator ^(const fk_GenVector &, const fk_GenVector &);
-		//@}
+
+		///@}
 
 	private:
 

@@ -127,7 +127,7 @@ namespace FK {
 
 
 		//! \name 再生制御関数
-		//@{
+		///@{
 
 		//! オーディオデータ読み込み関数
 		/*!
@@ -224,10 +224,10 @@ namespace FK {
 		 */
 		void			pause(void);
 
-		//@}
+		///@}
 
 		//! \name 音量制御関数
-		//@{
+		///@{
 
 		//! 音量設定関数
 		/*!
@@ -249,10 +249,10 @@ namespace FK {
 		 */
 		double	getGain(void);
 
-		//@}
+		///@}
 
 		//! \name キューバッファ制御関数
-		//@{
+		///@{
 
 		//! キューバッファサイズ設定関数
 		/*!
@@ -272,10 +272,10 @@ namespace FK {
 		 *		キューバッファのサイズ。
 		 */
 		int		getQueueSize(void);
-		//@}
+		///@}
 
 		//! \name ループ再生制御関数
-		//@{
+		///@{
 
 		//! ループモード設定関数
 		/*!
@@ -342,10 +342,10 @@ namespace FK {
 		 */
 		double	getLoopEndTime(void);
 
-		//@}
+		///@}
 
 		//! \name サラウンド制御関数
-		//@{
+		///@{
 
 		//! サラウンド音源位置設定関数
 		/*!
@@ -460,10 +460,10 @@ namespace FK {
 		 */
 		bool			getSurroundMode(void);
 
-		//@}
+		///@}
 
 		//! \name システム全体初期化・制御関数
-		//@{
+		///@{
 
 		//! オーディオシステム初期化関数
 		/*!
@@ -511,10 +511,10 @@ namespace FK {
 		 */
 		static void		sleep(double time);
 
-		//@}
+		///@}
 
 		//! \name サラウンドリスナー制御関数
-		//@{
+		///@{
 
 		//! サラウンドリスナー同期モデル設定関数1
 		/*!
@@ -567,7 +567,7 @@ namespace FK {
 		 */
 		static fk_Model *	getListenerModel(void);
 
-		//@}
+		///@}
 
 	protected:
 

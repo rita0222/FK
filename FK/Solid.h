@@ -184,7 +184,8 @@ namespace FK {
 		bool				compareShape(fk_Solid *solid);
 
 		//! \name ファイル入力関数
-		//@{
+		///@{
+
 		//! SMFファイル入力関数
 		/*!
 		 *	SMF形式のファイルからデータを入力します。
@@ -476,10 +477,10 @@ namespace FK {
 										 std::string objName,
 										 int materialID,
 										 bool solidFlg = true);
-		//@}
+		///@}
 
 		//! \name ファイル出力関数
-		//@{
+		///@{
 
 		//! VRML ファイル出力関数1
 		/*!
@@ -565,7 +566,7 @@ namespace FK {
 		 */
 		bool				writeMQOFile(std::string fileName);
 
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool				AllCheck(void);

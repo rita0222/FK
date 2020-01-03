@@ -145,7 +145,7 @@ namespace FK {
 	public:
 
 		//! \name 頂点に関連する関数
-		//@{
+		///@{
 
 		//! 頂点接続半稜線参照関数
 		/*!
@@ -168,10 +168,10 @@ namespace FK {
 		 *	\return		接続稜線のうちの1つ。ない場合は nullptr を返します。
 		 */
 		fk_Edge *		getOneEOnV(fk_Vertex *V) const;
-		//@}
+		///@}
 
 		//! \name 半稜線に関連する関数
-		//@{
+		///@{
 
 		//! 半稜線接続頂点参照関数
 		/*!
@@ -213,10 +213,10 @@ namespace FK {
 		 *	\return		親ループ。ない場合は nullptr を返します。
 		 */
 		fk_Loop *		getParentLOnH(fk_Half *H) const;
-		//@}
+		///@}
 	
 		//! \name 稜線に関連する関数
-		//@{
+		///@{
 
 		//! 右側頂点参照関数
 		/*!
@@ -296,10 +296,10 @@ namespace FK {
 		 */
 		fk_EdgeStatus	getEdgeStatus(fk_Edge *E) const;
 
-		//@}
+		///@}
 	
 		//! \name ループに関連する関数
-		//@{
+		///@{
 
 		//! ループ所属頂点参照関数
 		/*!
@@ -330,7 +330,7 @@ namespace FK {
 		 *	\return		所属稜線
 		 */
 		fk_Edge *		getOneEOnL(fk_Loop *L) const;
-		//@}
+		///@}
 	};
 
 	//! 位相状態参照用クラス(Level2)
@@ -352,7 +352,7 @@ namespace FK {
 	public:
 
 		//! \name 頂点に関連する関数
-		//@{
+		///@{
 
 		//! 隣接頂点参照関数
 		/*!
@@ -408,10 +408,10 @@ namespace FK {
 		 */
 		int							getENumOnV(fk_Vertex *V) const;
 
-		//@}
+		///@}
 
 		//! \name ループに関連する関数
-		//@{
+		///@{
 
 		//! ループ所属全頂点参照関数
 		/*!
@@ -482,7 +482,7 @@ namespace FK {
 		 */
 		int							getVNumOnL(fk_Loop *L) const;
 
-		//@}
+		///@}
 	};
 
 

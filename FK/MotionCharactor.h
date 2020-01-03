@@ -131,7 +131,7 @@ namespace FK {
 		bool cloneCharactor(fk_Performer *perf);
 
 		//! \name データ入力関数
-		//@{
+		///@{
 
 		//! MQO オブジェクト読み込み関数
 		/*!
@@ -169,10 +169,10 @@ namespace FK {
 		 */
 		bool loadMotionData(const std::string &filename);
 
-		//@}
+		///@}
 
 		//! \name シーン登録制御関数
-		//@{
+		///@{
 
 		//! シーン登録関数
 		/*!
@@ -196,10 +196,10 @@ namespace FK {
 		 */
 		void removeScene(fk_Scene *scene);
 
-		//@}
+		///@}
 
 		//! \name 各種オブジェクト取得関数
-		//@{
+		///@{
 
 		//! オブジェクト数取得関数
 		/*!
@@ -262,10 +262,10 @@ namespace FK {
 		 */
 		fk_Model * getJointModel(int id);
 
-		//@}
+		///@}
 
 		//! \name モーション再生制御関数
-		//@{
+		///@{
 
 		//! モーション再生位置取得関数
 		/*!
@@ -347,7 +347,7 @@ namespace FK {
 		 */
 		int getLoopCount(void);
 
-		//@}
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void jointToPoser(void);
