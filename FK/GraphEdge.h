@@ -80,15 +80,17 @@ namespace FK {
 	class fk_GraphNode;
 	class fk_Graph;
 
+	//! グラフ内コスト値の型を表す列挙型
 	enum class fk_CostType {
-		INT,
-		DOUBLE,
-		LENGTH
+		INT,		//!<	整数型
+		DOUBLE,		//!<	実数型
+		LENGTH		//!<	辺長
 	};
 
+	//! グラフ内コスト算出方向を表す列挙型
 	enum class fk_CostDirection {
-		FORWARD,
-		BACK
+		FORWARD,	//!< 出発ノードから開始
+		BACK		//!< 目標ノードから開始
 	};
 
 	//! グラフ構造の辺を制御するクラス
