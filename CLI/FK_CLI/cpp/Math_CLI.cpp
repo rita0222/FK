@@ -137,7 +137,6 @@ namespace FK_CLI {
 		return ret;
 	}
 
-
 	void fk_Math::CalcClosestPtPtToSeg(fk_Vector^ argC, fk_Vector^ argA, fk_Vector^ argB,
 									   double %argT, fk_Vector^ argP)
 	{
