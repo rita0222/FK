@@ -73,7 +73,7 @@
 #define __FK_MODEL_HEADER__
 
 #ifndef FK_OLD_NONSUPPORT
-#define FK_OLD_NONSUPPORT
+//#define FK_OLD_NONSUPPORT
 #endif
 
 #include <FK/Boundary.h>

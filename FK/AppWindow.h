@@ -73,6 +73,10 @@
 #ifndef __FK_APP_WINDOW_HEADER__
 #define __FK_APP_WINDOW_HEADER__
 
+#ifndef FK_OLD_NONSUPPORT
+//#define FK_OLD_NONSUPPORT
+#endif
+
 #include <FK/Window.h>
 #include <FK/Light.h>
 #include <FK/FrameController.h>
