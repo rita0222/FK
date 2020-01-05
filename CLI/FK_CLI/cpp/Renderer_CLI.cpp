@@ -196,10 +196,8 @@ namespace FK_CLI {
 		fk_Plane^ argPlane, fk_Vector^ argPos)
 	{
 		if (!argPlane || !argPos) return false;
-		::FK::fk_Vector	retPos;
-		bool		ret;
 
-		ret = pEngine->GetProjectPosition(argX, argY, argPlane->pPlane, &retPos);
+		auto [ret, retPos] = pEngine->GetProjectPosition(argX, argY, *(argPlane->pPlane));
 		argPos->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}
@@ -208,10 +206,8 @@ namespace FK_CLI {
 		double argDist, fk_Vector^ argPos)
 	{
 		if (!argPos) return false;
-		::FK::fk_Vector	retPos;
-		bool		ret;
 
-		ret = pEngine->GetProjectPosition(argX, argY, argDist, &retPos);
+		auto [ret, retPos] = pEngine->GetProjectPosition(argX, argY, argDist);
 		argPos->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}
@@ -219,11 +215,9 @@ namespace FK_CLI {
 	bool fk_Renderer::GetWindowPosition(fk_Vector^ argPos_3D, fk_Vector^ argPos_2D)
 	{
 		if (!argPos_3D || !argPos_2D) return false;
-		::FK::fk_Vector	retPos;
 		::FK::fk_Vector P(argPos_3D->x_, argPos_3D->y_, argPos_3D->z_);
-		bool		ret;
 
-		ret = pEngine->GetWindowPosition(P, &retPos);
+		auto [ret, retPos] = pEngine->GetWindowPosition(P);
 		argPos_2D->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}

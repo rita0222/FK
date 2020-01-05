@@ -128,11 +128,8 @@ namespace FK_CLI {
 		if(!argA || !argB || !argC || !argD) return 0.0;
 		if(!argP) argP = gcnew fk_Vector();
 		if(!argQ) argQ = gcnew fk_Vector();
-		double s, t, ret;
 
-		::FK::fk_Vector P, Q;
-
-		ret = ::FK::fk_Math::calcClosestPtSegToSeg(argA, argB, argC, argD, &s, &t, &P, &Q);
+		auto [ret, s, t, P, Q] = ::FK::fk_Math::calcClosestPtSegToSeg(argA, argB, argC, argD);
 		argS = s;
 		argT = t;
 		argP->Set(P.x, P.y, P.z);
@@ -147,10 +144,7 @@ namespace FK_CLI {
 		if(!argC || !argA || !argB) return;
 		if(!argP) argP = gcnew fk_Vector();
 
-		double t;
-		::FK::fk_Vector P;
-
-		::FK::fk_Math::calcClosestPtPtToSeg(argC, argA, argB, &t, &P);
+		auto [t, P] = ::FK::fk_Math::calcClosestPtPtToSeg(argC, argA, argB);
 
 		argP->Set(P.x, P.y, P.z);
 		argT = t;
@@ -164,10 +158,8 @@ namespace FK_CLI {
 		if(!argP || !argQ || !argA || !argB || !argC) return false;
 		if(!argR) argR = gcnew fk_Vector();
 
-		::FK::fk_Vector R;
-
-		bool retVal = ::FK::fk_Math::calcCrossLineAndTri(argP, argQ, argA, argB, argC, &R);
-		argR->Set(R.x, R.y, R.z);
+		auto [retVal, u, v, t] = ::FK::fk_Math::calcCrossLineAndTri(argP, argQ, argA, argB, argC);
+		argR->Set(u, v, t);
 		return retVal;
 	}
 	
@@ -176,7 +168,7 @@ namespace FK_CLI {
 	{
 		if(!argP || !argQ || !argA || !argB || !argC) return false;
 
-		return ::FK::fk_Math::calcCrossLineAndTri(argP, argQ, argA, argB, argC);
+		return std::get<0>(::FK::fk_Math::calcCrossLineAndTri(argP, argQ, argA, argB, argC));
 	}		
 
 	double fk_Math::CalcCosine(fk_Vector^ argA, fk_Vector^ argB)

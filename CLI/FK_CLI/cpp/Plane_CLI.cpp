@@ -204,9 +204,8 @@ namespace FK_CLI {
 	bool fk_Plane::CalcCrossPos(fk_Vector^ argA, fk_Vector^ argB, fk_Vector^ argPos)
 	{
 		if(!argA || !argB || !argPos) return false;
-		::FK::fk_Vector	retPos;
 
-		bool ret = pPlane->calcCrossPos(argA, argB, &retPos);
+		auto [ret, retPos] = pPlane->calcCrossPos(argA, argB);
 		argPos->Set(retPos.x, retPos.y, retPos.z);
 		return ret;
 	}
@@ -214,9 +213,8 @@ namespace FK_CLI {
 	bool fk_Plane::CalcCrossLineParam(fk_Vector^ argA, fk_Vector^ argB, double %argT)
 	{
 		if(!argA || !argB) return false;
-		bool	ret;
-		double	t;
-		ret = pPlane->calcCrossLineParam(argA, argB, &t);
+
+		auto [ret, t] = pPlane->calcCrossLineParam(argA, argB);
 		argT = t;
 		return ret;
 	}
@@ -225,10 +223,8 @@ namespace FK_CLI {
 									   double %argU, double %argV)
 	{
 		if(!argA || !argB) return false;
-		bool	ret;
-		double	u, v;
 
-		ret = pPlane->calcCrossPlaneParam(argA, argB, &u, &v);
+		auto [ret, u, v] = pPlane->calcCrossPlaneParam(argA, argB);
 		argU = u;
 		argV = v;
 		return ret;
@@ -238,11 +234,8 @@ namespace FK_CLI {
 								double %argT, double %argU, double %argV)
 	{
 		if(!argA || !argB || !argPos) return false;
-		::FK::fk_Vector	retPos;
-		bool		ret;
-		double		t, u, v;
 
-		ret = pPlane->calcCrossAll(argA, argB, &retPos, &t, &u, &v);
+		auto [ret, retPos, t, u, v] = pPlane->calcCrossAll(argA, argB);
 		argPos->Set(retPos.x, retPos.y, retPos.z);
 		argT = t;
 		argU = u;

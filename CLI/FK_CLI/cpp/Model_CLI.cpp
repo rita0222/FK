@@ -611,8 +611,7 @@ namespace FK_CLI {
 
 	bool fk_Model::IsCollision(fk_Model^ argModel, double %argTime)
 	{
-		double tmpT;
-		bool retVal = GetP()->isCollision(argModel->GetP(), &tmpT);
+		auto [retVal, tmpT] = GetP()->isCollision(argModel->GetP());
 		argTime = tmpT;
 		return retVal;
 	}
