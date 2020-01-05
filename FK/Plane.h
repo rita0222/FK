@@ -73,6 +73,7 @@
 #define __FK_PLANE_HEADER__
 
 #include <FK/Vector.h>
+#include <tuple>
 
 namespace FK {
 	//! 幾何平面を管理するクラス
@@ -120,7 +121,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		setPosNormal(const fk_Vector &pos, const fk_Vector &norm);
+		bool setPosNormal(const fk_Vector &pos, const fk_Vector &norm);
 
 		//! 平面設定関数2
 		/*!
@@ -136,9 +137,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		set3Pos(const fk_Vector &pos1,
-							const fk_Vector &pos2,
-							const fk_Vector &pos3);
+		bool set3Pos(const fk_Vector &pos1, const fk_Vector &pos2, const fk_Vector &pos3);
 
 		//! 平面設定関数3
 		/*!
@@ -153,9 +152,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		setPosUVVec(const fk_Vector &pos,
-								const fk_Vector &U,
-								const fk_Vector &V);
+		bool setPosUVVec(const fk_Vector &pos, const fk_Vector &U, const fk_Vector &V);
 
 		//! 基点ベクトル参照関数
 		/*!
@@ -163,7 +160,7 @@ namespace FK {
 		 *
 		 *	\return		基点ベクトル
 		 */
-		fk_Vector	getBasePos(void);
+		fk_Vector getBasePos(void);
 
 		//! Uベクトル参照関数
 		/*!
@@ -171,7 +168,7 @@ namespace FK {
 		 *
 		 *	\return		Uベクトル
 		 */
-		fk_Vector	getUVec(void);
+		fk_Vector getUVec(void);
 
 		//! Vベクトル参照関数
 		/*!
@@ -179,7 +176,7 @@ namespace FK {
 		 *
 		 *	\return		Vベクトル
 		 */
-		fk_Vector	getVVec(void);
+		fk_Vector getVVec(void);
 
 		//! 法線ベクトル参照関数
 		/*!
@@ -187,7 +184,7 @@ namespace FK {
 		 *
 		 *	\return		法線ベクトル
 		 */
-		fk_Vector	getNormal(void);
+		fk_Vector getNormal(void);
 
 		//! 原点距離参照関数
 		/*!
@@ -195,7 +192,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double		getDist(void);
+		double getDist(void);
 
 		//! 任意点距離参照関数
 		/*!
@@ -205,7 +202,7 @@ namespace FK {
 		 *
 		 *	\return			距離
 		 */
-		double		getDist(const fk_Vector &pos);
+		double getDist(const fk_Vector &pos);
 
 		//! u,v パラメータによる平面上点参照関数
 		/*!
@@ -216,7 +213,7 @@ namespace FK {
 		 *
 		 *	\return		平面上点の位置ベクトル
 		 */
-		fk_Vector	getPos(double u, double v);
+		fk_Vector getPos(double u, double v);
 
 		//! ベクトル平行判定関数
 		/*!
@@ -227,7 +224,7 @@ namespace FK {
 		 *
 		 *	\return		平行であれば true を、平行でなければ false を返します。
 		 */
-		bool		isParallel(const fk_Vector &V);
+		bool isParallel(const fk_Vector &V);
 
 		//! 平面平行判定関数
 		/*!
@@ -237,7 +234,7 @@ namespace FK {
 		 *
 		 *	\return		平行であれば true を、平行でなければ false を返します。
 		 */
-		bool		isParallel(const fk_Plane &P);
+		bool isParallel(const fk_Plane &P);
 
 		//! ベクトル垂直判定関数
 		/*!
@@ -248,7 +245,7 @@ namespace FK {
 		 *
 		 *	\return		垂直であれば true を、垂直でなければ false を返します。
 		 */
-		bool		isVertical(const fk_Vector &V);
+		bool isVertical(const fk_Vector &V);
 
 		//! 平面垂直判定関数
 		/*!
@@ -258,7 +255,7 @@ namespace FK {
 		 *
 		 *	\return		垂直であれば true を、垂直でなければ false を返します。
 		 */
-		bool		isVertical(const fk_Plane &P);
+		bool isVertical(const fk_Plane &P);
 
 		//! 交点位置ベクトル参照関数
 		/*!
@@ -268,14 +265,17 @@ namespace FK {
 		 *
 		 *	\param[in]		A		直線上の1点
 		 *	\param[in]		B		直線上の1点
-		 *	\param[out]		pos		交点位置ベクトルが代入されます。
 		 *
-		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、成功すれば true を、失敗すれば false が入ります。
+		 *		第2要素は交点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
 		 */
-		bool		calcCrossPos(const fk_Vector &A,
-								 const fk_Vector &B,
-								 fk_Vector *pos);
+		std::tuple<bool, fk_Vector> calcCrossPos(const fk_Vector &A, const fk_Vector &B);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool calcCrossPos(const fk_Vector &, const fk_Vector &, fk_Vector *);
+#endif
 		//! 交点直線パラメータ参照関数
 		/*!
 		 *	2点A, B を通る直線と平面との交点の、直線上でのパラメータを取得します。
@@ -288,14 +288,17 @@ namespace FK {
 		 *
 		 *	\param[in]		A		直線上の1点
 		 *	\param[in]		B		直線上の1点
-		 *	\param[out]		t		交点の直線上でのパラメータが代入されます。
 		 *
-		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、成功すれば true を、失敗すれば false が入ります。
+		 *		第2要素は交点の直線上でのパラメータが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
 		 */
-		bool		calcCrossLineParam(const fk_Vector & A,
-									   const fk_Vector & B,
-									   double *t);
+		std::tuple<bool, double> calcCrossLineParam(const fk_Vector &A, const fk_Vector &B);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool calcCrossLineParam(const fk_Vector &, const fk_Vector &, double *);
+#endif
 		//! 交点平面パラメータ参照関数
 		/*!
 		 *	2点A, B を通る直線と平面との交点の、平面上でのパラメータを取得します。
@@ -305,15 +308,17 @@ namespace FK {
 		 *	
 		 *	\param[in]		A		直線上の1点
 		 *	\param[in]		B		直線上の1点
-		 *	\param[out]		u		交点の平面上でのuパラメータが代入されます。
-		 *	\param[out]		v		交点の平面上でのvパラメータが代入されます。
 		 *
-		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、成功すれば true を、失敗すれば false が入ります。
+		 *		第2,3要素は、交点の平面上での u, v パラメータがそれぞれ入ります。
+		 *		失敗した場合の第2,3要素の値は未定義です。
 		 */
-		bool		calcCrossPlaneParam(const fk_Vector &A,
-										const fk_Vector &B,
-										double *u, double *v);
-
+		std::tuple<bool, double, double> calcCrossPlaneParam(const fk_Vector &A,
+															 const fk_Vector &B);
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool calcCrossPlaneParam(const fk_Vector &, const fk_Vector &, double *, double *);
+#endif
 		//! 交点情報参照関数
 		/*!
 		 *	2点A, B を通る直線と平面との交点の、直線上でのパラメータを取得します。
@@ -322,23 +327,25 @@ namespace FK {
 		 *		\mathbf{L}(t) = (1-t)\mathbf{A} + t\mathbf{B}
 		 *	\f]
 		 *	平面の式は概要のものと想定します。
-		 *	A,Bが同じ位置であった場合は、直線と平面が平行である場合、
-		 *	エラーとなります。
+		 *	A,Bが同じ位置であった場合は、直線と平面が平行である場合、エラーとなります。
 		 *
 		 *	\param[in]		A		直線上の1点
 		 *	\param[in]		B		直線上の1点
-		 *	\param[out]		pos		交点位置ベクトルが代入されます。
-		 *	\param[out]		t		交点の直線上でのパラメータが代入されます。
-		 *	\param[out]		u		交点の平面上でのuパラメータが代入されます。
-		 *	\param[out]		v		交点の平面上でのvパラメータが代入されます。
 		 *
-		 *	\return		成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、成功すれば true を、失敗すれば false が入ります。
+		 *		第2要素は、交点位置ベクトルが入ります。
+		 *		第3要素は、交点の直線上でのパラメータが入ります。
+		 *		第4,5要素は、交点の平面上でのu,vパラメータがそれぞれ入ります。
+		 *		失敗した場合の第2〜5要素の値は未定義です。
 		 */
-		bool		calcCrossAll(const fk_Vector &A,
-								 const fk_Vector &B,
-								 fk_Vector *pos,
-								 double *t,
-								 double *u, double *v);
+		std::tuple<bool, fk_Vector, double, double, double> calcCrossAll(const fk_Vector &A,
+																		 const fk_Vector &B);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool calcCrossAll(const fk_Vector &A, const fk_Vector &B,
+						  fk_Vector *pos, double *t, double *u, double *v);
+#endif
 
 		
 		//! 点正射影算出関数

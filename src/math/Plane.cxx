@@ -74,6 +74,7 @@
 #include <FK/Math.h>
 
 using namespace FK;
+using namespace std;
 
 fk_Plane::fk_Plane(void)
 	: fk_BaseObject(fk_Type::PLANE)
@@ -234,73 +235,85 @@ bool fk_Plane::isVertical(const fk_Plane &argPlane)
 	return isParallel(argPlane.norm);
 }
 
-bool fk_Plane::calcCrossLineParam(const fk_Vector &argStart,
-								  const fk_Vector &argEnd,
-								  double *retT)
+tuple<bool, fk_Vector> fk_Plane::calcCrossPos(const fk_Vector &argStart, const fk_Vector &argEnd)
 {
-	fk_Vector		lineVec;
+	auto [status, t] = calcCrossLineParam(argStart, argEnd);
+	if(status == false) return {false, fk_Vector()};
 
-	lineVec = argEnd - argStart;
+	return {true, (1.0 - t)*argStart + t*argEnd};
+}
 
-	if(isParallel(lineVec) == true) return false;
+bool fk_Plane::calcCrossPos(const fk_Vector &argStart, const fk_Vector &argEnd, fk_Vector *retPos)
+{
+	auto [status, pos] = calcCrossPos(argStart, argEnd);
+	*retPos = pos;
+	return status;
+}
 
+tuple<bool, double> fk_Plane::calcCrossLineParam(const fk_Vector &argStart,
+												 const fk_Vector &argEnd)
+{
+	fk_Vector lineVec(argEnd - argStart);
+
+	if(isParallel(lineVec) == true) return {false, 0.0};
 	if(distFlag == false) CalcDist();
-	*retT = (dist - (norm * argStart))/(norm * lineVec);
-	return true;
+	return {true, (dist - (norm * argStart))/(norm * lineVec)};
 }
 
-bool fk_Plane::calcCrossPos(const fk_Vector &argStart,
-							const fk_Vector &argEnd,
-							fk_Vector *retPos)
+bool fk_Plane::calcCrossLineParam(const fk_Vector &argStart, const fk_Vector &argEnd, double *retT)
 {
-	double			param;
-
-	if(calcCrossLineParam(argStart, argEnd, &param) == false) {
-		return false;
-	}
-
-	*retPos = (1.0 - param)*argStart + param*argEnd;
-	return true;
+	auto [status, t] = calcCrossLineParam(argStart, argEnd);
+	*retT = t;
+	return status;
 }
 
-bool fk_Plane::calcCrossAll(const fk_Vector &argStart,
-							const fk_Vector &argEnd,
-							fk_Vector *retPos, double *retT,
-							double *retU, double *retV)
+tuple<bool, double, double> fk_Plane::calcCrossPlaneParam(const fk_Vector &argStart,
+														  const fk_Vector &argEnd)
 {
-	fk_Matrix		mat;
-	fk_HVector		lineVec, tmpVec, paramVec;
-
-	lineVec = argStart - argEnd;
-	if(isParallel(lineVec) == true) {
-		return false;
-	}
-
-	tmpVec = argStart - base;
-
-	mat[0][0] = uVec.x;	mat[0][1] = vVec.x;	mat[0][2] = lineVec.x;
-	mat[1][0] = uVec.y;	mat[1][1] = vVec.y;	mat[1][2] = lineVec.y;
-	mat[2][0] = uVec.z;	mat[2][1] = vVec.z;	mat[2][2] = lineVec.z;
-
-	mat.inverse();
-	paramVec = mat * tmpVec;
-
-	*retU = paramVec.x;
-	*retV = paramVec.y;
-	*retT = paramVec.z;
-
-	*retPos = (1.0 - *retT)*argStart + (*retT)*argEnd;
-	return true;
+	auto [status, dummy, t, u, v] = calcCrossAll(argStart, argEnd);
+	return {status, u, v};
 }
 
 bool fk_Plane::calcCrossPlaneParam(const fk_Vector &argStart,
 								   const fk_Vector &argEnd,
 								   double *retU, double *retV)
 {
-	fk_Vector	dummy;
-	double		t;
+	auto [status, dummy, t, u, v] = calcCrossAll(argStart, argEnd);
+	*retU = u;
+	*retV = v;
+	return status;
+}
 
-	return calcCrossAll(argStart, argEnd, &dummy, &t, retU, retV);
+tuple<bool, fk_Vector, double, double, double> fk_Plane::calcCrossAll(const fk_Vector &argStart,
+																	  const fk_Vector &argEnd)
+{
+	fk_Matrix mat;
+	fk_HVector lineVec(argStart - argEnd);
+	fk_HVector V;
+
+	if(isParallel(lineVec) == true) {
+		return {false, fk_Vector(), 0.0, 0.0, 0.0};
+	}
+
+	mat.setCol(0, uVec);
+	mat.setCol(1, vVec);
+	mat.setCol(2, lineVec);
+
+	mat.inverse();
+	V = mat * (argStart - base);
+
+	return {true, (1.0 - V.z) * argStart + V.z * argEnd, V.z, V.x, V.y};
+}
+
+bool fk_Plane::calcCrossAll(const fk_Vector &argStart, const fk_Vector &argEnd,
+							fk_Vector *retPos, double *retT, double *retU, double *retV)
+{
+	auto [status, P, t, u, v] = calcCrossAll(argStart, argEnd);
+	*retPos = P;
+	*retT = t;
+	*retU = u;
+	*retV = v;
+	return status;
 }
 
 fk_Vector fk_Plane::proj(const fk_Vector &argP)

@@ -97,91 +97,88 @@ namespace FK {
 		fk_GraphicsEngine(void);
 		virtual ~fk_GraphicsEngine();
 
-		void				Init(int, int);
+		void Init(int, int);
 
-		void				SetScene(fk_Scene *);
-		void				ResizeWindow(int, int);
+		void SetScene(fk_Scene *);
+		void ResizeWindow(int, int);
 
-		bool				GetProjectPosition(double, double,
-											   fk_Plane *, fk_Vector *);
-		bool				GetProjectPosition(double, double,
-											   double, fk_Vector *);
-		bool				GetWindowPosition(fk_Vector, fk_Vector *);
-		//void				GetPickData(fk_PickData *, int, int, int);
+		std::tuple<bool, fk_Vector> GetProjectPosition(double, double, fk_Plane &);
+		std::tuple<bool, fk_Vector> GetProjectPosition(double, double, double);
+		bool GetWindowPosition(fk_Vector, fk_Vector *);
+		//void GetPickData(fk_PickData *, int, int, int);
 
-		bool				SnapImage(fk_Image *, fk_SnapProcMode = fk_SnapProcMode::FRONT);
+		bool SnapImage(fk_Image *, fk_SnapProcMode = fk_SnapProcMode::FRONT);
 
-		void				OpenGLInit(void);
+		void OpenGLInit(void);
 
-		void				SetPickViewPort(int, int, int);
-		void				Draw(void);
+		void SetPickViewPort(int, int, int);
+		void Draw(void);
 
-		//void				StereoDrawPrep(fk_StereoChannel);
-		//void				StereoDrawMain(fk_StereoChannel);
+		//void StereoDrawPrep(fk_StereoChannel);
+		//void StereoDrawMain(fk_StereoChannel);
 
 	private:
 
-		fk_PointDraw				*pointDraw;
-		fk_LineDraw					*lineDraw;
-		fk_FaceDraw					*faceDraw;
-		fk_TextureDraw				*textureDraw;
-		fk_BezCurveDraw				*bezCurveLineDraw;
-		fk_BezCurveDraw				*bezCurvePointDraw;
-		fk_SurfaceDraw				*surfaceDraw;
-		fk_SurfaceDraw				*surfacePointDraw;
-		fk_SurfaceDraw				*surfaceLineDraw;
+		fk_PointDraw *pointDraw;
+		fk_LineDraw *lineDraw;
+		fk_FaceDraw *faceDraw;
+		fk_TextureDraw *textureDraw;
+		fk_BezCurveDraw *bezCurveLineDraw;
+		fk_BezCurveDraw *bezCurvePointDraw;
+		fk_SurfaceDraw *surfaceDraw;
+		fk_SurfaceDraw *surfacePointDraw;
+		fk_SurfaceDraw *surfaceLineDraw;
 
-		unsigned int				winID;
-		fk_DisplayLink				*curDLink;
-		int							dLinkStatus;
-		int							dLinkID;
-		int							wSize;
-		int							hSize;
-		bool						resizeFlag;
-		fk_BlendFactor				srcFactor, dstFactor;
-		bool						depthRead, depthWrite;
+		unsigned int winID;
+		fk_DisplayLink *curDLink;
+		int dLinkStatus;
+		int dLinkID;
+		int wSize;
+		int hSize;
+		bool resizeFlag;
+		fk_BlendFactor srcFactor, dstFactor;
+		bool depthRead, depthWrite;
 
-		std::vector<fk_Model *>		modelArray;
+		std::vector<fk_Model *> modelArray;
 
-		fk_ProjectBase				*curProj;
-		GLint						viewArray[4];
+		fk_ProjectBase *curProj;
+		GLint viewArray[4];
 
-		std::vector<fk_ImType>		snapBuffer;
+		std::vector<fk_ImType> snapBuffer;
 
-		fk_Perspective				defProj;
+		fk_Perspective defProj;
 
-		fk_Model					boundaryModel;
+		fk_Model boundaryModel;
 
-		void				DrawObjs(void);
-		void				DrawModel(fk_Model *);
-		void				CurrentDispLinkDraw(void);
+		void DrawObjs(void);
+		void DrawModel(fk_Model *);
+		void CurrentDispLinkDraw(void);
 
-		void				DrawShapeObj(fk_Model *);
-		void				DrawBoundaryLine(fk_Model *);
+		void DrawShapeObj(fk_Model *);
+		void DrawBoundaryLine(fk_Model *);
 
-		void				SetViewPort(void);
-		void				SetProjection(fk_ProjectBase *);
-		//void				SetDefaultProjection(void);
+		void SetViewPort(void);
+		void SetProjection(fk_ProjectBase *);
+		//void SetDefaultProjection(void);
 
-		void				ApplySceneParameter(bool);
+		void ApplySceneParameter(bool);
 
-		void				InitFogStatus(fk_Scene *);
+		void InitFogStatus(fk_Scene *);
 
-		bool				IsInsideWindow(void);
+		bool IsInsideWindow(void);
 
-		unsigned long		GetNow(void);
+		unsigned long GetNow(void);
 
-		//void				ViewMatCalc(fk_Matrix *);
+		//void ViewMatCalc(fk_Matrix *);
 
-		bool				GetViewLinePos(double, double,
-										   fk_Vector *, fk_Vector *);
+		std::tuple<fk_Vector, fk_Vector> GetViewLinePos(double, double);
 
-		//void				SetStereoViewPort(fk_StereoChannel);
-		//void				RecalcStereoModelView(fk_StereoChannel);
-		//void				DrawStereoObjs(bool);
+		//void SetStereoViewPort(fk_StereoChannel);
+		//void RecalcStereoModelView(fk_StereoChannel);
+		//void DrawStereoObjs(bool);
 
-		void				SetBlendMode(fk_Model *model);
-		void				SetDepthMode(fk_DepthMode mode);
+		void SetBlendMode(fk_Model *model);
+		void SetDepthMode(fk_DepthMode mode);
 	};
 }
 

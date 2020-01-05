@@ -536,10 +536,9 @@ void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 	return;
 }
 
-bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
-									   fk_Vector *retS, fk_Vector *retE)
+tuple<fk_Vector, fk_Vector> fk_GraphicsEngine::GetViewLinePos(double argX, double argY)
 {
-	fk_HVector		inVec, outVec;
+	fk_HVector		inVec, outS, outE;
 	fk_Matrix		mat;
 	double			tmpY;
 	double			diffX, diffY;
@@ -558,43 +557,35 @@ bool fk_GraphicsEngine::GetViewLinePos(double argX, double argY,
 	inVec.w = 1.0;
 
 	inVec.z = -1.0;
-	outVec = mat * inVec;
-
-	if(fabs(outVec.w) < fk_Math::EPS) return false;
-	retS->set(outVec.x/outVec.w, outVec.y/outVec.w, outVec.z/outVec.w);
-	
+	outS = mat * inVec;
 	inVec.z = 1.0;
-	outVec = mat * inVec;
-	if(fabs(outVec.w) < fk_Math::EPS) return false;
-	retE->set(outVec.x/outVec.w, outVec.y/outVec.w, outVec.z/outVec.w);
-	return true;
+	outE = mat * inVec;
+
+	if(fabs(outS.w) < fk_Math::EPS || fabs(outE.w) < fk_Math::EPS) return {outS, outE};
+	return {fk_Vector(outS)/outS.w, fk_Vector(outE)/outE.w};
 }
 
-bool fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
-										   fk_Plane *argPlane,
-										   fk_Vector *retPos)
+tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
+															 fk_Plane &argPlane)
 {
-	fk_Vector		sVec, eVec;
-
-	if(curDLink == nullptr) return false;
-
+	if(curDLink == nullptr) return {false, fk_Vector()};
 	if(generalID > 2) SetViewPort();
 
-	GetViewLinePos(argX, argY, &sVec, &eVec);
-	return argPlane->calcCrossPos(sVec, eVec, retPos);
+	auto [sVec, eVec] = GetViewLinePos(argX, argY);
+	return argPlane.calcCrossPos(sVec, eVec);
 }
 
-bool fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
-										   double argDist, fk_Vector *retPos)
+tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
+															 double argDist)
 {
-	fk_Vector		sVec, eVec, eyeVec, cameraPos;
+	fk_Vector		eyeVec, cameraPos;
 	const fk_Model	*tmpCamera;
 
-	if(curDLink == nullptr) return false;
+	if(curDLink == nullptr) return {false, fk_Vector()};
 	tmpCamera = curDLink->getCamera();
 	if(generalID > 2) SetViewPort();
 
-	GetViewLinePos(argX, argY, &sVec, &eVec);
+	auto [sVec, eVec] = GetViewLinePos(argX, argY);
 	eyeVec = eVec - sVec;
 	eyeVec.normalize();
 	if(tmpCamera == nullptr) {
@@ -603,8 +594,7 @@ bool fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
 		cameraPos = tmpCamera->getInhPosition();
 	}
 
-	*retPos = cameraPos + eyeVec * argDist;
-	return true;
+	return {true, cameraPos + eyeVec * argDist};
 }
 
 bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)

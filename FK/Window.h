@@ -369,15 +369,12 @@ namespace FK {
 		 *	コード例は以下の通りです。
 		 *
 		 *		fk_Window		win;
-		 *		int				x, y;
 		 *
-		 *		win.getMousePosition(&x, &y, true);
+		 *		auto [x, y] = win.getMousePosition(true);
 		 *
 		 *	格納される値は投影座標となります。
 		 *	投影座標の詳細は本クラスの概要を参照して下さい。
 		 *
-		 *	\param[out]		x		マウスポインタの x 座標
-		 *	\param[out]		y		マウスポインタの y 座標
 		 *	\param[in]		insideFlag
 		 *		true の場合は、もしマウスポインタが描画領域の外側にあった場合は
 		 *		x, y の両方に -1 を格納します。
@@ -387,11 +384,17 @@ namespace FK {
 		 *		負の値が x や y に格納されることがありえることを意味しますので、
 		 *		注意が必要です。
 		 *
+		 *	\return
+		 *		マウスポインタの x, y 座標がそれぞれ第1,2要素に入ります。
+		 *		型は int 型となります。
+		 *
 		 *	\sa getMouseStatus(), getMouseWheelStatus(),
-		 *		getPickModel(fk_PickData *, int),
-		 *		getPickModel(fk_PickData *, int, int, int)
 		 */
-		void	getMousePosition(int *x, int *y, bool insideFlag = true);
+		std::tuple<int, int> getMousePosition(bool insideFlag = true);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void getMousePosition(int *, int *, bool = true);
+#endif
 
 		//! マウスボタン状態取得関数
 		/*!
@@ -473,18 +476,22 @@ namespace FK {
 		 *
 		 *	\param[in]	x		投影座標の x 成分
 		 *	\param[in]	y		投影座標の y 成分
-		 *	\param[in]	plane
-		 *		射影先の平面。平面情報の設定については fk_Plane の解説を参照して下さい。
-		 *	\param[out]	pos		算出した点の位置ベクトル
+		 *	\param[in]	plane	射影先の平面。
 		 *
-		 *	\return		算出に成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、算出に成功すれば true が、失敗すれば false が入ります。
+		 *		第2要素は算出した点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
 		 *
-		 *	\sa getProjectPosition(double, double, double, fk_Vector *),
+		 *	\sa getProjectPosition(double, double, double),
 		 *		getWindowPosition(), fk_Plane
 		 */
+		std::tuple<bool, fk_Vector> getProjectPosition(double x, double y, fk_Plane &plane);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getProjectPosition(double x, double y,
 								   fk_Plane *plane, fk_Vector *pos);
-
+#endif
 		//! 投影平面から任意距離での射影点算出関数
 		/*!
 		 *	この関数は、描画領域上の投影座標に対し、
@@ -496,13 +503,18 @@ namespace FK {
 		 *	\param[in]	x		投影座標の x 成分
 		 *	\param[in]	y		投影座標の y 成分
 		 *	\param[in]	dist	カメラからの空間中の距離
-		 *	\param[out]	pos		算出した点の位置ベクトル
 		 *
-		 *	\return		算出に成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、算出に成功すれば true が、失敗すれば false が入ります。
+		 *		第2要素は算出した点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
 		 */
+		std::tuple<bool, fk_Vector> getProjectPosition(double x, double y, double dist);
+
+#ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getProjectPosition(double x, double y,
 								   double dist, fk_Vector *pos);
-
+#endif
 		//! 空間座標から投影座標への射影点算出関数
 		/*!
 		 *	この関数は、空間座標から投影座標への射影点を算出します。

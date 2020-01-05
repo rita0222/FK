@@ -349,16 +349,17 @@ char fk_Window::getLastKey(void)
 	return lastKey;
 }
 
+tuple<int, int> fk_Window::getMousePosition(bool argInsideFlag)
+{
+	if(argInsideFlag == true && IsInsideWindow() == false) return {-1, -1};
+	return {Fl::event_x() - GLWinXPosition, Fl::event_y() - GLWinYPosition};
+}
+
 void fk_Window::getMousePosition(int *argX, int *argY, bool argInsideFlag)
 {
-	if(argInsideFlag == true && IsInsideWindow() == false) {
-		*argX = *argY = -1;
-		return;
-	}
-
-	*argX = Fl::event_x() - GLWinXPosition;
-	*argY = Fl::event_y() - GLWinYPosition;
-
+	auto [x, y] = getMousePosition(argInsideFlag);
+	*argX = x;
+	*argY = y;
 	return;
 }
 

@@ -191,16 +191,29 @@ void fk_Window::setScene(fk_Scene *argScene)
 	return;
 }
 
-bool fk_Window::getProjectPosition(double argX, double argY,
-								   double argDist, fk_Vector *retPos)
+tuple<bool, fk_Vector> fk_Window::getProjectPosition(double argX, double argY, double argDist)
 {
-	return engine.GetProjectPosition(argX, argY, argDist, retPos);
+	return engine.GetProjectPosition(argX, argY, argDist);
+}
+
+bool fk_Window::getProjectPosition(double argX, double argY, double argDist, fk_Vector *retPos)
+{
+	auto [status, pos] = getProjectPosition(argX, argY, argDist);
+	*retPos = pos;
+	return status;
+}
+
+tuple<bool, fk_Vector> fk_Window::getProjectPosition(double argX, double argY, fk_Plane &argPlane)
+{
+	return engine.GetProjectPosition(argX, argY, argPlane);
 }
 
 bool fk_Window::getProjectPosition(double argX, double argY,
 								   fk_Plane *argPlane, fk_Vector *retPos)
 {
-	return engine.GetProjectPosition(argX, argY, argPlane, retPos);
+	auto [status, pos] = engine.GetProjectPosition(argX, argY, *argPlane);
+	*retPos = pos;
+	return status;
 }
 
 bool fk_Window::getWindowPosition(fk_Vector argPos, fk_Vector *retPos)
