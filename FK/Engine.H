@@ -104,7 +104,7 @@ namespace FK {
 
 		std::tuple<bool, fk_Vector> GetProjectPosition(double, double, fk_Plane &);
 		std::tuple<bool, fk_Vector> GetProjectPosition(double, double, double);
-		bool GetWindowPosition(fk_Vector, fk_Vector *);
+		std::tuple<bool, fk_Vector> GetWindowPosition(fk_Vector &);
 		//void GetPickData(fk_PickData *, int, int, int);
 
 		bool SnapImage(fk_Image *, fk_SnapProcMode = fk_SnapProcMode::FRONT);

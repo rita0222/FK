@@ -70,7 +70,6 @@
  *
  ****************************************************************************/
 
-
 #ifndef __FK_APP_WINDOW_HEADER__
 #define __FK_APP_WINDOW_HEADER__
 
@@ -361,7 +360,7 @@ namespace FK {
 		 *	\param[in]		y		カメラ位置のy成分
 		 *	\param[in]		z		カメラ位置のz成分
 		 */
-		void		setCameraPos(double x, double y, double z);
+		void setCameraPos(double x, double y, double z);
 
 		//! カメラ位置設定関数2
 		/*!
@@ -369,7 +368,7 @@ namespace FK {
 		 *
 		 *	\param[in]		pos		カメラ位置のベクトル
 		 */
-		void		setCameraPos(const fk_Vector &pos);
+		void setCameraPos(const fk_Vector &pos);
 
 		//!	カメラ注視点設定関数1
 		/*!
@@ -380,7 +379,7 @@ namespace FK {
 		 *	\param[in]	   	y		注視点位置のy成分
 		 *	\param[in]	   	z		注視点位置のz成分
 		 */
-		void		setCameraFocus(double x, double y, double z);
+		void setCameraFocus(double x, double y, double z);
 
 		//!	カメラ注視点設定関数2
 		/*!
@@ -389,7 +388,7 @@ namespace FK {
 		 *
 		 *	\param[in]	   	pos		注視点の位置ベクトル
 		 */
-		void		setCameraFocus(const fk_Vector &pos);
+		void setCameraFocus(const fk_Vector &pos);
 
 		//! カメラモデル設定関数1
 		/*!
@@ -401,7 +400,7 @@ namespace FK {
 		 *
 		 *	\param[in]		model	カメラモデル(のアドレス)
 		 */
-		void		setCameraModel(fk_Model *model);
+		void setCameraModel(fk_Model *model);
 
 		//! カメラモデル設定関数2
 		/*!
@@ -413,7 +412,7 @@ namespace FK {
 		 *
 		 *	\param[in]		model	カメラモデル
 		 */
-		void		setCameraModel(fk_Model &model);
+		void setCameraModel(fk_Model &model);
 
 		//! カメラモデル取得関数
 		/*!
@@ -425,7 +424,7 @@ namespace FK {
 		 *	\sa		setCameraModel(fk_Model *), setCameraModel(fk_Model &),
 		 *			fk_Model
 		 */
-		fk_Model *	getCameraModel(void);
+		fk_Model * getCameraModel(void);
 
 
 		//! カメラ初期化関数
@@ -436,7 +435,7 @@ namespace FK {
 		 *	\sa		setCameraModel(fk_Model *), setCameraModel(fk_Model &),
 		 *			getCameraModel()
 		 */
-		void		setCameraDefault(void);
+		void setCameraDefault(void);
 		///@}
 
 		//! \name シーン制御関数
@@ -464,7 +463,7 @@ namespace FK {
 		 *
 		 *	\sa getScene(), setSceneDefault()
 		 */
-		void		setScene(fk_Scene *scene, bool defCameraAndLight = false);
+		void setScene(fk_Scene *scene, bool defCameraAndLight = false);
 
 		//! シーン設定関数2
 		/*!
@@ -488,7 +487,7 @@ namespace FK {
 		 *
 		 *	\sa getScene(), setSceneDefault(), fk_Scene
 		 */
-		void		setScene(fk_Scene &scene, bool defCameraAndLight = false);
+		void setScene(fk_Scene &scene, bool defCameraAndLight = false);
 
 		//! シーン取得関数
 		/*!
@@ -499,7 +498,7 @@ namespace FK {
 		 *	\sa setScene(fk_Scene *, bool), setScene(fk_Scene &, bool),
 		 *		setSceneDefault(), fk_Scene
 		 */
-		fk_Scene *	getScene(void);
+		fk_Scene * getScene(void);
 
 		//! シーン設定初期化関数
 		/*!
@@ -509,7 +508,7 @@ namespace FK {
 		 *	\sa setScene(fk_Scene *, bool), setScene(fk_Scene &, bool),
 		 *		getScene(), fk_Scene
 		 */
-		void		setSceneDefault(void);
+		void setSceneDefault(void);
 
 		//! モデル表示登録関数1
 		/*!
@@ -761,7 +760,7 @@ namespace FK {
 		 *
 		 *	\sa getSpecialKeyStatus(), update()
 		 */
-		bool	getKeyStatus(char keyChar, fk_Switch status, bool insideFlg = false);
+		bool getKeyStatus(char keyChar, fk_Switch status, bool insideFlg = false);
 
 		//! 特殊キー状態取得関数
 		/*!
@@ -790,12 +789,12 @@ namespace FK {
 		 *
 		 *	\sa getKeyStatus(), update()
 		 */
-		bool	getSpecialKeyStatus(fk_Key keyCode,
-									fk_Switch status, bool insideFlg = false);
+		bool getSpecialKeyStatus(fk_Key keyCode,
+								 fk_Switch status, bool insideFlg = false);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Switch	getSpecialKeyStatus(fk_Key keyCode);
-		fk_Switch	getKeyStatus(char keyChar);
+		fk_Switch getSpecialKeyStatus(fk_Key keyCode);
+		fk_Switch getKeyStatus(char keyChar);
 #endif
 		///@}
 
@@ -821,11 +820,11 @@ namespace FK {
 		 *		ボタンが status で指定した状態を満たしていれば true を、
 		 *		そうでなければ false を返します。
 		 */
-		bool	getMouseStatus(fk_MouseButton buttonCode,
-							   fk_Switch status, bool insideFlag);
+		bool getMouseStatus(fk_MouseButton buttonCode,
+							fk_Switch status, bool insideFlag);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Switch		getMouseStatus(fk_MouseButton buttonCode);
+		fk_Switch getMouseStatus(fk_MouseButton buttonCode);
 #endif	
 
 		//! マウスポインタ位置取得関数
@@ -841,7 +840,7 @@ namespace FK {
 		 *
 		 *	\sa getMouseStatus(), fk_Window::getMousePosition()
 		 */
-		fk_Vector			getMousePosition(void);
+		fk_Vector getMousePosition(void);
 
 		//! マウスカーソル表示制御関数
 		/*!
@@ -859,7 +858,7 @@ namespace FK {
 		 *	\note
 		 *		この関数は Windows 環境のみ対応しています。
 		 */
-		void				setCursorState(bool visible, bool center);
+		void setCursorState(bool visible, bool center);
 		///@}
 
 		//! \name マウス制御支援関数
@@ -887,8 +886,7 @@ namespace FK {
 		 *		true の場合、カーソルの中心を固定します。
 		 *		false の場合は固定しません。
 		 */
-		void procMouseView(fk_Model *camera, double spinX,
-						   double spinY, bool lockSW);
+		void procMouseView(fk_Model *camera, double spinX, double spinY, bool lockSW);
 
 		//! FPS視点的カメラ制御関数2
 		/*!
@@ -901,8 +899,7 @@ namespace FK {
 		 *		true の場合、カーソルの中心を固定します。
 		 *		false の場合は固定しません。
 		 */
-		void procMouseView(fk_Model &camera, double spinX,
-						   double spinY, bool lockSW);
+		void procMouseView(fk_Model &camera, double spinX, double spinY, bool lockSW);
 		///@}
 
 		//! \name 投影座標・空間座標変換関数
@@ -918,17 +915,23 @@ namespace FK {
 		 *
 		 *	\param[in]	x		投影座標の x 成分
 		 *	\param[in]	y		投影座標の y 成分
-		 *	\param[in]	plane
-		 *		射影先の平面。平面情報の設定については fk_Plane の解説を参照して下さい。
-		 *	\param[out]	pos		算出した点の位置ベクトル
+		 *	\param[in]	plane	射影先の平面。
 		 *
-		 *	\return		算出に成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、算出に成功すれば true が、失敗すれば false が入ります。
+		 *		第2要素は算出した点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
 		 *
-		 *	\sa getProjectPosition(double, double, double, fk_Vector *),
+		 *	\sa getProjectPosition(double, double, double),
 		 *		getWindowPosition(), fk_Plane
 		 */
-		bool	getProjectPosition(double x, double y,
-								   fk_Plane *plane, fk_Vector *pos);
+		std::tuple<bool, fk_Vector> getProjectPosition(double x, double y, fk_Plane &plane);
+
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool getProjectPosition(double x, double y, fk_Plane *plane, fk_Vector *pos);
+#endif
+#endif
 
 		//! 投影平面から任意距離での射影点算出関数
 		/*!
@@ -941,13 +944,19 @@ namespace FK {
 		 *	\param[in]	x		投影座標の x 成分
 		 *	\param[in]	y		投影座標の y 成分
 		 *	\param[in]	dist	カメラからの空間中の距離
-		 *	\param[out]	pos		算出した点の位置ベクトル
 		 *
-		 *	\return		算出に成功すれば true を、失敗すれば false を返します。
+		 *	\return
+		 *		第1要素は、算出に成功すれば true が、失敗すれば false が入ります。
+		 *		第2要素は算出した点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
 		 */
-		bool	getProjectPosition(double x, double y,
-								   double dist, fk_Vector *pos);
+		std::tuple<bool, fk_Vector> getProjectPosition(double x, double y, double dist);
 
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool getProjectPosition(double x, double y, double dist, fk_Vector *pos);
+#endif
+#endif
 		//! 空間座標から投影座標への射影点算出関数
 		/*!
 		 *	この関数は、空間座標から投影座標への射影点を算出します。
@@ -959,13 +968,23 @@ namespace FK {
 		 *	つまり、カメラに近いほど値が小さくなるということです。
 		 *
 		 *	\param[in]	pos_3D		空間座標位置ベクトル
-		 *	\param[out]	pos_2D		射影点となる投影座標の位置ベクトル
 		 *
-		 *	\sa getProjectPosition(double, double, fk_Plane *, fk_Vector *),
-		 *		getProjectPosition(double, double, double, fk_Vector *),
+		 *	\return
+		 *		第1要素は、算出に成功すれば true が、失敗すれば false が入ります。
+		 *		第2要素は算出した射影点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
+		 *
+		 *	\sa getProjectPosition(double, double, fk_Plane &),
+		 *		getProjectPosition(double, double, double),
 		 *		fk_Perspective, fk_Ortho, fk_Frustum
 		 */
-		bool	getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
+		std::tuple<bool, fk_Vector> getWindowPosition(fk_Vector &pos_3D);
+
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
+#endif
+#endif
 		///@}
 
 		//! \name スクリーンショット関数
@@ -988,9 +1007,9 @@ namespace FK {
 		 *	\return
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	snapImage(std::string fileName,
-						  fk_ImageType format = fk_ImageType::BMP,
-						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
+		bool snapImage(std::string fileName,
+					   fk_ImageType format = fk_ImageType::BMP,
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
 		//! 描画画像データ出力関数
 		/*!
@@ -1006,37 +1025,37 @@ namespace FK {
 		 *	\return
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	snapImage(fk_Image *image,
-						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
+		bool snapImage(fk_Image *image,
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
 		///@}
 
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void		SetFinalizeMode(void);
+		void SetFinalizeMode(void);
 #endif
 
 	private:
 		friend class fk_ShaderBinder;
 
-		Fl_Window				*mainWin;
-		fk_Window				*drawWin;
+		Fl_Window *mainWin;
+		fk_Window *drawWin;
 
-		fk_AppWindow			*ref_child;
-		fk_FrameController		fps_admin;
-		fk_GuideObject			guide;
-		fk_TrackBall			*tb;
-		fk_FullscreenController	fsc;
+		fk_AppWindow *ref_child;
+		fk_FrameController fps_admin;
+		fk_GuideObject guide;
+		fk_TrackBall *tb;
+		fk_FullscreenController fsc;
 
-		fk_Scene				scene;
-		fk_Scene				*ref_scene;
+		fk_Scene scene;
+		fk_Scene *ref_scene;
 
-		fk_Light				lightShape;
-		fk_Model				camera, light;
-		fk_Model				*ref_camera;
+		fk_Light lightShape;
+		fk_Model camera, light;
+		fk_Model *ref_camera;
 
-		int						fps;
-		bool					tbFlag, childMode;
+		int fps;
+		bool tbFlag, childMode;
 
 		void ToggleScreen(void);
 	};

@@ -958,17 +958,17 @@ void fk_ShapeViewer::MovePosition(double argX, double argY, double argZ)
 
 void fk_ShapeViewer::DragShape(void)
 {
-	double		tmpX, tmpY;
-
 	if(viewWin == nullptr) return;
 	if(viewWin->getMouseStatus(fk_MouseButton::M1) == true) {
 		moveFlag = true;
-		double oldX = mouseX;
-		double oldY = mouseY;
-		viewWin->getMousePosition(&mouseX, &mouseY);
+		double oldX = double(mouseX);
+		double oldY = double(mouseY);
+		auto [x, y] = viewWin->getMousePosition();
+		mouseX = x;
+		mouseY = y;
 		if(oldMoveFlag == true) {
-			tmpX = static_cast<double>(mouseX - oldX)*720.0/static_cast<double>(fkWinSize.h);
-			tmpY = static_cast<double>(oldY - mouseY)*720.0/static_cast<double>(fkWinSize.h);
+			double tmpX = (double(mouseX) - oldX)*720.0/double(fkWinSize.h);
+			double tmpY = (oldY - double(mouseY))*720.0/double(fkWinSize.h);
 			MovePosition(tmpX, tmpY, 0.0);
 		}
 	} else {

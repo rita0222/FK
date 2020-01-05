@@ -75,6 +75,7 @@
 #include <FK/TrackBall.h>
 
 using namespace FK;
+using namespace std;
 
 // コンストラクタ
 fk_TrackBall::fk_TrackBall(fk_Window *p_fk_win, fk_Model *p_camera)
@@ -137,13 +138,13 @@ void fk_TrackBall::ControlLookTo()
 	fk_Vector cameraX = cameraV ^ cameraU;
 
 	if(fk_win->getMouseStatus(lookButton, overCheck) & !lookClick) {
-		fk_win->getMousePosition(&oldX, &oldY, overCheck);
+		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
 		lookClick = true;
 		echoX = 0;
 		echoY = 0;
 	// クリック継続時
 	} else if(fk_win->getMouseStatus(lookButton, overCheck) & lookClick) {
-		fk_win->getMousePosition(&nowX, &nowY, overCheck);
+		tie(nowX, nowY) = fk_win->getMousePosition(overCheck);
 		double divX = double(oldX - nowX)/divLook;
 		double divY = double(oldY - nowY)/divLook;
 		camera->glRotateWithVec(lookPos, lookPos + cameraU, divX);
@@ -183,20 +184,20 @@ void fk_TrackBall::ControlLookToDist()
 	if( (fk_win->getMouseStatus(distButton[0], overCheck) &
 		 fk_win->getMouseStatus(distButton[1], overCheck) & !distClick)
 		|| (bShiftState & fk_win->getMouseStatus(lookButton, overCheck) & !distClick) ) {
-		fk_win->getMousePosition(&oldX, &oldY, overCheck);
+		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
 		distClick = true;
 	// クリック継続時
 	} else if( (fk_win->getMouseStatus(distButton[0], overCheck) &
 				fk_win->getMouseStatus(distButton[1], overCheck) & distClick)
 			   || (bShiftState & fk_win->getMouseStatus(lookButton, overCheck) & distClick) ) {
-		fk_win->getMousePosition(&nowX, &nowY, overCheck);
+		tie(nowX, nowY) = fk_win->getMousePosition(overCheck);
 
 		// 左右ドラッグでズーム操作を可能にした
 		camera->loTranslate(0.0, 0.0,
 							(double)(nowY - oldY)/divPos + (double)(oldX - nowX)/divPos);
 
 		if((lookPos - camera->getPosition()).dist() < divDist) camera->glMoveTo(prePos);
-		fk_win->getMousePosition(&oldX, &oldY, overCheck);
+		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
 
 	} else {
 		// リリース時
@@ -213,17 +214,17 @@ void fk_TrackBall::ControlLookToMove()
 {
 	// 初回クリック時
 	if(fk_win->getMouseStatus(moveButton, overCheck) & !moveClick) {
-		fk_win->getMousePosition(&oldX, &oldY, overCheck);
+		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
 		moveClick = true;
 	// クリック継続時
 	} else if(fk_win->getMouseStatus(moveButton, overCheck) & moveClick) {
 		static fk_Vector prePos;
 
 		prePos = camera->getPosition();
-		fk_win->getMousePosition(&nowX, &nowY, overCheck);
+		tie(nowX, nowY) = fk_win->getMousePosition(overCheck);
 		camera->loTranslate(-(double)(nowX - oldX)/divPos, (double)(nowY - oldY)/divPos, 0.0);
 		lookPos += camera->getPosition() - prePos;
-		fk_win->getMousePosition(&oldX, &oldY, overCheck);
+		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
 	// リリース時
 	} else {
 		moveClick = false;

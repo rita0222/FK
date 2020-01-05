@@ -607,16 +607,8 @@ fk_Switch fk_AppWindow::getMouseStatus(fk_MouseButton argButton)
 
 fk_Vector fk_AppWindow::getMousePosition(void)
 {
-	int			x, y;
-	fk_Vector	retPos;
-
-	drawWin->getMousePosition(&x, &y, false);
-
-	retPos.x = (double)x;
-	retPos.y = (double)y;
-	retPos.z = 0.0;
-
-	return retPos;
+	auto [x, y] = drawWin->getMousePosition(false);
+	return fk_Vector(double(x), double(y), 0.0);
 }
 
 void fk_AppWindow::setGuideAxisWidth(double width)
@@ -719,22 +711,44 @@ void fk_AppWindow::SetFinalizeMode(void)
 	light.SetTreeDelMode(false);
 }
 
+tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY,
+														fk_Plane &argPlane)
+{
+	return drawWin->getProjectPosition(argX, argY, argPlane);
+}
+
+#ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getProjectPosition(double argX, double argY,
 									  fk_Plane *argPlane, fk_Vector *argPos)
 {
 	return drawWin->getProjectPosition(argX, argY, argPlane, argPos);
 }
-	
+#endif
+
+tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY, double argDist)
+{
+	return drawWin->getProjectPosition(argX, argY, argDist);
+}
+
+#ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getProjectPosition(double argX, double argY,
 									  double argDist, fk_Vector *argPos)
 {
 	return drawWin->getProjectPosition(argX, argY, argDist, argPos);
 }
+#endif
 
+tuple<bool, fk_Vector> fk_AppWindow::getWindowPosition(fk_Vector &argPos_3D)
+{
+	return drawWin->getWindowPosition(argPos_3D);
+}
+
+#ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getWindowPosition(fk_Vector argPos_3D, fk_Vector *argPos_2D)
 {
 	return drawWin->getWindowPosition(argPos_3D, argPos_2D);
 }
+#endif
 
 bool fk_AppWindow::snapImage(string argFileName, fk_ImageType argFormat, fk_SnapProcMode argMode)
 {

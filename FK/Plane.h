@@ -72,6 +72,10 @@
 #ifndef __FK_PLANE_HEADER__
 #define __FK_PLANE_HEADER__
 
+#ifndef FK_OLD_NONSUPPORT
+#define FK_OLD_NONSUPPORT
+#endif
+
 #include <FK/Vector.h>
 #include <tuple>
 
@@ -273,8 +277,10 @@ namespace FK {
 		 */
 		std::tuple<bool, fk_Vector> calcCrossPos(const fk_Vector &A, const fk_Vector &B);
 
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool calcCrossPos(const fk_Vector &, const fk_Vector &, fk_Vector *);
+#endif
 #endif
 		//! 交点直線パラメータ参照関数
 		/*!
@@ -296,8 +302,11 @@ namespace FK {
 		 */
 		std::tuple<bool, double> calcCrossLineParam(const fk_Vector &A, const fk_Vector &B);
 
+
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool calcCrossLineParam(const fk_Vector &, const fk_Vector &, double *);
+#endif
 #endif
 		//! 交点平面パラメータ参照関数
 		/*!
@@ -316,8 +325,10 @@ namespace FK {
 		 */
 		std::tuple<bool, double, double> calcCrossPlaneParam(const fk_Vector &A,
 															 const fk_Vector &B);
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool calcCrossPlaneParam(const fk_Vector &, const fk_Vector &, double *, double *);
+#endif
 #endif
 		//! 交点情報参照関数
 		/*!
@@ -342,11 +353,12 @@ namespace FK {
 		std::tuple<bool, fk_Vector, double, double, double> calcCrossAll(const fk_Vector &A,
 																		 const fk_Vector &B);
 
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool calcCrossAll(const fk_Vector &A, const fk_Vector &B,
 						  fk_Vector *pos, double *t, double *u, double *v);
 #endif
-
+#endif
 		
 		//! 点正射影算出関数
 		/*!

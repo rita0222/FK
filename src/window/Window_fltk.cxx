@@ -196,30 +196,43 @@ tuple<bool, fk_Vector> fk_Window::getProjectPosition(double argX, double argY, d
 	return engine.GetProjectPosition(argX, argY, argDist);
 }
 
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Window::getProjectPosition(double argX, double argY, double argDist, fk_Vector *retPos)
 {
-	auto [status, pos] = getProjectPosition(argX, argY, argDist);
-	*retPos = pos;
+	bool status;
+	tie(status, *retPos) = getProjectPosition(argX, argY, argDist);
 	return status;
 }
+#endif
 
 tuple<bool, fk_Vector> fk_Window::getProjectPosition(double argX, double argY, fk_Plane &argPlane)
 {
 	return engine.GetProjectPosition(argX, argY, argPlane);
 }
 
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Window::getProjectPosition(double argX, double argY,
 								   fk_Plane *argPlane, fk_Vector *retPos)
 {
-	auto [status, pos] = engine.GetProjectPosition(argX, argY, *argPlane);
-	*retPos = pos;
+	bool status;
+	tie(status, *retPos) = engine.GetProjectPosition(argX, argY, *argPlane);
 	return status;
 }
+#endif
 
+tuple<bool, fk_Vector> fk_Window::getWindowPosition(fk_Vector &argPos)
+{
+	return engine.GetWindowPosition(argPos);
+}
+
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Window::getWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 {
-	return engine.GetWindowPosition(argPos, retPos);
+	bool status;
+	tie(status, *retPos) = engine.GetWindowPosition(argPos);
+	return status;
 }
+#endif
 
 // Stereo Mode
 void fk_Window::setOGLStereoMode(bool argFlg)

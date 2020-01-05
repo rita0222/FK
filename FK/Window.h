@@ -72,6 +72,10 @@
 #ifndef __FK_WINDOW_HEADER__
 #define __FK_WINDOW_HEADER__
 
+#ifndef FK_OLD_NONSUPPORT
+#define FK_OLD_NONSUPPORT
+#endif
+
 #include <stdarg.h>
 #include <map>
 
@@ -294,7 +298,7 @@ namespace FK {
 		 *
 		 *	\sa getSpecialKeyStatus()
 		 */
-		bool	getKeyStatus(char key, fk_Switch status, bool insideFlag = true);
+		bool getKeyStatus(char key, fk_Switch status, bool insideFlag = true);
 	
 		//! 特殊キー状態取得関数
 		/*!
@@ -392,10 +396,12 @@ namespace FK {
 		 */
 		std::tuple<int, int> getMousePosition(bool insideFlag = true);
 
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void getMousePosition(int *, int *, bool = true);
 #endif
-
+#endif
+		
 		//! マウスボタン状態取得関数
 		/*!
 		 *	指定したマウスボタンの現在の押下状態を参照します。
@@ -430,6 +436,7 @@ namespace FK {
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getMouseStatus(fk_MouseButton button, bool insideFlag = true);
 #endif
+
 		//! マウスホイール回転量取得関数
 		/*!
 		 *	この関数は、ウスホイールの回転量を取得するときに使用します。
@@ -488,9 +495,11 @@ namespace FK {
 		 */
 		std::tuple<bool, fk_Vector> getProjectPosition(double x, double y, fk_Plane &plane);
 
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getProjectPosition(double x, double y,
 								   fk_Plane *plane, fk_Vector *pos);
+#endif
 #endif
 		//! 投影平面から任意距離での射影点算出関数
 		/*!
@@ -511,9 +520,11 @@ namespace FK {
 		 */
 		std::tuple<bool, fk_Vector> getProjectPosition(double x, double y, double dist);
 
+#ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
 		bool	getProjectPosition(double x, double y,
 								   double dist, fk_Vector *pos);
+#endif
 #endif
 		//! 空間座標から投影座標への射影点算出関数
 		/*!
@@ -526,13 +537,23 @@ namespace FK {
 		 *	つまり、カメラに近いほど値が小さくなるということです。
 		 *
 		 *	\param[in]	pos_3D		空間座標位置ベクトル
-		 *	\param[out]	pos_2D		射影点となる投影座標の位置ベクトル
 		 *
-		 *	\sa getProjectPosition(double, double, fk_Plane *, fk_Vector *),
-		 *		getProjectPosition(double, double, double, fk_Vector *),
+		 *	\return
+		 *		第1要素は、算出に成功すれば true が、失敗すれば false が入ります。
+		 *		第2要素は算出した射影点の位置ベクトルが入ります。
+		 *		失敗した場合の第2要素の値は未定義です。
+		 *
+		 *	\sa getProjectPosition(double, double, fk_Plane &),
+		 *		getProjectPosition(double, double, double),
 		 *		fk_Perspective, fk_Ortho, fk_Frustum
 		 */
-		bool	getWindowPosition(fk_Vector pos_3D, fk_Vector *pos_2D);
+		std::tuple<bool, fk_Vector> getWindowPosition(fk_Vector &pos_3D);
+
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
+		bool	getWindowPosition(fk_Vector, fk_Vector *);
+#endif
+#endif
 		///@}
 
 		//! 初期化前処理関数

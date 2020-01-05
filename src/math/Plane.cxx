@@ -243,12 +243,14 @@ tuple<bool, fk_Vector> fk_Plane::calcCrossPos(const fk_Vector &argStart, const f
 	return {true, (1.0 - t)*argStart + t*argEnd};
 }
 
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Plane::calcCrossPos(const fk_Vector &argStart, const fk_Vector &argEnd, fk_Vector *retPos)
 {
-	auto [status, pos] = calcCrossPos(argStart, argEnd);
-	*retPos = pos;
+	bool status;
+	tie(status, *retPos) = calcCrossPos(argStart, argEnd);
 	return status;
 }
+#endif
 
 tuple<bool, double> fk_Plane::calcCrossLineParam(const fk_Vector &argStart,
 												 const fk_Vector &argEnd)
@@ -260,12 +262,14 @@ tuple<bool, double> fk_Plane::calcCrossLineParam(const fk_Vector &argStart,
 	return {true, (dist - (norm * argStart))/(norm * lineVec)};
 }
 
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Plane::calcCrossLineParam(const fk_Vector &argStart, const fk_Vector &argEnd, double *retT)
 {
-	auto [status, t] = calcCrossLineParam(argStart, argEnd);
-	*retT = t;
+	bool status;
+	tie(status, *retT) = calcCrossLineParam(argStart, argEnd);
 	return status;
 }
+#endif
 
 tuple<bool, double, double> fk_Plane::calcCrossPlaneParam(const fk_Vector &argStart,
 														  const fk_Vector &argEnd)
@@ -274,15 +278,16 @@ tuple<bool, double, double> fk_Plane::calcCrossPlaneParam(const fk_Vector &argSt
 	return {status, u, v};
 }
 
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Plane::calcCrossPlaneParam(const fk_Vector &argStart,
 								   const fk_Vector &argEnd,
 								   double *retU, double *retV)
 {
-	auto [status, dummy, t, u, v] = calcCrossAll(argStart, argEnd);
-	*retU = u;
-	*retV = v;
+	bool status;
+	tie(status, ignore, ignore, *retU, *retV) = calcCrossAll(argStart, argEnd);
 	return status;
 }
+#endif
 
 tuple<bool, fk_Vector, double, double, double> fk_Plane::calcCrossAll(const fk_Vector &argStart,
 																	  const fk_Vector &argEnd)
@@ -305,16 +310,15 @@ tuple<bool, fk_Vector, double, double, double> fk_Plane::calcCrossAll(const fk_V
 	return {true, (1.0 - V.z) * argStart + V.z * argEnd, V.z, V.x, V.y};
 }
 
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Plane::calcCrossAll(const fk_Vector &argStart, const fk_Vector &argEnd,
 							fk_Vector *retPos, double *retT, double *retU, double *retV)
 {
-	auto [status, P, t, u, v] = calcCrossAll(argStart, argEnd);
-	*retPos = P;
-	*retT = t;
-	*retU = u;
-	*retV = v;
+	bool status;
+	tie(status, *retPos, *retT, *retU, *retV) = calcCrossAll(argStart, argEnd);
 	return status;
 }
+#endif
 
 fk_Vector fk_Plane::proj(const fk_Vector &argP)
 {

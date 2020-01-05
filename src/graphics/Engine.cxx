@@ -597,10 +597,10 @@ tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double
 	return {true, cameraPos + eyeVec * argDist};
 }
 
-bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
+tuple<bool, fk_Vector> fk_GraphicsEngine::GetWindowPosition(fk_Vector &argPos)
 {
-	fk_HVector		inVec, outVec;
-	fk_Matrix		mat;
+	fk_HVector inVec, outVec, retPos;
+	fk_Matrix mat;
 
 	inVec = argPos;
 	inVec.w = 1.0;
@@ -610,12 +610,13 @@ bool fk_GraphicsEngine::GetWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 	glGetIntegerv(GL_VIEWPORT, viewArray);
 	mat = *(curProj->GetMatrix()) * curDLink->getCamera()->getInhInvMatrix();
 	outVec = mat * inVec;
-	if(fabs(outVec.w) < fk_Math::EPS) return false;
+
+	if(fabs(outVec.w) < fk_Math::EPS) return {false, retPos};
 	outVec /= outVec.w;
-	retPos->set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
-				double(viewArray[1] + hSize - 1) - double(viewArray[3])*(outVec.y + 1.0)/2.0,
-				(1.0 + outVec.z)/2.0);
-	return true;
+	retPos.set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
+			   double(viewArray[1] + hSize - 1) - double(viewArray[3])*(outVec.y + 1.0)/2.0,
+			   (1.0 + outVec.z)/2.0);
+	return {true, retPos};
 }
 
 GLenum GetBlendFactor(fk_BlendFactor factor)

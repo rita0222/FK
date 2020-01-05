@@ -355,13 +355,13 @@ tuple<int, int> fk_Window::getMousePosition(bool argInsideFlag)
 	return {Fl::event_x() - GLWinXPosition, Fl::event_y() - GLWinYPosition};
 }
 
+#ifndef FK_OLD_NONSUPPORT
 void fk_Window::getMousePosition(int *argX, int *argY, bool argInsideFlag)
 {
-	auto [x, y] = getMousePosition(argInsideFlag);
-	*argX = x;
-	*argY = y;
+	tie(*argX, *argY) = getMousePosition(argInsideFlag);
 	return;
 }
+#endif
 
 Fl_Group * fk_Window::GetInhParentWindow(void)
 {
