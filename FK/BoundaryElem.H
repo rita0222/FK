@@ -90,17 +90,17 @@ namespace FK {
 
 	class fk_SphereBoundary {
 	public:
-		static bool		isInter(const fk_Vector &, double, const fk_Vector &, double);
-		static bool		isCollision(const fk_Vector &, const fk_Vector &, double,
-									const fk_Vector &, const fk_Vector &, double, double *);
-		static double	getAdjustRadius(fk_Shape *);
+		static bool isInter(const fk_Vector &, double, const fk_Vector &, double);
+		static std::tuple<bool, double> isCollision(const fk_Vector &, const fk_Vector &, double,
+													const fk_Vector &, const fk_Vector &, double);
+		static double getAdjustRadius(fk_Shape *);
 
 	private:
-		static double	GetAdjustIFS(fk_IndexFaceSet *);
-		static double	GetAdjustSolid(fk_Solid *);
-		static double	GetAdjustPoint(fk_Point *);
-		static double	GetAdjustTexture(fk_Texture *);
-		static double	GetAdjustMeshTexture(fk_MeshTexture *);
+		static double GetAdjustIFS(fk_IndexFaceSet *);
+		static double GetAdjustSolid(fk_Solid *);
+		static double GetAdjustPoint(fk_Point *);
+		static double GetAdjustTexture(fk_Texture *);
+		static double GetAdjustMeshTexture(fk_MeshTexture *);
 	};
 
 	class fk_AABBBoundary {

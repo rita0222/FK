@@ -94,13 +94,12 @@ bool fk_SphereBoundary::isInter(const fk_Vector &argP1, double argR1,
 	return (dist2 <= r2);
 }
 
-bool fk_SphereBoundary::isCollision(const fk_Vector &argOldP1,
-									const fk_Vector &argNewP1,
-									double argRad1,
-									const fk_Vector &argOldP2,
-									const fk_Vector &argNewP2,
-									double argRad2,
-									double *argTime)
+tuple<bool, double> fk_SphereBoundary::isCollision(const fk_Vector &argOldP1,
+												   const fk_Vector &argNewP1,
+												   double argRad1,
+												   const fk_Vector &argOldP2,
+												   const fk_Vector &argNewP2,
+												   double argRad2)
 {
 	fk_Vector		A, B;
 	double			vecProd, orgDist2, sqValue, distA2;
@@ -108,17 +107,18 @@ bool fk_SphereBoundary::isCollision(const fk_Vector &argOldP1,
 	B = argOldP2 - argOldP1;
 	A = argNewP2 - argNewP1 - B;
 	distA2 = A.dist2();
+
 	if(distA2 < fk_Math::EPS) {
-		*argTime = 0.0;
-		return true;
+		return {true, 0.0};
 	}
 
 	vecProd = A * B;
 	orgDist2 = (argRad1 + argRad2) * (argRad1 + argRad2);
 	sqValue = (vecProd * vecProd) - distA2*(B.dist2() - orgDist2);
-	if(sqValue < 0.0) return false;
-	*argTime = (-vecProd - sqrt(sqValue))/distA2;
-	return true;
+
+	if(sqValue < 0.0) return {false, 0.0};
+
+	return {true, (-vecProd - sqrt(sqValue))/distA2};
 }
 
 double fk_SphereBoundary::getAdjustRadius(fk_Shape *argShape)
@@ -579,13 +579,10 @@ bool fk_CapsuleBoundary::isInter(const fk_Vector &argS1,
 								 const fk_Vector &argE2,
 								 double argR2)
 {
-	static double		s, t, l;
-	static fk_Vector	P, Q;
-
-	l = fk_Math::calcClosestPtSegToSeg(argS1, argE1, argS2, argE2,
-									   &s, &t, &P, &Q);
-
-	if(l < argR1 + argR2 + fk_Math::EPS) return true;
+	double len;
+	tie(len, ignore, ignore, ignore, ignore) =
+		fk_Math::calcClosestPtSegToSeg(argS1, argE1, argS2, argE2);
+	if(len < argR1 + argR2 + fk_Math::EPS) return true;
 	return false;
 }
 
@@ -748,9 +745,6 @@ double fk_CapsuleBoundary::CalcLen(const fk_Vector &argP,
 								   const fk_Vector &argS,
 								   const fk_Vector &argE)
 {
-	fk_Vector	q;
-	double		t;
-
-	fk_Math::calcClosestPtPtToSeg(argP, argS, argE, &t, &q);
-	return (argP - q).dist();
+	auto [t, Q] = fk_Math::calcClosestPtPtToSeg(argP, argS, argE);
+	return (argP - Q).dist();
 }

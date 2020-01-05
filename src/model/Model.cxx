@@ -704,22 +704,29 @@ bool fk_Model::IsCapsuleInter(fk_Model *argModel)
 										argModel->Scale * argModel->getCapsuleRadius()));
 }
 
-bool fk_Model::isCollision(fk_Model *argModel, double *argTime)
+tuple<bool, double> fk_Model::isCollision(fk_Model *argModel)
 {
-	if(argModel == nullptr) return false;
-	if(snapFlag == false || argModel->snapFlag == false) return false;
-	if(snapInhPos == nullptr) return false;
-	if(argModel->snapInhPos == nullptr) return false;
+	if(argModel == nullptr) return {false, 0.0};
+	if(snapFlag == false || argModel->snapFlag == false) return {false, 0.0};
+	if(snapInhPos == nullptr) return {false, 0.0};
+	if(argModel->snapInhPos == nullptr) return {false, 0.0};
 
 	return fk_SphereBoundary::isCollision(*snapInhPos,
 										  getInhPosition(),
 										  getSphere() * Scale,
 										  *(argModel->snapInhPos),
 										  argModel->getInhPosition(),
-										  argModel->getSphere() * argModel->Scale,
-										  argTime);
-	return true;
+										  argModel->getSphere() * argModel->Scale);
 }
+
+#ifndef FK_OLD_NONSUPPORT
+bool fk_Model::isCollision(fk_Model *argModel, double *argTime)
+{
+	bool status;
+	tie(status, *argTime) = isCollision(argModel);
+	return status;
+}
+#endif
 
 void fk_Model::setInterMode(bool argMode)
 {

@@ -287,10 +287,13 @@ double fk_Math::clamp(double n, double min, double max)
 	return n;
 }
 
-double fk_Math::calcClosestPtSegToSeg(const fk_Vector &p1, const fk_Vector &q1,
-										const fk_Vector &p2, const fk_Vector &q2,
-										double *s, double *t, fk_Vector *c1, fk_Vector *c2)
+tuple<double, double, double, fk_Vector, fk_Vector>
+fk_Math::calcClosestPtSegToSeg(const fk_Vector &p1, const fk_Vector &q1,
+							   const fk_Vector &p2, const fk_Vector &q2)
 {
+	double s, t;
+	fk_Vector C1, C2;
+
 	fk_Vector d1 = q1 - p1;
 	fk_Vector d2 = q2 - p2;
 	fk_Vector r = p1 - p2;
@@ -298,53 +301,94 @@ double fk_Math::calcClosestPtSegToSeg(const fk_Vector &p1, const fk_Vector &q1,
 	double e = d2*d2;
 	double f = d2*r;
 	if(a < EPS && e < EPS) {
-		*s = *t = 0.0;
-		*c1 = p1;
-		*c2 = p2;
+		s = t = 0.0;
+		C1 = p1;
+		C2 = p2;
 	} else if(a < EPS) {
-		*s = 0.0;
-		*t = f/e;
-		*t = clamp(*t, 0.0, 1.0);
+		s = 0.0;
+		t = f/e;
+		t = clamp(t, 0.0, 1.0);
 	} else {
 		double c = d1*r;
 		if(e < EPS) {
-			*t = 0.0;
-			*s = clamp(-c/a, 0.0, 1.0);
+			t = 0.0;
+			s = clamp(-c/a, 0.0, 1.0);
 		} else {
 			double b = d1*d2;
 			double denom = a*e - b*b;
 			if(denom != 0.0) {
-				*s = clamp((b*f - c*e)/denom, 0.0, 1.0);
+				s = clamp((b*f - c*e)/denom, 0.0, 1.0);
 			} else {
-				*s = 0.0;
+				s = 0.0;
 			}
-			*t = (b*(*s) + f)/e;
-			if(*t < 0.0) {
-				*t = 0.0;
-				*s = clamp(-c/a, 0.0, 1.0);
-			} else if(*t > 1.0) {
-				*t = 1.0;
-				*s = clamp((b - c)/a, 0.0, 1.0);
+			t = (b*s + f)/e;
+			if(t < 0.0) {
+				t = 0.0;
+				s = clamp(-c/a, 0.0, 1.0);
+			} else if(t > 1.0) {
+				t = 1.0;
+				s = clamp((b - c)/a, 0.0, 1.0);
 			}
 		}
 	}
-	*c1 = p1 + d1*(*s);
-	*c2 = p2 + d2*(*t);
-	return ((*c1)-(*c2)).dist();
+	C1 = p1 + d1*s;
+	C2 = p2 + d2*t;
+	
+	return {(C1-C2).dist(), s, t, C1, C2};
 }
 
-void fk_Math::calcClosestPtPtToSeg(const fk_Vector &c, const fk_Vector &a, const fk_Vector &b,
-									double *t, fk_Vector *d)
+#ifndef FK_OLD_NONSUPPORT
+double fk_Math::calcClosestPtSegToSeg(const fk_Vector &p1, const fk_Vector &q1,
+									  const fk_Vector &p2, const fk_Vector &q2,
+									  double *s, double *t, fk_Vector *c1, fk_Vector *c2)
+{
+	double dist;
+
+	tie(dist, *s, *t, *c1, *c2) = calcClosestPtSegToSeg(p1, q1, p2, q2);
+	return dist;
+}
+#endif
+
+tuple<double, fk_Vector>
+fk_Math::calcClosestPtPtToSeg(const fk_Vector &c, const fk_Vector &a, const fk_Vector &b)
 {
 	fk_Vector ab = b - a;
-	*t = (c - a)*ab / (ab*ab);
-	if(*t < 0.0) *t = 0.0;
-	if(*t > 1.0) *t = 1.0;
-	*d = a + (*t)*ab;
-
-	return;
+	double t = clamp((c - a)*ab / (ab*ab), 0.0, 1.0);
+	return {t, a + t*ab};
 }
 
+#ifndef FK_OLD_NONSUPPORT
+void fk_Math::calcClosestPtPtToSeg(const fk_Vector &c, const fk_Vector &a, const fk_Vector &b,
+									double *t, fk_Vector *D)
+{
+	tie(*t, *D) = calcClosestPtPtToSeg(c, a, b);
+	return;
+}
+#endif
+
+tuple<bool, double, double, double>
+fk_Math::calcCrossLineAndTri(const fk_Vector &argP, const fk_Vector &argQ,
+							 const fk_Vector &argA, const fk_Vector &argB,
+							 const fk_Vector &argC)
+{
+	fk_Matrix M;
+
+	M.setCol(0, argB - argA);
+	M.setCol(1, argC - argA);
+	M.setCol(2, argP - argQ);
+	if(M.inverse() == false) return {false, 0.0, 0.0, 0.0};
+	
+	fk_Vector R = M * (argP - argA);
+
+	if(R.x <= -EPS || R.y <= -EPS || R.x + R.y >= 1.0 + EPS ||
+	   R.z <= -EPS || R.z >= 1.0 + EPS) {
+		return {false, 0.0, 0.0, 0.0};
+	}
+
+	return {true, R.x, R.y, R.z};
+}
+
+#ifndef FK_OLD_NONSUPPORT
 bool fk_Math::calcCrossLineAndTri(const fk_Vector &argP,
 								  const fk_Vector &argQ,
 								  const fk_Vector &argA,
@@ -352,30 +396,11 @@ bool fk_Math::calcCrossLineAndTri(const fk_Vector &argP,
 								  const fk_Vector &argC,
 								  fk_Vector *argR)
 {
-	fk_Vector		L, M, S, D, R;
-	fk_Matrix		mat;
-
-	L = argB - argA;
-	M = argC - argA;
-	S = argP - argQ;
-	D = argP - argA;
-
-	mat.setCol(0, L);
-	mat.setCol(1, M);
-	mat.setCol(2, S);
-	if(mat.inverse() == false) return false;
-	
-	R = mat * D;
-
-	if(argR != nullptr) argR->set(R.x, R.y, R.z);
-
-	if(R.x <= -EPS || R.y <= -EPS || R.x + R.y >= 1.0 + EPS ||
-	   R.z <= -EPS || R.z >= 1.0 + EPS) {
-		return false;
-	}
-
-	return true;
+	auto [status, u, v, t] = calcCrossLineAndTri(argP, argQ, argA, argB, argC);
+	if(argR != nullptr) argR->set(u, v, t);
+	return status;
 }
+#endif
 
 unsigned int fk_Math::rand(void)
 {

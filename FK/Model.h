@@ -72,6 +72,10 @@
 #ifndef __FK_MODEL_HEADER__
 #define __FK_MODEL_HEADER__
 
+#ifndef FK_OLD_NONSUPPORT
+#define FK_OLD_NONSUPPORT
+#endif
+
 #include <FK/Boundary.h>
 #include <FK/Palette.h>
 #include <FK/RenderState.h>
@@ -1952,7 +1956,7 @@ namespace FK {
 		 *
 		 *	なお、衝突判定は snapShot() を呼ぶ以前や現時点以降を含めての検出となるので、
 		 *	snapShot() を呼んだ時点から現時点までの間に衝突が起こったかどうかを判定するには、
-		 * 	第二引数の衝突時間を考慮する必要があります。
+		 * 	返値第2引数の衝突時間を考慮する必要があります。
 		 *
 		 * \note
 		 *		「干渉判定」と「衝突判定」の違いに関しては、
@@ -1961,19 +1965,15 @@ namespace FK {
 		 * \param[in]	model
 		 *		衝突判定を行うモデル
 		 *
-		 * \param[out]	time
-		 *		snapShot() が呼ばれた時刻を 0、
-		 *		現時点の時刻を 1 とした場合の、衝突時間を検出します。
-		 *		本関数の返値が true であった場合でも、
+		 * \return
+		 *		第1要素は、両モデルが等速度直線運動をすると想定した場合に、
+		 *		いずれかの時刻で衝突が起きる場合 true が、衝突しない場合は false が入ります。
+		 *
+		 *		第2要素は，snapShot() が呼ばれた時刻を 0、
+		 *		現時点の時刻を 1 とした場合の衝突時間が入ります。
+		 *	   	第1要素が true であった場合でも、
 		 *		この値が 0 から 1 の間にないときは、
 		 *		衝突が起こっていないことになりますので、注意して下さい。
-		 *
-		 * \return
-		 *		両モデルが等速度直線運動をすると想定した場合に、
-		 *		いずれかの時刻で衝突が起きる場合 true を、衝突しない場合は false を返します。
-		 *		ただし、第二引数の値が 0 から 1 の間にない場合は、
-		 *		snapShot() を呼んだ時点から現時点までの間においては、
-		 *		衝突が起こっていないことになります。
 		 *
 		 * \sa adjustSphere(), adjustAABB(), adjustOBB(), adjustCapsule(), isInter(),
 		 *		snapShot(), restore(double),
@@ -1982,7 +1982,13 @@ namespace FK {
 		 *		fk_Boundary::getCapsuleLength(), fk_Boundary::getCapsuleStartPos(),
 		 *		fk_Boundary::getCapsuleEndPos()
 		 */
+		std::tuple<bool, double> isCollision(fk_Model *model);
+
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
 		bool	isCollision(fk_Model *model, double *time);
+#endif
+#endif
 
 		//! 干渉継続モード設定関数
 		/*!

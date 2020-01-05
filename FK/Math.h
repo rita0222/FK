@@ -72,6 +72,10 @@
 #ifndef __FK_MATH_HEADER__
 #define __FK_MATH_HEADER__
 
+#ifndef FK_OLD_NONSUPPORT
+#define FK_OLD_NONSUPPORT
+#endif
+
 #include <FK/Quaternion.h>
 
 namespace FK {
@@ -240,19 +244,27 @@ namespace FK {
 		 *	\param[in]	B	1本目の線分の終点。A とは異なる位置でなければなりません。
 		 *	\param[in]	C	2本目の線分の始点。D とは異なる位置でなければなりません。
 		 *	\param[in]	D	2本目の線分の終点。C とは異なる位置でなければなりません。
-		 *	\param[out]	s	1本目の線分上の最近接点を示すパラメータが代入されます。
-		 *	\param[out]	t	2本目の線分上の最近接点を示すパラメータが代入されます。
-		 *	\param[out]	P	1本目の線分上の最近接点座標が代入されます。
-		 *	\param[out]	Q	2本目の線分上の最近接点座標が代入されます。
 		 *
 		 *	\return
-		 *		線分間の距離を返します。線分が交差してる場合はこの値は 0 になります。
+		 *		第1要素は線分間の距離が代入されます。線分が交差してる場合はこの値は 0 になります。
+		 *		第2要素は1本目の線分上の最近接点を示すパラメータが代入されます。
+		 *		第3要素は2本目の線分上の最近接点を示すパラメータが代入されます。
+		 *		第4要素は1本目の線分上の最近接点座標が代入されます。
+		 *		第5要素は2本目の線分上の最近接点座標が代入されます。
 		 *
 		 *	\sa isCrossLine(), isCrossLineSegment()
 		 */
+		static std::tuple<double, double, double, fk_Vector, fk_Vector>
+		calcClosestPtSegToSeg(const fk_Vector &A, const fk_Vector &B,
+							  const fk_Vector &C, const fk_Vector &D);
+
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
 		static double calcClosestPtSegToSeg(const fk_Vector &A, const fk_Vector &B,
 											const fk_Vector &C, const fk_Vector &D,
 											double *s, double *t, fk_Vector *P, fk_Vector *Q);
+#endif
+#endif
 
 		//! 点対線分・最近接点算出関数
 		/*!
@@ -262,12 +274,20 @@ namespace FK {
 		 *	\param[in]	C	点の座標。
 		 *	\param[in]	A	線分の始点。B とは異なる位置でなければなりません。
 		 *	\param[in]	B	線分の終点。A とは異なる位置でなければなりません。
-		 *	\param[out]	t	線分上の最近接点を示すパラメータが代入されます。
-		 *	\param[out]	P	線分上の最近接点座標が代入されます。
+		 *
+		 *	\return
+		 *		第1要素は線分上の最近接点を示すパラメータが代入されます。
+		 *		第2要素は線分上の最近接点座標が代入されます。
 		 */
-		static void calcClosestPtPtToSeg(const fk_Vector &C, const fk_Vector &A, const fk_Vector &B,
-										 double *t, fk_Vector *P);
+		static std::tuple<double, fk_Vector>
+		calcClosestPtPtToSeg(const fk_Vector &C, const fk_Vector &A, const fk_Vector &B);
 
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
+		static void calcClosestPtPtToSeg(const fk_Vector &C, const fk_Vector &A,
+										 const fk_Vector &B, double *t, fk_Vector *P);
+#endif
+#endif
 		//! 三角形対線分交差判定関数
 		/*!
 		 *	線分 PQ と、三角形 ABC が交差しているかどうかを判定します。
@@ -279,14 +299,17 @@ namespace FK {
 		 *		- 三角形 ABC の 3 点が同一直線上にある場合。
 		 *		- 線分 PQ と 三角形 ABC が平行だった場合。
 		 *	.
+		 *
 		 *	\param[in]	P		有向線分の始点。
 		 *	\param[in]	Q		有向線分の終点。
 		 *	\param[in]	A		三角形の頂点。
 		 *	\param[in]	B		三角形の頂点。
 		 *	\param[in]	C		三角形の頂点。
-		 *	\param[out]	R
+		 *
+		 *	\return
+		 *		第1要素は交差していれば true が、していなければ false が入ります。
 		 *		交差の有無にかかわらず、
-		 *		PQを通る直線とABCを通る平面の交点のパラメータが代入されます。
+		 *		返値の第2〜4要素にはPQを通る直線とABCを通る平面の交点のパラメータが入ります。
 		 *		以下の式は、ABC平面上の点 T をパラメータ表現したものです。
 		 *		\f[
 		 *			\mathbf{T} = \mathbf{A} + u (\mathbf{B} - \mathbf{A})
@@ -296,20 +319,23 @@ namespace FK {
 		 *		\f[
 		 *			\mathbf{L} = (1 - t)\mathbf{P} + t\mathbf{Q}
 		 *		\f]
-		 *		これらの式のうち、平面パラメータ\f$ u, v \f$ が
-		 *		R の x 成分と y 成分、
-		 *		直線パラメータ \f$ t \f$ が R の z 成分に代入されます。
-		 *		なお、パラメータ出力を必要としない場合は、
-		 *		本引数を省略するか nullptr を代入しても構いません。
-		 *
-		 *	\return		交差していれば true を、していなければ false を返します。
+		 *		これらの式のうち、平面パラメータ\f$ u, v, t \f$
+		 *		がそれぞれ第2,3,4要素に入ります。
 		 */
+		static std::tuple<bool, double, double, double>
+		calcCrossLineAndTri(const fk_Vector &P, const fk_Vector &Q,
+							const fk_Vector &A, const fk_Vector &B, const fk_Vector &C);
+
+#ifndef FK_OLD_NONSUPPORT
+#ifndef FK_DOXYGEN_USER_PROCESS
 		static bool calcCrossLineAndTri(const fk_Vector &P,
 										const fk_Vector &Q,
 										const fk_Vector &A,
 										const fk_Vector &B,
 										const fk_Vector &C,
-										fk_Vector *R = nullptr);
+										fk_Vector *R);
+#endif
+#endif
 
 		//! 余弦値算出関数
 		/*!

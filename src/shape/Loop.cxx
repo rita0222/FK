@@ -565,12 +565,10 @@ fk_LoopCrossStatus fk_Loop::IsCross(const fk_Vector &argS,
 		curH = curH->getNextHalf();
 	}
 
-	if(fk_Math::calcCrossLineAndTri(argS, argE,
-									V[0], V[1], V[2], &R) == false) {
-		return fk_LoopCrossStatus::NO;
-	}
+	auto [status, u, v, t] = fk_Math::calcCrossLineAndTri(argS, argE, V[0], V[1], V[2]);
+	if(status == false) return fk_LoopCrossStatus::NO;
 
-	if(retR != nullptr) retR->set(R.x, R.y, R.z);
+	if(retR != nullptr) retR->set(u, v, t);
 
 	if(R.x <= fk_Math::EPS) return fk_LoopCrossStatus::ONEDGE;
 	if(R.y <= fk_Math::EPS) return fk_LoopCrossStatus::ONEDGE;
