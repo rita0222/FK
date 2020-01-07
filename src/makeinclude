@@ -120,8 +120,11 @@ mac-g:
 
 linux:
 	$(MAKE) $(TARGET) \
+	"CC = g++-8" \
+	"LINKCC = g++-8" \
 	"OPTOPT = -O3 -pipe" \
 	"SYSOPT = -D_LINUX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
+	"GRAMOPT = -pedantic -std=gnu++17" \
 	"LFLAGS = " \
 	"FKLIBS = " \
 	"SYSLIBS = " \

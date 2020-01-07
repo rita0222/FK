@@ -285,6 +285,9 @@ bool fk_AudioWavBuffer::open(const std::string &argFileName)
 
 	if(ifs.fail()) return false;
 
+	freq = channel = bit = 0;
+	size = 0;
+
 	if(ReadHeaderWav(ifs, &channel, &bit, &size, &freq) != 0) {
 		ifs.close();
 		return false;

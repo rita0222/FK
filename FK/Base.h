@@ -89,6 +89,7 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <tuple>
 
 #if !defined(WIN32) || defined(_MINGW_)
 

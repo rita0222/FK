@@ -334,7 +334,7 @@ fk_Math::calcClosestPtSegToSeg(const fk_Vector &p1, const fk_Vector &q1,
 	C1 = p1 + d1*s;
 	C2 = p2 + d2*t;
 	
-	return {(C1-C2).dist(), s, t, C1, C2};
+	return make_tuple((C1-C2).dist(), s, t, C1, C2);
 }
 
 #ifndef FK_OLD_NONSUPPORT
