@@ -87,20 +87,14 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <string.h>
 #include <vector>
 #include <tuple>
 
-#if !defined(WIN32) || defined(_MINGW_)
-
-#include <sys/types.h>
-#include <sys/time.h>
-
-#else
+#if defined(WIN32)
 
 #pragma warning(disable : 4786)
-#define snprintf _snprintf
-#define vsnprintf _vsnprintf
+//#define snprintf _snprintf
+//#define vsnprintf _vsnprintf
 
 #endif	// !WIN32 || _CYGWIN_GCC_
 
