@@ -335,16 +335,10 @@ bool fk_Graph::initCostTable(unsigned int argID)
 
 fk_CostStatus fk_Graph::updateCostTable(unsigned int argID)
 {
-	if(tableArray.size() <= argID) return fk_CostStatus::ERROR;
+	fk_CostStatus status = getCostStatus(argID);
+	if(status != fk_CostStatus::CONTINUE) return status;
+
 	fk_CostTable *tbl = tableArray[argID];
-	if(tbl == nullptr) return fk_CostStatus::ERROR;
-	if(tbl->getStart() == nullptr) return fk_CostStatus::ERROR;
-	if(tbl->getDirection() == fk_CostDirection::BACK && tbl->getGoal()->empty() == true) {
-		return fk_CostStatus::ERROR;
-	}
-
-	if(tbl->isQueueEmpty()) return fk_CostStatus::FINISH;
-
 	fk_GraphNode *cur = tbl->queuePopFront();
 
 	list<fk_GraphEdge *> edgeList;
@@ -397,6 +391,243 @@ void fk_Graph::DoubleUpdate(fk_CostTable *argTable,
 	if(cost < next->getDoubleCost(nodeID) || next->isDoneDoubleCost(nodeID) == false) {
 		argTable->insertDoubleQueue(next, nodeID, cost);
 	}
+}
+
+list<fk_GraphNode *> fk_Graph::getOnePath(unsigned int argID)
+{
+	list<fk_GraphNode *> retList;
+
+	retList.clear();
+	getOnePath(argID, &retList);
+	return retList;
+}
+
+void fk_Graph::getOnePath(unsigned int argID, list<fk_GraphNode *> *argList)
+{
+	if(argList == nullptr) return;
+	if(getCostStatus(argID) != fk_CostStatus::FINISH) return;
+
+	auto *tbl = tableArray[argID];
+	auto nodeCostType = tbl->getType();
+	auto nodeCostID = tbl->getNodeCostID();
+	auto direction = tbl->getDirection();
+	auto start = tbl->getStart();
+	auto *goal = tbl->getGoal();
+
+	if(start == nullptr) return;
+	if(goal->empty()) return;
+
+	switch(nodeCostType) {
+	  case fk_CostType::INT:
+		switch(direction) {
+		  case fk_CostDirection::FORWARD:
+			GetIntForwardPath(nodeCostID, start, goal, argList);
+			break;
+
+		  case fk_CostDirection::BACK:
+			GetIntBackPath(nodeCostID, start, goal, argList);
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case fk_CostType::DOUBLE:
+	  case fk_CostType::LENGTH:
+		switch(direction) {
+		  case fk_CostDirection::FORWARD:
+			GetDoubleForwardPath(nodeCostID, start, goal, argList);
+			break;
+
+		  case fk_CostDirection::BACK:
+			GetDoubleBackPath(nodeCostID, start, goal, argList);
+			break;
+
+		  default:
+			break;
+		}
+		break;
+	}
+	return;
+}
+
+void fk_Graph::GetDoubleForwardPath(unsigned int argCostID,
+									fk_GraphNode *argStart,
+									list<fk_GraphNode *> *argGoal,
+									list<fk_GraphNode *> *argList)
+{
+	argList->clear();
+	fk_GraphNode *trueGoal = GetTrueGoal(fk_CostType::DOUBLE, argCostID, argGoal);
+	if(trueGoal == nullptr) return;
+
+	fk_GraphNode *node = trueGoal;
+	list<fk_GraphNode *> neighbor;
+
+	while(node != nullptr) {
+		argList->push_front(node);
+		if(node == argStart) return;
+		fk_GraphNode *nowNode = node;
+
+		double curCost = node->getDoubleCost(argCostID);
+
+		nowNode->getPrevNode(&neighbor);
+		for(auto n : neighbor) {
+			if(curCost > n->getDoubleCost(argCostID)) {
+				node = n;
+				curCost = n->getDoubleCost(argCostID);
+			}
+		}
+		if(node == nowNode) return;
+	}
+	return;
+}
+
+void fk_Graph::GetDoubleBackPath(unsigned int argCostID,
+								 fk_GraphNode *argStart,
+								 list<fk_GraphNode *> *argGoal,
+								 list<fk_GraphNode *> *argList)
+{
+	argList->clear();
+	if(argStart->isDoneDoubleCost(argCostID) == false) return;
+
+	fk_GraphNode *node = argStart;
+	list<fk_GraphNode *> neighbor;
+
+	while(node != nullptr) {
+		argList->push_back(node);
+		for(auto g : *argGoal) {
+			if(node == g) return;
+		}
+		fk_GraphNode *nowNode = node;
+
+		double curCost = node->getDoubleCost(argCostID);
+
+		nowNode->getNextNode(&neighbor);
+		for(auto n : neighbor) {
+			if(curCost < n->getDoubleCost(argCostID)) {
+				node = n;
+				curCost = n->getDoubleCost(argCostID);
+			}
+		}
+		if(node == nowNode) return;
+	}
+	return;
+}
+
+void fk_Graph::GetIntForwardPath(unsigned int argCostID,
+								 fk_GraphNode *argStart,
+								 list<fk_GraphNode *> *argGoal,
+								 list<fk_GraphNode *> *argList)
+{
+	argList->clear();
+	fk_GraphNode *trueGoal = GetTrueGoal(fk_CostType::INT, argCostID, argGoal);
+	if(trueGoal == nullptr) return;
+
+	fk_GraphNode *node = trueGoal;
+	list<fk_GraphNode *> neighbor;
+
+	while(node != nullptr) {
+		argList->push_front(node);
+		if(node == argStart) return;
+		fk_GraphNode *nowNode = node;
+
+		int curCost = node->getIntCost(argCostID);
+
+		nowNode->getPrevNode(&neighbor);
+		for(auto n : neighbor) {
+			if(curCost > n->getIntCost(argCostID)) {
+				node = n;
+				curCost = n->getIntCost(argCostID);
+			}
+		}
+		if(node == nowNode) return;
+	}
+	return;
+}
+
+void fk_Graph::GetIntBackPath(unsigned int argCostID,
+							  fk_GraphNode *argStart,
+							  list<fk_GraphNode *> *argGoal,
+							  list<fk_GraphNode *> *argList)
+{
+	argList->clear();
+	if(argStart->isDoneIntCost(argCostID) == false) return;
+
+	fk_GraphNode *node = argStart;
+	list<fk_GraphNode *> neighbor;
+
+	while(node != nullptr) {
+		argList->push_back(node);
+		for(auto g : *argGoal) {
+			if(node == g) return;
+		}
+		fk_GraphNode *nowNode = node;
+
+		int curCost = node->getIntCost(argCostID);
+
+		nowNode->getNextNode(&neighbor);
+		for(auto n : neighbor) {
+			if(curCost < n->getIntCost(argCostID)) {
+				node = n;
+				curCost = n->getIntCost(argCostID);
+			}
+		}
+		if(node == nowNode) return;
+	}
+	return;
+}
+
+fk_GraphNode * fk_Graph::GetTrueGoal(fk_CostType argType,
+									 unsigned int argID,
+									 list<fk_GraphNode *> *argGoal)
+{
+	fk_GraphNode *trueGoal = nullptr;
+	
+	for(auto g : *argGoal) {
+		switch(argType) {
+		  case fk_CostType::INT:
+			if(g->isDoneIntCost(argID) == false) continue;
+			if(trueGoal == nullptr) {
+				trueGoal = g;
+			} else {
+				if(trueGoal->getIntCost(argID) > g->getIntCost(argID)) {
+					trueGoal = g;
+				}
+			}
+			break;
+
+		  case fk_CostType::DOUBLE:
+		  case fk_CostType::LENGTH:
+			if(g->isDoneDoubleCost(argID) == false) continue;
+			if(trueGoal == nullptr) {
+				trueGoal = g;
+			} else {
+				if(trueGoal->getDoubleCost(argID) > g->getDoubleCost(argID)) {
+					trueGoal = g;
+				}
+			}
+			break;
+
+		  default:
+			break;
+		}
+	}
+	return trueGoal;
+}
+
+fk_CostStatus fk_Graph::getCostStatus(unsigned int argID)
+{
+	if(tableArray.size() <= argID) return fk_CostStatus::ERROR;
+	fk_CostTable *tbl = tableArray[argID];
+	if(tbl == nullptr) return fk_CostStatus::ERROR;
+	if(tbl->getStart() == nullptr) return fk_CostStatus::ERROR;
+	if(tbl->getDirection() == fk_CostDirection::BACK && tbl->getGoal()->empty() == true) {
+		return fk_CostStatus::ERROR;
+	}
+
+	if(tbl->isQueueEmpty()) return fk_CostStatus::FINISH;
+	return fk_CostStatus::CONTINUE;
 }
 
 void fk_Graph::CostPrint(unsigned int argID)

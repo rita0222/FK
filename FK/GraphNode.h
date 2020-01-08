@@ -217,6 +217,9 @@ namespace FK {
 		std::list<fk_GraphNode *> getNextNode(void);
 		void getNextNode(std::list<fk_GraphNode *> *list);
 
+		std::list<fk_GraphNode *> getPrevNode(void);
+		void getPrevNode(std::list<fk_GraphNode *> *list);
+
 		void setIntCost(unsigned int ID, int value);
 		void setDoubleCost(unsigned int ID, double value);
 		int getIntCost(unsigned int ID);

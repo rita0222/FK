@@ -229,19 +229,7 @@ void fk_GraphNode::getEndEdge(list<fk_GraphEdge *> *argList)
 list<fk_GraphNode *> fk_GraphNode::getNextNode(void)
 {
 	list<fk_GraphNode *> ret;
-
-	for(auto e : edgeS) {
-		ret.push_back(e->getNode(false));
-	}
-
-	for(auto e : edgeB) {
-		if(e->getNode(true) == this) {
-			ret.push_back(e->getNode(false));
-		} else {
-			ret.push_back(e->getNode(true));
-		}
-	}
-
+	getNextNode(&ret);
 	return ret;
 }
 
@@ -262,6 +250,32 @@ void fk_GraphNode::getNextNode(list<fk_GraphNode *> *argList)
 		}
 	}
 }
+
+list<fk_GraphNode *> fk_GraphNode::getPrevNode(void)
+{
+	list<fk_GraphNode *> ret;
+	getPrevNode(&ret);
+	return ret;
+}
+
+void fk_GraphNode::getPrevNode(list<fk_GraphNode *> *argList)
+{
+	if(argList == nullptr) return;
+	argList->clear();
+
+	for(auto e : edgeE) {
+		argList->push_back(e->getNode(true));
+	}
+
+	for(auto e : edgeB) {
+		if(e->getNode(true) == this) {
+			argList->push_back(e->getNode(false));
+		} else {
+			argList->push_back(e->getNode(true));
+		}
+	}
+}
+
 
 void fk_GraphNode::clearIntCost(void)
 {

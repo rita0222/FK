@@ -287,6 +287,11 @@ namespace FK {
 		 */
 		fk_CostStatus updateCostTable(unsigned int tableID);
 
+		fk_CostStatus getCostStatus(unsigned int tableID);
+
+		std::list<fk_GraphNode *> getOnePath(unsigned int tableID);
+		void getOnePath(unsigned int tableID, std::list<fk_GraphNode *> *);
+
 		///@}
 		
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -312,6 +317,17 @@ namespace FK {
 		bool TableReady(unsigned int);
 		void DoubleUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
 		void IntUpdate(fk_CostTable *, fk_GraphEdge *, fk_GraphNode *);
+
+		void GetIntForwardPath(unsigned int, fk_GraphNode *,
+							   std::list<fk_GraphNode *> *, std::list<fk_GraphNode *> *);
+		void GetIntBackPath(unsigned int, fk_GraphNode *,
+							std::list<fk_GraphNode *> *, std::list<fk_GraphNode *> *);
+		void GetDoubleForwardPath(unsigned int, fk_GraphNode *,
+								  std::list<fk_GraphNode *> *, std::list<fk_GraphNode *> *);
+		void GetDoubleBackPath(unsigned int, fk_GraphNode *,
+							   std::list<fk_GraphNode *> *, std::list<fk_GraphNode *> *);
+		fk_GraphNode * GetTrueGoal(fk_CostType, unsigned int, std::list<fk_GraphNode *> *);
+
 	};
 }
 
