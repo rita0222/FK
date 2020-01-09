@@ -94,6 +94,7 @@ namespace FK_CLI
 	{
         private fk_AudioStream bgm;
         private bool openStatus;
+		private bool playStatus;
         private Task task;
 
 		//! コンストラクタ
@@ -115,6 +116,7 @@ namespace FK_CLI
 				Console.WriteLine("Audio File Open Error.");
 			}
             task = new Task(Start_);
+			playStatus = false;
 		}
 
 		//! BGM 再生開始メソッド
@@ -123,7 +125,11 @@ namespace FK_CLI
 		 */
 		public void Start()
 		{
-            task.Start();
+			if (playStatus == false)
+			{
+				task.Start();
+				playStatus = true;
+			}
         }
 
 		//! 終了指示用プロパティ
@@ -154,6 +160,7 @@ namespace FK_CLI
 		{
 			bgm.Dispose();
             Task.WaitAll(new[] { task });
+			playStatus = false;
 		}
 
 #endif
