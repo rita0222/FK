@@ -13,5 +13,5 @@
     <choice id="jp.gamescience.fk" visible="false">
         <pkg-ref id="jp.gamescience.fk"/>
     </choice>
-    <pkg-ref id="jp.gamescience.fk" version="4.0.0" onConclusion="none">tmpInst.pkg</pkg-ref>
+    <pkg-ref id="jp.gamescience.fk" version="4.1.6" onConclusion="none">tmpInst.pkg</pkg-ref>
 </installer-gui-script>
