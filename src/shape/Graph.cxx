@@ -505,7 +505,7 @@ void fk_Graph::GetDoubleBackPath(unsigned int argCostID,
 
 		nowNode->getNextNode(&neighbor);
 		for(auto n : neighbor) {
-			if(curCost < n->getDoubleCost(argCostID)) {
+			if(curCost > n->getDoubleCost(argCostID)) {
 				node = n;
 				curCost = n->getDoubleCost(argCostID);
 			}
@@ -568,7 +568,7 @@ void fk_Graph::GetIntBackPath(unsigned int argCostID,
 
 		nowNode->getNextNode(&neighbor);
 		for(auto n : neighbor) {
-			if(curCost < n->getIntCost(argCostID)) {
+			if(curCost > n->getIntCost(argCostID)) {
 				node = n;
 				curCost = n->getIntCost(argCostID);
 			}
