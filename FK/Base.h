@@ -83,6 +83,7 @@
 #include <cstdio>
 #include <string>
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <cmath>
 #include <fstream>

@@ -745,6 +745,7 @@ double fk_CapsuleBoundary::CalcLen(const fk_Vector &argP,
 								   const fk_Vector &argS,
 								   const fk_Vector &argE)
 {
-	auto [t, Q] = fk_Math::calcClosestPtPtToSeg(argP, argS, argE);
+	fk_Vector Q;
+	tie(ignore, Q) = fk_Math::calcClosestPtPtToSeg(argP, argS, argE);
 	return (argP - Q).dist();
 }

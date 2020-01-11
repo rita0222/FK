@@ -274,7 +274,9 @@ bool fk_Plane::calcCrossLineParam(const fk_Vector &argStart, const fk_Vector &ar
 tuple<bool, double, double> fk_Plane::calcCrossPlaneParam(const fk_Vector &argStart,
 														  const fk_Vector &argEnd)
 {
-	auto [status, dummy, t, u, v] = calcCrossAll(argStart, argEnd);
+	bool status;
+	double u, v;
+	tie(status, ignore, ignore, u, v) = calcCrossAll(argStart, argEnd);
 	return {status, u, v};
 }
 
