@@ -207,9 +207,6 @@
     <ClInclude Include="..\..\FK\Loop.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\MassProperty.h">
-      <Filter>Header\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\MatAdmin.h">
       <Filter>Header\Base</Filter>
     </ClInclude>
@@ -1007,9 +1004,6 @@
     <ClCompile Include="..\..\src\shape\Closedline.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Command.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Cone.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
@@ -1028,46 +1022,13 @@
     <ClCompile Include="..\..\src\shape\D3DXShapeParser.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\DataAccess.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\DataBase.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\DrawCache.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\DXFOut.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\DXFParser.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Edge.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\Gregory.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Half.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\History.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\HRCParser.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\IFSetHandle.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\IFSTexture.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Image.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\ImageIO.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\IndexFace.cxx">
@@ -1082,25 +1043,7 @@
     <ClCompile Include="..\..\src\shape\LineBase.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Loop.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\MassProperty.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\MeshTexture.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Modify.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\MQOOut.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\MQOParser.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Operation.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\ParserBase.cxx">
@@ -1127,28 +1070,10 @@
     <ClCompile Include="..\..\src\shape\RDSParser.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\RectTexture.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Reference1.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Reference2.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Reference3.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Shape.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\SMFParser.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Solid.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\SolidBase.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\Sphere.cxx">
@@ -1157,37 +1082,10 @@
     <ClCompile Include="..\..\src\shape\SRFParser.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\STLOut.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\STLParser.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\SubDivision.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Surface.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\TextImage.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Texture.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Topology.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\TriTexture.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\UniCode.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Vertex.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\VRMLOut.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\VRMLParser.cxx">
@@ -1253,19 +1151,115 @@
     <ClCompile Include="..\..\src\shape\EdgePair.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Graph.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\GraphEdge.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\GraphNode.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\math\Angle.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\CostTable.cxx">
+    <ClCompile Include="..\..\src\graph\CostTable.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graph\Graph.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graph\GraphEdge.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graph\GraphNode.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Command.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DataAccess.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DataBase.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DrawCache.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\DXFOut.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Edge.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Half.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\History.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\IFSetHandle.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Loop.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Modify.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\MQOOut.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Operation.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Reference1.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Reference2.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Reference3.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Solid.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\SolidBase.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\STLOut.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\SubDivision.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Topology.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\Vertex.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\solid\VRMLOut.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\IFSTexture.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\Image.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\ImageIO.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\MeshTexture.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\RectTexture.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\TextImage.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\Texture.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\TriTexture.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\UniCode.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
   </ItemGroup>
