@@ -1,0 +1,21 @@
+BASENAME	= graph
+
+LIBSRCS		= \
+			CostTable.cxx \
+			Graph.cxx \
+			GraphEdge.cxx \
+			GraphNode.cxx
+
+FKLINK			= \
+			-lFK4_base.$(VERNAME) \
+			-lFK4_math.$(VERNAME) \
+			-lFK4_material.$(VERNAME) \
+			-lFK4_shape.$(VERNAME)
+
+FKLINK_G	= \
+			-lFK4_base_g.$(VERNAME) \
+			-lFK4_math_g.$(VERNAME) \
+			-lFK4_material_g.$(VERNAME) \
+			-lFK4_shape_g.$(VERNAME)
+
+include ../makeinclude

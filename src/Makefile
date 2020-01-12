@@ -2,7 +2,7 @@ SHELL	= /bin/sh
 
 RM		= rm -f
 CP		= cp
-BASE		= base material math shape solid model scene shader graphics window util
+BASE		= base material math shape graph solid model scene shader graphics window util
 AUDIO		= audio
 OPENCL		= OpenCL
 

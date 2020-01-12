@@ -39,6 +39,7 @@ FKLIB_S		= \
 			-lFK4_scene \
 			-lFK4_model \
 			-lFK4_solid \
+			-lFK4_graph \
 			-lFK4_shape \
 			-lFK4_material \
 			-lFK4_math \
@@ -51,6 +52,7 @@ FKLIB_SG		= \
 			-lFK4_scene_g \
 			-lFK4_model_g \
 			-lFK4_solid_g \
+			-lFK4_graph_g \
 			-lFK4_shape_g \
 			-lFK4_material_g \
 			-lFK4_math_g \
@@ -63,6 +65,7 @@ FKLIB_D		= \
 			-lFK4_scene.$(VERNAME) \
 			-lFK4_model.$(VERNAME) \
 			-lFK4_solid.$(VERNAME) \
+			-lFK4_graph.$(VERNAME) \
 			-lFK4_shape.$(VERNAME) \
 			-lFK4_material.$(VERNAME) \
 			-lFK4_math.$(VERNAME) \
@@ -75,6 +78,7 @@ FKLIB_DG		= \
 			-lFK4_scene_g.$(VERNAME) \
 			-lFK4_model_g.$(VERNAME) \
 			-lFK4_solid_g.$(VERNAME) \
+			-lFK4_graph_g.$(VERNAME) \
 			-lFK4_shape_g.$(VERNAME) \
 			-lFK4_material_g.$(VERNAME) \
 			-lFK4_math_g.$(VERNAME) \

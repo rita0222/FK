@@ -74,7 +74,7 @@
 #ifndef __FK_DRAW_CACHE_HEADER__
 #define __FK_DRAW_CACHE_HEADER__
 
-#include <FK/MassProperty.h>
+#include <FK/Reference.h>
 #include <FK/Vector.h>
 #include <list>
 
@@ -85,7 +85,7 @@ namespace FK {
 	 *	描画用データのキャッシングを制御するための機能を提供します。
 	 *	通常、ユーザがこのクラスの機能を利用することはありません。
 	 */
-	class fk_DrawCache : public fk_MassProperty {
+	class fk_DrawCache : public fk_ReferenceL3 {
 
 		friend class	fk_PointDraw;
 		friend class	fk_LineDraw;

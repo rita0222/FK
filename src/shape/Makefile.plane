@@ -12,7 +12,6 @@ LIBSRCS		= \
 			Circle.cxx \
 			Closedline.cxx \
 			Cone.cxx \
-			CostTable.cxx \
 			Curve.cxx \
 			D3DXAnimation.cxx \
 			D3DXData.cxx \
@@ -20,9 +19,6 @@ LIBSRCS		= \
 			D3DXShapeParser.cxx \
 			DXFParser.cxx \
 			EdgePair.cxx \
-			Graph.cxx \
-			GraphEdge.cxx \
-			GraphNode.cxx \
 			Gregory.cxx \
 			HRCParser.cxx \
 			IFSTexture.cxx \
