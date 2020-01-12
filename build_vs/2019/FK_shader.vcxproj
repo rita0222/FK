@@ -30,7 +30,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{20CEA45E-407A-429E-AC8F-0B3073AA3870}</ProjectGuid>
-    <RootNamespace>FK2_shader</RootNamespace>
+    <RootNamespace>FK4_shader</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>FK4_shader</ProjectName>

@@ -41,7 +41,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{AD84AEE2-7B35-4910-8533-B3BA580A063B}</ProjectGuid>
-    <RootNamespace>FK2_base</RootNamespace>
+    <RootNamespace>FK4_math</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>FK4_math</ProjectName>

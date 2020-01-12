@@ -42,7 +42,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{541B0751-8E82-4FA9-98D7-AC7E67C9E844}</ProjectGuid>
-    <RootNamespace>FK2_base</RootNamespace>
+    <RootNamespace>FK4_graphics</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>FK4_graphics</ProjectName>

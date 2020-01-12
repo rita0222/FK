@@ -40,7 +40,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3DDE0711-909C-41BF-AAD7-9324E003BA1E}</ProjectGuid>
-    <RootNamespace>FK2_util</RootNamespace>
+    <RootNamespace>FK4_util</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>FK4_util</ProjectName>

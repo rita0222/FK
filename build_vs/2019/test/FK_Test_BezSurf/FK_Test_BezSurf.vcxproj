@@ -228,6 +228,9 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
     <ProjectReference Include="..\..\FK_base.vcxproj">
       <Project>{1b953c98-382b-4942-8f1a-c74174a446a4}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\FK_graph.vcxproj">
+      <Project>{abdf2a2b-c1ae-44ff-ad4d-f5464c37c0f0}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\FK_graphics.vcxproj">
       <Project>{541b0751-8e82-4fa9-98d7-ac7e67c9e844}</Project>
     </ProjectReference>
@@ -248,6 +251,12 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
     </ProjectReference>
     <ProjectReference Include="..\..\FK_shape.vcxproj">
       <Project>{2a1adccd-29f6-479e-b41d-9307c8b36737}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FK_solid.vcxproj">
+      <Project>{95183143-1039-4b85-bfdb-1376fb9003ce}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FK_texture.vcxproj">
+      <Project>{fece0f98-b415-49b6-b9a0-0679ab194d12}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\FK_util.vcxproj">
       <Project>{3dde0711-909c-41bf-aad7-9324e003ba1e}</Project>

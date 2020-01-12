@@ -28,7 +28,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EBF4A69F-3AA4-4826-B8FC-36B6D77E8C3A}</ProjectGuid>
-    <RootNamespace>FK2_audio</RootNamespace>
+    <RootNamespace>FK4_audio</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>FK4_audio</ProjectName>

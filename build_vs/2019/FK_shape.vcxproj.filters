@@ -31,9 +31,6 @@
     <ClCompile Include="..\..\src\shape\Closedline.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Command.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Cone.cxx">
       <Filter>Source</Filter>
     </ClCompile>
@@ -52,46 +49,13 @@
     <ClCompile Include="..\..\src\shape\D3DXShapeParser.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\DataAccess.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\DataBase.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\DrawCache.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\DXFOut.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\DXFParser.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Edge.cxx">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\Gregory.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Half.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\History.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\HRCParser.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\IFSetHandle.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\IFSTexture.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Image.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\ImageIO.cxx">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\IndexFace.cxx">
@@ -106,25 +70,7 @@
     <ClCompile Include="..\..\src\shape\LineBase.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Loop.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\MassProperty.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\MeshTexture.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Modify.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\MQOOut.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\MQOParser.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Operation.cxx">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\ParserBase.cxx">
@@ -151,28 +97,10 @@
     <ClCompile Include="..\..\src\shape\RDSParser.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\RectTexture.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Reference1.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Reference2.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Reference3.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Shape.cxx">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\SMFParser.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Solid.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\SolidBase.cxx">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\Sphere.cxx">
@@ -181,37 +109,10 @@
     <ClCompile Include="..\..\src\shape\SRFParser.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\STLOut.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\STLParser.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\SubDivision.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\Surface.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\TextImage.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Texture.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Topology.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\TriTexture.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\UniCode.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\Vertex.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\VRMLOut.cxx">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\shape\VRMLParser.cxx">
@@ -220,19 +121,7 @@
     <ClCompile Include="..\..\src\shape\RBezCurve.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\shape\Graph.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\GraphEdge.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\GraphNode.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\EdgePair.cxx">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shape\CostTable.cxx">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -275,9 +164,6 @@
     <ClInclude Include="..\..\FK\Closedline.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\Command.H">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\Cone.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -296,43 +182,13 @@
     <ClInclude Include="..\..\FK\D3DXShapeParser.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\DataAccess.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\DataBase.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\DrawCache.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\DXFOut.H">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\DXFParser.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Edge.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Gregory.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\Half.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\History.H">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\HRCParser.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\IFSetHandle.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\IFSTexture.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Image.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\IndexFace.h">
@@ -347,25 +203,7 @@
     <ClInclude Include="..\..\FK\LineBase.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\Loop.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\MassProperty.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\MeshTexture.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Modify.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\MQOOut.H">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\MQOParser.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Operation.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\ParserBase.H">
@@ -395,22 +233,10 @@
     <ClInclude Include="..\..\FK\RDSParser.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\RectTexture.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Reference.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\Shape.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\SMFParser.H">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Solid.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\SolidBase.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\Sphere.h">
@@ -419,55 +245,16 @@
     <ClInclude Include="..\..\FK\SRFParser.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\STLOut.H">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\STLParser.H">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\SubDivision.H">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\FK\Surface.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\TextImage.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Texture.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Topology.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\TriTexture.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\UniCode.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Vertex.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\VRMLOut.H">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\VRMLParser.H">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FK\RBezCurve.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\Graph.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\GraphEdge.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\GraphNode.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\FK\CostTable.H">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
