@@ -21,16 +21,11 @@ LIBSRCS		= \
 			EdgePair.cxx \
 			Gregory.cxx \
 			HRCParser.cxx \
-			IFSTexture.cxx \
-			Image.cxx \
-			ImageIO.cxx \
 			IndexFace.cxx \
 			Light.cxx \
 			Line.cxx \
 			LineBase.cxx \
 			MQOParser.cxx \
-			MassProperty.cxx \
-			MeshTexture.cxx \
 			ParserBase.cxx \
 			Particle.cxx \
 			ParticleSet.cxx \
@@ -46,11 +41,6 @@ LIBSRCS		= \
 			Shape.cxx \
 			Sphere.cxx \
 			Surface.cxx \
-			TextImage.cxx \
-			Texture.cxx \
-			TriTexture.cxx \
-			RectTexture.cxx \
-			UniCode.cxx \
 			VRMLParser.cxx
 
 FKLINK			= \

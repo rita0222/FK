@@ -1,4 +1,4 @@
-SHELL	= /bin/sh
+cSHELL	= /bin/sh
 
 .SUFFIXES : .cxx .o
 .SUFFIXES : .c .o
@@ -39,6 +39,7 @@ FKLIB_S		= \
 			-lFK4_scene \
 			-lFK4_model \
 			-lFK4_solid \
+			-lFK4_texture \
 			-lFK4_graph \
 			-lFK4_shape \
 			-lFK4_material \
@@ -52,6 +53,7 @@ FKLIB_SG		= \
 			-lFK4_scene_g \
 			-lFK4_model_g \
 			-lFK4_solid_g \
+			-lFK4_texture_g \
 			-lFK4_graph_g \
 			-lFK4_shape_g \
 			-lFK4_material_g \
@@ -65,6 +67,7 @@ FKLIB_D		= \
 			-lFK4_scene.$(VERNAME) \
 			-lFK4_model.$(VERNAME) \
 			-lFK4_solid.$(VERNAME) \
+			-lFK4_texture.$(VERNAME) \
 			-lFK4_graph.$(VERNAME) \
 			-lFK4_shape.$(VERNAME) \
 			-lFK4_material.$(VERNAME) \
@@ -78,6 +81,7 @@ FKLIB_DG		= \
 			-lFK4_scene_g.$(VERNAME) \
 			-lFK4_model_g.$(VERNAME) \
 			-lFK4_solid_g.$(VERNAME) \
+			-lFK4_texture_g.$(VERNAME) \
 			-lFK4_graph_g.$(VERNAME) \
 			-lFK4_shape_g.$(VERNAME) \
 			-lFK4_material_g.$(VERNAME) \
