@@ -11,7 +11,6 @@ LIBSRCS		= \
 			Capsule.cxx \
 			Circle.cxx \
 			Closedline.cxx \
-			Command.cxx \
 			Cone.cxx \
 			CostTable.cxx \
 			Curve.cxx \
@@ -19,35 +18,23 @@ LIBSRCS		= \
 			D3DXData.cxx \
 			D3DXParser.cxx \
 			D3DXShapeParser.cxx \
-			DXFOut.cxx \
 			DXFParser.cxx \
-			DataAccess.cxx \
-			DataBase.cxx \
-			DrawCache.cxx \
-			Edge.cxx \
 			EdgePair.cxx \
 			Graph.cxx \
 			GraphEdge.cxx \
 			GraphNode.cxx \
 			Gregory.cxx \
 			HRCParser.cxx \
-			Half.cxx \
-			History.cxx \
 			IFSTexture.cxx \
-			IFSetHandle.cxx \
 			Image.cxx \
 			ImageIO.cxx \
 			IndexFace.cxx \
 			Light.cxx \
 			Line.cxx \
 			LineBase.cxx \
-			Loop.cxx \
-			MQOOut.cxx \
 			MQOParser.cxx \
 			MassProperty.cxx \
 			MeshTexture.cxx \
-			Modify.cxx \
-			Operation.cxx \
 			ParserBase.cxx \
 			Particle.cxx \
 			ParticleSet.cxx \
@@ -57,28 +44,18 @@ LIBSRCS		= \
 			Prism.cxx \
 			RBezCurve.cxx \
 			RDSParser.cxx \
-			Reference1.cxx \
-			Reference2.cxx \
-			Reference3.cxx \
 			SMFParser.cxx \
 			SRFParser.cxx \
-			STLOut.cxx \
 			STLParser.cxx \
 			Shape.cxx \
-			Solid.cxx \
-			SolidBase.cxx \
 			Sphere.cxx \
-			SubDivision.cxx \
 			Surface.cxx \
 			TextImage.cxx \
 			Texture.cxx \
-			Topology.cxx \
 			TriTexture.cxx \
 			RectTexture.cxx \
 			UniCode.cxx \
-			VRMLOut.cxx \
-			VRMLParser.cxx \
-			Vertex.cxx
+			VRMLParser.cxx
 
 FKLINK			= \
 			-lFK4_base.$(VERNAME) \
