@@ -1,9 +1,0 @@
-BASENAME	= OpenCL
-
-LIBSRCS		= OpenCL.cxx
-
-FKLINK		= -lFK4_base.$(VERNAME)
-
-FKLINK_G	= -lFK4_base_g.$(VERNAME)
-
-include ../makeinclude

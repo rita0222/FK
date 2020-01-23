@@ -1,55 +1,167 @@
-SHELL	= /bin/sh
+SHELL = /bin/sh
 
+.SUFFIXES : .cxx .o
+.SUFFIXES : .c .o
+
+LIBSRCS = $(wildcard */*.cxx)
+GLSLSRCS = $(wildcard */GLSL/*.glsl)
+
+MAJORVERSION	= 4
+MINORVERSION	= 2
+PATCHVERSION	= 0
+VERNAME		= $(MAJORVERSION).$(MINORVERSION).$(PATCHVERSION)
+
+CC		= c++
+LINKCC		= c++
 RM		= rm -f
-CP		= cp
+MV		= mv
+TOUCH		= touch
+AR		= ar
+AROPS		= cq
+LOADER_S	= $(AR) $(AROPS)
+LOADER_D	= $(CC)
+LOADER_D_OPT	= -L. -dynamiclib -lc \
+			-install_name @executable_path/lib/$(LIBNAME_D) \
+			-current_version $(VERNAME) \
+			-compatibility_version $(MAJORVERSION).$(MINORVERSION).0
+OPTOPT		= -O
+FKDEF		= -DFK_LIB_SRC
+SYSOPT		=
+GRAMOPT		= -pedantic -std=c++17
+WARNOPT		= -Wall -Wextra -Wshadow -Wpointer-arith -Wconversion \
+			-Wredundant-decls -Woverloaded-virtual -Wno-long-long
+EXTOPT		= -Werror
+OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
+#
+
+LIBOBJS = $(LIBSRCS:cxx=o)
+GLSLOBJS = $(GLSLSRCS:glsl=out)
+ALLSRCS = $(LIBSRCS)
+
+###################
+
+FKTOP		= ..
+STATIC_DIR	= $(FKTOP)/lib/static
+DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
+
+MACPACK		= $(FKTOP)/MacPack
+MACINCLUDE	= $(MACPACK)/include
+MACSYSLIB_S	= $(MACPACK)/lib/static
+MACSYSLIB_D	= $(MACPACK)/lib/dynamic
+
+DLPRE		= dylib
+
+LIBNAME_S	= libFK4.a
+LIBNAME_SG	= libFK4_g.a
+LIBNAME_D	= libFK4.$(VERNAME).$(DLPRE)
+LIBNAME_DG	= libFK4_g.$(VERNAME).$(DLPRE)
+
+LIBRARY_S	= $(STATIC_DIR)/$(LIBNAME_S)
+LIBRARY_SG	= $(STATIC_DIR)/$(LIBNAME_SG)
+LIBRARY_D	= $(DYNAMIC_DIR)/$(LIBNAME_D)
+LIBRARY_DG	= $(DYNAMIC_DIR)/$(LIBNAME_DG)
+
+TARGET		= target
+LOCAL		= /usr/local
+OPTLOCAL	= /opt/local
 
 all:
 	@echo "	macOS:			make mac"
 	@echo "	macOS Dynamic:		make mac-d"
 	@echo "	macOS Debug:		make mac-g"
 	@echo "	Linux:			make linux"
-	@echo "	Clean:			make clean"
 
 mac:
-	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	$(MAKE) mac -f Makefile_sub
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O3 -pipe" \
+	"SYSOPT = -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LIBRARY = $(LIBRARY_S)" \
+	"RANLIB = ranlib"
 
 mac-d:
-	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-d TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) mac-d TARGET=depend ; \
-		$(MAKE) mac-d ; \
-		cd .. ; done
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O -pipe" \
+	"SYSOPT = -fPIC -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
+	"LFLAGS = -L$(DYNAMIC_DIR) -L$(MACSYSLIB_D)" \
+	"FKLIBS = $(FKLINK)" \
+	"SYSLIBS = -lfltk_gl.1.3 -lfltk.1.3 \
+		-lvorbisfile.3 -lvorbis.0 -logg.0 \
+		-liconv.8 -lpng16.16 -ljpeg.9 -lfreetype.6 -lz.1 -lbz2.1.0.6 \
+		-framework AGL -framework OpenGL \
+		-framework Cocoa -framework OpenAL \
+		-framework ApplicationServices \
+		-framework OpenCL \
+		-framework Foundation \
+		-framework AudioToolBox" \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LIBRARY = $(LIBRARY_D)" \
+	"RANLIB = ranlib"
 
 mac-g:
-	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) mac TARGET=glsl ; cd ..
-	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) mac-g TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) mac-g TARGET=depend ; \
-		$(MAKE) mac-g ; \
-		cd .. ; done
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -g" \
+	"SYSOPT = -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I$(MACINCLUDE)" \
+	"DEPENDCFLAGS = -D_MACOSX_" \
+	"LIBRARY_S = $(LIBRARY_SG)" \
+	"LIBRARY_D = $(LIBRARY_DG)" \
+	"LIBRARY = $(LIBRARY_SG)" \
+	"RANLIB = ranlib"
 
 linux:
-	cd graphics ; $(CP) Makefile.plane Makefile ; $(MAKE) linux TARGET=glsl ; cd ..
-	cd shader; $(CP) Makefile.plane Makefile ; $(MAKE) linux TARGET=glsl ; cd ..
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
-		cd $$sd ; \
-		$(CP) Makefile.plane Makefile ; \
-		$(MAKE) linux TARGET=depend ; \
-		$(MAKE) linux ; \
-		cd .. ; done
+	$(MAKE) $(TARGET) \
+	"OPTOPT = -O3 -pipe" \
+	"SYSOPT = -D_LINUX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
+	"LFLAGS = " \
+	"FKLIBS = " \
+	"SYSLIBS = " \
+	"INCLDIRS = -I. -I$(FKTOP) -I/usr/include/freetype2 -I/usr/local/include" \
+	"DEPENDDIRS = -I. -I$(FKTOP) -I/usr/include/freetype2 -I/usr/local/include" \
+	"DEPENDCFLAGS = -D_LINUX_" \
+	"LIBRARY = $(LIBRARY_S)" \
+	"RANLIB = ranlib"
+
+CFLAGS 		= $(OPS) $(FKDEF) $(SYSOPT) $(INCLDIRS)
+DEPENDCFLAGS	= $(CFLAGS)
+
+target : $(LIBRARY_S)
+
+$(LIBRARY_S) : $(GLSLOBJS) $(LIBOBJS)
+	$(RM) $(LIBRARY_S)
+	$(LOADER_S) $(LIBRARY_S) $(LIBOBJS)
+	$(RANLIB) $(LIBRARY_S)
+
+$(LIBRARY_D) : $(LIBOBJS)
+	$(RM) $(LIBRARY_D)
+	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) \
+		-o $(LIBRARY_D) $(LIBOBJS)
+
+depend:: $(ALLSRCS)
+	makedepend -s "# DO NOT DELETE!!!" \
+		-- $(DEPENDCFLAGS) $(DEPENDDIRS) -- $(ALLSRCS) > /dev/null 2>&1
 
 clean:
-	for sd in $(BASE) $(AUDIO) $(OPENCL) ; do \
-		cd $$sd ; \
-		$(MAKE) clean -f Makefile.plane ; \
-		$(RM) Makefile ; \
-		cd .. ; done
+	touch dummy~
+	$(RM) dummy~ Makefile.bak */*.o */GLSL/*.out \
+		*/*~ */GLSL/*~ */#*# */GLSL/#*#
+
+###
+%.o : %.cxx
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.out : %.glsl
+	$(FKTOP)/FK/glsl2out $<
 
 ####################

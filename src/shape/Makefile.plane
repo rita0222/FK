@@ -1,4 +1,0 @@
-BASENAME	= shape
-LIBSRCS		= $(wildcard *.cxx)
-
-include ../makeinclude
