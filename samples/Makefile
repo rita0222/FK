@@ -28,37 +28,13 @@ SAMPLEEXE	= $(SAMPLESRCS:cxx=exe)
 SAMPLEAPPS	= $(SAMPLESRCS:cxx=app)
 ALLSRCS		= $(SAMPLESRCS)
 
-VERNAME		= 4.1.0
+VERNAME		= 4.2.0
 
 ###################
 
-FKLIB_S		= \
-			-lFK4_util \
-			-lFK4_window \
-			-lFK4_graphics \
-			-lFK4_scene \
-			-lFK4_model \
-			-lFK4_solid \
-			-lFK4_texture \
-			-lFK4_graph \
-			-lFK4_shape \
-			-lFK4_material \
-			-lFK4_math \
-			-lFK4_base \
+FKLIB_S		= -lFK4
 
-FKLIB_SG		= \
-			-lFK4_util_g \
-			-lFK4_window_g \
-			-lFK4_graphics_g \
-			-lFK4_scene_g \
-			-lFK4_model_g \
-			-lFK4_solid_g \
-			-lFK4_texture_g \
-			-lFK4_graph_g \
-			-lFK4_shape_g \
-			-lFK4_material_g \
-			-lFK4_math_g \
-			-lFK4_base_g \
+FKLIB_SG	= -lFK4_g
 
 FKLIB_D		= \
 			-lFK4_util.$(VERNAME) \
@@ -163,7 +139,7 @@ mac:
 		-framework CoreAudio \
 		-framework AudioToolBox" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKSHADER_S) $(FKLIB_S)" \
+	"FKLINK = $(FKLIB_S)" \
 	"SAMPLE = $(SAMPLEAPPS)" \
 	"POSTLINK = ../FK/appmake.pl"
 

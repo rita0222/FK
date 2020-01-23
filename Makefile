@@ -14,7 +14,7 @@ all:
 	@echo "	Doc Clean:		make doc-clean"
 
 mac:
-	cd src; $(MAKE) mac
+	cd src; cp Makefile_base Makefile; $(MAKE) mac TARGET=depend; $(MAKE) mac
 	cd samples; $(MAKE) mac
 
 mac-d:

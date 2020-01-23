@@ -1,4 +1,6 @@
-﻿#include <FK/ARDevice.h>
+﻿#ifdef FK_AR
+
+#include <FK/ARDevice.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -468,3 +470,5 @@ bool fk_ARDevice::getModelDetect(int argID)
 {
 	return pat_array[st(GetID(argID))].contFlg;
 }
+
+#endif

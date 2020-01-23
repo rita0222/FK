@@ -3,6 +3,8 @@ SHELL = /bin/sh
 .SUFFIXES : .cxx .o
 .SUFFIXES : .c .o
 
+LIBSRCS = $(wildcard */*.cxx)
+
 MAJORVERSION	= 4
 MINORVERSION	= 2
 PATCHVERSION	= 0
@@ -32,13 +34,11 @@ OPS		= $(OPTOPT) $(GRAMOPT) $(WARNOPT) $(EXTOPT)
 #
 
 LIBOBJS = $(LIBSRCS:cxx=o)
-LIBBCCOBJS = $(LIBSRCS:cxx=obj)
-
 ALLSRCS = $(LIBSRCS)
 
 ###################
 
-FKTOP		= ../..
+FKTOP		= ..
 STATIC_DIR	= $(FKTOP)/lib/static
 DYNAMIC_DIR	= $(FKTOP)/lib/dynamic
 
@@ -49,10 +49,10 @@ MACSYSLIB_D	= $(MACPACK)/lib/dynamic
 
 DLPRE		= dylib
 
-LIBNAME_S	= libFK4_$(BASENAME).a
-LIBNAME_SG	= libFK4_$(BASENAME)_g.a
-LIBNAME_D	= libFK4_$(BASENAME).$(VERNAME).$(DLPRE)
-LIBNAME_DG	= libFK4_$(BASENAME)_g.$(VERNAME).$(DLPRE)
+LIBNAME_S	= libFK4.a
+LIBNAME_SG	= libFK4_g.a
+LIBNAME_D	= libFK4.$(VERNAME).$(DLPRE)
+LIBNAME_DG	= libFK4_g.$(VERNAME).$(DLPRE)
 
 LIBRARY_S	= $(STATIC_DIR)/$(LIBNAME_S)
 LIBRARY_SG	= $(STATIC_DIR)/$(LIBNAME_SG)
@@ -70,7 +70,7 @@ all:
 	@echo "	Linux:			make linux"
 
 mac:
-	$(MAKE) $(TARGET) \
+	$(MAKE) $(TARGET) -f Makefile_sub \
 	"OPTOPT = -O3 -pipe" \
 	"SYSOPT = -D_MACOSX_ -DHAVE_NANOSLEEP -DHAVE_TIME_H -DOPENGL4" \
 	"LFLAGS = " \
@@ -134,16 +134,14 @@ linux:
 CFLAGS 		= $(OPS) $(FKDEF) $(SYSOPT) $(INCLDIRS)
 DEPENDCFLAGS	= $(CFLAGS)
 
-target : $(LIBRARY)
+target : $(LIBRARY_S)
 
 $(LIBRARY_S) : $(LIBOBJS)
-	$(PRECOM)
 	$(RM) $(LIBRARY_S)
 	$(LOADER_S) $(LIBRARY_S) $(LIBOBJS)
 	$(RANLIB) $(LIBRARY_S)
 
 $(LIBRARY_D) : $(LIBOBJS)
-	$(PRECOM)
 	$(RM) $(LIBRARY_D)
 	$(LOADER_D) $(LFLAGS) $(SYSLIBS) $(FKLIBS) $(LOADER_D_OPT) \
 		-o $(LIBRARY_D) $(LIBOBJS)
