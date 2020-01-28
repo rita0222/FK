@@ -222,6 +222,9 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FK.vcxproj">
+      <Project>{5beb0bb9-67e6-4f3c-aba4-9e5da6d29908}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\FK_audio.vcxproj">
       <Project>{ebf4a69f-3aa4-4826-b8fc-36b6d77e8c3a}</Project>
     </ProjectReference>
