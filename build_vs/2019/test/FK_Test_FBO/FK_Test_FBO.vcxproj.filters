@@ -10,4 +10,7 @@
       <Filter>Resources</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fbo.cxx" />
+  </ItemGroup>
 </Project>

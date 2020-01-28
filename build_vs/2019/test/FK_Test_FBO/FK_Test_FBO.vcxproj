@@ -229,6 +229,9 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
   <ItemGroup>
     <Text Include="Resources\readme.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fbo.cxx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
