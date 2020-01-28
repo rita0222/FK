@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{40e0c340-24aa-4a7b-a4dc-29b78a5ff741}</ProjectGuid>
+    <ProjectGuid>{f5ec25bb-9dc2-4aaa-a1da-20a1029c0fd2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>FK_Test_Box</RootNamespace>
+    <RootNamespace>FK_Test_BezSurf</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -230,7 +230,7 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
     <Text Include="Resources\readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="box.cxx" />
+    <ClCompile Include="ftest_surf.cxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

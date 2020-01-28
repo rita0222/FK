@@ -97,6 +97,7 @@ public:
 
 
 	Ball(void);
+	~Ball();
 	void		init(void);
 	fk_Model *	getModel(void);
 	fk_Vector	getPosition(void);
@@ -121,6 +122,10 @@ private:
 Ball::Ball(void)
 {
 	init();
+}
+
+Ball::~Ball()
+{
 }
 
 // 初期化
@@ -243,97 +248,112 @@ int Ball::draw(fk_Vector pos)
 int main(int, char *[])
 {
 	int				view_mode = Ball::HIGH_MODE;
-	Ball			ball;
-	fk_Sphere		lightBall(4, 2.0);
-	fk_Model		viewModel, groundModel, blockModel, lightModel, lightBallModel;
-	fk_Light		light;
-	fk_Circle		ground(4, 100.0);
-	fk_Block		block(10.0, 10.0, 10.0);
-	fk_Scene		scene;
+	Ball *ball = new Ball();
+	fk_Sphere *lightBall = new fk_Sphere(4, 2.0);
+	fk_Model *viewModel = new fk_Model();
+	fk_Model *groundModel = new fk_Model();
+	fk_Model *blockModel = new fk_Model();
+	fk_Model *lightModel = new fk_Model();
+	fk_Model *lightBallModel = new fk_Model();
+	fk_Light *light = new fk_Light();
+	fk_Circle *ground = new fk_Circle(4, 100.0);
+	fk_Block *block = new fk_Block(10.0, 10.0, 10.0);
+	fk_Scene *scene = new fk_Scene();
 
 	// ### WINDOW ###
-	fk_AppWindow	win;
-	win.setSize(800, 800);
-	win.setScene(&scene);
+	fk_AppWindow	*win = new fk_AppWindow();
+	win->setSize(800, 800);
+	win->setScene(scene);
 
 	// ### Material 初期化 ###
 	fk_Material::initDefault();
 
 	// ### VIEW POINT ###
 	// 上の方から見た視点
-	viewModel.glMoveTo(0.0, 400.0, 80.0);
-	viewModel.glFocus(0.0, 30.0, 0.0);
-	viewModel.glUpvec(0.0, 1.0, 0.0);
+	viewModel->glMoveTo(0.0, 400.0, 80.0);
+	viewModel->glFocus(0.0, 30.0, 0.0);
+	viewModel->glUpvec(0.0, 1.0, 0.0);
 
 	// ### LIGHT ###
-	light.setLightType(fk_LightType::POINT);
-	light.setAttenuation(0.0, 0.0);
-	lightModel.setShape(&light);
-	lightModel.setMaterial(WhiteLight);
-	lightModel.glTranslate(-60.0, 60.0, 0.0);
-	lightModel.glVec(0.0, -1.0, 0.0);
+	light->setLightType(fk_LightType::POINT);
+	light->setAttenuation(0.0, 0.0);
+	lightModel->setShape(light);
+	lightModel->setMaterial(WhiteLight);
+	lightModel->glTranslate(-60.0, 60.0, 0.0);
+	lightModel->glVec(0.0, -1.0, 0.0);
 
-	lightBallModel.setShape(&lightBall);
-	lightBallModel.setMaterial(TrueWhite);
-	lightBallModel.glTranslate(lightModel.getInhPosition());
-	light.setAttenuation(0.01, 0.0, 0.2);
+	lightBallModel->setShape(lightBall);
+	lightBallModel->setMaterial(TrueWhite);
+	lightBallModel->glTranslate(lightModel->getInhPosition());
+	light->setAttenuation(0.01, 0.0, 0.2);
 	
 	// ### GROUND ###
-	groundModel.setShape(&ground);
+	groundModel->setShape(ground);
 	LightGreen.setSpecular(0.1, 0.1, 0.1);
 	LightGreen.setShininess(80.0);
-	groundModel.setMaterial(LightGreen);
-	groundModel.setSmoothMode(true);
-	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/2.0);
+	groundModel->setMaterial(LightGreen);
+	groundModel->setSmoothMode(true);
+	groundModel->loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/2.0);
 
 	// ### VIEW BLOCK ###
-	blockModel.setShape(&block);
+	blockModel->setShape(block);
 	Blue.setSpecular(1.0, 1.0, 1.0);
 	Blue.setShininess(70.0);
-	blockModel.setMaterial(Blue);
-	blockModel.glMoveTo(60.0, 30.0, 0.0);
-	blockModel.setParent(&groundModel);
+	blockModel->setMaterial(Blue);
+	blockModel->glMoveTo(60.0, 30.0, 0.0);
+	blockModel->setParent(groundModel);
 
 	// ### BALL ###
 	Red.setSpecular(1.0, 1.0, 1.0);
 	Red.setShininess(100.0);
-	ball.getModel()->setMaterial(Red);
-	ball.getModel()->setSmoothMode(true);
+	ball->getModel()->setMaterial(Red);
+	ball->getModel()->setSmoothMode(true);
 	
 	// ### Model Entry ###
-	scene.entryCamera(&viewModel);
-	scene.entryModel(&lightModel);
-	scene.entryModel(ball.getModel());
-	scene.entryModel(&groundModel);
-	scene.entryModel(&blockModel);
-	scene.entryModel(&lightBallModel);
+	scene->entryCamera(viewModel);
+	scene->entryModel(lightModel);
+	scene->entryModel(ball->getModel());
+	scene->entryModel(groundModel);
+	scene->entryModel(blockModel);
+	scene->entryModel(lightBallModel);
 
-	win.open();
+	win->open();
 
 	// ### MAIN LOOP ###
-	while(win.update() == true) {
+	while(win->update() == true) {
 
 		// ボールを弾ませて, カメラの状態を取得。
-		view_mode = ball.draw(viewModel.getPosition());
+		view_mode = ball->draw(viewModel->getPosition());
 
 		if(view_mode == Ball::HIGH_MODE) {
 			// カメラを上からの視点にする。
-			viewModel.glMoveTo(0.0, 400.0, 80.0);
-			viewModel.glFocus(0.0, 30.0, 0.0);
-			viewModel.glUpvec(0.0, 1.0, 0.0);
-			scene.entryModel(&blockModel);
+			viewModel->glMoveTo(0.0, 400.0, 80.0);
+			viewModel->glFocus(0.0, 30.0, 0.0);
+			viewModel->glUpvec(0.0, 1.0, 0.0);
+			scene->entryModel(blockModel);
 		} else {
 			// カメラをブロックからの視点にする。
-			viewModel.glMoveTo(blockModel.getInhPosition());
-			viewModel.glTranslate(0.0, 10.0, 0.0);
-			viewModel.glFocus(ball.getPosition());
-			viewModel.glUpvec(0.0, 1.0, 0.0);
-			scene.removeModel(&blockModel);
+			viewModel->glMoveTo(blockModel->getInhPosition());
+			viewModel->glTranslate(0.0, 10.0, 0.0);
+			viewModel->glFocus(ball->getPosition());
+			viewModel->glUpvec(0.0, 1.0, 0.0);
+			scene->removeModel(blockModel);
 		}
 
 		// 地面をくるくる回転させましょう。
-		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, Ball::ROTATE);
+		groundModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, Ball::ROTATE);
 	}
+	delete ball;
+	delete lightBall;
+	delete viewModel;
+	delete groundModel;
+	delete blockModel;
+	delete lightModel;
+	delete lightBallModel;
+	delete light;
+	delete ground;
+	delete block;
+	delete scene;
 
 	return 0;
 }
