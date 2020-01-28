@@ -48,11 +48,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Shader", "test\FK_T
 		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GeomShader", "test\FK_Test_GeomShader\FK_Test_GeomShader.vcxproj", "{78080738-C810-4778-9433-9127EE89F5AF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_MultiTex", "test\FK_Test_MultiTex\FK_Test_MultiTex.vcxproj", "{1B6CF515-4EDE-49AA-A35D-B9B146C1B856}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
@@ -83,6 +78,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GenMat", "test\FK_Test_GenMat\FK_Test_GenMat.vcxproj", "{C580BA08-67FA-454C-918B-DADD0DC66A30}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GUI", "test\FK_Test_GUI\FK_Test_GUI.vcxproj", "{0CE2DF75-03FD-4ACF-9EC0-E49BC0F3BDFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GeomShader", "test\FK_Test_GeomShader\FK_Test_GeomShader.vcxproj", "{DA477795-4961-4C25-BE7F-31009B0FB59B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -160,14 +157,6 @@ Global
 		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|Win32.Build.0 = Release|Win32
 		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|x64.ActiveCfg = Release|x64
 		{1A595088-5604-46F1-A8E1-FD2A0229088C}.Release|x64.Build.0 = Release|x64
-		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|Win32.Build.0 = Debug|Win32
-		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|x64.ActiveCfg = Debug|x64
-		{78080738-C810-4778-9433-9127EE89F5AF}.Debug|x64.Build.0 = Debug|x64
-		{78080738-C810-4778-9433-9127EE89F5AF}.Release|Win32.ActiveCfg = Release|Win32
-		{78080738-C810-4778-9433-9127EE89F5AF}.Release|Win32.Build.0 = Release|Win32
-		{78080738-C810-4778-9433-9127EE89F5AF}.Release|x64.ActiveCfg = Release|x64
-		{78080738-C810-4778-9433-9127EE89F5AF}.Release|x64.Build.0 = Release|x64
 		{1B6CF515-4EDE-49AA-A35D-B9B146C1B856}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1B6CF515-4EDE-49AA-A35D-B9B146C1B856}.Debug|Win32.Build.0 = Debug|Win32
 		{1B6CF515-4EDE-49AA-A35D-B9B146C1B856}.Debug|x64.ActiveCfg = Debug|x64
@@ -256,6 +245,14 @@ Global
 		{0CE2DF75-03FD-4ACF-9EC0-E49BC0F3BDFB}.Release|Win32.Build.0 = Release|Win32
 		{0CE2DF75-03FD-4ACF-9EC0-E49BC0F3BDFB}.Release|x64.ActiveCfg = Release|x64
 		{0CE2DF75-03FD-4ACF-9EC0-E49BC0F3BDFB}.Release|x64.Build.0 = Release|x64
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Debug|Win32.Build.0 = Debug|Win32
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Debug|x64.ActiveCfg = Debug|x64
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Debug|x64.Build.0 = Debug|x64
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Release|Win32.ActiveCfg = Release|Win32
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Release|Win32.Build.0 = Release|Win32
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Release|x64.ActiveCfg = Release|x64
+		{DA477795-4961-4C25-BE7F-31009B0FB59B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
