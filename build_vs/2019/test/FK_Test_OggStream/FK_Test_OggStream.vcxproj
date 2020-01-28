@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{bd5be767-8dd0-4fa9-a9ae-175c536e6982}</ProjectGuid>
+    <ProjectGuid>{BD5BE767-8DD0-4FA9-A9AE-175C536E6982}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FK_Test_OggStream</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -221,6 +221,11 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
 copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FK.vcxproj">
+      <Project>{ebf4a69f-3aa4-4826-b8fc-36b6d77e8c3a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\readme.txt" />
   </ItemGroup>

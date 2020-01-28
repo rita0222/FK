@@ -61,22 +61,49 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Ball", "test\FK_Tes
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_BezSurf", "test\FK_Test_BezSurf\FK_Test_BezSurf.vcxproj", "{F5EC25BB-9DC2-4AAA-A1DA-20A1029C0FD2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Box", "test\FK_Test_Box\FK_Test_Box.vcxproj", "{40E0C340-24AA-4A7B-A4DC-29B78A5FF741}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Car", "test\FK_Test_Car\FK_Test_Car.vcxproj", "{303FCE87-AA53-405C-8FB2-B538A95DDB47}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_BlockSize", "test\FK_Test_BlockSize\FK_Test_BlockSize.vcxproj", "{FE0538CE-327E-4315-A408-AAC5B631A7A0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_FBO", "test\FK_Test_FBO\FK_Test_FBO.vcxproj", "{EB17438D-F854-4240-83D2-74BDE9D4229B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GenMat", "test\FK_Test_GenMat\FK_Test_GenMat.vcxproj", "{C580BA08-67FA-454C-918B-DADD0DC66A30}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GUI", "test\FK_Test_GUI\FK_Test_GUI.vcxproj", "{0CE2DF75-03FD-4ACF-9EC0-E49BC0F3BDFB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_GeomShader", "test\FK_Test_GeomShader\FK_Test_GeomShader.vcxproj", "{DA477795-4961-4C25-BE7F-31009B0FB59B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FK_Test_Gregory", "test\FK_Test_Gregory\FK_Test_Gregory.vcxproj", "{6C4CFD8F-CB68-43AE-99AF-628726308B12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908} = {5BEB0BB9-67E6-4F3C-ABA4-9E5DA6D29908}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
