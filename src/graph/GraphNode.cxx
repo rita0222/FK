@@ -77,7 +77,7 @@ using namespace std;
 using namespace FK;
 
 fk_GraphNode::fk_GraphNode(unsigned int argID, fk_Graph *argGraph)
-	: ID(argID), generation(0), baseGraph(argGraph)
+	: fk_BaseObject(fk_Type::GRAPHNODE), ID(argID), generation(0), baseGraph(argGraph)
 {
 	clearIntCost(0);
 	clearDoubleCost(0);

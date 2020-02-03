@@ -80,7 +80,7 @@ fk_GraphEdge::fk_GraphEdge(unsigned int argEID,
 						   fk_GraphNode *argV1,
 						   fk_GraphNode *argV2,
 						   fk_Graph *argGraph) :
-	edgeID(argEID), lengthMode(true), baseGraph(argGraph)
+	fk_BaseObject(fk_Type::GRAPHEDGE), edgeID(argEID), lengthMode(true), baseGraph(argGraph)
 {
 	node[0] = argV1;
 	node[1] = argV2;

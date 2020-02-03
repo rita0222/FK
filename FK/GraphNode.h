@@ -87,7 +87,7 @@ namespace FK {
 	/*!
 	 *	このクラスは、グラフ構造におけるノードを制御する機能を提供します。
 	 */
-	class fk_GraphNode {
+	class fk_GraphNode : public fk_BaseObject {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

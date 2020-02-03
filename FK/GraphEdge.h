@@ -97,7 +97,7 @@ namespace FK {
 	/*!
 	 *	このクラスは、グラフ構造における辺を制御する機能を提供します。
 	 */
-	class fk_GraphEdge {
+	class fk_GraphEdge : public fk_BaseObject {
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS

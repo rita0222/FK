@@ -169,7 +169,9 @@ namespace FK {
 		SHAPEVIEWER,	//!<	fk_ShapeViewer 型
 		PARTICLE,		//!<	fk_Particle 型
 		PARTICLESET,	//!<	fk_ParticleSet 型
-		GRAPH			//!<	fk_Graph 型
+		GRAPH,			//!<	fk_Graph 型
+		GRAPHNODE,		//!<	fk_GraphNode 型
+		GRAPHEDGE,		//!<	fk_GraphEdge 型
 	};
 
 #ifndef FK_DOXYGEN_USER_PROCESS
