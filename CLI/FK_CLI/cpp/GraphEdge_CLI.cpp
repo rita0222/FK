@@ -69,103 +69,135 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-// GraphEdge_CLI.h
+#include "GraphEdge_CLI.h"
+#include "GraphNode_CLI.h"
 
-#ifndef _FK_CLI_GRAPHEDGE_
-#define _FK_CLI_GRAPHEDGE_
+namespace FK_CLI {
 
-#include <FK/GraphEdge.h>
-#include "Color_CLI.h"
+	using namespace std;
+	using namespace System::Collections::Generic;
+	
+    ::FK::fk_CostType fk_GraphEdge::getCT(fk_CostType argType)
+    {
+        switch(argType) {
+            case fk_CostType::INT:
+                return ::FK::fk_CostType::INT;
 
-namespace FK_CLI
-{
-    using namespace System::Collections::Generic;
+            case fk_CostType::DOUBLE:
+                return ::FK::fk_CostType::DOUBLE;
 
-    ref class fk_GraphNode;
+            default:
+                break;
+        }
+        return ::FK::fk_CostType::LENGTH;
+    }
 
-    //! グラフ内コスト値の型を表す列挙型
-	public enum class fk_CostType {
-		INT,		//!<	整数型
-		DOUBLE,		//!<	実数型
-		LENGTH		//!<	辺長
-	};
+    ::FK::fk_CostDirection fk_GraphEdge::getCD(fk_CostDirection argType)
+    {
+        if (argType == fk_CostDirection::FORWARD) return ::FK::fk_CostDirection::FORWARD;
+        return ::FK::fk_CostDirection::BACK;
+    }
 
-	//! グラフ内コスト算出方向を表す列挙型
-	public enum class fk_CostDirection {
-		FORWARD,	//!< 出発ノードから開始
-		BACK		//!< 目標ノードから開始
-	};
+	::FK::fk_GraphEdge * fk_GraphEdge::GetP(void)
+	{
+		return (::FK::fk_GraphEdge *)(pBase);
+	}
 
-	//! グラフ構造を制御するクラス
-	/*!
-	 *	このクラスは、グラフ構造を制御する機能を提供します。
-	 */
-	public ref class fk_GraphEdge : fk_BaseObject {
-	internal:
-		::FK::fk_GraphEdge * GetP(void);
-        static ::FK::fk_CostType getCT(fk_CostType);
-        static ::FK::fk_CostDirection getCD(fk_CostDirection);
+    fk_GraphEdge::fk_GraphEdge(::FK::fk_GraphEdge* argE) : fk_BaseObject(false)
+    {
+        pBase = (::FK::fk_BaseObject*)argE;
+        dFlg = false;
+    }
 
-	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphEdge(::FK::fk_GraphEdge *);
-		~fk_GraphEdge();
-		!fk_GraphEdge();
-#endif
+    fk_GraphEdge::~fk_GraphEdge()
+	{
+		this->!fk_GraphEdge();
+	}
 
-		//! ID 取得関数
-		/*!
-		 *	稜線の ID を取得します。
-		 *
-		 *	\return		ID
-		 */
-		property unsigned int ID {
-			unsigned int get();
-		}
+	fk_GraphEdge::!fk_GraphEdge()
+	{
+		if(pBase == nullptr) return;
+		pBase = nullptr;
+	}
 
-		//! ノード取得関数
-		/*!
-		 *	稜線の端点にあたるノードを取得します。
-		 *
-		 *	\param[in]	mode	true の場合始点を、false の場合終点を返します。
-		 *
-		 *	\return		端点ノード
-		 */
-		fk_GraphNode^ GetNode(bool mode);
+    unsigned int fk_GraphEdge::ID::get()
+    {
+        return GetP()->getID();
+    }
 
-		property bool LengthMode {
-			bool get();
-			void set(bool);
-		}
+    fk_GraphNode^ fk_GraphEdge::GetNode(bool argMode)
+    {
+        return gcnew fk_GraphNode(GetP()->getNode(argMode));
+    }
 
-		property double Length {
-			double get();
-		}
-		
-		//! 整数型コストID上限設定関数
-		void SetCostMaxID(fk_CostType type, unsigned int max);
-		unsigned int GetCostMaxID(fk_CostType type);
+    bool fk_GraphEdge::LengthMode::get()
+    {
+        return GetP()->getLengthMode();
+    }
 
-		//! 整数型コスト設定関数
-		/*!
-		 *
-		 */
-		void SetIntCost(int cost);
-		void SetIntCost(unsigned int ID, int cost);
+    void fk_GraphEdge::LengthMode::set(bool argMode)
+    {
+        GetP()->setLengthMode(argMode);
+    }
 
-		void SetDoubleCost(double cost);
-		void SetDoubleCost(unsigned int ID, double cost);
+    double fk_GraphEdge::Length::get()
+    {
+        return GetP()->getLength();
+    }
 
-		int GetIntCost(void);
-		int GetIntCost(unsigned int ID);
+    void fk_GraphEdge::SetCostMaxID(fk_CostType argType, unsigned int argMax)
+    {
+        GetP()->setCostMaxID(getCT(argType), argMax);
+    }
 
-		double GetDoubleCost(void);
-		double GetDoubleCost(unsigned int ID);
+    unsigned int fk_GraphEdge::GetCostMaxID(fk_CostType argType)
+    {
+        return GetP()->getCostMaxID(getCT(argType));
+    }
 
-		property fk_Color^ Color {
-			void set(fk_Color^);
-		}
-	};
+    void fk_GraphEdge::SetIntCost(int argCost)
+    {
+        GetP()->setIntCost(argCost);
+    }
+
+    void fk_GraphEdge::SetIntCost(unsigned int argID, int argCost)
+    {
+        GetP()->setIntCost(argID, argCost);
+    }
+
+    void fk_GraphEdge::SetDoubleCost(double argCost)
+    {
+        GetP()->setDoubleCost(argCost);
+    }
+
+    void fk_GraphEdge::SetDoubleCost(unsigned int argID, double argCost)
+    {
+        GetP()->setDoubleCost(argID, argCost);
+    }
+
+    int fk_GraphEdge::GetIntCost(void)
+    {
+        return GetP()->getIntCost();
+    }
+
+    int fk_GraphEdge::GetIntCost(unsigned int argID)
+    {
+        return GetP()->getIntCost(argID);
+    }
+
+    double fk_GraphEdge::GetDoubleCost(void)
+    {
+        return GetP()->getDoubleCost();
+    }
+
+    double fk_GraphEdge::GetDoubleCost(unsigned int argID)
+    {
+        return GetP()->getDoubleCost(argID);
+    }
+
+    void fk_GraphEdge::Color::set(fk_Color^ argColor)
+    {
+        if (!argColor) return;
+        GetP()->setColor(argColor->pCol);
+    }
 }
-
-#endif

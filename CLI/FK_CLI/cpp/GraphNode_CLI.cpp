@@ -1,0 +1,262 @@
+﻿/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	Redistribution and use in source and binary forms,
+ *	with or without modification, are permitted provided that the
+ *	following conditions are met:
+ *
+ *		- Redistributions of source code must retain the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer.
+ *
+ *		- Redistributions in binary form must reproduce the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer in the documentation and/or
+ *			other materials provided with the distribution.
+ *
+ *		- Neither the name of the copyright holders nor the names
+ *			of its contributors may be used to endorse or promote
+ *			products derived from this software without specific
+ *			prior written permission.
+ *
+ *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *	POSSIBILITY OF SUCH DAMAGE. 
+ *
+ ****************************************************************************/
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	本ソフトウェアおよびソースコードのライセンスは、基本的に
+ *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
+ *
+ *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
+ *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
+ *
+ *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
+ *		および下記免責条項を含めること。
+ *
+ *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
+ *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
+ *		含めること。
+ *
+ *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
+ *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
+ *		コントリビューターの名前を使用してはならない。
+ *
+ *	本ソフトウェアは、著作権者およびコントリビューターによって「現
+ *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
+ *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
+ *	に限定されない、いかなる保証もないものとします。著作権者もコン
+ *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
+ *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
+ *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
+ *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
+ *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
+ *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
+ *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
+ *	ついて、一切責任を負わないものとします。
+ *
+ ****************************************************************************/
+#include <FK/Vector.h>
+#include "GraphNode_CLI.h"
+#include "GraphEdge_CLI.h"
+
+namespace FK_CLI {
+
+	using namespace std;
+	using namespace System::Collections::Generic;
+
+	::FK::fk_GraphNode * fk_GraphNode::GetP(void)
+	{
+		return (::FK::fk_GraphNode *)(pBase);
+	}
+
+    fk_GraphNode::fk_GraphNode(::FK::fk_GraphNode* argN) : fk_BaseObject(false)
+    {
+        pBase = (::FK::fk_BaseObject*)argN;
+        dFlg = false;
+    }
+
+    fk_GraphNode::~fk_GraphNode()
+	{
+		this->!fk_GraphNode();
+	}
+
+	fk_GraphNode::!fk_GraphNode()
+	{
+		if(pBase == nullptr) return;
+		pBase = nullptr;
+	}
+
+    unsigned int fk_GraphNode::ID::get()
+    {
+        return GetP()->getID();
+    }
+
+    fk_Vector^ fk_GraphNode::Position::get()
+    {
+        return gcnew fk_Vector(GetP()->getPosition());
+    }
+
+    void fk_GraphNode::Position::set(fk_Vector^ argP)
+    {
+        if (!argP) return;
+        ::FK::fk_Vector V(argP->x_, argP->y_, argP->z_);
+        GetP()->setPosition(&V);
+    }
+
+    unsigned int fk_GraphNode::Generation::get()
+    {
+        return GetP()->getGeneration();
+    }
+
+    bool fk_GraphNode::IsConnect(fk_GraphNode^ argNode)
+    {
+        if (!argNode) return false;
+        return GetP()->isConnect(argNode->GetP());
+    }
+
+    bool fk_GraphNode::IsConnect(bool argMode, fk_GraphNode^ argNode)
+    {
+        if (!argNode) return false;
+        return GetP()->isConnect(argMode, argNode->GetP());
+    }
+
+    List<fk_GraphEdge^>^ fk_GraphNode::AllEdge::get()
+    {
+        auto retList = gcnew List<fk_GraphEdge^>();
+        list<::FK::fk_GraphEdge*> list;
+
+        GetP()->getAllEdge(&list);
+        for (auto e : list) {
+            retList->Add(gcnew fk_GraphEdge(e));
+        }
+        return retList;
+    }
+
+    List<fk_GraphEdge^>^ fk_GraphNode::StartEdge::get()
+    {
+        auto retList = gcnew List<fk_GraphEdge^>();
+        list<::FK::fk_GraphEdge*> list;
+
+        GetP()->getStartEdge(&list);
+        for (auto e : list) {
+            retList->Add(gcnew fk_GraphEdge(e));
+        }
+        return retList;
+    }
+
+    List<fk_GraphEdge^>^ fk_GraphNode::EndEdge::get()
+    {
+        auto retList = gcnew List<fk_GraphEdge^>();
+        list<::FK::fk_GraphEdge*> list;
+
+        GetP()->getEndEdge(&list);
+        for (auto e : list) {
+            retList->Add(gcnew fk_GraphEdge(e));
+        }
+        return retList;
+    }
+
+    List<fk_GraphNode^>^ fk_GraphNode::NextNode::get()
+    {
+        auto retList = gcnew List<fk_GraphNode^>();
+        list<::FK::fk_GraphNode*> list;
+
+        GetP()->getNextNode(&list);
+        for (auto n : list) {
+            retList->Add(gcnew fk_GraphNode(n));
+        }
+        return retList;
+    }
+
+    List<fk_GraphNode^>^ fk_GraphNode::PrevNode::get()
+    {
+        auto retList = gcnew List<fk_GraphNode^>();
+        list<::FK::fk_GraphNode*> list;
+
+        GetP()->getPrevNode(&list);
+        for (auto n : list) {
+            retList->Add(gcnew fk_GraphNode(n));
+        }
+        return retList;
+    }
+
+    void fk_GraphNode::SetIntCost(unsigned int argID, int argValue)
+    {
+        GetP()->setIntCost(argID, argValue);
+    }
+
+    void fk_GraphNode::SetDoubleCost(unsigned int argID, double argValue)
+    {
+        GetP()->setDoubleCost(argID, argValue);
+    }
+
+    int fk_GraphNode::GetIntCost(unsigned int argID)
+    {
+        return GetP()->getIntCost(argID);
+    }
+
+    double fk_GraphNode::GetDoubleCost(unsigned int argID)
+    {
+        return GetP()->getDoubleCost(argID);
+    }
+
+    void fk_GraphNode::ClearIntCost(void)
+    {
+        GetP()->clearIntCost();
+    }
+
+    void fk_GraphNode::ClearIntCost(unsigned int argID)
+    {
+        GetP()->clearIntCost(argID);
+    }
+
+    void fk_GraphNode::ClearDoubleCost(void)
+    {
+        GetP()->clearDoubleCost();
+    }
+
+    void fk_GraphNode::ClearDoubleCost(unsigned int argID)
+    {
+        GetP()->clearDoubleCost(argID);
+    }
+
+    bool fk_GraphNode::IsDoneIntCost(void)
+    {
+        return GetP()->isDoneIntCost();
+    }
+
+    bool fk_GraphNode::IsDoneIntCost(unsigned int argID)
+    {
+        return GetP()->isDoneIntCost(argID);
+    }
+
+    bool fk_GraphNode::IsDoneDoubleCost(void)
+    {
+        return GetP()->isDoneDoubleCost();
+    }
+
+    bool fk_GraphNode::IsDoneDoubleCost(unsigned int argID)
+    {
+        return GetP()->isDoneDoubleCost(argID);
+    }
+
+    void fk_GraphNode::Color::set(fk_Color^ argColor)
+    {
+        if (!argColor) return;
+        GetP()->setColor(argColor->pCol);
+    }
+}

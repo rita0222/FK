@@ -639,6 +639,15 @@
     <ClInclude Include="..\..\FK\CostTable.H">
       <Filter>Header\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\Graph_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\GraphEdge_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\GraphNode_CLI.h">
+      <Filter>Header\CLI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\FK_CLI\cpp\AppWindow_CLI.cpp">
@@ -1261,6 +1270,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\texture\UniCode.cxx">
       <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\Graph_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\GraphEdge_CLI.cpp">
+      <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\GraphNode_CLI.cpp">
+      <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

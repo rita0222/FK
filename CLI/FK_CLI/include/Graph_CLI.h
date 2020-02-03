@@ -71,7 +71,8 @@
  ****************************************************************************/
 // Graph_CLI.h
 
-#pragma once
+#ifndef _FK_CLI_GRAPH_
+#define _FK_CLI_GRAPH_
 
 #include <FK/Graph.h>
 #include "Shape_CLI.h"
@@ -95,11 +96,9 @@ namespace FK_CLI
 	public ref class fk_Graph : fk_Shape {
 	internal:
 		::FK::fk_Graph * GetP(void);
+		static fk_CostStatus getCS(::FK::fk_CostStatus);
 
 	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Graph(bool argNewFlg);
-#endif
 		//! コンストラクタ
 		/*!
 		 *	\param[in]	num		ノード数
@@ -304,3 +303,4 @@ namespace FK_CLI
 		///@}
 	};
 }
+#endif

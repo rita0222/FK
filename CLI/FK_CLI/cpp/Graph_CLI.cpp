@@ -69,103 +69,144 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-// GraphEdge_CLI.h
+#include "Graph_CLI.h"
 
-#ifndef _FK_CLI_GRAPHEDGE_
-#define _FK_CLI_GRAPHEDGE_
+namespace FK_CLI {
 
-#include <FK/GraphEdge.h>
-#include "Color_CLI.h"
+	using namespace std;
+	using namespace System::Collections::Generic;
 
-namespace FK_CLI
-{
-    using namespace System::Collections::Generic;
+    fk_CostStatus fk_Graph::getCS(::FK::fk_CostStatus argS)
+    {
+        switch (argS) {
+        case ::FK::fk_CostStatus::CONTINUE:
+			return fk_CostStatus::CONTINUE;
 
-    ref class fk_GraphNode;
+		case ::FK::fk_CostStatus::FINISH:
+            return fk_CostStatus::FINISH;
 
-    //! グラフ内コスト値の型を表す列挙型
-	public enum class fk_CostType {
-		INT,		//!<	整数型
-		DOUBLE,		//!<	実数型
-		LENGTH		//!<	辺長
-	};
+        default:
+            break;
+        }
+        return fk_CostStatus::ERROR;
+    }
 
-	//! グラフ内コスト算出方向を表す列挙型
-	public enum class fk_CostDirection {
-		FORWARD,	//!< 出発ノードから開始
-		BACK		//!< 目標ノードから開始
-	};
+	::FK::fk_Graph * fk_Graph::GetP(void)
+	{
+		return (::FK::fk_Graph *)(pBase);
+	}
 
-	//! グラフ構造を制御するクラス
-	/*!
-	 *	このクラスは、グラフ構造を制御する機能を提供します。
-	 */
-	public ref class fk_GraphEdge : fk_BaseObject {
-	internal:
-		::FK::fk_GraphEdge * GetP(void);
-        static ::FK::fk_CostType getCT(fk_CostType);
-        static ::FK::fk_CostDirection getCD(fk_CostDirection);
+	fk_Graph::fk_Graph(unsigned int argNum) : fk_Shape(false)
+	{
+		pBase = new ::FK::fk_Graph(argNum);
+	}
 
-	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphEdge(::FK::fk_GraphEdge *);
-		~fk_GraphEdge();
-		!fk_GraphEdge();
-#endif
+	fk_Graph::~fk_Graph()
+	{
+		this->!fk_Graph();
+	}
 
-		//! ID 取得関数
-		/*!
-		 *	稜線の ID を取得します。
-		 *
-		 *	\return		ID
-		 */
-		property unsigned int ID {
-			unsigned int get();
-		}
+	fk_Graph::!fk_Graph()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
 
-		//! ノード取得関数
-		/*!
-		 *	稜線の端点にあたるノードを取得します。
-		 *
-		 *	\param[in]	mode	true の場合始点を、false の場合終点を返します。
-		 *
-		 *	\return		端点ノード
-		 */
-		fk_GraphNode^ GetNode(bool mode);
+    unsigned int fk_Graph::NodeSize::get()
+    {
+        return GetP()->getNodeSize();
+    }
 
-		property bool LengthMode {
-			bool get();
-			void set(bool);
-		}
+    unsigned int fk_Graph::MaxEdgeID::get()
+    {
+        return GetP()->getMaxEdgeID();
+    }
 
-		property double Length {
-			double get();
-		}
-		
-		//! 整数型コストID上限設定関数
-		void SetCostMaxID(fk_CostType type, unsigned int max);
-		unsigned int GetCostMaxID(fk_CostType type);
+    fk_GraphNode^ fk_Graph::GetNode(unsigned int argID)
+    {
+        return gcnew fk_GraphNode(GetP()->getNode(argID));
+    }
 
-		//! 整数型コスト設定関数
-		/*!
-		 *
-		 */
-		void SetIntCost(int cost);
-		void SetIntCost(unsigned int ID, int cost);
+    fk_GraphEdge^ fk_Graph::GetEdge(unsigned int argID)
+    {
+        return gcnew fk_GraphEdge(GetP()->getEdge(argID));
+    }
 
-		void SetDoubleCost(double cost);
-		void SetDoubleCost(unsigned int ID, double cost);
+    bool fk_Graph::IsConnect(fk_GraphNode^ argV1, fk_GraphNode^ argV2)
+    {
+        if (!argV1 || !argV2) return false;
+        return GetP()->isConnect(argV1->GetP(), argV2->GetP());
+    }
 
-		int GetIntCost(void);
-		int GetIntCost(unsigned int ID);
+    fk_GraphEdge^ fk_Graph::MakeEdge(bool argMode, fk_GraphNode^ argV1, fk_GraphNode^ argV2)
+    {
+        if (!argV1 || !argV2) return nullptr;
+        return gcnew fk_GraphEdge(GetP()->makeEdge(argMode, argV1->GetP(), argV2->GetP()));
+    }
 
-		double GetDoubleCost(void);
-		double GetDoubleCost(unsigned int ID);
+    bool fk_Graph::DeleteEdge(fk_GraphEdge^ argE)
+    {
+        if (!argE) return false;
+        return GetP()->deleteEdge(argE->GetP());
+    }
 
-		property fk_Color^ Color {
-			void set(fk_Color^);
-		}
-	};
+    bool fk_Graph::MakeCostTable(unsigned int argID, fk_CostType argType)
+    {
+        return GetP()->makeCostTable(argID, fk_GraphEdge::getCT(argType));
+    }
+
+    bool fk_Graph::SetCostDirection(unsigned int argID, fk_CostDirection argD)
+    {
+        return GetP()->setCostDirection(argID, fk_GraphEdge::getCD(argD));
+    }
+
+    bool fk_Graph::SetEdgeCostID(unsigned int argTableID, unsigned int argCostID)
+    {
+        return GetP()->setEdgeCostID(argTableID, argCostID);
+    }
+
+    unsigned int fk_Graph::GetNodeCostID(unsigned int argID)
+    {
+        return GetP()->getNodeCostID(argID);
+    }
+
+    void fk_Graph::SetStart(unsigned int argID, fk_GraphNode^ argNode)
+    {
+        if (!argNode) return;
+        GetP()->setStart(argID, argNode->GetP());
+    }
+
+    void fk_Graph::AddGoal(unsigned int argID, fk_GraphNode^ argNode)
+    {
+        if (!argNode) return;
+        GetP()->addGoal(argID, argNode->GetP());
+    }
+
+    bool fk_Graph::InitCostTable(unsigned int argID)
+    {
+        return GetP()->initCostTable(argID);
+    }
+
+    fk_CostStatus fk_Graph::UpdateCostTable(unsigned int argID)
+    {
+        return getCS(GetP()->updateCostTable(argID));
+    }
+
+    fk_CostStatus fk_Graph::GetCostStatus(unsigned int argID)
+    {
+        return getCS(GetP()->getCostStatus(argID));
+    }
+
+    List<fk_GraphNode^>^ fk_Graph::GetOnePath(unsigned int argID)
+    {
+        auto retList = gcnew List<fk_GraphNode^>();
+        list<::FK::fk_GraphNode*> list;
+
+        GetP()->getOnePath(argID, &list);
+        for (auto n : list) {
+            retList->Add(gcnew fk_GraphNode(n));
+        }
+        return retList;
+    }
 }
-
-#endif

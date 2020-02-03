@@ -175,6 +175,9 @@
     <ClInclude Include="..\FK_CLI\include\Fog_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenMatrix_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenVector_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\GraphEdge_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\GraphNode_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\Graph_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Gregory_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GuideObject_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Half_CLI.h" />
@@ -384,6 +387,9 @@
     <ClCompile Include="..\FK_CLI\cpp\Fog_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenMatrix_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenVector_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\GraphEdge_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\GraphNode_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\Graph_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Gregory_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GuideObject_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Half_CLI.cpp" />

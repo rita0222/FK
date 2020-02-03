@@ -71,26 +71,37 @@
  ****************************************************************************/
 // GraphNode_CLI.h
 
-#pragma once
+#ifndef _FK_CLI_GRAPHNODE_
+#define _FK_CLI_GRAPHNODE_
+
 
 #include <FK/GraphNode.h>
+#include "Base_CLI.h"
+#include "Vector_CLI.h"
+#include "Color_CLI.h"
+#using <System.dll>
 
 namespace FK_CLI
 {
+	using namespace System;
+	using namespace System::Collections::Generic;
+
+	ref class fk_GraphEdge;
+
 	//! グラフ構造のノードを制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造におけるノードを制御する機能を提供します。
 	 */
-	public ref class fk_GraphNode {
+	public ref class fk_GraphNode : fk_BaseObject {
 	internal:
 		::FK::fk_GraphNode * GetP(void);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphNode(bool argNewFlg);
-#endif
+		fk_GraphNode(::FK::fk_GraphNode*);
 		~fk_GraphNode();
 		!fk_GraphNode();
+#endif
 		
 		//! ID 取得関数
 		/*!
@@ -192,7 +203,7 @@ namespace FK_CLI
 		}
 		
 		property List<fk_GraphNode^>^ PrevNode {
-			List<fk_GraphNode^> get();
+			List<fk_GraphNode^>^ get();
 		}
 
 		void SetIntCost(unsigned int ID, int value);
@@ -215,3 +226,5 @@ namespace FK_CLI
 		}
 	};
 }
+
+#endif
