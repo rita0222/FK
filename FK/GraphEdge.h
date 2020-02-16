@@ -101,9 +101,10 @@ namespace FK {
 	 *	fk_Graph のマニュアルを参照して下さい。
 	 *	ここでは、グラフの辺に関する情報に特化して解説します。
 	 *
-	 *	本クラスの辺は有向と無向を設定によって変更することができます。
-	 *	有向に設定した場合、両端にあたるノードのいずれかが始点、
+	 *	本クラスのインスタンスは fk_Graph::makeEdge() で自動的に生成されるものであり、
+	 *	FK 利用者が直接インスタンスを生成することはありません。
 	 *
+	 *	\sa fk_Graph, fk_GraphNode
 	 */
 	class fk_GraphEdge : public fk_BaseObject {
 
@@ -115,7 +116,7 @@ namespace FK {
 
 		//! ID 取得関数
 		/*!
-		 *	稜線の ID を取得します。
+		 *	辺の ID を取得します。
 		 *
 		 *	\return		ID
 		 */
@@ -123,7 +124,7 @@ namespace FK {
 
 		//! ノード取得関数
 		/*!
-		 *	稜線の端点にあたるノードを取得します。
+		 *	辺の端点にあたるノードを取得します。
 		 *
 		 *	\param[in]	mode	true の場合始点を、false の場合終点を返します。
 		 *
@@ -131,13 +132,43 @@ namespace FK {
 		 */
 		fk_GraphNode * getNode(bool mode);
 
+		//! 辺長利用モード設定関数
+		/*!
+		 *	辺長利用モードを設定します。
+		 *	辺長利用モードを有効とした場合、辺長が辺のコストとして設定されます。
+		 *	この場合、コストの型は double 型として扱われます。
+		 *	両端のいずれかのノードが移動するなどして辺の長さが変更となった場合、
+		 *	辺のコストは自動的に更新されます。
+		 *	
+		 *	\param[in]	mode
+		 *		true の場合辺長利用モードを有効とします。
+		 *		false の場合無効とします。
+		 *
+		 *	\sa getLengthMode(), getLength()
+		 */
 		void setLengthMode(bool mode);
+
+		//! 辺長利用モード参照関数
+		/*!
+		 *	現在の辺長利用モードを参照します。
+		 *
+		 *	\return		辺長利用モードが有効な場合 true を、無効な場合 false を返します。
+		 *
+		 *	\sa setLengthMode(), getLength()
+		 */
 		bool getLengthMode(void);
 
+		//! 辺長参照関数
+		/*!
+		 *	現在の辺長を参照します。
+		 *	なお、本関数は「辺長利用モード」の状態が有効、無効のいずれであっても利用可能です。
+		 *
+		 *	\return		辺長値
+		 *
+		 *	\sa setLengthMode(), getLengthMode()
+		 */
 		double getLength(void);
 		
-		//! 整数型コストID上限設定関数
-		void setCostMaxID(fk_CostType type, unsigned int max);
 		unsigned int getCostMaxID(fk_CostType type);
 
 		//! 整数型コスト設定関数

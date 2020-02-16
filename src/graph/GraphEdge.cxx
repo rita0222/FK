@@ -136,24 +136,6 @@ double fk_GraphEdge::getLength(void)
 	return length;
 }
 
-void fk_GraphEdge::setCostMaxID(fk_CostType argType, unsigned int argMax)
-{
-	unsigned int max = (argMax < 1) ? 1 : argMax;
-	switch(argType) {
-	  case fk_CostType::INT:
-		intCost.resize(max);
-		break;
-
-	  case fk_CostType::DOUBLE:
-		doubleCost.resize(max);
-		break;
-
-	  default:
-		break;
-	}
-}
-
-
 unsigned int fk_GraphEdge::getCostMaxID(fk_CostType argType)
 {
 	switch(argType) {
@@ -179,8 +161,7 @@ void fk_GraphEdge::setIntCost(int argCost)
 
 void fk_GraphEdge::setIntCost(unsigned int argID, int argCost)
 {
-	if(argID >= intCost.size()) return;
-
+	if(argID >= intCost.size()) intCost.resize(argID+1);
 	intCost[argID] = argCost;
 }
 
@@ -191,8 +172,7 @@ void fk_GraphEdge::setDoubleCost(double argCost)
 
 void fk_GraphEdge::setDoubleCost(unsigned int argID, double argCost)
 {
-	if(argID >= doubleCost.size()) return;
-
+	if(argID >= doubleCost.size()) doubleCost.resize(argID+1);
 	doubleCost[argID] = argCost;
 }
 

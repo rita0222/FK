@@ -49,7 +49,7 @@ document:
 	cd doc; $(MAKE) doc MAKE=$(MAKE)
 
 clean:
-	cd src; $(MAKE) clean
+	cd src; cp Makefile_base Makefile; $(MAKE) clean
 	cd samples; $(MAKE) clean
 	cd lib/dynamic; $(RM) lib*
 	cd lib/static; $(RM) lib*
