@@ -136,24 +136,6 @@ double fk_GraphEdge::getLength(void)
 	return length;
 }
 
-unsigned int fk_GraphEdge::getCostMaxID(fk_CostType argType)
-{
-	switch(argType) {
-	  case fk_CostType::INT:
-		if(intCost.empty()) return 0;
-		return (unsigned int)(intCost.size() - 1);
-
-	  case fk_CostType::DOUBLE:
-		if(doubleCost.empty()) return 0;
-		return (unsigned int)(doubleCost.size() - 1);
-
-	  default:
-		break;
-	}
-
-	return 0;
-}
-
 void fk_GraphEdge::setIntCost(int argCost)
 {
 	intCost[0] = argCost;

@@ -101,7 +101,7 @@ namespace FK {
 	 *	fk_Graph のマニュアルを参照して下さい。
 	 *	ここでは、グラフの辺に関する情報に特化して解説します。
 	 *
-	 *	本クラスのインスタンスは fk_Graph::makeEdge() で自動的に生成されるものであり、
+	 *	本クラスのインスタンスは fk_Graph::makeEdge(void) で自動的に生成されるものであり、
 	 *	FK 利用者が直接インスタンスを生成することはありません。
 	 *
 	 *	\sa fk_Graph, fk_GraphNode
@@ -144,7 +144,7 @@ namespace FK {
 		 *		true の場合辺長利用モードを有効とします。
 		 *		false の場合無効とします。
 		 *
-		 *	\sa getLengthMode(), getLength()
+		 *	\sa getLengthMode(void), getLength(void)
 		 */
 		void setLengthMode(bool mode);
 
@@ -154,7 +154,7 @@ namespace FK {
 		 *
 		 *	\return		辺長利用モードが有効な場合 true を、無効な場合 false を返します。
 		 *
-		 *	\sa setLengthMode(), getLength()
+		 *	\sa setLengthMode(void), getLength(void)
 		 */
 		bool getLengthMode(void);
 
@@ -165,29 +165,114 @@ namespace FK {
 		 *
 		 *	\return		辺長値
 		 *
-		 *	\sa setLengthMode(), getLengthMode()
+		 *	\sa setLengthMode(void), getLengthMode(void)
 		 */
 		double getLength(void);
 		
-		unsigned int getCostMaxID(fk_CostType type);
-
 		//! 整数型コスト設定関数
 		/*!
+		 *	辺の整数型コストを設定します。
+		 *	コスト ID は自動的に 0 となります。
 		 *
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa getIntCost(void), setIntCost(unsigned int, int), setDoubleCost(double)
 		 */
 		void setIntCost(int cost);
+
+		//! ID指定付整数型コスト設定関数
+		/*!
+		 *	辺の整数型コストを設定します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa getIntCost(unsigned int), setIntCost(int), setDoubleCost(unsigned int, double)
+		 */
 		void setIntCost(unsigned int ID, int cost);
 
+		//! 実数型コスト設定関数
+		/*!
+		 *	辺の実数型コストを設定します。
+		 *	コスト ID は自動的に 0 となります。
+		 *
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa getIntCost(void), setIntCost(unsigned int, int), setDoubleCost(double)
+		 */
 		void setDoubleCost(double cost);
+
+		//! ID指定付実数型コスト設定関数
+		/*!
+		 *	辺の実数型コストを設定します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa getDoubleCost(unsigned int), setDoubleCost(double), setIntCost(unsigned int, int)
+		 */
 		void setDoubleCost(unsigned int ID, double cost);
 
+		//! 整数型コスト参照関数
+		/*!
+		 *	辺の整数型コストを参照します。
+		 *	getIntCost(0) と同義です。
+		 *
+		 *	\return		辺コスト
+		 *
+		 *	\sa getIntCost(unsigned int), setIntCost(int), getDoubleCost(void)
+		 */
 		int getIntCost(void);
+
+		//! ID指定付整数型コスト参照関数
+		/*!
+		 *	辺の整数型コストを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return		辺コスト
+		 *
+		 *	\sa getIntCost(void), setIntCost(unsigned int, int), getDoubleCost(unsigned int)
+		 */
 		int getIntCost(unsigned int ID);
 
+		//! 実数型コスト参照関数
+		/*!
+		 *	辺の実数型コストを参照します。
+		 *	getDoubleCost(0) と同義です。
+		 *
+		 *	\return		辺コスト
+		 *
+		 *	\sa getDoubleCost(unsigned int), setDoubleCost(double), getIntCost(void)
+		 */
 		double getDoubleCost(void);
+
+		//! ID指定付実数型コスト参照関数
+		/*!
+		 *	辺の実数型コストを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return		辺コスト
+		 *
+		 *	\sa getDoubleCost(void), setDoubleCost(unsigned int, double), getIntCost(unsigned int)
+		 */
 		double getDoubleCost(unsigned int ID);
 
+		//! 色指定関数1
+		/*!
+		 *	辺の色を指定します。
+		 *
+		 *	\param[in]	col		色値
+		 */
 		void setColor(fk_Color col);
+
+		//! 色指定関数2
+		/*!
+		 *	辺の色を指定します。
+		 *
+		 *	\param[in]	col		色値
+		 */
 		void setColor(fk_Color *col);
 
 	private:
