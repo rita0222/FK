@@ -33,56 +33,9 @@ VERNAME		= 4.2.0
 ###################
 
 FKLIB_S		= -lFK4
-
 FKLIB_SG	= -lFK4_g
-
-FKLIB_D		= \
-			-lFK4_util.$(VERNAME) \
-			-lFK4_window.$(VERNAME) \
-			-lFK4_graphics.$(VERNAME) \
-			-lFK4_scene.$(VERNAME) \
-			-lFK4_model.$(VERNAME) \
-			-lFK4_solid.$(VERNAME) \
-			-lFK4_texture.$(VERNAME) \
-			-lFK4_graph.$(VERNAME) \
-			-lFK4_shape.$(VERNAME) \
-			-lFK4_material.$(VERNAME) \
-			-lFK4_math.$(VERNAME) \
-			-lFK4_base.$(VERNAME) \
-
-FKLIB_DG		= \
-			-lFK4_util_g.$(VERNAME) \
-			-lFK4_window_g.$(VERNAME) \
-			-lFK4_graphics_g.$(VERNAME) \
-			-lFK4_scene_g.$(VERNAME) \
-			-lFK4_model_g.$(VERNAME) \
-			-lFK4_solid_g.$(VERNAME) \
-			-lFK4_texture_g.$(VERNAME) \
-			-lFK4_graph_g.$(VERNAME) \
-			-lFK4_shape_g.$(VERNAME) \
-			-lFK4_material_g.$(VERNAME) \
-			-lFK4_math_g.$(VERNAME) \
-			-lFK4_base_g.$(VERNAME) \
-
-FKAUDIO_S	= -lFK4_audio
-FKAUDIO_SG	= -lFK4_audio_g
-FKAUDIO_D	= -lFK4_audio.$(VERNAME)
-FKAUDIO_DG	= -lFK4_audio_g.$(VERNAME)
-
-FKOPENCL_S	= -lFK4_OpenCL
-FKOPENCL_SG	= -lFK4_OpenCL_g
-FKOPENCL_D	= -lFK4_OpenCL.$(VERNAME)
-FKOPENCL_DG	= -lFK4_OpenCL_g.$(VERNAME)
-
-FKSHADER_S	= -lFK4_shader
-FKSHADER_SG	= -lFK4_shader_g
-FKSHADER_D	= -lFK4_shader.$(VERNAME)
-FKSHADER_DG	= -lFK4_shader_g.$(VERNAME)
-
-FKAR_S		= -lFK4_AR
-FKAR_SG		= -lFK4_AR_g
-FKAR_D		= -lFK4_AR.$(VERNAME)
-FKAR_DG		= -lFK4_AR_g.$(VERNAME)
+FKLIB_D		= -lFK4.$(VERNAME)
+FKLIB_DG	= -lFK4_g.$(VERNAME)
 
 FKLINK		= $(FKLIB_S)
 LINK		= $(FKLINK) $(SYSLIBS)
@@ -114,7 +67,7 @@ linux:
 		-ljpeg -lpng -lfreetype -lGL -lpthread -lOpenCL \
 		-lXext -lX11 -lz -lm" \
 	"RANLIB = ranlib" \
-	"FKLINK = $(FKOPENCL_S) $(FKAUDIO_S) $(FKLIB_S) $(FKSHADER_S)"
+	"FKLINK = $(FKLIB_S)"
 
 mac:
 	$(MAKE) $(TARGET) \
