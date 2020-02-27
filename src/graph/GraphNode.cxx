@@ -97,15 +97,19 @@ unsigned int fk_GraphNode::getID(void)
 
 void fk_GraphNode::setPosition(fk_Vector *argPos)
 {
-	position = *argPos;
-	baseGraph->GetVertexShape()->setVertex(int(ID), position);
+	setPosition(*argPos);
+}
+
+void fk_GraphNode::setPosition(fk_Vector argPos)
+{
+	baseGraph->GetVertexShape()->setVertex(int(ID), argPos);
 
 	auto edgeShape = baseGraph->GetEdgeShape();
 	for(auto e : edgeAll) {
 		if(e->getNode(true) == this) {
-			edgeShape->setVertex(int(e->getID()), 0, position);
+			edgeShape->setVertex(int(e->getID()), 0, argPos);
 		} else {
-			edgeShape->setVertex(int(e->getID()), 1, position);
+			edgeShape->setVertex(int(e->getID()), 1, argPos);
 		}
 	}
 	++generation;

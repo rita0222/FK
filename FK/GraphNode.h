@@ -86,6 +86,15 @@ namespace FK {
 	//! グラフ構造のノードを制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造におけるノードを制御する機能を提供します。
+	 *
+	 *	グラフ構造の詳細および利用方法についての詳細は、
+	 *	fk_Graph のマニュアルを参照して下さい。
+	 *	ここでは、グラフの辺に関する情報に特化して解説します。
+	 *
+	 *	本クラスのインスタンスは fk_Graph 内で自動的に生成されるものであり、
+	 *	FK 利用者が直接インスタンスを生成することはありません。
+	 *
+	 *	\sa fk_Graph, fk_GraphNode
 	 */
 	class fk_GraphNode : public fk_BaseObject {
 
@@ -97,17 +106,27 @@ namespace FK {
 		
 		//! ID 取得関数
 		/*!
+		 *	ノードの ID を取得します。
+		 *
 		 *	\return		ID
 		 */
 		unsigned int getID(void);
 
-		//! 位置ベクトル設定関数
+		//! 位置ベクトル設定関数1
 		/*!
 		 *	ノードの位置ベクトルを設定します。
 		 *
 		 *	\param[in]	pos		位置ベクトル
 		 */
 		void setPosition(fk_Vector *pos);
+
+		//! 位置ベクトル設定関数2
+		/*!
+		 *	ノードの位置ベクトルを設定します。
+		 *
+		 *	\param[in]	pos		位置ベクトル
+		 */
+		void setPosition(fk_Vector pos);
 
 		//! 位置ベクトル取得関数
 		/*!
@@ -156,7 +175,7 @@ namespace FK {
 
 		//! 全接続辺取得関数1
 		/*!
-		 *	現在ノードに接続している全ての辺を取得します。
+		 *	このノードに接続している全ての辺を取得します。
 		 *
 		 *	\return		接続辺の list 集合。
 		 */
@@ -164,7 +183,7 @@ namespace FK {
 
 		//! 全接続辺取得関数2
 		/*!
-		 *	現在ノードに接続している全ての辺を取得します。
+		 *	このノードに接続している全ての辺を取得します。
 		 *
 		 *	\param[out]		list	接続辺の list 集合。
 		 */
@@ -172,7 +191,7 @@ namespace FK {
 
 		//! 始点接続辺取得関数1
 		/*!
-		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	このノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
 		 *	- 双方向辺。
 		 *	- 一方通行辺のうち、このノードが始点となっている辺。
 		 *	.
@@ -183,7 +202,7 @@ namespace FK {
 
 		//! 始点接続辺取得関数2
 		/*!
-		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	このノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
 		 *	- 双方向辺。
 		 *	- 一方通行辺のうち、このノードが始点となっている辺。
 		 *	.
@@ -194,7 +213,7 @@ namespace FK {
 
 		//! 終点接続辺取得関数1
 		/*!
-		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	このノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
 		 *	- 双方向辺。
 		 *	- 一方通行辺のうち、このノードが終点となっている辺。
 		 *	.
@@ -205,7 +224,7 @@ namespace FK {
 
 		//! 終点接続辺取得関数2
 		/*!
-		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	このノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
 		 *	- 双方向辺。
 		 *	- 一方通行辺のうち、このノードが終点となっている辺。
 		 *	.
@@ -214,17 +233,113 @@ namespace FK {
 		 */
 		void getEndEdge(std::list<fk_GraphEdge *> *list);
 
+		//! 接続終点取得関数1
+		/*!
+		 *	このノードと隣接するノードのうち、以下の条件に当てはまるノードを取得します。
+		 *	- 双方向辺で接続しているノード。
+		 *	- このノードが始点である一方通行辺に接続している終点ノード。
+		 *	.
+		 *
+		 *	\return		接続点の list 集合
+		 *
+		 *	\sa	getStartEdge(void),
+		 *		getNextNode(std::list<fk_GraphNode *> *),
+		 *		getPrevNode(void)
+		 */
 		std::list<fk_GraphNode *> getNextNode(void);
+		
+		//! 接続終点取得関数2
+		/*!
+		 *	このノードと隣接するノードのうち、以下の条件に当てはまるノードを取得します。
+		 *	- 双方向辺で接続しているノード。
+		 *	- このノードが始点である一方通行辺に接続している終点ノード。
+		 *	.
+		 *
+		 *	\oaram[out]		接続点の list 集合
+		 *
+		 *	\sa getStartEdge(std::list<fk_GraphEdge *> *),
+		 *		getNextNode(void),
+		 *		getPrevNode(std::list<fk_GraphNode *> *)
+		 */
 		void getNextNode(std::list<fk_GraphNode *> *list);
 
+		//! 接続始点取得関数1
+		/*!
+		 *	このノードと隣接するノードのうち、以下の条件に当てはまるノードを取得します。
+		 *	- 双方向辺で接続しているノード。
+		 *	- このノードが終点である一方通行辺に接続している始点ノード。
+		 *	.
+		 *
+		 *	\return		接続点の list 集合
+		 *
+		 *	\sa	getEndEdge(void),
+		 *		getPrevNode(std::list<fk_GraphNode *> *),
+		 *		getNextNode(void)
+		 */
 		std::list<fk_GraphNode *> getPrevNode(void);
+
+		//! 接続始点取得関数2
+		/*!
+		 *	このノードと隣接するノードのうち、以下の条件に当てはまるノードを取得します。
+		 *	- 双方向辺で接続しているノード。
+		 *	- このノードが終点である一方通行辺に接続している始点ノード。
+		 *	.
+		 *
+		 *	\oaram[out]		接続点の list 集合
+		 *
+		 *	\sa getEndEdge(std::list<fk_GraphEdge *> *),
+		 *		getPrevNode(void),
+		 *		getNextNode(std::list<fk_GraphNode *> *)
+		 */
 		void getPrevNode(std::list<fk_GraphNode *> *list);
 
-		void setIntCost(unsigned int ID, int value);
-		void setDoubleCost(unsigned int ID, double value);
+		//! 整数型コスト設定関数
+		/*!
+		 *	整数型コストを設定します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 */
+		void setIntCost(unsigned int ID, int cost);
+
+		//! 実数型コスト設定関数
+		/*!
+		 *	実数型コストを設定します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 */
+		void setDoubleCost(unsigned int ID, double cost);
+
+		//! 整数型コスト取得関数
+		/*!
+		 *	整数型コストを取得します。
+		 *	なお、ID に対応するコスト値が未設定だった場合は 0 が返りますが、
+		 *	取得後も未設定状態のままになります。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return コスト値
+		 */
 		int getIntCost(unsigned int ID);
+
+		//! 実数型コスト取得関数
+		/*!
+		 *	実数型コストを取得します。
+		 *	なお、ID に対応するコスト値が未設定だった場合は 0.0 が返りますが、
+		 *	取得後も未設定状態のままになります。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return コスト値
+		 */
 		double getDoubleCost(unsigned int ID);
 
+		//! 整数型コスト設定解除関数
+		/*!
+		 *	ID が 0 の整数型コストの設定を解除し、未設定状態とします。
+		 *	
+		 */
 		void clearIntCost(void);
 		void clearIntCost(unsigned int ID);
 		void clearDoubleCost(void);

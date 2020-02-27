@@ -152,8 +152,6 @@ namespace FK_CLI
 		 */
 		bool IsConnect(fk_GraphNode^ v1, fk_GraphNode^ v2);
 
-		///@}
-
 		//! \name 接続変更関数
 		///@{
 
