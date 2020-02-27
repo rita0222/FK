@@ -214,19 +214,9 @@ namespace FK_CLI {
         return GetP()->getDoubleCost(argID);
     }
 
-    void fk_GraphNode::ClearIntCost(void)
-    {
-        GetP()->clearIntCost();
-    }
-
     void fk_GraphNode::ClearIntCost(unsigned int argID)
     {
         GetP()->clearIntCost(argID);
-    }
-
-    void fk_GraphNode::ClearDoubleCost(void)
-    {
-        GetP()->clearDoubleCost();
     }
 
     void fk_GraphNode::ClearDoubleCost(unsigned int argID)
@@ -234,19 +224,9 @@ namespace FK_CLI {
         GetP()->clearDoubleCost(argID);
     }
 
-    bool fk_GraphNode::IsDoneIntCost(void)
-    {
-        return GetP()->isDoneIntCost();
-    }
-
     bool fk_GraphNode::IsDoneIntCost(unsigned int argID)
     {
         return GetP()->isDoneIntCost(argID);
-    }
-
-    bool fk_GraphNode::IsDoneDoubleCost(void)
-    {
-        return GetP()->isDoneDoubleCost();
     }
 
     bool fk_GraphNode::IsDoneDoubleCost(unsigned int argID)

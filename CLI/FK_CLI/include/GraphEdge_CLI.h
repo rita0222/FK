@@ -142,24 +142,13 @@ namespace FK_CLI
 			double get();
 		}
 		
-		//! 整数型コストID上限設定関数
-		void SetCostMaxID(fk_CostType type, unsigned int max);
-		unsigned int GetCostMaxID(fk_CostType type);
-
 		//! 整数型コスト設定関数
 		/*!
 		 *
 		 */
-		void SetIntCost(int cost);
 		void SetIntCost(unsigned int ID, int cost);
-
-		void SetDoubleCost(double cost);
 		void SetDoubleCost(unsigned int ID, double cost);
-
-		int GetIntCost(void);
 		int GetIntCost(unsigned int ID);
-
-		double GetDoubleCost(void);
 		double GetDoubleCost(unsigned int ID);
 
 		property fk_Color^ Color {

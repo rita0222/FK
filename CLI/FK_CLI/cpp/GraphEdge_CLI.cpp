@@ -145,29 +145,9 @@ namespace FK_CLI {
         return GetP()->getLength();
     }
 
-    void fk_GraphEdge::SetCostMaxID(fk_CostType argType, unsigned int argMax)
-    {
-        GetP()->setCostMaxID(getCT(argType), argMax);
-    }
-
-    unsigned int fk_GraphEdge::GetCostMaxID(fk_CostType argType)
-    {
-        return GetP()->getCostMaxID(getCT(argType));
-    }
-
-    void fk_GraphEdge::SetIntCost(int argCost)
-    {
-        GetP()->setIntCost(argCost);
-    }
-
     void fk_GraphEdge::SetIntCost(unsigned int argID, int argCost)
     {
         GetP()->setIntCost(argID, argCost);
-    }
-
-    void fk_GraphEdge::SetDoubleCost(double argCost)
-    {
-        GetP()->setDoubleCost(argCost);
     }
 
     void fk_GraphEdge::SetDoubleCost(unsigned int argID, double argCost)
@@ -175,19 +155,9 @@ namespace FK_CLI {
         GetP()->setDoubleCost(argID, argCost);
     }
 
-    int fk_GraphEdge::GetIntCost(void)
-    {
-        return GetP()->getIntCost();
-    }
-
     int fk_GraphEdge::GetIntCost(unsigned int argID)
     {
         return GetP()->getIntCost(argID);
-    }
-
-    double fk_GraphEdge::GetDoubleCost(void)
-    {
-        return GetP()->getDoubleCost();
     }
 
     double fk_GraphEdge::GetDoubleCost(unsigned int argID)

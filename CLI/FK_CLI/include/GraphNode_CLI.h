@@ -211,14 +211,10 @@ namespace FK_CLI
 		int GetIntCost(unsigned int ID);
 		double GetDoubleCost(unsigned int ID);
 
-		void ClearIntCost(void);
 		void ClearIntCost(unsigned int ID);
-		void ClearDoubleCost(void);
 		void ClearDoubleCost(unsigned int ID);
 
-		bool IsDoneIntCost(void);
 		bool IsDoneIntCost(unsigned int ID);
-		bool IsDoneDoubleCost(void);
 		bool IsDoneDoubleCost(unsigned int ID);
 
 		property fk_Color^ Color {
