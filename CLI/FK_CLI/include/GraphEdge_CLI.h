@@ -84,27 +84,37 @@ namespace FK_CLI
     ref class fk_GraphNode;
 
     //! グラフ内コスト値の型を表す列挙型
-	public enum class fk_CostType {
-		INT,		//!<	整数型
-		DOUBLE,		//!<	実数型
-		LENGTH		//!<	辺長
-	};
+						  public enum class fk_CostType {
+							  INT,		//!<	整数型
+							  DOUBLE,		//!<	実数型
+							  LENGTH		//!<	辺長
+						  };
 
 	//! グラフ内コスト算出方向を表す列挙型
-	public enum class fk_CostDirection {
-		FORWARD,	//!< 出発ノードから開始
-		BACK		//!< 目標ノードから開始
-	};
+						   public enum class fk_CostDirection {
+							   FORWARD,	//!< 出発ノードから開始
+							   BACK		//!< 目標ノードから開始
+						   };
 
-	//! グラフ構造を制御するクラス
+	//! グラフ構造の辺を制御するクラス
 	/*!
-	 *	このクラスは、グラフ構造を制御する機能を提供します。
+	 *	このクラスは、グラフ構造における辺を制御する機能を提供します。
+	 *
+	 *	グラフ構造の詳細および利用方法についての詳細は、
+	 *	fk_Graph のマニュアルを参照して下さい。
+	 *	ここでは、グラフの辺に関する情報に特化して解説します。
+	 *
+	 *	本クラスのインスタンスは fk_Graph::MakeEdge() で自動的に生成されるものであり、
+	 *	FK 利用者が直接インスタンスを生成することはありません。
+	 *
+	 *	\sa fk_Graph, fk_GraphNode
 	 */
+
 	public ref class fk_GraphEdge : fk_BaseObject {
 	internal:
 		::FK::fk_GraphEdge * GetP(void);
-        static ::FK::fk_CostType getCT(fk_CostType);
-        static ::FK::fk_CostDirection getCD(fk_CostDirection);
+		static ::FK::fk_CostType getCT(fk_CostType);
+		static ::FK::fk_CostDirection getCD(fk_CostDirection);
 
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -113,7 +123,7 @@ namespace FK_CLI
 		!fk_GraphEdge();
 #endif
 
-		//! ID 取得関数
+		//! ID 取得プロパティ
 		/*!
 		 *	稜線の ID を取得します。
 		 *
@@ -123,7 +133,44 @@ namespace FK_CLI
 			unsigned int get();
 		}
 
-		//! ノード取得関数
+		//! 辺長利用モードプロパティ
+		/*!
+		 *	辺長利用モードを設定・参照します。
+		 *	辺長利用モードを有効とした場合、辺長が辺のコストとして設定されます。
+		 *	この場合、コストの型は double 型として扱われます。
+		 *	両端のいずれかのノードが移動するなどして辺の長さが変更となった場合、
+		 *	辺のコストは自動的に更新されます。
+		 *	
+		 *	true の場合辺長利用モードを有効とします。
+		 *	false の場合無効とします。
+		 *
+		 *	\sa Length
+		 */
+		property bool LengthMode {
+			bool get();
+			void set(bool);
+		}
+
+		//! 辺長参照プロパティ
+		/*!
+		 *	現在の辺長を参照します。
+		 *	なお、本関数は「辺長利用モード」の状態が有効、無効のいずれであっても利用可能です。
+		 *
+		 *	\sa LengthMode
+		 */
+		property double Length {
+			double get();
+		}
+		
+		//! 色指定プロパティ
+		/*!
+		 *	辺の色を指定します。
+		 */
+		property fk_Color^ Color {
+			void set(fk_Color^);
+		}
+
+		//! ノード取得メソッド
 		/*!
 		 *	稜線の端点にあたるノードを取得します。
 		 *
@@ -133,27 +180,51 @@ namespace FK_CLI
 		 */
 		fk_GraphNode^ GetNode(bool mode);
 
-		property bool LengthMode {
-			bool get();
-			void set(bool);
-		}
-
-		property double Length {
-			double get();
-		}
-		
-		//! 整数型コスト設定関数
+		//! 整数型コスト設定メソッド
 		/*!
+		 *	辺の整数型コストを設定します。
 		 *
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa GetIntCost(), SetDoubleCost()
 		 */
 		void SetIntCost(unsigned int ID, int cost);
-		void SetDoubleCost(unsigned int ID, double cost);
-		int GetIntCost(unsigned int ID);
-		double GetDoubleCost(unsigned int ID);
 
-		property fk_Color^ Color {
-			void set(fk_Color^);
-		}
+		//! 実数型コスト設定メソッド
+		/*!
+		 *	辺の実数型コストを設定します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa GetDoubleCost(), SetDoubleCost(), SetIntCost()
+		 */
+		void SetDoubleCost(unsigned int ID, double cost);
+
+		//! 整数型コスト参照メソッド
+		/*!
+		 *	辺の整数型コストを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return		辺コスト
+		 *
+		 *	\sa GetIntCost(), SetIntCost(), GetDoubleCost()
+		 */
+		int GetIntCost(unsigned int ID);
+
+		//! 実数型コスト参照メソッド
+		/*!
+		 *	辺の実数型コストを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return		辺コスト
+		 *
+		 *	\sa GetDoubleCost(), SetDoubleCost(), GetIntCost()
+		 */
+		double GetDoubleCost(unsigned int ID);
 	};
 }
 

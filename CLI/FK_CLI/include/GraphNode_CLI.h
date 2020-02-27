@@ -91,7 +91,17 @@ namespace FK_CLI
 	//! グラフ構造のノードを制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造におけるノードを制御する機能を提供します。
+	 *
+	 *	グラフ構造の詳細および利用方法についての詳細は、
+	 *	fk_Graph のマニュアルを参照して下さい。
+	 *	ここでは、グラフの辺に関する情報に特化して解説します。
+	 *
+	 *	本クラスのインスタンスは fk_Graph 内で自動的に生成されるものであり、
+	 *	FK 利用者が直接インスタンスを生成することはありません。
+	 *
+	 *	\sa fk_Graph, fk_GraphNode
 	 */
+
 	public ref class fk_GraphNode : fk_BaseObject {
 	internal:
 		::FK::fk_GraphNode * GetP(void);
@@ -103,9 +113,9 @@ namespace FK_CLI
 		!fk_GraphNode();
 #endif
 		
-		//! ID 取得関数
+		//! ID 取得プロパティ
 		/*!
-		 *	\return		ID
+		 *	ノードの ID を取得します。
 		 */
 		property unsigned int ID {
 			unsigned int get();
@@ -118,22 +128,94 @@ namespace FK_CLI
 		 *	\param[in]	pos		位置ベクトル
 		 */
 
+		//! 位置ベクトルプロパティ
+		/*!
+		 *	ノードの位置ベクトルの設定・参照を行います。
+		 */
 		property fk_Vector^ Position {
 			fk_Vector^ get();
 			void set(fk_Vector^);
 		}
 
-		//! 位置変更回数取得関数
+		//! 位置変更回数取得プロパティ
 		/*!
 		 *	これまでのノード位置変更回数を取得します。
-		 *
-		 *	\return		変更回数
 		 */
 		property unsigned int Generation {
 			unsigned int get();
 		}
 
-		//! 接続ノード確認関数
+		//! 全接続辺取得プロパティ
+		/*!
+		 *	現在ノードに接続している全ての辺を取得します。
+		 *
+		 *	\sa StartEdge, EndEdge, NextNode, PrevNode
+		 */
+		property List<fk_GraphEdge^>^ AllEdge {
+			List<fk_GraphEdge^>^ get();
+		}
+
+		//! 始点接続辺取得プロパティ
+		/*!
+		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	- 双方向辺。
+		 *	- 一方通行辺のうち、このノードが始点となっている辺。
+		 *	.
+		 *
+		 *	\sa AllEdge, EndEdge, NextNode, PrevNode
+		 */
+		property List<fk_GraphEdge^>^ StartEdge {
+			List<fk_GraphEdge^>^ get();
+		}
+
+		//! 終点接続辺取得プロパティ
+		/*!
+		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
+		 *	- 双方向辺。
+		 *	- 一方通行辺のうち、このノードが終点となっている辺。
+		 *	.
+		 *
+		 *	\sa AllEdge, StartEdge, NextNode, PrevNode
+		 */
+		property List<fk_GraphEdge^>^ EndEdge {
+			List<fk_GraphEdge^>^ get();
+		}
+
+		//! 接続終点取得プロパティ
+		/*!
+		 *	このノードと隣接するノードのうち、以下の条件に当てはまるノードを取得します。
+		 *	- 双方向辺で接続しているノード。
+		 *	- このノードが始点である一方通行辺に接続している終点ノード。
+		 *	.
+		 *
+		 *	\sa	AllEdge, StartEdge, EndEdge, PrevNode
+		 */
+		property List<fk_GraphNode^>^ NextNode {
+			List<fk_GraphNode^>^ get();
+		}
+		
+		//! 接続始点取得プロパティ
+		/*!
+		 *	このノードと隣接するノードのうち、以下の条件に当てはまるノードを取得します。
+		 *	- 双方向辺で接続しているノード。
+		 *	- このノードが終点である一方通行辺に接続している始点ノード。
+		 *	.
+		 *
+		 *	\sa	AllEdge, StartEdge, EndEdge, NextNode
+		 */
+		property List<fk_GraphNode^>^ PrevNode {
+			List<fk_GraphNode^>^ get();
+		}
+
+		//! 色指定プロパティ
+		/*!
+		 *	辺の色を指定します。
+		 */
+		property fk_Color^ Color {
+			void set(fk_Color^);
+		}
+
+		//! 接続ノード確認メソッド
 		/*!
 		 *	指定したノードとの間に辺が存在するかどうかを判定します。
 		 *	辺の方向も考慮したい場合は IsConnect(bool, fk_GraphNode^) を使用して下さい。
@@ -141,10 +223,12 @@ namespace FK_CLI
 		 *	\param[in]	node	接続を確認するノード
 		 *
 		 *	\return		辺が存在する場合 true を、存在しない場合 false を返します。
+		 *
+		 *	\sa IsConnect(bool, fk_GraphNode^), AllEdge
 		 */
 		bool IsConnect(fk_GraphNode^ node);
 
-		//! 方向判定付き接続ノード確認関数
+		//! 方向判定付き接続ノード確認メソッド
 		/*!
 		 *	指定したノードとの間に、指定した方向の辺が存在するかどうかを判定します。
 		 *	IsConnect(fk_GraphNode^) の場合は何かしらの辺が存在すれば true を返しますが、
@@ -162,64 +246,103 @@ namespace FK_CLI
 		 */
 		bool IsConnect(bool mode, fk_GraphNode^ node);
 
-		//! 全接続辺取得関数1
+
+		//! 整数型コスト設定メソッド
 		/*!
-		 *	現在ノードに接続している全ての辺を取得します。
+		 *	整数型コストを設定します。
 		 *
-		 *	\return		接続辺の list 集合。
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa SetDoubleCost(), GetIntCost(), ClearIntCost(), IsDoneIntCost()
 		 */
-		property List<fk_GraphEdge^>^ AllEdge {
-			List<fk_GraphEdge^>^ get();
-		}
+		void SetIntCost(unsigned int ID, int cost);
 
-		//! 始点接続辺取得関数1
+		//! 実数型コスト設定メソッド
 		/*!
-		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
-		 *	- 双方向辺。
-		 *	- 一方通行辺のうち、このノードが始点となっている辺。
-		 *	.
+		 *	実数型コストを設定します。
 		 *
-		 *	\return		接続辺の list 集合。
+		 *	\param[in]	ID		コスト ID
+		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa SetIntCost(), GetDoubleCost(), ClearDoubleCost(), IsDoneDoubleCost()
 		 */
-		property List<fk_GraphEdge^>^ StartEdge {
-			List<fk_GraphEdge^>^ get();
-		}
+		void SetDoubleCost(unsigned int ID, double cost);
 
-		//! 終点接続辺取得関数1
+		//! 整数型コスト取得メソッド
 		/*!
-		 *	現在ノードに接続している辺のうち、以下の条件に当てはまる辺を取得します。
-		 *	- 双方向辺。
-		 *	- 一方通行辺のうち、このノードが終点となっている辺。
-		 *	.
+		 *	整数型コストを取得します。
+		 *	なお、ID に対応するコスト値が未設定だった場合は 0 が返りますが、
+		 *	取得後も未設定状態のままになります。
 		 *
-		 *	\return		接続辺の list 集合。
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return コスト値
+		 *
+		 *	\sa GetDoubleCost(), SetIntCost(), ClearIntCost(), IsDoneIntCost()
 		 */
-		property List<fk_GraphEdge^>^ EndEdge {
-			List<fk_GraphEdge^>^ get();
-		}
-
-		property List<fk_GraphNode^>^ NextNode {
-			List<fk_GraphNode^>^ get();
-		}
-		
-		property List<fk_GraphNode^>^ PrevNode {
-			List<fk_GraphNode^>^ get();
-		}
-
-		void SetIntCost(unsigned int ID, int value);
-		void SetDoubleCost(unsigned int ID, double value);
 		int GetIntCost(unsigned int ID);
+
+		//! 実数型コスト取得メソッド
+		/*!
+		 *	実数型コストを取得します。
+		 *	なお、ID に対応するコスト値が未設定だった場合は 0.0 が返りますが、
+		 *	取得後も未設定状態のままになります。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return コスト値
+		 *
+		 *	\sa GetIntCost(), SetDoubleCost(), ClearDoubleCost(), IsDoneDoubleCost()
+		 */
 		double GetDoubleCost(unsigned int ID);
 
+		//! 整数型コスト設定解除メソッド
+		/*!
+		 *	整数型コストの設定を解除し、未設定状態とします。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\sa ClearDoubleCost(), SetIntCost(), GetIntCost(), IsDoneIntCost()
+		 */
 		void ClearIntCost(unsigned int ID);
+
+		//! 実数型コスト設定解除メソッド
+		/*!
+		 *	実数型コストの設定を解除し、未設定状態とします。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\sa ClearIntCost(), SetDoubleCost(), GetDoubleCost(), IsDoneDoubleCost()
+		 */
 		void ClearDoubleCost(unsigned int ID);
 
+		//! 整数型コスト設定状態参照メソッド
+		/*!
+		 *	整数型コストが設定済がどうかを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return	対応する ID のコストが設定されている場合 true を、
+		 *			未設定の場合 false を返します。
+		 *
+		 *	\sa IsDoneDoubleCost(), SetIntCost(), GetIntCost(), ClearIntCost()
+		 */
 		bool IsDoneIntCost(unsigned int ID);
+
+		//! 実数型コスト設定状態参照メソッド
+		/*!
+		 *	実数型コストが設定済がどうかを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return	対応する ID のコストが設定されている場合 true を、
+		 *			未設定の場合 false を返します。
+		 *
+		 *	\sa IsDoneIntCost(), SetDoubleCost(), GetDoubleCost(), ClearDoubleCost()
+		 */
 		bool IsDoneDoubleCost(unsigned int ID);
 
-		property fk_Color^ Color {
-			void set(fk_Color^);
-		}
 	};
 }
 

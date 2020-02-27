@@ -291,6 +291,8 @@ namespace FK {
 		 *
 		 *	\param[in]	ID		コスト ID
 		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa setDoubleCost(), getIntCost(), clearIntCost(), isDoneIntCost()
 		 */
 		void setIntCost(unsigned int ID, int cost);
 
@@ -300,6 +302,8 @@ namespace FK {
 		 *
 		 *	\param[in]	ID		コスト ID
 		 *	\param[in]	cost	コスト値
+		 *
+		 *	\sa setIntCost(), getDoubleCost(), clearDoubleCost(), isDoneDoubleCost()
 		 */
 		void setDoubleCost(unsigned int ID, double cost);
 
@@ -312,6 +316,8 @@ namespace FK {
 		 *	\param[in]	ID		コスト ID
 		 *
 		 *	\return コスト値
+		 *
+		 *	\sa getDoubleCost(), setIntCost(), clearIntCost(), isDoneIntCost()
 		 */
 		int getIntCost(unsigned int ID);
 
@@ -324,6 +330,8 @@ namespace FK {
 		 *	\param[in]	ID		コスト ID
 		 *
 		 *	\return コスト値
+		 *
+		 *	\sa getIntCost(), setDoubleCost(), clearDoubleCost(), isDoneDoubleCost()
 		 */
 		double getDoubleCost(unsigned int ID);
 
@@ -332,6 +340,8 @@ namespace FK {
 		 *	整数型コストの設定を解除し、未設定状態とします。
 		 *
 		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\sa clearDoubleCost(), setIntCost(), getIntCost(), isDoneIntCost()
 		 */
 		void clearIntCost(unsigned int ID);
 
@@ -340,6 +350,8 @@ namespace FK {
 		 *	実数型コストの設定を解除し、未設定状態とします。
 		 *
 		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\sa clearIntCost(), setDoubleCost(), getDoubleCost(), isDoneDoubleCost()
 		 */
 		void clearDoubleCost(unsigned int ID);
 
@@ -351,6 +363,8 @@ namespace FK {
 		 *
 		 *	\return	対応する ID のコストが設定されている場合 true を、
 		 *			未設定の場合 false を返します。
+		 *
+		 *	\sa isDoneDoubleCost(), setIntCost(), getIntCost(), clearIntCost()
 		 */
 		bool isDoneIntCost(unsigned int ID);
 
@@ -362,6 +376,8 @@ namespace FK {
 		 *
 		 *	\return	対応する ID のコストが設定されている場合 true を、
 		 *			未設定の場合 false を返します。
+		 *
+		 *	\sa isDoneIntCost(), setDoubleCost(), getDoubleCost(), clearDoubleCost()
 		 */
 		bool isDoneDoubleCost(unsigned int ID);
 

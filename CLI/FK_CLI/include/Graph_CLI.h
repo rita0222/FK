@@ -92,8 +92,31 @@ namespace FK_CLI
 	//! グラフ構造を制御するクラス
 	/*!
 	 *	このクラスは、グラフ構造を制御する機能を提供します。
+	 *	グラフ構造には多くの応用用途がありますが、
+	 *	本クラスではその中でも経路探索を念頭に置いた機能を多く提供しています。
+	 *
+	 *	グラフ構造は、「ノード」と「辺」の2種類の要素によって構成されます。
+	 *	ノードは任意の位置を持つ頂点集合であり、
+	 *	辺は任意の2点を接続する線分です。
+	 *	辺は無向線分としても有向線分としても考えることができ、
+	 *	経路としてとらえると無向線分は両通行経路、有向線分は一方通行経路となります。
+	 *
+	 *	ノードを表すクラスは fk_GraphNode, 辺を表すクラスは fk_GraphEdge であり、
+	 *	これらのクラスの機能も合わせて利用します。
+	 *
+	 *	fk_Graph のノードと辺は、「コスト」を格納することができます。
+	 *	グラフ内の全要素のコストをまとめて「コストテーブル」と呼びます。
+	 *	コストテーブルは、経路探索アルゴリズムで重要なデータであり、
+	 *	fk_Graph はコストを扱うために有用な機能を多く提供しています。
+	 *
+	 *	コストテーブルは、int 型と double 型のいずれかを選択でき、
+	 *	かつ両方の型それぞれで複数のコストテーブルを格納することができます。
+	 *	各コストテーブルは ID により管理します。
+	 *
+	 *	\sa fk_GraphNode, fk_GraphEdge
 	 */
-	public ref class fk_Graph : fk_Shape {
+
+	 public ref class fk_Graph : fk_Shape {
 	internal:
 		::FK::fk_Graph * GetP(void);
 		static fk_CostStatus getCS(::FK::fk_CostStatus);
@@ -101,6 +124,10 @@ namespace FK_CLI
 	public:
 		//! コンストラクタ
 		/*!
+		 *	初期値として、ノード数を設定します。
+		 *	fk_Graph ではノード数は固定であるため、
+		 *	利用する際に十分な数のノードを確保しておく必要があります。
+		 *
 		 *	\param[in]	num		ノード数
 		 */
 		fk_Graph(unsigned int num);
@@ -113,7 +140,7 @@ namespace FK_CLI
 
 		//! ノード数取得プロパティ
 		/*!
-		 *	ノード数の参照を行います。
+		 *	グラフ内に存在するノード数を取得します。
 		 */
 		property unsigned int NodeSize {
 			unsigned int get();
@@ -121,30 +148,39 @@ namespace FK_CLI
 		
 		//! 辺ID最大値取得プロパティ
 		/*!
+		 *	現在存在する辺の ID の最大値を取得します。
+		 *
 		 *	\return		最大ID
 		 */
 		property unsigned int MaxEdgeID {
 			unsigned int get();
 		}
 
-		//! ノード取得関数
+		//! ノード取得メソッド
 		/*!
+		 *	ノードを表すインスタンスを ID より取得します。
+		 *
 		 *	\param[in]	ID		ノード ID
 		 *
 		 *	\return		ノード
 		 */
 		fk_GraphNode^ GetNode(unsigned int ID);
 
-		//! 辺情報取得関数
+		//! 辺情報取得メソッド
 		/*!
+		 *	辺を表すインスタンスを ID より取得します。
+		 *
 		 *	\param[in]	ID		辺 ID
 		 *
 		 *	\return		辺情報
 		 */
 		fk_GraphEdge^ GetEdge(unsigned int ID);
 
-		//! 辺存在確認関数
+		//! 辺存在確認メソッド
 		/*!
+		 *	2つのノードの間に辺が存在するかどうかを判定します。
+		 *	なお、ノード間の辺は複数存在する場合もあり、2本以上存在する場合も true を返します。
+		 *
 		 *	\param[in]	v1		辺の頂点となるノード。
 		 *	\param[in]	v2		辺の頂点となるノード。
 		 *
@@ -152,10 +188,10 @@ namespace FK_CLI
 		 */
 		bool IsConnect(fk_GraphNode^ v1, fk_GraphNode^ v2);
 
-		//! \name 接続変更関数
+		//! \name 接続変更メソッド
 		///@{
 
-		//!	辺生成関数
+		//!	辺生成メソッド
 		/*!
 		 *	2点のノード間に辺を作成します。
 		 *	なお、既に2点間に辺が存在する場合でも、エラーとならずに新たに辺を追加生成します。
@@ -171,7 +207,7 @@ namespace FK_CLI
 		 */
 		fk_GraphEdge^ MakeEdge(bool mode, fk_GraphNode^ v1, fk_GraphNode^ v2);
 
-		//! 辺削除関数
+		//! 辺削除メソッド
 		/*!
 		 *	辺を削除します。
 		 *
@@ -183,10 +219,10 @@ namespace FK_CLI
 
 		///@}
 
-		//! \name 経路コスト制御関数
+		//! \name 経路コスト制御メソッド
 		///@{
 
-		//! コストテーブル生成関数
+		//! コストテーブル生成メソッド
 		/*!
 		 *	コストテーブルを作成します。
 		 *	指定した ID で既に作成済であった場合は false を返し、初期化は行いません。
@@ -194,11 +230,11 @@ namespace FK_CLI
 		 *	\param[in]	tableID		コストテーブル ID
 		 *
 		 *	\param[in]	type		コスト値のタイプを設定します。
-		 *							- fk_CostType::INT \n
+		 *							- fk_CostType.INT \n
 		 *								コストが int 型となります。
-		 *							- fk_CostType::DOUBLE \n
+		 *							- fk_CostType.DOUBLE \n
 		 *								コストが double 型となります。
-		 *							- fk_CostType::LENGTH \n
+		 *							- fk_CostType.LENGTH \n
 		 *								コストは辺の長さとなり、
 		 *								内部では double 型として扱われます。
 		 *							.
@@ -214,28 +250,28 @@ namespace FK_CLI
 		 *	\param[in]	tableID		コストテーブルID
 		 *
 		 *	\param[in]	direction	コストを出発ノード側から算出する場合は
-		 *							fk_CostDirection::FORWARD を指定します。
+		 *							fk_CostDirection.FORWARD を指定します。
 		 *							コストを目標ノード側から算出する場合は
-		 *							fk_CostDirection::BACK を指定します。
+		 *							fk_CostDirection.BACK を指定します。
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool SetCostDirection(unsigned int tableID, fk_CostDirection direction);
 
-		//! 辺コストID対応指定関数
+		//! 辺コストID対応指定メソッド
 		/*!
 		 *	コストテーブルに対し、コスト値算出に利用する辺のコストIDを指定します。
 		 *
 		 *	\param[in]	tableID		コストテーブルID
 		 *
 		 *	\param[in]	edgeCostID 	利用する辺のコスト値 ID を指定します。
-		 *							makeCostTable() の第2引数に
-		 *							fk_CostType::LENGTH を指定していた場合、
+		 *							MakeCostTable() の第2引数に
+		 *							fk_CostType.LENGTH を指定していた場合、
 		 *							この値は無視されます。
 		 */
 		bool SetEdgeCostID(unsigned int tableID, unsigned int edgeCostID);
 
-		//! ノード内コストID参照関数
+		//! ノード内コストID参照メソッド
 		/*!
 		 *	コストテーブルに対応するノード内コストIDを参照します。
 		 *
@@ -245,7 +281,7 @@ namespace FK_CLI
 		 */
 		unsigned int GetNodeCostID(unsigned int tableID);
 
-		//! 出発ノード設定関数
+		//! 出発ノード設定メソッド
 		/*!
 		 *	出発ノードを指定します。
 		 *	既に別の出発ノードが設定されていた場合は、新たに設定したノードに更新されます。
@@ -255,7 +291,7 @@ namespace FK_CLI
 		 */
 		void SetStart(unsigned int tableID, fk_GraphNode^ node);
 
-		//! 目標ノード追加関数
+		//! 目標ノード追加メソッド
 		/*!
 		 *	目標ノードを追加します。
 		 *	目標ノードは一つのコストテーブルに対し複数設定することができます。
@@ -265,38 +301,69 @@ namespace FK_CLI
 		 */
 		void AddGoal(unsigned int tableID, fk_GraphNode^ node);
 
-		//! コストテーブル初期化関数
+		//! コストテーブル初期化メソッド
 		/*!
 		 *	コストテーブルを初期化します。
 		 *
 		 *	\param[in]	tableID		コストテーブルID
 		 *
 		 *	\return		初期化に成功したら true を、失敗したら false を返します。
-		 *				setCostMode() による設定が行われていないコストテーブルだった場合は
+		 *				SetCostMode() による設定が行われていないコストテーブルだった場合は
 		 *				false を返します。
 		 */
 		bool InitCostTable(unsigned int tableID);
 
-		//! コストテーブル更新関数
+		//! コストテーブル更新メソッド
 		/*!
 		 *	各ノードに対し、コスト算出を一段階進めます。
 		 *	全てのノードのコスト値を完全にするには、
-		 *	fk_CostStatus::FINISH が返されるまで繰り返し本関数を呼び出す必要があります。
+		 *	fk_CostStatus.FINISH が返されるまで繰り返し本関数を呼び出す必要があります。
 		 *
 		 *	\param[in]	tableID		コストテーブルID
 		 *
 		 *	\return		現在のコスト算出状況を返します。
-		 *				- fk_CostStatus::CONTINUE \n
+		 *				- fk_CostStatus.CONTINUE \n
 		 *					コスト算出がまだ途中段階であることを意味します。
-		 *				- fk_CostStatus::FINISH \n
+		 *				- fk_CostStatus.FINISH \n
 		 *					コスト算出が完了したことを意味します。
-		 *				- fk_CostStatus::ERROR \n
+		 *				- fk_CostStatus.ERROR \n
 		 *					グラフ内のコスト算出に関する情報が不完全であることを意味します。
 		 */
 		fk_CostStatus UpdateCostTable(unsigned int tableID);
 
+		//! コストテーブル状態取得メソッド
+		/*!
+		 *	現在のコストテーブルにおける更新情報を取得します。
+		 *	UpdateCostTable() では実際にコストテーブルの更新処理を行いますが、
+		 *	本関数は更新処理は行わず状態のみを取得します。
+		 *
+		 *	\param[in]	tableID		コストテーブルID
+		 *
+		 *	\return		現在のコスト算出状況を返します。
+		 *				- fk_CostStatus.CONTINUE \n
+		 *					コスト算出がまだ途中段階であることを意味します。
+		 *				- fk_CostStatus.FINISH \n
+		 *					コスト算出が完了したことを意味します。
+		 *				- fk_CostStatus.ERROR \n
+		 *					グラフ内のコスト算出に関する情報が不完全であることを意味します。
+		 */
 		fk_CostStatus GetCostStatus(unsigned int tableID);
 
+		//! 最短経路取得メソッド
+		/*!
+		 *	コストテーブルに基づいた、出発ノードから目標ノードまでの最短経路を取得します。
+		 *	本関数を用いる際には、事前にコストテーブルの更新が完了し、
+		 *	GetCostStatus() による結果が fk_CostStatus.FINISH となる状況でなければなりません。
+		 *
+		 *	最短経路が複数存在するような場合、任意の1種類のみを取得します。
+		 *	現状では全ての最短経路を取得する機能は提供していません。
+		 *
+		 *	目標ノードが複数ある場合、そのうち出発ノードからもっとも経路が短いものが抽出されます。
+		 *
+		 *	\param[in]	tableID		経路探索に用いる コストテーブルの ID
+		 *
+		 *	\return		最短経路の経由地となるノードを経路順に格納したリストを返します。
+		 */
 		List<fk_GraphNode^>^ GetOnePath(unsigned int tableID);
 		///@}
 	};
