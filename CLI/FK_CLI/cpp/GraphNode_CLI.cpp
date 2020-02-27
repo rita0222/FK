@@ -114,7 +114,7 @@ namespace FK_CLI {
     {
         if (!argP) return;
         ::FK::fk_Vector V(argP->x_, argP->y_, argP->z_);
-        GetP()->setPosition(&V);
+        GetP()->setPosition(V);
     }
 
     unsigned int fk_GraphNode::Generation::get()
