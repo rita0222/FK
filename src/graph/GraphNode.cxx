@@ -95,7 +95,7 @@ unsigned int fk_GraphNode::getID(void)
 	return ID;
 }
 
-void fk_GraphNode::setPosition(fk_Vector &argPos)
+void fk_GraphNode::setPosition(fk_Vector argPos)
 {
 	position = argPos;
 	baseGraph->GetVertexShape()->setVertex(int(ID), argPos);

@@ -118,7 +118,7 @@ namespace FK {
 		 *
 		 *	\param[in]	pos		位置ベクトル
 		 */
-		void setPosition(fk_Vector &pos);
+		void setPosition(fk_Vector pos);
 
 		//! 位置ベクトル取得関数
 		/*!
