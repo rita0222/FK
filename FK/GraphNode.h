@@ -112,21 +112,13 @@ namespace FK {
 		 */
 		unsigned int getID(void);
 
-		//! 位置ベクトル設定関数1
+		//! 位置ベクトル設定関数
 		/*!
 		 *	ノードの位置ベクトルを設定します。
 		 *
 		 *	\param[in]	pos		位置ベクトル
 		 */
-		void setPosition(fk_Vector *pos);
-
-		//! 位置ベクトル設定関数2
-		/*!
-		 *	ノードの位置ベクトルを設定します。
-		 *
-		 *	\param[in]	pos		位置ベクトル
-		 */
-		void setPosition(fk_Vector pos);
+		void setPosition(fk_Vector &pos);
 
 		//! 位置ベクトル取得関数
 		/*!
@@ -255,7 +247,7 @@ namespace FK {
 		 *	- このノードが始点である一方通行辺に接続している終点ノード。
 		 *	.
 		 *
-		 *	\oaram[out]		接続点の list 集合
+		 *	\param[out]		list	接続点の list 集合
 		 *
 		 *	\sa getStartEdge(std::list<fk_GraphEdge *> *),
 		 *		getNextNode(void),
@@ -285,7 +277,7 @@ namespace FK {
 		 *	- このノードが終点である一方通行辺に接続している始点ノード。
 		 *	.
 		 *
-		 *	\oaram[out]		接続点の list 集合
+		 *	\param[out]		list	接続点の list 集合
 		 *
 		 *	\sa getEndEdge(std::list<fk_GraphEdge *> *),
 		 *		getPrevNode(void),
@@ -337,20 +329,56 @@ namespace FK {
 
 		//! 整数型コスト設定解除関数
 		/*!
-		 *	ID が 0 の整数型コストの設定を解除し、未設定状態とします。
-		 *	
+		 *	整数型コストの設定を解除し、未設定状態とします。
+		 *
+		 *	\param[in]	ID		コスト ID
 		 */
-		void clearIntCost(void);
 		void clearIntCost(unsigned int ID);
-		void clearDoubleCost(void);
+
+		//! 実数型コスト設定解除関数
+		/*!
+		 *	実数型コストの設定を解除し、未設定状態とします。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 */
 		void clearDoubleCost(unsigned int ID);
 
-		bool isDoneIntCost(void);
+		//! 整数型コスト設定状態参照関数
+		/*!
+		 *	整数型コストが設定済がどうかを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return	対応する ID のコストが設定されている場合 true を、
+		 *			未設定の場合 false を返します。
+		 */
 		bool isDoneIntCost(unsigned int ID);
-		bool isDoneDoubleCost(void);
+
+		//! 実数型コスト設定状態参照関数
+		/*!
+		 *	実数型コストが設定済がどうかを参照します。
+		 *
+		 *	\param[in]	ID		コスト ID
+		 *
+		 *	\return	対応する ID のコストが設定されている場合 true を、
+		 *			未設定の場合 false を返します。
+		 */
 		bool isDoneDoubleCost(unsigned int ID);
 
+		//! 色指定関数1
+		/*!
+		 *	辺の色を指定します。
+		 *
+		 *	\param[in]	col		色値
+		 */
 		void setColor(fk_Color col);
+
+		//! 色指定関数2
+		/*!
+		 *	辺の色を指定します。
+		 *
+		 *	\param[in]	col		色値
+		 */
 		void setColor(fk_Color *col);
 
 #ifndef FK_DOXYGEN_USER_PROCESS

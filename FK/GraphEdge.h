@@ -172,90 +172,46 @@ namespace FK {
 		//! 整数型コスト設定関数
 		/*!
 		 *	辺の整数型コストを設定します。
-		 *	コスト ID は自動的に 0 となります。
-		 *
-		 *	\param[in]	cost	コスト値
-		 *
-		 *	\sa getIntCost(void), setIntCost(unsigned int, int), setDoubleCost(double)
-		 */
-		void setIntCost(int cost);
-
-		//! ID指定付整数型コスト設定関数
-		/*!
-		 *	辺の整数型コストを設定します。
 		 *
 		 *	\param[in]	ID		コスト ID
 		 *	\param[in]	cost	コスト値
 		 *
-		 *	\sa getIntCost(unsigned int), setIntCost(int), setDoubleCost(unsigned int, double)
+		 *	\sa getIntCost(), setDoubleCost()
 		 */
 		void setIntCost(unsigned int ID, int cost);
 
 		//! 実数型コスト設定関数
 		/*!
 		 *	辺の実数型コストを設定します。
-		 *	コスト ID は自動的に 0 となります。
-		 *
-		 *	\param[in]	cost	コスト値
-		 *
-		 *	\sa getIntCost(void), setIntCost(unsigned int, int), setDoubleCost(double)
-		 */
-		void setDoubleCost(double cost);
-
-		//! ID指定付実数型コスト設定関数
-		/*!
-		 *	辺の実数型コストを設定します。
 		 *
 		 *	\param[in]	ID		コスト ID
 		 *	\param[in]	cost	コスト値
 		 *
-		 *	\sa getDoubleCost(unsigned int), setDoubleCost(double), setIntCost(unsigned int, int)
+		 *	\sa getDoubleCost(), setDoubleCost(), setIntCost()
 		 */
 		void setDoubleCost(unsigned int ID, double cost);
 
 		//! 整数型コスト参照関数
 		/*!
 		 *	辺の整数型コストを参照します。
-		 *	getIntCost(0) と同義です。
-		 *
-		 *	\return		辺コスト
-		 *
-		 *	\sa getIntCost(unsigned int), setIntCost(int), getDoubleCost(void)
-		 */
-		int getIntCost(void);
-
-		//! ID指定付整数型コスト参照関数
-		/*!
-		 *	辺の整数型コストを参照します。
 		 *
 		 *	\param[in]	ID		コスト ID
 		 *
 		 *	\return		辺コスト
 		 *
-		 *	\sa getIntCost(void), setIntCost(unsigned int, int), getDoubleCost(unsigned int)
+		 *	\sa getIntCost(), setIntCost(), getDoubleCost()
 		 */
 		int getIntCost(unsigned int ID);
 
 		//! 実数型コスト参照関数
 		/*!
 		 *	辺の実数型コストを参照します。
-		 *	getDoubleCost(0) と同義です。
-		 *
-		 *	\return		辺コスト
-		 *
-		 *	\sa getDoubleCost(unsigned int), setDoubleCost(double), getIntCost(void)
-		 */
-		double getDoubleCost(void);
-
-		//! ID指定付実数型コスト参照関数
-		/*!
-		 *	辺の実数型コストを参照します。
 		 *
 		 *	\param[in]	ID		コスト ID
 		 *
 		 *	\return		辺コスト
 		 *
-		 *	\sa getDoubleCost(void), setDoubleCost(unsigned int, double), getIntCost(unsigned int)
+		 *	\sa getDoubleCost(), setDoubleCost(), getIntCost()
 		 */
 		double getDoubleCost(unsigned int ID);
 
@@ -274,7 +230,7 @@ namespace FK {
 		 *	\param[in]	col		色値
 		 */
 		void setColor(fk_Color *col);
-
+		
 	private:
 		unsigned int edgeID;
 		fk_GraphNode *node[2];

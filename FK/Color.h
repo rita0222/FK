@@ -435,8 +435,6 @@ namespace FK {
 	 *	1 を超える場合はその成分を 1 とします。
 	 */
 	fk_Color	operator /(const fk_Color &, double);
-
-	///@}
 }
 
 #endif // __FK_COLOR_HEADER__

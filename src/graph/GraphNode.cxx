@@ -95,13 +95,9 @@ unsigned int fk_GraphNode::getID(void)
 	return ID;
 }
 
-void fk_GraphNode::setPosition(fk_Vector *argPos)
+void fk_GraphNode::setPosition(fk_Vector &argPos)
 {
-	setPosition(*argPos);
-}
-
-void fk_GraphNode::setPosition(fk_Vector argPos)
-{
+	position = argPos;
 	baseGraph->GetVertexShape()->setVertex(int(ID), argPos);
 
 	auto edgeShape = baseGraph->GetEdgeShape();
@@ -281,11 +277,6 @@ void fk_GraphNode::getPrevNode(list<fk_GraphNode *> *argList)
 }
 
 
-void fk_GraphNode::clearIntCost(void)
-{
-	clearIntCost(0);
-}
-
 void fk_GraphNode::clearIntCost(unsigned int argID)
 {
 	if(intCost.size() <= argID) {
@@ -296,11 +287,6 @@ void fk_GraphNode::clearIntCost(unsigned int argID)
 		}
 	}
 	intCost[argID] = {false, 0};
-}
-
-void fk_GraphNode::clearDoubleCost(void)
-{
-	clearDoubleCost(0);
 }
 
 void fk_GraphNode::clearDoubleCost(unsigned int argID)
@@ -315,20 +301,10 @@ void fk_GraphNode::clearDoubleCost(unsigned int argID)
 	doubleCost[argID] = {false, 0.0};
 }
 
-bool fk_GraphNode::isDoneIntCost(void)
-{
-	return isDoneIntCost(0);
-}
-
 bool fk_GraphNode::isDoneIntCost(unsigned int argID)
 {
 	if(intCost.size() <= argID) clearIntCost(argID);
 	return get<0>(intCost[argID]);
-}
-
-bool fk_GraphNode::isDoneDoubleCost(void)
-{
-	return isDoneDoubleCost(0);
 }
 
 bool fk_GraphNode::isDoneDoubleCost(unsigned int argID)
@@ -368,12 +344,13 @@ bool fk_GraphNode::IsBase(fk_Graph *argBase)
 
 void fk_GraphNode::setColor(fk_Color argC)
 {
-	baseGraph->GetVertexShape()->setColor(int(ID), argC);
+	baseGraph->GetVertexShape()->setColor(int(ID), &argC);
 }
 
 void fk_GraphNode::setColor(fk_Color *argC)
 {
-	baseGraph->GetVertexShape()->setColor(int(ID), *argC);
+	if(argC == nullptr) return;
+	baseGraph->GetVertexShape()->setColor(int(ID), argC);
 }
 
 string fk_GraphNode::print(void)

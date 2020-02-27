@@ -136,20 +136,10 @@ double fk_GraphEdge::getLength(void)
 	return length;
 }
 
-void fk_GraphEdge::setIntCost(int argCost)
-{
-	intCost[0] = argCost;
-}
-
 void fk_GraphEdge::setIntCost(unsigned int argID, int argCost)
 {
 	if(argID >= intCost.size()) intCost.resize(argID+1);
 	intCost[argID] = argCost;
-}
-
-void fk_GraphEdge::setDoubleCost(double argCost)
-{
-	doubleCost[0] = argCost;
 }
 
 void fk_GraphEdge::setDoubleCost(unsigned int argID, double argCost)
@@ -158,20 +148,10 @@ void fk_GraphEdge::setDoubleCost(unsigned int argID, double argCost)
 	doubleCost[argID] = argCost;
 }
 
-int fk_GraphEdge::getIntCost(void)
-{
-	return intCost[0];
-}
-
 int fk_GraphEdge::getIntCost(unsigned int argID)
 {
 	if(argID >= intCost.size()) return 0;
 	return intCost[argID];
-}
-
-double fk_GraphEdge::getDoubleCost(void)
-{
-	return doubleCost[0];
 }
 
 double fk_GraphEdge::getDoubleCost(unsigned int argID)
@@ -187,5 +167,6 @@ void fk_GraphEdge::setColor(fk_Color argC)
 
 void fk_GraphEdge::setColor(fk_Color *argC)
 {
+	if(argC == nullptr) return;
 	baseGraph->GetEdgeShape()->setColor(int(edgeID), argC);
 }
