@@ -28,6 +28,7 @@ namespace FK_CLI_Graph
             window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
             window.Open();
             window.TrackBallMode = true;
+			window.FPS = 60;
 
             var P = new fk_Vector();
             fk_GraphEdge edge;

@@ -80,6 +80,7 @@ namespace FK_CLI_Particle
             window.Size = new fk_Dimension(800, 800);
             window.BGColor = new fk_Color(0.0, 0.0, 0.0);
             window.TrackBallMode = true;
+            window.FPS = 60;
             return window;
         }
 
