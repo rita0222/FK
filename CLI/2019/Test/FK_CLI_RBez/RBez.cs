@@ -16,6 +16,7 @@ namespace FK_CLI_RBez
             window.CameraPos = new fk_Vector(0.0, 0.0, 100.0);
             window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
             window.TrackBallMode = true;
+            window.FPS = 60;
 
             curv.Degree = 2;
             curv.Div = 32;
