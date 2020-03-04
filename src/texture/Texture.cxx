@@ -80,8 +80,7 @@ using namespace FK;
 const string fk_Texture::texIDName = "fk_TexID";
 
 fk_Texture::fk_Texture(fk_Image *argImage)
-	: fk_Shape(fk_Type::TEXTURE),
-	  image(nullptr), samplerSource(fk_SamplerSource::TEXTURE_IMAGE)
+	: fk_Shape(fk_Type::TEXTURE), image(nullptr)
 {
 	GetFaceSize = []() { return 0; };
 	StatusUpdate = []() {};
@@ -312,39 +311,18 @@ bool fk_Texture::BindTexture(bool forceLoad)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
 	if (loaded == false || forceLoad == true) {
-		switch(samplerSource) {
-		  case fk_SamplerSource::TEXTURE_IMAGE:
 /*
-			if(loaded == false) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-							 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-			} else {
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
-								GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-			}
-*/
+		if(loaded == false) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-
-			break;
-			
-		  case fk_SamplerSource::COLOR_BUFFER:
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-						 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-			break;
-
-		  case fk_SamplerSource::DEPTH_BUFFER:
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, bufSize->w, bufSize->h,
-						 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
-			break;
-
-		  default:
-			break;
+		} else {
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
+							GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
 		}
-	}
+*/
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
+					 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
 
-	if (samplerSource != fk_SamplerSource::TEXTURE_IMAGE) {
-		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufSize->w, bufSize->h);
 	}
 
 	return true;
@@ -358,14 +336,4 @@ void fk_Texture::Replace(void)
 		BindTexture(true);
 		image->SetUpdate(false);
 	}
-}
-
-void fk_Texture::setSamplerSource(fk_SamplerSource argMode)
-{
-	samplerSource = argMode;
-}
-
-fk_SamplerSource fk_Texture::getSamplerSource(void)
-{
-	return samplerSource;
 }

@@ -98,12 +98,6 @@ namespace FK {
 		CLAMP,		//!< 縁部伸張式
 	};
 
-	// フレームバッファのサンプリングソースを表す列挙型
-	enum class fk_SamplerSource {
-		TEXTURE_IMAGE,	//!< テクスチャ画像情報参照
-		COLOR_BUFFER,	//!< 画面色情報参照
-		DEPTH_BUFFER,	//!< 画面深度情報参照
-	};
 
 	//! テクスチャ用基底クラス
 	/*!
@@ -384,35 +378,6 @@ namespace FK {
 		 */
 		const fk_ImType *		getImageBuf(void);
 
-		//! テクスチャ参照情報設定関数
-		/*!
-		 *	参照テクスチャが参照する情報を設定します。
-		 *	設定できる種類は以下のとおりです。
-		 *
-		 *	- fk_SamplerSource::TEXTURE_IMAGE: 
-		 *		コンストラクタで設定した
-		 *		fk_Image 型インスタンスに入っているデータを参照先とします。
-		 *	- fk_SamplerSource::COLOR_BUFFER: 
-		 *		描画シーン全体の色値情報を参照先とします。
-		 *	- fk_SamplerSource::DEPTH_BUFFER: 
-		 *		描画シーン全体の深度情報を参照先とします。
-		 *	.
-		 *	デフォルトは fk_SamplerSource::TEXTURE_IMAGE に設定されています。
-		 *
-		 *	\param[in]	mode
-		 *		テクスチャ参照情報の参照先
-		 *
-		 *	\sa getSamplerSource()
-		 */
-		void setSamplerSource(fk_SamplerSource mode);
-
-		//! テクスチャ参照情報参照関数
-		/*!
-		 *	参照テクスチャが参照する情報を参照します。
-		 *
-		 *	\return		テクスチャ参照情報
-		 */
-		fk_SamplerSource getSamplerSource(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::function<void(void)> FaceIBOSetup;
@@ -420,6 +385,7 @@ namespace FK {
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
 		void Replace(void);
+		virtual fk_TexID	GetTexID(void);
 		
 		static const std::string		texIDName;
 #endif
@@ -453,9 +419,7 @@ namespace FK {
 		fk_TexRendMode		texRendMode;
 		fk_TexWrapMode		texWrapMode;
 		fk_Palette			localPal;
-		fk_SamplerSource	samplerSource;
 
-		fk_TexID			GetTexID(void);
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
 	};
