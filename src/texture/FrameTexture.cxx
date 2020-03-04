@@ -143,7 +143,7 @@ void fk_FrameTexture::SetupFBO(void)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void fk_FrameTexture::BindFBO(void)
+void fk_FrameTexture::AttachFBO(void)
 {
 	if(source == fk_SamplerSource::COLOR) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
@@ -152,7 +152,7 @@ void fk_FrameTexture::BindFBO(void)
 	}
 }
 
-void fk_FrameTexture::PostDraw(void)
+void fk_FrameTexture::BindFBO(void)
 {
 	if(source == fk_SamplerSource::COLOR) {
 		glActiveTexture(GL_TEXTURE0);

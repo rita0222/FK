@@ -303,7 +303,9 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 	GLint tmpWrapModeGl = (getTexWrapMode() == fk_TexWrapMode::REPEAT)
 		? GL_REPEAT : GL_CLAMP_TO_EDGE;
-	GLint tmpRendMode = (getTexRendMode() == fk_TexRendMode::NORMAL) ? GL_NEAREST : GL_LINEAR;
+
+	GLint tmpRendMode = (getTexRendMode() == fk_TexRendMode::NORMAL)
+		? GL_NEAREST : GL_LINEAR;
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tmpWrapModeGl);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tmpWrapModeGl);
@@ -311,18 +313,8 @@ bool fk_Texture::BindTexture(bool forceLoad)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
 	if (loaded == false || forceLoad == true) {
-/*
-		if(loaded == false) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-						 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-		} else {
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bufSize->w, bufSize->h,
-							GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-		}
-*/
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 					 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
-
 	}
 
 	return true;

@@ -125,8 +125,8 @@ namespace FK {
 
 		fk_TexID		GetTexID(void);
 		void			SetupFBO(void);
+		void			AttachFBO(void);
 		void			BindFBO(void);
-		void			PostDraw(void);
 		void			Unbind(void);
 
 	private:

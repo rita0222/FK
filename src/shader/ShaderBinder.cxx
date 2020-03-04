@@ -128,6 +128,8 @@ fk_ShaderBinder::fk_ShaderBinder()
 
 fk_ShaderBinder::~fk_ShaderBinder()
 {
+	delete colorTex;
+	delete depthTex;
 	//finalizeFrameBufferObject();
 }
 
@@ -182,46 +184,12 @@ void fk_ShaderBinder::SetupFBO(void)
 	colorTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
 	colorTex->setTexRendMode(fk_TexRendMode::SMOOTH);
 	colorTex->SetupFBO();
-/*	
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &colorBuf);
-	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, bufW, bufH, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
-*/
 
 	depthTex->setBufferSize(bufW, bufH);
 	depthTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
 	depthTex->setTexRendMode(fk_TexRendMode::SMOOTH);
 	depthTex->SetupFBO();
-/*
-	glActiveTexture(GL_TEXTURE1);
-	glGenTextures(1, &depthBuf);
-	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, bufW, bufH, 0,
-				 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
-*/
 
-/*
-	// こっちの方が速いらしいが、うまくいかない
-	glGenRenderbuffers(1, &depthBuf);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, bufW, bufH);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
-*/
 	glGenFramebuffers(1, &fboHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
 
@@ -231,11 +199,8 @@ void fk_ShaderBinder::SetupFBO(void)
 	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 2);
 #endif
 
-	colorTex->BindFBO();
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuf, 0);
-
-	depthTex->BindFBO();
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuf, 0);
+	colorTex->AttachFBO();
+	depthTex->AttachFBO();
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
@@ -366,42 +331,17 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	glDrawBuffer(GL_BACK);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClear(GL_DEPTH_BUFFER_BIT);
 
-
-	colorTex->PostDraw();
-/*
-	glActiveTexture(GL_TEXTURE0);
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	glBindTexture(GL_TEXTURE_2D, colorBuf);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
-	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-*/
-
-	depthTex->PostDraw();
-/*
-	glActiveTexture(GL_TEXTURE1);
-	glReadBuffer(GL_DEPTH_ATTACHMENT);
-	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
-*/
-	//glBlitFramebuffer(0, 0, bufW, bufH, 0, 0, bufW, bufH, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
+	colorTex->BindFBO();
+	depthTex->BindFBO();
 
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 
 	ProcPostShader();
 
-
 	colorTex->Unbind();
 	depthTex->Unbind();
-/*
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, 0);
-*/
-	
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
