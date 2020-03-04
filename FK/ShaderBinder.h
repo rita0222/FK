@@ -76,6 +76,7 @@
 //#include <GL/glew.h>
 #include <FK/AppWindow.h>
 #include <FK/ShaderProgram.h>
+#include <FK/FrameTexture.h>
 
 namespace FK {
 	//! シェーダープログラム統括クラス
@@ -334,11 +335,13 @@ namespace FK {
 		bool usingProgram;
 		bool setupFlg;
 
-		GLint	bufW;
-		GLint	bufH;
+		GLint	bufW, bufH;
 
 		GLuint		rectVAO, fboHandle;
-		GLuint		colorBuf, depthBuf;
+		//GLuint		colorBuf, depthBuf;
+		fk_FrameTexture	*colorTex;
+		fk_FrameTexture *depthTex;
+
 		std::vector<float>	fboSize;
 
 		static std::string	fboVertexCode, fboGeometryCode;

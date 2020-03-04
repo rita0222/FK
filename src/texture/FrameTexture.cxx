@@ -91,6 +91,11 @@ fk_FrameTexture::~fk_FrameTexture()
 	return;
 }
 
+void fk_FrameTexture::init(void)
+{
+	BaseInit();
+}
+
 fk_TexID fk_FrameTexture::GetTexID(void)
 {
 	return ID;

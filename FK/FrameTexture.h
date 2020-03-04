@@ -92,6 +92,8 @@ namespace FK {
 		//! デストラクタ
 		virtual ~fk_FrameTexture();
 
+		void init(void);
+
 		//! テクスチャ参照情報設定関数
 		/*!
 		 *	参照テクスチャが参照する情報を設定します。
