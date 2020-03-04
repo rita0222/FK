@@ -148,6 +148,7 @@ namespace FK {
 		MESHTEXTURE,	//!<	fk_MeshTexture 型
 		IFSTEXTURE,		//!<	fk_IFSTexture 型
 		ARTEXTURE,		//!<	fk_ARTexture 型
+		FRAMETEXTURE,	//!<	fk_FrameTexture 型
 		UNICHAR,		//!<	fk_UniChar 型
 		UNISTR,			//!<	fk_UniStr 型
 		TEXTIMAGE,		//!<	fk_TextImage 型
@@ -173,43 +174,6 @@ namespace FK {
 		GRAPHNODE,		//!<	fk_GraphNode 型
 		GRAPHEDGE,		//!<	fk_GraphEdge 型
 	};
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-#ifdef NO_GL_LIBRARY
-
-	enum GLenum {
-		GL_COLOR_INDEX,
-		GL_STENCIL_INDEX,
-		GL_DEPTH_INDEX,
-		GL_RED,
-		GL_GREEN,
-		GL_BLUE,
-		GL_ALPHA,
-		GL_LUMINANCE,
-		GL_LUMINANCE_ALPHA,
-		GL_RGB,
-		GL_BGR,
-		GL_RGBA,
-		GL_BGRA,
-		GL_ABGR_EXT,
-		GL_UNSIGNED_BYTE,
-		GL_BYTE,
-		GL_UNSIGNED_SHORT,
-		GL_SHORT,
-		GL_UNSIGNED_INT,
-		GL_INT,
-		GL_FLOAT,
-		GL_BITMAP
-	};
-
-	using GLint = int;
-	using GLuint = unsigned int;
-	using GLfloat = float;
-
-#endif
-
-#endif
 
 	//! FK の各クラスの基盤となる基本クラス
 	/*!

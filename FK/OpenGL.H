@@ -73,16 +73,11 @@
 #define __FK_OPENGL_HEADER__
 
 #ifdef _MACOSX_
- #ifdef OPENGL4
-  #define GL_SILENCE_DEPRECATION
-  #include <OpenGL/OpenGL.h>
-  #include <OpenGL/gl3.h>
- #else // OPENGL4
-  #include <OpenGL/gl.h>
-  #include <OpenGL/glu.h>
- #endif // OpenGL4
+ #define GL_SILENCE_DEPRECATION
+ #include <OpenGL/OpenGL.h>
+ #include <OpenGL/gl3.h>
 #else // !_MACOSX_
- #if defined(WIN32) && !defined(_MINGW_)
+ #ifdef WIN32
   //#define GLEW_STATIC
   #include <windows.h>
   #include <GL/glew.h>
