@@ -411,6 +411,9 @@
     <ClInclude Include="..\..\FK\Window.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\FK\FrameTexture.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\audio\Audio_Base.cxx">
@@ -810,6 +813,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\FrameTexture.cxx">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

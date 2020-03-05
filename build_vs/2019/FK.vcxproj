@@ -63,6 +63,7 @@
     <ClInclude Include="..\..\FK\FK.h" />
     <ClInclude Include="..\..\FK\Fog.h" />
     <ClInclude Include="..\..\FK\FrameController.h" />
+    <ClInclude Include="..\..\FK\FrameTexture.h" />
     <ClInclude Include="..\..\FK\Fullscreen.h" />
     <ClInclude Include="..\..\FK\FVecArray.h" />
     <ClInclude Include="..\..\FK\GenMatrix.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="..\..\src\solid\Topology.cxx" />
     <ClCompile Include="..\..\src\solid\Vertex.cxx" />
     <ClCompile Include="..\..\src\solid\VRMLOut.cxx" />
+    <ClCompile Include="..\..\src\texture\FrameTexture.cxx" />
     <ClCompile Include="..\..\src\texture\IFSTexture.cxx" />
     <ClCompile Include="..\..\src\texture\Image.cxx" />
     <ClCompile Include="..\..\src\texture\ImageIO.cxx" />
