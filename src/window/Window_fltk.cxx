@@ -90,6 +90,8 @@ int					fk_Window::winNum = 0;
 Fl_Window *			fk_Window::error_win = nullptr;
 Fl_Multi_Browser *	fk_Window::err_browser = nullptr;
 
+fk_GraphicsEngine	fk_Window::engine;
+
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0])
 {
@@ -505,4 +507,9 @@ void fk_Window::ErrorInit(void)
 			return;
 		};
 	}
+}
+
+fk_GraphicsEngine * fk_Window::GetEngine(void)
+{
+	return &engine;
 }
