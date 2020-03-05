@@ -837,10 +837,6 @@ namespace FK {
 		///@}
 #endif
 		
-#ifndef FK_DOXYGEN_USER_PROCESS
-		static fk_GraphicsEngine * GetEngine(void);
-#endif
-		
 	private:
 
 		fk_Image				snapBuffer;
@@ -891,7 +887,7 @@ namespace FK {
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		static fk_GraphicsEngine		engine;
+		fk_GraphicsEngine		engine;
 
 		void					drawScene(void);
 		void					drawSceneLeft(void);
