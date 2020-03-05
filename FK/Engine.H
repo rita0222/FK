@@ -119,15 +119,15 @@ namespace FK {
 
 	private:
 
-		fk_PointDraw *pointDraw;
-		fk_LineDraw *lineDraw;
-		fk_FaceDraw *faceDraw;
-		fk_TextureDraw *textureDraw;
-		fk_BezCurveDraw *bezCurveLineDraw;
-		fk_BezCurveDraw *bezCurvePointDraw;
-		fk_SurfaceDraw *surfaceDraw;
-		fk_SurfaceDraw *surfacePointDraw;
-		fk_SurfaceDraw *surfaceLineDraw;
+		static fk_PointDraw *pointDraw;
+		static fk_LineDraw *lineDraw;
+		static fk_FaceDraw *faceDraw;
+		static fk_TextureDraw *textureDraw;
+		static fk_BezCurveDraw *bezCurveLineDraw;
+		static fk_BezCurveDraw *bezCurvePointDraw;
+		static fk_SurfaceDraw *surfaceDraw;
+		static fk_SurfaceDraw *surfacePointDraw;
+		static fk_SurfaceDraw *surfaceLineDraw;
 
 		unsigned int winID;
 		fk_DisplayLink *curDLink;

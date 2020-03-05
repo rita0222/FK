@@ -91,18 +91,31 @@ using namespace std;
 using namespace FK;
 
 static unsigned int		generalID = 1;
+static unsigned int		engineNum = 0;
+
+fk_PointDraw * fk_GraphicsEngine::pointDraw = nullptr;
+fk_LineDraw * fk_GraphicsEngine::lineDraw = nullptr;
+fk_FaceDraw * fk_GraphicsEngine::faceDraw = nullptr;
+fk_TextureDraw * fk_GraphicsEngine::textureDraw = nullptr;
+fk_BezCurveDraw * fk_GraphicsEngine::bezCurveLineDraw = nullptr;
+fk_BezCurveDraw * fk_GraphicsEngine::bezCurvePointDraw = nullptr;
+fk_SurfaceDraw * fk_GraphicsEngine::surfaceDraw = nullptr;
+fk_SurfaceDraw * fk_GraphicsEngine::surfacePointDraw = nullptr;
+fk_SurfaceDraw * fk_GraphicsEngine::surfaceLineDraw = nullptr;
 
 fk_GraphicsEngine::fk_GraphicsEngine(void)
 {
-	pointDraw = new fk_PointDraw;
-	lineDraw = new fk_LineDraw;
-	faceDraw = new fk_FaceDraw;
-	textureDraw = new fk_TextureDraw;
-	bezCurveLineDraw = new fk_BezCurveDraw(1);
-	bezCurvePointDraw = new fk_BezCurveDraw(2);
-	surfaceDraw = new fk_SurfaceDraw(1);
-	surfaceLineDraw = new fk_SurfaceDraw(2);
-	surfacePointDraw = new fk_SurfaceDraw(3);
+	if(engineNum == 0) {
+		pointDraw = new fk_PointDraw;
+		lineDraw = new fk_LineDraw;
+		faceDraw = new fk_FaceDraw;
+		textureDraw = new fk_TextureDraw;
+		bezCurveLineDraw = new fk_BezCurveDraw(1);
+		bezCurvePointDraw = new fk_BezCurveDraw(2);
+		surfaceDraw = new fk_SurfaceDraw(1);
+		surfaceLineDraw = new fk_SurfaceDraw(2);
+		surfacePointDraw = new fk_SurfaceDraw(3);
+	}
 
 	winID = 0;
 	curDLink = nullptr;
@@ -119,20 +132,27 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	boundaryModel.setDrawMode(fk_Draw::LINE);
 	boundaryModel.setBMode(fk_BoundaryMode::NONE);
 	boundaryModel.setBDrawToggle(false);
+
+	engineNum++;
+
 	return;
 }
 
 fk_GraphicsEngine::~fk_GraphicsEngine()
 {
-	delete pointDraw;
-	delete lineDraw;
-	delete faceDraw;
-	delete textureDraw;
-	delete bezCurveLineDraw;
-	delete bezCurvePointDraw;
-	delete surfaceDraw;
-	delete surfaceLineDraw;
-	delete surfacePointDraw;
+	engineNum--;
+
+	if(engineNum == 0) {
+		delete pointDraw; pointDraw = nullptr;
+		delete lineDraw; lineDraw = nullptr;
+		delete faceDraw; faceDraw = nullptr;
+		delete textureDraw; textureDraw = nullptr;
+		delete bezCurveLineDraw; bezCurveLineDraw = nullptr;
+		delete bezCurvePointDraw; bezCurvePointDraw = nullptr;
+		delete surfaceDraw; surfaceDraw = nullptr;
+		delete surfaceLineDraw; surfaceLineDraw = nullptr;
+		delete surfacePointDraw; surfacePointDraw = nullptr;
+	}
 
 	snapBuffer.clear();
 
