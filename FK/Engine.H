@@ -116,7 +116,7 @@ namespace FK {
 		void Draw(void);
 
 		void BindWindow(fk_ShaderBinder *);
-u		//void StereoDrawPrep(fk_StereoChannel);
+		//void StereoDrawPrep(fk_StereoChannel);
 		//void StereoDrawMain(fk_StereoChannel);
 
 	private:
