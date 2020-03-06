@@ -101,6 +101,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
+			shader->SetupDone(true);
 		}
 	} else {
 		if(surfaceShader == nullptr) ShaderSetup();

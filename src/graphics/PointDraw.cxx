@@ -107,6 +107,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
+			shader->SetupDone(true);
 		}
 	} else {
 		if(pointShader == nullptr) ShaderSetup();

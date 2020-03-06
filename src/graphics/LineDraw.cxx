@@ -108,6 +108,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
+			shader->SetupDone(true);
 		}
 	} else {
 		if(lineShader == nullptr) ShaderSetup();

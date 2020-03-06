@@ -109,6 +109,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 		shader = modelShader;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
+			shader->SetupDone(true);
 		}
 	} else {
 		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
