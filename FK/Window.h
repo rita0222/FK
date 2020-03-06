@@ -836,6 +836,10 @@ namespace FK {
 		bool	getOGLStereoMode(void);
 		///@}
 #endif
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_GraphicsEngine * GetEngine(void);
+#endif
 		
 	private:
 

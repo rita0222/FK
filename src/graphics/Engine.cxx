@@ -103,6 +103,8 @@ fk_SurfaceDraw * fk_GraphicsEngine::surfaceDraw = nullptr;
 fk_SurfaceDraw * fk_GraphicsEngine::surfacePointDraw = nullptr;
 fk_SurfaceDraw * fk_GraphicsEngine::surfaceLineDraw = nullptr;
 
+static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+
 fk_GraphicsEngine::fk_GraphicsEngine(void)
 {
 	if(engineNum == 0) {
@@ -116,6 +118,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 		surfaceLineDraw = new fk_SurfaceDraw(2);
 		surfacePointDraw = new fk_SurfaceDraw(3);
 	}
+
+	engineNum++;
 
 	winID = 0;
 	curDLink = nullptr;
@@ -133,8 +137,13 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	boundaryModel.setBMode(fk_BoundaryMode::NONE);
 	boundaryModel.setBDrawToggle(false);
 
-	engineNum++;
-
+	FBOMode = false;
+	colorTex = nullptr;
+	depthTex = nullptr;
+	rectVAO = 0;
+	fboHandle = 0;
+	FBOShader = nullptr;
+	
 	return;
 }
 
@@ -156,6 +165,14 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 
 	snapBuffer.clear();
 
+	delete colorTex;
+	delete depthTex;
+
+	if(FBOMode == true) {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		if(fboHandle != 0) glDeleteFramebuffers(1, &fboHandle);
+	}
 	return;
 }
 
@@ -171,6 +188,13 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	resizeFlag = false;
 
 	defProj.setAll(40.0, 1.0, 6000.0);
+
+	FBOMode = false;
+	delete colorTex;
+	delete depthTex;
+	colorTex = nullptr;
+	depthTex = nullptr;
+	FBOShader = nullptr;
 	
 	return;
 }
@@ -293,6 +317,7 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 
 void fk_GraphicsEngine::Draw(void)
 {
+	if(FBOMode == true) PreFBODraw();
 	// リサイズ時に加えて、マルチウィンドウ時もビューポートを再設定(by rita)
 	if(resizeFlag == true || generalID > 2) {
 		SetViewPort();
@@ -319,6 +344,8 @@ void fk_GraphicsEngine::Draw(void)
 
 	DrawObjs();
 
+	if(FBOMode == true) PostFBODraw();
+	
 	return;
 }
 
@@ -736,4 +763,98 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 	}
 
 	return true;
+}
+
+void fk_GraphicsEngine::SetupFBO(void)
+{
+	if(colorTex != nullptr) delete colorTex;
+	colorTex = new fk_FrameTexture();
+	if(depthTex != nullptr) delete depthTex;
+	depthTex = new fk_FrameTexture();
+
+	colorTex->setSource(fk_SamplerSource::COLOR);
+	depthTex->setSource(fk_SamplerSource::DEPTH);
+
+	colorTex->setBufferSize(wSize, hSize);
+	colorTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
+	colorTex->setTexRendMode(fk_TexRendMode::SMOOTH);
+	colorTex->SetupFBO();
+
+	depthTex->setBufferSize(wSize, hSize);
+	depthTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
+	depthTex->setTexRendMode(fk_TexRendMode::SMOOTH);
+	depthTex->SetupFBO();
+
+	glGenFramebuffers(1, &fboHandle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
+
+#ifdef WIN32	
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, wSize);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, hSize);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 2);
+#endif
+
+	colorTex->AttachFBO();
+	depthTex->AttachFBO();
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	FBOMode = true;
+}
+
+void fk_GraphicsEngine::PreFBODraw(void)
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
+	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		fk_Window::putString("FBO Error");
+	}
+}
+
+void fk_GraphicsEngine::PostFBODraw(void)
+{
+ 	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
+
+	FBOShader->ProcPreShader();
+	glDrawBuffer(GL_BACK);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	colorTex->BindFBO();
+	depthTex->BindFBO();
+
+	glBindVertexArray(rectVAO);
+	glDrawArrays(GL_POINTS, 0, 1);
+
+	FBOShader->ProcPostShader();
+
+	colorTex->Unbind();
+	depthTex->Unbind();
+}
+
+void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
+{
+	FBOShader = argShader;
+
+	SetupFBO();
+
+	GLuint handle;
+	glGenBuffers(1, &handle);
+
+	static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &rectVAO);
+	glBindVertexArray(rectVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, handle);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
 }

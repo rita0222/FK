@@ -506,3 +506,8 @@ void fk_Window::ErrorInit(void)
 		};
 	}
 }
+
+fk_GraphicsEngine * fk_Window::GetEngine(void)
+{
+	return &engine;
+}

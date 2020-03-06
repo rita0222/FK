@@ -100,7 +100,6 @@ namespace FK {
 	 *
 	 *	シェーダープログラムの設定については fk_ShaderProgram を、
 	 *	シェーダーに渡すパラメータ設定については fk_ShaderParameter を参照して下さい。
-	 *	また、入出力用テクスチャについては fk_TextureSampler を参照して下さい。
 	 *
 	 *	\sa fk_ShaderProgram, fk_ShaderParameter, fk_TextureSampler, fk_Model
 	 */
@@ -244,15 +243,6 @@ namespace FK {
 		 */
 		void initializeFrameBufferObject(fk_Dimension dim);
 
-		//! フレームバッファーオブジェクト (FBO) 利用終了関数
-		/*!
-		 *	フレームバッファーオブジェクト (FBO) の利用を終了します。
-		 *
-		 *	\sa initializeFrameBufferObject(int, int),
-		 *			initializeFrameBufferObject(fk_Dimension)
-		 */
-		void finalizeFrameBufferObject();
-	
 		//! ウィンドウ連携設定関数1
 		/*!
 		 *	フレームバッファーオブジェクト
@@ -337,19 +327,18 @@ namespace FK {
 
 		GLint	bufW, bufH;
 
-		GLuint		rectVAO, fboHandle;
-		//GLuint		colorBuf, depthBuf;
-		fk_FrameTexture	*colorTex;
-		fk_FrameTexture *depthTex;
+		//GLuint		rectVAO, fboHandle;
+		//fk_FrameTexture	*colorTex;
+		//fk_FrameTexture *depthTex;
 
 		std::vector<float>	fboSize;
 
 		static std::string	fboVertexCode, fboGeometryCode;
 
-		void ProcPreDraw(void);
-		void ProcPostDraw(void);
+		//void ProcPreDraw(void);
+		//void ProcPostDraw(void);
 
-		void	SetupFBO(void);
+		//void SetupFBO(void);
 	};
 }
 

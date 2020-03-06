@@ -84,7 +84,7 @@ bool fk_ShaderBinder::isExtensionInitialized = false;
 string fk_ShaderBinder::fboVertexCode;
 string fk_ShaderBinder::fboGeometryCode;
 
-static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+//static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
 //static const GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
 
 bool fk_ShaderBinder::Initialize()
@@ -115,10 +115,10 @@ bool fk_ShaderBinder::Initialize()
 fk_ShaderBinder::fk_ShaderBinder()
 	: program(&innerProgram), parameter(&innerParameter),
 	  usingProgram(false), setupFlg(false),
-	  bufW(0), bufH(0),
-	  rectVAO(0), fboHandle(0),
+	  bufW(0), bufH(0)
+	  //rectVAO(0), fboHandle(0),
 	  //colorBuf(0), depthBuf(0)
-	  colorTex(nullptr), depthTex(nullptr)
+	  //colorTex(nullptr), depthTex(nullptr)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -128,8 +128,8 @@ fk_ShaderBinder::fk_ShaderBinder()
 
 fk_ShaderBinder::~fk_ShaderBinder()
 {
-	delete colorTex;
-	delete depthTex;
+	//delete colorTex;
+	//delete depthTex;
 	//finalizeFrameBufferObject();
 }
 
@@ -169,7 +169,7 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	fboSize.push_back(float(bufW));
 	fboSize.push_back(float(bufH));
 }
-
+/*
 void fk_ShaderBinder::SetupFBO(void)
 {
 	if(colorTex != nullptr) delete colorTex;
@@ -204,13 +204,13 @@ void fk_ShaderBinder::SetupFBO(void)
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
-
+*/
 
 void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 {
 	initializeFrameBufferObject(argDim.w, argDim.h);
 }
-
+/*
 void fk_ShaderBinder::finalizeFrameBufferObject(void)
 {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -225,29 +225,14 @@ void fk_ShaderBinder::finalizeFrameBufferObject(void)
 		bufW = bufH = 0;
 	}
 }
+*/
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
 	if(argWin == nullptr || bufW <= 0 || bufH <= 0) return;
-	auto id = program->getProgramID();
+	argWin->GetEngine()->BindWindow(this);
 
-	SetupFBO();
-
-	GLuint handle;
-	glGenBuffers(1, &handle);
-
-	static GLfloat verts[3] = {0.0f, 0.0f, 0.0f};
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &rectVAO);
-	glBindVertexArray(rectVAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, handle);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
+	GLuint id = program->getProgramID();
 
 	glBindAttribLocation(id, 0, fk_Shape::vertexName.c_str());
 	glBindFragDataLocation(id, 0, fk_DrawBase::fragmentName.c_str());
@@ -256,11 +241,12 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 	parameter->setRegister(colorBufName, 0);
 	parameter->setRegister(depthBufName, 1);
 	parameter->setRegister(fboSizeName, &fboSize);
-
+/*
 	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
 	fk_funcSet	postD = fk_funcSet(id, [&](){ ProcPostDraw(); });
 	argWin->preDrawList.push_back(preD);
 	argWin->postDrawList.push_back(postD);
+*/
 }
 
 void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
@@ -272,18 +258,7 @@ void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
 void fk_ShaderBinder::unbindWindow(fk_Window *argWin)
 {
 	if(argWin == nullptr) return;
-
-	GLuint id = program->getProgramID();
-
-	for(auto it = argWin->preDrawList.begin(); it != argWin->preDrawList.end();) {
-		if(get<0>(*it) == id) it = argWin->preDrawList.erase(it);
-		else ++it;
-	}
-
-	for(auto it = argWin->postDrawList.begin(); it != argWin->postDrawList.end();) {
-		if(get<0>(*it) == id) it = argWin->postDrawList.erase(it);
-		else ++it;
-	}
+	argWin->GetEngine()->BindWindow(nullptr);
 }
 
 void fk_ShaderBinder::unbindWindow(fk_AppWindow *argWin)
@@ -309,7 +284,7 @@ void fk_ShaderBinder::ProcPostShader(void)
 		usingProgram = false;
 	}
 }
-
+/*
 void fk_ShaderBinder::ProcPreDraw(void)
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
@@ -343,6 +318,7 @@ void fk_ShaderBinder::ProcPostDraw(void)
 	colorTex->Unbind();
 	depthTex->Unbind();
 }
+*/
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
 {

@@ -80,6 +80,7 @@
 #include <FK/Matrix.h>
 #include <FK/Image.h>
 #include <FK/DList.h>
+#include <FK/FrameTexture.h>
 
 namespace FK {
 	class fk_Scene;
@@ -114,6 +115,7 @@ namespace FK {
 		void SetPickViewPort(int, int, int);
 		void Draw(void);
 
+		void BindWindow(fk_ShaderBinder *);
 		//void StereoDrawPrep(fk_StereoChannel);
 		//void StereoDrawMain(fk_StereoChannel);
 
@@ -150,6 +152,12 @@ namespace FK {
 
 		fk_Model boundaryModel;
 
+		bool FBOMode;
+		fk_FrameTexture *colorTex;
+		fk_FrameTexture *depthTex;
+		GLuint rectVAO, fboHandle;
+		fk_ShaderBinder *FBOShader;
+		
 		void DrawObjs(void);
 		void DrawModel(fk_Model *);
 		void CurrentDispLinkDraw(void);
@@ -179,6 +187,10 @@ namespace FK {
 
 		void SetBlendMode(fk_Model *model);
 		void SetDepthMode(fk_DepthMode mode);
+
+		void SetupFBO(void);
+		void PreFBODraw(void);
+		void PostFBODraw(void);
 	};
 }
 
