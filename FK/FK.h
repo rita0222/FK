@@ -92,6 +92,7 @@
 #include <FK/TriTexture.h>
 #include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
+#include <FK/FrameTexture.h>
 #include <FK/GenMatrix.h>
 #include <FK/Quaternion.h>
 #include <FK/Math.h>
