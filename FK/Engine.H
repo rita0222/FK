@@ -152,7 +152,7 @@ namespace FK {
 
 		fk_Model boundaryModel;
 
-		bool FBOMode;
+		bool FBOMode, FBOWindowMode;
 		fk_FrameTexture *colorTex;
 		fk_FrameTexture *depthTex;
 		GLuint rectVAO, fboHandle;
@@ -191,6 +191,7 @@ namespace FK {
 		void SetupFBO(void);
 		void PreFBODraw(void);
 		void PostFBODraw(void);
+		void FBOWindowDraw(void);
 	};
 }
 

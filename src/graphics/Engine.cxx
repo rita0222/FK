@@ -138,6 +138,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	boundaryModel.setBDrawToggle(false);
 
 	FBOMode = false;
+	FBOWindowMode = false;
 	colorTex = nullptr;
 	depthTex = nullptr;
 	rectVAO = 0;
@@ -190,6 +191,7 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	defProj.setAll(40.0, 1.0, 6000.0);
 
 	FBOMode = false;
+	FBOWindowMode = false;
 	delete colorTex;
 	delete depthTex;
 	colorTex = nullptr;
@@ -345,6 +347,7 @@ void fk_GraphicsEngine::Draw(void)
 	DrawObjs();
 
 	if(FBOMode == true) PostFBODraw();
+	if(FBOWindowMode == true) FBOWindowDraw();
 	
 	return;
 }
@@ -827,6 +830,11 @@ void fk_GraphicsEngine::PostFBODraw(void)
 	colorTex->BindFBO();
 	depthTex->BindFBO();
 
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+}
+
+void fk_GraphicsEngine::FBOWindowDraw(void)
+{
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 
@@ -834,13 +842,16 @@ void fk_GraphicsEngine::PostFBODraw(void)
 
 	colorTex->Unbind();
 	depthTex->Unbind();
-}
+}	
+	
 
 void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 {
 	FBOShader = argShader;
 
 	SetupFBO();
+
+	FBOWindowMode = true;
 
 	GLuint handle;
 	glGenBuffers(1, &handle);
