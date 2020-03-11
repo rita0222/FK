@@ -141,6 +141,7 @@ namespace FK {
 		BEZSURFACE,		//!<	fk_BezSurface 型
 		GREGORY,		//!<	fk_Gregory 型
 		IMAGE,			//!<	fk_Image 型
+		FRAMEBUFFER,	//!<	fk_FrameBuffer 型
 		TEXCOORD,		//!<	fk_TexCoord 型
 		TEXTURE,		//!<	fk_Texture 型
 		RECTTEXTURE,	//!<	fk_RectTexture 型
@@ -148,7 +149,6 @@ namespace FK {
 		MESHTEXTURE,	//!<	fk_MeshTexture 型
 		IFSTEXTURE,		//!<	fk_IFSTexture 型
 		ARTEXTURE,		//!<	fk_ARTexture 型
-		FRAMETEXTURE,	//!<	fk_FrameTexture 型
 		UNICHAR,		//!<	fk_UniChar 型
 		UNISTR,			//!<	fk_UniStr 型
 		TEXTIMAGE,		//!<	fk_TextImage 型

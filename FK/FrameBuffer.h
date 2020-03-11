@@ -69,8 +69,8 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef	__FK_FRAME_TEXTURE_HEADER__
-#define	__FK_FRAME_TEXTURE_HEADER__
+#ifndef	__FK_FRAME_BUFFER_HEADER__
+#define	__FK_FRAME_BUFFER_HEADER__
 
 #include <FK/Texture.h>
 
@@ -82,17 +82,15 @@ namespace FK {
 		DEPTH	//!< 画面深度情報参照
 	};
 
-	class fk_FrameTexture : public fk_Texture {
+	class fk_FrameBuffer : public fk_BaseObject {
 
 	public:
 
 		//! コンストラクタ
-		fk_FrameTexture(void);
+		fk_FrameBuffer(void);
 
 		//! デストラクタ
-		virtual ~fk_FrameTexture();
-
-		void init(void);
+		virtual ~fk_FrameBuffer();
 
 		//! テクスチャ参照情報設定関数
 		/*!
@@ -137,6 +135,6 @@ namespace FK {
 	};
 }
 
-#endif	// !__FK_FRAME_TEXTURE_HEADER__
+#endif	// !__FK_FRAME_BUFFER_HEADER__
 
 

@@ -139,8 +139,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 
 	FBOMode = false;
 	FBOWindowMode = false;
-	colorTex = nullptr;
-	depthTex = nullptr;
+	colorBuf = nullptr;
+	depthBuf = nullptr;
 	rectVAO = 0;
 	fboHandle = 0;
 	FBOShader = nullptr;
@@ -166,8 +166,8 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 
 	snapBuffer.clear();
 
-	delete colorTex;
-	delete depthTex;
+	delete colorBuf;
+	delete depthBuf;
 
 	if(FBOMode == true) {
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -192,10 +192,10 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 
 	FBOMode = false;
 	FBOWindowMode = false;
-	delete colorTex;
-	delete depthTex;
-	colorTex = nullptr;
-	depthTex = nullptr;
+	delete colorBuf;
+	delete depthBuf;
+	colorBuf = nullptr;
+	depthBuf = nullptr;
 	FBOShader = nullptr;
 	
 	return;
@@ -770,23 +770,19 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 void fk_GraphicsEngine::SetupFBO(void)
 {
-	if(colorTex != nullptr) delete colorTex;
-	colorTex = new fk_FrameTexture();
-	if(depthTex != nullptr) delete depthTex;
-	depthTex = new fk_FrameTexture();
+	if(colorBuf != nullptr) delete colorBuf;
+	colorBuf = new fk_FrameBuffer();
+	if(depthBuf != nullptr) delete depthBuf;
+	depthBuf = new fk_FrameBuffer();
 
-	colorTex->setSource(fk_SamplerSource::COLOR);
-	depthTex->setSource(fk_SamplerSource::DEPTH);
+	colorBuf->setSource(fk_SamplerSource::COLOR);
+	depthBuf->setSource(fk_SamplerSource::DEPTH);
 
-	colorTex->setBufferSize(wSize, hSize);
-	colorTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
-	colorTex->setTexRendMode(fk_TexRendMode::SMOOTH);
-	colorTex->SetupFBO();
+	colorBuf->setBufferSize(wSize, hSize);
+	colorBuf->SetupFBO();
 
-	depthTex->setBufferSize(wSize, hSize);
-	depthTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
-	depthTex->setTexRendMode(fk_TexRendMode::SMOOTH);
-	depthTex->SetupFBO();
+	depthBuf->setBufferSize(wSize, hSize);
+	depthBuf->SetupFBO();
 
 	glGenFramebuffers(1, &fboHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
@@ -797,8 +793,8 @@ void fk_GraphicsEngine::SetupFBO(void)
 	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 2);
 #endif
 
-	colorTex->AttachFBO();
-	depthTex->AttachFBO();
+	colorBuf->AttachFBO();
+	depthBuf->AttachFBO();
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -827,8 +823,8 @@ void fk_GraphicsEngine::PostFBODraw(void)
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	colorTex->BindFBO();
-	depthTex->BindFBO();
+	colorBuf->BindFBO();
+	depthBuf->BindFBO();
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 }
@@ -840,8 +836,8 @@ void fk_GraphicsEngine::FBOWindowDraw(void)
 
 	FBOShader->ProcPostShader();
 
-	colorTex->Unbind();
-	depthTex->Unbind();
+	colorBuf->Unbind();
+	depthBuf->Unbind();
 }	
 	
 

@@ -70,7 +70,7 @@
  *
  ****************************************************************************/
 #define FK_DEF_SIZETYPE
-#include <FK/FrameTexture.h>
+#include <FK/FrameBuffer.h>
 //#include <FK/Error.H>
 //#include <FK/Window.h>
 
@@ -78,46 +78,41 @@ using namespace std;
 using namespace FK;
 
 
-fk_FrameTexture::fk_FrameTexture(void)
-	: fk_Texture(nullptr), ID(0), source(fk_SamplerSource::COLOR), bufW(0), bufH(0)
+fk_FrameBuffer::fk_FrameBuffer(void)
+	: ID(0), source(fk_SamplerSource::COLOR), bufW(0), bufH(0)
 {
-	SetObjectType(fk_Type::FRAMETEXTURE);
+	SetObjectType(fk_Type::FRAMEBUFFER);
 	return;
 }
 
-fk_FrameTexture::~fk_FrameTexture()
+fk_FrameBuffer::~fk_FrameBuffer()
 {
 	if(ID != 0) glDeleteTextures(1, &ID);
 	return;
 }
 
-void fk_FrameTexture::init(void)
-{
-	BaseInit();
-}
-
-fk_TexID fk_FrameTexture::GetTexID(void)
+fk_TexID fk_FrameBuffer::GetTexID(void)
 {
 	return ID;
 }
 
-void fk_FrameTexture::setSource(fk_SamplerSource argMode)
+void fk_FrameBuffer::setSource(fk_SamplerSource argMode)
 {
 	source = argMode;
 }
 
-fk_SamplerSource fk_FrameTexture::getSource(void)
+fk_SamplerSource fk_FrameBuffer::getSource(void)
 {
 	return source;
 }
 
-void fk_FrameTexture::setBufferSize(int argW, int argH)
+void fk_FrameBuffer::setBufferSize(int argW, int argH)
 {
 	bufW = argW;
 	bufH = argH;
 }
 
-void fk_FrameTexture::SetupFBO(void)
+void fk_FrameBuffer::SetupFBO(void)
 {
 	if(source == fk_SamplerSource::COLOR) glActiveTexture(GL_TEXTURE0);
 	else glActiveTexture(GL_TEXTURE1);
@@ -143,7 +138,7 @@ void fk_FrameTexture::SetupFBO(void)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void fk_FrameTexture::AttachFBO(void)
+void fk_FrameBuffer::AttachFBO(void)
 {
 	if(source == fk_SamplerSource::COLOR) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
@@ -152,7 +147,7 @@ void fk_FrameTexture::AttachFBO(void)
 	}
 }
 
-void fk_FrameTexture::BindFBO(void)
+void fk_FrameBuffer::BindFBO(void)
 {
 	if(source == fk_SamplerSource::COLOR) {
 		glActiveTexture(GL_TEXTURE0);
@@ -166,7 +161,7 @@ void fk_FrameTexture::BindFBO(void)
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
 }
 
-void fk_FrameTexture::Unbind(void)
+void fk_FrameBuffer::Unbind(void)
 {
 	if(source == fk_SamplerSource::COLOR) {
 		glActiveTexture(GL_TEXTURE0);

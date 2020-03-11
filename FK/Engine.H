@@ -80,7 +80,7 @@
 #include <FK/Matrix.h>
 #include <FK/Image.h>
 #include <FK/DList.h>
-#include <FK/FrameTexture.h>
+#include <FK/FrameBuffer.h>
 
 namespace FK {
 	class fk_Scene;
@@ -153,8 +153,8 @@ namespace FK {
 		fk_Model boundaryModel;
 
 		bool FBOMode, FBOWindowMode;
-		fk_FrameTexture *colorTex;
-		fk_FrameTexture *depthTex;
+		fk_FrameBuffer *colorBuf;
+		fk_FrameBuffer *depthBuf;
 		GLuint rectVAO, fboHandle;
 		fk_ShaderBinder *FBOShader;
 		

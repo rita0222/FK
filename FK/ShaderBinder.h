@@ -76,7 +76,7 @@
 //#include <GL/glew.h>
 #include <FK/AppWindow.h>
 #include <FK/ShaderProgram.h>
-#include <FK/FrameTexture.h>
+#include <FK/FrameBuffer.h>
 
 namespace FK {
 	//! シェーダープログラム統括クラス
