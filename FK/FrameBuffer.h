@@ -72,7 +72,7 @@
 #ifndef	__FK_FRAME_BUFFER_HEADER__
 #define	__FK_FRAME_BUFFER_HEADER__
 
-#include <FK/Texture.h>
+#include <FK/Image.h>
 
 namespace FK {
 
@@ -120,6 +120,7 @@ namespace FK {
 		fk_SamplerSource getSource(void);
 
 		void setBufferSize(int, int);
+		fk_Dimension * getBufferSize(void);
 
 		fk_TexID		GetTexID(void);
 		void			SetupFBO(void);
@@ -131,7 +132,7 @@ namespace FK {
 
 		fk_TexID			ID;
 		fk_SamplerSource	source;
-		GLint				bufW, bufH;
+		fk_Dimension		dim;
 	};
 }
 

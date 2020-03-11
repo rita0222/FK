@@ -79,8 +79,9 @@ using namespace FK;
 
 
 fk_FrameBuffer::fk_FrameBuffer(void)
-	: ID(0), source(fk_SamplerSource::COLOR), bufW(0), bufH(0)
+	: ID(0), source(fk_SamplerSource::COLOR)
 {
+	dim.set(0, 0);
 	SetObjectType(fk_Type::FRAMEBUFFER);
 	return;
 }
@@ -108,8 +109,7 @@ fk_SamplerSource fk_FrameBuffer::getSource(void)
 
 void fk_FrameBuffer::setBufferSize(int argW, int argH)
 {
-	bufW = argW;
-	bufH = argH;
+	dim.set(argW, argH);
 }
 
 void fk_FrameBuffer::SetupFBO(void)
@@ -128,10 +128,10 @@ void fk_FrameBuffer::SetupFBO(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	if(source == fk_SamplerSource::COLOR) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, bufW, bufH, 0,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, dim.w, dim.h, 0,
 					 GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	} else {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, bufW, bufH, 0,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
 					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 	}
 		
@@ -158,7 +158,7 @@ void fk_FrameBuffer::BindFBO(void)
 	}
 	
 	glBindTexture(GL_TEXTURE_2D, ID);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, bufW, bufH);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, dim.w, dim.h);
 }
 
 void fk_FrameBuffer::Unbind(void)
@@ -169,4 +169,9 @@ void fk_FrameBuffer::Unbind(void)
 		glActiveTexture(GL_TEXTURE1);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+fk_Dimension * fk_FrameBuffer::getBufferSize(void)
+{
+	return &dim;
 }

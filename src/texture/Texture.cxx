@@ -86,7 +86,6 @@ fk_Texture::fk_Texture(fk_Image *argImage)
 	StatusUpdate = []() {};
 	FaceIBOSetup = []() {};
 	realType = fk_RealShapeType::TEXTURE;
-	SetPaletteData(&localPal);
 	BaseInit();
 	setImage(argImage);
 
@@ -101,6 +100,7 @@ fk_Texture::~fk_Texture()
 void fk_Texture::BaseInit(void)
 {
 	setImage(nullptr);
+	frameBuffer = nullptr;
 	clearMaterial();
 	AttrInit();
 	setTextureMode(fk_TexMode::MODULATE);
@@ -189,7 +189,9 @@ fk_Image * fk_Texture::getImage(void)
 
 const fk_Dimension * fk_Texture::getImageSize(void)
 {
-	if(image != nullptr) {
+	if(frameBuffer != nullptr) {
+		return frameBuffer->getBufferSize();
+	} else if(image != nullptr) {
 		return image->getImageSize();
 	}
 
@@ -198,7 +200,9 @@ const fk_Dimension * fk_Texture::getImageSize(void)
 
 const fk_Dimension * fk_Texture::getBufferSize(void)
 {
-	if(image != nullptr) {
+	if(frameBuffer != nullptr) {
+		return frameBuffer->getBufferSize();
+	} else if(image != nullptr) {
 		return image->getBufferSize();
 	}
 
@@ -207,7 +211,9 @@ const fk_Dimension * fk_Texture::getBufferSize(void)
 
 fk_TexID fk_Texture::GetTexID(void)
 {
-	if(image != nullptr) {
+	if(frameBuffer != nullptr) {
+		return frameBuffer->GetTexID();
+	} else if(image != nullptr) {
 		return image->GetTexID();
 	}
 

@@ -75,6 +75,7 @@
 #include <FK/Shape.h>
 #include <FK/Image.h>
 #include <FK/IndexFace.h>
+#include <FK/FrameBuffer.h>
 
 namespace FK {
 
@@ -115,7 +116,7 @@ namespace FK {
 
 		fk_Texture(fk_Image * = nullptr);
 		virtual ~fk_Texture();
-		virtual void			init(void) = 0;
+		virtual void init(void) = 0;
 
 #endif
 
@@ -132,7 +133,7 @@ namespace FK {
 		 *
 		 *	\param[in]		image		画像データ
 		 */
-		void					setImage(fk_Image *image);
+		void setImage(fk_Image *image);
 
 		//! 画像データ取得関数
 		/*!
@@ -140,7 +141,7 @@ namespace FK {
 		 *
 		 *	\return		画像データ
 		 */
-		fk_Image *				getImage(void);
+		fk_Image * getImage(void);
 
 		//! BMP ファイル入力関数
 		/*!
@@ -151,7 +152,7 @@ namespace FK {
 		 *
 		 *	\return	入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool					readBMP(std::string fileName);
+		bool readBMP(std::string fileName);
 
 		//! BMP バッファ入力関数
 		/*!
@@ -164,7 +165,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool					readBMPData(fk_ImType *buf);
+		bool readBMPData(fk_ImType *buf);
 
 		//! PNG ファイル入力関数
 		/*!
@@ -175,7 +176,7 @@ namespace FK {
 		 *
 		 *	\return	入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool					readPNG(std::string fileName);
+		bool readPNG(std::string fileName);
 
 		//! PNG バッファ入力関数
 		/*!
@@ -188,7 +189,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool					readPNGData(fk_ImType *buf);
+		bool readPNGData(fk_ImType *buf);
 
 		//! JPEG ファイル入力関数
 		/*!
@@ -199,7 +200,7 @@ namespace FK {
 		 *
 		 *	\return	入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool					readJPG(std::string fileName);
+		bool readJPG(std::string fileName);
 
 		//! 画像サイズ取得関数
 		/*!
@@ -209,7 +210,7 @@ namespace FK {
 		 *
 		 *	\sa getBufferSize()
 		 */
-		const fk_Dimension *	getImageSize(void);
+		const fk_Dimension * getImageSize(void);
 
 		//! 画像バッファサイズ取得関数
 		/*!
@@ -224,7 +225,7 @@ namespace FK {
 		 *
 		 *	\sa getImageSize(), fk_Image::getBufferSize()
 		 */
-		const fk_Dimension *	getBufferSize(void);
+		const fk_Dimension * getBufferSize(void);
 
 		//! テクスチャモード設定関数
 		/*!
@@ -271,7 +272,8 @@ namespace FK {
 		 *	.
 		 *	デフォルトでは fk_TexMode::MODULATE が設定されています。
 		 *	なお、同様の設定は fk_Model::setTextureMode() でも行うことが可能で、
-		 *	fk_Model 側で fk_TexMode::NONE 以外が設定されている場合は fk_Model 側の設定が優先されます。
+		 *	fk_Model 側で fk_TexMode::NONE 以外が設定されている場合は
+		 *	fk_Model 側の設定が優先されます。
 		 *	fk_Model 側で fk_TexMode::NONE が設定されている場合のみ、
 		 *	この fk_Texture 側での設定が有効となります。
 		 *
@@ -279,7 +281,7 @@ namespace FK {
 		 *
 		 *	\sa getTextureMode(), fk_Model::setTextureMode()
 		 */
-		void					setTextureMode(fk_TexMode mode);
+		void setTextureMode(fk_TexMode mode);
 
 		//! テクスチャモード取得関数
 		/*!
@@ -289,7 +291,7 @@ namespace FK {
 		 *
 		 *	\sa setTextureMode()
 		 */
-		fk_TexMode				getTextureMode(void);
+		fk_TexMode getTextureMode(void);
 
 		//! テクスチャ描画品質設定関数
 		/*!
@@ -302,7 +304,7 @@ namespace FK {
 		 *
 		 *	\param[in]	mode	品質モード
 		 */
-		void					setTexRendMode(fk_TexRendMode mode);
+		void setTexRendMode(fk_TexRendMode mode);
 
 		//! テクスチャ描画品質取得関数
 		/*!
@@ -312,7 +314,7 @@ namespace FK {
 		 *
 		 *	\sa setTexRendMode()
 		 */
-		fk_TexRendMode			getTexRendMode(void);
+		fk_TexRendMode getTexRendMode(void);
 
 		//! テクスチャ外周部モード設定関数
 		/*!
@@ -326,7 +328,7 @@ namespace FK {
 		 *
 		 *	\param[in]	mode	外周部モード
 		 */
-		void					setTexWrapMode(fk_TexWrapMode mode);
+		void setTexWrapMode(fk_TexWrapMode mode);
 
 		//! テクスチャ外周部モード取得関数
 		/*!
@@ -334,7 +336,7 @@ namespace FK {
 		 *
 		 *	\return		外周部モード
 		 */
-		fk_TexWrapMode			getTexWrapMode(void);
+		fk_TexWrapMode getTexWrapMode(void);
 	
 		//! 一様色初期化関数1
 		/*!
@@ -344,7 +346,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Color
 		 */
-		void					fillColor(const fk_Color &color);
+		void fillColor(const fk_Color &color);
 
 		//! 一様色初期化関数2
 		/*!
@@ -356,7 +358,7 @@ namespace FK {
 		 *	\param[in]	b		初期化色の青要素
 		 *	\param[in]	a		初期化色の透明度要素
 		 */
-		void					fillColor(int r, int g, int b, int a = 0);
+		void fillColor(int r, int g, int b, int a = 0);
 
 		//! 画像データ配列先頭アドレス取得関数	
 		/*!
@@ -376,7 +378,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Image::getBufPointer()
 		 */
-		const fk_ImType *		getImageBuf(void);
+		const fk_ImType * getImageBuf(void);
 
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -385,18 +387,18 @@ namespace FK {
 		std::function<int(void)> GetFaceSize;
 		std::function<void(void)> StatusUpdate;
 		void Replace(void);
-		virtual fk_TexID	GetTexID(void);
+		virtual fk_TexID GetTexID(void);
 		
-		static const std::string		texIDName;
+		static const std::string texIDName;
 #endif
 
 	protected:
 
-		fk_FVecArray		texCoord;
+		fk_FVecArray texCoord;
 
-		void				BaseInit(void);
-		bool				IsLocalImage(void);
-		void				SetLocalImage(void);
+		void BaseInit(void);
+		bool IsLocalImage(void);
+		void SetLocalImage(void);
 
 //		std::function<void(void)>	GenTextureObj;
 //		std::function<void(void)>	ReplaceSubImage;
@@ -418,7 +420,9 @@ namespace FK {
 		fk_TexMode			texMode;
 		fk_TexRendMode		texRendMode;
 		fk_TexWrapMode		texWrapMode;
-		fk_Palette			localPal;
+
+		fk_FrameBuffer		*frameBuffer;
+
 
 		void				SetTexID(const fk_TexID);
 		static void			ClearTexState(fk_Image *);
