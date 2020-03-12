@@ -380,6 +380,9 @@ namespace FK {
 		 */
 		const fk_ImType * getImageBuf(void);
 
+		void setFrameBuffer(fk_FrameBuffer *);
+		fk_FrameBuffer * getFrameBuffer(void);
+		void initFrameBuffer(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::function<void(void)> FaceIBOSetup;

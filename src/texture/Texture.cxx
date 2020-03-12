@@ -335,3 +335,18 @@ void fk_Texture::Replace(void)
 		image->SetUpdate(false);
 	}
 }
+
+void fk_Texture::setFrameBuffer(fk_FrameBuffer *argFB)
+{
+	frameBuffer = argFB;
+}
+
+fk_FrameBuffer * fk_Texture::getFrameBuffer(void)
+{
+	return frameBuffer;
+}
+
+void fk_Texture::initFrameBuffer(void)
+{
+	frameBuffer = nullptr;
+}
