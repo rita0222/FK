@@ -252,6 +252,8 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
+	
+
 	shader->ProcPreShader();
 
 	fk_TexMode texMode = argModel->getTextureMode();

@@ -116,6 +116,9 @@ namespace FK {
 		void Draw(void);
 
 		void BindWindow(fk_ShaderBinder *);
+
+		void InitFrameBufferMode(void);
+
 		fk_FrameBuffer * GetColorBuffer(void);
 		fk_FrameBuffer * GetDepthBuffer(void);
 

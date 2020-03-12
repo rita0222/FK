@@ -80,7 +80,10 @@ fk_Renderer::fk_Renderer(int argW, int argH)
 {
 	engine = new fk_GraphicsEngine(false);
 	engine->Init(argW, argH);
-	initFlg = false;
+	engine->OpenGLInit();
+	engine->InitFrameBufferMode();
+	engine->Draw();
+	initFlg = true;
 }
 
 fk_Renderer::~fk_Renderer()
@@ -97,6 +100,7 @@ void fk_Renderer::draw(void)
 {
 	if(initFlg == false) {
 		engine->OpenGLInit();
+		engine->InitFrameBufferMode();
 		initFlg = true;
 	}
 	
@@ -106,7 +110,7 @@ void fk_Renderer::draw(void)
 void fk_Renderer::resize(int argW, int argH)
 {
 	engine->ResizeWindow(argW, argH);
-	initFlg = true;
+	initFlg = false;
 }
 
 fk_FrameBuffer * fk_Renderer::getColorBuffer(void)

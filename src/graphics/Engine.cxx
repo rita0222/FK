@@ -333,16 +333,18 @@ void fk_GraphicsEngine::Draw(void)
 
 	curProj->MakeMat();
 
-	fk_DrawBase::SetCamera(curDLink->getCamera());
+	if(curDLink != nullptr) {
+		fk_DrawBase::SetCamera(curDLink->getCamera());
 
-	fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::PARALLEL),
-						  fk_LightType::PARALLEL);
+		fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::PARALLEL),
+							  fk_LightType::PARALLEL);
 
-	fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::POINT),
-						  fk_LightType::POINT);
+		fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::POINT),
+							  fk_LightType::POINT);
 
-	fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::SPOT),
-						  fk_LightType::SPOT);
+		fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::SPOT),
+							  fk_LightType::SPOT);
+	}
 
 	DrawObjs();
 
@@ -770,6 +772,8 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 void fk_GraphicsEngine::SetupFBO(void)
 {
+	fk_Window::printf("SetupFBO");
+
 	if(colorBuf != nullptr) delete colorBuf;
 	colorBuf = new fk_FrameBuffer();
 	if(depthBuf != nullptr) delete depthBuf;
@@ -799,6 +803,9 @@ void fk_GraphicsEngine::SetupFBO(void)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	FBOMode = true;
+
+	fk_Window::printf("SetupFBO = %d", fboHandle);
+	fk_Window::printf("colorBuf = %d", colorBuf->GetTexID());
 }
 
 void fk_GraphicsEngine::PreFBODraw(void)
@@ -818,7 +825,7 @@ void fk_GraphicsEngine::PostFBODraw(void)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
 
-	FBOShader->ProcPreShader();
+	if(FBOShader != nullptr) FBOShader->ProcPreShader();
 	glDrawBuffer(GL_BACK);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -834,7 +841,7 @@ void fk_GraphicsEngine::FBOWindowDraw(void)
 	glBindVertexArray(rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 
-	FBOShader->ProcPostShader();
+	if(FBOShader != nullptr) FBOShader->ProcPostShader();
 
 	colorBuf->Unbind();
 	depthBuf->Unbind();
@@ -875,3 +882,11 @@ fk_FrameBuffer * fk_GraphicsEngine::GetDepthBuffer(void)
 {
 	return depthBuf;
 }
+
+void fk_GraphicsEngine::InitFrameBufferMode(void)
+{
+	FBOMode = true;
+	FBOWindowMode = false;
+	SetupFBO();
+}
+
