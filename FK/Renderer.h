@@ -69,133 +69,37 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
+#ifndef __FK_RENDERER_HEADER__
+#define __FK_RENDERER_HEADER__
 
+// for FK Header.
+#include <FK/Engine.H>
 
-
-#ifndef __FK_GRAPHICS_ENGINE_HEADER__
-#define __FK_GRAPHICS_ENGINE_HEADER__
-
-#include <FK/Base.h>
-#include <FK/OpenGL.H>
-#include <FK/Matrix.h>
-#include <FK/Image.h>
-#include <FK/DList.h>
-#include <FK/FrameBuffer.h>
+// for Graphics Routine
 
 namespace FK {
-	class fk_Scene;
-	class fk_Plane;
-	class fk_PointDraw;
-	class fk_LineDraw;
-	class fk_FaceDraw;
-	class fk_TextureDraw;
-	class fk_BezCurveDraw;
-	class fk_SurfaceDraw;
 
-	class fk_GraphicsEngine {
+	class fk_Renderer {
 
 	public:
-		fk_GraphicsEngine(bool);
-		virtual ~fk_GraphicsEngine();
+		fk_Renderer(int w = 1024, int h = 1024);
 
-		void Init(int, int);
+		//! デストラクタ
+		virtual ~fk_Renderer();
 
-		void SetScene(fk_Scene *);
-		void ResizeWindow(int, int);
+		void setScene(fk_Scene *scene);
+		void draw(void);
+		void resize(int, int);
 
-		std::tuple<bool, fk_Vector> GetProjectPosition(double, double, fk_Plane &);
-		std::tuple<bool, fk_Vector> GetProjectPosition(double, double, double);
-		std::tuple<bool, fk_Vector> GetWindowPosition(fk_Vector &);
-		//void GetPickData(fk_PickData *, int, int, int);
-
-		bool SnapImage(fk_Image *, fk_SnapProcMode = fk_SnapProcMode::FRONT);
-
-		void OpenGLInit(void);
-
-		void SetPickViewPort(int, int, int);
-		void Draw(void);
-
-		void BindWindow(fk_ShaderBinder *);
-		fk_FrameBuffer * GetColorBuffer(void);
-		fk_FrameBuffer * GetDepthBuffer(void);
-
-		//void StereoDrawPrep(fk_StereoChannel);
-		//void StereoDrawMain(fk_StereoChannel);
+		fk_FrameBuffer * getColorBuffer(void);
+		fk_FrameBuffer * getDepthBuffer(void);
 
 	private:
-
-		static fk_PointDraw *pointDraw;
-		static fk_LineDraw *lineDraw;
-		static fk_FaceDraw *faceDraw;
-		static fk_TextureDraw *textureDraw;
-		static fk_BezCurveDraw *bezCurveLineDraw;
-		static fk_BezCurveDraw *bezCurvePointDraw;
-		static fk_SurfaceDraw *surfaceDraw;
-		static fk_SurfaceDraw *surfacePointDraw;
-		static fk_SurfaceDraw *surfaceLineDraw;
-
-		unsigned int winID;
-		fk_DisplayLink *curDLink;
-		int dLinkStatus;
-		int dLinkID;
-		int wSize;
-		int hSize;
-		bool resizeFlag;
-		fk_BlendFactor srcFactor, dstFactor;
-		bool depthRead, depthWrite;
-
-		std::vector<fk_Model *> modelArray;
-
-		fk_ProjectBase *curProj;
-		GLint viewArray[4];
-
-		std::vector<fk_ImType> snapBuffer;
-
-		fk_Perspective defProj;
-
-		fk_Model boundaryModel;
-
-		bool FBOMode, FBOWindowMode;
-		fk_FrameBuffer *colorBuf;
-		fk_FrameBuffer *depthBuf;
-		GLuint rectVAO, fboHandle;
-		fk_ShaderBinder *FBOShader;
-		
-		void DrawObjs(void);
-		void DrawModel(fk_Model *);
-		void CurrentDispLinkDraw(void);
-
-		void DrawShapeObj(fk_Model *);
-		void DrawBoundaryLine(fk_Model *);
-
-		void SetViewPort(void);
-		void SetProjection(fk_ProjectBase *);
-		//void SetDefaultProjection(void);
-
-		void ApplySceneParameter(bool);
-
-		void InitFogStatus(fk_Scene *);
-
-		bool IsInsideWindow(void);
-
-		unsigned long GetNow(void);
-
-		//void ViewMatCalc(fk_Matrix *);
-
-		std::tuple<fk_Vector, fk_Vector> GetViewLinePos(double, double);
-
-		//void SetStereoViewPort(fk_StereoChannel);
-		//void RecalcStereoModelView(fk_StereoChannel);
-		//void DrawStereoObjs(bool);
-
-		void SetBlendMode(fk_Model *model);
-		void SetDepthMode(fk_DepthMode mode);
-
-		void SetupFBO(void);
-		void PreFBODraw(void);
-		void PostFBODraw(void);
-		void FBOWindowDraw(void);
+		fk_GraphicsEngine *engine;
+		bool initFlg;
 	};
 }
 
-#endif /* !__FK_GRAPHICS_ENGINE_HEADER__ */
+#endif /* !__FK_RENDERER_HEADER__ */
+
+

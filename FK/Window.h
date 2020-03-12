@@ -891,7 +891,7 @@ namespace FK {
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphicsEngine		engine;
+		fk_GraphicsEngine		*engine;
 
 		void					drawScene(void);
 		void					drawSceneLeft(void);

@@ -138,7 +138,7 @@ void fk_Window::resizeWindow(int argX, int argY, int argW, int argH)
 	GLWinYPosition = argY;
 	GLWinWSize = argW;
 	GLWinHSize = argH;
-	engine.ResizeWindow(argW, argH);
+	engine->ResizeWindow(argW, argH);
 	resize(argX, argY, argW, argH);
 
 	return;

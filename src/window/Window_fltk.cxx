@@ -93,7 +93,8 @@ Fl_Multi_Browser *	fk_Window::err_browser = nullptr;
 fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr)
 	: Fl_Gl_Window(argX, argY, argW, argH, &argStr[0])
 {
-	engine.Init(argW, argH);
+	engine = new fk_GraphicsEngine(true);
+	engine->Init(argW, argH);
 	winOpenFlag = false;
 	GLWinXPosition = argX;
 	GLWinYPosition = argY;
@@ -128,12 +129,14 @@ fk_Window::~fk_Window()
 		browser = nullptr;
 	}
 
+	delete engine;
+
 	return;
 }
 
 void fk_Window::drawScene(void)
 {
-	engine.Draw();
+	engine->Draw();
 }
 
 void fk_Window::drawSceneLeft(void)
@@ -150,7 +153,7 @@ void fk_Window::draw(void)
 {
 	if(!valid()) {
 		preInit();
-		engine.OpenGLInit();
+		engine->OpenGLInit();
 		postInit();
 	}
 
@@ -172,7 +175,7 @@ void fk_Window::draw(void)
 		postDrawRight();
 		*/
 	} else {
-		engine.Draw();
+		engine->Draw();
 	}
 	postDraw();
 
@@ -187,13 +190,13 @@ void fk_Window::draw(void)
 
 void fk_Window::setScene(fk_Scene *argScene)
 {
-	engine.SetScene(argScene);
+	engine->SetScene(argScene);
 	return;
 }
 
 tuple<bool, fk_Vector> fk_Window::getProjectPosition(double argX, double argY, double argDist)
 {
-	return engine.GetProjectPosition(argX, argY, argDist);
+	return engine->GetProjectPosition(argX, argY, argDist);
 }
 
 #ifndef FK_OLD_NONSUPPORT
@@ -207,7 +210,7 @@ bool fk_Window::getProjectPosition(double argX, double argY, double argDist, fk_
 
 tuple<bool, fk_Vector> fk_Window::getProjectPosition(double argX, double argY, fk_Plane &argPlane)
 {
-	return engine.GetProjectPosition(argX, argY, argPlane);
+	return engine->GetProjectPosition(argX, argY, argPlane);
 }
 
 #ifndef FK_OLD_NONSUPPORT
@@ -215,21 +218,21 @@ bool fk_Window::getProjectPosition(double argX, double argY,
 								   fk_Plane *argPlane, fk_Vector *retPos)
 {
 	bool status;
-	tie(status, *retPos) = engine.GetProjectPosition(argX, argY, *argPlane);
+	tie(status, *retPos) = engine->GetProjectPosition(argX, argY, *argPlane);
 	return status;
 }
 #endif
 
 tuple<bool, fk_Vector> fk_Window::getWindowPosition(fk_Vector &argPos)
 {
-	return engine.GetWindowPosition(argPos);
+	return engine->GetWindowPosition(argPos);
 }
 
 #ifndef FK_OLD_NONSUPPORT
 bool fk_Window::getWindowPosition(fk_Vector argPos, fk_Vector *retPos)
 {
 	bool status;
-	tie(status, *retPos) = engine.GetWindowPosition(argPos);
+	tie(status, *retPos) = engine->GetWindowPosition(argPos);
 	return status;
 }
 #endif
@@ -276,7 +279,7 @@ bool fk_Window::snapImage(string argFName, fk_ImageType argType, fk_SnapProcMode
 	argMode = fk_SnapProcMode::FRONT;
 #endif
 	if(argMode != fk_SnapProcMode::WIN32_GDI) {
-		if(engine.SnapImage(&snapBuffer, argMode) == false) return false;
+		if(engine->SnapImage(&snapBuffer, argMode) == false) return false;
 	}
 
 	switch(argType) {
@@ -301,7 +304,7 @@ bool fk_Window::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 #else
 	argMode = fk_SnapProcMode::FRONT;
 #endif
-	return engine.SnapImage(argImage, argMode);
+	return engine->SnapImage(argImage, argMode);
 }
 
 #ifdef WIN32
@@ -509,5 +512,5 @@ void fk_Window::ErrorInit(void)
 
 fk_GraphicsEngine * fk_Window::GetEngine(void)
 {
-	return &engine;
+	return engine;
 }

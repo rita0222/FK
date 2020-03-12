@@ -105,7 +105,7 @@ fk_SurfaceDraw * fk_GraphicsEngine::surfaceLineDraw = nullptr;
 
 static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
 
-fk_GraphicsEngine::fk_GraphicsEngine(void)
+fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 {
 	if(engineNum == 0) {
 		pointDraw = new fk_PointDraw;
@@ -138,7 +138,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(void)
 	boundaryModel.setBDrawToggle(false);
 
 	FBOMode = false;
-	FBOWindowMode = false;
+	FBOWindowMode = argWinMode;
 	colorBuf = nullptr;
 	depthBuf = nullptr;
 	rectVAO = 0;
@@ -864,4 +864,14 @@ void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
+}
+
+fk_FrameBuffer * fk_GraphicsEngine::GetColorBuffer(void)
+{
+	return colorBuf;
+}
+
+fk_FrameBuffer * fk_GraphicsEngine::GetDepthBuffer(void)
+{
+	return depthBuf;
 }
