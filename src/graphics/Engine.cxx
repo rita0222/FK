@@ -349,7 +349,6 @@ void fk_GraphicsEngine::Draw(void)
 	DrawObjs();
 
 	if(FBOMode == true) PostFBODraw();
-	if(FBOWindowMode == true) FBOWindowDraw();
 	
 	return;
 }
@@ -772,8 +771,6 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 void fk_GraphicsEngine::SetupFBO(void)
 {
-	fk_Window::printf("SetupFBO");
-
 	if(colorBuf != nullptr) delete colorBuf;
 	colorBuf = new fk_FrameBuffer();
 	if(depthBuf != nullptr) delete depthBuf;
@@ -801,11 +798,7 @@ void fk_GraphicsEngine::SetupFBO(void)
 	depthBuf->AttachFBO();
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
 	FBOMode = true;
-
-	fk_Window::printf("SetupFBO = %d", fboHandle);
-	fk_Window::printf("colorBuf = %d", colorBuf->GetTexID());
 }
 
 void fk_GraphicsEngine::PreFBODraw(void)
@@ -834,6 +827,11 @@ void fk_GraphicsEngine::PostFBODraw(void)
 	depthBuf->BindFBO();
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+	if(FBOWindowMode == true) FBOWindowDraw();
+
+	colorBuf->Unbind();
+	depthBuf->Unbind();
 }
 
 void fk_GraphicsEngine::FBOWindowDraw(void)
@@ -842,12 +840,8 @@ void fk_GraphicsEngine::FBOWindowDraw(void)
 	glDrawArrays(GL_POINTS, 0, 1);
 
 	if(FBOShader != nullptr) FBOShader->ProcPostShader();
-
-	colorBuf->Unbind();
-	depthBuf->Unbind();
 }	
 	
-
 void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 {
 	FBOShader = argShader;

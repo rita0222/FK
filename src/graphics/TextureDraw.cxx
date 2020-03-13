@@ -123,7 +123,6 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
-
 	Draw_Texture(argModel, parameter);
 	return;
 }

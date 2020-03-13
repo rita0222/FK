@@ -292,12 +292,12 @@ bool fk_Texture::BindTexture(bool forceLoad)
 {
 	bool 		loaded = true;
 
-	if (image == nullptr) return false;
+	if (frameBuffer == nullptr && image == nullptr) return false;
 
-	const fk_Dimension	*bufSize = image->getBufferSize();
+	const fk_Dimension	*bufSize = getBufferSize();
 	if(bufSize == nullptr) return false;
 
-	GLuint			id = image->GetTexID();
+	GLuint			id = GetTexID();
 
 	if(id == 0) {
 		glGenTextures(1, &id);
@@ -318,7 +318,7 @@ bool fk_Texture::BindTexture(bool forceLoad)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
-	if (loaded == false || forceLoad == true) {
+	if (frameBuffer == nullptr && (loaded == false || forceLoad == true)) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
 					 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
 	}
@@ -328,8 +328,11 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 void fk_Texture::Replace(void)
 {
-	if(image == nullptr) return;
-	if(image->GetUpdate() == true) {
+	if(frameBuffer == nullptr && image == nullptr) return;
+	if(frameBuffer != nullptr) {
+		StatusUpdate();
+		BindTexture(true);
+	} else if(image->GetUpdate() == true) {
 		StatusUpdate();
 		BindTexture(true);
 		image->SetUpdate(false);
