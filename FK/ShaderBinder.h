@@ -308,6 +308,7 @@ namespace FK {
 
 		static const std::string colorBufName;
 		static const std::string depthBufName;
+		static const std::string shadowBufName;
 		static const std::string fboTexCoordName;
 		static const std::string fboSizeName;
 		

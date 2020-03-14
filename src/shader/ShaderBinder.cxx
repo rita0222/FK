@@ -77,6 +77,7 @@ using namespace FK;
 
 const string fk_ShaderBinder::colorBufName = "fk_ColorBuf";
 const string fk_ShaderBinder::depthBufName = "fk_DepthBuf";
+const string fk_ShaderBinder::shadowBufName = "fk_ShadowBuf";
 const string fk_ShaderBinder::fboTexCoordName = "fk_FBOTexCoord";
 const string fk_ShaderBinder::fboSizeName = "fk_FBOSize";
 
@@ -116,9 +117,6 @@ fk_ShaderBinder::fk_ShaderBinder()
 	: program(&innerProgram), parameter(&innerParameter),
 	  usingProgram(false), setupFlg(false),
 	  bufW(0), bufH(0)
-	  //rectVAO(0), fboHandle(0),
-	  //colorBuf(0), depthBuf(0)
-	  //colorTex(nullptr), depthTex(nullptr)
 {
 	isExtensionInitialized = false;
 	Initialize();
@@ -128,9 +126,6 @@ fk_ShaderBinder::fk_ShaderBinder()
 
 fk_ShaderBinder::~fk_ShaderBinder()
 {
-	//delete colorTex;
-	//delete depthTex;
-	//finalizeFrameBufferObject();
 }
 
 fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
@@ -169,63 +164,11 @@ void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 	fboSize.push_back(float(bufW));
 	fboSize.push_back(float(bufH));
 }
-/*
-void fk_ShaderBinder::SetupFBO(void)
-{
-	if(colorTex != nullptr) delete colorTex;
-	colorTex = new fk_FrameTexture();
-	if(depthTex != nullptr) delete depthTex;
-	depthTex = new fk_FrameTexture();
-
-	colorTex->setSource(fk_SamplerSource::COLOR);
-	depthTex->setSource(fk_SamplerSource::DEPTH);
-
-	colorTex->setBufferSize(bufW, bufH);
-	colorTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
-	colorTex->setTexRendMode(fk_TexRendMode::SMOOTH);
-	colorTex->SetupFBO();
-
-	depthTex->setBufferSize(bufW, bufH);
-	depthTex->setTexWrapMode(fk_TexWrapMode::CLAMP);
-	depthTex->setTexRendMode(fk_TexRendMode::SMOOTH);
-	depthTex->SetupFBO();
-
-	glGenFramebuffers(1, &fboHandle);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
-
-#ifdef WIN32	
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, bufW);
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, bufH);
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 2);
-#endif
-
-	colorTex->AttachFBO();
-	depthTex->AttachFBO();
-
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-}
-*/
 
 void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 {
 	initializeFrameBufferObject(argDim.w, argDim.h);
 }
-/*
-void fk_ShaderBinder::finalizeFrameBufferObject(void)
-{
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	if (bufW > 0 && bufH > 0) {
-		glDeleteFramebuffers(1, &fboHandle);
-		delete colorTex;
-		colorTex = nullptr;
-
-		delete depthTex;
-		depthTex = nullptr;
-		bufW = bufH = 0;
-	}
-}
-*/
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
@@ -240,13 +183,8 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 
 	parameter->setRegister(colorBufName, 0);
 	parameter->setRegister(depthBufName, 1);
+	parameter->setRegister(shadowBufName, 1);
 	parameter->setRegister(fboSizeName, &fboSize);
-/*
-	fk_funcSet	preD = fk_funcSet(id, [&](){ ProcPreDraw(); });
-	fk_funcSet	postD = fk_funcSet(id, [&](){ ProcPostDraw(); });
-	argWin->preDrawList.push_back(preD);
-	argWin->postDrawList.push_back(postD);
-*/
 }
 
 void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
@@ -284,41 +222,6 @@ void fk_ShaderBinder::ProcPostShader(void)
 		usingProgram = false;
 	}
 }
-/*
-void fk_ShaderBinder::ProcPreDraw(void)
-{
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClear(GL_DEPTH_BUFFER_BIT);
-	glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
-	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		fk_Window::putString("FBO Error");
-	}
-}
-
-void fk_ShaderBinder::ProcPostDraw(void)
-{
- 	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
-
-	ProcPreShader();
-	glDrawBuffer(GL_BACK);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	colorTex->BindFBO();
-	depthTex->BindFBO();
-
-	glBindVertexArray(rectVAO);
-	glDrawArrays(GL_POINTS, 0, 1);
-
-	ProcPostShader();
-
-	colorTex->Unbind();
-	depthTex->Unbind();
-}
-*/
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
 {
