@@ -325,11 +325,10 @@ void fk_GraphicsEngine::Draw(void)
 		SetViewPort();
 		resizeFlag = false;
 	}
-
+	
 	SetDepthMode(fk_DepthMode::READ_AND_WRITE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
 	ApplySceneParameter(true);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	curProj->MakeMat();
 
