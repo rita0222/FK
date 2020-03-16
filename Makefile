@@ -22,7 +22,7 @@ mac-d:
 	cd samples; $(MAKE) mac-d
 
 mac-g:
-	cd src; $(MAKE) mac-g
+	cd src; cp Makefile_base Makefile; $(MAKE) mac-g TARGET=depend; $(MAKE) mac-g
 	cd samples; $(MAKE) mac-g
 
 mac-gcc:

@@ -141,9 +141,12 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	FBOWindowMode = argWinMode;
 	colorBuf = nullptr;
 	depthBuf = nullptr;
+	shadowBuf = nullptr;
 	rectVAO = 0;
 	fboHandle = 0;
 	FBOShader = nullptr;
+
+	shadowProj = &defaultShadowProj;
 	
 	return;
 }
@@ -168,6 +171,7 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 
 	delete colorBuf;
 	delete depthBuf;
+	delete shadowBuf;
 
 	if(FBOMode == true) {
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -192,10 +196,11 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 
 	FBOMode = false;
 	FBOWindowMode = false;
-	delete colorBuf;
-	delete depthBuf;
-	colorBuf = nullptr;
-	depthBuf = nullptr;
+
+	delete colorBuf; colorBuf = nullptr;
+	delete depthBuf; depthBuf = nullptr;
+	delete shadowBuf; shadowBuf = nullptr;
+
 	FBOShader = nullptr;
 	
 	return;
@@ -319,8 +324,19 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 
 void fk_GraphicsEngine::Draw(void)
 {
+	DrawShadow();
+	DrawWorld();
+}
+
+void fk_GraphicsEngine::DrawShadow(void)
+{
+}
+
+void fk_GraphicsEngine::DrawWorld(void)
+{
 	if(FBOMode == true) PreFBODraw();
-	// リサイズ時に加えて、マルチウィンドウ時もビューポートを再設定(by rita)
+
+	// リサイズ時に加えて、マルチウィンドウ時もビューポートを再設定
 	if(resizeFlag == true || generalID > 2) {
 		SetViewPort();
 		resizeFlag = false;
