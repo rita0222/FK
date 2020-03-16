@@ -257,8 +257,8 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 
 void fk_GraphicsEngine::Draw(void)
 {
-	if(drawCount == 0) ShadowInit();
-	DrawShadow();
+	//if(drawCount == 0) ShadowInit();
+	//DrawShadow();
 	DrawWorld();
 	drawCount++;
 }
