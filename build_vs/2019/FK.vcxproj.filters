@@ -411,7 +411,10 @@
     <ClInclude Include="..\..\FK\Window.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FK\FrameTexture.h">
+    <ClInclude Include="..\..\FK\FrameBuffer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Renderer.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -815,7 +818,10 @@
     <ClCompile Include="..\..\src\window\WindowEvent_fltk.cxx">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\texture\FrameTexture.cxx">
+    <ClCompile Include="..\..\src\texture\FrameBuffer.cxx">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Renderer.cxx">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

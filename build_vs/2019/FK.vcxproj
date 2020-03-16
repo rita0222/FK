@@ -62,8 +62,8 @@
     <ClInclude Include="..\..\FK\FaceDraw.H" />
     <ClInclude Include="..\..\FK\FK.h" />
     <ClInclude Include="..\..\FK\Fog.h" />
+    <ClInclude Include="..\..\FK\FrameBuffer.h" />
     <ClInclude Include="..\..\FK\FrameController.h" />
-    <ClInclude Include="..\..\FK\FrameTexture.h" />
     <ClInclude Include="..\..\FK\Fullscreen.h" />
     <ClInclude Include="..\..\FK\FVecArray.h" />
     <ClInclude Include="..\..\FK\GenMatrix.h" />
@@ -121,6 +121,7 @@
     <ClInclude Include="..\..\FK\RDSParser.H" />
     <ClInclude Include="..\..\FK\RectTexture.h" />
     <ClInclude Include="..\..\FK\Reference.h" />
+    <ClInclude Include="..\..\FK\Renderer.h" />
     <ClInclude Include="..\..\FK\RenderState.h" />
     <ClInclude Include="..\..\FK\Scene.h" />
     <ClInclude Include="..\..\FK\ShaderBinder.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
     <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
+    <ClCompile Include="..\..\src\graphics\Renderer.cxx" />
     <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx" />
     <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
     <ClCompile Include="..\..\src\graph\CostTable.cxx" />
@@ -269,7 +271,7 @@
     <ClCompile Include="..\..\src\solid\Topology.cxx" />
     <ClCompile Include="..\..\src\solid\Vertex.cxx" />
     <ClCompile Include="..\..\src\solid\VRMLOut.cxx" />
-    <ClCompile Include="..\..\src\texture\FrameTexture.cxx" />
+    <ClCompile Include="..\..\src\texture\FrameBuffer.cxx" />
     <ClCompile Include="..\..\src\texture\IFSTexture.cxx" />
     <ClCompile Include="..\..\src\texture\Image.cxx" />
     <ClCompile Include="..\..\src\texture\ImageIO.cxx" />
