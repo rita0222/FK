@@ -775,14 +775,17 @@ void fk_GraphicsEngine::SetupFBO(void)
 	if(depthBuf != nullptr) delete depthBuf;
 	depthBuf = new fk_FrameBuffer();
 
+	int maxUnit;
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
+
 	colorBuf->setSource(fk_SamplerSource::COLOR);
 	depthBuf->setSource(fk_SamplerSource::DEPTH);
 
 	colorBuf->setBufferSize(wSize, hSize);
-	colorBuf->SetupFBO();
+	colorBuf->SetupFBO(maxUnit-1);
 
 	depthBuf->setBufferSize(wSize, hSize);
-	depthBuf->SetupFBO();
+	depthBuf->SetupFBO(maxUnit-2);
 
 	glGenFramebuffers(1, &fboHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);

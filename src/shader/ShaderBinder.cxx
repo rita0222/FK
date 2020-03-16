@@ -180,10 +180,13 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 	glBindAttribLocation(id, 0, fk_Shape::vertexName.c_str());
 	glBindFragDataLocation(id, 0, fk_DrawBase::fragmentName.c_str());
 	program->link();
+	
+	int maxUnit;
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
 
-	parameter->setRegister(colorBufName, 0);
-	parameter->setRegister(depthBufName, 1);
-	parameter->setRegister(shadowBufName, 1);
+	parameter->setRegister(colorBufName, maxUnit-1);
+	parameter->setRegister(depthBufName, maxUnit-2);
+	parameter->setRegister(shadowBufName, maxUnit-3);
 	parameter->setRegister(fboSizeName, &fboSize);
 }
 

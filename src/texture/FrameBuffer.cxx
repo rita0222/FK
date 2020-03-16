@@ -1,4 +1,105 @@
-﻿/****************************************************************************
+﻿#define FK_DEF_SIZETYPE
+#include <FK/FrameBuffer.h>
+//#include <FK/Error.H>
+//#include <FK/Window.h>
+
+using namespace std;
+using namespace FK;
+
+fk_FrameBuffer::fk_FrameBuffer(void)
+	: ID(0), source(fk_SamplerSource::COLOR), unitID(0)
+{
+	dim.set(0, 0);
+	SetObjectType(fk_Type::FRAMEBUFFER);
+	return;
+}
+
+fk_FrameBuffer::~fk_FrameBuffer()
+{
+	if(ID != 0) glDeleteTextures(1, &ID);
+	return;
+}
+
+fk_TexID fk_FrameBuffer::GetTexID(void)
+{
+	return ID;
+}
+
+void fk_FrameBuffer::setSource(fk_SamplerSource argMode)
+{
+	source = argMode;
+}
+
+fk_SamplerSource fk_FrameBuffer::getSource(void)
+{
+	return source;
+}
+
+void fk_FrameBuffer::setBufferSize(int argW, int argH)
+{
+	dim.set(argW, argH);
+}
+
+void fk_FrameBuffer::SetupFBO(int argUnitID)
+{
+	unitID = argUnitID;
+	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
+
+	glGenTextures(1, &ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	if(source == fk_SamplerSource::COLOR) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, dim.w, dim.h, 0,
+					 GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	} else {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
+					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+	}
+		
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void fk_FrameBuffer::AttachFBO(void)
+{
+	if(source == fk_SamplerSource::COLOR) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
+	} else {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ID, 0);
+	}
+}
+
+void fk_FrameBuffer::BindFBO(void)
+{
+	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
+	if(source == fk_SamplerSource::COLOR) {
+		glReadBuffer(GL_COLOR_ATTACHMENT0);
+	} else {
+		glReadBuffer(GL_DEPTH_ATTACHMENT);
+	}
+	
+	glBindTexture(GL_TEXTURE_2D, ID);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, dim.w, dim.h);
+}
+
+void fk_FrameBuffer::Unbind(void)
+{
+	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+fk_Dimension * fk_FrameBuffer::getBufferSize(void)
+{
+	return &dim;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,109 +170,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-#include <FK/FrameBuffer.h>
-//#include <FK/Error.H>
-//#include <FK/Window.h>
-
-using namespace std;
-using namespace FK;
-
-
-fk_FrameBuffer::fk_FrameBuffer(void)
-	: ID(0), source(fk_SamplerSource::COLOR)
-{
-	dim.set(0, 0);
-	SetObjectType(fk_Type::FRAMEBUFFER);
-	return;
-}
-
-fk_FrameBuffer::~fk_FrameBuffer()
-{
-	if(ID != 0) glDeleteTextures(1, &ID);
-	return;
-}
-
-fk_TexID fk_FrameBuffer::GetTexID(void)
-{
-	return ID;
-}
-
-void fk_FrameBuffer::setSource(fk_SamplerSource argMode)
-{
-	source = argMode;
-}
-
-fk_SamplerSource fk_FrameBuffer::getSource(void)
-{
-	return source;
-}
-
-void fk_FrameBuffer::setBufferSize(int argW, int argH)
-{
-	dim.set(argW, argH);
-}
-
-void fk_FrameBuffer::SetupFBO(void)
-{
-	if(source == fk_SamplerSource::COLOR) glActiveTexture(GL_TEXTURE0);
-	else glActiveTexture(GL_TEXTURE1);
-
-	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	if(source == fk_SamplerSource::COLOR) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, dim.w, dim.h, 0,
-					 GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-	} else {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
-					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
-	}
-		
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void fk_FrameBuffer::AttachFBO(void)
-{
-	if(source == fk_SamplerSource::COLOR) {
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
-	} else {
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ID, 0);
-	}
-}
-
-void fk_FrameBuffer::BindFBO(void)
-{
-	if(source == fk_SamplerSource::COLOR) {
-		glActiveTexture(GL_TEXTURE0);
-		glReadBuffer(GL_COLOR_ATTACHMENT0);
-	} else {
-		glActiveTexture(GL_TEXTURE1);
-		glReadBuffer(GL_DEPTH_ATTACHMENT);
-	}
-	
-	glBindTexture(GL_TEXTURE_2D, ID);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, dim.w, dim.h);
-}
-
-void fk_FrameBuffer::Unbind(void)
-{
-	if(source == fk_SamplerSource::COLOR) {
-		glActiveTexture(GL_TEXTURE0);
-	} else {
-		glActiveTexture(GL_TEXTURE1);
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-fk_Dimension * fk_FrameBuffer::getBufferSize(void)
-{
-	return &dim;
-}

@@ -123,7 +123,7 @@ namespace FK {
 		fk_Dimension * getBufferSize(void);
 
 		fk_TexID		GetTexID(void);
-		void			SetupFBO(void);
+		void			SetupFBO(int);
 		void			AttachFBO(void);
 		void			BindFBO(void);
 		void			Unbind(void);
@@ -133,6 +133,7 @@ namespace FK {
 		fk_TexID			ID;
 		fk_SamplerSource	source;
 		fk_Dimension		dim;
+		int					unitID;
 	};
 }
 
