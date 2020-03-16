@@ -258,6 +258,8 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 		  return;
 	}
 
+	if(list == nullptr) return;
+
 	for(auto p = list->begin(); p != list->end(); ++p) {
 		fk_Model *model = *p;
 		fk_Light *light = dynamic_cast<fk_Light *>(model->getShape());

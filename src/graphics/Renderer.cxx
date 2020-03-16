@@ -1,4 +1,58 @@
-﻿/****************************************************************************
+﻿#define FK_DEF_SIZETYPE
+
+#include <FK/Renderer.h>
+
+using namespace std;
+using namespace FK;
+
+fk_Renderer::fk_Renderer(int argW, int argH)
+{
+	engine = new fk_GraphicsEngine(false);
+	engine->Init(argW, argH);
+	engine->OpenGLInit();
+	engine->InitFrameBufferMode();
+	engine->Draw();
+	initFlg = true;
+}
+
+fk_Renderer::~fk_Renderer()
+{
+	delete engine;
+}
+
+void fk_Renderer::setScene(fk_Scene *argScene)
+{
+	engine->SetScene(argScene);
+}
+
+void fk_Renderer::draw(void)
+{
+	if(initFlg == false) {
+		engine->OpenGLInit();
+		engine->InitFrameBufferMode();
+		initFlg = true;
+	}
+	
+	engine->Draw();
+}
+
+void fk_Renderer::resize(int argW, int argH)
+{
+	engine->ResizeWindow(argW, argH);
+	initFlg = false;
+}
+
+fk_FrameBuffer * fk_Renderer::getColorBuffer(void)
+{
+	return engine->GetColorBuffer();
+}
+
+fk_FrameBuffer * fk_Renderer::getDepthBuffer(void)
+{
+	return engine->GetDepthBuffer();
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,56 +123,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-
-#include <FK/Renderer.h>
-
-using namespace std;
-using namespace FK;
-
-fk_Renderer::fk_Renderer(int argW, int argH)
-{
-	engine = new fk_GraphicsEngine(false);
-	engine->Init(argW, argH);
-	engine->OpenGLInit();
-	engine->InitFrameBufferMode();
-	engine->Draw();
-	initFlg = true;
-}
-
-fk_Renderer::~fk_Renderer()
-{
-	delete engine;
-}
-
-void fk_Renderer::setScene(fk_Scene *argScene)
-{
-	engine->SetScene(argScene);
-}
-
-void fk_Renderer::draw(void)
-{
-	if(initFlg == false) {
-		engine->OpenGLInit();
-		engine->InitFrameBufferMode();
-		initFlg = true;
-	}
-	
-	engine->Draw();
-}
-
-void fk_Renderer::resize(int argW, int argH)
-{
-	engine->ResizeWindow(argW, argH);
-	initFlg = false;
-}
-
-fk_FrameBuffer * fk_Renderer::getColorBuffer(void)
-{
-	return engine->GetColorBuffer();
-}
-
-fk_FrameBuffer * fk_Renderer::getDepthBuffer(void)
-{
-	return engine->GetDepthBuffer();
-}

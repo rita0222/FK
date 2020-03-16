@@ -63,6 +63,7 @@ namespace FK {
 		static fk_SurfaceDraw *surfacePointDraw;
 		static fk_SurfaceDraw *surfaceLineDraw;
 
+		unsigned int drawCount;
 		unsigned int winID;
 		fk_DisplayLink *curDLink;
 		int dLinkStatus;
@@ -87,12 +88,15 @@ namespace FK {
 		bool FBOMode, FBOWindowMode;
 		fk_FrameBuffer *colorBuf;
 		fk_FrameBuffer *depthBuf;
-		fk_FrameBuffer *shadowBuf;
 		GLuint rectVAO, fboHandle;
 		fk_ShaderBinder *FBOShader;
 
+		GLuint shadowHandle;
+		fk_FrameBuffer *shadowBuf;
+		bool shadowMode;
 		fk_ProjectBase *shadowProj;
 		fk_Perspective defaultShadowProj;
+		fk_Model shadowCamera;
 
 		void DrawShadow(void);
 		void DrawWorld(void);
@@ -131,6 +135,10 @@ namespace FK {
 		void PreFBODraw(void);
 		void PostFBODraw(void);
 		void FBOWindowDraw(void);
+
+		void ShadowInit(void);
+		void PreShadowDraw(void);
+		void PostShadowDraw(void);
 	};
 }
 
