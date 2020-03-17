@@ -6,6 +6,7 @@ uniform mat4 fk_ModelViewProjectionMatrix;
 uniform mat4 fk_NormalModelMatrix;
 uniform mat4 fk_NormalModelViewMatrix;
 uniform vec3 fk_CameraPosition;
+uniform mat4 fk_ShadowMatrix;
 uniform Material fk_Material;
 uniform ParallelLight fk_ParallelLight[LIGHTNUM];
 uniform PointLight fk_PointLight[LIGHTNUM];

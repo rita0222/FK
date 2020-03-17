@@ -7,6 +7,7 @@
 #include <FK/Image.h>
 #include <FK/DList.h>
 #include <FK/FrameBuffer.h>
+#include <FK/RectTexture.h>
 
 namespace FK {
 	class fk_Scene;
@@ -50,6 +51,8 @@ namespace FK {
 
 		//void StereoDrawPrep(fk_StereoChannel);
 		//void StereoDrawMain(fk_StereoChannel);
+
+		fk_RectTexture * GetTmpTexture(void);
 
 	private:
 
@@ -98,11 +101,13 @@ namespace FK {
 		fk_Perspective defaultShadowProj;
 		fk_Model shadowCamera;
 
+		fk_RectTexture tmpTexture;
+
 		void DrawShadow(void);
 		void DrawWorld(void);
 		
 		void DrawObjs(void);
-		void DrawModel(fk_Model *);
+		void DrawModel(fk_Model *, bool);
 		void CurrentDispLinkDraw(void);
 
 		void DrawShapeObj(fk_Model *);

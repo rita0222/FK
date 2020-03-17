@@ -132,7 +132,6 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 
 	delete colorBuf; colorBuf = nullptr;
 	delete depthBuf; depthBuf = nullptr;
-	delete shadowBuf; shadowBuf = nullptr;
 
 	FBOShader = nullptr;
 
@@ -257,8 +256,8 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 
 void fk_GraphicsEngine::Draw(void)
 {
-	//if(drawCount == 0) ShadowInit();
-	//DrawShadow();
+	if(drawCount == 0) ShadowInit();
+	DrawShadow();
 	DrawWorld();
 	drawCount++;
 }
@@ -271,7 +270,7 @@ void fk_GraphicsEngine::DrawWorld(void)
 		SetViewPort();
 		resizeFlag = false;
 	}
-	
+
 	SetDepthMode(fk_DepthMode::READ_AND_WRITE);
 	ApplySceneParameter(true);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -315,7 +314,7 @@ void fk_GraphicsEngine::DrawObjs(void)
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
 		SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP);
+		DrawModel(*modelP, true);
 	}
 
 	overlayList = curDLink->GetOverlayList();
@@ -324,20 +323,20 @@ void fk_GraphicsEngine::DrawObjs(void)
 	SetDepthMode(fk_DepthMode::NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP);
+		DrawModel(*modelP, false);
 	}
 
 	return;
 }
 
-void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
+void fk_GraphicsEngine::DrawModel(fk_Model *argModel, bool argShadowMode)
 {
 	if(argModel->getBDrawToggle() == true) DrawBoundaryLine(argModel);
 
 	fk_Shape * modelShape = argModel->getShape();
 	if(modelShape == nullptr) return;
 	modelShape->FlushAttr();
-	fk_DrawBase::SetModel(argModel);
+	fk_DrawBase::SetModel(argModel, argShadowMode);
 	SetBlendMode(argModel);
 	DrawShapeObj(argModel);
 	modelShape->FinishSetVBO();
@@ -380,7 +379,7 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 	}	
 	boundaryModel.setShape(argModel->GetBShape());
 	boundaryModel.setDrawMode(fk_Draw::LINE);
-	DrawModel(&boundaryModel);
+	DrawModel(&boundaryModel, false);
 	return;
 }
 
@@ -852,6 +851,9 @@ void fk_GraphicsEngine::ShadowInit(void)
 
 	shadowBuf->AttachFBO();
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	tmpTexture.setFrameBuffer(shadowBuf);
+	tmpTexture.setTextureSize(200.0, 200.0);
 }
 
 void fk_GraphicsEngine::PreShadowDraw(void)
@@ -882,24 +884,36 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 void fk_GraphicsEngine::DrawShadow(void)
 {
 	list<fk_Model *>::iterator	modelP, modelPEnd;
+	shadowCamera.glMoveTo(-200.0, 200.0, -200.0);
+	shadowCamera.glFocus(0.0, 0.0, 0.0);
+	shadowCamera.glUpvec(0.0, 1.0, 0.0);
 
 	PreShadowDraw();
 
 	glViewport(0, 0, 1024, 1024);
 	shadowProj->MakeMat();
 	fk_DrawBase::SetProjectionMatrix(shadowProj->GetMatrix());
+	fk_DrawBase::SetShadowProjMatrix(shadowProj->GetMatrix());
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	fk_DrawBase::SetCamera(&shadowCamera);
+	fk_DrawBase::SetShadowCamera(&shadowCamera);
 
-	modelPEnd = curDLink->GetModelList()->end();
-	for(modelP = curDLink->GetModelList()->begin();
-		modelP != modelPEnd; ++modelP) {
-		//SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP);
+	if(curDLink != nullptr) {
+		modelPEnd = curDLink->GetModelList()->end();
+		for(modelP = curDLink->GetModelList()->begin();
+			modelP != modelPEnd; ++modelP) {
+			//SetDepthMode((*modelP)->getDepthMode());
+			DrawModel(*modelP, false);
+		}
 	}
 
 	PostShadowDraw();
+}
+
+fk_RectTexture * fk_GraphicsEngine::GetTmpTexture(void)
+{
+	return &tmpTexture;
 }
 
 /****************************************************************************

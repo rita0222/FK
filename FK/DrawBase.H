@@ -1,4 +1,106 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_DRAW_BASE_HEADER__
+#define __FK_DRAW_BASE_HEADER__
+
+#include <FK/OpenGL.H>
+#include <FK/Matrix.h>
+#include <FK/Material.h>
+#include <FK/Light.h>
+#include <list>
+
+namespace FK {
+	class fk_Model;
+	class fk_Shape;
+	class fk_ShaderBinder;
+	class fk_ShaderProgram;
+	class fk_ShaderParameter;
+	
+	class fk_DrawBase {
+	public:
+		fk_DrawBase(void);
+		virtual ~fk_DrawBase();
+
+		static void		SetProjectionMatrix(fk_Matrix *);
+		static void		SetCamera(fk_Model *);
+		static void		SetModel(fk_Model *, bool);
+		static void		SetLight(std::list<fk_Model *> *, fk_LightType);
+		virtual GLuint	VAOSetup(fk_Shape *) = 0;
+		static void		SetShadowProjMatrix(fk_Matrix *);
+		static void		SetShadowCamera(fk_Model *);
+
+		static const std::string projectionMatrixName;
+		static const std::string viewMatrixName;
+		static const std::string modelMatrixName;
+		static const std::string modelViewMatrixName;
+		static const std::string modelViewProjectionMatrixName;
+		static const std::string normalModelMatrixName;
+		static const std::string normalModelViewMatrixName;
+		static const std::string cameraPositionName;
+
+		static const std::string shadowMatrixName;
+
+		static const std::string modelMaterialName;
+		static const std::string diffuseName;
+		static const std::string ambientName;
+		static const std::string specularName;
+		static const std::string shininessName;
+
+		static const std::string parallelLightName;
+ 		static const std::string pointLightName;
+ 		static const std::string spotLightName;
+
+		static const std::string parallelLightNumName;
+		static const std::string pointLightNumName;
+		static const std::string spotLightNumName;
+
+		static const std::string lightPositionName;
+		static const std::string lightVecName;
+		static const std::string lightDiffuseName;
+		static const std::string lightSpecularName;
+		static const std::string lightSpotCutOffName;
+		static const std::string lightSpotExponentName;
+		static const std::string lightAttenuationName;
+		
+		static const std::string fragmentName;
+
+		static const int MAXLIGHTNUM;
+
+	protected:
+		static fk_Matrix	*projectionMatrix;
+		static fk_Matrix	viewMatrix;
+		static fk_Matrix	modelMatrix;
+		static fk_Matrix	modelViewMatrix;
+		static fk_Matrix	modelViewProjectionMatrix;
+		static fk_Matrix	normalModelMatrix;
+		static fk_Matrix	normalModelViewMatrix;
+		static fk_Material	*modelMaterial;
+		static fk_Vector	cameraPosition;
+
+		static fk_Matrix	*shadowProjMatrix;
+		static fk_Matrix	shadowViewMatrix;
+		static fk_Matrix	shadowMatrix;
+		static fk_Matrix	shadowBiasMatrix;
+
+		static std::list<fk_Model *> *parallelLightList;
+		static std::list<fk_Model *> *pointLightList;
+		static std::list<fk_Model *> *spotLightList;
+
+		fk_ShaderBinder		*shader;
+
+		void SetParameter(fk_ShaderParameter *);
+
+	private:
+
+		void SetMatrixParam(fk_ShaderParameter *);
+		void SetMaterialParam(fk_ShaderParameter *);
+		void SetLightParam(fk_ShaderParameter *, fk_LightType);
+
+		void InitBiasMatrix(void);
+	};
+}
+
+#endif /* !__FK_DRAW_BASE_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,95 +171,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-
-#ifndef __FK_DRAW_BASE_HEADER__
-#define __FK_DRAW_BASE_HEADER__
-
-#include <FK/OpenGL.H>
-#include <FK/Matrix.h>
-#include <FK/Material.h>
-#include <FK/Light.h>
-#include <list>
-
-namespace FK {
-	class fk_Model;
-	class fk_Shape;
-	class fk_ShaderBinder;
-	class fk_ShaderProgram;
-	class fk_ShaderParameter;
-	
-	class fk_DrawBase {
-	public:
-		fk_DrawBase(void);
-		virtual ~fk_DrawBase();
-
-		static void			SetProjectionMatrix(fk_Matrix *);
-		static void			SetCamera(fk_Model *);
-		static void			SetModel(fk_Model *);
-		static void			SetLight(std::list<fk_Model *> *, fk_LightType);
-		virtual GLuint		VAOSetup(fk_Shape *) = 0;
-
-		static const std::string projectionMatrixName;
-		static const std::string viewMatrixName;
-		static const std::string modelMatrixName;
-		static const std::string modelViewMatrixName;
-		static const std::string modelViewProjectionMatrixName;
-		static const std::string normalModelMatrixName;
-		static const std::string normalModelViewMatrixName;
-		static const std::string cameraPositionName;
-
-		static const std::string modelMaterialName;
-		static const std::string diffuseName;
-		static const std::string ambientName;
-		static const std::string specularName;
-		static const std::string shininessName;
-
-		static const std::string parallelLightName;
- 		static const std::string pointLightName;
- 		static const std::string spotLightName;
-
-		static const std::string parallelLightNumName;
-		static const std::string pointLightNumName;
-		static const std::string spotLightNumName;
-
-		static const std::string lightPositionName;
-		static const std::string lightVecName;
-		static const std::string lightDiffuseName;
-		static const std::string lightSpecularName;
-		static const std::string lightSpotCutOffName;
-		static const std::string lightSpotExponentName;
-		static const std::string lightAttenuationName;
-		
-		static const std::string fragmentName;
-
-		static const int MAXLIGHTNUM;
-
-	protected:
-		static fk_Matrix	*projectionMatrix;
-		static fk_Matrix	viewMatrix;
-		static fk_Matrix	modelMatrix;
-		static fk_Matrix	modelViewMatrix;
-		static fk_Matrix	modelViewProjectionMatrix;
-		static fk_Matrix	normalModelMatrix;
-		static fk_Matrix	normalModelViewMatrix;
-		static fk_Material	*modelMaterial;
-		static fk_Vector	cameraPosition;
-
-		static std::list<fk_Model *> *parallelLightList;
-		static std::list<fk_Model *> *pointLightList;
-		static std::list<fk_Model *> *spotLightList;
-
-		fk_ShaderBinder		*shader;
-
-		void SetParameter(fk_ShaderParameter *);
-
-	private:
-
-		void SetMatrixParam(fk_ShaderParameter *);
-		void SetMaterialParam(fk_ShaderParameter *);
-		void SetLightParam(fk_ShaderParameter *, fk_LightType);
-	};
-}
-
-#endif /* !__FK_DRAW_BASE_HEADER__ */
