@@ -131,6 +131,6 @@ void main()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	vec3 addColor = difSumColor + speSumColor + fk_Material.ambient.rgb;
+	vec3 addColor = (difSumColor + speSumColor) + fk_Material.ambient.rgb;
 	fk_Fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }

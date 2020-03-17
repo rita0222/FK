@@ -21,5 +21,5 @@ uniform int fk_Degree;
 uniform sampler2D fk_TexID[TEXTURENUM];
 uniform sampler2D fk_ColorBuf;
 uniform sampler2D fk_DepthBuf;
-uniform sampler2DShadow fk_ShadowBuf;
+uniform sampler2D fk_ShadowBuf;
 uniform vec2 fk_FBOSize;
