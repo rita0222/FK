@@ -140,11 +140,7 @@ fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
 {
-	int maxUnit;
-	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
-
 	argModel->setShader(this);
-	parameter->setRegister(shadowBufName, maxUnit-3);
 }
 
 void fk_ShaderBinder::unbindModel(fk_Model *argModel)

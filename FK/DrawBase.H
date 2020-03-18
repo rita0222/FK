@@ -65,7 +65,7 @@ namespace FK {
 
 		static const int MAXLIGHTNUM;
 
-		void AttachTexture(int, fk_Texture *);
+		void AttachTexture(int, const std::string &, fk_Texture *);
 
 	protected:
 		static fk_Matrix	*projectionMatrix;
@@ -88,6 +88,7 @@ namespace FK {
 		static std::list<fk_Model *> *spotLightList;
 
 		fk_ShaderBinder		*shader;
+		fk_Texture			*shadowTexture;
 
 		void SetParameter(fk_ShaderParameter *);
 

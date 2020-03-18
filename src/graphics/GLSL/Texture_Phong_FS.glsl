@@ -8,6 +8,7 @@ subroutine uniform textureRendType textureRendSelect;
 in vec4 varP;
 in vec4 varN;
 in vec2 varT;
+in vec3 varS;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {
@@ -135,7 +136,14 @@ vec3 GetMaterial()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	return difSumColor + speSumColor + fk_Material.ambient.rgb;
+	float bias = 0.00001;
+	float sValue = 1.0;
+
+	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) {
+		sValue = 0.0;
+	}
+
+	return (difSumColor + speSumColor)*sValue + fk_Material.ambient.rgb;
 }
 
 subroutine(textureRendType)

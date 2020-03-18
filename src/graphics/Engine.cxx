@@ -730,10 +730,10 @@ void fk_GraphicsEngine::SetupFBO(void)
 	depthBuf->setSource(fk_SamplerSource::DEPTH);
 
 	colorBuf->setBufferSize(wSize, hSize);
-	colorBuf->SetupFBO(maxUnit-1);
+	colorBuf->SetupFBO(maxUnit-2);
 
 	depthBuf->setBufferSize(wSize, hSize);
-	depthBuf->SetupFBO(maxUnit-2);
+	depthBuf->SetupFBO(maxUnit-3);
 
 	glGenFramebuffers(1, &fboHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
@@ -839,7 +839,7 @@ void fk_GraphicsEngine::ShadowInit(void)
 	shadowBuf = new fk_FrameBuffer();
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
-	shadowBufferID = maxUnit - 3;
+	shadowBufferID = maxUnit - 4;
 
 	shadowBuf->setSource(fk_SamplerSource::DEPTH);
 	shadowBuf->setBufferSize(1024, 1024);
@@ -862,9 +862,10 @@ void fk_GraphicsEngine::ShadowInit(void)
 
 void fk_GraphicsEngine::AttachShadowBuffer(int argID)
 {
-	faceDraw->AttachTexture(argID, &shadowTexture);
-	textureDraw->AttachTexture(argID, &shadowTexture);
-	surfaceDraw->AttachTexture(argID, &shadowTexture);
+	shadowTexture.Replace();
+	faceDraw->AttachTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
+	textureDraw->AttachTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
+	surfaceDraw->AttachTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
 }
 
 void fk_GraphicsEngine::PreShadowDraw(void)

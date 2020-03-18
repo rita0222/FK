@@ -92,14 +92,14 @@ map<string, int> * fk_ShaderParameter::getAttrTable(void)
 
 bool fk_ShaderParameter::attachTexture(int argUnit, fk_Texture *argTexture)
 {
-	if (argUnit < 0 || argUnit > 31) return false;
+	if (argUnit < 0) return false;
 	textureTable[argUnit+1] = argTexture;
 	return true;
 }
 
 bool fk_ShaderParameter::detachTexture(int argUnit)
 {
-	return ((textureTable.erase(argUnit) > 0) ? true : false);
+	return ((textureTable.erase(argUnit+1) > 0) ? true : false);
 }
 
 void fk_ShaderParameter::clearTexture(void)

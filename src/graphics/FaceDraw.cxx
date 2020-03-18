@@ -176,7 +176,7 @@ void fk_FaceDraw::PhongSetup(void)
 	prog->fragmentShaderSource =
 		#include "GLSL/Face_Phong_FS.out"
 		;
-	
+
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "PhongSetup", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
@@ -247,12 +247,15 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
 	if(vao == 0) {
 		vao = VAOSetup(ifs);
 	}
+	
 	glBindVertexArray(vao);
 	ifs->BindShaderBuffer(argParam->getAttrTable());
 	ifs->FaceIBOSetup();
+
 	glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
 	return;
 }

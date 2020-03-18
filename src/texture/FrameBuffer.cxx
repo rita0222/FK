@@ -42,7 +42,7 @@ void fk_FrameBuffer::setBufferSize(int argW, int argH)
 
 void fk_FrameBuffer::SetupFBO(int argUnitID)
 {
-	unitID = argUnitID;
+	unitID = argUnitID+1;
 	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
 
 	glGenTextures(1, &ID);
