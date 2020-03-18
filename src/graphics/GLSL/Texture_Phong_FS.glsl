@@ -118,6 +118,14 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 	return sum;
 }
 
+float ShadowValue()
+{
+	float bias = 0.00001;
+	float value = 1.0;
+	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) value = 0.0;
+	return value;
+}
+
 vec3 GetMaterial()
 {
 	vec3 Vn = normalize(varN.xyz);
@@ -139,11 +147,7 @@ vec3 GetMaterial()
 	float bias = 0.00001;
 	float sValue = 1.0;
 
-	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) {
-		sValue = 0.0;
-	}
-
-	return (difSumColor + speSumColor)*sValue + fk_Material.ambient.rgb;
+	return (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
 }
 
 subroutine(textureRendType)

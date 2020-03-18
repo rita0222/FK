@@ -113,6 +113,18 @@ vec3 SpotSpecular(vec3 argP, vec3 argN, vec3 argV)
 	return sum;
 }
 
+float ShadowValue()
+{
+	vec4 v = fk_ShadowMatrix * vec4(fk_Vertex, 1.0);
+	vec3 vv = v.xyz/v.w;
+
+	float bias = 0.00001;
+	float value = 1.0;
+
+	if(texture(fk_ShadowBuf, vv.xy).r < vv.z - bias) value = 0.0;
+	return value;
+}
+
 void main()
 {
 	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
@@ -134,7 +146,7 @@ void main()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	vec3 addColor = difSumColor + speSumColor + fk_Material.ambient.rgb;
+	vec3 addColor = (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
 	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 	varT = fk_TexCoord;
 }

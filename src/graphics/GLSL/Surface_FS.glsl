@@ -4,6 +4,7 @@
 
 in vec4 varP;
 in vec4 varN;
+in vec3 varS;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {
@@ -113,6 +114,14 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 	return sum;
 }
 
+float ShadowValue()
+{
+	float bias = 0.00001;
+	float value = 1.0;
+	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) value = 0.0;
+	return value;
+}
+
 void main()
 {
 	vec3 Vn = normalize(varN.xyz);
@@ -131,6 +140,6 @@ void main()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	vec3 addColor = difSumColor + speSumColor + fk_Material.ambient.rgb;
+	vec3 addColor = (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
 	fk_Fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }
