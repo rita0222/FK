@@ -138,6 +138,9 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	return;
 }
 
+
+
+
 void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 {
 	wSize = argW;
@@ -836,10 +839,11 @@ void fk_GraphicsEngine::ShadowInit(void)
 	shadowBuf = new fk_FrameBuffer();
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
+	shadowBufferID = maxUnit - 3;
 
 	shadowBuf->setSource(fk_SamplerSource::DEPTH);
 	shadowBuf->setBufferSize(1024, 1024);
-	shadowBuf->SetupFBO(maxUnit-3);
+	shadowBuf->SetupFBO(shadowBufferID);
 	glGenFramebuffers(1, &shadowHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
 	
@@ -852,8 +856,15 @@ void fk_GraphicsEngine::ShadowInit(void)
 	shadowBuf->AttachFBO();
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	tmpTexture.setFrameBuffer(shadowBuf);
-	tmpTexture.setTextureSize(200.0, 200.0);
+	shadowTexture.setFrameBuffer(shadowBuf);
+	shadowTexture.setTextureSize(1.0, 1.0);
+}
+
+void fk_GraphicsEngine::AttachShadowBuffer(int argID)
+{
+	faceDraw->AttachTexture(argID, &shadowTexture);
+	textureDraw->AttachTexture(argID, &shadowTexture);
+	surfaceDraw->AttachTexture(argID, &shadowTexture);
 }
 
 void fk_GraphicsEngine::PreShadowDraw(void)
@@ -879,6 +890,8 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 	shadowBuf->Unbind();
+
+	AttachShadowBuffer(shadowBufferID);
 }
 
 void fk_GraphicsEngine::DrawShadow(void)
@@ -911,9 +924,14 @@ void fk_GraphicsEngine::DrawShadow(void)
 	PostShadowDraw();
 }
 
-fk_RectTexture * fk_GraphicsEngine::GetTmpTexture(void)
+fk_RectTexture * fk_GraphicsEngine::GetShadowTexture(void)
 {
-	return &tmpTexture;
+	return &shadowTexture;
+}
+
+void fk_GraphicsEngine::SetShadowTextureSize(int argW, int argH)
+{
+	shadowTexture.setTextureSize(argW, argH);
 }
 
 /****************************************************************************

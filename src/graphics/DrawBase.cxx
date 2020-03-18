@@ -227,7 +227,10 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 		  return;
 	}
 
-	if(list == nullptr) return;
+	if(list == nullptr) {
+		argParam->setRegister(numName, 0, numName);
+		return;
+	}
 
 	for(auto p = list->begin(); p != list->end(); ++p) {
 		fk_Model *model = *p;
@@ -269,6 +272,11 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 	}
 
 	argParam->setRegister(numName, lightID, numName);
+}
+
+void fk_DrawBase::AttachTexture(int argID, fk_Texture *argTexture)
+{
+	if(shader != nullptr) shader->getParameter()->attachTexture(argID, argTexture);
 }
 
 /****************************************************************************

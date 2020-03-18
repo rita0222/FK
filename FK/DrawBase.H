@@ -5,6 +5,7 @@
 #include <FK/Matrix.h>
 #include <FK/Material.h>
 #include <FK/Light.h>
+#include <FK/Texture.h>
 #include <list>
 
 namespace FK {
@@ -63,6 +64,8 @@ namespace FK {
 		static const std::string fragmentName;
 
 		static const int MAXLIGHTNUM;
+
+		void AttachTexture(int, fk_Texture *);
 
 	protected:
 		static fk_Matrix	*projectionMatrix;

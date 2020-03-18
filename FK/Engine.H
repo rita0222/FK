@@ -52,7 +52,8 @@ namespace FK {
 		//void StereoDrawPrep(fk_StereoChannel);
 		//void StereoDrawMain(fk_StereoChannel);
 
-		fk_RectTexture * GetTmpTexture(void);
+		fk_RectTexture * GetShadowTexture(void);
+		void SetShadowTextureSize(int, int);
 
 	private:
 
@@ -100,8 +101,8 @@ namespace FK {
 		fk_ProjectBase *shadowProj;
 		fk_Perspective defaultShadowProj;
 		fk_Model shadowCamera;
-
-		fk_RectTexture tmpTexture;
+		fk_RectTexture shadowTexture;
+		int shadowBufferID;
 
 		void DrawShadow(void);
 		void DrawWorld(void);
@@ -142,6 +143,7 @@ namespace FK {
 		void FBOWindowDraw(void);
 
 		void ShadowInit(void);
+		void AttachShadowBuffer(int);
 		void PreShadowDraw(void);
 		void PostShadowDraw(void);
 	};
