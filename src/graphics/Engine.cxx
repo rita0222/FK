@@ -77,10 +77,12 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	fboHandle = 0;
 	FBOShader = nullptr;
 
-	shadowProj = &defaultShadowProj;
-
 	shadowMode = true;
-	
+	SetShadowSize(400.0);
+	SetShadowDistance(1000.0);
+	SetShadowVec(fk_Vector(1.0, -1.0, 1.0));
+	SetShadowResolution(4096);
+
 	return;
 }
 
@@ -842,14 +844,14 @@ void fk_GraphicsEngine::ShadowInit(void)
 	shadowBufferID = maxUnit - 4;
 
 	shadowBuf->setSource(fk_SamplerSource::DEPTH);
-	shadowBuf->setBufferSize(1024, 1024);
+	shadowBuf->setBufferSize(shadowResolution, shadowResolution);
 	shadowBuf->SetupFBO(shadowBufferID);
 	glGenFramebuffers(1, &shadowHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
 	
 #ifdef WIN32	
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 1024);
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 1024);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, shadowResolution);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, shadowResolution);
 	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 1);
 #endif
 
@@ -898,16 +900,29 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 void fk_GraphicsEngine::DrawShadow(void)
 {
 	list<fk_Model *>::iterator	modelP, modelPEnd;
-	shadowCamera.glMoveTo(-200.0, 200.0, -200.0);
-	shadowCamera.glFocus(0.0, 0.0, 0.0);
-	shadowCamera.glUpvec(0.0, 1.0, 0.0);
+	fk_Model *camera;
+	fk_Vector cameraPos, cameraVec, shadowPos;
+
+	if(curDLink != nullptr) {
+		camera = curDLink->getCamera();
+		if(camera != nullptr) {
+			cameraPos = camera->getInhPosition();
+			cameraVec = camera->getInhVec();
+		}
+	}
+
+	//shadowPos = cameraPos - cameraVec * shadowSize/4.0 - shadowVec * shadowDistance/2.0;
+	//shadowPos = cameraPos - shadowVec * shadowDistance/2.0;
+	shadowPos = cameraPos + cameraVec * shadowSize/4.0;
+	shadowCamera.glMoveTo(shadowPos);
+	shadowCamera.glVec(shadowVec);
 
 	PreShadowDraw();
 
-	glViewport(0, 0, 1024, 1024);
-	shadowProj->MakeMat();
-	fk_DrawBase::SetProjectionMatrix(shadowProj->GetMatrix());
-	fk_DrawBase::SetShadowProjMatrix(shadowProj->GetMatrix());
+	glViewport(0, 0, shadowResolution, shadowResolution);
+	shadowProj.MakeMat();
+	fk_DrawBase::SetProjectionMatrix(shadowProj.GetMatrix());
+	fk_DrawBase::SetShadowProjMatrix(shadowProj.GetMatrix());
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	fk_DrawBase::SetCamera(&shadowCamera);
@@ -933,6 +948,38 @@ fk_RectTexture * fk_GraphicsEngine::GetShadowTexture(void)
 void fk_GraphicsEngine::SetShadowTextureSize(int argW, int argH)
 {
 	shadowTexture.setTextureSize(argW, argH);
+}
+
+int fk_GraphicsEngine::ShadowFixVal(int argVal)
+{
+	int x;
+	for(x = 1; 2 * x <= argVal; x *= 2);
+	return x;
+}
+
+void fk_GraphicsEngine::SetShadowVec(fk_Vector argV)
+{
+	shadowVec = argV;
+}
+
+void fk_GraphicsEngine::SetShadowResolution(int argVal)
+{
+	shadowResolution = ShadowFixVal(argVal);
+}
+
+void fk_GraphicsEngine::SetShadowSize(double argSize)
+{
+	shadowSize = argSize;
+	shadowProj.setAll(-argSize/2.0, argSize/2.0,
+					  -argSize/2.0, argSize/2.0,
+					  -shadowDistance/2.0, shadowDistance/2.0);
+}
+
+void fk_GraphicsEngine::SetShadowDistance(double argDist)
+{
+	shadowDistance = argDist;
+	shadowProj.setNear(-shadowDistance/2.0);
+	shadowProj.setFar(shadowDistance/2.0);
 }
 
 /****************************************************************************
