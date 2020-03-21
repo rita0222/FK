@@ -89,9 +89,9 @@ namespace FK {
 
 		fk_ShaderBinder	*shader;
 		fk_Texture		*shadowTexture;
-		bool defaultShaderFlag;
+		bool			shadowMode;
 
-		GLuint fsShadowDrawID, fsElemDrawID;
+		bool defaultShaderFlag;
 
 		void SetParameter(fk_ShaderParameter *);
 

@@ -22,9 +22,11 @@ fk_TextureDraw::~fk_TextureDraw()
 	return;
 }
 
-void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
+void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowSwitch)
 {
 	auto modelShader = argModel->getShader();
+
+	FK_UNUSED(argShadowSwitch);
 
 	if(modelShader != nullptr) {
 		shader = modelShader;

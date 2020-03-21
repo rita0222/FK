@@ -112,7 +112,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 		}
 	} else {
 		if(pointShader == nullptr) ShaderSetup();
-		else shader = pointShader;
+		shader = pointShader;
 		defaultShaderFlag = true;
 	}
 
@@ -144,9 +144,8 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 void fk_PointDraw::ShaderSetup(void)
 {
 	pointShader = new fk_ShaderBinder();
-	shader = pointShader;
- 	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+ 	auto prog = pointShader->getProgram();
+	auto param = pointShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Point_VS.out"

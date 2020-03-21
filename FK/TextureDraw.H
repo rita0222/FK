@@ -81,7 +81,7 @@ namespace FK {
 		fk_TextureDraw(void);
 		virtual ~fk_TextureDraw();
 
-		void	DrawShapeTexture(fk_Model *);
+		void	DrawShapeTexture(fk_Model *, bool);
 		GLuint	VAOSetup(fk_Shape *);
 	private:
 		fk_ShaderBinder		*phongShader, *gouraudShader;

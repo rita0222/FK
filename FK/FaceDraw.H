@@ -1,4 +1,33 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_FACE_DRAW_HEADER__
+#define __FK_FACE_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+
+namespace FK {
+	class fk_FaceDraw : public fk_DrawBase {
+	public:
+		fk_FaceDraw(void);
+		virtual ~fk_FaceDraw();
+
+		void	DrawShapeFace(fk_Model *, bool);
+		GLuint	VAOSetup(fk_Shape *);
+
+	private:
+		fk_ShaderBinder		*phongShader, *gouraudShader;
+
+		void	ShaderSetup(void);
+		void	PhongSetup(void);
+		void	GouraudSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+		void	PolygonModeSet(fk_Draw);
+		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
+	};
+}
+
+#endif /* !__FK_WINDOW_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,33 +98,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_FACE_DRAW_HEADER__
-#define __FK_FACE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-	class fk_FaceDraw : public fk_DrawBase {
-	public:
-		fk_FaceDraw(void);
-		virtual ~fk_FaceDraw();
-
-		void	DrawShapeFace(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
-
-	private:
-		fk_ShaderBinder		*phongShader, *gouraudShader;
-
-		void	ShaderSetup(void);
-		void	PhongSetup(void);
-		void	GouraudSetup(void);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void	PolygonModeSet(fk_Draw);
-		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
-	};
-}
-
-#endif /* !__FK_WINDOW_HEADER__ */
-
-

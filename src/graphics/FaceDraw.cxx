@@ -28,11 +28,13 @@ fk_FaceDraw::~fk_FaceDraw()
 	return;
 }
 
-void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, bool argShadowSwitch)
 {
 	auto	shapeType = argModel->getShape()->getRealShapeType();
 	auto	drawMode = argModel->getDrawMode();
 	auto	modelShader = argModel->getShader();
+
+	FK_UNUSED(argShadowSwitch);
 
 	if(modelShader != nullptr) {
 		shader = modelShader;

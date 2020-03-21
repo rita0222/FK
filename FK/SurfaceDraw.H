@@ -1,4 +1,35 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_SURFACE_DRAW_HEADER__
+#define __FK_SURFACE_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+
+namespace FK {
+
+	class fk_SurfaceDraw : public fk_DrawBase {
+	public:
+		fk_SurfaceDraw(int);
+		virtual ~fk_SurfaceDraw();
+
+		void	DrawShapeSurface(fk_Model *, bool);
+		GLuint	VAOSetup(fk_Shape *);
+
+	private:
+		fk_ShaderBinder		*surfaceShader;
+		int 				mode;
+		GLuint				bezID, gregID;
+		
+		void	ShaderSetup(void);
+		void	SubroutineSetup(fk_Model *);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+
+ 		void	Draw_Surface(fk_Model *, fk_ShaderParameter *);
+	};
+}
+
+#endif /* !__FK_CURVE_DRAW_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,33 +100,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_SURFACE_DRAW_HEADER__
-#define __FK_SURFACE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-
-	class fk_SurfaceDraw : public fk_DrawBase {
-	public:
-		fk_SurfaceDraw(int);
-		virtual ~fk_SurfaceDraw();
-
-		void	DrawShapeSurface(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
-
-	private:
-		fk_ShaderBinder		*surfaceShader;
-		int 				mode;
-		GLuint				bezID, gregID;
-		
-		void	ShaderSetup(void);
-		void	SubroutineSetup(fk_Model *);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-
- 		void	Draw_Surface(fk_Model *, fk_ShaderParameter *);
-	};
-}
-
-#endif /* !__FK_CURVE_DRAW_HEADER__ */
