@@ -12,6 +12,7 @@
 namespace FK {
 	class fk_Scene;
 	class fk_Plane;
+	class fk_DrawBase;
 	class fk_PointDraw;
 	class fk_LineDraw;
 	class fk_FaceDraw;
@@ -72,6 +73,8 @@ namespace FK {
 		static fk_SurfaceDraw *surfacePointDraw;
 		static fk_SurfaceDraw *surfaceLineDraw;
 
+		std::vector<fk_DrawBase *> shaderArray;
+
 		unsigned int drawCount;
 		unsigned int winID;
 		fk_DisplayLink *curDLink;
@@ -102,7 +105,7 @@ namespace FK {
 
 		GLuint shadowHandle;
 		fk_FrameBuffer *shadowBuf;
-		bool shadowMode;
+		bool shadowMode, shadowInitFlag;
 		fk_Ortho shadowProj;
 		fk_Model shadowCamera;
 		fk_RectTexture shadowTexture;
@@ -116,7 +119,7 @@ namespace FK {
 		void DrawWorld(void);
 		
 		void DrawObjs(void);
-		void DrawModel(fk_Model *, bool);
+		void DrawModel(fk_Model *);
 		void CurrentDispLinkDraw(void);
 
 		void DrawShapeObj(fk_Model *);

@@ -36,6 +36,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
+		defaultShaderFlag = false;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 			shader->SetupDone(true);
@@ -54,6 +55,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel)
 		  default:
 			return;
 		}
+		defaultShaderFlag = true;
 	}
 
 	PolygonModeSet(drawMode);

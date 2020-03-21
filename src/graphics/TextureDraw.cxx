@@ -28,6 +28,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
+		defaultShaderFlag = false;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 			shader->SetupDone(true);
@@ -46,6 +47,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel)
 		  default:
 			return;
 		}
+		defaultShaderFlag = true;
 	}
 	
 	PolygonModeSet();
@@ -185,7 +187,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
 
-	if(shader == phongShader || shader == gouraudShader) {
+	if(defaultShaderFlag == true) {
 		GLuint id = 0;
 
 		switch(argModel->getShadingMode()) {

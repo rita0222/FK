@@ -49,6 +49,16 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 		surfacePointDraw = new fk_SurfaceDraw(3);
 	}
 
+	shaderArray.push_back(pointDraw);
+	shaderArray.push_back(lineDraw);
+	shaderArray.push_back(faceDraw);
+	shaderArray.push_back(textureDraw);
+	shaderArray.push_back(bezCurveLineDraw);
+	shaderArray.push_back(bezCurvePointDraw);
+	shaderArray.push_back(surfaceDraw);
+	shaderArray.push_back(surfaceLineDraw);
+	shaderArray.push_back(surfacePointDraw);
+
 	engineNum++;
 
 	winID = 0;
@@ -78,10 +88,11 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	FBOShader = nullptr;
 
 	shadowMode = true;
+	shadowInitFlag = false;
 	SetShadowSize(400.0);
 	SetShadowDistance(1000.0);
 	SetShadowVec(fk_Vector(1.0, -1.0, 1.0));
-	SetShadowResolution(4096);
+	SetShadowResolution(1024);
 
 	return;
 }
@@ -261,8 +272,14 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 
 void fk_GraphicsEngine::Draw(void)
 {
-	if(drawCount == 0) ShadowInit();
-	DrawShadow();
+	if(shadowMode == true) {
+		if(shadowInitFlag == false) {
+			ShadowInit();
+			shadowInitFlag = true;
+		}
+		DrawShadow();
+	}
+
 	DrawWorld();
 	drawCount++;
 }
@@ -319,7 +336,7 @@ void fk_GraphicsEngine::DrawObjs(void)
 	for(modelP = curDLink->GetModelList()->begin();
 		modelP != modelPEnd; ++modelP) {
 		SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP, true);
+		DrawModel(*modelP);
 	}
 
 	overlayList = curDLink->GetOverlayList();
@@ -328,20 +345,20 @@ void fk_GraphicsEngine::DrawObjs(void)
 	SetDepthMode(fk_DepthMode::NO_USE);
 	modelPEnd = overlayList->end();
 	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP, false);
+		DrawModel(*modelP);
 	}
 
 	return;
 }
 
-void fk_GraphicsEngine::DrawModel(fk_Model *argModel, bool argShadowMode)
+void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 {
 	if(argModel->getBDrawToggle() == true) DrawBoundaryLine(argModel);
 
 	fk_Shape * modelShape = argModel->getShape();
 	if(modelShape == nullptr) return;
 	modelShape->FlushAttr();
-	fk_DrawBase::SetModel(argModel, argShadowMode);
+	fk_DrawBase::SetModel(argModel, shadowMode);
 	SetBlendMode(argModel);
 	DrawShapeObj(argModel);
 	modelShape->FinishSetVBO();
@@ -384,7 +401,7 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 	}	
 	boundaryModel.setShape(argModel->GetBShape());
 	boundaryModel.setDrawMode(fk_Draw::LINE);
-	DrawModel(&boundaryModel, false);
+	DrawModel(&boundaryModel);
 	return;
 }
 
@@ -933,7 +950,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 		for(modelP = curDLink->GetModelList()->begin();
 			modelP != modelPEnd; ++modelP) {
 			//SetDepthMode((*modelP)->getDepthMode());
-			DrawModel(*modelP, false);
+			DrawModel(*modelP);
 		}
 	}
 

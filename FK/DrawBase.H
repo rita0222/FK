@@ -87,8 +87,11 @@ namespace FK {
 		static std::list<fk_Model *> *pointLightList;
 		static std::list<fk_Model *> *spotLightList;
 
-		fk_ShaderBinder		*shader;
-		fk_Texture			*shadowTexture;
+		fk_ShaderBinder	*shader;
+		fk_Texture		*shadowTexture;
+		bool defaultShaderFlag;
+
+		GLuint fsShadowDrawID, fsElemDrawID;
 
 		void SetParameter(fk_ShaderParameter *);
 

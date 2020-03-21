@@ -106,6 +106,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
+		defaultShaderFlag = false;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 			shader->SetupDone(true);
@@ -113,6 +114,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 	} else {
 		if(lineShader == nullptr) ShaderSetup();
 		else shader = lineShader;
+		defaultShaderFlag = true;
 	}
 	
 	auto parameter = shader->getParameter();
@@ -121,7 +123,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
 	shader->ProcPreShader();
 
-	if(shader == lineShader) SubroutineSetup(argModel);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel);
 	
 	glEnable(GL_LINE_SMOOTH);
 

@@ -105,6 +105,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
+		defaultShaderFlag = false;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 			shader->SetupDone(true);
@@ -112,6 +113,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 	} else {
 		if(pointShader == nullptr) ShaderSetup();
 		else shader = pointShader;
+		defaultShaderFlag = true;
 	}
 
 	auto parameter = shader->getParameter();
@@ -122,7 +124,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
 	shader->ProcPreShader();
 
 	int pointNum = GetPointNum(shape);
-	if(shader == pointShader) SubroutineSetup(argModel);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel);
 	
 	glPointSize((GLfloat)argModel->getPointSize());
 

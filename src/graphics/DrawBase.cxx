@@ -63,7 +63,8 @@ list<fk_Model *> * fk_DrawBase::pointLightList;
 list<fk_Model *> * fk_DrawBase::spotLightList;
 
 fk_DrawBase::fk_DrawBase(void)
-	: shader(nullptr), shadowTexture(nullptr)
+	: shader(nullptr), shadowTexture(nullptr),
+	  defaultShaderFlag(true), fsShadowDrawID(0), fsElemDrawID(0)
 {
 	InitBiasMatrix();
 	return;

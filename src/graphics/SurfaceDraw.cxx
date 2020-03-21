@@ -99,6 +99,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
+		defaultShaderFlag = false;
 		if(shader->IsSetup() == false) {
 			ParamInit(shader->getProgram(), shader->getParameter());
 			shader->SetupDone(true);
@@ -106,7 +107,9 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 	} else {
 		if(surfaceShader == nullptr) ShaderSetup();
 		else shader = surfaceShader;
+		defaultShaderFlag = true;
 	}
+
 	glDisable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -125,7 +128,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel)
 
 	shader->ProcPreShader();
 
-	SubroutineSetup(argModel);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel);
 
 	Draw_Surface(argModel, parameter);
 
