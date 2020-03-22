@@ -11,17 +11,17 @@ namespace FK {
 		fk_SurfaceDraw(int);
 		virtual ~fk_SurfaceDraw();
 
-		void	DrawShapeSurface(fk_Model *, bool);
+		void	DrawShapeSurface(fk_Model *, bool, bool);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
 		fk_ShaderBinder *surfaceShader;
 		int mode;
 		GLuint bezID, gregID;
-		GLuint shadowID, elemID;
+		GLuint shadowBuf_ID, shadowON_ID, shadowOFF_ID;
 		
 		void	ShaderSetup(void);
-		void	SubroutineSetup(fk_Model *, bool);
+		void	SubroutineSetup(fk_Model *, bool, bool);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
  		void	Draw_Surface(fk_Model *, fk_ShaderParameter *);

@@ -87,8 +87,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	fboHandle = 0;
 	FBOShader = nullptr;
 
-	//shadowMode = true;
-	shadowMode = false;
+	shadowMode = true;
+	//shadowMode = false;
 
 	shadowInitFlag = false;
 	shadowSwitch = false;
@@ -442,7 +442,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
 		if(surface != nullptr) {
-			surfaceDraw->DrawShapeSurface(argModel, shadowSwitch);
+			surfaceDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
 
@@ -474,7 +474,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfaceLineDraw->DrawShapeSurface(argModel, shadowSwitch);
+			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
 
@@ -482,7 +482,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfacePointDraw->DrawShapeSurface(argModel, shadowSwitch);
+			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
 

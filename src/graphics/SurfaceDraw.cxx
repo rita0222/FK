@@ -11,7 +11,7 @@ using namespace FK;
 fk_SurfaceDraw::fk_SurfaceDraw(int argMode)
 	: surfaceShader(nullptr), mode(argMode),
 	  bezID(0), gregID(0),
-	  shadowID(0), elemID(0)
+	  shadowBuf_ID(0), shadowON_ID(0), shadowOFF_ID(0)
 {
 	return;
 }
@@ -23,7 +23,7 @@ fk_SurfaceDraw::~fk_SurfaceDraw()
 }
 
 
-void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowSwitch)
+void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
 {
 	auto col = &(argModel->getCurveColor()->col);
 	auto modelShader = argModel->getShader();
@@ -61,7 +61,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowSwitch)
 
 	shader->ProcPreShader();
 
-	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowMode, argShadowSwitch);
 
 	Draw_Surface(argModel, parameter);
 
@@ -137,9 +137,10 @@ void fk_SurfaceDraw::ShaderSetup(void)
 	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
 
 	if(mode == 1) {
-		shadowID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowDraw");
-		elemID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ElementDraw");
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &elemID);
+		shadowBuf_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Shadow_Buf");
+		shadowON_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Shadow_ON");
+		shadowOFF_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Shadow_OFF");
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &shadowON_ID);
 	}
 
 	return;
@@ -191,7 +192,7 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argPar
 	return;
 }
 
-void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
+void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
 {
 	switch(argModel->getShape()->getObjectType()) {
 	  case fk_Type::BEZSURFACE:
@@ -207,7 +208,7 @@ void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
 	}
 
 	if(mode == 1) {
-		auto ID = (argShadowSwitch == true) ? shadowID : elemID;
+		auto ID = (argShadowSwitch) ? shadowBuf_ID : ((argShadowMode) ? shadowON_ID : shadowOFF_ID);
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &ID);
 	}	
 

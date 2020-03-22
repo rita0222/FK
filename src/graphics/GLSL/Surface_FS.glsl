@@ -2,7 +2,7 @@
 
 #FKBuildIn
 
-subroutine void surfaceDrawType();
+subroutine vec4 surfaceDrawType();
 subroutine uniform surfaceDrawType SurfaceDrawFunc;
 
 in vec4 varP;
@@ -125,8 +125,7 @@ float ShadowValue()
 	return value;
 }
 
-subroutine(surfaceDrawType)
-void ElementDraw()	
+vec3 DifSpeColor()
 {
 	vec3 Vn = normalize(varN.xyz);
 	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
@@ -144,17 +143,30 @@ void ElementDraw()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	vec3 addColor = (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
-	fk_Fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+	return (difSumColor + speSumColor);
 }
 
 subroutine(surfaceDrawType)
-void ShadowDraw()
+vec4 Shadow_ON()	
 {
-	fk_Fragment = vec4(1.0, 1.0, 1.0, 1.0);
+	vec3 addColor = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(surfaceDrawType)
+vec4 Shadow_OFF()	
+{
+	vec3 addColor = DifSpeColor() + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(surfaceDrawType)
+vec4 Shadow_Buf()
+{
+	return vec4(1.0, 1.0, 1.0, 1.0);
 }
 
 void main()
 {
-	SurfaceDrawFunc();
+	fk_Fragment = SurfaceDrawFunc();
 }
