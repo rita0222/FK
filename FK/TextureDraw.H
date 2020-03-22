@@ -1,4 +1,37 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_TEXTURE_DRAW_HEADER__
+#define __FK_TEXTURE_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+
+namespace FK {
+	class fk_TextureDraw : public fk_DrawBase {
+	public:
+		fk_TextureDraw(void);
+		virtual ~fk_TextureDraw();
+
+		void	DrawShapeTexture(fk_Model *, bool, bool);
+		GLuint	VAOSetup(fk_Shape *);
+	private:
+		fk_ShaderBinder		*phongShader, *gouraudShader;
+
+		GLuint	replace_p_ID, mod_ON_p_ID, mod_OFF_p_ID, dec_ON_p_ID, dec_OFF_p_ID, shadow_p_ID;
+		GLuint	ON_g_VS_ID, OFF_g_VS_ID, Buf_g_VS_ID;
+		GLuint	replace_g_FS_ID, modulate_g_FS_ID, decal_g_FS_ID, shadow_g_FS_ID;
+
+		void 	ShaderSetup(void);
+		void	PhongSetup(void);
+		void	GouraudSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool, bool);
+		void	PolygonModeSet(void);
+		void	SubroutineSetup(fk_Model *, fk_TexMode, bool, bool);
+	};
+}
+
+#endif /* !__FK_TEXTURE_DRAW_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,35 +102,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_TEXTURE_DRAW_HEADER__
-#define __FK_TEXTURE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-	class fk_TextureDraw : public fk_DrawBase {
-	public:
-		fk_TextureDraw(void);
-		virtual ~fk_TextureDraw();
-
-		void	DrawShapeTexture(fk_Model *, bool);
-		GLuint	VAOSetup(fk_Shape *);
-	private:
-		fk_ShaderBinder		*phongShader, *gouraudShader;
-
-		GLuint	modulate_p_ID, replace_p_ID, decal_p_ID;
-		GLuint	modulate_g_ID, replace_g_ID, decal_g_ID;
-
-		void 	ShaderSetup(void);
-		void	PhongSetup(void);
-		void	GouraudSetup(void);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void	Draw_Texture(fk_Model *, fk_ShaderParameter *);
-		void	PolygonModeSet(void);
-	};
-}
-
-#endif /* !__FK_TEXTURE_DRAW_HEADER__ */
-
-

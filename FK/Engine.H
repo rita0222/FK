@@ -41,7 +41,7 @@ namespace FK {
 		void OpenGLInit(void);
 
 		void SetPickViewPort(int, int, int);
-		void Draw(void);
+		unsigned int Draw(void);
 
 		void BindWindow(fk_ShaderBinder *);
 

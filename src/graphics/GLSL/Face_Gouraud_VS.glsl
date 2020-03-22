@@ -2,6 +2,9 @@
 
 #FKBuildIn
 
+subroutine void faceDrawType();
+subroutine uniform faceDrawType FaceDrawFunc;
+
 out vec4 varC;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
@@ -123,10 +126,9 @@ float ShadowValue()
 	if(texture(fk_ShadowBuf, vv.xy).r < vv.z - bias) value = 0.0;
 	return value;
 }
-	
-void main()
+
+vec3 DifSpeColor()
 {
-	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
 	vec3 varP = gl_Position.xyz;
 	vec4 varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
 	vec3 Vn = normalize(varN.xyz);
@@ -145,6 +147,31 @@ void main()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	vec3 addColor = (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
+	return (difSumColor + speSumColor);
+}
+
+subroutine(faceDrawType)
+void ShadowONDraw()
+{
+	vec3 addColor = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
 	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(faceDrawType)
+void ShadowOFFDraw()
+{
+	vec3 addColor = DifSpeColor() + fk_Material.ambient.rgb;
+	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(faceDrawType)
+void ShadowBufDraw()
+{
+	varC = vec4(1.0, 1.0, 1.0, 1.0);
+}
+
+void main()
+{
+	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
+	FaceDrawFunc();
 }

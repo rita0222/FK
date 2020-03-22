@@ -16,7 +16,9 @@ typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
-	: phongShader(nullptr), gouraudShader(nullptr)
+	: phongShader(nullptr), gouraudShader(nullptr),
+	  shadowBuf_p_ID(0), shadowON_p_ID(0), shadowOFF_p_ID(0), 
+	  shadowBuf_g_ID(0), shadowON_g_ID(0), shadowOFF_g_ID(0)
 {
 	return;
 }
@@ -28,13 +30,11 @@ fk_FaceDraw::~fk_FaceDraw()
 	return;
 }
 
-void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, bool argShadowSwitch)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
 {
 	auto	shapeType = argModel->getShape()->getRealShapeType();
 	auto	drawMode = argModel->getDrawMode();
 	auto	modelShader = argModel->getShader();
-
-	FK_UNUSED(argShadowSwitch);
 
 	if(modelShader != nullptr) {
 		shader = modelShader;
@@ -65,14 +65,10 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, bool argShadowSwitch)
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
 
-	switch(shapeType) {
-	  case fk_RealShapeType::IFS:
-		Draw_IFS(argModel, parameter);
-		break;
-
-	  default:
-		break;
+	if(shapeType == fk_RealShapeType::IFS) {
+		Draw_IFS(argModel, parameter, argShadowMode, argShadowSwitch);
 	}
+
 	return;
 }
 
@@ -112,6 +108,14 @@ void fk_FaceDraw::PhongSetup(void)
 	}
 
 	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+
+	shadowBuf_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowBufDraw");
+	shadowON_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowONDraw");
+	shadowOFF_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowOFFDraw");
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &shadowON_p_ID);
+	
 	return;
 }
 
@@ -135,6 +139,12 @@ void fk_FaceDraw::GouraudSetup(void)
 	}
 
 	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+	shadowBuf_g_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ShadowBufDraw");
+	shadowON_g_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ShadowONDraw");
+	shadowOFF_g_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ShadowOFFDraw");
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &shadowON_g_ID);
 	return;
 }
 
@@ -168,7 +178,8 @@ GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam,
+						   bool argShadowMode, bool argShadowSwitch)
 {
 	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
 	GLuint			vao = ifs->GetFaceVAO();
@@ -181,6 +192,9 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
 	ifs->FaceIBOSetup();
 	ifs->BindShaderBuffer(argParam->getAttrTable());
 	shader->ProcPreShader();
+
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowMode, argShadowSwitch);
+	
 	glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -189,6 +203,29 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam)
 
 	return;
 }
+
+void fk_FaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
+{
+	FK_UNUSED(argShadowMode);
+
+	GLuint ID = 0;
+
+	switch(argModel->getShadingMode()) {
+	  case fk_ShadingMode::PHONG:
+		ID = (argShadowSwitch) ? shadowBuf_p_ID : ((argShadowMode) ? shadowON_p_ID : shadowOFF_p_ID);
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &ID);
+		break;
+
+	  case fk_ShadingMode::GOURAUD:
+		ID = (argShadowSwitch) ? shadowBuf_g_ID : ((argShadowMode) ? shadowON_g_ID : shadowOFF_g_ID);
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &ID);
+		break;
+
+	  default:
+		break;
+	}
+	return;
+}		
 
 /****************************************************************************
  *

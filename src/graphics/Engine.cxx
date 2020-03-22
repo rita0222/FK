@@ -87,13 +87,15 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	fboHandle = 0;
 	FBOShader = nullptr;
 
-	shadowMode = true;
+	//shadowMode = true;
+	shadowMode = false;
+
 	shadowInitFlag = false;
 	shadowSwitch = false;
 	SetShadowSize(400.0);
 	SetShadowDistance(1000.0);
 	SetShadowVec(fk_Vector(1.0, -1.0, 1.0));
-	SetShadowResolution(2048);
+	SetShadowResolution(1024);
 
 	return;
 }
@@ -271,7 +273,7 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 	return;
 }
 
-void fk_GraphicsEngine::Draw(void)
+unsigned int fk_GraphicsEngine::Draw(void)
 {
 	if(shadowMode == true) {
 		if(shadowInitFlag == false) {
@@ -282,9 +284,9 @@ void fk_GraphicsEngine::Draw(void)
 		DrawShadow();
 		shadowSwitch = false;
 	}
-
 	DrawWorld();
 	drawCount++;
+	return drawCount;
 }
 
 void fk_GraphicsEngine::DrawWorld(void)
@@ -330,26 +332,16 @@ void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 
 void fk_GraphicsEngine::DrawObjs(void)
 {
-	list<fk_Model *>::iterator	modelP, modelPEnd;
-	list<fk_Model *>			*overlayList;
-
 	if(curDLink == nullptr) return;
 
-	modelPEnd = curDLink->GetModelList()->end();
-	for(modelP = curDLink->GetModelList()->begin();
-		modelP != modelPEnd; ++modelP) {
-		SetDepthMode((*modelP)->getDepthMode());
-		DrawModel(*modelP);
+	for(auto modelP : *(curDLink->GetModelList())) {
+		SetDepthMode(modelP->getDepthMode());
+		DrawModel(modelP);
 	}
 
-	overlayList = curDLink->GetOverlayList();
-	if(overlayList->empty() == true) return;
-
+	if(curDLink->GetOverlayList()->empty() == true) return;
 	SetDepthMode(fk_DepthMode::NO_USE);
-	modelPEnd = overlayList->end();
-	for(modelP = overlayList->begin(); modelP != modelPEnd; ++modelP) {
-		DrawModel(*modelP);
-	}
+	for(auto modelP : *(curDLink->GetOverlayList())) DrawModel(modelP);
 
 	return;
 }
@@ -441,11 +433,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	argModel->getShape()->FlushAttr();
 
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
-		faceDraw->DrawShapeFace(argModel, shadowSwitch);
+		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
-		textureDraw->DrawShapeTexture(argModel, shadowSwitch);
+		textureDraw->DrawShapeTexture(argModel, shadowMode, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
@@ -454,45 +446,43 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		}
 	}
 
-	if(shadowSwitch == false) {
-		if((drawMode & fk_Draw::POINT) != fk_Draw::NONE) {
-			if(curve != nullptr) {
-				pointDraw->DrawShapePoint(argModel, curve->GetPoint());
-			} else if(surface != nullptr) {
-				pointDraw->DrawShapePoint(argModel, surface->GetPoint());
-			} else if(graph != nullptr) {
-				pointDraw->DrawShapePoint(argModel, graph->GetVertexShape());
-			} else {
-				pointDraw->DrawShapePoint(argModel);
-			}
+	if((drawMode & fk_Draw::POINT) != fk_Draw::NONE) {
+		if(curve != nullptr) {
+			pointDraw->DrawShapePoint(argModel, curve->GetPoint(), shadowSwitch);
+		} else if(surface != nullptr) {
+			pointDraw->DrawShapePoint(argModel, surface->GetPoint(), shadowSwitch);
+		} else if(graph != nullptr) {
+			pointDraw->DrawShapePoint(argModel, graph->GetVertexShape(), shadowSwitch);
+		} else {
+			pointDraw->DrawShapePoint(argModel, nullptr, shadowSwitch);
 		}
+	}
 
-		if((drawMode & fk_Draw::LINE) != fk_Draw::NONE) {
-			if(curve != nullptr) {
-				lineDraw->DrawShapeLine(argModel, curve->GetLine());
-			} else if(surface != nullptr) {
-				lineDraw->DrawShapeLine(argModel, surface->GetLine());
-			} else if(graph != nullptr) {
-				lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape());
-			} else {
-				lineDraw->DrawShapeLine(argModel);
-			}
+	if((drawMode & fk_Draw::LINE) != fk_Draw::NONE) {
+		if(curve != nullptr) {
+			lineDraw->DrawShapeLine(argModel, curve->GetLine(), shadowSwitch);
+		} else if(surface != nullptr) {
+			lineDraw->DrawShapeLine(argModel, surface->GetLine(), shadowSwitch);
+		} else if(graph != nullptr) {
+			lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape(), shadowSwitch);
+		} else {
+			lineDraw->DrawShapeLine(argModel, nullptr, shadowSwitch);
 		}
+	}
 
-		if((drawMode & fk_Draw::GEOM_LINE) != fk_Draw::NONE) {
-			if(curve != nullptr) {
-				bezCurveLineDraw->DrawShapeCurve(argModel);
-			} else if(surface != nullptr) {
-				surfaceLineDraw->DrawShapeSurface(argModel, false);
-			}
+	if((drawMode & fk_Draw::GEOM_LINE) != fk_Draw::NONE) {
+		if(curve != nullptr) {
+			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch);
+		} else if(surface != nullptr) {
+			surfaceLineDraw->DrawShapeSurface(argModel, shadowSwitch);
 		}
+	}
 
-		if((drawMode & fk_Draw::GEOM_POINT) != fk_Draw::NONE) {
-			if(curve != nullptr) {
-				bezCurvePointDraw->DrawShapeCurve(argModel);
-			} else if(surface != nullptr) {
-				surfacePointDraw->DrawShapeSurface(argModel, false);
-			}
+	if((drawMode & fk_Draw::GEOM_POINT) != fk_Draw::NONE) {
+		if(curve != nullptr) {
+			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch);
+		} else if(surface != nullptr) {
+			surfacePointDraw->DrawShapeSurface(argModel, shadowSwitch);
 		}
 	}
 
@@ -920,7 +910,6 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 
 void fk_GraphicsEngine::DrawShadow(void)
 {
-	list<fk_Model *>::iterator	modelP, modelPEnd;
 	fk_Model *camera;
 	fk_Vector cameraPos, cameraVec, shadowPos;
 
@@ -932,8 +921,6 @@ void fk_GraphicsEngine::DrawShadow(void)
 		}
 	}
 
-	//shadowPos = cameraPos - cameraVec * shadowSize/4.0 - shadowVec * shadowDistance/2.0;
-	//shadowPos = cameraPos - shadowVec * shadowDistance/2.0;
 	shadowPos = cameraPos + cameraVec * shadowSize/4.0;
 	shadowCamera.glMoveTo(shadowPos);
 	shadowCamera.glVec(shadowVec);
@@ -950,12 +937,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 	fk_DrawBase::SetShadowCamera(&shadowCamera);
 
 	if(curDLink != nullptr) {
-		modelPEnd = curDLink->GetModelList()->end();
-		for(modelP = curDLink->GetModelList()->begin();
-			modelP != modelPEnd; ++modelP) {
-			//SetDepthMode((*modelP)->getDepthMode());
-			DrawModel(*modelP);
-		}
+		for(auto modelP : *(curDLink->GetModelList())) DrawModel(modelP);
 	}
 
 	PostShadowDraw();

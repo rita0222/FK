@@ -85,7 +85,9 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
-	: lineShader(nullptr), vsModelID(0), vsElemID(0), vsIFSID(0), fsLineID(0), fsIFSID(0)
+	: lineShader(nullptr),
+	  vsModelID(0), vsElemID(0), vsIFSID(0),
+	  fsLineID(0), fsIFSID(0), fsShadowID(0)
 {
 	return;
 }
@@ -97,8 +99,10 @@ fk_LineDraw::~fk_LineDraw()
 }
 
 
-void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
+void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool argShadowSwitch)
 {
+	FK_UNUSED(argShadowSwitch);
+	
 	fk_Shape * shape = (argShape == nullptr) ? argModel->getShape() : argShape;
 	auto shapeType = shape->getRealShapeType();
 	auto col = &(argModel->getLineColor()->col);
@@ -123,7 +127,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape)
 	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
 	shader->ProcPreShader();
 
-	if(defaultShaderFlag == true) SubroutineSetup(argModel);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
 	
 	glEnable(GL_LINE_SMOOTH);
 
@@ -173,6 +177,7 @@ void fk_LineDraw::ShaderSetup(void)
 	vsIFSID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "LineIFSVS");
 	fsLineID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "LineLineFS");
 	fsIFSID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "LineIFSFS");
+	fsShadowID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "LineShadowFS");
 
 	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsLineID);
@@ -239,10 +244,12 @@ void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam
 	return;
 }
 
-void fk_LineDraw::SubroutineSetup(fk_Model *argModel)
+void fk_LineDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
 {
 	auto shape = argModel->getShape();
 	auto mode = argModel->getElementMode();
+	GLuint vID = vsModelID;
+	GLuint fID = fsLineID;
 
 	switch(shape->getRealShapeType()) {
 	  case fk_RealShapeType::LINE:
@@ -250,30 +257,22 @@ void fk_LineDraw::SubroutineSetup(fk_Model *argModel)
 	  case fk_RealShapeType::SURFACE:
 	  case fk_RealShapeType::GRAPH:
 
-		switch(mode) {
-		  case fk_ElementMode::MODEL:
-			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
-			break;
-
-		  case fk_ElementMode::ELEMENT:
-			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsElemID);
-			break;
-
-		  default:
-			return;
-		}
-		
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsLineID);
-		return;
+		if(mode == fk_ElementMode::ELEMENT) vID = vsElemID;
+		break;
 
 	  case fk_RealShapeType::IFS:
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsIFSID);
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsIFSID);
-		return;
+		vID = vsIFSID;
+		fID = fsIFSID;
+		break;
 
 	  default:
 		break;
 	}
+
+	if(argShadowSwitch == true) fID = fsShadowID;
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vID);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
 
 	return;
 }

@@ -15,12 +15,13 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder		*surfaceShader;
-		int 				mode;
-		GLuint				bezID, gregID;
+		fk_ShaderBinder *surfaceShader;
+		int mode;
+		GLuint bezID, gregID;
+		GLuint shadowID, elemID;
 		
 		void	ShaderSetup(void);
-		void	SubroutineSetup(fk_Model *);
+		void	SubroutineSetup(fk_Model *, bool);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
  		void	Draw_Surface(fk_Model *, fk_ShaderParameter *);

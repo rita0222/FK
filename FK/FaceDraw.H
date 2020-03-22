@@ -10,18 +10,22 @@ namespace FK {
 		fk_FaceDraw(void);
 		virtual ~fk_FaceDraw();
 
-		void	DrawShapeFace(fk_Model *, bool);
+		void	DrawShapeFace(fk_Model *, bool, bool);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
 		fk_ShaderBinder		*phongShader, *gouraudShader;
+
+		GLuint	shadowBuf_p_ID, shadowON_p_ID, shadowOFF_p_ID;
+		GLuint	shadowBuf_g_ID, shadowON_g_ID, shadowOFF_g_ID;
 
 		void	ShaderSetup(void);
 		void	PhongSetup(void);
 		void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	PolygonModeSet(fk_Draw);
-		void	Draw_IFS(fk_Model *, fk_ShaderParameter *);
+		void	Draw_IFS(fk_Model *, fk_ShaderParameter *, bool, bool);
+		void	SubroutineSetup(fk_Model *, bool, bool);
 	};
 }
 

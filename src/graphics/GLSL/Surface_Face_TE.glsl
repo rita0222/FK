@@ -124,6 +124,6 @@ void main()
 	varN = fk_ModelMatrix * N;
 	gl_Position = fk_ModelViewProjectionMatrix * P;
 
-	vec4 v = fk_ShadowMatrix * P;
-	varS = v.xyz/v.w;
+	vec4 sV = fk_ShadowMatrix * P;
+	varS = sV.xyz/sV.w;
 }

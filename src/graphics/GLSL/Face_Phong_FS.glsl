@@ -2,6 +2,9 @@
 
 #FKBuildIn
 
+subroutine vec4 faceDrawType();
+subroutine uniform faceDrawType FaceDrawFunc;
+
 in vec4 varP;
 in vec4 varN;
 in vec3 varS;
@@ -116,13 +119,13 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 
 float ShadowValue()
 {
-	float bias = 0.00001;
+	float bias = 0.000001;
 	float value = 1.0;
 	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) value = 0.0;
 	return value;
 }
 
-void main()
+vec3 DifSpeColor()
 {
 	vec3 Vn = normalize(varN.xyz);
 	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
@@ -140,6 +143,30 @@ void main()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	vec3 addColor = (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
-	fk_Fragment = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+	return (difSumColor + speSumColor);
+}	
+
+subroutine(faceDrawType)
+vec4 ShadowBufDraw()
+{
+	return vec4(1.0, 1.0, 1.0, 1.0);
+}
+
+subroutine(faceDrawType)
+vec4 ShadowONDraw()
+{
+	vec3 addColor = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(faceDrawType)
+vec4 ShadowOFFDraw()
+{
+	vec3 addColor = DifSpeColor() + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+void main()
+{
+	fk_Fragment = FaceDrawFunc();
 }

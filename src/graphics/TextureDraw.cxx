@@ -9,8 +9,10 @@ using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
 	: phongShader(nullptr), gouraudShader(nullptr),
-	  modulate_p_ID(0), replace_p_ID(0), decal_p_ID(0),
-	  modulate_g_ID(0), replace_g_ID(0), decal_g_ID(0)
+	  replace_p_ID(0), mod_ON_p_ID(0), mod_OFF_p_ID(0),
+	  dec_ON_p_ID(0), dec_OFF_p_ID(0), shadow_p_ID(0),
+	  ON_g_VS_ID(0), OFF_g_VS_ID(0), Buf_g_VS_ID(0),
+	  replace_g_FS_ID(0), modulate_g_FS_ID(0), decal_g_FS_ID(0), shadow_g_FS_ID(0)
 {
 	return;
 }
@@ -22,7 +24,7 @@ fk_TextureDraw::~fk_TextureDraw()
 	return;
 }
 
-void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowSwitch)
+void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
 {
 	auto modelShader = argModel->getShader();
 
@@ -56,7 +58,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowSwitch)
 
 	auto parameter = shader->getParameter();
 	SetParameter(parameter);
-	Draw_Texture(argModel, parameter);
+	Draw_Texture(argModel, parameter, argShadowMode, argShadowSwitch);
 	return;
 }
 
@@ -90,12 +92,15 @@ void fk_TextureDraw::PhongSetup(void)
 	ParamInit(prog, param);
 
 	auto progID = prog->getProgramID();
-	
-	modulate_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
-	replace_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
-	decal_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
 
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulate_p_ID);
+	replace_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
+	mod_ON_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate_ON");
+	mod_OFF_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate_OFF");
+	dec_ON_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal_ON");
+	dec_OFF_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal_OFF");
+	shadow_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowBuf");
+
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &mod_ON_p_ID);
 
 	return;
 }
@@ -124,11 +129,17 @@ void fk_TextureDraw::GouraudSetup(void)
 
 	auto progID = prog->getProgramID();
 	
-	modulate_g_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
-	replace_g_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
-	decal_g_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
+	ON_g_VS_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "Shadow_ON");
+	OFF_g_VS_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "Shadow_OFF");
+	Buf_g_VS_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "Shadow_Buf");
 
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulate_g_ID);
+	replace_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
+	modulate_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
+	decal_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
+	shadow_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowBuf");
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &ON_g_VS_ID);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulate_g_FS_ID);
 
 	return;
 }
@@ -165,7 +176,8 @@ GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam,
+								  bool argShadowMode, bool argShadowSwitch)
 {
 	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
 	GLuint			vao = texture->GetFaceVAO();
@@ -189,54 +201,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
 
-	if(defaultShaderFlag == true) {
-		GLuint id = 0;
-
-		switch(argModel->getShadingMode()) {
-		  case fk_ShadingMode::PHONG:
-			switch(texMode) {
-			  case fk_TexMode::MODULATE:
-				id = modulate_p_ID;
-				break;
-
-			  case fk_TexMode::REPLACE:
-				id = replace_p_ID;
-				break;
-
-			  case fk_TexMode::DECAL:
-				id = decal_p_ID;
-				break;
-
-			  default:
-				break;
-			}
-			break;
-
-		  case fk_ShadingMode::GOURAUD:
-			switch(texMode) {
-			  case fk_TexMode::MODULATE:
-				id = modulate_g_ID;
-				break;
-
-			  case fk_TexMode::REPLACE:
-				id = replace_g_ID;
-				break;
-
-			  case fk_TexMode::DECAL:
-				id = decal_g_ID;
-				break;
-
-			  default:
-				break;
-			}
-			break;
-
-		  default:
-			break;
-		}
-
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &id);
-	}
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, texMode, argShadowMode, argShadowSwitch);
 
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -245,6 +210,72 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	shader->ProcPostShader();
 	return;
 }
+
+void fk_TextureDraw::SubroutineSetup(fk_Model *argModel, fk_TexMode argTexMode,
+									 bool argShadowMode, bool argShadowSwitch)
+{
+	GLuint vID = 0;
+	GLuint fID = 0;
+
+	FK_UNUSED(vID);
+
+	switch(argModel->getShadingMode()) {
+	  case fk_ShadingMode::PHONG:
+		if(argShadowSwitch == true) {
+			fID = shadow_p_ID;
+		} else {
+			switch(argTexMode) {
+			  case fk_TexMode::REPLACE:
+				fID = replace_p_ID;
+				break;
+
+			  case fk_TexMode::MODULATE:
+				fID = (argShadowMode) ? mod_ON_p_ID : mod_OFF_p_ID;
+				break;
+
+			  case fk_TexMode::DECAL:
+				fID = (argShadowMode) ? dec_ON_p_ID : dec_OFF_p_ID;
+				break;
+
+			  default:
+				break;
+			}
+		}
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
+		break;
+
+	  case fk_ShadingMode::GOURAUD:
+		if(argShadowSwitch == true) {
+			vID = Buf_g_VS_ID;
+			fID = shadow_g_FS_ID;
+		} else {
+			vID = (argShadowMode) ? ON_g_VS_ID : OFF_g_VS_ID;
+			switch(argTexMode) {
+			  case fk_TexMode::REPLACE:
+				fID = replace_g_FS_ID;
+				break;
+
+			  case fk_TexMode::MODULATE:
+				fID = modulate_g_FS_ID;
+				break;
+
+			  case fk_TexMode::DECAL:
+				fID = decal_g_FS_ID;
+				break;
+
+			  default:
+				break;
+			}
+		}
+		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vID);
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
+		break;
+
+	  default:
+		break;
+	}
+}
+
 
 /****************************************************************************
  *

@@ -1,4 +1,202 @@
-﻿/****************************************************************************
+﻿#define FK_DEF_SIZETYPE
+#include <FK/PointDraw.H>
+#include <FK/OpenGL.H>
+#include <FK/Model.h>
+#include <FK/Point.h>
+#include <FK/Solid.h>
+#include <FK/IndexFace.h>
+#include <FK/Vertex.h>
+#include <FK/Curve.h>
+#include <FK/Surface.h>
+#include <FK/Graph.h>
+#include <FK/Error.H>
+
+using namespace std;
+using namespace FK;
+
+fk_PointDraw::fk_PointDraw(void)
+	: pointShader(nullptr),
+	  vsModelID(0), vsElemID(0), vsIFSID(0),
+	  fsPointID(0), fsIFSID(0), fsShadowID(0)
+{
+	return;
+}
+
+fk_PointDraw::~fk_PointDraw()
+{
+	delete pointShader;
+	return;
+}
+
+void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool argShadowSwitch)
+{
+	fk_Shape *shape = (argShape == nullptr) ? argModel->getShape() : argShape;
+	auto shapeType = shape->getRealShapeType();
+	auto modelShader = (argShape == nullptr) ? argModel->getShader() : nullptr;
+
+	if(modelShader != nullptr) {
+		shader = modelShader;
+		defaultShaderFlag = false;
+		if(shader->IsSetup() == false) {
+			ParamInit(shader->getProgram(), shader->getParameter());
+			shader->SetupDone(true);
+		}
+	} else {
+		if(pointShader == nullptr) ShaderSetup();
+		shader = pointShader;
+		defaultShaderFlag = true;
+	}
+
+	auto parameter = shader->getParameter();
+	SetParameter(parameter);
+	parameter->setRegister(fk_Shape::pointModelColorName, &(argModel->getPointColor()->col),
+						   fk_Shape::pointModelColorName);
+
+	shader->ProcPreShader();
+
+	int pointNum = GetPointNum(shape);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
+	
+	glPointSize((GLfloat)argModel->getPointSize());
+
+	switch(shapeType) {
+	  case fk_RealShapeType::POINT:
+	  case fk_RealShapeType::IFS:
+		Draw_Point(shape, parameter, pointNum);
+		break;
+	  default:
+		break;
+	}
+
+	shader->ProcPostShader();
+	return;
+}
+
+void fk_PointDraw::ShaderSetup(void)
+{
+	pointShader = new fk_ShaderBinder();
+ 	auto prog = pointShader->getProgram();
+	auto param = pointShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Point_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Point_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_PointDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+
+	vsModelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointModelVS");
+	vsElemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointElemVS");
+	vsIFSID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointIFSVS");
+	fsPointID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointPointFS");
+	fsIFSID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointIFSFS");
+	fsShadowID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointShadowFS");
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
+
+	return;
+}
+
+void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
+{
+	argParam->reserveAttribute(fk_Shape::vertexName);
+	argParam->reserveAttribute(fk_Shape::pointElementColorName);
+	argParam->reserveAttribute(fk_Shape::pointElementAliveName);
+
+	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
+	argProg->link();
+}
+
+void fk_PointDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
+{
+	auto shape = argModel->getShape();
+	auto mode = argModel->getElementMode();
+	GLuint vID = vsModelID;
+	GLuint fID = fsPointID;
+
+	switch(shape->getRealShapeType()) {
+	  case fk_RealShapeType::POINT:
+	  case fk_RealShapeType::CURVE:
+	  case fk_RealShapeType::SURFACE:
+	  case fk_RealShapeType::GRAPH:
+
+		if(mode == fk_ElementMode::ELEMENT) vID = vsElemID;
+		break;
+
+	  case fk_RealShapeType::IFS:
+		vID = vsIFSID;
+		fID = fsIFSID;
+		break;
+
+	  default:
+		break;
+	}
+
+	if(argShadowSwitch == true) fID = fsShadowID;
+
+	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vID);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
+
+	return;
+}
+
+int fk_PointDraw::GetPointNum(fk_Shape *argShape)
+{
+	switch(argShape->getRealShapeType()) {
+	  case fk_RealShapeType::POINT:
+		return dynamic_cast<fk_Point *>(argShape)->getSize();
+
+	  case fk_RealShapeType::IFS:
+		return dynamic_cast<fk_IndexFaceSet *>(argShape)->getPosSize();
+
+	  default:
+		break;
+	}
+
+	return 0;
+}	
+
+GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
+{
+	GLuint 			vao;
+	
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	argShape->SetPointVAO(vao);
+	argShape->DefineVBO();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	return vao;
+}
+
+void fk_PointDraw::Draw_Point(fk_Shape *argShape, fk_ShaderParameter *argParam, int argSize)
+{
+	GLuint vao = argShape->GetPointVAO();
+
+	if(vao == 0) vao = VAOSetup(argShape);
+	glBindVertexArray(vao);
+	argShape->BindShaderBuffer(argParam->getAttrTable());
+	glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,203 +267,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#define FK_DEF_SIZETYPE
-#include <FK/PointDraw.H>
-#include <FK/OpenGL.H>
-#include <FK/Model.h>
-#include <FK/Point.h>
-#include <FK/Solid.h>
-#include <FK/IndexFace.h>
-#include <FK/Vertex.h>
-#include <FK/Curve.h>
-#include <FK/Surface.h>
-#include <FK/Graph.h>
-#include <FK/Error.H>
-
-using namespace std;
-using namespace FK;
-
-fk_PointDraw::fk_PointDraw(void)
-	: pointShader(nullptr)
-{
-	return;
-}
-
-fk_PointDraw::~fk_PointDraw()
-{
-	delete pointShader;
-	return;
-}
-
-void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape)
-{
-	fk_Shape *shape = (argShape == nullptr) ? argModel->getShape() : argShape;
-	auto shapeType = shape->getRealShapeType();
-	auto modelShader = (argShape == nullptr) ? argModel->getShader() : nullptr;
-
-	if(modelShader != nullptr) {
-		shader = modelShader;
-		defaultShaderFlag = false;
-		if(shader->IsSetup() == false) {
-			ParamInit(shader->getProgram(), shader->getParameter());
-			shader->SetupDone(true);
-		}
-	} else {
-		if(pointShader == nullptr) ShaderSetup();
-		shader = pointShader;
-		defaultShaderFlag = true;
-	}
-
-	auto parameter = shader->getParameter();
-	SetParameter(parameter);
-	parameter->setRegister(fk_Shape::pointModelColorName, &(argModel->getPointColor()->col),
-						   fk_Shape::pointModelColorName);
-
-	shader->ProcPreShader();
-
-	int pointNum = GetPointNum(shape);
-	if(defaultShaderFlag == true) SubroutineSetup(argModel);
-	
-	glPointSize((GLfloat)argModel->getPointSize());
-
-	switch(shapeType) {
-	  case fk_RealShapeType::POINT:
-	  case fk_RealShapeType::IFS:
-		Draw_Point(shape, parameter, pointNum);
-		break;
-	  default:
-		break;
-	}
-
-	shader->ProcPostShader();
-	return;
-}
-
-void fk_PointDraw::ShaderSetup(void)
-{
-	pointShader = new fk_ShaderBinder();
- 	auto prog = pointShader->getProgram();
-	auto param = pointShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Point_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_PointDraw", "ShaderSetup", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	vsModelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointModelVS");
-	vsElemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointElemVS");
-	vsIFSID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointIFSVS");
-	fsPointID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointPointFS");
-	fsIFSID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointIFSFS");
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
-
-	return;
-}
-
-void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
-{
-	argParam->reserveAttribute(fk_Shape::vertexName);
-	argParam->reserveAttribute(fk_Shape::pointElementColorName);
-	argParam->reserveAttribute(fk_Shape::pointElementAliveName);
-
-	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
-	argProg->link();
-}
-
-void fk_PointDraw::SubroutineSetup(fk_Model *argModel)
-{
-	auto shape = argModel->getShape();
-	auto mode = argModel->getElementMode();
-
-	switch(shape->getRealShapeType()) {
-	  case fk_RealShapeType::POINT:
-	  case fk_RealShapeType::CURVE:
-	  case fk_RealShapeType::SURFACE:
-	  case fk_RealShapeType::GRAPH:
-
-		switch(mode) {
-		  case fk_ElementMode::MODEL:
-			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
-			break;
-
-		  case fk_ElementMode::ELEMENT:
-			glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsElemID);
-			break;
-
-		  default:
-			return;
-		}
-		
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
-		return;
-
-	  case fk_RealShapeType::IFS:
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsIFSID);
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsIFSID);
-		return;
-
-	  default:
-		break;
-	}
-
-	return;
-}
-
-int fk_PointDraw::GetPointNum(fk_Shape *argShape)
-{
-	switch(argShape->getRealShapeType()) {
-	  case fk_RealShapeType::POINT:
-		return dynamic_cast<fk_Point *>(argShape)->getSize();
-
-	  case fk_RealShapeType::IFS:
-		return dynamic_cast<fk_IndexFaceSet *>(argShape)->getPosSize();
-
-	  default:
-		break;
-	}
-
-	return 0;
-}	
-
-GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
-{
-	GLuint 			vao;
-	
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	argShape->SetPointVAO(vao);
-	argShape->DefineVBO();
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	return vao;
-}
-
-void fk_PointDraw::Draw_Point(fk_Shape *argShape, fk_ShaderParameter *argParam, int argSize)
-{
-	GLuint vao = argShape->GetPointVAO();
-
-	if(vao == 0) vao = VAOSetup(argShape);
-	glBindVertexArray(vao);
-	argShape->BindShaderBuffer(argParam->getAttrTable());
-	glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	return;
-}

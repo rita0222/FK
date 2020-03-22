@@ -2,6 +2,9 @@
 
 #FKBuildIn
 
+subroutine vec4 textureDrawType();
+subroutine uniform textureDrawType TextureDrawFunc;
+
 out vec4 varC;
 out vec2 varT;
 
@@ -125,10 +128,9 @@ float ShadowValue()
 	return value;
 }
 
-void main()
+vec3 DifSpeColor()
 {
-	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
-	vec3 varP = gl_Position.xyz;
+	vec3 varP = (fk_ModelMatrix * vec4(fk_Vertex, 1.0)).xyz;
 	vec4 varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
 	vec3 Vn = normalize(varN.xyz);
 	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
@@ -145,8 +147,32 @@ void main()
 
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
+	return (difSumColor + speSumColor);
+}
 
-	vec3 addColor = (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
-	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+subroutine(textureDrawType)
+vec4 Shadow_ON()
+{
+	vec3 addColor = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(textureDrawType)
+vec4 Shadow_OFF()
+{
+	vec3 addColor = DifSpeColor() + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+subroutine(textureDrawType)
+vec4 Shadow_Buf()
+{
+	return vec4(1.0, 1.0, 1.0, 1.0);
+}
+
+void main()
+{
+	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
+	varC = TextureDrawFunc();
 	varT = fk_TexCoord;
 }

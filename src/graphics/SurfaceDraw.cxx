@@ -9,7 +9,9 @@ using namespace std;
 using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(int argMode)
-	: surfaceShader(nullptr), mode(argMode), bezID(0), gregID(0)
+	: surfaceShader(nullptr), mode(argMode),
+	  bezID(0), gregID(0),
+	  shadowID(0), elemID(0)
 {
 	return;
 }
@@ -59,7 +61,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowSwitch)
 
 	shader->ProcPreShader();
 
-	if(defaultShaderFlag == true) SubroutineSetup(argModel);
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
 
 	Draw_Surface(argModel, parameter);
 
@@ -134,6 +136,12 @@ void fk_SurfaceDraw::ShaderSetup(void)
 	gregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
 	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
 
+	if(mode == 1) {
+		shadowID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowDraw");
+		elemID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ElementDraw");
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &elemID);
+	}
+
 	return;
 }
 
@@ -183,20 +191,25 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argPar
 	return;
 }
 
-void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel)
+void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
 {
 	switch(argModel->getShape()->getObjectType()) {
 	  case fk_Type::BEZSURFACE:
 		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
-		return;
+		break;
 
 	  case fk_Type::GREGORY:
 		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &gregID);
-		return;
+		break;
 
 	  default:
 		break;
 	}
+
+	if(mode == 1) {
+		auto ID = (argShadowSwitch == true) ? shadowID : elemID;
+		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &ID);
+	}	
 
 	return;
 }

@@ -118,15 +118,7 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 	return sum;
 }
 
-float ShadowValue()
-{
-	float bias = 0.00001;
-	float value = 1.0;
-	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) value = 0.0;
-	return value;
-}
-
-vec3 GetMaterial()
+vec3 DifSpeColor()
 {
 	vec3 Vn = normalize(varN.xyz);
 	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
@@ -147,7 +139,15 @@ vec3 GetMaterial()
 	float bias = 0.00001;
 	float sValue = 1.0;
 
-	return (difSumColor + speSumColor) * ShadowValue() + fk_Material.ambient.rgb;
+	return (difSumColor + speSumColor);
+}
+
+float ShadowValue()
+{
+	float bias = 0.00001;
+	float value = 1.0;
+	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) value = 0.0;
+	return value;
 }
 
 subroutine(textureRendType)
@@ -157,22 +157,46 @@ vec4 Replace()
 }
 
 subroutine(textureRendType)
-vec4 Modulate()
+vec4 Modulate_ON()
 {
-	vec3 material = GetMaterial();
+	vec3 material = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
 	vec4 texColor = texture(fk_TexID[0], varT);
 	vec3 trueColor = material * texColor.rgb;
 	return vec4(min(vec3(1.0, 1.0, 1.0), trueColor), fk_Material.diffuse.a * texColor.a);
 }
 
 subroutine(textureRendType)
-vec4 Decal()
+vec4 Modulate_OFF()
 {
-	vec3 material = GetMaterial();
+	vec3 material = DifSpeColor() + fk_Material.ambient.rgb;
+	vec4 texColor = texture(fk_TexID[0], varT);
+	vec3 trueColor = material * texColor.rgb;
+	return vec4(min(vec3(1.0, 1.0, 1.0), trueColor), fk_Material.diffuse.a * texColor.a);
+}
+
+subroutine(textureRendType)
+vec4 Decal_ON()
+{
+	vec3 material = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
 	vec4 texColor = texture(fk_TexID[0], varT);
 	vec3 trueColor = material * (1.0 - texColor.a) + texColor.rgb * texColor.a;
 	return vec4(min(vec3(1.0, 1.0, 1.0), trueColor), fk_Material.diffuse.a);
-}	
+}
+
+subroutine(textureRendType)
+vec4 Decal_OFF()
+{
+	vec3 material = DifSpeColor() + fk_Material.ambient.rgb;
+	vec4 texColor = texture(fk_TexID[0], varT);
+	vec3 trueColor = material * (1.0 - texColor.a) + texColor.rgb * texColor.a;
+	return vec4(min(vec3(1.0, 1.0, 1.0), trueColor), fk_Material.diffuse.a);
+}
+
+subroutine(textureRendType)
+vec4 ShadowBuf()
+{
+	return vec4(1.0, 1.0, 1.0, 1.0);
+}
 
 void main()
 {

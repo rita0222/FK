@@ -19,6 +19,12 @@ void PointIFSFS()
 {
 }
 
+subroutine(pointDrawType)
+void PointShadowFS()
+{
+	discard;
+}
+
 void main()
 {
 	pointDrawFunc();

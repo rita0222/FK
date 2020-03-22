@@ -19,6 +19,12 @@ void LineIFSFS()
 {
 }
 
+subroutine(lineDrawType)
+void LineShadowFS()
+{
+	discard;
+}
+
 void main()
 {
 	lineDrawFunc();

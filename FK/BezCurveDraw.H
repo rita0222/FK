@@ -1,4 +1,38 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_CURVE_DRAW_HEADER__
+#define __FK_CURVE_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+#include <FK/BezCurve.h>
+#include <FK/RBezCurve.h>
+
+namespace FK {
+
+	class fk_BezCurveDraw : public fk_DrawBase {
+	public:
+		fk_BezCurveDraw(int);
+		virtual ~fk_BezCurveDraw();
+
+		void	DrawShapeCurve(fk_Model *, bool);
+		GLuint	VAOSetup(fk_Shape *);
+
+	private:
+		fk_ShaderBinder *curveShader;
+		GLuint	bezier2_ID, bezier3_ID, bezier4_ID;
+		GLuint	rBezier2_ID, rBezier3_ID, rBezier4_ID;
+		GLuint	shadowID, elemID;
+		int		mode;
+		void	ShaderSetup(void);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+ 		void	Draw_Curve(fk_Model *, fk_ShaderParameter *, bool);
+
+		bool	SubroutineSetup(fk_Curve *, bool);
+	};
+}
+
+#endif /* !__FK_CURVE_DRAW_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,32 +103,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_CURVE_DRAW_HEADER__
-#define __FK_CURVE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-
-	class fk_BezCurveDraw : public fk_DrawBase {
-	public:
-		fk_BezCurveDraw(int);
-		virtual ~fk_BezCurveDraw();
-
-		void	DrawShapeCurve(fk_Model *);
-		GLuint	VAOSetup(fk_Shape *);
-
-	private:
-		fk_ShaderBinder		*curveShader;
-		GLuint	bezier2_ID, bezier3_ID, bezier4_ID;
-		GLuint	rBezier2_ID, rBezier3_ID, rBezier4_ID;
-		int		mode;
-		void	ShaderSetup(void);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-
- 		void	Draw_Curve(fk_Model *, fk_ShaderParameter *);
-	};
-}
-
-#endif /* !__FK_CURVE_DRAW_HEADER__ */

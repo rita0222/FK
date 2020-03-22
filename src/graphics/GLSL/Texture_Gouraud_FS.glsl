@@ -30,6 +30,12 @@ vec4 Decal()
 	return vec4(min(vec3(1.0, 1.0, 1.0), trueColor), fk_Material.diffuse.a);
 }	
 
+subroutine(textureRendType)
+vec4 ShadowBuf()
+{
+	return vec4(1.0, 1.0, 1.0, 1.0);
+}	
+
 void main()
 {
 	fk_Fragment = textureRendSelect();
