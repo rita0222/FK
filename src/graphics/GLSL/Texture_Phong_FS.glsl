@@ -8,7 +8,7 @@ subroutine uniform textureRendType textureRendSelect;
 in vec4 varP;
 in vec4 varN;
 in vec2 varT;
-in vec3 varS;
+in vec4 varS;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {
@@ -144,9 +144,7 @@ vec3 DifSpeColor()
 
 float ShadowValue()
 {
-	float value = 1.0;
-	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - fk_ShadowBias) value = 1.0 - fk_ShadowVisibility;
-	return value;
+	return 1.0 - fk_ShadowVisibility * (1.0 - textureProj(fk_ShadowBuf, varS));
 }
 
 subroutine(textureRendType)

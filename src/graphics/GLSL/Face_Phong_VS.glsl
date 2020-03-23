@@ -4,7 +4,7 @@
 
 out vec4 varP;
 out vec4 varN;
-out vec3 varS;
+out vec4 varS;
 
 void main()
 {
@@ -12,6 +12,5 @@ void main()
 	gl_Position = fk_ModelViewProjectionMatrix * p;
 	varP = fk_ModelMatrix * p;
 	varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
-	vec4 v = fk_ShadowMatrix * p;
-	varS = v.xyz/v.w;
+	varS = fk_ShadowMatrix * p;
 }

@@ -1,4 +1,42 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_RENDERER_HEADER__
+#define __FK_RENDERER_HEADER__
+
+#include <FK/Engine.H>
+
+namespace FK {
+
+	//! マルチパスレンダリング制御クラス
+	/*!
+	 *	このクラスは、マルチパスレンダリングを実現するための機能を提供します。
+	 *
+	 *	設定したシーンのカラーバッファーと深度バッファーを生成し、
+	 *	テクスチャーデータとして扱うことができます。
+	 */
+	class fk_Renderer {
+
+	public:
+		fk_Renderer(int w = 1024, int h = 1024);
+
+		//! デストラクタ
+		virtual ~fk_Renderer();
+
+		void setScene(fk_Scene *scene);
+		void draw(void);
+		void resize(int, int);
+
+		fk_FrameBuffer * getColorBuffer(void);
+		fk_FrameBuffer * getDepthBuffer(void);
+
+	private:
+		fk_GraphicsEngine *engine;
+		bool initFlg;
+	};
+}
+
+#endif /* !__FK_RENDERER_HEADER__ */
+
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,37 +107,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_RENDERER_HEADER__
-#define __FK_RENDERER_HEADER__
-
-// for FK Header.
-#include <FK/Engine.H>
-
-// for Graphics Routine
-
-namespace FK {
-
-	class fk_Renderer {
-
-	public:
-		fk_Renderer(int w = 1024, int h = 1024);
-
-		//! デストラクタ
-		virtual ~fk_Renderer();
-
-		void setScene(fk_Scene *scene);
-		void draw(void);
-		void resize(int, int);
-
-		fk_FrameBuffer * getColorBuffer(void);
-		fk_FrameBuffer * getDepthBuffer(void);
-
-	private:
-		fk_GraphicsEngine *engine;
-		bool initFlg;
-	};
-}
-
-#endif /* !__FK_RENDERER_HEADER__ */
-
-

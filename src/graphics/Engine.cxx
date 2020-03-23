@@ -883,6 +883,7 @@ void fk_GraphicsEngine::AttachShadowBuffer(int argID)
 
 void fk_GraphicsEngine::PreShadowDraw(void)
 {
+	glCullFace(GL_FRONT);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glDrawBuffers(sizeof(shadowBuffers) / sizeof(shadowBuffers[0]), shadowBuffers);
@@ -906,6 +907,7 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 	shadowBuf->Unbind();
 
 	AttachShadowBuffer(shadowBufferID);
+	glCullFace(GL_BACK);
 }
 
 void fk_GraphicsEngine::CopyShadowStatus(void)

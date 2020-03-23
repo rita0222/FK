@@ -1,4 +1,74 @@
-﻿/****************************************************************************
+﻿#ifndef	__FK_FRAME_BUFFER_HEADER__
+#define	__FK_FRAME_BUFFER_HEADER__
+
+#include <FK/Image.h>
+
+namespace FK {
+
+	// フレームバッファのサンプリングソースを表す列挙型
+	enum class fk_SamplerSource {
+		COLOR,	//!< 画面色情報参照
+		DEPTH	//!< 画面深度情報参照
+	};
+
+	class fk_FrameBuffer : public fk_BaseObject {
+
+	public:
+
+		//! コンストラクタ
+		fk_FrameBuffer(void);
+
+		//! デストラクタ
+		virtual ~fk_FrameBuffer();
+
+		//! テクスチャ参照情報設定関数
+		/*!
+		 *	参照テクスチャが参照する情報を設定します。
+		 *	設定できる種類は以下のとおりです。
+		 *
+		 *	- fk_SamplerSource::COLOR:
+		 *		描画シーン全体の色値情報を参照先とします。
+		 *	- fk_SamplerSource::DEPTH:
+		 *		描画シーン全体の深度情報を参照先とします。
+		 *	.
+		 *	デフォルトは fk_SamplerSource::COLOR に設定されています。
+		 *
+		 *	\param[in]	mode
+		 *		テクスチャ参照情報の参照先
+		 *
+		 *	\sa getSource()
+		 */
+		void setSource(fk_SamplerSource mode);
+
+		//! テクスチャ参照情報参照関数
+		/*!
+		 *	参照テクスチャが参照する情報を参照します。
+		 *
+		 *	\return		テクスチャ参照情報
+		 */
+		fk_SamplerSource getSource(void);
+
+		void setBufferSize(int, int);
+		fk_Dimension * getBufferSize(void);
+
+		fk_TexID		GetTexID(void);
+		void			SetupFBO(int);
+		void			AttachFBO(void);
+		void			BindFBO(void);
+		void			Unbind(void);
+
+	private:
+
+		fk_TexID			ID;
+		fk_SamplerSource	source;
+		fk_Dimension		dim;
+		int					unitID;
+	};
+}
+
+#endif	// !__FK_FRAME_BUFFER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,74 +139,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef	__FK_FRAME_BUFFER_HEADER__
-#define	__FK_FRAME_BUFFER_HEADER__
-
-#include <FK/Image.h>
-
-namespace FK {
-
-	// フレームバッファのサンプリングソースを表す列挙型
-	enum class fk_SamplerSource {
-		COLOR,	//!< 画面色情報参照
-		DEPTH	//!< 画面深度情報参照
-	};
-
-	class fk_FrameBuffer : public fk_BaseObject {
-
-	public:
-
-		//! コンストラクタ
-		fk_FrameBuffer(void);
-
-		//! デストラクタ
-		virtual ~fk_FrameBuffer();
-
-		//! テクスチャ参照情報設定関数
-		/*!
-		 *	参照テクスチャが参照する情報を設定します。
-		 *	設定できる種類は以下のとおりです。
-		 *
-		 *	- fk_SamplerSource::COLOR:
-		 *		描画シーン全体の色値情報を参照先とします。
-		 *	- fk_SamplerSource::DEPTH:
-		 *		描画シーン全体の深度情報を参照先とします。
-		 *	.
-		 *	デフォルトは fk_SamplerSource::COLOR に設定されています。
-		 *
-		 *	\param[in]	mode
-		 *		テクスチャ参照情報の参照先
-		 *
-		 *	\sa getSource()
-		 */
-		void setSource(fk_SamplerSource mode);
-
-		//! テクスチャ参照情報参照関数
-		/*!
-		 *	参照テクスチャが参照する情報を参照します。
-		 *
-		 *	\return		テクスチャ参照情報
-		 */
-		fk_SamplerSource getSource(void);
-
-		void setBufferSize(int, int);
-		fk_Dimension * getBufferSize(void);
-
-		fk_TexID		GetTexID(void);
-		void			SetupFBO(int);
-		void			AttachFBO(void);
-		void			BindFBO(void);
-		void			Unbind(void);
-
-	private:
-
-		fk_TexID			ID;
-		fk_SamplerSource	source;
-		fk_Dimension		dim;
-		int					unitID;
-	};
-}
-
-#endif	// !__FK_FRAME_BUFFER_HEADER__
-
-

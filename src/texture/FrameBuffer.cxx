@@ -42,6 +42,7 @@ void fk_FrameBuffer::setBufferSize(int argW, int argH)
 
 void fk_FrameBuffer::SetupFBO(int argUnitID)
 {
+	static const GLfloat border[] = {1.0f, 0.0f, 0.0f, 0.0f};
 	unitID = argUnitID+1;
 	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
 
@@ -59,6 +60,9 @@ void fk_FrameBuffer::SetupFBO(int argUnitID)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, dim.w, dim.h, 0,
 					 GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	} else {
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
 					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 	}

@@ -9,7 +9,7 @@ layout( quads, equal_spacing, ccw ) in;
 
 out vec4 varP;
 out vec4 varN;
-out vec3 varS;
+out vec4 varS;
 
 void bezier(out float[5] b, out float[5] db, float t)
 {
@@ -124,6 +124,5 @@ void main()
 	varN = fk_ModelMatrix * N;
 	gl_Position = fk_ModelViewProjectionMatrix * P;
 
-	vec4 sV = fk_ShadowMatrix * P;
-	varS = sV.xyz/sV.w;
+	varS = fk_ShadowMatrix * P;
 }
