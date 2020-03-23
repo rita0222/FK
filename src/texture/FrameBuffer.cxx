@@ -62,9 +62,12 @@ void fk_FrameBuffer::SetupFBO(int argUnitID)
 	} else {
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
-					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
+//					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, dim.w, dim.h, 0,
+					 GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 	}
 		
 	glBindTexture(GL_TEXTURE_2D, 0);
