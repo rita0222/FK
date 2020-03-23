@@ -5,7 +5,7 @@
 #include <FK/OpenGL.H>
 #include <FK/Matrix.h>
 #include <FK/Image.h>
-#include <FK/DList.h>
+#include <FK/Scene.h>
 #include <FK/FrameBuffer.h>
 #include <FK/RectTexture.h>
 
@@ -56,20 +56,12 @@ namespace FK {
 		fk_RectTexture * GetShadowTexture(void);
 		void SetShadowTextureSize(int, int);
 
-		void SetShadowMode(bool);
-		bool GetShadowMode(void);
-		
 		void SetShadowVec(fk_Vector);
-		fk_Vector GetShadowVec(void);
-		
 		void SetShadowResolution(int);
-		int GetShadowResolution(void);
-		
 		void SetShadowAreaSize(double);
-		double GetShadowAreaSize(void);
-
 		void SetShadowDistance(double);
-		double GetShadowDistance(void);
+		void SetShadowBias(double);
+		void SetShadowVisibility(double);
 
 	private:
 
@@ -87,9 +79,9 @@ namespace FK {
 
 		unsigned int drawCount;
 		unsigned int winID;
-		fk_DisplayLink *curDLink;
-		int dLinkStatus;
-		int dLinkID;
+		fk_Scene *curScene;
+		int sceneStatus;
+		int sceneID;
 		int wSize;
 		int hSize;
 		bool resizeFlag;
@@ -124,6 +116,8 @@ namespace FK {
 		fk_Vector shadowVec;
 		double shadowDistance;
 		int shadowResolution;
+		double shadowBias;
+		double shadowVisibility;
 
 		void DrawShadow(void);
 		void DrawWorld(void);
@@ -167,6 +161,7 @@ namespace FK {
 		void AttachShadowBuffer(int);
 		void PreShadowDraw(void);
 		void PostShadowDraw(void);
+		void CopyShadowStatus(void);
 
 		int ShadowFixVal(int);
 	};

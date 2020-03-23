@@ -18,6 +18,8 @@ const string fk_DrawBase::normalModelViewMatrixName = "fk_NormalModelViewMatrix"
 const string fk_DrawBase::cameraPositionName = "fk_CameraPosition";
 
 const string fk_DrawBase::shadowMatrixName = "fk_ShadowMatrix";
+const string fk_DrawBase::shadowBiasName = "fk_ShadowBias";
+const string fk_DrawBase::shadowVisibilityName = "fk_ShadowVisibility";
 
 const string fk_DrawBase::modelMaterialName = "fk_Material";
 const string fk_DrawBase::diffuseName = "diffuse";
@@ -57,13 +59,16 @@ fk_Matrix * fk_DrawBase::shadowProjMatrix = nullptr;
 fk_Matrix fk_DrawBase::shadowViewMatrix;
 fk_Matrix fk_DrawBase::shadowBiasMatrix;
 fk_Matrix fk_DrawBase::shadowMatrix;
+float fk_DrawBase::shadowBias = 0.0;
+float fk_DrawBase::shadowVisibility = 1.0;
+bool fk_DrawBase::shadowMode = false;
 
 list<fk_Model *> * fk_DrawBase::parallelLightList;
 list<fk_Model *> * fk_DrawBase::pointLightList;
 list<fk_Model *> * fk_DrawBase::spotLightList;
 
 fk_DrawBase::fk_DrawBase(void)
-	: shader(nullptr), shadowTexture(nullptr), shadowMode(false), defaultShaderFlag(true)
+	: shader(nullptr), shadowTexture(nullptr), defaultShaderFlag(true)
 {
 	InitBiasMatrix();
 	return;
@@ -72,6 +77,11 @@ fk_DrawBase::fk_DrawBase(void)
 fk_DrawBase::~fk_DrawBase()
 {
 	return;
+}
+
+void fk_DrawBase::SetShadowMode(bool argMode)
+{
+	shadowMode = argMode;
 }
 
 void fk_DrawBase::InitBiasMatrix(void)
@@ -110,10 +120,16 @@ void fk_DrawBase::SetShadowCamera(fk_Model *argModel)
 	return;
 }
 
-void fk_DrawBase::SetModel(fk_Model *argModel, bool argShadowMode)
+void fk_DrawBase::SetShadowParam(double argBias, double argVis)
+{
+	shadowBias = float(argBias);
+	shadowVisibility = float(argVis);
+}
+
+void fk_DrawBase::SetModel(fk_Model *argModel)
 {
 	if(projectionMatrix == nullptr) return;
-	
+
 	modelMatrix = argModel->getInhMatrix();
 	modelViewMatrix = viewMatrix * modelMatrix;
 	modelViewProjectionMatrix = (*projectionMatrix) * modelViewMatrix;
@@ -123,7 +139,7 @@ void fk_DrawBase::SetModel(fk_Model *argModel, bool argShadowMode)
 	normalModelViewMatrix = modelViewMatrix;
 	normalModelViewMatrix.covariant();
 
-	if(argShadowMode == true) {
+	if(shadowMode == true) {
 		shadowMatrix = shadowBiasMatrix * (*shadowProjMatrix) * shadowViewMatrix * modelMatrix;
 	}
 	return;
@@ -154,6 +170,7 @@ void fk_DrawBase::SetLight(list<fk_Model *> *argList, fk_LightType argType)
 void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
 	SetMatrixParam(argParam);
+	if(shadowMode == true) SetValueParam(argParam);
 	SetMaterialParam(argParam);
 	SetLightParam(argParam, fk_LightType::PARALLEL);
 	SetLightParam(argParam, fk_LightType::POINT);
@@ -176,9 +193,15 @@ void fk_DrawBase::SetMatrixParam(fk_ShaderParameter *argParam)
 	argParam->setRegister(normalModelViewMatrixName, &normalModelViewMatrix,
 						  normalModelViewMatrixName);
 	argParam->setRegister(cameraPositionName, &cameraPosition, cameraPositionName);
-	argParam->setRegister(shadowMatrixName, &shadowMatrix, shadowMatrixName);
+	if(shadowMode == true) argParam->setRegister(shadowMatrixName, &shadowMatrix, shadowMatrixName);
 
 	return;
+}
+
+void fk_DrawBase::SetValueParam(fk_ShaderParameter *argParam)
+{
+	argParam->setRegister(shadowBiasName, shadowBias, shadowBiasName);
+	argParam->setRegister(shadowVisibilityName, shadowVisibility, shadowVisibilityName);
 }
 
 void fk_DrawBase::SetMaterialParam(fk_ShaderParameter *argParam)
@@ -274,7 +297,7 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 	argParam->setRegister(numName, lightID, numName);
 }
 
-void fk_DrawBase::AttachTexture(int argID, const string &strName, fk_Texture *argTexture)
+void fk_DrawBase::AttachShadowTexture(int argID, const string &strName, fk_Texture *argTexture)
 {
 	if(shader != nullptr) {
 		shadowTexture = argTexture;

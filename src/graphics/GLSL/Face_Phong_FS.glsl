@@ -119,9 +119,8 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 
 float ShadowValue()
 {
-	float bias = 0.000001;
 	float value = 1.0;
-	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - bias) value = 0.0;
+	if(texture(fk_ShadowBuf, varS.xy).r < varS.z - fk_ShadowBias) value = 1.0 - fk_ShadowVisibility;
 	return value;
 }
 

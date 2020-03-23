@@ -22,11 +22,13 @@ namespace FK {
 
 		static void		SetProjectionMatrix(fk_Matrix *);
 		static void		SetCamera(fk_Model *);
-		static void		SetModel(fk_Model *, bool);
+		static void		SetModel(fk_Model *);
 		static void		SetLight(std::list<fk_Model *> *, fk_LightType);
 		virtual GLuint	VAOSetup(fk_Shape *) = 0;
 		static void		SetShadowProjMatrix(fk_Matrix *);
 		static void		SetShadowCamera(fk_Model *);
+		static void		SetShadowParam(double, double);
+		static void		SetShadowMode(bool);
 
 		static const std::string projectionMatrixName;
 		static const std::string viewMatrixName;
@@ -38,6 +40,8 @@ namespace FK {
 		static const std::string cameraPositionName;
 
 		static const std::string shadowMatrixName;
+		static const std::string shadowBiasName;
+		static const std::string shadowVisibilityName;
 
 		static const std::string modelMaterialName;
 		static const std::string diffuseName;
@@ -65,7 +69,7 @@ namespace FK {
 
 		static const int MAXLIGHTNUM;
 
-		void AttachTexture(int, const std::string &, fk_Texture *);
+		void AttachShadowTexture(int, const std::string &, fk_Texture *);
 
 	protected:
 		static fk_Matrix	*projectionMatrix;
@@ -78,19 +82,20 @@ namespace FK {
 		static fk_Material	*modelMaterial;
 		static fk_Vector	cameraPosition;
 
+		static bool			shadowMode;
 		static fk_Matrix	*shadowProjMatrix;
 		static fk_Matrix	shadowViewMatrix;
 		static fk_Matrix	shadowMatrix;
 		static fk_Matrix	shadowBiasMatrix;
+		static float		shadowBias;
+		static float		shadowVisibility;
 
 		static std::list<fk_Model *> *parallelLightList;
 		static std::list<fk_Model *> *pointLightList;
 		static std::list<fk_Model *> *spotLightList;
 
 		fk_ShaderBinder	*shader;
-		fk_Texture		*shadowTexture;
-		bool			shadowMode;
-
+		fk_Texture *shadowTexture;
 		bool defaultShaderFlag;
 
 		void SetParameter(fk_ShaderParameter *);
@@ -98,6 +103,7 @@ namespace FK {
 	private:
 
 		void SetMatrixParam(fk_ShaderParameter *);
+		void SetValueParam(fk_ShaderParameter *);
 		void SetMaterialParam(fk_ShaderParameter *);
 		void SetLightParam(fk_ShaderParameter *, fk_LightType);
 

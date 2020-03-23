@@ -121,10 +121,8 @@ float ShadowValue()
 	vec4 v = fk_ShadowMatrix * vec4(fk_Vertex, 1.0);
 	vec3 vv = v.xyz/v.w;
 
-	float bias = 0.00001;
 	float value = 1.0;
-
-	if(texture(fk_ShadowBuf, vv.xy).r < vv.z - bias) value = 0.0;
+	if(texture(fk_ShadowBuf, vv.xy).r < vv.z - fk_ShadowBias) value = 1.0 - fk_ShadowVisibility;
 	return value;
 }
 

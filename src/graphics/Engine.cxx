@@ -62,9 +62,9 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	engineNum++;
 
 	winID = 0;
-	curDLink = nullptr;
-	dLinkStatus = 0;
-	dLinkID = 0;
+	curScene = nullptr;
+	sceneStatus = 0;
+	sceneID = 0;
 	wSize = 0;
 	hSize = 0;
 	resizeFlag = false;
@@ -87,15 +87,15 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	fboHandle = 0;
 	FBOShader = nullptr;
 
-	shadowMode = true;
-	//shadowMode = false;
-
+	shadowMode = false;
 	shadowInitFlag = false;
 	shadowSwitch = false;
-	SetShadowAreaSize(400.0);
-	SetShadowDistance(1000.0);
-	SetShadowVec(fk_Vector(1.0, -1.0, 1.0));
+	SetShadowAreaSize(100.0);
+	SetShadowDistance(100.0);
+	SetShadowVec(fk_Vector(0.0, -1.0, 0.0));
 	SetShadowResolution(1024);
+	SetShadowBias(0.0);
+	SetShadowVisibility(1.0);
 
 	return;
 }
@@ -120,7 +120,12 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 
 	delete colorBuf;
 	delete depthBuf;
-	delete shadowBuf;
+	if(shadowBuf != nullptr) {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
+		delete shadowBuf;
+	}
 
 	if(FBOMode == true) {
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -134,14 +139,14 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 {
 	winID = generalID;
 	generalID++;
-	curDLink = nullptr;
-	dLinkStatus = FK_UNDEFINED;
-	dLinkID = FK_UNDEFINED;
+	curScene = nullptr;
+	sceneStatus = FK_UNDEFINED;
+	sceneID = FK_UNDEFINED;
 	wSize = argW;
 	hSize = argH;
 	resizeFlag = false;
 
-	defProj.setAll(40.0, 1.0, 6000.0);
+	defProj.setAll(40.0*fk_Math::PI/180.0, 1.0, 6000.0);
 
 	FBOMode = false;
 	FBOWindowMode = false;
@@ -153,9 +158,6 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 
 	return;
 }
-
-
-
 
 void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 {
@@ -169,10 +171,10 @@ void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 void fk_GraphicsEngine::SetViewPort(void)
 {
 	glViewport(0, 0, wSize, hSize);
-	if(curDLink == nullptr) {
+	if(curScene == nullptr) {
 		SetProjection(&defProj);
 	} else {
-		SetProjection(curDLink->getProjection());
+		SetProjection(curScene->getProjection());
 	}
 	return;
 }
@@ -227,43 +229,31 @@ void fk_GraphicsEngine::OpenGLInit(void)
 void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 {
 	bool			fogStatus = false;
-	fk_Scene		*scene;
 	fk_Color		bgColor;
 
-	scene = nullptr;
-
-	if(curDLink != nullptr) {
-		if(dLinkID != curDLink->GetID() ||
-		   dLinkStatus != curDLink->GetProjChangeStatus()) {
-			dLinkID = curDLink->GetID();
-			dLinkStatus = curDLink->GetProjChangeStatus();
+	if(curScene != nullptr) {
+		if(sceneID != curScene->GetID() ||
+		   sceneStatus != curScene->GetProjChangeStatus()) {
+			sceneID = curScene->GetID();
+			sceneStatus = curScene->GetProjChangeStatus();
 			if(argVPFlg == true) {
 				SetViewPort();
 			}
-			if(curDLink->getObjectType() == fk_Type::SCENE) {
-				scene = static_cast<fk_Scene *>(curDLink);
-				scene->GetFogChangeStatus();
-				fogStatus = true;
-			}
+			curScene->GetFogChangeStatus();
+			fogStatus = true;
 		} else {
-			if(curDLink->getObjectType() == fk_Type::SCENE) {
-				scene = static_cast<fk_Scene *>(curDLink);
-				fogStatus = scene->GetFogChangeStatus();
-			}
+			fogStatus = curScene->GetFogChangeStatus();
 		}
-	}
 
-	if(scene != nullptr) {
-
-		if(scene->getBlendStatus() == true) {
+		if(curScene->getBlendStatus() == true) {
 			glEnable(GL_BLEND);
 		} else {
 			glDisable(GL_BLEND);
 		}
 		if(fogStatus == true) {
-			InitFogStatus(scene);
+			InitFogStatus(curScene);
 		}
-		bgColor = scene->getBGColor();
+		bgColor = curScene->getBGColor();
 		glClearColor(bgColor.col[0], bgColor.col[1], bgColor.col[2], 1.0f);
 
 	} else {
@@ -275,6 +265,9 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 
 unsigned int fk_GraphicsEngine::Draw(void)
 {
+	if(curScene != nullptr) shadowMode = curScene->getShadowMode();
+
+	fk_DrawBase::SetShadowMode(shadowMode);
 	if(shadowMode == true) {
 		if(shadowInitFlag == false) {
 			ShadowInit();
@@ -304,16 +297,16 @@ void fk_GraphicsEngine::DrawWorld(void)
 
 	curProj->MakeMat();
 
-	if(curDLink != nullptr) {
-		fk_DrawBase::SetCamera(curDLink->getCamera());
+	if(curScene != nullptr) {
+		fk_DrawBase::SetCamera(curScene->getCamera());
 
-		fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::PARALLEL),
+		fk_DrawBase::SetLight(curScene->GetLightList(fk_LightType::PARALLEL),
 							  fk_LightType::PARALLEL);
 
-		fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::POINT),
+		fk_DrawBase::SetLight(curScene->GetLightList(fk_LightType::POINT),
 							  fk_LightType::POINT);
 
-		fk_DrawBase::SetLight(curDLink->GetLightList(fk_LightType::SPOT),
+		fk_DrawBase::SetLight(curScene->GetLightList(fk_LightType::SPOT),
 							  fk_LightType::SPOT);
 	}
 
@@ -326,22 +319,22 @@ void fk_GraphicsEngine::DrawWorld(void)
 
 void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 {
-	curDLink = argScene;
+	curScene = argScene;
 	return;
 }
 
 void fk_GraphicsEngine::DrawObjs(void)
 {
-	if(curDLink == nullptr) return;
+	if(curScene == nullptr) return;
 
-	for(auto modelP : *(curDLink->GetModelList())) {
+	for(auto modelP : *(curScene->GetModelList())) {
 		SetDepthMode(modelP->getDepthMode());
 		DrawModel(modelP);
 	}
 
-	if(curDLink->GetOverlayList()->empty() == true) return;
+	if(curScene->GetOverlayList()->empty() == true) return;
 	SetDepthMode(fk_DepthMode::NO_USE);
-	for(auto modelP : *(curDLink->GetOverlayList())) DrawModel(modelP);
+	for(auto modelP : *(curScene->GetOverlayList())) DrawModel(modelP);
 
 	return;
 }
@@ -353,7 +346,7 @@ void fk_GraphicsEngine::DrawModel(fk_Model *argModel)
 	fk_Shape * modelShape = argModel->getShape();
 	if(modelShape == nullptr) return;
 	modelShape->FlushAttr();
-	fk_DrawBase::SetModel(argModel, shadowMode);
+	fk_DrawBase::SetModel(argModel);
 	SetBlendMode(argModel);
 	DrawShapeObj(argModel);
 	modelShape->FinishSetVBO();
@@ -554,7 +547,7 @@ tuple<fk_Vector, fk_Vector> fk_GraphicsEngine::GetViewLinePos(double argX, doubl
 	double			tmpY;
 	double			diffX, diffY;
 
-	mat = *(curProj->GetMatrix()) * curDLink->getCamera()->getInhInvMatrix();
+	mat = *(curProj->GetMatrix()) * curScene->getCamera()->getInhInvMatrix();
 	mat.inverse();
 
 	glGetIntegerv(GL_VIEWPORT, viewArray);
@@ -579,7 +572,7 @@ tuple<fk_Vector, fk_Vector> fk_GraphicsEngine::GetViewLinePos(double argX, doubl
 tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
 															 fk_Plane &argPlane)
 {
-	if(curDLink == nullptr) return {false, fk_Vector()};
+	if(curScene == nullptr) return {false, fk_Vector()};
 	if(generalID > 2) SetViewPort();
 
 	auto [sVec, eVec] = GetViewLinePos(argX, argY);
@@ -592,8 +585,8 @@ tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double
 	fk_Vector		eyeVec, cameraPos;
 	const fk_Model	*tmpCamera;
 
-	if(curDLink == nullptr) return {false, fk_Vector()};
-	tmpCamera = curDLink->getCamera();
+	if(curScene == nullptr) return {false, fk_Vector()};
+	tmpCamera = curScene->getCamera();
 	if(generalID > 2) SetViewPort();
 
 	auto [sVec, eVec] = GetViewLinePos(argX, argY);
@@ -619,7 +612,7 @@ tuple<bool, fk_Vector> fk_GraphicsEngine::GetWindowPosition(fk_Vector &argPos)
 	if(generalID > 2) SetViewPort();
 
 	glGetIntegerv(GL_VIEWPORT, viewArray);
-	mat = *(curProj->GetMatrix()) * curDLink->getCamera()->getInhInvMatrix();
+	mat = *(curProj->GetMatrix()) * curScene->getCamera()->getInhInvMatrix();
 	outVec = mat * inVec;
 
 	if(fabs(outVec.w) < fk_Math::EPS) return {false, retPos};
@@ -849,6 +842,13 @@ void fk_GraphicsEngine::InitFrameBufferMode(void)
 
 void fk_GraphicsEngine::ShadowInit(void)
 {
+	if(shadowBuf != nullptr) {
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
+		delete shadowBuf;
+	}
+		
 	shadowBuf = new fk_FrameBuffer();
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
@@ -876,9 +876,9 @@ void fk_GraphicsEngine::ShadowInit(void)
 void fk_GraphicsEngine::AttachShadowBuffer(int argID)
 {
 	shadowTexture.Replace();
-	faceDraw->AttachTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
-	textureDraw->AttachTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
-	surfaceDraw->AttachTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
+	faceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
+	textureDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
+	surfaceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
 }
 
 void fk_GraphicsEngine::PreShadowDraw(void)
@@ -908,13 +908,27 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 	AttachShadowBuffer(shadowBufferID);
 }
 
+void fk_GraphicsEngine::CopyShadowStatus(void)
+{
+	if(curScene == nullptr) return;
+
+	SetShadowVec(curScene->getShadowVec());
+	SetShadowResolution(curScene->getShadowResolution());
+	SetShadowAreaSize(curScene->getShadowAreaSize());
+	SetShadowDistance(curScene->getShadowDistance());
+	SetShadowBias(curScene->getShadowBias());
+	SetShadowVisibility(curScene->getShadowVisibility());
+}
+
 void fk_GraphicsEngine::DrawShadow(void)
 {
 	fk_Model *camera;
 	fk_Vector cameraPos, cameraVec, shadowPos;
 
-	if(curDLink != nullptr) {
-		camera = curDLink->getCamera();
+	CopyShadowStatus();
+
+	if(curScene != nullptr) {
+		camera = curScene->getCamera();
 		if(camera != nullptr) {
 			cameraPos = camera->getInhPosition();
 			cameraVec = camera->getInhVec();
@@ -935,9 +949,10 @@ void fk_GraphicsEngine::DrawShadow(void)
 
 	fk_DrawBase::SetCamera(&shadowCamera);
 	fk_DrawBase::SetShadowCamera(&shadowCamera);
+	fk_DrawBase::SetShadowParam(shadowBias, shadowVisibility);
 
-	if(curDLink != nullptr) {
-		for(auto modelP : *(curDLink->GetModelList())) DrawModel(modelP);
+	if(curScene != nullptr) {
+		for(auto modelP : *(curScene->GetModelList())) DrawModel(modelP);
 	}
 
 	PostShadowDraw();
@@ -960,36 +975,19 @@ int fk_GraphicsEngine::ShadowFixVal(int argVal)
 	return x;
 }
 
-void fk_GraphicsEngine::SetShadowMode(bool argMode)
-{
-	shadowMode = argMode;
-}
-
-bool fk_GraphicsEngine::GetShadowMode(void)
-{
-	return shadowMode;
-}
-
 void fk_GraphicsEngine::SetShadowVec(fk_Vector argV)
 {
 	shadowVec = argV;
-	shadowVec.normalize();
 	shadowCamera.glVec(shadowVec);
-}
-
-fk_Vector fk_GraphicsEngine::GetShadowVec(void)
-{
-	return shadowVec;
 }
 
 void fk_GraphicsEngine::SetShadowResolution(int argVal)
 {
-	shadowResolution = ShadowFixVal(argVal);
-}
-
-int fk_GraphicsEngine::GetShadowResolution(void)
-{
-	return shadowResolution;
+	int newRes = ShadowFixVal(argVal);
+	if(shadowResolution != newRes) {
+		shadowResolution = newRes;
+		if(shadowInitFlag == true) ShadowInit();
+	}
 }
 
 void fk_GraphicsEngine::SetShadowAreaSize(double argSize)
@@ -1000,11 +998,6 @@ void fk_GraphicsEngine::SetShadowAreaSize(double argSize)
 					  -shadowDistance/2.0, shadowDistance/2.0);
 }
 
-double fk_GraphicsEngine::GetShadowAreaSize(void)
-{
-	return shadowSize;
-}
-
 void fk_GraphicsEngine::SetShadowDistance(double argDist)
 {
 	shadowDistance = argDist;
@@ -1012,9 +1005,14 @@ void fk_GraphicsEngine::SetShadowDistance(double argDist)
 	shadowProj.setFar(shadowDistance/2.0);
 }
 
-double fk_GraphicsEngine::GetShadowDistance(void)
+void fk_GraphicsEngine::SetShadowBias(double argBias)
 {
-	return shadowDistance;
+	shadowBias = argBias;
+}
+
+void fk_GraphicsEngine::SetShadowVisibility(double argVis)
+{
+	shadowVisibility = argVis;
 }
 
 /****************************************************************************

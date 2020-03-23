@@ -1,4 +1,127 @@
-﻿/****************************************************************************
+﻿#include <FK/Scene.h>
+
+using namespace FK;
+
+fk_Scene::fk_Scene(void)
+{
+	SetObjectType(fk_Type::SCENE);
+	setBGColor(0.0f, 0.0f, 0.0f);
+	setBlendStatus(false);
+	setShadowMode(false);
+	setShadowVec(fk_Vector(0.0, 1.0, 0.0));
+	setShadowResolution(1024);
+	setShadowAreaSize(100.0);
+	setShadowDistance(100.0);
+	setShadowBias(0.000001);
+	setShadowVisibility(1.0);
+
+	return;
+}
+
+fk_Scene::~fk_Scene()
+{
+	return;
+}
+
+void fk_Scene::setBGColor(fk_Color argColor)
+{
+	bgColor = argColor;
+	return;
+}
+
+void fk_Scene::setBGColor(float argR, float argG, float argB)
+{
+	bgColor.set(argR, argG, argB, 1.0f);
+}
+
+void fk_Scene::setBlendStatus(bool argFlg)
+{
+	blendStatus = argFlg;
+	return;
+}
+
+fk_Color fk_Scene::getBGColor(void)
+{
+	return bgColor;
+}
+
+bool fk_Scene::getBlendStatus(void)
+{
+	return blendStatus;
+}
+
+void fk_Scene::setShadowMode(bool argMode)
+{
+	shadowMode = argMode;
+}
+
+bool fk_Scene::getShadowMode(void)
+{
+	return shadowMode;
+}
+
+void fk_Scene::setShadowVec(fk_Vector argV)
+{
+	shadowVec = argV;
+	shadowVec.normalize();
+}
+
+fk_Vector fk_Scene::getShadowVec(void)
+{
+	return shadowVec;
+}
+
+void fk_Scene::setShadowResolution(int argResolution)
+{
+	shadowResolution = argResolution;
+}
+
+int fk_Scene::getShadowResolution(void)
+{
+	return shadowResolution;
+}
+
+void fk_Scene::setShadowAreaSize(double argSize)
+{
+	shadowSize = (argSize > 0.0) ? argSize : 0.0;
+}
+
+double fk_Scene::getShadowAreaSize(void)
+{
+	return shadowSize;
+}
+
+void fk_Scene::setShadowDistance(double argDist)
+{
+	shadowDistance = (argDist > 0.0) ? argDist : 0.0;
+}
+
+double fk_Scene::getShadowDistance(void)
+{
+	return shadowDistance;
+}
+
+void fk_Scene::setShadowBias(double argBias)
+{
+	shadowBias = (argBias < 0.0) ? 0.0 : ((argBias > 1.0) ? 1.0 : argBias);
+}
+
+double fk_Scene::getShadowBias(void)
+{
+	return shadowBias;
+}
+
+void fk_Scene::setShadowVisibility(double argVis)
+{
+	shadowVisibility = (argVis < 0.0) ? 0.0 : ((argVis > 1.0) ? 1.0 : argVis);
+}
+
+double fk_Scene::getShadowVisibility(void)
+{
+	return shadowVisibility;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,46 +192,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Scene.h>
-
-using namespace FK;
-
-fk_Scene::fk_Scene(void)
-{
-	SetObjectType(fk_Type::SCENE);
-	setBGColor(0.0f, 0.0f, 0.0f);
-	setBlendStatus(false);
-	return;
-}
-
-fk_Scene::~fk_Scene()
-{
-	return;
-}
-
-void fk_Scene::setBGColor(fk_Color argColor)
-{
-	bgColor = argColor;
-	return;
-}
-
-void fk_Scene::setBGColor(float argR, float argG, float argB)
-{
-	bgColor.set(argR, argG, argB, 1.0f);
-}
-
-void fk_Scene::setBlendStatus(bool argFlg)
-{
-	blendStatus = argFlg;
-	return;
-}
-
-fk_Color fk_Scene::getBGColor(void)
-{
-	return bgColor;
-}
-
-bool fk_Scene::getBlendStatus(void)
-{
-	return blendStatus;
-}

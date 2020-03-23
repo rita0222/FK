@@ -128,35 +128,40 @@ namespace FK {
 		//! 影表示設定関数
 		/*!
 		 */
-		/*
 		void setShadowMode(bool);
 		bool getShadowMode(void);
 
 		void setShadowVec(fk_Vector);
 		fk_Vector getShadowVec(void);
 
-		void setShadowResolution(unsigned int);
-		unsigned int getShadowResolution(void);
+		void setShadowResolution(int);
+		int getShadowResolution(void);
 
 		void setShadowAreaSize(double);
 		double getShadowAreaSize(void);
 
 		void setShadowDistance(double);
 		double getShadowDistance(void);
-		*/
+
+		void setShadowBias(double);
+		double getShadowBias(void);
+
+		void setShadowVisibility(double);
+		double getShadowVisibility(void);
 
 		///@}
 
 	private:
 		fk_Color bgColor;
 		bool blendStatus;
-/*
+
 		bool shadowMode;
 		fk_Vector shadowVec;
 		int shadowResolution;
 		double shadowSize;
 		double shadowDistance;
-*/
+		double shadowBias;
+		double shadowVisibility;
 	};
 }
 
