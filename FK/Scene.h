@@ -1,4 +1,168 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_SCENE_HEADER__
+#define __FK_SCENE_HEADER__
+
+#include <FK/Fog.h>
+
+namespace FK {
+	//! シーンを制御するクラス
+	/*!
+	 *	このクラスは、シーンを制御するための機能を提供します。
+	 *
+	 *	シーンは、複数のモデルとカメラからなる「場面」を意味します。
+	 *	利用者は、シーンに描画を想定した複数のモデルとカメラを示すモデルを登録します。
+	 *	このシーンを fk_Window クラスによるウィンドウに設定することによって、
+	 *	そのシーンに登録されたモデル群が実際に描画される仕組みになっています。
+	 *
+	 *	シーンは、別々のインスタンスとして複数存在することが可能です。
+	 *	異なるシーンを同時に生成しておき、
+	 *	実際にウィンドウに描画するシーンを動的に切り替えることができます。
+	 *	任意のモデルは、複数のシーンに同時に登録することができます。
+	 *
+	 *	シーンにモデルを登録するための機能は、
+	 *	実質的には fk_DisplayLink クラスに集約されています。
+	 *	fk_Scene クラスは fk_DisplayLink クラスの派生クラスとなっており、
+	 *	fk_DisplayLink クラスのメンバ関数を利用することが可能です。
+	 *	モデル登録についての機能は、 fk_DisplayLink クラスの説明を参照して下さい。
+	 *
+	 *	シーンは、通常のモデルとは別に霧に関する設定も可能です。
+	 *	霧に関する機能は、 fk_Fog クラスに集約されており、
+	 *	fk_Scene クラスは fk_Fog クラスの派生クラスとなっています。
+	 *	霧についての機能は、 fk_Fog クラスの説明を参照して下さい。
+	 *
+	 *	本クラス固有のメンバ関数は、背景色設定に関する機能と、
+	 *	透過処理に関するものとなっています
+	 *
+	 *	\sa fk_DisplayLink, fk_Fog, fk_Window
+	 */
+
+	class fk_Scene : public fk_Fog {
+
+	public:
+
+		//! コンストラクタ
+		fk_Scene(void);
+		//! デストラクタ
+		virtual ~fk_Scene();
+
+		//! \name 背景色制御関数
+		///@{
+
+		//! 背景色設定関数1
+		/*!
+		 *	シーンの背景色を設定します。
+		 *
+		 *	\param[in]	col		背景色
+		 *
+		 *	\sa setBGColor(float, float, float), fk_Color, getBGColor()
+		 */
+		void setBGColor(fk_Color col);
+
+		//! 背景色設定関数2
+		/*!
+		 *	シーンの背景色を設定します。
+		 *	各色要素は 0 から 1 までの値を取ります。
+		 *	それ以外の値が与えられた場合、0 以下なら 0 に、1 以上なら 1 に丸められます。
+		 *
+		 *	\param[in]	r		背景色の赤要素
+		 *	\param[in]	g		背景色の緑要素
+		 *	\param[in]	b		背景色の青要素
+		 *
+		 *	\sa setBGColor(fk_Color), getBGColor()
+		 */
+		void setBGColor(float r, float g, float b);
+
+		//! 背景色参照関数
+		/*!
+		 *	シーンの背景色を取得します。
+		 *
+		 *	\return		背景色
+		 *
+		 *	\sa fk_Color, setBGColor(fk_Color), setBGColor(float, float, float)
+		 */
+		fk_Color getBGColor(void);
+		///@}
+
+		//! \name 透過処理制御関数
+		///@{
+
+		//! 透過処理設定関数
+		/*!
+		 *	シーンに対し、透過処理を有効とするかどうかを設定します。
+		 *	有効にした場合、シーン全体で透過処理がなされますが、
+		 *	無効な場合と比較して描画速度が遅くなります。
+		 *	これは、実際に透過する物体があるかどうかに関わらず、
+		 *	速度が遅くなるということに注意して下さい。
+		 *	デフォルトでは透過処理設定は無効となっています。
+		 *
+		 *	\note
+		 *		実行するハードウェアによっては、
+		 *		シーンに登録した順番によって適切な透過処理がなされないことがあります。
+		 *		カメラからみて手前側にある形状が透明(あるいは半透明)であり、
+		 *		奥側にある形状が透けて見える状況を想定したとします。
+		 *		このとき、手前側のモデルの方がシーンの登録順が先であった場合、
+		 *		透けて見えるはずの奥側の形状が表示されないという現象が起こることがあります。
+		 *		この場合、シーンの登録順を変更すれば奥側の形状が透けて見えるようになりますが、
+		 *		カメラとの位置関係を常に監視し、
+		 *		登録順を変動させなければならないという問題が生じます。
+		 *
+		 *	\param[in]	mode		true であれば有効、false であれば無効とします。
+		 *
+		 *	\sa fk_Material::setAlpha()
+		 */
+		void setBlendStatus(bool mode);
+
+		//! 透過処理参照関数
+		/*!
+		 *	現在の透過処理状態を取得します。
+		 *
+		 *	\return		有効であれば true を、無効であれば false を返します。
+		 *
+		 *	\sa setBlendStatus()
+		 */
+		bool getBlendStatus(void);
+		///@}
+
+		//! \name 影制御関数
+		///@{
+
+		//! 影表示設定関数
+		/*!
+		 */
+		/*
+		void setShadowMode(bool);
+		bool getShadowMode(void);
+
+		void setShadowVec(fk_Vector);
+		fk_Vector getShadowVec(void);
+
+		void setShadowResolution(unsigned int);
+		unsigned int getShadowResolution(void);
+
+		void setShadowAreaSize(double);
+		double getShadowAreaSize(void);
+
+		void setShadowDistance(double);
+		double getShadowDistance(void);
+		*/
+
+		///@}
+
+	private:
+		fk_Color bgColor;
+		bool blendStatus;
+/*
+		bool shadowMode;
+		fk_Vector shadowVec;
+		int shadowResolution;
+		double shadowSize;
+		double shadowDistance;
+*/
+	};
+}
+
+#endif // !__FK_SCENE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,136 +233,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_SCENE_HEADER__
-#define __FK_SCENE_HEADER__
-
-#include <FK/Fog.h>
-
-namespace FK {
-	//! シーンを制御するクラス
-	/*!
-	 *	このクラスは、シーンを制御するための機能を提供します。
-	 *
-	 *	シーンは、複数のモデルとカメラからなる「場面」を意味します。
-	 *	利用者は、シーンに描画を想定した複数のモデルとカメラを示すモデルを登録します。
-	 *	このシーンを fk_Window クラスによるウィンドウに設定することによって、
-	 *	そのシーンに登録されたモデル群が実際に描画される仕組みになっています。
-	 *
-	 *	シーンは、別々のインスタンスとして複数存在することが可能です。
-	 *	異なるシーンを同時に生成しておき、
-	 *	実際にウィンドウに描画するシーンを動的に切り替えることができます。
-	 *	任意のモデルは、複数のシーンに同時に登録することができます。
-	 *
-	 *	シーンにモデルを登録するための機能は、
-	 *	実質的には fk_DisplayLink クラスに集約されています。
-	 *	fk_Scene クラスは fk_DisplayLink クラスの派生クラスとなっており、
-	 *	fk_DisplayLink クラスのメンバ関数を利用することが可能です。
-	 *	モデル登録についての機能は、 fk_DisplayLink クラスの説明を参照して下さい。
-	 *
-	 *	シーンは、通常のモデルとは別に霧に関する設定も可能です。
-	 *	霧に関する機能は、 fk_Fog クラスに集約されており、
-	 *	fk_Scene クラスは fk_Fog クラスの派生クラスとなっています。
-	 *	霧についての機能は、 fk_Fog クラスの説明を参照して下さい。
-	 *
-	 *	本クラス固有のメンバ関数は、背景色設定に関する機能と、
-	 *	透過処理に関するものとなっています
-	 *
-	 *	\sa fk_DisplayLink, fk_Fog, fk_Window
-	 */
-
-	class fk_Scene : public fk_Fog {
-
-	public:
-
-		//! コンストラクタ
-		fk_Scene(void);
-		//! デストラクタ
-		virtual ~fk_Scene();
-
-		//! \name 背景色制御関数
-		///@{
-
-		//! 背景色設定関数1
-		/*!
-		 *	シーンの背景色を設定します。
-		 *
-		 *	\param[in]	col		背景色
-		 *
-		 *	\sa setBGColor(float, float, float), fk_Color, getBGColor()
-		 */
-		void			setBGColor(fk_Color col);
-
-		//! 背景色設定関数2
-		/*!
-		 *	シーンの背景色を設定します。
-		 *	各色要素は 0 から 1 までの値を取ります。
-		 *	それ以外の値が与えられた場合、0 以下なら 0 に、1 以上なら 1 に丸められます。
-		 *
-		 *	\param[in]	r		背景色の赤要素
-		 *	\param[in]	g		背景色の緑要素
-		 *	\param[in]	b		背景色の青要素
-		 *
-		 *	\sa setBGColor(fk_Color), getBGColor()
-		 */
-		void			setBGColor(float r, float g, float b);
-
-		//! 背景色参照関数
-		/*!
-		 *	シーンの背景色を取得します。
-		 *
-		 *	\return		背景色
-		 *
-		 *	\sa fk_Color, setBGColor(fk_Color), setBGColor(float, float, float)
-		 */
-		fk_Color		getBGColor(void);
-		///@}
-
-		//! \name 透過処理制御関数
-		///@{
-
-		//! 透過処理設定関数
-		/*!
-		 *	シーンに対し、透過処理を有効とするかどうかを設定します。
-		 *	有効にした場合、シーン全体で透過処理がなされますが、
-		 *	無効な場合と比較して描画速度が遅くなります。
-		 *	これは、実際に透過する物体があるかどうかに関わらず、
-		 *	速度が遅くなるということに注意して下さい。
-		 *	デフォルトでは透過処理設定は無効となっています。
-		 *
-		 *	\note
-		 *		実行するハードウェアによっては、
-		 *		シーンに登録した順番によって適切な透過処理がなされないことがあります。
-		 *		カメラからみて手前側にある形状が透明(あるいは半透明)であり、
-		 *		奥側にある形状が透けて見える状況を想定したとします。
-		 *		このとき、手前側のモデルの方がシーンの登録順が先であった場合、
-		 *		透けて見えるはずの奥側の形状が表示されないという現象が起こることがあります。
-		 *		この場合、シーンの登録順を変更すれば奥側の形状が透けて見えるようになりますが、
-		 *		カメラとの位置関係を常に監視し、
-		 *		登録順を変動させなければならないという問題が生じます。
-		 *
-		 *	\param[in]	mode		true であれば有効、false であれば無効とします。
-		 *
-		 *	\sa fk_Material::setAlpha()
-		 */
-		void			setBlendStatus(bool mode);
-
-		//! 透過処理参照関数
-		/*!
-		 *	現在の透過処理状態を取得します。
-		 *
-		 *	\return		有効であれば true を、無効であれば false を返します。
-		 *
-		 *	\sa setBlendStatus()
-		 */
-		bool			getBlendStatus(void);
-		///@}
-
-	private:
-		fk_Color		bgColor;
-		bool			blendStatus;
-	};
-}
-
-#endif // !__FK_SCENE_HEADER__
-
-

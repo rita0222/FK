@@ -56,10 +56,20 @@ namespace FK {
 		fk_RectTexture * GetShadowTexture(void);
 		void SetShadowTextureSize(int, int);
 
+		void SetShadowMode(bool);
+		bool GetShadowMode(void);
+		
 		void SetShadowVec(fk_Vector);
+		fk_Vector GetShadowVec(void);
+		
 		void SetShadowResolution(int);
-		void SetShadowSize(double);
+		int GetShadowResolution(void);
+		
+		void SetShadowAreaSize(double);
+		double GetShadowAreaSize(void);
+
 		void SetShadowDistance(double);
+		double GetShadowDistance(void);
 
 	private:
 

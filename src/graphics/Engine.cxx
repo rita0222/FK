@@ -92,7 +92,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 
 	shadowInitFlag = false;
 	shadowSwitch = false;
-	SetShadowSize(400.0);
+	SetShadowAreaSize(400.0);
 	SetShadowDistance(1000.0);
 	SetShadowVec(fk_Vector(1.0, -1.0, 1.0));
 	SetShadowResolution(1024);
@@ -923,7 +923,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 
 	shadowPos = cameraPos + cameraVec * shadowSize/4.0;
 	shadowCamera.glMoveTo(shadowPos);
-	shadowCamera.glVec(shadowVec);
+	//shadowCamera.glVec(shadowVec);
 
 	PreShadowDraw();
 
@@ -956,13 +956,30 @@ void fk_GraphicsEngine::SetShadowTextureSize(int argW, int argH)
 int fk_GraphicsEngine::ShadowFixVal(int argVal)
 {
 	int x;
-	for(x = 1; 2 * x <= argVal; x *= 2);
+	for(x = 16; 2 * x <= argVal; x *= 2);
 	return x;
+}
+
+void fk_GraphicsEngine::SetShadowMode(bool argMode)
+{
+	shadowMode = argMode;
+}
+
+bool fk_GraphicsEngine::GetShadowMode(void)
+{
+	return shadowMode;
 }
 
 void fk_GraphicsEngine::SetShadowVec(fk_Vector argV)
 {
 	shadowVec = argV;
+	shadowVec.normalize();
+	shadowCamera.glVec(shadowVec);
+}
+
+fk_Vector fk_GraphicsEngine::GetShadowVec(void)
+{
+	return shadowVec;
 }
 
 void fk_GraphicsEngine::SetShadowResolution(int argVal)
@@ -970,7 +987,12 @@ void fk_GraphicsEngine::SetShadowResolution(int argVal)
 	shadowResolution = ShadowFixVal(argVal);
 }
 
-void fk_GraphicsEngine::SetShadowSize(double argSize)
+int fk_GraphicsEngine::GetShadowResolution(void)
+{
+	return shadowResolution;
+}
+
+void fk_GraphicsEngine::SetShadowAreaSize(double argSize)
 {
 	shadowSize = argSize;
 	shadowProj.setAll(-argSize/2.0, argSize/2.0,
@@ -978,11 +1000,21 @@ void fk_GraphicsEngine::SetShadowSize(double argSize)
 					  -shadowDistance/2.0, shadowDistance/2.0);
 }
 
+double fk_GraphicsEngine::GetShadowAreaSize(void)
+{
+	return shadowSize;
+}
+
 void fk_GraphicsEngine::SetShadowDistance(double argDist)
 {
 	shadowDistance = argDist;
 	shadowProj.setNear(-shadowDistance/2.0);
 	shadowProj.setFar(shadowDistance/2.0);
+}
+
+double fk_GraphicsEngine::GetShadowDistance(void)
+{
+	return shadowDistance;
 }
 
 /****************************************************************************
