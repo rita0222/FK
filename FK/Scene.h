@@ -201,7 +201,7 @@ namespace FK {
 		 *	この値が大きくなるにつれて影の粒度も荒くなります。
 		 *	シーンの状況に応じて適切な値を設定する必要があります。
 		 *
-		 *	\param[in]	影生成領域の大きさ
+		 *	\param[in]	size	影生成領域の大きさ
 		 *
 		 *	\sa setShadowVec(), setShadowResolution(), setshadowDistance()
 		 */
