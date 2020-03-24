@@ -25,17 +25,19 @@ namespace FK {
 	 *	fk_DisplayLink クラスのメンバ関数を利用することが可能です。
 	 *	モデル登録についての機能は、 fk_DisplayLink クラスの説明を参照して下さい。
 	 *
-	 *	シーンは、通常のモデルとは別に霧に関する設定も可能です。
-	 *	霧に関する機能は、 fk_Fog クラスに集約されており、
-	 *	fk_Scene クラスは fk_Fog クラスの派生クラスとなっています。
-	 *	霧についての機能は、 fk_Fog クラスの説明を参照して下さい。
-	 *
 	 *	本クラス固有のメンバ関数は、背景色設定に関する機能と、
 	 *	透過処理に関するものとなっています
 	 *
 	 *	\sa fk_DisplayLink, fk_Fog, fk_Window
 	 */
 
+	/*
+	 *	(current non support)
+	 *	シーンは、通常のモデルとは別に霧に関する設定も可能です。
+	 *	霧に関する機能は、 fk_Fog クラスに集約されており、
+	 *	fk_Scene クラスは fk_Fog クラスの派生クラスとなっています。
+	 *	霧についての機能は、 fk_Fog クラスの説明を参照して下さい。
+	 */
 	class fk_Scene : public fk_Fog {
 
 	public:
@@ -126,28 +128,136 @@ namespace FK {
 		//! \name 影制御関数
 		///@{
 
-		//! 影表示設定関数
+		//! 影表示設定変更関数
 		/*!
+		 *	影表示有無の設定を行います。
+		 *
+		 *	\param[in]	mode   	true 有効、false で無効とします。デフォルトは false です。
 		 */
-		void setShadowMode(bool);
+		void setShadowMode(bool mode);
+
+		//! 影表示設定参照関数
+		/*!
+		 *	影表示設定を参照します。
+		 *
+		 *	\return		有効な場合 true を、無効な場合 false を返します。
+		 */
 		bool getShadowMode(void);
 
-		void setShadowVec(fk_Vector);
+		//! 影光線方向設定関数
+		/*!
+		 *	影を生成する際の光の方向を設定します。
+		 *
+		 *	\param[in]	v	光の方向ベクトル
+		 */
+		void setShadowVec(fk_Vector v);
+
+		//!	影光線方向取得関数
+		/*!
+		 *	影生成光線の方向を取得します。
+		 *
+		 *	\return		光の方向ベクトル
+		 */
 		fk_Vector getShadowVec(void);
 
-		void setShadowResolution(int);
+		//!	シャドウマップ解像度設定関数
+		/*!
+		 *	影生成に使用するシャドウマップテクスチャの解像度を指定します。
+		 *	この解像度は影表示の質と実行速度に大きく影響します。
+		 *	解像度が高いと影のディザーは目立たなくなりますが、描画速度が低下し、
+		 *	また実行環境によっては表示に異常をきたすことがあります。
+		 *	解像度が低い場合は描画速度が向上しますが、
+		 *	ディザーが発生しやすくなります。
+		 *
+		 *	この解像度は 16 以上の 2の累乗数であることが前提となっており、
+		 *	その条件を満たさない場合は 15 以下の場合は 16、
+		 *	それ以外の数値の場合はその数値未満の最大の2の累乗数が設定されます。
+		 *
+		 *	シャドウマップのディザーを目立たなくするには、
+		 *	解像度だけでなく処理範囲も重要な要素です。
+		 *	処理範囲については setShadowAreaSize(), setShadowDistance() を参照して下さい。
+		 *
+		 *	\param[in]	resolution	シャドウマップ解像度
+		 *
+		 *	\sa setShadowMode(), setShadowVec(), setShadowAreaSize(), setShadowDistance()
+		 */
+		void setShadowResolution(int resolution);
+
+		//!	シャドウマップ解像度取得関数
+		/*!
+		 *	シャドウマップの解像度を取得します。
+		 *
+		 *	\return 解像度
+		 *
+		 *	\sa setShadowResolution()
+		 */
 		int getShadowResolution(void);
 
-		void setShadowAreaSize(double);
+		//!	シャドウマップ領域設定関数
+		/*!
+		 *	影は空間中の直方体領域の内部に生成されますが、
+		 *	この直方体のうち影光線ベクトルに垂直な辺の長さを設定します。
+		 *	この値が大きいほど広い領域に対し影を生成しますが、
+		 *	この値が大きくなるにつれて影の粒度も荒くなります。
+		 *	シーンの状況に応じて適切な値を設定する必要があります。
+		 *
+		 *	\param[in]	影生成領域の大きさ
+		 *
+		 *	\sa setShadowVec(), setShadowResolution(), setshadowDistance()
+		 */
+		void setShadowAreaSize(double size);
+
+		//!	シャドウマップ領域取得関数
+		/*!
+		 *	影生成直方体領域の大きさを取得します。
+		 *
+		 *	\return	影生成領域の大きさ
+		 *
+		 *	\sa setShadowAreaSize()
+		 */
 		double getShadowAreaSize(void);
 
-		void setShadowDistance(double);
+		//!	シャドウマップ領域奥行き幅設定関数
+		/*!
+		 *	影は空間中の直方体領域の内部に生成されますが、
+		 *	この直方体のうち影光線ベクトルに平行な辺の長さを設定します。
+		 *	この値が大きいほど広い領域に対し影を生成しますが、
+		 *	一方で大きいほど計算精度が悪くなり、描画の不具合を生じやすくなります。
+		 *	通常は、 setShadowAreaSize() の設定値と同程度にしておくことが無難です。
+		 *
+		 *	\param[in]	distance	シャドウマップ領域奥行き幅
+		 *
+		 *	\sa setShadowVec(), setShadowResolution(), setShadowAreaSize()
+		 */
+		void setShadowDistance(double distance);
+
+		//!	シャドウマップ領域奥行き幅取得関数
+		/*!
+		 *	影性生直方体領域の奥行き方向(影光線ベクトルに平行な方向)の幅を取得します。
+		 *
+		 *	\return 領域奥行き幅
+		 *
+		 *	\sa setShadowDistance()
+		 */
 		double getShadowDistance(void);
 
-		void setShadowBias(double);
-		double getShadowBias(void);
+		//!	影濃度設定関数
+		/*!
+		 *	影の濃度を設定します。
+		 *	この値が大きいほど影となる部分の輝度は低くなる、つまり影自体は濃くなってきます。
+		 *	最小値は 0, 最大値は 1 で、0 のときは影効果は無効となります。
+		 *	1 の場合、影となる領域は一切光が当たってない状況の輝度(色)となります。
+		 *
+		 *	\param[in]	value	影濃度。0 で最小、1 で最大で、大きいほど影が濃くなります。
+		 */
+		void setShadowVisibility(double value);
 
-		void setShadowVisibility(double);
+		//!	影濃度取得関数
+		/*!
+		 *	影の濃度を取得します。
+		 *
+		 *	\return	影濃度
+		 */
 		double getShadowVisibility(void);
 
 		///@}
@@ -161,7 +271,6 @@ namespace FK {
 		int shadowResolution;
 		double shadowSize;
 		double shadowDistance;
-		double shadowBias;
 		double shadowVisibility;
 	};
 }

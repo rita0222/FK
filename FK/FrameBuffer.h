@@ -5,25 +5,38 @@
 
 namespace FK {
 
-	// フレームバッファのサンプリングソースを表す列挙型
+	// フレームバッファーのサンプリングソースを表す列挙型
 	enum class fk_SamplerSource {
 		COLOR,	//!< 画面色情報参照
 		DEPTH	//!< 画面深度情報参照
 	};
 
+	//! フレームバッファー制御クラス
+	/*!
+	 *	このクラスは、フレームバッファーを制御する機能を提供します。
+	 *	フレームバッファーとはシーン描画時の色情報と深度情報のことであり、
+	 *	それぞれを「カラーバッファー」、「深度バッファー」と呼称します。
+	 *	シーン描画は通常は fk_Window あるいは fk_AppWindow によってモニター上に描画されますが、
+	 *	fk_Scene インスタンスを fk_Renderer に設定することにより、
+	 *	描画情報をモニター上ではなくフレームバッファーに格納することができます。
+	 *	そのフレームバッファー情報を示すのが本クラスです。
+	 *	この情報を fk_Texutre::setFrameBuffer() に渡すことで、
+	 *	フレームバッファーをアニメーションテクスチャとして利用できます。
+	 *
+	 *	\sa fk_Scene, fk_Renderer, fk_Texture
+	 */
+	
 	class fk_FrameBuffer : public fk_BaseObject {
 
 	public:
 
-		//! コンストラクタ
+#ifndef FK_DOXYGEN_USER_PROCESS
 		fk_FrameBuffer(void);
-
-		//! デストラクタ
 		virtual ~fk_FrameBuffer();
-
-		//! テクスチャ参照情報設定関数
+#endif
+		//! バッファー種類設定関数
 		/*!
-		 *	参照テクスチャが参照する情報を設定します。
+		 *	フレームバッファーとして参照する情報を設定します。
 		 *	設定できる種類は以下のとおりです。
 		 *
 		 *	- fk_SamplerSource::COLOR:
@@ -34,29 +47,37 @@ namespace FK {
 		 *	デフォルトは fk_SamplerSource::COLOR に設定されています。
 		 *
 		 *	\param[in]	mode
-		 *		テクスチャ参照情報の参照先
+		 *		フレームバッファー情報種類
 		 *
 		 *	\sa getSource()
 		 */
 		void setSource(fk_SamplerSource mode);
 
-		//! テクスチャ参照情報参照関数
+		//! バッファー種類参照関数
 		/*!
-		 *	参照テクスチャが参照する情報を参照します。
+		 *	フレームバッファーとして参照する情報種類を取得します。
 		 *
-		 *	\return		テクスチャ参照情報
+		 *	\return		フレームバッファー情報種類
 		 */
 		fk_SamplerSource getSource(void);
 
-		void setBufferSize(int, int);
+		//! バッファーサイズ取得関数
+		/*!
+		 *	現在設定されているバッファーのサイズを取得します。
+		 *
+		 *	\return	バッファーのサイズ
+		 */
 		fk_Dimension * getBufferSize(void);
 
-		fk_TexID		GetTexID(void);
-		void			SetupFBO(int);
-		void			AttachFBO(void);
-		void			BindFBO(void);
-		void			Unbind(void);
-
+#ifndef FK_DOXYGEN_USER_PROCESS
+		void SetBufferSize(int, int);
+		fk_TexID GetTexID(void);
+		void SetupFBO(int);
+		void AttachFBO(void);
+		void BindFBO(void);
+		void Unbind(void);
+#endif
+		
 	private:
 
 		fk_TexID			ID;

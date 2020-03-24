@@ -94,7 +94,6 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	SetShadowDistance(100.0);
 	SetShadowVec(fk_Vector(0.0, -1.0, 0.0));
 	SetShadowResolution(1024);
-	SetShadowBias(0.0);
 	SetShadowVisibility(1.0);
 
 	return;
@@ -735,10 +734,10 @@ void fk_GraphicsEngine::SetupFBO(void)
 	colorBuf->setSource(fk_SamplerSource::COLOR);
 	depthBuf->setSource(fk_SamplerSource::DEPTH);
 
-	colorBuf->setBufferSize(wSize, hSize);
+	colorBuf->SetBufferSize(wSize, hSize);
 	colorBuf->SetupFBO(maxUnit-2);
 
-	depthBuf->setBufferSize(wSize, hSize);
+	depthBuf->SetBufferSize(wSize, hSize);
 	depthBuf->SetupFBO(maxUnit-3);
 
 	glGenFramebuffers(1, &fboHandle);
@@ -855,7 +854,7 @@ void fk_GraphicsEngine::ShadowInit(void)
 	shadowBufferID = maxUnit - 4;
 
 	shadowBuf->setSource(fk_SamplerSource::DEPTH);
-	shadowBuf->setBufferSize(shadowResolution, shadowResolution);
+	shadowBuf->SetBufferSize(shadowResolution, shadowResolution);
 	shadowBuf->SetupFBO(shadowBufferID);
 	glGenFramebuffers(1, &shadowHandle);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
@@ -918,7 +917,6 @@ void fk_GraphicsEngine::CopyShadowStatus(void)
 	SetShadowResolution(curScene->getShadowResolution());
 	SetShadowAreaSize(curScene->getShadowAreaSize());
 	SetShadowDistance(curScene->getShadowDistance());
-	SetShadowBias(curScene->getShadowBias());
 	SetShadowVisibility(curScene->getShadowVisibility());
 }
 
@@ -951,7 +949,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 
 	fk_DrawBase::SetCamera(&shadowCamera);
 	fk_DrawBase::SetShadowCamera(&shadowCamera);
-	fk_DrawBase::SetShadowParam(shadowBias, shadowVisibility);
+	fk_DrawBase::SetShadowParam(shadowVisibility);
 
 	if(curScene != nullptr) {
 		for(auto modelP : *(curScene->GetModelList())) DrawModel(modelP);
@@ -1005,11 +1003,6 @@ void fk_GraphicsEngine::SetShadowDistance(double argDist)
 	shadowDistance = argDist;
 	shadowProj.setNear(-shadowDistance/2.0);
 	shadowProj.setFar(shadowDistance/2.0);
-}
-
-void fk_GraphicsEngine::SetShadowBias(double argBias)
-{
-	shadowBias = argBias;
 }
 
 void fk_GraphicsEngine::SetShadowVisibility(double argVis)

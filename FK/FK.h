@@ -115,6 +115,7 @@
 #include <FK/MotionCharactor.h>
 #include <FK/ShaderBinder.h>
 #include <FK/Time.h>
+#include <FK/Renderer.h>
 
 #ifndef FK_NO_FLTK
 
@@ -133,11 +134,11 @@ using namespace FK;
  *	<b> Copyright 1999 - 2020 by Fine Kernel Project. </b> \n
  *	この文書は、「Fine Kernel ToolKit」C++版 のリファレンスマニュアルです。
  *	システムに関する概略は、以下の URL を参照して下さい。
- *	- http://gamescience.jp/FK
+ *	- https://gamescience.jp/FK
  *	.
  *	インストールパッケージやユーザーズマニュアル等のダウンロードは、
  *	以下の URL を参照して下さい。
- *	- http://osdn.jp/projects/fktoolkit/releases/
+ *	- https://osdn.jp/projects/fktoolkit/releases/
  *	.
  *	<hr>
  *	本ソフトウェア、ソースコードおよび付属文書のライセンスは、基本的に

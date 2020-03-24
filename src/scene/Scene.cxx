@@ -12,7 +12,6 @@ fk_Scene::fk_Scene(void)
 	setShadowResolution(1024);
 	setShadowAreaSize(100.0);
 	setShadowDistance(100.0);
-	setShadowBias(0.000001);
 	setShadowVisibility(1.0);
 
 	return;
@@ -99,16 +98,6 @@ void fk_Scene::setShadowDistance(double argDist)
 double fk_Scene::getShadowDistance(void)
 {
 	return shadowDistance;
-}
-
-void fk_Scene::setShadowBias(double argBias)
-{
-	shadowBias = (argBias < 0.0) ? 0.0 : ((argBias > 1.0) ? 1.0 : argBias);
-}
-
-double fk_Scene::getShadowBias(void)
-{
-	return shadowBias;
 }
 
 void fk_Scene::setShadowVisibility(double argVis)

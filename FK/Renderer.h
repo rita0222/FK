@@ -9,22 +9,83 @@ namespace FK {
 	/*!
 	 *	このクラスは、マルチパスレンダリングを実現するための機能を提供します。
 	 *
-	 *	設定したシーンのカラーバッファーと深度バッファーを生成し、
-	 *	テクスチャーデータとして扱うことができます。
+	 *	シーン描画時のカラーバッファーと深度バッファーを生成し、
+	 *	これをテクスチャーデータとして扱うことができます。
+	 *
+	 *	\sa fk_Scene, fk_FrameBuffer, fk_Texture
 	 */
 	class fk_Renderer {
 
 	public:
-		fk_Renderer(int w = 1024, int h = 1024);
+
+		//! コンストラクタ
+		/*!
+		 *	\param[in]	w	描画領域横幅
+		 *	\param[in]	h	描画領域縦幅
+		 *
+		 *	\note	描画領域の縦幅と横幅は 16 以上の 2 の累乗数 (2^n で表せる数値) である必要があり、
+		 *			その条件を満たさない場合の動作は保証されません。
+		 */
+		fk_Renderer(int w = 256, int h = 256);
 
 		//! デストラクタ
 		virtual ~fk_Renderer();
 
+		//! シーン設定関数
+		/*!
+		 *	描画対象となるシーンを設定します。
+		 *
+		 *	\param[in]	scene	描画対象シーン
+		 */
 		void setScene(fk_Scene *scene);
-		void draw(void);
-		void resize(int, int);
 
+		//! 描画関数
+		/*!
+		 *	設定されているシーンに対し描画処理を行い、
+		 *	カラーバッファーと深度バッファーを生成します。
+		 */
+		void draw(void);
+
+		//! 描画領域再設定関数
+		/*!
+		 *	描画領域の幅を再設定します。
+		 *
+		 *	\param[in]	w	描画領域横幅
+		 *	\param[in]	h	描画領域縦幅
+		 *
+		 *	\note	描画領域の縦幅と横幅は 16 以上の 2 の累乗数 (2^n で表せる数値) である必要があり、
+		 *			その条件を満たさない場合の動作は保証されません。
+		 */		
+		void resize(int w, int h);
+
+		//! カラーバッファー取得関数
+		/*!
+		 *	シーン描画結果のカラーバッファーを取得します。
+		 *	fk_Texture::setFrameBuffer() に渡すことで、テクスチャーの描画イメージを
+		 *	このシーンのカラーバッファーに設定することができます。
+		 *	また、テクスチャーに設定した後は常に
+		 *	fk_Renderer::draw() の変更結果が反映されるようになり、
+		 *	fk_Texture::setFrameBuffer() の再設定は必要ありません。
+		 *
+		 *	\return	カラーバッファー
+		 *
+		 *	\sa draw(), getDepthBuffer(), fk_Texture::setFrameBuffer()
+		 */
 		fk_FrameBuffer * getColorBuffer(void);
+
+		//! 深度バッファー取得関数
+		/*!
+		 *	シーン描画結果の深度バッファーを取得します。
+		 *	fk_Texture::setFrameBuffer() に渡すことで、テクスチャーの描画イメージを
+		 *	このシーンの深度バッファーに設定することができます。
+		 *	また、テクスチャーに設定した後は常に
+		 *	fk_Renderer::draw() の変更結果が反映されるようになり、
+		 *	fk_Texture::setFrameBuffer() の再設定は必要ありません。
+		 *
+		 *	\return	深度バッファー
+		 *
+		 *	\sa draw(), getColorBuffer(), fk_Texture::setFrameBuffer()
+		 */
 		fk_FrameBuffer * getDepthBuffer(void);
 
 	private:

@@ -35,7 +35,7 @@ fk_SamplerSource fk_FrameBuffer::getSource(void)
 	return source;
 }
 
-void fk_FrameBuffer::setBufferSize(int argW, int argH)
+void fk_FrameBuffer::SetBufferSize(int argW, int argH)
 {
 	dim.set(argW, argH);
 }

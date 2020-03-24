@@ -18,7 +18,6 @@ const string fk_DrawBase::normalModelViewMatrixName = "fk_NormalModelViewMatrix"
 const string fk_DrawBase::cameraPositionName = "fk_CameraPosition";
 
 const string fk_DrawBase::shadowMatrixName = "fk_ShadowMatrix";
-const string fk_DrawBase::shadowBiasName = "fk_ShadowBias";
 const string fk_DrawBase::shadowVisibilityName = "fk_ShadowVisibility";
 
 const string fk_DrawBase::modelMaterialName = "fk_Material";
@@ -59,7 +58,6 @@ fk_Matrix * fk_DrawBase::shadowProjMatrix = nullptr;
 fk_Matrix fk_DrawBase::shadowViewMatrix;
 fk_Matrix fk_DrawBase::shadowBiasMatrix;
 fk_Matrix fk_DrawBase::shadowMatrix;
-float fk_DrawBase::shadowBias = 0.0;
 float fk_DrawBase::shadowVisibility = 1.0;
 bool fk_DrawBase::shadowMode = false;
 
@@ -120,9 +118,8 @@ void fk_DrawBase::SetShadowCamera(fk_Model *argModel)
 	return;
 }
 
-void fk_DrawBase::SetShadowParam(double argBias, double argVis)
+void fk_DrawBase::SetShadowParam(double argVis)
 {
-	shadowBias = float(argBias);
 	shadowVisibility = float(argVis);
 }
 
@@ -200,7 +197,6 @@ void fk_DrawBase::SetMatrixParam(fk_ShaderParameter *argParam)
 
 void fk_DrawBase::SetValueParam(fk_ShaderParameter *argParam)
 {
-	argParam->setRegister(shadowBiasName, shadowBias, shadowBiasName);
 	argParam->setRegister(shadowVisibilityName, shadowVisibility, shadowVisibilityName);
 }
 
