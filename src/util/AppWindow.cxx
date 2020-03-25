@@ -759,3 +759,70 @@ bool fk_AppWindow::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 {
 	return drawWin->snapImage(argImage, argMode);
 }
+
+
+void fk_AppWindow::setShadowMode(bool argMode)
+{
+	if(ref_scene != nullptr) ref_scene->setShadowMode(argMode);
+}
+
+bool fk_AppWindow::getShadowMode(void)
+{
+	if(ref_scene != nullptr) return ref_scene->getShadowMode();
+	return false;
+}
+
+void fk_AppWindow::setShadowVec(fk_Vector argV)
+{
+	if(ref_scene != nullptr) ref_scene->setShadowVec(argV);
+}
+
+fk_Vector fk_AppWindow::getShadowVec(void)
+{
+	if(ref_scene != nullptr) return ref_scene->getShadowVec();
+	return fk_Vector(0.0, 0.0, 0.0);
+}
+
+void fk_AppWindow::setShadowResolution(int argRes)
+{
+	if(ref_scene != nullptr) ref_scene->setShadowResolution(argRes);
+}
+	
+int fk_AppWindow::getShadowResolution(void)
+{
+	if(ref_scene != nullptr) return ref_scene->getShadowResolution();
+	return 0;
+}
+
+void fk_AppWindow::setShadowAreaSize(double argSize)
+{
+	if(ref_scene != nullptr) ref_scene->setShadowAreaSize(argSize);
+}
+
+double fk_AppWindow::getShadowAreaSize(void)
+{
+	if(ref_scene != nullptr) return ref_scene->getShadowAreaSize();
+	return 0.0;
+}
+
+void fk_AppWindow::setShadowDistance(double argDis)
+{
+	if(ref_scene != nullptr) ref_scene->setShadowDistance(argDis);
+}
+
+double fk_AppWindow::getShadowDistance(void)
+{
+	if(ref_scene != nullptr) return ref_scene->getShadowDistance();
+	return 0.0;
+}
+
+void fk_AppWindow::setShadowVisibility(double argVal)
+{
+	if(ref_scene != nullptr) ref_scene->setShadowVisibility(argVal);
+}
+
+double fk_AppWindow::getShadowVisibility(void)
+{
+	if(ref_scene != nullptr) return ref_scene->getShadowVisibility();
+	return 0.0;
+}

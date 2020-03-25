@@ -1,76 +1,4 @@
-﻿/****************************************************************************
- *
- *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
- *
- *	Redistribution and use in source and binary forms,
- *	with or without modification, are permitted provided that the
- *	following conditions are met:
- *
- *		- Redistributions of source code must retain the above
- *			copyright notice, this list of conditions and the
- *			following disclaimer.
- *
- *		- Redistributions in binary form must reproduce the above
- *			copyright notice, this list of conditions and the
- *			following disclaimer in the documentation and/or
- *			other materials provided with the distribution.
- *
- *		- Neither the name of the copyright holders nor the names
- *			of its contributors may be used to endorse or promote
- *			products derived from this software without specific
- *			prior written permission.
- *
- *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE. 
- *
- ****************************************************************************/
-/****************************************************************************
- *
- *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
- *
- *	本ソフトウェアおよびソースコードのライセンスは、基本的に
- *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
- *
- *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
- *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
- *
- *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
- *		および下記免責条項を含めること。
- *
- *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
- *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
- *		含めること。
- *
- *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
- *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
- *		コントリビューターの名前を使用してはならない。
- *
- *	本ソフトウェアは、著作権者およびコントリビューターによって「現
- *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
- *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
- *	に限定されない、いかなる保証もないものとします。著作権者もコン
- *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
- *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
- *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
- *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
- *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
- *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
- *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
- *	ついて、一切責任を負わないものとします。
- *
- ****************************************************************************/
-
-#ifndef __FK_APP_WINDOW_HEADER__
+﻿#ifndef __FK_APP_WINDOW_HEADER__
 #define __FK_APP_WINDOW_HEADER__
 
 #ifndef FK_OLD_NONSUPPORT
@@ -1034,6 +962,142 @@ namespace FK {
 
 		///@}
 
+		//! \name 影制御関数
+		///@{
+
+		//! 影表示設定変更関数
+		/*!
+		 *	影表示有無の設定を行います。
+		 *
+		 *	\param[in]	mode   	true 有効、false で無効とします。デフォルトは false です。
+		 */
+		void setShadowMode(bool mode);
+
+		//! 影表示設定参照関数
+		/*!
+		 *	影表示設定を参照します。
+		 *
+		 *	\return		有効な場合 true を、無効な場合 false を返します。
+		 */
+		bool getShadowMode(void);
+
+		//! 影光線方向設定関数
+		/*!
+		 *	影を生成する際の光の方向を設定します。
+		 *
+		 *	\param[in]	v	光の方向ベクトル
+		 */
+		void setShadowVec(fk_Vector v);
+
+		//!	影光線方向取得関数
+		/*!
+		 *	影生成光線の方向を取得します。
+		 *
+		 *	\return		光の方向ベクトル
+		 */
+		fk_Vector getShadowVec(void);
+
+		//!	シャドウマップ解像度設定関数
+		/*!
+		 *	影生成に使用するシャドウマップテクスチャの解像度を指定します。
+		 *	この解像度は影表示の質と実行速度に大きく影響します。
+		 *	解像度が高いと影のディザーは目立たなくなりますが、描画速度が低下し、
+		 *	また実行環境によっては表示に異常をきたすことがあります。
+		 *	解像度が低い場合は描画速度が向上しますが、
+		 *	ディザーが発生しやすくなります。
+		 *
+		 *	この解像度は 16 以上の 2の累乗数であることが前提となっており、
+		 *	その条件を満たさない場合は 15 以下の場合は 16、
+		 *	それ以外の数値の場合はその数値未満の最大の2の累乗数が設定されます。
+		 *
+		 *	シャドウマップのディザーを目立たなくするには、
+		 *	解像度だけでなく処理範囲も重要な要素です。
+		 *	処理範囲については setShadowAreaSize(), setShadowDistance() を参照して下さい。
+		 *
+		 *	\param[in]	resolution	シャドウマップ解像度
+		 *
+		 *	\sa setShadowMode(), setShadowVec(), setShadowAreaSize(), setShadowDistance()
+		 */
+		void setShadowResolution(int resolution);
+
+		//!	シャドウマップ解像度取得関数
+		/*!
+		 *	シャドウマップの解像度を取得します。
+		 *
+		 *	\return 解像度
+		 *
+		 *	\sa setShadowResolution()
+		 */
+		int getShadowResolution(void);
+
+		//!	シャドウマップ領域設定関数
+		/*!
+		 *	影は空間中の直方体領域の内部に生成されますが、
+		 *	この直方体のうち影光線ベクトルに垂直な辺の長さを設定します。
+		 *	この値が大きいほど広い領域に対し影を生成しますが、
+		 *	この値が大きくなるにつれて影の粒度も荒くなります。
+		 *	シーンの状況に応じて適切な値を設定する必要があります。
+		 *
+		 *	\param[in]	size	影生成領域の大きさ
+		 *
+		 *	\sa setShadowVec(), setShadowResolution(), setshadowDistance()
+		 */
+		void setShadowAreaSize(double size);
+
+		//!	シャドウマップ領域取得関数
+		/*!
+		 *	影生成直方体領域の大きさを取得します。
+		 *
+		 *	\return	影生成領域の大きさ
+		 *
+		 *	\sa setShadowAreaSize()
+		 */
+		double getShadowAreaSize(void);
+
+		//!	シャドウマップ領域奥行き幅設定関数
+		/*!
+		 *	影は空間中の直方体領域の内部に生成されますが、
+		 *	この直方体のうち影光線ベクトルに平行な辺の長さを設定します。
+		 *	この値が大きいほど広い領域に対し影を生成しますが、
+		 *	一方で大きいほど計算精度が悪くなり、描画の不具合を生じやすくなります。
+		 *	通常は、 setShadowAreaSize() の設定値と同程度にしておくことが無難です。
+		 *
+		 *	\param[in]	distance	シャドウマップ領域奥行き幅
+		 *
+		 *	\sa setShadowVec(), setShadowResolution(), setShadowAreaSize()
+		 */
+		void setShadowDistance(double distance);
+
+		//!	シャドウマップ領域奥行き幅取得関数
+		/*!
+		 *	影性生直方体領域の奥行き方向(影光線ベクトルに平行な方向)の幅を取得します。
+		 *
+		 *	\return 領域奥行き幅
+		 *
+		 *	\sa setShadowDistance()
+		 */
+		double getShadowDistance(void);
+
+		//!	影濃度設定関数
+		/*!
+		 *	影の濃度を設定します。
+		 *	この値が大きいほど影となる部分の輝度は低くなる、つまり影自体は濃くなってきます。
+		 *	最小値は 0, 最大値は 1 で、0 のときは影効果は無効となります。
+		 *	1 の場合、影となる領域は一切光が当たってない状況の輝度(色)となります。
+		 *
+		 *	\param[in]	value	影濃度。0 で最小、1 で最大で、大きいほど影が濃くなります。
+		 */
+		void setShadowVisibility(double value);
+
+		//!	影濃度取得関数
+		/*!
+		 *	影の濃度を取得します。
+		 *
+		 *	\return	影濃度
+		 */
+		double getShadowVisibility(void);
+
+		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void SetFinalizeMode(void);
@@ -1068,3 +1132,75 @@ namespace FK {
 }
 
 #endif //!__FK_SIMPLE_WINDOW_HEADER__
+
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	Redistribution and use in source and binary forms,
+ *	with or without modification, are permitted provided that the
+ *	following conditions are met:
+ *
+ *		- Redistributions of source code must retain the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer.
+ *
+ *		- Redistributions in binary form must reproduce the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer in the documentation and/or
+ *			other materials provided with the distribution.
+ *
+ *		- Neither the name of the copyright holders nor the names
+ *			of its contributors may be used to endorse or promote
+ *			products derived from this software without specific
+ *			prior written permission.
+ *
+ *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *	POSSIBILITY OF SUCH DAMAGE. 
+ *
+ ****************************************************************************/
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	本ソフトウェアおよびソースコードのライセンスは、基本的に
+ *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
+ *
+ *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
+ *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
+ *
+ *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
+ *		および下記免責条項を含めること。
+ *
+ *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
+ *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
+ *		含めること。
+ *
+ *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
+ *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
+ *		コントリビューターの名前を使用してはならない。
+ *
+ *	本ソフトウェアは、著作権者およびコントリビューターによって「現
+ *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
+ *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
+ *	に限定されない、いかなる保証もないものとします。著作権者もコン
+ *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
+ *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
+ *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
+ *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
+ *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
+ *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
+ *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
+ *	ついて、一切責任を負わないものとします。
+ *
+ ****************************************************************************/
