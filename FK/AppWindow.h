@@ -370,6 +370,59 @@ namespace FK {
 		void setCameraDefault(void);
 		///@}
 
+		//! \name デフォルト光源設定関数
+		///@{
+
+		//! 光源初期化関数
+		/*!
+		 *	デフォルト光源をシーンに追加します。
+		 */
+		void setLightDefault(void);
+
+		//! デフォルト光源方向設定関数1
+		/*!
+		 *	デフォルト光源の方向を設定します。
+		 *
+		 *	\param[in]	v	光源の方向ベクトル
+		 */
+		void setDefaultLightVec(const fk_Vector &v);
+
+		//! デフォルト光源方向設定関数2
+		/*!
+		 *	デフォルト光源の方向を設定します。
+		 *
+		 *	\param[in]	x	光源の方向ベクトル x 成分
+		 *	\param[in]	y	光源の方向ベクトル y 成分
+		 *	\param[in]	z	光源の方向ベクトル z 成分
+		 */
+		void setDefaultLightVec(double x, double y, double z);
+
+		//! デフォルト光源方向取得関数
+		/*!
+		 *	デフォルト光源の方向を取得します。
+		 *
+		 *	\return	デフォルト光源方向ベクトル
+		 */
+		fk_Vector getDefaultLightVec(void);
+
+		//! デフォルト光源マテリアル設定関数
+		/*!
+		 *	デフォルト光源のマテリアルを設定します。
+		 *
+		 *	\param[in]	mat		光源マテリアル
+		 */
+		void setDefaultLightMaterial(const fk_Material &mat);
+
+		//! デフォルト光源マテリアル取得関数
+		/*!
+		 *	デフォルト光源のマテリアルを取得します。
+		 *
+		 *	\return 光源マテリアル
+		 */
+		fk_Material * getDefaultLightMaterial(void);
+		
+		///@}
+
 		//! \name シーン制御関数
 		///@{
 
@@ -981,13 +1034,23 @@ namespace FK {
 		 */
 		bool getShadowMode(void);
 
-		//! 影光線方向設定関数
+		//! 影光線方向設定関数1
 		/*!
 		 *	影を生成する際の光の方向を設定します。
 		 *
 		 *	\param[in]	v	光の方向ベクトル
 		 */
-		void setShadowVec(fk_Vector v);
+		void setShadowVec(const fk_Vector &v);
+
+		//! 影光線方向設定関数2
+		/*!
+		 *	影を生成する際の光の方向を設定します。
+		 *
+		 *	\param[in]	x	光の方向ベクトル x 成分
+		 *	\param[in]	y	光の方向ベクトル y 成分
+		 *	\param[in]	z	光の方向ベクトル z 成分
+		 */
+		void setShadowVec(double x, double y, double z);
 
 		//!	影光線方向取得関数
 		/*!

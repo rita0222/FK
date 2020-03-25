@@ -144,13 +144,23 @@ namespace FK {
 		 */
 		bool getShadowMode(void);
 
-		//! 影光線方向設定関数
+		//! 影光線方向設定関数1
 		/*!
 		 *	影を生成する際の光の方向を設定します。
 		 *
 		 *	\param[in]	v	光の方向ベクトル
 		 */
-		void setShadowVec(fk_Vector v);
+		void setShadowVec(const fk_Vector &v);
+
+		//! 影光線方向設定関数2
+		/*!
+		 *	影を生成する際の光の方向を設定します。
+		 *
+		 *	\param[in]	x	光の方向ベクトル x 成分
+		 *	\param[in]	y	光の方向ベクトル y 成分
+		 *	\param[in]	z	光の方向ベクトル z 成分
+		 */
+		void setShadowVec(double x, double y, double z);
 
 		//!	影光線方向取得関数
 		/*!
