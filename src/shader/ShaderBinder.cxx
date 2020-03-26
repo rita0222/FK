@@ -113,6 +113,11 @@ bool fk_ShaderBinder::Initialize()
 	return isExtensionInitialized;
 }
 
+bool fk_ShaderBinder::IsInitialized(void)
+{
+    return isExtensionInitialized;
+}
+
 fk_ShaderBinder::fk_ShaderBinder()
 	: program(&innerProgram), parameter(&innerParameter),
 	  usingProgram(false), setupFlg(false),

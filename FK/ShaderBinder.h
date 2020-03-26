@@ -299,6 +299,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		static bool Initialize(void);
+		static bool IsInitialized(void);
 		void ProcPreShader(void);
 		void ProcPostShader(void);
 		void SetupDone(bool = true);

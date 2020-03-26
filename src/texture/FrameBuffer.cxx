@@ -1,7 +1,8 @@
 ﻿#define FK_DEF_SIZETYPE
 #include <FK/FrameBuffer.h>
-//#include <FK/Error.H>
-//#include <FK/Window.h>
+#include <FK/ShaderBinder.h>
+#include <FK/Error.H>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -42,10 +43,10 @@ void fk_FrameBuffer::SetBufferSize(int argW, int argH)
 
 void fk_FrameBuffer::SetupFBO(int argUnitID)
 {
+    if (fk_ShaderBinder::IsInitialized() == false) fk_ShaderBinder::Initialize();
 	static const GLfloat border[] = {1.0f, 0.0f, 0.0f, 0.0f};
 	unitID = argUnitID+1;
-	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
-
+    glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
 	glGenTextures(1, &ID);
 	glBindTexture(GL_TEXTURE_2D, ID);
 	

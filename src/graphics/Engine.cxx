@@ -37,6 +37,8 @@ static const GLenum shadowBuffers[] = {GL_DEPTH_ATTACHMENT};
 
 fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 {
+	if (fk_ShaderBinder::IsInitialized() == false) fk_ShaderBinder::Initialize();
+
 	if(engineNum == 0) {
 		pointDraw = new fk_PointDraw;
 		lineDraw = new fk_LineDraw;
@@ -842,8 +844,8 @@ void fk_GraphicsEngine::InitFrameBufferMode(void)
 void fk_GraphicsEngine::ShadowInit(void)
 {
 	if(shadowBuf != nullptr) {
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
 		delete shadowBuf;
 	}
