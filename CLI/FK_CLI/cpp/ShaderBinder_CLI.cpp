@@ -128,11 +128,6 @@ namespace FK_CLI {
 		pB->initializeFrameBufferObject(argD->w, argD->h);
 	}
 
-	void fk_ShaderBinder::FinalizeFrameBufferObject(void)
-	{
-		pB->finalizeFrameBufferObject();
-	}
-
 	void fk_ShaderBinder::BindWindow(fk_AppWindow^ argWindow)
 	{
 		if (argWindow == nullptr) return;

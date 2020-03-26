@@ -648,6 +648,12 @@
     <ClInclude Include="..\FK_CLI\include\GraphNode_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\FK\FrameBuffer.h">
+      <Filter>Header\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FK\Renderer.h">
+      <Filter>Header\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\FK_CLI\cpp\AppWindow_CLI.cpp">
@@ -1279,6 +1285,12 @@
     </ClCompile>
     <ClCompile Include="..\FK_CLI\cpp\GraphNode_CLI.cpp">
       <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texture\FrameBuffer.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Renderer.cxx">
+      <Filter>Source\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
