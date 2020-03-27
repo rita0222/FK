@@ -125,38 +125,6 @@ namespace FK_CLI {
 		}
 		return fk_FogMode::NONE;
 	}
-			   
-	void fk_Fog::FogOption::set(fk_FogOption argOpt)
-	{
-		switch(argOpt) {
-		  case fk_FogOption::FASTEST:
-			GetP()->setFogOption(::FK::fk_FogOption::FASTEST);
-			break;
-
-		  case fk_FogOption::NICEST:
-			GetP()->setFogOption(::FK::fk_FogOption::NICEST);
-			break;
-
-		  default:
-			GetP()->setFogOption(::FK::fk_FogOption::NOOPTION);
-			break;
-		}
-	}
-
-	fk_FogOption fk_Fog::FogOption::get(void)
-	{
-		switch(GetP()->getFogOption()) {
-		case ::FK::fk_FogOption::FASTEST:
-			return fk_FogOption::FASTEST;
-				
-		case ::FK::fk_FogOption::NICEST:
-			return fk_FogOption::NICEST;
-
-		  default:
-			break;
-		}
-		return fk_FogOption::NOOPTION;
-	}
 
 	void fk_Fog::FogDensity::set(double argD)
 	{

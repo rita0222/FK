@@ -131,5 +131,66 @@ namespace FK_CLI {
 	{
 		return GetP()->getBlendStatus();
 	}
+
+    void fk_Scene::ShadowMode::set(bool argMode)
+    {
+        GetP()->setShadowMode(argMode);
+    }
+
+    bool fk_Scene::ShadowMode::get(void)
+    {
+        return GetP()->getShadowMode();
+    }
+
+    void fk_Scene::ShadowVec::set(fk_Vector^ argV)
+    {
+        if (!argV) return;
+        GetP()->setShadowVec(::FK::fk_Vector(argV->x_, argV->y_, argV->z_));
+    }
+
+    fk_Vector^ fk_Scene::ShadowVec::get(void)
+    {
+        return gcnew fk_Vector(GetP()->getShadowVec());
+    }
+
+    void fk_Scene::ShadowResolution::set(int argRes)
+    {
+        GetP()->setShadowResolution(argRes);
+    }
+
+    int fk_Scene::ShadowResolution::get(void)
+    {
+        return GetP()->getShadowResolution();
+    }
+
+    void fk_Scene::ShadowAreaSize::set(double argSize)
+    {
+        GetP()->setShadowAreaSize(argSize);
+    }
+
+    double fk_Scene::ShadowAreaSize::get(void)
+    {
+        return GetP()->getShadowAreaSize();
+    }
+
+    void fk_Scene::ShadowDistance::set(double argDist)
+    {
+        GetP()->setShadowDistance(argDist);
+    }
+
+    double fk_Scene::ShadowDistance::get(void)
+    {
+        return GetP()->getShadowDistance();
+    }
+
+    void fk_Scene::ShadowVisibility::set(double argV)
+    {
+        GetP()->setShadowVisibility(argV);
+    }
+
+    double fk_Scene::ShadowVisibility::get(void)
+    {
+        return GetP()->getShadowVisibility();
+    }
 }
 

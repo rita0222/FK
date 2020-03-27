@@ -87,6 +87,11 @@ namespace FK_CLI {
 
 	fk_Texture::~fk_Texture()
 	{
+		this->!fk_Texture();
+	}
+
+	fk_Texture::!fk_Texture()
+	{
 	}
 
 	void fk_Texture::Image::set(fk_Image^ argImage)
@@ -217,6 +222,28 @@ namespace FK_CLI {
 		return fk_TexWrapMode::REPEAT;
 	}
 	
+	void fk_Texture::FrameBuffer::set(fk_FrameBuffer^ argFB)
+	{
+		if (!argFB) {
+			GetP()->setFrameBuffer(nullptr);
+			return;
+		}
+
+		GetP()->setFrameBuffer(argFB->pFrame);
+	}
+
+	fk_FrameBuffer^ fk_Texture::FrameBuffer::get(void)
+	{
+		::FK::fk_FrameBuffer* pF = GetP()->getFrameBuffer();
+		if (pF == nullptr) return nullptr;
+		return gcnew fk_FrameBuffer(pF);
+	}
+
+	void fk_Texture::InitFrameBuffer(void)
+	{
+		GetP()->initFrameBuffer();
+	}
+
 	bool fk_Texture::ReadBMP(String^ argFileName)
 	{
 		if(!argFileName) return false;

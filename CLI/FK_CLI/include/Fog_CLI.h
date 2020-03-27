@@ -149,26 +149,6 @@ namespace FK_CLI
 			fk_FogMode get();
 		}
 
-		//! 霧効果処理オプションプロパティ
-		/*!
-		 *	霧効果処理に対するオプションの設定や参照を行います。
-		 *	実際の効果の程度についてはハードウェアやOSに依存します。
-		 *	設定できるオプションの種類は以下のとおりです。
-		 *
-		 *	- fk_FogOption.FASTEST \n
-		 *		処理の際に、実行速度を優先します。
-		 *	- fk_FogOption.FK_NICEST \n
-		 *		処理の際に、品質を優先します。
-		 *	- fk_FogOption.NOOPTION \n
-		 *		特に優先度を設定しません。
-		 *	.
-		 *	デフォルトでは fk_FogOption.NOOPTION が設定されています。
-		 */
-		property fk_FogOption FogOption {
-			void set(fk_FogOption);
-			fk_FogOption get();
-		}
-
 		//! 指数式係数プロパティ
 		/*!
 		 *	減衰関数として指数式か指数(2乗)式を選択した場合の、
