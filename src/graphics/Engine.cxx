@@ -212,7 +212,6 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDisable(GL_BLEND);
 	glEnable(GL_MULTISAMPLE);
-	glClearDepth(1.0);
 	//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
 #ifndef OPENGL4
@@ -886,7 +885,6 @@ void fk_GraphicsEngine::PreShadowDraw(void)
 {
 	glCullFace(GL_FRONT);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
-	glClear(GL_DEPTH_BUFFER_BIT);
 	glDrawBuffers(sizeof(shadowBuffers) / sizeof(shadowBuffers[0]), shadowBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		fk_Window::putString("Shadow Error");
@@ -947,11 +945,12 @@ void fk_GraphicsEngine::DrawShadow(void)
 	shadowProj.MakeMat();
 	fk_DrawBase::SetProjectionMatrix(shadowProj.GetMatrix());
 	fk_DrawBase::SetShadowProjMatrix(shadowProj.GetMatrix());
-	glClear(GL_DEPTH_BUFFER_BIT);
-
 	fk_DrawBase::SetCamera(&shadowCamera);
 	fk_DrawBase::SetShadowCamera(&shadowCamera);
 	fk_DrawBase::SetShadowParam(shadowVisibility);
+
+	glClearDepth(1.0);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	if(curScene != nullptr) {
 		for(auto modelP : *(curScene->GetModelList())) DrawModel(modelP);

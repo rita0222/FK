@@ -76,7 +76,6 @@ using namespace FK;
 fk_Fog::fk_Fog(void)
 {
 	setFogMode(fk_FogMode::NONE);
-	setFogOption(fk_FogOption::NOOPTION);
 	setFogDensity(0.35);
 	setFogLinearMap(1.0, 5.0);
 	setFogColor(0.5, 0.5, 0.5, 1.0);
@@ -97,13 +96,6 @@ void fk_Fog::setFogMode(const fk_FogMode argMode)
 	return;
 }
 
-void fk_Fog::setFogOption(const fk_FogOption argOption)
-{
-	fogOption = argOption;
-	fogChangeStatus = true;
-	return;
-}
-
 void fk_Fog::setFogDensity(const double argDensity)
 {
 	fogDensity = argDensity;
@@ -119,7 +111,7 @@ void fk_Fog::setFogLinearMap(const double argStart, const double argEnd)
 	return;
 }
 
-void fk_Fog::setFogColor(const fk_Color argColor)
+void fk_Fog::setFogColor(const fk_Color &argColor)
 {
 	fogColor = argColor;
 	fogChangeStatus = true;
@@ -145,11 +137,6 @@ void fk_Fog::setFogColor(const double argR, const double argG,
 fk_FogMode fk_Fog::getFogMode(void) const
 {
 	return fogMode;
-}
-
-fk_FogOption fk_Fog::getFogOption(void) const
-{
-	return fogOption;
 }
 
 double fk_Fog::getFogDensity(void) const

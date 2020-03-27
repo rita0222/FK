@@ -16,11 +16,11 @@ namespace FK_CLI
 	 *	このクラスは、フレームバッファーを制御する機能を提供します。
 	 *	フレームバッファーとはシーン描画時の色情報と深度情報のことであり、
 	 *	それぞれを「カラーバッファー」、「深度バッファー」と呼称します。
-	 *	シーン描画は通常は fk_Window あるいは fk_AppWindow によってモニター上に描画されますが、
+	 *	シーン描画は通常は fk_AppWindow によってモニター上に描画されますが、
 	 *	fk_Scene インスタンスを fk_Renderer に設定することにより、
 	 *	描画情報をモニター上ではなくフレームバッファーに格納することができます。
 	 *	そのフレームバッファー情報を示すのが本クラスです。
-	 *	この情報を fk_Texutre::setFrameBuffer() に渡すことで、
+	 *	この情報を fk_Texutre::FrameBuffer に渡すことで、
 	 *	フレームバッファーをアニメーションテクスチャとして利用できます。
 	 *
 	 *	\sa fk_Scene, fk_Renderer, fk_Texture
@@ -38,33 +38,24 @@ namespace FK_CLI
 		~fk_FrameBuffer();
         !fk_FrameBuffer();
 #endif
-		//! バッファー種類設定関数
+		//! バッファー種類プロパティ
 		/*!
-		 *	フレームバッファーとして参照する情報を設定します。
-		 *	設定できる種類は以下のとおりです。
+		 *	フレームバッファーの種類を参照します。
+		 *	種類は以下のとおりです。
 		 *
 		 *	- fk_SamplerSource::COLOR:
 		 *		描画シーン全体の色値情報を参照先とします。
 		 *	- fk_SamplerSource::DEPTH:
 		 *		描画シーン全体の深度情報を参照先とします。
-		 *	.
-		 *	デフォルトは fk_SamplerSource::COLOR に設定されています。
-		 *
-		 *	\param[in]	mode
-		 *		フレームバッファー情報種類
-		 *
-		 *	\sa getSource()
 		 */
 
         property fk_SamplerSource Source {
             fk_SamplerSource get();
         }
 
-		//! バッファーサイズ取得関数
+		//! バッファーサイズプロパティ
 		/*!
 		 *	現在設定されているバッファーのサイズを取得します。
-		 *
-		 *	\return	バッファーのサイズ
 		 */
         property fk_Dimension^ BufferSize {
             fk_Dimension^ get();

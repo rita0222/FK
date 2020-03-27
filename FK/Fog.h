@@ -1,4 +1,193 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_FOG_HEADER__
+#define __FK_FOG_HEADER__
+
+#include <FK/Material.h>
+#include <FK/DList.h>
+
+namespace FK {
+
+	//! 霧効果の減衰関数を表す列挙型
+	enum class fk_FogMode {
+		LINEAR,	//!< 線形式
+		EXP,	//!< 指数式
+		EXP2,	//!< 指数(2乗)式
+		NONE	//!< 無効
+	};
+
+	//! シーン中の霧効果を制御するクラス
+	/*!
+	 *	このクラスは、シーン内の霧効果を制御する機能を提供します。
+	 *	実際の利用時には、インスタンスは本クラスのものではなく
+	 *	派生クラスの fk_Scene によるものを利用することになります。
+	 *
+	 *	\sa fk_Scene, fk_DisplayLink, fk_Color
+	 */
+
+	class fk_Fog : public fk_DisplayLink {
+
+		friend class	fk_GraphicsEngine;
+
+	public:
+
+		//! コンストラクタ
+		fk_Fog(void);
+		//! デストラクタ
+		virtual ~fk_Fog();
+
+		//! 減衰関数設定関数
+		/*!
+		 *	霧効果の減衰関数を設定します。設定できる関数の種類は以下のとおりです。
+		 *	各数式中の \f$ z \f$ はカメラからの距離を意味します。
+		 *
+		 *	- fk_FogMode::LINEAR \n
+		 *		減衰関数として線形式を設定します。具体的には以下の数式を用います。
+		 *		\f[
+		 *			\frac{E-z}{E-S}
+		 *		\f]
+		 *		式中の \f$ E, S \f$ は setFogLinearMap() で設定します。
+		 *	- fk_FogMode::EXP \n
+		 *		減衰関数として指数式を設定します。具体的には以下の数式を用います。
+		 *		\f[
+		 *			e^{-dz}
+		 *		\f]
+		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
+		 *	- fk_FogMode::EXP2 \n
+		 *		減衰関数として指数(2乗)式を設定します。具体的には以下の数式を用います。
+		 *		\f[
+		 *			e^{-\left(dz\right)^2}
+		 *		\f]
+		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
+		 *	- fk_FogMode::NONE \n
+		 *		この値を設定した場合、霧効果を無効にします。
+		 *	.
+		 *	デフォルトでは fk_FogMode::NONE が設定されています。
+		 *
+		 *	\param[in] mode		減衰関数を表す値
+		 */
+		void setFogMode(const fk_FogMode mode);
+
+		//! 指数式係数設定関数
+		/*!
+		 *	減衰関数として指数式か指数(2乗)式を選択した場合の、
+		 *	指数部の係数 d を設定します。
+		 *	数式の詳細は setFogMode() を参照して下さい。
+		 *
+		 *	\param[in] d	指数部係数
+		 */
+		void setFogDensity(const double d);
+
+		//! 線形式係数設定関数
+		/*!
+		 *	減衰関数として線形式を選択した場合の、
+		 *	係数 S, E を設定します。
+		 *	意味的には、霧効果が始まる最低距離が S、
+		 *	霧によって完全に物体が見えなくなる距離を E とすることになります。
+		 *	数式の詳細は setFogMode() を参照して下さい。
+		 *
+		 *	\param[in]	S	霧効果開始距離
+		 *	\param[in]	E	霧効果完全距離
+		 */
+		void setFogLinearMap(const double S, const double E);
+
+		//! 霧色設定関数1
+		/*!
+		 *	霧の色を設定します。通常はシーンの背景色と同色とします。
+		 *
+		 *	\param[in] col	霧色
+		 *
+		 *	\sa fk_Scene::setBGColor()
+		 */
+		void setFogColor(const fk_Color &col);
+
+		//! 霧色設定関数2
+		/*!
+		 *	霧の色を設定します。通常はシーンの背景色と同色とします。
+		 *	色設定に関しての詳細は fk_Color を参照して下さい。
+		 *
+		 *	\param[in] r	霧色のR(赤)要素値
+		 *	\param[in] g	霧色のG(緑)要素値
+		 *	\param[in] b	霧色のB(青)要素値
+		 *	\param[in] a	霧色のA(透過)要素値
+		 *
+		 *	\sa fk_Scene::setBGColor()
+		 */
+		void setFogColor(float r, float g, float b, float a);
+
+		//! 霧色設定関数3
+		/*!
+		 *	霧の色を設定します。通常はシーンの背景色と同色とします。
+		 *	色設定に関しての詳細は fk_Color を参照して下さい。
+		 *
+		 *	\param[in] r	霧色のR(赤)要素値
+		 *	\param[in] g	霧色のG(緑)要素値
+		 *	\param[in] b	霧色のB(青)要素値
+		 *	\param[in] a	霧色のA(透過)要素値
+		 *
+		 *	\sa fk_Scene::setBGColor()
+		 */
+		void setFogColor(double r, double g, double b, double a);
+
+		//! 減衰関数取得関数
+		/*!
+		 *	霧効果の減衰関数として何が選択されているのかを取得します。
+		 *	関数の種類および詳細は setFogMode() を参照して下さい。
+		 *
+		 *	\return 減衰関数を表す値
+		 */
+		fk_FogMode getFogMode(void) const;
+
+		//! 指数式係数取得関数
+		/*!
+		 *	減衰関数として指数式か指数(2乗)式を選択した場合の、
+		 *	指数部の係数 d を参照します。
+		 *	数式の詳細は setFogMode() を参照して下さい。
+		 *
+		 *	\return 指数部係数
+		 */
+		double getFogDensity(void) const;
+
+		//! 線形式係数取得関数1
+		/*!
+		 *	減衰関数として線形式を選択した場合の、
+		 *	係数 S を参照します。
+		 *	数式の詳細は setFogMode() を参照して下さい。
+		 *
+		 *	\return 霧効果開始距離
+		 */
+		double getFogLinearStart(void) const;
+
+		//! 線形式係数取得関数1
+		/*!
+		 *	減衰関数として線形式を選択した場合の、
+		 *	係数 E を参照します。
+		 *	数式の詳細は setFogMode() を参照して下さい。
+		 *
+		 *	\return 霧効果完全距離
+		 */
+		double getFogLinearEnd(void) const;
+
+		//! 霧色取得関数
+		/*!
+		 *	現在設定されている霧の色を参照します。
+		 *
+		 *	\return 霧色
+		 */
+		fk_Color getFogColor(void) const;
+
+	private:
+
+		fk_FogMode		fogMode;
+		double			fogStart, fogEnd, fogDensity;
+		bool			fogChangeStatus;
+		fk_Color		fogColor;
+
+		bool			GetFogChangeStatus(void);
+	};
+}
+
+#endif // !__FK_FOG_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,231 +258,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_FOG_HEADER__
-#define __FK_FOG_HEADER__
-
-#include <FK/Material.h>
-#include <FK/DList.h>
-
-namespace FK {
-
-	//! 霧効果の減衰関数を表す列挙型
-	enum class fk_FogMode {
-		LINEAR,	//!< 線形式
-		EXP,	//!< 指数式
-		EXP2,	//!< 指数(2乗)式
-		NONE	//!< 無効
-	};
-
-	//! 霧効果のオプションを表す列挙型
-	enum class fk_FogOption {
-		FASTEST,	//!< 速度優先
-		NICEST,		//!< 質優先
-		NOOPTION	//!< 指定なし
-	};
-
-	//! シーン中の霧効果を制御するクラス
-	/*!
-	 *	このクラスは、シーン内の霧効果を制御する機能を提供します。
-	 *	実際の利用時には、インスタンスは本クラスのものではなく
-	 *	派生クラスの fk_Scene によるものを利用することになります。
-	 *
-	 *	\sa fk_Scene, fk_DisplayLink, fk_Color
-	 */
-
-	class fk_Fog : public fk_DisplayLink {
-
-		friend class	fk_GraphicsEngine;
-
-	public:
-
-		//! コンストラクタ
-		fk_Fog(void);
-		//! デストラクタ
-		virtual ~fk_Fog();
-
-		//! 減衰関数設定関数
-		/*!
-		 *	霧効果の減衰関数を設定します。設定できる関数の種類は以下のとおりです。
-		 *	各数式中の \f$ z \f$ はカメラからの距離を意味します。
-		 *
-		 *	- fk_FogMode::LINEAR \n
-		 *		減衰関数として線形式を設定します。具体的には以下の数式を用います。
-		 *		\f[
-		 *			\frac{E-z}{E-S}
-		 *		\f]
-		 *		式中の \f$ E, S \f$ は setFogLinearMap() で設定します。
-		 *	- fk_FogMode::EXP \n
-		 *		減衰関数として指数式を設定します。具体的には以下の数式を用います。
-		 *		\f[
-		 *			e^{-dz}
-		 *		\f]
-		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
-		 *	- fk_FogMode::EXP2 \n
-		 *		減衰関数として指数(2乗)式を設定します。具体的には以下の数式を用います。
-		 *		\f[
-		 *			e^{-\left(dz\right)^2}
-		 *		\f]
-		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
-		 *	- fk_FogMode::NONE \n
-		 *		この値を設定した場合、霧効果を無効にします。
-		 *	.
-		 *	デフォルトでは fk_FogMode::NONE が設定されています。
-		 *
-		 *	\param[in] mode		減衰関数を表す値
-		 */
-		void			setFogMode(const fk_FogMode mode);
-
-		//! 霧効果処理オプション設定関数
-		/*!
-		 *	霧効果処理に対するオプションを設定します。
-		 *	実際の効果の程度についてはハードウェアやOSに依存します。
-		 *	設定できるオプションの種類は以下のとおりです。
-		 *
-		 *	- fk_FogOption::FASTEST \n
-		 *		処理の際に、実行速度を優先します。
-		 *	- fk_FogOption::NICEST \n
-		 *		処理の際に、品質を優先します。
-		 *	- fk_FogOption::NOOPTION \n
-		 *		特に優先度を設定しません。
-		 *	.
-		 *	デフォルトでは fk_FogOption::NOOPTION が設定されています。
-		 *
-		 *	\param[in] opt	オプションを表す値
-		 */
-		void			setFogOption(const fk_FogOption opt);
-
-		//! 指数式係数設定関数
-		/*!
-		 *	減衰関数として指数式か指数(2乗)式を選択した場合の、
-		 *	指数部の係数 d を設定します。
-		 *	数式の詳細は setFogMode() を参照して下さい。
-		 *
-		 *	\param[in] d	指数部係数
-		 */
-		void			setFogDensity(const double d);
-
-		//! 線形式係数設定関数
-		/*!
-		 *	減衰関数として線形式を選択した場合の、
-		 *	係数 S, E を設定します。
-		 *	意味的には、霧効果が始まる最低距離が S、
-		 *	霧によって完全に物体が見えなくなる距離を E とすることになります。
-		 *	数式の詳細は setFogMode() を参照して下さい。
-		 *
-		 *	\param[in]	S	霧効果開始距離
-		 *	\param[in]	E	霧効果完全距離
-		 */
-		void			setFogLinearMap(const double S, const double E);
-
-		//! 霧色設定関数1
-		/*!
-		 *	霧の色を設定します。通常はシーンの背景色と同色とします。
-		 *
-		 *	\param[in] col	霧色
-		 *
-		 *	\sa fk_Scene::setBGColor()
-		 */
-		void			setFogColor(const fk_Color col);
-
-		//! 霧色設定関数2
-		/*!
-		 *	霧の色を設定します。通常はシーンの背景色と同色とします。
-		 *	色設定に関しての詳細は fk_Color を参照して下さい。
-		 *
-		 *	\param[in] r	霧色のR(赤)要素値
-		 *	\param[in] g	霧色のG(緑)要素値
-		 *	\param[in] b	霧色のB(青)要素値
-		 *	\param[in] a	霧色のA(透過)要素値
-		 *
-		 *	\sa fk_Scene::setBGColor()
-		 */
-		void			setFogColor(const float r, const float g,
-									const float b, const float a);
-
-		//! 霧色設定関数3
-		/*!
-		 *	霧の色を設定します。通常はシーンの背景色と同色とします。
-		 *	色設定に関しての詳細は fk_Color を参照して下さい。
-		 *
-		 *	\param[in] r	霧色のR(赤)要素値
-		 *	\param[in] g	霧色のG(緑)要素値
-		 *	\param[in] b	霧色のB(青)要素値
-		 *	\param[in] a	霧色のA(透過)要素値
-		 *
-		 *	\sa fk_Scene::setBGColor()
-		 */
-		void			setFogColor(const double r, const double g,
-									const double b, const double a);
-
-		//! 減衰関数取得関数
-		/*!
-		 *	霧効果の減衰関数として何が選択されているのかを取得します。
-		 *	関数の種類および詳細は setFogMode() を参照して下さい。
-		 *
-		 *	\return 減衰関数を表す値
-		 */
-		fk_FogMode		getFogMode(void) const;
-
-		//! 霧効果処理オプション取得関数
-		/*!
-		 *	霧効果処理に対して現在設定されているオプションを取得します。
-		 *	オプションの種類および詳細は setFogOption() を参照して下さい。
-		 *
-		 *	\return オプションを表す値
-		 */
-		fk_FogOption	getFogOption(void) const;
-
-		//! 指数式係数取得関数
-		/*!
-		 *	減衰関数として指数式か指数(2乗)式を選択した場合の、
-		 *	指数部の係数 d を参照します。
-		 *	数式の詳細は setFogMode() を参照して下さい。
-		 *
-		 *	\return 指数部係数
-		 */
-		double			getFogDensity(void) const;
-
-		//! 線形式係数取得関数1
-		/*!
-		 *	減衰関数として線形式を選択した場合の、
-		 *	係数 S を参照します。
-		 *	数式の詳細は setFogMode() を参照して下さい。
-		 *
-		 *	\return 霧効果開始距離
-		 */
-		double			getFogLinearStart(void) const;
-
-		//! 線形式係数取得関数1
-		/*!
-		 *	減衰関数として線形式を選択した場合の、
-		 *	係数 E を参照します。
-		 *	数式の詳細は setFogMode() を参照して下さい。
-		 *
-		 *	\return 霧効果完全距離
-		 */
-		double			getFogLinearEnd(void) const;
-
-		//! 霧色取得関数
-		/*!
-		 *	現在設定されている霧の色を参照します。
-		 *
-		 *	\return 霧色
-		 */
-		fk_Color		getFogColor(void) const;
-
-	private:
-
-		fk_FogMode		fogMode;
-		fk_FogOption	fogOption;
-		double			fogStart, fogEnd, fogDensity;
-		bool			fogChangeStatus;
-		fk_Color		fogColor;
-
-		bool			GetFogChangeStatus(void);
-	};
-}
-
-#endif // !__FK_FOG_HEADER__
-
-

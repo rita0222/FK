@@ -24,3 +24,5 @@ uniform sampler2D fk_DepthBuf;
 uniform sampler2DShadow fk_ShadowBuf;
 uniform vec2 fk_FBOSize;
 uniform float fk_ShadowVisibility;
+uniform vec4 fk_FogColor;
+uniform vec4 fk_FogParam;
