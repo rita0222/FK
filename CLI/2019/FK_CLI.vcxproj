@@ -176,6 +176,7 @@
     <ClInclude Include="..\FK_CLI\include\Edge_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\EngineWrapper_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Fog_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\FrameBuffer_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenMatrix_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenVector_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GraphEdge_CLI.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="..\FK_CLI\include\RBezCurve_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\RectTexture_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Reference_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\Renderer_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Scene_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\ShaderBinder_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\ShaderParameter_CLI.h" />
@@ -390,6 +392,7 @@
     <ClCompile Include="..\FK_CLI\cpp\Edge_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\EngineWrapper_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Fog_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\FrameBuffer_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenMatrix_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenVector_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GraphEdge_CLI.cpp" />
@@ -425,6 +428,7 @@
     <ClCompile Include="..\FK_CLI\cpp\RBezCurve_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\RectTexture_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Reference_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\Renderer_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Scene_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\ShaderBinder_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\ShaderParameter_CLI.cpp" />
