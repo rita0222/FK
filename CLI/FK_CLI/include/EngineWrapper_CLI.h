@@ -1,6 +1,4 @@
-﻿// Renderer_CLI.h
-
-#pragma once
+﻿#pragma once
 
 #include <FK/Engine.H>
 #include <msclr/marshal_cppstd.h>
@@ -9,7 +7,7 @@
 
 namespace FK_CLI
 {
-	public ref class fk_Renderer {
+	public ref class fk_EngineWrapper {
 	private:
 		HWND	hWnd;
 		HDC		hDC;
@@ -18,9 +16,9 @@ namespace FK_CLI
 		::FK::fk_GraphicsEngine *pEngine;
 
 	public:
-		fk_Renderer(void);
-		~fk_Renderer();
-		!fk_Renderer();
+		fk_EngineWrapper(void);
+		~fk_EngineWrapper();
+		!fk_EngineWrapper();
 
 		bool Initialize(System::IntPtr pWnd, int w, int h);
 		void Shutdown(void);

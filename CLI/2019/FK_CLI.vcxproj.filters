@@ -546,9 +546,6 @@
     <ClInclude Include="..\FK_CLI\include\Reference_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
-    <ClInclude Include="..\FK_CLI\include\Renderer_CLI.H">
-      <Filter>Header\CLI</Filter>
-    </ClInclude>
     <ClInclude Include="..\FK_CLI\include\Scene_CLI.h">
       <Filter>Header\CLI</Filter>
     </ClInclude>
@@ -653,6 +650,9 @@
     </ClInclude>
     <ClInclude Include="..\..\FK\Renderer.h">
       <Filter>Header\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FK_CLI\include\EngineWrapper_CLI.h">
+      <Filter>Header\CLI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -804,9 +804,6 @@
       <Filter>Source\CLI</Filter>
     </ClCompile>
     <ClCompile Include="..\FK_CLI\cpp\Reference_CLI.cpp">
-      <Filter>Source\CLI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\FK_CLI\cpp\Renderer_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
     <ClCompile Include="..\FK_CLI\cpp\Scene_CLI.cpp">
@@ -1291,6 +1288,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\graphics\Renderer.cxx">
       <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FK_CLI\cpp\EngineWrapper_CLI.cpp">
+      <Filter>Source\CLI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

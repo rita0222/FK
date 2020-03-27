@@ -12,12 +12,12 @@ namespace FK_FormHelper
     {
         private Control panel;
         private fk_Scene scene;
-        private readonly fk_Renderer renderer;
+        private readonly fk_EngineWrapper engine;
         protected readonly ITimer timer;
 
         public fk_Viewport(Control argPanel)
         {
-            renderer = new fk_Renderer();
+            engine = new fk_EngineWrapper();
             timer = MakeTimer();
             timer.Interval = 16;
             timer.Tick += (s, e) => Draw();
@@ -35,7 +35,7 @@ namespace FK_FormHelper
             set
             {
                 scene = value;
-                renderer.SetScene(scene);
+                engine.SetScene(scene);
             }
         }
 
@@ -60,32 +60,32 @@ namespace FK_FormHelper
 
         public event fk_DrawCallback PreDraw
         {
-            add { this.renderer.PreDraw += value; }
-            remove { this.renderer.PreDraw -= value; }
+            add { this.engine.PreDraw += value; }
+            remove { this.engine.PreDraw -= value; }
         }
 
         public event fk_DrawCallback PostDraw
         {
-            add { this.renderer.PostDraw += value; }
-            remove { this.renderer.PostDraw -= value; }
+            add { this.engine.PostDraw += value; }
+            remove { this.engine.PostDraw -= value; }
         }
 
         public void Dispose()
         {
             timer.Enabled = false;
-            renderer.Dispose();
+            engine.Dispose();
         }
 
         public void Draw()
         {
             if (Update != null) Update(null, null);
-            renderer.Draw();
+            engine.Draw();
         }
 
         public bool GetProjectPosition(double argX, double argY, fk_Plane argPlane, out fk_Vector outPos)
         {
             var pos2d = new fk_Vector();
-            bool ret = renderer.GetProjectPosition(argX, argY, argPlane, pos2d);
+            bool ret = engine.GetProjectPosition(argX, argY, argPlane, pos2d);
             outPos = pos2d;
             return ret;
         }
@@ -93,7 +93,7 @@ namespace FK_FormHelper
         public bool GetProjectPosition(double argX, double argY, double argDist, out fk_Vector outPos)
         {
             var pos2d = new fk_Vector();
-            bool ret = renderer.GetProjectPosition(argX, argY, argDist, pos2d);
+            bool ret = engine.GetProjectPosition(argX, argY, argDist, pos2d);
             outPos = pos2d;
             return ret;
         }
@@ -101,7 +101,7 @@ namespace FK_FormHelper
         public void GetWindowPosition(fk_Vector argPos, out fk_Vector outPos)
         {
             var pos2d = new fk_Vector();
-            renderer.GetWindowPosition(argPos, pos2d);
+            engine.GetWindowPosition(argPos, pos2d);
             outPos = pos2d;
         }
 
@@ -127,18 +127,18 @@ namespace FK_FormHelper
 
             panel.HandleDestroyed += (s, e) => Dispose();
 
-            panel.Paint += (s, e) => renderer.Draw();
+            panel.Paint += (s, e) => engine.Draw();
             panel.Resize += (s, e) =>
             {
-                renderer.Resize(panel.Width, panel.Height);
-                renderer.Draw();
+                engine.Resize(panel.Width, panel.Height);
+                engine.Draw();
             };
         }
 
         private void InitializeRenderer(object sender, EventArgs args)
         {
-            renderer.Initialize(panel.Handle, panel.Width, panel.Height);
-            if (scene != null) renderer.SetScene(scene);
+            engine.Initialize(panel.Handle, panel.Width, panel.Height);
+            if (scene != null) engine.SetScene(scene);
             IsDrawing = true;
             panel.HandleCreated -= InitializeRenderer;
         }

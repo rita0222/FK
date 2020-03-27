@@ -203,15 +203,6 @@ namespace FK_CLI
 		 */
 		void InitializeFrameBufferObject(fk_Dimension^ dim);
 
-		//! フレームバッファーオブジェクト (FBO) 利用終了メソッド
-		/*!
-		 *	フレームバッファーオブジェクト (FBO) の利用を終了します。
-		 *
-		 *	\sa InitializeFrameBufferObject(int, int),
-		 *			InitializeFrameBufferObject(fk_Dimension^)
-		 */
-		void FinalizeFrameBufferObject();
-
 		//! ウィンドウ連携設定メソッド
 		/*!
 		 *	フレームバッファーオブジェクト
