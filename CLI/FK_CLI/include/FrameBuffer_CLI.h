@@ -20,7 +20,7 @@ namespace FK_CLI
 	 *	fk_Scene インスタンスを fk_Renderer に設定することにより、
 	 *	描画情報をモニター上ではなくフレームバッファーに格納することができます。
 	 *	そのフレームバッファー情報を示すのが本クラスです。
-	 *	この情報を fk_Texutre::FrameBuffer に渡すことで、
+	 *	この情報を fk_Texture::FrameBuffer に渡すことで、
 	 *	フレームバッファーをアニメーションテクスチャとして利用できます。
 	 *
 	 *	\sa fk_Scene, fk_Renderer, fk_Texture

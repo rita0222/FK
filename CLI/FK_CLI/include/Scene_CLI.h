@@ -1,6 +1,4 @@
-﻿// Scene_CLI.h
-
-#pragma once
+﻿#pragma once
 
 #include <FK/Scene.h>
 #include "Fog_CLI.h"
@@ -94,36 +92,96 @@ namespace FK_CLI
 			bool get();
 		}
 
+		//! 影表示設定プロパティ
+		/*!
+		 *	影表示有無の設定や参照を行います。
+		 *	true であれば有効、false であれば無効となります。
+		 *
+		 *	\sa ShadowVec, ShadowResolution, ShadowAreaSize, ShadowDistance, ShadowVisibility
+		 */
 		property bool ShadowMode {
 			void set(bool);
 			bool get();
 		}
 
+		//! 影光線方向設定プロパティ
+		/*!
+		 *	影を生成する際の光の方向の設定や参照を行います。
+		 *
+		 *	\sa ShadowMode, ShadowResolution, ShadowAreaSize, ShadowDistance, ShadowVisibility
+		 */
 		property fk_Vector^ ShadowVec {
 			void set(fk_Vector^);
 			fk_Vector^ get();
 		}
 
+		//!	シャドウマップ解像度プロパティ
+		/*!
+		 *	影生成に使用するシャドウマップテクスチャの解像度の設定や参照を行います。
+		 *	この解像度は影表示の質と実行速度に大きく影響します。
+		 *	解像度が高いと影のディザーは目立たなくなりますが、描画速度が低下し、
+		 *	また実行環境によっては表示に異常をきたすことがあります。
+		 *	解像度が低い場合は描画速度が向上しますが、
+		 *	ディザーが発生しやすくなります。
+		 *
+		 *	この解像度は 16 以上の 2の累乗数であることが前提となっており、
+		 *	その条件を満たさない場合は 15 以下の場合は 16、
+		 *	それ以外の数値の場合はその数値未満の最大の2の累乗数が設定されます。
+		 *
+		 *	シャドウマップのディザーを目立たなくするには、
+		 *	解像度だけでなく処理範囲も重要な要素です。
+		 *	処理範囲については fk_Scene::ShadowAreaSize, fk_Scene::ShadowDistance を参照して下さい。
+		 *
+		 *	\sa ShadowMode, ShadowVec, ShadowAreaSize, ShadowDistance, ShadowVisibility
+		 */
 		property int ShadowResolution {
 			void set(int);
 			int get(void);
 		}
 
+		//!	シャドウマップ領域設定プロパティ
+		/*!
+		 *	影は空間中の直方体領域の内部に生成されますが、
+		 *	この直方体のうち影光線ベクトルに垂直な辺の長さの設定や参照を行います。
+		 *	この値が大きいほど広い領域に対し影を生成しますが、
+		 *	この値が大きくなるにつれて影の粒度も荒くなります。
+		 *	シーンの状況に応じて適切な値を設定する必要があります。
+		 *
+		 *	\sa ShadowMode, ShadowVec, ShadowResolution, ShadowDistance, ShadowVisibility
+		 */
 		property double ShadowAreaSize {
 			void set(double);
 			double get(void);
 		}
 
+		//!	シャドウマップ領域奥行き幅設定プロパティ
+		/*!
+		 *	影は空間中の直方体領域の内部に生成されますが、
+		 *	この直方体のうち影光線ベクトルに平行な辺の長さの設定や参照を行います。
+		 *	この値が大きいほど広い領域に対し影を生成しますが、
+		 *	一方で大きいほど計算精度が悪くなり、描画の不具合を生じやすくなります。
+		 *	通常は fk_Scene::ShadowAreaSize の設定値と同程度にしておくことが無難です。
+		 *
+		 *	\sa ShadowMode, ShadowVec, ShadowResolution, ShadowAreaSize, ShadowVisibility
+		 */
 		property double ShadowDistance {
 			void set(double);
 			double get(void);
 		}
 
+		//!	影濃度設定プロパティ
+		/*!
+		 *	影の濃度の設定や参照を行います。
+		 *	この値が大きいほど影となる部分の輝度は低くなる、つまり影自体は濃くなってきます。
+		 *	最小値は 0, 最大値は 1 で、0 のときは影効果は無効となります。
+		 *	1 の場合、影となる領域は一切光が当たってない状況の輝度(色)となります。
+		 *
+		 *	\sa ShadowMode, ShadowVec, ShadowResolution, ShadowAreaSize, ShadowDistance
+		 */
 		property double ShadowVisibility {
 			void set(double);
 			double get(void);
 		}
-
 	};
 }
 
