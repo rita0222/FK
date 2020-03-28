@@ -1,4 +1,67 @@
-﻿/****************************************************************************
+﻿#include <FK/Capsule.h>
+
+using namespace FK;
+
+fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
+{
+	SetObjectType(fk_Type::CAPSULE);
+
+	cap_div = argDiv;
+	cap_len = argLen;
+	cap_rad = argRad;
+
+	makeCapsule(cap_div, cap_len, cap_rad);
+
+	return;
+}
+
+fk_Capsule::~fk_Capsule()
+{
+	return;
+}
+
+void fk_Capsule::setDivide(int argDiv)
+{
+	if(cap_div != argDiv && argDiv >= 2) {
+		cap_div = argDiv;
+		makeCapsule(cap_div, cap_len, cap_rad);
+	}
+
+	return;
+}
+
+void fk_Capsule::setLength(double argLen)
+{
+	if(argLen > 0.0) {
+		cap_len = argLen;
+		setCapsuleSize(cap_len, cap_rad);
+	}
+
+	return;
+}
+
+void fk_Capsule::setRadius(double argRad)
+{
+	if(argRad > 0.0) {
+		cap_rad = argRad;
+		setCapsuleSize(cap_len, cap_rad);
+	}
+
+	return;
+}
+
+void fk_Capsule::setScale(double argScale)
+{
+	if(argScale > 0.0) {
+		cap_len *= argScale;
+		cap_rad *= argScale;
+		setCapsuleSize(cap_len, cap_rad);
+	}
+
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,66 +132,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Capsule.h>
-
-using namespace FK;
-
-fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
-{
-	SetObjectType(fk_Type::CAPSULE);
-
-	cap_div = argDiv;
-	cap_len = argLen;
-	cap_rad = argRad;
-
-	makeCapsule(cap_div, cap_len, cap_rad);
-
-	return;
-}
-
-fk_Capsule::~fk_Capsule()
-{
-	return;
-}
-
-void fk_Capsule::setDivide(int argDiv)
-{
-	if(cap_div != argDiv && argDiv >= 2) {
-		cap_div = argDiv;
-		makeCapsule(cap_div, cap_len, cap_rad);
-	}
-
-	return;
-}
-
-void fk_Capsule::setLength(double argLen)
-{
-	if(argLen > 0.0) {
-		cap_len = argLen;
-		setCapsuleSize(cap_len, cap_rad);
-	}
-
-	return;
-}
-
-void fk_Capsule::setRadius(double argRad)
-{
-	if(argRad > 0.0) {
-		cap_rad = argRad;
-		setCapsuleSize(cap_len, cap_rad);
-	}
-
-	return;
-}
-
-void fk_Capsule::setScale(double argScale)
-{
-	if(argScale > 0.0) {
-		cap_len *= argScale;
-		cap_rad *= argScale;
-		setCapsuleSize(cap_len, cap_rad);
-	}
-
-	return;
-}
-

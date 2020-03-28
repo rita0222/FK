@@ -1,4 +1,52 @@
-﻿/****************************************************************************
+﻿#define FK_DEF_SIZETYPE
+#include <FK/EdgePair.H>
+
+using namespace FK;
+
+fk_EdgePair::fk_EdgePair()
+{
+	id[0] = id[1] = -1;
+}
+
+fk_EdgePair::fk_EdgePair(int argID1, int argID2)
+{
+	id[0] = argID1;
+	id[1] = argID2;
+}
+
+bool fk_EdgePair::operator ==(const fk_EdgePair &argE) const
+{
+	return (id[0] == argE.id[0] && id[1] == argE.id[1]);
+}
+
+bool fk_EdgePair::operator >(const fk_EdgePair &argE) const
+{
+	if(id[0] > argE.id[0]) return true;
+	if(id[0] < argE.id[0]) return false;
+	if(id[1] > argE.id[1]) return true;
+	return false;
+}
+
+bool fk_EdgePair::operator <(const fk_EdgePair &argE) const
+{
+	if(id[0] < argE.id[0]) return true;
+	if(id[0] > argE.id[0]) return false;
+	if(id[1] < argE.id[1]) return true;
+	return false;
+}
+
+void fk_EdgePair::set(int argID1, int argID2)
+{
+	if(argID1 < argID2) {
+		id[0] = argID1;
+		id[1] = argID2;
+	} else {
+		id[0] = argID2;
+		id[1] = argID1;
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,51 +117,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-#define FK_DEF_SIZETYPE
-#include <FK/EdgePair.H>
-
-using namespace FK;
-
-fk_EdgePair::fk_EdgePair()
-{
-	id[0] = id[1] = -1;
-}
-
-fk_EdgePair::fk_EdgePair(int argID1, int argID2)
-{
-	id[0] = argID1;
-	id[1] = argID2;
-}
-
-bool fk_EdgePair::operator ==(const fk_EdgePair &argE) const
-{
-	return (id[0] == argE.id[0] && id[1] == argE.id[1]);
-}
-
-bool fk_EdgePair::operator >(const fk_EdgePair &argE) const
-{
-	if(id[0] > argE.id[0]) return true;
-	if(id[0] < argE.id[0]) return false;
-	if(id[1] > argE.id[1]) return true;
-	return false;
-}
-
-bool fk_EdgePair::operator <(const fk_EdgePair &argE) const
-{
-	if(id[0] < argE.id[0]) return true;
-	if(id[0] > argE.id[0]) return false;
-	if(id[1] < argE.id[1]) return true;
-	return false;
-}
-
-void fk_EdgePair::set(int argID1, int argID2)
-{
-	if(argID1 < argID2) {
-		id[0] = argID1;
-		id[1] = argID2;
-	} else {
-		id[0] = argID2;
-		id[1] = argID1;
-	}
-}

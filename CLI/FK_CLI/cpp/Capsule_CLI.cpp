@@ -1,4 +1,65 @@
-﻿/****************************************************************************
+﻿#include "Capsule_CLI.h"
+
+namespace FK_CLI {
+
+	::FK::fk_Capsule * fk_Capsule::GetP(void)
+	{
+		return (::FK::fk_Capsule *)(pBase);
+	}
+
+	fk_Capsule::fk_Capsule() : fk_IndexFaceSet(false)
+	{
+		pBase = new ::FK::fk_Capsule();
+	}
+
+	fk_Capsule::fk_Capsule(bool argNewFlg) : fk_IndexFaceSet(false)
+	{
+		if(argNewFlg == true) {
+			pBase = new ::FK::fk_Capsule();
+		}
+				
+	}
+
+	fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
+		: fk_IndexFaceSet(false)
+	{
+		pBase = new ::FK::fk_Capsule(argDiv, argLen, argRad);
+	}
+
+	fk_Capsule::~fk_Capsule()
+	{
+		this->!fk_Capsule();
+	}
+
+	fk_Capsule::!fk_Capsule()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	void fk_Capsule::SetDivide(int argDiv)
+	{
+		GetP()->setDivide(argDiv);
+	}
+
+	void fk_Capsule::SetLength(double argLen)
+	{
+		GetP()->setLength(argLen);
+	}
+
+	void fk_Capsule::SetRadius(double argRad)
+	{
+		GetP()->setRadius(argRad);
+	}
+
+	void fk_Capsule::SetScale(double argScale)
+	{
+		GetP()->setScale(argScale);
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,65 +130,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Capsule_CLI.h"
-
-namespace FK_CLI {
-
-	::FK::fk_Capsule * fk_Capsule::GetP(void)
-	{
-		return (::FK::fk_Capsule *)(pBase);
-	}
-
-	fk_Capsule::fk_Capsule() : fk_IndexFaceSet(false)
-	{
-		pBase = new ::FK::fk_Capsule();
-	}
-
-	fk_Capsule::fk_Capsule(bool argNewFlg) : fk_IndexFaceSet(false)
-	{
-		if(argNewFlg == true) {
-			pBase = new ::FK::fk_Capsule();
-		}
-				
-	}
-
-	fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
-		: fk_IndexFaceSet(false)
-	{
-		pBase = new ::FK::fk_Capsule(argDiv, argLen, argRad);
-	}
-
-	fk_Capsule::~fk_Capsule()
-	{
-		this->!fk_Capsule();
-	}
-
-	fk_Capsule::!fk_Capsule()
-	{
-		if(pBase == nullptr) return;
-		if(dFlg == true) delete GetP();
-		pBase = nullptr;
-	}
-
-	void fk_Capsule::SetDivide(int argDiv)
-	{
-		GetP()->setDivide(argDiv);
-	}
-
-	void fk_Capsule::SetLength(double argLen)
-	{
-		GetP()->setLength(argLen);
-	}
-
-	void fk_Capsule::SetRadius(double argRad)
-	{
-		GetP()->setRadius(argRad);
-	}
-
-	void fk_Capsule::SetScale(double argScale)
-	{
-		GetP()->setScale(argScale);
-	}
-}
-
-

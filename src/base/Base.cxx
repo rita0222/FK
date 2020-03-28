@@ -1,4 +1,25 @@
-﻿/****************************************************************************
+﻿#include <FK/Base.h>
+
+using namespace FK;
+
+fk_BaseObject::fk_BaseObject(fk_Type argObjType)
+{
+	ObjectType = argObjType;
+	return;
+}
+
+void fk_BaseObject::SetObjectType(const fk_Type argObjType)
+{
+	ObjectType = argObjType;
+	return;
+}
+
+fk_Type fk_BaseObject::getObjectType(void) const
+{
+	return ObjectType;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,23 +90,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Base.h>
-
-using namespace FK;
-
-fk_BaseObject::fk_BaseObject(fk_Type argObjType)
-{
-	ObjectType = argObjType;
-	return;
-}
-
-void fk_BaseObject::SetObjectType(const fk_Type argObjType)
-{
-	ObjectType = argObjType;
-	return;
-}
-
-fk_Type fk_BaseObject::getObjectType(void) const
-{
-	return ObjectType;
-}

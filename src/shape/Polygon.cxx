@@ -1,4 +1,38 @@
-﻿/****************************************************************************
+﻿#include <FK/Polygon.h>
+
+using namespace std;
+using namespace FK;
+
+fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet)
+{
+	SetObjectType(fk_Type::POLYGON);
+
+	if(argVertexSet != nullptr) {
+		makePolygon(argVertexSet);
+	}
+
+	return;
+}
+
+fk_Polygon::~fk_Polygon()
+{
+	return;
+}
+
+void fk_Polygon::setVertex(vector<fk_Vector> *argArray)
+{
+	makePolygon(argArray);
+	return;
+}
+
+void fk_Polygon::setVertex(int argNum, fk_Vector *argArray)
+{
+	makePolygon(argNum, argArray);
+
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,36 +103,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Polygon.h>
-
-using namespace std;
-using namespace FK;
-
-fk_Polygon::fk_Polygon(vector<fk_Vector> *argVertexSet)
-{
-	SetObjectType(fk_Type::POLYGON);
-
-	if(argVertexSet != nullptr) {
-		makePolygon(argVertexSet);
-	}
-
-	return;
-}
-
-fk_Polygon::~fk_Polygon()
-{
-	return;
-}
-
-void fk_Polygon::setVertex(vector<fk_Vector> *argArray)
-{
-	makePolygon(argArray);
-	return;
-}
-
-void fk_Polygon::setVertex(int argNum, fk_Vector *argArray)
-{
-	makePolygon(argNum, argArray);
-
-	return;
-}

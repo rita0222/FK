@@ -1,4 +1,69 @@
-﻿/****************************************************************************
+﻿#include "Closedline_CLI.h"
+
+namespace FK_CLI {
+
+	using namespace std;
+	using namespace System::Collections::Generic;
+	
+	::FK::fk_Closedline * fk_Closedline::GetP(void)
+	{
+		return (::FK::fk_Closedline *)(pBase);
+	}
+
+	fk_Closedline::fk_Closedline() : fk_Shape(false)
+	{
+		pBase = new ::FK::fk_Closedline();
+	}
+
+	fk_Closedline::fk_Closedline(bool argNewFlg) : fk_Shape(false)
+	{
+		if(argNewFlg == true) pBase = new ::FK::fk_Closedline();
+	}
+
+	fk_Closedline::~fk_Closedline()
+	{
+		this->!fk_Closedline();
+	}
+
+	fk_Closedline::!fk_Closedline()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	void fk_Closedline::AllClear(void)
+	{
+		GetP()->allClear();
+	}
+
+	void fk_Closedline::SetVertex(int argVID, fk_Vector^ argPos)
+	{
+		if(!argPos) return;
+		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
+		GetP()->setVertex(argVID, V);
+	}
+
+	void fk_Closedline::PushVertex(fk_Vector^ argPos)
+	{
+		if(!argPos) return;
+		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
+		GetP()->pushVertex(V);
+	}
+
+	void fk_Closedline::SetVertex(IEnumerable<fk_Vector^>^ argArray)
+	{
+		if(!argArray) return;
+		vector<::FK::fk_Vector> vArray;
+
+		for each (fk_Vector^ pos in argArray) {
+			vArray.push_back(pos);
+		}
+		GetP()->setVertex(&vArray);
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,67 +134,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Closedline_CLI.h"
-
-namespace FK_CLI {
-
-	using namespace std;
-	using namespace System::Collections::Generic;
-	
-	::FK::fk_Closedline * fk_Closedline::GetP(void)
-	{
-		return (::FK::fk_Closedline *)(pBase);
-	}
-
-	fk_Closedline::fk_Closedline() : fk_Shape(false)
-	{
-		pBase = new ::FK::fk_Closedline();
-	}
-
-	fk_Closedline::fk_Closedline(bool argNewFlg) : fk_Shape(false)
-	{
-		if(argNewFlg == true) pBase = new ::FK::fk_Closedline();
-	}
-
-	fk_Closedline::~fk_Closedline()
-	{
-		this->!fk_Closedline();
-	}
-
-	fk_Closedline::!fk_Closedline()
-	{
-		if(pBase == nullptr) return;
-		if(dFlg == true) delete GetP();
-		pBase = nullptr;
-	}
-
-	void fk_Closedline::AllClear(void)
-	{
-		GetP()->allClear();
-	}
-
-	void fk_Closedline::SetVertex(int argVID, fk_Vector^ argPos)
-	{
-		if(!argPos) return;
-		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
-		GetP()->setVertex(argVID, V);
-	}
-
-	void fk_Closedline::PushVertex(fk_Vector^ argPos)
-	{
-		if(!argPos) return;
-		::FK::fk_Vector V(argPos->x_, argPos->y_, argPos->z_);
-		GetP()->pushVertex(V);
-	}
-
-	void fk_Closedline::SetVertex(IEnumerable<fk_Vector^>^ argArray)
-	{
-		if(!argArray) return;
-		vector<::FK::fk_Vector> vArray;
-
-		for each (fk_Vector^ pos in argArray) {
-			vArray.push_back(pos);
-		}
-		GetP()->setVertex(&vArray);
-	}
-}

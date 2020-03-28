@@ -1,4 +1,22 @@
-﻿/****************************************************************************
+﻿#include <FK/Misc.h>
+
+using namespace FK;
+
+std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken)
+{
+	std::vector<std::string>	retStrArray;
+	std::string::size_type		curPos = 0, nextPos = 0;
+
+	while(nextPos != std::string::npos) {
+		nextPos = argStr.find(argToken, curPos);
+		retStrArray.push_back(argStr.substr(curPos, nextPos-curPos));
+		curPos = nextPos+argToken.size();
+	}
+
+	return retStrArray;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,20 +87,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Misc.h>
-
-using namespace FK;
-
-std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken)
-{
-	std::vector<std::string>	retStrArray;
-	std::string::size_type		curPos = 0, nextPos = 0;
-
-	while(nextPos != std::string::npos) {
-		nextPos = argStr.find(argToken, curPos);
-		retStrArray.push_back(argStr.substr(curPos, nextPos-curPos));
-		curPos = nextPos+argToken.size();
-	}
-
-	return retStrArray;
-}

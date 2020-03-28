@@ -1,4 +1,38 @@
-﻿/****************************************************************************
+﻿#include <FK/Cone.h>
+
+using namespace FK;
+
+fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight, bool argSmoothMode)
+{
+	SetObjectType(fk_Type::CONE);
+	makeCone(argDiv, argRadius, argHeight, argSmoothMode);
+	return;
+}
+
+fk_Cone::~fk_Cone()
+{
+	return;
+}
+
+void fk_Cone::setDivide(int argDiv)
+{
+	setConeDivide(argDiv);
+	return;
+}
+
+void fk_Cone::setRadius(double argRadius)
+{
+	setConeRadius(argRadius);
+	return;
+}
+
+void fk_Cone::setHeight(double argHeight)
+{
+	setConeHeight(argHeight);
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,36 +103,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Cone.h>
-
-using namespace FK;
-
-fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight, bool argSmoothMode)
-{
-	SetObjectType(fk_Type::CONE);
-	makeCone(argDiv, argRadius, argHeight, argSmoothMode);
-	return;
-}
-
-fk_Cone::~fk_Cone()
-{
-	return;
-}
-
-void fk_Cone::setDivide(int argDiv)
-{
-	setConeDivide(argDiv);
-	return;
-}
-
-void fk_Cone::setRadius(double argRadius)
-{
-	setConeRadius(argRadius);
-	return;
-}
-
-void fk_Cone::setHeight(double argHeight)
-{
-	setConeHeight(argHeight);
-	return;
-}

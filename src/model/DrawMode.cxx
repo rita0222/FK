@@ -1,4 +1,24 @@
-﻿/****************************************************************************
+﻿#include <FK/DrawMode.h>
+
+namespace FK {
+	
+	fk_Draw operator | (fk_Draw argL, fk_Draw argR) {
+		return static_cast<fk_Draw>(static_cast<unsigned int>(argL) |
+									static_cast<unsigned int>(argR));
+	}
+
+	fk_Draw operator & (fk_Draw argL, fk_Draw argR) {
+		return static_cast<fk_Draw>(static_cast<unsigned int>(argL) &
+									static_cast<unsigned int>(argR));
+	}
+
+	fk_Draw operator ^ (fk_Draw argL, fk_Draw argR) {
+		return static_cast<fk_Draw>(static_cast<unsigned int>(argL) ^
+									static_cast<unsigned int>(argR));
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,22 +89,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/DrawMode.h>
-
-namespace FK {
-	
-	fk_Draw operator | (fk_Draw argL, fk_Draw argR) {
-		return static_cast<fk_Draw>(static_cast<unsigned int>(argL) |
-									static_cast<unsigned int>(argR));
-	}
-
-	fk_Draw operator & (fk_Draw argL, fk_Draw argR) {
-		return static_cast<fk_Draw>(static_cast<unsigned int>(argL) &
-									static_cast<unsigned int>(argR));
-	}
-
-	fk_Draw operator ^ (fk_Draw argL, fk_Draw argR) {
-		return static_cast<fk_Draw>(static_cast<unsigned int>(argL) ^
-									static_cast<unsigned int>(argR));
-	}
-}

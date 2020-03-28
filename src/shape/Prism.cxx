@@ -1,4 +1,45 @@
-﻿/****************************************************************************
+﻿#include <FK/Prism.h>
+
+using namespace FK;
+
+fk_Prism::fk_Prism(int argDiv, double argTop,
+				   double argBottom, double argHeight, bool argSmoothMode)
+{
+	SetObjectType(fk_Type::PRISM);
+	makePrism(argDiv, argTop, argBottom, argHeight, argSmoothMode);
+	return;
+}
+
+fk_Prism::~fk_Prism()
+{
+	return;
+}
+
+void fk_Prism::setDivide(int argDiv)
+{
+	setPrismDivide(argDiv);
+	return;
+}
+
+void fk_Prism::setTopRadius(double argTop)
+{
+	setPrismTopRadius(argTop);
+	return;
+}
+
+void fk_Prism::setBottomRadius(double argBottom)
+{
+	setPrismBottomRadius(argBottom);
+	return;
+}
+
+void fk_Prism::setHeight(double argHeight)
+{
+	setPrismHeight(argHeight);
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,43 +110,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Prism.h>
-
-using namespace FK;
-
-fk_Prism::fk_Prism(int argDiv, double argTop,
-				   double argBottom, double argHeight, bool argSmoothMode)
-{
-	SetObjectType(fk_Type::PRISM);
-	makePrism(argDiv, argTop, argBottom, argHeight, argSmoothMode);
-	return;
-}
-
-fk_Prism::~fk_Prism()
-{
-	return;
-}
-
-void fk_Prism::setDivide(int argDiv)
-{
-	setPrismDivide(argDiv);
-	return;
-}
-
-void fk_Prism::setTopRadius(double argTop)
-{
-	setPrismTopRadius(argTop);
-	return;
-}
-
-void fk_Prism::setBottomRadius(double argBottom)
-{
-	setPrismBottomRadius(argBottom);
-	return;
-}
-
-void fk_Prism::setHeight(double argHeight)
-{
-	setPrismHeight(argHeight);
-	return;
-}

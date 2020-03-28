@@ -1,4 +1,37 @@
-﻿/****************************************************************************
+﻿#include <FK/Circle.h>
+
+using namespace FK;
+
+fk_Circle::fk_Circle(int argDiv, double argRad)
+{
+	SetObjectType(fk_Type::CIRCLE);
+	makeCircle(argDiv, argRad);
+}
+
+fk_Circle::~fk_Circle()
+{
+	return;
+}
+
+void fk_Circle::setDivide(int argDiv)
+{
+	setCircleDivide(argDiv);
+	return;
+}
+
+void fk_Circle::setRadius(double argRad)
+{
+	setCircleRadius(argRad);
+	return;
+}
+
+void fk_Circle::setScale(double argScale)
+{
+	setCircleScale(argScale);
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,35 +102,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Circle.h>
-
-using namespace FK;
-
-fk_Circle::fk_Circle(int argDiv, double argRad)
-{
-	SetObjectType(fk_Type::CIRCLE);
-	makeCircle(argDiv, argRad);
-}
-
-fk_Circle::~fk_Circle()
-{
-	return;
-}
-
-void fk_Circle::setDivide(int argDiv)
-{
-	setCircleDivide(argDiv);
-	return;
-}
-
-void fk_Circle::setRadius(double argRad)
-{
-	setCircleRadius(argRad);
-	return;
-}
-
-void fk_Circle::setScale(double argScale)
-{
-	setCircleScale(argScale);
-	return;
-}

@@ -1,4 +1,38 @@
-﻿/****************************************************************************
+﻿#include <FK/Sphere.h>
+
+using namespace FK;
+
+fk_Sphere::fk_Sphere(int argDiv, double argRad)
+{
+	SetObjectType(fk_Type::SPHERE);
+	makeSphere(argDiv, argRad);
+	return;
+}
+
+fk_Sphere::~fk_Sphere()
+{
+	return;
+}
+
+void fk_Sphere::setDivide(int argDiv)
+{
+	setSphereDivide(argDiv);
+	return;
+}
+
+void fk_Sphere::setRadius(double argRad)
+{
+	setSphereRadius(argRad);
+	return;
+}
+
+void fk_Sphere::setScale(double argScale)
+{
+	setSphereScale(argScale);
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,36 +103,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Sphere.h>
-
-using namespace FK;
-
-fk_Sphere::fk_Sphere(int argDiv, double argRad)
-{
-	SetObjectType(fk_Type::SPHERE);
-	makeSphere(argDiv, argRad);
-	return;
-}
-
-fk_Sphere::~fk_Sphere()
-{
-	return;
-}
-
-void fk_Sphere::setDivide(int argDiv)
-{
-	setSphereDivide(argDiv);
-	return;
-}
-
-void fk_Sphere::setRadius(double argRad)
-{
-	setSphereRadius(argRad);
-	return;
-}
-
-void fk_Sphere::setScale(double argScale)
-{
-	setSphereScale(argScale);
-	return;
-}

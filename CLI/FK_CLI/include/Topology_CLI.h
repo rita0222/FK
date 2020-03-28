@@ -1,4 +1,62 @@
-﻿/****************************************************************************
+﻿#pragma once
+
+#include <FK/Topology.h>
+#include "Attribute_CLI.h"
+#include "Material_CLI.h"
+
+namespace FK_CLI
+{
+	//! 位相タイプを表す列挙型
+	public enum class fk_TopologyType {
+		VERTEX,		//!< 頂点
+		HALF,		//!< 半稜線
+		EDGE,		//!< 稜線
+		LOOP,		//!< ループ
+		INDEXFACE,	//!< インデックスフェースセット
+		UNDEFINED	//!< 未定義な位相要素
+	};
+
+	//! ソリッドモデル位相要素用基底クラス
+	/*!
+	 *	このクラスは、 fk_Solid における位相要素の共通部分に関する機能を提供します。
+	 *	FK におけるソリッドモデルの構造については、
+	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
+	 *
+	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Loop, fk_TopologyMaterial
+	 */
+	public ref class fk_Topology : fk_Attribute {
+	internal:
+		::FK::fk_Topology * GetP(void);
+
+	public:
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_Topology(bool argNewFlg);
+		~fk_Topology();
+#endif
+		
+		//! IDプロパティ
+		property int ID {
+			int get();
+		}
+
+		//! 位相タイププロパティ
+		/*!
+		 *	位相タイプを参照します。以下のいずれかとなります。
+		 *
+		 *	\retval fk_TopologyType.VERTEX		頂点を表します。
+		 *	\retval fk_TopologyType.HALF		半稜線を表します。
+		 *	\retval fk_TopologyType.EDGE		稜線を表します。
+		 *	\retval fk_TopologyType.LOOP		ループを表します。
+		 *	\retval fk_TopologyType.INDEXFACE	インデックスフェースセットを表します。
+		 *	\retval fk_TopologyType.UNDEFINED	未定義な位相要素を表します。
+		 */
+		property fk_TopologyType Type {
+			fk_TopologyType get();
+		}
+	};
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,64 +127,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-// Topology_CLI.h
-
-#pragma once
-
-#include <FK/Topology.h>
-#include "Attribute_CLI.h"
-#include "Material_CLI.h"
-
-namespace FK_CLI
-{
-	//! 位相タイプを表す列挙型
-	public enum class fk_TopologyType {
-		VERTEX,		//!< 頂点
-		HALF,		//!< 半稜線
-		EDGE,		//!< 稜線
-		LOOP,		//!< ループ
-		INDEXFACE,	//!< インデックスフェースセット
-		UNDEFINED	//!< 未定義な位相要素
-	};
-
-	//! ソリッドモデル位相要素用基底クラス
-	/*!
-	 *	このクラスは、 fk_Solid における位相要素の共通部分に関する機能を提供します。
-	 *	FK におけるソリッドモデルの構造については、
-	 *	ユーザーズマニュアルの「形状に対する高度な操作」の章を参照して下さい。
-	 *
-	 *	\sa fk_Solid, fk_Vertex, fk_Half, fk_Edge, fk_Loop, fk_TopologyMaterial
-	 */
-	public ref class fk_Topology : fk_Attribute {
-	internal:
-		::FK::fk_Topology * GetP(void);
-
-	public:
-#ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Topology(bool argNewFlg);
-		~fk_Topology();
-#endif
-		
-		//! IDプロパティ
-		property int ID {
-			int get();
-		}
-
-		//! 位相タイププロパティ
-		/*!
-		 *	位相タイプを参照します。以下のいずれかとなります。
-		 *
-		 *	\retval fk_TopologyType.VERTEX		頂点を表します。
-		 *	\retval fk_TopologyType.HALF		半稜線を表します。
-		 *	\retval fk_TopologyType.EDGE		稜線を表します。
-		 *	\retval fk_TopologyType.LOOP		ループを表します。
-		 *	\retval fk_TopologyType.INDEXFACE	インデックスフェースセットを表します。
-		 *	\retval fk_TopologyType.UNDEFINED	未定義な位相要素を表します。
-		 */
-		property fk_TopologyType Type {
-			fk_TopologyType get();
-		}
-	};
-}
-
-

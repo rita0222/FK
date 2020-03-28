@@ -1,4 +1,63 @@
-﻿/****************************************************************************
+﻿#include "Prism_CLI.h"
+
+namespace FK_CLI {
+	::FK::fk_Prism * fk_Prism::GetP(void)
+	{
+		return (::FK::fk_Prism *)(pBase);
+	}
+
+	fk_Prism::fk_Prism() : fk_IndexFaceSet(false)
+	{
+		pBase = new ::FK::fk_Prism();
+	}
+
+	fk_Prism::fk_Prism(bool argNewFlg) : fk_IndexFaceSet(false)
+	{
+		if(argNewFlg == true) {
+			pBase = new ::FK::fk_Prism();
+		}
+	}
+		
+	fk_Prism::fk_Prism(int argDiv, double argTop, double argBottom, double argHeight)
+		: fk_IndexFaceSet(false)
+	{
+		pBase = new ::FK::fk_Prism(argDiv, argTop, argBottom, argHeight);
+	}
+
+	fk_Prism::~fk_Prism()
+	{
+		this->!fk_Prism();
+	}
+
+	fk_Prism::!fk_Prism()
+	{
+		if(pBase == nullptr) return;
+		if(dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	void fk_Prism::SetDivide(int argDiv)
+	{
+		GetP()->setDivide(argDiv);
+	}
+
+	void fk_Prism::SetTopRadius(double argRad)
+	{
+		GetP()->setTopRadius(argRad);
+	}
+
+	void fk_Prism::SetBottomRadius(double argRad)
+	{
+		GetP()->setBottomRadius(argRad);
+	}
+		
+	void fk_Prism::SetHeight(double argHeight)
+	{
+		GetP()->setHeight(argHeight);
+	}			
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,62 +128,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Prism_CLI.h"
-
-namespace FK_CLI {
-	::FK::fk_Prism * fk_Prism::GetP(void)
-	{
-		return (::FK::fk_Prism *)(pBase);
-	}
-
-	fk_Prism::fk_Prism() : fk_IndexFaceSet(false)
-	{
-		pBase = new ::FK::fk_Prism();
-	}
-
-	fk_Prism::fk_Prism(bool argNewFlg) : fk_IndexFaceSet(false)
-	{
-		if(argNewFlg == true) {
-			pBase = new ::FK::fk_Prism();
-		}
-	}
-		
-	fk_Prism::fk_Prism(int argDiv, double argTop, double argBottom, double argHeight)
-		: fk_IndexFaceSet(false)
-	{
-		pBase = new ::FK::fk_Prism(argDiv, argTop, argBottom, argHeight);
-	}
-
-	fk_Prism::~fk_Prism()
-	{
-		this->!fk_Prism();
-	}
-
-	fk_Prism::!fk_Prism()
-	{
-		if(pBase == nullptr) return;
-		if(dFlg == true) delete GetP();
-		pBase = nullptr;
-	}
-
-	void fk_Prism::SetDivide(int argDiv)
-	{
-		GetP()->setDivide(argDiv);
-	}
-
-	void fk_Prism::SetTopRadius(double argRad)
-	{
-		GetP()->setTopRadius(argRad);
-	}
-
-	void fk_Prism::SetBottomRadius(double argRad)
-	{
-		GetP()->setBottomRadius(argRad);
-	}
-		
-	void fk_Prism::SetHeight(double argHeight)
-	{
-		GetP()->setHeight(argHeight);
-	}			
-}
-

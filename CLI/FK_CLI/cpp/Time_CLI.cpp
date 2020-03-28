@@ -1,4 +1,67 @@
-﻿/****************************************************************************
+﻿#include "Time_CLI.h"
+
+namespace FK_CLI {
+	using namespace std;
+	
+	::FK::fk_Time * fk_Time::GetP(void)
+	{
+		return pTime;
+	}
+
+	fk_Time::fk_Time()
+	{
+		pTime = new ::FK::fk_Time();
+	}
+
+	fk_Time::~fk_Time()
+	{
+		this->!fk_Time();
+	}
+
+	fk_Time::!fk_Time()
+	{
+		if(pTime == nullptr) return;
+		delete pTime;
+		pTime = nullptr;
+	}
+
+	void fk_Time::Start(void)
+	{
+		GetP()->start();
+	}
+
+	void fk_Time::Stop(void)
+	{
+		GetP()->stop();
+	}
+
+	void fk_Time::Init(void)
+	{
+		GetP()->init();
+	}
+
+	double fk_Time::LapTime(void)
+	{
+		return GetP()->lapTime();
+	}
+
+	double fk_Time::Now(void)
+	{
+		return ::FK::fk_Time::now();
+	}
+
+	void fk_Time::Sleep(double argTime)
+	{
+		::FK::fk_Time::sleep(argTime);
+	}
+
+	void fk_Time::USleep(double argTime)
+	{
+		::FK::fk_Time::usleep(argTime);
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,66 +132,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Time_CLI.h"
-
-namespace FK_CLI {
-	using namespace std;
-	
-	::FK::fk_Time * fk_Time::GetP(void)
-	{
-		return pTime;
-	}
-
-	fk_Time::fk_Time()
-	{
-		pTime = new ::FK::fk_Time();
-	}
-
-	fk_Time::~fk_Time()
-	{
-		this->!fk_Time();
-	}
-
-	fk_Time::!fk_Time()
-	{
-		if(pTime == nullptr) return;
-		delete pTime;
-		pTime = nullptr;
-	}
-
-	void fk_Time::Start(void)
-	{
-		GetP()->start();
-	}
-
-	void fk_Time::Stop(void)
-	{
-		GetP()->stop();
-	}
-
-	void fk_Time::Init(void)
-	{
-		GetP()->init();
-	}
-
-	double fk_Time::LapTime(void)
-	{
-		return GetP()->lapTime();
-	}
-
-	double fk_Time::Now(void)
-	{
-		return ::FK::fk_Time::now();
-	}
-
-	void fk_Time::Sleep(double argTime)
-	{
-		::FK::fk_Time::sleep(argTime);
-	}
-
-	void fk_Time::USleep(double argTime)
-	{
-		::FK::fk_Time::usleep(argTime);
-	}
-}
-

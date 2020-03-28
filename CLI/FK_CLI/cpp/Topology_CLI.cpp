@@ -1,4 +1,51 @@
-﻿/****************************************************************************
+﻿#include "Topology_CLI.h"
+
+namespace FK_CLI {
+
+	::FK::fk_Topology * fk_Topology::GetP(void)
+	{
+		return (::FK::fk_Topology *)(pBase);
+	}
+
+	fk_Topology::fk_Topology(bool argNewFlg) : fk_Attribute(false)
+	{
+	}
+
+	fk_Topology::~fk_Topology()
+	{
+	}
+
+	int fk_Topology::ID::get(void)
+	{
+		return GetP()->getID();
+	}
+
+	fk_TopologyType fk_Topology::Type::get(void)
+	{
+		switch(GetP()->getType()) {
+		case ::FK::fk_TopologyType::VERTEX:
+			return fk_TopologyType::VERTEX;
+				
+		case ::FK::fk_TopologyType::HALF:
+			return fk_TopologyType::HALF;
+				
+		case ::FK::fk_TopologyType::EDGE:
+			return fk_TopologyType::EDGE;
+				
+		case ::FK::fk_TopologyType::LOOP:
+			return fk_TopologyType::LOOP;
+				
+		case ::FK::fk_TopologyType::INDEXFACE:
+			return fk_TopologyType::INDEXFACE;
+				
+		  default:
+			break;
+		}
+		return fk_TopologyType::UNDEFINED;
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,50 +116,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Topology_CLI.h"
-
-namespace FK_CLI {
-
-	::FK::fk_Topology * fk_Topology::GetP(void)
-	{
-		return (::FK::fk_Topology *)(pBase);
-	}
-
-	fk_Topology::fk_Topology(bool argNewFlg) : fk_Attribute(false)
-	{
-	}
-
-	fk_Topology::~fk_Topology()
-	{
-	}
-
-	int fk_Topology::ID::get(void)
-	{
-		return GetP()->getID();
-	}
-
-	fk_TopologyType fk_Topology::Type::get(void)
-	{
-		switch(GetP()->getType()) {
-		case ::FK::fk_TopologyType::VERTEX:
-			return fk_TopologyType::VERTEX;
-				
-		case ::FK::fk_TopologyType::HALF:
-			return fk_TopologyType::HALF;
-				
-		case ::FK::fk_TopologyType::EDGE:
-			return fk_TopologyType::EDGE;
-				
-		case ::FK::fk_TopologyType::LOOP:
-			return fk_TopologyType::LOOP;
-				
-		case ::FK::fk_TopologyType::INDEXFACE:
-			return fk_TopologyType::INDEXFACE;
-				
-		  default:
-			break;
-		}
-		return fk_TopologyType::UNDEFINED;
-	}
-}
-

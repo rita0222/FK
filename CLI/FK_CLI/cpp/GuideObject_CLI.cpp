@@ -1,4 +1,71 @@
-﻿/****************************************************************************
+﻿#include "GuideObject_CLI.h"
+
+namespace FK_CLI {
+
+	::FK::fk_GuideObject * fk_GuideObject::GetP(void)
+	{
+		return pGuide;
+	}
+
+	fk_GuideObject::fk_GuideObject()
+	{
+		pGuide = new ::FK::fk_GuideObject();
+		dFlg = true;
+	}
+
+	fk_GuideObject::fk_GuideObject(bool argNewFlg)
+	{
+		if(argNewFlg == true) pGuide = new ::FK::fk_GuideObject();
+		dFlg = argNewFlg;
+	}
+
+	fk_GuideObject::~fk_GuideObject()
+	{
+		this->!fk_GuideObject();
+	}
+
+	fk_GuideObject::!fk_GuideObject()
+	{
+		if(pGuide == nullptr) return;
+		if(dFlg == true) {
+			pGuide->SetFinalizeMode();
+			delete pGuide;
+		}
+		pGuide = nullptr;
+	}
+
+	void fk_GuideObject::AxisWidth::set(double argWidth)
+	{
+		GetP()->setAxisWidth(argWidth);
+	}
+
+	void fk_GuideObject::GridWidth::set(double argWidth)
+	{
+		GetP()->setGridWidth(argWidth);
+	}
+
+	void fk_GuideObject::Scale::set(double argScale)
+	{
+		GetP()->setScale(argScale);
+	}
+
+	void fk_GuideObject::Num::set(int argNum)
+	{
+		GetP()->setNum(argNum);
+	}
+		
+	void fk_GuideObject::EntryScene(fk_Scene ^argS, fk_Guide argMode)
+	{
+		GetP()->entryScene(argS->GetP(), static_cast<::FK::fk_Guide>(argMode));
+	}
+		
+	void fk_GuideObject::RemoveScene(fk_Scene ^argS)
+	{	
+		GetP()->removeScene(argS->GetP());
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,69 +136,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "GuideObject_CLI.h"
-
-namespace FK_CLI {
-
-	::FK::fk_GuideObject * fk_GuideObject::GetP(void)
-	{
-		return pGuide;
-	}
-
-	fk_GuideObject::fk_GuideObject()
-	{
-		pGuide = new ::FK::fk_GuideObject();
-		dFlg = true;
-	}
-
-	fk_GuideObject::fk_GuideObject(bool argNewFlg)
-	{
-		if(argNewFlg == true) pGuide = new ::FK::fk_GuideObject();
-		dFlg = argNewFlg;
-	}
-
-	fk_GuideObject::~fk_GuideObject()
-	{
-		this->!fk_GuideObject();
-	}
-
-	fk_GuideObject::!fk_GuideObject()
-	{
-		if(pGuide == nullptr) return;
-		if(dFlg == true) {
-			pGuide->SetFinalizeMode();
-			delete pGuide;
-		}
-		pGuide = nullptr;
-	}
-
-	void fk_GuideObject::AxisWidth::set(double argWidth)
-	{
-		GetP()->setAxisWidth(argWidth);
-	}
-
-	void fk_GuideObject::GridWidth::set(double argWidth)
-	{
-		GetP()->setGridWidth(argWidth);
-	}
-
-	void fk_GuideObject::Scale::set(double argScale)
-	{
-		GetP()->setScale(argScale);
-	}
-
-	void fk_GuideObject::Num::set(int argNum)
-	{
-		GetP()->setNum(argNum);
-	}
-		
-	void fk_GuideObject::EntryScene(fk_Scene ^argS, fk_Guide argMode)
-	{
-		GetP()->entryScene(argS->GetP(), static_cast<::FK::fk_Guide>(argMode));
-	}
-		
-	void fk_GuideObject::RemoveScene(fk_Scene ^argS)
-	{	
-		GetP()->removeScene(argS->GetP());
-	}
-}

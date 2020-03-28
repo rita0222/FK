@@ -1,4 +1,50 @@
-﻿/****************************************************************************
+﻿#include <FK/Block.h>
+
+using namespace FK;
+
+fk_Block::fk_Block(double argX, double argY, double argZ)
+{
+	SetObjectType(fk_Type::BLOCK);
+	makeBlock(argX, argY, argZ);
+	return;
+}
+
+fk_Block::~fk_Block()
+{
+	return;
+}
+
+void fk_Block::setSize(double argX, double argY, double argZ)
+{
+	setBlockSize(argX, argY, argZ);
+	return;
+}
+
+void fk_Block::setSize(double argSize, fk_Axis argAxis)
+{
+	setBlockSize(argSize, argAxis);
+	return;
+}
+
+void fk_Block::setScale(double argX, double argY, double argZ)
+{
+	setBlockScale(argX, argY, argZ);
+	return;
+}
+
+void fk_Block::setScale(double argScale, fk_Axis argAxis)
+{
+	setBlockScale(argScale, argAxis);
+	return;
+}
+
+void fk_Block::setScale(double argScale)
+{
+	setBlockScale(argScale, argScale, argScale);
+	return;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,48 +115,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Block.h>
-
-using namespace FK;
-
-fk_Block::fk_Block(double argX, double argY, double argZ)
-{
-	SetObjectType(fk_Type::BLOCK);
-	makeBlock(argX, argY, argZ);
-	return;
-}
-
-fk_Block::~fk_Block()
-{
-	return;
-}
-
-void fk_Block::setSize(double argX, double argY, double argZ)
-{
-	setBlockSize(argX, argY, argZ);
-	return;
-}
-
-void fk_Block::setSize(double argSize, fk_Axis argAxis)
-{
-	setBlockSize(argSize, argAxis);
-	return;
-}
-
-void fk_Block::setScale(double argX, double argY, double argZ)
-{
-	setBlockScale(argX, argY, argZ);
-	return;
-}
-
-void fk_Block::setScale(double argScale, fk_Axis argAxis)
-{
-	setBlockScale(argScale, argAxis);
-	return;
-}
-
-void fk_Block::setScale(double argScale)
-{
-	setBlockScale(argScale, argScale, argScale);
-	return;
-}

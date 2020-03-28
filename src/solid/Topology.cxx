@@ -1,4 +1,73 @@
-﻿/****************************************************************************
+﻿#include <FK/Topology.h>
+
+using namespace FK;
+
+fk_Topology::fk_Topology(void)
+{
+	ID = -1;
+	ariveFlg = false;
+	type = fk_TopologyType::UNDEFINED;
+	DB = nullptr;
+
+	return;
+}
+
+fk_Topology::~fk_Topology()
+{
+	return;
+}
+
+void fk_Topology::InitTopology(fk_DataBase *argDB, int argID, fk_TopologyType argType)
+{
+	DeleteElem();
+	DB = argDB;
+	SetType(argType);
+	SetID(argID);
+}
+
+void fk_Topology::SetType(fk_TopologyType argType)
+{
+	type = argType;
+	return;
+}
+
+void fk_Topology::SetID(int argID)
+{
+	if(argID <= 0) ID = FK_UNDEFINED;
+	else ID = argID;
+
+	return;
+}
+
+int fk_Topology::getID(void) const
+{
+	return ID;
+}
+
+fk_TopologyType fk_Topology::getType(void) const
+{
+	return type;
+}
+
+void fk_Topology::DeleteElem(void)
+{
+	ID = FK_UNDEFINED;
+	AttrInit();
+	ariveFlg = false;
+	return;
+}
+
+bool fk_Topology::CloneElem(fk_Topology *argTP)
+{
+	DB = argTP->DB;
+	ID = argTP->ID;
+	ariveFlg = argTP->ariveFlg;
+
+	if(ID == FK_UNDEFINED) return false;
+	return true;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,71 +138,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/Topology.h>
-
-using namespace FK;
-
-fk_Topology::fk_Topology(void)
-{
-	ID = -1;
-	ariveFlg = false;
-	type = fk_TopologyType::UNDEFINED;
-	DB = nullptr;
-
-	return;
-}
-
-fk_Topology::~fk_Topology()
-{
-	return;
-}
-
-void fk_Topology::InitTopology(fk_DataBase *argDB, int argID, fk_TopologyType argType)
-{
-	DeleteElem();
-	DB = argDB;
-	SetType(argType);
-	SetID(argID);
-}
-
-void fk_Topology::SetType(fk_TopologyType argType)
-{
-	type = argType;
-	return;
-}
-
-void fk_Topology::SetID(int argID)
-{
-	if(argID <= 0) ID = FK_UNDEFINED;
-	else ID = argID;
-
-	return;
-}
-
-int fk_Topology::getID(void) const
-{
-	return ID;
-}
-
-fk_TopologyType fk_Topology::getType(void) const
-{
-	return type;
-}
-
-void fk_Topology::DeleteElem(void)
-{
-	ID = FK_UNDEFINED;
-	AttrInit();
-	ariveFlg = false;
-	return;
-}
-
-bool fk_Topology::CloneElem(fk_Topology *argTP)
-{
-	DB = argTP->DB;
-	ID = argTP->ID;
-	ariveFlg = argTP->ariveFlg;
-
-	if(ID == FK_UNDEFINED) return false;
-	return true;
-}

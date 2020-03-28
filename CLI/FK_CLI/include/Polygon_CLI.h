@@ -1,4 +1,65 @@
-﻿/****************************************************************************
+﻿#pragma once
+
+#include <FK/Polygon.h>
+#include "IndexFace_CLI.h"
+
+namespace FK_CLI
+{
+	using namespace System::Collections::Generic;
+
+	//! 多角形を生成、管理するクラス
+	/*!
+	 *	このクラスは、形状として多角形を制御する機能を提供します。
+	 *	このクラスによる形状は、多角形の内部も描画します。
+	 *	もし辺のみを描画したい場合は fk_Closedline クラスを利用して下さい。
+	 *
+	 *	描画される面は、基本的には多角形の頂点順番が向かって
+	 *	反時計回りになっている側になります。
+	 *	両面を描画したい場合は fk_Model::DrawMode プロパティを参照して下さい。
+	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
+	 *	平面でなかった場合に意図している形状と描画形状が異なる場合があります。
+	 *
+	 *	\sa fk_Solid, fk_Polyline, fk_Closedline
+	 */
+	public ref class fk_Polygon : fk_IndexFaceSet {
+	internal:
+		::FK::fk_Polygon * GetP(void);
+
+	public:
+#ifndef FK_DOXYGEN_USER_PROCESS		
+		fk_Polygon(bool argNewFlg);
+#endif
+		//! コンストラクタ1
+		/*!
+		 *	空のポリゴンを生成します。
+		 */
+		fk_Polygon();
+
+		//! コンストラクタ2
+		/*!
+		 *	与えられた引数を頂点とするポリゴンを生成します。
+		 *
+		 *	\param[in]	array		頂点配列。
+		 */
+		fk_Polygon(IEnumerable<fk_Vector^>^ array);
+
+		//! デストラクタ
+		~fk_Polygon();
+
+		//! ファイナライザ
+		!fk_Polygon();
+
+		//! 頂点位置設定メソッド
+		/*!
+		 *	頂点全部を、指定した配列に入れ替えます。
+		 *
+		 *	\param[in] array	array型による頂点位置配列
+		 */
+		void SetVertex(IEnumerable<fk_Vector^>^ array);
+	};		
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,65 +130,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-// Polygon_CLI.h
-
-#pragma once
-
-#include <FK/Polygon.h>
-#include "IndexFace_CLI.h"
-
-namespace FK_CLI
-{
-	using namespace System::Collections::Generic;
-
-	//! 多角形を生成、管理するクラス
-	/*!
-	 *	このクラスは、形状として多角形を制御する機能を提供します。
-	 *	このクラスによる形状は、多角形の内部も描画します。
-	 *	もし辺のみを描画したい場合は fk_Closedline クラスを利用して下さい。
-	 *
-	 *	描画される面は、基本的には多角形の頂点順番が向かって
-	 *	反時計回りになっている側になります。
-	 *	両面を描画したい場合は fk_Model::DrawMode プロパティを参照して下さい。
-	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
-	 *	平面でなかった場合に意図している形状と描画形状が異なる場合があります。
-	 *
-	 *	\sa fk_Solid, fk_Polyline, fk_Closedline
-	 */
-	public ref class fk_Polygon : fk_IndexFaceSet {
-	internal:
-		::FK::fk_Polygon * GetP(void);
-
-	public:
-#ifndef FK_DOXYGEN_USER_PROCESS		
-		fk_Polygon(bool argNewFlg);
-#endif
-		//! コンストラクタ1
-		/*!
-		 *	空のポリゴンを生成します。
-		 */
-		fk_Polygon();
-
-		//! コンストラクタ2
-		/*!
-		 *	与えられた引数を頂点とするポリゴンを生成します。
-		 *
-		 *	\param[in]	array		頂点配列。
-		 */
-		fk_Polygon(IEnumerable<fk_Vector^>^ array);
-
-		//! デストラクタ
-		~fk_Polygon();
-
-		//! ファイナライザ
-		!fk_Polygon();
-
-		//! 頂点位置設定メソッド
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *
-		 *	\param[in] array	array型による頂点位置配列
-		 */
-		void SetVertex(IEnumerable<fk_Vector^>^ array);
-	};		
-}

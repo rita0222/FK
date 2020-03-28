@@ -1,4 +1,59 @@
-﻿/****************************************************************************
+﻿#include "Polygon_CLI.h"
+
+namespace FK_CLI {
+
+	using namespace std;
+	using namespace System::Collections::Generic;
+
+	::FK::fk_Polygon* fk_Polygon::GetP(void)
+	{
+		return (::FK::fk_Polygon*)(pBase);
+	}
+
+	fk_Polygon::fk_Polygon() : fk_IndexFaceSet(false)
+	{
+		pBase = new ::FK::fk_Polygon();
+	}
+
+	fk_Polygon::fk_Polygon(IEnumerable<fk_Vector^>^ argArray) : fk_IndexFaceSet(false)
+	{
+		pBase = new ::FK::fk_Polygon();
+		SetVertex(argArray);
+	}
+
+	fk_Polygon::fk_Polygon(bool argNewFlg) : fk_IndexFaceSet(false)
+	{
+		if (argNewFlg == true) {
+			pBase = new ::FK::fk_Polygon();
+		}
+	}
+
+	fk_Polygon::~fk_Polygon()
+	{
+		this->!fk_Polygon();
+	}
+
+	fk_Polygon::!fk_Polygon()
+	{
+		if (pBase == nullptr) return;
+		if (dFlg == true) delete GetP();
+		pBase = nullptr;
+	}
+
+	void fk_Polygon::SetVertex(IEnumerable<fk_Vector^>^ argArray)
+	{
+		if (!argArray) return;
+		vector<::FK::fk_Vector> vArray;
+
+		for each (fk_Vector ^ pos in argArray) {
+			vArray.push_back(pos);
+		}
+
+		GetP()->setVertex(&vArray);
+	}
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,57 +124,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include "Polygon_CLI.h"
-
-namespace FK_CLI {
-
-	using namespace std;
-	using namespace System::Collections::Generic;
-
-	::FK::fk_Polygon* fk_Polygon::GetP(void)
-	{
-		return (::FK::fk_Polygon*)(pBase);
-	}
-
-	fk_Polygon::fk_Polygon() : fk_IndexFaceSet(false)
-	{
-		pBase = new ::FK::fk_Polygon();
-	}
-
-	fk_Polygon::fk_Polygon(IEnumerable<fk_Vector^>^ argArray) : fk_IndexFaceSet(false)
-	{
-		pBase = new ::FK::fk_Polygon();
-		SetVertex(argArray);
-	}
-
-	fk_Polygon::fk_Polygon(bool argNewFlg) : fk_IndexFaceSet(false)
-	{
-		if (argNewFlg == true) {
-			pBase = new ::FK::fk_Polygon();
-		}
-	}
-
-	fk_Polygon::~fk_Polygon()
-	{
-		this->!fk_Polygon();
-	}
-
-	fk_Polygon::!fk_Polygon()
-	{
-		if (pBase == nullptr) return;
-		if (dFlg == true) delete GetP();
-		pBase = nullptr;
-	}
-
-	void fk_Polygon::SetVertex(IEnumerable<fk_Vector^>^ argArray)
-	{
-		if (!argArray) return;
-		vector<::FK::fk_Vector> vArray;
-
-		for each (fk_Vector ^ pos in argArray) {
-			vArray.push_back(pos);
-		}
-
-		GetP()->setVertex(&vArray);
-	}
-}
