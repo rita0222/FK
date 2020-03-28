@@ -1,4 +1,39 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_DRAWMODE_HEADER__
+#define __FK_DRAWMODE_HEADER__
+
+namespace FK {
+
+	//! 描画モードを表す列挙型
+	enum class fk_Draw : unsigned int {
+		NONE			= 0,					//!< 何も表示しない
+		POINT 			= 1 << 1,				//!< 点描画
+		LINE 			= 1 << 2,				//!< 線描画
+		FACE 			= 1 << 3,				//!< 面描画 (表面のみ)
+		BACK_FACE		= ((1 << 4) | FACE),	//!< 裏面描画
+		FRONTBACK_FACE	= ((1 << 5) | FACE),	//!< 表裏面描画
+		TEXTURE			= 1 << 6,				//!< テクスチャー描画
+		GEOM_LINE		= 1 << 7,				//!< 曲線・曲面グリッド描画
+		GEOM_POINT		= 1 << 8,				//!< 曲線・曲面点描画
+		GEOM_FACE		= 1 << 9,				//!< 曲面描画
+	};
+
+	fk_Draw operator | (fk_Draw argL, fk_Draw argR);
+	fk_Draw operator & (fk_Draw argL, fk_Draw argR);
+	fk_Draw operator ^ (fk_Draw argL, fk_Draw argR);
+/*
+	const fk_DrawMode FK_NONEMODE = fk_DrawMode::NONE;
+	const fk_DrawMode FK_POINTMODE = fk_DrawMode::POINT;
+	const fk_DrawMode FK_LINEMODE = fk_DrawMode::LINE;
+	const fk_DrawMode FK_POLYMODE = fk_DrawMode::FACE;
+	const fk_DrawMode FK_BACK_POLYMODE = fk_DrawMode::BACK_FACE;
+	const fk_DrawMode FK_FRONTBACK_POLYMODE = fk_DrawMode::FRONTBACK_FACE;
+	const fk_DrawMode FK_TEXTUREMODE = fk_DrawMode::TEXTURE;
+*/
+}
+
+#endif // !__FK_BOUNDARY_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,39 +104,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-
-#ifndef __FK_DRAWMODE_HEADER__
-#define __FK_DRAWMODE_HEADER__
-
-namespace FK {
-
-	//! 描画モードを表す列挙型
-	enum class fk_Draw : unsigned int {
-		NONE			= 0,					//!< 何も表示しない
-		POINT 			= 1 << 1,				//!< 点描画
-		LINE 			= 1 << 2,				//!< 線描画
-		FACE 			= 1 << 3,				//!< 面描画 (表面のみ)
-		BACK_FACE		= ((1 << 4) | FACE),	//!< 裏面描画
-		FRONTBACK_FACE	= ((1 << 5) | FACE),	//!< 表裏面描画
-		TEXTURE			= 1 << 6,				//!< テクスチャー描画
-		GEOM_LINE		= 1 << 7,				//!< 曲線・曲面グリッド描画
-		GEOM_POINT		= 1 << 8,				//!< 曲線・曲面点描画
-		GEOM_FACE		= 1 << 9,				//!< 曲面描画
-	};
-
-	fk_Draw operator | (fk_Draw argL, fk_Draw argR);
-	fk_Draw operator & (fk_Draw argL, fk_Draw argR);
-	fk_Draw operator ^ (fk_Draw argL, fk_Draw argR);
-/*
-	const fk_DrawMode FK_NONEMODE = fk_DrawMode::NONE;
-	const fk_DrawMode FK_POINTMODE = fk_DrawMode::POINT;
-	const fk_DrawMode FK_LINEMODE = fk_DrawMode::LINE;
-	const fk_DrawMode FK_POLYMODE = fk_DrawMode::FACE;
-	const fk_DrawMode FK_BACK_POLYMODE = fk_DrawMode::BACK_FACE;
-	const fk_DrawMode FK_FRONTBACK_POLYMODE = fk_DrawMode::FRONTBACK_FACE;
-	const fk_DrawMode FK_TEXTUREMODE = fk_DrawMode::TEXTURE;
-*/
-}
-
-#endif // !__FK_BOUNDARY_HEADER__

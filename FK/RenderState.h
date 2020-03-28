@@ -1,4 +1,50 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_RENDER_STATE_HEADER__
+#define __FK_RENDER_STATE_HEADER__
+
+namespace FK {
+	//! ブレンドモード列挙型
+	enum class fk_BlendMode {
+		ALPHA,		//!< アルファブレンド(デフォルト)
+		NEGATIVE,	//!< 反転
+		ADDITION,	//!< 加算
+		SCREEN,		//!< スクリーン
+		LIGHTEN,	//!< 比較(明)
+		MULTIPLY,	//!< 乗算
+		NONE,		//!< ブレンドなし
+		CUSTOM,		//!< カスタム
+	};
+
+	//! ブレンド係数列挙型
+
+	enum class fk_BlendFactor {
+		ZERO,					//! 0
+		ONE,					//! 1
+		SRC_COLOR,				//! Sr,Sg,Sb
+		ONE_MINUS_SRC_COLOR,	//! 1-Sr,Sg,Sb
+		DST_COLOR,				//! Dr,Dg,Db
+		ONE_MINUS_DST_COLOR,	//! 1-Dr,Dg,Db
+		SRC_ALPHA,				//! Sa
+		ONE_MINUS_SRC_ALPHA,	//! 1-Sa
+		DST_ALPHA,				//! Da
+		ONE_MINUS_DST_ALPHA,	//! 1-Da
+	};
+
+	//! デプス読み書きモード列挙型
+	enum class fk_DepthMode : unsigned int {
+		NO_USE = 0,						//!< デプスバッファの参照も更新せず、常に上書きします
+		READ = 1,						//!< デプスバッファを参照し、前後関係のチェックを行います
+		WRITE = 2,						//!< デプスバッファに書き込みを行い、更新します
+		READ_AND_WRITE = READ | WRITE,	//!< デプスバッファの参照と書き込みを共に行います(初期値)
+	};
+
+	fk_DepthMode operator | (fk_DepthMode argL, fk_DepthMode argR);
+	fk_DepthMode operator & (fk_DepthMode argL, fk_DepthMode argR);
+	fk_DepthMode operator ^ (fk_DepthMode argL, fk_DepthMode argR);
+}
+
+#endif // __FK_RENDER_STATE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,50 +115,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_RENDER_STATE_HEADER__
-#define __FK_RENDER_STATE_HEADER__
-
-namespace FK {
-	//! ブレンドモード列挙型
-	enum class fk_BlendMode {
-		ALPHA,		//!< アルファブレンド(デフォルト)
-		NEGATIVE,	//!< 反転
-		ADDITION,	//!< 加算
-		SCREEN,		//!< スクリーン
-		LIGHTEN,	//!< 比較(明)
-		MULTIPLY,	//!< 乗算
-		NONE,		//!< ブレンドなし
-		CUSTOM,		//!< カスタム
-	};
-
-	//! ブレンド係数列挙型
-
-	enum class fk_BlendFactor {
-		ZERO,					//! 0
-		ONE,					//! 1
-		SRC_COLOR,				//! Sr,Sg,Sb
-		ONE_MINUS_SRC_COLOR,	//! 1-Sr,Sg,Sb
-		DST_COLOR,				//! Dr,Dg,Db
-		ONE_MINUS_DST_COLOR,	//! 1-Dr,Dg,Db
-		SRC_ALPHA,				//! Sa
-		ONE_MINUS_SRC_ALPHA,	//! 1-Sa
-		DST_ALPHA,				//! Da
-		ONE_MINUS_DST_ALPHA,	//! 1-Da
-	};
-
-	//! デプス読み書きモード列挙型
-	enum class fk_DepthMode : unsigned int {
-		NO_USE = 0,						//!< デプスバッファの参照も更新せず、常に上書きします
-		READ = 1,						//!< デプスバッファを参照し、前後関係のチェックを行います
-		WRITE = 2,						//!< デプスバッファに書き込みを行い、更新します
-		READ_AND_WRITE = READ | WRITE,	//!< デプスバッファの参照と書き込みを共に行います(初期値)
-	};
-
-	fk_DepthMode operator | (fk_DepthMode argL, fk_DepthMode argR);
-	fk_DepthMode operator & (fk_DepthMode argL, fk_DepthMode argR);
-	fk_DepthMode operator ^ (fk_DepthMode argL, fk_DepthMode argR);
-}
-
-#endif // __FK_RENDER_STATE_HEADER__
-
-

@@ -1,4 +1,26 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_STL_PARSER_HEADER__
+#define __FK_STL_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+
+namespace FK {
+	class fk_STLParser : public fk_ParserBase {
+	public:
+		fk_STLParser(void);
+		virtual ~fk_STLParser();
+
+		bool	ReadSTLFile(std::string, bool, double = 0.0);
+
+	private:
+
+		bool	CheckSTLFile(std::ifstream *);
+		bool	MakeSTLIFSet(std::ifstream *, std::vector<fk_Vector> *,
+							 std::vector< std::vector<int> > *, bool);
+	};
+}
+#endif // !__FK_STL_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,26 +91,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_STL_PARSER_HEADER__
-#define __FK_STL_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-
-namespace FK {
-	class fk_STLParser : public fk_ParserBase {
-	public:
-		fk_STLParser(void);
-		virtual ~fk_STLParser();
-
-		bool	ReadSTLFile(std::string, bool, double = 0.0);
-
-	private:
-
-		bool	CheckSTLFile(std::ifstream *);
-		bool	MakeSTLIFSet(std::ifstream *, std::vector<fk_Vector> *,
-							 std::vector< std::vector<int> > *, bool);
-	};
-}
-#endif // !__FK_STL_PARSER_HEADER__
-
-

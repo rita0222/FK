@@ -1,4 +1,59 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_IFSETHANDLE_HEADER__
+#define __FK_IFSETHANDLE_HEADER__
+
+#include <stdio.h>
+#include <vector>
+#include <map>
+
+namespace FK {
+
+	class fk_Vertex;
+	class fk_Half;
+	class fk_Edge;
+	class fk_Loop;
+	class fk_DataBase;
+	class fk_Vector;
+
+	using fk_IFS_EdgeSet = std::multimap<int, fk_Edge *>;
+	using fk_IFS_Entry = fk_IFS_EdgeSet::value_type;
+
+	class fk_IFSetHandle {
+
+		friend class			fk_Modify;
+
+	public:
+		fk_IFSetHandle(fk_DataBase * = nullptr);
+		virtual ~fk_IFSetHandle() {};
+
+		void			Init(void);
+		void			SetDataBase(fk_DataBase *);
+		fk_DataBase *	GetDataBase(void);
+		bool			SetIndexFaceSet(std::vector<fk_Vector> *,
+										std::vector< std::vector<int> > *,
+										bool = true);
+		bool			RefineTopology(void);
+
+	private:
+		fk_DataBase *		DB;
+		std::map<int, int>	edgeCount;
+
+		bool		DB_Check(void);
+		fk_Edge *	CheckExistEdge(int, int, fk_IFS_EdgeSet *);
+		bool		MakeLoopEdgeSet(std::vector< std::vector<int> >::iterator,
+									fk_IFS_EdgeSet *, bool);
+		fk_Half *	MakeNewEdge(int, int, fk_IFS_EdgeSet *);
+		void		MakeNewLoop(std::vector<fk_Half *> *, bool);
+		bool		DefineNewEH(int, int, fk_IFS_EdgeSet *,
+								std::vector<fk_Half *> *,
+								std::vector<fk_Half *> *, bool);
+		bool		SearchUndefLoop(fk_Half *);
+		int			GetEdgeCountNum(int);
+	};
+}
+
+#endif // !__FK_IFSETHANDLE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,59 +124,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_IFSETHANDLE_HEADER__
-#define __FK_IFSETHANDLE_HEADER__
-
-#include <stdio.h>
-#include <vector>
-#include <map>
-
-namespace FK {
-
-	class fk_Vertex;
-	class fk_Half;
-	class fk_Edge;
-	class fk_Loop;
-	class fk_DataBase;
-	class fk_Vector;
-
-	using fk_IFS_EdgeSet = std::multimap<int, fk_Edge *>;
-	using fk_IFS_Entry = fk_IFS_EdgeSet::value_type;
-
-	class fk_IFSetHandle {
-
-		friend class			fk_Modify;
-
-	public:
-		fk_IFSetHandle(fk_DataBase * = nullptr);
-		virtual ~fk_IFSetHandle() {};
-
-		void			Init(void);
-		void			SetDataBase(fk_DataBase *);
-		fk_DataBase *	GetDataBase(void);
-		bool			SetIndexFaceSet(std::vector<fk_Vector> *,
-										std::vector< std::vector<int> > *,
-										bool = true);
-		bool			RefineTopology(void);
-
-	private:
-		fk_DataBase *		DB;
-		std::map<int, int>	edgeCount;
-
-		bool		DB_Check(void);
-		fk_Edge *	CheckExistEdge(int, int, fk_IFS_EdgeSet *);
-		bool		MakeLoopEdgeSet(std::vector< std::vector<int> >::iterator,
-									fk_IFS_EdgeSet *, bool);
-		fk_Half *	MakeNewEdge(int, int, fk_IFS_EdgeSet *);
-		void		MakeNewLoop(std::vector<fk_Half *> *, bool);
-		bool		DefineNewEH(int, int, fk_IFS_EdgeSet *,
-								std::vector<fk_Half *> *,
-								std::vector<fk_Half *> *, bool);
-		bool		SearchUndefLoop(fk_Half *);
-		int			GetEdgeCountNum(int);
-	};
-}
-
-#endif // !__FK_IFSETHANDLE_HEADER__
-
-

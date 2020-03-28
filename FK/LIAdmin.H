@@ -1,4 +1,25 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_LOOP_INDEX_ADMIN_HEADER__
+#define __FK_LOOP_INDEX_ADMIN_HEADER__
+
+#include <vector>
+
+namespace FK {
+	class fk_LoopIndexAdmin {
+	public:
+		fk_LoopIndexAdmin(void);
+		virtual ~fk_LoopIndexAdmin();
+
+		void	PushRemoveID(int, int);
+		int		GetNewID(int);
+
+	private:
+		int									maxID;
+		std::vector< std::vector<int> >		IDAdmin;
+	};
+}
+#endif // !__FK_LOOP_INDEX_ADMIN_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,25 +90,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_LOOP_INDEX_ADMIN_HEADER__
-#define __FK_LOOP_INDEX_ADMIN_HEADER__
-
-#include <vector>
-
-namespace FK {
-	class fk_LoopIndexAdmin {
-	public:
-		fk_LoopIndexAdmin(void);
-		virtual ~fk_LoopIndexAdmin();
-
-		void	PushRemoveID(int, int);
-		int		GetNewID(int);
-
-	private:
-		int									maxID;
-		std::vector< std::vector<int> >		IDAdmin;
-	};
-}
-#endif // !__FK_LOOP_INDEX_ADMIN_HEADER__
-
-

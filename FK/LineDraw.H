@@ -1,4 +1,34 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_LINE_DRAW_HEADER__
+#define __FK_LINE_DRAW_HEADER__
+
+#include <FK/DrawBase.H>
+#include <FK/ShaderBinder.h>
+
+namespace FK {
+
+	class fk_LineDraw : public fk_DrawBase {
+	public:
+		fk_LineDraw(void);
+		virtual ~fk_LineDraw();
+
+		void	DrawShapeLine(fk_Model *, fk_Shape *, bool);
+		GLuint	VAOSetup(fk_Shape *);
+
+	private:
+		fk_ShaderBinder		*lineShader;
+
+		GLuint	vsModelID, vsElemID, vsIFSID, fsLineID, fsIFSID, fsShadowID;
+		void	ShaderSetup(void);
+		void	SubroutineSetup(fk_Model *, bool);
+		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+
+ 		void	Draw_Line(fk_LineBase *, fk_ShaderParameter *);
+ 		void	Draw_IFS(fk_IndexFaceSet *, fk_ShaderParameter *);
+	};
+}
+#endif /* !__FK_LINE_DRAW_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,34 +99,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_LINE_DRAW_HEADER__
-#define __FK_LINE_DRAW_HEADER__
-
-#include <FK/DrawBase.H>
-#include <FK/ShaderBinder.h>
-
-namespace FK {
-
-	class fk_LineDraw : public fk_DrawBase {
-	public:
-		fk_LineDraw(void);
-		virtual ~fk_LineDraw();
-
-		void	DrawShapeLine(fk_Model *, fk_Shape *, bool);
-		GLuint	VAOSetup(fk_Shape *);
-
-	private:
-		fk_ShaderBinder		*lineShader;
-
-		GLuint	vsModelID, vsElemID, vsIFSID, fsLineID, fsIFSID, fsShadowID;
-		void	ShaderSetup(void);
-		void	SubroutineSetup(fk_Model *, bool);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-
- 		void	Draw_Line(fk_LineBase *, fk_ShaderParameter *);
- 		void	Draw_IFS(fk_IndexFaceSet *, fk_ShaderParameter *);
-	};
-}
-#endif /* !__FK_LINE_DRAW_HEADER__ */
-
-

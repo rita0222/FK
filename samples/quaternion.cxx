@@ -1,4 +1,54 @@
-﻿/****************************************************************************
+﻿#include <FK/FK.h>
+
+using namespace FK;
+using namespace FK::Material;
+
+int main(int, char *[])
+{
+	fk_AppWindow win;
+	fk_Model model;
+	fk_Model pointM;
+	fk_Cone cone(3, 4.0, 15.0, false);
+	fk_Vector pos(0.0, 0.0, -15.0);
+	fk_Angle angle1(0.0, 0.0, 0.0);
+	fk_Angle angle2(fk_Math::PI/2.0, fk_Math::PI/2.0 - 0.01, 0.0);
+
+	fk_Quaternion q1, q2, q;
+	fk_Polyline point;
+
+	fk_Material::initDefault();
+
+	model.setShape(&cone);
+	model.setMaterial(Material::Yellow);
+	model.glAngle(angle1);
+
+	pointM.setShape(&point);
+	pointM.setLineColor(1.0, 0.0, 0.0);
+
+	win.setSize(800, 800);
+	win.setBGColor(0.3, 0.4, 0.5);
+	win.entry(&model);
+	win.entry(&pointM);
+	win.setTrackBallMode(true);
+	win.showGuide();
+	win.open();
+	q1.makeEuler(angle1);
+	q2.makeEuler(angle2);
+
+	double t = 0.0;
+
+	while(win.update() == true) {
+		q = fk_Math::quatInterSphere(q1, q2, t);
+		model.glAngle(q.getEuler());
+		if(t < 1.0) {
+			point.pushVertex(model.getMatrix() * pos);
+			t += 0.005;
+		}
+	}
+	return 0;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,52 +119,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FK.h>
-
-using namespace FK;
-using namespace FK::Material;
-
-int main(int, char *[])
-{
-	fk_AppWindow win;
-	fk_Model model;
-	fk_Model pointM;
-	fk_Cone cone(3, 4.0, 15.0, false);
-	fk_Vector pos(0.0, 0.0, -15.0);
-	fk_Angle angle1(0.0, 0.0, 0.0);
-	fk_Angle angle2(fk_Math::PI/2.0, fk_Math::PI/2.0 - 0.01, 0.0);
-
-	fk_Quaternion q1, q2, q;
-	fk_Polyline point;
-
-	fk_Material::initDefault();
-
-	model.setShape(&cone);
-	model.setMaterial(Material::Yellow);
-	model.glAngle(angle1);
-
-	pointM.setShape(&point);
-	pointM.setLineColor(1.0, 0.0, 0.0);
-
-	win.setSize(800, 800);
-	win.setBGColor(0.3, 0.4, 0.5);
-	win.entry(&model);
-	win.entry(&pointM);
-	win.setTrackBallMode(true);
-	win.showGuide();
-	win.open();
-	q1.makeEuler(angle1);
-	q2.makeEuler(angle2);
-
-	double t = 0.0;
-
-	while(win.update() == true) {
-		q = fk_Math::quatInterSphere(q1, q2, t);
-		model.glAngle(q.getEuler());
-		if(t < 1.0) {
-			point.pushVertex(model.getMatrix() * pos);
-			t += 0.005;
-		}
-	}
-	return 0;
-}

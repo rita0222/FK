@@ -1,4 +1,27 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_SRF_PARSER_HEADER__
+#define __FK_SRF_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+
+namespace FK {
+	class fk_SRFParser : public fk_ParserBase {
+	public:
+		fk_SRFParser(void);
+		virtual ~fk_SRFParser();
+
+		bool	ReadSRFFile(std::string);
+
+	private:
+
+		bool	CheckSRFFile(std::ifstream *);
+		bool	ReadSRFVertexData(std::ifstream *, std::vector<fk_Vector> *);
+		bool	ReadSRFPolygonData(std::ifstream *, int,
+								   std::vector< std::vector<int> > *);
+	};
+}
+#endif // !__FK_SRF_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,27 +92,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_SRF_PARSER_HEADER__
-#define __FK_SRF_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-
-namespace FK {
-	class fk_SRFParser : public fk_ParserBase {
-	public:
-		fk_SRFParser(void);
-		virtual ~fk_SRFParser();
-
-		bool	ReadSRFFile(std::string);
-
-	private:
-
-		bool	CheckSRFFile(std::ifstream *);
-		bool	ReadSRFVertexData(std::ifstream *, std::vector<fk_Vector> *);
-		bool	ReadSRFPolygonData(std::ifstream *, int,
-								   std::vector< std::vector<int> > *);
-	};
-}
-#endif // !__FK_SRF_PARSER_HEADER__
-
-

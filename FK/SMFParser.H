@@ -1,4 +1,27 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_SMF_PARSER_HEADER__
+#define __FK_SMF_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+
+namespace FK {
+	class fk_SMFParser : public fk_ParserBase {
+	public:
+		fk_SMFParser(void);
+		virtual ~fk_SMFParser();
+
+		bool	ReadSMFFile(std::string);
+
+	private:
+
+		bool	CheckSMFFile(std::ifstream &);
+		bool	ReadSMFNumData(std::ifstream &, int *, int *);
+		bool	ReadSMFVertexData(int, std::ifstream &, std::vector<fk_Vector> *);
+		bool	ReadSMFPolygonData(int, std::ifstream &, std::vector< std::vector<int> > *);
+	};
+}
+#endif // !__FK_SMF_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,27 +92,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_SMF_PARSER_HEADER__
-#define __FK_SMF_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-
-namespace FK {
-	class fk_SMFParser : public fk_ParserBase {
-	public:
-		fk_SMFParser(void);
-		virtual ~fk_SMFParser();
-
-		bool	ReadSMFFile(std::string);
-
-	private:
-
-		bool	CheckSMFFile(std::ifstream &);
-		bool	ReadSMFNumData(std::ifstream &, int *, int *);
-		bool	ReadSMFVertexData(int, std::ifstream &, std::vector<fk_Vector> *);
-		bool	ReadSMFPolygonData(int, std::ifstream &, std::vector< std::vector<int> > *);
-	};
-}
-#endif // !__FK_SMF_PARSER_HEADER__
-
-

@@ -1,4 +1,25 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_EDGEPAIR_HEADER__
+#define __FK_EDGEPAIR_HEADER__
+
+namespace FK {
+	class fk_EdgePair {
+	public:
+		int id[2];
+
+		fk_EdgePair(void);
+		fk_EdgePair(int, int);
+		
+		bool	operator ==(const fk_EdgePair &) const;
+		bool	operator >(const fk_EdgePair &) const;
+		bool	operator <(const fk_EdgePair &) const;
+
+		void	set(int, int);
+	};		
+}
+
+#endif
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,23 +90,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_EDGEPAIR_HEADER__
-#define __FK_EDGEPAIR_HEADER__
-
-namespace FK {
-	class fk_EdgePair {
-	public:
-		int id[2];
-
-		fk_EdgePair(void);
-		fk_EdgePair(int, int);
-		
-		bool	operator ==(const fk_EdgePair &) const;
-		bool	operator >(const fk_EdgePair &) const;
-		bool	operator <(const fk_EdgePair &) const;
-
-		void	set(int, int);
-	};		
-}
-
-#endif

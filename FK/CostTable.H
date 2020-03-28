@@ -1,4 +1,59 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_COST_TABLE_HEADER__
+#define __FK_COST_TABLE_HEADER__
+
+#include <FK/GraphNode.h>
+
+#ifdef ERROR
+#undef ERROR
+#endif
+
+namespace FK {
+
+	class fk_CostTable {
+	public:
+		fk_CostTable(void);
+		~fk_CostTable();
+
+		std::string print(void);
+
+		void setType(fk_CostType);
+		void setDirection(fk_CostDirection);
+		void setNodeCostID(unsigned int);
+		void setEdgeCostID(unsigned int);
+
+		fk_CostType getType(void);
+		fk_CostDirection getDirection(void);
+		unsigned int getNodeCostID(void);
+		unsigned int getEdgeCostID(void);
+
+		void setStart(fk_GraphNode *);
+		fk_GraphNode * getStart(void);
+
+		void addGoal(fk_GraphNode *);
+		void clearGoal(void);
+		std::list<fk_GraphNode *> * getGoal(void);
+
+		void queueClear(void);
+		void addQueue(fk_GraphNode *);
+		bool isQueueEmpty(void);
+		fk_GraphNode * queuePopFront(void);
+
+		void insertIntQueue(fk_GraphNode *, unsigned int, int);
+		void insertDoubleQueue(fk_GraphNode *, unsigned int, double);
+		
+	private:
+		fk_GraphNode *start;
+		std::list<fk_GraphNode *> goal;
+		fk_CostType type;
+		unsigned int edgeCostID, nodeCostID;
+		std::list<fk_GraphNode *> queueList;
+		fk_CostDirection direction;
+	};
+}
+
+#endif
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,58 +124,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-#ifndef __FK_COST_TABLE_HEADER__
-#define __FK_COST_TABLE_HEADER__
-
-#include <FK/GraphNode.h>
-
-#ifdef ERROR
-#undef ERROR
-#endif
-
-namespace FK {
-
-	class fk_CostTable {
-	public:
-		fk_CostTable(void);
-		~fk_CostTable();
-
-		std::string print(void);
-
-		void setType(fk_CostType);
-		void setDirection(fk_CostDirection);
-		void setNodeCostID(unsigned int);
-		void setEdgeCostID(unsigned int);
-
-		fk_CostType getType(void);
-		fk_CostDirection getDirection(void);
-		unsigned int getNodeCostID(void);
-		unsigned int getEdgeCostID(void);
-
-		void setStart(fk_GraphNode *);
-		fk_GraphNode * getStart(void);
-
-		void addGoal(fk_GraphNode *);
-		void clearGoal(void);
-		std::list<fk_GraphNode *> * getGoal(void);
-
-		void queueClear(void);
-		void addQueue(fk_GraphNode *);
-		bool isQueueEmpty(void);
-		fk_GraphNode * queuePopFront(void);
-
-		void insertIntQueue(fk_GraphNode *, unsigned int, int);
-		void insertDoubleQueue(fk_GraphNode *, unsigned int, double);
-		
-	private:
-		fk_GraphNode *start;
-		std::list<fk_GraphNode *> goal;
-		fk_CostType type;
-		unsigned int edgeCostID, nodeCostID;
-		std::list<fk_GraphNode *> queueList;
-		fk_CostDirection direction;
-	};
-}
-
-#endif

@@ -1,4 +1,44 @@
-﻿/****************************************************************************
+﻿#include <FK/FK.h>
+#include <FK/GenMatrix.h>
+
+using namespace FK;
+
+int main(int, char *[])
+{
+	fk_GenVector	largeV[3];
+	fk_GenMatrix	largeM[2];
+	const int		DEG = 50;
+	const int		COUNT = 50;
+	int				i, j, c, diff;
+
+	largeV[0].resize(DEG);
+	largeV[1].resize(DEG);
+	largeV[2].resize(DEG);
+	largeM[0].setDeg(DEG);
+	largeM[1].setDeg(DEG);
+
+	diff = 0;
+	for(c = 0; c < COUNT; c++) {
+
+		for(i = 0; i < DEG; i++) {
+			largeV[0].set(i, fk_Math::drand());
+			for(j = 0; j < DEG; j++) {
+				largeM[0].set(i, j, fk_Math::drand());
+			}
+		}
+		largeV[1] = largeM[0] * largeV[0];
+		largeM[1] = !largeM[0];
+		largeV[2] = largeM[1] * largeV[1];
+
+		if(largeV[0] != largeV[2]) diff++;
+	}
+	fk_Window::setPutStrMode(fk_PutStrMode::CONSOLE);
+	fk_Window::putString("Diff Count = " + std::to_string(diff));
+
+	return 0;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,42 +109,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FK.h>
-#include <FK/GenMatrix.h>
-
-using namespace FK;
-
-int main(int, char *[])
-{
-	fk_GenVector	largeV[3];
-	fk_GenMatrix	largeM[2];
-	const int		DEG = 50;
-	const int		COUNT = 50;
-	int				i, j, c, diff;
-
-	largeV[0].resize(DEG);
-	largeV[1].resize(DEG);
-	largeV[2].resize(DEG);
-	largeM[0].setDeg(DEG);
-	largeM[1].setDeg(DEG);
-
-	diff = 0;
-	for(c = 0; c < COUNT; c++) {
-
-		for(i = 0; i < DEG; i++) {
-			largeV[0].set(i, fk_Math::drand());
-			for(j = 0; j < DEG; j++) {
-				largeM[0].set(i, j, fk_Math::drand());
-			}
-		}
-		largeV[1] = largeM[0] * largeV[0];
-		largeM[1] = !largeM[0];
-		largeV[2] = largeM[1] * largeV[1];
-
-		if(largeV[0] != largeV[2]) diff++;
-	}
-	fk_Window::setPutStrMode(fk_PutStrMode::CONSOLE);
-	fk_Window::putString("Diff Count = " + std::to_string(diff));
-
-	return 0;
-}

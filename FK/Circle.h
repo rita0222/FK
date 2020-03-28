@@ -1,4 +1,70 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_CIRCLE_HEADER__
+#define __FK_CIRCLE_HEADER__
+
+#include <FK/IndexFace.h>
+
+namespace FK {
+
+	//! 円を生成、管理するクラス
+	/*!
+	 *	このクラスは、形状として円を制御する機能を提供します。
+	 *	ここでの「円」は実際には正多角形を円に近似して扱っています。
+	 *	多角形の角数は (分割数) * 4 となっています。
+	 *	この多角形は、実質的には設定された半径の円に内接するものです。
+	 *	円としての見栄えを良くするには分割数を大きめに設定すべきですが、
+	 *	分割数の大きい円を大量に利用すると描画処理が遅くなるという問題が生じます。
+	 *
+	 *	初期状態では、中心を原点とし、
+	 *	面の法線ベクトルが (0, 0, 1) となるように配置されます。
+	 *	このクラスは fk_IndexFaceSet クラスの派生クラスであり、
+	 *	生成後に fk_IndexFaceSet クラスの機能によって頂点を移動することが可能です。
+	 *
+	 *	\sa fk_IndexFaceSet, fk_Shape, fk_Model
+	 */	
+
+	class fk_Circle: public fk_IndexFaceSet {
+	public:
+		//! コンストラクタ
+		/*!
+		 *	引数として、分割数と半径を入力できます。
+		 *
+		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
+		 *	\param[in]	rad	半径
+		 */
+		fk_Circle(int div = 3, double rad = 1.0);
+
+		//! デストラクタ
+		virtual ~fk_Circle();
+
+		//! 分割数設定関数
+		/*!
+		 *	分割数を設定します。
+		 *
+		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
+		 */
+		void	setDivide(int div);
+
+		//! 半径設定関数
+		/*!
+		 *	半径を設定します。
+		 *
+		 *	\param[in]	rad	半径
+		 */
+		void	setRadius(double rad);
+
+		//! 拡大縮小関数
+		/*!
+		 *	円全体を与えられた倍率で拡大縮小します。
+		 *
+		 *	\param[in]	scale	倍率
+		 */
+		void	setScale(double scale);
+	};
+}
+
+#endif // !__FK_CIRCLE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,70 +135,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-
-#ifndef __FK_CIRCLE_HEADER__
-#define __FK_CIRCLE_HEADER__
-
-#include <FK/IndexFace.h>
-
-namespace FK {
-
-	//! 円を生成、管理するクラス
-	/*!
-	 *	このクラスは、形状として円を制御する機能を提供します。
-	 *	ここでの「円」は実際には正多角形を円に近似して扱っています。
-	 *	多角形の角数は (分割数) * 4 となっています。
-	 *	この多角形は、実質的には設定された半径の円に内接するものです。
-	 *	円としての見栄えを良くするには分割数を大きめに設定すべきですが、
-	 *	分割数の大きい円を大量に利用すると描画処理が遅くなるという問題が生じます。
-	 *
-	 *	初期状態では、中心を原点とし、
-	 *	面の法線ベクトルが (0, 0, 1) となるように配置されます。
-	 *	このクラスは fk_IndexFaceSet クラスの派生クラスであり、
-	 *	生成後に fk_IndexFaceSet クラスの機能によって頂点を移動することが可能です。
-	 *
-	 *	\sa fk_IndexFaceSet, fk_Shape, fk_Model
-	 */	
-
-	class fk_Circle: public fk_IndexFaceSet {
-	public:
-		//! コンストラクタ
-		/*!
-		 *	引数として、分割数と半径を入力できます。
-		 *
-		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
-		 *	\param[in]	rad	半径
-		 */
-		fk_Circle(int div = 3, double rad = 1.0);
-
-		//! デストラクタ
-		virtual ~fk_Circle();
-
-		//! 分割数設定関数
-		/*!
-		 *	分割数を設定します。
-		 *
-		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
-		 */
-		void	setDivide(int div);
-
-		//! 半径設定関数
-		/*!
-		 *	半径を設定します。
-		 *
-		 *	\param[in]	rad	半径
-		 */
-		void	setRadius(double rad);
-
-		//! 拡大縮小関数
-		/*!
-		 *	円全体を与えられた倍率で拡大縮小します。
-		 *
-		 *	\param[in]	scale	倍率
-		 */
-		void	setScale(double scale);
-	};
-}
-
-#endif // !__FK_CIRCLE_HEADER__

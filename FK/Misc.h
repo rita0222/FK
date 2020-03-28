@@ -1,4 +1,30 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_MISC__
+#define __FK_MISC__
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+#include <vector>
+#include <string>
+
+#define SAFE_DELETE(p) if(p!=0){delete p;p=0;}
+
+namespace FK {
+	class Noncopyable {
+	public:
+		Noncopyable() {};
+
+	private:
+		void operator =(const Noncopyable&) {};
+		Noncopyable(const Noncopyable&) {};
+	};
+
+	std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken);
+}
+#endif
+
+#endif //!__FK_MISC__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,30 +95,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_MISC__
-#define __FK_MISC__
-
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-#include <vector>
-#include <string>
-
-#define SAFE_DELETE(p) if(p!=0){delete p;p=0;}
-
-namespace FK {
-	class Noncopyable {
-	public:
-		Noncopyable() {};
-
-	private:
-		void operator =(const Noncopyable&) {};
-		Noncopyable(const Noncopyable&) {};
-	};
-
-	std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken);
-}
-#endif
-
-#endif //!__FK_MISC__
-
-

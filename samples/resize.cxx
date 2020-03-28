@@ -1,4 +1,71 @@
-﻿/****************************************************************************
+﻿#include <FK/FK.h>
+
+using namespace std;
+using namespace FK;
+
+int main(int, char *[])
+{
+	Fl_Window		MainWindow(300, 300, "RESIZE TEST");
+	fk_Model		Camera, BlockModel, LightModel;
+	fk_Light		Light;
+	fk_Block		Block(50.0, 70.0, 40.0);
+	fk_Scene		Scene;
+	fk_Window		fkWindow(0, 0, 300, 300);
+
+	MainWindow.end();
+	fk_Material::initDefault();
+
+	MainWindow.size_range(320, 320);
+
+	// 照明の設定
+	LightModel.setShape(&Light);
+	LightModel.setMaterial(Material::White);
+	LightModel.glMoveTo(0.0, 0.0, 0.0);
+	LightModel.glFocus(-1.0, -1.0, -1.0);
+
+	// 直方体の設定
+	BlockModel.setShape(&Block);
+	BlockModel.setMaterial(Material::Yellow);
+
+	// 各モデルをディスプレイリストに登録
+	Scene.entryCamera(&Camera);
+	Scene.entryModel(&BlockModel);
+	Scene.entryModel(&LightModel);
+
+	// ウィンドウへディスプレイリストを登録
+	fkWindow.setScene(&Scene);
+
+	// 視点の位置と姿勢を設定
+	Camera.glMoveTo(0.0, 0.0, 300.0);
+	Camera.glFocus(0.0, 0.0, 0.0);
+	Camera.glUpvec(0.0, 1.0, 0.0);
+
+	MainWindow.show();
+	fkWindow.show();
+
+	while(true) {
+
+		fkWindow.resizeWindow(0, 0, MainWindow.w(), MainWindow.h());
+		if(MainWindow.visible() == 0) {
+			if(Fl::wait() == 0) {
+				break;
+			} else {
+				continue;
+			}
+		}
+
+		if(fkWindow.drawWindow() == 0) break;
+		if(Fl::check() == 0) break;
+		if(fkWindow.winOpenStatus() == false) continue;
+
+		// 直方体(と子モデルの線分)を Y 軸中心に回転
+		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
+	}
+
+	return 0;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,69 +136,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FK.h>
-
-using namespace std;
-using namespace FK;
-
-int main(int, char *[])
-{
-	Fl_Window		MainWindow(300, 300, "RESIZE TEST");
-	fk_Model		Camera, BlockModel, LightModel;
-	fk_Light		Light;
-	fk_Block		Block(50.0, 70.0, 40.0);
-	fk_Scene		Scene;
-	fk_Window		fkWindow(0, 0, 300, 300);
-
-	MainWindow.end();
-	fk_Material::initDefault();
-
-	MainWindow.size_range(320, 320);
-
-	// 照明の設定
-	LightModel.setShape(&Light);
-	LightModel.setMaterial(Material::White);
-	LightModel.glMoveTo(0.0, 0.0, 0.0);
-	LightModel.glFocus(-1.0, -1.0, -1.0);
-
-	// 直方体の設定
-	BlockModel.setShape(&Block);
-	BlockModel.setMaterial(Material::Yellow);
-
-	// 各モデルをディスプレイリストに登録
-	Scene.entryCamera(&Camera);
-	Scene.entryModel(&BlockModel);
-	Scene.entryModel(&LightModel);
-
-	// ウィンドウへディスプレイリストを登録
-	fkWindow.setScene(&Scene);
-
-	// 視点の位置と姿勢を設定
-	Camera.glMoveTo(0.0, 0.0, 300.0);
-	Camera.glFocus(0.0, 0.0, 0.0);
-	Camera.glUpvec(0.0, 1.0, 0.0);
-
-	MainWindow.show();
-	fkWindow.show();
-
-	while(true) {
-
-		fkWindow.resizeWindow(0, 0, MainWindow.w(), MainWindow.h());
-		if(MainWindow.visible() == 0) {
-			if(Fl::wait() == 0) {
-				break;
-			} else {
-				continue;
-			}
-		}
-
-		if(fkWindow.drawWindow() == 0) break;
-		if(Fl::check() == 0) break;
-		if(fkWindow.winOpenStatus() == false) continue;
-
-		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
-	}
-
-	return 0;
-}

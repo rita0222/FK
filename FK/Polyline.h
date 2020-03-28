@@ -1,4 +1,73 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_POLYLINE_HEADER__
+#define __FK_POLYLINE_HEADER__
+
+#include <FK/LineBase.H>
+
+namespace FK {
+
+	//! ポリラインを生成、管理するクラス
+	/*!
+	 *	このクラスは、形状としてポリライン(折れ線)を制御する機能を提供します。
+	 *	各線分を接続せず独立して制御したい場合は fk_Line を、
+	 *	始点と終点を自動的に接続した多角形形状を表現したい場合は fk_ClosedLine を利用して下さい。
+	 *
+	 *	\sa fk_Line, fk_Closedline
+	 */
+	class fk_Polyline: public fk_LineBase {
+	public:
+
+		//! コンストラクタ
+		/*!
+		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
+		 *	省略した場合や nullptr が入力された場合は、
+		 *	初期状態として頂点が存在しない状態となります。
+		 */
+		fk_Polyline(std::vector<fk_Vector> *array = nullptr);
+
+		//! デストラクタ
+		virtual ~fk_Polyline();
+
+		//! 全消去関数
+		/*!
+		 *	すべてのデータを消去します。
+		 */
+		void allClear(void);
+
+		//! 頂点追加関数
+		/*!
+		 *	頂点を追加します。
+		 *
+		 *	\param[in] pos 追加頂点の位置ベクトル
+		 */
+		void	pushVertex(fk_Vector pos);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点の位置を設定します。
+		 *	対象となる頂点がまだ存在していなかった場合、
+		 *	頂点数を (id+1) まで増加させます。
+		 *
+		 *	\param[in] ID 頂点ID
+		 *	\param[in] pos 頂点位置ベクトル
+		 */
+		void	setVertex(int ID, fk_Vector pos);
+
+		//! 頂点位置設定関数
+		/*!
+		 *	頂点全部を、指定した配列に入れ替えます。
+		 *
+		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
+		 */
+		void	setVertex(std::vector<fk_Vector> *array);
+
+	private:
+		int num;
+	};
+}
+
+#endif // !__FK_POLYLINE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,73 +138,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-
-
-#ifndef __FK_POLYLINE_HEADER__
-#define __FK_POLYLINE_HEADER__
-
-#include <FK/LineBase.H>
-
-namespace FK {
-
-	//! ポリラインを生成、管理するクラス
-	/*!
-	 *	このクラスは、形状としてポリライン(折れ線)を制御する機能を提供します。
-	 *	各線分を接続せず独立して制御したい場合は fk_Line を、
-	 *	始点と終点を自動的に接続した多角形形状を表現したい場合は fk_ClosedLine を利用して下さい。
-	 *
-	 *	\sa fk_Line, fk_Closedline
-	 */
-	class fk_Polyline: public fk_LineBase {
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス。
-		 *	省略した場合や nullptr が入力された場合は、
-		 *	初期状態として頂点が存在しない状態となります。
-		 */
-		fk_Polyline(std::vector<fk_Vector> *array = nullptr);
-
-		//! デストラクタ
-		virtual ~fk_Polyline();
-
-		//! 全消去関数
-		/*!
-		 *	すべてのデータを消去します。
-		 */
-		void allClear(void);
-
-		//! 頂点追加関数
-		/*!
-		 *	頂点を追加します。
-		 *
-		 *	\param[in] pos 追加頂点の位置ベクトル
-		 */
-		void	pushVertex(fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点の位置を設定します。
-		 *	対象となる頂点がまだ存在していなかった場合、
-		 *	頂点数を (id+1) まで増加させます。
-		 *
-		 *	\param[in] ID 頂点ID
-		 *	\param[in] pos 頂点位置ベクトル
-		 */
-		void	setVertex(int ID, fk_Vector pos);
-
-		//! 頂点位置設定関数
-		/*!
-		 *	頂点全部を、指定した配列に入れ替えます。
-		 *
-		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
-		 */
-		void	setVertex(std::vector<fk_Vector> *array);
-
-	private:
-		int num;
-	};
-}
-
-#endif // !__FK_POLYLINE_HEADER__

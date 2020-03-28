@@ -1,4 +1,71 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_POLYGON_HEADER__
+#define __FK_POLYGON_HEADER__
+
+#include <FK/IndexFace.h>
+
+namespace FK {
+	//! 多角形を生成、管理するクラス
+	/*!
+	 *	このクラスは、形状として多角形を制御する機能を提供します。
+	 *	このクラスによる形状は、多角形の内部も描画します。
+	 *	もし辺のみを描画したい場合は fk_Closedline クラスを利用して下さい。
+	 *
+	 *	描画される面は、基本的には多角形の頂点順番が向かって
+	 *	反時計回りになっている側になります。
+	 *	両面を描画したい場合は fk_Model の setDrawMode() 関数を参照して下さい。
+	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
+	 *	同一平面上にある凸多角形を前提としています。
+	 *	その条件を満たしていない場合の描画結果は保証されません。
+	 *
+	 *	\sa fk_IndexFaceSet, fk_Polyline, fk_Closedline
+	 */
+
+	class fk_Polygon: public fk_IndexFaceSet {
+	public:
+
+		//! コンストラクタ
+		/*!
+		 *	詳細は setVertex(std::vector<fk_Vector> *) を参照して下さい。
+		 *	引数を省略した場合、初期状態は空となります。
+		 *
+		 *	\param[in]	posArray	多角形頂点配列
+		 */
+		fk_Polygon(std::vector<fk_Vector> *posArray = nullptr);
+
+		//! デストラクタ
+		virtual ~fk_Polygon();
+
+		//! 形状生成関数1
+		/*!
+		 *	多角形 (ポリゴン) を生成します。
+		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
+		 *	現時点では凸多角形のみサポートしており、
+		 *	非凸多角形が入力された場合の動作は保証されません。
+		 *
+		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
+		 *
+		 *	\param[in]	posArray	多角形頂点配列
+		 */
+		void	setVertex(std::vector<fk_Vector> *posArray);
+
+		//! 形状生成関数2
+		/*!
+		 *	多角形 (ポリゴン) を生成します。
+		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
+		 *	現時点では凸多角形のみサポートしており、
+		 *	非凸多角形が入力された場合の動作は保証されません。
+		 *
+		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
+		 *
+		 *	\param[in]	num			頂点数
+		 *	\param[in]	posArray	多角形頂点配列
+		 */
+		void	setVertex(int num, fk_Vector *posArray);
+	};
+}
+#endif // !__FK_POLYGON_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,71 +136,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_POLYGON_HEADER__
-#define __FK_POLYGON_HEADER__
-
-#include <FK/IndexFace.h>
-
-namespace FK {
-	//! 多角形を生成、管理するクラス
-	/*!
-	 *	このクラスは、形状として多角形を制御する機能を提供します。
-	 *	このクラスによる形状は、多角形の内部も描画します。
-	 *	もし辺のみを描画したい場合は fk_Closedline クラスを利用して下さい。
-	 *
-	 *	描画される面は、基本的には多角形の頂点順番が向かって
-	 *	反時計回りになっている側になります。
-	 *	両面を描画したい場合は fk_Model の setDrawMode() 関数を参照して下さい。
-	 *	また、本クラスの多角形の角数は 3 以上であれば制限はありませんが、
-	 *	同一平面上にある凸多角形を前提としています。
-	 *	その条件を満たしていない場合の描画結果は保証されません。
-	 *
-	 *	\sa fk_IndexFaceSet, fk_Polyline, fk_Closedline
-	 */
-
-	class fk_Polygon: public fk_IndexFaceSet {
-	public:
-
-		//! コンストラクタ
-		/*!
-		 *	詳細は setVertex(std::vector<fk_Vector> *) を参照して下さい。
-		 *	引数を省略した場合、初期状態は空となります。
-		 *
-		 *	\param[in]	posArray	多角形頂点配列
-		 */
-		fk_Polygon(std::vector<fk_Vector> *posArray = nullptr);
-
-		//! デストラクタ
-		virtual ~fk_Polygon();
-
-		//! 形状生成関数1
-		/*!
-		 *	多角形 (ポリゴン) を生成します。
-		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
-		 *	現時点では凸多角形のみサポートしており、
-		 *	非凸多角形が入力された場合の動作は保証されません。
-		 *
-		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
-		 *
-		 *	\param[in]	posArray	多角形頂点配列
-		 */
-		void	setVertex(std::vector<fk_Vector> *posArray);
-
-		//! 形状生成関数2
-		/*!
-		 *	多角形 (ポリゴン) を生成します。
-		 *	頂点を結ぶ境界線が反時計回りに見える側が表になります。
-		 *	現時点では凸多角形のみサポートしており、
-		 *	非凸多角形が入力された場合の動作は保証されません。
-		 *
-		 *	生成後、頂点を移動するには moveVPosition() を利用して下さい。
-		 *
-		 *	\param[in]	num			頂点数
-		 *	\param[in]	posArray	多角形頂点配列
-		 */
-		void	setVertex(int num, fk_Vector *posArray);
-	};
-}
-#endif // !__FK_POLYGON_HEADER__
-
-

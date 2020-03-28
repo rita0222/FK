@@ -1,4 +1,23 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_OPENGL_HEADER__
+#define __FK_OPENGL_HEADER__
+
+#ifdef _MACOSX_
+ #define GL_SILENCE_DEPRECATION
+ #include <OpenGL/OpenGL.h>
+ #include <OpenGL/gl3.h>
+#else // !_MACOSX_
+ #ifdef WIN32
+  //#define GLEW_STATIC
+  #include <windows.h>
+  #include <GL/glew.h>
+ #endif // WIN32
+ #define GL_GLEXT_PROTOTYPES
+ #include <GL/gl.h>
+#endif // _MACOSX_
+
+#endif /* !__FK_OPENGL_HEADER__ */
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,23 +88,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_OPENGL_HEADER__
-#define __FK_OPENGL_HEADER__
-
-#ifdef _MACOSX_
- #define GL_SILENCE_DEPRECATION
- #include <OpenGL/OpenGL.h>
- #include <OpenGL/gl3.h>
-#else // !_MACOSX_
- #ifdef WIN32
-  //#define GLEW_STATIC
-  #include <windows.h>
-  #include <GL/glew.h>
- #endif // WIN32
- #define GL_GLEXT_PROTOTYPES
- #include <GL/gl.h>
-#endif // _MACOSX_
-
-#endif /* !__FK_OPENGL_HEADER__ */
-
-

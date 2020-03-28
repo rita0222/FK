@@ -1,4 +1,26 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_HRC_PARSER_HEADER__
+#define __FK_HRC_PARSER_HEADER__
+
+#include <FK/ParserBase.H>
+
+namespace FK {
+
+	class fk_HRCParser : public fk_ParserBase {
+	public:
+		fk_HRCParser(void);
+		virtual ~fk_HRCParser();
+
+		bool	ReadHRCFile(std::string);
+
+	private:
+		bool	CheckHRCFile(std::ifstream &);
+		bool	ReadHRCVertexData(std::ifstream &, std::vector<fk_Vector> *);
+		bool	ReadHRCPolygonData(std::ifstream &, std::vector< std::vector<int> > *);
+	};
+}
+#endif // !__FK_HRC_PARSER_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,26 +91,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_HRC_PARSER_HEADER__
-#define __FK_HRC_PARSER_HEADER__
-
-#include <FK/ParserBase.H>
-
-namespace FK {
-
-	class fk_HRCParser : public fk_ParserBase {
-	public:
-		fk_HRCParser(void);
-		virtual ~fk_HRCParser();
-
-		bool	ReadHRCFile(std::string);
-
-	private:
-		bool	CheckHRCFile(std::ifstream &);
-		bool	ReadHRCVertexData(std::ifstream &, std::vector<fk_Vector> *);
-		bool	ReadHRCPolygonData(std::ifstream &, std::vector< std::vector<int> > *);
-	};
-}
-#endif // !__FK_HRC_PARSER_HEADER__
-
-

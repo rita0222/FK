@@ -1,4 +1,44 @@
-﻿/****************************************************************************
+﻿#ifndef __FK_LINE_BASE_HEADER__
+#define __FK_LINE_BASE_HEADER__
+
+#include <FK/FVecArray.h>
+#include <FK/Shape.h>
+
+namespace FK {
+
+	class fk_LineBase: public fk_Shape {
+
+	public:
+
+		fk_LineBase(std::vector<fk_Vector> *array = nullptr);
+		virtual ~fk_LineBase();
+		int Size(void);
+
+	protected:
+		void MakeLines(std::vector<fk_Vector> *);
+		void MakeLines(fk_Vector *);
+		void PushLines(fk_Vector *, fk_Vector *);
+		void SetPos(int, int, fk_Vector *);
+		void SetCol(int, int, fk_Color *);
+		void SetAlive(int, bool);
+		void Resize(int);
+		fk_Vector GetLast(void);
+		fk_Vector GetPos(int, int);
+		fk_Color GetCol(int, int);
+		bool GetAlive(int);
+		void Touch(void);
+		void AllClear();
+
+	private:
+		fk_FVecArray		posArray;
+		fk_FVecArray		colArray;
+		std::vector<int>	aliveArray;
+	};
+}
+
+#endif // !__FK_LINE_BASE_HEADER__
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
@@ -69,44 +109,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#ifndef __FK_LINE_BASE_HEADER__
-#define __FK_LINE_BASE_HEADER__
-
-#include <FK/FVecArray.h>
-#include <FK/Shape.h>
-
-namespace FK {
-
-	class fk_LineBase: public fk_Shape {
-
-	public:
-
-		fk_LineBase(std::vector<fk_Vector> *array = nullptr);
-		virtual ~fk_LineBase();
-		int Size(void);
-
-	protected:
-		void MakeLines(std::vector<fk_Vector> *);
-		void MakeLines(fk_Vector *);
-		void PushLines(fk_Vector *, fk_Vector *);
-		void SetPos(int, int, fk_Vector *);
-		void SetCol(int, int, fk_Color *);
-		void SetAlive(int, bool);
-		void Resize(int);
-		fk_Vector GetLast(void);
-		fk_Vector GetPos(int, int);
-		fk_Color GetCol(int, int);
-		bool GetAlive(int);
-		void Touch(void);
-		void AllClear();
-
-	private:
-		fk_FVecArray		posArray;
-		fk_FVecArray		colArray;
-		std::vector<int>	aliveArray;
-	};
-}
-
-#endif // !__FK_LINE_BASE_HEADER__
-
-
