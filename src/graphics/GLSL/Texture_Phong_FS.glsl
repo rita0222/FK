@@ -136,9 +136,6 @@ vec3 DifSpeColor()
 	difSumColor *= fk_Material.diffuse.rgb;
 	speSumColor *= fk_Material.specular.rgb;
 
-	float bias = 0.00001;
-	float sValue = 1.0;
-
 	return (difSumColor + speSumColor);
 }
 

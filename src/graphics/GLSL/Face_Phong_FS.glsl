@@ -117,9 +117,47 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 	return sum;
 }
 
-float ShadowValue()
+float HardShadowValue()
 {
-	return 1.0 - fk_ShadowVisibility * (1.0 - textureProj(fk_ShadowBuf, varS));
+	float bias = 0.0005;
+	vec4 s = vec4(varS.xy, varS.z - bias, varS.w);
+	return 1.0 - fk_ShadowVisibility * (1.0 - textureProj(fk_ShadowBuf, s));
+	//vec3 s = vec3(varS.xy, (varS.z - bias)/varS.w);
+	//return 1.0 - fk_ShadowVisibility * (1.0 - texture(fk_ShadowBuf, s));
+}
+
+float SoftShadowValue()
+{
+	float bias = 0.005;
+	float sum = 0.0;
+	vec4 s = vec4(varS.xy, varS.z - bias, varS.w);
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, -2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, -1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, 0));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, 2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, -2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, -1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, 0));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, 2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(0, -2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(0, -1));
+	sum += textureProj(fk_ShadowBuf, s);
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(0, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(0, 2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, -2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, -1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, 0));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, 2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(2, -2));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(2, -1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(2, 0));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(2, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(2, 2));
+
+	return (1.0 - fk_ShadowVisibility * (1.0 - sum/25.0));
 }
 
 vec3 DifSpeColor()
@@ -152,7 +190,8 @@ vec4 ShadowBufDraw()
 subroutine(faceDrawType)
 vec4 ShadowONDraw()
 {
-	vec3 addColor = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
+	//vec3 addColor = DifSpeColor() * HardShadowValue() + fk_Material.ambient.rgb;
+	vec3 addColor = DifSpeColor() * SoftShadowValue() + fk_Material.ambient.rgb;
 	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }
 
