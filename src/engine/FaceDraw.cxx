@@ -18,8 +18,9 @@ typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 fk_FaceDraw::fk_FaceDraw(void)
 	: phongOffShader(nullptr), phongHardShader(nullptr),
 	  phongSoftFastShader(nullptr), phongSoftNiceShader(nullptr),
-	  gouraudShader(nullptr), shadowShader(nullptr),
-	  shadowON_g_ID(0), shadowOFF_g_ID(0)
+	  gouraudOffShader(nullptr), gouraudHardShader(nullptr),
+	  gouraudSoftFastShader(nullptr), gouraudSoftNiceShader(nullptr),
+	  shadowShader(nullptr)
 {
 	return;
 }
@@ -30,7 +31,11 @@ fk_FaceDraw::~fk_FaceDraw()
 	delete phongHardShader;
 	delete phongSoftFastShader;
 	delete phongSoftNiceShader;
-	delete gouraudShader;
+	delete gouraudOffShader;
+	delete gouraudHardShader;
+	delete gouraudSoftFastShader;
+	delete gouraudSoftNiceShader;
+	delete shadowShader;
 	return;
 }
 
@@ -203,7 +208,7 @@ void fk_FaceDraw::PhongSoftNiceInit(void)
 }
 
 
-void fk_FaceDraw::GouraudInit(void)
+void fk_FaceDraw::GouraudOffInit(void)
 {
 	if(gouraudShader == nullptr) gouraudShader = new fk_ShaderBinder();
 	auto prog = gouraudShader->getProgram();

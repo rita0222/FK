@@ -2,9 +2,6 @@
 
 #FKBuildIn
 
-subroutine void faceDrawType();
-subroutine uniform faceDrawType FaceDrawFunc;
-
 out vec4 varC;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
