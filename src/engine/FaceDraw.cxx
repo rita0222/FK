@@ -60,7 +60,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 
 	fk_ShaderParameter *parameter;
 	if(argShadowSwitch == true && defaultShaderFlag == true) {
-		if(shadowShader == nullptr) ShadowSetup();
+		if(shadowShader == nullptr) ShadowInit();
 		parameter = shadowShader->getParameter();
 	} else {
 		parameter = drawShader->getParameter();
@@ -69,9 +69,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 	SetParameter(parameter);
 	PolygonModeSet(drawMode);
 
-	if(shapeType == fk_RealShapeType::IFS) {
-		Draw_IFS(argModel, parameter, argShadowMode, argShadowSwitch);
-	}
+	if(shapeType == fk_RealShapeType::IFS) Draw_IFS(argModel, parameter, argShadowSwitch);
 
 	return;
 }
@@ -207,15 +205,17 @@ void fk_FaceDraw::PhongSoftNiceInit(void)
 	return;
 }
 
-
 void fk_FaceDraw::GouraudOffInit(void)
 {
-	if(gouraudShader == nullptr) gouraudShader = new fk_ShaderBinder();
-	auto prog = gouraudShader->getProgram();
-	auto param = gouraudShader->getParameter();
+	if(gouraudOffShader == nullptr) gouraudOffShader = new fk_ShaderBinder();
+	auto prog = gouraudOffShader->getProgram();
+	auto param = gouraudOffShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Face_Gouraud_VS.out"
+		#include "GLSL/Face_Gouraud_Common_VS.out"
+		;
+	prog->vertexShaderSource +=
+		#include "GLSL/Face_Gouraud_Off_VS.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -223,20 +223,94 @@ void fk_FaceDraw::GouraudOffInit(void)
 		;
 	
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "GouraudSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_FaceDraw", "GouraudOffInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-	shadowON_g_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ShadowONDraw");
-	shadowOFF_g_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "ShadowOFFDraw");
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &shadowON_g_ID);
 	return;
 }
 
-void fk_FaceDraw::ShadowSetup(void)
+void fk_FaceDraw::GouraudHardInit(void)
+{
+	if(gouraudHardShader == nullptr) gouraudHardShader = new fk_ShaderBinder();
+	auto prog = gouraudHardShader->getProgram();
+	auto param = gouraudHardShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Face_Gouraud_Common_VS.out"
+		;
+	prog->vertexShaderSource +=
+		#include "GLSL/Face_Gouraud_Hard_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_Gouraud_FS.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "GouraudHardInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+	return;
+}
+
+void fk_FaceDraw::GouraudSoftFastInit(void)
+{
+	if(gouraudSoftFastShader == nullptr) gouraudSoftFastShader = new fk_ShaderBinder();
+	auto prog = gouraudSoftFastShader->getProgram();
+	auto param = gouraudSoftFastShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Face_Gouraud_Common_VS.out"
+		;
+	prog->vertexShaderSource +=
+		#include "GLSL/Face_Gouraud_SoftFast_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_Gouraud_FS.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "GouraudSoftFastInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+	return;
+}
+
+void fk_FaceDraw::GouraudSoftNiceInit(void)
+{
+	if(gouraudSoftNiceShader == nullptr) gouraudSoftNiceShader = new fk_ShaderBinder();
+	auto prog = gouraudSoftNiceShader->getProgram();
+	auto param = gouraudSoftNiceShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Face_Gouraud_Common_VS.out"
+		;
+	prog->vertexShaderSource +=
+		#include "GLSL/Face_Gouraud_SoftNice_VS.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_Gouraud_FS.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "GouraudSoftNiceInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+	return;
+}
+
+
+void fk_FaceDraw::ShadowInit(void)
 {
 	if(shadowShader == nullptr) shadowShader = new fk_ShaderBinder();
 	auto prog = shadowShader->getProgram();
@@ -291,8 +365,30 @@ void fk_FaceDraw::DefaultShaderSetup(fk_ShadingMode argShadingMode, fk_ShadowMod
 		break;
 
 	  case fk_ShadingMode::GOURAUD:
-		if(gouraudShader == nullptr) GouraudInit();
-		drawShader = gouraudShader;
+		switch(argShadowMode) {
+		  case fk_ShadowMode::OFF:
+			if(gouraudOffShader == nullptr) GouraudOffInit();
+			drawShader = gouraudOffShader;
+			break;
+
+		  case fk_ShadowMode::HARD:
+			if(gouraudHardShader == nullptr) GouraudHardInit();
+			drawShader = gouraudHardShader;
+			break;
+
+		  case fk_ShadowMode::SOFT_FAST:
+			if(gouraudSoftFastShader == nullptr) GouraudSoftFastInit();
+			drawShader = gouraudSoftFastShader;
+			break;
+
+		  case fk_ShadowMode::SOFT_NICE:
+			if(gouraudSoftNiceShader == nullptr) GouraudSoftNiceInit();
+			drawShader = gouraudSoftNiceShader;
+			break;
+
+		  default:
+			break;
+		}
 		break;
 
 	  default:
@@ -325,8 +421,7 @@ GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam,
-						   fk_ShadowMode argShadowMode, bool argShadowSwitch)
+void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, bool argShadowSwitch)
 {
 	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
 	GLuint			vao = ifs->GetFaceVAO();
@@ -341,10 +436,6 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam,
 	ifs->BindShaderBuffer(argParam->getAttrTable());
 	shader->ProcPreShader();
 
-	if(defaultShaderFlag == true && argShadowSwitch == false) {
-		SubroutineSetup(argModel, argShadowMode);
-	}
-
 	glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -352,28 +443,6 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam,
 	shader->ProcPostShader();
 
 	return;
-}
-
-void fk_FaceDraw::SubroutineSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
-{
-	GLuint ID = 0;
-
-	switch(argModel->getShadingMode()) {
-	  case fk_ShadingMode::GOURAUD:
-		ID = GetGouraudVertexID(argShadowMode);
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &ID);
-		break;
-		
-	  default:
-		break;
-	}		
-	return;
-}
-
-GLuint fk_FaceDraw::GetGouraudVertexID(fk_ShadowMode argMode)
-{
-	if(argMode != fk_ShadowMode::OFF) return shadowON_g_ID;
-	return shadowOFF_g_ID;
 }
 
 /****************************************************************************

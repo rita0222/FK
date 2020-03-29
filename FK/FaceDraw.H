@@ -36,7 +36,7 @@ namespace FK {
 		void ShadowInit(void);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
-		void Draw_IFS(fk_Model *, fk_ShaderParameter *, fk_ShadowMode, bool);
+		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);
 	};
 }
 

@@ -112,12 +112,6 @@ vec3 SpotSpecular(vec3 argP, vec3 argN, vec3 argV)
 	return sum;
 }
 
-float ShadowValue()
-{
-	vec4 v = fk_ShadowMatrix * vec4(fk_Vertex, 1.0);
-	return 1.0 - fk_ShadowVisibility * (1.0 - textureProj(fk_ShadowBuf, v));
-}
-
 vec3 DifSpeColor()
 {
 	vec3 varP = gl_Position.xyz;
@@ -139,24 +133,4 @@ vec3 DifSpeColor()
 	speSumColor *= fk_Material.specular.rgb;
 
 	return (difSumColor + speSumColor);
-}
-
-subroutine(faceDrawType)
-void ShadowONDraw()
-{
-	vec3 addColor = DifSpeColor() * ShadowValue() + fk_Material.ambient.rgb;
-	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
-}
-
-subroutine(faceDrawType)
-void ShadowOFFDraw()
-{
-	vec3 addColor = DifSpeColor() + fk_Material.ambient.rgb;
-	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
-}
-
-void main()
-{
-	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
-	FaceDrawFunc();
 }
