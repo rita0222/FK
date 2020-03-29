@@ -1024,7 +1024,7 @@ namespace FK {
 		 *
 		 *	\param[in]	mode   	true 有効、false で無効とします。デフォルトは false です。
 		 */
-		void setShadowMode(bool mode);
+		void setShadowMode(fk_ShadowMode mode);
 
 		//! 影表示設定参照関数
 		/*!
@@ -1032,7 +1032,7 @@ namespace FK {
 		 *
 		 *	\return		有効な場合 true を、無効な場合 false を返します。
 		 */
-		bool getShadowMode(void);
+		fk_ShadowMode getShadowMode(void);
 
 		//! 影光線方向設定関数1
 		/*!

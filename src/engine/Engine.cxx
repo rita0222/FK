@@ -89,7 +89,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	fboHandle = 0;
 	FBOShader = nullptr;
 
-	shadowMode = false;
+	shadowMode = fk_ShadowMode::OFF;
 	shadowInitFlag = false;
 	shadowSwitch = false;
 	SetShadowAreaSize(100.0);
@@ -269,7 +269,7 @@ unsigned int fk_GraphicsEngine::Draw(void)
 	if(curScene != nullptr) shadowMode = curScene->getShadowMode();
 
 	fk_DrawBase::SetShadowMode(shadowMode);
-	if(shadowMode == true) {
+	if(shadowMode != fk_ShadowMode::OFF) {
 		if(shadowInitFlag == false) {
 			ShadowInit();
 			shadowInitFlag = true;
@@ -287,7 +287,7 @@ void fk_GraphicsEngine::DrawWorld(void)
 {
 	if(FBOMode == true) PreFBODraw();
 
-	if(resizeFlag == true || generalID > 2 || shadowMode == true) {
+	if(resizeFlag == true || generalID > 2 || shadowMode != fk_ShadowMode::OFF) {
 		SetViewPort();
 		resizeFlag = false;
 	}
@@ -426,17 +426,19 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	argModel->getShape()->FlushAttr();
 
+	bool shadowMode_ = (shadowMode != fk_ShadowMode::OFF) ? true : false;
+
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
-		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch);
+		faceDraw->DrawShapeFace(argModel, shadowMode_, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
-		textureDraw->DrawShapeTexture(argModel, shadowMode, shadowSwitch);
+		textureDraw->DrawShapeTexture(argModel, shadowMode_, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
 		if(surface != nullptr) {
-			surfaceDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
+			surfaceDraw->DrawShapeSurface(argModel, shadowMode_, shadowSwitch);
 		}
 	}
 
@@ -468,7 +470,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
+			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode_, shadowSwitch);
 		}
 	}
 
@@ -476,7 +478,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
+			surfacePointDraw->DrawShapeSurface(argModel, shadowMode_, shadowSwitch);
 		}
 	}
 

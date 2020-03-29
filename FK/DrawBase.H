@@ -6,6 +6,7 @@
 #include <FK/Material.h>
 #include <FK/Light.h>
 #include <FK/Texture.h>
+#include <FK/Scene.h>
 #include <list>
 
 namespace FK {
@@ -20,15 +21,15 @@ namespace FK {
 		fk_DrawBase(void);
 		virtual ~fk_DrawBase();
 
-		static void		SetProjectionMatrix(fk_Matrix *);
-		static void		SetCamera(fk_Model *);
-		static void		SetModel(fk_Model *);
-		static void		SetLight(std::list<fk_Model *> *, fk_LightType);
-		virtual GLuint	VAOSetup(fk_Shape *) = 0;
-		static void		SetShadowProjMatrix(fk_Matrix *);
-		static void		SetShadowCamera(fk_Model *);
-		static void		SetShadowParam(double, double);
-		static void		SetShadowMode(bool);
+		static void SetProjectionMatrix(fk_Matrix *);
+		static void SetCamera(fk_Model *);
+		static void SetModel(fk_Model *);
+		static void SetLight(std::list<fk_Model *> *, fk_LightType);
+		virtual GLuint VAOSetup(fk_Shape *) = 0;
+		static void SetShadowProjMatrix(fk_Matrix *);
+		static void SetShadowCamera(fk_Model *);
+		static void SetShadowParam(double, double);
+		static void SetShadowMode(fk_ShadowMode);
 
 		static const std::string projectionMatrixName;
 		static const std::string viewMatrixName;
@@ -82,7 +83,7 @@ namespace FK {
 		static fk_Material	*modelMaterial;
 		static fk_Vector	cameraPosition;
 
-		static bool			shadowMode;
+		static fk_ShadowMode shadowMode;
 		static fk_Matrix	*shadowProjMatrix;
 		static fk_Matrix	shadowViewMatrix;
 		static fk_Matrix	shadowMatrix;

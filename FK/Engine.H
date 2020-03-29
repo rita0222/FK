@@ -107,7 +107,8 @@ namespace FK {
 
 		GLuint shadowHandle;
 		fk_FrameBuffer *shadowBuf;
-		bool shadowMode, shadowInitFlag, shadowSwitch;
+		fk_ShadowMode shadowMode;
+		bool shadowInitFlag, shadowSwitch;
 		fk_Ortho shadowProj;
 		fk_Model shadowCamera;
 		fk_RectTexture shadowTexture;

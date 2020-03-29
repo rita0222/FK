@@ -7,7 +7,7 @@ fk_Scene::fk_Scene(void)
 	SetObjectType(fk_Type::SCENE);
 	setBGColor(0.0f, 0.0f, 0.0f);
 	setBlendStatus(false);
-	setShadowMode(false);
+	setShadowMode(fk_ShadowMode::OFF);
 	setShadowVec(0.0, 1.0, 0.0);
 	setShadowResolution(1024);
 	setShadowAreaSize(100.0);
@@ -50,12 +50,12 @@ bool fk_Scene::getBlendStatus(void)
 	return blendStatus;
 }
 
-void fk_Scene::setShadowMode(bool argMode)
+void fk_Scene::setShadowMode(fk_ShadowMode argMode)
 {
 	shadowMode = argMode;
 }
 
-bool fk_Scene::getShadowMode(void)
+fk_ShadowMode fk_Scene::getShadowMode(void)
 {
 	return shadowMode;
 }

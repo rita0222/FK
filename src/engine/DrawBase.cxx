@@ -61,7 +61,7 @@ fk_Matrix fk_DrawBase::shadowBiasMatrix;
 fk_Matrix fk_DrawBase::shadowMatrix;
 float fk_DrawBase::shadowVisibility = 1.0f;
 float fk_DrawBase::shadowBias = 0.0005f;
-bool fk_DrawBase::shadowMode = false;
+fk_ShadowMode fk_DrawBase::shadowMode = fk_ShadowMode::OFF;
 
 list<fk_Model *> * fk_DrawBase::parallelLightList;
 list<fk_Model *> * fk_DrawBase::pointLightList;
@@ -79,7 +79,7 @@ fk_DrawBase::~fk_DrawBase()
 	return;
 }
 
-void fk_DrawBase::SetShadowMode(bool argMode)
+void fk_DrawBase::SetShadowMode(fk_ShadowMode argMode)
 {
 	shadowMode = argMode;
 }
@@ -139,7 +139,7 @@ void fk_DrawBase::SetModel(fk_Model *argModel)
 	normalModelViewMatrix = modelViewMatrix;
 	normalModelViewMatrix.covariant();
 
-	if(shadowMode == true) {
+	if(shadowMode != fk_ShadowMode::OFF) {
 		shadowMatrix = shadowBiasMatrix * (*shadowProjMatrix) * shadowViewMatrix * modelMatrix;
 	}
 	return;
@@ -170,7 +170,7 @@ void fk_DrawBase::SetLight(list<fk_Model *> *argList, fk_LightType argType)
 void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
 	SetMatrixParam(argParam);
-	if(shadowMode == true) SetValueParam(argParam);
+	if(shadowMode != fk_ShadowMode::OFF) SetValueParam(argParam);
 	SetMaterialParam(argParam);
 	SetLightParam(argParam, fk_LightType::PARALLEL);
 	SetLightParam(argParam, fk_LightType::POINT);
@@ -193,7 +193,9 @@ void fk_DrawBase::SetMatrixParam(fk_ShaderParameter *argParam)
 	argParam->setRegister(normalModelViewMatrixName, &normalModelViewMatrix,
 						  normalModelViewMatrixName);
 	argParam->setRegister(cameraPositionName, &cameraPosition, cameraPositionName);
-	if(shadowMode == true) argParam->setRegister(shadowMatrixName, &shadowMatrix, shadowMatrixName);
+	if(shadowMode != fk_ShadowMode::OFF) {
+		argParam->setRegister(shadowMatrixName, &shadowMatrix, shadowMatrixName);
+	}
 
 	return;
 }

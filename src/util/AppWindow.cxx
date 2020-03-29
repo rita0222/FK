@@ -724,12 +724,12 @@ bool fk_AppWindow::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 }
 
 
-void fk_AppWindow::setShadowMode(bool argMode)
+void fk_AppWindow::setShadowMode(fk_ShadowMode argMode)
 {
 	ref_scene->setShadowMode(argMode);
 }
 
-bool fk_AppWindow::getShadowMode(void)
+fk_ShadowMode fk_AppWindow::getShadowMode(void)
 {
 	return ref_scene->getShadowMode();
 }
