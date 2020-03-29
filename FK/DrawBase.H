@@ -27,7 +27,7 @@ namespace FK {
 		virtual GLuint	VAOSetup(fk_Shape *) = 0;
 		static void		SetShadowProjMatrix(fk_Matrix *);
 		static void		SetShadowCamera(fk_Model *);
-		static void		SetShadowParam(double);
+		static void		SetShadowParam(double, double);
 		static void		SetShadowMode(bool);
 
 		static const std::string projectionMatrixName;

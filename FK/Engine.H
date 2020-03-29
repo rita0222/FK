@@ -61,6 +61,7 @@ namespace FK {
 		void SetShadowAreaSize(double);
 		void SetShadowDistance(double);
 		void SetShadowVisibility(double);
+		void SetShadowBias(double);
 
 	private:
 
@@ -116,6 +117,7 @@ namespace FK {
 		double shadowDistance;
 		int shadowResolution;
 		double shadowVisibility;
+		double shadowBias;
 
 		void DrawShadow(void);
 		void DrawWorld(void);

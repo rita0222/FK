@@ -268,6 +268,9 @@ namespace FK {
 		 */
 		double getShadowVisibility(void);
 
+		void setShadowBias(double value);
+		double getShadowBias(void);
+
 		///@}
 
 	private:
@@ -280,6 +283,7 @@ namespace FK {
 		double shadowSize;
 		double shadowDistance;
 		double shadowVisibility;
+		double shadowBias;
 	};
 }
 

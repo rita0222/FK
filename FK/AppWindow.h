@@ -1160,6 +1160,9 @@ namespace FK {
 		 */
 		double getShadowVisibility(void);
 
+		void setShadowBias(double value);
+		double getShadowBias(void);
+
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS

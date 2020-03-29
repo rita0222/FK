@@ -789,6 +789,16 @@ double fk_AppWindow::getShadowVisibility(void)
 	return ref_scene->getShadowVisibility();
 }
 
+void fk_AppWindow::setShadowBias(double argBias)
+{
+	ref_scene->setShadowBias(argBias);
+}
+
+double fk_AppWindow::getShadowBias(void)
+{
+	return ref_scene->getShadowBias();
+}
+
 /****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.

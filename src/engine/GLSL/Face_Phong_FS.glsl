@@ -119,8 +119,7 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 
 float HardShadowValue()
 {
-	float bias = 0.0005;
-	vec4 s = vec4(varS.xy, varS.z - bias, varS.w);
+	vec4 s = vec4(varS.xy, varS.z - fk_ShadowBias, varS.w);
 	return 1.0 - fk_ShadowVisibility * (1.0 - textureProj(fk_ShadowBuf, s));
 	//vec3 s = vec3(varS.xy, (varS.z - bias)/varS.w);
 	//return 1.0 - fk_ShadowVisibility * (1.0 - texture(fk_ShadowBuf, s));
@@ -128,9 +127,8 @@ float HardShadowValue()
 
 float SoftShadowValue()
 {
-	float bias = 0.005;
 	float sum = 0.0;
-	vec4 s = vec4(varS.xy, varS.z - bias, varS.w);
+	vec4 s = vec4(varS.xy, varS.z - fk_ShadowBias, varS.w);
 	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, -2));
 	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, -1));
 	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-2, 0));

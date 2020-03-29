@@ -97,6 +97,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	SetShadowVec(fk_Vector(0.0, -1.0, 0.0));
 	SetShadowResolution(1024);
 	SetShadowVisibility(1.0);
+	SetShadowBias(0.0005);
 
 	return;
 }
@@ -918,6 +919,7 @@ void fk_GraphicsEngine::CopyShadowStatus(void)
 	SetShadowAreaSize(curScene->getShadowAreaSize());
 	SetShadowDistance(curScene->getShadowDistance());
 	SetShadowVisibility(curScene->getShadowVisibility());
+	SetShadowBias(curScene->getShadowBias());
 }
 
 void fk_GraphicsEngine::DrawShadow(void)
@@ -947,7 +949,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 	fk_DrawBase::SetShadowProjMatrix(shadowProj.GetMatrix());
 	fk_DrawBase::SetCamera(&shadowCamera);
 	fk_DrawBase::SetShadowCamera(&shadowCamera);
-	fk_DrawBase::SetShadowParam(shadowVisibility);
+	fk_DrawBase::SetShadowParam(shadowVisibility, shadowBias);
 
 	glClearDepth(1.0);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -1009,6 +1011,11 @@ void fk_GraphicsEngine::SetShadowDistance(double argDist)
 void fk_GraphicsEngine::SetShadowVisibility(double argVis)
 {
 	shadowVisibility = argVis;
+}
+
+void fk_GraphicsEngine::SetShadowBias(double argBias)
+{
+	shadowBias = argBias;
 }
 
 /****************************************************************************
