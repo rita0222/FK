@@ -117,15 +117,57 @@ vec3 SpotSpecular(vec3 argN, vec3 argV)
 	return sum;
 }
 
-float HardShadowValue()
+vec3 DifSpeColor()
+{
+	vec3 Vn = normalize(varN.xyz);
+	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
+	vec3 speSumColor = vec3(0.0, 0.0, 0.0);
+	vec3 viewVec = normalize(fk_CameraPosition - varP.xyz);
+
+	difSumColor += ParallelDiffuse(Vn);
+	difSumColor += PointDiffuse(Vn);
+	difSumColor += SpotDiffuse(Vn);
+
+	speSumColor += ParallelSpecular(Vn, viewVec);
+	speSumColor += PointSpecular(Vn, viewVec);
+	speSumColor += SpotSpecular(Vn, viewVec);
+
+	difSumColor *= fk_Material.diffuse.rgb;
+	speSumColor *= fk_Material.specular.rgb;
+
+	return (difSumColor + speSumColor);
+}	
+
+vec4 Color_Calc(float argShadow)
+{
+	vec3 addColor = DifSpeColor() * argShadow + fk_Material.ambient.rgb;
+	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+}
+
+float Shadow_Hard_Value()
 {
 	vec4 s = vec4(varS.xy, varS.z - fk_ShadowBias, varS.w);
 	return 1.0 - fk_ShadowVisibility * (1.0 - textureProj(fk_ShadowBuf, s));
-	//vec3 s = vec3(varS.xy, (varS.z - bias)/varS.w);
-	//return 1.0 - fk_ShadowVisibility * (1.0 - texture(fk_ShadowBuf, s));
 }
 
-float SoftShadowValue()
+float Shadow_Soft_Fast_Value()
+{
+	float sum = 0.0;
+	vec4 s = vec4(varS.xy, varS.z - fk_ShadowBias, varS.w);
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, -1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, 0));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(-1, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(0, -1));
+	sum += textureProj(fk_ShadowBuf, s);
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(0, 1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, -1));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, 0));
+	sum += textureProjOffset(fk_ShadowBuf, s, ivec2(1, 1));
+
+	return (1.0 - fk_ShadowVisibility * (1.0 - sum/9.0));
+}
+
+float Shadow_Soft_Nice_Value()
 {
 	float sum = 0.0;
 	vec4 s = vec4(varS.xy, varS.z - fk_ShadowBias, varS.w);
@@ -158,27 +200,6 @@ float SoftShadowValue()
 	return (1.0 - fk_ShadowVisibility * (1.0 - sum/25.0));
 }
 
-vec3 DifSpeColor()
-{
-	vec3 Vn = normalize(varN.xyz);
-	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
-	vec3 speSumColor = vec3(0.0, 0.0, 0.0);
-	vec3 viewVec = normalize(fk_CameraPosition - varP.xyz);
-
-	difSumColor += ParallelDiffuse(Vn);
-	difSumColor += PointDiffuse(Vn);
-	difSumColor += SpotDiffuse(Vn);
-
-	speSumColor += ParallelSpecular(Vn, viewVec);
-	speSumColor += PointSpecular(Vn, viewVec);
-	speSumColor += SpotSpecular(Vn, viewVec);
-
-	difSumColor *= fk_Material.diffuse.rgb;
-	speSumColor *= fk_Material.specular.rgb;
-
-	return (difSumColor + speSumColor);
-}	
-
 subroutine(faceDrawType)
 vec4 ShadowBufDraw()
 {
@@ -188,16 +209,13 @@ vec4 ShadowBufDraw()
 subroutine(faceDrawType)
 vec4 ShadowONDraw()
 {
-	//vec3 addColor = DifSpeColor() * HardShadowValue() + fk_Material.ambient.rgb;
-	vec3 addColor = DifSpeColor() * SoftShadowValue() + fk_Material.ambient.rgb;
-	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+	return Color_Calc(Shadow_Soft_Nice_Value());
 }
 
 subroutine(faceDrawType)
 vec4 ShadowOFFDraw()
 {
-	vec3 addColor = DifSpeColor() + fk_Material.ambient.rgb;
-	return vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
+	return Color_Calc(1.0);
 }
 
 void main()
