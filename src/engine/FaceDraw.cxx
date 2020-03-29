@@ -30,7 +30,8 @@ fk_FaceDraw::~fk_FaceDraw()
 	return;
 }
 
-void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
+								fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
 	auto	shapeType = argModel->getShape()->getRealShapeType();
 	auto	drawMode = argModel->getDrawMode();
@@ -179,7 +180,7 @@ GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 }
 
 void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam,
-						   bool argShadowMode, bool argShadowSwitch)
+						   fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
 	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
 	GLuint			vao = ifs->GetFaceVAO();
@@ -204,28 +205,41 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam,
 	return;
 }
 
-void fk_FaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
+void fk_FaceDraw::SubroutineSetup(fk_Model *argModel,
+								  fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
-	FK_UNUSED(argShadowMode);
-
 	GLuint ID = 0;
 
 	switch(argModel->getShadingMode()) {
 	  case fk_ShadingMode::PHONG:
-		ID = (argShadowSwitch) ? shadowBuf_p_ID : ((argShadowMode) ? shadowON_p_ID : shadowOFF_p_ID);
+		ID = GetPhongFragmentID(argShadowMode, argShadowSwitch);
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &ID);
 		break;
 
 	  case fk_ShadingMode::GOURAUD:
-		ID = (argShadowSwitch) ? shadowBuf_g_ID : ((argShadowMode) ? shadowON_g_ID : shadowOFF_g_ID);
+		ID = GetGouraudVertexID(argShadowMode, argShadowSwitch);
 		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &ID);
 		break;
-
+		
 	  default:
 		break;
-	}
+	}		
 	return;
-}		
+}
+
+GLuint fk_FaceDraw::GetPhongFragmentID(fk_ShadowMode argMode, bool argSwitch)
+{
+	if(argSwitch == true) return shadowBuf_p_ID;
+	if(argMode != fk_ShadowMode::OFF) return shadowON_p_ID;
+	return shadowOFF_p_ID;
+}
+
+GLuint fk_FaceDraw::GetGouraudVertexID(fk_ShadowMode argMode, bool argSwitch)
+{
+	if(argSwitch == true) return shadowBuf_g_ID;
+	if(argMode != fk_ShadowMode::OFF) return shadowON_g_ID;
+	return shadowOFF_g_ID;
+}
 
 /****************************************************************************
  *

@@ -10,7 +10,7 @@ namespace FK {
 		fk_FaceDraw(void);
 		virtual ~fk_FaceDraw();
 
-		void	DrawShapeFace(fk_Model *, bool, bool);
+		void	DrawShapeFace(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
@@ -24,8 +24,10 @@ namespace FK {
 		void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	PolygonModeSet(fk_Draw);
-		void	Draw_IFS(fk_Model *, fk_ShaderParameter *, bool, bool);
-		void	SubroutineSetup(fk_Model *, bool, bool);
+		void	Draw_IFS(fk_Model *, fk_ShaderParameter *, fk_ShadowMode, bool);
+		void	SubroutineSetup(fk_Model *, fk_ShadowMode, bool);
+		GLuint GetPhongFragmentID(fk_ShadowMode, bool);
+		GLuint GetGouraudVertexID(fk_ShadowMode, bool);
 	};
 }
 

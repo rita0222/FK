@@ -429,7 +429,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	bool shadowMode_ = (shadowMode != fk_ShadowMode::OFF) ? true : false;
 
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
-		faceDraw->DrawShapeFace(argModel, shadowMode_, shadowSwitch);
+		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
