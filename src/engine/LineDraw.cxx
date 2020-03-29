@@ -38,23 +38,23 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 	auto modelShader = (argShape == nullptr) ? argModel->getShader() : nullptr;
 
 	if(modelShader != nullptr) {
-		shader = modelShader;
+		drawShader = modelShader;
 		defaultShaderFlag = false;
-		if(shader->IsSetup() == false) {
-			ParamInit(shader->getProgram(), shader->getParameter());
-			shader->SetupDone(true);
+		if(drawShader->IsSetup() == false) {
+			ParamInit(drawShader->getProgram(), drawShader->getParameter());
+			drawShader->SetupDone(true);
 		}
 	} else {
 		if(lineShader == nullptr) ShaderSetup();
-		else shader = lineShader;
+		else drawShader = lineShader;
 		defaultShaderFlag = true;
 	}
 	
-	auto parameter = shader->getParameter();
+	auto parameter = drawShader->getParameter();
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
-	shader->ProcPreShader();
+	drawShader->ProcPreShader();
 
 	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
 	
@@ -73,16 +73,16 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 		break;
 	}
 
-	shader->ProcPostShader();
+	drawShader->ProcPostShader();
 	return;
 }
 
 void fk_LineDraw::ShaderSetup(void)
 {
 	lineShader = new fk_ShaderBinder();
-	shader = lineShader;
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	drawShader = lineShader;
+	auto prog = drawShader->getProgram();
+	auto param = drawShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Line_VS.out"

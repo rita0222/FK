@@ -31,21 +31,21 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowMode, bo
 	FK_UNUSED(argShadowSwitch);
 
 	if(modelShader != nullptr) {
-		shader = modelShader;
+		drawShader = modelShader;
 		defaultShaderFlag = false;
-		if(shader->IsSetup() == false) {
-			ParamInit(shader->getProgram(), shader->getParameter());
-			shader->SetupDone(true);
+		if(drawShader->IsSetup() == false) {
+			ParamInit(drawShader->getProgram(), drawShader->getParameter());
+			drawShader->SetupDone(true);
 		}
 	} else {
 		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
 		switch(argModel->getShadingMode()) {
 		  case fk_ShadingMode::PHONG:
-			shader = phongShader;
+			drawShader = phongShader;
 			break;
 
 		  case fk_ShadingMode::GOURAUD:
-			shader = gouraudShader;
+			drawShader = gouraudShader;
 			break;
 
 		  default:
@@ -56,7 +56,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowMode, bo
 	
 	PolygonModeSet();
 
-	auto parameter = shader->getParameter();
+	auto parameter = drawShader->getParameter();
 	SetParameter(parameter);
 	Draw_Texture(argModel, parameter, argShadowMode, argShadowSwitch);
 	return;
@@ -72,9 +72,9 @@ void fk_TextureDraw::PolygonModeSet(void)
 void fk_TextureDraw::PhongSetup(void)
 {
 	if(phongShader == nullptr) phongShader = new fk_ShaderBinder();
-	shader = phongShader;
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	drawShader = phongShader;
+	auto prog = drawShader->getProgram();
+	auto param = drawShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Texture_Phong_VS.out"
@@ -108,9 +108,9 @@ void fk_TextureDraw::PhongSetup(void)
 void fk_TextureDraw::GouraudSetup(void)
 {
 	if(gouraudShader == nullptr) gouraudShader = new fk_ShaderBinder();
-	shader = gouraudShader;
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	drawShader = gouraudShader;
+	auto prog = drawShader->getProgram();
+	auto param = drawShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Texture_Gouraud_VS.out"
@@ -196,7 +196,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
-	shader->ProcPreShader();
+	drawShader->ProcPreShader();
 
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
@@ -207,7 +207,7 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	shader->ProcPostShader();
+	drawShader->ProcPostShader();
 	return;
 }
 

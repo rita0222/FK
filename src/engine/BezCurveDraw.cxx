@@ -28,18 +28,18 @@ void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel, bool argShadowSwitch)
 	auto modelShader = argModel->getShader();
 
 	if(modelShader != nullptr) {
-		shader = modelShader;
+		drawShader = modelShader;
 		defaultShaderFlag = false;
-		if(shader->IsSetup() == false) {
-			ParamInit(shader->getProgram(), shader->getParameter());
+		if(drawShader->IsSetup() == false) {
+			ParamInit(drawShader->getProgram(), drawShader->getParameter());
 		}
 	} else {
 		if(curveShader == nullptr) ShaderSetup();
-		else shader = curveShader;
+		else drawShader = curveShader;
 		defaultShaderFlag = true;
 	}
 	
-	auto parameter = shader->getParameter();
+	auto parameter = drawShader->getParameter();
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
@@ -56,22 +56,22 @@ void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel, bool argShadowSwitch)
 		return;
 	}
 
-	shader->ProcPreShader();
+	drawShader->ProcPreShader();
 
 	glEnable(GL_LINE_SMOOTH);
 
 	Draw_Curve(argModel, parameter, argShadowSwitch);
 
-	shader->ProcPostShader();
+	drawShader->ProcPostShader();
 	return;
 }
 
 void fk_BezCurveDraw::ShaderSetup(void)
 {
 	curveShader = new fk_ShaderBinder();
-	shader = curveShader;
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	drawShader = curveShader;
+	auto prog = drawShader->getProgram();
+	auto param = drawShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Curve_VS.out"

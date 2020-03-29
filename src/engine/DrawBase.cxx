@@ -68,7 +68,8 @@ list<fk_Model *> * fk_DrawBase::pointLightList;
 list<fk_Model *> * fk_DrawBase::spotLightList;
 
 fk_DrawBase::fk_DrawBase(void)
-	: shader(nullptr), shadowTexture(nullptr), defaultShaderFlag(true)
+	: drawShader(nullptr),
+	  shadowTexture(nullptr), defaultShaderFlag(true)
 {
 	InitBiasMatrix();
 	return;
@@ -301,9 +302,9 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 
 void fk_DrawBase::AttachShadowTexture(int argID, const string &strName, fk_Texture *argTexture)
 {
-	if(shader != nullptr) {
+	if(drawShader != nullptr) {
 		shadowTexture = argTexture;
-		auto param = shader->getParameter();
+		auto param = drawShader->getParameter();
 		param->attachTexture(argID, argTexture);
 		param->setRegister(strName, argID+1);
 	}

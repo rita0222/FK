@@ -31,22 +31,22 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowMode, bo
 	FK_UNUSED(argShadowSwitch);
 
 	if(modelShader != nullptr) {
-		shader = modelShader;
+		drawShader = modelShader;
 		defaultShaderFlag = false;
-		if(shader->IsSetup() == false) {
-			ParamInit(shader->getProgram(), shader->getParameter());
-			shader->SetupDone(true);
+		if(drawShader->IsSetup() == false) {
+			ParamInit(drawShader->getProgram(), drawShader->getParameter());
+			drawShader->SetupDone(true);
 		}
 	} else {
 		if(surfaceShader == nullptr) ShaderSetup();
-		else shader = surfaceShader;
+		else drawShader = surfaceShader;
 		defaultShaderFlag = true;
 	}
 
 	glDisable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	auto parameter = shader->getParameter();
+	auto parameter = drawShader->getParameter();
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
@@ -59,22 +59,22 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowMode, bo
 		parameter->setRegister(fk_Shape::degreeName, 3, fk_Shape::degreeName);
 	}
 
-	shader->ProcPreShader();
+	drawShader->ProcPreShader();
 
 	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowMode, argShadowSwitch);
 
 	Draw_Surface(argModel, parameter);
 
-	shader->ProcPostShader();
+	drawShader->ProcPostShader();
 	return;
 }
 
 void fk_SurfaceDraw::ShaderSetup(void)
 {
 	surfaceShader = new fk_ShaderBinder();
-	shader = surfaceShader;
-	auto prog = shader->getProgram();
-	auto param = shader->getParameter();
+	drawShader = surfaceShader;
+	auto prog = drawShader->getProgram();
+	auto param = drawShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"

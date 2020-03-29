@@ -35,24 +35,24 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 	auto modelShader = (argShape == nullptr) ? argModel->getShader() : nullptr;
 
 	if(modelShader != nullptr) {
-		shader = modelShader;
+		drawShader = modelShader;
 		defaultShaderFlag = false;
-		if(shader->IsSetup() == false) {
-			ParamInit(shader->getProgram(), shader->getParameter());
-			shader->SetupDone(true);
+		if(drawShader->IsSetup() == false) {
+			ParamInit(drawShader->getProgram(), drawShader->getParameter());
+			drawShader->SetupDone(true);
 		}
 	} else {
 		if(pointShader == nullptr) ShaderSetup();
-		shader = pointShader;
+		drawShader = pointShader;
 		defaultShaderFlag = true;
 	}
 
-	auto parameter = shader->getParameter();
+	auto parameter = drawShader->getParameter();
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::pointModelColorName, &(argModel->getPointColor()->col),
 						   fk_Shape::pointModelColorName);
 
-	shader->ProcPreShader();
+	drawShader->ProcPreShader();
 
 	int pointNum = GetPointNum(shape);
 	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
@@ -68,7 +68,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 		break;
 	}
 
-	shader->ProcPostShader();
+	drawShader->ProcPostShader();
 	return;
 }
 

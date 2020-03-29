@@ -201,21 +201,15 @@ float Shadow_Soft_Nice_Value()
 }
 
 subroutine(faceDrawType)
-vec4 ShadowBufDraw()
-{
-	return vec4(1.0, 1.0, 1.0, 1.0);
-}
-
-subroutine(faceDrawType)
-vec4 ShadowONDraw()
-{
-	return Color_Calc(Shadow_Soft_Nice_Value());
-}
-
-subroutine(faceDrawType)
-vec4 ShadowOFFDraw()
+vec4 OFF_Draw()
 {
 	return Color_Calc(1.0);
+}
+
+subroutine(faceDrawType)
+vec4 Hard_Draw()
+{
+	return Color_Calc(Shadow_Hard_Value());
 }
 
 void main()

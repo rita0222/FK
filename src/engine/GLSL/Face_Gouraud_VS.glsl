@@ -158,12 +158,6 @@ void ShadowOFFDraw()
 	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 }
 
-subroutine(faceDrawType)
-void ShadowBufDraw()
-{
-	varC = vec4(1.0, 1.0, 1.0, 1.0);
-}
-
 void main()
 {
 	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
