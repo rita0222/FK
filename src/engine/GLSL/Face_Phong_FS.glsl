@@ -209,7 +209,7 @@ vec4 OFF_Draw()
 subroutine(faceDrawType)
 vec4 Hard_Draw()
 {
-	return Color_Calc(Shadow_Hard_Value());
+	return Color_Calc(Shadow_Soft_Nice_Value());
 }
 
 void main()

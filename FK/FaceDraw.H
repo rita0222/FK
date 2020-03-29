@@ -14,21 +14,25 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder *phongShader, *gouraudShader, *shadowShader;
+		fk_ShaderBinder *phongOffShader;
+		fk_ShaderBinder *phongHardShader;
+		fk_ShaderBinder *phongSoftFastShader;
+		fk_ShaderBinder *phongSoftNiceShader;
+		fk_ShaderBinder *gouraudShader, *shadowShader;
 
-		//GLuint	shadowBuf_p_ID, shadowON_p_ID, shadowOFF_p_ID;
-		GLuint off_p_FS_ID, hard_p_FS_ID, softFast_p_FS_ID, softNice_p_FS_ID;
 		GLuint shadowON_g_ID, shadowOFF_g_ID;
 
-		void ShaderSetup(void);
-		void PhongSetup(void);
-		void GouraudSetup(void);
+		void DefaultShaderSetup(fk_ShadingMode, fk_ShadowMode);
+		void PhongOffInit(void);
+		void PhongHardInit(void);
+		void PhongSoftFastInit(void);
+		void PhongSoftNiceInit(void);
+		void GouraudInit(void);
 		void ShadowSetup(void);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, fk_ShadowMode, bool);
 		void SubroutineSetup(fk_Model *, fk_ShadowMode);
-		GLuint GetPhongFragmentID(fk_ShadowMode);
 		GLuint GetGouraudVertexID(fk_ShadowMode);
 	};
 }
