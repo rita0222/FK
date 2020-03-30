@@ -46,9 +46,9 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 		textureDraw = new fk_TextureDraw;
 		bezCurveLineDraw = new fk_BezCurveDraw(1);
 		bezCurvePointDraw = new fk_BezCurveDraw(2);
-		surfaceDraw = new fk_SurfaceDraw(1);
-		surfaceLineDraw = new fk_SurfaceDraw(2);
-		surfacePointDraw = new fk_SurfaceDraw(3);
+		surfaceDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::FACE);
+		surfaceLineDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::LINE);
+		surfacePointDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::POINT);
 	}
 
 	shaderArray.push_back(pointDraw);
@@ -438,7 +438,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
 		if(surface != nullptr) {
-			surfaceDraw->DrawShapeSurface(argModel, shadowMode_, shadowSwitch);
+			surfaceDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
 
@@ -470,7 +470,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode_, shadowSwitch);
+			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
 
@@ -478,7 +478,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfacePointDraw->DrawShapeSurface(argModel, shadowMode_, shadowSwitch);
+			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
 

@@ -6,27 +6,43 @@
 
 namespace FK {
 
+	enum class fk_SurfaceDrawMode {
+		FACE,
+		LINE,
+		POINT
+	};
+
 	class fk_SurfaceDraw : public fk_DrawBase {
 	public:
-		fk_SurfaceDraw(int);
+		fk_SurfaceDraw(fk_SurfaceDrawMode);
 		virtual ~fk_SurfaceDraw();
 
-		void	DrawShapeSurface(fk_Model *, bool, bool);
+		void	DrawShapeSurface(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder *surfaceShader;
+		fk_ShaderBinder *lineShader;
+		fk_ShaderBinder *pointShader;
+		fk_ShaderBinder *offShader;
+		fk_ShaderBinder *hardShader;
+		fk_ShaderBinder *softFastShader;
+		fk_ShaderBinder *softNiceShader;
 		fk_ShaderBinder *shadowShader;
-		int mode;
+
+		fk_SurfaceDrawMode mode;
 		GLuint drawBezID, drawGregID, shadowBezID, shadowGregID;
-		GLuint shadowON_ID, shadowOFF_ID;
 		
 		void ShaderSetup(void);
-		void SubroutineSetup(fk_Model *, bool, bool);
+		void SubroutineSetup(fk_Model *, bool);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
- 		void Draw_Surface(fk_Model *, bool, bool);
-		void DefaultShaderSetup(void);
-		void SurfaceShaderInit(void);
+ 		void Draw_Surface(fk_Model *, bool);
+		void DefaultShaderSetup(fk_ShadowMode);
+		void LineShaderInit(void);
+		void PointShaderInit(void);
+		void OffShaderInit(void);
+		void HardShaderInit(void);
+		void SoftFastShaderInit(void);
+		void SoftNiceShaderInit(void);
 		void ShadowInit(void);
 	};
 }

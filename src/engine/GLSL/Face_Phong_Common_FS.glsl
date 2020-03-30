@@ -133,4 +133,4 @@ vec3 DifSpeColor()
 	speSumColor *= fk_Material.specular.rgb;
 
 	return (difSumColor + speSumColor);
-}	
+}
