@@ -54,8 +54,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 			drawShader->SetupDone(true);
 		}
 	} else {
-		fk_ShadingMode shadingMode = argModel->getShadingMode();
-		DefaultShaderSetup(shadingMode, argShadowMode);
+		DefaultShaderSetup(argModel->getShadingMode(), argShadowMode);
 	}
 
 	fk_ShaderParameter *parameter;

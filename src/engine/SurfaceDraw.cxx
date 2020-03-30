@@ -9,9 +9,9 @@ using namespace std;
 using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(int argMode)
-	: surfaceShader(nullptr), mode(argMode),
-	  bezID(0), gregID(0),
-	  shadowBuf_ID(0), shadowON_ID(0), shadowOFF_ID(0)
+	: surfaceShader(nullptr), shadowShader(nullptr), mode(argMode),
+	  drawBezID(0), drawGregID(0), shadowBezID(0), shadowGregID(0),
+	  shadowON_ID(0), shadowOFF_ID(0)
 {
 	return;
 }
@@ -19,6 +19,7 @@ fk_SurfaceDraw::fk_SurfaceDraw(int argMode)
 fk_SurfaceDraw::~fk_SurfaceDraw()
 {
 	delete surfaceShader;
+	delete shadowShader;
 	return;
 }
 
@@ -28,8 +29,6 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowMode, bo
 	auto col = &(argModel->getCurveColor()->col);
 	auto modelShader = argModel->getShader();
 
-	FK_UNUSED(argShadowSwitch);
-
 	if(modelShader != nullptr) {
 		drawShader = modelShader;
 		defaultShaderFlag = false;
@@ -38,15 +37,19 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowMode, bo
 			drawShader->SetupDone(true);
 		}
 	} else {
-		if(surfaceShader == nullptr) ShaderSetup();
-		else drawShader = surfaceShader;
-		defaultShaderFlag = true;
+		DefaultShaderSetup();
 	}
 
 	glDisable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	auto parameter = drawShader->getParameter();
+	fk_ShaderParameter *parameter;
+	if(argShadowSwitch == true && defaultShaderFlag == true) {
+		if(shadowShader == nullptr) ShadowInit();
+		parameter = shadowShader->getParameter();
+	} else {
+		parameter = drawShader->getParameter();
+	}
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
@@ -59,22 +62,23 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, bool argShadowMode, bo
 		parameter->setRegister(fk_Shape::degreeName, 3, fk_Shape::degreeName);
 	}
 
-	drawShader->ProcPreShader();
-
-	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowMode, argShadowSwitch);
-
-	Draw_Surface(argModel, parameter);
-
-	drawShader->ProcPostShader();
+	Draw_Surface(argModel, argShadowMode, argShadowSwitch);
 	return;
 }
 
-void fk_SurfaceDraw::ShaderSetup(void)
+void fk_SurfaceDraw::DefaultShaderSetup(void)
+{
+	if(surfaceShader == nullptr) SurfaceShaderInit();
+	drawShader = surfaceShader;
+	defaultShaderFlag = true;
+}
+
+void fk_SurfaceDraw::SurfaceShaderInit(void)
 {
 	surfaceShader = new fk_ShaderBinder();
-	drawShader = surfaceShader;
-	auto prog = drawShader->getProgram();
-	auto param = drawShader->getParameter();
+
+	auto prog = surfaceShader->getProgram();
+	auto param = surfaceShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"
@@ -132,17 +136,50 @@ void fk_SurfaceDraw::ShaderSetup(void)
 
 	auto progID = prog->getProgramID();
 
-	bezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	gregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
+	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
+	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
+	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
 
 	if(mode == 1) {
-		shadowBuf_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Shadow_Buf");
 		shadowON_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Shadow_ON");
 		shadowOFF_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Shadow_OFF");
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &shadowON_ID);
 	}
 
+	return;
+}
+
+void fk_SurfaceDraw::ShadowInit(void)
+{
+	if(shadowShader == nullptr) shadowShader = new fk_ShaderBinder();
+	auto prog = shadowShader->getProgram();
+	auto param = shadowShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Surface_VS.out"
+		;
+
+	prog->tessEvalShaderSource =
+		#include "GLSL/Surface_Shadow_TE.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Surface_Shadow_FS.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+
+	shadowBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
+	shadowGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
+
+	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &shadowBezID);
 	return;
 }
 
@@ -168,19 +205,25 @@ GLuint fk_SurfaceDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, bool argShadowMode,
+								  bool argShadowSwitch)
 {
 	fk_Surface	*surf = dynamic_cast<fk_Surface *>(argModel->getShape());
 	GLuint		vao = surf->GetFaceVAO();
 	GLfloat		div = float(surf->getDiv());
 	GLfloat		tessOut[4] = {div, div, div, div};
 	GLfloat		tessIn[2] = {div, div};
+	fk_ShaderBinder *shader = (argShadowSwitch) ? shadowShader : drawShader;
 
 	if(vao == 0) {
 		vao = VAOSetup(surf);
 	}
+	
 	glBindVertexArray(vao);
-	surf->BindShaderBuffer(argParam->getAttrTable());
+	surf->BindShaderBuffer(shader->getParameter()->getAttrTable());
+
+	shader->ProcPreShader();
+	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowMode, argShadowSwitch);
 
 	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
@@ -189,26 +232,32 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, fk_ShaderParameter *argPar
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	shader->ProcPostShader();
 	return;
 }
 
 void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
 {
+	GLuint ID = 0;
+
 	switch(argModel->getShape()->getObjectType()) {
 	  case fk_Type::BEZSURFACE:
-		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &bezID);
+		ID = (argShadowSwitch) ? shadowBezID : drawBezID;
 		break;
 
 	  case fk_Type::GREGORY:
-		glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &gregID);
+		ID = (argShadowSwitch) ? shadowGregID : drawGregID;
 		break;
 
 	  default:
 		break;
 	}
 
-	if(mode == 1) {
-		auto ID = (argShadowSwitch) ? shadowBuf_ID : ((argShadowMode) ? shadowON_ID : shadowOFF_ID);
+	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &ID);
+
+	if(mode == 1 && argShadowSwitch == false) {
+		ID = (argShadowMode) ? shadowON_ID : shadowOFF_ID;
 		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &ID);
 	}	
 

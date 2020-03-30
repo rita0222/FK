@@ -16,15 +16,18 @@ namespace FK {
 
 	private:
 		fk_ShaderBinder *surfaceShader;
+		fk_ShaderBinder *shadowShader;
 		int mode;
-		GLuint bezID, gregID;
-		GLuint shadowBuf_ID, shadowON_ID, shadowOFF_ID;
+		GLuint drawBezID, drawGregID, shadowBezID, shadowGregID;
+		GLuint shadowON_ID, shadowOFF_ID;
 		
-		void	ShaderSetup(void);
-		void	SubroutineSetup(fk_Model *, bool, bool);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-
- 		void	Draw_Surface(fk_Model *, fk_ShaderParameter *);
+		void ShaderSetup(void);
+		void SubroutineSetup(fk_Model *, bool, bool);
+		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+ 		void Draw_Surface(fk_Model *, bool, bool);
+		void DefaultShaderSetup(void);
+		void SurfaceShaderInit(void);
+		void ShadowInit(void);
 	};
 }
 
