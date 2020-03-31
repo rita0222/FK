@@ -5,11 +5,13 @@
 
 namespace FK {
 
+	// 影モードを表す列挙型
 	enum class fk_ShadowMode {
-		HARD,
-		SOFT_FAST,
-		SOFT_NICE,
-		OFF
+		HARD = 0,	//!< ハードシャドウ
+		SOFT_FAST,	//!< 速度重視ソフトシャドウ
+		SOFT_NICE,	//!< 質重視ソフトシャドウ
+		OFF,		//!< 影無効
+		NUM			//!< 影モード種類数
 	};
 	
 	//! シーンを制御するクラス

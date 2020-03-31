@@ -14,29 +14,15 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder *phongOffShader;
-		fk_ShaderBinder *phongHardShader;
-		fk_ShaderBinder *phongSoftFastShader;
-		fk_ShaderBinder *phongSoftNiceShader;
-		fk_ShaderBinder *gouraudOffShader;
-		fk_ShaderBinder *gouraudHardShader;
-		fk_ShaderBinder *gouraudSoftFastShader;
-		fk_ShaderBinder *gouraudSoftNiceShader;
+		fk_ShaderBinder *faceShader[int(fk_ShadingMode::NUM)][int(fk_ShadowMode::NUM)];
 		fk_ShaderBinder *shadowShader;
 
 		void DefaultShaderSetup(fk_ShadingMode, fk_ShadowMode);
-		void PhongOffInit(void);
-		void PhongHardInit(void);
-		void PhongSoftFastInit(void);
-		void PhongSoftNiceInit(void);
-		void GouraudOffInit(void);
-		void GouraudHardInit(void);
-		void GouraudSoftFastInit(void);
-		void GouraudSoftNiceInit(void);
 		void ShadowInit(void);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);
+		void ShaderInit(fk_ShadingMode, fk_ShadowMode);
 	};
 }
 

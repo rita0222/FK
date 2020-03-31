@@ -15,7 +15,7 @@ namespace FK {
 	class fk_ShaderBinder;
 	class fk_ShaderProgram;
 	class fk_ShaderParameter;
-	
+
 	class fk_DrawBase {
 	public:
 		fk_DrawBase(void);

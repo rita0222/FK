@@ -16,26 +16,26 @@ typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
-	: phongOffShader(nullptr), phongHardShader(nullptr),
-	  phongSoftFastShader(nullptr), phongSoftNiceShader(nullptr),
-	  gouraudOffShader(nullptr), gouraudHardShader(nullptr),
-	  gouraudSoftFastShader(nullptr), gouraudSoftNiceShader(nullptr),
-	  shadowShader(nullptr)
 {
+	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
+		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+			faceShader[i][j] = nullptr;
+		}
+	}
+	shadowShader = nullptr;
 	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
-	delete phongOffShader;
-	delete phongHardShader;
-	delete phongSoftFastShader;
-	delete phongSoftNiceShader;
-	delete gouraudOffShader;
-	delete gouraudHardShader;
-	delete gouraudSoftFastShader;
-	delete gouraudSoftNiceShader;
 	delete shadowShader;
+
+	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
+		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+			delete faceShader[i][j];
+		}
+	}
+	
 	return;
 }
 
@@ -89,226 +89,6 @@ void fk_FaceDraw::PolygonModeSet(fk_Draw argDMode)
 	}
 }
 
-void fk_FaceDraw::PhongOffInit(void)
-{
-	phongOffShader = new fk_ShaderBinder();
-
-	auto prog = phongOffShader->getProgram();
-	auto param = phongOffShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Phong_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_Off_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "PhongOffInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-void fk_FaceDraw::PhongHardInit(void)
-{
-	phongHardShader = new fk_ShaderBinder();
-
-	auto prog = phongHardShader->getProgram();
-	auto param = phongHardShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Phong_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_Hard_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "PhongHardSetup", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	return;
-}
-
-void fk_FaceDraw::PhongSoftFastInit(void)
-{
-	phongSoftFastShader = new fk_ShaderBinder();
-
-	auto prog = phongSoftFastShader->getProgram();
-	auto param = phongSoftFastShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Phong_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_SoftFast_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "PhongSoftFastSetup", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	return;
-}
-
-void fk_FaceDraw::PhongSoftNiceInit(void)
-{
-	phongSoftNiceShader = new fk_ShaderBinder();
-
-	auto prog = phongSoftNiceShader->getProgram();
-	auto param = phongSoftNiceShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Phong_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_SoftNice_FS.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "PhongSoftNiceSetup", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	return;
-}
-
-void fk_FaceDraw::GouraudOffInit(void)
-{
-	if(gouraudOffShader == nullptr) gouraudOffShader = new fk_ShaderBinder();
-	auto prog = gouraudOffShader->getProgram();
-	auto param = gouraudOffShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Gouraud_Common_VS.out"
-		;
-	prog->vertexShaderSource +=
-		#include "GLSL/Face_Gouraud_Off_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Gouraud_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "GouraudOffInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-void fk_FaceDraw::GouraudHardInit(void)
-{
-	if(gouraudHardShader == nullptr) gouraudHardShader = new fk_ShaderBinder();
-	auto prog = gouraudHardShader->getProgram();
-	auto param = gouraudHardShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Gouraud_Common_VS.out"
-		;
-	prog->vertexShaderSource +=
-		#include "GLSL/Face_Gouraud_Hard_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Gouraud_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "GouraudHardInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-void fk_FaceDraw::GouraudSoftFastInit(void)
-{
-	if(gouraudSoftFastShader == nullptr) gouraudSoftFastShader = new fk_ShaderBinder();
-	auto prog = gouraudSoftFastShader->getProgram();
-	auto param = gouraudSoftFastShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Gouraud_Common_VS.out"
-		;
-	prog->vertexShaderSource +=
-		#include "GLSL/Face_Gouraud_SoftFast_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Gouraud_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "GouraudSoftFastInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-void fk_FaceDraw::GouraudSoftNiceInit(void)
-{
-	if(gouraudSoftNiceShader == nullptr) gouraudSoftNiceShader = new fk_ShaderBinder();
-	auto prog = gouraudSoftNiceShader->getProgram();
-	auto param = gouraudSoftNiceShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_Gouraud_Common_VS.out"
-		;
-	prog->vertexShaderSource +=
-		#include "GLSL/Face_Gouraud_SoftNice_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_Gouraud_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "GouraudSoftNiceInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-	return;
-}
-
-
 void fk_FaceDraw::ShadowInit(void)
 {
 	if(shadowShader == nullptr) shadowShader = new fk_ShaderBinder();
@@ -335,64 +115,10 @@ void fk_FaceDraw::ShadowInit(void)
 
 void fk_FaceDraw::DefaultShaderSetup(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
 {
-	switch(argShadingMode) {
-	  case fk_ShadingMode::PHONG:
-		switch(argShadowMode) {
-		  case fk_ShadowMode::OFF:
-			if(phongOffShader == nullptr) PhongOffInit();
-			drawShader = phongOffShader;
-			break;
-
-		  case fk_ShadowMode::HARD:
-			if(phongHardShader == nullptr) PhongHardInit();
-			drawShader = phongHardShader;
-			break;
-
-		  case fk_ShadowMode::SOFT_FAST:
-			if(phongSoftFastShader == nullptr) PhongSoftFastInit();
-			drawShader = phongSoftFastShader;
-			break;
-
-		  case fk_ShadowMode::SOFT_NICE:
-			if(phongSoftNiceShader == nullptr) PhongSoftNiceInit();
-			drawShader = phongSoftNiceShader;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  case fk_ShadingMode::GOURAUD:
-		switch(argShadowMode) {
-		  case fk_ShadowMode::OFF:
-			if(gouraudOffShader == nullptr) GouraudOffInit();
-			drawShader = gouraudOffShader;
-			break;
-
-		  case fk_ShadowMode::HARD:
-			if(gouraudHardShader == nullptr) GouraudHardInit();
-			drawShader = gouraudHardShader;
-			break;
-
-		  case fk_ShadowMode::SOFT_FAST:
-			if(gouraudSoftFastShader == nullptr) GouraudSoftFastInit();
-			drawShader = gouraudSoftFastShader;
-			break;
-
-		  case fk_ShadowMode::SOFT_NICE:
-			if(gouraudSoftNiceShader == nullptr) GouraudSoftNiceInit();
-			drawShader = gouraudSoftNiceShader;
-			break;
-
-		  default:
-			break;
-		}
-		break;
-
-	  default:
-		break;
+	if(faceShader[int(argShadingMode)][int(argShadowMode)] == nullptr) {
+		ShaderInit(argShadingMode, argShadowMode);
 	}
+	drawShader = faceShader[int(argShadingMode)][int(argShadowMode)];
 	defaultShaderFlag = true;
 }
 
@@ -441,6 +167,120 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, boo
 	glBindVertexArray(0);
 	shader->ProcPostShader();
 
+	return;
+}
+
+void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
+{
+	fk_ShaderBinder *shader;
+
+	if(faceShader[int(argShadingMode)][int(argShadowMode)] == nullptr) {
+		faceShader[int(argShadingMode)][int(argShadowMode)] = new fk_ShaderBinder();
+	}
+	shader = faceShader[int(argShadingMode)][int(argShadowMode)];
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	// Vertex Shader
+	switch(argShadingMode) {
+	  case fk_ShadingMode::PHONG:
+		prog->vertexShaderSource =
+			#include "GLSL/Face_Phong_VS.out"
+			;
+		break;
+
+	  case fk_ShadingMode::GOURAUD:
+		prog->vertexShaderSource =
+			#include "GLSL/Face_Gouraud_Common_VS.out"
+			;
+
+		switch(argShadowMode) {
+		  case fk_ShadowMode::HARD:
+			prog->vertexShaderSource +=
+				#include "GLSL/Face_Gouraud_Hard_VS.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_FAST:
+			prog->vertexShaderSource +=
+				#include "GLSL/Face_Gouraud_SoftFast_VS.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_NICE:
+			prog->vertexShaderSource +=
+				#include "GLSL/Face_Gouraud_SoftNice_VS.out"
+				;
+			break;
+
+		  case fk_ShadowMode::OFF:
+			prog->vertexShaderSource +=
+				#include "GLSL/Face_Gouraud_Off_VS.out"
+				;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  default:
+		break;
+	}
+		
+	// Fragment Shader
+	switch(argShadingMode) {
+	  case fk_ShadingMode::PHONG:
+		prog->fragmentShaderSource =
+			#include "GLSL/Face_Phong_Common_FS.out"
+			;
+
+		switch(argShadowMode) {
+		  case fk_ShadowMode::HARD:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Face_Phong_Hard_FS.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_FAST:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Face_Phong_SoftFast_FS.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_NICE:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Face_Phong_SoftNice_FS.out"
+				;
+			break;
+
+		  case fk_ShadowMode::OFF:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Face_Phong_Off_FS.out"
+				;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+		
+	  case fk_ShadingMode::GOURAUD:
+		prog->fragmentShaderSource =
+			#include "GLSL/Face_Gouraud_FS.out"
+			;
+		break;
+
+	  default:
+		break;
+	}
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "ShaderUnit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
 	return;
 }
 
