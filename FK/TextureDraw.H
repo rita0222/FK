@@ -10,22 +10,23 @@ namespace FK {
 		fk_TextureDraw(void);
 		virtual ~fk_TextureDraw();
 
-		void	DrawShapeTexture(fk_Model *, bool, bool);
+		void	DrawShapeTexture(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
 	private:
-		fk_ShaderBinder		*phongShader, *gouraudShader;
+		fk_ShaderBinder *textureShader[int(fk_ShadingMode::NUM)][int(fk_ShadowMode::NUM)][2];
+		fk_ShaderBinder *replaceShader;
+		fk_ShaderBinder *shadowShader;
 
-		GLuint	replace_p_ID, mod_ON_p_ID, mod_OFF_p_ID, dec_ON_p_ID, dec_OFF_p_ID, shadow_p_ID;
-		GLuint	ON_g_VS_ID, OFF_g_VS_ID, Buf_g_VS_ID;
-		GLuint	replace_g_FS_ID, modulate_g_FS_ID, decal_g_FS_ID, shadow_g_FS_ID;
-
-		void 	ShaderSetup(void);
-		void	PhongSetup(void);
-		void	GouraudSetup(void);
+		//	void 	ShaderSetup(void);
+		//void	PhongSetup(void);
+		//void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool, bool);
+		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
 		void	PolygonModeSet(void);
-		void	SubroutineSetup(fk_Model *, fk_TexMode, bool, bool);
+		void	DefaultShaderSetup(fk_Model *, fk_ShadowMode);
+		void	ReplaceShaderInit(void);
+		void	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode);
+		void	ShadowInit(void);
 	};
 }
 

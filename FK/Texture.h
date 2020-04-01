@@ -10,10 +10,10 @@ namespace FK {
 
 	//! テクスチャモードを表す列挙型
 	enum class fk_TexMode {
-		MODULATE,	//!< 積算モード
-		REPLACE,	//!< 画像モード
-		DECAL,		//!< 線形補間モード
-		NONE		//!< 指定なし
+		MODULATE = 0,	//!< 積算モード
+		DECAL,			//!< 線形補間モード
+		REPLACE,		//!< 画像モード
+		NONE			//!< 指定なし
 	};
 
 	//! テクスチャ描画品質を表す列挙型

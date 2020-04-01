@@ -8,27 +8,40 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
-	: phongShader(nullptr), gouraudShader(nullptr),
-	  replace_p_ID(0), mod_ON_p_ID(0), mod_OFF_p_ID(0),
-	  dec_ON_p_ID(0), dec_OFF_p_ID(0), shadow_p_ID(0),
-	  ON_g_VS_ID(0), OFF_g_VS_ID(0), Buf_g_VS_ID(0),
-	  replace_g_FS_ID(0), modulate_g_FS_ID(0), decal_g_FS_ID(0), shadow_g_FS_ID(0)
 {
+	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
+		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+			for(int k = 0; k < 2; ++k) {
+				textureShader[i][j][k] = nullptr;
+			}
+		}
+	}
+
+	replaceShader = nullptr;
+	shadowShader = nullptr;
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete phongShader;
-	delete gouraudShader;
+	delete shadowShader;
+	delete replaceShader;
+
+	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
+		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+			for(int k = 0; k < 2; ++k) {
+				delete textureShader[i][j][k];
+			}
+		}
+	}
+
 	return;
 }
 
-void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowMode, bool argShadowSwitch)
+void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel,
+									  fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
 	auto modelShader = argModel->getShader();
-
-	FK_UNUSED(argShadowSwitch);
 
 	if(modelShader != nullptr) {
 		drawShader = modelShader;
@@ -38,27 +51,23 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, bool argShadowMode, bo
 			drawShader->SetupDone(true);
 		}
 	} else {
-		if(phongShader == nullptr || gouraudShader == nullptr) ShaderSetup();
-		switch(argModel->getShadingMode()) {
-		  case fk_ShadingMode::PHONG:
-			drawShader = phongShader;
-			break;
-
-		  case fk_ShadingMode::GOURAUD:
-			drawShader = gouraudShader;
-			break;
-
-		  default:
-			return;
-		}
+		DefaultShaderSetup(argModel, argShadowMode);
 		defaultShaderFlag = true;
 	}
 	
 	PolygonModeSet();
 
-	auto parameter = drawShader->getParameter();
+	fk_ShaderParameter *parameter;
+
+	if(argShadowSwitch == true && defaultShaderFlag == true) {
+		if(shadowShader == nullptr) ShadowInit();
+		parameter = shadowShader->getParameter();
+	} else {
+		parameter = drawShader->getParameter();
+	}
+
 	SetParameter(parameter);
-	Draw_Texture(argModel, parameter, argShadowMode, argShadowSwitch);
+	Draw_Texture(argModel, parameter, argShadowSwitch);
 	return;
 }
 
@@ -67,87 +76,6 @@ void fk_TextureDraw::PolygonModeSet(void)
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT, GL_FILL);
-}
-
-void fk_TextureDraw::PhongSetup(void)
-{
-	if(phongShader == nullptr) phongShader = new fk_ShaderBinder();
-	drawShader = phongShader;
-	auto prog = drawShader->getProgram();
-	auto param = drawShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_Phong_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_Phong_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "PhongSetup", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	replace_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
-	mod_ON_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate_ON");
-	mod_OFF_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate_OFF");
-	dec_ON_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal_ON");
-	dec_OFF_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal_OFF");
-	shadow_p_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowBuf");
-
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &mod_ON_p_ID);
-
-	return;
-}
-
-void fk_TextureDraw::GouraudSetup(void)
-{
-	if(gouraudShader == nullptr) gouraudShader = new fk_ShaderBinder();
-	drawShader = gouraudShader;
-	auto prog = drawShader->getProgram();
-	auto param = drawShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Texture_Gouraud_VS.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Texture_Gouraud_FS.out"
-		;
-	
-	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "GouraudSetup", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-	
-	ON_g_VS_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "Shadow_ON");
-	OFF_g_VS_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "Shadow_OFF");
-	Buf_g_VS_ID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "Shadow_Buf");
-
-	replace_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Replace");
-	modulate_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Modulate");
-	decal_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "Decal");
-	shadow_g_FS_ID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "ShadowBuf");
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &ON_g_VS_ID);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &modulate_g_FS_ID);
-
-	return;
-}
-
-void fk_TextureDraw::ShaderSetup(void)
-{
-	PhongSetup();
-	GouraudSetup();
 }
 
 void fk_TextureDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -176,11 +104,12 @@ GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argParam,
-								  bool argShadowMode, bool argShadowSwitch)
+void fk_TextureDraw::Draw_Texture(fk_Model *argModel,
+								  fk_ShaderParameter *argParam, bool argShadowSwitch)
 {
-	fk_Texture		*texture = dynamic_cast<fk_Texture *>(argModel->getShape());
-	GLuint			vao = texture->GetFaceVAO();
+	fk_Texture *texture = dynamic_cast<fk_Texture *>(argModel->getShape());
+	GLuint vao = texture->GetFaceVAO();
+	fk_ShaderBinder *shader = (argShadowSwitch) ? shadowShader : drawShader;
 
 	if(vao == 0) {
 		vao = VAOSetup(texture);
@@ -196,86 +125,236 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel, fk_ShaderParameter *argPar
 		argParam->setRegister(fk_Texture::texIDName + "[" + to_string(i) + "]", i+1);
 	}
 
-	drawShader->ProcPreShader();
+	shader->ProcPreShader();
 
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
-
-	if(defaultShaderFlag == true) SubroutineSetup(argModel, texMode, argShadowMode, argShadowSwitch);
 
 	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	drawShader->ProcPostShader();
+	shader->ProcPostShader();
 	return;
 }
 
-void fk_TextureDraw::SubroutineSetup(fk_Model *argModel, fk_TexMode argTexMode,
-									 bool argShadowMode, bool argShadowSwitch)
+void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
 {
-	GLuint vID = 0;
-	GLuint fID = 0;
+	fk_Texture *texture = dynamic_cast<fk_Texture *>(argModel->getShape());
+	fk_TexMode texMode = argModel->getTextureMode();
+	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
+	fk_ShadingMode shadingMode = argModel->getShadingMode();
 
-	FK_UNUSED(vID);
-
-	switch(argModel->getShadingMode()) {
-	  case fk_ShadingMode::PHONG:
-		if(argShadowSwitch == true) {
-			fID = shadow_p_ID;
-		} else {
-			switch(argTexMode) {
-			  case fk_TexMode::REPLACE:
-				fID = replace_p_ID;
-				break;
-
-			  case fk_TexMode::MODULATE:
-				fID = (argShadowMode) ? mod_ON_p_ID : mod_OFF_p_ID;
-				break;
-
-			  case fk_TexMode::DECAL:
-				fID = (argShadowMode) ? dec_ON_p_ID : dec_OFF_p_ID;
-				break;
-
-			  default:
-				break;
-			}
-		}
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
+	switch(texMode) {
+	  case fk_TexMode::NONE:
+		break;
+		
+	  case fk_TexMode::REPLACE:
+		if(replaceShader == nullptr) ReplaceShaderInit();
+		drawShader = replaceShader;
 		break;
 
-	  case fk_ShadingMode::GOURAUD:
-		if(argShadowSwitch == true) {
-			vID = Buf_g_VS_ID;
-			fID = shadow_g_FS_ID;
-		} else {
-			vID = (argShadowMode) ? ON_g_VS_ID : OFF_g_VS_ID;
-			switch(argTexMode) {
-			  case fk_TexMode::REPLACE:
-				fID = replace_g_FS_ID;
-				break;
-
-			  case fk_TexMode::MODULATE:
-				fID = modulate_g_FS_ID;
-				break;
-
-			  case fk_TexMode::DECAL:
-				fID = decal_g_FS_ID;
-				break;
-
-			  default:
-				break;
-			}
+	  default:
+		if(textureShader[int(shadingMode)][int(argShadowMode)][int(texMode)] == nullptr) {
+			TextureShaderInit(shadingMode, argShadowMode, texMode);
 		}
-		glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vID);
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
+		drawShader = textureShader[int(shadingMode)][int(argShadowMode)][int(texMode)];
+	}
+	
+	defaultShaderFlag = true;
+}
+
+void fk_TextureDraw::ReplaceShaderInit(void)
+{
+	replaceShader = new fk_ShaderBinder();
+
+	auto prog = replaceShader->getProgram();
+	auto param = replaceShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Texture_VS_Replace.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Texture_FS_Replace.out"
+		;
+	
+	if(prog->validate() == false) {
+		fk_PutError("fk_TextureDraw", "ReplaceShaderInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+}
+
+void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
+									   fk_ShadowMode argShadowMode,
+									   fk_TexMode argTexMode)
+{
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	textureShader[int(argShadingMode)][int(argShadowMode)][int(argTexMode)] = shader;
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	// Vertex Shader
+	switch(argShadingMode) {
+	  case fk_ShadingMode::PHONG:
+		prog->vertexShaderSource =
+			#include "GLSL/Texture_VS_Phong.out"
+			;
+		break;
+		
+	  case fk_ShadingMode::GOURAUD:
+		prog->vertexShaderSource =
+			#include "GLSL/Texture_VS_Gouraud_Common.out"
+			;
+		break;
+
+		switch(argShadowMode) {
+		  case fk_ShadowMode::HARD:
+			prog->vertexShaderSource +=
+				#include "GLSL/Texture_VS_Gouraud_Hard.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_FAST:
+			prog->vertexShaderSource +=
+				#include "GLSL/Texture_VS_Gouraud_SoftFast.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_NICE:
+			prog->vertexShaderSource +=
+				#include "GLSL/Texture_VS_Gouraud_SoftNice.out"
+				;
+			break;
+
+		  case fk_ShadowMode::OFF:
+			prog->vertexShaderSource +=
+				#include "GLSL/Texture_VS_Gouraud_Off.out"
+				;
+			break;
+
+		  default:
+			break;
+		}
 		break;
 
 	  default:
 		break;
 	}
+
+	// Fragment Shader
+	switch(argShadingMode) {
+	  case fk_ShadingMode::PHONG:
+		prog->fragmentShaderSource =
+			#include "GLSL/Texture_FS_Phong_Common.out"
+			;
+
+		switch(argShadowMode) {
+		  case fk_ShadowMode::HARD:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Phong_Hard.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_FAST:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Phong_SoftFast.out"
+				;
+			break;
+
+		  case fk_ShadowMode::SOFT_NICE:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Phong_SoftNice.out"
+				;
+			break;
+
+		  case fk_ShadowMode::OFF:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Phong_Off.out"
+				;
+			break;
+
+		  default:
+			break;
+		}
+
+		switch(argTexMode) {
+		  case fk_TexMode::MODULATE:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Phong_Mod.out"
+				;
+			break;
+			
+		  case fk_TexMode::DECAL:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Phong_Dec.out"
+				;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  case fk_ShadingMode::GOURAUD:
+		switch(argTexMode) {
+		  case fk_TexMode::MODULATE:
+			prog->fragmentShaderSource =
+				#include "GLSL/Texture_FS_Gouraud_Mod.out"
+				;
+			break;
+			
+		  case fk_TexMode::DECAL:
+			prog->fragmentShaderSource +=
+				#include "GLSL/Texture_FS_Gouraud_Dec.out"
+				;
+			break;
+
+		  default:
+			break;
+		}
+		break;
+
+	  default:
+		break;
+	}
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "TextureShaderInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+		//fk_PutError(prog->vertexShaderSource);
+		//fk_PutError(prog->fragmentShaderSource);
+	}
+
+	ParamInit(prog, param);
+	return;
 }
 
+void fk_TextureDraw::ShadowInit(void)
+{
+	if(shadowShader == nullptr) shadowShader = new fk_ShaderBinder();
+	auto prog = shadowShader->getProgram();
+	auto param = shadowShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Face_VS_Shadow.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Face_FS_Shadow.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_TextureDraw", "ShadowSetup", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	return;
+}
 
 /****************************************************************************
  *

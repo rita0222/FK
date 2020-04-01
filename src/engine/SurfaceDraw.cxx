@@ -207,11 +207,11 @@ void fk_SurfaceDraw::OffShaderInit(void)
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
+		#include "GLSL/Face_FS_Phong_Common.out"
 		;
 
 	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_Off_FS.out"
+		#include "GLSL/Face_FS_Phong_Off.out"
 		;
 
 
@@ -247,11 +247,11 @@ void fk_SurfaceDraw::HardShaderInit(void)
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
+		#include "GLSL/Face_FS_Phong_Common.out"
 		;
 
 	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_Hard_FS.out"
+		#include "GLSL/Face_FS_Phong_Hard.out"
 		;
 
 
@@ -287,11 +287,11 @@ void fk_SurfaceDraw::SoftFastShaderInit(void)
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
+		#include "GLSL/Face_FS_Phong_Common.out"
 		;
 
 	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_SoftFast_FS.out"
+		#include "GLSL/Face_FS_Phong_SoftFast.out"
 		;
 
 
@@ -327,11 +327,11 @@ void fk_SurfaceDraw::SoftNiceShaderInit(void)
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Face_Phong_Common_FS.out"
+		#include "GLSL/Face_FS_Phong_Common.out"
 		;
 
 	prog->fragmentShaderSource +=
-		#include "GLSL/Face_Phong_SoftNice_FS.out"
+		#include "GLSL/Face_FS_Phong_SoftNice.out"
 		;
 
 

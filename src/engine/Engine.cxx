@@ -426,14 +426,14 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	argModel->getShape()->FlushAttr();
 
-	bool shadowMode_ = (shadowMode != fk_ShadowMode::OFF) ? true : false;
+	//bool shadowMode_ = (shadowMode != fk_ShadowMode::OFF) ? true : false;
 
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
 		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
-		textureDraw->DrawShapeTexture(argModel, shadowMode_, shadowSwitch);
+		textureDraw->DrawShapeTexture(argModel, shadowMode, shadowSwitch);
 	}
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
