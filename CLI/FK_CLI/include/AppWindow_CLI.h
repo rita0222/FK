@@ -8,6 +8,7 @@
 
 namespace FK_CLI
 {
+	// キーボード上のキーを表す列挙型
 	public enum class fk_Key {
 		SHIFT_R,	//!< 右シフトキー
 		SHIFT_L,	//!< 左シフトキー
@@ -319,12 +320,34 @@ namespace FK_CLI
 
 		//! 影表示設定プロパティ
 		/*!
-		 *	影表示有無の設定や参照を行います。
-		 *	true であれば有効、false であれば無効となります。
+		 *	影表示の設定や参照を行います。
+		 *	設定は，以下の中から選択できます。
+		 *
+		 *	- fk_ShadowMode::HARD \n
+		 *		ハードシャドウを描画します。
+		 *		影表示を有効とする設定の中で描画は高速ですが、
+		 *		影の内外部分の境界が明瞭なため、ディザーが目立ちます。
+		 *		ディザーを改善するには、ソフトシャドウを利用するか、
+		 *		シャドウマップ解像度を高く設定します。
+		 *
+		 *	- fk_ShadowMode::SOFT_FAST \n
+		 *		速度重視設定のソフトシャドウを描画します。
+		 *		ソフトシャドウは、影の内外部分の境界に対しエイリアシング処理を施したものであり、
+		 *		多くの場合でハードシャドウよりも印象が良くなります。
+		 *		ただし、ハードシャドウよりも実行速度は低下します。
+		 *
+		 *	- fk_ShadowMode::SOFT_NICE \n
+		 *		質重視設定のソフトシャドウを描画します。
+		 *		この設定は fk_ShadowMode::SOFT_FAST よりも高い質のソフトシャドウを生成しますが、
+		 *		描画速度が低下する場合があります。
+		 *
+		 *	- fk_ShadowMode::OFF \n
+		 *		影表示を無効とします。デフォルトはこの設定となります。
+		 *		影表示が有効な場合よりもかなり描画速度が速くなります。
 		 *
 		 *	\sa ShadowVec, ShadowResolution, ShadowAreaSize, ShadowDistance, ShadowVisibility
 		 */
-		property bool ShadowMode {
+		property fk_ShadowMode ShadowMode {
 			void set(bool);
 			bool get();
 		}
@@ -404,6 +427,24 @@ namespace FK_CLI
 		 *	\sa ShadowMode, ShadowVec, ShadowResolution, ShadowAreaSize, ShadowDistance
 		 */
 		property double ShadowVisibility {
+			void set(double);
+			double get(void);
+		}
+
+		//! 影バイアス値設定関数
+		/*!
+		 *	影バイアス値の設定や参照を行います．
+		 *	FK での影生成処理は「シャドウマップ」という手法を用いています。
+		 *	シャドウマップによる影生成では「シャドウアクネ」というモアレ模様が生じることがあります。
+		 *	シャドウアクネを防ぐ方法としては、バイアス値を用いて補正を行いますが、
+		 *	本関数はこのバイアス値を設定するものです。
+		 *	バイアス値は正の微小値であり、デフォルトでは 0.0005 となっています。
+		 *	この値が小さいとシャドウアクネが生じやすくなります。
+		 *	しかし、この値が大きい場合は正常な影が生成できなくなります。
+		 *	適切な値は様々な要因が関わってくるため、
+		 *	シャドウアクネが生じた場合は適正な値を試行錯誤する必要があります。
+		 */
+		property double ShadowBias {
 			void set(double);
 			double get(void);
 		}

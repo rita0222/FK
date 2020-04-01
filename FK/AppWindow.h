@@ -141,7 +141,7 @@ namespace FK {
 		 *
 		 *	\sa toFullscreen()
 		 */
-		void toWindow(void);
+	void toWindow(void);
 		///@}
 
 		//! \name 描画制御関数
@@ -1020,9 +1020,31 @@ namespace FK {
 
 		//! 影表示設定変更関数
 		/*!
-		 *	影表示有無の設定を行います。
+		 *	影表示の設定を行います。
+		 *	以下の中から選択できます。
+		 *	- fk_ShadowMode::HARD \n
+		 *		ハードシャドウを描画します。
+		 *		影表示を有効とする設定の中で描画は高速ですが、
+		 *		影の内外部分の境界が明瞭なため、ディザーが目立ちます。
+		 *		ディザーを改善するには、ソフトシャドウを利用するか、
+		 *		シャドウマップ解像度を高く設定します。
 		 *
-		 *	\param[in]	mode   	true 有効、false で無効とします。デフォルトは false です。
+		 *	- fk_ShadowMode::SOFT_FAST \n
+		 *		速度重視設定のソフトシャドウを描画します。
+		 *		ソフトシャドウは、影の内外部分の境界に対しエイリアシング処理を施したものであり、
+		 *		多くの場合でハードシャドウよりも印象が良くなります。
+		 *		ただし、ハードシャドウよりも実行速度は低下します。
+		 *
+		 *	- fk_ShadowMode::SOFT_NICE \n
+		 *		質重視設定のソフトシャドウを描画します。
+		 *		この設定は fk_ShadowMode::SOFT_FAST よりも高い質のソフトシャドウを生成しますが、
+		 *		描画速度が低下する場合があります。
+		 *
+		 *	- fk_ShadowMode::OFF \n
+		 *		影表示を無効とします。デフォルトはこの設定となります。
+		 *		影表示が有効な場合よりもかなり描画速度が速くなります。
+		 *
+		 *	\param[in]	mode   	影表示モード
 		 */
 		void setShadowMode(fk_ShadowMode mode);
 
@@ -1030,7 +1052,7 @@ namespace FK {
 		/*!
 		 *	影表示設定を参照します。
 		 *
-		 *	\return		有効な場合 true を、無効な場合 false を返します。
+		 *	\return		影表示モード
 		 */
 		fk_ShadowMode getShadowMode(void);
 
