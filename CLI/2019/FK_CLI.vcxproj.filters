@@ -890,30 +890,6 @@
     <ClCompile Include="..\..\src\base\Tree.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\graphics\DrawBase.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\Engine.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\FaceDraw.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\FrameController.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\LineDraw.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\PointDraw.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\graphics\TextureDraw.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\material\Color.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
@@ -1154,9 +1130,6 @@
     <ClCompile Include="..\FK_CLI\cpp\Gregory_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\graphics\BezCurveDraw.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\shape\RBezCurve.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
@@ -1292,9 +1265,6 @@
     <ClCompile Include="..\..\src\texture\FrameBuffer.cxx">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\graphics\Renderer.cxx">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="..\FK_CLI\cpp\EngineWrapper_CLI.cpp">
       <Filter>Source\CLI</Filter>
     </ClCompile>
@@ -1303,6 +1273,36 @@
     </ClCompile>
     <ClCompile Include="..\FK_CLI\cpp\Renderer_CLI.cpp">
       <Filter>Source\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\BezCurveDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\DrawBase.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\Engine.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\FaceDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\FrameController.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\LineDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\PointDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\Renderer.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\SurfaceDraw.cxx">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\TextureDraw.cxx">
+      <Filter>Source\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

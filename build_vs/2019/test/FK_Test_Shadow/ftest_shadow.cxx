@@ -61,7 +61,6 @@ int main(int, char **)
 	window.setSize(WIN_W, WIN_H);
 	window.open();
 	window.update();
-	Fl::check();
 	window.setTrackBallMode(true);
 
 	window.setCameraPos(0.0, 50.0, 200.0);
@@ -89,14 +88,18 @@ int main(int, char **)
 	window.entry(&spModel);
 	window.entry(&ifsModel);
 	window.entry(&floorModel);
-	window.showGuide();
 
-	window.setShadowMode(true);
+	//fk_ShadowMode mode = fk_ShadowMode::OFF;
+	//fk_ShadowMode mode = fk_ShadowMode::HARD;
+	//fk_ShadowMode mode = fk_ShadowMode::SOFT_FAST;
+	fk_ShadowMode mode = fk_ShadowMode::SOFT_NICE;
+	window.setShadowMode(mode);
 	window.setShadowVec(1.0, -1.0, 1.0);
 	window.setShadowAreaSize(500.0);
-	window.setShadowDistance(500.0);
-	window.setShadowResolution(2048);
-	window.setShadowVisibility(0.8);
+	window.setShadowDistance(300.0);
+	window.setShadowResolution(1024);
+	window.setShadowVisibility(1.0);
+	window.setShadowBias(0.01);
 
 	ModelSetup(&spModel, Material::Yellow, fk_Vector(-20.0, 20.0, 0.0));
 	ModelSetup(&ifsModel, Material::White, fk_Vector(20.0, 5.0, 0.0));

@@ -243,16 +243,16 @@
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Time.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
-    <ClCompile Include="..\..\src\graphics\BezCurveDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
-    <ClCompile Include="..\..\src\graphics\Engine.cxx" />
-    <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
-    <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\Renderer.cxx" />
-    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\BezCurveDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\DrawBase.cxx" />
+    <ClCompile Include="..\..\src\engine\Engine.cxx" />
+    <ClCompile Include="..\..\src\engine\FaceDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\FrameController.cxx" />
+    <ClCompile Include="..\..\src\engine\LineDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\PointDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\Renderer.cxx" />
+    <ClCompile Include="..\..\src\engine\SurfaceDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\TextureDraw.cxx" />
     <ClCompile Include="..\..\src\graph\CostTable.cxx" />
     <ClCompile Include="..\..\src\graph\Graph.cxx" />
     <ClCompile Include="..\..\src\graph\GraphEdge.cxx" />
@@ -566,7 +566,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
 
 perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
@@ -599,7 +599,7 @@ perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
 
 perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
@@ -642,7 +642,7 @@ perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
 
 perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
@@ -684,7 +684,7 @@ perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\graphics\GLSL\glsl2out
+      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
 
 perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
     </PreBuildEvent>
