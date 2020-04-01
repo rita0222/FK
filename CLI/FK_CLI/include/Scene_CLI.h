@@ -130,8 +130,8 @@ namespace FK_CLI
 		 *	\sa ShadowVec, ShadowResolution, ShadowAreaSize, ShadowDistance, ShadowVisibility
 		 */
 		property fk_ShadowMode ShadowMode {
-			void set(bool);
-			bool get();
+			void set(fk_ShadowMode);
+			fk_ShadowMode get();
 		}
 
 		//! 影光線方向設定プロパティ

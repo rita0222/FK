@@ -524,14 +524,49 @@ namespace FK_CLI {
 		return GetP()->snapImage(argImage->GetP());
 	}
 	
-    void fk_AppWindow::ShadowMode::set(bool argMode)
+    void fk_AppWindow::ShadowMode::set(fk_ShadowMode argMode)
     {
-        GetP()->setShadowMode(argMode);
+		switch (argMode) {
+		case fk_ShadowMode::HARD:
+			GetP()->setShadowMode(::FK::fk_ShadowMode::HARD);
+			break;
+
+		case fk_ShadowMode::SOFT_FAST:
+			GetP()->setShadowMode(::FK::fk_ShadowMode::SOFT_FAST);
+			break;
+
+		case fk_ShadowMode::SOFT_NICE:
+			GetP()->setShadowMode(::FK::fk_ShadowMode::SOFT_NICE);
+			break;
+
+		case fk_ShadowMode::OFF:
+			GetP()->setShadowMode(::FK::fk_ShadowMode::OFF);
+			break;
+
+		default:
+			break;
+		}
     }
 
-    bool fk_AppWindow::ShadowMode::get(void)
+    fk_ShadowMode fk_AppWindow::ShadowMode::get(void)
     {
-        return GetP()->getShadowMode();
+		switch (GetP()->getShadowMode()) {
+		case ::FK::fk_ShadowMode::HARD:
+			return fk_ShadowMode::HARD;
+
+		case ::FK::fk_ShadowMode::SOFT_FAST:
+			return fk_ShadowMode::SOFT_FAST;
+
+		case ::FK::fk_ShadowMode::SOFT_NICE:
+			return fk_ShadowMode::SOFT_NICE;
+
+		case ::FK::fk_ShadowMode::OFF:
+			return fk_ShadowMode::OFF;
+
+		default:
+			break;
+		}
+		return fk_ShadowMode::OFF;
     }
 
     void fk_AppWindow::ShadowVec::set(fk_Vector^ argV)
@@ -584,6 +619,16 @@ namespace FK_CLI {
     {
         return GetP()->getShadowVisibility();
     }
+
+	void fk_AppWindow::ShadowBias::set(double argV)
+	{
+		GetP()->setShadowBias(argV);
+	}
+
+	double fk_AppWindow::ShadowBias::get(void)
+	{
+		return GetP()->getShadowBias();
+	}
 }
 
 /****************************************************************************

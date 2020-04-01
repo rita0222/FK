@@ -61,14 +61,49 @@ namespace FK_CLI {
 		return GetP()->getBlendStatus();
 	}
 
-    void fk_Scene::ShadowMode::set(bool argMode)
+    void fk_Scene::ShadowMode::set(fk_ShadowMode argMode)
     {
-        GetP()->setShadowMode(argMode);
+        switch (argMode) {
+        case fk_ShadowMode::HARD:
+            GetP()->setShadowMode(::FK::fk_ShadowMode::HARD);
+            break;
+
+        case fk_ShadowMode::SOFT_FAST:
+            GetP()->setShadowMode(::FK::fk_ShadowMode::SOFT_FAST);
+            break;
+
+        case fk_ShadowMode::SOFT_NICE:
+            GetP()->setShadowMode(::FK::fk_ShadowMode::SOFT_NICE);
+            break;
+
+        case fk_ShadowMode::OFF:
+            GetP()->setShadowMode(::FK::fk_ShadowMode::OFF);
+            break;
+
+        default:
+            break;
+        }
     }
 
-    bool fk_Scene::ShadowMode::get(void)
+    fk_ShadowMode fk_Scene::ShadowMode::get(void)
     {
-        return GetP()->getShadowMode();
+        switch (GetP()->getShadowMode()) {
+        case ::FK::fk_ShadowMode::HARD:
+            return fk_ShadowMode::HARD;
+
+        case ::FK::fk_ShadowMode::SOFT_FAST:
+            return fk_ShadowMode::SOFT_FAST;
+
+        case ::FK::fk_ShadowMode::SOFT_NICE:
+            return fk_ShadowMode::SOFT_NICE;
+
+        case ::FK::fk_ShadowMode::OFF:
+            return fk_ShadowMode::OFF;
+
+        default:
+            break;
+        }
+        return fk_ShadowMode::OFF;
     }
 
     void fk_Scene::ShadowVec::set(fk_Vector^ argV)
@@ -120,6 +155,16 @@ namespace FK_CLI {
     double fk_Scene::ShadowVisibility::get(void)
     {
         return GetP()->getShadowVisibility();
+    }
+
+    void fk_Scene::ShadowBias::set(double argV)
+    {
+        GetP()->setShadowBias(argV);
+    }
+
+    double fk_Scene::ShadowBias::get(void)
+    {
+        return GetP()->getShadowBias();
     }
 }
 
