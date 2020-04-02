@@ -18,14 +18,16 @@ fk_TextureDraw::fk_TextureDraw(void)
 	}
 
 	replaceShader = nullptr;
-	shadowShader = nullptr;
+	texShadowShader[0] = nullptr;
+	texShadowShader[1] = nullptr;
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete shadowShader;
 	delete replaceShader;
+	delete texShadowShader[0];
+	delete texShadowShader[1];
 
 	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
 		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
@@ -60,7 +62,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel,
 	fk_ShaderParameter *parameter;
 
 	if(argShadowSwitch == true && defaultShaderFlag == true) {
-		if(shadowShader == nullptr) ShadowInit();
+		ShadowSetup(argModel);
 		parameter = shadowShader->getParameter();
 	} else {
 		parameter = drawShader->getParameter();
@@ -332,22 +334,37 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	return;
 }
 
-void fk_TextureDraw::ShadowInit(void)
+void fk_TextureDraw::ShadowSetup(fk_Model *argModel)
 {
-	if(shadowShader == nullptr) shadowShader = new fk_ShaderBinder();
-	auto prog = shadowShader->getProgram();
-	auto param = shadowShader->getParameter();
+	int ID = (argModel->getShadowEffect()) ? 0 : 1;
+	if(texShadowShader[ID] == nullptr) ShadowInit(ID);
+	shadowShader = texShadowShader[ID];
+}
+
+void fk_TextureDraw::ShadowInit(int argID)
+{
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	texShadowShader[argID] = shader;
+	
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Face_VS_Shadow.out"
 		;
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS_Shadow.out"
-		;
+	if(argID == 0) {
+		prog->fragmentShaderSource =
+			#include "GLSL/Face_FS_Shadow.out"
+			;
+	} else {
+		prog->fragmentShaderSource =
+			#include "GLSL/FS_Discard.out"
+			;
+	}
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "ShadowSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_TextureDraw", "ShadowInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 

@@ -23,15 +23,15 @@ fk_FaceDraw::fk_FaceDraw(void)
 		}
 	}
 
-	shadowDrawShader = nullptr;
-	shadowDiscardShader = nullptr;
+	faceShadowShader[0] = nullptr;
+	faceShadowShader[1] = nullptr;
 	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
-	delete shadowDrawShader;
-	delete shadowDiscardShader;
+	delete faceShadowShader[0];
+	delete faceShadowShader[1];
 
 	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
 		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
@@ -94,51 +94,35 @@ void fk_FaceDraw::PolygonModeSet(fk_Draw argDMode)
 
 void fk_FaceDraw::ShadowSetup(fk_Model *argModel)
 {
-	if(shadowDrawShader == nullptr) ShadowDrawInit();
-	if(shadowDiscardShader == nullptr) ShadowDiscardInit();
-	shadowShader = (argModel->getShadowEffect()) ? shadowDrawShader : shadowDiscardShader;
+	int ID = (argModel->getShadowEffect()) ? 0 : 1;
+	if(faceShadowShader[ID] == nullptr) ShadowInit(ID);
+	shadowShader = faceShadowShader[ID];
 }
 
-void fk_FaceDraw::ShadowDrawInit(void)
+void fk_FaceDraw::ShadowInit(int argID)
 {
-	shadowDrawShader = new fk_ShaderBinder();
-	auto prog = shadowDrawShader->getProgram();
-	auto param = shadowDrawShader->getParameter();
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	faceShadowShader[argID] = shader;
+
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Face_VS_Shadow.out"
 		;
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS_Shadow.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowDrawInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
+	if(argID == 0) {
+		prog->fragmentShaderSource =
+			#include "GLSL/Face_FS_Shadow.out"
+			;
+	} else {
+		prog->fragmentShaderSource =
+			#include "GLSL/FS_Discard.out"
+			;
 	}
 
-	ParamInit(prog, param);
-
-	return;
-}
-
-void fk_FaceDraw::ShadowDiscardInit(void)
-{
-	shadowDiscardShader = new fk_ShaderBinder();
-	auto prog = shadowDiscardShader->getProgram();
-	auto param = shadowDiscardShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Face_VS_Shadow.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/FS_Discard.out"
-		;
-
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowDiscardInit", 1, "Shader Compile Error");
+		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 

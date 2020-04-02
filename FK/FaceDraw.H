@@ -17,7 +17,7 @@ namespace FK {
 
 	private:
 		fk_ShaderBinder *faceShader[int(fk_ShadingMode::NUM)][int(fk_ShadowMode::NUM)];
-		fk_ShaderBinder *shadowDrawShader, *shadowDiscardShader;
+		fk_ShaderBinder *faceShadowShader[2];
 
 		void DefaultShaderSetup(fk_ShadingMode, fk_ShadowMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
@@ -25,8 +25,7 @@ namespace FK {
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);
 		void ShaderInit(fk_ShadingMode, fk_ShadowMode);
 		void ShadowSetup(fk_Model *);
-		void ShadowDrawInit(void);
-		void ShadowDiscardInit(void);
+		void ShadowInit(int);
 	};
 }
 
