@@ -97,6 +97,7 @@ fk_SurfaceDrawType fk_SurfaceDraw::GetSurfType(fk_Model *argModel)
 void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
 {
 	fk_SurfaceDrawType type = GetSurfType(argModel);
+	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 	
 	switch(mode) {
 	  case fk_SurfaceDrawMode::LINE:
@@ -110,10 +111,10 @@ void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argSha
 		break;
 
 	  case fk_SurfaceDrawMode::FACE:
-		if(faceShader[int(type)][int(argShadowMode)] == nullptr) {
-			FaceShaderInit(type, argShadowMode);
+		if(faceShader[int(type)][int(shadowMode)] == nullptr) {
+			FaceShaderInit(type, shadowMode);
 		}
-		drawShader = faceShader[int(type)][int(argShadowMode)];
+		drawShader = faceShader[int(type)][int(shadowMode)];
 
 		break;
 

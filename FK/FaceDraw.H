@@ -19,7 +19,7 @@ namespace FK {
 		fk_ShaderBinder *faceShader[int(fk_ShadingMode::NUM)][int(fk_ShadowMode::NUM)];
 		fk_ShaderBinder *faceShadowShader[2];
 
-		void DefaultShaderSetup(fk_ShadingMode, fk_ShadowMode);
+		void DefaultShaderSetup(fk_Model *, fk_ShadowMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);

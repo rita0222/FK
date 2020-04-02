@@ -57,7 +57,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel->getShadingMode(), argShadowMode);
+		DefaultShaderSetup(argModel, argShadowMode);
 	}
 
 	fk_ShaderParameter *parameter;
@@ -131,12 +131,15 @@ void fk_FaceDraw::ShadowInit(int argID)
 	return;
 }
 
-void fk_FaceDraw::DefaultShaderSetup(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
+void fk_FaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
 {
-	if(faceShader[int(argShadingMode)][int(argShadowMode)] == nullptr) {
-		ShaderInit(argShadingMode, argShadowMode);
+	fk_ShadingMode shadingMode = argModel->getShadingMode();
+	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
+	
+	if(faceShader[int(shadingMode)][int(shadowMode)] == nullptr) {
+		ShaderInit(shadingMode, shadowMode);
 	}
-	drawShader = faceShader[int(argShadingMode)][int(argShadowMode)];
+	drawShader = faceShader[int(shadingMode)][int(shadowMode)];
 	defaultShaderFlag = true;
 }
 
@@ -167,7 +170,7 @@ GLuint fk_FaceDraw::VAOSetup(fk_Shape *argShape)
 void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, bool argShadowSwitch)
 {
 	fk_IndexFaceSet *ifs = dynamic_cast<fk_IndexFaceSet *>(argModel->getShape());
-	GLuint			vao = ifs->GetFaceVAO();
+	GLuint vao = ifs->GetFaceVAO();
 	fk_ShaderBinder *shader = (argShadowSwitch) ? shadowShader : drawShader;
 
 	if(vao == 0) {

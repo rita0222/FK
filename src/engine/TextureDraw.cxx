@@ -146,6 +146,7 @@ void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argSha
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
 	fk_ShadingMode shadingMode = argModel->getShadingMode();
+	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 
 	switch(texMode) {
 	  case fk_TexMode::NONE:
@@ -157,10 +158,10 @@ void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argSha
 		break;
 
 	  default:
-		if(textureShader[int(shadingMode)][int(argShadowMode)][int(texMode)] == nullptr) {
-			TextureShaderInit(shadingMode, argShadowMode, texMode);
+		if(textureShader[int(shadingMode)][int(shadowMode)][int(texMode)] == nullptr) {
+			TextureShaderInit(shadingMode, shadowMode, texMode);
 		}
-		drawShader = textureShader[int(shadingMode)][int(argShadowMode)][int(texMode)];
+		drawShader = textureShader[int(shadingMode)][int(shadowMode)][int(texMode)];
 	}
 	
 	defaultShaderFlag = true;
