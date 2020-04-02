@@ -36,19 +36,27 @@ namespace FK {
 		//GLuint drawBezID, drawGregID, shadowBezID, shadowGregID;
 		
 		void ShaderSetup(void);
-		void SubroutineSetup(fk_Model *, bool);
+		//void SubroutineSetup(fk_Model *, bool);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
  		void Draw_Surface(fk_Model *, bool);
-		void DefaultShaderSetup(fk_ShadowMode);
-		void LineShaderInit(void);
-		void PointShaderInit(void);
+		void DefaultShaderSetup(fk_Model *, fk_ShadowMode);
+		void LineShaderInit(fk_SurfaceDrawType);
+		void PointShaderInit(fk_SurfaceDrawType);
+		void FaceShaderInit(fk_SurfaceDrawType, fk_ShadowMode);
+
+		void TessEvalAdd(fk_ShaderProgram *, fk_SurfaceDrawType);
+		fk_SurfaceDrawType GetSurfType(fk_Model *);
+
+		/*
 		void OffShaderInit(void);
 		void HardShaderInit(void);
 		void SoftFastShaderInit(void);
 		void SoftNiceShaderInit(void);
+		*/
 		void ShadowSetup(fk_Model *);
-		void ShadowDrawInit(void);
-		void ShadowDiscardInit(void);
+		void ShadowInit(fk_SurfaceDrawType, int);
+		//void ShadowDrawInit(void);
+		//void ShadowDiscardInit(void);
 	};
 }
 

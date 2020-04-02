@@ -8,6 +8,8 @@ out vec4 varP;
 out vec4 varN;
 out vec4 varS;
 
+void makeSurf(out vec3 [25]);
+
 void bezier(out float[5] b, out float[5] db, float t)
 {
 	float ot = 1.0 - t;

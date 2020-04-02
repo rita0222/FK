@@ -1,5 +1,6 @@
 ﻿#define FK_DEF_SIZETYPE
 #include <FK/SurfaceDraw.H>
+#include <FK/FaceDraw.H>
 #include <FK/OpenGL.H>
 #include <FK/Model.h>
 #include <FK/BezSurface.h>
@@ -10,33 +11,33 @@ using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode)
 {
-	lineShader = nullptr;
-	pointShader = nullptr;
-	offShader = nullptr;
-	hardShader = nullptr;
-	softFastShader = nullptr;
-	softNiceShader = nullptr;
-	shadowDrawShader = nullptr;
-	shadowDiscardShader = nullptr;
+	for(int i = 0; i < int(fk_SurfaceDrawType::NUM); ++i) {
+		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+			faceShader[i][j] = nullptr;
+		}
+		for(int j = 0; j < 2; ++j) {
+			surfaceShadowShader[i][j] = nullptr;
+		}
+		lineShader[i] = nullptr;
+		pointShader[i] = nullptr;
+	}
 
 	mode = argMode;
-	drawBezID = 0;
-	drawGregID = 0;
-	shadowBezID = 0;
-	shadowGregID = 0;
 	return;
 }
 
 fk_SurfaceDraw::~fk_SurfaceDraw()
 {
-	delete lineShader;
-	delete pointShader;
-	delete offShader;
-	delete hardShader;
-	delete softFastShader;
-	delete softNiceShader;
-	delete shadowDrawShader;
-	delete shadowDiscardShader;
+	for(int i = 0; i < int(fk_SurfaceDrawType::NUM); ++i) {
+		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+			delete faceShader[i][j];
+		}
+		for(int j = 0; j < 2; ++j) {
+			delete surfaceShadowShader[i][j];
+		}
+		delete lineShader[i];
+		delete pointShader[i];
+	}
 
 	return;
 }
@@ -56,7 +57,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel,
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argShadowMode);
+		DefaultShaderSetup(argModel, argShadowMode);
 	}
 
 	glDisable(GL_CULL_FACE);
@@ -85,41 +86,35 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel,
 	return;
 }
 
-void fk_SurfaceDraw::DefaultShaderSetup(fk_ShadowMode argShadowMode)
+fk_SurfaceDrawType fk_SurfaceDraw::GetSurfType(fk_Model *argModel)
 {
+	if(argModel->getShape()->getObjectType() == fk_Type::BEZSURFACE) {
+		return fk_SurfaceDrawType::BEZIER;
+	}
+	return fk_SurfaceDrawType::GREGORY;
+}	
+
+void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
+{
+	fk_SurfaceDrawType type = GetSurfType(argModel);
+	
 	switch(mode) {
 	  case fk_SurfaceDrawMode::LINE:
-		if(lineShader == nullptr) LineShaderInit();
-		drawShader = lineShader;
+		if(lineShader[int(type)] == nullptr) LineShaderInit(type);
+		drawShader = lineShader[int(type)];
 		break;
 
 	  case fk_SurfaceDrawMode::POINT:
-		if(pointShader == nullptr) PointShaderInit();
-		drawShader = pointShader;
+		if(pointShader[int(type)] == nullptr) PointShaderInit(type);
+		drawShader = pointShader[int(type)];
 		break;
 
 	  case fk_SurfaceDrawMode::FACE:
-		switch(argShadowMode) {
-		  case fk_ShadowMode::HARD:
-			if(hardShader == nullptr) HardShaderInit();
-			drawShader = hardShader;
-			break;
-
-		  case fk_ShadowMode::SOFT_FAST:
-			if(softFastShader == nullptr) SoftFastShaderInit();
-			drawShader = softFastShader;
-			break;
-
-		  case fk_ShadowMode::SOFT_NICE:
-			if(softNiceShader == nullptr) SoftNiceShaderInit();
-			drawShader = softNiceShader;
-			break;
-
-		  default:
-			if(offShader == nullptr) OffShaderInit();
-			drawShader = offShader;
-			break;
+		if(faceShader[int(type)][int(argShadowMode)] == nullptr) {
+			FaceShaderInit(type, argShadowMode);
 		}
+		drawShader = faceShader[int(type)][int(argShadowMode)];
+
 		break;
 
 	  default:
@@ -128,12 +123,13 @@ void fk_SurfaceDraw::DefaultShaderSetup(fk_ShadowMode argShadowMode)
 	defaultShaderFlag = true;
 }
 
-void fk_SurfaceDraw::LineShaderInit(void)
+void fk_SurfaceDraw::LineShaderInit(fk_SurfaceDrawType argType)
 {
-	lineShader = new fk_ShaderBinder();
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	lineShader[int(argType)] = shader;
 
-	auto prog = lineShader->getProgram();
-	auto param = lineShader->getParameter();
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"
@@ -147,6 +143,8 @@ void fk_SurfaceDraw::LineShaderInit(void)
 		#include "GLSL/Surface_TE_Line.out"
 		;
 
+	TessEvalAdd(prog, argType);
+
 	prog->geometryShaderSource =
 		#include "GLSL/Surface_GS_Line.out"
 		;
@@ -154,25 +152,20 @@ void fk_SurfaceDraw::LineShaderInit(void)
 	if(prog->validate() == false) {
 		fk_PutError("fk_SurfaceDraw", "LineShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		fk_PutError(prog->tessEvalShaderSource);
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
-
 	return;
 }
 
-void fk_SurfaceDraw::PointShaderInit(void)
+void fk_SurfaceDraw::PointShaderInit(fk_SurfaceDrawType argType)
 {
-	pointShader = new fk_ShaderBinder();
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	pointShader[int(argType)] = shader;
 
-	auto prog = pointShader->getProgram();
-	auto param = pointShader->getParameter();
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"
@@ -186,255 +179,103 @@ void fk_SurfaceDraw::PointShaderInit(void)
 		#include "GLSL/Surface_TE_Point.out"
 		;
 
+	TessEvalAdd(prog, argType);
+
 	if(prog->validate() == false) {
 		fk_PutError("fk_SurfaceDraw", "PointShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
-
 	return;
 }
 
-void fk_SurfaceDraw::OffShaderInit(void)
+void fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType, fk_ShadowMode argMode)
 {
-	offShader = new fk_ShaderBinder();
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	faceShader[int(argType)][int(argMode)] = shader;
 
-	auto prog = offShader->getProgram();
-	auto param = offShader->getParameter();
-
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+	
+	// Vertex Shader
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"
 		;
 
+	// Tess Eval Shader
 	prog->tessEvalShaderSource =
 		#include "GLSL/Surface_TE_Face.out"
 		;
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS_Phong_Common.out"
-		;
+	TessEvalAdd(prog, argType);
 
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_FS_Phong_Off.out"
-		;
-
+	fk_FaceDraw::FaceFragmentInit(prog, fk_ShadingMode::PHONG, argMode);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "OffShaderInit", 1, "Shader Compile Error");
+		fk_PutError("fk_SurfaceDraw", "FaceShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		fk_PutError(prog->tessEvalShaderSource);
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
-
-	return;
 }
 
-void fk_SurfaceDraw::HardShaderInit(void)
+void fk_SurfaceDraw::TessEvalAdd(fk_ShaderProgram *argProgram, fk_SurfaceDrawType argType)
 {
-	hardShader = new fk_ShaderBinder();
-
-	auto prog = hardShader->getProgram();
-	auto param = hardShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
-		;
-
-	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Face.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS_Phong_Common.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_FS_Phong_Hard.out"
-		;
-
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "HardShaderInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
+	if(argType == fk_SurfaceDrawType::BEZIER) {
+		argProgram->tessEvalShaderSource +=
+			#include "GLSL/Surface_TE_Bez.out"
+			;
+	} else {
+		argProgram->tessEvalShaderSource +=
+			#include "GLSL/Surface_TE_Greg.out"
+			;
 	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
-
-	return;
-}
-
-void fk_SurfaceDraw::SoftFastShaderInit(void)
-{
-	softFastShader = new fk_ShaderBinder();
-
-	auto prog = softFastShader->getProgram();
-	auto param = softFastShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
-		;
-
-	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Face.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS_Phong_Common.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_FS_Phong_SoftFast.out"
-		;
-
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "SoftFastShaderInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
-
-	return;
-}
-
-void fk_SurfaceDraw::SoftNiceShaderInit(void)
-{
-	softNiceShader = new fk_ShaderBinder();
-
-	auto prog = softNiceShader->getProgram();
-	auto param = softNiceShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
-		;
-
-	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Face.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Face_FS_Phong_Common.out"
-		;
-
-	prog->fragmentShaderSource +=
-		#include "GLSL/Face_FS_Phong_SoftNice.out"
-		;
-
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "SoftNiceShaderInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	drawBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	drawGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &drawBezID);
-
-	return;
 }
 
 void fk_SurfaceDraw::ShadowSetup(fk_Model *argModel)
 {
-	if(shadowDrawShader == nullptr) ShadowDrawInit();
-	if(shadowDiscardShader == nullptr) ShadowDiscardInit();
-	shadowShader = (argModel->getShadowEffect()) ? shadowDrawShader : shadowDiscardShader;
+	int ID = (argModel->getShadowEffect()) ? 0 : 1;
+	auto type = GetSurfType(argModel);
+	if(surfaceShadowShader[int(type)][ID] == nullptr) ShadowInit(type, ID);
+	shadowShader = surfaceShadowShader[int(type)][ID];
 }
+
+void fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType, int argID)
+{
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	surfaceShadowShader[int(argType)][argID] = shader;
+
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 	
-void fk_SurfaceDraw::ShadowDrawInit(void)
-{
-	if(shadowDrawShader == nullptr) shadowDrawShader = new fk_ShaderBinder();
-	auto prog = shadowDrawShader->getProgram();
-	auto param = shadowDrawShader->getParameter();
-
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Shadow.out"
+		#include "GLSL/Surface_TE_Point.out"
 		;
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Surface_FS_Shadow.out"
-		;
+	TessEvalAdd(prog, argType);
+
+	if(argID == 0) {
+		prog->fragmentShaderSource =
+			#include "GLSL/Face_FS_Shadow.out"
+			;
+	} else {
+		prog->fragmentShaderSource =
+			#include "GLSL/FS_Discard.out"
+			;
+	}		
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowDrawInit", 1, "Shader Compile Error");
+		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	shadowBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	shadowGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &shadowBezID);
-	return;
-}
-
-void fk_SurfaceDraw::ShadowDrawInit(void)
-{
-	if(shadowDrawShader == nullptr) shadowDrawShader = new fk_ShaderBinder();
-	auto prog = shadowDrawShader->getProgram();
-	auto param = shadowDrawShader->getParameter();
-
-	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
-		;
-
-	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Shadow.out"
-		;
-
-	prog->fragmentShaderSource =
-		#include "GLSL/Surface_FS_Shadow.out"
-		;
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowDrawInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	shadowBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
-	shadowGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
-
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &shadowBezID);
-	return;
 }
 
 void fk_SurfaceDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -476,7 +317,6 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, bool argShadowSwitch)
 	surf->BindShaderBuffer(shader->getParameter()->getAttrTable());
 
 	shader->ProcPreShader();
-	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
 
 	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 	glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
@@ -487,27 +327,6 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, bool argShadowSwitch)
 	glBindVertexArray(0);
 
 	shader->ProcPostShader();
-	return;
-}
-
-void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
-{
-	GLuint ID = 0;
-
-	switch(argModel->getShape()->getObjectType()) {
-	  case fk_Type::BEZSURFACE:
-		ID = (argShadowSwitch) ? shadowBezID : drawBezID;
-		break;
-
-	  case fk_Type::GREGORY:
-		ID = (argShadowSwitch) ? shadowGregID : drawGregID;
-		break;
-
-	  default:
-		break;
-	}
-
-	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &ID);
 	return;
 }
 

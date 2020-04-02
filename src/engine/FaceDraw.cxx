@@ -206,49 +206,64 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, boo
 
 void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
 {
-	fk_ShaderBinder *shader;
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	faceShader[int(argShadingMode)][int(argShadowMode)] = shader;
 
-	if(faceShader[int(argShadingMode)][int(argShadowMode)] == nullptr) {
-		faceShader[int(argShadingMode)][int(argShadowMode)] = new fk_ShaderBinder();
-	}
-	shader = faceShader[int(argShadingMode)][int(argShadowMode)];
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 
 	// Vertex Shader
+	FaceVertexInit(prog, argShadingMode, argShadowMode);
+		
+	// Fragment Shader
+	FaceFragmentInit(prog, argShadingMode, argShadowMode);
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "ShaderUnit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+	return;
+}
+
+void fk_FaceDraw::FaceVertexInit(fk_ShaderProgram *argProg,
+								   fk_ShadingMode argShadingMode,
+								   fk_ShadowMode argShadowMode)
+{
 	switch(argShadingMode) {
 	  case fk_ShadingMode::PHONG:
-		prog->vertexShaderSource =
+		argProg->vertexShaderSource =
 			#include "GLSL/Face_VS_Phong.out"
 			;
 		break;
 
 	  case fk_ShadingMode::GOURAUD:
-		prog->vertexShaderSource =
+		argProg->vertexShaderSource =
 			#include "GLSL/Face_VS_Gouraud_Common.out"
 			;
 
 		switch(argShadowMode) {
 		  case fk_ShadowMode::HARD:
-			prog->vertexShaderSource +=
+			argProg->vertexShaderSource +=
 				#include "GLSL/Face_VS_Gouraud_Hard.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_FAST:
-			prog->vertexShaderSource +=
+			argProg->vertexShaderSource +=
 				#include "GLSL/Face_VS_Gouraud_SoftFast.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_NICE:
-			prog->vertexShaderSource +=
+			argProg->vertexShaderSource +=
 				#include "GLSL/Face_VS_Gouraud_SoftNice.out"
 				;
 			break;
 
 		  case fk_ShadowMode::OFF:
-			prog->vertexShaderSource +=
+			argProg->vertexShaderSource +=
 				#include "GLSL/Face_VS_Gouraud_Off.out"
 				;
 			break;
@@ -261,35 +276,39 @@ void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argSha
 	  default:
 		break;
 	}
-		
+}
+void fk_FaceDraw::FaceFragmentInit(fk_ShaderProgram *argProg,
+								   fk_ShadingMode argShadingMode,
+								   fk_ShadowMode argShadowMode)
+{
 	// Fragment Shader
 	switch(argShadingMode) {
 	  case fk_ShadingMode::PHONG:
-		prog->fragmentShaderSource =
+		argProg->fragmentShaderSource =
 			#include "GLSL/Face_FS_Phong_Common.out"
 			;
 
 		switch(argShadowMode) {
 		  case fk_ShadowMode::HARD:
-			prog->fragmentShaderSource +=
+			argProg->fragmentShaderSource +=
 				#include "GLSL/Face_FS_Phong_Hard.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_FAST:
-			prog->fragmentShaderSource +=
+			argProg->fragmentShaderSource +=
 				#include "GLSL/Face_FS_Phong_SoftFast.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_NICE:
-			prog->fragmentShaderSource +=
+			argProg->fragmentShaderSource +=
 				#include "GLSL/Face_FS_Phong_SoftNice.out"
 				;
 			break;
 
 		  case fk_ShadowMode::OFF:
-			prog->fragmentShaderSource +=
+			argProg->fragmentShaderSource +=
 				#include "GLSL/Face_FS_Phong_Off.out"
 				;
 			break;
@@ -300,7 +319,7 @@ void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argSha
 		break;
 		
 	  case fk_ShadingMode::GOURAUD:
-		prog->fragmentShaderSource =
+		argProg->fragmentShaderSource =
 			#include "GLSL/Face_FS_Gouraud.out"
 			;
 		break;
@@ -308,15 +327,7 @@ void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argSha
 	  default:
 		break;
 	}
-
-	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShaderUnit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
-	}
-
-	ParamInit(prog, param);
-	return;
-}
+}	
 
 /****************************************************************************
  *

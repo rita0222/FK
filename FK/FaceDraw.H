@@ -12,6 +12,8 @@ namespace FK {
 
 		void	DrawShapeFace(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
+		static void FaceVertexInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
+		static void FaceFragmentInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
 
 	private:
 		fk_ShaderBinder *faceShader[int(fk_ShadingMode::NUM)][int(fk_ShadowMode::NUM)];

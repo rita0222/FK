@@ -6,6 +6,8 @@ layout( quads, equal_spacing, ccw, point_mode ) in;
 
 out vec4 varP;
 
+void makeSurf(out vec3 [25]);
+
 void bezier(out float[5] b, float t)
 {
 	float ot = 1.0 - t;
