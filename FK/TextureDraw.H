@@ -15,11 +15,7 @@ namespace FK {
 	private:
 		fk_ShaderBinder *textureShader[int(fk_ShadingMode::NUM)][int(fk_ShadowMode::NUM)][2];
 		fk_ShaderBinder *replaceShader;
-		fk_ShaderBinder *shadowShader;
 
-		//	void 	ShaderSetup(void);
-		//void	PhongSetup(void);
-		//void	GouraudSetup(void);
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
 		void	PolygonModeSet(void);

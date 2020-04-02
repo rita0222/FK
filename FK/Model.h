@@ -1034,32 +1034,6 @@ namespace FK {
 		//! \name 描画属性制御関数
 		///@{
 
-		//! 頂点描画サイズ設定関数
-		/*!
-		 *	頂点の描画サイズを設定します。
-		 *	単位はピクセルです。整数以外も設定可能です。
-		 *
-		 *	\param[in]	size	頂点描画サイズ
-		 *
-		 *	\sa	getPointSize(), setLineWidth()
-		 */
-		void	setPointSize(const double size);
-
-
-		//! 頂点描画サイズ参照関数
-		/*!
-		 *	頂点の描画サイズを取得します。
-		 *
-		 *	\return		頂点描画サイズ
-		 *
-		 *	\sa	setPointSize()
-		 */
-		double	getPointSize(void) const;
-
-		///@}
-
-		//! \name 描画モード制御関数
-		///@{
 
 		//! 描画モード設定関数
 		/*!
@@ -1362,6 +1336,88 @@ namespace FK {
 		 *	\sa setTextureMode()
 		 */
 		fk_TexMode		getTextureMode(void);
+
+		//! 頂点描画サイズ設定関数
+		/*!
+		 *	頂点の描画サイズを設定します。
+		 *	単位はピクセルです。整数以外も設定可能です。
+		 *
+		 *	\param[in]	size	頂点描画サイズ
+		 *
+		 *	\sa	getPointSize(), setLineWidth()
+		 */
+		void	setPointSize(const double size);
+
+
+		//! 頂点描画サイズ参照関数
+		/*!
+		 *	頂点の描画サイズを取得します。
+		 *
+		 *	\return		頂点描画サイズ
+		 *
+		 *	\sa	setPointSize()
+		 */
+		double	getPointSize(void) const;
+
+		//! 影投影設定関数
+		/*!
+		 *	このモデルが別モデル(やこのモデル自身)へ影を投影するかどうかの設定を行います。
+		 *	この設定を false にすると、シーン全体で影効果が有効であっても、
+		 *	当モデルの影は別モデル(やこのモデル自身)に投影されなくなります。
+		 *	デフォルトは true です。
+		 *
+		 *	他モデルの影をこのモデルに投影するかどうかを制御する場合は、
+		 *	setShadowDraw() を用いてください。
+		 *
+		 *	\param[in]	mode	true で有効、false で無効となります。
+		 *
+		 *	\sa
+		 *		setShadowDraw(), getShadowEffect(),
+		 *		fk_Scene::setShadowMode(), fk_AppWindow::setShadowMode()
+		 */
+		void setShadowEffect(bool mode);
+
+		//! 影投影設定参照関数
+		/*!
+		 *	このモデルの影投影設定を参照します。
+		 *	詳細は setShadowEffect() のマニュアルを参照して下さい。
+		 *
+		 *	\return	影投影設定。true で有効、false で無効を意味します。
+		 *
+		 *	\sa
+		 *		setShadowEffect(), getShadowDraw(),
+		 *		fk_Scene::setShadowMode(), fk_AppWindow::setShadowMode()
+		 */
+		bool getShadowEffect(void);
+
+		//! 影表示設定関数
+		/*!
+		 *	別モデルやこのモデル自身の影を、このモデルに投影するかどうかの設定を行います。
+		 *
+		 *	このモデルの影を別のモデル(や自分自身)に投影するかどうかの制御は、
+		 *	setShadowEffect() を用いて下さい。
+		 *
+		 *	\param[in]	mode	true で有効、false で無効となります。
+		 *
+		 *	\sa
+		 *		setShadowEffect(), getShadowDraw(),
+		 *		fk_Scene::setShadowMode(), fk_AppWindow::setShadowMode()
+		 */
+		void setShadowDraw(bool mode);
+
+		//! 影表示設定参照関数
+		/*!
+		 *	このモデルの影表示設定を参照します。
+		 *	詳細は setShadowDraw() のマニュアルを参照して下さい。
+		 *
+		 *	\return	影表示設定。true で有効、false で無効を意味します。
+		 *
+		 *	\sa
+		 *		setShadowDraw(), getShadowEffect(),
+		 *		fk_Scene::setShadowMode(), fk_AppWindow::setShadowMode()
+		 */
+		bool getShadowDraw(void);
+
 		///@}
 
 		//! \name 座標系情報参照関数
@@ -2118,6 +2174,9 @@ namespace FK {
 		std::list<fk_Model *>	interList;
 
 		fk_ShaderBinder		*shader;
+
+		bool				shadowEffectMode;
+		bool				shadowDrawMode;
 
 		void				EntryTree(void);
 		void				DeleteTree(void);

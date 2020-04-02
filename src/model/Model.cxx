@@ -40,7 +40,8 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	  texMode(fk_TexMode::NONE), shadingMode(fk_ShadingMode::PHONG),
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
 	  interMode(false), interStatus(false), interStopMode(false),
-	  shader(nullptr)
+	  shader(nullptr),
+	  shadowEffectMode(true), shadowDrawMode(true)
 {
 	setBlendMode(fk_BlendMode::ALPHA);
 	setShape(argShape);
@@ -964,6 +965,26 @@ fk_ShaderBinder * fk_Model::getShader(void)
 
 void fk_Model::setPickMode(const bool) {}
 bool fk_Model::getPickMode(void) const { return true; }
+
+void fk_Model::setShadowEffect(bool argMode)
+{
+	shadowEffectMode = argMode;
+}
+
+bool fk_Model::getShadowEffect(void)
+{
+	return shadowEffectMode;
+}
+
+void fk_Model::setShadowDraw(bool argMode)
+{
+	shadowDrawMode = argMode;
+}
+
+bool fk_Model::getShadowDraw(void)
+{
+	return shadowDrawMode;
+}
 
 /****************************************************************************
  *

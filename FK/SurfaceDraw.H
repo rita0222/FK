@@ -12,6 +12,12 @@ namespace FK {
 		POINT
 	};
 
+	enum class fk_SurfaceDrawType {
+		BEZIER = 0,
+		GREGORY,
+		NUM
+	};
+
 	class fk_SurfaceDraw : public fk_DrawBase {
 	public:
 		fk_SurfaceDraw(fk_SurfaceDrawMode);
@@ -21,16 +27,13 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder *lineShader;
-		fk_ShaderBinder *pointShader;
-		fk_ShaderBinder *offShader;
-		fk_ShaderBinder *hardShader;
-		fk_ShaderBinder *softFastShader;
-		fk_ShaderBinder *softNiceShader;
-		fk_ShaderBinder *shadowShader;
+		fk_ShaderBinder *lineShader[int(fk_SurfaceDrawType::NUM)];
+		fk_ShaderBinder *pointShader[int(fk_SurfaceDrawType::NUM)];
+		fk_ShaderBinder *faceShader[int(fk_SurfaceDrawType::NUM)][int(fk_ShadowMode::NUM)];
+		fk_ShaderBinder *surfaceShadowShader[int(fk_SurfaceDrawType::NUM)][2];
 
 		fk_SurfaceDrawMode mode;
-		GLuint drawBezID, drawGregID, shadowBezID, shadowGregID;
+		//GLuint drawBezID, drawGregID, shadowBezID, shadowGregID;
 		
 		void ShaderSetup(void);
 		void SubroutineSetup(fk_Model *, bool);
@@ -43,7 +46,9 @@ namespace FK {
 		void HardShaderInit(void);
 		void SoftFastShaderInit(void);
 		void SoftNiceShaderInit(void);
-		void ShadowInit(void);
+		void ShadowSetup(fk_Model *);
+		void ShadowDrawInit(void);
+		void ShadowDiscardInit(void);
 	};
 }
 

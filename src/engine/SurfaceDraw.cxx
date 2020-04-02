@@ -9,12 +9,21 @@ using namespace std;
 using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode)
-	: lineShader(nullptr), pointShader(nullptr),
-	  offShader(nullptr), hardShader(nullptr),
-	  softFastShader(nullptr), softNiceShader(nullptr),
-	  shadowShader(nullptr), mode(argMode),
-	  drawBezID(0), drawGregID(0), shadowBezID(0), shadowGregID(0)
 {
+	lineShader = nullptr;
+	pointShader = nullptr;
+	offShader = nullptr;
+	hardShader = nullptr;
+	softFastShader = nullptr;
+	softNiceShader = nullptr;
+	shadowDrawShader = nullptr;
+	shadowDiscardShader = nullptr;
+
+	mode = argMode;
+	drawBezID = 0;
+	drawGregID = 0;
+	shadowBezID = 0;
+	shadowGregID = 0;
 	return;
 }
 
@@ -26,7 +35,9 @@ fk_SurfaceDraw::~fk_SurfaceDraw()
 	delete hardShader;
 	delete softFastShader;
 	delete softNiceShader;
-	delete shadowShader;
+	delete shadowDrawShader;
+	delete shadowDiscardShader;
+
 	return;
 }
 
@@ -53,7 +64,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel,
 
 	fk_ShaderParameter *parameter;
 	if(argShadowSwitch == true && defaultShaderFlag == true) {
-		if(shadowShader == nullptr) ShadowInit();
+		ShadowSetup(argModel);
 		parameter = shadowShader->getParameter();
 	} else {
 		parameter = drawShader->getParameter();
@@ -129,15 +140,15 @@ void fk_SurfaceDraw::LineShaderInit(void)
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Surface_Line_FS.out"
+		#include "GLSL/Surface_FS_Line.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Line_TE.out"
+		#include "GLSL/Surface_TE_Line.out"
 		;
 
 	prog->geometryShaderSource =
-		#include "GLSL/Surface_Line_GS.out"
+		#include "GLSL/Surface_GS_Line.out"
 		;
 
 	if(prog->validate() == false) {
@@ -168,11 +179,11 @@ void fk_SurfaceDraw::PointShaderInit(void)
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Surface_Line_FS.out"
+		#include "GLSL/Surface_FS_Line.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Point_TE.out"
+		#include "GLSL/Surface_TE_Point.out"
 		;
 
 	if(prog->validate() == false) {
@@ -203,7 +214,7 @@ void fk_SurfaceDraw::OffShaderInit(void)
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Face_TE.out"
+		#include "GLSL/Surface_TE_Face.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -243,7 +254,7 @@ void fk_SurfaceDraw::HardShaderInit(void)
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Face_TE.out"
+		#include "GLSL/Surface_TE_Face.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -283,7 +294,7 @@ void fk_SurfaceDraw::SoftFastShaderInit(void)
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Face_TE.out"
+		#include "GLSL/Surface_TE_Face.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -323,7 +334,7 @@ void fk_SurfaceDraw::SoftNiceShaderInit(void)
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Face_TE.out"
+		#include "GLSL/Surface_TE_Face.out"
 		;
 
 	prog->fragmentShaderSource =
@@ -351,26 +362,67 @@ void fk_SurfaceDraw::SoftNiceShaderInit(void)
 	return;
 }
 
-void fk_SurfaceDraw::ShadowInit(void)
+void fk_SurfaceDraw::ShadowSetup(fk_Model *argModel)
 {
-	if(shadowShader == nullptr) shadowShader = new fk_ShaderBinder();
-	auto prog = shadowShader->getProgram();
-	auto param = shadowShader->getParameter();
+	if(shadowDrawShader == nullptr) ShadowDrawInit();
+	if(shadowDiscardShader == nullptr) ShadowDiscardInit();
+	shadowShader = (argModel->getShadowEffect()) ? shadowDrawShader : shadowDiscardShader;
+}
+	
+void fk_SurfaceDraw::ShadowDrawInit(void)
+{
+	if(shadowDrawShader == nullptr) shadowDrawShader = new fk_ShaderBinder();
+	auto prog = shadowDrawShader->getProgram();
+	auto param = shadowDrawShader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Surface_VS.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_Shadow_TE.out"
+		#include "GLSL/Surface_TE_Shadow.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Surface_Shadow_FS.out"
+		#include "GLSL/Surface_FS_Shadow.out"
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
+		fk_PutError("fk_FaceDraw", "ShadowDrawInit", 1, "Shader Compile Error");
+		fk_PutError(prog->getLastError());
+	}
+
+	ParamInit(prog, param);
+
+	auto progID = prog->getProgramID();
+
+	shadowBezID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "BezSurf");
+	shadowGregID = glGetSubroutineIndex(progID, GL_TESS_EVALUATION_SHADER, "GregSurf");
+
+	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &shadowBezID);
+	return;
+}
+
+void fk_SurfaceDraw::ShadowDrawInit(void)
+{
+	if(shadowDrawShader == nullptr) shadowDrawShader = new fk_ShaderBinder();
+	auto prog = shadowDrawShader->getProgram();
+	auto param = shadowDrawShader->getParameter();
+
+	prog->vertexShaderSource =
+		#include "GLSL/Surface_VS.out"
+		;
+
+	prog->tessEvalShaderSource =
+		#include "GLSL/Surface_TE_Shadow.out"
+		;
+
+	prog->fragmentShaderSource =
+		#include "GLSL/Surface_FS_Shadow.out"
+		;
+
+	if(prog->validate() == false) {
+		fk_PutError("fk_FaceDraw", "ShadowDrawInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
@@ -456,12 +508,6 @@ void fk_SurfaceDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
 	}
 
 	glUniformSubroutinesuiv(GL_TESS_EVALUATION_SHADER, 1, &ID);
-/*
-	if(mode == fk_SurfaceDrawMode::FACE && argShadowSwitch == false) {
-		ID = (argShadowMode != fk_ShadowMode::OFF) ? shadowON_ID : shadowOFF_ID;
-		glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &ID);
-	}	
-*/
 	return;
 }
 

@@ -95,7 +95,7 @@ namespace FK {
 		static std::list<fk_Model *> *pointLightList;
 		static std::list<fk_Model *> *spotLightList;
 
-		fk_ShaderBinder	*drawShader;
+		fk_ShaderBinder	*drawShader, *shadowShader;
 		fk_Texture *shadowTexture;
 		bool defaultShaderFlag;
 

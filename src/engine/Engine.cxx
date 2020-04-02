@@ -426,8 +426,6 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	argModel->getShape()->FlushAttr();
 
-	//bool shadowMode_ = (shadowMode != fk_ShadowMode::OFF) ? true : false;
-
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
 		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch);
 	}
@@ -481,7 +479,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
 		}
 	}
-
+	
 	return;
 }
 

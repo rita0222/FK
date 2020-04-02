@@ -174,8 +174,9 @@ int main(int, char *[])
 	int				view_mode = Ball::HIGH_MODE;
 	Ball			ball;
 	fk_Sphere		lightBall(4, 2.0);
-	fk_Model		viewModel, groundModel, blockModel, lightModel, lightBallModel;
-	fk_Light		light;
+	fk_Model		viewModel, groundModel, blockModel;
+	fk_Model		pointLightModel, parallelLightModel, lightBallModel;
+	fk_Light		pointLight, parallelLight;
 	fk_Circle		ground(4, 100.0);
 	fk_Block		block(10.0, 10.0, 10.0);
 	fk_Scene		scene;
@@ -195,17 +196,21 @@ int main(int, char *[])
 	viewModel.glUpvec(0.0, 1.0, 0.0);
 
 	// ### LIGHT ###
-	light.setLightType(fk_LightType::POINT);
-	light.setAttenuation(0.0, 0.0);
-	lightModel.setShape(&light);
-	lightModel.setMaterial(WhiteLight);
-	lightModel.glTranslate(-60.0, 60.0, 0.0);
-	lightModel.glVec(0.0, -1.0, 0.0);
+	pointLight.setLightType(fk_LightType::POINT);
+	pointLight.setAttenuation(0.01, 0.0, 0.2);
+	pointLightModel.setShape(&pointLight);
+	pointLightModel.setMaterial(WhiteLight);
+	pointLightModel.glTranslate(-60.0, 60.0, 0.0);
+	pointLightModel.glVec(0.0, -1.0, 0.0);
+
+	parallelLight.setLightType(fk_LightType::PARALLEL);
+	parallelLightModel.setShape(&parallelLight);
+	parallelLightModel.setMaterial(WhiteLight);
+	parallelLightModel.glVec(1.0, -1.0, 1.0);
 
 	lightBallModel.setShape(&lightBall);
 	lightBallModel.setMaterial(TrueWhite);
-	lightBallModel.glTranslate(lightModel.getInhPosition());
-	light.setAttenuation(0.01, 0.0, 0.2);
+	lightBallModel.glTranslate(pointLightModel.getInhPosition());
 	
 	// ### GROUND ###
 	groundModel.setShape(&ground);
@@ -231,11 +236,20 @@ int main(int, char *[])
 	
 	// ### Model Entry ###
 	scene.entryCamera(&viewModel);
-	scene.entryModel(&lightModel);
+	scene.entryModel(&pointLightModel);
+	scene.entryModel(&parallelLightModel);
 	scene.entryModel(ball.getModel());
 	scene.entryModel(&groundModel);
 	scene.entryModel(&blockModel);
 	scene.entryModel(&lightBallModel);
+
+	scene.setShadowMode(fk_ShadowMode::SOFT_NICE);
+	scene.setShadowVec(1.0, -1.0, 1.0);
+	scene.setShadowAreaSize(1000.0);
+	scene.setShadowDistance(1000.0);
+	scene.setShadowResolution(1024);
+	scene.setShadowVisibility(0.5);
+	scene.setShadowBias(0.005);
 
 	win.open();
 
