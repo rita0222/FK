@@ -98,6 +98,7 @@ namespace FK {
 		fk_ShaderBinder	*drawShader, *shadowShader;
 		fk_Texture *shadowTexture;
 		bool defaultShaderFlag;
+		std::vector<fk_ShaderBinder *> aliveShader;
 
 		void SetParameter(fk_ShaderParameter *);
 

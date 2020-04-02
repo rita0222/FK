@@ -171,6 +171,8 @@ int Ball::draw(fk_Vector pos)
 
 int main(int, char *[])
 {
+	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
+
 	int				view_mode = Ball::HIGH_MODE;
 	Ball			ball;
 	fk_Sphere		lightBall(4, 2.0);
@@ -211,6 +213,8 @@ int main(int, char *[])
 	lightBallModel.setShape(&lightBall);
 	lightBallModel.setMaterial(TrueWhite);
 	lightBallModel.glTranslate(pointLightModel.getInhPosition());
+	lightBallModel.setShadowEffect(false);
+	lightBallModel.setShadowDraw(false);
 	
 	// ### GROUND ###
 	groundModel.setShape(&ground);
@@ -219,6 +223,7 @@ int main(int, char *[])
 	groundModel.setMaterial(LightGreen);
 	groundModel.setSmoothMode(true);
 	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/2.0);
+	groundModel.setShadowDraw(true);
 
 	// ### VIEW BLOCK ###
 	blockModel.setShape(&block);
@@ -227,28 +232,30 @@ int main(int, char *[])
 	blockModel.setMaterial(Blue);
 	blockModel.glMoveTo(60.0, 30.0, 0.0);
 	blockModel.setParent(&groundModel);
+	blockModel.setShadowDraw(false);
 
 	// ### BALL ###
 	Red.setSpecular(1.0, 1.0, 1.0);
 	Red.setShininess(100.0);
 	ball.getModel()->setMaterial(Red);
 	ball.getModel()->setSmoothMode(true);
+	ball.getModel()->setShadowDraw(false);
 	
 	// ### Model Entry ###
 	scene.entryCamera(&viewModel);
+	scene.entryModel(&groundModel);
 	scene.entryModel(&pointLightModel);
 	scene.entryModel(&parallelLightModel);
-	scene.entryModel(ball.getModel());
-	scene.entryModel(&groundModel);
-	scene.entryModel(&blockModel);
 	scene.entryModel(&lightBallModel);
+	scene.entryModel(&blockModel);
+	scene.entryModel(ball.getModel());
 
 	scene.setShadowMode(fk_ShadowMode::SOFT_NICE);
 	scene.setShadowVec(1.0, -1.0, 1.0);
-	scene.setShadowAreaSize(1000.0);
+	scene.setShadowAreaSize(500.0);
 	scene.setShadowDistance(1000.0);
 	scene.setShadowResolution(1024);
-	scene.setShadowVisibility(0.5);
+	scene.setShadowVisibility(1.0);
 	scene.setShadowBias(0.005);
 
 	win.open();

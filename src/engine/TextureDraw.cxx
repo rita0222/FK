@@ -196,6 +196,8 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 {
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
 	textureShader[int(argShadingMode)][int(argShadowMode)][int(argTexMode)] = shader;
+	aliveShader.push_back(shader);
+
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 

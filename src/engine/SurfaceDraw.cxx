@@ -195,6 +195,7 @@ void fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType, fk_ShadowMode ar
 {
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
 	faceShader[int(argType)][int(argMode)] = shader;
+	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

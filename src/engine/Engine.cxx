@@ -884,7 +884,7 @@ void fk_GraphicsEngine::AttachShadowBuffer(int argID)
 
 void fk_GraphicsEngine::PreShadowDraw(void)
 {
-	glCullFace(GL_FRONT);
+	//glCullFace(GL_FRONT);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
 	glDrawBuffers(sizeof(shadowBuffers) / sizeof(shadowBuffers[0]), shadowBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -907,7 +907,7 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 	shadowBuf->Unbind();
 
 	AttachShadowBuffer(shadowBufferID);
-	glCullFace(GL_BACK);
+	//glCullFace(GL_BACK);
 }
 
 void fk_GraphicsEngine::CopyShadowStatus(void)

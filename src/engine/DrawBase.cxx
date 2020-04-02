@@ -302,9 +302,9 @@ void fk_DrawBase::SetLightParam(fk_ShaderParameter *argParam, fk_LightType argTy
 
 void fk_DrawBase::AttachShadowTexture(int argID, const string &strName, fk_Texture *argTexture)
 {
-	if(drawShader != nullptr) {
-		shadowTexture = argTexture;
-		auto param = drawShader->getParameter();
+	if(aliveShader.empty() == false) shadowTexture = argTexture;
+	for(auto shader : aliveShader) {
+		auto param = shader->getParameter();
 		param->attachTexture(argID, argTexture);
 		param->setRegister(strName, argID+1);
 	}
