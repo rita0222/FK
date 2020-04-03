@@ -63,6 +63,7 @@ public:
 
 	void		init(void);
 	void		entryScene(fk_Scene *);
+	void		shadowSet(fk_Scene *, fk_Vector);
 };
 
 void Car::init(void)
@@ -231,8 +232,7 @@ void World::init(void)
 {
 
 	// 照明の設定
-	defLight(fk_Vector(1.0, 1.0, -1.0));
-	defLight(fk_Vector(-1.0, -1.0, -1.0));
+	//defLight(fk_Vector(1.0, 1.0, -1.0));
 
 	// 建物の設定
 	defBuild(fk_Vector(-250.0, 100.0), 125.0, Red);
@@ -262,6 +262,17 @@ void World::entryScene(fk_Scene *scene)
 	return;
 }
 
+void World::shadowSet(fk_Scene *argScene, fk_Vector argV)
+{
+	defLight(argV);
+	argScene->setShadowMode(fk_ShadowMode::SOFT_NICE);
+	argScene->setShadowVec(argV);
+	argScene->setShadowAreaSize(1000.0);
+	argScene->setShadowDistance(1000.0);
+	argScene->setShadowResolution(1024);
+	argScene->setShadowVisibility(0.8);
+	argScene->setShadowBias(0.01);
+}
 
 int main(int, char *[])
 {
@@ -275,6 +286,7 @@ int main(int, char *[])
 	fk_Window		buildViewWindow(420, 10, 400, 400);
 	fk_Window		birdViewWindow(830, 10, 400, 400);
 	fk_Color		bgColor(0.2, 0.7, 1.0);
+	fk_Vector		lightVec(1.0, 1.0, -1.0);
 
 	fk_Model		buildViewModel, birdViewModel;
 	double			speed = 2.0;
@@ -290,10 +302,15 @@ int main(int, char *[])
 	buildViewScene.setBGColor(bgColor);
 	birdViewScene.setBGColor(bgColor);
 
+	worldObj.shadowSet(&carViewScene, lightVec);
+	worldObj.shadowSet(&buildViewScene, lightVec);
+	worldObj.shadowSet(&birdViewScene, lightVec);
+
 	// 各モデルをディスプレイリストに登録
 	worldObj.entryScene(&carViewScene);
 	worldObj.entryScene(&buildViewScene);
 	worldObj.entryScene(&birdViewScene);
+
 
 	carObj.entryScene(&carViewScene, false);
 	carObj.entryScene(&buildViewScene, true);
