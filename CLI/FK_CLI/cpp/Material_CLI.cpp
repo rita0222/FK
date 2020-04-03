@@ -259,6 +259,12 @@ namespace FK_CLI {
 
 		TrueWhite = gcnew fk_Material();
 		*TrueWhite->pMat = ::FK::Material::TrueWhite;
+
+		WhiteLight = gcnew fk_Material();
+		*WhiteLight->pMat = ::FK::Material::WhiteLight;
+
+		Raw = gcnew fk_Material();
+		*Raw->pMat = ::FK::Material::Raw;
 	}
 }
 

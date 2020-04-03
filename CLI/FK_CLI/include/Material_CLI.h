@@ -387,7 +387,15 @@ namespace FK_CLI
 		  */
 		 static fk_Material^ Yellow;
 
+		 /*!
+		  * (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (1.0, 1.0, 1.0), (0.0)
+		  */
+		 static fk_Material^ WhiteLight;
 
+		 /*!
+		  * (1.0, 1.0, 1.0), (1.0, 1.0, 1.0), (0.0, 0.0, 0.0), (0.0)
+		  */
+		 static fk_Material^ Raw;
 	};
 }
 

@@ -342,6 +342,26 @@ namespace FK_CLI {
 		return static_cast<fk_BlendFactor>(dst);
 	}
 
+	void fk_Model::ShadowEffect::set(bool argMode)
+	{
+		GetP()->setShadowEffect(argMode);
+	}
+
+	bool fk_Model::ShadowEffect::get(void)
+	{
+		return GetP()->getShadowEffect();
+	}
+
+	void fk_Model::ShadowDraw::set(bool argMode)
+	{
+		GetP()->setShadowDraw(argMode);
+	}
+
+	bool fk_Model::ShadowDraw::get(void)
+	{
+		return GetP()->getShadowDraw();
+	}
+
 	fk_Matrix^ fk_Model::InhMatrix::get(void)
 	{
 		fk_Matrix^ M = gcnew fk_Matrix();

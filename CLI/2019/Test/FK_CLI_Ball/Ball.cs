@@ -55,6 +55,7 @@ namespace FK_CLI_Ball
             ball_model.Material.Specular = new fk_Color(1.0, 1.0, 1.0);
             ball_model.Material.Shininess = 100.0f;
             ball_model.SmoothMode = true;
+			ball_model.ShadowDraw = false;
         }
 
  
@@ -156,8 +157,17 @@ namespace FK_CLI_Ball
             fk_Material.InitDefault();
 
             var win = new fk_AppWindow();
-			win.Size = new fk_Dimension(600, 600);
+			win.Size = new fk_Dimension(800, 800);
 			win.ClearModel(false); // デフォルト光源消去
+
+			win.ShadowMode = fk_ShadowMode.SOFT_NICE;
+			win.ShadowVec = new fk_Vector(1.0, -1.0, 1.0);
+			win.ShadowAreaSize = 500.0;
+			win.ShadowDistance = 1000.0;
+			win.ShadowResolution = 1024;
+			win.ShadowVisibility = 1.0;
+			win.ShadowBias = 0.005;
+			win.FPS = 0;
 
 			int view_mode = Ball.HIGH_MODE;
 	
@@ -165,15 +175,16 @@ namespace FK_CLI_Ball
             var lightBall = new fk_Sphere(4, 2.0);
 
 			var viewModel = new fk_Model();
-			var lightModel = new fk_Model();
+			var pointLightModel = new fk_Model();
+			var parallelLightModel = new fk_Model();
 			var groundModel = new fk_Model();
 			var blockModel = new fk_Model();
             var lightBallModel = new fk_Model();
 
-			var light = new fk_Light();
+			var pointLight = new fk_Light();
+			var parallelLight = new fk_Light();
 			var ground = new fk_Circle(4, 100.0);
 			var block = new fk_Block(10.0, 10.0, 10.0);
-
 
 			// ### VIEW POINT ###
 			// 上の方から見た視点
@@ -182,21 +193,28 @@ namespace FK_CLI_Ball
 			viewModel.GlUpvec(0.0, 1.0, 0.0);
 
 			// ### LIGHT ###
-			light.Type = fk_LightType.POINT;
-            //light.SetAttenuation(0.01, 0.0, 0.2);
-			lightModel.Shape = light;
-			lightModel.Material = fk_Material.TrueWhite;
-			lightModel.GlTranslate(-60.0, 60.0, 0.0);
-            lightModel.GlVec(0.0, -1.0, 0.0);
+			pointLight.Type = fk_LightType.POINT;
+            pointLight.SetAttenuation(0.01, 0.0, 0.2);
+			pointLightModel.Shape = pointLight;
+			pointLightModel.Material = fk_Material.WhiteLight;
+			pointLightModel.GlTranslate(-60.0, 60.0, 0.0);
+            pointLightModel.GlVec(0.0, -1.0, 0.0);
+
+			parallelLight.Type = fk_LightType.PARALLEL;
+			parallelLightModel.Shape = parallelLight;
+			parallelLightModel.Material = fk_Material.WhiteLight;
+			parallelLightModel.GlVec(1.0, -1.0, 1.0);
 
             lightBallModel.Shape = lightBall;
             lightBallModel.Material = fk_Material.TrueWhite;
-            lightBallModel.GlTranslate(lightModel.InhPosition);
+            lightBallModel.GlTranslate(pointLightModel.InhPosition);
+			lightBallModel.ShadowEffect = false;
+			lightBallModel.ShadowDraw = false;
 
 			// ### GROUND ###
 			groundModel.Shape = ground;
 			groundModel.Material = fk_Material.LightGreen;
-            groundModel.Material.Shininess = 160.0f;
+			groundModel.Material.Specular = new fk_Color(0.1, 0.1, 0.1);
 			groundModel.SmoothMode = true;
 			groundModel.LoRotateWithVec(0.0, 0.0, 0.0, fk_Axis.X, -Math.PI/2.0);
 
@@ -207,12 +225,11 @@ namespace FK_CLI_Ball
             blockModel.Material.Shininess = 70.0f;
 			blockModel.GlMoveTo(60.0, 30.0, 0.0);
 			blockModel.Parent = groundModel;
-
-
 	
 			// ### Model Entry ###
 			win.CameraModel = viewModel;
-			win.Entry(lightModel);
+			win.Entry(pointLightModel);
+			win.Entry(parallelLightModel);
 			win.Entry(ball.Model);
 			win.Entry(groundModel);
 			win.Entry(blockModel);

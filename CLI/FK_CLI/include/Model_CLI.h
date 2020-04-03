@@ -478,6 +478,33 @@ namespace FK_CLI
 			fk_BlendFactor get(void);
 		}
 
+		//! 影投影プロパティ
+		/*!
+		 *	このモデルが別モデル(やこのモデル自身)へ影を投影するかどうかの設定を行います。
+		 *	この設定を false にすると、シーン全体で影効果が有効であっても、
+		 *	当モデルの影は別モデル(やこのモデル自身)に投影されなくなります。
+		 *	デフォルトは true です。
+		 *
+		 *	他モデルの影をこのモデルに投影するかどうかを制御する場合は、
+		 *	ShadowDraw を用いてください。
+		 */
+		 property bool ShadowEffect {
+			void set(bool);
+			bool get(void);
+		}
+
+		 //! 影表示プロパティ
+		 /*!
+		  *	別モデルやこのモデル自身の影を、このモデルに投影するかどうかの設定を行います。
+		  *
+		  *	このモデルの影を別のモデル(や自分自身)に投影するかどうかの制御は、
+		  *	ShadowEffect を用いて下さい。
+		  */
+		 property bool ShadowDraw {
+			void set(bool);
+			bool get(void);
+		}
+
 		///@}
 
 		//! \name 位置・姿勢・行列関連プロパティ

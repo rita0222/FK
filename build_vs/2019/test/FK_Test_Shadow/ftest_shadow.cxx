@@ -59,14 +59,14 @@ int main(int, char **)
 
 	fk_Material::initDefault();
 	window.setSize(WIN_W, WIN_H);
-	window.open();
-	window.update();
 	window.setTrackBallMode(true);
+	window.showGuide();
 
 	window.setCameraPos(0.0, 50.0, 200.0);
 	window.setCameraFocus(0.0, 0.0, 0.0);
 	window.setDefaultLightVec(1.0, -1.0, 1.0);
-	window.setDefaultLightMaterial(Material::TrueWhite);
+	window.setDefaultLightMaterial(Material::WhiteLight);
+
 
 	// モデル
 	if(ifsShape.readBMP("00tex_master.BMP") == false) {
@@ -81,13 +81,18 @@ int main(int, char **)
 	spModel.setShape(&sph);
 	ifsModel.setShape(&ifsShape);
 	floorModel.setShape(&floor);
+
+	spModel.setShadowEffect(false);
+	spModel.setShadowDraw(true);
+	ifsModel.setShadowEffect(true);
+	ifsModel.setShadowDraw(true);
+	floorModel.setShadowDraw(true);
 	
 	// 各モデルをディスプレイリストに登録
-	//window.setBlendStatus(true);
 	window.setBGColor(0.5f, 0.5f, 0.5f);
+	window.entry(&floorModel);
 	window.entry(&spModel);
 	window.entry(&ifsModel);
-	window.entry(&floorModel);
 
 	//fk_ShadowMode mode = fk_ShadowMode::OFF;
 	//fk_ShadowMode mode = fk_ShadowMode::HARD;
@@ -105,6 +110,7 @@ int main(int, char **)
 	ModelSetup(&ifsModel, Material::White, fk_Vector(20.0, 5.0, 0.0));
 	ModelSetup(&floorModel, Material::White, fk_Vector(0.0, -1.0, 0.0));
 
+	window.open();
 	while(window.update()) {
 		BallMove(&window, &spModel);
 		RobotRotate(&window, &ifsModel);
