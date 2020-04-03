@@ -263,7 +263,25 @@ namespace FK_CLI
 		 */
 		property fk_Model^ CameraModel {
 			void set(fk_Model^);
-			fk_Model^ get();
+			fk_Model^ get(void);
+		}
+
+		//! デフォルト光源方向プロパティ
+		/*!
+		 *	デフォルト光源の方向を設定します。
+		 */
+		property fk_Vector^ DefaultLightVec {
+			void set(fk_Vector^);
+			fk_Vector^ get(void);
+		}
+
+		//! デフォルト光源マテリアルプロパティ
+		/*!
+		 *	デフォルト光源のマテリアルを設定します。
+		 */
+		property fk_Material^ DefaultLightMaterial {
+			void set(fk_Material^);
+			fk_Material^ get(void);
 		}
 		
 		//! シーン設定プロパティ
@@ -500,6 +518,12 @@ namespace FK_CLI
 		 *	\sa Scene, SetScene(fk_Scene^, bool), fk_Scene
 		 */
 		void SetSceneDefault(void);
+
+		//! 光源初期化メソッド
+		/*!
+		 *	デフォルト光源をシーンに追加します。
+		 */
+		void SetLightDefault(void);
 
 		//! 通常モデル表示登録メソッド
 		/*!

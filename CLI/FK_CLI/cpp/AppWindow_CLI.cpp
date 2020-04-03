@@ -290,7 +290,32 @@ namespace FK_CLI {
 	{
 		return gcnew fk_Vector(GetP()->getMousePosition());
 	}
-				
+
+	void fk_AppWindow::DefaultLightVec::set(fk_Vector^ argV)
+	{
+		if (!argV) return;
+		GetP()->setDefaultLightVec(argV->x_, argV->y_, argV->z_);
+	}
+
+	fk_Vector^ fk_AppWindow::DefaultLightVec::get(void)
+	{
+		fk_Vector^ V = gcnew fk_Vector(GetP()->getDefaultLightVec());
+		return V;
+	}
+
+	void fk_AppWindow::DefaultLightMaterial::set(fk_Material^ argM)
+	{
+		if (!argM) return;
+		GetP()->setDefaultLightMaterial(*argM->pMat);
+	}
+
+	fk_Material^ fk_AppWindow::DefaultLightMaterial::get(void)
+	{
+		fk_Material^ M = gcnew fk_Material();
+		*M->pMat = *GetP()->getDefaultLightMaterial();
+		return M;
+	}
+
 	void fk_AppWindow::Open(void)
 	{
 		GetP()->open();
@@ -628,6 +653,11 @@ namespace FK_CLI {
 	double fk_AppWindow::ShadowBias::get(void)
 	{
 		return GetP()->getShadowBias();
+	}
+
+	void fk_AppWindow::SetLightDefault(void)
+	{
+		GetP()->setLightDefault();
 	}
 }
 
