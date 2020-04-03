@@ -65,6 +65,7 @@ namespace FK_CLI_Shadow
             window.DefaultLightVec = new fk_Vector(1.0, -1.0, 1.0);
             window.DefaultLightMaterial = fk_Material.WhiteLight;
             window.BGColor = new fk_Color(0.5, 0.5, 0.5);
+            window.FPS = 60;
 
             var ifsShape = new fk_IFSTexture();
             if (ifsShape.ReadBMP("00tex_master.BMP") == false)
