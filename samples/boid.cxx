@@ -204,6 +204,7 @@ int main(int, char **)
 	win.setCameraPos(0.0, 0.0, 80.0);
 	win.setCameraFocus(0.0, 0.0, 0.0);
 	win.setTrackBallMode(true);
+
 	win.open();
 
 	while(win.update() == true) {
