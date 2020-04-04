@@ -14,24 +14,30 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void)
-	: lineShader(nullptr),
-	  vsModelID(0), vsElemID(0), vsIFSID(0),
-	  fsLineID(0), fsIFSID(0), fsShadowID(0)
 {
+	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
+		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
+			lineShader[i][j] = nullptr;
+		}
+	}
+
 	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
-	delete lineShader;
+	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
+		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
+			delete lineShader[i][j];
+		}
+	}
+
 	return;
 }
 
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool argShadowSwitch)
 {
-	FK_UNUSED(argShadowSwitch);
-	
 	fk_Shape * shape = (argShape == nullptr) ? argModel->getShape() : argShape;
 	auto shapeType = shape->getRealShapeType();
 	auto col = &(argModel->getLineColor()->col);
@@ -45,9 +51,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 			drawShader->SetupDone(true);
 		}
 	} else {
-		if(lineShader == nullptr) ShaderSetup();
-		else drawShader = lineShader;
-		defaultShaderFlag = true;
+		DefaultShaderSetup(argModel, argShadowSwitch);
 	}
 	
 	auto parameter = drawShader->getParameter();
@@ -56,8 +60,6 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
 	drawShader->ProcPreShader();
 
-	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
-	
 	glEnable(GL_LINE_SMOOTH);
 
 	switch(shapeType) {
@@ -77,41 +79,98 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 	return;
 }
 
-void fk_LineDraw::ShaderSetup(void)
+void fk_LineDraw::DefaultShaderSetup(fk_Model *argModel, bool argShadowSwitch)
 {
-	lineShader = new fk_ShaderBinder();
-	drawShader = lineShader;
-	auto prog = drawShader->getProgram();
-	auto param = drawShader->getParameter();
+	fk_DrawVS vID = fk_DrawVS::MODEL;
+	fk_DrawFS fID = fk_DrawFS::ORG;
 
-	prog->vertexShaderSource =
-		#include "GLSL/Line_VS.out"
-		;
+	auto shape = argModel->getShape();
+	auto mode = argModel->getElementMode();
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Line_FS.out"
-		;
+	switch(shape->getRealShapeType()) {
+	  case fk_RealShapeType::LINE:
+	  case fk_RealShapeType::CURVE:
+	  case fk_RealShapeType::SURFACE:
+	  case fk_RealShapeType::GRAPH:
+		if(mode == fk_ElementMode::ELEMENT) vID = fk_DrawVS::ELEM;
+		break;
+
+	  case fk_RealShapeType::IFS:
+		vID = fk_DrawVS::IFS;
+		fID = fk_DrawFS::IFS;
+		break;
+
+	  default:
+		break;
+	}
+
+	if(argShadowSwitch) fID = fk_DrawFS::SHADOW;
+
+	if(lineShader[int(vID)][int(fID)] == nullptr) {
+		ShaderInit(vID, fID);
+	}
+	drawShader = lineShader[int(vID)][int(fID)];
+	defaultShaderFlag = true;
+
+	return;
+
+}
+
+void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
+{
+	auto *shader = new fk_ShaderBinder();
+	lineShader[int(argVID)][int(argFID)] = shader;
+
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	switch(argVID) {
+	  case fk_DrawVS::MODEL:
+		prog->vertexShaderSource =
+			#include "GLSL/Line_VS_Model.out"
+			;
+		break;
+		
+	  case fk_DrawVS::ELEM:
+		prog->vertexShaderSource =
+			#include "GLSL/Line_VS_Elem.out"
+			;
+		break;
+		
+	  default:
+		prog->vertexShaderSource =
+			#include "GLSL/Line_VS_IFS.out"
+			;
+		break;
+	}
+		
+	switch(argFID) {
+	  case fk_DrawFS::ORG:
+		prog->fragmentShaderSource =
+			#include "GLSL/Line_FS_Line.out"
+			;
+		break;
+
+	  case fk_DrawFS::IFS:
+		prog->fragmentShaderSource =
+			#include "GLSL/Line_FS_IFS.out"
+			;
+		break;
+
+	  default:
+
+		prog->fragmentShaderSource =
+			#include "GLSL/Line_FS_Shadow.out"
+			;
+		break;
+	}
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_LineDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_LineDraw", "ShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-	
-	vsModelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "LineModelVS");
-	vsElemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "LineElemVS");
-	vsIFSID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "LineIFSVS");
-	fsLineID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "LineLineFS");
-	fsIFSID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "LineIFSFS");
-	fsShadowID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "LineShadowFS");
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsLineID);
-
-	return;
 }
 
 void fk_LineDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -170,39 +229,6 @@ void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	return;
-}
-
-void fk_LineDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
-{
-	auto shape = argModel->getShape();
-	auto mode = argModel->getElementMode();
-	GLuint vID = vsModelID;
-	GLuint fID = fsLineID;
-
-	switch(shape->getRealShapeType()) {
-	  case fk_RealShapeType::LINE:
-	  case fk_RealShapeType::CURVE:
-	  case fk_RealShapeType::SURFACE:
-	  case fk_RealShapeType::GRAPH:
-
-		if(mode == fk_ElementMode::ELEMENT) vID = vsElemID;
-		break;
-
-	  case fk_RealShapeType::IFS:
-		vID = vsIFSID;
-		fID = fsIFSID;
-		break;
-
-	  default:
-		break;
-	}
-
-	if(argShadowSwitch == true) fID = fsShadowID;
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vID);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
-
 	return;
 }
 

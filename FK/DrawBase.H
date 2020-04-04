@@ -10,6 +10,21 @@
 #include <list>
 
 namespace FK {
+
+	enum class fk_DrawVS {
+		MODEL = 0,
+		ELEM,
+		IFS,
+		NUM
+	};
+
+	enum class fk_DrawFS {
+		ORG = 0,
+		IFS,
+		SHADOW,
+		NUM
+	};
+	
 	class fk_Model;
 	class fk_Shape;
 	class fk_ShaderBinder;
