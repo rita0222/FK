@@ -15,16 +15,23 @@ using namespace std;
 using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
-	: pointShader(nullptr),
-	  vsModelID(0), vsElemID(0), vsIFSID(0),
-	  fsPointID(0), fsIFSID(0), fsShadowID(0)
 {
+	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
+		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
+			pointShader[i][j] = nullptr;
+		}
+	}
 	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	delete pointShader;
+	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
+		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
+			delete pointShader[i][j];
+		}
+	}
+
 	return;
 }
 
@@ -42,9 +49,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 			drawShader->SetupDone(true);
 		}
 	} else {
-		if(pointShader == nullptr) ShaderSetup();
-		drawShader = pointShader;
-		defaultShaderFlag = true;
+		DefaultShaderSetup(argModel, argShadowSwitch);
 	}
 
 	auto parameter = drawShader->getParameter();
@@ -55,7 +60,6 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 	drawShader->ProcPreShader();
 
 	int pointNum = GetPointNum(shape);
-	if(defaultShaderFlag == true) SubroutineSetup(argModel, argShadowSwitch);
 	
 	glPointSize((GLfloat)argModel->getPointSize());
 
@@ -72,40 +76,98 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 	return;
 }
 
-void fk_PointDraw::ShaderSetup(void)
+void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel, bool argShadowSwitch)
 {
-	pointShader = new fk_ShaderBinder();
- 	auto prog = pointShader->getProgram();
-	auto param = pointShader->getParameter();
+	fk_DrawVS vID = fk_DrawVS::MODEL;
+	fk_DrawFS fID = fk_DrawFS::ORG;
 
-	prog->vertexShaderSource =
-		#include "GLSL/Point_VS.out"
-		;
+	auto shape = argModel->getShape();
+	auto mode = argModel->getElementMode();
 
-	prog->fragmentShaderSource =
-		#include "GLSL/Point_FS.out"
-		;
+	switch(shape->getRealShapeType()) {
+	  case fk_RealShapeType::POINT:
+	  case fk_RealShapeType::CURVE:
+	  case fk_RealShapeType::SURFACE:
+	  case fk_RealShapeType::GRAPH:
+
+		if(mode == fk_ElementMode::ELEMENT) vID = fk_DrawVS::ELEM;
+		break;
+
+	  case fk_RealShapeType::IFS:
+		vID = fk_DrawVS::IFS;
+		fID = fk_DrawFS::IFS;
+		break;
+
+	  default:
+		break;
+	}
+
+	if(argShadowSwitch == true) fID = fk_DrawFS::SHADOW;
+
+	if(pointShader[int(vID)][int(fID)] == nullptr) {
+		ShaderInit(vID, fID);
+	}
+	drawShader = pointShader[int(vID)][int(fID)];
+	defaultShaderFlag = true;
+
+	return;
+}
+
+void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
+{
+	auto *shader = new fk_ShaderBinder();
+	pointShader[int(argVID)][int(argFID)] = shader;
+
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
+
+	switch(argVID) {
+	  case fk_DrawVS::MODEL:
+		prog->vertexShaderSource =
+			#include "GLSL/Point_VS_Model.out"
+			;
+		break;
+		
+	  case fk_DrawVS::ELEM:
+		prog->vertexShaderSource =
+			#include "GLSL/Point_VS_Elem.out"
+			;
+		break;
+		
+	  default:
+		prog->vertexShaderSource =
+			#include "GLSL/Point_VS_IFS.out"
+			;
+		break;
+	}
+		
+	switch(argFID) {
+	  case fk_DrawFS::ORG:
+		prog->fragmentShaderSource =
+			#include "GLSL/Point_FS_Point.out"
+			;
+		break;
+
+	  case fk_DrawFS::IFS:
+		prog->fragmentShaderSource =
+			#include "GLSL/Point_FS_IFS.out"
+			;
+		break;
+
+	  default:
+
+		prog->fragmentShaderSource =
+			#include "GLSL/Point_FS_Shadow.out"
+			;
+		break;
+	}
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_PointDraw", "ShaderSetup", 1, "Shader Compile Error");
+		fk_PutError("fk_PointDraw", "ShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
-
-	auto progID = prog->getProgramID();
-
-	vsModelID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointModelVS");
-	vsElemID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointElemVS");
-	vsIFSID = glGetSubroutineIndex(progID, GL_VERTEX_SHADER, "PointIFSVS");
-	fsPointID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointPointFS");
-	fsIFSID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointIFSFS");
-	fsShadowID = glGetSubroutineIndex(progID, GL_FRAGMENT_SHADER, "PointShadowFS");
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vsModelID);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fsPointID);
-
-	return;
 }
 
 void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -116,39 +178,6 @@ void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argP
 
 	glBindFragDataLocation(argProg->getProgramID(), 0, fragmentName.c_str());
 	argProg->link();
-}
-
-void fk_PointDraw::SubroutineSetup(fk_Model *argModel, bool argShadowSwitch)
-{
-	auto shape = argModel->getShape();
-	auto mode = argModel->getElementMode();
-	GLuint vID = vsModelID;
-	GLuint fID = fsPointID;
-
-	switch(shape->getRealShapeType()) {
-	  case fk_RealShapeType::POINT:
-	  case fk_RealShapeType::CURVE:
-	  case fk_RealShapeType::SURFACE:
-	  case fk_RealShapeType::GRAPH:
-
-		if(mode == fk_ElementMode::ELEMENT) vID = vsElemID;
-		break;
-
-	  case fk_RealShapeType::IFS:
-		vID = vsIFSID;
-		fID = fsIFSID;
-		break;
-
-	  default:
-		break;
-	}
-
-	if(argShadowSwitch == true) fID = fsShadowID;
-
-	glUniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &vID);
-	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &fID);
-
-	return;
 }
 
 int fk_PointDraw::GetPointNum(fk_Shape *argShape)
