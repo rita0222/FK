@@ -21,7 +21,6 @@ namespace FK {
 	private:
 
 		fk_ShaderBinder *pointShader[int(fk_DrawVS::NUM)][int(fk_DrawFS::NUM)];
-		//GLuint vsModelID, vsElemID, vsIFSID, fsPointID, fsIFSID, fsShadowID;
 
 		void DefaultShaderSetup(fk_Model *, bool);
 		void ShaderInit(fk_DrawVS, fk_DrawFS);
