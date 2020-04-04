@@ -30,7 +30,7 @@ private:
 	fk_Model	birdModel;		// 鳥瞰視点モデル
 
 	fk_Block	body;			// 車体形状
-	fk_Circle	tire;			// タイヤ形状
+	fk_Prism	tire;			// タイヤ形状
 	fk_Sphere	driver;			// 運転者形状
 };
 
@@ -73,10 +73,12 @@ void Car::init(void)
 	double		tx = 4.0, ty = 1.0, tz = 8.0;
 
 	body.setSize(7.0, 6.0, 20.0);
-	tire.setRadius(2.0);
-	tire.setDivide(2);
+	tire.setDivide(8);
+	tire.setTopRadius(2.0);
+	tire.setBottomRadius(2.0);
+	tire.setHeight(0.5);
 	driver.setRadius(2.0);
-	driver.setDivide(2);
+	driver.setDivide(4);
 
 	bodyModel.setShape(&body);
 	bodyModel.glMoveTo(0.0, 5.0, 0.0);
@@ -102,10 +104,10 @@ void Car::init(void)
 	driverModel[1].setShape(&driver);
 	driverModel[0].glMoveTo(-2.0, 10.0, 0.0);
 	driverModel[1].glMoveTo(2.0, 10.0, 0.0);
-	driverModel[0].setMaterial(Cream);
-	driverModel[1].setMaterial(Cream);
-	driverModel[0].setSmoothMode(true);
-	driverModel[1].setSmoothMode(true);
+	driverModel[0].setMaterial(AshGray);
+	driverModel[1].setMaterial(AshGray);
+	//driverModel[0].setSmoothMode(true);
+	//driverModel[1].setSmoothMode(true);
 	driverModel[0].setParent(&carModel);
 	driverModel[1].setParent(&carModel);
 
@@ -271,7 +273,7 @@ void World::shadowSet(fk_Scene *argScene, fk_Vector argV)
 	argScene->setShadowDistance(1000.0);
 	argScene->setShadowResolution(1024);
 	argScene->setShadowVisibility(0.8);
-	argScene->setShadowBias(0.01);
+	argScene->setShadowBias(0.005);
 }
 
 int main(int, char *[])

@@ -148,7 +148,6 @@ target : $(SAMPLE)
 
 clean:
 	$(RM) $(SAMPLE) $(SAMPLEEXE) Makefile.bak \
-		$(SAMPLESRCS:cxx=obj) $(SAMPLESRCS:cxx=tds) \
 		$(SAMPLESRCS:cxx=o) $(SAMPLEAPPS) \
 		*.out core *.core *~ #*# 
 ###
