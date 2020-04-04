@@ -4,7 +4,7 @@ SHELL = /bin/sh
 .SUFFIXES : .c .o
 
 LIBSRCS = $(wildcard */*.cxx)
-GLSLSRCS = $(wildcard */GLSL/*.glsl)
+GLSLSRCS = $(wildcard */GLSL/*.glsl */GLSL/*/*.glsl)
 
 MAJORVERSION	= 4
 MINORVERSION	= 2
@@ -154,8 +154,8 @@ depend:: $(ALLSRCS)
 
 clean:
 	touch dummy~
-	$(RM) dummy~ Makefile.bak */*.o */GLSL/*.out \
-		*/*~ */GLSL/*~ */#*# */GLSL/#*#
+	$(RM) dummy~ Makefile.bak */*.o */GLSL/*.out */GLSL/*/*.out \
+		*/*~ */GLSL/*~ */GLSL/*/*~ */#*# */GLSL/#*# */GLSL/*/#*#
 
 ###
 %.o : %.cxx

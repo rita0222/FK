@@ -74,20 +74,20 @@ void fk_BezCurveDraw::ShaderSetup(void)
 	auto param = drawShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Curve_VS.out"
+		#include "GLSL/Curve/VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Curve_FS.out"
+		#include "GLSL/Curve/FS.out"
 		;
 
 	if(mode == 1) {
 		prog->tessEvalShaderSource =
-			#include "GLSL/Curve_Line_TE.out"
+			#include "GLSL/Curve/Line_TE.out"
 			;
 	} else {
 		prog->tessEvalShaderSource =
-			#include "GLSL/Curve_Point_TE.out"
+			#include "GLSL/Curve/Point_TE.out"
 			;
 	}
 	

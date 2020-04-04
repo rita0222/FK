@@ -175,11 +175,11 @@ void fk_TextureDraw::ReplaceShaderInit(void)
 	auto param = replaceShader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Texture_VS_Replace.out"
+		#include "GLSL/Texture/VS_Replace.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Texture_FS_Replace.out"
+		#include "GLSL/Texture/FS_Replace.out"
 		;
 	
 	if(prog->validate() == false) {
@@ -205,38 +205,38 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	switch(argShadingMode) {
 	  case fk_ShadingMode::PHONG:
 		prog->vertexShaderSource =
-			#include "GLSL/Texture_VS_Phong.out"
+			#include "GLSL/Texture/VS_Phong.out"
 			;
 		break;
 		
 	  case fk_ShadingMode::GOURAUD:
 		prog->vertexShaderSource =
-			#include "GLSL/Texture_VS_Gouraud_Common.out"
+			#include "GLSL/Texture/VS_Gouraud_Common.out"
 			;
 		break;
 
 		switch(argShadowMode) {
 		  case fk_ShadowMode::HARD:
 			prog->vertexShaderSource +=
-				#include "GLSL/Texture_VS_Gouraud_Hard.out"
+				#include "GLSL/Texture/VS_Gouraud_Hard.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_FAST:
 			prog->vertexShaderSource +=
-				#include "GLSL/Texture_VS_Gouraud_SoftFast.out"
+				#include "GLSL/Texture/VS_Gouraud_SoftFast.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_NICE:
 			prog->vertexShaderSource +=
-				#include "GLSL/Texture_VS_Gouraud_SoftNice.out"
+				#include "GLSL/Texture/VS_Gouraud_SoftNice.out"
 				;
 			break;
 
 		  case fk_ShadowMode::OFF:
 			prog->vertexShaderSource +=
-				#include "GLSL/Texture_VS_Gouraud_Off.out"
+				#include "GLSL/Texture/VS_Gouraud_Off.out"
 				;
 			break;
 
@@ -253,31 +253,31 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	switch(argShadingMode) {
 	  case fk_ShadingMode::PHONG:
 		prog->fragmentShaderSource =
-			#include "GLSL/Texture_FS_Phong_Common.out"
+			#include "GLSL/Texture/FS_Phong_Common.out"
 			;
 
 		switch(argShadowMode) {
 		  case fk_ShadowMode::HARD:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Phong_Hard.out"
+				#include "GLSL/Texture/FS_Phong_Hard.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_FAST:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Phong_SoftFast.out"
+				#include "GLSL/Texture/FS_Phong_SoftFast.out"
 				;
 			break;
 
 		  case fk_ShadowMode::SOFT_NICE:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Phong_SoftNice.out"
+				#include "GLSL/Texture/FS_Phong_SoftNice.out"
 				;
 			break;
 
 		  case fk_ShadowMode::OFF:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Phong_Off.out"
+				#include "GLSL/Texture/FS_Phong_Off.out"
 				;
 			break;
 
@@ -288,13 +288,13 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 		switch(argTexMode) {
 		  case fk_TexMode::MODULATE:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Phong_Mod.out"
+				#include "GLSL/Texture/FS_Phong_Mod.out"
 				;
 			break;
 			
 		  case fk_TexMode::DECAL:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Phong_Dec.out"
+				#include "GLSL/Texture/FS_Phong_Dec.out"
 				;
 			break;
 
@@ -307,13 +307,13 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 		switch(argTexMode) {
 		  case fk_TexMode::MODULATE:
 			prog->fragmentShaderSource =
-				#include "GLSL/Texture_FS_Gouraud_Mod.out"
+				#include "GLSL/Texture/FS_Gouraud_Mod.out"
 				;
 			break;
 			
 		  case fk_TexMode::DECAL:
 			prog->fragmentShaderSource +=
-				#include "GLSL/Texture_FS_Gouraud_Dec.out"
+				#include "GLSL/Texture/FS_Gouraud_Dec.out"
 				;
 			break;
 
@@ -353,16 +353,16 @@ void fk_TextureDraw::ShadowInit(int argID)
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Face_VS_Shadow.out"
+		#include "GLSL/Face/VS_Shadow.out"
 		;
 
 	if(argID == 0) {
 		prog->fragmentShaderSource =
-			#include "GLSL/Face_FS_Shadow.out"
+			#include "GLSL/Face/FS_Shadow.out"
 			;
 	} else {
 		prog->fragmentShaderSource =
-			#include "GLSL/FS_Discard.out"
+			#include "GLSL/Misc/FS_Discard.out"
 			;
 	}
 

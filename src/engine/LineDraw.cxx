@@ -127,19 +127,19 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	switch(argVID) {
 	  case fk_DrawVS::MODEL:
 		prog->vertexShaderSource =
-			#include "GLSL/Line_VS_Model.out"
+			#include "GLSL/Line/VS_Model.out"
 			;
 		break;
 		
 	  case fk_DrawVS::ELEM:
 		prog->vertexShaderSource =
-			#include "GLSL/Line_VS_Elem.out"
+			#include "GLSL/Line/VS_Elem.out"
 			;
 		break;
 		
 	  default:
 		prog->vertexShaderSource =
-			#include "GLSL/Line_VS_IFS.out"
+			#include "GLSL/Line/VS_IFS.out"
 			;
 		break;
 	}
@@ -147,20 +147,20 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	switch(argFID) {
 	  case fk_DrawFS::ORG:
 		prog->fragmentShaderSource =
-			#include "GLSL/Line_FS_Line.out"
+			#include "GLSL/Line/FS_Line.out"
 			;
 		break;
 
 	  case fk_DrawFS::IFS:
 		prog->fragmentShaderSource =
-			#include "GLSL/Line_FS_IFS.out"
+			#include "GLSL/Line/FS_IFS.out"
 			;
 		break;
 
 	  default:
 
 		prog->fragmentShaderSource =
-			#include "GLSL/Line_FS_Shadow.out"
+			#include "GLSL/Line/FS_Shadow.out"
 			;
 		break;
 	}

@@ -124,19 +124,19 @@ void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	switch(argVID) {
 	  case fk_DrawVS::MODEL:
 		prog->vertexShaderSource =
-			#include "GLSL/Point_VS_Model.out"
+			#include "GLSL/Point/VS_Model.out"
 			;
 		break;
 		
 	  case fk_DrawVS::ELEM:
 		prog->vertexShaderSource =
-			#include "GLSL/Point_VS_Elem.out"
+			#include "GLSL/Point/VS_Elem.out"
 			;
 		break;
 		
 	  default:
 		prog->vertexShaderSource =
-			#include "GLSL/Point_VS_IFS.out"
+			#include "GLSL/Point/VS_IFS.out"
 			;
 		break;
 	}
@@ -144,20 +144,20 @@ void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	switch(argFID) {
 	  case fk_DrawFS::ORG:
 		prog->fragmentShaderSource =
-			#include "GLSL/Point_FS_Point.out"
+			#include "GLSL/Point/FS_Point.out"
 			;
 		break;
 
 	  case fk_DrawFS::IFS:
 		prog->fragmentShaderSource =
-			#include "GLSL/Point_FS_IFS.out"
+			#include "GLSL/Point/FS_IFS.out"
 			;
 		break;
 
 	  default:
 
 		prog->fragmentShaderSource =
-			#include "GLSL/Point_FS_Shadow.out"
+			#include "GLSL/Point/FS_Shadow.out"
 			;
 		break;
 	}

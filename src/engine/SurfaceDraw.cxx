@@ -133,21 +133,21 @@ void fk_SurfaceDraw::LineShaderInit(fk_SurfaceDrawType argType)
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
+		#include "GLSL/Surface/VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Surface_FS_Line.out"
+		#include "GLSL/Surface/FS_Line.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Line.out"
+		#include "GLSL/Surface/TE_Line.out"
 		;
 
 	TessEvalAdd(prog, argType);
 
 	prog->geometryShaderSource =
-		#include "GLSL/Surface_GS_Line.out"
+		#include "GLSL/Surface/GS_Line.out"
 		;
 
 	if(prog->validate() == false) {
@@ -169,15 +169,15 @@ void fk_SurfaceDraw::PointShaderInit(fk_SurfaceDrawType argType)
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
+		#include "GLSL/Surface/VS.out"
 		;
 
 	prog->fragmentShaderSource =
-		#include "GLSL/Surface_FS_Line.out"
+		#include "GLSL/Surface/FS_Line.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Point.out"
+		#include "GLSL/Surface/TE_Point.out"
 		;
 
 	TessEvalAdd(prog, argType);
@@ -202,12 +202,12 @@ void fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType, fk_ShadowMode ar
 	
 	// Vertex Shader
 	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
+		#include "GLSL/Surface/VS.out"
 		;
 
 	// Tess Eval Shader
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Face.out"
+		#include "GLSL/Surface/TE_Face.out"
 		;
 
 	TessEvalAdd(prog, argType);
@@ -227,11 +227,11 @@ void fk_SurfaceDraw::TessEvalAdd(fk_ShaderProgram *argProgram, fk_SurfaceDrawTyp
 {
 	if(argType == fk_SurfaceDrawType::BEZIER) {
 		argProgram->tessEvalShaderSource +=
-			#include "GLSL/Surface_TE_Bez.out"
+			#include "GLSL/Surface/TE_Bez.out"
 			;
 	} else {
 		argProgram->tessEvalShaderSource +=
-			#include "GLSL/Surface_TE_Greg.out"
+			#include "GLSL/Surface/TE_Greg.out"
 			;
 	}
 }
@@ -253,22 +253,22 @@ void fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType, int argID)
 	auto param = shader->getParameter();
 	
 	prog->vertexShaderSource =
-		#include "GLSL/Surface_VS.out"
+		#include "GLSL/Surface/VS.out"
 		;
 
 	prog->tessEvalShaderSource =
-		#include "GLSL/Surface_TE_Point.out"
+		#include "GLSL/Surface/TE_Point.out"
 		;
 
 	TessEvalAdd(prog, argType);
 
 	if(argID == 0) {
 		prog->fragmentShaderSource =
-			#include "GLSL/Face_FS_Shadow.out"
+			#include "GLSL/Face/FS_Shadow.out"
 			;
 	} else {
 		prog->fragmentShaderSource =
-			#include "GLSL/FS_Discard.out"
+			#include "GLSL/Misc/FS_Discard.out"
 			;
 	}		
 
