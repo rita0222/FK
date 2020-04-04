@@ -44,8 +44,8 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 		lineDraw = new fk_LineDraw;
 		faceDraw = new fk_FaceDraw;
 		textureDraw = new fk_TextureDraw;
-		bezCurveLineDraw = new fk_BezCurveDraw(1);
-		bezCurvePointDraw = new fk_BezCurveDraw(2);
+		bezCurveLineDraw = new fk_BezCurveDraw(fk_CurveDrawMode::LINE);
+		bezCurvePointDraw = new fk_BezCurveDraw(fk_CurveDrawMode::POINT);
 		surfaceDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::FACE);
 		surfaceLineDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::LINE);
 		surfacePointDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::POINT);

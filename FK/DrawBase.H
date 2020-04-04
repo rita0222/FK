@@ -24,7 +24,7 @@ namespace FK {
 		SHADOW,
 		NUM
 	};
-	
+
 	class fk_Model;
 	class fk_Shape;
 	class fk_ShaderBinder;

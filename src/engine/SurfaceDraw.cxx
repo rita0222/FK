@@ -11,8 +11,8 @@ using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode)
 {
-	for(int i = 0; i < int(fk_SurfaceDrawType::NUM); ++i) {
-		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+	for(int i = 0; i < T_NUM; ++i) {
+		for(int j = 0; j < S_NUM; ++j) {
 			faceShader[i][j] = nullptr;
 		}
 		for(int j = 0; j < 2; ++j) {
@@ -28,8 +28,8 @@ fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode)
 
 fk_SurfaceDraw::~fk_SurfaceDraw()
 {
-	for(int i = 0; i < int(fk_SurfaceDrawType::NUM); ++i) {
-		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+	for(int i = 0; i < T_NUM; ++i) {
+		for(int j = 0; j < S_NUM; ++j) {
 			delete faceShader[i][j];
 		}
 		for(int j = 0; j < 2; ++j) {

@@ -8,25 +8,50 @@
 
 namespace FK {
 
+	enum class fk_CurveDrawMode {
+		LINE = 0,
+		POINT,
+		NUM
+	};
+
+	enum class fk_CurveDrawType {
+		BEZ = 0,
+		RBEZ,
+		NUM
+	};
+
+	enum class fk_CurveDrawDeg {
+		D2 = 0,
+		D3,
+		D4,
+		NUM
+	};
+
+	enum class fk_CurveShadowType {
+		ELEMENT = 0,
+		SHADOW,
+		NUM
+	};
+
 	class fk_BezCurveDraw : public fk_DrawBase {
 	public:
-		fk_BezCurveDraw(int);
+		fk_BezCurveDraw(fk_CurveDrawMode);
 		virtual ~fk_BezCurveDraw();
 
-		void	DrawShapeCurve(fk_Model *, bool);
-		GLuint	VAOSetup(fk_Shape *);
+		void DrawShapeCurve(fk_Model *, bool);
+		GLuint VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder *curveShader;
-		GLuint	bezier2_ID, bezier3_ID, bezier4_ID;
-		GLuint	rBezier2_ID, rBezier3_ID, rBezier4_ID;
-		GLuint	shadowID, elemID;
-		int		mode;
-		void	ShaderSetup(void);
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
- 		void	Draw_Curve(fk_Model *, fk_ShaderParameter *, bool);
+		static constexpr int C_NUM = int(fk_CurveDrawType::NUM);
+		static constexpr int D_NUM = int(fk_CurveDrawDeg::NUM);
+		static constexpr int S_NUM = int(fk_CurveShadowType::NUM);
 
-		bool	SubroutineSetup(fk_Curve *, bool);
+		fk_ShaderBinder *curveShader[C_NUM][D_NUM][S_NUM];
+		fk_CurveDrawMode mode;
+		void DefaultShaderSetup(fk_Type, int, bool);
+		void ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType);
+		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+ 		void Draw_Curve(fk_Model *, fk_ShaderParameter *);
 	};
 }
 
