@@ -1,75 +1,4 @@
-﻿/****************************************************************************
- *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
- *
- *	Redistribution and use in source and binary forms,
- *	with or without modification, are permitted provided that the
- *	following conditions are met:
- *
- *		- Redistributions of source code must retain the above
- *			copyright notice, this list of conditions and the
- *			following disclaimer.
- *
- *		- Redistributions in binary form must reproduce the above
- *			copyright notice, this list of conditions and the
- *			following disclaimer in the documentation and/or
- *			other materials provided with the distribution.
- *
- *		- Neither the name of the copyright holders nor the names
- *			of its contributors may be used to endorse or promote
- *			products derived from this software without specific
- *			prior written permission.
- *
- *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE. 
- *
- ****************************************************************************/
-/****************************************************************************
- *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
- *
- *	本ソフトウェアおよびソースコードのライセンスは、基本的に
- *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
- *
- *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
- *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
- *
- *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
- *		および下記免責条項を含めること。
- *
- *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
- *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
- *		含めること。
- *
- *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
- *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
- *		コントリビューターの名前を使用してはならない。
- *
- *	本ソフトウェアは、著作権者およびコントリビューターによって「現
- *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
- *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
- *	に限定されない、いかなる保証もないものとします。著作権者もコン
- *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
- *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
- *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
- *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
- *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
- *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
- *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
- *	ついて、一切責任を負わないものとします。
- *
- ****************************************************************************/
-#include <FK/FK.h>
+﻿#include <FK/FK.h>
 
 using namespace FK;
 using namespace FK::Material;
@@ -97,7 +26,6 @@ public:
 
 
 	Ball(void);
-	~Ball();
 	void		init(void);
 	fk_Model *	getModel(void);
 	fk_Vector	getPosition(void);
@@ -122,10 +50,6 @@ private:
 Ball::Ball(void)
 {
 	init();
-}
-
-Ball::~Ball()
-{
 }
 
 // 初期化
@@ -247,113 +171,191 @@ int Ball::draw(fk_Vector pos)
 
 int main(int, char *[])
 {
+	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
+
 	int				view_mode = Ball::HIGH_MODE;
-	Ball *ball = new Ball();
-	fk_Sphere *lightBall = new fk_Sphere(4, 2.0);
-	fk_Model *viewModel = new fk_Model();
-	fk_Model *groundModel = new fk_Model();
-	fk_Model *blockModel = new fk_Model();
-	fk_Model *lightModel = new fk_Model();
-	fk_Model *lightBallModel = new fk_Model();
-	fk_Light *light = new fk_Light();
-	fk_Circle *ground = new fk_Circle(4, 100.0);
-	fk_Block *block = new fk_Block(10.0, 10.0, 10.0);
-	fk_Scene *scene = new fk_Scene();
+	Ball			ball;
+	fk_Sphere		lightBall(4, 2.0);
+	fk_Model		viewModel, groundModel, blockModel;
+	fk_Model		pointLightModel, parallelLightModel, lightBallModel;
+	fk_Light		pointLight, parallelLight;
+	fk_Circle		ground(4, 100.0);
+	fk_Block		block(10.0, 10.0, 10.0);
+	fk_Scene		scene;
 
 	// ### WINDOW ###
-	fk_AppWindow	*win = new fk_AppWindow();
-	win->setSize(800, 800);
-	win->setScene(scene);
+	fk_AppWindow	win;
+	win.setSize(800, 800);
+	win.setScene(&scene);
 
 	// ### Material 初期化 ###
 	fk_Material::initDefault();
 
 	// ### VIEW POINT ###
 	// 上の方から見た視点
-	viewModel->glMoveTo(0.0, 400.0, 80.0);
-	viewModel->glFocus(0.0, 30.0, 0.0);
-	viewModel->glUpvec(0.0, 1.0, 0.0);
+	viewModel.glMoveTo(0.0, 400.0, 80.0);
+	viewModel.glFocus(0.0, 30.0, 0.0);
+	viewModel.glUpvec(0.0, 1.0, 0.0);
 
 	// ### LIGHT ###
-	light->setLightType(fk_LightType::POINT);
-	light->setAttenuation(0.0, 0.0);
-	lightModel->setShape(light);
-	lightModel->setMaterial(WhiteLight);
-	lightModel->glTranslate(-60.0, 60.0, 0.0);
-	lightModel->glVec(0.0, -1.0, 0.0);
+	pointLight.setLightType(fk_LightType::POINT);
+	pointLight.setAttenuation(0.01, 0.0, 0.2);
+	pointLightModel.setShape(&pointLight);
+	pointLightModel.setMaterial(WhiteLight);
+	pointLightModel.glTranslate(-60.0, 60.0, 0.0);
+	pointLightModel.glVec(0.0, -1.0, 0.0);
 
-	lightBallModel->setShape(lightBall);
-	lightBallModel->setMaterial(TrueWhite);
-	lightBallModel->glTranslate(lightModel->getInhPosition());
-	light->setAttenuation(0.01, 0.0, 0.2);
+	parallelLight.setLightType(fk_LightType::PARALLEL);
+	parallelLightModel.setShape(&parallelLight);
+	parallelLightModel.setMaterial(WhiteLight);
+	parallelLightModel.glVec(1.0, -1.0, 1.0);
+
+	lightBallModel.setShape(&lightBall);
+	lightBallModel.setMaterial(TrueWhite);
+	lightBallModel.glTranslate(pointLightModel.getInhPosition());
+	lightBallModel.setShadowEffect(false);
+	lightBallModel.setShadowDraw(false);
 	
 	// ### GROUND ###
-	groundModel->setShape(ground);
+	groundModel.setShape(&ground);
 	LightGreen.setSpecular(0.1, 0.1, 0.1);
 	LightGreen.setShininess(80.0);
-	groundModel->setMaterial(LightGreen);
-	groundModel->setSmoothMode(true);
-	groundModel->loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/2.0);
+	groundModel.setMaterial(LightGreen);
+	groundModel.setSmoothMode(true);
+	groundModel.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/2.0);
+	groundModel.setShadowDraw(true);
 
 	// ### VIEW BLOCK ###
-	blockModel->setShape(block);
+	blockModel.setShape(&block);
 	Blue.setSpecular(1.0, 1.0, 1.0);
 	Blue.setShininess(70.0);
-	blockModel->setMaterial(Blue);
-	blockModel->glMoveTo(60.0, 30.0, 0.0);
-	blockModel->setParent(groundModel);
+	blockModel.setMaterial(Blue);
+	blockModel.glMoveTo(60.0, 30.0, 0.0);
+	blockModel.setParent(&groundModel);
+	blockModel.setShadowDraw(false);
 
 	// ### BALL ###
 	Red.setSpecular(1.0, 1.0, 1.0);
 	Red.setShininess(100.0);
-	ball->getModel()->setMaterial(Red);
-	ball->getModel()->setSmoothMode(true);
+	ball.getModel()->setMaterial(Red);
+	ball.getModel()->setSmoothMode(true);
+	ball.getModel()->setShadowDraw(false);
 	
 	// ### Model Entry ###
-	scene->entryCamera(viewModel);
-	scene->entryModel(lightModel);
-	scene->entryModel(ball->getModel());
-	scene->entryModel(groundModel);
-	scene->entryModel(blockModel);
-	scene->entryModel(lightBallModel);
+	scene.entryCamera(&viewModel);
+	scene.entryModel(&groundModel);
+	scene.entryModel(&pointLightModel);
+	scene.entryModel(&parallelLightModel);
+	scene.entryModel(&lightBallModel);
+	scene.entryModel(&blockModel);
+	scene.entryModel(ball.getModel());
 
-	win->open();
+	scene.setShadowMode(fk_ShadowMode::SOFT_NICE);
+	scene.setShadowVec(1.0, -1.0, 1.0);
+	scene.setShadowAreaSize(500.0);
+	scene.setShadowDistance(1000.0);
+	scene.setShadowResolution(1024);
+	scene.setShadowVisibility(1.0);
+	scene.setShadowBias(0.005);
+
+	win.open();
 
 	// ### MAIN LOOP ###
-	while(win->update() == true) {
+	while(win.update() == true) {
 
 		// ボールを弾ませて, カメラの状態を取得。
-		view_mode = ball->draw(viewModel->getPosition());
+		view_mode = ball.draw(viewModel.getPosition());
 
 		if(view_mode == Ball::HIGH_MODE) {
 			// カメラを上からの視点にする。
-			viewModel->glMoveTo(0.0, 400.0, 80.0);
-			viewModel->glFocus(0.0, 30.0, 0.0);
-			viewModel->glUpvec(0.0, 1.0, 0.0);
-			scene->entryModel(blockModel);
+			viewModel.glMoveTo(0.0, 400.0, 80.0);
+			viewModel.glFocus(0.0, 30.0, 0.0);
+			viewModel.glUpvec(0.0, 1.0, 0.0);
+			scene.entryModel(&blockModel);
 		} else {
 			// カメラをブロックからの視点にする。
-			viewModel->glMoveTo(blockModel->getInhPosition());
-			viewModel->glTranslate(0.0, 10.0, 0.0);
-			viewModel->glFocus(ball->getPosition());
-			viewModel->glUpvec(0.0, 1.0, 0.0);
-			scene->removeModel(blockModel);
+			viewModel.glMoveTo(blockModel.getInhPosition());
+			viewModel.glTranslate(0.0, 10.0, 0.0);
+			viewModel.glFocus(ball.getPosition());
+			viewModel.glUpvec(0.0, 1.0, 0.0);
+			scene.removeModel(&blockModel);
 		}
 
 		// 地面をくるくる回転させましょう。
-		groundModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, Ball::ROTATE);
+		groundModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, Ball::ROTATE);
 	}
-	delete ball;
-	delete lightBall;
-	delete viewModel;
-	delete groundModel;
-	delete blockModel;
-	delete lightModel;
-	delete lightBallModel;
-	delete light;
-	delete ground;
-	delete block;
-	delete scene;
 
 	return 0;
 }
+
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	Redistribution and use in source and binary forms,
+ *	with or without modification, are permitted provided that the
+ *	following conditions are met:
+ *
+ *		- Redistributions of source code must retain the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer.
+ *
+ *		- Redistributions in binary form must reproduce the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer in the documentation and/or
+ *			other materials provided with the distribution.
+ *
+ *		- Neither the name of the copyright holders nor the names
+ *			of its contributors may be used to endorse or promote
+ *			products derived from this software without specific
+ *			prior written permission.
+ *
+ *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *	POSSIBILITY OF SUCH DAMAGE. 
+ *
+ ****************************************************************************/
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	本ソフトウェアおよびソースコードのライセンスは、基本的に
+ *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
+ *
+ *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
+ *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
+ *
+ *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
+ *		および下記免責条項を含めること。
+ *
+ *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
+ *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
+ *		含めること。
+ *
+ *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
+ *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
+ *		コントリビューターの名前を使用してはならない。
+ *
+ *	本ソフトウェアは、著作権者およびコントリビューターによって「現
+ *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
+ *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
+ *	に限定されない、いかなる保証もないものとします。著作権者もコン
+ *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
+ *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
+ *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
+ *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
+ *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
+ *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
+ *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
+ *	ついて、一切責任を負わないものとします。
+ *
+ ****************************************************************************/

@@ -1,75 +1,4 @@
-﻿/****************************************************************************
- *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
- *
- *	Redistribution and use in source and binary forms,
- *	with or without modification, are permitted provided that the
- *	following conditions are met:
- *
- *		- Redistributions of source code must retain the above
- *			copyright notice, this list of conditions and the
- *			following disclaimer.
- *
- *		- Redistributions in binary form must reproduce the above
- *			copyright notice, this list of conditions and the
- *			following disclaimer in the documentation and/or
- *			other materials provided with the distribution.
- *
- *		- Neither the name of the copyright holders nor the names
- *			of its contributors may be used to endorse or promote
- *			products derived from this software without specific
- *			prior written permission.
- *
- *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *	POSSIBILITY OF SUCH DAMAGE. 
- *
- ****************************************************************************/
-/****************************************************************************
- *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
- *
- *	本ソフトウェアおよびソースコードのライセンスは、基本的に
- *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
- *
- *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
- *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
- *
- *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
- *		および下記免責条項を含めること。
- *
- *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
- *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
- *		含めること。
- *
- *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
- *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
- *		コントリビューターの名前を使用してはならない。
- *
- *	本ソフトウェアは、著作権者およびコントリビューターによって「現
- *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
- *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
- *	に限定されない、いかなる保証もないものとします。著作権者もコン
- *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
- *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
- *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
- *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
- *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
- *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
- *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
- *	ついて、一切責任を負わないものとします。
- *
- ****************************************************************************/
-#include <list>
+﻿#include <list>
 #include <FK/FK.h>
 
 using namespace std;
@@ -101,7 +30,7 @@ private:
 	fk_Model	birdModel;		// 鳥瞰視点モデル
 
 	fk_Block	body;			// 車体形状
-	fk_Circle	tire;			// タイヤ形状
+	fk_Prism	tire;			// タイヤ形状
 	fk_Sphere	driver;			// 運転者形状
 };
 
@@ -134,6 +63,7 @@ public:
 
 	void		init(void);
 	void		entryScene(fk_Scene *);
+	void		shadowSet(fk_Scene *, fk_Vector);
 };
 
 void Car::init(void)
@@ -143,10 +73,12 @@ void Car::init(void)
 	double		tx = 4.0, ty = 1.0, tz = 8.0;
 
 	body.setSize(7.0, 6.0, 20.0);
-	tire.setRadius(2.0);
-	tire.setDivide(2);
+	tire.setDivide(8);
+	tire.setTopRadius(2.0);
+	tire.setBottomRadius(2.0);
+	tire.setHeight(0.5);
 	driver.setRadius(2.0);
-	driver.setDivide(2);
+	driver.setDivide(4);
 
 	bodyModel.setShape(&body);
 	bodyModel.glMoveTo(0.0, 5.0, 0.0);
@@ -172,10 +104,10 @@ void Car::init(void)
 	driverModel[1].setShape(&driver);
 	driverModel[0].glMoveTo(-2.0, 10.0, 0.0);
 	driverModel[1].glMoveTo(2.0, 10.0, 0.0);
-	driverModel[0].setMaterial(Cream);
-	driverModel[1].setMaterial(Cream);
-	driverModel[0].setSmoothMode(true);
-	driverModel[1].setSmoothMode(true);
+	driverModel[0].setMaterial(AshGray);
+	driverModel[1].setMaterial(AshGray);
+	//driverModel[0].setSmoothMode(true);
+	//driverModel[1].setSmoothMode(true);
 	driverModel[0].setParent(&carModel);
 	driverModel[1].setParent(&carModel);
 
@@ -302,8 +234,7 @@ void World::init(void)
 {
 
 	// 照明の設定
-	defLight(fk_Vector(1.0, 1.0, -1.0));
-	defLight(fk_Vector(-1.0, -1.0, -1.0));
+	//defLight(fk_Vector(1.0, 1.0, -1.0));
 
 	// 建物の設定
 	defBuild(fk_Vector(-250.0, 100.0), 125.0, Red);
@@ -333,6 +264,17 @@ void World::entryScene(fk_Scene *scene)
 	return;
 }
 
+void World::shadowSet(fk_Scene *argScene, fk_Vector argV)
+{
+	defLight(argV);
+	argScene->setShadowMode(fk_ShadowMode::SOFT_NICE);
+	argScene->setShadowVec(argV);
+	argScene->setShadowAreaSize(1000.0);
+	argScene->setShadowDistance(1000.0);
+	argScene->setShadowResolution(1024);
+	argScene->setShadowVisibility(0.8);
+	argScene->setShadowBias(0.005);
+}
 
 int main(int, char *[])
 {
@@ -346,6 +288,7 @@ int main(int, char *[])
 	fk_Window		buildViewWindow(420, 10, 400, 400);
 	fk_Window		birdViewWindow(830, 10, 400, 400);
 	fk_Color		bgColor(0.2, 0.7, 1.0);
+	fk_Vector		lightVec(1.0, 1.0, -1.0);
 
 	fk_Model		buildViewModel, birdViewModel;
 	double			speed = 2.0;
@@ -361,10 +304,15 @@ int main(int, char *[])
 	buildViewScene.setBGColor(bgColor);
 	birdViewScene.setBGColor(bgColor);
 
+	worldObj.shadowSet(&carViewScene, lightVec);
+	worldObj.shadowSet(&buildViewScene, lightVec);
+	worldObj.shadowSet(&birdViewScene, lightVec);
+
 	// 各モデルをディスプレイリストに登録
 	worldObj.entryScene(&carViewScene);
 	worldObj.entryScene(&buildViewScene);
 	worldObj.entryScene(&birdViewScene);
+
 
 	carObj.entryScene(&carViewScene, false);
 	carObj.entryScene(&buildViewScene, true);
@@ -420,3 +368,75 @@ int main(int, char *[])
 	
 	return 0;
 }
+
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	Redistribution and use in source and binary forms,
+ *	with or without modification, are permitted provided that the
+ *	following conditions are met:
+ *
+ *		- Redistributions of source code must retain the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer.
+ *
+ *		- Redistributions in binary form must reproduce the above
+ *			copyright notice, this list of conditions and the
+ *			following disclaimer in the documentation and/or
+ *			other materials provided with the distribution.
+ *
+ *		- Neither the name of the copyright holders nor the names
+ *			of its contributors may be used to endorse or promote
+ *			products derived from this software without specific
+ *			prior written permission.
+ *
+ *	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *	FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *	INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ *	HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ *	STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ *	IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *	POSSIBILITY OF SUCH DAMAGE. 
+ *
+ ****************************************************************************/
+/****************************************************************************
+ *
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
+ *
+ *	本ソフトウェアおよびソースコードのライセンスは、基本的に
+ *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
+ *
+ *	ソースコード形式かバイナリ形式か、変更するかしないかを問わず、
+ *	以下の条件を満たす場合に限り、再頒布および使用が許可されます。
+ *
+ *	- ソースコードを再頒布する場合、上記の著作権表示、本条件一覧、
+ *		および下記免責条項を含めること。
+ *
+ *	- バイナリ形式で再頒布する場合、頒布物に付属のドキュメント等の
+ *		資料に、上記の著作権表示、本条件一覧、および下記免責条項を
+ *		含めること。
+ *
+ *	- 書面による特別の許可なしに、本ソフトウェアから派生した製品の
+ *		宣伝または販売促進に、本ソフトウェアの著作権者の名前または
+ *		コントリビューターの名前を使用してはならない。
+ *
+ *	本ソフトウェアは、著作権者およびコントリビューターによって「現
+ *	状のまま」提供されており、明示黙示を問わず、商業的な使用可能性、
+ *	および特定の目的に対する適合性に関す暗黙の保証も含め、またそれ
+ *	に限定されない、いかなる保証もないものとします。著作権者もコン
+ *	トリビューターも、事由のいかんを問わず、損害発生の原因いかんを
+ *	問わず、かつ責任の根拠が契約であるか厳格責任であるか(過失その
+ *	他の)不法行為であるかを問わず、仮にそのような損害が発生する可
+ *	能性を知らされていたとしても、本ソフトウェアの使用によって発生
+ *	した(代替品または代用サービスの調達、使用の喪失、データの喪失、
+ *	利益の喪失、業務の中断も含め、またそれに限定されない)直接損害、
+ *	間接損害、偶発的な損害、特別損害、懲罰的損害、または結果損害に
+ *	ついて、一切責任を負わないものとします。
+ *
+ ****************************************************************************/
