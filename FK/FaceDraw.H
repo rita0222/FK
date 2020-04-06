@@ -16,7 +16,7 @@ namespace FK {
 		static void FaceFragmentInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
 
 	private:
-		fk_ShaderBinder *faceShader[SHADING_NUM][SHADOW_NUM];
+		fk_ShaderBinder *faceShader[SHADING_NUM][SHADOW_NUM][FOG_NUM];
 		fk_ShaderBinder *faceShadowShader[2];
 
 		void DefaultShaderSetup(fk_Model *, fk_ShadowMode);

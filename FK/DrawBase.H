@@ -114,6 +114,7 @@ namespace FK {
 		static constexpr int FS_NUM = int(fk_DrawFS::NUM);
 		static constexpr int SHADOW_NUM = int(fk_ShadowMode::NUM);
 		static constexpr int SHADING_NUM = int(fk_ShadingMode::NUM);
+		static constexpr int FOG_NUM = int(fk_FogMode::NUM);
 
 		fk_ShaderBinder	*drawShader, *shadowShader;
 		fk_Texture *shadowTexture;

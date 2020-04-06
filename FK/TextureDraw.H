@@ -13,7 +13,9 @@ namespace FK {
 		void	DrawShapeTexture(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
 	private:
-		fk_ShaderBinder *textureShader[SHADING_NUM][SHADOW_NUM][2];
+		static constexpr int TEXTURE_NUM = int(fk_TexMode::NUM);
+
+		fk_ShaderBinder *textureShader[SHADING_NUM][SHADOW_NUM][TEXTURE_NUM];
 		fk_ShaderBinder *replaceShader;
 		fk_ShaderBinder *texShadowShader[2];
 

@@ -11,7 +11,7 @@ fk_TextureDraw::fk_TextureDraw(void)
 {
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
-			for(int k = 0; k < 2; ++k) {
+			for(int k = 0; k < TEXTURE_NUM; ++k) {
 				textureShader[i][j][k] = nullptr;
 			}
 		}
@@ -31,7 +31,7 @@ fk_TextureDraw::~fk_TextureDraw()
 
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
-			for(int k = 0; k < 2; ++k) {
+			for(int k = 0; k < TEXTURE_NUM; ++k) {
 				delete textureShader[i][j][k];
 			}
 		}

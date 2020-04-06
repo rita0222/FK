@@ -17,9 +17,11 @@ typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
 fk_FaceDraw::fk_FaceDraw(void)
 {
-	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
-		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
-			faceShader[i][j] = nullptr;
+	for(int i = 0; i < SHADING_NUM; ++i) {
+		for(int j = 0; j < SHADOW_NUM; ++j) {
+			for(int k = 0; k < FOG_NUM; ++k) {
+				faceShader[i][j][k] = nullptr;
+			}
 		}
 	}
 
@@ -33,9 +35,11 @@ fk_FaceDraw::~fk_FaceDraw()
 	delete faceShadowShader[0];
 	delete faceShadowShader[1];
 
-	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
-		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
-			delete faceShader[i][j];
+	for(int i = 0; i < SHADING_NUM; ++i) {
+		for(int j = 0; j < SHADOW_NUM; ++j) {
+			for(int k = 0; k < FOG_NUM; ++k) {
+				delete faceShader[i][j][k];
+			}
 		}
 	}
 
@@ -136,10 +140,10 @@ void fk_FaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadow
 	fk_ShadingMode shadingMode = argModel->getShadingMode();
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 	
-	if(faceShader[int(shadingMode)][int(shadowMode)] == nullptr) {
+	if(faceShader[int(shadingMode)][int(shadowMode)][0] == nullptr) {
 		ShaderInit(shadingMode, shadowMode);
 	}
-	drawShader = faceShader[int(shadingMode)][int(shadowMode)];
+	drawShader = faceShader[int(shadingMode)][int(shadowMode)][0];
 	defaultShaderFlag = true;
 }
 
@@ -194,7 +198,7 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, boo
 void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
 {
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	faceShader[int(argShadingMode)][int(argShadowMode)] = shader;
+	faceShader[int(argShadingMode)][int(argShadowMode)][0] = shader;
 	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();

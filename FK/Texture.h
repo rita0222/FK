@@ -13,7 +13,8 @@ namespace FK {
 		MODULATE = 0,	//!< 積算モード
 		DECAL,			//!< 線形補間モード
 		REPLACE,		//!< 画像モード
-		NONE			//!< 指定なし
+		NONE,			//!< 指定なし
+		NUM
 	};
 
 	//! テクスチャ描画品質を表す列挙型
