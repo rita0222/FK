@@ -566,9 +566,8 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
-
-perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -599,9 +598,8 @@ perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
-
-perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -642,9 +640,8 @@ perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
-
-perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -684,9 +681,8 @@ perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\..\src\engine\GLSL\glsl2out
-
-perl $(SolutionDir)..\..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
