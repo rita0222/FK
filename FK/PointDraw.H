@@ -20,7 +20,7 @@ namespace FK {
 
 	private:
 
-		fk_ShaderBinder *pointShader[int(fk_DrawVS::NUM)][int(fk_DrawFS::NUM)];
+		fk_ShaderBinder *pointShader[VS_NUM][FS_NUM];
 
 		void DefaultShaderSetup(fk_Model *, bool);
 		void ShaderInit(fk_DrawVS, fk_DrawFS);

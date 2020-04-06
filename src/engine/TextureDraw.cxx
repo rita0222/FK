@@ -9,8 +9,8 @@ using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
 {
-	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
-		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+	for(int i = 0; i < SHADING_NUM; ++i) {
+		for(int j = 0; j < SHADOW_NUM; ++j) {
 			for(int k = 0; k < 2; ++k) {
 				textureShader[i][j][k] = nullptr;
 			}
@@ -29,8 +29,8 @@ fk_TextureDraw::~fk_TextureDraw()
 	delete texShadowShader[0];
 	delete texShadowShader[1];
 
-	for(int i = 0; i < int(fk_ShadingMode::NUM); ++i) {
-		for(int j = 0; j < int(fk_ShadowMode::NUM); ++j) {
+	for(int i = 0; i < SHADING_NUM; ++i) {
+		for(int j = 0; j < SHADOW_NUM; ++j) {
 			for(int k = 0; k < 2; ++k) {
 				delete textureShader[i][j][k];
 			}

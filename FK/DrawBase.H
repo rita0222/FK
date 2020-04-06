@@ -110,6 +110,11 @@ namespace FK {
 		static std::list<fk_Model *> *pointLightList;
 		static std::list<fk_Model *> *spotLightList;
 
+		static constexpr int VS_NUM = int(fk_DrawVS::NUM);
+		static constexpr int FS_NUM = int(fk_DrawFS::NUM);
+		static constexpr int SHADOW_NUM = int(fk_ShadowMode::NUM);
+		static constexpr int SHADING_NUM = int(fk_ShadingMode::NUM);
+
 		fk_ShaderBinder	*drawShader, *shadowShader;
 		fk_Texture *shadowTexture;
 		bool defaultShaderFlag;

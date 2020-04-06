@@ -8,10 +8,11 @@ namespace FK {
 
 	//! 霧効果の減衰関数を表す列挙型
 	enum class fk_FogMode {
-		LINEAR,	//!< 線形式
-		EXP,	//!< 指数式
-		EXP2,	//!< 指数(2乗)式
-		NONE	//!< 無効
+		NONE,		//!< 無効
+		LINEAR = 0,	//!< 線形式
+		EXP,		//!< 指数式
+		EXP2,		//!< 指数(2乗)式
+		NUM			//!< 種類数
 	};
 
 	//! シーン中の霧効果を制御するクラス

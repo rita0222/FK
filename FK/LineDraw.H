@@ -15,7 +15,7 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		fk_ShaderBinder *lineShader[int(fk_DrawVS::NUM)][int(fk_DrawFS::NUM)];
+		fk_ShaderBinder *lineShader[VS_NUM][FS_NUM];
 
 		void DefaultShaderSetup(fk_Model *, bool);
 		void ShaderInit(fk_DrawVS, fk_DrawFS);

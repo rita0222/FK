@@ -9,9 +9,9 @@ using namespace FK;
 
 fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode)
 {
-	for(int i = 0; i < C_NUM; ++i) {
-		for(int j = 0; j < D_NUM; ++j) {
-			for(int k = 0; k < S_NUM; ++k) {
+	for(int i = 0; i < C_DRAW_NUM; ++i) {
+		for(int j = 0; j < C_DEG_NUM; ++j) {
+			for(int k = 0; k < C_SHADOW_NUM; ++k) {
 				curveShader[i][j][k] = nullptr;
 			}
 		}
@@ -23,9 +23,9 @@ fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode)
 
 fk_BezCurveDraw::~fk_BezCurveDraw()
 {
-	for(int i = 0; i < C_NUM; ++i) {
-		for(int j = 0; j < D_NUM; ++j) {
-			for(int k = 0; k < S_NUM; ++k) {
+	for(int i = 0; i < C_DRAW_NUM; ++i) {
+		for(int j = 0; j < C_DEG_NUM; ++j) {
+			for(int k = 0; k < C_SHADOW_NUM; ++k) {
 				delete curveShader[i][j][k];
 			}
 		}

@@ -27,13 +27,12 @@ namespace FK {
 		GLuint	VAOSetup(fk_Shape *);
 
 	private:
-		static constexpr int T_NUM = int(fk_SurfaceDrawType::NUM);
-		static constexpr int S_NUM = int(fk_ShadowMode::NUM);
+		static constexpr int S_DRAW_NUM = int(fk_SurfaceDrawType::NUM);
 
-		fk_ShaderBinder *lineShader[T_NUM];
-		fk_ShaderBinder *pointShader[T_NUM];
-		fk_ShaderBinder *faceShader[T_NUM][S_NUM];
-		fk_ShaderBinder *surfaceShadowShader[T_NUM][2];
+		fk_ShaderBinder *lineShader[S_DRAW_NUM];
+		fk_ShaderBinder *pointShader[S_DRAW_NUM];
+		fk_ShaderBinder *faceShader[S_DRAW_NUM][SHADOW_NUM];
+		fk_ShaderBinder *surfaceShadowShader[S_DRAW_NUM][2];
 
 		fk_SurfaceDrawMode mode;
 		

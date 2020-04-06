@@ -42,11 +42,11 @@ namespace FK {
 		GLuint VAOSetup(fk_Shape *);
 
 	private:
-		static constexpr int C_NUM = int(fk_CurveDrawType::NUM);
-		static constexpr int D_NUM = int(fk_CurveDrawDeg::NUM);
-		static constexpr int S_NUM = int(fk_CurveShadowType::NUM);
+		static constexpr int C_DRAW_NUM = int(fk_CurveDrawType::NUM);
+		static constexpr int C_DEG_NUM = int(fk_CurveDrawDeg::NUM);
+		static constexpr int C_SHADOW_NUM = int(fk_CurveShadowType::NUM);
 
-		fk_ShaderBinder *curveShader[C_NUM][D_NUM][S_NUM];
+		fk_ShaderBinder *curveShader[C_DRAW_NUM][C_DEG_NUM][C_SHADOW_NUM];
 		fk_CurveDrawMode mode;
 		void DefaultShaderSetup(fk_Type, int, bool);
 		void ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType);
