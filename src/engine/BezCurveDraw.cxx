@@ -137,7 +137,7 @@ void fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
 			;
 	} else {
 		prog->fragmentShaderSource =
-			#include "GLSL/Misc/FS_Discard.out"
+			#include "GLSL/Common/FS_Discard.out"
 			;
 	}		
 

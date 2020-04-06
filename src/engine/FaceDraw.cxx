@@ -108,16 +108,16 @@ void fk_FaceDraw::ShadowInit(int argID)
 	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
-		#include "GLSL/Face/VS_Shadow.out"
+		#include "GLSL/Common/VS_Shadow.out"
 		;
 
 	if(argID == 0) {
 		prog->fragmentShaderSource =
-			#include "GLSL/Face/FS_Shadow.out"
+			#include "GLSL/Common/FS_Shadow.out"
 			;
 	} else {
 		prog->fragmentShaderSource =
-			#include "GLSL/Misc/FS_Discard.out"
+			#include "GLSL/Common/FS_Discard.out"
 			;
 	}
 

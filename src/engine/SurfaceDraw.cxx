@@ -264,11 +264,11 @@ void fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType, int argID)
 
 	if(argID == 0) {
 		prog->fragmentShaderSource =
-			#include "GLSL/Face/FS_Shadow.out"
+			#include "GLSL/Common/FS_Shadow.out"
 			;
 	} else {
 		prog->fragmentShaderSource =
-			#include "GLSL/Misc/FS_Discard.out"
+			#include "GLSL/Common/FS_Discard.out"
 			;
 	}		
 
