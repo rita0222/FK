@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 use File::Basename 'dirname';
+use File::Find;
 
 $scriptName = $0;
 $scriptName =~ s/^(\w)(:)/\/cygdrive\/$1/;
@@ -10,13 +11,18 @@ $dirName = dirname($scriptName);
 if ($#ARGV >= 0) {
 	@fileList = @ARGV;
 } else {
-	@fileList = glob("$dirName/*.glsl");
+#	@fileList = glob("$dirName/*.glsl");
+	find sub {
+		if($_ =~ /\.glsl$/) {
+			push(@fileList, $File::Find::name);
+		}
+	}, $dirName;
 }
 
 foreach $glslName (@fileList) {
-	next if $glslName !~ /.glsl$/;
+	next if $glslName !~ /\.glsl$/;
 	$outName = $glslName;
-	$outName =~ s/.glsl$/.out/;
+	$outName =~ s/\.glsl$/\.out/;
 
 	open(INFILE, $glslName) || die "Can't Open $glslName : $!\n";
 	open(OUTFILE, ">$outName") || die "Can't Open $outName : $!\n";
