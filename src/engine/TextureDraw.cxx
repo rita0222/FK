@@ -18,16 +18,14 @@ fk_TextureDraw::fk_TextureDraw(void)
 	}
 
 	replaceShader = nullptr;
-	texShadowShader[0] = nullptr;
-	texShadowShader[1] = nullptr;
+	texShadowShader = nullptr;
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
 	delete replaceShader;
-	delete texShadowShader[0];
-	delete texShadowShader[1];
+	delete texShadowShader;
 
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
@@ -62,7 +60,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel,
 	fk_ShaderParameter *parameter;
 
 	if(argShadowSwitch == true && defaultShaderFlag == true) {
-		ShadowSetup(argModel);
+		ShadowSetup();
 		parameter = shadowShader->getParameter();
 	} else {
 		parameter = drawShader->getParameter();
@@ -132,7 +130,10 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel,
 	fk_TexMode texMode = argModel->getTextureMode();
 	if(texMode == fk_TexMode::NONE) texMode = texture->getTextureMode();
 
-	glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
+	if(argShadowSwitch == false || argModel->getShadowEffect() == true) {
+		glDrawElements(GL_TRIANGLES, GLint(texture->GetFaceSize()*3), GL_UNSIGNED_INT, 0);
+	}
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -337,17 +338,16 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	return;
 }
 
-void fk_TextureDraw::ShadowSetup(fk_Model *argModel)
+void fk_TextureDraw::ShadowSetup(void)
 {
-	int ID = (argModel->getShadowEffect()) ? 0 : 1;
-	if(texShadowShader[ID] == nullptr) ShadowInit(ID);
-	shadowShader = texShadowShader[ID];
+	if(texShadowShader == nullptr) ShadowInit();
+	shadowShader = texShadowShader;
 }
 
-void fk_TextureDraw::ShadowInit(int argID)
+void fk_TextureDraw::ShadowInit(void)
 {
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	texShadowShader[argID] = shader;
+	texShadowShader = shader;
 	
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -356,15 +356,9 @@ void fk_TextureDraw::ShadowInit(int argID)
 		#include "GLSL/Common/VS_Shadow.out"
 		;
 
-	if(argID == 0) {
-		prog->fragmentShaderSource =
-			#include "GLSL/Common/FS_Shadow.out"
-			;
-	} else {
-		prog->fragmentShaderSource =
-			#include "GLSL/Common/FS_Discard.out"
-			;
-	}
+	prog->fragmentShaderSource =
+		#include "GLSL/Common/FS_Shadow.out"
+		;
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_TextureDraw", "ShadowInit", 1, "Shader Compile Error");

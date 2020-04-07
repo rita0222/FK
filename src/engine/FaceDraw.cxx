@@ -25,15 +25,13 @@ fk_FaceDraw::fk_FaceDraw(void)
 		}
 	}
 
-	faceShadowShader[0] = nullptr;
-	faceShadowShader[1] = nullptr;
+	faceShadowShader = nullptr;
 	return;
 }
 
 fk_FaceDraw::~fk_FaceDraw()
 {
-	delete faceShadowShader[0];
-	delete faceShadowShader[1];
+	delete faceShadowShader;
 
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
@@ -49,9 +47,9 @@ fk_FaceDraw::~fk_FaceDraw()
 void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 								fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
-	auto	shapeType = argModel->getShape()->getRealShapeType();
-	auto	drawMode = argModel->getDrawMode();
-	auto	modelShader = argModel->getShader();
+	auto shapeType = argModel->getShape()->getRealShapeType();
+	auto drawMode = argModel->getDrawMode();
+	auto modelShader = argModel->getShader();
 
 	if(modelShader != nullptr) {
 		drawShader = modelShader;
@@ -66,7 +64,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 
 	fk_ShaderParameter *parameter;
 	if(argShadowSwitch == true && defaultShaderFlag == true) {
-		ShadowSetup(argModel);
+		ShadowSetup();
 		parameter = shadowShader->getParameter();
 	} else {
 		parameter = drawShader->getParameter();
@@ -96,17 +94,16 @@ void fk_FaceDraw::PolygonModeSet(fk_Draw argDMode)
 	}
 }
 
-void fk_FaceDraw::ShadowSetup(fk_Model *argModel)
+void fk_FaceDraw::ShadowSetup(void)
 {
-	int ID = (argModel->getShadowEffect()) ? 0 : 1;
-	if(faceShadowShader[ID] == nullptr) ShadowInit(ID);
-	shadowShader = faceShadowShader[ID];
+	if(faceShadowShader == nullptr) ShadowInit();
+	shadowShader = faceShadowShader;
 }
 
-void fk_FaceDraw::ShadowInit(int argID)
+void fk_FaceDraw::ShadowInit(void)
 {
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	faceShadowShader[argID] = shader;
+	faceShadowShader = shader;
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -115,15 +112,9 @@ void fk_FaceDraw::ShadowInit(int argID)
 		#include "GLSL/Common/VS_Shadow.out"
 		;
 
-	if(argID == 0) {
-		prog->fragmentShaderSource =
-			#include "GLSL/Common/FS_Shadow.out"
-			;
-	} else {
-		prog->fragmentShaderSource =
-			#include "GLSL/Common/FS_Discard.out"
-			;
-	}
+	prog->fragmentShaderSource =
+		#include "GLSL/Common/FS_Shadow.out"
+		;
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
@@ -185,8 +176,9 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, boo
 	ifs->FaceIBOSetup();
 	ifs->BindShaderBuffer(argParam->getAttrTable());
 	shader->ProcPreShader();
-
-	glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
+	if(argShadowSwitch == false || argModel->getShadowEffect() == true) {
+		glDrawElements(GL_TRIANGLES, GLint(ifs->getFaceSize()*3), GL_UNSIGNED_INT, 0);
+	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

@@ -17,15 +17,15 @@ namespace FK {
 
 	private:
 		fk_ShaderBinder *faceShader[SHADING_NUM][SHADOW_NUM][FOG_NUM];
-		fk_ShaderBinder *faceShadowShader[2];
+		fk_ShaderBinder *faceShadowShader;
 
 		void DefaultShaderSetup(fk_Model *, fk_ShadowMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);
 		void ShaderInit(fk_ShadingMode, fk_ShadowMode);
-		void ShadowSetup(fk_Model *);
-		void ShadowInit(int);
+		void ShadowSetup(void);
+		void ShadowInit(void);
 	};
 }
 

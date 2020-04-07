@@ -32,7 +32,7 @@ namespace FK {
 		fk_ShaderBinder *lineShader[S_DRAW_NUM];
 		fk_ShaderBinder *pointShader[S_DRAW_NUM];
 		fk_ShaderBinder *faceShader[S_DRAW_NUM][SHADOW_NUM];
-		fk_ShaderBinder *surfaceShadowShader[S_DRAW_NUM][2];
+		fk_ShaderBinder *surfaceShadowShader[S_DRAW_NUM];
 
 		fk_SurfaceDrawMode mode;
 		
@@ -46,7 +46,7 @@ namespace FK {
 		void TessEvalAdd(fk_ShaderProgram *, fk_SurfaceDrawType);
 		fk_SurfaceDrawType GetSurfType(fk_Model *);
 		void ShadowSetup(fk_Model *);
-		void ShadowInit(fk_SurfaceDrawType, int);
+		void ShadowInit(fk_SurfaceDrawType);
 	};
 }
 

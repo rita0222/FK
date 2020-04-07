@@ -15,11 +15,9 @@ fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode)
 		for(int j = 0; j < SHADOW_NUM; ++j) {
 			faceShader[i][j] = nullptr;
 		}
-		for(int j = 0; j < 2; ++j) {
-			surfaceShadowShader[i][j] = nullptr;
-		}
 		lineShader[i] = nullptr;
 		pointShader[i] = nullptr;
+		surfaceShadowShader[i] = nullptr;
 	}
 
 	mode = argMode;
@@ -32,11 +30,9 @@ fk_SurfaceDraw::~fk_SurfaceDraw()
 		for(int j = 0; j < SHADOW_NUM; ++j) {
 			delete faceShader[i][j];
 		}
-		for(int j = 0; j < 2; ++j) {
-			delete surfaceShadowShader[i][j];
-		}
 		delete lineShader[i];
 		delete pointShader[i];
+		delete surfaceShadowShader[i];
 	}
 
 	return;
@@ -238,16 +234,15 @@ void fk_SurfaceDraw::TessEvalAdd(fk_ShaderProgram *argProgram, fk_SurfaceDrawTyp
 
 void fk_SurfaceDraw::ShadowSetup(fk_Model *argModel)
 {
-	int ID = (argModel->getShadowEffect()) ? 0 : 1;
-	auto type = GetSurfType(argModel);
-	if(surfaceShadowShader[int(type)][ID] == nullptr) ShadowInit(type, ID);
-	shadowShader = surfaceShadowShader[int(type)][ID];
+	fk_SurfaceDrawType type = GetSurfType(argModel);
+	if(surfaceShadowShader[int(type)] == nullptr) ShadowInit(type);
+	shadowShader = surfaceShadowShader[int(type)];
 }
 
-void fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType, int argID)
+void fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType)
 {
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	surfaceShadowShader[int(argType)][argID] = shader;
+	surfaceShadowShader[int(argType)] = shader;
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -262,15 +257,9 @@ void fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType, int argID)
 
 	TessEvalAdd(prog, argType);
 
-	if(argID == 0) {
-		prog->fragmentShaderSource =
-			#include "GLSL/Common/FS_Shadow.out"
-			;
-	} else {
-		prog->fragmentShaderSource =
-			#include "GLSL/Common/FS_Discard.out"
-			;
-	}		
+	prog->fragmentShaderSource =
+		#include "GLSL/Common/FS_Shadow.out"
+		;
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
@@ -320,7 +309,9 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, bool argShadowSwitch)
 
 	shader->ProcPreShader();
 
-	if(mode == fk_SurfaceDrawMode::FACE || argShadowSwitch == false) {
+	if(argShadowSwitch == false ||
+	   (mode == fk_SurfaceDrawMode::FACE &&
+		argModel->getShadowEffect() == true)) {
 		glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 		glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
 		glPatchParameteri(GL_PATCH_VERTICES, surf->getCtrlSize());

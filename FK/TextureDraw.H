@@ -17,7 +17,7 @@ namespace FK {
 
 		fk_ShaderBinder *textureShader[SHADING_NUM][SHADOW_NUM][TEXTURE_NUM];
 		fk_ShaderBinder *replaceShader;
-		fk_ShaderBinder *texShadowShader[2];
+		fk_ShaderBinder *texShadowShader;
 
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
@@ -25,8 +25,8 @@ namespace FK {
 		void	DefaultShaderSetup(fk_Model *, fk_ShadowMode);
 		void	ReplaceShaderInit(void);
 		void	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode);
-		void	ShadowSetup(fk_Model *);
-		void	ShadowInit(int);
+		void	ShadowSetup(void);
+		void	ShadowInit(void);
 	};
 }
 
