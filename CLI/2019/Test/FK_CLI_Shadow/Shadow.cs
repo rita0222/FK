@@ -114,11 +114,13 @@ namespace FK_CLI_Shadow
             ModelSetup(ifsModel, fk_Material.White, new fk_Vector(20.0, 5.0, 0.0));
             ModelSetup(floorModel, fk_Material.White, new fk_Vector(0.0, -1.0, 0.0));
 
+
             window.Open();
-            while (window.Update())
+            for(int count = 0;  window.Update(); count++)
             {
                 BallMove(window, spModel);
                 RobotRotate(window, ifsModel);
+                if (count == 300) ifsModel.ShadowEffect = false;
             }
         }
     }
