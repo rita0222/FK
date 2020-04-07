@@ -952,7 +952,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 	fk_DrawBase::SetShadowParam(shadowVisibility, shadowBias);
 
 	glClearDepth(1.0);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	if(curScene != nullptr) {
 		for(auto modelP : *(curScene->GetModelList())) DrawModel(modelP);

@@ -157,7 +157,7 @@ void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	  default:
 
 		prog->fragmentShaderSource =
-			#include "GLSL/Point/FS_Shadow.out"
+			#include "GLSL/Common/FS_Discard.out"
 			;
 		break;
 	}

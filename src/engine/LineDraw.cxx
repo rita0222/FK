@@ -58,8 +58,6 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::lineModelColorName, col, fk_Shape::lineModelColorName);
-	drawShader->ProcPreShader();
-
 	glEnable(GL_LINE_SMOOTH);
 
 	switch(shapeType) {
@@ -74,8 +72,6 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 	  default:
 		break;
 	}
-
-	drawShader->ProcPostShader();
 	return;
 }
 
@@ -158,10 +154,17 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 		break;
 
 	  default:
-
-		prog->fragmentShaderSource =
-			#include "GLSL/Line/FS_Shadow.out"
-			;
+		if(argVID == fk_DrawVS::IFS) {
+			prog->fragmentShaderSource =
+				#include "GLSL/Line/FS_IFS_Discard.out"
+				;
+			fk_Window::printf("IFS Discard");
+		} else {
+			prog->fragmentShaderSource =
+				#include "GLSL/Line/FS_Line_Discard.out"
+				;
+			fk_Window::printf("Line Discard");
+		}			
 		break;
 	}
 
@@ -171,6 +174,7 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 }
 
 void fk_LineDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
@@ -207,10 +211,11 @@ void fk_LineDraw::Draw_Line(fk_LineBase *argLine, fk_ShaderParameter *argParam)
 	}
 	glBindVertexArray(vao);
 	argLine->BindShaderBuffer(argParam->getAttrTable());
-	glEnable(GL_LINE_SMOOTH);
+	drawShader->ProcPreShader();
 	glDrawArrays(GL_LINES, 0, argLine->Size()*2);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	drawShader->ProcPostShader();
 	return;
 }
 
@@ -224,11 +229,12 @@ void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam
 	glBindVertexArray(vao);
 	argIFS->BindShaderBuffer(argParam->getAttrTable());
 	argIFS->EdgeIBOSetup();
-	glEnable(GL_LINE_SMOOTH);
+	drawShader->ProcPreShader();
 	glDrawElements(GL_LINES, GLint(argIFS->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	drawShader->ProcPostShader();
 	return;
 }
 
