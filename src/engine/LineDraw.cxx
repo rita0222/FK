@@ -51,7 +51,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel, argShadowSwitch);
+		DefaultShaderSetup(argModel);
 	}
 	
 	auto parameter = drawShader->getParameter();
@@ -75,7 +75,7 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 	return;
 }
 
-void fk_LineDraw::DefaultShaderSetup(fk_Model *argModel, bool argShadowSwitch)
+void fk_LineDraw::DefaultShaderSetup(fk_Model *argModel)
 {
 	fk_DrawVS vID = fk_DrawVS::MODEL;
 	fk_DrawFS fID = fk_DrawFS::ORG;
@@ -99,8 +99,6 @@ void fk_LineDraw::DefaultShaderSetup(fk_Model *argModel, bool argShadowSwitch)
 	  default:
 		break;
 	}
-
-	if(argShadowSwitch) fID = fk_DrawFS::SHADOW;
 
 	if(lineShader[int(vID)][int(fID)] == nullptr) {
 		ShaderInit(vID, fID);

@@ -22,7 +22,7 @@ namespace FK {
 
 		fk_ShaderBinder *pointShader[VS_NUM][FS_NUM];
 
-		void DefaultShaderSetup(fk_Model *, bool);
+		void DefaultShaderSetup(fk_Model *);
 		void ShaderInit(fk_DrawVS, fk_DrawFS);
 		int GetPointNum(fk_Shape *);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);

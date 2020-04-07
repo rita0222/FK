@@ -1,4 +1,4 @@
-cSHELL	= /bin/sh
+SHELL	= /bin/sh
 
 .SUFFIXES : .cxx .o
 .SUFFIXES : .c .o
@@ -145,6 +145,9 @@ mac-g:
 CFLAGS = $(OPS) $(SYSOPS) $(INCLDIRS)
 
 target : $(SAMPLE)
+
+depend:: $(SAMPLESRCS)
+	@:
 
 clean:
 	$(RM) $(SAMPLE) $(SAMPLEEXE) Makefile.bak \

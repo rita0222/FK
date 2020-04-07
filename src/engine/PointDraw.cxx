@@ -49,7 +49,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel, argShadowSwitch);
+		DefaultShaderSetup(argModel);
 	}
 
 	auto parameter = drawShader->getParameter();
@@ -76,7 +76,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 	return;
 }
 
-void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel, bool argShadowSwitch)
+void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel)
 {
 	fk_DrawVS vID = fk_DrawVS::MODEL;
 	fk_DrawFS fID = fk_DrawFS::ORG;
@@ -101,8 +101,6 @@ void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel, bool argShadowSwitch)
 	  default:
 		break;
 	}
-
-	if(argShadowSwitch == true) fID = fk_DrawFS::SHADOW;
 
 	if(pointShader[int(vID)][int(fID)] == nullptr) {
 		ShaderInit(vID, fID);
@@ -155,7 +153,6 @@ void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 		break;
 
 	  default:
-
 		prog->fragmentShaderSource =
 			#include "GLSL/Common/FS_Discard.out"
 			;

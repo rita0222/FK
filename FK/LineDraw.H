@@ -17,7 +17,7 @@ namespace FK {
 	private:
 		fk_ShaderBinder *lineShader[VS_NUM][FS_NUM];
 
-		void DefaultShaderSetup(fk_Model *, bool);
+		void DefaultShaderSetup(fk_Model *);
 		void ShaderInit(fk_DrawVS, fk_DrawFS);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
