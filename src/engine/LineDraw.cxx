@@ -158,12 +158,10 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 			prog->fragmentShaderSource =
 				#include "GLSL/Line/FS_IFS_Discard.out"
 				;
-			fk_Window::printf("IFS Discard");
 		} else {
 			prog->fragmentShaderSource =
 				#include "GLSL/Line/FS_Line_Discard.out"
 				;
-			fk_Window::printf("Line Discard");
 		}			
 		break;
 	}
