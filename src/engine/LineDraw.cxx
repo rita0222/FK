@@ -62,11 +62,11 @@ void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool arg
 
 	switch(shapeType) {
 	  case fk_RealShapeType::LINE:
-		Draw_Line(dynamic_cast<fk_LineBase *>(shape), parameter);
+		Draw_Line(dynamic_cast<fk_LineBase *>(shape), parameter, argShadowSwitch);
 		break;
 
 	  case fk_RealShapeType::IFS:
-		Draw_IFS(dynamic_cast<fk_IndexFaceSet *>(shape), parameter);
+		Draw_IFS(dynamic_cast<fk_IndexFaceSet *>(shape), parameter, argShadowSwitch);
 		break;
 
 	  default:
@@ -154,15 +154,9 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 		break;
 
 	  default:
-		if(argVID == fk_DrawVS::IFS) {
-			prog->fragmentShaderSource =
-				#include "GLSL/Line/FS_IFS_Discard.out"
-				;
-		} else {
-			prog->fragmentShaderSource =
-				#include "GLSL/Line/FS_Line_Discard.out"
-				;
-		}			
+		prog->fragmentShaderSource =
+			#include "GLSL/Common/FS_Discard.out"
+			;
 		break;
 	}
 
@@ -200,8 +194,9 @@ GLuint fk_LineDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_LineDraw::Draw_Line(fk_LineBase *argLine, fk_ShaderParameter *argParam)
+void fk_LineDraw::Draw_Line(fk_LineBase *argLine, fk_ShaderParameter *argParam, bool argShadowSwitch)
 {
+	FK_UNUSED(argShadowSwitch);
 	GLuint vao = argLine->GetLineVAO();
 
 	if(vao == 0) {
@@ -210,15 +205,16 @@ void fk_LineDraw::Draw_Line(fk_LineBase *argLine, fk_ShaderParameter *argParam)
 	glBindVertexArray(vao);
 	argLine->BindShaderBuffer(argParam->getAttrTable());
 	drawShader->ProcPreShader();
-	glDrawArrays(GL_LINES, 0, argLine->Size()*2);
+	if(!argShadowSwitch) glDrawArrays(GL_LINES, 0, argLine->Size()*2);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	drawShader->ProcPostShader();
 	return;
 }
 
-void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam)
+void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam, bool argShadowSwitch)
 {
+	FK_UNUSED(argShadowSwitch);
 	GLuint vao = argIFS->GetLineVAO();
 
 	if(vao == 0) {
@@ -228,7 +224,7 @@ void fk_LineDraw::Draw_IFS(fk_IndexFaceSet *argIFS, fk_ShaderParameter *argParam
 	argIFS->BindShaderBuffer(argParam->getAttrTable());
 	argIFS->EdgeIBOSetup();
 	drawShader->ProcPreShader();
-	glDrawElements(GL_LINES, GLint(argIFS->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
+	if(!argShadowSwitch) glDrawElements(GL_LINES, GLint(argIFS->getEdgeSize()*2), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

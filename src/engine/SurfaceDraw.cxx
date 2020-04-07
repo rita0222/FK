@@ -320,10 +320,12 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, bool argShadowSwitch)
 
 	shader->ProcPreShader();
 
-	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
-	glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
-	glPatchParameteri(GL_PATCH_VERTICES, surf->getCtrlSize());
-	glDrawArrays(GL_PATCHES, 0, surf->getCtrlSize());
+	if(mode == fk_SurfaceDrawMode::FACE || argShadowSwitch == false) {
+		glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
+		glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
+		glPatchParameteri(GL_PATCH_VERTICES, surf->getCtrlSize());
+		glDrawArrays(GL_PATCHES, 0, surf->getCtrlSize());
+	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

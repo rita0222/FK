@@ -51,7 +51,7 @@ namespace FK {
 		void DefaultShaderSetup(fk_Type, int, bool);
 		void ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
- 		void Draw_Curve(fk_Model *, fk_ShaderParameter *);
+ 		void Draw_Curve(fk_Model *, fk_ShaderParameter *, bool);
 	};
 }
 

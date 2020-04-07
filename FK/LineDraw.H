@@ -21,8 +21,8 @@ namespace FK {
 		void ShaderInit(fk_DrawVS, fk_DrawFS);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
- 		void Draw_Line(fk_LineBase *, fk_ShaderParameter *);
- 		void Draw_IFS(fk_IndexFaceSet *, fk_ShaderParameter *);
+ 		void Draw_Line(fk_LineBase *, fk_ShaderParameter *, bool);
+ 		void Draw_IFS(fk_IndexFaceSet *, fk_ShaderParameter *, bool);
 	};
 }
 #endif /* !__FK_LINE_DRAW_HEADER__ */

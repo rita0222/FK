@@ -26,7 +26,7 @@ namespace FK {
 		void ShaderInit(fk_DrawVS, fk_DrawFS);
 		int GetPointNum(fk_Shape *);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void Draw_Point(fk_Shape *, fk_ShaderParameter *, int);
+		void Draw_Point(fk_Shape *, fk_ShaderParameter *, int, bool);
 	};
 }
 

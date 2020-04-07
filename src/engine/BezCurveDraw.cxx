@@ -80,7 +80,7 @@ void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel, bool argShadowSwitch)
 
 	glEnable(GL_LINE_SMOOTH);
 
-	Draw_Curve(argModel, parameter);
+	Draw_Curve(argModel, parameter, argShadowSwitch);
 
 	drawShader->ProcPostShader();
 	return;
@@ -234,7 +234,7 @@ GLuint fk_BezCurveDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_BezCurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam)
+void fk_BezCurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argParam, bool argShadowSwitch)
 {
 	fk_Curve	*curve = dynamic_cast<fk_Curve *>(argModel->getShape());
 	GLuint		vao = curve->GetLineVAO();
@@ -247,10 +247,11 @@ void fk_BezCurveDraw::Draw_Curve(fk_Model *argModel, fk_ShaderParameter *argPara
 	curve->BindShaderBuffer(argParam->getAttrTable());
 	glEnable(GL_LINE_SMOOTH);
 
-	glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
-	glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
-	
-	glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
+	if(!argShadowSwitch) {
+		glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
+		glPatchParameteri(GL_PATCH_VERTICES, curve->getCtrlSize());
+		glDrawArrays(GL_PATCHES, 0, curve->getCtrlSize());
+	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	return;

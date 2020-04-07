@@ -66,7 +66,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 	switch(shapeType) {
 	  case fk_RealShapeType::POINT:
 	  case fk_RealShapeType::IFS:
-		Draw_Point(shape, parameter, pointNum);
+		Draw_Point(shape, parameter, pointNum, argShadowSwitch);
 		break;
 	  default:
 		break;
@@ -211,14 +211,15 @@ GLuint fk_PointDraw::VAOSetup(fk_Shape *argShape)
 	return vao;
 }
 
-void fk_PointDraw::Draw_Point(fk_Shape *argShape, fk_ShaderParameter *argParam, int argSize)
+void fk_PointDraw::Draw_Point(fk_Shape *argShape, fk_ShaderParameter *argParam,
+							  int argSize, bool argShadowSwitch)
 {
 	GLuint vao = argShape->GetPointVAO();
 
 	if(vao == 0) vao = VAOSetup(argShape);
 	glBindVertexArray(vao);
 	argShape->BindShaderBuffer(argParam->getAttrTable());
-	glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
+	if(!argShadowSwitch) glDrawArrays(GL_POINTS, 0, GLsizei(argSize));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
