@@ -82,7 +82,7 @@ int main(int, char **)
 	ifsModel.setShape(&ifsShape);
 	floorModel.setShape(&floor);
 
-	spModel.setShadowEffect(false);
+	spModel.setShadowEffect(true);
 	spModel.setShadowDraw(true);
 	ifsModel.setShadowEffect(true);
 	ifsModel.setShadowDraw(true);
