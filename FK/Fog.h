@@ -179,10 +179,7 @@ namespace FK {
 
 		fk_FogMode		fogMode;
 		double			fogStart, fogEnd, fogDensity;
-		bool			fogChangeStatus;
 		fk_Color		fogColor;
-
-		bool			GetFogChangeStatus(void);
 	};
 }
 

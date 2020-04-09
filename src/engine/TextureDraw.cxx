@@ -38,6 +38,23 @@ fk_TextureDraw::~fk_TextureDraw()
 	return;
 }
 
+bool fk_TextureDraw::AllTest(void)
+{
+	bool retFlg = true;
+	if(ReplaceShaderInit() == false) retFlg = false;
+	if(ShadowInit() == false) retFlg = false;
+	for(int i = 0; i < SHADING_NUM; ++i) {
+		for(int j = 0; j < SHADOW_NUM; ++j) {
+			for(int k = 0; k < TEXTURE_NUM; ++k) {
+				if(TextureShaderInit(fk_ShadingMode(i), fk_ShadowMode(j), fk_TexMode(k)) == false) {
+					retFlg = false;
+				}
+			}
+		}
+	}
+	return retFlg;
+}
+
 void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel,
 									  fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
@@ -168,8 +185,9 @@ void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argSha
 	defaultShaderFlag = true;
 }
 
-void fk_TextureDraw::ReplaceShaderInit(void)
+bool fk_TextureDraw::ReplaceShaderInit(void)
 {
+	delete replaceShader;
 	replaceShader = new fk_ShaderBinder();
 
 	auto prog = replaceShader->getProgram();
@@ -186,15 +204,18 @@ void fk_TextureDraw::ReplaceShaderInit(void)
 	if(prog->validate() == false) {
 		fk_PutError("fk_TextureDraw", "ReplaceShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		return false;
 	}
 
 	ParamInit(prog, param);
+	return true;
 }
 
-void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
+bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 									   fk_ShadowMode argShadowMode,
 									   fk_TexMode argTexMode)
 {
+	delete textureShader[int(argShadingMode)][int(argShadowMode)][int(argTexMode)];
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
 	textureShader[int(argShadingMode)][int(argShadowMode)][int(argTexMode)] = shader;
 	aliveShader.push_back(shader);
@@ -330,12 +351,11 @@ void fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "TextureShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
-		//fk_PutError(prog->vertexShaderSource);
-		//fk_PutError(prog->fragmentShaderSource);
+		return false;
 	}
 
 	ParamInit(prog, param);
-	return;
+	return true;
 }
 
 void fk_TextureDraw::ShadowSetup(void)
@@ -344,8 +364,9 @@ void fk_TextureDraw::ShadowSetup(void)
 	shadowShader = texShadowShader;
 }
 
-void fk_TextureDraw::ShadowInit(void)
+bool fk_TextureDraw::ShadowInit(void)
 {
+	delete texShadowShader;
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
 	texShadowShader = shader;
 	
@@ -363,11 +384,12 @@ void fk_TextureDraw::ShadowInit(void)
 	if(prog->validate() == false) {
 		fk_PutError("fk_TextureDraw", "ShadowInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		return false;
 	}
 
 	ParamInit(prog, param);
 
-	return;
+	return true;
 }
 
 /****************************************************************************

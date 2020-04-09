@@ -45,6 +45,7 @@ namespace FK {
 		static void SetShadowCamera(fk_Model *);
 		static void SetShadowParam(double, double);
 		static void SetShadowMode(fk_ShadowMode);
+		static void SetFogStatus(fk_FogMode, double, double, double, fk_Color &);
 
 		static const std::string projectionMatrixName;
 		static const std::string viewMatrixName;
@@ -58,6 +59,11 @@ namespace FK {
 		static const std::string shadowMatrixName;
 		static const std::string shadowBiasName;
 		static const std::string shadowVisibilityName;
+
+		static const std::string fogStartName;
+		static const std::string fogEndName;
+		static const std::string fogDensityName;
+		static const std::string fogColorName;
 
 		static const std::string modelMaterialName;
 		static const std::string diffuseName;
@@ -87,46 +93,63 @@ namespace FK {
 
 		void AttachShadowTexture(int, const std::string &, fk_Texture *);
 
+		virtual bool AllTest(void) = 0;
+
 	protected:
-		static fk_Matrix	*projectionMatrix;
-		static fk_Matrix	viewMatrix;
-		static fk_Matrix	modelMatrix;
-		static fk_Matrix	modelViewMatrix;
-		static fk_Matrix	modelViewProjectionMatrix;
-		static fk_Matrix	normalModelMatrix;
-		static fk_Matrix	normalModelViewMatrix;
-		static fk_Material	*modelMaterial;
-		static fk_Vector	cameraPosition;
+		// 投影関係 static メンバー
+		static fk_Matrix *projectionMatrix;
+		static fk_Matrix viewMatrix;
+		static fk_Matrix modelMatrix;
+		static fk_Matrix modelViewMatrix;
+		static fk_Matrix modelViewProjectionMatrix;
+		static fk_Matrix normalModelMatrix;
+		static fk_Matrix normalModelViewMatrix;
+		static fk_Material *modelMaterial;
+		static fk_Vector cameraPosition;
 
+		// 影関係 static メンバー
 		static fk_ShadowMode shadowMode;
-		static fk_Matrix	*shadowProjMatrix;
-		static fk_Matrix	shadowViewMatrix;
-		static fk_Matrix	shadowMatrix;
-		static fk_Matrix	shadowBiasMatrix;
-		static float		shadowBias;
-		static float		shadowVisibility;
+		static fk_Matrix *shadowProjMatrix;
+		static fk_Matrix shadowViewMatrix;
+		static fk_Matrix shadowMatrix;
+		static fk_Matrix shadowBiasMatrix;
+		static float shadowBias;
+		static float shadowVisibility;
 
+		// 霧関係 static メンバー
+		static fk_FogMode fogMode;
+		static float fogStart;
+		static float fogEnd;
+		static float fogDensity;
+		static fk_Color fogColor;
+
+		// 光源関係 static メンバー
 		static std::list<fk_Model *> *parallelLightList;
 		static std::list<fk_Model *> *pointLightList;
 		static std::list<fk_Model *> *spotLightList;
 
+		// 要素定数別名
 		static constexpr int VS_NUM = int(fk_DrawVS::NUM);
 		static constexpr int FS_NUM = int(fk_DrawFS::NUM);
 		static constexpr int SHADOW_NUM = int(fk_ShadowMode::NUM);
 		static constexpr int SHADING_NUM = int(fk_ShadingMode::NUM);
 		static constexpr int FOG_NUM = int(fk_FogMode::NUM);
 
+		// シェーダーポインターインスタンス
 		fk_ShaderBinder	*drawShader, *shadowShader;
 		fk_Texture *shadowTexture;
 		bool defaultShaderFlag;
+
+		// 生成シェーダー格納庫
 		std::vector<fk_ShaderBinder *> aliveShader;
 
 		void SetParameter(fk_ShaderParameter *);
 
 	private:
 
-		void SetMatrixParam(fk_ShaderParameter *);
-		void SetValueParam(fk_ShaderParameter *);
+		void SetProjectionParam(fk_ShaderParameter *);
+		void SetShadowParam(fk_ShaderParameter *);
+		void SetFogParam(fk_ShaderParameter *);
 		void SetMaterialParam(fk_ShaderParameter *);
 		void SetLightParam(fk_ShaderParameter *, fk_LightType);
 

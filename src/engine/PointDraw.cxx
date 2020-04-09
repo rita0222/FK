@@ -35,6 +35,20 @@ fk_PointDraw::~fk_PointDraw()
 	return;
 }
 
+bool fk_PointDraw::AllTest(void)
+{
+	bool retFlg = true;
+
+	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
+		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
+			if(ShaderInit(fk_DrawVS(i), fk_DrawFS(j)) == false) {
+				retFlg = false;
+			}
+		}
+	}
+	return retFlg;
+}
+
 void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool argShadowSwitch)
 {
 	fk_Shape *shape = (argShape == nullptr) ? argModel->getShape() : argShape;
@@ -111,8 +125,9 @@ void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel)
 	return;
 }
 
-void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
+bool fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 {
+	delete pointShader[int(argVID)][int(argFID)];
 	auto *shader = new fk_ShaderBinder();
 	pointShader[int(argVID)][int(argFID)] = shader;
 
@@ -162,9 +177,11 @@ void fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	if(prog->validate() == false) {
 		fk_PutError("fk_PointDraw", "ShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		return false;
 	}
 
 	ParamInit(prog, param);
+	return true;
 }
 
 void fk_PointDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)

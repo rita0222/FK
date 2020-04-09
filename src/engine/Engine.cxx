@@ -39,6 +39,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 {
 	if (fk_ShaderBinder::IsInitialized() == false) fk_ShaderBinder::Initialize();
 
+	// エンジン用インスタンス生成
 	if(engineNum == 0) {
 		pointDraw = new fk_PointDraw;
 		lineDraw = new fk_LineDraw;
@@ -51,18 +52,9 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 		surfacePointDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::POINT);
 	}
 
-	shaderArray.push_back(pointDraw);
-	shaderArray.push_back(lineDraw);
-	shaderArray.push_back(faceDraw);
-	shaderArray.push_back(textureDraw);
-	shaderArray.push_back(bezCurveLineDraw);
-	shaderArray.push_back(bezCurvePointDraw);
-	shaderArray.push_back(surfaceDraw);
-	shaderArray.push_back(surfaceLineDraw);
-	shaderArray.push_back(surfacePointDraw);
-
 	engineNum++;
 
+	// 基本メンバー初期化
 	winID = 0;
 	curScene = nullptr;
 	sceneStatus = 0;
@@ -76,10 +68,12 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
 	depthRead = depthWrite = true;
 
+	// 境界ボリュームモデル初期化
 	boundaryModel.setDrawMode(fk_Draw::LINE);
 	boundaryModel.setBMode(fk_BoundaryMode::NONE);
 	boundaryModel.setBDrawToggle(false);
 
+	// FBO設定初期化
 	FBOMode = false;
 	FBOWindowMode = argWinMode;
 	colorBuf = nullptr;
@@ -89,6 +83,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	fboHandle = 0;
 	FBOShader = nullptr;
 
+	// 影設定初期化
 	shadowMode = fk_ShadowMode::OFF;
 	shadowInitFlag = false;
 	shadowSwitch = false;
@@ -98,6 +93,11 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	SetShadowResolution(1024);
 	SetShadowVisibility(1.0);
 	SetShadowBias(0.0005);
+
+	// 霧設定初期化
+	fogMode = fk_FogMode::NONE;
+	fogStart = fogEnd = fogDensity = 0.0;
+	fogColor.set(0.0, 0.0, 0.0, 1.0);
 
 	return;
 }
@@ -135,6 +135,22 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 		if(fboHandle != 0) glDeleteFramebuffers(1, &fboHandle);
 	}
 	return;
+}
+
+bool fk_GraphicsEngine::AllTest(void)
+{
+	bool retFlg = true;
+
+	if(pointDraw->AllTest() == false) retFlg = false;
+	if(lineDraw->AllTest() == false) retFlg = false;
+	if(faceDraw->AllTest() == false) retFlg = false;
+	if(textureDraw->AllTest() == false) retFlg = false;
+	if(bezCurveLineDraw->AllTest() == false) retFlg = false;
+	if(bezCurvePointDraw->AllTest() == false) retFlg = false;
+	if(surfaceDraw->AllTest() == false) retFlg = false;
+	if(surfaceLineDraw->AllTest() == false) retFlg = false;
+	if(surfacePointDraw->AllTest() == false) retFlg = false;
+	return retFlg;
 }
 
 void fk_GraphicsEngine::Init(int argW, int argH)
@@ -215,21 +231,11 @@ void fk_GraphicsEngine::OpenGLInit(void)
 	glEnable(GL_MULTISAMPLE);
 	//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
-#ifndef OPENGL4
-	glDisable(GL_LIGHTING);
-	glEnable(GL_ALPHA_TEST);
-	glEnable(GL_NORMALIZE);
-	glEnable(GL_POINT_SMOOTH);
-	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-	glShadeModel(GL_FLAT);
-	glAlphaFunc(GL_GREATER, 0.01f);
-#endif
 	return;
 }
 
-void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
+void fk_GraphicsEngine::ApplySceneParameter(void)
 {
-	bool			fogStatus = false;
 	fk_Color		bgColor;
 
 	if(curScene != nullptr) {
@@ -237,13 +243,8 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 		   sceneStatus != curScene->GetProjChangeStatus()) {
 			sceneID = curScene->GetID();
 			sceneStatus = curScene->GetProjChangeStatus();
-			if(argVPFlg == true) {
-				SetViewPort();
-			}
-			curScene->GetFogChangeStatus();
-			fogStatus = true;
+			SetViewPort();
 		} else {
-			fogStatus = curScene->GetFogChangeStatus();
 		}
 
 		if(curScene->getBlendStatus() == true) {
@@ -251,9 +252,7 @@ void fk_GraphicsEngine::ApplySceneParameter(bool argVPFlg)
 		} else {
 			glDisable(GL_BLEND);
 		}
-		if(fogStatus == true) {
-			InitFogStatus(curScene);
-		}
+		InitFogStatus(curScene);
 		bgColor = curScene->getBGColor();
 		glClearColor(bgColor.col[0], bgColor.col[1], bgColor.col[2], 1.0f);
 
@@ -293,7 +292,7 @@ void fk_GraphicsEngine::DrawWorld(void)
 	}
 
 	SetDepthMode(fk_DepthMode::READ_AND_WRITE);
-	ApplySceneParameter(true);
+	ApplySceneParameter();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	curProj->MakeMat();
@@ -485,59 +484,13 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
-	FK_UNUSED(argScene);
-
-#ifndef OPENGL4
-	fk_FogMode		fogMode = argScene->getFogMode();
-
-	if(fogMode == FK_NONE_FOG) {
-		glDisable(GL_FOG);
-		return;
+	if((fogMode = argScene->getFogMode()) != fk_FogMode::NONE) {
+		fogStart = argScene->getFogLinearStart();
+		fogEnd = argScene->getFogLinearEnd();
+		fogDensity = argScene->getFogDensity();
+		fogColor = argScene->getFogColor();
 	}
 
-	glEnable(GL_FOG);
-
-	switch(fogMode) {
-	  case FK_EXP_FOG:
-		glFogi(GL_FOG_MODE, GL_EXP);
-		break;
-	
-	  case FK_EXP2_FOG:
-		glFogi(GL_FOG_MODE, GL_EXP);
-		break;
-
-	  case FK_LINEAR_FOG:
-		glFogi(GL_FOG_MODE, GL_LINEAR);
-		break;
-
-	  default:
-		break;
-	}
-
-	switch(argScene->getFogOption()) {
-	  case FK_FASTEST_FOG:
-		glHint(GL_FOG_HINT, GL_FASTEST);
-		break;
-
-	  case FK_NICEST_FOG:
-		glHint(GL_FOG_HINT, GL_NICEST);
-		break;
-
-	  case FK_NOOPTION_FOG:
-		glHint(GL_FOG_HINT, GL_DONT_CARE);
-		break;
-
-	  default:
-		break;
-	}
-
-	glFogf(GL_FOG_DENSITY, static_cast<float>(argScene->getFogDensity()));
-	glFogf(GL_FOG_START, static_cast<float>(argScene->getFogLinearStart()));
-	glFogf(GL_FOG_END, static_cast<float>(argScene->getFogLinearEnd()));
-
-	glFogfv(GL_FOG_COLOR, argScene->getFogColor().col);
-#endif
-	
 	return;
 }
 
@@ -950,6 +903,7 @@ void fk_GraphicsEngine::DrawShadow(void)
 	fk_DrawBase::SetCamera(&shadowCamera);
 	fk_DrawBase::SetShadowCamera(&shadowCamera);
 	fk_DrawBase::SetShadowParam(shadowVisibility, shadowBias);
+	fk_DrawBase::SetFogStatus(fogMode, fogStart, fogEnd, fogDensity, fogColor);
 
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

@@ -41,6 +41,8 @@ namespace FK {
 		void DrawShapeCurve(fk_Model *, bool);
 		GLuint VAOSetup(fk_Shape *);
 
+		bool AllTest(void);
+
 	private:
 		static constexpr int C_DRAW_NUM = int(fk_CurveDrawType::NUM);
 		static constexpr int C_DEG_NUM = int(fk_CurveDrawDeg::NUM);
@@ -49,7 +51,7 @@ namespace FK {
 		fk_ShaderBinder *curveShader[C_DRAW_NUM][C_DEG_NUM][C_SHADOW_NUM];
 		fk_CurveDrawMode mode;
 		void DefaultShaderSetup(fk_Type, int, bool);
-		void ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType);
+		bool ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
  		void Draw_Curve(fk_Model *, fk_ShaderParameter *, bool);
 	};

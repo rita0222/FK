@@ -15,6 +15,8 @@ namespace FK {
 		static void FaceVertexInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
 		static void FaceFragmentInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
 
+		bool AllTest(void);
+
 	private:
 		fk_ShaderBinder *faceShader[SHADING_NUM][SHADOW_NUM][FOG_NUM];
 		fk_ShaderBinder *faceShadowShader;
@@ -23,7 +25,7 @@ namespace FK {
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);
-		void ShaderInit(fk_ShadingMode, fk_ShadowMode);
+		bool ShaderInit(fk_ShadingMode, fk_ShadowMode);
 		void ShadowSetup(void);
 		void ShadowInit(void);
 	};

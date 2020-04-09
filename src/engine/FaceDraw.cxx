@@ -44,6 +44,21 @@ fk_FaceDraw::~fk_FaceDraw()
 	return;
 }
 
+bool fk_FaceDraw::AllTest(void)
+{
+	bool retFlg = true;
+	for(int i = 0; i < SHADING_NUM; ++i) {
+		for(int j = 0; j < SHADOW_NUM; ++j) {
+			if(ShaderInit(fk_ShadingMode(i), fk_ShadowMode(j)) == false) {
+				retFlg = false;
+			}
+		}
+	}
+	return retFlg;
+}
+	
+	
+
 void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 								fk_ShadowMode argShadowMode, bool argShadowSwitch)
 {
@@ -187,8 +202,9 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, boo
 	return;
 }
 
-void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
+bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
 {
+	delete faceShader[int(argShadingMode)][int(argShadowMode)][0];
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
 	faceShader[int(argShadingMode)][int(argShadowMode)][0] = shader;
 	aliveShader.push_back(shader);
@@ -205,10 +221,11 @@ void fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argSha
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "ShaderUnit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		return false;
 	}
 
 	ParamInit(prog, param);
-	return;
+	return true;
 }
 
 void fk_FaceDraw::FaceVertexInit(fk_ShaderProgram *argProg,

@@ -34,6 +34,24 @@ fk_BezCurveDraw::~fk_BezCurveDraw()
 	return;
 }
 
+bool fk_BezCurveDraw::AllTest(void)
+{
+	bool retFlg = true;
+	for(int i = 0; i < C_DRAW_NUM; ++i) {
+		for(int j = 0; j < C_DEG_NUM; ++j) {
+			for(int k = 0; k < C_SHADOW_NUM; ++k) {
+				if(ShaderInit(fk_CurveDrawType(i),
+							  fk_CurveDrawDeg(j),
+							  fk_CurveShadowType(k)) == false) {
+					retFlg = false;
+				}
+			}
+		}
+	}
+	return retFlg;
+}
+	
+
 void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel, bool argShadowSwitch)
 {
 	auto col = &(argModel->getCurveColor()->col);
@@ -117,10 +135,11 @@ void fk_BezCurveDraw::DefaultShaderSetup(fk_Type argType, int argDegree, bool ar
 	return;
 }
 	
-void fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
+bool fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
 								 fk_CurveDrawDeg argDeg,
 								 fk_CurveShadowType argShadow)
 {
+	delete curveShader[int(argType)][int(argDeg)][int(argShadow)];
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
 	curveShader[int(argType)][int(argDeg)][int(argShadow)] = shader;
 
@@ -202,14 +221,11 @@ void fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
 	if(prog->validate() == false) {
 		fk_PutError("fk_BezCurveDraw", "ShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
-	} else {
-		fk_PutError(prog->vertexShaderSource);
-		fk_PutError(prog->fragmentShaderSource);
-		fk_PutError(prog->tessEvalShaderSource);
+		return false;
 	}
 
 	ParamInit(prog, param);
-	return;
+	return true;
 }
 
 void fk_BezCurveDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)

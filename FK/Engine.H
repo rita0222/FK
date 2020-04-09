@@ -63,8 +63,11 @@ namespace FK {
 		void SetShadowVisibility(double);
 		void SetShadowBias(double);
 
+		bool AllTest(void);
+
 	private:
 
+		// DrawEngine static インスタンス群
 		static fk_PointDraw *pointDraw;
 		static fk_LineDraw *lineDraw;
 		static fk_FaceDraw *faceDraw;
@@ -75,8 +78,7 @@ namespace FK {
 		static fk_SurfaceDraw *surfacePointDraw;
 		static fk_SurfaceDraw *surfaceLineDraw;
 
-		std::vector<fk_DrawBase *> shaderArray;
-
+		// エンジン用基本メンバー
 		unsigned int drawCount;
 		unsigned int winID;
 		fk_Scene *curScene;
@@ -88,23 +90,27 @@ namespace FK {
 		fk_BlendFactor srcFactor, dstFactor;
 		bool depthRead, depthWrite;
 
-		std::vector<fk_Model *> modelArray;
-
+		// 投影処理用メンバー
 		fk_ProjectBase *curProj;
 		GLint viewArray[4];
 
+		// スナップイメージ用メンバー
 		std::vector<fk_ImType> snapBuffer;
 
+		// デフォルト投影
 		fk_Perspective defProj;
 
+		// 境界ボリューム描画用モデル
 		fk_Model boundaryModel;
 
+		// FBO用メンバー
 		bool FBOMode, FBOWindowMode;
 		fk_FrameBuffer *colorBuf;
 		fk_FrameBuffer *depthBuf;
 		GLuint rectVAO, fboHandle;
 		fk_ShaderBinder *FBOShader;
 
+		// 影用メンバー
 		GLuint shadowHandle;
 		fk_FrameBuffer *shadowBuf;
 		fk_ShadowMode shadowMode;
@@ -120,6 +126,11 @@ namespace FK {
 		double shadowVisibility;
 		double shadowBias;
 
+		// 霧用メンバー
+		fk_FogMode	fogMode;
+		double fogStart, fogEnd, fogDensity;
+		fk_Color fogColor;
+		
 		void DrawShadow(void);
 		void DrawWorld(void);
 		
@@ -134,7 +145,7 @@ namespace FK {
 		void SetProjection(fk_ProjectBase *);
 		//void SetDefaultProjection(void);
 
-		void ApplySceneParameter(bool);
+		void ApplySceneParameter(void);
 
 		void InitFogStatus(fk_Scene *);
 

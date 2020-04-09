@@ -8,7 +8,6 @@ fk_Fog::fk_Fog(void)
 	setFogDensity(0.35);
 	setFogLinearMap(1.0, 5.0);
 	setFogColor(0.5, 0.5, 0.5, 1.0);
-	fogChangeStatus = true;
 
 	return;
 }
@@ -21,14 +20,12 @@ fk_Fog::~fk_Fog()
 void fk_Fog::setFogMode(const fk_FogMode argMode)
 {
 	fogMode = argMode;
-	fogChangeStatus = true;
 	return;
 }
 
 void fk_Fog::setFogDensity(const double argDensity)
 {
 	fogDensity = argDensity;
-	fogChangeStatus = true;
 	return;
 }
 
@@ -36,14 +33,12 @@ void fk_Fog::setFogLinearMap(const double argStart, const double argEnd)
 {
 	fogStart = argStart;
 	fogEnd = argEnd;
-	fogChangeStatus = true;
 	return;
 }
 
 void fk_Fog::setFogColor(const fk_Color &argColor)
 {
 	fogColor = argColor;
-	fogChangeStatus = true;
 	return;
 }
 
@@ -51,7 +46,6 @@ void fk_Fog::setFogColor(const float argR, const float argG,
 						 const float argB, const float argA)
 {
 	fogColor.init(argR, argG, argB, argA);
-	fogChangeStatus = true;
 	return;
 }
 
@@ -59,7 +53,6 @@ void fk_Fog::setFogColor(const double argR, const double argG,
 						 const double argB, const double argA)
 {
 	fogColor.init(argR, argG, argB, argA);
-	fogChangeStatus = true;
 	return;
 }	 
 
@@ -86,16 +79,6 @@ double fk_Fog::getFogLinearEnd(void) const
 fk_Color fk_Fog::getFogColor(void) const
 {
 	return fogColor;
-}
-
-bool fk_Fog::GetFogChangeStatus(void)
-{
-	if(fogChangeStatus == true) {
-		fogChangeStatus = false;
-		return true;
-	}
-
-	return false;
 }
 
 /****************************************************************************

@@ -14,11 +14,13 @@ namespace FK {
 		void	DrawShapeLine(fk_Model *, fk_Shape *, bool);
 		GLuint	VAOSetup(fk_Shape *);
 
+		bool AllTest(void);
+
 	private:
 		fk_ShaderBinder *lineShader[VS_NUM][FS_NUM];
 
 		void DefaultShaderSetup(fk_Model *);
-		void ShaderInit(fk_DrawVS, fk_DrawFS);
+		bool ShaderInit(fk_DrawVS, fk_DrawFS);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 
  		void Draw_Line(fk_LineBase *, fk_ShaderParameter *, bool);

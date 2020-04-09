@@ -12,6 +12,9 @@ namespace FK {
 
 		void	DrawShapeTexture(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
+
+		bool AllTest(void);
+
 	private:
 		static constexpr int TEXTURE_NUM = int(fk_TexMode::NUM);
 
@@ -23,10 +26,10 @@ namespace FK {
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
 		void	PolygonModeSet(void);
 		void	DefaultShaderSetup(fk_Model *, fk_ShadowMode);
-		void	ReplaceShaderInit(void);
-		void	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode);
+		bool	ReplaceShaderInit(void);
+		bool	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode);
 		void	ShadowSetup(void);
-		void	ShadowInit(void);
+		bool	ShadowInit(void);
 	};
 }
 

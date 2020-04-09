@@ -26,6 +26,8 @@ namespace FK {
 		void	DrawShapeSurface(fk_Model *, fk_ShadowMode, bool);
 		GLuint	VAOSetup(fk_Shape *);
 
+		bool AllTest(void);
+
 	private:
 		static constexpr int S_DRAW_NUM = int(fk_SurfaceDrawType::NUM);
 
@@ -40,13 +42,13 @@ namespace FK {
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
  		void Draw_Surface(fk_Model *, bool);
 		void DefaultShaderSetup(fk_Model *, fk_ShadowMode);
-		void LineShaderInit(fk_SurfaceDrawType);
-		void PointShaderInit(fk_SurfaceDrawType);
-		void FaceShaderInit(fk_SurfaceDrawType, fk_ShadowMode);
+		bool LineShaderInit(fk_SurfaceDrawType);
+		bool PointShaderInit(fk_SurfaceDrawType);
+		bool FaceShaderInit(fk_SurfaceDrawType, fk_ShadowMode);
 		void TessEvalAdd(fk_ShaderProgram *, fk_SurfaceDrawType);
 		fk_SurfaceDrawType GetSurfType(fk_Model *);
 		void ShadowSetup(fk_Model *);
-		void ShadowInit(fk_SurfaceDrawType);
+		bool ShadowInit(fk_SurfaceDrawType);
 	};
 }
 

@@ -35,6 +35,19 @@ fk_LineDraw::~fk_LineDraw()
 	return;
 }
 
+bool fk_LineDraw::AllTest(void)
+{
+	bool retFlg = true;
+
+	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
+		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
+			if(ShaderInit(fk_DrawVS(i), fk_DrawFS(j)) == false) {
+				retFlg = false;
+			}
+		}
+	}
+	return retFlg;
+}
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape, bool argShadowSwitch)
 {
@@ -110,8 +123,9 @@ void fk_LineDraw::DefaultShaderSetup(fk_Model *argModel)
 
 }
 
-void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
+bool fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 {
+	delete lineShader[int(argVID)][int(argFID)];
 	auto *shader = new fk_ShaderBinder();
 	lineShader[int(argVID)][int(argFID)] = shader;
 
@@ -161,10 +175,12 @@ void fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 	if(prog->validate() == false) {
 		fk_PutError("fk_LineDraw", "ShaderInit", 1, "Shader Compile Error");
 		fk_PutError(prog->getLastError());
+		return false;
 	}
 
 	ParamInit(prog, param);
 	shader->SetupDone(true);
+	return true;
 }
 
 void fk_LineDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *argParam)
