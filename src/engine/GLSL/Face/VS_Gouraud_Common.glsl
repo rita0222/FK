@@ -53,12 +53,9 @@ vec3 SpotDiffuse(vec3 argP, vec3 argN)
 		float cutMin = cos(fk_SpotLight[i].cut);
 		vec3 Vl = normalize(argP - fk_SpotLight[i].position);
 		float prod = -dot(argN, Vl);
-		if(prod > cutMin) {
-			float a = Attenuation(fk_SpotLight[i].attenuation, argP,
-								  fk_SpotLight[i].position);
-			float k = clamp(pow(prod, fk_SpotLight[i].exp) * a, 0.0, 1.0);
-			sum += fk_SpotLight[i].diffuse.rgb * k;
-		}
+		float a = Attenuation(fk_SpotLight[i].attenuation, argP, fk_SpotLight[i].position);
+		float k = clamp(pow(prod, fk_SpotLight[i].exp) * a, 0.0, 1.0);
+		sum += max(0.0, sign(prod - cutMin)) * fk_SpotLight[i].diffuse.rgb * k;
 	}
 	return sum;
 }
@@ -84,8 +81,7 @@ vec3 PointSpecular(vec3 argP, vec3 argN, vec3 argV)
 		if(i == fk_PointLightNum) break;
 		vec3 Vl = normalize(argP - fk_PointLight[i].position);
 		float k = GetSpecular(argN, argV, Vl, 1.0);
-		float a = Attenuation(fk_PointLight[i].attenuation, argP,
-							  fk_PointLight[i].position);
+		float a = Attenuation(fk_PointLight[i].attenuation, argP, fk_PointLight[i].position);
 		sum += k * a * fk_PointLight[i].specular.rgb;
 	}
 
@@ -101,12 +97,9 @@ vec3 SpotSpecular(vec3 argP, vec3 argN, vec3 argV)
 		float cutMin = cos(fk_SpotLight[i].cut);
 		vec3 Vl = normalize(argP - fk_SpotLight[i].position);
 		float prod = -dot(argN, Vl);
-		if(prod > cutMin) {
-			float k = GetSpecular(argN, argV, Vl, fk_SpotLight[i].exp);
-			float a = Attenuation(fk_SpotLight[i].attenuation, argP,
-								  fk_SpotLight[i].position);
-			sum += k * a * fk_SpotLight[i].specular.rgb;
-		}
+		float k = GetSpecular(argN, argV, Vl, fk_SpotLight[i].exp);
+		float a = Attenuation(fk_SpotLight[i].attenuation, argP, fk_SpotLight[i].position);
+		sum += max(0.0, sign(prod - cutMin)) * k * a * fk_SpotLight[i].specular.rgb;
 	}
 
 	return sum;
@@ -117,20 +110,15 @@ vec3 DifSpeColor()
 	vec3 varP = gl_Position.xyz;
 	vec4 varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
 	vec3 Vn = normalize(varN.xyz);
-	vec3 difSumColor = vec3(0.0, 0.0, 0.0);
-	vec3 speSumColor = vec3(0.0, 0.0, 0.0);
 	vec3 viewVec = normalize(fk_CameraPosition - gl_Position.xyz);
 
-	difSumColor += ParallelDiffuse(Vn);
-	difSumColor += PointDiffuse(varP, Vn);
-	difSumColor += SpotDiffuse(varP, Vn);
+	vec3 difSumColor = (ParallelDiffuse(Vn) +
+						PointDiffuse(varP, Vn) + 
+						SpotDiffuse(varP, Vn)) * fk_Material.diffuse.rgb;
 
-	speSumColor += ParallelSpecular(Vn, viewVec);
-	speSumColor += PointSpecular(varP, Vn, viewVec);
-	speSumColor += SpotSpecular(varP, Vn, viewVec);
+	vec3 speColor = (ParallelSpecular(Vn, viewVec) +
+					 PointSpecular(varP, Vn, viewVec) +
+					 SpotSpecular(varP, Vn, viewVec)) * fk_Material.specular.rgb;
 
-	difSumColor *= fk_Material.diffuse.rgb;
-	speSumColor *= fk_Material.specular.rgb;
-
-	return (difSumColor + speSumColor);
+	return (difColor + speColor);
 }

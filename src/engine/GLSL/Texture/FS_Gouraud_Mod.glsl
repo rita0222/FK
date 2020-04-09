@@ -7,7 +7,5 @@ in vec2 varT;
 
 void main()
 {
-	vec4 texColor = texture(fk_TexID[0], varT);
-	vec3 trueColor = varC.rgb * texColor.rgb;
-	fk_Fragment = vec4(min(vec3(1.0, 1.0, 1.0), trueColor), varC.a * texColor.a);
+	fk_Fragment = min(vec4(1.0, 1.0, 1.0, 1.0), varC * texture(fk_TexID[0], varT));
 }
