@@ -31,9 +31,9 @@ namespace FK {
 	private:
 		static constexpr int S_DRAW_NUM = int(fk_SurfaceDrawType::NUM);
 
-		fk_ShaderBinder *lineShader[S_DRAW_NUM];
-		fk_ShaderBinder *pointShader[S_DRAW_NUM];
-		fk_ShaderBinder *faceShader[S_DRAW_NUM][SHADOW_NUM];
+		fk_ShaderBinder *lineShader[S_DRAW_NUM][FOG_NUM];
+		fk_ShaderBinder *pointShader[S_DRAW_NUM][FOG_NUM];
+		fk_ShaderBinder *faceShader[S_DRAW_NUM][FOG_NUM][SHADOW_NUM];
 		fk_ShaderBinder *surfaceShadowShader[S_DRAW_NUM];
 
 		fk_SurfaceDrawMode mode;
@@ -41,10 +41,10 @@ namespace FK {
 		void ShaderSetup(void);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
  		void Draw_Surface(fk_Model *, bool);
-		void DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
-		bool LineShaderInit(fk_SurfaceDrawType);
-		bool PointShaderInit(fk_SurfaceDrawType);
-		bool FaceShaderInit(fk_SurfaceDrawType, fk_ShadowMode, fk_FogMode);
+		void DefaultShaderSetup(fk_Model *, fk_FogMode, fk_ShadowMode);
+		bool LineShaderInit(fk_SurfaceDrawType, fk_FogMode);
+		bool PointShaderInit(fk_SurfaceDrawType, fk_FogMode);
+		bool FaceShaderInit(fk_SurfaceDrawType, fk_FogMode, fk_ShadowMode);
 		void TessEvalAdd(fk_ShaderProgram *, fk_SurfaceDrawType);
 		fk_SurfaceDrawType GetSurfType(fk_Model *);
 		void ShadowSetup(fk_Model *);

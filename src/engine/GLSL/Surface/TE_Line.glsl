@@ -4,7 +4,7 @@
 
 layout( quads, equal_spacing , ccw ) in;
 
-out vec4 varP;
+out vec4 varPP;
 
 void makeSurf(out vec3 [25]);
 
@@ -42,6 +42,6 @@ void main()
 	}
 	
 	vec4 P = vec4(pos, 1.0);
-	varP = fk_ModelMatrix * P;
+	varPP = fk_ModelMatrix * P;
 	gl_Position = fk_ModelViewProjectionMatrix * P;
 }
