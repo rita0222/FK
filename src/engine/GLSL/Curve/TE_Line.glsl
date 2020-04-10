@@ -4,9 +4,13 @@
 
 layout( isolines ) in;
 
+out vec4 varP;
+
 vec4 curveFunc();
 
 void main()
 {
-	gl_Position = fk_ModelViewProjectionMatrix * curveFunc();
+	vec4 p = curveFunc();
+	gl_Position = fk_ModelViewProjectionMatrix * p;
+	varP = fk_ModelMatrix * p;
 }

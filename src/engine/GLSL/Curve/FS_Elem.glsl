@@ -2,7 +2,11 @@
 
 #FKBuildIn
 
+float FogValue();
+
+in vec4 varP;
+
 void main()
 {
-	fk_Fragment = fk_CurveModelColor;
+	fk_Fragment = mix(fk_FogColor, fk_CurveModelColor, FogValue());
 }

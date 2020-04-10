@@ -465,7 +465,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch);
+			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch, fogMode);
 		} else if(surface != nullptr) {
 			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, fogMode);
 		}
@@ -473,7 +473,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch);
+			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch, fogMode);
 		} else if(surface != nullptr) {
 			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, fogMode);
 		}
