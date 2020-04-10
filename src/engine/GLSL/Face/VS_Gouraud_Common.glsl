@@ -112,9 +112,9 @@ vec3 DifSpeColor()
 	vec3 Vn = normalize(varN.xyz);
 	vec3 viewVec = normalize(fk_CameraPosition - gl_Position.xyz);
 
-	vec3 difSumColor = (ParallelDiffuse(Vn) +
-						PointDiffuse(varP, Vn) + 
-						SpotDiffuse(varP, Vn)) * fk_Material.diffuse.rgb;
+	vec3 difColor = (ParallelDiffuse(Vn) +
+					 PointDiffuse(varP, Vn) + 
+					 SpotDiffuse(varP, Vn)) * fk_Material.diffuse.rgb;
 
 	vec3 speColor = (ParallelSpecular(Vn, viewVec) +
 					 PointSpecular(varP, Vn, viewVec) +

@@ -320,7 +320,16 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 				;
 			break;
 
+		  case fk_TexMode::REPLACE:
+			prog->fragmentShaderSource =
+				#include "GLSL/Texture/FS_Replace.out"
+				;
+			break;
+			
 		  default:
+			prog->fragmentShaderSource =
+				#include "GLSL/Common/FS_Discard.out"
+				;
 			break;
 		}
 		break;
@@ -339,7 +348,16 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 				;
 			break;
 
+		  case fk_TexMode::REPLACE:
+			prog->fragmentShaderSource =
+				#include "GLSL/Texture/FS_Replace.out"
+				;
+			break;
+
 		  default:
+			prog->fragmentShaderSource =
+				#include "GLSL/Common/FS_Discard.out"
+				;
 			break;
 		}
 		break;
@@ -349,8 +367,11 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	}
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "TextureShaderInit", 1, "Shader Compile Error");
+		fk_PutError("fk_TextureDraw", "TextureShaderInit", 1, "Shader Compile Error");
+		fk_Printf("Mode Code (%d, %d, %d)", int(argShadingMode), int(argShadowMode), int(argTexMode));
 		fk_PutError(prog->getLastError());
+		fk_Window::putString(prog->vertexShaderSource);
+		fk_Window::putString(prog->fragmentShaderSource);
 		return false;
 	}
 

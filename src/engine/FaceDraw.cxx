@@ -219,8 +219,11 @@ bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argSha
 	FaceFragmentInit(prog, argShadingMode, argShadowMode);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShaderUnit", 1, "Shader Compile Error");
+		fk_PutError("fk_FaceDraw", "ShaderInit", 1, "Shader Compile Error");
+		fk_Printf("Mode Code (%d, %d)", int(argShadingMode), int(argShadowMode));
 		fk_PutError(prog->getLastError());
+		fk_Window::putString(prog->vertexShaderSource);
+		fk_Window::putString(prog->fragmentShaderSource);
 		return false;
 	}
 

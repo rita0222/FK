@@ -1,4 +1,4 @@
-oo#version 410 core
+#version 410 core
 
 #FKBuildIn
 
