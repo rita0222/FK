@@ -48,14 +48,16 @@ int main(int, char **)
 	fk_System::setcwd();
 	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
 
-	fk_AppWindow	window;
-	fk_Material		mat;
+	fk_AppWindow window;
+	fk_Material mat;
 
-	fk_IFSTexture	ifsShape;
-	fk_Sphere		sph(8, 7.0);
-	fk_Block		floor(200.0, 2.0, 200.0);
+	fk_IFSTexture ifsShape;
+	fk_Sphere sph(8, 7.0);
+	fk_Block floor(200.0, 2.0, 200.0);
 
-	fk_Model		spModel, ifsModel, floorModel;
+	fk_Model spModel, ifsModel, floorModel;
+
+	fk_Color bgColor(0.5, 0.5, 0.5);
 
 	fk_Material::initDefault();
 	window.setSize(WIN_W, WIN_H);
@@ -89,7 +91,7 @@ int main(int, char **)
 	floorModel.setShadowDraw(true);
 	
 	// 各モデルをディスプレイリストに登録
-	window.setBGColor(0.5f, 0.5f, 0.5f);
+	window.setBGColor(bgColor);
 	window.entry(&floorModel);
 	window.entry(&spModel);
 	window.entry(&ifsModel);
@@ -105,6 +107,10 @@ int main(int, char **)
 	window.setShadowResolution(1024);
 	window.setShadowVisibility(1.0);
 	window.setShadowBias(0.01);
+
+	window.setFogMode(fk_FogMode::EXP2);
+	window.setFogDensity(0.005);
+	window.setFogColor(bgColor);
 
 	ModelSetup(&spModel, Material::Yellow, fk_Vector(-20.0, 20.0, 0.0));
 	ModelSetup(&ifsModel, Material::White, fk_Vector(20.0, 5.0, 0.0));
