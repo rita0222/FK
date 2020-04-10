@@ -267,10 +267,10 @@ void World::entryScene(fk_Scene *scene)
 void World::shadowSet(fk_Scene *argScene, fk_Vector argV)
 {
 	defLight(argV);
-	argScene->setShadowMode(fk_ShadowMode::SOFT_NICE);
+	argScene->setShadowMode(fk_ShadowMode::SOFT_FAST);
 	argScene->setShadowVec(argV);
-	argScene->setShadowAreaSize(1000.0);
-	argScene->setShadowDistance(1000.0);
+	argScene->setShadowAreaSize(2000.0);
+	argScene->setShadowDistance(1500.0);
 	argScene->setShadowResolution(1024);
 	argScene->setShadowVisibility(0.8);
 	argScene->setShadowBias(0.005);
