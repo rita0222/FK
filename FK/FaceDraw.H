@@ -10,10 +10,10 @@ namespace FK {
 		fk_FaceDraw(void);
 		virtual ~fk_FaceDraw();
 
-		void	DrawShapeFace(fk_Model *, fk_ShadowMode, bool);
+		void	DrawShapeFace(fk_Model *, fk_ShadowMode, bool, fk_FogMode);
 		GLuint	VAOSetup(fk_Shape *);
 		static void FaceVertexInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
-		static void FaceFragmentInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode);
+		static void FaceFragmentInit(fk_ShaderProgram *, fk_ShadingMode, fk_ShadowMode, fk_FogMode);
 
 		bool AllTest(void);
 
@@ -21,11 +21,11 @@ namespace FK {
 		fk_ShaderBinder *faceShader[SHADING_NUM][SHADOW_NUM][FOG_NUM];
 		fk_ShaderBinder *faceShadowShader;
 
-		void DefaultShaderSetup(fk_Model *, fk_ShadowMode);
+		void DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void PolygonModeSet(fk_Draw);
 		void Draw_IFS(fk_Model *, fk_ShaderParameter *, bool);
-		bool ShaderInit(fk_ShadingMode, fk_ShadowMode);
+		bool ShaderInit(fk_ShadingMode, fk_ShadowMode, fk_FogMode);
 		void ShadowSetup(void);
 		void ShadowInit(void);
 	};

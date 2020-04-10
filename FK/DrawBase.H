@@ -60,9 +60,7 @@ namespace FK {
 		static const std::string shadowBiasName;
 		static const std::string shadowVisibilityName;
 
-		static const std::string fogStartName;
-		static const std::string fogEndName;
-		static const std::string fogDensityName;
+		static const std::string fogParamName;
 		static const std::string fogColorName;
 
 		static const std::string modelMaterialName;
@@ -118,9 +116,7 @@ namespace FK {
 
 		// 霧関係 static メンバー
 		static fk_FogMode fogMode;
-		static float fogStart;
-		static float fogEnd;
-		static float fogDensity;
+		static fk_Vector fogParam;
 		static fk_Color fogColor;
 
 		// 光源関係 static メンバー

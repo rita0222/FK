@@ -44,7 +44,11 @@ bool fk_SurfaceDraw::AllTest(void)
 
 	for(int i = 0; i < S_DRAW_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
-			if(FaceShaderInit(fk_SurfaceDrawType(i), fk_ShadowMode(j)) == false) retFlg = false;
+			for(int k = 0; k < FOG_NUM; ++k) {
+				if(FaceShaderInit(fk_SurfaceDrawType(i), fk_ShadowMode(j), fk_FogMode(k)) == false) {
+					retFlg = false;
+				}
+			}
 		}
 		if(LineShaderInit(fk_SurfaceDrawType(i)) == false) retFlg = false;
 		if(PointShaderInit(fk_SurfaceDrawType(i)) == false) retFlg = false;
@@ -53,8 +57,8 @@ bool fk_SurfaceDraw::AllTest(void)
 	return retFlg;
 }
 
-void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel,
-									  fk_ShadowMode argShadowMode, bool argShadowSwitch)
+void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, fk_ShadowMode argShadowMode,
+									  bool argShadowSwitch, fk_FogMode argFogMode)
 {
 	auto col = &(argModel->getCurveColor()->col);
 	auto modelShader = argModel->getShader();
@@ -67,7 +71,7 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel,
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel, argShadowMode);
+		DefaultShaderSetup(argModel, argShadowMode, argFogMode);
 	}
 
 	glDisable(GL_CULL_FACE);
@@ -104,7 +108,9 @@ fk_SurfaceDrawType fk_SurfaceDraw::GetSurfType(fk_Model *argModel)
 	return fk_SurfaceDrawType::GREGORY;
 }	
 
-void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
+void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel,
+										fk_ShadowMode argShadowMode,
+										fk_FogMode argFogMode)
 {
 	fk_SurfaceDrawType type = GetSurfType(argModel);
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
@@ -122,7 +128,7 @@ void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argSha
 
 	  case fk_SurfaceDrawMode::FACE:
 		if(faceShader[int(type)][int(shadowMode)] == nullptr) {
-			FaceShaderInit(type, shadowMode);
+			FaceShaderInit(type, shadowMode, argFogMode);
 		}
 		drawShader = faceShader[int(type)][int(shadowMode)];
 
@@ -204,11 +210,13 @@ bool fk_SurfaceDraw::PointShaderInit(fk_SurfaceDrawType argType)
 	return true;
 }
 
-bool fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType, fk_ShadowMode argMode)
+bool fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType,
+									fk_ShadowMode argShadowMode,
+									fk_FogMode argFogMode)
 {
-	delete faceShader[int(argType)][int(argMode)];
+	delete faceShader[int(argType)][int(argShadowMode)];
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	faceShader[int(argType)][int(argMode)] = shader;
+	faceShader[int(argType)][int(argShadowMode)] = shader;
 	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();
@@ -226,7 +234,7 @@ bool fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType, fk_ShadowMode ar
 
 	TessEvalAdd(prog, argType);
 
-	fk_FaceDraw::FaceFragmentInit(prog, fk_ShadingMode::PHONG, argMode);
+	fk_FaceDraw::FaceFragmentInit(prog, fk_ShadingMode::PHONG, argShadowMode, argFogMode);
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_SurfaceDraw", "FaceShaderInit", 1, "Shader Compile Error");

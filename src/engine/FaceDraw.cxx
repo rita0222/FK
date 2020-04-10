@@ -49,8 +49,10 @@ bool fk_FaceDraw::AllTest(void)
 	bool retFlg = true;
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
-			if(ShaderInit(fk_ShadingMode(i), fk_ShadowMode(j)) == false) {
-				retFlg = false;
+			for(int k = 0; k < FOG_NUM; ++k) {
+				if(ShaderInit(fk_ShadingMode(i), fk_ShadowMode(j), fk_FogMode(k)) == false) {
+					retFlg = false;
+				}
 			}
 		}
 	}
@@ -59,8 +61,8 @@ bool fk_FaceDraw::AllTest(void)
 	
 	
 
-void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
-								fk_ShadowMode argShadowMode, bool argShadowSwitch)
+void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, fk_ShadowMode argShadowMode,
+								bool argShadowSwitch, fk_FogMode argFogMode)
 {
 	auto shapeType = argModel->getShape()->getRealShapeType();
 	auto drawMode = argModel->getDrawMode();
@@ -74,7 +76,7 @@ void fk_FaceDraw::DrawShapeFace(fk_Model *argModel,
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel, argShadowMode);
+		DefaultShaderSetup(argModel, argShadowMode, argFogMode);
 	}
 
 	fk_ShaderParameter *parameter;
@@ -141,15 +143,17 @@ void fk_FaceDraw::ShadowInit(void)
 	return;
 }
 
-void fk_FaceDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
+void fk_FaceDraw::DefaultShaderSetup(fk_Model *argModel,
+									 fk_ShadowMode argShadowMode,
+									 fk_FogMode argFogMode)
 {
 	fk_ShadingMode shadingMode = argModel->getShadingMode();
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 	
-	if(faceShader[int(shadingMode)][int(shadowMode)][0] == nullptr) {
-		ShaderInit(shadingMode, shadowMode);
+	if(faceShader[int(shadingMode)][int(shadowMode)][int(argFogMode)] == nullptr) {
+		ShaderInit(shadingMode, shadowMode, argFogMode);
 	}
-	drawShader = faceShader[int(shadingMode)][int(shadowMode)][0];
+	drawShader = faceShader[int(shadingMode)][int(shadowMode)][int(argFogMode)];
 	defaultShaderFlag = true;
 }
 
@@ -202,11 +206,13 @@ void fk_FaceDraw::Draw_IFS(fk_Model *argModel, fk_ShaderParameter *argParam, boo
 	return;
 }
 
-bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argShadowMode)
+bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode,
+							 fk_ShadowMode argShadowMode,
+							 fk_FogMode argFogMode)
 {
-	delete faceShader[int(argShadingMode)][int(argShadowMode)][0];
+	delete faceShader[int(argShadingMode)][int(argShadowMode)][int(argFogMode)];
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	faceShader[int(argShadingMode)][int(argShadowMode)][0] = shader;
+	faceShader[int(argShadingMode)][int(argShadowMode)][int(argFogMode)] = shader;
 	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();
@@ -216,14 +222,14 @@ bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode, fk_ShadowMode argSha
 	FaceVertexInit(prog, argShadingMode, argShadowMode);
 		
 	// Fragment Shader
-	FaceFragmentInit(prog, argShadingMode, argShadowMode);
+	FaceFragmentInit(prog, argShadingMode, argShadowMode, argFogMode);
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "ShaderInit", 1, "Shader Compile Error");
-		fk_Printf("Mode Code (%d, %d)", int(argShadingMode), int(argShadowMode));
+		fk_Printf("Mode Code (%d, %d, %d)", int(argShadingMode), int(argShadowMode), int(argFogMode));
 		fk_PutError(prog->getLastError());
-		fk_Window::putString(prog->vertexShaderSource);
-		fk_Window::putString(prog->fragmentShaderSource);
+		//fk_Window::putString(prog->vertexShaderSource);
+		//fk_Window::putString(prog->fragmentShaderSource);
 		return false;
 	}
 
@@ -283,7 +289,8 @@ void fk_FaceDraw::FaceVertexInit(fk_ShaderProgram *argProg,
 }
 void fk_FaceDraw::FaceFragmentInit(fk_ShaderProgram *argProg,
 								   fk_ShadingMode argShadingMode,
-								   fk_ShadowMode argShadowMode)
+								   fk_ShadowMode argShadowMode,
+								   fk_FogMode argFogMode)
 {
 	// Fragment Shader
 	switch(argShadingMode) {
@@ -329,8 +336,43 @@ void fk_FaceDraw::FaceFragmentInit(fk_ShaderProgram *argProg,
 		break;
 
 	  default:
+		argProg->fragmentShaderSource =
+			#include "GLSL/Common/FS_Discard.out"
+			;
 		break;
 	}
+
+	switch(argFogMode) {
+	  case fk_FogMode::OFF:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Face/FS_Fog_Off.out"
+			;
+		break;
+		
+	  case fk_FogMode::LINEAR:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Face/FS_Fog_Linear.out"
+			;
+		break;
+
+	  case fk_FogMode::EXP:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Face/FS_Fog_Exp1.out"
+			;
+		break;
+
+	  case fk_FogMode::EXP2:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Face/FS_Fog_Exp2.out"
+			;
+		break;
+
+	  default:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Face/FS_Fog_Off.out"
+			;
+		break;
+	}		
 }	
 
 /****************************************************************************

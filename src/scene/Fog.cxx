@@ -4,7 +4,7 @@ using namespace FK;
 
 fk_Fog::fk_Fog(void)
 {
-	setFogMode(fk_FogMode::NONE);
+	setFogMode(fk_FogMode::OFF);
 	setFogDensity(0.35);
 	setFogLinearMap(1.0, 5.0);
 	setFogColor(0.5, 0.5, 0.5, 1.0);

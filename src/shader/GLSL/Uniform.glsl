@@ -26,4 +26,4 @@ uniform vec2 fk_FBOSize;
 uniform float fk_ShadowVisibility;
 uniform float fk_ShadowBias;
 uniform vec4 fk_FogColor;
-uniform vec4 fk_FogParam;
+uniform vec3 fk_FogParam;

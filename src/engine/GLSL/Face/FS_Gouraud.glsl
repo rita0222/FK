@@ -3,6 +3,9 @@
 #FKBuildIn
 
 in vec4 varC;
+in vec4 varP;
+
+float FogValue();
 
 void main()
 {

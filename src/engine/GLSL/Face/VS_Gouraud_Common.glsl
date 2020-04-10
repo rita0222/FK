@@ -3,6 +3,7 @@
 #FKBuildIn
 
 out vec4 varC;
+out vec4 varP;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {
@@ -107,18 +108,18 @@ vec3 SpotSpecular(vec3 argP, vec3 argN, vec3 argV)
 
 vec3 DifSpeColor()
 {
-	vec3 varP = gl_Position.xyz;
-	vec4 varN = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
-	vec3 Vn = normalize(varN.xyz);
+	vec3 P = gl_Position.xyz;
+	vec4 N = fk_NormalModelMatrix * vec4(fk_Normal, 0.0);
+	vec3 Vn = normalize(N.xyz);
 	vec3 viewVec = normalize(fk_CameraPosition - gl_Position.xyz);
 
 	vec3 difColor = (ParallelDiffuse(Vn) +
-					 PointDiffuse(varP, Vn) + 
-					 SpotDiffuse(varP, Vn)) * fk_Material.diffuse.rgb;
+					 PointDiffuse(P, Vn) + 
+					 SpotDiffuse(P, Vn)) * fk_Material.diffuse.rgb;
 
 	vec3 speColor = (ParallelSpecular(Vn, viewVec) +
-					 PointSpecular(varP, Vn, viewVec) +
-					 SpotSpecular(varP, Vn, viewVec)) * fk_Material.specular.rgb;
+					 PointSpecular(P, Vn, viewVec) +
+					 SpotSpecular(P, Vn, viewVec)) * fk_Material.specular.rgb;
 
 	return (difColor + speColor);
 }

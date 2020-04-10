@@ -95,7 +95,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	SetShadowBias(0.0005);
 
 	// 霧設定初期化
-	fogMode = fk_FogMode::NONE;
+	fogMode = fk_FogMode::OFF;
 	fogStart = fogEnd = fogDensity = 0.0;
 	fogColor.set(0.0, 0.0, 0.0, 1.0);
 
@@ -426,7 +426,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	argModel->getShape()->FlushAttr();
 
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
-		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch);
+		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch, fogMode);
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
@@ -435,7 +435,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
 		if(surface != nullptr) {
-			surfaceDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
+			surfaceDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, fogMode);
 		}
 	}
 
@@ -467,7 +467,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
+			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, fogMode);
 		}
 	}
 
@@ -475,7 +475,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 		if(curve != nullptr) {
 			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch);
 		} else if(surface != nullptr) {
-			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch);
+			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, fogMode);
 		}
 	}
 	
@@ -484,7 +484,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
-	if((fogMode = argScene->getFogMode()) != fk_FogMode::NONE) {
+	if((fogMode = argScene->getFogMode()) != fk_FogMode::OFF) {
 		fogStart = argScene->getFogLinearStart();
 		fogEnd = argScene->getFogLinearEnd();
 		fogDensity = argScene->getFogDensity();

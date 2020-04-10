@@ -21,10 +21,8 @@ const string fk_DrawBase::shadowMatrixName = "fk_ShadowMatrix";
 const string fk_DrawBase::shadowVisibilityName = "fk_ShadowVisibility";
 const string fk_DrawBase::shadowBiasName = "fk_ShadowBias";
 
-const string fk_DrawBase::fogStartName = "fk_FogStart";
-const string fk_DrawBase::fogEndName = "fk_FogEnd";
-const string fk_DrawBase::fogDensityName = "fk_FogDensity";
 const string fk_DrawBase::fogColorName = "fk_FogColor";
+const string fk_DrawBase::fogParamName = "fk_FogParam";
 
 const string fk_DrawBase::modelMaterialName = "fk_Material";
 const string fk_DrawBase::diffuseName = "diffuse";
@@ -68,10 +66,8 @@ float fk_DrawBase::shadowVisibility = 1.0f;
 float fk_DrawBase::shadowBias = 0.0005f;
 fk_ShadowMode fk_DrawBase::shadowMode = fk_ShadowMode::OFF;
 
-fk_FogMode fk_DrawBase::fogMode = fk_FogMode::NONE;
-float fk_DrawBase::fogStart = 0.0f;
-float fk_DrawBase::fogEnd = 0.0f;
-float fk_DrawBase::fogDensity = 0.0f;
+fk_FogMode fk_DrawBase::fogMode = fk_FogMode::OFF;
+fk_Vector fk_DrawBase::fogParam;
 fk_Color fk_DrawBase::fogColor;
 
 list<fk_Model *> * fk_DrawBase::parallelLightList;
@@ -142,10 +138,8 @@ void fk_DrawBase::SetFogStatus(fk_FogMode argFogMode,
 							   double argFogStart, double argFogEnd,
 							   double argFogDensity, fk_Color &argFogColor)
 {
-	if((fogMode = argFogMode) != fk_FogMode::NONE) {
-		fogStart = float(argFogStart);
-		fogEnd = float(argFogEnd);
-		fogDensity = float(argFogDensity);
+	if((fogMode = argFogMode) != fk_FogMode::OFF) {
+		fogParam.set(argFogStart, argFogEnd, argFogDensity);
 		fogColor = argFogColor;
 	}
 }
@@ -196,7 +190,7 @@ void fk_DrawBase::SetParameter(fk_ShaderParameter *argParam)
 {
 	if(projectionMatrix != nullptr) SetProjectionParam(argParam);
 	if(shadowMode != fk_ShadowMode::OFF) SetShadowParam(argParam);
-	if(fogMode != fk_FogMode::NONE) SetFogParam(argParam);
+	if(fogMode != fk_FogMode::OFF) SetFogParam(argParam);
 	SetMaterialParam(argParam);
 	SetLightParam(argParam, fk_LightType::PARALLEL);
 	SetLightParam(argParam, fk_LightType::POINT);
@@ -230,9 +224,7 @@ void fk_DrawBase::SetShadowParam(fk_ShaderParameter *argParam)
 
 void fk_DrawBase::SetFogParam(fk_ShaderParameter *argParam)
 {
-	argParam->setRegister(fogStartName, fogStart, fogStartName);
-	argParam->setRegister(fogEndName, fogEnd, fogEndName);
-	argParam->setRegister(fogDensityName, fogDensity, fogDensityName);
+	argParam->setRegister(fogParamName, &fogParam, fogParamName);
 	argParam->setRegister(fogColorName, &(fogColor.col), fogColorName);
 }
 
