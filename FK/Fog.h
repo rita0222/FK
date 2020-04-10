@@ -58,10 +58,10 @@ namespace FK {
 		 *			e^{-\left(dz\right)^2}
 		 *		\f]
 		 *		式中の \f$ d \f$ は setFogDensity() で設定します。
-		 *	- fk_FogMode::NONE \n
+		 *	- fk_FogMode::OFF \n
 		 *		この値を設定した場合、霧効果を無効にします。
 		 *	.
-		 *	デフォルトでは fk_FogMode::NONE が設定されています。
+		 *	デフォルトでは fk_FogMode::OFF が設定されています。
 		 *
 		 *	\param[in] mode		減衰関数を表す値
 		 */

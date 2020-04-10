@@ -4,6 +4,7 @@
 
 out vec4 varC;
 out vec2 varT;
+out vec4 varP;
 
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {

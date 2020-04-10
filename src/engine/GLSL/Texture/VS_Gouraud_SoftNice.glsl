@@ -33,8 +33,10 @@ float Shadow_Soft_Nice_Value()
 
 void main()
 {
-	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
+	vec4 p = vec4(fk_Vertex, 1.0);
+	gl_Position = fk_ModelViewProjectionMatrix * p;
 	vec3 addColor = DifSpeColor() * Shadow_Soft_Nice_Value() + fk_Material.ambient.rgb;
 	varC = vec4(min(addColor, vec3(1.0, 1.0, 1.0)), fk_Material.diffuse.a);
 	varT = fk_TexCoord;
+	varP = fk_ModelMatrix * p;
 }

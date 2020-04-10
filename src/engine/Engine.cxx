@@ -430,7 +430,7 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
-		textureDraw->DrawShapeTexture(argModel, shadowMode, shadowSwitch);
+		textureDraw->DrawShapeTexture(argModel, shadowMode, shadowSwitch, fogMode);
 	}
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
@@ -441,25 +441,25 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	if((drawMode & fk_Draw::POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			pointDraw->DrawShapePoint(argModel, curve->GetPoint(), shadowSwitch);
+			pointDraw->DrawShapePoint(argModel, curve->GetPoint(), shadowSwitch, fogMode);
 		} else if(surface != nullptr) {
-			pointDraw->DrawShapePoint(argModel, surface->GetPoint(), shadowSwitch);
+			pointDraw->DrawShapePoint(argModel, surface->GetPoint(), shadowSwitch, fogMode);
 		} else if(graph != nullptr) {
-			pointDraw->DrawShapePoint(argModel, graph->GetVertexShape(), shadowSwitch);
+			pointDraw->DrawShapePoint(argModel, graph->GetVertexShape(), shadowSwitch, fogMode);
 		} else {
-			pointDraw->DrawShapePoint(argModel, nullptr, shadowSwitch);
+			pointDraw->DrawShapePoint(argModel, nullptr, shadowSwitch, fogMode);
 		}
 	}
 
 	if((drawMode & fk_Draw::LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			lineDraw->DrawShapeLine(argModel, curve->GetLine(), shadowSwitch);
+			lineDraw->DrawShapeLine(argModel, curve->GetLine(), shadowSwitch, fogMode);
 		} else if(surface != nullptr) {
-			lineDraw->DrawShapeLine(argModel, surface->GetLine(), shadowSwitch);
+			lineDraw->DrawShapeLine(argModel, surface->GetLine(), shadowSwitch, fogMode);
 		} else if(graph != nullptr) {
-			lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape(), shadowSwitch);
+			lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape(), shadowSwitch, fogMode);
 		} else {
-			lineDraw->DrawShapeLine(argModel, nullptr, shadowSwitch);
+			lineDraw->DrawShapeLine(argModel, nullptr, shadowSwitch, fogMode);
 		}
 	}
 

@@ -807,6 +807,61 @@ double fk_AppWindow::getShadowBias(void)
 	return ref_scene->getShadowBias();
 }
 
+void fk_AppWindow::setFogMode(const fk_FogMode argMode)
+{
+	ref_scene->setFogMode(argMode);
+}
+
+void fk_AppWindow::setFogDensity(const double argD)
+{
+	ref_scene->setFogDensity(argD);
+}
+
+void fk_AppWindow::setFogLinearMap(const double argS, const double argE)
+{
+	ref_scene->setFogLinearMap(argS, argE);
+}
+
+void fk_AppWindow::setFogColor(const fk_Color &argCol)
+{
+	ref_scene->setFogColor(argCol);
+}
+
+void fk_AppWindow::setFogColor(float argR, float argG, float argB, float argA)
+{
+	ref_scene->setFogColor(argR, argG, argB, argA);
+}
+
+void fk_AppWindow::setFogColor(double argR, double argG, double argB, double argA)
+{
+	ref_scene->setFogColor(argR, argG, argB, argA);
+}
+
+fk_FogMode fk_AppWindow::getFogMode(void) const
+{
+	return ref_scene->getFogMode();
+}
+
+double fk_AppWindow::getFogDensity(void) const
+{
+	return ref_scene->getFogDensity();
+}
+
+double fk_AppWindow::getFogLinearStart(void) const
+{
+	return ref_scene->getFogLinearStart();
+}
+
+double fk_AppWindow::getFogLinearEnd(void) const
+{
+	return ref_scene->getFogLinearEnd();
+}
+
+fk_Color fk_AppWindow::getFogColor(void) const
+{
+	return ref_scene->getFogColor();
+}
+
 /****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.

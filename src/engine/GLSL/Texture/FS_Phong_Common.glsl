@@ -7,6 +7,9 @@ in vec4 varN;
 in vec2 varT;
 in vec4 varS;
 
+float FogValue();
+float ShadowValue();
+
 float Attenuation(vec3 argA, vec3 argP1, vec3 argP2)
 {
 	float dist = distance(argP1, argP2);

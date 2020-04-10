@@ -331,6 +331,42 @@ void fk_DrawBase::AttachShadowTexture(int argID, const string &strName, fk_Textu
 	}
 }
 
+void fk_DrawBase::FragmentFogInit(fk_ShaderProgram *argProg, fk_FogMode argFogMode)
+{
+	switch(argFogMode) {
+	  case fk_FogMode::OFF:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Common/FS_Fog_Off.out"
+			;
+		break;
+		
+	  case fk_FogMode::LINEAR:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Common/FS_Fog_Linear.out"
+			;
+		break;
+
+	  case fk_FogMode::EXP:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Common/FS_Fog_Exp1.out"
+			;
+		break;
+
+	  case fk_FogMode::EXP2:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Common/FS_Fog_Exp2.out"
+			;
+		break;
+
+	  default:
+		argProg->fragmentShaderSource +=
+			#include "GLSL/Common/FS_Fog_Off.out"
+			;
+		break;
+	}
+	return;
+}
+
 /****************************************************************************
  *
  *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.

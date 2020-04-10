@@ -12,25 +12,35 @@ fk_TextureDraw::fk_TextureDraw(void)
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
 			for(int k = 0; k < TEXTURE_NUM; ++k) {
-				textureShader[i][j][k] = nullptr;
+				for(int l = 0; l < FOG_NUM; ++l) {
+					textureShader[i][j][k][l] = nullptr;
+				}
 			}
 		}
 	}
 
-	replaceShader = nullptr;
+	for(int i = 0; i < FOG_NUM; ++i) {
+		replaceShader[i] = nullptr;
+	}
+
 	texShadowShader = nullptr;
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete replaceShader;
 	delete texShadowShader;
+
+	for(int i = 0; i < FOG_NUM; ++i) {
+		delete replaceShader[i];
+	}
 
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
 			for(int k = 0; k < TEXTURE_NUM; ++k) {
-				delete textureShader[i][j][k];
+				for(int l = 0; l < FOG_NUM; ++l) {
+					delete textureShader[i][j][k][l];
+				}
 			}
 		}
 	}
@@ -41,13 +51,20 @@ fk_TextureDraw::~fk_TextureDraw()
 bool fk_TextureDraw::AllTest(void)
 {
 	bool retFlg = true;
-	if(ReplaceShaderInit() == false) retFlg = false;
 	if(ShadowInit() == false) retFlg = false;
+
+	for(int i = 0; i < FOG_NUM; ++i) {
+		if(ReplaceShaderInit(fk_FogMode(i)) == false) retFlg = false;
+	}
+
 	for(int i = 0; i < SHADING_NUM; ++i) {
 		for(int j = 0; j < SHADOW_NUM; ++j) {
 			for(int k = 0; k < TEXTURE_NUM; ++k) {
-				if(TextureShaderInit(fk_ShadingMode(i), fk_ShadowMode(j), fk_TexMode(k)) == false) {
-					retFlg = false;
+				for(int l = 0; l < FOG_NUM; ++l) {
+					if(TextureShaderInit(fk_ShadingMode(i), fk_ShadowMode(j),
+										 fk_TexMode(k), fk_FogMode(l)) == false) {
+						retFlg = false;
+					}
 				}
 			}
 		}
@@ -55,8 +72,8 @@ bool fk_TextureDraw::AllTest(void)
 	return retFlg;
 }
 
-void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel,
-									  fk_ShadowMode argShadowMode, bool argShadowSwitch)
+void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel, fk_ShadowMode argShadowMode,
+									  bool argShadowSwitch, fk_FogMode argFogMode)
 {
 	auto modelShader = argModel->getShader();
 
@@ -68,7 +85,7 @@ void fk_TextureDraw::DrawShapeTexture(fk_Model *argModel,
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel, argShadowMode);
+		DefaultShaderSetup(argModel, argShadowMode, argFogMode);
 		defaultShaderFlag = true;
 	}
 	
@@ -158,7 +175,8 @@ void fk_TextureDraw::Draw_Texture(fk_Model *argModel,
 	return;
 }
 
-void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argShadowMode)
+void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel,
+										fk_ShadowMode argShadowMode, fk_FogMode argFogMode)
 {
 	fk_Texture *texture = dynamic_cast<fk_Texture *>(argModel->getShape());
 	fk_TexMode texMode = argModel->getTextureMode();
@@ -166,32 +184,36 @@ void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel, fk_ShadowMode argSha
 	fk_ShadingMode shadingMode = argModel->getShadingMode();
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 
+	int i = int(shadingMode);
+	int j = int(shadowMode);
+	int k = int(texMode);
+	int l = int(argFogMode);
+
 	switch(texMode) {
-	  case fk_TexMode::NONE:
-		break;
-		
 	  case fk_TexMode::REPLACE:
-		if(replaceShader == nullptr) ReplaceShaderInit();
-		drawShader = replaceShader;
+		if(replaceShader[l] == nullptr) ReplaceShaderInit(argFogMode);
+		drawShader = replaceShader[l];
 		break;
 
 	  default:
-		if(textureShader[int(shadingMode)][int(shadowMode)][int(texMode)] == nullptr) {
-			TextureShaderInit(shadingMode, shadowMode, texMode);
+		if(textureShader[i][j][k][l] == nullptr) {
+			TextureShaderInit(shadingMode, shadowMode, texMode, argFogMode);
 		}
-		drawShader = textureShader[int(shadingMode)][int(shadowMode)][int(texMode)];
+		drawShader = textureShader[i][j][k][l];
 	}
 	
 	defaultShaderFlag = true;
 }
 
-bool fk_TextureDraw::ReplaceShaderInit(void)
+bool fk_TextureDraw::ReplaceShaderInit(fk_FogMode argFogMode)
 {
-	delete replaceShader;
-	replaceShader = new fk_ShaderBinder();
+	int i = int(argFogMode);
+	delete replaceShader[i];
+	fk_ShaderBinder *shader = new fk_ShaderBinder();
+	replaceShader[i] = shader;
 
-	auto prog = replaceShader->getProgram();
-	auto param = replaceShader->getParameter();
+	auto prog = shader->getProgram();
+	auto param = shader->getParameter();
 
 	prog->vertexShaderSource =
 		#include "GLSL/Texture/VS_Replace.out"
@@ -200,24 +222,36 @@ bool fk_TextureDraw::ReplaceShaderInit(void)
 	prog->fragmentShaderSource =
 		#include "GLSL/Texture/FS_Replace.out"
 		;
+
+	FragmentFogInit(prog, argFogMode);
 	
 	if(prog->validate() == false) {
 		fk_PutError("fk_TextureDraw", "ReplaceShaderInit", 1, "Shader Compile Error");
+		string outStr = "Mode Code (";
+		outStr += to_string(int(argFogMode)) + ")";
+		fk_PutError(outStr);
 		fk_PutError(prog->getLastError());
 		return false;
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 	return true;
 }
 
 bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 									   fk_ShadowMode argShadowMode,
-									   fk_TexMode argTexMode)
+									   fk_TexMode argTexMode,
+									   fk_FogMode argFogMode)
 {
-	delete textureShader[int(argShadingMode)][int(argShadowMode)][int(argTexMode)];
+	int i = int(argShadingMode);
+	int j = int(argShadowMode);
+	int k = int(argTexMode);
+	int l = int(argFogMode);
+
+	delete textureShader[i][j][k][l];
 	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	textureShader[int(argShadingMode)][int(argShadowMode)][int(argTexMode)] = shader;
+	textureShader[i][j][k][l] = shader;
 	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();
@@ -366,16 +400,22 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 		break;
 	}
 
+	if(argTexMode != fk_TexMode::NONE) FragmentFogInit(prog, argFogMode);
+
 	if(prog->validate() == false) {
 		fk_PutError("fk_TextureDraw", "TextureShaderInit", 1, "Shader Compile Error");
-		fk_Printf("Mode Code (%d, %d, %d)", int(argShadingMode), int(argShadowMode), int(argTexMode));
+		string outStr = "Mode Code (";
+		outStr += to_string(int(argShadingMode)) + ", ";
+		outStr += to_string(int(argShadowMode)) + ", ";
+		outStr += to_string(int(argTexMode)) + ", ";
+		outStr += to_string(int(argFogMode)) + ")";
+		fk_PutError(outStr);
 		fk_PutError(prog->getLastError());
-		fk_Window::putString(prog->vertexShaderSource);
-		fk_Window::putString(prog->fragmentShaderSource);
 		return false;
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 	return true;
 }
 
@@ -409,6 +449,7 @@ bool fk_TextureDraw::ShadowInit(void)
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 
 	return true;
 }

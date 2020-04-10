@@ -16,9 +16,11 @@ using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void)
 {
-	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
-		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
-			pointShader[i][j] = nullptr;
+	for(int i = 0; i < VS_NUM; ++i) {
+		for(int j = 0; j < FS_NUM; ++j) {
+			for(int k = 0; k < FOG_NUM; ++k) {
+				pointShader[i][j][k] = nullptr;
+			}
 		}
 	}
 	return;
@@ -26,9 +28,11 @@ fk_PointDraw::fk_PointDraw(void)
 
 fk_PointDraw::~fk_PointDraw()
 {
-	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
-		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
-			delete pointShader[i][j];
+	for(int i = 0; i < VS_NUM; ++i) {
+		for(int j = 0; j < FS_NUM; ++j) {
+			for(int k = 0; k < FOG_NUM; ++k) {
+				delete pointShader[i][j][k];
+			}
 		}
 	}
 
@@ -39,17 +43,20 @@ bool fk_PointDraw::AllTest(void)
 {
 	bool retFlg = true;
 
-	for(int i = 0; i < int(fk_DrawVS::NUM); ++i) {
-		for(int j = 0; j < int(fk_DrawFS::NUM); ++j) {
-			if(ShaderInit(fk_DrawVS(i), fk_DrawFS(j)) == false) {
-				retFlg = false;
+	for(int i = 0; i < VS_NUM; ++i) {
+		for(int j = 0; j < FS_NUM; ++j) {
+			for(int k = 0; k < FOG_NUM; ++k) {
+				if(ShaderInit(fk_DrawVS(i), fk_DrawFS(j), fk_FogMode(k)) == false) {
+					retFlg = false;
+				}
 			}
 		}
 	}
 	return retFlg;
 }
 
-void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool argShadowSwitch)
+void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape,
+								  bool argShadowSwitch, fk_FogMode argFogMode)
 {
 	fk_Shape *shape = (argShape == nullptr) ? argModel->getShape() : argShape;
 	auto shapeType = shape->getRealShapeType();
@@ -63,7 +70,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 			drawShader->SetupDone(true);
 		}
 	} else {
-		DefaultShaderSetup(argModel);
+		DefaultShaderSetup(argModel, argFogMode);
 	}
 
 	auto parameter = drawShader->getParameter();
@@ -90,7 +97,7 @@ void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape, bool a
 	return;
 }
 
-void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel)
+void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel, fk_FogMode argFogMode)
 {
 	fk_DrawVS vID = fk_DrawVS::MODEL;
 	fk_DrawFS fID = fk_DrawFS::ORG;
@@ -116,20 +123,20 @@ void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel)
 		break;
 	}
 
-	if(pointShader[int(vID)][int(fID)] == nullptr) {
-		ShaderInit(vID, fID);
+	if(pointShader[int(vID)][int(fID)][int(argFogMode)] == nullptr) {
+		ShaderInit(vID, fID, argFogMode);
 	}
-	drawShader = pointShader[int(vID)][int(fID)];
+	drawShader = pointShader[int(vID)][int(fID)][int(argFogMode)];
 	defaultShaderFlag = true;
 
 	return;
 }
 
-bool fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
+bool fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	delete pointShader[int(argVID)][int(argFID)];
+	delete pointShader[int(argVID)][int(argFID)][int(argFogMode)];
 	auto *shader = new fk_ShaderBinder();
-	pointShader[int(argVID)][int(argFID)] = shader;
+	pointShader[int(argVID)][int(argFID)][int(argFogMode)] = shader;
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -174,13 +181,21 @@ bool fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID)
 		break;
 	}
 
+	if(argFID != fk_DrawFS::SHADOW) FragmentFogInit(prog, argFogMode);
+
 	if(prog->validate() == false) {
 		fk_PutError("fk_PointDraw", "ShaderInit", 1, "Shader Compile Error");
+		string outStr = "Mode Code (";
+		outStr += to_string(int(argVID)) + ", ";
+		outStr += to_string(int(argFID)) + ", ";
+		outStr += to_string(int(argFogMode)) + ")";
+		fk_PutError(outStr);
 		fk_PutError(prog->getLastError());
 		return false;
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 	return true;
 }
 

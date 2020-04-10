@@ -15,17 +15,17 @@ namespace FK {
 		fk_PointDraw(void);
 		virtual ~fk_PointDraw();
 
-		void	DrawShapePoint(fk_Model *, fk_Shape *, bool);
+		void	DrawShapePoint(fk_Model *, fk_Shape *, bool, fk_FogMode);
 		GLuint	VAOSetup(fk_Shape *);
 
 		bool AllTest(void);
 
 	private:
 
-		fk_ShaderBinder *pointShader[VS_NUM][FS_NUM];
+		fk_ShaderBinder *pointShader[VS_NUM][FS_NUM][FOG_NUM];
 
-		void DefaultShaderSetup(fk_Model *);
-		bool ShaderInit(fk_DrawVS, fk_DrawFS);
+		void DefaultShaderSetup(fk_Model *, fk_FogMode);
+		bool ShaderInit(fk_DrawVS, fk_DrawFS, fk_FogMode);
 		int GetPointNum(fk_Shape *);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void Draw_Point(fk_Shape *, fk_ShaderParameter *, int, bool);

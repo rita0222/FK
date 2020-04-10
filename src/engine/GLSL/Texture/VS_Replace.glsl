@@ -3,9 +3,12 @@
 #FKBuildIn
 
 out vec2 varT;
+out vec4 varP;
 
 void main()
 {
-	gl_Position = fk_ModelViewProjectionMatrix * vec4(fk_Vertex, 1.0);
+	vec4 p = vec4(fk_Vertex, 1.0);
+	gl_Position = fk_ModelViewProjectionMatrix * p;
 	varT = fk_TexCoord;
+	varP = fk_ModelMatrix * p;
 }

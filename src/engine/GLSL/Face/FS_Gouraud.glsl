@@ -9,5 +9,5 @@ float FogValue();
 
 void main()
 {
-	fk_Fragment = varC;
+	fk_Fragment = mix(fk_FogColor, varC, FogValue());
 }

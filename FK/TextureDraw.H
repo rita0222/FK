@@ -10,7 +10,7 @@ namespace FK {
 		fk_TextureDraw(void);
 		virtual ~fk_TextureDraw();
 
-		void	DrawShapeTexture(fk_Model *, fk_ShadowMode, bool);
+		void	DrawShapeTexture(fk_Model *, fk_ShadowMode, bool, fk_FogMode);
 		GLuint	VAOSetup(fk_Shape *);
 
 		bool AllTest(void);
@@ -18,16 +18,16 @@ namespace FK {
 	private:
 		static constexpr int TEXTURE_NUM = int(fk_TexMode::NUM);
 
-		fk_ShaderBinder *textureShader[SHADING_NUM][SHADOW_NUM][TEXTURE_NUM];
-		fk_ShaderBinder *replaceShader;
+		fk_ShaderBinder *textureShader[SHADING_NUM][SHADOW_NUM][TEXTURE_NUM][FOG_NUM];
+		fk_ShaderBinder *replaceShader[FOG_NUM];
 		fk_ShaderBinder *texShadowShader;
 
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
 		void	PolygonModeSet(void);
-		void	DefaultShaderSetup(fk_Model *, fk_ShadowMode);
-		bool	ReplaceShaderInit(void);
-		bool	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode);
+		void	DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
+		bool	ReplaceShaderInit(fk_FogMode);
+		bool	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);
 		void	ShadowSetup(void);
 		bool	ShadowInit(void);
 	};

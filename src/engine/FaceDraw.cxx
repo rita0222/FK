@@ -139,6 +139,7 @@ void fk_FaceDraw::ShadowInit(void)
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 
 	return;
 }
@@ -226,14 +227,17 @@ bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode,
 
 	if(prog->validate() == false) {
 		fk_PutError("fk_FaceDraw", "ShaderInit", 1, "Shader Compile Error");
-		fk_Printf("Mode Code (%d, %d, %d)", int(argShadingMode), int(argShadowMode), int(argFogMode));
+		string outStr = "Mode Code (";
+		outStr += to_string(int(argShadingMode)) + ", ";
+		outStr += to_string(int(argShadowMode)) + ", ";
+		outStr += to_string(int(argFogMode)) + ")";
+		fk_PutError(outStr);
 		fk_PutError(prog->getLastError());
-		//fk_Window::putString(prog->vertexShaderSource);
-		//fk_Window::putString(prog->fragmentShaderSource);
 		return false;
 	}
 
 	ParamInit(prog, param);
+	shader->SetupDone(true);
 	return true;
 }
 
@@ -342,37 +346,9 @@ void fk_FaceDraw::FaceFragmentInit(fk_ShaderProgram *argProg,
 		break;
 	}
 
-	switch(argFogMode) {
-	  case fk_FogMode::OFF:
-		argProg->fragmentShaderSource +=
-			#include "GLSL/Face/FS_Fog_Off.out"
-			;
-		break;
-		
-	  case fk_FogMode::LINEAR:
-		argProg->fragmentShaderSource +=
-			#include "GLSL/Face/FS_Fog_Linear.out"
-			;
-		break;
+	FragmentFogInit(argProg, argFogMode);
 
-	  case fk_FogMode::EXP:
-		argProg->fragmentShaderSource +=
-			#include "GLSL/Face/FS_Fog_Exp1.out"
-			;
-		break;
-
-	  case fk_FogMode::EXP2:
-		argProg->fragmentShaderSource +=
-			#include "GLSL/Face/FS_Fog_Exp2.out"
-			;
-		break;
-
-	  default:
-		argProg->fragmentShaderSource +=
-			#include "GLSL/Face/FS_Fog_Off.out"
-			;
-		break;
-	}		
+	return;
 }	
 
 /****************************************************************************

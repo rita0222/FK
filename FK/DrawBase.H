@@ -140,6 +140,7 @@ namespace FK {
 		std::vector<fk_ShaderBinder *> aliveShader;
 
 		void SetParameter(fk_ShaderParameter *);
+		static void FragmentFogInit(fk_ShaderProgram *, fk_FogMode);
 
 	private:
 
