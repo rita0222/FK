@@ -61,7 +61,7 @@ linux:
 	"SYSOPS = -D_LINUX_ -DNO_GLU_LIBRARY" \
 	"INCLDIRS = -I. -I.. -I$(LOCAL)/include" \
 	"LFLAGS = -L../lib/static -L$(LOCAL)/lib" \
-	"SYSLIBS = -liconv_hook \
+	"SYSLIBS = -licuuc -licudata \
 		-lopenal -lvorbisfile -lvorbis -logg \
 		-lfltk_images -lfltk_forms -lfltk_gl -lfltk \
 		-ljpeg -lpng -lfreetype -lGL -lpthread -lOpenCL \
@@ -102,7 +102,8 @@ mac-d:
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
 	"LFLAGS = -L../lib/dynamic -L$(MACSYSLIB_D)" \
-	"SYSLIBS = -lfltk_gl.1.3 -lfltk.1.3 -liconv.8 \
+	"SYSLIBS = -lfltk_gl.1.3 -lfltk.1.3 \
+		-licuuc.66 -licudata.66 \
 		-lvorbisfile.3 -lvorbis.0 -logg.0 \
 		-lpng16.16 -ljpeg.9 -lfreetype.6 \
 		-lz.1 -lbz2.1.0.6 \
@@ -123,7 +124,9 @@ mac-g:
 	"SYSOPS = -D_MACOSX_" \
 	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
 	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S)" \
-	"SYSLIBS = -liconv -lfltk_gl -lfltk \
+	"SYSLIBS = \
+		-licuuc -licudata \
+		-lfltk_gl -lfltk \
 		-lopenal -lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \
 		-framework QTKit \

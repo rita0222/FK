@@ -2,10 +2,8 @@
 #include <map>
 #include <FK/UniCode.h>
 #include <FK/Error.H>
-//#include <iconv.h>
 #include <sstream>
 #include <unicode/unistr.h>
-#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
