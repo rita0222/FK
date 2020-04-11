@@ -659,6 +659,89 @@ namespace FK_CLI {
 	{
 		GetP()->setLightDefault();
 	}
+
+	void fk_AppWindow::FogMode::set(fk_FogMode argMode)
+	{
+		switch (argMode) {
+		case fk_FogMode::LINEAR:
+			GetP()->setFogMode(::FK::fk_FogMode::LINEAR);
+			break;
+
+		case fk_FogMode::EXP:
+			GetP()->setFogMode(::FK::fk_FogMode::EXP);
+			break;
+
+		case fk_FogMode::EXP2:
+			GetP()->setFogMode(::FK::fk_FogMode::EXP2);
+			break;
+
+		default:
+			GetP()->setFogMode(::FK::fk_FogMode::OFF);
+			break;
+		}
+	}
+
+	fk_FogMode fk_AppWindow::FogMode::get(void)
+	{
+		switch (GetP()->getFogMode()) {
+		case ::FK::fk_FogMode::LINEAR:
+			return fk_FogMode::LINEAR;
+
+		case ::FK::fk_FogMode::EXP:
+			return fk_FogMode::EXP;
+
+		case ::FK::fk_FogMode::EXP2:
+			return fk_FogMode::EXP2;
+
+		default:
+			break;
+		}
+		return fk_FogMode::OFF;
+	}
+
+	void fk_AppWindow::FogDensity::set(double argD)
+	{
+		GetP()->setFogDensity(argD);
+	}
+
+	double fk_AppWindow::FogDensity::get(void)
+	{
+		return GetP()->getFogDensity();
+	}
+
+	void fk_AppWindow::FogLinearStart::set(double argS)
+	{
+		GetP()->setFogLinearMap(argS, GetP()->getFogLinearEnd());
+	}
+
+	double fk_AppWindow::FogLinearStart::get(void)
+	{
+		return GetP()->getFogLinearStart();
+	}
+
+	void fk_AppWindow::FogLinearEnd::set(double argE)
+	{
+		GetP()->setFogLinearMap(GetP()->getFogLinearStart(), argE);
+	}
+
+	double fk_AppWindow::FogLinearEnd::get(void)
+	{
+		return GetP()->getFogLinearEnd();
+	}
+
+	void fk_AppWindow::FogColor::set(fk_Color^ argCol)
+	{
+		if (!argCol) return;
+		GetP()->setFogColor(*argCol->GetP());
+	}
+
+	fk_Color^ fk_AppWindow::FogColor::get(void)
+	{
+		fk_Color^ C = gcnew fk_Color();
+		::FK::fk_Color tmpC = GetP()->getFogColor();
+		C->Set(tmpC.getR(), tmpC.getG(), tmpC.getB(), tmpC.getA());
+		return C;
+	}
 }
 
 /****************************************************************************

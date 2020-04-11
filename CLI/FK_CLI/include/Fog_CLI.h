@@ -10,7 +10,7 @@ namespace FK_CLI
 		LINEAR,		//!< 線形式
 		EXP,		//!< 指数式
 		EXP2,		//!< 指数(2乗)式
-		NONE,		//!< 無効
+		OFF,		//!< 無効
 	};
 
 	//! 霧効果のオプションを表す列挙型
@@ -66,10 +66,10 @@ namespace FK_CLI
 		 *		\f]
 		 *		式中の \f$ d \f$ は fk_Fog::FogDensity プロパティで設定します。
 		 *
-		 *	- fk_FogMode.NONE \n
+		 *	- fk_FogMode.OFF \n
 		 *		この値を設定した場合、霧効果を無効にします。
 		 *	.
-		 *	デフォルトでは fk_FogMode.NONE が設定されています。
+		 *	デフォルトでは fk_FogMode.OFF が設定されています。
 		 */
 		property fk_FogMode FogMode {
 			void set(fk_FogMode);

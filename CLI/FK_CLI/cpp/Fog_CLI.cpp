@@ -32,7 +32,7 @@ namespace FK_CLI {
 			break;
 
 		  default:
-			GetP()->setFogMode(::FK::fk_FogMode::NONE);
+			GetP()->setFogMode(::FK::fk_FogMode::OFF);
 			break;
 		}
 	}
@@ -52,7 +52,7 @@ namespace FK_CLI {
 		  default:
 			break;
 		}
-		return fk_FogMode::NONE;
+		return fk_FogMode::OFF;
 	}
 
 	void fk_Fog::FogDensity::set(double argD)

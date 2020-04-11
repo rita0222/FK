@@ -491,7 +491,7 @@ namespace FK_CLI
 		 property bool ShadowEffect {
 			void set(bool);
 			bool get(void);
-		}
+		 }
 
 		 //! 影表示プロパティ
 		 /*!
@@ -503,7 +503,18 @@ namespace FK_CLI
 		 property bool ShadowDraw {
 			void set(bool);
 			bool get(void);
-		}
+		 }
+
+		 //! 霧効果プロパティ
+		 /*!
+		  * このモデル表示に対する霧効果の設定を行います。
+		  * true で有効、false で無効となります。
+		  * デフォルトは true です。
+		  */
+		 property bool FogMode {
+			 void set(bool);
+			 bool get(void);
+		 }
 
 		///@}
 

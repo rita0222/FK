@@ -55,6 +55,7 @@ namespace FK_CLI_Shadow
         static void Main(string[] args)
         {
             var window = new fk_AppWindow();
+            var bgColor = new fk_Color(0.5, 0.5, 0.5);
 
             fk_Material.InitDefault();
             window.Size = new fk_Dimension(WIN_W, WIN_H);
@@ -64,7 +65,7 @@ namespace FK_CLI_Shadow
             window.CameraFocus = new fk_Vector(0.0, 0.0, 0.0);
             window.DefaultLightVec = new fk_Vector(1.0, -1.0, 1.0);
             window.DefaultLightMaterial = fk_Material.WhiteLight;
-            window.BGColor = new fk_Color(0.5, 0.5, 0.5);
+            window.BGColor = bgColor;
             window.FPS = 60;
 
             var ifsShape = new fk_IFSTexture();
@@ -94,6 +95,8 @@ namespace FK_CLI_Shadow
             ifsModel.ShadowDraw = true;
             floorModel.ShadowDraw = true;
 
+            spModel.FogMode = false;
+
             // 各モデルをディスプレイリストに登録
             window.Entry(floorModel);
             window.Entry(spModel);
@@ -109,6 +112,10 @@ namespace FK_CLI_Shadow
             window.ShadowResolution = 1024;
             window.ShadowVisibility = 0.7;
             window.ShadowBias = 0.01;
+
+            window.FogMode = fk_FogMode.EXP2;
+            window.FogDensity = 0.005;
+            window.FogColor = bgColor;
 
             ModelSetup(spModel, fk_Material.Yellow, new fk_Vector(-20.0, 20.0, 0.0));
             ModelSetup(ifsModel, fk_Material.White, new fk_Vector(20.0, 5.0, 0.0));

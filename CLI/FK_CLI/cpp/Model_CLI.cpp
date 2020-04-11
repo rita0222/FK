@@ -362,6 +362,16 @@ namespace FK_CLI {
 		return GetP()->getShadowDraw();
 	}
 
+	void fk_Model::FogMode::set(bool argMode)
+	{
+		GetP()->setFogMode(argMode);
+	}
+
+	bool fk_Model::FogMode::get(void)
+	{
+		return GetP()->getFogMode();
+	}
+
 	fk_Matrix^ fk_Model::InhMatrix::get(void)
 	{
 		fk_Matrix^ M = gcnew fk_Matrix();

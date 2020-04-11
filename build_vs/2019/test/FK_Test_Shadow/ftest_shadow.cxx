@@ -48,16 +48,16 @@ int main(int, char **)
 	fk_System::setcwd();
 	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
 
-	fk_AppWindow window;
-	fk_Material mat;
+	fk_AppWindow	window;
+	fk_Material		mat;
 
-	fk_IFSTexture ifsShape;
-	fk_Sphere sph(8, 7.0);
-	fk_Block floor(200.0, 2.0, 200.0);
+	fk_IFSTexture	ifsShape;
+	fk_Sphere		sph(8, 7.0);
+	fk_Block		floor(200.0, 2.0, 200.0);
 
-	fk_Model spModel, ifsModel, floorModel;
+	fk_Model		spModel, ifsModel, floorModel;
 
-	fk_Color bgColor(0.5, 0.5, 0.5);
+	fk_Color		bgColor(0.5, 0.5, 0.5);
 
 	fk_Material::initDefault();
 	window.setSize(WIN_W, WIN_H);
@@ -69,6 +69,10 @@ int main(int, char **)
 	window.setDefaultLightVec(1.0, -1.0, 1.0);
 	window.setDefaultLightMaterial(Material::WhiteLight);
 
+	window.setFogMode(fk_FogMode::EXP2);
+	window.setFogColor(bgColor);
+	window.setFogLinearMap(20.0, 300.0);
+	window.setFogDensity(0.005);
 
 	// モデル
 	if(ifsShape.readBMP("00tex_master.BMP") == false) {
@@ -89,6 +93,9 @@ int main(int, char **)
 	ifsModel.setShadowEffect(true);
 	ifsModel.setShadowDraw(true);
 	floorModel.setShadowDraw(true);
+
+	//spModel.setFogMode(false);
+	ifsModel.setFogMode(false);
 	
 	// 各モデルをディスプレイリストに登録
 	window.setBGColor(bgColor);
@@ -106,11 +113,7 @@ int main(int, char **)
 	window.setShadowDistance(300.0);
 	window.setShadowResolution(1024);
 	window.setShadowVisibility(1.0);
-	window.setShadowBias(0.01);
-
-	window.setFogMode(fk_FogMode::EXP2);
-	window.setFogDensity(0.005);
-	window.setFogColor(bgColor);
+	window.setShadowBias(0.005);
 
 	ModelSetup(&spModel, Material::Yellow, fk_Vector(-20.0, 20.0, 0.0));
 	ModelSetup(&ifsModel, Material::White, fk_Vector(20.0, 5.0, 0.0));
