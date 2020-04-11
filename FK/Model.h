@@ -1418,6 +1418,9 @@ namespace FK {
 		 */
 		bool getShadowDraw(void);
 
+		void setFogMode(bool);
+		bool getFogMode(void);
+
 		///@}
 
 		//! \name 座標系情報参照関数
@@ -2177,6 +2180,8 @@ namespace FK {
 
 		bool				shadowEffectMode;
 		bool				shadowDrawMode;
+
+		bool				fogMode;
 
 		void				EntryTree(void);
 		void				DeleteTree(void);

@@ -41,7 +41,7 @@ fk_Model::fk_Model(fk_Shape *argShape)
 	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
 	  interMode(false), interStatus(false), interStopMode(false),
 	  shader(nullptr),
-	  shadowEffectMode(true), shadowDrawMode(true)
+	  shadowEffectMode(true), shadowDrawMode(true), fogMode(true)
 {
 	setBlendMode(fk_BlendMode::ALPHA);
 	setShape(argShape);
@@ -984,6 +984,16 @@ void fk_Model::setShadowDraw(bool argMode)
 bool fk_Model::getShadowDraw(void)
 {
 	return shadowDrawMode;
+}
+
+void fk_Model::setFogMode(bool argMode)
+{
+	fogMode = argMode;
+}
+
+bool fk_Model::getFogMode(void)
+{
+	return fogMode;
 }
 
 /****************************************************************************
