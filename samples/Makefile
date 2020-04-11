@@ -76,7 +76,7 @@ mac:
 	"INCLDIRS = -I. -I.. -I$(MACINCLUDE)" \
 	"LFLAGS = -L../lib/static -L$(MACSYSLIB_S) -L/opt/local/lib" \
 	"SYSLIBS = \
-		-liconv \
+		-licuuc -licudata \
 		-lfltk_gl -lfltk \
 		-lopenal -lvorbisfile -lvorbis -logg \
 		-lpng  -ljpeg -lfreetype -lz -lbz2 \

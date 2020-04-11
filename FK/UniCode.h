@@ -505,21 +505,6 @@ namespace FK {
 	private:
 		fk_StrConverterBase		*base;
 
-		bool	InitJIS_UTF8_Base(void);
-		bool	InitSJIS_UTF8_Base(void);
-		bool	InitEUC_UTF8_Base(void);
-		bool	InitUTF16_UTF8_Base(void);
-
-		bool	InitJIS_UTF16_Base(void);
-		bool	InitSJIS_UTF16_Base(void);
-		bool	InitEUC_UTF16_Base(void);
-		bool	InitUTF8_UTF16_Base(void);
-
-		bool	InitJIS_SJIS_Base(void);
-		bool	InitEUC_SJIS_Base(void);
-		bool	InitUTF8_SJIS_Base(void);
-		bool	InitUTF16_SJIS_Base(void);
-
 		void	ConvertJIS_UTF8(const std::string &, std::string *);
 		void	ConvertSJIS_UTF8(const std::string &, std::string *);
 		void	ConvertEUC_UTF8(const std::string &, std::string *);
@@ -529,6 +514,7 @@ namespace FK {
 		void	ConvertEUC_SJIS(const std::string &, std::string *);
 		void	ConvertUTF8_SJIS(const std::string &, std::string *);
 		void	ConvertUTF16_SJIS(const std::string &, std::string *);
+
 	};
 
 	//! 簡易文字コード変換用名前空間

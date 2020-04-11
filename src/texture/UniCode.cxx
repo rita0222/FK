@@ -2,8 +2,10 @@
 #include <map>
 #include <FK/UniCode.h>
 #include <FK/Error.H>
-#include <iconv.h>
+//#include <iconv.h>
 #include <sstream>
+#include <unicode/unistr.h>
+#include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
@@ -29,30 +31,15 @@ namespace FK {
 
 	class fk_StrConverterBase {
 	private:
-		char *	_buffer;
-		int		_size;
+		vector<char>	buffer;
+		string CodeName(fk_StringCode);
 
 	public:
-		iconv_t	jis_utf8;
-		iconv_t	sjis_utf8;
-		iconv_t	euc_utf8;
-		iconv_t	utf16_utf8;
-
-		iconv_t	jis_utf16;
-		iconv_t	sjis_utf16;
-		iconv_t	euc_utf16;
-		iconv_t	utf8_utf16;
-
-		iconv_t	jis_sjis;
-		iconv_t	euc_sjis;
-		iconv_t	utf8_sjis;
-		iconv_t	utf16_sjis;
-
 		fk_StrConverterBase();
 		~fk_StrConverterBase();
 
-		bool	CommonConvert(iconv_t, const std::string &, fk_UniStr *);
-		bool	CommonConvert(iconv_t, const std::string &, std::string *);
+		void CommonConvert(fk_StringCode, fk_StringCode, const string &, fk_UniStr *);
+		void CommonConvert(fk_StringCode, fk_StringCode, const string &, string *);
 	};
 }
 
@@ -75,7 +62,6 @@ static fk_StrStack * getStrStack(void)
 }
 
 static fk_StringCode	defCode = fk_StringCode::UTF16;
-
 
 fk_UniChar::fk_UniChar(int argCode)
 	: fk_BaseObject(fk_Type::UNICHAR)
@@ -495,118 +481,73 @@ bool fk_UniStr::getLine(fk_UniStr *argStr)
 
 fk_StrConverterBase::fk_StrConverterBase(void)
 {
-	jis_utf8 = (iconv_t)(-1);
-	sjis_utf8 = (iconv_t)(-1);
-	euc_utf8 = (iconv_t)(-1);
-	utf16_utf8 = (iconv_t)(-1);
-
-	jis_utf16 = (iconv_t)(-1);
-	sjis_utf16 = (iconv_t)(-1);
-	euc_utf16 = (iconv_t)(-1);
-	utf8_utf16 = (iconv_t)(-1);
-
-	jis_sjis = (iconv_t)(-1);
-	euc_sjis = (iconv_t)(-1);
-	utf8_sjis = (iconv_t)(-1);
-	utf16_sjis = (iconv_t)(-1);
-
-	_size = 1023;
-	_buffer = new char [1024];
 	return;
 }
 
 fk_StrConverterBase::~fk_StrConverterBase()
 {
-	if(jis_utf8 != (iconv_t)(-1)) iconv_close(jis_utf8);
-	if(sjis_utf8 != (iconv_t)(-1)) iconv_close(sjis_utf8);
-	if(euc_utf8 != (iconv_t)(-1)) iconv_close(euc_utf8);
-	if(utf16_utf8 != (iconv_t)(-1)) iconv_close(utf16_utf8);
-
-	if(jis_utf16 != (iconv_t)(-1)) iconv_close(jis_utf16);
-	if(sjis_utf16 != (iconv_t)(-1)) iconv_close(sjis_utf16);
-	if(euc_utf16 != (iconv_t)(-1)) iconv_close(euc_utf16);
-	if(utf8_utf16 != (iconv_t)(-1)) iconv_close(utf8_utf16);
-
-	if(jis_sjis != (iconv_t)(-1)) iconv_close(jis_sjis);
-	if(euc_sjis != (iconv_t)(-1)) iconv_close(euc_sjis);
-	if(utf8_sjis != (iconv_t)(-1)) iconv_close(utf8_sjis);
-	if(utf16_sjis != (iconv_t)(-1)) iconv_close(utf16_sjis);
-
-	delete [] _buffer;
 	return;
 }
 
-bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
-										const string &argStr, fk_UniStr *outStr)
+string fk_StrConverterBase::CodeName(fk_StringCode argCode)
 {
-	const char	*inBuf = argStr.c_str();
-	char		*outBuf;
-	size_t		inSize, outSize, orgSize, i;
-	fk_UniChar	uniChar;
+	switch(argCode) {
+	  case fk_StringCode::UTF16:
+		return "utf16";
 
-	//	outStr->clear();
-	if(argStr.size() >= static_cast<_st>(_size)) {
-		delete [] _buffer;
-		_size = static_cast<int>(argStr.size());
-		_buffer = new char [static_cast<size_t>(_size + 1)];
+	  case fk_StringCode::UTF8:
+		return "utf8";
+
+	  case fk_StringCode::JIS:
+		return "jis8";
+
+	  case fk_StringCode::SJIS:
+		return "shift-jis";
+
+	  case fk_StringCode::EUC:
+		return "euc-jp";
+
+	  default:
+		break;
 	}
-
-	outSize = orgSize = static_cast<size_t>(_size);
-	outBuf = _buffer;
-
-	inSize = static_cast<size_t>(argStr.size());
-
-	while(0 < inSize) {
-		if(iconv(argIV, iconvpp(&inBuf),
-				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
-			return false;
-		}
-	}
-
-	for(i = 0; i < orgSize - outSize; i += 2) {
-		if(int(i) > _size) break;
-		uniChar.setBuffer(static_cast<unsigned char>(_buffer[i]),
-						  static_cast<unsigned char>(_buffer[i+1]));
-		outStr->push_back(&uniChar);
-	}
-
-	return true;
+	return "";
 }
 
-bool fk_StrConverterBase::CommonConvert(iconv_t argIV,
-										const string &argStr, string *argOutStr)
+void fk_StrConverterBase::CommonConvert(fk_StringCode argInCode, fk_StringCode argOutCode,
+										const string &argInStr, string *argOutStr)
 {
-	const char	*inBuf = argStr.c_str();
-	char		*outBuf;
-	size_t		inSize, outSize, orgSize;
+	string inName = CodeName(argInCode);
+	string outName = CodeName(argOutCode);
 
-	if(argStr.size() >= static_cast<_st>(_size)) {
-		delete [] _buffer;
-		_size = static_cast<int>(argStr.size());
-		_buffer = new char [static_cast<size_t>(_size + 1)];
+	icu::UnicodeString src(argInStr.c_str(), inName.c_str());
+	int32_t length = src.extract(0, src.length(), nullptr, outName.c_str());
+
+	buffer.resize(_st(length+1));
+	src.extract(0, src.length(), &buffer[0], outName.c_str());
+	*argOutStr = string(buffer.begin(), buffer.end()-1);
+}
+
+void fk_StrConverterBase::CommonConvert(fk_StringCode argInCode, fk_StringCode argOutCode,
+										const string &argInStr, fk_UniStr *argOutStr)
+{
+	string outStr;
+	fk_UniChar uniChar;
+
+	CommonConvert(argInCode, argOutCode, argInStr, &outStr);
+	argOutStr->clear();
+
+	for(_st i = 2; i < outStr.length(); i += 2) {
+		uniChar.setBuffer(static_cast<unsigned char>(outStr[i]),
+						  static_cast<unsigned char>(outStr[i+1]));
+		argOutStr->push_back(&uniChar);
+		//fk_Window::printf("c = (%d, %d)", int(outStr[i]), int(outStr[i+1]));
 	}
-
-	outSize = orgSize = static_cast<size_t>(_size);
-	outBuf = _buffer;
-
-	inSize = static_cast<size_t>(argStr.size());
-
-	while(0 < inSize) {
-		if(iconv(argIV, iconvpp(&inBuf),
-				&inSize, &outBuf, &outSize) == static_cast<size_t>(-1)) {
-			return false;
-		}
-	}
-
-	_buffer[orgSize - outSize] = '\0';
-	(*argOutStr) = _buffer;
-	return true;
 }
 
 
 fk_StrConverter::fk_StrConverter(void)
 {
-	base = new fk_StrConverterBase;
+	base = new fk_StrConverterBase();
 
 	return;
 }
@@ -616,172 +557,53 @@ fk_StrConverter::~fk_StrConverter()
 	delete base;
 	return;
 }
-
-bool fk_StrConverter::InitJIS_UTF8_Base(void)
-{
-	base->jis_utf8 = iconv_open("UTF-8", "ISO-2022-JP");
-	if(base->jis_utf8 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitSJIS_UTF8_Base(void)
-{
-	base->sjis_utf8 = iconv_open("UTF-8", "SJIS");
-	if(base->sjis_utf8 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitEUC_UTF8_Base(void)
-{
-	base->euc_utf8 = iconv_open("UTF-8", "EUC-JP");
-	if(base->euc_utf8 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitUTF16_UTF8_Base(void)
-{
-	base->utf16_utf8 = iconv_open("UTF-8", "UTF-16LE");
-	if(base->utf16_utf8 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitJIS_UTF16_Base(void)
-{
-	base->jis_utf16 = iconv_open("UTF-16LE", "ISO-2022-JP");
-	if(base->jis_utf16 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitSJIS_UTF16_Base(void)
-{
-	base->sjis_utf16 = iconv_open("UTF-16LE", "SJIS");
-	if(base->sjis_utf16 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitEUC_UTF16_Base(void)
-{
-	base->euc_utf16 = iconv_open("UTF-16LE", "EUC-JP");
-	if(base->euc_utf16 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitUTF8_UTF16_Base(void)
-{
-	base->utf8_utf16 = iconv_open("UTF-16LE", "UTF-8");
-	if(base->utf8_utf16 == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitJIS_SJIS_Base(void)
-{
-	base->jis_sjis = iconv_open("SJIS", "ISO-2022-JP");
-	if(base->jis_sjis == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitEUC_SJIS_Base(void)
-{
-	base->euc_sjis = iconv_open("SJIS", "EUC-JP");
-	if(base->euc_sjis == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitUTF8_SJIS_Base(void)
-{
-	base->utf8_sjis = iconv_open("SJIS", "UTF-8");
-	if(base->utf8_sjis == (iconv_t)(-1)) return false;
-	return true;
-}
-
-bool fk_StrConverter::InitUTF16_SJIS_Base(void)
-{
-	base->utf16_sjis = iconv_open("SJIS", "UTF-16LE");
-	if(base->utf16_sjis == (iconv_t)(-1)) return false;
-	return true;
-}
-
 void fk_StrConverter::convertJIS(const string &argStr, fk_UniStr *outStr)
 {
-	if(base->jis_utf16 == (iconv_t)(-1)) {
-		InitJIS_UTF16_Base();
-	}
-
-	base->CommonConvert(base->jis_utf16, argStr, outStr);
+	base->CommonConvert(fk_StringCode::JIS, fk_StringCode::UTF16, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::convertSJIS(const string &argStr, fk_UniStr *outStr)
 {
-	if(base->sjis_utf16 == (iconv_t)(-1)) {
-		InitSJIS_UTF16_Base();
-	}
-
-	base->CommonConvert(base->sjis_utf16, argStr, outStr);
+	base->CommonConvert(fk_StringCode::SJIS, fk_StringCode::UTF16, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::convertEUC(const string &argStr, fk_UniStr *outStr)
 {
-	if(base->euc_utf16 == (iconv_t)(-1)) {
-		InitEUC_UTF16_Base();
-	}
-
-	base->CommonConvert(base->euc_utf16, argStr, outStr);
+	base->CommonConvert(fk_StringCode::EUC, fk_StringCode::UTF16, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::convertUTF8(const string &argStr, fk_UniStr *outStr)
 {
-	if(base->utf8_utf16 == (iconv_t)(-1)) {
-		InitUTF8_UTF16_Base();
-	}
-
-	base->CommonConvert(base->utf8_utf16, argStr, outStr);
+	base->CommonConvert(fk_StringCode::UTF8, fk_StringCode::UTF16, argStr, outStr);
 	return;
 }
 
-
 void fk_StrConverter::ConvertJIS_UTF8(const string &argStr, string *outStr)
 {
-	if(base->jis_utf8 == (iconv_t)(-1)) {
-		InitJIS_UTF8_Base();
-	}
-
-	base->CommonConvert(base->jis_utf8, argStr, outStr);
+	base->CommonConvert(fk_StringCode::JIS, fk_StringCode::UTF8, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::ConvertSJIS_UTF8(const string &argStr, string *outStr)
 {
-	if(base->sjis_utf8 == (iconv_t)(-1)) {
-		InitSJIS_UTF8_Base();
-	}
-
-	base->CommonConvert(base->sjis_utf8, argStr, outStr);
+	base->CommonConvert(fk_StringCode::SJIS, fk_StringCode::UTF8, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::ConvertEUC_UTF8(const string &argStr, string *outStr)
 {
-	if(base->euc_utf8 == (iconv_t)(-1)) {
-		InitEUC_UTF8_Base();
-	}
-
-	base->CommonConvert(base->euc_utf8, argStr, outStr);
+	base->CommonConvert(fk_StringCode::EUC, fk_StringCode::UTF8, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::ConvertUTF16_UTF8(const string &argStr, string *outStr)
 {
-	if(base->utf16_utf8 == (iconv_t)(-1)) {
-		InitUTF16_UTF8_Base();
-	}
-
-	base->CommonConvert(base->utf16_utf8, argStr, outStr);
+	base->CommonConvert(fk_StringCode::UTF16, fk_StringCode::UTF8, argStr, outStr);
 	return;
 }
-
 
 void fk_StrConverter::convert_UTF8(const string &argStr, string *outStr, fk_StringCode argCode)
 {
@@ -814,44 +636,27 @@ void fk_StrConverter::convert_UTF8(const string &argStr, string *outStr, fk_Stri
 	return;
 }
 
-
 void fk_StrConverter::ConvertJIS_SJIS(const string &argStr, string *outStr)
 {
-	if(base->jis_sjis == (iconv_t)(-1)) {
-		InitJIS_SJIS_Base();
-	}
-
-	base->CommonConvert(base->jis_sjis, argStr, outStr);
+	base->CommonConvert(fk_StringCode::JIS, fk_StringCode::SJIS, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::ConvertEUC_SJIS(const string &argStr, string *outStr)
 {
-	if(base->euc_sjis == (iconv_t)(-1)) {
-		InitEUC_SJIS_Base();
-	}
-
-	base->CommonConvert(base->euc_sjis, argStr, outStr);
+	base->CommonConvert(fk_StringCode::EUC, fk_StringCode::SJIS, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::ConvertUTF8_SJIS(const string &argStr, string *outStr)
 {
-	if(base->utf8_sjis == (iconv_t)(-1)) {
-		InitUTF8_SJIS_Base();
-	}
-
-	base->CommonConvert(base->utf8_sjis, argStr, outStr);
+	base->CommonConvert(fk_StringCode::UTF8, fk_StringCode::SJIS, argStr, outStr);
 	return;
 }
 
 void fk_StrConverter::ConvertUTF16_SJIS(const string &argStr, string *outStr)
 {
-	if(base->utf16_sjis == (iconv_t)(-1)) {
-		InitUTF16_SJIS_Base();
-	}
-
-	base->CommonConvert(base->utf16_sjis, argStr, outStr);
+	base->CommonConvert(fk_StringCode::UTF16, fk_StringCode::SJIS, argStr, outStr);
 	return;
 }
 
