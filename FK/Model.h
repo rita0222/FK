@@ -1418,7 +1418,21 @@ namespace FK {
 		 */
 		bool getShadowDraw(void);
 
-		void setFogMode(bool);
+		//! 霧効果設定関数
+		/*!
+		 *	このモデルの表示に対し霧効果の有効とするかどうかを設定します。
+		 *	デフォルトでは有効となっています。
+		 *
+		 *	\param[in]	mode	true で有効、false で無効となります。
+		 */
+		void setFogMode(bool mode);
+
+		//! 霧効果設定参照関数
+		/*!
+		 *	霧効果が有効かどうかを参照します。
+		 *
+		 *	\return		有効なら true、無効なら false を返します。
+		 */
 		bool getFogMode(void);
 
 		///@}
