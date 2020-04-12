@@ -357,6 +357,10 @@
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\..\FK\glsl2out</Command>
     </PreBuildEvent>
+    <Link>
+      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;icuuc.lib;icudt.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)contrib\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -386,6 +390,11 @@
     <PreBuildEvent>
       <Command>perl $(SolutionDir)..\..\FK\glsl2out</Command>
     </PreBuildEvent>
+    <Link>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;icuuc.lib;icudt.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)contrib\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
