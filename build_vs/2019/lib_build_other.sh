@@ -14,12 +14,6 @@ source ./vsenv.sh
 "$VS16_DEVENV_PATH" ..\\extlibs\\freetype-2.10.0\\builds\\windows\\vc2017\\freetype.sln /Build "Release Static|x64"
 "$VS16_DEVENV_PATH" ..\\extlibs\\freetype-2.10.0\\builds\\windows\\vc2017\\freetype.sln /Build "Debug Static|x64"
 
-# libiconv
-"$VS16_DEVENV_PATH" ..\\extlibs\\libiconv\\LibIconv_2017.sln /Build "ReleaseStatic|Win32"
-"$VS16_DEVENV_PATH" ..\\extlibs\\libiconv\\LibIconv_2017.sln /Build "DebugStatic|Win32"
-"$VS16_DEVENV_PATH" ..\\extlibs\\libiconv\\LibIconv_2017.sln /Build "ReleaseStatic|x64"
-"$VS16_DEVENV_PATH" ..\\extlibs\\libiconv\\LibIconv_2017.sln /Build "DebugStatic|x64"
-
 # ogg
 "$VS16_DEVENV_PATH" ..\\extlibs\\libogg-1.3.3\\win32\\VS2017\\libogg_static.sln /Build "Release|Win32"
 "$VS16_DEVENV_PATH" ..\\extlibs\\libogg-1.3.3\\win32\\VS2017\\libogg_static.sln /Build "Debug|Win32"
