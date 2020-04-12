@@ -491,19 +491,19 @@ string fk_StrConverterBase::CodeName(fk_StringCode argCode)
 {
 	switch(argCode) {
 	  case fk_StringCode::UTF16:
-		return "utf16";
+		return "UTF-16LE";
 
 	  case fk_StringCode::UTF8:
-		return "utf8";
+		return "UTF-8";
 
 	  case fk_StringCode::JIS:
-		return "jis8";
+		return "JIS8";
 
 	  case fk_StringCode::SJIS:
-		return "shift-jis";
+		return "SHIFT-JIS";
 
 	  case fk_StringCode::EUC:
-		return "euc-jp";
+		return "EUC-JP";
 
 	  default:
 		break;
@@ -534,11 +534,9 @@ void fk_StrConverterBase::CommonConvert(fk_StringCode argInCode, fk_StringCode a
 	CommonConvert(argInCode, argOutCode, argInStr, &outStr);
 	argOutStr->clear();
 
-	for(_st i = 2; i < outStr.length(); i += 2) {
-		uniChar.setBuffer(static_cast<unsigned char>(outStr[i]),
-						  static_cast<unsigned char>(outStr[i+1]));
+	for(_st i = 0; i < outStr.length(); i += 2) {
+		uniChar.setBuffer((unsigned char)(outStr[i]), (unsigned char)(outStr[i+1]));
 		argOutStr->push_back(&uniChar);
-		//fk_Window::printf("c = (%d, %d)", int(outStr[i]), int(outStr[i+1]));
 	}
 }
 
