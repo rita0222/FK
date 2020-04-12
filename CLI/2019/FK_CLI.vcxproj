@@ -556,7 +556,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2019\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;libiconv_d.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;icuuc.lib;icudt.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -588,7 +588,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2019\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;libiconv_d.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;icuuc.lib;icudt.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -629,7 +629,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2019\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;icuuc.lib;icudt.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -670,7 +670,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2019\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;icuuc.lib;icudt.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
