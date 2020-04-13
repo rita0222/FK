@@ -1,12 +1,7 @@
 #!/bin/sh
 
-SHADERDIR="../../../src/shader/GLSL"
-GRAPHICSDIR="../../../src/graphics/GLSL"
+SRCDIR="../../../src"
+SCRIPTDIR="../../../FK"
 
-touch $SHADERDIR/tmp.out
-rm $SHADERDIR/*.out
-$SHADERDIR/glsl2out $SHADERDIR/*.glsl
-
-touch $GRAPHICSDIR/tmp.out
-rm $GRAPHICSDIR/*.out
-$GRAPHICSDIR/glsl2out $GRAPHICSDIR/*.glsl
+find $SRCDIR -name \*.out -exec rm {} \;
+$SCRIPTDIR/glsl2out

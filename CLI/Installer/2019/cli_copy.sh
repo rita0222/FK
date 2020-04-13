@@ -23,5 +23,5 @@ cp ./doc/License.txt $OUTPATH/doc
 cp ./doc/Version_CLI.txt $OUTPATH/doc/Version.txt
 cp ../../contrib/bin/x86/* $OUTPATH/dll/x86
 cp ../../contrib/bin/x64/* $OUTPATH/dll/x64
-cp "$VS160COMNTOOLS\\VC\\Redist\\MSVC\\14.24.28127\\vcredist_x86.exe" $OUTPATH/redist
-cp "$VS160COMNTOOLS\\VC\\Redist\\MSVC\\14.24.28127\\vcredist_x64.exe" $OUTPATH/redist
+cp "$VS160COMNTOOLS"/VC/Redist/MSVC/*/vcredist_x86.exe $OUTPATH/redist
+cp "$VS160COMNTOOLS"/VC/Redist/MSVC/*/vcredist_x64.exe $OUTPATH/redist
