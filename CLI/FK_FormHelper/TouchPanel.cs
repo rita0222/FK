@@ -218,7 +218,7 @@ namespace FK_FormHelper
         // but the window procedure can be overriden, if needed.
         // in:
         //      m       message
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+        //[PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
             // Decode and handle WM_TOUCH message.
