@@ -27,3 +27,4 @@ uniform float fk_ShadowVisibility;
 uniform float fk_ShadowBias;
 uniform vec4 fk_FogColor;
 uniform vec3 fk_FogParam;
+uniform int fk_GeomDiv;

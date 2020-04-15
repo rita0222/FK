@@ -67,13 +67,16 @@ void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel,
 	fk_BezCurve *bez = nullptr;
 	fk_RBezCurve *rBez = nullptr;
 	int degree = 0;
+	int div = 0;
 
 	if(type == fk_Type::BEZCURVE) {
 		bez = dynamic_cast<fk_BezCurve *>(argModel->getShape());
 		degree = bez->getDegree();
+		div = bez->getDiv();
 	}  else if(type == fk_Type::RBEZCURVE) {
 		rBez = dynamic_cast<fk_RBezCurve *>(argModel->getShape());
 		degree = rBez->getDegree();
+		div = rBez->getDiv();
 	}
 
 	if(modelShader != nullptr) {
@@ -90,16 +93,8 @@ void fk_BezCurveDraw::DrawShapeCurve(fk_Model *argModel,
 
 	SetParameter(parameter);
 	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
-
-	if(type == fk_Type::BEZCURVE) {
-		bez = dynamic_cast<fk_BezCurve *>(argModel->getShape());
-		parameter->setRegister(fk_Shape::degreeName, bez->getDegree(), fk_Shape::degreeName);
-	} else if(type == fk_Type::RBEZCURVE) {
-		rBez = dynamic_cast<fk_RBezCurve *>(argModel->getShape());
-		parameter->setRegister(fk_Shape::degreeName, rBez->getDegree(), fk_Shape::degreeName);
-	} else {
-		return;
-	}
+	parameter->setRegister(fk_Shape::degreeName, degree, fk_Shape::degreeName);
+	parameter->setRegister(fk_Shape::geomDivName, div, fk_Shape::geomDivName);
 
 	drawShader->ProcPreShader();
 

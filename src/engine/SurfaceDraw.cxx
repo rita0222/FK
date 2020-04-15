@@ -68,6 +68,8 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, fk_ShadowMode argShado
 {
 	auto col = &(argModel->getCurveColor()->col);
 	auto modelShader = argModel->getShader();
+	int degree = 3;
+	int div = 0;
 
 	if(modelShader != nullptr) {
 		drawShader = modelShader;
@@ -91,16 +93,20 @@ void fk_SurfaceDraw::DrawShapeSurface(fk_Model *argModel, fk_ShadowMode argShado
 		parameter = drawShader->getParameter();
 	}
 
-	SetParameter(parameter);
-	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
-
 	if(argModel->getShape()->getObjectType() == fk_Type::BEZSURFACE) {
 		fk_BezSurface *bezSurf = dynamic_cast<fk_BezSurface *>(argModel->getShape());
-		parameter->setRegister(fk_Shape::degreeName, bezSurf->getDegree(), fk_Shape::degreeName);
+		degree = bezSurf->getDegree();
+		div = bezSurf->getDiv();
 	} else {
 		// Gregory Surface
-		parameter->setRegister(fk_Shape::degreeName, 3, fk_Shape::degreeName);
+		degree = 3;
+		div = dynamic_cast<fk_Surface *>(argModel->getShape())->getDiv();
 	}
+
+	SetParameter(parameter);
+	parameter->setRegister(fk_Shape::curveModelColorName, col, fk_Shape::curveModelColorName);
+	parameter->setRegister(fk_Shape::degreeName, degree, fk_Shape::degreeName);
+	parameter->setRegister(fk_Shape::geomDivName, div, fk_Shape::geomDivName);
 
 	Draw_Surface(argModel, argShadowSwitch);
 	return;
