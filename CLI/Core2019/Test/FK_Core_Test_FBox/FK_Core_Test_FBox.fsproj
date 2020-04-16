@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RunPostBuildEvent>1</RunPostBuildEvent>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="FBox.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\FK_Audio\FK_Audio_Core.csproj" />
+    <ProjectReference Include="..\..\..\FK_FormHelper\FK_FormHelper_Core.csproj" />
+    <ProjectReference Include="..\..\FK_Core.vcxproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&#xA;copy /b /v /y &quot;$(SolutionDir)..\contrib\bin\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
+</Project>

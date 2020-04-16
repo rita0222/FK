@@ -1,7 +1,7 @@
 ﻿using System;
 using FK_CLI;
 
-namespace FK_Core_Test_Ball
+namespace FK_CLI_Ball
 {
 	public class Ball
 	{
