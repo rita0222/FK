@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\FK_Audio\FK_Audio_Core.csproj" />
-    <ProjectReference Include="..\..\..\FK_FormHelper\FK_FormHelper_Core.csproj" />
     <ProjectReference Include="..\..\FK_Core.vcxproj" />
   </ItemGroup>
 
