@@ -1,11 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RunPostBuildEvent>1</RunPostBuildEvent>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <StartupObject></StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="FBox.fs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\FK_Audio\FK_Audio_Core.csproj" />
@@ -13,7 +17,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /s /e /y /i &quot;$(ProjectDir)\Resources\*.*&quot; &quot;$(TargetDir)&quot;&#xA;copy /b /v /y &quot;$(SolutionDir)..\contrib\bin\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;" />
+    <Exec Command="&#xA;copy /b /v /y &quot;$(SolutionDir)..\contrib\bin\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;" />
   </Target>
 
 </Project>
