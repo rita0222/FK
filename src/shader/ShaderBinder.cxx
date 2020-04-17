@@ -107,6 +107,8 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
 	if(argWin == nullptr || bufW <= 0 || bufH <= 0) return;
+	if(IsInitialized() == false) Initialize();
+	
 	argWin->GetEngine()->BindWindow(this);
 
 	GLuint id = program->getProgramID();

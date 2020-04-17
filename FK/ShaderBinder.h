@@ -33,8 +33,7 @@ namespace FK {
 	 *	\sa fk_ShaderProgram, fk_ShaderParameter, fk_TextureSampler, fk_Model
 	 */
 
-	class fk_ShaderBinder
-	{
+	class fk_ShaderBinder {
 	public:
 		//! コンストラクタ1
 		/*!
@@ -227,12 +226,12 @@ namespace FK {
 		void unbindWindow(fk_AppWindow *window);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		static bool Initialize(void);
-		static bool IsInitialized(void);
 		void ProcPreShader(void);
 		void ProcPostShader(void);
 		void SetupDone(bool = true);
 		bool IsSetup(void);
+		static bool Initialize(void);
+		static bool IsInitialized(void);
 
 		void LoadFBOShader(void);
 

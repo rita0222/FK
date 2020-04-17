@@ -1,4 +1,5 @@
 ﻿#include <FK/ShaderProgram.h>
+#include <FK/ShaderBinder.h>
 #include <FK/Window.h>
 #include <regex>
 
@@ -148,6 +149,13 @@ bool fk_ShaderProgram::validate(void)
 	if(idTessEval != 0) {
 		DeleteShader(idTessEval);
 		idTessEval = 0;
+	}
+
+	if(fk_ShaderBinder::IsInitialized() == false) {
+		if(fk_ShaderBinder::Initialize() == false) {
+			lastError = "ERROR: OpenGL Initalize Error.";
+			return false;
+		}
 	}
 
 	idVertex = Compile(&vertexShaderSource, GL_VERTEX_SHADER);
