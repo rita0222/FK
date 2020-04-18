@@ -1,6 +1,5 @@
 \documentclass[report]{jsbook}
 
-%\usepackage[dvipdfmx]{graphicx}
 \usepackage[dvips]{graphicx,color}
 \usepackage{amsmath, amssymb}
 %\usepackage{eclbkbox}
@@ -19,14 +18,13 @@
 \evensidemargin=-10pt
 
 \newcommand{\lvec}[1]{\overrightarrow{#1}}
-\newcommand{\bC}{\mathbf{C}}
-\newcommand{\bG}{\mathbf{G}}
 \newcommand{\bP}{\mathbf{P}}
-\newcommand{\bQ}{\mathbf{Q}}
-\newcommand{\bS}{\mathbf{S}}
-\newcommand{\bT}{\mathbf{T}}
-\newcommand{\bV}{\mathbf{V}}
 \newcommand{\bX}{\mathbf{X}}
+\newcommand{\bT}{\mathbf{T}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\bQ}{\mathbf{Q}}
+\newcommand{\bC}{\mathbf{C}}
+\newcommand{\bV}{\mathbf{V}}
 \newcommand{\bq}{\mathbf{q}}
 %\newcommand{\dfrac}[2]{{\displaystyle \frac{#1}{#2}}}
 \newcommand{\ovec}[1]{\overrightarrow{#1}}
@@ -66,7 +64,7 @@
 
 \begin{document}
 \pagestyle{empty}
-\include{title_cli}
+\include{title_cpp}
 \pagestyle{plain}
 \renewcommand{\thepage}{\roman{page}}
 \setcounter{page}{1}
@@ -77,21 +75,21 @@
 \setcounter{page}{1}
 \setcounter{chapter}{0}
 \renewcommand{\thepage}{\arabic{page}}
-\include{abstract_cli}
-\include{intro_cli}
-\include{math_cli}
-\include{material_cli}
-\include{shape_cli}
-\include{generate_cli}
-%\include{solid_cli}
-\include{image_cli}
-\include{text_cli}
-\include{model_cli}
-\include{scene_cli}
-\include{window_cli}
-%\include{viewport_cli}
-\include{viewer_cli}
-\include{sample_cli}
+\include{abstract_cpp}
+\include{intro_cpp}
+\include{math_cpp}
+\include{material_cpp}
+\include{shape_cpp}
+\include{generate_cpp}
+%\include{solid_cpp}
+\include{image_cpp}
+\include{text_cpp}
+\include{model_cpp}
+\include{scene_cpp}
+\include{window_cpp}
+\include{viewer_cpp}
+\include{sample_cpp}
 \appendix
-\include{mattable_cli}
+\include{mattable_cpp}
+%\include{classtree_cpp}
 \end{document}

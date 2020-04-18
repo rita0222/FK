@@ -1,0 +1,975 @@
+\chapter{形状に対する高度な操作} \label{chap:solid} ~
+
+\ref{chap:shape} 章では汎用的な形状の生成法について述べ、
+\ref{chap:easygen} 章で任意形状の生成、変形に関して述べたが、
+本章では fk\_Solid クラスを用いた高度な形状情報の参照と変形操作に
+ついて触れている。
+fk\_Solid クラスでは、形状のデータは \textbf{Half-Edge 構造} と呼ばれる
+表現法を用いて格納されている。
+従って、形状情報の変形や操作を行いたい場合にはまずこの
+Half-Edge 構造を理解する必要がある。
+本章では、まず Half-Edge 構造に関しての解説を述べ、その後に
+fk\_Solid での形状の扱い方について述べる。
+\section{fk\_Solid の形状構造}
+\subsection{Half-Edge 構造の基本的概念}
+Half-Edge 構造では、「頂点」「稜線」「半稜線」「ループ」という4種類の要素に
+よって形状を構成すると考える。図 \ref{fig:HalfEdge1} が示す形状に対する
+各要素の解説を表 \ref{tbl:HalfEdge1} に示す。
+
+\myfig{fig:HalfEdge1}{./Fig/HalfEdge1_cpp.eps}{width=10truecm}
+	{Half-Edge 構造での各要素}{0mm}
+
+\begin{table}[H]
+\caption{Half-Edge 構造位相要素の解説}
+\label{tbl:HalfEdge1}
+\begin{center}
+\begin{tabular}{|l|l|p{6cm}|p{6cm}|}
+\hline
+名称 & 図中表記 & 解説 & 保持データ \\ \hline \hline
+頂点 & v1 〜 v3 &
+	形状中の頂点を表す。単独で存在する場合と、
+	稜線の端点となる場合がある。&
+	\vspace*{-5mm}
+	\begin{itemize}
+	 \item 頂点位置ベクトル。(必須)
+	 \item 自身を始点とする半稜線1個。(適宜)
+	\end{itemize} \\ \hline
+稜線 & e1 〜 e3 &
+	形状中の面同士の境界線を表す。必ず両端点に頂点があり、
+	それぞれを始点とする半稜線を1個ずつ持つ。&
+	\vspace*{-5mm}
+	\begin{itemize}
+	 \item 両側の半稜線。(必須)
+	\end{itemize} \\ \hline
+半稜線 & h1 〜 h6 &
+	稜線に2個ずつ属している要素で、稜線の端点のうちの片方を始点とする。&
+	\vspace*{-5mm}
+	\begin{itemize}
+	 \item 親稜線。(必須)
+	 \item 始点頂点。(必須)
+	 \item 前後の半稜線。(必須)
+	 \item 属する面。(適宜)
+	\end{itemize} \\ \hline
+ループ & L1 &
+	形状中の面を表す。複数の半稜線の連結によって構成される。&
+	\vspace*{-5mm}
+	\begin{itemize}
+	 \item 構成する半稜線1個。(必須)
+	\end{itemize} \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+簡単に述べると、「頂点」は節点を、「稜線」は頂点を結ぶ線分を、「ループ」は
+稜線によって囲まれた面を指す。「半稜線」は、各稜線に2本ずつ付随する要素で、
+人間にとっての両腕のようなものだと考えればよい。そこで、それぞれの半稜線を
+腕に見立てて、「右半稜線」「左半稜線」と呼ぶことにする。
+しかし、「右」「左」ということには必然性はなく、
+仮に左右を交換したとしても構造としてはまったく支障はない。
+半稜線には ``向き" という概念があって、左右の半稜線同士では
+片方の始点がもう片方の終点となる。
+
+\subsection{用語の定義}
+Half-Edge 構造では、ループは複数の半稜線のリング状の繋がりによって構成される
+と考えられる。半稜線は、その「繋がり」の中で自身の前や後ろに位置する
+別の半稜線が必ず存在することになる。これらを自身に対する
+「\textbf{前半稜線}」、「\textbf{後半稜線}」と呼ぶことにする。
+
+また、ループ \(L\) が複数の半稜線によって構成されているとき、それらの
+半稜線はループ \(L\) に「\textbf{属している}」と呼び、ループ \(L\) のことを
+これらの半稜線の「\textbf{親ループ}」と呼ぶこととする。また、自身が属している
+稜線をその半稜線の「\textbf{親稜線}」と呼ぶこととする。
+
+これを踏まえ、さらに以下に述べような用語を定義する。
+\begin{description}
+ \item[位相要素:] ~ \\
+	頂点、稜線、半稜線、ループの4種類の要素の総称のこと。
+
+ \item[位相:] ~ \\
+	全ての位相要素の接続関係のこと。
+
+ \item[接続:] ~ \\
+	次のような関係に対し、「接続している」という言葉を使う。
+	\begin{enumerate}
+	 \item (頂点と稜線) \quad 頂点と、それを両端点に持つ稜線。
+	 \item (稜線とループ) \quad ある稜線と、それを境界線とするループ。
+	\end{enumerate}
+	乱暴に述べると、接している状態に対して「接続」という
+	言葉を使うということである。
+
+ \item[隣接:] ~ \\
+	次のような関係に対し、「隣接している」という言葉を使う。
+	\begin{enumerate}
+	 \item (頂点と頂点) \quad ある稜線の端点を構成する両頂点同士。
+	 \item (ループとループ) \quad ある稜線を境界線として共有する
+		ループ同士。
+	\end{enumerate}
+
+ \item[独立頂点:] ~ \\
+	稜線に接続していない頂点のこと。
+
+ \item[接続頂点:] ~ \\
+	1本以上の稜線に接続している頂点のこと。
+
+ \item[任意頂点:] ~ \\
+	任意の頂点のこと。
+
+ \item[定義半稜線:] ~ \\
+	親ループを持つ半稜線のこと。
+
+ \item[未定義半稜線:] ~ \\
+	親ループを持たない半稜線のこと。
+
+ \item[未定義稜線:] ~ \\
+	属している半稜線が両方とも未定義半稜線である稜線のこと。
+
+ \item[定義稜線:] ~ \\
+	属している半稜線の少なくともいずれかが定義半稜線である稜線のこと。
+\end{description}
+\subsection{fk\_Solid での基本的な位相要素}
+fk\_Solid クラスを用いて生成した形状の各位相要素は、それぞれ
+個別のクラスが用意されている。いかに、そのクラスを羅列していく。
+
+\subsection{頂点}
+頂点を表すクラスは fk\_Vertex である。fk\_Vertex は情報として
+自身の位置ベクトルと法線ベクトル値を持つ。もし1本以上の稜線と接続している
+場合は、自身を始点とする半稜線のうちの1つを保持している。
+
+\subsection{半稜線}
+半稜線を表すクラスは fk\_Half である。fk\_Half は情報として
+自身の始点となる頂点、自身の親稜線、自身の次にあたる半稜線、
+自身の前にあたる半稜線、そしてもしあれば自身の親ループを保持している。
+
+\subsection{稜線}
+稜線を表すクラスは fk\_Edge である。fk\_Edge は情報として
+左右の半稜線を保持している。特に左右に意味があるわけではなく、
+もし反転していても他になんの影響も与えない。
+
+\subsection{ループ}
+ループを表すクラスは fk\_Loop である。fk\_Loop は情報として
+自身に属する半稜線のうちの1つと自身の法線ベクトル値を保持している。
+
+\section{形状の参照}
+この節では、具体的な形状情報の参照法を述べる。たとえば次のような
+要求に対して、全てこの節に解決法が記述されている。
+\begin{itemize}
+ \item 立体形状の全頂点の位置ベクトルが知りたい。
+ \item ある頂点に接続されている稜線の数が知りたい。
+ \item あるループの法線ベクトルが知りたい。
+ \item あるループが、幾つの稜線で成り立っているか知りたい。
+\end{itemize}
+この他にも、多くの位相情報を得る手段が提供されている。
+
+\subsection{任意の位相要素の取得法}
+まず、形状が持つ全ての位相要素情報を得る手段について述べる。ここでは例として
+頂点の取得法から述べる。次の例は、全ての頂点の位置ベクトルを出力する
+プログラムである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid    solid;
+    fk_Vertex   *curV;
+    fk_Vector   pos;
+    int         ID;
+
+    solid.readVRMLFile("sample.wrl", true, true);
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
+        pos = curV->getPosition();
+        ID = curV->getID();
+        printf("ID[%d] = (%lf, %lf, %lf)\n", ID, pos.x, pos.y, pos.z);
+        curV = solid.getNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+このプログラムでは、getPosition() などまだ紹介していない関数も
+含まれているが、注目してほしいのは
+getNextV() 関数である。while ループの外にある getNextV() と
+中にある getNextV() では与えている引数が異なっている。全ての
+頂点はユニークな ID を保持しており、
+\verb+getNextV(nullptr)+ という記述では現存する頂点
+のうち最も ID が小さな頂点を返す。従って、ループ外の getNextV() では
+curV に最小の ID を持つ頂点オブジェクト(のポインタ)が代入される。
+
+次にループ中の getNextV() であるが、引数が curV になっている。
+getNextV() は、引数にある頂点を代入すると、代入された頂点 ID の
+次に大きい頂点 ID を持つ頂点を返す。また、もし引数の頂点が
+最大の ID を所持していた場合には nullptr が返される。従って、
+例のプログラムの場合にはループから抜けることになる。
+このように、getNextV() をループ中で用いることによって全ての
+頂点位置を表示することが可能となる。
+
+以上が頂点の場合であるが、半稜線、稜線、ループの場合もほとんど
+変化はない。半稜線の場合は getNextV() の代わりに getNextH() を、
+稜線の場合は getNextE() を、ループの場合は getNextL() を使用すればよい。
+以下に半稜線の場合を示す。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid   solid;
+    fk_Half    *curH;
+
+    curH = solid.getNextH(nullptr);
+    while(curH != nullptr) {
+        printf("Half ID = %d", curH->getID());
+        curH = solid.getNextH(curH);
+    }
+\end{verbatim}
+\end{breakbox}
+\subsection{全ての位相要素に共通の参照関数}
+既に紹介済みなのだが、各要素の ID を得る手段として getID() メンバ関数が
+ある。例えば、ループの ID を調べたいときは以下のようになる。
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Loop     *Loop;
+    int         ID;
+            :
+            :
+    ID = Loop->getID();
+\end{verbatim}
+\end{screen}
+~ \\
+その逆で、ID から位相要素オブジェクトを取得したい場合には、以下に
+羅列するメンバ関数を用いる。
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Vertex   *getVData(int);
+    fk_Half     *getHData(int);
+    fk_Edge     *getEData(int);
+    fk_Loop     *getLData(int);
+\end{verbatim}
+\end{screen}
+~ \\
+例えば、ID が 5 の頂点オブジェクトを得たいのであれば、
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Solid    solid;
+    fk_Vertex   *v = solid.getVData(5);
+\end{verbatim}
+\end{screen}
+~ \\
+とすればよい。
+\subsection{fk\_Vertex で使用できる参照関数}
+頂点を表す fk\_Vertex では、次のような参照用のメンバ関数が用意されて
+いる。
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Vector getPosition(void)] ~ \\
+	自身の位置ベクトルを返す。
+ \item[\hspace*{0.6cm}fk\_Vector getNormal(void)] ~ \\
+	自身の法線ベクトルを返す。
+ \item[\hspace*{0.6cm}fk\_Half * getOneHalf(void)] ~ \\
+	自身を始点とする半稜線のうちの1つを返す。もし自身の
+	頂点を始点とする半稜線がない場合は nullptr が返る。
+\end{description}
+
+\subsection{fk\_Half で使用できる参照関数}
+半稜線を表す fk\_Half では、次のような参照用のメンバ関数が用意されている。
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Vertex * getVertex(void)] ~ \\
+	自身の始点である頂点を返す。
+ \item[\hspace*{0.6cm}fk\_Half * getNextHalf(void)] ~ \\
+	自身の前にあたる半稜線を返す。
+ \item[\hspace*{0.6cm}fk\_Half * getPrevHalf(void)] ~ \\
+	自身の後にあたる半稜線を返す。
+ \item[\hspace*{0.6cm}fk\_Edge * getParentEdge(void)] ~ \\
+	自身が属する稜線(親稜線)を返す。
+ \item[\hspace*{0.6cm}fk\_Loop * getParentLoop(void)] ~ \\
+	自身が属するループ(親ループ)を返す。親ループがない場合は
+	nullptr が返る。
+\end{description}
+
+\subsection{fk\_Edge で使用できる参照関数}
+稜線を表す fk\_Edge では、次のような参照用メンバ関数が用意されている。
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Half * getRightHalf(void)] ~ \\
+	自身の右半稜線を返す。
+ \item[\hspace*{0.6cm}fk\_Half * getLeftHalf(void)] ~ \\
+	自身の左半稜線を返す。
+\end{description}
+
+\subsection{fk\_Loop で使用できる参照関数}
+ループを表す fk\_Loop では、次のような参照用メンバ関数が用意されている。
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Half * getOneHalf(void)] ~ \\
+	自身に属している半稜線のうちの1つを返す。
+ \item[\hspace*{0.6cm}fk\_Vector * getNormal(void)] ~ \\
+	自身の法線ベクトルを返す。
+ \item[\hspace*{0.6cm}int getVNum(void)] ~ \\
+	自身に属している頂点数を返す。
+\end{description}
+
+\subsection{fk\_Solid で使用できる参照関数}
+これまで述べてきた以外に、fk\_Solid が持つ多くのメンバ関数が
+存在する。この中には、vector\(<\)???\(>\) の形式を持つものが
+幾つかある。これは STL と呼ばれる汎用 C++ template クラスライブラリの
+うちの格納クラスの一種である。STL 自体の詳しい解説は、比較的新しい
+C++ の解説書を参照してほしい。ここでは、本節で必要と思われるであろう
+機能のみを簡単に紹介する。
+
+この、vector\(<\)???\(>\) で生成されるオブジェクトは、平たく言って
+しまえば \(<\) と \(>\) で囲まれた型による可変長な配列である。
+例えば、getAllEOnV 関数は返り値として
+vector\(<\)fk\_Edge *\(>\) 型を返すが、これは以下のように記述すれば
+よい。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid            solid;
+    fk_Vertex           *v1;
+    vector<fk_Edge *>   edgeArray;
+            :
+            :
+    edgeArray = solid.getAllEOnV(v1);
+\end{verbatim}
+\end{breakbox}
+~ \\
+このとき、EdgeArray には V1 に接続している全ての稜線が格納される。
+EdgeArray に格納された稜線の本数を調べたい場合は、size() メンバ関数を
+用いればよい。また、各要素は配列演算子によってアクセスできる。従って、
+格納された稜線の ID を表示するプログラムは以下のようになる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    for(unsigned int i = 0; i < edgeArray.size(); i++) {
+        cout << "EDGE ID = " << edgeArray[i]->getID() << "\n";
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+なお、ここで用いる fk\_Solid オブジェクトは、必ず引数として利用する
+位相要素オブジェクトを含むものでなければならない。もし別の
+fk\_Solid 型のオブジェクトに含まれる位相要素を代入した場合、
+致命的な障害が出る可能性がある。
+\begin{center}
+{\large 頂点に関連する関数}
+\end{center}
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Half * getOneHOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続する半稜線のうちの1つを返す。V1 が
+	独立頂点の場合は nullptr が返る。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Half *\(>\)
+	getAllHOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続する半稜線すべてを vector で返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Edge *\(>\)
+	getEOnVV(fk\_Vertex *V1, fk\_Vertex *V2)] ~ \\
+	V1 と V2 の両方に接続している稜線すべてを
+	vector で返す。		
+
+ \item[\hspace*{0.6cm}fk\_Edge * getOneEOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続している稜線のうちの1つを返す。V1 が
+	独立頂点の場合は nullptr が返る。
+
+ \item[\hspace*{0.6cm}int getENumOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続している稜線の本数を返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Edge *\(>\)
+	getAllEOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続している稜線すべてを vector で返す。
+
+ \item[\hspace*{0.6cm}fk\_Loop *getOneLOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続しているループのうちの1つを返す。
+	ひとつのループとも接続していない場合は nullptr を返す。
+
+ \item[\hspace*{0.6cm}fk\_Vertex *getOneNeighborVOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続している頂点のうちの1つを返す。
+	ひとつの頂点とも接続していない場合は nullptr を返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Loop *\(>\)
+	getAllLOnV(fk\_Vertex *V1)] ~ \\
+	V1 に接続しているループすべてを vector で返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Vertex *\(>\)
+	getAllNeighborVOnV(fk\_Vertex *V1)] ~ \\
+	V1 に隣接している頂点すべてを vector で返す。
+
+\end{description}
+\begin{center}
+{\large 半稜線に関連する関数}
+\end{center}
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Vertex * getVOnH(fk\_Half *H1)] ~ \\
+	H1 の元頂点(出発点)を返す。		
+
+ \item[\hspace*{0.6cm}fk\_Half * getMateHOnH(fk\_Half *H1)] ~ \\
+	H1 と同じ稜線を共有する、反対側の半稜線を返す。		
+
+ \item[\hspace*{0.6cm}fk\_Edge * getParentEOnH(fk\_Half *H1)] ~ \\
+	H1 が所属している稜線を返す。
+
+ \item[\hspace*{0.6cm}fk\_Loop * getParentLOnH(fk\_Half *H1)] ~ \\
+	H1 が所属しているループを返す。H1 がどのループにも
+	所属していない場合は nullptr が返る。
+\end{description}
+\begin{center}
+{\large 稜線に関連する関数}
+\end{center}
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Vertex * getRightVOnE(fk\_Edge *E1)] ~ \\
+	E1 の右側の半稜線の元頂点を返す。
+
+ \item[\hspace*{0.6cm}fk\_Vertex * getLeftVOnE(fk\_Edge *E1)] ~ \\
+	E1 の左側の半稜線の元頂点を返す。
+
+ \item[\hspace*{0.6cm}fk\_Half * getRightHOnE(fk\_Edge *E1)] ~ \\
+	E1 の右側の半稜線を返す。
+
+ \item[\hspace*{0.6cm}fk\_Half * getLeftHOnE(fk\_Edge *E1)] ~ \\
+	E1 の左側の半稜線を返す。
+
+ \item[\hspace*{0.6cm}fk\_Loop * getRightLOnE(fk\_Edge *E1)] ~ \\
+	E1 の右側にあるループを返す。右側にループがなければ
+	nullptr を返す。
+
+ \item[\hspace*{0.6cm}fk\_Loop * getLeftLOnE(fk\_Edge *E1)] ~ \\
+	E1 の左側にあるループを返す。右側にループがなければ
+	nullptr を返す。
+
+ \item[\hspace*{0.6cm}fk\_EdgeStatus getEdgeStatus(fk\_Edge *E1)] ~ \\
+	E1 が現在どのような稜線かを返す。返す値と状態は次の通り。
+	\begin{itemize}
+	 \item FK\_NONE\_EDGE: エラーの場合
+	 \item FK\_UNDEF\_EDGE: 未定義稜線の場合
+	 \item FK\_HALFDEF\_EDGE: 片側にループが存在する場合
+	 \item FK\_BOTHDEF\_EDGE: 両側にループが存在する場合
+	\end{itemize}
+\end{description}
+\begin{center}
+{\large ループに関連する関数}
+\end{center}
+\begin{description}
+ \item[\hspace*{0.6cm}fk\_Vertex * getOneVonL(fk\_Loop *L1)] ~ \\
+	L1 に属している頂点のうちの1つを返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Vertex *\(>\)
+	getAllVOnL(fk\_Loop *L1)] ~ \\
+	L1 に属している頂点すべてを vector で返す。
+	このとき、vector の順番で頂点は接続していることが
+	保証されている。
+
+ \item[\hspace*{0.6cm}fk\_Half * getOneHOnL(fk\_Loop *L1)] ~ \\
+	L1 に属している半稜線のうちの1つを返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Half *\(>\)
+	getAllHOnL(fk\_Loop *L1)] ~ \\
+	L1 に属している半稜線すべてを vector で返す。
+	このとき、vector の順番で半稜線は接続していることが
+	保証されている。
+
+ \item[\hspace*{0.6cm}fk\_Edge * getOneEOnL(fk\_Loop *L1)] ~ \\
+	L1 に属している稜線のうちの1つを返す。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Edge *\(>\)
+	getAllEOnL(fk\_Loop *L1)] ~ \\
+	L1 に属している稜線すべてを vector で返す。
+	このとき、vector の順番で稜線は接続していることが
+	保証されている。
+
+ \item[\hspace*{0.6cm}fk\_Loop * getOneNeighorLOnL(fk\_Loop *L1)] ~ \\
+	L1 と隣接しているループのうちの1つを返す。
+	1つも隣接しているループがない場合は nullptr が
+	返る。
+
+ \item[\hspace*{0.6cm}vector\(<\)fk\_Loop *\(>\)
+	getAllNeighborLOnL(fk\_Loop *L1)] ~ \\
+	L1 と隣接しているループすべてを vector で
+	返す。
+
+ \item[\hspace*{0.6cm}fk\_Loop *
+	getNeighborLOnLH(fk\_Loop *L1, fk\_Half *H1)] ~ \\
+	L1 と隣接しているループのうち、H1 の親稜線を共有している
+	ループを返す。この共有関係が成り立たないような状態の
+	場合 (H1 が L1 上にない、H1 の反対側にループが存在
+	しないなど) は、nullptr が返る。
+
+ \item[\hspace*{0.6cm}fk\_Loop *
+	getNeighborLOnLE(fk\_Loop *L1, fk\_Edge *E1)] ~ \\
+	L1 と隣り合っているループのうち、E1 を共有している
+	ループを返す。この共有関係が成り立たないような状態の
+	場合 (E1 が L1 上にない、E1 の反対側にループが存在
+	しないなど) は、nullptr が返る。
+\end{description}
+
+\section{形状の変形} \label{sec:ModifySolid}
+fk\_Solid クラスには、以下に挙げるような形状操作用の関数が用意されている
+\footnote{厳密には fk\_Operation クラスと fk\_Modify クラスであり、
+fk\_Solid クラスは単にそれらのメンバ関数を継承しているだけである。}。
+ \subsubsection*{\hspace*{0.6cm}fk\_Vertex * makeVertex(fk\_Vector P)}
+	P の位置に新たに頂点を生成し、新たに生成された頂点を返す。
+	その位置に既に頂点があっても生成する。
+
+ \subsubsection*{\hspace*{0.6cm}bool deleteVertex(fk\_Vertex *V)}
+   	稜線が接続されていない頂点(独立頂点) V を消去する。成功すれば
+	true を返す。V に稜線が接続されている場合はエラーとなり false
+	を返し、V 自体は消去しない。
+
+\myfig{Fig:Euler01}{./Fig/Euler01_cpp.eps}{width=8truecm}{makeVertex と removeVertex}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}bool moveVertex(fk\_Vertex *V, fk\_Vector P)}
+	V を 位置座標 P へ移動する。成功すれば true を返す。V が存在
+	しない場合はエラーとなり false を返す。
+
+\myfig{Fig:Euler02}{./Fig/Euler02_cpp.eps}{width=10truecm}{moveVertex}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}fk\_Edge * makeEdge(
+	fk\_Vertex *V1, fk\_Vertex *V2, \\ \hspace*{4.4cm}
+	fk\_Half *H1\_1, fk\_Half *H1\_2,
+	fk\_Half *H2\_1, fk\_Half *H2\_2)}
+	頂点 V1 と V2 の間に未定義稜線を生成する。この関数は大きく以下の
+	3通りの処理を行う。
+
+	\begin{enumerate}
+	 \item V1, V2 がともに独立頂点の場合: \\
+		H1\_1, H1\_2, H2\_1, H2\_2 にはいずれも nullptr を代入する。
+		なお、H1\_1 以下の引数は省略可能である。
+
+	 \item V1 が接続頂点、V2 が独立頂点の場合: \\
+		新たに生成される半稜線を H1, H2 (H1 の始点は V1)とする。
+		このとき、H1\_1 は H1 の前となる半稜線を、H1\_2 には H2 の
+		後となる半稜線を代入する。このとき、
+		H1\_1 及び H1\_2 は未定義半稜線でなければならない。
+		H2\_1 及び H2\_2 には nullptr を
+		代入する。なお、H2\_1, H2\_2 は省略可能である。
+
+	 \item V1, V2 いずれも接続頂点の場合: \\
+		新たに生成される半稜線を H1, H2 (H1 の始点は V1)とする。
+		このとき、
+		\begin{itemize}
+		 \item H1\_1 は H1 の前
+		 \item H1\_2 は H2 の後
+		 \item H2\_1 は H2 の前
+		 \item H2\_2 は H1 の後
+		\end{itemize}
+		となる半稜線を代入する。なお、H1\_1, H1\_2, H2\_1, H2\_2 の
+		いずれも未定義半稜線でなければならない。
+	\end{enumerate}
+	返り値は新たに生成された稜線である。もし稜線生成に失敗した場合は
+	nullptr を返す。
+
+ \subsubsection*{\hspace*{0.6cm}bool deleteEdge(fk\_Edge *E1)}
+   	未定義稜線 E1 を削除する。成功すれば true を返す。
+	E1 が未定義稜線で無い場合 false を返して何もしない。
+
+\myfig{Fig:Euler03}{./Fig/Euler03_cpp.eps}{width=10truecm}{makeEdge と deleteEdge}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}fk\_Loop * makeLoop(fk\_Half *H1)}
+	未定義半稜線 H1 が属するループを作成する。
+	成功すれば新たに生成されたループを返す。
+	H1 が定義半稜線であった場合は nullptr が返って新たなループは生成されない。
+
+ \subsubsection*{\hspace*{0.6cm}bool deleteLoop(fk\_Loop *L1)}
+	ループ L1 を削除する。その結果として、L1 が存在した場所は
+	空洞になる。成功すれば true を返し、失敗した場合は false を
+	返す。
+
+\myfig{Fig:Euler04}{./Fig/Euler04_cpp.eps}{width=8truecm}{makeLoop と deleteLoop}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}fk\_Edge *
+	separateLoop(fk\_Half *H1, fk\_Half *H2)}
+	単一ループ内に存在する H1 の終点にある頂点と H2 の始点にある
+	頂点の間に定義稜線を生成し、ループを分割する。
+	成功すれば新たに生成された稜線を返す。H1 と H2 が同一の
+	ループ内にない場合はエラーとなり nullptr を返す。なお、
+	H1 と H2 は分割後新ループ側に属するので、新たに生成された
+	ループを得たい場合は H1 や H2 の親ループを参照すればよい。
+
+ \subsubsection*{\hspace*{0.6cm}bool uniteLoop(fk\_Edge *E1)}
+	両側にループを保持する稜線 E1 を削除し、
+	両側のループを統合する。成功すれば true を返す。
+	E1 が両側にループを持つ稜線でない場合はエラーになり false が返る。
+
+\myfig{Fig:Euler05}{./Fig/Euler05_cpp.eps}{width=8truecm}{separateLoop と uniteLoop}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}fk\_Vertex * separateEdge(fk\_Edge *E1)}
+	任意稜線 E1 を分割し、新たな頂点を稜線の両端点の
+	中点位置に生成する。成功した場合新たに生成された頂点を返し、
+	失敗した場合は nullptr を返す。
+
+ \subsubsection*{\hspace*{0.6cm}bool uniteEdge(fk\_Vertex *V1)}
+	2本の任意稜線に接続されている頂点 V1 を削除し、1本の
+	稜線にする。成功すれば true を返す。V1 に接続されている
+	稜線が2本でない場合はエラーとなり false が返る。
+
+\myfig{Fig:Euler06}{./Fig/Euler06_cpp.eps}{width=8truecm}
+	{separateEdge ・ uniteEdge}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}fk\_Loop * removeVertexInLoop(fk\_Vertex *V)}
+	頂点 V と V に接続している全ての稜線を削除し、1つの大きな
+	ループを生成する。成功すれば新たなループを返し、
+	失敗した場合は nullptr を返す。
+
+\myfig{Fig:Euler07}{./Fig/Euler07_cpp.eps}{width=8truecm}
+	{removeVertexInLoop}{0mm}
+
+ \subsubsection*{\hspace*{0.6cm}bool contractEdge(fk\_Edge *E)}
+	稜線 E の両端点を接合し、E を削除する。成功すれば true を、
+	失敗すれば false を返す。
+
+\myfig{Fig:Euler08}{./Fig/Euler08_cpp.eps}{width=8truecm}
+	{contractEdge}{0mm}
+
+ \subsubsection{\hspace*{0.6cm}bool checkContract(fk\_Edge *E)}
+	稜線 E に対し contractEdge() 関数が成功する状態のときに
+	true を、失敗する状態のときに false を返す。この関数自体は
+	変形操作を行わない。
+
+ \subsubsection{\hspace*{0.6cm}void allClear(bool flag)}
+	全ての形状データを破棄する。flag が true のとき、
+	\ref{subsec:solid_matid} で述べるマテリアルインデックスも
+	同時に破棄するが、false のときにはマテリアルインデックスに関しては
+	保持する。
+
+\section{変形履歴操作}
+\ref{sec:ModifySolid} 節で各種の変形操作に関して述べたが、それらの操作は
+全て履歴を管理することができ、自由に UNDO 操作 (操作の取り消し) や
+REDO 操作 (操作のやり直し) を制御できる。大まかに述べると、以下のような
+手順を踏むことになる。
+\begin{enumerate}
+ \item 履歴を保存するように設定する。
+ \item 変形操作を行う。その際に、状態を保存したい時点でマーク操作を行う。
+ \item 履歴操作を行う。
+\end{enumerate}
+
+\subsection{履歴保存設定} \label{subsec:shapehistory}
+通常、変形操作履歴は保存されない状態になっているが、ある fk\_Solid クラス	オブジェクト (およびその派生クラスオブジェクト) で履歴を保存するには、
+setHistoryMode() メンバ関数を用いる。引数に true を与えることで、
+履歴保存モードとなる。\\
+\begin{screen}
+\begin{verbatim}
+        fk_Solid        solid;
+                :
+        solid.setHistoryMode(true);
+\end{verbatim}
+\end{screen} \\ ~ \\
+厳密に述べると、setHistoryMode(true) を呼んだ時点から履歴を保存し、
+setHistoryMode(false) を呼んだ時点でこれまでの履歴を全て破棄する。
+
+\subsection{変形操作時のマーク設定と履歴操作}
+履歴操作を行う場合、「マーク」の設定を行う必要がある。これは、
+状態の「スナップショット」を設定するもので、UNDO や REDO を行った際には
+マークをした時点まで戻る。
+
+たとえば、ある形状に対して 1000 個の変形操作を行い、200 個目、500 個目の
+操作に対してマークを設定したとする。この形状に対して UNDO 操作を
+行った場合、500 個目の変形操作を行った状態に戻る。さらに UNDO 操作を
+したとき、今度は 200 個目の変形操作を行った状態に戻る。この状態に
+REDO 操作を施すと、今度は 500 個目の状態となる。このように、マークは
+変形操作の単位となる箇所に行う。
+
+形状の現状態に対しマークを行うには、setHistoryMark() 関数を用いる。\\
+\begin{screen}
+\begin{verbatim}
+        fk_Solid        solid;
+                :
+        solid.setHistoryMark();
+\end{verbatim}
+\end{screen} \\ ~ \\
+また、UNDO 操作、REDO 操作を行うにはそれぞれ undoHistory()、
+redoHistory() 関数を用いる。\\
+\begin{screen}
+\begin{verbatim}
+        fk_Solid        solid;
+                :
+        solid.undoHistory();
+        solid.redoHistory();
+\end{verbatim}
+\end{screen}
+\section{個別の位相要素へのマテリアル設定}
+fk\_Solid クラスでは、頂点、稜線、面の各位相要素に対して
+個別にマテリアルを設定することが可能である。その方法は、
+多くの部分で第 \ref{sec:ifs_mat} 節と共通である。
+ここでは、fk\_Solid クラスに特有の部分を中心に述べていく。
+なお、ここでの設定を実際に有効にするには、
+対象となる fk\_Solid (あるいは fk\_IndexFaceSet) 型の変数と、
+それを設定する fk\_Model 型の変数の両方で、
+\verb+setMaterialMode(FK_PARENT_MODE);+ を実行しておく必要がある。
+
+\subsection{パレットの設定} \label{subsec:solid_palette}
+fk\_Solid で個別にマテリアルを設定するには、まず
+マテリアルパレットというものを設定する必要がある。
+これに関しては、第 \ref{subsec:ifs_palette} とまったく同一の方法なので、
+ここでの解説は割愛する。
+
+\subsection{マテリアルインデックスの設定} \label{subsec:solid_matid}
+各位相要素にマテリアルインデックスを設定するには、
+fk\_Vertex や fk\_Edge クラスなどの各位相要素を表すクラスの
+setElemMaterialID() メンバ関数で引数にインデックスを入力すればよい。
+次の例は、全頂点のうち \(z\) 成分が負のものにインデックス 1 を、
+そうでないものにインデックス 0 を設定するプログラムである。
+(もちろん、事前にパレットの設定を行っていなければならない。)
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid    solid;
+    fk_Vertex   *curV;
+            :
+            :
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
+        if(curV->getPosition().z < 0) {
+            curV->setElemMaterialID(1);
+        } else {
+            curV->setElemMaterialID(0);
+        }
+        curV = solid.getNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+ここで、各位相要素にはマテリアルの情報が設定されるわけではなく、あくまで
+インデックス情報のみを保持することに注意してほしい。従って、setPalette
+によってパレット情報を再設定した場合、再設定されたインデックスを持つ
+位相要素のマテリアルは全て再設定されたものに変化する。これを上手に
+利用すると、特定の位相要素のみに対して動的にマテリアルを変更することが
+可能となる。
+
+なお、各位相要素には getElemMaterialID(void) というメンバ関数がある。
+これは、各位相要素のマテリアルインデックスを int 型で返す関数である。
+
+\subsection{各位相要素の描画モード設定}	\label{subsec:matmode}
+任意の位相要素に対して表示／非表示等を制御するために
+setElemMaterialMode という関数が用意されている。引数として
+モードを取るが、それには以下のような種類がある。
+
+\begin{table}[H]
+\caption{マテリアルモードの種類}
+\label{tbl:mate1}
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+モード名 & 意味 \\ \hline \hline
+FK\_PARENT\_MODE & モデルのマテリアルを利用して描画する。\\ \hline
+FK\_CHILD\_MODE & 位相要素固有のマテリアルを利用して描画する。\\ \hline
+FK\_NONE\_MODE & 描画しない。\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+次の例は、全頂点のうち \(z\) 成分が 0 以上のもののみを描画する
+プログラムである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid    solid;
+    fk_Vertex   *curV;
+            :
+            :
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
+        if(curV->getPosition().z < 0) {
+            curV->setElemMaterialMode(FK_NONE_MODE);
+        } else {
+            curV->setElemMaterialMode(FK_PARENT_MODE);
+        }
+        curV = solid.getNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+\section{描画時の稜線幅や頂点の大きさの設定}
+\subsection{線幅の設定方法}
+FK システムでは、描画時の線幅を変更するには
+\ref{sec:widthsize} 節で述べるような fk\_Model 中の
+setWidth() メンバ関数があるが、これはモデル中の全要素に対して
+行う設定である。それに対し、各稜線に個別に線幅を設定するには
+fk\_Edge の setDrawWidth() メンバ関数を利用することで可能となる。
+具体的には、以下のようにして利用する。
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Edge    *edge;
+
+    edge->setDrawWidth(3.0);
+\end{verbatim}
+\end{screen}
+~ \\
+これにより、通常の 3 倍の幅で描画されるようになる。
+なお、fk\_Edge には設定されている線幅を double 型で返すメンバ関数
+getDrawWidth(void) もある。
+\subsection{点の大きさの設定方法}
+線幅と同様に、fk\_Vertex にも描画時の大きさを設定するメンバ関数
+setDrawSize(double) と、設定されている大きさ値を double 型で返す
+getDrawSize(void) が利用できる。
+
+\section{形状や位相要素の属性} \label{sec:userattr}
+fk\_Point、fk\_Sphere などの、fk\_Solid を含む形状を表現するクラス、
+及び fk\_Vertex や fk\_Half などの位相要素を示すクラスのオブジェクトには、
+それぞれ独自に属性を持たせることが可能である。
+この機能を利用すると、形状情報の管理や分析に
+大きく役立つであろう。
+
+FK システム中では、次の 6 種類の属性設定用の関数が用意されている。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性設定関数}
+\label{tbl:attr1}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+関数名 & キーワード型 & 値型 \\ \hline \hline
+setAttrII(int, int) & int & int \\ \hline
+setAttrID(int, double) & int & double \\ \hline
+setAttrIS(int, string) & int & string \\ \hline
+setAttrSI(string, int) & string & int \\ \hline
+setAttrSD(string, double) & string & double \\ \hline
+setAttrSS(string, string) & string & string \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+この表中で出てくる string 型は、STL の中で定義されている文字列クラスで
+あるが、ここでは通常の文字列 (char *) として扱えると考えて差し支えない。
+次のプログラムは、形状中の全ての頂点に対して文字列 "xPos" を
+キーワードにしてそれぞれの \(x\) 成分を属性として設定するプログラムで
+ある。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid        solid;
+    fk_Vertex       *curV;
+
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
+        curV->setAttrSD("xPos", curV->getPosition().x);
+        curV = solid.getNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+例の場合は位相要素で行っているが、fk\_Point クラスオブジェクトなどの
+形状要素でも属性設定は可能である。
+
+属性の参照は、設定関数に対応した次の 6 種類の関数である。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性参照関数}
+\label{tbl:attr2}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+関数名 & 対応する設定関数名 \\ \hline
+int getAttrII(int)		& setAttrII()	\\ \hline
+double getAttrID(int)		& setAttrID()	\\ \hline
+string getAttrIS(int)		& setAttrIS()	\\ \hline
+int getAttrSI(string)		& setAttrSI()	\\ \hline
+double getAttrSD(string)	& setAttrSD()	\\ \hline
+string getAttrSS(string)	& setAttrSS()	\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+例えば、前の例で設定した "xPos" をキーワードにした値を出力するような
+プログラムを作成すると、次のようになる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_Solid    solid;
+    fk_Vertex   *curV;
+
+    curV = solid.getNextV(nullptr);
+    while(curV != nullptr) {
+        cout << "xPos = " << curV->getAttrSD("xPos") << "\n";
+        curV = solid.getNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+また、各位相要素に属性が存在するかどうかを判定するために、
+以下のような 6 種類の関数が用意されている。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性判定関数}
+\label{tbl:attr3}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+関数名 & 対応する設定関数名 \\ \hline
+bool existAttrII(int)		& setAttrII()	\\ \hline
+bool existAttrID(int)		& setAttrID()	\\ \hline
+bool existAttrIS(int)		& setAttrIS()	\\ \hline
+bool existAttrSI(string)	& setAttrSI()	\\ \hline
+bool existAttrSD(string)	& setAttrSD()	\\ \hline
+bool existAttrSS(string)	& setAttrSS()	\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+これらの関数は、キーワードによる属性が存在する場合には true を、
+存在しない場合には false を返す。
+
+また、属性を削除する (つまり、\verb+existAttr??+ 関数の結果が
+false になるようにする) 関数として、以下のような 6 種類の関数が
+提供されている。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性削除関数}
+\label{tbl:attr4}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+関数名 & 対応する設定関数名 \\ \hline
+bool deleteAttrII(int)		& setAttrII()	\\ \hline
+bool deleteAttrID(int)		& setAttrID()	\\ \hline
+bool deleteAttrIS(int)		& setAttrIS()	\\ \hline
+bool deleteAttrSI(string)	& setAttrSI()	\\ \hline
+bool deleteAttrSD(string)	& setAttrSD()	\\ \hline
+bool deleteAttrSS(string)	& setAttrSS()	\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+これらの関数は、削除した時点で実際に属性が存在した場合は true を、
+属性が存在しなかった場合は false を返す。しかし、
+どちらの場合でも「与えられたキーワードの属性をない状態にする」という
+結果には差異がない。
+
+\section{形状データのファイル保存と読み込み}
+
+\subsection{独自形式による入出力}
+形状データをファイルに保存するには、fk\_Solid クラスの writeFile() という
+メンバ関数を用いる。この関数は fk\_Solid クラスの派生クラスの
+オブジェクトであれば利用可能である。引数にはファイル名を入力し、
+成功した場合には true を、失敗した場合には false を返す。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Solid        solid;
+                :
+                :
+        if(solid.writeData("filename.fkd") == false) {
+            cerr << "File Write Error\n";
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+ここで、2番目の引数として「FK\_TEXT\_FILE」を入力したとき、
+形状データがテキストファイルとして出力されるので、形状データを
+分析したい場合には便利である。
+\\
+\begin{screen}
+\begin{verbatim}
+        solid.writeData("filename.fkd", FK_TEXT_FILE);
+\end{verbatim}
+\end{screen}
+~ \\
+
+逆に、形状データファイルから読み込みたい場合は readData() 関数を用いる。
+引数にファイル名を入力し、成功した場合に true を、失敗した場合には false を
+返す。ファイルは通常方法で出力した場合でも、FK\_TEXT\_FILE モードで
+出力した場合でも入力可能である。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_Solid        solid;
+                :
+                :
+        if(solid.readData("filename.fkd") == false) {
+            cerr << "File Read Error\n";
+        }
+\end{verbatim}
+\end{breakbox}
+~ \\
+なお、このデータには \ref{subsec:shapehistory} 節で述べた変形履歴や、
+\ref{sec:userattr} 節で解説した属性値は保存されないので注意すること。

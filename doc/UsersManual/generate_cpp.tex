@@ -1,0 +1,441 @@
+\chapter{動的な形状生成と形状変形} \label{chap:easygen} ~
+
+この章では、プログラム中で動的に形状を生成する手法を述べる。FK システムでは、
+形状に対する生成、参照、変形と言った操作の方法が数多く提供されているが、
+この章ではそれらの機能の中で比較的容易に扱える形状生成方法を解説する。
+
+\section{立体の作成方法 (1)} \label{sec:solidGen1}
+独立した頂点や線分ではなく、面を持つ立体を作成したい場合には、
+「\textbf{インデックスフェースセット (Index Face Set)}」
+(以下 IF セット) と呼ばれるデータを作成する必要がある。
+IF セットは、次の2つのデータから成り立っている。
+\begin{itemize}
+ \item 各頂点の位置ベクトルデータ。
+ \item 各面が、どの頂点を結んで構成されているかを示すデータ。
+\end{itemize}
+例として次のような三角錐を作成してみる。
+
+\myfig{fig:pyr3}{./Fig/Pyramid3_cpp.eps}{width=7truecm}
+	{三角錐と各頂点 ID}{0mm}
+
+ここで、それぞれの頂点の位置ベクトルは以下のようなものと想定する。
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+頂点 ID & 位置ベクトル \\ \hline
+0 & \((0, 10, 0)\) \\ \hline
+1 & \((-10, -10, 10)\) \\ \hline
+2 & \((10, -10, 10)\) \\ \hline
+3 & \((0, -10, -10)\) \\ \hline
+\end{tabular}
+\end{center}
+このとき、4 枚の面はそれぞれ次のような頂点を結ぶことで構成されていることが、
+図を参照することで確認できる。
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+平面番号 & 構成される頂点の ID \\ \hline
+1 枚目 & 0, 1, 2 \\ \hline
+2 枚目 & 0, 2, 3 \\ \hline
+3 枚目 & 0, 3, 1 \\ \hline
+4 枚目 & 1, 3, 2 \\ \hline
+\end{tabular}
+\end{center}
+この2つのデータを、次のようにして入力する。「pos」が頂点の位置ベクトルを
+格納する配列、「IFSet」が各面の頂点 ID を格納する配列である。IFSet は、
+面数と角数を掛けた分を用意し、例にあるように続き番号で入力していく。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    fk_IndexFaceSet     ifs;
+    fk_Vector           pos[4];
+    int                 IFSet[3*4];
+
+    pos[0].set(0.0, 10.0, 0.0);
+    pos[1].set(-10.0, -10.0, 10.0);
+    pos[2].set(10.0, -10.0, 10.0);
+    pos[3].set(0.0, -10.0, -10.0);
+
+    IFSet[0] = 0;  IFSet[1] = 1;  IFSet[2] = 2;
+    IFSet[3] = 0;  IFSet[4] = 2;  IFSet[5] = 3;
+    IFSet[6] = 0;  IFSet[7] = 3;  IFSet[8] = 1;
+    IFSet[9] = 1;  IFSet[10] = 3; IFSet[11] = 2;
+
+    ifs.makeIFSet(4, 3, IFSet, 4, pos);
+\end{verbatim}
+\end{breakbox}
+~ \\
+最終的には、makeIFSet というメンバ関数を用いて fk\_IndexFaceSet 型に情報を
+与えることになる。makeIFSet は、次のような形式で用いることができる。
+\\
+\begin{screen}
+\begin{center}
+変数.makeIFSet(面数, 角数, 各面頂点配列, 頂点数, 位置ベクトル配列);
+\end{center}
+\end{screen}
+~ \\
+例の場合、面数が 4、角数は三角形なので 3、頂点数は 4 になっている。
+今のところ、角数として用いることができるのは 3 か 4
+(つまり三角形か四角形)のいずれかのみに制限されている。
+
+\section{立体の作成方法 (2)} \label{sec:solidGen2}
+前節では、全ての面が同じ角数であることが前提となっているが、
+ここでは各面で角数が同一でない立体の作成方法を解説する。
+今回は、次のような四角錐 (ピラミッド型) を想定する。
+
+\myfig{fig:pyr4}{./Fig/Pyramid4_cpp.eps}{width=7truecm}
+	{四角錐と各頂点 ID}{0mm}
+
+前節と同様に、各頂点の位置ベクトルと面を構成する頂点 ID の表を記述すると
+次のようになる。
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+頂点 ID & 位置ベクトル \\ \hline
+0 & \((0, 10, 0)\) \\ \hline
+1 & \((-10, -10, 10)\) \\ \hline
+2 & \((10, -10, 10)\) \\ \hline
+3 & \((10, -10, -10)\) \\ \hline
+4 & \((-10, -10, -10)\) \\ \hline
+\end{tabular} \qquad
+\begin{tabular}{|c|c|}
+\hline
+平面番号 & 構成される頂点の ID \\ \hline
+1 枚目 & 0, 1, 2 \\ \hline
+2 枚目 & 0, 2, 3 \\ \hline
+3 枚目 & 0, 3, 4 \\ \hline
+4 枚目 & 0, 4, 1 \\ \hline
+5 枚目 & 4, 3, 2, 1 \\ \hline
+\end{tabular}
+\end{center}
+今回は、三角形と四角形が混在しているが、このような立体を作成するには
+次の例のようなプログラムを作成する。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_IndexFaceSet shape;
+        fk_Vector pos;
+        std::vector<fk_Vector> posArray;
+        std::vector<int> polygon;
+        std::vector< std::vector<int> > IFSet;
+    
+        pos.set(0.0, 10.0, 0.0); posArray.push_back(pos);
+        pos.set(-10.0, -10.0, 10.0); posArray.push_back(pos);
+        pos.set(10.0, -10.0, 10.0); posArray.push_back(pos);
+        pos.set(10.0, -10.0, -10.0); posArray.push_back(pos);
+        pos.set(-10.0, -10.0, -10.0); posArray.push_back(pos);
+        // 1 枚目
+        polygon.clear();
+        polygon.push_back(0);
+        polygon.push_back(1);
+        polygon.push_back(2);
+        IFSet.push_back(polygon);
+        // 2 枚目
+        polygon.clear();
+        polygon.push_back(0);
+        polygon.push_back(2);
+        polygon.push_back(3);
+        IFSet.push_back(polygon);
+        // 3 枚目
+        polygon.clear();
+        polygon.push_back(0);
+        polygon.push_back(3);
+        polygon.push_back(4);
+        IFSet.push_back(polygon);
+        // 4 枚目
+        polygon.clear();
+        polygon.push_back(0);
+        polygon.push_back(4);
+        polygon.push_back(1);
+        IFSet.push_back(polygon);
+        // 5 枚目
+        polygon.clear();
+        polygon.push_back(4);
+        polygon.push_back(3);
+        polygon.push_back(2);
+        polygon.push_back(1);
+        IFSet.push_back(polygon);
+
+        shape.makeIFSet(&IFSet, &posArray);
+\end{verbatim}
+\end{breakbox}
+~ \\
+上記のプログラム中では、「\verb+std::vector<***>+」という形式で定義された
+変数が3個登場する。
+ここではこの形式 (STL と呼ばれる C++ の機能) の詳細は解説しないが、
+これを用いて次のようにして形状を定義していくことができる。
+\begin{enumerate}
+ \item まず、\verb+std::vector<fk_Vector>+ 型の変数 (例では posArray) に対し、
+	push\_back 関数で頂点の位置ベクトルを次々に与えていく。
+
+ \item polygon を \verb+std::vector<int>+ 型の変数、IFSet を
+	\verb+std::vector< vector<int> >+ 型の変数として、
+	次のような形式で面を定義していく。\\ ~ \\
+	\begin{screen}
+	\begin{verbatim}
+                polygon.clear();
+                polygon.push_back(頂点 ID);
+                polygon.push_back(頂点 ID);
+                        :
+                polygon.push_back(頂点 ID);
+                IFSet.push_back(polygon);
+	\end{verbatim}
+	\end{screen}
+\end{enumerate}
+
+\section{頂点の移動} \label{sec:movevertex}
+第 \ref{sec:solidGen1} 節 〜 第 \ref{sec:solidGen2} 節で
+述べた方法で作成した
+様々な形状に対し、頂点を移動することで変形操作を行うことができる。
+頂点移動をするには、moveVPosition() を用いる。以下のプログラムは、
+ID が 2 である頂点を fk\_Vector を用いて \((0, 1, 2)\) へ移動し、
+ID が 3 である頂点を数値だけで \((1.5, 2.5, 3,5)\) へ移動させるものである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+        fk_IndexFaceSet shape;
+        fk_Vector       pos;
+                :
+                :
+        pos.set(0.0, 1.0, 2.0);
+        shape.moveVPosition(2, pos);
+        shape.moveVPosition(3, 1.5, 2.5, 3.5);
+\end{verbatim}
+\end{breakbox}
+
+% \section{面へのマテリアル設定} \label{sec:ifs_mat}
+% 第 \ref{chap:model} 章で述べるように、通常マテリアルはモデルに
+% 対して設定する。しかし、形状中の各面に個別にマテリアルを設定することも
+% 可能である。この機能を利用するには、次の2つの
+% ステップを踏む必要がある。
+% \begin{enumerate}
+%  \item fk\_IndexFaceSet クラスあるいは fk\_Solid クラスの
+% 	オブジェクトに対してマテリアルパレットを設定する。
+%  \item 各面に対してマテリアルのインデックスを設定する。
+% 	fk\_Solid の場合、線や頂点に対しても個別に設定できる。
+% \end{enumerate}
+% \ref{subsec:ifs_palette} 節で1番目の方法を、
+% \ref{subsec:ifs_matid} 節で
+% 2番目の方法を説明する。
+% \subsection{パレットの設定} \label{subsec:ifs_palette}
+% まず、各位相要素の個別の設定を行う前に、元となるパレットを設定
+% する必要がある。パレットの設定法は、
+% 以下のように setPalette() 関数で設定することで行う。
+% これに関しては、\ref{sec:mat_palette} 節で詳しく述べているので、
+% そちらを参照してほしい。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%     fk_IndexFaceSet    shape;
+% 
+%     fk_Material::initDefault();
+%     shape.setPalette(Red, 0);
+%     shape.setPalette(Blue, 1);
+%     shape.setPalette(Green, 2);
+% \end{verbatim}
+% \end{breakbox}
+% \subsection{マテリアルインデックスの設定} \label{subsec:ifs_matid}
+% 次に、各面に対して個別のマテリアルに対応するインデックスを設定していく。
+% なお、この部分は fk\_IndexFaceSet と fk\_Solid の場合ではやり方が
+% 異なる。ここでは fk\_IndexFaceSet に関する解説を行う。
+% fk\_Solid の設定方法は第 \ref{subsec:solid_matid} 節で述べているので、
+% そちらを参照してほしい。
+% 
+% さて、fk\_IndexFaceSet での個別の設定であるが、これは
+% setElemMaterialID() というメンバ関数を用いる。以下が
+% 利用方法である。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%     fk_IndexFaceSet    shape;
+% 
+%     fk_Material::initDefault();
+%     shape.setPalette(Red, 0);
+%     shape.setPalette(Blue, 1);
+%     shape.setPalette(Green, 2);
+% 
+%     shape.setElemMaterialID(0, 1);
+%     shape.setElemMaterialID(1, 2);
+%     shape.setElemMaterialID(3, 0);
+% \end{verbatim}
+% \end{breakbox}
+% ~ \\
+% このように、setElemMaterialID() 関数は2つの整数を引数に取る。
+% 最初の引数は、形状中の面 ID を指定する。fk\_IndexFaceSet クラスで
+% 生成した形状では、それぞれ生成した順に \(0, 1, 2, \cdots\) という ID が
+% 面に対応づけられている。2番目の引数は、パレットで指定したマテリアルの
+% ID を指定する。従って、この例では最初の面に青色を、次の面に緑色を、
+% 3番目の面には赤色を設定していることになる。もちろん、複数の
+% 面に対して同じマテリアルを指定してもよい。
+% \newpage
+% \section{マテリアル情報の取得}
+% マテリアルパレットや各面の情報を得る方法を以下に述べる。
+% \subsection{マテリアルパレットの取得}
+% まず、マテリアルパレットの取得方法を述べる。この節の内容は、
+% fk\_IndexFaceSet と fk\_Solid クラスの両方で用いることができる。
+% 
+% パレットを得るためのメンバ関数は「getPalette()」というものである。
+% この関数は、返り値として fk\_Palette のポインタ型を返す。
+% 以下に利用方法を示す。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%     fk_IndexFaceSet       shape;
+%     fk_Palette            palette;
+%     vector<fk_Material>   *matArray;
+%     fk_Color              col[10], *tmpCol;
+%     unsigned int          i, size;
+% 
+%     // VRML ファイルの読み込み
+%     shape.readVRMLFile("sample.wrl");
+% 
+%     // マテリアル配列の取得
+%     palette = shape.getPalette();
+%     matArray = palette->getMaterialVector();
+% 
+%     // マテリアル配列から、マテリアル要素数を取得
+%     size = matArray->size();
+% 
+%     // col 配列にパレットの Diffuse 要素を格納
+%     for(i = 0; i < size && i < 10; i++) {
+%         tmpCol = (*matArray)[i].getDiffuse();
+%         col[i] = *tmpCol;
+%     }
+% \end{verbatim}
+% \end{breakbox}
+% ~ \\
+% このプログラムは、まず最初に「sample.wrl」という名称の VRML ファイルを
+% 入力している。その次に、「palette」という変数にパレット情報(のポインタ)
+% を格納している。さらに、パレットから「matArray」という STL の
+% vector 型配列を取得している。
+% その次の行でパレットの要素数を得ている。この「size()」という
+% メンバ関数は FK の機能ではなく STL の機能である。
+% 最後の for 文は、マテリアルの拡散反射計数 (diffuse) を col という配列に
+% コピーしている。getDiffuse() 関数は fk\_Color のポインタ型を返すので、
+% 一旦 tmpCol という変数に格納してから col に対してコピーを行っている。
+% 
+% このプログラムは、ポインタと STL に不馴れな人には見辛いものとなっているが、
+% 本質的に難しいことを行っているわけではないので、ゆっくり分析してほしい。
+% 
+% \subsection{各面のマテリアルインデックスの参照}
+% ここでは、fk\_IndexFaceSet クラスでのマテリアルインデックスの参照方法を
+% 述べる。fk\_Solid の各位相要素に対する参照は、ここではなく
+% 第 \ref{subsec:solid_matid} 節で述べる。
+% 
+% 各面のマテリアルインデックスの参照には、getElemMaterialID() という
+% メンバ関数を用いる。以下が利用方法である。
+% \\
+% \begin{breakbox}
+% \begin{verbatim}
+%     fk_IndexFaceSet    shape;
+%     int                id;
+% 
+%     shape.readVRMLFile("sample.wrl");
+%     id = shape.getElemMaterialID(0);
+% \end{verbatim}
+% \end{breakbox}
+% ~ \\
+% これは、インデックスが 0 である面のマテリアルインデックスを
+% 参照しているプログラムである。もし指定したインデックスに対応する
+% 面が存在しない場合は、-1 が返る。
+% 
+% \subsection{fk\_Solidクラスでの汎用フォーマットファイル入出力}
+% fk\_Solid では、各種形状データフォーマットでの入出力が可能となっている。
+% 現在サポートされているフォーマットを表 \ref{tbl:SolidFileIO} に示す。
+% 
+% \begin{table}[H]
+% \caption{fk\_Solidで利用できるファイルフォーマット}
+% \label{tbl:SolidFileIO}
+% \begin{center}
+% \begin{tabular}{|l|l|}
+% \hline
+% 入力 & SMF, VRML2.0, STL, HRC, RDS, DXF, MQO, Direct3D X \\ \hline
+% 出力 & VRML2.0, STL, DXF, MQO \\ \hline
+% \end{tabular}
+% \end{center}
+% \end{table}
+% 以下に、各入出力用関数を個別に紹介する。
+% \begin{tabbing}
+% xx \= xxxx \= \kill
+% \> \textbf{bool readSMFFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		SMF形式のファイルから、形状データを入力する。
+% 		「fileName」は入力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool readVRMLFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		VRML2.0形式のファイルから、形状データを入力する。
+% 		「fileName」は入力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool readSTLFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		STL形式のファイルから、形状データを入力する。
+% 		「fileName」は入力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool readHRCFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		HRC形式のファイルから、形状データを入力する。
+% 		「fileName」は入力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool readRDSFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		RDS(Ray Dream Studio)形式のファイルから、
+% 		形状データを入力する。
+% 		「fileName」は入力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool readDXFFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		DXF形式のファイルから、形状データを入力する。
+% 		「fileName」は入力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> {\footnotesize \bf bool readMQOFile(string fileName,
+% 	string objName, bool solidFlg, bool contFlg, bool matFlg)} \\
+% \> {\footnotesize \bf bool readMQOFile(string fileName,
+% 	string objName, int matID, bool solidFlg, bool contFlg, bool matFlg)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		MQO形式のファイルから、形状データを入力する。
+% 		各引数については、fk\_IndexFaceSet の同名関数と同様なので、
+% 		\ref{subsec:mqoread}節を参照のこと。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool writeVRMLFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		形状データを VRML 2.0 形式で出力する。
+% 		「fileName」は出力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool writeSTLFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		形状データを STL 形式で出力する。
+% 		「fileName」は出力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool writeDXFFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		形状データを DXF 形式で出力する。
+% 		「fileName」は出力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 	\end{tabular} \\ \\
+% 
+% \> \textbf{bool writeMQOFile(string fileName)} \\
+% 	\> \> \begin{tabular}{p{15cm}}
+% 		形状データを MQO 形式で出力する。
+% 		「fileName」は出力ファイル名を指定する。
+% 		成功すれば true、失敗した場合は false を返す。
+% 		なお、オブジェクト名は「obj1」が自動的に付与される。		
+% 	\end{tabular}
+% \end{tabbing}

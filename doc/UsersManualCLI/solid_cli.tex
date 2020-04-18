@@ -1,0 +1,1006 @@
+\chapter{形状に対する高度な操作} \label{chap:solid} ~
+
+\ref{chap:shape} 章では汎用的な形状の生成法について述べ、
+\ref{chap:easygen} 章で任意形状の生成、変形に関して述べたが、
+本章では fk\_Solid クラスを用いた高度な形状情報の参照と変形操作に
+ついて触れている。
+fk\_Solid クラスでは、形状のデータは \textbf{Half-Edge 構造} と呼ばれる
+表現法を用いて格納されている。
+従って、形状情報の変形や操作を行いたい場合にはまずこの
+Half-Edge 構造を理解する必要がある。
+本章では、まず Half-Edge 構造に関しての解説を述べ、その後に
+fk\_Solid での形状の扱い方について述べる。
+\section{fk\_Solid の形状構造}
+\subsection{Half-Edge 構造の基本的概念}
+Half-Edge 構造では、「頂点」「稜線」「半稜線」「ループ」という4種類の要素に
+よって形状を構成すると考える。図 \ref{fig:HalfEdge1} が示す形状に対する
+各要素の解説を表 \ref{tbl:HalfEdge1} に示す。
+
+\myfig{fig:HalfEdge1}{./Fig/HalfEdge1_cli.eps}{width=10truecm}
+	{Half-Edge 構造での各要素}{0mm}
+
+\begin{table}[H]
+\caption{Half-Edge 構造位相要素の解説}
+\label{tbl:HalfEdge1}
+\begin{center}
+\begin{tabular}{|l|l|p{6cm}|p{6cm}|}
+\hline
+名称 & 図中表記 & 解説 & 保持データ \\ \hline \hline
+頂点 & v1 〜 v3 &
+	形状中の頂点を表す。単独で存在する場合と、
+	稜線の端点となる場合がある。&
+	\vspace*{0mm}
+	\begin{itemize}
+	 \item 頂点位置ベクトル。(必須)
+	 \item 自身を始点とする半稜線1個。(適宜)
+	\end{itemize} \\ \hline
+稜線 & e1 〜 e3 &
+	形状中の面同士の境界線を表す。必ず両端点に頂点があり、
+	それぞれを始点とする半稜線を1個ずつ持つ。&
+	\vspace*{0mm}
+	\begin{itemize}
+	 \item 両側の半稜線。(必須)
+	\end{itemize} \\ \hline
+半稜線 & h1 〜 h6 &
+	稜線に2個ずつ属している要素で、稜線の端点のうちの片方を始点とする。&
+	\vspace*{0mm}
+	\begin{itemize}
+	 \item 親稜線。(必須)
+	 \item 始点頂点。(必須)
+	 \item 前後の半稜線。(必須)
+	 \item 属する面。(適宜)
+	\end{itemize} \\ \hline
+ループ & L1 &
+	形状中の面を表す。複数の半稜線の連結によって構成される。&
+	\vspace*{0mm}
+	\begin{itemize}
+	 \item 構成する半稜線1個。(必須)
+	\end{itemize} \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+簡単に述べると、「頂点」は節点を、「稜線」は頂点を結ぶ線分を、「ループ」は
+稜線によって囲まれた面を指す。「半稜線」は、各稜線に2本ずつ付随する要素で、
+人間にとっての両腕のようなものだと考えればよい。そこで、それぞれの半稜線を
+腕に見立てて、「右半稜線」「左半稜線」と呼ぶことにする。
+しかし、「右」「左」ということには必然性はなく、
+仮に左右を交換したとしても構造としてはまったく支障はない。
+半稜線には ``向き" という概念があって、左右の半稜線同士では
+片方の始点がもう片方の終点となる。
+
+\subsection{用語の定義}
+Half-Edge 構造では、ループは複数の半稜線のリング状の繋がりによって構成される
+と考えられる。半稜線は、その「繋がり」の中で自身の前や後ろに位置する
+別の半稜線が必ず存在することになる。これらを自身に対する
+「\textbf{前半稜線}」、「\textbf{後半稜線}」と呼ぶことにする。
+
+また、ループ \(L\) が複数の半稜線によって構成されているとき、それらの
+半稜線はループ \(L\) に「\textbf{属している}」と呼び、ループ \(L\) のことを
+これらの半稜線の「\textbf{親ループ}」と呼ぶこととする。また、自身が属している
+稜線をその半稜線の「\textbf{親稜線}」と呼ぶこととする。
+
+これを踏まえ、さらに以下に述べような用語を定義する。
+\begin{description}
+ \item[位相要素:] ~ \\
+	頂点、稜線、半稜線、ループの4種類の要素の総称のこと。
+
+ \item[位相:] ~ \\
+	全ての位相要素の接続関係のこと。
+
+ \item[接続:] ~ \\
+	次のような関係に対し、「接続している」という言葉を使う。
+	\begin{enumerate}
+	 \item (頂点と稜線) \quad 頂点と、それを両端点に持つ稜線。
+	 \item (稜線とループ) \quad ある稜線と、それを境界線とするループ。
+	\end{enumerate}
+	乱暴に述べると、接している状態に対して「接続」という
+	言葉を使うということである。
+
+ \item[隣接:] ~ \\
+	次のような関係に対し、「隣接している」という言葉を使う。
+	\begin{enumerate}
+	 \item (頂点と頂点) \quad ある稜線の端点を構成する両頂点同士。
+	 \item (ループとループ) \quad ある稜線を境界線として共有する
+		ループ同士。
+	\end{enumerate}
+
+ \item[独立頂点:] ~ \\
+	稜線に接続していない頂点のこと。
+
+ \item[接続頂点:] ~ \\
+	1本以上の稜線に接続している頂点のこと。
+
+ \item[任意頂点:] ~ \\
+	任意の頂点のこと。
+
+ \item[定義半稜線:] ~ \\
+	親ループを持つ半稜線のこと。
+
+ \item[未定義半稜線:] ~ \\
+	親ループを持たない半稜線のこと。
+
+ \item[未定義稜線:] ~ \\
+	属している半稜線が両方とも未定義半稜線である稜線のこと。
+
+ \item[定義稜線:] ~ \\
+	属している半稜線の少なくともいずれかが定義半稜線である稜線のこと。
+\end{description}
+\subsection{fk\_Solid での基本的な位相要素}
+fk\_Solid クラスを用いて生成した形状の各位相要素は、それぞれ
+個別のクラスが用意されている。いかに、そのクラスを羅列していく。
+
+\subsection{頂点}
+頂点を表すクラスは fk\_Vertex である。fk\_Vertex は情報として
+自身の位置ベクトルと法線ベクトル値を持つ。もし1本以上の稜線と接続している
+場合は、自身を始点とする半稜線のうちの1つを保持している。
+
+\subsection{半稜線}
+半稜線を表すクラスは fk\_Half である。fk\_Half は情報として
+自身の始点となる頂点、自身の親稜線、自身の次にあたる半稜線、
+自身の前にあたる半稜線、そしてもしあれば自身の親ループを保持している。
+
+\subsection{稜線}
+稜線を表すクラスは fk\_Edge である。fk\_Edge は情報として
+左右の半稜線を保持している。特に左右に意味があるわけではなく、
+もし反転していても他になんの影響も与えない。
+
+\subsection{ループ}
+ループを表すクラスは fk\_Loop である。fk\_Loop は情報として
+自身に属する半稜線のうちの1つと自身の法線ベクトル値を保持している。
+
+\section{形状の参照}
+この節では、具体的な形状情報の参照法を述べる。たとえば次のような
+要求に対して、全てこの節に解決法が記述されている。
+\begin{itemize}
+ \item 立体形状の全頂点の位置ベクトルが知りたい。
+ \item ある頂点に接続されている稜線の数が知りたい。
+ \item あるループの法線ベクトルが知りたい。
+ \item あるループが、幾つの稜線で成り立っているか知りたい。
+\end{itemize}
+この他にも、多くの位相情報を得る手段が提供されている。
+
+\subsection{任意の位相要素の取得法}
+まず、形状が持つ全ての位相要素情報を得る手段について述べる。ここでは例として
+頂点の取得法から述べる。次の例は、全ての頂点の位置ベクトルを出力する
+プログラムである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    var solid = new fk_Solid();
+    int ID;
+
+    solid.ReadVRMLFile("sample.wrl", true, true);
+    var curV = solid.GetNextV(null);
+    while(curV != null) {
+        var pos = curV.Position;
+        ID = curV.ID;
+        Console.WriteLine("ID[{0}] = {1}", ID, pos);
+        curV = solid.GetNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+このプログラムで注目してほしいのは
+GetNextV() メソッドである。while ループの外にある GetNextV() と
+中にある GetNextV() では与えている引数が異なっている。全ての
+頂点はユニークな ID を保持しており、
+\verb+GetNextV(null)+ という記述では現存する頂点
+のうち最も ID が小さな頂点を返す。従って、ループ外の GetNextV() では
+curV に最小の ID を持つ頂点インスタンスが代入される。
+
+次にループ中の GetNextV() であるが、引数が curV になっている。
+GetNextV() は、引数にある頂点を代入すると、代入された頂点 ID の
+次に大きい頂点 ID を持つ頂点を返す。また、もし引数の頂点が
+最大の ID を所持していた場合には null が返される。従って、
+例のプログラムの場合にはループから抜けることになる。
+このように、GetNextV() をループ中で用いることによって全ての
+頂点位置を表示することが可能となる。
+
+以上が頂点の場合であるが、半稜線、稜線、ループの場合もほとんど
+変化はない。半稜線の場合は GetNextV() の代わりに GetNextH() を、
+稜線の場合は GetNextE() を、ループの場合は GetNextL() を使用すればよい。
+以下に半稜線の場合を示す。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    var solid = new fk_Solid();
+
+    var curH = solid.GetNextH(null);
+    while(curH != null) {
+        Console.WriteLine("Half ID = {0}", curH.ID);
+        curH = solid.GetNextH(curH);
+    }
+\end{verbatim}
+\end{breakbox}
+\subsection{全ての位相要素に共通の参照関数}
+各要素の ID を得るには「ID」プロパティを参照する。
+例えば、ループの ID を調べたいときは以下のようになる。
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Loop     loop;
+    int         ID;
+            :
+            :
+    ID = loop.ID;
+\end{verbatim}
+\end{screen}
+~ \\
+その逆で、ID から位相要素オブジェクトを取得したい場合には、
+以下のような各メソッドを用いる。
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Vertex   GetVData(int);
+    fk_Half     GetHData(int);
+    fk_Edge     GetEData(int);
+    fk_Loop     GetLData(int);
+\end{verbatim}
+\end{screen}
+~ \\
+例えば、ID が 5 の頂点オブジェクトを得たいのであれば、
+\\
+\begin{screen}
+\begin{verbatim}
+    var solid = new fk_Solid();
+    var v = solid.GetVData(5);
+\end{verbatim}
+\end{screen}
+~ \\
+とすればよい。
+\subsection{fk\_Vertex で使用できる参照プロパティ}
+頂点を表す fk\_Vertex では、次のような参照用プロパティが用意されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Vector Position \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の位置ベクトルを参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Vector Normal \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の法線ベクトルを参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Half OneHalf \\
+	\> \> \begin{minipage}[]{15cm}
+		自身を始点とする半稜線のうちの1つを参照する。もし自身の
+		頂点を始点とする半稜線がない場合は null となる。
+	\end{minipage}
+\end{tabbing}
+
+\subsection{fk\_Half で使用できる参照プロパティ}
+半稜線を表す fk\_Half では、次のような参照用プロパティが用意されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Vertex Vertex \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の始点である頂点を参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Half NextHalf \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の前にあたる半稜線を参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Half PrevHalf \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の後にあたる半稜線を参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Edge ParentEdge \\
+	\> \> \begin{minipage}[]{15cm}
+		自身が属する稜線(親稜線)を参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Loop ParentLoop \\
+	\> \> \begin{minipage}[]{15cm}
+		自身が属するループ(親ループ)を参照する。親ループがない場合は null となる。
+	\end{minipage}
+\end{tabbing}
+
+\subsection{fk\_Edge で使用できる参照プロパティ}
+稜線を表す fk\_Edge では、次のような参照用プロパティが用意されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Half RightHalf \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の右半稜線を参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Half LeftHalf \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の左半稜線を参照する。
+	\end{minipage}
+\end{tabbing}
+
+\subsection{fk\_Loop で使用できる参照プロパティ}
+ループを表す fk\_Loop では、次のような参照用プロパティが用意されている。
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Half OneHalf \\
+	\> \> \begin{minipage}[]{15cm}
+		自身に属している半稜線のうちの1つを参照する。
+	\end{minipage} \\ \\
+
+\> fk\_Vector Normal \\
+	\> \> \begin{minipage}[]{15cm}
+		自身の法線ベクトルを参照する。
+	\end{minipage} \\ \\
+
+\> int VertexNum \\
+	\> \> \begin{minipage}[]{15cm}
+		自身に属している頂点数を参照する。
+	\end{minipage}
+\end{tabbing}
+
+\subsection{fk\_Solid で使用できる参照用メソッド・プロパティ}
+これまで述べてきた以外に、fk\_Solid \footnote{厳密には、fk\_Solid の基底クラスの一つである
+fk\_Reference クラス。} が持つ多くの参照用メソッドやプロパティが存在する。
+ここで用いる fk\_Solid インスタンスは、必ず引数として利用する
+位相要素オブジェクトを含むものでなければならない。もし別の
+fk\_Solid 型のインスタンスに含まれる位相要素を代入した場合、
+致命的な障害が出る可能性がある。
+\begin{center}
+{\large 頂点に関連するメソッド}
+\end{center}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Half GetOneHOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続する半稜線のうちの1つを返す。
+		V が独立頂点の場合は null が返る。
+	\end{minipage} \\ \\
+
+\> fk\_Half [ ] GetAllHOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続する半稜線すべてを配列で返す。
+	\end{minipage} \\ \\
+
+\> fk\_Edge [ ] GetEOnVV(fk\_Vertex V1, fk\_Vertex V2) \\
+	\> \> \begin{minipage}[]{15cm}
+		V1 と V2 の両方に接続している稜線すべてを配列で返す。		
+	\end{minipage} \\ \\
+
+\> fk\_Edge GetOneEOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続している稜線のうちの1つを返す。V が独立頂点の場合は null が返る。
+	\end{minipage} \\ \\
+
+\> int GetENumOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V1 に接続している稜線の本数を返す。
+	\end{minipage} \\ \\
+
+\> fk\_Edge [ ] GetAllEOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続している稜線すべてを配列で返す。
+	\end{minipage} \\ \\
+
+\> fk\_Loop GetOneLOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続しているループのうちの1つを返す。
+		ひとつのループとも接続していない場合は null を返す。
+	\end{minipage} \\ \\
+
+\> fk\_Vertex GetOneNeighborVOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続している頂点のうちの1つを返す。
+		ひとつの頂点とも接続していない場合は null を返す。
+	\end{minipage} \\ \\
+
+\> fk\_Loop [ ] GetAllLOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に接続しているループすべてを配列で返す。
+	\end{minipage} \\ \\
+
+\> fk\_Vertex [ ] GetAllNeighborVOnV(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		V に隣接している頂点すべてを配列で返す。
+	\end{minipage}
+\end{tabbing}
+\begin{center}
+{\large 半稜線に関連する関数}
+\end{center}
+\begin{tabbing}
+xx \= xxxx \= \kill
+\> fk\_Vertex GetVOnH(fk\_Half H) \\
+	\> \> \begin{minipage}[]{15cm}
+		H の元頂点(出発点)を返す。
+	\end{minipage} \\ \\
+
+\> fk\_Half GetMateHOnH(fk\_Half H) \\
+	\> \> \begin{minipage}[]{15cm}
+		H と同じ稜線を共有する、反対側の半稜線を返す。
+	\end{minipage} \\ \\
+
+\> fk\_Edge GetParentEOnH(fk\_Half H) \\
+	\> \> \begin{minipage}[]{15cm}
+		H が所属している稜線を返す。
+	\end{minipage} \\ \\
+
+\> fk\_Loop GetParentLOnH(fk\_Half H) \\
+	\> \> \begin{minipage}[]{15cm}
+		H が所属しているループを返す。H がどのループにも
+		所属していない場合は null が返る。
+	\end{minipage}
+\end{tabbing}
+\begin{center}
+{\large 稜線に関連する関数}
+\end{center}
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Vertex GetRightVOnE(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E の右側の半稜線の元頂点を返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Vertex GetLeftVOnE(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E の左側の半稜線の元頂点を返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Half GetRightHOnE(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E の右側の半稜線を返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Half GetLeftHOnE(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E の左側の半稜線を返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Loop GetRightLOnE(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E の右側にあるループを返す。
+		右側にループがなければ null を返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Loop GetLeftLOnE(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E の左側にあるループを返す。
+		右側にループがなければ null を返す。
+	\end{minipage} \\ \\
+
+ \> fk\_EdgeStatus GetEdgeStatus(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		E が現在どのような稜線かを返す。
+	\end{minipage}
+\end{tabbing}
+\begin{center}
+{\large ループに関連する関数}
+\end{center}
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Vertex GetOneVonL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L に属している頂点のうちの1つを返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Vertex [ ] GetAllVOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L に属している頂点すべてを配列で返す。
+		このとき、配列の順番で頂点は接続していることが保証されている。
+	\end{minipage} \\ \\
+
+ \> fk\_Half GetOneHOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L に属している半稜線のうちの1つを返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Half [ ] GetAllHOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L に属している半稜線すべてを配列で返す。
+		このとき、配列の順番で半稜線は接続していることが保証されている。
+	\end{minipage} \\ \\
+
+ \> fk\_Edge GetOneEOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L に属している稜線のうちの1つを返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Edge [ ] GetAllEOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L に属している稜線すべてを配列で返す。
+		このとき、配列の順番で稜線は接続していることが保証されている。
+	\end{minipage} \\ \\
+
+ \> fk\_Loop GetOneNeighorLOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L と隣接しているループのうちの1つを返す。
+		1つも隣接しているループがない場合は null が返る。
+	\end{minipage} \\ \\
+
+ \> fk\_Loop [ ] GetAllNeighborLOnL(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		L と隣接しているループすべてを配列で返す。
+	\end{minipage} \\ \\
+
+ \> fk\_Loop GetNeighborLOnLH(fk\_Loop L, fk\_Half H) \\
+	\> \> \begin{minipage}[]{15cm}
+		L と隣接しているループのうち、H の親稜線を共有しているループを返す。
+		この共有関係が成り立たないような状態の場合
+		(H が L 上にない、H の反対側にループが存在しないなど) は、null が返る。
+	\end{minipage} \\ \\
+
+ \> fk\_Loop GetNeighborLOnLE(fk\_Loop L, fk\_Edge E1) \\
+	\> \> \begin{minipage}[]{15cm}
+		L と隣り合っているループのうち、E を共有しているループを返す。
+		この共有関係が成り立たないような状態の場合
+		(E が L 上にない、E の反対側にループが存在しないなど) は、null が返る。
+	\end{minipage}
+\end{tabbing}
+
+\section{形状の変形} \label{sec:ModifySolid}
+fk\_Solid クラスには、以下に挙げるような形状操作用のメソッドが用意されている
+\footnote{厳密には fk\_Operation クラスと fk\_Modify クラスであり、
+fk\_Solid クラスはこれらの派生クラスとなっている。}
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Vertex MakeVertex(fk\_Vector P) \\
+	\> \> \begin{minipage}[]{15cm}
+		P の位置に新たに頂点を生成し、新たに生成された頂点を返す。
+		その位置に既に頂点があっても生成する。
+	\end{minipage} \\ \\
+
+ \> bool DeleteVertex(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+	   	稜線が接続されていない頂点(独立頂点) V を消去する。成功すれば
+		true を返す。V に稜線が接続されている場合はエラーとなり false
+		を返し、V 自体は消去しない。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler01}{./Fig/Euler01_cli.eps}{width=8truecm}{MakeVertex と RemoveVertex}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> bool MoveVertex(fk\_Vertex V, fk\_Vector P) \\
+	\> \> \begin{minipage}[]{15cm}
+		V を 位置座標 P へ移動する。成功すれば true を返す。V が存在
+		しない場合はエラーとなり false を返す。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler02}{./Fig/Euler02_cli.eps}{width=10truecm}{moveVertex}{0mm}
+\newpage
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Edge MakeEdge(fk\_Vertex *V1, fk\_Vertex *V2, fk\_Half *H1\_1, fk\_Half *H1\_2,
+	fk\_Half *H2\_1, fk\_Half *H2\_2) \\
+	\> \> \begin{minipage}[]{15cm}
+		頂点 V1 と V2 の間に未定義稜線を生成する。この関数は大きく以下の
+		3通りの処理を行う。
+
+		\begin{enumerate}
+		 \item V1, V2 がともに独立頂点の場合: \\
+			H1\_1, H1\_2, H2\_1, H2\_2 にはいずれも null を代入する。
+			なお、H1\_1 以下の引数は省略可能である。
+
+		 \item V1 が接続頂点、V2 が独立頂点の場合: \\
+			新たに生成される半稜線を H1, H2 (H1 の始点は V1)とする。
+	 		このとき、H1\_1 は H1 の前となる半稜線を、H1\_2 には H2 の
+			後となる半稜線を代入する。このとき、
+			H1\_1 及び H1\_2 は未定義半稜線でなければならない。
+			H2\_1 及び H2\_2 には null を
+			代入する。なお、H2\_1, H2\_2 は省略可能である。
+
+		 \item V1, V2 いずれも接続頂点の場合: \\
+			新たに生成される半稜線を H1, H2 (H1 の始点は V1)とする。
+			このとき、
+			\begin{itemize}
+			 \item H1\_1 は H1 の前
+			 \item H1\_2 は H2 の後
+			 \item H2\_1 は H2 の前
+			 \item H2\_2 は H1 の後
+			\end{itemize}
+			となる半稜線を代入する。なお、H1\_1, H1\_2, H2\_1, H2\_2 の
+			いずれも未定義半稜線でなければならない。
+		\end{enumerate}
+		返り値は新たに生成された稜線である。もし稜線生成に失敗した場合は
+		null を返す。
+	\end{minipage} \\ \\
+ \> bool deleteEdge(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+	   	未定義稜線 E を削除する。成功すれば true を返す。
+		E が未定義稜線で無い場合 false を返して何もしない。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler03}{./Fig/Euler03_cli.eps}{width=10truecm}{MakeEdge と DeleteEdge}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Loop MakeLoop(fk\_Half H) \\
+	\> \> \begin{minipage}[]{15cm}
+		未定義半稜線 H が属するループを作成する。
+		成功すれば新たに生成されたループを返す。
+		H が定義半稜線であった場合は null が返って新たなループは生成されない。
+	\end{minipage} \\ \\
+
+ \> bool DeleteLoop(fk\_Loop L) \\
+	\> \> \begin{minipage}[]{15cm}
+		ループ L を削除する。その結果として、L が存在した場所は
+		空洞になる。成功すれば true を返し、失敗した場合は false を
+		返す。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler04}{./Fig/Euler04_cli.eps}{width=8truecm}{makeLoop と deleteLoop}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Edge SeparateLoop(fk\_Half H1, fk\_Half H2) \\
+	\> \> \begin{minipage}[]{15cm}
+		単一ループ内に存在する H1 の終点にある頂点と H2 の始点にある
+		頂点の間に定義稜線を生成し、ループを分割する。
+		成功すれば新たに生成された稜線を返す。H1 と H2 が同一の
+		ループ内にない場合はエラーとなり null を返す。なお、
+		H1 と H2 は分割後新ループ側に属するので、新たに生成された
+		ループを得たい場合は H1 や H2 の親ループを参照すればよい。
+	\end{minipage} \\ \\
+
+ \> bool UniteLoop(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		両側にループを保持する稜線 E を削除し、
+		両側のループを統合する。成功すれば true を返す。
+		E が両側にループを持つ稜線でない場合はエラーになり false が返る。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler05}{./Fig/Euler05_cli.eps}{width=8truecm}{separateLoop と uniteLoop}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Vertex SeparateEdge(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		任意稜線 E を分割し、新たな頂点を稜線の両端点の
+		中点位置に生成する。成功した場合新たに生成された頂点を返し、
+		失敗した場合は null を返す。
+	\end{minipage} \\ \\
+
+ \> bool UniteEdge(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		2本の任意稜線に接続されている頂点 V を削除し、1本の
+		稜線にする。成功すれば true を返す。V に接続されている
+		稜線が2本でない場合はエラーとなり false が返る。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler06}{./Fig/Euler06_cli.eps}{width=8truecm}{separateEdge と uniteEdge}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> fk\_Loop RemoveVertexInLoop(fk\_Vertex V) \\
+	\> \> \begin{minipage}[]{15cm}
+		頂点 V と V に接続している全ての稜線を削除し、1つの大きな
+		ループを生成する。成功すれば新たなループを返し、
+		失敗した場合は null を返す。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler07}{./Fig/Euler07_cli.eps}{width=8truecm}{removeVertexInLoop}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> bool ContractEdge(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		稜線 E の両端点を接合し、E を削除する。成功すれば true を、
+		失敗すれば false を返す。
+	\end{minipage}
+\end{tabbing}
+
+\myfig{Fig:Euler08}{./Fig/Euler08_cli.eps}{width=8truecm}{contractEdge}{0mm}
+
+\begin{tabbing}
+xx \= xxxx \= \kill
+ \> bool CheckContract(fk\_Edge E) \\
+	\> \> \begin{minipage}[]{15cm}
+		稜線 E に対し ContractEdge() 関数が成功する状態のときに
+		true を、失敗する状態のときに false を返す。この関数自体は
+		変形操作を行わない。
+	\end{minipage} \\ \\
+
+\> void AllClear(bool flag) \\
+	\> \> \begin{minipage}[]{15cm}
+		全ての形状データを破棄する。flag が true のとき、
+		\ref{subsec:solid_matid} で述べるマテリアルインデックスも
+		同時に破棄するが、false のときにはマテリアルインデックスに関しては
+		保持する。
+	\end{minipage}
+\end{tabbing}
+	
+\section{変形履歴操作}
+\ref{sec:ModifySolid} 節で各種の変形操作に関して述べたが、それらの操作は
+全て履歴を管理することができ、自由に UNDO 操作 (操作の取り消し) や
+REDO 操作 (操作のやり直し) を制御できる。大まかに述べると、以下のような
+手順を踏むことになる。
+\begin{enumerate}
+ \item 履歴を保存するように設定する。
+ \item 変形操作を行う。その際に、状態を保存したい時点でマーク操作を行う。
+ \item 履歴操作を行う。
+\end{enumerate}
+
+\subsection{履歴保存設定} \label{subsec:shapehistory}
+通常、変形操作履歴は保存されない状態になっているが、
+ある fk\_Solid クラスインスタンスで履歴を保存するには、
+HistoryMode プロパティに対し true を与えることで、
+履歴保存モードとなる。\\
+\begin{screen}
+\begin{verbatim}
+        var solid = new fk_Solid();
+                :
+        solid.HistoryMode = true;
+\end{verbatim}
+\end{screen} \\ ~ \\
+厳密に述べると、HistoryMode に true を設定した時点から履歴を保存し、
+HistoryMode に false を設定した時点でこれまでの履歴を全て破棄する。
+
+\subsection{変形操作時のマーク設定と履歴操作}
+履歴操作を行う場合、「マーク」の設定を行う必要がある。これは、
+状態の「スナップショット」を設定するもので、UNDO や REDO を行った際には
+マークをした時点まで戻る。
+
+たとえば、ある形状に対して 1000 個の変形操作を行い、200 個目、500 個目の
+操作に対してマークを設定したとする。この形状に対して UNDO 操作を
+行った場合、500 個目の変形操作を行った状態に戻る。さらに UNDO 操作を
+したとき、今度は 200 個目の変形操作を行った状態に戻る。この状態に
+REDO 操作を施すと、今度は 500 個目の状態となる。このように、マークは
+変形操作の単位となる箇所に行う。
+
+形状の現状態に対しマークを行うには、SetHistoryMark() メソッドを用いる。\\
+\begin{screen}
+\begin{verbatim}
+        var solid = new fk_Solid();
+                :
+        solid.SetHistoryMark();
+\end{verbatim}
+\end{screen} \\ ~ \\
+また、UNDO 操作、REDO 操作を行うにはそれぞれ UndoHistory()、
+RedoHistory() メソッドを用いる。\\
+\begin{screen}
+\begin{verbatim}
+        var solid = new fk_Solid();
+                :
+        solid.UndoHistory();
+        solid.RedoHistory();
+\end{verbatim}
+\end{screen}
+\section{個別の位相要素へのマテリアル設定}
+fk\_Solid クラスでは、頂点、稜線、面の各位相要素に対して
+個別にマテリアルを設定することが可能である。その方法は、
+多くの部分で第 \ref{sec:ifs_mat} 節と共通である。
+ここでは、fk\_Solid クラスに特有の部分を中心に述べていく。
+なお、ここでの設定を実際に有効にするには、
+対象となる fk\_Solid (あるいは fk\_IndexFaceSet) 型の変数と、
+それを設定する fk\_Model 型の変数の両方で、
+MaterialMode プロパティに対し fk\_MaterialMode.PARENT を設定しておく必要がある。
+
+\subsection{パレットの設定} \label{subsec:solid_palette}
+fk\_Solid で個別にマテリアルを設定するには、まず
+マテリアルパレットというものを設定する必要がある。
+これに関しては、第 \ref{subsec:ifs_palette} とまったく同一の方法なので、
+ここでの解説は割愛する。
+
+\subsection{マテリアルインデックスの設定} \label{subsec:solid_matid}
+各位相要素にマテリアルインデックスを設定するには、
+fk\_Vertex や fk\_Edge クラスなどの各位相要素を表すクラスの
+MaterialID プロパティにインデックスを入力すればよい。
+次の例は、全頂点のうち \(z\) 成分が負のものにインデックス 1 を、
+そうでないものにインデックス 0 を設定するプログラムである。
+(もちろん、事前にパレットの設定を行っていなければならない。)
+\\
+\begin{breakbox}
+\begin{verbatim}
+    var solid = new fk_Solid();
+            :
+            :
+    var curV = solid.GetNextV(null);
+    while(curV != null) {
+        if(curV.Position.z < 0) {
+            curV.MaterialID = 1;
+        } else {
+            curV.MaterialID = 0;
+        }
+        curV = solid.GetNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+ここで、各位相要素にはマテリアルの情報が設定されるわけではなく、あくまで
+インデックス情報のみを保持することに注意してほしい。従って、
+SetPalette() メソッドによってパレット情報を再設定した場合、
+再設定されたインデックスを持つ位相要素のマテリアルは全て再設定されたものに変化する。
+これを上手に利用すると、特定の位相要素のみに対して動的にマテリアルを変更することが
+可能となる。
+
+なお、各位相要素の MaterialID プロパティは参照にも利用可能である。
+
+\subsection{各位相要素の描画モード設定}	\label{subsec:matmode}
+任意の位相要素に対して表示／非表示等を制御するために
+MaterialMode というプロパティが用意されている。
+設定値は以下のような種類がある。
+
+\begin{table}[H]
+\caption{マテリアルモードの種類}
+\label{tbl:mate1}
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+モード名 & 意味 \\ \hline \hline
+fk\_MaterialMode.PARENT & モデルのマテリアルを利用して描画する。\\ \hline
+fk\_MaterialMode.CHILD & 位相要素固有のマテリアルを利用して描画する。\\ \hline
+fk\_MaterialMode.NONE & 描画しない。\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+次の例は、全頂点のうち \(z\) 成分が 0 以上のもののみを描画する
+プログラムである。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    var solid = new fk_Solid();
+            :
+            :
+    var curV = solid.GetNextV(null);
+    while(curV != null) {
+        if(curV.Position.z < 0) {
+            curV.MaterialMode = fk_MaterialMode.NONE;
+        } else {
+            curV.MaterialMode = fk_MaterialMode.PARENT;
+        }
+        curV = solid.GetNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+\section{描画時の稜線幅や頂点の大きさの設定}
+\subsection{線幅の設定方法}
+FK システムでは、描画時の線幅を変更するには
+\ref{sec:widthsize} 節で述べるような fk\_Model 中の
+LineWidth プロパティがあるが、これはモデル中の全要素に対して
+行う設定である。それに対し、各稜線に個別に線幅を設定するには
+fk\_Edge の DrawWidth プロパティを利用することで可能となる。
+具体的には、以下のようにして利用する。
+\\
+\begin{screen}
+\begin{verbatim}
+    fk_Edge    edge;
+
+    edge.DrawWidth = 3.0;
+\end{verbatim}
+\end{screen}
+~ \\
+これにより、通常の 3 倍の幅で描画されるようになる。
+なお、このプロパティは参照にも利用可能である。
+
+\subsection{点の大きさの設定方法}
+線幅と同様に、fk\_Vertex にも描画時の大きさを設定・参照するプロパティ
+DrawSize が利用できる。
+
+\section{形状や位相要素の属性} \label{sec:userattr}
+fk\_Point、fk\_Sphere などの、fk\_Solid を含む形状を表現するクラス、
+及び fk\_Vertex や fk\_Half などの位相要素を示すクラスのオブジェクトには、
+それぞれ独自に属性を持たせることが可能である。
+この機能を利用すると、形状情報の管理や分析に
+大きく役立つであろう。
+
+FK システム中では、次の 6 種類の属性設定用のメソッドが用意されている。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性設定メソッド}
+\label{tbl:attr1}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+メソッド名 & キーワード型 & 値型 \\ \hline \hline
+SetAttrII(int, int) & int & int \\ \hline
+SetAttrID(int, double) & int & double \\ \hline
+SetAttrIS(int, String) & int & String \\ \hline
+SetAttrSI(String, int) & String & int \\ \hline
+SetAttrSD(String, double) & String & double \\ \hline
+SetAttrSS(String, String) & String & String \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+次のプログラムは、形状中の全ての頂点に対して文字列 "xPos" を
+キーワードにしてそれぞれの \(x\) 成分を属性として設定するプログラムで
+ある。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    var solid = new fk_Solid();
+
+    var curV = solid.GetNextV(null);
+    while(curV != null) {
+        curV.SetAttrSD("xPos", curV.Position.x);
+        curV = solid.GetNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+例の場合は位相要素で行っているが、fk\_Point クラスオブジェクトなどの
+形状要素でも属性設定は可能である。
+
+属性の参照は、設定用メソッドに対応した次の 6 種類のメソッドである。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性参照メソッド}
+\label{tbl:attr2}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+メソッド名 & 対応する設定メソッド名 \\ \hline
+int GetAttrII(int)		& SetAttrII()	\\ \hline
+double GetAttrID(int)		& SetAttrID()	\\ \hline
+String GetAttrIS(int)		& SetAttrIS()	\\ \hline
+int GetAttrSI(String)		& SetAttrSI()	\\ \hline
+double GetAttrSD(String)	& SetAttrSD()	\\ \hline
+String GetAttrSS(String)	& SetAttrSS()	\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+例えば、前の例で設定した "xPos" をキーワードにした値を出力するような
+プログラムを作成すると、次のようになる。
+\\
+\begin{breakbox}
+\begin{verbatim}
+    var solid = new fk_Solid();
+
+    var curV = solid.GetNextV(null);
+    while(curV != null) {
+        Console.WriteLine("xPos = {0}", curV.GetAttrSD("xPos"));
+        curV = solid.GetNextV(curV);
+    }
+\end{verbatim}
+\end{breakbox}
+~ \\
+また、各位相要素に属性が存在するかどうかを判定するために、
+以下のような 6 種類のメソッドが用意されている。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性判定メソッド}
+\label{tbl:attr3}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+メソッド名 & 対応する設定メソッド名 \\ \hline
+bool ExistAttrII(int)		& SetAttrII()	\\ \hline
+bool ExistAttrID(int)		& SetAttrID()	\\ \hline
+bool ExistAttrIS(int)		& SetAttrIS()	\\ \hline
+bool ExistAttrSI(String)	& SetAttrSI()	\\ \hline
+bool ExistAttrSD(String)	& SetAttrSD()	\\ \hline
+bool ExistAttrSS(String)	& SetAttrSS()	\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+これらのメソッドは、キーワードによる属性が存在する場合には true を、
+存在しない場合には false を返す。
+
+また、属性を削除する (つまり、\verb+ExistAttr??+ メソッドの結果が
+false になるようにする) メソッドとして、以下のような 6 種類のメソッドが
+提供されている。
+
+\begin{table}[H]
+\caption{FK システム中の 6 種類の属性削除メソッド}
+\label{tbl:attr4}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+メソッド名 & 対応する設定メソッド名 \\ \hline
+bool DeleteAttrII(int)		& SetAttrII()	\\ \hline
+bool DeleteAttrID(int)		& SetAttrID()	\\ \hline
+bool DeleteAttrIS(int)		& SetAttrIS()	\\ \hline
+bool DeleteAttrSI(String)	& SetAttrSI()	\\ \hline
+bool DeleteAttrSD(String)	& SetAttrSD()	\\ \hline
+bool DeleteAttrSS(String)	& SetAttrSS()	\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+これらのメソッドは、削除した時点で実際に属性が存在した場合は true を、
+属性が存在しなかった場合は false を返す。しかし、
+どちらの場合でも「与えられたキーワードの属性をない状態にする」という
+結果には差異がない。
