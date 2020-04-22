@@ -27,8 +27,8 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
 		if(faceIndexFlg == true) {
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-						 GLsizeiptr(3 * GLsizeiptr(triNum) * sizeof(GLuint)),
+			GLsizeiptr size = 3 * GLsizeiptr(triNum) * GLsizeiptr(sizeof(GLuint));
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, size,
 						 faceIndex.data(), GL_STATIC_DRAW);
 			faceIndexFlg = false;
 		}
