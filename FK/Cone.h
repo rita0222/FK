@@ -76,6 +76,11 @@ namespace FK {
 		 *	\param[in]	height	高さ
 		 */
 		void	setHeight(double height);
+
+    private:
+        double height, radius;
+        int divide;
+        bool smoothMode;
 	};
 }
 

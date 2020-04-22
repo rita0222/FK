@@ -290,6 +290,11 @@ void fk_AudioBase::setModel(fk_Model *argModel)
 	return;
 }
 
+void fk_AudioBase::setModel(fk_Model &argModel)
+{
+	setModel(&argModel);
+}
+
 void fk_AudioBase::setReferenceDist(double argDist)
 {
 	refDist = argDist;

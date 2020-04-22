@@ -35,9 +35,8 @@ namespace FK {
 	const int FK_MINOR_VERSION = 1;
 	const int FK_SUBMINOR_VERSION = 6;
 
-#define _FK_UNDEFINED_DEFINE_ -1
-
-	const int FK_UNDEFINED = _FK_UNDEFINED_DEFINE_;
+	constexpr int _FK_UNDEFINED_DEFINE_ = -1;
+	constexpr int FK_UNDEFINED = _FK_UNDEFINED_DEFINE_;
 
 	//! オブジェクトインスタンスのタイプを表す列挙型
 	enum class fk_Type {

@@ -517,8 +517,6 @@ namespace FK {
 		bool			surround;
 		fk_Model		*ref_model;
 
-		void			InitSource(void);
-
 		void			CreateID(void);
 		void			EraseID(void);
 		void			MakeOVInfo(OggVorbis_File *);

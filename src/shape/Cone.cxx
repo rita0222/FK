@@ -5,8 +5,13 @@ using namespace FK;
 fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight, bool argSmoothMode)
 {
 	SetObjectType(fk_Type::CONE);
-	makeCone(argDiv, argRadius, argHeight, argSmoothMode);
-	return;
+    divide = argDiv;
+    radius = argRadius;
+    height = argHeight;
+    smoothMode = argSmoothMode;
+    makeCone(divide, radius, height, smoothMode);
+
+    return;
 }
 
 fk_Cone::~fk_Cone()
@@ -30,6 +35,14 @@ void fk_Cone::setHeight(double argHeight)
 {
 	setConeHeight(argHeight);
 	return;
+}
+
+void fk_Cone::setSmoothMode(bool argMode)
+{
+    if (smoothMode != argMode) {
+        smoothMode = argMode;
+		makeCone(divide, radius, height, smoothMode);
+    }
 }
 
 /****************************************************************************
