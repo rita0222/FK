@@ -12,6 +12,7 @@ using namespace FK;
 static const fk_Vector fk_VInitPos(0.0, 0.0, 0.0);
 
 fk_Vertex::fk_Vertex(int argID)
+	: normCalcFlag(false), normFailFlag(false), oneHalf(FK_UNDEFINED), size(-1.0)
 {
 	DB = nullptr;
 	SetID(argID);

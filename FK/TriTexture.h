@@ -154,7 +154,6 @@ namespace FK {
 		static GLuint				faceIBO;
 		static bool					faceIndexFlg;
 
-		void				TriInit(void);
 		void				PosUpdate(void);
 		void				NormUpdate(void);
 		void				TexCoordUpdate(void);

@@ -352,11 +352,11 @@ int fk_UniStr::getCode(int argID) const
 void fk_UniStr::printf(fk_StringCode argCode, const char *argFormat, ...)
 {
 	va_list		ap;
-	char		buffer[65536];
+	char		buffer[8192];
 	string		str;
 
 	va_start(ap, argFormat);
-	vsnprintf(buffer, 65535, argFormat, ap);
+	vsnprintf(buffer, 8191, argFormat, ap);
 	va_end(ap);
 	str = buffer;
 	convert(buffer, argCode);
@@ -520,7 +520,7 @@ void fk_StrConverterBase::CommonConvert(fk_StringCode argInCode, fk_StringCode a
 	icu::UnicodeString src(argInStr.c_str(), inName.c_str());
 	int32_t length = src.extract(0, src.length(), nullptr, outName.c_str());
 
-	buffer.resize(_st(length+1));
+	buffer.resize(_st(length)+1);
 	src.extract(0, src.length(), &buffer[0], outName.c_str());
 	*argOutStr = string(buffer.begin(), buffer.end()-1);
 }

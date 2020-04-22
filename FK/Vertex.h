@@ -94,8 +94,6 @@ namespace FK {
 		void		Print(void) const;
 		bool		Check(void) const;
 		bool		Compare(fk_Vertex *) const;
-		void		PutFile_Text(FILE *);
-		void		PutFile_Binary(FILE *);
 
 #endif
 

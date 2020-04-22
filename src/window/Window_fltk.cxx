@@ -306,10 +306,10 @@ bool fk_Window::setPutFile(const string &argFileName)
 void fk_Window::printf(const char *argFormat, ...)
 {
 	va_list		ap;
-	char		buffer[65536];
+	char		buffer[8192];
 
 	va_start(ap, argFormat);
-	vsnprintf(buffer, 65535, argFormat, ap);
+	vsnprintf(buffer, 8191, argFormat, ap);
 	va_end(ap);
 	putString(buffer);
 	return;

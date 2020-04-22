@@ -15,18 +15,18 @@ static LPDIRECT3DDEVICE9	g_lpD3DDEV = nullptr;
 */
 
 // グローバル変数
-static windowstate	WindowState[MAX_WINDOWNUMBER];
+static windowstate	WindowState[fk_FullscreenController::MAX_WINDOWNUMBER];
 static int			iWindowNumber;					// 画面上のウインドウ数
 
 // ウインドウ位置保存のコールバック関数
 BOOL CALLBACK EnumWindowsSaveFunc(HWND hWnd, LPARAM lParam)
 {
-	char szWindowName[MAX_NAMELENGTH];
-	char szClassName[MAX_NAMELENGTH];
+	char szWindowName[fk_FullscreenController::MAX_NAMELENGTH];
+	char szClassName[fk_FullscreenController::MAX_NAMELENGTH];
 
 	// ウインドウ名とクラス名の取得
-	GetWindowText(hWnd, szWindowName, MAX_NAMELENGTH);
-	GetClassName(hWnd, szClassName, MAX_NAMELENGTH);
+	GetWindowText(hWnd, szWindowName, fk_FullscreenController::MAX_NAMELENGTH);
+	GetClassName(hWnd, szClassName, fk_FullscreenController::MAX_NAMELENGTH);
 
 	// 見えているウインドウだけをセレクト
 	if(IsWindowVisible(hWnd) &&
@@ -35,7 +35,7 @@ BOOL CALLBACK EnumWindowsSaveFunc(HWND hWnd, LPARAM lParam)
 		lstrcmp(szClassName, "Progman") != 0 ){
 
 		// ウインドウ位置を保存
-		if(iWindowNumber < MAX_WINDOWNUMBER){
+		if(iWindowNumber < fk_FullscreenController::MAX_WINDOWNUMBER){
 			WindowState[iWindowNumber].WindowPlacement.length = sizeof(WINDOWPLACEMENT);
 			GetWindowPlacement(hWnd, &WindowState[iWindowNumber].WindowPlacement);
 			WindowState[iWindowNumber].hWnd = hWnd;
@@ -50,11 +50,11 @@ BOOL CALLBACK EnumWindowsSaveFunc(HWND hWnd, LPARAM lParam)
 // ウインドウ位置再現のコールバック関数
 BOOL CALLBACK EnumWindowsLoadFunc(HWND hWnd, LPARAM lParam)
 {
-	char szWindowName[MAX_NAMELENGTH];
+	char szWindowName[fk_FullscreenController::MAX_NAMELENGTH];
 	int  i;
 
 	// ウインドウ名の取得
-	GetWindowText(hWnd, szWindowName, MAX_NAMELENGTH);
+	GetWindowText(hWnd, szWindowName, fk_FullscreenController::MAX_NAMELENGTH);
 
 	// 保存されているウインドウを検索
 	for(i = 0; i < iWindowNumber; i++){

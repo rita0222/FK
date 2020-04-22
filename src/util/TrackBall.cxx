@@ -8,27 +8,14 @@ using namespace std;
 
 // コンストラクタ
 fk_TrackBall::fk_TrackBall(fk_Window *p_fk_win, fk_Model *p_camera)
+	: fk_win(p_fk_win), camera(p_camera),
+	lookButton(fk_MouseButton::M3), moveButton(fk_MouseButton::M2),
+	overCheck(false), divPos(10.0), divLook(200.0), divDist(1.0),
+	bEcho(false), nowX(0), nowY(0), oldX(0), oldY(0),
+	echoX(0), echoY(0), lookClick(false), distClick(false), moveClick(false)
 {
-	// ポインタ受け取り
-	fk_win = p_fk_win;
-	camera = p_camera;
-	// ウィンドウオーバー時に座標を返さないかどうか
-	overCheck = false;
-	// 処理量初期値
-	divPos = 10.0;
-	divLook = 200.0;
-	divDist = 1.0;
-
-	echoX = 0;
-	echoY = 0;
-
-	lookButton = fk_MouseButton::M3;
 	distButton[0] = fk_MouseButton::M1;
 	distButton[1] = fk_MouseButton::M3;
-	moveButton = fk_MouseButton::M2;
-
-	bEcho = false;
-
 	return;
 }
 
@@ -74,8 +61,8 @@ void fk_TrackBall::ControlLookTo()
 	// クリック継続時
 	} else if(fk_win->getMouseStatus(lookButton, overCheck) & lookClick) {
 		tie(nowX, nowY) = fk_win->getMousePosition(overCheck);
-		double divX = double(oldX - nowX)/divLook;
-		double divY = double(oldY - nowY)/divLook;
+		double divX = (double(oldX) - double(nowX))/divLook;
+		double divY = (double(oldY) - double(nowY))/divLook;
 		camera->glRotateWithVec(lookPos, lookPos + cameraU, divX);
 		camera->glRotateWithVec(lookPos, lookPos + cameraX, divY);
 
@@ -123,7 +110,8 @@ void fk_TrackBall::ControlLookToDist()
 
 		// 左右ドラッグでズーム操作を可能にした
 		camera->loTranslate(0.0, 0.0,
-							(double)(nowY - oldY)/divPos + (double)(oldX - nowX)/divPos);
+			(double(nowY) - double(oldY)) / divPos +
+			(double(oldX) - double(nowX)) / divPos);
 
 		if((lookPos - camera->getPosition()).dist() < divDist) camera->glMoveTo(prePos);
 		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
@@ -151,7 +139,8 @@ void fk_TrackBall::ControlLookToMove()
 
 		prePos = camera->getPosition();
 		tie(nowX, nowY) = fk_win->getMousePosition(overCheck);
-		camera->loTranslate(-(double)(nowX - oldX)/divPos, (double)(nowY - oldY)/divPos, 0.0);
+		camera->loTranslate(-(double(nowX) - double(oldX))/divPos,
+			(double(nowY) - double(oldY))/divPos, 0.0);
 		lookPos += camera->getPosition() - prePos;
 		tie(oldX, oldY) = fk_win->getMousePosition(overCheck);
 	// リリース時

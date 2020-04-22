@@ -27,7 +27,6 @@ namespace FK {
 		bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
 		bool			GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
 		bool			ReadFaceData(std::ifstream &);
-		bool			ReadTextureData(std::ifstream &);
 
 		void			SetIFSTexCoord(fk_IFSTexture *);
 		void			SetQuadFace(int);

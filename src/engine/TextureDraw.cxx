@@ -8,22 +8,10 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
+	:
+	textureShader(SHADING_NUM * SHADOW_NUM * TEXTURE_NUM * FOG_NUM, nullptr),
+	replaceShader(FOG_NUM, nullptr), texShadowShader(nullptr)
 {
-	for(int i = 0; i < SHADING_NUM; ++i) {
-		for(int j = 0; j < SHADOW_NUM; ++j) {
-			for(int k = 0; k < TEXTURE_NUM; ++k) {
-				for(int l = 0; l < FOG_NUM; ++l) {
-					textureShader[i][j][k][l] = nullptr;
-				}
-			}
-		}
-	}
-
-	for(int i = 0; i < FOG_NUM; ++i) {
-		replaceShader[i] = nullptr;
-	}
-
-	texShadowShader = nullptr;
 	return;
 }
 		
@@ -31,21 +19,53 @@ fk_TextureDraw::~fk_TextureDraw()
 {
 	delete texShadowShader;
 
-	for(int i = 0; i < FOG_NUM; ++i) {
-		delete replaceShader[i];
-	}
-
-	for(int i = 0; i < SHADING_NUM; ++i) {
-		for(int j = 0; j < SHADOW_NUM; ++j) {
-			for(int k = 0; k < TEXTURE_NUM; ++k) {
-				for(int l = 0; l < FOG_NUM; ++l) {
-					delete textureShader[i][j][k][l];
-				}
-			}
-		}
-	}
+	for (auto s : textureShader) delete s;
+	for (auto s : replaceShader) delete s;
 
 	return;
+}
+
+fk_ShaderBinder * fk_TextureDraw::GetShader(
+	fk_ShadingMode argShadingMode,
+	fk_ShadowMode argShadowMode,
+	fk_TexMode argTexMode,
+	fk_FogMode argFogMode)
+{
+	_st index =
+		_st(argShadingMode) * SHADOW_NUM * TEXTURE_NUM * FOG_NUM +
+		_st(argShadowMode) * TEXTURE_NUM * FOG_NUM +
+		_st(argTexMode) * FOG_NUM +
+		_st(argFogMode);
+	return textureShader[index];
+}
+
+fk_ShaderBinder * fk_TextureDraw::MakeShader(
+	fk_ShadingMode argShadingMode,
+	fk_ShadowMode argShadowMode,
+	fk_TexMode argTexMode,
+	fk_FogMode argFogMode)
+{
+	_st index =
+		_st(argShadingMode) * SHADOW_NUM * TEXTURE_NUM * FOG_NUM +
+		_st(argShadowMode) * TEXTURE_NUM * FOG_NUM +
+		_st(argTexMode) * FOG_NUM +
+		_st(argFogMode);
+	delete textureShader[index];
+	textureShader[index] = new fk_ShaderBinder();
+	return textureShader[index];
+}
+
+fk_ShaderBinder * fk_TextureDraw::MakeReplace(fk_FogMode argFogMode)
+{
+	_st index = _st(argFogMode);
+	delete replaceShader[index];
+	replaceShader[index] = new fk_ShaderBinder();
+	return replaceShader[index];
+}
+
+fk_ShaderBinder * fk_TextureDraw::GetReplace(fk_FogMode argFogMode)
+{
+	return replaceShader[_st(argFogMode)];
 }
 
 bool fk_TextureDraw::AllTest(void)
@@ -184,22 +204,17 @@ void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel,
 	fk_ShadingMode shadingMode = argModel->getShadingMode();
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 
-	int i = int(shadingMode);
-	int j = int(shadowMode);
-	int k = int(texMode);
-	int l = int(argFogMode);
-
 	switch(texMode) {
 	  case fk_TexMode::REPLACE:
-		if(replaceShader[l] == nullptr) ReplaceShaderInit(argFogMode);
-		drawShader = replaceShader[l];
+		if(GetReplace(argFogMode) == nullptr) ReplaceShaderInit(argFogMode);
+		drawShader = GetReplace(argFogMode);
 		break;
 
 	  default:
-		if(textureShader[i][j][k][l] == nullptr) {
+		if(GetShader(shadingMode, shadowMode, texMode, argFogMode) == nullptr) {
 			TextureShaderInit(shadingMode, shadowMode, texMode, argFogMode);
 		}
-		drawShader = textureShader[i][j][k][l];
+		drawShader = GetShader(shadingMode, shadowMode, texMode, argFogMode);
 	}
 	
 	defaultShaderFlag = true;
@@ -207,10 +222,7 @@ void fk_TextureDraw::DefaultShaderSetup(fk_Model *argModel,
 
 bool fk_TextureDraw::ReplaceShaderInit(fk_FogMode argFogMode)
 {
-	int i = int(argFogMode);
-	delete replaceShader[i];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	replaceShader[i] = shader;
+	fk_ShaderBinder *shader = MakeReplace(argFogMode);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -244,14 +256,7 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 									   fk_TexMode argTexMode,
 									   fk_FogMode argFogMode)
 {
-	int i = int(argShadingMode);
-	int j = int(argShadowMode);
-	int k = int(argTexMode);
-	int l = int(argFogMode);
-
-	delete textureShader[i][j][k][l];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	textureShader[i][j][k][l] = shader;
+	fk_ShaderBinder *shader = MakeShader(argShadingMode, argShadowMode, argTexMode, argFogMode);
 	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();

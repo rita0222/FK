@@ -18,8 +18,8 @@ namespace FK {
 	private:
 		static constexpr int TEXTURE_NUM = int(fk_TexMode::NUM);
 
-		fk_ShaderBinder *textureShader[SHADING_NUM][SHADOW_NUM][TEXTURE_NUM][FOG_NUM];
-		fk_ShaderBinder *replaceShader[FOG_NUM];
+        std::vector<fk_ShaderBinder *> textureShader;// [SHADING_NUM] [SHADOW_NUM] [TEXTURE_NUM] [FOG_NUM] ;
+        std::vector<fk_ShaderBinder *> replaceShader; // [FOG_NUM] ;
 		fk_ShaderBinder *texShadowShader;
 
 		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
@@ -30,6 +30,11 @@ namespace FK {
 		bool	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);
 		void	ShadowSetup(void);
 		bool	ShadowInit(void);
+
+        fk_ShaderBinder * GetReplace(fk_FogMode);
+        fk_ShaderBinder * GetShader(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);
+        fk_ShaderBinder * MakeShader(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);
+        fk_ShaderBinder * MakeReplace(fk_FogMode);
 	};
 }
 

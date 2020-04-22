@@ -61,13 +61,14 @@ namespace FK {
 		 */
 		void	changeToWindow(void);
 
-	private:
+        ////////// ウインドウ保存関係 //////////
+        constexpr static int MAX_NAMELENGTH = 512;
+        constexpr static int MAX_WINDOWNUMBER = 128;
+    
+    private:
 
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 
-		////////// ウインドウ保存関係 //////////
-#define MAX_NAMELENGTH		512
-#define MAX_WINDOWNUMBER	128
 
 		enum class fk_FullscreenMode {
 			SCMODE_FULLSCREEN,				// フルスクリーンモード

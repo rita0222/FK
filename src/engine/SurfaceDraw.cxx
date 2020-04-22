@@ -9,37 +9,59 @@
 using namespace std;
 using namespace FK;
 
-fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode)
+fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode) :
+	surfShader(_st(fk_SurfaceDrawMode::NUM) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM, nullptr),
+	surfShadowShader(SHADOW_NUM, nullptr), mode(argMode)
 {
-	for(int i = 0; i < S_DRAW_NUM; ++i) {
-		for(int j = 0; j < FOG_NUM; ++j) {
-			for(int k = 0; k < SHADOW_NUM; ++k) {
-				faceShader[i][j][k] = nullptr;
-			}
-			lineShader[i][j] = nullptr;
-			pointShader[i][j] = nullptr;
-		}
-		surfaceShadowShader[i] = nullptr;
-	}
-
-	mode = argMode;
 	return;
 }
 
 fk_SurfaceDraw::~fk_SurfaceDraw()
 {
-	for(int i = 0; i < S_DRAW_NUM; ++i) {
-		for(int j = 0; j < FOG_NUM; ++j) {
-			for(int k = 0; k < SHADOW_NUM; ++k) {
-				delete faceShader[i][j][k];
-			}
-			delete lineShader[i][j];
-			delete pointShader[i][j];
-		}
-		delete surfaceShadowShader[i];
-	}
-
+	for (auto s : surfShader) delete s;
+	for (auto s : surfShadowShader) delete s;
 	return;
+}
+
+fk_ShaderBinder *fk_SurfaceDraw::GetDrawShader(
+	fk_SurfaceDrawMode argMode,
+	fk_SurfaceDrawType argType,
+	fk_FogMode argFog,
+	fk_ShadowMode argShadow)
+{
+	_st index =
+		_st(argMode) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM +
+		_st(argType) * FOG_NUM * SHADOW_NUM +
+		_st(argFog) * SHADOW_NUM + _st(argShadow);
+	return surfShader[index];
+}
+
+fk_ShaderBinder * fk_SurfaceDraw::MakeDrawShader(
+	fk_SurfaceDrawMode argMode,
+	fk_SurfaceDrawType argType,
+	fk_FogMode argFog,
+	fk_ShadowMode argShadow)
+{
+	_st index =
+		_st(argMode) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM +
+		_st(argType) * FOG_NUM * SHADOW_NUM +
+		_st(argFog) * SHADOW_NUM + _st(argShadow);
+
+	delete surfShader[index];
+	surfShader[index] = new fk_ShaderBinder();
+	return surfShader[index];
+}
+
+fk_ShaderBinder *fk_SurfaceDraw::GetShadowShader(fk_SurfaceDrawType argType)
+{
+	return surfShadowShader[_st(argType)];
+}
+
+fk_ShaderBinder *fk_SurfaceDraw::MakeShadowShader(fk_SurfaceDrawType argType)
+{
+	delete surfShadowShader[_st(argType)];
+	surfShadowShader[_st(argType)] = new fk_ShaderBinder();
+	return surfShadowShader[_st(argType)];
 }
 
 bool fk_SurfaceDraw::AllTest(void)
@@ -127,40 +149,41 @@ void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel,
 	fk_SurfaceDrawType type = GetSurfType(argModel);
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 
-	int i = int(type);
-	int j = int(argFogMode);
-	int k = int(argShadowMode);
-	
 	switch(mode) {
 	  case fk_SurfaceDrawMode::LINE:
-		if(lineShader[i][j] == nullptr) LineShaderInit(type, argFogMode);
-		drawShader = lineShader[i][j];
-		break;
+		  drawShader = GetDrawShader(fk_SurfaceDrawMode::LINE, type, argFogMode);
+		  if (drawShader == nullptr) {
+			  LineShaderInit(type, argFogMode);
+			  drawShader = GetDrawShader(fk_SurfaceDrawMode::LINE, type, argFogMode);
+		  }
+		  break;
 
 	  case fk_SurfaceDrawMode::POINT:
-		if(pointShader[i][j] == nullptr) PointShaderInit(type, argFogMode);
-		drawShader = pointShader[i][j];
-		break;
+		  drawShader = GetDrawShader(fk_SurfaceDrawMode::POINT, type, argFogMode);
+		  if (drawShader == nullptr) {
+			  PointShaderInit(type, argFogMode);
+			  drawShader = GetDrawShader(fk_SurfaceDrawMode::POINT, type, argFogMode);
+		  }
+		  break;
 
 	  case fk_SurfaceDrawMode::FACE:
-		if(faceShader[i][j][k] == nullptr) {
-			FaceShaderInit(type, argFogMode, shadowMode);
-		}
-		drawShader = faceShader[i][j][k];
-
-		break;
+		  drawShader = GetDrawShader(fk_SurfaceDrawMode::FACE, type, argFogMode, shadowMode);
+		  if (drawShader == nullptr) {
+			  FaceShaderInit(type, argFogMode, shadowMode);
+			  drawShader = GetDrawShader(fk_SurfaceDrawMode::FACE, type, argFogMode, shadowMode);
+		  }
+		  break;
 
 	  default:
-		break;
+		  break;
 	}
 	defaultShaderFlag = true;
 }
 
 bool fk_SurfaceDraw::LineShaderInit(fk_SurfaceDrawType argType, fk_FogMode argFogMode)
 {
-	delete lineShader[int(argType)][int(argFogMode)];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	lineShader[int(argType)][int(argFogMode)] = shader;
+	fk_ShaderBinder *shader = MakeDrawShader(
+		fk_SurfaceDrawMode::LINE, argType, argFogMode);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -202,9 +225,8 @@ bool fk_SurfaceDraw::LineShaderInit(fk_SurfaceDrawType argType, fk_FogMode argFo
 
 bool fk_SurfaceDraw::PointShaderInit(fk_SurfaceDrawType argType, fk_FogMode argFogMode)
 {
-	delete pointShader[int(argType)][int(argFogMode)];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	pointShader[int(argType)][int(argFogMode)] = shader;
+	fk_ShaderBinder *shader = MakeDrawShader(
+		fk_SurfaceDrawMode::POINT, argType, argFogMode);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
@@ -244,9 +266,9 @@ bool fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType,
 									fk_FogMode argFogMode,
 									fk_ShadowMode argShadowMode)
 {
-	delete faceShader[int(argType)][int(argFogMode)][int(argShadowMode)];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	faceShader[int(argType)][int(argFogMode)][int(argShadowMode)] = shader;
+	fk_ShaderBinder *shader = MakeDrawShader(
+		fk_SurfaceDrawMode::FACE, argType, argFogMode, argShadowMode);
+
 	aliveShader.push_back(shader);
 
 	auto prog = shader->getProgram();
@@ -298,15 +320,16 @@ void fk_SurfaceDraw::TessEvalAdd(fk_ShaderProgram *argProgram, fk_SurfaceDrawTyp
 void fk_SurfaceDraw::ShadowSetup(fk_Model *argModel)
 {
 	fk_SurfaceDrawType type = GetSurfType(argModel);
-	if(surfaceShadowShader[int(type)] == nullptr) ShadowInit(type);
-	shadowShader = surfaceShadowShader[int(type)];
+	shadowShader = GetShadowShader(type);
+	if (shadowShader == nullptr) {
+		ShadowInit(type);
+		shadowShader = GetShadowShader(type);
+	}
 }
 
 bool fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType)
 {
-	delete surfaceShadowShader[int(argType)];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	surfaceShadowShader[int(argType)] = shader;
+	fk_ShaderBinder *shader = MakeShadowShader(argType);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

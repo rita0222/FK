@@ -17,8 +17,6 @@ namespace FK {
 		void operator =(const Noncopyable&) {};
 		Noncopyable(const Noncopyable&) {};
 	};
-
-	std::vector<std::string> fk_StrSplit(std::string argStr, std::string argToken);
 }
 #endif
 

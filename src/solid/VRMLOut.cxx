@@ -159,7 +159,7 @@ void fk_VRMLOut::WriteVRMLMaterial(ofstream &argOFS, fk_Material *argMaterial)
 	// Ambient
 	curColor = argMaterial->getAmbient();
 	ss << "\t\t\t\t\tambientIntensity\t";
-	ss << (curColor->getR() + curColor->getG() + curColor->getB())/3.0 << endl;
+	ss << (double(curColor->getR()) + double(curColor->getG()) + double(curColor->getB()))/3.0 << endl;
 
 	// Diffuse
 	curColor = argMaterial->getDiffuse();

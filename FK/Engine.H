@@ -40,7 +40,7 @@ namespace FK {
 
 		void OpenGLInit(void);
 
-		void SetPickViewPort(int, int, int);
+		//void SetPickViewPort(int, int, int);
 		unsigned int Draw(void);
 
 		void BindWindow(fk_ShaderBinder *);
@@ -136,24 +136,14 @@ namespace FK {
 		
 		void DrawObjs(void);
 		void DrawModel(fk_Model *);
-		void CurrentDispLinkDraw(void);
-
 		void DrawShapeObj(fk_Model *);
 		void DrawBoundaryLine(fk_Model *);
 
 		void SetViewPort(void);
 		void SetProjection(fk_ProjectBase *);
-		//void SetDefaultProjection(void);
 
 		void ApplySceneParameter(void);
-
 		void InitFogStatus(fk_Scene *);
-
-		bool IsInsideWindow(void);
-
-		unsigned long GetNow(void);
-
-		//void ViewMatCalc(fk_Matrix *);
 
 		std::tuple<fk_Vector, fk_Vector> GetViewLinePos(double, double);
 

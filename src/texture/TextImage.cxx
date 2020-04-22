@@ -773,9 +773,9 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 			oneImage_h = pBBox->yMax - pBBox->yMin;
 
 			buffer = getGlyphServer()->GetBuffer(fkGlyph->status);
-			buffer->resize(_st(oneImage_w * oneImage_h));
+			buffer->resize(_st(oneImage_w) * _st(oneImage_h));
 
-			for(j = 0; j < _st(oneImage_w * oneImage_h); j++) {
+			for(j = 0; j < _st(oneImage_w) * _st(oneImage_h); j++) {
 				(*buffer)[j] = slot->bitmap.buffer[j];
 			}
 			FT_Done_Glyph(glyph);
@@ -943,7 +943,7 @@ int fk_TextImage::GetPixel(fk_GlyphBuffer *argBuffer, int argCW, int argIW, int 
 
 	if(monospaceMode == true) {
 		int w = (argK * argIW)/argCW;
-		index = _st(argJ * argIW + w);
+		index = _st(argJ) * _st(argIW) + _st(w);
 		if(argIW >= w) {
 			pixel = argBuffer->at(index);
 		} else {
@@ -953,7 +953,7 @@ int fk_TextImage::GetPixel(fk_GlyphBuffer *argBuffer, int argCW, int argIW, int 
 			pixel = _st((1.0 - t)*double(pixel1) + t * double(pixel2));
 		}
 	} else {
-		index = _st(argJ * argIW + argK);
+		index = _st(argJ) * _st(argIW) + _st(argK);
 		pixel = argBuffer->at(index);
 	}
 	return int(pixel);

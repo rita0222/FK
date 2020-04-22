@@ -151,7 +151,6 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void						Init(fk_DataBase *, int);
-		std::vector<fk_Vector> *	GetTesselatePos(void);
 		std::vector<fk_Vertex *> *	GetTesselateVertex(void);
 		std::vector<int> *			GetTesselateIndex(void);
 		void						Print(void) const;

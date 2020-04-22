@@ -589,26 +589,6 @@ namespace FK {
 						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 		///@}
 
-		//! \name 時間参照関数
-		///@{
-
-		//! 現時点システム時間参照関数
-		/*!
-		 *	この関数は、呼んだ時点でのシステム時間を取得します。
-		 *	システム時間の定義は実行プラットフォームによって意味が異なりますが、
-		 *	どのプラットフォームでも単位はミリ秒です。
-		 *
-		 *	\note
-		 *		本関数は static 関数なので、
-		 *		以下のように記述することでインスタンスの生成なしに利用することができます。
-		 *
-		 *			unsigned long nowTime = fk_Window::getNow();
-		 *
-		 *	\return		現在のシステム時間
-		 */
-		static unsigned long	getNow(void);
-		///@}
-
 		//! \name メッセージ出力制御関数
 		///@{
 

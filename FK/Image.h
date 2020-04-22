@@ -626,8 +626,8 @@ namespace FK {
 		fk_TexID				texID;
 		bool					updateFlg;
 
-		unsigned int		ChgUInt(fk_ImType *, int) const;
-		unsigned int		ChgUShort(fk_ImType *, int) const;
+		unsigned int ChgUInt(unsigned char *, int) const;
+		unsigned int ChgUShort(fk_ImType *, int) const;
 
 		int					GetOffset(int, int) const;
 		fk_ImType			RoundVal(int) const;
@@ -664,7 +664,6 @@ namespace FK {
 		void				MakeBmpBuffer(int, int, bool, fk_ImType *);
 
 		bool				IsPngFile(const std::string) const;
-		bool				IsPngData(fk_ImType *) const;
 		fk_ImageStatus		LoadPngFile(const std::string);
 		fk_ImageStatus		LoadPngData(fk_ImType *);
 		void				ReleaseTexture(void);
