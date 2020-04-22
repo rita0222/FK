@@ -38,7 +38,6 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_Angle(const fk_Angle &);
-		fk_Angle(const fk_Angle &&);
 
 		//! 同値比較演算子 
 		/*!
@@ -70,7 +69,6 @@ namespace FK {
 
 		//! 単純代入演算子
 		fk_Angle & operator =(const fk_Angle &);
-		fk_Angle & operator =(const fk_Angle &&);
 
 		//! 設定用関数
 		/*!

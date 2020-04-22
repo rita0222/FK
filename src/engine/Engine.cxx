@@ -574,7 +574,7 @@ tuple<bool, fk_Vector> fk_GraphicsEngine::GetWindowPosition(fk_Vector &argPos)
 	if(fabs(outVec.w) < fk_Math::EPS) return {false, retPos};
 	outVec /= outVec.w;
 	retPos.set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
-			   double(viewArray[1] + hSize - 1) - double(viewArray[3])*(outVec.y + 1.0)/2.0,
+			   double(viewArray[1]) + double(hSize) - 1.0 - double(viewArray[3])*(outVec.y + 1.0)/2.0,
 			   (1.0 + outVec.z)/2.0);
 	return {true, retPos};
 }
@@ -654,7 +654,7 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 		argImage->newImage(wSize, hSize);
 	}
 	if(static_cast<int>(snapBuffer.size()) != 3*wSize*hSize) {
-		snapBuffer.resize(static_cast<_st>(3*wSize*hSize));
+		snapBuffer.resize(3 * _st(wSize) * _st(hSize));
 	}
 	if(argMode == fk_SnapProcMode::FRONT) {
 		glReadBuffer(GL_FRONT);
@@ -667,7 +667,7 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 	for(hCount = 0; hCount < hSize; hCount++) {
 		for(wCount = 0; wCount < wSize; wCount++) {
-			index = static_cast<_st>(3*(hCount*wSize + wCount));
+			index = 3 * _st(hCount) * _st(wSize) + _st(wCount);
 			argImage->setRGB(wCount, hSize - hCount - 1,
 							 snapBuffer[index],
 							 snapBuffer[index+1],

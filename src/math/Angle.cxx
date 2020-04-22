@@ -1,4 +1,5 @@
 ﻿#include <FK/Angle.h>
+#include <FK/Vector.h>
 #include <FK/Error.H>
 #include <sstream>
 
@@ -21,14 +22,6 @@ fk_Angle::fk_Angle(const fk_Angle &argAngle)
 	return;
 }
 
-fk_Angle::fk_Angle(const fk_Angle &&argAngle)
-{
-	h = argAngle.h;
-	p = argAngle.p;
-	b = argAngle.b;
-	return;
-}
-
 fk_Angle & fk_Angle::operator =(const fk_Angle &tmp)
 {
 	h = tmp.h;
@@ -37,12 +30,17 @@ fk_Angle & fk_Angle::operator =(const fk_Angle &tmp)
 	return *this;
 }
 
-fk_Angle & fk_Angle::operator =(const fk_Angle &&tmp)
+bool fk_Angle::operator ==(const fk_Angle &argAngle) const
 {
-	h = tmp.h;
-	p = tmp.p;
-	b = tmp.b;
-	return *this;
+    if (fabs(argAngle.h - h) < fk_Vector::VECTOREPS &&
+        fabs(argAngle.p - p) < fk_Vector::VECTOREPS &&
+        fabs(argAngle.b - b) < fk_Vector::VECTOREPS) return true;
+    return false;
+}
+
+bool fk_Angle::operator !=(const fk_Angle &argAngle) const
+{
+    return !(*this == argAngle);
 }
 
 void fk_Angle::set(double argH, double argP, double argB)
