@@ -290,10 +290,10 @@ fk_Vertex * fk_DataBase::GetNewVertex(void)
 		vSet.resize(vSet.size()+1);
 		vSet.back().Init(this, newID);
 	} else {
-		vSet[_st(newID-1)].Init(this, newID);
+		vSet[_st(newID)-1].Init(this, newID);
 	}
 
-	return &vSet[_st(newID-1)];
+	return &vSet[_st(newID)-1];
 }
 
 fk_Vertex * fk_DataBase::GetNewVertex(int argID)
@@ -306,10 +306,10 @@ fk_Vertex * fk_DataBase::GetNewVertex(int argID)
 		vSet.resize(vSet.size()+1);
 		vSet.back().Init(this, argID);
 	} else {
-		vSet[_st(argID-1)].Init(this, argID);
+		vSet[_st(argID)-1].Init(this, argID);
 	}
 
-	return &vSet[_st(argID-1)];
+	return &vSet[_st(argID)-1];
 }
 
 fk_Half * fk_DataBase::GetNewHalf(void)
@@ -320,10 +320,10 @@ fk_Half * fk_DataBase::GetNewHalf(void)
 		hSet.resize(hSet.size()+1);
 		hSet.back().Init(this, newID);
 	} else {
-		hSet[_st(newID-1)].Init(this, newID);
+		hSet[_st(newID)-1].Init(this, newID);
 	}
 
-	return &hSet[_st(newID-1)];
+	return &hSet[_st(newID)-1];
 }
 
 fk_Half * fk_DataBase::GetNewHalf(int argID)
@@ -336,10 +336,10 @@ fk_Half * fk_DataBase::GetNewHalf(int argID)
 		hSet.resize(hSet.size()+1);
 		hSet.back().Init(this, argID);
 	} else {
-		hSet[_st(argID-1)].Init(this, argID);
+		hSet[_st(argID)-1].Init(this, argID);
 	}
 
-	return &hSet[_st(argID-1)];
+	return &hSet[_st(argID)-1];
 }
 
 fk_Edge * fk_DataBase::GetNewEdge(void)
@@ -350,10 +350,10 @@ fk_Edge * fk_DataBase::GetNewEdge(void)
 		eSet.resize(eSet.size()+1);
 		eSet.back().Init(this, newID);
 	} else {
-		eSet[_st(newID-1)].Init(this, newID);
+		eSet[_st(newID)-1].Init(this, newID);
 	}
 
-	return &eSet[_st(newID-1)];
+	return &eSet[_st(newID)-1];
 }
 
 fk_Edge * fk_DataBase::GetNewEdge(int argID)
@@ -366,10 +366,10 @@ fk_Edge * fk_DataBase::GetNewEdge(int argID)
 		eSet.resize(eSet.size()+1);
 		eSet.back().Init(this, argID);
 	} else {
-		eSet[_st(argID-1)].Init(this, argID);
+		eSet[_st(argID)-1].Init(this, argID);
 	}
 
-	return &eSet[_st(argID-1)];
+	return &eSet[_st(argID)-1];
 }
 
 fk_Loop * fk_DataBase::GetNewLoop(void)
@@ -379,10 +379,10 @@ fk_Loop * fk_DataBase::GetNewLoop(void)
 		lSet.resize(lSet.size()+1);
 		lSet.back().Init(this, newID);
 	} else {
-		lSet[_st(newID-1)].Init(this, newID);
+		lSet[_st(newID)-1].Init(this, newID);
 	}
 
-	return &lSet[_st(newID-1)];
+	return &lSet[_st(newID)-1];
 }
 
 fk_Loop * fk_DataBase::GetNewLoop(int argID)
@@ -395,17 +395,17 @@ fk_Loop * fk_DataBase::GetNewLoop(int argID)
 		lSet.resize(lSet.size()+1);
 		lSet.back().Init(this, argID);
 	} else {
-		lSet[_st(argID-1)].Init(this, argID);
+		lSet[_st(argID)-1].Init(this, argID);
 	}
 
-	return &lSet[_st(argID-1)];
+	return &lSet[_st(argID)-1];
 }
 
 bool fk_DataBase::ExistVertex(fk_Vertex *argVx) const
 {
 	if(argVx == nullptr) return false;
 	if(ExistVertex(argVx->getID()) == false) return false;
-	if(&vSet[_st(argVx->getID() - 1)] != argVx) return false;
+	if(&vSet[_st(argVx->getID()) - 1] != argVx) return false;
 	return true;
 }
 
@@ -418,7 +418,7 @@ bool fk_DataBase::ExistHalf(fk_Half *argHf) const
 {
 	if(argHf == nullptr) return false;
 	if(ExistHalf(argHf->getID()) == false) return false;
-	if(&hSet[_st(argHf->getID() - 1)] != argHf) return false;
+	if(&hSet[_st(argHf->getID()) - 1] != argHf) return false;
 	return true;
 }
 
@@ -431,7 +431,7 @@ bool fk_DataBase::ExistEdge(fk_Edge *argEd) const
 {
 	if(argEd == nullptr) return false;
 	if(ExistEdge(argEd->getID()) == false) return false;
-	if(&eSet[_st(argEd->getID() - 1)] != argEd) return false;
+	if(&eSet[_st(argEd->getID()) - 1] != argEd) return false;
 	return true;
 }
 
@@ -444,7 +444,7 @@ bool fk_DataBase::ExistLoop(fk_Loop *argLp) const
 {
 	if(argLp == nullptr) return false;
 	if(ExistLoop(argLp->getID()) == false) return false;
-	if(&lSet[_st(argLp->getID() - 1)] != argLp) return false;
+	if(&lSet[_st(argLp->getID()) - 1] != argLp) return false;
 	return true;
 }
 
@@ -456,53 +456,53 @@ bool fk_DataBase::ExistLoop(int argID) const
 bool fk_DataBase::DeleteVertex(int argID)
 {
 	if(vAdmin.EraseID(argID) == false) return false;
-	vSet[_st(argID-1)].DeleteElem();
+	vSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 bool fk_DataBase::DeleteHalf(int argID)
 {
 	if(hAdmin.EraseID(argID) == false) return false;
-	hSet[_st(argID-1)].DeleteElem();
+	hSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 bool fk_DataBase::DeleteEdge(int argID)
 {
 	if(eAdmin.EraseID(argID) == false) return false;
-	eSet[_st(argID-1)].DeleteElem();
+	eSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 bool fk_DataBase::DeleteLoop(int argID)
 {
 	if(lAdmin.EraseID(argID) == false) return false;
-	lSet[_st(argID-1)].DeleteElem();
+	lSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 fk_Vertex * fk_DataBase::GetVData(int argVID)
 {
 	if(vAdmin.ExistID(argVID) == false) return nullptr;
-	return &vSet[_st(argVID - 1)];
+	return &vSet[_st(argVID) - 1];
 }
 
 fk_Half * fk_DataBase::GetHData(int argHID)
 {
 	if(hAdmin.ExistID(argHID) == false) return nullptr;
-	return &hSet[_st(argHID - 1)];
+	return &hSet[_st(argHID) - 1];
 }
 
 fk_Edge * fk_DataBase::GetEData(int argEID)
 {
 	if(eAdmin.ExistID(argEID) == false) return nullptr;
-	return &eSet[_st(argEID - 1)];
+	return &eSet[_st(argEID) - 1];
 }
 
 fk_Loop * fk_DataBase::GetLData(int argLID)
 {
 	if(lAdmin.ExistID(argLID) == false) return nullptr;
-	return &lSet[_st(argLID - 1)];
+	return &lSet[_st(argLID) - 1];
 }
 
 fk_Vertex * fk_DataBase::GetNextV(fk_Vertex *argV)
@@ -591,7 +591,7 @@ void fk_DataBase::VPrint(int argID) const
 		fk_PutError("fk_DataBase", "VPrint", 1,
 					"Vertex Admin Error.");
 	} else {
-		vSet[_st(argID-1)].Print();
+		vSet[_st(argID)-1].Print();
 	}
 
 	return;
@@ -608,7 +608,7 @@ void fk_DataBase::HPrint(int argID) const
 		fk_PutError("fk_DataBase", "HPrint", 1,
 					"Half Edge Admin Error.");
 	} else {
-		hSet[_st(argID-1)].Print();
+		hSet[_st(argID)-1].Print();
 	}
 
 	return;
@@ -624,7 +624,7 @@ void fk_DataBase::EPrint(int argID) const
 		fk_PutError("fk_DataBase", "EPrint", 1,
 					"Edge Admin Error.");
 	} else {
-		eSet[_st(argID-1)].Print();
+		eSet[_st(argID)-1].Print();
 	}
 
 	return;
@@ -640,7 +640,7 @@ void fk_DataBase::LPrint(int argID) const
 		fk_PutError("fk_DataBase", "LPrint", 1,
 					"Loop Admin Error.");
 	} else {
-		lSet[_st(argID-1)].Print();
+		lSet[_st(argID)-1].Print();
 	}
 
 	return;
@@ -673,7 +673,7 @@ bool	fk_DataBase::VCheck(int argID) const
 					"Vertex Admin Error.");
 		retBool = false;
 	} else {
-		retBool = vSet[_st(argID-1)].Check();
+		retBool = vSet[_st(argID)-1].Check();
 	}
 
 	return retBool;
@@ -696,7 +696,7 @@ bool	fk_DataBase::HCheck(int argID) const
 					"Half Edge Admin Error.");
 		retBool = false;
 	} else {
-		retBool = hSet[_st(argID-1)].Check();
+		retBool = hSet[_st(argID)-1].Check();
 	}
 
 	return retBool;
@@ -719,7 +719,7 @@ bool	fk_DataBase::ECheck(int argID) const
 					"Edge Admin Error.");
 		retBool = false;
 	} else {
-		retBool = eSet[_st(argID-1)].Check();
+		retBool = eSet[_st(argID)-1].Check();
 	}
 
 	return retBool;
@@ -742,7 +742,7 @@ bool fk_DataBase::LCheck(int argID) const
 					"Loop Admin Error");
 		retBool = false;
 	} else {
-		retBool = lSet[_st(argID-1)].Check();
+		retBool = lSet[_st(argID)-1].Check();
 	}
 
 	return retBool;

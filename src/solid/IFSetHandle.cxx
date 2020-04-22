@@ -139,14 +139,16 @@ void fk_IFSetHandle::MakeNewLoop(vector<fk_Half *> *argHalfSet, bool argFlg)
 		auto curH = *halfI;
 		curH->SetPrevHalf(prevH->getID());
 		prevH->SetNextHalf(curH->getID());
-		curH->SetParentLoop(newL->getID());
+		if(newL != nullptr) curH->SetParentLoop(newL->getID());
 		prevH = &(*curH);
 	}
 
 	startH->SetPrevHalf(prevH->getID());
 	prevH->SetNextHalf(startH->getID());
-	startH->SetParentLoop(newL->getID());
-	if(argFlg == true) newL->SetOneHalf(startH->getID());
+	if (newL != nullptr) {
+		startH->SetParentLoop(newL->getID());
+		newL->SetOneHalf(startH->getID());
+	}
 
 	return;
 }

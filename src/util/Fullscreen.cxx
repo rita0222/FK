@@ -70,13 +70,11 @@ BOOL CALLBACK EnumWindowsLoadFunc(HWND hWnd, LPARAM lParam)
 }
 
 // プライベートコンストラクタ
-fk_FullscreenController::fk_FullscreenController()
+fk_FullscreenController::fk_FullscreenController() :
+	pFlWnd(nullptr), pFkWnd(nullptr), hFlWnd(nullptr),
+	nWndX(0), nWndY(0), nWndW(0), nWndH(0),
+	fscW(0), fscH(0), mode(true)
 {
-	pFlWnd = nullptr;
-	hFlWnd = nullptr;
-	pFkWnd = nullptr;
-	fscW = fscH = 0;
-
 	return;
 }
 // プライベートデストラクタ

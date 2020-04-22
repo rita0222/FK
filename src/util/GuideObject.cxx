@@ -87,15 +87,14 @@ void fk_GuideObject::setNum(int argNum)
 	num = argNum;
 
 	grid.allClear();
+	double hn = double(num / 2);
 	for(int i = 0; i <= num; i++) {
-		grid.pushLine(fk_Vector(double(i-num/2), 0.0 , double(num/2)),
-					  fk_Vector(double(i-num/2), 0.0 , -double(num/2)));
-		grid.pushLine(fk_Vector(-double(num/2), 0.0 , double(num/2-i)),
-					  fk_Vector(double(num/2), 0.0 , double(num/2-i)));
+		grid.pushLine(fk_Vector(double(i) - hn, 0.0, hn), fk_Vector(double(i) - hn, 0.0, -hn));
+		grid.pushLine(fk_Vector(-hn, 0.0, hn - double(i)), fk_Vector(hn, 0.0, hn - double(i)));
 	}
 
 	for(int i = 0; i < 3; i++) {
-		axisModel[i].setScale(scale*(double)(num/2));
+		axisModel[i].setScale(scale*hn);
 	}
 
 	return;

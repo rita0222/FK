@@ -650,7 +650,7 @@ namespace FK {
 		OggVorbis_File	*vf;
 		bool			ovOpenStatus;
 		int				current;
-		char			buffer[fk_AudioBase::BUFSIZE];
+		std::vector<char>	buffer;
 		double			nowTime;
 
 		void			StartQueue(bool);

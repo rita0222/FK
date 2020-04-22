@@ -8,7 +8,12 @@
 using namespace std;
 using namespace FK;
 
-fk_Half::fk_Half(int argID)
+fk_Half::fk_Half(int argID) :
+	vertex(FK_UNDEFINED),
+	parentEdge(FK_UNDEFINED),
+	nextHalf(FK_UNDEFINED),
+	prevHalf(FK_UNDEFINED),
+	parentLoop(FK_UNDEFINED)
 {
 	DB = nullptr;
 	SetID(argID);

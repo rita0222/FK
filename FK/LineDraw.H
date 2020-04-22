@@ -17,7 +17,7 @@ namespace FK {
 		bool AllTest(void);
 
 	private:
-		fk_ShaderBinder *lineShader[VS_NUM][FS_NUM][FOG_NUM];
+        std::vector<fk_ShaderBinder *> lineShader; // [VS_NUM] [FS_NUM] [FOG_NUM] ;
 
 		void DefaultShaderSetup(fk_Model *, fk_FogMode);
 		bool ShaderInit(fk_DrawVS, fk_DrawFS, fk_FogMode);
@@ -25,6 +25,9 @@ namespace FK {
 
  		void Draw_Line(fk_LineBase *, fk_ShaderParameter *, bool);
  		void Draw_IFS(fk_IndexFaceSet *, fk_ShaderParameter *, bool);
+
+        fk_ShaderBinder * GetShader(fk_DrawVS, fk_DrawFS, fk_FogMode);
+        fk_ShaderBinder * MakeShader(fk_DrawVS, fk_DrawFS, fk_FogMode);
 	};
 }
 #endif /* !__FK_LINE_DRAW_HEADER__ */

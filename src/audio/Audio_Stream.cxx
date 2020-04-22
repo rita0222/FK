@@ -17,10 +17,14 @@ const int _ENDIAN = 0;
 using namespace std;
 using namespace FK;
 
-fk_AudioStream::fk_AudioStream(void)
+fk_AudioStream::fk_AudioStream(void) :
+	vf(new OggVorbis_File),
+	ovOpenStatus(false),
+	current(0),
+	buffer(fk_AudioBase::BUFSIZE, char(0)),
+	nowTime(0.0)
 {
-	ovOpenStatus = startStatus = endStatus = false;
-	vf = new OggVorbis_File;
+	startStatus = endStatus = false;
 	return;
 }
 

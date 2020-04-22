@@ -12,7 +12,8 @@ typedef unsigned int uint;
 using namespace std;
 using namespace FK;
 
-fk_SubDivision::fk_SubDivision()
+fk_SubDivision::fk_SubDivision() :
+	_vNum(0), _eNum(0), _fNum(0)
 {
 	return;
 }

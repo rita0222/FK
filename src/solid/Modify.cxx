@@ -799,81 +799,83 @@ void fk_Modify::makeSphere(int argDiv, double argRadius)
 	vector<fk_Vector>		VecArray;
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
-	int						i, j, index, index2;
-	_st						ii, jj;
 	vector<double>			xz_radius;
 	double					theta1, theta2;
+	_st i, j, index;
+	int ii, jj, bottom, bottom2;
 
 	if(checkDB() == false) return;
 
 	AllClear_();
 	IFSet.SetDataBase(GetDB());
 
-	VecArray.resize(static_cast<_st>(argDiv*4 * (argDiv*2 - 1) + 2));
-	xz_radius.resize(static_cast<_st>(argDiv*2 - 1));
+	double d = double(argDiv);
+	_st sd = _st(argDiv);
 
-	for(i = 0; i < argDiv*2 - 1; i++) {
-		ii = static_cast<_st>(i);
-		xz_radius[ii] = argRadius*sin(static_cast<double>(i+1)*fk_Math::PI/(argDiv*2.0));
+	VecArray.resize(sd * 4 * (sd * 2 - 1) + 2);
+	xz_radius.resize(sd*2 - 1);
+
+	for(i = 0; i < sd*2 - 1; i++) {
+		xz_radius[i] = argRadius*sin((double(i)+1.0) * fk_Math::PI/(d*2.0));
 	}
 
 	VecArray.front().set(0.0, argRadius, 0.0);
 	VecArray.back().set(0.0, -argRadius, 0.0);
 	
-	for(i = 0; i < argDiv*2 - 1; i++) {
-		for(j = 0; j < argDiv*4; j++) {
-			index = i*argDiv*4 + j + 1;
-			ii = static_cast<_st>(i);
-			jj = static_cast<_st>(index);
+	for(i = 0; i < sd*2 - 1; i++) {
+		for(j = 0; j < sd*4; j++) {
+			index = i*sd*4 + j + 1;
+			//ii = static_cast<_st>(i);
+			//jj = static_cast<_st>(index);
 
-			theta1 = static_cast<double>(j)*fk_Math::PI/(argDiv*2.0);
-			theta2 = static_cast<double>(i+1)*fk_Math::PI/(argDiv*2.0);
-			VecArray[jj].set(xz_radius[ii] * cos(theta1),
+			theta1 = double(j)*fk_Math::PI/(d*2.0);
+			theta2 = (double(i)+1.0)*fk_Math::PI/(d*2.0);
+			VecArray[index].set(xz_radius[i] * cos(theta1),
 							 argRadius * cos(theta2),
-							 xz_radius[ii] * sin(theta1));
+							 xz_radius[i] * sin(theta1));
 		}
 	}
 
 	IFArray.clear();
 
 	// TOP
-	for(i = 0; i < argDiv*4; i++) {
+	for(ii = 0; ii < argDiv*4; ii++) {
 		IDArray.clear();
 		IDArray.push_back(1);
-		if(i == argDiv*4 - 1) {
+		if(ii == argDiv*4 - 1) {
 			IDArray.push_back(2);
 		} else {
-			IDArray.push_back(i+3);
+			IDArray.push_back(ii+3);
 		}
-		IDArray.push_back(i+2);
+		IDArray.push_back(ii+2);
 		IFArray.push_back(IDArray);
 	}
 
 	// BOTTOM
-	index = (argDiv*4)*(argDiv*2 - 2) + 2;
-	for(i = 0; i < argDiv*4; i++) {
+	bottom = (argDiv*4)*(argDiv*2 - 2) + 2;
+	for(ii = 0; ii < argDiv*4; ii++) {
 		IDArray.clear();
-		IDArray.push_back(index + (argDiv*4));
-		IDArray.push_back(index + i);
-		if(i == argDiv*4 - 1) {
-			IDArray.push_back(index);
+		IDArray.push_back(bottom + (argDiv*4));
+		IDArray.push_back(bottom + ii);
+		if(ii == argDiv*4 - 1) {
+			IDArray.push_back(bottom);
 		} else {
-			IDArray.push_back(index + i + 1);
+			IDArray.push_back(bottom + ii + 1);
 		}
 		IFArray.push_back(IDArray);
 	}
 
 	// SIDE
-	for(i = 0; i < argDiv*2 - 2; i++) {
-		for(j = 0; j < argDiv*4; j++) {
+	for(ii = 0; ii < argDiv*2 - 2; ii++) {
+		for(jj = 0; jj < argDiv*4; jj++) {
 			IDArray.clear();
-			index = i*argDiv*4 + j + 2;
-			index2 = (j == argDiv*4 - 1) ? i*argDiv*4 + 2 : index + 1;
+			bottom = ii * argDiv * 4 + jj + 2;
+			bottom2 = (jj == argDiv * 4 - 1) ? ii * argDiv * 4 + 2 : bottom + 1;
 
-			IDArray.push_back(index);
-			IDArray.push_back(index2);
-			IDArray.push_back(index2 + argDiv*4);
-			IDArray.push_back(index + argDiv*4);
+			IDArray.push_back(bottom);
+			IDArray.push_back(bottom2);
+			IDArray.push_back(bottom2 + argDiv*4);
+			IDArray.push_back(bottom + argDiv*4);
 			IFArray.push_back(IDArray);
 		}
 	}
@@ -957,16 +959,18 @@ void fk_Modify::makePrism(int argDiv, double argTop, double argBottom,
 
 	IFSet.SetDataBase(GetDB());
 
-	VecArray.resize(static_cast<_st>(argDiv*2+2));
-	VecArray[0].set(0.0, 0.0, 0.0);
-	VecArray[static_cast<_st>(argDiv + 1)].set(0.0, 0.0, -argHeight);
+	_st sd = _st(argDiv);
 
-	for(i = 0; i < argDiv; i++) {
-		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(argDiv);
-		VecArray[static_cast<_st>(i+1)].set(cos(theta) * argBottom,
-						  sin(theta) * argBottom, 0.0);
-		VecArray[static_cast<_st>(argDiv+i+2)].set(cos(theta) * argTop, 
-												   sin(theta) * argTop, -argHeight);
+	VecArray.resize(sd*2+2);
+	VecArray[0].set(0.0, 0.0, 0.0);
+	VecArray[sd+1].set(0.0, 0.0, -argHeight);
+
+	for (i = 0; i < argDiv; i++) {
+		theta = (double(i) * 2.0 * fk_Math::PI)/double(argDiv);
+		VecArray[_st(i)+1].set(cos(theta) * argBottom,
+			sin(theta) * argBottom, 0.0);
+		VecArray[sd+_st(i)+2].set(cos(theta) * argTop, 
+			sin(theta) * argTop, -argHeight);
 	}
 
 	IFArray.clear();
@@ -988,7 +992,7 @@ void fk_Modify::makePrism(int argDiv, double argTop, double argBottom,
 		// 上面 
 		IDArray.clear();
 		IDArray.push_back(argDiv+2);
-		if(i == argDiv-1) {
+		if(i == argDiv - 1) {
 			IDArray.push_back(argDiv+3);
 		} else {
 			IDArray.push_back(argDiv+i+4);
@@ -1000,7 +1004,7 @@ void fk_Modify::makePrism(int argDiv, double argTop, double argBottom,
 		// 側面 
 		v[0] = i + 2;
 		v[1] = argDiv + i + 3;
-		if(i == argDiv-1) {
+		if(i == argDiv - 1) {
 			v[2] = 2;
 			v[3] = argDiv + 3;
 		} else {
@@ -1045,16 +1049,15 @@ void fk_Modify::setPrismDivide(int argDiv)
 void fk_Modify::setPrismTopRadius(double argTop)
 {
 	int			div;
-	int			i;
 	fk_Vertex	*v;
 	double		theta, z;
 	fk_Vector	pos;
 
 	div = getVNum()/2 - 1;
 	z = getVData(div+3)->getPosition().z;
-	for(i = 0; i < div; i++) {
+	for(int i = 0; i < div; i++) {
 		v = getVData(div+i+3);
-		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(div);
+		theta = (double(i)* 2.0 * fk_Math::PI)/double(div);
 		pos.set(cos(theta) * argTop, sin(theta) * argTop, z);
 		moveVertex(v, pos);
 	}
@@ -1073,7 +1076,7 @@ void fk_Modify::setPrismBottomRadius(double argBottom)
 	div = getVNum()/2 - 1;
 	for(i = 0; i < div; i++) {
 		v = getVData(i+2);
-		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(div);
+		theta = (double(i)* 2.0 * fk_Math::PI)/double(div);
 		pos.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
 		moveVertex(v, pos);
 	}
@@ -1104,7 +1107,6 @@ void fk_Modify::makeCone(int argDiv, double argRadius, double argHeight)
 	vector<fk_Vector>		VecArray;
 	vector<int>				IDArray;
 	vector< vector<int> >	IFArray;
-	int						i;
 	double					theta;
 
 	if(checkDB() == false) return;
@@ -1112,18 +1114,19 @@ void fk_Modify::makeCone(int argDiv, double argRadius, double argHeight)
 
 	IFSet.SetDataBase(GetDB());
 	
-	VecArray.resize(static_cast<_st>(argDiv+2));
+	_st sd = _st(argDiv);
+	VecArray.resize(sd+2);
 	VecArray[0].set(0.0, 0.0, 0.0);
 	VecArray[1].set(0.0, 0.0, -argHeight);
 
-	for(i = 0; i < argDiv; i++) {
-		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(argDiv);
-		VecArray[static_cast<_st>(i+2)].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
+	for(_st i = 0; i < sd; i++) {
+		theta = (double(i) * 2.0 * fk_Math::PI)/double(argDiv);
+		VecArray[i+2].set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 	}
 
 	IFArray.clear();
 
-	for(i = 0; i < argDiv; i++) {
+	for(int i = 0; i < argDiv; i++) {
 		// 底面 
 		IDArray.clear();
 		IDArray.push_back(1);
@@ -1169,15 +1172,14 @@ void fk_Modify::setConeDivide(int argDiv)
 void fk_Modify::setConeRadius(double argRadius)
 {
 	int			div;
-	int			i;
 	fk_Vertex	*v;
 	double		theta;
 	fk_Vector	pos;
 
 	div = getVNum()-2;
-	for(i = 0; i < div; i++) {
-		v = getVData(i+3);
-		theta = (static_cast<double>(i*2) * fk_Math::PI)/static_cast<double>(div);
+	for(_st i = 0; i < _st(div); i++) {
+		v = getVData(int(i)+3);
+		theta = (double(i)* 2.0 * fk_Math::PI)/double(div);
 		pos.set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 		moveVertex(v, pos);
 	}

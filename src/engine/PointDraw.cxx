@@ -14,28 +14,15 @@
 using namespace std;
 using namespace FK;
 
-fk_PointDraw::fk_PointDraw(void)
+fk_PointDraw::fk_PointDraw(void) :
+	pointShader(_st(VS_NUM) * _st(FS_NUM) * _st(FOG_NUM), nullptr)
 {
-	for(int i = 0; i < VS_NUM; ++i) {
-		for(int j = 0; j < FS_NUM; ++j) {
-			for(int k = 0; k < FOG_NUM; ++k) {
-				pointShader[i][j][k] = nullptr;
-			}
-		}
-	}
 	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	for(int i = 0; i < VS_NUM; ++i) {
-		for(int j = 0; j < FS_NUM; ++j) {
-			for(int k = 0; k < FOG_NUM; ++k) {
-				delete pointShader[i][j][k];
-			}
-		}
-	}
-
+	for (auto s : pointShader) delete s;
 	return;
 }
 
@@ -53,6 +40,26 @@ bool fk_PointDraw::AllTest(void)
 		}
 	}
 	return retFlg;
+}
+
+fk_ShaderBinder * fk_PointDraw::GetShader(
+	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+{
+	_st index = _st(argVID) * FS_NUM * FOG_NUM +
+		_st(argFID) * FOG_NUM + _st(argFogMode);
+
+	return pointShader[index];
+}
+
+fk_ShaderBinder * fk_PointDraw::MakeShader(
+	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+{
+	_st index = _st(argVID) * FS_NUM * FOG_NUM +
+		_st(argFID) * FOG_NUM + _st(argFogMode);
+
+	delete pointShader[index];
+	pointShader[index] = new fk_ShaderBinder();
+	return pointShader[index];
 }
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape,
@@ -123,10 +130,11 @@ void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel, fk_FogMode argFogMode)
 		break;
 	}
 
-	if(pointShader[int(vID)][int(fID)][int(argFogMode)] == nullptr) {
+	drawShader = GetShader(vID, fID, argFogMode);
+	if(drawShader == nullptr) {
 		ShaderInit(vID, fID, argFogMode);
+		drawShader = GetShader(vID, fID, argFogMode);
 	}
-	drawShader = pointShader[int(vID)][int(fID)][int(argFogMode)];
 	defaultShaderFlag = true;
 
 	return;
@@ -134,9 +142,7 @@ void fk_PointDraw::DefaultShaderSetup(fk_Model *argModel, fk_FogMode argFogMode)
 
 bool fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	delete pointShader[int(argVID)][int(argFID)][int(argFogMode)];
-	auto *shader = new fk_ShaderBinder();
-	pointShader[int(argVID)][int(argFID)][int(argFogMode)] = shader;
+	fk_ShaderBinder *shader = MakeShader(argVID, argFID, argFogMode);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

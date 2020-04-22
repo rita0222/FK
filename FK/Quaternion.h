@@ -87,7 +87,6 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_Quaternion(const fk_Quaternion &);
-		fk_Quaternion(const fk_Quaternion &&);
 
 		//! \name 単項演算子
 		///@{
@@ -189,7 +188,6 @@ namespace FK {
 
 		//! 単純代入演算子
 		fk_Quaternion & operator =(const fk_Quaternion &);
-		fk_Quaternion & operator =(const fk_Quaternion &&);
 
 		//! 積代入演算子
 		/*!

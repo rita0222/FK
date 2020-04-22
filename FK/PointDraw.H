@@ -22,14 +22,17 @@ namespace FK {
 
 	private:
 
-		fk_ShaderBinder *pointShader[VS_NUM][FS_NUM][FOG_NUM];
+        std::vector<fk_ShaderBinder *> pointShader; // [VS_NUM] [FS_NUM] [FOG_NUM] ;
 
 		void DefaultShaderSetup(fk_Model *, fk_FogMode);
-		bool ShaderInit(fk_DrawVS, fk_DrawFS, fk_FogMode);
-		int GetPointNum(fk_Shape *);
+        bool ShaderInit(fk_DrawVS, fk_DrawFS, fk_FogMode);
+        int GetPointNum(fk_Shape *);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void Draw_Point(fk_Shape *, fk_ShaderParameter *, int, bool);
-	};
+
+        fk_ShaderBinder * GetShader(fk_DrawVS, fk_DrawFS, fk_FogMode);
+        fk_ShaderBinder * MakeShader(fk_DrawVS, fk_DrawFS, fk_FogMode);
+    };
 }
 
 #endif /* !__FK_POINT_DRAW_HEADER__ */

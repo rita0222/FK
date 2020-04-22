@@ -278,12 +278,6 @@ fk_OrthoMatrix::fk_OrthoMatrix(const fk_OrthoMatrix &ArgMat)
 	CopyMatrix(m, ArgMat.m);
 }
 
-fk_OrthoMatrix::fk_OrthoMatrix(const fk_OrthoMatrix &&ArgMat)
-	: buf(nullptr), updateStatus(true)
-{
-	CopyMatrix(m, ArgMat.m);
-}
-
 fk_OrthoMatrix::~fk_OrthoMatrix()
 {
 	if(buf != nullptr) delete [] buf;
@@ -574,14 +568,6 @@ fk_OrthoMatrix & fk_OrthoMatrix::operator =(const fk_OrthoMatrix &ArgMat)
 	return *this;
 }
 
-fk_OrthoMatrix & fk_OrthoMatrix::operator =(const fk_OrthoMatrix &&ArgMat)
-{
-	CopyMatrix(m, ArgMat.m);
-
-	updateStatus = true;
-	return *this;
-}
-
 fk_OrthoMatrix & fk_OrthoMatrix::operator *=(const fk_OrthoMatrix &ArgMat)
 {
 	fk_OrthoMatrix tmp;
@@ -640,12 +626,6 @@ fk_Matrix::fk_Matrix(void)
 
 // コピーコンストラクタ 
 fk_Matrix::fk_Matrix(const fk_Matrix &argMat)
-	: fk_OrthoMatrix()
-{
-	CopyMatrix(m, argMat.m);
-}
-
-fk_Matrix::fk_Matrix(const fk_Matrix &&argMat)
 	: fk_OrthoMatrix()
 {
 	CopyMatrix(m, argMat.m);
@@ -805,19 +785,7 @@ fk_Matrix & fk_Matrix::operator =(const fk_Matrix &ArgMat)
 	return *this;
 }
 
-fk_Matrix & fk_Matrix::operator =(const fk_Matrix &&ArgMat)
-{
-	CopyMatrix(m, ArgMat.m);
-	return *this;
-}
-
 fk_Matrix & fk_Matrix::operator =(const fk_OrthoMatrix &ArgMat)
-{
-	CopyMatrix(m, ArgMat.m);
-	return *this;
-}
-
-fk_Matrix & fk_Matrix::operator =(const fk_OrthoMatrix &&ArgMat)
 {
 	CopyMatrix(m, ArgMat.m);
 	return *this;

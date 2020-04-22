@@ -7,35 +7,49 @@
 using namespace std;
 using namespace FK;
 
-fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode)
+fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode) :
+	curveShader(C_DRAW_NUM * C_DEG_NUM * C_SHADOW_NUM * FOG_NUM, nullptr),
+	mode(argMode)
 {
-	for(int i = 0; i < C_DRAW_NUM; ++i) {
-		for(int j = 0; j < C_DEG_NUM; ++j) {
-			for(int k = 0; k < C_SHADOW_NUM; ++k) {
-				for(int l = 0; l < FOG_NUM; ++l) {
-					curveShader[i][j][k][l] = nullptr;
-				}
-			}
-		}
-	}
-
-	mode = argMode;
 	return;
 }
 
 fk_BezCurveDraw::~fk_BezCurveDraw()
 {
-	for(int i = 0; i < C_DRAW_NUM; ++i) {
-		for(int j = 0; j < C_DEG_NUM; ++j) {
-			for(int k = 0; k < C_SHADOW_NUM; ++k) {
-				for(int l = 0; l < FOG_NUM; ++l) {
-					delete curveShader[i][j][k][l];
-				}
-			}
-		}
-	}
-
+	for (auto s : curveShader) delete s;
 	return;
+}
+
+fk_ShaderBinder *fk_BezCurveDraw::GetShader(
+	fk_CurveDrawType argType,
+	fk_CurveDrawDeg argDeg,
+	fk_CurveShadowType argShadow,
+	fk_FogMode argFog)
+{
+	_st index =
+		_st(argType) * C_DEG_NUM * C_SHADOW_NUM * FOG_NUM +
+		_st(argDeg) * C_SHADOW_NUM * FOG_NUM +
+		_st(argShadow) * FOG_NUM +
+		_st(argFog);
+
+	return curveShader[index];
+}
+
+fk_ShaderBinder * fk_BezCurveDraw::MakeShader(
+	fk_CurveDrawType argType,
+	fk_CurveDrawDeg argDeg,
+	fk_CurveShadowType argShadow,
+	fk_FogMode argFog)
+{
+	_st index =
+		_st(argType) * C_DEG_NUM * C_SHADOW_NUM * FOG_NUM +
+		_st(argDeg) * C_SHADOW_NUM * FOG_NUM +
+		_st(argShadow) * FOG_NUM +
+		_st(argFog);
+
+	delete curveShader[index];
+	curveShader[index] = new fk_ShaderBinder();
+	return curveShader[index];
 }
 
 bool fk_BezCurveDraw::AllTest(void)
@@ -130,10 +144,11 @@ void fk_BezCurveDraw::DefaultShaderSetup(fk_Type argType, int argDegree,
 	fk_CurveShadowType sID = (argShadowSwitch) ?
 		fk_CurveShadowType::SHADOW : fk_CurveShadowType::ELEMENT;
 
-	if(curveShader[int(typeID)][int(degID)][int(sID)][int(argFogMode)] == nullptr) {
+	drawShader = GetShader(typeID, degID, sID, argFogMode);
+	if(drawShader == nullptr) {
 		ShaderInit(typeID, degID, sID, argFogMode);
+		drawShader = GetShader(typeID, degID, sID, argFogMode);
 	}
-	drawShader = curveShader[int(typeID)][int(degID)][int(sID)][int(argFogMode)];
 	defaultShaderFlag = true;
 	return;
 }
@@ -143,9 +158,7 @@ bool fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
 								 fk_CurveShadowType argShadow,
 								 fk_FogMode argFogMode)
 {
-	delete curveShader[int(argType)][int(argDeg)][int(argShadow)][int(argFogMode)];
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	curveShader[int(argType)][int(argDeg)][int(argShadow)][int(argFogMode)] = shader;
+	fk_ShaderBinder *shader = MakeShader(argType, argDeg, argShadow, argFogMode);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

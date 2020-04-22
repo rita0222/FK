@@ -7,7 +7,9 @@
 using namespace std;
 using namespace FK;
 
-fk_Edge::fk_Edge(int argID)
+fk_Edge::fk_Edge(int argID) :
+	leftHalf(FK_UNDEFINED), rightHalf(FK_UNDEFINED),
+	curv(nullptr), width(-1.0)
 {
 	DB = nullptr;
 	SetID(argID);

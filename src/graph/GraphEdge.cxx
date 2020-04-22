@@ -66,13 +66,13 @@ double fk_GraphEdge::getLength(void)
 
 void fk_GraphEdge::setIntCost(unsigned int argID, int argCost)
 {
-	if(argID >= intCost.size()) intCost.resize(argID+1);
+	if(argID >= intCost.size()) intCost.resize(_st(argID)+1);
 	intCost[argID] = argCost;
 }
 
 void fk_GraphEdge::setDoubleCost(unsigned int argID, double argCost)
 {
-	if(argID >= doubleCost.size()) doubleCost.resize(argID+1);
+	if(argID >= doubleCost.size()) doubleCost.resize(_st(argID)+1);
 	doubleCost[argID] = argCost;
 }
 

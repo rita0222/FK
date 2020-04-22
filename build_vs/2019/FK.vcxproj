@@ -348,6 +348,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>true</SDLCheck>
       <OmitFramePointers>false</OmitFramePointers>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Lib />
     <Lib>
@@ -381,6 +382,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <OmitFramePointers>true</OmitFramePointers>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Lib />
     <Lib>

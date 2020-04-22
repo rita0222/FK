@@ -33,7 +33,7 @@ int fk_FVecArray::getSize(void)
 void fk_FVecArray::resize(int argSize)
 {
 	size = argSize;
-	array.resize(_st(argSize*dim));
+	array.resize(_st(argSize)*_st(dim));
 	elemFlg.resize(_st(argSize));
 	fill(elemFlg.begin(), elemFlg.end(), char(true));
 	allFlg = true;
@@ -123,7 +123,7 @@ bool fk_FVecArray::set(int argID, double argX, double argY)
 {
 	if(argID < 0 || argID >= size) return false;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	array[id] = float(argX);
 	array[id+1] = float(argY);
 	elemFlg[_st(argID)] = true;
@@ -136,7 +136,7 @@ bool fk_FVecArray::set(int argID, double argX, double argY, double argZ)
 {
 	if(argID < 0 || argID >= size) return false;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	array[id] = float(argX);
 	array[id+1] = float(argY);
 	if(dim >= 3) array[id+2] = float(argZ);
@@ -150,7 +150,7 @@ bool fk_FVecArray::set(int argID, double argX, double argY, double argZ, double 
 {
 	if(argID < 0 || argID >= size) return false;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	array[id] = float(argX);
 	array[id+1] = float(argY);
 	if(dim >= 3) array[id+2] = float(argZ);
@@ -165,7 +165,7 @@ bool fk_FVecArray::set(int argID, float argX, float argY)
 {
 	if(argID < 0 || argID >= size) return false;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	array[id] = argX;
 	array[id+1] = argY;
 	elemFlg[_st(argID)] = true;
@@ -178,7 +178,7 @@ bool fk_FVecArray::set(int argID, float argX, float argY, float argZ)
 {
 	if(argID < 0 || argID >= size) return false;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	array[id] = argX;
 	array[id+1] = argY;
 	if(dim >= 3) array[id+2] = argZ;
@@ -192,7 +192,7 @@ bool fk_FVecArray::set(int argID, float argX, float argY, float argZ, float argW
 {
 	if(argID < 0 || argID >= size) return false;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	array[id] = argX;
 	array[id+1] = argY;
 	if(dim >= 3) array[id+2] = argZ;
@@ -208,7 +208,7 @@ fk_Vector fk_FVecArray::getV(int argID)
 	fk_Vector tmp;
 	if(argID < 0 || argID >= getSize()) return tmp;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	tmp.x = double(array[id]);
 	tmp.y = double(array[id+1]);
 	if(dim >= 3) tmp.z = double(array[id+2]);
@@ -221,7 +221,7 @@ fk_FVector fk_FVecArray::getF(int argID)
 	fk_FVector tmp;
 	if(argID < 0 || argID >= getSize()) return tmp;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	tmp.x = array[id];
 	tmp.y = array[id+1];
 	if(dim >= 3) tmp.z = array[id+2];
@@ -233,7 +233,7 @@ fk_HVector fk_FVecArray::getHV(int argID)
 	fk_HVector tmp;
 	if(argID < 0 || argID >= getSize()) return tmp;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	tmp.x = double(array[id]);
 	tmp.y = double(array[id+1]);
 	if(dim >= 3) tmp.z = double(array[id+2]);
@@ -246,7 +246,7 @@ fk_TexCoord fk_FVecArray::getT(int argID)
 	fk_TexCoord tmp;
 	if(argID < 0 || argID >= getSize()) return tmp;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	tmp.x = array[id];
 	tmp.y = array[id+1];
 	return tmp;
@@ -257,7 +257,7 @@ fk_Color fk_FVecArray::getC(int argID)
 	fk_Color tmp;
 	if(argID < 0 || argID >= getSize()) return tmp;
 
-	_st	id = _st(argID*dim);
+	_st	id = _st(argID)*_st(dim);
 	tmp.col[0] = array[id];
 	tmp.col[1] = array[id+1];
 	if(dim >= 3) tmp.col[2] = array[id+2];

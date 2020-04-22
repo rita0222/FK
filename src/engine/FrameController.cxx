@@ -49,7 +49,7 @@ void fk_FrameController::timeRegular()
 		return;
 	}
 
-	double tmpTime = double(m_dwFrameCount + 1) * m_fFrameTime;
+	double tmpTime = (double(m_dwFrameCount) + 1.0) * m_fFrameTime;
 	if(m_bFrameSkip == true && nowTime > tmpTime + m_dwLastMinitues) {
 		m_bDrawFlag = false;
 		m_dwSkipCount++;

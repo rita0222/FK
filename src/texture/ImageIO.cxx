@@ -197,8 +197,8 @@ fk_ImageStatus fk_Image::LoadBmpData(fk_ImType *argBuffer)
 
 		for(x = 0; x < bmpSize.w; x++) {
 			SetRGBA4Bmp(x, y,
-						tmpImageBuf + count * tmpSize,
-						static_cast<int>(bmpType), rgbQuad);
+						tmpImageBuf + _st(count) * _st(tmpSize),
+						int(bmpType), rgbQuad);
 		}
 	}
 
@@ -216,30 +216,30 @@ void fk_Image::SetRGBA4Bmp(int argX, int argY,
 	  case 1:
 		if((argBuffer[argX/8] & (0x80 >> argX % 8)) != 0) {
 			setRGB(argX, argY,
-				   static_cast<int>(argQuadBuffer[4]),
-				   static_cast<int>(argQuadBuffer[5]),
-				   static_cast<int>(argQuadBuffer[6]));
+				   int(argQuadBuffer[4]),
+				   int(argQuadBuffer[5]),
+				   int(argQuadBuffer[6]));
 		} else {
 			setRGB(argX, argY,
-				   static_cast<int>(argQuadBuffer[0]),
-				   static_cast<int>(argQuadBuffer[1]),
-				   static_cast<int>(argQuadBuffer[2]));
+				   int(argQuadBuffer[0]),
+				   int(argQuadBuffer[1]),
+				   int(argQuadBuffer[2]));
 		}
 
 		break;
 
 	  case 4:
 		if((argX % 2) == 0) {
-			tmp = (fk_ImType)(static_cast<int>(argBuffer[argX/2]) >> 4);
+			tmp = (fk_ImType)(int(argBuffer[argX/2]) >> 4);
 			tmp &= 0x0f;
 		} else {
-			tmp = (fk_ImType)(static_cast<int>(argBuffer[argX/2]) & 0x0f);
+			tmp = (fk_ImType)(int(argBuffer[argX/2]) & 0x0f);
 		}
 
 		setRGB(argX, argY,
-			   argQuadBuffer[2+4*tmp],
-			   argQuadBuffer[1+4*tmp],
-			   argQuadBuffer[4*tmp]);
+			   argQuadBuffer[2+4*_st(tmp)],
+			   argQuadBuffer[1+4*_st(tmp)],
+			   argQuadBuffer[4*_st(tmp)]);
 
 		break;
 
@@ -301,7 +301,7 @@ fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 	MakeBmpFileHeader(wSize, hSize, bitSize, bmpFileHeader);
 	MakeBmpInfoHeader(wSize, hSize, bitSize*8, bmpInfoHeader);
 
-	bmpBufSize = static_cast<_st>(wSize * bitSize);
+	bmpBufSize = _st(wSize) * _st(bitSize);
 
 	while(bmpBufSize % 4 != 0) {
 		bmpBufSize++;
@@ -1062,7 +1062,7 @@ bool fk_Image::readJPG(const string fileName)
 	}
 
 	for(int i = 0; i < int(hgt); i++) {
-		img[i] = static_cast<JSAMPROW>(calloc(sizeof(JSAMPLE), 3 * wid));
+		img[i] = static_cast<JSAMPROW>(calloc(sizeof(JSAMPLE), 3 * _st(wid)));
 		if(img[i] == nullptr) {
 			for(int j = i-1; j >= 0; j--) free(img[j]);
 			free(img);

@@ -13,29 +13,15 @@
 using namespace std;
 using namespace FK;
 
-fk_LineDraw::fk_LineDraw(void)
+fk_LineDraw::fk_LineDraw(void) :
+	lineShader(VS_NUM * FS_NUM * FOG_NUM, nullptr)
 {
-	for(int i = 0; i < VS_NUM; ++i) {
-		for(int j = 0; j < FS_NUM; ++j) {
-			for(int k = 0; k < FOG_NUM; ++k) {
-				lineShader[i][j][k] = nullptr;
-			}
-		}
-	}
-
 	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
-	for(int i = 0; i < VS_NUM; ++i) {
-		for(int j = 0; j < FS_NUM; ++j) {
-			for(int k = 0; k < FOG_NUM; ++k) {
-				delete lineShader[i][j][k];
-			}
-		}
-	}
-
+	for (auto s : lineShader) delete s;
 	return;
 }
 
@@ -53,6 +39,26 @@ bool fk_LineDraw::AllTest(void)
 		}
 	}
 	return retFlg;
+}
+
+fk_ShaderBinder * fk_LineDraw::GetShader(
+	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+{
+	_st index = _st(argVID) * FS_NUM * FOG_NUM +
+		_st(argFID) * FOG_NUM + _st(argFogMode);
+
+	return lineShader[index];
+}
+
+fk_ShaderBinder * fk_LineDraw::MakeShader(
+	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+{
+	_st index = _st(argVID) * FS_NUM * FOG_NUM +
+		_st(argFID) * FOG_NUM + _st(argFogMode);
+
+	delete lineShader[index];
+	lineShader[index] = new fk_ShaderBinder();
+	return lineShader[index];
 }
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape,
@@ -120,21 +126,18 @@ void fk_LineDraw::DefaultShaderSetup(fk_Model *argModel, fk_FogMode argFogMode)
 		break;
 	}
 
-	if(lineShader[int(vID)][int(fID)][int(argFogMode)] == nullptr) {
+	drawShader = GetShader(vID, fID, argFogMode);
+	if(drawShader == nullptr) {
 		ShaderInit(vID, fID, argFogMode);
+		drawShader = GetShader(vID, fID, argFogMode);
 	}
-	drawShader = lineShader[int(vID)][int(fID)][int(argFogMode)];
 	defaultShaderFlag = true;
-
 	return;
-
 }
 
 bool fk_LineDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	delete lineShader[int(argVID)][int(argFID)][int(argFogMode)];
-	auto *shader = new fk_ShaderBinder();
-	lineShader[int(argVID)][int(argFID)][int(argFogMode)] = shader;
+	fk_ShaderBinder *shader = MakeShader(argVID, argFID, argFogMode);
 
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

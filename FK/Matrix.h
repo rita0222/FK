@@ -52,7 +52,6 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_OrthoMatrix(const fk_OrthoMatrix &);
-		fk_OrthoMatrix(const fk_OrthoMatrix &&);
 
 		//! デストラクタ
 		~fk_OrthoMatrix();
@@ -160,7 +159,6 @@ namespace FK {
 
 		//! 単純代入演算子
 		fk_OrthoMatrix & operator =(const fk_OrthoMatrix &);
-		fk_OrthoMatrix & operator =(const fk_OrthoMatrix &&);
 
 		//! 行列積代入演算子
 		/*!
@@ -567,7 +565,6 @@ namespace FK {
 
 		//! コピーコンストラクタ
 		fk_Matrix(const fk_Matrix &);
-		fk_Matrix(const fk_Matrix &&);
 
 		//! \name 単項演算子
 		///@{
@@ -623,11 +620,9 @@ namespace FK {
 
 		//! 単純代入演算子
 		fk_Matrix & operator =(const fk_Matrix &);
-		fk_Matrix & operator =(const fk_Matrix &&);
 
 		//! fk_OrthoMatrix 型からの単純代入演算子
 		fk_Matrix & operator =(const fk_OrthoMatrix &);
-		fk_Matrix & operator =(const fk_OrthoMatrix &&);
 
 		//! 行列和代入演算子1
 		/*!

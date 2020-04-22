@@ -92,12 +92,6 @@ fk_Quaternion::fk_Quaternion(const fk_Quaternion &argQ)
 	return;
 }
 
-fk_Quaternion::fk_Quaternion(const fk_Quaternion &&argQ)
-{
-	set(argQ.s, argQ.v.x, argQ.v.y, argQ.v.z);
-	return;
-}
-
 void fk_Quaternion::init(void)
 {
 	set(1.0, 0.0, 0.0, 0.0);
@@ -250,14 +244,6 @@ fk_Quaternion & fk_Quaternion::operator -(void) const
 }
 
 fk_Quaternion & fk_Quaternion::operator =(const fk_Quaternion &argQ)
-{
-	s = argQ.s;
-	v = argQ.v;
-
-	return *this;
-}
-
-fk_Quaternion & fk_Quaternion::operator =(const fk_Quaternion &&argQ)
 {
 	s = argQ.s;
 	v = argQ.v;

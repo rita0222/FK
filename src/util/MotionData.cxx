@@ -209,12 +209,12 @@ int fk_PerformerMotion::setFrameState(int argFrame, fk_Model *argModel)
 		argModel->setScale(scaleArray[nowKey-1].x, scaleArray[nowKey-1].y, scaleArray[nowKey-1].z);
 	} else if(nowKey != 0) {
        	q = getInterQ(qArray[nowKey-1], qArray[nowKey],
-					  double(stepFrame+1)/double(frameArray[nowKey]), interTypeArray[nowKey]);
+					  (double(stepFrame)+1.0)/double(frameArray[nowKey]), interTypeArray[nowKey]);
 		argModel->glVec(q*dirV);
 		argModel->glUpvec(q*upV);
 		if(isBaseMotion()) {
 			argModel->glMoveTo(getInterVec(basePosArray[nowKey-1], basePosArray[nowKey],
-										   double(stepFrame+1)/double(frameArray[nowKey]),
+										   (double(stepFrame)+1.0)/double(frameArray[nowKey]),
 										   interTypeArray[nowKey]));
 		}
 		sc = getInterVec(scaleArray[nowKey-1], scaleArray[nowKey],
@@ -228,12 +228,12 @@ int fk_PerformerMotion::setFrameState(int argFrame, fk_Model *argModel)
 				  argModel->getScale(fk_Axis::Y),
 				  argModel->getScale(fk_Axis::Z));
 
-       	q = getInterQ(nowQ, qArray[nowKey], (double)(stepFrame+1)/(double)frameArray[nowKey]);
+       	q = getInterQ(nowQ, qArray[nowKey], ((double)(stepFrame)+1.0)/(double)frameArray[nowKey]);
 		argModel->glVec(q*dirV);
 		argModel->glUpvec(q*upV);
 		if(isBaseMotion()) {
 			argModel->glMoveTo(getInterVec(argModel->getPosition(), basePosArray[nowKey],
-				(double)(stepFrame+1)/(double)frameArray[nowKey]));//-basePosArray[0]);
+				(double(stepFrame)+1.0)/(double)frameArray[nowKey]));//-basePosArray[0]);
 		}
 		sc = getInterVec(nowSc, scaleArray[nowKey],
 						 double(stepFrame)/double(frameArray[nowKey]), interTypeArray[nowKey]);

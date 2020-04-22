@@ -233,7 +233,7 @@ void fk_Image::CreateBuffer(int argW, int argH, bool argInitFlg)
 	bufSize.set(tmpBufSizeW, tmpBufSizeH);
 
 	if(bufPointer == nullptr) {
-		bSize = _st(bufSize.w * bufSize.h * 4);
+		bSize = _st(bufSize.w) * _st(bufSize.h) * 4;
 		imageBuf.resize(bSize);
 		bufPointer = &imageBuf[0];
 	}
@@ -334,7 +334,7 @@ void fk_Image::copyImage(const fk_Image *argImage)
 	if(argImage->bufSize.w > 0 && argImage->bufSize.h > 0) {
 		CreateBuffer(argImage->imageSize, true);
 		memcpy(&imageBuf[0], &argImage->imageBuf[0],
-			   _st(bufSize.w * bufSize.h * 4));
+			   _st(bufSize.w) * _st(bufSize.h) * 4);
 	}
 	SetUpdate(true);
 
@@ -358,7 +358,7 @@ void fk_Image::copyImage(const fk_Image *argImage, int argX, int argY)
 		off2 = _st(argImage->GetOffset(0, i));
 		memmove(&imageBuf[off1],
 				&argImage->imageBuf[off2],
-				_st(argImage->imageSize.w * 4));
+				_st(argImage->imageSize.w) * 4);
 	}
 
 	SetUpdate(true);
@@ -390,7 +390,7 @@ bool fk_Image::subImage(const fk_Image *argImage,
 		index2 = _st(argImage->GetOffset(argX, argY + i));
 		memcpy(&imageBuf[index1],
 			   &argImage->imageBuf[index2],
-			   _st(argW * 4));
+			   _st(argW) * 4);
 	}
 
 	SetUpdate(true);
@@ -433,7 +433,7 @@ int fk_Image::getG(int argX, int argY) const
 		return -1;
 	}
 
-	return imageBuf[_st(GetOffset(argX, argY) + 1)];
+	return imageBuf[_st(GetOffset(argX, argY)) + 1];
 }
 
 int fk_Image::getB(int argX, int argY) const
@@ -442,7 +442,7 @@ int fk_Image::getB(int argX, int argY) const
 		return -1;
 	}
 
-	return imageBuf[_st(GetOffset(argX, argY) + 2)];
+	return imageBuf[_st(GetOffset(argX, argY)) + 2];
 }
 
 int fk_Image::getA(int argX, int argY) const
@@ -451,7 +451,7 @@ int fk_Image::getA(int argX, int argY) const
 		return -1;
 	}
 
-	return (imageBuf[_st(GetOffset(argX, argY) + 3)]);
+	return (imageBuf[_st(GetOffset(argX, argY)) + 3]);
 }
 
 fk_Color fk_Image::getColor(int argX, int argY) const
@@ -687,7 +687,7 @@ void fk_Image::fillColor(int argR, int argG, int argB, int argA)
 		return;
 	}
 
-	for(i = 0; i < _st(bufSize.w * bufSize.h); i++) {
+	for(i = 0; i < _st(bufSize.w) * _st(bufSize.h); i++) {
 		imageBuf[4*i] = fk_ImType(argR);
 		imageBuf[4*i+1] = fk_ImType(argG);
 		imageBuf[4*i+2] = fk_ImType(argB);

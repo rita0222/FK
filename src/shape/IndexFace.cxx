@@ -466,7 +466,7 @@ vector<int> fk_IndexFaceSet::getFaceData(int argID)
 
 	if(argID < 0 || argID >= int(faceIndex.size()/3)) return retIF;
 
-	_st id = _st(argID*3);
+	_st id = _st(argID)*3;
 
 	retIF.push_back(int(faceIndex[id]));
 	retIF.push_back(int(faceIndex[id+1]));
@@ -480,7 +480,7 @@ int fk_IndexFaceSet::getFaceData(int argFID, int argVID)
 	if(argFID < 0 || argFID >= int(faceIndex.size()/3)) return -1;
 	if(argVID < 0 || argVID >= 3) return -1;
 
-	return int(faceIndex[_st(argFID * 3 + argVID)]);
+	return int(faceIndex[_st(argFID) * 3 + _st(argVID)]);
 }
 
 bool fk_IndexFaceSet::moveVPosition(int argID,
@@ -984,11 +984,11 @@ void fk_IndexFaceSet::makeCircle(int argDiv, double argRadius)
 	vector< vector<int> >	IFArray;
 	double					theta;
 
-	vecArray.resize(_st(argDiv*4 + 1));
-	vecArray[_st(argDiv*4)].set(0.0, 0.0, 0.0);
+	vecArray.resize(_st(argDiv)*4 + 1);
+	vecArray[_st(argDiv)*4].set(0.0, 0.0, 0.0);
 
 	for(int i = 0; i < 4 * argDiv; ++i) {
-		theta = (double(i) * fk_Math::PI)/(double(argDiv*2));
+		theta = (double(i) * fk_Math::PI)/(double(argDiv) * 2.0);
 		vecArray[_st(i)].set(cos(theta) * argRadius,
 							 sin(theta) * argRadius, 0.0);
 	}
@@ -1273,7 +1273,7 @@ void fk_IndexFaceSet::setPrismTopRadius(double argTop)
 	div = (smoothMode == true) ? (vSize - 2)/4 : (vSize - 2)/6;
 	z = vertexPosition.getV(vSize-1).z;
 	for(i = 0; i < div; ++i) {
-		theta = (double(i*2) * fk_Math::PI)/double(div);
+		theta = double(i) * 2.0 * fk_Math::PI/double(div);
 		vec.set(cos(theta) * argTop, sin(theta) * argTop, z);
 		moveVPosition(div+i, vec);
 		moveVPosition(3*div+i, vec);
@@ -1293,7 +1293,7 @@ void fk_IndexFaceSet::setPrismBottomRadius(double argBottom)
 	int vSize = vertexPosition.getSize();
 	div = (smoothMode == true) ? (vSize - 2)/4 : (vSize - 2)/6;
 	for(i = 0; i < div; ++i) {
-		theta = (double(i*2) * fk_Math::PI)/double(div);
+		theta = double(i) * 2.0 * fk_Math::PI/double(div);
 		vec.set(cos(theta) * argBottom, sin(theta) * argBottom, 0.0);
 		moveVPosition(i, vec);
 		moveVPosition(2*div+i, vec);
@@ -1399,7 +1399,7 @@ void fk_IndexFaceSet::setConeRadius(double argRadius)
 	int vSize = vertexPosition.getSize();
 	int div = (smoothMode == true) ? (vSize - 1)/3 : (vSize - 1)/4;
 	for(int i = 0; i < div; ++i) {
-		double theta = (double(i*2) * fk_Math::PI)/double(div);
+		double theta = double(i) * 2.0 * fk_Math::PI/double(div);
 		vec.set(cos(theta) * argRadius, sin(theta) * argRadius, 0.0);
 		moveVPosition(i, vec);
 		moveVPosition(div+i, vec);

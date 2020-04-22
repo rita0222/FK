@@ -89,8 +89,9 @@ fk_Vector fk_BezSurface::pos(double argU, double argV)
 
 fk_Vector fk_BezSurface::uDeriv(double argU, double argV)
 {
-	fk_Vector	retV(0.0, 0.0, 0.0);
-	double		u[4], v[5];
+	fk_Vector retV(0.0, 0.0, 0.0);
+	double u[4] = { 0.0, 0.0, 0.0, 0.0 };
+	double v[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 
 	for(int i = 0; i <= deg-1; i++) {
 		u[i] = Bernstein(deg-1, i, argU);
@@ -112,8 +113,9 @@ fk_Vector fk_BezSurface::uDeriv(double argU, double argV)
 
 fk_Vector fk_BezSurface::vDeriv(double argU, double argV)
 {
-	fk_Vector	retV(0.0, 0.0, 0.0);
-	double		u[5], v[4];
+	fk_Vector retV(0.0, 0.0, 0.0);
+	double u[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+	double v[4] = { 0.0, 0.0, 0.0, 0.0 };
 
 	for(int i = 0; i <= deg; i++) {
 		u[i] = Bernstein(deg, i, argU);

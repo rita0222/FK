@@ -70,13 +70,13 @@ fk_Color fk_LineBase::GetCol(int argEID, int argVID)
 void fk_LineBase::SetAlive(int argEID, bool argMode)
 {
 	int mode = (argMode == true) ? fk_Shape::ALIVE : fk_Shape::DEAD;
-	aliveArray[_st(argEID*2)] = aliveArray[_st(argEID*2)+1] = mode;
+	aliveArray[_st(argEID)*2] = aliveArray[_st(argEID)*2+1] = mode;
 	modifyAttribute(lineElementAliveName);
 }
 
 bool fk_LineBase::GetAlive(int argEID)
 {
-	return ((aliveArray[_st(argEID*2)] == fk_Shape::ALIVE) ? true : false);
+	return ((aliveArray[_st(argEID)*2] == fk_Shape::ALIVE) ? true : false);
 }
 
 void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
@@ -95,8 +95,8 @@ void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 	aliveArray.resize(argVPos->size());
 
 	for(int i = 0; i < posArray.getSize()/2; ++i) {
-		SetPos(i, 0, &(*argVPos)[_st(i*2)]);
-		SetPos(i, 1, &(*argVPos)[_st(i*2+1)]);
+		SetPos(i, 0, &(*argVPos)[_st(i)*2]);
+		SetPos(i, 1, &(*argVPos)[_st(i)*2+1]);
 		SetCol(i, 0, &col);
 		SetCol(i, 1, &col);
 		SetAlive(i, true);
@@ -133,7 +133,7 @@ void fk_LineBase::Resize(int argSize)
 {
 	posArray.resize(argSize*2);
 	colArray.resize(argSize*2);
-	aliveArray.resize(_st(argSize*2));
+	aliveArray.resize(_st(argSize)*2);
 	Touch();
 }
 

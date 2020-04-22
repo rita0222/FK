@@ -23,9 +23,9 @@ void fk_LoopIndexAdmin::PushRemoveID(int argNum, int argID)
 {
 	if(argNum <= 0) return;
 	if(argNum >= static_cast<int>(IDAdmin.size())) {
-		IDAdmin.resize(static_cast<_st>(argNum));
+		IDAdmin.resize(_st(argNum));
 	}
-	IDAdmin[static_cast<_st>(argNum-1)].push_back(argID);
+	IDAdmin[_st(argNum)-1].push_back(argID);
 
 	return;
 }
@@ -36,7 +36,7 @@ int fk_LoopIndexAdmin::GetNewID(int argNum)
 	_st		id;
 
 	if(argNum <= 0) return -1;
-	id = static_cast<_st>(argNum-1);
+	id = _st(argNum)-1;
 	if(argNum <= static_cast<int>(IDAdmin.size())) {
 		if(IDAdmin[id].empty() == false) {
 			retID = IDAdmin[id][IDAdmin[id].size()-1];
@@ -144,7 +144,7 @@ void fk_DrawCache::MakeVCache(void)
 	curV = getNextV(nullptr);
 	while(curV != nullptr) {
 		vertexCache.push_back(curV);
-		vID = static_cast<_st>(curV->getID() - 1);
+		vID = _st(curV->getID()) - 1;
 		if(vID >= vertexArray.size()) vertexArray.resize(vID+1);
 		vertexArray[vID] = curV->getPosition();
 		curV = getNextV(curV);
@@ -184,7 +184,7 @@ void fk_DrawCache::AddVCache(fk_Vertex *argV)
 
 	ClearVCache(argV);
 	vertexCache.push_back(argV);
-	vID = static_cast<_st>(argV->getID() - 1);
+	vID = _st(argV->getID()) - 1;
 	if(vID >= vertexArray.size()) vertexArray.resize(vID+1);
 	vertexArray[vID] = argV->getPosition();
 

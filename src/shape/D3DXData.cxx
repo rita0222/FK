@@ -217,7 +217,7 @@ void fk_D3DXFrameAnimation::SetTime(double argTime)
 			q = rotData[static_cast<_st>(rID)];
 		} else {
 			q = fk_Q_Inter_Sphere(rotData[static_cast<_st>(rID)],
-								  rotData[static_cast<_st>(rID+1)], rDiv);
+								  rotData[static_cast<_st>(rID)+1], rDiv);
 		}
 		angle = q.getEuler();
 		rotMat.makeEuler(angle);
@@ -228,7 +228,7 @@ void fk_D3DXFrameAnimation::SetTime(double argTime)
 			scaleV = scaleData[static_cast<_st>(sID)];
 		} else {
 			scaleV = (1.0-sDiv)*scaleData[static_cast<_st>(sID)] +
-				sDiv*scaleData[static_cast<_st>(sID+1)];
+				sDiv*scaleData[static_cast<_st>(sID)+1];
 		}
 		scaleMat.makeScale(scaleV);
 	}
@@ -238,7 +238,7 @@ void fk_D3DXFrameAnimation::SetTime(double argTime)
 			transV = transData[static_cast<_st>(tID)];
 		} else {
 			transV = (1.0-tDiv)*transData[static_cast<_st>(tID)] +
-				tDiv*transData[static_cast<_st>(tID+1)];
+				tDiv*transData[static_cast<_st>(tID)+1];
 		}
 		transMat.makeTrans(transV);
 	}

@@ -107,7 +107,10 @@ static int GetNextID(list<int> *argList, int argID)
 	return (*ite);
 }
 
-fk_Loop::fk_Loop(int argID)
+fk_Loop::fk_Loop(int argID) :
+	oneHalf(FK_UNDEFINED), normFlag(false), errorFlag(false),
+	tesselateFlag(false), tesselateMode(true),
+	surf(nullptr), ifsID(-1)
 {	
 	DB = nullptr;
 	SetID(argID);

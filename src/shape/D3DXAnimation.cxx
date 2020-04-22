@@ -541,23 +541,23 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 		}
 
 		for(j = 0; j < cur->GetTransKeyNum(); j++) {
-			fTime = static_cast<int>(argBVH->getOneFrameTime()*1000.0);
-			timeD = static_cast<double>(fTime*(j+1));
+			fTime = int(argBVH->getOneFrameTime()*1000.0);
+			timeD = double(fTime)*(double(j)+1.0);
 															 
 			cur->SetTransKey(j, timeD);
 			cur->SetTransData(j, argBVH->getPos(i, j));
 		}
 		for(j = 0; j < cur->GetRotKeyNum(); j++) {
-			fTime = static_cast<int>(argBVH->getOneFrameTime()*1000.0);
-			timeD = static_cast<double>(fTime*(j+1));
+			fTime = int(argBVH->getOneFrameTime()*1000.0);
+			timeD = double(fTime)*(double(j)+1.0);
 
 			cur->SetRotKey(j, timeD);
 			q.makeEuler(argBVH->getRot(i, j));
 			cur->SetRotData(j, q);
 		}
 		for(j = 0; j < cur->GetScaleKeyNum(); j++) {
-			fTime = static_cast<int>(argBVH->getOneFrameTime()*1000.0);
-			timeD = static_cast<double>(fTime*(j+1));
+			fTime = int(argBVH->getOneFrameTime()*1000.0);
+			timeD = double(fTime)*(double(j)+1.0);
 
 			cur->SetScaleKey(j, timeD);
 			cur->SetScaleData(j, fk_Vector(1.0, 1.0, 1.0));

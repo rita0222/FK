@@ -85,7 +85,7 @@ int fk_IDAdmin::CreateID(void)
 	} else {
 		retID = eraseIDSet->back();
 		eraseIDSet->pop_back();
-		index = static_cast<_st>(retID - order);
+		index = _st(retID) - _st(order);
 		existFlagSet[index] = static_cast<char>(true);
 	}
 
@@ -94,7 +94,7 @@ int fk_IDAdmin::CreateID(void)
 
 bool fk_IDAdmin::CreateID(int argID)
 {
-	_st		index = static_cast<_st>(argID - order);
+	_st index = _st(argID) - _st(order);
 
 	if(argID < order || argID > MaxID) {
 		return false;
@@ -111,7 +111,7 @@ bool fk_IDAdmin::CreateID(int argID)
 
 bool fk_IDAdmin::EraseID(int argID)
 {
-	_st		index = static_cast<_st>(argID - order);
+	_st index = _st(argID) - _st(order);
 
 	if(ExistID(argID) == false) return false;
 	eraseIDSet->push_back(argID);
@@ -123,7 +123,7 @@ bool fk_IDAdmin::EraseID(int argID)
 
 bool fk_IDAdmin::ExistID(int argID) const
 {
-	_st		index = static_cast<_st>(argID - order);
+	_st index = _st(argID) - _st(order);
 
 	if(argID > MaxID || argID < order) return false;
 	if(existFlagSet.size() <= index) {
@@ -173,7 +173,7 @@ int fk_IDAdmin::GetNext(int argID) const
 
 	// 検索
 	while(tmpID <= validMaxID) {
-		if(existFlagSet[static_cast<_st>(tmpID-order)] == static_cast<char>(true)) break;
+		if(existFlagSet[_st(tmpID)-_st(order)] == static_cast<char>(true)) break;
 		tmpID++;
 	}
 

@@ -28,7 +28,7 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
 		if(faceIndexFlg == true) {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-						 GLsizei(3*triNum*int(sizeof(GLuint))),
+						 GLsizeiptr(3 * GLsizeiptr(triNum) * sizeof(GLuint)),
 						 faceIndex.data(), GL_STATIC_DRAW);
 			faceIndexFlg = false;
 		}
@@ -85,8 +85,8 @@ void fk_MeshTexture::init(void)
 void fk_MeshTexture::FaceUpdate(void)
 {
 	_st		oldSize = faceIndex.size();
-	faceIndex.resize(_st(triNum*3));
-	for(_st i = oldSize; i < _st(triNum*3); ++i) {
+	faceIndex.resize(_st(triNum)*3);
+	for(_st i = oldSize; i < _st(triNum)*3; ++i) {
 		faceIndex[i] = GLuint(i);
 	}
 	faceIndexFlg = true;
@@ -105,7 +105,7 @@ void fk_MeshTexture::PosUpdate(void)
 void fk_MeshTexture::PosUpdate(int argTID, int argVID)
 {
 	if(vertexPosition.getSize() <= (argTID+1)*3) vertexPosition.resize((argTID+1)*3);
-	vertexPosition.set(argTID*3 + argVID, posArray[_st(argTID*3 + argVID)]);
+	vertexPosition.set(argTID*3 + argVID, posArray[_st(argTID)*3 + _st(argVID)]);
 	modifyAttribute(vertexName);
 }
 
@@ -113,7 +113,7 @@ void fk_MeshTexture::NormUpdate(void)
 {
 	vertexNormal.resize(triNum*3);
 	for(int i = 0; i < triNum; ++i) {
-		_st tid = _st(i*3);
+		_st tid = _st(i)*3;
 		fk_Vector norm = (posArray[tid+1] - posArray[tid]) ^ (posArray[tid+2] - posArray[tid]);
 		if(norm.normalize() == false) continue;
 		for(int j = 0; j < 3; ++j) {
@@ -126,7 +126,7 @@ void fk_MeshTexture::NormUpdate(void)
 void fk_MeshTexture::NormUpdate(int argTID)
 {
 	if(vertexNormal.getSize() <= (argTID+1)*3) vertexNormal.resize((argTID+1)*3);
-	_st id = _st(argTID*3);
+	_st id = _st(argTID)*3;
 	fk_Vector norm = (posArray[id+1] - posArray[id]) ^ (posArray[id+2] - posArray[id]);
 	if(norm.normalize() == false) return;
 	for(int i = 0; i < 3; i++) vertexNormal.set(argTID*3 + i, norm);
@@ -185,8 +185,8 @@ bool fk_MeshTexture::setTriNum(int argNum)
 		posArray.clear();
 		coordArray.clear();
 	} else {
-		posArray.resize(_st(triNum * 3));
-		coordArray.resize(_st(triNum * 3));
+		posArray.resize(_st(triNum) * 3);
+		coordArray.resize(_st(triNum) * 3);
 	}
 	FaceUpdate();
 	PosUpdate();
@@ -209,7 +209,7 @@ bool fk_MeshTexture::setVertexPos(int argTID, int argVID,
 		setTriNum(argTID+1);
 	}
 
-	posArray[_st(3*argTID + argVID)].set(argX, argY, argZ);
+	posArray[3 * _st(argTID) + _st(argVID)].set(argX, argY, argZ);
 	PosUpdate(argTID, argVID);
 	NormUpdate(argTID);
 
@@ -228,7 +228,7 @@ bool fk_MeshTexture::setVertexPos(int argTID, int argVID, fk_Vector argPos)
 		setTriNum(argTID+1);
 	}
 
-	posArray[_st(3*argTID + argVID)] = argPos;
+	posArray[3 * _st(argTID) + _st(argVID)] = argPos;
 	PosUpdate(argTID, argVID);
 	NormUpdate(argTID);
 
@@ -308,7 +308,7 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 		setTriNum(argTID+1);
 	}
 
-	coordArray[_st(argTID*3 + argVID)].set(argS, argT);
+	coordArray[3 * _st(argTID) + _st(argVID)].set(argS, argT);
 	TexCoordUpdate(argTID, argVID);
 
 	return true;
@@ -335,7 +335,7 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 		setTriNum(argTID+1);
 	}
 
-	coordArray[_st(argTID*3 + argVID)] = argCoord;
+	coordArray[3 * _st(argTID) + _st(argVID)] = argCoord;
 	TexCoordUpdate(argTID, argVID);
 	return true;
 }
@@ -406,7 +406,7 @@ fk_Vector fk_MeshTexture::getVertexPos(int argTID, int argVID)
 		return dummy;
 	}
 
-	return posArray[_st(argTID * 3 + argVID)];
+	return posArray[3 * _st(argTID) + _st(argVID)];
 }
 
 fk_TexCoord fk_MeshTexture::getTextureCoord(int argTID, int argVID)
@@ -420,7 +420,7 @@ fk_TexCoord fk_MeshTexture::getTextureCoord(int argTID, int argVID)
 		return dummy;
 	}
 
-	return coordArray[_st(argTID * 3 + argVID)];
+	return coordArray[3 * _st(argTID) + _st(argVID)];
 }
 
 void fk_MeshTexture::putIndexFaceSet(fk_IndexFaceSet *argIF)
@@ -429,8 +429,8 @@ void fk_MeshTexture::putIndexFaceSet(fk_IndexFaceSet *argIF)
 	int			*ifset;
 	fk_Vector	*pos;
 
-	ifset = new int [static_cast<size_t>(triNum * 3)];
-	pos = new fk_Vector [static_cast<size_t>(triNum * 3)];
+	ifset = new int [_st(triNum) * 3];
+	pos = new fk_Vector [_st(triNum) * 3];
 
 	for(i = 0; i < triNum * 3; i++) {
 		ifset[i] = i;

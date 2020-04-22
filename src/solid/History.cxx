@@ -48,7 +48,7 @@ bool fk_History::Open(const int argComID)
 		maxFlg = false;
 	}
 
-	comStack.resize(static_cast<_st>(curIndex+1));
+	comStack.resize(_st(curIndex)+1);
 
 	if(maxFlg == true) {
 		com.SetCommandID(argComID);
