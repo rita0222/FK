@@ -124,75 +124,86 @@ int main(int, char **)
 {
 	fk_System::setcwd();
 
-	fk_AppWindow	window;
-	fk_IFSTexture	ifsShape;
-	fk_Model		ifsModel, lightModel, camera;
-	fk_SpriteModel	sprite;
-	fk_ShaderBinder binder;
+	fk_AppWindow *window = new fk_AppWindow();
+	fk_IFSTexture *ifsShape = new fk_IFSTexture();
+	fk_Model *ifsModel = new fk_Model();
+	fk_Model *lightModel = new fk_Model();
+	fk_Model *camera = new fk_Model();
+	fk_SpriteModel *sprite = new fk_SpriteModel();
+	fk_ShaderBinder *binder = new fk_ShaderBinder();
 
-	window.setSize(WIN_W, WIN_H);
+	window->setSize(WIN_W, WIN_H);
 	fk_InitMaterial();
 	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
-	if(ifsShape.readPNG("image/poe.png") == false) {
+	if(ifsShape->readPNG("data/image/poe.png") == false) {
 		fl_alert("tex load err");
 	}
 
-	ifsShape.setTexRendMode(fk_TexRendMode::SMOOTH);
-	CylMake(&ifsShape);
+	ifsShape->setTexRendMode(fk_TexRendMode::SMOOTH);
+	CylMake(ifsShape);
 
-	ifsModel.setShape(&ifsShape);
-	ModelSetup(&ifsModel, White, fk_Vector(0.0, 0.0, 0.0));
+	ifsModel->setShape(ifsShape);
+	ModelSetup(ifsModel, White, fk_Vector(0.0, 0.0, 0.0));
 
-	if(sprite.initFont("image/rm1b.ttf") == false) {
+	if(sprite->initFont("data/font/rm1b.ttf") == false) {
 		fl_alert("Font Init Error");
 	}
-	sprite.setPositionLT(SP_X, SP_Y);
-	fk_Image	*image = sprite.getImage();
-	fk_RectTexture	texture(image);
+	sprite->setPositionLT(SP_X, SP_Y);
+	fk_Image *image = sprite->getImage();
+	fk_RectTexture *texture = new fk_RectTexture(image);
 
-	window.setBGColor(0.5f, 0.5f, 0.5f);
-	window.setCameraModel(&camera);
-	window.entry(&ifsModel);
-	window.entry(&sprite);
-	window.setTrackBallMode(true);
-	window.showGuide();
+	window->setBGColor(0.5f, 0.5f, 0.5f);
+	window->setCameraModel(camera);
+	window->entry(ifsModel);
+	window->entry(sprite);
+	window->setTrackBallMode(true);
+	window->showGuide();
 
 	// 視点の位置と姿勢を設定
-	camera.glMoveTo(0.0, 0.0, 100.0);
-	camera.glFocus(0.0, 0.0, 0.0);
-	camera.glUpvec(0.0, 1.0, 0.0);
+	camera->glMoveTo(0.0, 0.0, 100.0);
+	camera->glFocus(0.0, 0.0, 0.0);
+	camera->glUpvec(0.0, 1.0, 0.0);
 
 	// ウィンドウ生成 (シェーダー設定の前に行う必要がある。)
-	window.open();
+	window->open();
 	Fl::check();
 
-	ShaderSetup(&binder, &ifsModel, "shader/multi_vp.glsl", "shader/multi_fp.glsl");
+	ShaderSetup(binder, ifsModel, "data/shader/multi_vp.glsl", "data/shader/multi_fp.glsl");
 
-	auto parameter = binder.getParameter();
+	auto parameter = binder->getParameter();
 		
 	// シェーダー内で fk_TexID[1] で参照できるように設定
-	parameter->attachTexture(1, &texture);
+	parameter->attachTexture(1, texture);
 
-	auto texSizeDim = ifsShape.getImageSize();
-	auto texBufDim = ifsShape.getBufferSize();
+	auto texSizeDim = ifsShape->getImageSize();
+	auto texBufDim = ifsShape->getBufferSize();
 	fk_TexCoord orgScale(double(texBufDim->w)/double(texSizeDim->w),
 						 double(texBufDim->h)/double(texSizeDim->h));
 
 	fk_TexCoord scaleCoord = getScale(image, &orgScale);
 	vector<float>	scale = {scaleCoord.x, scaleCoord.y};
 	parameter->setRegister("scale", &scale);
-	for(int count = 0; window.update() == true; count++) {
-		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.01);
-		sprite.drawText(to_string(count), true);
-		sprite.setPositionLT(SP_X, SP_Y);
+	for(int count = 0; window->update() == true; count++) {
+		lightModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.01);
+		sprite->drawText(to_string(count), true);
+		sprite->setPositionLT(SP_X, SP_Y);
 
-		texture.setImage(image);
+		texture->setImage(image);
 		scaleCoord = getScale(image, &orgScale);
 		scale[0] = scaleCoord.x * 5.0f;
 		scale[1] = scaleCoord.y * 5.0f;
 		parameter->setRegister("scale", &scale);
 	}
+
+	delete texture;
+	delete binder;
+	delete sprite;
+	delete ifsModel;
+	delete lightModel;
+	delete camera;
+	delete ifsShape;
+	delete window;
 
 	return 0;
 }

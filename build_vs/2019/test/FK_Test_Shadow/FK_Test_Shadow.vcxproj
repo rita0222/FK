@@ -125,7 +125,7 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ftest_shadow.cxx" />
+    <ClCompile Include="shadow.cxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
