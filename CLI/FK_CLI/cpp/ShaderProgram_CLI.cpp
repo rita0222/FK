@@ -61,16 +61,40 @@ namespace FK_CLI {
 		pProg->fragmentShaderSource = marshal_as<string>(argCode);
 	}
 
-	String^ fk_ShaderProgram::GeometryShaderSource::get(void)
+	String ^fk_ShaderProgram::GeometryShaderSource::get(void)
 	{
 		if (pProg == nullptr) return nullptr;
-		return marshal_as<String^>(pProg->geometryShaderSource);
+		return marshal_as<String ^>(pProg->geometryShaderSource);
 	}
 
-	void fk_ShaderProgram::GeometryShaderSource::set(String^ argCode)
+	void fk_ShaderProgram::GeometryShaderSource::set(String ^argCode)
 	{
 		if (pProg == nullptr) return;
 		pProg->geometryShaderSource = marshal_as<string>(argCode);
+	}
+
+	String ^fk_ShaderProgram::TessCtrlShaderSource::get(void)
+	{
+		if (pProg == nullptr) return nullptr;
+		return marshal_as<String ^>(pProg->tessCtrlShaderSource);
+	}
+
+	void fk_ShaderProgram::TessCtrlShaderSource::set(String ^argCode)
+	{
+		if (pProg == nullptr) return;
+		pProg->tessCtrlShaderSource = marshal_as<string>(argCode);
+	}
+
+	String ^fk_ShaderProgram::TessEvalShaderSource::get(void)
+	{
+		if (pProg == nullptr) return nullptr;
+		return marshal_as<String ^>(pProg->tessEvalShaderSource);
+	}
+
+	void fk_ShaderProgram::TessEvalShaderSource::set(String ^argCode)
+	{
+		if (pProg == nullptr) return;
+		pProg->tessEvalShaderSource = marshal_as<string>(argCode);
 	}
 
 	UInt32 fk_ShaderProgram::ProgramID::get(void)
@@ -97,10 +121,22 @@ namespace FK_CLI {
 		return pProg->loadFragmentShader(marshal_as<string>(argFileName));
 	}
 
-	bool fk_ShaderProgram::LoadGeometryShader(String^ argFileName)
+	bool fk_ShaderProgram::LoadGeometryShader(String ^argFileName)
 	{
 		if (pProg == nullptr) return false;
 		return pProg->loadGeometryShader(marshal_as<string>(argFileName));
+	}
+
+	bool fk_ShaderProgram::LoadTessCtrlShader(String ^argFileName)
+	{
+		if (pProg == nullptr) return false;
+		return pProg->loadTessCtrlShader(marshal_as<string>(argFileName));
+	}
+
+	bool fk_ShaderProgram::LoadTessEvalShader(String ^argFileName)
+	{
+		if (pProg == nullptr) return false;
+		return pProg->loadTessEvalShader(marshal_as<string>(argFileName));
 	}
 
 	bool fk_ShaderProgram::Validate(void)

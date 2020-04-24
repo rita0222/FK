@@ -76,6 +76,30 @@ namespace FK_CLI
 			void set(String^);
 		}
 
+		//! テッセレーション制御コードプロパティ
+		/*!
+		 *	テッセレーション制御シェーダーのコードの設定や取得を行います。
+		 *	テッセレーション制御シェーダーのコードを設定する際は、
+		 *	本プロパティに直接コードを書き込むか、
+		 *	LoadTessCtrlShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		property String ^TessCtrlShaderSource {
+			String ^get(void);
+			void set(String ^);
+		}
+
+		//! テッセレーション評価シェーダーコードプロパティ
+		/*!
+		 *	テッセレーション評価シェーダーのコードの設定や取得を行います。
+		 *	テッセレーション評価シェーダーのコードを設定する際は、
+		 *	本プロパティに直接コードを書き込むか、
+		 *	LoadTessEvalShader() 関数でコードが格納されているファイル名を指定して下さい。
+		 */
+		property String ^TessEvalShaderSource {
+			String ^get(void);
+			void set(String ^);
+		}
+
 		//! IDプロパティ
 		/*!
 		 *	GPU からシェーダープログラムに割り振られた ID を取得します。
@@ -143,6 +167,40 @@ namespace FK_CLI
 		 *		入力に成功すれば true を、失敗すれば false を返します。
 		 */
 		bool LoadGeometryShader(String^ fileName);
+
+		//! テッセレーション制御シェーダーコード入力メソッド
+		/*!
+		 *	テッセレーション評価シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram.TessCtrlShaderSource プロパティにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 Validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool LoadTessCtrlShader(String^ fileName);
+
+		//! テッセレーション評価シェーダーコード入力メソッド
+		/*!
+		 *	テッセレーション評価シェーダーのコードが記述されているファイルから、
+		 *	コードを読み込みます。
+		 *	読み込みに成功した場合、
+		 *	fk_ShaderProgram.TessEvalShaderSource プロパティにその内容が格納されます。
+		 *	なお、コードに誤りがあった場合でも、この時点では false を返しません。
+		 *	実際に利用するには、 Validate() 関数を呼ぶ必要があります。
+		 *
+		 *	\param[in]	fileName
+		 *		ファイル名
+		 *
+		 *	\return
+		 *		入力に成功すれば true を、失敗すれば false を返します。
+		 */
+		bool LoadTessEvalShader(String^ fileName);
 
 		//! シェーダープログラムコンパイルメソッド
 		/*!
