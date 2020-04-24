@@ -103,7 +103,7 @@ bool fk_SRFParser::ReadSRFPolygonData(ifstream *argIFS, int argMaxID,
 				faceFlg = true;
 				continue;
 			} else {
-				fk_PutError("Error Code 1");
+				Error::Put("fk_SRFParser", "ReadSRFPolygonData", 1);
 				return false;
 			}
 		}

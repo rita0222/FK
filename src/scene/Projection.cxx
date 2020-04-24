@@ -88,7 +88,7 @@ fk_Perspective & fk_Perspective::operator =(const fk_Perspective &argPers)
 void fk_Perspective::setFovy(double argFovy)
 {
 	if(argFovy <= 0.0 || argFovy > fk_Math::PI) {
-		fk_PutError("fk_Perspective", "setFovy", 1, "Fovy Angle Error.");
+		Error::Put("fk_Perspective", "setFovy", 1, "Fovy Angle Error.");
 		return;
 	}
 
@@ -99,8 +99,7 @@ void fk_Perspective::setFovy(double argFovy)
 void fk_Perspective::setNear(double argNear)
 {
 	if(argNear <= 0.0) {
-		fk_PutError("fk_Perspective", "setNear", 1,
-					"Near Plane Distance Error.");
+		Error::Put("fk_Perspective", "setNear", 1, "Near Plane Distance Error.");
 		return;
 	}
 
@@ -111,8 +110,7 @@ void fk_Perspective::setNear(double argNear)
 void fk_Perspective::setFar(double argFar)
 {
 	if(argFar <= 0.0) {
-		fk_PutError("fk_Perspective", "setFar", 1,
-					"Far Plane Distance Error.");
+		Error::Put("fk_Perspective", "setFar", 1, "Far Plane Distance Error.");
 		return;
 	}
 

@@ -238,11 +238,11 @@ bool fk_TextureDraw::ReplaceShaderInit(fk_FogMode argFogMode)
 	FragmentFogInit(prog, argFogMode);
 	
 	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "ReplaceShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_TextureDraw", "ReplaceShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 
@@ -408,14 +408,14 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 	if(argTexMode != fk_TexMode::NONE) FragmentFogInit(prog, argFogMode);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "TextureShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_TextureDraw", "TextureShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argShadingMode)) + ", ";
 		outStr += to_string(int(argShadowMode)) + ", ";
 		outStr += to_string(int(argTexMode)) + ", ";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 
@@ -448,8 +448,8 @@ bool fk_TextureDraw::ShadowInit(void)
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_TextureDraw", "ShadowInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
+		Error::Put("fk_TextureDraw", "ShadowInit", 1, "Shader Compile Error");
+		Error::Put(prog->getLastError());
 		return false;
 	}
 

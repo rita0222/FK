@@ -34,17 +34,17 @@ void fk_D3DXShapeParser::Clear(void)
 bool fk_D3DXShapeParser::ReadMeshData(fk_TreeData *argData, ifstream &argIFS)
 {
 	if(SetFrameMatrix(argData) == false) {
-		fk_PutError("fk_D3DXShapeParser", "ReadMeshData", 1);
+		Error::Put("fk_D3DXShapeParser", "ReadMeshData", 1);
 		return false;
 	}
 
 	if(ReadVectorData(argIFS, fk_D3DX_VecMode::V_MODE) == false) {
-		fk_PutError("fk_D3DXShapeParser", "ReadMeshData", 2);
+		Error::Put("fk_D3DXShapeParser", "ReadMeshData", 2);
 		return false;
 	}
 
 	if(ReadFaceData(argIFS) == false) {
-		fk_PutError("fk_D3DXShapeParser", "ReadMeshData", 3);
+		Error::Put("fk_D3DXShapeParser", "ReadMeshData", 3);
 		return false;
 	}
 
@@ -57,7 +57,7 @@ bool fk_D3DXShapeParser::SetFrameMatrix(fk_TreeData *argData)
 	fk_D3DXPropertyList		*prop;
 
 	if(parent == nullptr) {
-		fk_PutError("fk_D3DXShapeParser", "SetFrameMatrix", 1);
+		Error::Put("fk_D3DXShapeParser", "SetFrameMatrix", 1);
 		return false;
 	}
 
@@ -347,17 +347,17 @@ void fk_D3DXShapeParser::Print(void)
 	stringstream	ss;
 
 	ss << "vsize = " << optVData.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 	
 	for(i = 0; i < optVData.size(); i++) {
 		ss << "v[" << i << "]\t= " << optVData[i].OutStr();
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 	}
 
 	ss << "fSize = " <<  optFData.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 	
 	for(i = 0; i < optFData.size(); i++) {
@@ -370,27 +370,27 @@ void fk_D3DXShapeParser::Print(void)
 				ss << ", ";
 			}
 		}
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 	}
 
 	ss << "tSize = " << optTData.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	for(i = 0; i < optTData.size(); i++) {
 		ss << "t[" << i << "]\t= (" << optTData[i].x << ", " << optTData[i].y << ")";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 	}
 
 	ss << "mSize = " << mData.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	for(i = 0; i < mData.size(); i++) {
 		ss << "m[" << i << "]\t = " <<  mData[i];
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 	}
 

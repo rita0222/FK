@@ -49,27 +49,27 @@ bool fk_AudioOggBuffer::open(const std::string &argFileName)
 	if((ovStatus = ov_fopen((char *)&argFileName[0], &vf)) < 0) {
 		switch(ovStatus) {
 		  case OV_EREAD:
-			fk_PutError("fk_AudioOggBuffer", "open", 1, "Read Error");
+			Error::Put("fk_AudioOggBuffer", "open", 1, "Read Error");
 			break;
 
 		  case OV_ENOTVORBIS:
-			fk_PutError("fk_AudioOggBuffer", "open", 1, "Not Vorbis Error");
+			Error::Put("fk_AudioOggBuffer", "open", 1, "Not Vorbis Error");
 			break;
 
 		  case OV_EVERSION:
-			fk_PutError("fk_AudioOggBuffer", "open", 1, "Version Error");
+			Error::Put("fk_AudioOggBuffer", "open", 1, "Version Error");
 			break;
 
 		  case OV_EBADHEADER:
-			fk_PutError("fk_AudioOggBuffer", "open", 1, "Header Error");
+			Error::Put("fk_AudioOggBuffer", "open", 1, "Header Error");
 			break;
 
 		  case OV_EFAULT:
-			fk_PutError("fk_AudioOggBuffer", "open", 1, "Fault Error");
+			Error::Put("fk_AudioOggBuffer", "open", 1, "Fault Error");
 			break;
 
 		  default:
-			fk_PutError("fk_AudioOggBuffer", "open", 1, "Undefined Error");
+			Error::Put("fk_AudioOggBuffer", "open", 1, "Undefined Error");
 			break;
 		}
 
@@ -275,7 +275,7 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 	buffer.resize(argSize);
 	argIFS.read((char *)(&buffer[0]), sizeof(char) * argSize);
 	if(argIFS.bad()) {
-		fk_PutError("fk_AudioWavBuffer", "ReadBuffer", 1, "Read Error");
+		Error::Put("fk_AudioWavBuffer", "ReadBuffer", 1, "Read Error");
 		buffer.clear();
 		rate = 0;
 		return false;

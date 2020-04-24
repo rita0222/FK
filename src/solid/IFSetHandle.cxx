@@ -203,8 +203,7 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 	// 頂点が存在するかどうかの判定 
 	if(DB->ExistVertex(vID1) == false ||
 	   DB->ExistVertex(vID2) == false) {
-		fk_PutError("fk_IFSetHandle", "DefineNewEH", 1,
-					"No Exist Vertex Error.");
+		Error::Put("fk_IFSetHandle", "DefineNewEH", 1, "No Exist Vertex Error.");
 		return false;
 	}
 
@@ -250,7 +249,7 @@ bool fk_IFSetHandle::DefineNewEH(int vID1, int vID2, fk_IFS_EdgeSet *VPair,
 			ss << "LPosition ... (";
 			ss << tmpVec.x << ", " << tmpVec.y << ", " << tmpVec.z << ")" << endl;
 			
-			fk_PutError("fk_IFSetHandle", "DefineNewEH", 2, ss.str());
+			Error::Put("fk_IFSetHandle", "DefineNewEH", 2, ss.str());
 			return false;
 		}
 	}
@@ -301,8 +300,7 @@ bool fk_IFSetHandle::SearchUndefLoop(fk_Half *argHalf)
 		}
 
 		if(halfCount != 1) {
-			fk_PutError("fk_IFSetHandle", "SearchUndefLoop", 1,
-						"Half Edge Count Error.");
+			Error::Put("fk_IFSetHandle", "SearchUndefLoop", 1, "Half Edge Count Error.");
 			return false;
 		}
 

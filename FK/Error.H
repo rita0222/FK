@@ -9,84 +9,101 @@
 #include <functional>
 #include <list>
 
-#ifdef FK_EXTERN
-#undef FK_EXTERN
-#endif
-
-#ifdef __FK_ERROR_CODE__
-#define FK_EXTERN
-#else
-#define FK_EXTERN extern
-#endif
-
 namespace FK {
 
-	class fk_ErrorData;
-	
-	enum class fk_ErrorMode {
-		NONE,
-		INTERACTIVE,
-		QUEUE,
-		CONSOLE_INTERACTIVE,
-		CONSOLE_QUEUE,
-		OUT_CONSOLE_INTERACTIVE,
-		OUT_CONSOLE_QUEUE,
-		BROWSER_INTERACTIVE,
-		BROWSER_QUEUE,
-		FILE
-	};
+	namespace Error {
+		
+		enum class Mode {
+			NONE,
+			INTERACTIVE,
+			QUEUE,
+			CONSOLE_INTERACTIVE,
+			CONSOLE_QUEUE,
+			OUT_CONSOLE_INTERACTIVE,
+			OUT_CONSOLE_QUEUE,
+			BROWSER_INTERACTIVE,
+			BROWSER_QUEUE,
+			FILE
+		};
 
-	class fk_ErrorBrowser {
-	public:
-		fk_ErrorBrowser(void);
-		virtual ~fk_ErrorBrowser();
+		class Data {
+		private:
 
-		std::function<void(const std::string &)>		PutBrowser;
-		std::function<void(const std::string &)>		PutAlert;
-	};
+			std::string className;
+			std::string funcName;
+			int errCode;
+			std::string message;
+			bool modeFlg;
 
-	class fk_ErrorDataBase {
+		public:
+			Data(void);
+			~Data();
 
-		friend class			fk_Window;
+			void Set(const std::string, const std::string, const int, const std::string);
+			void Set(const std::string, const std::string, const int);
+			void Set(const std::string);
 
-	private:
-		std::list<fk_ErrorData *>	DataBase;
-		fk_ErrorMode				mode;
-		bool						fileMode;
-		std::ofstream				ofs;
-		fk_ErrorBrowser				*errorBrowser;
+			void SetClassName(const std::string);
+			void SetFuncName(const std::string);
+			void SetErrCode(const int);
+			void SetErrMessage(const std::string);
 
-	public:
-		fk_ErrorDataBase(void);
-		~fk_ErrorDataBase();
+			std::string GetClassName(void) const;
+			std::string GetFuncName(void) const;
+			int GetErrCode(void) const;
+			std::string GetErrMessage(void) const;
+			bool GetMode(void) const;
+		};	  
 
-		void			SetMode(const fk_ErrorMode);
-		fk_ErrorMode	GetMode(void) const;
+		class Browser {
+		public:
+			Browser(void);
+			virtual ~Browser();
 
-		void			PutError(const std::string, const std::string,
-								 const int, const std::string);
-		void			PutError(const std::string, const std::string, const int);
-		void			PutError(const std::string);
-		bool			IsEmpty() const;
-		bool			SetFileName(std::string);
-		bool			Print(void);
-	};
+			std::function<void(const std::string &)> PutBrowser;
+			std::function<void(const std::string &)> PutAlert;
+		};
 
-	FK_EXTERN void				fk_SetErrorMode(const fk_ErrorMode);
-	FK_EXTERN fk_ErrorMode		fk_GetErrorMode(void);
-	FK_EXTERN void				fk_PutError(const std::string,
-											const std::string, const int);
-	FK_EXTERN void				fk_PutError(const std::string, const std::string,
-											const int, const std::string);
-	FK_EXTERN void				fk_PutError(const std::string);
-	FK_EXTERN bool				fk_ErrorPrint(void);
-	FK_EXTERN bool				fk_SetErrorFile(std::string);
-	FK_EXTERN fk_ErrorDataBase *	fk_GetErrorDB();
+		class DataBase {
+
+		private:
+			std::list<Data *> _DB;
+			Mode mode;
+			bool fileMode;
+			std::ofstream ofs;
+			Browser *errorBrowser;
+
+		public:
+			DataBase(void);
+			~DataBase();
+
+			void SetMode(const Mode);
+			Mode GetMode(void) const;
+
+			void Put(const std::string, const std::string, const int, const std::string);
+			void Put(const std::string, const std::string, const int);
+			void Put(const std::string);
+			bool IsEmpty() const;
+			bool SetFileName(std::string);
+			bool Print(void);
+			Browser * GetBrowser(void);
+			Browser * MakeBrowser(void);
+		};
+
+		void SetMode(const Mode);
+		Mode GetMode(void);
+		void Put(const std::string, const std::string, const int);
+		void Put(const std::string, const std::string, const int, const std::string);
+		void Put(const std::string);
+		bool Print(void);
+		bool SetFile(std::string);
+		DataBase * GetDB();
 
 #ifndef FK_CLI_CODE
-	FK_EXTERN void				fk_Printf(const char *, ...);
-	FK_EXTERN std::string		fk_StrPrintf(const char *, ...);
+		void Printf(const char *, ...);
+		std::string StrPrintf(const char *, ...);
 #endif
+	}
 }
 
 #endif // !__FK_ERROR_HEADER__

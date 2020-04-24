@@ -145,7 +145,7 @@ void fk_TreeData::Print(void)
 	}
 
 	ss << "(" << name << ", " << maxDepth << ")";
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 
 	for(ite = children.begin(); ite != children.end(); ++ite) {
 		(*ite)->Print();
@@ -343,11 +343,11 @@ fk_TreeData * fk_Tree::cloneBranch(fk_TreeData *argParent,
 	fk_TreeData		*tmpRoot;
 
 	if(isArive(argParent) == false) {
-		fk_PutError("fk_Tree", "cloneBranch", 1, "dst-node is dead.");
+		Error::Put("fk_Tree", "cloneBranch", 1, "dst-node is dead.");
 		return nullptr;
 	}
 	if(argData == nullptr) {
-		fk_PutError("fk_Tree", "cloneBranch", 2, "src-node is dead.");
+		Error::Put("fk_Tree", "cloneBranch", 2, "src-node is dead.");
 		return nullptr;
 	}
 
@@ -379,22 +379,22 @@ bool fk_Tree::moveBranch(fk_TreeData *argParent, fk_TreeData *argData)
 	fk_TreeData		*tmpData;
 
 	if(argParent == nullptr || argData == nullptr) {
-		fk_PutError("fk_Tree", "moveBranch", 1, "nullptr error.");
+		Error::Put("fk_Tree", "moveBranch", 1, "nullptr error.");
 		return false;
 	}
 
 	if(isArive(argParent) == false) {
-		fk_PutError("fk_Tree", "moveBranch", 2, "dst-node is dead.");
+		Error::Put("fk_Tree", "moveBranch", 2, "dst-node is dead.");
 		return false;
 	}
 	if(isArive(argData) == false) {
-		fk_PutError("fk_Tree", "moveBranch", 3, "src-node is dead.");
+		Error::Put("fk_Tree", "moveBranch", 3, "src-node is dead.");
 		return false;
 	}
 
 	for(tmpData = argParent; tmpData != nullptr; tmpData = tmpData->parent) {
 		if(tmpData == argData) {
-			fk_PutError("fk_Tree", "moveBranch", 4, "dst-node is under the src-node.");
+			Error::Put("fk_Tree", "moveBranch", 4, "dst-node is under the src-node.");
 			return false;
 		}
 	}

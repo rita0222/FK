@@ -238,14 +238,14 @@ bool fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
 	}
 	
 	if(prog->validate() == false) {
-		fk_PutError("fk_BezCurveDraw", "ShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_BezCurveDraw", "ShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argType)) + ", ";
 		outStr += to_string(int(argDeg)) + ", ";
 		outStr += to_string(int(argShadow)) + ", ";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 

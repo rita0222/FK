@@ -141,8 +141,7 @@ bool fk_Modify::contractEdge(fk_Edge *argEd, fk_Vector argPos, bool rightFlg)
 	// deleteV を削除 
 	remainL = removeVertexInLoop(deleteV);
 	if(remainL != newArgFirstH->getParentLoop()) {
-		fk_PutError("fk_Modify", "ContractEdge", 1,
-					"Illegal Loop Error.");
+		Error::Put("fk_Modify", "ContractEdge", 1, "Illegal Loop Error.");
 		return false;
 	}
 
@@ -265,7 +264,7 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 	}
 
 	if((prevE = makeEdge(VertexArray[1], VertexArray[0])) == nullptr) {
-		fk_PutError("fk_Modify", "makePolygon", 1, "Make Edge Error.");
+		Error::Put("fk_Modify", "makePolygon", 1, "Make Edge Error.");
 		AllClear_();
 		return retL;
 	}
@@ -283,7 +282,7 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 
 		if((prevE = makeEdge(VertexArray[i-1], VertexArray[i],
 							 prevH, nextH)) == nullptr) {
-			fk_PutError("fk_Modify", "makePolygon", 2, "Make Edge Error.");
+			Error::Put("fk_Modify", "makePolygon", 2, "Make Edge Error.");
 			AllClear_();
 			return retL;
 		}
@@ -298,12 +297,12 @@ fk_Loop * fk_Modify::makePolygon(vector<fk_Vector> *argVec,
 
 		if(makeEdge(VertexArray.back(), VertexArray[0],
 					prevH, nextH, prevH2, nextH2) == nullptr) {
-			fk_PutError("fk_Modify", "makePolygon", 3, "Make Edge Error.");
+			Error::Put("fk_Modify", "makePolygon", 3, "Make Edge Error.");
 			AllClear_();
 			return retL;
 		}
 		if((retL = makeLoop(prevH)) == nullptr) {
-			fk_PutError("fk_Modify", "makePolygon", 4, "Make Loop Error.");
+			Error::Put("fk_Modify", "makePolygon", 4, "Make Loop Error.");
 			AllClear_();
 			return retL;
 		}

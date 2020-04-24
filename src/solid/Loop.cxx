@@ -194,8 +194,7 @@ bool fk_Loop::SetNormal(void)
 	}
 
 	if(sumNorm.normalize() == false) {
-		fk_PutError("fk_Loop", "SetNormal", 1,
-					"Normal Undefined Error");
+		Error::Put("fk_Loop", "SetNormal", 1, "Normal Undefined Error");
 		return false;
 	}
 
@@ -209,8 +208,7 @@ fk_Vector * fk_Loop::getNormal(void)
 
 	if(normFlag == false) {
 		if(SetNormal() == false) {
-			fk_PutError("fk_Loop", "getNormal", 1,
-						"Normal Vector Error.");
+			Error::Put("fk_Loop", "getNormal", 1, "Normal Vector Error.");
 			errorFlag = true;
 			return nullptr;
 		}
@@ -250,7 +248,7 @@ void fk_Loop::Print(void) const
 	stringstream	ss;
 
 	ss << "Loop[" << getID() << "] = {";
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 
 	ss.clear();
 	if(oneHalf != FK_UNDEFINED) {
@@ -258,8 +256,8 @@ void fk_Loop::Print(void) const
 	} else {
 		ss << "\t1H = UNDEF";
 	}
-	fk_PutError(ss.str());
-	fk_PutError("}");
+	Error::Put(ss.str());
+	Error::Put("}");
 
 	return;
 }
@@ -275,7 +273,7 @@ bool fk_Loop::Check(void) const
 		ss << "Loop[" << getID() << "] ... Half[";
 		ss << oneHalf << "] ERROR";
 
-		fk_PutError("fk_Loop", "Check", 1, ss.str());
+		Error::Put("fk_Loop", "Check", 1, ss.str());
 		return false;
 	}
 
@@ -285,7 +283,7 @@ bool fk_Loop::Check(void) const
 	if(curH->getPrevHalf() != prevH) {
 		ss << "Loop[" << getID() << "] ... Half[";
 		ss << curH->getID() << "] ERROR";
-		fk_PutError("fk_Loop", "Check", 2, ss.str());
+		Error::Put("fk_Loop", "Check", 2, ss.str());
 		return false;
 	}
 
@@ -294,7 +292,7 @@ bool fk_Loop::Check(void) const
 		if(curH->getParentLoop() != this) {
 			ss << "Loop[" << getID() << "] ... Half[";
 			ss << curH->getID() << "] ERROR";
-			fk_PutError("fk_Loop", "Check", 3, ss.str());
+			Error::Put("fk_Loop", "Check", 3, ss.str());
 			return false;
 		}
 
@@ -304,7 +302,7 @@ bool fk_Loop::Check(void) const
 		if(curH->getPrevHalf() != prevH) {
 			ss << "Loop[" << getID() << "] ... Half[";
 			ss << curH->getID() << "] ERROR";
-			fk_PutError("fk_Loop", "Check", 4, ss.str());
+			Error::Put("fk_Loop", "Check", 4, ss.str());
 			return false;
 		}
 	}
@@ -438,8 +436,7 @@ void fk_Loop::MakeTesselateData(void)
 		}
 
 		if(loopCount >= static_cast<int>(loopVID.size())) {
-			fk_PutError("fk_Loop", "MakeTesselateData", 1,
-						"Tesselate Error");
+			Error::Put("fk_Loop", "MakeTesselateData", 1, "Tesselate Error");
 			tesselateMode = false;
 			tesselateIndex.clear();
 			tesselateVertex.clear();

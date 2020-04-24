@@ -143,8 +143,8 @@ void fk_FaceDraw::ShadowInit(void)
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
+		Error::Put("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
+		Error::Put(prog->getLastError());
 	}
 
 	ParamInit(prog, param);
@@ -234,13 +234,13 @@ bool fk_FaceDraw::ShaderInit(fk_ShadingMode argShadingMode,
 	FaceFragmentInit(prog, argShadingMode, argShadowMode, argFogMode);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_FaceDraw", "ShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argShadingMode)) + ", ";
 		outStr += to_string(int(argShadowMode)) + ", ";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 

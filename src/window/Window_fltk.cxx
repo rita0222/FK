@@ -391,11 +391,12 @@ void fk_Window::clearBrowser(void)
 
 void fk_Window::ErrorInit(void)
 {
-	fk_ErrorDataBase		*db = fk_GetErrorDB();
+	Error::DataBase *db = Error::GetDB();
+	Error::Browser *_browser = db->GetBrowser();
 
-	if(db->errorBrowser == nullptr) {
-		db->errorBrowser = new fk_ErrorBrowser();
-		db->errorBrowser->PutBrowser = [&](const string argStr) {
+	if(_browser == nullptr) {
+		_browser = db->MakeBrowser();
+		_browser->PutBrowser = [&](const string argStr) {
 			static const string		space = "			 ";
 			string					output, str;
 			string::size_type		index, old;
@@ -431,7 +432,7 @@ void fk_Window::ErrorInit(void)
 			browser->bottomline(99999999);
 		};
 
-		db->errorBrowser->PutAlert = [&](const string argStr) {
+		_browser->PutAlert = [&](const string argStr) {
 			fl_alert("%s", argStr.c_str());
 			return;
 		};

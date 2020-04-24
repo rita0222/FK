@@ -633,7 +633,7 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	int						fbScale[1024], sbScale[1024];
 
 	if(face->face == nullptr) {
-		fk_PutError("fk_TextImage", "loadUniStr", 1);
+		Error::Put("fk_TextImage", "loadUniStr", 1);
 		return false;
 	}
 
@@ -739,26 +739,26 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 		if(getGlyphServer()->IsArive(fkGlyph->status) == false) {
 			if(FT_Load_Glyph(face->face, fkGlyph->status.GetIndex(),
 							 FT_LOAD_DEFAULT | FT_LOAD_NO_BITMAP)) {
-				fk_PutError("fk_TextImage", "LayoutGlyphs", 1);
+				Error::Put("fk_TextImage", "LayoutGlyphs", 1);
 				continue;
 			}
 
 			slot = face->face->glyph;
 
 			if(slot->format != FT_GLYPH_FORMAT_OUTLINE) {
-				fk_PutError("fk_TextImage", "LayoutGlyohs", 2);
+				Error::Put("fk_TextImage", "LayoutGlyohs", 2);
 				continue;
 			}
 
 			if(boldStrength != 1) {
 				if(FT_Outline_Embolden(&(slot->outline), boldStrength)) {
-					fk_PutError("fk_TextImage", "LayoutGlyohs", 3);
+					Error::Put("fk_TextImage", "LayoutGlyohs", 3);
 					continue;
 				}
 			}
 
 			if(FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL)) {
-				fk_PutError("fk_TextImage", "LayoutGlyohs", 4);
+				Error::Put("fk_TextImage", "LayoutGlyohs", 4);
 				continue;
 			}
 
@@ -1180,7 +1180,7 @@ bool fk_TextImage::loadStrFile(const string argFileName, fk_StringCode argCode)
 	fk_UniStr		uniStr;
 
 	if(uniStr.readFile(argFileName, argCode) == false) {
-		fk_PutError("fk_TextImage", "loadStrFile", 1);
+		Error::Put("fk_TextImage", "loadStrFile", 1);
 		return false;
 	}
 

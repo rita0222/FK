@@ -397,7 +397,7 @@ void fk_GenVector::Print(void) const
 	}
 	ss << ")";
 
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	return;
 }
 
@@ -415,7 +415,7 @@ void fk_GenVector::Print(string argStr) const
 	}
 	ss << ")";
 
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	return;
 }
 

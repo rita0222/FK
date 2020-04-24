@@ -244,8 +244,7 @@ bool fk_Attribute_Data::SetAttrII(const int Key, const int Value)
 	int			Index;
 
 	if(Key < 0) {
-		fk_PutError("fk_Attribute", "setAttrII", 1,
-					"Key Value Error.");
+		Error::Put("fk_Attribute", "setAttrII", 1, "Key Value Error.");
 		return false;
 	}
 
@@ -277,8 +276,7 @@ bool fk_Attribute_Data::SetAttrID(const int Key, const double Value)
 	int			Index;
 
 	if(Key < 0) {
-		fk_PutError("fk_Attribute", "setAttrID", 1,
-					"Key Value Error.");
+		Error::Put("fk_Attribute", "setAttrID", 1, "Key Value Error.");
 		return false;
 	}
 
@@ -310,8 +308,7 @@ bool fk_Attribute_Data::SetAttrIS(const int Key, const string Value)
 	int			Index;
 
 	if(Key < 0) {
-		fk_PutError("fk_Attribute", "setAttrIS", 1,
-					"Key Value Error.");
+		Error::Put("fk_Attribute", "setAttrIS", 1, "Key Value Error.");
 		return false;
 	}
 
@@ -343,8 +340,7 @@ bool fk_Attribute_Data::SetAttrSI(const string Key, const int Value)
 	int			Index;
 
 	if(Key.length() == 0) {
-		fk_PutError("fk_Attribute", "setAttrSI", 1,
-					"Key Value Error.");
+		Error::Put("fk_Attribute", "setAttrSI", 1, "Key Value Error.");
 		return false;
 	}
 
@@ -376,8 +372,7 @@ bool fk_Attribute_Data::SetAttrSD(const string Key, const double Value)
 	int			Index;
 
 	if(Key.length() == 0) {
-		fk_PutError("fk_Attribute", "setAttrSD", 1,
-					"Key Value Error.");
+		Error::Put("fk_Attribute", "setAttrSD", 1, "Key Value Error.");
 		return false;
 	}
 
@@ -409,8 +404,7 @@ bool fk_Attribute_Data::SetAttrSS(const string Key, const string Value)
 	int			Index;
 
 	if(Key.length() == 0) {
-		fk_PutError("fk_Attribute", "setAttrSS", 1,
-					"Key Value Error.");
+		Error::Put("fk_Attribute", "setAttrSS", 1, "Key Value Error.");
 		return false;
 	}
 

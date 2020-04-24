@@ -55,7 +55,7 @@ void ShadowChange(int argCount, fk_Model *argModel)
 int main(int, char **)
 {
 	fk_System::setcwd();
-	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
+	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
 	fk_AppWindow	window;
 	fk_Material		mat;

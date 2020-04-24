@@ -4,58 +4,24 @@
 #include <sstream>
 
 using namespace std;
+using namespace FK;
+using namespace FK::Error;
 
-namespace FK {
-	class fk_Window;
+Data::Data(void)
+{
+	className = "";
+	funcName = "";
+	errCode = -1;
+	message = "";
+	modeFlg = true;
 
-	class fk_ErrorData {
-	private:
-
-		string		className;
-		string		funcName;
-		int			errCode;
-		string		message;
-		bool		modeFlg;
-
-	public:
-		fk_ErrorData(void);
-		~fk_ErrorData();
-
-		void	Set(const string, const string, const int, const string);
-		void	Set(const string, const string, const int);
-		void	Set(const string);
-
-		void	SetClassName(const string);
-		void	SetFuncName(const string);
-		void	SetErrCode(const int);
-		void	SetErrMessage(const string);
-
-		string	GetClassName(void) const;
-		string	GetFuncName(void) const;
-		int		GetErrCode(void) const;
-		string	GetErrMessage(void) const;
-		bool	GetMode(void) const;
-	};	  
-
-
-	fk_ErrorData::fk_ErrorData(void)
-	{
-		className = "";
-		funcName = "";
-		errCode = -1;
-		message = "";
-		modeFlg = true;
-
-		return;
-	}
+	return;
 }
 
-using namespace FK;
+Data::~Data() {}
 
-fk_ErrorData::~fk_ErrorData() {}
-
-void fk_ErrorData::Set(const string argClass, const string argFunc,
-					   const int argErrCode, const string argMessage)
+void Data::Set(const string argClass, const string argFunc,
+			   const int argErrCode, const string argMessage)
 {
 	className = argClass;
 	funcName = argFunc;
@@ -66,8 +32,7 @@ void fk_ErrorData::Set(const string argClass, const string argFunc,
 	return;
 }
 
-void fk_ErrorData::Set(const string argClass,
-					   const string argFunc, const int argErrCode)
+void Data::Set(const string argClass, const string argFunc, const int argErrCode)
 {
 	className = argClass;
 	funcName = argFunc;
@@ -78,7 +43,7 @@ void fk_ErrorData::Set(const string argClass,
 	return;
 }
 
-void fk_ErrorData::Set(const string argMessage)
+void Data::Set(const string argMessage)
 {
 	message = argMessage;
 	modeFlg = false;
@@ -86,72 +51,69 @@ void fk_ErrorData::Set(const string argMessage)
 }
 
 
-void fk_ErrorData::SetClassName(const string argClass)
+void Data::SetClassName(const string argClass)
 {
 	className = argClass;
 	return;
 }
 
-void fk_ErrorData::SetFuncName(const string argFunc)
+void Data::SetFuncName(const string argFunc)
 {
 	funcName = argFunc;
 	return;
 }
 
-void fk_ErrorData::SetErrCode(const int argErrCode)
+void Data::SetErrCode(const int argErrCode)
 {
 	errCode = argErrCode;
 	return;
 }
 
-void fk_ErrorData::SetErrMessage(const string argMessage)
+void Data::SetErrMessage(const string argMessage)
 {
 	message = argMessage;
 	return;
 }
 
-string fk_ErrorData::GetClassName(void) const
+string Data::GetClassName(void) const
 {
 	return className;
 }
 
-string fk_ErrorData::GetFuncName(void) const
+string Data::GetFuncName(void) const
 {
 	return funcName;
 }
 
-int fk_ErrorData::GetErrCode(void) const
+int Data::GetErrCode(void) const
 {
 	return errCode;
 }
 
-string fk_ErrorData::GetErrMessage(void) const
+string Data::GetErrMessage(void) const
 {
 	return message;
 }
 
-bool fk_ErrorData::GetMode(void) const
+bool Data::GetMode(void) const
 {
 	return modeFlg;
 }
 
-fk_ErrorDataBase::fk_ErrorDataBase(void)
+DataBase::DataBase(void) :
+	mode(Mode::NONE), fileMode(false), errorBrowser(nullptr)
 {
-	mode = fk_ErrorMode::NONE;
-	DataBase.clear();
-	fileMode = false;
-	errorBrowser = nullptr;
-	
+	_DB.clear();
 	return;
 }
 
-fk_ErrorDataBase::~fk_ErrorDataBase()
+DataBase::~DataBase()
 {
-	fk_ErrorData	*data;
+	Data *data;
 
-	while(DataBase.empty() == false) {
-		data = DataBase.front();
-		DataBase.pop_front();
+	while(_DB.empty() == false) {
+		data = _DB.front();
+		_DB.pop_front();
 		delete data;
 	}
 
@@ -163,35 +125,35 @@ fk_ErrorDataBase::~fk_ErrorDataBase()
 	return;
 }
 
-void fk_ErrorDataBase::SetMode(const fk_ErrorMode argMode)
+void DataBase::SetMode(const Mode argMode)
 {
 	mode = argMode;
 	return;
 }
 
-fk_ErrorMode fk_ErrorDataBase::GetMode(void) const
+Mode DataBase::GetMode(void) const
 {
 	return mode;
 }
 
-void fk_ErrorDataBase::PutError(const string argClass, const string argFunc,
-								const int argErrCode, const string argMessage)
+void DataBase::Put(const string argClass, const string argFunc,
+				   const int argErrCode, const string argMessage)
 {
-	fk_ErrorData	*data;
+	Data *data;
 
-	if(mode == fk_ErrorMode::NONE) return;
+	if(mode == Mode::NONE) return;
 
-	data = new fk_ErrorData();
+	data = new Data();
 
 	data->Set(argClass, argFunc, argErrCode, argMessage);
-	DataBase.push_back(data);
+	_DB.push_back(data);
 
 	switch(mode) {
-	  case fk_ErrorMode::INTERACTIVE:
-	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::BROWSER_INTERACTIVE:
-	  case fk_ErrorMode::FILE:
+	  case Mode::INTERACTIVE:
+	  case Mode::CONSOLE_INTERACTIVE:
+	  case Mode::OUT_CONSOLE_INTERACTIVE:
+	  case Mode::BROWSER_INTERACTIVE:
+	  case Mode::FILE:
 		Print();
 		break;
 
@@ -202,24 +164,23 @@ void fk_ErrorDataBase::PutError(const string argClass, const string argFunc,
 	return;
 }
 
-void fk_ErrorDataBase::PutError(const string argClass,
-								const string argFunc, const int argErrCode)
+void DataBase::Put(const string argClass, const string argFunc, const int argErrCode)
 {
-	fk_ErrorData	*data;
+	Data	*data;
 
-	if(mode == fk_ErrorMode::NONE) return;
+	if(mode == Mode::NONE) return;
 
-	data = new fk_ErrorData();
+	data = new Data();
 
 	data->Set(argClass, argFunc, argErrCode);
-	DataBase.push_back(data);
+	_DB.push_back(data);
 
 	switch(mode) {
-	  case fk_ErrorMode::INTERACTIVE:
-	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::BROWSER_INTERACTIVE:
-	  case fk_ErrorMode::FILE:
+	  case Mode::INTERACTIVE:
+	  case Mode::CONSOLE_INTERACTIVE:
+	  case Mode::OUT_CONSOLE_INTERACTIVE:
+	  case Mode::BROWSER_INTERACTIVE:
+	  case Mode::FILE:
 		Print();
 		break;
 
@@ -230,23 +191,23 @@ void fk_ErrorDataBase::PutError(const string argClass,
 	return;
 }
 
-void fk_ErrorDataBase::PutError(const string argMessage)
+void DataBase::Put(const string argMessage)
 {
-	fk_ErrorData	*data;
+	Data	*data;
 
-	if(mode == fk_ErrorMode::NONE) return;
+	if(mode == Mode::NONE) return;
 
-	data = new fk_ErrorData();
+	data = new Data();
 
 	data->Set(argMessage);
-	DataBase.push_back(data);
+	_DB.push_back(data);
 
 	switch(mode) {
-	  case fk_ErrorMode::INTERACTIVE:
-	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::BROWSER_INTERACTIVE:
-	  case fk_ErrorMode::FILE:
+	  case Mode::INTERACTIVE:
+	  case Mode::CONSOLE_INTERACTIVE:
+	  case Mode::OUT_CONSOLE_INTERACTIVE:
+	  case Mode::BROWSER_INTERACTIVE:
+	  case Mode::FILE:
 		Print();
 		break;
 
@@ -257,12 +218,12 @@ void fk_ErrorDataBase::PutError(const string argMessage)
 	return;
 }
 
-bool fk_ErrorDataBase::IsEmpty(void) const
+bool DataBase::IsEmpty(void) const
 {
-	return DataBase.empty();
+	return _DB.empty();
 }
 
-bool fk_ErrorDataBase::SetFileName(string argFileName)
+bool DataBase::SetFileName(string argFileName)
 {
 	if(fileMode == true) {
 		ofs.close();
@@ -279,27 +240,38 @@ bool fk_ErrorDataBase::SetFileName(string argFileName)
 	return fileMode;
 }
 
-fk_ErrorBrowser::fk_ErrorBrowser(void)
+Browser * DataBase::GetBrowser(void)
+{
+	return errorBrowser;
+}
+
+Browser * DataBase::MakeBrowser(void)
+{
+	errorBrowser = new Browser();
+	return errorBrowser;
+}
+
+Browser::Browser(void)
 {
 	return;
 }
 
-fk_ErrorBrowser::~fk_ErrorBrowser()
+Browser::~Browser()
 {
 	return;
 }
 
-bool fk_ErrorDataBase::Print(void)
+bool DataBase::Print(void)
 {
-	fk_ErrorData	*data;
-	string			outStr;
-	stringstream	ss;
+	Data *data;
+	string outStr;
+	stringstream ss;
 
-	if(mode == fk_ErrorMode::NONE) return false;
+	if(mode == Mode::NONE) return false;
 	if(IsEmpty() == true) return false;
 
-	data = DataBase.front();
-	DataBase.pop_front();
+	data = _DB.front();
+	_DB.pop_front();
 
 	outStr.erase();
 
@@ -314,27 +286,27 @@ bool fk_ErrorDataBase::Print(void)
 	delete data;
 
 	switch(mode) {
-	  case fk_ErrorMode::INTERACTIVE:
-	  case fk_ErrorMode::QUEUE:
+	  case Mode::INTERACTIVE:
+	  case Mode::QUEUE:
 		if(errorBrowser != nullptr) errorBrowser->PutAlert(outStr.c_str());
 		break;
 
-	  case fk_ErrorMode::CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::CONSOLE_QUEUE:
+	  case Mode::CONSOLE_INTERACTIVE:
+	  case Mode::CONSOLE_QUEUE:
 		cerr << outStr << endl;
 		break;
 
-	  case fk_ErrorMode::OUT_CONSOLE_INTERACTIVE:
-	  case fk_ErrorMode::OUT_CONSOLE_QUEUE:
+	  case Mode::OUT_CONSOLE_INTERACTIVE:
+	  case Mode::OUT_CONSOLE_QUEUE:
 		cout << outStr << endl;
 		break;
 
-	  case fk_ErrorMode::BROWSER_INTERACTIVE:
-	  case fk_ErrorMode::BROWSER_QUEUE:
+	  case Mode::BROWSER_INTERACTIVE:
+	  case Mode::BROWSER_QUEUE:
 		if(errorBrowser != nullptr) errorBrowser->PutBrowser(outStr);
 		break;
 
-	  case fk_ErrorMode::FILE:
+	  case Mode::FILE:
 		if(fileMode == true) {
 			ofs << outStr << endl;
 		}
@@ -347,59 +319,56 @@ bool fk_ErrorDataBase::Print(void)
 	return true;
 }
 
-namespace FK {
-	void fk_SetErrorMode(const fk_ErrorMode argMode)
+namespace FK::Error {
+	void SetMode(const Mode argMode)
 	{
-		fk_GetErrorDB()->SetMode(argMode);
+		GetDB()->SetMode(argMode);
 		return;
 	}
 
-	fk_ErrorMode fk_GetErrorMode(void)
+	Mode GetMode(void)
 	{
-		return fk_GetErrorDB()->GetMode();
+		return GetDB()->GetMode();
 	}
 
-	void fk_PutError(const string argClassName,
-					 const string argFuncName,
-					 const int argErrCode)
+	void Put(const string argClassName, const string argFuncName, const int argErrCode)
 	{
-		fk_GetErrorDB()->PutError(argClassName, argFuncName, argErrCode);
+		GetDB()->Put(argClassName, argFuncName, argErrCode);
 		return;
 	}
 
-	void fk_PutError(const string argClassName,
-					 const string argFuncName,
-					 const int argErrCode, const string argMessage)
+	void Put(const string argClassName, const string argFuncName,
+			 const int argErrCode, const string argMessage)
 	{
-		fk_GetErrorDB()->PutError(argClassName, argFuncName, argErrCode, argMessage);
+		GetDB()->Put(argClassName, argFuncName, argErrCode, argMessage);
 		return;
 	}
 
-	void fk_PutError(const string argMessage)
+	void Put(const string argMessage)
 	{
-		fk_GetErrorDB()->PutError(argMessage);
+		GetDB()->Put(argMessage);
 		return;
 	}
 
 	bool fk_ErrorPrint(void)
 	{
-		return fk_GetErrorDB()->Print();
+		return GetDB()->Print();
 	}
 
 	bool fk_SetErrorFile(string argFileName)
 	{
-		return fk_GetErrorDB()->SetFileName(argFileName);
+		return GetDB()->SetFileName(argFileName);
 	}
 
-	fk_ErrorDataBase * fk_GetErrorDB(void)
+	DataBase * GetDB(void)
 	{
-		static fk_ErrorDataBase		errDB;
+		static DataBase errDB;
 		return &errDB;
 	}
 
 #ifndef FK_CLI_CODE
 
-	void fk_Printf(const char *argFormat, ...)
+	void Printf(const char *argFormat, ...)
 	{
 		va_list			ap;
 		char			*buffer = new char [8192];
@@ -407,12 +376,12 @@ namespace FK {
 		va_start(ap, argFormat);
 		vsnprintf(&buffer[0], 8191, argFormat, ap);
 		va_end(ap);
-		fk_GetErrorDB()->PutError(buffer);
+		GetDB()->Put(buffer);
 		delete [] buffer;
 		return;
 	}
 
-	string fk_StrPrintf(const char *argFormat, ...)
+	string StrPrintf(const char *argFormat, ...)
 	{
 		va_list		ap;
 		char		*buffer = new char [8192];

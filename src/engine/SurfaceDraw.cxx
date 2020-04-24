@@ -209,12 +209,12 @@ bool fk_SurfaceDraw::LineShaderInit(fk_SurfaceDrawType argType, fk_FogMode argFo
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "LineShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_SurfaceDraw", "LineShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argType)) + ", ";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 
@@ -248,12 +248,12 @@ bool fk_SurfaceDraw::PointShaderInit(fk_SurfaceDrawType argType, fk_FogMode argF
 	TessEvalAdd(prog, argType);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "PointShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_SurfaceDraw", "PointShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argType)) + ", ";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 
@@ -289,13 +289,13 @@ bool fk_SurfaceDraw::FaceShaderInit(fk_SurfaceDrawType argType,
 	fk_FaceDraw::FaceFragmentInit(prog, fk_ShadingMode::PHONG, argShadowMode, argFogMode);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_SurfaceDraw", "FaceShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_SurfaceDraw", "FaceShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argType)) + ", ";
 		outStr += to_string(int(argFogMode)) + ", ";
 		outStr += to_string(int(argShadowMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 
@@ -349,8 +349,8 @@ bool fk_SurfaceDraw::ShadowInit(fk_SurfaceDrawType argType)
 		;
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
-		fk_PutError(prog->getLastError());
+		Error::Put("fk_FaceDraw", "ShadowInit", 1, "Shader Compile Error");
+		Error::Put(prog->getLastError());
 		return false;
 	}
 

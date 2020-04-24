@@ -69,7 +69,7 @@ bool fk_TriTexture::setVertexPos(int argID,
 								 double argX, double argY, double argZ)
 {
 	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setVertexPos", 1, "ID Error.");
+		Error::Put("fk_TriTexture", "setVertexPos", 1, "ID Error.");
 		return false;
 	}
 
@@ -82,7 +82,7 @@ bool fk_TriTexture::setVertexPos(int argID,
 bool fk_TriTexture::setVertexPos(int argID, fk_Vector argPos)
 {
 	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setVertexPos", 2, "ID Error.");
+		Error::Put("fk_TriTexture", "setVertexPos", 2, "ID Error.");
 		return false;
 	}
 
@@ -95,14 +95,13 @@ bool fk_TriTexture::setVertexPos(int argID, fk_Vector argPos)
 bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
 {
 	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 1, "ID Error.");
+		Error::Put("fk_TriTexture", "setTextureCoord", 1, "ID Error.");
 		return false;
 	}
 
 	if(argS < -fk_Math::EPS || argS > 1.0 + fk_Math::EPS ||
 	   argT < -fk_Math::EPS || argT > 1.0 + fk_Math::EPS) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 2,
-					"Texture Coord Error.");
+		Error::Put("fk_TriTexture", "setTextureCoord", 2, "Texture Coord Error.");
 		return false;
 	}
 
@@ -115,14 +114,13 @@ bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
 bool fk_TriTexture::setTextureCoord(int argID, fk_TexCoord argCoord)
 {
 	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 3, "ID Error.");
+		Error::Put("fk_TriTexture", "setTextureCoord", 3, "ID Error.");
 		return false;
 	}
 
 	if(argCoord.x < -fk_Math::EPS || argCoord.x > 1.0 + fk_Math::EPS ||
 	   argCoord.y < -fk_Math::EPS || argCoord.y > 1.0 + fk_Math::EPS) {
-		fk_PutError("fk_TriTexture", "setTextureCoord", 4,
-					"Texture Coord Error.");
+		Error::Put("fk_TriTexture", "setTextureCoord", 4, "Texture Coord Error.");
 		return false;
 	}
 
@@ -137,7 +135,7 @@ fk_Vector fk_TriTexture::getVertexPos(int argID)
 	fk_Vector		dummy(0.0, 0.0, 0.0);
 
 	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "getVertexPos", 1, "ID Error.");
+		Error::Put("fk_TriTexture", "getVertexPos", 1, "ID Error.");
 		return dummy;
 	}
 
@@ -149,7 +147,7 @@ fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
 	fk_TexCoord		dummy(0.0, 0.0);
 
 	if(argID < 0 || argID > 2) {
-		fk_PutError("fk_TriTexture", "getTextureCoord", 1, "ID Error.");
+		Error::Put("fk_TriTexture", "getTextureCoord", 1, "ID Error.");
 		return dummy;
 	}
 

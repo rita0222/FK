@@ -86,18 +86,18 @@ void fk_Edge::Print(void) const
 	stringstream	ss;
 
 	ss << "Edge[" << getID() << "] = {";
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 	
 	ss << "\tlH = " << leftHalf;
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	ss << "\trH = " << rightHalf;
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
-	fk_PutError("}");
+	Error::Put("}");
 
 	return;
 }
@@ -113,7 +113,7 @@ bool fk_Edge::Check(void) const
 		if(DB->GetHData(leftHalf)->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... leftH[";
 			ss << leftHalf << "] ERROR!!";
-			fk_PutError("fk_Edge", "Check", 1, ss.str());
+			Error::Put("fk_Edge", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
@@ -122,7 +122,7 @@ bool fk_Edge::Check(void) const
 		if(DB->GetHData(rightHalf)->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... rightH[";
 			ss << rightHalf << "] ERROR!!";
-			fk_PutError("fk_Edge", "Check", 2, ss.str());
+			Error::Put("fk_Edge", "Check", 2, ss.str());
 			retBool = false;
 		}
 	}

@@ -1,11 +1,11 @@
 ﻿#include <FK/OpenCL.h>
 #include <FK/Error.H>
 
-// FK以外で利用する場合、ここに printf 互換の適当な関数名を書く
-#define ErrOut fk_Printf
-
 using namespace std;
 using namespace FK;
+
+// FK以外で利用する場合、ここに printf 互換の適当な関数名を書く
+#define ErrOut Error::Printf
 
 fk_OpenCL::fk_OpenCL(void)
 {
@@ -246,7 +246,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 	cl_platform_id	*clPlatformIDs;			// プラットフォームの数が不定なので、最初はアドレスのみ
 	cl_int			ciErrNum;				// OpenCL関数実行時のエラーチェック用int
 	
-	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
+	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
 	*argID = nullptr;
  

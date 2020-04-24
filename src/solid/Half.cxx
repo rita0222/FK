@@ -141,11 +141,11 @@ void fk_Half::Print(void) const
 
 
 	ss << "Half[" << getID() << "] = {";
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 	
 	ss << "\tv = " << vertex;
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	if(nextHalf == FK_UNDEFINED) {
@@ -153,7 +153,7 @@ void fk_Half::Print(void) const
 	} else {
 		ss << "\tnH = " << nextHalf;
 	}
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	if(prevHalf == FK_UNDEFINED) {
@@ -161,11 +161,11 @@ void fk_Half::Print(void) const
 	} else {
 		ss << "\tpH = " << prevHalf;
 	}
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	ss << "\tpE = " << parentEdge;
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	if(parentLoop == FK_UNDEFINED) {
@@ -173,10 +173,10 @@ void fk_Half::Print(void) const
 	} else {
 		ss << "\tpL = " << parentLoop;
 	}
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
-	fk_PutError("}");
+	Error::Put("}");
 
 	return;
 }
@@ -192,7 +192,7 @@ bool fk_Half::Check(void) const
 		if(DB->GetHData(nextHalf)->getPrevHalf() != this) {
 			ss << "Half[" << getID() << "] ... next[";
 			ss << nextHalf << "] ERROR!!";
-			fk_PutError("fk_Half", "Check", 1, ss.str());
+			Error::Put("fk_Half", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
@@ -201,7 +201,7 @@ bool fk_Half::Check(void) const
 		if(DB->GetHData(prevHalf)->getNextHalf() != this) {
 			ss << "Half[" << getID() << "] ... prev[";
 			ss << prevHalf << "] ERROR!!";
-			fk_PutError("fk_Half", "Check", 2, ss.str());
+			Error::Put("fk_Half", "Check", 2, ss.str());
 			retBool = false;
 		}
 	}

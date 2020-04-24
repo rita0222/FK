@@ -10,8 +10,7 @@ static fk_Angle & VectorToHeadPitch(const fk_Vector &argVec)
 
 	tmpVec = argVec;
 	if(tmpVec.normalize() == false) {
-		fk_PutError("fk_Quaternion", "VectorToHeadPitch", 1,
-					"Zero Vector Error.");
+		Error::Put("fk_Quaternion", "VectorToHeadPitch", 1, "Zero Vector Error.");
 		retAngle.h = retAngle.p = retAngle.b = 0.0;
 		return retAngle;
 	}

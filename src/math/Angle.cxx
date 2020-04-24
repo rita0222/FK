@@ -56,7 +56,7 @@ void fk_Angle::Print(void)
 	stringstream	ss;
 
 	ss << "Angle = (" << h << ", " << p << ", " << b << ")";
-	fk_PutError("fk_Angle", "Print", 1, ss.str());
+	Error::Put("fk_Angle", "Print", 1, ss.str());
 
 	return;
 }
@@ -66,7 +66,7 @@ void fk_Angle::Print(string argStr)
 	stringstream	ss;
 	
 	ss << "Angle(" << argStr << ") = (" << h << ", " << p << ", " << b << ")";
-	fk_PutError("fk_Angle", "Print", 2, ss.str());
+	Error::Put("fk_Angle", "Print", 2, ss.str());
 
 	return;
 }

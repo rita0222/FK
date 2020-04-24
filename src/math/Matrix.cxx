@@ -294,7 +294,7 @@ void fk_OrthoMatrix::init(void)
 void fk_OrthoMatrix::set(int argR, int argC, double argValue)
 {
 	if(argR < 0 || argR > 3 || argC < 0 || argC > 3) {
-		fk_PutError("fk_OrthoMatrix", "set", 1, "ID Error");
+		Error::Put("fk_OrthoMatrix", "set", 1, "ID Error");
 		return;
 	}
 
@@ -307,7 +307,7 @@ void fk_OrthoMatrix::set(int argR, int argC, double argValue)
 void fk_OrthoMatrix::setRow(int argR, const fk_Vector &argV)
 {
 	if(argR < 0 || argR > 3) {
-		fk_PutError("fk_OrthoMatrix", "setRow", 1, "ID Error");
+		Error::Put("fk_OrthoMatrix", "setRow", 1, "ID Error");
 		return;
 	}
 
@@ -322,7 +322,7 @@ void fk_OrthoMatrix::setRow(int argR, const fk_Vector &argV)
 void fk_OrthoMatrix::setRow(int argR, const fk_HVector &argV)
 {
 	if(argR < 0 || argR > 3) {
-		fk_PutError("fk_OrthoMatrix", "setRow", 2, "ID Error");
+		Error::Put("fk_OrthoMatrix", "setRow", 2, "ID Error");
 		return;
 	}
 
@@ -338,7 +338,7 @@ void fk_OrthoMatrix::setRow(int argR, const fk_HVector &argV)
 void fk_OrthoMatrix::setCol(int argC, const fk_Vector &argV)
 {
 	if(argC < 0 || argC > 3) {
-		fk_PutError("fk_OrthoMatrix", "setCol", 1, "ID Error");
+		Error::Put("fk_OrthoMatrix", "setCol", 1, "ID Error");
 		return;
 	}
 
@@ -353,7 +353,7 @@ void fk_OrthoMatrix::setCol(int argC, const fk_Vector &argV)
 void fk_OrthoMatrix::setCol(int argC, const fk_HVector &argV)
 {
 	if(argC < 0 || argC > 3) {
-		fk_PutError("fk_OrthoMatrix", "setCol", 2, "ID Error");
+		Error::Put("fk_OrthoMatrix", "setCol", 2, "ID Error");
 		return;
 	}
 
@@ -371,7 +371,7 @@ fk_HVector fk_OrthoMatrix::getRow(int argR)
 	fk_HVector	retV;
 
 	if(argR < 0 || argR > 3) {
-		fk_PutError("fk_OrthMatrix", "getRow", 1, "ID Error");
+		Error::Put("fk_OrthMatrix", "getRow", 1, "ID Error");
 		return retV;
 	}
 	retV.set(m[argR][0], m[argR][1], m[argR][2], m[argR][3]);
@@ -384,7 +384,7 @@ fk_HVector fk_OrthoMatrix::getCol(int argC)
 	fk_HVector	retV;
 
 	if(argC < 0 || argC > 3) {
-		fk_PutError("fk_OrthMatrix", "getCol", 1, "ID Error");
+		Error::Put("fk_OrthMatrix", "getCol", 1, "ID Error");
 		return retV;
 	}
 	retV.set(m[0][argC], m[1][argC], m[2][argC], m[3][argC]);
@@ -494,9 +494,9 @@ void fk_OrthoMatrix::Print(string argStr) const
 	stringstream	ss;
 
 	if(argStr.size() == 0) {
-		fk_PutError("Matrix = ");
+		Error::Put("Matrix = ");
 	} else {
-		fk_PutError("Matrix[" + argStr + "] = ");
+		Error::Put("Matrix[" + argStr + "] = ");
 	}
 
 	ss.clear();
@@ -506,7 +506,7 @@ void fk_OrthoMatrix::Print(string argStr) const
 		ss << "|";
 		if(i != 3) ss << endl;
 	}
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	return;
 }
 

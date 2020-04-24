@@ -227,13 +227,13 @@ string fk_Vector::OutStr(void) const
 
 void fk_Vector::Print(void) const
 {
-	fk_PutError("Vector = " + OutStr());
+	Error::Put("Vector = " + OutStr());
 	return;
 }
 
 void fk_Vector::Print(string argStr) const
 {
-	fk_PutError("Vector[" + argStr + "] = " + OutStr());
+	Error::Put("Vector[" + argStr + "] = " + OutStr());
 	return;
 }
 
@@ -373,12 +373,12 @@ string fk_HVector::OutStr(void) const
 
 void fk_HVector::Print(void) const
 {
-	fk_PutError("HVector = " + OutStr());
+	Error::Put("HVector = " + OutStr());
 }
 
 void fk_HVector::Print(string argStr) const
 {
-	fk_PutError("HVector[" + argStr + "] = " + OutStr());
+	Error::Put("HVector[" + argStr + "] = " + OutStr());
 	return;
 }
 

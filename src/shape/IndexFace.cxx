@@ -1722,7 +1722,7 @@ void fk_IndexFaceSet::DataPrint(void)
 		ss << edgeIndex[2*i] << ", ";
 		ss << edgeIndex[2*i+1] << "}" << endl;
 	}
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 
 	return;
 }

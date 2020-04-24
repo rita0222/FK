@@ -196,7 +196,7 @@ void fk_Vertex::Print(void) const
 		ss << "\tpH = " << oneHalf;
 	}
 	ss << "}";
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 
 	return;
 }
@@ -211,7 +211,7 @@ bool fk_Vertex::Check(void) const
 			ss << "Vertex[" << getID();
 			ss << "] ... Half[" << oneHalf;
 			ss << "] ERROR";
-			fk_PutError("fk_Vertex", "Check", 1, ss.str());
+			Error::Put("fk_Vertex", "Check", 1, ss.str());
 			return false;
 		}
 	}

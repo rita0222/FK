@@ -216,7 +216,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 			if(CheckProperty(data, "FrameTransformMatrix") == true) {
 				if(ReadFrameMatrix(data, ifs) == false) {
 					ifs.close();
-					fk_PutError("fk_D3DXParser", "ReadData", 1);
+					Error::Put("fk_D3DXParser", "ReadData", 1);
 					return false;
 				}
 			} else if(readFlg == false &&
@@ -226,27 +226,27 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 				meshModeFlg = true;
 				if(shape->ReadMeshData(data, ifs) == false) {
 					ifs.close();
-					fk_PutError("fk_D3DXParser", "ReadData", 2);
+					Error::Put("fk_D3DXParser", "ReadData", 2);
 					return false;
 				}
 			} else if(meshModeFlg == true) {
 				if(CheckProperty(data, "MeshTextureCoords") == true) {
 					if(shape->ReadVectorData(ifs, fk_D3DX_VecMode::T_MODE) == false) {
 						ifs.close();
-						fk_PutError("fk_D3DXParser", "ReadData", 3);
+						Error::Put("fk_D3DXParser", "ReadData", 3);
 						return false;
 					}
 				} else if(CheckProperty(data, "MeshMaterialList") == true) {
 					if(shape->ReadMaterialData(ifs) == false) {
 						ifs.close();
-						fk_PutError("fk_D3DXParser", "ReadData", 4);
+						Error::Put("fk_D3DXParser", "ReadData", 4);
 						return false;
 					}
 				} else if(CheckProperty(data, "SkinWeights") == true) {
 					if(anim != nullptr) {
 						if(anim->ReadSkinData(ifs) == false) {
 							ifs.close();
-							fk_PutError("fk_D3DXParser", "ReadData", 5);
+							Error::Put("fk_D3DXParser", "ReadData", 5);
 							return false;
 						}
 					}
@@ -262,7 +262,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 						  anim != nullptr) {
 					if(anim->ReadAnimationKey(ifs) == false) {
 						ifs.close();
-						fk_PutError("fk_D3DXParser", "ReadData", 6);
+						Error::Put("fk_D3DXParser", "ReadData", 6);
 						return false;
 					}
 				}
@@ -279,7 +279,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 			data = data->getParent();
 			if(data == nullptr) {
 				ifs.close();
-				fk_PutError("fk_D3DXParser", "ReadData", 7);
+				Error::Put("fk_D3DXParser", "ReadData", 7);
 				return false;
 			}
 			line.erase(0, line.find("}")+1);
@@ -289,7 +289,7 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 	ifs.close();
 	
 	if(readFlg == false) {
-		fk_PutError("fk_D3DXParser", "ReadData", 8);
+		Error::Put("fk_D3DXParser", "ReadData", 8);
 		return false;
 	}
 

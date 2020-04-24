@@ -44,8 +44,7 @@ fk_Material & fk_Material::operator =(const fk_Material &argMat)
 void fk_Material::setAlpha(float argA)
 {
 	if(argA < -fk_Color::EPS || argA > 1.0f + fk_Color::EPS) {
-		fk_PutError("fk_Material", "setAlpha", 1,
-					"Alpha Value Error.");
+		Error::Put("fk_Material", "setAlpha", 1, "Alpha Value Error.");
 		return;
 	}
 
@@ -126,8 +125,7 @@ void fk_Material::setAmbDiff(double argR, double argG, double argB, double argA)
 void fk_Material::setShininess(float argS)
 {
 	if(argS < -fk_Color::EPS || argS > 128.0f + fk_Color::EPS) {
-		fk_PutError("fk_Material", "setShininess", 1,
-					"Shininess Value Error.");
+		Error::Put("fk_Material", "setShininess", 1, "Shininess Value Error.");
 		return;
 	}
 	shininess = argS;
@@ -177,26 +175,26 @@ void fk_Material::Print(int argTabSize, string argTag)
 	for(i = 0; i < _st(argTabSize); i++) tab += '\t';
 
 	if(argTag.size() == 0) {
-		fk_PutError(tab + "Mat = {");
+		Error::Put(tab + "Mat = {");
 	} else {
-		fk_PutError(tab + "Mat[" + argTag + "] = {");
+		Error::Put(tab + "Mat[" + argTag + "] = {");
 	}
 
 	ss << "\tamb = " << ambient.OutStr() << ";";
-	fk_PutError(tab + ss.str());
+	Error::Put(tab + ss.str());
 	ss.clear();
 
 	ss << "\tdiff = " << diffuse.OutStr() << ";";
-	fk_PutError(tab + ss.str());
+	Error::Put(tab + ss.str());
 	ss.clear();
 
 	ss << "\tspec = " << specular.OutStr() << ";";
-	fk_PutError(tab + ss.str());
+	Error::Put(tab + ss.str());
 	ss.clear();
 
 	ss << "\tshini = " << shininess << ";";
-	fk_PutError(tab + ss.str());
-	fk_PutError(tab + "}");
+	Error::Put(tab + ss.str());
+	Error::Put(tab + "}");
 	
 	return;
 }

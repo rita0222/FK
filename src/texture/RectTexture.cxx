@@ -175,8 +175,7 @@ void fk_RectTexture::setTextureCoord(double argSU, double argSV,
 	   argSV < -fk_Math::EPS || argSV > 1.0 + fk_Math::EPS ||
 	   argEU < -fk_Math::EPS || argEU > 1.0 + fk_Math::EPS ||
 	   argEV < -fk_Math::EPS || argEV > 1.0 + fk_Math::EPS) {
-		fk_PutError("fk_RectTexture", "setTextureCoord", 1,
-					"Texture Coord Error.");
+		Error::Put("fk_RectTexture", "setTextureCoord", 1, "Texture Coord Error.");
 		return;
 	}
 
@@ -195,8 +194,7 @@ void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
 	   argS.y < -fk_Math::EPS || argS.y > 1.0 + fk_Math::EPS ||
 	   argE.x < -fk_Math::EPS || argE.x > 1.0 + fk_Math::EPS ||
 	   argE.y < -fk_Math::EPS || argE.y > 1.0 + fk_Math::EPS) {
-		fk_PutError("fk_RectTexture", "setTextureCoord", 2,
-					"Texture Coord Error.");
+		Error::Put("fk_RectTexture", "setTextureCoord", 2, "Texture Coord Error.");
 		return;
 	}
 
@@ -210,7 +208,7 @@ void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
 fk_TexCoord fk_RectTexture::getTextureCoord(int argID)
 {
 	if(argID < 0 || argID > 1) {
-		fk_PutError("fk_RectTexture", "getTextureCoord", 1, "ID Error");
+		Error::Put("fk_RectTexture", "getTextureCoord", 1, "ID Error");
 		return fk_TexCoord(0.0, 0.0);
 	}
 	return rectSE[argID];

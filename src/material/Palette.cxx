@@ -106,23 +106,23 @@ void fk_Palette::Print(int argTabSize, string argTag)
 	for(i = 0; i < static_cast<_st>(argTabSize); i++) tab += '\t';
 
 	if(argTag.size() == 0) {
-		fk_PutError(tab + "MatAdmin {");
+		Error::Put(tab + "MatAdmin {");
 	} else {
-		fk_PutError(tab + "MatAdmin[" + argTag + "] = {");
+		Error::Put(tab + "MatAdmin[" + argTag + "] = {");
 	}
 
 
 	ss << "\tthisColorID = " << thisColorID << ";";
-	fk_PutError(tab + ss.str());
+	Error::Put(tab + ss.str());
 	
 	for(i = 0; i < paletteStack.size(); i++) {
 		ss.clear();
 		ss << "PAL" << i;
 		paletteStack[i].Print(argTabSize + 1, ss.str());
 	}
-	fk_PutError(tab + "\tColID = {");
-	fk_PutError(tab + "\t}");
-	fk_PutError(tab + "}");
+	Error::Put(tab + "\tColID = {");
+	Error::Put(tab + "\t}");
+	Error::Put(tab + "}");
 	return;
 }
 

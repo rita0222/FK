@@ -81,7 +81,7 @@ bool fk_History::Close(void)
 void fk_History::PushBool(const bool argBool)
 {
 	if(defFlag == false) {
-		fk_PutError("fk_History", "PushBool", 1, "Command Open Error.");
+		Error::Put("fk_History", "PushBool", 1, "Command Open Error.");
 		return;
 	}
 
@@ -96,7 +96,7 @@ void fk_History::PushBool(const bool argBool)
 void fk_History::PushInt(const int argInt)
 {
 	if(defFlag == false) {
-		fk_PutError("fk_History", "PushBool", 1, "Command Open Error.");
+		Error::Put("fk_History", "PushBool", 1, "Command Open Error.");
 		return;
 	}
 
@@ -107,7 +107,7 @@ void fk_History::PushInt(const int argInt)
 void fk_History::PushVec(const fk_Vector argVec)
 {
 	if(defFlag == false) {
-		fk_PutError("fk_History", "PushVec", 1, "Command Open Error.");
+		Error::Put("fk_History", "PushVec", 1, "Command Open Error.");
 		return;
 	}
 
@@ -118,7 +118,7 @@ void fk_History::PushVec(const fk_Vector argVec)
 void fk_History::PushDouble(const double argDouble)
 {
 	if(defFlag == false) {
-		fk_PutError("fk_History", "PushDouble", 1, "Command Open Error.");
+		Error::Put("fk_History", "PushDouble", 1, "Command Open Error.");
 		return;
 	}
 
@@ -129,7 +129,7 @@ void fk_History::PushDouble(const double argDouble)
 void fk_History::PushStr(const string argStr)
 {
 	if(defFlag == false) {
-		fk_PutError("fk_History", "PushStr", 1, "Command Open Error.");
+		Error::Put("fk_History", "PushStr", 1, "Command Open Error.");
 		return;
 	}
 
@@ -140,7 +140,7 @@ void fk_History::PushStr(const string argStr)
 int fk_History::GetComIndex(void) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetComIndex", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetComIndex", 1, "Command Open Error.");
 		return -1;
 	}
 
@@ -150,12 +150,12 @@ int fk_History::GetComIndex(void) const
 fk_Command fk_History::GetCom(void) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetCom", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetCom", 1, "Command Open Error.");
 		return dummyCom;
 	}
 
 	if(curIndex == -1) {
-		fk_PutError("fk_History", "GetCom", 2, "Stack Empty Error.");
+		Error::Put("fk_History", "GetCom", 2, "Stack Empty Error.");
 		return dummyCom;
 	}
 	return comStack[static_cast<_st>(curIndex)];
@@ -164,12 +164,12 @@ fk_Command fk_History::GetCom(void) const
 fk_Command fk_History::GetCom(const unsigned int argIndex) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetCom", 3, "Command Open Error.");
+		Error::Put("fk_History", "GetCom", 3, "Command Open Error.");
 		return dummyCom;
 	}
 
 	if(curIndex == -1 || static_cast<int>(argIndex) > curIndex) {
-		fk_PutError("fk_History", "GetCom", 4, "Stack OverFlow Error.");
+		Error::Put("fk_History", "GetCom", 4, "Stack OverFlow Error.");
 		return dummyCom;
 	}
 	return comStack[argIndex];
@@ -178,12 +178,12 @@ fk_Command fk_History::GetCom(const unsigned int argIndex) const
 bool fk_History::GetBool(const unsigned int argIndex) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetBool", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetBool", 1, "Command Open Error.");
 		return true;
 	}
 
 	if(argIndex >= boolStack.size()) {
-		fk_PutError("fk_History", "GetBool", 2, "Stack OverFlow Error.");
+		Error::Put("fk_History", "GetBool", 2, "Stack OverFlow Error.");
 		return true;
 	}
 
@@ -196,12 +196,12 @@ bool fk_History::GetBool(const unsigned int argIndex) const
 int fk_History::GetInt(const unsigned int argIndex) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetInt", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetInt", 1, "Command Open Error.");
 		return -1;
 	}
 
 	if(argIndex >= intStack.size()) {
-		fk_PutError("fk_History", "GetInt", 2, "Stack OverFlow Error.");
+		Error::Put("fk_History", "GetInt", 2, "Stack OverFlow Error.");
 		return -1;
 	}
 
@@ -211,12 +211,12 @@ int fk_History::GetInt(const unsigned int argIndex) const
 fk_Vector fk_History::GetVec(const unsigned int argIndex) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetVec", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetVec", 1, "Command Open Error.");
 		return dummyVec;
 	}
 
 	if(argIndex >= vecStack.size()) {
-		fk_PutError("fk_History", "GetVec", 2, "Stack OverFlow Error.");
+		Error::Put("fk_History", "GetVec", 2, "Stack OverFlow Error.");
 		return dummyVec;
 	}
 
@@ -227,12 +227,12 @@ fk_Vector fk_History::GetVec(const unsigned int argIndex) const
 double fk_History::GetDouble(const unsigned int argIndex) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetDouble", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetDouble", 1, "Command Open Error.");
 		return 0.0;
 	}
 
 	if(argIndex >= doubleStack.size()) {
-		fk_PutError("fk_History", "GetDouble", 2, "Stack OverFlow Error.");
+		Error::Put("fk_History", "GetDouble", 2, "Stack OverFlow Error.");
 		return 0.0;
 	}
 
@@ -242,12 +242,12 @@ double fk_History::GetDouble(const unsigned int argIndex) const
 string fk_History::GetStr(const unsigned int argIndex) const
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetStr", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetStr", 1, "Command Open Error.");
 		return dummyStr;
 	}
 
 	if(argIndex >= strStack.size()) {
-		fk_PutError("fk_History", "GetStr", 2, "Stack OverFlow Error.");
+		Error::Put("fk_History", "GetStr", 2, "Stack OverFlow Error.");
 		return dummyStr;
 	}
 
@@ -257,7 +257,7 @@ string fk_History::GetStr(const unsigned int argIndex) const
 void fk_History::SetMark(bool argFlg)
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "SetMark", 1, "Command Open Error.");
+		Error::Put("fk_History", "SetMark", 1, "Command Open Error.");
 		return;
 	}
 
@@ -270,7 +270,7 @@ void fk_History::SetMark(bool argFlg)
 bool fk_History::GetMarkStatus(void)
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "GetMarkStatus", 1, "Command Open Error.");
+		Error::Put("fk_History", "GetMarkStatus", 1, "Command Open Error.");
 		return false;
 	}
 	
@@ -282,7 +282,7 @@ bool fk_History::GetMarkStatus(void)
 bool fk_History::Undo(void)
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "Undo", 1, "Command Open Error.");
+		Error::Put("fk_History", "Undo", 1, "Command Open Error.");
 		return false;
 	}
 
@@ -300,7 +300,7 @@ bool fk_History::Undo(unsigned int argTimes)
 	times = static_cast<int>(argTimes);
 	
 	if(defFlag == true) {
-		fk_PutError("fk_History", "Undo", 2, "Command Open Error.");
+		Error::Put("fk_History", "Undo", 2, "Command Open Error.");
 		return false;
 	}
 	
@@ -312,7 +312,7 @@ bool fk_History::Undo(unsigned int argTimes)
 bool fk_History::Redo(void)
 {
 	if(defFlag == true) {
-		fk_PutError("fk_History", "Redo", 1, "Command Open Error.");
+		Error::Put("fk_History", "Redo", 1, "Command Open Error.");
 		return false;
 	}
 
@@ -330,7 +330,7 @@ bool fk_History::Redo(unsigned int argTimes)
 	times = static_cast<int>(argTimes);
 	
 	if(defFlag == true) {
-		fk_PutError("fk_History", "Redo", 2, "Command Open Error.");
+		Error::Put("fk_History", "Redo", 2, "Command Open Error.");
 		return false;
 	}
 	
@@ -362,7 +362,7 @@ void fk_History::Print(void)
 		}
 
 		ss << "Com[" << i << "] (" << com1.GetCommandID() << ") = ";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 		
 		ss << "\tBool = (";
@@ -378,7 +378,7 @@ void fk_History::Print(void)
 			}
 		}
 		ss << ")";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 		
 		ss << "\tInt = (";
@@ -390,7 +390,7 @@ void fk_History::Print(void)
 			}
 		}
 		ss << ")";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 		
 		ss << "\tVec = (";
@@ -401,7 +401,7 @@ void fk_History::Print(void)
 			}
 		}
 		ss << ");";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 		
 		ss << "\tdouble = (";
@@ -412,7 +412,7 @@ void fk_History::Print(void)
 			}
 		}
 		ss << ");";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 		ss.clear();
 
 		ss << "\tString = (";
@@ -423,7 +423,7 @@ void fk_History::Print(void)
 			}
 		}
 		ss << ");";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 	}
 
 	return;
@@ -434,19 +434,19 @@ void fk_History::PrintSize(void)
 	stringstream	ss;
 
 	ss << "ComSize = " << comStack.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 	
 	ss << "boolSize = " << boolStack.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 	
 	ss << "intSize = " << intStack.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 	ss.clear();
 
 	ss << "vecSize = " << vecStack.size();
-	fk_PutError(ss.str());
+	Error::Put(ss.str());
 
 	return;
 }

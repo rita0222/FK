@@ -69,8 +69,7 @@ fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 
 	index = ifs->getFaceData(argTID, argVID);
 	if(index < 0) {
-		fk_PutError("fk_IFSTexture", "getTextureCoord", 1,
-					"Face ID Error.");
+		Error::Put("fk_IFSTexture", "getTextureCoord", 1, "Face ID Error.");
 		return coord;
 	}
 

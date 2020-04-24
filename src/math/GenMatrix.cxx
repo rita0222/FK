@@ -447,9 +447,9 @@ void fk_GenMatrix::Print(string argStr) const
 	stringstream	ss;
 
 	if(argStr.size() == 0) {
-		fk_PutError("Matrix = ");
+		Error::Put("Matrix = ");
 	} else {
-		fk_PutError("Matrix[" + argStr + "] = ");
+		Error::Put("Matrix[" + argStr + "] = ");
 	}
 
 	for(i = 0; i < deg; ++i) {
@@ -459,7 +459,7 @@ void fk_GenMatrix::Print(string argStr) const
 			ss << m[i*deg + j] << " ";
 		}
 		ss << "|";
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 	}
 
 	return;

@@ -190,13 +190,13 @@ bool fk_PointDraw::ShaderInit(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode arg
 	if(argFID != fk_DrawFS::SHADOW) FragmentFogInit(prog, argFogMode);
 
 	if(prog->validate() == false) {
-		fk_PutError("fk_PointDraw", "ShaderInit", 1, "Shader Compile Error");
+		Error::Put("fk_PointDraw", "ShaderInit", 1, "Shader Compile Error");
 		string outStr = "Mode Code (";
 		outStr += to_string(int(argVID)) + ", ";
 		outStr += to_string(int(argFID)) + ", ";
 		outStr += to_string(int(argFogMode)) + ")";
-		fk_PutError(outStr);
-		fk_PutError(prog->getLastError());
+		Error::Put(outStr);
+		Error::Put(prog->getLastError());
 		return false;
 	}
 

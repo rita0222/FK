@@ -588,8 +588,7 @@ void fk_DataBase::VPrint(int argID) const
 			if(vSet[i].getID() != FK_UNDEFINED) vSet[i].Print();
 		}
 	} else if(!vAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "VPrint", 1,
-					"Vertex Admin Error.");
+		Error::Put("fk_DataBase", "VPrint", 1, "Vertex Admin Error.");
 	} else {
 		vSet[_st(argID)-1].Print();
 	}
@@ -605,8 +604,7 @@ void fk_DataBase::HPrint(int argID) const
 			if(hSet[i].getID() != FK_UNDEFINED) hSet[i].Print();
 		}
 	} else if(!hAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "HPrint", 1,
-					"Half Edge Admin Error.");
+		Error::Put("fk_DataBase", "HPrint", 1, "Half Edge Admin Error.");
 	} else {
 		hSet[_st(argID)-1].Print();
 	}
@@ -621,8 +619,7 @@ void fk_DataBase::EPrint(int argID) const
 			if(eSet[i].getID() != FK_UNDEFINED) eSet[i].Print();
 		}
 	} else if(!eAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "EPrint", 1,
-					"Edge Admin Error.");
+		Error::Put("fk_DataBase", "EPrint", 1, "Edge Admin Error.");
 	} else {
 		eSet[_st(argID)-1].Print();
 	}
@@ -637,8 +634,7 @@ void fk_DataBase::LPrint(int argID) const
 			if(lSet[i].getID() != FK_UNDEFINED) lSet[i].Print();
 		}
 	} else if(!lAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "LPrint", 1,
-					"Loop Admin Error.");
+		Error::Put("fk_DataBase", "LPrint", 1, "Loop Admin Error.");
 	} else {
 		lSet[_st(argID)-1].Print();
 	}
@@ -669,8 +665,7 @@ bool	fk_DataBase::VCheck(int argID) const
 			}
 		}
 	} else if(!vAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "VCheck", 1,
-					"Vertex Admin Error.");
+		Error::Put("fk_DataBase", "VCheck", 1, "Vertex Admin Error.");
 		retBool = false;
 	} else {
 		retBool = vSet[_st(argID)-1].Check();
@@ -692,8 +687,7 @@ bool	fk_DataBase::HCheck(int argID) const
 			}
 		}
 	} else if(!hAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "HCheck", 1,
-					"Half Edge Admin Error.");
+		Error::Put("fk_DataBase", "HCheck", 1, "Half Edge Admin Error.");
 		retBool = false;
 	} else {
 		retBool = hSet[_st(argID)-1].Check();
@@ -715,8 +709,7 @@ bool	fk_DataBase::ECheck(int argID) const
 			}
 		}
 	} else if(!eAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "ECheck", 1,
-					"Edge Admin Error.");
+		Error::Put("fk_DataBase", "ECheck", 1, "Edge Admin Error.");
 		retBool = false;
 	} else {
 		retBool = eSet[_st(argID)-1].Check();
@@ -738,8 +731,7 @@ bool fk_DataBase::LCheck(int argID) const
 			}
 		}
 	} else if(!lAdmin.ExistID(argID)) {
-		fk_PutError("fk_DataBase", "LCheck", 1,
-					"Loop Admin Error");
+		Error::Put("fk_DataBase", "LCheck", 1, "Loop Admin Error");
 		retBool = false;
 	} else {
 		retBool = lSet[_st(argID)-1].Check();

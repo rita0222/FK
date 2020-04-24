@@ -6,8 +6,6 @@
 using namespace std;
 using namespace FK;
 
-// static fk_HVector fk_dummy_vec;
-
 inline bool AlmostZero(double x)
 {
 	if(x < fk_Vector::MATRIXEPS2 && x > -fk_Vector::MATRIXEPS2) return true;
@@ -168,8 +166,7 @@ fk_OrthoMatrix fk_MatrixAdmin::getInvBaseMatrix(void) const
 bool fk_MatrixAdmin::setScale(const double argScale)
 {
 	if(fabs(argScale) < fk_Math::EPS) {
-		fk_PutError("fk_MatrixAdmin", "setScale", 1,
-					"Zero Scale Error.");
+		Error::Put("fk_MatrixAdmin", "setScale", 1, "Zero Scale Error.");
 		return false;
 	}
 
@@ -184,8 +181,7 @@ bool fk_MatrixAdmin::setScale(const double argScale)
 bool fk_MatrixAdmin::setScale(const double argScale, const fk_Axis argAxis)
 {
 	if(fabs(argScale) < fk_Math::EPS) {
-		fk_PutError("fk_MatrixAdmin", "setScale", 2,
-					"Zero Scale Error.");
+		Error::Put("fk_MatrixAdmin", "setScale", 2, "Zero Scale Error.");
 		return false;
 	}
 
@@ -213,8 +209,7 @@ bool fk_MatrixAdmin::setScale(const double argX, const double argY,
 							  const double argZ)
 {
 	if(fabs(argX) < fk_Math::EPS || fabs(argY) < fk_Math::EPS || fabs(argZ) < fk_Math::EPS) {
-		fk_PutError("fk_MatrixAdmin", "setScale", 3,
-					"Zero Scale Error.");
+		Error::Put("fk_MatrixAdmin", "setScale", 3, "Zero Scale Error.");
 		return false;
 	}
 
@@ -230,8 +225,7 @@ bool fk_MatrixAdmin::setScale(const double argX, const double argY,
 bool fk_MatrixAdmin::prdScale(const double argScale)
 {
 	if(fabs(argScale * Scale) < fk_Math::EPS) {
-		fk_PutError("fk_MatrixAdmin", "prdScale", 1,
-					"Zero Scale Error.");
+		Error::Put("fk_MatrixAdmin", "prdScale", 1, "Zero Scale Error.");
 		return false;
 	}
 
@@ -247,8 +241,7 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 	switch(argAxis) {
 	  case fk_Axis::X:
 		if(fabs(xScale * argScale) < fk_Math::EPS) {
-			fk_PutError("fk_MatrixAdmin", "prdScale", 2,
-						"Zero Scale Error.");
+			Error::Put("fk_MatrixAdmin", "prdScale", 2, "Zero Scale Error.");
 			return false;
 		}
 
@@ -256,8 +249,7 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 		break;
 	  case fk_Axis::Y:
 		if(fabs(yScale * argScale) < fk_Math::EPS) {
-			fk_PutError("fk_MatrixAdmin", "prdScale", 2,
-						"Zero Scale Error.");
+			Error::Put("fk_MatrixAdmin", "prdScale", 2, "Zero Scale Error.");
 			return false;
 		}
 
@@ -265,8 +257,7 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 		break;
 	  case fk_Axis::Z:
 		if(fabs(zScale * argScale) < fk_Math::EPS) {
-			fk_PutError("fk_MatrixAdmin", "prdScale", 2,
-						"Zero Scale Error.");
+			Error::Put("fk_MatrixAdmin", "prdScale", 2, "Zero Scale Error.");
 			return false;
 		}
 
@@ -288,8 +279,7 @@ bool fk_MatrixAdmin::prdScale(const double argX, const double argY,
 	if(fabs(xScale * argX) < fk_Math::EPS ||
 	   fabs(yScale * argY) < fk_Math::EPS ||
 	   fabs(zScale * argZ) < fk_Math::EPS) {
-		fk_PutError("fk_MatrixAdmin", "prdScale", 3,
-					"Zero Scale Error.");
+		Error::Put("fk_MatrixAdmin", "prdScale", 3, "Zero Scale Error.");
 		return false;
 	}
 
@@ -365,8 +355,7 @@ void fk_MatrixAdmin::GlRotate_(const fk_Vector &argOrg, const fk_Vector &argTop,
 bool fk_MatrixAdmin::glRotate_(fk_Vector &argOrg, fk_Vector &argTop, double argAngle)
 {
 	if(argOrg == argTop) {
-		fk_PutError("fk_MatrixAdmin", "glRotate", 1,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glRotate", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -383,8 +372,7 @@ bool fk_MatrixAdmin::glRotate_(double argOX, double argOY, double argOZ,
 	org.set(argOX, argOY, argOZ);
 	top.set(argTX, argTY, argTZ);
 	if(org == top) {
-		fk_PutError("fk_MatrixAdmin", "glRotate", 2,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glRotate", 2, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -452,8 +440,7 @@ void fk_MatrixAdmin::LoRotate_(const fk_Vector &argOrg, const fk_Vector &argTop,
 bool fk_MatrixAdmin::loRotate_(fk_Vector &argOrg, fk_Vector &argTop, double argAngle)
 {
 	if(argOrg == argTop) {
-		fk_PutError("fk_MatrixAdmin", "loRotate", 1,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "loRotate", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -470,8 +457,7 @@ bool fk_MatrixAdmin::loRotate_(double argOX, double argOY, double argOZ,
 	top.set(argTX, argTY, argTZ);
 
 	if(org == top) {
-		fk_PutError("fk_MatrixAdmin", "loRotate", 2,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "loRotate", 2, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -533,8 +519,7 @@ void fk_MatrixAdmin::GlRotateWithVec_(const fk_Vector &argOrg,
 bool fk_MatrixAdmin::glRotateWithVec_(fk_Vector &argOrg, fk_Vector &argTop, double argAngle)
 {
 	if(argOrg == argTop) {
-		fk_PutError("fk_MatrixAdmin", "glRotateWithVec", 1,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glRotateWithVec", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -551,8 +536,7 @@ bool fk_MatrixAdmin::glRotateWithVec_(double argOX, double argOY, double argOZ,
 	top.set(argTX, argTY, argTZ);
 
 	if(org == top) {
-		fk_PutError("fk_MatrixAdmin", "glRotateWithVec", 2,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glRotateWithVec", 2, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -623,8 +607,7 @@ void fk_MatrixAdmin::LoRotateWithVec_(const fk_Vector &argOrg,
 bool fk_MatrixAdmin::loRotateWithVec_(fk_Vector &argOrg, fk_Vector &argTop, double argAngle)
 {
 	if(argOrg == argTop) {
-		fk_PutError("fk_MatrixAdmin", "loRotateWithVec", 1,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "loRotateWithVec", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -640,8 +623,7 @@ bool fk_MatrixAdmin::loRotateWithVec_(double argOX, double argOY, double argOZ,
 	org.set(argOX, argOY, argOZ);
 	top.set(argTX, argTY, argTZ);
 	if(org == top) {
-		fk_PutError("fk_MatrixAdmin", "loRotateWithVec", 2,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "loRotateWithVec", 2, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -656,8 +638,7 @@ bool fk_MatrixAdmin::glFocus(fk_Vector argObj)
 	// Find out Heading & Pitching
 	focusVec = argObj - Position;
 	if(focusVec.isZero() == true) {
-		fk_PutError("fk_MatrixAdmin", "glFocus", 1,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glFocus", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -678,15 +659,14 @@ bool fk_MatrixAdmin::loFocus(fk_Vector argObj)
 	fk_Vector glo;
 
 	if(argObj.isZero() == true) {
-		fk_PutError("fk_MatrixAdmin", "loFocus", 1,
-					"Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "loFocus", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
 	// Make Objective Vector in Global Axis
 	RotateLtoG(&glo, &argObj, &Angle);
 	if(glo.normalize() == false) {
-		fk_PutError("fk_MatrixAdmin", "loFocus", 2, "Vector Undefined Error.");
+		Error::Put("fk_MatrixAdmin", "loFocus", 2, "Vector Undefined Error.");
 		return false;
 	}
 
@@ -708,7 +688,7 @@ bool fk_MatrixAdmin::loFocus(double argX, double argY, double argZ)
 bool fk_MatrixAdmin::glVec(fk_Vector argVec)
 {
 	if(argVec.normalize() == false) {
-		fk_PutError("fk_MatrixAdmin", "glVec", 1, "Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glVec", 1, "Zero-Vector Defined.");
 		return false;
 	}
 	Vec = argVec;
@@ -727,7 +707,7 @@ bool fk_MatrixAdmin::glVec(double argX, double argY, double argZ)
 bool fk_MatrixAdmin::glUpvec(fk_Vector argUpv)
 {
 	if(argUpv.normalize() == false) {
-		fk_PutError("fk_MatrixAdmin", "glUpvec", 1, "Zero-Vector Defined.");
+		Error::Put("fk_MatrixAdmin", "glUpvec", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
@@ -735,8 +715,7 @@ bool fk_MatrixAdmin::glUpvec(fk_Vector argUpv)
 		UpVec = argUpv;
 		UpdateMatrix(true);
 	} else {
-		fk_PutError("fk_MatrixAdmin", "glUpvec", 2,
-					"Up Vector Parallel Error.");
+		Error::Put("fk_MatrixAdmin", "glUpvec", 2, "Up Vector Parallel Error.");
 		return false;
 	}
 
@@ -755,16 +734,14 @@ bool fk_MatrixAdmin::loUpvec(fk_Vector argUpv)
 
 	RotateLtoG(&tmp, &argUpv, &Angle);
 	if(tmp.normalize() == false) {
-		fk_PutError("fk_MatrixAdmin", "loUpvec", 1,
-					"UpVector Undefined Error.");
+		Error::Put("fk_MatrixAdmin", "loUpvec", 1, "UpVector Undefined Error.");
 		return false;
 	}
 
 	if(fabs(tmp * fk_Vector(Vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
 		UpVec = tmp;
 	} else {
-		fk_PutError("fk_MatrixAdmin", "loUpvec", 2,
-					"Up Vector Parallel Error.");
+		Error::Put("fk_MatrixAdmin", "loUpvec", 2, "Up Vector Parallel Error.");
 		return false;
 	}
 	UpdateMatrix(true);
@@ -899,8 +876,7 @@ void fk_MatrixAdmin::VectorToHeadPitch(fk_Angle *retAngle,
 
 	tmpVec = *argVec;
 	if(tmpVec.normalize() == false) {
-		fk_PutError("fk_MatrixAdmin", "VectorToHeadPitch", 1,
-					"Zero Vector Error.");
+		Error::Put("fk_MatrixAdmin", "VectorToHeadPitch", 1, "Zero Vector Error.");
 		return;
 	}
 

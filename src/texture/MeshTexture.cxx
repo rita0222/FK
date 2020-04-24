@@ -175,8 +175,7 @@ void fk_MeshTexture::TexCoordUpdate(int argTID, int argVID)
 bool fk_MeshTexture::setTriNum(int argNum)
 {
 	if(argNum < 0) {
-		fk_PutError("fk_MeshTexture", "setTriNum", 1,
-					"Triangle Number Error.");
+		Error::Put("fk_MeshTexture", "setTriNum", 1, "Triangle Number Error.");
 		return false;
 	}
 
@@ -201,7 +200,7 @@ bool fk_MeshTexture::setVertexPos(int argTID, int argVID,
 {
 	if(argTID < 0 ||
 	   argVID < 0 || argVID > 2) {
-		fk_PutError("fk_MeshTexture", "setVertexPos", 1, "ID Error.");
+		Error::Put("fk_MeshTexture", "setVertexPos", 1, "ID Error.");
 		return false;
 	}
 
@@ -220,7 +219,7 @@ bool fk_MeshTexture::setVertexPos(int argTID, int argVID, fk_Vector argPos)
 {
 	if(argTID < 0 ||
 	   argVID < 0 || argVID > 2) {
-		fk_PutError("fk_MeshTexture", "setVertexPos", 2, "ID Error.");
+		Error::Put("fk_MeshTexture", "setVertexPos", 2, "ID Error.");
 		return false;
 	}
 
@@ -240,14 +239,12 @@ bool fk_MeshTexture::setTriPos(int argTID, vector<fk_Vector> *argTPos)
 	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
-		fk_PutError("fk_MeshTexture", "setTriPos", 1,
-					"ID Error.");
+		Error::Put("fk_MeshTexture", "setTriPos", 1, "ID Error.");
 		return false;
 	}
 
 	if(argTPos->size() != 3) {
-		fk_PutError("fk_MeshTexture", "setTriPos", 2,
-					"Vertex Number Error.");
+		Error::Put("fk_MeshTexture", "setTriPos", 2, "Vertex Number Error.");
 		return false;
 	}
 
@@ -269,8 +266,7 @@ bool fk_MeshTexture::setTriPos(int argTID, fk_Vector *argTPos)
 	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
-		fk_PutError("fk_MeshTexture", "setTriPos", 3,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "setTriPos", 3, "Triangle ID Error.");
 		return false;
 	}
 
@@ -292,15 +288,13 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 {
 	if(argTID < 0 ||
 	   argVID < 0 || argVID > 2) {
-		fk_PutError("fk_MeshTexture", "setTextureCoord", 1,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "setTextureCoord", 1, "Triangle ID Error.");
 		return false;
 	}
 
 	if(argS < -fk_Math::EPS || argS > 1.0 + fk_Math::EPS ||
 	   argT < -fk_Math::EPS || argT > 1.0 + fk_Math::EPS) {
-		fk_PutError("fk_MeshTexture", "setTextureCoord", 2,
-					"Texture Coord Error.");
+		Error::Put("fk_MeshTexture", "setTextureCoord", 2, "Texture Coord Error.");
 		return false;
 	}
 
@@ -319,15 +313,13 @@ bool fk_MeshTexture::setTextureCoord(int argTID, int argVID,
 {
 	if(argTID < 0 ||
 	   argVID < 0 || argVID > 2) {
-		fk_PutError("fk_MeshTexture", "setTextureCoord", 3,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "setTextureCoord", 3, "Triangle ID Error.");
 		return false;
 	}
 
 	if(argCoord.x < -fk_Math::EPS || argCoord.x > 1.0 + fk_Math::EPS ||
 	   argCoord.y < -fk_Math::EPS || argCoord.y > 1.0 + fk_Math::EPS) {
-		fk_PutError("fk_MeshTexture", "setTextureCoord", 4,
-					"Texture Coord Error.");
+		Error::Put("fk_MeshTexture", "setTextureCoord", 4, "Texture Coord Error.");
 		return false;
 	}
 
@@ -346,14 +338,12 @@ bool fk_MeshTexture::setTriTextureCoord(int argTID,
 	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
-		fk_PutError("fk_MeshTexture", "setTriTextureCoord", 1,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "setTriTextureCoord", 1, "Triangle ID Error.");
 		return false;
 	}
 
 	if(argTCoord->size() != 3) {
-		fk_PutError("fk_MeshTexture", "setTriTextureCoord", 2,
-					"Vertex Number Error.");
+		Error::Put("fk_MeshTexture", "setTriTextureCoord", 2, "Vertex Number Error.");
 		return false;
 	}
 
@@ -373,8 +363,7 @@ bool fk_MeshTexture::setTriTextureCoord(int argTID, fk_TexCoord *argTCoord)
 	_st		tid = _st(argTID);
 
 	if(argTID < 0) {
-		fk_PutError("fk_MeshTexture", "setTriTextureCoord", 3,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "setTriTextureCoord", 3, "Triangle ID Error.");
 		return false;
 	}
 
@@ -401,8 +390,7 @@ fk_Vector fk_MeshTexture::getVertexPos(int argTID, int argVID)
 
 	if(argTID < 0 ||
 	   argVID < 0 || argVID > 2) {
-		fk_PutError("fk_MeshTexture", "getVertexPos", 1,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "getVertexPos", 1, "Triangle ID Error.");
 		return dummy;
 	}
 
@@ -415,8 +403,7 @@ fk_TexCoord fk_MeshTexture::getTextureCoord(int argTID, int argVID)
 
 	if(argTID < 0 || argTID >= triNum ||
 	   argVID < 0 || argVID > 2) {
-		fk_PutError("fk_MeshTexture", "getTextureCoord", 1,
-					"Triangle ID Error.");
+		Error::Put("fk_MeshTexture", "getTextureCoord", 1, "Triangle ID Error.");
 		return dummy;
 	}
 

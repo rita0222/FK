@@ -327,7 +327,7 @@ bool fk_UniStr::readFile(string argFileName, fk_StringCode argCode)
 	ifstream	ifs(argFileName);
 
 	if(ifs.fail()) {
-		fk_PutError("fk_UniStr", "readFile", 1);
+		Error::Put("fk_UniStr", "readFile", 1);
 		return false;
 	}
 
@@ -446,7 +446,7 @@ void fk_UniStr::Print(string argStr)
 	for(i = 0; i < getLength(); i++) {
 		ss.clear();
 		ss << prefix << "[" << i << "] = " << getCode(i) << endl;
-		fk_PutError(ss.str());
+		Error::Put(ss.str());
 	}
 	return;
 }
