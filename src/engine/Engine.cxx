@@ -32,6 +32,14 @@ fk_SurfaceDraw * fk_GraphicsEngine::surfaceDraw = nullptr;
 fk_SurfaceDraw * fk_GraphicsEngine::surfacePointDraw = nullptr;
 fk_SurfaceDraw * fk_GraphicsEngine::surfaceLineDraw = nullptr;
 
+#ifndef GL_COLOR_ATTACHMENT0
+#define GL_COLOR_ATTACHMENT0 0x8CE0
+#endif
+
+#ifndef GL_DEPTH_ATTACHMENT
+#define GL_DEPTH_ATTACHMENT 0x8D00
+#endif
+
 static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
 static const GLenum shadowBuffers[] = {GL_DEPTH_ATTACHMENT};
 
