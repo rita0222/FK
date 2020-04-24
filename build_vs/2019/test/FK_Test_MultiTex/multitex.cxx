@@ -49,8 +49,8 @@ void CylMake(fk_IFSTexture *argIFS)
 	double radius = 10.0;
 	double height = 30.0;
 
-	vector<int>	ifset(_st(divW * divH * 6));
-	vector<fk_Vector> pos(_st((divW + 1) * (divH + 1)));
+	vector<int>	ifset(_st(divW) * _st(divH) * 6);
+	vector<fk_Vector> pos((_st(divW) + 1) * (_st(divH) + 1));
 
 	for(int j = 0; j <= divH; j++) {
 		double h1 = height * double(j)/double(divH);
@@ -70,7 +70,7 @@ void CylMake(fk_IFSTexture *argIFS)
 			int id_1 = vID(i+1, j, divW);
 			int id_2 = vID(i+1, j+1, divW);
 			int id_3 = vID(i, j+1, divW);
-			_st faceOffset = _st(fID(i, j, divW) * 3);
+			_st faceOffset = _st(fID(i, j, divW)) * 3;
 
 			ifset[faceOffset + 0] = id_0;
 			ifset[faceOffset + 1] = id_1;
@@ -90,9 +90,9 @@ void CylMake(fk_IFSTexture *argIFS)
 		for(int i = 0; i <= divW; i++) { // xz方向
 			int id = fID(i, j, divW);
 			double x1 = double(i)/double(divW);
-			double x2 = double(i+1)/double(divW);
+			double x2 = (double(i)+1.0)/double(divW);
 			double y1 = double(j)/double(divH);
-			double y2 = double(j+1)/double(divH);
+			double y2 = (double(j)+1.0)/double(divH);
 
 			coord[0].set(x1, y1);
 			coord[1].set(x2, y1);
@@ -115,8 +115,8 @@ fk_TexCoord getScale(fk_Image *argImage, fk_TexCoord *argScale)
 	auto spriteBufDim = argImage->getBufferSize();
 	fk_TexCoord sprScale(double(spriteSizeDim->w)/double(spriteBufDim->w),
 						 double(spriteSizeDim->h)/double(spriteBufDim->h));
-	fk_TexCoord prodScale(double(argScale->x * sprScale.x),
-						  double(argScale->y * sprScale.y));
+	fk_TexCoord prodScale(double(argScale->x) * double(sprScale.x),
+						  double(argScale->y) * double(sprScale.y));
 	return prodScale;
 }
 	
@@ -132,7 +132,7 @@ int main(int, char **)
 
 	window.setSize(WIN_W, WIN_H);
 	fk_InitMaterial();
-	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
+	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
 	if(ifsShape.readPNG("image/poe.png") == false) {
 		fl_alert("tex load err");

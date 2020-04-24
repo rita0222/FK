@@ -171,7 +171,7 @@ int Ball::draw(fk_Vector pos)
 
 int main(int, char *[])
 {
-	fk_SetErrorMode(fk_ErrorMode::BROWSER_INTERACTIVE);
+	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
 	int				view_mode = Ball::HIGH_MODE;
 	Ball			ball;
