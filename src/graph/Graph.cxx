@@ -1,6 +1,6 @@
 ﻿#define FK_DEF_SIZETYPE
 #include <FK/Graph.h>
-#include <FK/Window.h>
+#include <FK/Error.H>
 
 using namespace std;
 using namespace FK;
@@ -215,8 +215,8 @@ void fk_Graph::TablePrint(void)
 {
 	for(_st i = 0; i < tableArray.size(); ++i) {
 		if(tableArray[i] == nullptr) continue;
-		fk_Window::putString("Table[" + to_string(i) + "] :");
-		fk_Window::putString(tableArray[i]->print());
+		Error::Put("Table[" + to_string(i) + "] :");
+		Error::Put(tableArray[i]->print());
 	}
 }		
 
@@ -574,7 +574,7 @@ void fk_Graph::CostPrint(unsigned int argID)
 		} else {
 			str += to_string(node->getDoubleCost(nodeID));
 		}
-		fk_Window::putString(str);
+		Error::Put(str);
 	}
 }
 
@@ -588,7 +588,7 @@ void fk_Graph::CostPrint(fk_CostType argType, unsigned int argID)
 		} else {
 			str += to_string(node->getDoubleCost(argID));
 		}
-		fk_Window::putString(str);
+		Error::Put(str);
 	}
 }
 

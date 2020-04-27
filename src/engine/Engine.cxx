@@ -728,7 +728,7 @@ void fk_GraphicsEngine::PreFBODraw(void)
 	//glClear(GL_DEPTH_BUFFER_BIT);
 	glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		fk_Window::putString("FBO Error");
+		Error::Put("fk_GraphicsEngine", "PreFBODraw", 1, "FBO Error");
 	}
 }
 
@@ -852,7 +852,7 @@ void fk_GraphicsEngine::PreShadowDraw(void)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
 	glDrawBuffers(sizeof(shadowBuffers) / sizeof(shadowBuffers[0]), shadowBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		fk_Window::putString("Shadow Error");
+		Error::Put("fk_GraphicsEngine", "PreShadowDraw", 1, "Shadow Error");
 	}
 }
 
