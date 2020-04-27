@@ -5,9 +5,6 @@ namespace FK_Core_Test_Shadow
 {
     class Shadow
     {
-        const int WIN_W = 1024;
-        const int WIN_H = 1024;
-
         static void ModelSetup(fk_Model argModel, fk_Material argMat, fk_Vector argPos)
         {
             argModel.Material = argMat;
@@ -58,7 +55,7 @@ namespace FK_Core_Test_Shadow
             var bgColor = new fk_Color(0.5, 0.5, 0.5);
 
             fk_Material.InitDefault();
-            window.Size = new fk_Dimension(WIN_W, WIN_H);
+            window.Size = new fk_Dimension(800, 800);
             window.TrackBallMode = true;
             window.ShowGuide();
             window.CameraPos = new fk_Vector(0.0, 50.0, 200.0);
