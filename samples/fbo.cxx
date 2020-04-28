@@ -7,7 +7,7 @@ using namespace FK;
 constexpr int WIN_W = 512; // ウィンドウ横幅
 constexpr int WIN_H = 512; // ウィンドウ縦幅
 
-enum WinStatus {
+enum class WinStatus {
 	NORMAL, CONTINUE, BREAK
 };
 
@@ -52,21 +52,21 @@ WinStatus WindowUpdate(Fl_Window *argMainWin, fk_Window *argBaseWin,
 {
 	if(argMainWin->visible() == 0) {
 		if(Fl::wait() == 0) {
-			return BREAK;
+			return WinStatus::BREAK;
 		} else {
-			return CONTINUE;
+			return WinStatus::CONTINUE;
 		}
 	}
 
-	if(argBaseWin->drawWindow() == 0) return BREAK;;
-	if(argEdgeWin->drawWindow() == 0) return BREAK;
-	if(argDepthWin->drawWindow() == 0) return BREAK;
-	if(Fl::check() == 0) return BREAK;
-	if(argBaseWin->winOpenStatus() == false) return CONTINUE;
-	if(argEdgeWin->winOpenStatus() == false) return CONTINUE;
-	if(argDepthWin->winOpenStatus() == false) return CONTINUE;
+	if(argBaseWin->drawWindow() == 0) return WinStatus::BREAK;
+	if(argEdgeWin->drawWindow() == 0) return WinStatus::BREAK;
+	if(argDepthWin->drawWindow() == 0) return WinStatus::BREAK;
+	if(Fl::check() == 0) return WinStatus::BREAK;
+	if(argBaseWin->winOpenStatus() == false) return WinStatus::CONTINUE;
+	if(argEdgeWin->winOpenStatus() == false) return WinStatus::CONTINUE;
+	if(argDepthWin->winOpenStatus() == false) return WinStatus::CONTINUE;
 
-	return NORMAL;
+	return WinStatus::NORMAL;
 }
 
 int main(int, char **)
@@ -173,15 +173,15 @@ int main(int, char **)
 		// シーン描画
 		switch(WindowUpdate(mainWindow.get(), baseWindow.get(),
 							edgeWindow.get(), depthWindow.get())) {
-		  case BREAK:
+		  case WinStatus::BREAK:
 			// プログラム終了
 			return 0;
 
-		  case CONTINUE:
+		  case WinStatus::CONTINUE:
 			// メインループ処理を行わず再描画
 			continue;
 
-		  case NORMAL:
+		  case WinStatus::NORMAL:
 			// 以下の処理を行う。
 			break;
 		}
