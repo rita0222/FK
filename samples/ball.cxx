@@ -1,7 +1,9 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace FK;
 using namespace FK::Material;
+using namespace std;
 
 class Ball {
 
@@ -39,16 +41,19 @@ private:
 	int			view_mode;		// 視点モード
 	int			bound_count;	// バウンド回数を数える変数
 	double		y_trs;			// ボールのｙ座標移動量
-	fk_Model	ball_model;		// ボールのモデル
-	fk_Sphere	ball2;			// 二分割形状
-	fk_Sphere	ball3;			// 三分割形状
-	fk_Sphere	ball4;			// 四分割形状
-
+	unique_ptr<fk_Model> ball_model;		// ボールのモデル
+	unique_ptr<fk_Sphere> ball2;			// 二分割形状
+	unique_ptr<fk_Sphere> ball3;			// 三分割形状
+	unique_ptr<fk_Sphere> ball4;			// 四分割形状
 };
 
 // コンストラクタ
 Ball::Ball(void)
 {
+	ball_model = make_unique<fk_Model>();
+	ball2 = make_unique<fk_Sphere>(6, BALL_SIZE);
+	ball3 = make_unique<fk_Sphere>(8, BALL_SIZE);
+	ball4 = make_unique<fk_Sphere>(10, BALL_SIZE);
 	init();
 }
 
@@ -59,55 +64,47 @@ void Ball::init(void)
 	y_trs		= 0.0;
 	view_mode	= HIGH_MODE;
 	bound_count	= 1;
-	ball2.setRadius(BALL_SIZE);
-	ball2.setDivide(6);
-	ball3.setRadius(BALL_SIZE);
-	ball3.setDivide(8);
-	ball4.setRadius(BALL_SIZE);
-	ball4.setDivide(10);
 
-	ball_model.glMoveTo(0.0, TOP_POS, 0.0);
-	ball_model.setShape(&ball2);
+	ball_model->glMoveTo(0.0, TOP_POS, 0.0);
+	ball_model->setShape(ball2.get());
 }
 
 // fk_Model を返す関数
 fk_Model * Ball::getModel(void)
 {
-	return &ball_model;
+	return ball_model.get();
 }
 
 // ボールの現在位置を返す関数
 fk_Vector Ball::getPosition(void)
 {
-	return ball_model.getPosition();
+	return ball_model->getPosition();
 }
 
 // 視点からの距離によってボールの分割数を変える関数 (Level Of Detail)
 void Ball::lod(fk_Vector pos){
-	double	Distance;
-
-	Distance = (ball_model.getPosition() - pos).dist();
+	double	Distance = (ball_model->getPosition() - pos).dist();
 
 	switch(view_mode) {
 	  case HIGH_MODE:
 
 		if(Distance < LOD4_HIGH) {
-			ball_model.setShape(&ball4);
+			ball_model->setShape(ball4.get());
 		} else if(Distance < LOD3_HIGH) {
-			ball_model.setShape(&ball3);
+			ball_model->setShape(ball3.get());
 		} else {
-			ball_model.setShape(&ball2);
+			ball_model->setShape(ball2.get());
 		}
 		break;
 
 	  case LOW_MODE:
 
 		if(Distance < LOD4_LOW) {
-			ball_model.setShape(&ball4);
+			ball_model->setShape(ball4.get());
 		} else if(Distance < LOD3_LOW) {
-			ball_model.setShape(&ball3);
+			ball_model->setShape(ball3.get());
 		} else {
-			ball_model.setShape(&ball2);
+			ball_model->setShape(ball2.get());
 		}
 		break;
 
@@ -125,12 +122,12 @@ void Ball::accel(void)
 	switch(direction) {
 	  case DOWN_MODE:
 		y_trs += DOWN_ACCEL;
-		ball_model.glTranslate(0.0, -y_trs, 0.0);
+		ball_model->glTranslate(0.0, -y_trs, 0.0);
 		break;
 
 	  case RISE_MODE:
 		y_trs -= RISE_ACCEL;
-		ball_model.glTranslate(0.0, y_trs,0.0);
+		ball_model->glTranslate(0.0, y_trs,0.0);
 		break;
 		
 	  default:
@@ -142,7 +139,7 @@ void Ball::accel(void)
 // ボールの跳ね返り判定をする関数
 void Ball::bound(void)
 {
-	if(ball_model.getPosition().y < BTM_POS) {
+	if(ball_model->getPosition().y < BTM_POS) {
 		direction = RISE_MODE;
 	} else if(y_trs < 0.01) {
 		if(direction == RISE_MODE) {
@@ -174,24 +171,24 @@ int main(int, char *[])
 	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
 	int view_mode = Ball::HIGH_MODE;
-	Ball *ball = new Ball();
-	fk_Sphere *lightBall = new fk_Sphere(4, 2.0);
-	fk_Model *viewModel = new fk_Model();
-	fk_Model *groundModel = new fk_Model();
-	fk_Model *blockModel = new fk_Model();
-	fk_Model *pointLightModel = new fk_Model();
-	fk_Model *parallelLightModel = new fk_Model();
-	fk_Model *lightBallModel = new fk_Model();
-	fk_Light *pointLight = new fk_Light();
-	fk_Light *parallelLight = new fk_Light();
-	fk_Circle *ground = new fk_Circle(4, 100.0);
-	fk_Block *block = new fk_Block(10.0, 10.0, 10.0);
-	fk_Scene *scene = new fk_Scene();
+	unique_ptr<Ball> ball(new Ball());
+	unique_ptr<fk_Sphere> lightBall(new fk_Sphere(4, 2.0));
+	unique_ptr<fk_Model> viewModel(new fk_Model());
+	unique_ptr<fk_Model> groundModel(new fk_Model());
+	unique_ptr<fk_Model> blockModel(new fk_Model());
+	unique_ptr<fk_Model> pointLightModel(new fk_Model());
+	unique_ptr<fk_Model> parallelLightModel(new fk_Model());
+	unique_ptr<fk_Model> lightBallModel(new fk_Model());
+	unique_ptr<fk_Light> pointLight(new fk_Light());
+	unique_ptr<fk_Light> parallelLight(new fk_Light());
+	unique_ptr<fk_Circle> ground(new fk_Circle(4, 100.0));
+	unique_ptr<fk_Block> block(new fk_Block(10.0, 10.0, 10.0));
+	unique_ptr<fk_Scene> scene(new fk_Scene());
 
 	// ### WINDOW ###
-	fk_AppWindow *win = new fk_AppWindow();
+	unique_ptr<fk_AppWindow> win(new fk_AppWindow());
 	win->setSize(800, 800);
-	win->setScene(scene);
+	win->setScene(scene.get());
 
 	// ### Material 初期化 ###
 	fk_Material::initDefault();
@@ -205,24 +202,24 @@ int main(int, char *[])
 	// ### LIGHT ###
 	pointLight->setLightType(fk_LightType::POINT);
 	pointLight->setAttenuation(0.01, 0.0, 0.2);
-	pointLightModel->setShape(pointLight);
+	pointLightModel->setShape(pointLight.get());
 	pointLightModel->setMaterial(WhiteLight);
 	pointLightModel->glTranslate(-60.0, 60.0, 0.0);
 	pointLightModel->glVec(0.0, -1.0, 0.0);
 
 	parallelLight->setLightType(fk_LightType::PARALLEL);
-	parallelLightModel->setShape(parallelLight);
+	parallelLightModel->setShape(parallelLight.get());
 	parallelLightModel->setMaterial(WhiteLight);
 	parallelLightModel->glVec(1.0, -1.0, 1.0);
 
-	lightBallModel->setShape(lightBall);
+	lightBallModel->setShape(lightBall.get());
 	lightBallModel->setMaterial(TrueWhite);
 	lightBallModel->glTranslate(pointLightModel->getInhPosition());
 	lightBallModel->setShadowEffect(false);
 	lightBallModel->setShadowDraw(false);
 	
 	// ### GROUND ###
-	groundModel->setShape(ground);
+	groundModel->setShape(ground.get());
 	LightGreen.setSpecular(0.1, 0.1, 0.1);
 	LightGreen.setShininess(80.0);
 	groundModel->setMaterial(LightGreen);
@@ -231,12 +228,12 @@ int main(int, char *[])
 	groundModel->setShadowDraw(true);
 
 	// ### VIEW BLOCK ###
-	blockModel->setShape(block);
+	blockModel->setShape(block.get());
 	Blue.setSpecular(1.0, 1.0, 1.0);
 	Blue.setShininess(70.0);
 	blockModel->setMaterial(Blue);
 	blockModel->glMoveTo(60.0, 30.0, 0.0);
-	blockModel->setParent(groundModel);
+	blockModel->setParent(groundModel.get());
 	blockModel->setShadowDraw(false);
 
 	// ### BALL ###
@@ -247,12 +244,12 @@ int main(int, char *[])
 	ball->getModel()->setShadowDraw(false);
 	
 	// ### Model Entry ###
-	scene->entryCamera(viewModel);
-	scene->entryModel(groundModel);
-	scene->entryModel(pointLightModel);
-	scene->entryModel(parallelLightModel);
-	scene->entryModel(lightBallModel);
-	scene->entryModel(blockModel);
+	scene->entryCamera(viewModel.get());
+	scene->entryModel(groundModel.get());
+	scene->entryModel(pointLightModel.get());
+	scene->entryModel(parallelLightModel.get());
+	scene->entryModel(lightBallModel.get());
+	scene->entryModel(blockModel.get());
 	scene->entryModel(ball->getModel());
 
 	scene->setShadowMode(fk_ShadowMode::SOFT_NICE);
@@ -276,34 +273,19 @@ int main(int, char *[])
 			viewModel->glMoveTo(0.0, 400.0, 80.0);
 			viewModel->glFocus(0.0, 30.0, 0.0);
 			viewModel->glUpvec(0.0, 1.0, 0.0);
-			scene->entryModel(blockModel);
+			scene->entryModel(blockModel.get());
 		} else {
 			// カメラをブロックからの視点にする。
 			viewModel->glMoveTo(blockModel->getInhPosition());
 			viewModel->glTranslate(0.0, 10.0, 0.0);
 			viewModel->glFocus(ball->getPosition());
 			viewModel->glUpvec(0.0, 1.0, 0.0);
-			scene->removeModel(blockModel);
+			scene->removeModel(blockModel.get());
 		}
 
 		// 地面をくるくる回転させましょう。
 		groundModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, Ball::ROTATE);
 	}
-
-	delete win;
-	delete scene;
-	delete block;
-	delete ground;
-	delete pointLight;
-	delete parallelLight;
-	delete lightBallModel;
-	delete parallelLightModel;
-	delete pointLightModel;
-	delete groundModel;
-	delete blockModel;
-	delete viewModel;
-	delete lightBall;
-	delete ball;
 
 	return 0;
 }
