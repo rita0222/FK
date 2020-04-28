@@ -8,117 +8,118 @@ using namespace FK::Material;
 class Car {
 
 public:
-	static constexpr double	BUILDWIDTH	= 25.0;		// 建物幅の基本単位
-	static constexpr double	CIRCUITX	= 150.0;	// コースの X 方向幅
-	static constexpr double	CIRCUITY	= 250.0;	// コースの Y 方向幅
+	static constexpr double	BUILDWIDTH = 25.0;		// 建物幅の基本単位
+	static constexpr double	CIRCUITX = 150.0;	// コースの X 方向幅
+	static constexpr double	CIRCUITY = 250.0;	// コースの Y 方向幅
 
-	Car(void) {}		// コンストラクタ
+	Car(void);		// コンストラクタ
 
-	void		init(void);
-	void		entryScene(fk_Scene *, bool);	
-	fk_Vector	getCarPosition(void);
-	fk_Model *	getBirdModel(void);
-	void		forward(double);
-	bool		isRotate(void);
-	void		rotate(double);
+	void init(void);
+	void entryScene(fk_Scene *, bool);	
+	fk_Vector getCarPosition(void);
+	fk_Model * getBirdModel(void);
+	void forward(double);
+	bool isRotate(void);
+	void rotate(double);
 
 private:
-	fk_Model	carModel;		// 車全体モデル
-	fk_Model	bodyModel;		// 車体モデル
-	fk_Model	tireModel[4];	// 各タイヤモデル
-	fk_Model	driverModel[2];	// 運転者モデル
-	fk_Model	birdModel;		// 鳥瞰視点モデル
+	unique_ptr<fk_Model> carModel;		// 車全体モデル
+	unique_ptr<fk_Model> bodyModel;		// 車体モデル
+	vector< unique_ptr<fk_Model> > tireModel;	// 各タイヤモデル
+	vector< unique_ptr<fk_Model> > driverModel;	// 運転者モデル
+	unique_ptr<fk_Model> birdModel;		// 鳥瞰視点モデル
 
-	fk_Block	body;			// 車体形状
-	fk_Prism	tire;			// タイヤ形状
-	fk_Sphere	driver;			// 運転者形状
+	unique_ptr<fk_Block> body;			// 車体形状
+	unique_ptr<fk_Prism> tire;			// タイヤ形状
+	unique_ptr<fk_Sphere> driver;			// 運転者形状
 };
 
 class Build {
 private:
-	fk_Model	buildModel;
-	fk_Block	buildShape;
+	unique_ptr<fk_Model> buildModel;
+	unique_ptr<fk_Block> buildShape;
 
 public:
 	Build(void);
 
-	void		makeBuild(fk_Vector, double, fk_Material &);
-	fk_Model *	getModel(void);
+	void makeBuild(fk_Vector, double, fk_Material &);
+	fk_Model * getModel(void);
 };
 
 class World {
 private:
-	fk_Model			groundModel;
-	fk_Block			buildShape, groundShape;
-	fk_Light			lightShape;
-	list<Build *>		builds;
-	list<fk_Model *>	lightModels;
+	unique_ptr<fk_Model> groundModel;
+	unique_ptr<fk_Block> buildShape, groundShape;
+	unique_ptr<fk_Light> lightShape;
+	list< unique_ptr<Build> > builds;
+	list< unique_ptr<fk_Model> > lightModels;
 
-	void		defLight(fk_Vector);
-	void		defBuild(fk_Vector, double, fk_Material &);
+	void defLight(fk_Vector);
+	void defBuild(fk_Vector, double, fk_Material &);
 
 public:
 	World(void) {}
 	~World();
 
-	void		init(void);
-	void		entryScene(fk_Scene *);
-	void		shadowSet(fk_Scene *, fk_Vector);
+	void init(void);
+	void entryScene(fk_Scene *);
+	void shadowSet(fk_Scene *, fk_Vector);
 };
+
+Car::Car(void)
+{
+	carModel = make_unique<fk_Model>();
+	bodyModel = make_unique<fk_Model>();
+	for(int i = 0; i < 4; ++i) tireModel.push_back(make_unique<fk_Model>());
+	for(int i = 0; i < 2; ++i) driverModel.push_back(make_unique<fk_Model>());
+	birdModel = make_unique<fk_Model>();
+	body = make_unique<fk_Block>(7.0, 6.0, 20.0);
+	tire = make_unique<fk_Prism>(8, 2.0, 2.0);
+	driver = make_unique<fk_Sphere>(4, 2.0);
+}
 
 void Car::init(void)
 {
-	int			i;
-	fk_Vector	X(1.0, 0.0, 0.0);
-	double		tx = 4.0, ty = 1.0, tz = 8.0;
+	fk_Vector X(1.0, 0.0, 0.0);
+	double tx = 4.0, ty = 1.0, tz = 8.0;
 
-	body.setSize(7.0, 6.0, 20.0);
-	tire.setDivide(8);
-	tire.setTopRadius(2.0);
-	tire.setBottomRadius(2.0);
-	tire.setHeight(0.5);
-	driver.setRadius(2.0);
-	driver.setDivide(4);
+	bodyModel->setShape(body.get());
+	bodyModel->glMoveTo(0.0, 5.0, 0.0);
+	bodyModel->setMaterial(Yellow);
+	bodyModel->setParent(carModel.get());
 
-	bodyModel.setShape(&body);
-	bodyModel.glMoveTo(0.0, 5.0, 0.0);
-	bodyModel.setMaterial(Yellow);
-	bodyModel.setParent(&carModel);
+	tireModel[0]->glMoveTo(-tx, ty, -tz);
+	tireModel[0]->glVec(X);
+	tireModel[1]->glMoveTo(tx, ty, -tz);
+	tireModel[1]->glVec(-X);
+	tireModel[2]->glMoveTo(-tx, ty, tz);
+	tireModel[2]->glVec(X);
+	tireModel[3]->glMoveTo(tx, ty, tz);
+	tireModel[3]->glVec(-X);
 
-	tireModel[0].glMoveTo(-tx, ty, -tz);
-	tireModel[0].glVec(X);
-	tireModel[1].glMoveTo(tx, ty, -tz);
-	tireModel[1].glVec(-X);
-	tireModel[2].glMoveTo(-tx, ty, tz);
-	tireModel[2].glVec(X);
-	tireModel[3].glMoveTo(tx, ty, tz);
-	tireModel[3].glVec(-X);
-
-	for(i = 0; i < 4; i++) {
-		tireModel[i].setShape(&tire);
-		tireModel[i].setMaterial(Gray2);
-		tireModel[i].setParent(&carModel);
+	for(_st i = 0; i < 4; i++) {
+		tireModel[i]->setShape(tire.get());
+		tireModel[i]->setMaterial(Gray2);
+		tireModel[i]->setParent(carModel.get());
 	}
 
-	driverModel[0].setShape(&driver);
-	driverModel[1].setShape(&driver);
-	driverModel[0].glMoveTo(-2.0, 10.0, 0.0);
-	driverModel[1].glMoveTo(2.0, 10.0, 0.0);
-	driverModel[0].setMaterial(AshGray);
-	driverModel[1].setMaterial(AshGray);
-	//driverModel[0].setSmoothMode(true);
-	//driverModel[1].setSmoothMode(true);
-	driverModel[0].setParent(&carModel);
-	driverModel[1].setParent(&carModel);
+	driverModel[0]->setShape(driver.get());
+	driverModel[1]->setShape(driver.get());
+	driverModel[0]->glMoveTo(-2.0, 10.0, 0.0);
+	driverModel[1]->glMoveTo(2.0, 10.0, 0.0);
+	driverModel[0]->setMaterial(AshGray);
+	driverModel[1]->setMaterial(AshGray);
+	driverModel[0]->setParent(carModel.get());
+	driverModel[1]->setParent(carModel.get());
 
-	birdModel.glMoveTo(0.0, 100.0, 200.0);
-	birdModel.glFocus(0.0, 5.0, 0.0);
-	birdModel.glUpvec(0.0, 1.0, 0.0);
-	birdModel.setParent(&carModel);
+	birdModel->glMoveTo(0.0, 100.0, 200.0);
+	birdModel->glFocus(0.0, 5.0, 0.0);
+	birdModel->glUpvec(0.0, 1.0, 0.0);
+	birdModel->setParent(carModel.get());
 
-	carModel.glMoveTo(CIRCUITX, CIRCUITY, 0.0);
-	carModel.glVec(0.0, -1.0, 0.0);
-	carModel.glUpvec(0.0, 0.0, 1.0);
+	carModel->glMoveTo(CIRCUITX, CIRCUITY, 0.0);
+	carModel->glVec(0.0, -1.0, 0.0);
+	carModel->glUpvec(0.0, 0.0, 1.0);
 
 	return;
 }
