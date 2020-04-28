@@ -1,14 +1,15 @@
 ﻿#define FK_DEF_SIZETYPE
 #include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
 using namespace FK::Material;
 
-const int WIN_W = 800; // ウィンドウ横幅
-const int WIN_H = 800; // ウィンドウ縦幅
-const double SP_X = -(double(WIN_W/2) - 10.0);
-const double SP_Y = double(WIN_H/2) - 10.0;
+constexpr int WIN_W = 800; // ウィンドウ横幅
+constexpr int WIN_H = 800; // ウィンドウ縦幅
+constexpr double SP_X = -(double(WIN_W/2) - 10.0);
+constexpr double SP_Y = double(WIN_H/2) - 10.0;
 
 // 通常モデルのシェーダー設定
 void ShaderSetup(fk_ShaderBinder *argBinder, fk_Model *argModel,
@@ -85,7 +86,7 @@ void CylMake(fk_IFSTexture *argIFS)
 	argIFS->getIFS()->makeIFSet(int(ifset.size())/3, 3, ifset.data(),
 								int(pos.size()), pos.data());
 
-	fk_TexCoord coord[4];
+	vector<fk_TexCoord> coord(4);
 	for(int j = 0; j <= divH; j++) { // y方向
 		for(int i = 0; i <= divW; i++) { // xz方向
 			int id = fID(i, j, divW);
@@ -124,13 +125,13 @@ int main(int, char **)
 {
 	fk_System::setcwd();
 
-	fk_AppWindow *window = new fk_AppWindow();
-	fk_IFSTexture *ifsShape = new fk_IFSTexture();
-	fk_Model *ifsModel = new fk_Model();
-	fk_Model *lightModel = new fk_Model();
-	fk_Model *camera = new fk_Model();
-	fk_SpriteModel *sprite = new fk_SpriteModel();
-	fk_ShaderBinder *binder = new fk_ShaderBinder();
+	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
+	unique_ptr<fk_IFSTexture> ifsShape(new fk_IFSTexture());
+	unique_ptr<fk_Model> ifsModel(new fk_Model());
+	unique_ptr<fk_Model> lightModel(new fk_Model());
+	unique_ptr<fk_Model> camera(new fk_Model());
+	unique_ptr<fk_SpriteModel> sprite(new fk_SpriteModel());
+	unique_ptr<fk_ShaderBinder> binder(new fk_ShaderBinder());
 
 	window->setSize(WIN_W, WIN_H);
 	fk_InitMaterial();
@@ -141,22 +142,22 @@ int main(int, char **)
 	}
 
 	ifsShape->setTexRendMode(fk_TexRendMode::SMOOTH);
-	CylMake(ifsShape);
+	CylMake(ifsShape.get());
 
-	ifsModel->setShape(ifsShape);
-	ModelSetup(ifsModel, White, fk_Vector(0.0, 0.0, 0.0));
+	ifsModel->setShape(ifsShape.get());
+	ModelSetup(ifsModel.get(), White, fk_Vector(0.0, 0.0, 0.0));
 
 	if(sprite->initFont("data/font/rm1b.ttf") == false) {
 		fl_alert("Font Init Error");
 	}
 	sprite->setPositionLT(SP_X, SP_Y);
 	fk_Image *image = sprite->getImage();
-	fk_RectTexture *texture = new fk_RectTexture(image);
+	unique_ptr<fk_RectTexture> texture(new fk_RectTexture(image));
 
 	window->setBGColor(0.5f, 0.5f, 0.5f);
-	window->setCameraModel(camera);
-	window->entry(ifsModel);
-	window->entry(sprite);
+	window->setCameraModel(camera.get());
+	window->entry(ifsModel.get());
+	window->entry(sprite.get());
 	window->setTrackBallMode(true);
 	window->showGuide();
 
@@ -169,12 +170,12 @@ int main(int, char **)
 	window->open();
 	Fl::check();
 
-	ShaderSetup(binder, ifsModel, "data/shader/multi_vp.glsl", "data/shader/multi_fp.glsl");
+	ShaderSetup(binder.get(), ifsModel.get(), "data/shader/multi_vp.glsl", "data/shader/multi_fp.glsl");
 
 	auto parameter = binder->getParameter();
 		
 	// シェーダー内で fk_TexID[1] で参照できるように設定
-	parameter->attachTexture(1, texture);
+	parameter->attachTexture(1, texture.get());
 
 	auto texSizeDim = ifsShape->getImageSize();
 	auto texBufDim = ifsShape->getBufferSize();
@@ -195,15 +196,6 @@ int main(int, char **)
 		scale[1] = scaleCoord.y * 5.0f;
 		parameter->setRegister("scale", &scale);
 	}
-
-	delete texture;
-	delete binder;
-	delete sprite;
-	delete ifsModel;
-	delete lightModel;
-	delete camera;
-	delete ifsShape;
-	delete window;
 
 	return 0;
 }

@@ -1,42 +1,44 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace FK;
+using namespace std;
 
 int main(int, char *[])
 {
-	fk_AppWindow	window;
-	fk_SpriteModel	sprite;
-	fk_Block		block(1.0, 1.0, 1.0);
-	fk_Model		model;
-	fk_Vector		origin(0.0, 0.0, 0.0);
-	int				count;
-	std::string		str;
+	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
+	unique_ptr<fk_SpriteModel> sprite(new fk_SpriteModel());
+	unique_ptr<fk_Block> block(new fk_Block(1.0, 1.0, 1.0));
+	unique_ptr<fk_Model> model(new fk_Model());
+	fk_Vector origin(0.0, 0.0, 0.0);
+	int count;
+	string str;
 
 	fk_System::setcwd();
 
-	sprite.initFont("data/font/rm1b.ttf");
-	sprite.setPositionLT(-280.0, 230.0);
-	window.entry(&sprite);
+	sprite->initFont("data/font/rm1b.ttf");
+	sprite->setPositionLT(-280.0, 230.0);
+	window->entry(sprite.get());
 
-	model.setShape(&block);
-	model.glMoveTo(0.0, 6.0, 0.0);
-	model.setMaterial(Material::Yellow);
-	window.entry(&model);
+	model->setShape(block.get());
+	model->glMoveTo(0.0, 6.0, 0.0);
+	model->setMaterial(Material::Yellow);
+	window->entry(model.get());
 
-	window.setCameraPos(0.0, 5.0, 20.0);
-	window.setCameraFocus(0.0, 5.0, 0.0);
-	window.setSize(800, 600);
-	window.setBGColor(0.6, 0.7, 0.8);
-	window.showGuide(fk_Guide::GRID_XZ);
-	window.setTrackBallMode(true);
-	window.open();
+	window->setCameraPos(0.0, 5.0, 20.0);
+	window->setCameraFocus(0.0, 5.0, 0.0);
+	window->setSize(800, 600);
+	window->setBGColor(0.6, 0.7, 0.8);
+	window->showGuide(fk_Guide::GRID_XZ);
+	window->setTrackBallMode(true);
+	window->open();
 
 	count = 0;
-	while(window.update() == true) {
+	while(window->update() == true) {
 		str = "count = " + std::to_string(count);
-		sprite.drawText(str, true);
-		sprite.setPositionLT(-280.0, 230.0);
-		model.glRotateWithVec(origin, fk_Axis::Y, fk_Math::PI/120.0);
+		sprite->drawText(str, true);
+		sprite->setPositionLT(-280.0, 230.0);
+		model->glRotateWithVec(origin, fk_Axis::Y, fk_Math::PI/120.0);
 		count++;
 	}
 	return 0;

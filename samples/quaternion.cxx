@@ -1,47 +1,49 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace FK;
 using namespace FK::Material;
+using namespace std;
 
 int main(int, char *[])
 {
-	fk_AppWindow win;
-	fk_Model model;
-	fk_Model pointM;
-	fk_Cone cone(3, 4.0, 15.0, false);
+	unique_ptr<fk_AppWindow> win(new fk_AppWindow());
+	unique_ptr<fk_Model> model(new fk_Model());
+	unique_ptr<fk_Model> pointM(new fk_Model());
+	unique_ptr<fk_Cone> cone(new fk_Cone(3, 4.0, 15.0, false));
 	fk_Vector pos(0.0, 0.0, -15.0);
 	fk_Angle angle1(0.0, 0.0, 0.0);
 	fk_Angle angle2(fk_Math::PI/2.0, fk_Math::PI/2.0 - 0.01, 0.0);
 
 	fk_Quaternion q1, q2, q;
-	fk_Polyline point;
+	unique_ptr<fk_Polyline> point(new fk_Polyline());
 
 	fk_Material::initDefault();
 
-	model.setShape(&cone);
-	model.setMaterial(Material::Yellow);
-	model.glAngle(angle1);
+	model->setShape(cone.get());
+	model->setMaterial(Material::Yellow);
+	model->glAngle(angle1);
 
-	pointM.setShape(&point);
-	pointM.setLineColor(1.0, 0.0, 0.0);
+	pointM->setShape(point.get());
+	pointM->setLineColor(1.0, 0.0, 0.0);
 
-	win.setSize(800, 800);
-	win.setBGColor(0.3, 0.4, 0.5);
-	win.entry(&model);
-	win.entry(&pointM);
-	win.setTrackBallMode(true);
-	win.showGuide();
-	win.open();
+	win->setSize(800, 800);
+	win->setBGColor(0.3, 0.4, 0.5);
+	win->entry(model.get());
+	win->entry(pointM.get());
+	win->setTrackBallMode(true);
+	win->showGuide();
+	win->open();
 	q1.makeEuler(angle1);
 	q2.makeEuler(angle2);
 
 	double t = 0.0;
 
-	while(win.update() == true) {
+	while(win->update() == true) {
 		q = fk_Math::quatInterSphere(q1, q2, t);
-		model.glAngle(q.getEuler());
+		model->glAngle(q.getEuler());
 		if(t < 1.0) {
-			point.pushVertex(model.getMatrix() * pos);
+			point->pushVertex(model->getMatrix() * pos);
 			t += 0.005;
 		}
 	}

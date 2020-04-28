@@ -1,10 +1,11 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
 
-const int WIN_W = 512; // ウィンドウ横幅
-const int WIN_H = 512; // ウィンドウ縦幅
+constexpr int WIN_W = 512; // ウィンドウ横幅
+constexpr int WIN_H = 512; // ウィンドウ縦幅
 
 enum WinStatus {
 	NORMAL, CONTINUE, BREAK
@@ -72,100 +73,106 @@ int main(int, char **)
 {
 	fk_System::setcwd();
 
-	Fl_Window		mainWindow(WIN_W*3, WIN_H, "Shader Test");
-	fk_Model		camera, lightModel;
-	fk_Material		mat;
-	fk_Light		light;
-	fk_Scene		scene;
-	fk_Window		baseWindow(0, 0, WIN_W, WIN_H);
-	fk_Window		edgeWindow(WIN_W, 0, WIN_W, WIN_H);
-	fk_Window		depthWindow(WIN_W*2, 0, WIN_W, WIN_H);
+	unique_ptr<Fl_Window> mainWindow(new Fl_Window(WIN_W*3, WIN_H, "Shader Test"));
+	unique_ptr<fk_Model> camera(new fk_Model());
+	unique_ptr<fk_Model> lightModel(new fk_Model());
+	unique_ptr<fk_Material> mat(new fk_Material());
+	unique_ptr<fk_Light> light(new fk_Light());
+	unique_ptr<fk_Scene> scene(new fk_Scene());
+	unique_ptr<fk_Window> baseWindow(new fk_Window(0, 0, WIN_W, WIN_H));
+	unique_ptr<fk_Window> edgeWindow(new fk_Window(WIN_W, 0, WIN_W, WIN_H));
+	unique_ptr<fk_Window> depthWindow(new fk_Window(WIN_W*2, 0, WIN_W, WIN_H));
 
-	fk_GuideObject	guide;
-	fk_TrackBall	tb(&baseWindow, &camera);
+	unique_ptr<fk_GuideObject> guide(new fk_GuideObject());
+	unique_ptr<fk_TrackBall> tb(new fk_TrackBall(baseWindow.get(), camera.get()));
 
-	fk_IFSTexture	ifsShape;
-	fk_Sphere		sph(8, 7.0);
+	unique_ptr<fk_IFSTexture> ifsShape(new fk_IFSTexture());
+	unique_ptr<fk_Sphere> sph(new fk_Sphere(8, 7.0));
 
-	fk_SpriteModel	sprite;
+	unique_ptr<fk_SpriteModel> sprite(new fk_SpriteModel());
 
-	fk_Model		modelDef, ifsModelDef;
-	fk_ShaderBinder spBinder, ifsBinder, edgeBinder, depthBinder;
-	int				thresshold = 80;
-	const double 	SP_X = -(double(WIN_W/2) - 10.0);
-	const double 	SP_Y = double(WIN_H/2) - 10.0;
+	unique_ptr<fk_Model> modelDef(new fk_Model());
+	unique_ptr<fk_Model> ifsModelDef(new fk_Model());
+	
+	unique_ptr<fk_ShaderBinder> spBinder(new fk_ShaderBinder());
+	unique_ptr<fk_ShaderBinder> ifsBinder(new fk_ShaderBinder());
+	unique_ptr<fk_ShaderBinder> edgeBinder(new fk_ShaderBinder());
+	unique_ptr<fk_ShaderBinder> depthBinder(new fk_ShaderBinder());
 
+	int thresshold = 80;
+	constexpr double SP_X = -(double(WIN_W/2) - 10.0);
+	constexpr double SP_Y = double(WIN_H/2) - 10.0;
 
-	mainWindow.end();
-	fk_InitMaterial();
+	mainWindow->end();
+	fk_Material::initDefault();
 
 	// 照明の設定
-	lightModel.setShape(&light);
-	lightModel.setMaterial(Material::TrueWhite);
-	lightModel.glMoveTo(0.0, 0.0, 0.0);
-	lightModel.glFocus(-1.0, -1.0, -1.0);
+	lightModel->setShape(light.get());
+	lightModel->setMaterial(Material::TrueWhite);
+	lightModel->glMoveTo(0.0, 0.0, 0.0);
+	lightModel->glFocus(-1.0, -1.0, -1.0);
 
 	// 球と読み込みデータの設定
-	if(ifsShape.readBMP("data/model/00tex_master.BMP") == false) {
+	if(ifsShape->readBMP("data/model/00tex_master.BMP") == false) {
 		fl_alert("tex load err");
 	}
 
-	if(ifsShape.readMQOFile("data/model/meka.mqo", "body01") == false) {
+	if(ifsShape->readMQOFile("data/model/meka.mqo", "body01") == false) {
 		fl_alert("ifs load err");
 	}
-	ifsShape.setTexRendMode(fk_TexRendMode::SMOOTH);
-	modelDef.setShape(&sph);
-	ifsModelDef.setShape(&ifsShape);
+	ifsShape->setTexRendMode(fk_TexRendMode::SMOOTH);
+	modelDef->setShape(sph.get());
+	ifsModelDef->setShape(ifsShape.get());
 
 	// スプライト設定
 
-	if(sprite.initFont("data/font/rm1b.ttf") == false) {
+	if(sprite->initFont("data/font/rm1b.ttf") == false) {
 		fl_alert("Font Init Error");
 	}
-	sprite.setPositionLT(SP_X, SP_Y);
+	sprite->setPositionLT(SP_X, SP_Y);
 	
 	// 各モデルをディスプレイリストに登録
-	scene.setBlendStatus(true);
-	scene.setBGColor(0.5f, 0.5f, 0.5f);
-	scene.entryCamera(&camera);
-	scene.entryModel(&lightModel);
-	guide.entryScene(&scene);
-	scene.entryModel(&modelDef);
-	scene.entryModel(&ifsModelDef);
+	scene->setBlendStatus(true);
+	scene->setBGColor(0.5f, 0.5f, 0.5f);
+	scene->entryCamera(camera.get());
+	scene->entryModel(lightModel.get());
+	guide->entryScene(scene.get());
+	scene->entryModel(modelDef.get());
+	scene->entryModel(ifsModelDef.get());
 
 	// ウィンドウへディスプレイリストを登録
-	baseWindow.setScene(&scene);
-	edgeWindow.setScene(&scene);
-	depthWindow.setScene(&scene);
+	baseWindow->setScene(scene.get());
+	edgeWindow->setScene(scene.get());
+	depthWindow->setScene(scene.get());
 
 	// 視点の位置と姿勢を設定
-	camera.glMoveTo(0.0, 0.0, 100.0);
-	camera.glFocus(0.0, 0.0, 0.0);
-	camera.glUpvec(0.0, 1.0, 0.0);
-	sprite.entryFirst(&baseWindow, &scene, &camera);
+	camera->glMoveTo(0.0, 0.0, 100.0);
+	camera->glFocus(0.0, 0.0, 0.0);
+	camera->glUpvec(0.0, 1.0, 0.0);
+	sprite->entryFirst(baseWindow.get(), scene.get(), camera.get());
 
 	// ウィンドウ生成 (シェーダー設定の前に行う必要がある。)
-	mainWindow.show();
-	baseWindow.show();
-	edgeWindow.show();
-	depthWindow.show();
+	mainWindow->show();
+	baseWindow->show();
+	edgeWindow->show();
+	depthWindow->show();
 	Fl::check();
 
 	// 各種シェーダー設定
-	ShaderSetup(&spBinder, &modelDef, Material::Yellow, fk_Vector(-20.0, 0.0, 0.0),
+	ShaderSetup(spBinder.get(), modelDef.get(), Material::Yellow, fk_Vector(-20.0, 0.0, 0.0),
 				"data/shader/model_vp.glsl", "data/shader/model_fp.glsl");
 	
-	ShaderSetup(&ifsBinder, &ifsModelDef, Material::White, fk_Vector(20.0, 0.0, 0.0),
+	ShaderSetup(ifsBinder.get(), ifsModelDef.get(), Material::White, fk_Vector(20.0, 0.0, 0.0),
 				"data/shader/model_vp.glsl", "data/shader/modelTex_fp.glsl");
 
-	FBOSetup(&edgeBinder, &edgeWindow, float(thresshold)/100.0f, "data/shader/fbo_edge.glsl");
-	FBOSetup(&depthBinder, &depthWindow, 0.0f, "data/shader/fbo_depth.glsl");
+	FBOSetup(edgeBinder.get(), edgeWindow.get(), float(thresshold)/100.0f, "data/shader/fbo_edge.glsl");
+	FBOSetup(depthBinder.get(), depthWindow.get(), 0.0f, "data/shader/fbo_depth.glsl");
 
 	while(true) {
 
 		// シーン描画
-		switch(WindowUpdate(&mainWindow, &baseWindow,
-							&edgeWindow, &depthWindow)) {
+		switch(WindowUpdate(mainWindow.get(), baseWindow.get(),
+							edgeWindow.get(), depthWindow.get())) {
 		  case BREAK:
 			// プログラム終了
 			return 0;
@@ -180,24 +187,24 @@ int main(int, char **)
 		}
 		
 		// エッジ抽出用閾値の変更
-		if(baseWindow.getSpecialKeyStatus(fk_Key::UP, false) == true) {
+		if(baseWindow->getSpecialKeyStatus(fk_Key::UP, false) == true) {
 			++thresshold;
 		}
-		if(baseWindow.getSpecialKeyStatus(fk_Key::DOWN, false) == true) {
+		if(baseWindow->getSpecialKeyStatus(fk_Key::DOWN, false) == true) {
 			if(thresshold > 0) --thresshold;
 		}			
 		
 		// FBOシェーダーに閾値を送信
-		edgeBinder.getParameter()->setRegister("Thresshold", float(thresshold)/100.0f);
+		edgeBinder->getParameter()->setRegister("Thresshold", float(thresshold)/100.0f);
 
 		// 光源回転
-		lightModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.05);
+		lightModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, 0.05);
 
-		sprite.drawText(to_string(double(thresshold)/100.0), true);
-		sprite.setPositionLT(SP_X, SP_Y);
-		sprite.entryFirst(&baseWindow, &scene, &camera);
+		sprite->drawText(to_string(double(thresshold)/100.0), true);
+		sprite->setPositionLT(SP_X, SP_Y);
+		sprite->entryFirst(baseWindow.get(), scene.get(), camera.get());
 		// マウスによるカメラ制御
-		tb.update();
+		tb->update();
 	}
 
 	return 0;

@@ -1,42 +1,43 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
 
 int main(int, char **)
 {
-	fk_ShapeViewer      viewer(800, 600);
-	fk_ParticleSet      particle;
-	fk_Prism			prism(32, 15.0, 15.0, 50.0, false);
-	double				maxSpeed, minSpeed;
-	fk_Vector       	water(-0.5, 0.0, 0.0);
-	double          	R = 15.0;
+	unique_ptr<fk_ShapeViewer> viewer(new fk_ShapeViewer(800, 600));
+	unique_ptr<fk_ParticleSet> particle(new fk_ParticleSet());
+	unique_ptr<fk_Prism> prism(new fk_Prism(32, 15.0, 15.0, 50.0, false));
+	double maxSpeed, minSpeed;
+	fk_Vector water(-0.5, 0.0, 0.0);
+	double R = 15.0;
 
-	particle.setMaxSize(1000);   // パーティクルの最大数設定。
-	particle.setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
-	particle.setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
+	particle->setMaxSize(1000);   // パーティクルの最大数設定。
+	particle->setIndivMode(true); // 個別処理 (indivMethod) を ON にしておく。
+	particle->setAllMode(true);   // 全体処理 (allMethod) を ON にしておく。
 
 	maxSpeed = 0.6;
 	minSpeed = 0.3;
 
-	particle.genMethod = [](fk_Particle *p) {
+	particle->genMethod = [](fk_Particle *p) {
 		p->setPosition(50.0, fk_Math::drand(-25.0, 25.0), fk_Math::drand(-25.0, 25.0));
 	};
 
-	particle.allMethod = [&](void) {
+	particle->allMethod = [&](void) {
 		for(int i = 0; i < 5; i++) {
 			if(fk_Math::drand() < 0.3) {
 				// 新たなパーティクルを生成。
 				// 生成時に genMethod() が呼ばれる。
-				particle.newParticle();
+				particle->newParticle();
 			}
 		}
 	};
 
 
-	particle.indivMethod = [&](fk_Particle *p) {
-		fk_Vector       pos, vec, tmp1, tmp2;
-		fk_Color		col;
+	particle->indivMethod = [&](fk_Particle *p) {
+		fk_Vector pos, vec, tmp1, tmp2;
+		fk_Color col;
  
 		// パーティクルの位置を取得。
 		pos = p->getPosition();
@@ -58,25 +59,25 @@ int main(int, char **)
 		p->setColor(col);
 		// パーティクルの x 座標が -50 以下になったら消去。
 		if(pos.x < -50.0) {
-			particle.removeParticle(p);
+			particle->removeParticle(p);
 		}
 	}; 
 
-	viewer.setShape(2, particle.getShape());
-	viewer.setDrawMode(2, fk_Draw::POINT);
-	viewer.setElementMode(2, fk_ElementMode::ELEMENT);
-	viewer.setPointSize(2, 3.0);
+	viewer->setShape(2, particle->getShape());
+	viewer->setDrawMode(2, fk_Draw::POINT);
+	viewer->setElementMode(2, fk_ElementMode::ELEMENT);
+	viewer->setPointSize(2, 3.0);
 
-	viewer.setShape(3, &prism);
-	viewer.setPosition(3, 0.0, 0.0, 25.0);
-	viewer.setDrawMode(3, fk_Draw::LINE | fk_Draw::FACE);
-	viewer.setVertexColor(3, fk_Color(0.0, 1.0, 0.0));
-	viewer.setEdgeColor(3, fk_Color(0.0, 0.0, 1.0));
+	viewer->setShape(3, prism.get());
+	viewer->setPosition(3, 0.0, 0.0, 25.0);
+	viewer->setDrawMode(3, fk_Draw::LINE | fk_Draw::FACE);
+	viewer->setVertexColor(3, fk_Color(0.0, 1.0, 0.0));
+	viewer->setEdgeColor(3, fk_Color(0.0, 0.0, 1.0));
 
-	viewer.setScale(10.0);
+	viewer->setScale(10.0);
 
-	for(int i = 0; viewer.draw() == true; i++) {
-		particle.handle(); // パーティクルを 1 ステップ実行する。
+	for(int i = 0; viewer->draw() == true; i++) {
+		particle->handle(); // パーティクルを 1 ステップ実行する。
 	}
 	return 0;
 }

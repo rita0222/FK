@@ -1,56 +1,63 @@
-﻿#include <FK/FK.h>
+﻿#define FK_DEF_SIZETYPE
+
+#include <FK/FK.h>
+#include <memory>
 
 using namespace FK;
+using namespace std;
 
 int main()
 {
-	fk_ShapeViewer	viewer(600, 660);
-	fk_IndexFaceSet	shape;
-	fk_Vector		pos[121], moveVec, movePos;
-	int				IFSet[4*100];
-	int				i, j;
-	double			x, y;
+	unique_ptr<fk_ShapeViewer> viewer(new fk_ShapeViewer(600, 660));
+	unique_ptr<fk_IndexFaceSet> shape(new fk_IndexFaceSet());
+	vector<fk_Vector> pos(121);
+	fk_Vector moveVec, movePos;
+	vector< vector<int> > IFSet;
+	vector<int> loop(4);
+	int i, j;
+	double x, y;
 
 	// 各頂点位置の設定
 	for(i = 0; i <= 10; i++) {
 		for(j = 0; j <= 10; j++) {
 			x = double(i - 5);	
 			y = double(j - 5);
-			pos[i*11 + j].set(x, y, (x*x - y*y)/10.0);
+			pos[_st(i*11 + j)].set(x, y, (x*x - y*y)/10.0);
 		}
 	}
 
 	// インデックスフェースセットの生成
 	for(i = 0; i < 10; i++) {
 		for(j = 0; j < 10; j++) {
-			IFSet[(i*10 + j)*4 + 0] = i*11 + j;
-			IFSet[(i*10 + j)*4 + 1] = (i+1)*11 + j;
-			IFSet[(i*10 + j)*4 + 2] = (i+1)*11 + j+1;
-			IFSet[(i*10 + j)*4 + 3] = i*11 + j+1;
+			loop[0] = i*11 + j;
+			loop[1] = (i+1)*11 + j;
+			loop[2] = (i+1)*11 + j+1;
+			loop[3] = i*11 + j+1;
+			IFSet.push_back(loop);
 		}
 	}
 
 	// 形状の生成
-	shape.makeIFSet(100, 4, IFSet, 121, pos);
+	shape->makeIFSet(&IFSet, &pos);
 
 	// fk_ShapeViewer へ形状を設定
-	viewer.setShape(0, &shape);
+	viewer->setShape(0, shape.get());
 
 	// 各種設定
-	viewer.setDrawMode(fk_Draw::FRONTBACK_FACE | fk_Draw::LINE);
-	viewer.setScale(10.0);
+	viewer->setDrawMode(fk_Draw::FRONTBACK_FACE | fk_Draw::LINE);
+	viewer->setScale(10.0);
 
-	for(int k = 0; viewer.draw() == true; k += 3) {
+	for(int k = 0; viewer->draw() == true; k += 10) {
 		for(i = 0; i <= 10; i++) {
 			for(j = 0; j <= 10; j++) {
 				// 各頂点の移動量計算
 				moveVec.set(0.0, 0.0, sin(double(k+j*40)*0.05/fk_Math::PI));
 
 				// 各頂点を移動場所を計算
-				movePos = moveVec + pos[i*11 + j];
+				movePos = moveVec + pos[_st(i*11 + j)];
 
 				// 各頂点を実際に移動
-				shape.moveVPosition(i*11 + j, movePos);
+				shape->moveVPosition(i*11 + j, movePos);
 			}
 		}
 	}

@@ -1,52 +1,55 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
 
 int main(int, char *[])
 {
-	Fl_Window		MainWindow(300, 300, "RESIZE TEST");
-	fk_Model		Camera, BlockModel, LightModel;
-	fk_Light		Light;
-	fk_Block		Block(50.0, 70.0, 40.0);
-	fk_Scene		Scene;
-	fk_Window		fkWindow(0, 0, 300, 300);
+	unique_ptr<Fl_Window> MainWindow(new Fl_Window(300, 300, "RESIZE TEST"));
+	unique_ptr<fk_Model> Camera(new fk_Model());
+	unique_ptr<fk_Model> BlockModel(new fk_Model());
+	unique_ptr<fk_Model> LightModel(new fk_Model());
+	unique_ptr<fk_Light> Light(new fk_Light());
+	unique_ptr<fk_Block> Block(new fk_Block(50.0, 70.0, 40.0));
+	unique_ptr<fk_Scene> Scene(new fk_Scene());
+	unique_ptr<fk_Window> fkWindow(new fk_Window(0, 0, 300, 300));
 
-	MainWindow.end();
+	MainWindow->end();
 	fk_Material::initDefault();
 
-	MainWindow.size_range(320, 320);
+	MainWindow->size_range(320, 320);
 
 	// 照明の設定
-	LightModel.setShape(&Light);
-	LightModel.setMaterial(Material::White);
-	LightModel.glMoveTo(0.0, 0.0, 0.0);
-	LightModel.glFocus(-1.0, -1.0, -1.0);
+	LightModel->setShape(Light.get());
+	LightModel->setMaterial(Material::White);
+	LightModel->glMoveTo(0.0, 0.0, 0.0);
+	LightModel->glFocus(-1.0, -1.0, -1.0);
 
 	// 直方体の設定
-	BlockModel.setShape(&Block);
-	BlockModel.setMaterial(Material::Yellow);
+	BlockModel->setShape(Block.get());
+	BlockModel->setMaterial(Material::Yellow);
 
 	// 各モデルをディスプレイリストに登録
-	Scene.entryCamera(&Camera);
-	Scene.entryModel(&BlockModel);
-	Scene.entryModel(&LightModel);
+	Scene->entryCamera(Camera.get());
+	Scene->entryModel(BlockModel.get());
+	Scene->entryModel(LightModel.get());
 
 	// ウィンドウへディスプレイリストを登録
-	fkWindow.setScene(&Scene);
+	fkWindow->setScene(Scene.get());
 
 	// 視点の位置と姿勢を設定
-	Camera.glMoveTo(0.0, 0.0, 300.0);
-	Camera.glFocus(0.0, 0.0, 0.0);
-	Camera.glUpvec(0.0, 1.0, 0.0);
+	Camera->glMoveTo(0.0, 0.0, 300.0);
+	Camera->glFocus(0.0, 0.0, 0.0);
+	Camera->glUpvec(0.0, 1.0, 0.0);
 
-	MainWindow.show();
-	fkWindow.show();
+	MainWindow->show();
+	fkWindow->show();
 
 	while(true) {
 
-		fkWindow.resizeWindow(0, 0, MainWindow.w(), MainWindow.h());
-		if(MainWindow.visible() == 0) {
+		fkWindow->resizeWindow(0, 0, MainWindow->w(), MainWindow->h());
+		if(MainWindow->visible() == 0) {
 			if(Fl::wait() == 0) {
 				break;
 			} else {
@@ -54,12 +57,12 @@ int main(int, char *[])
 			}
 		}
 
-		if(fkWindow.drawWindow() == 0) break;
+		if(fkWindow->drawWindow() == 0) break;
 		if(Fl::check() == 0) break;
-		if(fkWindow.winOpenStatus() == false) continue;
+		if(fkWindow->winOpenStatus() == false) continue;
 
 		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		BlockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
+		BlockModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, fk_Math::PI/100.0);
 	}
 
 	return 0;

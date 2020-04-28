@@ -1,17 +1,17 @@
 ﻿#include <FK/FK.h>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <memory>
 
 using namespace std;
 using namespace FK;
 
 string imageFileSelect(void)
 {
-	Fl_Native_File_Chooser	*fc;
-	string					fileName;
-	string					pathName;
+	unique_ptr<Fl_Native_File_Chooser> fc(new Fl_Native_File_Chooser());
+	string fileName;
+	string pathName;
 
 	pathName = fk_System::get_cwd();
-	fc = new Fl_Native_File_Chooser();
 	fc->title("Image File Select");
 	fc->filter("*.bmp");
 	if(pathName.empty() == false) fc->directory(pathName.c_str());
@@ -21,11 +21,9 @@ string imageFileSelect(void)
 
 	  case -1:
 		fl_alert("%s", fc->errmsg());
-		delete fc;
 		return fileName;
 
 	  case 1:
-		delete fc;
 		return fileName;
 
 	  default:
@@ -33,61 +31,60 @@ string imageFileSelect(void)
 	}
 
 	fileName = fc->filename();
-	delete fc;
 	return fileName;
 }
 
 
 int main(int, char *[])
 {
-	fk_MeshTexture	tex;
-	string			fileName;
-	fk_Material		mat;
+	unique_ptr<fk_MeshTexture> tex(new fk_MeshTexture());
+	string fileName;
+	unique_ptr<fk_Material> mat(new fk_Material());
 
 	fileName = imageFileSelect();
 
-	if(tex.readBMP(fileName) == false) {
+	if(tex->readBMP(fileName) == false) {
 		fl_alert("Image File Read Error.");
 		exit(1);
 	}
 
-	tex.setTriNum(4);
+	tex->setTriNum(4);
 
 	// テクスチャ画像を置く位置の設定
-	tex.setVertexPos(0, 0, -100.0, 100.0, 0.0);
-	tex.setVertexPos(0, 1, -100.0, 0.0, 0.0);
-	tex.setVertexPos(0, 2, 0.0, 100.0, 0.0);
-	tex.setVertexPos(1, 0, -100.0, -100.0, 0.0);
-	tex.setVertexPos(1, 1, 0.0, -100.0, 0.0);
-	tex.setVertexPos(1, 2, -100.0, 0.0, 0.0);
-	tex.setVertexPos(2, 0, 100.0, -100.0, 0.0);
-	tex.setVertexPos(2, 1, 100.0, 0.0, 0.0);
-	tex.setVertexPos(2, 2, 0.0, -100.0, 0.0);
-	tex.setVertexPos(3, 0, 100.0, 100.0, 0.0);
-	tex.setVertexPos(3, 1, 0.0, 100.0, 0.0);
-	tex.setVertexPos(3, 2, 100.0, 0.0, 0.0);
+	tex->setVertexPos(0, 0, -100.0, 100.0, 0.0);
+	tex->setVertexPos(0, 1, -100.0, 0.0, 0.0);
+	tex->setVertexPos(0, 2, 0.0, 100.0, 0.0);
+	tex->setVertexPos(1, 0, -100.0, -100.0, 0.0);
+	tex->setVertexPos(1, 1, 0.0, -100.0, 0.0);
+	tex->setVertexPos(1, 2, -100.0, 0.0, 0.0);
+	tex->setVertexPos(2, 0, 100.0, -100.0, 0.0);
+	tex->setVertexPos(2, 1, 100.0, 0.0, 0.0);
+	tex->setVertexPos(2, 2, 0.0, -100.0, 0.0);
+	tex->setVertexPos(3, 0, 100.0, 100.0, 0.0);
+	tex->setVertexPos(3, 1, 0.0, 100.0, 0.0);
+	tex->setVertexPos(3, 2, 100.0, 0.0, 0.0);
 
 	// テクスチャ座標の設定
-	tex.setTextureCoord(0, 0, 0.0, 1.0);
-	tex.setTextureCoord(0, 1, 0.0, 0.5);
-	tex.setTextureCoord(0, 2, 0.5, 1.0);
-	tex.setTextureCoord(1, 0, 0.0, 0.0);
-	tex.setTextureCoord(1, 1, 0.5, 0.0);
-	tex.setTextureCoord(1, 2, 0.0, 0.5);
-	tex.setTextureCoord(2, 0, 1.0, 0.0);
-	tex.setTextureCoord(2, 1, 1.0, 0.5);
-	tex.setTextureCoord(2, 2, 0.5, 0.0);
-	tex.setTextureCoord(3, 0, 1.0, 1.0);
-	tex.setTextureCoord(3, 1, 0.5, 1.0);
-	tex.setTextureCoord(3, 2, 1.0, 0.5);
+	tex->setTextureCoord(0, 0, 0.0, 1.0);
+	tex->setTextureCoord(0, 1, 0.0, 0.5);
+	tex->setTextureCoord(0, 2, 0.5, 1.0);
+	tex->setTextureCoord(1, 0, 0.0, 0.0);
+	tex->setTextureCoord(1, 1, 0.5, 0.0);
+	tex->setTextureCoord(1, 2, 0.0, 0.5);
+	tex->setTextureCoord(2, 0, 1.0, 0.0);
+	tex->setTextureCoord(2, 1, 1.0, 0.5);
+	tex->setTextureCoord(2, 2, 0.5, 0.0);
+	tex->setTextureCoord(3, 0, 1.0, 1.0);
+	tex->setTextureCoord(3, 1, 0.5, 1.0);
+	tex->setTextureCoord(3, 2, 1.0, 0.5);
 
-	fk_ShapeViewer	viewer(800, 600);
+	unique_ptr<fk_ShapeViewer> viewer(new fk_ShapeViewer(800, 600));
 
-	mat.setAmbDiff(1.0, 1.0, 1.0);
-	viewer.setShape(&tex);
-	viewer.setMaterial(0, mat);
+	mat->setAmbDiff(1.0, 1.0, 1.0);
+	viewer->setShape(tex.get());
+	viewer->setMaterial(0, *mat.get());
 
-	while(viewer.draw() == true) { }
+	while(viewer->draw() == true) { }
 
 	return 0;
 }
