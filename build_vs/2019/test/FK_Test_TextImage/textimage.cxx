@@ -1,4 +1,63 @@
-﻿/****************************************************************************
+﻿#include <FK/FK.h>
+#include <memory>
+
+using namespace FK;
+using namespace std;
+
+int main (int, char *[])
+{
+	unique_ptr<fk_AppWindow> win(new fk_AppWindow());
+	unique_ptr<fk_TextImage> textImage(new fk_TextImage());
+	unique_ptr<fk_RectTexture> texture(new fk_RectTexture());
+	unique_ptr<fk_UniStr> str(new fk_UniStr());
+	unique_ptr<fk_Model> strModel(new fk_Model());
+
+	fk_System::setcwd();
+	fk_Material::initDefault();
+
+#ifdef WIN32
+	str->convert("FK日本語", fk_StringCode::SJIS);
+#else
+	str->convert("FK日本語", fk_StringCode::UTF8);
+#endif
+
+	texture->setImage(textImage.get());
+	if(textImage->initFont("data/font/rm1b.ttf") == false) {
+		fl_alert("Font Init Error.");
+	}
+
+	textImage->setDPI(96);
+	textImage->setPTSize(96);
+	textImage->setLineSkip(30);
+	textImage->setMonospaceMode(true);
+	textImage->setMonospaceSize(96);
+	textImage->setForeColor(0.5, 1.0, 0.8, 1.0);
+	textImage->setBackColor(0.2, 0.7, 0.8, 0.0);
+	textImage->setAlign(fk_TextAlign::CENTER);
+	textImage->loadUniStr(str.get());
+	texture->setTextureSize(40.0, 10.0);
+	texture->setTextureMode(fk_TexMode::REPLACE);
+	strModel->setMaterial(Material::TrueWhite);
+
+	strModel->setShape(texture.get());
+	strModel->glVec(0.0, 0.0, -1.0);
+	strModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI/2.0);
+
+	win->entry(strModel.get());
+	win->open();
+	win->setCameraPos(0.0, 0.0, 100.0);
+	win->setCameraFocus(0.0, 0.0, 0.0);
+
+	while(win->update() == true) {
+		strModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/100.0);
+		if(strModel->getVec().z > 0.0) {
+			strModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI);
+		}
+	}
+	return 0;
+}
+
+/****************************************************************************
  *
  *	Copyright (c) 1999-2018, Fine Kernel Project, All rights reserved.
  *
@@ -69,62 +128,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FK.h>
-
-using namespace FK;
-
-int main (int, char *[])
-{
-	fk_AppWindow	win;
-	fk_TextImage	textImage;
-	fk_RectTexture	texture;
-	fk_UniStr		str;
-	fk_Model		strModel;
-
-	fk_System::setcwd();
-	fk_Material::initDefault();
-
-#ifdef WIN32
-	str.convert("FK日本語", fk_StringCode::SJIS);
-#else
-	str.convert("FK日本語", fk_StringCode::UTF8);
-#endif
-
-	texture.setImage(&textImage);
-	if(textImage.initFont("data/rm1b.ttf") == false) {
-		fl_alert("Font Init Error.");
-	}
-
-	textImage.setDPI(96);
-	textImage.setPTSize(96);
-	textImage.setLineSkip(30);
-	textImage.setMonospaceMode(true);
-	textImage.setMonospaceSize(96);
-	textImage.setForeColor(0.5, 1.0, 0.8, 1.0);
-	textImage.setBackColor(0.2, 0.7, 0.8, 0.0);
-	textImage.setAlign(fk_TextAlign::CENTER);
-	textImage.loadUniStr(&str);
-	texture.setTextureSize(40.0, 10.0);
-	texture.setTextureMode(fk_TexMode::REPLACE);
-	strModel.setMaterial(Material::TrueWhite);
-
-	strModel.setShape(&texture);
-	strModel.glVec(0.0, 0.0, -1.0);
-	strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI/2.0);
-
-	win.entry(&strModel);
-	win.setFPS(60);
-	win.open();
-	win.setCameraPos(0.0, 0.0, 100.0);
-	win.setCameraFocus(0.0, 0.0, 0.0);
-
-	while(win.update() == true) {
-		strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, -fk_Math::PI/100.0);
-		/*
-		if(strModel.getVec().z > 0.0) {
-			strModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::X, fk_Math::PI);
-		}
-		*/
-	}
-	return 0;
-}

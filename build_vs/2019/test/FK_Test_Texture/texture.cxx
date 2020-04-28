@@ -1,6 +1,97 @@
-﻿/****************************************************************************
+﻿#include <FK/FK.h>
+#include <FL/Fl_Native_File_Chooser.H>
+#include <memory>
+
+using namespace std;
+using namespace FK;
+
+string imageFileSelect(void)
+{
+	unique_ptr<Fl_Native_File_Chooser> fc(new Fl_Native_File_Chooser());
+	string fileName;
+	string pathName;
+
+	pathName = fk_System::get_cwd();
+	fc->title("Image File Select");
+	fc->filter("*.bmp");
+	if(pathName.empty() == false) fc->directory(pathName.c_str());
+	fc->type(Fl_Native_File_Chooser::BROWSE_FILE);
+
+	switch(fc->show()) {
+
+	  case -1:
+		fl_alert("%s", fc->errmsg());
+		return fileName;
+
+	  case 1:
+		return fileName;
+
+	  default:
+		break;
+	}
+
+	fileName = fc->filename();
+	return fileName;
+}
+
+
+int main(int, char *[])
+{
+	unique_ptr<fk_MeshTexture> tex(new fk_MeshTexture());
+	string fileName;
+	unique_ptr<fk_Material> mat(new fk_Material());
+
+	fileName = imageFileSelect();
+
+	if(tex->readBMP(fileName) == false) {
+		fl_alert("Image File Read Error.");
+		exit(1);
+	}
+
+	tex->setTriNum(4);
+
+	// テクスチャ画像を置く位置の設定
+	tex->setVertexPos(0, 0, -100.0, 100.0, 0.0);
+	tex->setVertexPos(0, 1, -100.0, 0.0, 0.0);
+	tex->setVertexPos(0, 2, 0.0, 100.0, 0.0);
+	tex->setVertexPos(1, 0, -100.0, -100.0, 0.0);
+	tex->setVertexPos(1, 1, 0.0, -100.0, 0.0);
+	tex->setVertexPos(1, 2, -100.0, 0.0, 0.0);
+	tex->setVertexPos(2, 0, 100.0, -100.0, 0.0);
+	tex->setVertexPos(2, 1, 100.0, 0.0, 0.0);
+	tex->setVertexPos(2, 2, 0.0, -100.0, 0.0);
+	tex->setVertexPos(3, 0, 100.0, 100.0, 0.0);
+	tex->setVertexPos(3, 1, 0.0, 100.0, 0.0);
+	tex->setVertexPos(3, 2, 100.0, 0.0, 0.0);
+
+	// テクスチャ座標の設定
+	tex->setTextureCoord(0, 0, 0.0, 1.0);
+	tex->setTextureCoord(0, 1, 0.0, 0.5);
+	tex->setTextureCoord(0, 2, 0.5, 1.0);
+	tex->setTextureCoord(1, 0, 0.0, 0.0);
+	tex->setTextureCoord(1, 1, 0.5, 0.0);
+	tex->setTextureCoord(1, 2, 0.0, 0.5);
+	tex->setTextureCoord(2, 0, 1.0, 0.0);
+	tex->setTextureCoord(2, 1, 1.0, 0.5);
+	tex->setTextureCoord(2, 2, 0.5, 0.0);
+	tex->setTextureCoord(3, 0, 1.0, 1.0);
+	tex->setTextureCoord(3, 1, 0.5, 1.0);
+	tex->setTextureCoord(3, 2, 1.0, 0.5);
+
+	unique_ptr<fk_ShapeViewer> viewer(new fk_ShapeViewer(800, 600));
+
+	mat->setAmbDiff(1.0, 1.0, 1.0);
+	viewer->setShape(tex.get());
+	viewer->setMaterial(0, *mat.get());
+
+	while(viewer->draw() == true) { }
+
+	return 0;
+}
+
+/****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +127,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,96 +160,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FK.h>
-#include <FL/Fl_Native_File_Chooser.H>
-
-using namespace std;
-using namespace FK;
-
-string imageFileSelect(void)
-{
-	Fl_Native_File_Chooser	*fc;
-	string					fileName;
-	string					pathName;
-
-	pathName = fk_System::get_cwd();
-	fc = new Fl_Native_File_Chooser();
-	fc->title("Image File Select");
-	fc->filter("*.bmp");
-	if(pathName.empty() == false) fc->directory(pathName.c_str());
-	fc->type(Fl_Native_File_Chooser::BROWSE_FILE);
-
-	switch(fc->show()) {
-
-	  case -1:
-		fl_alert("%s", fc->errmsg());
-		delete fc;
-		return fileName;
-
-	  case 1:
-		delete fc;
-		return fileName;
-
-	  default:
-		break;
-	}
-
-	fileName = fc->filename();
-	delete fc;
-	return fileName;
-}
-
-
-int main(int, char *[])
-{
-	fk_MeshTexture	tex;
-	string			fileName;
-	fk_Material		mat;
-
-	fileName = imageFileSelect();
-
-	if(tex.readBMP(fileName) == false) {
-		fl_alert("Image File Read Error.");
-		exit(1);
-	}
-
-	tex.setTriNum(4);
-
-	// テクスチャ画像を置く位置の設定
-	tex.setVertexPos(0, 0, -100.0, 100.0, 0.0);
-	tex.setVertexPos(0, 1, -100.0, 0.0, 0.0);
-	tex.setVertexPos(0, 2, 0.0, 100.0, 0.0);
-	tex.setVertexPos(1, 0, -100.0, -100.0, 0.0);
-	tex.setVertexPos(1, 1, 0.0, -100.0, 0.0);
-	tex.setVertexPos(1, 2, -100.0, 0.0, 0.0);
-	tex.setVertexPos(2, 0, 100.0, -100.0, 0.0);
-	tex.setVertexPos(2, 1, 100.0, 0.0, 0.0);
-	tex.setVertexPos(2, 2, 0.0, -100.0, 0.0);
-	tex.setVertexPos(3, 0, 100.0, 100.0, 0.0);
-	tex.setVertexPos(3, 1, 0.0, 100.0, 0.0);
-	tex.setVertexPos(3, 2, 100.0, 0.0, 0.0);
-
-	// テクスチャ座標の設定
-	tex.setTextureCoord(0, 0, 0.0, 1.0);
-	tex.setTextureCoord(0, 1, 0.0, 0.5);
-	tex.setTextureCoord(0, 2, 0.5, 1.0);
-	tex.setTextureCoord(1, 0, 0.0, 0.0);
-	tex.setTextureCoord(1, 1, 0.5, 0.0);
-	tex.setTextureCoord(1, 2, 0.0, 0.5);
-	tex.setTextureCoord(2, 0, 1.0, 0.0);
-	tex.setTextureCoord(2, 1, 1.0, 0.5);
-	tex.setTextureCoord(2, 2, 0.5, 0.0);
-	tex.setTextureCoord(3, 0, 1.0, 1.0);
-	tex.setTextureCoord(3, 1, 0.5, 1.0);
-	tex.setTextureCoord(3, 2, 1.0, 0.5);
-
-	fk_ShapeViewer	viewer(800, 600);
-
-	mat.setAmbDiff(1.0, 1.0, 1.0);
-	viewer.setShape(&tex);
-	viewer.setMaterial(0, mat);
-
-	while(viewer.draw() == true) { }
-
-	return 0;
-}
