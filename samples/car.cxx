@@ -1,4 +1,6 @@
-﻿#include <list>
+﻿#define FK_DEF_SIZETYPE
+
+#include <list>
 #include <FK/FK.h>
 
 using namespace std;
@@ -126,20 +128,18 @@ void Car::init(void)
 
 void Car::entryScene(fk_Scene *scene, bool viewFlag)
 {
-	int		i;
+	scene->entryModel(bodyModel.get());
 
-	scene->entryModel(&bodyModel);
-
-	for(i = 0; i < 4; i++) {
-		scene->entryModel(&tireModel[i]);
+	for(_st i = 0; i < 4; i++) {
+		scene->entryModel(tireModel[i].get());
 	}
 
-	scene->entryModel(&driverModel[0]);
+	scene->entryModel(driverModel[0].get());
 
 	if(viewFlag == true) {
-		scene->entryModel(&driverModel[1]);
+		scene->entryModel(driverModel[1].get());
 	} else {
-		scene->entryCamera(&driverModel[1]);
+		scene->entryCamera(driverModel[1].get());
 	}
 
 	return;
@@ -147,26 +147,26 @@ void Car::entryScene(fk_Scene *scene, bool viewFlag)
 
 fk_Vector Car::getCarPosition(void)
 {
-	return carModel.getPosition();
+	return carModel->getPosition();
 }
 
 fk_Model * Car::getBirdModel(void)
 {
-	return &birdModel;
+	return birdModel.get();
 }
 
 void Car::forward(double argSpeed)
 {
-	carModel.loTranslate(0.0, 0.0, -argSpeed); // 前進
+	carModel->loTranslate(0.0, 0.0, -argSpeed); // 前進
 	return;
 }
 
 bool Car::isRotate(void)
 {
-	fk_Vector		XVec(1.0, 0.0, 0.0);
-	fk_Vector		YVec(0.0, 1.0, 0.0);
-	fk_Vector		carVec = carModel.getVec();
-	fk_Vector		carPos = carModel.getPosition();
+	fk_Vector XVec(1.0, 0.0, 0.0);
+	fk_Vector YVec(0.0, 1.0, 0.0);
+	fk_Vector carVec = carModel->getVec();
+	fk_Vector carPos = carModel->getPosition();
 
 	// サーキットの外にでた場合、回転する。
 	// 車の方向ベクトルと、壁の法線ベクトルとの内積がマイナスのときに回転
@@ -180,45 +180,36 @@ bool Car::isRotate(void)
 
 void Car::rotate(double argAngle)
 {
-	carModel.loAngle(argAngle, 0.0, 0.0);
+	carModel->loAngle(argAngle, 0.0, 0.0);
 }
 
 Build::Build(void)
 {
-	buildModel.setShape(&buildShape);
+	buildModel->setShape(buildShape.get());
 }
 
 void Build::makeBuild(fk_Vector argPos, double argHeight, fk_Material &argMat)
 {
-	buildShape.setSize(Car::BUILDWIDTH, Car::BUILDWIDTH, argHeight);
-	buildModel.glMoveTo(argPos.x, argPos.y, argHeight/2.0);
-	buildModel.setMaterial(argMat);
+	buildShape->setSize(Car::BUILDWIDTH, Car::BUILDWIDTH, argHeight);
+	buildModel->glMoveTo(argPos.x, argPos.y, argHeight/2.0);
+	buildModel->setMaterial(argMat);
 }
 
 fk_Model * Build::getModel(void)
 {
-	return &buildModel;
+	return buildModel.get();
 }
 
 World::~World()
 {
-	for(auto b : builds) {
-		delete b;
-	}
-
-	for(auto m : lightModels) {
-		delete m;
-	}
 }
 
 void World::defLight(fk_Vector argV)
 {
-	fk_Model		*model = new fk_Model;
-
-	model->setShape(&lightShape);
-	model->setMaterial(White);
-	model->glFocus(argV);
-	lightModels.push_back(model);
+	lightModels.push_back(make_unique<fk_Model>());
+	lightModels.back()->setShape(lightShape.get());
+	lightModels.back()->setMaterial(White);
+	lightModels.back()->glFocus(argV);
 
 	return;
 }
