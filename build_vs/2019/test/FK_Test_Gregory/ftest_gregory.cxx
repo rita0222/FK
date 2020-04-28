@@ -1,15 +1,9 @@
-﻿#include <FK/FK.h>
-#include <random>
+﻿#define FK_DEF_SIZETYPE
+#include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
-
-double r(double min, double max, mt19937 &mt)
-{
-	uniform_real_distribution<>	dist(0.0, 1.0);
-	
-	return min + (max - min)*dist(mt);
-}
 
 void modelInit(fk_Model *argM)
 {
@@ -22,24 +16,23 @@ void modelInit(fk_Model *argM)
 	argM->setDrawMode(fk_Draw::GEOM_LINE | fk_Draw::GEOM_FACE | fk_Draw::LINE | fk_Draw::POINT);
 }
 
-
 int main(int, char *[])
 {
-	fk_AppWindow * window = new fk_AppWindow();
-	fk_Light * light = new fk_Light();
-	fk_Model* lightModel = new fk_Model();
-	fk_Model* camera = new fk_Model();
+	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
+	unique_ptr<fk_Light> light(new fk_Light());
+	unique_ptr<fk_Model> lightModel(new fk_Model());
+	unique_ptr<fk_Model> camera(new fk_Model());
 
-	fk_Model* model[2];
-	fk_Gregory* surf[2];
+	vector<unique_ptr<fk_Model>> model(2);
+	vector<unique_ptr<fk_Gregory>> surf(2);
 
-	random_device	rnd;
-	mt19937			mt(rnd());
-	
+	for (auto &m : model) m.reset(new fk_Model());
+	for (auto &s : surf) s.reset(new fk_Gregory());
+
 	fk_Material::initDefault();
 
 	window->clearModel();
-	window->setCameraModel(camera);
+	window->setCameraModel(camera.get());
 	window->setSize(800, 800);
 	window->setBGColor(0.6, 0.7, 0.8);
 	window->setCameraPos(0.0, 0.0, 100.0);
@@ -47,19 +40,17 @@ int main(int, char *[])
 	window->open();
 	window->setTrackBallMode(true);
 
-	fk_Vector ctrlP[4];
-	for(int i = 0; i < 2; i++) {
-		model[i] = new fk_Model();
-		surf[i] = new fk_Gregory();
+	vector<fk_Vector> ctrlP(4);
+	for(_st i = 0; i < 2; i++) {
 		surf[i]->setDiv(64);
 		double x = double(i)*30.0 - 30.0;
 
 		for(int j = 0; j <= 3; j++) {
 			double d = 10.0*double(j);
-			ctrlP[0].set(x + d, -r(13.0, 17.0, mt), r(-15.0, 15.0, mt));
-			ctrlP[1].set(x + d, r(13.0, 17.0, mt), r(-15.0, 15.0, mt));
-			ctrlP[2].set(x, d - r(13.0, 17.0, mt), r(-15.0, 15.0, mt));
-			ctrlP[3].set(x + 30.0, d - r(13.0, 17.0, mt), r(-15.0, 15.0, mt));
+			ctrlP[0].set(x + d, fk_Math::drand(13.0, 17.0), fk_Math::drand(-15.0, 15.0));
+			ctrlP[1].set(x + d, fk_Math::drand(13.0, 17.0), fk_Math::drand(-15.0, 15.0));
+			ctrlP[2].set(x, d - fk_Math::drand(13.0, 17.0), fk_Math::drand(-15.0, 15.0));
+			ctrlP[3].set(x + 30.0, d - fk_Math::drand(13.0, 17.0), fk_Math::drand(-15.0, 15.0));
 
 			for(int k = 0; k < 4; k++) {
 				surf[i]->setBoundary(fk_UV(k), j, ctrlP[k]);
@@ -67,19 +58,21 @@ int main(int, char *[])
 		}
 
 		surf[i]->adjustDerivative();
-		model[i]->setShape(surf[i]);
-		modelInit(model[i]);
-		window->entry(model[i]);
+		model[i]->setShape(surf[i].get());
+		modelInit(model[i].get());
+		window->entry(model[i].get());
 	}
 
 	surf[1]->setBoundary(fk_UV::V_S, 0, surf[0]->getBoundary(fk_UV::V_E, 0));
 	surf[1]->setBoundary(fk_UV::V_S, 3, surf[0]->getBoundary(fk_UV::V_E, 3));
-	if(surf[1]->connect(surf[0], fk_UV::V_S, fk_UV::V_E, true, true) == false) fl_alert("NG");
+	if (surf[1]->connect(surf[0].get(), fk_UV::V_S, fk_UV::V_E, true, true) == false) {
+		fl_alert("Connect NG");
+	}
 
-	lightModel->setShape(light);
+	lightModel->setShape(light.get());
 	lightModel->setMaterial(Material::TrueWhite);
 	lightModel->glVec(0.0, 0.0, -1.0);
-	window->entry(lightModel);
+	window->entry(lightModel.get());
 
 	while(window->update() == true) {
 		if(window->getKeyStatus('1', fk_Switch::DOWN)) {
@@ -98,15 +91,5 @@ int main(int, char *[])
 			}
 		}
 	}	
-
-	delete window;
-	delete lightModel;
-	delete light;
-	delete camera;
-	for (int i = 0; i < 2; i++) {
-		delete model[i];
-		delete surf[i];
-	}
-
 	return 0;
 }
