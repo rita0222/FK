@@ -1,10 +1,11 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
 
-const int WIN_W = 1024; // ウィンドウ横幅
-const int WIN_H = 1024; // ウィンドウ縦幅
+constexpr int WIN_W = 1024; // ウィンドウ横幅
+constexpr int WIN_H = 1024; // ウィンドウ縦幅
 
 // 通常モデルのシェーダー設定
 void ModelSetup(fk_Model *argModel, fk_Material argMat, fk_Vector argPos)
@@ -57,15 +58,15 @@ int main(int, char **)
 	fk_System::setcwd();
 	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
-	fk_AppWindow *window = new fk_AppWindow();
-	fk_Material *mat = new fk_Material();
+	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
+	unique_ptr<fk_Material> mat(new fk_Material());
 
-	fk_IFSTexture *ifsShape = new fk_IFSTexture();
-	fk_Sphere *sph = new fk_Sphere(8, 7.0);
-	fk_Block *floor = new fk_Block(200.0, 2.0, 200.0);
-	fk_Model *spModel = new fk_Model();
-	fk_Model *ifsModel = new fk_Model();
-	fk_Model *floorModel = new fk_Model();
+	unique_ptr<fk_IFSTexture> ifsShape(new fk_IFSTexture());
+	unique_ptr<fk_Sphere> sph(new fk_Sphere(8, 7.0));
+	unique_ptr<fk_Block> floor(new fk_Block(200.0, 2.0, 200.0));
+	unique_ptr<fk_Model> spModel(new fk_Model());
+	unique_ptr<fk_Model> ifsModel(new fk_Model());
+	unique_ptr<fk_Model> floorModel(new fk_Model());
 
 	fk_Color bgColor(0.5, 0.5, 0.5);
 
@@ -94,9 +95,9 @@ int main(int, char **)
 	}
 
 	ifsShape->setTexRendMode(fk_TexRendMode::SMOOTH);
-	spModel->setShape(sph);
-	ifsModel->setShape(ifsShape);
-	floorModel->setShape(floor);
+	spModel->setShape(sph.get());
+	ifsModel->setShape(ifsShape.get());
+	floorModel->setShape(floor.get());
 
 	spModel->setShadowEffect(true);
 	spModel->setShadowDraw(true);
@@ -109,9 +110,9 @@ int main(int, char **)
 	
 	// 各モデルをディスプレイリストに登録
 	window->setBGColor(bgColor);
-	window->entry(floorModel);
-	window->entry(spModel);
-	window->entry(ifsModel);
+	window->entry(floorModel.get());
+	window->entry(spModel.get());
+	window->entry(ifsModel.get());
 
 	//fk_ShadowMode mode = fk_ShadowMode::OFF;
 	//fk_ShadowMode mode = fk_ShadowMode::HARD;
@@ -125,26 +126,16 @@ int main(int, char **)
 	window->setShadowVisibility(1.0);
 	window->setShadowBias(0.005);
 
-	ModelSetup(spModel, Material::Yellow, fk_Vector(-20.0, 20.0, 0.0));
-	ModelSetup(ifsModel, Material::White, fk_Vector(20.0, 5.0, 0.0));
-	ModelSetup(floorModel, Material::White, fk_Vector(0.0, -1.0, 0.0));
+	ModelSetup(spModel.get(), Material::Yellow, fk_Vector(-20.0, 20.0, 0.0));
+	ModelSetup(ifsModel.get(), Material::White, fk_Vector(20.0, 5.0, 0.0));
+	ModelSetup(floorModel.get(), Material::White, fk_Vector(0.0, -1.0, 0.0));
 
 	window->open();
 	for(int count = 0; window->update(); ++count) {
-		BallMove(window, spModel);
-		RobotRotate(window, ifsModel);
-		ShadowChange(count, ifsModel);
+		BallMove(window.get(), spModel.get());
+		RobotRotate(window.get(), ifsModel.get());
+		ShadowChange(count, ifsModel.get());
 	}
-
-
-	delete floorModel;
-	delete ifsModel;
-	delete spModel;
-	delete floor;
-	delete sph;
-	delete ifsShape;
-	delete mat;
-	delete window;
 
 	return 0;
 }

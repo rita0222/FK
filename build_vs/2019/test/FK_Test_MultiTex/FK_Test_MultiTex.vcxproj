@@ -125,9 +125,6 @@ copy /b /v /y "$(SolutionDir)contrib\dll\$(Platform)\*.dll" "$(TargetDir)"</Comm
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="multitex.cxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
