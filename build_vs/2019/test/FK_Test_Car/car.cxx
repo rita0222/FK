@@ -1,4 +1,6 @@
-﻿#include <list>
+﻿#define FK_DEF_SIZETYPE
+
+#include <list>
 #include <FK/FK.h>
 
 using namespace std;
@@ -8,137 +10,135 @@ using namespace FK::Material;
 class Car {
 
 public:
-	static constexpr double	BUILDWIDTH	= 25.0;		// 建物幅の基本単位
-	static constexpr double	CIRCUITX	= 150.0;	// コースの X 方向幅
-	static constexpr double	CIRCUITY	= 250.0;	// コースの Y 方向幅
+	static constexpr double	BUILDWIDTH = 25.0;		// 建物幅の基本単位
+	static constexpr double	CIRCUITX = 150.0;	// コースの X 方向幅
+	static constexpr double	CIRCUITY = 250.0;	// コースの Y 方向幅
 
-	Car(void) {}		// コンストラクタ
+	Car(void);		// コンストラクタ
 
-	void		init(void);
-	void		entryScene(fk_Scene *, bool);	
-	fk_Vector	getCarPosition(void);
-	fk_Model *	getBirdModel(void);
-	void		forward(double);
-	bool		isRotate(void);
-	void		rotate(double);
+	void init(void);
+	void entryScene(fk_Scene *, bool);	
+	fk_Vector getCarPosition(void);
+	fk_Model * getBirdModel(void);
+	void forward(double);
+	bool isRotate(void);
+	void rotate(double);
 
 private:
-	fk_Model	carModel;		// 車全体モデル
-	fk_Model	bodyModel;		// 車体モデル
-	fk_Model	tireModel[4];	// 各タイヤモデル
-	fk_Model	driverModel[2];	// 運転者モデル
-	fk_Model	birdModel;		// 鳥瞰視点モデル
+	unique_ptr<fk_Model> carModel;		// 車全体モデル
+	unique_ptr<fk_Model> bodyModel;		// 車体モデル
+	vector< unique_ptr<fk_Model> > tireModel;	// 各タイヤモデル
+	vector< unique_ptr<fk_Model> > driverModel;	// 運転者モデル
+	unique_ptr<fk_Model> birdModel;		// 鳥瞰視点モデル
 
-	fk_Block	body;			// 車体形状
-	fk_Prism	tire;			// タイヤ形状
-	fk_Sphere	driver;			// 運転者形状
+	unique_ptr<fk_Block> body;			// 車体形状
+	unique_ptr<fk_Prism> tire;			// タイヤ形状
+	unique_ptr<fk_Sphere> driver;			// 運転者形状
 };
 
 class Build {
 private:
-	fk_Model	buildModel;
-	fk_Block	buildShape;
+	unique_ptr<fk_Model> buildModel;
+	unique_ptr<fk_Block> buildShape;
 
 public:
 	Build(void);
 
-	void		makeBuild(fk_Vector, double, fk_Material &);
-	fk_Model *	getModel(void);
+	void makeBuild(fk_Vector, double, fk_Material &);
+	fk_Model * getModel(void);
 };
 
 class World {
 private:
-	fk_Model			groundModel;
-	fk_Block			buildShape, groundShape;
-	fk_Light			lightShape;
-	list<Build *>		builds;
-	list<fk_Model *>	lightModels;
+	unique_ptr<fk_Model> groundModel;
+	unique_ptr<fk_Block> groundShape;
+	unique_ptr<fk_Light> lightShape;
+	list< unique_ptr<Build> > builds;
+	list< unique_ptr<fk_Model> > lightModels;
 
-	void		defLight(fk_Vector);
-	void		defBuild(fk_Vector, double, fk_Material &);
+	void defLight(fk_Vector);
+	void defBuild(fk_Vector, double, fk_Material &);
 
 public:
-	World(void) {}
-	~World();
+	World(void);
 
-	void		init(void);
-	void		entryScene(fk_Scene *);
-	void		shadowSet(fk_Scene *, fk_Vector);
+	void init(void);
+	void entryScene(fk_Scene *);
+	void shadowSet(fk_Scene *, fk_Vector);
 };
+
+Car::Car(void)
+{
+	carModel = make_unique<fk_Model>();
+	bodyModel = make_unique<fk_Model>();
+	for(int i = 0; i < 4; ++i) tireModel.push_back(make_unique<fk_Model>());
+	for(int i = 0; i < 2; ++i) driverModel.push_back(make_unique<fk_Model>());
+	birdModel = make_unique<fk_Model>();
+	body = make_unique<fk_Block>(7.0, 6.0, 20.0);
+	tire = make_unique<fk_Prism>(8, 2.0, 2.0);
+	driver = make_unique<fk_Sphere>(4, 2.0);
+}
 
 void Car::init(void)
 {
-	int			i;
-	fk_Vector	X(1.0, 0.0, 0.0);
-	double		tx = 4.0, ty = 1.0, tz = 8.0;
+	fk_Vector X(1.0, 0.0, 0.0);
+	double tx = 4.0, ty = 1.0, tz = 8.0;
 
-	body.setSize(7.0, 6.0, 20.0);
-	tire.setDivide(8);
-	tire.setTopRadius(2.0);
-	tire.setBottomRadius(2.0);
-	tire.setHeight(0.5);
-	driver.setRadius(2.0);
-	driver.setDivide(4);
+	bodyModel->setShape(body.get());
+	bodyModel->glMoveTo(0.0, 5.0, 0.0);
+	bodyModel->setMaterial(Yellow);
+	bodyModel->setParent(carModel.get());
 
-	bodyModel.setShape(&body);
-	bodyModel.glMoveTo(0.0, 5.0, 0.0);
-	bodyModel.setMaterial(Yellow);
-	bodyModel.setParent(&carModel);
+	tireModel[0]->glMoveTo(-tx, ty, -tz);
+	tireModel[0]->glVec(X);
+	tireModel[1]->glMoveTo(tx, ty, -tz);
+	tireModel[1]->glVec(-X);
+	tireModel[2]->glMoveTo(-tx, ty, tz);
+	tireModel[2]->glVec(X);
+	tireModel[3]->glMoveTo(tx, ty, tz);
+	tireModel[3]->glVec(-X);
 
-	tireModel[0].glMoveTo(-tx, ty, -tz);
-	tireModel[0].glVec(X);
-	tireModel[1].glMoveTo(tx, ty, -tz);
-	tireModel[1].glVec(-X);
-	tireModel[2].glMoveTo(-tx, ty, tz);
-	tireModel[2].glVec(X);
-	tireModel[3].glMoveTo(tx, ty, tz);
-	tireModel[3].glVec(-X);
-
-	for(i = 0; i < 4; i++) {
-		tireModel[i].setShape(&tire);
-		tireModel[i].setMaterial(Gray2);
-		tireModel[i].setParent(&carModel);
+	for(_st i = 0; i < 4; i++) {
+		tireModel[i]->setShape(tire.get());
+		tireModel[i]->setMaterial(Gray2);
+		tireModel[i]->setParent(carModel.get());
 	}
 
-	driverModel[0].setShape(&driver);
-	driverModel[1].setShape(&driver);
-	driverModel[0].glMoveTo(-2.0, 10.0, 0.0);
-	driverModel[1].glMoveTo(2.0, 10.0, 0.0);
-	driverModel[0].setMaterial(AshGray);
-	driverModel[1].setMaterial(AshGray);
-	//driverModel[0].setSmoothMode(true);
-	//driverModel[1].setSmoothMode(true);
-	driverModel[0].setParent(&carModel);
-	driverModel[1].setParent(&carModel);
+	driverModel[0]->setShape(driver.get());
+	driverModel[1]->setShape(driver.get());
+	driverModel[0]->glMoveTo(-2.0, 10.0, 0.0);
+	driverModel[1]->glMoveTo(2.0, 10.0, 0.0);
+	driverModel[0]->setMaterial(AshGray);
+	driverModel[1]->setMaterial(AshGray);
+	driverModel[0]->setParent(carModel.get());
+	driverModel[1]->setParent(carModel.get());
 
-	birdModel.glMoveTo(0.0, 100.0, 200.0);
-	birdModel.glFocus(0.0, 5.0, 0.0);
-	birdModel.glUpvec(0.0, 1.0, 0.0);
-	birdModel.setParent(&carModel);
+	birdModel->glMoveTo(0.0, 100.0, 200.0);
+	birdModel->glFocus(0.0, 5.0, 0.0);
+	birdModel->glUpvec(0.0, 1.0, 0.0);
+	birdModel->setParent(carModel.get());
 
-	carModel.glMoveTo(CIRCUITX, CIRCUITY, 0.0);
-	carModel.glVec(0.0, -1.0, 0.0);
-	carModel.glUpvec(0.0, 0.0, 1.0);
+	carModel->glMoveTo(CIRCUITX, CIRCUITY, 0.0);
+	carModel->glVec(0.0, -1.0, 0.0);
+	carModel->glUpvec(0.0, 0.0, 1.0);
 
 	return;
 }
 
 void Car::entryScene(fk_Scene *scene, bool viewFlag)
 {
-	int		i;
+	scene->entryModel(bodyModel.get());
 
-	scene->entryModel(&bodyModel);
-
-	for(i = 0; i < 4; i++) {
-		scene->entryModel(&tireModel[i]);
+	for(_st i = 0; i < 4; i++) {
+		scene->entryModel(tireModel[i].get());
 	}
 
-	scene->entryModel(&driverModel[0]);
+	scene->entryModel(driverModel[0].get());
 
 	if(viewFlag == true) {
-		scene->entryModel(&driverModel[1]);
+		scene->entryModel(driverModel[1].get());
 	} else {
-		scene->entryCamera(&driverModel[1]);
+		scene->entryCamera(driverModel[1].get());
 	}
 
 	return;
@@ -146,26 +146,26 @@ void Car::entryScene(fk_Scene *scene, bool viewFlag)
 
 fk_Vector Car::getCarPosition(void)
 {
-	return carModel.getPosition();
+	return carModel->getPosition();
 }
 
 fk_Model * Car::getBirdModel(void)
 {
-	return &birdModel;
+	return birdModel.get();
 }
 
 void Car::forward(double argSpeed)
 {
-	carModel.loTranslate(0.0, 0.0, -argSpeed); // 前進
+	carModel->loTranslate(0.0, 0.0, -argSpeed); // 前進
 	return;
 }
 
 bool Car::isRotate(void)
 {
-	fk_Vector		XVec(1.0, 0.0, 0.0);
-	fk_Vector		YVec(0.0, 1.0, 0.0);
-	fk_Vector		carVec = carModel.getVec();
-	fk_Vector		carPos = carModel.getPosition();
+	fk_Vector XVec(1.0, 0.0, 0.0);
+	fk_Vector YVec(0.0, 1.0, 0.0);
+	fk_Vector carVec = carModel->getVec();
+	fk_Vector carPos = carModel->getPosition();
 
 	// サーキットの外にでた場合、回転する。
 	// 車の方向ベクトルと、壁の法線ベクトルとの内積がマイナスのときに回転
@@ -179,60 +179,54 @@ bool Car::isRotate(void)
 
 void Car::rotate(double argAngle)
 {
-	carModel.loAngle(argAngle, 0.0, 0.0);
+	carModel->loAngle(argAngle, 0.0, 0.0);
 }
 
 Build::Build(void)
 {
-	buildModel.setShape(&buildShape);
+	buildModel = make_unique<fk_Model>();
+	buildShape = make_unique<fk_Block>();
+
+	buildModel->setShape(buildShape.get());
 }
 
 void Build::makeBuild(fk_Vector argPos, double argHeight, fk_Material &argMat)
 {
-	buildShape.setSize(Car::BUILDWIDTH, Car::BUILDWIDTH, argHeight);
-	buildModel.glMoveTo(argPos.x, argPos.y, argHeight/2.0);
-	buildModel.setMaterial(argMat);
+	buildShape->setSize(Car::BUILDWIDTH, Car::BUILDWIDTH, argHeight);
+	buildModel->glMoveTo(argPos.x, argPos.y, argHeight/2.0);
+	buildModel->setMaterial(argMat);
 }
 
 fk_Model * Build::getModel(void)
 {
-	return &buildModel;
+	return buildModel.get();
 }
 
-World::~World()
+World::World(void)
 {
-	for(auto b : builds) {
-		delete b;
-	}
-
-	for(auto m : lightModels) {
-		delete m;
-	}
+	groundModel = make_unique<fk_Model>();
+	groundShape = make_unique<fk_Block>(1000, 1000, 2.0);
+	lightShape = make_unique<fk_Light>();
 }
 
 void World::defLight(fk_Vector argV)
 {
-	fk_Model		*model = new fk_Model;
-
-	model->setShape(&lightShape);
-	model->setMaterial(White);
-	model->glFocus(argV);
-	lightModels.push_back(model);
+	lightModels.push_back(make_unique<fk_Model>());
+	lightModels.back()->setShape(lightShape.get());
+	lightModels.back()->setMaterial(White);
+	lightModels.back()->glFocus(argV);
 
 	return;
 }
 
 void World::defBuild(fk_Vector argPos, double argHeight, fk_Material &argMat)
 {
-	Build *b = new Build;
-
-	b->makeBuild(argPos, argHeight, argMat);
-	builds.push_back(b);
+	builds.push_back(make_unique<Build>());
+	builds.back()->makeBuild(argPos, argHeight, argMat);
 }
 
 void World::init(void)
 {
-
 	// 照明の設定
 	//defLight(fk_Vector(1.0, 1.0, -1.0));
 
@@ -245,21 +239,20 @@ void World::init(void)
 	defBuild(fk_Vector(-50.0, -350.0), 150.0, Orange);
 
 	// 地面の設定
-	groundShape.setSize(1000, 1000, 2.0);
-	groundModel.setShape(&groundShape);
-	groundModel.glTranslate(0.0, 0.0, -1.0);
-	groundModel.setMaterial(Brown);
+	groundShape->setSize(1000, 1000, 2.0);
+	groundModel->setShape(groundShape.get());
+	groundModel->glTranslate(0.0, 0.0, -1.0);
+	groundModel->setMaterial(Brown);
 
 	return;
 }
 
 void World::entryScene(fk_Scene *scene)
 {
-	scene->entryModel(&groundModel);
+	scene->entryModel(groundModel.get());
 
-	for(fk_Model *m : lightModels) scene->entryModel(m);
-
-	for(Build *b : builds) scene->entryModel(b->getModel());
+	for(auto &m : lightModels) scene->entryModel(m.get());
+	for(auto &b : builds) scene->entryModel(b->getModel());
 
 	return;
 }
@@ -267,10 +260,10 @@ void World::entryScene(fk_Scene *scene)
 void World::shadowSet(fk_Scene *argScene, fk_Vector argV)
 {
 	defLight(argV);
-	argScene->setShadowMode(fk_ShadowMode::SOFT_NICE);
+	argScene->setShadowMode(fk_ShadowMode::SOFT_FAST);
 	argScene->setShadowVec(argV);
-	argScene->setShadowAreaSize(1000.0);
-	argScene->setShadowDistance(1000.0);
+	argScene->setShadowAreaSize(2000.0);
+	argScene->setShadowDistance(1500.0);
 	argScene->setShadowResolution(1024);
 	argScene->setShadowVisibility(0.8);
 	argScene->setShadowBias(0.005);
@@ -280,66 +273,66 @@ int main(int, char *[])
 {
 	fk_Material::initDefault();
 
-	Car				carObj;
-	World			worldObj;
-	Fl_Window		mainWindow(1240, 420, "MultiWindow Test");
-	fk_Scene		carViewScene, buildViewScene, birdViewScene;
-	fk_Window		carViewWindow(10, 10, 400, 400);
-	fk_Window		buildViewWindow(420, 10, 400, 400);
-	fk_Window		birdViewWindow(830, 10, 400, 400);
-	fk_Color		bgColor(0.2, 0.7, 1.0);
-	fk_Vector		lightVec(1.0, 1.0, -1.0);
+	unique_ptr<Car> carObj(new Car());
+	unique_ptr<World> worldObj(new World());
+	unique_ptr<Fl_Window> mainWindow(new Fl_Window(1240, 420, "MultiWindow Test"));
+	unique_ptr<fk_Scene> carViewScene(new fk_Scene());
+	unique_ptr<fk_Scene> buildViewScene(new fk_Scene());
+	unique_ptr<fk_Scene> birdViewScene(new fk_Scene());
+	unique_ptr<fk_Window> carViewWindow(new fk_Window(10, 10, 400, 400));
+	unique_ptr<fk_Window> buildViewWindow(new fk_Window(420, 10, 400, 400));
+	unique_ptr<fk_Window> birdViewWindow(new fk_Window(830, 10, 400, 400));
+	unique_ptr<fk_Model> buildViewModel(new fk_Model());
+	unique_ptr<fk_Model> birdViewModel(new fk_Model());
+	double speed = 2.0;
+	fk_Color bgColor(0.2, 0.7, 1.0);
+	fk_Vector lightVec(1.0, 1.0, -1.0);
 
-	fk_Model		buildViewModel, birdViewModel;
-	double			speed = 2.0;
-
-	mainWindow.end();
-	fk_Material::initDefault();
-
-	carObj.init();
-	worldObj.init();
+	mainWindow->end();
+	carObj->init();
+	worldObj->init();
 
 	// 各ウィンドウにバックグラウンドカラー設定
-	carViewScene.setBGColor(bgColor);
-	buildViewScene.setBGColor(bgColor);
-	birdViewScene.setBGColor(bgColor);
+	carViewScene->setBGColor(bgColor);
+	buildViewScene->setBGColor(bgColor);
+	birdViewScene->setBGColor(bgColor);
 
-	worldObj.shadowSet(&carViewScene, lightVec);
-	worldObj.shadowSet(&buildViewScene, lightVec);
-	worldObj.shadowSet(&birdViewScene, lightVec);
+	worldObj->shadowSet(carViewScene.get(), lightVec);
+	worldObj->shadowSet(buildViewScene.get(), lightVec);
+	worldObj->shadowSet(birdViewScene.get(), lightVec);
 
 	// 各モデルをディスプレイリストに登録
-	worldObj.entryScene(&carViewScene);
-	worldObj.entryScene(&buildViewScene);
-	worldObj.entryScene(&birdViewScene);
+	worldObj->entryScene(carViewScene.get());
+	worldObj->entryScene(buildViewScene.get());
+	worldObj->entryScene(birdViewScene.get());
 
 
-	carObj.entryScene(&carViewScene, false);
-	carObj.entryScene(&buildViewScene, true);
-	carObj.entryScene(&birdViewScene, true);
+	carObj->entryScene(carViewScene.get(), false);
+	carObj->entryScene(buildViewScene.get(), true);
+	carObj->entryScene(birdViewScene.get(), true);
 
 	// 建物ウィンドウの視点設定
-	buildViewModel.glMoveTo(-250.0, 100.0, 100.0);
-	buildViewModel.glFocus(carObj.getCarPosition());
-	buildViewModel.glUpvec(0.0, 0.0, 1.0);
-	buildViewScene.entryCamera(&buildViewModel);
+	buildViewModel->glMoveTo(-250.0, 100.0, 100.0);
+	buildViewModel->glFocus(carObj->getCarPosition());
+	buildViewModel->glUpvec(0.0, 0.0, 1.0);
+	buildViewScene->entryCamera(buildViewModel.get());
 
 	// 鳥瞰ウィンドウの視点設定
-	birdViewScene.entryCamera(carObj.getBirdModel());
+	birdViewScene->entryCamera(carObj->getBirdModel());
 
 	// ウィンドウへディスプレイリストを登録
-	carViewWindow.setScene(&carViewScene);
-	buildViewWindow.setScene(&buildViewScene);
-	birdViewWindow.setScene(&birdViewScene);
+	carViewWindow->setScene(carViewScene.get());
+	buildViewWindow->setScene(buildViewScene.get());
+	birdViewWindow->setScene(birdViewScene.get());
 
-	mainWindow.show();
-	carViewWindow.show();
-	buildViewWindow.show();
-	birdViewWindow.show();
+	mainWindow->show();
+	carViewWindow->show();
+	buildViewWindow->show();
+	birdViewWindow->show();
 
 	while(true) {
 
-		if(mainWindow.visible() == 0) {
+		if(mainWindow->visible() == 0) {
 			if(Fl::wait() == 0) {
 				break;
 			} else {
@@ -347,23 +340,23 @@ int main(int, char *[])
 			}
 		}
 
-		if(carViewWindow.drawWindow() == 0 ||
-		   buildViewWindow.drawWindow() == 0 ||
-		   birdViewWindow.drawWindow() == 0) break;
+		if(carViewWindow->drawWindow() == 0 ||
+		   buildViewWindow->drawWindow() == 0 ||
+		   birdViewWindow->drawWindow() == 0) break;
 
 		if(Fl::check() == 0) break;
 
-		if(carViewWindow.winOpenStatus() == false ||
-		   buildViewWindow.winOpenStatus() == false ||
-		   birdViewWindow.winOpenStatus() == false) {
+		if(carViewWindow->winOpenStatus() == false ||
+		   buildViewWindow->winOpenStatus() == false ||
+		   birdViewWindow->winOpenStatus() == false) {
 			continue;
 		}	  
 
-		carObj.forward(speed);
-		if(carObj.isRotate() == true) carObj.rotate(speed * fk_Math::PI/200.0);
+		carObj->forward(speed);
+		if(carObj->isRotate() == true) carObj->rotate(speed * fk_Math::PI/200.0);
 
-		buildViewModel.glFocus(carObj.getCarPosition());
-		buildViewModel.glUpvec(0.0, 0.0, 1.0);
+		buildViewModel->glFocus(carObj->getCarPosition());
+		buildViewModel->glUpvec(0.0, 0.0, 1.0);
 	}
 	
 	return 0;

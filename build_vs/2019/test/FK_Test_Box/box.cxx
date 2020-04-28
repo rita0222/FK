@@ -1,6 +1,91 @@
-﻿/****************************************************************************
+﻿#include <FK/FK.h>
+#include <memory>
+
+using namespace FK;
+using namespace std;
+
+int main(int, char *[])
+{
+	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
+	unique_ptr<fk_Model> camera(new fk_Model());
+	unique_ptr<fk_Model> blockModel(new fk_Model());
+	vector< unique_ptr<fk_Model> > lineModel(2);
+	vector<fk_Vector> pos(4);
+	vector< unique_ptr<fk_Line> > line(2);
+	unique_ptr<fk_Block> block(new fk_Block(50.0, 70.0, 40.0));
+
+
+	for(auto &m : lineModel) m.reset(new fk_Model());
+	for(auto &l : line) l.reset(new fk_Line());
+
+// マテリアルの初期化
+	fk_Material::initDefault();
+
+	// ウィンドウ設定
+	window->setSize(800, 800);
+
+	// 直方体の設定
+	blockModel->setShape(block.get());
+	blockModel->setMaterial(Material::Yellow);
+
+	// 線分の設定
+	pos[0].set(0.0, 100.0, 0.0);
+	pos[1].set(100.0, 0.0, 0.0);
+	pos[2] = -pos[0];
+	pos[3] = -pos[1];
+	line[0]->setVertex(&pos[0]);
+	line[1]->setVertex(&pos[2]);
+	lineModel[0]->setShape(line[0].get());
+	lineModel[1]->setShape(line[1].get());
+
+	// 線分の色設定
+	lineModel[0]->setLineColor(1.0f, 0.0f, 0.0f);
+	lineModel[1]->setLineColor(0.0f, 1.0f, 0.0f);
+
+	// 直方体を線分の親モデルに設定
+	lineModel[0]->setParent(blockModel.get());
+	lineModel[1]->setParent(blockModel.get());
+
+	// 視点の位置と姿勢を設定
+	camera->glMoveTo(0.0, 0.0, 2000.0);
+	camera->glFocus(0.0, 0.0, 0.0);
+	camera->glUpvec(0.0, 1.0, 0.0);
+
+	// 各モデルをウィンドウに登録
+	window->setCameraModel(camera.get());
+	window->entry(blockModel.get());
+	window->entry(lineModel[0].get());
+	window->entry(lineModel[1].get());
+    window->open();
+
+	double speed = 5.0;
+
+	for(int i = 0; window->update() == true; i++) {
+		double z = camera->getPosition().z;
+
+		// 視点を原点に近づける
+		camera->glTranslate(0.0, 0.0, -speed);
+        
+		// 直方体(と子モデルの線分)を Y 軸中心に回転
+		blockModel->glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, speed * fk_Math::PI/300.0);
+
+		// カメラが 1000 より近くなったら Z 軸回転
+		if(z < 1000.0) {
+			camera->loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Z, speed * fk_Math::PI/500.0);
+		}
+
+		// 視点が原点を越えたら、向きをもう一度原点に向かせる。
+		if(z < -fk_Math::EPS) {
+			camera->glFocus(0.0, 0.0, 0.0);
+		}
+	}
+
+	return 0;
+}
+
+/****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
  *	Redistribution and use in source and binary forms,
  *	with or without modification, are permitted provided that the
@@ -36,7 +121,7 @@
  ****************************************************************************/
 /****************************************************************************
  *
- *	Copyright (c) 1999-2019, Fine Kernel Project, All rights reserved.
+ *	Copyright (c) 1999-2020, Fine Kernel Project, All rights reserved.
  *
  *	本ソフトウェアおよびソースコードのライセンスは、基本的に
  *	「修正 BSD ライセンス」に従います。以下にその詳細を記します。
@@ -69,81 +154,3 @@
  *	ついて、一切責任を負わないものとします。
  *
  ****************************************************************************/
-#include <FK/FK.h>
-
-using namespace FK;
-
-int main(int, char *[])
-{
-	fk_AppWindow	window;
-	fk_Model		camera, blockModel, lineModel[2];
-	fk_Vector		pos[4];
-	fk_Line			line[2];
-	fk_Block		block(50.0, 70.0, 40.0);
-
-	// マテリアルの初期化
-	fk_Material::initDefault();
-
-	// ウィンドウ設定
-	window.setSize(800, 800);
-
-	// 直方体の設定
-	blockModel.setShape(&block);
-	blockModel.setMaterial(Material::Yellow);
-
-	// 線分の設定
-	pos[0].set(0.0, 100.0, 0.0);
-	pos[1].set(100.0, 0.0, 0.0);
-	pos[2] = -pos[0];
-	pos[3] = -pos[1];
-	line[0].setVertex(&pos[0]);
-	line[1].setVertex(&pos[2]);
-	lineModel[0].setShape(&line[0]);
-	lineModel[1].setShape(&line[1]);
-
-	// 線分の色設定
-	lineModel[0].setLineColor(1.0f, 0.0f, 0.0f);
-	lineModel[1].setLineColor(0.0f, 1.0f, 0.0f);
-
-	// 直方体を線分の親モデルに設定
-	lineModel[0].setParent(&blockModel);
-	lineModel[1].setParent(&blockModel);
-
-	// 視点の位置と姿勢を設定
-	camera.glMoveTo(0.0, 0.0, 2000.0);
-	camera.glFocus(0.0, 0.0, 0.0);
-	camera.glUpvec(0.0, 1.0, 0.0);
-
-	// 各モデルをウィンドウに登録
-	window.setCameraModel(&camera);
-	window.entry(&blockModel);
-	window.entry(&lineModel[0]);
-	window.entry(&lineModel[1]);
-
-	window.open();
-
-	double speed = 5.0;
-
-	for(int i = 0; window.update() == true; i++) {
-		double z = camera.getPosition().z;
-
-		// 視点を原点に近づける
-		camera.glTranslate(0.0, 0.0, -speed);
-        
-		// 直方体(と子モデルの線分)を Y 軸中心に回転
-		blockModel.glRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Y, speed * fk_Math::PI/300.0);
-
-		// カメラが 1000 より近くなったら Z 軸回転
-		if(z < 1000.0) {
-			camera.loRotateWithVec(0.0, 0.0, 0.0, fk_Axis::Z, speed * fk_Math::PI/500.0);
-		}
-
-		// 視点が原点を越えたら、向きをもう一度原点に向かせる。
-		if(z < -fk_Math::EPS) {
-			camera.glFocus(0.0, 0.0, 0.0);
-		}
-
-	}
-
-	return 0;
-}
