@@ -1,4 +1,5 @@
 ﻿#include <FK/FK.h>
+#include <memory>
 
 using namespace std;
 using namespace FK;
@@ -7,18 +8,18 @@ using namespace FK;
 class Agent {
 
 private:
-	fk_Model		model;
-	fk_Vector		newVec;
+	unique_ptr<fk_Model> model;
+	fk_Vector newVec;
 	
 public:
 	Agent(void);
 
-	fk_Vector		getPos(void);
-	void			setVec(fk_Vector);
-	fk_Vector		getVec(void);
-	void			setShape(fk_Shape *);
-	void			entry(fk_AppWindow *);
-	void			forward(void);
+	fk_Vector getPos(void);
+	void setVec(fk_Vector);
+	fk_Vector getVec(void);
+	void setShape(fk_Shape *);
+	void entry(fk_AppWindow *);
+	void forward(void);
 	static constexpr double SPEED = 0.05;
 	static constexpr double AREASIZE = 15.0;
 };
@@ -26,33 +27,36 @@ public:
 // 群衆用クラス
 class Boid {
 private:
-	vector<Agent *>	agent;
-	fk_Cone			*cone;
-	double			paramA, paramB, paramC, paramLA, paramLB;
+	vector< unique_ptr<Agent> >	agent;
+	unique_ptr<fk_Cone> cone;
+	double paramA, paramB, paramC, paramLA, paramLB;
+
+	vector<fk_Vector> pArray, vArray;
 
 public:
 	Boid(int);
-	~Boid();
 
-	void			setParam(double, double, double, double, double);
-	void			setWindow(fk_AppWindow *);
-	void			forward(bool, bool, bool);
+	void setParam(double, double, double, double, double);
+	void setWindow(fk_AppWindow *);
+	void forward(bool, bool, bool);
 };
 
 // コンストラクタ
 Agent::Agent(void)
 {
-	model.setMaterial(Material::Red);
+	model = make_unique<fk_Model>();
+
+	model->setMaterial(Material::Red);
 	// モデルの方向と位置をランダムに設定
-	model.glVec(fk_Math::drand(-1.0, 1.0), fk_Math::drand(-1.0, 1.0), 0.0);
-	model.glMoveTo(fk_Math::drand(-AREASIZE, AREASIZE),
-				   fk_Math::drand(-AREASIZE, AREASIZE), 0.0);
+	model->glVec(fk_Math::drand(-1.0, 1.0), fk_Math::drand(-1.0, 1.0), 0.0);
+	model->glMoveTo(fk_Math::drand(-AREASIZE, AREASIZE),
+					fk_Math::drand(-AREASIZE, AREASIZE), 0.0);
 }
 
 // 位置取得
 fk_Vector Agent::getPos(void)
 {
-	return model.getPosition();
+	return model->getPosition();
 }
 
 // 方向設定
@@ -64,42 +68,49 @@ void Agent::setVec(fk_Vector argV)
 // 方向取得
 fk_Vector Agent::getVec(void)
 {
-	return model.getVec();
+	return model->getVec();
 }
 
 // 形状設定
 void Agent::setShape(fk_Shape *argS)
 {
-	model.setShape(argS);
+	model->setShape(argS);
 }
 
 // ウィンドウ登録
 void Agent::entry(fk_AppWindow *argWin)
 {
-	argWin->entry(model);
+	argWin->entry(model.get());
 }
 
 // 前進
 void Agent::forward()
 {
-	model.glVec(newVec);
-	model.loTranslate(0.0, 0.0, -SPEED);
+	model->glVec(newVec);
+	model->loTranslate(0.0, 0.0, -SPEED);
 }
 	
 // 群集のコンストラクタ
 Boid::Boid(int argNum)
 {
 	// 形状インスタンス生成
+	cone = make_unique<fk_Cone>(16, 0.4, 1.0, true);
+
 	fk_Material::initDefault();
-	cone = new fk_Cone(16, 0.4, 1.0, true);
 	if(argNum < 0) return;
 
 	// エージェントインスタンスの作成
 	for(int i = 0; i < argNum; ++i) {
-		Agent *newAgent = new Agent();
-		newAgent->setShape(cone);
-		agent.push_back(newAgent);
+		/*
+		unique_ptr<Agent> newAgent = make_unique<Agent>();
+		newAgent->setShape(cone.get());
+		agent.push_back(move(newAgent));
+		*/
+		agent.push_back(make_unique<Agent>());
+		agent.back()->setShape(cone.get());
 	}
+	pArray.resize(vector<fk_Vector>::size_type(argNum));
+	vArray.resize(vector<fk_Vector>::size_type(argNum));
 
 	// 各種パラメータ設定
 	paramA = 0.2;
@@ -108,13 +119,6 @@ Boid::Boid(int argNum)
 	paramLA = 3.0;
 	paramLB = 5.0;
 }
-
-// 群集のデストラクタ
-Boid::~Boid()
-{
-	for(auto M : agent) delete M;
-	delete cone;
-}	
 
 // パラメータ設定メソッド
 void Boid::setParam(double argA, double argB, double argC, double argLA, double argLB)
@@ -129,15 +133,15 @@ void Boid::setParam(double argA, double argB, double argC, double argLA, double 
 // ウィンドウへのエージェント登録メソッド
 void Boid::setWindow(fk_AppWindow *argWin)
 {
-	for(auto M : agent) M->entry(argWin);
+	for(auto &A : agent) A->entry(argWin);
 }
 
 // 各エージェント動作メソッド
 void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 {
 	fk_Vector gVec, diff;
-	vector<fk_Vector> pArray(agent.size()); // 位置ベクトル格納用配列
-	vector<fk_Vector> vArray(agent.size()); // 方向ベクトル格納用配列
+	//vector<fk_Vector> pArray(agent.size()); // 位置ベクトル格納用配列
+	//vector<fk_Vector> vArray(agent.size()); // 方向ベクトル格納用配列
 
 	// 全体の重心計算
 	for(size_t i = 0; i < agent.size(); i++) {
@@ -187,38 +191,38 @@ void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 	}
 
 	// 全エージェントを前進
-	for(auto M : agent) M->forward();
+	for(auto &A : agent) A->forward();
 }
 
 int main(int, char **)
 {
-	fk_AppWindow win;
-	Boid boid(200);
+	unique_ptr<fk_AppWindow> win(new fk_AppWindow());
+	unique_ptr<Boid> boid(new Boid(200));
 
-	boid.setWindow(&win);
+	boid->setWindow(win.get());
 
 	// ウィンドウ各種設定
-	win.setSize(800, 800);
-	win.setBGColor(0.6, 0.7, 0.8);
-	win.showGuide(fk_Guide::GRID_XY);
-	win.setCameraPos(0.0, 0.0, 80.0);
-	win.setCameraFocus(0.0, 0.0, 0.0);
-	win.setTrackBallMode(true);
+	win->setSize(800, 800);
+	win->setBGColor(0.6, 0.7, 0.8);
+	win->showGuide(fk_Guide::GRID_XY);
+	win->setCameraPos(0.0, 0.0, 80.0);
+	win->setCameraFocus(0.0, 0.0, 0.0);
+	win->setTrackBallMode(true);
 
-	win.open();
+	win->open();
 
-	while(win.update() == true) {
+	while(win->update() == true) {
 		// Sキーで「Separate(分離)」を OFF に
-		bool sMode = win.getKeyStatus('S', fk_Switch::RELEASE);
+		bool sMode = win->getKeyStatus('S', fk_Switch::RELEASE);
 
 		// Aキーで「Alignment(整列)」を OFF に
-		bool aMode = win.getKeyStatus('A', fk_Switch::RELEASE);
+		bool aMode = win->getKeyStatus('A', fk_Switch::RELEASE);
 
 		// Cキーで「Cohesion(結合)」を OFF に
-		bool cMode = win.getKeyStatus('C', fk_Switch::RELEASE);
+		bool cMode = win->getKeyStatus('C', fk_Switch::RELEASE);
 
 		// 群集の前進処理
-		boid.forward(sMode, aMode, cMode);
+		boid->forward(sMode, aMode, cMode);
 	}
 }
 
