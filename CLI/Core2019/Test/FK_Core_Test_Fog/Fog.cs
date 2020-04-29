@@ -48,26 +48,17 @@ namespace FK_Core_Test_Shadow
             }
         }
 
-        static void ShadowVecChange(int argCount, fk_AppWindow argWindow)
+        static void FogChange(int argCount, fk_Model argModel)
         {
-            var rotMat = new fk_Matrix();
-            rotMat.MakeRot((double)argCount / 100.0, fk_Axis.Y);
-            var vec = rotMat * (new fk_Vector(1.0, -1.0, 0.0));
-            argWindow.ShadowVec = vec;
-            argWindow.DefaultLightVec = vec;
+            if((argCount/100) % 2 == 0)
+            {
+                argModel.FogMode = true;
+            } else
+            {
+                argModel.FogMode = false;
+            }
         }
 
-        static void ShadowChange(fk_AppWindow argWindow, fk_Model argModel, char argC1, char argC2)
-        {
-            if(argWindow.GetKeyStatus(argC1, fk_Switch.DOWN))
-            {
-                argModel.ShadowEffect = (argModel.ShadowEffect ? false : true);
-            }
-            if(argWindow.GetKeyStatus(argC2, fk_Switch.DOWN))
-            {
-                argModel.ShadowDraw = (argModel.ShadowDraw ? false : true);
-            }
-        }
 
         static void Main(string[] args)
         {
@@ -119,30 +110,24 @@ namespace FK_Core_Test_Shadow
             window.ShadowAreaSize = 500.0;
             window.ShadowDistance = 300.0;
             window.ShadowResolution = 1024;
-            window.ShadowVisibility = 0.9;
+            window.ShadowVisibility = 1.0;
             window.ShadowBias = 0.01;
+
+            window.FogMode = fk_FogMode.EXP2;
+            window.FogDensity = 0.005;
+            window.FogColor = bgColor;
 
             ModelSetup(spModel, fk_Material.Yellow, new fk_Vector(-20.0, 20.0, 0.0));
             ModelSetup(ifsModel, fk_Material.White, new fk_Vector(20.0, 5.0, 0.0));
             ModelSetup(floorModel, fk_Material.White, new fk_Vector(0.0, -1.0, 0.0));
 
             window.Open();
-
-            Console.WriteLine("1 : 球影効果 ON/OFF");
-            Console.WriteLine("2 : 球影描画 ON/OFF");
-            Console.WriteLine("3 : ロボット影効果 ON/OFF");
-            Console.WriteLine("4 : ロボット影描画 ON/OFF");
-            Console.WriteLine("z : ロボット 反時計回り回転");
-            Console.WriteLine("x : ロボット 時計回り回転");
-            Console.WriteLine("矢印 : 球移動");
-
-            for (int count = 0;  window.Update(); count++)
+            for(int count = 0;  window.Update(); count++)
             {
                 BallMove(window, spModel);
                 RobotRotate(window, ifsModel);
-                ShadowVecChange(count, window);
-                ShadowChange(window, spModel, '1', '2');
-                ShadowChange(window, ifsModel, '3', '4');
+                FogChange(count, ifsModel);
+                FogChange(count + 100, spModel);
             }
         }
     }
