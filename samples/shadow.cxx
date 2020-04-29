@@ -7,6 +7,12 @@ using namespace FK;
 const int WIN_W = 1024; // ウィンドウ横幅
 const int WIN_H = 1024; // ウィンドウ縦幅
 
+#ifdef WIN32
+#define CODE(x) fk_Code::utf8(x)
+#else
+#define CODE(x) x
+#endif
+
 // 通常モデルのシェーダー設定
 void ModelSetup(fk_Model *argModel, fk_Material argMat, fk_Vector argPos)
 {
@@ -128,13 +134,18 @@ int main(int, char **)
 	ModelSetup(floorModel.get(), Material::White, fk_Vector(0.0, -1.0, 0.0));
 
 	window->open();
-	fk_Window::putString("1 : 球影効果 ON/OFF");
-	fk_Window::putString("2 : 球影描画 ON/OFF");
-	fk_Window::putString("3 : ロボット影効果 ON/OFF");
-	fk_Window::putString("4 : ロボット影描画 ON/OFF");
-	fk_Window::putString("z : ロボット 反時計回り回転");
-	fk_Window::putString("x : ロボット 時計回り回転");
-	fk_Window::putString("矢印 : 球移動");
+
+#ifdef WIN32
+	fk_Code::setInputCoding(fk_StringCode::SJIS);
+#endif
+
+	fk_Window::putString(CODE("1 : 球影効果 ON/OFF"));
+	fk_Window::putString(CODE("2 : 球影描画 ON/OFF"));
+	fk_Window::putString(CODE("3 : ロボット影効果 ON/OFF"));
+	fk_Window::putString(CODE("4 : ロボット影描画 ON/OFF"));
+	fk_Window::putString(CODE("z : ロボット 反時計回り回転"));
+	fk_Window::putString(CODE("x : ロボット 時計回り回転"));
+	fk_Window::putString(CODE("矢印 : 球移動"));
 	
 	for(int count = 0; window->update(); ++count) {
 		BallMove(window.get(), spModel.get());
