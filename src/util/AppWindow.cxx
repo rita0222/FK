@@ -59,7 +59,7 @@ public:
 };
 #endif
 
-const static fk_Switch stArray[4] = {
+const static fk_Switch stArray[3] = {
 	fk_Switch::UP,
 	fk_Switch::DOWN,
 	fk_Switch::RELEASE

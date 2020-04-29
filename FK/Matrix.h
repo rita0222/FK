@@ -341,7 +341,7 @@ namespace FK {
 		 *	座標軸回転変換を表す行列を生成します。
 		 *
 		 *	\param[in]	rad		回転角。単位は弧度法(ラジアン)です。
-		 *	\param[in]	axis	座標軸。 fk_X, fk_Y, fk_Z のいずれかになります。
+		 *	\param[in]	axis	座標軸。
 		 */
 		void makeRot(double rad, fk_Axis axis);
 
