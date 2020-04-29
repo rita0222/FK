@@ -7,12 +7,6 @@ using namespace FK;
 const int WIN_W = 1024; // ウィンドウ横幅
 const int WIN_H = 1024; // ウィンドウ縦幅
 
-#ifdef WIN32
-#define CODE(x) fk_Code::utf8(x)
-#else
-#define CODE(x) x
-#endif
-
 // 通常モデルのシェーダー設定
 void ModelSetup(fk_Model *argModel, fk_Material argMat, fk_Vector argPos)
 {
@@ -50,23 +44,12 @@ void RobotRotate(fk_AppWindow *argWindow, fk_Model *argModel)
 	}
 }
 
-void ShadowVecChange(int argCount, fk_AppWindow *argWindow)
+void FogChange(int argCount, fk_Model *argModel)
 {
-	fk_Matrix rotMat;
-	rotMat.makeRot(double(argCount)/100.0, fk_Axis::Y);
-
-	fk_Vector vec = rotMat * fk_Vector(1.0, -1.0, 0.0);
-	argWindow->setShadowVec(vec);
-	argWindow->setDefaultLightVec(vec);
-}
-
-void ShadowChange(fk_AppWindow *argWindow, fk_Model *argModel, char argC1, char argC2)
-{
-	if(argWindow->getKeyStatus(argC1, fk_Switch::DOWN)) {
-		argModel->setShadowEffect((argModel->getShadowEffect()) ? false : true);
-	}
-	if(argWindow->getKeyStatus(argC2, fk_Switch::DOWN)) {
-		argModel->setShadowDraw((argModel->getShadowDraw()) ? false : true);
+	if((argCount/100) % 2 == 0) {
+		argModel->setFogMode(true);
+	} else {
+		argModel->setFogMode(false);
 	}
 }
 
@@ -97,6 +80,11 @@ int main(int, char **)
 	window->setDefaultLightVec(1.0, -1.0, 1.0);
 	window->setDefaultLightMaterial(Material::WhiteLight);
 
+	window->setFogMode(fk_FogMode::EXP2);
+	window->setFogColor(bgColor);
+	window->setFogLinearMap(20.0, 300.0);
+	window->setFogDensity(0.005);
+
 	// モデル
 	if(ifsShape->readBMP("data/model/00tex_master.BMP") == false) {
 		fl_alert("tex load err");
@@ -117,12 +105,9 @@ int main(int, char **)
 	window->entry(spModel.get());
 	window->entry(ifsModel.get());
 
-	//fk_ShadowMode mode = fk_ShadowMode::OFF;
-	//fk_ShadowMode mode = fk_ShadowMode::HARD;
-	//fk_ShadowMode mode = fk_ShadowMode::SOFT_FAST;
 	fk_ShadowMode mode = fk_ShadowMode::SOFT_NICE;
 	window->setShadowMode(mode);
-	window->setShadowVec(1.0, 0.0, 1.0);
+	window->setShadowVec(1.0, -1.0, 1.0);
 	window->setShadowAreaSize(500.0);
 	window->setShadowDistance(300.0);
 	window->setShadowResolution(1024);
@@ -134,25 +119,11 @@ int main(int, char **)
 	ModelSetup(floorModel.get(), Material::White, fk_Vector(0.0, -1.0, 0.0));
 
 	window->open();
-
-#ifdef WIN32
-	fk_Code::setInputCoding(fk_StringCode::SJIS);
-#endif
-
-	fk_Window::putString(CODE("1 : 球影効果 ON/OFF"));
-	fk_Window::putString(CODE("2 : 球影描画 ON/OFF"));
-	fk_Window::putString(CODE("3 : ロボット影効果 ON/OFF"));
-	fk_Window::putString(CODE("4 : ロボット影描画 ON/OFF"));
-	fk_Window::putString(CODE("z : ロボット 反時計回り回転"));
-	fk_Window::putString(CODE("x : ロボット 時計回り回転"));
-	fk_Window::putString(CODE("矢印 : 球移動"));
-	
 	for(int count = 0; window->update(); ++count) {
 		BallMove(window.get(), spModel.get());
 		RobotRotate(window.get(), ifsModel.get());
-		ShadowVecChange(count, window.get());
-		ShadowChange(window.get(), spModel.get(), '1', '2');
-		ShadowChange(window.get(), ifsModel.get(), '3', '4');
+		FogChange(count, ifsModel.get());
+		FogChange(count+100, spModel.get());
 	}
 
 	return 0;
