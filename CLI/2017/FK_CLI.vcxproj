@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\FK\Audio.h" />
     <ClInclude Include="..\..\FK\Base.h" />
     <ClInclude Include="..\..\FK\BezCurve.h" />
+    <ClInclude Include="..\..\FK\BezCurveDraw.H" />
     <ClInclude Include="..\..\FK\BezSurface.h" />
     <ClInclude Include="..\..\FK\Block.h" />
     <ClInclude Include="..\..\FK\Boundary.h" />
@@ -40,8 +41,8 @@
     <ClInclude Include="..\..\FK\Color.h" />
     <ClInclude Include="..\..\FK\Command.H" />
     <ClInclude Include="..\..\FK\Cone.h" />
+    <ClInclude Include="..\..\FK\CostTable.H" />
     <ClInclude Include="..\..\FK\Curve.h" />
-    <ClInclude Include="..\..\FK\CurveDraw.H" />
     <ClInclude Include="..\..\FK\D3DXAnimation.H" />
     <ClInclude Include="..\..\FK\D3DXData.H" />
     <ClInclude Include="..\..\FK\D3DXParser.H" />
@@ -55,16 +56,21 @@
     <ClInclude Include="..\..\FK\DXFOut.H" />
     <ClInclude Include="..\..\FK\DXFParser.H" />
     <ClInclude Include="..\..\FK\Edge.h" />
+    <ClInclude Include="..\..\FK\EdgePair.H" />
     <ClInclude Include="..\..\FK\Engine.H" />
     <ClInclude Include="..\..\FK\Error.H" />
     <ClInclude Include="..\..\FK\FaceDraw.H" />
     <ClInclude Include="..\..\FK\FK.h" />
     <ClInclude Include="..\..\FK\Fog.h" />
+    <ClInclude Include="..\..\FK\FrameBuffer.h" />
     <ClInclude Include="..\..\FK\FrameController.h" />
     <ClInclude Include="..\..\FK\Fullscreen.h" />
     <ClInclude Include="..\..\FK\FVecArray.h" />
     <ClInclude Include="..\..\FK\GenMatrix.h" />
     <ClInclude Include="..\..\FK\GenVector.h" />
+    <ClInclude Include="..\..\FK\Graph.h" />
+    <ClInclude Include="..\..\FK\GraphEdge.h" />
+    <ClInclude Include="..\..\FK\GraphNode.h" />
     <ClInclude Include="..\..\FK\Gregory.h" />
     <ClInclude Include="..\..\FK\GuideObject.h" />
     <ClInclude Include="..\..\FK\Half.h" />
@@ -82,7 +88,6 @@
     <ClInclude Include="..\..\FK\LineBase.H" />
     <ClInclude Include="..\..\FK\LineDraw.H" />
     <ClInclude Include="..\..\FK\Loop.h" />
-    <ClInclude Include="..\..\FK\MassProperty.h" />
     <ClInclude Include="..\..\FK\MatAdmin.h" />
     <ClInclude Include="..\..\FK\Material.h" />
     <ClInclude Include="..\..\FK\MatExample.h" />
@@ -112,9 +117,11 @@
     <ClInclude Include="..\..\FK\Prism.h" />
     <ClInclude Include="..\..\FK\Projection.h" />
     <ClInclude Include="..\..\FK\Quaternion.h" />
+    <ClInclude Include="..\..\FK\RBezCurve.h" />
     <ClInclude Include="..\..\FK\RDSParser.H" />
     <ClInclude Include="..\..\FK\RectTexture.h" />
     <ClInclude Include="..\..\FK\Reference.h" />
+    <ClInclude Include="..\..\FK\Renderer.h" />
     <ClInclude Include="..\..\FK\RenderState.h" />
     <ClInclude Include="..\..\FK\Scene.h" />
     <ClInclude Include="..\..\FK\ShaderBinder.h" />
@@ -167,9 +174,14 @@
     <ClInclude Include="..\FK_CLI\include\DataAccess_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\DList_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Edge_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\EngineWrapper_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Fog_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\FrameBuffer_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenMatrix_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GenVector_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\GraphEdge_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\GraphNode_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\Graph_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Gregory_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\GuideObject_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Half_CLI.h" />
@@ -197,14 +209,14 @@
     <ClInclude Include="..\FK_CLI\include\Prism_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Projection_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Quaternion_CLI.h" />
+    <ClInclude Include="..\FK_CLI\include\RBezCurve_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\RectTexture_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Reference_CLI.h" />
-    <ClInclude Include="..\FK_CLI\include\Renderer_CLI.H" />
+    <ClInclude Include="..\FK_CLI\include\Renderer_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Scene_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\ShaderBinder_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\ShaderParameter_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\ShaderProgram_CLI.h" />
-    <ClInclude Include="..\FK_CLI\include\ShaderProgram_New_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\ShapeViewer_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\Shape_CLI.h" />
     <ClInclude Include="..\FK_CLI\include\SolidBase_CLI.h" />
@@ -231,19 +243,25 @@
     <ClCompile Include="..\..\src\base\System.cxx" />
     <ClCompile Include="..\..\src\base\Time.cxx" />
     <ClCompile Include="..\..\src\base\Tree.cxx" />
-    <ClCompile Include="..\..\src\graphics\CurveDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\DrawBase.cxx" />
-    <ClCompile Include="..\..\src\graphics\Engine.cxx" />
-    <ClCompile Include="..\..\src\graphics\FaceDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\FrameController.cxx" />
-    <ClCompile Include="..\..\src\graphics\LineDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\PointDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\SurfaceDraw.cxx" />
-    <ClCompile Include="..\..\src\graphics\TextureDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\BezCurveDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\DrawBase.cxx" />
+    <ClCompile Include="..\..\src\engine\Engine.cxx" />
+    <ClCompile Include="..\..\src\engine\FaceDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\FrameController.cxx" />
+    <ClCompile Include="..\..\src\engine\LineDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\PointDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\Renderer.cxx" />
+    <ClCompile Include="..\..\src\engine\SurfaceDraw.cxx" />
+    <ClCompile Include="..\..\src\engine\TextureDraw.cxx" />
+    <ClCompile Include="..\..\src\graph\CostTable.cxx" />
+    <ClCompile Include="..\..\src\graph\Graph.cxx" />
+    <ClCompile Include="..\..\src\graph\GraphEdge.cxx" />
+    <ClCompile Include="..\..\src\graph\GraphNode.cxx" />
     <ClCompile Include="..\..\src\material\Color.cxx" />
     <ClCompile Include="..\..\src\material\Material.cxx" />
     <ClCompile Include="..\..\src\material\MatExample.cxx" />
     <ClCompile Include="..\..\src\material\Palette.cxx" />
+    <ClCompile Include="..\..\src\math\Angle.cxx" />
     <ClCompile Include="..\..\src\math\FVecArray.cxx" />
     <ClCompile Include="..\..\src\math\GenMatrix.cxx" />
     <ClCompile Include="..\..\src\math\GenVector.cxx" />
@@ -276,38 +294,21 @@
     <ClCompile Include="..\..\src\shape\Capsule.cxx" />
     <ClCompile Include="..\..\src\shape\Circle.cxx" />
     <ClCompile Include="..\..\src\shape\Closedline.cxx" />
-    <ClCompile Include="..\..\src\shape\Command.cxx" />
     <ClCompile Include="..\..\src\shape\Cone.cxx" />
     <ClCompile Include="..\..\src\shape\Curve.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXAnimation.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXData.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXParser.cxx" />
     <ClCompile Include="..\..\src\shape\D3DXShapeParser.cxx" />
-    <ClCompile Include="..\..\src\shape\DataAccess.cxx" />
-    <ClCompile Include="..\..\src\shape\DataBase.cxx" />
-    <ClCompile Include="..\..\src\shape\DrawCache.cxx" />
-    <ClCompile Include="..\..\src\shape\DXFOut.cxx" />
     <ClCompile Include="..\..\src\shape\DXFParser.cxx" />
-    <ClCompile Include="..\..\src\shape\Edge.cxx" />
+    <ClCompile Include="..\..\src\shape\EdgePair.cxx" />
     <ClCompile Include="..\..\src\shape\Gregory.cxx" />
-    <ClCompile Include="..\..\src\shape\Half.cxx" />
-    <ClCompile Include="..\..\src\shape\History.cxx" />
     <ClCompile Include="..\..\src\shape\HRCParser.cxx" />
-    <ClCompile Include="..\..\src\shape\IFSetHandle.cxx" />
-    <ClCompile Include="..\..\src\shape\IFSTexture.cxx" />
-    <ClCompile Include="..\..\src\shape\Image.cxx" />
-    <ClCompile Include="..\..\src\shape\ImageIO.cxx" />
     <ClCompile Include="..\..\src\shape\IndexFace.cxx" />
     <ClCompile Include="..\..\src\shape\Light.cxx" />
     <ClCompile Include="..\..\src\shape\Line.cxx" />
     <ClCompile Include="..\..\src\shape\LineBase.cxx" />
-    <ClCompile Include="..\..\src\shape\Loop.cxx" />
-    <ClCompile Include="..\..\src\shape\MassProperty.cxx" />
-    <ClCompile Include="..\..\src\shape\MeshTexture.cxx" />
-    <ClCompile Include="..\..\src\shape\Modify.cxx" />
-    <ClCompile Include="..\..\src\shape\MQOOut.cxx" />
     <ClCompile Include="..\..\src\shape\MQOParser.cxx" />
-    <ClCompile Include="..\..\src\shape\Operation.cxx" />
     <ClCompile Include="..\..\src\shape\ParserBase.cxx" />
     <ClCompile Include="..\..\src\shape\Particle.cxx" />
     <ClCompile Include="..\..\src\shape\ParticleSet.cxx" />
@@ -315,29 +316,48 @@
     <ClCompile Include="..\..\src\shape\Polygon.cxx" />
     <ClCompile Include="..\..\src\shape\Polyline.cxx" />
     <ClCompile Include="..\..\src\shape\Prism.cxx" />
+    <ClCompile Include="..\..\src\shape\RBezCurve.cxx" />
     <ClCompile Include="..\..\src\shape\RDSParser.cxx" />
-    <ClCompile Include="..\..\src\shape\RectTexture.cxx" />
-    <ClCompile Include="..\..\src\shape\Reference1.cxx" />
-    <ClCompile Include="..\..\src\shape\Reference2.cxx" />
-    <ClCompile Include="..\..\src\shape\Reference3.cxx" />
     <ClCompile Include="..\..\src\shape\Shape.cxx" />
     <ClCompile Include="..\..\src\shape\SMFParser.cxx" />
-    <ClCompile Include="..\..\src\shape\Solid.cxx" />
-    <ClCompile Include="..\..\src\shape\SolidBase.cxx" />
     <ClCompile Include="..\..\src\shape\Sphere.cxx" />
     <ClCompile Include="..\..\src\shape\SRFParser.cxx" />
-    <ClCompile Include="..\..\src\shape\STLOut.cxx" />
     <ClCompile Include="..\..\src\shape\STLParser.cxx" />
-    <ClCompile Include="..\..\src\shape\SubDivision.cxx" />
     <ClCompile Include="..\..\src\shape\Surface.cxx" />
-    <ClCompile Include="..\..\src\shape\TextImage.cxx" />
-    <ClCompile Include="..\..\src\shape\Texture.cxx" />
-    <ClCompile Include="..\..\src\shape\Topology.cxx" />
-    <ClCompile Include="..\..\src\shape\TriTexture.cxx" />
-    <ClCompile Include="..\..\src\shape\UniCode.cxx" />
-    <ClCompile Include="..\..\src\shape\Vertex.cxx" />
-    <ClCompile Include="..\..\src\shape\VRMLOut.cxx" />
     <ClCompile Include="..\..\src\shape\VRMLParser.cxx" />
+    <ClCompile Include="..\..\src\solid\Command.cxx" />
+    <ClCompile Include="..\..\src\solid\DataAccess.cxx" />
+    <ClCompile Include="..\..\src\solid\DataBase.cxx" />
+    <ClCompile Include="..\..\src\solid\DrawCache.cxx" />
+    <ClCompile Include="..\..\src\solid\DXFOut.cxx" />
+    <ClCompile Include="..\..\src\solid\Edge.cxx" />
+    <ClCompile Include="..\..\src\solid\Half.cxx" />
+    <ClCompile Include="..\..\src\solid\History.cxx" />
+    <ClCompile Include="..\..\src\solid\IFSetHandle.cxx" />
+    <ClCompile Include="..\..\src\solid\Loop.cxx" />
+    <ClCompile Include="..\..\src\solid\Modify.cxx" />
+    <ClCompile Include="..\..\src\solid\MQOOut.cxx" />
+    <ClCompile Include="..\..\src\solid\Operation.cxx" />
+    <ClCompile Include="..\..\src\solid\Reference1.cxx" />
+    <ClCompile Include="..\..\src\solid\Reference2.cxx" />
+    <ClCompile Include="..\..\src\solid\Reference3.cxx" />
+    <ClCompile Include="..\..\src\solid\Solid.cxx" />
+    <ClCompile Include="..\..\src\solid\SolidBase.cxx" />
+    <ClCompile Include="..\..\src\solid\STLOut.cxx" />
+    <ClCompile Include="..\..\src\solid\SubDivision.cxx" />
+    <ClCompile Include="..\..\src\solid\Topology.cxx" />
+    <ClCompile Include="..\..\src\solid\Vertex.cxx" />
+    <ClCompile Include="..\..\src\solid\VRMLOut.cxx" />
+    <ClCompile Include="..\..\src\texture\FrameBuffer.cxx" />
+    <ClCompile Include="..\..\src\texture\IFSTexture.cxx" />
+    <ClCompile Include="..\..\src\texture\Image.cxx" />
+    <ClCompile Include="..\..\src\texture\ImageIO.cxx" />
+    <ClCompile Include="..\..\src\texture\MeshTexture.cxx" />
+    <ClCompile Include="..\..\src\texture\RectTexture.cxx" />
+    <ClCompile Include="..\..\src\texture\TextImage.cxx" />
+    <ClCompile Include="..\..\src\texture\Texture.cxx" />
+    <ClCompile Include="..\..\src\texture\TriTexture.cxx" />
+    <ClCompile Include="..\..\src\texture\UniCode.cxx" />
     <ClCompile Include="..\..\src\util\AppWindow.cxx" />
     <ClCompile Include="..\..\src\util\Fullscreen.cxx" />
     <ClCompile Include="..\..\src\util\GuideObject.cxx" />
@@ -357,6 +377,7 @@
     <ClCompile Include="..\FK_CLI\cpp\AudioStream_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\AudioWavBuffer_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Base_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\BezCurve_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\BezSurface_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Block_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Boundary_CLI.cpp" />
@@ -369,9 +390,14 @@
     <ClCompile Include="..\FK_CLI\cpp\DataAccess_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\DList_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Edge_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\EngineWrapper_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Fog_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\FrameBuffer_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenMatrix_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GenVector_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\GraphEdge_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\GraphNode_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\Graph_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Gregory_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\GuideObject_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Half_CLI.cpp" />
@@ -399,6 +425,7 @@
     <ClCompile Include="..\FK_CLI\cpp\Prism_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Projection_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Quaternion_CLI.cpp" />
+    <ClCompile Include="..\FK_CLI\cpp\RBezCurve_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\RectTexture_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Reference_CLI.cpp" />
     <ClCompile Include="..\FK_CLI\cpp\Renderer_CLI.cpp" />
@@ -485,21 +512,21 @@
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -507,7 +534,7 @@
     <OutDir>$(SolutionDir)FK_CLI_DLL\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -516,7 +543,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;FK_OLD_NONSUPPORT;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -529,7 +556,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2017\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;libiconv_d.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;icuuc.lib;icudt.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -539,8 +566,8 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -549,7 +576,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;FK_OLD_NONSUPPORT;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -561,7 +588,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2017\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;libiconv_d.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk_d.lib;fltkforms_d.lib;fltkgl_d.lib;fltkimages_d.lib;fltkjpeg_d.lib;fltkpng_d.lib;fltkzlib_d.lib;freetype_d.lib;glew32s_d.lib;icuuc.lib;icudt.lib;libogg_d.lib;libvorbis_d.lib;libvorbisfile_d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -571,8 +598,8 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -583,7 +610,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;FK_OLD_NONSUPPORT;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -602,7 +629,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2017\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;icuuc.lib;icudt.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -613,8 +640,8 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -625,7 +652,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;FKCLI2017_EXPORTS;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;WIN32;OPENGL4;FK_CLI_CODE;FK_OLD_NONSUPPORT;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -643,7 +670,7 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\build_vs\2017\contrib\lib\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;libiconv.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib;fltk.lib;fltkforms.lib;fltkgl.lib;fltkimages.lib;fltkjpeg.lib;fltkpng.lib;fltkzlib.lib;freetype.lib;glew32s.lib;icuuc.lib;icudt.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>
@@ -654,8 +681,8 @@ perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PreBuildEvent>
-      <Command>perl $(SolutionDir)..\src\graphics\GLSL\glsl2out
-perl $(SolutionDir)..\src\shader\GLSL\glsl2out</Command>
+      <Command>perl $(SolutionDir)..\..\FK\glsl2out
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
