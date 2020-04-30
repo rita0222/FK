@@ -17,6 +17,7 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <memory>
 
 #if defined(WIN32)
 
