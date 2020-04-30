@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <UseWindowsForms>true</UseWindowsForms>
+    <StartupObject>FK_Core_WinFormAppTest.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\FK_Audio\FK_Audio_Core.csproj" />
+    <ProjectReference Include="..\..\..\FK_FormHelper\FK_FormHelper_Core.csproj" />
+    <ProjectReference Include="..\..\FK_Core.vcxproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /s /e /y /i &quot;$(ProjectDir)\Resources\*.*&quot; &quot;$(TargetDir)&quot;&#xA;copy /b /v /y &quot;$(SolutionDir)..\contrib\bin\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
+</Project>
