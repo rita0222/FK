@@ -1356,30 +1356,30 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void SetFinalizeMode(void);
+		fk_Window * GetDrawWin(void) const;
 #endif
 
 	private:
-		friend class fk_ShaderBinder;
-
-		Fl_Window *mainWin;
-		fk_Window *drawWin;
-
+		std::shared_ptr<Fl_Window> mainWin;
+		std::unique_ptr<fk_Window> drawWin;
 		fk_AppWindow *ref_child;
-		fk_FrameController fps_admin;
-		fk_GuideObject guide;
-		fk_TrackBall *tb;
-		fk_FullscreenController fsc;
 
-		fk_Scene scene;
+		std::unique_ptr<fk_FrameController> fps_admin;
+		std::unique_ptr<fk_GuideObject> guide;
+		std::unique_ptr<fk_TrackBall> tb;
+		std::unique_ptr<fk_FullscreenController> fsc;
+
+		std::unique_ptr<fk_Scene> scene;
 		fk_Scene *ref_scene;
 
-		fk_Light lightShape;
-		fk_Model camera, light;
+		std::unique_ptr<fk_Light> lightShape;
+		std::unique_ptr<fk_Model> camera, light;
 		fk_Model *ref_camera;
 
 		int fps;
 		bool tbFlag, childMode;
 
+		void InitMember(void);
 		void ToggleScreen(void);
 	};
 

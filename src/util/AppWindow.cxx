@@ -65,6 +65,17 @@ const static fk_Switch stArray[3] = {
 	fk_Switch::RELEASE
 };
 
+void fk_AppWindow::InitMember(void)
+{
+	fps_admin = make_unique<fk_FrameController>();
+	guide = make_unique<fk_GuideObject>();
+	fsc = make_unique<fk_FullscreenController>();
+	scene = make_unique<fk_Scene>();
+	lightShape = make_unique<fk_Light>();
+	camera = make_unique<fk_Model>();
+	light = make_unique<fk_Model>();
+}
+
 // スクリーンモードのハンドリング処理
 void fk_AppWindow::ToggleScreen(void)
 {
@@ -72,15 +83,15 @@ void fk_AppWindow::ToggleScreen(void)
 	if(getSpecialKeyStatus(fk_Key::ALT_L) >= fk_Switch::DOWN
 	|| getSpecialKeyStatus(fk_Key::ALT_R) >= fk_Switch::DOWN) {
 		if(getSpecialKeyStatus(fk_Key::ENTER) == fk_Switch::DOWN) {
-			if(fsc.isFullscreen() == true) {
-				fsc.changeToWindow();
+			if(fsc->isFullscreen() == true) {
+				fsc->changeToWindow();
 			} else {
-				fsc.changeToFullscreen();
+				fsc->changeToFullscreen();
 			}
 		}
 	}
 	// ウィンドウのフォーカスが外れたらウィンドウモードに戻す
-	if(Fl::focus() != mainWin) {
+	if(Fl::focus() != mainWin.get()) {
 		toWindow();
 	}
 
@@ -97,32 +108,34 @@ fk_AppWindow::fk_AppWindow(uint32_t *argCallbacks)
 fk_AppWindow::fk_AppWindow(void)
 #endif // FK_CLI_CODE
 {
+	InitMember();
 	fk_System::setcwd();
 
-	mainWin = new Fl_Window(512, 512, "FKAPP Window");
+
+	mainWin = make_shared<Fl_Window>(512, 512, "FKAPP Window");
 #ifdef FK_CLI_CODE
 #ifdef _WIN64
-	drawWin = new InnerWindow(argCallbacks, 0, 0, 512, 512);
+	drawWin = make_unique<fk_Window>(InnerWindow(argCallbacks, 0, 0, 512, 512));
 #else
-	drawWin = new InnerWindow(argCallbacks, 0, 0, 512, 512);
+	drawWin = make_unique<fk_Window>(InnerWindow(argCallbacks, 0, 0, 512, 512));
 #endif // _WIN64
 #else
-	drawWin = new fk_Window(0, 0, 512, 512);
+	drawWin = make_unique<fk_Window>(0, 0, 512, 512);
 #endif // FK_CLI_CODE
 	mainWin->end();
 
 	fk_Material::initDefault();
 
-	light.setShape(&lightShape);
-	light.setMaterial(WhiteLight);
-	light.glMoveTo(0.0, 0.0, 0.0);
-	light.glFocus(-1.0, -1.0, -1.0);
+	light->setShape(lightShape.get());
+	light->setMaterial(WhiteLight);
+	light->glMoveTo(0.0, 0.0, 0.0);
+	light->glFocus(-1.0, -1.0, -1.0);
 
-	scene.setBlendStatus(true);
-	scene.entryCamera(&camera);
-	scene.entryModel(&light);
+	scene->setBlendStatus(true);
+	scene->entryCamera(camera.get());
+	scene->entryModel(light.get());
 
-	drawWin->setScene(&scene);
+	drawWin->setScene(scene.get());
 
 #ifdef FK_CLI_CODE
 	setFPS(60);
@@ -130,41 +143,43 @@ fk_AppWindow::fk_AppWindow(void)
 	setFPS(0);
 #endif
 
-	camera.glMoveTo(0.0, 0.0, 100.0);
-	camera.glFocus(0.0, 0.0, 0.0);
-	camera.glUpvec(0.0, 1.0, 0.0);
+	camera->glMoveTo(0.0, 0.0, 100.0);
+	camera->glFocus(0.0, 0.0, 0.0);
+	camera->glUpvec(0.0, 1.0, 0.0);
 
-	tb = new fk_TrackBall(drawWin, &camera);
+	tb = make_unique<fk_TrackBall>(drawWin.get(), camera.get());
 	tbFlag = false;
 	childMode = false;
 	ref_child = nullptr;
 
-	ref_camera = &camera;
-	ref_scene = &scene;
+	ref_camera = camera.get();
+	ref_scene = scene.get();
 
 	return;
 }
 
 fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 {
+	InitMember();
+
 	mainWin = argParent.mainWin;
 	mainWin->begin();
 	argParent.drawWin->resizeWindow(0, 0, mainWin->w(), mainWin->h()/2);
-	drawWin = new fk_Window(0, mainWin->h()/2, mainWin->w(), mainWin->h()/2);
+	drawWin = make_unique<fk_Window>(0, mainWin->h()/2, mainWin->w(), mainWin->h()/2);
 	mainWin->end();
 
 	fk_Material::initDefault();
 
-	light.setShape(&lightShape);
-	light.setMaterial(WhiteLight);
-	light.glMoveTo(0.0, 0.0, 0.0);
-	light.glFocus(-1.0, -1.0, -1.0);
+	light->setShape(lightShape.get());
+	light->setMaterial(WhiteLight);
+	light->glMoveTo(0.0, 0.0, 0.0);
+	light->glFocus(-1.0, -1.0, -1.0);
 
-	scene.setBlendStatus(true);
-	scene.entryCamera(&camera);
-	scene.entryModel(&light);
+	scene->setBlendStatus(true);
+	scene->entryCamera(camera.get());
+	scene->entryModel(light.get());
 
-	drawWin->setScene(&scene);
+	drawWin->setScene(scene.get());
 
 #ifdef FK_CLI_CODE
 	setFPS(60);
@@ -172,18 +187,18 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 	setFPS(0);
 #endif
 
-	camera.glMoveTo(0.0, 0.0, 100.0);
-	camera.glFocus(0.0, 0.0, 0.0);
-	camera.glUpvec(0.0, 1.0, 0.0);
+	camera->glMoveTo(0.0, 0.0, 100.0);
+	camera->glFocus(0.0, 0.0, 0.0);
+	camera->glUpvec(0.0, 1.0, 0.0);
 
-	tb = new fk_TrackBall(drawWin, &camera);
+	tb = make_unique<fk_TrackBall>(drawWin.get(), camera.get());
 	tbFlag = false;
 	childMode = true;
 	ref_child = nullptr;
 	argParent.ref_child = this;
 
-	ref_camera = &camera;
-	ref_scene = &scene;
+	ref_camera = camera.get();
+	ref_scene = scene.get();
 
 	return;
 }
@@ -193,9 +208,9 @@ fk_AppWindow::~fk_AppWindow(void)
 	drawWin->hide();
 	mainWin->hide();
 
-	delete tb;
-	delete drawWin;
-	if(!childMode) delete mainWin;
+	//delete tb;
+	//delete drawWin;
+	//if(!childMode) delete mainWin;
 }
 
 void fk_AppWindow::setWindowName(const std::string &name)
@@ -229,11 +244,11 @@ void fk_AppWindow::setFPS(int argFPS)
 {
 	if(argFPS == 0) {
 		fps = 0;
-		fps_admin.setFrameSkipMode(false);
+		fps_admin->setFrameSkipMode(false);
 	} else {
 		fps = argFPS;
-		fps_admin.setFrameSkipMode(true);
-		fps_admin.setFPS(argFPS);
+		fps_admin->setFrameSkipMode(true);
+		fps_admin->setFPS(argFPS);
 	}
 }
 
@@ -244,12 +259,12 @@ void fk_AppWindow::setTrackBallMode(bool mode)
 
 void fk_AppWindow::showGuide(fk_Guide mode)
 {
-	guide.entryScene(ref_scene, mode);
+	guide->entryScene(ref_scene, mode);
 }
 
 void fk_AppWindow::hideGuide(void)
 {
-	guide.removeScene(ref_scene);
+	guide->removeScene(ref_scene);
 }
 
 void fk_AppWindow::setCameraPos(double x, double y, double z)
@@ -295,37 +310,37 @@ fk_Model * fk_AppWindow::getCameraModel(void)
 
 void fk_AppWindow::setCameraDefault(void)
 {
-	setCameraModel(camera);
+	setCameraModel(camera.get());
 }
 
 void fk_AppWindow::setLightDefault(void)
 {
-	ref_scene->entryModel(&light);
+	ref_scene->entryModel(light.get());
 }
 
 void fk_AppWindow::setDefaultLightVec(const fk_Vector &argV)
 {
-	light.glVec(argV);
+	light->glVec(argV);
 }
 
 void fk_AppWindow::setDefaultLightVec(double argX, double argY, double argZ)
 {
-	light.glVec(argX, argY, argZ);
+	light->glVec(argX, argY, argZ);
 }
 
 fk_Vector fk_AppWindow::getDefaultLightVec(void)
 {
-	return light.getVec();
+	return light->getVec();
 }
 
 void fk_AppWindow::setDefaultLightMaterial(const fk_Material &argM)
 {
-	light.setMaterial(argM);
+	light->setMaterial(argM);
 }
 
 fk_Material * fk_AppWindow::getDefaultLightMaterial(void)
 {
-	return light.getMaterial();
+	return light->getMaterial();
 }
 
 void fk_AppWindow::setScene(fk_Scene &argScene, bool argLightAndCamera)
@@ -336,7 +351,7 @@ void fk_AppWindow::setScene(fk_Scene &argScene, bool argLightAndCamera)
 void fk_AppWindow::setScene(fk_Scene *argScene, bool argLightAndCamera)
 {
 	if(argScene == nullptr) {
-		ref_scene = &scene;
+		ref_scene = scene.get();
 	} else {
 		ref_scene = argScene;
 	}
@@ -345,8 +360,8 @@ void fk_AppWindow::setScene(fk_Scene *argScene, bool argLightAndCamera)
 	ref_scene->setBlendStatus(true);
 	drawWin->setScene(ref_scene);
 	if(argLightAndCamera) {
-		ref_scene->entryCamera(&camera);
-		ref_scene->entryModel(&light);
+		ref_scene->entryCamera(camera.get());
+		ref_scene->entryModel(light.get());
 	}
 }
 
@@ -357,7 +372,7 @@ fk_Scene * fk_AppWindow::getScene(void)
 
 void fk_AppWindow::setSceneDefault(void)
 {
-	setScene(scene, true);
+	setScene(scene.get(), true);
 }
 
 void fk_AppWindow::entry(fk_Model &model)
@@ -454,10 +469,10 @@ void fk_AppWindow::clearModel(bool argLightAndCamera)
 {
 	ref_scene->clearDisplay();
 	if(argLightAndCamera) {
-		ref_scene->entryCamera(&camera);
-		ref_scene->entryModel(&light);
-		ref_camera = &camera;
-		tb->setCamera(&camera);
+		ref_scene->entryCamera(camera.get());
+		ref_scene->entryModel(light.get());
+		ref_camera = camera.get();
+		tb->setCamera(camera.get());
 	}
 }
 
@@ -466,7 +481,7 @@ void fk_AppWindow::open(void)
 	mainWin->show();
 	drawWin->show();
 
-	fsc.init(mainWin, drawWin);
+	fsc->init(mainWin.get(), drawWin.get());
 	Fl::check();
 
 	return;
@@ -487,7 +502,7 @@ bool fk_AppWindow::update(bool argForceDraw)
 {
 	if(childMode) return false;
 
-	if(fps != 0) fps_admin.timeRegular();
+	if(fps != 0) fps_admin->timeRegular();
 
 	if(mainWin->visible() == 0) {
 		if(Fl::wait() == 0) {
@@ -497,7 +512,7 @@ bool fk_AppWindow::update(bool argForceDraw)
 		}
 	}
 
-	if(fps_admin.getDrawFlag() || fps == 0 || argForceDraw) {
+	if(fps_admin->getDrawFlag() || fps == 0 || argForceDraw) {
 		drawWin->drawWindow();
 		if(ref_child != nullptr) ref_child->drawWin->drawWindow();
 	}
@@ -584,22 +599,22 @@ fk_Vector fk_AppWindow::getMousePosition(void)
 
 void fk_AppWindow::setGuideAxisWidth(double width)
 {
-	guide.setAxisWidth(width);
+	guide->setAxisWidth(width);
 }
 
 void fk_AppWindow::setGuideGridWidth(double width)
 {
-	guide.setGridWidth(width);
+	guide->setGridWidth(width);
 }
 
 void fk_AppWindow::setGuideScale(double scale)
 {
-	guide.setScale(scale);
+	guide->setScale(scale);
 }
 
 void fk_AppWindow::setGuideNum(int num)
 {
-	guide.setNum(num);
+	guide->setNum(num);
 }
 
 #if defined(WIN32) && !defined(_MINGW_)
@@ -668,18 +683,18 @@ void fk_AppWindow::procMouseView(fk_Model &, double, double, bool)
 
 void fk_AppWindow::toFullscreen(void)
 {
-	if(!fsc.isFullscreen()) fsc.changeToFullscreen();
+	if(!fsc->isFullscreen()) fsc->changeToFullscreen();
 }
 
 void fk_AppWindow::toWindow(void)
 {
-	if(fsc.isFullscreen()) fsc.changeToWindow();
+	if(fsc->isFullscreen()) fsc->changeToWindow();
 }
 
 void fk_AppWindow::SetFinalizeMode(void)
 {
-	camera.SetTreeDelMode(false);
-	light.SetTreeDelMode(false);
+	camera->SetTreeDelMode(false);
+	light->SetTreeDelMode(false);
 }
 
 tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY,
@@ -860,6 +875,11 @@ double fk_AppWindow::getFogLinearEnd(void) const
 fk_Color fk_AppWindow::getFogColor(void) const
 {
 	return ref_scene->getFogColor();
+}
+
+fk_Window * fk_AppWindow::GetDrawWin(void) const
+{
+	return drawWin.get();
 }
 
 /****************************************************************************

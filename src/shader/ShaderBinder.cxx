@@ -128,7 +128,7 @@ void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
 {
 	if(argWin == nullptr) return;
-	bindWindow(argWin->drawWin);
+	bindWindow(argWin->GetDrawWin());
 }
 
 void fk_ShaderBinder::unbindWindow(fk_Window *argWin)
@@ -140,7 +140,7 @@ void fk_ShaderBinder::unbindWindow(fk_Window *argWin)
 void fk_ShaderBinder::unbindWindow(fk_AppWindow *argWin)
 {
 	if(argWin == nullptr) return;
-	unbindWindow(argWin->drawWin);
+	unbindWindow(argWin->GetDrawWin());
 }
 
 void fk_ShaderBinder::ProcPreShader(void)
