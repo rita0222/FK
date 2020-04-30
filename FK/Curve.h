@@ -136,7 +136,7 @@ namespace FK {
 		 *	この変数は制御点情報を格納しておくものであり、
 		 *	派生クラス内で設定や参照が可能です。
 		 */
-		fk_FVecArray	ctrlPos;
+		std::unique_ptr<fk_FVecArray> ctrlPos;
 
 		//! 制御点数設定関数
 		/*!
@@ -150,8 +150,8 @@ namespace FK {
 		int div;
 		int size;
 
-		fk_Line	 ctrlLine;
-		fk_Point ctrlPoint;
+		std::unique_ptr<fk_Line> ctrlLine;
+		std::unique_ptr<fk_Point> ctrlPoint;
 	};
 }
 

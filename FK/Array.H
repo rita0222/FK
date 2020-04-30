@@ -9,6 +9,7 @@ namespace FK {
 	public:
 
 		fk_Array(void) {
+			_IDAdmin = std::make_unique<fk_IDAdmin>();
 			_array = nullptr;
 			bufClear();
 		}
@@ -21,15 +22,15 @@ namespace FK {
 			delete [] _array;
 			_array = nullptr;
 			_bufSize = 0;
-			_IDAdmin.Init(0);
+			_IDAdmin->Init(0);
 		}
 
 		void clear(void) {
-			_IDAdmin.Init(0);
+			_IDAdmin->Init(0);
 		}
 
 		bool isSerial(void) {
-			if(_IDAdmin.GetIDNum() == _IDAdmin.GetMaxID() + 1) return true;
+			if(_IDAdmin->GetIDNum() == _IDAdmin->GetMaxID() + 1) return true;
 			return false;
 		}
 
@@ -40,19 +41,19 @@ namespace FK {
 		}
 
 		bool remove(int id) {
-			return _IDAdmin.EraseID(id);
+			return _IDAdmin->EraseID(id);
 		}
 
 		bool isAlive(int id) {
-			return _IDAdmin.ExistID(id);
+			return _IDAdmin->ExistID(id);
 		}
 
 		int next(int id) {
-			return (_IDAdmin.GetNext(id));
+			return (_IDAdmin->GetNext(id));
 		}
 
 		int size(void) {
-			return _IDAdmin.GetIDNum();
+			return _IDAdmin->GetIDNum();
 		}
 
 		int bufSize(void) {
@@ -62,14 +63,14 @@ namespace FK {
 	private:
 		TYPE			*_array;
 		int				_bufSize;
-		fk_IDAdmin		_IDAdmin;
+		std::unique_ptr<fk_IDAdmin> _IDAdmin;
 	};
 
 	template<class TYPE> int fk_Array<TYPE>::push(const TYPE &a) {
 		int		id;
 		TYPE	*tmpBuf;
 
-		id = _IDAdmin.CreateID();
+		id = _IDAdmin->CreateID();
 		if(_bufSize == 0) {
 			_bufSize = 1;
 			_array = new TYPE [static_cast<size_t>(_bufSize)];

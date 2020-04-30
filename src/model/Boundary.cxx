@@ -1,32 +1,17 @@
 ﻿#include <FK/Model.h>
 
 using namespace FK;
+using namespace std;
 
 fk_Boundary::fk_Boundary(fk_Type argType)
 	: fk_MatrixAdmin(argType), bMode(fk_BoundaryMode::NONE), bDrawToggle(false),
-	  bLineColor(nullptr), bIntLineColor(nullptr), bLineWidth(1.0),
-	  bSphereRad(0.0), bAABBSize(nullptr), bOBBSize(nullptr),
-	  bCapSPos(nullptr), bCapEPos(nullptr), bCapRad(0.0),
-	  bSphere(nullptr), bAABB(nullptr), bOBB(nullptr), bCapsule(nullptr)
+	  bLineWidth(1.0), bSphereRad(0.0), bCapRad(0.0)
 {
 	return;
 }
 
 fk_Boundary::~fk_Boundary()
 {
-	delete bLineColor;
-	delete bIntLineColor;
-
-	delete bAABBSize;
-	delete bOBBSize;
-	delete bCapSPos;
-	delete bCapEPos;
-
-	delete bSphere;
-	delete bAABB;
-	delete bOBB;
-	delete bCapsule;
-
 	return;
 }
 
@@ -39,7 +24,7 @@ void fk_Boundary::setSphere(double argRadius)
 	}
 
 	if(bSphere == nullptr) {
-		bSphere = new fk_IndexFaceSet;
+		bSphere = make_unique<fk_IndexFaceSet>();
 		bSphere->makeSphere(4, bSphereRad);
 	} else {
 		bSphere->setSphereRadius(bSphereRad);
@@ -55,11 +40,14 @@ double fk_Boundary::getSphere(void)
 
 void fk_Boundary::setAABBSize(double argX, double argY, double argZ)
 {
-	if(bAABBSize == nullptr) bAABBSize = new fk_Vector;
-	bAABBSize->set(argX, argY, argZ);
+	if(bAABBSize == nullptr) {
+		bAABBSize = make_unique<fk_Vector>(argX, argY, argZ);
+	} else {
+		bAABBSize->set(argX, argY, argZ);
+	}
 
 	if(bAABB == nullptr) {
-		bAABB = new fk_IndexFaceSet;
+		bAABB = make_unique<fk_IndexFaceSet>();
 		bAABB->makeBlock(argX, argY, argZ);
 	} else {
 		bAABB->setBlockSize(argX, argY, argZ);
@@ -82,11 +70,14 @@ fk_Vector fk_Boundary::getAABBSize(void)
 
 void fk_Boundary::setOBBSize(double argX, double argY, double argZ)
 {
-	if(bOBBSize == nullptr) bOBBSize = new fk_Vector;
-	bOBBSize->set(argX, argY, argZ);
+	if(bOBBSize == nullptr) {
+		bOBBSize = make_unique<fk_Vector>(argX, argY, argZ);
+	} else {
+		bOBBSize->set(argX, argY, argZ);
+	}
 
 	if(bOBB == nullptr) {
-		bOBB = new fk_IndexFaceSet;
+		bOBB = make_unique<fk_IndexFaceSet>();
 		bOBB->makeBlock(argX, argY, argZ);
 	} else {
 		bOBB->setBlockSize(argX, argY, argZ);
@@ -111,8 +102,8 @@ void fk_Boundary::setCapsule(fk_Vector argS, fk_Vector argE, double argRad)
 {
 	fk_Vector	vec;
 	
-	if(bCapSPos == nullptr) bCapSPos = new fk_Vector;
-	if(bCapEPos == nullptr) bCapEPos = new fk_Vector;
+	if(bCapSPos == nullptr) bCapSPos = make_unique<fk_Vector>();
+	if(bCapEPos == nullptr) bCapEPos = make_unique<fk_Vector>();
 	if(argRad < 0.0) return;
 	if(argS == argE) return;
 	*bCapSPos = argS;
@@ -127,7 +118,7 @@ void fk_Boundary::setCapsule(fk_Vector argS, fk_Vector argE, double argRad)
 */
 
 	if(bCapsule == nullptr) {
-		bCapsule = new fk_IndexFaceSet;
+		bCapsule = make_unique<fk_IndexFaceSet>();
 		bCapsule->makeCapsule(4, vec.dist(), bCapRad);
 	} else {
 		bCapsule->setCapsuleSize(vec.dist(), bCapRad);
@@ -179,26 +170,26 @@ bool fk_Boundary::getBDrawToggle(void)
 
 void fk_Boundary::setBLineColor(fk_Color argCol)
 {
-	if(bLineColor == nullptr) bLineColor = new fk_Color;
+	if(bLineColor == nullptr) bLineColor = make_unique<fk_Color>();
 	*bLineColor = argCol;
 }
 
 fk_Color * fk_Boundary::getBLineColor(void)
 {
-	if(bLineColor == nullptr) bLineColor = new fk_Color;
-	return bLineColor;
+	if(bLineColor == nullptr) bLineColor = make_unique<fk_Color>();
+	return bLineColor.get();
 }
 
 void fk_Boundary::setBIntLineColor(fk_Color argCol)
 {
-	if(bIntLineColor == nullptr) bIntLineColor = new fk_Color;
+	if(bIntLineColor == nullptr) bIntLineColor = make_unique<fk_Color>();
 	*bIntLineColor = argCol;
 }
 
 fk_Color * fk_Boundary::getBIntLineColor(void)
 {
-	if(bIntLineColor == nullptr) bIntLineColor = new fk_Color;
-	return bIntLineColor;
+	if(bIntLineColor == nullptr) bIntLineColor = make_unique<fk_Color>();
+	return bIntLineColor.get();
 }
 
 void fk_Boundary::setBLineWidth(double argWidth)
@@ -215,16 +206,16 @@ fk_IndexFaceSet * fk_Boundary::GetBShape(void)
 {
 	switch(bMode) {
 	  case fk_BoundaryMode::SPHERE:
-		return bSphere;
+		return bSphere.get();
 
 	  case fk_BoundaryMode::AABB:
-		return bAABB;
+		return bAABB.get();
 
 	  case fk_BoundaryMode::OBB:
-		return bOBB;
+		return bOBB.get();
 
 	  case fk_BoundaryMode::CAPSULE:
-		return bCapsule;
+		return bCapsule.get();
 
 	  case fk_BoundaryMode::NONE:
 	  default:

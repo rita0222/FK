@@ -9,70 +9,33 @@ using namespace FK;
 
 fk_Attribute_Data::fk_Attribute_Data(void)
 {
-	ItoIIndex = nullptr;
-	ItoIValue = nullptr;
-
-	ItoDIndex = nullptr;
-	ItoDValue = nullptr;
-
-	ItoSIndex = nullptr;
-	ItoSValue = nullptr;
-
-	StoIIndex = nullptr;
-	StoIValue = nullptr;
-
-	StoDIndex = nullptr;
-	StoDValue = nullptr;
-
-	StoSIndex = nullptr;
-	StoSValue = nullptr;
-
 	return;
 }
 
 fk_Attribute_Data::~fk_Attribute_Data()
 {
-	AttrInit();
 	return;
 }
 
 void fk_Attribute_Data::AttrInit(void)
 {
-	delete ItoIIndex;
-	delete ItoIValue;
+	ItoIIndex.reset();
+	ItoIValue.reset();
+	
+	ItoDIndex.reset();
+	ItoDValue.reset();
 
-	delete ItoDIndex;
-	delete ItoDValue;
+	ItoSIndex.reset();
+	ItoSValue.reset();
 
-	delete ItoSIndex;
-	delete ItoSValue;
+	StoIIndex.reset();
+	StoIValue.reset();
 
-	delete StoIIndex;
-	delete StoIValue;
+	StoDIndex.reset();
+	StoDValue.reset();
 
-	delete StoDIndex;
-	delete StoDValue;
-
-	delete StoSIndex;
-	delete StoSValue;
-
-	ItoIIndex = nullptr;
-	ItoIValue = nullptr;
-
-	ItoDIndex = nullptr;
-	ItoDValue = nullptr;
-
-	ItoSIndex = nullptr;
-	ItoSValue = nullptr;
-
-	StoIIndex = nullptr;
-	StoIValue = nullptr;
-
-	StoDIndex = nullptr;
-	StoDValue = nullptr;
-
-	StoSIndex = nullptr;
-	StoSValue = nullptr;
+	StoSIndex.reset();
+	StoSValue.reset();
 
 	return;
 }
@@ -252,11 +215,11 @@ bool fk_Attribute_Data::SetAttrII(const int Key, const int Value)
 
 	if(Index == FK_UNDEFINED) {
 		if(ItoIIndex == nullptr) {
-			ItoIIndex = new vector<int>;
-			ItoIValue = new vector<int>;
+			ItoIIndex = make_unique<vector<int>>();
+			ItoIValue = make_unique<vector<int>>();
 		}
 
-		Index = CreateNewIndexI(ItoIIndex, Key);
+		Index = CreateNewIndexI(ItoIIndex.get(), Key);
 
 		if(Index == static_cast<int>(ItoIValue->size())) {
 			ItoIValue->push_back(Value);
@@ -284,11 +247,11 @@ bool fk_Attribute_Data::SetAttrID(const int Key, const double Value)
 
 	if(Index == FK_UNDEFINED) {
 		if(ItoDIndex == nullptr) {
-			ItoDIndex = new vector<int>;
-			ItoDValue = new vector<double>;
+			ItoDIndex = make_unique<vector<int>>();
+			ItoDValue = make_unique<vector<double>>();
 		}
 
-		Index = CreateNewIndexI(ItoDIndex, Key);
+		Index = CreateNewIndexI(ItoDIndex.get(), Key);
 
 		if(Index == static_cast<int>(ItoDValue->size())) {
 			ItoDValue->push_back(Value);
@@ -316,11 +279,11 @@ bool fk_Attribute_Data::SetAttrIS(const int Key, const string Value)
 
 	if(Index == FK_UNDEFINED) {
 		if(ItoSIndex == nullptr) {
-			ItoSIndex = new vector<int>;
-			ItoSValue = new vector<string>;
+			ItoSIndex = make_unique<vector<int>>();
+			ItoSValue = make_unique<vector<string>>();
 		}
 
-		Index = CreateNewIndexI(ItoSIndex, Key);
+		Index = CreateNewIndexI(ItoSIndex.get(), Key);
 
 		if(Index == static_cast<int>(ItoSValue->size())) {
 			ItoSValue->push_back(Value);
@@ -348,11 +311,11 @@ bool fk_Attribute_Data::SetAttrSI(const string Key, const int Value)
 
 	if(Index == FK_UNDEFINED) {
 		if(StoIIndex == nullptr) {
-			StoIIndex = new vector<string>;
-			StoIValue = new vector<int>;
+			StoIIndex = make_unique<vector<string>>();
+			StoIValue = make_unique<vector<int>>();
 		}
 
-		Index = CreateNewIndexS(StoIIndex, Key);
+		Index = CreateNewIndexS(StoIIndex.get(), Key);
 
 		if(Index == static_cast<int>(StoIValue->size())) {
 			StoIValue->push_back(Value);
@@ -380,11 +343,11 @@ bool fk_Attribute_Data::SetAttrSD(const string Key, const double Value)
 
 	if(Index == FK_UNDEFINED) {
 		if(StoDIndex == nullptr) {
-			StoDIndex = new vector<string>;
-			StoDValue = new vector<double>;
+			StoDIndex = make_unique<vector<string>>();
+			StoDValue = make_unique<vector<double>>();
 		}
 
-		Index = CreateNewIndexS(StoDIndex, Key);
+		Index = CreateNewIndexS(StoDIndex.get(), Key);
 
 		if(Index == static_cast<int>(StoDValue->size())) {
 			StoDValue->push_back(Value);
@@ -412,11 +375,11 @@ bool fk_Attribute_Data::SetAttrSS(const string Key, const string Value)
 
 	if(Index == FK_UNDEFINED) {
 		if(StoSIndex == nullptr) {
-			StoSIndex = new vector<string>;
-			StoSValue = new vector<string>;
+			StoSIndex = make_unique<vector<string>>();
+			StoSValue = make_unique<vector<string>>();
 		}
 
-		Index = CreateNewIndexS(StoSIndex, Key);
+		Index = CreateNewIndexS(StoSIndex.get(), Key);
 
 		if(Index == static_cast<int>(StoSValue->size())) {
 			StoSValue->push_back(Value);

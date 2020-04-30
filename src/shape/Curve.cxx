@@ -7,9 +7,13 @@ fk_Curve::fk_Curve(void) : div(128), size(0)
 {
 	realType = fk_RealShapeType::CURVE;
 	SetObjectType(fk_Type::CURVE);
-	ctrlPos.setDim(4);
-	ctrlPos.clear();
-	setShaderAttribute(ctrlPosName, 4, ctrlPos.getP());
+	ctrlPos = make_unique<fk_FVecArray>();
+	ctrlLine = make_unique<fk_Line>();
+	ctrlPoint = make_unique<fk_Point>();
+	
+	ctrlPos->setDim(4);
+	ctrlPos->clear();
+	setShaderAttribute(ctrlPosName, 4, ctrlPos->getP());
 
 	return;
 }
@@ -21,22 +25,22 @@ fk_Curve::~fk_Curve(void)
 
 void fk_Curve::init(void)
 {
-	ctrlPos.clear();
+	ctrlPos->clear();
 }
 
 bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
 {
 	if(argID < 0 || argID >= size) return false;
-	ctrlPos.set(argID, argPos);
+	ctrlPos->set(argID, argPos);
 	modifyAttribute(ctrlPosName);
 
-	ctrlPoint.setVertex(argID, argPos);
+	ctrlPoint->setVertex(argID, argPos);
 	if(argID != 0) {
-		ctrlLine.changeLine(argID-1, ctrlPos.getV(argID-1), ctrlPos.getV(argID));
+		ctrlLine->changeLine(argID-1, ctrlPos->getV(argID-1), ctrlPos->getV(argID));
 	}
 	
 	if(argID != size - 1) {
-		ctrlLine.changeLine(argID, ctrlPos.getV(argID), ctrlPos.getV(argID+1));
+		ctrlLine->changeLine(argID, ctrlPos->getV(argID), ctrlPos->getV(argID+1));
 	}
 
 	return true;
@@ -45,9 +49,9 @@ bool fk_Curve::setCtrl(int argID, fk_Vector argPos)
 bool fk_Curve::setWeight(int argID, double argW)
 {
 	if(argID < 0 || argID >= size) return false;
-	fk_HVector v = ctrlPos.getV(argID);
+	fk_HVector v = ctrlPos->getV(argID);
 	v.w = argW;
-	ctrlPos.set(argID, v);
+	ctrlPos->set(argID, v);
 	modifyAttribute(ctrlPosName);
 
 	return true;
@@ -55,12 +59,12 @@ bool fk_Curve::setWeight(int argID, double argW)
 
 fk_Vector fk_Curve::getCtrl(int argID)
 {
-	return ctrlPos.getV(argID);
+	return ctrlPos->getV(argID);
 }
 
 double fk_Curve::getWeight(int argID)
 {
-	return ctrlPos.getHV(argID).w;
+	return ctrlPos->getHV(argID).w;
 }
 
 int fk_Curve::getCtrlSize(void)
@@ -72,15 +76,15 @@ void fk_Curve::setCtrlSize(int argNum)
 {
 	fk_Vector	zero(0.0, 0.0, 0.0);
 
-	if(ctrlPos.getSize() < argNum) ctrlPos.resize(argNum);
+	if(ctrlPos->getSize() < argNum) ctrlPos->resize(argNum);
 	size = argNum;
-	ctrlPoint.allClear();
-	ctrlLine.allClear();
+	ctrlPoint->allClear();
+	ctrlLine->allClear();
 	for(int i = 0; i < argNum - 1; i++) {
-		ctrlPoint.pushVertex(zero);
-		ctrlLine.pushLine(zero, zero);
+		ctrlPoint->pushVertex(zero);
+		ctrlLine->pushLine(zero, zero);
 	}
-	ctrlPoint.pushVertex(zero);
+	ctrlPoint->pushVertex(zero);
 }
 
 void fk_Curve::setDiv(int argDiv)
@@ -96,12 +100,12 @@ int fk_Curve::getDiv(void)
 
 fk_Line * fk_Curve::GetLine(void)
 {
-	return &ctrlLine;
+	return ctrlLine.get();
 }
 
 fk_Point * fk_Curve::GetPoint(void)
 {
-	return &ctrlPoint;
+	return ctrlPoint.get();
 }
 
 /****************************************************************************

@@ -74,7 +74,7 @@ fk_Vector fk_BezCurve::pos(double t)
 	}	
 
 	for(int i = 0; i <= deg; ++i) {
-		vec += ctrlPos.getV(i) * tmp[i];
+		vec += ctrlPos->getV(i) * tmp[i];
 	}
 
 	return vec;
@@ -109,7 +109,7 @@ fk_Vector fk_BezCurve::diff(double t)
 	}	
 
 	for(int i = 0; i < deg; ++i) {
-		vec += (ctrlPos.getV(i+1) - ctrlPos.getV(i)) * tmp[i];
+		vec += (ctrlPos->getV(i+1) - ctrlPos->getV(i)) * tmp[i];
 	}
 
 	return (vec*double(deg));
@@ -130,7 +130,7 @@ void fk_BezCurve::MakeDiv(double argT, vector<vector<fk_Vector> > &argDivPos)
 	}
 
 	for(i = 0; i <= d; ++i) {
-		argDivPos[0][i] = ctrlPos.getV(int(i));
+		argDivPos[0][i] = ctrlPos->getV(int(i));
 	}
 
 	for(i = 1; i <= d; ++i) {
@@ -307,8 +307,8 @@ void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> 
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
 
-	for(int i = 0; i < ctrlPos.getSize(); ++i) {
-		ctrl.push_back(m * (ctrlPos.getV(i) - argS));
+	for(int i = 0; i < ctrlPos->getSize(); ++i) {
+		ctrl.push_back(m * (ctrlPos->getV(i) - argS));
 	}
 	
 	argA->clear();
@@ -328,8 +328,8 @@ void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
 
-	for(int i = 0; i < ctrlPos.getSize(); ++i) {
-		ctrl.push_back(m * ((argM * ctrlPos.getV(i)) - argS));
+	for(int i = 0; i < ctrlPos->getSize(); ++i) {
+		ctrl.push_back(m * ((argM * ctrlPos->getV(i)) - argS));
 	}
 	
 	argA->clear();

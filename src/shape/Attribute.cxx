@@ -6,13 +6,11 @@ using namespace FK;
 
 fk_Attribute::fk_Attribute(void)
 {
-	attr_data = nullptr;
 	return;
 }
 
 fk_Attribute::~fk_Attribute()
 {
-	delete attr_data;
 	return;
 }
 

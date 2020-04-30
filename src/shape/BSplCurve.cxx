@@ -15,14 +15,14 @@ fk_BSplCurve::fk_BSplCurve(void)
 
 fk_BSplCurve::~fk_BSplCurve()
 {
-	ctrlPos.clear();
+	ctrlPos->clear();
 	knotVec.clear();
 	return;
 }
 
 void fk_BSplCurve::init(void)
 {
-	ctrlPos.clear();
+	ctrlPos->clear();
 	knotVec.clear();
 	setOrdinate(3);
 	setNum(3);
@@ -36,7 +36,7 @@ bool fk_BSplCurve::setOrdinate(int argOrd)
 	}
 
 	ord = argOrd;
-	ctrlPos.clear();
+	ctrlPos->clear();
 	num = 0;
 
 	return true;
@@ -47,7 +47,7 @@ bool fk_BSplCurve::setNum(int argNum)
 	if(argNum < ord) return false;
 	num = argNum;
 	setCtrlSize(num);
-	ctrlPos.resize(num);
+	ctrlPos->resize(num);
 	UpdateKnot(ord, num, knotVec);
 
 	return true;
@@ -70,7 +70,7 @@ fk_Vector fk_BSplCurve::pos(double t)
 
 	if(num == 0) return retPos;
 	for(i = 0; i < num; i++) {
-		retPos += PosBasis(i, ord, t, knotVec) * ctrlPos.getV(i);
+		retPos += PosBasis(i, ord, t, knotVec) * ctrlPos->getV(i);
 	}
 
 	return retPos;
@@ -82,12 +82,12 @@ fk_Vector fk_BSplCurve::diff(double t)
 
 	if(num == 0) return retVec;
 	if(IsSame(t, 0.0)) {
-		retVec = double(ord-1) * (ctrlPos.getV(1) - ctrlPos.getV(0));
+		retVec = double(ord-1) * (ctrlPos->getV(1) - ctrlPos->getV(0));
 	} else if(IsSame(t, 1.0)) {
-		retVec = double(ord-1) * (ctrlPos.getV(num-1) - ctrlPos.getV(num-2));
+		retVec = double(ord-1) * (ctrlPos->getV(num-1) - ctrlPos->getV(num-2));
 	} else {
 		for(int i = 0; i < num; i++) {
-			retVec += DiffBasis(i, ord, t, knotVec) * ctrlPos.getV(i);
+			retVec += DiffBasis(i, ord, t, knotVec) * ctrlPos->getV(i);
 		}
 	}
 
