@@ -1,4 +1,6 @@
-﻿#include <FK/DList.h>
+﻿#define FK_DEF_SIZETYPE
+
+#include <FK/DList.h>
 #include <FK/Model.h>
 #include <FK/IDAdmin.H>
 #include <FK/Window.h>
@@ -15,10 +17,22 @@ static fk_IDAdmin & fk_DLManager(void)
 fk_DisplayLink::fk_DisplayLink(void)
 	: fk_BaseObject(fk_Type::DISPLAYLINK)
 {
-	camera = &localCamera;
+	localCamera = make_unique<fk_Model>();
+	camera = localCamera.get();
 	displayID = fk_DLManager().CreateID();
-	proj = &perspective;
+
+	perspective = make_unique<fk_Perspective>();
+	frustum = make_unique<fk_Frustum>();
+	ortho = make_unique<fk_Ortho>();
+	
+	proj = perspective.get();
 	projStatus = 0;
+
+	for(_st i = 0; i < 2; ++i) {
+		stereoPers[i] = make_shared<fk_Perspective>();
+		stereoFrus[i] = make_shared<fk_Frustum>();
+		stereoOrtho[i] = make_shared<fk_Ortho>();
+	}
 
 	clearStereo();
 	stereoOverlayMode = true;
@@ -38,8 +52,8 @@ void fk_DisplayLink::clearDisplay(void)
 	clearModel();
 	clearOverlayModel();
 
-	camera = &localCamera;
-	proj = &perspective;
+	camera = localCamera.get();
+	proj = perspective.get();
 	projStatus++;
 
 	clearStereo();
@@ -136,7 +150,7 @@ void fk_DisplayLink::clearOverlayModel(void)
 void fk_DisplayLink::entryCamera(fk_Model *argModel)
 {
 	if(argModel == nullptr) {
-		camera = &localCamera;
+		camera = localCamera.get();
 	} else {
 		camera = argModel;
 	}
@@ -188,18 +202,18 @@ void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 
 	switch(argProj->getMode()) {
 	  case fk_ProjectMode::PERSPECTIVE:
-		perspective = *(static_cast<fk_Perspective *>(argProj));
-		proj = &perspective;
+		*perspective = *(static_cast<fk_Perspective *>(argProj));
+		proj = perspective.get();
 		break;
 
 	  case fk_ProjectMode::FRUSTUM:
-		frustum = *(static_cast<fk_Frustum *>(argProj));
-		proj = &frustum;
+		*frustum = *(static_cast<fk_Frustum *>(argProj));
+		proj = frustum.get();
 		break;
 
 	  case fk_ProjectMode::ORTHO:
-		ortho = *(static_cast<fk_Ortho *>(argProj));
-		proj = &ortho;
+		*ortho = *(static_cast<fk_Ortho *>(argProj));
+		proj = ortho.get();
 		break;
 
 	  default:
@@ -251,18 +265,18 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 
 	switch(argProj->getMode()) {
 	  case fk_ProjectMode::PERSPECTIVE:
-		stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
-		stereoProj[index] = &stereoPers[index];
+		*stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
+		stereoProj[index] = stereoPers[index].get();
 		break;
 
 	  case fk_ProjectMode::FRUSTUM:
-		stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
-		stereoProj[index] = &stereoFrus[index];
+		*stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
+		stereoProj[index] = stereoFrus[index].get();
 		break;
 
 	  case fk_ProjectMode::ORTHO:
-		stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
-		stereoProj[index] = &stereoOrtho[index];
+		*stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
+		stereoProj[index] = stereoOrtho[index].get();
 		break;
 
 	  default:
@@ -311,7 +325,7 @@ bool fk_DisplayLink::getStereoOverlayMode(void)
 
 void fk_DisplayLink::SetFinalizeMode(void)
 {
-	localCamera.SetTreeDelMode(false);
+	localCamera->SetTreeDelMode(false);
 	return;
 }
 

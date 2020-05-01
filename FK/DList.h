@@ -43,8 +43,8 @@ namespace FK {
 
 	class fk_DisplayLink : public fk_BaseObject {
 
-		friend class		fk_Window;
-		friend class		fk_GraphicsEngine;
+		friend class fk_Window;
+		friend class fk_GraphicsEngine;
 
 	public:
 
@@ -60,7 +60,7 @@ namespace FK {
 		 *	解除する対象は通常表示モデル、モデルオーバーレイモデル、
 		 *	カメラ、投影設定です。
 		 */
-		void					clearDisplay(void);
+		void clearDisplay(void);
 
 		//! 通常モデル登録関数
 		/*!
@@ -68,7 +68,7 @@ namespace FK {
 		 *
 		 *	\param[in] model	登録モデルのアドレス
 		 */
-		void					entryModel(fk_Model *model);
+		void entryModel(fk_Model *model);
 
 		//! 通常モデル解除関数
 		/*!
@@ -77,14 +77,14 @@ namespace FK {
 		 *
 		 *	\param[in] model	解除モデルのアドレス
 		 */
-		void					removeModel(fk_Model *model);
+		void removeModel(fk_Model *model);
 
 		//! 通常モデル全解除関数
 		/*!
 		 *	ディスプレイリストに登録されている全ての通常モデルに対し、
 		 *	登録を解除します。
 		 */
-		void					clearModel(void);
+		void clearModel(void);
 
 		//! オーバーレイモデル登録関数
 		/*!
@@ -95,7 +95,7 @@ namespace FK {
 		 *
 		 *	\param[in] model	登録モデルのアドレス
 		 */
-		void					entryOverlayModel(fk_Model *model);
+		void entryOverlayModel(fk_Model *model);
 
 		//! オーバーレイモデル解除関数
 		/*!
@@ -104,14 +104,14 @@ namespace FK {
 		 *
 		 *	\param[in] model	解除モデルのアドレス
 		 */
-		void					removeOverlayModel(fk_Model *model);
+		void removeOverlayModel(fk_Model *model);
 
 		//! オーバーレイモデル全解除関数
 		/*!
 		 *	ディスプレイリストに登録されている全てのオーバーレイモデルに対し、
 		 *	登録を解除します。
 		 */
-		void					clearOverlayModel(void);
+		void clearOverlayModel(void);
 
 		//! カメラモデル登録関数
 		/*!
@@ -119,7 +119,7 @@ namespace FK {
 		 *
 		 *	\param[in] model	カメラモデルのアドレス
 		 */
-		void					entryCamera(fk_Model *model);
+		void entryCamera(fk_Model *model);
 
 		//! カメラモデル取得関数
 		/*!
@@ -128,7 +128,7 @@ namespace FK {
 		 *
 		 *	\return	カメラモデルのアドレス
 		 */
-		fk_Model *				getCamera(void) const;
+		fk_Model * getCamera(void) const;
 
 		//! 投影設定関数
 		/*!
@@ -138,7 +138,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Perspective, fk_Ortho
 		 */
-		void					setProjection(fk_ProjectBase *proj);
+		void setProjection(fk_ProjectBase *proj);
 
 		//! 投影設定取得関数
 		/*!
@@ -146,7 +146,7 @@ namespace FK {
 		 *
 		 *	\return 投影設定のアドレス
 		 */
-		fk_ProjectBase *	getProjection(void) const;
+		fk_ProjectBase * getProjection(void) const;
 
 		//! \name 立体視モード制御関数
 		///@{
@@ -163,7 +163,7 @@ namespace FK {
 		 *
 		 *	\sa fk_StereoChannel, fk_Window::setOGLStereoMode()
 		 */
-		void					entryStereoCamera(fk_StereoChannel channel, fk_Model *model);
+		void entryStereoCamera(fk_StereoChannel channel, fk_Model *model);
 
 		//! 立体視用射影設定関数
 		/*!
@@ -177,7 +177,7 @@ namespace FK {
 		 *
 		 *	\sa fk_StereoChannel, fk_Window::setOGLStereoMode()
 		 */
-		void					setStereoProjection(fk_StereoChannel channel, fk_ProjectBase *proj);
+		void setStereoProjection(fk_StereoChannel channel, fk_ProjectBase *proj);
 
 		//! 立体視用カメラモデル取得関数
 		/*!
@@ -194,7 +194,7 @@ namespace FK {
 		 *
 		 *	\sa fk_StereoChannel, entryStereoCamera()
 		 */
-		const fk_Model *		getStereoCamera(fk_StereoChannel channel);
+		const fk_Model * getStereoCamera(fk_StereoChannel channel);
 
 		//! 立体視用射影設定取得関数
 		/*!
@@ -210,7 +210,7 @@ namespace FK {
 		 *
 		 *	\sa fk_StereoChannel, getStereoProjection()
 		 */
-		const fk_ProjectBase *	getStereoProjection(fk_StereoChannel channel);
+		const fk_ProjectBase * getStereoProjection(fk_StereoChannel channel);
 
 		//! 立体視用設定情報初期化関数
 		/*!
@@ -218,7 +218,7 @@ namespace FK {
 		 *
 		 *	\sa entryStereoCamera(), setStereoProjection(), getStereoCamera(), getStereoProjection()
 		 */
-		void					clearStereo(void);
+		void clearStereo(void);
 
 		//! 立体視モード時のオーバーレイ描画モード設定関数
 		/*!
@@ -239,7 +239,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window::setOGLStereoMode(), getStereoOverlayMode()
 		 */
-		void	setStereoOverlayMode(bool mode);
+		void setStereoOverlayMode(bool mode);
 
 		//! 立体視モード時のオーバーレイ描画モード取得関数
 		/*!
@@ -251,40 +251,41 @@ namespace FK {
 		 *
 		 *	\sa fk_DisplayLink, setOGLStereoOverlayMode()
 		 */
-		bool	getStereoOverlayMode(void);
+		bool getStereoOverlayMode(void);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	SetFinalizeMode(void);
+		void SetFinalizeMode(void);
 #endif
 
 	private:
-		std::list<fk_Model *>	modelList;
-		std::list<fk_Model *>	overlayList;
-		std::list<fk_Model *>	parallelLightList;
-		std::list<fk_Model *>	pointLightList;
-		std::list<fk_Model *>	spotLightList;
-		int						displayID;
-		fk_Model				localCamera;
-		fk_Model				*camera;
-		fk_ProjectBase			*proj;
-		fk_Perspective			perspective;
-		fk_Frustum				frustum;
-		fk_Ortho				ortho;
-		int						projStatus;
+		std::list<fk_Model *> modelList;
+		std::list<fk_Model *> overlayList;
+		std::list<fk_Model *> parallelLightList;
+		std::list<fk_Model *> pointLightList;
+		std::list<fk_Model *> spotLightList;
+		int displayID;
 
-		fk_Model				*stereoCamera[2];
-		fk_ProjectBase			*stereoProj[2];
-		fk_Perspective			stereoPers[2];
-		fk_Frustum				stereoFrus[2];
-		fk_Ortho				stereoOrtho[2];
-		bool					stereoOverlayMode;
+		std::unique_ptr<fk_Model> localCamera;
+		fk_Model *camera;
+		fk_ProjectBase *proj;
+		std::unique_ptr<fk_Perspective> perspective;
+		std::unique_ptr<fk_Frustum> frustum;
+		std::unique_ptr<fk_Ortho> ortho;
+		int projStatus;
+
+		fk_Model *stereoCamera[2];
+		fk_ProjectBase *stereoProj[2];
+		std::shared_ptr<fk_Perspective> stereoPers[2];
+		std::shared_ptr<fk_Frustum> stereoFrus[2];
+		std::shared_ptr<fk_Ortho> stereoOrtho[2];
+		bool stereoOverlayMode;
 
 		std::list<fk_Model *> *	GetModelList(void);
 		std::list<fk_Model *> *	GetLightList(fk_LightType);
 		std::list<fk_Model *> *	GetOverlayList(void);
-		int						GetID(void) const;
-		int						GetProjChangeStatus(void) const;
+		int GetID(void) const;
+		int GetProjChangeStatus(void) const;
 	};
 }
 

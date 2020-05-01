@@ -51,23 +51,23 @@ namespace FK {
 		bool	DeleteAttrSS(const std::string);
 
 	private:
-		std::unique_ptr<std::vector<int>> ItoIIndex;
-		std::unique_ptr<std::vector<int>> ItoIValue;
+		std::vector<int> ItoIIndex;
+		std::vector<int> ItoIValue;
 
-		std::unique_ptr<std::vector<int>> ItoDIndex;
-		std::unique_ptr<std::vector<double>> ItoDValue;
+		std::vector<int> ItoDIndex;
+		std::vector<double> ItoDValue;
 
-		std::unique_ptr<std::vector<int>> ItoSIndex;
-		std::unique_ptr<std::vector<std::string>> ItoSValue;
+		std::vector<int> ItoSIndex;
+		std::vector<std::string> ItoSValue;
 
-		std::unique_ptr<std::vector<std::string>> StoIIndex;
-		std::unique_ptr<std::vector<int>> StoIValue;
+		std::vector<std::string> StoIIndex;
+		std::vector<int> StoIValue;
 
-		std::unique_ptr<std::vector<std::string>> StoDIndex;
-		std::unique_ptr<std::vector<double>> StoDValue;
+		std::vector<std::string> StoDIndex;
+		std::vector<double> StoDValue;
 
-		std::unique_ptr<std::vector<std::string>> StoSIndex;
-		std::unique_ptr<std::vector<std::string>> StoSValue;
+		std::vector<std::string> StoSIndex;
+		std::vector<std::string> StoSValue;
 
 		int		GetIndexAttrII(const int) const;
 		int		GetIndexAttrID(const int) const;

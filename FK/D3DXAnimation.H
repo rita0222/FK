@@ -21,15 +21,15 @@ namespace FK {
 		fk_D3DXSkinMap(const fk_D3DXSkinMap &);
 		virtual ~fk_D3DXSkinMap();
 
-		void				SetFrame(fk_D3DXFrame *);
-		void				SetWeight(double);
+		void SetFrame(fk_D3DXFrame *);
+		void SetWeight(double);
 
-		fk_D3DXFrame *		GetFrame(void);
-		double				GetWeight(void);
+		fk_D3DXFrame * GetFrame(void);
+		double GetWeight(void);
 
 	private:
-		fk_D3DXFrame		*frame;
-		double				weight;
+		fk_D3DXFrame *frame;
+		double weight;
 	};
 
 	class fk_D3DXAnimation : public fk_ParserBase {
@@ -38,32 +38,32 @@ namespace FK {
 		fk_D3DXAnimation(void);
 		virtual ~fk_D3DXAnimation();
 
-		void			SetTree(fk_Tree *);
-		bool			ReadSkinData(std::ifstream &);
-		void			MakeNewAnimation(void);
-		bool			ReadAnimationKey(std::ifstream &);
-		bool			SetAnimationName(std::string *);
-		void			MakeAnimationData(void);
-		void			MakeSkinMap(fk_D3DXShapeParser *);
-		void			MakeDummySkinWeights(fk_TreeData *, int);
-		void			SetTime(double);
-		fk_FVector		GetMovePos(int, const fk_FVector &);
-		void			SetBVHMotion(fk_BVHBase *);
+		void SetTree(fk_Tree *);
+		bool ReadSkinData(std::ifstream &);
+		void MakeNewAnimation(void);
+		bool ReadAnimationKey(std::ifstream &);
+		bool SetAnimationName(std::string *);
+		void MakeAnimationData(void);
+		void MakeSkinMap(fk_D3DXShapeParser *);
+		void MakeDummySkinWeights(fk_TreeData *, int);
+		void SetTime(double);
+		fk_FVector GetMovePos(int, const fk_FVector &);
+		void SetBVHMotion(fk_BVHBase *);
 
 	private:
 
-		fk_Tree										*tree;
-		std::vector<fk_D3DXSkinData *>				skinData;
-		std::vector<fk_D3DXFrame *>					frameData;
-		std::vector<fk_D3DXFrameAnimation *>		animData;
-		std::vector< std::vector<fk_D3DXSkinMap> >	mapData;
+		fk_Tree *tree;
+		std::vector<std::unique_ptr<fk_D3DXSkinData>> skinData;
+		std::vector<std::unique_ptr<fk_D3DXFrame>> frameData;
+		std::vector<std::unique_ptr<fk_D3DXFrameAnimation>> animData;
+		std::vector<std::vector<fk_D3DXSkinMap>> mapData;
 
-		bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
-		bool			GetQuaternion(std::ifstream &, std::string *, fk_Quaternion *);
-		bool			ReadAnimationRotData(std::ifstream &, std::string *);
-		bool			ReadAnimationScaleData(std::ifstream &, std::string *);
-		bool			ReadAnimationTransData(std::ifstream &, std::string *);
-		fk_D3DXFrame *	MakeNewFrame(fk_TreeData *);
+		bool GetVector(std::ifstream &, std::string *, fk_Vector *);
+		bool GetQuaternion(std::ifstream &, std::string *, fk_Quaternion *);
+		bool ReadAnimationRotData(std::ifstream &, std::string *);
+		bool ReadAnimationScaleData(std::ifstream &, std::string *);
+		bool ReadAnimationTransData(std::ifstream &, std::string *);
+		fk_D3DXFrame * MakeNewFrame(fk_TreeData *);
 	};
 }
 

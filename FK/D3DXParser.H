@@ -17,30 +17,28 @@ namespace FK {
 		fk_D3DXParser(void);
 		virtual ~fk_D3DXParser();
 
-		bool	ReadD3DXFile(const std::string &, const std::string &,
-							 int, bool, bool *);
-		void	SetIFSTexture(fk_IFSTexture *);
-		void	SetAnimation(fk_D3DXAnimation *);
-		void	print(void);
+		bool ReadD3DXFile(const std::string &, const std::string &, int, bool, bool *);
+		void SetIFSTexture(fk_IFSTexture *);
+		void SetAnimation(fk_D3DXAnimation *);
+		void print(void);
 
 	private:
-		fk_Tree				*tree;
-		fk_D3DXShapeParser	*shape;
+		std::unique_ptr<fk_Tree> tree;
+		std::unique_ptr<fk_D3DXShapeParser> shape;
 
-		fk_IFSTexture		*ifsTexture;
-		fk_D3DXAnimation	*anim;
+		fk_IFSTexture *ifsTexture;
+		fk_D3DXAnimation *anim;
 
-		bool			CheckFile(const std::string &);
-		bool			ReadData(const std::string &,
-								 const std::string &, int, bool, bool *);
+		bool CheckFile(const std::string &);
+		bool ReadData(const std::string &, const std::string &, int, bool, bool *);
 
-		bool			CheckOneLineProperty(const std::string *);
-		fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
-		bool			CheckMeshProperty(fk_TreeData *, const std::string &);
-		bool			CheckProperty(fk_TreeData *, const std::string &);
-		bool			ReadFrameMatrix(fk_TreeData *, std::ifstream &);
+		bool CheckOneLineProperty(const std::string *);
+		fk_TreeData * GetProperty(fk_TreeData *, std::string *);
+		bool CheckMeshProperty(fk_TreeData *, const std::string &);
+		bool CheckProperty(fk_TreeData *, const std::string &);
+		bool ReadFrameMatrix(fk_TreeData *, std::ifstream &);
 
-		bool			MakeData(int, bool);
+		bool MakeData(int, bool);
 	};
 }
 

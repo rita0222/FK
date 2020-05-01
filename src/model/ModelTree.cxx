@@ -10,14 +10,14 @@ fk_Tree fk_Model::_modelTree;
 
 class fk_ModelTreeObject : public fk_TreeBaseObject {
 private:
-	fk_Model		*model;
+	fk_Model *model;
 
 public:
 	fk_ModelTreeObject(void);
 	~fk_ModelTreeObject();
 
-	void			SetModel(fk_Model *);
-	fk_Model *		GetModel(void);
+	void SetModel(fk_Model *);
+	fk_Model * GetModel(void);
 };
 
 fk_ModelTreeObject::fk_ModelTreeObject(void)

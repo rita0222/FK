@@ -1,4 +1,6 @@
-﻿#include <FK/Matrix.h>
+﻿#define FK_DEF_SIZETYPE
+
+#include <FK/Matrix.h>
 #include <FK/Error.H>
 #include <sstream>
 
@@ -266,21 +268,21 @@ static void MultMatrix(double m1[4][4],
 
 // コンストラクタ 
 fk_OrthoMatrix::fk_OrthoMatrix(void)
-	: buf(nullptr), updateStatus(true)
+	: updateStatus(true)
 {
 	MakeIdentMatrix(m);
 }
 
 // コピーコンストラクタ 
 fk_OrthoMatrix::fk_OrthoMatrix(const fk_OrthoMatrix &ArgMat)
-	: buf(nullptr), updateStatus(true)
+	: updateStatus(true)
 {
 	CopyMatrix(m, ArgMat.m);
 }
 
 fk_OrthoMatrix::~fk_OrthoMatrix()
 {
-	if(buf != nullptr) delete [] buf;
+	//if(buf != nullptr) delete [] buf;
 }
 
 // 初期化関数 (単位行列の生成) 
@@ -512,14 +514,14 @@ void fk_OrthoMatrix::Print(string argStr) const
 
 GLfloat * fk_OrthoMatrix::GetBuffer(void)
 {
-	if(buf == nullptr) buf = new float[16];
+	if(buf.empty()) buf.resize(16);
 	if(updateStatus == true) {
-		for(int i = 0; i < 16; ++i) {
-			buf[i] = float(m[i%4][i/4]);
+		for(_st i = 0; i < 16; ++i) {
+			buf[i] = GLfloat(m[i%4][i/4]);
 		}
 		updateStatus = false;
 	}
-	return buf;
+	return &buf[0];
 }
 
 

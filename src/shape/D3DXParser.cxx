@@ -12,8 +12,8 @@ using namespace FK;
 fk_D3DXParser::fk_D3DXParser(void)
 {
 	ifsTexture = nullptr;
-	tree = new fk_Tree;
-	shape = new fk_D3DXShapeParser;
+	tree = make_unique<fk_Tree>();
+	shape = make_unique<fk_D3DXShapeParser>();
 	tree->clear("_D3DXParser_root");
 	anim = nullptr;
 
@@ -22,8 +22,6 @@ fk_D3DXParser::fk_D3DXParser(void)
 
 fk_D3DXParser::~fk_D3DXParser()
 {
-	delete shape;
-	delete tree;
 	return;
 }
 
@@ -38,7 +36,7 @@ void fk_D3DXParser::SetIFSTexture(fk_IFSTexture *argTexture)
 void fk_D3DXParser::SetAnimation(fk_D3DXAnimation *argAnim)
 {
 	anim = argAnim;
-	anim->SetTree(tree);
+	anim->SetTree(tree.get());
 	return;
 }
 
@@ -318,7 +316,7 @@ bool fk_D3DXParser::MakeData(int argMateID, bool argSolidFlg)
 	}
 	
 	if(anim != nullptr) {
-		anim->MakeSkinMap(shape);
+		anim->MakeSkinMap(shape.get());
 	}
 
 	return true;

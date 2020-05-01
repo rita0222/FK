@@ -8,7 +8,8 @@ using namespace FK;
 
 fk_D3DXFrameAnimation::fk_D3DXFrameAnimation(void)
 {
-	name.clear();
+	name = make_unique<string>();
+	frameMatrix = make_unique<fk_Matrix>();
 
 	rotKey.clear();
 	scaleKey.clear();
@@ -28,143 +29,142 @@ fk_D3DXFrameAnimation::~fk_D3DXFrameAnimation()
 
 void fk_D3DXFrameAnimation::SetName(const string &argName)
 {
-	name = argName;
+	name.get()->assign(argName);
 	return;
 }
 
 string fk_D3DXFrameAnimation::GetName(void)
 {
-	return name;
+	return *(name.get());
 }
 
 void fk_D3DXFrameAnimation::SetRotKeyNum(int argNum)
 {
 	if(argNum < 0) return;
-	rotKey.resize(static_cast<_st>(argNum));
-	rotData.resize(static_cast<_st>(argNum));
+	rotKey.resize(_st(argNum));
+	rotData.resize(_st(argNum));
 	return;
 }
 
 void fk_D3DXFrameAnimation::SetScaleKeyNum(int argNum)
 {
 	if(argNum < 0) return;
-	scaleKey.resize(static_cast<_st>(argNum));
-	scaleData.resize(static_cast<_st>(argNum));
+	scaleKey.resize(_st(argNum));
+	scaleData.resize(_st(argNum));
 	return;
 }
 
 void fk_D3DXFrameAnimation::SetTransKeyNum(int argNum)
 {
 	if(argNum < 0) return;
-	transKey.resize(static_cast<_st>(argNum));
-	transData.resize(static_cast<_st>(argNum));
+	transKey.resize(_st(argNum));
+	transData.resize(_st(argNum));
 	return;
 }
 
 int fk_D3DXFrameAnimation::GetRotKeyNum(void)
 {
-	return static_cast<int>(rotKey.size());
+	return int(rotKey.size());
 }
 
 int fk_D3DXFrameAnimation::GetScaleKeyNum(void)
 {
-	return static_cast<int>(scaleKey.size());
+	return int(scaleKey.size());
 }
 
 int fk_D3DXFrameAnimation::GetTransKeyNum(void)
 {
-	return static_cast<int>(transKey.size());
+	return int(transKey.size());
 }
 
 void fk_D3DXFrameAnimation::SetRotKey(int argID, double argKey)
 {
-	if(argID < 0 || argID >= static_cast<int>(rotKey.size())) return;
-	rotKey[static_cast<_st>(argID)] = argKey;
+	if(argID < 0 || argID >= int(rotKey.size())) return;
+	rotKey[_st(argID)] = argKey;
 	return;
 }
 
 void fk_D3DXFrameAnimation::SetScaleKey(int argID, double argKey)
 {
-	if(argID < 0 || argID >= static_cast<int>(scaleKey.size())) return;
-	scaleKey[static_cast<_st>(argID)] = argKey;
+	if(argID < 0 || argID >= int(scaleKey.size())) return;
+	scaleKey[_st(argID)] = argKey;
 	return;
 }
 
 void fk_D3DXFrameAnimation::SetTransKey(int argID, double argKey)
 {
-	if(argID < 0 || argID >= static_cast<int>(transKey.size())) return;
-	transKey[static_cast<_st>(argID)] = argKey;
+	if(argID < 0 || argID >= int(transKey.size())) return;
+	transKey[_st(argID)] = argKey;
 	return;
 }
 
 double fk_D3DXFrameAnimation::GetRotKey(int argID)
 {
-	if(argID < 0 || argID >= static_cast<int>(rotKey.size())) return -1;
-	return rotKey[static_cast<_st>(argID)];
+	if(argID < 0 || argID >= int(rotKey.size())) return -1;
+	return rotKey[_st(argID)];
 }
 
 double fk_D3DXFrameAnimation::GetScaleKey(int argID)
 {
-	if(argID < 0 || argID >= static_cast<int>(scaleKey.size())) return -1;
-	return scaleKey[static_cast<_st>(argID)];
+	if(argID < 0 || argID >= int(scaleKey.size())) return -1;
+	return scaleKey[_st(argID)];
 }
 
 double fk_D3DXFrameAnimation::GetTransKey(int argID)
 {
-	if(argID < 0 || argID >= static_cast<int>(transKey.size())) return -1;
-	return transKey[static_cast<_st>(argID)];
+	if(argID < 0 || argID >= int(transKey.size())) return -1;
+	return transKey[_st(argID)];
 }
 
 void fk_D3DXFrameAnimation::SetRotData(int argID, const fk_Quaternion &argQ)
 {
-	if(argID < 0 || argID >= static_cast<int>(rotData.size())) return;
-	rotData[static_cast<_st>(argID)] = argQ;
+	if(argID < 0 || argID >= int(rotData.size())) return;
+	rotData[_st(argID)] = make_unique<fk_Quaternion>(argQ);
 	return;
 }
 
 void fk_D3DXFrameAnimation::SetScaleData(int argID, const fk_Vector &argV)
 {
-	if(argID < 0 || argID >= static_cast<int>(scaleData.size())) return;
-	scaleData[static_cast<_st>(argID)] = argV;
+	if(argID < 0 || argID >= int(scaleData.size())) return;
+	scaleData[_st(argID)] = make_unique<fk_Vector>(argV);
 	return;
 }
 
 void fk_D3DXFrameAnimation::SetTransData(int argID, const fk_Vector &argV)
 {
-	if(argID < 0 || argID >= static_cast<int>(transData.size())) return;
-	transData[static_cast<_st>(argID)] = argV;
+	if(argID < 0 || argID >= int(transData.size())) return;
+	transData[_st(argID)] = make_unique<fk_Vector>(argV);
 	return;
 }
 
 fk_Quaternion fk_D3DXFrameAnimation::GetRotData(int argID)
 {
-	if(argID < 0 || argID >= static_cast<int>(rotData.size())) {
+	if(argID < 0 || argID >= int(rotData.size())) {
 		return fk_Quaternion();
 	}
-	return rotData[static_cast<_st>(argID)];
+	return *rotData[_st(argID)];
 }
 
 fk_Vector fk_D3DXFrameAnimation::GetScaleData(int argID)
 {
-	if(argID < 0 || argID >= static_cast<int>(scaleData.size())) {
+	if(argID < 0 || argID >= int(scaleData.size())) {
 		return fk_Vector();
 	}
-	return scaleData[static_cast<_st>(argID)];
+	return *scaleData[_st(argID)];
 }
 
 fk_Vector fk_D3DXFrameAnimation::GetTransData(int argID)
 {
-	if(argID < 0 || argID >= static_cast<int>(transData.size())) {
+	if(argID < 0 || argID >= int(transData.size())) {
 		return fk_Vector();
 	}
-	return transData[static_cast<_st>(argID)];
+	return *transData[_st(argID)];
 }
 
 void fk_D3DXFrameAnimation::LinearDiv(double argTime, vector<double> *argArray,
 									  int *retID, double *retDiv)
 {
-	double	startTime, endTime;
-	_st		i;
+	double startTime, endTime;
 
 	if(argArray->size() == 0) {
 		*retID = -1;
@@ -182,16 +182,15 @@ void fk_D3DXFrameAnimation::LinearDiv(double argTime, vector<double> *argArray,
 	}
 
 	if(endTime - fk_Math::EPS < argTime) {
-		*retID = static_cast<int>(argArray->size())-1;
+		*retID = int(argArray->size())-1;
 		*retDiv = 0.0;
 		return;
 	}
 
-	for(i = 1; i < argArray->size(); i++) {
+	for(_st i = 1; i < argArray->size(); i++) {
 		if(argArray->at(i) > argTime) {
-			*retID = static_cast<int>(i-1);
-			*retDiv = (argTime - argArray->at(i-1))/
-					(argArray->at(i) - argArray->at(i-1));
+			*retID = int(i-1);
+			*retDiv = (argTime - argArray->at(i-1))/(argArray->at(i) - argArray->at(i-1));
 			break;
 		}
 	}
@@ -201,49 +200,51 @@ void fk_D3DXFrameAnimation::LinearDiv(double argTime, vector<double> *argArray,
 
 void fk_D3DXFrameAnimation::SetTime(double argTime)
 {
-	fk_Matrix		rotMat, scaleMat, transMat, retMat;
-	fk_Quaternion	q;
-	fk_Angle		angle;
-	fk_Vector		scaleV, transV;
-	int				rID = 0, sID = 0, tID = 0;
-	double			rDiv = 0.0, sDiv = 0.0, tDiv = 0.0;
+	fk_Matrix rotMat, scaleMat, transMat, retMat;
+	fk_Quaternion q;
+	fk_Angle angle;
+	fk_Vector scaleV, transV;
+	int rID = 0, sID = 0, tID = 0;
+	double rDiv = 0.0, sDiv = 0.0, tDiv = 0.0;
+	fk_Vector v1, v2;
 
 	LinearDiv(argTime, &rotKey, &rID, &rDiv);
 	LinearDiv(argTime, &scaleKey, &sID, &sDiv);
 	LinearDiv(argTime, &transKey, &tID, &tDiv);
 
 	if(rID != -1) {
-		if(rID == static_cast<int>(rotKey.size()-1)) {
-			q = rotData[static_cast<_st>(rID)];
+		if(rID == int(rotKey.size()-1)) {
+			q = *rotData[_st(rID)];
 		} else {
-			q = fk_Q_Inter_Sphere(rotData[static_cast<_st>(rID)],
-								  rotData[static_cast<_st>(rID)+1], rDiv);
+			q = fk_Q_Inter_Sphere(*rotData[_st(rID)], *rotData[_st(rID)+1], rDiv);
 		}
 		angle = q.getEuler();
 		rotMat.makeEuler(angle);
 	}
 
 	if(sID != -1) {
-		if(sID == static_cast<int>(scaleKey.size()-1)) {
-			scaleV = scaleData[static_cast<_st>(sID)];
+		if(sID == int(scaleKey.size()-1)) {
+			scaleV = *scaleData[_st(sID)];
 		} else {
-			scaleV = (1.0-sDiv)*scaleData[static_cast<_st>(sID)] +
-				sDiv*scaleData[static_cast<_st>(sID)+1];
+			v1 = *scaleData[_st(sID)];
+			v2 = *scaleData[_st(sID)+1];
+			scaleV = (1.0-sDiv) * v1 + sDiv * v2;
 		}
 		scaleMat.makeScale(scaleV);
 	}
 
 	if(tID != -1) {
-		if(tID == static_cast<int>(transKey.size()-1)) {
-			transV = transData[static_cast<_st>(tID)];
+		if(tID == int(transKey.size()-1)) {
+			transV = *transData[_st(tID)];
 		} else {
-			transV = (1.0-tDiv)*transData[static_cast<_st>(tID)] +
-				tDiv*transData[static_cast<_st>(tID)+1];
+			v1 = *transData[_st(tID)];
+			v2 = *transData[_st(tID)+1];
+			transV = (1.0-tDiv) * v1 + tDiv * v2;
 		}
 		transMat.makeTrans(transV);
 	}
 
-	frameMatrix = transMat * rotMat * scaleMat;
+	*frameMatrix = transMat * rotMat * scaleMat;
 
 	return;
 }
@@ -267,12 +268,14 @@ double fk_D3DXFrameAnimation::GetStartTime(void)
 
 fk_Matrix fk_D3DXFrameAnimation::GetFrameMatrix(void)
 {
-	return frameMatrix;
+	return *frameMatrix;
 }
 
 fk_D3DXSkinData::fk_D3DXSkinData(void)
 {
-	name.clear();
+	name = make_unique<string>();
+	offsetMatrix = make_unique<fk_Matrix>();
+
 	vNum = 0;
 	vArray.clear();
 	wArray.clear();
@@ -286,7 +289,7 @@ fk_D3DXSkinData::~fk_D3DXSkinData()
 
 void fk_D3DXSkinData::SetName(const string &argName)
 {
-	name = argName;
+	*name = argName;
 	return;
 }
 
@@ -294,22 +297,22 @@ void fk_D3DXSkinData::SetNum(int argNum)
 {
 	if(argNum <= 0) return;
 	vNum = argNum;
-	vArray.resize(static_cast<_st>(vNum));
-	wArray.resize(static_cast<_st>(vNum));
+	vArray.resize(_st(vNum));
+	wArray.resize(_st(vNum));
 	return;
 }
 
 void fk_D3DXSkinData::SetVID(int argIndex, int argID)
 {
 	if(argIndex < 0 || argIndex >= vNum) return;
-	vArray[static_cast<_st>(argIndex)] = argID;
+	vArray[_st(argIndex)] = argID;
 	return;
 }
 
 void fk_D3DXSkinData::SetVWeight(int argIndex, double argWeight)
 {
 	if(argIndex < 0 || argIndex >= vNum) return;
-	wArray[static_cast<_st>(argIndex)] = argWeight;
+	wArray[_st(argIndex)] = argWeight;
 	return;
 }
 
@@ -317,13 +320,13 @@ void fk_D3DXSkinData::SetOffsetMatrixValue(int argI, int argJ,
 										   double argValue)
 {
 	if(argI < 0 || argI > 3 || argJ < 0 || argJ > 3) return;
-	offsetMatrix[argI][argJ] = argValue;
+	offsetMatrix->set(argI, argJ, argValue);
 	return;
 }
 
 string fk_D3DXSkinData::GetName(void)
 {
-	return name;
+	return *name;
 }
 
 int fk_D3DXSkinData::GetNum(void)
@@ -334,29 +337,29 @@ int fk_D3DXSkinData::GetNum(void)
 int fk_D3DXSkinData::GetVID(int argIndex)
 {
 	if(argIndex < 0 || argIndex >= vNum) return -1;
-	return vArray[static_cast<_st>(argIndex)];
+	return vArray[_st(argIndex)];
 }
 
 double fk_D3DXSkinData::GetWeight(int argIndex)
 {
 	if(argIndex < 0 || argIndex >= vNum) return -1.0;
-	return wArray[static_cast<_st>(argIndex)];
+	return wArray[_st(argIndex)];
 }
 
 fk_Matrix fk_D3DXSkinData::GetOffsetMatrix(void)
 {
-	return offsetMatrix;
+	return *offsetMatrix;
 }
 
 fk_D3DXFrame::fk_D3DXFrame(void)
 {
-	name.clear();
+	name = make_unique<string>();
 	skin = nullptr;
 	anim = nullptr;
 
-	offsetMatrix.init();
-	curMatrix.init();
-	totalMatrix.init();
+	offsetMatrix = make_unique<fk_Matrix>();
+	curMatrix = make_unique<fk_Matrix>();
+	totalMatrix = make_unique<fk_Matrix>();
 	parentMatrix = nullptr;
 
 	return;
@@ -369,13 +372,13 @@ fk_D3DXFrame::~fk_D3DXFrame()
 
 void fk_D3DXFrame::SetName(const string &argName)
 {
-	name = argName;
+	*name = argName;
 	return;
 }
 
 string fk_D3DXFrame::GetName(void)
 {
-	return name;
+	return *name;
 }
 
 void fk_D3DXFrame::SetSkin(fk_D3DXSkinData *argSkin)
@@ -403,31 +406,31 @@ fk_D3DXFrameAnimation * fk_D3DXFrame::GetAnimation(void)
 void fk_D3DXFrame::SetParentFrame(fk_D3DXFrame *argParent)
 {
 	if(argParent == nullptr) return;
-	parentMatrix = &(argParent->curMatrix);
+	parentMatrix = argParent->curMatrix.get();
 	return;
 }
 
 void fk_D3DXFrame::SetInitMatrix(const fk_Matrix *argMat)
 {
-	initMatrix = *argMat;
+	*initMatrix = *argMat;
 	return;
 }
 
 void fk_D3DXFrame::SetUpMatrix(void)
 {
 	if(skin != nullptr) {
-		offsetMatrix = skin->GetOffsetMatrix();
+		*offsetMatrix = skin->GetOffsetMatrix();
 	} else {
-		offsetMatrix.init();
+		offsetMatrix->init();
 	}
 
 	if(parentMatrix != nullptr) {
-		curMatrix = *parentMatrix * initMatrix;
+		*curMatrix = *parentMatrix * (*initMatrix);
 	} else {
-		curMatrix = initMatrix;
+		*curMatrix = *initMatrix;
 	}
 
-	totalMatrix = curMatrix * offsetMatrix;
+	*totalMatrix = *curMatrix * (*offsetMatrix);
 
 	return;
 }
@@ -447,25 +450,25 @@ void fk_D3DXFrame::SetTime(double argTime)
 	anim->SetTime(argTime);
 
 	if(parentMatrix != nullptr) {
-		curMatrix = *parentMatrix * anim->GetFrameMatrix();
+		*curMatrix = *parentMatrix * anim->GetFrameMatrix();
 	} else {
-		curMatrix = anim->GetFrameMatrix();
+		*curMatrix = anim->GetFrameMatrix();
 	}
 
-	totalMatrix = curMatrix * offsetMatrix;
+	*totalMatrix = *curMatrix * (*offsetMatrix);
 
 	return;
 }
 
 fk_Matrix * fk_D3DXFrame::GetTotalMatrix(void)
 {
-	return &totalMatrix;
+	return totalMatrix.get();
 }
 
 fk_D3DXPropertyList::fk_D3DXPropertyList(void)
 {
 	matrixFlg = false;
-	frameMatrix.init();
+	frameMatrix = make_unique<fk_Matrix>();
 	property.clear();
 	data.clear();
 	frame = nullptr;
@@ -498,16 +501,15 @@ string fk_D3DXPropertyList::GetData(void)
 	return data;
 }
 
-void fk_D3DXPropertyList::SetFrameMatrixValue(int argI, int argJ,
-											  double argValue)
+void fk_D3DXPropertyList::SetFrameMatrixValue(int argI, int argJ, double argValue)
 {
-	frameMatrix.set(argI, argJ, argValue);
+	frameMatrix->set(argI, argJ, argValue);
 	return;
 }
 
 fk_Matrix * fk_D3DXPropertyList::GetFrameMatrix(void)
 {
-	return &frameMatrix;
+	return frameMatrix.get();
 }
 
 void fk_D3DXPropertyList::SetFrame(fk_D3DXFrame *argFrame)

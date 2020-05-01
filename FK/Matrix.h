@@ -407,8 +407,8 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		double	m[4][4];
-		float	*buf;
+		double m[4][4];
+		std::vector<GLfloat> buf;
 		bool updateStatus;
 		void MultVec(fk_HVector &, const fk_HVector &) const;
 

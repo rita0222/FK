@@ -389,7 +389,7 @@ namespace FK {
 #endif
 
 	private:
-		fk_Attribute_Data *attr_data;
+		std::shared_ptr<fk_Attribute_Data> attr_data;
 		bool IsExistData(void) const;
 	};
 }

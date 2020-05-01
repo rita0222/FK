@@ -19,149 +19,137 @@ fk_Attribute_Data::~fk_Attribute_Data()
 
 void fk_Attribute_Data::AttrInit(void)
 {
-	ItoIIndex.reset();
-	ItoIValue.reset();
+	ItoIIndex.clear();
+	ItoIValue.clear();
 	
-	ItoDIndex.reset();
-	ItoDValue.reset();
+	ItoDIndex.clear();
+	ItoDValue.clear();
 
-	ItoSIndex.reset();
-	ItoSValue.reset();
+	ItoSIndex.clear();
+	ItoSValue.clear();
 
-	StoIIndex.reset();
-	StoIValue.reset();
+	StoIIndex.clear();
+	StoIValue.clear();
 
-	StoDIndex.reset();
-	StoDValue.reset();
+	StoDIndex.clear();
+	StoDValue.clear();
 
-	StoSIndex.reset();
-	StoSValue.reset();
+	StoSIndex.clear();
+	StoSValue.clear();
 
 	return;
 }
 
 int fk_Attribute_Data::CreateNewIndexI(vector<int> *argArray, int argKey)
 {
-	_st		i, size = argArray->size();
+	_st size = argArray->size();
 
-	for(i = 0; i < size; i++) {
+	for(_st i = 0; i < size; i++) {
 		if((*argArray)[i] == FK_UNDEFINED) {
 			(*argArray)[i] = argKey;
-			return static_cast<int>(i);
+			return int(i);
 		}
 	}
 
 	argArray->push_back(argKey);
-	return static_cast<int>(size);
+	return int(size);
 }
 
 int fk_Attribute_Data::CreateNewIndexS(vector<string> *argArray, string argKey)
 {
-	_st		i, size = argArray->size();
+	_st size = argArray->size();
 
-	for(i = 0; i < size; i++) {
+	for(_st i = 0; i < size; i++) {
 		if((*argArray)[i] == "") {
 			(*argArray)[i] = argKey;
-			return static_cast<int>(i);
+			return int(i);
 		}
 	}
 
 	argArray->push_back(argKey);
-	return static_cast<int>(size);
+	return int(size);
 }
 
 int fk_Attribute_Data::GetIndexAttrII(const int Key) const
 {
-	_st		i, size;
-
-	if(ItoIIndex == nullptr) {
+	if(ItoIIndex.empty()) {
 		return FK_UNDEFINED;
 	}
 
-	size = ItoIIndex->size();
+	_st size = ItoIIndex.size();
 
-	for(i = 0; i < size; i++) {
-		if((*ItoIIndex)[i] == Key) return static_cast<int>(i);
+	for(_st i = 0; i < size; i++) {
+		if(ItoIIndex[i] == Key) return int(i);
 	}
 	return FK_UNDEFINED;
 }
 
 int fk_Attribute_Data::GetIndexAttrID(const int Key) const
 {
-	_st		i, size;
-
-	if(ItoDIndex == nullptr) {
+	if(ItoDIndex.empty()) {
 		return FK_UNDEFINED;
 	}
 
-	size = ItoDIndex->size();
+	_st size = ItoDIndex.size();
 
-	for(i = 0; i < size; i++) {
-		if((*ItoDIndex)[i] == Key) return static_cast<int>(i);
+	for(_st i = 0; i < size; i++) {
+		if(ItoDIndex[i] == Key) return int(i);
 	}
 	return FK_UNDEFINED;
 }
 
 int fk_Attribute_Data::GetIndexAttrIS(const int Key) const
 {
-	_st		i, size;
-
-	if(ItoSIndex == nullptr) {
+	if(ItoSIndex.empty()) {
 		return FK_UNDEFINED;
 	}
 
-	size = ItoSIndex->size();
+	_st size = ItoSIndex.size();
 
-	for(i = 0; i < size; i++) {
-		if((*ItoSIndex)[i] == Key) return static_cast<int>(i);
+	for(_st i = 0; i < size; i++) {
+		if(ItoSIndex[i] == Key) return int(i);
 	}
 	return FK_UNDEFINED;
 }
 
 int fk_Attribute_Data::GetIndexAttrSI(const string Key) const
 {
-	_st		i, size;
-
-	if(StoIIndex == nullptr) {
+	if(StoIIndex.empty()) {
 		return FK_UNDEFINED;
 	}
 
-	size = StoIIndex->size();
+	_st size = StoIIndex.size();
 
-	for(i = 0; i < size; i++) {
-		if((*StoIIndex)[i] == Key) return static_cast<int>(i);
+	for(_st i = 0; i < size; i++) {
+		if(StoIIndex[i] == Key) return int(i);
 	}
 	return FK_UNDEFINED;
 }
 
 int fk_Attribute_Data::GetIndexAttrSD(const string Key) const
 {
-	_st		i, size;
-
-	if(StoDIndex == nullptr) {
+	if(StoDIndex.empty()) {
 		return FK_UNDEFINED;
 	}
 
-	size = StoDIndex->size();
+	_st size = StoDIndex.size();
 
-	for(i = 0; i < size; i++) {
-		if((*StoDIndex)[i] == Key) return static_cast<int>(i);
+	for(_st i = 0; i < size; i++) {
+		if(StoDIndex[i] == Key) return int(i);
 	}
 	return FK_UNDEFINED;
 }
 
 int fk_Attribute_Data::GetIndexAttrSS(const string Key) const
 {
-	_st		i, size;
-
-	if(StoSIndex == nullptr) {
+	if(StoSIndex.empty()) {
 		return FK_UNDEFINED;
 	}
 
-	size = StoSIndex->size();
+	_st size = StoSIndex.size();
 
-	for(i = 0; i < size; i++) {
-		if((*StoSIndex)[i] == Key) return static_cast<int>(i);
+	for(_st i = 0; i < size; i++) {
+		if(StoSIndex[i] == Key) return int(i);
 	}
 	return FK_UNDEFINED;
 }
@@ -204,268 +192,225 @@ bool fk_Attribute_Data::ExistAttrSS(const string Key) const
 
 bool fk_Attribute_Data::SetAttrII(const int Key, const int Value)
 {
-	int			Index;
-
 	if(Key < 0) {
 		Error::Put("fk_Attribute", "setAttrII", 1, "Key Value Error.");
 		return false;
 	}
 
-	Index = GetIndexAttrII(Key);
+	int Index = GetIndexAttrII(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(ItoIIndex == nullptr) {
-			ItoIIndex = make_unique<vector<int>>();
-			ItoIValue = make_unique<vector<int>>();
-		}
+		Index = CreateNewIndexI(&ItoIIndex, Key);
 
-		Index = CreateNewIndexI(ItoIIndex.get(), Key);
-
-		if(Index == static_cast<int>(ItoIValue->size())) {
-			ItoIValue->push_back(Value);
+		if(Index == int(ItoIValue.size())) {
+			ItoIValue.push_back(Value);
 		} else {
-			(*ItoIValue)[static_cast<_st>(Index)] = Value;
+			ItoIValue[_st(Index)] = Value;
 		}
 
 		return false;
 	} else {
-		(*ItoIValue)[static_cast<_st>(Index)] = Value;
+		ItoIValue[_st(Index)] = Value;
 	}
 	return true;
 }
 
 bool fk_Attribute_Data::SetAttrID(const int Key, const double Value)
 {
-	int			Index;
-
 	if(Key < 0) {
 		Error::Put("fk_Attribute", "setAttrID", 1, "Key Value Error.");
 		return false;
 	}
 
-	Index = GetIndexAttrID(Key);
+	int Index = GetIndexAttrID(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(ItoDIndex == nullptr) {
-			ItoDIndex = make_unique<vector<int>>();
-			ItoDValue = make_unique<vector<double>>();
-		}
+		Index = CreateNewIndexI(&ItoDIndex, Key);
 
-		Index = CreateNewIndexI(ItoDIndex.get(), Key);
-
-		if(Index == static_cast<int>(ItoDValue->size())) {
-			ItoDValue->push_back(Value);
+		if(Index == int(ItoDValue.size())) {
+			ItoDValue.push_back(Value);
 		} else {
-			(*ItoDValue)[static_cast<_st>(Index)] = Value;
+			ItoDValue[_st(Index)] = Value;
 		}
 
 		return false;
 	} else {
-		(*ItoDValue)[static_cast<_st>(Index)] = Value;
+		ItoDValue[_st(Index)] = Value;
 	}
 	return true;
 }
 
 bool fk_Attribute_Data::SetAttrIS(const int Key, const string Value)
 {
-	int			Index;
-
 	if(Key < 0) {
 		Error::Put("fk_Attribute", "setAttrIS", 1, "Key Value Error.");
 		return false;
 	}
 
-	Index = GetIndexAttrIS(Key);
+	int Index = GetIndexAttrIS(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(ItoSIndex == nullptr) {
-			ItoSIndex = make_unique<vector<int>>();
-			ItoSValue = make_unique<vector<string>>();
-		}
+		Index = CreateNewIndexI(&ItoSIndex, Key);
 
-		Index = CreateNewIndexI(ItoSIndex.get(), Key);
-
-		if(Index == static_cast<int>(ItoSValue->size())) {
-			ItoSValue->push_back(Value);
+		if(Index == int(ItoSValue.size())) {
+			ItoSValue.push_back(Value);
 		} else {
-			(*ItoSValue)[static_cast<_st>(Index)] = Value;
+			ItoSValue[_st(Index)] = Value;
 		}
 
 		return false;
 	} else {
-		(*ItoSValue)[static_cast<_st>(Index)] = Value;
+		ItoSValue[_st(Index)] = Value;
 	}
 	return true;
 }
 
 bool fk_Attribute_Data::SetAttrSI(const string Key, const int Value)
 {
-	int			Index;
-
 	if(Key.length() == 0) {
 		Error::Put("fk_Attribute", "setAttrSI", 1, "Key Value Error.");
 		return false;
 	}
 
-	Index = GetIndexAttrSI(Key);
+	int Index = GetIndexAttrSI(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(StoIIndex == nullptr) {
-			StoIIndex = make_unique<vector<string>>();
-			StoIValue = make_unique<vector<int>>();
-		}
+		Index = CreateNewIndexS(&StoIIndex, Key);
 
-		Index = CreateNewIndexS(StoIIndex.get(), Key);
-
-		if(Index == static_cast<int>(StoIValue->size())) {
-			StoIValue->push_back(Value);
+		if(Index == int(StoIValue.size())) {
+			StoIValue.push_back(Value);
 		} else {
-			(*StoIValue)[static_cast<_st>(Index)] = Value;
+			StoIValue[_st(Index)] = Value;
 		}
-
 		return false;
 	} else {
-		(*StoIValue)[static_cast<_st>(Index)] = Value;
+		StoIValue[_st(Index)] = Value;
 	}
 	return true;
 }
 
 bool fk_Attribute_Data::SetAttrSD(const string Key, const double Value)
 {
-	int			Index;
-
 	if(Key.length() == 0) {
 		Error::Put("fk_Attribute", "setAttrSD", 1, "Key Value Error.");
 		return false;
 	}
 
-	Index = GetIndexAttrSD(Key);
+	int Index = GetIndexAttrSD(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(StoDIndex == nullptr) {
-			StoDIndex = make_unique<vector<string>>();
-			StoDValue = make_unique<vector<double>>();
-		}
+		Index = CreateNewIndexS(&StoDIndex, Key);
 
-		Index = CreateNewIndexS(StoDIndex.get(), Key);
-
-		if(Index == static_cast<int>(StoDValue->size())) {
-			StoDValue->push_back(Value);
+		if(Index == int(StoDValue.size())) {
+			StoDValue.push_back(Value);
 		} else {
-			(*StoDValue)[static_cast<_st>(Index)] = Value;
+			StoDValue[_st(Index)] = Value;
 		}
 
 		return false;
 	} else {
-		(*StoDValue)[static_cast<_st>(Index)] = Value;
+		StoDValue[_st(Index)] = Value;
 	}
 	return true;
 }
 
 bool fk_Attribute_Data::SetAttrSS(const string Key, const string Value)
 {
-	int			Index;
-
 	if(Key.length() == 0) {
 		Error::Put("fk_Attribute", "setAttrSS", 1, "Key Value Error.");
 		return false;
 	}
 
-	Index = GetIndexAttrSS(Key);
+	int Index = GetIndexAttrSS(Key);
 
 	if(Index == FK_UNDEFINED) {
-		if(StoSIndex == nullptr) {
-			StoSIndex = make_unique<vector<string>>();
-			StoSValue = make_unique<vector<string>>();
-		}
+		Index = CreateNewIndexS(&StoSIndex, Key);
 
-		Index = CreateNewIndexS(StoSIndex.get(), Key);
-
-		if(Index == static_cast<int>(StoSValue->size())) {
-			StoSValue->push_back(Value);
+		if(Index == int(StoSValue.size())) {
+			StoSValue.push_back(Value);
 		} else {
-			(*StoSValue)[static_cast<_st>(Index)] = Value;
+			StoSValue[_st(Index)] = Value;
 		}
 
 		return false;
 	} else {
-		(*StoSValue)[static_cast<_st>(Index)] = Value;
+		StoSValue[_st(Index)] = Value;
 	}
 	return true;
 }
 
 int fk_Attribute_Data::GetAttrII(const int Key) const
 {
-	int		Index = GetIndexAttrII(Key);
+	int Index = GetIndexAttrII(Key);
 
 	if(Index == FK_UNDEFINED) {
 		return 0;
 	} else {
-		return (*ItoIValue)[static_cast<_st>(Index)];
+		return ItoIValue[_st(Index)];
 	}
 }
 
 double fk_Attribute_Data::GetAttrID(const int Key) const
 {
-	int		Index = GetIndexAttrID(Key);
+	int Index = GetIndexAttrID(Key);
 
 	if(Index == FK_UNDEFINED) {
 		return 0.0;
 	} else {
-		return (*ItoDValue)[static_cast<_st>(Index)];
+		return ItoDValue[_st(Index)];
 	}
 }
 
 string fk_Attribute_Data::GetAttrIS(const int Key) const
 {
-	int		Index = GetIndexAttrIS(Key);
+	int Index = GetIndexAttrIS(Key);
 
 	if(Index == FK_UNDEFINED) {
 		return "";
 	} else {
-		return (*ItoSValue)[static_cast<_st>(Index)];
+		return ItoSValue[_st(Index)];
 	}
 }
 
 int fk_Attribute_Data::GetAttrSI(const string Key) const
 {
-	int		Index = GetIndexAttrSI(Key);
+	int Index = GetIndexAttrSI(Key);
 
 	if(Index == FK_UNDEFINED) {
 		return 0;
 	} else {
-		return (*StoIValue)[static_cast<_st>(Index)];
+		return StoIValue[_st(Index)];
 	}
 }
 
 double fk_Attribute_Data::GetAttrSD(const string Key) const
 {
-	int		Index = GetIndexAttrSD(Key);
+	int Index = GetIndexAttrSD(Key);
 
 	if(Index == FK_UNDEFINED) {
 		return 0.0;
 	} else {
-		return (*StoDValue)[static_cast<_st>(Index)];
+		return StoDValue[_st(Index)];
 	}
 }
 
 string fk_Attribute_Data::GetAttrSS(const string Key) const
 {
-	int		Index = GetIndexAttrSS(Key);
+	int Index = GetIndexAttrSS(Key);
 
 	if(Index == FK_UNDEFINED) {
 		return "";
 	} else {
-		return (*StoSValue)[static_cast<_st>(Index)];
+		return StoSValue[_st(Index)];
 	}
 }
 
 bool fk_Attribute_Data::DeleteAttrII(const int argKey)
 {
-	int		Index = GetIndexAttrII(argKey);
+	int Index = GetIndexAttrII(argKey);
 
 	if(Index != FK_UNDEFINED) {
-		(*ItoIIndex)[static_cast<_st>(Index)] = FK_UNDEFINED;
+		ItoIIndex[_st(Index)] = FK_UNDEFINED;
 		return true;
 	}
 	return false;
@@ -473,10 +418,10 @@ bool fk_Attribute_Data::DeleteAttrII(const int argKey)
 
 bool fk_Attribute_Data::DeleteAttrID(const int argKey)
 {
-	int		Index = GetIndexAttrID(argKey);
+	int Index = GetIndexAttrID(argKey);
 
 	if(Index != FK_UNDEFINED) {
-		(*ItoDIndex)[static_cast<_st>(Index)] = FK_UNDEFINED;
+		ItoDIndex[_st(Index)] = FK_UNDEFINED;
 		return true;
 	}
 	return false;
@@ -484,10 +429,10 @@ bool fk_Attribute_Data::DeleteAttrID(const int argKey)
 
 bool fk_Attribute_Data::DeleteAttrIS(const int argKey)
 {
-	int		Index = GetIndexAttrIS(argKey);
+	int Index = GetIndexAttrIS(argKey);
 
 	if(Index != FK_UNDEFINED) {
-		(*ItoSIndex)[static_cast<_st>(Index)] = FK_UNDEFINED;
+		ItoSIndex[_st(Index)] = FK_UNDEFINED;
 		return true;
 	}
 	return false;
@@ -495,10 +440,10 @@ bool fk_Attribute_Data::DeleteAttrIS(const int argKey)
 
 bool fk_Attribute_Data::DeleteAttrSI(const string argKey)
 {
-	int		Index = GetIndexAttrSI(argKey);
+	int Index = GetIndexAttrSI(argKey);
 
 	if(Index != FK_UNDEFINED) {
-		(*StoIIndex)[static_cast<_st>(Index)].erase();
+		StoIIndex[_st(Index)].erase();
 		return true;
 	}
 	return false;
@@ -506,10 +451,10 @@ bool fk_Attribute_Data::DeleteAttrSI(const string argKey)
 
 bool fk_Attribute_Data::DeleteAttrSD(const string argKey)
 {
-	int		Index = GetIndexAttrSD(argKey);
+	int Index = GetIndexAttrSD(argKey);
 
 	if(Index != FK_UNDEFINED) {
-		(*StoDIndex)[static_cast<_st>(Index)].erase();
+		StoDIndex[_st(Index)].erase();
 		return true;
 	}
 	return false;
@@ -517,10 +462,10 @@ bool fk_Attribute_Data::DeleteAttrSD(const string argKey)
 
 bool fk_Attribute_Data::DeleteAttrSS(const string argKey)
 {
-	int		Index = GetIndexAttrSS(argKey);
+	int Index = GetIndexAttrSS(argKey);
 
 	if(Index != FK_UNDEFINED) {
-		(*StoSIndex)[static_cast<_st>(Index)].erase();
+		StoSIndex[_st(Index)].erase();
 		return true;
 	}
 	return false;

@@ -11,6 +11,7 @@ using namespace FK;
 
 fk_D3DXShapeParser::fk_D3DXShapeParser(void)
 {
+	frameMatrix = make_unique<fk_Matrix>();
 	Clear();
 	return;
 }
@@ -63,7 +64,7 @@ bool fk_D3DXShapeParser::SetFrameMatrix(fk_TreeData *argData)
 
 	prop = static_cast<fk_D3DXPropertyList *>(parent->getObject());
 	if(prop != nullptr) {
-		frameMatrix = *(prop->GetFrameMatrix());
+		*frameMatrix = *(prop->GetFrameMatrix());
 	}
 
 	return true;

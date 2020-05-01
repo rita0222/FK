@@ -25,7 +25,7 @@ bool fk_Attribute::IsExistData(void) const
 
 void fk_Attribute::AttrInit(void)
 {
-	if(IsExistData() == false) return;
+	if(attr_data == nullptr) attr_data = make_shared<fk_Attribute_Data>();
 	attr_data->AttrInit();
 	return;
 }
@@ -68,160 +68,112 @@ bool fk_Attribute::existAttrSS(const string argKey) const
 
 bool fk_Attribute::setAttrII(const int argKey, const int argValue)
 {
-	if(IsExistData() == false) {
-		attr_data = new fk_Attribute_Data();
-	}
-
+	if(IsExistData() == false) AttrInit();
 	return attr_data->SetAttrII(argKey, argValue);
 }
 
 bool fk_Attribute::setAttrID(const int argKey, const double argValue)
 {
-	if(IsExistData() == false) {
-		attr_data = new fk_Attribute_Data();
-	}
-
+	if(IsExistData() == false) AttrInit();
 	return attr_data->SetAttrID(argKey, argValue);
 }
 
 bool fk_Attribute::setAttrIS(const int argKey, const string argValue)
 {
-	if(IsExistData() == false) {
-		attr_data = new fk_Attribute_Data();
-	}
-
+	if(IsExistData() == false) AttrInit();
 	return attr_data->SetAttrIS(argKey, argValue);
 }
 
 bool fk_Attribute::setAttrSI(const string argKey, const int argValue)
 {
-	if(IsExistData() == false) {
-		attr_data = new fk_Attribute_Data();
-	}
-
+	if(IsExistData() == false) AttrInit();
 	return attr_data->SetAttrSI(argKey, argValue);
 }
 
 bool fk_Attribute::setAttrSD(const string argKey, const double argValue)
 {
-	if(IsExistData() == false) {
-		attr_data = new fk_Attribute_Data();
-	}
-
+	if(IsExistData() == false) AttrInit();
 	return attr_data->SetAttrSD(argKey, argValue);
 }
 
 bool fk_Attribute::setAttrSS(const string argKey, const string argValue)
 {
-	if(IsExistData() == false) {
-		attr_data = new fk_Attribute_Data();
-	}
-
+	if(IsExistData() == false) AttrInit();
 	return attr_data->SetAttrSS(argKey, argValue);
 }
 
 int fk_Attribute::getAttrII(const int argKey) const
 {
-	if(IsExistData() == false) {
-		return 0;
-	}
+	if(IsExistData() == false) return 0;
 	return attr_data->GetAttrII(argKey);
 }
 
 double fk_Attribute::getAttrID(const int argKey) const
 {
-	if(IsExistData() == false) {
-		return 0.0;
-	}
+	if(IsExistData() == false) return 0.0;
 	return attr_data->GetAttrID(argKey);
 }
 
 string fk_Attribute::getAttrIS(const int argKey) const
 {
-	if(IsExistData() == false) {
-		return "";
-	}
+	if(IsExistData() == false) return "";
 	return attr_data->GetAttrIS(argKey);
 }
 
 int fk_Attribute::getAttrSI(const string argKey) const
 {
-	if(IsExistData() == false) {
-		return 0;
-	}
+	if(IsExistData() == false) return 0;
 	return attr_data->GetAttrSI(argKey);
 }
 
 double fk_Attribute::getAttrSD(const string argKey) const
 {
-	if(IsExistData() == false) {
-		return 0.0;
-	}
+	if(IsExistData() == false) return 0.0;
 	return attr_data->GetAttrSD(argKey);
 }
 
 string fk_Attribute::getAttrSS(const string argKey) const
 {
-	if(IsExistData() == false) {
-		return "";
-	}
+	if(IsExistData() == false) return "";
 	return attr_data->GetAttrSS(argKey);
 }
 
 bool fk_Attribute::deleteAttrII(const int argKey)
 {
-	if(IsExistData() == false) {
-		return false;
-	}
-
+	if(IsExistData() == false) return false;
 	return attr_data->DeleteAttrII(argKey);
 }
 
 
 bool fk_Attribute::deleteAttrID(const int argKey)
 {
-	if(IsExistData() == false) {
-		return false;
-	}
-
+	if(IsExistData() == false) return false;
 	return attr_data->DeleteAttrID(argKey);
 }
 
 
 bool fk_Attribute::deleteAttrIS(const int argKey)
 {
-	if(IsExistData() == false) {
-		return false;
-	}
-
+	if(IsExistData() == false) return false;
 	return attr_data->DeleteAttrIS(argKey);
 }
 
 
 bool fk_Attribute::deleteAttrSI(const string argKey)
 {
-	if(IsExistData() == false) {
-		return false;
-	}
-
+	if(IsExistData() == false) return false;
 	return attr_data->DeleteAttrSI(argKey);
 }
 
 bool fk_Attribute::deleteAttrSD(const string argKey)
 {
-	if(IsExistData() == false) {
-		return false;
-	}
-
+	if(IsExistData() == false) return false;
 	return attr_data->DeleteAttrSD(argKey);
 }
 
 bool fk_Attribute::deleteAttrSS(const string argKey)
 {
-	if(IsExistData() == false) {
-		return false;
-	}
-
+	if(IsExistData() == false) return false;
 	return attr_data->DeleteAttrSS(argKey);
 }
 

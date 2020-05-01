@@ -62,11 +62,10 @@ fk_D3DXAnimation::fk_D3DXAnimation(void)
 
 fk_D3DXAnimation::~fk_D3DXAnimation()
 {
-	_st		i;
-
-	for(i = 0; i < skinData.size(); i++) delete skinData[i];
-	for(i = 0; i < frameData.size(); i++) delete frameData[i];
-	for(i = 0; i < animData.size(); i++) delete animData[i];
+	//_st i;
+	//for(i = 0; i < skinData.size(); i++) delete skinData[i];
+	//for(i = 0; i < frameData.size(); i++) delete frameData[i];
+	//for(i = 0; i < animData.size(); i++) delete animData[i];
 
 	return;
 }
@@ -80,8 +79,8 @@ void fk_D3DXAnimation::SetTree(fk_Tree *argTree)
 bool fk_D3DXAnimation::GetVector(ifstream &argIFS,
 								 string *argLine, fk_Vector *argVec)
 {
-	string		word;
-	fk_Vector	vec;
+	string word;
+	fk_Vector vec;
 
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	if(IsNumeric(word) == false) return false;
@@ -101,8 +100,8 @@ bool fk_D3DXAnimation::GetVector(ifstream &argIFS,
 bool fk_D3DXAnimation::GetQuaternion(ifstream &argIFS, string *argLine,
 									 fk_Quaternion *argQ)
 {
-	string		word;
-	fk_Vector	vec;
+	string word;
+	fk_Vector vec;
 
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	if(IsNumeric(word) == false) return false;
@@ -125,12 +124,12 @@ bool fk_D3DXAnimation::GetQuaternion(ifstream &argIFS, string *argLine,
 
 bool fk_D3DXAnimation::ReadSkinData(ifstream &argIFS)
 {
-	string				word, lineList;
-	fk_D3DXSkinData		*curSkin;
+	string word, lineList;
+	fk_D3DXSkinData *curSkin;
 	int					i, j;
 
-	curSkin = new fk_D3DXSkinData();
-	skinData.push_back(curSkin);
+	skinData.push_back(make_unique<fk_D3DXSkinData>());
+	curSkin = skinData.back().get();
 
 	word.clear();
 	lineList.clear();
@@ -176,14 +175,13 @@ bool fk_D3DXAnimation::ReadSkinData(ifstream &argIFS)
 
 void fk_D3DXAnimation::MakeNewAnimation(void)
 {
-	animData.push_back(new fk_D3DXFrameAnimation());
+	animData.push_back(make_unique<fk_D3DXFrameAnimation>());
 	return;
 }
 
 bool fk_D3DXAnimation::SetAnimationName(string *argLine)
 {
-	string					word;
-	fk_D3DXFrameAnimation	*cur;
+	string word;
 
 	word = *argLine;
 	while(word.find("{") != string::npos) {
@@ -198,8 +196,7 @@ bool fk_D3DXAnimation::SetAnimationName(string *argLine)
 
 	if(word.empty() == true) return false;
 	if(animData.empty() == true) return false;
-	cur = animData.back();
-	cur->SetName(word);
+	animData.back().get()->SetName(word);
 	return true;
 }
 
@@ -230,13 +227,13 @@ bool fk_D3DXAnimation::ReadAnimationKey(ifstream &argIFS)
 
 bool fk_D3DXAnimation::ReadAnimationRotData(ifstream &argIFS, string *argLine)
 {
-	fk_D3DXFrameAnimation	*cur;
-	string					word;
-	int						i, num;
-	double					key;
-	fk_Quaternion			tmpQ;
+	fk_D3DXFrameAnimation *cur;
+	string word;
+	int i, num;
+	double key;
+	fk_Quaternion quat;
 
-	cur = animData.back();
+	cur = animData.back().get();
 	word.clear();
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	TrimString(&word);
@@ -255,22 +252,22 @@ bool fk_D3DXAnimation::ReadAnimationRotData(ifstream &argIFS, string *argLine)
 		if(IsInteger(word) == false) return false;
 		if(Str2Int(word) != 4) return false;
 
-		if(GetQuaternion(argIFS, argLine, &tmpQ) == false) return false;
+		if(GetQuaternion(argIFS, argLine, &quat) == false) return false;
 
-		cur->SetRotData(i, tmpQ);
+		cur->SetRotData(i, quat);
 	}
 
 	return true;
 }
 
 bool fk_D3DXAnimation::ReadAnimationScaleData(ifstream &argIFS, string *argLine){
-	fk_D3DXFrameAnimation	*cur;
-	string					word;
-	int						i, num;
-	double					key;
-	fk_Vector				tmpV;
+	fk_D3DXFrameAnimation *cur;
+	string word;
+	int i, num;
+	double key;
+	fk_Vector vec;
 
-	cur = animData.back();
+	cur = animData.back().get();
 	word.clear();
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	TrimString(&word);
@@ -289,9 +286,9 @@ bool fk_D3DXAnimation::ReadAnimationScaleData(ifstream &argIFS, string *argLine)
 		if(IsInteger(word) == false) return false;
 		if(Str2Int(word) != 3) return false;
 
-		if(GetVector(argIFS, argLine, &tmpV) == false) return false;
+		if(GetVector(argIFS, argLine, &vec) == false) return false;
 
-		cur->SetScaleData(i, tmpV);
+		cur->SetScaleData(i, vec);
 	}
 
 	return true;
@@ -299,13 +296,13 @@ bool fk_D3DXAnimation::ReadAnimationScaleData(ifstream &argIFS, string *argLine)
 
 bool fk_D3DXAnimation::ReadAnimationTransData(ifstream &argIFS, string *argLine)
 {
-	fk_D3DXFrameAnimation	*cur;
-	string					word;
-	int						i, num;
-	double					key;
-	fk_Vector				tmpV;
+	fk_D3DXFrameAnimation *cur;
+	string word;
+	int i, num;
+	double key;
+	fk_Vector vec;
 
-	cur = animData.back();
+	cur = animData.back().get();
 	word.clear();
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	TrimString(&word);
@@ -325,9 +322,9 @@ bool fk_D3DXAnimation::ReadAnimationTransData(ifstream &argIFS, string *argLine)
 		if(IsInteger(word) == false) return false;
 		if(Str2Int(word) != 3) return false;
 
-		if(GetVector(argIFS, argLine, &tmpV) == false) return false;
+		if(GetVector(argIFS, argLine, &vec) == false) return false;
 
-		cur->SetTransData(i, tmpV);
+		cur->SetTransData(i, vec);
 	}
 
 	return true;
@@ -335,17 +332,17 @@ bool fk_D3DXAnimation::ReadAnimationTransData(ifstream &argIFS, string *argLine)
 
 void fk_D3DXAnimation::MakeAnimationData(void)
 {
-	fk_TreeData				*treeData;
-	fk_D3DXPropertyList		*propList;
-	_st						i;
-	fk_D3DXFrame			*frame;
+	fk_TreeData *treeData;
+	fk_D3DXPropertyList *propList;
+	_st i;
+	fk_D3DXFrame *frame;
 
 	if(tree == nullptr) return;
 
 	for(treeData = tree->foreachData(nullptr); treeData != nullptr;
 		treeData = tree->foreachData(treeData)) {
 
-		propList = (fk_D3DXPropertyList *)treeData->getObject();
+		propList = static_cast<fk_D3DXPropertyList *>(treeData->getObject());
 		if(propList == nullptr) continue;
 
 		if(propList->GetProperty() == "Frame") {
@@ -356,14 +353,14 @@ void fk_D3DXAnimation::MakeAnimationData(void)
 
 		for(i = 0; i < skinData.size(); i++) {
 			if(skinData[i]->GetName() == propList->GetData()) {
-				frame->SetSkin(skinData[i]);
+				frame->SetSkin(skinData[i].get());
 				break;
 			}
 		}
 
 		for(i = 0; i < animData.size(); i++) {
 			if(animData[i]->GetName() == propList->GetData()) {
-				frame->SetAnimation(animData[i]);
+				frame->SetAnimation(animData[i].get());
 				break;
 			}
 		}
@@ -376,14 +373,14 @@ void fk_D3DXAnimation::MakeAnimationData(void)
 
 fk_D3DXFrame * fk_D3DXAnimation::MakeNewFrame(fk_TreeData *argData)
 {
-	fk_D3DXPropertyList		*prop, *parentProp;
-	fk_TreeData				*parentData;
-	fk_D3DXFrame			*frame, *parentFrame;
+	fk_D3DXPropertyList *prop, *parentProp;
+	fk_TreeData *parentData;
+	fk_D3DXFrame *frame, *parentFrame;
 
-	prop = (fk_D3DXPropertyList *)(argData->getObject());
+	prop = static_cast<fk_D3DXPropertyList *>(argData->getObject());
 
-	frame = new fk_D3DXFrame();
-	frameData.push_back(frame);
+	frameData.push_back(make_unique<fk_D3DXFrame>());
+	frame = frameData.back().get();
 
 	frame->SetName(prop->GetData());
 	prop->SetFrame(frame);
@@ -404,11 +401,11 @@ fk_D3DXFrame * fk_D3DXAnimation::MakeNewFrame(fk_TreeData *argData)
 
 void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 {
-	_st					i, j;
-	int					vID;
-	fk_D3DXSkinMap		skinMap;
-	fk_D3DXSkinData		*tmpSkinData;
-	double				weight;
+	_st i, j;
+	int vID;
+	fk_D3DXSkinMap skinMap;
+	fk_D3DXSkinData *tmpSkinData;
+	double weight;
 
 	mapData.resize(_st(argShape->GetOptVSize()));
 
@@ -426,7 +423,7 @@ void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 			weight = tmpSkinData->GetWeight(static_cast<int>(j));
 
 			if(weight > fk_Math::EPS) {
-				skinMap.SetFrame(frameData[i]);
+				skinMap.SetFrame(frameData[i].get());
 				skinMap.SetWeight(weight);
 				mapData[static_cast<_st>(vID)].push_back(skinMap);
 			}
@@ -438,19 +435,19 @@ void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 
 void fk_D3DXAnimation::MakeDummySkinWeights(fk_TreeData *argData, int argVNum)
 {
-	fk_D3DXPropertyList		*prop;
-	fk_D3DXFrame			*frame;
-	fk_D3DXSkinData			*curSkin;
-	int						i;
-	fk_Matrix				offsetMatrix;
+	fk_D3DXPropertyList *prop;
+	fk_D3DXFrame *frame;
+	fk_D3DXSkinData *curSkin;
+	int i;
+	fk_Matrix offsetMatrix;
 
 	prop = static_cast<fk_D3DXPropertyList *>(argData->getObject());
 	if(prop == nullptr) return;
 	frame = prop->GetFrame();
 	if(frame == nullptr) return;
 
-	curSkin = new fk_D3DXSkinData();
-	skinData.push_back(curSkin);
+	skinData.push_back(make_unique<fk_D3DXSkinData>());
+	curSkin = skinData.back().get();
 
 	curSkin->SetName(frame->GetName());
 	curSkin->SetNum(argVNum);
@@ -468,9 +465,7 @@ void fk_D3DXAnimation::MakeDummySkinWeights(fk_TreeData *argData, int argVNum)
 
 void fk_D3DXAnimation::SetTime(double argTime)
 {
-	unsigned int		i;
-
-	for(i = 0; i < frameData.size(); i++) {
+	for(_st i = 0; i < frameData.size(); i++) {
 		frameData[i]->SetTime(argTime);
 	}
 
@@ -479,10 +474,9 @@ void fk_D3DXAnimation::SetTime(double argTime)
 
 fk_FVector fk_D3DXAnimation::GetMovePos(int argID, const fk_FVector &argV)
 {
-	fk_Vector		retV, orgV;
-	fk_D3DXFrame	*frame;
-	_st				i;
-	double			weight;
+	fk_Vector retV, orgV;
+	fk_D3DXFrame *frame;
+	double weight;
 
 	if(argID < 0 || argID >= static_cast<int>(mapData.size())) {
 		return fk_FVector(retV);
@@ -491,9 +485,9 @@ fk_FVector fk_D3DXAnimation::GetMovePos(int argID, const fk_FVector &argV)
 	retV.set(0.0, 0.0, 0.0);
 	orgV = fk_Vector(argV);
 
-	for(i = 0; i < mapData[static_cast<_st>(argID)].size(); i++) {
-		frame = mapData[static_cast<_st>(argID)][i].GetFrame();
-		weight = mapData[static_cast<_st>(argID)][i].GetWeight();
+	for(_st i = 0; i < mapData[_st(argID)].size(); ++i) {
+		frame = mapData[_st(argID)][i].GetFrame();
+		weight = mapData[_st(argID)][i].GetWeight();
 
 		retV += weight * (*(frame->GetTotalMatrix()) * orgV);
 	}
@@ -515,9 +509,6 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 	for(i = 0; i < int(frameData.size()); i++) {
 		frameData.at(_st(i))->SetAnimation(nullptr);
 	}
-	for(i = 0; i < int(animData.size()); i++) {
-		delete animData.at(_st(i));
-	}
 	animData.clear();
 
 	for(i = 0; i < argBVH->getNodeNum(); i++) {
@@ -526,7 +517,7 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 
 		MakeNewAnimation();
 
-		cur = animData.back();
+		cur = animData.back().get();
 
 		cur->SetName(argBVH->getNodeName(i));
 		posSize = argBVH->getPosSize(i);

@@ -58,7 +58,7 @@ namespace FK {
 
 	class fk_TreeData {
 
-		friend class			fk_Tree;
+		friend class fk_Tree;
 
 	public:
 		//! コンストラクタ
@@ -87,7 +87,7 @@ namespace FK {
 		 *
 		 *	\sa getMaxDepth()
 		 */
-		int		getDepth(void);
+		int getDepth(void);
 
 		//! 枝深さ参照関数
 		/*!
@@ -98,7 +98,7 @@ namespace FK {
 		 *
 		 *	\sa getDepth()
 		 */
-		int		getMaxDepth(void);
+		int getMaxDepth(void);
 
 		//! 子ノード逐次参照関数
 		/*!
@@ -129,7 +129,7 @@ namespace FK {
 		 *
 		 *	\sa getParent(), getPrev(), getNext(), getChildrenSize()
 		 */
-		fk_TreeData *	getChild(fk_TreeData *node);
+		fk_TreeData * getChild(fk_TreeData *node);
 	
 		//! 親ノード参照関数
 		/*!
@@ -140,7 +140,7 @@ namespace FK {
 		 *
 		 *	\sa getChild(), getChildrenSize()
 		 */
-		fk_TreeData *	getParent(void);
+		fk_TreeData * getParent(void);
 
 		//! 後ノード参照関数
 		/*!
@@ -152,7 +152,7 @@ namespace FK {
 		 *
 		 *	\sa getChild(), getParent(), getPrev(), getOrder(), getChildrenSize()
 		 */
-		fk_TreeData *	getNext(void);
+		fk_TreeData * getNext(void);
 
 		//! 前ノード参照関数
 		/*!
@@ -164,7 +164,7 @@ namespace FK {
 		 *
 		 *	\sa getChild(), getParent(), getNext(), getOrder(), getChildrenSize()
 		 */
-		fk_TreeData *	getPrev(void);
+		fk_TreeData * getPrev(void);
 
 		//! 順位参照関数
 		/*!
@@ -175,7 +175,7 @@ namespace FK {
 		 *
 		 *	\sa getNext(), getPrev(), getChildrenSize()
 		 */
-		int		getOrder(void);
+		int getOrder(void);
 
 		//! 子ノード個数参照関数
 		/*!
@@ -185,7 +185,7 @@ namespace FK {
 		 *
 		 *	\sa getParent(), getChild(), getOrder()
 		 */
-		int		getChildrenSize(void);
+		int getChildrenSize(void);
 
 		//! 名称参照関数
 		/*!
@@ -195,7 +195,7 @@ namespace FK {
 		 *
 		 *	\sa setObject(), getObject()
 		 */
-		std::string		getName(void);
+		std::string getName(void);
 
 		// ユーザデータの挿入 (デストラクタで同時に消去されたくない場合は,
 		// 後ろの引数で false を選択)
@@ -224,8 +224,7 @@ namespace FK {
 		 *
 		 *	\sa fk_TreeBaseObject, getName(), getObject()
 		 */
-		void	setObject(fk_TreeBaseObject *object,
-						  bool deleteFlg = true);
+		void setObject(fk_TreeBaseObject *object, bool deleteFlg = true);
 
 		//! ユーザデータ参照関数
 		/*!
@@ -236,24 +235,24 @@ namespace FK {
 		 *
 		 *	\sa fk_TreeBaseObject, setObject(), getName()
 		 */
-		fk_TreeBaseObject *		getObject(void);
+		fk_TreeBaseObject * getObject(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void					Print(void);
+		void Print(void);
 #endif
 
 	private:
-		fk_TreeBaseObject		*object;
-		fk_Tree					*base;
-		std::string				name;
-		fk_TreeData				*parent;
-		fk_TList				children;
-		int						depth, maxDepth;
-		bool					deleteFlg;
+		fk_TreeBaseObject *object;
+		fk_Tree *base;
+		std::string name;
+		fk_TreeData *parent;
+		fk_TList children;
+		int depth, maxDepth;
+		bool deleteFlg;
 
-		void					_calcMaxDepth(void);
-		void					_addChild(fk_TreeData *);
-		void					_clearChild(fk_TreeData *);
+		void _calcMaxDepth(void);
+		void _addChild(fk_TreeData *);
+		void _clearChild(fk_TreeData *);
 	};
 
 	//! 木構造用データベースクラス
@@ -355,9 +354,7 @@ namespace FK {
 		 *		新たなノードとなる fk_TreeData 型インスタンスを生成し、
 		 *		それを返すようにして下さい。
 		 */
-		virtual fk_TreeData *	makeNewData(fk_Tree *tree,
-											const std::string name,
-											fk_TreeData *parent);
+		virtual fk_TreeData * makeNewData(fk_Tree *tree, const std::string name, fk_TreeData *parent);
 
 	public:
 		//! コンストラクタ
@@ -379,7 +376,7 @@ namespace FK {
 		 *
 		 *	\return		根ノードインスタンス
 		 */
-		fk_TreeData *	getRoot(void);
+		fk_TreeData * getRoot(void);
 
 		//!	初期化関数
 		/*!
@@ -390,7 +387,7 @@ namespace FK {
 		 *
 		 *	\sa deleteBranch()
 		 */
-		void	clear(const std::string name);
+		void clear(const std::string name);
 
 		//! 新規ノード生成関数
 		/*!
@@ -403,8 +400,7 @@ namespace FK {
 		 *
 		 *	\return		新ノードのインスタンス
 		 */
-		fk_TreeData *	addNewChild(fk_TreeData *parent,
-									const std::string name);
+		fk_TreeData * addNewChild(fk_TreeData *parent, const std::string name);
 
 		//! ノードおよびその下の枝の消去関数
 		/*!
@@ -424,7 +420,7 @@ namespace FK {
 		 *
 		 *	\sa clear(), clearChildren()
 		 */
-		bool	deleteBranch(fk_TreeData *node);
+		bool deleteBranch(fk_TreeData *node);
 
 		//! 子ノードおよびその下の枝の消去関数
 		/*!
@@ -443,7 +439,7 @@ namespace FK {
 		 *
 		 *	\sa clear(), deleteBranch()
 		 */
-		bool	clearChildren(fk_TreeData *node);
+		bool clearChildren(fk_TreeData *node);
 
 		//! 単一ノード複製関数
 		/*!
@@ -471,8 +467,7 @@ namespace FK {
 		 *
 		 *	\sa cloneBranch(), moveBranch()
 		 */
-		fk_TreeData *	cloneOneData(fk_TreeData *parent,
-									 fk_TreeData *node);
+		fk_TreeData * cloneOneData(fk_TreeData *parent, fk_TreeData *node);
 
 		//! 枝複製関数
 		/*!
@@ -499,8 +494,7 @@ namespace FK {
 		 *
 		 *	\sa cloneOneData(), moveBranch()
 		 */
-		fk_TreeData *	cloneBranch(fk_TreeData *parent,
-									fk_TreeData *node);
+		fk_TreeData * cloneBranch(fk_TreeData *parent, fk_TreeData *node);
 
 		//! 枝移動関数
 		/*!
@@ -529,7 +523,7 @@ namespace FK {
 		 *
 		 *	\sa cloneOneData(), cloneBranch()
 		 */
-		bool	moveBranch(fk_TreeData *parent, fk_TreeData *node);
+		bool moveBranch(fk_TreeData *parent, fk_TreeData *node);
 
 		//! 順位前進関数
 		/*!
@@ -546,7 +540,7 @@ namespace FK {
 		 *
 		 *	\sa toBack()
 		 */
-		void	toFront(int n, fk_TreeData *node);
+		void toFront(int n, fk_TreeData *node);
 
 		//! 順位後退関数
 		/*!
@@ -563,7 +557,7 @@ namespace FK {
 		 *
 		 *	\sa toFront()
 		 */
-		void	toBack(int n, fk_TreeData *node);
+		void toBack(int n, fk_TreeData *node);
 
 		// d が該当の木の中で生存するデータかどうか判定
 
@@ -576,7 +570,7 @@ namespace FK {
 		 *	\return
 		 *		データ内に存在していれば true を、していなければ false を返します。
 		 */
-		bool	isArive(fk_TreeData *node);
+		bool isArive(fk_TreeData *node);
 
 		// nという名前のデータを検索
 		//! ノード検索関数
@@ -591,7 +585,7 @@ namespace FK {
 		 *		見つかれば、そのインスタンスを返します。
 		 *		データ内に存在していなかった場合は nullptr を返します。
 		 */
-		fk_TreeData *	findData(const std::string name);
+		fk_TreeData * findData(const std::string name);
 
 		//! 逐次ノード参照関数
 		/*!
@@ -619,21 +613,21 @@ namespace FK {
 		 *		引数の次に生成されたノードインスタンスを返します。
 		 *		引数のノードが最後に生成されたインスタンスであった場合は nullptr を返します。
 		 */
-		fk_TreeData *	foreachData(fk_TreeData *node);
+		fk_TreeData * foreachData(fk_TreeData *node);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	Print(void);
+		void Print(void);
 #endif
 
 	private:
-		fk_TList		_treeData;
-		fk_TreeData		*_root;
+		fk_TList _treeData;
+		fk_TreeData *_root;
 
-		void			_clear(void);
-		void			_makeRoot(const std::string);
-		void			_clearData(fk_TreeData *);
-		fk_TreeData *	_simpleClone(fk_TreeData *, fk_TreeData *);
-		int				_setDepth(fk_TreeData *, int);
+		void _clear(void);
+		void _makeRoot(const std::string);
+		void _clearData(fk_TreeData *);
+		fk_TreeData * _simpleClone(fk_TreeData *, fk_TreeData *);
+		int _setDepth(fk_TreeData *, int);
 	};
 }
 

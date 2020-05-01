@@ -20,33 +20,33 @@ namespace FK {
 		fk_D3DXShapeParser(void);
 		virtual ~fk_D3DXShapeParser();
 
-		bool			SetFrameMatrix(fk_TreeData *);
-		bool			ReadMeshData(fk_TreeData *, std::ifstream &);
-		bool			ReadVectorData(std::ifstream &, fk_D3DX_VecMode);
-		bool			ReadMaterialData(std::ifstream &);
-		bool			GetVector(std::ifstream &, std::string *, fk_Vector *);
-		bool			GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
-		bool			ReadFaceData(std::ifstream &);
+		bool SetFrameMatrix(fk_TreeData *);
+		bool ReadMeshData(fk_TreeData *, std::ifstream &);
+		bool ReadVectorData(std::ifstream &, fk_D3DX_VecMode);
+		bool ReadMaterialData(std::ifstream &);
+		bool GetVector(std::ifstream &, std::string *, fk_Vector *);
+		bool GetTexCoord(std::ifstream &, std::string *, fk_TexCoord *);
+		bool ReadFaceData(std::ifstream &);
 
-		void			SetIFSTexCoord(fk_IFSTexture *);
-		void			SetQuadFace(int);
-		void			OptimizeData(int);
-		bool			MakeMesh(fk_ParserData *, bool);
+		void SetIFSTexCoord(fk_IFSTexture *);
+		void SetQuadFace(int);
+		void OptimizeData(int);
+		bool MakeMesh(fk_ParserData *, bool);
 
-		int				GetOrgVSize(void);
-		int				GetOptVSize(void);
-		int				GetVMap(int);
+		int GetOrgVSize(void);
+		int GetOptVSize(void);
+		int GetVMap(int);
 
-		void			Clear(void);
-		void			Print(void);
+		void Clear(void);
+		void Print(void);
 
 	private:
-		std::vector<fk_Vector>				vData, optVData;
-		std::vector< std::vector<int> >		fData, optFData;
-		std::vector<fk_TexCoord>			tData, optTData;
-		std::vector<int>					mData;
-		std::vector<int>					vMapData;
-		fk_Matrix							frameMatrix;
+		std::vector<fk_Vector> vData, optVData;
+		std::vector<std::vector<int>> fData, optFData;
+		std::vector<fk_TexCoord> tData, optTData;
+		std::vector<int> mData;
+		std::vector<int> vMapData;
+		std::unique_ptr<fk_Matrix> frameMatrix;
 	};
 }
 

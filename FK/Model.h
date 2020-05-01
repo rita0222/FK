@@ -2157,59 +2157,59 @@ namespace FK {
 #endif
 
 	private:
-		fk_Material			material;
-		fk_Color			pointColor;
-		fk_Color			lineColor;
-		fk_Color			curveColor;
-		fk_Shape			*shape;
-		fk_Model			*parentModel;
-		fk_TreeData			*treeData;
-		fk_Draw				drawMode;
-		fk_ElementMode		elemMode;
-		fk_BlendMode		blendMode;
-		fk_BlendFactor		srcFactor;
-		fk_BlendFactor		dstFactor;
-		fk_DepthMode		depthMode;
-		double				pointSize;
-		bool				smoothFlag;
-		bool				reverseFlag;
-		bool				treeFlag;
-		unsigned int		_modelID;
-		bool				treeDelMode;
-		fk_TexMode			texMode;
-		fk_ShadingMode		shadingMode;
+		fk_Material material;
+		fk_Color pointColor;
+		fk_Color lineColor;
+		fk_Color curveColor;
+		fk_Shape *shape;
+		fk_Model *parentModel;
+		fk_TreeData *treeData;
+		fk_Draw drawMode;
+		fk_ElementMode elemMode;
+		fk_BlendMode blendMode;
+		fk_BlendFactor srcFactor;
+		fk_BlendFactor dstFactor;
+		fk_DepthMode depthMode;
+		double pointSize;
+		bool smoothFlag;
+		bool reverseFlag;
+		bool treeFlag;
+		unsigned int _modelID;
+		bool treeDelMode;
+		fk_TexMode texMode;
+		fk_ShadingMode shadingMode;
 
-		fk_HVector			*snapPos;
-		fk_HVector			*snapInhPos;
-		fk_Angle			*snapAngle;
-		bool				snapFlag;
+		fk_HVector *snapPos;
+		fk_HVector *snapInhPos;
+		fk_Angle *snapAngle;
+		bool snapFlag;
 
-		bool				interMode;
-		bool				interStatus;
-		bool				interStopMode;
+		bool interMode;
+		bool interStatus;
+		bool interStopMode;
 
-		std::list<fk_Model *>	interList;
+		std::list<fk_Model *> interList;
 
-		fk_ShaderBinder		*shader;
+		fk_ShaderBinder *shader;
 
-		bool				shadowEffectMode;
-		bool				shadowDrawMode;
+		bool shadowEffectMode;
+		bool shadowDrawMode;
 
-		bool				fogMode;
+		bool fogMode;
 
-		void				EntryTree(void);
-		void				DeleteTree(void);
-		fk_TreeData *		GetTreeData(fk_Model *);
+		void EntryTree(void);
+		void DeleteTree(void);
+		fk_TreeData * GetTreeData(fk_Model *);
 
-		bool				IsBSInter(fk_Model *);
-		bool				IsAABBInter(fk_Model *);
-		bool				IsOBBInter(fk_Model *);
-		bool				IsCapsuleInter(fk_Model *);
+		bool IsBSInter(fk_Model *);
+		bool IsAABBInter(fk_Model *);
+		bool IsOBBInter(fk_Model *);
+		bool IsCapsuleInter(fk_Model *);
 
-		void				PreMove(void);
-		void				PostMove(void);
+		void PreMove(void);
+		void PostMove(void);
 
-		static fk_Tree		_modelTree;
+		static fk_Tree _modelTree;
 	};
 }
 
