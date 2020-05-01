@@ -15,14 +15,13 @@ using namespace std;
 using namespace FK;
 
 fk_PointDraw::fk_PointDraw(void) :
-	pointShader(_st(VS_NUM) * _st(FS_NUM) * _st(FOG_NUM), nullptr)
+	pointShader(_st(VS_NUM) * _st(FS_NUM) * _st(FOG_NUM))
 {
 	return;
 }
 
 fk_PointDraw::~fk_PointDraw()
 {
-	for (auto s : pointShader) delete s;
 	return;
 }
 
@@ -48,7 +47,7 @@ fk_ShaderBinder * fk_PointDraw::GetShader(
 	_st index = _st(argVID) * FS_NUM * FOG_NUM +
 		_st(argFID) * FOG_NUM + _st(argFogMode);
 
-	return pointShader[index];
+	return pointShader[index].get();
 }
 
 fk_ShaderBinder * fk_PointDraw::MakeShader(
@@ -57,9 +56,8 @@ fk_ShaderBinder * fk_PointDraw::MakeShader(
 	_st index = _st(argVID) * FS_NUM * FOG_NUM +
 		_st(argFID) * FOG_NUM + _st(argFogMode);
 
-	delete pointShader[index];
-	pointShader[index] = new fk_ShaderBinder();
-	return pointShader[index];
+	pointShader[index] = make_unique<fk_ShaderBinder>();
+	return pointShader[index].get();
 }
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape,

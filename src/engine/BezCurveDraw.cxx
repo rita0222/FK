@@ -8,7 +8,7 @@ using namespace std;
 using namespace FK;
 
 fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode) :
-	curveShader(C_DRAW_NUM * C_DEG_NUM * C_SHADOW_NUM * FOG_NUM, nullptr),
+	curveShader(C_DRAW_NUM * C_DEG_NUM * C_SHADOW_NUM * FOG_NUM),
 	mode(argMode)
 {
 	return;
@@ -16,7 +16,6 @@ fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode) :
 
 fk_BezCurveDraw::~fk_BezCurveDraw()
 {
-	for (auto s : curveShader) delete s;
 	return;
 }
 
@@ -32,7 +31,7 @@ fk_ShaderBinder *fk_BezCurveDraw::GetShader(
 		_st(argShadow) * FOG_NUM +
 		_st(argFog);
 
-	return curveShader[index];
+	return curveShader[index].get();
 }
 
 fk_ShaderBinder * fk_BezCurveDraw::MakeShader(
@@ -47,9 +46,8 @@ fk_ShaderBinder * fk_BezCurveDraw::MakeShader(
 		_st(argShadow) * FOG_NUM +
 		_st(argFog);
 
-	delete curveShader[index];
-	curveShader[index] = new fk_ShaderBinder();
-	return curveShader[index];
+	curveShader[index] = make_unique<fk_ShaderBinder>();
+	return curveShader[index].get();
 }
 
 bool fk_BezCurveDraw::AllTest(void)

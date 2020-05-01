@@ -17,7 +17,8 @@ namespace FK {
 		bool AllTest(void);
 
 	private:
-        std::vector<fk_ShaderBinder *> lineShader; // [VS_NUM] [FS_NUM] [FOG_NUM] ;
+		// [VS_NUM] [FS_NUM] [FOG_NUM] ;
+        std::vector<std::unique_ptr<fk_ShaderBinder>> lineShader; 
 
 		void DefaultShaderSetup(fk_Model *, fk_FogMode);
 		bool ShaderInit(fk_DrawVS, fk_DrawFS, fk_FogMode);

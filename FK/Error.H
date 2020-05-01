@@ -67,11 +67,11 @@ namespace FK {
 		class DataBase {
 
 		private:
-			std::list<Data *> _DB;
+			std::list<std::unique_ptr<Data>> _DB;
 			Mode mode;
 			bool fileMode;
 			std::ofstream ofs;
-			Browser *errorBrowser;
+			std::unique_ptr<Browser> errorBrowser;
 
 		public:
 			DataBase(void);

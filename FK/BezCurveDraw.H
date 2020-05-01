@@ -48,7 +48,8 @@ namespace FK {
 		static constexpr int C_DEG_NUM = int(fk_CurveDrawDeg::NUM);
 		static constexpr int C_SHADOW_NUM = int(fk_CurveShadowType::NUM);
 
-        std::vector<fk_ShaderBinder *> curveShader; // [C_DRAW_NUM] [C_DEG_NUM] [C_SHADOW_NUM] [FOG_NUM] ;
+		// [C_DRAW_NUM] [C_DEG_NUM] [C_SHADOW_NUM] [FOG_NUM] ;
+        std::vector<std::unique_ptr<fk_ShaderBinder>> curveShader;
 		fk_CurveDrawMode mode;
 		void DefaultShaderSetup(fk_Type, int, bool, fk_FogMode);
 		bool ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType, fk_FogMode);

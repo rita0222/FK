@@ -10,6 +10,8 @@
 
 #include <FK/IDAdmin.H>
 #include <FK/Vector.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 
 struct OggVorbis_File;
 
@@ -42,6 +44,25 @@ namespace FK {
 
 	class fk_AudioBase {
 
+		class Data {
+		public:
+			double refDist;
+			fk_Vector sourcePos;
+			double gain;
+			bool startStatus, endStatus;
+			double loopStartTime, loopEndTime;
+			int format;
+			int rate;
+			bool loopMode;
+			unsigned int queueSize;
+			int source_id;
+			unsigned int source;
+			bool surround;
+			fk_Model *ref_model;
+
+			Data(void);
+		};
+		
 	public:
 		static const unsigned int BUFSIZE = 4096;
 		static const unsigned int DEFAULT_QUEUE_SIZE = 64;
@@ -69,7 +90,7 @@ namespace FK {
 		 *	\sa	fk_AudioStream::open(), fk_AudioOggBuffer::open(),
 		 *		fk_AudioWavBuffer::open()
 		 */
-		virtual bool	open(const std::string &name) = 0;
+		virtual bool open(const std::string &name) = 0;
 
 		//! 再生開始可能状態取得関数
 		/*!
@@ -83,7 +104,7 @@ namespace FK {
 		 *		再生可能状態であれば true を、
 		 *		まだ再生の準備ができていない状態であれば false を返します。
 		 */
-		virtual bool	ready(void) = 0;
+		virtual bool ready(void) = 0;
 
 		//! 再生関数
 		/*!
@@ -95,7 +116,7 @@ namespace FK {
 		 *		音声再生が完了していない場合は true を、
 		 *		完了している場合 false を返します。
 		 */
-		virtual bool	play(void) = 0;
+		virtual bool play(void) = 0;
 
 		//! 再生位置取得関数
 		/*!
@@ -108,7 +129,7 @@ namespace FK {
 		 *
 		 *	\sa seek()
 		 */
-		virtual double	tell(void) = 0;
+		virtual double tell(void) = 0;
 
 		//! 再生位置頭出し関数
 		/*!
@@ -118,7 +139,7 @@ namespace FK {
 		 *
 		 *	\sa tell()
 		 */
-		virtual void	seek(double time) = 0;
+		virtual void seek(double time) = 0;
 
 		//! 停止関数
 		/*!
@@ -129,7 +150,7 @@ namespace FK {
 		 *
 		 *	\sa pause()
 		 */
-		virtual void	stop(void) = 0;
+		virtual void stop(void) = 0;
 
 		//! オーディオデータ解放関数
 		/*!
@@ -137,7 +158,7 @@ namespace FK {
 		 *
 		 *	\sa open(), stop(), pause()
 		 */
-		virtual void	end(void) = 0;
+		virtual void end(void) = 0;
 
 		//! ポーズ関数
 		/*!
@@ -149,7 +170,7 @@ namespace FK {
 		 *
 		 *	\sa play(), stop(), end()
 		 */
-		void			pause(void);
+		void pause(void);
 
 		///@}
 
@@ -165,7 +186,7 @@ namespace FK {
 		 *		0 未満または 1 を超過する値が指定された場合は、
 		 *		音量の変化を行いません。
 		 */
-		void	setGain(double gain);
+		void setGain(double gain);
 
 		//! 音量取得関数
 		/*!
@@ -174,7 +195,7 @@ namespace FK {
 		 *	\return
 		 *		現在の音量値を返します。無音で0、最大音量で1となります。
 		 */
-		double	getGain(void);
+		double getGain(void);
 
 		///@}
 
@@ -189,7 +210,7 @@ namespace FK {
 		 *	\param[in]	size
 		 *		キューバッファのサイズ。
 		 */
-		void	setQueueSize(int size);
+		void setQueueSize(int size);
 
 		//! キューバッファサイズ取得関数
 		/*!
@@ -198,7 +219,7 @@ namespace FK {
 		 *	\return
 		 *		キューバッファのサイズ。
 		 */
-		int		getQueueSize(void);
+		int getQueueSize(void);
 		///@}
 
 		//! \name ループ再生制御関数
@@ -221,7 +242,7 @@ namespace FK {
 		 *	
 		 *	\sa play(), setLoopArea()
 		 */
-		void	setLoopMode(bool mode);
+		void setLoopMode(bool mode);
 
 		//! ループモード取得関数
 		/*!
@@ -233,7 +254,7 @@ namespace FK {
 		 *	
 		 *	\sa setLoopMode()
 		 */
-		bool	getLoopMode(void);
+		bool getLoopMode(void);
 
 		//! ループエリア設定関数
 		/*!
@@ -247,7 +268,7 @@ namespace FK {
 		 *
 		 *	\sa setLoopMode(), play(), seek(), tell()
 		 */
-		void	setLoopArea(double start, double end);
+		void setLoopArea(double start, double end);
 
 		//! ループ開始点取得関数
 		/*!
@@ -257,7 +278,7 @@ namespace FK {
 		 *
 		 *	\sa setLoopMode(), setLoopArea(), getLoopEndTime()
 		 */
-		double	getLoopStartTime(void);
+		double getLoopStartTime(void);
 
 		//! ループ終了点取得関数
 		/*!
@@ -267,7 +288,7 @@ namespace FK {
 		 *
 		 *	\sa setLoopMode(), setLoopArea(), getLoopStartTime()
 		 */
-		double	getLoopEndTime(void);
+		double getLoopEndTime(void);
 
 		///@}
 
@@ -285,7 +306,7 @@ namespace FK {
 		 *
 		 *	\sa getPosition(), setModel(fk_Model *), setModel(fk_Model &)
 		 */
-		void			setPosition(const fk_Vector &pos);
+		void setPosition(const fk_Vector &pos);
 
 		//! サラウンド音源座標取得関数
 		/*!
@@ -295,7 +316,7 @@ namespace FK {
 		 *
 		 *	\sa setPosition(), setModel(fk_Model *), setModel(fk_Model &)
 		 */
-		fk_Vector		getPosition(void);
+		fk_Vector getPosition(void);
 
 		//! サラウンド音源同期モデル設定関数1
 		/*!
@@ -310,7 +331,7 @@ namespace FK {
 		 *	\sa setPosition(), getPosition(), getModel(),
 		 *		setListenerModel(fk_Model *), setListenerModel(fk_Model &)
 		 */
-		void			setModel(fk_Model *model);
+		void setModel(fk_Model *model);
 
 		//! サラウンド音源同期モデル設定関数2
 		/*!
@@ -324,7 +345,7 @@ namespace FK {
 		 *	\sa setPosition(), getPosition(), getModel(),
 		 *		setListenerModel(fk_Model *), setListenerModel(fk_Model &)
 		 */
-		void			setModel(fk_Model &model);
+		void setModel(fk_Model &model);
 
 		//! サラウンド音源同期モデル取得関数
 		/*!
@@ -334,7 +355,7 @@ namespace FK {
 		 *		音源位置同期モデルのポインタ。
 		 *		同期モデルが設定されていなかった場合は nullptr を返します。
 		 */
-		fk_Model *		getModel(void);
+		fk_Model * getModel(void);
 
 		//! サラウンド音源有効距離設定関数
 		/*!
@@ -347,7 +368,7 @@ namespace FK {
 		 *
 		 *	\sa getReferenceDist()
 		 */
-		void			setReferenceDist(double dist);
+		void setReferenceDist(double dist);
 
 		//! サラウンド音源座有効距離取得関数
 		/*!
@@ -358,7 +379,7 @@ namespace FK {
 		 *
 		 *	\sa setReferenceDist()
 		 */
-		double			getReferenceDist(void);
+		double getReferenceDist(void);
 
 		//! サラウンド効果状態設定関数
 		/*!
@@ -374,7 +395,7 @@ namespace FK {
 		 *
 		 *	\sa getSurroundMode()
 		 */
-		void			setSurroundMode(bool mode);
+		void setSurroundMode(bool mode);
 
 		//! サラウンド効果状態取得関数
 		/*!
@@ -385,7 +406,7 @@ namespace FK {
 		 *
 		 *	\sa setSurroundMode()
 		 */
-		bool			getSurroundMode(void);
+		bool getSurroundMode(void);
 
 		///@}
 
@@ -401,7 +422,7 @@ namespace FK {
 		 *
 		 *	\sa getInit()
 		 */
-		static bool		init(void);
+		static bool init(void);
 
 		//! オーディオシステム初期化状態取得関数
 		/*!
@@ -413,7 +434,7 @@ namespace FK {
 		 *
 		 *	\sa init()
 		 */
-		static bool		getInit(void);
+		static bool getInit(void);
 
 		//! プロセススリープ関数
 		/*!
@@ -436,7 +457,7 @@ namespace FK {
 		 *
 		 *	\sa stop(), end()
 		 */
-		static void		sleep(double time);
+		static void sleep(double time);
 
 		///@}
 
@@ -461,7 +482,7 @@ namespace FK {
 		 *
 		 *	\sa setPosition(), setModel()
 		 */
-		static void			setListenerModel(fk_Model *model);
+		static void setListenerModel(fk_Model *model);
 
 		//! サラウンドリスナー同期モデル設定関数2
 		/*!
@@ -481,7 +502,7 @@ namespace FK {
 		 *
 		 *	\sa setPosition(), setModel()
 		 */
-		static void			setListenerModel(fk_Model &model);
+		static void setListenerModel(fk_Model &model);
 
 		//! サラウンドリスナーモデル取得関数
 		/*!
@@ -492,7 +513,7 @@ namespace FK {
 		 *
 		 *	\sa setListenerModel(fk_Model *), setListenerModel(fk_Model &)
 		 */
-		static fk_Model *	getListenerModel(void);
+		static fk_Model * getListenerModel(void);
 
 		///@}
 
@@ -500,28 +521,21 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		double				refDist;
-		fk_Vector			sourcePos;
-		double				gain;
-		static fk_Model		*listenerCamera;
+		static bool initStatus;
+		static ALCcontext *alContext;
+		static std::unique_ptr<fk_IDAdmin> admin;
+		static int sourceNum;
+		static fk_Model *listenerCamera;
 
-		bool			startStatus, endStatus;
-		double			loopStartTime, loopEndTime;
-		int				format;
-		int				rate;
-		bool			loopMode;
-		unsigned int	queueSize;
-		int				source_id;
-		unsigned int	source;
+		std::unique_ptr<Data> data;
 
-		bool			surround;
-		fk_Model		*ref_model;
+		void CreateID(void);
+		void EraseID(void);
+		void MakeOVInfo(OggVorbis_File *);
 
-		void			CreateID(void);
-		void			EraseID(void);
-		void			MakeOVInfo(OggVorbis_File *);
-
-		static void		UpdateListener(void);
+		static void UpdateListener(void);
+		static bool ALInit(void);
+		static bool ALExit(void);
 
 #endif // !FK_DOXYGEN_USER_PROCESS
 	};
@@ -553,6 +567,18 @@ namespace FK {
 
 	class fk_AudioStream : public fk_AudioBase {
 
+		class StreamData {
+		public:
+			bool ovOpenStatus;
+			int current;
+			std::vector<char> buffer;
+			double nowTime;
+			std::unique_ptr<OggVorbis_File> vf;
+
+			StreamData(void);
+		};
+			
+
 	public:
 
 		//! コンストラクタ
@@ -575,7 +601,7 @@ namespace FK {
 		 *		入力に成功すれば true を、
 		 *		失敗すれば false を返します。
 		 */
-		bool			open(const std::string &filename);
+		bool open(const std::string &filename);
 
 		//! 再生開始可能状態取得関数
 		/*!
@@ -589,7 +615,7 @@ namespace FK {
 		 *		再生可能状態であれば true を、
 		 *		まだ再生の準備ができていない状態であれば false を返します。
 		 */
-		bool			ready(void);
+		bool ready(void);
 
 		//! 再生関数
 		/*!
@@ -602,7 +628,7 @@ namespace FK {
 		 *		音声再生が完了していない場合は true を、
 		 *		完了している場合 false を返します。
 		 */
-		bool			play(void);
+		bool play(void);
 
 		//! 再生位置取得関数
 		/*!
@@ -615,7 +641,7 @@ namespace FK {
 		 *
 		 *	\sa seek()
 		 */
-		double			tell(void);
+		double tell(void);
 
 		//! 再生位置頭出し関数
 		/*!
@@ -625,7 +651,7 @@ namespace FK {
 		 *
 		 *	\sa tell()
 		 */
-		void			seek(double time);
+		void seek(double time);
 
 		//! 停止関数
 		/*!
@@ -636,7 +662,7 @@ namespace FK {
 		 *
 		 *	\sa fk_AudioBase::pause()
 		 */
-		void			stop(void);
+		void stop(void);
 
 		//! オーディオデータ解放関数
 		/*!
@@ -644,18 +670,14 @@ namespace FK {
 		 *
 		 *	\sa open(), stop(), fk_AudioBase::pause()
 		 */
-		void			end(void);
+		void end(void);
 
 	private:
-		OggVorbis_File	*vf;
-		bool			ovOpenStatus;
-		int				current;
-		std::vector<char>	buffer;
-		double			nowTime;
+		std::unique_ptr<StreamData> stData;
 
-		void			StartQueue(bool);
-		bool			PlayStream(void);
-		void			UnQueue(bool);
+		void StartQueue(bool);
+		bool PlayStream(void);
+		void UnQueue(bool);
 
 	};
 
@@ -688,6 +710,16 @@ namespace FK {
 	 */
 	class fk_AudioOggBuffer : public fk_AudioBase {
 
+		class BufData {
+		public:
+			unsigned int current, length;
+			std::vector<char> buffer;
+			std::vector<int> chunkSize;
+			std::vector<double> chunkTime;
+
+			BufData(void);
+		};
+
 	public:
 
 		//! コンストラクタ
@@ -710,7 +742,7 @@ namespace FK {
 		 *		入力に成功すれば true を、
 		 *		失敗すれば false を返します。
 		 */
-		bool			open(const std::string &filename);
+		bool open(const std::string &filename);
 
 		//! 再生開始可能状態取得関数
 		/*!
@@ -724,7 +756,7 @@ namespace FK {
 		 *		再生可能状態であれば true を、
 		 *		まだ再生の準備ができていない状態であれば false を返します。
 		 */
-		bool			ready(void);
+		bool ready(void);
 
 		//! 再生関数
 		/*!
@@ -737,7 +769,7 @@ namespace FK {
 		 *		音声再生が完了していない場合は true を、
 		 *		完了している場合 false を返します。
 		 */
-		bool			play(void);
+		bool play(void);
 
 		//! 再生位置取得関数
 		/*!
@@ -750,7 +782,7 @@ namespace FK {
 		 *
 		 *	\sa seek()
 		 */
-		double			tell(void);
+		double tell(void);
 
 		//! 再生位置頭出し関数
 		/*!
@@ -760,7 +792,7 @@ namespace FK {
 		 *
 		 *	\sa tell()
 		 */
-		void			seek(double time);
+		void seek(double time);
 
 		//! 停止関数
 		/*!
@@ -771,7 +803,7 @@ namespace FK {
 		 *
 		 *	\sa fk_AudioBase::pause()
 		 */
-		void			stop(void);
+		void stop(void);
 
 		//! オーディオデータ解放関数
 		/*!
@@ -779,22 +811,16 @@ namespace FK {
 		 *
 		 *	\sa open(), stop(), fk_AudioBase::pause()
 		 */
-		void			end(void);
+		void end(void);
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-
-		unsigned int			current, length;
-		std::vector<char>		buffer;
-		std::vector<int>		chunkSize;
-		std::vector<double>		chunkTime;
-
-
-		void			ReadBuffer(OggVorbis_File *);
-		void			StartQueue(bool);
-		bool			PlayBuffer(void);
-		void			UnQueue(bool);
+		std::unique_ptr<BufData> bufData;
+		void ReadBuffer(OggVorbis_File *);
+		void StartQueue(bool);
+		bool PlayBuffer(void);
+		void UnQueue(bool);
 
 #endif // !FK_DOXYGEN_USER_PROCESS
 

@@ -7,7 +7,7 @@ using namespace FK;
 
 fk_Renderer::fk_Renderer(int argW, int argH)
 {
-	engine = new fk_GraphicsEngine(false);
+	engine = make_unique<fk_GraphicsEngine>(false);
 	engine->Init(argW, argH);
 	engine->OpenGLInit();
 	engine->InitFrameBufferMode();
@@ -17,7 +17,7 @@ fk_Renderer::fk_Renderer(int argW, int argH)
 
 fk_Renderer::~fk_Renderer()
 {
-	delete engine;
+	return;
 }
 
 void fk_Renderer::setScene(fk_Scene *argScene)

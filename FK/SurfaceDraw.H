@@ -32,15 +32,8 @@ namespace FK {
 	private:
 		static constexpr int S_DRAW_NUM = int(fk_SurfaceDrawType::NUM);
 
-        std::vector<fk_ShaderBinder *> surfShader; // [MODE][TYPE][FOG][SHADOW]
-        std::vector<fk_ShaderBinder *> surfShadowShader; // [TYPE]
-
-        /*
-        std::vector<fk_ShaderBinder *> lineShader; // [S_DRAW_NUM] [FOG_NUM] ;
-        std::vector<fk_ShaderBinder *> pointShader; // [S_DRAW_NUM] [FOG_NUM] ;
-        std::vector<fk_ShaderBinder *> faceShader; // [S_DRAW_NUM] [FOG_NUM] [SHADOW_NUM] ;
-        std::vector<fk_ShaderBinder *> surfaceShadowShader; // [S_DRAW_NUM]
-        */
+        std::vector<std::unique_ptr<fk_ShaderBinder>> surfShader; // [MODE][TYPE][FOG][SHADOW]
+        std::vector<std::unique_ptr<fk_ShaderBinder>> surfShadowShader; // [TYPE]
 
 		fk_SurfaceDrawMode mode;
 		
@@ -56,11 +49,12 @@ namespace FK {
 		bool ShadowInit(fk_SurfaceDrawType);
 
         fk_ShaderBinder * GetDrawShader(fk_SurfaceDrawMode, fk_SurfaceDrawType,
-            fk_FogMode, fk_ShadowMode = fk_ShadowMode(0));
+										fk_FogMode, fk_ShadowMode = fk_ShadowMode(0));
         fk_ShaderBinder * GetShadowShader(fk_SurfaceDrawType);
 
         fk_ShaderBinder * MakeDrawShader(fk_SurfaceDrawMode, fk_SurfaceDrawType,
-            fk_FogMode, fk_ShadowMode = fk_ShadowMode(0));
+										 fk_FogMode, fk_ShadowMode = fk_ShadowMode(0));
+
         fk_ShaderBinder * MakeShadowShader(fk_SurfaceDrawType);
 	};
 }

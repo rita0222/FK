@@ -89,7 +89,7 @@ namespace FK {
 		fk_FrameBuffer * getDepthBuffer(void);
 
 	private:
-		fk_GraphicsEngine *engine;
+		std::unique_ptr<fk_GraphicsEngine> engine;
 		bool initFlg;
 	};
 }

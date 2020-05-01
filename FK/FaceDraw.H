@@ -18,8 +18,9 @@ namespace FK {
 		bool AllTest(void);
 
 	private:
-        std::vector<fk_ShaderBinder *> faceShader; // [SHADING_NUM] [SHADOW_NUM] [FOG_NUM] ;
-		fk_ShaderBinder *faceShadowShader;
+		 // [SHADING_NUM] [SHADOW_NUM] [FOG_NUM] ;
+        std::vector<std::unique_ptr<fk_ShaderBinder>> faceShader;
+		std::unique_ptr<fk_ShaderBinder> faceShadowShader;
 
 		void DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);

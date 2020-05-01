@@ -18,7 +18,7 @@ namespace FK {
 	 */
 	class fk_DataAccess : public fk_ParserData {
 
-		friend class		fk_Solid;
+		friend class fk_Solid;
 
 	public:
 		//! コンストラクタ
@@ -34,7 +34,7 @@ namespace FK {
 		 *
 		 *	\return 設定済みであれば true、未設定であれば false を返します。
 		 */
-		bool				checkDB(void) const;
+		bool checkDB(void) const;
 
 		//! 位相状況チェック関数
 		/*!
@@ -42,14 +42,14 @@ namespace FK {
 		 *
 		 *	\return 整合していれば true、非整合状態であれば false を返します。
 		 */
-		bool				checkTopology(void);
+		bool checkTopology(void);
 
 		//! 位相状況出力関数
 		/*!
 		 *	この関数はシステム内部での解析用に存在するもので、
 		 *	ユーザによる利用は推奨されていません。
 		 */
-		void				printTopology(void);
+		void printTopology(void);
 
 		//! \name 位相要素存在判定
 		///@{
@@ -62,7 +62,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existVertex(fk_Vertex *vertex) const;
+		bool existVertex(fk_Vertex *vertex) const;
 
 		//! 頂点位相要素存在判定関数2
 		/*!
@@ -72,7 +72,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existVertex(int ID) const;
+		bool existVertex(int ID) const;
 
 		//! 半稜線位相要素存在判定関数1
 		/*!
@@ -82,7 +82,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existHalf(fk_Half *half) const;
+		bool existHalf(fk_Half *half) const;
 
 		//! 半稜線位相要素存在判定関数2
 		/*!
@@ -92,7 +92,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existHalf(int ID) const;
+		bool existHalf(int ID) const;
 
 		//! 稜線位相要素存在判定関数1
 		/*!
@@ -102,7 +102,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existEdge(fk_Edge *edge) const;
+		bool existEdge(fk_Edge *edge) const;
 
 		//! 稜線位相要素存在判定関数2
 		/*!
@@ -112,7 +112,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existEdge(int ID) const;
+		bool existEdge(int ID) const;
 
 		//! ループ位相要素存在判定関数1
 		/*!
@@ -122,7 +122,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existLoop(fk_Loop *loop) const;
+		bool existLoop(fk_Loop *loop) const;
 
 		//! ループ位相要素存在判定関数2
 		/*!
@@ -132,7 +132,7 @@ namespace FK {
 		 *
 		 *	\return 存在すれば true、しなければ false を返します。
 		 */
-		bool				existLoop(int ID) const;
+		bool existLoop(int ID) const;
 		///@}
 
 		//! \name 位相要素参照
@@ -148,7 +148,7 @@ namespace FK {
 		 *		存在すれば位相要素のポインタを返します。
 		 *		存在しなかった場合は nullptr を返します。
 		 */
-		fk_Vertex *			getVData(int ID) const;
+		fk_Vertex * getVData(int ID) const;
 
 		//! 半稜線位相要素参照関数
 		/*!
@@ -160,7 +160,7 @@ namespace FK {
 		 *		存在すれば位相要素のポインタを返します。
 		 *		存在しなかった場合は nullptr を返します。
 		 */
-		fk_Half *			getHData(int ID) const;
+		fk_Half * getHData(int ID) const;
 
 		//! 稜線位相要素参照関数
 		/*!
@@ -172,7 +172,7 @@ namespace FK {
 		 *		存在すれば位相要素のポインタを返します。
 		 *		存在しなかった場合は nullptr を返します。
 		 */
-		fk_Edge *			getEData(int ID) const;
+		fk_Edge * getEData(int ID) const;
 
 		//! ループ位相要素参照関数
 		/*!
@@ -184,7 +184,7 @@ namespace FK {
 		 *		存在すれば位相要素のポインタを返します。
 		 *		存在しなかった場合は nullptr を返します。
 		 */
-		fk_Loop *			getLData(int ID) const;
+		fk_Loop * getLData(int ID) const;
 
 		//! 頂点位相要素逐次参照関数
 		/*!
@@ -204,7 +204,7 @@ namespace FK {
 		 *		- 形状中に頂点が存在しない場合。
 		 *		- vertex が形状中に存在する頂点位相要素ではなかった場合。
 		 */
-		fk_Vertex *			getNextV(fk_Vertex *vertex) const;
+		fk_Vertex * getNextV(fk_Vertex *vertex) const;
 
 		//! 半稜線位相要素逐次参照関数
 		/*!
@@ -224,7 +224,7 @@ namespace FK {
 		 *		- 形状中に半稜線が存在しない場合。
 		 *		- half が形状中に存在する半稜線位相要素ではなかった場合。
 		 */
-		fk_Half *			getNextH(fk_Half *half) const;
+		fk_Half * getNextH(fk_Half *half) const;
 
 		//! 稜線位相要素逐次参照関数
 		/*!
@@ -244,7 +244,7 @@ namespace FK {
 		 *		- 形状中に稜線が存在しない場合。
 		 *		- edge が形状中に存在する稜線位相要素ではなかった場合。
 		 */
-		fk_Edge *			getNextE(fk_Edge *edge) const;
+		fk_Edge * getNextE(fk_Edge *edge) const;
 
 		//! ループ位相要素逐次参照関数
 		/*!
@@ -264,7 +264,7 @@ namespace FK {
 		 *		- 形状中にループが存在しない場合。
 		 *		- loop が形状中に存在するループ位相要素ではなかった場合。
 		 */
-		fk_Loop *			getNextL(fk_Loop *loop) const;
+		fk_Loop * getNextL(fk_Loop *loop) const;
 
 		//! 頂点位相最終要素参照関数
 		/*!
@@ -276,7 +276,7 @@ namespace FK {
 		 *		最もIDが大きな位相要素。
 		 *		形状中に頂点が存在しなかった場合は、nullptr を返します。
 		 */
-		fk_Vertex *			getLastV(void) const;
+		fk_Vertex * getLastV(void) const;
 
 		//! 半稜線位相最終要素参照関数
 		/*!
@@ -288,7 +288,7 @@ namespace FK {
 		 *		最もIDが大きな位相要素。
 		 *		形状中に半稜線が存在しなかった場合は、nullptr を返します。
 		 */
-		fk_Half *			getLastH(void) const;
+		fk_Half * getLastH(void) const;
 
 		//! 稜線位相最終要素参照関数
 		/*!
@@ -300,7 +300,7 @@ namespace FK {
 		 *		最もIDが大きな位相要素。
 		 *		形状中に稜線が存在しなかった場合は、nullptr を返します。
 		 */
-		fk_Edge *			getLastE(void) const;
+		fk_Edge * getLastE(void) const;
 
 		//! ループ位相最終要素参照関数
 		/*!
@@ -312,7 +312,7 @@ namespace FK {
 		 *		最もIDが大きな位相要素。
 		 *		形状中にループが存在しなかった場合は、nullptr を返します。
 		 */
-		fk_Loop *			getLastL(void) const;
+		fk_Loop * getLastL(void) const;
 		///@}
 
 		//! \name 位相要素数参照
@@ -324,7 +324,7 @@ namespace FK {
 		 *
 		 *	\return 頂点数
 		 */
-		int					getVNum(void) const;
+		int getVNum(void) const;
 
 		//! 半稜線数参照関数
 		/*!
@@ -332,7 +332,7 @@ namespace FK {
 		 *
 		 *	\return 半稜線数
 		 */
-		int					getHNum(void) const;
+		int getHNum(void) const;
 
 		//! 稜線数参照関数
 		/*!
@@ -340,7 +340,7 @@ namespace FK {
 		 *
 		 *	\return 稜線数
 		 */
-		int					getENum(void) const;
+		int getENum(void) const;
 
 		//! ループ数参照関数
 		/*!
@@ -348,7 +348,7 @@ namespace FK {
 		 *
 		 *	\return ループ数
 		 */
-		int					getLNum(void) const;
+		int getLNum(void) const;
 		///@}
 
 		//! \name 位相要素格納コンテナ取得
@@ -368,7 +368,7 @@ namespace FK {
 		 *		
 		 *	\sa getNextV(), getVNum()
 		 */
-		void				getVertexList(std::list<fk_Vertex *> *list);
+		void getVertexList(std::list<fk_Vertex *> *list);
 
 		//! 半稜線コンテナ取得関数
 		/*!
@@ -384,7 +384,7 @@ namespace FK {
 		 *		
 		 *	\sa getNextH(), getHNum()
 		 */
-		void				getHalfList(std::list<fk_Half *> *list);
+		void getHalfList(std::list<fk_Half *> *list);
 
 
 		//! 稜線コンテナ取得関数
@@ -401,7 +401,7 @@ namespace FK {
 		 *
 		 *	\sa getNextE(), getENum()
 		 */
-		void				getEdgeList(std::list<fk_Edge *> *list);
+		void getEdgeList(std::list<fk_Edge *> *list);
 
 		//! ループコンテナ取得関数
 		/*!
@@ -417,34 +417,34 @@ namespace FK {
 		 *
 		 *	\sa getNextL(), getLNum()
 		 */
-		void				getLoopList(std::list<fk_Loop *> *list);
+		void getLoopList(std::list<fk_Loop *> *list);
 		///@}
 
 	private:
-		fk_DataBase			*ope_DB;
+		fk_DataBase *ope_DB;
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		fk_DataBase *		GetDB(void);
-		void				SetDataBase(fk_DataBase *);
+		fk_DataBase * GetDB(void);
+		void SetDataBase(fk_DataBase *);
 
-		fk_Vertex *			GetNewVertexObj_(void);
-		fk_Vertex *			GetNewVertexObj_(int);
-		fk_Half *			GetNewHalfObj_(void);
-		fk_Half *			GetNewHalfObj_(int);
-		fk_Edge *			GetNewEdgeObj_(void);
-		fk_Edge *			GetNewEdgeObj_(int);
-		fk_Loop *			GetNewLoopObj_(void);
-		fk_Loop *			GetNewLoopObj_(int);
+		fk_Vertex * GetNewVertexObj_(void);
+		fk_Vertex * GetNewVertexObj_(int);
+		fk_Half * GetNewHalfObj_(void);
+		fk_Half * GetNewHalfObj_(int);
+		fk_Edge * GetNewEdgeObj_(void);
+		fk_Edge * GetNewEdgeObj_(int);
+		fk_Loop * GetNewLoopObj_(void);
+		fk_Loop * GetNewLoopObj_(int);
 
-		bool				DeleteVertexObj_(fk_Vertex *);
-		bool				DeleteHalfObj_(fk_Half *);
-		bool				DeleteEdgeObj_(fk_Edge *);
-		bool				DeleteLoopObj_(fk_Loop *);
+		bool DeleteVertexObj_(fk_Vertex *);
+		bool DeleteHalfObj_(fk_Half *);
+		bool DeleteEdgeObj_(fk_Edge *);
+		bool DeleteLoopObj_(fk_Loop *);
 
-		void				AllDBClear_(void);
+		void AllDBClear_(void);
 #endif
 	};
 }

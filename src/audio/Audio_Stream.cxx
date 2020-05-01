@@ -17,14 +17,19 @@ const int _ENDIAN = 0;
 using namespace std;
 using namespace FK;
 
-fk_AudioStream::fk_AudioStream(void) :
-	vf(new OggVorbis_File),
+fk_AudioStream::StreamData::StreamData(void) :
 	ovOpenStatus(false),
 	current(0),
 	buffer(fk_AudioBase::BUFSIZE, char(0)),
-	nowTime(0.0)
+	nowTime(0.0),
+	vf(make_unique<OggVorbis_File>())
 {
-	startStatus = endStatus = false;
+}
+
+fk_AudioStream::fk_AudioStream(void)
+{
+	stData = make_unique<StreamData>();
+	data->startStatus = data->endStatus = false;
 	return;
 }
 
@@ -35,13 +40,11 @@ fk_AudioStream::~fk_AudioStream()
 
 bool fk_AudioStream::open(const std::string &argFileName)
 {
-	int		ovStatus;
-
 	if(getInit() == false) init();
+	if(stData->ovOpenStatus == true) ov_clear(stData->vf.get());
 
-	if(ovOpenStatus == true) ov_clear(vf);
-
-	if((ovStatus = ov_fopen((char *)&argFileName[0], vf)) < 0) {
+	int ovStatus;
+	if((ovStatus = ov_fopen(argFileName.c_str(), stData->vf.get())) < 0) {
 		switch(ovStatus) {
 		  case OV_EREAD:
 			Error::Put("fk_AudioStream", "open", 1, "Read Error");
@@ -70,22 +73,22 @@ bool fk_AudioStream::open(const std::string &argFileName)
 
 		return false;
 	}
-	ovOpenStatus = true;
-	startStatus = endStatus = false;
+	stData->ovOpenStatus = true;
+	data->startStatus = data->endStatus = false;
 	return true;
 }
 
 bool fk_AudioStream::ready(void)
 {
-	if(ovOpenStatus == false) return false;
-	if(startStatus == false) StartQueue(true);
+	if(stData->ovOpenStatus == false) return false;
+	if(data->startStatus == false) StartQueue(true);
 	return true;
 }
 
 bool fk_AudioStream::play(void)
 {
-	if(ovOpenStatus == false) return false;
-	if(startStatus == false) {
+	if(stData->ovOpenStatus == false) return false;
+	if(data->startStatus == false) {
 		if(ready() == false) return false;
 	}
 	
@@ -94,34 +97,32 @@ bool fk_AudioStream::play(void)
 
 void fk_AudioStream::StartQueue(bool argInitFlg)
 {
-	ALsizei		size;
-	ALuint		bufferID;
-
-	startStatus = true;
+	data->startStatus = true;
 
 	if(argInitFlg == true) {
-		current = 0;
+		stData->current = 0;
 		CreateID();
 	}
 
 	UnQueue(true);
 
-	for(unsigned int i = 0; i < queueSize; i++) {
+	for(unsigned int i = 0; i < data->queueSize; ++i) {
 
-		size = static_cast<ALsizei>(ov_read(vf, &buffer[0],
-											static_cast<int>(fk_AudioBase::BUFSIZE*sizeof(char)),
-											_ENDIAN, 2, 1, &current));
+		ALsizei size = ALsizei(ov_read(stData->vf.get(), stData->buffer.data(),
+									   int(fk_AudioBase::BUFSIZE*sizeof(char)),
+									   _ENDIAN, 2, 1, &stData->current));
 
 		if(size <= 0) {
-			endStatus = true;
+			data->endStatus = true;
 			break;
 		}
 
-		if(i == 0) MakeOVInfo(vf);
+		if(i == 0) MakeOVInfo(stData->vf.get());
 
+		ALuint bufferID;
 		alGenBuffers(1, &bufferID);
-		alBufferData(bufferID, format, &buffer[0], size, rate);
-		alSourceQueueBuffers(source, 1, &bufferID);
+		alBufferData(bufferID, data->format, stData->buffer.data(), size, data->rate);
+		alSourceQueueBuffers(data->source, 1, &bufferID);
 	}
 
 	return;
@@ -129,13 +130,12 @@ void fk_AudioStream::StartQueue(bool argInitFlg)
 
 void fk_AudioStream::UnQueue(bool argBufferFlg)
 {
-	ALint		queueNum;
-	ALuint		bufferID;
-	int			i;
+	ALint queueNum;
+	alGetSourcei(data->source, AL_BUFFERS_QUEUED, &queueNum);
 
-	alGetSourcei(source, AL_BUFFERS_QUEUED, &queueNum);
-	for(i = 0; i < queueNum; i++) {
-		alSourceUnqueueBuffers(source, 1, &bufferID);
+	for(ALint i = 0; i < queueNum; ++i) {
+		ALuint bufferID;
+		alSourceUnqueueBuffers(data->source, 1, &bufferID);
 		if(argBufferFlg == true) {
 			alDeleteBuffers(1, &bufferID);
 		}
@@ -145,42 +145,38 @@ void fk_AudioStream::UnQueue(bool argBufferFlg)
 
 bool fk_AudioStream::PlayStream(void)
 {
-	ALint		status, i, procNum;
-	ALuint		bufferID;
-	ALsizei		size;
-
-	bufferID = 0;
-	procNum = 0;
-
-	alGetSourcei(source, AL_SOURCE_STATE, &status);
+	ALint status;
+	alGetSourcei(data->source, AL_SOURCE_STATE, &status);
 	
 	// 再生していなければ、再生命令を出す
 	if(status != AL_PLAYING) {
-		alSourcePlay(source);
+		alSourcePlay(data->source);
 		sleep(0.001);
 	}
 
 	// 再生済みバッファの個数を取得
-	alGetSourcei(source, AL_BUFFERS_PROCESSED, &procNum);
+	ALint procNum;
+	alGetSourcei(data->source, AL_BUFFERS_PROCESSED, &procNum);
 
-	for(i = 0; i < procNum; i++) {
-		alSourceUnqueueBuffers(source, 1, &bufferID);
+	for(ALint i = 0; i < procNum; ++i) {
+		ALuint bufferID;
+		alSourceUnqueueBuffers(data->source, 1, &bufferID);
 
 		// 既にファイルを読み終えてる場合、バッファを消去
-		if(endStatus == true) {
+		if(data->endStatus == true) {
 			alDeleteBuffers(1, &bufferID);
 			continue;
 		}
 
-		ogg_int64_t length = static_cast<ogg_int64_t>(fk_AudioBase::BUFSIZE*sizeof(char));
-		nowTime = ov_time_tell(vf);
+		ogg_int64_t length = ogg_int64_t(fk_AudioBase::BUFSIZE*sizeof(char));
+		stData->nowTime = ov_time_tell(stData->vf.get());
 		bool need_rewind = false;
-		if (loopMode && loopEndTime > 0.0)
+		if (data->loopMode && data->loopEndTime > 0.0)
 		{
-			ogg_int64_t now_pcm = ov_pcm_tell(vf);
-			ov_time_seek(vf, loopEndTime);
-			ogg_int64_t end_pcm = ov_pcm_tell(vf);
-			ov_pcm_seek(vf, now_pcm);
+			ogg_int64_t now_pcm = ov_pcm_tell(stData->vf.get());
+			ov_time_seek(stData->vf.get(), data->loopEndTime);
+			ogg_int64_t end_pcm = ov_pcm_tell(stData->vf.get());
+			ov_pcm_seek(stData->vf.get(), now_pcm);
 			if (now_pcm > end_pcm)
 			{
 				length = 0;
@@ -194,90 +190,92 @@ bool fk_AudioStream::PlayStream(void)
 		}
 
 		// ファイル読み込み
-		size = static_cast<ALsizei>(ov_read(vf, &buffer[0], static_cast<int>(length), _ENDIAN, 2, 1, &current));
+		ALsizei size = ALsizei(ov_read(stData->vf.get(), stData->buffer.data(),
+									   int(length), _ENDIAN, 2, 1, &stData->current));
 		if (need_rewind)
 		{
-			ov_time_seek_lap(vf, loopStartTime);
+			ov_time_seek_lap(stData->vf.get(), data->loopStartTime);
 		}
 
 		if(size == 0)
 		{
 			// 終端
-			if (!loopMode)
+			if (!data->loopMode)
 			{
-				endStatus = true;
+				data->endStatus = true;
 				alDeleteBuffers(1, &bufferID);
 			}
 			else
 			{
-				ov_time_seek(vf, loopStartTime);
+				ov_time_seek(stData->vf.get(), data->loopStartTime);
 			}
 
 			continue;
 		}
 
-		alBufferData(bufferID, format, &buffer[0], size, rate);
-		alSourceQueueBuffers(source, 1, &bufferID);
+		alBufferData(bufferID, data->format, stData->buffer.data(), size, data->rate);
+		alSourceQueueBuffers(data->source, 1, &bufferID);
 	}
 
 	// 終了判定
-	if(status != AL_PLAYING && endStatus == true) return false;
+	if(status != AL_PLAYING && data->endStatus == true) return false;
 	return true;
 }
 
 void fk_AudioStream::stop(void)
 {
-	ALint		status, procNum, i;
-	ALuint		bufferID;
+	if(data->startStatus == false) return;
 
-	if(startStatus == false) return;
-	alGetSourcei(source, AL_SOURCE_STATE, &status);
+	ALint status;
+	alGetSourcei(data->source, AL_SOURCE_STATE, &status);
+
 	if(status != AL_STOPPED) {
-		alSourceStop(source);
+		alSourceStop(data->source);
 	}
-	alGetSourcei(source, AL_BUFFERS_PROCESSED, &procNum);
-	for(i = 0; i < procNum; i++) {
-		alSourceUnqueueBuffers(source, 1, &bufferID);
+
+	ALint procNum;
+	alGetSourcei(data->source, AL_BUFFERS_PROCESSED, &procNum);
+	for(ALint i = 0; i < procNum; ++i) {
+		ALuint bufferID;
+		alSourceUnqueueBuffers(data->source, 1, &bufferID);
 		alDeleteBuffers(1, &bufferID);
 	}
 }
 
 void fk_AudioStream::end(void)
 {
-	if(ovOpenStatus == false) return;
+	if(stData->ovOpenStatus == false) return;
 
 	stop();
 
-	if(startStatus == true) alDeleteSources(1, &source);
-	startStatus = endStatus = false;
+	if(data->startStatus == true) alDeleteSources(1, &data->source);
+	data->startStatus = data->endStatus = false;
 	EraseID();
-	ov_clear(vf);
-	ovOpenStatus = false;
-	delete vf;
+	ov_clear(stData->vf.get());
+	stData->ovOpenStatus = false;
 
 	return;
 }	
 
 double fk_AudioStream::tell(void)
 {
-	ALfloat		bufTell;
-	ALint		queueNum;
+	if(data->startStatus == false) return -1.0;
 
-	if(startStatus == false) return -1.0;
-
-	alGetSourcei(source, AL_BUFFERS_QUEUED, &queueNum);
-	alGetSourcef(source, AL_SEC_OFFSET, &bufTell);
-	return nowTime + (double)bufTell;
+	ALfloat bufTell;
+	ALint queueNum;
+	alGetSourcei(data->source, AL_BUFFERS_QUEUED, &queueNum);
+	alGetSourcef(data->source, AL_SEC_OFFSET, &bufTell);
+	return stData->nowTime + (double)bufTell;
 }
 
 void fk_AudioStream::seek(double argTime)
 {
-	if(ovOpenStatus == false) return;
+	if(stData->ovOpenStatus == false) return;
 
 	stop();
-	ov_time_seek_lap(vf, argTime);
-	endStatus = false;
-	StartQueue(!startStatus);
+	ov_time_seek_lap(stData->vf.get(), argTime);
+	data->endStatus = false;
+	StartQueue(!data->startStatus);
 
 	return;
 }

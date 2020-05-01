@@ -8,20 +8,13 @@ using namespace std;
 using namespace FK;
 
 fk_TextureDraw::fk_TextureDraw(void)
-	:
-	textureShader(SHADING_NUM * SHADOW_NUM * TEXTURE_NUM * FOG_NUM, nullptr),
-	replaceShader(FOG_NUM, nullptr), texShadowShader(nullptr)
+	: textureShader(SHADING_NUM * SHADOW_NUM * TEXTURE_NUM * FOG_NUM), replaceShader(FOG_NUM)
 {
 	return;
 }
 		
 fk_TextureDraw::~fk_TextureDraw()
 {
-	delete texShadowShader;
-
-	for (auto s : textureShader) delete s;
-	for (auto s : replaceShader) delete s;
-
 	return;
 }
 
@@ -36,7 +29,8 @@ fk_ShaderBinder * fk_TextureDraw::GetShader(
 		_st(argShadowMode) * TEXTURE_NUM * FOG_NUM +
 		_st(argTexMode) * FOG_NUM +
 		_st(argFogMode);
-	return textureShader[index];
+
+	return textureShader[index].get();
 }
 
 fk_ShaderBinder * fk_TextureDraw::MakeShader(
@@ -50,22 +44,22 @@ fk_ShaderBinder * fk_TextureDraw::MakeShader(
 		_st(argShadowMode) * TEXTURE_NUM * FOG_NUM +
 		_st(argTexMode) * FOG_NUM +
 		_st(argFogMode);
-	delete textureShader[index];
-	textureShader[index] = new fk_ShaderBinder();
-	return textureShader[index];
+
+	textureShader[index] = make_unique<fk_ShaderBinder>();
+	return textureShader[index].get();
 }
 
 fk_ShaderBinder * fk_TextureDraw::MakeReplace(fk_FogMode argFogMode)
 {
 	_st index = _st(argFogMode);
-	delete replaceShader[index];
-	replaceShader[index] = new fk_ShaderBinder();
-	return replaceShader[index];
+
+	replaceShader[index] = make_unique<fk_ShaderBinder>();
+	return replaceShader[index].get();
 }
 
 fk_ShaderBinder * fk_TextureDraw::GetReplace(fk_FogMode argFogMode)
 {
-	return replaceShader[_st(argFogMode)];
+	return replaceShader[_st(argFogMode)].get();
 }
 
 bool fk_TextureDraw::AllTest(void)
@@ -145,7 +139,7 @@ void fk_TextureDraw::ParamInit(fk_ShaderProgram *argProg, fk_ShaderParameter *ar
 
 GLuint fk_TextureDraw::VAOSetup(fk_Shape *argShape)
 {
-	GLuint 			vao;
+	GLuint vao;
 	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -427,14 +421,13 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 void fk_TextureDraw::ShadowSetup(void)
 {
 	if(texShadowShader == nullptr) ShadowInit();
-	shadowShader = texShadowShader;
+	shadowShader = texShadowShader.get();
 }
 
 bool fk_TextureDraw::ShadowInit(void)
 {
-	delete texShadowShader;
-	fk_ShaderBinder *shader = new fk_ShaderBinder();
-	texShadowShader = shader;
+	texShadowShader = make_unique<fk_ShaderBinder>();
+	fk_ShaderBinder *shader = texShadowShader.get();
 	
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

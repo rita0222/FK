@@ -101,7 +101,7 @@ bool Data::GetMode(void) const
 }
 
 DataBase::DataBase(void) :
-	mode(Mode::NONE), fileMode(false), errorBrowser(nullptr)
+	mode(Mode::NONE), fileMode(false)
 {
 	_DB.clear();
 	return;
@@ -109,19 +109,10 @@ DataBase::DataBase(void) :
 
 DataBase::~DataBase()
 {
-	Data *data;
-
-	while(_DB.empty() == false) {
-		data = _DB.front();
-		_DB.pop_front();
-		delete data;
-	}
-
 	if(fileMode == true) {
 		ofs.close();
 	}
 
-	delete errorBrowser;
 	return;
 }
 
@@ -139,14 +130,12 @@ Mode DataBase::GetMode(void) const
 void DataBase::Put(const string argClass, const string argFunc,
 				   const int argErrCode, const string argMessage)
 {
-	Data *data;
-
 	if(mode == Mode::NONE) return;
 
-	data = new Data();
+	_DB.push_back(make_unique<Data>());
+	auto data = _DB.back().get();
 
 	data->Set(argClass, argFunc, argErrCode, argMessage);
-	_DB.push_back(data);
 
 	switch(mode) {
 	  case Mode::INTERACTIVE:
@@ -166,14 +155,12 @@ void DataBase::Put(const string argClass, const string argFunc,
 
 void DataBase::Put(const string argClass, const string argFunc, const int argErrCode)
 {
-	Data	*data;
-
 	if(mode == Mode::NONE) return;
 
-	data = new Data();
+	_DB.push_back(make_unique<Data>());
+	auto data = _DB.back().get();
 
 	data->Set(argClass, argFunc, argErrCode);
-	_DB.push_back(data);
 
 	switch(mode) {
 	  case Mode::INTERACTIVE:
@@ -193,14 +180,12 @@ void DataBase::Put(const string argClass, const string argFunc, const int argErr
 
 void DataBase::Put(const string argMessage)
 {
-	Data	*data;
-
 	if(mode == Mode::NONE) return;
 
-	data = new Data();
+	_DB.push_back(make_unique<Data>());
+	auto data = _DB.back().get();
 
 	data->Set(argMessage);
-	_DB.push_back(data);
 
 	switch(mode) {
 	  case Mode::INTERACTIVE:
@@ -242,13 +227,13 @@ bool DataBase::SetFileName(string argFileName)
 
 Browser * DataBase::GetBrowser(void)
 {
-	return errorBrowser;
+	return errorBrowser.get();
 }
 
 Browser * DataBase::MakeBrowser(void)
 {
-	errorBrowser = new Browser();
-	return errorBrowser;
+	errorBrowser = make_unique<Browser>();
+	return errorBrowser.get();
 }
 
 Browser::Browser(void)
@@ -263,15 +248,13 @@ Browser::~Browser()
 
 bool DataBase::Print(void)
 {
-	Data *data;
 	string outStr;
 	stringstream ss;
 
 	if(mode == Mode::NONE) return false;
 	if(IsEmpty() == true) return false;
 
-	data = _DB.front();
-	_DB.pop_front();
+	auto data = _DB.front().get();
 
 	outStr.erase();
 
@@ -282,8 +265,6 @@ bool DataBase::Print(void)
 	}
 
 	outStr += data->GetErrMessage();
-
-	delete data;
 
 	switch(mode) {
 	  case Mode::INTERACTIVE:
@@ -316,6 +297,7 @@ bool DataBase::Print(void)
 		break;
 	}
 
+	_DB.pop_front();
 	return true;
 }
 

@@ -20,6 +20,10 @@ using namespace FK;
 
 fk_DataBase::fk_DataBase(void)
 {
+	vAdmin = make_unique<fk_IDAdmin>();
+	hAdmin = make_unique<fk_IDAdmin>();
+	eAdmin = make_unique<fk_IDAdmin>();
+	lAdmin = make_unique<fk_IDAdmin>();
 	AllClear();
 }
 
@@ -30,10 +34,10 @@ fk_DataBase::~fk_DataBase()
 
 void fk_DataBase::AllClear(void)
 {
-	vAdmin.Init(1);
-	hAdmin.Init(1);
-	eAdmin.Init(1);
-	lAdmin.Init(1);
+	vAdmin->Init(1);
+	hAdmin->Init(1);
+	eAdmin->Init(1);
+	lAdmin->Init(1);
 
 	while(!vSet.empty()) {
 		vSet.pop_back();
@@ -60,10 +64,10 @@ void fk_DataBase::CloneData(fk_DataBase *argDB)
 
 	ResizeData(argDB);
 
-	vAdmin.CloneData(&argDB->vAdmin);
-	hAdmin.CloneData(&argDB->hAdmin);
-	eAdmin.CloneData(&argDB->eAdmin);
-	lAdmin.CloneData(&argDB->lAdmin);
+	vAdmin->CloneData(argDB->vAdmin.get());
+	hAdmin->CloneData(argDB->hAdmin.get());
+	eAdmin->CloneData(argDB->eAdmin.get());
+	lAdmin->CloneData(argDB->lAdmin.get());
 
 	VSetClone(&argDB->vSet);
 	HSetClone(&argDB->hSet);
@@ -285,7 +289,7 @@ bool fk_DataBase::LCompare(fk_DataBase *argDB)
 
 fk_Vertex * fk_DataBase::GetNewVertex(void)
 {
-	int newID = vAdmin.CreateID();
+	int newID = vAdmin->CreateID();
 	if(int(vSet.size())== newID - 1) {
 		vSet.resize(vSet.size()+1);
 		vSet.back().Init(this, newID);
@@ -298,7 +302,7 @@ fk_Vertex * fk_DataBase::GetNewVertex(void)
 
 fk_Vertex * fk_DataBase::GetNewVertex(int argID)
 {
-	if(vAdmin.CreateID(argID) == false) {
+	if(vAdmin->CreateID(argID) == false) {
 		return nullptr;
 	}
 
@@ -314,7 +318,7 @@ fk_Vertex * fk_DataBase::GetNewVertex(int argID)
 
 fk_Half * fk_DataBase::GetNewHalf(void)
 {
-	int newID = hAdmin.CreateID();
+	int newID = hAdmin->CreateID();
 
 	if(int(hSet.size()) == newID - 1) {
 		hSet.resize(hSet.size()+1);
@@ -328,7 +332,7 @@ fk_Half * fk_DataBase::GetNewHalf(void)
 
 fk_Half * fk_DataBase::GetNewHalf(int argID)
 {
-	if(hAdmin.CreateID(argID) == false) {
+	if(hAdmin->CreateID(argID) == false) {
 		return nullptr;
 	}
 
@@ -344,7 +348,7 @@ fk_Half * fk_DataBase::GetNewHalf(int argID)
 
 fk_Edge * fk_DataBase::GetNewEdge(void)
 {
-	int newID = eAdmin.CreateID();
+	int newID = eAdmin->CreateID();
 
 	if(int(eSet.size()) == newID - 1) {
 		eSet.resize(eSet.size()+1);
@@ -358,7 +362,7 @@ fk_Edge * fk_DataBase::GetNewEdge(void)
 
 fk_Edge * fk_DataBase::GetNewEdge(int argID)
 {
-	if(eAdmin.CreateID(argID) == false) {
+	if(eAdmin->CreateID(argID) == false) {
 		return nullptr;
 	}
 
@@ -374,7 +378,7 @@ fk_Edge * fk_DataBase::GetNewEdge(int argID)
 
 fk_Loop * fk_DataBase::GetNewLoop(void)
 {
-	int newID = lAdmin.CreateID();
+	int newID = lAdmin->CreateID();
 	if(int(lSet.size()) == newID - 1) {
 		lSet.resize(lSet.size()+1);
 		lSet.back().Init(this, newID);
@@ -387,7 +391,7 @@ fk_Loop * fk_DataBase::GetNewLoop(void)
 
 fk_Loop * fk_DataBase::GetNewLoop(int argID)
 {
-	if(lAdmin.CreateID(argID) == false) {
+	if(lAdmin->CreateID(argID) == false) {
 		return nullptr;
 	}
 
@@ -411,7 +415,7 @@ bool fk_DataBase::ExistVertex(fk_Vertex *argVx) const
 
 bool fk_DataBase::ExistVertex(int argID) const
 {
-	return vAdmin.ExistID(argID);
+	return vAdmin->ExistID(argID);
 }
 
 bool fk_DataBase::ExistHalf(fk_Half *argHf) const
@@ -424,7 +428,7 @@ bool fk_DataBase::ExistHalf(fk_Half *argHf) const
 
 bool fk_DataBase::ExistHalf(int argID) const
 {
-	return hAdmin.ExistID(argID);
+	return hAdmin->ExistID(argID);
 }
 
 bool fk_DataBase::ExistEdge(fk_Edge *argEd) const
@@ -437,7 +441,7 @@ bool fk_DataBase::ExistEdge(fk_Edge *argEd) const
 
 bool fk_DataBase::ExistEdge(int argID) const
 {
-	return eAdmin.ExistID(argID);
+	return eAdmin->ExistID(argID);
 }
 
 bool fk_DataBase::ExistLoop(fk_Loop *argLp) const
@@ -450,135 +454,135 @@ bool fk_DataBase::ExistLoop(fk_Loop *argLp) const
 
 bool fk_DataBase::ExistLoop(int argID) const
 {
-	return lAdmin.ExistID(argID);
+	return lAdmin->ExistID(argID);
 }
 
 bool fk_DataBase::DeleteVertex(int argID)
 {
-	if(vAdmin.EraseID(argID) == false) return false;
+	if(vAdmin->EraseID(argID) == false) return false;
 	vSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 bool fk_DataBase::DeleteHalf(int argID)
 {
-	if(hAdmin.EraseID(argID) == false) return false;
+	if(hAdmin->EraseID(argID) == false) return false;
 	hSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 bool fk_DataBase::DeleteEdge(int argID)
 {
-	if(eAdmin.EraseID(argID) == false) return false;
+	if(eAdmin->EraseID(argID) == false) return false;
 	eSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 bool fk_DataBase::DeleteLoop(int argID)
 {
-	if(lAdmin.EraseID(argID) == false) return false;
+	if(lAdmin->EraseID(argID) == false) return false;
 	lSet[_st(argID)-1].DeleteElem();
 	return true;
 }
 
 fk_Vertex * fk_DataBase::GetVData(int argVID)
 {
-	if(vAdmin.ExistID(argVID) == false) return nullptr;
+	if(vAdmin->ExistID(argVID) == false) return nullptr;
 	return &vSet[_st(argVID) - 1];
 }
 
 fk_Half * fk_DataBase::GetHData(int argHID)
 {
-	if(hAdmin.ExistID(argHID) == false) return nullptr;
+	if(hAdmin->ExistID(argHID) == false) return nullptr;
 	return &hSet[_st(argHID) - 1];
 }
 
 fk_Edge * fk_DataBase::GetEData(int argEID)
 {
-	if(eAdmin.ExistID(argEID) == false) return nullptr;
+	if(eAdmin->ExistID(argEID) == false) return nullptr;
 	return &eSet[_st(argEID) - 1];
 }
 
 fk_Loop * fk_DataBase::GetLData(int argLID)
 {
-	if(lAdmin.ExistID(argLID) == false) return nullptr;
+	if(lAdmin->ExistID(argLID) == false) return nullptr;
 	return &lSet[_st(argLID) - 1];
 }
 
 fk_Vertex * fk_DataBase::GetNextV(fk_Vertex *argV)
 {
 	if(argV == nullptr) {
-		return GetVData(vAdmin.GetNext(0));
+		return GetVData(vAdmin->GetNext(0));
 	} else {
-		return GetVData(vAdmin.GetNext(argV->getID()));
+		return GetVData(vAdmin->GetNext(argV->getID()));
 	}
 }
 
 fk_Half * fk_DataBase::GetNextH(fk_Half *argH)
 {
 	if(argH == nullptr) {
-		return GetHData(hAdmin.GetNext(0));
+		return GetHData(hAdmin->GetNext(0));
 	} else {
-		return GetHData(hAdmin.GetNext(argH->getID()));
+		return GetHData(hAdmin->GetNext(argH->getID()));
 	}
 }
 
 fk_Edge * fk_DataBase::GetNextE(fk_Edge *argE)
 {
 	if(argE == nullptr) {
-		return GetEData(eAdmin.GetNext(0));
+		return GetEData(eAdmin->GetNext(0));
 	} else {
-		return GetEData(eAdmin.GetNext(argE->getID()));
+		return GetEData(eAdmin->GetNext(argE->getID()));
 	}
 }
 
 fk_Loop * fk_DataBase::GetNextL(fk_Loop *argL)
 {
 	if(argL == nullptr) {
-		return GetLData(lAdmin.GetNext(0));
+		return GetLData(lAdmin->GetNext(0));
 	} else {
-		return GetLData(lAdmin.GetNext(argL->getID()));
+		return GetLData(lAdmin->GetNext(argL->getID()));
 	}
 }
 
 fk_Vertex * fk_DataBase::GetLastV(void)
 {
-	return GetVData(vAdmin.GetMaxID());
+	return GetVData(vAdmin->GetMaxID());
 }
 
 fk_Half * fk_DataBase::GetLastH(void)
 {
-	return GetHData(hAdmin.GetMaxID());
+	return GetHData(hAdmin->GetMaxID());
 }
 
 fk_Edge * fk_DataBase::GetLastE(void)
 {
-	return GetEData(eAdmin.GetMaxID());
+	return GetEData(eAdmin->GetMaxID());
 }
 
 fk_Loop * fk_DataBase::GetLastL(void)
 {
-	return GetLData(lAdmin.GetMaxID());
+	return GetLData(lAdmin->GetMaxID());
 }
 
 int fk_DataBase::GetVNum(void) const
 {
-	return vAdmin.GetIDNum();
+	return vAdmin->GetIDNum();
 }
 
 int fk_DataBase::GetHNum(void) const
 {
-	return hAdmin.GetIDNum();
+	return hAdmin->GetIDNum();
 }
 
 int fk_DataBase::GetENum(void) const
 {
-	return eAdmin.GetIDNum();
+	return eAdmin->GetIDNum();
 }
 
 int fk_DataBase::GetLNum(void) const
 {
-	return lAdmin.GetIDNum();
+	return lAdmin->GetIDNum();
 }
 
 void fk_DataBase::VPrint(int argID) const
@@ -587,7 +591,7 @@ void fk_DataBase::VPrint(int argID) const
 		for(_st i = 0; i < vSet.size(); ++i) {
 			if(vSet[i].getID() != FK_UNDEFINED) vSet[i].Print();
 		}
-	} else if(!vAdmin.ExistID(argID)) {
+	} else if(!vAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "VPrint", 1, "Vertex Admin Error.");
 	} else {
 		vSet[_st(argID)-1].Print();
@@ -603,7 +607,7 @@ void fk_DataBase::HPrint(int argID) const
 		for(_st i = 0; i < hSet.size(); ++i) {
 			if(hSet[i].getID() != FK_UNDEFINED) hSet[i].Print();
 		}
-	} else if(!hAdmin.ExistID(argID)) {
+	} else if(!hAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "HPrint", 1, "Half Edge Admin Error.");
 	} else {
 		hSet[_st(argID)-1].Print();
@@ -618,7 +622,7 @@ void fk_DataBase::EPrint(int argID) const
 		for(_st i = 0; i < eSet.size(); ++i) {
 			if(eSet[i].getID() != FK_UNDEFINED) eSet[i].Print();
 		}
-	} else if(!eAdmin.ExistID(argID)) {
+	} else if(!eAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "EPrint", 1, "Edge Admin Error.");
 	} else {
 		eSet[_st(argID)-1].Print();
@@ -633,7 +637,7 @@ void fk_DataBase::LPrint(int argID) const
 		for(_st i = 0; i < lSet.size(); ++i) {
 			if(lSet[i].getID() != FK_UNDEFINED) lSet[i].Print();
 		}
-	} else if(!lAdmin.ExistID(argID)) {
+	} else if(!lAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "LPrint", 1, "Loop Admin Error.");
 	} else {
 		lSet[_st(argID)-1].Print();
@@ -664,7 +668,7 @@ bool	fk_DataBase::VCheck(int argID) const
 				}
 			}
 		}
-	} else if(!vAdmin.ExistID(argID)) {
+	} else if(!vAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "VCheck", 1, "Vertex Admin Error.");
 		retBool = false;
 	} else {
@@ -686,7 +690,7 @@ bool	fk_DataBase::HCheck(int argID) const
 				}
 			}
 		}
-	} else if(!hAdmin.ExistID(argID)) {
+	} else if(!hAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "HCheck", 1, "Half Edge Admin Error.");
 		retBool = false;
 	} else {
@@ -708,7 +712,7 @@ bool	fk_DataBase::ECheck(int argID) const
 				}
 			}
 		}
-	} else if(!eAdmin.ExistID(argID)) {
+	} else if(!eAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "ECheck", 1, "Edge Admin Error.");
 		retBool = false;
 	} else {
@@ -730,7 +734,7 @@ bool fk_DataBase::LCheck(int argID) const
 				}
 			}
 		}
-	} else if(!lAdmin.ExistID(argID)) {
+	} else if(!lAdmin->ExistID(argID)) {
 		Error::Put("fk_DataBase", "LCheck", 1, "Loop Admin Error");
 		retBool = false;
 	} else {

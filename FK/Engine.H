@@ -68,15 +68,15 @@ namespace FK {
 	private:
 
 		// DrawEngine static インスタンス群
-		static fk_PointDraw *pointDraw;
-		static fk_LineDraw *lineDraw;
-		static fk_FaceDraw *faceDraw;
-		static fk_TextureDraw *textureDraw;
-		static fk_BezCurveDraw *bezCurveLineDraw;
-		static fk_BezCurveDraw *bezCurvePointDraw;
-		static fk_SurfaceDraw *surfaceDraw;
-		static fk_SurfaceDraw *surfacePointDraw;
-		static fk_SurfaceDraw *surfaceLineDraw;
+		static std::unique_ptr<fk_PointDraw> pointDraw;
+		static std::unique_ptr<fk_LineDraw> lineDraw;
+		static std::unique_ptr<fk_FaceDraw> faceDraw;
+		static std::unique_ptr<fk_TextureDraw> textureDraw;
+		static std::unique_ptr<fk_BezCurveDraw> bezCurveLineDraw;
+		static std::unique_ptr<fk_BezCurveDraw> bezCurvePointDraw;
+		static std::unique_ptr<fk_SurfaceDraw> surfaceDraw;
+		static std::unique_ptr<fk_SurfaceDraw> surfacePointDraw;
+		static std::unique_ptr<fk_SurfaceDraw> surfaceLineDraw;
 
 		// エンジン用基本メンバー
 		unsigned int drawCount;
@@ -98,29 +98,29 @@ namespace FK {
 		std::vector<fk_ImType> snapBuffer;
 
 		// デフォルト投影
-		fk_Perspective defProj;
+		std::unique_ptr<fk_Perspective> defProj;
 
 		// 境界ボリューム描画用モデル
-		fk_Model boundaryModel;
+		std::unique_ptr<fk_Model> boundaryModel;
 
 		// FBO用メンバー
 		bool FBOMode, FBOWindowMode;
-		fk_FrameBuffer *colorBuf;
-		fk_FrameBuffer *depthBuf;
+		std::unique_ptr<fk_FrameBuffer> colorBuf;
+		std::unique_ptr<fk_FrameBuffer> depthBuf;
 		GLuint rectVAO, fboHandle;
 		fk_ShaderBinder *FBOShader;
 
 		// 影用メンバー
 		GLuint shadowHandle;
-		fk_FrameBuffer *shadowBuf;
+		std::unique_ptr<fk_FrameBuffer> shadowBuf;
 		fk_ShadowMode shadowMode;
 		bool shadowInitFlag, shadowSwitch;
-		fk_Ortho shadowProj;
-		fk_Model shadowCamera;
-		fk_RectTexture shadowTexture;
+		std::unique_ptr<fk_Ortho> shadowProj;
+		std::unique_ptr<fk_Model> shadowCamera;
+		std::unique_ptr<fk_RectTexture> shadowTexture;
+		std::unique_ptr<fk_Vector> shadowVec;
 		int shadowBufferID;
 		double shadowSize;
-		fk_Vector shadowVec;
 		double shadowDistance;
 		int shadowResolution;
 		double shadowVisibility;
@@ -129,7 +129,7 @@ namespace FK {
 		// 霧用メンバー
 		fk_FogMode	fogMode;
 		double fogStart, fogEnd, fogDensity;
-		fk_Color fogColor;
+		std::unique_ptr<fk_Color> fogColor;
 		
 		void DrawShadow(void);
 		void DrawWorld(void);

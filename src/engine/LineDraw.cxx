@@ -14,14 +14,13 @@ using namespace std;
 using namespace FK;
 
 fk_LineDraw::fk_LineDraw(void) :
-	lineShader(VS_NUM * FS_NUM * FOG_NUM, nullptr)
+	lineShader(VS_NUM * FS_NUM * FOG_NUM)
 {
 	return;
 }
 
 fk_LineDraw::~fk_LineDraw()
 {
-	for (auto s : lineShader) delete s;
 	return;
 }
 
@@ -47,7 +46,7 @@ fk_ShaderBinder * fk_LineDraw::GetShader(
 	_st index = _st(argVID) * FS_NUM * FOG_NUM +
 		_st(argFID) * FOG_NUM + _st(argFogMode);
 
-	return lineShader[index];
+	return lineShader[index].get();
 }
 
 fk_ShaderBinder * fk_LineDraw::MakeShader(
@@ -56,9 +55,8 @@ fk_ShaderBinder * fk_LineDraw::MakeShader(
 	_st index = _st(argVID) * FS_NUM * FOG_NUM +
 		_st(argFID) * FOG_NUM + _st(argFogMode);
 
-	delete lineShader[index];
-	lineShader[index] = new fk_ShaderBinder();
-	return lineShader[index];
+	lineShader[index] = make_unique<fk_ShaderBinder>();
+	return lineShader[index].get();
 }
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape,

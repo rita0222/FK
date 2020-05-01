@@ -10,16 +10,14 @@ using namespace std;
 using namespace FK;
 
 fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode) :
-	surfShader(_st(fk_SurfaceDrawMode::NUM) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM, nullptr),
-	surfShadowShader(SHADOW_NUM, nullptr), mode(argMode)
+	surfShader(_st(fk_SurfaceDrawMode::NUM) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM),
+	surfShadowShader(SHADOW_NUM), mode(argMode)
 {
 	return;
 }
 
 fk_SurfaceDraw::~fk_SurfaceDraw()
 {
-	for (auto s : surfShader) delete s;
-	for (auto s : surfShadowShader) delete s;
 	return;
 }
 
@@ -33,7 +31,8 @@ fk_ShaderBinder *fk_SurfaceDraw::GetDrawShader(
 		_st(argMode) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM +
 		_st(argType) * FOG_NUM * SHADOW_NUM +
 		_st(argFog) * SHADOW_NUM + _st(argShadow);
-	return surfShader[index];
+
+	return surfShader[index].get();
 }
 
 fk_ShaderBinder * fk_SurfaceDraw::MakeDrawShader(
@@ -47,21 +46,19 @@ fk_ShaderBinder * fk_SurfaceDraw::MakeDrawShader(
 		_st(argType) * FOG_NUM * SHADOW_NUM +
 		_st(argFog) * SHADOW_NUM + _st(argShadow);
 
-	delete surfShader[index];
-	surfShader[index] = new fk_ShaderBinder();
-	return surfShader[index];
+	surfShader[index] = make_unique<fk_ShaderBinder>();
+	return surfShader[index].get();
 }
 
 fk_ShaderBinder *fk_SurfaceDraw::GetShadowShader(fk_SurfaceDrawType argType)
 {
-	return surfShadowShader[_st(argType)];
+	return surfShadowShader[_st(argType)].get();
 }
 
 fk_ShaderBinder *fk_SurfaceDraw::MakeShadowShader(fk_SurfaceDrawType argType)
 {
-	delete surfShadowShader[_st(argType)];
-	surfShadowShader[_st(argType)] = new fk_ShaderBinder();
-	return surfShadowShader[_st(argType)];
+	surfShadowShader[_st(argType)] = make_unique<fk_ShaderBinder>();
+	return surfShadowShader[_st(argType)].get();
 }
 
 bool fk_SurfaceDraw::AllTest(void)

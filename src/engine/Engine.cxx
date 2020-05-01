@@ -22,15 +22,15 @@ using namespace FK;
 static unsigned int		generalID = 1;
 static unsigned int		engineNum = 0;
 
-fk_PointDraw * fk_GraphicsEngine::pointDraw = nullptr;
-fk_LineDraw * fk_GraphicsEngine::lineDraw = nullptr;
-fk_FaceDraw * fk_GraphicsEngine::faceDraw = nullptr;
-fk_TextureDraw * fk_GraphicsEngine::textureDraw = nullptr;
-fk_BezCurveDraw * fk_GraphicsEngine::bezCurveLineDraw = nullptr;
-fk_BezCurveDraw * fk_GraphicsEngine::bezCurvePointDraw = nullptr;
-fk_SurfaceDraw * fk_GraphicsEngine::surfaceDraw = nullptr;
-fk_SurfaceDraw * fk_GraphicsEngine::surfacePointDraw = nullptr;
-fk_SurfaceDraw * fk_GraphicsEngine::surfaceLineDraw = nullptr;
+unique_ptr<fk_PointDraw> fk_GraphicsEngine::pointDraw = nullptr;
+unique_ptr<fk_LineDraw> fk_GraphicsEngine::lineDraw = nullptr;
+unique_ptr<fk_FaceDraw>  fk_GraphicsEngine::faceDraw = nullptr;
+unique_ptr<fk_TextureDraw>  fk_GraphicsEngine::textureDraw = nullptr;
+unique_ptr<fk_BezCurveDraw>  fk_GraphicsEngine::bezCurveLineDraw = nullptr;
+unique_ptr<fk_BezCurveDraw>  fk_GraphicsEngine::bezCurvePointDraw = nullptr;
+unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfaceDraw = nullptr;
+unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfacePointDraw = nullptr;
+unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfaceLineDraw = nullptr;
 
 #ifndef GL_COLOR_ATTACHMENT0
 #define GL_COLOR_ATTACHMENT0 0x8CE0
@@ -48,17 +48,35 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	if (fk_ShaderBinder::IsInitialized() == false) fk_ShaderBinder::Initialize();
 
 	// エンジン用インスタンス生成
-	if(engineNum == 0) {
-		pointDraw = new fk_PointDraw;
-		lineDraw = new fk_LineDraw;
-		faceDraw = new fk_FaceDraw;
-		textureDraw = new fk_TextureDraw;
-		bezCurveLineDraw = new fk_BezCurveDraw(fk_CurveDrawMode::LINE);
-		bezCurvePointDraw = new fk_BezCurveDraw(fk_CurveDrawMode::POINT);
-		surfaceDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::FACE);
-		surfaceLineDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::LINE);
-		surfacePointDraw = new fk_SurfaceDraw(fk_SurfaceDrawMode::POINT);
+	if(pointDraw == nullptr) pointDraw = make_unique<fk_PointDraw>();
+	if(lineDraw == nullptr) lineDraw = make_unique<fk_LineDraw>();
+	if(faceDraw == nullptr) faceDraw = make_unique<fk_FaceDraw>();
+	if(textureDraw == nullptr) textureDraw = make_unique<fk_TextureDraw>();
+
+	if(bezCurveLineDraw == nullptr) {
+		bezCurveLineDraw = make_unique<fk_BezCurveDraw>(fk_CurveDrawMode::LINE);
 	}
+	if(bezCurvePointDraw == nullptr) {
+		bezCurvePointDraw = make_unique<fk_BezCurveDraw>(fk_CurveDrawMode::POINT);
+	}
+	if(surfaceDraw == nullptr) {
+		surfaceDraw = make_unique<fk_SurfaceDraw>(fk_SurfaceDrawMode::FACE);
+	}
+	if(surfaceLineDraw == nullptr) {
+		surfaceLineDraw = make_unique<fk_SurfaceDraw>(fk_SurfaceDrawMode::LINE);
+	}
+	if(surfacePointDraw == nullptr) {
+		surfacePointDraw = make_unique<fk_SurfaceDraw>(fk_SurfaceDrawMode::POINT);
+	}
+
+	defProj = make_unique<fk_Perspective>();
+	boundaryModel = make_unique<fk_Model>();
+
+	shadowProj = make_unique<fk_Ortho>();
+	shadowCamera = make_unique<fk_Model>();
+	shadowTexture = make_unique<fk_RectTexture>();
+	shadowVec = make_unique<fk_Vector>();
+	fogColor = make_unique<fk_Color>();
 
 	engineNum++;
 
@@ -77,9 +95,9 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	depthRead = depthWrite = true;
 
 	// 境界ボリュームモデル初期化
-	boundaryModel.setDrawMode(fk_Draw::LINE);
-	boundaryModel.setBMode(fk_BoundaryMode::NONE);
-	boundaryModel.setBDrawToggle(false);
+	boundaryModel->setDrawMode(fk_Draw::LINE);
+	boundaryModel->setBMode(fk_BoundaryMode::NONE);
+	boundaryModel->setBDrawToggle(false);
 
 	// FBO設定初期化
 	FBOMode = false;
@@ -105,7 +123,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 	// 霧設定初期化
 	fogMode = fk_FogMode::OFF;
 	fogStart = fogEnd = fogDensity = 0.0;
-	fogColor.set(0.0, 0.0, 0.0, 1.0);
+	fogColor->set(0.0, 0.0, 0.0, 1.0);
 
 	return;
 }
@@ -114,27 +132,12 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 {
 	engineNum--;
 
-	if(engineNum == 0) {
-		delete pointDraw; pointDraw = nullptr;
-		delete lineDraw; lineDraw = nullptr;
-		delete faceDraw; faceDraw = nullptr;
-		delete textureDraw; textureDraw = nullptr;
-		delete bezCurveLineDraw; bezCurveLineDraw = nullptr;
-		delete bezCurvePointDraw; bezCurvePointDraw = nullptr;
-		delete surfaceDraw; surfaceDraw = nullptr;
-		delete surfaceLineDraw; surfaceLineDraw = nullptr;
-		delete surfacePointDraw; surfacePointDraw = nullptr;
-	}
-
 	snapBuffer.clear();
 
-	delete colorBuf;
-	delete depthBuf;
 	if(shadowBuf != nullptr) {
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
-		delete shadowBuf;
 	}
 
 	if(FBOMode == true) {
@@ -172,14 +175,10 @@ void fk_GraphicsEngine::Init(int argW, int argH)
 	hSize = argH;
 	resizeFlag = false;
 
-	defProj.setAll(40.0*fk_Math::PI/180.0, 1.0, 6000.0);
+	defProj->setAll(40.0*fk_Math::PI/180.0, 1.0, 6000.0);
 
 	FBOMode = false;
 	FBOWindowMode = false;
-
-	delete colorBuf; colorBuf = nullptr;
-	delete depthBuf; depthBuf = nullptr;
-
 	FBOShader = nullptr;
 
 	return;
@@ -198,7 +197,7 @@ void fk_GraphicsEngine::SetViewPort(void)
 {
 	glViewport(0, 0, wSize, hSize);
 	if(curScene == nullptr) {
-		SetProjection(&defProj);
+		SetProjection(defProj.get());
 	} else {
 		SetProjection(curScene->getProjection());
 	}
@@ -369,20 +368,20 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 	switch(argModel->getBMode()) {
 	  case fk_BoundaryMode::SPHERE:
 	  case fk_BoundaryMode::AABB:
-		  boundaryModel.glMoveTo(argModel->getInhPosition());
+		  boundaryModel->glMoveTo(argModel->getInhPosition());
 		  break;
 		  
 	  case fk_BoundaryMode::OBB:
-		  boundaryModel.glMoveTo(argModel->getInhPosition());
-		  boundaryModel.glAngle(argModel->getInhAngle());
+		  boundaryModel->glMoveTo(argModel->getInhPosition());
+		  boundaryModel->glAngle(argModel->getInhAngle());
 		  break;
 
 	  case fk_BoundaryMode::CAPSULE:
 		  mat = argModel->getInhMatrix();
 		  posS = mat * argModel->getCapsuleStartPos();
 		  posE = mat * argModel->getCapsuleEndPos();
-		  boundaryModel.glMoveTo((posS + posE)/2.0);
-		  boundaryModel.glVec(posE - posS);
+		  boundaryModel->glMoveTo((posS + posE)/2.0);
+		  boundaryModel->glVec(posE - posS);
 		  break;
 		  
 	  default:
@@ -391,13 +390,13 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 
 	if(argModel->getInterMode() == true &&
 	   argModel->getInterStatus() == true) {
-		boundaryModel.setLineColor(argModel->getBIntLineColor());
+		boundaryModel->setLineColor(argModel->getBIntLineColor());
 	} else {
-		boundaryModel.setLineColor(argModel->getBLineColor());
+		boundaryModel->setLineColor(argModel->getBLineColor());
 	}	
-	boundaryModel.setShape(argModel->GetBShape());
-	boundaryModel.setDrawMode(fk_Draw::LINE);
-	DrawModel(&boundaryModel);
+	boundaryModel->setShape(argModel->GetBShape());
+	boundaryModel->setDrawMode(fk_Draw::LINE);
+	DrawModel(boundaryModel.get());
 	return;
 }
 
@@ -498,7 +497,7 @@ void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 		fogStart = argScene->getFogLinearStart();
 		fogEnd = argScene->getFogLinearEnd();
 		fogDensity = argScene->getFogDensity();
-		fogColor = argScene->getFogColor();
+		*fogColor = argScene->getFogColor();
 	}
 
 	return;
@@ -688,10 +687,8 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 void fk_GraphicsEngine::SetupFBO(void)
 {
-	if(colorBuf != nullptr) delete colorBuf;
-	colorBuf = new fk_FrameBuffer();
-	if(depthBuf != nullptr) delete depthBuf;
-	depthBuf = new fk_FrameBuffer();
+	colorBuf = make_unique<fk_FrameBuffer>();
+	depthBuf = make_unique<fk_FrameBuffer>();
 
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
@@ -789,12 +786,12 @@ void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 
 fk_FrameBuffer * fk_GraphicsEngine::GetColorBuffer(void)
 {
-	return colorBuf;
+	return colorBuf.get();
 }
 
 fk_FrameBuffer * fk_GraphicsEngine::GetDepthBuffer(void)
 {
-	return depthBuf;
+	return depthBuf.get();
 }
 
 void fk_GraphicsEngine::InitFrameBufferMode(void)
@@ -810,10 +807,9 @@ void fk_GraphicsEngine::ShadowInit(void)
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
-		delete shadowBuf;
 	}
 		
-	shadowBuf = new fk_FrameBuffer();
+	shadowBuf = make_unique<fk_FrameBuffer>();
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
 	shadowBufferID = maxUnit - 4;
@@ -833,16 +829,16 @@ void fk_GraphicsEngine::ShadowInit(void)
 	shadowBuf->AttachFBO();
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	shadowTexture.setFrameBuffer(shadowBuf);
-	shadowTexture.setTextureSize(1.0, 1.0);
+	shadowTexture->setFrameBuffer(shadowBuf.get());
+	shadowTexture->setTextureSize(1.0, 1.0);
 }
 
 void fk_GraphicsEngine::AttachShadowBuffer(int argID)
 {
-	shadowTexture.Replace();
-	faceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
-	textureDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
-	surfaceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, &shadowTexture);
+	shadowTexture->Replace();
+	faceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, shadowTexture.get());
+	textureDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, shadowTexture.get());
+	surfaceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, shadowTexture.get());
 }
 
 void fk_GraphicsEngine::PreShadowDraw(void)
@@ -902,19 +898,19 @@ void fk_GraphicsEngine::DrawShadow(void)
 	}
 
 	shadowPos = cameraPos + cameraVec * shadowSize/4.0;
-	shadowCamera.glMoveTo(shadowPos);
+	shadowCamera->glMoveTo(shadowPos);
 	//shadowCamera.glVec(shadowVec);
 
 	PreShadowDraw();
 
 	glViewport(0, 0, shadowResolution, shadowResolution);
-	shadowProj.MakeMat();
-	fk_DrawBase::SetProjectionMatrix(shadowProj.GetMatrix());
-	fk_DrawBase::SetShadowProjMatrix(shadowProj.GetMatrix());
-	fk_DrawBase::SetCamera(&shadowCamera);
-	fk_DrawBase::SetShadowCamera(&shadowCamera);
+	shadowProj->MakeMat();
+	fk_DrawBase::SetProjectionMatrix(shadowProj->GetMatrix());
+	fk_DrawBase::SetShadowProjMatrix(shadowProj->GetMatrix());
+	fk_DrawBase::SetCamera(shadowCamera.get());
+	fk_DrawBase::SetShadowCamera(shadowCamera.get());
 	fk_DrawBase::SetShadowParam(shadowVisibility, shadowBias);
-	fk_DrawBase::SetFogStatus(fogMode, fogStart, fogEnd, fogDensity, fogColor);
+	fk_DrawBase::SetFogStatus(fogMode, fogStart, fogEnd, fogDensity, *fogColor);
 
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -928,12 +924,12 @@ void fk_GraphicsEngine::DrawShadow(void)
 
 fk_RectTexture * fk_GraphicsEngine::GetShadowTexture(void)
 {
-	return &shadowTexture;
+	return shadowTexture.get();
 }
 
 void fk_GraphicsEngine::SetShadowTextureSize(int argW, int argH)
 {
-	shadowTexture.setTextureSize(argW, argH);
+	shadowTexture->setTextureSize(argW, argH);
 }
 
 int fk_GraphicsEngine::ShadowFixVal(int argVal)
@@ -945,8 +941,8 @@ int fk_GraphicsEngine::ShadowFixVal(int argVal)
 
 void fk_GraphicsEngine::SetShadowVec(fk_Vector argV)
 {
-	shadowVec = argV;
-	shadowCamera.glVec(shadowVec);
+	*shadowVec = argV;
+	shadowCamera->glVec(*shadowVec);
 }
 
 void fk_GraphicsEngine::SetShadowResolution(int argVal)
@@ -961,16 +957,16 @@ void fk_GraphicsEngine::SetShadowResolution(int argVal)
 void fk_GraphicsEngine::SetShadowAreaSize(double argSize)
 {
 	shadowSize = argSize;
-	shadowProj.setAll(-argSize/2.0, argSize/2.0,
-					  -argSize/2.0, argSize/2.0,
-					  -shadowDistance/2.0, shadowDistance/2.0);
+	shadowProj->setAll(-argSize/2.0, argSize/2.0,
+					   -argSize/2.0, argSize/2.0,
+					   -shadowDistance/2.0, shadowDistance/2.0);
 }
 
 void fk_GraphicsEngine::SetShadowDistance(double argDist)
 {
 	shadowDistance = argDist;
-	shadowProj.setNear(-shadowDistance/2.0);
-	shadowProj.setFar(shadowDistance/2.0);
+	shadowProj->setNear(-shadowDistance/2.0);
+	shadowProj->setFar(shadowDistance/2.0);
 }
 
 void fk_GraphicsEngine::SetShadowVisibility(double argVis)

@@ -13,13 +13,13 @@ namespace FK {
 		fk_DXFOut(fk_IndexFaceSet *);
 		virtual ~fk_DXFOut();
 
-		bool	WriteDXFFile(std::string, bool);
+		bool WriteDXFFile(std::string, bool);
 
 	private:
-		fk_Solid		*solid;
-		fk_IndexFaceSet	*ifs;
-		bool			WriteDXFShape_Solid(std::ofstream &, bool);
-		bool			WriteDXFShape_IFS(std::ofstream &, bool);
+		fk_Solid *solid;
+		fk_IndexFaceSet *ifs;
+		bool WriteDXFShape_Solid(std::ofstream &, bool);
+		bool WriteDXFShape_IFS(std::ofstream &, bool);
 	};
 }
 

@@ -18,18 +18,22 @@ namespace FK {
 	private:
 		static constexpr int TEXTURE_NUM = int(fk_TexMode::NUM);
 
-        std::vector<fk_ShaderBinder *> textureShader;// [SHADING_NUM] [SHADOW_NUM] [TEXTURE_NUM] [FOG_NUM] ;
-        std::vector<fk_ShaderBinder *> replaceShader; // [FOG_NUM] ;
-		fk_ShaderBinder *texShadowShader;
+		// [SHADING_NUM] [SHADOW_NUM] [TEXTURE_NUM] [FOG_NUM]
+        std::vector<std::unique_ptr<fk_ShaderBinder>> textureShader;
 
-		void	ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
-		void	Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
-		void	PolygonModeSet(void);
-		void	DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
-		bool	ReplaceShaderInit(fk_FogMode);
-		bool	TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);
-		void	ShadowSetup(void);
-		bool	ShadowInit(void);
+		// [FOG_NUM]
+        std::vector<std::unique_ptr<fk_ShaderBinder>> replaceShader; 
+
+		std::unique_ptr<fk_ShaderBinder> texShadowShader;
+
+		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
+		void Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);
+		void PolygonModeSet(void);
+		void DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
+		bool ReplaceShaderInit(fk_FogMode);
+		bool TextureShaderInit(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);
+		void ShadowSetup(void);
+		bool ShadowInit(void);
 
         fk_ShaderBinder * GetReplace(fk_FogMode);
         fk_ShaderBinder * GetShader(fk_ShadingMode, fk_ShadowMode, fk_TexMode, fk_FogMode);

@@ -96,28 +96,28 @@ namespace FK {
 	protected:
 		// 投影関係 static メンバー
 		static fk_Matrix *projectionMatrix;
-		static fk_Matrix viewMatrix;
-		static fk_Matrix modelMatrix;
-		static fk_Matrix modelViewMatrix;
-		static fk_Matrix modelViewProjectionMatrix;
-		static fk_Matrix normalModelMatrix;
-		static fk_Matrix normalModelViewMatrix;
+		static std::unique_ptr<fk_Matrix> viewMatrix;
+		static std::unique_ptr<fk_Matrix> modelMatrix;
+		static std::unique_ptr<fk_Matrix> modelViewMatrix;
+		static std::unique_ptr<fk_Matrix> modelViewProjectionMatrix;
+		static std::unique_ptr<fk_Matrix> normalModelMatrix;
+		static std::unique_ptr<fk_Matrix> normalModelViewMatrix;
 		static fk_Material *modelMaterial;
-		static fk_Vector cameraPosition;
+		static std::unique_ptr<fk_Vector> cameraPosition;
 
 		// 影関係 static メンバー
 		static fk_ShadowMode shadowMode;
 		static fk_Matrix *shadowProjMatrix;
-		static fk_Matrix shadowViewMatrix;
-		static fk_Matrix shadowMatrix;
-		static fk_Matrix shadowBiasMatrix;
+		static std::unique_ptr<fk_Matrix> shadowViewMatrix;
+		static std::unique_ptr<fk_Matrix> shadowMatrix;
+		static std::unique_ptr<fk_Matrix> shadowBiasMatrix;
 		static float shadowBias;
 		static float shadowVisibility;
 
 		// 霧関係 static メンバー
 		static fk_FogMode fogMode;
-		static fk_Vector fogParam;
-		static fk_Color fogColor;
+		static std::unique_ptr<fk_Vector> fogParam;
+		static std::unique_ptr<fk_Color> fogColor;
 
 		// 光源関係 static メンバー
 		static std::list<fk_Model *> *parallelLightList;
