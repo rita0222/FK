@@ -51,6 +51,21 @@ namespace FK {
 
 	class fk_MatrixAdmin : public fk_BaseObject {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_MatAdminData {
+		public:
+			fk_OrthoMatrix M;	// Model Base Matrix
+			fk_HVector pos;		// Model Position
+			fk_HVector vec, uvec;		// Model Vector & Up Vector
+			fk_Angle angle;			// Model Angle (Heading Pitch Bank)
+			double scale;			// Model Scale
+			double xScale, yScale, zScale;	// Axis Scale
+			bool mode;
+
+			fk_MatAdminData();
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -74,7 +89,7 @@ namespace FK {
 		 *
 		 *	\sa getVec(), getUpvec(), getAngle(), fk_Model::getInhPosition()
 		 */
-		fk_Vector		getPosition(void) const;
+		fk_Vector getPosition(void) const;
 
 		//! 方向ベクトル取得関数
 		/*!
@@ -88,7 +103,7 @@ namespace FK {
 		 *
 		 *	\sa getPosition(), getUpvec(), getAngle(), fk_Model::getInhVec()
 		 */
-		fk_Vector		getVec(void) const;
+		fk_Vector getVec(void) const;
 
 		//! アップベクトル取得関数
 		/*!
@@ -102,10 +117,10 @@ namespace FK {
 		 *
 		 *	\sa getPosition(), getVec(), getAngle(), fk_Model::getInhUpvec()
 		 */
-		fk_Vector		getUpvec(void) const;
+		fk_Vector getUpvec(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Vector		getUpVec(void) const;
+		fk_Vector getUpVec(void) const;
 #endif
 
 		//! オイラー角取得関数
@@ -121,7 +136,7 @@ namespace FK {
 		 *
 		 *	\sa getPosition(), getVec(), getUpvec(), fk_Model::getInhAngle(), fk_Angle
 		 */
-		fk_Angle		getAngle(void) const;
+		fk_Angle getAngle(void) const;
 
 		//! 変換行列取得関数
 		/*!
@@ -135,7 +150,7 @@ namespace FK {
 		 *
 		 *	\sa getInvMatrix(), fk_Model::getInhMatrix(), getBaseMatrix()
 		 */
-		fk_Matrix		getMatrix(void) const;
+		fk_Matrix getMatrix(void) const;
 
 		//! 逆変換行列取得関数
 		/*!
@@ -150,7 +165,7 @@ namespace FK {
 		 *
 		 *	\sa getMatrix(), fk_Model::getInhInvMatrix()
 		 */
-		fk_Matrix		getInvMatrix(void) const;
+		fk_Matrix getInvMatrix(void) const;
 
 		//! 移動・回転要素変換行列取得関数
 		/*!
@@ -165,7 +180,7 @@ namespace FK {
 		 *
 		 *	\sa getMatrix(), fk_Model::getInhBaseMatrix(), fk_OrthoMatrix
 		 */
-		fk_OrthoMatrix	getBaseMatrix(void) const;
+		fk_OrthoMatrix getBaseMatrix(void) const;
 
 		//! 移動・回転要素逆変換行列取得関数
 		/*!
@@ -180,7 +195,7 @@ namespace FK {
 		 *
 		 *	\sa getInvMatrix(), fk_Model::getInhInvBaseMatrix(), fk_OrthoMatrix
 		 */
-		fk_OrthoMatrix	getInvBaseMatrix(void) const;
+		fk_OrthoMatrix getInvBaseMatrix(void) const;
 
 		///@}
 
@@ -200,7 +215,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			setScale(const double scale);
+		bool setScale(const double scale);
 
 		//! 軸方向絶対倍率設定関数
 		/*!
@@ -216,7 +231,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			setScale(const double scale, fk_Axis axis);
+		bool setScale(const double scale, fk_Axis axis);
 
 		//! 軸方向個別絶対倍率設定関数
 		/*!
@@ -233,7 +248,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			setScale(const double x, const double y, const double z);
+		bool setScale(const double x, const double y, const double z);
 
 		//! 全体相対倍率設定関数
 		/*!
@@ -248,7 +263,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			prdScale(const double scale);
+		bool prdScale(const double scale);
 
 		//! 軸方向相対倍率設定関数
 		/*!
@@ -264,7 +279,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			prdScale(const double scale, fk_Axis axis);
+		bool prdScale(const double scale, fk_Axis axis);
 
 		//! 軸方向個別相対倍率設定関数
 		/*!
@@ -281,7 +296,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			prdScale(const double x, const double y, const double z);
+		bool prdScale(const double x, const double y, const double z);
 
 		//! 全体倍率取得関数
 		/*!
@@ -289,7 +304,7 @@ namespace FK {
 		 *
 		 *	\return		モデル全体倍率
 		 */
-		double			getScale(void) const;
+		double getScale(void) const;
 
 		//! 軸方向倍率取得関数
 		/*!
@@ -299,7 +314,7 @@ namespace FK {
 		 *
 		 *	\return		モデル軸方向倍率
 		 */
-		double			getScale(fk_Axis axis) const;
+		double getScale(fk_Axis axis) const;
 
 		//! 拡大縮小状態判定関数
 		/*!
@@ -321,7 +336,7 @@ namespace FK {
 		 *		拡大縮小倍率に 1 以外が設定されている場合 true を、
 		 *		されていない場合 false を返します。
 		 */
-		bool			getScaleMode(void) const;
+		bool getScaleMode(void) const;
 
 		///@}
 
@@ -352,7 +367,7 @@ namespace FK {
 		 *		loRotate_(fk_Vector &, fk_Axis, double),
 		 *		fk_Model::glRotate(fk_Vector, fk_Axis, double)
 		 */
-		bool	glRotate_(fk_Vector &origin, fk_Axis axis, double theta);
+		bool glRotate_(fk_Vector &origin, fk_Axis axis, double theta);
 
 		//! グローバル座標系座標軸回転関数2
 		/*!
@@ -378,8 +393,8 @@ namespace FK {
 		 *		loRotate_(double, double, double, fk_Axis, double),
 		 *		fk_Model::glRotate(double, double, double, fk_Axis, double)
 		 */
-		bool 	glRotate_(double orgX, double orgY, double orgZ,
-						  fk_Axis axis, double theta);
+		bool glRotate_(double orgX, double orgY, double orgZ,
+					   fk_Axis axis, double theta);
 
 		//! グローバル座標系任意軸回転関数1
 		/*!
@@ -404,7 +419,7 @@ namespace FK {
 		 *		loRotate_(fk_Vector &, fk_Vector &, double),
 		 *		fk_Model::glRotate(fk_Vector, fk_Vector, double)
 		 */
-		bool 	glRotate_(fk_Vector &A, fk_Vector &B, double theta);
+		bool glRotate_(fk_Vector &A, fk_Vector &B, double theta);
 
 		//! グローバル座標系任意軸回転関数2
 		/*!
@@ -433,8 +448,8 @@ namespace FK {
 		 *		loRotate_(double, double, double, double, double, double, double),
 		 *		fk_Model::glRotate(double, double, double, double, double, double, double)
 		 */
-		bool	glRotate_(double Ax, double Ay, double Az,
-						  double Bx, double By, double Bz, double theta);
+		bool glRotate_(double Ax, double Ay, double Az,
+					   double Bx, double By, double Bz, double theta);
 
 		//! ローカル座標系座標軸回転関数1
 		/*!
@@ -461,7 +476,7 @@ namespace FK {
 		 *		loRotateWithVec_(fk_Vector &, fk_Axis, double),
 		 *		fk_Model::loRotate(fk_Vector, fk_Axis, double)
 		 */
-		bool	loRotate_(fk_Vector &origin, fk_Axis axis, double theta);
+		bool loRotate_(fk_Vector &origin, fk_Axis axis, double theta);
 
 		//! ローカル座標系座標軸回転関数2
 		/*!
@@ -488,7 +503,8 @@ namespace FK {
 		 *		loRotateWithVec_(double, double, double, fk_Axis, double),
 		 *		fk_Model::loRotate(double, double, double, fk_Axis, double)
 		 */
-		bool	loRotate_(double orgX, double orgY, double orgZ, fk_Axis axis, double theta);
+		bool loRotate_(double orgX, double orgY, double orgZ,
+					   fk_Axis axis, double theta);
 
 		//! ローカル座標系任意軸回転関数1
 		/*!
@@ -515,7 +531,7 @@ namespace FK {
 		 *		loRotate_(fk_Vector &, fk_Vector &, double),
 		 *		fk_Model::loRotate(fk_Vector, fk_Vector, double),
 		 */
-		bool	loRotate_(fk_Vector &A, fk_Vector &B, double theta);
+		bool loRotate_(fk_Vector &A, fk_Vector &B, double theta);
 
 		//! ローカル座標系任意軸回転関数2
 		/*!
@@ -551,8 +567,8 @@ namespace FK {
 		 *		loRotate_(double, double, double, double, double, double, double),
 		 *		fk_Model::loRotate(double, double, double, double, double, double, double)
 		 */
-		bool	loRotate_(double Ax, double Ay, double Az,
-						  double Bx, double By, double Bz, double theta);
+		bool loRotate_(double Ax, double Ay, double Az,
+					   double Bx, double By, double Bz, double theta);
 
 		//! グローバル座標系座標軸回転(姿勢付き)関数1
 		/*!
@@ -577,7 +593,7 @@ namespace FK {
 		 *		loRotateWithVec_(fk_Vector &, fk_Axis, double),
 		 *		fk_Model::glRotateWithVec(fk_Vector, fk_Axis, double)
 		 */
-		bool	glRotateWithVec_(fk_Vector &origin, fk_Axis axis, double theta);
+		bool glRotateWithVec_(fk_Vector &origin, fk_Axis axis, double theta);
 
 		//! グローバル座標系座標軸回転(姿勢付き)関数2
 		/*!
@@ -604,7 +620,8 @@ namespace FK {
 		 *		loRotateWithVec_(double, double, double, fk_Axis, double),
 		 *		fk_Model::glRotateWithVec(double, double, double, fk_Axis, double)
 		 */
-		bool	glRotateWithVec_(double orgX, double orgY, double orgZ, fk_Axis axis, double theta);
+		bool glRotateWithVec_(double orgX, double orgY, double orgZ,
+							  fk_Axis axis, double theta);
 
 		//! グローバル座標系任意軸回転(姿勢付き)関数1
 		/*!
@@ -630,7 +647,7 @@ namespace FK {
 		 *		loRotateWithVec_(fk_Vector &, fk_Vector &, double),
 		 *		fk_Model::glRotateWithVec(fk_Vector, fk_Vector, double)
 		 */
-		bool	glRotateWithVec_(fk_Vector &A, fk_Vector &B, double theta);
+		bool glRotateWithVec_(fk_Vector &A, fk_Vector &B, double theta);
 	
 		//! グローバル座標系任意軸回転(姿勢付き)関数2
 		/*!
@@ -660,8 +677,8 @@ namespace FK {
 		 *		loRotateWithVec_(double, double, double, double, double, double, double),
 		 *		fk_Model::glRotateWithVec(double, double, double, double, double, double, double)
 		 */
-		bool	glRotateWithVec_(double Ax, double Ay, double Az,
-								 double Bx, double By, double Bz, double theta);
+		bool glRotateWithVec_(double Ax, double Ay, double Az,
+							  double Bx, double By, double Bz, double theta);
 
 		//! ローカル座標系座標軸回転(姿勢付き)関数1
 		/*!
@@ -687,7 +704,7 @@ namespace FK {
 		 *		glRotateWithVec_(fk_Vector &, fk_Axis, double),
 		 *		fk_Model::loRotateWithVec(fk_Vector, fk_Axis, double)
 		 */
-		bool	loRotateWithVec_(fk_Vector &origin, fk_Axis axis, double theta);
+		bool loRotateWithVec_(fk_Vector &origin, fk_Axis axis, double theta);
 
 		//! ローカル座標系座標軸回転(姿勢付き)関数2
 		/*!
@@ -715,7 +732,8 @@ namespace FK {
 		 *		glRotateWithVec_(double, double, double, fk_Axis, double),
 		 *		fk_Model::loRotateWithVec(double, double, double, fk_Axis, double)
 		 */
-		bool	loRotateWithVec_(double orgX, double orgY, double orgZ, fk_Axis axis, double theta);
+		bool loRotateWithVec_(double orgX, double orgY, double orgZ,
+							  fk_Axis axis, double theta);
 
 		//! ローカル座標系任意軸回転(姿勢付き)関数1
 		/*!
@@ -743,7 +761,7 @@ namespace FK {
 		 *		loRotate_(fk_Vector &, fk_Vector &, double),
 		 *		fk_Model::loRotateWithVec(fk_Vector, fk_Vector, double)
 		 */
-		bool	loRotateWithVec_(fk_Vector &A, fk_Vector &B, double theta);
+		bool loRotateWithVec_(fk_Vector &A, fk_Vector &B, double theta);
 
 		//! ローカル座標系任意軸回転(姿勢付き)関数2
 		/*!
@@ -780,8 +798,8 @@ namespace FK {
 		 *		loRotate_(double, double, double, double, double, double, double),
 		 *		fk_Model::loRotateWithVec(double, double, double, double, double, double, double)
 		 */
-		bool	loRotateWithVec_(double Ax, double Ay, double Az,
-								 double Bx, double By, double Bz, double theta);
+		bool loRotateWithVec_(double Ax, double Ay, double Az,
+							  double Bx, double By, double Bz, double theta);
 		///@}
 
 		//! \name 位置制御関数
@@ -801,7 +819,7 @@ namespace FK {
 		 *
 		 *	\sa loTranslate_(fk_Vector &), fk_Model::glTranslate(fk_Vector)
 		 */
-		bool	glTranslate_(fk_Vector &v);
+		bool glTranslate_(fk_Vector &v);
 
 		//! グローバル座標系平行移動関数2
 		/*!
@@ -820,7 +838,7 @@ namespace FK {
 		 *	\sa loTranslate_(double, double, double),
 		 *		fk_Model::glTranslate(double, double, double)
 		 */
-		bool	glTranslate_(double x, double y, double z);
+		bool glTranslate_(double x, double y, double z);
 
 		//! ローカル座標系平行移動関数1
 		/*!
@@ -837,7 +855,7 @@ namespace FK {
 		 *	\sa glTranslate_(fk_Vector &), glMoveTo_(fk_Vector &),
 		 *		fk_Model::loTranslate(fk_Vector)
 		 */
-		bool	loTranslate_(fk_Vector &v);
+		bool loTranslate_(fk_Vector &v);
 
 		//! ローカル座標系平行移動関数2
 		/*!
@@ -856,7 +874,7 @@ namespace FK {
 		 *	\sa glTranslate_(double, double, double), glMoveTo_(double, double, double),
 		 *		fk_Model::loTranslate(double, double, double)
 		 */
-		bool	loTranslate_(double x, double y, double z);
+		bool loTranslate_(double x, double y, double z);
 
 		//! グローバル座標系位置指定関数1
 		/*!
@@ -876,7 +894,7 @@ namespace FK {
 		 *	\sa glTranslate_(fk_Vector &), loTranslate_(fk_Vector &),
 		 *		fk_Model::glMoveTo(fk_Vector)
 		 */
-		bool	glMoveTo_(fk_Vector &p);
+		bool glMoveTo_(fk_Vector &p);
 
 		//! グローバル座標系位置指定関数2
 		/*!
@@ -898,7 +916,7 @@ namespace FK {
 		 *	\sa glTranslate_(double, double, double), loTranslate_(double, double, double),
 		 *		fk_Model::glMoveTo(double, double, double)
 		 */
-		bool	glMoveTo_(double x, double y, double z);
+		bool glMoveTo_(double x, double y, double z);
 
 		///@}
 
@@ -925,7 +943,7 @@ namespace FK {
 		 *
 		 *	\sa loFocus(), glVec(), glUpvec(), glAngle()
 		 */
-		bool			glFocus(fk_Vector p);
+		bool glFocus(fk_Vector p);
 
 		//! グローバル座標系注視点設定関数2
 		/*!
@@ -949,7 +967,7 @@ namespace FK {
 		 *
 		 *	\sa loFocus(), glVec(), glUpvec(), glAngle()
 		 */
-		bool			glFocus(double x, double y, double z);
+		bool glFocus(double x, double y, double z);
 
 		//! ローカル座標系注視点設定関数1
 		/*!
@@ -971,7 +989,7 @@ namespace FK {
 		 *
 		 *	\sa glFocus(), glUpvec(), loUpvec(), loAngle()
 		 */
-		bool			loFocus(fk_Vector p);
+		bool loFocus(fk_Vector p);
 
 		//! ローカル座標系注視点設定関数2
 		/*!
@@ -995,7 +1013,7 @@ namespace FK {
 		 *
 		 *	\sa glFocus(), glUpvec(), loUpvec(), loAngle()
 		 */
-		bool			loFocus(double x, double y, double z);
+		bool loFocus(double x, double y, double z);
 
 		//! グローバル座標系方向ベクトル設定関数1
 		/*!
@@ -1021,7 +1039,7 @@ namespace FK {
 		 *
 		 *	\sa glFocus(), glUpvec(), glAngle(), loFocus()
 		 */
-		bool			glVec(fk_Vector v);
+		bool glVec(fk_Vector v);
 
 		//! グローバル座標系方向ベクトル設定関数2
 		/*!
@@ -1049,7 +1067,7 @@ namespace FK {
 		 *
 		 *	\sa glFocus(), glUpvec(), glAngle(), loFocus()
 		 */
-		bool			glVec(double x, double y, double z);
+		bool glVec(double x, double y, double z);
 
 		//! グローバル座標系アップベクトル設定関数1
 		/*!
@@ -1067,7 +1085,7 @@ namespace FK {
 		 *
 		 *	\sa glFocus(), glVec(), glAngle(), loUpvec()
 		 */
-		bool			glUpvec(fk_Vector v);
+		bool glUpvec(fk_Vector v);
 
 		//! グローバル座標系アップベクトル設定関数2
 		/*!
@@ -1087,7 +1105,7 @@ namespace FK {
 		 *
 		 *	\sa glFocus(), glVec(), glAngle(), loUpvec()
 		 */
-		bool			glUpvec(double x, double y, double z);
+		bool glUpvec(double x, double y, double z);
 
 		//! ローカル座標系アップベクトル設定関数1
 		/*!
@@ -1108,7 +1126,7 @@ namespace FK {
 		 *
 		 *	\sa loFocus(), loAngle(), glUpvec()
 		 */
-		bool			loUpvec(fk_Vector v);
+		bool loUpvec(fk_Vector v);
 
 		//! ローカル座標系アップベクトル設定関数2
 		/*!
@@ -1131,7 +1149,7 @@ namespace FK {
 		 *
 		 *	\sa loFocus(), loAngle(), glUpvec()
 		 */
-		bool			loUpvec(double x, double y, double z);
+		bool loUpvec(double x, double y, double z);
 
 		//! グローバル座標系オイラー角設定関数1
 		/*!
@@ -1146,7 +1164,7 @@ namespace FK {
 		 *
 		 *	\sa loAngle(), glVec(), glUpvec(), fk_Angle
 		 */
-		bool			glAngle(fk_Angle angle);
+		bool glAngle(fk_Angle angle);
 
 		//! グローバル座標系オイラー角設定関数2
 		/*!
@@ -1163,7 +1181,7 @@ namespace FK {
 		 *
 		 *	\sa loAngle(), glVec(), glUpvec(), fk_Angle
 		 */
-		bool			glAngle(double h, double p, double b);
+		bool glAngle(double h, double p, double b);
 
 		//! ローカル座標系オイラー角設定関数1
 		/*!
@@ -1176,7 +1194,7 @@ namespace FK {
 		 *
 		 *	\sa glAngle(), loFocus(), loUpvec(), fk_Angle
 		 */
-		bool			loAngle(fk_Angle angle);
+		bool loAngle(fk_Angle angle);
 
 		//! ローカル座標系オイラー角設定関数2
 		/*!
@@ -1191,7 +1209,7 @@ namespace FK {
 		 *
 		 *	\sa glAngle(), loFocus(), loUpvec(), fk_Angle
 		 */
-		bool			loAngle(double h, double p, double b);
+		bool loAngle(double h, double p, double b);
 
 		///@}
 
@@ -1199,32 +1217,26 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		fk_OrthoMatrix	OrthoMatrix;	// Model Base Matrix
-		fk_HVector		Position;		// Model Position
-		fk_HVector		Vec, UpVec;		// Model Vector & Up Vector
-		fk_Angle		Angle;			// Model Angle (Heading Pitch Bank)
-		double			Scale;			// Model Scale
-		double			xScale, yScale, zScale;	// Axis Scale
-		bool			ScaleMode;
+		std::unique_ptr<fk_MatAdminData> oData;
 
-		void			RotateLtoG(fk_Vector *, const fk_Vector *, const fk_Angle *) const;
-		void			VectorToHeadPitch(fk_Angle *, const fk_Vector *) const;
-		void			VectorToAngle(fk_Angle *, const fk_Vector *, const fk_Vector *) const;
-		void			AngleToVector(fk_Vector *, fk_Vector *, const fk_Angle *) const;
-		void			AddAngle(fk_Angle *, const fk_Angle *) const;
+		void RotateLtoG(fk_Vector *, const fk_Vector *, const fk_Angle *) const;
+		void VectorToHeadPitch(fk_Angle *, const fk_Vector *) const;
+		void VectorToAngle(fk_Angle *, const fk_Vector *, const fk_Vector *) const;
+		void AngleToVector(fk_Vector *, fk_Vector *, const fk_Angle *) const;
+		void AddAngle(fk_Angle *, const fk_Angle *) const;
 	
-		void			AdjustAngleToVec(void);
-		void			AdjustVecToAngle(void);
+		void AdjustAngleToVec(void);
+		void AdjustVecToAngle(void);
 
-		void			UpdateMatrix(bool = true);
+		void UpdateMatrix(bool = true);
 
-		fk_OrthoMatrix	OrthonormalMatrix(const fk_Vector &, const fk_Vector &, const double) const;
-		void			SetScaleMode(void);
+		fk_OrthoMatrix OrthonormalMatrix(const fk_Vector &, const fk_Vector &, const double) const;
+		void SetScaleMode(void);
 
-		void			GlRotate_(const fk_Vector &, const fk_Vector &, const double);
-		void			LoRotate_(const fk_Vector &, const fk_Vector &, const double);
-		void			GlRotateWithVec_(const fk_Vector &, const fk_Vector &, double);
-		void			LoRotateWithVec_(const fk_Vector &, const fk_Vector &, double);
+		void GlRotate_(const fk_Vector &, const fk_Vector &, const double);
+		void LoRotate_(const fk_Vector &, const fk_Vector &, const double);
+		void GlRotateWithVec_(const fk_Vector &, const fk_Vector &, double);
+		void LoRotateWithVec_(const fk_Vector &, const fk_Vector &, double);
 #endif
 	};
 }

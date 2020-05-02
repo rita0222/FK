@@ -302,13 +302,13 @@ fk_Matrix fk_Model::getInhInvMatrix(void) const
 
 fk_OrthoMatrix fk_Model::getInhBaseMatrix(void) const
 {
-	if(parentModel == nullptr) return OrthoMatrix;
-	return (parentModel->getInhBaseMatrix() * OrthoMatrix);
+	if(parentModel == nullptr) return data->M;
+	return (parentModel->getInhBaseMatrix() * data->M);
 }
 
 fk_OrthoMatrix fk_Model::getInhInvBaseMatrix(void) const
 {
-	fk_OrthoMatrix	RetMat = OrthoMatrix;
+	fk_OrthoMatrix	RetMat = data->M;
 	RetMat.inverse();
 	if(parentModel == nullptr) return RetMat;
 	return (parentModel->getInhInvBaseMatrix() * RetMat);

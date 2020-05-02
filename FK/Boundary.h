@@ -90,7 +90,7 @@ namespace FK {
 		 *
 		 *	\sa getBMode(), fk_Model::isInter()
 		 */
-		void		setBMode(fk_BoundaryMode mode);
+		void setBMode(fk_BoundaryMode mode);
 
 		//! 境界ボリューム選択状態参照関数
 		/*!
@@ -116,7 +116,7 @@ namespace FK {
 		 *
 		 *	\sa getSphere(), setBMode(), fk_Model::adjustSphere()
 		 */
-		void		setSphere(double r);
+		void setSphere(double r);
 
 		//! 境界球半径参照関数
 		/*!
@@ -126,7 +126,7 @@ namespace FK {
 		 *
 		 *	\sa setSphere(), fk_Model::adjustSphere()
 		 */
-		double		getSphere(void);
+		double getSphere(void);
 		///@}
 
 		//! \name 軸平行境界ボックス (AABB) 制御関数
@@ -144,7 +144,7 @@ namespace FK {
 		 *
 		 *	\sa setAABBSize(fk_Vector), getAABBSize(), setBMode(), fk_Model::adjustAABB()
 		 */
-		void		setAABBSize(double x, double y, double z);
+		void setAABBSize(double x, double y, double z);
 
 		//! 軸平行境界ボックス (AABB) サイズ設定関数2
 		/*!
@@ -157,7 +157,7 @@ namespace FK {
 		 *	\sa setAABBSize(double, double, double), getAABBSize(),
 		 *		setBMode(), fk_Model::adjustAABB()
 		 */
-		void		setAABBSize(fk_Vector size);
+		void setAABBSize(fk_Vector size);
 
 		//! 軸平行境界ボックス (AABB) サイズ取得関数
 		/*!
@@ -167,7 +167,7 @@ namespace FK {
 		 *
 		 *	\sa setAABBSize(double, double, double), setAABBSize(fk_Vector), fk_Model::adjustAABB()
 		 */
-		fk_Vector	getAABBSize(void);
+		fk_Vector getAABBSize(void);
 		///@}
 
 		//! \name 有向境界ボックス (OBB) 制御関数
@@ -185,7 +185,7 @@ namespace FK {
 		 *
 		 *	\sa setOBBSize(fk_Vector), getOBBSize(), setBMode(), fk_Model::adjustOBB()
 		 */
-		void		setOBBSize(double x, double y, double z);
+		void setOBBSize(double x, double y, double z);
 
 		//! 有向境界ボックス (OBB) サイズ設定関数2
 		/*!
@@ -197,7 +197,7 @@ namespace FK {
 		 *
 		 *	\sa setOBBSize(double, double, double), getOBBSize(), setBMode(), fk_Model::adjustOBB()
 		 */
-		void		setOBBSize(fk_Vector size);
+		void setOBBSize(fk_Vector size);
 
 		//! 有向境界ボックス (OBB) サイズ取得関数
 		/*!
@@ -207,7 +207,7 @@ namespace FK {
 		 *
 		 *	\sa setOBBSize(double, double, double), setOBBSize(fk_Vector), fk_Model::adjustOBB()
 		 */
-		fk_Vector	getOBBSize(void);
+		fk_Vector getOBBSize(void);
 		///@}
 
 		//! \name カプセル型制御関数
@@ -227,7 +227,7 @@ namespace FK {
 		 *	\sa	getCapsuleRadius(), getCapsuleLength(), getCapsuleStartPos(), getCapsuleEndPos(),
 		 *		setBMode(), fk_Model::adjustCapsule()
 		 */
-		void		setCapsule(fk_Vector sPos, fk_Vector ePos, double r);
+		void setCapsule(fk_Vector sPos, fk_Vector ePos, double r);
 
 		//! カプセル型領域規定距離取得関数
 		/*!
@@ -237,7 +237,7 @@ namespace FK {
 		 *
 		 *	\sa	setCapsule(), fk_Model::adjustCapsule()
 		 */
-		double		getCapsuleRadius(void);
+		double getCapsuleRadius(void);
 
 		//! カプセル型中心軸長取得関数
 		/*!
@@ -247,7 +247,7 @@ namespace FK {
 		 *
 		 *	\sa	setCapsule(), fk_Model::adjustCapsule()
 		 */
-		double		getCapsuleLength(void);
+		double getCapsuleLength(void);
 
 		//! カプセル型中心軸始点取得関数
 		/*!
@@ -257,7 +257,7 @@ namespace FK {
 		 *
 		 *	\sa	setCapsule(), fk_Model::adjustCapsule()
 		 */
-		fk_Vector	getCapsuleStartPos(void);
+		fk_Vector getCapsuleStartPos(void);
 
 		//! カプセル型中心軸終点取得関数
 		/*!
@@ -267,7 +267,7 @@ namespace FK {
 		 *
 		 *	\sa	setCapsule(), fk_Model::adjustCapsule()
 		 */
-		fk_Vector	getCapsuleEndPos(void);
+		fk_Vector getCapsuleEndPos(void);
 		///@}
 
 		//! \name 境界ボリューム描画制御関数
@@ -282,7 +282,7 @@ namespace FK {
 		 *
 		 *	\sa getBDrawToggle(), setBLineColor(), setBIntLineColor(), setBLineWidth()
 		 */
-		void		setBDrawToggle(bool mode);
+		void setBDrawToggle(bool mode);
 
 		//! 境界ボリューム描画有無取得関数
 		/*!
@@ -294,7 +294,7 @@ namespace FK {
 		 *
 		 *	\sa	setBDrawToggle()
 		 */
-		bool		getBDrawToggle(void);
+		bool getBDrawToggle(void);
 
 		//! 境界ボリューム非干渉描画色設定関数
 		/*!
@@ -305,7 +305,7 @@ namespace FK {
 		 *	\sa	getBLineColor(), setBIntLineColor(), setBDrawToggle(),
 		 *		fk_Model::isInter(), fk_Model::setInterMode()
 		 */
-		void		setBLineColor(fk_Color col);
+		void setBLineColor(fk_Color col);
 
 		//! 境界ボリューム非干渉描画色取得関数
 		/*!
@@ -315,7 +315,7 @@ namespace FK {
 		 *
 		 *	\sa	setBLineColor(), getBIntLineColor()
 		 */
-		fk_Color *	getBLineColor(void);
+		fk_Color * getBLineColor(void);
 
 		//! 境界ボリューム干渉状態描画色設定関数
 		/*!
@@ -330,7 +330,7 @@ namespace FK {
 		 *	\sa	getBIntLineColor(), setBLineColor(), setBDrawToggle(),
 		 *		fk_Model::isInter(), fk_Model::setInterMode()
 		 */
-		void		setBIntLineColor(fk_Color col);
+		void setBIntLineColor(fk_Color col);
 
 		//! 境界ボリューム干渉状態描画色取得関数
 		/*!
@@ -340,7 +340,7 @@ namespace FK {
 		 *
 		 *	\sa	setBIntLineColor(), getBLineColor()
 		 */
-		fk_Color *	getBIntLineColor(void);
+		fk_Color * getBIntLineColor(void);
 
 		//!	境界ボリューム描画線幅設定関数
 		/*!
@@ -350,7 +350,7 @@ namespace FK {
 		 *
 		 *	\sa setBDrawToggle(), setBLineColor(), setBIntLineColor()
 		 */
-		void		setBLineWidth(double width);
+		void setBLineWidth(double width);
 
 		//!	境界ボリューム描画線幅取得関数
 		/*!
@@ -360,11 +360,11 @@ namespace FK {
 		 *
 		 *	\sa setBLineWidth()
 		 */
-		double		getBLineWidth(void);
+		double getBLineWidth(void);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_IndexFaceSet *		GetBShape(void);
+		fk_IndexFaceSet * GetBShape(void);
 #endif
 
 	private:

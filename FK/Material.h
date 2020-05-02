@@ -67,7 +67,7 @@ namespace FK {
 		/*!
 		 *	変数を初期状態に戻します。
 		 */
-		void		init(void);
+		void init(void);
 
 		//! \name 設定用関数
 		///@{
@@ -78,7 +78,7 @@ namespace FK {
 		 *
 		 *	\param[in] c 色
 		 */
-		void		setAmbient(fk_Color c);
+		void setAmbient(fk_Color c);
 
 		//! 環境反射係数設定関数2
 		/*!
@@ -92,7 +92,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setAmbient(float r, float g, float b, float a = 1.0f);
+		void setAmbient(float r, float g, float b, float a = 1.0f);
 
 		//! 環境反射係数設定関数3
 		/*!
@@ -106,7 +106,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setAmbient(double r, double g, double b, double a = 1.0);
+		void setAmbient(double r, double g, double b, double a = 1.0);
 
 		//! 拡散反射係数設定関数1
 		/*!
@@ -114,7 +114,7 @@ namespace FK {
 		 *
 		 *	\param[in] c 色
 		 */
-		void		setDiffuse(fk_Color c);
+		void setDiffuse(fk_Color c);
 
 		//! 拡散反射係数設定関数2
 		/*!
@@ -128,7 +128,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setDiffuse(float r, float g, float b, float a = 1.0f);
+		void setDiffuse(float r, float g, float b, float a = 1.0f);
 
 		//! 拡散反射係数設定関数3
 		/*!
@@ -142,7 +142,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setDiffuse(double r, double g, double b, double a = 1.0);
+		void setDiffuse(double r, double g, double b, double a = 1.0);
 
 		//! 鏡面反射設定関数1
 		/*!
@@ -150,7 +150,7 @@ namespace FK {
 		 *
 		 *	\param[in] c 色
 		 */
-		void		setSpecular(fk_Color c);
+		void setSpecular(fk_Color c);
 
 		//! 鏡面反射係数設定関数2
 		/*!
@@ -164,7 +164,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setSpecular(float r, float g, float b, float a = 1.0f);
+		void setSpecular(float r, float g, float b, float a = 1.0f);
 
 		//! 鏡面反射係数設定関数3
 		/*!
@@ -178,7 +178,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setSpecular(double r, double g, double b, double a = 1.0);
+		void setSpecular(double r, double g, double b, double a = 1.0);
 
 		//! 鏡面反射ハイライト設定関数1
 		/*!
@@ -186,7 +186,7 @@ namespace FK {
 		 *
 		 *	\param[in] s 鏡面反射ハイライト
 		 */
-		void		setShininess(float s);
+		void setShininess(float s);
 
 		//! 鏡面反射ハイライト設定関数2
 		/*!
@@ -194,7 +194,7 @@ namespace FK {
 		 *
 		 *	\param[in] s 鏡面反射ハイライト
 		 */
-		void		setShininess(double s);
+		void setShininess(double s);
 
 		//! 環境反射・拡散反射同時設定関数1
 		/*!
@@ -202,7 +202,7 @@ namespace FK {
 		 *
 		 *	\param[in] c 色
 		 */
-		void		setAmbDiff(fk_Color c);
+		void setAmbDiff(fk_Color c);
 
 		//! 環境反射・拡散反射同時設定関数2
 		/*!
@@ -216,7 +216,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setAmbDiff(float r, float g, float b, float a = 1.0f);
+		void setAmbDiff(float r, float g, float b, float a = 1.0f);
 
 		//! 環境反射・拡散反射同時設定関数3
 		/*!
@@ -230,7 +230,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A(透過)要素
 		 */
-		void		setAmbDiff(double r, double g, double b, double a = 1.0);
+		void setAmbDiff(double r, double g, double b, double a = 1.0);
 		///@}
 
 		//! \name 参照用関数
@@ -246,7 +246,7 @@ namespace FK {
 		 *
 		 *	\sa setAmbient(), setAmbDiff()
 		 */
-		fk_Color *	getAmbient(void);
+		fk_Color * getAmbient(void);
 
 		//! 拡散反射係数参照関数
 		/*!
@@ -258,7 +258,7 @@ namespace FK {
 		 *
 		 *	\sa setDiffuse(), setAmbDiff()
 		 */
-		fk_Color *	getDiffuse(void);
+		fk_Color * getDiffuse(void);
 
 		//! 鏡面反射係数参照関数
 		/*!
@@ -270,7 +270,7 @@ namespace FK {
 		 *
 		 *	\sa setSpecular()
 		 */
-		fk_Color *	getSpecular(void);
+		fk_Color * getSpecular(void);
 
 
 		//! 鏡面反射ハイライト参照関数
@@ -279,7 +279,7 @@ namespace FK {
 		 *
 		 *	\sa setShininess()
 		 */
-		float		getShininess(void);
+		float getShininess(void);
 
 		//! 透明度設定関数1
 		/*!
@@ -297,7 +297,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Scene::setBlendStatus()
 		 */
-		void		setAlpha(float a);
+		void setAlpha(float a);
 
 		//! 透明度設定関数2
 		/*!
@@ -315,7 +315,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Scene::setBlendStatus()
 		 */
-		void		setAlpha(double a);
+		void setAlpha(double a);
 		///@}
 
 		//! デフォルトマテリアル初期化関数
@@ -332,20 +332,20 @@ namespace FK {
 		static void	initDefault(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void		setEmission(fk_Color c);
-		void		setEmission(float r, float g, float b);
-		void		setEmission(double r, double g, double b);
-		fk_Color *	getEmission(void);
-		float		getAlpha(void);
+		void setEmission(fk_Color c);
+		void setEmission(float r, float g, float b);
+		void setEmission(double r, double g, double b);
+		fk_Color * getEmission(void);
+		float getAlpha(void);
 
-		void		Print(int, std::string = "");
+		void Print(int, std::string = "");
 #endif
 
 	private:
-		fk_Color	diffuse;
-		fk_Color	ambient;
-		fk_Color	specular;
-		float		shininess;
+		std::unique_ptr<fk_Color> diffuse;
+		std::unique_ptr<fk_Color> ambient;
+		std::unique_ptr<fk_Color> specular;
+		float shininess;
 	};
 }
 #endif // __FK_MATERIAL_HEADER__

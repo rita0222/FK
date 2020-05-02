@@ -37,7 +37,7 @@ namespace FK {
 
 	class fk_BVHMotion : public fk_BVHBase {
 
-		friend class				fk_D3DXAnimation;
+		friend class fk_D3DXAnimation;
 
 	public:
 		//! コンストラクタ
@@ -50,7 +50,7 @@ namespace FK {
 		/*!
 		 *	モーションデータを初期化します。
 		 */
-		void		init(void);
+		void init(void);
 
 		//! BVH ファイル入力関数
 		/*!
@@ -60,7 +60,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool		readBVHFile(const std::string fileName);
+		bool readBVHFile(const std::string fileName);
 
 		//! ノード数取得関数
 		/*!
@@ -69,7 +69,7 @@ namespace FK {
 		 *	\return ノード数。
 		 *	モーションデータが未入力の場合は、0 を返します。
 		 */
-		int			getNodeNum(void);
+		int getNodeNum(void);
 
 		//! ノード名取得関数
 		/*!
@@ -80,7 +80,7 @@ namespace FK {
 		 *	\return ノード名。
 		 *	インデックスが無効な値の場合は、空の文字列を返します。
 		 */
-		std::string	getNodeName(int index);
+		std::string getNodeName(int index);
 
 		//! ノードモデル取得関数
 		/*!
@@ -91,7 +91,7 @@ namespace FK {
 		 *	\return ノードを表す fk_Model のポインタ。
 		 *	インデックスが無効な値の場合は、nullptr を返します。
 		 */
-		fk_Model *	getNodeModel(int index);
+		fk_Model * getNodeModel(int index);
 
 		//! ノードモデル取得関数
 		/*!
@@ -103,7 +103,7 @@ namespace FK {
 		 *	\return ノードを表す fk_Model のポインタ。
 		 *	存在しないノード名を指定した場合は、nullptr を返します。
 		 */
-		fk_Model *	getNodeModel(std::string nodeName);
+		fk_Model * getNodeModel(std::string nodeName);
 
 
 		//! モーション再生関数
@@ -113,7 +113,7 @@ namespace FK {
 		 *
 		 *	\return モーションを 1 フレーム進めた後のフレームカウント。
 		 */
-		int			nextFrame(void);
+		int nextFrame(void);
 
 		//! モーション状態セット関数
 		/*!
@@ -123,7 +123,7 @@ namespace FK {
 		 *	\param[in] frame モーションのフレームカウント。
 		 *	0 未満やモーションの長さ以上の値を指定した場合は、それぞれ上下限に丸められます。
 		 */
-		void		setFrameCount(int frame);
+		void setFrameCount(int frame);
 
 		//! アニメーション時間設定関数
 		/*!
@@ -133,7 +133,7 @@ namespace FK {
 		 *	\param[in] t 時間
 		 *	0.0 未満やモーションの長さ以上の値を指定した場合は、それぞれ上下限に丸められます。
 		 */
-		void		setAnimationTime(double t);
+		void setAnimationTime(double t);
 
 
 		//! モーション現在位置取得関数
@@ -142,7 +142,7 @@ namespace FK {
 		 *
 		 *	\return モーション再生の現在位置を指すフレームカウント。
 		 */
-		int			getNowFrameCount(void);
+		int getNowFrameCount(void);
 
 		//! モーション長取得関数
 		/*!
@@ -150,7 +150,7 @@ namespace FK {
 		 *
 		 *	\return モーションの長さを指すフレーム数。
 		 */
-		int			getFrameLength(void);
+		int getFrameLength(void);
 
 		//! 1フレームの実時間取得関数
 		/*!
@@ -158,7 +158,7 @@ namespace FK {
 		 *
 		 *	\return モーションの長さを指すフレーム数。
 		 */
-		double		getOneFrameTime(void);
+		double getOneFrameTime(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
@@ -169,23 +169,23 @@ namespace FK {
 #endif		
 		
 	private:
-		std::vector<fk_Model *>					nodeArray;
-		std::vector<std::string>				nameArray;
-		std::vector<fk_Vector>					offsetArray;
-		std::vector<int>						typeArray;
-		std::vector< std::vector<fk_Vector> >	posArray;
-		std::vector< std::vector<fk_Angle> >	rotArray;
+		std::vector<fk_Model *> nodeArray;
+		std::vector<std::string> nameArray;
+		std::vector<fk_Vector> offsetArray;
+		std::vector<int> typeArray;
+		std::vector<std::vector<fk_Vector>> posArray;
+		std::vector<std::vector<fk_Angle>> rotArray;
 
-		std::map<std::string, fk_Model *>		nameToNodeMap;
+		std::map<std::string, fk_Model *> nameToNodeMap;
 
-		std::vector< std::pair<std::vector<int>::size_type, int> >	frameFormat;
+		std::vector<std::pair<std::vector<int>::size_type, int>> frameFormat;
 
-		int			nowFrame, length;
-		double		oneFrameTime;
+		int nowFrame, length;
+		double oneFrameTime;
 
-		int			ReadHierarchy(std::vector<std::string> *, int);
-		int			ReadMotion(std::vector<std::string> *, int);
-		int			SetFrameFormat(std::vector<std::string> *, int);
+		int ReadHierarchy(std::vector<std::string> *, int);
+		int ReadMotion(std::vector<std::string> *, int);
+		int SetFrameFormat(std::vector<std::string> *, int);
 	};
 }
 

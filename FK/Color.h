@@ -81,7 +81,7 @@ namespace FK {
 		 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
 		 *	1 を超える場合はその成分を 1 とします。
 		 */
-		fk_Color &			operator *=(double);
+		fk_Color & operator *=(double);
 
 		//! 実数商代入演算子
 		/*!
@@ -98,7 +98,7 @@ namespace FK {
 		 *	1 を超える場合はその成分を 1 とします。
 		 *	また、d が 0 であった場合は C の値を変更しません。
 		 */
-		fk_Color &			operator /=(double);
+		fk_Color & operator /=(double);
 
 		//! 単項和代入演算子
 		/*!
@@ -113,7 +113,7 @@ namespace FK {
 		 *
 		 *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
 		 */
-		fk_Color &			operator +=(const fk_Color &);
+		fk_Color & operator +=(const fk_Color &);
 
 		//! 単項差代入演算子
 		/*!
@@ -128,13 +128,13 @@ namespace FK {
 		 *
 		 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
 		 */
-		fk_Color &			operator -=(const fk_Color &);
+		fk_Color & operator -=(const fk_Color &);
 
 		//! 初期化関数1
 		/*!
 		 *	(R, G, B, A) = (0, 0, 0, 1) で初期化を行います。
 		 */
-		void		init(void);
+		void init(void);
 
 		//! 初期化関数2
 		/*!
@@ -145,7 +145,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A要素値
 		 */
-		void		init(float r, float g, float b, float a = 1.0f);
+		void init(float r, float g, float b, float a = 1.0f);
 
 		//! 初期化関数3
 		/*!
@@ -156,7 +156,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A要素値
 		 */
-		void		init(double r, double g, double b, double a = 1.0);
+		void init(double r, double g, double b, double a = 1.0);
 
 		//! 設定関数1
 		/*!
@@ -167,7 +167,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A要素値
 		 */
-		void		set(float r, float g, float b, float a = 1.0f);
+		void set(float r, float g, float b, float a = 1.0f);
 
 		//! 設定関数2
 		/*!
@@ -178,7 +178,7 @@ namespace FK {
 		 *	\param[in] b B要素値
 		 *	\param[in] a A要素値
 		 */
-		void		set(double r, double g, double b, double a = 1.0);
+		void set(double r, double g, double b, double a = 1.0);
 
 		//! HSV変換関数
 		/*!
@@ -189,79 +189,79 @@ namespace FK {
 		 *	\param[in] s 彩度要素値。最小値は0、最大値は1です。
 		 *	\param[in] v 明度要素値。最小値は0、最大値は1です。
 		 */
-		void		setHSV(double h, double s, double v);
+		void setHSV(double h, double s, double v);
 
 		//! R要素設定関数
 		/*!
 		 *	\param[in] r R要素値
 		 */
-		void		setR(float r);
+		void setR(float r);
 
 		//! G要素設定関数
 		/*!
 		 *	\param[in] g G要素値
 		 */
-		void		setG(float g);
+		void setG(float g);
 
 		//! B要素設定関数
 		/*!
 		 *	\param[in] b B要素値
 		 */
-		void		setB(float b);
+		void setB(float b);
 
 		//! A要素設定関数
 		/*!
 		 *	\param[in] a A要素値
 		 */
-		void		setA(float a);
+		void setA(float a);
 
 		//! R要素設定関数
 		/*!
 		 *	\param[in] r R要素値
 		 */
-		void		setR(double r);
+		void setR(double r);
 
 		//! G要素設定関数
 		/*!
 		 *	\param[in] g G要素値
 		 */
-		void		setG(double g);
+		void setG(double g);
 
 		//! B要素設定関数
 		/*!
 		 *	\param[in] b B要素値
 		 */
-		void		setB(double b);
+		void setB(double b);
 
 		//! A要素設定関数
 		/*!
 		 *	\param[in] a A要素値
 		 */
-		void		setA(double a);
+		void setA(double a);
 
 		//! R要素参照関数
 		/*!
 		 *	\return R要素値
 		 */
-		float		getR(void) const;
+		float getR(void) const;
 
 		//! G要素参照関数
 		/*!
 		 *	\return G要素値
 		 */
-		float		getG(void) const;
+		float getG(void) const;
 
 		//! B要素参照関数
 		/*!
 		 *	\return B要素値
 		 */
-		float		getB(void) const;
+		float getB(void) const;
 
 		//! A要素参照関数
 		/*!
 		 *	\return A要素値
 		 */
-		float		getA(void) const;
+		float getA(void) const;
 
 		//! 
 
@@ -274,7 +274,7 @@ namespace FK {
 		 *
 		 *	\return		補正値
 		 */
-		static double	clamp(double x);
+		static double clamp(double x);
 
 		//! 色成分範囲補正関数2
 		/*!
@@ -285,7 +285,7 @@ namespace FK {
 		 *
 		 *	\return		補正値
 		 */
-		static float	clamp(float x);
+		static float clamp(float x);
 
 		//! \name 二項演算子
 		///@{
@@ -299,7 +299,7 @@ namespace FK {
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		std::string		OutStr(void);
+		std::string OutStr(void);
 #endif
 	};
 
@@ -312,7 +312,7 @@ namespace FK {
 	 *
 	 *	なお演算の結果、成分値が 1 を超える場合はその成分を 1 とします。
 	 */
-	fk_Color	operator +(const fk_Color &, const fk_Color &);
+	fk_Color operator +(const fk_Color &, const fk_Color &);
 
 	//! 色要素差二項演算子
 	/*!
@@ -323,7 +323,7 @@ namespace FK {
 	 *
 	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 にします。
 	 */
-	fk_Color	operator -(const fk_Color &, const fk_Color &);
+	fk_Color operator -(const fk_Color &, const fk_Color &);
 
 	//! 実数倍二項演算子1
 	/*!
@@ -336,7 +336,7 @@ namespace FK {
 	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
 	 *	1 を超える場合はその成分を 1 とします。
 	 */
-	fk_Color	operator *(const fk_Color &, double);
+	fk_Color operator *(const fk_Color &, double);
 
 	//! 実数倍二項演算子2
 	/*!
@@ -349,7 +349,7 @@ namespace FK {
 	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
 	 *	1 を超える場合はその成分を 1 とします。
 	 */
-	fk_Color	operator *(double, const fk_Color &);
+	fk_Color operator *(double, const fk_Color &);
 
 	//! 実数商二項演算子
 	/*!
@@ -361,7 +361,7 @@ namespace FK {
 	 *	なお演算の結果、成分値が 0 未満となる場合はその成分を 0 に、
 	 *	1 を超える場合はその成分を 1 とします。
 	 */
-	fk_Color	operator /(const fk_Color &, double);
+	fk_Color operator /(const fk_Color &, double);
 }
 
 #endif // __FK_COLOR_HEADER__
