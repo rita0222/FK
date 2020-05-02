@@ -32,9 +32,9 @@
 //! Fine Kernel Toolkit 名前空間
 namespace FK {
 
-	const int FK_MAJOR_VERSION = 4;
-	const int FK_MINOR_VERSION = 1;
-	const int FK_SUBMINOR_VERSION = 6;
+	constexpr int FK_MAJOR_VERSION = 4;
+	constexpr int FK_MINOR_VERSION = 2;
+	constexpr int FK_SUBMINOR_VERSION = 0;
 
 	constexpr int _FK_UNDEFINED_DEFINE_ = -1;
 	constexpr int FK_UNDEFINED = _FK_UNDEFINED_DEFINE_;
@@ -125,11 +125,11 @@ namespace FK {
 		fk_Type	getObjectType(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void			SetObjectType(const fk_Type type);
+		void SetObjectType(const fk_Type type);
 #endif
 
 	private:
-		fk_Type			ObjectType;
+		fk_Type ObjectType;
 
 	};
 

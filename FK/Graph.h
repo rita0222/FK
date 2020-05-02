@@ -319,13 +319,13 @@ namespace FK {
 #endif
 
 	private:
-		fk_Point *nodeShape;
-		fk_Line *edgeShape;
-		fk_IDAdmin *edgeAdmin;
+		std::unique_ptr<fk_Point> nodeShape;
+		std::unique_ptr<fk_Line> edgeShape;
+		std::unique_ptr<fk_IDAdmin> edgeAdmin;
 
-		std::vector<fk_GraphNode *>	nodeArray;
-		std::vector<fk_GraphEdge *>	edgeArray;
-		std::vector<fk_CostTable *> tableArray;
+		std::vector<std::unique_ptr<fk_GraphNode>> nodeArray;
+		std::vector<std::unique_ptr<fk_GraphEdge>> edgeArray;
+		std::vector<std::unique_ptr<fk_CostTable>> tableArray;
 
 		unsigned int intCostMax, doubleCostMax;
 

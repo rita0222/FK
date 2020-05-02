@@ -1,5 +1,4 @@
-﻿
-#define FK_DEF_SIZETYPE
+﻿#define FK_DEF_SIZETYPE
 #include <FK/MQOParser.H>
 #include <FK/MeshTexture.h>
 #include <FK/IFSTexture.h>
@@ -95,7 +94,7 @@ fk_TreeData * fk_MQOParser::GetProperty(fk_TreeData *argParent,
 {
 	string					keys, objName;
 	fk_TreeData				*newData;
-	_fk_MQOPropertyList		*propList = new _fk_MQOPropertyList;
+	shared_ptr<_fk_MQOPropertyList> propList(new _fk_MQOPropertyList());
 
 	keys = argLine->substr(0, argLine->find("{"));
 	TrimString(&keys);
@@ -117,7 +116,7 @@ fk_TreeData * fk_MQOParser::GetProperty(fk_TreeData *argParent,
 	}
 
 	ReplaceString(&(propList->data), "\"", "");
-	newData->setObject(propList, true);
+	newData->setObject(propList);
 	return newData;
 }
 

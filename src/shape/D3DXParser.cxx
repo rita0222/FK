@@ -96,14 +96,14 @@ fk_TreeData * fk_D3DXParser::GetProperty(fk_TreeData *argParent,
 {
 	string					keys;
 	fk_TreeData				*newData;
-	fk_D3DXPropertyList		*propList = new fk_D3DXPropertyList;
+	shared_ptr<fk_D3DXPropertyList> propList(new fk_D3DXPropertyList());
 
 	keys = argLine->substr(0, argLine->find("{"));
 	TrimString(&keys);
 	newData = tree->addNewChild(argParent, keys);
 	propList->SetProperty(PopWord(&keys));
 	propList->SetData(PopWord(&keys));
-	newData->setObject(propList, true);
+	newData->setObject(propList);
 	return newData;
 }
 

@@ -12,24 +12,24 @@ namespace FK {
 		fk_IDAdmin(int = 1);
 		virtual ~fk_IDAdmin();
 
-		void	CloneData(fk_IDAdmin *);
-		void	Init(int = 1);
-		void	Resize(int);
-		int		NewID(void) const;
-		int		CreateID(void);
-		bool	CreateID(int);
-		bool	EraseID(int);
-		bool	ExistID(int) const;
-		int		GetMaxID(void) const;
-		int		GetIDNum(void) const;
-		int		GetNext(int) const;
-		int		GetOrder(void) const;
+		void CloneData(fk_IDAdmin *);
+		void Init(int = 1);
+		void Resize(int);
+		int NewID(void) const;
+		int CreateID(void);
+		bool CreateID(int);
+		bool EraseID(int);
+		bool ExistID(int) const;
+		int GetMaxID(void) const;
+		int GetIDNum(void) const;
+		int GetNext(int) const;
+		int GetOrder(void) const;
 
 	private:
-		int					order;
-		int					MaxID;
-		std::list<int>		*eraseIDSet;
-		std::vector<char>	existFlagSet;
+		int order;
+		int MaxID;
+		std::list<int> *eraseIDSet;
+		std::vector<char> existFlagSet;
 	};
 }
 

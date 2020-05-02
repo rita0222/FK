@@ -64,14 +64,12 @@ void fk_Model::SetTreeDelMode(bool argMode)
 
 void fk_Model::EntryTree(void)
 {
-	fk_ModelTreeObject		*thisObject;
-	stringstream			ss;
-	
 	if(treeFlag == true) return;
-
 	treeFlag = true;
 
-	thisObject = new fk_ModelTreeObject();
+	shared_ptr<fk_ModelTreeObject> thisObject(new fk_ModelTreeObject());
+	stringstream ss;
+	
 	ss << "m" << _modelID;
 	treeData = _modelTree.addNewChild(_modelTree.getRoot(), ss.str());
 	thisObject->SetModel(this);

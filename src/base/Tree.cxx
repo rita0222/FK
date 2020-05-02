@@ -8,15 +8,9 @@ using namespace FK;
 
 using list_ite = fk_TList::iterator;
 
-fk_TreeData::fk_TreeData(fk_Tree *argTree,
-						 const string argName, fk_TreeData *argParent)
+fk_TreeData::fk_TreeData(fk_Tree *argTree, const string argName, fk_TreeData *argParent) :
+	base(argTree), name(argName), parent(argParent)
 {
-	object = nullptr;
-	base = argTree;
-	name = argName;
-	parent = argParent;
-	deleteFlg = false;
-
 	if(parent == nullptr) {
 		depth = 0;
 		maxDepth = 0;
@@ -24,15 +18,12 @@ fk_TreeData::fk_TreeData(fk_Tree *argTree,
 		depth = parent->getDepth() + 1;
 		maxDepth = depth;
 	}
-
-	children.clear();
 	return;
 }
 
 fk_TreeData::~fk_TreeData()
 {
-	if(deleteFlg == true) delete object;
-
+	//if(deleteFlg == true) delete object;
 	return;
 }
 
@@ -173,16 +164,22 @@ string fk_TreeData::getName(void)
 	return name;
 }
 
+/*
 void fk_TreeData::setObject(fk_TreeBaseObject *argObject, bool argDelFlg)
 {
 	object = argObject;
 	deleteFlg = argDelFlg;
 	return;
 }
+*/
+void fk_TreeData::setObject(const shared_ptr<fk_TreeBaseObject> &argObject)
+{
+	object = argObject;
+}
 
 fk_TreeBaseObject * fk_TreeData::getObject(void)
 {
-	return object;
+	return object.get();
 }
 
 fk_Tree::fk_Tree(const string argName)
@@ -197,8 +194,7 @@ fk_Tree::~fk_Tree(void)
 	return;
 }
 
-fk_TreeData * fk_Tree::makeNewData(fk_Tree *argTree, string argName,
-								   fk_TreeData *argParent)
+fk_TreeData * fk_Tree::makeNewData(fk_Tree *argTree, string argName, fk_TreeData *argParent)
 {
 	return(new fk_TreeData(argTree, argName, argParent));
 }
