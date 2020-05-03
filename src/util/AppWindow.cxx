@@ -65,35 +65,21 @@ const static fk_Switch stArray[3] = {
 	fk_Switch::RELEASE
 };
 
-void fk_AppWindow::InitMember(void)
+fk_AppWindow::fk_AWData::fk_AWData(void) :
+	ref_child(nullptr), ref_scene(&scene), ref_camera(&camera), tbFlag(false)
 {
-	fps_admin = make_unique<fk_FrameController>();
-	guide = make_unique<fk_GuideObject>();
-	fsc = make_unique<fk_FullscreenController>();
-	scene = make_unique<fk_Scene>();
-	lightShape = make_unique<fk_Light>();
-	camera = make_unique<fk_Model>();
-	light = make_unique<fk_Model>();
-}
+	light.setShape(&lightShape);
+	light.setMaterial(WhiteLight);
+	light.glMoveTo(0.0, 0.0, 0.0);
+	light.glFocus(-1.0, -1.0, -1.0);
 
-// スクリーンモードのハンドリング処理
-void fk_AppWindow::ToggleScreen(void)
-{
-	// ALT+ENTERでフルスクリーンとウィンドウモードを切り替え
-	if(getSpecialKeyStatus(fk_Key::ALT_L) >= fk_Switch::DOWN
-	|| getSpecialKeyStatus(fk_Key::ALT_R) >= fk_Switch::DOWN) {
-		if(getSpecialKeyStatus(fk_Key::ENTER) == fk_Switch::DOWN) {
-			if(fsc->isFullscreen() == true) {
-				fsc->changeToWindow();
-			} else {
-				fsc->changeToFullscreen();
-			}
-		}
-	}
-	// ウィンドウのフォーカスが外れたらウィンドウモードに戻す
-	if(Fl::focus() != mainWin.get()) {
-		toWindow();
-	}
+	scene.setBlendStatus(true);
+	scene.entryCamera(&camera);
+	scene.entryModel(&light);
+
+	camera.glMoveTo(0.0, 0.0, 100.0);
+	camera.glFocus(0.0, 0.0, 0.0);
+	camera.glUpvec(0.0, 1.0, 0.0);
 
 	return;
 }
@@ -108,34 +94,24 @@ fk_AppWindow::fk_AppWindow(uint32_t *argCallbacks)
 fk_AppWindow::fk_AppWindow(void)
 #endif // FK_CLI_CODE
 {
-	InitMember();
 	fk_System::setcwd();
-
-
-	mainWin = make_shared<Fl_Window>(512, 512, "FKAPP Window");
-#ifdef FK_CLI_CODE
-#ifdef _WIN64
-	drawWin = make_unique<fk_Window>(InnerWindow(argCallbacks, 0, 0, 512, 512));
-#else
-	drawWin = make_unique<fk_Window>(InnerWindow(argCallbacks, 0, 0, 512, 512));
-#endif // _WIN64
-#else
-	drawWin = make_unique<fk_Window>(0, 0, 512, 512);
-#endif // FK_CLI_CODE
-	mainWin->end();
-
 	fk_Material::initDefault();
 
-	light->setShape(lightShape.get());
-	light->setMaterial(WhiteLight);
-	light->glMoveTo(0.0, 0.0, 0.0);
-	light->glFocus(-1.0, -1.0, -1.0);
+	data = make_unique<fk_AWData>();
 
-	scene->setBlendStatus(true);
-	scene->entryCamera(camera.get());
-	scene->entryModel(light.get());
+	data->mainWin = make_shared<Fl_Window>(512, 512, "FKAPP Window");
+#ifdef FK_CLI_CODE
+#ifdef _WIN64
+	data->drawWin = make_unique<fk_Window>(InnerWindow(argCallbacks, 0, 0, 512, 512));
+#else
+	data->drawWin = make_unique<fk_Window>(InnerWindow(argCallbacks, 0, 0, 512, 512));
+#endif // _WIN64
+#else
+	data->drawWin = make_unique<fk_Window>(0, 0, 512, 512);
+#endif // FK_CLI_CODE
+	data->mainWin->end();
 
-	drawWin->setScene(scene.get());
+	data->drawWin->setScene(&(data->scene));
 
 #ifdef FK_CLI_CODE
 	setFPS(60);
@@ -143,43 +119,25 @@ fk_AppWindow::fk_AppWindow(void)
 	setFPS(0);
 #endif
 
-	camera->glMoveTo(0.0, 0.0, 100.0);
-	camera->glFocus(0.0, 0.0, 0.0);
-	camera->glUpvec(0.0, 1.0, 0.0);
-
-	tb = make_unique<fk_TrackBall>(drawWin.get(), camera.get());
-	tbFlag = false;
-	childMode = false;
-	ref_child = nullptr;
-
-	ref_camera = camera.get();
-	ref_scene = scene.get();
+	data->tb = make_unique<fk_TrackBall>(data->drawWin.get(), &(data->camera));
+	data->childMode = false;
 
 	return;
 }
 
 fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 {
-	InitMember();
-
-	mainWin = argParent.mainWin;
-	mainWin->begin();
-	argParent.drawWin->resizeWindow(0, 0, mainWin->w(), mainWin->h()/2);
-	drawWin = make_unique<fk_Window>(0, mainWin->h()/2, mainWin->w(), mainWin->h()/2);
-	mainWin->end();
-
+	fk_System::setcwd();
 	fk_Material::initDefault();
+	data = make_unique<fk_AWData>();
 
-	light->setShape(lightShape.get());
-	light->setMaterial(WhiteLight);
-	light->glMoveTo(0.0, 0.0, 0.0);
-	light->glFocus(-1.0, -1.0, -1.0);
-
-	scene->setBlendStatus(true);
-	scene->entryCamera(camera.get());
-	scene->entryModel(light.get());
-
-	drawWin->setScene(scene.get());
+	data->mainWin = argParent.data->mainWin;
+	data->mainWin->begin();
+	argParent.data->drawWin->resizeWindow(0, 0, data->mainWin->w(), data->mainWin->h()/2);
+	data->drawWin = make_unique<fk_Window>(0, data->mainWin->h()/2,
+										   data->mainWin->w(), data->mainWin->h()/2);
+	data->mainWin->end();
+	data->drawWin->setScene(&(data->scene));
 
 #ifdef FK_CLI_CODE
 	setFPS(60);
@@ -187,26 +145,17 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent)
 	setFPS(0);
 #endif
 
-	camera->glMoveTo(0.0, 0.0, 100.0);
-	camera->glFocus(0.0, 0.0, 0.0);
-	camera->glUpvec(0.0, 1.0, 0.0);
-
-	tb = make_unique<fk_TrackBall>(drawWin.get(), camera.get());
-	tbFlag = false;
-	childMode = true;
-	ref_child = nullptr;
-	argParent.ref_child = this;
-
-	ref_camera = camera.get();
-	ref_scene = scene.get();
+	data->tb = make_unique<fk_TrackBall>(data->drawWin.get(), &(data->camera));
+	data->childMode = true;
+	argParent.data->ref_child = this;
 
 	return;
 }
 
 fk_AppWindow::~fk_AppWindow(void)
 {
-	drawWin->hide();
-	mainWin->hide();
+	data->drawWin->hide();
+	data->mainWin->hide();
 
 	//delete tb;
 	//delete drawWin;
@@ -215,132 +164,132 @@ fk_AppWindow::~fk_AppWindow(void)
 
 void fk_AppWindow::setWindowName(const std::string &name)
 {
-	mainWin->label(name.c_str());
+	data->mainWin->label(name.c_str());
 	return;
 }
 
 void fk_AppWindow::setSize(int argW, int argH)
 {
-	mainWin->resize(mainWin->x(), mainWin->y(), argW, argH);
-	if(!childMode) drawWin->resizeWindow(0, 0, argW, argH);
+	data->mainWin->resize(data->mainWin->x(), data->mainWin->y(), argW, argH);
+	if(!data->childMode) data->drawWin->resizeWindow(0, 0, argW, argH);
 }
 
 void fk_AppWindow::setInnerSize(int argX, int argY, int argW, int argH)
 {
-	drawWin->resizeWindow(argX, argY, argW, argH);
+	data->drawWin->resizeWindow(argX, argY, argW, argH);
 }
 
 void fk_AppWindow::setBGColor(double r, double g, double b)
 {
-	ref_scene->setBGColor((float)r, (float)g, (float)b);
+	data->ref_scene->setBGColor((float)r, (float)g, (float)b);
 }
 
 void fk_AppWindow::setBGColor(const fk_Color &argColor)
 {
-	ref_scene->setBGColor(argColor);
+	data->ref_scene->setBGColor(argColor);
 }
 
 void fk_AppWindow::setFPS(int argFPS)
 {
 	if(argFPS == 0) {
-		fps = 0;
-		fps_admin->setFrameSkipMode(false);
+		data->fps = 0;
+		data->fps_admin.setFrameSkipMode(false);
 	} else {
-		fps = argFPS;
-		fps_admin->setFrameSkipMode(true);
-		fps_admin->setFPS(argFPS);
+		data->fps = argFPS;
+		data->fps_admin.setFrameSkipMode(true);
+		data->fps_admin.setFPS(argFPS);
 	}
 }
 
-void fk_AppWindow::setTrackBallMode(bool mode)
+void fk_AppWindow::setTrackBallMode(bool argMode)
 {
-	tbFlag = mode;
+	data->tbFlag = argMode;
 }
 
-void fk_AppWindow::showGuide(fk_Guide mode)
+void fk_AppWindow::showGuide(fk_Guide argMode)
 {
-	guide->entryScene(ref_scene, mode);
+	data->guide.entryScene(data->ref_scene, argMode);
 }
 
 void fk_AppWindow::hideGuide(void)
 {
-	guide->removeScene(ref_scene);
+	data->guide.removeScene(data->ref_scene);
 }
 
-void fk_AppWindow::setCameraPos(double x, double y, double z)
+void fk_AppWindow::setCameraPos(double argX, double argY, double argZ)
 {
-	ref_camera->glMoveTo(x, y, z);
+	data->ref_camera->glMoveTo(argX, argY, argZ);
 }
 
 void fk_AppWindow::setCameraPos(const fk_Vector &argPos)
 {
-	ref_camera->glMoveTo(argPos);
+	data->ref_camera->glMoveTo(argPos);
 }
 
-void fk_AppWindow::setCameraFocus(double x, double y, double z)
+void fk_AppWindow::setCameraFocus(double argX, double argY, double argZ)
 {
-	ref_camera->glFocus(x, y, z);
-	tb->setLookTo(fk_Vector(x, y, z));
+	data->ref_camera->glFocus(argX, argY, argZ);
+	data->tb->setLookTo(fk_Vector(argX, argY, argZ));
 }
 
 void fk_AppWindow::setCameraFocus(const fk_Vector &argPos)
 {
-	ref_camera->glFocus(argPos);
-	tb->setLookTo(argPos);
+	data->ref_camera->glFocus(argPos);
+	data->tb->setLookTo(argPos);
 }
 
 void fk_AppWindow::setCameraModel(fk_Model &model)
 {
-	ref_camera = &model;
-	tb->setCamera(&model);
-	ref_scene->entryCamera(ref_camera);
+	data->ref_camera = &model;
+	data->tb->setCamera(&model);
+	data->ref_scene->entryCamera(data->ref_camera);
 }
 
 void fk_AppWindow::setCameraModel(fk_Model *argModel)
 {
-	ref_camera = argModel;
-	tb->setCamera(argModel);
-	ref_scene->entryCamera(ref_camera);
+	data->ref_camera = argModel;
+	data->tb->setCamera(argModel);
+	data->ref_scene->entryCamera(data->ref_camera);
 }
 
 fk_Model * fk_AppWindow::getCameraModel(void)
 {
-	return ref_camera;
+	return data->ref_camera;
 }
 
 void fk_AppWindow::setCameraDefault(void)
 {
-	setCameraModel(camera.get());
+	setCameraModel(&(data->camera));
 }
 
 void fk_AppWindow::setLightDefault(void)
 {
-	ref_scene->entryModel(light.get());
+	data->ref_scene->entryModel(&(data->light));
 }
 
 void fk_AppWindow::setDefaultLightVec(const fk_Vector &argV)
 {
-	light->glVec(argV);
+	data->light.glVec(argV);
 }
 
 void fk_AppWindow::setDefaultLightVec(double argX, double argY, double argZ)
 {
-	light->glVec(argX, argY, argZ);
+	data->light.glVec(argX, argY, argZ);
 }
 
 fk_Vector fk_AppWindow::getDefaultLightVec(void)
 {
-	return light->getVec();
+	return data->light.getVec();
 }
 
 void fk_AppWindow::setDefaultLightMaterial(const fk_Material &argM)
 {
-	light->setMaterial(argM);
+	data->light.setMaterial(argM);
 }
 
 fk_Material * fk_AppWindow::getDefaultLightMaterial(void)
 {
-	return light->getMaterial();
+	return data->light.getMaterial();
 }
 
 void fk_AppWindow::setScene(fk_Scene &argScene, bool argLightAndCamera)
@@ -351,137 +300,137 @@ void fk_AppWindow::setScene(fk_Scene &argScene, bool argLightAndCamera)
 void fk_AppWindow::setScene(fk_Scene *argScene, bool argLightAndCamera)
 {
 	if(argScene == nullptr) {
-		ref_scene = scene.get();
+		data->ref_scene = &(data->scene);
 	} else {
-		ref_scene = argScene;
+		data->ref_scene = argScene;
 	}
 
-	ref_camera = const_cast<fk_Model *>(ref_scene->getCamera());
-	ref_scene->setBlendStatus(true);
-	drawWin->setScene(ref_scene);
+	data->ref_camera = const_cast<fk_Model *>(data->ref_scene->getCamera());
+	data->ref_scene->setBlendStatus(true);
+	data->drawWin->setScene(data->ref_scene);
 	if(argLightAndCamera) {
-		ref_scene->entryCamera(camera.get());
-		ref_scene->entryModel(light.get());
+		data->ref_scene->entryCamera(&(data->camera));
+		data->ref_scene->entryModel(&(data->light));
 	}
 }
 
 fk_Scene * fk_AppWindow::getScene(void)
 {
-	return ref_scene;
+	return data->ref_scene;
 }
 
 void fk_AppWindow::setSceneDefault(void)
 {
-	setScene(scene.get(), true);
+	setScene(&(data->scene), true);
 }
 
 void fk_AppWindow::entry(fk_Model &model)
 {
-	ref_scene->entryModel(&model);
+	data->ref_scene->entryModel(&model);
 }
 
 void fk_AppWindow::remove(fk_Model &model)
 {
-	ref_scene->removeModel(&model);
+	data->ref_scene->removeModel(&model);
 }
 
 void fk_AppWindow::entry(fk_Model &model, fk_GuideObject &argGuide)
 {
 	argGuide.setParent(&model);
-	argGuide.entryScene(ref_scene);
-	ref_scene->entryModel(&model);
+	argGuide.entryScene(data->ref_scene);
+	data->ref_scene->entryModel(&model);
 }
 
 void fk_AppWindow::remove(fk_Model &model, fk_GuideObject &argGuide)
 {
 	argGuide.setParent(nullptr);
-	argGuide.removeScene(ref_scene);
-	ref_scene->removeModel(&model);
+	argGuide.removeScene(data->ref_scene);
+	data->ref_scene->removeModel(&model);
 }
 
 void fk_AppWindow::entry(fk_SpriteModel &model)
 {
-	model.MakePixelBase(fk_Dimension(drawWin->w(), drawWin->h()), ref_scene);
-	ref_scene->entryOverlayModel(&model);
+	model.MakePixelBase(fk_Dimension(data->drawWin->w(), data->drawWin->h()), data->ref_scene);
+	data->ref_scene->entryOverlayModel(&model);
 }
 
 void fk_AppWindow::remove(fk_SpriteModel &model)
 {
-	ref_scene->removeOverlayModel(&model);
+	data->ref_scene->removeOverlayModel(&model);
 }
 
 void fk_AppWindow::entry(fk_Performer &chara)
 {
-	chara.entryScene(ref_scene);
+	chara.entryScene(data->ref_scene);
 }
 
 void fk_AppWindow::remove(fk_Performer &chara)
 {
-	chara.removeScene(ref_scene);
+	chara.removeScene(data->ref_scene);
 }
 
 void fk_AppWindow::entry(fk_Model *model)
 {
-	ref_scene->entryModel(model);
+	data->ref_scene->entryModel(model);
 }
 
 void fk_AppWindow::remove(fk_Model *model)
 {
-	ref_scene->removeModel(model);
+	data->ref_scene->removeModel(model);
 }
 
 void fk_AppWindow::entry(fk_Model *model, fk_GuideObject *argGuide)
 {
 	argGuide->setParent(model);
-	argGuide->entryScene(ref_scene);
-	ref_scene->entryModel(model);
+	argGuide->entryScene(data->ref_scene);
+	data->ref_scene->entryModel(model);
 }
 
 void fk_AppWindow::remove(fk_Model *model, fk_GuideObject *argGuide)
 {
 	argGuide->setParent(nullptr);
-	argGuide->removeScene(ref_scene);
-	ref_scene->removeModel(model);
+	argGuide->removeScene(data->ref_scene);
+	data->ref_scene->removeModel(model);
 }
 
 void fk_AppWindow::entry(fk_SpriteModel *model)
 {
-	model->MakePixelBase(fk_Dimension(drawWin->w(), drawWin->h()), ref_scene);
-	ref_scene->entryOverlayModel(model);
+	model->MakePixelBase(fk_Dimension(data->drawWin->w(), data->drawWin->h()), data->ref_scene);
+	data->ref_scene->entryOverlayModel(model);
 }
 
 void fk_AppWindow::remove(fk_SpriteModel *model)
 {
-	ref_scene->removeOverlayModel(model);
+	data->ref_scene->removeOverlayModel(model);
 }
 
 void fk_AppWindow::entry(fk_Performer *chara)
 {
-	chara->entryScene(ref_scene);
+	chara->entryScene(data->ref_scene);
 }
 
 void fk_AppWindow::remove(fk_Performer *chara)
 {
-	chara->removeScene(ref_scene);
+	chara->removeScene(data->ref_scene);
 }
 
 void fk_AppWindow::clearModel(bool argLightAndCamera)
 {
-	ref_scene->clearDisplay();
+	data->ref_scene->clearDisplay();
 	if(argLightAndCamera) {
-		ref_scene->entryCamera(camera.get());
-		ref_scene->entryModel(light.get());
-		ref_camera = camera.get();
-		tb->setCamera(camera.get());
+		data->ref_scene->entryCamera(&(data->camera));
+		data->ref_scene->entryModel(&(data->light));
+		data->ref_camera = &(data->camera);
+		data->tb->setCamera(&(data->camera));
 	}
 }
 
 void fk_AppWindow::open(void)
 {
-	mainWin->show();
-	drawWin->show();
+	data->mainWin->show();
+	data->drawWin->show();
 
-	fsc->init(mainWin.get(), drawWin.get());
+	data->fsc.init(data->mainWin.get(), data->drawWin.get());
 	Fl::check();
 
 	return;
@@ -489,10 +438,10 @@ void fk_AppWindow::open(void)
 
 void fk_AppWindow::close(void)
 {
-	drawWin->hide();
-	if(!childMode) {
+	data->drawWin->hide();
+	if(!data->childMode) {
 		toWindow();
-		mainWin->hide();
+		data->mainWin->hide();
 	}
 
 	return;
@@ -500,11 +449,11 @@ void fk_AppWindow::close(void)
 
 bool fk_AppWindow::update(bool argForceDraw)
 {
-	if(childMode) return false;
+	if(data->childMode) return false;
 
-	if(fps != 0) fps_admin->timeRegular();
+	if(data->fps != 0) data->fps_admin.timeRegular();
 
-	if(mainWin->visible() == 0) {
+	if(data->mainWin->visible() == 0) {
 		if(Fl::wait() == 0) {
 			return false;
 		} else {
@@ -512,17 +461,17 @@ bool fk_AppWindow::update(bool argForceDraw)
 		}
 	}
 
-	if(fps_admin->getDrawFlag() || fps == 0 || argForceDraw) {
-		drawWin->drawWindow();
-		if(ref_child != nullptr) ref_child->drawWin->drawWindow();
+	if(data->fps_admin.getDrawFlag() || data->fps == 0 || argForceDraw) {
+		data->drawWin->drawWindow();
+		if(data->ref_child != nullptr) data->ref_child->data->drawWin->drawWindow();
 	}
 	if(Fl::check() == 0) return false;
 
 	ToggleScreen();
 
-	if(tbFlag) tb->update();
-	if(ref_child != nullptr) {
-		ref_child->tb->update();
+	if(data->tbFlag) data->tb->update();
+	if(data->ref_child != nullptr) {
+		data->ref_child->data->tb->update();
 	}
 
 	return true;
@@ -546,12 +495,12 @@ fk_Switch GetSwitchStatus(bool now, bool pre)
 
 bool fk_AppWindow::getKeyStatus(char argKey, fk_Switch argStatus, bool argInsideFlg)
 {
-	return drawWin->getKeyStatus(argKey, argStatus, argInsideFlg);
+	return data->drawWin->getKeyStatus(argKey, argStatus, argInsideFlg);
 }
 
 fk_Switch fk_AppWindow::getKeyStatus(char argKey)
 {
-	//return GetSwitchStatus(drawWin->getKeyStatus(argKey, false), prevKeySt[(int)argKey]);
+	//return GetSwitchStatus(data->drawWin->getKeyStatus(argKey, false), prevKeySt[(int)argKey]);
 
 	for(int i = 0; i < 3; ++i) {
 		if(getKeyStatus(argKey, stArray[i], false) == true) return stArray[i];
@@ -562,12 +511,12 @@ fk_Switch fk_AppWindow::getKeyStatus(char argKey)
 bool fk_AppWindow::getSpecialKeyStatus(fk_Key argKey,
 									   fk_Switch argStatus, bool argInsideFlg)
 {
-	return drawWin->getSpecialKeyStatus(argKey, argStatus, argInsideFlg);
+	return data->drawWin->getSpecialKeyStatus(argKey, argStatus, argInsideFlg);
 }
 
 fk_Switch fk_AppWindow::getSpecialKeyStatus(fk_Key argKey)
 {
-	//return GetSwitchStatus(drawWin->getSpecialKeyStatus(argKey, false), prevSPKeySt[(int)argKey]);
+	//return GetSwitchStatus(data->drawWin->getSpecialKeyStatus(argKey, false), prevSPKeySt[(int)argKey]);
 
 	for(int i = 0; i < 3; ++i) {
 		if(getSpecialKeyStatus(argKey, stArray[i], false) == true) return stArray[i];
@@ -578,12 +527,12 @@ fk_Switch fk_AppWindow::getSpecialKeyStatus(fk_Key argKey)
 bool fk_AppWindow::getMouseStatus(fk_MouseButton argButton,
 								  fk_Switch argStatus, bool argInsideFlg)
 {
-	return drawWin->getMouseStatus(argButton, argStatus, argInsideFlg);
+	return data->drawWin->getMouseStatus(argButton, argStatus, argInsideFlg);
 }
 
 fk_Switch fk_AppWindow::getMouseStatus(fk_MouseButton argButton)
 {
-	//return GetSwitchStatus(drawWin->getMouseStatus(argButton, false), prevMouseSt[(int)argButton]);
+	//return GetSwitchStatus(data->drawWin->getMouseStatus(argButton, false), prevMouseSt[(int)argButton]);
 
 	for(int i = 0; i < 3; ++i) {
 		if(getMouseStatus(argButton, stArray[i], false) == true) return stArray[i];
@@ -593,28 +542,28 @@ fk_Switch fk_AppWindow::getMouseStatus(fk_MouseButton argButton)
 
 fk_Vector fk_AppWindow::getMousePosition(void)
 {
-	auto [x, y] = drawWin->getMousePosition(false);
+	auto [x, y] = data->drawWin->getMousePosition(false);
 	return fk_Vector(double(x), double(y), 0.0);
 }
 
 void fk_AppWindow::setGuideAxisWidth(double width)
 {
-	guide->setAxisWidth(width);
+	data->guide.setAxisWidth(width);
 }
 
 void fk_AppWindow::setGuideGridWidth(double width)
 {
-	guide->setGridWidth(width);
+	data->guide.setGridWidth(width);
 }
 
 void fk_AppWindow::setGuideScale(double scale)
 {
-	guide->setScale(scale);
+	data->guide.setScale(scale);
 }
 
 void fk_AppWindow::setGuideNum(int num)
 {
-	guide->setNum(num);
+	data->guide.setNum(num);
 }
 
 #if defined(WIN32) && !defined(_MINGW_)
@@ -626,7 +575,7 @@ void fk_AppWindow::setCursorState(bool visible, bool center)
 		ShowCursor(FALSE);
 	}
 	if(center) {
-		SetCursorPos(mainWin->x()+mainWin->w()/2, mainWin->y()+mainWin->h()/2);
+		SetCursorPos(data->mainWin->x()+data->mainWin->w()/2, data->mainWin->y()+data->mainWin->h()/2);
 	}
 	return;
 }
@@ -683,203 +632,225 @@ void fk_AppWindow::procMouseView(fk_Model &, double, double, bool)
 
 void fk_AppWindow::toFullscreen(void)
 {
-	if(!fsc->isFullscreen()) fsc->changeToFullscreen();
+	if(!data->fsc.isFullscreen()) data->fsc.changeToFullscreen();
 }
 
 void fk_AppWindow::toWindow(void)
 {
-	if(fsc->isFullscreen()) fsc->changeToWindow();
+	if(data->fsc.isFullscreen()) data->fsc.changeToWindow();
 }
 
 void fk_AppWindow::SetFinalizeMode(void)
 {
-	camera->SetTreeDelMode(false);
-	light->SetTreeDelMode(false);
+	data->camera.SetTreeDelMode(false);
+	data->light.SetTreeDelMode(false);
 }
 
 tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY,
 														fk_Plane &argPlane)
 {
-	return drawWin->getProjectPosition(argX, argY, argPlane);
+	return data->drawWin->getProjectPosition(argX, argY, argPlane);
 }
 
 #ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getProjectPosition(double argX, double argY,
 									  fk_Plane *argPlane, fk_Vector *argPos)
 {
-	return drawWin->getProjectPosition(argX, argY, argPlane, argPos);
+	return data->drawWin->getProjectPosition(argX, argY, argPlane, argPos);
 }
 #endif
 
 tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY, double argDist)
 {
-	return drawWin->getProjectPosition(argX, argY, argDist);
+	return data->drawWin->getProjectPosition(argX, argY, argDist);
 }
 
 #ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getProjectPosition(double argX, double argY,
 									  double argDist, fk_Vector *argPos)
 {
-	return drawWin->getProjectPosition(argX, argY, argDist, argPos);
+	return data->drawWin->getProjectPosition(argX, argY, argDist, argPos);
 }
 #endif
 
 tuple<bool, fk_Vector> fk_AppWindow::getWindowPosition(fk_Vector &argPos_3D)
 {
-	return drawWin->getWindowPosition(argPos_3D);
+	return data->drawWin->getWindowPosition(argPos_3D);
 }
 
 #ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getWindowPosition(fk_Vector argPos_3D, fk_Vector *argPos_2D)
 {
-	return drawWin->getWindowPosition(argPos_3D, argPos_2D);
+	return data->drawWin->getWindowPosition(argPos_3D, argPos_2D);
 }
 #endif
 
 bool fk_AppWindow::snapImage(string argFileName, fk_ImageType argFormat, fk_SnapProcMode argMode)
 {
-	return drawWin->snapImage(argFileName, argFormat, argMode);
+	return data->drawWin->snapImage(argFileName, argFormat, argMode);
 }
 
 bool fk_AppWindow::snapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 {
-	return drawWin->snapImage(argImage, argMode);
+	return data->drawWin->snapImage(argImage, argMode);
 }
 
 
 void fk_AppWindow::setShadowMode(fk_ShadowMode argMode)
 {
-	ref_scene->setShadowMode(argMode);
+	data->ref_scene->setShadowMode(argMode);
 }
 
 fk_ShadowMode fk_AppWindow::getShadowMode(void)
 {
-	return ref_scene->getShadowMode();
+	return data->ref_scene->getShadowMode();
 }
 
 void fk_AppWindow::setShadowVec(const fk_Vector &argV)
 {
-	ref_scene->setShadowVec(argV);
+	data->ref_scene->setShadowVec(argV);
 }
 
 void fk_AppWindow::setShadowVec(double argX, double argY, double argZ)
 {
-	ref_scene->setShadowVec(argX, argY, argZ);
+	data->ref_scene->setShadowVec(argX, argY, argZ);
 }
 
 fk_Vector fk_AppWindow::getShadowVec(void)
 {
-	return ref_scene->getShadowVec();
+	return data->ref_scene->getShadowVec();
 }
 
 void fk_AppWindow::setShadowResolution(int argRes)
 {
-	ref_scene->setShadowResolution(argRes);
+	data->ref_scene->setShadowResolution(argRes);
 }
 	
 int fk_AppWindow::getShadowResolution(void)
 {
-	return ref_scene->getShadowResolution();
+	return data->ref_scene->getShadowResolution();
 }
 
 void fk_AppWindow::setShadowAreaSize(double argSize)
 {
-	ref_scene->setShadowAreaSize(argSize);
+	data->ref_scene->setShadowAreaSize(argSize);
 }
 
 double fk_AppWindow::getShadowAreaSize(void)
 {
-	return ref_scene->getShadowAreaSize();
+	return data->ref_scene->getShadowAreaSize();
 }
 
 void fk_AppWindow::setShadowDistance(double argDis)
 {
-	ref_scene->setShadowDistance(argDis);
+	data->ref_scene->setShadowDistance(argDis);
 }
 
 double fk_AppWindow::getShadowDistance(void)
 {
-	return ref_scene->getShadowDistance();
+	return data->ref_scene->getShadowDistance();
 }
 
 void fk_AppWindow::setShadowVisibility(double argVal)
 {
-	ref_scene->setShadowVisibility(argVal);
+	data->ref_scene->setShadowVisibility(argVal);
 }
 
 double fk_AppWindow::getShadowVisibility(void)
 {
-	return ref_scene->getShadowVisibility();
+	return data->ref_scene->getShadowVisibility();
 }
 
 void fk_AppWindow::setShadowBias(double argBias)
 {
-	ref_scene->setShadowBias(argBias);
+	data->ref_scene->setShadowBias(argBias);
 }
 
 double fk_AppWindow::getShadowBias(void)
 {
-	return ref_scene->getShadowBias();
+	return data->ref_scene->getShadowBias();
 }
 
 void fk_AppWindow::setFogMode(const fk_FogMode argMode)
 {
-	ref_scene->setFogMode(argMode);
+	data->ref_scene->setFogMode(argMode);
 }
 
 void fk_AppWindow::setFogDensity(const double argD)
 {
-	ref_scene->setFogDensity(argD);
+	data->ref_scene->setFogDensity(argD);
 }
 
 void fk_AppWindow::setFogLinearMap(const double argS, const double argE)
 {
-	ref_scene->setFogLinearMap(argS, argE);
+	data->ref_scene->setFogLinearMap(argS, argE);
 }
 
 void fk_AppWindow::setFogColor(const fk_Color &argCol)
 {
-	ref_scene->setFogColor(argCol);
+	data->ref_scene->setFogColor(argCol);
 }
 
 void fk_AppWindow::setFogColor(float argR, float argG, float argB, float argA)
 {
-	ref_scene->setFogColor(argR, argG, argB, argA);
+	data->ref_scene->setFogColor(argR, argG, argB, argA);
 }
 
 void fk_AppWindow::setFogColor(double argR, double argG, double argB, double argA)
 {
-	ref_scene->setFogColor(argR, argG, argB, argA);
+	data->ref_scene->setFogColor(argR, argG, argB, argA);
 }
 
 fk_FogMode fk_AppWindow::getFogMode(void) const
 {
-	return ref_scene->getFogMode();
+	return data->ref_scene->getFogMode();
 }
 
 double fk_AppWindow::getFogDensity(void) const
 {
-	return ref_scene->getFogDensity();
+	return data->ref_scene->getFogDensity();
 }
 
 double fk_AppWindow::getFogLinearStart(void) const
 {
-	return ref_scene->getFogLinearStart();
+	return data->ref_scene->getFogLinearStart();
 }
 
 double fk_AppWindow::getFogLinearEnd(void) const
 {
-	return ref_scene->getFogLinearEnd();
+	return data->ref_scene->getFogLinearEnd();
 }
 
 fk_Color fk_AppWindow::getFogColor(void) const
 {
-	return ref_scene->getFogColor();
+	return data->ref_scene->getFogColor();
 }
 
 fk_Window * fk_AppWindow::GetDrawWin(void) const
 {
-	return drawWin.get();
+	return data->drawWin.get();
+}
+
+// スクリーンモードのハンドリング処理
+void fk_AppWindow::ToggleScreen(void)
+{
+	// ALT+ENTERでフルスクリーンとウィンドウモードを切り替え
+	if(getSpecialKeyStatus(fk_Key::ALT_L) >= fk_Switch::DOWN
+	|| getSpecialKeyStatus(fk_Key::ALT_R) >= fk_Switch::DOWN) {
+		if(getSpecialKeyStatus(fk_Key::ENTER) == fk_Switch::DOWN) {
+			if(data->fsc.isFullscreen() == true) {
+				data->fsc.changeToWindow();
+			} else {
+				data->fsc.changeToFullscreen();
+			}
+		}
+	}
+	// ウィンドウのフォーカスが外れたらウィンドウモードに戻す
+	if(Fl::focus() != data->mainWin.get()) {
+		toWindow();
+	}
+
+	return;
 }
 
 /****************************************************************************

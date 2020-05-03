@@ -47,6 +47,23 @@ namespace FK {
 
 	class fk_Scene : public fk_Fog {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_SceneData {
+		public:
+			fk_Color bgColor;
+			bool blendStatus;
+			fk_ShadowMode shadowMode;
+			fk_Vector shadowVec;
+			int shadowResolution;
+			double shadowSize;
+			double shadowDistance;
+			double shadowVisibility;
+			double shadowBias;
+
+			fk_SceneData(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -327,16 +344,7 @@ namespace FK {
 		///@}
 
 	private:
-		fk_Color bgColor;
-		bool blendStatus;
-
-		fk_ShadowMode shadowMode;
-		fk_Vector shadowVec;
-		int shadowResolution;
-		double shadowSize;
-		double shadowDistance;
-		double shadowVisibility;
-		double shadowBias;
+		std::unique_ptr<fk_SceneData> scene_data;
 	};
 }
 

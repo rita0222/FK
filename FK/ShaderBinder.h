@@ -34,6 +34,21 @@ namespace FK {
 	 */
 
 	class fk_ShaderBinder {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_SBData {
+		public:
+			fk_ShaderProgram innerProgram;
+			fk_ShaderParameter innerParameter;
+			fk_ShaderProgram *program;
+			fk_ShaderParameter *parameter;
+			bool usingProgram;
+			bool setupFlg;
+			GLint	bufW, bufH;
+			std::vector<float>	fboSize;
+
+			fk_SBData(void);
+		};
+#endif
 	public:
 		//! コンストラクタ1
 		/*!
@@ -201,31 +216,10 @@ namespace FK {
 #endif
 	
 	private:
-
-		fk_ShaderProgram innerProgram;
-		fk_ShaderParameter innerParameter;
-
-		fk_ShaderProgram *program;
-		fk_ShaderParameter *parameter;
+		std::unique_ptr<fk_SBData> sb_data;
 
 		static bool	isExtensionInitialized;
-		bool usingProgram;
-		bool setupFlg;
-
-		GLint	bufW, bufH;
-
-		//GLuint		rectVAO, fboHandle;
-		//fk_FrameTexture	*colorTex;
-		//fk_FrameTexture *depthTex;
-
-		std::vector<float>	fboSize;
-
 		static std::string	fboVertexCode, fboGeometryCode;
-
-		//void ProcPreDraw(void);
-		//void ProcPostDraw(void);
-
-		//void SetupFBO(void);
 	};
 }
 

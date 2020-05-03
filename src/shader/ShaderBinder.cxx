@@ -14,8 +14,15 @@ bool fk_ShaderBinder::isExtensionInitialized = false;
 string fk_ShaderBinder::fboVertexCode;
 string fk_ShaderBinder::fboGeometryCode;
 
-//static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
-//static const GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+fk_ShaderBinder::fk_SBData::fk_SBData(void) :
+	program(&innerProgram), parameter(&innerParameter),
+	usingProgram(false), setupFlg(false),
+	bufW(0), bufH(0)
+{
+	program->SetParameter(parameter);
+	parameter->SetProgram(program);
+}
+
 
 bool fk_ShaderBinder::Initialize()
 {
@@ -48,14 +55,10 @@ bool fk_ShaderBinder::IsInitialized(void)
 }
 
 fk_ShaderBinder::fk_ShaderBinder()
-	: program(&innerProgram), parameter(&innerParameter),
-	  usingProgram(false), setupFlg(false),
-	  bufW(0), bufH(0)
 {
+	sb_data = make_unique<fk_SBData>();
 	isExtensionInitialized = false;
 	Initialize();
-	program->SetParameter(parameter);
-	parameter->SetProgram(program);
 }
 
 fk_ShaderBinder::~fk_ShaderBinder()
@@ -64,12 +67,12 @@ fk_ShaderBinder::~fk_ShaderBinder()
 
 fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
 {
-	return program;
+	return sb_data->program;
 }
 
 fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 {
-	return parameter;
+	return sb_data->parameter;
 }
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
@@ -84,19 +87,19 @@ void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 
 void fk_ShaderBinder::LoadFBOShader(void)
 {
-	program->vertexShaderSource = fboVertexCode;
-	program->geometryShaderSource = fboGeometryCode;
-	program->SetFBOMode(true);
+	sb_data->program->vertexShaderSource = fboVertexCode;
+	sb_data->program->geometryShaderSource = fboGeometryCode;
+	sb_data->program->SetFBOMode(true);
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 {
-	bufW = width;
-	bufH = height;
+	sb_data->bufW = width;
+	sb_data->bufH = height;
 	LoadFBOShader();
-	fboSize.clear();
-	fboSize.push_back(float(bufW));
-	fboSize.push_back(float(bufH));
+	sb_data->fboSize.clear();
+	sb_data->fboSize.push_back(float(sb_data->bufW));
+	sb_data->fboSize.push_back(float(sb_data->bufH));
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
@@ -106,23 +109,23 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
-	if(argWin == nullptr || bufW <= 0 || bufH <= 0) return;
+	if(argWin == nullptr || sb_data->bufW <= 0 || sb_data->bufH <= 0) return;
 	if(IsInitialized() == false) Initialize();
 	
 	argWin->GetEngine()->BindWindow(this);
 
-	GLuint id = program->getProgramID();
+	GLuint id = sb_data->program->getProgramID();
 
 	glBindAttribLocation(id, 0, fk_Shape::vertexName.c_str());
 	glBindFragDataLocation(id, 0, fk_DrawBase::fragmentName.c_str());
-	program->link();
+	sb_data->program->link();
 	
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
 
-	parameter->setRegister(colorBufName, maxUnit-1);
-	parameter->setRegister(depthBufName, maxUnit-2);
-	parameter->setRegister(fboSizeName, &fboSize);
+	sb_data->parameter->setRegister(colorBufName, maxUnit-1);
+	sb_data->parameter->setRegister(depthBufName, maxUnit-2);
+	sb_data->parameter->setRegister(fboSizeName, &sb_data->fboSize);
 }
 
 void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
@@ -145,30 +148,30 @@ void fk_ShaderBinder::unbindWindow(fk_AppWindow *argWin)
 
 void fk_ShaderBinder::ProcPreShader(void)
 {
-	GLuint id = program->getProgramID();
+	GLuint id = sb_data->program->getProgramID();
 	if (id != 0) {
 		glUseProgram(id);
-		parameter->Apply(id);
-		usingProgram = true;
+		sb_data->parameter->Apply(id);
+		sb_data->usingProgram = true;
 	}
 }
 
 void fk_ShaderBinder::ProcPostShader(void)
 {
-	if (usingProgram == true) {
+	if (sb_data->usingProgram == true) {
 		glUseProgram(0);
-		usingProgram = false;
+		sb_data->usingProgram = false;
 	}
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
 {
-	setupFlg = argFlg;
+	sb_data->setupFlg = argFlg;
 }
 
 bool fk_ShaderBinder::IsSetup(void)
 {
-	return setupFlg;
+	return sb_data->setupFlg;
 }
 
 /****************************************************************************

@@ -6,53 +6,62 @@
 using namespace std;
 using namespace FK;
 
-fk_ShaderParameter::fk_ShaderParameter(void) : lastAppliedId(0), prog(nullptr)
+fk_ShaderParameter::fk_SPData::fk_SPData(void) :
+	 lastAppliedId(0), prog(nullptr)
 {
+	return;
+}
+
+fk_ShaderParameter::fk_ShaderParameter(void)
+{
+	sp_data = make_unique<fk_SPData>();
+	return;
 }
 
 fk_ShaderParameter::~fk_ShaderParameter()
 {
+	return;
 }
 
 void fk_ShaderParameter::SetProgram(fk_ShaderProgram *argProg)
 {
-	prog = argProg;
+	sp_data->prog = argProg;
 }
 
 string fk_ShaderParameter::getLastError(void)
 {
-	return lastError;
+	return sp_data->lastError;
 }
 
 void fk_ShaderParameter::setRegister(string argName, float argValue, string argKey)
 {
-	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
-	floatTable[argName] = argValue;
+	if(argKey.empty() == false && sp_data->prog->GetUniformStatus(argKey) == false) return;
+	sp_data->floatTable[argName] = argValue;
 }
 
 void fk_ShaderParameter::setRegister(string argName, vector<float> *argValue, string argKey)
 {
 	
-	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
-	floatArrayTable[argName] = *argValue;
+	if(argKey.empty() == false && sp_data->prog->GetUniformStatus(argKey) == false) return;
+	sp_data->floatArrayTable[argName] = *argValue;
 }
 
 void fk_ShaderParameter::setRegister(string argName, int argValue, string argKey)
 {
-	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
-	intTable[argName] = argValue;
+	if(argKey.empty() == false && sp_data->prog->GetUniformStatus(argKey) == false) return;
+	sp_data->intTable[argName] = argValue;
 }
 
 void fk_ShaderParameter::setRegister(string argName, vector<int> *argValue, string argKey)
 {
-	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
-	intArrayTable[argName] = *argValue;
+	if(argKey.empty() == false && sp_data->prog->GetUniformStatus(argKey) == false) return;
+	sp_data->intArrayTable[argName] = *argValue;
 }
 
 void fk_ShaderParameter::setRegister(string argName, fk_Matrix *argValue, string argKey)
 {
-	if(argKey.empty() == false && prog->GetUniformStatus(argKey) == false) return;
-	matrixTable[argName] = *argValue;
+	if(argKey.empty() == false && sp_data->prog->GetUniformStatus(argKey) == false) return;
+	sp_data->matrixTable[argName] = *argValue;
 }
 
 void fk_ShaderParameter::setRegister(string argName, fk_Vector *argValue, string argKey)
@@ -70,56 +79,56 @@ void fk_ShaderParameter::setRegister(string argName, fk_HVector *argValue, strin
 
 bool fk_ShaderParameter::removeRegister(string argName)
 {
-	if (floatTable.erase(argName) > 0) return true;
-	if (floatArrayTable.erase(argName) > 0) return true;
-	if (intTable.erase(argName) > 0) return true;
-	if (intArrayTable.erase(argName) > 0) return true;
-	if (matrixTable.erase(argName) > 0) return true;
+	if (sp_data->floatTable.erase(argName) > 0) return true;
+	if (sp_data->floatArrayTable.erase(argName) > 0) return true;
+	if (sp_data->intTable.erase(argName) > 0) return true;
+	if (sp_data->intArrayTable.erase(argName) > 0) return true;
+	if (sp_data->matrixTable.erase(argName) > 0) return true;
 	return false;
 }
 
 void fk_ShaderParameter::reserveAttribute(string argName)
 {
-	if(attrTable.find(argName) == attrTable.end()) {
-		attrTable[argName] = -1;
+	if(sp_data->attrTable.find(argName) == sp_data->attrTable.end()) {
+		sp_data->attrTable[argName] = -1;
 	}
 }
 
 map<string, int> * fk_ShaderParameter::getAttrTable(void)
 {
-	return &attrTable;
+	return &(sp_data->attrTable);
 }
 
 bool fk_ShaderParameter::attachTexture(int argUnit, fk_Texture *argTexture)
 {
 	if (argUnit < 0) return false;
-	textureTable[argUnit+1] = argTexture;
+	sp_data->textureTable[argUnit+1] = argTexture;
 	return true;
 }
 
 bool fk_ShaderParameter::detachTexture(int argUnit)
 {
-	return ((textureTable.erase(argUnit+1) > 0) ? true : false);
+	return ((sp_data->textureTable.erase(argUnit+1) > 0) ? true : false);
 }
 
 void fk_ShaderParameter::clearTexture(void)
 {
-	textureTable.clear();
+	sp_data->textureTable.clear();
 }
 
 bool fk_ShaderParameter::Apply(GLuint argProgramID)
 {
 	bool result = true;
 
-	if (lastAppliedId != argProgramID) {
-		locationTable.clear();
-		lastAppliedId = argProgramID;
+	if (sp_data->lastAppliedId != argProgramID) {
+		sp_data->locationTable.clear();
+		sp_data->lastAppliedId = argProgramID;
 	}
 
-	lastError.clear();
+	sp_data->lastError.clear();
 
 	bool changed = false;
-	for(auto pair : textureTable) {
+	for(auto pair : sp_data->textureTable) {
 		glActiveTexture(GL_TEXTURE0 + GLenum(pair.first));
 		pair.second->BindTexture(false);
 		changed = true;
@@ -127,17 +136,17 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 
 	if (changed) glActiveTexture(GL_TEXTURE0);
 
-	for(auto pair : floatTable) {
+	for(auto pair : sp_data->floatTable) {
 		GLint location = GetLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			glUniform1f(location, pair.second);
 		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
+			sp_data->lastError += "ERROR: " + pair.first + " is not found.";
 			result = false;
 		}
 	}
 
-	for(auto pair : floatArrayTable) {
+	for(auto pair : sp_data->floatArrayTable) {
 		GLint location = GetLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			switch (pair.second.size()) {
@@ -158,22 +167,22 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 				result = false;
 			}
 		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
+			sp_data->lastError += "ERROR: " + pair.first + " is not found.";
 			result = false;
 		}
 	}
 
-	for(auto pair : intTable) {
+	for(auto pair : sp_data->intTable) {
 		GLint location = GetLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			glUniform1i(location, pair.second);
 		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
+			sp_data->lastError += "ERROR: " + pair.first + " is not found.";
 			result = false;
 		}
 	}
 
-	for(auto pair : intArrayTable) {
+	for(auto pair : sp_data->intArrayTable) {
 		GLint location = GetLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			switch (pair.second.size()) {
@@ -194,18 +203,18 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 				result = false;
 			}
 		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
+			sp_data->lastError += "ERROR: " + pair.first + " is not found.";
 			result = false;
 		}
 	}
 
-	for(auto pair : matrixTable) {
+	for(auto pair : sp_data->matrixTable) {
 		GLint location = GetLocation(argProgramID, pair.first);
 		if (location >= 0) {
 			float *pArray = pair.second.GetBuffer();
 			glUniformMatrix4fv(location, 1, GL_FALSE, pArray);
 		} else {
-			lastError += "ERROR: " + pair.first + " is not found.";
+			sp_data->lastError += "ERROR: " + pair.first + " is not found.";
 			result = false;
 		}
 	}
@@ -215,12 +224,12 @@ bool fk_ShaderParameter::Apply(GLuint argProgramID)
 
 GLint fk_ShaderParameter::GetLocation(GLuint argProgramID, string argName)
 {
-	if(locationTable.find(argName) != locationTable.end()) {
-		return locationTable[argName];
+	if(sp_data->locationTable.find(argName) != sp_data->locationTable.end()) {
+		return sp_data->locationTable[argName];
 	}
 
 	GLint location = glGetUniformLocation(argProgramID, argName.c_str());
-	if (location >= 0) locationTable[argName] = location;
+	if (location >= 0) sp_data->locationTable[argName] = location;
 
 	return location;
 }
@@ -229,7 +238,7 @@ void fk_ShaderParameter::BindAttr(GLuint argID)
 {
 	GLuint locID = 0;
 
-	for(auto itr = attrTable.begin(); itr != attrTable.end(); ++itr) {
+	for(auto itr = sp_data->attrTable.begin(); itr != sp_data->attrTable.end(); ++itr) {
 		glBindAttribLocation(argID, locID, itr->first.c_str());
 		itr->second = int(locID);
 		locID++;

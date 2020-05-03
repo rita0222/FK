@@ -1,20 +1,26 @@
 ﻿#include <FK/Scene.h>
 
 using namespace FK;
+using namespace std;
+
+fk_Scene::fk_SceneData::fk_SceneData(void) :
+	bgColor(0.0f, 0.0f, 0.0f),
+	blendStatus(false),
+	shadowMode(fk_ShadowMode::OFF),
+	shadowVec(0.0, 0.0, 0.0),
+	shadowResolution(1024),
+	shadowSize(100.0),
+	shadowDistance(100.0),
+	shadowVisibility(1.0),
+	shadowBias(0.0005)
+{
+	return;
+}
 
 fk_Scene::fk_Scene(void)
 {
 	SetObjectType(fk_Type::SCENE);
-	setBGColor(0.0f, 0.0f, 0.0f);
-	setBlendStatus(false);
-	setShadowMode(fk_ShadowMode::OFF);
-	setShadowVec(0.0, 1.0, 0.0);
-	setShadowResolution(1024);
-	setShadowAreaSize(100.0);
-	setShadowDistance(100.0);
-	setShadowVisibility(1.0);
-	setShadowBias(0.0005);
-
+	scene_data = make_unique<fk_SceneData>();
 	return;
 }
 
@@ -25,106 +31,106 @@ fk_Scene::~fk_Scene()
 
 void fk_Scene::setBGColor(fk_Color argColor)
 {
-	bgColor = argColor;
+	scene_data->bgColor = argColor;
 	return;
 }
 
 void fk_Scene::setBGColor(float argR, float argG, float argB)
 {
-	bgColor.set(argR, argG, argB, 1.0f);
+	scene_data->bgColor.set(argR, argG, argB, 1.0f);
 }
 
 void fk_Scene::setBlendStatus(bool argFlg)
 {
-	blendStatus = argFlg;
+	scene_data->blendStatus = argFlg;
 	return;
 }
 
 fk_Color fk_Scene::getBGColor(void)
 {
-	return bgColor;
+	return scene_data->bgColor;
 }
 
 bool fk_Scene::getBlendStatus(void)
 {
-	return blendStatus;
+	return scene_data->blendStatus;
 }
 
 void fk_Scene::setShadowMode(fk_ShadowMode argMode)
 {
-	shadowMode = argMode;
+	scene_data->shadowMode = argMode;
 }
 
 fk_ShadowMode fk_Scene::getShadowMode(void)
 {
-	return shadowMode;
+	return scene_data->shadowMode;
 }
 
 void fk_Scene::setShadowVec(const fk_Vector &argV)
 {
-	shadowVec = argV;
-	shadowVec.normalize();
+	scene_data->shadowVec = argV;
+	scene_data->shadowVec.normalize();
 }
 
 void fk_Scene::setShadowVec(double argX, double argY, double argZ)
 {
-	shadowVec.set(argX, argY, argZ);
-	shadowVec.normalize();
+	scene_data->shadowVec.set(argX, argY, argZ);
+	scene_data->shadowVec.normalize();
 }
 
 fk_Vector fk_Scene::getShadowVec(void)
 {
-	return shadowVec;
+	return scene_data->shadowVec;
 }
 
 void fk_Scene::setShadowResolution(int argResolution)
 {
-	shadowResolution = argResolution;
+	scene_data->shadowResolution = argResolution;
 }
 
 int fk_Scene::getShadowResolution(void)
 {
-	return shadowResolution;
+	return scene_data->shadowResolution;
 }
 
 void fk_Scene::setShadowAreaSize(double argSize)
 {
-	shadowSize = (argSize > 0.0) ? argSize : 0.0;
+	scene_data->shadowSize = (argSize > 0.0) ? argSize : 0.0;
 }
 
 double fk_Scene::getShadowAreaSize(void)
 {
-	return shadowSize;
+	return scene_data->shadowSize;
 }
 
 void fk_Scene::setShadowDistance(double argDist)
 {
-	shadowDistance = (argDist > 0.0) ? argDist : 0.0;
+	scene_data->shadowDistance = (argDist > 0.0) ? argDist : 0.0;
 }
 
 double fk_Scene::getShadowDistance(void)
 {
-	return shadowDistance;
+	return scene_data->shadowDistance;
 }
 
 void fk_Scene::setShadowVisibility(double argVis)
 {
-	shadowVisibility = (argVis < 0.0) ? 0.0 : ((argVis > 1.0) ? 1.0 : argVis);
+	scene_data->shadowVisibility = (argVis < 0.0) ? 0.0 : ((argVis > 1.0) ? 1.0 : argVis);
 }
 
 double fk_Scene::getShadowVisibility(void)
 {
-	return shadowVisibility;
+	return scene_data->shadowVisibility;
 }
 
 void fk_Scene::setShadowBias(double argBias)
 {
-	shadowBias = (argBias < 0.0) ? 0.0 : argBias;
+	scene_data->shadowBias = (argBias < 0.0) ? 0.0 : argBias;
 }
 
 double fk_Scene::getShadowBias(void)
 {
-	return shadowBias;
+	return scene_data->shadowBias;
 }
 
 /****************************************************************************

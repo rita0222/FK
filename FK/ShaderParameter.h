@@ -17,6 +17,24 @@ namespace FK {
 	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
 	 */
 	class fk_ShaderParameter {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_SPData {
+		public:
+			std::map<std::string, float> floatTable;
+			std::map<std::string, std::vector<float>> floatArrayTable;
+			std::map<std::string, int> intTable;
+			std::map<std::string, std::vector<int>> intArrayTable;
+			std::map<std::string, fk_Matrix> matrixTable;
+			std::map<std::string, int> locationTable;
+			std::map<std::string, int> attrTable;
+			std::map<int, fk_Texture *> textureTable;
+			std::string lastError;
+			unsigned int lastAppliedId;
+			fk_ShaderProgram *prog;
+
+			fk_SPData(void);
+		};
+#endif
 	public:
 		//! コンストラクタ
 		fk_ShaderParameter();
@@ -194,22 +212,8 @@ namespace FK {
 #endif
 	
 	private:
+		std::unique_ptr<fk_SPData> sp_data;
 		GLint GetLocation(GLuint, std::string);
-
-		std::map<std::string, float> floatTable;
-		std::map<std::string, std::vector<float> > floatArrayTable;
-		std::map<std::string, int> intTable;
-		std::map<std::string, std::vector<int> > intArrayTable;
-		std::map<std::string, fk_Matrix> matrixTable;
-		std::map<std::string, int> locationTable;
-
-		std::map<std::string, int> attrTable;
-		std::map<int, fk_Texture *> textureTable;
-
-		std::string lastError;
-		unsigned int lastAppliedId;
-
-		fk_ShaderProgram	*prog;
 	};
 }
 

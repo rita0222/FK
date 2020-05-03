@@ -30,6 +30,35 @@ namespace FK {
 	 */
 
 	class fk_AppWindow {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_AWData {
+		public:
+			std::shared_ptr<Fl_Window> mainWin;
+			std::unique_ptr<fk_Window> drawWin;
+			fk_AppWindow *ref_child;
+
+			fk_FrameController fps_admin;
+			fk_GuideObject guide;
+			fk_FullscreenController fsc;
+			std::unique_ptr<fk_TrackBall> tb;
+			
+			fk_Scene scene;
+			fk_Scene *ref_scene;
+
+			fk_Light lightShape;
+			fk_Model light;
+
+			fk_Model camera;
+			fk_Model *ref_camera;
+
+			int fps;
+			bool tbFlag, childMode;
+
+			fk_AWData(void);
+		};
+
+#endif
 	public:
 
 		//! コンストラクタ
@@ -1360,26 +1389,8 @@ namespace FK {
 #endif
 
 	private:
-		std::shared_ptr<Fl_Window> mainWin;
-		std::unique_ptr<fk_Window> drawWin;
-		fk_AppWindow *ref_child;
+		std::unique_ptr<fk_AWData> data;
 
-		std::unique_ptr<fk_FrameController> fps_admin;
-		std::unique_ptr<fk_GuideObject> guide;
-		std::unique_ptr<fk_TrackBall> tb;
-		std::unique_ptr<fk_FullscreenController> fsc;
-
-		std::unique_ptr<fk_Scene> scene;
-		fk_Scene *ref_scene;
-
-		std::unique_ptr<fk_Light> lightShape;
-		std::unique_ptr<fk_Model> camera, light;
-		fk_Model *ref_camera;
-
-		int fps;
-		bool tbFlag, childMode;
-
-		void InitMember(void);
 		void ToggleScreen(void);
 	};
 

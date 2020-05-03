@@ -20,6 +20,27 @@ namespace FK {
 	 */
 	class fk_ShaderProgram {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_SPData {
+		public:
+			GLuint idProgram;
+			GLuint idVertex;
+			GLuint idFragment;
+			GLuint idGeometry;
+			GLuint idTessCtrl;
+			GLuint idTessEval;
+		
+			std::string lastError;
+			fk_ShaderParameter *parameter;
+			bool fboMode;
+
+			std::map<std::string, bool> uniformStatus;
+			std::map<std::string, bool> attributeStatus;
+
+			fk_SPData(void);
+		};
+#endif
+
 	public:
 		//! バーテックスシェーダーコードメンバー
 		/*!
@@ -214,16 +235,6 @@ namespace FK {
 #endif
 
 	private:
-		GLuint idProgram;
-		GLuint idVertex;
-		GLuint idFragment;
-		GLuint idGeometry;
-		GLuint idTessCtrl;
-		GLuint idTessEval;
-		
-		std::string lastError;
-		fk_ShaderParameter *parameter;
-		bool fboMode;
 
 		static std::string vertexBuildIn;
 		static std::string fragmentBuildIn;
@@ -231,12 +242,10 @@ namespace FK {
 		static std::string tessCtrlBuildIn;
 		static std::string tessEvalBuildIn;
 		static std::string fboBuildIn;
+		static std::vector<fk_BuildInKey> uniformStack;
+		static std::vector<fk_BuildInKey> attributeStack;
 
-		static std::vector<fk_BuildInKey>	uniformStack;
-		static std::vector<fk_BuildInKey>	attributeStack;
-
-		std::map<std::string, bool>		uniformStatus;
-		std::map<std::string, bool>		attributeStatus;
+		std::unique_ptr<fk_SPData> sp_data;
 
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint, std::string);
