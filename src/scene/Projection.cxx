@@ -2,9 +2,11 @@
 #include <FK/Error.H>
 
 using namespace FK;
+using namespace std;
 
 fk_ProjectBase::fk_ProjectBase(fk_ProjectMode argMode)
 {
+	ProjM = make_unique<fk_Matrix>();
 	SetMode(argMode);
 	return;
 }
@@ -21,7 +23,7 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 	switch(Mode) {
 	  case fk_ProjectMode::NONE:
 		SetObjectType(fk_Type::PROJECTBASE);
-		MakeMat = [&] { ProjM.init(); };
+		MakeMat = [&] { ProjM->init(); };
 		break;
 
 	  case fk_ProjectMode::PERSPECTIVE:
@@ -45,7 +47,7 @@ void fk_ProjectBase::SetMode(fk_ProjectMode argMode)
 
 fk_Matrix * fk_ProjectBase::GetMatrix()
 {
-	return &ProjM;
+	return ProjM.get();
 }
 
 fk_ProjectMode fk_ProjectBase::getMode(void) const
@@ -53,22 +55,36 @@ fk_ProjectMode fk_ProjectBase::getMode(void) const
 	return Mode;
 }
 
+fk_Perspective::fk_PersData::fk_PersData(void) :
+	Fovy(0.0), Near(0.0), Far(0.0), Aspect(1.0), AutoMode(true)
+{
+	return;
+}
+
+void fk_Perspective::MakeInit(void)
+{
+	MakeMat = [&] { ProjM->makePerspective(pers_data->Fovy,
+										   pers_data->Near,
+										   pers_data->Far,
+										   pers_data->Aspect); };
+}
+
 fk_Perspective::fk_Perspective(double argFovy, double argNear, double argFar)
 	: fk_ProjectBase(fk_ProjectMode::PERSPECTIVE)
 {
-	MakeMat = [&] { ProjM.makePerspective(Fovy, Near, Far, Aspect); };
-	AutoMode = true;
+	pers_data = make_unique<fk_PersData>();
+	MakeInit();
 	setAll(argFovy, argNear, argFar, 1.0);
-	Aspect = 1.0;
 	return;
 }
 
 fk_Perspective::fk_Perspective(const fk_Perspective &argPers)
 	: fk_ProjectBase(fk_ProjectMode::PERSPECTIVE)
 {
-	MakeMat = [&] { ProjM.makePerspective(Fovy, Near, Far, Aspect); };
-	AutoMode = true;
-	setAll(argPers.Fovy, argPers.Near, argPers.Far, argPers.Aspect);
+	pers_data = make_unique<fk_PersData>();
+	MakeInit();
+	setAll(argPers.pers_data->Fovy, argPers.pers_data->Near,
+		   argPers.pers_data->Far, argPers.pers_data->Aspect);
 }
 
 fk_Perspective::~fk_Perspective()
@@ -79,8 +95,9 @@ fk_Perspective::~fk_Perspective()
 fk_Perspective & fk_Perspective::operator =(const fk_Perspective &argPers)
 {
 	SetMode(fk_ProjectMode::PERSPECTIVE);
-	AutoMode = argPers.AutoMode;
-	setAll(argPers.Fovy, argPers.Near, argPers.Far, argPers.Aspect);
+	pers_data->AutoMode = argPers.pers_data->AutoMode;
+	setAll(argPers.pers_data->Fovy, argPers.pers_data->Near,
+		   argPers.pers_data->Far, argPers.pers_data->Aspect);
 
 	return *this;
 }
@@ -92,7 +109,7 @@ void fk_Perspective::setFovy(double argFovy)
 		return;
 	}
 
-	Fovy = argFovy;
+	pers_data->Fovy = argFovy;
 	return;
 }
 
@@ -103,7 +120,7 @@ void fk_Perspective::setNear(double argNear)
 		return;
 	}
 
-	Near = argNear;
+	pers_data->Near = argNear;
 	return;
 }
 
@@ -114,14 +131,14 @@ void fk_Perspective::setFar(double argFar)
 		return;
 	}
 
-	Far = argFar;
+	pers_data->Far = argFar;
 	return;
 }
 
 void fk_Perspective::setAspect(double argAspect)
 {
-	Aspect = argAspect;
-	AutoMode = false;
+	pers_data->Aspect = argAspect;
+	pers_data->AutoMode = false;
 	return;
 }
 
@@ -130,7 +147,7 @@ void fk_Perspective::setAll(double argFovy, double argNear, double argFar)
 	setFovy(argFovy);
 	setNear(argNear);
 	setFar(argFar);
-	AutoMode = true;
+	pers_data->AutoMode = true;
 
 	return;
 }
@@ -148,30 +165,46 @@ void fk_Perspective::setAll(double argFovy, double argNear, double argFar, doubl
 
 double fk_Perspective::getFovy(void) const
 {
-	return Fovy;
+	return pers_data->Fovy;
 }
 
 double fk_Perspective::getNear(void) const
 {
-	return Near;
+	return pers_data->Near;
 }
 
 double fk_Perspective::getFar(void) const
 {
-	return Far;
+	return pers_data->Far;
 }
 
 double fk_Perspective::getAspect(void) const
 {
-	return Aspect;
+	return pers_data->Aspect;
 }
+
+fk_Frustum::fk_FrustData::fk_FrustData(void)
+{
+	return;
+}
+
+void fk_Frustum::MakeInit(void)
+{
+	MakeMat = [&] {
+		ProjM->makeFrustum(fr_data->Left, fr_data->Right,
+						   fr_data->Bottom, fr_data->Top,
+						   fr_data->Near, fr_data->Far);
+	};
+}
+	
 
 fk_Frustum::fk_Frustum(double argLeft, double argRight,
 					   double argBottom, double argTop,
 					   double argNear, double argFar)
 	: fk_ProjectBase(fk_ProjectMode::FRUSTUM)
 {
-	MakeMat = [&] { ProjM.makeFrustum(Left, Right, Bottom, Top, Near, Far); };
+	fr_data = make_unique<fk_FrustData>();
+	MakeInit();
 	setAll(argLeft, argRight, argBottom, argTop, argNear, argFar);
 	return;
 }
@@ -179,10 +212,11 @@ fk_Frustum::fk_Frustum(double argLeft, double argRight,
 fk_Frustum::fk_Frustum(const fk_Frustum &argFrustum)
 	: fk_ProjectBase(fk_ProjectMode::FRUSTUM)
 {
-	MakeMat = [&] { ProjM.makeFrustum(Left, Right, Bottom, Top, Near, Far); };
-	setAll(argFrustum.Left, argFrustum.Right,
-		   argFrustum.Bottom, argFrustum.Top,
-		   argFrustum.Near, argFrustum.Far);
+	fr_data = make_unique<fk_FrustData>();
+	MakeInit();
+	setAll(argFrustum.fr_data->Left, argFrustum.fr_data->Right,
+		   argFrustum.fr_data->Bottom, argFrustum.fr_data->Top,
+		   argFrustum.fr_data->Near, argFrustum.fr_data->Far);
 	return;
 }
 
@@ -194,46 +228,46 @@ fk_Frustum::~fk_Frustum()
 fk_Frustum & fk_Frustum::operator =(const fk_Frustum &argFrustum)
 {
 	SetMode(fk_ProjectMode::FRUSTUM);
-	setAll(argFrustum.Left, argFrustum.Right,
-		   argFrustum.Bottom, argFrustum.Top,
-		   argFrustum.Near, argFrustum.Far);
+	setAll(argFrustum.fr_data->Left, argFrustum.fr_data->Right,
+		   argFrustum.fr_data->Bottom, argFrustum.fr_data->Top,
+		   argFrustum.fr_data->Near, argFrustum.fr_data->Far);
 
 	return *this;
 }
 
 void fk_Frustum::setLeft(double argLeft)
 {
-	Left = argLeft;
+	fr_data->Left = argLeft;
 	return;
 }
 
 void fk_Frustum::setRight(double argRight)
 {
-	Right = argRight;
+	fr_data->Right = argRight;
 	return;
 }
 
 void fk_Frustum::setBottom(double argBottom)
 {
-	Bottom = argBottom;
+	fr_data->Bottom = argBottom;
 	return;
 }
 
 void fk_Frustum::setTop(double argTop)
 {
-	Top = argTop;
+	fr_data->Top = argTop;
 	return;
 }
 
 void fk_Frustum::setNear(double argNear)
 {
-	Near = argNear;
+	fr_data->Near = argNear;
 	return;
 }
 
 void fk_Frustum::setFar(double argFar)
 {
-	Far = argFar;
+	fr_data->Far = argFar;
 	return;
 }
 
@@ -241,43 +275,57 @@ void fk_Frustum::setAll(double argLeft, double argRight,
 						double argBottom, double argTop,
 						double argNear, double argFar)
 {
-	Left = argLeft;
-	Right = argRight;
-	Bottom = argBottom;
-	Top = argTop;
-	Near = argNear;
-	Far = argFar;
+	fr_data->Left = argLeft;
+	fr_data->Right = argRight;
+	fr_data->Bottom = argBottom;
+	fr_data->Top = argTop;
+	fr_data->Near = argNear;
+	fr_data->Far = argFar;
 	return;
 }
 
 double fk_Frustum::getLeft(void) const
 {
-	return Left;
+	return fr_data->Left;
 }
 
 double fk_Frustum::getRight(void) const
 {
-	return Right;
+	return fr_data->Right;
 }
 
 double fk_Frustum::getBottom(void) const
 {
-	return Bottom;
+	return fr_data->Bottom;
 }
 
 double fk_Frustum::getTop(void) const
 {
-	return Top;
+	return fr_data->Top;
 }
 
 double fk_Frustum::getNear(void) const
 {
-	return Near;
+	return fr_data->Near;
 }
 
 double fk_Frustum::getFar(void) const
 {
-	return Far;
+	return fr_data->Far;
+}
+
+fk_Ortho::fk_OrthoData::fk_OrthoData(void)
+{
+	return;
+}
+
+void fk_Ortho::MakeInit(void)
+{
+	MakeMat = [&] {
+		ProjM->makeOrtho(or_data->Left, or_data->Right,
+						 or_data->Bottom, or_data->Top,
+						 or_data->Near, or_data->Far);
+	};
 }
 
 fk_Ortho::fk_Ortho(double argLeft, double argRight,
@@ -285,7 +333,8 @@ fk_Ortho::fk_Ortho(double argLeft, double argRight,
 				   double argNear, double argFar)
 	: fk_ProjectBase(fk_ProjectMode::ORTHO)
 {
-	MakeMat = [&] { ProjM.makeOrtho(Left, Right, Bottom, Top, Near, Far); };
+	or_data = make_unique<fk_OrthoData>();
+	MakeInit();
 	setAll(argLeft, argRight, argBottom, argTop, argNear, argFar);
 	return;
 }
@@ -293,10 +342,11 @@ fk_Ortho::fk_Ortho(double argLeft, double argRight,
 fk_Ortho::fk_Ortho(const fk_Ortho &argOrtho)
 	: fk_ProjectBase(fk_ProjectMode::ORTHO)
 {
-	MakeMat = [&] { ProjM.makeOrtho(Left, Right, Bottom, Top, Near, Far); };
-	setAll(argOrtho.Left, argOrtho.Right,
-		   argOrtho.Bottom, argOrtho.Top,
-		   argOrtho.Near, argOrtho.Far);
+	or_data = make_unique<fk_OrthoData>();
+	MakeInit();
+	setAll(argOrtho.or_data->Left, argOrtho.or_data->Right,
+		   argOrtho.or_data->Bottom, argOrtho.or_data->Top,
+		   argOrtho.or_data->Near, argOrtho.or_data->Far);
 }
 
 fk_Ortho::~fk_Ortho()
@@ -307,46 +357,46 @@ fk_Ortho::~fk_Ortho()
 fk_Ortho & fk_Ortho::operator =(const fk_Ortho &argOrtho)
 {
 	SetMode(fk_ProjectMode::ORTHO);
-	setAll(argOrtho.Left, argOrtho.Right,
-		   argOrtho.Bottom, argOrtho.Top,
-		   argOrtho.Near, argOrtho.Far);
+	setAll(argOrtho.or_data->Left, argOrtho.or_data->Right,
+		   argOrtho.or_data->Bottom, argOrtho.or_data->Top,
+		   argOrtho.or_data->Near, argOrtho.or_data->Far);
 
 	return *this;
 }
 
 void fk_Ortho::setLeft(double argLeft)
 {
-	Left = argLeft;
+	or_data->Left = argLeft;
 	return;
 }
 
 void fk_Ortho::setRight(double argRight)
 {
-	Right = argRight;
+	or_data->Right = argRight;
 	return;
 }
 
 void fk_Ortho::setBottom(double argBottom)
 {
-	Bottom = argBottom;
+	or_data->Bottom = argBottom;
 	return;
 }
 
 void fk_Ortho::setTop(double argTop)
 {
-	Top = argTop;
+	or_data->Top = argTop;
 	return;
 }
 
 void fk_Ortho::setNear(double argNear)
 {
-	Near = argNear;
+	or_data->Near = argNear;
 	return;
 }
 
 void fk_Ortho::setFar(double argFar)
 {
-	Far = argFar;
+	or_data->Far = argFar;
 	return;
 }
 
@@ -366,32 +416,32 @@ void fk_Ortho::setAll(double argLeft, double argRight,
 
 double fk_Ortho::getLeft(void) const
 {
-	return Left;
+	return or_data->Left;
 }
 
 double fk_Ortho::getRight(void) const
 {
-	return Right;
+	return or_data->Right;
 }
 
 double fk_Ortho::getBottom(void) const
 {
-	return Bottom;
+	return or_data->Bottom;
 }
 
 double fk_Ortho::getTop(void) const
 {
-	return Top;
+	return or_data->Top;
 }
 
 double fk_Ortho::getNear(void) const
 {
-	return Near;
+	return or_data->Near;
 }
 
 double fk_Ortho::getFar(void) const
 {
-	return Far;
+	return or_data->Far;
 }
 
 /****************************************************************************

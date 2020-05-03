@@ -17,8 +17,8 @@ fk_DisplayLink::fk_DLinkData::fk_DLinkData(void) :
 fk_DisplayLink::fk_DisplayLink(void)
 	: fk_BaseObject(fk_Type::DISPLAYLINK)
 {
-	data = make_unique<fk_DLinkData>();
-	data->displayID = DLManager->CreateID();
+	dl_data = make_unique<fk_DLinkData>();
+	dl_data->displayID = DLManager->CreateID();
 	clearStereo();
 
 	return;
@@ -26,7 +26,7 @@ fk_DisplayLink::fk_DisplayLink(void)
 
 fk_DisplayLink::~fk_DisplayLink()
 {
-	DLManager->EraseID(data->displayID);
+	DLManager->EraseID(dl_data->displayID);
 	return;
 }
 
@@ -35,9 +35,9 @@ void fk_DisplayLink::clearDisplay(void)
 	clearModel();
 	clearOverlayModel();
 
-	data->camera = &(data->localCamera);
-	data->proj = &(data->perspective);
-	data->projStatus++;
+	dl_data->camera = &(dl_data->localCamera);
+	dl_data->proj = &(dl_data->perspective);
+	dl_data->projStatus++;
 
 	clearStereo();
 
@@ -53,18 +53,18 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 			fk_Light *light = dynamic_cast<fk_Light *>(argModel->getShape());
 			switch(light->getLightType()) {
 			  case fk_LightType::PARALLEL:
-				data->parallelLightList.remove(argModel);
-				data->parallelLightList.push_front(argModel);
+				dl_data->parallelLightList.remove(argModel);
+				dl_data->parallelLightList.push_front(argModel);
 				break;
 
 			  case fk_LightType::POINT:
-				data->pointLightList.remove(argModel);
-				data->pointLightList.push_front(argModel);
+				dl_data->pointLightList.remove(argModel);
+				dl_data->pointLightList.push_front(argModel);
 				break;
 
 			  case fk_LightType::SPOT:
-				data->spotLightList.remove(argModel);
-				data->spotLightList.push_front(argModel);
+				dl_data->spotLightList.remove(argModel);
+				dl_data->spotLightList.push_front(argModel);
 				break;
 
 			  default:
@@ -74,28 +74,28 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 		}
 	}
 
-	data->modelList.remove(argModel);
-	data->modelList.push_back(argModel);
+	dl_data->modelList.remove(argModel);
+	dl_data->modelList.push_back(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::removeModel(fk_Model *argModel)
 {
-	data->parallelLightList.remove(argModel);
-	data->pointLightList.remove(argModel);
-	data->spotLightList.remove(argModel);
-	data->modelList.remove(argModel);
+	dl_data->parallelLightList.remove(argModel);
+	dl_data->pointLightList.remove(argModel);
+	dl_data->spotLightList.remove(argModel);
+	dl_data->modelList.remove(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::clearModel(void)
 {
-	data->parallelLightList.clear();
-	data->pointLightList.clear();
-	data->spotLightList.clear();
-	data->modelList.clear();
+	dl_data->parallelLightList.clear();
+	dl_data->pointLightList.clear();
+	dl_data->spotLightList.clear();
+	dl_data->modelList.clear();
 
 	return;
 }
@@ -110,22 +110,22 @@ void fk_DisplayLink::entryOverlayModel(fk_Model *argModel)
 		}
 	}
 
-	data->overlayList.remove(argModel);
-	data->overlayList.push_back(argModel);
+	dl_data->overlayList.remove(argModel);
+	dl_data->overlayList.push_back(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::removeOverlayModel(fk_Model *argModel)
 {
-	data->overlayList.remove(argModel);
+	dl_data->overlayList.remove(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::clearOverlayModel(void)
 {
-	data->overlayList.clear();
+	dl_data->overlayList.clear();
 
 	return;
 }
@@ -133,29 +133,29 @@ void fk_DisplayLink::clearOverlayModel(void)
 void fk_DisplayLink::entryCamera(fk_Model *argModel)
 {
 	if(argModel == nullptr) {
-		data->camera = &(data->localCamera);
+		dl_data->camera = &(dl_data->localCamera);
 	} else {
-		data->camera = argModel;
+		dl_data->camera = argModel;
 	}
 	return;
 }
 
 list<fk_Model *> * fk_DisplayLink::GetModelList(void)
 {
-	return &(data->modelList);
+	return &(dl_data->modelList);
 }
 
 list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 {
 	switch(argType) {
 	  case fk_LightType::PARALLEL:
-		return &(data->parallelLightList);
+		return &(dl_data->parallelLightList);
 
 	  case fk_LightType::POINT:
-		return &(data->pointLightList);
+		return &(dl_data->pointLightList);
 
 	  case fk_LightType::SPOT:
-		return &(data->spotLightList);
+		return &(dl_data->spotLightList);
 
 	  default:
 		break;
@@ -166,17 +166,17 @@ list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 
 list<fk_Model *> * fk_DisplayLink::GetOverlayList(void)
 {
-	return &(data->overlayList);
+	return &(dl_data->overlayList);
 }
 
 fk_Model * fk_DisplayLink::getCamera(void) const
 {
-	return data->camera;
+	return dl_data->camera;
 }
 
 int fk_DisplayLink::GetID(void) const
 {
-	return data->displayID;
+	return dl_data->displayID;
 }
 
 void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
@@ -185,48 +185,48 @@ void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 
 	switch(argProj->getMode()) {
 	  case fk_ProjectMode::PERSPECTIVE:
-		data->perspective = *(static_cast<fk_Perspective *>(argProj));
-		data->proj = &(data->perspective);
+		dl_data->perspective = *(static_cast<fk_Perspective *>(argProj));
+		dl_data->proj = &(dl_data->perspective);
 		break;
 
 	  case fk_ProjectMode::FRUSTUM:
-		data->frustum = *(static_cast<fk_Frustum *>(argProj));
-		data->proj = &(data->frustum);
+		dl_data->frustum = *(static_cast<fk_Frustum *>(argProj));
+		dl_data->proj = &(dl_data->frustum);
 		break;
 
 	  case fk_ProjectMode::ORTHO:
-		data->ortho = *(static_cast<fk_Ortho *>(argProj));
-		data->proj = &(data->ortho);
+		dl_data->ortho = *(static_cast<fk_Ortho *>(argProj));
+		dl_data->proj = &(dl_data->ortho);
 		break;
 
 	  default:
 		break;
 	}
 
-	data->projStatus++;
+	dl_data->projStatus++;
 
 	return;
 }
 
 fk_ProjectBase * fk_DisplayLink::getProjection(void) const
 {
-	return data->proj;
+	return dl_data->proj;
 }
 
 int fk_DisplayLink::GetProjChangeStatus(void) const
 {
-	return data->projStatus;
+	return dl_data->projStatus;
 }
 
 void fk_DisplayLink::entryStereoCamera(fk_StereoChannel argChannel, fk_Model *argModel)
 {
 	switch(argChannel) {
 	  case fk_StereoChannel::LEFT:
-		data->stereoCamera[0] = argModel;
+		dl_data->stereoCamera[0] = argModel;
 		break;
 
 	  case fk_StereoChannel::RIGHT:
-		data->stereoCamera[1] = argModel;
+		dl_data->stereoCamera[1] = argModel;
 		break;
 
 	  default:
@@ -253,24 +253,24 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel argChannel, fk_Project
 	}
 
 	if(argProj == nullptr) {
-		data->stereoProj[index] = data->proj;
+		dl_data->stereoProj[index] = dl_data->proj;
 		return;
 	}
 
 	switch(argProj->getMode()) {
 	  case fk_ProjectMode::PERSPECTIVE:
-		data->stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
-		data->stereoProj[index] = &(data->stereoPers[index]);
+		dl_data->stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
+		dl_data->stereoProj[index] = &(dl_data->stereoPers[index]);
 		break;
 
 	  case fk_ProjectMode::FRUSTUM:
-		data->stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
-		data->stereoProj[index] = &(data->stereoFrus[index]);
+		dl_data->stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
+		dl_data->stereoProj[index] = &(dl_data->stereoFrus[index]);
 		break;
 
 	  case fk_ProjectMode::ORTHO:
-		data->stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
-		data->stereoProj[index] = &(data->stereoOrtho[index]);
+		dl_data->stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
+		dl_data->stereoProj[index] = &(dl_data->stereoOrtho[index]);
 		break;
 
 	  default:
@@ -282,10 +282,10 @@ const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel argChannel)
 {
 	switch(argChannel) {
 	  case fk_StereoChannel::LEFT:
-		return data->stereoCamera[0];
+		return dl_data->stereoCamera[0];
 
 	  case fk_StereoChannel::RIGHT:
-		return data->stereoCamera[1];
+		return dl_data->stereoCamera[1];
 
 	  default:
 		break;
@@ -297,10 +297,10 @@ const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel argC
 {
 	switch(argChannel) {
 	  case fk_StereoChannel::LEFT:
-		return data->stereoProj[0];
+		return dl_data->stereoProj[0];
 
 	  case fk_StereoChannel::RIGHT:
-		return data->stereoProj[1];
+		return dl_data->stereoProj[1];
 
 	  default:
 		break;
@@ -310,26 +310,26 @@ const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel argC
 
 void fk_DisplayLink::clearStereo(void)
 {
-	data->stereoCamera[0] = nullptr;
-	data->stereoCamera[1] = nullptr;
-	data->stereoProj[0] = data->proj;
-	data->stereoProj[1] = data->proj;
+	dl_data->stereoCamera[0] = nullptr;
+	dl_data->stereoCamera[1] = nullptr;
+	dl_data->stereoProj[0] = dl_data->proj;
+	dl_data->stereoProj[1] = dl_data->proj;
 }
 
 void fk_DisplayLink::setStereoOverlayMode(bool argFlg)
 {
-	data->stereoOverlayMode = argFlg;
+	dl_data->stereoOverlayMode = argFlg;
 	return;
 }
 
 bool fk_DisplayLink::getStereoOverlayMode(void)
 {
-	return data->stereoOverlayMode;
+	return dl_data->stereoOverlayMode;
 }
 
 void fk_DisplayLink::SetFinalizeMode(void)
 {
-	data->localCamera.SetTreeDelMode(false);
+	dl_data->localCamera.SetTreeDelMode(false);
 	return;
 }
 

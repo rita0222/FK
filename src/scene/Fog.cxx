@@ -1,9 +1,12 @@
 ﻿#include <FK/Fog.h>
 
 using namespace FK;
+using namespace std;
 
 fk_Fog::fk_Fog(void)
 {
+	fog_data = make_unique<fk_FogData>();
+	
 	setFogMode(fk_FogMode::OFF);
 	setFogDensity(0.35);
 	setFogLinearMap(1.0, 5.0);
@@ -19,66 +22,66 @@ fk_Fog::~fk_Fog()
 
 void fk_Fog::setFogMode(const fk_FogMode argMode)
 {
-	fogMode = argMode;
+	fog_data->fogMode = argMode;
 	return;
 }
 
 void fk_Fog::setFogDensity(const double argDensity)
 {
-	fogDensity = argDensity;
+	fog_data->fogDensity = argDensity;
 	return;
 }
 
 void fk_Fog::setFogLinearMap(const double argStart, const double argEnd)
 {
-	fogStart = argStart;
-	fogEnd = argEnd;
+	fog_data->fogStart = argStart;
+	fog_data->fogEnd = argEnd;
 	return;
 }
 
 void fk_Fog::setFogColor(const fk_Color &argColor)
 {
-	fogColor = argColor;
+	fog_data->fogColor = argColor;
 	return;
 }
 
 void fk_Fog::setFogColor(const float argR, const float argG,
 						 const float argB, const float argA)
 {
-	fogColor.init(argR, argG, argB, argA);
+	fog_data->fogColor.init(argR, argG, argB, argA);
 	return;
 }
 
 void fk_Fog::setFogColor(const double argR, const double argG,
 						 const double argB, const double argA)
 {
-	fogColor.init(argR, argG, argB, argA);
+	fog_data->fogColor.init(argR, argG, argB, argA);
 	return;
 }	 
 
 fk_FogMode fk_Fog::getFogMode(void) const
 {
-	return fogMode;
+	return fog_data->fogMode;
 }
 
 double fk_Fog::getFogDensity(void) const
 {
-	return fogDensity;
+	return fog_data->fogDensity;
 }
 
 double fk_Fog::getFogLinearStart(void) const
 {
-	return fogStart;
+	return fog_data->fogStart;
 }
 
 double fk_Fog::getFogLinearEnd(void) const
 {
-	return fogEnd;
+	return fog_data->fogEnd;
 }
 
 fk_Color fk_Fog::getFogColor(void) const
 {
-	return fogColor;
+	return fog_data->fogColor;
 }
 
 /****************************************************************************

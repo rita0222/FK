@@ -38,22 +38,21 @@ namespace FK {
 		 *
 		 *	\return		投影法に対応する列挙型の値を返します。
 		 */
-		fk_ProjectMode	getMode(void) const;
+		fk_ProjectMode getMode(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Matrix		*GetMatrix(void);
-		std::function<void()>	MakeMat;
+		fk_Matrix *GetMatrix(void);
+		std::function<void()> MakeMat;
 #endif
 
 	private:
-		fk_ProjectMode	Mode;
+		fk_ProjectMode Mode;
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_Matrix		ProjM;
-		void			SetMode(fk_ProjectMode);
-
+		std::unique_ptr<fk_Matrix> ProjM;
+		void SetMode(fk_ProjectMode);
 #endif
 
 	};
@@ -96,6 +95,18 @@ namespace FK {
 	 */
 
 	class fk_Perspective : public fk_ProjectBase {
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		class fk_PersData {
+		public:
+			double Fovy;
+			double Near, Far;
+			double Aspect;
+			bool AutoMode;
+
+			fk_PersData(void);
+		};
+#endif
 	public:
 
 		//! コンストラクタ
@@ -125,7 +136,7 @@ namespace FK {
 		 *
 		 *	\param[in]	fovy	視野角。単位は弧度法(ラジアン)です。
 		 */
-		void			setFovy(double fovy);
+		void setFovy(double fovy);
 
 		//! クリッピング近距離面距離設定関数
 		/*!
@@ -133,7 +144,7 @@ namespace FK {
 		 *
 		 *	\param[in]	near	面への距離
 		 */
-		void			setNear(double near);
+		void setNear(double near);
 
 		//! クリッピング遠距離面距離設定関数
 		/*!
@@ -141,7 +152,7 @@ namespace FK {
 		 *
 		 *	\param[in]	far		面への距離
 		 */
-		void			setFar(double far);
+		void setFar(double far);
 
 		//! アスペクト比設定関数
 		/*!
@@ -152,7 +163,7 @@ namespace FK {
 		 *
 		 *	\param[in]	aspect	アスペクト比
 		 */
-		void			setAspect(double aspect);
+		void setAspect(double aspect);
 
 		//! 一括設定関数1
 		/*!
@@ -162,7 +173,7 @@ namespace FK {
 		 *	\param[in]	near	クリッピング近距離面への距離
 		 *	\param[in]	far		クリッピング遠距離面への距離
 		 */
-		void			setAll(double fovy, double near, double far);
+		void setAll(double fovy, double near, double far);
 
 		//! 一括設定関数2
 		/*!
@@ -173,7 +184,7 @@ namespace FK {
 		 *	\param[in]	far		クリッピング遠距離面への距離
 		 *	\param[in]	aspect	アスペクト比
 		 */
-		void			setAll(double fovy, double near, double far, double aspect);
+		void setAll(double fovy, double near, double far, double aspect);
 
 //! 視野角参照関数
 		/*!
@@ -181,7 +192,7 @@ namespace FK {
 		 *
 		 *	\return		視野角。単位は弧度法(ラジアン)です。
 		 */
-		double			getFovy(void) const;
+		double getFovy(void) const;
 
 
 		//! クリッピング近距離面距離参照関数
@@ -190,7 +201,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getNear(void) const;
+		double getNear(void) const;
 
 		//! クリッピング遠距離面距離参照関数
 		/*!
@@ -198,7 +209,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getFar(void) const;
+		double getFar(void) const;
 
 		//! アスペクト比参照関数
 		/*!
@@ -206,13 +217,11 @@ namespace FK {
 		 *
 		 *	\return		アスペクト比
 		 */
-		double			getAspect(void) const;
+		double getAspect(void) const;
 
 	private:
-		double			Fovy;
-		double			Near, Far;
-		double			Aspect;
-		bool			AutoMode;
+		void MakeInit(void);
+		std::unique_ptr<fk_PersData> pers_data;
 	};
 
 	//! 一般透視投影を制御するクラス
@@ -250,6 +259,16 @@ namespace FK {
 	 */
 
 	class fk_Frustum : public fk_ProjectBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_FrustData {
+		public:
+			double Left, Right, Bottom, Top, Near, Far;
+
+			fk_FrustData(void);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		/*!
@@ -284,7 +303,7 @@ namespace FK {
 		 *
 		 *	\param[in]	left	符号付き距離
 		 */
-		void		setLeft(double left);
+		void setLeft(double left);
 
 		//! 視錐台右側符号付き距離設定関数
 		/*!
@@ -292,7 +311,7 @@ namespace FK {
 		 *
 		 *	\param[in]	right	符号付き距離
 		 */
-		void		setRight(double right);
+		void setRight(double right);
 
 		//! 視錐台下側符号付き距離設定関数
 		/*!
@@ -300,7 +319,7 @@ namespace FK {
 		 *
 		 *	\param[in]	bottom	符号付き距離
 		 */
-		void		setBottom(double bottom);
+		void setBottom(double bottom);
 
 		//! 視錐台上側符号付き距離設定関数
 		/*!
@@ -308,7 +327,7 @@ namespace FK {
 		 *
 		 *	\param[in]	top		符号付き距離
 		 */
-		void		setTop(double top);
+		void setTop(double top);
 
 		//! クリッピング近距離面距離設定関数
 		/*!
@@ -316,7 +335,7 @@ namespace FK {
 		 *
 		 *	\param[in]	near	面への距離
 		 */
-		void			setNear(double near);
+		void setNear(double near);
 
 		//! クリッピング遠距離面距離設定関数
 		/*!
@@ -324,7 +343,7 @@ namespace FK {
 		 *
 		 *	\param[in]	far		面への距離
 		 */
-		void			setFar(double far);
+		void setFar(double far);
 
 		//! 一括設定関数
 		/*!
@@ -337,12 +356,7 @@ namespace FK {
 		 *	\param[in]	near	クリッピング近距離面への距離
 		 *	\param[in]	far		クリッピング遠距離面への距離
 		 */
-		void			setAll(double left,
-							   double right,
-							   double bottom,
-							   double top,
-							   double near,
-							   double far);
+		void setAll(double left, double right, double bottom, double top, double near, double far);
 
 		//! 視錐台左側符号付き距離取得関数
 		/*!
@@ -350,7 +364,7 @@ namespace FK {
 		 *
 		 *	\return		符号付き距離
 		 */
-		double			getLeft(void) const;
+		double getLeft(void) const;
 
 		//! 視錐台右側符号付き距離取得関数
 		/*!
@@ -358,7 +372,7 @@ namespace FK {
 		 *
 		 *	\return		符号付き距離
 		 */
-		double			getRight(void) const;
+		double getRight(void) const;
 
 		//! 視錐台下側符号付き距離取得関数
 		/*!
@@ -366,7 +380,7 @@ namespace FK {
 		 *
 		 *	\return		符号付き距離
 		 */
-		double			getBottom(void) const;
+		double getBottom(void) const;
 
 		//! 視錐台上側符号付き距離取得関数
 		/*!
@@ -374,7 +388,7 @@ namespace FK {
 		 *
 		 *	\return		符号付き距離
 		 */
-		double			getTop(void) const;
+		double getTop(void) const;
 
 		//! クリッピング近距離面距離取得関数
 		/*!
@@ -382,7 +396,7 @@ namespace FK {
 		 *
 		 *	\return		面への距離
 		 */
-		double			getNear(void) const;
+		double getNear(void) const;
 
 		//! クリッピング遠距離面距離取得関数
 		/*!
@@ -390,10 +404,11 @@ namespace FK {
 		 *
 		 *	\return		面への距離
 		 */
-		double			getFar(void) const;
+		double getFar(void) const;
 
 	private:
-		double		Left, Right, Bottom, Top, Near, Far;
+		std::unique_ptr<fk_FrustData> fr_data;
+		void MakeInit(void);
 	};
 
 	//! 平行投影法を制御するクラス
@@ -414,10 +429,18 @@ namespace FK {
 	 *	
 	 *	設定は、左右、上下、遠近の各面を表す距離を設定します。
 	 *
-	 *	\sa fk_Perspective, fk_DisplayLink
+	 *	\sa fk_Perspective, fk_Frustum, fk_DisplayLink
 	 */
 
 	class fk_Ortho : public fk_ProjectBase {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_OrthoData {
+		public:
+			double Left, Right, Bottom, Top, Near, Far;
+
+			fk_OrthoData(void);
+		};
+#endif
 	public:
 
 		//! コンストラクタ
@@ -451,7 +474,7 @@ namespace FK {
 		 *
 		 *	\param[in]	left	距離
 		 */
-		void			setLeft(double left);
+		void setLeft(double left);
 
 		//! クリッピング左側面距離設定関数
 		/*!
@@ -459,7 +482,7 @@ namespace FK {
 		 *
 		 *	\param[in]	right	距離
 		 */
-		void			setRight(double right);
+		void setRight(double right);
 
 		//! クリッピング左側面距離設定関数
 		/*!
@@ -467,7 +490,7 @@ namespace FK {
 		 *
 		 *	\param[in]	bottom	距離
 		 */
-		void			setBottom(double bottom);
+		void setBottom(double bottom);
 
 		//! クリッピング左側面距離設定関数
 		/*!
@@ -475,7 +498,7 @@ namespace FK {
 		 *
 		 *	\param[in]	top		距離
 		 */
-		void			setTop(double top);
+		void setTop(double top);
 
 		//! クリッピング近距離距離設定関数
 		/*!
@@ -483,7 +506,7 @@ namespace FK {
 		 *
 		 *	\param[in]	near	距離
 		 */
-		void			setNear(double near);
+		void setNear(double near);
 
 		//! クリッピング遠距離距離設定関数
 		/*!
@@ -491,7 +514,7 @@ namespace FK {
 		 *
 		 *	\param[in]	far	距離
 		 */
-		void			setFar(double far);
+		void setFar(double far);
 
 		//! 一括設定関数
 		/*!
@@ -505,9 +528,7 @@ namespace FK {
 		 *	\param[in]	near	カメラから近距離面への距離
 		 *	\param[in]	far		カメラから遠距離面への距離
 		 */
-		void			setAll(double left, double right,
-							   double bottom, double top,
-							   double near, double far);
+		void setAll(double left, double right, double bottom, double top, double near, double far);
 
 		//! クリッピング左側面距離参照関数
 		/*!
@@ -515,7 +536,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getLeft(void) const;
+		double getLeft(void) const;
 
 		//! クリッピング右側面距離参照関数
 		/*!
@@ -523,7 +544,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getRight(void) const;
+		double getRight(void) const;
 
 		//! クリッピング下側面距離参照関数
 		/*!
@@ -531,7 +552,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getBottom(void) const;
+		double getBottom(void) const;
 
 		//! クリッピング上側面距離参照関数
 		/*!
@@ -539,7 +560,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getTop(void) const;
+		double getTop(void) const;
 
 		//! クリッピング近距離距離参照関数
 		/*!
@@ -547,7 +568,7 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getNear(void) const;
+		double getNear(void) const;
 
 		//! クリッピング遠距離距離参照関数
 		/*!
@@ -555,12 +576,11 @@ namespace FK {
 		 *
 		 *	\return		距離
 		 */
-		double			getFar(void) const;
+		double getFar(void) const;
 
 	private:
-		double			Left, Right;
-		double			Bottom, Top;
-		double			Near, Far;
+		std::unique_ptr<fk_OrthoData> or_data;
+		void MakeInit(void);
 	};
 }
 #endif // !__FK_PROJECTION_HEADER__

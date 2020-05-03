@@ -291,7 +291,7 @@ namespace FK {
 #endif
 
 	private:
-		std::unique_ptr<fk_DLinkData> data;
+		std::unique_ptr<fk_DLinkData> dl_data;
 		static std::unique_ptr<fk_IDAdmin> DLManager;
 	};
 }
