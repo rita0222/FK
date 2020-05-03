@@ -1,49 +1,32 @@
 ﻿#define FK_DEF_SIZETYPE
 
 #include <FK/DList.h>
-#include <FK/Model.h>
-#include <FK/IDAdmin.H>
 #include <FK/Window.h>
 
 using namespace std;
 using namespace FK;
 
-static fk_IDAdmin & fk_DLManager(void)
+unique_ptr<fk_IDAdmin> fk_DisplayLink::DLManager = make_unique<fk_IDAdmin>(1);
+
+fk_DisplayLink::fk_DLinkData::fk_DLinkData(void) :
+	camera(&localCamera), proj(&perspective), projStatus(0), stereoOverlayMode(true)
 {
-	static fk_IDAdmin	fk_DLManager(1);
-	return fk_DLManager;
+	return;
 }
 
 fk_DisplayLink::fk_DisplayLink(void)
 	: fk_BaseObject(fk_Type::DISPLAYLINK)
 {
-	localCamera = make_unique<fk_Model>();
-	camera = localCamera.get();
-	displayID = fk_DLManager().CreateID();
-
-	perspective = make_unique<fk_Perspective>();
-	frustum = make_unique<fk_Frustum>();
-	ortho = make_unique<fk_Ortho>();
-	
-	proj = perspective.get();
-	projStatus = 0;
-
-	for(_st i = 0; i < 2; ++i) {
-		stereoPers[i] = make_shared<fk_Perspective>();
-		stereoFrus[i] = make_shared<fk_Frustum>();
-		stereoOrtho[i] = make_shared<fk_Ortho>();
-	}
-
+	data = make_unique<fk_DLinkData>();
+	data->displayID = DLManager->CreateID();
 	clearStereo();
-	stereoOverlayMode = true;
 
 	return;
 }
 
 fk_DisplayLink::~fk_DisplayLink()
 {
-	fk_DLManager().EraseID(displayID);
-
+	DLManager->EraseID(data->displayID);
 	return;
 }
 
@@ -52,9 +35,9 @@ void fk_DisplayLink::clearDisplay(void)
 	clearModel();
 	clearOverlayModel();
 
-	camera = localCamera.get();
-	proj = perspective.get();
-	projStatus++;
+	data->camera = &(data->localCamera);
+	data->proj = &(data->perspective);
+	data->projStatus++;
 
 	clearStereo();
 
@@ -70,49 +53,49 @@ void fk_DisplayLink::entryModel(fk_Model *argModel)
 			fk_Light *light = dynamic_cast<fk_Light *>(argModel->getShape());
 			switch(light->getLightType()) {
 			  case fk_LightType::PARALLEL:
-				  parallelLightList.remove(argModel);
-				  parallelLightList.push_front(argModel);
-				  break;
+				data->parallelLightList.remove(argModel);
+				data->parallelLightList.push_front(argModel);
+				break;
 
 			  case fk_LightType::POINT:
-				  pointLightList.remove(argModel);
-				  pointLightList.push_front(argModel);
-				  break;
+				data->pointLightList.remove(argModel);
+				data->pointLightList.push_front(argModel);
+				break;
 
 			  case fk_LightType::SPOT:
-				  spotLightList.remove(argModel);
-				  spotLightList.push_front(argModel);
-				  break;
+				data->spotLightList.remove(argModel);
+				data->spotLightList.push_front(argModel);
+				break;
 
 			  default:
-				  break;
+				break;
 			}
 			return;
 		}
 	}
 
-	modelList.remove(argModel);
-	modelList.push_back(argModel);
+	data->modelList.remove(argModel);
+	data->modelList.push_back(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::removeModel(fk_Model *argModel)
 {
-	parallelLightList.remove(argModel);
-	pointLightList.remove(argModel);
-	spotLightList.remove(argModel);
-	modelList.remove(argModel);
+	data->parallelLightList.remove(argModel);
+	data->pointLightList.remove(argModel);
+	data->spotLightList.remove(argModel);
+	data->modelList.remove(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::clearModel(void)
 {
-	parallelLightList.clear();
-	pointLightList.clear();
-	spotLightList.clear();
-	modelList.clear();
+	data->parallelLightList.clear();
+	data->pointLightList.clear();
+	data->spotLightList.clear();
+	data->modelList.clear();
 
 	return;
 }
@@ -127,22 +110,22 @@ void fk_DisplayLink::entryOverlayModel(fk_Model *argModel)
 		}
 	}
 
-	overlayList.remove(argModel);
-	overlayList.push_back(argModel);
+	data->overlayList.remove(argModel);
+	data->overlayList.push_back(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::removeOverlayModel(fk_Model *argModel)
 {
-	overlayList.remove(argModel);
+	data->overlayList.remove(argModel);
 
 	return;
 }
 
 void fk_DisplayLink::clearOverlayModel(void)
 {
-	overlayList.clear();
+	data->overlayList.clear();
 
 	return;
 }
@@ -150,32 +133,32 @@ void fk_DisplayLink::clearOverlayModel(void)
 void fk_DisplayLink::entryCamera(fk_Model *argModel)
 {
 	if(argModel == nullptr) {
-		camera = localCamera.get();
+		data->camera = &(data->localCamera);
 	} else {
-		camera = argModel;
+		data->camera = argModel;
 	}
 	return;
 }
 
 list<fk_Model *> * fk_DisplayLink::GetModelList(void)
 {
-	return &modelList;
+	return &(data->modelList);
 }
 
 list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 {
 	switch(argType) {
 	  case fk_LightType::PARALLEL:
-		  return &parallelLightList;
+		return &(data->parallelLightList);
 
 	  case fk_LightType::POINT:
-		  return &pointLightList;
+		return &(data->pointLightList);
 
 	  case fk_LightType::SPOT:
-		  return &spotLightList;
+		return &(data->spotLightList);
 
 	  default:
-		  break;
+		break;
 	}
 
 	return nullptr;
@@ -183,17 +166,17 @@ list<fk_Model *> * fk_DisplayLink::GetLightList(fk_LightType argType)
 
 list<fk_Model *> * fk_DisplayLink::GetOverlayList(void)
 {
-	return &overlayList;
+	return &(data->overlayList);
 }
 
 fk_Model * fk_DisplayLink::getCamera(void) const
 {
-	return camera;
+	return data->camera;
 }
 
 int fk_DisplayLink::GetID(void) const
 {
-	return displayID;
+	return data->displayID;
 }
 
 void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
@@ -202,81 +185,92 @@ void fk_DisplayLink::setProjection(fk_ProjectBase *argProj)
 
 	switch(argProj->getMode()) {
 	  case fk_ProjectMode::PERSPECTIVE:
-		*perspective = *(static_cast<fk_Perspective *>(argProj));
-		proj = perspective.get();
+		data->perspective = *(static_cast<fk_Perspective *>(argProj));
+		data->proj = &(data->perspective);
 		break;
 
 	  case fk_ProjectMode::FRUSTUM:
-		*frustum = *(static_cast<fk_Frustum *>(argProj));
-		proj = frustum.get();
+		data->frustum = *(static_cast<fk_Frustum *>(argProj));
+		data->proj = &(data->frustum);
 		break;
 
 	  case fk_ProjectMode::ORTHO:
-		*ortho = *(static_cast<fk_Ortho *>(argProj));
-		proj = ortho.get();
+		data->ortho = *(static_cast<fk_Ortho *>(argProj));
+		data->proj = &(data->ortho);
 		break;
 
 	  default:
 		break;
 	}
 
-	projStatus++;
+	data->projStatus++;
 
 	return;
 }
 
 fk_ProjectBase * fk_DisplayLink::getProjection(void) const
 {
-	return proj;
+	return data->proj;
 }
 
 int fk_DisplayLink::GetProjChangeStatus(void) const
 {
-	return projStatus;
+	return data->projStatus;
 }
 
-void fk_DisplayLink::entryStereoCamera(fk_StereoChannel channel,
-									   fk_Model *argModel)
+void fk_DisplayLink::entryStereoCamera(fk_StereoChannel argChannel, fk_Model *argModel)
 {
-	if(channel == fk_StereoChannel::LEFT) {
-		stereoCamera[0] = argModel;
-	} else if(channel == fk_StereoChannel::RIGHT) {
-		stereoCamera[1] = argModel;
+	switch(argChannel) {
+	  case fk_StereoChannel::LEFT:
+		data->stereoCamera[0] = argModel;
+		break;
+
+	  case fk_StereoChannel::RIGHT:
+		data->stereoCamera[1] = argModel;
+		break;
+
+	  default:
+		break;
 	}
+	return;
 }
 
-void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
-										 fk_ProjectBase *argProj)
+void fk_DisplayLink::setStereoProjection(fk_StereoChannel argChannel, fk_ProjectBase *argProj)
 {
 	int index;
 
-	if(channel == fk_StereoChannel::LEFT) {
+	switch(argChannel) {
+	  case fk_StereoChannel::LEFT:
 		index = 0;
-	} else if(channel == fk_StereoChannel::RIGHT) {
+		break;
+		
+	  case fk_StereoChannel::RIGHT:
 		index = 1;
-	} else {
+		break;
+
+	  default:
 		return;
 	}
 
 	if(argProj == nullptr) {
-		stereoProj[index] = proj;
+		data->stereoProj[index] = data->proj;
 		return;
 	}
 
 	switch(argProj->getMode()) {
 	  case fk_ProjectMode::PERSPECTIVE:
-		*stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
-		stereoProj[index] = stereoPers[index].get();
+		data->stereoPers[index] = *(static_cast<fk_Perspective *>(argProj));
+		data->stereoProj[index] = &(data->stereoPers[index]);
 		break;
 
 	  case fk_ProjectMode::FRUSTUM:
-		*stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
-		stereoProj[index] = stereoFrus[index].get();
+		data->stereoFrus[index] = *(static_cast<fk_Frustum *>(argProj));
+		data->stereoProj[index] = &(data->stereoFrus[index]);
 		break;
 
 	  case fk_ProjectMode::ORTHO:
-		*stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
-		stereoProj[index] = stereoOrtho[index].get();
+		data->stereoOrtho[index] = *(static_cast<fk_Ortho *>(argProj));
+		data->stereoProj[index] = &(data->stereoOrtho[index]);
 		break;
 
 	  default:
@@ -284,48 +278,58 @@ void fk_DisplayLink::setStereoProjection(fk_StereoChannel channel,
 	}
 }
 
-const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel channel)
+const fk_Model * fk_DisplayLink::getStereoCamera(fk_StereoChannel argChannel)
 {
-	if(channel == fk_StereoChannel::LEFT) {
-		return stereoCamera[0];
-	} else if(channel == fk_StereoChannel::RIGHT) {
-		return stereoCamera[1];
+	switch(argChannel) {
+	  case fk_StereoChannel::LEFT:
+		return data->stereoCamera[0];
+
+	  case fk_StereoChannel::RIGHT:
+		return data->stereoCamera[1];
+
+	  default:
+		break;
 	}
 	return nullptr;
 }
 
-const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel channel)
+const fk_ProjectBase * fk_DisplayLink::getStereoProjection(fk_StereoChannel argChannel)
 {
-	if(channel == fk_StereoChannel::LEFT) {
-		return stereoProj[0];
-	} else if(channel == fk_StereoChannel::RIGHT) {
-		return stereoProj[1];
+	switch(argChannel) {
+	  case fk_StereoChannel::LEFT:
+		return data->stereoProj[0];
+
+	  case fk_StereoChannel::RIGHT:
+		return data->stereoProj[1];
+
+	  default:
+		break;
 	}
 	return nullptr;
 }
 
 void fk_DisplayLink::clearStereo(void)
 {
-	stereoCamera[0] = nullptr;
-	stereoCamera[1] = nullptr;
-	stereoProj[0] = proj;
-	stereoProj[1] = proj;
+	data->stereoCamera[0] = nullptr;
+	data->stereoCamera[1] = nullptr;
+	data->stereoProj[0] = data->proj;
+	data->stereoProj[1] = data->proj;
 }
 
 void fk_DisplayLink::setStereoOverlayMode(bool argFlg)
 {
-	stereoOverlayMode = argFlg;
+	data->stereoOverlayMode = argFlg;
 	return;
 }
 
 bool fk_DisplayLink::getStereoOverlayMode(void)
 {
-	return stereoOverlayMode;
+	return data->stereoOverlayMode;
 }
 
 void fk_DisplayLink::SetFinalizeMode(void)
 {
-	localCamera->SetTreeDelMode(false);
+	data->localCamera.SetTreeDelMode(false);
 	return;
 }
 

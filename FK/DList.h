@@ -4,6 +4,7 @@
 #include <FK/Projection.h>
 #include <FK/Model.h>
 #include <FK/Light.h>
+#include <FK/IDAdmin.H>
 #include <list>
 
 namespace FK {
@@ -43,8 +44,34 @@ namespace FK {
 
 	class fk_DisplayLink : public fk_BaseObject {
 
-		friend class fk_Window;
-		friend class fk_GraphicsEngine;
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_DLinkData {
+		public:
+			std::list<fk_Model *> modelList;
+			std::list<fk_Model *> overlayList;
+			std::list<fk_Model *> parallelLightList;
+			std::list<fk_Model *> pointLightList;
+			std::list<fk_Model *> spotLightList;
+			int displayID;
+
+			fk_Model localCamera;
+			fk_Model *camera;
+			fk_ProjectBase *proj;
+			fk_Perspective perspective;
+			fk_Frustum frustum;
+			fk_Ortho ortho;
+			int projStatus;
+
+			fk_Model *stereoCamera[2];
+			fk_ProjectBase *stereoProj[2];
+			fk_Perspective stereoPers[2];
+			fk_Frustum stereoFrus[2];
+			fk_Ortho stereoOrtho[2];
+			bool stereoOverlayMode;
+
+			fk_DLinkData(void);
+		};
+#endif
 
 	public:
 
@@ -256,36 +283,16 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		void SetFinalizeMode(void);
-#endif
-
-	private:
-		std::list<fk_Model *> modelList;
-		std::list<fk_Model *> overlayList;
-		std::list<fk_Model *> parallelLightList;
-		std::list<fk_Model *> pointLightList;
-		std::list<fk_Model *> spotLightList;
-		int displayID;
-
-		std::unique_ptr<fk_Model> localCamera;
-		fk_Model *camera;
-		fk_ProjectBase *proj;
-		std::unique_ptr<fk_Perspective> perspective;
-		std::unique_ptr<fk_Frustum> frustum;
-		std::unique_ptr<fk_Ortho> ortho;
-		int projStatus;
-
-		fk_Model *stereoCamera[2];
-		fk_ProjectBase *stereoProj[2];
-		std::shared_ptr<fk_Perspective> stereoPers[2];
-		std::shared_ptr<fk_Frustum> stereoFrus[2];
-		std::shared_ptr<fk_Ortho> stereoOrtho[2];
-		bool stereoOverlayMode;
-
+		int GetID(void) const;
+		int GetProjChangeStatus(void) const;
 		std::list<fk_Model *> *	GetModelList(void);
 		std::list<fk_Model *> *	GetLightList(fk_LightType);
 		std::list<fk_Model *> *	GetOverlayList(void);
-		int GetID(void) const;
-		int GetProjChangeStatus(void) const;
+#endif
+
+	private:
+		std::unique_ptr<fk_DLinkData> data;
+		static std::unique_ptr<fk_IDAdmin> DLManager;
 	};
 }
 
