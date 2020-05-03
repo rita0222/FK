@@ -38,6 +38,7 @@ namespace FK {
 		NUM				//!< シェーディングモード種類数
 	};
 
+
 	//! モデルを生成、管理するクラス
 	/*!
 	 *	このクラスは、「モデル」を制御する機能を提供します。
@@ -97,6 +98,53 @@ namespace FK {
 	 */
 
 	class fk_Model : public fk_Boundary {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_ModelData {
+		public:
+			fk_Material material;
+			fk_Color pointColor;
+			fk_Color lineColor;
+			fk_Color curveColor;
+			fk_Shape *shape;
+			fk_Model *parentModel;
+			fk_TreeData *treeData;
+			fk_Draw drawMode;
+			fk_ElementMode elemMode;
+			fk_BlendMode blendMode;
+			fk_BlendFactor srcFactor;
+			fk_BlendFactor dstFactor;
+			fk_DepthMode depthMode;
+			double pointSize;
+			bool smoothFlag;
+			bool reverseFlag;
+			bool treeFlag;
+			unsigned int modelID;
+			bool treeDelMode;
+			fk_TexMode texMode;
+			fk_ShadingMode shadingMode;
+
+			std::unique_ptr<fk_HVector> snapPos;
+			std::unique_ptr<fk_HVector> snapInhPos;
+			std::unique_ptr<fk_Angle> snapAngle;
+			bool snapFlag;
+
+			bool interMode;
+			bool interStatus;
+			bool interStopMode;
+
+			std::list<fk_Model *> interList;
+
+			fk_ShaderBinder *shader;
+
+			bool shadowEffectMode;
+			bool shadowDrawMode;
+
+			bool fogMode;
+
+			fk_ModelData(void);
+		};
+#endif
 
 	public:
 
@@ -2157,45 +2205,7 @@ namespace FK {
 #endif
 
 	private:
-		fk_Material material;
-		fk_Color pointColor;
-		fk_Color lineColor;
-		fk_Color curveColor;
-		fk_Shape *shape;
-		fk_Model *parentModel;
-		fk_TreeData *treeData;
-		fk_Draw drawMode;
-		fk_ElementMode elemMode;
-		fk_BlendMode blendMode;
-		fk_BlendFactor srcFactor;
-		fk_BlendFactor dstFactor;
-		fk_DepthMode depthMode;
-		double pointSize;
-		bool smoothFlag;
-		bool reverseFlag;
-		bool treeFlag;
-		unsigned int _modelID;
-		bool treeDelMode;
-		fk_TexMode texMode;
-		fk_ShadingMode shadingMode;
-
-		fk_HVector *snapPos;
-		fk_HVector *snapInhPos;
-		fk_Angle *snapAngle;
-		bool snapFlag;
-
-		bool interMode;
-		bool interStatus;
-		bool interStopMode;
-
-		std::list<fk_Model *> interList;
-
-		fk_ShaderBinder *shader;
-
-		bool shadowEffectMode;
-		bool shadowDrawMode;
-
-		bool fogMode;
+		std::unique_ptr<fk_ModelData> mData;
 
 		void EntryTree(void);
 		void DeleteTree(void);
@@ -2209,7 +2219,8 @@ namespace FK {
 		void PreMove(void);
 		void PostMove(void);
 
-		static fk_Tree _modelTree;
+		static std::unique_ptr<fk_Tree> modelTree;
+		static unsigned int globalModelID;
 	};
 }
 

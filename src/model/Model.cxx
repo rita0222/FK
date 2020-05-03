@@ -12,7 +12,7 @@ using namespace FK;
 
 using mi = list<fk_Model *>::iterator;
 
-static unsigned int		_globalModelID = 1;
+unsigned int fk_Model::globalModelID = 1;
 
 namespace FK {
 	fk_DepthMode operator | (fk_DepthMode argL, fk_DepthMode argR) {
@@ -31,18 +31,23 @@ namespace FK {
 	}
 }
 
-fk_Model::fk_Model(fk_Shape *argShape)
-	: fk_Boundary(fk_Type::MODEL), shape(nullptr), parentModel(nullptr),
-	  treeData(nullptr), drawMode(fk_Draw::NONE), elemMode(fk_ElementMode::MODEL),
-	  depthMode(fk_DepthMode::READ_AND_WRITE), pointSize(1.0),
-	  smoothFlag(false), reverseFlag(false),
-	  treeFlag(false), _modelID(_globalModelID), treeDelMode(true),
-	  texMode(fk_TexMode::NONE), shadingMode(fk_ShadingMode::PHONG),
-	  snapPos(nullptr), snapInhPos(nullptr), snapAngle(nullptr), snapFlag(false),
-	  interMode(false), interStatus(false), interStopMode(false),
-	  shader(nullptr),
-	  shadowEffectMode(true), shadowDrawMode(true), fogMode(true)
+fk_Model::fk_ModelData::fk_ModelData(void) :
+	shape(nullptr), parentModel(nullptr),
+	treeData(nullptr), drawMode(fk_Draw::NONE), elemMode(fk_ElementMode::MODEL),
+	depthMode(fk_DepthMode::READ_AND_WRITE), pointSize(1.0),
+	smoothFlag(false), reverseFlag(false),
+	treeFlag(false), modelID(globalModelID), treeDelMode(true),
+	texMode(fk_TexMode::NONE), shadingMode(fk_ShadingMode::PHONG),
+	snapFlag(false), interMode(false), interStatus(false), interStopMode(false),
+	shader(nullptr), shadowEffectMode(true), shadowDrawMode(true), fogMode(true)
 {
+	return;
+}
+
+fk_Model::fk_Model(fk_Shape *argShape) : fk_Boundary(fk_Type::MODEL)
+{
+	mData = make_unique<fk_ModelData>();
+	
 	setBlendMode(fk_BlendMode::ALPHA);
 	setShape(argShape);
 
@@ -53,10 +58,6 @@ fk_Model::~fk_Model()
 {
 	DeleteTree();
 
-	delete snapPos;
-	delete snapInhPos;
-	delete snapAngle;
-
 	return;
 }
 
@@ -65,13 +66,13 @@ void fk_Model::setShape(fk_Shape *argShape)
 	bool	drawModeFlag;
 
 	if(argShape == nullptr) {
-		shape = nullptr;
+		mData->shape = nullptr;
 		return;
 	}
 
-	if(shape == nullptr) {
+	if(mData->shape == nullptr) {
 		drawModeFlag = true;
-	} else if(shape->getObjectType() != argShape->getObjectType()) {
+	} else if(mData->shape->getObjectType() != argShape->getObjectType()) {
 		drawModeFlag = true;
 	} else {
 		drawModeFlag = false;
@@ -82,13 +83,13 @@ void fk_Model::setShape(fk_Shape *argShape)
 		switch(type) {
 		  case fk_Type::POINT:
 		  case fk_Type::PARTICLESET:
-			drawMode = fk_Draw::POINT;
+			mData->drawMode = fk_Draw::POINT;
 			break;
 
 		  case fk_Type::LINE:
 		  case fk_Type::POLYLINE:
 		  case fk_Type::CLOSEDLINE:
-			drawMode = fk_Draw::LINE;
+			mData->drawMode = fk_Draw::LINE;
 			break;
 			 
 		  case fk_Type::POLYGON:
@@ -100,7 +101,7 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case fk_Type::CAPSULE:
 		  case fk_Type::SOLID:
 		  case fk_Type::INDEXFACESET:
-			drawMode = fk_Draw::FACE;
+			mData->drawMode = fk_Draw::FACE;
 			break;
 
 		  case fk_Type::RECTTEXTURE:
@@ -108,22 +109,22 @@ void fk_Model::setShape(fk_Shape *argShape)
 		  case fk_Type::MESHTEXTURE:
 		  case fk_Type::IFSTEXTURE:
 		  case fk_Type::ARTEXTURE:
-			drawMode = fk_Draw::TEXTURE;
+			mData->drawMode = fk_Draw::TEXTURE;
 			break;
 
 		  default:
-			drawMode = fk_Draw::NONE;
+			mData->drawMode = fk_Draw::NONE;
 			break;
 		}
 	}
-	shape = argShape;
+	mData->shape = argShape;
 
 	return;
 }
 
 void fk_Model::setMaterial(const fk_Material &argMate)
 {
-	material = argMate;
+	mData->material = argMate;
 	return;
 }
 
@@ -136,7 +137,7 @@ void fk_Model::setPointColor(fk_Color *argColor)
 
 void fk_Model::setPointColor(float argR, float argG, float argB)
 {
-	pointColor.set(argR, argG, argB);
+	mData->pointColor.set(argR, argG, argB);
 	return;
 }
 
@@ -149,7 +150,7 @@ void fk_Model::setLineColor(fk_Color *argColor)
 
 void fk_Model::setLineColor(float argR, float argG, float argB)
 {
-	lineColor.set(argR, argG, argB);
+	mData->lineColor.set(argR, argG, argB);
 	return;
 }
 
@@ -161,58 +162,58 @@ void fk_Model::setCurveColor(fk_Color *argColor)
 }
 void fk_Model::setCurveColor(float argR, float argG, float argB)
 {
-	curveColor.set(argR, argG, argB);
+	mData->curveColor.set(argR, argG, argB);
 	return;
 }
 
 fk_Shape * fk_Model::getShape(void) const
 {
-	return shape;
+	return mData->shape;
 }
 
 fk_Material * fk_Model::getMaterial(void)
 {
-	return &material;
+	return &(mData->material);
 }
 
 fk_Color * fk_Model::getPointColor(void)
 {
-	return &pointColor;
+	return &(mData->pointColor);
 }
 
 fk_Color * fk_Model::getLineColor(void)
 {
-	return &lineColor;
+	return &(mData->lineColor);
 }
 
 fk_Color * fk_Model::getCurveColor(void)
 {
-	return &curveColor;
+	return &(mData->curveColor);
 }
 
 void fk_Model::setDrawMode(const fk_Draw argMode)
 {
-	if(drawMode == argMode) return;
-	drawMode = argMode;
-	if(shape != nullptr) {
-		shape->ForceUpdateAttr();
+	if(mData->drawMode == argMode) return;
+	mData->drawMode = argMode;
+	if(mData->shape != nullptr) {
+		mData->shape->ForceUpdateAttr();
 	}
 	return;
 }
 
 fk_Draw fk_Model::getDrawMode(void) const
 {
-	return drawMode;
+	return mData->drawMode;
 }
 
 void fk_Model::setElementMode(const fk_ElementMode argMode)
 {
-	elemMode = argMode;
+	mData->elemMode = argMode;
 }
 
 fk_ElementMode fk_Model::getElementMode(void) const
 {
-	return elemMode;
+	return mData->elemMode;
 }
 
 void fk_Model::setMaterialMode(const fk_MaterialMode) {}
@@ -224,126 +225,126 @@ void fk_Model::setBlendMode(const fk_BlendMode argMode,
 {
 	switch(argMode) {
 	  case fk_BlendMode::ALPHA:
-		srcFactor = fk_BlendFactor::SRC_ALPHA;
-		dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
+		mData->srcFactor = fk_BlendFactor::SRC_ALPHA;
+		mData->dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
 		break;
 
 	  case fk_BlendMode::NEGATIVE:
-		srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
-		dstFactor = fk_BlendFactor::ZERO;
+		mData->srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
+		mData->dstFactor = fk_BlendFactor::ZERO;
 		break;
 
 	  case fk_BlendMode::ADDITION:
-		srcFactor = fk_BlendFactor::ONE;
-		dstFactor = fk_BlendFactor::ONE;
+		mData->srcFactor = fk_BlendFactor::ONE;
+		mData->dstFactor = fk_BlendFactor::ONE;
 		break;
 
 	  case fk_BlendMode::SCREEN:
-		srcFactor = fk_BlendFactor::SRC_ALPHA;
-		dstFactor = fk_BlendFactor::ONE;
+		mData->srcFactor = fk_BlendFactor::SRC_ALPHA;
+		mData->dstFactor = fk_BlendFactor::ONE;
 		break;
 
 	  case fk_BlendMode::LIGHTEN:
-		srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
-		dstFactor = fk_BlendFactor::ONE;
+		mData->srcFactor = fk_BlendFactor::ONE_MINUS_DST_COLOR;
+		mData->dstFactor = fk_BlendFactor::ONE;
 		break;
 
 	  case fk_BlendMode::MULTIPLY:
-		srcFactor = fk_BlendFactor::ZERO;
-		dstFactor = fk_BlendFactor::SRC_COLOR;
+		mData->srcFactor = fk_BlendFactor::ZERO;
+		mData->dstFactor = fk_BlendFactor::SRC_COLOR;
 		break;
 
 	  case fk_BlendMode::NONE:
-		srcFactor = fk_BlendFactor::ONE;
-		dstFactor = fk_BlendFactor::ZERO;
+		mData->srcFactor = fk_BlendFactor::ONE;
+		mData->dstFactor = fk_BlendFactor::ZERO;
 		break;
 
 	  case fk_BlendMode::CUSTOM:
-		srcFactor = argSrcFactor;
-		dstFactor = argDstFactor;
+		mData->srcFactor = argSrcFactor;
+		mData->dstFactor = argDstFactor;
 		break;
 
 	  default:
 		return;
 	}
 
-	blendMode = argMode;
+	mData->blendMode = argMode;
 	return;
 }
 
-fk_BlendMode fk_Model::getBlendMode(fk_BlendFactor *outSrc, fk_BlendFactor *outDst) const
+fk_BlendMode fk_Model::getBlendMode(fk_BlendFactor *argOutSrc, fk_BlendFactor *argOutDst) const
 {
-	if (outSrc != nullptr) *outSrc = srcFactor;
-	if (outDst != nullptr) *outDst = dstFactor;
-	return blendMode;
+	if (argOutSrc != nullptr) *argOutSrc = mData->srcFactor;
+	if (argOutDst != nullptr) *argOutDst = mData->dstFactor;
+	return mData->blendMode;
 }
 
 void fk_Model::setDepthMode(const fk_DepthMode argMode)
 {
-	depthMode = argMode;
+	mData->depthMode = argMode;
 }
 
 fk_DepthMode fk_Model::getDepthMode(void) const
 {
-	return depthMode;
+	return mData->depthMode;
 }
 
 fk_Matrix fk_Model::getInhMatrix(void) const
 {
-	if(parentModel == nullptr) return getMatrix();
-	return (parentModel->getInhMatrix() * getMatrix());
+	if(mData->parentModel == nullptr) return getMatrix();
+	return (mData->parentModel->getInhMatrix() * getMatrix());
 }
 
 fk_Matrix fk_Model::getInhInvMatrix(void) const
 {
-	if(parentModel == nullptr) return getInvMatrix();
-	return (getInvMatrix() * parentModel->getInhInvMatrix());
+	if(mData->parentModel == nullptr) return getInvMatrix();
+	return (getInvMatrix() * mData->parentModel->getInhInvMatrix());
 }
 
 fk_OrthoMatrix fk_Model::getInhBaseMatrix(void) const
 {
-	if(parentModel == nullptr) return data->M;
-	return (parentModel->getInhBaseMatrix() * data->M);
+	if(mData->parentModel == nullptr) return oData->M;
+	return (mData->parentModel->getInhBaseMatrix() * oData->M);
 }
 
 fk_OrthoMatrix fk_Model::getInhInvBaseMatrix(void) const
 {
-	fk_OrthoMatrix	RetMat = data->M;
+	fk_OrthoMatrix	RetMat = oData->M;
 	RetMat.inverse();
-	if(parentModel == nullptr) return RetMat;
-	return (parentModel->getInhInvBaseMatrix() * RetMat);
+	if(mData->parentModel == nullptr) return RetMat;
+	return (mData->parentModel->getInhInvBaseMatrix() * RetMat);
 }
 
 fk_Vector fk_Model::getInhPosition(void) const
 {
 	fk_Vector retVec;
 
-	if(parentModel == nullptr) {
-		retVec = Position;
+	if(mData->parentModel == nullptr) {
+		retVec = oData->pos;
 	} else {
-		retVec = parentModel->getInhMatrix() * Position;
+		retVec = mData->parentModel->getInhMatrix() * oData->pos;
 	}
 	return retVec;
 }
 
 fk_Vector fk_Model::getInhVec(void) const
 {
-	fk_HVector	hvec(Vec);
+	fk_HVector	hvec(oData->vec);
 
-	if(parentModel == nullptr) return Vec;
+	if(mData->parentModel == nullptr) return oData->vec;
 
 	hvec.isvec();
-	return (parentModel->getInhMatrix() * hvec);
+	return (mData->parentModel->getInhMatrix() * hvec);
 }
 	
 fk_Vector fk_Model::getInhUpvec(void) const
 {
-	fk_HVector	hvec(UpVec);
+	fk_HVector	hvec(oData->uvec);
 
-	if(parentModel == nullptr) return UpVec;
+	if(mData->parentModel == nullptr) return oData->uvec;
 	
 	hvec.isvec();
-	return (parentModel->getInhMatrix() * hvec);
+	return (mData->parentModel->getInhMatrix() * hvec);
 }
 
 fk_Vector fk_Model::getInhUpVec(void) const
@@ -356,7 +357,7 @@ fk_Angle fk_Model::getInhAngle(void) const
 	fk_Angle		retAngle;
 	fk_Vector		vec, upvec;
 
-	if(parentModel == nullptr) return Angle;
+	if(mData->parentModel == nullptr) return oData->angle;
 	vec = getInhVec();
 	upvec = getInhUpVec();
 	VectorToAngle(&retAngle, &vec, &upvec);
@@ -365,16 +366,16 @@ fk_Angle fk_Model::getInhAngle(void) const
 
 double fk_Model::getInhScale(void) const
 {
-	if(parentModel == nullptr) {
-		return Scale;
+	if(mData->parentModel == nullptr) {
+		return oData->scale;
 	}
-	return (parentModel->getInhScale() * Scale);
+	return (mData->parentModel->getInhScale() * oData->scale);
 }
 
 void fk_Model::setPointSize(const double argSize)
 {
 	if(argSize <= fk_Math::EPS) return;
-	pointSize = argSize;
+	mData->pointSize = argSize;
 	return;
 }
 
@@ -390,7 +391,7 @@ void fk_Model::setWidth(const double)
 
 double fk_Model::getPointSize(void) const
 {
-	return pointSize;
+	return mData->pointSize;
 }
 
 double fk_Model::getSize(void) const
@@ -407,7 +408,7 @@ double fk_Model::getWidth(void) const
 
 void fk_Model::setSmoothMode(const bool argFlg)
 {
-	smoothFlag = argFlg;
+	mData->smoothFlag = argFlg;
 
 	return;
 }
@@ -423,66 +424,66 @@ void fk_Model::setSmoothMode(const bool)
 
 bool fk_Model::getSmoothMode(void) const
 {
-	return smoothFlag;
+	return mData->smoothFlag;
 }
 
 void fk_Model::setReverseDrawMode(const bool argFlg)
 {
-	reverseFlag = argFlg;
+	mData->reverseFlag = argFlg;
 	return;
 }
 
 bool fk_Model::getReverseDrawMode(void) const
 {
-	return reverseFlag;
+	return mData->reverseFlag;
 }
 
 void fk_Model::setTextureMode(fk_TexMode argMode)
 {
-	texMode = argMode;
+	mData->texMode = argMode;
 }
 
 fk_TexMode fk_Model::getTextureMode(void)
 {
-	return texMode;
+	return mData->texMode;
 }
 
 void fk_Model::setShadingMode(fk_ShadingMode argMode)
 {
-	shadingMode = argMode;
+	mData->shadingMode = argMode;
 }
 
 fk_ShadingMode fk_Model::getShadingMode(void) const
 {
-	return shadingMode;
+	return mData->shadingMode;
 }
 
 unsigned int fk_Model::getID(void) const
 {
-	return _modelID;
+	return mData->modelID;
 }
 
 void fk_Model::snapShot(void)
 {
-	if(snapPos == nullptr) snapPos = new fk_HVector;
-	*snapPos = Position;
+	if(mData->snapPos == nullptr) mData->snapPos = make_unique<fk_HVector>();
+	*(mData->snapPos) = oData->pos;
 
-	if(snapInhPos == nullptr) snapInhPos = new fk_HVector;
-	*snapInhPos = getInhPosition();
+	if(mData->snapInhPos == nullptr) mData->snapInhPos = make_unique<fk_HVector>();
+	*(mData->snapInhPos) = getInhPosition();
 
-	if(snapAngle == nullptr) snapAngle = new fk_Angle;
-	*snapAngle = Angle;
+	if(mData->snapAngle == nullptr) mData->snapAngle = make_unique<fk_Angle>();
+	*(mData->snapAngle) = oData->angle;
 
-	snapFlag = true;
+	mData->snapFlag = true;
 	return;
 }
 
 bool fk_Model::restore(void)
 {
-	if(snapFlag == false) return false;
+	if(mData->snapFlag == false) return false;
 
-	Angle = *snapAngle;
-	Position = *snapPos;
+	oData->angle = *(mData->snapAngle);
+	oData->pos = *(mData->snapPos);
 	AdjustAngleToVec();
 	UpdateMatrix(false);
 
@@ -491,17 +492,17 @@ bool fk_Model::restore(void)
 
 bool fk_Model::restore(double argT)
 {
-	fk_Quaternion		qOrg, qNew, qRet;
+	fk_Quaternion qOrg, qNew, qRet;
 
-	if(snapFlag == false) return false;
+	if(mData->snapFlag == false) return false;
 	if(argT < fk_Math::EPS || argT > 1.0 + fk_Math::EPS) return false;
 
-	qOrg.makeEuler(*snapAngle);
-	qNew.makeEuler(Angle);
+	qOrg.makeEuler(*(mData->snapAngle));
+	qNew.makeEuler(oData->angle);
 	qRet = fk_Q_Inter_Sphere(qOrg, qNew, argT);
-	Angle = qRet.getEuler();
+	oData->angle = qRet.getEuler();
 
-	Position = (1.0 - argT)*(*snapPos) +  argT*Position;
+	oData->pos = (1.0 - argT) * (*(mData->snapPos)) +  argT * oData->pos;
 	AdjustAngleToVec();
 	UpdateMatrix(false);
 
@@ -510,34 +511,34 @@ bool fk_Model::restore(double argT)
 
 void fk_Model::adjustSphere(void)
 {
-	if(shape == nullptr) return;
-	setSphere(fk_SphereBoundary::getAdjustRadius(shape));
+	if(mData->shape == nullptr) return;
+	setSphere(fk_SphereBoundary::getAdjustRadius(mData->shape));
 	return;
 }
 
 void fk_Model::adjustAABB(void)
 {
-	if(shape == nullptr) return;
-	setAABBSize(fk_AABBBoundary::getAdjustSize(shape, getInhInvMatrix()));
+	if(mData->shape == nullptr) return;
+	setAABBSize(fk_AABBBoundary::getAdjustSize(mData->shape, getInhInvMatrix()));
 	return;
 }
 
 void fk_Model::adjustOBB(void)
 {
-	if(shape == nullptr) return;
-	setOBBSize(fk_OBBBoundary::getAdjustSize(shape));
+	if(mData->shape == nullptr) return;
+	setOBBSize(fk_OBBBoundary::getAdjustSize(mData->shape));
 	return;
 }
 
 void fk_Model::adjustCapsule(fk_Vector argS, fk_Vector argE)
 {
-	if(shape == nullptr) return;
-	setCapsule(argS, argE, fk_CapsuleBoundary::getAdjustRadius(shape, argS, argE));
+	if(mData->shape == nullptr) return;
+	setCapsule(argS, argE, fk_CapsuleBoundary::getAdjustRadius(mData->shape, argS, argE));
 }
 
 bool fk_Model::isInter(fk_Model *argModel)
 {
-	bool		retStatus = false;
+	bool retStatus = false;
 
 	if(argModel == nullptr) return false;
 
@@ -562,31 +563,31 @@ bool fk_Model::isInter(fk_Model *argModel)
 	  default:
 		break;
 	}
-	if(retStatus == true) interStatus = true;
+	if(retStatus == true) mData->interStatus = true;
 	return retStatus;
 }
 
 bool fk_Model::IsBSInter(fk_Model *argModel)
 {
-	fk_Vector	p1, p2;
+	fk_Vector p1, p2;
 
 	p1 = getInhPosition();
 	p2 = argModel->getInhPosition();
 
-	return fk_SphereBoundary::isInter(p1, getSphere()*Scale,
-									  p2, argModel->getSphere() * argModel->Scale);
+	return fk_SphereBoundary::isInter(p1, getSphere() * oData->scale,
+									  p2, argModel->getSphere() * argModel->oData->scale);
 }
 
 
 bool fk_Model::IsAABBInter(fk_Model *argModel)
 {
-	fk_Vector	p1, p2;
+	fk_Vector p1, p2;
 
 	p1 = getInhPosition();
 	p2 = argModel->getInhPosition();
 
-	return fk_AABBBoundary::isInter(p1, getAABBSize() * Scale,
-									p2, argModel->getAABBSize() * argModel->Scale);
+	return fk_AABBBoundary::isInter(p1, getAABBSize() * oData->scale,
+									p2, argModel->getAABBSize() * argModel->oData->scale);
 }
 
 bool fk_Model::IsOBBInter(fk_Model *argModel)
@@ -605,14 +606,14 @@ bool fk_Model::IsOBBInter(fk_Model *argModel)
 	B[0] = B[1] ^ B[2];
 
 	obb_A = getOBBSize();
-	a[0] = Scale * obb_A.x/2.0;
-	a[1] = Scale * obb_A.y/2.0;
-	a[2] = Scale * obb_A.z/2.0;
+	a[0] = oData->scale * obb_A.x/2.0;
+	a[1] = oData->scale * obb_A.y/2.0;
+	a[2] = oData->scale * obb_A.z/2.0;
 
 	obb_B = argModel->getOBBSize();
-	b[0] = argModel->Scale * obb_B.x/2.0;
-	b[1] = argModel->Scale * obb_B.y/2.0;
-	b[2] = argModel->Scale * obb_B.z/2.0;
+	b[0] = argModel->oData->scale * obb_B.x/2.0;
+	b[1] = argModel->oData->scale * obb_B.y/2.0;
+	b[2] = argModel->oData->scale * obb_B.z/2.0;
 
 	return fk_OBBBoundary::isInter(A, B, a, b, P);
 }
@@ -630,23 +631,23 @@ bool fk_Model::IsCapsuleInter(fk_Model *argModel)
 	s2 = m2 * argModel->getCapsuleStartPos();
 	e2 = m2 * argModel->getCapsuleEndPos();
 
-	return (fk_CapsuleBoundary::isInter(s1, e1, Scale * getCapsuleRadius(), s2, e2,
-										argModel->Scale * argModel->getCapsuleRadius()));
+	return (fk_CapsuleBoundary::isInter(s1, e1, oData->scale * getCapsuleRadius(), s2, e2,
+										argModel->oData->scale * argModel->getCapsuleRadius()));
 }
 
 tuple<bool, double> fk_Model::isCollision(fk_Model *argModel)
 {
 	if(argModel == nullptr) return {false, 0.0};
-	if(snapFlag == false || argModel->snapFlag == false) return {false, 0.0};
-	if(snapInhPos == nullptr) return {false, 0.0};
-	if(argModel->snapInhPos == nullptr) return {false, 0.0};
+	if(mData->snapFlag == false || argModel->mData->snapFlag == false) return {false, 0.0};
+	if(mData->snapInhPos == nullptr) return {false, 0.0};
+	if(argModel->mData->snapInhPos == nullptr) return {false, 0.0};
 
-	return fk_SphereBoundary::isCollision(*snapInhPos,
+	return fk_SphereBoundary::isCollision(*(mData->snapInhPos),
 										  getInhPosition(),
-										  getSphere() * Scale,
-										  *(argModel->snapInhPos),
+										  getSphere() * oData->scale,
+										  *(argModel->mData->snapInhPos),
 										  argModel->getInhPosition(),
-										  argModel->getSphere() * argModel->Scale);
+										  argModel->getSphere() * argModel->oData->scale);
 }
 
 #ifndef FK_OLD_NONSUPPORT
@@ -660,63 +661,64 @@ bool fk_Model::isCollision(fk_Model *argModel, double *argTime)
 
 void fk_Model::setInterMode(bool argMode)
 {
-	interMode = argMode;
-	interStatus = false;
+	mData->interMode = argMode;
+	mData->interStatus = false;
 }
 
 bool fk_Model::getInterMode(void)
 {
-	return interMode;
+	return mData->interMode;
 }
 
 bool fk_Model::getInterStatus(void)
 {
-	return interStatus;
+	return mData->interStatus;
 }
 
 void fk_Model::resetInter(void)
 {
-	interStatus = false;
+	mData->interStatus = false;
 }
 
 void fk_Model::entryInterModel(fk_Model *argModel)
 {
-	if(find(interList.begin(), interList.end(), argModel) == interList.end()) {
-		interList.push_back(argModel);
+	if(find(mData->interList.begin(), mData->interList.end(), argModel) ==
+	   mData->interList.end()) {
+		mData->interList.push_back(argModel);
 	}
 	return;
 }
 
 void fk_Model::deleteInterModel(fk_Model *argModel)
 {
-	interList.remove(argModel);
+	mData->interList.remove(argModel);
 	return;
 }
 
 void fk_Model::clearInterModel(void)
 {
-	interList.clear();
+	mData->interList.clear();
 	return;
 }
 
 void fk_Model::setInterStopMode(bool argMode)
 {
-	interStopMode = argMode;
+	mData->interStopMode = argMode;
 }
 
 bool fk_Model::getInterStopMode(void)
 {
-	return interStopMode;
+	return mData->interStopMode;
 }
 
 void fk_Model::PreMove(void)
 {
-	if(interStopMode == true && interList.empty() == false) snapShot();
+	if(mData->interStopMode == true && mData->interList.empty() == false) snapShot();
 }
 
 void fk_Model::PostMove(void)
 {
-	for(mi ite = interList.begin(); ite != interList.end(); ++ite) {
+	for(mi ite = mData->interList.begin(); ite != mData->interList.end(); ++ite) {
 		if(isInter(*ite) == true) {
 			restore();
 			return;
@@ -726,7 +728,7 @@ void fk_Model::PostMove(void)
 
 bool fk_Model::glRotate(fk_Vector argOrg, fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotate_(argOrg, argAxis, argAngle);
@@ -736,7 +738,7 @@ bool fk_Model::glRotate(fk_Vector argOrg, fk_Axis argAxis, double argAngle)
 
 bool fk_Model::glRotate(double argX, double argY, double argZ, fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotate_(argX, argY, argZ, argAxis, argAngle);
@@ -747,7 +749,7 @@ bool fk_Model::glRotate(double argX, double argY, double argZ, fk_Axis argAxis, 
 
 bool fk_Model::glRotate(fk_Vector argOrg, fk_Vector argTop, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotate_(argOrg, argTop, argAngle);
@@ -758,7 +760,7 @@ bool fk_Model::glRotate(fk_Vector argOrg, fk_Vector argTop, double argAngle)
 bool fk_Model::glRotate(double argOX, double argOY, double argOZ,
 						double argTX, double argTY, double argTZ, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotate_(argOX, argOY, argOZ, argTX, argTY, argTZ, argAngle);
@@ -768,7 +770,7 @@ bool fk_Model::glRotate(double argOX, double argOY, double argOZ,
 
 bool fk_Model::loRotate(fk_Vector argOrg, fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotate_(argOrg, argAxis, argAngle);
@@ -779,7 +781,7 @@ bool fk_Model::loRotate(fk_Vector argOrg, fk_Axis argAxis, double argAngle)
 bool fk_Model::loRotate(double argX, double argY, double argZ,
 						fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotate_(argX, argY, argZ, argAxis, argAngle);
@@ -789,7 +791,7 @@ bool fk_Model::loRotate(double argX, double argY, double argZ,
 
 bool fk_Model::loRotate(fk_Vector argOrg, fk_Vector argTop, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotate_(argOrg, argTop, argAngle);
@@ -800,7 +802,7 @@ bool fk_Model::loRotate(fk_Vector argOrg, fk_Vector argTop, double argAngle)
 bool fk_Model::loRotate(double argOX, double argOY, double argOZ,
 						double argTX, double argTY, double argTZ, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotate_(argOX, argOY, argOZ, argTX, argTY, argTZ, argAngle);
@@ -810,7 +812,7 @@ bool fk_Model::loRotate(double argOX, double argOY, double argOZ,
 
 bool fk_Model::glRotateWithVec(fk_Vector argOrg, fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotateWithVec_(argOrg, argAxis, argAngle);
@@ -821,7 +823,7 @@ bool fk_Model::glRotateWithVec(fk_Vector argOrg, fk_Axis argAxis, double argAngl
 bool fk_Model::glRotateWithVec(double argX, double argY, double argZ,
 							   fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotateWithVec_(argX, argY, argZ, argAxis, argAngle);
@@ -831,7 +833,7 @@ bool fk_Model::glRotateWithVec(double argX, double argY, double argZ,
 
 bool fk_Model::glRotateWithVec(fk_Vector argOrg, fk_Vector argTop, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotateWithVec_(argOrg, argTop, argAngle);
@@ -842,7 +844,7 @@ bool fk_Model::glRotateWithVec(fk_Vector argOrg, fk_Vector argTop, double argAng
 bool fk_Model::glRotateWithVec(double argOX, double argOY, double argOZ,
 							   double argTX, double argTY, double argTZ, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glRotateWithVec_(argOX, argOY, argOZ, argTX, argTY, argTZ, argAngle);
@@ -852,7 +854,7 @@ bool fk_Model::glRotateWithVec(double argOX, double argOY, double argOZ,
 
 bool fk_Model::loRotateWithVec(fk_Vector argOrg, fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotateWithVec_(argOrg, argAxis, argAngle);
@@ -863,7 +865,7 @@ bool fk_Model::loRotateWithVec(fk_Vector argOrg, fk_Axis argAxis, double argAngl
 bool fk_Model::loRotateWithVec(double argX, double argY, double argZ,
 							   fk_Axis argAxis, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotateWithVec_(argX, argY, argZ, argAxis, argAngle);
@@ -873,7 +875,7 @@ bool fk_Model::loRotateWithVec(double argX, double argY, double argZ,
 
 bool fk_Model::loRotateWithVec(fk_Vector argOrg, fk_Vector argTop, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotateWithVec_(argOrg, argTop, argAngle);
@@ -884,7 +886,7 @@ bool fk_Model::loRotateWithVec(fk_Vector argOrg, fk_Vector argTop, double argAng
 bool fk_Model::loRotateWithVec(double argOX, double argOY, double argOZ,
 							   double argTX, double argTY, double argTZ, double argAngle)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loRotateWithVec_(argOX, argOY, argOZ, argTX, argTY, argTZ, argAngle);
@@ -894,7 +896,7 @@ bool fk_Model::loRotateWithVec(double argOX, double argOY, double argOZ,
 
 bool fk_Model::glTranslate(fk_Vector argV)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glTranslate_(argV);
@@ -904,7 +906,7 @@ bool fk_Model::glTranslate(fk_Vector argV)
 
 bool fk_Model::glTranslate(double argX, double argY, double argZ)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glTranslate_(argX, argY, argZ);
@@ -914,7 +916,7 @@ bool fk_Model::glTranslate(double argX, double argY, double argZ)
 
 bool fk_Model::loTranslate(fk_Vector argV)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loTranslate_(argV);
@@ -924,7 +926,7 @@ bool fk_Model::loTranslate(fk_Vector argV)
 
 bool fk_Model::loTranslate(double argX, double argY, double argZ)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = loTranslate_(argX, argY, argZ);
@@ -935,7 +937,7 @@ bool fk_Model::loTranslate(double argX, double argY, double argZ)
 
 bool fk_Model::glMoveTo(fk_Vector argP)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glMoveTo_(argP);
@@ -945,7 +947,7 @@ bool fk_Model::glMoveTo(fk_Vector argP)
 
 bool fk_Model::glMoveTo(double argX, double argY, double argZ)
 {
-	bool	ret;
+	bool ret;
 
 	PreMove();
 	ret = glMoveTo_(argX, argY, argZ);
@@ -955,12 +957,12 @@ bool fk_Model::glMoveTo(double argX, double argY, double argZ)
 
 void fk_Model::setShader(fk_ShaderBinder *argShader)
 {
-	shader = argShader;
+	mData->shader = argShader;
 }
 
 fk_ShaderBinder * fk_Model::getShader(void)
 {
-	return shader;
+	return mData->shader;
 }
 
 void fk_Model::setPickMode(const bool) {}
@@ -968,32 +970,32 @@ bool fk_Model::getPickMode(void) const { return true; }
 
 void fk_Model::setShadowEffect(bool argMode)
 {
-	shadowEffectMode = argMode;
+	mData->shadowEffectMode = argMode;
 }
 
 bool fk_Model::getShadowEffect(void)
 {
-	return shadowEffectMode;
+	return mData->shadowEffectMode;
 }
 
 void fk_Model::setShadowDraw(bool argMode)
 {
-	shadowDrawMode = argMode;
+	mData->shadowDrawMode = argMode;
 }
 
 bool fk_Model::getShadowDraw(void)
 {
-	return shadowDrawMode;
+	return mData->shadowDrawMode;
 }
 
 void fk_Model::setFogMode(bool argMode)
 {
-	fogMode = argMode;
+	mData->fogMode = argMode;
 }
 
 bool fk_Model::getFogMode(void)
 {
-	return fogMode;
+	return mData->fogMode;
 }
 
 /****************************************************************************
