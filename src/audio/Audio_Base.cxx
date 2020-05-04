@@ -19,6 +19,21 @@ ALCcontext * fk_AudioBase::alContext = nullptr;
 int fk_AudioBase::sourceNum = 0;
 fk_Model * fk_AudioBase::listenerCamera = nullptr;
 
+fk_AudioBase::Member::Member(void)
+{
+	queueSize = DEFAULT_QUEUE_SIZE;
+	format = AL_FORMAT_STEREO16;
+	rate = 0;
+	source_id = -1;
+	source = 99999;
+	gain = 1.0;
+	loopMode = false;
+	loopStartTime = 0.0;
+	loopEndTime = -1.0;
+	refDist = 1.0;
+	ref_model = nullptr;
+}
+
 bool fk_AudioBase::ALInit(void)
 {
 	ALCdevice *device = alcOpenDevice(nullptr);
@@ -61,32 +76,17 @@ bool fk_AudioBase::ALExit(void)
 	return true;
 }
 
-fk_AudioBase::Data::Data(void)
-{
-	queueSize = DEFAULT_QUEUE_SIZE;
-	format = AL_FORMAT_STEREO16;
-	rate = 0;
-	source_id = -1;
-	source = 99999;
-	gain = 1.0;
-	loopMode = false;
-	loopStartTime = 0.0;
-	loopEndTime = -1.0;
-	refDist = 1.0;
-	ref_model = nullptr;
-}
-
 fk_AudioBase::fk_AudioBase(void)
 {
-	data = make_unique<Data>();
+	_m_AudioBase = make_unique<Member>();
 	init();
 	return;
 }
 
 fk_AudioBase::~fk_AudioBase()
 {
-	if(data->source_id != -1) {
-		admin.get()->EraseID(data->source_id);
+	if(_m_AudioBase->source_id != -1) {
+		admin.get()->EraseID(_m_AudioBase->source_id);
 		sourceNum--;
 	}
 	if(sourceNum != 0) return;
@@ -118,18 +118,18 @@ bool fk_AudioBase::getInit(void)
 
 void fk_AudioBase::CreateID(void)
 {
-	data->source_id = admin.get()->CreateID();
+	_m_AudioBase->source_id = admin.get()->CreateID();
 	sourceNum++;
-	alGenSources(1, &(data->source));
-	alSourcef(data->source, AL_GAIN, ALfloat(data->gain));
-	alSourcei(data->source, AL_SOURCE_RELATIVE, AL_TRUE);
+	alGenSources(1, &(_m_AudioBase->source));
+	alSourcef(_m_AudioBase->source, AL_GAIN, ALfloat(_m_AudioBase->gain));
+	alSourcei(_m_AudioBase->source, AL_SOURCE_RELATIVE, AL_TRUE);
 	return;
 }
 
 void fk_AudioBase::EraseID(void)
 {
-	admin.get()->EraseID(data->source_id);
-	data->source_id = -1;
+	admin.get()->EraseID(_m_AudioBase->source_id);
+	_m_AudioBase->source_id = -1;
 	if(sourceNum > 0) sourceNum--;
 	return;
 }
@@ -137,60 +137,60 @@ void fk_AudioBase::EraseID(void)
 void fk_AudioBase::setGain(double argGain)
 {
 	if(argGain < -0.00001 || argGain > 1.00001) return;
-	data->gain = argGain;
-	if(data->source_id != -1) {
-		alSourcef(data->source, AL_GAIN, ALfloat(data->gain));
+	_m_AudioBase->gain = argGain;
+	if(_m_AudioBase->source_id != -1) {
+		alSourcef(_m_AudioBase->source, AL_GAIN, ALfloat(_m_AudioBase->gain));
 	}
 	return;
 }
 
 double fk_AudioBase::getGain(void)
 {
-	return data->gain;
+	return _m_AudioBase->gain;
 }
 
 
 void fk_AudioBase::setQueueSize(int argSize)
 {
 	if(argSize < 1) return;
-	data->queueSize = (unsigned int)(argSize);
+	_m_AudioBase->queueSize = (unsigned int)(argSize);
 	return;
 }
 
 int fk_AudioBase::getQueueSize(void)
 {
-	return int(data->queueSize);
+	return int(_m_AudioBase->queueSize);
 }
 
 void fk_AudioBase::setLoopMode(bool argMode)
 {
-	data->loopMode = argMode;
+	_m_AudioBase->loopMode = argMode;
 	return;
 }
 
 bool fk_AudioBase::getLoopMode(void)
 {
-	return data->loopMode;
+	return _m_AudioBase->loopMode;
 }
 
 void fk_AudioBase::setLoopArea(double argST, double argED)
 {
 	if(argST < -fk_Math::EPS || argST > argED) return;
-	data->loopStartTime = (argST < 0.0) ? 0.0 : argST;
-	data->loopEndTime = argED;
-	data->loopMode = true;
+	_m_AudioBase->loopStartTime = (argST < 0.0) ? 0.0 : argST;
+	_m_AudioBase->loopEndTime = argED;
+	_m_AudioBase->loopMode = true;
 
 	return;
 }
 
 double fk_AudioBase::getLoopStartTime(void)
 {
-	return data->loopStartTime;
+	return _m_AudioBase->loopStartTime;
 }
 
 double fk_AudioBase::getLoopEndTime(void)
 {
-	return data->loopEndTime;
+	return _m_AudioBase->loopEndTime;
 }
 
 void fk_AudioBase::MakeOVInfo(OggVorbis_File *argVF)
@@ -198,11 +198,11 @@ void fk_AudioBase::MakeOVInfo(OggVorbis_File *argVF)
 	vorbis_info *info = ov_info(argVF, -1);
 
 	if(info->channels == 1) {
-		data->format = AL_FORMAT_MONO16;
+		_m_AudioBase->format = AL_FORMAT_MONO16;
 	} else {
-		data->format = AL_FORMAT_STEREO16;
+		_m_AudioBase->format = AL_FORMAT_STEREO16;
 	}
-	data->rate = static_cast<ALsizei>(info->rate);
+	_m_AudioBase->rate = static_cast<ALsizei>(info->rate);
 
 	return;
 }
@@ -217,10 +217,10 @@ void fk_AudioBase::pause(void)
 {
 	ALint status;
 
-	if(data->source_id == -1) return;
-	alGetSourcei(data->source, AL_SOURCE_STATE, &status);
+	if(_m_AudioBase->source_id == -1) return;
+	alGetSourcei(_m_AudioBase->source, AL_SOURCE_STATE, &status);
 	if(status == AL_PLAYING) {
-		alSourcePause(data->source);
+		alSourcePause(_m_AudioBase->source);
 	}
 	return;
 }
@@ -260,18 +260,18 @@ void fk_AudioBase::UpdateListener(void)
 
 void fk_AudioBase::setPosition(const fk_Vector &argPos)
 {
-	data->sourcePos = argPos;
-	data->surround = true;
+	_m_AudioBase->sourcePos = argPos;
+	_m_AudioBase->surround = true;
 
 	return;
 }
 
 void fk_AudioBase::setModel(fk_Model *argModel)
 {
-	data->ref_model = argModel;
+	_m_AudioBase->ref_model = argModel;
 	if(argModel != nullptr) {
-		data->sourcePos = argModel->getInhPosition();
-		data->surround = true;
+		_m_AudioBase->sourcePos = argModel->getInhPosition();
+		_m_AudioBase->surround = true;
 	}
 
 	return;
@@ -284,45 +284,45 @@ void fk_AudioBase::setModel(fk_Model &argModel)
 
 void fk_AudioBase::setReferenceDist(double argDist)
 {
-	data->refDist = argDist;
+	_m_AudioBase->refDist = argDist;
 }
 
 /*
-void fk_AudioBase::disableSurround(void)
-{
-	ref_model = nullptr;
-	sourcePos.init();
-	refDist = 1.0;
-	surround = false;
+  void fk_AudioBase::disableSurround(void)
+  {
+  ref_model = nullptr;
+  sourcePos.init();
+  refDist = 1.0;
+  surround = false;
 
-	return;
-}
+  return;
+  }
 */
 
 fk_Model * fk_AudioBase::getModel(void)
 {
-	return data->ref_model;
+	return _m_AudioBase->ref_model;
 }
 
 fk_Vector fk_AudioBase::getPosition(void)
 {
-	return data->sourcePos;
+	return _m_AudioBase->sourcePos;
 }
 
 double fk_AudioBase::getReferenceDist(void)
 {
-	return data->refDist;
+	return _m_AudioBase->refDist;
 }
 
 void fk_AudioBase::setSurroundMode(bool argMode)
 {
-	data->surround = argMode;
+	_m_AudioBase->surround = argMode;
 	return;
 }
 
 bool fk_AudioBase::getSurroundMode(void)
 {
-	return data->surround;
+	return _m_AudioBase->surround;
 }
 
 /****************************************************************************

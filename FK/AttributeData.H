@@ -1,4 +1,4 @@
-﻿#ifndef __FK_ATTIRIBUTE_DATA_HEADER__
+#ifndef __FK_ATTIRIBUTE_DATA_HEADER__
 #define __FK_ATTIRIBUTE_DATA_HEADER__
 
 #include <vector>

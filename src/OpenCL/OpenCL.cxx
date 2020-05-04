@@ -1,4 +1,6 @@
-﻿#include <FK/OpenCL.h>
+﻿#define FK_DEF_SIZETYPE
+
+#include <FK/OpenCL.h>
 #include <FK/Error.H>
 
 using namespace std;
@@ -7,14 +9,19 @@ using namespace FK;
 // FK以外で利用する場合、ここに printf 互換の適当な関数名を書く
 #define ErrOut Error::Printf
 
+fk_OpenCL::Member::Member(void) :
+	command_queue(nullptr),
+	context(nullptr),
+	kernel(nullptr),
+	program(nullptr),
+	initFlg(false)
+{
+	return;
+}
+
 fk_OpenCL::fk_OpenCL(void)
 {
-	command_queue = nullptr;
-	context = nullptr;
-	kernel = nullptr;
-	program = nullptr;
-	initFlg = false;
-	
+	_m = unique_ptr<Member>();
 	return;
 }
 
@@ -26,14 +33,14 @@ fk_OpenCL::~fk_OpenCL()
 
 bool fk_OpenCL::ReadKernel(string argFileName)
 {
-	ifstream					inputFile(argFileName);
+	ifstream inputFile(argFileName);
 
 	if(inputFile.fail()) {
 		return false;
 	}
-	istreambuf_iterator<char>	vdataBegin(inputFile);
-	istreambuf_iterator<char>	vdataEnd;
-	kernelStr = string(vdataBegin, vdataEnd);
+	istreambuf_iterator<char> vdataBegin(inputFile);
+	istreambuf_iterator<char> vdataEnd;
+	_m->kernelStr = string(vdataBegin, vdataEnd);
 	inputFile.close();
 	
 	return true;
@@ -41,10 +48,10 @@ bool fk_OpenCL::ReadKernel(string argFileName)
 
 bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDebugMode)
 {
-	cl_int				ciErrNum = 0;	// エラーチェック用変数
-	cl_platform_id		testID = nullptr;
-	cl_device_id		testdevid = nullptr;
-	cl_uint				devicenum = 0;
+	cl_int ciErrNum = 0;	// エラーチェック用変数
+	cl_platform_id testID = nullptr;
+	cl_device_id testdevid = nullptr;
+	cl_uint devicenum = 0;
 	
 	ciErrNum = GetPlatformID(&testID, argDebugMode);
 
@@ -54,8 +61,8 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 	}
 
 /*
-	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, 0, nullptr, &devicenum);
-	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, devicenum, &testdevid, nullptr);
+  ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, 0, nullptr, &devicenum);
+  ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_DEFAULT, devicenum, &testdevid, nullptr);
 */
 
 	ciErrNum = clGetDeviceIDs(testID, CL_DEVICE_TYPE_ALL, 0, nullptr, &devicenum);
@@ -67,7 +74,8 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 	}
 
 	if(argDebugMode == true) PrintDevInfo(testdevid);
-	context = clCreateContext(nullptr, devicenum, &testdevid, nullptr, nullptr, &ciErrNum);
+	_m->context = clCreateContext(nullptr, devicenum, &testdevid,
+								  nullptr, nullptr, &ciErrNum);
 
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clCreateContext()");
@@ -76,9 +84,10 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 	
 	//-- command_queueの作成
 #ifdef _MACOSX_
-	command_queue = clCreateCommandQueue(context, testdevid, 0, nullptr);
+	_m->command_queue = clCreateCommandQueue(_m->context, testdevid, 0, nullptr);
 #else
-	command_queue = clCreateCommandQueueWithProperties(context, testdevid, 0, nullptr);
+	_m->command_queue = clCreateCommandQueueWithProperties(_m->context, testdevid,
+														   0, nullptr);
 #endif
 	
 	if(ciErrNum != CL_SUCCESS){
@@ -91,33 +100,35 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 		return false;
 	}
 	
-	size_t kernelLength = kernelStr.size();
-	const char *kernelSource = kernelStr.c_str();
+	size_t kernelLength = _m->kernelStr.size();
+	const char *kernelSource = _m->kernelStr.c_str();
 
-	program = clCreateProgramWithSource(context, 1, &kernelSource,
-										const_cast<size_t *>(&kernelLength), &ciErrNum);
+	_m->program = clCreateProgramWithSource(_m->context, 1, &kernelSource,
+											const_cast<size_t *>(&kernelLength), &ciErrNum);
 
 	if(ciErrNum != CL_SUCCESS){
 		ErrOut("Error in clCreateProgramWithSource()");
 		return false;
 	}
 		
-	if(clBuildProgram(program, devicenum, &testdevid, nullptr, nullptr, nullptr) != CL_SUCCESS) {
+	if(clBuildProgram(_m->program, devicenum, &testdevid,
+					  nullptr, nullptr, nullptr) != CL_SUCCESS) {
 		ErrOut("Error in clBuildProgram()");
-		char	*log;
-		size_t	length;
+		vector<char> log;
+		size_t length;
 
-		clGetProgramBuildInfo(program, testdevid, CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
-		log = new char [length];
-		clGetProgramBuildInfo(program, testdevid, CL_PROGRAM_BUILD_LOG, length, log, nullptr);
-		ErrOut(log);
-		delete [] log;
+		clGetProgramBuildInfo(_m->program, testdevid, CL_PROGRAM_BUILD_LOG,
+							  0, nullptr, &length);
+		log.resize(length+1);
+		clGetProgramBuildInfo(_m->program, testdevid, CL_PROGRAM_BUILD_LOG,
+							  length, log.data(), nullptr);
+		ErrOut(log.data());
 		
 		return false;
 	}
 
 	//-- kernelの作成
-	kernel = clCreateKernel(program, argKernelName.c_str(), &ciErrNum);
+	_m->kernel = clCreateKernel(_m->program, argKernelName.c_str(), &ciErrNum);
 
 	if(ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in clCreateKernel()");
@@ -129,32 +140,34 @@ bool fk_OpenCL::deviceInit(string argFileName, string argKernelName, bool argDeb
 		return false;
 	}
 
-	initFlg = true;
+	_m->initFlg = true;
 	return true;
 }
 
 void fk_OpenCL::createData(int argID, size_t argSize, bool argWriteFlg)
 {	
-	cl_int		ciErrNum = 0;
-	size_t		id = size_t(argID);
+	cl_int ciErrNum = 0;
+	size_t id = size_t(argID);
 	
 	if(argID < 0) return;
-	if(id >= devFlg.size()) {
-		size_t curMax = devFlg.size();
-		devData.resize(id+1);
-		devFlg.resize(id+1);
-		for(size_t i = curMax; i <= id; i++) devFlg[i] = false;
+	if(id >= _m->devFlg.size()) {
+		size_t curMax = _m->devFlg.size();
+		_m->devData.resize(id+1);
+		_m->devFlg.resize(id+1);
+		for(size_t i = curMax; i <= id; i++) _m->devFlg[i] = false;
 	}
 
-	if(devFlg[id] == true) clReleaseMemObject(devData[id]);
+	if(_m->devFlg[id] == true) clReleaseMemObject(_m->devData[id]);
 	
 	if(argWriteFlg == true) {
-		devData[id] = clCreateBuffer(context, CL_MEM_READ_WRITE, argSize, nullptr, &ciErrNum);
+		_m->devData[id] = clCreateBuffer(_m->context, CL_MEM_READ_WRITE,
+										 argSize, nullptr, &ciErrNum);
 	} else {
-		devData[id] = clCreateBuffer(context, CL_MEM_READ_ONLY, argSize, nullptr, &ciErrNum);
+		_m->devData[id] = clCreateBuffer(_m->context, CL_MEM_READ_ONLY,
+										 argSize, nullptr, &ciErrNum);
 	}
 	if(ciErrNum != CL_SUCCESS) PrintError(ciErrNum);
-	devFlg[id] = true;
+	_m->devFlg[id] = true;
 }
 
 bool fk_OpenCL::sendData(int argID, size_t argSize, const void *argPtr)
@@ -162,11 +175,11 @@ bool fk_OpenCL::sendData(int argID, size_t argSize, const void *argPtr)
 	size_t id = size_t(argID);
 
 	if(argID < 0) return false;
-	if(id >= devFlg.size()) return false;
-	if(devFlg[id] == false) return false;
+	if(id >= _m->devFlg.size()) return false;
+	if(_m->devFlg[id] == false) return false;
 
-	cl_int ciErrNum = clEnqueueWriteBuffer(command_queue, devData[id], CL_TRUE,
-										   0, argSize, argPtr, 0, nullptr, nullptr);
+	cl_int ciErrNum = clEnqueueWriteBuffer(_m->command_queue, _m->devData[id],
+										   CL_TRUE, 0, argSize, argPtr, 0, nullptr, nullptr);
 
 	if (ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in clEnqueueWriteBuffer()");
@@ -182,11 +195,11 @@ bool fk_OpenCL::getData(int argID, size_t argSize, void *argPtr)
 	size_t id = size_t(argID);
 
 	if(argID < 0) return false;
-	if(id >= devFlg.size()) return false;
-	if(devFlg[id] == false) return false;
+	if(id >= _m->devFlg.size()) return false;
+	if(_m->devFlg[id] == false) return false;
 
-	cl_int ciErrNum = clEnqueueReadBuffer(command_queue, devData[id], CL_TRUE,
-										  0, argSize, argPtr, 0, nullptr, nullptr);
+	cl_int ciErrNum = clEnqueueReadBuffer(_m->command_queue, _m->devData[id],
+										  CL_TRUE, 0, argSize, argPtr, 0, nullptr, nullptr);
 	
 	if (ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in setReadBuffer");
@@ -200,9 +213,10 @@ bool fk_OpenCL::run(size_t argSize)
 {
 	cl_int ciErrNum;
 	
-	for(size_t i = 0; i < devFlg.size(); i++) {
-		if(devFlg[i] == true) {
-			ciErrNum = clSetKernelArg(kernel, cl_uint(i), sizeof(cl_mem), &devData[i]);
+	for(size_t i = 0; i < _m->devFlg.size(); i++) {
+		if(_m->devFlg[i] == true) {
+			ciErrNum = clSetKernelArg(_m->kernel, cl_uint(i),
+									  sizeof(cl_mem), &_m->devData[i]);
 			if (ciErrNum != CL_SUCCESS) {
 				ErrOut("Error in SetKernel");
 				PrintError(ciErrNum);
@@ -211,8 +225,8 @@ bool fk_OpenCL::run(size_t argSize)
 		}
 	}
 
-	ciErrNum = clEnqueueNDRangeKernel(command_queue, kernel, 1, nullptr,
-									  &argSize, nullptr, 0, nullptr, nullptr);
+	ciErrNum = clEnqueueNDRangeKernel(_m->command_queue, _m->kernel, 1,
+									  nullptr, &argSize, nullptr, 0, nullptr, nullptr);
 
 	if (ciErrNum != CL_SUCCESS) {
 		ErrOut("Error in RUN");
@@ -225,15 +239,15 @@ bool fk_OpenCL::run(size_t argSize)
 
 void fk_OpenCL::release(void)
 {
-	if(initFlg == true) {
-		clReleaseKernel(kernel);
-		clReleaseProgram(program);
-		clReleaseCommandQueue(command_queue);
-		clReleaseContext(context);
-		for(size_t i = 0; i < devFlg.size(); i++) {
-			if(devFlg[i] == true) clReleaseMemObject(devData[i]);
+	if(_m->initFlg == true) {
+		clReleaseKernel(_m->kernel);
+		clReleaseProgram(_m->program);
+		clReleaseCommandQueue(_m->command_queue);
+		clReleaseContext(_m->context);
+		for(size_t i = 0; i < _m->devFlg.size(); i++) {
+			if(_m->devFlg[i] == true) clReleaseMemObject(_m->devData[i]);
 		}
-		initFlg = false;
+		_m->initFlg = false;
 	}
 	return;
 }
@@ -264,7 +278,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 		if (num_platforms == 0) {
 			ErrOut("I can't find OpenCL Platform! Get away");
 			return -20;
-		//-- platformの数が1以上の場合
+			//-- platformの数が1以上の場合
 
 		}else if(argInfoMode == true) {
 
@@ -293,9 +307,9 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_PROFILE,
 											 chBufsize, &chBuffer, nullptr);
 				/*
-				if(ciErrNum == CL_SUCCESS){
-					ErrOut("PLATFORM_PROLILE : %s", chBuffer);
-				}
+				  if(ciErrNum == CL_SUCCESS){
+				  ErrOut("PLATFORM_PROLILE : %s", chBuffer);
+				  }
 				*/
 				//-- 取得したい情報の種類：バージョン
 				ciErrNum = clGetPlatformInfo(clPlatformIDs[i], CL_PLATFORM_VERSION,
@@ -431,7 +445,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 							   sizeof(max_mem_alloc_size), &max_mem_alloc_size, nullptr);
 	if (ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_MAX_MEM_ALLOC_SIZE : %u MByte",
-				  (unsigned int)(max_mem_alloc_size / (1024 * 1024)));
+			   (unsigned int)(max_mem_alloc_size / (1024 * 1024)));
 	}
 	else {
 		ErrOut("Error in CL_DEVICE_MAX_MEM_ALLOC_SIZE");
@@ -443,7 +457,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_GLOBAL_MEM_SIZE : %u MByte",
-				  (unsigned int)(mem_size / (1024 * 1024)));
+			   (unsigned int)(mem_size / (1024 * 1024)));
 	}
 	else {
 		ErrOut("Error in CL_DEVICE_GLOBAL_MEM_SIZE");
@@ -455,7 +469,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_ERROR_CORRECTION_SUPPORT : %s",
-				  error_correction_support == CL_TRUE ? "yes" : "no");
+			   error_correction_support == CL_TRUE ? "yes" : "no");
 	} else {
 		ErrOut("Error in CL_DEVICE_ERROR_CORRECTION_SUPPORT");
 	}
@@ -484,7 +498,7 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 	
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE : %u KByte",
-				  (unsigned int)(mem_size / 1024));
+			   (unsigned int)(mem_size / 1024));
 	} else {
 		ErrOut("Error in CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE");
 	}
@@ -540,12 +554,12 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 
 	if(ciErrNum == CL_SUCCESS) {
 		ErrOut("CL_DEVICE_SINGLE_FP_CONFIG : %s%s%s%s%s%s", 
-				  fp_config & CL_FP_DENORM ? "denorms " : "",
-				  fp_config & CL_FP_INF_NAN ? "INF-quietNaNs " : "",
-				  fp_config & CL_FP_ROUND_TO_NEAREST ? "round-to-nearest " : "",
-				  fp_config & CL_FP_ROUND_TO_ZERO ? "round-to-zero " : "",
-				  fp_config & CL_FP_ROUND_TO_INF ? "round-to-inf " : "",
-				  fp_config & CL_FP_FMA ? "fma " : "");
+			   fp_config & CL_FP_DENORM ? "denorms " : "",
+			   fp_config & CL_FP_INF_NAN ? "INF-quietNaNs " : "",
+			   fp_config & CL_FP_ROUND_TO_NEAREST ? "round-to-nearest " : "",
+			   fp_config & CL_FP_ROUND_TO_ZERO ? "round-to-zero " : "",
+			   fp_config & CL_FP_ROUND_TO_INF ? "round-to-inf " : "",
+			   fp_config & CL_FP_FMA ? "fma " : "");
 	} else {
 		ErrOut("Error in CL_DEVICE_SINGLE_FP_CONFIG");
 	}
@@ -597,8 +611,8 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
     clGetDeviceInfo(argDev, CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE,
 					sizeof(cl_uint), &vec_width[5], nullptr);
 	ErrOut("CHAR %u, SHORT %u, INT %u, LONG %u, FLOAT %u, DOUBLE %u",
-			  vec_width[0], vec_width[1], vec_width[2],
-			  vec_width[3], vec_width[4], vec_width[5]);
+		   vec_width[0], vec_width[1], vec_width[2],
+		   vec_width[3], vec_width[4], vec_width[5]);
 
 	return;
 }
@@ -606,153 +620,153 @@ void fk_OpenCL::PrintDevInfo(cl_device_id argDev)
 void fk_OpenCL::PrintError(cl_int argErrNum)
 {
 	switch (argErrNum) {
-		case CL_DEVICE_NOT_FOUND: // -1
-			ErrOut("CL_DEVICE_NOT_FOUND");
-			break;
-		case CL_DEVICE_NOT_AVAILABLE: // -2
-			ErrOut("CL_DEVICE_NOT_AVAILABLE");
-			break;
-		case CL_COMPILER_NOT_AVAILABLE: // -3
-			ErrOut("CL_COMPILER_NOT_AVAILABLE");
-			break;
-		case CL_MEM_OBJECT_ALLOCATION_FAILURE: // -4
-			ErrOut("CL_MEM_OBJECT_ALLOCATION_FAILURE");
-			break;
-		case CL_OUT_OF_RESOURCES: // -5
-			ErrOut("CL_OUT_OF_RESOURCES");
-			break;
-		case CL_OUT_OF_HOST_MEMORY: // -6
-			ErrOut("CL_OUT_OF_HOST_MEMORY");
-			break;
-		case CL_PROFILING_INFO_NOT_AVAILABLE: // -7
-			ErrOut("CL_PROFILING_INFO_NOT_AVAILABLE");
-			break;
-		case CL_MEM_COPY_OVERLAP: // -8
-			ErrOut("CL_MEM_COPY_OVERLAP");
-			break;
-		case CL_IMAGE_FORMAT_MISMATCH: // -9
-			ErrOut("CL_IMAGE_FORMAT_MISMATCH");
-			break;
-		case CL_IMAGE_FORMAT_NOT_SUPPORTED: // -10
-			ErrOut("CL_IMAGE_FORMAT_NOT_SUPPORTED");
-			break;
-		case CL_BUILD_PROGRAM_FAILURE: // -11
-			ErrOut("CL_BUILD_PROGRAM_FAILURE");
-			break;
-		case CL_MAP_FAILURE: // -12
-			ErrOut("CL_MAP_FAILURE");
-			break;
+	  case CL_DEVICE_NOT_FOUND: // -1
+		ErrOut("CL_DEVICE_NOT_FOUND");
+		break;
+	  case CL_DEVICE_NOT_AVAILABLE: // -2
+		ErrOut("CL_DEVICE_NOT_AVAILABLE");
+		break;
+	  case CL_COMPILER_NOT_AVAILABLE: // -3
+		ErrOut("CL_COMPILER_NOT_AVAILABLE");
+		break;
+	  case CL_MEM_OBJECT_ALLOCATION_FAILURE: // -4
+		ErrOut("CL_MEM_OBJECT_ALLOCATION_FAILURE");
+		break;
+	  case CL_OUT_OF_RESOURCES: // -5
+		ErrOut("CL_OUT_OF_RESOURCES");
+		break;
+	  case CL_OUT_OF_HOST_MEMORY: // -6
+		ErrOut("CL_OUT_OF_HOST_MEMORY");
+		break;
+	  case CL_PROFILING_INFO_NOT_AVAILABLE: // -7
+		ErrOut("CL_PROFILING_INFO_NOT_AVAILABLE");
+		break;
+	  case CL_MEM_COPY_OVERLAP: // -8
+		ErrOut("CL_MEM_COPY_OVERLAP");
+		break;
+	  case CL_IMAGE_FORMAT_MISMATCH: // -9
+		ErrOut("CL_IMAGE_FORMAT_MISMATCH");
+		break;
+	  case CL_IMAGE_FORMAT_NOT_SUPPORTED: // -10
+		ErrOut("CL_IMAGE_FORMAT_NOT_SUPPORTED");
+		break;
+	  case CL_BUILD_PROGRAM_FAILURE: // -11
+		ErrOut("CL_BUILD_PROGRAM_FAILURE");
+		break;
+	  case CL_MAP_FAILURE: // -12
+		ErrOut("CL_MAP_FAILURE");
+		break;
 		
-		case CL_INVALID_VALUE: // -30
-			ErrOut("CL_INVALID_VALUE");
-			break;
-		case CL_INVALID_DEVICE_TYPE: // -31
-			ErrOut("CL_INVALID_DEVICE_TYPE");
-			break;
-		case CL_INVALID_PLATFORM: // -32
-			ErrOut("CL_INVALID_PLATFORM");
-			break;
-		case CL_INVALID_DEVICE: // -33
-			ErrOut("CL_INVALID_DEVICE");
-			break;
-		case CL_INVALID_CONTEXT: // -34
-			ErrOut("CL_INVALID_CONTEXT");
-			break;
-		case CL_INVALID_QUEUE_PROPERTIES: // -35
-			ErrOut("CL_INVALID_QUEUE_PROPERTIES");
-			break;
-		case CL_INVALID_COMMAND_QUEUE: // -36
-			ErrOut("CL_INVALID_COMMAND_QUEUE");
-			break;
-		case CL_INVALID_HOST_PTR: // -37
-			ErrOut("CL_INVALID_HOST_PTR");
-			break;
-		case CL_INVALID_MEM_OBJECT: // -38
-			ErrOut("CL_INVALID_MEM_OBJECT");
-			break;
-		case CL_INVALID_IMAGE_FORMAT_DESCRIPTOR: // -39
-			ErrOut("CL_INVALID_IMAGE_FORMAT_DESCRIPTOR");
-			break;
-		case CL_INVALID_IMAGE_SIZE: // -40
-			ErrOut("CL_INVALID_IMAGE_SIZE");
-			break;
-		case CL_INVALID_SAMPLER: // -41
-			ErrOut("CL_INVALID_SAMPLER");
-			break;
-		case CL_INVALID_BINARY: // -42
-			ErrOut("CL_INVALID_BINARY");
-			break;
-		case CL_INVALID_BUILD_OPTIONS: // -43
-			ErrOut("CL_INVALID_BUILD_OPTIONS");
-			break;
-		case CL_INVALID_PROGRAM: //- 44
-			ErrOut("CL_INVALID_PROGRAM");
-			break;
-		case CL_INVALID_PROGRAM_EXECUTABLE: // -45
-			ErrOut("CL_INVALID_PROGRAM_EXECUTABLE");
-			break;
-		case CL_INVALID_KERNEL_NAME: // -46
-			ErrOut("CL_INVALID_KERNEL_NAME");
-			break;
-		case CL_INVALID_KERNEL_DEFINITION: // -47
-			ErrOut("CL_INVALID_KERNEL_DEFINITION");
-			break;
-		case CL_INVALID_KERNEL: // -48
-			ErrOut("CL_INVALID_KERNEL");
-			break;
-		case CL_INVALID_ARG_INDEX: // -49
-			ErrOut("CL_INVALID_ARG_INDEX");
-			break;
-		case CL_INVALID_ARG_VALUE: // -50
-			ErrOut("CL_INVALID_ARG_VALUE");
-			break;
-		case CL_INVALID_ARG_SIZE: // -51
-			ErrOut("CL_INVALID_ARG_SIZE");
-			break;
-		case CL_INVALID_KERNEL_ARGS: // -52
-			ErrOut("CL_INVALID_KERNEL_ARGS");
-			break;
-		case CL_INVALID_WORK_DIMENSION: // -53
-			ErrOut("CL_INVALID_WORK_DIMENSION");
-			break;
-		case CL_INVALID_WORK_GROUP_SIZE: // -54
-			ErrOut("CL_INVALID_WORK_GROUP_SIZE");
-			break;
-		case CL_INVALID_WORK_ITEM_SIZE: // -55
-			ErrOut("CL_INVALID_WORK_ITEM_SIZE");
-			break;
-		case CL_INVALID_GLOBAL_OFFSET: // -56
-			ErrOut("CL_INVALID_GLOBAL_OFFSET");
-			break;
-		case CL_INVALID_EVENT_WAIT_LIST: // -57
-			ErrOut("CL_INVALID_EVENT_WAIT_LIST");
-			break;
-		case CL_INVALID_EVENT: // -58
-			ErrOut("CL_INVALID_EVENT");
-			break;
-		case CL_INVALID_OPERATION: // -59
-			ErrOut("CL_INVALID_OPERATION");
-			break;
-		case CL_INVALID_GL_OBJECT: // -60
-			ErrOut("CL_INVALID_GL_OBJECT");
-			break;
-		case CL_INVALID_BUFFER_SIZE: // -61
-			ErrOut("CL_INVALID_BUFFER_SIZE");
-			break;
-		case CL_INVALID_MIP_LEVEL: // -62
-			ErrOut("CL_INVALID_MIP_LEVEL");
-			break;
-		case CL_INVALID_GLOBAL_WORK_SIZE: // -63
-			ErrOut("CL_INVALID_GLOBAL_WORK_SIZE");
-			break;
+	  case CL_INVALID_VALUE: // -30
+		ErrOut("CL_INVALID_VALUE");
+		break;
+	  case CL_INVALID_DEVICE_TYPE: // -31
+		ErrOut("CL_INVALID_DEVICE_TYPE");
+		break;
+	  case CL_INVALID_PLATFORM: // -32
+		ErrOut("CL_INVALID_PLATFORM");
+		break;
+	  case CL_INVALID_DEVICE: // -33
+		ErrOut("CL_INVALID_DEVICE");
+		break;
+	  case CL_INVALID_CONTEXT: // -34
+		ErrOut("CL_INVALID_CONTEXT");
+		break;
+	  case CL_INVALID_QUEUE_PROPERTIES: // -35
+		ErrOut("CL_INVALID_QUEUE_PROPERTIES");
+		break;
+	  case CL_INVALID_COMMAND_QUEUE: // -36
+		ErrOut("CL_INVALID_COMMAND_QUEUE");
+		break;
+	  case CL_INVALID_HOST_PTR: // -37
+		ErrOut("CL_INVALID_HOST_PTR");
+		break;
+	  case CL_INVALID_MEM_OBJECT: // -38
+		ErrOut("CL_INVALID_MEM_OBJECT");
+		break;
+	  case CL_INVALID_IMAGE_FORMAT_DESCRIPTOR: // -39
+		ErrOut("CL_INVALID_IMAGE_FORMAT_DESCRIPTOR");
+		break;
+	  case CL_INVALID_IMAGE_SIZE: // -40
+		ErrOut("CL_INVALID_IMAGE_SIZE");
+		break;
+	  case CL_INVALID_SAMPLER: // -41
+		ErrOut("CL_INVALID_SAMPLER");
+		break;
+	  case CL_INVALID_BINARY: // -42
+		ErrOut("CL_INVALID_BINARY");
+		break;
+	  case CL_INVALID_BUILD_OPTIONS: // -43
+		ErrOut("CL_INVALID_BUILD_OPTIONS");
+		break;
+	  case CL_INVALID_PROGRAM: //- 44
+		ErrOut("CL_INVALID_PROGRAM");
+		break;
+	  case CL_INVALID_PROGRAM_EXECUTABLE: // -45
+		ErrOut("CL_INVALID_PROGRAM_EXECUTABLE");
+		break;
+	  case CL_INVALID_KERNEL_NAME: // -46
+		ErrOut("CL_INVALID_KERNEL_NAME");
+		break;
+	  case CL_INVALID_KERNEL_DEFINITION: // -47
+		ErrOut("CL_INVALID_KERNEL_DEFINITION");
+		break;
+	  case CL_INVALID_KERNEL: // -48
+		ErrOut("CL_INVALID_KERNEL");
+		break;
+	  case CL_INVALID_ARG_INDEX: // -49
+		ErrOut("CL_INVALID_ARG_INDEX");
+		break;
+	  case CL_INVALID_ARG_VALUE: // -50
+		ErrOut("CL_INVALID_ARG_VALUE");
+		break;
+	  case CL_INVALID_ARG_SIZE: // -51
+		ErrOut("CL_INVALID_ARG_SIZE");
+		break;
+	  case CL_INVALID_KERNEL_ARGS: // -52
+		ErrOut("CL_INVALID_KERNEL_ARGS");
+		break;
+	  case CL_INVALID_WORK_DIMENSION: // -53
+		ErrOut("CL_INVALID_WORK_DIMENSION");
+		break;
+	  case CL_INVALID_WORK_GROUP_SIZE: // -54
+		ErrOut("CL_INVALID_WORK_GROUP_SIZE");
+		break;
+	  case CL_INVALID_WORK_ITEM_SIZE: // -55
+		ErrOut("CL_INVALID_WORK_ITEM_SIZE");
+		break;
+	  case CL_INVALID_GLOBAL_OFFSET: // -56
+		ErrOut("CL_INVALID_GLOBAL_OFFSET");
+		break;
+	  case CL_INVALID_EVENT_WAIT_LIST: // -57
+		ErrOut("CL_INVALID_EVENT_WAIT_LIST");
+		break;
+	  case CL_INVALID_EVENT: // -58
+		ErrOut("CL_INVALID_EVENT");
+		break;
+	  case CL_INVALID_OPERATION: // -59
+		ErrOut("CL_INVALID_OPERATION");
+		break;
+	  case CL_INVALID_GL_OBJECT: // -60
+		ErrOut("CL_INVALID_GL_OBJECT");
+		break;
+	  case CL_INVALID_BUFFER_SIZE: // -61
+		ErrOut("CL_INVALID_BUFFER_SIZE");
+		break;
+	  case CL_INVALID_MIP_LEVEL: // -62
+		ErrOut("CL_INVALID_MIP_LEVEL");
+		break;
+	  case CL_INVALID_GLOBAL_WORK_SIZE: // -63
+		ErrOut("CL_INVALID_GLOBAL_WORK_SIZE");
+		break;
 
-		case CL_SUCCESS: // 0
-			ErrOut("CL_SUCCESS");
-			break;
+	  case CL_SUCCESS: // 0
+		ErrOut("CL_SUCCESS");
+		break;
 
-		default:
-			ErrOut("Unknown error code : %d", argErrNum);
-			break;
+	  default:
+		ErrOut("Unknown error code : %d", argErrNum);
+		break;
 	}
 }
 

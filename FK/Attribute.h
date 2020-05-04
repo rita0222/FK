@@ -39,7 +39,7 @@ namespace FK {
 		 *
 		 *	\sa getAttrII(), existAttrII(), deleteAttrII()
 		 */
-		bool	setAttrII(const int key, const int value);
+		bool setAttrII(const int key, const int value);
 
 		//! キーが int 型、値が double 型である属性設定関数
 		/*!
@@ -54,7 +54,7 @@ namespace FK {
 		 *
 		 *	\sa getAttrID(), existAttrID(), deleteAttrID()
 		 */
-		bool	setAttrID(const int key, const double value);
+		bool setAttrID(const int key, const double value);
 
 		//! キーが int 型、値が std::string 型である属性設定関数
 		/*!
@@ -69,7 +69,7 @@ namespace FK {
 		 *
 		 *	\sa getAttrIS(), existAttrIS(), deleteAttrIS()
 		 */
-		bool	setAttrIS(const int key, const std::string value);
+		bool setAttrIS(const int key, const std::string value);
 
 		//! キーが std::string 型、値が int 型である属性設定関数
 		/*!
@@ -84,7 +84,7 @@ namespace FK {
 		 *
 		 *	\sa getAttrSI(), existAttrSI(), deleteAttrSI()
 		 */
-		bool	setAttrSI(const std::string key, const int value);
+		bool setAttrSI(const std::string key, const int value);
 
 		//! キーが std::string 型、値が double 型である属性設定関数
 		/*!
@@ -99,7 +99,7 @@ namespace FK {
 		 *
 		 *	\sa getAttrSD(), existAttrSD(), deleteAttrSD()
 		 */
-		bool	setAttrSD(const std::string key, const double value);
+		bool setAttrSD(const std::string key, const double value);
 
 		//! キーが std::string 型、値が std::string 型である属性設定関数
 		/*!
@@ -114,7 +114,7 @@ namespace FK {
 		 *
 		 *	\sa getAttrSS(), existAttrSS(), deleteAttrSS()
 		 */
-		bool	setAttrSS(const std::string key, const std::string value);
+		bool setAttrSS(const std::string key, const std::string value);
 		///@}
 
 		//! \name 属性取得用関数
@@ -210,7 +210,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrII(), getAttrII(), deleteAttrII()
 		 */
-		bool	existAttrII(const int key) const;
+		bool existAttrII(const int key) const;
 
 		//! キーが int 型、値が double 型である属性存在参照関数
 		/*!
@@ -225,7 +225,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrID(), getAttrID(), deleteAttrID()
 		 */
-		bool	existAttrID(const int key) const;
+		bool existAttrID(const int key) const;
 
 		//! キーが int 型、値が std::string 型である属性存在参照関数
 		/*!
@@ -240,7 +240,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrIS(), getAttrIS(), deleteAttrIS()
 		 */
-		bool	existAttrIS(const int key) const;
+		bool existAttrIS(const int key) const;
 
 		//! キーが std::string 型、値が int 型である属性存在参照関数
 		/*!
@@ -255,7 +255,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrSI(), getAttrSI(), deleteAttrSI()
 		 */
-		bool	existAttrSI(const std::string key) const;
+		bool existAttrSI(const std::string key) const;
 
 		//! キーが std::string 型、値が double 型である属性存在参照関数
 		/*!
@@ -270,7 +270,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrSD(), getAttrSD(), deleteAttrSD()
 		 */
-		bool	existAttrSD(const std::string key) const;
+		bool existAttrSD(const std::string key) const;
 
 		//! キーが std::string 型、値が std::string 型である属性存在参照関数
 		/*!
@@ -285,7 +285,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrSS(), getAttrSS(), deleteAttrSS()
 		 */
-		bool	existAttrSS(const std::string key) const;
+		bool existAttrSS(const std::string key) const;
 		///@}
 
 		//! \name 属性消去関数
@@ -304,7 +304,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrII(), getAttrII(), existAttrII()
 		 */
-		bool	deleteAttrII(const int key);
+		bool deleteAttrII(const int key);
 
 		//! キーが int 型、値が double 型である属性消去関数
 		/*!
@@ -319,7 +319,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrID(), getAttrID(), existAttrID()
 		 */
-		bool	deleteAttrID(const int key);
+		bool deleteAttrID(const int key);
 
 		//! キーが int 型、値が std::string 型である属性消去関数
 		/*!
@@ -334,7 +334,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrIS(), getAttrIS(), existAttrIS()
 		 */
-		bool	deleteAttrIS(const int key);
+		bool deleteAttrIS(const int key);
 
 		//! キーが std::string 型、値が int 型である属性消去関数
 		/*!
@@ -349,7 +349,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrSI(), getAttrSI(), existAttrSI()
 		 */
-		bool	deleteAttrSI(const std::string key);
+		bool deleteAttrSI(const std::string key);
 
 		//! キーが std::string 型、値が double 型である属性消去関数
 		/*!
@@ -364,7 +364,7 @@ namespace FK {
 		 *
 		 *	\sa setAttrSD(), getAttrSD(), existAttrSD()
 		 */
-		bool	deleteAttrSD(const std::string key);
+		bool deleteAttrSD(const std::string key);
 
 		//! キーが std::string 型、値が std::string 型である属性消去関数
 		/*!
@@ -379,12 +379,12 @@ namespace FK {
 		 *
 		 *	\sa setAttrSS(), getAttrSS(), existAttrSS()
 		 */
-		bool	deleteAttrSS(const std::string key);
+		bool deleteAttrSS(const std::string key);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		void	AttrInit(void);
+		void AttrInit(void);
 
 #endif
 

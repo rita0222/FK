@@ -44,7 +44,7 @@ namespace FK {
 
 	class fk_AudioBase {
 
-		class Data {
+		class Member {
 		public:
 			double refDist;
 			fk_Vector sourcePos;
@@ -60,7 +60,7 @@ namespace FK {
 			bool surround;
 			fk_Model *ref_model;
 
-			Data(void);
+			Member(void);
 		};
 		
 	public:
@@ -527,7 +527,7 @@ namespace FK {
 		static int sourceNum;
 		static fk_Model *listenerCamera;
 
-		std::unique_ptr<Data> data;
+		std::unique_ptr<Member> _m_AudioBase;
 
 		void CreateID(void);
 		void EraseID(void);
@@ -567,7 +567,7 @@ namespace FK {
 
 	class fk_AudioStream : public fk_AudioBase {
 
-		class StreamData {
+		class Member {
 		public:
 			bool ovOpenStatus;
 			int current;
@@ -575,7 +575,7 @@ namespace FK {
 			double nowTime;
 			std::unique_ptr<OggVorbis_File> vf;
 
-			StreamData(void);
+			Member(void);
 		};
 			
 
@@ -673,12 +673,11 @@ namespace FK {
 		void end(void);
 
 	private:
-		std::unique_ptr<StreamData> stData;
+		std::unique_ptr<Member> _m;
 
 		void StartQueue(bool);
 		bool PlayStream(void);
 		void UnQueue(bool);
-
 	};
 
 	//! Ogg Vorbis オーディオバッファクラス
@@ -710,14 +709,14 @@ namespace FK {
 	 */
 	class fk_AudioOggBuffer : public fk_AudioBase {
 
-		class BufData {
+		class Member {
 		public:
 			unsigned int current, length;
 			std::vector<char> buffer;
 			std::vector<int> chunkSize;
 			std::vector<double> chunkTime;
 
-			BufData(void);
+			Member(void);
 		};
 
 	public:
@@ -816,7 +815,7 @@ namespace FK {
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		std::unique_ptr<BufData> bufData;
+		std::unique_ptr<Member> _m;
 		void ReadBuffer(OggVorbis_File *);
 		void StartQueue(bool);
 		bool PlayBuffer(void);
@@ -879,7 +878,6 @@ namespace FK {
 		bool	open(const std::string &filename);
 
 	private:
-
 		int		ReadHeaderWav(std::ifstream &, int *, int *, unsigned int *, int *);
 		bool	ReadBuffer(std::ifstream &, int, int, unsigned int, int);
 

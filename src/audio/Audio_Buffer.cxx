@@ -22,17 +22,17 @@ const int _ENDIAN = 0;
 using namespace std;
 using namespace FK;
 
-fk_AudioOggBuffer::BufData::BufData(void)
+fk_AudioOggBuffer::Member::Member(void)
 	: current(0), length(0)
 {
 }
 
 fk_AudioOggBuffer::fk_AudioOggBuffer(void)
-	: bufData(make_unique<BufData>())
+	: _m(make_unique<Member>())
 {
-	data->startStatus = data->endStatus = data->surround = false;
-	data->refDist = 1.0;
-	data->ref_model = nullptr;
+	_m_AudioBase->startStatus = _m_AudioBase->endStatus = _m_AudioBase->surround = false;
+	_m_AudioBase->refDist = 1.0;
+	_m_AudioBase->ref_model = nullptr;
 	return;
 }
 
@@ -81,7 +81,7 @@ bool fk_AudioOggBuffer::open(const std::string &argFileName)
 	ReadBuffer(&vf);
 	ov_clear(&vf);
 
-	data->startStatus = data->endStatus = false;
+	_m_AudioBase->startStatus = _m_AudioBase->endStatus = false;
 	return true;
 }
 
@@ -91,25 +91,25 @@ void fk_AudioOggBuffer::ReadBuffer(OggVorbis_File *argVF)
 	unsigned int count = 0;
 	int tmpCurrent = 0;
 
-	bufData->buffer.clear();
-	bufData->chunkTime.clear();
-	bufData->chunkSize.clear();
-	bufData->length = 0;
+	_m->buffer.clear();
+	_m->chunkTime.clear();
+	_m->chunkSize.clear();
+	_m->length = 0;
 
 	for(count = 0;; count++) {
-		bufData->buffer.resize((count+1)*fk_AudioBase::BUFSIZE);
-		bufData->chunkTime.push_back(ov_time_tell(argVF));
-		size = ALsizei(ov_read(argVF, &bufData->buffer[count*fk_AudioBase::BUFSIZE],
+		_m->buffer.resize((count+1)*fk_AudioBase::BUFSIZE);
+		_m->chunkTime.push_back(ov_time_tell(argVF));
+		size = ALsizei(ov_read(argVF, &_m->buffer[count*fk_AudioBase::BUFSIZE],
 							   int(fk_AudioBase::BUFSIZE * sizeof(char)),
 							   _ENDIAN, 2, 1, &tmpCurrent));
 
 		if(size <= 0) break;
-		bufData->chunkSize.push_back(size);
-		bufData->length++;
+		_m->chunkSize.push_back(size);
+		_m->length++;
 		if(count == 0) MakeOVInfo(argVF);
 	}
-	bufData->buffer.resize(count * fk_AudioBase::BUFSIZE);
-	bufData->chunkTime.resize(count);
+	_m->buffer.resize(count * fk_AudioBase::BUFSIZE);
+	_m->chunkTime.resize(count);
 
 	return;
 }
@@ -231,7 +231,7 @@ bool fk_AudioWavBuffer::open(const std::string &argFileName)
 	bool res = ReadBuffer(ifs, channel, bit, size, freq);
 	ifs.close();
 
-	data->startStatus = data->endStatus = false;
+	_m_AudioBase->startStatus = _m_AudioBase->endStatus = false;
 	return res;
 }
 
@@ -242,19 +242,19 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 
 	if(argCh == 2) {
 		if(argBit == 16) {
-			data->format = AL_FORMAT_STEREO16;
+			_m_AudioBase->format = AL_FORMAT_STEREO16;
 		} else {
-			data->format = AL_FORMAT_STEREO8;
+			_m_AudioBase->format = AL_FORMAT_STEREO8;
 		}
 	} else {
 		if(argBit == 16) {
-			data->format = AL_FORMAT_MONO16;
+			_m_AudioBase->format = AL_FORMAT_MONO16;
 		} else {
-			data->format = AL_FORMAT_MONO8;
+			_m_AudioBase->format = AL_FORMAT_MONO8;
 		}
 	}
-	bytePerSec = data->rate = argFreq;
-	switch(data->format) {
+	bytePerSec = _m_AudioBase->rate = argFreq;
+	switch(_m_AudioBase->format) {
 	case AL_FORMAT_MONO8:
 		bytePerSec *= 1;
 		break;
@@ -267,33 +267,33 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 		break;
 	}
 
-	bufData->buffer.clear();
-	bufData->chunkTime.clear();
-	bufData->chunkSize.clear();
-	bufData->length = 0;
+	_m->buffer.clear();
+	_m->chunkTime.clear();
+	_m->chunkSize.clear();
+	_m->length = 0;
 
 	unsigned int count = (unsigned int)(argSize / fk_AudioBase::BUFSIZE);
 	ALsizei adjust = ALsizei(argSize % fk_AudioBase::BUFSIZE);
 
-	bufData->buffer.resize(argSize);
-	argIFS.read((char *)bufData->buffer.data(), sizeof(char) * argSize);
+	_m->buffer.resize(argSize);
+	argIFS.read((char *)_m->buffer.data(), sizeof(char) * argSize);
 	if(argIFS.bad()) {
 		Error::Put("fk_AudioWavBuffer", "ReadBuffer", 1, "Read Error");
-		bufData->buffer.clear();
-		data->rate = 0;
+		_m->buffer.clear();
+		_m_AudioBase->rate = 0;
 		return false;
 	}
 
 	for(unsigned int i = 0; i < count; i++) {
-		bufData->chunkTime.push_back(double(i*fk_AudioBase::BUFSIZE)/(double)bytePerSec);
-		bufData->chunkSize.push_back(fk_AudioBase::BUFSIZE);
-		bufData->length++;
+		_m->chunkTime.push_back(double(i*fk_AudioBase::BUFSIZE)/(double)bytePerSec);
+		_m->chunkSize.push_back(fk_AudioBase::BUFSIZE);
+		_m->length++;
 	}
 
 	if(adjust != 0) {
-		bufData->chunkTime.push_back(double(count*fk_AudioBase::BUFSIZE)/(double)bytePerSec);
-		bufData->chunkSize.push_back(adjust);
-		bufData->length++;
+		_m->chunkTime.push_back(double(count*fk_AudioBase::BUFSIZE)/(double)bytePerSec);
+		_m->chunkSize.push_back(adjust);
+		_m->length++;
 	}
 
 	return true;
@@ -301,20 +301,20 @@ bool fk_AudioWavBuffer::ReadBuffer(ifstream &argIFS, int argCh, int argBit,
 
 bool fk_AudioOggBuffer::ready(void)
 {
-	bufData->current = 0;
-	if(data->startStatus == false) StartQueue(true);
+	_m->current = 0;
+	if(_m_AudioBase->startStatus == false) StartQueue(true);
 	return true;
 }
 
 bool fk_AudioOggBuffer::play(void)
 {
-	if(data->startStatus == false) {
+	if(_m_AudioBase->startStatus == false) {
 		if(ready() == false) return false;
 	}
 
 	if(PlayBuffer() == true) return true;
-	else if(data->endStatus & data->loopMode) {
-		seek(data->loopStartTime);
+	else if(_m_AudioBase->endStatus & _m_AudioBase->loopMode) {
+		seek(_m_AudioBase->loopStartTime);
 		return PlayBuffer();
 	}
 
@@ -323,20 +323,20 @@ bool fk_AudioOggBuffer::play(void)
 
 void fk_AudioOggBuffer::StartQueue(bool argInitFlg)
 {
-	data->startStatus = true;
+	_m_AudioBase->startStatus = true;
 
 	if(argInitFlg == true) CreateID();
 	UnQueue(true);
 
-	for(unsigned int i = 0; i < data->queueSize && bufData->current < bufData->length; ++i) {
+	for(unsigned int i = 0; i < _m_AudioBase->queueSize && _m->current < _m->length; ++i) {
 		ALuint bufferID;
 		alGenBuffers(1, &bufferID);
-		alBufferData(bufferID, data->format,
-					 &bufData->buffer[bufData->current*fk_AudioBase::BUFSIZE],
-					 ALsizei(bufData->chunkSize[bufData->current]),
-					 static_cast<ALsizei>(data->rate));
-		alSourceQueueBuffers(data->source, 1, &bufferID);
-		bufData->current++;
+		alBufferData(bufferID, _m_AudioBase->format,
+					 &_m->buffer[_m->current*fk_AudioBase::BUFSIZE],
+					 ALsizei(_m->chunkSize[_m->current]),
+					 static_cast<ALsizei>(_m_AudioBase->rate));
+		alSourceQueueBuffers(_m_AudioBase->source, 1, &bufferID);
+		_m->current++;
 	}
 
 	return;
@@ -345,11 +345,11 @@ void fk_AudioOggBuffer::StartQueue(bool argInitFlg)
 void fk_AudioOggBuffer::UnQueue(bool argBufferFlg)
 {
 	ALint queueNum;
-	alGetSourcei(data->source, AL_BUFFERS_QUEUED, &queueNum);
+	alGetSourcei(_m_AudioBase->source, AL_BUFFERS_QUEUED, &queueNum);
 
 	for(ALint i = 0; i < queueNum; i++) {
 		ALuint bufferID;
-		alSourceUnqueueBuffers(data->source, 1, &bufferID);
+		alSourceUnqueueBuffers(_m_AudioBase->source, 1, &bufferID);
 		if(argBufferFlg == true) {
 			alDeleteBuffers(1, &bufferID);
 		}
@@ -359,58 +359,58 @@ void fk_AudioOggBuffer::UnQueue(bool argBufferFlg)
 
 bool fk_AudioOggBuffer::PlayBuffer(void)
 {
-	if(data->surround == true) {
-		alSourcei(data->source, AL_SOURCE_RELATIVE, AL_FALSE);
-		if(data->ref_model != nullptr) {
-			data->sourcePos = data->ref_model->getInhPosition();
+	if(_m_AudioBase->surround == true) {
+		alSourcei(_m_AudioBase->source, AL_SOURCE_RELATIVE, AL_FALSE);
+		if(_m_AudioBase->ref_model != nullptr) {
+			_m_AudioBase->sourcePos = _m_AudioBase->ref_model->getInhPosition();
 		}
-		alSource3f(data->source, AL_POSITION,
-				   float(data->sourcePos.x), float(data->sourcePos.y), float(data->sourcePos.z));
-		alSourcef(data->source, AL_REFERENCE_DISTANCE, float(data->refDist));
+		alSource3f(_m_AudioBase->source, AL_POSITION,
+				   float(_m_AudioBase->sourcePos.x), float(_m_AudioBase->sourcePos.y), float(_m_AudioBase->sourcePos.z));
+		alSourcef(_m_AudioBase->source, AL_REFERENCE_DISTANCE, float(_m_AudioBase->refDist));
 		UpdateListener();
 	} else {
-		alSourcei(data->source, AL_SOURCE_RELATIVE, AL_TRUE);
+		alSourcei(_m_AudioBase->source, AL_SOURCE_RELATIVE, AL_TRUE);
 	}
 
 	ALint status;
-	alGetSourcei(data->source, AL_SOURCE_STATE, &status);
+	alGetSourcei(_m_AudioBase->source, AL_SOURCE_STATE, &status);
 	
 	// 再生していなければ、再生命令を出す
 	if(status != AL_PLAYING) {
-		alSourcePlay(data->source);
+		alSourcePlay(_m_AudioBase->source);
 		sleep(0.001);
 	}
 
 	// 再生済みバッファの個数を取得
 	ALint procNum;
-	alGetSourcei(data->source, AL_BUFFERS_PROCESSED, &procNum);
+	alGetSourcei(_m_AudioBase->source, AL_BUFFERS_PROCESSED, &procNum);
 
 	ALuint bufferID;
 	for(ALint i = 0; i < procNum; ++i) {
-		alSourceUnqueueBuffers(data->source, 1, &bufferID);
+		alSourceUnqueueBuffers(_m_AudioBase->source, 1, &bufferID);
 
 		// 既にファイルを読み終えてる場合、バッファを消去
-		if(data->endStatus == true) {
+		if(_m_AudioBase->endStatus == true) {
 			alDeleteBuffers(1, &bufferID);
 			continue;
 		}
 
-		if(bufData->current >= bufData->length) {
+		if(_m->current >= _m->length) {
 			// 終端
-			data->endStatus = true;
+			_m_AudioBase->endStatus = true;
 			alDeleteBuffers(1, &bufferID);
 			continue;
 		}
 
-		alBufferData(bufferID, data->format,
-					 &bufData->buffer[bufData->current*fk_AudioBase::BUFSIZE],
-					 bufData->chunkSize[bufData->current], data->rate);
-		alSourceQueueBuffers(data->source, 1, &bufferID);
-		bufData->current++;
+		alBufferData(bufferID, _m_AudioBase->format,
+					 &_m->buffer[_m->current*fk_AudioBase::BUFSIZE],
+					 _m->chunkSize[_m->current], _m_AudioBase->rate);
+		alSourceQueueBuffers(_m_AudioBase->source, 1, &bufferID);
+		_m->current++;
 	}
 
 	// 終了判定
-	if(status != AL_PLAYING && data->endStatus == true) return false;
+	if(status != AL_PLAYING && _m_AudioBase->endStatus == true) return false;
 	return true;
 }
 
@@ -419,20 +419,20 @@ void fk_AudioOggBuffer::stop(void)
 	//ALint		status, procNum, i;
 	//ALuint		bufferID;
 
-	if(data->startStatus == false) return;
+	if(_m_AudioBase->startStatus == false) return;
 
 	ALint status;
-	alGetSourcei(data->source, AL_SOURCE_STATE, &status);
+	alGetSourcei(_m_AudioBase->source, AL_SOURCE_STATE, &status);
 	if(status != AL_STOPPED) {
-		alSourceStop(data->source);
+		alSourceStop(_m_AudioBase->source);
 	}
 
 	ALint procNum;
-	alGetSourcei(data->source, AL_BUFFERS_PROCESSED, &procNum);
+	alGetSourcei(_m_AudioBase->source, AL_BUFFERS_PROCESSED, &procNum);
 
 	for(ALint i = 0; i < procNum; ++i) {
 		ALuint bufferID;
-		alSourceUnqueueBuffers(data->source, 1, &bufferID);
+		alSourceUnqueueBuffers(_m_AudioBase->source, 1, &bufferID);
 		alDeleteBuffers(1, &bufferID);
 	}
 	return;
@@ -441,8 +441,8 @@ void fk_AudioOggBuffer::stop(void)
 void fk_AudioOggBuffer::end(void)
 {
 	stop();
-	if(data->startStatus == true) alDeleteSources(1, &data->source);
-	data->startStatus = data->endStatus = false;
+	if(_m_AudioBase->startStatus == true) alDeleteSources(1, &_m_AudioBase->source);
+	_m_AudioBase->startStatus = _m_AudioBase->endStatus = false;
 	EraseID();
 	return;
 }	
@@ -451,10 +451,10 @@ double fk_AudioOggBuffer::tell(void)
 {
 	ALfloat	bufTell;
 
-	if(data->startStatus == false) return -1.0;
+	if(_m_AudioBase->startStatus == false) return -1.0;
 
-	alGetSourcef(data->source, AL_SEC_OFFSET, &bufTell);
-	return bufData->chunkTime[bufData->current] + (double)bufTell;
+	alGetSourcef(_m_AudioBase->source, AL_SEC_OFFSET, &bufTell);
+	return _m->chunkTime[_m->current] + (double)bufTell;
 }
 
 void fk_AudioOggBuffer::seek(double argTime)
@@ -462,12 +462,12 @@ void fk_AudioOggBuffer::seek(double argTime)
 	unsigned int i;
 
 	stop();
-	for(i = 0; i < bufData->length; ++i) {
-		if(bufData->chunkTime[i] >= argTime - 0.00001) break;
+	for(i = 0; i < _m->length; ++i) {
+		if(_m->chunkTime[i] >= argTime - 0.00001) break;
 	}
-	bufData->current = i;
-	data->endStatus = false;
-	StartQueue(!data->startStatus);
+	_m->current = i;
+	_m_AudioBase->endStatus = false;
+	StartQueue(!_m_AudioBase->startStatus);
 
 	return;
 }

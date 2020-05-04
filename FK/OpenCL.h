@@ -19,6 +19,23 @@ namespace FK {
 
 	//! OpenCL 簡易利用クラス
 	class fk_OpenCL {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			std::string kernelStr;
+			std::vector<cl_mem> devData;
+			std::vector<bool> devFlg;
+			cl_command_queue command_queue;
+			cl_context context;
+			cl_kernel kernel;
+			cl_program program;
+			bool initFlg;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		fk_OpenCL(void);
 		~fk_OpenCL();
@@ -31,14 +48,7 @@ namespace FK {
 		void	release(void);
 
 	private:
-		std::string				kernelStr;
-		std::vector<cl_mem>		devData;
-		std::vector<bool>		devFlg;
-		cl_command_queue		command_queue;
-		cl_context				context;
-		cl_kernel				kernel;
-		cl_program				program;
-		bool					initFlg;
+		std::unique_ptr<Member> _m;
 	
 		bool	ReadKernel(std::string);
 		cl_int	GetPlatformID(cl_platform_id *, bool);

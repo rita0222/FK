@@ -33,7 +33,7 @@ namespace FK {
 		 *		- すべての制御点の位置ベクトルが原点と一致。
 		 *		.
 		 */
-		void	init(void);
+		void init(void);
 
 		//! 位数設定関数
 		/*!
@@ -48,7 +48,7 @@ namespace FK {
 		 *
 		 *	\return 位数設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool	setOrdinate(int ord);
+		bool setOrdinate(int ord);
 
 		//! 制御点数設定関数
 		/*!
@@ -60,7 +60,7 @@ namespace FK {
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool	setNum(int num);
+		bool setNum(int num);
 
 		// 位数参照関数
 		/*!
@@ -68,7 +68,7 @@ namespace FK {
 		 *
 		 *	\return 位数
 		 */
-		int		getOrdinate(void);	
+		int getOrdinate(void);	
 
 		//! 制御点数参照関数
 		/*!
@@ -76,7 +76,7 @@ namespace FK {
 		 *
 		 *	\return	制御点数
 		 */
-		int		getNum(void);
+		int getNum(void);
 
 		//! 曲線算出関数
 		/*!
@@ -88,7 +88,7 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の位置ベクトル
 		 */
-		fk_Vector	pos(double t);
+		fk_Vector pos(double t);
 
 		//! 曲線1階微分ベクトル算出関数
 		/*!
@@ -100,13 +100,13 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の1階微分ベクトル
 		 */
-		fk_Vector	diff(double t);
+		fk_Vector diff(double t);
 
 	private:
 
-		int						ord;
-		int						num;
-		std::vector<double>		knotVec;
+		int ord;
+		int num;
+		std::vector<double> knotVec;
 	};
 }
 
