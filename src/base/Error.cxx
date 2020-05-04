@@ -18,8 +18,6 @@ Data::Data(void)
 	return;
 }
 
-Data::~Data() {}
-
 void Data::Set(const string argClass, const string argFunc,
 			   const int argErrCode, const string argMessage)
 {
@@ -100,44 +98,44 @@ bool Data::GetMode(void) const
 	return modeFlg;
 }
 
-DataBase::DataBase(void) :
-	mode(Mode::NONE), fileMode(false)
+Member::Member(void) : mode(Mode::NONE), fileMode(false)
 {
-	_DB.clear();
-	return;
 }
 
-DataBase::~DataBase()
+Member::~Member()
 {
 	if(fileMode == true) {
 		ofs.close();
 	}
+}
 
+DataBase::DataBase(void) : _m(make_unique<Member>())
+{
 	return;
 }
 
 void DataBase::SetMode(const Mode argMode)
 {
-	mode = argMode;
+	_m->mode = argMode;
 	return;
 }
 
 Mode DataBase::GetMode(void) const
 {
-	return mode;
+	return _m->mode;
 }
 
 void DataBase::Put(const string argClass, const string argFunc,
 				   const int argErrCode, const string argMessage)
 {
-	if(mode == Mode::NONE) return;
+	if(_m->mode == Mode::NONE) return;
 
-	_DB.push_back(make_unique<Data>());
-	auto data = _DB.back().get();
+	_m->DB.push_back(make_unique<Data>());
+	auto data = _m->DB.back().get();
 
 	data->Set(argClass, argFunc, argErrCode, argMessage);
 
-	switch(mode) {
+	switch(_m->mode) {
 	  case Mode::INTERACTIVE:
 	  case Mode::CONSOLE_INTERACTIVE:
 	  case Mode::OUT_CONSOLE_INTERACTIVE:
@@ -155,14 +153,14 @@ void DataBase::Put(const string argClass, const string argFunc,
 
 void DataBase::Put(const string argClass, const string argFunc, const int argErrCode)
 {
-	if(mode == Mode::NONE) return;
+	if(_m->mode == Mode::NONE) return;
 
-	_DB.push_back(make_unique<Data>());
-	auto data = _DB.back().get();
+	_m->DB.push_back(make_unique<Data>());
+	auto data = _m->DB.back().get();
 
 	data->Set(argClass, argFunc, argErrCode);
 
-	switch(mode) {
+	switch(_m->mode) {
 	  case Mode::INTERACTIVE:
 	  case Mode::CONSOLE_INTERACTIVE:
 	  case Mode::OUT_CONSOLE_INTERACTIVE:
@@ -180,14 +178,14 @@ void DataBase::Put(const string argClass, const string argFunc, const int argErr
 
 void DataBase::Put(const string argMessage)
 {
-	if(mode == Mode::NONE) return;
+	if(_m->mode == Mode::NONE) return;
 
-	_DB.push_back(make_unique<Data>());
-	auto data = _DB.back().get();
+	_m->DB.push_back(make_unique<Data>());
+	auto data = _m->DB.back().get();
 
 	data->Set(argMessage);
 
-	switch(mode) {
+	switch(_m->mode) {
 	  case Mode::INTERACTIVE:
 	  case Mode::CONSOLE_INTERACTIVE:
 	  case Mode::OUT_CONSOLE_INTERACTIVE:
@@ -205,43 +203,38 @@ void DataBase::Put(const string argMessage)
 
 bool DataBase::IsEmpty(void) const
 {
-	return _DB.empty();
+	return _m->DB.empty();
 }
 
 bool DataBase::SetFileName(string argFileName)
 {
-	if(fileMode == true) {
-		ofs.close();
+	if(_m->fileMode == true) {
+		_m->ofs.close();
 	}
 
-	ofs.open(argFileName);
+	_m->ofs.open(argFileName);
 
-	if(ofs.fail()) {
-		fileMode = false;
+	if(_m->ofs.fail()) {
+		_m->fileMode = false;
 	} else {
-		fileMode = true;
+		_m->fileMode = true;
 	}
 
-	return fileMode;
+	return _m->fileMode;
 }
 
 Browser * DataBase::GetBrowser(void)
 {
-	return errorBrowser.get();
+	return _m->errorBrowser.get();
 }
 
 Browser * DataBase::MakeBrowser(void)
 {
-	errorBrowser = make_unique<Browser>();
-	return errorBrowser.get();
+	_m->errorBrowser = make_unique<Browser>();
+	return _m->errorBrowser.get();
 }
 
 Browser::Browser(void)
-{
-	return;
-}
-
-Browser::~Browser()
 {
 	return;
 }
@@ -251,10 +244,10 @@ bool DataBase::Print(void)
 	string outStr;
 	stringstream ss;
 
-	if(mode == Mode::NONE) return false;
+	if(_m->mode == Mode::NONE) return false;
 	if(IsEmpty() == true) return false;
 
-	auto data = _DB.front().get();
+	auto data = _m->DB.front().get();
 
 	outStr.erase();
 
@@ -266,10 +259,10 @@ bool DataBase::Print(void)
 
 	outStr += data->GetErrMessage();
 
-	switch(mode) {
+	switch(_m->mode) {
 	  case Mode::INTERACTIVE:
 	  case Mode::QUEUE:
-		if(errorBrowser != nullptr) errorBrowser->PutAlert(outStr.c_str());
+		if(_m->errorBrowser != nullptr) _m->errorBrowser->PutAlert(outStr.c_str());
 		break;
 
 	  case Mode::CONSOLE_INTERACTIVE:
@@ -284,12 +277,12 @@ bool DataBase::Print(void)
 
 	  case Mode::BROWSER_INTERACTIVE:
 	  case Mode::BROWSER_QUEUE:
-		if(errorBrowser != nullptr) errorBrowser->PutBrowser(outStr);
+		if(_m->errorBrowser != nullptr) _m->errorBrowser->PutBrowser(outStr);
 		break;
 
 	  case Mode::FILE:
-		if(fileMode == true) {
-			ofs << outStr << endl;
+		if(_m->fileMode == true) {
+			_m->ofs << outStr << endl;
 		}
 		break;
 
@@ -297,7 +290,7 @@ bool DataBase::Print(void)
 		break;
 	}
 
-	_DB.pop_front();
+	_m->DB.pop_front();
 	return true;
 }
 

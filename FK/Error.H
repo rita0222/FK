@@ -81,7 +81,6 @@ namespace FK {
 
 		public:
 			DataBase(void);
-			~DataBase();
 
 			void SetMode(const Mode);
 			Mode GetMode(void) const;
