@@ -37,7 +37,6 @@ namespace FK {
 
 		public:
 			Data(void);
-			~Data();
 
 			void Set(const std::string, const std::string, const int, const std::string);
 			void Set(const std::string, const std::string, const int);
@@ -58,20 +57,27 @@ namespace FK {
 		class Browser {
 		public:
 			Browser(void);
-			virtual ~Browser();
 
 			std::function<void(const std::string &)> PutBrowser;
 			std::function<void(const std::string &)> PutAlert;
 		};
 
-		class DataBase {
-
-		private:
-			std::list<std::unique_ptr<Data>> _DB;
+		class Member {
+		public:
+			std::list<std::unique_ptr<Data>> DB;
 			Mode mode;
 			bool fileMode;
 			std::ofstream ofs;
 			std::unique_ptr<Browser> errorBrowser;
+
+			Member(void);
+			~Member();
+		};
+
+		class DataBase {
+
+		private:
+			std::unique_ptr<Member> _m;
 
 		public:
 			DataBase(void);
