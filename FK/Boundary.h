@@ -63,6 +63,30 @@ namespace FK {
 	 */
 
 	class fk_Boundary : public fk_MatrixAdmin {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_BoundaryMode bMode;
+			bool bDrawToggle;
+			std::unique_ptr<fk_Color> bLineColor, bIntLineColor;
+			double bLineWidth;
+
+			double bSphereRad;
+			std::unique_ptr<fk_Vector> bAABBSize;
+			std::unique_ptr<fk_Vector> bOBBSize;
+			std::unique_ptr<fk_Vector> bCapSPos, bCapEPos;
+			double bCapRad;
+
+			std::unique_ptr<fk_IndexFaceSet> bSphere;
+			std::unique_ptr<fk_IndexFaceSet> bAABB;
+			std::unique_ptr<fk_IndexFaceSet> bOBB;
+			std::unique_ptr<fk_IndexFaceSet> bCapsule;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -368,21 +392,7 @@ namespace FK {
 #endif
 
 	private:
-		fk_BoundaryMode bMode;
-		bool bDrawToggle;
-		std::unique_ptr<fk_Color> bLineColor, bIntLineColor;
-		double bLineWidth;
-
-		double bSphereRad;
-		std::unique_ptr<fk_Vector> bAABBSize;
-		std::unique_ptr<fk_Vector> bOBBSize;
-		std::unique_ptr<fk_Vector> bCapSPos, bCapEPos;
-		double bCapRad;
-
-		std::unique_ptr<fk_IndexFaceSet> bSphere;
-		std::unique_ptr<fk_IndexFaceSet> bAABB;
-		std::unique_ptr<fk_IndexFaceSet> bOBB;
-		std::unique_ptr<fk_IndexFaceSet> bCapsule;
+		std::unique_ptr<Member> _m;
 	};
 }
 

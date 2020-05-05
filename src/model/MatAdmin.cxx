@@ -17,22 +17,18 @@ inline bool AlmostEqual(double x, double y)
 	return(AlmostZero(x - y));
 }
 
-fk_MatrixAdmin::fk_MatAdminData::fk_MatAdminData(void)
+fk_MatrixAdmin::Member::Member(void) :
+	pos(0.0, 0.0, 0.0), vec(0.0, 0.0, -1.0), uvec(0.0, 1.0, 0.0),
+	scale(1.0), xScale(1.0), yScale(1.0), zScale(1.0), mode(false)
 {
-	pos.set(0.0, 0.0, 0.0);
 	pos.ispos();
-	vec.set(0.0, 0.0, -1.0);
 	vec.isvec();
-	uvec.set(0.0, 1.0, 0.0);
 	uvec.isvec();
-	xScale = yScale = zScale = scale = 1.0;
-	mode = false;
 }
 
 fk_MatrixAdmin::fk_MatrixAdmin(fk_Type argType)
-	: fk_BaseObject(argType)
+	: fk_BaseObject(argType), _m_MatAdmin(make_unique<Member>())
 {
-	oData = make_unique<fk_MatAdminData>();
 	UpdateMatrix(true);
 }
 
@@ -50,12 +46,12 @@ void fk_MatrixAdmin::UpdateMatrix(bool argAngFlag)
 		AdjustVecToAngle();
 	}
 
-	tmp1.makeTrans(oData->pos.x, oData->pos.y, oData->pos.z);
-	tmp2.makeEuler(oData->angle.h, oData->angle.p, oData->angle.b);
+	tmp1.makeTrans(_m_MatAdmin->pos.x, _m_MatAdmin->pos.y, _m_MatAdmin->pos.z);
+	tmp2.makeEuler(_m_MatAdmin->angle.h, _m_MatAdmin->angle.p, _m_MatAdmin->angle.b);
 
-	oData->M = tmp1*tmp2;
+	_m_MatAdmin->M = tmp1*tmp2;
 	Y.set(0.0, 1.0, 0.0, 0.0);
-	oData->uvec = oData->M * Y;
+	_m_MatAdmin->uvec = _m_MatAdmin->M * Y;
 
 	return;
 }
@@ -81,13 +77,13 @@ fk_OrthoMatrix fk_MatrixAdmin::OrthonormalMatrix(const fk_Vector &argOrg,
 
 void fk_MatrixAdmin::SetScaleMode(void)
 {
-	if(AlmostEqual(oData->scale, 1.0) == false ||
-	   AlmostEqual(oData->xScale, 1.0) == false ||
-	   AlmostEqual(oData->yScale, 1.0) == false ||
-	   AlmostEqual(oData->zScale, 1.0) == false) {
-		oData->mode = true;
+	if(AlmostEqual(_m_MatAdmin->scale, 1.0) == false ||
+	   AlmostEqual(_m_MatAdmin->xScale, 1.0) == false ||
+	   AlmostEqual(_m_MatAdmin->yScale, 1.0) == false ||
+	   AlmostEqual(_m_MatAdmin->zScale, 1.0) == false) {
+		_m_MatAdmin->mode = true;
 	} else {
-		oData->mode = false;
+		_m_MatAdmin->mode = false;
 	}
 
 	return;
@@ -115,17 +111,17 @@ void fk_MatrixAdmin::AddAngle(fk_Angle *argBaseAng,
 
 fk_Vector fk_MatrixAdmin::getPosition(void) const
 {
-	return oData->pos;
+	return _m_MatAdmin->pos;
 }
 
 fk_Vector fk_MatrixAdmin::getVec(void) const
 {
-	return oData->vec;
+	return _m_MatAdmin->vec;
 }
 
 fk_Vector fk_MatrixAdmin::getUpvec(void) const
 {
-	return oData->uvec;
+	return _m_MatAdmin->uvec;
 }
 
 fk_Vector fk_MatrixAdmin::getUpVec(void) const
@@ -135,20 +131,20 @@ fk_Vector fk_MatrixAdmin::getUpVec(void) const
 
 fk_Angle fk_MatrixAdmin::getAngle(void) const
 {
-	return oData->angle;
+	return _m_MatAdmin->angle;
 }
 
 fk_Matrix fk_MatrixAdmin::getMatrix(void) const
 {
 	fk_Matrix scaleMat, affineMat;
 
-	if(oData->mode == true) {
-		scaleMat.makeScale(oData->scale * oData->xScale,
-						   oData->scale * oData->yScale,
-						   oData->scale * oData->zScale);
-		affineMat = oData->M * scaleMat;
+	if(_m_MatAdmin->mode == true) {
+		scaleMat.makeScale(_m_MatAdmin->scale * _m_MatAdmin->xScale,
+						   _m_MatAdmin->scale * _m_MatAdmin->yScale,
+						   _m_MatAdmin->scale * _m_MatAdmin->zScale);
+		affineMat = _m_MatAdmin->M * scaleMat;
 	} else {
-		affineMat = oData->M;
+		affineMat = _m_MatAdmin->M;
 	}
 
 	return affineMat;
@@ -161,12 +157,12 @@ fk_Matrix fk_MatrixAdmin::getInvMatrix(void) const
 
 fk_OrthoMatrix fk_MatrixAdmin::getBaseMatrix(void) const
 {
-	return oData->M;
+	return _m_MatAdmin->M;
 }
 
 fk_OrthoMatrix fk_MatrixAdmin::getInvBaseMatrix(void) const
 {
-	return !oData->M;
+	return !_m_MatAdmin->M;
 }
 
 bool fk_MatrixAdmin::setScale(const double argScale)
@@ -176,7 +172,7 @@ bool fk_MatrixAdmin::setScale(const double argScale)
 		return false;
 	}
 
-	oData->scale = argScale;
+	_m_MatAdmin->scale = argScale;
 	SetScaleMode();
 
 	UpdateMatrix(false);
@@ -193,13 +189,13 @@ bool fk_MatrixAdmin::setScale(const double argScale, const fk_Axis argAxis)
 
 	switch(argAxis) {
 	  case fk_Axis::X:
-		oData->xScale = argScale;
+		_m_MatAdmin->xScale = argScale;
 		break;
 	  case fk_Axis::Y:
-		oData->yScale = argScale;
+		_m_MatAdmin->yScale = argScale;
 		break;
 	  case fk_Axis::Z:
-		oData->zScale = argScale;
+		_m_MatAdmin->zScale = argScale;
 		break;
 	  default:
 		break;
@@ -219,9 +215,9 @@ bool fk_MatrixAdmin::setScale(const double argX, const double argY,
 		return false;
 	}
 
-	oData->xScale = argX;
-	oData->yScale = argY;
-	oData->zScale = argZ;
+	_m_MatAdmin->xScale = argX;
+	_m_MatAdmin->yScale = argY;
+	_m_MatAdmin->zScale = argZ;
 	SetScaleMode();
 	UpdateMatrix(false);
 
@@ -230,12 +226,12 @@ bool fk_MatrixAdmin::setScale(const double argX, const double argY,
 
 bool fk_MatrixAdmin::prdScale(const double argScale)
 {
-	if(fabs(argScale * oData->scale) < fk_Math::EPS) {
+	if(fabs(argScale * _m_MatAdmin->scale) < fk_Math::EPS) {
 		Error::Put("fk_MatrixAdmin", "prdScale", 1, "Zero Scale Error.");
 		return false;
 	}
 
-	oData->scale *= argScale;
+	_m_MatAdmin->scale *= argScale;
 	SetScaleMode();
 	UpdateMatrix(false);
 
@@ -246,28 +242,28 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 {
 	switch(argAxis) {
 	  case fk_Axis::X:
-		if(fabs(oData->xScale * argScale) < fk_Math::EPS) {
+		if(fabs(_m_MatAdmin->xScale * argScale) < fk_Math::EPS) {
 			Error::Put("fk_MatrixAdmin", "prdScale", 2, "Zero Scale Error.");
 			return false;
 		}
 
-		oData->xScale *= argScale;
+		_m_MatAdmin->xScale *= argScale;
 		break;
 	  case fk_Axis::Y:
-		if(fabs(oData->yScale * argScale) < fk_Math::EPS) {
+		if(fabs(_m_MatAdmin->yScale * argScale) < fk_Math::EPS) {
 			Error::Put("fk_MatrixAdmin", "prdScale", 2, "Zero Scale Error.");
 			return false;
 		}
 
-		oData->yScale *= argScale;
+		_m_MatAdmin->yScale *= argScale;
 		break;
 	  case fk_Axis::Z:
-		if(fabs(oData->zScale * argScale) < fk_Math::EPS) {
+		if(fabs(_m_MatAdmin->zScale * argScale) < fk_Math::EPS) {
 			Error::Put("fk_MatrixAdmin", "prdScale", 2, "Zero Scale Error.");
 			return false;
 		}
 
-		oData->zScale *= argScale;
+		_m_MatAdmin->zScale *= argScale;
 		break;
 	  default:
 		break;
@@ -282,16 +278,16 @@ bool fk_MatrixAdmin::prdScale(const double argScale, const fk_Axis argAxis)
 bool fk_MatrixAdmin::prdScale(const double argX, const double argY,
 							  const double argZ)
 {
-	if(fabs(oData->xScale * argX) < fk_Math::EPS ||
-	   fabs(oData->yScale * argY) < fk_Math::EPS ||
-	   fabs(oData->zScale * argZ) < fk_Math::EPS) {
+	if(fabs(_m_MatAdmin->xScale * argX) < fk_Math::EPS ||
+	   fabs(_m_MatAdmin->yScale * argY) < fk_Math::EPS ||
+	   fabs(_m_MatAdmin->zScale * argZ) < fk_Math::EPS) {
 		Error::Put("fk_MatrixAdmin", "prdScale", 3, "Zero Scale Error.");
 		return false;
 	}
 
-	oData->xScale *= argX;
-	oData->yScale *= argY;
-	oData->zScale *= argZ;
+	_m_MatAdmin->xScale *= argX;
+	_m_MatAdmin->yScale *= argY;
+	_m_MatAdmin->zScale *= argZ;
 	SetScaleMode();
 	UpdateMatrix(false);
 
@@ -301,25 +297,25 @@ bool fk_MatrixAdmin::prdScale(const double argX, const double argY,
 
 double fk_MatrixAdmin::getScale(void) const
 {
-	return oData->scale;
+	return _m_MatAdmin->scale;
 }
 
 double fk_MatrixAdmin::getScale(const fk_Axis argAxis) const
 {
 	switch(argAxis) {
 	  case fk_Axis::X:
-		return oData->xScale;
+		return _m_MatAdmin->xScale;
 	  case fk_Axis::Y:
-		return oData->yScale;
+		return _m_MatAdmin->yScale;
 	  case fk_Axis::Z:
-		return oData->zScale;
+		return _m_MatAdmin->zScale;
 	}
 	return 0.0;
 }
 
 bool fk_MatrixAdmin::getScaleMode(void) const
 {
-	return oData->mode;
+	return _m_MatAdmin->mode;
 }
 
 bool fk_MatrixAdmin::glRotate_(fk_Vector &argOrg, fk_Axis argAxis, double argAngle)
@@ -330,8 +326,8 @@ bool fk_MatrixAdmin::glRotate_(fk_Vector &argOrg, fk_Axis argAxis, double argAng
 	TransInv.makeTrans(argOrg);
 	Rot.makeRot(argAngle, argAxis);
 
-	oData->pos.ispos();
-	oData->pos *= TransInv * Rot * Trans;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= TransInv * Rot * Trans;
 	UpdateMatrix(false);
 
 	return true;
@@ -350,8 +346,8 @@ void fk_MatrixAdmin::GlRotate_(const fk_Vector &argOrg, const fk_Vector &argTop,
 {
 	fk_OrthoMatrix rotMat = OrthonormalMatrix(argOrg, argTop, argAngle);
 
-	oData->pos.ispos();
-	oData->pos *= rotMat;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= rotMat;
 
 	UpdateMatrix(false);
 
@@ -391,13 +387,13 @@ bool fk_MatrixAdmin::loRotate_(fk_Vector &argOrg, fk_Axis argAxis, double argAng
 	fk_Matrix SelfInv, affineMat, scaleMat;
 	fk_Matrix Rot, Trans, TransInv;
 
-	if(oData->mode == true) {
-		scaleMat.makeScale(oData->scale * oData->xScale,
-						   oData->scale * oData->yScale,
-						   oData->scale * oData->zScale);
-		affineMat = oData->M * scaleMat;
+	if(_m_MatAdmin->mode == true) {
+		scaleMat.makeScale(_m_MatAdmin->scale * _m_MatAdmin->xScale,
+						   _m_MatAdmin->scale * _m_MatAdmin->yScale,
+						   _m_MatAdmin->scale * _m_MatAdmin->zScale);
+		affineMat = _m_MatAdmin->M * scaleMat;
 	} else {
-		affineMat = oData->M;
+		affineMat = _m_MatAdmin->M;
 	}
 
 	SelfInv = !affineMat;
@@ -405,8 +401,8 @@ bool fk_MatrixAdmin::loRotate_(fk_Vector &argOrg, fk_Axis argAxis, double argAng
 	TransInv.makeTrans(argOrg);
 	Rot.makeRot(argAngle, argAxis);
 
-	oData->pos.ispos();
-	oData->pos *= affineMat * TransInv * Rot * Trans * SelfInv;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= affineMat * TransInv * Rot * Trans * SelfInv;
 	UpdateMatrix(false);
 
 	return true;
@@ -429,19 +425,19 @@ void fk_MatrixAdmin::LoRotate_(const fk_Vector &argOrg, const fk_Vector &argTop,
 	fk_OrthoMatrix	rotMat;
 	fk_Matrix		scaleMat, affineMat;
 
-	if(oData->mode == true) {
-		scaleMat.makeScale(oData->scale * oData->xScale,
-						   oData->scale * oData->yScale,
-						   oData->scale * oData->zScale);
-		affineMat = oData->M * scaleMat;
+	if(_m_MatAdmin->mode == true) {
+		scaleMat.makeScale(_m_MatAdmin->scale * _m_MatAdmin->xScale,
+						   _m_MatAdmin->scale * _m_MatAdmin->yScale,
+						   _m_MatAdmin->scale * _m_MatAdmin->zScale);
+		affineMat = _m_MatAdmin->M * scaleMat;
 	} else {
-		affineMat = oData->M;
+		affineMat = _m_MatAdmin->M;
 	}
 
-	SelfInv = !oData->M;
+	SelfInv = !_m_MatAdmin->M;
 	rotMat = OrthonormalMatrix(argOrg, argTop, argAngle);
-	oData->pos.ispos();
-	oData->pos *= affineMat * rotMat * SelfInv;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= affineMat * rotMat * SelfInv;
 
 	UpdateMatrix(false);
 	return;
@@ -484,13 +480,13 @@ bool fk_MatrixAdmin::glRotateWithVec_(fk_Vector &argOrg, fk_Axis argAxis, double
 
 	Rot.makeRot(argAngle, argAxis);
 
-	oData->pos.ispos();
-	oData->pos *= TransInv * Rot * Trans;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= TransInv * Rot * Trans;
 
-	oData->vec.isvec();
-	oData->vec *= Rot;
-	oData->uvec.isvec();
-	oData->uvec *= Rot;
+	_m_MatAdmin->vec.isvec();
+	_m_MatAdmin->vec *= Rot;
+	_m_MatAdmin->uvec.isvec();
+	_m_MatAdmin->uvec *= Rot;
 
 	UpdateMatrix(true);
 	return true;
@@ -513,14 +509,14 @@ void fk_MatrixAdmin::GlRotateWithVec_(const fk_Vector &argOrg,
 
 	rotMat = OrthonormalMatrix(argOrg, argTop, argAngle);
 
-	oData->pos.ispos();
-	oData->pos *= rotMat;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= rotMat;
 
-	oData->vec.isvec();
-	oData->vec *= rotMat;
+	_m_MatAdmin->vec.isvec();
+	_m_MatAdmin->vec *= rotMat;
 
-	oData->uvec.isvec();
-	oData->uvec *= rotMat;
+	_m_MatAdmin->uvec.isvec();
+	_m_MatAdmin->uvec *= rotMat;
 
 	UpdateMatrix(true);
 	return;
@@ -559,21 +555,21 @@ bool fk_MatrixAdmin::loRotateWithVec_(fk_Vector &argOrg, fk_Axis argAxis, double
 	fk_OrthoMatrix SelfInv;
 	fk_OrthoMatrix Rot, Trans, TransInv, New;
 
-	SelfInv = !oData->M;
+	SelfInv = !_m_MatAdmin->M;
 	Trans.makeTrans(-argOrg);
 	TransInv.makeTrans(argOrg);
 
 	Rot.makeRot(argAngle, argAxis);
 
-	New = oData->M * TransInv * Rot * Trans * SelfInv;
-	oData->pos.ispos();
-	oData->pos *= New;
+	New = _m_MatAdmin->M * TransInv * Rot * Trans * SelfInv;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= New;
 
-	oData->vec.isvec();
-	oData->vec *= New;
+	_m_MatAdmin->vec.isvec();
+	_m_MatAdmin->vec *= New;
 
-	oData->uvec.isvec();
-	oData->uvec *= New;
+	_m_MatAdmin->uvec.isvec();
+	_m_MatAdmin->uvec *= New;
 
 	UpdateMatrix(true);
 
@@ -599,17 +595,17 @@ void fk_MatrixAdmin::LoRotateWithVec_(const fk_Vector &argOrg,
 	fk_OrthoMatrix New;
 
 	rotMat = OrthonormalMatrix(argOrg, argTop, argAngle);
-	SelfInv = !oData->M;
-	New = oData->M * rotMat * SelfInv;	
+	SelfInv = !_m_MatAdmin->M;
+	New = _m_MatAdmin->M * rotMat * SelfInv;	
 
-	oData->pos.ispos();
-	oData->pos *= New;
+	_m_MatAdmin->pos.ispos();
+	_m_MatAdmin->pos *= New;
 
-	oData->vec.isvec();
-	oData->vec *= New;
+	_m_MatAdmin->vec.isvec();
+	_m_MatAdmin->vec *= New;
 
-	oData->uvec.isvec();
-	oData->uvec *= New;
+	_m_MatAdmin->uvec.isvec();
+	_m_MatAdmin->uvec *= New;
 
 	UpdateMatrix(true);
 }
@@ -646,13 +642,13 @@ bool fk_MatrixAdmin::glFocus(fk_Vector argObj)
 	fk_Vector focusVec;
 
 	// Find out Heading & Pitching
-	focusVec = argObj - oData->pos;
+	focusVec = argObj - _m_MatAdmin->pos;
 	if(focusVec.isZero() == true) {
 		Error::Put("fk_MatrixAdmin", "glFocus", 1, "Zero-Vector Defined.");
 		return false;
 	}
 
-	VectorToHeadPitch(&oData->angle, &focusVec);
+	VectorToHeadPitch(&_m_MatAdmin->angle, &focusVec);
 	AdjustAngleToVec();
 	UpdateMatrix(true);
 	return true;
@@ -674,14 +670,14 @@ bool fk_MatrixAdmin::loFocus(fk_Vector argObj)
 	}
 
 	// Make Objective Vector in Global Axis
-	RotateLtoG(&glo, &argObj, &oData->angle);
+	RotateLtoG(&glo, &argObj, &_m_MatAdmin->angle);
 	if(glo.normalize() == false) {
 		Error::Put("fk_MatrixAdmin", "loFocus", 2, "Vector Undefined Error.");
 		return false;
 	}
 
 	// Find out Heading & Pitching
-	VectorToHeadPitch(&oData->angle, &glo);
+	VectorToHeadPitch(&_m_MatAdmin->angle, &glo);
 
 	AdjustAngleToVec();
 	UpdateMatrix(true);
@@ -701,7 +697,7 @@ bool fk_MatrixAdmin::glVec(fk_Vector argVec)
 		Error::Put("fk_MatrixAdmin", "glVec", 1, "Zero-Vector Defined.");
 		return false;
 	}
-	oData->vec = argVec;
+	_m_MatAdmin->vec = argVec;
 	UpdateMatrix(true);
 
 	return true;
@@ -721,8 +717,8 @@ bool fk_MatrixAdmin::glUpvec(fk_Vector argUpv)
 		return false;
 	}
 
-	if(fabs(argUpv * fk_Vector(oData->vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
-		oData->uvec = argUpv;
+	if(fabs(argUpv * fk_Vector(_m_MatAdmin->vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
+		_m_MatAdmin->uvec = argUpv;
 		UpdateMatrix(true);
 	} else {
 		Error::Put("fk_MatrixAdmin", "glUpvec", 2, "Up Vector Parallel Error.");
@@ -742,14 +738,14 @@ bool fk_MatrixAdmin::loUpvec(fk_Vector argUpv)
 {
 	fk_Vector tmp;
 
-	RotateLtoG(&tmp, &argUpv, &oData->angle);
+	RotateLtoG(&tmp, &argUpv, &_m_MatAdmin->angle);
 	if(tmp.normalize() == false) {
 		Error::Put("fk_MatrixAdmin", "loUpvec", 1, "UpVector Undefined Error.");
 		return false;
 	}
 
-	if(fabs(tmp * fk_Vector(oData->vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
-		oData->uvec = tmp;
+	if(fabs(tmp * fk_Vector(_m_MatAdmin->vec)) <= 1.0 - fk_Vector::MATRIXEPS2) {
+		_m_MatAdmin->uvec = tmp;
 	} else {
 		Error::Put("fk_MatrixAdmin", "loUpvec", 2, "Up Vector Parallel Error.");
 		return false;
@@ -768,7 +764,7 @@ bool fk_MatrixAdmin::loUpvec(double argX, double argY, double argZ)
 
 bool fk_MatrixAdmin::glAngle(fk_Angle argAng)
 {
-	oData->angle = argAng;
+	_m_MatAdmin->angle = argAng;
 	AdjustAngleToVec();
 	UpdateMatrix(false);
 
@@ -792,8 +788,8 @@ bool fk_MatrixAdmin::loAngle(fk_Angle argAng) // Pitching & Yawing
 	// Find out Eye Vector & Up Vector in Global Axis
 
 	AngleToVector(&tmpVec, &tmpUpv, &argAng);
-	RotateLtoG(&oData->vec, &tmpVec, &oData->angle);
-	RotateLtoG(&oData->uvec, &tmpUpv, &oData->angle);
+	RotateLtoG(&_m_MatAdmin->vec, &tmpVec, &_m_MatAdmin->angle);
+	RotateLtoG(&_m_MatAdmin->uvec, &tmpUpv, &_m_MatAdmin->angle);
 
 	UpdateMatrix(true);
 	return true;
@@ -811,7 +807,7 @@ bool fk_MatrixAdmin::loAngle(double argH, double argP, double argB)
 
 bool fk_MatrixAdmin::glTranslate_(fk_Vector &argVec)
 {
-	oData->pos += argVec;
+	_m_MatAdmin->pos += argVec;
 	UpdateMatrix(false);
 	return true;
 }
@@ -824,7 +820,7 @@ bool fk_MatrixAdmin::glTranslate_(double argX, double argY, double argZ)
 
 bool fk_MatrixAdmin::glMoveTo_(fk_Vector &argVec)
 {
-	oData->pos = argVec;
+	_m_MatAdmin->pos = argVec;
 	UpdateMatrix(false);
 
 	return true;
@@ -840,8 +836,8 @@ bool fk_MatrixAdmin::loTranslate_(fk_Vector &argVec)
 {
 	fk_Vector tmp;
 
-	RotateLtoG(&tmp, &argVec, &oData->angle);
-	oData->pos += tmp;
+	RotateLtoG(&tmp, &argVec, &_m_MatAdmin->angle);
+	_m_MatAdmin->pos += tmp;
 	UpdateMatrix(false);
 
 	return true;
@@ -944,13 +940,13 @@ void fk_MatrixAdmin::VectorToAngle(fk_Angle *retAngle,
 
 void fk_MatrixAdmin::AdjustAngleToVec(void)
 {
-	AngleToVector(&oData->vec, &oData->uvec, &oData->angle);
+	AngleToVector(&_m_MatAdmin->vec, &_m_MatAdmin->uvec, &_m_MatAdmin->angle);
 	return;
 }
 
 void fk_MatrixAdmin::AdjustVecToAngle(void)
 {
-	VectorToAngle(&oData->angle, &oData->vec, &oData->uvec);
+	VectorToAngle(&_m_MatAdmin->angle, &_m_MatAdmin->vec, &_m_MatAdmin->uvec);
 	return;
 }
 

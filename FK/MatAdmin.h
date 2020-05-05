@@ -52,7 +52,7 @@ namespace FK {
 	class fk_MatrixAdmin : public fk_BaseObject {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_MatAdminData {
+		class Member {
 		public:
 			fk_OrthoMatrix M;	// Model Base Matrix
 			fk_HVector pos;		// Model Position
@@ -62,7 +62,7 @@ namespace FK {
 			double xScale, yScale, zScale;	// Axis Scale
 			bool mode;
 
-			fk_MatAdminData();
+			Member(void);
 		};
 #endif
 
@@ -1217,7 +1217,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		std::unique_ptr<fk_MatAdminData> oData;
+		std::unique_ptr<Member> _m_MatAdmin;
 
 		void RotateLtoG(fk_Vector *, const fk_Vector *, const fk_Angle *) const;
 		void VectorToHeadPitch(fk_Angle *, const fk_Vector *) const;

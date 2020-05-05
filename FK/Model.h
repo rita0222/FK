@@ -100,7 +100,7 @@ namespace FK {
 	class fk_Model : public fk_Boundary {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_ModelData {
+		class Member {
 		public:
 			fk_Material material;
 			fk_Color pointColor;
@@ -142,7 +142,7 @@ namespace FK {
 
 			bool fogMode;
 
-			fk_ModelData(void);
+			Member(void);
 		};
 #endif
 
@@ -2205,7 +2205,7 @@ namespace FK {
 #endif
 
 	private:
-		std::unique_ptr<fk_ModelData> mData;
+		std::unique_ptr<Member> _m;
 
 		void EntryTree(void);
 		void DeleteTree(void);
