@@ -5,16 +5,19 @@
 using namespace FK;
 using namespace std;
 
-fk_Plane::fk_Plane(void)
-	: fk_BaseObject(fk_Type::PLANE)
+fk_Plane::Member::Member(void) :
+	base(0.0, 0.0, 0.0),
+	uVec(1.0, 0.0, 0.0),
+	vVec(0.0, 1.0, 0.0),
+	norm(0.0, 0.0, 1.0),
+	dist(0.0), distFlag(false)
 {
-	base.set(0.0, 0.0, 0.0);
-	uVec.set(1.0, 0.0, 0.0);
-	vVec.set(0.0, 1.0, 0.0);
-	norm.set(0.0, 0.0, 1.0);
-	dist = 0.0;
-	distFlag = false;
+	return;
+}
 
+fk_Plane::fk_Plane(void)
+	: fk_BaseObject(fk_Type::PLANE), _m(make_unique<Member>())
+{
 	return;
 }
 
@@ -26,36 +29,36 @@ fk_Plane::~fk_Plane()
 bool fk_Plane::setPosNormal(const fk_Vector &argBase,
 							const fk_Vector &argNorm)
 {
-	fk_Vector		tmp;
+	fk_Vector tmp;
 
 	if(argNorm.isZero() == true) {
 		return false;
 	}
 
-	base = argBase;
-	norm = argNorm;
-	norm.normalize();
-	if(fabs(norm.z) > 1.0 - fk_Math::EPS) {
+	_m->base = argBase;
+	_m->norm = argNorm;
+	_m->norm.normalize();
+	if(fabs(_m->norm.z) > 1.0 - fk_Math::EPS) {
 		// 法線ベクトルが z 軸に平行
 
-		uVec.set(1.0, 0.0, 0.0);
-		if(norm.z > 0.0) {
-			vVec.set(0.0, 1.0, 0.0);
-			norm.set(0.0, 0.0, 1.0);
+		_m->uVec.set(1.0, 0.0, 0.0);
+		if(_m->norm.z > 0.0) {
+			_m->vVec.set(0.0, 1.0, 0.0);
+			_m->norm.set(0.0, 0.0, 1.0);
 		} else {
-			vVec.set(0.0, -1.0, 0.0);
-			norm.set(0.0, 0.0, -1.0);
+			_m->vVec.set(0.0, -1.0, 0.0);
+			_m->norm.set(0.0, 0.0, -1.0);
 		}
 	} else {
 		// z 軸に平行じゃない場合
 
-		tmp.set(norm.x, norm.y, norm.z + 1.0);
-		uVec = norm ^ tmp;
-		uVec.normalize();
-		vVec = norm ^ uVec;
-		vVec.normalize();
+		tmp.set(_m->norm.x, _m->norm.y, _m->norm.z + 1.0);
+		_m->uVec = _m->norm ^ tmp;
+		_m->uVec.normalize();
+		_m->vVec = _m->norm ^ _m->uVec;
+		_m->vVec.normalize();
 	}
-	distFlag = false;
+	_m->distFlag = false;
 	return true;
 }
 
@@ -71,11 +74,11 @@ bool fk_Plane::set3Pos(const fk_Vector &argPos1,
 	if((tmpU ^ tmpV).dist2() < fk_Math::EPS) return false;
 	tmpU.normalize();
 	tmpV.normalize();
-	base = argPos1;
-	uVec = tmpU;
-	vVec = tmpV;
-	norm = uVec ^ vVec;
-	distFlag = false;
+	_m->base = argPos1;
+	_m->uVec = tmpU;
+	_m->vVec = tmpV;
+	_m->norm = _m->uVec ^ _m->vVec;
+	_m->distFlag = false;
 
 	return true;
 }
@@ -85,83 +88,83 @@ bool fk_Plane::setPosUVVec(const fk_Vector &argBase,
 						   const fk_Vector &argVVec)
 {
 	if((argUVec ^ argVVec).dist2() < fk_Math::EPS) return false;
-	base = argBase;
-	uVec = argUVec;
-	uVec.normalize();
-	vVec = argVVec.perp(uVec);
-	vVec.normalize();
-	norm = uVec ^ vVec;
-	distFlag = false;
+	_m->base = argBase;
+	_m->uVec = argUVec;
+	_m->uVec.normalize();
+	_m->vVec = argVVec.perp(_m->uVec);
+	_m->vVec.normalize();
+	_m->norm = _m->uVec ^ _m->vVec;
+	_m->distFlag = false;
 
 	return true;
 }
 
 fk_Vector fk_Plane::getBasePos(void)
 {
-	return base;
+	return _m->base;
 }
 
 fk_Vector fk_Plane::getUVec(void)
 {
-	return uVec;
+	return _m->uVec;
 }
 
 fk_Vector fk_Plane::getVVec(void)
 {
-	return vVec;
+	return _m->vVec;
 }
 
 fk_Vector fk_Plane::getNormal(void)
 {
-	return norm;
+	return _m->norm;
 }
 
 double fk_Plane::getDist(void)
 {
-	if(distFlag == false) {
+	if(_m->distFlag == false) {
 		CalcDist();
 	}
 
-	return fabs(dist);
+	return fabs(_m->dist);
 }
 
 void fk_Plane::CalcDist(void)
 {
-	dist = base * norm;
-	distFlag = true;
+	_m->dist = _m->base * _m->norm;
+	_m->distFlag = true;
 	return;
 }
 
 double fk_Plane::getDist(const fk_Vector &argPos)
 {
-	return (fabs((argPos - base) * norm));
+	return (fabs((argPos - _m->base) * _m->norm));
 }
 
 fk_Vector fk_Plane::getPos(double argU, double argV)
 {
-	return (base + argU*uVec + argV*vVec);
+	return (_m->base + argU*_m->uVec + argV*_m->vVec);
 }
 
 bool fk_Plane::isParallel(const fk_Vector &argVec)
 {
-	if(fabs(norm * argVec) < fk_Math::EPS) return true;
+	if(fabs(_m->norm * argVec) < fk_Math::EPS) return true;
 	return false;
 }
 
 bool fk_Plane::isParallel(const fk_Plane &argPlane)
 {
-	return isVertical(argPlane.norm);
+	return isVertical(argPlane._m->norm);
 }
 
 bool fk_Plane::isVertical(const fk_Vector &argVec)
 {
-	if((norm ^ argVec).dist2() < fk_Math::EPS) return true;
+	if((_m->norm ^ argVec).dist2() < fk_Math::EPS) return true;
 	return false;
 }
 
 bool fk_Plane::isVertical(const fk_Plane &argPlane)
 {
-	return isParallel(argPlane.norm);
+	return isParallel(argPlane._m->norm);
 }
 
 tuple<bool, fk_Vector> fk_Plane::calcCrossPos(const fk_Vector &argStart, const fk_Vector &argEnd)
@@ -187,8 +190,8 @@ tuple<bool, double> fk_Plane::calcCrossLineParam(const fk_Vector &argStart,
 	fk_Vector lineVec(argEnd - argStart);
 
 	if(isParallel(lineVec) == true) return {false, 0.0};
-	if(distFlag == false) CalcDist();
-	return {true, (dist - (norm * argStart))/(norm * lineVec)};
+	if(_m->distFlag == false) CalcDist();
+	return {true, (_m->dist - (_m->norm * argStart))/(_m->norm * lineVec)};
 }
 
 #ifndef FK_OLD_NONSUPPORT
@@ -231,12 +234,12 @@ tuple<bool, fk_Vector, double, double, double> fk_Plane::calcCrossAll(const fk_V
 		return {false, fk_Vector(), 0.0, 0.0, 0.0};
 	}
 
-	mat.setCol(0, uVec);
-	mat.setCol(1, vVec);
+	mat.setCol(0, _m->uVec);
+	mat.setCol(1, _m->vVec);
 	mat.setCol(2, lineVec);
 
 	mat.inverse();
-	V = mat * (argStart - base);
+	V = mat * (argStart - _m->base);
 
 	return {true, (1.0 - V.z) * argStart + V.z * argEnd, V.z, V.x, V.y};
 }
@@ -253,7 +256,7 @@ bool fk_Plane::calcCrossAll(const fk_Vector &argStart, const fk_Vector &argEnd,
 
 fk_Vector fk_Plane::proj(const fk_Vector &argP)
 {
-	return argP - ((argP - base) * norm) * norm;
+	return argP - ((argP - _m->base) * _m->norm) * _m->norm;
 }
 
 /****************************************************************************

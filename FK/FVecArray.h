@@ -30,12 +30,31 @@ namespace FK {
 
 	class fk_FVecArray {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int dim;
+			int size;
+			bool allFlg;
+			std::vector<float> array;
+			std::vector<char> elemFlg;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_FVecArray(void);
 
 		//! デストラクタ
 		~fk_FVecArray();
+
+		//! 代入演算子
+		fk_FVecArray & operator =(const fk_FVecArray &);
+
+		//! コピーコンストラクタ
+		fk_FVecArray(const fk_FVecArray &);
 
 		//! 次元設定関数
 		/*!
@@ -436,7 +455,7 @@ namespace FK {
 		 *
 		 *	\sa isModify(int)
 		 */
-		bool	isModify(void);
+		bool isModify(void);
 
 		//! 個別要素変更状態取得関数
 		/*!
@@ -448,7 +467,7 @@ namespace FK {
 		 *
 		 *	\sa isModify()
 		 */
-		bool	isModify(int id);
+		bool isModify(int id);
 
 		//! 変更状態初期化関数
 		/*!
@@ -456,14 +475,10 @@ namespace FK {
 		 *
 		 *	\sa isModify(), isModify(int)
 		 */
-		void	reset(void);
+		void reset(void);
 
 	private:
-		int					dim;
-		int					size;
-		bool				allFlg;
-		std::vector<float>	array;
-		std::vector<char>	elemFlg;
+		std::unique_ptr<Member> _m;
 	};
 }
 

@@ -35,6 +35,21 @@ namespace FK {
 
 	class fk_Plane : public fk_BaseObject {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		class Member {
+		public:
+			fk_Vector	base;
+			fk_Vector	uVec, vVec;
+			fk_Vector	norm;
+			double		dist;
+			bool		distFlag;
+
+			Member(void);
+		};
+
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -300,22 +315,8 @@ namespace FK {
 		fk_Vector	proj(const fk_Vector &P);
 
 	private:
-		// 平面上の一点 
-		fk_Vector	base;
-
-		// u, v 方向単位ベクトル 
-		fk_Vector	uVec, vVec;
-
-		// 法線ベクトル 
-		fk_Vector	norm;
-
-		// 原点からの距離 
-		double		dist;
-
-		bool		distFlag;
-
-		void		CalcDist(void);
-
+		std::unique_ptr<Member> _m;
+		void CalcDist(void);
 	};
 }
 #endif	// __FK_PLANE_HEADER__
