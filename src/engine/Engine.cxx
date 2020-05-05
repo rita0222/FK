@@ -19,18 +19,18 @@
 using namespace std;
 using namespace FK;
 
-static unsigned int		generalID = 1;
-static unsigned int		engineNum = 0;
+unsigned int fk_GraphicsEngine::generalID = 1;
+unsigned int fk_GraphicsEngine::engineNum = 0;
 
 unique_ptr<fk_PointDraw> fk_GraphicsEngine::pointDraw = nullptr;
 unique_ptr<fk_LineDraw> fk_GraphicsEngine::lineDraw = nullptr;
-unique_ptr<fk_FaceDraw>  fk_GraphicsEngine::faceDraw = nullptr;
-unique_ptr<fk_TextureDraw>  fk_GraphicsEngine::textureDraw = nullptr;
-unique_ptr<fk_BezCurveDraw>  fk_GraphicsEngine::bezCurveLineDraw = nullptr;
-unique_ptr<fk_BezCurveDraw>  fk_GraphicsEngine::bezCurvePointDraw = nullptr;
-unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfaceDraw = nullptr;
-unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfacePointDraw = nullptr;
-unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfaceLineDraw = nullptr;
+unique_ptr<fk_FaceDraw> fk_GraphicsEngine::faceDraw = nullptr;
+unique_ptr<fk_TextureDraw> fk_GraphicsEngine::textureDraw = nullptr;
+unique_ptr<fk_BezCurveDraw> fk_GraphicsEngine::bezCurveLineDraw = nullptr;
+unique_ptr<fk_BezCurveDraw> fk_GraphicsEngine::bezCurvePointDraw = nullptr;
+unique_ptr<fk_SurfaceDraw> fk_GraphicsEngine::surfaceDraw = nullptr;
+unique_ptr<fk_SurfaceDraw> fk_GraphicsEngine::surfacePointDraw = nullptr;
+unique_ptr<fk_SurfaceDraw> fk_GraphicsEngine::surfaceLineDraw = nullptr;
 
 #ifndef GL_COLOR_ATTACHMENT0
 #define GL_COLOR_ATTACHMENT0 0x8CE0
@@ -40,10 +40,31 @@ unique_ptr<fk_SurfaceDraw>  fk_GraphicsEngine::surfaceLineDraw = nullptr;
 #define GL_DEPTH_ATTACHMENT 0x8D00
 #endif
 
-static const GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
-static const GLenum shadowBuffers[] = {GL_DEPTH_ATTACHMENT};
+static constexpr GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+static constexpr GLenum shadowBuffers[] = {GL_DEPTH_ATTACHMENT};
 
-fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
+fk_GraphicsEngine::Member::Member(bool argWinMode) :
+	drawCount(0), winID(0), curScene(nullptr), sceneStatus(0),
+	sceneID(0), wSize(0), hSize(0), resizeFlag(false),
+	srcFactor(fk_BlendFactor::SRC_ALPHA), dstFactor(fk_BlendFactor::ONE_MINUS_SRC_ALPHA),
+	depthRead(true), depthWrite(true), curProj(nullptr),
+	FBOMode(false), FBOWindowMode(argWinMode),
+	rectVAO(0), fboHandle(0), FBOShader(nullptr),
+	shadowHandle(0), shadowMode(fk_ShadowMode::OFF),
+	shadowInitFlag(false), shadowSwitch(false), shadowBufferID(-1),
+	shadowSize(100.0), shadowDistance(100.0),
+	shadowResolution(1024), shadowVisibility(1.0), shadowBias(0.0005),
+	shadowVec(fk_Vector(0.0, -1.0, 0.0)),
+	fogMode(fk_FogMode::OFF), fogStart(0.0), fogEnd(0.0), fogDensity(0.0)
+{
+	boundaryModel.setDrawMode(fk_Draw::LINE);
+	boundaryModel.setBMode(fk_BoundaryMode::NONE);
+	boundaryModel.setBDrawToggle(false);
+	fogColor.set(0.0, 0.0, 0.0, 1.0);
+	return;
+}
+
+fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode) : _m(make_unique<Member>(argWinMode))
 {
 	if (fk_ShaderBinder::IsInitialized() == false) fk_ShaderBinder::Initialize();
 
@@ -69,61 +90,7 @@ fk_GraphicsEngine::fk_GraphicsEngine(bool argWinMode)
 		surfacePointDraw = make_unique<fk_SurfaceDraw>(fk_SurfaceDrawMode::POINT);
 	}
 
-	defProj = make_unique<fk_Perspective>();
-	boundaryModel = make_unique<fk_Model>();
-
-	shadowProj = make_unique<fk_Ortho>();
-	shadowCamera = make_unique<fk_Model>();
-	shadowTexture = make_unique<fk_RectTexture>();
-	shadowVec = make_unique<fk_Vector>();
-	fogColor = make_unique<fk_Color>();
-
 	engineNum++;
-
-	// 基本メンバー初期化
-	winID = 0;
-	curScene = nullptr;
-	sceneStatus = 0;
-	sceneID = 0;
-	wSize = 0;
-	hSize = 0;
-	resizeFlag = false;
-	drawCount = 0;
-
-	srcFactor = fk_BlendFactor::SRC_ALPHA;
-	dstFactor = fk_BlendFactor::ONE_MINUS_SRC_ALPHA;
-	depthRead = depthWrite = true;
-
-	// 境界ボリュームモデル初期化
-	boundaryModel->setDrawMode(fk_Draw::LINE);
-	boundaryModel->setBMode(fk_BoundaryMode::NONE);
-	boundaryModel->setBDrawToggle(false);
-
-	// FBO設定初期化
-	FBOMode = false;
-	FBOWindowMode = argWinMode;
-	colorBuf = nullptr;
-	depthBuf = nullptr;
-	shadowBuf = nullptr;
-	rectVAO = 0;
-	fboHandle = 0;
-	FBOShader = nullptr;
-
-	// 影設定初期化
-	shadowMode = fk_ShadowMode::OFF;
-	shadowInitFlag = false;
-	shadowSwitch = false;
-	SetShadowAreaSize(100.0);
-	SetShadowDistance(100.0);
-	SetShadowVec(fk_Vector(0.0, -1.0, 0.0));
-	SetShadowResolution(1024);
-	SetShadowVisibility(1.0);
-	SetShadowBias(0.0005);
-
-	// 霧設定初期化
-	fogMode = fk_FogMode::OFF;
-	fogStart = fogEnd = fogDensity = 0.0;
-	fogColor->set(0.0, 0.0, 0.0, 1.0);
 
 	return;
 }
@@ -132,18 +99,18 @@ fk_GraphicsEngine::~fk_GraphicsEngine()
 {
 	engineNum--;
 
-	snapBuffer.clear();
+	_m->snapBuffer.clear();
 
-	if(shadowBuf != nullptr) {
+	if(_m->shadowBuf != nullptr) {
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
+		if(_m->shadowHandle != 0) glDeleteFramebuffers(1, &(_m->shadowHandle));
 	}
 
-	if(FBOMode == true) {
+	if(_m->FBOMode == true) {
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		if(fboHandle != 0) glDeleteFramebuffers(1, &fboHandle);
+		if(_m->fboHandle != 0) glDeleteFramebuffers(1, &(_m->fboHandle));
 	}
 	return;
 }
@@ -166,53 +133,53 @@ bool fk_GraphicsEngine::AllTest(void)
 
 void fk_GraphicsEngine::Init(int argW, int argH)
 {
-	winID = generalID;
+	_m->winID = generalID;
 	generalID++;
-	curScene = nullptr;
-	sceneStatus = FK_UNDEFINED;
-	sceneID = FK_UNDEFINED;
-	wSize = argW;
-	hSize = argH;
-	resizeFlag = false;
+	_m->curScene = nullptr;
+	_m->sceneStatus = FK_UNDEFINED;
+	_m->sceneID = FK_UNDEFINED;
+	_m->wSize = argW;
+	_m->hSize = argH;
+	_m->resizeFlag = false;
 
-	defProj->setAll(40.0*fk_Math::PI/180.0, 1.0, 6000.0);
+	_m->defProj.setAll(40.0*fk_Math::PI/180.0, 1.0, 6000.0);
 
-	FBOMode = false;
-	FBOWindowMode = false;
-	FBOShader = nullptr;
+	_m->FBOMode = false;
+	_m->FBOWindowMode = false;
+	_m->FBOShader = nullptr;
 
 	return;
 }
 
 void fk_GraphicsEngine::ResizeWindow(int argW, int argH)
 {
-	wSize = argW;
-	hSize = argH;
-	resizeFlag = true;
+	_m->wSize = argW;
+	_m->hSize = argH;
+	_m->resizeFlag = true;
 
 	return;
 }
 
 void fk_GraphicsEngine::SetViewPort(void)
 {
-	glViewport(0, 0, wSize, hSize);
-	if(curScene == nullptr) {
-		SetProjection(defProj.get());
+	glViewport(0, 0, _m->wSize, _m->hSize);
+	if(_m->curScene == nullptr) {
+		SetProjection(&(_m->defProj));
 	} else {
-		SetProjection(curScene->getProjection());
+		SetProjection(_m->curScene->getProjection());
 	}
 	return;
 }
 
 void fk_GraphicsEngine::SetProjection(fk_ProjectBase *argProj)
 {
-	curProj = argProj;
-	if(curProj->getMode() == fk_ProjectMode::PERSPECTIVE) {
-		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(curProj);
-		pers->setAspect(GLfloat(wSize)/GLfloat(hSize));
+	_m->curProj = argProj;
+	if(_m->curProj->getMode() == fk_ProjectMode::PERSPECTIVE) {
+		fk_Perspective *pers = dynamic_cast<fk_Perspective *>(_m->curProj);
+		pers->setAspect(GLfloat(_m->wSize)/GLfloat(_m->hSize));
 	}
-	curProj->MakeMat();
-	fk_DrawBase::SetProjectionMatrix(curProj->GetMatrix());
+	_m->curProj->MakeMat();
+	fk_DrawBase::SetProjectionMatrix(_m->curProj->GetMatrix());
 
 	return;
 }
@@ -243,24 +210,24 @@ void fk_GraphicsEngine::OpenGLInit(void)
 
 void fk_GraphicsEngine::ApplySceneParameter(void)
 {
-	fk_Color		bgColor;
+	fk_Color bgColor;
 
-	if(curScene != nullptr) {
-		if(sceneID != curScene->GetID() ||
-		   sceneStatus != curScene->GetProjChangeStatus()) {
-			sceneID = curScene->GetID();
-			sceneStatus = curScene->GetProjChangeStatus();
+	if(_m->curScene != nullptr) {
+		if(_m->sceneID != _m->curScene->GetID() ||
+		   _m->sceneStatus != _m->curScene->GetProjChangeStatus()) {
+			_m->sceneID = _m->curScene->GetID();
+			_m->sceneStatus = _m->curScene->GetProjChangeStatus();
 			SetViewPort();
 		} else {
 		}
 
-		if(curScene->getBlendStatus() == true) {
+		if(_m->curScene->getBlendStatus() == true) {
 			glEnable(GL_BLEND);
 		} else {
 			glDisable(GL_BLEND);
 		}
-		InitFogStatus(curScene);
-		bgColor = curScene->getBGColor();
+		InitFogStatus(_m->curScene);
+		bgColor = _m->curScene->getBGColor();
 		glClearColor(bgColor.col[0], bgColor.col[1], bgColor.col[2], 1.0f);
 
 	} else {
@@ -272,76 +239,76 @@ void fk_GraphicsEngine::ApplySceneParameter(void)
 
 unsigned int fk_GraphicsEngine::Draw(void)
 {
-	if(curScene != nullptr) shadowMode = curScene->getShadowMode();
+	if(_m->curScene != nullptr) _m->shadowMode = _m->curScene->getShadowMode();
 
-	fk_DrawBase::SetShadowMode(shadowMode);
-	if(shadowMode != fk_ShadowMode::OFF) {
-		if(shadowInitFlag == false) {
+	fk_DrawBase::SetShadowMode(_m->shadowMode);
+	if(_m->shadowMode != fk_ShadowMode::OFF) {
+		if(_m->shadowInitFlag == false) {
 			ShadowInit();
-			shadowInitFlag = true;
+			_m->shadowInitFlag = true;
 		}
-		shadowSwitch = true;
+		_m->shadowSwitch = true;
 		DrawShadow();
-		shadowSwitch = false;
+		_m->shadowSwitch = false;
 	}
 	DrawWorld();
-	drawCount++;
-	return drawCount;
+	_m->drawCount++;
+	return _m->drawCount;
 }
 
 void fk_GraphicsEngine::DrawWorld(void)
 {
-	if(FBOMode == true) PreFBODraw();
+	if(_m->FBOMode == true) PreFBODraw();
 
-	if(resizeFlag == true || generalID > 2 || shadowMode != fk_ShadowMode::OFF) {
+	if(_m->resizeFlag == true || generalID > 2 || _m->shadowMode != fk_ShadowMode::OFF) {
 		SetViewPort();
-		resizeFlag = false;
+		_m->resizeFlag = false;
 	}
 
 	SetDepthMode(fk_DepthMode::READ_AND_WRITE);
 	ApplySceneParameter();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	curProj->MakeMat();
+	_m->curProj->MakeMat();
 
-	if(curScene != nullptr) {
-		fk_DrawBase::SetCamera(curScene->getCamera());
+	if(_m->curScene != nullptr) {
+		fk_DrawBase::SetCamera(_m->curScene->getCamera());
 
-		fk_DrawBase::SetLight(curScene->GetLightList(fk_LightType::PARALLEL),
+		fk_DrawBase::SetLight(_m->curScene->GetLightList(fk_LightType::PARALLEL),
 							  fk_LightType::PARALLEL);
 
-		fk_DrawBase::SetLight(curScene->GetLightList(fk_LightType::POINT),
+		fk_DrawBase::SetLight(_m->curScene->GetLightList(fk_LightType::POINT),
 							  fk_LightType::POINT);
 
-		fk_DrawBase::SetLight(curScene->GetLightList(fk_LightType::SPOT),
+		fk_DrawBase::SetLight(_m->curScene->GetLightList(fk_LightType::SPOT),
 							  fk_LightType::SPOT);
 	}
 
 	DrawObjs();
 
-	if(FBOMode == true) PostFBODraw();
+	if(_m->FBOMode == true) PostFBODraw();
 	
 	return;
 }
 
 void fk_GraphicsEngine::SetScene(fk_Scene *argScene)
 {
-	curScene = argScene;
+	_m->curScene = argScene;
 	return;
 }
 
 void fk_GraphicsEngine::DrawObjs(void)
 {
-	if(curScene == nullptr) return;
+	if(_m->curScene == nullptr) return;
 
-	for(auto modelP : *(curScene->GetModelList())) {
+	for(auto modelP : *(_m->curScene->GetModelList())) {
 		SetDepthMode(modelP->getDepthMode());
 		DrawModel(modelP);
 	}
 
-	if(curScene->GetOverlayList()->empty() == true) return;
+	if(_m->curScene->GetOverlayList()->empty() == true) return;
 	SetDepthMode(fk_DepthMode::NO_USE);
-	for(auto modelP : *(curScene->GetOverlayList())) DrawModel(modelP);
+	for(auto modelP : *(_m->curScene->GetOverlayList())) DrawModel(modelP);
 
 	return;
 }
@@ -368,20 +335,20 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 	switch(argModel->getBMode()) {
 	  case fk_BoundaryMode::SPHERE:
 	  case fk_BoundaryMode::AABB:
-		  boundaryModel->glMoveTo(argModel->getInhPosition());
+		  _m->boundaryModel.glMoveTo(argModel->getInhPosition());
 		  break;
 		  
 	  case fk_BoundaryMode::OBB:
-		  boundaryModel->glMoveTo(argModel->getInhPosition());
-		  boundaryModel->glAngle(argModel->getInhAngle());
+		  _m->boundaryModel.glMoveTo(argModel->getInhPosition());
+		  _m->boundaryModel.glAngle(argModel->getInhAngle());
 		  break;
 
 	  case fk_BoundaryMode::CAPSULE:
 		  mat = argModel->getInhMatrix();
 		  posS = mat * argModel->getCapsuleStartPos();
 		  posE = mat * argModel->getCapsuleEndPos();
-		  boundaryModel->glMoveTo((posS + posE)/2.0);
-		  boundaryModel->glVec(posE - posS);
+		  _m->boundaryModel.glMoveTo((posS + posE)/2.0);
+		  _m->boundaryModel.glVec(posE - posS);
 		  break;
 		  
 	  default:
@@ -390,13 +357,13 @@ void fk_GraphicsEngine::DrawBoundaryLine(fk_Model *argModel)
 
 	if(argModel->getInterMode() == true &&
 	   argModel->getInterStatus() == true) {
-		boundaryModel->setLineColor(argModel->getBIntLineColor());
+		_m->boundaryModel.setLineColor(argModel->getBIntLineColor());
 	} else {
-		boundaryModel->setLineColor(argModel->getBLineColor());
+		_m->boundaryModel.setLineColor(argModel->getBLineColor());
 	}	
-	boundaryModel->setShape(argModel->GetBShape());
-	boundaryModel->setDrawMode(fk_Draw::LINE);
-	DrawModel(boundaryModel.get());
+	_m->boundaryModel.setShape(argModel->GetBShape());
+	_m->boundaryModel.setDrawMode(fk_Draw::LINE);
+	DrawModel(&(_m->boundaryModel));
 	return;
 }
 
@@ -432,59 +399,68 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 	argModel->getShape()->FlushAttr();
 
-	fk_FogMode localFogMode = (argModel->getFogMode()) ? fogMode : fk_FogMode::OFF;
+	fk_FogMode localFogMode = (argModel->getFogMode()) ? _m->fogMode : fk_FogMode::OFF;
 
 	if((drawMode & fk_Draw::FACE) != fk_Draw::NONE) {
-		faceDraw->DrawShapeFace(argModel, shadowMode, shadowSwitch, localFogMode);
+		faceDraw->DrawShapeFace(argModel, _m->shadowMode, _m->shadowSwitch, localFogMode);
 	}
 
 	if((drawMode & fk_Draw::TEXTURE) != fk_Draw::NONE) {
-		textureDraw->DrawShapeTexture(argModel, shadowMode, shadowSwitch, localFogMode);
+		textureDraw->DrawShapeTexture(argModel, _m->shadowMode, _m->shadowSwitch, localFogMode);
 	}
 
 	if((drawMode & fk_Draw::GEOM_FACE) != fk_Draw::NONE) {
 		if(surface != nullptr) {
-			surfaceDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, localFogMode);
+			surfaceDraw->DrawShapeSurface(argModel, _m->shadowMode,
+										  _m->shadowSwitch, localFogMode);
 		}
 	}
 
 	if((drawMode & fk_Draw::POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			pointDraw->DrawShapePoint(argModel, curve->GetPoint(), shadowSwitch, localFogMode);
+			pointDraw->DrawShapePoint(argModel, curve->GetPoint(),
+									  _m->shadowSwitch, localFogMode);
 		} else if(surface != nullptr) {
-			pointDraw->DrawShapePoint(argModel, surface->GetPoint(), shadowSwitch, localFogMode);
+			pointDraw->DrawShapePoint(argModel, surface->GetPoint(),
+									  _m->shadowSwitch, localFogMode);
 		} else if(graph != nullptr) {
-			pointDraw->DrawShapePoint(argModel, graph->GetVertexShape(), shadowSwitch, localFogMode);
+			pointDraw->DrawShapePoint(argModel, graph->GetVertexShape(),
+									  _m->shadowSwitch, localFogMode);
 		} else {
-			pointDraw->DrawShapePoint(argModel, nullptr, shadowSwitch, localFogMode);
+			pointDraw->DrawShapePoint(argModel, nullptr, _m->shadowSwitch, localFogMode);
 		}
 	}
 
 	if((drawMode & fk_Draw::LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			lineDraw->DrawShapeLine(argModel, curve->GetLine(), shadowSwitch, localFogMode);
+			lineDraw->DrawShapeLine(argModel, curve->GetLine(),
+									_m->shadowSwitch, localFogMode);
 		} else if(surface != nullptr) {
-			lineDraw->DrawShapeLine(argModel, surface->GetLine(), shadowSwitch, localFogMode);
+			lineDraw->DrawShapeLine(argModel, surface->GetLine(),
+									_m->shadowSwitch, localFogMode);
 		} else if(graph != nullptr) {
-			lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape(), shadowSwitch, localFogMode);
+			lineDraw->DrawShapeLine(argModel, graph->GetEdgeShape(),
+									_m->shadowSwitch, localFogMode);
 		} else {
-			lineDraw->DrawShapeLine(argModel, nullptr, shadowSwitch, localFogMode);
+			lineDraw->DrawShapeLine(argModel, nullptr, _m->shadowSwitch, localFogMode);
 		}
 	}
 
 	if((drawMode & fk_Draw::GEOM_LINE) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			bezCurveLineDraw->DrawShapeCurve(argModel, shadowSwitch, localFogMode);
+			bezCurveLineDraw->DrawShapeCurve(argModel, _m->shadowSwitch, localFogMode);
 		} else if(surface != nullptr) {
-			surfaceLineDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, localFogMode);
+			surfaceLineDraw->DrawShapeSurface(argModel, _m->shadowMode,
+											  _m->shadowSwitch, localFogMode);
 		}
 	}
 
 	if((drawMode & fk_Draw::GEOM_POINT) != fk_Draw::NONE) {
 		if(curve != nullptr) {
-			bezCurvePointDraw->DrawShapeCurve(argModel, shadowSwitch, localFogMode);
+			bezCurvePointDraw->DrawShapeCurve(argModel, _m->shadowSwitch, localFogMode);
 		} else if(surface != nullptr) {
-			surfacePointDraw->DrawShapeSurface(argModel, shadowMode, shadowSwitch, localFogMode);
+			surfacePointDraw->DrawShapeSurface(argModel, _m->shadowMode,
+											   _m->shadowSwitch, localFogMode);
 		}
 	}
 	
@@ -493,11 +469,11 @@ void fk_GraphicsEngine::DrawShapeObj(fk_Model *argModel)
 
 void fk_GraphicsEngine::InitFogStatus(fk_Scene *argScene)
 {
-	if((fogMode = argScene->getFogMode()) != fk_FogMode::OFF) {
-		fogStart = argScene->getFogLinearStart();
-		fogEnd = argScene->getFogLinearEnd();
-		fogDensity = argScene->getFogDensity();
-		*fogColor = argScene->getFogColor();
+	if((_m->fogMode = argScene->getFogMode()) != fk_FogMode::OFF) {
+		_m->fogStart = argScene->getFogLinearStart();
+		_m->fogEnd = argScene->getFogLinearEnd();
+		_m->fogDensity = argScene->getFogDensity();
+		_m->fogColor = argScene->getFogColor();
 	}
 
 	return;
@@ -510,17 +486,17 @@ tuple<fk_Vector, fk_Vector> fk_GraphicsEngine::GetViewLinePos(double argX, doubl
 	double			tmpY;
 	double			diffX, diffY;
 
-	mat = *(curProj->GetMatrix()) * curScene->getCamera()->getInhInvMatrix();
+	mat = *(_m->curProj->GetMatrix()) * _m->curScene->getCamera()->getInhInvMatrix();
 	mat.inverse();
 
-	glGetIntegerv(GL_VIEWPORT, viewArray);
+	glGetIntegerv(GL_VIEWPORT, _m->viewArray);
 
-	tmpY = double(hSize) - argY - 1.0;
-	diffX = argX - double(viewArray[0]);
-	diffY = tmpY - double(viewArray[1]);
+	tmpY = double(_m->hSize) - argY - 1.0;
+	diffX = argX - double(_m->viewArray[0]);
+	diffY = tmpY - double(_m->viewArray[1]);
 
-	inVec.x = diffX*2.0/double(viewArray[2]) - 1.0;
-	inVec.y = diffY*2.0/double(viewArray[3]) - 1.0;
+	inVec.x = diffX*2.0/double(_m->viewArray[2]) - 1.0;
+	inVec.y = diffY*2.0/double(_m->viewArray[3]) - 1.0;
 	inVec.w = 1.0;
 
 	inVec.z = -1.0;
@@ -535,7 +511,7 @@ tuple<fk_Vector, fk_Vector> fk_GraphicsEngine::GetViewLinePos(double argX, doubl
 tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double argY,
 															 fk_Plane &argPlane)
 {
-	if(curScene == nullptr) return {false, fk_Vector()};
+	if(_m->curScene == nullptr) return {false, fk_Vector()};
 	if(generalID > 2) SetViewPort();
 
 	auto [sVec, eVec] = GetViewLinePos(argX, argY);
@@ -548,8 +524,8 @@ tuple<bool, fk_Vector> fk_GraphicsEngine::GetProjectPosition(double argX, double
 	fk_Vector		eyeVec, cameraPos;
 	const fk_Model	*tmpCamera;
 
-	if(curScene == nullptr) return {false, fk_Vector()};
-	tmpCamera = curScene->getCamera();
+	if(_m->curScene == nullptr) return {false, fk_Vector()};
+	tmpCamera = _m->curScene->getCamera();
 	if(generalID > 2) SetViewPort();
 
 	auto [sVec, eVec] = GetViewLinePos(argX, argY);
@@ -574,14 +550,15 @@ tuple<bool, fk_Vector> fk_GraphicsEngine::GetWindowPosition(fk_Vector &argPos)
 
 	if(generalID > 2) SetViewPort();
 
-	glGetIntegerv(GL_VIEWPORT, viewArray);
-	mat = *(curProj->GetMatrix()) * curScene->getCamera()->getInhInvMatrix();
+	glGetIntegerv(GL_VIEWPORT, _m->viewArray);
+	mat = *(_m->curProj->GetMatrix()) * _m->curScene->getCamera()->getInhInvMatrix();
 	outVec = mat * inVec;
 
 	if(fabs(outVec.w) < fk_Math::EPS) return {false, retPos};
 	outVec /= outVec.w;
-	retPos.set(double(viewArray[0]) + double(viewArray[2])*(outVec.x + 1.0)/2.0,
-			   double(viewArray[1]) + double(hSize) - 1.0 - double(viewArray[3])*(outVec.y + 1.0)/2.0,
+	retPos.set(double(_m->viewArray[0]) + double(_m->viewArray[2])*(outVec.x + 1.0)/2.0,
+			   double(_m->viewArray[1]) + double(_m->hSize) - 1.0 -
+			   double(_m->viewArray[3])*(outVec.y + 1.0)/2.0,
 			   (1.0 + outVec.z)/2.0);
 	return {true, retPos};
 }
@@ -619,10 +596,10 @@ void fk_GraphicsEngine::SetBlendMode(fk_Model *argModel)
 	fk_BlendFactor src, dst;
 	argModel->getBlendMode(&src, &dst);
 
-	if(src != srcFactor || dst != dstFactor) {
-		srcFactor = src;
-		dstFactor = dst;
-		glBlendFunc(GetBlendFactor(srcFactor), GetBlendFactor(dstFactor));
+	if(src != _m->srcFactor || dst != _m->dstFactor) {
+		_m->srcFactor = src;
+		_m->dstFactor = dst;
+		glBlendFunc(GetBlendFactor(src), GetBlendFactor(dst));
 	}
 	return;
 }
@@ -632,21 +609,21 @@ void fk_GraphicsEngine::SetDepthMode(fk_DepthMode argMode)
 	bool readMode = ((argMode & fk_DepthMode::READ) != fk_DepthMode::NO_USE);
 	bool writeMode = ((argMode & fk_DepthMode::WRITE) != fk_DepthMode::NO_USE);
 
-	if (depthRead != readMode) {
+	if (_m->depthRead != readMode) {
 		if (readMode == true) {
 			glEnable(GL_DEPTH_TEST);
 		} else {
 			glDisable(GL_DEPTH_TEST);
 		}
-		depthRead = readMode;
+		_m->depthRead = readMode;
 	}
-	if (depthWrite != writeMode) {
+	if (_m->depthWrite != writeMode) {
 		if(writeMode == true) {
 			glDepthMask(GL_TRUE);
 		} else {
 			glDepthMask(GL_FALSE);
 		}
-		depthWrite = writeMode;
+		_m->depthWrite = writeMode;
 	}
 }
 
@@ -657,28 +634,28 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 	if(argImage == nullptr) return false;
 
-	if(argImage->getWidth() != wSize || argImage->getHeight() != hSize) {
-		argImage->newImage(wSize, hSize);
+	if(argImage->getWidth() != _m->wSize || argImage->getHeight() != _m->hSize) {
+		argImage->newImage(_m->wSize, _m->hSize);
 	}
-	if(static_cast<int>(snapBuffer.size()) != 3*wSize*hSize) {
-		snapBuffer.resize(3 * _st(wSize) * _st(hSize));
+	if(static_cast<int>(_m->snapBuffer.size()) != 3 * _m->wSize * _m->hSize) {
+		_m->snapBuffer.resize(3 * _st(_m->wSize) * _st(_m->hSize));
 	}
 	if(argMode == fk_SnapProcMode::FRONT) {
 		glReadBuffer(GL_FRONT);
 	} else {
 		glReadBuffer(GL_BACK);
 	}
-	glReadPixels(0, 0, wSize, hSize,
+	glReadPixels(0, 0, _m->wSize, _m->hSize,
 				 GL_RGB, GL_UNSIGNED_BYTE,
-				 static_cast<GLvoid *>(&snapBuffer[0]));
+				 static_cast<GLvoid *>(_m->snapBuffer.data()));
 
-	for(hCount = 0; hCount < hSize; hCount++) {
-		for(wCount = 0; wCount < wSize; wCount++) {
-			index = 3 * _st(hCount) * _st(wSize) + _st(wCount);
-			argImage->setRGB(wCount, hSize - hCount - 1,
-							 snapBuffer[index],
-							 snapBuffer[index+1],
-							 snapBuffer[index+2]);
+	for(hCount = 0; hCount < _m->hSize; ++hCount) {
+		for(wCount = 0; wCount < _m->wSize; ++wCount) {
+			index = 3 * _st(hCount) * _st(_m->wSize) + _st(wCount);
+			argImage->setRGB(wCount, _m->hSize - hCount - 1,
+							 _m->snapBuffer[index],
+							 _m->snapBuffer[index+1],
+							 _m->snapBuffer[index+2]);
 		}
 	}
 
@@ -687,40 +664,40 @@ bool fk_GraphicsEngine::SnapImage(fk_Image *argImage, fk_SnapProcMode argMode)
 
 void fk_GraphicsEngine::SetupFBO(void)
 {
-	colorBuf = make_unique<fk_FrameBuffer>();
-	depthBuf = make_unique<fk_FrameBuffer>();
+	_m->colorBuf = make_unique<fk_FrameBuffer>();
+	_m->depthBuf = make_unique<fk_FrameBuffer>();
 
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
 
-	colorBuf->setSource(fk_SamplerSource::COLOR);
-	depthBuf->setSource(fk_SamplerSource::DEPTH);
+	_m->colorBuf->setSource(fk_SamplerSource::COLOR);
+	_m->depthBuf->setSource(fk_SamplerSource::DEPTH);
 
-	colorBuf->SetBufferSize(wSize, hSize);
-	colorBuf->SetupFBO(maxUnit-2);
+	_m->colorBuf->SetBufferSize(_m->wSize, _m->hSize);
+	_m->colorBuf->SetupFBO(maxUnit - 2);
 
-	depthBuf->SetBufferSize(wSize, hSize);
-	depthBuf->SetupFBO(maxUnit-3);
+	_m->depthBuf->SetBufferSize(_m->wSize, _m->hSize);
+	_m->depthBuf->SetupFBO(maxUnit - 3);
 
-	glGenFramebuffers(1, &fboHandle);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
+	glGenFramebuffers(1, &(_m->fboHandle));
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _m->fboHandle);
 
 #ifdef WIN32	
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, wSize);
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, hSize);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, _m->wSize);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, _m->hSize);
 	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 1);
 #endif
 
-	colorBuf->AttachFBO();
-	depthBuf->AttachFBO();
+	_m->colorBuf->AttachFBO();
+	_m->depthBuf->AttachFBO();
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	FBOMode = true;
+	_m->FBOMode = true;
 }
 
 void fk_GraphicsEngine::PreFBODraw(void)
 {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboHandle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _m->fboHandle);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glClear(GL_DEPTH_BUFFER_BIT);
 	glDrawBuffers(sizeof(drawBuffers) / sizeof(drawBuffers[0]), drawBuffers);
@@ -733,39 +710,39 @@ void fk_GraphicsEngine::PostFBODraw(void)
 {
  	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboHandle);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, _m->fboHandle);
 
-	if(FBOShader != nullptr) FBOShader->ProcPreShader();
+	if(_m->FBOShader != nullptr) _m->FBOShader->ProcPreShader();
 	glDrawBuffer(GL_BACK);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	colorBuf->BindFBO();
-	depthBuf->BindFBO();
+	_m->colorBuf->BindFBO();
+	_m->depthBuf->BindFBO();
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 
-	if(FBOWindowMode == true) FBOWindowDraw();
+	if(_m->FBOWindowMode == true) FBOWindowDraw();
 
-	colorBuf->Unbind();
-	depthBuf->Unbind();
+	_m->colorBuf->Unbind();
+	_m->depthBuf->Unbind();
 }
 
 void fk_GraphicsEngine::FBOWindowDraw(void)
 {
-	glBindVertexArray(rectVAO);
+	glBindVertexArray(_m->rectVAO);
 	glDrawArrays(GL_POINTS, 0, 1);
 
-	if(FBOShader != nullptr) FBOShader->ProcPostShader();
+	if(_m->FBOShader != nullptr) _m->FBOShader->ProcPostShader();
 }	
 	
 void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 {
-	FBOShader = argShader;
+	_m->FBOShader = argShader;
 
 	SetupFBO();
 
-	FBOWindowMode = true;
+	_m->FBOWindowMode = true;
 
 	GLuint handle;
 	glGenBuffers(1, &handle);
@@ -775,8 +752,8 @@ void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
 	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &rectVAO);
-	glBindVertexArray(rectVAO);
+	glGenVertexArrays(1, &(_m->rectVAO));
+	glBindVertexArray(_m->rectVAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, handle);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -786,66 +763,72 @@ void fk_GraphicsEngine::BindWindow(fk_ShaderBinder *argShader)
 
 fk_FrameBuffer * fk_GraphicsEngine::GetColorBuffer(void)
 {
-	return colorBuf.get();
+	return _m->colorBuf.get();
 }
 
 fk_FrameBuffer * fk_GraphicsEngine::GetDepthBuffer(void)
 {
-	return depthBuf.get();
+	return _m->depthBuf.get();
 }
 
 void fk_GraphicsEngine::InitFrameBufferMode(void)
 {
-	FBOMode = true;
-	FBOWindowMode = false;
+	_m->FBOMode = true;
+	_m->FBOWindowMode = false;
 	SetupFBO();
 }
 
 void fk_GraphicsEngine::ShadowInit(void)
 {
-	if(shadowBuf != nullptr) {
+	if(_m->shadowBuf != nullptr) {
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		if(shadowHandle != 0) glDeleteFramebuffers(1, &shadowHandle);
+		if(_m->shadowHandle != 0) glDeleteFramebuffers(1, &(_m->shadowHandle));
 	}
 		
-	shadowBuf = make_unique<fk_FrameBuffer>();
+	_m->shadowBuf = make_unique<fk_FrameBuffer>();
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
-	shadowBufferID = maxUnit - 4;
+	_m->shadowBufferID = maxUnit - 4;
 
-	shadowBuf->setSource(fk_SamplerSource::DEPTH);
-	shadowBuf->SetBufferSize(shadowResolution, shadowResolution);
-	shadowBuf->SetupFBO(shadowBufferID);
-	glGenFramebuffers(1, &shadowHandle);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
+	_m->shadowBuf->setSource(fk_SamplerSource::DEPTH);
+	_m->shadowBuf->SetBufferSize(_m->shadowResolution, _m->shadowResolution);
+	_m->shadowBuf->SetupFBO(_m->shadowBufferID);
+	glGenFramebuffers(1, &(_m->shadowHandle));
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _m->shadowHandle);
 	
 #ifdef WIN32	
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, shadowResolution);
-	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, shadowResolution);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, _m->shadowResolution);
+	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, _m->shadowResolution);
 	glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 1);
 #endif
 
-	shadowBuf->AttachFBO();
+	_m->shadowBuf->AttachFBO();
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	shadowTexture->setFrameBuffer(shadowBuf.get());
-	shadowTexture->setTextureSize(1.0, 1.0);
+	_m->shadowTexture.setFrameBuffer(_m->shadowBuf.get());
+	_m->shadowTexture.setTextureSize(1.0, 1.0);
 }
 
 void fk_GraphicsEngine::AttachShadowBuffer(int argID)
 {
-	shadowTexture->Replace();
-	faceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, shadowTexture.get());
-	textureDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, shadowTexture.get());
-	surfaceDraw->AttachShadowTexture(argID, fk_ShaderBinder::shadowBufName, shadowTexture.get());
+	_m->shadowTexture.Replace();
+	faceDraw->AttachShadowTexture(argID,
+								  fk_ShaderBinder::shadowBufName,
+								  &(_m->shadowTexture));
+	textureDraw->AttachShadowTexture(argID,
+									 fk_ShaderBinder::shadowBufName,
+									 &(_m->shadowTexture));
+	surfaceDraw->AttachShadowTexture(argID,
+									 fk_ShaderBinder::shadowBufName,
+									 &(_m->shadowTexture));
 }
 
 void fk_GraphicsEngine::PreShadowDraw(void)
 {
 	//glCullFace(GL_FRONT);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowHandle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _m->shadowHandle);
 	glDrawBuffers(sizeof(shadowBuffers) / sizeof(shadowBuffers[0]), shadowBuffers);
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		Error::Put("fk_GraphicsEngine", "PreShadowDraw", 1, "Shadow Error");
@@ -856,30 +839,30 @@ void fk_GraphicsEngine::PostShadowDraw(void)
 {
  	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, shadowHandle);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, _m->shadowHandle);
 
 	glDrawBuffer(GL_BACK);
 	//glClear(GL_DEPTH_BUFFER_BIT);
 
-	shadowBuf->BindFBO();
+	_m->shadowBuf->BindFBO();
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-	shadowBuf->Unbind();
+	_m->shadowBuf->Unbind();
 
-	AttachShadowBuffer(shadowBufferID);
+	AttachShadowBuffer(_m->shadowBufferID);
 	//glCullFace(GL_BACK);
 }
 
 void fk_GraphicsEngine::CopyShadowStatus(void)
 {
-	if(curScene == nullptr) return;
+	if(_m->curScene == nullptr) return;
 
-	SetShadowVec(curScene->getShadowVec());
-	SetShadowResolution(curScene->getShadowResolution());
-	SetShadowAreaSize(curScene->getShadowAreaSize());
-	SetShadowDistance(curScene->getShadowDistance());
-	SetShadowVisibility(curScene->getShadowVisibility());
-	SetShadowBias(curScene->getShadowBias());
+	SetShadowVec(_m->curScene->getShadowVec());
+	SetShadowResolution(_m->curScene->getShadowResolution());
+	SetShadowAreaSize(_m->curScene->getShadowAreaSize());
+	SetShadowDistance(_m->curScene->getShadowDistance());
+	SetShadowVisibility(_m->curScene->getShadowVisibility());
+	SetShadowBias(_m->curScene->getShadowBias());
 }
 
 void fk_GraphicsEngine::DrawShadow(void)
@@ -889,34 +872,35 @@ void fk_GraphicsEngine::DrawShadow(void)
 
 	CopyShadowStatus();
 
-	if(curScene != nullptr) {
-		camera = curScene->getCamera();
+	if(_m->curScene != nullptr) {
+		camera = _m->curScene->getCamera();
 		if(camera != nullptr) {
 			cameraPos = camera->getInhPosition();
 			cameraVec = camera->getInhVec();
 		}
 	}
 
-	shadowPos = cameraPos + cameraVec * shadowSize/4.0;
-	shadowCamera->glMoveTo(shadowPos);
+	shadowPos = cameraPos + cameraVec * _m->shadowSize/4.0;
+	_m->shadowCamera.glMoveTo(shadowPos);
 	//shadowCamera.glVec(shadowVec);
 
 	PreShadowDraw();
 
-	glViewport(0, 0, shadowResolution, shadowResolution);
-	shadowProj->MakeMat();
-	fk_DrawBase::SetProjectionMatrix(shadowProj->GetMatrix());
-	fk_DrawBase::SetShadowProjMatrix(shadowProj->GetMatrix());
-	fk_DrawBase::SetCamera(shadowCamera.get());
-	fk_DrawBase::SetShadowCamera(shadowCamera.get());
-	fk_DrawBase::SetShadowParam(shadowVisibility, shadowBias);
-	fk_DrawBase::SetFogStatus(fogMode, fogStart, fogEnd, fogDensity, *fogColor);
+	glViewport(0, 0, _m->shadowResolution, _m->shadowResolution);
+	_m->shadowProj.MakeMat();
+	fk_DrawBase::SetProjectionMatrix(_m->shadowProj.GetMatrix());
+	fk_DrawBase::SetShadowProjMatrix(_m->shadowProj.GetMatrix());
+	fk_DrawBase::SetCamera(&(_m->shadowCamera));
+	fk_DrawBase::SetShadowCamera(&(_m->shadowCamera));
+	fk_DrawBase::SetShadowParam(_m->shadowVisibility, _m->shadowBias);
+	fk_DrawBase::SetFogStatus(_m->fogMode, _m->fogStart, _m->fogEnd,
+							  _m->fogDensity, _m->fogColor);
 
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	if(curScene != nullptr) {
-		for(auto modelP : *(curScene->GetModelList())) DrawModel(modelP);
+	if(_m->curScene != nullptr) {
+		for(auto modelP : *(_m->curScene->GetModelList())) DrawModel(modelP);
 	}
 
 	PostShadowDraw();
@@ -924,12 +908,12 @@ void fk_GraphicsEngine::DrawShadow(void)
 
 fk_RectTexture * fk_GraphicsEngine::GetShadowTexture(void)
 {
-	return shadowTexture.get();
+	return &(_m->shadowTexture);
 }
 
 void fk_GraphicsEngine::SetShadowTextureSize(int argW, int argH)
 {
-	shadowTexture->setTextureSize(argW, argH);
+	_m->shadowTexture.setTextureSize(argW, argH);
 }
 
 int fk_GraphicsEngine::ShadowFixVal(int argVal)
@@ -941,42 +925,42 @@ int fk_GraphicsEngine::ShadowFixVal(int argVal)
 
 void fk_GraphicsEngine::SetShadowVec(fk_Vector argV)
 {
-	*shadowVec = argV;
-	shadowCamera->glVec(*shadowVec);
+	_m->shadowVec = argV;
+	_m->shadowCamera.glVec(_m->shadowVec);
 }
 
 void fk_GraphicsEngine::SetShadowResolution(int argVal)
 {
 	int newRes = ShadowFixVal(argVal);
-	if(shadowResolution != newRes) {
-		shadowResolution = newRes;
-		if(shadowInitFlag == true) ShadowInit();
+	if(_m->shadowResolution != newRes) {
+		_m->shadowResolution = newRes;
+		if(_m->shadowInitFlag == true) ShadowInit();
 	}
 }
 
 void fk_GraphicsEngine::SetShadowAreaSize(double argSize)
 {
-	shadowSize = argSize;
-	shadowProj->setAll(-argSize/2.0, argSize/2.0,
-					   -argSize/2.0, argSize/2.0,
-					   -shadowDistance/2.0, shadowDistance/2.0);
+	_m->shadowSize = argSize;
+	_m->shadowProj.setAll(-argSize/2.0, argSize/2.0,
+						  -argSize/2.0, argSize/2.0,
+						  -_m->shadowDistance/2.0, _m->shadowDistance/2.0);
 }
 
 void fk_GraphicsEngine::SetShadowDistance(double argDist)
 {
-	shadowDistance = argDist;
-	shadowProj->setNear(-shadowDistance/2.0);
-	shadowProj->setFar(shadowDistance/2.0);
+	_m->shadowDistance = argDist;
+	_m->shadowProj.setNear(-_m->shadowDistance/2.0);
+	_m->shadowProj.setFar(_m->shadowDistance/2.0);
 }
 
 void fk_GraphicsEngine::SetShadowVisibility(double argVis)
 {
-	shadowVisibility = argVis;
+	_m->shadowVisibility = argVis;
 }
 
 void fk_GraphicsEngine::SetShadowBias(double argBias)
 {
-	shadowBias = argBias;
+	_m->shadowBias = argBias;
 }
 
 /****************************************************************************

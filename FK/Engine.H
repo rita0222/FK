@@ -22,6 +22,67 @@ namespace FK {
 
 	class fk_GraphicsEngine {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			// エンジン用基本メンバー
+			unsigned int drawCount;
+			unsigned int winID;
+			fk_Scene *curScene;
+			int sceneStatus;
+			int sceneID;
+			int wSize;
+			int hSize;
+			bool resizeFlag;
+			fk_BlendFactor srcFactor, dstFactor;
+			bool depthRead, depthWrite;
+
+			// 投影処理用メンバー
+			fk_ProjectBase *curProj;
+			GLint viewArray[4];
+
+			// スナップイメージ用メンバー
+			std::vector<fk_ImType> snapBuffer;
+
+			// デフォルト投影
+			fk_Perspective defProj;
+
+			// 境界ボリューム描画用モデル
+			fk_Model boundaryModel;
+
+			// FBO用メンバー
+			std::unique_ptr<fk_FrameBuffer> colorBuf;
+			std::unique_ptr<fk_FrameBuffer> depthBuf;
+			bool FBOMode, FBOWindowMode;
+			GLuint rectVAO, fboHandle;
+			fk_ShaderBinder *FBOShader;
+
+			// 影用メンバー
+			std::unique_ptr<fk_FrameBuffer> shadowBuf;
+			GLuint shadowHandle;
+			fk_ShadowMode shadowMode;
+			bool shadowInitFlag, shadowSwitch;
+			int shadowBufferID;
+			double shadowSize;
+			double shadowDistance;
+			int shadowResolution;
+			double shadowVisibility;
+			double shadowBias;
+			fk_Vector shadowVec;
+
+			fk_Ortho shadowProj;
+			fk_Model shadowCamera;
+			fk_RectTexture shadowTexture;
+
+			// 霧用メンバー
+			fk_FogMode	fogMode;
+			double fogStart, fogEnd, fogDensity;
+			fk_Color fogColor;
+
+			Member(bool);
+		};
+#endif
+
 	public:
 		fk_GraphicsEngine(bool);
 		virtual ~fk_GraphicsEngine();
@@ -78,59 +139,11 @@ namespace FK {
 		static std::unique_ptr<fk_SurfaceDraw> surfacePointDraw;
 		static std::unique_ptr<fk_SurfaceDraw> surfaceLineDraw;
 
-		// エンジン用基本メンバー
-		unsigned int drawCount;
-		unsigned int winID;
-		fk_Scene *curScene;
-		int sceneStatus;
-		int sceneID;
-		int wSize;
-		int hSize;
-		bool resizeFlag;
-		fk_BlendFactor srcFactor, dstFactor;
-		bool depthRead, depthWrite;
+		static unsigned int generalID;
+		static unsigned int engineNum;
 
-		// 投影処理用メンバー
-		fk_ProjectBase *curProj;
-		GLint viewArray[4];
+		std::unique_ptr<Member> _m;
 
-		// スナップイメージ用メンバー
-		std::vector<fk_ImType> snapBuffer;
-
-		// デフォルト投影
-		std::unique_ptr<fk_Perspective> defProj;
-
-		// 境界ボリューム描画用モデル
-		std::unique_ptr<fk_Model> boundaryModel;
-
-		// FBO用メンバー
-		bool FBOMode, FBOWindowMode;
-		std::unique_ptr<fk_FrameBuffer> colorBuf;
-		std::unique_ptr<fk_FrameBuffer> depthBuf;
-		GLuint rectVAO, fboHandle;
-		fk_ShaderBinder *FBOShader;
-
-		// 影用メンバー
-		GLuint shadowHandle;
-		std::unique_ptr<fk_FrameBuffer> shadowBuf;
-		fk_ShadowMode shadowMode;
-		bool shadowInitFlag, shadowSwitch;
-		std::unique_ptr<fk_Ortho> shadowProj;
-		std::unique_ptr<fk_Model> shadowCamera;
-		std::unique_ptr<fk_RectTexture> shadowTexture;
-		std::unique_ptr<fk_Vector> shadowVec;
-		int shadowBufferID;
-		double shadowSize;
-		double shadowDistance;
-		int shadowResolution;
-		double shadowVisibility;
-		double shadowBias;
-
-		// 霧用メンバー
-		fk_FogMode	fogMode;
-		double fogStart, fogEnd, fogDensity;
-		std::unique_ptr<fk_Color> fogColor;
-		
 		void DrawShadow(void);
 		void DrawWorld(void);
 		

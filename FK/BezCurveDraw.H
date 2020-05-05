@@ -34,6 +34,18 @@ namespace FK {
 	};
 
 	class fk_BezCurveDraw : public fk_DrawBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			// [C_DRAW_NUM] [C_DEG_NUM] [C_SHADOW_NUM] [FOG_NUM] ;
+			std::vector<std::unique_ptr<fk_ShaderBinder>> curveShader;
+			fk_CurveDrawMode mode;
+
+			Member(fk_CurveDrawMode);
+		};
+#endif
+
 	public:
 		fk_BezCurveDraw(fk_CurveDrawMode);
 		virtual ~fk_BezCurveDraw();
@@ -48,9 +60,8 @@ namespace FK {
 		static constexpr int C_DEG_NUM = int(fk_CurveDrawDeg::NUM);
 		static constexpr int C_SHADOW_NUM = int(fk_CurveShadowType::NUM);
 
-		// [C_DRAW_NUM] [C_DEG_NUM] [C_SHADOW_NUM] [FOG_NUM] ;
-        std::vector<std::unique_ptr<fk_ShaderBinder>> curveShader;
-		fk_CurveDrawMode mode;
+		std::unique_ptr<Member> _m;
+
 		void DefaultShaderSetup(fk_Type, int, bool, fk_FogMode);
 		bool ShaderInit(fk_CurveDrawType, fk_CurveDrawDeg, fk_CurveShadowType, fk_FogMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);

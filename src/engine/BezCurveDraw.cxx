@@ -7,9 +7,14 @@
 using namespace std;
 using namespace FK;
 
-fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode) :
+fk_BezCurveDraw::Member::Member(fk_CurveDrawMode argMode) :
 	curveShader(C_DRAW_NUM * C_DEG_NUM * C_SHADOW_NUM * FOG_NUM),
 	mode(argMode)
+{
+	return;
+}
+
+fk_BezCurveDraw::fk_BezCurveDraw(fk_CurveDrawMode argMode) : _m(make_unique<Member>(argMode))
 {
 	return;
 }
@@ -31,7 +36,7 @@ fk_ShaderBinder *fk_BezCurveDraw::GetShader(
 		_st(argShadow) * FOG_NUM +
 		_st(argFog);
 
-	return curveShader[index].get();
+	return _m->curveShader[index].get();
 }
 
 fk_ShaderBinder * fk_BezCurveDraw::MakeShader(
@@ -46,8 +51,8 @@ fk_ShaderBinder * fk_BezCurveDraw::MakeShader(
 		_st(argShadow) * FOG_NUM +
 		_st(argFog);
 
-	curveShader[index] = make_unique<fk_ShaderBinder>();
-	return curveShader[index].get();
+	_m->curveShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->curveShader[index].get();
 }
 
 bool fk_BezCurveDraw::AllTest(void)
@@ -177,7 +182,7 @@ bool fk_BezCurveDraw::ShaderInit(fk_CurveDrawType argType,
 
 	if(argShadow != fk_CurveShadowType::SHADOW) FragmentFogInit(prog, argFogMode);
 
-	if(mode == fk_CurveDrawMode::LINE) {
+	if(_m->mode == fk_CurveDrawMode::LINE) {
 		prog->tessEvalShaderSource =
 			#include "GLSL/Curve/TE_Line.out"
 			;
