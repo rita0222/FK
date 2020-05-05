@@ -39,6 +39,40 @@ namespace FK {
 
 		friend class fk_D3DXAnimation;
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		enum class BVH_NodeType {
+			ROOT,
+			JOINT,
+			END
+		};
+
+		enum class BVH_ChannelType {
+			XPOS,
+			YPOS,
+			ZPOS,
+			XROT,
+			YROT,
+			ZROT
+		};
+
+		class Member {
+		public:
+			std::vector<std::unique_ptr<fk_Model>> nodeArray;
+			std::vector<std::string> nameArray;
+			std::vector<fk_Vector> offsetArray;
+			std::vector<BVH_NodeType> typeArray;
+			std::vector<std::vector<fk_Vector>> posArray;
+			std::vector<std::vector<fk_Angle>> rotArray;
+			std::map<std::string, fk_Model *> nameToNodeMap;
+			std::vector<std::pair<std::vector<int>::size_type, BVH_ChannelType>> frameFormat;
+			int nowFrame, length;
+			double oneFrameTime;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_BVHMotion(void);
@@ -169,19 +203,7 @@ namespace FK {
 #endif		
 		
 	private:
-		std::vector<fk_Model *> nodeArray;
-		std::vector<std::string> nameArray;
-		std::vector<fk_Vector> offsetArray;
-		std::vector<int> typeArray;
-		std::vector<std::vector<fk_Vector>> posArray;
-		std::vector<std::vector<fk_Angle>> rotArray;
-
-		std::map<std::string, fk_Model *> nameToNodeMap;
-
-		std::vector<std::pair<std::vector<int>::size_type, int>> frameFormat;
-
-		int nowFrame, length;
-		double oneFrameTime;
+		std::unique_ptr<Member> _m;
 
 		int ReadHierarchy(std::vector<std::string> *, int);
 		int ReadMotion(std::vector<std::string> *, int);

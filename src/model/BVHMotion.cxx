@@ -7,20 +7,6 @@
 using namespace std;
 using namespace FK;
 
-enum BVH_NodeType {
-	BVH_ROOT,
-	BVH_JOINT,
-	BVH_END
-};
-
-enum BVH_ChannelType {
-	BVH_XPOS,
-	BVH_YPOS,
-	BVH_ZPOS,
-	BVH_XROT,
-	BVH_YROT,
-	BVH_ZROT
-};
 
 fk_BVHBase::fk_BVHBase(void)
 {
@@ -32,7 +18,14 @@ fk_BVHBase::~fk_BVHBase()
 	return;
 }
 
-fk_BVHMotion::fk_BVHMotion(void)
+fk_BVHMotion::Member::Member(void) :
+	nowFrame(0), length(0), oneFrameTime(0.0)
+{
+	return;
+}
+
+
+fk_BVHMotion::fk_BVHMotion(void) : _m(make_unique<Member>())
 {
 	init();
 }
@@ -44,37 +37,28 @@ fk_BVHMotion::~fk_BVHMotion(void)
 
 void fk_BVHMotion::init(void)
 {
-	nowFrame = 0;
-	length = 0;
-	oneFrameTime = 0.033;
+	_m->nowFrame = 0;
+	_m->length = 0;
+	_m->oneFrameTime = 0.033;
 
-	for(_st i = 0; i < nodeArray.size(); i++) {
-		delete nodeArray[i];
-	}
-	nodeArray.clear();
-	nameArray.clear();
-	offsetArray.clear();
-	typeArray.clear();
-
-	nameToNodeMap.clear();
-	frameFormat.clear();
-
-	for(_st i = 0; i < posArray.size(); i++) {
-		posArray.at(i).clear();
-		rotArray.at(i).clear();
-	}
-	posArray.clear();
-	rotArray.clear();
+	_m->nodeArray.clear();
+	_m->nameArray.clear();
+	_m->offsetArray.clear();
+	_m->typeArray.clear();
+	_m->nameToNodeMap.clear();
+	_m->frameFormat.clear();
+	_m->posArray.clear();
+	_m->rotArray.clear();
 
 	return;
 }
 
 bool fk_BVHMotion::readBVHFile(const string argFileName)
 {
-	ifstream		ifs(argFileName);
-	string			tmpLine;
-	vector<string>	buffer(1);
-	int				result;
+	ifstream ifs(argFileName);
+	string tmpLine;
+	vector<string> buffer(1);
+	int result;
 
 	if(ifs.fail()) return false;
 
@@ -88,20 +72,20 @@ bool fk_BVHMotion::readBVHFile(const string argFileName)
 
 	for(_st i = 0; i < buffer.size(); i++) {
 		if(buffer[i].find("HIERARCHY") != string::npos) {
-			result = ReadHierarchy(&buffer, static_cast<int>(i));
+			result = ReadHierarchy(&buffer, int(i));
 			if(result < 1) {
 				init();
 				return false;
 			}
-			i += static_cast<_st>(result);
+			i += _st(result);
 		}
 		if(buffer[i].find("MOTION") != string::npos) {
-			result = ReadMotion(&buffer, static_cast<int>(i));
+			result = ReadMotion(&buffer, int(i));
 			if(result < 1) {
 				init();
 				return false;
 			}
-			i += static_cast<_st>(result);
+			i += _st(result);
 		}
 	}
 	return true;
@@ -109,10 +93,10 @@ bool fk_BVHMotion::readBVHFile(const string argFileName)
 
 int fk_BVHMotion::SetFrameFormat(vector<string> *argBuf, int argCurLine)
 {
-	string				lineStr, word;
-	string::size_type	strPos;
-	pair<_st, int>		tmpFmt;
-	_st					curLine = static_cast<_st>(argCurLine);
+	string lineStr, word;
+	string::size_type strPos;
+	pair<_st, BVH_ChannelType> tmpFmt;
+	_st curLine = _st(argCurLine);
 
 	while(argBuf->size() > curLine) {
 		curLine++;
@@ -123,29 +107,29 @@ int fk_BVHMotion::SetFrameFormat(vector<string> *argBuf, int argCurLine)
 			word = PopWord(&lineStr);
 			while(word.length() != 0) {
 				if(word == "Xposition") {
-					tmpFmt.first = nodeArray.size()-1;
-					tmpFmt.second = BVH_XPOS;
-					frameFormat.push_back(tmpFmt);
+					tmpFmt.first = _m->nodeArray.size() - 1;
+					tmpFmt.second = BVH_ChannelType::XPOS;
+					_m->frameFormat.push_back(tmpFmt);
 				} else if(word == "Yposition") {
-					tmpFmt.first = nodeArray.size()-1;
-					tmpFmt.second = BVH_YPOS;
-					frameFormat.push_back(tmpFmt);
+					tmpFmt.first = _m->nodeArray.size()-1;
+					tmpFmt.second = BVH_ChannelType::YPOS;
+					_m->frameFormat.push_back(tmpFmt);
 				} else if(word == "Zposition") {
-					tmpFmt.first = nodeArray.size()-1;
-					tmpFmt.second = BVH_ZPOS;
-					frameFormat.push_back(tmpFmt);
+					tmpFmt.first = _m->nodeArray.size()-1;
+					tmpFmt.second = BVH_ChannelType::ZPOS;
+					_m->frameFormat.push_back(tmpFmt);
 				} else if(word == "Xrotation") {
-					tmpFmt.first = nodeArray.size()-1;
-					tmpFmt.second = BVH_XROT;
-					frameFormat.push_back(tmpFmt);
+					tmpFmt.first = _m->nodeArray.size()-1;
+					tmpFmt.second = BVH_ChannelType::XROT;
+					_m->frameFormat.push_back(tmpFmt);
 				} else if(word == "Yrotation") {
-					tmpFmt.first = nodeArray.size()-1;
-					tmpFmt.second = BVH_YROT;
-					frameFormat.push_back(tmpFmt);
+					tmpFmt.first = _m->nodeArray.size()-1;
+					tmpFmt.second = BVH_ChannelType::YROT;
+					_m->frameFormat.push_back(tmpFmt);
 				} else if(word == "Zrotation") {
-					tmpFmt.first = nodeArray.size()-1;
-					tmpFmt.second = BVH_ZROT;
-					frameFormat.push_back(tmpFmt);
+					tmpFmt.first = _m->nodeArray.size()-1;
+					tmpFmt.second = BVH_ChannelType::ZROT;
+					_m->frameFormat.push_back(tmpFmt);
 				}
 
 				word = PopWord(&lineStr);
@@ -154,16 +138,16 @@ int fk_BVHMotion::SetFrameFormat(vector<string> *argBuf, int argCurLine)
 		}
 	}
 
-	return static_cast<int>(curLine);
+	return int(curLine);
 }
 
 int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 {
-	_st					curLine = static_cast<_st>(argLine);
-	string::size_type	strPos;
-	stack<fk_Model *>	hieStack;
-	string				lineStr;
-	fk_Vector			tmpVec;
+	_st curLine = _st(argLine);
+	string::size_type strPos;
+	stack<fk_Model *> hieStack;
+	string lineStr;
+	fk_Vector tmpVec;
 
 	while(argBuf->size() > curLine) {
 		// 1 行取得
@@ -172,15 +156,15 @@ int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 
 		if((strPos = lineStr.find("ROOT")) != string::npos) {
 			// Model 生成とスタックに積む
-			nodeArray.push_back(new fk_Model);
-			typeArray.push_back(BVH_ROOT);
-			hieStack.push(nodeArray.back());
+			_m->nodeArray.push_back(make_unique<fk_Model>());
+			_m->typeArray.push_back(BVH_NodeType::ROOT);
+			hieStack.push(_m->nodeArray.back().get());
 			// ROOT の後の名前を抽出
 			lineStr.erase(0, strPos + 4);
 
 			// 名前リストとマップに追加
-			nameArray.push_back(PopWord(&lineStr));
-			nameToNodeMap[nameArray.back()] = nodeArray.back();
+			_m->nameArray.push_back(PopWord(&lineStr));
+			_m->nameToNodeMap[_m->nameArray.back()] = _m->nodeArray.back().get();
 
 			while(true) {
 				curLine++;
@@ -192,24 +176,23 @@ int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 					tmpVec.x = Str2Double(PopWord(&lineStr));
 					tmpVec.y = Str2Double(PopWord(&lineStr));
 					tmpVec.z = Str2Double(PopWord(&lineStr));
-					nodeArray.back()->glMoveTo(tmpVec);
-					offsetArray.push_back(tmpVec);
+					_m->nodeArray.back()->glMoveTo(tmpVec);
+					_m->offsetArray.push_back(tmpVec);
 
-					curLine = static_cast<_st>(SetFrameFormat(argBuf,
-																   static_cast<int>(curLine)));
+					curLine = _st(SetFrameFormat(argBuf, int(curLine)));
 					break;
 				}
 			}
 		} else if((strPos = lineStr.find("JOINT")) != string::npos) {
-			nodeArray.push_back(new fk_Model);
-			nodeArray.back()->setParent(hieStack.top());
-			typeArray.push_back(BVH_JOINT);
-			hieStack.push(nodeArray.back());
+			_m->nodeArray.push_back(make_unique<fk_Model>());
+			_m->nodeArray.back()->setParent(hieStack.top());
+			_m->typeArray.push_back(BVH_NodeType::JOINT);
+			hieStack.push(_m->nodeArray.back().get());
 
 			lineStr.erase(0, strPos + 6);
 
-			nameArray.push_back(PopWord(&lineStr));
-			nameToNodeMap[nameArray.back()] = nodeArray.back();
+			_m->nameArray.push_back(PopWord(&lineStr));
+			_m->nameToNodeMap[_m->nameArray.back()] = _m->nodeArray.back().get();
 
 			while(argBuf->size() > curLine) {
 				curLine++;
@@ -220,21 +203,20 @@ int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 					tmpVec.x = Str2Double(PopWord(&lineStr));
 					tmpVec.y = Str2Double(PopWord(&lineStr));
 					tmpVec.z = Str2Double(PopWord(&lineStr));
-					nodeArray.back()->glMoveTo(tmpVec);
-					offsetArray.push_back(tmpVec);
+					_m->nodeArray.back()->glMoveTo(tmpVec);
+					_m->offsetArray.push_back(tmpVec);
 
-					curLine = static_cast<_st>(SetFrameFormat(argBuf,
-															  static_cast<int>(curLine)));
+					curLine = _st(SetFrameFormat(argBuf, int(curLine)));
 					break;
 				}
 			}
 		} else if(argBuf->at(curLine).find("End") != string::npos) {
-			nodeArray.push_back(new fk_Model);
-			nodeArray.back()->setParent(hieStack.top());
-			typeArray.push_back(BVH_END);
-			hieStack.push(nodeArray.back());
+			_m->nodeArray.push_back(make_unique<fk_Model>());
+			_m->nodeArray.back()->setParent(hieStack.top());
+			_m->typeArray.push_back(BVH_NodeType::END);
+			hieStack.push(_m->nodeArray.back().get());
 
-			nameArray.push_back("End Site");
+			_m->nameArray.push_back("End Site");
 
 			while(argBuf->size() > curLine) {
 				curLine++;
@@ -245,8 +227,8 @@ int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 					tmpVec.x = Str2Double(PopWord(&lineStr));
 					tmpVec.y = Str2Double(PopWord(&lineStr));
 					tmpVec.z = Str2Double(PopWord(&lineStr));
-					nodeArray.back()->glMoveTo(tmpVec);
-					offsetArray.push_back(tmpVec);
+					_m->nodeArray.back()->glMoveTo(tmpVec);
+					_m->offsetArray.push_back(tmpVec);
 
 					break;
 				}
@@ -270,22 +252,22 @@ int fk_BVHMotion::ReadHierarchy(vector<string> *argBuf, int argLine)
 
 	}
 
-	return (static_cast<int>(curLine)-argLine);
+	return (int(curLine)-argLine);
 }
 
 int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 {
-	_st					curLine = static_cast<_st>(argLine);
-	string::size_type	strPos;
-	string				lineStr, word;
-	vector<double>		tmpArray;
-	fk_Model			tmpModel;
-	fk_Angle			tmpAngle;
-	_st					prevID;
-	vector<fk_Axis>		rotStack;
-	fk_Vector			tmpVec(0.0, 0.0, -1.0);
-	fk_Vector			tmpUpVec(0.0, 1.0, 0.0);
-	fk_Matrix			rotMat;
+	_st curLine = _st(argLine);
+	string::size_type strPos;
+	string lineStr, word;
+	vector<double> tmpArray;
+	fk_Model tmpModel;
+	fk_Angle tmpAngle;
+	_st prevID;
+	vector<fk_Axis> rotStack;
+	fk_Vector tmpVec(0.0, 0.0, -1.0);
+	fk_Vector tmpUpVec(0.0, 1.0, 0.0);
+	fk_Matrix rotMat;
 
 	while(argBuf->size() > curLine) {
 		curLine++;
@@ -293,7 +275,7 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 		if((strPos = lineStr.find("Frames")) != string::npos) {
 			lineStr.erase(0, strPos + 6);
 			ReplaceString(&lineStr, ":", " ");
-			length = Str2Int(lineStr);
+			_m->length = Str2Int(lineStr);
 			break;
 		}
 	}
@@ -303,19 +285,19 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 		if((strPos = lineStr.find("Frame Time")) != string::npos) {
 			lineStr.erase(0, strPos + 10);
 			ReplaceString(&lineStr, ":", " ");
-			oneFrameTime = Str2Double(lineStr);
+			_m->oneFrameTime = Str2Double(lineStr);
 			break;
 		}
 	}
 
-	posArray.resize(static_cast<_st>(getNodeNum()));
-	rotArray.resize(static_cast<_st>(getNodeNum()));
-	for(_st i = 0; i < static_cast<_st>(getNodeNum()); i++) {
-		posArray[i].resize(static_cast<_st>(length));
-		rotArray[i].resize(static_cast<_st>(length));
+	_m->posArray.resize(_st(getNodeNum()));
+	_m->rotArray.resize(_st(getNodeNum()));
+	for(_st i = 0; i < _st(getNodeNum()); i++) {
+		_m->posArray[i].resize(_st(_m->length));
+		_m->rotArray[i].resize(_st(_m->length));
 	}
 
-	for(_st j = 0; j < static_cast<_st>(length); j++) {
+	for(_st j = 0; j < _st(_m->length); j++) {
 		// 1 行取得
 		curLine++;
 		lineStr = argBuf->at(curLine);
@@ -328,24 +310,24 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 			word = PopWord(&lineStr);
 		}
 		// 各関節の位置と角度を初期化
-		for(_st i = 0; i < static_cast<_st>(getNodeNum()); i++) {
-			posArray[i][j] = offsetArray[i];
-			rotArray[i][j].set(0.0, 0.0, 0.0);
+		for(_st i = 0; i < _st(getNodeNum()); i++) {
+			_m->posArray[i][j] = _m->offsetArray[i];
+			_m->rotArray[i][j].set(0.0, 0.0, 0.0);
 		}
 		// 回転解釈変数初期化
-		prevID = frameFormat[0].first;
+		prevID = _m->frameFormat[0].first;
 		tmpAngle.set(0.0, 0.0, 0.0);
 		rotStack.clear();
 
 		// フレームデータ解釈開始
-		for(_st i = 0; i < frameFormat.size(); i++) {
+		for(_st i = 0; i < _m->frameFormat.size(); i++) {
 			// 次の関節の情報に移ったらオイラー角を生成
-			if(prevID != frameFormat[i].first) {
+			if(prevID != _m->frameFormat[i].first) {
 				// BVH での記述と逆順になる(角度反転無し)
 				tmpVec.set(0.0, 0.0, -1.0);
 				tmpUpVec.set(0.0, 1.0, 0.0);
-				for(int k = static_cast<int>(rotStack.size())-1; k >= 0; k--) {
-					switch(rotStack[static_cast<_st>(k)]) {
+				for(int k = int(rotStack.size())-1; k >= 0; k--) {
+					switch(rotStack[_st(k)]) {
 					  case fk_Axis::X:
 						rotMat.makeRot(tmpAngle.p, fk_Axis::X);
 						tmpVec *= rotMat;
@@ -368,32 +350,32 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 				// データへ反映
 				tmpModel.glVec(tmpVec);
 				tmpModel.glUpvec(tmpUpVec);
-				rotArray[static_cast<_st>(prevID)][j] = tmpModel.getAngle();
+				_m->rotArray[_st(prevID)][j] = tmpModel.getAngle();
 				// 回転解釈変数初期化
-				prevID = frameFormat[i].first;
+				prevID = _m->frameFormat[i].first;
 				tmpAngle.set(0.0, 0.0, 0.0);
 				rotStack.clear();
 			}
 			// 座標値はそのまま反映、回転角度は一時的に保存し後で反映
-			switch(frameFormat[i].second) {
-			  case BVH_XPOS:
-				posArray[static_cast<_st>(frameFormat[i].first)][j].x = tmpArray[i];
+			switch(_m->frameFormat[i].second) {
+			  case BVH_ChannelType::XPOS:
+				_m->posArray[_st(_m->frameFormat[i].first)][j].x = tmpArray[i];
 				break;
-			  case BVH_YPOS:
-				posArray[static_cast<_st>(frameFormat[i].first)][j].y = tmpArray[i];
+			  case BVH_ChannelType::YPOS:
+				_m->posArray[_st(_m->frameFormat[i].first)][j].y = tmpArray[i];
 				break;
-			  case BVH_ZPOS:
-				posArray[static_cast<_st>(frameFormat[i].first)][j].z = tmpArray[i];
+			  case BVH_ChannelType::ZPOS:
+				_m->posArray[_st(_m->frameFormat[i].first)][j].z = tmpArray[i];
 				break;
-			  case BVH_XROT:
+			  case BVH_ChannelType::XROT:
 				tmpAngle.p = tmpArray[i]*fk_Math::PI/180.0;
 				rotStack.push_back(fk_Axis::X);
 				break;
-			  case BVH_YROT:
+			  case BVH_ChannelType::YROT:
 				tmpAngle.h = tmpArray[i]*fk_Math::PI/180.0;
 				rotStack.push_back(fk_Axis::Y);
 				break;
-			  case BVH_ZROT:
+			  case BVH_ChannelType::ZROT:
 				tmpAngle.b = tmpArray[i]*fk_Math::PI/180.0;
 				rotStack.push_back(fk_Axis::Z);
 				break;
@@ -405,8 +387,8 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 		// 最後の1つに対して角度を反映
 		tmpVec.set(0.0, 0.0, -1.0);
 		tmpUpVec.set(0.0, 1.0, 0.0);
-		for(int k = static_cast<int>(rotStack.size())-1; k >= 0; k--) {
-			switch(rotStack[static_cast<_st>(k)]) {
+		for(int k = int(rotStack.size())-1; k >= 0; k--) {
+			switch(rotStack[_st(k)]) {
 			  case fk_Axis::X:
 				rotMat.makeRot(tmpAngle.p, fk_Axis::X);
 				tmpVec *= rotMat;
@@ -428,61 +410,61 @@ int fk_BVHMotion::ReadMotion(vector<string> *argBuf, int argLine)
 		}
 		tmpModel.glVec(tmpVec);
 		tmpModel.glUpvec(tmpUpVec);
-		rotArray[static_cast<_st>(prevID)][j] = tmpModel.getAngle();
+		_m->rotArray[_st(prevID)][j] = tmpModel.getAngle();
 	}
 
-	return (static_cast<int>(curLine)-argLine);
+	return (int(curLine)-argLine);
 }
 
 int fk_BVHMotion::getNodeNum(void)
 {
-	return static_cast<int>(nodeArray.size());
+	return int(_m->nodeArray.size());
 }
 
 string fk_BVHMotion::getNodeName(int argID)
 {
-	if(argID < 0 || static_cast<_st>(argID) >= nameArray.size()) {
+	if(argID < 0 || _st(argID) >= _m->nameArray.size()) {
 		return "";
 	}
-	return nameArray[static_cast<_st>(argID)];
+	return _m->nameArray[_st(argID)];
 }
 
 fk_Model * fk_BVHMotion::getNodeModel(int argID)
 {
-	if(argID < 0 || static_cast<_st>(argID) >= nodeArray.size()) {
+	if(argID < 0 || _st(argID) >= _m->nodeArray.size()) {
 		return nullptr;
 	}
-	return nodeArray[static_cast<_st>(argID)];
+	return _m->nodeArray[_st(argID)].get();
 }
 
 fk_Model * fk_BVHMotion::getNodeModel(string argName)
 {
-	if(nameToNodeMap.find(argName) == nameToNodeMap.end()) return nullptr;
-	return nameToNodeMap[argName];
+	if(_m->nameToNodeMap.find(argName) == _m->nameToNodeMap.end()) return nullptr;
+	return _m->nameToNodeMap[argName];
 }
 
 int fk_BVHMotion::nextFrame(void)
 {
-	for(_st i = 0; i < static_cast<_st>(getNodeNum()); i++) {
-		nodeArray[i]->glMoveTo(posArray[i][static_cast<_st>(nowFrame)]);
-		nodeArray[i]->glAngle(rotArray[i][static_cast<_st>(nowFrame)]);
+	for(_st i = 0; i < _st(getNodeNum()); i++) {
+		_m->nodeArray[i]->glMoveTo(_m->posArray[i][_st(_m->nowFrame)]);
+		_m->nodeArray[i]->glAngle(_m->rotArray[i][_st(_m->nowFrame)]);
 	}
 
-	nowFrame++;
-	if(nowFrame >= length) nowFrame = 0;
+	_m->nowFrame++;
+	if(_m->nowFrame >= _m->length) _m->nowFrame = 0;
 
-	return nowFrame;
+	return _m->nowFrame;
 }
 
 void fk_BVHMotion::setFrameCount(int argFrame)
 {
-	if(argFrame < 0) nowFrame = 0;
-	else if(argFrame >= length) nowFrame = length-1;
-	else nowFrame = argFrame;
+	if(argFrame < 0) _m->nowFrame = 0;
+	else if(argFrame >= _m->length) _m->nowFrame = _m->length-1;
+	else _m->nowFrame = argFrame;
 
-	for(_st i = 0; i < static_cast<_st>(getNodeNum()); i++) {
-		nodeArray[i]->glMoveTo(posArray[i][static_cast<_st>(nowFrame)]);
-		nodeArray[i]->glAngle(rotArray[i][static_cast<_st>(nowFrame)]);
+	for(_st i = 0; i < _st(getNodeNum()); i++) {
+		_m->nodeArray[i]->glMoveTo(_m->posArray[i][_st(_m->nowFrame)]);
+		_m->nodeArray[i]->glAngle(_m->rotArray[i][_st(_m->nowFrame)]);
 	}
 
 	return;
@@ -490,43 +472,43 @@ void fk_BVHMotion::setFrameCount(int argFrame)
 
 void fk_BVHMotion::setAnimationTime(double argT)
 {
-	setFrameCount(static_cast<int>((double)argT/oneFrameTime));
+	setFrameCount(int((double)argT/_m->oneFrameTime));
 	return;
 }
 
 int fk_BVHMotion::getNowFrameCount(void)
 {
-	return nowFrame;
+	return _m->nowFrame;
 }
 
 int fk_BVHMotion::getFrameLength(void)
 {
-	return length;
+	return _m->length;
 }
 
 double fk_BVHMotion::getOneFrameTime(void)
 {
-	return oneFrameTime;
+	return _m->oneFrameTime;
 }
 
 int fk_BVHMotion::getPosSize(int argID)
 {
-	return int(posArray[_st(argID)].size());
+	return int(_m->posArray[_st(argID)].size());
 }
 
 int fk_BVHMotion::getRotSize(int argID)
 {
-	return int(rotArray[_st(argID)].size());
+	return int(_m->rotArray[_st(argID)].size());
 }
 
 fk_Vector fk_BVHMotion::getPos(int argI, int argJ)
 {
-	return posArray[_st(argI)][_st(argJ)];
+	return _m->posArray[_st(argI)][_st(argJ)];
 }
 
 fk_Angle fk_BVHMotion::getRot(int argI, int argJ)
 {
-	return rotArray[_st(argI)][_st(argJ)];
+	return _m->rotArray[_st(argI)][_st(argJ)];
 }
 
 /****************************************************************************
