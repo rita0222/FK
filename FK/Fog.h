@@ -27,11 +27,13 @@ namespace FK {
 	class fk_Fog : public fk_DisplayLink {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_FogData {
+		class Member {
 		public:
 			fk_FogMode fogMode;
 			double fogStart, fogEnd, fogDensity;
 			fk_Color fogColor;
+
+			Member(void);
 		};
 #endif
 
@@ -184,7 +186,7 @@ namespace FK {
 
 	private:
 
-		std::unique_ptr<fk_FogData> fog_data;
+		std::unique_ptr<Member> _m;
 	};
 }
 

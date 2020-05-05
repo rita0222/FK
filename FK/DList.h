@@ -45,7 +45,7 @@ namespace FK {
 	class fk_DisplayLink : public fk_BaseObject {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_DLinkData {
+		class Member {
 		public:
 			std::list<fk_Model *> modelList;
 			std::list<fk_Model *> overlayList;
@@ -69,7 +69,7 @@ namespace FK {
 			fk_Ortho stereoOrtho[2];
 			bool stereoOverlayMode;
 
-			fk_DLinkData(void);
+			Member(void);
 		};
 #endif
 
@@ -291,7 +291,7 @@ namespace FK {
 #endif
 
 	private:
-		std::unique_ptr<fk_DLinkData> dl_data;
+		std::unique_ptr<Member> _m;
 		static std::unique_ptr<fk_IDAdmin> DLManager;
 	};
 }

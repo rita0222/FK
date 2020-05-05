@@ -3,15 +3,15 @@
 using namespace FK;
 using namespace std;
 
-fk_Fog::fk_Fog(void)
+fk_Fog::Member::Member(void) :
+	fogMode(fk_FogMode::OFF), fogStart(1.0), fogEnd(5.0), fogDensity(0.35),
+	fogColor(0.5, 0.5, 0.5, 1.0)
 {
-	fog_data = make_unique<fk_FogData>();
-	
-	setFogMode(fk_FogMode::OFF);
-	setFogDensity(0.35);
-	setFogLinearMap(1.0, 5.0);
-	setFogColor(0.5, 0.5, 0.5, 1.0);
+	return;
+}
 
+fk_Fog::fk_Fog(void) : _m(make_unique<Member>())
+{
 	return;
 }
 
@@ -22,66 +22,66 @@ fk_Fog::~fk_Fog()
 
 void fk_Fog::setFogMode(const fk_FogMode argMode)
 {
-	fog_data->fogMode = argMode;
+	_m->fogMode = argMode;
 	return;
 }
 
 void fk_Fog::setFogDensity(const double argDensity)
 {
-	fog_data->fogDensity = argDensity;
+	_m->fogDensity = argDensity;
 	return;
 }
 
 void fk_Fog::setFogLinearMap(const double argStart, const double argEnd)
 {
-	fog_data->fogStart = argStart;
-	fog_data->fogEnd = argEnd;
+	_m->fogStart = argStart;
+	_m->fogEnd = argEnd;
 	return;
 }
 
 void fk_Fog::setFogColor(const fk_Color &argColor)
 {
-	fog_data->fogColor = argColor;
+	_m->fogColor = argColor;
 	return;
 }
 
 void fk_Fog::setFogColor(const float argR, const float argG,
 						 const float argB, const float argA)
 {
-	fog_data->fogColor.init(argR, argG, argB, argA);
+	_m->fogColor.init(argR, argG, argB, argA);
 	return;
 }
 
 void fk_Fog::setFogColor(const double argR, const double argG,
 						 const double argB, const double argA)
 {
-	fog_data->fogColor.init(argR, argG, argB, argA);
+	_m->fogColor.init(argR, argG, argB, argA);
 	return;
 }	 
 
 fk_FogMode fk_Fog::getFogMode(void) const
 {
-	return fog_data->fogMode;
+	return _m->fogMode;
 }
 
 double fk_Fog::getFogDensity(void) const
 {
-	return fog_data->fogDensity;
+	return _m->fogDensity;
 }
 
 double fk_Fog::getFogLinearStart(void) const
 {
-	return fog_data->fogStart;
+	return _m->fogStart;
 }
 
 double fk_Fog::getFogLinearEnd(void) const
 {
-	return fog_data->fogEnd;
+	return _m->fogEnd;
 }
 
 fk_Color fk_Fog::getFogColor(void) const
 {
-	return fog_data->fogColor;
+	return _m->fogColor;
 }
 
 /****************************************************************************

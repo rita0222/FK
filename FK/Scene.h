@@ -48,7 +48,7 @@ namespace FK {
 	class fk_Scene : public fk_Fog {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_SceneData {
+		class Member {
 		public:
 			fk_Color bgColor;
 			bool blendStatus;
@@ -60,7 +60,7 @@ namespace FK {
 			double shadowVisibility;
 			double shadowBias;
 
-			fk_SceneData(void);
+			Member(void);
 		};
 #endif
 
@@ -344,7 +344,7 @@ namespace FK {
 		///@}
 
 	private:
-		std::unique_ptr<fk_SceneData> scene_data;
+		std::unique_ptr<Member> _m;
 	};
 }
 

@@ -97,14 +97,14 @@ namespace FK {
 	class fk_Perspective : public fk_ProjectBase {
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		class fk_PersData {
+		class Member {
 		public:
 			double Fovy;
 			double Near, Far;
 			double Aspect;
 			bool AutoMode;
 
-			fk_PersData(void);
+			Member(void);
 		};
 #endif
 	public:
@@ -220,8 +220,9 @@ namespace FK {
 		double getAspect(void) const;
 
 	private:
+		std::unique_ptr<Member> _m;
+
 		void MakeInit(void);
-		std::unique_ptr<fk_PersData> pers_data;
 	};
 
 	//! 一般透視投影を制御するクラス
@@ -261,11 +262,11 @@ namespace FK {
 	class fk_Frustum : public fk_ProjectBase {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_FrustData {
+		class Member {
 		public:
 			double Left, Right, Bottom, Top, Near, Far;
 
-			fk_FrustData(void);
+			Member(void);
 		};
 #endif
 
@@ -407,7 +408,8 @@ namespace FK {
 		double getFar(void) const;
 
 	private:
-		std::unique_ptr<fk_FrustData> fr_data;
+		std::unique_ptr<Member> _m;
+
 		void MakeInit(void);
 	};
 
@@ -433,12 +435,13 @@ namespace FK {
 	 */
 
 	class fk_Ortho : public fk_ProjectBase {
+
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_OrthoData {
+		class Member {
 		public:
 			double Left, Right, Bottom, Top, Near, Far;
 
-			fk_OrthoData(void);
+			Member(void);
 		};
 #endif
 	public:
@@ -579,7 +582,7 @@ namespace FK {
 		double getFar(void) const;
 
 	private:
-		std::unique_ptr<fk_OrthoData> or_data;
+		std::unique_ptr<Member> _m;
 		void MakeInit(void);
 	};
 }

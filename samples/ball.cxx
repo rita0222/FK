@@ -254,8 +254,8 @@ int main(int, char *[])
 
 	scene->setShadowMode(fk_ShadowMode::SOFT_NICE);
 	scene->setShadowVec(1.0, -1.0, 1.0);
-	scene->setShadowAreaSize(500.0);
-	scene->setShadowDistance(1000.0);
+	scene->setShadowAreaSize(800.0);
+	scene->setShadowDistance(800.0);
 	scene->setShadowResolution(1024);
 	scene->setShadowVisibility(1.0);
 	scene->setShadowBias(0.005);
