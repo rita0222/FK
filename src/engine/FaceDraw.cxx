@@ -15,8 +15,12 @@ using namespace FK;
 typedef list<fk_Loop *>::iterator			loopIte;
 typedef list<fk_Loop *>::reverse_iterator	loopRIte;
 
-fk_FaceDraw::fk_FaceDraw(void) :
-	faceShader(SHADING_NUM * SHADOW_NUM * FOG_NUM)
+fk_FaceDraw::Member::Member(void) :	faceShader(SHADING_NUM * SHADOW_NUM * FOG_NUM)
+{
+	return;
+}
+
+fk_FaceDraw::fk_FaceDraw(void) : _m(make_unique<Member>())
 {
 	return;
 }
@@ -47,10 +51,9 @@ fk_ShaderBinder *fk_FaceDraw::GetShader(
 	fk_FogMode argFogMode)
 {
 	_st index = _st(argShadingMode) * SHADOW_NUM * FOG_NUM +
-		_st(argShadowMode) * FOG_NUM +
-		_st(argFogMode);
+		_st(argShadowMode) * FOG_NUM + _st(argFogMode);
 
-	return faceShader[index].get();
+	return _m->faceShader[index].get();
 }
 
 fk_ShaderBinder * fk_FaceDraw::MakeShader(
@@ -59,11 +62,10 @@ fk_ShaderBinder * fk_FaceDraw::MakeShader(
 	fk_FogMode argFogMode)
 {
 	_st index = _st(argShadingMode) * SHADOW_NUM * FOG_NUM +
-		_st(argShadowMode) * FOG_NUM +
-		_st(argFogMode);
+		_st(argShadowMode) * FOG_NUM + _st(argFogMode);
 
-	faceShader[index] = make_unique<fk_ShaderBinder>();
-	return faceShader[index].get();
+	_m->faceShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->faceShader[index].get();
 }
 
 void fk_FaceDraw::DrawShapeFace(fk_Model *argModel, fk_ShadowMode argShadowMode,
@@ -118,14 +120,14 @@ void fk_FaceDraw::PolygonModeSet(fk_Draw argDMode)
 
 void fk_FaceDraw::ShadowSetup(void)
 {
-	if(faceShadowShader == nullptr) ShadowInit();
-	shadowShader = faceShadowShader.get();
+	if(_m->faceShadowShader == nullptr) ShadowInit();
+	shadowShader = _m->faceShadowShader.get();
 }
 
 void fk_FaceDraw::ShadowInit(void)
 {
-	faceShadowShader = make_unique<fk_ShaderBinder>();
-	auto shader = faceShadowShader.get();
+	_m->faceShadowShader = make_unique<fk_ShaderBinder>();
+	auto shader = _m->faceShadowShader.get();
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();
 

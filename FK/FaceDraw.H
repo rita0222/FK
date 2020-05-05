@@ -6,6 +6,17 @@
 
 namespace FK {
 	class fk_FaceDraw : public fk_DrawBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+		 // [SHADING_NUM] [SHADOW_NUM] [FOG_NUM] ;
+			std::vector<std::unique_ptr<fk_ShaderBinder>> faceShader;
+			std::unique_ptr<fk_ShaderBinder> faceShadowShader;
+
+			Member(void);
+		};
+#endif
 	public:
 		fk_FaceDraw(void);
 		virtual ~fk_FaceDraw();
@@ -18,9 +29,7 @@ namespace FK {
 		bool AllTest(void);
 
 	private:
-		 // [SHADING_NUM] [SHADOW_NUM] [FOG_NUM] ;
-        std::vector<std::unique_ptr<fk_ShaderBinder>> faceShader;
-		std::unique_ptr<fk_ShaderBinder> faceShadowShader;
+		std::unique_ptr<Member> _m;
 
 		void DefaultShaderSetup(fk_Model *, fk_ShadowMode, fk_FogMode);
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
