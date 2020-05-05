@@ -39,13 +39,23 @@ namespace FK {
 
 	class fk_Material : public fk_BaseObject {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Color diffuse, ambient, specular;
+			float shininess;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
-		fk_Material();
+		fk_Material(void);
 
 		//! デストラクタ
-		virtual ~fk_Material() {}
+		virtual ~fk_Material();
 
 		//! 比較等号演算子
 		/*!
@@ -342,10 +352,7 @@ namespace FK {
 #endif
 
 	private:
-		std::unique_ptr<fk_Color> diffuse;
-		std::unique_ptr<fk_Color> ambient;
-		std::unique_ptr<fk_Color> specular;
-		float shininess;
+		std::unique_ptr<Member> _m;
 	};
 }
 #endif // __FK_MATERIAL_HEADER__

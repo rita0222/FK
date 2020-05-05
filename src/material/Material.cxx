@@ -8,15 +8,33 @@
 using namespace std;
 using namespace FK;
 
-fk_Material::fk_Material() :
-	fk_BaseObject(fk_Type::MATERIAL),
-	diffuse(make_unique<fk_Color>()),
-	ambient(make_unique<fk_Color>()),
-	specular(make_unique<fk_Color>())
+fk_Material::Member::Member(void) : shininess(0.0f)
+{
+	return;
+}
+
+fk_Material::fk_Material(void) :
+	fk_BaseObject(fk_Type::MATERIAL), _m(make_unique<Member>())
 {
 	init();
 }
 
+fk_Material::fk_Material(const fk_Material &argMat) :
+	fk_BaseObject(fk_Type::MATERIAL), _m(make_unique<Member>())
+{
+	_m->ambient = argMat._m->ambient;
+	_m->diffuse = argMat._m->diffuse;
+	_m->specular = argMat._m->specular;
+	_m->shininess = argMat._m->shininess;
+
+	return;
+}
+
+fk_Material::~fk_Material()
+{
+	return;
+}
+		
 void fk_Material::init(void)
 {
 	setAmbient(0.3, 0.3, 0.3);
@@ -25,24 +43,13 @@ void fk_Material::init(void)
 	setShininess(30.0);
 }
 
-fk_Material::fk_Material(const fk_Material &argMat) :
-	fk_BaseObject(fk_Type::MATERIAL),
-	diffuse(make_unique<fk_Color>()),
-	ambient(make_unique<fk_Color>()),
-	specular(make_unique<fk_Color>())
-{
-	*ambient = *argMat.ambient;
-	*diffuse = *argMat.diffuse;
-	*specular = *argMat.specular;
-	shininess = argMat.shininess;
-}
 
 fk_Material & fk_Material::operator =(const fk_Material &argMat)
 {
-	*ambient = *argMat.ambient;
-	*diffuse = *argMat.diffuse;
-	*specular = *argMat.specular;
-	shininess = argMat.shininess;
+	_m->ambient = argMat._m->ambient;
+	_m->diffuse = argMat._m->diffuse;
+	_m->specular = argMat._m->specular;
+	_m->shininess = argMat._m->shininess;
 
 	return *this;
 }
@@ -54,9 +61,9 @@ void fk_Material::setAlpha(float argA)
 		return;
 	}
 
-	ambient->setA(argA);
-	diffuse->setA(argA);
-	specular->setA(argA);
+	_m->ambient.setA(argA);
+	_m->diffuse.setA(argA);
+	_m->specular.setA(argA);
 	return;
 }
 
@@ -67,17 +74,17 @@ void fk_Material::setAlpha(double argA)
 
 void fk_Material::setAmbient(fk_Color argC)
 {
-	*ambient = argC;
+	_m->ambient = argC;
 }
 
 void fk_Material::setDiffuse(fk_Color argC)
 {
-	*diffuse = argC;
+	_m->diffuse = argC;
 }
 
 void fk_Material::setSpecular(fk_Color argC)
 {
-	*specular = argC;
+	_m->specular = argC;
 }
 
 void fk_Material::setAmbDiff(fk_Color argC)
@@ -88,44 +95,44 @@ void fk_Material::setAmbDiff(fk_Color argC)
 
 void fk_Material::setAmbient(float argR, float argG, float argB, float argA)
 {
-	ambient->init(argR, argG, argB, argA);
+	_m->ambient.init(argR, argG, argB, argA);
 }
 
 void fk_Material::setDiffuse(float argR, float argG, float argB, float argA)
 {
-	diffuse->init(argR, argG, argB, argA);
+	_m->diffuse.init(argR, argG, argB, argA);
 }
 
 void fk_Material::setSpecular(float argR, float argG, float argB, float argA)
 {
-	specular->init(argR, argG, argB, argA);
+	_m->specular.init(argR, argG, argB, argA);
 }
 
 void fk_Material::setAmbDiff(float argR, float argG, float argB, float argA)
 {
-	ambient->init(argR, argG, argB, argA);  
-	diffuse->init(argR, argG, argB, argA);
+	_m->ambient.init(argR, argG, argB, argA);  
+	_m->diffuse.init(argR, argG, argB, argA);
 }
 
 void fk_Material::setAmbient(double argR, double argG, double argB, double argA)
 {
-	ambient->init(float(argR), float(argG), float(argB), float(argA));
+	_m->ambient.init(float(argR), float(argG), float(argB), float(argA));
 }
 
 void fk_Material::setDiffuse(double argR, double argG, double argB, double argA)
 {
-	diffuse->init(float(argR), float(argG), float(argB), float(argA));
+	_m->diffuse.init(float(argR), float(argG), float(argB), float(argA));
 }
 
 void fk_Material::setSpecular(double argR, double argG, double argB, double argA)
 {
-	specular->init(float(argR), float(argG), float(argB), float(argA));
+	_m->specular.init(float(argR), float(argG), float(argB), float(argA));
 }
 
 void fk_Material::setAmbDiff(double argR, double argG, double argB, double argA)
 {
-	ambient->init(float(argR), float(argG), float(argB), float(argA));	
-	diffuse->init(float(argR), float(argG), float(argB), float(argA));
+	_m->ambient.init(float(argR), float(argG), float(argB), float(argA));	
+	_m->diffuse.init(float(argR), float(argG), float(argB), float(argA));
 }
 
 void fk_Material::setShininess(float argS)
@@ -134,7 +141,7 @@ void fk_Material::setShininess(float argS)
 		Error::Put("fk_Material", "setShininess", 1, "Shininess Value Error.");
 		return;
 	}
-	shininess = argS;
+	_m->shininess = argS;
 }
 
 void fk_Material::setShininess(double argS)
@@ -143,20 +150,20 @@ void fk_Material::setShininess(double argS)
 	return;
 }
 
-float fk_Material::getAlpha(void) { return diffuse->getA(); }
-fk_Color * fk_Material::getAmbient(void) { return ambient.get(); }
-fk_Color * fk_Material::getDiffuse(void) { return diffuse.get(); }
-fk_Color * fk_Material::getSpecular(void) { return specular.get(); }
-float fk_Material::getShininess(void) { return shininess; }
+float fk_Material::getAlpha(void) { return _m->diffuse.getA(); }
+fk_Color * fk_Material::getAmbient(void) { return &(_m->ambient); }
+fk_Color * fk_Material::getDiffuse(void) { return &(_m->diffuse); }
+fk_Color * fk_Material::getSpecular(void) { return &(_m->specular); }
+float fk_Material::getShininess(void) { return _m->shininess; }
 
 namespace FK {
 	bool operator ==(fk_Material argA, fk_Material argB)
 	{
-		float sh = argA.shininess - argB.shininess;
+		float sh = argA._m->shininess - argB._m->shininess;
 		return(fabs((float)sh) < fk_Color::EPS &&
-			   *argA.ambient == *argB.ambient &&
-			   *argA.diffuse == *argB.diffuse &&
-			   *argA.specular == *argB.specular);
+			   argA._m->ambient == argB._m->ambient &&
+			   argA._m->diffuse == argB._m->diffuse &&
+			   argA._m->specular == argB._m->specular);
 	}
 }
 	
@@ -169,16 +176,15 @@ void fk_Material::initDefault(void)
 void fk_Material::setEmission(float, float, float) {}
 void fk_Material::setEmission(double, double, double) {}
 void fk_Material::setEmission(fk_Color) {}
-fk_Color * fk_Material::getEmission(void) { return ambient.get(); }
+fk_Color * fk_Material::getEmission(void) { return &(_m->ambient); }
 
 void fk_Material::Print(int argTabSize, string argTag)
 {
-	string			tab;
-	_st				i;
-	stringstream	ss;
+	string tab;
+	stringstream ss;
 	
 	tab.erase();
-	for(i = 0; i < _st(argTabSize); i++) tab += '\t';
+	for(_st i = 0; i < _st(argTabSize); i++) tab += '\t';
 
 	if(argTag.size() == 0) {
 		Error::Put(tab + "Mat = {");
@@ -186,19 +192,19 @@ void fk_Material::Print(int argTabSize, string argTag)
 		Error::Put(tab + "Mat[" + argTag + "] = {");
 	}
 
-	ss << "\tamb = " << ambient->OutStr() << ";";
+	ss << "\tamb = " << _m->ambient.OutStr() << ";";
 	Error::Put(tab + ss.str());
 	ss.clear();
 
-	ss << "\tdiff = " << diffuse->OutStr() << ";";
+	ss << "\tdiff = " << _m->diffuse.OutStr() << ";";
 	Error::Put(tab + ss.str());
 	ss.clear();
 
-	ss << "\tspec = " << specular->OutStr() << ";";
+	ss << "\tspec = " << _m->specular.OutStr() << ";";
 	Error::Put(tab + ss.str());
 	ss.clear();
 
-	ss << "\tshini = " << shininess << ";";
+	ss << "\tshini = " << _m->shininess << ";";
 	Error::Put(tab + ss.str());
 	Error::Put(tab + "}");
 	
