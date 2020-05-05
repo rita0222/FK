@@ -14,8 +14,12 @@
 using namespace std;
 using namespace FK;
 
-fk_PointDraw::fk_PointDraw(void) :
-	pointShader(_st(VS_NUM) * _st(FS_NUM) * _st(FOG_NUM))
+fk_PointDraw::Member::Member(void) : pointShader(_st(VS_NUM) * _st(FS_NUM) * _st(FOG_NUM))
+{
+	return;
+}
+
+fk_PointDraw::fk_PointDraw(void) : _m(make_unique<Member>())
 {
 	return;
 }
@@ -41,23 +45,18 @@ bool fk_PointDraw::AllTest(void)
 	return retFlg;
 }
 
-fk_ShaderBinder * fk_PointDraw::GetShader(
-	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+fk_ShaderBinder * fk_PointDraw::GetShader(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	_st index = _st(argVID) * FS_NUM * FOG_NUM +
-		_st(argFID) * FOG_NUM + _st(argFogMode);
-
-	return pointShader[index].get();
+	_st index = _st(argVID) * FS_NUM * FOG_NUM + _st(argFID) * FOG_NUM + _st(argFogMode);
+	return _m->pointShader[index].get();
 }
 
-fk_ShaderBinder * fk_PointDraw::MakeShader(
-	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+fk_ShaderBinder * fk_PointDraw::MakeShader(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	_st index = _st(argVID) * FS_NUM * FOG_NUM +
-		_st(argFID) * FOG_NUM + _st(argFogMode);
+	_st index = _st(argVID) * FS_NUM * FOG_NUM + _st(argFID) * FOG_NUM + _st(argFogMode);
 
-	pointShader[index] = make_unique<fk_ShaderBinder>();
-	return pointShader[index].get();
+	_m->pointShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->pointShader[index].get();
 }
 
 void fk_PointDraw::DrawShapePoint(fk_Model *argModel, fk_Shape *argShape,

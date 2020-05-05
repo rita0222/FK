@@ -20,6 +20,22 @@ namespace FK {
 	};
 
 	class fk_SurfaceDraw : public fk_DrawBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			// [MODE][TYPE][FOG][SHADOW]
+			std::vector<std::unique_ptr<fk_ShaderBinder>> surfShader;
+
+			// [TYPE]
+			std::vector<std::unique_ptr<fk_ShaderBinder>> surfShadowShader; 
+
+			fk_SurfaceDrawMode mode;
+
+			Member(fk_SurfaceDrawMode);
+		};
+#endif
+		
 	public:
 		fk_SurfaceDraw(fk_SurfaceDrawMode);
 		virtual ~fk_SurfaceDraw();
@@ -32,10 +48,8 @@ namespace FK {
 	private:
 		static constexpr int S_DRAW_NUM = int(fk_SurfaceDrawType::NUM);
 
-        std::vector<std::unique_ptr<fk_ShaderBinder>> surfShader; // [MODE][TYPE][FOG][SHADOW]
-        std::vector<std::unique_ptr<fk_ShaderBinder>> surfShadowShader; // [TYPE]
+		std::unique_ptr<Member> _m;
 
-		fk_SurfaceDrawMode mode;
 		
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
  		void Draw_Surface(fk_Model *, bool);

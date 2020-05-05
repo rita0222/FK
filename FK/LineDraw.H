@@ -7,6 +7,17 @@
 namespace FK {
 
 	class fk_LineDraw : public fk_DrawBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			// [VS_NUM] [FS_NUM] [FOG_NUM] ;
+			std::vector<std::unique_ptr<fk_ShaderBinder>> lineShader;
+
+			Member(void);
+		};
+
+#endif
 	public:
 		fk_LineDraw(void);
 		virtual ~fk_LineDraw();
@@ -17,8 +28,8 @@ namespace FK {
 		bool AllTest(void);
 
 	private:
-		// [VS_NUM] [FS_NUM] [FOG_NUM] ;
-        std::vector<std::unique_ptr<fk_ShaderBinder>> lineShader; 
+
+		std::unique_ptr<Member> _m;
 
 		void DefaultShaderSetup(fk_Model *, fk_FogMode);
 		bool ShaderInit(fk_DrawVS, fk_DrawFS, fk_FogMode);

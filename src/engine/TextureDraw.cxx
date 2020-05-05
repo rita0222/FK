@@ -7,8 +7,13 @@
 using namespace std;
 using namespace FK;
 
-fk_TextureDraw::fk_TextureDraw(void)
-	: textureShader(SHADING_NUM * SHADOW_NUM * TEXTURE_NUM * FOG_NUM), replaceShader(FOG_NUM)
+fk_TextureDraw::Member::Member(void) :
+	textureShader(SHADING_NUM * SHADOW_NUM * TEXTURE_NUM * FOG_NUM), replaceShader(FOG_NUM)
+{
+	return;
+}
+
+fk_TextureDraw::fk_TextureDraw(void) : _m(make_unique<Member>())
 {
 	return;
 }
@@ -30,7 +35,7 @@ fk_ShaderBinder * fk_TextureDraw::GetShader(
 		_st(argTexMode) * FOG_NUM +
 		_st(argFogMode);
 
-	return textureShader[index].get();
+	return _m->textureShader[index].get();
 }
 
 fk_ShaderBinder * fk_TextureDraw::MakeShader(
@@ -45,21 +50,21 @@ fk_ShaderBinder * fk_TextureDraw::MakeShader(
 		_st(argTexMode) * FOG_NUM +
 		_st(argFogMode);
 
-	textureShader[index] = make_unique<fk_ShaderBinder>();
-	return textureShader[index].get();
+	_m->textureShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->textureShader[index].get();
 }
 
 fk_ShaderBinder * fk_TextureDraw::MakeReplace(fk_FogMode argFogMode)
 {
 	_st index = _st(argFogMode);
 
-	replaceShader[index] = make_unique<fk_ShaderBinder>();
-	return replaceShader[index].get();
+	_m->replaceShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->replaceShader[index].get();
 }
 
 fk_ShaderBinder * fk_TextureDraw::GetReplace(fk_FogMode argFogMode)
 {
-	return replaceShader[_st(argFogMode)].get();
+	return _m->replaceShader[_st(argFogMode)].get();
 }
 
 bool fk_TextureDraw::AllTest(void)
@@ -420,14 +425,14 @@ bool fk_TextureDraw::TextureShaderInit(fk_ShadingMode argShadingMode,
 
 void fk_TextureDraw::ShadowSetup(void)
 {
-	if(texShadowShader == nullptr) ShadowInit();
-	shadowShader = texShadowShader.get();
+	if(_m->texShadowShader == nullptr) ShadowInit();
+	shadowShader = _m->texShadowShader.get();
 }
 
 bool fk_TextureDraw::ShadowInit(void)
 {
-	texShadowShader = make_unique<fk_ShaderBinder>();
-	fk_ShaderBinder *shader = texShadowShader.get();
+	_m->texShadowShader = make_unique<fk_ShaderBinder>();
+	fk_ShaderBinder *shader = _m->texShadowShader.get();
 	
 	auto prog = shader->getProgram();
 	auto param = shader->getParameter();

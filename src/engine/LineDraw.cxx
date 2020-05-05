@@ -13,8 +13,12 @@
 using namespace std;
 using namespace FK;
 
-fk_LineDraw::fk_LineDraw(void) :
-	lineShader(VS_NUM * FS_NUM * FOG_NUM)
+fk_LineDraw::Member::Member(void) : lineShader(VS_NUM * FS_NUM * FOG_NUM)
+{
+	return;
+}
+
+fk_LineDraw::fk_LineDraw(void) : _m(make_unique<Member>())
 {
 	return;
 }
@@ -40,23 +44,19 @@ bool fk_LineDraw::AllTest(void)
 	return retFlg;
 }
 
-fk_ShaderBinder * fk_LineDraw::GetShader(
-	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+fk_ShaderBinder * fk_LineDraw::GetShader(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	_st index = _st(argVID) * FS_NUM * FOG_NUM +
-		_st(argFID) * FOG_NUM + _st(argFogMode);
+	_st index = _st(argVID) * FS_NUM * FOG_NUM + _st(argFID) * FOG_NUM + _st(argFogMode);
 
-	return lineShader[index].get();
+	return _m->lineShader[index].get();
 }
 
-fk_ShaderBinder * fk_LineDraw::MakeShader(
-	fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
+fk_ShaderBinder * fk_LineDraw::MakeShader(fk_DrawVS argVID, fk_DrawFS argFID, fk_FogMode argFogMode)
 {
-	_st index = _st(argVID) * FS_NUM * FOG_NUM +
-		_st(argFID) * FOG_NUM + _st(argFogMode);
+	_st index = _st(argVID) * FS_NUM * FOG_NUM + _st(argFID) * FOG_NUM + _st(argFogMode);
 
-	lineShader[index] = make_unique<fk_ShaderBinder>();
-	return lineShader[index].get();
+	_m->lineShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->lineShader[index].get();
 }
 
 void fk_LineDraw::DrawShapeLine(fk_Model *argModel, fk_Shape *argShape,

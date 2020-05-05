@@ -6,6 +6,20 @@
 
 namespace FK {
 	class fk_TextureDraw : public fk_DrawBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			// [SHADING_NUM] [SHADOW_NUM] [TEXTURE_NUM] [FOG_NUM]
+			std::vector<std::unique_ptr<fk_ShaderBinder>> textureShader;
+			// [FOG_NUM]
+			std::vector<std::unique_ptr<fk_ShaderBinder>> replaceShader; 
+			std::unique_ptr<fk_ShaderBinder> texShadowShader;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		fk_TextureDraw(void);
 		virtual ~fk_TextureDraw();
@@ -18,13 +32,7 @@ namespace FK {
 	private:
 		static constexpr int TEXTURE_NUM = int(fk_TexMode::NUM);
 
-		// [SHADING_NUM] [SHADOW_NUM] [TEXTURE_NUM] [FOG_NUM]
-        std::vector<std::unique_ptr<fk_ShaderBinder>> textureShader;
-
-		// [FOG_NUM]
-        std::vector<std::unique_ptr<fk_ShaderBinder>> replaceShader; 
-
-		std::unique_ptr<fk_ShaderBinder> texShadowShader;
+		std::unique_ptr<Member> _m;
 
 		void ParamInit(fk_ShaderProgram *, fk_ShaderParameter *);
 		void Draw_Texture(fk_Model *, fk_ShaderParameter *, bool);

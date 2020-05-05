@@ -16,6 +16,16 @@ namespace FK {
 	 */
 	class fk_Renderer {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			std::unique_ptr<fk_GraphicsEngine> engine;
+			bool initFlg;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -89,8 +99,7 @@ namespace FK {
 		fk_FrameBuffer * getDepthBuffer(void);
 
 	private:
-		std::unique_ptr<fk_GraphicsEngine> engine;
-		bool initFlg;
+		std::unique_ptr<Member> _m;
 	};
 }
 

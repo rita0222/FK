@@ -5,14 +5,18 @@
 using namespace std;
 using namespace FK;
 
-fk_Renderer::fk_Renderer(int argW, int argH)
+fk_Renderer::Member::Member(void) :
+	engine(make_unique<fk_GraphicsEngine>(false)), initFlg(true)
 {
-	engine = make_unique<fk_GraphicsEngine>(false);
-	engine->Init(argW, argH);
-	engine->OpenGLInit();
-	engine->InitFrameBufferMode();
-	engine->Draw();
-	initFlg = true;
+	return;
+}
+
+fk_Renderer::fk_Renderer(int argW, int argH) : _m(make_unique<Member>())
+{	
+	_m->engine->Init(argW, argH);
+	_m->engine->OpenGLInit();
+	_m->engine->InitFrameBufferMode();
+	_m->engine->Draw();
 }
 
 fk_Renderer::~fk_Renderer()
@@ -22,34 +26,34 @@ fk_Renderer::~fk_Renderer()
 
 void fk_Renderer::setScene(fk_Scene *argScene)
 {
-	engine->SetScene(argScene);
+	_m->engine->SetScene(argScene);
 }
 
 void fk_Renderer::draw(void)
 {
-	if(initFlg == false) {
-		engine->OpenGLInit();
-		engine->InitFrameBufferMode();
-		initFlg = true;
+	if(_m->initFlg == false) {
+		_m->engine->OpenGLInit();
+		_m->engine->InitFrameBufferMode();
+		_m->initFlg = true;
 	}
 	
-	engine->Draw();
+	_m->engine->Draw();
 }
 
 void fk_Renderer::resize(int argW, int argH)
 {
-	engine->ResizeWindow(argW, argH);
-	initFlg = false;
+	_m->engine->ResizeWindow(argW, argH);
+	_m->initFlg = false;
 }
 
 fk_FrameBuffer * fk_Renderer::getColorBuffer(void)
 {
-	return engine->GetColorBuffer();
+	return _m->engine->GetColorBuffer();
 }
 
 fk_FrameBuffer * fk_Renderer::getDepthBuffer(void)
 {
-	return engine->GetDepthBuffer();
+	return _m->engine->GetDepthBuffer();
 }
 
 /****************************************************************************

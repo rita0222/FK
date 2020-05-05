@@ -9,9 +9,14 @@
 using namespace std;
 using namespace FK;
 
-fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode) :
+fk_SurfaceDraw::Member::Member(fk_SurfaceDrawMode argMode) :
 	surfShader(_st(fk_SurfaceDrawMode::NUM) * S_DRAW_NUM * FOG_NUM * SHADOW_NUM),
 	surfShadowShader(SHADOW_NUM), mode(argMode)
+{
+	return;
+}
+
+fk_SurfaceDraw::fk_SurfaceDraw(fk_SurfaceDrawMode argMode) : _m(make_unique<Member>(argMode))
 {
 	return;
 }
@@ -32,7 +37,7 @@ fk_ShaderBinder *fk_SurfaceDraw::GetDrawShader(
 		_st(argType) * FOG_NUM * SHADOW_NUM +
 		_st(argFog) * SHADOW_NUM + _st(argShadow);
 
-	return surfShader[index].get();
+	return _m->surfShader[index].get();
 }
 
 fk_ShaderBinder * fk_SurfaceDraw::MakeDrawShader(
@@ -46,19 +51,19 @@ fk_ShaderBinder * fk_SurfaceDraw::MakeDrawShader(
 		_st(argType) * FOG_NUM * SHADOW_NUM +
 		_st(argFog) * SHADOW_NUM + _st(argShadow);
 
-	surfShader[index] = make_unique<fk_ShaderBinder>();
-	return surfShader[index].get();
+	_m->surfShader[index] = make_unique<fk_ShaderBinder>();
+	return _m->surfShader[index].get();
 }
 
 fk_ShaderBinder *fk_SurfaceDraw::GetShadowShader(fk_SurfaceDrawType argType)
 {
-	return surfShadowShader[_st(argType)].get();
+	return _m->surfShadowShader[_st(argType)].get();
 }
 
 fk_ShaderBinder *fk_SurfaceDraw::MakeShadowShader(fk_SurfaceDrawType argType)
 {
-	surfShadowShader[_st(argType)] = make_unique<fk_ShaderBinder>();
-	return surfShadowShader[_st(argType)].get();
+	_m->surfShadowShader[_st(argType)] = make_unique<fk_ShaderBinder>();
+	return _m->surfShadowShader[_st(argType)].get();
 }
 
 bool fk_SurfaceDraw::AllTest(void)
@@ -146,7 +151,7 @@ void fk_SurfaceDraw::DefaultShaderSetup(fk_Model *argModel,
 	fk_SurfaceDrawType type = GetSurfType(argModel);
 	fk_ShadowMode shadowMode = (argModel->getShadowDraw()) ? argShadowMode : fk_ShadowMode::OFF;
 
-	switch(mode) {
+	switch(_m->mode) {
 	  case fk_SurfaceDrawMode::LINE:
 		  drawShader = GetDrawShader(fk_SurfaceDrawMode::LINE, type, argFogMode);
 		  if (drawShader == nullptr) {
@@ -397,7 +402,7 @@ void fk_SurfaceDraw::Draw_Surface(fk_Model *argModel, bool argShadowSwitch)
 	shader->ProcPreShader();
 
 	if(argShadowSwitch == false ||
-	   (mode == fk_SurfaceDrawMode::FACE &&
+	   (_m->mode == fk_SurfaceDrawMode::FACE &&
 		argModel->getShadowEffect() == true)) {
 		glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessOut);
 		glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessIn);
