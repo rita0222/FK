@@ -4,22 +4,25 @@
 #include <FK/Window.h>
 
 using namespace FK;
+using namespace std;
+
+fk_FrameController::Member::Member(bool argFrameSkip) :
+	nowTime(0.0), lastMinitues(0.0), frameRate(0), skipRate(0),
+	frameTime(0.0), drawFlag(false), frameSkip(argFrameSkip),
+	init(true), frameCount(0), skipCount(0)
+{
+	return;
+}
+	
 
 //======================================================
 //コンストラクタ
 //======================================================
-fk_FrameController::fk_FrameController(int dwFps, bool bFrameSkip)
+fk_FrameController::fk_FrameController(int argFPS, bool argFrameSkip) :
+	_m(make_unique<Member>(argFrameSkip))
 {
-	m_bInit = true;
-	m_bDrawFlag = false;
-	m_bFrameSkip = bFrameSkip;
-	m_dwFrameRate = 0;
-	m_dwSkipRate = 0;
-	m_dwFrameCount = 0;
-	m_dwSkipCount = 0;
-	setFPS(dwFps);
+	setFPS(argFPS);
 }
-
 
 //======================================================
 //デストラクタ
@@ -39,45 +42,45 @@ void fk_FrameController::SleepOneMSec(void)
 //======================================================
 void fk_FrameController::timeRegular()
 {
-	m_dwFrameCount++;
-	nowTime = fk_Time::now();
+	_m->frameCount++;
+	_m->nowTime = fk_Time::now();
 
-	if(m_bInit == true) {
-		m_dwLastMinitues = nowTime;
-		m_bInit = false;
-		m_bDrawFlag = true;
+	if(_m->init == true) {
+		_m->lastMinitues = _m->nowTime;
+		_m->init = false;
+		_m->drawFlag = true;
 		return;
 	}
 
-	double tmpTime = (double(m_dwFrameCount) + 1.0) * m_fFrameTime;
-	if(m_bFrameSkip == true && nowTime > tmpTime + m_dwLastMinitues) {
-		m_bDrawFlag = false;
-		m_dwSkipCount++;
+	double tmpTime = (double(_m->frameCount) + 1.0) * _m->frameTime;
+	if(_m->frameSkip == true && _m->nowTime > tmpTime + _m->lastMinitues) {
+		_m->drawFlag = false;
+		_m->skipCount++;
 	} else {
-		tmpTime = double(m_dwFrameCount) * m_fFrameTime;
-		double dwTime = tmpTime + m_dwLastMinitues;
+		tmpTime = double(_m->frameCount) * _m->frameTime;
+		double dwTime = tmpTime + _m->lastMinitues;
 		while(fk_Time::now() < dwTime) {
 			SleepOneMSec();
 		}
-		m_bDrawFlag = true;
+		_m->drawFlag = true;
 	}
 
 	double nowTime_ = fk_Time::now();
-	if(nowTime_ - m_dwLastMinitues >= 1.0) {
-		m_dwLastMinitues = nowTime_;
-		m_dwFrameRate = m_dwFrameCount;
-		m_dwFrameCount = 0;
-		m_dwSkipRate = m_dwSkipCount;
-		m_dwSkipCount = 0;
+	if(nowTime_ - _m->lastMinitues >= 1.0) {
+		_m->lastMinitues = nowTime_;
+		_m->frameRate = _m->frameCount;
+		_m->frameCount = 0;
+		_m->skipRate = _m->skipCount;
+		_m->skipCount = 0;
 	}
 }
 
 //======================================================
 //フレームスキップをするかしないかを設定します。
 //======================================================
-void fk_FrameController::setFrameSkipMode(bool bFrameSkip)
+void fk_FrameController::setFrameSkipMode(bool argFrameSkip)
 {
-	m_bFrameSkip = bFrameSkip;
+	_m->frameSkip = argFrameSkip;
 }
 
 //======================================================
@@ -85,7 +88,7 @@ void fk_FrameController::setFrameSkipMode(bool bFrameSkip)
 //======================================================
 void fk_FrameController::setFPS(int fps)
 {
-	m_fFrameTime = 1.0 / double(fps);
+	_m->frameTime = 1.0 / double(fps);
 }
 
 
@@ -94,7 +97,7 @@ void fk_FrameController::setFPS(int fps)
 //======================================================
 unsigned long fk_FrameController::getFrameRate()
 {
-	return m_dwFrameRate;
+	return _m->frameRate;
 }
 
 //======================================================
@@ -102,7 +105,7 @@ unsigned long fk_FrameController::getFrameRate()
 //======================================================
 unsigned long fk_FrameController::getSkipRate()
 {
-	return m_dwSkipRate;
+	return _m->skipRate;
 }
 
 //======================================================
@@ -110,7 +113,7 @@ unsigned long fk_FrameController::getSkipRate()
 //======================================================
 bool fk_FrameController::getDrawFlag()
 {
-	return m_bDrawFlag;
+	return _m->drawFlag;
 }
 
 /****************************************************************************

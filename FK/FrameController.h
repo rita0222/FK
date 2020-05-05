@@ -27,6 +27,24 @@ namespace FK {
 	 */
 	class fk_FrameController {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			double nowTime;
+			double lastMinitues;
+			unsigned long frameRate;
+			unsigned long skipRate;
+			double frameTime;
+			bool drawFlag;
+			bool frameSkip;
+			bool init;
+			unsigned long frameCount;
+			unsigned long skipCount;
+
+			Member(bool);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_FrameController(int dwFps = 60, bool bFrameSkip = true);
@@ -88,18 +106,7 @@ namespace FK {
 		unsigned long getFrameRate(void);
 
 	private:
-		double nowTime;
-
-		double m_dwLastMinitues;
-		unsigned long m_dwFrameRate;
-		unsigned long m_dwSkipRate;
-		double m_fFrameTime;
-		bool m_bDrawFlag;
-		bool m_bFrameSkip;
-		
-		bool m_bInit;
-		unsigned long m_dwFrameCount;
-		unsigned long m_dwSkipCount;
+		std::unique_ptr<Member> _m;
 
 		static void SleepOneMSec(void);
 	};
