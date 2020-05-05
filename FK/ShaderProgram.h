@@ -21,7 +21,7 @@ namespace FK {
 	class fk_ShaderProgram {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_SPData {
+		class Member {
 		public:
 			GLuint idProgram;
 			GLuint idVertex;
@@ -37,7 +37,7 @@ namespace FK {
 			std::map<std::string, bool> uniformStatus;
 			std::map<std::string, bool> attributeStatus;
 
-			fk_SPData(void);
+			Member(void);
 		};
 #endif
 
@@ -245,7 +245,7 @@ namespace FK {
 		static std::vector<fk_BuildInKey> uniformStack;
 		static std::vector<fk_BuildInKey> attributeStack;
 
-		std::unique_ptr<fk_SPData> sp_data;
+		std::unique_ptr<Member> _m;
 
 		GLuint Compile(std::string *, GLuint);
 		bool UpdateLastError(GLuint, std::string);

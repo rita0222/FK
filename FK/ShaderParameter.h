@@ -17,8 +17,9 @@ namespace FK {
 	 *	\sa fk_ShaderBinder, fk_ShaderProgram, fk_Texture
 	 */
 	class fk_ShaderParameter {
+
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_SPData {
+		class Member {
 		public:
 			std::map<std::string, float> floatTable;
 			std::map<std::string, std::vector<float>> floatArrayTable;
@@ -32,7 +33,7 @@ namespace FK {
 			unsigned int lastAppliedId;
 			fk_ShaderProgram *prog;
 
-			fk_SPData(void);
+			Member(void);
 		};
 #endif
 	public:
@@ -212,7 +213,7 @@ namespace FK {
 #endif
 	
 	private:
-		std::unique_ptr<fk_SPData> sp_data;
+		std::unique_ptr<Member> _m;
 		GLint GetLocation(GLuint, std::string);
 	};
 }

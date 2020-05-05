@@ -34,8 +34,9 @@ namespace FK {
 	 */
 
 	class fk_ShaderBinder {
+
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_SBData {
+		class Member {
 		public:
 			fk_ShaderProgram innerProgram;
 			fk_ShaderParameter innerParameter;
@@ -46,7 +47,7 @@ namespace FK {
 			GLint	bufW, bufH;
 			std::vector<float>	fboSize;
 
-			fk_SBData(void);
+			Member(void);
 		};
 #endif
 	public:
@@ -216,7 +217,7 @@ namespace FK {
 #endif
 	
 	private:
-		std::unique_ptr<fk_SBData> sb_data;
+		std::unique_ptr<Member> _m;
 
 		static bool	isExtensionInitialized;
 		static std::string	fboVertexCode, fboGeometryCode;

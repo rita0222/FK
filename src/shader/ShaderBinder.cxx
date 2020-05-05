@@ -14,7 +14,7 @@ bool fk_ShaderBinder::isExtensionInitialized = false;
 string fk_ShaderBinder::fboVertexCode;
 string fk_ShaderBinder::fboGeometryCode;
 
-fk_ShaderBinder::fk_SBData::fk_SBData(void) :
+fk_ShaderBinder::Member::Member(void) :
 	program(&innerProgram), parameter(&innerParameter),
 	usingProgram(false), setupFlg(false),
 	bufW(0), bufH(0)
@@ -54,9 +54,8 @@ bool fk_ShaderBinder::IsInitialized(void)
     return isExtensionInitialized;
 }
 
-fk_ShaderBinder::fk_ShaderBinder()
+fk_ShaderBinder::fk_ShaderBinder() : _m(make_unique<Member>())
 {
-	sb_data = make_unique<fk_SBData>();
 	isExtensionInitialized = false;
 	Initialize();
 }
@@ -67,12 +66,12 @@ fk_ShaderBinder::~fk_ShaderBinder()
 
 fk_ShaderProgram * fk_ShaderBinder::getProgram(void)
 {
-	return sb_data->program;
+	return _m->program;
 }
 
 fk_ShaderParameter * fk_ShaderBinder::getParameter(void)
 {
-	return sb_data->parameter;
+	return _m->parameter;
 }
 
 void fk_ShaderBinder::bindModel(fk_Model *argModel)
@@ -87,19 +86,19 @@ void fk_ShaderBinder::unbindModel(fk_Model *argModel)
 
 void fk_ShaderBinder::LoadFBOShader(void)
 {
-	sb_data->program->vertexShaderSource = fboVertexCode;
-	sb_data->program->geometryShaderSource = fboGeometryCode;
-	sb_data->program->SetFBOMode(true);
+	_m->program->vertexShaderSource = fboVertexCode;
+	_m->program->geometryShaderSource = fboGeometryCode;
+	_m->program->SetFBOMode(true);
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(int width, int height)
 {
-	sb_data->bufW = width;
-	sb_data->bufH = height;
+	_m->bufW = width;
+	_m->bufH = height;
 	LoadFBOShader();
-	sb_data->fboSize.clear();
-	sb_data->fboSize.push_back(float(sb_data->bufW));
-	sb_data->fboSize.push_back(float(sb_data->bufH));
+	_m->fboSize.clear();
+	_m->fboSize.push_back(float(_m->bufW));
+	_m->fboSize.push_back(float(_m->bufH));
 }
 
 void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
@@ -109,23 +108,23 @@ void fk_ShaderBinder::initializeFrameBufferObject(fk_Dimension argDim)
 
 void fk_ShaderBinder::bindWindow(fk_Window *argWin)
 {
-	if(argWin == nullptr || sb_data->bufW <= 0 || sb_data->bufH <= 0) return;
+	if(argWin == nullptr || _m->bufW <= 0 || _m->bufH <= 0) return;
 	if(IsInitialized() == false) Initialize();
 	
 	argWin->GetEngine()->BindWindow(this);
 
-	GLuint id = sb_data->program->getProgramID();
+	GLuint id = _m->program->getProgramID();
 
 	glBindAttribLocation(id, 0, fk_Shape::vertexName.c_str());
 	glBindFragDataLocation(id, 0, fk_DrawBase::fragmentName.c_str());
-	sb_data->program->link();
+	_m->program->link();
 	
 	int maxUnit;
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnit);
 
-	sb_data->parameter->setRegister(colorBufName, maxUnit-1);
-	sb_data->parameter->setRegister(depthBufName, maxUnit-2);
-	sb_data->parameter->setRegister(fboSizeName, &sb_data->fboSize);
+	_m->parameter->setRegister(colorBufName, maxUnit-1);
+	_m->parameter->setRegister(depthBufName, maxUnit-2);
+	_m->parameter->setRegister(fboSizeName, &_m->fboSize);
 }
 
 void fk_ShaderBinder::bindWindow(fk_AppWindow *argWin)
@@ -148,30 +147,30 @@ void fk_ShaderBinder::unbindWindow(fk_AppWindow *argWin)
 
 void fk_ShaderBinder::ProcPreShader(void)
 {
-	GLuint id = sb_data->program->getProgramID();
+	GLuint id = _m->program->getProgramID();
 	if (id != 0) {
 		glUseProgram(id);
-		sb_data->parameter->Apply(id);
-		sb_data->usingProgram = true;
+		_m->parameter->Apply(id);
+		_m->usingProgram = true;
 	}
 }
 
 void fk_ShaderBinder::ProcPostShader(void)
 {
-	if (sb_data->usingProgram == true) {
+	if (_m->usingProgram == true) {
 		glUseProgram(0);
-		sb_data->usingProgram = false;
+		_m->usingProgram = false;
 	}
 }
 
 void fk_ShaderBinder::SetupDone(bool argFlg)
 {
-	sb_data->setupFlg = argFlg;
+	_m->setupFlg = argFlg;
 }
 
 bool fk_ShaderBinder::IsSetup(void)
 {
-	return sb_data->setupFlg;
+	return _m->setupFlg;
 }
 
 /****************************************************************************

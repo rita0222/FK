@@ -15,17 +15,15 @@ string fk_ShaderProgram::fboBuildIn;
 vector<fk_BuildInKey> fk_ShaderProgram::uniformStack;
 vector<fk_BuildInKey> fk_ShaderProgram::attributeStack;
 
-fk_ShaderProgram::fk_SPData::fk_SPData(void) :
+fk_ShaderProgram::Member::Member(void) :
 	idProgram(0), idVertex(0), idFragment(0), idGeometry(0), idTessCtrl(0), idTessEval(0),
 	parameter(nullptr), fboMode(false)
 {
 	return;
 }
 
-fk_ShaderProgram::fk_ShaderProgram(void)
+fk_ShaderProgram::fk_ShaderProgram(void) : _m(make_unique<Member>())
 {
-	sp_data = make_unique<fk_SPData>();
-	
 	if(uniformStack.empty() == true) {
 		string uniformStr =
 			#include "GLSL/Uniform.out"
@@ -88,141 +86,141 @@ fk_ShaderProgram::fk_ShaderProgram(void)
 
 fk_ShaderProgram::~fk_ShaderProgram()
 {
-	if(sp_data->idProgram != 0) DeleteProgram(sp_data->idProgram);
-	if(sp_data->idVertex != 0) DeleteShader(sp_data->idVertex);
-	if(sp_data->idGeometry != 0) DeleteShader(sp_data->idGeometry);
-	if(sp_data->idFragment != 0) DeleteShader(sp_data->idFragment);
-	if(sp_data->idTessCtrl != 0) DeleteShader(sp_data->idTessCtrl);
-	if(sp_data->idTessEval != 0) DeleteShader(sp_data->idTessEval);
+	if(_m->idProgram != 0) DeleteProgram(_m->idProgram);
+	if(_m->idVertex != 0) DeleteShader(_m->idVertex);
+	if(_m->idGeometry != 0) DeleteShader(_m->idGeometry);
+	if(_m->idFragment != 0) DeleteShader(_m->idFragment);
+	if(_m->idTessCtrl != 0) DeleteShader(_m->idTessCtrl);
+	if(_m->idTessEval != 0) DeleteShader(_m->idTessEval);
 
 	return;
 }
 
 void fk_ShaderProgram::SetParameter(fk_ShaderParameter *argP)
 {
-	sp_data->parameter = argP;
+	_m->parameter = argP;
 }
 
 void fk_ShaderProgram::SetFBOMode(bool argMode)
 {
-	sp_data->fboMode = argMode;
+	_m->fboMode = argMode;
 }
 
 bool fk_ShaderProgram::GetUniformStatus(string argKey)
 {
-	if(sp_data->uniformStatus.find(argKey) == sp_data->uniformStatus.end()) return false;
-	return sp_data->uniformStatus[argKey];
+	if(_m->uniformStatus.find(argKey) == _m->uniformStatus.end()) return false;
+	return _m->uniformStatus[argKey];
 }
 
 bool fk_ShaderProgram::GetAttributeStatus(string argKey)
 {
-	if(sp_data->attributeStatus.find(argKey) == sp_data->attributeStatus.end()) return false;
-	return sp_data->attributeStatus[argKey];
+	if(_m->attributeStatus.find(argKey) == _m->attributeStatus.end()) return false;
+	return _m->attributeStatus[argKey];
 }
 
 bool fk_ShaderProgram::validate(void)
 {
 	if(vertexShaderSource.empty()) {
-		sp_data->lastError = "ERROR: VertexShader is empty.";
+		_m->lastError = "ERROR: VertexShader is empty.";
 		return false;
 	}
 	
 	if(fragmentShaderSource.empty()) {
-		sp_data->lastError = "ERROR: FragmentShader is empty.";
+		_m->lastError = "ERROR: FragmentShader is empty.";
 		return false;
 	}
 
-	if(sp_data->idVertex != 0) {
-		DeleteShader(sp_data->idVertex);
-		sp_data->idVertex = 0;
+	if(_m->idVertex != 0) {
+		DeleteShader(_m->idVertex);
+		_m->idVertex = 0;
 	}
 
-	if(sp_data->idFragment != 0) {
-		DeleteShader(sp_data->idFragment);
-		sp_data->idFragment = 0;
+	if(_m->idFragment != 0) {
+		DeleteShader(_m->idFragment);
+		_m->idFragment = 0;
 	}
 
-	if(sp_data->idGeometry != 0) {
-		DeleteShader(sp_data->idGeometry);
-		sp_data->idGeometry = 0;
+	if(_m->idGeometry != 0) {
+		DeleteShader(_m->idGeometry);
+		_m->idGeometry = 0;
 	}
 
-	if(sp_data->idTessCtrl != 0) {
-		DeleteShader(sp_data->idTessCtrl);
-		sp_data->idTessCtrl = 0;
+	if(_m->idTessCtrl != 0) {
+		DeleteShader(_m->idTessCtrl);
+		_m->idTessCtrl = 0;
 	}
 
-	if(sp_data->idTessEval != 0) {
-		DeleteShader(sp_data->idTessEval);
-		sp_data->idTessEval = 0;
+	if(_m->idTessEval != 0) {
+		DeleteShader(_m->idTessEval);
+		_m->idTessEval = 0;
 	}
 
 	if(fk_ShaderBinder::IsInitialized() == false) {
 		if(fk_ShaderBinder::Initialize() == false) {
-			sp_data->lastError = "ERROR: OpenGL Initalize Error.";
+			_m->lastError = "ERROR: OpenGL Initalize Error.";
 			return false;
 		}
 	}
 
-	sp_data->idVertex = Compile(&vertexShaderSource, GL_VERTEX_SHADER);
-	if(sp_data->idVertex == 0) {
-		sp_data->lastError = "ERROR: VertexShader could not create.";
+	_m->idVertex = Compile(&vertexShaderSource, GL_VERTEX_SHADER);
+	if(_m->idVertex == 0) {
+		_m->lastError = "ERROR: VertexShader could not create.";
 		return false;
 	}
 
-	if(UpdateLastError(sp_data->idVertex, "VertexShader")) return false;
+	if(UpdateLastError(_m->idVertex, "VertexShader")) return false;
 
-	sp_data->idFragment = Compile(&fragmentShaderSource, GL_FRAGMENT_SHADER);
-	if(sp_data->idFragment == 0) {
-		sp_data->lastError = "ERROR: FragmentShader could not create.";
+	_m->idFragment = Compile(&fragmentShaderSource, GL_FRAGMENT_SHADER);
+	if(_m->idFragment == 0) {
+		_m->lastError = "ERROR: FragmentShader could not create.";
 		return false;
 	}
 		
-	if(UpdateLastError(sp_data->idFragment, "FragmentShader")) return false;
+	if(UpdateLastError(_m->idFragment, "FragmentShader")) return false;
 
 	if(geometryShaderSource.empty() == false) {
-		sp_data->idGeometry = Compile(&geometryShaderSource, GL_GEOMETRY_SHADER);
-		if(sp_data->idGeometry == 0) {
-			sp_data->lastError = "ERROR: GeometryShader could not create.";
+		_m->idGeometry = Compile(&geometryShaderSource, GL_GEOMETRY_SHADER);
+		if(_m->idGeometry == 0) {
+			_m->lastError = "ERROR: GeometryShader could not create.";
 			return false;
 		}
-		if(UpdateLastError(sp_data->idGeometry, "GeometryShader")) return false;
+		if(UpdateLastError(_m->idGeometry, "GeometryShader")) return false;
 	}
 
 	if(tessCtrlShaderSource.empty() == false) {
-		sp_data->idTessCtrl = Compile(&tessCtrlShaderSource, GL_TESS_CONTROL_SHADER);
-		if(sp_data->idTessCtrl == 0) {
-			sp_data->lastError = "ERROR: TessCtrlShader could not create.";
+		_m->idTessCtrl = Compile(&tessCtrlShaderSource, GL_TESS_CONTROL_SHADER);
+		if(_m->idTessCtrl == 0) {
+			_m->lastError = "ERROR: TessCtrlShader could not create.";
 			return false;
 		}
-		if(UpdateLastError(sp_data->idTessCtrl, "TessControlShader")) return false;
+		if(UpdateLastError(_m->idTessCtrl, "TessControlShader")) return false;
 	}
 
 	if(tessEvalShaderSource.empty() == false) {
-		sp_data->idTessEval = Compile(&tessEvalShaderSource, GL_TESS_EVALUATION_SHADER);
-		if(sp_data->idTessEval == 0) {
-			sp_data->lastError = "ERROR: TessEvalShader could not create.";
+		_m->idTessEval = Compile(&tessEvalShaderSource, GL_TESS_EVALUATION_SHADER);
+		if(_m->idTessEval == 0) {
+			_m->lastError = "ERROR: TessEvalShader could not create.";
 			return false;
 		}
-		if(UpdateLastError(sp_data->idTessEval, "TessEvalShader")) return false;
+		if(UpdateLastError(_m->idTessEval, "TessEvalShader")) return false;
 	}
 
-	if(sp_data->idProgram != 0) {
-		DeleteProgram(sp_data->idProgram);
-		sp_data->idProgram = 0;
+	if(_m->idProgram != 0) {
+		DeleteProgram(_m->idProgram);
+		_m->idProgram = 0;
 	}
 
-	sp_data->idProgram = glCreateProgram();
-	if(sp_data->idProgram == 0) {
-		sp_data->lastError = "ERROR: Could not create program.";
+	_m->idProgram = glCreateProgram();
+	if(_m->idProgram == 0) {
+		_m->lastError = "ERROR: Could not create program.";
 		return false;
 	}
 
-	glAttachShader(sp_data->idProgram, sp_data->idVertex);
-	glAttachShader(sp_data->idProgram, sp_data->idFragment);
-	if(sp_data->idGeometry != 0) glAttachShader(sp_data->idProgram, sp_data->idGeometry);
-	if(sp_data->idTessCtrl != 0) glAttachShader(sp_data->idProgram, sp_data->idTessCtrl);
-	if(sp_data->idTessEval != 0) glAttachShader(sp_data->idProgram, sp_data->idTessEval);
+	glAttachShader(_m->idProgram, _m->idVertex);
+	glAttachShader(_m->idProgram, _m->idFragment);
+	if(_m->idGeometry != 0) glAttachShader(_m->idProgram, _m->idGeometry);
+	if(_m->idTessCtrl != 0) glAttachShader(_m->idProgram, _m->idTessCtrl);
+	if(_m->idTessEval != 0) glAttachShader(_m->idProgram, _m->idTessEval);
 
 	return true;
 }
@@ -289,12 +287,12 @@ bool fk_ShaderProgram::loadTessEvalShader(string argFileName)
 
 GLuint fk_ShaderProgram::getProgramID(void)
 {
-	return sp_data->idProgram;
+	return _m->idProgram;
 }
 
 string fk_ShaderProgram::getLastError(void)
 {
-	return sp_data->lastError;
+	return _m->lastError;
 }
 
 GLuint fk_ShaderProgram::Compile(string *argCode, GLuint argKind)
@@ -314,14 +312,14 @@ GLuint fk_ShaderProgram::Compile(string *argCode, GLuint argKind)
 
 bool fk_ShaderProgram::link(void)
 {
-	sp_data->parameter->BindAttr(sp_data->idProgram);
+	_m->parameter->BindAttr(_m->idProgram);
 
-	glLinkProgram(sp_data->idProgram);
+	glLinkProgram(_m->idProgram);
 
 	GLint linked = 0;
-	glGetProgramiv(sp_data->idProgram, GL_LINK_STATUS, &linked);
+	glGetProgramiv(_m->idProgram, GL_LINK_STATUS, &linked);
 	if(linked == GL_FALSE) {
-		sp_data->lastError = "ERROR: Shader Link Failed.";
+		_m->lastError = "ERROR: Shader Link Failed.";
 		return false;
 	}
 
@@ -347,20 +345,20 @@ bool fk_ShaderProgram::UpdateLastError(GLuint argShader, string argType)
 			auto ite = tmpError.cbegin();
 			auto end = tmpError.cend();
 			while(regex_search(ite, end, lineMatch, lineRegex)) {
-				sp_data->lastError += argType + ":" + lineMatch.str();
+				_m->lastError += argType + ":" + lineMatch.str();
 				ite = lineMatch[0].second;
 			}
 		} else {
-			sp_data->lastError = "ERROR: Could not allocate InfoLog buffer.";
+			_m->lastError = "ERROR: Could not allocate InfoLog buffer.";
 		}
 
-		if(sp_data->lastError.find("ERROR") != string::npos ||
-		   sp_data->lastError.find("error") != string::npos) {
+		if(_m->lastError.find("ERROR") != string::npos ||
+		   _m->lastError.find("error") != string::npos) {
 			return true;
 		}
 		return false;
 	} else {
-		sp_data->lastError.clear();
+		_m->lastError.clear();
 		return false;
 	}
 }
@@ -381,7 +379,7 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 		break;
 
 	  case GL_FRAGMENT_SHADER:
-		buildIn = (sp_data->fboMode == true) ? fboBuildIn : fragmentBuildIn;
+		buildIn = (_m->fboMode == true) ? fboBuildIn : fragmentBuildIn;
 		break;
 		
 	  case GL_TESS_CONTROL_SHADER:
@@ -399,11 +397,11 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 	string tmpStr;
 	for(auto pair : uniformStack) {
 		if(argCode->find(pair.first) != string::npos) {
-			sp_data->uniformStatus[pair.first] = true;
+			_m->uniformStatus[pair.first] = true;
 			tmpStr += pair.second;
 		} else {
-			if(sp_data->uniformStatus.find(pair.first) == sp_data->uniformStatus.end()) {
-				sp_data->uniformStatus[pair.first] = false;
+			if(_m->uniformStatus.find(pair.first) == _m->uniformStatus.end()) {
+				_m->uniformStatus[pair.first] = false;
 			}
 		}
 	}
@@ -412,11 +410,11 @@ void fk_ShaderProgram::ReplaceBuildIn(string *argCode, GLuint argKind)
 	tmpStr.clear();
 	for(auto pair : attributeStack) {
 		if(argCode->find(pair.first) != string::npos) {
-			sp_data->attributeStatus[pair.first] = true;
+			_m->attributeStatus[pair.first] = true;
 			tmpStr += pair.second;
 		} else {
-			if(sp_data->attributeStatus.find(pair.first) == sp_data->attributeStatus.end()) {
-				sp_data->attributeStatus[pair.first] = false;
+			if(_m->attributeStatus.find(pair.first) == _m->attributeStatus.end()) {
+				_m->attributeStatus[pair.first] = false;
 			}
 		}
 	}
