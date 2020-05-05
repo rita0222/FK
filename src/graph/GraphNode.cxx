@@ -4,8 +4,14 @@
 using namespace std;
 using namespace FK;
 
+fk_GraphNode::Member::Member(unsigned int argID, fk_Graph *argGraph) :
+	ID(argID), generation(0), baseGraph(argGraph)
+{
+	return;
+}
+
 fk_GraphNode::fk_GraphNode(unsigned int argID, fk_Graph *argGraph)
-	: fk_BaseObject(fk_Type::GRAPHNODE), ID(argID), generation(0), baseGraph(argGraph)
+	: fk_BaseObject(fk_Type::GRAPHNODE), _m(make_unique<Member>(argID, argGraph))
 {
 	clearIntCost(0);
 	clearDoubleCost(0);
@@ -20,47 +26,47 @@ fk_GraphNode::~fk_GraphNode()
 
 unsigned int fk_GraphNode::getID(void)
 {
-	return ID;
+	return _m->ID;
 }
 
 void fk_GraphNode::setPosition(fk_Vector argPos)
 {
-	position = argPos;
-	baseGraph->GetVertexShape()->setVertex(int(ID), argPos);
+	_m->position = argPos;
+	_m->baseGraph->GetVertexShape()->setVertex(int(_m->ID), argPos);
 
-	auto edgeShape = baseGraph->GetEdgeShape();
-	for(auto e : edgeAll) {
+	auto edgeShape = _m->baseGraph->GetEdgeShape();
+	for(auto e : _m->edgeAll) {
 		if(e->getNode(true) == this) {
 			edgeShape->setVertex(int(e->getID()), 0, argPos);
 		} else {
 			edgeShape->setVertex(int(e->getID()), 1, argPos);
 		}
 	}
-	++generation;
+	++(_m->generation);
 }
 
 
 fk_Vector & fk_GraphNode::getPosition(void)
 {
-	return position;
+	return _m->position;
 }
 
 unsigned int fk_GraphNode::getGeneration(void)
 {
-	return generation;
+	return _m->generation;
 }
 
 void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
 {
-	edgeAll.push_back(argEdge);
+	_m->edgeAll.push_back(argEdge);
 
 	if(argMode == true) {
-		edgeB.push_back(argEdge);
+		_m->edgeB.push_back(argEdge);
 	} else {
 		if(argEdge->getNode(true) == this) {
-			edgeS.push_back(argEdge);
+			_m->edgeS.push_back(argEdge);
 		} else {
-			edgeE.push_back(argEdge);
+			_m->edgeE.push_back(argEdge);
 		}
 	}
 	return;
@@ -68,27 +74,27 @@ void fk_GraphNode::ConnectEdge(bool argMode, fk_GraphEdge *argEdge)
 
 void fk_GraphNode::DeleteEdge(fk_GraphEdge *argEdge)
 {
-	edgeAll.remove(argEdge);
-	edgeB.remove(argEdge);
-	edgeS.remove(argEdge);
-	edgeE.remove(argEdge);
+	_m->edgeAll.remove(argEdge);
+	_m->edgeB.remove(argEdge);
+	_m->edgeS.remove(argEdge);
+	_m->edgeE.remove(argEdge);
 }
 
 bool fk_GraphNode::isConnect(bool argMode, fk_GraphNode *argV)
 {
 	if(argV == nullptr) return false;
-	if(this->baseGraph != argV->baseGraph) return false;
+	if(this->_m->baseGraph != argV->_m->baseGraph) return false;
 
-	for(auto e : edgeB) {
+	for(auto e : _m->edgeB) {
 		if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 	}
 
 	if(argMode == true) {
-		for(auto e : edgeS) {
+		for(auto e : _m->edgeS) {
 			if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 		}
 	} else {
-		for(auto e : edgeE) {
+		for(auto e : _m->edgeE) {
 			if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 		}
 	}
@@ -99,9 +105,9 @@ bool fk_GraphNode::isConnect(bool argMode, fk_GraphNode *argV)
 bool fk_GraphNode::isConnect(fk_GraphNode *argV)
 {
 	if(argV == nullptr) return false;
-	if(this->baseGraph != argV->baseGraph) return false;
+	if(this->_m->baseGraph != argV->_m->baseGraph) return false;
 
-	for(auto e : edgeAll) {
+	for(auto e : _m->edgeAll) {
 		if(e->getNode(true) == argV || e->getNode(false) == argV) return true;
 	}
 
@@ -110,22 +116,22 @@ bool fk_GraphNode::isConnect(fk_GraphNode *argV)
 
 list<fk_GraphEdge *> fk_GraphNode::getAllEdge(void)
 {
-	return edgeAll;
+	return _m->edgeAll;
 }
 
 void fk_GraphNode::getAllEdge(list<fk_GraphEdge *> *argList)
 {
 	if(argList == nullptr) return;
 	argList->clear();
-	copy(edgeAll.begin(), edgeAll.end(), back_inserter(*argList));
+	copy(_m->edgeAll.begin(), _m->edgeAll.end(), back_inserter(*argList));
 }
 
 list<fk_GraphEdge *> fk_GraphNode::getStartEdge(void)
 {
 	list<fk_GraphEdge *> ret;
 
-	copy(edgeS.begin(), edgeS.end(), back_inserter(ret));
-	copy(edgeB.begin(), edgeB.end(), back_inserter(ret));
+	copy(_m->edgeS.begin(), _m->edgeS.end(), back_inserter(ret));
+	copy(_m->edgeB.begin(), _m->edgeB.end(), back_inserter(ret));
 	return ret;
 }
 
@@ -133,16 +139,16 @@ void fk_GraphNode::getStartEdge(list<fk_GraphEdge *> *argList)
 {
 	if(argList == nullptr) return;
 	argList->clear();
-	copy(edgeS.begin(), edgeS.end(), back_inserter(*argList));
-	copy(edgeB.begin(), edgeB.end(), back_inserter(*argList));
+	copy(_m->edgeS.begin(), _m->edgeS.end(), back_inserter(*argList));
+	copy(_m->edgeB.begin(), _m->edgeB.end(), back_inserter(*argList));
 }
 
 list<fk_GraphEdge *> fk_GraphNode::getEndEdge(void)
 {
 	list<fk_GraphEdge *> ret;
 
-	copy(edgeE.begin(), edgeE.end(), back_inserter(ret));
-	copy(edgeB.begin(), edgeB.end(), back_inserter(ret));
+	copy(_m->edgeE.begin(), _m->edgeE.end(), back_inserter(ret));
+	copy(_m->edgeB.begin(), _m->edgeB.end(), back_inserter(ret));
 	return ret;
 }
 
@@ -150,8 +156,8 @@ void fk_GraphNode::getEndEdge(list<fk_GraphEdge *> *argList)
 {
 	if(argList == nullptr) return;
 	argList->clear();
-	copy(edgeE.begin(), edgeE.end(), back_inserter(*argList));
-	copy(edgeB.begin(), edgeB.end(), back_inserter(*argList));
+	copy(_m->edgeE.begin(), _m->edgeE.end(), back_inserter(*argList));
+	copy(_m->edgeB.begin(), _m->edgeB.end(), back_inserter(*argList));
 }
 
 list<fk_GraphNode *> fk_GraphNode::getNextNode(void)
@@ -166,11 +172,11 @@ void fk_GraphNode::getNextNode(list<fk_GraphNode *> *argList)
 	if(argList == nullptr) return;
 	argList->clear();
 
-	for(auto e : edgeS) {
+	for(auto e : _m->edgeS) {
 		argList->push_back(e->getNode(false));
 	}
 
-	for(auto e : edgeB) {
+	for(auto e : _m->edgeB) {
 		if(e->getNode(true) == this) {
 			argList->push_back(e->getNode(false));
 		} else {
@@ -191,11 +197,11 @@ void fk_GraphNode::getPrevNode(list<fk_GraphNode *> *argList)
 	if(argList == nullptr) return;
 	argList->clear();
 
-	for(auto e : edgeE) {
+	for(auto e : _m->edgeE) {
 		argList->push_back(e->getNode(true));
 	}
 
-	for(auto e : edgeB) {
+	for(auto e : _m->edgeB) {
 		if(e->getNode(true) == this) {
 			argList->push_back(e->getNode(false));
 		} else {
@@ -207,97 +213,97 @@ void fk_GraphNode::getPrevNode(list<fk_GraphNode *> *argList)
 
 void fk_GraphNode::clearIntCost(unsigned int argID)
 {
-	if(intCost.size() <= argID) {
-		_st cur = intCost.size();
-		intCost.resize(_st(argID)+1);
-		for(_st i = cur; i < intCost.size() - 1; ++i) {
-			intCost[i] = {false, 0};
+	if(_m->intCost.size() <= argID) {
+		_st cur = _m->intCost.size();
+		_m->intCost.resize(_st(argID)+1);
+		for(_st i = cur; i < _m->intCost.size() - 1; ++i) {
+			_m->intCost[i] = {false, 0};
 		}
 	}
-	intCost[argID] = {false, 0};
+	_m->intCost[argID] = {false, 0};
 }
 
 void fk_GraphNode::clearDoubleCost(unsigned int argID)
 {
-	if(doubleCost.size() <= argID) {
-		_st cur = doubleCost.size();
-		doubleCost.resize(_st(argID)+1);
-		for(_st i = cur; i < doubleCost.size() - 1; ++i) {
-			doubleCost[i] = {false, 0.0};
+	if(_m->doubleCost.size() <= argID) {
+		_st cur = _m->doubleCost.size();
+		_m->doubleCost.resize(_st(argID)+1);
+		for(_st i = cur; i < _m->doubleCost.size() - 1; ++i) {
+			_m->doubleCost[i] = {false, 0.0};
 		}
 	}
-	doubleCost[argID] = {false, 0.0};
+	_m->doubleCost[argID] = {false, 0.0};
 }
 
 bool fk_GraphNode::isDoneIntCost(unsigned int argID)
 {
-	if(intCost.size() <= argID) clearIntCost(argID);
-	return get<0>(intCost[argID]);
+	if(_m->intCost.size() <= argID) clearIntCost(argID);
+	return get<0>(_m->intCost[argID]);
 }
 
 bool fk_GraphNode::isDoneDoubleCost(unsigned int argID)
 {
-	if(doubleCost.size() <= argID) clearDoubleCost(argID);
-	return get<0>(doubleCost[argID]);
+	if(_m->doubleCost.size() <= argID) clearDoubleCost(argID);
+	return get<0>(_m->doubleCost[argID]);
 }
 
 void fk_GraphNode::setIntCost(unsigned int argID, int argValue)
 {
-	if(intCost.size() <= argID) clearIntCost(argID);
-	intCost[argID] = {true, argValue};
+	if(_m->intCost.size() <= argID) clearIntCost(argID);
+	_m->intCost[argID] = {true, argValue};
 }
 
 void fk_GraphNode::setDoubleCost(unsigned int argID, double argValue)
 {
-	if(doubleCost.size() <= argID) clearDoubleCost(argID);
-	doubleCost[argID] = {true, argValue};
+	if(_m->doubleCost.size() <= argID) clearDoubleCost(argID);
+	_m->doubleCost[argID] = {true, argValue};
 }
 
 int fk_GraphNode::getIntCost(unsigned int argID)
 {
-	if(intCost.size() <= argID) return 0;
-	return get<1>(intCost[argID]);
+	if(_m->intCost.size() <= argID) return 0;
+	return get<1>(_m->intCost[argID]);
 }
 
 double fk_GraphNode::getDoubleCost(unsigned int argID)
 {
-	if(doubleCost.size() <= argID) return 0.0;
-	return get<1>(doubleCost[argID]);
+	if(_m->doubleCost.size() <= argID) return 0.0;
+	return get<1>(_m->doubleCost[argID]);
 }
 
 bool fk_GraphNode::IsBase(fk_Graph *argBase)
 {
-	return (argBase == baseGraph);
+	return (argBase == _m->baseGraph);
 }
 
 void fk_GraphNode::setColor(fk_Color argC)
 {
-	baseGraph->GetVertexShape()->setColor(int(ID), &argC);
+	_m->baseGraph->GetVertexShape()->setColor(int(_m->ID), &argC);
 }
 
 void fk_GraphNode::setColor(fk_Color *argC)
 {
 	if(argC == nullptr) return;
-	baseGraph->GetVertexShape()->setColor(int(ID), argC);
+	_m->baseGraph->GetVertexShape()->setColor(int(_m->ID), argC);
 }
 
 string fk_GraphNode::print(void)
 {
 	string outStr;
 
-	for(auto e : edgeB) {
+	for(auto e : _m->edgeB) {
 		outStr += "B = (" + to_string(e->getID()) + ", ";
 		outStr += to_string(e->getNode(true)->getID()) + ", ";
 		outStr += to_string(e->getNode(false)->getID()) + ")\n";
 	}
 	
-	for(auto e : edgeS) {
+	for(auto e : _m->edgeS) {
 		outStr += "S = (" + to_string(e->getID()) + ", ";
 		outStr += to_string(e->getNode(true)->getID()) + ", ";
 		outStr += to_string(e->getNode(false)->getID()) + ")\n";
 	}
 	
-	for(auto e : edgeE) {
+	for(auto e : _m->edgeE) {
 		outStr += "E = (" + to_string(e->getID()) + ", ";
 		outStr += to_string(e->getNode(true)->getID()) + ", ";
 		outStr += to_string(e->getNode(false)->getID()) + ")\n";

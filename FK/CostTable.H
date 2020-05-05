@@ -10,6 +10,21 @@
 namespace FK {
 
 	class fk_CostTable {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_GraphNode *start;
+			std::list<fk_GraphNode *> goal;
+			fk_CostType type;
+			unsigned int edgeCostID, nodeCostID;
+			std::list<fk_GraphNode *> queueList;
+			fk_CostDirection direction;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		fk_CostTable(void);
 		~fk_CostTable();
@@ -42,12 +57,7 @@ namespace FK {
 		void insertDoubleQueue(fk_GraphNode *, unsigned int, double);
 		
 	private:
-		fk_GraphNode *start;
-		std::list<fk_GraphNode *> goal;
-		fk_CostType type;
-		unsigned int edgeCostID, nodeCostID;
-		std::list<fk_GraphNode *> queueList;
-		fk_CostDirection direction;
+		std::unique_ptr<Member> _m;
 	};
 }
 

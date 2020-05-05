@@ -26,6 +26,25 @@ namespace FK {
 	 */
 	class fk_GraphNode : public fk_BaseObject {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			unsigned int ID;
+			fk_Vector position;
+			unsigned int generation;
+
+			std::list<fk_GraphEdge *> edgeS; // 始点稜線
+			std::list<fk_GraphEdge *> edgeE; // 終点稜線
+			std::list<fk_GraphEdge *> edgeB; // 無向稜線
+			std::list<fk_GraphEdge *> edgeAll; // 全稜線
+ 
+			std::vector<std::tuple<bool, int>> intCost;
+			std::vector<std::tuple<bool, double>> doubleCost;
+			fk_Graph *baseGraph;	// 元グラフインスタンス
+
+			Member(unsigned int, fk_Graph *);
+		};
+#endif
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_GraphNode(unsigned int, fk_Graph *);
@@ -332,20 +351,7 @@ namespace FK {
 		bool IsBase(fk_Graph *);
 #endif
 	private:
-
-		unsigned int ID;
-		fk_Vector position;
-		unsigned int generation;
-
-		std::list<fk_GraphEdge *> edgeS; // 始点稜線
-		std::list<fk_GraphEdge *> edgeE; // 終点稜線
-		std::list<fk_GraphEdge *> edgeB; // 無向稜線
-		std::list<fk_GraphEdge *> edgeAll; // 全稜線
- 
-		std::vector< std::tuple<bool, int> > intCost;
-		std::vector< std::tuple<bool, double> > doubleCost;
-
-		fk_Graph *baseGraph;	// 元グラフインスタンス
+		std::unique_ptr<Member> _m;
 	};
 }
 

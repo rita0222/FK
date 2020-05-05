@@ -41,6 +41,23 @@ namespace FK {
 	 */
 	class fk_Graph : public fk_Shape {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Point nodeShape;
+			fk_Line edgeShape;
+			std::unique_ptr<fk_IDAdmin> edgeAdmin;
+
+			std::vector<std::unique_ptr<fk_GraphNode>> nodeArray;
+			std::vector<std::unique_ptr<fk_GraphEdge>> edgeArray;
+			std::vector<std::unique_ptr<fk_CostTable>> tableArray;
+
+			unsigned int intCostMax, doubleCostMax;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -319,15 +336,8 @@ namespace FK {
 #endif
 
 	private:
-		std::unique_ptr<fk_Point> nodeShape;
-		std::unique_ptr<fk_Line> edgeShape;
-		std::unique_ptr<fk_IDAdmin> edgeAdmin;
 
-		std::vector<std::unique_ptr<fk_GraphNode>> nodeArray;
-		std::vector<std::unique_ptr<fk_GraphEdge>> edgeArray;
-		std::vector<std::unique_ptr<fk_CostTable>> tableArray;
-
-		unsigned int intCostMax, doubleCostMax;
+		std::unique_ptr<Member> _m;
 
 		void NodeResize(unsigned int);
 		bool TableReady(unsigned int);

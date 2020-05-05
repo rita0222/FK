@@ -5,130 +5,133 @@
 using namespace std;
 using namespace FK;
 
-fk_CostTable::fk_CostTable(void)
+fk_CostTable::Member::Member(void) :
+	start(nullptr), type(fk_CostType::LENGTH),
+	edgeCostID(0), nodeCostID(0), direction(fk_CostDirection::BACK)
 {
-	start = nullptr;
-	goal.clear();
-	type = fk_CostType::LENGTH;
-	nodeCostID = edgeCostID = 0;
-	queueList.clear();
-	direction = fk_CostDirection::BACK;
+	return;
+}
+
+fk_CostTable::fk_CostTable(void) : _m(make_unique<Member>())
+{
+	return;
 }
 
 fk_CostTable::~fk_CostTable()
 {
+	return;
 }
 
 void fk_CostTable::setType(fk_CostType argType)
 {
-	type = argType;
+	_m->type = argType;
 }
 
 void fk_CostTable::setDirection(fk_CostDirection argD)
 {
-	direction = argD;
+	_m->direction = argD;
 }
 
 void fk_CostTable::setNodeCostID(unsigned int argID)
 {
-	nodeCostID = argID;
+	_m->nodeCostID = argID;
 }
 
 void fk_CostTable::setEdgeCostID(unsigned int argID)
 {
-	edgeCostID = argID;
+	_m->edgeCostID = argID;
 }
 
 
 fk_CostType fk_CostTable::getType(void)
 {
-	return type;
+	return _m->type;
 }
 
 fk_CostDirection fk_CostTable::getDirection(void)
 {
-	return direction;
+	return _m->direction;
 }
 
 unsigned int fk_CostTable::getNodeCostID(void)
 {
-	return nodeCostID;
+	return _m->nodeCostID;
 }
 
 unsigned int fk_CostTable::getEdgeCostID(void)
 {
-	return edgeCostID;
+	return _m->edgeCostID;
 }
 
 void fk_CostTable::setStart(fk_GraphNode *argStart)
 {
-	start = argStart;
+	_m->start = argStart;
 }
 
 fk_GraphNode * fk_CostTable::getStart(void)
 {
-	return start;
+	return _m->start;
 }
 
 void fk_CostTable::addGoal(fk_GraphNode *argGoal)
 {
-	goal.push_back(argGoal);
+	_m->goal.push_back(argGoal);
 }
 
 void fk_CostTable::clearGoal(void)
 {
-	goal.clear();
+	_m->goal.clear();
 }
 
 list<fk_GraphNode *> * fk_CostTable::getGoal(void)
 {
-	return &goal;
+	return &(_m->goal);
 }
 
 void fk_CostTable::queueClear(void)
 {
-	queueList.clear();
+	_m->queueList.clear();
 }
 
 void fk_CostTable::addQueue(fk_GraphNode *argNode)
 {
-	queueList.push_back(argNode);
+	_m->queueList.push_back(argNode);
 }
 
 bool fk_CostTable::isQueueEmpty(void)
 {
-	return queueList.empty();
+	return _m->queueList.empty();
 }
 
 fk_GraphNode * fk_CostTable::queuePopFront(void)
 {
-	if(queueList.empty()) return nullptr;
-	fk_GraphNode *ret = queueList.front();
-	queueList.pop_front();
+	if(_m->queueList.empty()) return nullptr;
+	fk_GraphNode *ret = _m->queueList.front();
+	_m->queueList.pop_front();
 	return ret;
 }
 
 void fk_CostTable::insertIntQueue(fk_GraphNode *argNode, unsigned int argID, int argCost)
 {
 	argNode->setIntCost(argID, argCost);
-	auto p = queueList.begin();
-	if(p != queueList.end()) {
-		while(p != queueList.end() && (*p)->getIntCost(argID) < argCost) ++p;
-		queueList.insert(p, argNode);
+	auto p = _m->queueList.begin();
+	if(p != _m->queueList.end()) {
+		while(p != _m->queueList.end() && (*p)->getIntCost(argID) < argCost) ++p;
+		_m->queueList.insert(p, argNode);
 	} else {
-		queueList.push_back(argNode);
+		_m->queueList.push_back(argNode);
 	}
 }
 
 void fk_CostTable::insertDoubleQueue(fk_GraphNode *argNode, unsigned int argID, double argCost)
 {
 	argNode->setDoubleCost(argID, argCost);
-	auto p = queueList.begin();
-	if(p != queueList.end()) {
-		while(p != queueList.end() && (*p)->getDoubleCost(argID) < argCost) ++p;
-		queueList.insert(p, argNode);
+	auto p = _m->queueList.begin();
+	if(p != _m->queueList.end()) {
+		while(p != _m->queueList.end() && (*p)->getDoubleCost(argID) < argCost) ++p;
+		_m->queueList.insert(p, argNode);
 	} else {
-		queueList.push_back(argNode);
+		_m->queueList.push_back(argNode);
 	}
 }
 
@@ -137,15 +140,15 @@ string fk_CostTable::print(void)
 	string outStr;
 
 	outStr += "S = ";
-	outStr += (start == nullptr) ? "NULL" : to_string(start->getID());
+	outStr += (_m->start == nullptr) ? "NULL" : to_string(_m->start->getID());
 	outStr += + ",\n";
 	outStr += "G =";
-	for(auto n : goal) {
+	for(auto n : _m->goal) {
 		outStr += " " + to_string(n->getID()) + ",";
 	}
 	outStr += "\n";
 	outStr += "Type = ";
-	switch(type)
+	switch(_m->type)
 	{
 	  case fk_CostType::INT:
 		outStr += "INT";
@@ -165,7 +168,7 @@ string fk_CostTable::print(void)
 	}
 	outStr += ",\n";
 	outStr += "(nodeCost, edgeCost) = (";
-	outStr += to_string(nodeCostID) + ", " + to_string(edgeCostID) + ")\n";
+	outStr += to_string(_m->nodeCostID) + ", " + to_string(_m->edgeCostID) + ")\n";
 
 	return outStr;
 }

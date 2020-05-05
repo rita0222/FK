@@ -4,22 +4,26 @@
 using namespace std;
 using namespace FK;
 
+fk_GraphEdge::Member::Member(unsigned int argEID, fk_Graph *argGraph) :
+	edgeID(argEID), lengthMode(true), length(0.0), baseGraph(argGraph)
+{
+	return;
+}
+
 fk_GraphEdge::fk_GraphEdge(unsigned int argEID,
 						   fk_GraphNode *argV1,
 						   fk_GraphNode *argV2,
 						   fk_Graph *argGraph) :
-	fk_BaseObject(fk_Type::GRAPHEDGE), edgeID(argEID), lengthMode(true), baseGraph(argGraph)
+	fk_BaseObject(fk_Type::GRAPHEDGE), _m(make_unique<Member>(argEID, argGraph))
 {
-	node[0] = argV1;
-	node[1] = argV2;
+	_m->node[0] = argV1;
+	_m->node[1] = argV2;
 
-	intCost.clear();
-	intCost.push_back(0);
-	doubleCost.clear();
-	doubleCost.push_back(0.0);
-	length = (node[0]->getPosition() - node[1]->getPosition()).dist();
-	generation[0] = node[0]->getGeneration();
-	generation[1] = node[1]->getGeneration();
+	_m->intCost.push_back(0);
+	_m->doubleCost.push_back(0.0);
+	_m->length = (_m->node[0]->getPosition() - _m->node[1]->getPosition()).dist();
+	_m->generation[0] = _m->node[0]->getGeneration();
+	_m->generation[1] = _m->node[1]->getGeneration();
 }
 
 fk_GraphEdge::~fk_GraphEdge()
@@ -29,74 +33,74 @@ fk_GraphEdge::~fk_GraphEdge()
 
 unsigned int fk_GraphEdge::getID(void)
 {
-	return edgeID;
+	return _m->edgeID;
 }
 
 fk_GraphNode * fk_GraphEdge::getNode(bool argMode)
 {
-	if(argMode == true) return node[0];
-	return node[1];
+	if(argMode == true) return _m->node[0];
+	return _m->node[1];
 }
 
 void fk_GraphEdge::setLengthMode(bool argMode)
 {
-	lengthMode = argMode;
+	_m->lengthMode = argMode;
 }
 
 bool fk_GraphEdge::getLengthMode(void)
 {
-	return lengthMode;
+	return _m->lengthMode;
 }
 
 void fk_GraphEdge::UpdateLength(void)
 {
-	if(node[0]->getGeneration() != generation[0] ||
-	   node[1]->getGeneration() != generation[1]) {
-		length = (node[0]->getPosition() - node[1]->getPosition()).dist();
-		generation[0] = node[0]->getGeneration();
-		generation[1] = node[1]->getGeneration();
+	if(_m->node[0]->getGeneration() != _m->generation[0] ||
+	   _m->node[1]->getGeneration() != _m->generation[1]) {
+		_m->length = (_m->node[0]->getPosition() - _m->node[1]->getPosition()).dist();
+		_m->generation[0] = _m->node[0]->getGeneration();
+		_m->generation[1] = _m->node[1]->getGeneration();
 	}
 }
 
 double fk_GraphEdge::getLength(void)
 {
 	UpdateLength();
-	return length;
+	return _m->length;
 }
 
 void fk_GraphEdge::setIntCost(unsigned int argID, int argCost)
 {
-	if(argID >= intCost.size()) intCost.resize(_st(argID)+1);
-	intCost[argID] = argCost;
+	if(argID >= _m->intCost.size()) _m->intCost.resize(_st(argID)+1);
+	_m->intCost[argID] = argCost;
 }
 
 void fk_GraphEdge::setDoubleCost(unsigned int argID, double argCost)
 {
-	if(argID >= doubleCost.size()) doubleCost.resize(_st(argID)+1);
-	doubleCost[argID] = argCost;
+	if(argID >= _m->doubleCost.size()) _m->doubleCost.resize(_st(argID)+1);
+	_m->doubleCost[argID] = argCost;
 }
 
 int fk_GraphEdge::getIntCost(unsigned int argID)
 {
-	if(argID >= intCost.size()) return 0;
-	return intCost[argID];
+	if(argID >= _m->intCost.size()) return 0;
+	return _m->intCost[argID];
 }
 
 double fk_GraphEdge::getDoubleCost(unsigned int argID)
 {
-	if(argID >= doubleCost.size()) return 0.0;
-	return doubleCost[argID];
+	if(argID >= _m->doubleCost.size()) return 0.0;
+	return _m->doubleCost[argID];
 }
 
 void fk_GraphEdge::setColor(fk_Color argC)
 {
-	baseGraph->GetEdgeShape()->setColor(int(edgeID), &argC);
+	_m->baseGraph->GetEdgeShape()->setColor(int(_m->edgeID), &argC);
 }
 
 void fk_GraphEdge::setColor(fk_Color *argC)
 {
 	if(argC == nullptr) return;
-	baseGraph->GetEdgeShape()->setColor(int(edgeID), argC);
+	_m->baseGraph->GetEdgeShape()->setColor(int(_m->edgeID), argC);
 }
 
 /****************************************************************************

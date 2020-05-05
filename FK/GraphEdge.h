@@ -36,6 +36,23 @@ namespace FK {
 	 */
 	class fk_GraphEdge : public fk_BaseObject {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+
+		class Member {
+		public:
+			unsigned int edgeID;
+			fk_GraphNode *node[2];
+			unsigned int generation[2];
+			bool lengthMode;
+			double length;
+			std::vector<int> intCost;
+			std::vector<double> doubleCost;
+			fk_Graph *baseGraph;
+
+			Member(unsigned int, fk_Graph *);
+		};
+#endif
+
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_GraphEdge(unsigned int, fk_GraphNode *, fk_GraphNode *, fk_Graph *);
@@ -160,16 +177,8 @@ namespace FK {
 		void setColor(fk_Color *col);
 		
 	private:
-		unsigned int edgeID;
-		fk_GraphNode *node[2];
-		unsigned int generation[2];
 
-		bool lengthMode;
-		double length;
-		std::vector<int> intCost;
-		std::vector<double> doubleCost;
-
-		fk_Graph *baseGraph;
+		std::unique_ptr<Member> _m;
 
 		void UpdateLength(void);
 	};
