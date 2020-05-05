@@ -6,69 +6,63 @@
 using namespace std;
 using namespace FK;
 
-using list_ite = fk_TList::iterator;
-
-fk_TreeData::fk_TreeData(fk_Tree *argTree, const string argName, fk_TreeData *argParent) :
-	base(argTree), name(argName), parent(argParent)
+fk_TreeData::Member::Member(fk_Tree *argTree, const string &argName, fk_TreeData *argParent) :
+	base(argTree), name(argName), parent(argParent), depth(0), maxDepth(0)
 {
-	if(parent == nullptr) {
-		depth = 0;
-		maxDepth = 0;
-	} else {
-		depth = parent->getDepth() + 1;
-		maxDepth = depth;
-	}
+	return;
+}
+
+fk_TreeData::fk_TreeData(fk_Tree *argTree, const string &argName, fk_TreeData *argParent) :
+	_m(make_unique<Member>(argTree, argName, argParent))
+{
+	if(argParent != nullptr) _m->depth = _m->maxDepth = argParent->getDepth() + 1;
 	return;
 }
 
 fk_TreeData::~fk_TreeData()
 {
-	//if(deleteFlg == true) delete object;
 	return;
 }
 
 int fk_TreeData::getDepth(void)
 {
-	return depth;
+	return _m->depth;
 }
 
 int fk_TreeData::getMaxDepth(void)
 {
-	return maxDepth;
+	return _m->maxDepth;
 }
 
 fk_TreeData * fk_TreeData::getChild(fk_TreeData *argPrev)
 {
-	list_ite		ite;
-
 	if(argPrev == nullptr) {
-		if(children.empty() == true) return nullptr;
-		return children.front();
+		if(_m->children.empty() == true) return nullptr;
+		return _m->children.front();
 	}
 
-	ite = find(children.begin(), children.end(), argPrev);
-	if(ite == children.end()) return nullptr;
+	td_ite ite = find(_m->children.begin(), _m->children.end(), argPrev);
+	if(ite == _m->children.end()) return nullptr;
 	++ite;
-	if(ite == children.end()) return nullptr;
+	if(ite == _m->children.end()) return nullptr;
 	return (*ite);
 }
 
 fk_TreeData * fk_TreeData::getParent(void)
 {
-	return parent;
+	return _m->parent;
 }
 
 fk_TreeData * fk_TreeData::getNext(void)
 {
-	list_ite		ite;
+	if(getParent() == nullptr) return nullptr;
 
-	if(parent == nullptr) return nullptr;
+	fk_TDList *c = getParent()->_getChildren();
 
-	for(ite = parent->children.begin();
-		ite != parent->children.end(); ++ite) {
+	for(td_ite ite = c->begin(); ite != c->end(); ++ite) {
 		if((*ite) == this) {
 			++ite;
-			if(ite == parent->children.end()) return nullptr;
+			if(ite == c->end()) return nullptr;
 			return (*ite);
 		}
 	}
@@ -77,26 +71,22 @@ fk_TreeData * fk_TreeData::getNext(void)
 
 fk_TreeData * fk_TreeData::getPrev(void)
 {
-	list_ite		ite;
-
-	if(parent == nullptr) return nullptr;
-
-	ite = find(parent->children.begin(), parent->children.end(), this);
-	if(ite == parent->children.end() ||
-	   ite == parent->children.begin()) return nullptr;
+	if(getParent() == nullptr) return nullptr;
+	fk_TDList *c = getParent()->_getChildren();
+	td_ite ite = find(c->begin(), c->end(), this);
+	if(ite == c->end() || ite == c->begin()) return nullptr;
 	--ite;
 	return (*ite);
 }
 
 int fk_TreeData::getOrder(void)
 {
-	list_ite		ite;
 	int				order = 0;
 
-	if(parent == nullptr) return 0;
+	if(getParent() == nullptr) return 0;
 
-	for(ite = parent->children.begin();
-		ite != parent->children.end(); ++ite) {
+	fk_TDList *c = getParent()->_getChildren();
+	for(td_ite ite = c->begin(); ite != c->end(); ++ite) {
 		if((*ite) == this) return order;
 		order++;
 	}
@@ -105,40 +95,42 @@ int fk_TreeData::getOrder(void)
 
 int fk_TreeData::getChildrenSize(void)
 {
-	return int(children.size());
+	return int(_m->children.size());
 }
 
 void fk_TreeData::_addChild(fk_TreeData *argChild)
 {
-	children.push_back(argChild);
+	_m->children.push_back(argChild);
 	_calcMaxDepth();
 	return;
 }
 
 void fk_TreeData::_clearChild(fk_TreeData *argChild)
 {
-	list_ite		ite;
-
-	ite = find(children.begin(), children.end(), argChild);
-	if(ite == children.end()) return;
-	children.erase(ite);
+	td_ite ite = find(_m->children.begin(), _m->children.end(), argChild);
+	if(ite == _m->children.end()) return;
+	_m->children.erase(ite);
 	return;
+}
+
+fk_TreeData::fk_TDList * fk_TreeData::_getChildren(void)
+{
+	return &(_m->children);
 }
 
 void fk_TreeData::Print(void)
 {
-	list_ite		ite;
-	stringstream	ss;
+	stringstream ss;
 	
 
-	for(int i = 0; i < depth; i++) {
+	for(int i = 0; i < _m->depth; i++) {
 		ss << "\t";
 	}
 
-	ss << "(" << name << ", " << maxDepth << ")";
+	ss << "(" << _m->name << ", " << _m->maxDepth << ")";
 	Error::Put(ss.str());
 
-	for(ite = children.begin(); ite != children.end(); ++ite) {
+	for(td_ite ite = _m->children.begin(); ite != _m->children.end(); ++ite) {
 		(*ite)->Print();
 	}
 	return;
@@ -146,22 +138,19 @@ void fk_TreeData::Print(void)
 
 void fk_TreeData::_calcMaxDepth(void)
 {
-	list_ite		ite;
-	int				tmpDepth;
-
-	maxDepth = depth;
-	for(ite = children.begin(); ite != children.end(); ++ite) {
-		tmpDepth = (*ite)->getMaxDepth();
-		if(tmpDepth > maxDepth) maxDepth = tmpDepth;
+	_m->maxDepth = _m->depth;
+	for(td_ite ite = _m->children.begin(); ite != _m->children.end(); ++ite) {
+		int tmpDepth = (*ite)->getMaxDepth();
+		if(tmpDepth > _m->maxDepth) _m->maxDepth = tmpDepth;
 	}
 
-	if(parent != nullptr) parent->_calcMaxDepth();
+	if(_m->parent != nullptr) _m->parent->_calcMaxDepth();
 	return;
 }
 
 string fk_TreeData::getName(void)
 {
-	return name;
+	return _m->name;
 }
 
 /*
@@ -174,15 +163,20 @@ void fk_TreeData::setObject(fk_TreeBaseObject *argObject, bool argDelFlg)
 */
 void fk_TreeData::setObject(const shared_ptr<fk_TreeBaseObject> &argObject)
 {
-	object = argObject;
+	_m->object = argObject;
 }
 
 fk_TreeBaseObject * fk_TreeData::getObject(void)
 {
-	return object.get();
+	return _m->object.get();
 }
 
-fk_Tree::fk_Tree(const string argName)
+fk_Tree::Member::Member(void) : root(nullptr)
+{
+	return;
+}
+
+fk_Tree::fk_Tree(const string argName) : _m(make_unique<Member>())
 {
 	clear(argName);
 	return;
@@ -196,45 +190,41 @@ fk_Tree::~fk_Tree(void)
 
 fk_TreeData * fk_Tree::makeNewData(fk_Tree *argTree, string argName, fk_TreeData *argParent)
 {
-	return(new fk_TreeData(argTree, argName, argParent));
+	_m->tree.push_back(make_unique<fk_TreeData>(argTree, argName, argParent));
+	return _m->tree.back().get();
 }
 
 void fk_Tree::_makeRoot(const string argName)
 {
-	//if(this == nullptr) return;
-	_root = makeNewData(this, argName, nullptr);
-	_treeData.clear();
-	if(_root != nullptr) {
-		_treeData.push_back(_root);
-	}
+	_m->root = makeNewData(this, argName, nullptr);
 	return;
 }
 
-
 fk_TreeData * fk_Tree::getRoot(void)
 {
-	return _root;
+	return _m->root;
+}
+
+fk_Tree::t_ite fk_Tree::_getIte(fk_TreeData *argData)
+{
+	return find_if(_m->tree.begin(), _m->tree.end(),
+				   [argData](unique_ptr<fk_TreeData> &d) {
+					   return (d.get() == argData);
+				   });
+
 }
 
 void fk_Tree::_clear(void)
 {
-	list_ite		ite;
-
-	for(ite = _treeData.begin(); ite != _treeData.end(); ++ite) {
-		delete *ite;
-	}
-	_treeData.clear();
+	_m->tree.clear();
 	return;
 }
 
 void fk_Tree::_clearData(fk_TreeData *argData)
 {
-	list_ite		ite;
-
-	ite = find(_treeData.begin(), _treeData.end(), argData);
-	if(ite != _treeData.end()) {
-		delete (*ite);
-		_treeData.erase(ite);
+	t_ite ite = _getIte(argData);
+	if(ite != _m->tree.end()) {
+		_m->tree.erase(ite);
 	}
 	return;
 }
@@ -249,35 +239,23 @@ void fk_Tree::clear(const string argName)
 bool fk_Tree::isArive(fk_TreeData *argData)
 {
 	if(argData == nullptr) return false;
-	if(argData->base != this) return false;
+	if(argData->_m->base != this) return false;
 
-	if(find(_treeData.begin(), _treeData.end(), argData) != _treeData.end()) {
-		return true;
-	}
-	return false;
+	return (_getIte(argData) != _m->tree.end());
 }
 
 fk_TreeData * fk_Tree::addNewChild(fk_TreeData *argData, const string argName)
 {
-	fk_TreeData		*newData;
-
 	if(isArive(argData) == false) return nullptr;
-
-	newData = makeNewData(this, argName, argData);
-	_treeData.push_back(newData);
-	argData->_addChild(newData);
-
-	return newData;
+	return makeNewData(this, argName, argData);
 }
 
 bool fk_Tree::deleteBranch(fk_TreeData *argData)
 {
-	fk_TreeData		*parent;
-
 	if(isArive(argData) == false) return false;
-	if(argData == _root) return false;
+	if(argData == _m->root) return false;
 
-	parent = argData->parent;
+	fk_TreeData *parent = argData->_m->parent;
 
 	clearChildren(argData);
 
@@ -290,11 +268,9 @@ bool fk_Tree::deleteBranch(fk_TreeData *argData)
 
 bool fk_Tree::clearChildren(fk_TreeData *argData)
 {
-	fk_TreeData		*childData;
-
 	if(isArive(argData) == false) return false;
 
-	for(childData = argData->getChild(nullptr);
+	for(fk_TreeData *childData = argData->getChild(nullptr);
 		childData != nullptr;
 		childData = argData->getChild(childData)) {
 		deleteBranch(childData);
@@ -303,41 +279,29 @@ bool fk_Tree::clearChildren(fk_TreeData *argData)
 	return true;
 }
 
-fk_TreeData * fk_Tree::cloneOneData(fk_TreeData *argParent,
-									fk_TreeData *argData)
+fk_TreeData * fk_Tree::cloneOneData(fk_TreeData *argParent, fk_TreeData *argData)
 {
-	fk_TreeData		*newChild;
-
 	if(isArive(argParent) == false) return nullptr;
 
-	newChild = addNewChild(argParent, argData->name);
-	newChild->object = argData->object;
+	fk_TreeData *newChild = addNewChild(argParent, argData->_m->name);
+	newChild->_m->object = argData->_m->object;
 	return newChild;
 }
 
-fk_TreeData * fk_Tree::_simpleClone(fk_TreeData *argParentData,
-									fk_TreeData *argFromData)
+fk_TreeData * fk_Tree::_simpleClone(fk_TreeData *argParentData, fk_TreeData *argFromData)
 {
-	list_ite		ite;
-	fk_TreeData		*newData;
-
-	newData = makeNewData(this, argFromData->name, argParentData);
-	_treeData.push_back(newData);	// fix!(by rita)
-	for(ite = argFromData->children.begin();
-		ite != argFromData->children.end();
-		++ite) {
+	fk_TreeData *newData = makeNewData(this, argFromData->_m->name, argParentData);
+	fk_TreeData::fk_TDList *c = argFromData->_getChildren();
+	for(fk_TreeData::td_ite ite = c->begin(); ite != c->end(); ++ite) {
 		newData->_addChild(_simpleClone(newData, (*ite)));
 	}
-	newData->object = argFromData->object;
+	newData->_m->object = argFromData->_m->object;
 	return newData;
 }
 
 
-fk_TreeData * fk_Tree::cloneBranch(fk_TreeData *argParent,
-								   fk_TreeData *argData)
+fk_TreeData * fk_Tree::cloneBranch(fk_TreeData *argParent, fk_TreeData *argData)
 {
-	fk_TreeData		*tmpRoot;
-
 	if(isArive(argParent) == false) {
 		Error::Put("fk_Tree", "cloneBranch", 1, "dst-node is dead.");
 		return nullptr;
@@ -347,33 +311,29 @@ fk_TreeData * fk_Tree::cloneBranch(fk_TreeData *argParent,
 		return nullptr;
 	}
 
-	tmpRoot = _simpleClone(argParent, argData);
+	fk_TreeData *tmpRoot = _simpleClone(argParent, argData);
 	argParent->_addChild(tmpRoot);
 	return tmpRoot;
 }
 
 int fk_Tree::_setDepth(fk_TreeData *argData, int argDepth)
 {
-	list_ite		ite;
-	int				tmpMax;
-
 	if(argData == nullptr) return -1;
-	argData->depth = argDepth;
-	argData->maxDepth = argDepth;
+	argData->_m->depth = argDepth;
+	argData->_m->maxDepth = argDepth;
 
-	for(ite = argData->children.begin();
-		ite != argData->children.end(); ++ite) {
-		tmpMax = _setDepth(*ite, argDepth+1);
-		if(tmpMax > argData->maxDepth) argData->maxDepth = tmpMax;
+	fk_TreeData::fk_TDList *c = argData->_getChildren();
+
+	for(fk_TreeData::td_ite ite = c->begin(); ite != c->end(); ++ite) {
+		int tmpMax = _setDepth(*ite, argDepth+1);
+		if(tmpMax > argData->_m->maxDepth) argData->_m->maxDepth = tmpMax;
 	}
 
-	return argData->maxDepth;
+	return argData->_m->maxDepth;
 }
 
 bool fk_Tree::moveBranch(fk_TreeData *argParent, fk_TreeData *argData)
 {
-	fk_TreeData		*tmpData;
-
 	if(argParent == nullptr || argData == nullptr) {
 		Error::Put("fk_Tree", "moveBranch", 1, "nullptr error.");
 		return false;
@@ -388,17 +348,21 @@ bool fk_Tree::moveBranch(fk_TreeData *argParent, fk_TreeData *argData)
 		return false;
 	}
 
-	for(tmpData = argParent; tmpData != nullptr; tmpData = tmpData->parent) {
+	for(fk_TreeData *tmpData = argParent;
+		tmpData != nullptr;
+		tmpData = tmpData->_m->parent) {
 		if(tmpData == argData) {
 			Error::Put("fk_Tree", "moveBranch", 4, "dst-node is under the src-node.");
 			return false;
 		}
 	}
 
-	argData->parent->_clearChild(argData);
-	argData->parent->_calcMaxDepth();
-	argData->parent = argParent;
-	_setDepth(argData, argParent->depth + 1);
+	fk_TreeData *p = argData->_m->parent;
+
+	p->_clearChild(argData);
+	p->_calcMaxDepth();
+	argData->_m->parent = argParent;
+	_setDepth(argData, argParent->_m->depth + 1);
 	argParent->_addChild(argData);
 
 	return true;
@@ -406,17 +370,13 @@ bool fk_Tree::moveBranch(fk_TreeData *argParent, fk_TreeData *argData)
 
 void fk_Tree::toFront(int argNum, fk_TreeData *argData)
 {
-	list_ite	ite;
-	fk_TList	*list;
-	int			order;
-
 	if(argNum == 0) return;
 	if(isArive(argData) == false) return;
-	if(argData->parent == nullptr) return;
+	if(argData->_m->parent == nullptr) return;
 
-	list = &(argData->parent->children);
-
-	order = 0;
+	auto list = argData->getParent()->_getChildren();
+	int order = 0;
+	fk_TreeData::td_ite ite;
 	for(ite = list->begin(); ite != list->end(); ++ite) {
 		if((*ite) == argData) break;
 		order++;
@@ -437,17 +397,14 @@ void fk_Tree::toFront(int argNum, fk_TreeData *argData)
 
 void fk_Tree::toBack(int argNum, fk_TreeData *argData)
 {
-	list_ite	ite;
-	fk_TList	*list;
-	int			order;
-
 	if(argNum == 0) return;
 	if(isArive(argData) == false) return;
-	if(argData->parent == nullptr) return;
+	if(argData->_m->parent == nullptr) return;
 
-	list = &(argData->parent->children);
+	auto list = argData->getParent()->_getChildren();
+	int order = 0;
+	fk_TreeData::td_ite ite;
 
-	order = 0;
 	for(ite = list->begin(); ite != list->end(); ++ite) {
 		if((*ite) == argData) break;
 		order++;
@@ -468,33 +425,27 @@ void fk_Tree::toBack(int argNum, fk_TreeData *argData)
 
 fk_TreeData * fk_Tree::findData(const string argName)
 {
-	list_ite		ite;
-	fk_TreeData		*cur;
-
-	for(ite = _treeData.begin(); ite != _treeData.end(); ++ite) {
-		cur = *ite;
-		if(cur->name == argName) return cur;
+	for(auto ite = _m->tree.begin(); ite != _m->tree.end(); ++ite) {
+		if(ite->get()->_m->name == argName) return ite->get();
 	}
 	return nullptr;
 }
 
 fk_TreeData * fk_Tree::foreachData(fk_TreeData *argData)
 {
-	list_ite		ite;
-
 	if(argData == nullptr) {
-		return _treeData.front();
+		return _m->tree.front().get();
 	}
-	ite = find(_treeData.begin(), _treeData.end(), argData);
-	if(ite == _treeData.end()) return nullptr;
+	auto ite = _getIte(argData);
+	if(ite == _m->tree.end()) return nullptr;
 	++ite;
-	if(ite == _treeData.end()) return nullptr;
-	return (*ite);
+	if(ite == _m->tree.end()) return nullptr;
+	return ite->get();
 }
 
 void fk_Tree::Print(void)
 {
-	_root->Print();
+	_m->root->Print();
 	return;
 }
 
