@@ -9,11 +9,11 @@ namespace FK {
 		fk_EdgePair(void);
 		fk_EdgePair(int, int);
 		
-		bool	operator ==(const fk_EdgePair &) const;
-		bool	operator >(const fk_EdgePair &) const;
-		bool	operator <(const fk_EdgePair &) const;
+		bool operator ==(const fk_EdgePair &) const;
+		bool operator >(const fk_EdgePair &) const;
+		bool operator <(const fk_EdgePair &) const;
 
-		void	set(int, int);
+		void set(int, int);
 	};		
 }
 

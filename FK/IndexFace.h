@@ -67,6 +67,35 @@ namespace FK {
 
 	class fk_IndexFaceSet : public fk_ParserData {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_FVecArray vertexPosition;
+			fk_FVecArray timeOrgPosition;
+			fk_FVecArray vertexNormal;
+			fk_FVecArray faceNormal;
+			std::vector<GLuint> edgeIndex;
+			std::vector<GLuint> faceIndex;
+			std::vector< std::vector<int> >	loopStack;
+			std::vector<int> modifyList;
+			std::shared_ptr<fk_D3DXAnimation> anim;
+
+			bool cloneFlg;
+			std::list<fk_IndexFaceSet *> cloneList;
+			fk_IndexFaceSet *orgIFS;
+
+			// 編集があった場合に true, ない場合 false
+			bool edgeIndexFlg, faceIndexFlg;
+			std::vector<char> faceNormFlg;
+			std::vector<char> vertexNormFlg;
+
+			GLuint edgeIBO, faceIBO;
+			bool smoothMode;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -83,7 +112,7 @@ namespace FK {
 		 *
 		 *	\param[in]		ifs		複写元インスタンス
 		 */
-		void				cloneShape(fk_IndexFaceSet *ifs);
+		void cloneShape(fk_IndexFaceSet *ifs);
 
 		//! \name ファイル・データ入力関数
 		///@{
@@ -96,7 +125,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readSMFFile(std::string fileName);
+		bool readSMFFile(std::string fileName);
 
 		//! VRML ファイル入力関数
 		/*!
@@ -132,7 +161,7 @@ namespace FK {
 		 *		様々なデータによって異なる解釈がなされているようです。
 		 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
 		 */
-		bool	readVRMLFile(std::string fileName, bool materialFlg = true, bool solidFlg = true);
+		bool readVRMLFile(std::string fileName, bool materialFlg = true, bool solidFlg = true);
 
 		//! STL ファイル入力関数
 		/*!
@@ -158,7 +187,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	readSTLFile(std::string fileName, bool solidFlg = true, double tolerance = 1.0e-08);
+		bool readSTLFile(std::string fileName, bool solidFlg = true, double tolerance = 1.0e-08);
 
 		//! HRCファイル入力関数
 		/*!
@@ -168,7 +197,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	readHRCFile(std::string fileName);
+		bool readHRCFile(std::string fileName);
 
 		//! RDSファイル入力関数
 		/*!
@@ -184,7 +213,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	readRDSFile(std::string fileName, bool solidFlg = true);
+		bool readRDSFile(std::string fileName, bool solidFlg = true);
 
 		//! DXFファイル入力関数
 		/*!
@@ -199,7 +228,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	readDXFFile(std::string fileName, bool solidFlg = true);
+		bool readDXFFile(std::string fileName, bool solidFlg = true);
 
 		//! MQOファイル入力関数1
 		/*!
@@ -237,11 +266,11 @@ namespace FK {
 		 *
 		 *	\sa readMQOData(), fk_IFSTexture::readMQOFile()
 		 */
-		bool	readMQOFile(std::string fileName,
-							std::string objName,
-							bool solidFlg = true,
-							bool contFlg = true,
-							bool materialFlg = false);
+		bool readMQOFile(std::string fileName,
+						 std::string objName,
+						 bool solidFlg = true,
+						 bool contFlg = true,
+						 bool materialFlg = false);
 
 		//! MQOファイル入力関数2
 		/*!
@@ -289,12 +318,12 @@ namespace FK {
 		 *
 		 *	\sa readMQOData(), fk_IFSTexture::readMQOFile()
 		 */
-		bool	readMQOFile(std::string fileName,
-							std::string objName,
-							int materialID,
-							bool solidFlg = true,
-							bool contFlg = true,
-							bool materialFlg = false);
+		bool readMQOFile(std::string fileName,
+						 std::string objName,
+						 int materialID,
+						 bool solidFlg = true,
+						 bool contFlg = true,
+						 bool materialFlg = false);
 
 		//! MQOデータ入力関数1
 		/*!
@@ -339,11 +368,11 @@ namespace FK {
 		 *
 		 *	\sa readMQOFile(), fk_IFSTexture::readMQOData()
 		 */
-		bool	readMQOData(unsigned char *buffer,
-							std::string objName,
-							bool solidFlg = true,
-							bool contFlg = true,
-							bool materialFlg = false);
+		bool readMQOData(unsigned char *buffer,
+						 std::string objName,
+						 bool solidFlg = true,
+						 bool contFlg = true,
+						 bool materialFlg = false);
 
 		//! MQOデータ入力関数2
 		/*!
@@ -394,12 +423,12 @@ namespace FK {
 		 *
 		 *	\sa readMQOFile(), fk_IFSTexture::readMQOData()
 		 */
-		bool	readMQOData(unsigned char *buffer,
-							std::string objName,
-							int materialID,
-							bool solidFlg = true,
-							bool contFlg = true,
-							bool materialFlg = false);
+		bool readMQOData(unsigned char *buffer,
+						 std::string objName,
+						 int materialID,
+						 bool solidFlg = true,
+						 bool contFlg = true,
+						 bool materialFlg = false);
 
 		//! DirectX (D3DX) ファイル入力関数1
 		/*!
@@ -430,9 +459,9 @@ namespace FK {
 		 *
 		 *	\sa fk_IFSTexture::readD3DXFile()
 		 */
-		bool				readD3DXFile(std::string fileName,
-										 std::string objName,
-										 bool solidFlg = true);
+		bool readD3DXFile(std::string fileName,
+						  std::string objName,
+						  bool solidFlg = true);
 
 		//! DirectX (D3DX) ファイル入力関数2
 		/*!
@@ -469,10 +498,10 @@ namespace FK {
 		 *
 		 *	\sa fk_IFSTexture::readD3DXFile()
 		 */
-		bool	readD3DXFile(std::string fileName,
-							 std::string objName,
-							 int materialID,
-							 bool solidFlg = true);
+		bool readD3DXFile(std::string fileName,
+						  std::string objName,
+						  int materialID,
+						  bool solidFlg = true);
 
 		///@}
 
@@ -494,9 +523,9 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool	writeVRMLFile(std::string fileName,
-							  fk_Material *material = nullptr,
-							  bool triFlg = false);
+		bool writeVRMLFile(std::string fileName,
+						   fk_Material *material = nullptr,
+						   bool triFlg = false);
 
 		//! VRML ファイル出力関数2
 		/*!
@@ -522,11 +551,11 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool	writeVRMLFile(std::string fileName,
-							  std::vector<double> *time,
-							  std::vector<fk_Vector> *pos,
-							  fk_Material *material = nullptr,
-							  bool triFlg = false);
+		bool writeVRMLFile(std::string fileName,
+						   std::vector<double> *time,
+						   std::vector<fk_Vector> *pos,
+						   fk_Material *material = nullptr,
+						   bool triFlg = false);
 
 		//! STL ファイル出力関数
 		/*!
@@ -536,7 +565,7 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool	writeSTLFile(std::string fileName);
+		bool writeSTLFile(std::string fileName);
 
 		//! DXF ファイル出力関数
 		/*!
@@ -550,7 +579,7 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool	writeDXFFile(std::string fileName, bool triFlg = false);
+		bool writeDXFFile(std::string fileName, bool triFlg = false);
 
 		//! MQO ファイル出力関数
 		/*!
@@ -560,7 +589,7 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool	writeMQOFile(std::string fileName);
+		bool writeMQOFile(std::string fileName);
 		///@}
 
 		//! \name 形状情報参照関数
@@ -572,7 +601,7 @@ namespace FK {
 		 *
 		 *	\return		頂点数
 		 */
-		int		getPosSize(void);
+		int getPosSize(void);
 
 		//! 稜線数参照関数
 		/*!
@@ -580,7 +609,7 @@ namespace FK {
 		 *
 		 *	\return		稜線数
 		 */
-		int		getEdgeSize(void);
+		int getEdgeSize(void);
 
 		//! 面数参照関数
 		/*!
@@ -588,7 +617,7 @@ namespace FK {
 		 *
 		 *	\return		面数
 		 */
-		int		getFaceSize(void);
+		int getFaceSize(void);
 
 		//! 頂点位置ベクトル参照関数
 		/*!
@@ -602,7 +631,7 @@ namespace FK {
 		 *
 		 *	\sa moveVPosition()
 		 */
-		fk_Vector	getPosVec(int vertexID);
+		fk_Vector getPosVec(int vertexID);
 
 		//! 頂点 ID 配列参照関数
 		/*!
@@ -614,7 +643,7 @@ namespace FK {
 		 *
 		 *	\return		頂点 ID 配列
 		 */
-		std::vector<int>	getFaceData(int faceID);
+		std::vector<int> getFaceData(int faceID);
 
 		//! 頂点 ID 参照関数
 		/*!
@@ -632,7 +661,7 @@ namespace FK {
 		 *
 		 *	\return		頂点 ID
 		 */
-		int		getFaceData(int faceID, int vertexNum);
+		int getFaceData(int faceID, int vertexNum);
 
 
 		//! 面法線ベクトル取得関数
@@ -648,7 +677,7 @@ namespace FK {
 		 *
 		 *	\sa setFaceNorm(), getVertexNorm()
 		 */
-		fk_Vector	getFaceNorm(int faceID, int order = 0);
+		fk_Vector getFaceNorm(int faceID, int order = 0);
 
 		//! 頂点法線ベクトル取得関数
 		/*!
@@ -663,7 +692,7 @@ namespace FK {
 		 *
 		 *	\sa setVertexNorm(), getFaceNorm()
 		 */
-		fk_Vector	getVertexNorm(int vertexID, int order = 0);
+		fk_Vector getVertexNorm(int vertexID, int order = 0);
 
 		///@}
 
@@ -688,7 +717,7 @@ namespace FK {
 		 *
 		 *	\sa getPosVec()
 		 */
-		bool	moveVPosition(int vertexID, const fk_Vector &pos, int order = 0);
+		bool moveVPosition(int vertexID, const fk_Vector &pos, int order = 0);
 
 		//! 頂点移動関数2
 		/*!
@@ -709,7 +738,7 @@ namespace FK {
 		 *
 		 *	\sa getPosVec()
 		 */
-		bool	moveVPosition(int vertexID, double x, double y, double z, int order = 0);
+		bool moveVPosition(int vertexID, double x, double y, double z, int order = 0);
 
 		//! 頂点移動関数3
 		/*!
@@ -730,7 +759,7 @@ namespace FK {
 		 *
 		 *	\sa getPosVec()
 		 */
-		bool	moveVPosition(int vertexID, double *array, int order = 0);
+		bool moveVPosition(int vertexID, double *array, int order = 0);
 
 		//! 任意形状生成関数1
 		/*!
@@ -760,12 +789,12 @@ namespace FK {
 		 *
 		 *	\sa fk_Solid
 		 */
-		void	makeIFSet(int faceNum,
-						  int polyNum,
-						  int *IFSet,
-						  int vertexNum,
-						  fk_Vector *posArray,
-						  int order = 0);
+		void makeIFSet(int faceNum,
+					   int polyNum,
+					   int *IFSet,
+					   int vertexNum,
+					   fk_Vector *posArray,
+					   int order = 0);
 
 		//! 任意形状生成関数2
 		/*!
@@ -787,9 +816,9 @@ namespace FK {
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 		 */
-		void		makeIFSet(std::vector< std::vector<int> > *faceArray,
-							  std::vector<fk_Vector> *posArray,
-							  int order = 0);
+		void makeIFSet(std::vector< std::vector<int> > *faceArray,
+					   std::vector<fk_Vector> *posArray,
+					   int order = 0);
 
 		//! 面法線ベクトル設定関数
 		/*!
@@ -817,7 +846,7 @@ namespace FK {
 		 *
 		 *	\sa getFaceNorm(), setVertexNorm()
 		 */
-		bool	setFaceNorm(int faceID, const fk_Vector &norm, int order = 0);
+		bool setFaceNorm(int faceID, const fk_Vector &norm, int order = 0);
 
 		//! 頂点法線ベクトル設定関数
 		/*!
@@ -845,7 +874,7 @@ namespace FK {
 		 *
 		 *	\sa getVertexNorm(), setFaceNorm()
 		 */
-		bool	setVertexNorm(int vertexID, const fk_Vector &norm, int order = 0);
+		bool setVertexNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
 		//! 法線ベクトル強制計算関数 
 		/*!
@@ -863,7 +892,7 @@ namespace FK {
 		 *
 		 *	\sa getFaceNorm(), getVertexNorm(), setFaceNorm(), setVertexNorm()
 		 */
-		void	flush(void);
+		void flush(void);
 
 		///@}
 
@@ -925,7 +954,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Block
 		 */
-		void	makeBlock(double x, double y, double z);
+		void makeBlock(double x, double y, double z);
 
 		//! 直方体辺長変更関数
 		/*!
@@ -940,7 +969,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void	setBlockSize(double x, double y, double z);
+		void setBlockSize(double x, double y, double z);
 
 		//! 直方体個別辺長設定関数
 		/*!
@@ -957,7 +986,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void	setBlockSize(double length, fk_Axis axis);
+		void setBlockSize(double length, fk_Axis axis);
 
 		//! 直方体全体拡大縮小関数
 		/*!
@@ -970,7 +999,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void	setBlockScale(double scale);
+		void setBlockScale(double scale);
 
 		//! 直方体軸方向拡大縮小関数
 		/*!
@@ -987,7 +1016,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void	setBlockScale(double scale, fk_Axis axis);
+		void setBlockScale(double scale, fk_Axis axis);
 
 		//! 直方体軸方向個別拡大縮小関数
 		/*!
@@ -1002,7 +1031,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void	setBlockScale(double x, double y, double z);
+		void setBlockScale(double x, double y, double z);
 		///@}
 
 		//! \name 円形状制御関数
@@ -1028,7 +1057,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Circle
 		 */
-		void	makeCircle(int div, double rad);
+		void makeCircle(int div, double rad);
 
 		//! 円形状半径設定関数
 		/*!
@@ -1041,7 +1070,7 @@ namespace FK {
 		 *
 		 *	\sa makeCircle(), fk_Circle
 		 */
-		void	setCircleRadius(double rad);
+		void setCircleRadius(double rad);
 
 		//! 円形状分割数設定関数
 		/*!
@@ -1054,7 +1083,7 @@ namespace FK {
 		 *
 		 *	\sa makeCircle(), fk_Circle
 		 */
-		void	setCircleDivide(int div);
+		void setCircleDivide(int div);
 
 		//! 円形状拡大縮小関数
 		/*!
@@ -1067,7 +1096,7 @@ namespace FK {
 		 *
 		 *	\sa makeCircle(), fk_Circle
 		 */
-		void	setCircleScale(double scale);
+		void setCircleScale(double scale);
 		///@}
 
 		//! \name 球形状制御関数
@@ -1092,7 +1121,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Sphere
 		 */
-		void	makeSphere(int div, double rad);
+		void makeSphere(int div, double rad);
 
 		//! 球形状半径設定関数
 		/*!
@@ -1105,7 +1134,7 @@ namespace FK {
 		 *
 		 *	\sa makeSphere(), fk_Sphere
 		 */
-		void	setSphereRadius(double rad);
+		void setSphereRadius(double rad);
 
 		//! 球形状分割数設定関数
 		/*!
@@ -1118,7 +1147,7 @@ namespace FK {
 		 *
 		 *	\sa makeSphere(), fk_Sphere
 		 */
-		void	setSphereDivide(int div);
+		void setSphereDivide(int div);
 
 		//! 球形状拡大縮小関数
 		/*!
@@ -1131,7 +1160,7 @@ namespace FK {
 		 *
 		 *	\sa makeSphere(), fk_Sphere
 		 */
-		void	setSphereScale(double scale);
+		void setSphereScale(double scale);
 		///@}
 
 		//! \name 正多角柱(円柱)形状制御関数
@@ -1163,8 +1192,8 @@ namespace FK {
 		 *
 		 *	\sa fk_Prism
 		 */
-		void	makePrism(int div, double top,
-						  double bottom, double height, bool smoothMode = false);
+		void makePrism(int div, double top,
+					   double bottom, double height, bool smoothMode = false);
 
 		//! 正多角柱(円柱)角数設定関数
 		/*!
@@ -1177,7 +1206,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void	setPrismDivide(int div);
+		void setPrismDivide(int div);
 
 		//! 正多角柱(円柱)上面半径設定関数
 		/*!
@@ -1190,7 +1219,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void	setPrismTopRadius(double top);
+		void setPrismTopRadius(double top);
 
 		//! 正多角柱(円柱)角数設定関数
 		/*!
@@ -1203,7 +1232,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void	setPrismBottomRadius(double bottom);
+		void setPrismBottomRadius(double bottom);
 
 		//! 正多角柱(円柱)高さ設定関数
 		/*!
@@ -1216,7 +1245,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void	setPrismHeight(double height);
+		void setPrismHeight(double height);
 		///@}
 
 		//! \name 正多角錐(円錐)形状制御関数
@@ -1247,7 +1276,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Cone
 		 */
-		void	makeCone(int div, double rad, double height, bool smoothMode = true);
+		void makeCone(int div, double rad, double height, bool smoothMode = true);
 
 		//! 正多角錐(円錐)角数設定関数
 		/*!
@@ -1260,7 +1289,7 @@ namespace FK {
 		 *
 		 *	\sa makeCone(), fk_Cone
 		 */
-		void	setConeDivide(int div);
+		void setConeDivide(int div);
 
 		//! 正多角錐(円錐)底面半径設定関数
 		/*!
@@ -1273,7 +1302,7 @@ namespace FK {
 		 *
 		 *	\sa makeCone(), fk_Cone
 		 */
-		void	setConeRadius(double rad);
+		void setConeRadius(double rad);
 
 		//! 正多角錐(円錐)高さ設定関数
 		/*!
@@ -1286,7 +1315,7 @@ namespace FK {
 		 *
 		 *	\sa makeCone(), fk_Cone
 		 */
-		void	setConeHeight(double height);
+		void setConeHeight(double height);
 		///@}
 
 		//! \name カプセル型形状制御関数
@@ -1310,7 +1339,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Capsule
 		 */
-		void	makeCapsule(int div, double len, double rad);
+		void makeCapsule(int div, double len, double rad);
 
 		//! カプセル型形状寸法設定関数
 		/*!
@@ -1324,7 +1353,7 @@ namespace FK {
 		 *
 		 *	\sa makeCapsule(), fk_Capsule
 		 */
-		void	setCapsuleSize(double len, double rad);
+		void setCapsuleSize(double len, double rad);
 		///@}
 
 		//! \name その他
@@ -1341,7 +1370,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Solid
 		 */
-		void	putSolid(fk_Solid *solid);
+		void putSolid(fk_Solid *solid);
 
 		//! アニメーション時間設定関数
 		/*!
@@ -1353,7 +1382,7 @@ namespace FK {
 		 *
 		 *	\sa readD3DXFile(), setBVHMotion(), fk_BVHMotion
 		 */
-		void	setAnimationTime(double time);
+		void setAnimationTime(double time);
 
 		//! BVHデータ設定関数
 		/*!
@@ -1363,85 +1392,62 @@ namespace FK {
 		 *
 		 *	\sa setAnimationTime(), readD3DXFile(), fk_BVHMotion
 		 */
-		void	setBVHMotion(fk_BVHBase *bvh);
+		void setBVHMotion(fk_BVHBase *bvh);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		bool	MakeMesh(std::vector<fk_Vector> *,
-						 std::vector< std::vector<int> > *, bool = true);
+		bool MakeMesh(std::vector<fk_Vector> *,
+					  std::vector< std::vector<int> > *, bool = true);
 
 
-		fk_D3DXAnimation *	GetAnimation(void);
+		fk_D3DXAnimation * GetAnimation(void);
 
-		void	DataPrint(void);
+		void DataPrint(void);
 
-		void	EdgeIBOSetup(void);
-		void	FaceIBOSetup(void);
+		void EdgeIBOSetup(void);
+		void FaceIBOSetup(void);
 
-		int		getElemMaterialID(int);
-		bool	setElemMaterialID(int, int);
-		void	ForceUpdateAttr(void);
+		int getElemMaterialID(int);
+		bool setElemMaterialID(int, int);
+		void ForceUpdateAttr(void);
 
-		fk_Vector	getPNorm(int faceID, int order = 0);
-		fk_Vector	getVNorm(int vertexID, int order = 0);
-		bool	setPNorm(int faceID, const fk_Vector &norm, int order = 0);
-		bool	setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
+		fk_Vector getPNorm(int faceID, int order = 0);
+		fk_Vector getVNorm(int vertexID, int order = 0);
+		bool setPNorm(int faceID, const fk_Vector &norm, int order = 0);
+		bool setVNorm(int vertexID, const fk_Vector &norm, int order = 0);
 
-		void	updateAttr(void);
+		void updateAttr(void);
 
-		std::vector<float>	*	GetVertexP(void);
-		std::vector<float>	*	GetNormP(void);
+		std::vector<float> * GetVertexP(void);
+		std::vector<float> * GetNormP(void);
 
 #endif
 
 	private:
+		std::unique_ptr<Member> _m;
 
-		fk_FVecArray					vertexPosition;
-		fk_FVecArray					timeOrgPosition;
-		fk_FVecArray					vertexNormal;
-		fk_FVecArray					faceNormal;
-		std::vector<GLuint>				edgeIndex;
-		std::vector<GLuint>				faceIndex;
-		std::vector< std::vector<int> >	loopStack;
-		//bool							modifyFlg;
-		//bool							edgeModifyFlg;
-		std::vector<int>				modifyList;
-		fk_D3DXAnimation				*anim;
+		void InitFaceNorm(void);
+		void InitVertexNorm(void);
 
-		bool							cloneFlg;
-		std::list<fk_IndexFaceSet *>	cloneList;
-		fk_IndexFaceSet					*orgIFS;
+		void ModifyFaceNorm(void);
+		void ModifyVertexNorm(void);
 
-		// 編集があった場合に true, ない場合 false
-		bool				edgeIndexFlg, faceIndexFlg;
-		std::vector<char>	faceNormFlg;
-		std::vector<char>	vertexNormFlg;
+		void MakeFaceNorm(int);
 
-		GLuint				edgeIBO, faceIBO;
-		bool				smoothMode;
+		void ResetFaceFlg(void);
 
-		void				InitFaceNorm(void);
-		void				InitVertexNorm(void);
+		fk_FVector CalcTriNorm(GLuint *);
+		fk_FVector CalcPolyNorm(int, int *);
+		void MakeLoopTable(void);
+		void MakeEdgeSet(std::vector< std::vector<int> > *);
 
-		void				ModifyFaceNorm(void);
-		void				ModifyVertexNorm(void);
+		void Init(void);
 
-		void				MakeFaceNorm(int);
+		void DeleteCloneLink(fk_IndexFaceSet *);
 
-		void				ResetFaceFlg(void);
-
-		fk_FVector			CalcTriNorm(GLuint *);
-		fk_FVector			CalcPolyNorm(int, int *);
-		void				MakeLoopTable(void);
-		void				MakeEdgeSet(std::vector< std::vector<int> > *);
-
-		void				Init(void);
-
-		void				DeleteCloneLink(fk_IndexFaceSet *);
-
-		void				MakeCapsuleVec(std::vector<fk_Vector> *, int, double, double);
-		void				MakeCapsuleIFSet(std::vector< std::vector<int> > *, int);
+		void MakeCapsuleVec(std::vector<fk_Vector> *, int, double, double);
+		void MakeCapsuleIFSet(std::vector< std::vector<int> > *, int);
 	};
 }
 
