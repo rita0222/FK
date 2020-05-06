@@ -22,6 +22,19 @@ namespace FK {
 	 */
 
 	class fk_Cone: public fk_IndexFaceSet {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int divide;
+			double radius;
+			double height;
+			bool smoothMode;
+
+			Member(int, double, double, bool);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -51,7 +64,7 @@ namespace FK {
 		 *					false の場合は側面を独立した平面としてレンダリングし、
 		 *					角錐として表示します。
 		 */
-		void	setSmoothMode(bool smooth);
+		void setSmoothMode(bool smooth);
 		
 		//! 角数設定関数
 		/*!
@@ -59,7 +72,7 @@ namespace FK {
 		 *
 		 *	\param[in]	div	角数
 		 */		
-		void	setDivide(int div);
+		void setDivide(int div);
 
 		//! 底面半径設定関数
 		/*!
@@ -67,7 +80,7 @@ namespace FK {
 		 *
 		 *	\param[in]	rad	底面半径
 		 */
-		void	setRadius(double rad);
+		void setRadius(double rad);
 
 		//! 高さ設定関数
 		/*!
@@ -75,12 +88,10 @@ namespace FK {
 		 *
 		 *	\param[in]	height	高さ
 		 */
-		void	setHeight(double height);
+		void setHeight(double height);
 
     private:
-        double height, radius;
-        int divide;
-        bool smoothMode;
+		std::unique_ptr<Member> _m;
 	};
 }
 

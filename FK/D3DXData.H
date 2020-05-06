@@ -9,6 +9,21 @@ namespace FK {
 
 	class fk_D3DXFrameAnimation {
 
+		class Member {
+		public:
+			std::string name;
+			std::vector<double> rotKey;
+			std::vector<double> scaleKey;
+			std::vector<double> transKey;
+
+			std::vector<fk_Quaternion> rotData;
+			std::vector<fk_Vector> scaleData;
+			std::vector<fk_Vector> transData;
+			fk_Matrix frameMatrix;
+
+			Member(void);
+		};
+
 	public:
 		fk_D3DXFrameAnimation(void);
 		virtual ~fk_D3DXFrameAnimation();
@@ -42,30 +57,24 @@ namespace FK {
 		fk_Matrix GetFrameMatrix(void);
 
 	private:
-		std::unique_ptr<std::string> name;
-
-		std::vector<double> rotKey;
-		std::vector<double> scaleKey;
-		std::vector<double> transKey;
-
-		std::vector<std::unique_ptr<fk_Quaternion>> rotData;
-		std::vector<std::unique_ptr<fk_Vector>> scaleData;
-		std::vector<std::unique_ptr<fk_Vector>> transData;
-
-		std::unique_ptr<fk_Matrix> frameMatrix;
+		std::unique_ptr<Member> _m;
 
 		void LinearDiv(double, std::vector<double> *, int *, double *);
 	};
 
 	class fk_D3DXSkinData {
-	private:
-		std::unique_ptr<std::string> name;
-		int vNum;
-		std::vector<int> vArray;
-		std::vector<double> wArray;
 
-		std::unique_ptr<fk_Matrix> offsetMatrix;
+		class Member {
+		public:
+			std::string name;
+			int vNum;
+			std::vector<int> vArray;
+			std::vector<double> wArray;
+			fk_Matrix offsetMatrix;
 
+			Member(void);
+		};
+		
 	public:
 		fk_D3DXSkinData(void);
 		virtual ~fk_D3DXSkinData();
@@ -81,9 +90,27 @@ namespace FK {
 		int GetVID(int);
 		double GetWeight(int);
 		fk_Matrix GetOffsetMatrix(void);
+
+	private:
+		std::unique_ptr<Member> _m;
 	};
 
 	class fk_D3DXFrame {
+
+		class Member {
+		public:
+			std::string name;
+			fk_D3DXSkinData *skin;
+			fk_D3DXFrameAnimation *anim;
+			fk_Matrix initMatrix;
+			fk_Matrix offsetMatrix;
+			fk_Matrix curMatrix;
+			fk_Matrix totalMatrix;
+			fk_Matrix *parentMatrix;
+
+			Member(void);
+		};
+
 	public:
 		fk_D3DXFrame(void);
 		virtual ~fk_D3DXFrame();
@@ -101,27 +128,22 @@ namespace FK {
 		fk_Matrix * GetTotalMatrix(void);
 
 	private:
-		std::unique_ptr<std::string> name;
-		fk_D3DXSkinData *skin;
-		fk_D3DXFrameAnimation *anim;
+		std::unique_ptr<Member> _m;
 
-		// Frame の初期行列
-		std::unique_ptr<fk_Matrix> initMatrix;
-
-		// 各ボーン固有のオフセット行列
-		std::unique_ptr<fk_Matrix> offsetMatrix;
-
-		// 親からの継承を反映したボーン行列
-		std::unique_ptr<fk_Matrix> curMatrix;
-
-		// ボーン行列 * オフセット行列
-		std::unique_ptr<fk_Matrix> totalMatrix;
-
-		// 親ボーン行列
-		fk_Matrix *parentMatrix;
 	};
 
 	class fk_D3DXPropertyList : public fk_TreeBaseObject {
+		class Member {
+		public:
+			bool matrixFlg;
+			fk_Matrix frameMatrix;
+			std::string property;
+			std::string data;
+			fk_D3DXFrame *frame;
+
+			Member(void);
+		};
+
 	public:
 		fk_D3DXPropertyList(void);
 		virtual ~fk_D3DXPropertyList();
@@ -136,11 +158,7 @@ namespace FK {
 		fk_D3DXFrame * GetFrame(void);
 
 	private:
-		bool matrixFlg;
-		std::unique_ptr<fk_Matrix> frameMatrix;
-		std::string property;
-		std::string data;
-		fk_D3DXFrame *frame;
+		std::unique_ptr<Member> _m;
 	};
 }
 

@@ -1,15 +1,19 @@
 ﻿#include <FK/Cone.h>
 
 using namespace FK;
+using namespace std;
 
-fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight, bool argSmoothMode)
+fk_Cone::Member::Member(int argDiv, double argRadius, double argHeight, bool argSmoothMode) :
+	divide(argDiv), radius(argRadius), height(argHeight), smoothMode(argSmoothMode)
+{
+	return;
+}
+
+fk_Cone::fk_Cone(int argDiv, double argRadius, double argHeight, bool argSmoothMode) :
+	_m(make_unique<Member>(argDiv, argRadius, argHeight, argSmoothMode))
 {
 	SetObjectType(fk_Type::CONE);
-    divide = argDiv;
-    radius = argRadius;
-    height = argHeight;
-    smoothMode = argSmoothMode;
-    makeCone(divide, radius, height, smoothMode);
+    makeCone(_m->divide, _m->radius, _m->height, _m->smoothMode);
 
     return;
 }
@@ -21,27 +25,30 @@ fk_Cone::~fk_Cone()
 
 void fk_Cone::setDivide(int argDiv)
 {
+	_m->divide = argDiv;
 	setConeDivide(argDiv);
 	return;
 }
 
 void fk_Cone::setRadius(double argRadius)
 {
+	_m->radius = argRadius;
 	setConeRadius(argRadius);
 	return;
 }
 
 void fk_Cone::setHeight(double argHeight)
 {
+	_m->height = argHeight;
 	setConeHeight(argHeight);
 	return;
 }
 
 void fk_Cone::setSmoothMode(bool argMode)
 {
-    if (smoothMode != argMode) {
-        smoothMode = argMode;
-		makeCone(divide, radius, height, smoothMode);
+    if (_m->smoothMode != argMode) {
+        _m->smoothMode = argMode;
+		makeCone(_m->divide, _m->radius, _m->height, _m->smoothMode);
     }
 }
 

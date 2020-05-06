@@ -4,8 +4,12 @@
 using namespace std;
 using namespace FK;
 
-fk_Closedline::fk_Closedline(vector<fk_Vector> *argVertexSet)
-	: num(0)
+fk_Closedline::Member::Member(void) : num(0)
+{
+	return;
+}
+
+fk_Closedline::fk_Closedline(vector<fk_Vector> *argVertexSet) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::POLYLINE);
 	setVertex(argVertexSet);
@@ -21,13 +25,13 @@ void fk_Closedline::allClear(void)
 {
 	AllClear();
 	Touch();
-	num = 0;
+	_m->num = 0;
 }
 
 void fk_Closedline::pushVertex(fk_Vector argPos)
 {
 	fk_Vector S, V;
-	switch(num) {
+	switch(_m->num) {
 	  case 0:
 		Resize(1);
 		SetPos(0, 0, &argPos);
@@ -51,16 +55,16 @@ void fk_Closedline::pushVertex(fk_Vector argPos)
 		PushLines(&argPos, &S);
 		break;
 	}
-	num++;
+	_m->num++;
 	Touch();
 }
 
 void fk_Closedline::setVertex(int argID, fk_Vector argPos)
 {
-	if(argID < 0 || argID >= num) return;
+	if(argID < 0 || argID >= _m->num) return;
 	SetPos(argID, 0, &argPos);
 	if(argID == 0) {
-		SetPos(num-1, 1, &argPos);
+		SetPos(_m->num-1, 1, &argPos);
 	} else {
 		SetPos(argID-1, 1, &argPos);
 	}

@@ -16,6 +16,18 @@ namespace FK {
 	};
 
 	class fk_D3DXShapeParser : public fk_ParserBase {
+		class Member {
+		public:
+			std::vector<fk_Vector> vData, optVData;
+			std::vector<std::vector<int>> fData, optFData;
+			std::vector<fk_TexCoord> tData, optTData;
+			std::vector<int> mData;
+			std::vector<int> vMapData;
+			fk_Matrix frameMatrix;
+
+			Member(void);
+		};
+
 	public:
 		fk_D3DXShapeParser(void);
 		virtual ~fk_D3DXShapeParser();
@@ -41,12 +53,7 @@ namespace FK {
 		void Print(void);
 
 	private:
-		std::vector<fk_Vector> vData, optVData;
-		std::vector<std::vector<int>> fData, optFData;
-		std::vector<fk_TexCoord> tData, optTData;
-		std::vector<int> mData;
-		std::vector<int> vMapData;
-		std::unique_ptr<fk_Matrix> frameMatrix;
+		std::unique_ptr<Member> _m;
 	};
 }
 

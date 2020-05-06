@@ -21,6 +21,16 @@ namespace FK {
 
 	class fk_Capsule: public fk_IndexFaceSet {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int div;
+			double len, rad;
+
+			Member(int, double, double);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -48,7 +58,7 @@ namespace FK {
 		 *
 		 *	\sa setLength(), setRadius()
 		 */
-		void	setDivide(int div);
+		void setDivide(int div);
 
 		//! 中心軸長設定関数
 		/*!
@@ -62,7 +72,7 @@ namespace FK {
 		 *
 		 *	\sa setDivide(), setRadius()
 		 */
-		void	setLength(double len);
+		void setLength(double len);
 
 		//! 半径設定関数
 		/*!
@@ -72,7 +82,7 @@ namespace FK {
 		 *
 		 *	\sa setDivide(), setLength()
 		 */
-		void	setRadius(double rad);
+		void setRadius(double rad);
 
 		//! 拡大縮小関数
 		/*!
@@ -80,11 +90,10 @@ namespace FK {
 		 *
 		 *	\param[in]	scale	倍率
 		 */
-		void	setScale(double scale);
+		void setScale(double scale);
 
 	private:
-		double		cap_len, cap_rad;
-		int			cap_div;
+		std::unique_ptr<Member> _m;
 	};
 }
 

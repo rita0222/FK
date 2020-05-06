@@ -9,14 +9,14 @@
 using namespace std;
 using namespace FK;
 
-fk_D3DXParser::fk_D3DXParser(void)
+fk_D3DXParser::Member::Member(void) :
+	ifsTexture(nullptr), anim(nullptr)
 {
-	ifsTexture = nullptr;
-	tree = make_unique<fk_Tree>();
-	shape = make_unique<fk_D3DXShapeParser>();
-	tree->clear("_D3DXParser_root");
-	anim = nullptr;
+	tree.clear("_D3DXParser_root");
+}
 
+fk_D3DXParser::fk_D3DXParser(void) : _m(make_unique<Member>())
+{
 	return;
 }
 
@@ -27,7 +27,7 @@ fk_D3DXParser::~fk_D3DXParser()
 
 void fk_D3DXParser::SetIFSTexture(fk_IFSTexture *argTexture)
 {
-	ifsTexture = argTexture;
+	_m->ifsTexture = argTexture;
 	SetMeshData(argTexture->getIFS());
 	SetAnimation(argTexture->getIFS()->GetAnimation());
 	return;
@@ -35,8 +35,8 @@ void fk_D3DXParser::SetIFSTexture(fk_IFSTexture *argTexture)
 
 void fk_D3DXParser::SetAnimation(fk_D3DXAnimation *argAnim)
 {
-	anim = argAnim;
-	anim->SetTree(tree.get());
+	_m->anim = argAnim;
+	_m->anim->SetTree(&(_m->tree));
 	return;
 }
 
@@ -100,7 +100,7 @@ fk_TreeData * fk_D3DXParser::GetProperty(fk_TreeData *argParent,
 
 	keys = argLine->substr(0, argLine->find("{"));
 	TrimString(&keys);
-	newData = tree->addNewChild(argParent, keys);
+	newData = _m->tree.addNewChild(argParent, keys);
 	propList->SetProperty(PopWord(&keys));
 	propList->SetData(PopWord(&keys));
 	newData->setObject(propList);
@@ -182,28 +182,28 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 							 bool argSolidFlg,
 							 bool *argAnimFlg)
 {
-	ifstream		ifs(argFileName);
-	string			line, keys, property, argument;
-	fk_TreeData		*data, *meshTreeData, *animSetTreeData;
-	bool			readFlg;		// 形状読み込み済みチェック
-	bool			meshModeFlg;	// Mesh内外フラグ
-	bool			skinWeightsFlg;	// skinWeight有無フラグ
+	ifstream ifs(argFileName);
+	string line, keys, property, argument;
+	fk_TreeData *data, *meshTreeData, *animSetTreeData;
+	bool readFlg;		// 形状読み込み済みチェック
+	bool meshModeFlg;	// Mesh内外フラグ
+	bool skinWeightsFlg;	// skinWeight有無フラグ
 	
 	*argAnimFlg = false;
 
 	if(ifs.fail()) return false;
 
-	shape->Clear();
+	_m->shape.Clear();
 
-	data = tree->getRoot();
+	data = _m->tree.getRoot();
 	readFlg = meshModeFlg = skinWeightsFlg = false;
 	meshTreeData = animSetTreeData = nullptr;
 
 	while(getline(ifs, line)) {
 		line += "\n";
 		if(CheckOneLineProperty(&line) == true) {
-			if(*argAnimFlg == true && anim != nullptr) {
-				anim->SetAnimationName(&line);
+			if(*argAnimFlg == true && _m->anim != nullptr) {
+				_m->anim->SetAnimationName(&line);
 			}
 			continue;
 		}
@@ -222,27 +222,27 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 				meshTreeData = data;
 				readFlg = true;
 				meshModeFlg = true;
-				if(shape->ReadMeshData(data, ifs) == false) {
+				if(_m->shape.ReadMeshData(data, ifs) == false) {
 					ifs.close();
 					Error::Put("fk_D3DXParser", "ReadData", 2);
 					return false;
 				}
 			} else if(meshModeFlg == true) {
 				if(CheckProperty(data, "MeshTextureCoords") == true) {
-					if(shape->ReadVectorData(ifs, fk_D3DX_VecMode::T_MODE) == false) {
+					if(_m->shape.ReadVectorData(ifs, fk_D3DX_VecMode::T_MODE) == false) {
 						ifs.close();
 						Error::Put("fk_D3DXParser", "ReadData", 3);
 						return false;
 					}
 				} else if(CheckProperty(data, "MeshMaterialList") == true) {
-					if(shape->ReadMaterialData(ifs) == false) {
+					if(_m->shape.ReadMaterialData(ifs) == false) {
 						ifs.close();
 						Error::Put("fk_D3DXParser", "ReadData", 4);
 						return false;
 					}
 				} else if(CheckProperty(data, "SkinWeights") == true) {
-					if(anim != nullptr) {
-						if(anim->ReadSkinData(ifs) == false) {
+					if(_m->anim != nullptr) {
+						if(_m->anim->ReadSkinData(ifs) == false) {
 							ifs.close();
 							Error::Put("fk_D3DXParser", "ReadData", 5);
 							return false;
@@ -254,11 +254,11 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 				*argAnimFlg = true;
 				animSetTreeData = data;
 			} else if(*argAnimFlg == true) {
-				if(CheckProperty(data, "Animation") == true && anim != nullptr) {
-					anim->MakeNewAnimation();
+				if(CheckProperty(data, "Animation") == true && _m->anim != nullptr) {
+					_m->anim->MakeNewAnimation();
 				} else if(CheckProperty(data, "AnimationKey") == true &&
-						  anim != nullptr) {
-					if(anim->ReadAnimationKey(ifs) == false) {
+						  _m->anim != nullptr) {
+					if(_m->anim->ReadAnimationKey(ifs) == false) {
 						ifs.close();
 						Error::Put("fk_D3DXParser", "ReadData", 6);
 						return false;
@@ -291,13 +291,13 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 		return false;
 	}
 
-	if(anim != nullptr) {
-		anim->MakeAnimationData();
+	if(_m->anim != nullptr) {
+		_m->anim->MakeAnimationData();
 	}
 
 	if(skinWeightsFlg == false) {
-		anim->MakeDummySkinWeights(meshTreeData->getParent(),
-								   shape->GetOrgVSize());
+		_m->anim->MakeDummySkinWeights(meshTreeData->getParent(),
+								   _m->shape.GetOrgVSize());
 	}
 
 	return MakeData(argMateID, argSolidFlg);
@@ -305,18 +305,18 @@ bool fk_D3DXParser::ReadData(const string &argFileName,
 
 bool fk_D3DXParser::MakeData(int argMateID, bool argSolidFlg)
 {
-	shape->OptimizeData(argMateID);
+	_m->shape.OptimizeData(argMateID);
 
 	if(meshData != nullptr) {
-		if(shape->MakeMesh(meshData, argSolidFlg) == false) return false;
+		if(_m->shape.MakeMesh(meshData, argSolidFlg) == false) return false;
 	}
 
-	if(ifsTexture != nullptr) {
-		shape->SetIFSTexCoord(ifsTexture);
+	if(_m->ifsTexture != nullptr) {
+		_m->shape.SetIFSTexCoord(_m->ifsTexture);
 	}
 	
-	if(anim != nullptr) {
-		anim->MakeSkinMap(shape.get());
+	if(_m->anim != nullptr) {
+		_m->anim->MakeSkinMap(&(_m->shape));
 	}
 
 	return true;
@@ -326,8 +326,8 @@ bool fk_D3DXParser::MakeData(int argMateID, bool argSolidFlg)
 
 void fk_D3DXParser::print(void)
 {
-	tree->Print();
-	shape->Print();
+	_m->tree.Print();
+	_m->shape.Print();
 
 	return;
 }

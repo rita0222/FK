@@ -42,7 +42,7 @@ namespace FK {
 		 *
 		 *	\param[in]	div	分割数。実際には円弧全体をこの数値の 4 倍で分割します。
 		 */
-		void	setDivide(int div);
+		void setDivide(int div);
 
 		//! 半径設定関数
 		/*!
@@ -50,7 +50,7 @@ namespace FK {
 		 *
 		 *	\param[in]	rad	半径
 		 */
-		void	setRadius(double rad);
+		void setRadius(double rad);
 
 		//! 拡大縮小関数
 		/*!
@@ -58,7 +58,7 @@ namespace FK {
 		 *
 		 *	\param[in]	scale	倍率
 		 */
-		void	setScale(double scale);
+		void setScale(double scale);
 	};
 }
 

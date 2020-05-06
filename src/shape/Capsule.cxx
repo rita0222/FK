@@ -1,16 +1,19 @@
 ﻿#include <FK/Capsule.h>
 
 using namespace FK;
+using namespace std;
 
-fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad)
+fk_Capsule::Member::Member(int argDiv, double argLen, double argRad) :
+	div(argDiv), len(argLen), rad(argRad)
+{
+	return;
+}
+
+fk_Capsule::fk_Capsule(int argDiv, double argLen, double argRad) :
+	_m(make_unique<Member>(argDiv, argLen, argRad))
 {
 	SetObjectType(fk_Type::CAPSULE);
-
-	cap_div = argDiv;
-	cap_len = argLen;
-	cap_rad = argRad;
-
-	makeCapsule(cap_div, cap_len, cap_rad);
+	makeCapsule(_m->div, _m->len, _m->rad);
 
 	return;
 }
@@ -22,9 +25,9 @@ fk_Capsule::~fk_Capsule()
 
 void fk_Capsule::setDivide(int argDiv)
 {
-	if(cap_div != argDiv && argDiv >= 2) {
-		cap_div = argDiv;
-		makeCapsule(cap_div, cap_len, cap_rad);
+	if(_m->div != argDiv && argDiv >= 2) {
+		_m->div = argDiv;
+		makeCapsule(_m->div, _m->len, _m->rad);
 	}
 
 	return;
@@ -33,8 +36,8 @@ void fk_Capsule::setDivide(int argDiv)
 void fk_Capsule::setLength(double argLen)
 {
 	if(argLen > 0.0) {
-		cap_len = argLen;
-		setCapsuleSize(cap_len, cap_rad);
+		_m->len = argLen;
+		setCapsuleSize(_m->len, _m->rad);
 	}
 
 	return;
@@ -43,8 +46,8 @@ void fk_Capsule::setLength(double argLen)
 void fk_Capsule::setRadius(double argRad)
 {
 	if(argRad > 0.0) {
-		cap_rad = argRad;
-		setCapsuleSize(cap_len, cap_rad);
+		_m->rad = argRad;
+		setCapsuleSize(_m->len, _m->rad);
 	}
 
 	return;
@@ -53,9 +56,9 @@ void fk_Capsule::setRadius(double argRad)
 void fk_Capsule::setScale(double argScale)
 {
 	if(argScale > 0.0) {
-		cap_len *= argScale;
-		cap_rad *= argScale;
-		setCapsuleSize(cap_len, cap_rad);
+		_m->len *= argScale;
+		_m->rad *= argScale;
+		setCapsuleSize(_m->len, _m->rad);
 	}
 
 	return;

@@ -16,6 +16,15 @@ namespace FK {
 	class fk_BVHBase;
 
 	class fk_D3DXSkinMap {
+
+		class Member {
+		public:
+			fk_D3DXFrame *frame;
+			double weight;
+
+			Member(void);
+		};
+		
 	public:
 		fk_D3DXSkinMap(void);
 		fk_D3DXSkinMap(const fk_D3DXSkinMap &);
@@ -28,11 +37,21 @@ namespace FK {
 		double GetWeight(void);
 
 	private:
-		fk_D3DXFrame *frame;
-		double weight;
+		std::unique_ptr<Member> _m;
 	};
 
 	class fk_D3DXAnimation : public fk_ParserBase {
+		class Member {
+		public:
+			fk_Tree *tree;
+			std::vector<std::unique_ptr<fk_D3DXSkinData>> skinData;
+			std::vector<std::unique_ptr<fk_D3DXFrame>> frameData;
+			std::vector<std::unique_ptr<fk_D3DXFrameAnimation>> animData;
+			std::vector<std::vector<std::unique_ptr<fk_D3DXSkinMap>>> mapData;
+
+			Member(void);
+		};
+
 	public:
 
 		fk_D3DXAnimation(void);
@@ -51,12 +70,7 @@ namespace FK {
 		void SetBVHMotion(fk_BVHBase *);
 
 	private:
-
-		fk_Tree *tree;
-		std::vector<std::unique_ptr<fk_D3DXSkinData>> skinData;
-		std::vector<std::unique_ptr<fk_D3DXFrame>> frameData;
-		std::vector<std::unique_ptr<fk_D3DXFrameAnimation>> animData;
-		std::vector<std::vector<fk_D3DXSkinMap>> mapData;
+		std::unique_ptr<Member> _m;
 
 		bool GetVector(std::ifstream &, std::string *, fk_Vector *);
 		bool GetQuaternion(std::ifstream &, std::string *, fk_Quaternion *);

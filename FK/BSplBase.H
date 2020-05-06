@@ -5,7 +5,6 @@
 
 namespace FK {
 	namespace BSplBase {
-
 		bool IsSame(double, double);
 		bool IsBig(double, double);
 		bool UpdateKnot(int, int, std::vector<double> &);

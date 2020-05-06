@@ -9,10 +9,13 @@
 using namespace std;
 using namespace FK;
 
-fk_D3DXShapeParser::fk_D3DXShapeParser(void)
+fk_D3DXShapeParser::Member::Member(void)
 {
-	frameMatrix = make_unique<fk_Matrix>();
-	Clear();
+	return;
+}
+
+fk_D3DXShapeParser::fk_D3DXShapeParser(void) : _m(make_unique<Member>())
+{
 	return;
 }
 
@@ -23,11 +26,14 @@ fk_D3DXShapeParser::~fk_D3DXShapeParser()
 
 void fk_D3DXShapeParser::Clear(void)
 {
-	vData.clear(); optVData.clear();
-	fData.clear(); optFData.clear();
-	tData.clear(); optTData.clear();
-	mData.clear();
-	vMapData.clear();
+	_m->vData.clear();
+	_m->optVData.clear();
+	_m->fData.clear();
+	_m->optFData.clear();
+	_m->tData.clear();
+	_m->optTData.clear();
+	_m->mData.clear();
+	_m->vMapData.clear();
 
 	return;
 }
@@ -64,7 +70,7 @@ bool fk_D3DXShapeParser::SetFrameMatrix(fk_TreeData *argData)
 
 	prop = static_cast<fk_D3DXPropertyList *>(parent->getObject());
 	if(prop != nullptr) {
-		*frameMatrix = *(prop->GetFrameMatrix());
+		_m->frameMatrix = *(prop->GetFrameMatrix());
 	}
 
 	return true;
@@ -72,10 +78,10 @@ bool fk_D3DXShapeParser::SetFrameMatrix(fk_TreeData *argData)
 
 bool fk_D3DXShapeParser::ReadVectorData(ifstream &argIFS, fk_D3DX_VecMode argMode)
 {
-	string				word, line;
-	int					i, vNum;
-	fk_Vector			tmpVec;
-	fk_TexCoord			tmpTex;
+	string word, line;
+	int i, vNum;
+	fk_Vector tmpVec;
+	fk_TexCoord tmpTex;
 
 	word.clear();
 	while(word.size() == 0) {
@@ -90,12 +96,12 @@ bool fk_D3DXShapeParser::ReadVectorData(ifstream &argIFS, fk_D3DX_VecMode argMod
 	if(argMode == fk_D3DX_VecMode::V_MODE) {
 		for(i = 0; i < vNum; i++) {
 			if(GetVector(argIFS, &line, &tmpVec) == false) return false;
-			vData.push_back(tmpVec);
+			_m->vData.push_back(tmpVec);
 		}
 	} else {
 		for(i = 0; i < vNum; i++) {
 			if(GetTexCoord(argIFS, &line, &tmpTex) == false) return false;
-			tData.push_back(tmpTex);
+			_m->tData.push_back(tmpTex);
 		}
 	}
 
@@ -105,8 +111,8 @@ bool fk_D3DXShapeParser::ReadVectorData(ifstream &argIFS, fk_D3DX_VecMode argMod
 bool fk_D3DXShapeParser::GetVector(ifstream &argIFS,
 								   string *argLine, fk_Vector *argVec)
 {
-	string		word;
-	fk_Vector	vec;
+	string word;
+	fk_Vector vec;
 
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	if(IsNumeric(word) == false) return false;
@@ -126,25 +132,25 @@ bool fk_D3DXShapeParser::GetVector(ifstream &argIFS,
 bool fk_D3DXShapeParser::GetTexCoord(ifstream &argIFS, string *argLine,
 								fk_TexCoord *argTexCoord)
 {
-	string		word;
-	fk_TexCoord	coord;
+	string word;
+	fk_TexCoord coord;
 
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	if(IsNumeric(word) == false) return false;
-	argTexCoord->x = static_cast<float>(Str2Double(word));
+	argTexCoord->x = float(Str2Double(word));
 
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	if(IsNumeric(word) == false) return false;
-	argTexCoord->y = static_cast<float>(1.0 - Str2Double(word));
+	argTexCoord->y = float(1.0 - Str2Double(word));
 
 	return true;
 }
 
 bool fk_D3DXShapeParser::ReadFaceData(ifstream &argIFS)
 {
-	int					i, fNum, fCount, vNum;
-	string				word, line, lineList;
-	vector<int>			vIDArray;
+	int i, fNum, fCount, vNum;
+	string word, line, lineList;
+	vector<int> vIDArray;
 
 	word.clear();
 	while(word.size() == 0) {
@@ -182,7 +188,7 @@ bool fk_D3DXShapeParser::ReadFaceData(ifstream &argIFS)
 			vIDArray.push_back(Str2Int(word)+1);
 		}
 
-		fData.push_back(vIDArray);
+		_m->fData.push_back(vIDArray);
 		lineList.erase(0, 1);
 		fCount++;
 	}
@@ -192,11 +198,8 @@ bool fk_D3DXShapeParser::ReadFaceData(ifstream &argIFS)
 
 bool fk_D3DXShapeParser::ReadMaterialData(ifstream &argIFS)
 {
-	string		word, lineList;
-	int			i, matMaxID, fNum, matID;
-
-	lineList.clear();
-	word.clear();
+	string word, lineList;
+	int i, matMaxID, fNum, matID;
 
 	if(GetWord(argIFS, ";,", &lineList, &word) == false) return false;
 	if(IsNumeric(word) == false) return false;
@@ -206,13 +209,13 @@ bool fk_D3DXShapeParser::ReadMaterialData(ifstream &argIFS)
 	if(IsNumeric(word) == false) return false;
 	fNum = Str2Int(word);
 
-	mData.clear();
+	_m->mData.clear();
 	for(i = 0; i < fNum; i++) {
 		if(GetWord(argIFS, ";,", &lineList, &word) == false) return false;
 		if(IsNumeric(word) == false) return false;
 		matID = Str2Int(word);
 		if(matID < 0 || matID > matMaxID) return false;
-		mData.push_back(matID);
+		_m->mData.push_back(matID);
 	}
 
 	return true;
@@ -222,33 +225,31 @@ bool fk_D3DXShapeParser::ReadMaterialData(ifstream &argIFS)
 
 void fk_D3DXShapeParser::SetQuadFace(int argIndex)
 {
-	vector<int>		tmpIDArray1, tmpIDArray2;
-	_st				index = static_cast<_st>(argIndex);
+	vector<int> tmpIDArray1, tmpIDArray2;
+	_st index = _st(argIndex);
 	
-	tmpIDArray1.push_back(fData[index][0]);
-	tmpIDArray1.push_back(fData[index][1]);
-	tmpIDArray1.push_back(fData[index][2]);
+	tmpIDArray1.push_back(_m->fData[index][0]);
+	tmpIDArray1.push_back(_m->fData[index][1]);
+	tmpIDArray1.push_back(_m->fData[index][2]);
 
-	tmpIDArray2.push_back(fData[index][0]);
-	tmpIDArray2.push_back(fData[index][2]);
-	tmpIDArray2.push_back(fData[index][3]);
+	tmpIDArray2.push_back(_m->fData[index][0]);
+	tmpIDArray2.push_back(_m->fData[index][2]);
+	tmpIDArray2.push_back(_m->fData[index][3]);
 
-	optFData.push_back(tmpIDArray1);
-	optFData.push_back(tmpIDArray2);
+	_m->optFData.push_back(tmpIDArray1);
+	_m->optFData.push_back(tmpIDArray2);
 
 	return;
 }
 
 void fk_D3DXShapeParser::SetIFSTexCoord(fk_IFSTexture *argIFST)
 {
-	_st		i, j, index;
+	_st i, j, index;
 
-	for(i = 0; i < optFData.size(); i++) {
+	for(i = 0; i < _m->optFData.size(); i++) {
 		for(j = 0; j < 3; j++) {
-			index = static_cast<_st>(optFData[i][j]) - 1;
-			argIFST->setTextureCoord(static_cast<int>(i),
-									 static_cast<int>(j),
-									 optTData[index]);
+			index = _st(_m->optFData[i][j]) - 1;
+			argIFST->setTextureCoord(int(i), int(j), _m->optTData[index]);
 		}
 	}
 	return;
@@ -256,61 +257,61 @@ void fk_D3DXShapeParser::SetIFSTexCoord(fk_IFSTexture *argIFST)
 
 void fk_D3DXShapeParser::OptimizeData(int argMateID)
 {
-	_st				i, j;
-	bool			texDataFlg;
-	deque<bool>		tmpArray;
-	int				index, count;
-	string			outStr;
+	_st i, j;
+	bool texDataFlg;
+	deque<bool> tmpArray;
+	int index, count;
+	string outStr;
 
-	optVData.clear();
-	optFData.clear();
-	optTData.clear();
+	_m->optVData.clear();
+	_m->optFData.clear();
+	_m->optTData.clear();
 
 	count = 0;
-	vMapData.clear();
+	_m->vMapData.clear();
 
-	if(mData.size() == fData.size()) texDataFlg = true;
+	if(_m->mData.size() == _m->fData.size()) texDataFlg = true;
 	else texDataFlg = false;
 
-	for(i = 0; i < fData.size(); i++) {
+	for(i = 0; i < _m->fData.size(); i++) {
 		if(texDataFlg == true && argMateID >= 0) {
-			if(mData[i] != argMateID) continue;
+			if(_m->mData[i] != argMateID) continue;
 		}
 
-		if(fData[i].size() == 3) {
-			optFData.push_back(fData[i]);
+		if(_m->fData[i].size() == 3) {
+			_m->optFData.push_back(_m->fData[i]);
 		} else {
 			SetQuadFace(static_cast<int>(i));
 		}
 	}
 
-	tmpArray.resize(vData.size());
+	tmpArray.resize(_m->vData.size());
 	for(i = 0; i < tmpArray.size(); i++) tmpArray[i] = false;
 
-	for(i = 0; i < optFData.size(); i++) {
-		for(j = 0; j < optFData[i].size(); j++) {
-			index = optFData[i][j] - 1;
+	for(i = 0; i < _m->optFData.size(); i++) {
+		for(j = 0; j < _m->optFData[i].size(); j++) {
+			index = _m->optFData[i][j] - 1;
 			if(index < 0 || index >= static_cast<int>(tmpArray.size())) return;
 			tmpArray[static_cast<_st>(index)] = true;
 		}
 	}
 
-	vMapData.resize(tmpArray.size());
+	_m->vMapData.resize(tmpArray.size());
 	for(i = 0; i < tmpArray.size(); i++) {
 		if(tmpArray[i] == true) {
-			vMapData[i] = count;
-			optVData.push_back(vData[i]);
-			if(tData.empty() == false) optTData.push_back(tData[i]);
+			_m->vMapData[i] = count;
+			_m->optVData.push_back(_m->vData[i]);
+			if(_m->tData.empty() == false) _m->optTData.push_back(_m->tData[i]);
 			count++;
 		} else {
-			vMapData[i] = -1;
+			_m->vMapData[i] = -1;
 		}
 	}
 
-	for(i = 0; i < optFData.size(); i++) {
-		for(j = 0; j < optFData[i].size(); j++) {
-			index = optFData[i][j]-1;
-			optFData[i][j] = vMapData[static_cast<_st>(index)]+1;
+	for(i = 0; i < _m->optFData.size(); i++) {
+		for(j = 0; j < _m->optFData[i].size(); j++) {
+			index = _m->optFData[i][j]-1;
+			_m->optFData[i][j] = _m->vMapData[static_cast<_st>(index)]+1;
 		}
 	}
 
@@ -321,25 +322,25 @@ bool fk_D3DXShapeParser::MakeMesh(fk_ParserData *argMesh,
 								  bool argSolidFlg)
 {
 	argMesh->Init();
-	return argMesh->MakeMesh(&optVData, &optFData, argSolidFlg);
+	return argMesh->MakeMesh(&_m->optVData, &_m->optFData, argSolidFlg);
 }
 
 int fk_D3DXShapeParser::GetVMap(int argIndex)
 {
-	if(argIndex < 0 || argIndex >= static_cast<int>(vMapData.size())) {
+	if(argIndex < 0 || argIndex >= static_cast<int>(_m->vMapData.size())) {
 		return -1;
 	}
-	return vMapData[static_cast<_st>(argIndex)];
+	return _m->vMapData[static_cast<_st>(argIndex)];
 }
 
 int fk_D3DXShapeParser::GetOptVSize(void)
 {
-	return static_cast<int>(optVData.size());
+	return static_cast<int>(_m->optVData.size());
 }
 
 int fk_D3DXShapeParser::GetOrgVSize(void)
 {
-	return static_cast<int>(vData.size());
+	return static_cast<int>(_m->vData.size());
 }
 
 void fk_D3DXShapeParser::Print(void)
@@ -347,25 +348,25 @@ void fk_D3DXShapeParser::Print(void)
 	_st				i, j;
 	stringstream	ss;
 
-	ss << "vsize = " << optVData.size();
+	ss << "vsize = " << _m->optVData.size();
 	Error::Put(ss.str());
 	ss.clear();
 	
-	for(i = 0; i < optVData.size(); i++) {
-		ss << "v[" << i << "]\t= " << optVData[i].OutStr();
+	for(i = 0; i < _m->optVData.size(); i++) {
+		ss << "v[" << i << "]\t= " << _m->optVData[i].OutStr();
 		Error::Put(ss.str());
 		ss.clear();
 	}
 
-	ss << "fSize = " <<  optFData.size();
+	ss << "fSize = " <<  _m->optFData.size();
 	Error::Put(ss.str());
 	ss.clear();
 	
-	for(i = 0; i < optFData.size(); i++) {
+	for(i = 0; i < _m->optFData.size(); i++) {
 		ss << "f[" << i << "]\t= (";
-		for(j = 0; j < optFData[i].size(); j++) {
-			ss << optFData[i][j];
-			if(j == optFData[i].size()-1) {
+		for(j = 0; j < _m->optFData[i].size(); j++) {
+			ss << _m->optFData[i][j];
+			if(j == _m->optFData[i].size()-1) {
 				ss << ")";
 			} else {
 				ss << ", ";
@@ -375,22 +376,22 @@ void fk_D3DXShapeParser::Print(void)
 		ss.clear();
 	}
 
-	ss << "tSize = " << optTData.size();
+	ss << "tSize = " << _m->optTData.size();
 	Error::Put(ss.str());
 	ss.clear();
 
-	for(i = 0; i < optTData.size(); i++) {
-		ss << "t[" << i << "]\t= (" << optTData[i].x << ", " << optTData[i].y << ")";
+	for(i = 0; i < _m->optTData.size(); i++) {
+		ss << "t[" << i << "]\t= (" << _m->optTData[i].x << ", " << _m->optTData[i].y << ")";
 		Error::Put(ss.str());
 		ss.clear();
 	}
 
-	ss << "mSize = " << mData.size();
+	ss << "mSize = " << _m->mData.size();
 	Error::Put(ss.str());
 	ss.clear();
 
-	for(i = 0; i < mData.size(); i++) {
-		ss << "m[" << i << "]\t = " <<  mData[i];
+	for(i = 0; i < _m->mData.size(); i++) {
+		ss << "m[" << i << "]\t = " <<  _m->mData[i];
 		Error::Put(ss.str());
 		ss.clear();
 	}

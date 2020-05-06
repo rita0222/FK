@@ -9,17 +9,21 @@
 using namespace std;
 using namespace FK;
 
-fk_D3DXSkinMap::fk_D3DXSkinMap(void)
+fk_D3DXSkinMap::Member::Member(void) :
+	frame(nullptr), weight(-1.0)
 {
-	frame = nullptr;
-	weight = -1.0;
+	return;
+}
+
+fk_D3DXSkinMap::fk_D3DXSkinMap(void) : _m(make_unique<Member>())
+{
 	return;
 }
 
 fk_D3DXSkinMap::fk_D3DXSkinMap(const fk_D3DXSkinMap &argSkinMap)
 {
-	frame = argSkinMap.frame;
-	weight = argSkinMap.weight;
+	_m->frame = argSkinMap._m->frame;
+	_m->weight = argSkinMap._m->weight;
 }
 
 fk_D3DXSkinMap::~fk_D3DXSkinMap()
@@ -29,50 +33,44 @@ fk_D3DXSkinMap::~fk_D3DXSkinMap()
 
 void fk_D3DXSkinMap::SetFrame(fk_D3DXFrame *argFrame)
 {
-	frame = argFrame;
+	_m->frame = argFrame;
 	return;
 }
 
 void fk_D3DXSkinMap::SetWeight(double argWeight)
 {
-	weight = argWeight;
+	_m->weight = argWeight;
 	return;
 }
 
 fk_D3DXFrame * fk_D3DXSkinMap::GetFrame(void)
 {
-	return frame;
+	return _m->frame;
 }
 
 double fk_D3DXSkinMap::GetWeight(void)
 {
-	return weight;
+	return _m->weight;
 }
 
-fk_D3DXAnimation::fk_D3DXAnimation(void)
+fk_D3DXAnimation::Member::Member(void) : tree(nullptr)
 {
-	skinData.clear();
-	frameData.clear();
-	animData.clear();
-	mapData.clear();
+	return;
+}
 
-	tree = nullptr;
+fk_D3DXAnimation::fk_D3DXAnimation(void) : _m(make_unique<Member>())
+{
 	return;
 }
 
 fk_D3DXAnimation::~fk_D3DXAnimation()
 {
-	//_st i;
-	//for(i = 0; i < skinData.size(); i++) delete skinData[i];
-	//for(i = 0; i < frameData.size(); i++) delete frameData[i];
-	//for(i = 0; i < animData.size(); i++) delete animData[i];
-
 	return;
 }
 
 void fk_D3DXAnimation::SetTree(fk_Tree *argTree)
 {
-	tree = argTree;
+	_m->tree = argTree;
 	return;
 }
 
@@ -126,10 +124,10 @@ bool fk_D3DXAnimation::ReadSkinData(ifstream &argIFS)
 {
 	string word, lineList;
 	fk_D3DXSkinData *curSkin;
-	int					i, j;
+	int i, j;
 
-	skinData.push_back(make_unique<fk_D3DXSkinData>());
-	curSkin = skinData.back().get();
+	_m->skinData.push_back(make_unique<fk_D3DXSkinData>());
+	curSkin = _m->skinData.back().get();
 
 	word.clear();
 	lineList.clear();
@@ -175,7 +173,7 @@ bool fk_D3DXAnimation::ReadSkinData(ifstream &argIFS)
 
 void fk_D3DXAnimation::MakeNewAnimation(void)
 {
-	animData.push_back(make_unique<fk_D3DXFrameAnimation>());
+	_m->animData.push_back(make_unique<fk_D3DXFrameAnimation>());
 	return;
 }
 
@@ -195,15 +193,15 @@ bool fk_D3DXAnimation::SetAnimationName(string *argLine)
 	TrimString(&word);
 
 	if(word.empty() == true) return false;
-	if(animData.empty() == true) return false;
-	animData.back().get()->SetName(word);
+	if(_m->animData.empty() == true) return false;
+	_m->animData.back().get()->SetName(word);
 	return true;
 }
 
 bool fk_D3DXAnimation::ReadAnimationKey(ifstream &argIFS)
 {
-	string		lineList, word;
-	int			type;
+	string lineList, word;
+	int type;
 
 	lineList.clear();
 	word.clear();
@@ -233,7 +231,7 @@ bool fk_D3DXAnimation::ReadAnimationRotData(ifstream &argIFS, string *argLine)
 	double key;
 	fk_Quaternion quat;
 
-	cur = animData.back().get();
+	cur = _m->animData.back().get();
 	word.clear();
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	TrimString(&word);
@@ -267,7 +265,7 @@ bool fk_D3DXAnimation::ReadAnimationScaleData(ifstream &argIFS, string *argLine)
 	double key;
 	fk_Vector vec;
 
-	cur = animData.back().get();
+	cur = _m->animData.back().get();
 	word.clear();
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	TrimString(&word);
@@ -302,7 +300,7 @@ bool fk_D3DXAnimation::ReadAnimationTransData(ifstream &argIFS, string *argLine)
 	double key;
 	fk_Vector vec;
 
-	cur = animData.back().get();
+	cur = _m->animData.back().get();
 	word.clear();
 	if(GetWord(argIFS, ";,", argLine, &word) == false) return false;
 	TrimString(&word);
@@ -337,10 +335,10 @@ void fk_D3DXAnimation::MakeAnimationData(void)
 	_st i;
 	fk_D3DXFrame *frame;
 
-	if(tree == nullptr) return;
+	if(_m->tree == nullptr) return;
 
-	for(treeData = tree->foreachData(nullptr); treeData != nullptr;
-		treeData = tree->foreachData(treeData)) {
+	for(treeData = _m->tree->foreachData(nullptr); treeData != nullptr;
+		treeData = _m->tree->foreachData(treeData)) {
 
 		propList = static_cast<fk_D3DXPropertyList *>(treeData->getObject());
 		if(propList == nullptr) continue;
@@ -351,16 +349,16 @@ void fk_D3DXAnimation::MakeAnimationData(void)
 			continue;
 		}
 
-		for(i = 0; i < skinData.size(); i++) {
-			if(skinData[i]->GetName() == propList->GetData()) {
-				frame->SetSkin(skinData[i].get());
+		for(i = 0; i < _m->skinData.size(); i++) {
+			if(_m->skinData[i]->GetName() == propList->GetData()) {
+				frame->SetSkin(_m->skinData[i].get());
 				break;
 			}
 		}
 
-		for(i = 0; i < animData.size(); i++) {
-			if(animData[i]->GetName() == propList->GetData()) {
-				frame->SetAnimation(animData[i].get());
+		for(i = 0; i < _m->animData.size(); i++) {
+			if(_m->animData[i]->GetName() == propList->GetData()) {
+				frame->SetAnimation(_m->animData[i].get());
 				break;
 			}
 		}
@@ -379,8 +377,8 @@ fk_D3DXFrame * fk_D3DXAnimation::MakeNewFrame(fk_TreeData *argData)
 
 	prop = static_cast<fk_D3DXPropertyList *>(argData->getObject());
 
-	frameData.push_back(make_unique<fk_D3DXFrame>());
-	frame = frameData.back().get();
+	_m->frameData.push_back(make_unique<fk_D3DXFrame>());
+	frame = _m->frameData.back().get();
 
 	frame->SetName(prop->GetData());
 	prop->SetFrame(frame);
@@ -403,14 +401,14 @@ void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 {
 	_st i, j;
 	int vID;
-	fk_D3DXSkinMap skinMap;
+	fk_D3DXSkinMap *skinMap;
 	fk_D3DXSkinData *tmpSkinData;
 	double weight;
 
-	mapData.resize(_st(argShape->GetOptVSize()));
+	_m->mapData.resize(_st(argShape->GetOptVSize()));
 
-	for(i = 0; i < frameData.size(); i++) {
-		tmpSkinData = frameData[i]->GetSkin();
+	for(i = 0; i < _m->frameData.size(); i++) {
+		tmpSkinData = _m->frameData[i]->GetSkin();
 		if(tmpSkinData == nullptr) continue;
 
 		for(j = 0; j < static_cast<_st>(tmpSkinData->GetNum()); j++) {
@@ -423,9 +421,10 @@ void fk_D3DXAnimation::MakeSkinMap(fk_D3DXShapeParser *argShape)
 			weight = tmpSkinData->GetWeight(static_cast<int>(j));
 
 			if(weight > fk_Math::EPS) {
-				skinMap.SetFrame(frameData[i].get());
-				skinMap.SetWeight(weight);
-				mapData[static_cast<_st>(vID)].push_back(skinMap);
+				_m->mapData[static_cast<_st>(vID)].push_back(make_unique<fk_D3DXSkinMap>());
+				skinMap = _m->mapData[static_cast<_st>(vID)].back().get();
+				skinMap->SetFrame(_m->frameData[i].get());
+				skinMap->SetWeight(weight);
 			}
 		}
 	}
@@ -446,8 +445,8 @@ void fk_D3DXAnimation::MakeDummySkinWeights(fk_TreeData *argData, int argVNum)
 	frame = prop->GetFrame();
 	if(frame == nullptr) return;
 
-	skinData.push_back(make_unique<fk_D3DXSkinData>());
-	curSkin = skinData.back().get();
+	_m->skinData.push_back(make_unique<fk_D3DXSkinData>());
+	curSkin = _m->skinData.back().get();
 
 	curSkin->SetName(frame->GetName());
 	curSkin->SetNum(argVNum);
@@ -465,8 +464,8 @@ void fk_D3DXAnimation::MakeDummySkinWeights(fk_TreeData *argData, int argVNum)
 
 void fk_D3DXAnimation::SetTime(double argTime)
 {
-	for(_st i = 0; i < frameData.size(); i++) {
-		frameData[i]->SetTime(argTime);
+	for(_st i = 0; i < _m->frameData.size(); i++) {
+		_m->frameData[i]->SetTime(argTime);
 	}
 
 	return;
@@ -478,16 +477,16 @@ fk_FVector fk_D3DXAnimation::GetMovePos(int argID, const fk_FVector &argV)
 	fk_D3DXFrame *frame;
 	double weight;
 
-	if(argID < 0 || argID >= static_cast<int>(mapData.size())) {
+	if(argID < 0 || argID >= static_cast<int>(_m->mapData.size())) {
 		return fk_FVector(retV);
 	}
 
 	retV.set(0.0, 0.0, 0.0);
 	orgV = fk_Vector(argV);
 
-	for(_st i = 0; i < mapData[_st(argID)].size(); ++i) {
-		frame = mapData[_st(argID)][i].GetFrame();
-		weight = mapData[_st(argID)][i].GetWeight();
+	for(_st i = 0; i < _m->mapData[_st(argID)].size(); ++i) {
+		frame = _m->mapData[_st(argID)][i]->GetFrame();
+		weight = _m->mapData[_st(argID)][i]->GetWeight();
 
 		retV += weight * (*(frame->GetTotalMatrix()) * orgV);
 	}
@@ -506,10 +505,10 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 
 	if(argBVH == nullptr) return;
 
-	for(i = 0; i < int(frameData.size()); i++) {
-		frameData.at(_st(i))->SetAnimation(nullptr);
+	for(i = 0; i < int(_m->frameData.size()); i++) {
+		_m->frameData.at(_st(i))->SetAnimation(nullptr);
 	}
-	animData.clear();
+	_m->animData.clear();
 
 	for(i = 0; i < argBVH->getNodeNum(); i++) {
 
@@ -517,7 +516,7 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 
 		MakeNewAnimation();
 
-		cur = animData.back().get();
+		cur = _m->animData.back().get();
 
 		cur->SetName(argBVH->getNodeName(i));
 		posSize = argBVH->getPosSize(i);
@@ -554,10 +553,10 @@ void fk_D3DXAnimation::SetBVHMotion(fk_BVHBase *argBVH)
 			cur->SetScaleData(j, fk_Vector(1.0, 1.0, 1.0));
 		}
 
-		for(j = 0; j < int(frameData.size()); j++) {
-			if(cur->GetName() == frameData.at(_st(j))->GetName()) {
-				frameData.at(_st(j))->SetAnimation(cur);
-				frameData.at(_st(j))->SetUpMatrix();
+		for(j = 0; j < int(_m->frameData.size()); j++) {
+			if(cur->GetName() == _m->frameData.at(_st(j))->GetName()) {
+				_m->frameData.at(_st(j))->SetAnimation(cur);
+				_m->frameData.at(_st(j))->SetUpMatrix();
 				break;
 			}
 		}

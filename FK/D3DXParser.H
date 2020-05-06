@@ -2,17 +2,26 @@
 #define __FK_D3DX_PARSER_HEADER__
 
 #include <FK/ParserBase.H>
+#include <FK/D3DXShapeParser.H>
+#include <FK/Tree.h>
 
 namespace FK {
 
 	class fk_IFSTexture;
 	class fk_TexCoord;
-	class fk_D3DXAnimation;
-	class fk_D3DXShapeParser;
-	class fk_Tree;
-	class fk_TreeData;
 
 	class fk_D3DXParser : public fk_ParserBase {
+
+		class Member {
+		public:
+			fk_Tree tree;
+			fk_D3DXShapeParser shape;
+			fk_IFSTexture *ifsTexture;
+			fk_D3DXAnimation *anim;
+
+			Member(void);
+		};
+		
 	public:
 		fk_D3DXParser(void);
 		virtual ~fk_D3DXParser();
@@ -23,11 +32,7 @@ namespace FK {
 		void print(void);
 
 	private:
-		std::unique_ptr<fk_Tree> tree;
-		std::unique_ptr<fk_D3DXShapeParser> shape;
-
-		fk_IFSTexture *ifsTexture;
-		fk_D3DXAnimation *anim;
+		std::unique_ptr<Member> _m;
 
 		bool CheckFile(const std::string &);
 		bool ReadData(const std::string &, const std::string &, int, bool, bool *);
