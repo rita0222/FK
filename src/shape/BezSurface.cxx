@@ -17,18 +17,18 @@ fk_BezSurface::fk_BezSurface(void)
 
 fk_BezSurface::~fk_BezSurface()
 {
-	ctrlPos.clear();
+	_m_surf->ctrlPos.clear();
 	return;
 }
 
 void fk_BezSurface::init(void)
 {
-	deg = 3;
+	_m->deg = 3;
 	setCtrlSize(25);
 	setCtrlNum(16);
 	fk_Vector zero;
 
-	for(int i = 0; i < 2*deg*(deg+1); i++) ctrlLine.pushLine(zero, zero);
+	for(int i = 0; i < 2*_m->deg*(_m->deg+1); i++) _m_surf->ctrlLine.pushLine(zero, zero);
 	return;
 }
 
@@ -36,24 +36,24 @@ bool fk_BezSurface::setDegree(int argDeg)
 {
 	if(argDeg < 2 || argDeg > 4) return false;
 
-	deg = argDeg;
+	_m->deg = argDeg;
 	fk_Vector zero(0.0, 0.0, 0.0);
-	for(int i = 0; i < (deg+1)*(deg+1); i++) fk_Surface::setCtrl(i, zero);
-	ctrlLine.allClear();
-	for(int i = 0; i < 2*deg*(deg+1); i++) ctrlLine.pushLine(zero, zero);
+	for(int i = 0; i < (_m->deg+1)*(_m->deg+1); i++) fk_Surface::setCtrl(i, zero);
+	_m_surf->ctrlLine.allClear();
+	for(int i = 0; i < 2*_m->deg*(_m->deg+1); i++) _m_surf->ctrlLine.pushLine(zero, zero);
 	return true;
 }
 
 int fk_BezSurface::getDegree(void)
 {
-	return deg;
+	return _m->deg;
 }
 
 bool fk_BezSurface::setCtrl(int argUID, int argVID,
 							const fk_Vector &argPos)
 {
-	if(argUID < 0 || argUID > deg ||
-	   argVID < 0 || argVID > deg) return false;
+	if(argUID < 0 || argUID > _m->deg ||
+	   argVID < 0 || argVID > _m->deg) return false;
 
 	fk_Surface::setCtrl(GetID(argUID, argVID), argPos);
 	SetLine(argUID, argVID, argPos);
@@ -62,8 +62,8 @@ bool fk_BezSurface::setCtrl(int argUID, int argVID,
 
 fk_Vector fk_BezSurface::getCtrl(int argUID, int argVID)
 {
-	if(argUID < 0 || argUID > deg ||
-	   argVID < 0 || argVID > deg) return fk_Vector(0.0, 0.0, 0.0);
+	if(argUID < 0 || argUID > _m->deg ||
+	   argVID < 0 || argVID > _m->deg) return fk_Vector(0.0, 0.0, 0.0);
 
 	return fk_Surface::getCtrl(GetID(argUID, argVID));
 }
@@ -73,14 +73,14 @@ fk_Vector fk_BezSurface::pos(double argU, double argV)
 	fk_Vector	retP(0.0, 0.0, 0.0);
 	double		u[5], v[5];
 
-	for(int i = 0; i <= deg; i++) {
-		u[i] = Bernstein(deg, i, argU);
-		v[i] = Bernstein(deg, i, argV);
+	for(int i = 0; i <= _m->deg; i++) {
+		u[i] = Bernstein(_m->deg, i, argU);
+		v[i] = Bernstein(_m->deg, i, argV);
 	}
 
-	for(int i = 0; i <= deg; i++) {
-		for(int j = 0; j <= deg; j++) {
-			retP += u[i]*v[j]*ctrlPos.getV(GetID(i, j));
+	for(int i = 0; i <= _m->deg; i++) {
+		for(int j = 0; j <= _m->deg; j++) {
+			retP += u[i]*v[j]*_m_surf->ctrlPos.getV(GetID(i, j));
 		}
 	}
 
@@ -93,17 +93,17 @@ fk_Vector fk_BezSurface::uDeriv(double argU, double argV)
 	double u[4] = { 0.0, 0.0, 0.0, 0.0 };
 	double v[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-	for(int i = 0; i <= deg-1; i++) {
-		u[i] = Bernstein(deg-1, i, argU);
+	for(int i = 0; i <= _m->deg-1; i++) {
+		u[i] = Bernstein(_m->deg-1, i, argU);
 	}
 
-	for(int i = 0; i <= deg; i++) {
-		v[i] = Bernstein(deg, i, argV);
+	for(int i = 0; i <= _m->deg; i++) {
+		v[i] = Bernstein(_m->deg, i, argV);
 	}
 
-	for(int i = 0; i <= deg-1; i++) {
-		for(int j = 0; j <= deg; j++) {
-			fk_Vector dV = ctrlPos.getV(GetID(i+1, j)) - ctrlPos.getV(GetID(i, j));
+	for(int i = 0; i <= _m->deg-1; i++) {
+		for(int j = 0; j <= _m->deg; j++) {
+			fk_Vector dV = _m_surf->ctrlPos.getV(GetID(i+1, j)) - _m_surf->ctrlPos.getV(GetID(i, j));
 			retV += u[i] * v[j] * dV;
 		}
 	}
@@ -117,17 +117,17 @@ fk_Vector fk_BezSurface::vDeriv(double argU, double argV)
 	double u[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
 	double v[4] = { 0.0, 0.0, 0.0, 0.0 };
 
-	for(int i = 0; i <= deg; i++) {
-		u[i] = Bernstein(deg, i, argU);
+	for(int i = 0; i <= _m->deg; i++) {
+		u[i] = Bernstein(_m->deg, i, argU);
 	}
 
-	for(int i = 0; i <= deg-1; i++) {
-		v[i] = Bernstein(deg-1, i, argV);
+	for(int i = 0; i <= _m->deg-1; i++) {
+		v[i] = Bernstein(_m->deg-1, i, argV);
 	}
 
-	for(int i = 0; i <= deg; i++) {
-		for(int j = 0; j <= deg-1; j++) {
-			fk_Vector dV = ctrlPos.getV(GetID(i, j+1)) - ctrlPos.getV(GetID(i, j));
+	for(int i = 0; i <= _m->deg; i++) {
+		for(int j = 0; j <= _m->deg-1; j++) {
+			fk_Vector dV = _m_surf->ctrlPos.getV(GetID(i, j+1)) - _m_surf->ctrlPos.getV(GetID(i, j));
 			retV += u[i]*v[j]*dV;
 		}
 	}
@@ -137,7 +137,7 @@ fk_Vector fk_BezSurface::vDeriv(double argU, double argV)
 
 int fk_BezSurface::GetID(int argU, int argV)
 {
-	return (deg + 1) * argV + argU;
+	return (_m->deg + 1) * argV + argU;
 }
 
 // +u = 1, -u = 2, +v = 3, -v = 4
@@ -146,16 +146,16 @@ int fk_BezSurface::GetLID(int argU, int argV, int argD)
 	switch(argD)
 	{
 	  case 1:
-		return deg * argV + argU;
+		return _m->deg * argV + argU;
 
 	  case 2:
-		return deg * argV + argU - 1;
+		return _m->deg * argV + argU - 1;
 
 	  case 3:
-		return (deg+1) * deg + deg * argU + argV;
+		return (_m->deg+1) * _m->deg + _m->deg * argU + argV;
 
 	  case 4:
-		return (deg+1) * deg + deg * argU + argV - 1;
+		return (_m->deg+1) * _m->deg + _m->deg * argU + argV - 1;
 
 	  default:
 		break;
@@ -166,28 +166,28 @@ int fk_BezSurface::GetLID(int argU, int argV, int argD)
 void fk_BezSurface::SetLine(int argU, int argV, const fk_Vector &argP)
 {
 	int LID, VID;
-	if(argU < deg) {
+	if(argU < _m->deg) {
 		LID = GetLID(argU, argV, 1);
 		VID = GetID(argU + 1, argV);
-		ctrlLine.changeLine(LID, argP, ctrlPos.getV(VID));
+		_m_surf->ctrlLine.changeLine(LID, argP, _m_surf->ctrlPos.getV(VID));
 	}
 
 	if(argU > 0) {
 		LID = GetLID(argU, argV, 2);
 		VID = GetID(argU - 1, argV);
-		ctrlLine.changeLine(LID, ctrlPos.getV(VID), argP);
+		_m_surf->ctrlLine.changeLine(LID, _m_surf->ctrlPos.getV(VID), argP);
 	}
 
-	if(argV < deg) {
+	if(argV < _m->deg) {
 		LID = GetLID(argU, argV, 3);
 		VID = GetID(argU, argV + 1);
-		ctrlLine.changeLine(LID, argP, ctrlPos.getV(VID));
+		_m_surf->ctrlLine.changeLine(LID, argP, _m_surf->ctrlPos.getV(VID));
 	}
 
 	if(argV > 0) {
 		LID = GetLID(argU, argV, 4);
 		VID = GetID(argU, argV - 1);
-		ctrlLine.changeLine(LID, ctrlPos.getV(VID), argP);
+		_m_surf->ctrlLine.changeLine(LID, _m_surf->ctrlPos.getV(VID), argP);
 	}
 	return;
 }

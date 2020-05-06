@@ -35,6 +35,25 @@ namespace FK {
 
 	class fk_Surface : public fk_Shape {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class fk_SurfaceData {
+		public:
+			fk_FVecArray ctrlPos;
+			fk_Line ctrlLine;
+
+			fk_SurfaceData(void);
+		};
+
+		class Member {
+		public:
+			int	div;
+			int size;
+			fk_Point ctrlPoint;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -124,9 +143,6 @@ namespace FK {
 #endif
 
 	protected:
-		fk_FVecArray	ctrlPos;
-		fk_Line			ctrlLine;
-
 		//! 制御点設定関数1
 		/*!
 		 *	曲面の制御点位置ベクトルを設定します。
@@ -188,13 +204,11 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		double	Bernstein(int, int, double);
+		std::unique_ptr<fk_SurfaceData> _m_surf;
 #endif
 
 	private:
-		int	div;
-		int size;
-
-		fk_Point		ctrlPoint;
+		std::unique_ptr<Member> _m;
 	};
 }
 

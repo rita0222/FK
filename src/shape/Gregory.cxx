@@ -21,12 +21,17 @@ const static int DIDTable[4][4] = {
 	{2, 18, 19, 6}
 };
 
-static vector< vector< vector<_st> > > DerivTable, BoundTable;
+static vector<vector<vector<_st>>> DerivTable, BoundTable;
 
 using line_ = tuple<int, bool, fk_UV, int>;
-static vector< vector< vector<line_> > > BLineTable, DLineTable;
+static vector<vector<vector<line_>>> BLineTable, DLineTable;
 
-fk_Gregory::fk_Gregory(void)
+fk_Gregory::Member::Member(void)
+{
+	return;
+}
+
+fk_Gregory::fk_Gregory(void) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::GREGORY);
 	init();
@@ -35,7 +40,7 @@ fk_Gregory::fk_Gregory(void)
 
 fk_Gregory::~fk_Gregory()
 {
-	ctrlPos.clear();
+	_m_surf->ctrlPos.clear();
 	return;
 }
 
@@ -47,13 +52,13 @@ void fk_Gregory::init(void)
 
 	if(DerivTable.empty()) MakeTable();
 
-	ctrlLine.allClear();
-	for(int i = 0; i < 20; ++i) ctrlLine.pushLine(zero, zero);
+	_m_surf->ctrlLine.allClear();
+	for(int i = 0; i < 20; ++i) _m_surf->ctrlLine.pushLine(zero, zero);
 	for(int i = 0; i <= 3; ++i) {
 		for(int j = 0; j <= 3; ++j) {
-			boundary[i][j] = zero;
-			deriv[i][j] = zero;
-			bezier[i][j] = zero;
+			_m->boundary[i][j] = zero;
+			_m->deriv[i][j] = zero;
+			_m->bezier[i][j] = zero;
 		}
 	}
 }
@@ -62,22 +67,22 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 {
 	if(_st(argUV) > 3 || argVID < 0 || argVID > 3) return false;
 
-	boundary[_st(argUV)][_st(argVID)] = argV;
+	_m->boundary[_st(argUV)][_st(argVID)] = argV;
 
 	vector<_st>	v = BoundTable[_st(argUV)][_st(argVID)];
 	if(argVID == 0 || argVID == 3) {
-		boundary[v[0]][v[1]] = argV;
+		_m->boundary[v[0]][v[1]] = argV;
 	} else {
-		deriv[v[0]][v[1]] = argV;
+		_m->deriv[v[0]][v[1]] = argV;
 	}
 	
-	bezier[v[2]][v[3]] = argV;
+	_m->bezier[v[2]][v[3]] = argV;
 	setCtrl(BIDTable[_st(argUV)][argVID], argV);
 
 	vector<line_> lineSet = BLineTable[_st(argUV)][_st(argVID)];
 	for(auto [lineID, flg, segID, ctrlID] : lineSet) {
-		fk_Vector oP = (flg) ? boundary[_st(segID)][ctrlID] : deriv[_st(segID)][ctrlID];
-		ctrlLine.changeLine(lineID, argV, oP);
+		fk_Vector oP = (flg) ? _m->boundary[_st(segID)][ctrlID] : _m->deriv[_st(segID)][ctrlID];
+		_m_surf->ctrlLine.changeLine(lineID, argV, oP);
 	}
 
 	return true;
@@ -86,7 +91,7 @@ bool fk_Gregory::setBoundary(fk_UV argUV, int argVID, const fk_Vector &argV)
 fk_Vector fk_Gregory::getBoundary(fk_UV argUV, int argID)
 {
 	if(_st(argUV) > 3 || argID < 0 || argID > 3) return fk_Vector(0.0, 0.0, 0.0);
-	return boundary[_st(argUV)][argID];
+	return _m->boundary[_st(argUV)][argID];
 }
 
 bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
@@ -95,7 +100,7 @@ bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
 
 	vector<_st> v = DerivTable[_st(argUV)][_st(argVID)];
 	if(argVID == 1 || argVID == 2) {
-		deriv[v[0]][v[1]] = argV;
+		_m->deriv[v[0]][v[1]] = argV;
 		setCtrl(DIDTable[_st(argUV)][argVID], argV);
 	} else {
 		setBoundary(fk_UV(v[0]), int(v[1]), argV);
@@ -103,8 +108,8 @@ bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
 
 	vector<line_> lineSet = DLineTable[_st(argUV)][_st(argVID)];
 	for(auto [lineID, flg, segID, ctrlID] : lineSet) {
-		fk_Vector oP = (flg) ? boundary[_st(segID)][ctrlID] : deriv[_st(segID)][ctrlID];
-		ctrlLine.changeLine(lineID, argV, oP);
+		fk_Vector oP = (flg) ? _m->boundary[_st(segID)][ctrlID] : _m->deriv[_st(segID)][ctrlID];
+		_m_surf->ctrlLine.changeLine(lineID, argV, oP);
 	}
 
 	return true;
@@ -113,7 +118,7 @@ bool fk_Gregory::setDerivative(fk_UV argUV, int argVID, const fk_Vector &argV)
 fk_Vector fk_Gregory::getDerivative(fk_UV argUV, int argID)
 {
 	if(_st(argUV) > 3 || argID < 0 || argID > 3) return fk_Vector(0.0, 0.0, 0.0);
-	return deriv[_st(argUV)][argID];
+	return _m->deriv[_st(argUV)][argID];
 }
 
 void fk_Gregory::adjustDerivative(fk_UV argUV)
@@ -241,10 +246,10 @@ void fk_Gregory::MakeBezier(double argU, double argV)
 	double ou = 1.0 - argU;
 	double ov = 1.0 - argV;
 	
-	bezier[1][1] = (u * deriv[0][1] + v * deriv[2][1])/(u + v);
-	bezier[1][2] = (ou * deriv[0][2] + v * deriv[3][1])/(ou + v);
-	bezier[2][1] = (u * deriv[1][1] + ov * deriv[2][2])/(u + ov);
-	bezier[2][2] = (ou * deriv[1][2] + ov * deriv[3][2])/(ou + ov);
+	_m->bezier[1][1] = (u * _m->deriv[0][1] + v * _m->deriv[2][1])/(u + v);
+	_m->bezier[1][2] = (ou * _m->deriv[0][2] + v * _m->deriv[3][1])/(ou + v);
+	_m->bezier[2][1] = (u * _m->deriv[1][1] + ov * _m->deriv[2][2])/(u + ov);
+	_m->bezier[2][2] = (ou * _m->deriv[1][2] + ov * _m->deriv[3][2])/(ou + ov);
 }
 	
 
@@ -260,15 +265,15 @@ fk_Vector fk_Gregory::pos(double argU, double argV)
 
 	if(u < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return boundary[_st(fk_UV::U_S)][0];
+			return _m->boundary[_st(fk_UV::U_S)][0];
 		} else if(ov < fk_Math::EPS) {
-			return boundary[_st(fk_UV::U_E)][0];
+			return _m->boundary[_st(fk_UV::U_E)][0];
 		}
 	} else if(ou < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return boundary[_st(fk_UV::U_S)][3];
+			return _m->boundary[_st(fk_UV::U_S)][3];
 		} else if(ov < fk_Math::EPS) {
-			return boundary[_st(fk_UV::U_E)][3];
+			return _m->boundary[_st(fk_UV::U_E)][3];
 		}
 	}
 
@@ -281,7 +286,7 @@ fk_Vector fk_Gregory::pos(double argU, double argV)
 
 	for(int i = 0; i <= 3; ++i) {
 		for(int j = 0; j <= 3; ++j) {
-			retP += uA[j] * vA[i] * bezier[i][j];
+			retP += uA[j] * vA[i] * _m->bezier[i][j];
 		}
 	}
 
@@ -300,15 +305,15 @@ fk_Vector fk_Gregory::uDeriv(double argU, double argV)
 
 	if(u < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return 3.0 * (boundary[0][1] - boundary[0][0]);
+			return 3.0 * (_m->boundary[0][1] - _m->boundary[0][0]);
 		} else if(ov < fk_Math::EPS) {
-			return 3.0 * (boundary[1][1] - boundary[1][0]);
+			return 3.0 * (_m->boundary[1][1] - _m->boundary[1][0]);
 		}
 	} else if(ou < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return 3.0 * (boundary[0][3] - boundary[0][2]);
+			return 3.0 * (_m->boundary[0][3] - _m->boundary[0][2]);
 		} else if(ov < fk_Math::EPS) {
-			return 3.0 * (boundary[1][3] - boundary[1][2]);
+			return 3.0 * (_m->boundary[1][3] - _m->boundary[1][2]);
 		}
 	}
 
@@ -321,7 +326,7 @@ fk_Vector fk_Gregory::uDeriv(double argU, double argV)
 
 	for(int i = 0; i <= 3; ++i) {
 		for(int j = 0; j <= 2; ++j) {
-			fk_Vector dU = bezier[i][j+1] - bezier[i][j];
+			fk_Vector dU = _m->bezier[i][j+1] - _m->bezier[i][j];
 			retV += uA[j] * vA[i] * dU;
 		}
 	}
@@ -340,15 +345,15 @@ fk_Vector fk_Gregory::vDeriv(double argU, double argV)
 
 	if(u < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return 3.0 * (boundary[2][1] - boundary[2][0]);
+			return 3.0 * (_m->boundary[2][1] - _m->boundary[2][0]);
 		} else if(ov < fk_Math::EPS) {
-			return 3.0 * (boundary[2][3] - boundary[2][2]);
+			return 3.0 * (_m->boundary[2][3] - _m->boundary[2][2]);
 		}
 	} else if(ou < fk_Math::EPS) {
 		if(v < fk_Math::EPS) {
-			return 3.0 * (boundary[3][1] - boundary[3][0]);
+			return 3.0 * (_m->boundary[3][1] - _m->boundary[3][0]);
 		} else if(ov < fk_Math::EPS) {
-			return 3.0 * (boundary[3][3] - boundary[3][2]);
+			return 3.0 * (_m->boundary[3][3] - _m->boundary[3][2]);
 		}
 	}
 
@@ -361,7 +366,7 @@ fk_Vector fk_Gregory::vDeriv(double argU, double argV)
 
 	for(int i = 0; i <= 2; ++i) {
 		for(int j = 0; j <= 3; ++j) {
-			fk_Vector dV = bezier[i+1][j] - bezier[i][j];
+			fk_Vector dV = _m->bezier[i+1][j] - _m->bezier[i][j];
 			retV += uA[j] * vA[i] * dV;
 		}
 	}

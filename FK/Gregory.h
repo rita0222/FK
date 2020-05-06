@@ -40,8 +40,19 @@ namespace FK {
 
 	class fk_Gregory : public fk_Surface {
 
-	public:
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Vector boundary[4][4];
+			fk_Vector deriv[4][4];
+			fk_Vector bezier[4][4];
 
+			Member(void);
+		};
+
+#endif
+
+	public:
 		//! コンストラクタ
 		fk_Gregory(void);
 
@@ -185,10 +196,8 @@ namespace FK {
 		fk_Vector		vDeriv(double u, double v);
 
 	private:
-		fk_Vector boundary[4][4];
-		fk_Vector deriv[4][4];
-		fk_Vector bezier[4][4];
-
+		std::unique_ptr<Member> _m;
+		
 		void C1Connect(fk_UV, fk_Vector *);
 		void G1Connect(fk_UV, fk_Vector *);
 		void MakeBezier(double, double);

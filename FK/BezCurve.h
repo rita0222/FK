@@ -15,6 +15,14 @@ namespace FK {
 
 	class fk_BezCurve : public fk_Curve {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int deg;
+
+			Member(void);
+		};
+#endif
 	public:
 		//! コンストラクタ
 		fk_BezCurve(void);
@@ -28,7 +36,7 @@ namespace FK {
 		 *	- 次数を3次とする。
 		 *	- 制御点を全て原点とする。
 		 */
-		void	init(void);
+		void init(void);
 
 		//! 次数設定関数
 		/*!
@@ -43,7 +51,7 @@ namespace FK {
 		 *
 		 *	\return	次数設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool	setDegree(int deg);
+		bool setDegree(int deg);
 
 		//! 次数参照関数
 		/*!
@@ -51,7 +59,7 @@ namespace FK {
 		 *
 		 *	\return 次数
 		 */
-		int		getDegree(void);	
+		int getDegree(void);	
 
 		//! 曲線算出関数
 		/*!
@@ -63,7 +71,7 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の位置ベクトル
 		 */
-		fk_Vector	pos(double t);
+		fk_Vector pos(double t);
 
 		//! 曲線1階微分ベクトル算出関数
 		/*!
@@ -75,7 +83,7 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の1階微分ベクトル
 		 */
-		fk_Vector	diff(double t);
+		fk_Vector diff(double t);
 
 		//! 曲線分割制御点算出関数
 		/*!
@@ -91,7 +99,7 @@ namespace FK {
 		 *
 		 *	\return	分割に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	split(double t, std::vector<fk_Vector> *C);
+		bool split(double t, std::vector<fk_Vector> *C);
 
 		//! 直線交点算出関数
 		/*!
@@ -105,7 +113,7 @@ namespace FK {
 		 *	\param[out]	A	曲線上の交点パラメータ配列。
 		 *					交点がない場合は空配列となります。
 		 */
-		void	calcCrossParam(fk_Vector S, fk_Vector E, std::vector<double> *A);
+		void calcCrossParam(fk_Vector S, fk_Vector E, std::vector<double> *A);
 
 		//! 変換行列付直線交点算出関数
 		/*!
@@ -124,10 +132,10 @@ namespace FK {
 		 *	\param[out]	A	曲線上の交点パラメータ配列。
 		 *					交点がない場合は空配列となります。
 		 */
-		void	calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
+		void calcCrossParam(fk_Matrix M, fk_Vector S, fk_Vector E, std::vector<double> *A);
 
 	private:
-		int		deg;
+		std::unique_ptr<Member> _m;
 		
 		void MakeDiv(double, std::vector<std::vector<fk_Vector> > &);
 		double CrossZero(fk_Vector &, fk_Vector &);

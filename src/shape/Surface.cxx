@@ -4,13 +4,24 @@
 using namespace std;
 using namespace FK;
 
-fk_Surface::fk_Surface(void) : div(16), size(0)
+fk_Surface::fk_SurfaceData::fk_SurfaceData(void)
+{
+	return;
+}
+
+fk_Surface::Member::Member(void) : div(16), size(0)
+{
+	return;
+}
+
+fk_Surface::fk_Surface(void) :
+	_m_surf(make_unique<fk_SurfaceData>()), _m(make_unique<Member>())
 {
 	realType = fk_RealShapeType::SURFACE;
 	SetObjectType(fk_Type::SURFACE);
-	ctrlPos.setDim(4);
-	ctrlPos.clear();
-	setShaderAttribute(ctrlPosName, 4, ctrlPos.getP());
+	_m_surf->ctrlPos.setDim(4);
+	_m_surf->ctrlPos.clear();
+	setShaderAttribute(ctrlPosName, 4, _m_surf->ctrlPos.getP());
 
 	return;
 }
@@ -23,71 +34,71 @@ fk_Surface::~fk_Surface(void)
 void fk_Surface::setDiv(int argDiv)
 {
 	if(argDiv <= 0) return;
-	div = argDiv;
+	_m->div = argDiv;
 }
 
 int fk_Surface::getDiv(void)
 {
-	return div;
+	return _m->div;
 }
 
 fk_Line * fk_Surface::GetLine(void)
 {
-	return &ctrlLine;
+	return &(_m_surf->ctrlLine);
 }
 
 fk_Point * fk_Surface::GetPoint(void)
 {
-	return &ctrlPoint;
+	return &(_m->ctrlPoint);
 }
 
 bool fk_Surface::setCtrl(int argID, fk_Vector *argPos)
 {
-	if(argID < 0 || argID >= size || argPos == nullptr) return false;
-	ctrlPos.set(argID, *argPos);
+	if(argID < 0 || argID >= _m->size || argPos == nullptr) return false;
+	_m_surf->ctrlPos.set(argID, *argPos);
 	modifyAttribute(ctrlPosName);
 
-	ctrlPoint.setVertex(argID, *argPos);
+	_m->ctrlPoint.setVertex(argID, *argPos);
 	return true;
 }
 
 bool fk_Surface::setCtrl(int argID, fk_Vector argPos)
 {
-	if(argID < 0 || argID >= size) return false;
-	ctrlPos.set(argID, argPos);
+	if(argID < 0 || argID >= _m->size) return false;
+	_m_surf->ctrlPos.set(argID, argPos);
 	modifyAttribute(ctrlPosName);
 
-	ctrlPoint.setVertex(argID, argPos);
+	_m->ctrlPoint.setVertex(argID, argPos);
 
 	return true;
 }
 
 fk_Vector fk_Surface::getCtrl(int argID)
 {
-	return ctrlPos.getV(argID);
+	return _m_surf->ctrlPos.getV(argID);
 }
 
 int fk_Surface::getCtrlSize(void)
 {
-	return size;
+	return _m->size;
 }
 
 void fk_Surface::setCtrlSize(int argSize)
 {
 	fk_Vector	zero(0.0, 0.0, 0.0);
 
-	if(ctrlPos.getSize() < argSize) ctrlPos.resize(argSize);
-	size = argSize;
-	ctrlPoint.allClear();
-	ctrlLine.allClear();
+	if(_m_surf->ctrlPos.getSize() < argSize) _m_surf->ctrlPos.resize(argSize);
+	_m->size = argSize;
+	_m->ctrlPoint.allClear();
+	_m_surf->ctrlLine.allClear();
 }
 
 void fk_Surface::setCtrlNum(int argNum)
 {
 	fk_Vector zero(0.0, 0.0, 0.0);
 
-	ctrlPoint.allClear();
-	for(int i = 0; i < argNum; i++) ctrlPoint.pushVertex(zero);
+	_m->ctrlPoint.allClear();
+	for(int i = 0; i < argNum; i++) _m->ctrlPoint.pushVertex(zero);
 }
 
 fk_Vector fk_Surface::norm(double argU, double argV)

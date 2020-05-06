@@ -16,6 +16,17 @@ namespace FK {
 
 	class fk_BSplCurve : public fk_Curve {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int ord;
+			int num;
+			std::vector<double> knotVec;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -103,10 +114,7 @@ namespace FK {
 		fk_Vector diff(double t);
 
 	private:
-
-		int ord;
-		int num;
-		std::vector<double> knotVec;
+		std::unique_ptr<Member> _m;
 	};
 }
 

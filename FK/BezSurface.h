@@ -13,6 +13,15 @@ namespace FK {
 
 	class fk_BezSurface : public fk_Surface {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int deg;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -25,7 +34,7 @@ namespace FK {
 		/*!
 		 *	この関数は、曲面を初期状態(3次式、全ての制御点が原点にある状態)にします。
 		 */
-		void			init(void);
+		void init(void);
 
 		//! 次数設定関数
 		/*!
@@ -37,7 +46,7 @@ namespace FK {
 		 *
 		 *	\return 次数設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool			setDegree(int deg);
+		bool setDegree(int deg);
 
 		//! 制御点設定関数1
 		/*!
@@ -49,7 +58,7 @@ namespace FK {
 		 *
 		 *	\return 設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool			setCtrl(int uID, int vID, const fk_Vector &pos);
+		bool setCtrl(int uID, int vID, const fk_Vector &pos);
 
 		//! 次数参照関数
 		/*!
@@ -57,7 +66,7 @@ namespace FK {
 		 *
 		 *	\return	次数
 		 */
-		int				getDegree(void);	
+		int getDegree(void);	
 
 		//! 制御点参照関数
 		/*!
@@ -68,7 +77,7 @@ namespace FK {
 		 *
 		 *	\return 制御点位置ベクトル。IDが不正だった場合、零ベクトルを返します。
 		 */
-		fk_Vector		getCtrl(int uID, int vID);
+		fk_Vector getCtrl(int uID, int vID);
 
 		//! 曲面点算出関数
 		/*!
@@ -79,7 +88,7 @@ namespace FK {
 		 *
 		 *	\return 曲面上の点の位置ベクトル
 		 */
-		fk_Vector		pos(double u, double v);
+		fk_Vector pos(double u, double v);
 
 		//! 曲面 u 方向偏微分ベクトル算出関数
 		/*!
@@ -90,7 +99,7 @@ namespace FK {
 		 *
 		 *	\return		曲面上の u 方向偏微分ベクトル
 		 */
-		fk_Vector		uDeriv(double u, double v);
+		fk_Vector uDeriv(double u, double v);
 
 		//! 曲面 v 方向偏微分ベクトル算出関数
 		/*!
@@ -101,10 +110,11 @@ namespace FK {
 		 *
 		 *	\return		曲面上の v 方向偏微分ベクトル
 		 */
-		fk_Vector		vDeriv(double u, double v);
+		fk_Vector vDeriv(double u, double v);
 
 	private:
-		int		deg;
+		std::unique_ptr<Member> _m;
+		
 		void SetLine(int, int, const fk_Vector &);
 		int GetID(int, int);
 		int GetLID(int, int, int);

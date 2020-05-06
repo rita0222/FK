@@ -6,7 +6,13 @@ using namespace std;
 using namespace FK;
 using namespace FK::BSplBase;
 
-fk_BSplCurve::fk_BSplCurve(void)
+fk_BSplCurve::Member::Member(void) :
+	ord(3), num(0)
+{
+	return;
+}
+
+fk_BSplCurve::fk_BSplCurve(void) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::BSPLCURVE);
 	init();
@@ -15,15 +21,14 @@ fk_BSplCurve::fk_BSplCurve(void)
 
 fk_BSplCurve::~fk_BSplCurve()
 {
-	ctrlPos->clear();
-	knotVec.clear();
+	_m_ctrlPos->clear();
 	return;
 }
 
 void fk_BSplCurve::init(void)
 {
-	ctrlPos->clear();
-	knotVec.clear();
+	_m_ctrlPos->clear();
+	_m->knotVec.clear();
 	setOrdinate(3);
 	setNum(3);
 	return;
@@ -35,59 +40,57 @@ bool fk_BSplCurve::setOrdinate(int argOrd)
 		return false;
 	}
 
-	ord = argOrd;
-	ctrlPos->clear();
-	num = 0;
+	_m->ord = argOrd;
+	_m_ctrlPos->clear();
+	_m->num = 0;
 
 	return true;
 }
 
 bool fk_BSplCurve::setNum(int argNum)
 {
-	if(argNum < ord) return false;
-	num = argNum;
-	setCtrlSize(num);
-	ctrlPos->resize(num);
-	UpdateKnot(ord, num, knotVec);
+	if(argNum < _m->ord) return false;
+	_m->num = argNum;
+	setCtrlSize(_m->num);
+	_m_ctrlPos->resize(_m->num);
+	UpdateKnot(_m->ord, _m->num, _m->knotVec);
 
 	return true;
 }
 
 int fk_BSplCurve::getOrdinate(void)
 {
-	return ord;
+	return _m->ord;
 }
 
 int fk_BSplCurve::getNum(void)
 {
-	return num;
+	return _m->num;
 }
 
 fk_Vector fk_BSplCurve::pos(double t)
 {
-	fk_Vector	retPos(0.0, 0.0, 0.0);
-	int			i;
+	fk_Vector retPos(0.0, 0.0, 0.0);
 
-	if(num == 0) return retPos;
-	for(i = 0; i < num; i++) {
-		retPos += PosBasis(i, ord, t, knotVec) * ctrlPos->getV(i);
+	if(_m->num == 0) return retPos;
+	for(int i = 0; i < _m->num; i++) {
+		retPos += PosBasis(i, _m->ord, t, _m->knotVec) * _m_ctrlPos->getV(i);
 	}
-
 	return retPos;
 }
 
 fk_Vector fk_BSplCurve::diff(double t)
 {
-	fk_Vector	retVec(0.0, 0.0, 0.0);
+	fk_Vector retVec(0.0, 0.0, 0.0);
 
-	if(num == 0) return retVec;
+	if(_m->num == 0) return retVec;
 	if(IsSame(t, 0.0)) {
-		retVec = double(ord-1) * (ctrlPos->getV(1) - ctrlPos->getV(0));
+		retVec = double(_m->ord-1) * (_m_ctrlPos->getV(1) - _m_ctrlPos->getV(0));
 	} else if(IsSame(t, 1.0)) {
-		retVec = double(ord-1) * (ctrlPos->getV(num-1) - ctrlPos->getV(num-2));
+		retVec = double(_m->ord-1) * (_m_ctrlPos->getV(_m->num-1) - _m_ctrlPos->getV(_m->num-2));
 	} else {
-		for(int i = 0; i < num; i++) {
-			retVec += DiffBasis(i, ord, t, knotVec) * ctrlPos->getV(i);
+		for(int i = 0; i < _m->num; i++) {
+			retVec += DiffBasis(i, _m->ord, t, _m->knotVec) * _m_ctrlPos->getV(i);
 		}
 	}
 

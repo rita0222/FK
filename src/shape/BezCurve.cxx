@@ -6,7 +6,12 @@
 using namespace std;
 using namespace FK;
 
-fk_BezCurve::fk_BezCurve(void)
+fk_BezCurve::Member::Member(void) : deg(3)
+{
+	return;
+}
+
+fk_BezCurve::fk_BezCurve(void) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::BEZCURVE);
 	setCtrlSize(5);
@@ -31,15 +36,15 @@ bool fk_BezCurve::setDegree(int argDeg)
 		return false;
 	}
 
-	deg = argDeg;
-	setCtrlSize(deg+1);
+	_m->deg = argDeg;
+	setCtrlSize(_m->deg+1);
 	
 	return true;
 }
 
 int fk_BezCurve::getDegree(void)
 {
-	return deg;
+	return _m->deg;
 }
 
 fk_Vector fk_BezCurve::pos(double t)
@@ -47,7 +52,7 @@ fk_Vector fk_BezCurve::pos(double t)
 	fk_Vector	vec(0.0, 0.0, 0.0);
 	double		tmp[5];
 
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		tmp[0] = (1.0 - t)*(1.0 - t);
 		tmp[1] = 2.0 * (1.0 - t) * t;
@@ -73,8 +78,8 @@ fk_Vector fk_BezCurve::pos(double t)
 		return vec;
 	}	
 
-	for(int i = 0; i <= deg; ++i) {
-		vec += ctrlPos->getV(i) * tmp[i];
+	for(int i = 0; i <= _m->deg; ++i) {
+		vec += _m_ctrlPos->getV(i) * tmp[i];
 	}
 
 	return vec;
@@ -85,7 +90,7 @@ fk_Vector fk_BezCurve::diff(double t)
 	fk_Vector	vec(0.0, 0.0, 0.0);
 	double		tmp[4];
 
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		tmp[0] = 1.0 - t;
 		tmp[1] = t;
@@ -108,18 +113,18 @@ fk_Vector fk_BezCurve::diff(double t)
 		return vec;
 	}	
 
-	for(int i = 0; i < deg; ++i) {
-		vec += (ctrlPos->getV(i+1) - ctrlPos->getV(i)) * tmp[i];
+	for(int i = 0; i < _m->deg; ++i) {
+		vec += (_m_ctrlPos->getV(i+1) - _m_ctrlPos->getV(i)) * tmp[i];
 	}
 
-	return (vec*double(deg));
+	return (vec*double(_m->deg));
 }
 
 void fk_BezCurve::MakeDiv(double argT, vector<vector<fk_Vector> > &argDivPos)
 {
 	_st i, j, d;
 
-	d = _st(deg);
+	d = _st(_m->deg);
 
 	if(argDivPos.empty() == true) {
 		argDivPos.resize(d+1);
@@ -130,7 +135,7 @@ void fk_BezCurve::MakeDiv(double argT, vector<vector<fk_Vector> > &argDivPos)
 	}
 
 	for(i = 0; i <= d; ++i) {
-		argDivPos[0][i] = ctrlPos->getV(int(i));
+		argDivPos[0][i] = _m_ctrlPos->getV(int(i));
 	}
 
 	for(i = 1; i <= d; ++i) {
@@ -149,7 +154,7 @@ bool fk_BezCurve::split(double argT, vector<fk_Vector> *argP)
 	if(argP == nullptr) return false;
 	if(argT < fk_Math::EPS || argT > 1.0 - fk_Math::EPS) return false;
 
-	d = _st(deg);
+	d = _st(_m->deg);
 	argP->clear();
 
 	MakeDiv(argT, divPos);
@@ -186,7 +191,7 @@ bool fk_BezCurve::CrossCH(vector<fk_Vector> *argC, double *argMin, double *argMa
 	int count = 0;
 	vector<vector<_st> > *id;
 	
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		id = &id2;
 		break;
@@ -225,11 +230,11 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 	fk_BezCurve			curv;
 	double				min_o, min_n, max_o, max_n;
 	double				t1, t2, t;
-	_st					_deg = _st(deg);
+	_st					_deg = _st(_m->deg);
 
-	curv.setDegree(deg);
+	curv.setDegree(_m->deg);
 	for(i = 0; i <= _deg; ++i) {
-		clip.push_back(fk_Vector(double(i)/double(deg), argC->at(i).y, 0.0));
+		clip.push_back(fk_Vector(double(i)/double(_m->deg), argC->at(i).y, 0.0));
 		curv.setCtrl(int(i), clip[i]);
 	}
 	min_o = min_n = 0.0;
@@ -260,7 +265,7 @@ void fk_BezCurve::CrossFunc(vector<fk_Vector> *argC, double argMin,
 
 	if(max_n - min_n > 0.001) {
 		for(i = 0; i <= _deg; ++i) {
-			clip[i] = fk_Vector(double(i)/double(deg), argC->at(i).y, 0.0);
+			clip[i] = fk_Vector(double(i)/double(_m->deg), argC->at(i).y, 0.0);
 			curv.setCtrl(int(i), clip[i]);
 		}
 		curv.split(0.5, &tmpClip);
@@ -279,7 +284,7 @@ void fk_BezCurve::CheckCross(vector<fk_Vector> *argC, vector<double> *argTmpA,
 {
 	fk_BezCurve		curv;
 
-	curv.setDegree(deg);
+	curv.setDegree(_m->deg);
 	for(_st i = 0; i < argC->size(); ++i) {
 		curv.setCtrl(int(i), argC->at(i));
 	}
@@ -307,8 +312,8 @@ void fk_BezCurve::calcCrossParam(fk_Vector argS, fk_Vector argE, vector<double> 
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
 
-	for(int i = 0; i < ctrlPos->getSize(); ++i) {
-		ctrl.push_back(m * (ctrlPos->getV(i) - argS));
+	for(int i = 0; i < _m_ctrlPos->getSize(); ++i) {
+		ctrl.push_back(m * (_m_ctrlPos->getV(i) - argS));
 	}
 	
 	argA->clear();
@@ -328,8 +333,8 @@ void fk_BezCurve::calcCrossParam(fk_Matrix argM, fk_Vector argS,
 	m[0][1] = v.y;
 	m[1][0] = -v.y;
 
-	for(int i = 0; i < ctrlPos->getSize(); ++i) {
-		ctrl.push_back(m * ((argM * ctrlPos->getV(i)) - argS));
+	for(int i = 0; i < _m_ctrlPos->getSize(); ++i) {
+		ctrl.push_back(m * ((argM * _m_ctrlPos->getV(i)) - argS));
 	}
 	
 	argA->clear();

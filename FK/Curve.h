@@ -21,6 +21,18 @@ namespace FK {
 	 */
 	class fk_Curve : public fk_Shape {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int div;
+			int size;
+			fk_Line ctrlLine;
+			fk_Point ctrlPoint;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -136,7 +148,7 @@ namespace FK {
 		 *	この変数は制御点情報を格納しておくものであり、
 		 *	派生クラス内で設定や参照が可能です。
 		 */
-		std::unique_ptr<fk_FVecArray> ctrlPos;
+		std::unique_ptr<fk_FVecArray> _m_ctrlPos;
 
 		//! 制御点数設定関数
 		/*!
@@ -147,11 +159,7 @@ namespace FK {
 		void setCtrlSize(int num);
 
 	private:
-		int div;
-		int size;
-
-		std::unique_ptr<fk_Line> ctrlLine;
-		std::unique_ptr<fk_Point> ctrlPoint;
+		std::unique_ptr<Member> _m;
 	};
 }
 

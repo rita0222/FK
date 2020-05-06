@@ -73,7 +73,7 @@ void fk_GuideObject::setScale(double argScale)
 	scale = argScale;
 
 	for(int i = 0; i < 3; i++) {
-		axisModel[i].setScale(scale*(double)(num/2));
+		if(num >= 2) axisModel[i].setScale(scale*(double)(num/2));
 		gridModel[i].setScale(scale);
 	}
 

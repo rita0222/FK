@@ -7,7 +7,7 @@ fk_Scene::Member::Member(void) :
 	bgColor(0.0f, 0.0f, 0.0f),
 	blendStatus(false),
 	shadowMode(fk_ShadowMode::OFF),
-	shadowVec(0.0, 0.0, 0.0),
+	shadowVec(0.0, -1.0, 0.0),
 	shadowResolution(1024),
 	shadowSize(100.0),
 	shadowDistance(100.0),
@@ -67,13 +67,16 @@ fk_ShadowMode fk_Scene::getShadowMode(void)
 
 void fk_Scene::setShadowVec(const fk_Vector &argV)
 {
+	if(argV.isZero() == true) return;
 	_m->shadowVec = argV;
 	_m->shadowVec.normalize();
 }
 
 void fk_Scene::setShadowVec(double argX, double argY, double argZ)
 {
-	_m->shadowVec.set(argX, argY, argZ);
+	fk_Vector v(argX, argY, argZ);
+	if(v.isZero() == true) return;
+	_m->shadowVec = v;
 	_m->shadowVec.normalize();
 }
 
