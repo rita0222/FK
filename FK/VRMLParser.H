@@ -11,35 +11,35 @@ namespace FK {
 		fk_VRMLParser(void);
 		virtual ~fk_VRMLParser();
 
-		bool		ReadVRMLFile(std::string, bool = true, bool = true);
+		bool ReadVRMLFile(std::string, bool = true, bool = true);
 
 	private:
 
-		bool				CheckVRMLFile(std::ifstream &);
-		void				ReadVRMLShapeData(std::ifstream &, std::string *);
-		void				MakeVRMLIFSet(std::string *,
-										  std::vector<fk_Vector> *,
-										  std::vector< std::vector<int> > *,
-										  std::vector<int> *, bool);
+		bool CheckVRMLFile(std::ifstream &);
+		void ReadVRMLShapeData(std::ifstream &, std::string *);
+		void MakeVRMLIFSet(std::string *,
+						   std::vector<fk_Vector> *,
+						   std::vector< std::vector<int> > *,
+						   std::vector<int> *, bool);
 
-		std::string::size_type	SearchVRMLShapeLast(std::string *, 
-													std::string::size_type);
-		bool				GetVRMLShapeMaterial(std::string *, fk_Material *,
-												 std::string::size_type,
-												 std::string::size_type);
+		std::string::size_type SearchVRMLShapeLast(std::string *, 
+												   std::string::size_type);
+		bool GetVRMLShapeMaterial(std::string *, fk_Material *,
+								  std::string::size_type,
+								  std::string::size_type);
 	
-		void				GetVRMLVertexInfo(std::string *,
-											  std::vector<fk_Vector> *,
-											  fk_HeapBase<fk_Vector> *,
-											  std::vector<int> *,
-											  std::string::size_type,
-											  std::string::size_type, bool);
+		void GetVRMLVertexInfo(std::string *,
+							   std::vector<fk_Vector> *,
+							   fk_HeapBase<fk_Vector> *,
+							   std::vector<int> *,
+							   std::string::size_type,
+							   std::string::size_type, bool);
 
-		int					GetVRMLIndexFSetInfo(std::string *,
-												 std::vector<int> *,
-												 std::vector< std::vector<int> > *,
-												 std::string::size_type,
-												 std::string::size_type);
+		int GetVRMLIndexFSetInfo(std::string *,
+								 std::vector<int> *,
+								 std::vector< std::vector<int> > *,
+								 std::string::size_type,
+								 std::string::size_type);
 	};
 }
 

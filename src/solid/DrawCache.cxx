@@ -50,7 +50,12 @@ int fk_LoopIndexAdmin::GetNewID(int argNum)
 	return retID;
 }
 
-fk_DrawCache::fk_DrawCache(void)
+fk_DrawCache::Member::Member(void)
+{
+	return;
+}
+
+fk_DrawCache::fk_DrawCache(void) : _m(make_unique<Member>())
 {
 	AllCacheClear();
 	return;
@@ -64,7 +69,7 @@ fk_DrawCache::~fk_DrawCache()
 
 void fk_DrawCache::ClearVCache(void)
 {
-	vertexCache.clear();
+	_m->vertexCache.clear();
 	return;
 }
 
@@ -72,9 +77,9 @@ bool fk_DrawCache::ClearVCache(fk_Vertex *argV)
 {
 	list<fk_Vertex *>::iterator		ite;
 
-	ite = find(vertexCache.begin(), vertexCache.end(), argV);
-	if(ite == vertexCache.end()) return false;
-	vertexCache.erase(ite);
+	ite = find(_m->vertexCache.begin(), _m->vertexCache.end(), argV);
+	if(ite == _m->vertexCache.end()) return false;
+	_m->vertexCache.erase(ite);
 	return true;
 }
 
@@ -82,9 +87,9 @@ bool fk_DrawCache::ClearECache(fk_Edge *argE)
 {
 	list<fk_Edge *>::iterator		ite;
 
-	ite = find(edgeCache.begin(), edgeCache.end(), argE);
-	if(ite == edgeCache.end()) return false;
-	edgeCache.erase(ite);
+	ite = find(_m->edgeCache.begin(), _m->edgeCache.end(), argE);
+	if(ite == _m->edgeCache.end()) return false;
+	_m->edgeCache.erase(ite);
 	return true;
 }
 
@@ -92,27 +97,27 @@ bool fk_DrawCache::ClearLCache(fk_Loop *argL)
 {
 	list<fk_Loop *>::iterator		ite;
 
-	ite = find(loopCache.begin(), loopCache.end(), argL);
-	if(ite == loopCache.end()) return false;
-	loopCache.erase(ite);
+	ite = find(_m->loopCache.begin(), _m->loopCache.end(), argL);
+	if(ite == _m->loopCache.end()) return false;
+	_m->loopCache.erase(ite);
 	return true;
 }
 
 void fk_DrawCache::ClearECache(void)
 {
-	edgeCache.clear();
+	_m->edgeCache.clear();
 	return;
 }
 
 void fk_DrawCache::ClearLCache(void)
 {
-	loopCache.clear();
+	_m->loopCache.clear();
 	return;
 }
 
 bool fk_DrawCache::GetVCacheStatus(void)
 {
-	if(vertexCache.empty() == true && getNextV(nullptr) != nullptr) {
+	if(_m->vertexCache.empty() == true && getNextV(nullptr) != nullptr) {
 		return false;
 	}
 	return true;
@@ -120,7 +125,7 @@ bool fk_DrawCache::GetVCacheStatus(void)
 
 bool fk_DrawCache::GetECacheStatus(void)
 {
-	if(edgeCache.empty() == true && getNextE(nullptr) != nullptr) {
+	if(_m->edgeCache.empty() == true && getNextE(nullptr) != nullptr) {
 		return false;
 	}
 	return true;
@@ -128,7 +133,7 @@ bool fk_DrawCache::GetECacheStatus(void)
 
 bool fk_DrawCache::GetLCacheStatus(void)
 {
-	if(loopCache.empty() == true && getNextL(nullptr) != nullptr) {
+	if(_m->loopCache.empty() == true && getNextL(nullptr) != nullptr) {
 		return false;
 	}
 
@@ -140,13 +145,13 @@ void fk_DrawCache::MakeVCache(void)
 	fk_Vertex	*curV;
 	_st			vID;
 
-	vertexCache.clear();
+	_m->vertexCache.clear();
 	curV = getNextV(nullptr);
 	while(curV != nullptr) {
-		vertexCache.push_back(curV);
+		_m->vertexCache.push_back(curV);
 		vID = _st(curV->getID()) - 1;
-		if(vID >= vertexArray.size()) vertexArray.resize(vID+1);
-		vertexArray[vID] = curV->getPosition();
+		if(vID >= _m->vertexArray.size()) _m->vertexArray.resize(vID+1);
+		_m->vertexArray[vID] = curV->getPosition();
 		curV = getNextV(curV);
 	}
 	return;
@@ -156,10 +161,10 @@ void fk_DrawCache::MakeECache(void)
 {
 	fk_Edge			*curE;
 
-	edgeCache.clear();
+	_m->edgeCache.clear();
 	curE = getNextE(nullptr);
 	while(curE != nullptr) {
-		edgeCache.push_back(curE);
+		_m->edgeCache.push_back(curE);
 		curE = getNextE(curE);
 	}
 	return;
@@ -169,10 +174,10 @@ void fk_DrawCache::MakeLCache(void)
 {
 	fk_Loop			*curL;
 
-	loopCache.clear();
+	_m->loopCache.clear();
 	curL = getNextL(nullptr);
 	while(curL != nullptr) {
-		loopCache.push_back(curL);
+		_m->loopCache.push_back(curL);
 		curL = getNextL(curL);
 	}
 	return;
@@ -183,10 +188,10 @@ void fk_DrawCache::AddVCache(fk_Vertex *argV)
 	_st		vID;
 
 	ClearVCache(argV);
-	vertexCache.push_back(argV);
+	_m->vertexCache.push_back(argV);
 	vID = _st(argV->getID()) - 1;
-	if(vID >= vertexArray.size()) vertexArray.resize(vID+1);
-	vertexArray[vID] = argV->getPosition();
+	if(vID >= _m->vertexArray.size()) _m->vertexArray.resize(vID+1);
+	_m->vertexArray[vID] = argV->getPosition();
 
 	return;
 }
@@ -194,30 +199,30 @@ void fk_DrawCache::AddVCache(fk_Vertex *argV)
 void fk_DrawCache::AddECache(fk_Edge *argE)
 {
 	ClearECache(argE);
-	edgeCache.push_back(argE);
+	_m->edgeCache.push_back(argE);
 	return;
 }
 
 void fk_DrawCache::AddLCache(fk_Loop *argL)
 {
 	ClearLCache(argL);
-	loopCache.push_back(argL);
+	_m->loopCache.push_back(argL);
 	return;
 }
 
 list<fk_Vertex *> * fk_DrawCache::GetVCache(void)
 {
-	return &vertexCache;
+	return &_m->vertexCache;
 }
 
 list<fk_Edge *> * fk_DrawCache::GetECache(void)
 {
-	return &edgeCache;
+	return &_m->edgeCache;
 }
 
 list<fk_Loop *> * fk_DrawCache::GetLCache(void)
 {
-	return &loopCache;
+	return &_m->loopCache;
 }
 
 void fk_DrawCache::AllCacheClear(void)
@@ -226,8 +231,7 @@ void fk_DrawCache::AllCacheClear(void)
 	ClearECache();
 	ClearLCache();
 
-	vertexArray.clear();
-	ifsArray.clear();
+	_m->vertexArray.clear();
 
 	return;
 }

@@ -7,12 +7,18 @@
 using namespace std;
 using namespace FK;
 
-fk_Particle::fk_Particle(fk_Point *argBase, int argID)
+fk_Particle::Member::Member(fk_Point *argBase, int argID) :
+	id(argID), base(argBase), count(0), velocity(0.0, 0.0, 0.0), accel(0.0, 0.0, 0.0)
+{
+	return;
+}
+
+
+fk_Particle::fk_Particle(fk_Point *argBase, int argID) :
+	_m(make_unique<Member>(argBase, argID))
 {
 	SetObjectType(fk_Type::PARTICLE);
-	base = argBase;
-	id = argID;
-	init();
+	setDrawMode(true);
 	return;
 }
 
@@ -23,108 +29,105 @@ fk_Particle::~fk_Particle()
 
 void fk_Particle::init(void)
 {
-	count = 0;
-	velocity.set(0.0, 0.0, 0.0);
-	accel.set(0.0, 0.0, 0.0);
+	_m->count = 0;
+	_m->velocity.set(0.0, 0.0, 0.0);
+	_m->accel.set(0.0, 0.0, 0.0);
 	setDrawMode(true);
 	return;
 }
 
 int fk_Particle::getID(void) const
 {
-	return id;
+	return _m->id;
 }
 
 unsigned int fk_Particle::getCount(void) const
 {
-	return count;
+	return _m->count;
 }
 
 fk_Vector fk_Particle::getPosition(void) const
 {
-	return base->getVertex(id);
+	return _m->base->getVertex(_m->id);
 }
 
 void fk_Particle::setPosition(const fk_Vector &argVec)
 {
-	base->setVertex(id, argVec);
+	_m->base->setVertex(_m->id, argVec);
 	return;
 }
 
 void fk_Particle::setPosition(double argX, double argY, double argZ)
 {
-	fk_Vector		tmp(argX, argY, argZ);
-	setPosition(tmp);
+	setPosition(fk_Vector(argX, argY, argZ));
 	return;
 }
 
 fk_Vector fk_Particle::getVelocity(void) const
 {
-	return velocity;
+	return _m->velocity;
 }
 
 void fk_Particle::setVelocity(const fk_Vector &argVec)
 {
-	velocity = argVec;
+	_m->velocity = argVec;
 	return;
 }
 
 void fk_Particle::setVelocity(double argX, double argY, double argZ)
 {
-	fk_Vector		tmp(argX, argY, argZ);
-	setVelocity(tmp);
+	setVelocity(fk_Vector(argX, argY, argZ));
 	return;
 }
 
 fk_Vector fk_Particle::getAccel(void) const
 {
-	return accel;
+	return _m->accel;
 }
 
 void fk_Particle::setAccel(const fk_Vector &argVec)
 {
-	accel = argVec;
+	_m->accel = argVec;
 	return;
 }
 
 void fk_Particle::setAccel(double argX, double argY, double argZ)
 {
-	fk_Vector		tmp(argX, argY, argZ);
-	setAccel(tmp);
+	setAccel(fk_Vector(argX, argY, argZ));
 	return;
 }
 
 bool fk_Particle::getDrawMode(void) const
 {
-	return base->getDrawMode(id);
+	return _m->base->getDrawMode(_m->id);
 }
 
 void fk_Particle::setDrawMode(bool argFlag)
 {
-	base->setDrawMode(id, argFlag);
+	_m->base->setDrawMode(_m->id, argFlag);
 	return;
 }
 
 void fk_Particle::setColor(const fk_Color &argCol)
 {
-	base->setColor(id, argCol);
+	_m->base->setColor(_m->id, argCol);
 }
 
 void fk_Particle::setColor(fk_Color *argCol)
 {
-	base->setColor(id, argCol);
+	_m->base->setColor(_m->id, argCol);
 }
 
 fk_Color fk_Particle::getColor(void)
 {
-	return base->getColor(id);
+	return _m->base->getColor(_m->id);
 }
 
 void fk_Particle::handle(void)
 {
-	velocity += accel;
-	base->setVertex(id, getPosition() + velocity);
-	count++;
+	_m->velocity += _m->accel;
+	_m->base->setVertex(_m->id, getPosition() + _m->velocity);
+	_m->count++;
 
 	return;
 }

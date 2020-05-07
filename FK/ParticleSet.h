@@ -31,7 +31,19 @@ namespace FK {
 	 */
 
 	class fk_ParticleSet: public fk_BaseObject {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			std::vector<std::unique_ptr<fk_Particle>> pSet;
+			std::unique_ptr<fk_IDAdmin> pAdmin;
+			std::unique_ptr<fk_Point> point;
+			unsigned int count;
+			bool allMode, indivMode;
+			unsigned int maxNum;
 
+			Member(unsigned int);
+		};
+#endif
 	public:
 		//! コンストラクタ
 		/*!
@@ -51,7 +63,7 @@ namespace FK {
 		 *	- 各パーティクルの fk_Particle::handle() 実行。
 		 *	- パーティクル集合および各パーティクルの年齢に 1 を追加。
 		 */
-		void			handle(void);
+		void handle(void);
 
 		//! モデル設定用関数
 		/*!
@@ -66,7 +78,7 @@ namespace FK {
 		 *		fk_Point であることを前提とするような記述を行った場合、
 		 *		将来のバージョンにおいて問題が生じる可能性があります。
 		 */
-		fk_Shape *		getShape(void) const;
+		fk_Shape * getShape(void) const;
 
 		//! パーティクル生成関数1
 		/*!
@@ -78,7 +90,7 @@ namespace FK {
 		 *		生成した場合、新たなパーティクルのインスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Particle *	newParticle(void);
+		fk_Particle * newParticle(void);
 
 		//! パーティクル生成関数2
 		/*!
@@ -92,7 +104,7 @@ namespace FK {
 		 *		生成した場合、新たなパーティクルのインスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Particle *	newParticle(const fk_Vector &pos);
+		fk_Particle * newParticle(const fk_Vector &pos);
 
 		//! パーティクル生成関数3
 		/*!
@@ -108,7 +120,7 @@ namespace FK {
 		 *		生成した場合、新たなパーティクルのインスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Particle *	newParticle(double x, double y, double z);
+		fk_Particle * newParticle(double x, double y, double z);
 
 		//! パーティクル削除関数1
 		/*!
@@ -120,7 +132,7 @@ namespace FK {
 		 *
 		 *	\return		削除に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			removeParticle(fk_Particle *p);
+		bool removeParticle(fk_Particle *p);
 
 		//! パーティクル削除関数2
 		/*!
@@ -132,7 +144,7 @@ namespace FK {
 		 *
 		 *	\return		削除に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			removeParticle(int ID);
+		bool removeParticle(int ID);
 
 		//! 年齢参照関数
 		/*!
@@ -142,7 +154,7 @@ namespace FK {
 		 *
 		 *	\return		年齢
 		 */
-		unsigned int	getCount(void) const;
+		unsigned int getCount(void) const;
 
 		//! パーティクルインスタンス参照関数
 		/*!
@@ -152,7 +164,7 @@ namespace FK {
 		 *
 		 *	\return 存在した場合はインスタンスを、存在しない場合は nullptr を返します。
 		 */
-		fk_Particle *	getParticle(int ID) const;
+		fk_Particle * getParticle(int ID) const;
 
 		//! パーティクルインスタンス順次取得取得
 		/*!
@@ -184,7 +196,7 @@ namespace FK {
 		 *
 		 *	\return		上記解説を参照して下さい。
 		 */
-		fk_Particle *	getNextParticle(fk_Particle *p) const;
+		fk_Particle * getNextParticle(fk_Particle *p) const;
 
 		//! パーティクル個数参照関数
 		/*!
@@ -192,7 +204,7 @@ namespace FK {
 		 *
 		 *	\return		パーティクル個数
 		 */
-		unsigned int	getParticleNum(void) const;
+		unsigned int getParticleNum(void) const;
 
 		//! パーティクル最大個数設定関数
 		/*!
@@ -203,7 +215,7 @@ namespace FK {
 		 *
 		 *	\param[in]	max		最大個数
 		 */
-		void			setMaxSize(unsigned int max);
+		void setMaxSize(unsigned int max);
 
 		//! パーティクル最大個数参照関数
 		/*!
@@ -214,7 +226,7 @@ namespace FK {
 		 *
 		 *	\return		最大個数
 		 */
-		unsigned int	getMaxSize(void) const;
+		unsigned int getMaxSize(void) const;
 
 
 		//! 個別初期化用仮想関数
@@ -228,7 +240,7 @@ namespace FK {
 		 *	\param[in]	p		新たに生成されたパーティクルインスタンス
 		 */
 		//virtual void	genMethod(fk_Particle *p);
-		std::function<void(fk_Particle *)>	genMethod;
+		std::function<void(fk_Particle *)> genMethod;
 
 		//! 全体動作用仮想関数
 		/*!
@@ -264,7 +276,7 @@ namespace FK {
 		 *		true の場合は allMethod() の自動実行を行います。
 		 *		false の場合は行いません。
 		 */
-		void			setAllMode(bool mode);
+		void setAllMode(bool mode);
 
 		//! 全体動作モード参照関数
 		/*!
@@ -274,7 +286,7 @@ namespace FK {
 		 *		true の場合は allMethod() の自動実行を行います。
 		 *		false の場合は行いません。
 		 */
-		bool			getAllMode(void) const;
+		bool getAllMode(void) const;
 
 		//! 個別動作モード設定関数
 		/*!
@@ -285,7 +297,7 @@ namespace FK {
 		 *		true の場合は indivMethod() の自動実行を行います。
 		 *		false の場合は行いません。
 		 */
-		void			setIndivMode(bool mode);
+		void setIndivMode(bool mode);
 
 		//! 個別動作モード参照関数
 		/*!
@@ -295,22 +307,16 @@ namespace FK {
 		 *		true の場合は indivMethod() の自動実行を行います。
 		 *		false の場合は行いません。
 		 */
-		bool			getIndivMode(void) const;
+		bool getIndivMode(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void			setColorPalette(int ID, const fk_Color &col);
-		void			setColorPalette(int ID, float R, float G, float B);
-		void			setColorPalette(int ID, double R, double G, double B);
+		void setColorPalette(int ID, const fk_Color &col);
+		void setColorPalette(int ID, float R, float G, float B);
+		void setColorPalette(int ID, double R, double G, double B);
 
 #endif
 	private:
-		std::vector<fk_Particle *>	pSet;
-		fk_IDAdmin					*pAdmin;
-		fk_Point					*point;
-		unsigned int				count;
-		bool						allMode, indivMode;
-		unsigned int				maxNum;
-
+		std::unique_ptr<Member> _m;
 	};
 }
 

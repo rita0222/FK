@@ -14,6 +14,16 @@ namespace FK {
 	 *	\sa fk_Line, fk_Closedline
 	 */
 	class fk_Polyline: public fk_LineBase {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int num;
+
+			Member(void);
+		};
+
+#endif
 	public:
 
 		//! コンストラクタ
@@ -39,7 +49,7 @@ namespace FK {
 		 *
 		 *	\param[in] pos 追加頂点の位置ベクトル
 		 */
-		void	pushVertex(fk_Vector pos);
+		void pushVertex(fk_Vector pos);
 
 		//! 頂点位置設定関数
 		/*!
@@ -50,7 +60,7 @@ namespace FK {
 		 *	\param[in] ID 頂点ID
 		 *	\param[in] pos 頂点位置ベクトル
 		 */
-		void	setVertex(int ID, fk_Vector pos);
+		void setVertex(int ID, fk_Vector pos);
 
 		//! 頂点位置設定関数
 		/*!
@@ -58,10 +68,10 @@ namespace FK {
 		 *
 		 *	\param[in] array vectorによる頂点位置ベクトル配列のアドレス
 		 */
-		void	setVertex(std::vector<fk_Vector> *array);
+		void setVertex(std::vector<fk_Vector> *array);
 
 	private:
-		int num;
+		std::unique_ptr<Member> _m;
 	};
 }
 

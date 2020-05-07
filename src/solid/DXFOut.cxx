@@ -33,8 +33,8 @@ fk_DXFOut::~fk_DXFOut()
 
 bool fk_DXFOut::WriteDXFFile(string argFileName, bool argTriFlg)
 {
-	ofstream	ofs(argFileName);
-	bool		retFlg;
+	ofstream ofs(argFileName);
+	bool retFlg;
 
 	if(solid == nullptr && ifs == nullptr) return false;
 	if(ofs.fail()) return false;
@@ -52,10 +52,10 @@ bool fk_DXFOut::WriteDXFFile(string argFileName, bool argTriFlg)
 
 bool fk_DXFOut::WriteDXFShape_Solid(ofstream &argOFS, bool argTriFlg)
 {
-	fk_Loop					*curL;
-	vector<fk_Vertex *>		vArray;
-	_st						i;
-	fk_Vector				pos;
+	fk_Loop *curL;
+	vector<fk_Vertex *> vArray;
+	_st i;
+	fk_Vector pos;
 
 	argOFS << " 0" << endl;
 	argOFS << "SECTION" << endl;
@@ -106,9 +106,9 @@ bool fk_DXFOut::WriteDXFShape_Solid(ofstream &argOFS, bool argTriFlg)
 
 bool fk_DXFOut::WriteDXFShape_IFS(ofstream &argOFS, bool argTriFlg)
 {
-	vector<int>			fData;
-	fk_Vector			pos;
-	int					i, j;
+	vector<int> fData;
+	fk_Vector pos;
+	int i, j;
 
 	argOFS << " 0" << endl;
 	argOFS << "SECTION" << endl;

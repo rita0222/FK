@@ -6,16 +6,18 @@
 using namespace std;
 using namespace FK;
 
-fk_ParticleSet::fk_ParticleSet(unsigned int argMax)
+fk_ParticleSet::Member::Member(unsigned int argMax) :
+	pAdmin(make_unique<fk_IDAdmin>()), point(make_unique<fk_Point>()),
+	count(0), allMode(false), indivMode(false), maxNum(argMax)
+{
+	return;
+}
+
+fk_ParticleSet::fk_ParticleSet(unsigned int argMax) :
+	_m(make_unique<Member>(argMax))
 {
 	SetObjectType(fk_Type::PARTICLESET);
-	pAdmin = new fk_IDAdmin();
-	pAdmin->Init(0);
-	point = new fk_Point();
-	pSet.clear();
-	maxNum = argMax;
-	count = 0;
-	allMode = indivMode = false;
+	_m->pAdmin->Init(0);
 
 	genMethod = [](fk_Particle *){};
 	allMethod = [](){};
@@ -26,15 +28,6 @@ fk_ParticleSet::fk_ParticleSet(unsigned int argMax)
 
 fk_ParticleSet::~fk_ParticleSet()
 {
-	_st		i;
-
-	for(i = 0; i < pSet.size(); i++) {
-		delete pSet[i];
-	}
-
-	delete pAdmin;
-	delete point;
-
 	return;
 }
 
@@ -43,33 +36,27 @@ fk_Particle * fk_ParticleSet::newParticle(void)
 	return newParticle(0.0, 0.0, 0.0);
 }
 
-fk_Particle * fk_ParticleSet::newParticle(double argX,
-										  double argY, double argZ)
+fk_Particle * fk_ParticleSet::newParticle(double argX, double argY, double argZ)
 {
-	fk_Vector		vec(argX, argY, argZ);
-
-	return newParticle(vec);
+	return newParticle(fk_Vector(argX, argY, argZ));
 }
 
 fk_Particle * fk_ParticleSet::newParticle(const fk_Vector &argPos)
 {
-	_st				pID;
-	fk_Particle		*p;
-
-	if(maxNum <= static_cast<unsigned int>(pAdmin->GetIDNum())) {
+	if(_m->maxNum <= (unsigned int)(_m->pAdmin->GetIDNum())) {
 		return nullptr;
 	}
 
-	pID = static_cast<_st>(pAdmin->CreateID());
-	if(pSet.size() == pID) {
-		p = new fk_Particle(point, point->pushVertex(argPos));
-		pSet.push_back(p);
+	_st pID = _st(_m->pAdmin->CreateID());
+	if(_m->pSet.size() == pID) {
+		fk_Point *pShape = _m->point.get();
+		_m->pSet.push_back(make_unique<fk_Particle>(pShape, pShape->pushVertex(argPos)));
 	} else {
-		pSet[pID]->init();
+		_m->pSet[pID].get()->init();
 	}
 
-	genMethod(pSet[pID]);
-	return pSet[pID];
+	genMethod(_m->pSet[pID].get());
+	return _m->pSet[pID].get();
 }
 
 bool fk_ParticleSet::removeParticle(fk_Particle *argP)
@@ -80,80 +67,80 @@ bool fk_ParticleSet::removeParticle(fk_Particle *argP)
 
 bool fk_ParticleSet::removeParticle(int argID)
 {
-	if(pAdmin->EraseID(argID) == false) return false;
-	pSet[static_cast<_st>(argID)]->setDrawMode(false);
+	if(_m->pAdmin->EraseID(argID) == false) return false;
+	_m->pSet[_st(argID)]->setDrawMode(false);
 	return true;
 }
 
 unsigned int fk_ParticleSet::getCount(void) const
 {
-	return count;
+	return _m->count;
 }
 
 fk_Particle * fk_ParticleSet::getParticle(int argID) const
 {
-	if(pAdmin->ExistID(argID) == false) {
+	if(_m->pAdmin->ExistID(argID) == false) {
 		return nullptr;
 	}
 
-	return pSet[static_cast<_st>(argID)];
+	return _m->pSet[_st(argID)].get();
 }
 
 fk_Particle * fk_ParticleSet::getNextParticle(fk_Particle *argP) const
 {
 	if(argP == nullptr) {
-		return getParticle(pAdmin->GetNext(-1));
+		return getParticle(_m->pAdmin->GetNext(-1));
 	}
-	return getParticle(pAdmin->GetNext(argP->getID()));
+	return getParticle(_m->pAdmin->GetNext(argP->getID()));
 }
 
 unsigned int fk_ParticleSet::getParticleNum(void) const
 {
-	return static_cast<unsigned int>(pAdmin->GetIDNum());
+	return static_cast<unsigned int>(_m->pAdmin->GetIDNum());
 }
 
 void fk_ParticleSet::setMaxSize(unsigned int argSize)
 {
-	maxNum = argSize;
+	_m->maxNum = argSize;
 	return;
 }
 
 unsigned int fk_ParticleSet::getMaxSize(void) const
 {
-	return maxNum;
+	return _m->maxNum;
 }
 
 void fk_ParticleSet::setAllMode(bool argMode)
 {
-	allMode = argMode;
+	_m->allMode = argMode;
 	return;
 }
 
 bool fk_ParticleSet::getAllMode(void) const
 {
-	return allMode;
+	return _m->allMode;
 }
 
 void fk_ParticleSet::setIndivMode(bool argMode)
 {
-	indivMode = argMode;
+	_m->indivMode = argMode;
 	return;
 }
 
 bool fk_ParticleSet::getIndivMode(void) const
 {
-	return indivMode;
+	return _m->indivMode;
 }
 
 void fk_ParticleSet::handle(void)
 {
-	fk_Particle		*p;
+	fk_Particle *p;
 
-	if(allMode == true) {
+	if(_m->allMode == true) {
 		allMethod();
 	}
 
-	if(indivMode == true) {
+	if(_m->indivMode == true) {
 		for(p = getNextParticle(nullptr); p != nullptr; p = getNextParticle(p)) {
 			indivMethod(p);
 		}
@@ -163,13 +150,13 @@ void fk_ParticleSet::handle(void)
 		p->handle();
 	}
 
-	count++;
+	_m->count++;
 	return;
 }
 
 fk_Shape * fk_ParticleSet::getShape(void) const
 {
-	return static_cast<fk_Shape *>(point);
+	return static_cast<fk_Shape *>(_m->point.get());
 }
 
 int fk_Particle::getColorID(void) const { return 0; }

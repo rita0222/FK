@@ -46,7 +46,7 @@ namespace FK {
 		 *
 		 *	\param[in]	posArray	多角形頂点配列
 		 */
-		void	setVertex(std::vector<fk_Vector> *posArray);
+		void setVertex(std::vector<fk_Vector> *posArray);
 
 		//! 形状生成関数2
 		/*!
@@ -60,7 +60,7 @@ namespace FK {
 		 *	\param[in]	num			頂点数
 		 *	\param[in]	posArray	多角形頂点配列
 		 */
-		void	setVertex(int num, fk_Vector *posArray);
+		void setVertex(int num, fk_Vector *posArray);
 	};
 }
 #endif // !__FK_POLYGON_HEADER__

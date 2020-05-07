@@ -14,6 +14,16 @@ namespace FK {
 	 */
 
 	class fk_RBezCurve : public fk_Curve {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int deg;
+			std::vector<double> w;
+			std::vector<fk_Vector> wCtrl;
+
+			Member(void);
+		};
+#endif
 
 	public:
 		//! コンストラクタ
@@ -28,7 +38,7 @@ namespace FK {
 		 *	初期状態とは、次数は 3 で、全ての制御点が原点にあり、
 		 *	全ての重み値が 1 である状態のことです。
 		 */
-		void	init(void);
+		void init(void);
 
 		//! 次数設定関数
 		/*!
@@ -43,7 +53,7 @@ namespace FK {
 		 *
 		 *	\return	次数設定に成功した場合 true、失敗した場合 false を返します。
 		 */
-		bool	setDegree(int deg);
+		bool setDegree(int deg);
 
 		//! 次数参照関数
 		/*!
@@ -51,7 +61,7 @@ namespace FK {
 		 *
 		 *	\return 次数
 		 */
-		int		getDegree(void);
+		int getDegree(void);
 
 		//! 制御点設定関数
 		/*!
@@ -84,7 +94,7 @@ namespace FK {
 		 *	\return	指定した制御点の重み値。
 		 *		指定した制御点が存在しない場合は 0 を返します。
 		 */
-		double	getWeight(int ID);
+		double getWeight(int ID);
 
 		//! 曲線算出関数
 		/*!
@@ -96,7 +106,7 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の位置ベクトル
 		 */
-		fk_Vector	pos(double t);
+		fk_Vector pos(double t);
 
 		//! 曲線1階微分ベクトル算出関数
 		/*!
@@ -108,17 +118,15 @@ namespace FK {
 		 *
 		 *	\return 曲線上の点の1階微分ベクトル
 		 */
-		fk_Vector	diff(double t);
+		fk_Vector diff(double t);
 
 	private:
-		int		deg;
-		std::vector<double>		w;
-		std::vector<fk_Vector>	wCtrl;
-
-		fk_Vector	PosBasis(double);
-		fk_Vector	PosDiff(double);
-		double		WeightBasis(double);
-		double		WeightDiff(double);
+		std::unique_ptr<Member> _m;
+		
+		fk_Vector PosBasis(double);
+		fk_Vector PosDiff(double);
+		double WeightBasis(double);
+		double WeightDiff(double);
 	};
 }
 

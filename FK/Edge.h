@@ -43,6 +43,17 @@ namespace FK {
 		friend class		fk_Operation;
 		friend class		fk_DataBase;
 		friend class		fk_IFSetHandle;
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int leftHalf;
+			int rightHalf;
+			fk_Curve *curv;
+			double width;
+
+			Member(void);
+		};
+#endif
 
 	public:
 		//! コンストラクタ
@@ -72,7 +83,7 @@ namespace FK {
 		 *
 		 *	\return 描画線幅
 		 */
-		double		getDrawWidth(void) const;
+		double getDrawWidth(void) const;
 
 		//! 描画線幅設定関数
 		/*!
@@ -84,7 +95,7 @@ namespace FK {
 		 *
 		 *	\param[in] width	描画線幅
 		 */
-		void		setDrawWidth(double width);
+		void setDrawWidth(double width);
 
 		//! 幾何曲線形状設定関数
 		/*!
@@ -96,7 +107,7 @@ namespace FK {
 		 *
 		 *	\param[in] curve	幾何曲線インスタンスのアドレス
 		 */
-		void		setCurveGeometry(fk_Curve *curve);
+		void setCurveGeometry(fk_Curve *curve);
 
 		//! 幾何曲線形状取得関数
 		/*!
@@ -106,28 +117,22 @@ namespace FK {
 		 *		自由曲線インスタンスのアドレス。
 		 *		設定されていなかった場合は nullptr を返します。
 		 */
-		fk_Curve *	getCurveGeometry(void);
+		fk_Curve * getCurveGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		void		Init(fk_DataBase *, int);
-		void		Print(void) const;
-		bool		Check(void) const;
-		bool		Compare(fk_Edge *) const;
+		void Init(fk_DataBase *, int);
+		void Print(void) const;
+		bool Check(void) const;
+		bool Compare(fk_Edge *) const;
 
 #endif
 
 	private:
-		int		leftHalf;
-		int		rightHalf;
-		fk_Curve	*curv;
-
-		double		width;
-
-		int  	SetLeftHalf(int);
-		int		SetRightHalf(int);
-
-		void		SwapHalf(void);
+		std::shared_ptr<Member> _m;
+		int SetLeftHalf(int);
+		int SetRightHalf(int);
+		void SwapHalf(void);
 	};
 }
 

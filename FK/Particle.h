@@ -51,18 +51,30 @@ namespace FK {
 
 	class fk_Particle: public fk_Attribute {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int id; // 頂点 ID 
+			fk_Point *base; // 全体位相 
+			unsigned int count; // 年齢 
+			fk_Vector velocity;	// 速度 
+			fk_Vector accel; // 加速度
+
+			Member(fk_Point *, int);
+		};
+#endif
+
 	public:
 #ifndef FK_DOXYGEN_USER_PROCESS
 		fk_Particle(fk_Point *, int);
 		virtual ~fk_Particle();
-
 #endif
 
 		//! 初期化関数
 		/*!
 		 *	パーティクルを初期化します。
 		 */
-		void			init(void);
+		void init(void);
 
 		//! ID参照関数
 		/*!
@@ -70,7 +82,7 @@ namespace FK {
 		 *
 		 *	\return		ID番号
 		 */
-		int				getID(void) const;
+		int getID(void) const;
 
 		//! 年齢参照関数
 		/*!
@@ -80,7 +92,7 @@ namespace FK {
 		 *
 		 *	\return		年齢
 		 */
-		unsigned int	getCount(void) const;
+		unsigned int getCount(void) const;
 
 		//! 位置ベクトル参照設定 
 		/*!
@@ -88,7 +100,7 @@ namespace FK {
 		 *
 		 *	\return		位置ベクトル
 		 */
-		fk_Vector		getPosition(void) const;
+		fk_Vector getPosition(void) const;
 
 		//! 位置ベクトル設定関数1
 		/*!
@@ -96,7 +108,7 @@ namespace FK {
 		 *
 		 *	\param[in]	pos		位置ベクトル
 		 */
-		void			setPosition(const fk_Vector &pos);
+		void setPosition(const fk_Vector &pos);
 
 		//! 位置ベクトル設定関数2
 		/*!
@@ -106,7 +118,7 @@ namespace FK {
 		 *	\param[in]	y		位置ベクトルのy成分
 		 *	\param[in]	z		位置ベクトルのz成分
 		 */
-		void			setPosition(double x, double y, double z);
+		void setPosition(double x, double y, double z);
 
 		//!	速度ベクトル参照設定 
 		/*!
@@ -114,7 +126,7 @@ namespace FK {
 		 *
 		 *	\return		速度ベクトル
 		 */
-		fk_Vector		getVelocity(void) const;
+		fk_Vector getVelocity(void) const;
 
 		//! 速度ベクトル設定関数1
 		/*!
@@ -122,7 +134,7 @@ namespace FK {
 		 *
 		 *	\param[in]	vel		速度ベクトル
 		 */
-		void			setVelocity(const fk_Vector &vel);
+		void setVelocity(const fk_Vector &vel);
 
 		//! 速度ベクトル設定関数2
 		/*!
@@ -132,7 +144,7 @@ namespace FK {
 		 *	\param[in]	y		速度ベクトルのy成分
 		 *	\param[in]	z		速度ベクトルのz成分
 		 */
-		void			setVelocity(double x, double y, double z);
+		void setVelocity(double x, double y, double z);
 
 		//!	加速度ベクトル参照設定 
 		/*!
@@ -140,7 +152,7 @@ namespace FK {
 		 *
 		 *	\return		加速度ベクトル
 		 */
-		fk_Vector		getAccel(void) const;
+		fk_Vector getAccel(void) const;
 
 		//! 加速度ベクトル設定関数1
 		/*!
@@ -148,7 +160,7 @@ namespace FK {
 		 *
 		 *	\param[in]	acc		加速度ベクトル
 		 */
-		void			setAccel(const fk_Vector &acc);
+		void setAccel(const fk_Vector &acc);
 
 		//! 加速度ベクトル設定関数2
 		/*!
@@ -158,7 +170,7 @@ namespace FK {
 		 *	\param[in]	y		加速度ベクトルのy成分
 		 *	\param[in]	z		加速度ベクトルのz成分
 		 */
-		void			setAccel(double x, double y, double z);
+		void setAccel(double x, double y, double z);
 
 		//! 年齢更新関数
 		/*!
@@ -169,7 +181,7 @@ namespace FK {
 		 *
 		 *	\sa fk_ParticleSet::handle()
 		 */
-		void			handle(void);
+		void handle(void);
 
 		//! 色設定関数1
 		/*!
@@ -180,7 +192,7 @@ namespace FK {
 		 *
 		 *	\param[in]	col		色値
 		 */
-		void			setColor(const fk_Color &col);
+		void setColor(const fk_Color &col);
 
 		//! 色設定関数2
 		/*!
@@ -191,7 +203,7 @@ namespace FK {
 		 *
 		 *	\param[in]	col		色値
 		 */
-		void			setColor(fk_Color *col);
+		void setColor(fk_Color *col);
 
 		//! 色取得関数
 		/*!
@@ -199,7 +211,7 @@ namespace FK {
 		 *
 		 *	\return		色値
 		 */
-		fk_Color		getColor(void);
+		fk_Color getColor(void);
 
 		//! 描画有無取得関数
 		/*!
@@ -207,7 +219,7 @@ namespace FK {
 		 *
 		 *	\return		描画されている場合 true を、されていない場合 false を返します。
 		 */
-		bool			getDrawMode(void) const;
+		bool getDrawMode(void) const;
 
 		//! 描画有無設定関数
 		/*!
@@ -218,20 +230,15 @@ namespace FK {
 		 *
 		 *	\param[in]	mode	描画する場合 true を、しない場合 false を入力します。
 		 */
-		void			setDrawMode(bool mode);
+		void setDrawMode(bool mode);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		int				getColorID(void) const;
-		void			setColorID(int ID);
+		int getColorID(void) const;
+		void setColorID(int ID);
 #endif		
 
 	private:
-		int				id;			// 頂点 ID 
-		fk_Point		*base;		// 全体位相 
-		unsigned int	count;		// 年齢 
-		fk_Vector		velocity;	// 速度 
-		fk_Vector		accel;		// 加速度 
-
+		std::unique_ptr<Member> _m;
 	};
 }
 

@@ -4,8 +4,13 @@
 using namespace std;
 using namespace FK;
 
+fk_Polyline::Member::Member(void) : num(0)
+{
+	return;
+}
+
 fk_Polyline::fk_Polyline(vector<fk_Vector> *argVertexSet)
-	: fk_LineBase(nullptr), num(0)
+	: fk_LineBase(nullptr), _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::POLYLINE);
 	setVertex(argVertexSet);
@@ -21,12 +26,12 @@ void fk_Polyline::allClear(void)
 {
 	AllClear();
 	Touch();
-	num = 0;
+	_m->num = 0;
 }
 
 void fk_Polyline::pushVertex(fk_Vector argPos)
 {
-	switch(num) {
+	switch(_m->num) {
 	  case 0:
 		Resize(1);
 		SetPos(0, 0, &argPos);
@@ -41,7 +46,7 @@ void fk_Polyline::pushVertex(fk_Vector argPos)
 		PushLines(&V, &argPos);
 		break;
 	}
-	num++;
+	_m->num++;
 	Touch();
 }
 
@@ -60,7 +65,7 @@ void fk_Polyline::setVertex(vector<fk_Vector> *argPosArray)
 	if(argPosArray->empty() == true) return;
 	if(argPosArray->size() == 1) {
 		pushVertex(argPosArray->at(0));
-		num = 1;
+		_m->num = 1;
 		return;
 	}
 
@@ -73,7 +78,7 @@ void fk_Polyline::setVertex(vector<fk_Vector> *argPosArray)
 		}
 	}
 	MakeLines(&array);
-	num = int(argPosArray->size());
+	_m->num = int(argPosArray->size());
 	return;
 }
 

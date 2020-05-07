@@ -9,14 +9,14 @@ namespace FK {
 		fk_SRFParser(void);
 		virtual ~fk_SRFParser();
 
-		bool	ReadSRFFile(std::string);
+		bool ReadSRFFile(std::string);
 
 	private:
 
-		bool	CheckSRFFile(std::ifstream *);
-		bool	ReadSRFVertexData(std::ifstream *, std::vector<fk_Vector> *);
-		bool	ReadSRFPolygonData(std::ifstream *, int,
-								   std::vector< std::vector<int> > *);
+		bool CheckSRFFile(std::ifstream *);
+		bool ReadSRFVertexData(std::ifstream *, std::vector<fk_Vector> *);
+		bool ReadSRFPolygonData(std::ifstream *, int,
+								std::vector< std::vector<int> > *);
 	};
 }
 #endif // !__FK_SRF_PARSER_HEADER__

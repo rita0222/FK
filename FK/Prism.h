@@ -48,7 +48,7 @@ namespace FK {
 		 *
 		 *	\param[in]	div	角数
 		 */		
-		void	setDivide(int div);
+		void setDivide(int div);
 
 		//! 上面半径設定関数
 		/*!
@@ -56,7 +56,7 @@ namespace FK {
 		 *
 		 *	\param[in]	rad	上面半径
 		 */
-		void	setTopRadius(double rad);
+		void setTopRadius(double rad);
 
 		//! 底面半径設定関数
 		/*!
@@ -64,7 +64,7 @@ namespace FK {
 		 *
 		 *	\param[in]	rad	底面半径
 		 */
-		void	setBottomRadius(double rad);
+		void setBottomRadius(double rad);
 
 		//! 高さ設定関数
 		/*!
@@ -72,7 +72,7 @@ namespace FK {
 		 *
 		 *	\param[in]	height	高さ
 		 */
-		void	setHeight(double height);
+		void setHeight(double height);
 	};
 }
 #endif // !__FK_PRISM_HEADER__

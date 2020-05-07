@@ -28,6 +28,18 @@ namespace FK {
 
 	class fk_Point: public fk_Shape {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_FVecArray posArray;
+			fk_FVecArray colArray;
+			std::vector<int> aliveArray;
+
+			Member(void);
+		};
+#endif
+		
+
 	public:
 
 		//! コンストラクタ
@@ -175,9 +187,7 @@ namespace FK {
 #endif		
 
 	private:
-		fk_FVecArray posArray;
-		fk_FVecArray colArray;
-		std::vector<int> aliveArray;
+		std::unique_ptr<Member> _m;
 
 		bool MakePoint(std::vector<fk_Vector> *);
 		bool MakePoint(int, fk_Vector *);

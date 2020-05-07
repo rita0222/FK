@@ -15,6 +15,21 @@ namespace FK {
 		friend class fk_DataAccess;
 		friend class fk_IFSetHandle;
 
+		class Member {
+		public:
+			fk_IDAdmin vAdmin;
+			fk_IDAdmin hAdmin;
+			fk_IDAdmin eAdmin;
+			fk_IDAdmin lAdmin;
+
+			std::vector<fk_Vertex> vSet;
+			std::vector<fk_Half> hSet;
+			std::vector<fk_Edge> eSet;
+			std::vector<fk_Loop> lSet;
+
+			Member(void);
+		};
+
 	public:
 		
 		fk_DataBase(void);		// コンストラクタ
@@ -69,15 +84,7 @@ namespace FK {
 
 	private:
 
-		std::unique_ptr<fk_IDAdmin> vAdmin; // 頂点 ID 管理オブジェクト
-		std::unique_ptr<fk_IDAdmin> hAdmin; // 半稜線 ID 管理オブジェクト
-		std::unique_ptr<fk_IDAdmin> eAdmin; // 稜線 ID 管理オブジェクト
-		std::unique_ptr<fk_IDAdmin> lAdmin; // ループ ID 管理オブジェクト
-
-		std::vector<fk_Vertex> vSet;
-		std::vector<fk_Half> hSet;
-		std::vector<fk_Edge> eSet;
-		std::vector<fk_Loop> lSet;
+		std::unique_ptr<Member> _m;
 
 		void ResizeData(fk_DataBase *);
 		void ResizeData(int, int, int, int);

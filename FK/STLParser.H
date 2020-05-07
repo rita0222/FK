@@ -9,13 +9,13 @@ namespace FK {
 		fk_STLParser(void);
 		virtual ~fk_STLParser();
 
-		bool	ReadSTLFile(std::string, bool, double = 0.0);
+		bool ReadSTLFile(std::string, bool, double = 0.0);
 
 	private:
 
-		bool	CheckSTLFile(std::ifstream *);
-		bool	MakeSTLIFSet(std::ifstream *, std::vector<fk_Vector> *,
-							 std::vector< std::vector<int> > *, bool);
+		bool CheckSTLFile(std::ifstream *);
+		bool MakeSTLIFSet(std::ifstream *, std::vector<fk_Vector> *,
+						  std::vector< std::vector<int> > *, bool);
 	};
 }
 #endif // !__FK_STL_PARSER_HEADER__

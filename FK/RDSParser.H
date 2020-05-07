@@ -11,16 +11,16 @@ namespace FK {
 		fk_RDSParser(void);
 		virtual ~fk_RDSParser();
 
-		bool	ReadRDSFile(std::string, bool);
+		bool ReadRDSFile(std::string, bool);
 
 	private:
-		bool	CheckRDSFile(std::ifstream &);
-		bool	ReadRDSVertexData(std::ifstream &,
-								  std::vector<fk_Vector> *,
-								  std::vector<int> *, bool);
-		bool	ReadRDSPolygonData(std::ifstream &,
-								   std::vector< std::vector<int> > *,
-								   std::vector<int> *);
+		bool CheckRDSFile(std::ifstream &);
+		bool ReadRDSVertexData(std::ifstream &,
+							   std::vector<fk_Vector> *,
+							   std::vector<int> *, bool);
+		bool ReadRDSPolygonData(std::ifstream &,
+								std::vector< std::vector<int> > *,
+								std::vector<int> *);
 	};
 }
 

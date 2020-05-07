@@ -9,14 +9,14 @@ namespace FK {
 		fk_SMFParser(void);
 		virtual ~fk_SMFParser();
 
-		bool	ReadSMFFile(std::string);
+		bool ReadSMFFile(std::string);
 
 	private:
 
-		bool	CheckSMFFile(std::ifstream &);
-		bool	ReadSMFNumData(std::ifstream &, int *, int *);
-		bool	ReadSMFVertexData(int, std::ifstream &, std::vector<fk_Vector> *);
-		bool	ReadSMFPolygonData(int, std::ifstream &, std::vector< std::vector<int> > *);
+		bool CheckSMFFile(std::ifstream &);
+		bool ReadSMFNumData(std::ifstream &, int *, int *);
+		bool ReadSMFVertexData(int, std::ifstream &, std::vector<fk_Vector> *);
+		bool ReadSMFPolygonData(int, std::ifstream &, std::vector< std::vector<int> > *);
 	};
 }
 #endif // !__FK_SMF_PARSER_HEADER__

@@ -1,17 +1,18 @@
 ﻿#include <FK/Command.H>
 
 using namespace FK;
+using namespace std;
 
-fk_Command::fk_Command(int argComID)
+fk_Command::Member::Member(void) :
+	commandID(-1), boolIndex(0), intIndex(0), vecIndex(0),
+	doubleIndex(0), strIndex(0), mark(false)
+{
+	return;
+}
+
+fk_Command::fk_Command(int argComID) : _m(make_unique<Member>())
 {
 	SetCommandID(argComID);
-	SetBoolIndex(0);
-	SetIntIndex(0);
-	SetVecIndex(0);
-	SetDoubleIndex(0);
-	SetStrIndex(0);
-	SetMarkStatus(false);
-
 	return;
 }
 
@@ -22,103 +23,103 @@ fk_Command::~fk_Command()
 
 fk_Command::fk_Command(const fk_Command &argCom)
 {
-	commandID = argCom.commandID;
-	boolIndex = argCom.boolIndex;
-	intIndex = argCom.intIndex;
-	vecIndex = argCom.vecIndex;
-	doubleIndex = argCom.doubleIndex;
-	strIndex = argCom.strIndex;
-	mark = argCom.mark;
+	_m->commandID = argCom._m->commandID;
+	_m->boolIndex = argCom._m->boolIndex;
+	_m->intIndex = argCom._m->intIndex;
+	_m->vecIndex = argCom._m->vecIndex;
+	_m->doubleIndex = argCom._m->doubleIndex;
+	_m->strIndex = argCom._m->strIndex;
+	_m->mark = argCom._m->mark;
 }	
 
 fk_Command & fk_Command::operator =(const fk_Command &argCom)
 {
-	commandID = argCom.commandID;
-	boolIndex = argCom.boolIndex;
-	intIndex = argCom.intIndex;
-	vecIndex = argCom.vecIndex;
-	doubleIndex = argCom.doubleIndex;
-	strIndex = argCom.strIndex;
-	mark = argCom.mark;
+	_m->commandID = argCom._m->commandID;
+	_m->boolIndex = argCom._m->boolIndex;
+	_m->intIndex = argCom._m->intIndex;
+	_m->vecIndex = argCom._m->vecIndex;
+	_m->doubleIndex = argCom._m->doubleIndex;
+	_m->strIndex = argCom._m->strIndex;
+	_m->mark = argCom._m->mark;
 
 	return *this;
 }	
 
 void fk_Command::SetCommandID(const int argComID)
 {
-	commandID = argComID;
+	_m->commandID = argComID;
 	return;
 }
 
 void fk_Command::SetBoolIndex(const unsigned int argIndex)
 {
-	boolIndex = argIndex;
+	_m->boolIndex = argIndex;
 	return;
 }
 
 void fk_Command::SetIntIndex(const unsigned int argIndex)
 {
-	intIndex = argIndex;
+	_m->intIndex = argIndex;
 	return;
 }
 
 void fk_Command::SetVecIndex(const unsigned int argIndex)
 {
-	vecIndex = argIndex;
+	_m->vecIndex = argIndex;
 	return;
 }
 
 void fk_Command::SetDoubleIndex(const unsigned int argIndex)
 {
-	doubleIndex = argIndex;
+	_m->doubleIndex = argIndex;
 	return;
 }
 
 void fk_Command::SetStrIndex(const unsigned int argIndex)
 {
-	strIndex = argIndex;
+	_m->strIndex = argIndex;
 	return;
 }
 
 void fk_Command::SetMarkStatus(const bool argMark)
 {
-	mark = argMark;
+	_m->mark = argMark;
 	return;
 }
 
 int fk_Command::GetCommandID(void) const
 {
-	return commandID;
+	return _m->commandID;
 }
 
 unsigned int fk_Command::GetBoolIndex(void) const
 {
-	return boolIndex;
+	return _m->boolIndex;
 }
 
 unsigned int fk_Command::GetIntIndex(void) const
 {
-	return intIndex;
+	return _m->intIndex;
 }
 
 unsigned int fk_Command::GetVecIndex(void) const
 {
-	return vecIndex;
+	return _m->vecIndex;
 }
 
 unsigned int fk_Command::GetDoubleIndex(void) const
 {
-	return doubleIndex;
+	return _m->doubleIndex;
 }
 
 unsigned int fk_Command::GetStrIndex(void) const
 {
-	return strIndex;
+	return _m->strIndex;
 }
 
 bool fk_Command::GetMarkStatus(void) const
 {
-	return mark;
+	return _m->mark;
 }
 
 /****************************************************************************

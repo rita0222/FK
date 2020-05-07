@@ -7,9 +7,13 @@
 using namespace std;
 using namespace FK;
 
-fk_Edge::fk_Edge(int argID) :
-	leftHalf(FK_UNDEFINED), rightHalf(FK_UNDEFINED),
-	curv(nullptr), width(-1.0)
+fk_Edge::Member::Member(void) :
+	leftHalf(FK_UNDEFINED), rightHalf(FK_UNDEFINED), curv(nullptr), width(-1.0)
+{
+	return;
+}
+
+fk_Edge::fk_Edge(int argID) : _m(make_shared<Member>())
 {
 	DB = nullptr;
 	SetID(argID);
@@ -24,10 +28,10 @@ fk_Edge::~fk_Edge()
 void fk_Edge::Init(fk_DataBase *argDB, int argID)
 {
 	InitTopology(argDB, argID, fk_TopologyType::EDGE);
-	leftHalf = FK_UNDEFINED;
-	rightHalf = FK_UNDEFINED;
-	curv = nullptr;
-	width = -1.0;
+	_m->leftHalf = FK_UNDEFINED;
+	_m->rightHalf = FK_UNDEFINED;
+	_m->curv = nullptr;
+	_m->width = -1.0;
 
 	return;
 }
@@ -35,65 +39,65 @@ void fk_Edge::Init(fk_DataBase *argDB, int argID)
 fk_Half * fk_Edge::getLeftHalf(void) const
 {
 	if(DB == nullptr) return nullptr;
-	return DB->GetHData(leftHalf);
+	return DB->GetHData(_m->leftHalf);
 }
 
 fk_Half * fk_Edge::getRightHalf(void) const
 {
 	if(DB == nullptr) return nullptr;
-	return DB->GetHData(rightHalf);
+	return DB->GetHData(_m->rightHalf);
 }
 
 int fk_Edge::SetLeftHalf(int argHf)
 {
-	int retHf = leftHalf;
-	leftHalf = argHf;
+	int retHf = _m->leftHalf;
+	_m->leftHalf = argHf;
 	return retHf;
 }
 
 int fk_Edge::SetRightHalf(int argHf)
 {
-	int retHf = rightHalf;
-	rightHalf = argHf;
+	int retHf = _m->rightHalf;
+	_m->rightHalf = argHf;
 	return retHf;
 }
 
 void fk_Edge::SwapHalf(void)
 {
-	int tmpH = rightHalf;
-	rightHalf = leftHalf;
-	leftHalf = tmpH;
+	int tmpH = _m->rightHalf;
+	_m->rightHalf = _m->leftHalf;
+	_m->leftHalf = tmpH;
 	return;
 }
 
 double fk_Edge::getDrawWidth(void) const
 {
-	return width;
+	return _m->width;
 }
 
 void fk_Edge::setDrawWidth(double argWidth)
 {
 	if(argWidth < 0.0) {
-		width = -1.0;
+		_m->width = -1.0;
 	} else {
-		width = argWidth;
+		_m->width = argWidth;
 	}
 	return;
 }
 
 void fk_Edge::Print(void) const
 {
-	stringstream	ss;
+	stringstream ss;
 
 	ss << "Edge[" << getID() << "] = {";
 	Error::Put(ss.str());
 	ss.clear();
 	
-	ss << "\tlH = " << leftHalf;
+	ss << "\tlH = " << _m->leftHalf;
 	Error::Put(ss.str());
 	ss.clear();
 
-	ss << "\trH = " << rightHalf;
+	ss << "\trH = " << _m->rightHalf;
 	Error::Put(ss.str());
 	ss.clear();
 
@@ -104,24 +108,24 @@ void fk_Edge::Print(void) const
 
 bool fk_Edge::Check(void) const
 {
-	bool			retBool = true;
-	stringstream	ss;
+	bool retBool = true;
+	stringstream ss;
 
 	if(DB == nullptr) return false;
 
-	if(leftHalf != FK_UNDEFINED) {
-		if(DB->GetHData(leftHalf)->getParentEdge() != this) {
+	if(_m->leftHalf != FK_UNDEFINED) {
+		if(DB->GetHData(_m->leftHalf)->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... leftH[";
-			ss << leftHalf << "] ERROR!!";
+			ss << _m->leftHalf << "] ERROR!!";
 			Error::Put("fk_Edge", "Check", 1, ss.str());
 			retBool = false;
 		}
 	}
 
-	if(rightHalf != FK_UNDEFINED) {
-		if(DB->GetHData(rightHalf)->getParentEdge() != this) {
+	if(_m->rightHalf != FK_UNDEFINED) {
+		if(DB->GetHData(_m->rightHalf)->getParentEdge() != this) {
 			ss << "Edge[" << getID() << "] ... rightH[";
-			ss << rightHalf << "] ERROR!!";
+			ss << _m->rightHalf << "] ERROR!!";
 			Error::Put("fk_Edge", "Check", 2, ss.str());
 			retBool = false;
 		}
@@ -139,21 +143,21 @@ bool fk_Edge::Compare(fk_Edge *argE) const
 	if(getID() != argE->getID()) return false;
 	if(getID() == FK_UNDEFINED) return true;
 
-	if(leftHalf != argE->leftHalf) return false;
-	if(rightHalf != argE->rightHalf) return false;
+	if(_m->leftHalf != argE->_m->leftHalf) return false;
+	if(_m->rightHalf != argE->_m->rightHalf) return false;
 	return true;
 }
 
 void fk_Edge::setCurveGeometry(fk_Curve *argCurv)
 {
-	curv = argCurv;
+	_m->curv = argCurv;
 
 	return;
 }
 
 fk_Curve * fk_Edge::getCurveGeometry(void)
 {
-	return curv;
+	return _m->curv;
 }
 
 /****************************************************************************

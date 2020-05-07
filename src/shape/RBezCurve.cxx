@@ -6,15 +6,17 @@
 using namespace std;
 using namespace FK;
 
+fk_RBezCurve::Member::Member(void) :
+	deg(3), w(5), wCtrl(5)
+{
+	return;
+}
+
 fk_RBezCurve::fk_RBezCurve(void)
 {
 	SetObjectType(fk_Type::RBEZCURVE);
-	w.clear();
 	setCtrlSize(5);
-	w.resize(5);
-	wCtrl.resize(5);
 	for(int i = 0; i < 5; ++i) setWeight(i, 1.0);
-
 	setDegree(3);
 	return;
 }
@@ -35,21 +37,21 @@ bool fk_RBezCurve::setDegree(int argDeg)
 		return false;
 	}
 
-	deg = argDeg;
-	setCtrlSize(deg+1);
+	_m->deg = argDeg;
+	setCtrlSize(_m->deg+1);
 	
 	return true;
 }
 
 int fk_RBezCurve::getDegree(void)
 {
-	return deg;
+	return _m->deg;
 }
 
 bool fk_RBezCurve::setCtrl(int argID, fk_Vector argPos)
 {
 	if(fk_Curve::setCtrl(argID, argPos) == false) return false;
-	wCtrl[_st(argID)] = w[_st(argID)] * argPos;
+	_m->wCtrl[_st(argID)] = _m->w[_st(argID)] * argPos;
 	return true;
 }
 
@@ -57,24 +59,24 @@ bool fk_RBezCurve::setWeight(int argID, double argWeight)
 {
 	if(fk_Curve::setWeight(argID, argWeight) == false) return false;
 	_st i = _st(argID);
-	w[i] = argWeight;
-	wCtrl[i] = getCtrl(argID) * argWeight;
+	_m->w[i] = argWeight;
+	_m->wCtrl[i] = getCtrl(argID) * argWeight;
 	return true;
 }
 
 double fk_RBezCurve::getWeight(int argID)
 {
 	if(argID < 0 || argID > getDegree()) return 0.0;
-	return double(w[_st(argID)]);
+	return double(_m->w[_st(argID)]);
 }
 
 
 fk_Vector fk_RBezCurve::PosBasis(double t)
 {
-	fk_Vector	vec(0.0, 0.0, 0.0);
-	double		tmp[5];
+	fk_Vector vec(0.0, 0.0, 0.0);
+	double tmp[5];
 
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		tmp[0] = (1.0 - t)*(1.0 - t);
 		tmp[1] = 2.0 * (1.0 - t) * t;
@@ -100,8 +102,8 @@ fk_Vector fk_RBezCurve::PosBasis(double t)
 		return vec;
 	}	
 
-	for(_st i = 0; i <= _st(deg); ++i) {
-		vec += wCtrl[i] * tmp[i];
+	for(_st i = 0; i <= _st(_m->deg); ++i) {
+		vec += _m->wCtrl[i] * tmp[i];
 	}
 
 	return vec;
@@ -109,9 +111,9 @@ fk_Vector fk_RBezCurve::PosBasis(double t)
 
 double fk_RBezCurve::WeightBasis(double t)
 {
-	double		tmp[5], sumW = 0.0;
+	double tmp[5], sumW = 0.0;
 
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		tmp[0] = (1.0 - t)*(1.0 - t);
 		tmp[1] = 2.0 * (1.0 - t) * t;
@@ -137,8 +139,8 @@ double fk_RBezCurve::WeightBasis(double t)
 		return 0.0;
 	}	
 
-	for(_st i = 0; i <= _st(deg); ++i) {
-		sumW += w[i] * tmp[i];
+	for(_st i = 0; i <= _st(_m->deg); ++i) {
+		sumW += _m->w[i] * tmp[i];
 	}
 
 	return sumW;
@@ -146,10 +148,10 @@ double fk_RBezCurve::WeightBasis(double t)
 
 fk_Vector fk_RBezCurve::PosDiff(double t)
 {
-	fk_Vector	vec(0.0, 0.0, 0.0);
-	double		tmp[4];
+	fk_Vector vec(0.0, 0.0, 0.0);
+	double tmp[4];
 
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		tmp[0] = 1.0 - t;
 		tmp[1] = t;
@@ -172,18 +174,18 @@ fk_Vector fk_RBezCurve::PosDiff(double t)
 		return vec;
 	}	
 
-	for(_st i = 0; i < _st(deg); ++i) {
-		vec += (wCtrl[i+1] - wCtrl[i]) * tmp[i];
+	for(_st i = 0; i < _st(_m->deg); ++i) {
+		vec += (_m->wCtrl[i+1] - _m->wCtrl[i]) * tmp[i];
 	}
 
-	return (vec*double(deg));
+	return (vec*double(_m->deg));
 }
 
 double fk_RBezCurve::WeightDiff(double t)
 {
-	double		tmp[4], sumW = 0.0;
+	double tmp[4], sumW = 0.0;
 
-	switch(deg) {
+	switch(_m->deg) {
 	  case 2:
 		tmp[0] = 1.0 - t;
 		tmp[1] = t;
@@ -206,10 +208,10 @@ double fk_RBezCurve::WeightDiff(double t)
 		return 0.0;
 	}	
 
-	for(_st i = 0; i < _st(deg); ++i) {
-		sumW += (w[i+1] - w[i]) * tmp[i];
+	for(_st i = 0; i < _st(_m->deg); ++i) {
+		sumW += (_m->w[i+1] - _m->w[i]) * tmp[i];
 	}
-	return (sumW * double(deg));
+	return (sumW * double(_m->deg));
 }
 
 fk_Vector fk_RBezCurve::pos(double t)

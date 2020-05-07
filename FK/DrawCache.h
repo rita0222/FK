@@ -18,6 +18,16 @@ namespace FK {
 		friend class	fk_LineDraw;
 		friend class	fk_FaceDraw;
 
+		class Member {
+		public:
+			std::list<fk_Vertex *> vertexCache;
+			std::list<fk_Edge *> edgeCache;
+			std::list<fk_Loop *> loopCache;
+			std::vector<fk_Vector> vertexArray;
+
+			Member(void);
+		};
+
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -31,13 +41,7 @@ namespace FK {
 #endif
 
 	private:
-		std::list<fk_Vertex *> vertexCache;
-		std::list<fk_Edge *> edgeCache;
-		std::list<fk_Loop *> loopCache;
-
-		std::vector<fk_Vector> vertexArray;
-		std::vector<int> ifsArray;
-
+		std::unique_ptr<Member> _m;
 
 		void ClearVCache(void);
 		void ClearECache(void);
