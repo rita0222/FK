@@ -4,8 +4,7 @@
 using namespace std;
 using namespace FK;
 
-fk_Line::fk_Line(vector<fk_Vector> *argVertexPos)
-	: fk_LineBase(argVertexPos)
+fk_Line::fk_Line(vector<fk_Vector> *argVertexPos) : fk_LineBase(argVertexPos)
 {
 	SetObjectType(fk_Type::LINE);
 	return;

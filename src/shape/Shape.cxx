@@ -20,48 +20,50 @@ const string fk_Shape::ctrlPosName = "fk_CtrlPos";
 const string fk_Shape::degreeName = "fk_Degree";
 const string fk_Shape::geomDivName = "fk_GeomDiv";
 
-const int fk_Shape::ALIVE;
-const int fk_Shape::DEAD;
+//int fk_Shape::ALIVE;
+//int fk_Shape::DEAD;
 
-fk_Shape::fk_Shape(fk_Type argObjType)
-	: palette(&defaultPalette), materialMode(fk_MaterialMode::NONE),
-	  pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false), realType(fk_RealShapeType::OTHER)
+fk_Shape::Member::Member(void) :
+	pointVAO(0), lineVAO(0), faceVAO(0), vboInitFlg(false)
+{
+	return;
+}
+
+fk_Shape::fk_Shape(fk_Type argObjType) : _m(make_unique<Member>())
 {
 	SetObjectType(argObjType);
-
-
+	realType = fk_RealShapeType::OTHER;
 	FlushAttr = []() {};
-
 	return;
 }
 
 fk_Shape::~fk_Shape()
 {
-	if (pointVAO != 0) DeleteBuffer(pointVAO);
-	if (lineVAO != 0) DeleteBuffer(lineVAO);
-	if (faceVAO != 0) DeleteBuffer(faceVAO);
+	if (_m->pointVAO != 0) DeleteBuffer(_m->pointVAO);
+	if (_m->lineVAO != 0) DeleteBuffer(_m->lineVAO);
+	if (_m->faceVAO != 0) DeleteBuffer(_m->faceVAO);
 
 	int tmpID = 0;
 
-	for (auto p : attrMapI) {
+	for (auto p : _m->attrMapI) {
 		tmpID = get<0>(p.second);
 		if (tmpID != -1) {
 			DeleteBuffer(GLuint(tmpID));
 		}
 	}
 
-	for (auto p : attrMapF) {
+	for (auto p : _m->attrMapF) {
 		tmpID = get<0>(p.second);
 		if (tmpID != -1) {
 			DeleteBuffer(GLuint(tmpID));
 		}
 	}
 
-	for (auto p : intSelf) {
+	for (auto p : _m->intSelf) {
 		delete p.second;
 	}
 
-	for (auto p : floatSelf) {
+	for (auto p : _m->floatSelf) {
 		delete p.second;
 	}
 
@@ -70,77 +72,91 @@ fk_Shape::~fk_Shape()
 
 void fk_Shape::SetPaletteData(fk_Palette *argPal)
 {
-	palette = argPal;
+	FK_UNUSED(argPal);
+	//palette = argPal;
 	return;
 }
 
 void fk_Shape::setPaletteData(fk_Palette *argPal)
 {
-	SetPaletteData(argPal);
+	FK_UNUSED(argPal);
+	//SetPaletteData(argPal);
 	return;
 }
 
 fk_Palette * fk_Shape::getPaletteData(void)
 {
-	return palette;
+	//return palette;
+	return nullptr;
 }
 
 void fk_Shape::clearMaterial(void)
 {
-	palette->clearMaterial();
+	//palette->clearMaterial();
 	return;
 }
 
 void fk_Shape::setObjMaterialID(int argID)
 {
-	palette->setObjMaterialID(argID);
-	materialMode = fk_MaterialMode::CHILD;
+	FK_UNUSED(argID);
+	//palette->setObjMaterialID(argID);
+	//materialMode = fk_MaterialMode::CHILD;
 	return;
 }
 
 void fk_Shape::pushPalette(fk_Material &argMat)
 {
-	palette->pushPalette(&argMat);
-	materialMode = fk_MaterialMode::PARENT;
+	FK_UNUSED(argMat);
+	//palette->pushPalette(&argMat);
+	//materialMode = fk_MaterialMode::PARENT;
 	return;
 }
 
 void fk_Shape::setPalette(fk_Material &argMat, int argID)
 {
-	palette->setPalette(&argMat, argID);
-	materialMode = fk_MaterialMode::PARENT;
+	FK_UNUSED(argMat);
+	FK_UNUSED(argID);
+	//palette->setPalette(&argMat, argID);
+	//materialMode = fk_MaterialMode::PARENT;
 	return;
 }
 
 void fk_Shape::setMaterialMode(fk_MaterialMode argMode)
 {
-	materialMode = argMode;
+	FK_UNUSED(argMode);
+	//materialMode = argMode;
 	return;
 }
 
 fk_MaterialMode fk_Shape::getMaterialMode(void)
 {
-	return materialMode;
+	//return materialMode;
+	return fk_MaterialMode::NONE;
 }
 
 int fk_Shape::getObjMaterialID(void)
 {
-	return palette->getObjMaterialID();
+	//return palette->getObjMaterialID();
+	return 0;
 }
 
 int fk_Shape::getPaletteSize(void)
 {
-	return palette->getPaletteSize();
+	//return palette->getPaletteSize();
+	return 0;
 }
 
 fk_Material * fk_Shape::getMaterial(int argID)
 {
-	return palette->getMaterial(argID);
+	FK_UNUSED(argID);
+	//return palette->getMaterial(argID);
+	return nullptr;
 }
 
 vector<fk_Material> * fk_Shape::getMaterialVector(void)
 {
-	return palette->getMaterialVector();
+	//return palette->getMaterialVector();
+	return nullptr;
 }
 
 fk_RealShapeType fk_Shape::getRealShapeType(void)
@@ -150,53 +166,53 @@ fk_RealShapeType fk_Shape::getRealShapeType(void)
 
 void fk_Shape::SetPointVAO(GLuint argVAO)
 {
-	pointVAO = argVAO;
+	_m->pointVAO = argVAO;
 }
 
 void fk_Shape::SetLineVAO(GLuint argVAO)
 {
-	lineVAO = argVAO;
+	_m->lineVAO = argVAO;
 }
 
 void fk_Shape::SetFaceVAO(GLuint argVAO)
 {
-	faceVAO = argVAO;
+	_m->faceVAO = argVAO;
 }
 
 GLuint fk_Shape::GetPointVAO(void)
 {
-	return pointVAO;
+	return _m->pointVAO;
 }
 
 GLuint fk_Shape::GetLineVAO(void)
 {
-	return lineVAO;
+	return _m->lineVAO;
 }
 
 GLuint fk_Shape::GetFaceVAO(void)
 {
-	return faceVAO;
+	return _m->faceVAO;
 }
 
 void fk_Shape::DeleteMapI(string argName)
 {
-	if(attrMapI.find(argName) != attrMapI.end()) {
-		int tmpID = get<0>(attrMapI[argName]);
+	if(_m->attrMapI.find(argName) != _m->attrMapI.end()) {
+		int tmpID = get<0>(_m->attrMapI[argName]);
 		if(tmpID != -1) {
 			DeleteBuffer(GLuint(tmpID));
 		}
-		attrMapI.erase(argName);
+		_m->attrMapI.erase(argName);
 	}
 }	
 
 void fk_Shape::DeleteMapF(string argName)
 {
-	if(attrMapF.find(argName) != attrMapF.end()) {
-		int tmpID = get<0>(attrMapF[argName]);
+	if(_m->attrMapF.find(argName) != _m->attrMapF.end()) {
+		int tmpID = get<0>(_m->attrMapF[argName]);
 		if(tmpID != -1) {
 			DeleteBuffer(GLuint(tmpID));
 		}
-		attrMapF.erase(argName);
+		_m->attrMapF.erase(argName);
 	}
 }	
 
@@ -208,22 +224,22 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 
 	DeleteMapF(argName);
 	
-	if(attrMapI.find(argName) != attrMapI.end()) id = get<0>(attrMapI[argName]);
+	if(_m->attrMapI.find(argName) != _m->attrMapI.end()) id = get<0>(_m->attrMapI[argName]);
 
 	if(argSelf == true) {
 		vector<int> *array;
-		if(intSelf.find(argName) == intSelf.end()) {
+		if(_m->intSelf.find(argName) == _m->intSelf.end()) {
 			array = new vector<int>();
-			intSelf[argName] = array;
+			_m->intSelf[argName] = array;
 		} else {
-			array = intSelf[argName];
+			array = _m->intSelf[argName];
 		}
 		*array = *argValue;
-		attrMapI[argName] = shapeAttrI(id, argDim, array);
+		_m->attrMapI[argName] = shapeAttrI(id, argDim, array);
 	} else {
-		attrMapI[argName] = shapeAttrI(id, argDim, argValue);
+		_m->attrMapI[argName] = shapeAttrI(id, argDim, argValue);
 	}
-	attrModify[argName] = true;
+	_m->attrModify[argName] = true;
 }
 
 void fk_Shape::setShaderAttribute(string argName, int argDim,
@@ -234,24 +250,24 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 
 	DeleteMapI(argName);
 
-	if(attrMapF.find(argName) != attrMapF.end()) id = get<0>(attrMapF[argName]);
+	if(_m->attrMapF.find(argName) != _m->attrMapF.end()) id = get<0>(_m->attrMapF[argName]);
 
 	if(argSelf == true) {
 		vector<float> *array;
-		if(floatSelf.find(argName) == floatSelf.end()) {
+		if(_m->floatSelf.find(argName) == _m->floatSelf.end()) {
 			array = new vector<float>();
-			floatSelf[argName] = array;
+			_m->floatSelf[argName] = array;
 		} else {
-			array = floatSelf[argName];
+			array = _m->floatSelf[argName];
 		}
 		
 		*array = *argValue;
-		attrMapF[argName] = shapeAttrF(id, argDim, array);
+		_m->attrMapF[argName] = shapeAttrF(id, argDim, array);
 	} else {
-		attrMapF[argName] = shapeAttrF(id, argDim, argValue);
+		_m->attrMapF[argName] = shapeAttrF(id, argDim, argValue);
 	}
 	
-	attrModify[argName] = true;
+	_m->attrModify[argName] = true;
 }
 	
 void fk_Shape::setShaderAttribute(string argName, int argDim,
@@ -311,15 +327,15 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 
 void fk_Shape::DefineVBO(void)
 {
-	if(vboInitFlg == true) return;
+	if(_m->vboInitFlg == true) return;
 
-	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+	for(auto itr = _m->attrMapI.begin(); itr != _m->attrMapI.end(); ++itr) {
 		if(get<0>(itr->second) == -1) {
 			get<0>(itr->second) = int(GenBuffer());
 		}
 	}
 
-	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+	for(auto itr = _m->attrMapF.begin(); itr != _m->attrMapF.end(); ++itr) {
 		if(get<0>(itr->second) == -1) {
 			get<0>(itr->second) = int(GenBuffer());
 		}
@@ -332,34 +348,34 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 	GLuint loc;
 	_st size;
 
-	for(auto itr = attrMapI.begin(); itr != attrMapI.end(); ++itr) {
+	for(auto itr = _m->attrMapI.begin(); itr != _m->attrMapI.end(); ++itr) {
 		if(argTable->find(itr->first) == argTable->end()) continue;
 		auto [vbo, dim, iArray] = itr->second;
 		loc = GLuint(argTable->at(itr->first));
 		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
 		glVertexAttribIPointer(loc, dim, GL_INT, 0, 0);
-		if(attrModify[itr->first] == true) {
+		if(_m->attrModify[itr->first] == true) {
 			size = iArray->size();
 			glBufferData(GL_ARRAY_BUFFER,
 						 GLsizeiptr(sizeof(int) * size),
 						 iArray->data(), GL_STATIC_DRAW);
-			attrModify[itr->first] = false;
+			_m->attrModify[itr->first] = false;
 		}
 		glEnableVertexAttribArray(loc);
 	}
 
-	for(auto itr = attrMapF.begin(); itr != attrMapF.end(); ++itr) {
+	for(auto itr = _m->attrMapF.begin(); itr != _m->attrMapF.end(); ++itr) {
 		if(argTable->find(itr->first) == argTable->end()) continue;
 		auto [vbo, dim, fArray] = itr->second;
 		loc = GLuint(argTable->at(itr->first));
 		glBindBuffer(GL_ARRAY_BUFFER, GLuint(vbo));
 		glVertexAttribPointer(loc, dim, GL_FLOAT, GL_FALSE, 0, 0);
-		if(attrModify[itr->first] == true) {
+		if(_m->attrModify[itr->first] == true) {
 			size = fArray->size();
 			glBufferData(GL_ARRAY_BUFFER,
 						 GLsizeiptr(sizeof(float) * size),
 						 fArray->data(), GL_STATIC_DRAW);
-			attrModify[itr->first] = false;
+			_m->attrModify[itr->first] = false;
 		}
 		glEnableVertexAttribArray(loc);
 	}
@@ -369,12 +385,12 @@ void fk_Shape::BindShaderBuffer(map<string, int> *argTable)
 
 void fk_Shape::modifyAttribute(string argName)
 {
-	attrModify[argName] = true;
+	_m->attrModify[argName] = true;
 }
 
 void fk_Shape::FinishSetVBO(void)
 {
-	vboInitFlg = true;
+	_m->vboInitFlg = true;
 }
 
 GLuint fk_Shape::GenBuffer(void)
@@ -394,10 +410,10 @@ void fk_Shape::DeleteBuffer(GLuint argID)
 
 void fk_Shape::ForceUpdateAttr(void)
 {
-	for(auto itr = attrModify.begin(); itr != attrModify.end(); ++itr) {
+	for(auto itr = _m->attrModify.begin(); itr != _m->attrModify.end(); ++itr) {
 		itr->second = true;
 	}
-	vboInitFlg = false;
+	_m->vboInitFlg = false;
 }
 
 /****************************************************************************

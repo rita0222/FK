@@ -41,10 +41,34 @@ namespace FK {
 
 	class fk_Shape: public fk_Attribute {
 
-	public:
-		static const int ALIVE = 1;
-		static const int DEAD = 0;
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			//fk_Palette *palette;
+			//fk_Palette defaultPalette;
+			//fk_MaterialMode materialMode;
+			GLuint pointVAO, lineVAO, faceVAO;
 
+			shapeMapI attrMapI;
+			shapeMapF attrMapF;
+
+			bool vboInitFlg;
+
+			std::map<std::string, bool> attrModify;
+
+			std::map<std::string, std::vector<int> *> intSelf;
+			std::map<std::string, std::vector<float> *> floatSelf;
+
+			Member(void);
+		};
+#endif
+
+	public:
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		static constexpr int ALIVE = 1;
+		static constexpr int DEAD = 0;
+#endif
 		//! コンストラクタ
 		fk_Shape(fk_Type = fk_Type::SHAPE);
 		//! デストラクタ
@@ -57,7 +81,7 @@ namespace FK {
 		 *
 		 *	\return		格納データ構造
 		 */
-		fk_RealShapeType				getRealShapeType(void);
+		fk_RealShapeType getRealShapeType(void);
 
 		//! シェーダー内 attribute 変数設定関数1
 		/*!
@@ -238,85 +262,71 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		// 廃止関数群
-		fk_Palette *					getPaletteData(void);
-		void							clearMaterial(void);
-		void							setObjMaterialID(int ID);
-		void							pushPalette(fk_Material &mat);
-		void							setPalette(fk_Material &mat, int ID);
-		int								getObjMaterialID(void);
-		int								getPaletteSize(void);
-		fk_Material *					getMaterial(int id);
-		std::vector<fk_Material> *		getMaterialVector(void);
-		void							setMaterialMode(fk_MaterialMode mode);
-		fk_MaterialMode					getMaterialMode(void);
+		fk_Palette * getPaletteData(void);
+		void clearMaterial(void);
+		void setObjMaterialID(int ID);
+		void pushPalette(fk_Material &mat);
+		void setPalette(fk_Material &mat, int ID);
+		int getObjMaterialID(void);
+		int getPaletteSize(void);
+		fk_Material * getMaterial(int id);
+		std::vector<fk_Material> * getMaterialVector(void);
+		void setMaterialMode(fk_MaterialMode mode);
+		fk_MaterialMode getMaterialMode(void);
 
 		// 非公開関数群
 		void FinishSetVBO(void);
 		virtual void ForceUpdateAttr(void);
 		std::function<void(void)> FlushAttr;
 
-		void	SetPaletteData(fk_Palette *pal);
-		void	setPaletteData(fk_Palette *pal);
+		void SetPaletteData(fk_Palette *pal);
+		void setPaletteData(fk_Palette *pal);
 
-		void			SetPointVAO(GLuint);
-		void			SetLineVAO(GLuint);
-		void			SetFaceVAO(GLuint);
-		GLuint			GetPointVAO(void);
-		GLuint			GetLineVAO(void);
-		GLuint			GetFaceVAO(void);
+		void SetPointVAO(GLuint);
+		void SetLineVAO(GLuint);
+		void SetFaceVAO(GLuint);
+		GLuint GetPointVAO(void);
+		GLuint GetLineVAO(void);
+		GLuint GetFaceVAO(void);
 
-		void			DefineVBO(void);
-		void			BindShaderBuffer(std::map<std::string, int> *);
+		void DefineVBO(void);
+		void BindShaderBuffer(std::map<std::string, int> *);
 
-		static GLuint	GenBuffer(void);
-		static void		DeleteBuffer(GLuint);
+		static GLuint GenBuffer(void);
+		static void DeleteBuffer(GLuint);
 
 		// シェーダー変数名: 頂点座標
-		static const std::string	vertexName;
-		static const std::string	normalName;
+		static const std::string vertexName;
+		static const std::string normalName;
 
 		// シェーダー変数名: 頂点モデル色
-		static const std::string	pointModelColorName;
-		static const std::string	pointElementColorName;
-		static const std::string	pointElementAliveName;
+		static const std::string pointModelColorName;
+		static const std::string pointElementColorName;
+		static const std::string pointElementAliveName;
 
-		static const std::string	lineModelColorName;
-		static const std::string	lineElementColorName;
-		static const std::string	lineElementAliveName;
+		static const std::string lineModelColorName;
+		static const std::string lineElementColorName;
+		static const std::string lineElementAliveName;
 
-		static const std::string	curveModelColorName;
+		static const std::string curveModelColorName;
 
 		// シェーダー変数名: テクスチャ座標
-		static const std::string	texCoordName;
+		static const std::string texCoordName;
 
 		// シェーダー変数名: 曲線曲面
-		static const std::string	ctrlPosName;
-		static const std::string	degreeName;
-		static const std::string	geomDivName;
-
+		static const std::string ctrlPosName;
+		static const std::string degreeName;
+		static const std::string geomDivName;
 #endif
 
 	private:
-		fk_Palette			*palette;
-		fk_Palette			defaultPalette;
-		fk_MaterialMode		materialMode;
-		GLuint				pointVAO, lineVAO, faceVAO;
+		std::unique_ptr<Member> _m;
 
-		shapeMapI 			attrMapI;
-		shapeMapF 			attrMapF;
-
-		bool				vboInitFlg;
-
-		std::map<std::string, bool>		attrModify;
-
-		std::map<std::string, std::vector<int> *>	intSelf;
-		std::map<std::string, std::vector<float> *> floatSelf;
-
-		void			DeleteMapI(std::string);
-		void			DeleteMapF(std::string);
+		void DeleteMapI(std::string);
+		void DeleteMapF(std::string);
 
 	protected:
-		fk_RealShapeType	realType;
+		fk_RealShapeType realType;
 	};
 }
 

@@ -4,29 +4,34 @@
 using namespace std;
 using namespace FK;
 
-fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos)
+fk_LineBase::Member::Member(void)
+{
+	return;
+}
+
+fk_LineBase::fk_LineBase(vector<fk_Vector> *argVertexPos) : _m(make_unique<Member>())
 {
 	FlushAttr = [this]() {
-		if(posArray.isModify() == true) {
+		if(_m->posArray.isModify() == true) {
 			modifyAttribute(vertexName);
-			posArray.reset();
+			_m->posArray.reset();
 		}
 
-		if(colArray.isModify() == true) {
+		if(_m->colArray.isModify() == true) {
 			modifyAttribute(lineElementColorName);
-			colArray.reset();
+			_m->colArray.reset();
 		}
 	};
 	
-	posArray.setDim(3);
-	colArray.setDim(4);
+	_m->posArray.setDim(3);
+	_m->colArray.setDim(4);
 	realType = fk_RealShapeType::LINE;
 	AllClear();
 	MakeLines(argVertexPos);
 
-	setShaderAttribute(vertexName, 3, posArray.getP());
-	setShaderAttribute(lineElementColorName, 4, colArray.getP());
-	setShaderAttribute(lineElementAliveName, 1, &aliveArray);
+	setShaderAttribute(vertexName, 3, _m->posArray.getP());
+	setShaderAttribute(lineElementColorName, 4, _m->colArray.getP());
+	setShaderAttribute(lineElementAliveName, 1, &(_m->aliveArray));
 	return;
 }
 
@@ -37,64 +42,64 @@ fk_LineBase::~fk_LineBase()
 
 void fk_LineBase::AllClear(void)
 {
-	posArray.clear();
-	colArray.clear();
-	aliveArray.clear();
+	_m->posArray.clear();
+	_m->colArray.clear();
+	_m->aliveArray.clear();
 	Touch();
 }
 
 void fk_LineBase::SetPos(int argEID, int argVID, fk_Vector *argV)
 {
-	posArray.set(argEID*2 + argVID, *argV);
+	_m->posArray.set(argEID*2 + argVID, *argV);
 	modifyAttribute(vertexName);
 	return;
 }
 
 fk_Vector fk_LineBase::GetPos(int argEID, int argVID)
 {
-	return posArray.getV(argEID*2 + argVID);
+	return _m->posArray.getV(argEID*2 + argVID);
 }
 
 void fk_LineBase::SetCol(int argEID, int argVID, fk_Color *argC)
 {
-	colArray.set(argEID*2 + argVID, *argC);
+	_m->colArray.set(argEID*2 + argVID, *argC);
 	modifyAttribute(lineElementColorName);
 	return;
 }
 
 fk_Color fk_LineBase::GetCol(int argEID, int argVID)
 {
-	return colArray.getC(argEID*2 + argVID);
+	return _m->colArray.getC(argEID*2 + argVID);
 }
 
 void fk_LineBase::SetAlive(int argEID, bool argMode)
 {
 	int mode = (argMode == true) ? fk_Shape::ALIVE : fk_Shape::DEAD;
-	aliveArray[_st(argEID)*2] = aliveArray[_st(argEID)*2+1] = mode;
+	_m->aliveArray[_st(argEID)*2] = _m->aliveArray[_st(argEID)*2+1] = mode;
 	modifyAttribute(lineElementAliveName);
 }
 
 bool fk_LineBase::GetAlive(int argEID)
 {
-	return ((aliveArray[_st(argEID)*2] == fk_Shape::ALIVE) ? true : false);
+	return ((_m->aliveArray[_st(argEID)*2] == fk_Shape::ALIVE) ? true : false);
 }
 
 void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 {
 	if(argVPos == nullptr) {
-		posArray.clear();
-		colArray.clear();
-		aliveArray.clear();
+		_m->posArray.clear();
+		_m->colArray.clear();
+		_m->aliveArray.clear();
 		return;
 	}
 
 	fk_Color col(0.0, 0.0, 0.0, 1.0);
 
-	posArray.resize(int(argVPos->size()));
-	colArray.resize(int(argVPos->size()));
-	aliveArray.resize(argVPos->size());
+	_m->posArray.resize(int(argVPos->size()));
+	_m->colArray.resize(int(argVPos->size()));
+	_m->aliveArray.resize(argVPos->size());
 
-	for(int i = 0; i < posArray.getSize()/2; ++i) {
+	for(int i = 0; i < _m->posArray.getSize()/2; ++i) {
 		SetPos(i, 0, &(*argVPos)[_st(i)*2]);
 		SetPos(i, 1, &(*argVPos)[_st(i)*2+1]);
 		SetCol(i, 0, &col);
@@ -108,9 +113,9 @@ void fk_LineBase::MakeLines(vector<fk_Vector> *argVPos)
 void fk_LineBase::MakeLines(fk_Vector *argVPos)
 {
 	if(argVPos == nullptr) {
-		posArray.clear();
-		colArray.clear();
-		aliveArray.clear();
+		_m->posArray.clear();
+		_m->colArray.clear();
+		_m->aliveArray.clear();
 		return;
 	}
 
@@ -120,26 +125,26 @@ void fk_LineBase::MakeLines(fk_Vector *argVPos)
 
 void fk_LineBase::PushLines(fk_Vector *argS, fk_Vector *argE)
 {
-	posArray.push(*argS);
-	posArray.push(*argE);
-	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
-	colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
-	aliveArray.push_back(fk_Shape::ALIVE);
-	aliveArray.push_back(fk_Shape::ALIVE);
+	_m->posArray.push(*argS);
+	_m->posArray.push(*argE);
+	_m->colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
+	_m->colArray.push(0.0f, 0.0f, 0.0f, 1.0f);
+	_m->aliveArray.push_back(fk_Shape::ALIVE);
+	_m->aliveArray.push_back(fk_Shape::ALIVE);
 	Touch();
 }
 
 void fk_LineBase::Resize(int argSize)
 {
-	posArray.resize(argSize*2);
-	colArray.resize(argSize*2);
-	aliveArray.resize(_st(argSize)*2);
+	_m->posArray.resize(argSize*2);
+	_m->colArray.resize(argSize*2);
+	_m->aliveArray.resize(_st(argSize)*2);
 	Touch();
 }
 
 int fk_LineBase::Size(void)
 {
-	return int(posArray.getSize()/2);
+	return int(_m->posArray.getSize()/2);
 }
 
 void fk_LineBase::Touch(void)
@@ -157,12 +162,12 @@ fk_Vector fk_LineBase::GetLast(void)
 		return fk_Vector(0.0, 0.0, 0.0);
 
 	  case 1:
-		return posArray.getV(1);
+		return _m->posArray.getV(1);
 
 	  default:
 		break;
 	}
-	return posArray.getV(posArray.getSize()-1);
+	return _m->posArray.getV(_m->posArray.getSize()-1);
 }
 
 /****************************************************************************

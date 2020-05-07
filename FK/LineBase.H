@@ -8,6 +8,15 @@ namespace FK {
 
 	class fk_LineBase: public fk_Shape {
 
+		class Member {
+		public:
+			fk_FVecArray posArray;
+			fk_FVecArray colArray;
+			std::vector<int> aliveArray;
+
+			Member(void);
+		};
+
 	public:
 
 		fk_LineBase(std::vector<fk_Vector> *array = nullptr);
@@ -30,9 +39,7 @@ namespace FK {
 		void AllClear();
 
 	private:
-		fk_FVecArray		posArray;
-		fk_FVecArray		colArray;
-		std::vector<int>	aliveArray;
+		std::unique_ptr<Member> _m;
 	};
 }
 

@@ -2,18 +2,23 @@
 #include <FK/Math.h>
 
 using namespace FK;
+using namespace std;
 
 const int fk_Light::MAXLIGHTNUM = 8;
 
-fk_Light::fk_Light(fk_LightType argType)
+fk_Light::Member::Member(void) :
+	lightType(fk_LightType::PARALLEL), spotExponent(0.0), spotCutOff(fk_Math::PI/6.0)
+{
+	attenuation[0] = attenuation[1] = 0.0;
+	attenuation[2] = 1.0;
+	return;
+}
+
+fk_Light::fk_Light(fk_LightType argType) : _m(make_unique<Member>())
 {
 	realType = fk_RealShapeType::LIGHT;
 	SetObjectType(fk_Type::LIGHT);
 	setLightType(argType);
-	attenuation[0] = attenuation[1] = 0.0;
-	attenuation[2] = 1.0;
-	spotExponent = 0.0;
-	spotCutOff = fk_Math::PI/16.0;
 
 	return;
 }
@@ -25,37 +30,37 @@ fk_Light::~fk_Light()
 
 void fk_Light::setLightType(fk_LightType argType)
 {
-	lightType = argType;
+	_m->lightType = argType;
 
 	return;
 }
 
 fk_LightType fk_Light::getLightType(void)
 {
-	return lightType;
+	return _m->lightType;
 }
 
 void fk_Light::setAttenuation(double argK_l, double argK_q, double argK_c)
 {
-	attenuation[0] = (argK_l < fk_Math::EPS) ? 0.0 : argK_l;
-	attenuation[1] = (argK_q < fk_Math::EPS) ? 0.0 : argK_q;
-	attenuation[2] = (argK_c < fk_Math::EPS) ? 0.0 : argK_c;
+	_m->attenuation[0] = (argK_l < fk_Math::EPS) ? 0.0 : argK_l;
+	_m->attenuation[1] = (argK_q < fk_Math::EPS) ? 0.0 : argK_q;
+	_m->attenuation[2] = (argK_c < fk_Math::EPS) ? 0.0 : argK_c;
 
 	return;
 }
 
 void fk_Light::setSpotExponent(double argExp)
 {
-	spotExponent = (argExp < fk_Math::EPS) ? 0.0 : argExp;
+	_m->spotExponent = (argExp < fk_Math::EPS) ? 0.0 : argExp;
 
 	return;
 }
 
 void fk_Light::setSpotCutOff(double argCurAngle)
 {
-	if(argCurAngle > fk_Math::PI/2.0) spotCutOff = fk_Math::EPS;
-	else if(argCurAngle < fk_Math::EPS) spotCutOff = 0.0;
-	else spotCutOff = argCurAngle;
+	if(argCurAngle > fk_Math::PI/2.0) _m->spotCutOff = fk_Math::EPS;
+	else if(argCurAngle < fk_Math::EPS) _m->spotCutOff = 0.0;
+	else _m->spotCutOff = argCurAngle;
 
 	return;
 }
@@ -66,7 +71,7 @@ double fk_Light::getAttenuation(int argIndex)
 	  case 0:
 	  case 1:
 	  case 2:
-		return attenuation[argIndex];
+		return _m->attenuation[argIndex];
 	  default:
 		break;
 	}
@@ -76,12 +81,12 @@ double fk_Light::getAttenuation(int argIndex)
 
 double fk_Light::getSpotExponent(void)
 {
-	return spotExponent;
+	return _m->spotExponent;
 }
 
 double fk_Light::getSpotCutOff(void)
 {
-	return spotCutOff;
+	return _m->spotCutOff;
 }
 
 /****************************************************************************

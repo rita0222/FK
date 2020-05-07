@@ -9,8 +9,8 @@ using namespace FK;
 
 class _fk_MQOPropertyList : public fk_TreeBaseObject {
 public:
-	string		property;
-	string		data;
+	string property;
+	string data;
 };
 
 _fk_MQO_IDSet::_fk_MQO_IDSet(void)
@@ -26,23 +26,22 @@ bool _fk_MQO_IDSet::operator ==(const _fk_MQO_IDSet &i) const
 	return false;
 }
 
-fk_MQOParser::fk_MQOParser(void)
+fk_MQOParser::Member::Member(void) :
+	tree(make_unique<fk_Tree>()),
+	meshTexture(nullptr), ifsTexture(nullptr), contFlg(true), matFlg(false)
 {
-	meshTexture = nullptr;
-	ifsTexture = nullptr;
-	tree = new fk_Tree;
 	tree->clear("_MQOParser_root");
-	contFlg = true;
-	matFlg = false;
-	tData.clear();
+}
+	
 
+fk_MQOParser::fk_MQOParser(void) : _m(make_unique<Member>())
+{
 	IFSListUpdate = [](fk_IFSTexture *, fk_MQOListSet *) {};
 	return;
 }
 
 fk_MQOParser::~fk_MQOParser()
 {
-	delete tree;
 	return;
 }
 
@@ -50,7 +49,7 @@ bool fk_MQOParser::ReadMQOFile(const string &argFileName,
 							   const string &argObjName,
 							   int argMateID, bool argSolidFlg)
 {
-	if(meshData == nullptr && meshTexture == nullptr) {
+	if(meshData == nullptr && _m->meshTexture == nullptr) {
 		return false;
 	}
 
@@ -64,7 +63,7 @@ bool fk_MQOParser::ReadMQOData(unsigned char *argBuffer,
 							   const string &argObjName,
 							   int argMateID, bool argSolidFlg)
 {
-	if(meshData == nullptr && meshTexture == nullptr) {
+	if(meshData == nullptr && _m->meshTexture == nullptr) {
 		return false;
 	}
 
@@ -75,17 +74,17 @@ bool fk_MQOParser::ReadMQOData(unsigned char *argBuffer,
 
 void fk_MQOParser::SetMeshTexture(fk_MeshTexture *argTexture)
 {
-	meshTexture = argTexture;
+	_m->meshTexture = argTexture;
 	meshData = nullptr;
-	ifsTexture = nullptr;
+	_m->ifsTexture = nullptr;
 	return;
 }
 
 void fk_MQOParser::SetIFSTexture(fk_IFSTexture *argTexture, fk_IndexFaceSet *argMesh)
 {
-	ifsTexture = argTexture;
+	_m->ifsTexture = argTexture;
 	SetMeshData(argMesh);
-	meshTexture = nullptr;
+	_m->meshTexture = nullptr;
 	return;
 }
 
@@ -98,7 +97,7 @@ fk_TreeData * fk_MQOParser::GetProperty(fk_TreeData *argParent,
 
 	keys = argLine->substr(0, argLine->find("{"));
 	TrimString(&keys);
-	newData = tree->addNewChild(argParent, keys);
+	newData = _m->tree->addNewChild(argParent, keys);
 	propList->property = PopWord(&keys);
 
 	if(propList->property == "Object") {
@@ -159,15 +158,15 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 							const string &argObjName,
 							int argMateID, bool argSolidFlg)
 {
-	string					line;
-	ifstream				ifs(argFileName), *ifsP;
-	bool					oMode, vMode, fMode, mMode;
-	int						vNum, fNum;
-	unsigned int			bufTag;
-	fk_TreeData				*data;
-	_fk_MQOPropertyList		*propList;
+	string line;
+	ifstream ifs(argFileName), *ifsP;
+	bool oMode, vMode, fMode, mMode;
+	int vNum, fNum;
+	unsigned int bufTag;
+	fk_TreeData *data;
+	_fk_MQOPropertyList *propList;
 
-	if(meshTexture != nullptr && ifsTexture != nullptr) return false;
+	if(_m->meshTexture != nullptr && _m->ifsTexture != nullptr) return false;
 
 	if(argBuffer == nullptr) {
 		if(ifs.fail()) {
@@ -179,7 +178,7 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 		ifsP = nullptr;
 	}
 
-	data = tree->getRoot();
+	data = _m->tree->getRoot();
 	oMode = false;
 	vMode = false;
 	fMode = false;
@@ -225,7 +224,7 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 				oMode = false;
 				continue;
 			} else if(propList->property == "vertex" && vMode == true) {
-				if(vNum != int(vData.size())) {
+				if(vNum != int(_m->vData.size())) {
 					return false;
 				}
 				vMode = false;
@@ -269,8 +268,8 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 
 	if(meshData != nullptr) {
 		meshData->clearMaterial();
-		for(unsigned int i = 0; i < mData.size(); i++) {
-			meshData->pushPalette(mData[i]);
+		for(unsigned int i = 0; i < _m->mData.size(); i++) {
+			meshData->pushPalette(_m->mData[i]);
 		}
 
 		meshData->Init();
@@ -278,11 +277,11 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 		if(meshData->MakeMesh(&optVData, &fData,
 							  &cIDData, argSolidFlg) == false) {
 		*/
-		if(meshData->MakeMesh(&optVData, &fData, argSolidFlg) == false) {
+		if(meshData->MakeMesh(&_m->optVData, &_m->fData, argSolidFlg) == false) {
 			return false;
 		}
 
-		if(matFlg == true) {
+		if(_m->matFlg == true) {
 			if(meshData->getPaletteSize() == 0) {
 				meshData->setMaterialMode(fk_MaterialMode::NONE);
 			} else {
@@ -293,11 +292,11 @@ bool fk_MQOParser::MakeData(const string &argFileName,
 		}
 	}
 
-	if(meshTexture != nullptr) {
+	if(_m->meshTexture != nullptr) {
 		SetMeshTexCoord();
 	}
 
-	if(ifsTexture != nullptr) {
+	if(_m->ifsTexture != nullptr) {
 		SetIFSTexCoord();
 	}
 
@@ -363,7 +362,7 @@ bool fk_MQOParser::PushVertexData(string *argLine)
 	pos.y = Str2Double(words[1]);
 	pos.z = Str2Double(words[2]);
 
-	vData.push_back(pos);
+	_m->vData.push_back(pos);
 	return true;
 }
 
@@ -438,13 +437,13 @@ bool fk_MQOParser::PushFaceData(string *argLine, int argMateID)
 
 	if(argMateID >= 0 && mateID != argMateID) return true;
 
-	cIDData.push_back(mateID);
+	_m->cIDData.push_back(mateID);
 	if(vIDArray.size() == 3) {
-		fData.push_back(vIDArray);
-		tData.push_back(texArray);
+		_m->fData.push_back(vIDArray);
+		_m->tData.push_back(texArray);
 	} else {
-		SetQuadFace(&fData, &tData, &vIDArray, &texArray);
-		cIDData.push_back(mateID);
+		SetQuadFace(&_m->fData, &_m->tData, &vIDArray, &texArray);
+		_m->cIDData.push_back(mateID);
 	}
 
 	return true;
@@ -530,7 +529,7 @@ bool fk_MQOParser::PushMaterialData(string *argLine)
 					col.col[2] * spec);
 	mat.setShininess(shin);
 
-	mData.push_back(mat);
+	_m->mData.push_back(mat);
 
 	return true;
 }
@@ -576,15 +575,15 @@ bool fk_MQOParser::CheckIFData(int argVNum)
 	_st		i, j, size;
 	int		id;
 
-	for(i = 0; i < fData.size(); i++) {
-		size = fData[i].size();
+	for(i = 0; i < _m->fData.size(); i++) {
+		size = _m->fData[i].size();
 		if(size < 3 || size > 4) {
 			return false;
 		}
 		fNum += (size - 2);
 
-		for(j = 0; j < fData[i].size(); j++) {
-			id = fData[i][j];
+		for(j = 0; j < _m->fData[i].size(); j++) {
+			id = _m->fData[i][j];
 			//if(id <= 0 || id > argVNum) {
 			if(id < 0 || id >= argVNum) {
 				return false;
@@ -594,10 +593,10 @@ bool fk_MQOParser::CheckIFData(int argVNum)
 
 	OptimizeData();
 
-	if(contFlg == true) MakeUniqueVertex4Texture();
+	if(_m->contFlg == true) MakeUniqueVertex4Texture();
 
-	if(meshTexture != nullptr) {
-		meshTexture->setTriNum(int(fNum));
+	if(_m->meshTexture != nullptr) {
+		_m->meshTexture->setTriNum(int(fNum));
 	}
 
 	return true;
@@ -610,13 +609,13 @@ void fk_MQOParser::OptimizeData(void)
 	vector<int>		mapArray;
 	int				index, count;
 
-	tmpArray.resize(vData.size());
+	tmpArray.resize(_m->vData.size());
 	for(i = 0; i < tmpArray.size(); i++) tmpArray[i] = char(false);
 
-	for(i = 0; i < fData.size(); i++) {
-		for(j = 0; j < fData[i].size(); j++) {
-			//index = fData[i][j]-1;
-			index = fData[i][j];
+	for(i = 0; i < _m->fData.size(); i++) {
+		for(j = 0; j < _m->fData[i].size(); j++) {
+			//index = _m->fData[i][j]-1;
+			index = _m->fData[i][j];
 			if(index < 0 || index >= int(tmpArray.size())) return;
 			tmpArray[_st(index)] = char(true);
 		}
@@ -628,18 +627,18 @@ void fk_MQOParser::OptimizeData(void)
 	for(i = 0; i < tmpArray.size(); i++) {
 		if(tmpArray[i] == char(true)) {
 			mapArray[i] = count;
-			optVData.push_back(vData[i]);
+			_m->optVData.push_back(_m->vData[i]);
 			count++;
 		} else {
 			mapArray[i] = -1;
 		}
 	}
 
-	for(i = 0; i < fData.size(); i++) {
-		for(j = 0; j < fData[i].size(); j++) {
-			//index = fData[i][j]-1;
-			index = fData[i][j];
-			fData[i][j] = mapArray[_st(index)];
+	for(i = 0; i < _m->fData.size(); i++) {
+		for(j = 0; j < _m->fData[i].size(); j++) {
+			//index = _m->fData[i][j]-1;
+			index = _m->fData[i][j];
+			_m->fData[i][j] = mapArray[_st(index)];
 		}
 	}
 
@@ -654,18 +653,18 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 	_fk_MQO_IDSet						idset;
 	int									newID;
 
-	listSet.resize(optVData.size());
-	newID = int(optVData.size());
+	listSet.resize(_m->optVData.size());
+	newID = int(_m->optVData.size());
 
-	for(i = 0; i < fData.size(); i++) {
-		if(fData[i].size() != tData[i].size()) continue;
+	for(i = 0; i < _m->fData.size(); i++) {
+		if(_m->fData[i].size() != _m->tData[i].size()) continue;
 
-		for(j = 0; j < fData[i].size(); j++) {
-			//index = _st(fData[i][j] - 1);
-			index = _st(fData[i][j]);
+		for(j = 0; j < _m->fData[i].size(); j++) {
+			//index = _st(_m->fData[i][j] - 1);
+			index = _st(_m->fData[i][j]);
 			idset.id = int(index);
 
-			coord = tData[i][j];
+			coord = _m->tData[i][j];
 			idset.coord = coord;
 
 			if(listSet[index].size() == 0) {
@@ -673,28 +672,28 @@ void fk_MQOParser::MakeUniqueVertex4Texture(void)
 			} else {
 				for(k = 0; k < listSet[index].size(); k++) {
 					if(idset.coord == listSet[index][k].coord) {
-						//fData[i][j] = listSet[index][k].id + 1;
-						fData[i][j] = listSet[index][k].id;
+						//_m->fData[i][j] = listSet[index][k].id + 1;
+						_m->fData[i][j] = listSet[index][k].id;
 						break;
 					}
 				}
 				if(k == listSet[index].size()) {
 					idset.id = newID;
 					listSet[index].push_back(idset);
-					optVData.push_back(optVData[index]);
+					_m->optVData.push_back(_m->optVData[index]);
 					//newID++;
-					fData[i][j] = newID;
+					_m->fData[i][j] = newID;
 					newID++;
 				}
 			}
 		}
 	}
 
-	if(ifsTexture != nullptr) IFSListUpdate(ifsTexture, &listSet);
+	if(_m->ifsTexture != nullptr) IFSListUpdate(_m->ifsTexture, &listSet);
 		
 	/*
-	if(ifsTexture != nullptr) {
-		commonList = &(ifsTexture->commonList);
+	if(_m->ifsTexture != nullptr) {
+		commonList = &(_m->ifsTexture->commonList);
 		commonList->resize(listSet.size());
 		for(i = 0; i < listSet.size(); i++) {
 			for(j = 1; j < listSet[i].size(); j++) {
@@ -712,15 +711,15 @@ void fk_MQOParser::SetMeshTexCoord(void)
 	fk_Vector	triPos[3];
 	fk_TexCoord	triCoord[3];
 
-	if(meshTexture == nullptr) return;
-	for(i = 0; i < fData.size(); i++) {
+	if(_m->meshTexture == nullptr) return;
+	for(i = 0; i < _m->fData.size(); i++) {
 		for(j = 0; j < 3; j++) {
-			//triPos[j] = optVData[_st(fData[i][j]-1)];
-			triPos[j] = optVData[_st(fData[i][j])];
-			triCoord[j] = tData[i][j];
+			//triPos[j] = _m->optVData[_st(_m->fData[i][j]-1)];
+			triPos[j] = _m->optVData[_st(_m->fData[i][j])];
+			triCoord[j] = _m->tData[i][j];
 		}
-		meshTexture->setTriPos(int(i), triPos);
-		meshTexture->setTriTextureCoord(int(i), triCoord);
+		_m->meshTexture->setTriPos(int(i), triPos);
+		_m->meshTexture->setTriTextureCoord(int(i), triCoord);
 	}
 	return;
 }
@@ -729,9 +728,9 @@ void fk_MQOParser::SetIFSTexCoord(void)
 {
 	_st			i, j;
 
-	for(i = 0; i < tData.size(); i++) {
-		for(j = 0; j < tData[i].size(); j++) {
-			ifsTexture->setTextureCoord(int(i), int(j), tData[i][j]);
+	for(i = 0; i < _m->tData.size(); i++) {
+		for(j = 0; j < _m->tData[i].size(); j++) {
+			_m->ifsTexture->setTextureCoord(int(i), int(j), _m->tData[i][j]);
 		}
 	}
 	return;
@@ -739,13 +738,13 @@ void fk_MQOParser::SetIFSTexCoord(void)
 
 void fk_MQOParser::SetContMode(bool argFlg)
 {
-	contFlg = argFlg;
+	_m->contFlg = argFlg;
 	return;
 }
 
 void fk_MQOParser::SetMaterialMode(bool argFlg)
 {
-	matFlg = argFlg;
+	_m->matFlg = argFlg;
 	return;
 }
 

@@ -11,7 +11,6 @@ namespace FK {
 		SPOT		//!< スポットライト
 	};
 
-
 	//! 光源を管理するクラス
 	/*!
 	 *	このクラスは、光源を制御する機能を提供します。
@@ -48,6 +47,18 @@ namespace FK {
 
 	class fk_Light: public fk_Shape {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_LightType lightType;
+			double attenuation[3];
+			double spotExponent, spotCutOff;
+
+			Member(void);
+		};
+
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -68,7 +79,7 @@ namespace FK {
 		 *
 		 *	\param[in]	type	光源タイプ
 		 */
-		void				setLightType(fk_LightType type);
+		void setLightType(fk_LightType type);
 
 		//! 光源タイプ取得関数
 		/*!
@@ -76,7 +87,7 @@ namespace FK {
 		 *
 		 *	\return		光源タイプ
 		 */
-		fk_LightType		getLightType(void);
+		fk_LightType getLightType(void);
 
 		//! 減衰係数設定関数
 		/*!
@@ -103,9 +114,7 @@ namespace FK {
 		 *
 		 *	\sa setSpotExponent()
 		 */
-		void				setAttenuation(double k_l,
-										   double k_q,
-										   double k_c = 1.0);
+		void setAttenuation(double k_l, double k_q, double k_c = 1.0);
 
 		//! スポットライト効果範囲角度設定関数
 		/*!
@@ -127,7 +136,7 @@ namespace FK {
 		 *
 		 *	\sa setSpotExponent()
 		 */
-		void				setSpotCutOff(double theta);
+		void setSpotCutOff(double theta);
 
 		//! スポットライト減衰指数設定関数
 		/*!
@@ -166,7 +175,7 @@ namespace FK {
 		 *
 		 *	\sa setSpotCutOff(), setAttenuation()
 		 */
-		void				setSpotExponent(double alpha);
+		void setSpotExponent(double alpha);
 
 		//! 減衰係数参照関数
 		/*!
@@ -183,7 +192,7 @@ namespace FK {
 		 *
 		 *	\sa setAttenuation()
 		 */
-		double				getAttenuation(int num);
+		double getAttenuation(int num);
 
 		//! スポットライト効果範囲角度参照関数
 		/*!
@@ -195,7 +204,7 @@ namespace FK {
 		 *
 		 *	\sa setSpotCutOff()
 		 */
-		double				getSpotCutOff(void);
+		double getSpotCutOff(void);
 
 		//! スポットライト減衰指数参照関数
 		/*!
@@ -206,14 +215,13 @@ namespace FK {
 		 *
 		 *	\sa setSpotExponent()
 		 */
-		double				getSpotExponent(void);
+		double getSpotExponent(void);
 
-		static const int	MAXLIGHTNUM;
+		//! 光源最大数定数
+		static const int MAXLIGHTNUM;
 
 	private:
-		fk_LightType		lightType;
-		double				attenuation[3];
-		double				spotExponent, spotCutOff;
+		std::unique_ptr<Member> _m;
 	};
 }
 

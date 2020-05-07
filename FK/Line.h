@@ -62,7 +62,7 @@ namespace FK {
 		 *		なんらかの形で端点位置の設定がなされれば true、
 		 *		そうでない場合は false を返します。
 		 */
-		bool	setVertex(int vertexID, fk_Vector pos);
+		bool setVertex(int vertexID, fk_Vector pos);
 
 		//! 任意線分端点位置設定関数
 		/*!
@@ -83,7 +83,7 @@ namespace FK {
 		 *		端点位置の設定がなされれば true、
 		 *		そうでない場合は false を返します。
 		 */
-		bool	setVertex(int lineID, int vertexID, fk_Vector pos);
+		bool setVertex(int lineID, int vertexID, fk_Vector pos);
 
 		//! 単独線分生成関数
 		/*!
@@ -94,7 +94,7 @@ namespace FK {
 		 *	\param[in]	array
 		 *		fk_Vector 型の配列。array[0] が始点、array[1] が終点となります。
 		 */
-		void	setVertex(fk_Vector *array);
+		void setVertex(fk_Vector *array);
 
 		//! 複数線分生成関数
 		/*!
@@ -106,7 +106,7 @@ namespace FK {
 		 *		線分 ID が i となる線分の端点が、
 		 *		array[2*i] と array[2*i+1] となるように配置してください。
 		 */
-		void	setVertex(std::vector<fk_Vector> *array);
+		void setVertex(std::vector<fk_Vector> *array);
 
 		//! 単独線分追加関数1
 		/*!
@@ -116,7 +116,7 @@ namespace FK {
 		 *		端点位置ベクトルの配列。
 		 *		array[0] に始点、array[1] に終点となるように配置してください。
 		 */
-		void	pushLine(fk_Vector *array);
+		void pushLine(fk_Vector *array);
 
 		//! 単独線分追加関数2
 		/*!
@@ -125,7 +125,7 @@ namespace FK {
 		 *	\param[in]	startPos		始点位置ベクトル
 		 *	\param[in]	endPos			終点位置ベクトル
 		 */
-		void	pushLine(fk_Vector startPos, fk_Vector endPos);
+		void pushLine(fk_Vector startPos, fk_Vector endPos);
 
 		//! 線分端点位置変更関数
 		/*!
@@ -143,7 +143,7 @@ namespace FK {
 		 *		端点位置の設定がなされれば true、
 		 *		そうでない場合は false を返します。
 		 */
-		bool	changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
+		bool changeLine(int lineID, fk_Vector startPos, fk_Vector endPos);
 
 		//! 線分本数取得関数
 		/*!
@@ -151,7 +151,7 @@ namespace FK {
 		 *
 		 *	\return	線分の本数
 		 */
-		int			getSize(void);
+		int getSize(void);
 
 		//! 線分描画制御関数
 		/*!
@@ -162,7 +162,7 @@ namespace FK {
 		 *	\param[in]	mode
 		 *		true であれば描画を有効に、false であれば無効にします。
 		 */
-		void			setDrawMode(int ID, bool mode);
+		void setDrawMode(int ID, bool mode);
 
 		//! 個別線分描画状態参照関数
 		/*!
@@ -174,7 +174,7 @@ namespace FK {
 		 *		描画が有効であれば true を、無効であれば false を返します。
 		 *		指定した ID を持つ線分が存在しなかった場合も false を返します。
 		 */
-		bool			getDrawMode(int ID);
+		bool getDrawMode(int ID);
 
 		//! 個別色設定関数1
 		/*!
@@ -185,7 +185,7 @@ namespace FK {
 		 *	\param[in]	eID		要素ID
 		 *	\param[in]	col		色値
 		 */
-		void		setColor(int eID, fk_Color col);
+		void setColor(int eID, fk_Color col);
 
 		//! 個別色設定関数2
 		/*!
@@ -197,7 +197,7 @@ namespace FK {
 		 *	\param[in]	eID		要素ID
 		 *	\param[in]	col		色値
 		 */
-		void		setColor(int eID, fk_Color *col);
+		void setColor(int eID, fk_Color *col);
 	};
 }
 #endif // !__FK_LINE_HEADER__

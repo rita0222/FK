@@ -12,12 +12,12 @@ namespace FK {
 
 	class _fk_MQO_IDSet {
 	public:
-		int				id;
-		fk_TexCoord		coord;
+		int id;
+		fk_TexCoord coord;
 
 		_fk_MQO_IDSet(void);
 
-		bool			operator ==(const _fk_MQO_IDSet &) const;
+		bool operator ==(const _fk_MQO_IDSet &) const;
 	};
 
 	using fk_MQOListSet = std::vector< std::vector<_fk_MQO_IDSet> >;
@@ -26,53 +26,61 @@ namespace FK {
 
 		friend fk_IFSTexture;
 
+		class Member {
+		public:
+			std::unique_ptr<fk_Tree> tree;
+			fk_MeshTexture *meshTexture;
+			fk_IFSTexture *ifsTexture;
+			std::vector<fk_Vector> vData, optVData;
+			std::vector<std::vector<int>> fData;
+			std::vector<std::vector<fk_TexCoord>> tData;
+			std::vector<fk_Material> mData;
+			std::vector<int> cIDData;
+			bool contFlg;
+			bool matFlg;
+
+			Member(void);
+		};
+
 	public:
 		fk_MQOParser(void);
 		virtual ~fk_MQOParser();
 
-		bool	ReadMQOFile(const std::string &, const std::string &, int, bool);
-		bool	ReadMQOData(unsigned char *, const std::string &, int, bool);
-		void	SetMeshTexture(fk_MeshTexture *);
-		void	SetIFSTexture(fk_IFSTexture *, fk_IndexFaceSet *);
-		void	SetContMode(bool);
-		void	SetMaterialMode(bool);
+		bool ReadMQOFile(const std::string &, const std::string &, int, bool);
+		bool ReadMQOData(unsigned char *, const std::string &, int, bool);
+		void SetMeshTexture(fk_MeshTexture *);
+		void SetIFSTexture(fk_IFSTexture *, fk_IndexFaceSet *);
+		void SetContMode(bool);
+		void SetMaterialMode(bool);
 
 	private:
 
-		fk_MeshTexture								*meshTexture;
-		fk_IFSTexture								*ifsTexture;
-		fk_Tree										*tree;
-		std::vector<fk_Vector>						vData, optVData;
-		std::vector< std::vector<int> >				fData;
-		std::vector< std::vector<fk_TexCoord> >		tData;
-		std::vector<fk_Material>					mData;
-		std::vector<int>							cIDData;
-		bool										contFlg;
-		bool										matFlg;
+		std::unique_ptr<Member> _m;
 
-		bool	ReadLine(std::ifstream *, unsigned char *, unsigned int *, std::string *);
-		bool	CheckFile(const std::string &);
-		bool	CheckData(unsigned char *);
-		bool	MakeData(const std::string &, unsigned char *,
-						 const std::string &, int, bool);
-		bool	PushVertexData(std::string *);
-		bool	PushFaceData(std::string *, int);
-		bool	PushMaterialData(std::string *);
 
-		bool	CheckIFData(int);
-		void	SetMeshTexCoord(void);
-		void	SetIFSTexCoord(void);
-		void	OptimizeData(void);
-		void	MakeUniqueVertex4Texture(void);
+		bool ReadLine(std::ifstream *, unsigned char *, unsigned int *, std::string *);
+		bool CheckFile(const std::string &);
+		bool CheckData(unsigned char *);
+		bool MakeData(const std::string &, unsigned char *,
+					  const std::string &, int, bool);
+		bool PushVertexData(std::string *);
+		bool PushFaceData(std::string *, int);
+		bool PushMaterialData(std::string *);
 
-		void	SetQuadFace(std::vector< std::vector<int> > *,
-							std::vector< std::vector<fk_TexCoord> > *,
-							std::vector<int> *,
-							std::vector<fk_TexCoord> *);
+		bool CheckIFData(int);
+		void SetMeshTexCoord(void);
+		void SetIFSTexCoord(void);
+		void OptimizeData(void);
+		void MakeUniqueVertex4Texture(void);
 
-		fk_TreeData *	GetProperty(fk_TreeData *, std::string *);
+		void SetQuadFace(std::vector<std::vector<int>> *,
+						 std::vector<std::vector<fk_TexCoord>> *,
+						 std::vector<int> *,
+						 std::vector<fk_TexCoord> *);
 
-		std::function<void(fk_IFSTexture *, fk_MQOListSet *)>	IFSListUpdate;
+		fk_TreeData * GetProperty(fk_TreeData *, std::string *);
+
+		std::function<void(fk_IFSTexture *, fk_MQOListSet *)> IFSListUpdate;
 	};
 }
 
