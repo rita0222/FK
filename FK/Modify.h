@@ -31,7 +31,8 @@ namespace FK {
 	 *	fk_Block や fk_Sphere といった基本形状を
 	 *	fk_Solid によって生成したい場合に便利です。
 	 *
-	 *	\sa fk_Solid, fk_Operation, fk_DataAccess, fk_ReferenceL1, fk_ReferenceL2, fk_ReferenceL3, fk_IndexFaceSet
+	 *	\sa fk_Solid, fk_Operation, fk_DataAccess, fk_ReferenceL1,
+	 *		fk_ReferenceL2, fk_ReferenceL3, fk_IndexFaceSet
 	 */
 
 	class fk_Modify : public fk_Operation {
@@ -70,7 +71,7 @@ namespace FK {
 		 *		新たに生成されたループの位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Loop *	removeVertexInLoop(fk_Vertex *V);
+		fk_Loop * removeVertexInLoop(fk_Vertex *V);
 
 		//! 稜線削除関数1
 		/*!
@@ -105,7 +106,7 @@ namespace FK {
 		 *
 		 *	\sa checkContract(), contractEdge(fk_Edge *, fk_Vector, bool)
 		 */
-		bool		contractEdge(fk_Edge *E, bool R = true);
+		bool contractEdge(fk_Edge *E, bool R = true);
 
 		//! 稜線削除関数2
 		/*!
@@ -124,7 +125,7 @@ namespace FK {
 		 *
 		 *	\sa checkContract(), contractEdge(fk_Edge *, bool)
 		 */
-		bool		contractEdge(fk_Edge *E, fk_Vector P, bool R = true);
+		bool contractEdge(fk_Edge *E, fk_Vector P, bool R = true);
 
 		//! 稜線削除可能判定関数
 		/*!
@@ -134,7 +135,7 @@ namespace FK {
 		 *
 		 *	\return		削除可能であれば true を、不可能であれば false を返します。
 		 */
-		bool		checkContract(fk_Edge *E);
+		bool checkContract(fk_Edge *E);
 		///@}
 
 		//! \name 多角形生成関数
@@ -165,8 +166,7 @@ namespace FK {
 		 *
 		 *	\sa pushPolygon(std::vector<fk_Vector> *, bool)
 		 */
-		fk_Loop *	makePolygon(std::vector<fk_Vector> *array,
-								bool openFlg, bool initFlg = true);
+		fk_Loop * makePolygon(std::vector<fk_Vector> *array, bool openFlg, bool initFlg = true);
 
 		//! 多角形生成関数2
 		/*!
@@ -197,8 +197,7 @@ namespace FK {
 		 *
 		 *	\sa pushPolygon(int, fk_Vector *, bool)
 		 */
-		fk_Loop *	makePolygon(int num, fk_Vector *array,
-								bool openFlg, bool initFlg = true);
+		fk_Loop * makePolygon(int num, fk_Vector *array, bool openFlg, bool initFlg = true);
 
 		//! 多角形追加関数1
 		/*!
@@ -223,8 +222,7 @@ namespace FK {
 		 *
 		 *	\sa makePolygon(std::vector<fk_Vector> *, bool, bool)
 		 */
-		fk_Loop *	pushPolygon(std::vector<fk_Vector> *array,
-								bool openFlg = false);
+		fk_Loop * pushPolygon(std::vector<fk_Vector> *array, bool openFlg = false);
 
 		//! 多角形追加関数2
 		/*!
@@ -250,8 +248,7 @@ namespace FK {
 		 *
 		 *	\sa makePolygon(int, fk_Vector *, bool, bool)
 		 */
-		fk_Loop *	pushPolygon(int num, fk_Vector *array,
-								bool openFlg = false);
+		fk_Loop * pushPolygon(int num, fk_Vector *array, bool openFlg = false);
 
 		//! 多角形頂点追加関数
 		/*!
@@ -268,7 +265,7 @@ namespace FK {
 		 *		false の場合は閉じた多角形を生成します。
 		 *		つまり、多角形の始点と新規追加点の間に稜線を生成します。
 		 */
-		void		pushPolygonVertex(fk_Vector pos, bool openFlg);
+		void pushPolygonVertex(fk_Vector pos, bool openFlg);
 		///@}
 
 		//! \name 頂点群生成関数
@@ -281,7 +278,7 @@ namespace FK {
 		 *
 		 *	\param[in]	array		頂点群の位置ベクトル配列
 		 */
-		void		makePoint(std::vector<fk_Vector> *array);
+		void makePoint(std::vector<fk_Vector> *array);
 
 		//! 頂点群生成関数2
 		/*!
@@ -291,7 +288,7 @@ namespace FK {
 		 *	\param[in]	num			頂点数
 		 *	\param[in]	array		頂点群の位置ベクトル配列
 		 */
-		void		makePoint(int num, fk_Vector *array);
+		void makePoint(int num, fk_Vector *array);
 
 		//! 頂点追加関数
 		/*!
@@ -316,7 +313,7 @@ namespace FK {
 		 *
 		 *	\param[in]	array		線分の両端点を表す頂点位置ベクトル配列
 		 */
-		void		makeLines(std::vector<fk_Vector> *array);
+		void makeLines(std::vector<fk_Vector> *array);
 
 		//! 線分群生成関数2
 		/*!
@@ -331,7 +328,7 @@ namespace FK {
 		 *		線分の両端点を表す頂点位置ベクトル配列。
 		 *		配列の長さは、線分数の2倍よりも大きくなければなりません。
 		 */
-		void		makeLines(int num, fk_Vector *array);
+		void makeLines(int num, fk_Vector *array);
 
 		//! 線分追加関数
 		/*!
@@ -342,7 +339,7 @@ namespace FK {
 		 *
 		 *	\return		新規に生成された稜線位相のインスタンスを返します。
 		 */
-		fk_Edge *	pushLines(fk_Vector pos1, fk_Vector pos2);
+		fk_Edge * pushLines(fk_Vector pos1, fk_Vector pos2);
 
 		//! 線分頂点移動関数1
 		/*!
@@ -359,7 +356,7 @@ namespace FK {
 		 *
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		setLinePos(int ID, fk_Vector pos);
+		bool setLinePos(int ID, fk_Vector pos);
 
 		//! 線分頂点移動関数2
 		/*!
@@ -380,7 +377,7 @@ namespace FK {
 		 *
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		setLinePos(int edgeID, int vertexID, fk_Vector pos);
+		bool setLinePos(int edgeID, int vertexID, fk_Vector pos);
 
 		//! 線分両端点移動関数
 		/*!
@@ -396,7 +393,7 @@ namespace FK {
 		 *
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		changeLine(int edgeID, fk_Vector pos1, fk_Vector pos2);
+		bool changeLine(int edgeID, fk_Vector pos1, fk_Vector pos2);
 		///@}
 
 		//! \name 直方体形状生成関数
@@ -426,7 +423,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Block
 		 */
-		void		makeBlock(double x, double y, double z);
+		void makeBlock(double x, double y, double z);
 
 		//! 直方体辺長変更関数
 		/*!
@@ -441,7 +438,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void		setBlockSize(double x, double y, double z);
+		void setBlockSize(double x, double y, double z);
 	
 		//! 直方体個別辺長設定関数
 		/*!
@@ -458,7 +455,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void		setBlockSize(double length, fk_Axis axis);
+		void setBlockSize(double length, fk_Axis axis);
 
 		//! 直方体全体拡大縮小関数
 		/*!
@@ -471,7 +468,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void		setBlockScale(double scale);
+		void setBlockScale(double scale);
 
 		//! 直方体軸方向拡大縮小関数
 		/*!
@@ -488,7 +485,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void		setBlockScale(double scale, fk_Axis axis);
+		void setBlockScale(double scale, fk_Axis axis);
 
 		//! 直方体軸方向個別拡大縮小関数
 		/*!
@@ -503,7 +500,7 @@ namespace FK {
 		 *
 		 *	\sa makeBlock(), fk_Block
 		 */
-		void		setBlockScale(double x, double y, double z);
+		void setBlockScale(double x, double y, double z);
 		///@}
 
 		//! \name 円形状生成関数
@@ -529,7 +526,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Circle
 		 */
-		void		makeCircle(int div, double rad);
+		void makeCircle(int div, double rad);
 
 		//! 円形状半径設定関数
 		/*!
@@ -542,7 +539,7 @@ namespace FK {
 		 *
 		 *	\sa makeCircle(), fk_Circle
 		 */
-		void		setCircleRadius(double rad);
+		void setCircleRadius(double rad);
 
 		//! 円形状分割数設定関数
 		/*!
@@ -555,7 +552,7 @@ namespace FK {
 		 *
 		 *	\sa makeCircle(), fk_Circle
 		 */
-		void		setCircleDivide(int div);
+		void setCircleDivide(int div);
 
 		//! 円形状拡大縮小関数
 		/*!
@@ -568,7 +565,7 @@ namespace FK {
 		 *
 		 *	\sa makeCircle(), fk_Circle
 		 */
-		void		setCircleScale(double scale);
+		void setCircleScale(double scale);
 		///@}
 
 		//! \name 球形状制御関数
@@ -592,7 +589,7 @@ namespace FK {
 		 *	\param[in]	rad	半径
 		 *	\sa fk_Sphere
 		 */
-		void		makeSphere(int div, double rad);
+		void makeSphere(int div, double rad);
 
 		//! 球形状半径設定関数
 		/*!
@@ -605,7 +602,7 @@ namespace FK {
 		 *
 		 *	\sa makeSphere(), fk_Sphere
 		 */
-		void		setSphereRadius(double rad);
+		void setSphereRadius(double rad);
 
 		//! 球形状分割数設定関数
 		/*!
@@ -618,7 +615,7 @@ namespace FK {
 		 *
 		 *	\sa makeSphere(), fk_Sphere
 		 */
-		void		setSphereDivide(int div);
+		void setSphereDivide(int div);
 
 		//! 球形状拡大縮小関数
 		/*!
@@ -631,7 +628,7 @@ namespace FK {
 		 *
 		 *	\sa makeSphere(), fk_Sphere
 		 */
-		void		setSphereScale(double scale);
+		void setSphereScale(double scale);
 		///@}
 
 		//! \name 正多角柱(円柱)形状制御関数
@@ -658,8 +655,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Prism
 		 */
-		void		makePrism(int div, double top,
-							  double bottom, double height);
+		void makePrism(int div, double top, double bottom, double height);
 
 		//! 正多角柱(円柱)角数設定関数
 		/*!
@@ -672,7 +668,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void		setPrismDivide(int div);
+		void setPrismDivide(int div);
 
 		//! 正多角柱(円柱)上面半径設定関数
 		/*!
@@ -685,7 +681,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void		setPrismTopRadius(double top);
+		void setPrismTopRadius(double top);
 
 		//! 正多角柱(円柱)角数設定関数
 		/*!
@@ -698,7 +694,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void		setPrismBottomRadius(double bottom);
+		void setPrismBottomRadius(double bottom);
 
 		//! 正多角柱(円柱)高さ設定関数
 		/*!
@@ -711,7 +707,7 @@ namespace FK {
 		 *
 		 *	\sa makePrism(), fk_Prism
 		 */
-		void		setPrismHeight(double height);
+		void setPrismHeight(double height);
 		///@}
 
 		//! \name 正多角錐(円錐)形状制御関数
@@ -737,7 +733,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Cone
 		 */
-		void		makeCone(int div, double rad, double height);
+		void makeCone(int div, double rad, double height);
 
 		//! 正多角錐(円錐)角数設定関数
 		/*!
@@ -750,7 +746,7 @@ namespace FK {
 		 *
 		 *	\sa makeCone(), fk_Cone
 		 */
-		void		setConeDivide(int div);
+		void setConeDivide(int div);
 
 		//! 正多角錐(円錐)底面半径設定関数
 		/*!
@@ -763,7 +759,7 @@ namespace FK {
 		 *
 		 *	\sa makeCone(), fk_Cone
 		 */
-		void		setConeRadius(double rad);
+		void setConeRadius(double rad);
 
 		//! 正多角錐(円錐)高さ設定関数
 		/*!
@@ -776,7 +772,7 @@ namespace FK {
 		 *
 		 *	\sa makeCone(), fk_Cone
 		 */
-		void		setConeHeight(double height);
+		void setConeHeight(double height);
 		///@}
 
 		//! \name 頂点移動関数
@@ -792,7 +788,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		moveVPosition(int vertexID, fk_Vector pos, int order = 0);
+		bool moveVPosition(int vertexID, fk_Vector pos, int order = 0);
 
 		//! 頂点移動関数2
 		/*!
@@ -806,8 +802,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		moveVPosition(int vertexID, double x, double y, double z,
-								  int order = 0);
+		bool moveVPosition(int vertexID, double x, double y, double z, int order = 0);
 
 		//! 頂点移動関数2
 		/*!
@@ -819,7 +814,7 @@ namespace FK {
 		 *								
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool		moveVPosition(int vertexID, double *array, int order = 0);
+		bool moveVPosition(int vertexID, double *array, int order = 0);
 		///@}
 
 		//! \name 細分割曲面生成関数
@@ -839,7 +834,7 @@ namespace FK {
 		///@}
 
 	private:
-		bool		CheckLoop4Cont(fk_Half *);
+		bool CheckLoop4Cont(fk_Half *);
 	};
 }
 

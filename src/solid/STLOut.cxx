@@ -9,19 +9,20 @@
 using namespace std;
 using namespace FK;
 
-fk_STLOut::fk_STLOut(fk_Solid *argSolid)
+fk_STLOut::Member::Member(void) : solid(nullptr), ifset(nullptr)
 {
-	solid = argSolid;
-	ifset = nullptr;
-
 	return;
 }
 
-fk_STLOut::fk_STLOut(fk_IndexFaceSet *argIFSet)
+fk_STLOut::fk_STLOut(fk_Solid *argSolid) : _m(make_unique<Member>())
 {
-	ifset = argIFSet;
-	solid = nullptr;
+	_m->solid = argSolid;
+	return;
+}
 
+fk_STLOut::fk_STLOut(fk_IndexFaceSet *argIFSet) : _m(make_unique<Member>())
+{
+	_m->ifset = argIFSet;
 	return;
 }
 
@@ -32,14 +33,14 @@ fk_STLOut::~fk_STLOut()
 
 bool fk_STLOut::WriteSTLFile(string argFileName)
 {
-	ofstream	ofs(argFileName);
-	bool		retFlg;
+	ofstream ofs(argFileName);
+	bool retFlg;
 
-	if(solid == nullptr && ifset == nullptr) return false;
+	if(_m->solid == nullptr && _m->ifset == nullptr) return false;
 
 	if(ofs.fail()) return false;
 
-	if(solid != nullptr) {
+	if(_m->solid != nullptr) {
 		retFlg = WriteSTLShape_Solid(&ofs);
 	} else {
 		retFlg = WriteSTLShape_IFS(&ofs);
@@ -60,7 +61,7 @@ bool fk_STLOut::WriteSTLShape_Solid(ofstream *argOFS)
 
 	*argOFS << "solid design" << endl;
 
-	for(curL = solid->getNextL(nullptr); curL != nullptr; curL = solid->getNextL(curL)) {
+	for(curL = _m->solid->getNextL(nullptr); curL != nullptr; curL = _m->solid->getNextL(curL)) {
 		norm = curL->getNormal();
 		if(norm != nullptr) {
 			*argOFS << " facet normal " << norm->x << " " << norm->y << " " << norm->z << endl;
@@ -69,7 +70,7 @@ bool fk_STLOut::WriteSTLShape_Solid(ofstream *argOFS)
 			return false;
 		}
 
-		vArray = solid->getAllVOnL(curL);
+		vArray = _m->solid->getAllVOnL(curL);
 
 		for(i = 0; i < vArray.size(); i++) {
 			pos = vArray[i]->getPosition();
@@ -93,11 +94,11 @@ bool fk_STLOut::WriteSTLShape_IFS(ofstream *argOFS)
 
 	*argOFS << "solid design" << endl;
 
-	for(i = 0; i < ifset->getFaceSize(); i++) {
-		fData = ifset->getFaceData(i);
+	for(i = 0; i < _m->ifset->getFaceSize(); i++) {
+		fData = _m->ifset->getFaceData(i);
 
 		for(j = 0; j < fData.size(); j++) {
-			pos[j] = ifset->getPosVec(fData[j]);
+			pos[j] = _m->ifset->getPosVec(fData[j]);
 		}
 		norm = (pos[1] - pos[0]) ^ (pos[2] - pos[1]);
 		norm.normalize();

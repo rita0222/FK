@@ -1,14 +1,16 @@
 ﻿#include <FK/Topology.h>
 
 using namespace FK;
+using namespace std;
 
-fk_Topology::fk_Topology(void)
+fk_Topology::Member::Member(void) :
+	ID(-1), ariveFlg(false), type(fk_TopologyType::UNDEFINED)
 {
-	ID = -1;
-	ariveFlg = false;
-	type = fk_TopologyType::UNDEFINED;
-	DB = nullptr;
+	return;
+}
 
+fk_Topology::fk_Topology(void) : _m(make_shared<Member>()), DB(nullptr)
+{
 	return;
 }
 
@@ -27,43 +29,44 @@ void fk_Topology::InitTopology(fk_DataBase *argDB, int argID, fk_TopologyType ar
 
 void fk_Topology::SetType(fk_TopologyType argType)
 {
-	type = argType;
+	_m->type = argType;
 	return;
 }
 
 void fk_Topology::SetID(int argID)
 {
-	if(argID <= 0) ID = FK_UNDEFINED;
-	else ID = argID;
+	if(argID <= 0) _m->ID = FK_UNDEFINED;
+	else _m->ID = argID;
 
 	return;
 }
 
 int fk_Topology::getID(void) const
 {
-	return ID;
+	return _m->ID;
 }
 
 fk_TopologyType fk_Topology::getType(void) const
 {
-	return type;
+	return _m->type;
 }
 
 void fk_Topology::DeleteElem(void)
 {
-	ID = FK_UNDEFINED;
+	_m->ID = FK_UNDEFINED;
 	AttrInit();
-	ariveFlg = false;
+	_m->ariveFlg = false;
 	return;
 }
 
 bool fk_Topology::CloneElem(fk_Topology *argTP)
 {
 	DB = argTP->DB;
-	ID = argTP->ID;
-	ariveFlg = argTP->ariveFlg;
+	_m->ID = argTP->_m->ID;
+	_m->ariveFlg = argTP->_m->ariveFlg;
+	_m->type = argTP->_m->type;
 
-	if(ID == FK_UNDEFINED) return false;
+	if(_m->ID == FK_UNDEFINED) return false;
 	return true;
 }
 

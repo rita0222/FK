@@ -11,18 +11,20 @@
 using namespace std;
 using namespace FK;
 
-fk_VRMLOut::fk_VRMLOut(fk_Solid *argSolid)
+fk_VRMLOut::Member::Member(void) : solid(nullptr), ifset(nullptr)
 {
-	solid = argSolid;
-	ifset = nullptr;
-
 	return;
 }
 
-fk_VRMLOut::fk_VRMLOut(fk_IndexFaceSet *argIFSet)
+fk_VRMLOut::fk_VRMLOut(fk_Solid *argSolid) : _m(make_unique<Member>())
 {
-	ifset = argIFSet;
-	solid = nullptr;
+	_m->solid = argSolid;
+	return;
+}
+
+fk_VRMLOut::fk_VRMLOut(fk_IndexFaceSet *argIFSet) : _m(make_unique<Member>())
+{
+	_m->ifset = argIFSet;
 
 	return;
 }
@@ -35,9 +37,9 @@ fk_VRMLOut::~fk_VRMLOut()
 bool fk_VRMLOut::WriteVRMLFile(string argFileName, fk_Material *argMaterial,
 							   bool triFlag)
 {
-	ofstream	ofs(argFileName);
+	ofstream ofs(argFileName);
 
-	if(solid == nullptr && ifset == nullptr) {
+	if(_m->solid == nullptr && _m->ifset == nullptr) {
 		return false;
 	}
 
@@ -58,7 +60,7 @@ bool fk_VRMLOut::WriteVRMLFile(string argFileName,
 							   fk_Material *argMaterial,
 							   bool triFlag)
 {
-	ofstream	ofs(argFileName);
+	ofstream ofs(argFileName);
 
 	if(ofs.fail()) return false;
 
@@ -95,7 +97,7 @@ void fk_VRMLOut::WriteVRMLShape(ofstream &argOFS,
 	argOFS << "\t\tShape {" << endl;
 
 	WriteVRMLMaterial(argOFS, argMaterial);
-	if(solid != nullptr) {
+	if(_m->solid != nullptr) {
 		WriteVRMLPointData_Solid(argOFS);
 		WriteVRMLIFData_Solid(argOFS, triFlag);
 	} else {
@@ -113,7 +115,7 @@ void fk_VRMLOut::WriteVRMLShape(ofstream &argOFS,
 
 void fk_VRMLOut::WriteVRMLLightInfo(ofstream &argOFS)
 {
-	string	tab, outStr;
+	string tab, outStr;
 
 	tab = "\t\t";
 	outStr = tab + "DirectionalLight {\n";
@@ -131,7 +133,7 @@ void fk_VRMLOut::WriteVRMLLightInfo(ofstream &argOFS)
 
 void fk_VRMLOut::WriteVRMLNaviInfo(ofstream &argOFS)
 {
-	string	outStr, tab;
+	string outStr, tab;
 
 	tab = "\t\t";
 	outStr = tab + "NavigationInfo {\n";
@@ -148,8 +150,8 @@ void fk_VRMLOut::WriteVRMLNaviInfo(ofstream &argOFS)
 
 void fk_VRMLOut::WriteVRMLMaterial(ofstream &argOFS, fk_Material *argMaterial)
 {
-	fk_Color		*curColor;
-	stringstream	ss;
+	fk_Color *curColor;
+	stringstream ss;
 
 	if(argMaterial == nullptr) return;
 
@@ -196,11 +198,11 @@ void fk_VRMLOut::WriteVRMLMaterial(ofstream &argOFS, fk_Material *argMaterial)
 
 void fk_VRMLOut::WriteVRMLPointData_Solid(ofstream &argOFS)
 {
-	fk_Vertex		*curV;
-	fk_Vector		pos;
-	stringstream	ss;
+	fk_Vertex *curV;
+	fk_Vector pos;
+	stringstream ss;
 	
-	curV = solid->getNextV(nullptr);
+	curV = _m->solid->getNextV(nullptr);
 
     argOFS << "\t\t\tgeometry IndexedFaceSet {" << endl;
 	argOFS << "\t\t\t\tcoord DEF C Coordinate {" << endl;
@@ -211,7 +213,7 @@ void fk_VRMLOut::WriteVRMLPointData_Solid(ofstream &argOFS)
 		argOFS << "\t\t\t\t\t\t";
 		argOFS << pos.x << " " << pos.y << " " << pos.z;
 
-		curV = solid->getNextV(curV);
+		curV = _m->solid->getNextV(curV);
 
 		if(curV != nullptr) {
 			argOFS << ",";
@@ -229,17 +231,17 @@ void fk_VRMLOut::WriteVRMLPointData_Solid(ofstream &argOFS)
 
 void fk_VRMLOut::WriteVRMLPointData_IFS(ofstream &argOFS)
 {
-	fk_Vector		pos;
-	int				i, pSize;
+	fk_Vector pos;
+	int i, pSize;
 	
 	argOFS << "\t\t\tgeometry IndexedFaceSet {" << endl;
 	argOFS << "\t\t\t\tcoord DEF C Coordinate {" << endl;
 	argOFS << "\t\t\t\t\tpoint [" << endl;
 
-	pSize = ifset->getPosSize();
+	pSize = _m->ifset->getPosSize();
 	for(i = 0; i < pSize; i++) {
 		
-		pos = ifset->getPosVec(i);
+		pos = _m->ifset->getPosVec(i);
 		argOFS << "\t\t\t\t\t\t";
 		argOFS << pos.x << " " << pos.y << " " << pos.z;
 
@@ -256,32 +258,32 @@ void fk_VRMLOut::WriteVRMLPointData_IFS(ofstream &argOFS)
 
 void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 {
-	fk_Loop					*curL;
-	vector<fk_Vertex *>		vArray;
-	fk_Vertex				*tmpV;
-	_st						i, maxID, mapID;
-	vector<_st>				vMap;
-	int						tmpI;
+	fk_Loop *curL;
+	vector<fk_Vertex *> vArray;
+	fk_Vertex *tmpV;
+	_st i, maxID, mapID;
+	vector<_st> vMap;
+	int tmpI;
 
 	vMap.clear();
-	tmpV = solid->getLastV();
+	tmpV = _m->solid->getLastV();
 	if(tmpV == nullptr) return;
 	maxID = static_cast<_st>(tmpV->getID());
 	vMap.resize(maxID+1);
 	mapID = 0;
 	for(i = 1; i <= maxID; i++) {
-		if(solid->existVertex(static_cast<int>(i)) == true) {
+		if(_m->solid->existVertex(static_cast<int>(i)) == true) {
 			vMap[i] = mapID;
 			mapID++;
 		}
 	}
 
-	curL = solid->getNextL(nullptr);
+	curL = _m->solid->getNextL(nullptr);
 
 	argOFS << "\t\t\t\tcoordIndex [" << endl;
 
 	while(curL != nullptr) {
-		vArray = solid->getAllVOnL(curL);
+		vArray = _m->solid->getAllVOnL(curL);
 
 		if(triFlag == true && vArray.size() == 4) {
 			// 四角形を二つの三角形に分割
@@ -320,7 +322,7 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 			argOFS << "-1";
 		}
 
-		curL = solid->getNextL(curL);
+		curL = _m->solid->getNextL(curL);
 		if(curL != nullptr) {
 			argOFS << ",";
 		}
@@ -334,17 +336,17 @@ void fk_VRMLOut::WriteVRMLIFData_Solid(ofstream &argOFS, bool triFlag)
 
 void fk_VRMLOut::WriteVRMLIFData_IFS(ofstream &argOFS, bool)
 {
-	vector<int>		fData;
-	_st				fSize, i, j;
+	vector<int> fData;
+	_st fSize, i, j;
 
 
-	fSize = static_cast<_st>(ifset->getFaceSize());
+	fSize = static_cast<_st>(_m->ifset->getFaceSize());
 
 	argOFS << "\t\t\t\tcoordIndex [" << endl;
 	
 	for(i = 0; i < fSize; i++) {
 		argOFS << "\t\t\t\t\t\t";
-		fData = ifset->getFaceData(static_cast<int>(i));
+		fData = _m->ifset->getFaceData(static_cast<int>(i));
 		for(j = 0; j < fData.size(); j++) {
 			argOFS << fData[j] << ", ";
 		}
@@ -361,7 +363,7 @@ void fk_VRMLOut::WriteVRMLIFData_IFS(ofstream &argOFS, bool)
 
 void fk_VRMLOut::WriteVRMLFooter(ofstream &argOFS, fk_VRMLOutMode argMode)
 {
-	string 	outStr, tab;
+	string outStr, tab;
 
 	outStr.erase();
 
@@ -391,12 +393,12 @@ void fk_VRMLOut::WriteVRMLCoordInterp(ofstream &argOFS,
 									  vector<double> *argTime,
 									  vector<fk_Vector> *argPos)
 {
-	_st				i;
-	string			baseTab = "\t\t";
-	string			tab;
-	string			buf;
-	fk_Vector		tmpPos;
-	stringstream	ss;
+	_st i;
+	string baseTab = "\t\t";
+	string tab;
+	string buf;
+	fk_Vector tmpPos;
+	stringstream ss;
 	
 	tab = baseTab;
 	buf = tab + "DEF CI CoordinateInterpolator {\n";

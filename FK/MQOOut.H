@@ -16,6 +16,22 @@ namespace FK {
 
 	class fk_MQOOut {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Solid *solid;
+			fk_IndexFaceSet *ifs;
+			std::map<fk_Vertex *, int> vertIDMap;
+
+			std::vector<std::string> mBuf;
+			std::vector<std::string> vBuf;
+			std::vector<std::string> fBuf;
+
+			Member(void);
+		};
+			
+#endif
+
 	public:
 
 		fk_MQOOut(void);
@@ -23,27 +39,22 @@ namespace FK {
 		fk_MQOOut(fk_IndexFaceSet *);
 		virtual ~fk_MQOOut();
 
-		void				SetSolid(fk_Solid *);
-		void				SetIndexFaceSet(fk_IndexFaceSet *);
-		bool				WriteMQOFile(std::string);
+		void SetSolid(fk_Solid *);
+		void SetIndexFaceSet(fk_IndexFaceSet *);
+		bool WriteMQOFile(std::string);
 
 	private:
-		fk_Solid					*solid;
-		fk_IndexFaceSet				*ifs;
-		std::map<fk_Vertex *, int>	vertIDMap;
 
-		std::vector<std::string>	mBuf;
-		std::vector<std::string>	vBuf;
-		std::vector<std::string>	fBuf;
+		std::unique_ptr<Member> _m;
 
-		void				Init(void);
-		bool				Convert(void);
-		bool				Convert_Solid(void);
-		bool				Convert_IFS(void);
-		void				MakeVertexIDMap_Solid(void);
-		void				MakeVertexIDMap_IFS(void);
-		void				MakeMaterialPalette(fk_Type);
-		float				CalcMonotoneLuminance(fk_Color *);
+		void Init(void);
+		bool Convert(void);
+		bool Convert_Solid(void);
+		bool Convert_IFS(void);
+		void MakeVertexIDMap_Solid(void);
+		void MakeVertexIDMap_IFS(void);
+		void MakeMaterialPalette(fk_Type);
+		float CalcMonotoneLuminance(fk_Color *);
 	};
 }
 

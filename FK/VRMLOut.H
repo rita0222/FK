@@ -12,40 +12,48 @@ namespace FK {
 	class fk_Material;
 
 	class fk_VRMLOut {
+
+		enum class fk_VRMLOutMode {
+			NONE,
+			INTR
+		};
+
+		class Member {
+		public:
+			fk_Solid *solid;
+			fk_IndexFaceSet *ifset;
+
+			Member(void);
+		};
+
 	public:
 
 		fk_VRMLOut(fk_Solid *);
 		fk_VRMLOut(fk_IndexFaceSet *);
 		virtual ~fk_VRMLOut();
 
-		bool	WriteVRMLFile(std::string, fk_Material *, bool);
-		bool	WriteVRMLFile(std::string, std::vector<double> *,
+		bool WriteVRMLFile(std::string, fk_Material *, bool);
+		bool WriteVRMLFile(std::string, std::vector<double> *,
 							  std::vector<fk_Vector> *,
 							  fk_Material *, bool);
 
 	private:
-		enum class fk_VRMLOutMode {
-			NONE,
-			INTR
-		};
+		std::unique_ptr<Member> _m;
 
-		fk_Solid		*solid;
-		fk_IndexFaceSet	*ifset;
-
-		void			WriteVRMLHeader(std::ofstream &);
-		void			WriteVRMLShape(std::ofstream &, fk_Material *, bool,
+		void WriteVRMLHeader(std::ofstream &);
+		void WriteVRMLShape(std::ofstream &, fk_Material *, bool,
 									   std::vector<double> *,
 									   std::vector<fk_Vector> *);
-		void			WriteVRMLMaterial(std::ofstream &, fk_Material *);
-		void			WriteVRMLPointData_Solid(std::ofstream &);
-		void			WriteVRMLIFData_Solid(std::ofstream &, bool);
-		void			WriteVRMLPointData_IFS(std::ofstream &);
-		void			WriteVRMLIFData_IFS(std::ofstream &, bool);
-		void			WriteVRMLLightInfo(std::ofstream &);
-		void			WriteVRMLNaviInfo(std::ofstream &);
-		void			WriteVRMLFooter(std::ofstream &, fk_VRMLOutMode);
-		void			WriteVRMLCoordInterp(std::ofstream &, std::vector<double> *,
-											 std::vector<fk_Vector> *);
+		void WriteVRMLMaterial(std::ofstream &, fk_Material *);
+		void WriteVRMLPointData_Solid(std::ofstream &);
+		void WriteVRMLIFData_Solid(std::ofstream &, bool);
+		void WriteVRMLPointData_IFS(std::ofstream &);
+		void WriteVRMLIFData_IFS(std::ofstream &, bool);
+		void WriteVRMLLightInfo(std::ofstream &);
+		void WriteVRMLNaviInfo(std::ofstream &);
+		void WriteVRMLFooter(std::ofstream &, fk_VRMLOutMode);
+		void WriteVRMLCoordInterp(std::ofstream &, std::vector<double> *,
+								  std::vector<fk_Vector> *);
 	};
 }
 

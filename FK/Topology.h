@@ -26,6 +26,17 @@ namespace FK {
 
 	class fk_Topology : public fk_Attribute {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int ID;
+			bool ariveFlg;
+			fk_TopologyType type;
+
+			Member(void);
+		};
+#endif
+
 
 	public:
 		//! コンストラクタ
@@ -37,7 +48,7 @@ namespace FK {
 		/*!
 		 *	\return 位相要素ID
 		 */
-		int		getID(void) const;
+		int getID(void) const;
 
 		//! 位相タイプ取得関数
 		/*!
@@ -50,24 +61,20 @@ namespace FK {
 		 *	\retval fk_TopologyType::INDEXFACE	インデックスフェースセットを表します。
 		 *	\retval fk_TopologyType::UNDEFINED	未定義な位相要素を表します。
 		 */
-		fk_TopologyType		getType(void) const;
+		fk_TopologyType getType(void) const;
 
 	private:
-		int					ID;
-		bool				ariveFlg;
-		fk_TopologyType		type;
-		void				SetType(fk_TopologyType);
+		std::shared_ptr<Member> _m;
+		void SetType(fk_TopologyType);
 	
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_DataBase			*DB;
-		void				SetID(int);
-		void				InitTopology(fk_DataBase *, int, fk_TopologyType);
-
-
-		void				DeleteElem(void);
-		bool				CloneElem(fk_Topology *);
+		fk_DataBase *DB;
+		void SetID(int);
+		void InitTopology(fk_DataBase *, int, fk_TopologyType);
+		void DeleteElem(void);
+		bool CloneElem(fk_Topology *);
 #endif
 	};
 }

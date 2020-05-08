@@ -19,35 +19,42 @@ namespace FK {
 
 	class fk_IFSetHandle {
 
-		friend class			fk_Modify;
+		friend class fk_Modify;
+
+		class Member {
+		public:
+			fk_DataBase * DB;
+			std::map<int, int> edgeCount;
+
+			Member(void);
+		};
 
 	public:
 		fk_IFSetHandle(fk_DataBase * = nullptr);
 		virtual ~fk_IFSetHandle() {};
 
-		void			Init(void);
-		void			SetDataBase(fk_DataBase *);
-		fk_DataBase *	GetDataBase(void);
-		bool			SetIndexFaceSet(std::vector<fk_Vector> *,
-										std::vector< std::vector<int> > *,
-										bool = true);
-		bool			RefineTopology(void);
+		void Init(void);
+		void SetDataBase(fk_DataBase *);
+		fk_DataBase * GetDataBase(void);
+		bool SetIndexFaceSet(std::vector<fk_Vector> *,
+							 std::vector< std::vector<int> > *,
+							 bool = true);
+		bool RefineTopology(void);
 
 	private:
-		fk_DataBase *		DB;
-		std::map<int, int>	edgeCount;
+		std::unique_ptr<Member> _m;
 
-		bool		DB_Check(void);
-		fk_Edge *	CheckExistEdge(int, int, fk_IFS_EdgeSet *);
-		bool		MakeLoopEdgeSet(std::vector< std::vector<int> >::iterator,
+		bool DB_Check(void);
+		fk_Edge * CheckExistEdge(int, int, fk_IFS_EdgeSet *);
+		bool MakeLoopEdgeSet(std::vector< std::vector<int> >::iterator,
 									fk_IFS_EdgeSet *, bool);
-		fk_Half *	MakeNewEdge(int, int, fk_IFS_EdgeSet *);
-		void		MakeNewLoop(std::vector<fk_Half *> *, bool);
-		bool		DefineNewEH(int, int, fk_IFS_EdgeSet *,
-								std::vector<fk_Half *> *,
-								std::vector<fk_Half *> *, bool);
-		bool		SearchUndefLoop(fk_Half *);
-		int			GetEdgeCountNum(int);
+		fk_Half * MakeNewEdge(int, int, fk_IFS_EdgeSet *);
+		void MakeNewLoop(std::vector<fk_Half *> *, bool);
+		bool DefineNewEH(int, int, fk_IFS_EdgeSet *,
+						 std::vector<fk_Half *> *,
+						 std::vector<fk_Half *> *, bool);
+		bool SearchUndefLoop(fk_Half *);
+		int GetEdgeCountNum(int);
 	};
 }
 

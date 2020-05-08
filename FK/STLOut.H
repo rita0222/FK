@@ -8,18 +8,26 @@ namespace FK {
 	class fk_IndexFaceSet;
 
 	class fk_STLOut {
+
+		class Member {
+		public:
+			fk_Solid *solid;
+			fk_IndexFaceSet *ifset;
+
+			Member(void);
+		};
+		
 	public:
 		fk_STLOut(fk_Solid *);
 		fk_STLOut(fk_IndexFaceSet *);
 		virtual ~fk_STLOut();
 
-		bool	WriteSTLFile(std::string);
+		bool WriteSTLFile(std::string);
 
 	private:
-		fk_Solid		*solid;
-		fk_IndexFaceSet	*ifset;
-		bool			WriteSTLShape_Solid(std::ofstream *);
-		bool			WriteSTLShape_IFS(std::ofstream *);
+		std::unique_ptr<Member> _m;
+		bool WriteSTLShape_Solid(std::ofstream *);
+		bool WriteSTLShape_IFS(std::ofstream *);
 	};
 }
 #endif // !__FK_STL_OUT_HEADER__

@@ -64,6 +64,16 @@ namespace FK {
 	 */
 
 	class fk_Solid : public fk_SolidBase {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_DataBase SolidDB;
+			//fk_Palette localPal;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -81,7 +91,7 @@ namespace FK {
 		 *		true の場合、インスタンス中に設定されていたマテリアルに関する情報も
 		 *		合わせて消去します。false の場合、マテリアル情報は存続させます。
 		 */
-		void				allClear(bool matFlg = true);
+		void allClear(bool matFlg = true);
 
 		//! 空形状状態参照関数
 		/*!
@@ -89,7 +99,7 @@ namespace FK {
 		 *
 		 *	\return		形状情報が空の場合 true を、そうでない場合は false を返します。
 		 */
-		bool				isEmpty(void);
+		bool isEmpty(void);
 
 		//! 形状コピー関数
 		/*!
@@ -98,7 +108,7 @@ namespace FK {
 		 *
 		 *	\param[in]		solid		複写元インスタンス
 		 */
-		void				cloneShape(fk_Solid *solid);
+		void cloneShape(fk_Solid *solid);
 
 		//! 形状同値比較関数
 		/*!
@@ -110,7 +120,7 @@ namespace FK {
 		 *
 		 *	\return		同じであれば true を、異なれば false を返します。
 		 */
-		bool				compareShape(fk_Solid *solid);
+		bool compareShape(fk_Solid *solid);
 
 		//! \name ファイル入力関数
 		///@{
@@ -123,7 +133,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readSMFFile(std::string fileName);
+		bool readSMFFile(std::string fileName);
 
 		//! SRFファイル入力関数
 		/*!
@@ -133,7 +143,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readSRFFile(std::string fileName);
+		bool readSRFFile(std::string fileName);
 
 		//! VRML ファイル入力関数
 		/*!
@@ -166,9 +176,7 @@ namespace FK {
 		 *		様々なデータによって異なる解釈がなされているようです。
 		 *		そのため、構文解析がうまくいかずに入力失敗する場合がありえます。
 		 */
-		bool				readVRMLFile(std::string fileName,
-										 bool materialFlg = true,
-										 bool solidFlg = true);
+		bool readVRMLFile(std::string fileName, bool materialFlg = true, bool solidFlg = true);
 
 		//! STL ファイル入力関数
 		/*!
@@ -190,9 +198,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readSTLFile(std::string fileName,
-										bool solidFlg = true,
-										double tolerance = 1.0e-08);
+		bool readSTLFile(std::string fileName, bool solidFlg = true, double tolerance = 1.0e-08);
 
 		//! HRCファイル入力関数
 		/*!
@@ -202,7 +208,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readHRCFile(std::string fileName);
+		bool readHRCFile(std::string fileName);
 
 		//! RDSファイル入力関数
 		/*!
@@ -218,8 +224,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readRDSFile(std::string fileName,
-										bool solidFlg = true);
+		bool readRDSFile(std::string fileName, bool solidFlg = true);
 
 		//! DXFファイル入力関数
 		/*!
@@ -235,8 +240,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readDXFFile(std::string fileName,
-										bool solidFlg = true);
+		bool readDXFFile(std::string fileName, bool solidFlg = true);
 
 		//! MQOファイル入力関数1
 		/*!
@@ -276,11 +280,11 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readMQOFile(std::string fileName,
-										std::string objName,
-										bool solidFlg = true,
-										bool contFlg = true,
-										bool materialFlg = false);
+		bool readMQOFile(std::string fileName,
+						 std::string objName,
+						 bool solidFlg = true,
+						 bool contFlg = true,
+						 bool materialFlg = false);
 
 
 		//! MQOファイル入力関数2
@@ -327,12 +331,12 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool				readMQOFile(std::string fileName,
-										std::string objName,
-										int materialID,
-										bool solidFlg = true,
-										bool contFlg = true,
-										bool materialFlg = false);
+		bool readMQOFile(std::string fileName,
+						 std::string objName,
+						 int materialID,
+						 bool solidFlg = true,
+						 bool contFlg = true,
+						 bool materialFlg = false);
 
 		//! DirectX (D3DX) ファイル入力関数1
 		/*!
@@ -363,9 +367,9 @@ namespace FK {
 		 *
 		 *	\sa fk_IFSTexture::readD3DXFile()
 		 */
-		bool				readD3DXFile(std::string fileName,
-										 std::string objName,
-										 bool solidFlg = true);
+		bool readD3DXFile(std::string fileName,
+						  std::string objName,
+						  bool solidFlg = true);
 
 		//! DirectX (D3DX) ファイル入力関数2
 		/*!
@@ -402,10 +406,10 @@ namespace FK {
 		 *
 		 *	\sa fk_IFSTexture::readD3DXFile()
 		 */
-		bool				readD3DXFile(std::string fileName,
-										 std::string objName,
-										 int materialID,
-										 bool solidFlg = true);
+		bool readD3DXFile(std::string fileName,
+						  std::string objName,
+						  int materialID,
+						  bool solidFlg = true);
 		///@}
 
 		//! \name ファイル出力関数
@@ -426,9 +430,9 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				writeVRMLFile(std::string fileName,
-										  fk_Material *material = nullptr,
-										  bool triFlg = false);
+		bool writeVRMLFile(std::string fileName,
+						   fk_Material *material = nullptr,
+						   bool triFlg = false);
 
 		//! VRML ファイル出力関数2
 		/*!
@@ -454,11 +458,11 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				writeVRMLFile(std::string fileName,
-										  std::vector<double> *time,
-										  std::vector<fk_Vector> *pos,
-										  fk_Material *material = nullptr,
-										  bool triFlg = false);
+		bool writeVRMLFile(std::string fileName,
+						   std::vector<double> *time,
+						   std::vector<fk_Vector> *pos,
+						   fk_Material *material = nullptr,
+						   bool triFlg = false);
 
 		//! STL ファイル出力関数
 		/*!
@@ -468,7 +472,7 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				writeSTLFile(std::string fileName);
+		bool writeSTLFile(std::string fileName);
 
 		//! DXF ファイル出力関数
 		/*!
@@ -482,8 +486,8 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				writeDXFFile(std::string fileName,
-										 bool triFlg = false);
+		bool writeDXFFile(std::string fileName,
+						  bool triFlg = false);
 
 		//! MQO ファイル出力関数
 		/*!
@@ -493,18 +497,17 @@ namespace FK {
 		 *
 		 *	\return ファイルの出力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				writeMQOFile(std::string fileName);
+		bool writeMQOFile(std::string fileName);
 
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		bool				AllCheck(void);
-		void				PrintMat(std::string = "");
+		bool AllCheck(void);
+		void PrintMat(std::string = "");
 #endif
 
 	private:
-		fk_DataBase			*SolidDB;
-		fk_Palette			localPal;
+		std::unique_ptr<Member> _m;
 	};
 }
 

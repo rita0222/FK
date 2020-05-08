@@ -17,27 +17,29 @@
 using namespace std;
 using namespace FK;
 
-fk_Solid::fk_Solid(void)
+fk_Solid::Member::Member(void)
+{
+	return;
+}
+
+fk_Solid::fk_Solid(void) : _m(make_unique<Member>())
 {
 	realType = fk_RealShapeType::SOLID;
-	SolidDB = new fk_DataBase;
 
 	SetObjectType(fk_Type::SOLID);
-	SetDataBase(SolidDB);
-	SetPaletteData(&localPal);
+	SetDataBase(&_m->SolidDB);
+	//SetPaletteData(&localPal);
 	return;
 }
 
 fk_Solid::~fk_Solid()
 {
-	delete SolidDB;
-
 	return;
 }
 
 void fk_Solid::allClear(bool argMateFlg)
 {
-	SolidDB->AllClear();
+	_m->SolidDB.AllClear();
 	AttrInit();
 	if(argMateFlg == true) {
 		clearMaterial();
@@ -55,92 +57,74 @@ bool fk_Solid::isEmpty(void)
 void fk_Solid::cloneShape(fk_Solid *argS)
 {
 	AllCacheClear();
-	SolidDB->CloneData(argS->SolidDB);
+	_m->SolidDB.CloneData(&argS->_m->SolidDB);
 	AllCacheMake();
 	return;
 }
 
 bool fk_Solid::compareShape(fk_Solid *argS)
 {
-	return SolidDB->Compare(argS->SolidDB);
+	return _m->SolidDB.Compare(&argS->_m->SolidDB);
 }
 
 bool fk_Solid::AllCheck(void)
 {
-	return SolidDB->AllCheck();
+	return _m->SolidDB.AllCheck();
 }
 
 bool fk_Solid::readSMFFile(string argFileName)
 {
-	fk_SMFParser	*smfParser = new fk_SMFParser();
-	bool			retFlg;
+	unique_ptr<fk_SMFParser> smfParser(new fk_SMFParser());
 
 	smfParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = smfParser->ReadSMFFile(argFileName);
-	delete smfParser;
-	return retFlg;
+	return smfParser->ReadSMFFile(argFileName);
 }
 
 bool fk_Solid::readSRFFile(string argFileName)
 {
-	fk_SRFParser	*srfParser = new fk_SRFParser();
-	bool			retFlg;
+	unique_ptr<fk_SRFParser> srfParser(new fk_SRFParser());
 
 	srfParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = srfParser->ReadSRFFile(argFileName);
-	delete srfParser;
-	return retFlg;
+	return srfParser->ReadSRFFile(argFileName);
 }
 
 bool fk_Solid::readSTLFile(string argFileName,
 						   bool argSolidFlag, double argEPS)
 {
-	fk_STLParser	*stlParser = new fk_STLParser();
-	bool			retFlg;
+	unique_ptr<fk_STLParser> stlParser(new fk_STLParser());
 
 	stlParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = stlParser->ReadSTLFile(argFileName, argSolidFlag, argEPS);
-	delete stlParser;
-	return retFlg;
+	return stlParser->ReadSTLFile(argFileName, argSolidFlag, argEPS);
 }
 
 bool fk_Solid::readHRCFile(string argFileName)
 {
-	fk_HRCParser	*hrcParser = new fk_HRCParser();
-	bool			retFlg;
+	unique_ptr<fk_HRCParser> hrcParser(new fk_HRCParser());
 
 	hrcParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = hrcParser->ReadHRCFile(argFileName);
-	delete hrcParser;
-	return retFlg;
+	return hrcParser->ReadHRCFile(argFileName);
 }
 
 bool fk_Solid::readRDSFile(string argFileName, bool argSolidFlg)
 {
-	fk_RDSParser	*rdsParser = new fk_RDSParser();
-	bool			retFlg;
+	unique_ptr<fk_RDSParser> rdsParser(new fk_RDSParser());
 
 	rdsParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = rdsParser->ReadRDSFile(argFileName, argSolidFlg);
-	delete rdsParser;
-	return retFlg;
+	return rdsParser->ReadRDSFile(argFileName, argSolidFlg);
 }
 
 bool fk_Solid::readDXFFile(string argFileName, bool argSolidFlg)
 {
-	fk_DXFParser	*dxfParser = new fk_DXFParser();
-	bool			retFlg;
+	unique_ptr<fk_DXFParser> dxfParser(new fk_DXFParser());
 
 	dxfParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = dxfParser->ReadDXFFile(argFileName, argSolidFlg);
-	delete dxfParser;
-	return retFlg;
+	return dxfParser->ReadDXFFile(argFileName, argSolidFlg);
 }
 
 bool fk_Solid::readMQOFile(string argFileName,
@@ -149,25 +133,20 @@ bool fk_Solid::readMQOFile(string argFileName,
 						   bool argContFlg,
 						   bool argMatFlg)
 {
-	return readMQOFile(argFileName, argObjName, -1, argSolidFlg,
-					   argContFlg, argMatFlg);
+	return readMQOFile(argFileName, argObjName, -1, argSolidFlg, argContFlg, argMatFlg);
 }
 
 bool fk_Solid::readMQOFile(string argFileName, string argObjName,
 						   int argMateID, bool argSolidFlg,
 						   bool argContFlg, bool argMatFlg)
 {
-	fk_MQOParser	*mqoParser = new fk_MQOParser();
-	bool			retFlg;
+	unique_ptr<fk_MQOParser> mqoParser(new fk_MQOParser());
 
 	mqoParser->SetMeshData(this);
 	AllCacheClear();
 	mqoParser->SetContMode(argContFlg);
 	mqoParser->SetMaterialMode(argMatFlg);
-	retFlg = mqoParser->ReadMQOFile(argFileName, argObjName,
-									argMateID, argSolidFlg);
-	delete mqoParser;
-	return retFlg;
+	return mqoParser->ReadMQOFile(argFileName, argObjName, argMateID, argSolidFlg);
 }
 
 bool fk_Solid::readD3DXFile(string argFileName,
@@ -179,41 +158,29 @@ bool fk_Solid::readD3DXFile(string argFileName,
 bool fk_Solid::readD3DXFile(string argFileName, string argObjName,
 							int argTexID, bool argSolidFlg)
 {
-	fk_D3DXParser	*d3dxParser = new fk_D3DXParser();
-	bool			retFlg;
-	bool			animFlg;
+	unique_ptr<fk_D3DXParser> d3dxParser(new fk_D3DXParser());
+	bool animFlg;
 
 	d3dxParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = d3dxParser->ReadD3DXFile(argFileName, argObjName,
-									  argTexID, argSolidFlg, &animFlg);
-	delete d3dxParser;
-	return retFlg;
+	return d3dxParser->ReadD3DXFile(argFileName, argObjName, argTexID, argSolidFlg, &animFlg);
 }
 
 bool fk_Solid::readVRMLFile(string argFileName,
 							bool argMaterialFlag, bool argSolidFlag)
 {
-	fk_VRMLParser	*vrmlParser = new fk_VRMLParser();
-	bool			retFlg;
+	unique_ptr<fk_VRMLParser> vrmlParser(new fk_VRMLParser());
 
 	vrmlParser->SetMeshData(this);
 	AllCacheClear();
-	retFlg = vrmlParser->ReadVRMLFile(argFileName, argMaterialFlag,
-									  argSolidFlag);
-	delete vrmlParser;
-	return retFlg;
+	return vrmlParser->ReadVRMLFile(argFileName, argMaterialFlag, argSolidFlag);
 }
 
 bool fk_Solid::writeVRMLFile(string argFileName, fk_Material *argMaterial,
 							 bool triFlag)
 {
-	fk_VRMLOut		*vrmlOut = new fk_VRMLOut(this);
-	bool			retFlg;
-
-	retFlg = vrmlOut->WriteVRMLFile(argFileName, argMaterial, triFlag);
-	delete vrmlOut;
-	return retFlg;
+	unique_ptr<fk_VRMLOut> vrmlOut(new fk_VRMLOut(this));
+	return vrmlOut->WriteVRMLFile(argFileName, argMaterial, triFlag);
 }
 
 bool fk_Solid::writeVRMLFile(string argFileName,
@@ -221,48 +188,33 @@ bool fk_Solid::writeVRMLFile(string argFileName,
 							 vector<fk_Vector> *argPos,
 							 fk_Material *argMaterial, bool triFlag)
 {
-	fk_VRMLOut		*vrmlOut = new fk_VRMLOut(this);
-	bool			retFlg;
+	unique_ptr<fk_VRMLOut> vrmlOut(new fk_VRMLOut(this));
 
-	retFlg = vrmlOut->WriteVRMLFile(argFileName, argTime, argPos,
-									argMaterial, triFlag);
-	delete vrmlOut;
-	return retFlg;
+	return vrmlOut->WriteVRMLFile(argFileName, argTime, argPos, argMaterial, triFlag);
 }
 
 bool fk_Solid::writeSTLFile(string argFileName)
 {
-	fk_STLOut		*stlOut = new fk_STLOut(this);
-	bool			retFlg;
-
-	retFlg = stlOut->WriteSTLFile(argFileName);
-	delete stlOut;
-	return retFlg;
+	unique_ptr<fk_STLOut> stlOut(new fk_STLOut(this));
+	return stlOut->WriteSTLFile(argFileName);
 }
 
 bool fk_Solid::writeDXFFile(string argFileName, bool argTriFlg)
 {
-	fk_DXFOut		*dxfOut = new fk_DXFOut(this);
-	bool			retFlg;
-
-	retFlg = dxfOut->WriteDXFFile(argFileName, argTriFlg);
-	delete dxfOut;
-	return retFlg;
+	unique_ptr<fk_DXFOut> dxfOut(new fk_DXFOut(this));
+	return dxfOut->WriteDXFFile(argFileName, argTriFlg);
 }
 
 bool fk_Solid::writeMQOFile(string argFileName)
 {
-	fk_MQOOut		*mqoOut = new fk_MQOOut(this);
-	bool			retFlg;
-
-	retFlg = mqoOut->WriteMQOFile(argFileName);
-	delete mqoOut;
-	return retFlg;
+	unique_ptr<fk_MQOOut> mqoOut(new fk_MQOOut(this));
+	return mqoOut->WriteMQOFile(argFileName);
 }
 
 void fk_Solid::PrintMat(string argTag)
 {
-	localPal.Print(0, argTag);
+	FK_UNUSED(argTag);
+	//localPal.Print(0, argTag);
 	return;
 }
 

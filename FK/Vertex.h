@@ -25,10 +25,24 @@ namespace FK {
 
 	class fk_Vertex : public fk_Topology {
 
-		friend class		fk_Operation;
-		friend class		fk_DataBase;
-		friend class		fk_IFSetHandle;
+		friend class fk_Operation;
+		friend class fk_DataBase;
+		friend class fk_IFSetHandle;
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Vector position;
+			fk_Vector normal;
+			bool normCalcFlag;
+			bool normFailFlag;
+			int oneHalf;
+			double size;
+
+			Member(void);
+		};
+
+#endif
 	public:
 		//! コンストラクタ
 		fk_Vertex(int = FK_UNDEFINED);
@@ -43,7 +57,7 @@ namespace FK {
 		 *
 		 *	\return 位置ベクトル
 		 */
-		fk_Vector	getPosition(void) const;
+		fk_Vector getPosition(void) const;
 
 		//! 接続半稜線取得関数
 		/*!
@@ -55,7 +69,7 @@ namespace FK {
 		 *		この頂点を始点とする半稜線を表すインスタンス。
 		 *		対象となる半稜線が存在しない場合は nullptr を返します。
 		 */
-		fk_Half *	getOneHalf(void) const;
+		fk_Half * getOneHalf(void) const;
 
 		//! 法線ベクトル取得関数
 		/*!
@@ -63,7 +77,7 @@ namespace FK {
 		 *
 		 *	\return 法線ベクトル。算出できなかった場合は零ベクトルを返します。
 		 */
-		fk_Vector	getNormal(void);
+		fk_Vector getNormal(void);
 
 		//! 描画サイズ取得関数
 		/*!
@@ -71,7 +85,7 @@ namespace FK {
 		 *
 		 *	\return 描画サイズ
 		 */
-		double		getDrawSize(void) const;
+		double getDrawSize(void) const;
 
 		//! 描画サイズ設定関数
 		/*!
@@ -83,33 +97,28 @@ namespace FK {
 		 *
 		 *	\param[in] size	描画サイズ
 		 */
-		void		setDrawSize(double size);
+		void setDrawSize(double size);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		void		Init(fk_DataBase *, int);
+		void Init(fk_DataBase *, int);
 
 		fk_Vector *	GetPositionP(void);
 		fk_Vector *	GetNormalP(void);
-		void		Print(void) const;
-		bool		Check(void) const;
-		bool		Compare(fk_Vertex *) const;
+		void Print(void) const;
+		bool Check(void) const;
+		bool Compare(fk_Vertex *) const;
 
 #endif
 
 	private:
-		fk_Vector	position;
-		fk_Vector	normal;
-		bool		normCalcFlag;
-		bool		normFailFlag;
-		int 		oneHalf;
-		double		size;
+		std::shared_ptr<Member> _m;
 
-		void		CalcNormal(void);
-		void		SetOneHalf(int);
-		void		UndefNormal(void);
-		void		SetPosition(fk_Vector);
-		void		SetNormal(const fk_Vector &);
+		void CalcNormal(void);
+		void SetOneHalf(int);
+		void UndefNormal(void);
+		void SetPosition(fk_Vector);
+		void SetNormal(const fk_Vector &);
 	};
 }
 

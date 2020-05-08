@@ -66,12 +66,8 @@ namespace FK {
 		 *	\sa fk_IndexFaceSet::makeIFSet()
 		 */
 
-		void		makeIFSet(int faceNum,
-							  int polyNum,
-							  int *IFSet,
-							  int vertexNum,
-							  fk_Vector *posArray,
-							  int order = 0);
+		void makeIFSet(int faceNum, int polyNum, int *IFSet, int vertexNum,
+					   fk_Vector *posArray, int order = 0);
 
 		//! 任意形状生成関数2
 		/*!
@@ -93,19 +89,16 @@ namespace FK {
 		 *	\param[in]	posArray	頂点位置ベクトルデータ配列
 		 *	\param[in]	order		最初の頂点IDを補正するオーダー。通常は省略して問題ありません。
 		 */
-		void		makeIFSet(std::vector< std::vector<int> > *faceArray,
-							  std::vector<fk_Vector> *posArray,
-							  int order = 0);
+		void makeIFSet(std::vector< std::vector<int> > *faceArray,
+					   std::vector<fk_Vector> *posArray,
+					   int order = 0);
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		bool		MakeMesh(std::vector<fk_Vector> *,
-							 std::vector< std::vector<int> > *,
-							 bool = true);
-
-		void		Init(void);
+		bool MakeMesh(std::vector<fk_Vector> *, std::vector< std::vector<int> > *, bool = true);
+		void Init(void);
 
 #endif
 

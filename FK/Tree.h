@@ -223,11 +223,6 @@ namespace FK {
 		 *		インスタンスの消去は自前で行うべきです。
 		 *
 		 *	\param[in]	object		ユーザ定義インスタンス
-		 *	\param[in]	deleteFlg
-		 *		true の場合、
-		 *		ノードの消去とともにユーザ定義インスタンスも消去 (delete) します。
-		 *		false の場合は、
-		 *		ノードの消去時にユーザ定義インスタンスの消去 (delete) を行いません。
 		 *
 		 *	\sa fk_TreeBaseObject, getName(), getObject()
 		 */

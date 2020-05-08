@@ -13,12 +13,17 @@ using namespace FK;
 
 typedef list<fk_Loop *>::iterator	loopIte;
 
+fk_MQOOut::Member::Member(void) :
+	solid(nullptr), ifs(nullptr)
+{
+	return;
+}
 
 bool fk_MQOOut::Convert(void)
 {
-	if(solid != nullptr) {
+	if(_m->solid != nullptr) {
 		return Convert_Solid();
-	} else if(ifs != nullptr) {
+	} else if(_m->ifs != nullptr) {
 		return Convert_IFS();
 	}
 	return false;
@@ -26,31 +31,31 @@ bool fk_MQOOut::Convert(void)
 
 bool fk_MQOOut::Convert_Solid(void)
 {
-	fk_Loop					*curL;
-	fk_Half					*startH, *curH;
-	fk_Vertex				*curV;
-	bool					tesseMode;
-	vector<int>				tmpFaceArray;
-	vector<fk_Vertex *>		*tesseVertexArray;
-	vector<int>				*tesseIDArray;
-	_st						i;
-	stringstream			ss;
+	fk_Loop *curL;
+	fk_Half *startH, *curH;
+	fk_Vertex *curV;
+	bool tesseMode;
+	vector<int> tmpFaceArray;
+	vector<fk_Vertex *> *tesseVertexArray;
+	vector<int> *tesseIDArray;
+	_st i;
+	stringstream ss;
 	
-	if(solid->checkDB() == false) return false;
+	if(_m->solid->checkDB() == false) return false;
 
 	MakeMaterialPalette(fk_Type::SOLID);
 	MakeVertexIDMap_Solid();
-	fBuf.clear();
+	_m->fBuf.clear();
 
-	for(curL = solid->getNextL(nullptr);
+	for(curL = _m->solid->getNextL(nullptr);
 		curL != nullptr;
-		curL = solid->getNextL(curL)) {
+		curL = _m->solid->getNextL(curL)) {
 
 		startH = curH = curL->getOneHalf();
 		tmpFaceArray.clear();
 		do {
 			curV = curH->getVertex();
-			tmpFaceArray.push_back(vertIDMap[curV]);
+			tmpFaceArray.push_back(_m->vertIDMap[curV]);
 			curH = curH->getNextHalf();
 		} while(startH != curH);
 
@@ -63,7 +68,7 @@ bool fk_MQOOut::Convert_Solid(void)
 			ss << " " << tmpFaceArray[1];
 			ss << " " << tmpFaceArray[0];
 			ss << ")";
-			fBuf.push_back(ss.str());
+			_m->fBuf.push_back(ss.str());
 
 			break;
 
@@ -74,7 +79,7 @@ bool fk_MQOOut::Convert_Solid(void)
 			ss << " " << tmpFaceArray[1];
 			ss << " " << tmpFaceArray[0];
 			ss << ")";
-			fBuf.push_back(ss.str());
+			_m->fBuf.push_back(ss.str());
 			break;
 
 		  default:
@@ -87,7 +92,7 @@ bool fk_MQOOut::Convert_Solid(void)
 			tesseIDArray = curL->GetTesselateIndex();
 			for(i = 0; i < tesseIDArray->size(); i++) {
 				curV = tesseVertexArray->at(static_cast<_st>(tesseIDArray->at(i)));
-				tmpFaceArray.push_back(vertIDMap[curV]);
+				tmpFaceArray.push_back(_m->vertIDMap[curV]);
 			}
 
 			for(i = 0; i < tesseIDArray->size(); i += 3) {
@@ -96,7 +101,7 @@ bool fk_MQOOut::Convert_Solid(void)
 				ss << " " << tmpFaceArray[i+1];
 				ss << " " << tmpFaceArray[i];
 				ss << ")";
-				fBuf.push_back(ss.str());
+				_m->fBuf.push_back(ss.str());
 			}
 
 			curL->setTesselateMode(tesseMode);
@@ -111,18 +116,18 @@ bool fk_MQOOut::Convert_Solid(void)
 
 void fk_MQOOut::MakeVertexIDMap_Solid(void)
 {
-	int				id = 0;
-	fk_Vertex		*v;
-	fk_Vector		*p;
-	stringstream	ss;
-	vBuf.clear();
-	vertIDMap.clear();
-	for(v = solid->getNextV(nullptr); v != nullptr; v = solid->getNextV(v)) {
-		vertIDMap[v] = id;
+	int id = 0;
+	fk_Vertex *v;
+	fk_Vector *p;
+	stringstream ss;
+	_m->vBuf.clear();
+	_m->vertIDMap.clear();
+	for(v = _m->solid->getNextV(nullptr); v != nullptr; v = _m->solid->getNextV(v)) {
+		_m->vertIDMap[v] = id;
 		p = v->GetPositionP();
 		ss.clear();
 		ss << p->x << " " << p->y << " " << p->z;
-		vBuf.push_back(ss.str());
+		_m->vBuf.push_back(ss.str());
 		id++;
 	}
 
@@ -131,20 +136,20 @@ void fk_MQOOut::MakeVertexIDMap_Solid(void)
 
 bool fk_MQOOut::Convert_IFS(void)
 {
-	int				i;
-	vector<int>		fData;
-	int				curMate = -1;
-	stringstream	ss;
+	int i;
+	vector<int> fData;
+	int curMate = -1;
+	stringstream ss;
 
 	MakeMaterialPalette(fk_Type::INDEXFACESET);
 	MakeVertexIDMap_IFS();
-	fBuf.clear();
+	_m->fBuf.clear();
 
-	for(i = 0; i < ifs->getFaceSize(); i++) {
-		if(mBuf.empty() == false) {
-			curMate = ifs->getElemMaterialID(i);
+	for(i = 0; i < _m->ifs->getFaceSize(); i++) {
+		if(_m->mBuf.empty() == false) {
+			curMate = _m->ifs->getElemMaterialID(i);
 		}
-		fData = ifs->getFaceData(i);
+		fData = _m->ifs->getFaceData(i);
 
 		switch(fData.size()) {
 		  case 3:
@@ -153,7 +158,7 @@ bool fk_MQOOut::Convert_IFS(void)
 			ss << " " << fData[1];
 			ss << " " << fData[0];
 			ss << ") M(" << curMate << ")";
-			fBuf.push_back(ss.str());
+			_m->fBuf.push_back(ss.str());
 			break;
 
 		  case 4:
@@ -163,7 +168,7 @@ bool fk_MQOOut::Convert_IFS(void)
 			ss << " " << fData[1];
 			ss << " " << fData[0];
 			ss << ") M(" << curMate << ")";
-			fBuf.push_back(ss.str());
+			_m->fBuf.push_back(ss.str());
 			break;
 
 		  default:
@@ -176,15 +181,15 @@ bool fk_MQOOut::Convert_IFS(void)
 
 void fk_MQOOut::MakeVertexIDMap_IFS(void)
 {
-	int				i;
-	fk_Vector		pos;
-	stringstream	ss;
-	vBuf.clear();
-	for(i = 0; i < ifs->getPosSize(); i++) {
-		pos = ifs->getPosVec(i);
+	int i;
+	fk_Vector pos;
+	stringstream ss;
+	_m->vBuf.clear();
+	for(i = 0; i < _m->ifs->getPosSize(); i++) {
+		pos = _m->ifs->getPosVec(i);
 		ss.clear();
 		ss << pos.x << " " << pos.y << " " << pos.z;
-		vBuf.push_back(ss.str());
+		_m->vBuf.push_back(ss.str());
 	}
 
 	return;
@@ -201,25 +206,25 @@ float fk_MQOOut::CalcMonotoneLuminance(fk_Color *col)
 
 void fk_MQOOut::MakeMaterialPalette(fk_Type argType)
 {
-	int				i, j, mateNum;
-	fk_Material		*tmpMate;
-	fk_Color		baseCol;
-	float			tmpDif, tmpAmb, tmpEmi, tmpSpe;
-	stringstream	ss;
+	int i, j, mateNum;
+	fk_Material *tmpMate;
+	fk_Color baseCol;
+	float tmpDif, tmpAmb, tmpEmi, tmpSpe;
+	stringstream ss;
 	
-	mBuf.clear();
+	_m->mBuf.clear();
 	if(argType == fk_Type::SOLID) {
-		mateNum = solid->getPaletteSize();
+		mateNum = _m->solid->getPaletteSize();
 	} else if(argType == fk_Type::INDEXFACESET) {
-		mateNum = ifs->getPaletteSize();
+		mateNum = _m->ifs->getPaletteSize();
 	} else {
 		return;
 	}
 	for(i = 0; i < mateNum; ++i) {
 		if(argType == fk_Type::SOLID) {
-			tmpMate = solid->getMaterial(i);
+			tmpMate = _m->solid->getMaterial(i);
 		} else if(argType == fk_Type::INDEXFACESET) {
-			tmpMate = ifs->getMaterial(i);
+			tmpMate = _m->ifs->getMaterial(i);
 		} else {
 			break;
 		}
@@ -251,7 +256,7 @@ void fk_MQOOut::MakeMaterialPalette(fk_Type argType)
 		ss << ") spc(" << tmpSpe;
 		ss << ") power(" << tmpMate->getShininess() << ")";
 
-		mBuf.push_back(ss.str());
+		_m->mBuf.push_back(ss.str());
 
 	}
 
@@ -260,10 +265,10 @@ void fk_MQOOut::MakeMaterialPalette(fk_Type argType)
 
 void fk_MQOOut::Init(void)
 {
-	vertIDMap.clear();
-	mBuf.clear();
-	vBuf.clear();
-	fBuf.clear();
+	_m->vertIDMap.clear();
+	_m->mBuf.clear();
+	_m->vBuf.clear();
+	_m->fBuf.clear();
 
 	return;
 }
@@ -300,23 +305,23 @@ fk_MQOOut::~fk_MQOOut(void)
 
 void fk_MQOOut::SetSolid(fk_Solid *argSolid)
 {
-	solid = argSolid;
-	ifs = nullptr;
+	_m->solid = argSolid;
+	_m->ifs = nullptr;
 	return;
 }
 
 void fk_MQOOut::SetIndexFaceSet(fk_IndexFaceSet *argIFS)
 {
-	ifs = argIFS;
-	solid = nullptr;
+	_m->ifs = argIFS;
+	_m->solid = nullptr;
 	return;
 }
 
 bool fk_MQOOut::WriteMQOFile(string argFName)
 {
-	ofstream	ofs(argFName);
-	_st			i;
-	fk_Color	tmpCol;
+	ofstream ofs(argFName);
+	_st i;
+	fk_Color tmpCol;
 
 	if(ofs.fail()) return false;
 	
@@ -328,26 +333,26 @@ bool fk_MQOOut::WriteMQOFile(string argFName)
 	ofs << "Metasequoia Document" << endl;
 	ofs << "Format Text Ver 1.0" << endl << endl;
 
-	if(mBuf.empty() == false) {
-		ofs << "Material " << mBuf.size() << " {" << endl;
-		for(i = 0; i < mBuf.size(); ++i) {
-			ofs << "\t" << mBuf[i] << endl;
+	if(_m->mBuf.empty() == false) {
+		ofs << "Material " << _m->mBuf.size() << " {" << endl;
+		for(i = 0; i < _m->mBuf.size(); ++i) {
+			ofs << "\t" << _m->mBuf[i] << endl;
 		}
 		ofs << "}" << endl;
 	}
 
 	ofs << "Object \"obj1\" {" << endl;
-	ofs << "\tvertex " << vBuf.size() << " {" << endl;
+	ofs << "\tvertex " << _m->vBuf.size() << " {" << endl;
 
-	for(i = 0; i < vBuf.size(); i++) {
-		ofs << "\t\t" << vBuf.at(i) << endl;
+	for(i = 0; i < _m->vBuf.size(); i++) {
+		ofs << "\t\t" << _m->vBuf.at(i) << endl;
 	}
 
 	ofs << "\t}" << endl;
-	ofs << "\tface " << fBuf.size() << " {" << endl;
+	ofs << "\tface " << _m->fBuf.size() << " {" << endl;
 
-	for(i = 0; i < fBuf.size(); i++) {
-		ofs << "\t\t" << fBuf.at(i) << endl;
+	for(i = 0; i < _m->fBuf.size(); i++) {
+		ofs << "\t\t" << _m->fBuf.at(i) << endl;
 	}
 
 	ofs << "\t}" << endl;

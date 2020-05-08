@@ -7,48 +7,53 @@
 using namespace std;
 using namespace FK;
 
-fk_FrameBuffer::fk_FrameBuffer(void)
+fk_FrameBuffer::Member::Member(void)
 	: ID(0), source(fk_SamplerSource::COLOR), unitID(0)
 {
-	dim.set(0, 0);
+	return;
+}
+
+fk_FrameBuffer::fk_FrameBuffer(void) : _m(make_unique<Member>())
+{
 	SetObjectType(fk_Type::FRAMEBUFFER);
+	_m->dim.set(0, 0);
 	return;
 }
 
 fk_FrameBuffer::~fk_FrameBuffer()
 {
-	if(ID != 0) glDeleteTextures(1, &ID);
+	if(_m->ID != 0) glDeleteTextures(1, &_m->ID);
 	return;
 }
 
 fk_TexID fk_FrameBuffer::GetTexID(void)
 {
-	return ID;
+	return _m->ID;
 }
 
 void fk_FrameBuffer::setSource(fk_SamplerSource argMode)
 {
-	source = argMode;
+	_m->source = argMode;
 }
 
 fk_SamplerSource fk_FrameBuffer::getSource(void)
 {
-	return source;
+	return _m->source;
 }
 
 void fk_FrameBuffer::SetBufferSize(int argW, int argH)
 {
-	dim.set(argW, argH);
+	_m->dim.set(argW, argH);
 }
 
 void fk_FrameBuffer::SetupFBO(int argUnitID)
 {
     if (fk_ShaderBinder::IsInitialized() == false) fk_ShaderBinder::Initialize();
 	static const GLfloat border[] = {1.0f, 0.0f, 0.0f, 0.0f};
-	unitID = argUnitID+1;
-    glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
-	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
+	_m->unitID = argUnitID+1;
+    glActiveTexture(GL_TEXTURE0 + GLenum(_m->unitID));
+	glGenTextures(1, &_m->ID);
+	glBindTexture(GL_TEXTURE_2D, _m->ID);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
@@ -57,17 +62,17 @@ void fk_FrameBuffer::SetupFBO(int argUnitID)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	if(source == fk_SamplerSource::COLOR) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, dim.w, dim.h, 0,
+	if(_m->source == fk_SamplerSource::COLOR) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, _m->dim.w, _m->dim.h, 0,
 					 GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	} else {
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 //		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, dim.w, dim.h, 0,
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, _m->dim.w, _m->dim.h, 0,
 //					 GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, dim.w, dim.h, 0,
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, _m->dim.w, _m->dim.h, 0,
 					 GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 	}
 		
@@ -76,35 +81,35 @@ void fk_FrameBuffer::SetupFBO(int argUnitID)
 
 void fk_FrameBuffer::AttachFBO(void)
 {
-	if(source == fk_SamplerSource::COLOR) {
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
+	if(_m->source == fk_SamplerSource::COLOR) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _m->ID, 0);
 	} else {
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ID, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _m->ID, 0);
 	}
 }
 
 void fk_FrameBuffer::BindFBO(void)
 {
-	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
-	if(source == fk_SamplerSource::COLOR) {
+	glActiveTexture(GL_TEXTURE0 + GLenum(_m->unitID));
+	if(_m->source == fk_SamplerSource::COLOR) {
 		glReadBuffer(GL_COLOR_ATTACHMENT0);
 	} else {
 		glReadBuffer(GL_DEPTH_ATTACHMENT);
 	}
 	
-	glBindTexture(GL_TEXTURE_2D, ID);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, dim.w, dim.h);
+	glBindTexture(GL_TEXTURE_2D, _m->ID);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, _m->dim.w, _m->dim.h);
 }
 
 void fk_FrameBuffer::Unbind(void)
 {
-	glActiveTexture(GL_TEXTURE0 + GLenum(unitID));
+	glActiveTexture(GL_TEXTURE0 + GLenum(_m->unitID));
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 fk_Dimension * fk_FrameBuffer::getBufferSize(void)
 {
-	return &dim;
+	return &_m->dim;
 }
 
 /****************************************************************************

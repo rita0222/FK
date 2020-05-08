@@ -132,14 +132,14 @@ void fk_DataBase::VSetClone(vector<fk_Vertex> *argVSet)
 			continue;
 		}
 
-		newV->position = orgV->position;
-		newV->normal = orgV->normal;
-		newV->normCalcFlag = orgV->normCalcFlag;
-		newV->normFailFlag = orgV->normFailFlag;
-		if(orgV->oneHalf == FK_UNDEFINED) {
-			newV->oneHalf = FK_UNDEFINED;
+		newV->_m->position = orgV->_m->position;
+		newV->_m->normal = orgV->_m->normal;
+		newV->_m->normCalcFlag = orgV->_m->normCalcFlag;
+		newV->_m->normFailFlag = orgV->_m->normFailFlag;
+		if(orgV->_m->oneHalf == FK_UNDEFINED) {
+			newV->_m->oneHalf = FK_UNDEFINED;
 		} else {
-			newV->oneHalf = orgV->oneHalf;
+			newV->_m->oneHalf = orgV->_m->oneHalf;
 		}
 	}
 
@@ -159,14 +159,14 @@ void fk_DataBase::HSetClone(vector<fk_Half> *argHSet)
 			continue;
 		}
 
-		newH->vertex = orgH->vertex;
-		newH->nextHalf = orgH->nextHalf;
-		newH->prevHalf = orgH->prevHalf;
-		newH->parentEdge = orgH->parentEdge;
-		if(orgH->parentLoop == FK_UNDEFINED) {
-			newH->parentLoop = FK_UNDEFINED;
+		newH->_m->vertex = orgH->_m->vertex;
+		newH->_m->nextHalf = orgH->_m->nextHalf;
+		newH->_m->prevHalf = orgH->_m->prevHalf;
+		newH->_m->parentEdge = orgH->_m->parentEdge;
+		if(orgH->_m->parentLoop == FK_UNDEFINED) {
+			newH->_m->parentLoop = FK_UNDEFINED;
 		} else {
-			newH->parentLoop = orgH->parentLoop;
+			newH->_m->parentLoop = orgH->_m->parentLoop;
 		}
 	}
 
@@ -202,9 +202,9 @@ void fk_DataBase::LSetClone(vector<fk_Loop> *argLSet)
 
 		if(newL->CloneElem(orgL) == false) continue;
 
-		newL->oneHalf = orgL->oneHalf;
-		newL->norm = orgL->norm;
-		newL->normFlag = orgL->normFlag;
+		newL->_m->oneHalf = orgL->_m->oneHalf;
+		newL->_m->norm = orgL->_m->norm;
+		newL->_m->normFlag = orgL->_m->normFlag;
 	}
 
 	return;

@@ -42,9 +42,25 @@ namespace FK {
 
 	class fk_Loop : public fk_Topology {
 
-		friend class	fk_Operation;
-		friend class	fk_DataBase;
-		friend class	fk_IFSetHandle;
+		friend class fk_Operation;
+		friend class fk_DataBase;
+		friend class fk_IFSetHandle;
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int oneHalf;
+			fk_Vector norm;
+			bool normFlag, errorFlag;
+			bool tesselateFlag, tesselateMode;
+			fk_Surface *surf;
+			std::vector<fk_Vertex *> tesselateVertex;
+			std::vector<int> tesselateIndex;
+			int ifsID;
+
+			Member(void);
+		};
+#endif
 
 	public:
 		//! コンストラクタ
@@ -150,33 +166,24 @@ namespace FK {
 		fk_Surface * getSurfGeometry(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void						Init(fk_DataBase *, int);
-		std::vector<fk_Vertex *> *	GetTesselateVertex(void);
-		std::vector<int> *			GetTesselateIndex(void);
-		void						Print(void) const;
-		bool						Check(void) const;
-		bool						Compare(fk_Loop *) const;
-		void						SetIFSID(int);
-		int							GetIFSID(void);
+		void Init(fk_DataBase *, int);
+		std::vector<fk_Vertex *> * GetTesselateVertex(void);
+		std::vector<int> * GetTesselateIndex(void);
+		void Print(void) const;
+		bool Check(void) const;
+		bool Compare(fk_Loop *) const;
+		void SetIFSID(int);
+		int GetIFSID(void);
 
-		fk_LoopCrossStatus			IsCross(const fk_Vector &,
-											const fk_Vector &,
-											fk_Vector * = nullptr);
+		fk_LoopCrossStatus IsCross(const fk_Vector &, const fk_Vector &, fk_Vector * = nullptr);
 #endif
 	private:
-		int							oneHalf;
-		fk_Vector					norm;
-		bool						normFlag, errorFlag;
-		bool						tesselateFlag, tesselateMode;
-		fk_Surface					*surf;
-		std::vector<fk_Vertex *>	tesselateVertex;
-		std::vector<int>			tesselateIndex;
-		int							ifsID;
+		std::shared_ptr<Member> _m;
 
-		bool	SetNormal(void);
-		void	ModifyLoop(void);
-		int		SetOneHalf(int);
-		void	MakeTesselateData(void);
+		bool SetNormal(void);
+		void ModifyLoop(void);
+		int SetOneHalf(int);
+		void MakeTesselateData(void);
 	};
 }
 

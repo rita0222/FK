@@ -24,10 +24,22 @@ namespace FK {
 
 	class fk_Half : public fk_Topology {
 
-		friend class		fk_Operation;
-		friend class		fk_DataBase;
-		friend class		fk_IFSetHandle;
-		friend class		fk_SolidBase;
+		friend class fk_Operation;
+		friend class fk_DataBase;
+		friend class fk_IFSetHandle;
+		friend class fk_SolidBase;
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			int vertex;
+			int nextHalf;
+			int prevHalf;
+			int parentEdge;
+			int parentLoop;
+
+			Member(void);
+		};
+#endif
 
 	public:
 		//! コンストラクタ
@@ -86,7 +98,7 @@ namespace FK {
 		 *
 		 *	\return 「左側」である場合 true を、「右側」である場合 false を返します。
 		 */
-		bool		isLeft(void) const;
+		bool isLeft(void) const;
 
 		//! 右側判定関数
 		/*!
@@ -94,27 +106,23 @@ namespace FK {
 		 *
 		 *	\return 「右側」である場合 true を、「左側」である場合 false を返します。
 		 */
-		bool		isRight(void) const;
+		bool isRight(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void		Init(fk_DataBase *, int);
-		void		Print(void) const;
-		bool		Check(void) const;
-		bool		Compare(fk_Half *) const;
+		void Init(fk_DataBase *, int);
+		void Print(void) const;
+		bool Check(void) const;
+		bool Compare(fk_Half *) const;
 #endif
 
 	private:
-		int			vertex;
-		int			nextHalf;
-		int			prevHalf;
-		int			parentEdge;
-		int			parentLoop;
+		std::unique_ptr<Member> _m;
 
-		int			SetVertex(int);
-		int			SetNextHalf(int);
-		int			SetPrevHalf(int);
-		int			SetParentEdge(int);
-		int			SetParentLoop(int);
+		int SetVertex(int);
+		int SetNextHalf(int);
+		int SetPrevHalf(int);
+		int SetParentEdge(int);
+		int SetParentLoop(int);
 	};
 }
 #endif // !__FK_HALF_HEADER__

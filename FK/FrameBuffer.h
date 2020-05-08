@@ -28,6 +28,18 @@ namespace FK {
 	
 	class fk_FrameBuffer : public fk_BaseObject {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_TexID ID;
+			fk_SamplerSource source;
+			fk_Dimension dim;
+			int unitID;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -79,11 +91,7 @@ namespace FK {
 #endif
 		
 	private:
-
-		fk_TexID			ID;
-		fk_SamplerSource	source;
-		fk_Dimension		dim;
-		int					unitID;
+		std::unique_ptr<Member> _m;
 	};
 }
 
