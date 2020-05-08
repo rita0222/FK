@@ -32,8 +32,8 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage) :
 
 	setShaderAttribute(vertexName, 3, _m->ifs.GetVertexP());
 	setShaderAttribute(normalName, 3, _m->ifs.GetNormP());
-	texCoord.setDim(2);
-	setShaderAttribute(texCoordName, 2, texCoord.getP());
+	_m_texCoord->setDim(2);
+	setShaderAttribute(texCoordName, 2, _m_texCoord->getP());
 
 	modifyAttribute(vertexName);
 	modifyAttribute(normalName);
@@ -86,7 +86,7 @@ void fk_IFSTexture::ShapeUpdate(void)
 
 void fk_IFSTexture::TexCoordUpdate(void)
 {
-	texCoord.resize(int(_m->coordArray.size()));
+	_m_texCoord->resize(int(_m->coordArray.size()));
 
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
@@ -99,7 +99,7 @@ void fk_IFSTexture::TexCoordUpdate(void)
 	double hScale = double(imageSize->h)/double(bufSize->h);
 
 	for(_st i = 0; i < _m->coordArray.size(); ++i) {
-		texCoord.set(int(i), _m->coordArray[i].x * wScale, _m->coordArray[i].y * hScale);
+		_m_texCoord->set(int(i), _m->coordArray[i].x * wScale, _m->coordArray[i].y * hScale);
 	}
 	modifyAttribute(texCoordName);
 }
@@ -110,7 +110,7 @@ void fk_IFSTexture::TexCoordUpdate(int argID)
 	const fk_Dimension *bufSize = getBufferSize();
 
 	if(_m->ifs.getFaceSize() == 0) return;
-	if(texCoord.getSize() <= argID) texCoord.resize(argID+1);
+	if(_m_texCoord->getSize() <= argID) _m_texCoord->resize(argID+1);
 
 	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
@@ -118,9 +118,10 @@ void fk_IFSTexture::TexCoordUpdate(int argID)
 	double wScale = double(imageSize->w)/double(bufSize->w);
 	double hScale = double(imageSize->h)/double(bufSize->h);
 
-	if(texCoord.getSize() <= argID) texCoord.resize(argID+1);
+	if(_m_texCoord->getSize() <= argID) _m_texCoord->resize(argID+1);
 
-	texCoord.set(argID, _m->coordArray[_st(argID)].x * wScale, _m->coordArray[_st(argID)].y * hScale);
+	_m_texCoord->set(argID, _m->coordArray[_st(argID)].x * wScale,
+					 _m->coordArray[_st(argID)].y * hScale);
 }
 
 void fk_IFSTexture::cloneShape(fk_IFSTexture *argIT)

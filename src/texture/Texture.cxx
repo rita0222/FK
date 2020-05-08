@@ -8,8 +8,20 @@ using namespace FK;
 
 const string fk_Texture::texIDName = "fk_TexID";
 
-fk_Texture::fk_Texture(fk_Image *argImage)
-	: fk_Shape(fk_Type::TEXTURE), image(nullptr)
+fk_Texture::Member::Member(void) :
+	image(nullptr),
+	texMode(fk_TexMode::MODULATE),
+	texRendMode(fk_TexRendMode::NORMAL),
+	texWrapMode(fk_TexWrapMode::REPEAT),
+	frameBuffer(nullptr)
+{
+	return;
+}
+
+fk_Texture::fk_Texture(fk_Image *argImage) :
+	fk_Shape(fk_Type::TEXTURE),
+	_m_texCoord(make_unique<fk_FVecArray>()),
+	_m(make_unique<Member>())
 {
 	GetFaceSize = []() { return 0; };
 	StatusUpdate = []() {};
@@ -29,7 +41,7 @@ fk_Texture::~fk_Texture()
 void fk_Texture::BaseInit(void)
 {
 	setImage(nullptr);
-	frameBuffer = nullptr;
+	_m->frameBuffer = nullptr;
 	clearMaterial();
 	AttrInit();
 	setTextureMode(fk_TexMode::MODULATE);
@@ -42,12 +54,12 @@ void fk_Texture::BaseInit(void)
 
 bool fk_Texture::IsLocalImage(void)
 {
-	return ((image == &localImage) ? true : false);
+	return ((_m->image == &_m->localImage) ? true : false);
 }
 
 void fk_Texture::SetLocalImage(void)
 {
-	image = &localImage;
+	_m->image = &_m->localImage;
 	StatusUpdate();
 	return;
 }
@@ -55,7 +67,7 @@ void fk_Texture::SetLocalImage(void)
 bool fk_Texture::readBMP(string argFileName)
 {
 	SetLocalImage();
-	if(image->readBMP(argFileName) == false) return false;
+	if(_m->image->readBMP(argFileName) == false) return false;
 	StatusUpdate();
 	return true;
 }
@@ -63,7 +75,7 @@ bool fk_Texture::readBMP(string argFileName)
 bool fk_Texture::readBMPData(fk_ImType *argBuffer)
 {
 	SetLocalImage();
-	if(image->readBMPData(argBuffer) == false) return false;
+	if(_m->image->readBMPData(argBuffer) == false) return false;
 	StatusUpdate();
 	return true;
 }
@@ -71,7 +83,7 @@ bool fk_Texture::readBMPData(fk_ImType *argBuffer)
 bool fk_Texture::readPNG(string argFileName)
 {
 	SetLocalImage();
-	if(image->readPNG(argFileName) == false) return false;
+	if(_m->image->readPNG(argFileName) == false) return false;
 	StatusUpdate();
 	return true;
 }
@@ -79,7 +91,7 @@ bool fk_Texture::readPNG(string argFileName)
 bool fk_Texture::readPNGData(fk_ImType *argBuffer)
 {
 	SetLocalImage();
-	if(image->readPNGData(argBuffer) == false) return false;
+	if(_m->image->readPNGData(argBuffer) == false) return false;
 	StatusUpdate();
 	return true;
 }
@@ -87,41 +99,41 @@ bool fk_Texture::readPNGData(fk_ImType *argBuffer)
 bool fk_Texture::readJPG(string argFileName)
 {
 	SetLocalImage();
-	if(image->readJPG(argFileName) == false) return false;
+	if(_m->image->readJPG(argFileName) == false) return false;
 	StatusUpdate();
 	return true;
 }
 
 const fk_ImType * fk_Texture::getImageBuf(void)
 {
-	if(image != nullptr) {
-		return image->getBufPointer();
+	if(_m->image != nullptr) {
+		return _m->image->getBufPointer();
 	}
 	return nullptr;
 }
 
 void fk_Texture::setImage(fk_Image *argImage)
 {
-	if(image == argImage) {
+	if(_m->image == argImage) {
 		return;
 	}
 
-	image = argImage;
+	_m->image = argImage;
 	StatusUpdate();
 	return;
 }
 
 fk_Image * fk_Texture::getImage(void)
 {
-	return image;
+	return _m->image;
 }
 
 const fk_Dimension * fk_Texture::getImageSize(void)
 {
-	if(frameBuffer != nullptr) {
-		return frameBuffer->getBufferSize();
-	} else if(image != nullptr) {
-		return image->getImageSize();
+	if(_m->frameBuffer != nullptr) {
+		return _m->frameBuffer->getBufferSize();
+	} else if(_m->image != nullptr) {
+		return _m->image->getImageSize();
 	}
 
 	return nullptr;
@@ -129,10 +141,10 @@ const fk_Dimension * fk_Texture::getImageSize(void)
 
 const fk_Dimension * fk_Texture::getBufferSize(void)
 {
-	if(frameBuffer != nullptr) {
-		return frameBuffer->getBufferSize();
-	} else if(image != nullptr) {
-		return image->getBufferSize();
+	if(_m->frameBuffer != nullptr) {
+		return _m->frameBuffer->getBufferSize();
+	} else if(_m->image != nullptr) {
+		return _m->image->getBufferSize();
 	}
 
 	return nullptr;
@@ -140,10 +152,10 @@ const fk_Dimension * fk_Texture::getBufferSize(void)
 
 fk_TexID fk_Texture::GetTexID(void)
 {
-	if(frameBuffer != nullptr) {
-		return frameBuffer->GetTexID();
-	} else if(image != nullptr) {
-		return image->GetTexID();
+	if(_m->frameBuffer != nullptr) {
+		return _m->frameBuffer->GetTexID();
+	} else if(_m->image != nullptr) {
+		return _m->image->GetTexID();
 	}
 
 	return 0;
@@ -151,8 +163,8 @@ fk_TexID fk_Texture::GetTexID(void)
 
 void fk_Texture::SetTexID(fk_TexID argID)
 {
-	if(image != nullptr) {
-		image->SetTexID(argID);
+	if(_m->image != nullptr) {
+		_m->image->SetTexID(argID);
 	}
 
 	return;
@@ -170,58 +182,58 @@ void fk_Texture::ClearTexState(fk_Image *argImage)
 
 void fk_Texture::setTextureMode(fk_TexMode argMode)
 {
-	texMode = argMode;
+	_m->texMode = argMode;
 	return;
 }
 
 fk_TexMode fk_Texture::getTextureMode(void)
 {
-	return texMode;
+	return _m->texMode;
 }
 
 void fk_Texture::setTexRendMode(fk_TexRendMode argMode)
 {
-	texRendMode = argMode;
+	_m->texRendMode = argMode;
 	return;
 }
 
 fk_TexRendMode fk_Texture::getTexRendMode(void)
 {
-	return texRendMode;
+	return _m->texRendMode;
 }
 
 void fk_Texture::setTexWrapMode(fk_TexWrapMode argMode)
 {
-	texWrapMode = argMode;
+	_m->texWrapMode = argMode;
 	return;
 }
 
 fk_TexWrapMode fk_Texture::getTexWrapMode(void)
 {
-	return texWrapMode;
+	return _m->texWrapMode;
 }
 
 void fk_Texture::fillColor(const fk_Color &argCol)
 {
-	if(image == nullptr) return;
+	if(_m->image == nullptr) return;
 
-	image->fillColor(argCol);
+	_m->image->fillColor(argCol);
 	return;
 }
 
 void fk_Texture::fillColor(int argR, int argG, int argB, int argA)
 {
-	if(image == nullptr) return;
+	if(_m->image == nullptr) return;
 
-	image->fillColor(argR, argG, argB, argA);
+	_m->image->fillColor(argR, argG, argB, argA);
 	return;
 }
 
 bool fk_Texture::BindTexture(bool forceLoad)
 {
-	bool 		loaded = true;
+	bool loaded = true;
 
-	if (frameBuffer == nullptr && image == nullptr) return false;
+	if (_m->frameBuffer == nullptr && _m->image == nullptr) return false;
 
 	const fk_Dimension	*bufSize = getBufferSize();
 	if(bufSize == nullptr) return false;
@@ -230,7 +242,7 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 	if(id == 0) {
 		glGenTextures(1, &id);
-		image->SetTexID(id);
+		_m->image->SetTexID(id);
 		loaded = false;
 	}
 
@@ -247,9 +259,9 @@ bool fk_Texture::BindTexture(bool forceLoad)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tmpRendMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tmpRendMode);
 
-	if (frameBuffer == nullptr && (loaded == false || forceLoad == true)) {
+	if (_m->frameBuffer == nullptr && (loaded == false || forceLoad == true)) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufSize->w, bufSize->h,
-					 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getBufPointer());
+					 0, GL_RGBA, GL_UNSIGNED_BYTE, _m->image->getBufPointer());
 	}
 
 	return true;
@@ -257,30 +269,30 @@ bool fk_Texture::BindTexture(bool forceLoad)
 
 void fk_Texture::Replace(void)
 {
-	if(frameBuffer == nullptr && image == nullptr) return;
-	if(frameBuffer != nullptr) {
+	if(_m->frameBuffer == nullptr && _m->image == nullptr) return;
+	if(_m->frameBuffer != nullptr) {
 		StatusUpdate();
 		BindTexture(true);
-	} else if(image->GetUpdate() == true) {
+	} else if(_m->image->GetUpdate() == true) {
 		StatusUpdate();
 		BindTexture(true);
-		image->SetUpdate(false);
+		_m->image->SetUpdate(false);
 	}
 }
 
 void fk_Texture::setFrameBuffer(fk_FrameBuffer *argFB)
 {
-	frameBuffer = argFB;
+	_m->frameBuffer = argFB;
 }
 
 fk_FrameBuffer * fk_Texture::getFrameBuffer(void)
 {
-	return frameBuffer;
+	return _m->frameBuffer;
 }
 
 void fk_Texture::initFrameBuffer(void)
 {
-	frameBuffer = nullptr;
+	_m->frameBuffer = nullptr;
 }
 
 /****************************************************************************

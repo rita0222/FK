@@ -43,6 +43,21 @@ namespace FK {
 	 */
 
 	class fk_Texture: public fk_Shape {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Image *image;
+			fk_Image localImage;
+			fk_TexMode texMode;
+			fk_TexRendMode texRendMode;
+			fk_TexWrapMode texWrapMode;
+			fk_FrameBuffer *frameBuffer;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -359,38 +374,16 @@ namespace FK {
 
 	protected:
 
-		fk_FVecArray texCoord;
+		std::unique_ptr<fk_FVecArray> _m_texCoord;
 
 		void BaseInit(void);
 		bool IsLocalImage(void);
 		void SetLocalImage(void);
-
-//		std::function<void(void)>	GenTextureObj;
-//		std::function<void(void)>	ReplaceSubImage;
-//		std::function<void(bool)>	DrawTexture;
-//		std::function<void(void)>	DrawPick;
-
-/*
-		fk_FVecArray			*vertexPosition;
-		fk_FVecArray			*vertexNormal;
-		fk_FVecArray			*texCoord;
-		std::vector<GLuint>		*faceIndex;		
-		GLuint					faceIBO;
-		bool					faceIndexFlg;
-*/
 		
 	private:
-		fk_Image			*image;
-		fk_Image			localImage;
-		fk_TexMode			texMode;
-		fk_TexRendMode		texRendMode;
-		fk_TexWrapMode		texWrapMode;
-
-		fk_FrameBuffer		*frameBuffer;
-
-
-		void				SetTexID(const fk_TexID);
-		static void			ClearTexState(fk_Image *);
+		std::unique_ptr<Member> _m;
+		void SetTexID(const fk_TexID);
+		static void ClearTexState(fk_Image *);
 	};
 }
 

@@ -44,9 +44,9 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	vertexNormal.resize(3);
 	setShaderAttribute(normalName, 3, vertexNormal.getP());
 
-	texCoord.setDim(2);
-	texCoord.resize(3);
-	setShaderAttribute(texCoordName, 2, texCoord.getP());
+	_m_texCoord->setDim(2);
+	_m_texCoord->resize(3);
+	setShaderAttribute(texCoordName, 2, _m_texCoord->getP());
 
 	init();
 
@@ -175,7 +175,7 @@ void fk_TriTexture::TexCoordUpdate(void)
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
 
-	texCoord.resize(3);
+	_m_texCoord->resize(3);
 
 	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
@@ -183,7 +183,7 @@ void fk_TriTexture::TexCoordUpdate(void)
 	double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
 	double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
 	for(int i = 0; i < 3; ++i) {
-		texCoord.set(i, triTexCoord[i].x * wScale, triTexCoord[i].y * hScale);
+		_m_texCoord->set(i, triTexCoord[i].x * wScale, triTexCoord[i].y * hScale);
 	}
 
 	modifyAttribute(texCoordName);

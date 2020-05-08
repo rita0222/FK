@@ -42,11 +42,11 @@ fk_MeshTexture::fk_MeshTexture(fk_Image *argImage)
 
 	_m->vertexPosition.setDim(3);
 	_m->vertexNormal.setDim(3);
-	texCoord.setDim(2);
+	_m_texCoord->setDim(2);
 	
 	setShaderAttribute(vertexName, 3, _m->vertexPosition.getP());
 	setShaderAttribute(normalName, 3, _m->vertexNormal.getP());
-	setShaderAttribute(texCoordName, 2, texCoord.getP());
+	setShaderAttribute(texCoordName, 2, _m_texCoord->getP());
 		
 	init();
 
@@ -60,7 +60,7 @@ fk_MeshTexture::~fk_MeshTexture()
 	_m->faceIndex.clear();
 	_m->vertexPosition.clear();
 	_m->vertexNormal.clear();
-	texCoord.clear();
+	_m_texCoord->clear();
 
 	return;
 }
@@ -75,7 +75,7 @@ void fk_MeshTexture::init(void)
 	_m->faceIndex.clear();
 	_m->vertexPosition.clear();
 	_m->vertexNormal.clear();
-	texCoord.clear();
+	_m_texCoord->clear();
 
 	StatusUpdate();
 
@@ -120,7 +120,8 @@ void fk_MeshTexture::NormUpdate(void)
 	_m->vertexNormal.resize(_m->triNum*3);
 	for(int i = 0; i < _m->triNum; ++i) {
 		_st tid = _st(i)*3;
-		fk_Vector norm = (_m->posArray[tid+1] - _m->posArray[tid]) ^ (_m->posArray[tid+2] - _m->posArray[tid]);
+		fk_Vector norm = (_m->posArray[tid+1] - _m->posArray[tid]) ^
+			(_m->posArray[tid+2] - _m->posArray[tid]);
 		if(norm.normalize() == false) continue;
 		for(int j = 0; j < 3; ++j) {
 			_m->vertexNormal.set(i*3 + j, norm);
@@ -133,7 +134,8 @@ void fk_MeshTexture::NormUpdate(int argTID)
 {
 	if(_m->vertexNormal.getSize() <= (argTID+1)*3) _m->vertexNormal.resize((argTID+1)*3);
 	_st id = _st(argTID)*3;
-	fk_Vector norm = (_m->posArray[id+1] - _m->posArray[id]) ^ (_m->posArray[id+2] - _m->posArray[id]);
+	fk_Vector norm = (_m->posArray[id+1] - _m->posArray[id]) ^
+		(_m->posArray[id+2] - _m->posArray[id]);
 	if(norm.normalize() == false) return;
 	for(int i = 0; i < 3; i++) _m->vertexNormal.set(argTID*3 + i, norm);
 	modifyAttribute(normalName);
@@ -141,7 +143,7 @@ void fk_MeshTexture::NormUpdate(int argTID)
 
 void fk_MeshTexture::TexCoordUpdate(void)
 {
-	texCoord.resize(_m->triNum*3);
+	_m_texCoord->resize(_m->triNum*3);
 
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
@@ -154,7 +156,7 @@ void fk_MeshTexture::TexCoordUpdate(void)
 	double hScale = double(imageSize->h)/double(bufSize->h);
 
 	for(int i = 0; i < _m->triNum*3; ++i) {
-		texCoord.set(i, _m->coordArray[_st(i)].x * wScale, _m->coordArray[_st(i)].y * hScale);
+		_m_texCoord->set(i, _m->coordArray[_st(i)].x * wScale, _m->coordArray[_st(i)].y * hScale);
 	}
 	modifyAttribute(texCoordName);
 }
@@ -165,7 +167,7 @@ void fk_MeshTexture::TexCoordUpdate(int argTID, int argVID)
 	const fk_Dimension *bufSize = getBufferSize();
 
 	if(_m->triNum <= 0) return;
-	if(texCoord.getSize() <= (argTID+1)*3) texCoord.resize((argTID+1)*3);
+	if(_m_texCoord->getSize() <= (argTID+1)*3) _m_texCoord->resize((argTID+1)*3);
 
 	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
@@ -174,7 +176,7 @@ void fk_MeshTexture::TexCoordUpdate(int argTID, int argVID)
 	double hScale = double(imageSize->h)/double(bufSize->h);
 	int id = argTID*3 + argVID;
 	
-	texCoord.set(id, _m->coordArray[_st(id)].x * wScale, _m->coordArray[_st(id)].y * hScale);
+	_m_texCoord->set(id, _m->coordArray[_st(id)].x * wScale, _m->coordArray[_st(id)].y * hScale);
 	modifyAttribute(texCoordName);
 }
 	

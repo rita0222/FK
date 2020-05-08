@@ -6,12 +6,17 @@
 using namespace std;
 using namespace FK;
 
-vector<GLuint> fk_RectTexture::faceIndex = {0, 1, 3, 1, 2, 3};
-GLuint fk_RectTexture::faceIBO = 0;
-bool fk_RectTexture::faceIndexFlg = false;
+vector<GLuint> fk_RectTexture::_s_faceIndex = {0, 1, 3, 1, 2, 3};
+GLuint fk_RectTexture::_s_faceIBO = 0;
+bool fk_RectTexture::_s_faceIndexFlg = false;
 
-fk_RectTexture::fk_RectTexture(fk_Image *argImage)
-	: fk_Texture(argImage)
+fk_RectTexture::Member::Member(void) : repeatFlag(false)
+{
+	return;
+}
+	
+fk_RectTexture::fk_RectTexture(fk_Image *argImage) :
+	fk_Texture(argImage), _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::RECTTEXTURE);
 	GetFaceSize = []() { return 2; };
@@ -22,31 +27,31 @@ fk_RectTexture::fk_RectTexture(fk_Image *argImage)
 	};
 
 	FaceIBOSetup = []() {
-		if(faceIBO == 0) {
-			faceIBO = GenBuffer();
-			faceIndexFlg = true;
+		if(_s_faceIBO == 0) {
+			_s_faceIBO = GenBuffer();
+			_s_faceIndexFlg = true;
 		}
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
-		if(faceIndexFlg == true) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _s_faceIBO);
+		if(_s_faceIndexFlg == true) {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 						 GLsizei(6*sizeof(GLuint)),
-						 faceIndex.data(), GL_STATIC_DRAW);
-			faceIndexFlg = false;
+						 _s_faceIndex.data(), GL_STATIC_DRAW);
+			_s_faceIndexFlg = false;
 		}
 	};
 		
-	vertexPosition.setDim(3);
-	vertexPosition.resize(6);
-	setShaderAttribute(vertexName, 3, vertexPosition.getP());
+	_m->vertexPosition.setDim(3);
+	_m->vertexPosition.resize(6);
+	setShaderAttribute(vertexName, 3, _m->vertexPosition.getP());
 
-	vertexNormal.setDim(3);
-	vertexNormal.resize(6);
-	setShaderAttribute(normalName, 3, vertexNormal.getP());
+	_m->vertexNormal.setDim(3);
+	_m->vertexNormal.resize(6);
+	setShaderAttribute(normalName, 3, _m->vertexNormal.getP());
 
-	texCoord.setDim(2);
-	texCoord.resize(6);
-	setShaderAttribute(texCoordName, 2, texCoord.getP());
+	_m_texCoord->setDim(2);
+	_m_texCoord->resize(6);
+	setShaderAttribute(texCoordName, 2, _m_texCoord->getP());
 
 	init();
 	return;
@@ -66,11 +71,11 @@ void fk_RectTexture::init(void)
 
 void fk_RectTexture::RectInit(void)
 {
-	texSize.set(2.0, 2.0);
+	_m->texSize.set(2.0, 2.0);
 	setRepeatMode(false);
-	repeatParam.set(1.0, 1.0);
-	rectSE[0].set(0.0, 0.0);
-	rectSE[1].set(1.0, 1.0);
+	_m->repeatParam.set(1.0, 1.0);
+	_m->rectSE[0].set(0.0, 0.0);
+	_m->rectSE[1].set(1.0, 1.0);
 
 	SizeUpdate();
 	NormalUpdate();
@@ -79,22 +84,22 @@ void fk_RectTexture::RectInit(void)
 
 void fk_RectTexture::SizeUpdate(void)
 {
-	double tmpX = texSize.x/2.0;
-	double tmpY = texSize.y/2.0;
+	double tmpX = _m->texSize.x/2.0;
+	double tmpY = _m->texSize.y/2.0;
 		
-	vertexPosition.resize(4);
-	vertexPosition.set(0, -tmpX, -tmpY);
-	vertexPosition.set(1, tmpX, -tmpY);
-	vertexPosition.set(2, tmpX, tmpY);
-	vertexPosition.set(3, -tmpX, tmpY);
+	_m->vertexPosition.resize(4);
+	_m->vertexPosition.set(0, -tmpX, -tmpY);
+	_m->vertexPosition.set(1, tmpX, -tmpY);
+	_m->vertexPosition.set(2, tmpX, tmpY);
+	_m->vertexPosition.set(3, -tmpX, tmpY);
 	modifyAttribute(vertexName);
 }
 
 void fk_RectTexture::NormalUpdate(void)
 {
 	fk_Vector		norm(0.0, 0.0, 1.0);
-	vertexNormal.resize(4);
-	for(int i = 0; i < 4; i++) vertexNormal.set(i, norm);
+	_m->vertexNormal.resize(4);
+	for(int i = 0; i < 4; i++) _m->vertexNormal.set(i, norm);
 	modifyAttribute(normalName);
 }
 
@@ -104,7 +109,7 @@ void fk_RectTexture::TexCoordUpdate(void)
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
 
-	texCoord.resize(4);
+	_m_texCoord->resize(4);
 
 	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
@@ -115,14 +120,14 @@ void fk_RectTexture::TexCoordUpdate(void)
 	} else {
 		double wScale = double(imageSize->w)/double(bufSize->w);
 		double hScale = double(imageSize->h)/double(bufSize->h);
-		s.set(wScale * rectSE[0].x, hScale * rectSE[0].y);
-		e.set(wScale * rectSE[1].x, hScale * rectSE[1].y);
+		s.set(wScale * _m->rectSE[0].x, hScale * _m->rectSE[0].y);
+		e.set(wScale * _m->rectSE[1].x, hScale * _m->rectSE[1].y);
 	}
 
-	texCoord.set(0, s.x, s.y);
-	texCoord.set(1, e.x, s.y);
-	texCoord.set(2, e.x, e.y);
-	texCoord.set(3, s.x, e.y);
+	_m_texCoord->set(0, s.x, s.y);
+	_m_texCoord->set(1, e.x, s.y);
+	_m_texCoord->set(2, e.x, e.y);
+	_m_texCoord->set(3, s.x, e.y);
 
 	modifyAttribute(texCoordName);
 }
@@ -134,7 +139,7 @@ bool fk_RectTexture::setTextureSize(double argX, double argY)
 		return false;
 	}
 
-	texSize.set(argX, argY);
+	_m->texSize.set(argX, argY);
 	SizeUpdate();
 
 	return true;
@@ -142,30 +147,30 @@ bool fk_RectTexture::setTextureSize(double argX, double argY)
 
 fk_TexCoord fk_RectTexture::getTextureSize(void)
 {
-	return texSize;
+	return _m->texSize;
 }
 
 void fk_RectTexture::setRepeatMode(bool argFlag)
 {
-	repeatFlag = argFlag;
+	_m->repeatFlag = argFlag;
 	return;
 }
 
 bool fk_RectTexture::getRepeatMode(void)
 {
-	return repeatFlag;
+	return _m->repeatFlag;
 }
 
 void fk_RectTexture::setRepeatParam(double argS, double argT)
 {
-	repeatParam.set(argS, argT);
+	_m->repeatParam.set(argS, argT);
 	TexCoordUpdate();
 	return;
 }
 
 fk_TexCoord fk_RectTexture::getRepeatParam(void)
 {
-	return repeatParam;
+	return _m->repeatParam;
 }
 
 void fk_RectTexture::setTextureCoord(double argSU, double argSV,
@@ -179,8 +184,8 @@ void fk_RectTexture::setTextureCoord(double argSU, double argSV,
 		return;
 	}
 
-	rectSE[0].set(argSU, argSV);
-	rectSE[1].set(argEU, argEV);
+	_m->rectSE[0].set(argSU, argSV);
+	_m->rectSE[1].set(argEU, argEV);
 
 	TexCoordUpdate();
 
@@ -198,8 +203,8 @@ void fk_RectTexture::setTextureCoord(const fk_TexCoord &argS,
 		return;
 	}
 
-	rectSE[0].set(argS.x, argS.y);
-	rectSE[1].set(argE.x, argE.y);
+	_m->rectSE[0].set(argS.x, argS.y);
+	_m->rectSE[1].set(argE.x, argE.y);
 
 	TexCoordUpdate();
 	return;
@@ -211,7 +216,7 @@ fk_TexCoord fk_RectTexture::getTextureCoord(int argID)
 		Error::Put("fk_RectTexture", "getTextureCoord", 1, "ID Error");
 		return fk_TexCoord(0.0, 0.0);
 	}
-	return rectSE[argID];
+	return _m->rectSE[argID];
 }
 
 /****************************************************************************

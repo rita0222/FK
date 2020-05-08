@@ -27,6 +27,20 @@ namespace FK {
 
 	class fk_RectTexture : public fk_Texture {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_TexCoord texSize;
+			bool repeatFlag;
+			fk_TexCoord repeatParam;
+			fk_TexCoord rectSE[2];
+
+			fk_FVecArray vertexPosition;
+			fk_FVecArray vertexNormal;
+
+			Member(void);
+		};
+#endif
 	public:
 
 		//! コンストラクタ
@@ -44,7 +58,7 @@ namespace FK {
 		/*!
 		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
 		 */
-		void				init(void);
+		void init(void);
 
 		//! テクスチャサイズ設定関数
 		/*!
@@ -57,7 +71,7 @@ namespace FK {
 		 *		横幅、縦幅のいずれかで 0 以下の値が入力されていた場合、
 		 *		false を返します。設定に成功した場合は true を返します。
 		 */
-		bool				setTextureSize(double w, double h);
+		bool setTextureSize(double w, double h);
 
 		//! テクスチャサイズ参照関数
 		/*!
@@ -65,7 +79,7 @@ namespace FK {
 		 *
 		 *	\return		矩形テクスチャの大きさ
 		 */
-		fk_TexCoord			getTextureSize(void);
+		fk_TexCoord getTextureSize(void);
 
 		//! リピートモード設定関数
 		/*!
@@ -86,7 +100,7 @@ namespace FK {
 		 *
 		 *	\sa setRepeatParam()
 		 */
-		void				setRepeatMode(bool mode);
+		void setRepeatMode(bool mode);
 
 		//! リピートモード参照関数
 		/*!
@@ -98,7 +112,7 @@ namespace FK {
 		 *
 		 *	\sa setRepeatMode()
 		 */
-		bool				getRepeatMode(void);
+		bool getRepeatMode(void);
 
 		//! リピートモード枚数設定関数
 		/*!
@@ -113,7 +127,7 @@ namespace FK {
 		 *
 		 *	\sa setRepeatMode()
 		 */
-		void				setRepeatParam(double wNum, double hNum);
+		void setRepeatParam(double wNum, double hNum);
 
 		//! リピートモード枚数参照関数
 		/*!
@@ -123,7 +137,7 @@ namespace FK {
 		 *
 		 *	\sa setRepeatParam()
 		 */
-		fk_TexCoord			getRepeatParam(void);
+		fk_TexCoord getRepeatParam(void);
 
 		//! 部分抽出設定関数1
 		/*!
@@ -138,8 +152,7 @@ namespace FK {
 		 *	\param[in]	eX	抽出右上部分の x 成分
 		 *	\param[in]	eY	抽出右上部分の y 成分
 		 */
-		void				setTextureCoord(double sX, double sY,
-											double eX, double eY);
+		void setTextureCoord(double sX, double sY, double eX, double eY);
 
 		//! 部分抽出設定関数2
 		/*!
@@ -152,8 +165,7 @@ namespace FK {
 		 *	\param[in]	S	抽出左下部分のテクスチャ座標
 		 *	\param[in]	E	抽出右上部分のテクスチャ座標
 		 */
-		void				setTextureCoord(const fk_TexCoord &S,
-											const fk_TexCoord &E);
+		void setTextureCoord(const fk_TexCoord &S, const fk_TexCoord &E);
 
 		//! 部分抽出参照関数
 		/*!
@@ -169,21 +181,15 @@ namespace FK {
 		 *
 		 *	\sa setTextureCoord()
 		 */
-		fk_TexCoord			getTextureCoord(int ID);
+		fk_TexCoord getTextureCoord(int ID);
 
 	private:
 
-		fk_TexCoord			texSize;
-		bool				repeatFlag;
-		fk_TexCoord			repeatParam;
-		fk_TexCoord			rectSE[2];
+		std::unique_ptr<Member> _m;
 
-		fk_FVecArray		vertexPosition;
-		fk_FVecArray		vertexNormal;
-
-		static std::vector<GLuint>	faceIndex;
-		static GLuint				faceIBO;
-		static bool					faceIndexFlg;
+		static std::vector<GLuint> _s_faceIndex;
+		static GLuint _s_faceIBO;
+		static bool _s_faceIndexFlg;
 		
 		void				RectInit(void);
 
