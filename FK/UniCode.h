@@ -503,7 +503,7 @@ namespace FK {
 #endif
 
 	private:
-		fk_StrConverterBase		*base;
+		std::unique_ptr<fk_StrConverterBase> base;
 
 		void	ConvertJIS_UTF8(const std::string &, std::string *);
 		void	ConvertSJIS_UTF8(const std::string &, std::string *);

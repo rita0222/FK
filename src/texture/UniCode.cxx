@@ -17,7 +17,7 @@ using iconvpp = const char **;
 namespace FK {
 	class fk_StrStack {
 	private:
-		vector<char *>		stack;
+		vector<vector<char>>	stack;
 
 	public:
 		fk_StrStack(void);
@@ -541,18 +541,16 @@ void fk_StrConverterBase::CommonConvert(fk_StringCode argInCode, fk_StringCode a
 }
 
 
-fk_StrConverter::fk_StrConverter(void)
+fk_StrConverter::fk_StrConverter(void) : base(make_unique<fk_StrConverterBase>())
 {
-	base = new fk_StrConverterBase();
-
 	return;
 }
 
 fk_StrConverter::~fk_StrConverter()
 {
-	delete base;
 	return;
 }
+
 void fk_StrConverter::convertJIS(const string &argStr, fk_UniStr *outStr)
 {
 	base->CommonConvert(fk_StringCode::JIS, fk_StringCode::UTF16, argStr, outStr);
@@ -689,36 +687,32 @@ void fk_StrConverter::convert_SJIS(const string &argStr, string *outStr, fk_Stri
 
 fk_StrStack::fk_StrStack(void)
 {
-	stack.clear();
 	return;
 }
 
 fk_StrStack::~fk_StrStack()
 {
-	_st		i;
-
-	for(i = 0; i < stack.size(); i++) {
-		delete [] stack[i];
-	}
 	stack.clear();
 	return;
 }
 
 void fk_StrStack::push(const string &argStr)
 {
-	char *p;
+	stack.resize(stack.size()+1);
 
-	p = new char [argStr.length()+1];
-	// copy(p, string::npos)はオーバーランの危険性があるので非推奨らしい
-	memcpy(p, argStr.c_str(), argStr.length());
-	p[argStr.length()] = 0;
-	stack.push_back(p);
+	vector<char> *c = &(stack.back());
+	c->resize(argStr.length()+1);
+	char_traits<char>::copy(c->data(), argStr.c_str(), argStr.length()+1);
+
+	//memcpy(p, argStr.c_str(), argStr.length());
+	//p[argStr.length()] = 0;
+	//stack.push_back(p);
 	return;
 }
 
 char * fk_StrStack::get(int argID)
 {
-	return stack[static_cast<_st>(argID)];
+	return stack[_st(argID)].data();
 }
 
 void fk_Code::setInputCoding(fk_StringCode argCode)
