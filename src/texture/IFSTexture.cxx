@@ -8,11 +8,15 @@
 using namespace std;
 using namespace FK;
 
-fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
-	: fk_Texture(argImage)
+fk_IFSTexture::Member::Member(void) : connectMode(true)
+{
+	return;
+}
+fk_IFSTexture::fk_IFSTexture(fk_Image *argImage) :
+	fk_Texture(argImage), _m(make_unique<Member>())
 {
 	GetFaceSize = [this]() {
-		return ifs->getFaceSize();
+		return _m->ifs.getFaceSize();
 	};
 
 	StatusUpdate = [this]() {
@@ -21,17 +25,13 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 	};
 
 	FaceIBOSetup = [this]() {
-		ifs->FaceIBOSetup();
+		_m->ifs.FaceIBOSetup();
 	};
 
 	SetObjectType(fk_Type::IFSTEXTURE);
-	ifs = new fk_IndexFaceSet;
-	coordArray.clear();
-	commonList.clear();
-	connectMode = true;
 
-	setShaderAttribute(vertexName, 3, ifs->GetVertexP());
-	setShaderAttribute(normalName, 3, ifs->GetNormP());
+	setShaderAttribute(vertexName, 3, _m->ifs.GetVertexP());
+	setShaderAttribute(normalName, 3, _m->ifs.GetNormP());
 	texCoord.setDim(2);
 	setShaderAttribute(texCoordName, 2, texCoord.getP());
 
@@ -43,42 +43,39 @@ fk_IFSTexture::fk_IFSTexture(fk_Image *argImage)
 
 fk_IFSTexture::~fk_IFSTexture()
 {
-	coordArray.clear();
-	commonList.clear();
-	delete ifs;
 	return;
 }
 
 vector< vector<int> > * fk_IFSTexture::GetCommonList(void)
 {
-	return &commonList;
+	return &_m->commonList;
 }
 
 void fk_IFSTexture::init(void)
 {
 	BaseInit();
-	coordArray.clear();
-	commonList.clear();
+	_m->coordArray.clear();
+	_m->commonList.clear();
 	return;
 }
 
 fk_TexCoord fk_IFSTexture::getTextureCoord(int argTID, int argVID)
 {
 	fk_TexCoord	coord(0.0, 0.0);
-	int			index;
+	int index;
 
-	index = ifs->getFaceData(argTID, argVID);
+	index = _m->ifs.getFaceData(argTID, argVID);
 	if(index < 0) {
 		Error::Put("fk_IFSTexture", "getTextureCoord", 1, "Face ID Error.");
 		return coord;
 	}
 
-	return coordArray[_st(index)];
+	return _m->coordArray[_st(index)];
 }
 
 fk_IndexFaceSet * fk_IFSTexture::getIFS(void)
 {
-	return ifs;
+	return &_m->ifs;
 }
 
 void fk_IFSTexture::ShapeUpdate(void)
@@ -89,20 +86,20 @@ void fk_IFSTexture::ShapeUpdate(void)
 
 void fk_IFSTexture::TexCoordUpdate(void)
 {
-	texCoord.resize(int(coordArray.size()));
+	texCoord.resize(int(_m->coordArray.size()));
 
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
 
-	if(ifs->getFaceSize() == 0) return;
+	if(_m->ifs.getFaceSize() == 0) return;
 	if(bufSize == nullptr) return;
 	if(bufSize->w < 64 || bufSize->h < 64) return;
 
 	double wScale = double(imageSize->w)/double(bufSize->w);
 	double hScale = double(imageSize->h)/double(bufSize->h);
 
-	for(_st i = 0; i < coordArray.size(); ++i) {
-		texCoord.set(int(i), coordArray[i].x * wScale, coordArray[i].y * hScale);
+	for(_st i = 0; i < _m->coordArray.size(); ++i) {
+		texCoord.set(int(i), _m->coordArray[i].x * wScale, _m->coordArray[i].y * hScale);
 	}
 	modifyAttribute(texCoordName);
 }
@@ -112,7 +109,7 @@ void fk_IFSTexture::TexCoordUpdate(int argID)
 	const fk_Dimension *imageSize = getImageSize();
 	const fk_Dimension *bufSize = getBufferSize();
 
-	if(ifs->getFaceSize() == 0) return;
+	if(_m->ifs.getFaceSize() == 0) return;
 	if(texCoord.getSize() <= argID) texCoord.resize(argID+1);
 
 	if(bufSize == nullptr) return;
@@ -123,20 +120,20 @@ void fk_IFSTexture::TexCoordUpdate(int argID)
 
 	if(texCoord.getSize() <= argID) texCoord.resize(argID+1);
 
-	texCoord.set(argID, coordArray[_st(argID)].x * wScale, coordArray[_st(argID)].y * hScale);
+	texCoord.set(argID, _m->coordArray[_st(argID)].x * wScale, _m->coordArray[_st(argID)].y * hScale);
 }
 
 void fk_IFSTexture::cloneShape(fk_IFSTexture *argIT)
 {
-	ifs->cloneShape(argIT->ifs);
+	_m->ifs.cloneShape(&(argIT->_m->ifs));
 	if(argIT->IsLocalImage() == true) {
 		SetLocalImage();
 		getImage()->copyImage(argIT->getImage());
 	} else {
 		setImage(argIT->getImage());
 	}
-	coordArray = argIT->coordArray;
-	commonList = argIT->commonList;
+	_m->coordArray = argIT->_m->coordArray;
+	_m->commonList = argIT->_m->commonList;
 
 	StatusUpdate();
 	return;
@@ -145,17 +142,17 @@ void fk_IFSTexture::cloneShape(fk_IFSTexture *argIT)
 void fk_IFSTexture::setTextureCoord(int argFID, int argVID,
 									fk_TexCoord &argCoord)
 {
-	int			id;
-	_st			id_;
+	int id;
+	_st id_;
 
-	id = ifs->getFaceData(argFID, argVID);
+	id = _m->ifs.getFaceData(argFID, argVID);
 	if(id < 0) return;
 
 	id_ = _st(id);
-	if(id_ >= coordArray.size()) {
-		coordArray.resize(id_ + 1);
+	if(id_ >= _m->coordArray.size()) {
+		_m->coordArray.resize(id_ + 1);
 	}
-	coordArray[id_] = argCoord;
+	_m->coordArray[id_] = argCoord;
 	TexCoordUpdate(id);
 	
 	return;
@@ -165,10 +162,9 @@ bool fk_IFSTexture::readMQOFile(string argFileName,
 								string argObjName,
 								int argMateID, bool argContFlg)
 {
-	fk_MQOParser		*mqoParser = new fk_MQOParser();
-	bool				retVal;
+	unique_ptr<fk_MQOParser> mqoParser(new fk_MQOParser());
 
-	mqoParser->SetIFSTexture(this, ifs);
+	mqoParser->SetIFSTexture(this, &(_m->ifs));
 	mqoParser->SetContMode(argContFlg);
 
 	mqoParser->IFSListUpdate = [](fk_IFSTexture *argIFSTex, fk_MQOListSet *argListSet) {
@@ -183,12 +179,8 @@ bool fk_IFSTexture::readMQOFile(string argFileName,
 		return;
 	};
 
-	retVal = mqoParser->ReadMQOFile(argFileName, argObjName, argMateID, true);
-	delete mqoParser;
-
-	if(retVal == false) return false;
-
-	if(connectMode == true) SetConnectNormal();
+	if(mqoParser->ReadMQOFile(argFileName, argObjName, argMateID, true) == false) return false;
+	if(_m->connectMode == true) SetConnectNormal();
 
 	StatusUpdate();
 
@@ -199,14 +191,13 @@ bool fk_IFSTexture::readMQOData(unsigned char *argBuffer,
 								string argObjName,
 								int argMateID, bool argContFlg)
 {
-	fk_MQOParser		*mqoParser = new fk_MQOParser();
-	bool				retVal;
+	unique_ptr<fk_MQOParser> mqoParser(new fk_MQOParser());
 
-	mqoParser->SetIFSTexture(this, ifs);
+	mqoParser->SetIFSTexture(this, &(_m->ifs));
 	mqoParser->SetContMode(argContFlg);
 
 	mqoParser->IFSListUpdate = [](fk_IFSTexture *argIFSTex, fk_MQOListSet *argListSet) {
-		auto	tmpCommonList = argIFSTex->GetCommonList();
+		auto tmpCommonList = argIFSTex->GetCommonList();
 
 		tmpCommonList->resize(argListSet->size());
 		for(_st i = 0; i < argListSet->size(); i++) {
@@ -217,13 +208,8 @@ bool fk_IFSTexture::readMQOData(unsigned char *argBuffer,
 		return;
 	};
 
-	retVal = mqoParser->ReadMQOData(argBuffer, argObjName, argMateID, true);
-	delete mqoParser;
-
-	if(retVal == false) return false;
-
-	if(connectMode == true) SetConnectNormal();
-
+	if(mqoParser->ReadMQOData(argBuffer, argObjName, argMateID, true) == false) return false;
+	if(_m->connectMode == true) SetConnectNormal();
 	StatusUpdate();
 
 	return true;
@@ -232,48 +218,44 @@ bool fk_IFSTexture::readMQOData(unsigned char *argBuffer,
 bool fk_IFSTexture::readD3DXFile(string argFileName, string argObjName,
 								 int argMateID)
 {
-	fk_D3DXParser		*d3dxParser = new fk_D3DXParser();
-	bool				retVal;
-	bool				animFlg;
+	unique_ptr<fk_D3DXParser> d3dxParser(new fk_D3DXParser());
+	bool animFlg;
 
 	d3dxParser->SetIFSTexture(this);
-	retVal = d3dxParser->ReadD3DXFile(argFileName, argObjName,
-									  argMateID, true, &animFlg);
-
+	bool retVal = d3dxParser->ReadD3DXFile(argFileName, argObjName, argMateID, true, &animFlg);
 	if(animFlg == true) setAnimationTime(-1.0);
-	delete d3dxParser;
 	StatusUpdate();
 	return retVal;
 }
 
 void fk_IFSTexture::setConnectMode(bool argMode)
 {
-	connectMode = argMode;
+	_m->connectMode = argMode;
 	return;
 }
 
 bool fk_IFSTexture::getConnectMode(void)
 {
-	return connectMode;
+	return _m->connectMode;
 }
 
 void fk_IFSTexture::SetConnectNormal(void)
 {
-	_st			i, j;
-	fk_Vector	tmpNorm;
+	_st i, j;
+	fk_Vector tmpNorm;
 
-	for(i = 0; i < commonList.size(); i++) {
-		if(commonList[i].size() == 0) continue;
-		tmpNorm = ifs->getVNorm(static_cast<int>(i));
-		for(j = 0; j < commonList[i].size(); j++) {
-			tmpNorm += ifs->getVNorm(commonList[i][j]);
+	for(i = 0; i < _m->commonList.size(); i++) {
+		if(_m->commonList[i].size() == 0) continue;
+		tmpNorm = _m->ifs.getVNorm(static_cast<int>(i));
+		for(j = 0; j < _m->commonList[i].size(); j++) {
+			tmpNorm += _m->ifs.getVNorm(_m->commonList[i][j]);
 		}
 
 		tmpNorm.normalize();
 
-		ifs->setVNorm(static_cast<int>(i), tmpNorm);
-		for(j = 0; j < commonList[i].size(); j++) {
-			ifs->setVNorm(commonList[i][j], tmpNorm);
+		_m->ifs.setVNorm(static_cast<int>(i), tmpNorm);
+		for(j = 0; j < _m->commonList[i].size(); j++) {
+			_m->ifs.setVNorm(_m->commonList[i][j], tmpNorm);
 		}
 	}
 
@@ -283,18 +265,18 @@ void fk_IFSTexture::SetConnectNormal(void)
 bool fk_IFSTexture::moveVPosition(int argID, const fk_Vector &argV,
 								  int argOrder)
 {
-	_st		i, trueID;
-	int		tmp = argID - argOrder;
+	_st i, trueID;
+	int tmp = argID - argOrder;
 
 	if(tmp < 0) return false;
 	trueID = _st(tmp);
-	if(trueID >= commonList.size()) return false;
+	if(trueID >= _m->commonList.size()) return false;
 
-	if(ifs->moveVPosition(static_cast<int>(trueID), argV) == false) {
+	if(_m->ifs.moveVPosition(static_cast<int>(trueID), argV) == false) {
 		return false;
 	}
-	for(i = 0; i < commonList[trueID].size(); i++) {
-		if(ifs->moveVPosition(commonList[trueID][i], argV) == false) {
+	for(i = 0; i < _m->commonList[trueID].size(); i++) {
+		if(_m->ifs.moveVPosition(_m->commonList[trueID][i], argV) == false) {
 			return false;
 		}
 	}
@@ -307,34 +289,34 @@ bool fk_IFSTexture::moveVPosition(int argID,
 								  double argX, double argY, double argZ,
 								  int argOrder)
 {
-	fk_Vector		v(argX, argY, argZ);
+	fk_Vector v(argX, argY, argZ);
 
 	return moveVPosition(argID, v, argOrder);
 }
 
 bool fk_IFSTexture::moveVPosition(int argID, double *argP, int argOrder)
 {
-	fk_Vector		v(argP[0], argP[1], argP[2]);
+	fk_Vector v(argP[0], argP[1], argP[2]);
 
 	return moveVPosition(argID, v, argOrder);
 }
 
 void fk_IFSTexture::setAnimationTime(double argTime)
 {
-	ifs->setAnimationTime(argTime);
+	_m->ifs.setAnimationTime(argTime);
 	return;
 }
 
 void fk_IFSTexture::setBVHMotion(fk_BVHBase *argBVH)
 {
-	ifs->setBVHMotion(argBVH);
+	_m->ifs.setBVHMotion(argBVH);
 	return;
 }
 
 void fk_IFSTexture::ForceUpdateAttr(void)
 {
 	fk_Shape::ForceUpdateAttr();
-	ifs->ForceUpdateAttr();
+	_m->ifs.ForceUpdateAttr();
 	StatusUpdate();
 }
 

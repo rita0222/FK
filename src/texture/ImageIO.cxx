@@ -30,8 +30,8 @@ extern "C" {
 
 bool fk_Image::IsBmpFile(const string argFName) const
 {
-	ifstream	ifs(argFName, ios::binary);
-	fk_ImType	buf[2];
+	ifstream ifs(argFName, ios::binary);
+	fk_ImType buf[2];
 
 	if(ifs.fail()) return false;
 
@@ -55,7 +55,7 @@ bool fk_Image::IsBmpData(fk_ImType *argData) const
 
 bool fk_Image::GetBmpFileHeader(ifstream &argIFS, fk_ImType *argHeader)
 {
-	size_t	imSize = sizeof(fk_ImType);
+	size_t imSize = sizeof(fk_ImType);
 
 	argIFS.read((char *)(argHeader), static_cast<streamsize>(imSize * 14));
 	if(argIFS.bad()) return false;
@@ -65,7 +65,7 @@ bool fk_Image::GetBmpFileHeader(ifstream &argIFS, fk_ImType *argHeader)
 
 bool fk_Image::GetBmpInfoHeader(ifstream &argIFS, fk_ImType *argHeader)
 {
-	size_t	imSize = sizeof(fk_ImType);
+	size_t imSize = sizeof(fk_ImType);
 
 	argIFS.read((char *)(argHeader), static_cast<streamsize>(imSize * 40));
 	if(argIFS.bad()) return false;
@@ -75,7 +75,7 @@ bool fk_Image::GetBmpInfoHeader(ifstream &argIFS, fk_ImType *argHeader)
 
 fk_Dimension fk_Image::GetBmpSize(fk_ImType *argHeader)
 {
-	fk_Dimension	retDim;
+	fk_Dimension retDim;
 
 	retDim.w = static_cast<int>(ChgUInt(argHeader, 4));
 	retDim.h = static_cast<int>(ChgUInt(argHeader, 8));
@@ -85,36 +85,30 @@ fk_Dimension fk_Image::GetBmpSize(fk_ImType *argHeader)
 
 fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 {
-	ifstream			ifs(argFName, ios::binary);
-	int					tmpSize;
-	unsigned int		bmpType;
-	fk_ImType			bmpFileHeader[14];
-	fk_ImType			bmpInfoHeader[40];
-	fk_Dimension		bmpSize;
-	vector<fk_ImType>	rgbQuad;
-	vector<fk_ImType>	tmpBuffer;
-	int					x, y;
-	unsigned int		paletteSize;
+	ifstream ifs(argFName, ios::binary);
 
 	if(ifs.fail()) {
 		return fk_ImageStatus::OPENERROR;
 	}
 
+	fk_ImType bmpFileHeader[14];
 	if(GetBmpFileHeader(ifs, bmpFileHeader) == false) {
 		ifs.close();
 		return fk_ImageStatus::DATAERROR;
 	}
 
+	fk_ImType bmpInfoHeader[40];
 	if(GetBmpInfoHeader(ifs, bmpInfoHeader) == false) {
 		ifs.close();
 		return fk_ImageStatus::DATAERROR;
 	}
 
-	paletteSize = ChgUInt(bmpFileHeader, 10) - 54;
-	bmpSize = GetBmpSize(bmpInfoHeader);
+	unsigned int paletteSize = ChgUInt(bmpFileHeader, 10) - 54;
+	fk_Dimension bmpSize = GetBmpSize(bmpInfoHeader);
 	CreateBuffer(bmpSize);
 
-	bmpType = ChgUShort(bmpInfoHeader, 14);
+	unsigned int bmpType = ChgUShort(bmpInfoHeader, 14);
+	vector<fk_ImType> rgbQuad;
 
 	if(bmpType <= 8) {
 		rgbQuad.resize(paletteSize);
@@ -128,12 +122,13 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 		rgbQuad.clear();
 	}
 
-	tmpSize = GetOneBufferSize(static_cast<int>(bmpType), bmpSize.w);
+	int tmpSize = GetOneBufferSize(static_cast<int>(bmpType), bmpSize.w);
 	if(tmpSize < 0) return fk_ImageStatus::DATAERROR;
 
+	vector<fk_ImType> tmpBuffer;
 	tmpBuffer.resize(static_cast<_st>(tmpSize));
 
-	for(y = bmpSize.h - 1; y >= 0; y--) {
+	for(int y = bmpSize.h - 1; y >= 0; y--) {
 
 		ifs.read((char *)(&tmpBuffer[0]),
 				 static_cast<streamsize>(sizeof(fk_ImType) * static_cast<size_t>(tmpSize)));
@@ -145,7 +140,7 @@ fk_ImageStatus fk_Image::LoadBmpFile(const string argFName)
 			return fk_ImageStatus::DATAERROR;
 		}
 
-		for(x = 0; x < bmpSize.w; x++) {
+		for(int x = 0; x < bmpSize.w; x++) {
 			SetRGBA4Bmp(x, y, &tmpBuffer[0],
 						static_cast<int>(bmpType), rgbQuad);
 		}
@@ -278,37 +273,32 @@ void fk_Image::SetRGBA4Bmp(int argX, int argY,
 
 fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 {
-	ofstream			ofs(argFName, ios::binary);
-	int					wSize, hSize;
-	vector<fk_ImType>	bmpFileHeader;
-	vector<fk_ImType>	bmpInfoHeader;
-	vector<fk_ImType>	bmpBuffer;
-	_st					x, bmpBufSize;
-	int					y;
-	int					bitSize;
+	if(_m->imageBuf.empty() == true) return fk_ImageStatus::DATAERROR;
 
-	if(imageBuf.empty() == true) return fk_ImageStatus::DATAERROR;
-
+	ofstream ofs(argFName, ios::binary);
 	if(ofs.fail()) {
 		return fk_ImageStatus::OPENERROR;
 	}
 
-	wSize = imageSize.w;
-	hSize = imageSize.h;
+	int wSize = _m->imageSize.w;
+	int hSize = _m->imageSize.h;
 
-	bitSize = (argTransFlg == true) ? 4 : 3;
+	int bitSize = (argTransFlg == true) ? 4 : 3;
 
+	vector<fk_ImType> bmpFileHeader;
 	MakeBmpFileHeader(wSize, hSize, bitSize, bmpFileHeader);
+
+	vector<fk_ImType> bmpInfoHeader;
 	MakeBmpInfoHeader(wSize, hSize, bitSize*8, bmpInfoHeader);
 
-	bmpBufSize = _st(wSize) * _st(bitSize);
+	_st bmpBufSize = _st(wSize) * _st(bitSize);
 
 	while(bmpBufSize % 4 != 0) {
 		bmpBufSize++;
 	}
 
-	bmpBuffer.resize(bmpBufSize);
-	for(x = 0; x < bmpBufSize; x++) bmpBuffer[x] = 0;
+	vector<fk_ImType> bmpBuffer(bmpBufSize);
+	for(_st x = 0; x < bmpBufSize; x++) bmpBuffer[x] = 0;
 
 	ofs.write((char *)(&bmpFileHeader[0]),
 			  static_cast<streamsize>(sizeof(fk_ImType) * bmpFileHeader.size()));
@@ -316,7 +306,7 @@ fk_ImageStatus fk_Image::SaveBmpFile(string argFName, bool argTransFlg)
 	ofs.write((char *)(&bmpInfoHeader[0]),
 			  static_cast<streamsize>(sizeof(fk_ImType) * bmpInfoHeader.size()));
 
-	for(y = hSize-1; y >= 0; y--) {
+	for(int y = hSize-1; y >= 0; y--) {
 		MakeBmpBuffer(y, wSize, argTransFlg, &bmpBuffer[0]);
 		ofs.write((char *)(&bmpBuffer[0]),
 				  static_cast<streamsize>(sizeof(fk_ImType) * bmpBufSize));
@@ -584,10 +574,10 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 		for(int j = 0; j < static_cast<int>(trueY); j++){
 			for(int i = 0; i < static_cast<int>(trueX); i++){
 				offset = static_cast<_st>(GetOffset(i, j));
-				imageBuf[offset]   = tmpBuffer[j][i*3];
-				imageBuf[offset+1] = tmpBuffer[j][i*3+1];
-				imageBuf[offset+2] = tmpBuffer[j][i*3+2];
-				imageBuf[offset+3] = 255;
+				_m->imageBuf[offset]   = tmpBuffer[j][i*3];
+				_m->imageBuf[offset+1] = tmpBuffer[j][i*3+1];
+				_m->imageBuf[offset+2] = tmpBuffer[j][i*3+2];
+				_m->imageBuf[offset+3] = 255;
 			}
 		}
 	}
@@ -597,7 +587,7 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 		int	lineSize = static_cast<int>(png_get_rowbytes(png_ptr, info_ptr));
 
 		for(int j = 0; j < static_cast<int>(trueY); j++) {
-			memcpy(&(imageBuf[static_cast<_st>(GetOffset(0, j))]),
+			memcpy(&(_m->imageBuf[static_cast<_st>(GetOffset(0, j))]),
 				   tmpBuffer[j], static_cast<size_t>(lineSize));
 		}
 	}
@@ -609,10 +599,10 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 		for(int j = 0; j < static_cast<int>(trueY); j++){
 			for(int i = 0; i < static_cast<int>(trueX); i++){
 				offset = static_cast<_st>(GetOffset(i, j));
-				imageBuf[offset]   = tmpBuffer[j][i];
-				imageBuf[offset+1] = tmpBuffer[j][i];
-				imageBuf[offset+2] = tmpBuffer[j][i];
-				imageBuf[offset+3] = 255;
+				_m->imageBuf[offset]   = tmpBuffer[j][i];
+				_m->imageBuf[offset+1] = tmpBuffer[j][i];
+				_m->imageBuf[offset+2] = tmpBuffer[j][i];
+				_m->imageBuf[offset+3] = 255;
 			}
 		}
 	}
@@ -633,10 +623,10 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 					offset = static_cast<_st>(GetOffset(x, y));
 					
 					if(x < static_cast<int>(trueX)){
-						imageBuf[offset]   = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
-						imageBuf[offset+1] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
-						imageBuf[offset+2] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
-						imageBuf[offset+3] = static_cast<fk_ImType>(255);
+						_m->imageBuf[offset]   = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
+						_m->imageBuf[offset+1] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
+						_m->imageBuf[offset+2] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
+						_m->imageBuf[offset+3] = static_cast<fk_ImType>(255);
 					}
 				}
 			}
@@ -658,10 +648,10 @@ fk_ImageStatus fk_Image::LoadPngData(fk_ImType *argBuffer)
 				offset = static_cast<_st>(GetOffset(i, j));
 				// パレット番号の取得
 				num = tmpBuffer[j][i];
-				imageBuf[offset]   = palette[num].red;
-				imageBuf[offset+1] = palette[num].green;
-				imageBuf[offset+2] = palette[num].blue;
-				imageBuf[offset+3] = 255;
+				_m->imageBuf[offset]   = palette[num].red;
+				_m->imageBuf[offset+1] = palette[num].green;
+				_m->imageBuf[offset+2] = palette[num].blue;
+				_m->imageBuf[offset+3] = 255;
 			}
 		}	
 	}
@@ -798,10 +788,10 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 		for(int j = 0; j < static_cast<int>(trueY); j++){
 			for(int i = 0; i < static_cast<int>(trueX); i++){
 				offset = static_cast<_st>(GetOffset(i, j));
-				imageBuf[offset]   = tmpBuffer[j][i*3];
-				imageBuf[offset+1] = tmpBuffer[j][i*3+1];
-				imageBuf[offset+2] = tmpBuffer[j][i*3+2];
-				imageBuf[offset+3] = 255;
+				_m->imageBuf[offset]   = tmpBuffer[j][i*3];
+				_m->imageBuf[offset+1] = tmpBuffer[j][i*3+1];
+				_m->imageBuf[offset+2] = tmpBuffer[j][i*3+2];
+				_m->imageBuf[offset+3] = 255;
 			}
 		}
 	}
@@ -811,7 +801,7 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 		int	lineSize = static_cast<int>(png_get_rowbytes(png_ptr, info_ptr));
 
 		for(int j = 0; j < static_cast<int>(trueY); j++) {
-			memcpy(&imageBuf[static_cast<_st>(GetOffset(0, j))],
+			memcpy(&_m->imageBuf[static_cast<_st>(GetOffset(0, j))],
 				   tmpBuffer[j], static_cast<size_t>(lineSize));
 		}
 	}
@@ -823,10 +813,10 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 		for(int j = 0; j < static_cast<int>(trueY); j++){
 			for(int i = 0; i < static_cast<int>(trueX); i++){
 				offset = static_cast<_st>(GetOffset(i, j));
-				imageBuf[offset]   = tmpBuffer[j][i];
-				imageBuf[offset+1] = tmpBuffer[j][i];
-				imageBuf[offset+2] = tmpBuffer[j][i];
-				imageBuf[offset+3] = 255;
+				_m->imageBuf[offset]   = tmpBuffer[j][i];
+				_m->imageBuf[offset+1] = tmpBuffer[j][i];
+				_m->imageBuf[offset+2] = tmpBuffer[j][i];
+				_m->imageBuf[offset+3] = 255;
 			}
 		}
 	}
@@ -847,10 +837,10 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 					offset = static_cast<_st>(GetOffset(x, y));
 					
 					if(x < static_cast<int>(trueX)) {
-						imageBuf[offset]   = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
-						imageBuf[offset+1] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
-						imageBuf[offset+2] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
-						imageBuf[offset+3] = static_cast<fk_ImType>(255);
+						_m->imageBuf[offset]   = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
+						_m->imageBuf[offset+1] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
+						_m->imageBuf[offset+2] = static_cast<fk_ImType>(255 * ((color >> (7-k)) % 2));
+						_m->imageBuf[offset+3] = static_cast<fk_ImType>(255);
 					}
 				}
 			}
@@ -872,10 +862,10 @@ fk_ImageStatus fk_Image::LoadPngFile(const string argFName)
 				offset = static_cast<_st>(GetOffset(i, j));
 				// パレット番号の取得
 				num = tmpBuffer[j][i];
-				imageBuf[offset]   = palette[num].red;
-				imageBuf[offset+1] = palette[num].green;
-				imageBuf[offset+2] = palette[num].blue;
-				imageBuf[offset+3] = 255;
+				_m->imageBuf[offset]   = palette[num].red;
+				_m->imageBuf[offset+1] = palette[num].green;
+				_m->imageBuf[offset+2] = palette[num].blue;
+				_m->imageBuf[offset+3] = 255;
 			}
 		}	
 	}
@@ -987,7 +977,7 @@ bool fk_Image::writePNG(const string fileName, const bool argTransFlg)
 	if(argTransFlg == true) {
 		for(int j = 0; j < static_cast<int>(trueY); j++) {
 			memcpy(tmpBuffer[j],
-				   &imageBuf[static_cast<_st>(GetOffset(0, j))],
+				   &_m->imageBuf[static_cast<_st>(GetOffset(0, j))],
 				   lineSize);
 		}
 	} else {
@@ -995,9 +985,9 @@ bool fk_Image::writePNG(const string fileName, const bool argTransFlg)
 		for(int j = 0; j < static_cast<int>(trueY); j++) {
 			for(int i = 0; i < static_cast<int>(trueX); i++) {
 				offset = static_cast<_st>(GetOffset(i, j));
-				tmpBuffer[j][i * 3 + 0] = imageBuf[offset + 0];
-				tmpBuffer[j][i * 3 + 1] = imageBuf[offset + 1];
-				tmpBuffer[j][i * 3 + 2] = imageBuf[offset + 2];
+				tmpBuffer[j][i * 3 + 0] = _m->imageBuf[offset + 0];
+				tmpBuffer[j][i * 3 + 1] = _m->imageBuf[offset + 1];
+				tmpBuffer[j][i * 3 + 2] = _m->imageBuf[offset + 2];
 			}
 		}
 	}
@@ -1096,10 +1086,10 @@ bool fk_Image::readJPG(const string fileName)
 	for(int j = 0; j < static_cast<int>(hgt); j++){
 		for(int i = 0; i < static_cast<int>(wid); i++){
 			offset = static_cast<_st>(GetOffset(i, j));
-			imageBuf[offset + 0] = img[j][i * 3 + 0];
-			imageBuf[offset + 1] = img[j][i * 3 + 1];
-			imageBuf[offset + 2] = img[j][i * 3 + 2];
-			imageBuf[offset + 3] = 255;
+			_m->imageBuf[offset + 0] = img[j][i * 3 + 0];
+			_m->imageBuf[offset + 1] = img[j][i * 3 + 1];
+			_m->imageBuf[offset + 2] = img[j][i * 3 + 2];
+			_m->imageBuf[offset + 3] = 255;
 		}
 	}
 
@@ -1114,7 +1104,7 @@ bool fk_Image::readJPG(const string fileName)
 
 bool fk_Image::writeJPG(const string fileName, int quality)
 {
-	if(imageBuf.empty()) {
+	if(_m->imageBuf.empty()) {
 		return false;
 	}
 
@@ -1158,9 +1148,9 @@ bool fk_Image::writeJPG(const string fileName, int quality)
 		
 		for(int i = 0; i < static_cast<int>(wid); i++) {
 			offset = static_cast<_st>(GetOffset(i, j));
-			img[j][i * 3 + 0] = imageBuf[offset + 0];
-			img[j][i * 3 + 1] = imageBuf[offset + 1];
-			img[j][i * 3 + 2] = imageBuf[offset + 2];
+			img[j][i * 3 + 0] = _m->imageBuf[offset + 0];
+			img[j][i * 3 + 1] = _m->imageBuf[offset + 1];
+			img[j][i * 3 + 2] = _m->imageBuf[offset + 2];
 		}
 	}
 

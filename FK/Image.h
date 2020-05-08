@@ -66,8 +66,8 @@ namespace FK {
 	 */
 	class fk_Dimension {
 	public:
-		int		w; //!< 画像の横幅
-		int		h; //!< 画像の縦幅
+		int w; //!< 画像の横幅
+		int h; //!< 画像の縦幅
 
 		//! コンストラクタ
 		/*!
@@ -97,10 +97,10 @@ namespace FK {
 	 */
 	class fk_Rect {
 	public:
-		int		x;	//!< 領域左上の x 座標
-		int		y;	//!< 領域左上の y 座標
-		int		w;	//!< 領域の横幅
-		int		h;	//!< 領域の縦幅
+		int x;	//!< 領域左上の x 座標
+		int y;	//!< 領域左上の y 座標
+		int w;	//!< 領域の横幅
+		int h;	//!< 領域の縦幅
 
 		//! コンストラクタ
 		/*!
@@ -121,27 +121,27 @@ namespace FK {
 		 *	\param[in] w 領域の横幅
 		 *	\param[in] h 領域の縦幅
 		 */	
-		void			set(int x, int y, int w, int h);
+		void set(int x, int y, int w, int h);
 
 		//! 領域位置設定関数
 		/*!
 		 *	\param[in] x 領域左上の x 座標
 		 *	\param[in] y 領域左上の y 座標
 		 */
-		void			setPos(int x, int y);
+		void setPos(int x, int y);
 
 		//! 領域サイズ設定関数
 		/*!
 		 *	\param[in] w 領域の横幅
 		 *	\param[in] h 領域の縦幅
 		 */	
-		void			setSize(int w, int h);
+		void setSize(int w, int h);
 
 		//! 領域サイズ参照関数
 		/*!
 		 *	\return 領域サイズ
 		 */
-		fk_Dimension	getSize(void);
+		fk_Dimension getSize(void);
 	};
 
 	//! 画像を生成、管理するクラス
@@ -161,7 +161,20 @@ namespace FK {
 	 */
 	class fk_Image : public fk_BaseObject {
 
-		friend class	fk_Texture;
+		friend class fk_Texture;
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Dimension imageSize, bufSize;
+			std::vector<fk_ImType> imageBuf;
+			fk_ImType *bufPointer;
+			fk_TexID texID;
+			bool updateFlg;
+
+			Member(void);
+		};
+#endif
 
 	public:
 
@@ -183,7 +196,7 @@ namespace FK {
 		 *	画像データを初期化します。
 		 *	画像サイズも (0, 0) となります。
 		 */
-		void	init();
+		void init();
 
 		//! BMP ファイル入力関数
 		/*!
@@ -193,7 +206,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool	readBMP(const std::string fileName);
+		bool readBMP(const std::string fileName);
 
 		//! BMP バッファ入力関数
 		/*!
@@ -205,7 +218,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool	readBMPData(fk_ImType *buf);
+		bool readBMPData(fk_ImType *buf);
 
 		//! PNG ファイル入力関数
 		/*!
@@ -215,7 +228,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool	readPNG(const std::string fileName);
+		bool readPNG(const std::string fileName);
 
 		//! PNG データ入力用関数
 		/*!
@@ -227,7 +240,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool	readPNGData(fk_ImType *buf);
+		bool readPNGData(fk_ImType *buf);
 
 		//! JPEG ファイル入力関数
 		/*!
@@ -237,7 +250,7 @@ namespace FK {
 		 *
 		 *	\return 入力に成功すれば true、失敗すれば false を返します。
 		 */
-		bool	readJPG(const std::string fileName);
+		bool readJPG(const std::string fileName);
 
 		//! BMP ファイル出力関数
 		/*!
@@ -254,7 +267,7 @@ namespace FK {
 		 *
 		 *	\return 書き出しに成功すれば true、失敗すれば false を返します。
 		 */
-		bool	writeBMP(const std::string fileName, const bool transFlg = false);
+		bool writeBMP(const std::string fileName, const bool transFlg = false);
 
 		//! PNG ファイル出力関数
 		/*!
@@ -267,7 +280,7 @@ namespace FK {
 		 *
 		 *	\return 書き出しに成功すれば true、失敗すれば false を返します。
 		 */
-		bool	writePNG(const std::string fileName, const bool transFlg = true);
+		bool writePNG(const std::string fileName, const bool transFlg = true);
 
 		//! JPEG ファイル出力関数
 		/*!
@@ -284,7 +297,7 @@ namespace FK {
 		 *
 		 *	\return 書き出しに成功すれば true、失敗すれば false を返します。
 		 */
-		bool	writeJPG(const std::string fileName, int quality = 80);
+		bool writeJPG(const std::string fileName, int quality = 80);
 
 		//! 画像領域生成関数
 		/*!
@@ -298,7 +311,7 @@ namespace FK {
 		 *		その場合でも横幅が変更されたときは
 		 *		各ピクセルの縦横関係が崩れてしまう可能性があります。
 		 */
-		void	newImage(int w, int h, bool initFlg = true);
+		void newImage(int w, int h, bool initFlg = true);
 
 		//! 画像データコピー関数1
 		/*!
@@ -307,7 +320,7 @@ namespace FK {
 		 *
 		 *	\param[in] image	元画像データのアドレス
 		 */
-		void	copyImage(const fk_Image *image);
+		void copyImage(const fk_Image *image);
 
 		//! 画像データコピー関数2
 		/*!
@@ -321,7 +334,7 @@ namespace FK {
 		 *	\param[in] x		書き換え領域左上の x 座標
 		 *	\param[in] y		書き換え領域左上の y 座標
 		 */
-		void	copyImage(const fk_Image *image, int x, int y);
+		void copyImage(const fk_Image *image, int x, int y);
 
 		//! 画像データ部分抽出関数
 		/*!
@@ -335,25 +348,25 @@ namespace FK {
 		 *	\param[in] w		抽出矩形領域の横幅
 		 *	\param[in] h		抽出矩形領域の縦幅
 		 */
-		bool	subImage(const fk_Image *image, int x, int y, int w, int h);
+		bool subImage(const fk_Image *image, int x, int y, int w, int h);
 
 		//! 画像横幅取得関数
 		/*!
 		 *	\return 横幅
 		 */
-		int		getWidth(void) const;
+		int getWidth(void) const;
 
 		//! 画像縦幅取得関数
 		/*!
 		 *	\return 縦幅
 		 */
-		int		getHeight(void) const;
+		int getHeight(void) const;
 
 		//! 画像サイズ取得関数
 		/*!
 		 *	\return 画像サイズのポインタ
 		 */
-		const fk_Dimension *	getImageSize(void);
+		const fk_Dimension * getImageSize(void);
 
 		//! 画像バッファサイズ取得関数
 		/*!
@@ -378,7 +391,7 @@ namespace FK {
 		 *
 		 *	\return データサイズのポインタ
 		 */
-		const fk_Dimension *	getBufferSize(void);
+		const fk_Dimension * getBufferSize(void);
 
 		//! ピクセルR要素取得関数
 		/*!
@@ -392,7 +405,7 @@ namespace FK {
 		 *		ピクセルのR(赤)要素値。
 		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
-		int		getR(int x, int y) const;
+		int getR(int x, int y) const;
 
 		//! ピクセルG要素取得関数
 		/*!
@@ -406,7 +419,7 @@ namespace FK {
 		 *		ピクセルのG(緑)要素値。
 		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
-		int		getG(int x, int y) const;
+		int getG(int x, int y) const;
 
 		//! ピクセルB要素取得関数
 		/*!
@@ -420,7 +433,7 @@ namespace FK {
 		 *		ピクセルのB(青)要素値。
 		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
-		int		getB(int x, int y) const;
+		int getB(int x, int y) const;
 
 		//! ピクセルA要素取得関数
 		/*!
@@ -434,7 +447,7 @@ namespace FK {
 		 *		ピクセルのA(透過度)要素値。
 		 *		指定した座標が画像内にない場合は、-1 を返します。
 		 */
-		int		getA(int x, int y) const;
+		int getA(int x, int y) const;
 
 		//! ピクセル色要素取得関数
 		/*!
@@ -448,7 +461,7 @@ namespace FK {
 		 *		ピクセルの色要素値。
 		 *		指定した座標が画像内にない場合は、(0, 0, 0, 1) の値を返します。
 		 */
-		fk_Color	getColor(int x, int y) const;
+		fk_Color getColor(int x, int y) const;
 
 		//! ピクセル RGBA 値設定関数
 		/*!
@@ -469,7 +482,7 @@ namespace FK {
 		 *		更新に成功した場合 true を、失敗した場合 false を返します。
 		 *		値の丸めが入った場合については、失敗とはみなしません。
 		 */
-		bool	setRGBA(int x, int y, int r, int g, int b, int a);
+		bool setRGBA(int x, int y, int r, int g, int b, int a);
 
 		//! ピクセル RGB 値設定関数
 		/*!
@@ -489,7 +502,7 @@ namespace FK {
 		 *		更新に成功した場合 true を、失敗した場合 false を返します。
 		 *		値の丸めが入った場合については、失敗とはみなしません。
 		 */
-		bool	setRGB(int x, int y, int r, int g, int b);
+		bool setRGB(int x, int y, int r, int g, int b);
 
 		//! ピクセル R 値設定関数
 		/*!
@@ -506,7 +519,7 @@ namespace FK {
 		 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 		 *	値の丸めが入った場合については、失敗とはみなしません。
 		 */
-		bool	setR(int x, int y, int r);
+		bool setR(int x, int y, int r);
 
 		//! ピクセル G 値設定関数
 		/*!
@@ -523,7 +536,7 @@ namespace FK {
 		 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 		 *	値の丸めが入った場合については、失敗とはみなしません。
 		 */
-		bool	setG(int x, int y, int g);
+		bool setG(int x, int y, int g);
 
 		//! ピクセル B 値設定関数
 		/*!
@@ -540,7 +553,7 @@ namespace FK {
 		 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 		 *	値の丸めが入った場合については、失敗とはみなしません。
 		 */
-		bool	setB(int x, int y, int b);
+		bool setB(int x, int y, int b);
 
 		//! ピクセル A 値設定関数
 		/*!
@@ -557,7 +570,7 @@ namespace FK {
 		 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 		 *	値の丸めが入った場合については、失敗とはみなしません。
 		 */
-		bool	setA(int x, int y, int a);
+		bool setA(int x, int y, int a);
 
 		//! ピクセル色値設定関数
 		/*!
@@ -571,7 +584,7 @@ namespace FK {
 		 *
 		 *	\return	更新に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool	setColor(int x, int y, const fk_Color &col);
+		bool setColor(int x, int y, const fk_Color &col);
 
 		//! バッファ全体初期化関数1
 		/*!
@@ -581,7 +594,7 @@ namespace FK {
 		 *
 		 *	\param[in] col	色要素値
 		 */
-		void	fillColor(const fk_Color &col);
+		void fillColor(const fk_Color &col);
 
 		//! バッファ全体初期化関数2
 		/*!
@@ -594,7 +607,7 @@ namespace FK {
 		 *	\param[in] b	B(赤)要素値
 		 *	\param[in] a	A(赤)要素値
 		 */
-		void	fillColor(int r, int g, int b, int a = 0);
+		void fillColor(int r, int g, int b, int a = 0);
 
 		//! 画像データ配列先頭アドレス取得関数	
 		/*!
@@ -610,63 +623,59 @@ namespace FK {
 		 *
 		 *	\return 画像データ配列の先頭アドレス
 		 */
-		const fk_ImType *		getBufPointer(void) const;
+		const fk_ImType * getBufPointer(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 
-		fk_TexID	GetTexID(void);
-		bool		GetUpdate(void);
-		void		SetUpdate(bool);
+		fk_TexID GetTexID(void);
+		bool GetUpdate(void);
+		void SetUpdate(bool);
 #endif
 
 	private:
-		fk_Dimension			imageSize, bufSize;
-		std::vector<fk_ImType>	imageBuf;
-		fk_ImType				*bufPointer;
-		fk_TexID				texID;
-		bool					updateFlg;
+		std::unique_ptr<Member> _m;
 
 		unsigned int ChgUInt(unsigned char *, int) const;
 		unsigned int ChgUShort(fk_ImType *, int) const;
 
-		int					GetOffset(int, int) const;
-		fk_ImType			RoundVal(int) const;
-		fk_ImageStatus		CreateImg(const std::string);
-		fk_ImageStatus		CreateImg(fk_ImType *);
-		void				CreateBuffer(bool = true);
-		void				CreateBuffer(int, int, bool = true);
-		void				CreateBuffer(const fk_Dimension, bool = true);
-		bool				IsPixelStatus(int, int) const;
-		int					GetOneBufferSize(int, int);
-		int					GetFixVal(fk_ImageFix, int) const;
+		int GetOffset(int, int) const;
+		fk_ImType RoundVal(int) const;
+		fk_ImageStatus CreateImg(const std::string);
+		fk_ImageStatus CreateImg(fk_ImType *);
+		void CreateBuffer(bool = true);
+		void CreateBuffer(int, int, bool = true);
+		void CreateBuffer(const fk_Dimension, bool = true);
+		bool IsPixelStatus(int, int) const;
+		int GetOneBufferSize(int, int);
+		int GetFixVal(fk_ImageFix, int) const;
 
-		void				SetLong2Byte(long, fk_ImType *, int);
-		void				SetInt2Byte(int, fk_ImType *, int);
+		void SetLong2Byte(long, fk_ImType *, int);
+		void SetInt2Byte(int, fk_ImType *, int);
 
-		void				SetTexID(const fk_TexID);
+		void SetTexID(const fk_TexID);
 
-		bool				IsBmpFile(const std::string) const;
-		bool				IsBmpData(fk_ImType *) const;
-		fk_ImageStatus		LoadBmpFile(const std::string);
-		fk_ImageStatus		LoadBmpData(fk_ImType *);
-		void				SetRGBA4Bmp(int, int, fk_ImType *,
+		bool IsBmpFile(const std::string) const;
+		bool IsBmpData(fk_ImType *) const;
+		fk_ImageStatus LoadBmpFile(const std::string);
+		fk_ImageStatus LoadBmpData(fk_ImType *);
+		void SetRGBA4Bmp(int, int, fk_ImType *,
 										int, std::vector<fk_ImType> &);
 
-		bool				GetBmpFileHeader(std::ifstream &, fk_ImType *);
-		bool				GetBmpInfoHeader(std::ifstream &, fk_ImType *);
-		fk_Dimension		GetBmpSize(fk_ImType *);
+		bool GetBmpFileHeader(std::ifstream &, fk_ImType *);
+		bool GetBmpInfoHeader(std::ifstream &, fk_ImType *);
+		fk_Dimension GetBmpSize(fk_ImType *);
 
-		fk_ImageStatus		SaveBmpFile(std::string, bool);
-		void				MakeBmpFileHeader(int, int, int,
+		fk_ImageStatus SaveBmpFile(std::string, bool);
+		void MakeBmpFileHeader(int, int, int,
 											  std::vector<fk_ImType> &);
-		void				MakeBmpInfoHeader(int, int, int,
+		void MakeBmpInfoHeader(int, int, int,
 											  std::vector<fk_ImType> &);
-		void				MakeBmpBuffer(int, int, bool, fk_ImType *);
+		void MakeBmpBuffer(int, int, bool, fk_ImType *);
 
-		bool				IsPngFile(const std::string) const;
-		fk_ImageStatus		LoadPngFile(const std::string);
-		fk_ImageStatus		LoadPngData(fk_ImType *);
-		void				ReleaseTexture(void);
+		bool IsPngFile(const std::string) const;
+		fk_ImageStatus LoadPngFile(const std::string);
+		fk_ImageStatus LoadPngData(fk_ImType *);
+		void ReleaseTexture(void);
 	};
 }
 #endif	// __FK_IMAGE_HEADER__

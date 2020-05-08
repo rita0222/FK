@@ -42,6 +42,18 @@ namespace FK {
 
 	class fk_IFSTexture : public fk_Texture {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_IndexFaceSet ifs;
+			std::vector<fk_TexCoord> coordArray;
+			std::vector< std::vector<int> > commonList;
+			bool connectMode;
+
+			Member(void);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -62,7 +74,7 @@ namespace FK {
 		 *	テクスチャデータおよびテクスチャ座標のデータを全て破棄し、
 		 *	初期化を行います。
 		 */
-		void					init(void);
+		void init(void);
 
 		//! テクスチャ座標参照関数
 		/*!
@@ -73,7 +85,7 @@ namespace FK {
 		 *
 		 *	\return		テクスチャ座標
 		 */
-		fk_TexCoord				getTextureCoord(int tID, int vID);
+		fk_TexCoord getTextureCoord(int tID, int vID);
 
 		//! 形状データ参照関数
 		/*!
@@ -85,7 +97,7 @@ namespace FK {
 		 *
 		 *	\return		fk_IndexFaceSet 型の形状データのポインタ
 		 */
-		fk_IndexFaceSet *		getIFS(void);
+		fk_IndexFaceSet * getIFS(void);
 
 		//! 形状コピー関数
 		/*!
@@ -93,7 +105,7 @@ namespace FK {
 		 *
 		 *	\param[in]		ifsTex	複写元インスタンス
 		 */
-		void				cloneShape(fk_IFSTexture *ifsTex);
+		void cloneShape(fk_IFSTexture *ifsTex);
 
 		//! テクスチャ座標設定関数
 		/*!
@@ -104,8 +116,7 @@ namespace FK {
 		 *
 		 *	\param[in]	coord	テクスチャ座標
 		 */
-		void					setTextureCoord(int tID, int vID,
-												fk_TexCoord &coord);
+		void setTextureCoord(int tID, int vID, fk_TexCoord &coord);
 
 		//! MQOファイル入力関数
 		/*!
@@ -139,10 +150,7 @@ namespace FK {
 		 *
 		 *	\sa readMQOData(), fk_IFSTexture::readMQOFile()
 		 */
-		bool					readMQOFile(std::string fileName,
-											std::string objName,
-											int materialID = -1,
-											bool contFlg = true);
+		bool readMQOFile(std::string fileName, std::string, int materialID = -1, bool contFlg = true);
 
 		//! MQOデータ入力関数
 		/*!
@@ -180,10 +188,8 @@ namespace FK {
 		 *
 		 * 	\sa readMQOFile(), fk_IndexFaceSet::readMQOData()
 		 */
-		bool					readMQOData(unsigned char *buffer,
-											std::string objName,
-											int materialID = -1,
-											bool contFlg = true);
+		bool readMQOData(unsigned char *buffer, std::string objName,
+						 int materialID = -1, bool contFlg = true);
 
 		//! DirectX (D3DX) ファイル入力関数
 		/*!
@@ -211,9 +217,7 @@ namespace FK {
 		 *	
 		 *	\return ファイルの入力に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool					readD3DXFile(std::string fileName,
-											 std::string objName,
-											 int materialID = -1);
+		bool readD3DXFile(std::string fileName, std::string objName, int materialID = -1);
 
 		//! 法線連続性設定関数
 		/*!
@@ -233,7 +237,7 @@ namespace FK {
 		 *
 		 *	\sa getConnectMode()
 		 */
-		void					setConnectMode(bool connectFlg);
+		void setConnectMode(bool connectFlg);
 
 		//! 法線連続性設定関数
 		/*!
@@ -245,7 +249,7 @@ namespace FK {
 		 *
 		 *	\sa setConnectMode()
 		 */
-		bool					getConnectMode(void);
+		bool getConnectMode(void);
 
 		//! 頂点移動関数1
 		/*!
@@ -257,9 +261,7 @@ namespace FK {
 		 *
 		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
 		 */
-		bool					moveVPosition(int vID,
-											  const fk_Vector &pos,
-											  int order = 0);
+		bool moveVPosition(int vID, const fk_Vector &pos, int order = 0);
 
 		//! 頂点移動関数2
 		/*!
@@ -273,11 +275,7 @@ namespace FK {
 		 *
 		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
 		 */
-		bool					moveVPosition(int vID,
-											  double x,
-											  double y,
-											  double z,
-											  int order = 0);
+		bool moveVPosition(int vID, double x, double y, double z, int order = 0);
 
 		//! 頂点移動関数3
 		/*!
@@ -288,9 +286,7 @@ namespace FK {
 		 *	\param[in]	order	全頂点ID のうち、もっとも最小の ID 番号
 		 *	\return	頂点移動が成功したら true を、失敗したら false を返します。
 		 */
-		bool					moveVPosition(int vID,
-											  double *pos,
-											  int order = 0);
+		bool moveVPosition(int vID, double *pos, int order = 0);
 
 		//! アニメーション時間設定関数
 		/*!
@@ -299,7 +295,7 @@ namespace FK {
 		 *
 		 *	\param[in]	t		時間
 		 */
-		void					setAnimationTime(double t);
+		void setAnimationTime(double t);
 
 		//! BVH データ設定関数
 		/*!
@@ -308,24 +304,20 @@ namespace FK {
 		 *
 		 *	\param[in]	bvh		モーションデータ
 		 */
-		void					setBVHMotion(fk_BVHBase *bvh);
+		void setBVHMotion(fk_BVHBase *bvh);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 		std::vector< std::vector<int> > * GetCommonList(void);
-		void	ForceUpdateAttr(void);
+		void ForceUpdateAttr(void);
 #endif
 	   
 	private:
+		std::unique_ptr<Member> _m;
 
-		fk_IndexFaceSet						*ifs;
-		std::vector<fk_TexCoord>			coordArray;
-		std::vector< std::vector<int> >		commonList;
-		bool								connectMode;
-
-		void	SetConnectNormal(void);
-		void	ShapeUpdate(void);
-		void	TexCoordUpdate(void);
-		void	TexCoordUpdate(int);
+		void SetConnectNormal(void);
+		void ShapeUpdate(void);
+		void TexCoordUpdate(void);
+		void TexCoordUpdate(int);
 	};
 }
 

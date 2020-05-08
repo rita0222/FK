@@ -58,12 +58,18 @@ void fk_Rect::setSize(int argW, int argH)
 
 fk_Dimension fk_Rect::getSize(void)
 {
-	fk_Dimension	retDim(w, h);
+	fk_Dimension retDim(w, h);
 
 	return retDim;
 }
+
+fk_Image::Member::Member(void) :
+	bufPointer(nullptr), texID(0), updateFlg(true)
+{
+	return;
+}
 		
-fk_Image::fk_Image(int argW, int argH) : texID(0)
+fk_Image::fk_Image(int argW, int argH) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::IMAGE);
 	CreateBuffer(argW, argH, true);
@@ -85,12 +91,12 @@ fk_Image::fk_Image(const fk_Image &argImg)
 
 void fk_Image::init(void)
 {
-	imageSize.w = 0;
-	imageSize.h = 0;
-	bufSize.w = 0;
-	bufSize.h = 0;
-	imageBuf.clear();
-	bufPointer = nullptr;
+	_m->imageSize.w = 0;
+	_m->imageSize.h = 0;
+	_m->bufSize.w = 0;
+	_m->bufSize.h = 0;
+	_m->imageBuf.clear();
+	_m->bufPointer = nullptr;
 	SetUpdate(true);
 	ReleaseTexture();
 
@@ -99,19 +105,17 @@ void fk_Image::init(void)
 
 void fk_Image::ReleaseTexture(void)
 {
-	if(texID != 0) {
+	if(_m->texID != 0) {
 #ifndef FK_CLI_CODE		
-		glDeleteTextures(1, &texID);
+		glDeleteTextures(1, &_m->texID);
 #endif		
-		texID = 0;
+		_m->texID = 0;
 	}
 }	
 
 unsigned int fk_Image::ChgUInt(unsigned char *argBuf, int argOffset) const
 {
-	unsigned int	retVal;
-
-	retVal = (unsigned int)(argBuf[argOffset+3]) * 256 * 256 * 256;
+	unsigned int retVal = (unsigned int)(argBuf[argOffset+3]) * 256 * 256 * 256;
 	retVal += (unsigned int)(argBuf[argOffset+2]) * 256 * 256;
 	retVal += (unsigned int)(argBuf[argOffset+1]) * 256;
 	retVal += (unsigned int)(argBuf[argOffset]);
@@ -121,9 +125,7 @@ unsigned int fk_Image::ChgUInt(unsigned char *argBuf, int argOffset) const
 
 unsigned int fk_Image::ChgUShort(fk_ImType *argBuf, int argOffset) const
 {
-	unsigned int	retVal;
-
-	retVal = (unsigned int)(argBuf[argOffset+1]) * 256;
+	unsigned int retVal = (unsigned int)(argBuf[argOffset+1]) * 256;
 	retVal += (unsigned int)(argBuf[argOffset]);
 
 	return retVal;
@@ -131,7 +133,7 @@ unsigned int fk_Image::ChgUShort(fk_ImType *argBuf, int argOffset) const
 
 int fk_Image::GetOffset(int argX, int argY) const
 {
-	return (((imageSize.h - argY - 1)*bufSize.w + argX)*4);
+	return (((_m->imageSize.h - argY - 1)*_m->bufSize.w + argX)*4);
 }
 
 fk_ImType fk_Image::RoundVal(int argVal) const
@@ -146,7 +148,7 @@ fk_ImageStatus fk_Image::CreateImg(const string argFile)
 	init();
 
 	if(argFile == "") {
-		imageSize.w = imageSize.h = 0;
+		_m->imageSize.w = _m->imageSize.h = 0;
 		return fk_ImageStatus::OK;
 	}
 
@@ -181,7 +183,7 @@ fk_ImageStatus fk_Image::CreateImg(fk_ImType *argBuffer)
 	init();
 
 	if(argBuffer == nullptr) {
-		imageSize.w = imageSize.h = 0;
+		_m->imageSize.w = _m->imageSize.h = 0;
 		return fk_ImageStatus::OK;
 	}
 
@@ -212,30 +214,27 @@ void fk_Image::CreateBuffer(const fk_Dimension argDim, bool argInitFlg)
 
 void fk_Image::CreateBuffer(int argW, int argH, bool argInitFlg)
 {
-	_st		bSize;
-	int		tmpBufSizeW, tmpBufSizeH;
-
 	if(argW <= 0 || argH <= 0) {
 		init();
 		return;
 	}
 
-	tmpBufSizeW = GetFixVal(fk_ImageFix::FIX_LARGE, argW);
-	tmpBufSizeH = GetFixVal(fk_ImageFix::FIX_LARGE, argH);
+	int tmpBufSizeW = GetFixVal(fk_ImageFix::FIX_LARGE, argW);
+	int tmpBufSizeH = GetFixVal(fk_ImageFix::FIX_LARGE, argH);
 
-	if(tmpBufSizeW != bufSize.w || tmpBufSizeH != bufSize.h) {
+	if(tmpBufSizeW != _m->bufSize.w || tmpBufSizeH != _m->bufSize.h) {
 		init();
 	} else {
 		SetUpdate(true);
 	}
 
-	imageSize.set(argW, argH);
-	bufSize.set(tmpBufSizeW, tmpBufSizeH);
+	_m->imageSize.set(argW, argH);
+	_m->bufSize.set(tmpBufSizeW, tmpBufSizeH);
 
-	if(bufPointer == nullptr) {
-		bSize = _st(bufSize.w) * _st(bufSize.h) * 4;
-		imageBuf.resize(bSize);
-		bufPointer = &imageBuf[0];
+	if(_m->bufPointer == nullptr) {
+		_st bSize = _st(_m->bufSize.w) * _st(_m->bufSize.h) * 4;
+		_m->imageBuf.resize(bSize);
+		_m->bufPointer = &_m->imageBuf[0];
 	}
 
 	if(argInitFlg == true) fillColor(0, 0, 0, 0);
@@ -245,9 +244,9 @@ void fk_Image::CreateBuffer(int argW, int argH, bool argInitFlg)
 
 bool fk_Image::IsPixelStatus(int argX, int argY) const
 {
-	if(imageBuf.empty() == true ||
+	if(_m->imageBuf.empty() == true ||
 	   argX < 0 || argY < 0 ||
-	   argX >= imageSize.w || argY >= imageSize.h) {
+	   argX >= _m->imageSize.w || argY >= _m->imageSize.h) {
 		return false;
 	}
 
@@ -256,7 +255,7 @@ bool fk_Image::IsPixelStatus(int argX, int argY) const
 
 int fk_Image::GetOneBufferSize(int argType, int argXRes)
 {
-	int		tmpSize = 0;
+	int tmpSize = 0;
 
 	switch(argType) {
 	  case 1:
@@ -287,16 +286,13 @@ int fk_Image::GetOneBufferSize(int argType, int argXRes)
 
 void fk_Image::SetLong2Byte(long argNum, fk_ImType *argBuffer, int argOffset)
 {
-	long	tmp;
-	int		v1, v2, v3, v4;
-
-	tmp = argNum;
-	v1 = int(tmp / (256 * 256 * 256));
+	long tmp = argNum;
+	int v1 = int(tmp / (256 * 256 * 256));
 	tmp %= (256 * 256 * 256);
-	v2 = int(tmp / (256 * 256));
+	int v2 = int(tmp / (256 * 256));
 	tmp %= (256 * 256);
-	v3 = int(tmp / 256);
-	v4 = int(tmp % 256);
+	int v3 = int(tmp / 256);
+	int v4 = int(tmp % 256);
 
 	argBuffer[argOffset + 3] = fk_ImType(v1);
 	argBuffer[argOffset + 2] = fk_ImType(v2);
@@ -308,10 +304,8 @@ void fk_Image::SetLong2Byte(long argNum, fk_ImType *argBuffer, int argOffset)
 
 void fk_Image::SetInt2Byte(int argNum, fk_ImType *argBuffer, int argOffset)
 {
-	int		v1, v2;
-
-	v1 = argNum / 256;
-	v2 = argNum % 256;
+	int v1 = argNum / 256;
+	int v2 = argNum % 256;
 
 	argBuffer[argOffset + 1] = fk_ImType(v1);
 	argBuffer[argOffset] = fk_ImType(v2);
@@ -331,10 +325,10 @@ void fk_Image::copyImage(const fk_Image *argImage)
 
 	init();
 
-	if(argImage->bufSize.w > 0 && argImage->bufSize.h > 0) {
-		CreateBuffer(argImage->imageSize, true);
-		memcpy(&imageBuf[0], &argImage->imageBuf[0],
-			   _st(bufSize.w) * _st(bufSize.h) * 4);
+	if(argImage->_m->bufSize.w > 0 && argImage->_m->bufSize.h > 0) {
+		CreateBuffer(argImage->_m->imageSize, true);
+		memcpy(&_m->imageBuf[0], &argImage->_m->imageBuf[0],
+			   _st(_m->bufSize.w) * _st(_m->bufSize.h) * 4);
 	}
 	SetUpdate(true);
 
@@ -343,22 +337,20 @@ void fk_Image::copyImage(const fk_Image *argImage)
 
 void fk_Image::copyImage(const fk_Image *argImage, int argX, int argY)
 {
-	int		i;
-
 	if(argX < 0 || argY < 0) return;
 
-	if(argX + argImage->imageSize.w > imageSize.w ||
-	   argY + argImage->imageSize.h > imageSize.h) {
+	if(argX + argImage->_m->imageSize.w > _m->imageSize.w ||
+	   argY + argImage->_m->imageSize.h > _m->imageSize.h) {
 		return;
 	}
 
-	for(i = 0; i < argImage->imageSize.h; i++) {
+	for(int i = 0; i < argImage->_m->imageSize.h; i++) {
 		_st		off1, off2;
 		off1 = _st(GetOffset(argX, argY + i));
 		off2 = _st(argImage->GetOffset(0, i));
-		memmove(&imageBuf[off1],
-				&argImage->imageBuf[off2],
-				_st(argImage->imageSize.w) * 4);
+		memmove(&_m->imageBuf[off1],
+				&argImage->_m->imageBuf[off2],
+				_st(argImage->_m->imageSize.w) * 4);
 	}
 
 	SetUpdate(true);
@@ -370,26 +362,23 @@ void fk_Image::copyImage(const fk_Image *argImage, int argX, int argY)
 bool fk_Image::subImage(const fk_Image *argImage,
 						int argX, int argY, int argW, int argH)
 {
-	int		orgW, orgH, i;
-	_st		index1, index2;
-
 	if(argImage == nullptr) return false;
 	if(argImage == this) return false;
 
 	if(argX < 0 || argY < 0 || argW <= 0 || argH <= 0) return false;
 
-	orgW = argImage->getWidth();
-	orgH = argImage->getHeight();
+	int orgW = argImage->getWidth();
+	int orgH = argImage->getHeight();
 
 	if(orgW < argX + argW || orgH < argY + argH) return false;
 
 	CreateBuffer(argW, argH, true);
 
-	for(i = 0; i < argH; i++) {
-		index1 = _st(GetOffset(0, i));
-		index2 = _st(argImage->GetOffset(argX, argY + i));
-		memcpy(&imageBuf[index1],
-			   &argImage->imageBuf[index2],
+	for(int i = 0; i < argH; i++) {
+		_st index1 = _st(GetOffset(0, i));
+		_st index2 = _st(argImage->GetOffset(argX, argY + i));
+		memcpy(&_m->imageBuf[index1],
+			   &argImage->_m->imageBuf[index2],
 			   _st(argW) * 4);
 	}
 
@@ -400,22 +389,22 @@ bool fk_Image::subImage(const fk_Image *argImage,
 
 int fk_Image::getWidth(void) const
 {
-	return imageSize.w;
+	return _m->imageSize.w;
 }
 
 int fk_Image::getHeight(void) const
 {
-	return imageSize.h;
+	return _m->imageSize.h;
 }
 
 const fk_Dimension * fk_Image::getImageSize(void)
 {
-	return &imageSize;
+	return &_m->imageSize;
 }
 
 const fk_Dimension * fk_Image::getBufferSize(void)
 {
-	return &bufSize;
+	return &_m->bufSize;
 }
 
 int fk_Image::getR(int argX, int argY) const
@@ -424,7 +413,7 @@ int fk_Image::getR(int argX, int argY) const
 		return -1;
 	}
 
-	return imageBuf[_st(GetOffset(argX, argY))];
+	return _m->imageBuf[_st(GetOffset(argX, argY))];
 }
 
 int fk_Image::getG(int argX, int argY) const
@@ -433,7 +422,7 @@ int fk_Image::getG(int argX, int argY) const
 		return -1;
 	}
 
-	return imageBuf[_st(GetOffset(argX, argY)) + 1];
+	return _m->imageBuf[_st(GetOffset(argX, argY)) + 1];
 }
 
 int fk_Image::getB(int argX, int argY) const
@@ -442,7 +431,7 @@ int fk_Image::getB(int argX, int argY) const
 		return -1;
 	}
 
-	return imageBuf[_st(GetOffset(argX, argY)) + 2];
+	return _m->imageBuf[_st(GetOffset(argX, argY)) + 2];
 }
 
 int fk_Image::getA(int argX, int argY) const
@@ -451,23 +440,22 @@ int fk_Image::getA(int argX, int argY) const
 		return -1;
 	}
 
-	return (imageBuf[_st(GetOffset(argX, argY)) + 3]);
+	return (_m->imageBuf[_st(GetOffset(argX, argY)) + 3]);
 }
 
 fk_Color fk_Image::getColor(int argX, int argY) const
 {
-	fk_Color	col(0.0, 0.0, 0.0);
-	_st			offset;
+	fk_Color col(0.0, 0.0, 0.0);
 
 	if(!IsPixelStatus(argX, argY)) {
 		return col;
 	}
 
-	offset = _st(GetOffset(argX, argY));
-	col.setR(float(imageBuf[offset])/255.0f);
-	col.setG(float(imageBuf[offset+1])/255.0f);
-	col.setB(float(imageBuf[offset+2])/255.0f);
-	col.setA(float(imageBuf[offset+3])/255.0f);
+	_st offset = _st(GetOffset(argX, argY));
+	col.setR(float(_m->imageBuf[offset])/255.0f);
+	col.setG(float(_m->imageBuf[offset+1])/255.0f);
+	col.setB(float(_m->imageBuf[offset+2])/255.0f);
+	col.setA(float(_m->imageBuf[offset+3])/255.0f);
 
 	return col;
 }
@@ -475,17 +463,15 @@ fk_Color fk_Image::getColor(int argX, int argY) const
 bool fk_Image::setRGBA(int argX, int argY,
 					   int argR, int argG, int argB, int argA)
 {
-	_st		offset;
-
 	if(!IsPixelStatus(argX, argY)) {
 		return false;
 	}
 
-	offset = _st(GetOffset(argX, argY));
-	imageBuf[offset] = RoundVal(argR);
-	imageBuf[offset+1] = RoundVal(argG);
-	imageBuf[offset+2] = RoundVal(argB);
-	imageBuf[offset+3] = RoundVal(argA);
+	_st offset = _st(GetOffset(argX, argY));
+	_m->imageBuf[offset] = RoundVal(argR);
+	_m->imageBuf[offset+1] = RoundVal(argG);
+	_m->imageBuf[offset+2] = RoundVal(argB);
+	_m->imageBuf[offset+3] = RoundVal(argA);
 
 	SetUpdate(true);
 
@@ -504,7 +490,7 @@ bool fk_Image::setR(int argX, int argY, int argR)
 		return false;
 	}
 
-	imageBuf[_st(GetOffset(argX, argY))] = RoundVal(argR);
+	_m->imageBuf[_st(GetOffset(argX, argY))] = RoundVal(argR);
 
 	SetUpdate(true);
 
@@ -517,7 +503,7 @@ bool fk_Image::setG(int argX, int argY, int argG)
 		return false;
 	}
 
-	imageBuf[_st(GetOffset(argX, argY))+1] = RoundVal(argG);
+	_m->imageBuf[_st(GetOffset(argX, argY))+1] = RoundVal(argG);
 
 	SetUpdate(true);
 
@@ -530,7 +516,7 @@ bool fk_Image::setB(int argX, int argY, int argB)
 		return false;
 	}
 
-	imageBuf[_st(GetOffset(argX, argY))+2] = RoundVal(argB);
+	_m->imageBuf[_st(GetOffset(argX, argY))+2] = RoundVal(argB);
 
 	SetUpdate(true);
 
@@ -543,7 +529,7 @@ bool fk_Image::setA(int argX, int argY, int argA)
 		return false;
 	}
 
-	imageBuf[_st(GetOffset(argX, argY))+3] = RoundVal(argA);
+	_m->imageBuf[_st(GetOffset(argX, argY))+3] = RoundVal(argA);
 
 	SetUpdate(true);
 
@@ -552,17 +538,15 @@ bool fk_Image::setA(int argX, int argY, int argA)
 
 bool fk_Image::setColor(int argX, int argY, const fk_Color &argCol)
 {
-	_st		offset;
-
 	if(!IsPixelStatus(argX, argY)) {
 		return false;
 	}
 
-	offset = _st(GetOffset(argX, argY));
-	imageBuf[offset] = fk_ImType((double(argCol.getR()) + fk_Math::EPS)*255.0);
-	imageBuf[offset+1] = fk_ImType((double(argCol.getG()) + fk_Math::EPS)*255.0);
-	imageBuf[offset+2] = fk_ImType((double(argCol.getB()) + fk_Math::EPS)*255.0);
-	imageBuf[offset+3] = fk_ImType((double(argCol.getA()) + fk_Math::EPS)*255.0);
+	_st offset = _st(GetOffset(argX, argY));
+	_m->imageBuf[offset] = fk_ImType((double(argCol.getR()) + fk_Math::EPS)*255.0);
+	_m->imageBuf[offset+1] = fk_ImType((double(argCol.getG()) + fk_Math::EPS)*255.0);
+	_m->imageBuf[offset+2] = fk_ImType((double(argCol.getB()) + fk_Math::EPS)*255.0);
+	_m->imageBuf[offset+3] = fk_ImType((double(argCol.getA()) + fk_Math::EPS)*255.0);
 
 	SetUpdate(true);
 
@@ -571,12 +555,12 @@ bool fk_Image::setColor(int argX, int argY, const fk_Color &argCol)
 
 const fk_ImType * fk_Image::getBufPointer(void) const
 {
-	return bufPointer;
+	return _m->bufPointer;
 }
 
 int fk_Image::GetFixVal(fk_ImageFix argFix, int argSize) const
 {
-	int		trueVal = 0;
+	int trueVal = 0;
 
 	switch(argFix) {
 	  case fk_ImageFix::FIX_SMALL:
@@ -646,23 +630,23 @@ int fk_Image::GetFixVal(fk_ImageFix argFix, int argSize) const
 
 bool fk_Image::GetUpdate(void)
 {
-	return updateFlg;
+	return _m->updateFlg;
 }
 
 void fk_Image::SetUpdate(bool argFlg)
 {
-	updateFlg = argFlg;
+	_m->updateFlg = argFlg;
 	return;
 }
 
 fk_TexID fk_Image::GetTexID(void)
 {
-	return texID;
+	return _m->texID;
 }
 
 void fk_Image::SetTexID(const fk_TexID argID)
 {
-	texID = argID;
+	_m->texID = argID;
 	return;
 }
 
@@ -677,8 +661,6 @@ void fk_Image::fillColor(const fk_Color &argCol)
 
 void fk_Image::fillColor(int argR, int argG, int argB, int argA)
 {
-	_st		i;
-
 	if(argR < 0 || argR > 255 ||
 	   argG < 0 || argG > 255 ||
 	   argB < 0 || argB > 255 ||
@@ -687,11 +669,11 @@ void fk_Image::fillColor(int argR, int argG, int argB, int argA)
 		return;
 	}
 
-	for(i = 0; i < _st(bufSize.w) * _st(bufSize.h); i++) {
-		imageBuf[4*i] = fk_ImType(argR);
-		imageBuf[4*i+1] = fk_ImType(argG);
-		imageBuf[4*i+2] = fk_ImType(argB);
-		imageBuf[4*i+3] = fk_ImType(argA);
+	for(_st i = 0; i < _st(_m->bufSize.w) * _st(_m->bufSize.h); i++) {
+		_m->imageBuf[4*i] = fk_ImType(argR);
+		_m->imageBuf[4*i+1] = fk_ImType(argG);
+		_m->imageBuf[4*i+2] = fk_ImType(argB);
+		_m->imageBuf[4*i+3] = fk_ImType(argA);
 	}
 
 	SetUpdate(true);
