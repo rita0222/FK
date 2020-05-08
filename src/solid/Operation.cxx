@@ -10,10 +10,15 @@
 using namespace std;
 using namespace FK;
 
-fk_Operation::fk_Operation(fk_DataBase *argDB)
+fk_Operation::Member::Member(void) : historyMode(false), tesselateMode(false)
+{
+	return;
+}
+
+fk_Operation::fk_Operation(fk_DataBase *argDB) : _m(make_unique<Member>())
 {
 	SetDataBase(argDB);
-	history.Init();
+	_m->history.Init();
 	setHistoryMode(false);
 	setTesselateMode(false);
 	return;
@@ -21,16 +26,16 @@ fk_Operation::fk_Operation(fk_DataBase *argDB)
 
 fk_Operation::~fk_Operation()
 {
-	history.Init();
+	_m->history.Init();
 	return;
 }
 
 
 void fk_Operation::UndefVNorm(fk_Vertex *argV)
 {
-	_st						i, j;
-	vector<fk_Loop *>		LoopArray;
-	vector<fk_Vertex *>		VertexArray;
+	_st i, j;
+	vector<fk_Loop *> LoopArray;
+	vector<fk_Vertex *> VertexArray;
 
 
 	if(argV == nullptr) return;
@@ -49,11 +54,11 @@ void fk_Operation::UndefVNorm(fk_Vertex *argV)
 fk_Loop * fk_Operation::SetLoop(fk_Half *argH, bool nullFlg,
 								fk_Loop *argL, int argLID)
 {
-	fk_Loop				*newL;
-	fk_Half				*loopH, *nextH, *mateH;
-	vector<fk_Half *>	halfStack;
-	vector<fk_Loop *>	loopStack;
-	unsigned int		i;
+	fk_Loop *newL;
+	fk_Half *loopH, *nextH, *mateH;
+	vector<fk_Half *> halfStack;
+	vector<fk_Loop *> loopStack;
+	unsigned int i;
 
 
 	if(checkDB() == false) return nullptr;
@@ -140,11 +145,11 @@ fk_Vertex * fk_Operation::MakeVertex(const fk_Vector argPos, int argID)
 
 	newV->SetPosition(argPos);
 
-	if(historyMode == true) {
-		history.Open(MAKEV);
-		history.PushInt(newV->getID());
-		history.PushVec(argPos);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::MAKEV));
+		_m->history.PushInt(newV->getID());
+		_m->history.PushVec(argPos);
+		_m->history.Close();
 	}
 
 	return newV;
@@ -157,8 +162,8 @@ bool fk_Operation::deleteVertex(fk_Vertex *argV)
 
 bool fk_Operation::DeleteVertex(fk_Vertex *argV)
 {
-	int			id;
-	fk_Vector	pos;
+	int id;
+	fk_Vector pos;
 
 	if(checkDB() == false) return false;
 	if(argV == nullptr) return false;
@@ -169,17 +174,17 @@ bool fk_Operation::DeleteVertex(fk_Vertex *argV)
 
 	id = argV->getID();
 
-	if(historyMode == true) {
+	if(_m->historyMode == true) {
 		pos = argV->getPosition();
 	}
 
 	if(DeleteVertexObj(argV) == false) return false;
 
-	if(historyMode == true) {
-		history.Open(DELV);
-		history.PushInt(id);
-		history.PushVec(pos);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::DELV));
+		_m->history.PushInt(id);
+		_m->history.PushVec(pos);
+		_m->history.Close();
 	}
 
 	return true;
@@ -192,13 +197,13 @@ bool fk_Operation::moveVertex(fk_Vertex *argV, fk_Vector argVec)
 
 bool fk_Operation::MoveVertex(fk_Vertex *argV, fk_Vector argVec)
 {
-	vector<fk_Loop *>				LoopSet;
-	vector<fk_Loop *>::iterator		lIterator;
-	fk_Vector						orgPos;
+	vector<fk_Loop *> LoopSet;
+	vector<fk_Loop *>::iterator lIterator;
+	fk_Vector orgPos;
 
 	if(argV == nullptr) return false;
 
-	if(historyMode == true) {
+	if(_m->historyMode == true) {
 		orgPos = argV->getPosition();
 	}
 
@@ -211,12 +216,12 @@ bool fk_Operation::MoveVertex(fk_Vertex *argV, fk_Vector argVec)
 	}
 	UndefVNorm(argV);
 
-	if(historyMode == true) {
-		history.Open(MOVEV);
-		history.PushInt(argV->getID());
-		history.PushVec(orgPos);
-		history.PushVec(argVec);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::MOVEV));
+		_m->history.PushInt(argV->getID());
+		_m->history.PushVec(orgPos);
+		_m->history.PushVec(argVec);
+		_m->history.Close();
 	}
 
 	return true;
@@ -226,7 +231,7 @@ fk_Edge * fk_Operation::makeEdge(fk_Vertex *argV1, fk_Vertex *argV2,
 								 fk_Half *argH1_1, fk_Half *argH1_2,
 								 fk_Half *argH2_1, fk_Half *argH2_2)
 {
-	fk_Edge			*newE;
+	fk_Edge *newE;
 
 	newE = nullptr;
 	if(checkDB() == false) return nullptr;
@@ -252,8 +257,8 @@ fk_Edge * fk_Operation::makeEdge(fk_Vertex *argV1, fk_Vertex *argV2,
 fk_Edge * fk_Operation::MakeEdge1(fk_Vertex *argV1, fk_Vertex *argV2,
 								  int argEID, int argH1ID, int argH2ID)
 {
-	fk_Edge			*newE;
-	fk_Half			*newH1, *newH2;
+	fk_Edge *newE;
+	fk_Half *newH1, *newH2;
 
 	// 両方が独立頂点かどうかのチェック 
 	if(argV1->getOneHalf() != nullptr || argV2->getOneHalf() != nullptr) {
@@ -286,14 +291,14 @@ fk_Edge * fk_Operation::MakeEdge1(fk_Vertex *argV1, fk_Vertex *argV2,
 	newH2->SetNextHalf(newH1->getID());
 	argV2->SetOneHalf(newH2->getID());
 
-	if(historyMode == true) {
-		history.Open(MAKEE1);
-		history.PushInt(argV1->getID());
-		history.PushInt(argV2->getID());
-		history.PushInt(newE->getID());
-		history.PushInt(newH1->getID());
-		history.PushInt(newH2->getID());
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::MAKEE1));
+		_m->history.PushInt(argV1->getID());
+		_m->history.PushInt(argV2->getID());
+		_m->history.PushInt(newE->getID());
+		_m->history.PushInt(newH1->getID());
+		_m->history.PushInt(newH2->getID());
+		_m->history.Close();
 	}
 
 	return newE;
@@ -304,8 +309,8 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 								  bool lrFlag, bool v1ParentFlag,
 								  int argEID, int argH1ID, int argH2ID)
 {
-	fk_Edge			*newE;
-	fk_Half			*newH1, *newH2;
+	fk_Edge *newE;
+	fk_Half *newH1, *newH2;
 
 	// v1 が接続頂点、v2 が独立頂点になっているかどうかのチェック 
 	if(argV1->getOneHalf() == nullptr || argV2->getOneHalf() != nullptr) {
@@ -372,16 +377,16 @@ fk_Edge * fk_Operation::MakeEdge2(fk_Vertex *argV1, fk_Vertex *argV2,
 		argV1->SetOneHalf(newH1->getID());
 	}
 
-	if(historyMode == true) {
-		history.Open(MAKEE2);
-		history.PushInt(argV2->getID());
-		history.PushInt(argH1->getID());
-		history.PushInt(newE->getID());
-		history.PushInt(newH1->getID());
-		history.PushInt(newH2->getID());
-		history.PushBool(lrFlag);
-		history.PushBool(v1ParentFlag);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::MAKEE2));
+		_m->history.PushInt(argV2->getID());
+		_m->history.PushInt(argH1->getID());
+		_m->history.PushInt(newE->getID());
+		_m->history.PushInt(newH1->getID());
+		_m->history.PushInt(newH2->getID());
+		_m->history.PushBool(lrFlag);
+		_m->history.PushBool(v1ParentFlag);
+		_m->history.Close();
 	}
 
 	return newE;
@@ -393,8 +398,8 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 								  bool v1PFlag, bool v2PFlag,
 								  int argEID, int argH1ID, int argH2ID)
 {
-	fk_Edge		*newE;
-	fk_Half		*newH1, *newH2;
+	fk_Edge *newE;
+	fk_Half *newH1, *newH2;
 
 	// v1, v2 が接続頂点かどうかのチェック 
 	if(argV1->getOneHalf() == nullptr || argV2->getOneHalf() == nullptr) {
@@ -467,16 +472,16 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 		argV2->SetOneHalf(newH2->getID());
 	}
 
-	if(historyMode == true) {
-		history.Open(MAKEE3);
-		history.PushInt(argH1_1->getID());
-		history.PushInt(argH2_1->getID());
-		history.PushInt(newE->getID());
-		history.PushInt(newH1->getID());
-		history.PushInt(newH2->getID());
-		history.PushBool(v1PFlag);
-		history.PushBool(v2PFlag);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::MAKEE3));
+		_m->history.PushInt(argH1_1->getID());
+		_m->history.PushInt(argH2_1->getID());
+		_m->history.PushInt(newE->getID());
+		_m->history.PushInt(newH1->getID());
+		_m->history.PushInt(newH2->getID());
+		_m->history.PushBool(v1PFlag);
+		_m->history.PushBool(v2PFlag);
+		_m->history.Close();
 	}
 
 	return newE;
@@ -484,7 +489,7 @@ fk_Edge * fk_Operation::MakeEdge3(fk_Vertex *argV1, fk_Vertex *argV2,
 
 bool fk_Operation::deleteEdge(fk_Edge *argE)
 {
-	fk_Half		*lHalf, *rHalf;
+	fk_Half *lHalf, *rHalf;
 
 	if(checkDB() == false) return false;
 	if(getEdgeStatus(argE) != fk_EdgeStatus::UNDEF) {
@@ -512,9 +517,9 @@ bool fk_Operation::deleteEdge(fk_Edge *argE)
 
 bool fk_Operation::DeleteEdge1(fk_Edge *argE)
 {
-	fk_Vertex		*lV, *rV;
-	fk_Half			*lH, *rH;
-	int				eID, lHID, rHID;
+	fk_Vertex *lV, *rV;
+	fk_Half *lH, *rH;
+	int eID, lHID, rHID;
 
 	lH = argE->getLeftHalf();
 	rH = argE->getRightHalf();
@@ -535,17 +540,17 @@ bool fk_Operation::DeleteEdge1(fk_Edge *argE)
 		return false;
 	}
 
-	if(historyMode == true) {
+	if(_m->historyMode == true) {
 		int lVID = lV->getID();
 		int rVID = rV->getID();
 
-		history.Open(DELE1);
-		history.PushInt(lVID);
-		history.PushInt(rVID);
-		history.PushInt(eID);
-		history.PushInt(lHID);
-		history.PushInt(rHID);
-		history.Close();
+		_m->history.Open(int(Code::DELE1));
+		_m->history.PushInt(lVID);
+		_m->history.PushInt(rVID);
+		_m->history.PushInt(eID);
+		_m->history.PushInt(lHID);
+		_m->history.PushInt(rHID);
+		_m->history.Close();
 	}
 
 	return true;
@@ -553,11 +558,11 @@ bool fk_Operation::DeleteEdge1(fk_Edge *argE)
 
 bool fk_Operation::DeleteEdge2(fk_Half *argH)
 {
-	fk_Edge			*delE;
-	fk_Half			*mateH, *prevH, *nextH;
-	fk_Vertex		*conV, *aloneV;
-	int				eID, argHID, mateHID;
-	bool			lrFlag, v1ParentFlag;
+	fk_Edge *delE;
+	fk_Half *mateH, *prevH, *nextH;
+	fk_Vertex *conV, *aloneV;
+	int eID, argHID, mateHID;
+	bool lrFlag, v1ParentFlag;
 
 	delE = argH->getParentEdge();
 	mateH = getMateHOnH(argH);
@@ -593,19 +598,19 @@ bool fk_Operation::DeleteEdge2(fk_Half *argH)
 		return false;
 	}
 
-	if(historyMode == true) {
+	if(_m->historyMode == true) {
 		int prevHID = prevH->getID();
 		int aloneVID = aloneV->getID();
 
-		history.Open(DELE2);
-		history.PushInt(aloneVID);
-		history.PushInt(prevHID);
-		history.PushInt(eID);
-		history.PushInt(argHID);
-		history.PushInt(mateHID);
-		history.PushBool(lrFlag);
-		history.PushBool(v1ParentFlag);
-		history.Close();
+		_m->history.Open(int(Code::DELE2));
+		_m->history.PushInt(aloneVID);
+		_m->history.PushInt(prevHID);
+		_m->history.PushInt(eID);
+		_m->history.PushInt(argHID);
+		_m->history.PushInt(mateHID);
+		_m->history.PushBool(lrFlag);
+		_m->history.PushBool(v1ParentFlag);
+		_m->history.Close();
 	}
 
 	return true;
@@ -613,10 +618,10 @@ bool fk_Operation::DeleteEdge2(fk_Half *argH)
 
 bool fk_Operation::DeleteEdge3(fk_Edge *argE)
 {
-	fk_Vertex	*lV, *rV;
-	fk_Half		*lH, *rH, *lPrevH, *lNextH, *rPrevH, *rNextH;
-	int			eID, lHID, rHID, lPHID, rPHID;
-	bool		lVParentFlag, rVParentFlag;
+	fk_Vertex *lV, *rV;
+	fk_Half *lH, *rH, *lPrevH, *lNextH, *rPrevH, *rNextH;
+	int eID, lHID, rHID, lPHID, rPHID;
+	bool lVParentFlag, rVParentFlag;
 
 	lH = argE->getLeftHalf();
 	rH = argE->getRightHalf();
@@ -661,16 +666,16 @@ bool fk_Operation::DeleteEdge3(fk_Edge *argE)
 		return false;
 	}
 
-	if(historyMode == true) {
-		history.Open(DELE3);
-		history.PushInt(lPHID);
-		history.PushInt(rPHID);
-		history.PushInt(eID);
-		history.PushInt(lHID);
-		history.PushInt(rHID);
-		history.PushBool(lVParentFlag);
-		history.PushBool(rVParentFlag);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::DELE3));
+		_m->history.PushInt(lPHID);
+		_m->history.PushInt(rPHID);
+		_m->history.PushInt(eID);
+		_m->history.PushInt(lHID);
+		_m->history.PushInt(rHID);
+		_m->history.PushBool(lVParentFlag);
+		_m->history.PushBool(rVParentFlag);
+		_m->history.Close();
 	}
 
 	return true;
@@ -683,8 +688,8 @@ fk_Loop * fk_Operation::makeLoop(fk_Half *argH)
 
 fk_Loop * fk_Operation::MakeLoop(fk_Half *argH, int argLID)
 {
-	fk_Loop		*newL;
-	fk_Half		*loopH;
+	fk_Loop *newL;
+	fk_Half *loopH;
 
 	if((newL = SetLoop(argH, true, nullptr, argLID)) == nullptr) {
 		return nullptr;
@@ -696,11 +701,11 @@ fk_Loop * fk_Operation::MakeLoop(fk_Half *argH, int argLID)
 		loopH = loopH->getNextHalf();
 	} while(loopH != argH);
 
-	if(historyMode == true) {
-		history.Open(MAKEL);
-		history.PushInt(newL->getID());
-		history.PushInt(argH->getID());
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::MAKEL));
+		_m->history.PushInt(newL->getID());
+		_m->history.PushInt(argH->getID());
+		_m->history.Close();
 	}
 
 	return newL;
@@ -713,8 +718,8 @@ bool fk_Operation::deleteLoop(fk_Loop *argL)
 
 bool fk_Operation::DeleteLoop(fk_Loop *argL)
 {
-	fk_Half	*loopH, *oneH;
-	int		loopID;
+	fk_Half *loopH, *oneH;
+	int loopID;
 
 	if(checkDB() == false) return false;
 
@@ -745,11 +750,11 @@ bool fk_Operation::DeleteLoop(fk_Loop *argL)
 		return false;
 	}
 
-	if(historyMode == true) {
-		history.Open(DELL);
-		history.PushInt(loopID);
-		history.PushInt(oneH->getID());
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::DELL));
+		_m->history.PushInt(loopID);
+		_m->history.PushInt(oneH->getID());
+		_m->history.Close();
 	}
 
 	return true;
@@ -767,16 +772,12 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 									 int argEID, int argLHID,
 									 int argRHID, int argLID)
 {
-	fk_Loop		*curL, *newL;
-	fk_Half		*newLH, *newRH;
-	fk_Edge		*newE;
-	fk_Half		*oldNextH, *oldPrevH;
-	fk_Vertex	*lV, *rV;
-	/*
-	int			pHID, nHID, newLID, newEID, newLHID, newRHID;
-	int			lLOneHID, rLOneHID, uniRLOneHID;
-	*/
-	int			uniRLOneHID;
+	fk_Loop *curL, *newL;
+	fk_Half *newLH, *newRH;
+	fk_Edge *newE;
+	fk_Half *oldNextH, *oldPrevH;
+	fk_Vertex *lV, *rV;
+	int uniRLOneHID;
 
 	if(checkDB() == false) return nullptr;
 
@@ -861,7 +862,7 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 	UndefVNorm(lV);
 	UndefVNorm(rV);
 
-	if(historyMode == true) {
+	if(_m->historyMode == true) {
 		int pHID = argPrevH->getID();
 		int nHID = argNextH->getID();
 		int newLID = newL->getID();
@@ -871,19 +872,19 @@ fk_Edge * fk_Operation::SeparateLoop(fk_Half *argPrevH, fk_Half *argNextH,
 		int lLOneHID = (lLOneH != nullptr) ? lLOneH->getID() : FK_UNDEFINED;
 		int rLOneHID = (rLOneH != nullptr) ? rLOneH->getID() : FK_UNDEFINED;
 
-		history.Open(SEPL);
-		history.PushInt(pHID);
-		history.PushInt(nHID);
-		history.PushInt(newEID);
-		history.PushInt(newLHID);
-		history.PushInt(newRHID);
-		history.PushInt(newLID);
-		history.PushInt(lLOneHID);
-		history.PushInt(rLOneHID);
-		history.PushInt(uniRLOneHID);
-		history.PushBool(lVPFlag);
-		history.PushBool(rVPFlag);
-		history.Close();
+		_m->history.Open(int(Code::SEPL));
+		_m->history.PushInt(pHID);
+		_m->history.PushInt(nHID);
+		_m->history.PushInt(newEID);
+		_m->history.PushInt(newLHID);
+		_m->history.PushInt(newRHID);
+		_m->history.PushInt(newLID);
+		_m->history.PushInt(lLOneHID);
+		_m->history.PushInt(rLOneHID);
+		_m->history.PushInt(uniRLOneHID);
+		_m->history.PushBool(lVPFlag);
+		_m->history.PushBool(rVPFlag);
+		_m->history.Close();
 	}
 
 	return newE;
@@ -897,13 +898,13 @@ bool fk_Operation::uniteLoop(fk_Edge *argE)
 
 bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 {
-	fk_Loop		*lL, *rL;
-	fk_Half		*lH, *rH, *lLOneH, *rLOneH;
-	fk_Half		*lNextH, *lPrevH, *rNextH, *rPrevH;
-	fk_Vertex	*lV, *rV;
-	int			eID, pHID, nHID, loopID, lHID, rHID, lLOneHID, rLOneHID;
-	int			uniRLOneHID;
-	bool		lVPFlag, rVPFlag;
+	fk_Loop *lL, *rL;
+	fk_Half *lH, *rH, *lLOneH, *rLOneH;
+	fk_Half *lNextH, *lPrevH, *rNextH, *rPrevH;
+	fk_Vertex *lV, *rV;
+	int eID, pHID, nHID, loopID, lHID, rHID, lLOneHID, rLOneHID;
+	int uniRLOneHID;
+	bool lVPFlag, rVPFlag;
 
 	if(checkDB() == false) return false;
 
@@ -989,20 +990,20 @@ bool fk_Operation::UniteLoop(fk_Edge *argE, fk_Half *argNewRL1H)
 	UndefVNorm(lV);
 	UndefVNorm(rV);
 
-	if(historyMode == true) {
-		history.Open(UNITL);
-		history.PushInt(pHID);
-		history.PushInt(nHID);
-		history.PushInt(eID);
-		history.PushInt(lHID);
-		history.PushInt(rHID);
-		history.PushInt(loopID);
-		history.PushInt(lLOneHID);
-		history.PushInt(rLOneHID);
-		history.PushInt(uniRLOneHID);
-		history.PushBool(lVPFlag);
-		history.PushBool(rVPFlag);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::UNITL));
+		_m->history.PushInt(pHID);
+		_m->history.PushInt(nHID);
+		_m->history.PushInt(eID);
+		_m->history.PushInt(lHID);
+		_m->history.PushInt(rHID);
+		_m->history.PushInt(loopID);
+		_m->history.PushInt(lLOneHID);
+		_m->history.PushInt(rLOneHID);
+		_m->history.PushInt(uniRLOneHID);
+		_m->history.PushBool(lVPFlag);
+		_m->history.PushBool(rVPFlag);
+		_m->history.Close();
 	}
 
 	return true;
@@ -1020,12 +1021,12 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 									   int argVID, int argEID,
 									   int argH1ID, int argH2ID)
 {
-	fk_Edge		*newE;					// 新稜線 
-	fk_Half		*newH1, *newH2;			// 新半稜線 
-	fk_Half		*orgH1, *orgH2;			// argE の半稜線 
-	fk_Half		*orgPrevH, *orgNextH;	// curRH の前半稜線と、curLH の次半稜線 
-	fk_Vertex	*v1, *v2, *newV;		// argE の両端点と新頂点 
-	fk_Loop		*l1, *l2;				// argE の属するループ 
+	fk_Edge *newE;					// 新稜線 
+	fk_Half *newH1, *newH2;			// 新半稜線 
+	fk_Half *orgH1, *orgH2;			// argE の半稜線 
+	fk_Half *orgPrevH, *orgNextH;	// curRH の前半稜線と、curLH の次半稜線 
+	fk_Vertex *v1, *v2, *newV;		// argE の両端点と新頂点 
+	fk_Loop *l1, *l2;				// argE の属するループ 
 
 	if(checkDB() == false) return nullptr;
 
@@ -1111,19 +1112,19 @@ fk_Vertex * fk_Operation::SeparateEdge(fk_Edge *argE, bool argOrgEFlag,
 	if(l1 != nullptr) l1->ModifyLoop();
 	if(l2 != nullptr) l2->ModifyLoop();
 
-	if(historyMode == true) {
-		history.Open(SEPE);
-		history.PushInt(argE->getID());
-		history.PushInt(newV->getID());
-		history.PushInt(newE->getID());
-		history.PushInt(newH1->getID());
-		history.PushInt(newH2->getID());
-		history.PushBool(argOrgEFlag);
-		history.PushBool(argNewEFlag);
-		history.PushBool(argL1PFlag);
-		history.PushBool(argL2PFlag);
-		history.PushVec(newV->getPosition());
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::SEPE));
+		_m->history.PushInt(argE->getID());
+		_m->history.PushInt(newV->getID());
+		_m->history.PushInt(newE->getID());
+		_m->history.PushInt(newH1->getID());
+		_m->history.PushInt(newH2->getID());
+		_m->history.PushBool(argOrgEFlag);
+		_m->history.PushBool(argNewEFlag);
+		_m->history.PushBool(argL1PFlag);
+		_m->history.PushBool(argL2PFlag);
+		_m->history.PushVec(newV->getPosition());
+		_m->history.Close();
 	}
 
 	return newV;
@@ -1137,15 +1138,15 @@ bool fk_Operation::uniteEdge(fk_Vertex *argV)
 
 bool fk_Operation::UniteEdge(fk_Vertex *argV)
 {
-	fk_Half		*delH, *delMateH;
-	fk_Half		*remainH, *remainMateH;
-	fk_Half		*nextH, *prevH;
-	fk_Edge		*remainE, *delE;
-	fk_Vertex	*v1;
-	fk_Vector	pos;
-	fk_Loop		*l1, *l2;
-	bool		remEFlag, delEFlag, l1PFlag, l2PFlag;
-	int			delVID, delEID, delHID, delMateHID;
+	fk_Half *delH, *delMateH;
+	fk_Half *remainH, *remainMateH;
+	fk_Half *nextH, *prevH;
+	fk_Edge *remainE, *delE;
+	fk_Vertex *v1;
+	fk_Vector pos;
+	fk_Loop *l1, *l2;
+	bool remEFlag, delEFlag, l1PFlag, l2PFlag;
+	int delVID, delEID, delHID, delMateHID;
 	
 	if(checkDB() == false) return false;
 
@@ -1216,19 +1217,19 @@ bool fk_Operation::UniteEdge(fk_Vertex *argV)
 	UndefVNorm(remainH->getVertex());
 	UndefVNorm(remainMateH->getVertex());
 
-	if(historyMode == true) {
-		history.Open(UNITE);
-		history.PushInt(remainE->getID());
-		history.PushInt(delVID);
-		history.PushInt(delEID);
-		history.PushInt(delHID);
-		history.PushInt(delMateHID);
-		history.PushBool(remEFlag);
-		history.PushBool(delEFlag);
-		history.PushBool(l1PFlag);
-		history.PushBool(l2PFlag);
-		history.PushVec(pos);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::UNITE));
+		_m->history.PushInt(remainE->getID());
+		_m->history.PushInt(delVID);
+		_m->history.PushInt(delEID);
+		_m->history.PushInt(delHID);
+		_m->history.PushInt(delMateHID);
+		_m->history.PushBool(remEFlag);
+		_m->history.PushBool(delEFlag);
+		_m->history.PushBool(l1PFlag);
+		_m->history.PushBool(l2PFlag);
+		_m->history.PushVec(pos);
+		_m->history.Close();
 	}
 
 	return true;
@@ -1242,10 +1243,10 @@ void fk_Operation::negateBody(void)
 
 void fk_Operation::NegateBody(void)
 {
-	vector<fk_Half *>	rNext, rPrev, lNext, lPrev;
-	fk_Edge				*curE;
-	fk_Loop				*curL;
-	_st					i;
+	vector<fk_Half *> rNext, rPrev, lNext, lPrev;
+	fk_Edge *curE;
+	fk_Loop *curL;
+	_st i;
 
 	if(checkDB() == false) return;
 	for(curE = getNextE(nullptr);
@@ -1274,9 +1275,9 @@ void fk_Operation::NegateBody(void)
 		curL->SetOneHalf(getMateHOnH(curL->getOneHalf())->getID());
 	}
 
-	if(historyMode == true) {
-		history.Open(NEGATE);
-		history.Close();
+	if(_m->historyMode == true) {
+		_m->history.Open(int(Code::NEGATE));
+		_m->history.Close();
 	}
 
 	return;
@@ -1284,186 +1285,185 @@ void fk_Operation::NegateBody(void)
 
 void fk_Operation::setHistoryMode(bool argFlg)
 {
-	if(argFlg == false) history.Init();
-	historyMode = argFlg;
+	if(argFlg == false) _m->history.Init();
+	_m->historyMode = argFlg;
 	return;
 }
 
 bool fk_Operation::getHistoryMode(void)
 {
-	return historyMode;
+	return _m->historyMode;
 }
 
 void fk_Operation::setHistoryMark(void)
 {
-	history.SetMark();
+	_m->history.SetMark();
 	return;
 }
 
 bool fk_Operation::undoHistory(void)
 {
-	fk_Command			com;
-	bool				orgMode;
+	fk_Command com;
+	bool orgMode;
 
-	if(history.GetComIndex() == -1) return false;
+	if(_m->history.GetComIndex() == -1) return false;
 
-	orgMode = historyMode;
-	historyMode = false;
-	com = history.GetCom();
+	orgMode = _m->historyMode;
+	_m->historyMode = false;
+	com = _m->history.GetCom();
 	do {
 		UndoCom(&com);
-		history.Undo();
-		if(history.GetComIndex() == -1) break;
-		com = history.GetCom();
+		_m->history.Undo();
+		if(_m->history.GetComIndex() == -1) break;
+		com = _m->history.GetCom();
 	} while(com.GetMarkStatus() == false);
 
-	historyMode = orgMode;
+	_m->historyMode = orgMode;
 	return true;
 }
 
 bool fk_Operation::redoHistory(void)
 {
-	fk_Command			com;
-	bool				orgMode;
+	fk_Command com;
+	bool orgMode;
 
-	if(history.Redo() == false) return false;
+	if(_m->history.Redo() == false) return false;
 
-	orgMode = historyMode;
-	historyMode = false;
+	orgMode = _m->historyMode;
+	_m->historyMode = false;
 
 	do {
-		com = history.GetCom();
+		com = _m->history.GetCom();
 		RedoCom(&com);
 		if(com.GetMarkStatus() == true) break;
-	} while(history.Redo() == true);
+	} while(_m->history.Redo() == true);
 
-	historyMode = orgMode;
+	_m->historyMode = orgMode;
 	return true;
 }
 
 void fk_Operation::UndoCom(fk_Command *argCom)
 {
-	unsigned int		boolI, intI, vecI;
-	fk_Vertex			*tmpV1, *tmpV2;
-	fk_Half				*tmpH1, *tmpH2, *tmpH3, *tmpH4;
-	fk_Vector			tmpPos;
-
+	unsigned int boolI, intI, vecI;
+	fk_Vertex *tmpV1, *tmpV2;
+	fk_Half *tmpH1, *tmpH2, *tmpH3, *tmpH4;
+	fk_Vector tmpPos;
 
 	boolI = argCom->GetBoolIndex();
 	intI = argCom->GetIntIndex();
 	vecI = argCom->GetVecIndex();
 
-	switch(argCom->GetCommandID()) {
-	  case MAKEV:
-		DeleteVertex(getVData(history.GetInt(intI)));
+	switch(Code(argCom->GetCommandID())) {
+	  case Code::MAKEV:
+		DeleteVertex(getVData(_m->history.GetInt(intI)));
 		break;
 
-	  case DELV:
-		MakeVertex(history.GetVec(vecI), history.GetInt(intI));
+	  case Code::DELV:
+		MakeVertex(_m->history.GetVec(vecI), _m->history.GetInt(intI));
 		break;
 
-	  case MOVEV:
-		MoveVertex(getVData(history.GetInt(intI)), history.GetVec(vecI));
+	  case Code::MOVEV:
+		MoveVertex(getVData(_m->history.GetInt(intI)), _m->history.GetVec(vecI));
 		break;
 
-	  case MAKEE1:
-		DeleteEdge1(getEData(history.GetInt(intI+2)));
+	  case Code::MAKEE1:
+		DeleteEdge1(getEData(_m->history.GetInt(intI+2)));
 		break;
 
-	  case MAKEE2:
-		DeleteEdge2(getHData(history.GetInt(intI+3)));
+	  case Code::MAKEE2:
+		DeleteEdge2(getHData(_m->history.GetInt(intI+3)));
 		break;
 
-	  case MAKEE3:
-		DeleteEdge3(getEData(history.GetInt(intI+2)));
+	  case Code::MAKEE3:
+		DeleteEdge3(getEData(_m->history.GetInt(intI+2)));
 		break;
 
-	  case DELE1:
-		MakeEdge1(getVData(history.GetInt(intI)),
-				  getVData(history.GetInt(intI+1)),
-				  history.GetInt(intI+2),
-				  history.GetInt(intI+3),
-				  history.GetInt(intI+4));
+	  case Code::DELE1:
+		MakeEdge1(getVData(_m->history.GetInt(intI)),
+				  getVData(_m->history.GetInt(intI+1)),
+				  _m->history.GetInt(intI+2),
+				  _m->history.GetInt(intI+3),
+				  _m->history.GetInt(intI+4));
 		break;
 
-	  case DELE2:
-		tmpV2 = getVData(history.GetInt(intI));
-		tmpH1 = getHData(history.GetInt(intI+1));
+	  case Code::DELE2:
+		tmpV2 = getVData(_m->history.GetInt(intI));
+		tmpH1 = getHData(_m->history.GetInt(intI+1));
 		tmpH2 = tmpH1->getNextHalf();
 		tmpV1 = tmpH2->getVertex();
 
 		MakeEdge2(tmpV1, tmpV2, tmpH1, tmpH2,
-				  history.GetBool(boolI), history.GetBool(boolI+1),
-				  history.GetInt(intI+2),
-				  history.GetInt(intI+3),
-				  history.GetInt(intI+4));
+				  _m->history.GetBool(boolI), _m->history.GetBool(boolI+1),
+				  _m->history.GetInt(intI+2),
+				  _m->history.GetInt(intI+3),
+				  _m->history.GetInt(intI+4));
 		break;
 
-	  case DELE3:
-		tmpH1 = getHData(history.GetInt(intI));
+	  case Code::DELE3:
+		tmpH1 = getHData(_m->history.GetInt(intI));
 		tmpH2 = tmpH1->getNextHalf();
-		tmpH3 = getHData(history.GetInt(intI+1));
+		tmpH3 = getHData(_m->history.GetInt(intI+1));
 		tmpH4 = tmpH3->getNextHalf();
 		tmpV1 = tmpH2->getVertex();
 		tmpV2 = tmpH4->getVertex();
 
 		MakeEdge3(tmpV1, tmpV2, tmpH1, tmpH2, tmpH3, tmpH4,
-				  history.GetBool(boolI),
-				  history.GetBool(boolI+1),
-				  history.GetInt(intI+2),
-				  history.GetInt(intI+3),
-				  history.GetInt(intI+4));
+				  _m->history.GetBool(boolI),
+				  _m->history.GetBool(boolI+1),
+				  _m->history.GetInt(intI+2),
+				  _m->history.GetInt(intI+3),
+				  _m->history.GetInt(intI+4));
 		break;
 
-	  case MAKEL:
-		DeleteLoop(getLData(history.GetInt(intI)));
+	  case Code::MAKEL:
+		DeleteLoop(getLData(_m->history.GetInt(intI)));
 		break;
 
-	  case DELL:
-		MakeLoop(getHData(history.GetInt(intI+1)), history.GetInt(intI));
+	  case Code::DELL:
+		MakeLoop(getHData(_m->history.GetInt(intI+1)), _m->history.GetInt(intI));
 		break;
 
-	  case SEPL:
-		UniteLoop(getEData(history.GetInt(intI+2)),
-				  getHData(history.GetInt(intI+8)));
+	  case Code::SEPL:
+		UniteLoop(getEData(_m->history.GetInt(intI+2)),
+				  getHData(_m->history.GetInt(intI+8)));
 		break;
 
-	  case UNITL:
-		tmpH1 = getHData(history.GetInt(intI));
-		tmpH2 = getHData(history.GetInt(intI+1));
-		tmpH3 = (history.GetInt(intI+6) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+6)) : nullptr;
-		tmpH4 = (history.GetInt(intI+7) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+7)) : nullptr;
+	  case Code::UNITL:
+		tmpH1 = getHData(_m->history.GetInt(intI));
+		tmpH2 = getHData(_m->history.GetInt(intI+1));
+		tmpH3 = (_m->history.GetInt(intI+6) != FK_UNDEFINED) ?
+			getHData(_m->history.GetInt(intI+6)) : nullptr;
+		tmpH4 = (_m->history.GetInt(intI+7) != FK_UNDEFINED) ?
+			getHData(_m->history.GetInt(intI+7)) : nullptr;
 
 		SeparateLoop(tmpH1, tmpH2, tmpH3, tmpH4,
-					 history.GetBool(boolI),
-					 history.GetBool(boolI+1),
-					 history.GetInt(intI+2),
-					 history.GetInt(intI+3),
-					 history.GetInt(intI+4),
-					 history.GetInt(intI+5));
+					 _m->history.GetBool(boolI),
+					 _m->history.GetBool(boolI+1),
+					 _m->history.GetInt(intI+2),
+					 _m->history.GetInt(intI+3),
+					 _m->history.GetInt(intI+4),
+					 _m->history.GetInt(intI+5));
 		break;
 
-	  case SEPE:
-		UniteEdge(getVData(history.GetInt(intI+1)));
+	  case Code::SEPE:
+		UniteEdge(getVData(_m->history.GetInt(intI+1)));
 		break;
 
-	  case UNITE:
-		tmpPos = history.GetVec(vecI),
-		SeparateEdge(getEData(history.GetInt(intI)),
-					 history.GetBool(boolI),
-					 history.GetBool(boolI+1),
-					 history.GetBool(boolI+2),
-					 history.GetBool(boolI+3),
+	  case Code::UNITE:
+		tmpPos = _m->history.GetVec(vecI),
+		SeparateEdge(getEData(_m->history.GetInt(intI)),
+					 _m->history.GetBool(boolI),
+					 _m->history.GetBool(boolI+1),
+					 _m->history.GetBool(boolI+2),
+					 _m->history.GetBool(boolI+3),
 					 &tmpPos,
-					 history.GetInt(intI+1),
-					 history.GetInt(intI+2),
-					 history.GetInt(intI+3),
-					 history.GetInt(intI+4));
+					 _m->history.GetInt(intI+1),
+					 _m->history.GetInt(intI+2),
+					 _m->history.GetInt(intI+3),
+					 _m->history.GetInt(intI+4));
 		break;
 
-	  case NEGATE:
+	  case Code::NEGATE:
 		NegateBody();
 		break;
 
@@ -1476,127 +1476,127 @@ void fk_Operation::UndoCom(fk_Command *argCom)
 
 void fk_Operation::RedoCom(fk_Command *argCom)
 {
-	unsigned int		boolI, intI, vecI;
-	fk_Vertex			*tmpV1, *tmpV2;
-	fk_Half				*tmpH1, *tmpH2, *tmpH3, *tmpH4;
-	fk_Vector			tmpPos;
+	unsigned int boolI, intI, vecI;
+	fk_Vertex *tmpV1, *tmpV2;
+	fk_Half *tmpH1, *tmpH2, *tmpH3, *tmpH4;
+	fk_Vector tmpPos;
 
 	boolI = argCom->GetBoolIndex();
 	intI = argCom->GetIntIndex();
 	vecI = argCom->GetVecIndex();
 
-	switch(argCom->GetCommandID()) {
-	  case MAKEV:
-		MakeVertex(history.GetVec(vecI), history.GetInt(intI));
+	switch(Code(argCom->GetCommandID())) {
+	  case Code::MAKEV:
+		MakeVertex(_m->history.GetVec(vecI), _m->history.GetInt(intI));
 		break;
 
-	  case DELV:
-		DeleteVertex(getVData(history.GetInt(intI)));
+	  case Code::DELV:
+		DeleteVertex(getVData(_m->history.GetInt(intI)));
 		break;
 
-	  case MOVEV:
-		MoveVertex(getVData(history.GetInt(intI)), history.GetVec(vecI+1));
+	  case Code::MOVEV:
+		MoveVertex(getVData(_m->history.GetInt(intI)), _m->history.GetVec(vecI+1));
 		break;
 
-	  case MAKEE1:
-		MakeEdge1(getVData(history.GetInt(intI)),
-				  getVData(history.GetInt(intI+1)),
-				  history.GetInt(intI+2),
-				  history.GetInt(intI+3),
-				  history.GetInt(intI+4));
+	  case Code::MAKEE1:
+		MakeEdge1(getVData(_m->history.GetInt(intI)),
+				  getVData(_m->history.GetInt(intI+1)),
+				  _m->history.GetInt(intI+2),
+				  _m->history.GetInt(intI+3),
+				  _m->history.GetInt(intI+4));
 		break;
 
-	  case MAKEE2:
-		tmpV2 = getVData(history.GetInt(intI));
-		tmpH1 = getHData(history.GetInt(intI+1));
+	  case Code::MAKEE2:
+		tmpV2 = getVData(_m->history.GetInt(intI));
+		tmpH1 = getHData(_m->history.GetInt(intI+1));
 		tmpH2 = tmpH1->getNextHalf();
 		tmpV1 = tmpH2->getVertex();
 						 
 		MakeEdge2(tmpV1, tmpV2, tmpH1, tmpH2,
-				  history.GetBool(boolI), history.GetBool(boolI+1),
-				  history.GetInt(intI+2),
-				  history.GetInt(intI+3),
-				  history.GetInt(intI+4));
+				  _m->history.GetBool(boolI), _m->history.GetBool(boolI+1),
+				  _m->history.GetInt(intI+2),
+				  _m->history.GetInt(intI+3),
+				  _m->history.GetInt(intI+4));
 		break;
 
-	  case MAKEE3:
-		tmpH1 = getHData(history.GetInt(intI));
+	  case Code::MAKEE3:
+		tmpH1 = getHData(_m->history.GetInt(intI));
 		tmpH2 = tmpH1->getNextHalf();
-		tmpH3 = getHData(history.GetInt(intI+1));
+		tmpH3 = getHData(_m->history.GetInt(intI+1));
 		tmpH4 = tmpH3->getNextHalf();
 		tmpV1 = tmpH2->getVertex();
 		tmpV2 = tmpH4->getVertex();
 
 		MakeEdge3(tmpV1, tmpV2, tmpH1, tmpH2, tmpH3, tmpH4,
-				  history.GetBool(boolI),
-				  history.GetBool(boolI+1),
-				  history.GetInt(intI+2),
-				  history.GetInt(intI+3),
-				  history.GetInt(intI+4));
+				  _m->history.GetBool(boolI),
+				  _m->history.GetBool(boolI+1),
+				  _m->history.GetInt(intI+2),
+				  _m->history.GetInt(intI+3),
+				  _m->history.GetInt(intI+4));
 		break;
 
-	  case DELE1:
-		DeleteEdge1(getEData(history.GetInt(intI+2)));
+	  case Code::DELE1:
+		DeleteEdge1(getEData(_m->history.GetInt(intI+2)));
 		break;
 
-	  case DELE2:
-		DeleteEdge2(getHData(history.GetInt(intI+3)));
+	  case Code::DELE2:
+		DeleteEdge2(getHData(_m->history.GetInt(intI+3)));
 		break;
 
-	  case DELE3:
-		DeleteEdge3(getEData(history.GetInt(intI+2)));
+	  case Code::DELE3:
+		DeleteEdge3(getEData(_m->history.GetInt(intI+2)));
 		break;
 
-	  case MAKEL:
-		MakeLoop(getHData(history.GetInt(intI+1)), history.GetInt(intI));
+	  case Code::MAKEL:
+		MakeLoop(getHData(_m->history.GetInt(intI+1)), _m->history.GetInt(intI));
 		break;
 
-	  case DELL:
-		DeleteLoop(getLData(history.GetInt(intI)));
+	  case Code::DELL:
+		DeleteLoop(getLData(_m->history.GetInt(intI)));
 		break;
 
-	  case SEPL:
-		tmpH1 = getHData(history.GetInt(intI));
-		tmpH2 = getHData(history.GetInt(intI+1));
-		tmpH3 = (history.GetInt(intI+6) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+6)) : nullptr;
-		tmpH4 = (history.GetInt(intI+7) != FK_UNDEFINED) ?
-			getHData(history.GetInt(intI+7)) : nullptr;
+	  case Code::SEPL:
+		tmpH1 = getHData(_m->history.GetInt(intI));
+		tmpH2 = getHData(_m->history.GetInt(intI+1));
+		tmpH3 = (_m->history.GetInt(intI+6) != FK_UNDEFINED) ?
+			getHData(_m->history.GetInt(intI+6)) : nullptr;
+		tmpH4 = (_m->history.GetInt(intI+7) != FK_UNDEFINED) ?
+			getHData(_m->history.GetInt(intI+7)) : nullptr;
 
 		SeparateLoop(tmpH1, tmpH2, tmpH3, tmpH4,
-					 history.GetBool(boolI),
-					 history.GetBool(boolI+1),
-					 history.GetInt(intI+2),
-					 history.GetInt(intI+3),
-					 history.GetInt(intI+4),
-					 history.GetInt(intI+5));
+					 _m->history.GetBool(boolI),
+					 _m->history.GetBool(boolI+1),
+					 _m->history.GetInt(intI+2),
+					 _m->history.GetInt(intI+3),
+					 _m->history.GetInt(intI+4),
+					 _m->history.GetInt(intI+5));
 		break;
 
-	  case UNITL:
-		UniteLoop(getEData(history.GetInt(intI+2)),
-				  getHData(history.GetInt(intI+8)));
+	  case Code::UNITL:
+		UniteLoop(getEData(_m->history.GetInt(intI+2)),
+				  getHData(_m->history.GetInt(intI+8)));
 		break;
 
-	  case SEPE:
-		tmpPos = history.GetVec(vecI);
+	  case Code::SEPE:
+		tmpPos = _m->history.GetVec(vecI);
 
-		SeparateEdge(getEData(history.GetInt(intI)),
-					 history.GetBool(boolI),
-					 history.GetBool(boolI+1),
-					 history.GetBool(boolI+2),
-					 history.GetBool(boolI+3),
+		SeparateEdge(getEData(_m->history.GetInt(intI)),
+					 _m->history.GetBool(boolI),
+					 _m->history.GetBool(boolI+1),
+					 _m->history.GetBool(boolI+2),
+					 _m->history.GetBool(boolI+3),
 					 &tmpPos,
-					 history.GetInt(intI+1),
-					 history.GetInt(intI+2),
-					 history.GetInt(intI+3),
-					 history.GetInt(intI+4));
+					 _m->history.GetInt(intI+1),
+					 _m->history.GetInt(intI+2),
+					 _m->history.GetInt(intI+3),
+					 _m->history.GetInt(intI+4));
 		break;
 
-	  case UNITE:
-		UniteEdge(getVData(history.GetInt(intI+1)));
+	  case Code::UNITE:
+		UniteEdge(getVData(_m->history.GetInt(intI+1)));
 		break;
 
-	  case NEGATE:
+	  case Code::NEGATE:
 		NegateBody();
 		break;
 
@@ -1609,17 +1609,17 @@ void fk_Operation::RedoCom(fk_Command *argCom)
 
 void fk_Operation::PrintHistorySize(void)
 {
-	history.PrintSize();
+	_m->history.PrintSize();
 	return;
 }
 
 void fk_Operation::setTesselateMode(bool argMode)
 {
-	fk_Loop			*curL;
+	fk_Loop *curL;
 
-	tesselateMode = argMode;
+	_m->tesselateMode = argMode;
 
-	if(tesselateMode == true) {
+	if(_m->tesselateMode == true) {
 		for(curL = getNextL(nullptr); curL != nullptr; curL = getNextL(curL)) {
 			curL->setTesselateMode(true);
 			curL->isTesselated();
@@ -1633,12 +1633,12 @@ void fk_Operation::setTesselateMode(bool argMode)
 
 bool fk_Operation::getTesselateMode(void)
 {
-	return tesselateMode;
+	return _m->tesselateMode;
 }
 
 void fk_Operation::DeleteAllTesselateData(void)
 {
-	fk_Loop			*curL;
+	fk_Loop *curL;
 
 	for(curL = getNextL(nullptr); curL != nullptr; curL = getNextL(curL)) {
 		curL->setTesselateMode(false);

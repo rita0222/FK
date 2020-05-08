@@ -85,7 +85,7 @@ namespace FK {
 		 *
 		 *	\return		接続半稜線のうちの1つ。ない場合は nullptr を返します。
 		 */
-		fk_Half *		getOneHOnV(fk_Vertex *V) const;
+		fk_Half * getOneHOnV(fk_Vertex *V) const;
 
 		//! 頂点接続稜線参照関数
 		/*!
@@ -96,7 +96,7 @@ namespace FK {
 		 *
 		 *	\return		接続稜線のうちの1つ。ない場合は nullptr を返します。
 		 */
-		fk_Edge *		getOneEOnV(fk_Vertex *V) const;
+		fk_Edge * getOneEOnV(fk_Vertex *V) const;
 		///@}
 
 		//! \name 半稜線に関連する関数
@@ -110,7 +110,7 @@ namespace FK {
 		 *
 		 *	\return		元頂点
 		 */
-		fk_Vertex *		getVOnH(fk_Half *H) const;
+		fk_Vertex * getVOnH(fk_Half *H) const;
 
 		//! 対半稜線参照関数
 		/*!
@@ -120,7 +120,7 @@ namespace FK {
 		 *
 		 *	\return		対の半稜線
 		 */
-		fk_Half *		getMateHOnH(fk_Half *H) const;
+		fk_Half * getMateHOnH(fk_Half *H) const;
 
 		//! 親稜線参照関数
 		/*!
@@ -130,7 +130,7 @@ namespace FK {
 		 *
 		 *	\return		親稜線
 		 */
-		fk_Edge *		getParentEOnH(fk_Half *H) const;
+		fk_Edge * getParentEOnH(fk_Half *H) const;
 
 		//! 親ループ参照関数
 		/*!
@@ -141,7 +141,7 @@ namespace FK {
 		 *
 		 *	\return		親ループ。ない場合は nullptr を返します。
 		 */
-		fk_Loop *		getParentLOnH(fk_Half *H) const;
+		fk_Loop * getParentLOnH(fk_Half *H) const;
 		///@}
 	
 		//! \name 稜線に関連する関数
@@ -155,7 +155,7 @@ namespace FK {
 		 *
 		 *	\return		右側半稜線の元頂点
 		 */
-		fk_Vertex *		getRightVOnE(fk_Edge *E) const;
+		fk_Vertex * getRightVOnE(fk_Edge *E) const;
 
 		//! 左側頂点参照関数
 		/*!
@@ -165,7 +165,7 @@ namespace FK {
 		 *
 		 *	\return		左側半稜線の元頂点
 		 */
-		fk_Vertex *		getLeftVOnE(fk_Edge *E) const;
+		fk_Vertex * getLeftVOnE(fk_Edge *E) const;
 
 		//! 右側半稜線参照関数
 		/*!
@@ -175,7 +175,7 @@ namespace FK {
 		 *
 		 *	\return		右側半稜線
 		 */
-		fk_Half *		getRightHOnE(fk_Edge *E) const;
+		fk_Half * getRightHOnE(fk_Edge *E) const;
 
 		//! 左側半稜線参照関数
 		/*!
@@ -185,7 +185,7 @@ namespace FK {
 		 *
 		 *	\return		左側半稜線
 		 */
-		fk_Half *		getLeftHOnE(fk_Edge *E) const;
+		fk_Half * getLeftHOnE(fk_Edge *E) const;
 
 		//! 右側ループ参照関数
 		/*!
@@ -196,7 +196,7 @@ namespace FK {
 		 *
 		 *	\return		右側ループ。ない場合は nullptr を返します。
 		 */
-		fk_Loop *		getRightLOnE(fk_Edge *E) const;
+		fk_Loop * getRightLOnE(fk_Edge *E) const;
 
 		//! 左側ループ参照関数
 		/*!
@@ -223,7 +223,7 @@ namespace FK {
 		 *
 		 *	\return		位相状態を返します。
 		 */
-		fk_EdgeStatus	getEdgeStatus(fk_Edge *E) const;
+		fk_EdgeStatus getEdgeStatus(fk_Edge *E) const;
 
 		///@}
 	
@@ -238,7 +238,7 @@ namespace FK {
 		 *
 		 *	\return		所属頂点
 		 */
-		fk_Vertex *		getOneVOnL(fk_Loop *L) const;
+		fk_Vertex *	 getOneVOnL(fk_Loop *L) const;
 
 		//! ループ所属半稜線参照関数
 		/*!
@@ -248,7 +248,7 @@ namespace FK {
 		 *
 		 *	\return		所属半稜線
 		 */
-		fk_Half *		getOneHOnL(fk_Loop *L) const;
+		fk_Half *	 getOneHOnL(fk_Loop *L) const;
 
 		//! ループ所属稜線参照関数
 		/*!
@@ -258,7 +258,7 @@ namespace FK {
 		 *
 		 *	\return		所属稜線
 		 */
-		fk_Edge *		getOneEOnL(fk_Loop *L) const;
+		fk_Edge * getOneEOnL(fk_Loop *L) const;
 		///@}
 	};
 
@@ -292,7 +292,7 @@ namespace FK {
 		 *
 		 *	\return		隣接頂点のうちの1つ。ない場合は nullptr を返します。
 		 */
-		fk_Vertex *					getOneNeighborVOnV(fk_Vertex *V) const;
+		fk_Vertex * getOneNeighborVOnV(fk_Vertex *V) const;
 
 		//! 頂点接続全半稜線参照関数
 		/*!
@@ -303,7 +303,7 @@ namespace FK {
 		 *
 		 *	\return		V を元頂点とする半稜線の配列
 		 */
-		std::vector<fk_Half *>		getAllHOnV(fk_Vertex *V) const;
+		std::vector<fk_Half *> getAllHOnV(fk_Vertex *V) const;
 
 		//! 頂点接続全稜線参照関数
 		/*!
@@ -314,7 +314,7 @@ namespace FK {
 		 *
 		 *	\return		V に接続する稜線の配列
 		 */
-		std::vector<fk_Edge *>		getAllEOnV(fk_Vertex *V) const;
+		std::vector<fk_Edge *> getAllEOnV(fk_Vertex *V) const;
 
 		//! 頂点接続全ループ参照関数
 		/*!
@@ -325,7 +325,7 @@ namespace FK {
 		 *
 		 *	\return		V に接続するループの配列
 		 */
-		std::vector<fk_Loop *>		getAllLOnV(fk_Vertex *V) const;
+		std::vector<fk_Loop *> getAllLOnV(fk_Vertex *V) const;
 
 		//! 頂点接続稜線数参照関数
 		/*!
@@ -335,7 +335,7 @@ namespace FK {
 		 *
 		 *	\return		V に接続する稜線本数
 		 */
-		int							getENumOnV(fk_Vertex *V) const;
+		int getENumOnV(fk_Vertex *V) const;
 
 		///@}
 
@@ -351,7 +351,7 @@ namespace FK {
 		 *
 		 *	\return		L に所属する頂点の配列
 		 */
-		std::vector<fk_Vertex *>	getAllVOnL(fk_Loop *L) const;
+		std::vector<fk_Vertex *> getAllVOnL(fk_Loop *L) const;
 
 		//! ループ所属全半稜線参照関数
 		/*!
@@ -362,7 +362,7 @@ namespace FK {
 		 *
 		 *	\return		L に所属する半稜線の配列
 		 */
-		std::vector<fk_Half *>		getAllHOnL(fk_Loop *L) const;
+		std::vector<fk_Half *> getAllHOnL(fk_Loop *L) const;
 
 		//! ループ所属全稜線参照関数
 		/*!
@@ -373,7 +373,7 @@ namespace FK {
 		 *
 		 *	\return		L に所属する稜線の配列
 		 */
-		std::vector<fk_Edge *>		getAllEOnL(fk_Loop *L) const;
+		std::vector<fk_Edge *> getAllEOnL(fk_Loop *L) const;
 
 		//! 隣接ループ参照関数
 		/*!
@@ -384,7 +384,7 @@ namespace FK {
 		 *
 		 *	\return		隣接ループのうちの1つ。ない場合は nullptr を返します。
 		 */
-		fk_Loop *					getOneNeighborLOnL(fk_Loop *L) const;
+		fk_Loop * getOneNeighborLOnL(fk_Loop *L) const;
 
 		//! 半稜線条件付き隣接ループ参照関数
 		/*!
@@ -399,8 +399,7 @@ namespace FK {
 		 *
 		 *	\return		H を挟んだ隣接ループ。存在しない場合は nullptr を返します。
 		 */
-		fk_Loop *					getNeighborLOnLH(fk_Loop *L,
-													 fk_Half *H) const;
+		fk_Loop * getNeighborLOnLH(fk_Loop *L, fk_Half *H) const;
 		//! ループ上頂点数参照関数
 		/*!
 		 *	ループ L に所属している頂点の個数を返します。
@@ -409,7 +408,7 @@ namespace FK {
 		 *
 		 *	\return		L に所属する頂点個数
 		 */
-		int							getVNumOnL(fk_Loop *L) const;
+		int getVNumOnL(fk_Loop *L) const;
 
 		///@}
 	};
@@ -442,7 +441,7 @@ namespace FK {
 		 *
 		 *	\return		V に隣接する頂点の配列
 		 */
-		std::vector<fk_Vertex *>	getAllNeighborVOnV(fk_Vertex *V) const;
+		std::vector<fk_Vertex *> getAllNeighborVOnV(fk_Vertex *V) const;
 
 		//! 頂点間稜線参照関数
 		/*!
@@ -454,7 +453,7 @@ namespace FK {
 		 *
 		 *	\return		V1とV2に接続する稜線の配列
 		 */
-		std::vector<fk_Edge *>		getEOnVV(fk_Vertex *V1, fk_Vertex *V2) const;
+		std::vector<fk_Edge *> getEOnVV(fk_Vertex *V1, fk_Vertex *V2) const;
 
 		//! 頂点接続ループ参照関数
 		/*!
@@ -465,7 +464,7 @@ namespace FK {
 		 *
 		 *	\return		接続ループのうちの1つ。ない場合は nullptr を返します。
 		 */
-		fk_Loop *					getOneLOnV(fk_Vertex *V) const;
+		fk_Loop * getOneLOnV(fk_Vertex *V) const;
 
 		//! 稜線条件付き隣接ループ参照関数
 		/*!
@@ -480,7 +479,7 @@ namespace FK {
 		 *
 		 *	\return		E を挟んだ隣接ループ。存在しない場合は nullptr を返します。
 		 */
-		fk_Loop *					getNeighborLOnLE(fk_Loop *L, fk_Edge *E) const;
+		fk_Loop * getNeighborLOnLE(fk_Loop *L, fk_Edge *E) const;
 
 		//! 全隣接ループ参照関数
 		/*!
@@ -491,7 +490,7 @@ namespace FK {
 		 *
 		 *	\return		L に隣接するループの配列
 		 */
-		std::vector<fk_Loop *>		getAllNeighborLOnL(fk_Loop *L) const;
+		std::vector<fk_Loop *> getAllNeighborLOnL(fk_Loop *L) const;
 	};
 }
 

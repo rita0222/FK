@@ -7,25 +7,6 @@
 
 namespace FK {
 
-#ifdef __FK_OPERATION_CODE__
-	static const int	MAKEV		= 1;
-	static const int	DELV		= 2;
-	static const int	MOVEV		= 3;
-	static const int	MAKEE1		= 4;
-	static const int	MAKEE2		= 5;
-	static const int	MAKEE3		= 6;
-	static const int	DELE1		= 7;
-	static const int	DELE2		= 8;
-	static const int	DELE3		= 9;
-	static const int	MAKEL		= 10;
-	static const int	DELL		= 11;
-	static const int	SEPL		= 12;
-	static const int	UNITL		= 13;
-	static const int	SEPE		= 14;
-	static const int	UNITE		= 15;
-	static const int	NEGATE		= 16;
-
-#endif
 
 	//! オイラー操作用クラス
 	/*!
@@ -65,6 +46,36 @@ namespace FK {
 
 	class fk_Operation : public fk_DrawCache {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		enum class Code : int {
+			MAKEV = 1,
+			DELV,
+			MOVEV,
+			MAKEE1,
+			MAKEE2,
+			MAKEE3,
+			DELE1,
+			DELE2,
+			DELE3,
+			MAKEL,
+			DELL,
+			SEPL,
+			UNITL,
+			SEPE,
+			UNITE,
+			NEGATE
+		};
+
+		class Member {
+		public:
+			fk_History history;
+			bool historyMode;
+			bool tesselateMode;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_Operation(fk_DataBase * = nullptr);
@@ -89,7 +100,7 @@ namespace FK {
 		 *
 		 *	\return		新規頂点位相インスタンス
 		 */
-		fk_Vertex *		makeVertex(const fk_Vector P);
+		fk_Vertex * makeVertex(const fk_Vector P);
 
 		//! 頂点削除関数
 		/*!
@@ -106,7 +117,7 @@ namespace FK {
 		 *
 		 *	\return		削除に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			deleteVertex(fk_Vertex *V);
+		bool deleteVertex(fk_Vertex *V);
 
 		//! 頂点移動関数
 		/*!
@@ -124,7 +135,7 @@ namespace FK {
 		 *
 		 *	\return		移動に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			moveVertex(fk_Vertex *V, fk_Vector P);
+		bool moveVertex(fk_Vertex *V, fk_Vector P);
 
 		//! 稜線生成関数
 		/*!
@@ -170,11 +181,11 @@ namespace FK {
 		 *		新稜線の生成に成功した場合、その位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Edge *		makeEdge(fk_Vertex *V_1, fk_Vertex *V_2,
-								 fk_Half *H_11 = nullptr,
-								 fk_Half *H_12 = nullptr,
-								 fk_Half *H_21 = nullptr,
-								 fk_Half *H_22 = nullptr);
+		fk_Edge * makeEdge(fk_Vertex *V_1, fk_Vertex *V_2,
+						   fk_Half *H_11 = nullptr,
+						   fk_Half *H_12 = nullptr,
+						   fk_Half *H_21 = nullptr,
+						   fk_Half *H_22 = nullptr);
 
 		//! 稜線削除関数
 		/*!
@@ -191,7 +202,7 @@ namespace FK {
 		 *
 		 *	\return		削除に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			deleteEdge(fk_Edge *E);
+		bool deleteEdge(fk_Edge *E);
 
 		//! ループ生成関数
 		/*!
@@ -212,7 +223,7 @@ namespace FK {
 		 *		生成に成功した場合、そのループ位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Loop *		makeLoop(fk_Half *H);
+		fk_Loop * makeLoop(fk_Half *H);
 
 		//! ループ削除関数
 		/*!
@@ -230,7 +241,7 @@ namespace FK {
 		 *
 		 *	\return		成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool			deleteLoop(fk_Loop *L);
+		bool deleteLoop(fk_Loop *L);
 
 		//! ループ分割関数
 		/*!
@@ -257,7 +268,7 @@ namespace FK {
 		 *		成功した場合、新規稜線の位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */	
-		fk_Edge *		separateLoop(fk_Half *H1, fk_Half *H2);
+		fk_Edge * separateLoop(fk_Half *H1, fk_Half *H2);
 
 		//! ループ結合関数
 		/*!
@@ -275,7 +286,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			uniteLoop(fk_Edge *E);
+		bool uniteLoop(fk_Edge *E);
 
 		//! 稜線分離関数
 		/*!
@@ -292,7 +303,7 @@ namespace FK {
 		 *		成功すれば新規に生成された頂点位相インスタンスを返します。
 		 *		失敗した場合は nullptr を返します。
 		 */
-		fk_Vertex *		separateEdge(fk_Edge *E);
+		fk_Vertex * separateEdge(fk_Edge *E);
 
 		//! 稜線結合関数
 		/*!
@@ -310,7 +321,7 @@ namespace FK {
 		 *
 		 *	\return		成功すれば true を、失敗すれば false を返します。
 		 */
-		bool			uniteEdge(fk_Vertex *V);
+		bool uniteEdge(fk_Vertex *V);
 
 		//! 形状反転関数
 		/*!
@@ -328,7 +339,7 @@ namespace FK {
 		 *	.
 		 *	この操作の逆操作はこの関数自身となります。
 		 */
-		void			negateBody(void);
+		void negateBody(void);
 
 		///@}
 
@@ -352,7 +363,7 @@ namespace FK {
 		 *
 		 *	\sa getHistoryMode(), setHistoryMark()
 		 */
-		void			setHistoryMode(bool mode);
+		void setHistoryMode(bool mode);
 
 		//! 履歴保存モード参照関数
 		/*!
@@ -363,7 +374,7 @@ namespace FK {
 		 *
 		 *	\sa setHistoryMode()
 		 */
-		bool			getHistoryMode(void);
+		bool getHistoryMode(void);
 
 		//! 履歴マーク設定関数
 		/*!
@@ -376,7 +387,7 @@ namespace FK {
 		 *
 		 *	\sa setHistoryMode(), undoHistory(), redoHistory()
 		 */
-		void			setHistoryMark(void);
+		void setHistoryMark(void);
 
 		//! UNDO 操作実行関数
 		/*!
@@ -428,7 +439,7 @@ namespace FK {
 		 *
 		 *	\sa redoHistory()
 		 */
-		bool			undoHistory(void);
+		bool undoHistory(void);
 
 		//! REDO 操作実行関数
 		/*!
@@ -441,7 +452,7 @@ namespace FK {
 		 *
 		 *	\sa undoHistory()
 		 */
-		bool			redoHistory(void);
+		bool redoHistory(void);
 		///@}
 
 		//! \name テセレーション制御関数
@@ -460,7 +471,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Loop::setTesselateMode()
 		 */
-		void			setTesselateMode(bool mode);
+		void setTesselateMode(bool mode);
 
 		//! 形状全体テセレーション状態参照関数
 		/*!
@@ -473,72 +484,57 @@ namespace FK {
 		 *
 		 *	\return		直近の setTesselateMode() 関数による設定値を返します。
 		 */
-		bool			getTesselateMode(void);
+		bool getTesselateMode(void);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void			PrintHistorySize(void);
+		void PrintHistorySize(void);
 #endif
 
 	private:
-		fk_History		history;
-		bool			historyMode;
-		bool			tesselateMode;
+		std::unique_ptr<Member> _m;
+		
+		fk_Loop * SetLoop(fk_Half *, bool, fk_Loop * = nullptr, int = FK_UNDEFINED);
+		void UndefVNorm(fk_Vertex *);
 
-		fk_Loop *		SetLoop(fk_Half *, bool,
-								fk_Loop * = nullptr, int = FK_UNDEFINED);
-		void			UndefVNorm(fk_Vertex *);
+		fk_Vertex * MakeVertex(const fk_Vector, int);
+		bool DeleteVertex(fk_Vertex *);
+		bool MoveVertex(fk_Vertex *, fk_Vector);
 
-		fk_Vertex *		MakeVertex(const fk_Vector, int);
-		bool			DeleteVertex(fk_Vertex *);
-		bool			MoveVertex(fk_Vertex *, fk_Vector);
+		fk_Edge * MakeEdge1(fk_Vertex *, fk_Vertex *,
+							int = FK_UNDEFINED, int = FK_UNDEFINED, int = FK_UNDEFINED);
+		fk_Edge * MakeEdge2(fk_Vertex *, fk_Vertex *,
+							fk_Half *, fk_Half *, bool, bool,
+							int = FK_UNDEFINED, int = FK_UNDEFINED, int = FK_UNDEFINED);
+		fk_Edge * MakeEdge3(fk_Vertex *, fk_Vertex *,
+							fk_Half *, fk_Half *,
+							fk_Half *, fk_Half *, bool, bool,
+							int = FK_UNDEFINED, int = FK_UNDEFINED, int = FK_UNDEFINED);
 
-		fk_Edge *		MakeEdge1(fk_Vertex *, fk_Vertex *,
-								  int = FK_UNDEFINED,
-								  int = FK_UNDEFINED,
-								  int = FK_UNDEFINED);
-		fk_Edge *		MakeEdge2(fk_Vertex *, fk_Vertex *,
-								  fk_Half *, fk_Half *, bool, bool,
-								  int = FK_UNDEFINED,
-								  int = FK_UNDEFINED,
-								  int = FK_UNDEFINED);
-		fk_Edge *		MakeEdge3(fk_Vertex *, fk_Vertex *,
-								  fk_Half *, fk_Half *,
-								  fk_Half *, fk_Half *, bool, bool,
-								  int = FK_UNDEFINED,
-								  int = FK_UNDEFINED,
-								  int = FK_UNDEFINED);
+		bool DeleteEdge1(fk_Edge *);
+		bool DeleteEdge2(fk_Half *);
+		bool DeleteEdge3(fk_Edge *);
 
-		bool			DeleteEdge1(fk_Edge *);
-		bool			DeleteEdge2(fk_Half *);
-		bool			DeleteEdge3(fk_Edge *);
+		fk_Loop * MakeLoop(fk_Half *, int = FK_UNDEFINED);
+		bool DeleteLoop(fk_Loop *);
 
-		fk_Loop *		MakeLoop(fk_Half *, int = FK_UNDEFINED);
-		bool			DeleteLoop(fk_Loop *);
+		fk_Edge * SeparateLoop(fk_Half *, fk_Half *, fk_Half *, fk_Half *, bool, bool,
+							   int = FK_UNDEFINED, int = FK_UNDEFINED,
+							   int = FK_UNDEFINED, int = FK_UNDEFINED);
 
-		fk_Edge *		SeparateLoop(fk_Half *, fk_Half *, fk_Half *, fk_Half *,
-									 bool, bool,
-									 int = FK_UNDEFINED,
-									 int = FK_UNDEFINED,
-									 int = FK_UNDEFINED,
-									 int = FK_UNDEFINED);
+		bool UniteLoop(fk_Edge *, fk_Half *);
+		fk_Vertex * SeparateEdge(fk_Edge *, bool, bool, bool, bool, fk_Vector *,
+								 int = FK_UNDEFINED, int = FK_UNDEFINED,
+								 int = FK_UNDEFINED, int = FK_UNDEFINED);
 
-		bool			UniteLoop(fk_Edge *, fk_Half *);
-		fk_Vertex *		SeparateEdge(fk_Edge *, bool, bool, bool, bool,
-									 fk_Vector *,
-									 int = FK_UNDEFINED,
-									 int = FK_UNDEFINED,
-									 int = FK_UNDEFINED,
-									 int = FK_UNDEFINED);
-
-		bool			UniteEdge(fk_Vertex *);
-		void			NegateBody(void);
+		bool UniteEdge(fk_Vertex *);
+		void NegateBody(void);
 
 
-		void			UndoCom(fk_Command *);
-		void			RedoCom(fk_Command *);
+		void UndoCom(fk_Command *);
+		void RedoCom(fk_Command *);
 
-		void			DeleteAllTesselateData(void);
+		void DeleteAllTesselateData(void);
 	};
 }
 
