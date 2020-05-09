@@ -130,7 +130,6 @@ bool fk_Graph::deleteEdge(fk_GraphEdge *argE)
 	v1->DeleteEdge(argE);
 	v2->DeleteEdge(argE);
 	_m->edgeAdmin->EraseID(int(ID));
-	delete argE;
 	_m->edgeArray[ID] = nullptr;
 	_m->edgeShape.setDrawMode(int(ID), false);
 

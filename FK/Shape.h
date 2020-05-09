@@ -56,8 +56,8 @@ namespace FK {
 
 			std::map<std::string, bool> attrModify;
 
-			std::map<std::string, std::vector<int> *> intSelf;
-			std::map<std::string, std::vector<float> *> floatSelf;
+			std::map<std::string, std::unique_ptr<std::vector<int>>> intSelf;
+			std::map<std::string, std::unique_ptr<std::vector<float>>> floatSelf;
 
 			Member(void);
 		};

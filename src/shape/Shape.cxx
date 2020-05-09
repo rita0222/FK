@@ -58,15 +58,7 @@ fk_Shape::~fk_Shape()
 			DeleteBuffer(GLuint(tmpID));
 		}
 	}
-
-	for (auto p : _m->intSelf) {
-		delete p.second;
-	}
-
-	for (auto p : _m->floatSelf) {
-		delete p.second;
-	}
-
+	
 	return;
 }
 
@@ -227,14 +219,12 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 	if(_m->attrMapI.find(argName) != _m->attrMapI.end()) id = get<0>(_m->attrMapI[argName]);
 
 	if(argSelf == true) {
-		vector<int> *array;
 		if(_m->intSelf.find(argName) == _m->intSelf.end()) {
-			array = new vector<int>();
-			_m->intSelf[argName] = array;
-		} else {
-			array = _m->intSelf[argName];
+			_m->intSelf.emplace(argName, make_unique<vector<int>>());
 		}
-		*array = *argValue;
+		vector<int> *array = _m->intSelf[argName].get();
+		array->resize(argValue->size());
+		copy(argValue->begin(), argValue->end(), array->begin());
 		_m->attrMapI[argName] = shapeAttrI(id, argDim, array);
 	} else {
 		_m->attrMapI[argName] = shapeAttrI(id, argDim, argValue);
@@ -253,15 +243,11 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 	if(_m->attrMapF.find(argName) != _m->attrMapF.end()) id = get<0>(_m->attrMapF[argName]);
 
 	if(argSelf == true) {
-		vector<float> *array;
 		if(_m->floatSelf.find(argName) == _m->floatSelf.end()) {
-			array = new vector<float>();
-			_m->floatSelf[argName] = array;
-		} else {
-			array = _m->floatSelf[argName];
+			_m->floatSelf.emplace(argName, make_unique<vector<float>>());
 		}
-		
-		*array = *argValue;
+		vector<float> *array = _m->floatSelf[argName].get();
+		copy(argValue->begin(), argValue->end(), array->begin());
 		_m->attrMapF[argName] = shapeAttrF(id, argDim, array);
 	} else {
 		_m->attrMapF[argName] = shapeAttrF(id, argDim, argValue);

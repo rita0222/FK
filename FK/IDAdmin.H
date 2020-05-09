@@ -7,6 +7,15 @@
 namespace FK {
 
 	class fk_IDAdmin {
+		class Member {
+		public:
+			int order;
+			int MaxID;
+			std::list<int> eraseIDSet;
+			std::vector<char> existFlagSet;
+
+			Member(void);
+		};
 
 	public:
 		fk_IDAdmin(int = 1);
@@ -26,10 +35,7 @@ namespace FK {
 		int GetOrder(void) const;
 
 	private:
-		int order;
-		int MaxID;
-		std::list<int> *eraseIDSet;
-		std::vector<char> existFlagSet;
+		std::unique_ptr<Member> _m;
 	};
 }
 

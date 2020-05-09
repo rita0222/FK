@@ -6,9 +6,14 @@
 using namespace std;
 using namespace FK;
 
-fk_IDAdmin::fk_IDAdmin(int argOrder)
+fk_IDAdmin::Member::Member(void) :
+	order(0), MaxID(0)
 {
-	eraseIDSet = nullptr;
+	return;
+}
+
+fk_IDAdmin::fk_IDAdmin(int argOrder) : _m(make_unique<Member>())
+{
 	Init(argOrder);
 
 	return;
@@ -16,45 +21,42 @@ fk_IDAdmin::fk_IDAdmin(int argOrder)
 
 fk_IDAdmin::~fk_IDAdmin()
 {
-	delete eraseIDSet;
-	existFlagSet.clear();
+	_m->existFlagSet.clear();
 	return;
 }
 
 void fk_IDAdmin::CloneData(fk_IDAdmin *argIDA)
 {
-	order = argIDA->order;
-	MaxID = argIDA->MaxID;
-	(*eraseIDSet) = *(argIDA->eraseIDSet);
-	existFlagSet = argIDA->existFlagSet;
+	_m->order = argIDA->_m->order;
+	_m->MaxID = argIDA->_m->MaxID;
+	
+	_m->eraseIDSet = argIDA->_m->eraseIDSet;
+	_m->existFlagSet = argIDA->_m->existFlagSet;
 
 	return;
 }	 
 
 void fk_IDAdmin::Init(int argOrder)
 {
-	order = argOrder;
-	MaxID = order - 1;
+	_m->order = argOrder;
+	_m->MaxID = _m->order - 1;
 
-	delete eraseIDSet;
-	eraseIDSet = new list<int>;
-	existFlagSet.clear();
+	_m->eraseIDSet.clear();
+	_m->existFlagSet.clear();
 
 	return;
 }
 
 void fk_IDAdmin::Resize(int argSize)
 {
-	_st		i, size;
+	_st size = static_cast<_st>(argSize);
 
-	size = static_cast<_st>(argSize);
+	Init(_m->order);
 
-	Init(order);
-
-	MaxID = (argSize > 0) ? argSize + order - 1 : order - 1;
-	existFlagSet.resize(size);
-	for(i = 0; i < size; i++) {
-		existFlagSet[i] = static_cast<char>(true);
+	_m->MaxID = (argSize > 0) ? argSize + _m->order - 1 : _m->order - 1;
+	_m->existFlagSet.resize(size);
+	for(_st i = 0; i < size; i++) {
+		_m->existFlagSet[i] = static_cast<char>(true);
 	}
 
 	return;
@@ -62,10 +64,10 @@ void fk_IDAdmin::Resize(int argSize)
 
 int fk_IDAdmin::NewID(void) const
 {
-	if(eraseIDSet->empty()) {
-		return MaxID + 1;
+	if(_m->eraseIDSet.empty()) {
+		return _m->MaxID + 1;
 	} else {
-		return eraseIDSet->back();
+		return _m->eraseIDSet.back();
 	}
 }
 
@@ -74,19 +76,15 @@ int fk_IDAdmin::CreateID(void)
 	int 	retID;
 	_st		index;
 
-	if(eraseIDSet == nullptr) {
-		eraseIDSet = new list<int>;
-	}
-
-	if(eraseIDSet->empty() == true) {
-		retID = MaxID + 1;
-		MaxID++;
-		existFlagSet.push_back(static_cast<char>(true));
+	if(_m->eraseIDSet.empty() == true) {
+		retID = _m->MaxID + 1;
+		_m->MaxID++;
+		_m->existFlagSet.push_back(static_cast<char>(true));
 	} else {
-		retID = eraseIDSet->back();
-		eraseIDSet->pop_back();
-		index = _st(retID) - _st(order);
-		existFlagSet[index] = static_cast<char>(true);
+		retID = _m->eraseIDSet.back();
+		_m->eraseIDSet.pop_back();
+		index = _st(retID) - _st(_m->order);
+		_m->existFlagSet[index] = static_cast<char>(true);
 	}
 
 	return retID;
@@ -94,28 +92,28 @@ int fk_IDAdmin::CreateID(void)
 
 bool fk_IDAdmin::CreateID(int argID)
 {
-	_st index = _st(argID) - _st(order);
+	_st index = _st(argID) - _st(_m->order);
 
-	if(argID < order || argID > MaxID) {
+	if(argID < _m->order || argID > _m->MaxID) {
 		return false;
 	}
 
-	if(existFlagSet[index] == static_cast<char>(true)) {
+	if(_m->existFlagSet[index] == static_cast<char>(true)) {
 		return false;
 	}
 
-	existFlagSet[index] = static_cast<char>(true);
-	eraseIDSet->remove(argID);
+	_m->existFlagSet[index] = static_cast<char>(true);
+	_m->eraseIDSet.remove(argID);
 	return true;
 }
 
 bool fk_IDAdmin::EraseID(int argID)
 {
-	_st index = _st(argID) - _st(order);
+	_st index = _st(argID) - _st(_m->order);
 
 	if(ExistID(argID) == false) return false;
-	eraseIDSet->push_back(argID);
-	existFlagSet[index] = static_cast<char>(false);
+	_m->eraseIDSet.push_back(argID);
+	_m->existFlagSet[index] = static_cast<char>(false);
 
 	return true;
 }
@@ -123,13 +121,13 @@ bool fk_IDAdmin::EraseID(int argID)
 
 bool fk_IDAdmin::ExistID(int argID) const
 {
-	_st index = _st(argID) - _st(order);
+	_st index = _st(argID) - _st(_m->order);
 
-	if(argID > MaxID || argID < order) return false;
-	if(existFlagSet.size() <= index) {
+	if(argID > _m->MaxID || argID < _m->order) return false;
+	if(_m->existFlagSet.size() <= index) {
 		return false;
 	}
-	if(existFlagSet[index] == static_cast<char>(true)) return true;
+	if(_m->existFlagSet[index] == static_cast<char>(true)) return true;
 	return false;
 }
 
@@ -137,9 +135,9 @@ int fk_IDAdmin::GetMaxID(void) const
 {
 	int tmpMaxID;
 
-	if(GetIDNum() == 0) return order-1;
+	if(GetIDNum() == 0) return _m->order-1;
 
-	tmpMaxID = MaxID;
+	tmpMaxID = _m->MaxID;
 	while(ExistID(tmpMaxID) == false) {
 		tmpMaxID--;
 	}
@@ -149,7 +147,7 @@ int fk_IDAdmin::GetMaxID(void) const
 
 int fk_IDAdmin::GetIDNum(void) const
 {
-	return MaxID - static_cast<int>(eraseIDSet->size()) - order + 1;
+	return _m->MaxID - static_cast<int>(_m->eraseIDSet.size()) - _m->order + 1;
 }
 
 int fk_IDAdmin::GetNext(int argID) const
@@ -158,27 +156,27 @@ int fk_IDAdmin::GetNext(int argID) const
 	int	validMaxID = GetMaxID();
 
 	// 最初の要素を返す
-	if(argID > validMaxID) return order;
+	if(argID > validMaxID) return _m->order;
 
 	// nullptr 相当を返す
-	if(argID == validMaxID) return order-1;
+	if(argID == validMaxID) return _m->order-1;
 
 	// 検索候補
-	if(argID < order) {
+	if(argID < _m->order) {
 		// 最初の要素
-		tmpID = order;
+		tmpID = _m->order;
 	} else {
 		tmpID = argID + 1;
 	}
 
 	// 検索
 	while(tmpID <= validMaxID) {
-		if(existFlagSet[_st(tmpID)-_st(order)] == static_cast<char>(true)) break;
+		if(_m->existFlagSet[_st(tmpID)-_st(_m->order)] == static_cast<char>(true)) break;
 		tmpID++;
 	}
 
 	// nullptr 相当を返す
-	if(tmpID == validMaxID + 1) return order-1;
+	if(tmpID == validMaxID + 1) return _m->order-1;
 
 	// 検索結果
 	return tmpID;
@@ -186,7 +184,7 @@ int fk_IDAdmin::GetNext(int argID) const
 
 int fk_IDAdmin::GetOrder(void) const
 {
-	return order;
+	return _m->order;
 }
 
 /****************************************************************************

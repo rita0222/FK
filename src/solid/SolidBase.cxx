@@ -29,20 +29,15 @@ bool fk_SolidBase::MakeMesh(vector<fk_Vector> *vData,
 							vector< vector<int> > *lIndex,
 							bool argSolidFlag)
 {
-	fk_IFSetHandle		*IFSet;
-
 	if(checkDB() == false) return false;
 
-	IFSet = new fk_IFSetHandle(GetDB());
+	unique_ptr<fk_IFSetHandle> IFSet(new fk_IFSetHandle(GetDB()));
 
 	AllCacheClear();
 
 	if(IFSet->SetIndexFaceSet(vData, lIndex, argSolidFlag) == false) {
-		delete IFSet;
 		return false;
 	}
-
-	delete IFSet;
 
 	AllCacheMake();
 	/*

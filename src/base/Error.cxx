@@ -345,28 +345,26 @@ namespace FK::Error {
 
 	void Printf(const char *argFormat, ...)
 	{
-		va_list			ap;
-		char			*buffer = new char [8192];
+		va_list ap;
+		vector<char> buffer(8192);
 
 		va_start(ap, argFormat);
-		vsnprintf(&buffer[0], 8191, argFormat, ap);
+		vsnprintf(buffer.data(), 8191, argFormat, ap);
 		va_end(ap);
-		GetDB()->Put(buffer);
-		delete [] buffer;
+		GetDB()->Put(buffer.data());
 		return;
 	}
 
 	string StrPrintf(const char *argFormat, ...)
 	{
 		va_list		ap;
-		char		*buffer = new char [8192];
+		vector<char> buffer(8192);
 		string		str;
 
 		va_start(ap, argFormat);
-		vsnprintf(&buffer[0], 8191, argFormat, ap);
+		vsnprintf(buffer.data(), 8191, argFormat, ap);
 		va_end(ap);
-		str = buffer;
-		delete [] buffer;
+		str = buffer.data();
 		return str;
 	}
 

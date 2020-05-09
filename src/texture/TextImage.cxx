@@ -98,16 +98,16 @@ namespace FK {
 		fk_GlyphServer(void);
 		~fk_GlyphServer();
 
-		void				Clear(void);
-		void				MakeCache(const fk_GlyphStatus &, const FT_BBox &);
-		fk_GlyphBuffer *	GetBuffer(const fk_GlyphStatus &);
-		FT_BBox *			GetBBox(const fk_GlyphStatus &);
-		bool				IsArive(const fk_GlyphStatus &) const;
+		void Clear(void);
+		void MakeCache(const fk_GlyphStatus &, const FT_BBox &);
+		fk_GlyphBuffer * GetBuffer(const fk_GlyphStatus &);
+		FT_BBox * GetBBox(const fk_GlyphStatus &);
+		bool IsArive(const fk_GlyphStatus &) const;
 	};
 
 	class fk_FTFace {
 	public:
-		FT_Face		face;
+		FT_Face face;
 
 		fk_FTFace(void);
 		~fk_FTFace();
@@ -317,16 +317,6 @@ fk_GlyphServer::~fk_GlyphServer()
 
 void fk_GlyphServer::Clear(void)
 {
-	/*
-	fk_GlyphCache	*tmpCache;
-
-	for(auto p = glyphArray.begin(); p != glyphArray.end(); ++p) {
-		tmpCache = p->second;
-		delete tmpCache->buffer;
-		delete tmpCache;
-	}
-	*/
-
 	glyphArray.clear();
 	return;
 }
@@ -375,44 +365,34 @@ static fk_GlyphServer *	getGlyphServer(void)
 
 static bool				cacheMode = false;
 
-fk_TextImage::fk_TextImage(void)
+fk_TextImage::Member::Member(void) :
+	face(make_unique<fk_FTFace>()),
+	dpi(96), ptsize(06),
+	boldStrength(1),
+	lineSkip(0), charSkip(0), spaceLineSkip(0),
+	maxHeight(0), maxWidth(0),
+	minWidth(0),
+	upOffset(0), downOffset(0), leftOffset(0), rightOffset(0),
+	smoothFlg(true),
+	fgColor(1.0, 1.0, 1.0, 1.0),
+	bgColor(0.0, 0.0, 0.0, 1.0),
+	shadowColor(0.0, 0.0, 0.0, 1.0),
+	alignMode(fk_TextAlign::LEFT),
+	sendingMode(fk_TextSendingMode::ALL),
+	sendPos(0), shadowMode(false),
+	monospaceMode(true), monospaceSize(10)
+{
+	return;
+}
+
+fk_TextImage::fk_TextImage(void) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::TEXTIMAGE);
-	setDPI(96);
-	setPTSize(96);
-	setCharSkip(0);
-	setLineSkip(0);
-	setSpaceLineSkip(0);
-	setSmoothMode(true);
-	setMonospaceMode(true);
-	setMonospaceSize(10);
-	setOffset(0, 0, 0, 0);
-	maxHeight = maxWidth = 0;
-	setMinLineWidth(0);
-	setShadowMode(false);
-	setShadowOffset(0, 0);
-	setBoldStrength(1);
-
-	lineArray.clear();
-	lineMap.clear();
-	charArray.clear();
-
-	charImages.clear();
-
-	fgColor.init(1.0, 1.0, 1.0, 1.0);
-	bgColor.init(0.0, 0.0, 0.0, 1.0);
-	shadowColor.init(0.0, 0.0, 0.0, 1.0);
-
-	alignMode = fk_TextAlign::LEFT;
-	sendingMode = fk_TextSendingMode::ALL;
-
-	face = make_unique<fk_FTFace>();
 	return;
 }
 
 fk_TextImage::~fk_TextImage()
 {
-	//delete face;
 	ClearCharImages();
 
 	return;
@@ -420,156 +400,151 @@ fk_TextImage::~fk_TextImage()
 
 void fk_TextImage::setDPI(int argDPI)
 {
-	dpi = argDPI;
+	_m->dpi = argDPI;
 	return;
 }
 
 void fk_TextImage::setPTSize(int argPTSize)
 {
-	ptsize = argPTSize;
+	_m->ptsize = argPTSize;
 	return;
 }
 
 int fk_TextImage::getDPI(void) const
 {
-	return dpi;
+	return _m->dpi;
 }
 
 int fk_TextImage::getPTSize(void) const
 {
-	return ptsize;
+	return _m->ptsize;
 }
 
 void fk_TextImage::setBoldStrength(int argStrength)
 {
 	if(argStrength <= 0) return;
-	boldStrength = argStrength;
+	_m->boldStrength = argStrength;
 	return;
 }
 
 int fk_TextImage::getBoldStrength(void) const
 {
-	return boldStrength;
+	return _m->boldStrength;
 }
 
 void fk_TextImage::setLineSkip(int argSkip)
 {
 	if(argSkip >= 0) {
-		lineSkip = argSkip;
+		_m->lineSkip = argSkip;
 	}
 	return;
 }
 
 int fk_TextImage::getLineSkip(void) const
 {
-	return lineSkip;
+	return _m->lineSkip;
 }
 
 void fk_TextImage::setCharSkip(int argSkip)
 {
 	if(argSkip >= 0) {
-		charSkip = argSkip;
+		_m->charSkip = argSkip;
 	}
 	return;
 }
 
 int fk_TextImage::getCharSkip(void) const
 {
-	return charSkip;
+	return _m->charSkip;
 }
 
 void fk_TextImage::setSpaceLineSkip(int argSkip)
 {
 	if(argSkip >= 0) {
-		spaceLineSkip = argSkip;
+		_m->spaceLineSkip = argSkip;
 	}
 	return;
 }
 
 int fk_TextImage::getSpaceLineSkip(void) const
 {
-	return spaceLineSkip;
+	return _m->spaceLineSkip;
 }
 
 void fk_TextImage::setAlign(fk_TextAlign argAlign)
 {
-	alignMode = argAlign;
+	_m->alignMode = argAlign;
 	return;
 }
 
 fk_TextAlign fk_TextImage::getAlign(void) const
 {
-	return alignMode;
+	return _m->alignMode;
 }
 
 void fk_TextImage::setOffset(int argUp, int argDown, int argLeft, int argRight)
 {
-	upOffset = argUp;
-	downOffset = argDown;
-	leftOffset = argLeft;
-	rightOffset = argRight;
+	_m->upOffset = argUp;
+	_m->downOffset = argDown;
+	_m->leftOffset = argLeft;
+	_m->rightOffset = argRight;
 	return;
 }
 
 int fk_TextImage::getUpOffset(void) const
 {
-	return upOffset;
+	return _m->upOffset;
 }
 
 int fk_TextImage::getDownOffset(void) const
 {
-	return downOffset;
+	return _m->downOffset;
 }
 
 int fk_TextImage::getLeftOffset(void) const
 {
-	return leftOffset;
+	return _m->leftOffset;
 }
 
 int fk_TextImage::getRightOffset(void) const
 {
-	return rightOffset;
+	return _m->rightOffset;
 }
 
 void fk_TextImage::setMinLineWidth(int argWidth)
 {
-	minWidth = argWidth;
+	_m->minWidth = argWidth;
 	return;
 }
 
 int fk_TextImage::getMinLineWidth(void) const
 {
-	return minWidth;
+	return _m->minWidth;
 }
 
 int fk_TextImage::getMaxLineWidth(void) const
 {
-	return maxWidth;
+	return _m->maxWidth;
 }
 
 int fk_TextImage::getMaxLineHeight(void) const
 {
-	return maxHeight;
+	return _m->maxHeight;
 }
 
 bool fk_TextImage::initFont(const string fontName)
 {
-	face->face = getFTServer()->GetFace(fontName);
-	if(face->face == nullptr) {
+	_m->face->face = getFTServer()->GetFace(fontName);
+	if(_m->face->face == nullptr) {
 		return false;
 	}
 	return true;
 }
 
-void fk_TextImage::FreeGlyph(vector<fk_FTGlyph *> *argGlyphArray)
+void fk_TextImage::FreeGlyph(vector<unique_ptr<fk_FTGlyph>> *argGlyphArray)
 {
-	_st				i;
-	fk_FTGlyph		*glyph;
-
-	for(i = 0; i < argGlyphArray->size(); i++) {
-		glyph = (*argGlyphArray)[i];
-		glyph->Init();
-		delete glyph;
+	for(auto &g : *argGlyphArray) {
+		g->Init();
 	}
 
 	argGlyphArray->clear();
@@ -578,14 +553,15 @@ void fk_TextImage::FreeGlyph(vector<fk_FTGlyph *> *argGlyphArray)
 
 bool fk_TextImage::send(void)
 {
-	_st		i, endPos, sp;
+	//_st		i, endPos, sp;
 
-	sp = _st(sendPos);
-	if(sp == charArray.size()) return false;
+	_st sp = _st(_m->sendPos);
+	if(sp == _m->charArray.size()) return false;
 
-	switch(sendingMode) {
+	_st endPos = 0, i;
+	switch(_m->sendingMode) {
 	  case fk_TextSendingMode::ALL:
-		endPos = charArray.size();
+		endPos = _m->charArray.size();
 		break;
 
 	  case fk_TextSendingMode::CHAR:
@@ -594,8 +570,8 @@ bool fk_TextImage::send(void)
 
 	  case fk_TextSendingMode::LINE:
 
-		for(i = sp + 1; i < charArray.size(); i++) {
-			if(lineMap[sp] != lineMap[i]) break;
+		for(i = sp + 1; i < _m->charArray.size(); i++) {
+			if(_m->lineMap[sp] != _m->lineMap[i]) break;
 		}
 		endPos = i;
 		break;
@@ -607,86 +583,93 @@ bool fk_TextImage::send(void)
 	for(i = sp; i < endPos; i++) {
 		CopyCharImage(int(i));
 	}
-	sendPos = int(endPos);
+	_m->sendPos = int(endPos);
 
 	return true;
 }
 
 bool fk_TextImage::finish(void)
 {
-	int		i, endPos;
+	int endPos = int(_m->charArray.size());
+	if(_m->sendPos == endPos) return false;
 
-	endPos = int(charArray.size());
-	if(sendPos == endPos) return false;
-
-	for(i = sendPos; i < endPos; i++) {
+	for(int i = _m->sendPos; i < endPos; i++) {
 		CopyCharImage(i);
 	}
 
-	sendPos = endPos;
+	_m->sendPos = endPos;
 
 	return true;
 }
 
 bool fk_TextImage::clear(void)
 {
-	if(sendPos == 0) return false;
+	if(_m->sendPos == 0) return false;
 	InitTextImage();
-	sendPos = 0;
-	if(charImages.empty() == true) loadUniStr(nullptr);
+	_m->sendPos = 0;
+	if(_m->charImages.empty() == true) loadUniStr(nullptr);
 	return true;
 }
 
 void fk_TextImage::setSendingMode(fk_TextSendingMode argMode)
 {
-	sendingMode = argMode;
+	_m->sendingMode = argMode;
 	return;
 }
 
 fk_TextSendingMode fk_TextImage::getSendingMode(void) const
 {
-	return sendingMode;
+	return _m->sendingMode;
 }
 
 bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 {
-	fk_FTGlyph				*glyph;
-	vector<fk_FTGlyph *>	glyphArray;
-	int						i;
-	int						upper, lineNum;
-	fk_UniStr				tmpStr, line;
-	int						fbScale[1024], sbScale[1024];
+	/*
+	fk_FTGlyph *glyph;
+	vector<fk_FTGlyph *> glyphArray;
+	int i, upper, lineNum;
 
-	if(face->face == nullptr) {
+	fk_UniStr tmpStr, line;
+	int fbScale[1024], sbScale[1024];
+	*/
+
+	if(_m->face->face == nullptr) {
 		Error::Put("fk_TextImage", "loadUniStr", 1);
 		return false;
 	}
 
-	if(argStr != nullptr) strData.copyStr(argStr);
-	tmpStr.copyStr(&strData);
+	if(argStr != nullptr) _m->strData.copyStr(argStr);
+	fk_UniStr tmpStr;
+	tmpStr.copyStr(&_m->strData);
 
-	FreeGlyph(&glyphArray);
-	FT_F26Dot6 ptsize_ = ptsize << 6;
-	FT_Set_Char_Size(face->face, ptsize_, ptsize_, FT_UInt(dpi), FT_UInt(dpi));
+	//FreeGlyph(&glyphArray);
 
-	lineArray.clear();
-	lineMap.clear();
-	charArray.clear();
+	FT_F26Dot6 ptsize_ = _m->ptsize << 6;
+	FT_Set_Char_Size(_m->face->face, ptsize_, ptsize_, FT_UInt(_m->dpi), FT_UInt(_m->dpi));
+
+	_m->lineArray.clear();
+	_m->lineMap.clear();
+	_m->charArray.clear();
 	ClearCharImages();
 
-	MakeColorScale(fgColor, bgColor, fbScale);
-	if(shadowMode == true) MakeColorScale(shadowColor, bgColor, sbScale);
+	int fbScale[1024], sbScale[1024];
+	MakeColorScale(_m->fgColor, _m->bgColor, fbScale);
+	if(_m->shadowMode == true) MakeColorScale(_m->shadowColor, _m->bgColor, sbScale);
 
-	for(lineNum = 0; tmpStr.getLine(&line); lineNum++) {
+	fk_UniStr line;
+	int i;
+	vector<unique_ptr<fk_FTGlyph>> glyphArray;
+
+	for(int lineNum = 0; tmpStr.getLine(&line); lineNum++) {
 		for(i = 0; i < line.getLength(); i++) {
-			glyph = new fk_FTGlyph;
-			glyph->status.Set(face->face, FT_UInt(line.getCode(i)),
-							  ptsize, dpi, boldStrength);
-			glyphArray.push_back(glyph);
-			lineMap.push_back(lineNum);
+			unique_ptr<fk_FTGlyph> glyph(new fk_FTGlyph);
+			glyph->status.Set(_m->face->face, FT_UInt(line.getCode(i)),
+							  _m->ptsize, _m->dpi, _m->boldStrength);
+			glyphArray.push_back(move(glyph));
+			_m->lineMap.push_back(lineNum);
 		}
 
-		upper = LayoutGlyphs(&glyphArray);
+		int upper = LayoutGlyphs(&glyphArray);
 		DumpRasterMap(upper, fbScale, sbScale, &glyphArray);
 		FreeGlyph(&glyphArray);
 	}
@@ -694,12 +677,12 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 	CalcTextOffset();
 	ReCalcCharOffset();
 	InitTextImage();
-	if(sendingMode == fk_TextSendingMode::ALL) {
-		for(i = 0; i < int(charArray.size()); i++) CopyCharImage(i);
+	if(_m->sendingMode == fk_TextSendingMode::ALL) {
+		for(i = 0; i < int(_m->charArray.size()); i++) CopyCharImage(i);
 		ClearCharImages();
-		sendPos = int(charArray.size());
+		_m->sendPos = int(_m->charArray.size());
 	} else {
-		sendPos = 0;
+		_m->sendPos = 0;
 	}
 	if(cacheMode == false) clearCache();
 
@@ -708,13 +691,7 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 
 void fk_TextImage::ClearCharImages(void)
 {
-	/*
-	for(_st i = 0; i < charImages.size(); i++) {
-		delete charImages[i];
-	}
-	*/
-
-	charImages.clear();
+	_m->charImages.clear();
 	return;
 }
 
@@ -722,14 +699,11 @@ void fk_TextImage::MakeColorScale(const fk_Color &argC1,
 								  const fk_Color &argC2,
 								  int *argScale)
 {
-	_st		index, i, j;
-	float	val1, val2;
-
-	for(i = 0; i < 256; i++) {
-		for(j = 0; j < 4; j++) {
-			index = i*4 + j;
-			val1 = argC1.col[j] * float(i)/255.0f;
-			val2 = argC2.col[j] * (1.0f - (float(i)/255.0f));
+	for(_st i = 0; i < 256; i++) {
+		for(_st j = 0; j < 4; j++) {
+			_st index = i*4 + j;
+			float val1 = argC1.col[j] * float(i)/255.0f;
+			float val2 = argC2.col[j] * (1.0f - (float(i)/255.0f));
 			argScale[index] = int(256.0f*(val1 + val2));
 			if(argScale[index] >= 256) argScale[index] = 255;
 			if(argScale[index] < 0) argScale[index] = 0;
@@ -738,47 +712,35 @@ void fk_TextImage::MakeColorScale(const fk_Color &argC1,
 	return;
 }
 
-int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
+int fk_TextImage::LayoutGlyphs(vector<unique_ptr<fk_FTGlyph>> *argGlyphArray)
 {
-	FT_Pos			image_w, image_h, oneImage_w, oneImage_h, upper, under;
-	//FT_UInt			load_flags;
-	_st				i, j;
-	FT_BBox			*pBBox;
-	FT_Glyph		glyph;
-	fk_FTGlyph		*fkGlyph;
-	fk_Rect			lineRect;
-	FT_GlyphSlot	slot;
-	fk_GlyphBuffer	*buffer;
+	int pixelSp = int((double)_m->dpi/96.0*(double)_m->ptsize);
 
+	FT_Pos image_w = 0;
+	FT_Pos image_h = 0;
+	FT_Pos upper = 0;
+	FT_Pos under = 0;
 
-	int				pixelSp = int((double)dpi/96.0*(double)ptsize);
-
-	//load_flags = FT_LOAD_DEFAULT;
-
-	image_w = 0;
-	image_h = 0;
-	upper = 0;
-	under = 0;
-
-	for(i = 0; i < argGlyphArray->size(); i++) {
-		fkGlyph = (*argGlyphArray)[i];
+	FT_BBox *pBBox;
+	for(auto &g : *argGlyphArray) {
+		fk_FTGlyph *fkGlyph = g.get();
 
 		if(getGlyphServer()->IsArive(fkGlyph->status) == false) {
-			if(FT_Load_Glyph(face->face, fkGlyph->status.GetIndex(),
+			if(FT_Load_Glyph(_m->face->face, fkGlyph->status.GetIndex(),
 							 FT_LOAD_DEFAULT | FT_LOAD_NO_BITMAP)) {
 				Error::Put("fk_TextImage", "LayoutGlyphs", 1);
 				continue;
 			}
 
-			slot = face->face->glyph;
+			FT_GlyphSlot slot = _m->face->face->glyph;
 
 			if(slot->format != FT_GLYPH_FORMAT_OUTLINE) {
 				Error::Put("fk_TextImage", "LayoutGlyohs", 2);
 				continue;
 			}
 
-			if(boldStrength != 1) {
-				if(FT_Outline_Embolden(&(slot->outline), boldStrength)) {
+			if(_m->boldStrength != 1) {
+				if(FT_Outline_Embolden(&(slot->outline), _m->boldStrength)) {
 					Error::Put("fk_TextImage", "LayoutGlyohs", 3);
 					continue;
 				}
@@ -789,6 +751,7 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 				continue;
 			}
 
+			FT_Glyph glyph;
 			FT_Get_Glyph(slot, &glyph);
 
 			FT_Glyph_Get_CBox(glyph, ft_glyph_bbox_pixels, &(fkGlyph->bbox));
@@ -796,13 +759,13 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 			getGlyphServer()->MakeCache(fkGlyph->status, fkGlyph->bbox);
 
 			pBBox = &(fkGlyph->bbox);
-			oneImage_w = pBBox->xMax - pBBox->xMin;
-			oneImage_h = pBBox->yMax - pBBox->yMin;
+			FT_Pos oneImage_w = pBBox->xMax - pBBox->xMin;
+			FT_Pos oneImage_h = pBBox->yMax - pBBox->yMin;
 
-			buffer = getGlyphServer()->GetBuffer(fkGlyph->status);
+			fk_GlyphBuffer *buffer = getGlyphServer()->GetBuffer(fkGlyph->status);
 			buffer->resize(_st(oneImage_w) * _st(oneImage_h));
 
-			for(j = 0; j < _st(oneImage_w) * _st(oneImage_h); j++) {
+			for(_st j = 0; j < _st(oneImage_w) * _st(oneImage_h); j++) {
 				(*buffer)[j] = slot->bitmap.buffer[j];
 			}
 			FT_Done_Glyph(glyph);
@@ -813,32 +776,33 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 
 		fkGlyph->xOffset = image_w;
 
-		if(monospaceMode == true) {
-			image_w += monospaceSize + charSkip;
+		if(_m->monospaceMode == true) {
+			image_w += _m->monospaceSize + _m->charSkip;
 		} else {
 			// rita: 空白挿入処理＆通常のシフト処理
 			switch(fkGlyph->status.GetCode()) {
 			  case SP_1BYTE:
-				image_w += pixelSp/2 + charSkip;
+				image_w += pixelSp/2 + _m->charSkip;
 				break;
 			  case SP_2BYTE:
-				image_w += pixelSp + charSkip;
+				image_w += pixelSp + _m->charSkip;
 				break;
 			  default:
-				image_w += (pBBox->xMax - pBBox->xMin + charSkip);
+				image_w += (pBBox->xMax - pBBox->xMin + _m->charSkip);
 				break;
 			}
 		}
 
-		if(shadowMode == true && image_w != 0) image_w += abs(shadowOffset.w);
+		if(_m->shadowMode == true && image_w != 0) image_w += abs(_m->shadowOffset.w);
 		if(upper < pBBox->yMax) upper = pBBox->yMax;
 		if(under > pBBox->yMin) under = pBBox->yMin;
 	}
 
 	image_h = upper - under;
-	if(shadowMode == true && image_h != 0) image_h += abs(shadowOffset.h);
-	lineRect.set(0, 0, int(image_w - charSkip), int(image_h));
-	lineArray.push_back(lineRect);
+	if(_m->shadowMode == true && image_h != 0) image_h += abs(_m->shadowOffset.h);
+
+	fk_Rect lineRect(0, 0, int(image_w - _m->charSkip), int(image_h));
+	_m->lineArray.push_back(lineRect);
 
 	return int(upper);
 }
@@ -846,56 +810,48 @@ int fk_TextImage::LayoutGlyphs(vector<fk_FTGlyph *> *argGlyphArray)
 void fk_TextImage::DumpRasterMap(int argUpper,
 								 int *argFBScale,
 								 int *argSBScale,
-								 vector<fk_FTGlyph *> *argGlyphArray)
+								 vector<unique_ptr<fk_FTGlyph>> *argGlyphArray)
 {
-	_st				i;
-	int				j, k;
-	fk_GlyphBuffer	*localImageBuf;
-	FT_BBox			*pBBox;
-	_st				pixel, setVal;
-	fk_FTGlyph		*glyph;
-	fk_Rect			charRect, imageRect;
-	unique_ptr<fk_Image> charImage;
-	fk_Dimension	orgImageSize;
-	fk_Dimension	posOffset;
+	fk_Rect charRect;
+	fk_Dimension orgImageSize, posOffset;
+	_st setVal = 0;
 
-	for(i = 0; i < argGlyphArray->size(); i++) {
-		glyph = (*argGlyphArray)[i];
-		pBBox = &(glyph->bbox);
-		localImageBuf = getGlyphServer()->GetBuffer(glyph->status);
-
+	for(auto &g : *argGlyphArray) {
+		fk_FTGlyph *glyph = g.get();
+		FT_BBox *pBBox = &(glyph->bbox);
+		fk_GlyphBuffer *localImageBuf = getGlyphServer()->GetBuffer(glyph->status);
+		
 		charRect.x = int(glyph->xOffset);
 		charRect.y = int(argUpper - pBBox->yMax);
 		orgImageSize.w = int(pBBox->xMax - pBBox->xMin);
 		orgImageSize.h = int(pBBox->yMax - pBBox->yMin);
 
-		if(monospaceMode == true) {
-			charRect.w = monospaceSize;
+		if(_m->monospaceMode == true) {
+			charRect.w = _m->monospaceSize;
 		} else {
 			charRect.w = orgImageSize.w;
 		}
 		charRect.h = orgImageSize.h;
 
-		imageRect = charRect;
+		fk_Rect imageRect = charRect;
 
-		if(shadowMode == true) {
-			imageRect.w += abs(shadowOffset.w);
-			imageRect.h += abs(shadowOffset.h);
+		if(_m->shadowMode == true) {
+			imageRect.w += abs(_m->shadowOffset.w);
+			imageRect.h += abs(_m->shadowOffset.h);
 		}
 		
-		charImage = make_unique<fk_Image>(imageRect.w, imageRect.h);
+		unique_ptr<fk_Image> charImage = make_unique<fk_Image>(imageRect.w, imageRect.h);
 		charImage->fillColor(argFBScale[0], argFBScale[1],
 							 argFBScale[2], argFBScale[3]);
 
-		if(shadowMode == true) {
-			posOffset.w = (shadowOffset.w < 0) ? 0 : shadowOffset.w;
-			posOffset.h = (shadowOffset.h < 0) ? 0 : shadowOffset.h;
+		if(_m->shadowMode == true) {
+			posOffset.w = (_m->shadowOffset.w < 0) ? 0 : _m->shadowOffset.w;
+			posOffset.h = (_m->shadowOffset.h < 0) ? 0 : _m->shadowOffset.h;
 
-			for(j = 0; j < charRect.h; j++) {
-				for(k = 0; k < charRect.w; k++) {
-					pixel = _st(GetPixel(localImageBuf, charRect.w,
-													  orgImageSize.w, j, k));
-					if(smoothFlg == true) {
+			for(int j = 0; j < charRect.h; j++) {
+				for(int k = 0; k < charRect.w; k++) {
+					_st pixel = _st(GetPixel(localImageBuf, charRect.w, orgImageSize.w, j, k));
+					if(_m->smoothFlg == true) {
 						setVal = (pixel > 255) ? 255 : pixel;
 					} else {
 						setVal = (pixel > 128) ? 255 : 0;
@@ -911,37 +867,16 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 				}
 			}
 
-			posOffset.w = (shadowOffset.w > 0) ? 0 : -shadowOffset.w;
-			posOffset.h = (shadowOffset.h > 0) ? 0 : -shadowOffset.h;
+			posOffset.w = (_m->shadowOffset.w > 0) ? 0 : -_m->shadowOffset.w;
+			posOffset.h = (_m->shadowOffset.h > 0) ? 0 : -_m->shadowOffset.h;
 		} else {
 			posOffset.set(0, 0);
 		}
 
-		for(j = 0; j < charRect.h; j++) {
-			for(k = 0; k < charRect.w; k++) {
-				/*
-				_st tmpW = _st(orgImageSize.w);
-				if(monospaceMode == true) {
-					_st w = (k * tmpW)/_st(charRect.w);
-					_st index = j * tmpW + w;
-					if(tmpW >= w) {
-						pixel = localImageBuf->at(index);
-					} else {
-						_st pixel1 = localImageBuf->at(index);
-						_st pixel2 = localImageBuf->at(index+1);
-						double t = (double(tmpW)/double(charRect.w)) * double(k) - double(w);
-						pixel = (_st)((1.0 - t)*double(pixel1) + t * double(pixel2));
-					}
-				} else {
-					_st index = j * tmpW + k;
-					pixel = localImageBuf->at(index);
-				}
-				*/
-
-				pixel = _st(GetPixel(localImageBuf, charRect.w,
-												  orgImageSize.w, j, k));
-
-				if(smoothFlg == true) {
+		for(int j = 0; j < charRect.h; j++) {
+			for(int k = 0; k < charRect.w; k++) {
+				_st pixel = _st(GetPixel(localImageBuf, charRect.w, orgImageSize.w, j, k));
+				if(_m->smoothFlg == true) {
 					setVal = (pixel > 255) ? 255 : pixel;
 				} else {
 					setVal = (pixel > 128) ? 255 : 0;
@@ -957,8 +892,8 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 			}
 		}
 
-		charArray.push_back(charRect);
-		charImages.push_back(move(charImage));
+		_m->charArray.push_back(charRect);
+		_m->charImages.push_back(move(charImage));
 	}
 
 	return;
@@ -968,7 +903,7 @@ int fk_TextImage::GetPixel(fk_GlyphBuffer *argBuffer, int argCW, int argIW, int 
 {
 	_st pixel, index;
 
-	if(monospaceMode == true) {
+	if(_m->monospaceMode == true) {
 		int w = (argK * argIW)/argCW;
 		index = _st(argJ) * _st(argIW) + _st(w);
 		if(argIW >= w) {
@@ -995,7 +930,7 @@ void fk_TextImage::setSmoothFlg(bool argFlg)
 
 void fk_TextImage::setSmoothMode(bool argFlg)
 {
-	smoothFlg = argFlg;
+	_m->smoothFlg = argFlg;
 	return;
 }
 
@@ -1006,173 +941,170 @@ bool fk_TextImage::getSmoothFlg(void) const
 
 bool fk_TextImage::getSmoothMode(void) const
 {
-	return smoothFlg;
+	return _m->smoothFlg;
 }
 
 void fk_TextImage::setMonospaceMode(bool argMode)
 {
-	monospaceMode = argMode;
+	_m->monospaceMode = argMode;
 	return;
 }
 
 bool fk_TextImage::getMonospaceMode(void) const
 {
-	return monospaceMode;
+	return _m->monospaceMode;
 }
 
 void fk_TextImage::setMonospaceSize(int argSize)
 {
-	if(argSize >= 0) monospaceSize = argSize;
+	if(argSize >= 0) _m->monospaceSize = argSize;
 	return;
 }
 
 int fk_TextImage::getMonospaceSize(void) const
 {
-	return monospaceSize;
+	return _m->monospaceSize;
 }
 
 void fk_TextImage::setForeColor(fk_Color argColor)
 {
-	fgColor = argColor;
+	_m->fgColor = argColor;
 	return;
 }
 
 void fk_TextImage::setForeColor(float argR, float argG, float argB, float argA)
 {
-	fgColor.set(argR, argG, argB, argA);
+	_m->fgColor.set(argR, argG, argB, argA);
 	return;
 }
 
 void fk_TextImage::setForeColor(double argR, double argG,
 								double argB, double argA)
 {
-	fgColor.set(argR, argG, argB, argA);
+	_m->fgColor.set(argR, argG, argB, argA);
 	return;
 }
 
 void fk_TextImage::setBackColor(fk_Color argColor)
 {
-	bgColor = argColor;
+	_m->bgColor = argColor;
 	return;
 }
 
 void fk_TextImage::setBackColor(float argR, float argG, float argB, float argA)
 {
-	bgColor.set(argR, argG, argB, argA);
+	_m->bgColor.set(argR, argG, argB, argA);
 	return;
 }
 
 void fk_TextImage::setBackColor(double argR, double argG,
 								double argB, double argA)
 {
-	bgColor.set(argR, argG, argB, argA);
+	_m->bgColor.set(argR, argG, argB, argA);
 	return;
 }
 
 void fk_TextImage::setShadowColor(fk_Color argColor)
 {
-	shadowColor = argColor;
+	_m->shadowColor = argColor;
 	return;
 }
 
 void fk_TextImage::setShadowColor(float argR, float argG,
 								  float argB, float argA)
 {
-	shadowColor.set(argR, argG, argB, argA);
+	_m->shadowColor.set(argR, argG, argB, argA);
 	return;
 }
 
 void fk_TextImage::setShadowColor(double argR, double argG,
 								  double argB, double argA)
 {
-	shadowColor.set(argR, argG, argB, argA);
+	_m->shadowColor.set(argR, argG, argB, argA);
 	return;
 }
 
 fk_Color fk_TextImage::getForeColor(void) const
 {
-	return fgColor;
+	return _m->fgColor;
 }
 
 fk_Color fk_TextImage::getBackColor(void) const
 {
-	return bgColor;
+	return _m->bgColor;
 }
 
 fk_Color fk_TextImage::getShadowColor(void) const
 {
-	return shadowColor;
+	return _m->shadowColor;
 }
 
 void fk_TextImage::CalcTextOffset(void)
 {
-	_st		lineID;
-	int		yOffset, xOffset;
-	int		curW, curH, trueWidth;
+	int yOffset, xOffset;
+	_st lineID;
+	int curW, curH;
 
-	yOffset = upOffset;
+	yOffset = _m->upOffset;
+	_m->maxWidth = -1;
+	_m->maxHeight = -1;
 
-	maxWidth = -1;
-	maxHeight = -1;
+	for(lineID = 0; lineID < _m->lineArray.size(); lineID++) {
+		curW = _m->lineArray[lineID].w;
+		curH = _m->lineArray[lineID].h;
 
-	for(lineID = 0; lineID < lineArray.size(); lineID++) {
-		curW = lineArray[lineID].w;
-		curH = lineArray[lineID].h;
-
-		if(curW > maxWidth) maxWidth = curW;
-		if(curH > maxHeight) maxHeight = curH;
+		if(curW > _m->maxWidth) _m->maxWidth = curW;
+		if(curH > _m->maxHeight) _m->maxHeight = curH;
 	}
 
-	trueWidth = (maxWidth > minWidth) ? maxWidth : minWidth;
+	int trueWidth = (_m->maxWidth > _m->minWidth) ? _m->maxWidth : _m->minWidth;
 
-	for(lineID = 0; lineID < lineArray.size(); lineID++) {
-		curW = lineArray[lineID].w;
-		curH = lineArray[lineID].h;
+	for(lineID = 0; lineID < _m->lineArray.size(); lineID++) {
+		curW = _m->lineArray[lineID].w;
+		curH = _m->lineArray[lineID].h;
 
-		switch(alignMode) {
+		switch(_m->alignMode) {
 		  case fk_TextAlign::LEFT:
-			xOffset = leftOffset;
+			xOffset = _m->leftOffset;
 			break;
 
 		  case fk_TextAlign::CENTER:
-			xOffset = (trueWidth - curW)/2 + leftOffset;
+			xOffset = (trueWidth - curW)/2 + _m->leftOffset;
 			break;
 
 		  case fk_TextAlign::RIGHT:
-			xOffset = trueWidth - curW + leftOffset;
+			xOffset = trueWidth - curW + _m->leftOffset;
 			break;
 
 		  default:
-			xOffset = leftOffset;
+			xOffset = _m->leftOffset;
 			break;
 		}
 
-		lineArray[lineID].x = xOffset;
-		lineArray[lineID].y = yOffset;
+		_m->lineArray[lineID].x = xOffset;
+		_m->lineArray[lineID].y = yOffset;
 
 		if(curH == 0) {
-			yOffset += spaceLineSkip + lineSkip;
+			yOffset += _m->spaceLineSkip + _m->lineSkip;
 		} else {
-			yOffset += curH + lineSkip;
+			yOffset += curH + _m->lineSkip;
 		}
 	}
 
-	newImage(trueWidth + leftOffset + rightOffset,
-			 yOffset + downOffset - lineSkip, false);
+	newImage(trueWidth + _m->leftOffset + _m->rightOffset,
+			 yOffset + _m->downOffset - _m->lineSkip, false);
 
 	return;
 }
 
 void fk_TextImage::ReCalcCharOffset(void)
 {
-	_st		i, index;
+	if(_m->charArray.empty() == true) return;
 
-	if(charArray.empty() == true) return;
-
-	for(i = 0; i < charArray.size(); i++) {
-		index = _st(lineMap[i]);
-		charArray[i].x += lineArray[index].x;
-		charArray[i].y += lineArray[index].y;
+	for(_st i = 0; i < _m->charArray.size(); i++) {
+		_st index = _st(_m->lineMap[i]);
+		_m->charArray[i].x += _m->lineArray[index].x;
+		_m->charArray[i].y += _m->lineArray[index].y;
 	}
 	return;
 }
@@ -1180,11 +1112,10 @@ void fk_TextImage::ReCalcCharOffset(void)
 
 void fk_TextImage::InitTextImage(void)
 {
-	unsigned int	i;
-	int				bgCol[4];
+	int bgCol[4];
 
-	for(i = 0; i < 4; i++) {
-		bgCol[i] = int(bgColor.col[i] * 256);
+	for(_st i = 0; i < 4; i++) {
+		bgCol[i] = int(_m->bgColor.col[i] * 256);
 		if(bgCol[i] >= 256) bgCol[i] = 255;
 		if(bgCol[i] < 0) bgCol[i] = 0;
 	}
@@ -1198,7 +1129,7 @@ void fk_TextImage::CopyCharImage(int argID)
 {
 	_st		id = _st(argID);
 
-	copyImage(charImages[id].get(), charArray[id].x, charArray[id].y);
+	copyImage(_m->charImages[id].get(), _m->charArray[id].x, _m->charArray[id].y);
 	return;
 }
 
@@ -1217,83 +1148,82 @@ bool fk_TextImage::loadStrFile(const string argFileName, fk_StringCode argCode)
 
 int fk_TextImage::getLineNum(void) const
 {
-	return int(lineArray.size());
+	return int(_m->lineArray.size());
 }
 
 int fk_TextImage::getLineCharNum(int argLineID) const
 {
-	_st			i, count;
+	if(argLineID < 0 || argLineID >= int(_m->lineArray.size())) return 0;
 
-	if(argLineID < 0 || argLineID >= int(lineArray.size())) return 0;
-
-	for(count = 0, i = 0; i < lineMap.size(); i++) {
-		if(argLineID == lineMap[i]) count++;
-		if(argLineID < lineMap[i]) break;
+	int count = 0;
+	for(_st i = 0; i < _m->lineMap.size(); ++i) {
+		if(argLineID == _m->lineMap[i]) ++count;
+		if(argLineID < _m->lineMap[i]) break;
 	}
-	return int(count);
+	return count;
 }
 
 int fk_TextImage::getAllCharNum(void) const
 {
-	return int(charArray.size());
+	return int(_m->charArray.size());
 }
 
 int fk_TextImage::getLineWidth(int argID) const
 {
-	_st		id = _st(argID);
+	_st id = _st(argID);
 
-	if(argID < 0 || id >= lineArray.size()) return -1;
+	if(argID < 0 || id >= _m->lineArray.size()) return -1;
 
-	return lineArray[id].w;
+	return _m->lineArray[id].w;
 }
 
 int fk_TextImage::getLineHeight(int argID) const
 {
-	_st		id = _st(argID);
+	_st id = _st(argID);
 
-	if(argID < 0 || id >= lineArray.size()) return -1;
+	if(argID < 0 || id >= _m->lineArray.size()) return -1;
 
-	return lineArray[id].h;
+	return _m->lineArray[id].h;
 }
 
 int fk_TextImage::getLineStartXPos(int argID) const
 {
-	_st		id = _st(argID);
+	_st id = _st(argID);
 
-	if(argID < 0 || id >= lineArray.size()) return -1;
+	if(argID < 0 || id >= _m->lineArray.size()) return -1;
 
-	return lineArray[id].x;
+	return _m->lineArray[id].x;
 }
 
 int fk_TextImage::getLineStartYPos(int argID) const
 {
-	_st		id = _st(argID);
+	_st id = _st(argID);
 
-	if(argID < 0 || id >= lineArray.size()) return -1;
+	if(argID < 0 || id >= _m->lineArray.size()) return -1;
 
-	return lineArray[id].y;
+	return _m->lineArray[id].y;
 }
 
 void fk_TextImage::setShadowMode(bool argMode)
 {
-	shadowMode = argMode;
+	_m->shadowMode = argMode;
 	return;
 }
 
 void fk_TextImage::setShadowOffset(int argX, int argY)
 {
-	shadowOffset.set(argX, argY);
+	_m->shadowOffset.set(argX, argY);
 	return;
 }
 
 bool fk_TextImage::getShadowMode(void) const
 {
-	return shadowMode;
+	return _m->shadowMode;
 }
 
 fk_Dimension fk_TextImage::getShadowOffset(void) const
 {
-	return shadowOffset;
+	return _m->shadowOffset;
 }
 
 void fk_TextImage::clearCache(void)

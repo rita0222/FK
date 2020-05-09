@@ -254,11 +254,11 @@ void fk_OpenCL::release(void)
 
 cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 {
-	const cl_uint	chBufsize = 1024;		// 取得する文字情報の書き込み用バッファサイズ
-	char 			chBuffer[chBufsize];	// 取得する文字情報の書き込み用バッファ
-	cl_uint			num_platforms;			// 取得したプラットフォームの数を書き込むunsigned int
-	cl_platform_id	*clPlatformIDs;			// プラットフォームの数が不定なので、最初はアドレスのみ
-	cl_int			ciErrNum;				// OpenCL関数実行時のエラーチェック用int
+	const cl_uint chBufsize = 1024;		// 取得する文字情報の書き込み用バッファサイズ
+	char chBuffer[chBufsize];	// 取得する文字情報の書き込み用バッファ
+	cl_uint num_platforms;			// 取得したプラットフォームの数を書き込むunsigned int
+	vector<cl_platform_id> clPlatformIDs;	// プラットフォームの数が不定なので、最初はアドレスのみ
+	cl_int ciErrNum;				// OpenCL関数実行時のエラーチェック用int
 	
 	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
 
@@ -282,9 +282,9 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
 
 		}else if(argInfoMode == true) {
 
-			clPlatformIDs = new cl_platform_id[num_platforms];
+			clPlatformIDs.resize(num_platforms);
 			//-- メモリ足りなきゃエラーです
-			if(clPlatformIDs == nullptr){
+			if(clPlatformIDs.empty()){
 				ErrOut("I failed to allocate memory for cl_platformID's. Give me a memory");
 				return -30;
 			}
@@ -295,7 +295,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
  
 			//-- platformIDの取得
 			//-- 既に数は取得しているので、最後の引数はnullptr
-			ciErrNum = clGetPlatformIDs(num_platforms, clPlatformIDs, nullptr);
+			ciErrNum = clGetPlatformIDs(num_platforms, clPlatformIDs.data(), nullptr);
  
 			//-- 取得したplatformIDから、様々なID情報を取得し、表示
 			for (cl_uint i = 0; i < num_platforms; ++i) {
@@ -341,7 +341,7 @@ cl_int fk_OpenCL::GetPlatformID(cl_platform_id *argID, bool argInfoMode)
  
  
 			}
-			delete [] clPlatformIDs;
+			clPlatformIDs.clear();
 		}
  
 	}

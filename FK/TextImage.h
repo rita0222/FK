@@ -68,6 +68,35 @@ namespace FK {
 #endif
 
 	class fk_TextImage : public fk_Image {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			std::unique_ptr<fk_FTFace> face;
+			int dpi, ptsize;
+			int boldStrength;
+			int lineSkip, charSkip, spaceLineSkip;
+			int maxHeight, maxWidth;
+			std::vector<fk_Rect> lineArray;
+			std::vector<fk_Rect> charArray;
+			std::vector<int> lineMap;
+			int minWidth;
+			int upOffset, downOffset, leftOffset, rightOffset;
+			bool smoothFlg;
+			fk_Color fgColor, bgColor, shadowColor;
+			fk_TextAlign alignMode;
+			std::vector<std::unique_ptr<fk_Image>> charImages;
+			fk_TextSendingMode sendingMode;
+			int sendPos;
+			bool shadowMode;
+			fk_Dimension shadowOffset;
+			fk_UniStr strData;
+			bool monospaceMode;
+			int monospaceSize;
+
+			Member(void);
+		};
+#endif
 	public:
 		//! コンストラクタ
 		fk_TextImage(void);
@@ -1006,32 +1035,11 @@ namespace FK {
 		///@}
 
 	private:
-
-		std::unique_ptr<fk_FTFace> face;
-		int dpi, ptsize;
-		int boldStrength;
-		int lineSkip, charSkip, spaceLineSkip;
-		int maxHeight, maxWidth;
-		std::vector<fk_Rect> lineArray;
-		std::vector<fk_Rect> charArray;
-		std::vector<int> lineMap;
-		int minWidth;
-		int upOffset, downOffset, leftOffset, rightOffset;
-		bool smoothFlg;
-		fk_Color fgColor, bgColor, shadowColor;
-		fk_TextAlign alignMode;
-		std::vector<std::unique_ptr<fk_Image>> charImages;
-		fk_TextSendingMode sendingMode;
-		int sendPos;
-		bool shadowMode;
-		fk_Dimension shadowOffset;
-		fk_UniStr strData;
-		bool monospaceMode;
-		int monospaceSize;
+		std::unique_ptr<Member> _m;
 	
-		int LayoutGlyphs(std::vector<fk_FTGlyph *> *);
-		void DumpRasterMap(int, int *, int *, std::vector<fk_FTGlyph *> *);
-		void FreeGlyph(std::vector<fk_FTGlyph *> *);
+		int LayoutGlyphs(std::vector<std::unique_ptr<fk_FTGlyph>> *);
+		void DumpRasterMap(int, int *, int *, std::vector<std::unique_ptr<fk_FTGlyph>> *);
+		void FreeGlyph(std::vector<std::unique_ptr<fk_FTGlyph>> *);
 
 		void CalcTextOffset(void);
 		void ReCalcCharOffset(void);

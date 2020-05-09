@@ -671,15 +671,11 @@ bool fk_IndexFaceSet::readMQOFile(string argFileName,
 								  bool argContFlg,
 								  bool argMatFlg)
 {
-	fk_MQOParser *mqoParser = new fk_MQOParser();
-	bool retFlg;
-
+	unique_ptr<fk_MQOParser> mqoParser(new fk_MQOParser());
 	mqoParser->SetMeshData(this);
 	mqoParser->SetContMode(argContFlg);
 	mqoParser->SetMaterialMode(argMatFlg);
-	retFlg = mqoParser->ReadMQOFile(argFileName, argObjName, argMateID, argSolidFlg);
-	delete mqoParser;
-	return retFlg;
+	return mqoParser->ReadMQOFile(argFileName, argObjName, argMateID, argSolidFlg);
 }
 
 bool fk_IndexFaceSet::readMQOData(unsigned char *argBuffer,
@@ -699,15 +695,12 @@ bool fk_IndexFaceSet::readMQOData(unsigned char *argBuffer,
 								  bool argContFlg,
 								  bool argMatFlg)
 {
-	fk_MQOParser *mqoParser = new fk_MQOParser();
-	bool retFlg;
+	unique_ptr<fk_MQOParser> mqoParser(new fk_MQOParser());
 
 	mqoParser->SetMeshData(this);
 	mqoParser->SetContMode(argContFlg);
 	mqoParser->SetMaterialMode(argMatFlg);
-	retFlg = mqoParser->ReadMQOData(argBuffer, argObjName, argMateID, argSolidFlg);
-	delete mqoParser;
-	return retFlg;
+	return mqoParser->ReadMQOData(argBuffer, argObjName, argMateID, argSolidFlg);
 }
 
 bool fk_IndexFaceSet::readD3DXFile(string argFileName, string argObjName,
