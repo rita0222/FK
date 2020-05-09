@@ -99,7 +99,7 @@ namespace FK {
 		 *		ライセンス上再配布が禁止されているものがあります。
 		 *		プログラムの配布時には必ずライセンスの確認を行ってください。
 		 */
-		bool	initFont(const std::string fontFileName);
+		bool initFont(const std::string fontFileName);
 
 		//! フォント解像度設定関数
 		/*!
@@ -117,7 +117,7 @@ namespace FK {
 		 *
 		 *	\sa setPTSize()
 		 */
-		void	setDPI(int dpi);
+		void setDPI(int dpi);
 
 		//! フォント解像度参照関数
 		/*!
@@ -127,7 +127,7 @@ namespace FK {
 		 *
 		 *	\sa setDPI()
 		 */
-		int		getDPI(void) const;
+		int getDPI(void) const;
 
 		//! フォントサイズ設定関数
 		/*!
@@ -145,7 +145,7 @@ namespace FK {
 		 *
 		 *	\sa setDPI()
 		 */
-		void	setPTSize(int size);
+		void setPTSize(int size);
 
 		//! フォントサイズ参照関数
 		/*!
@@ -155,7 +155,7 @@ namespace FK {
 		 *
 		 *	\sa setPTSize()
 		 */
-		int		getPTSize(void) const;
+		int getPTSize(void) const;
 
 		//! 太さ値設定関数
 		/*!
@@ -169,7 +169,7 @@ namespace FK {
 		 *
 		 *	\sa setDPI(), setPTSize()
 		 */
-		void	setBoldStrength(int str);
+		void setBoldStrength(int str);
 
 		//! 太さ値参照関数
 		/*!
@@ -179,7 +179,7 @@ namespace FK {
 		 *
 		 *	\sa setBoldStrength()
 		 */
-		int		getBoldStrength(void) const;
+		int getBoldStrength(void) const;
 
 		//! 影付け効果設定関数
 		/*!
@@ -191,7 +191,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowOffset(), setShadowColor(fk_Color)
 		 */
-		void	setShadowMode(bool mode);
+		void setShadowMode(bool mode);
 
 		//! 影付け効果参照関数
 		/*!
@@ -201,7 +201,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowMode()
 		 */
-		bool	getShadowMode(void) const;
+		bool getShadowMode(void) const;
 
 		//! 影付けずらし幅設定関数
 		/*!
@@ -216,7 +216,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowMode(), setShadowColor(fk_Color)
 		 */
-		void	setShadowOffset(int x, int y);
+		void setShadowOffset(int x, int y);
 
 		//! 影付けずらし幅参照関数
 		/*!
@@ -226,7 +226,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowOffset(), fk_Dimension
 		 */
-		fk_Dimension	getShadowOffset(void) const;
+		fk_Dimension getShadowOffset(void) const;
 
 		//! 影付け色設定関数1
 		/*!
@@ -236,7 +236,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowMode(), setShadowOffset(), fk_Color
 		 */
-		void	setShadowColor(fk_Color col);
+		void setShadowColor(fk_Color col);
 
 		//! 影付け色設定関数2
 		/*!
@@ -250,7 +250,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowMode(), setShadowOffset(), fk_Color
 		 */
-		void	setShadowColor(float r, float g, float b, float a);
+		void setShadowColor(float r, float g, float b, float a);
 
 		//! 影付け色設定関数3
 		/*!
@@ -264,7 +264,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowMode(), setShadowOffset(), fk_Color
 		 */
-		void	setShadowColor(double r, double g, double b, double a);
+		void setShadowColor(double r, double g, double b, double a);
 
 		//! 影付け色参照関数
 		/*!
@@ -274,7 +274,7 @@ namespace FK {
 		 *
 		 *	\sa setShadowColor(fk_Color), fk_Color
 		 */
-		fk_Color	getShadowColor(void) const;
+		fk_Color getShadowColor(void) const;
 		///@}
 
 		//! \name 描画属性関連関数
@@ -288,7 +288,7 @@ namespace FK {
 		 *
 		 *	\sa setBackColor(fk_Color), setSmoothMode()
 		 */
-		void	setForeColor(fk_Color col);
+		void setForeColor(fk_Color col);
 
 		//! 文字色設定関数2
 		/*!
@@ -303,7 +303,7 @@ namespace FK {
 		 *	\sa setBackColor(float, float, float, float),
 		 *		setSmoothMode(), fk_Color
 		 */
-		void	setForeColor(float r, float g, float b, float a);
+		void setForeColor(float r, float g, float b, float a);
 
 		//! 文字色設定関数3
 		/*!
@@ -318,7 +318,7 @@ namespace FK {
 		 *	\sa setBackColor(double, double, double, double),
 		 *		setSmoothMode(), fk_Color
 		 */
-		void	setForeColor(double r, double g, double b, double a);
+		void setForeColor(double r, double g, double b, double a);
 
 		//! 文字色参照関数
 		/*!
@@ -328,7 +328,7 @@ namespace FK {
 		 *
 		 *	\sa setForeColor(fk_Color), fk_Color
 		 */
-		fk_Color	getForeColor(void) const;
+		fk_Color getForeColor(void) const;
 
 		//! 背景色設定関数1
 		/*!
@@ -338,7 +338,7 @@ namespace FK {
 		 *
 		 *	\sa setForeColor(fk_Color), setSmoothMode()
 		 */
-		void	setBackColor(fk_Color col);
+		void setBackColor(fk_Color col);
 
 		//! 背景色設定関数2
 		/*!
@@ -353,7 +353,7 @@ namespace FK {
 		 *	\sa setForeColor(float, float, float, float),
 		 *		setSmoothMode(), fk_Color
 		 */
-		void	setBackColor(float r, float g, float b, float a);
+		void setBackColor(float r, float g, float b, float a);
 
 		//! 背景色設定関数3
 		/*!
@@ -368,7 +368,7 @@ namespace FK {
 		 *	\sa setForeColor(double, double, double, double),
 		 *		setSmoothMode(), fk_Color
 		 */
-		void	setBackColor(double r, double g, double b, double a);
+		void setBackColor(double r, double g, double b, double a);
 
 		//! 背景色参照関数
 		/*!
@@ -378,7 +378,7 @@ namespace FK {
 		 *
 		 *	\sa setBackColor(fk_Color), fk_Color
 		 */
-		fk_Color	getBackColor(void) const;
+		fk_Color getBackColor(void) const;
 
 		//! アンチエイリアシング効果設定関数
 		/*!
@@ -393,7 +393,7 @@ namespace FK {
 		 *
 		 *	\sa setForeColor(fk_Color), setBackColor(fk_Color)
 		 */
-		void	setSmoothMode(bool mode);
+		void setSmoothMode(bool mode);
 
 		//! アンチエイリアシング効果参照関数
 		/*!
@@ -403,11 +403,11 @@ namespace FK {
 		 *
 		 *	\sa setSmoothMode()
 		 */
-		bool	getSmoothMode(void) const;
+		bool getSmoothMode(void) const;
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	setSmoothFlg(bool);
-		bool	getSmoothFlg(void) const;
+		void setSmoothFlg(bool);
+		bool getSmoothFlg(void) const;
 #endif
 
 	
@@ -432,7 +432,7 @@ namespace FK {
 		 *
 		 *	\sa getMonospaceMode(), setMonospaceSize(), setCharSkip()
 		 */
-		void	setMonospaceMode(bool mode);
+		void setMonospaceMode(bool mode);
 
 		//! 等幅表示設定参照関数
 		/*!
@@ -442,7 +442,7 @@ namespace FK {
 		 *
 		 *	\sa setMonospaceMode()
 		 */
-		bool	getMonospaceMode(void) const;
+		bool getMonospaceMode(void) const;
 
 		//! 等幅表示文字幅設定関数
 		/*!
@@ -457,7 +457,7 @@ namespace FK {
 		 *
 		 *	\sa setMonospaceMode(), getMonospaceSize(), setCharSkip()
 		 */
-		void	setMonospaceSize(int size);
+		void setMonospaceSize(int size);
 
 		//! 等幅表示文字幅参照関数
 		/*!
@@ -467,7 +467,7 @@ namespace FK {
 		 *
 		 *	\sa setMonospaceSize(), getCharSkip()
 		 */
-		int		getMonospaceSize(void) const;
+		int getMonospaceSize(void) const;
 
 		//! 文字間幅設定関数
 		/*!
@@ -486,7 +486,7 @@ namespace FK {
 		 *	\sa setLineSkip(), setSpaceLineSkip(), setOffset(),
 		 *		setDPI(), setPTSize(), setMonospaceMode(), setMonospaceSize()
 		 */
-		void	setCharSkip(int skip);
+		void setCharSkip(int skip);
 
 		//! 文字間幅参照関数
 		/*!
@@ -497,7 +497,7 @@ namespace FK {
 		 *
 		 *	\sa setCharSkip()
 		 */
-		int		getCharSkip(void) const;
+		int	getCharSkip(void) const;
 
 		//! 行間幅設定関数
 		/*!
@@ -516,7 +516,7 @@ namespace FK {
 		 *	\sa setCharSkip(), setSpaceLineSkip(), setOffset(),
 		 *		setDPI(), setPTSize()
 		 */
-		void	setLineSkip(int skip);
+		void setLineSkip(int skip);
 
 		//! 行間幅参照関数
 		/*!
@@ -527,7 +527,7 @@ namespace FK {
 		 *
 		 *	\sa setLineSkip()
 		 */
-		int		getLineSkip(void) const;
+		int	getLineSkip(void) const;
 
 		//! 空行縦幅設定関数
 		/*!
@@ -546,7 +546,7 @@ namespace FK {
 		 *	\sa setCharSkip(), setLineSkip(), setOffset(),
 		 *		setDPI(), setPTSize()
 		 */
-		void	setSpaceLineSkip(int skip);
+		void setSpaceLineSkip(int skip);
 
 		//! 空行縦幅参照関数
 		/*!
@@ -557,7 +557,7 @@ namespace FK {
 		 *
 		 *	\sa setSpaceLineSkip()
 		 */
-		int		getSpaceLineSkip(void) const;
+		int	getSpaceLineSkip(void) const;
 
 		//! オフセット設定関数
 		/*!
@@ -579,7 +579,7 @@ namespace FK {
 		 *	\sa setCharSkip(), setLineSkip(), setSpaceLineSkip(),
 		 *		setDPI(), setPTSize()
 		 */
-		void	setOffset(int up, int down, int left, int right);
+		void setOffset(int up, int down, int left, int right);
 
 		//! オフセット上幅参照関数
 		/*!
@@ -590,7 +590,7 @@ namespace FK {
 		 *
 		 *	\sa setOffset()
 		 */
-		int		getUpOffset(void) const;
+		int getUpOffset(void) const;
 
 		//! オフセット下幅参照関数
 		/*!
@@ -601,7 +601,7 @@ namespace FK {
 		 *
 		 *	\sa setOffset()
 		 */
-		int		getDownOffset(void) const;
+		int getDownOffset(void) const;
 
 		//! オフセット左幅参照関数
 		/*!
@@ -612,7 +612,7 @@ namespace FK {
 		 *
 		 *	\sa setOffset()
 		 */
-		int		getLeftOffset(void) const;
+		int getLeftOffset(void) const;
 
 		//! オフセット右幅参照関数
 		/*!
@@ -623,7 +623,7 @@ namespace FK {
 		 *
 		 *	\sa setOffset()
 		 */
-		int		getRightOffset(void) const;
+		int getRightOffset(void) const;
 
 		//! 文字列寄せ方向(アライメント)設定関数
 		/*!
@@ -639,7 +639,7 @@ namespace FK {
 		 *
 		 *	\sa fk_TextAlign, setMinLineWidth()
 		 */
-		void	setAlign(fk_TextAlign align);
+		void setAlign(fk_TextAlign align);
 
 		//! 文字列寄せ方向(アライメント)参照関数
 		/*!
@@ -649,7 +649,7 @@ namespace FK {
 		 *
 		 *	\sa setAlign()
 		 */
-		fk_TextAlign		getAlign(void) const;
+		fk_TextAlign getAlign(void) const;
 
 		//! 画像最小横幅設定関数
 		/*!
@@ -674,7 +674,7 @@ namespace FK {
 		 *
 		 *	\sa setAlign()
 		 */
-		void	setMinLineWidth(int width);
+		void setMinLineWidth(int width);
 
 		//! 画像最小横幅参照関数
 		/*!
@@ -685,7 +685,7 @@ namespace FK {
 		 *
 		 *	\sa setMinLineWidth()
 		 */
-		int		getMinLineWidth(void) const;
+		int	getMinLineWidth(void) const;
 
 		///@}
 
@@ -709,7 +709,7 @@ namespace FK {
 		 *
 		 *	\sa loadStrFile()
 		 */
-		bool	loadUniStr(fk_UniStr *str);
+		bool loadUniStr(fk_UniStr *str);
 
 		//! 文字列データファイル入力関数
 		/*!
@@ -731,8 +731,8 @@ namespace FK {
 		 *
 		 *	\return		文字列板生成に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	loadStrFile(const std::string fileName,
-							fk_StringCode code = fk_StringCode::UTF16);
+		bool loadStrFile(const std::string fileName,
+						 fk_StringCode code = fk_StringCode::UTF16);
 		///@}
 
 		//! \name 文字列入力後情報参照関数
@@ -746,7 +746,7 @@ namespace FK {
 		 *
 		 *	\sa loadUniStr(), loadStrFile()
 		 */
-		int		getLineNum(void) const;
+		int	getLineNum(void) const;
 
 		//! 行中文字数参照関数
 		/*!
@@ -758,7 +758,7 @@ namespace FK {
 		 *
 		 *	\sa getLineNum(), getAllCharNum(), loadUniStr(), loadStrFile()
 		 */
-		int		getLineCharNum(int num) const;
+		int	getLineCharNum(int num) const;
 
 		//! 文字数参照関数
 		/*!
@@ -768,7 +768,7 @@ namespace FK {
 		 *
 		 *	\sa getLineNum(), getLineCharNum(), loadUniStr(), loadStrFile()
 		 */
-		int		getAllCharNum(void) const;
+		int	getAllCharNum(void) const;
 
 		//! 最大横幅参照関数
 		/*!
@@ -782,7 +782,7 @@ namespace FK {
 		 *
 		 *	\sa getMaxLineHeight(), getLineWidth(), setMinLineWidth()
 		 */
-		int		getMaxLineWidth(void) const;
+		int	getMaxLineWidth(void) const;
 
 		//! 最大縦幅参照関数
 		/*!
@@ -801,7 +801,7 @@ namespace FK {
 		 *
 		 *	\sa getMaxLineWidth(), getLineHeight()
 		 */
-		int		getMaxLineHeight(void) const;
+		int	getMaxLineHeight(void) const;
 
 		//! 行横幅参照関数
 		/*!
@@ -814,7 +814,7 @@ namespace FK {
 		 *
 		 *	\sa getLineHeight(), getMaxLineWidth()
 		 */
-		int		getLineWidth(int num) const;
+		int	getLineWidth(int num) const;
 
 		//! 行縦幅参照関数
 		/*!
@@ -832,7 +832,7 @@ namespace FK {
 		 *
 		 *	\sa getLineWidth(), getMaxLineHeight()
 		 */
-		int		getLineHeight(int num) const;
+		int	getLineHeight(int num) const;
 
 		//! 行開始位置 x 成分取得関数
 		/*!
@@ -846,7 +846,7 @@ namespace FK {
 		 *
 		 *	\sa getLineStartYPos()
 		 */
-		int		getLineStartXPos(int num) const;
+		int	getLineStartXPos(int num) const;
 
 		//! 行開始位置 y 成分取得関数
 		/*!
@@ -860,7 +860,7 @@ namespace FK {
 		 *
 		 *	\sa getLineStartXPos()
 		 */
-		int		getLineStartYPos(int num) const;
+		int	getLineStartYPos(int num) const;
 
 		///@}
 
@@ -891,7 +891,7 @@ namespace FK {
 		 *
 		 *	\sa send(), finish(), clear()
 		 */
-		void	setSendingMode(fk_TextSendingMode mode);
+		void setSendingMode(fk_TextSendingMode mode);
 
 		//! 文字送りモード参照関数
 		/*!
@@ -901,7 +901,7 @@ namespace FK {
 		 *
 		 *	\sa setSendingMode()
 		 */
-		fk_TextSendingMode	getSendingMode(void) const;
+		fk_TextSendingMode getSendingMode(void) const;
 
 		//! 文字送り実行関数
 		/*!
@@ -915,7 +915,7 @@ namespace FK {
 		 *
 		 *	\sa setSendingMode(), finish(), clear()
 		 */
-		bool	send(void);
+		bool send(void);
 
 		//! 文字送り完了関数
 		/*!
@@ -930,7 +930,7 @@ namespace FK {
 		 *
 		 *	\sa setSendingMode(), send(), clear()
 		 */
-		bool	finish(void);
+		bool finish(void);
 
 		//! 文字送り初期化関数
 		/*!
@@ -945,7 +945,7 @@ namespace FK {
 		 *
 		 *	\sa setSendingMode(), send(), finish()
 		 */
-		bool	clear(void);
+		bool clear(void);
 
 		///@}
 
@@ -982,7 +982,7 @@ namespace FK {
 		 *
 		 *	\sa clearCache()
 		 */
-		static void		setCacheMode(bool mode);
+		static void setCacheMode(bool mode);
 
 		//! キャッシュ機能有無効参照関数
 		/*!
@@ -993,7 +993,7 @@ namespace FK {
 		 *
 		 *	\sa setCacheMode()
 		 */
-		static bool		getCacheMode(void);
+		static bool getCacheMode(void);
 
 		//! キャッシュ初期化関数
 		/*!
@@ -1002,45 +1002,44 @@ namespace FK {
 		 *
 		 *	\sa setCacheMode()
 		 */
-		static void		clearCache(void);
+		static void clearCache(void);
 		///@}
 
 	private:
 
-		fk_FTFace				*face;
-		int						dpi, ptsize;
-		int						boldStrength;
-		int						lineSkip, charSkip, spaceLineSkip;
-		int						maxHeight, maxWidth;
-		std::vector<fk_Rect>	lineArray;
-		std::vector<fk_Rect>	charArray;
-		std::vector<int>		lineMap;
-		int						minWidth;
-		int						upOffset, downOffset, leftOffset, rightOffset;
-		bool					smoothFlg;
-		fk_Color				fgColor, bgColor, shadowColor;
-		fk_TextAlign			alignMode;
-		std::vector<fk_Image *>	charImages;
-		fk_TextSendingMode		sendingMode;
-		int						sendPos;
-		bool					shadowMode;
-		fk_Dimension			shadowOffset;
-		fk_UniStr				strData;
-		bool					monospaceMode;
-		int						monospaceSize;
+		std::unique_ptr<fk_FTFace> face;
+		int dpi, ptsize;
+		int boldStrength;
+		int lineSkip, charSkip, spaceLineSkip;
+		int maxHeight, maxWidth;
+		std::vector<fk_Rect> lineArray;
+		std::vector<fk_Rect> charArray;
+		std::vector<int> lineMap;
+		int minWidth;
+		int upOffset, downOffset, leftOffset, rightOffset;
+		bool smoothFlg;
+		fk_Color fgColor, bgColor, shadowColor;
+		fk_TextAlign alignMode;
+		std::vector<std::unique_ptr<fk_Image>> charImages;
+		fk_TextSendingMode sendingMode;
+		int sendPos;
+		bool shadowMode;
+		fk_Dimension shadowOffset;
+		fk_UniStr strData;
+		bool monospaceMode;
+		int monospaceSize;
 	
-		int						LayoutGlyphs(std::vector<fk_FTGlyph *> *);
-		void					DumpRasterMap(int, int *, int *,
-											  std::vector<fk_FTGlyph *> *);
-		void					FreeGlyph(std::vector<fk_FTGlyph *> *);
+		int LayoutGlyphs(std::vector<fk_FTGlyph *> *);
+		void DumpRasterMap(int, int *, int *, std::vector<fk_FTGlyph *> *);
+		void FreeGlyph(std::vector<fk_FTGlyph *> *);
 
-		void					CalcTextOffset(void);
-		void					ReCalcCharOffset(void);
-		void					InitTextImage(void);
-		void					CopyCharImage(int);
-		void					ClearCharImages(void);
-		void					MakeColorScale(const fk_Color &, const fk_Color &, int *);
-		int						GetPixel(fk_GlyphBuffer *, int, int, int, int);
+		void CalcTextOffset(void);
+		void ReCalcCharOffset(void);
+		void InitTextImage(void);
+		void CopyCharImage(int);
+		void ClearCharImages(void);
+		void MakeColorScale(const fk_Color &, const fk_Color &, int *);
+		int GetPixel(fk_GlyphBuffer *, int, int, int, int);
 	};
 }
 

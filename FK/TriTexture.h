@@ -27,9 +27,19 @@ namespace FK {
 	 */
 
 	class fk_TriTexture : public fk_Texture {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Vector pos[3];
+			fk_TexCoord triTexCoord[3];
+			fk_FVecArray vertexPosition;
+			fk_FVecArray vertexNormal;
+
+			Member(void);
+		};
+#endif
 
 	public:
-
 		//! コンストラクタ
 		/*!
 		 *	\param[in]	image
@@ -45,7 +55,7 @@ namespace FK {
 		/*!
 		 *	現在設定されているテクスチャ画像を廃棄し、全ての設定を初期状態に戻します。
 		 */
-		void				init(void);
+		void init(void);
 
 		//! テクスチャ座標設定関数1
 		/*!
@@ -67,7 +77,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				setTextureCoord(int ID, double x, double y);
+		bool setTextureCoord(int ID, double x, double y);
 
 		//! テクスチャ座標設定関数2
 		/*!
@@ -85,7 +95,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				setTextureCoord(int ID, fk_TexCoord coord);
+		bool setTextureCoord(int ID, fk_TexCoord coord);
 
 		//! テクスチャ座標取得関数
 		/*!
@@ -97,7 +107,7 @@ namespace FK {
 		 *
 		 *	\return		IDに対応する頂点のテクスチャ座標
 		 */
-		fk_TexCoord			getTextureCoord(int ID);
+		fk_TexCoord getTextureCoord(int ID);
 
 		//! 頂点位置ベクトル設定関数1
 		/*!
@@ -114,7 +124,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				setVertexPos(int ID, double x, double y, double z);
+		bool setVertexPos(int ID, double x, double y, double z);
 
 		//! 頂点位置ベクトル設定関数2
 		/*!
@@ -129,7 +139,7 @@ namespace FK {
 		 *
 		 *	\return		設定に成功した場合 true を、失敗した場合 false を返します。
 		 */
-		bool				setVertexPos(int ID, fk_Vector pos);
+		bool setVertexPos(int ID, fk_Vector pos);
 
 		//! 頂点位置ベクトル取得関数
 		/*!
@@ -141,22 +151,17 @@ namespace FK {
 		 *
 		 *	\return		IDに対応する頂点の位置ベクトル
 		 */
-		fk_Vector			getVertexPos(int ID);
+		fk_Vector getVertexPos(int ID);
 
 	private:
-		fk_Vector			pos[3];
-		fk_TexCoord			triTexCoord[3];
+		std::unique_ptr<Member> _m;
+		static std::vector<GLuint> _s_faceIndex;
+		static GLuint _s_faceIBO;
+		static bool _s_faceIndexFlg;
 
-		fk_FVecArray		vertexPosition;
-		fk_FVecArray		vertexNormal;
-
-		static std::vector<GLuint>	faceIndex;
-		static GLuint				faceIBO;
-		static bool					faceIndexFlg;
-
-		void				PosUpdate(void);
-		void				NormUpdate(void);
-		void				TexCoordUpdate(void);
+		void PosUpdate(void);
+		void NormUpdate(void);
+		void TexCoordUpdate(void);
 	};
 }
 

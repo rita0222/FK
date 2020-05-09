@@ -128,8 +128,7 @@ namespace FK {
 		 *	\param[in]	h		描画領域縦幅
 		 *	\param[in]	name	ウィジェット名称
 		 */
-		fk_Window(int x = 0, int y = 0,
-				  int w = 300, int h = 300, std::string name = "FK Window");
+		fk_Window(int x = 0, int y = 0, int w = 300, int h = 300, std::string name = "FK Window");
 
 		//! デストラクタ
 		virtual ~fk_Window();
@@ -144,7 +143,7 @@ namespace FK {
 		 *
 		 *	\param[in]	scene		シーンインスタンス
 		 */
-		void	setScene(fk_Scene *scene);
+		void setScene(fk_Scene *scene);
 		///@}
 
 		//! \name イベント・デバイス制御関数
@@ -166,7 +165,7 @@ namespace FK {
 		 *
 		 *	\sa winOpenStatus()
 		 */
-		int					drawWindow(bool drawFlag = true);
+		int drawWindow(bool drawFlag = true);
 
 		//! 描画状態取得関数
 		/*!
@@ -178,7 +177,7 @@ namespace FK {
 		 *
 		 *	\sa drawWindow()
 		 */
-		bool	winOpenStatus(void);
+		bool winOpenStatus(void);
 
 		//! 描画領域寸法変更関数
 		/*!
@@ -189,7 +188,7 @@ namespace FK {
 		 *	\param[in]	w		描画領域横幅
 		 *	\param[in]	h		描画領域縦幅
 		 */
-		void	resizeWindow(int x, int y, int w, int h);
+		void resizeWindow(int x, int y, int w, int h);
 
 		//! 標準キー状態取得関数
 		/*!
@@ -267,12 +266,11 @@ namespace FK {
 		 *
 		 *	\sa getKeyStatus()
 		 */
-		bool	getSpecialKeyStatus(fk_Key key,
-									fk_Switch status, bool insideFlag = true);
+		bool getSpecialKeyStatus(fk_Key key, fk_Switch status, bool insideFlag = true);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		bool	getKeyStatus(char key, bool insideFlag = true);
-		bool	getSpecialKeyStatus(fk_Key key, bool insideFlag = true);
+		bool getKeyStatus(char key, bool insideFlag = true);
+		bool getSpecialKeyStatus(fk_Key key, bool insideFlag = true);
 #endif
 
 		//! 最終押下キー取得関数
@@ -294,7 +292,7 @@ namespace FK {
 		 *		アプリケーションが起動されてから、
 		 *		一度もキーが押されていない場合は 0 を返します。
 		 */
-		char	getLastKey(void);
+		char getLastKey(void);
 
 		//! マウスポインタ位置取得関数
 		/*!
@@ -359,11 +357,10 @@ namespace FK {
 		 *		キーが status で指定した状態を満たしていれば true を、
 		 *		そうでなければ false を返します。
 		 */
-		bool	getMouseStatus(fk_MouseButton button, fk_Switch status,
-							   bool insideFlag = true);
+		bool getMouseStatus(fk_MouseButton button, fk_Switch status, bool insideFlag = true);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		bool	getMouseStatus(fk_MouseButton button, bool insideFlag = true);
+		bool getMouseStatus(fk_MouseButton button, bool insideFlag = true);
 #endif
 
 		//! マウスホイール回転量取得関数
@@ -381,7 +378,7 @@ namespace FK {
 		 *
 		 *	\sa getMousePosition(), getMouseStatus()
 		 */
-		int		getMouseWheelStatus(void);
+		int getMouseWheelStatus(void);
 		///@}
 
 		//! \name フレームレート制御関数
@@ -395,7 +392,7 @@ namespace FK {
 		 *
 		 *	\param[in]		fps		FPS値
 		 */
-		void	setFPS(int fps);
+		void setFPS(int fps);
 
 		///@}
 
@@ -426,8 +423,7 @@ namespace FK {
 
 #ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
-		bool	getProjectPosition(double x, double y,
-								   fk_Plane *plane, fk_Vector *pos);
+		bool getProjectPosition(double x, double y, fk_Plane *plane, fk_Vector *pos);
 #endif
 #endif
 		//! 投影平面から任意距離での射影点算出関数
@@ -451,8 +447,7 @@ namespace FK {
 
 #ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
-		bool	getProjectPosition(double x, double y,
-								   double dist, fk_Vector *pos);
+		bool getProjectPosition(double x, double y, double dist, fk_Vector *pos);
 #endif
 #endif
 		//! 空間座標から投影座標への射影点算出関数
@@ -480,7 +475,7 @@ namespace FK {
 
 #ifndef FK_OLD_NONSUPPORT
 #ifndef FK_DOXYGEN_USER_PROCESS
-		bool	getWindowPosition(fk_Vector, fk_Vector *);
+		bool getWindowPosition(fk_Vector, fk_Vector *);
 #endif
 #endif
 		///@}
@@ -499,7 +494,7 @@ namespace FK {
 		 *
 		 *	\sa postInit(), preDraw(), postDraw()
 		 */
-		virtual void	preInit(void) {}
+		virtual void preInit(void) {}
 
 		//! 初期化後処理関数
 		/*!
@@ -512,7 +507,7 @@ namespace FK {
 		 *
 		 *	\sa preInit(), preDraw(), postDraw()
 		 */
-		virtual void	postInit(void) {}
+		virtual void postInit(void) {}
 
 		//! 描画前処理関数
 		/*!
@@ -523,7 +518,7 @@ namespace FK {
 		 *	グラフィックスシステム毎描画時の処理を追加することが可能です。
 		 *	代表的な用途として、特殊デバイスの情報取得などがあります。
 		 */
-		virtual void	preDraw(void) {}
+		virtual void preDraw(void) {}
 
 		//! 描画後処理関数
 		/*!
@@ -534,17 +529,17 @@ namespace FK {
 		 *	グラフィックスシステム毎描画時の処理を追加することが可能です。
 		 *	代表的な用途として、特殊デバイスの情報取得などがあります。
 		 */
-		virtual void	postDraw(void) {}
+		virtual void postDraw(void) {}
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		virtual void	preDrawLeft(void) {}
-		virtual void	postDrawLeft(void) {}
-		virtual void	preDrawRight(void) {}
-		virtual void	postDrawRight(void) {}
+		virtual void preDrawLeft(void) {}
+		virtual void postDrawLeft(void) {}
+		virtual void preDrawRight(void) {}
+		virtual void postDrawRight(void) {}
 
-		std::list<fk_funcSet>	preDrawList;
-		std::list<fk_funcSet>	postDrawList;
+		std::list<fk_funcSet> preDrawList;
+		std::list<fk_funcSet> postDrawList;
 #endif
 
 		//! \name 描画画像取り込み関数
@@ -567,9 +562,9 @@ namespace FK {
 		 *	\return
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	snapImage(std::string fileName,
-						  fk_ImageType format = fk_ImageType::BMP,
-						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
+		bool snapImage(std::string fileName,
+					   fk_ImageType format = fk_ImageType::BMP,
+					   fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 
 		//! 描画画像データ出力関数
 		/*!
@@ -585,8 +580,7 @@ namespace FK {
 		 *	\return
 		 *		出力に成功すれば true を、失敗すれば false を返します。
 		 */
-		bool	snapImage(fk_Image *image,
-						  fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
+		bool snapImage(fk_Image *image, fk_SnapProcMode mode = fk_SnapProcMode::FRONT);
 		///@}
 
 		//! \name メッセージ出力制御関数
@@ -616,7 +610,7 @@ namespace FK {
 		 *	\sa getPutStrMode(), setPutFile(), putString(),
 		 *		printf(), clearBrowser()
 		 */
-		static void				setPutStrMode(const fk_PutStrMode mode);
+		static void setPutStrMode(const fk_PutStrMode mode);
 
 		//! メッセージ出力モード参照関数
 		/*!
@@ -626,7 +620,7 @@ namespace FK {
 		 *
 		 *	\sa setPutStrMode()
 		 */
-		static fk_PutStrMode	getPutStrMode(void);
+		static fk_PutStrMode getPutStrMode(void);
 
 		//! メッセージ出力用ファイル設定関数
 		/*!
@@ -646,7 +640,7 @@ namespace FK {
 		 *
 		 *	\sa setPutStrMode(), putString(), printf()
 		 */
-		static bool				setPutFile(const std::string &fileName);
+		static bool setPutFile(const std::string &fileName);
 
 		//! メッセージ出力文字列設定関数
 		/*!
@@ -663,7 +657,7 @@ namespace FK {
 		 *
 		 *	\sa setPutStrMode(), setPutFile(), printf(), clearBrowser()
 		 */
-		static void				putString(const std::string &str);
+		static void putString(const std::string &str);
 
 #ifndef FK_CLI_CODE
 		//! メッセージ出力書式付き設定関数
@@ -681,7 +675,7 @@ namespace FK {
 		 *
 		 *	\sa setPutStrMode(), setPutFile(), putString(), clearBrowser()
 		 */
-		static void				printf(const char *format, ...);
+		static void printf(const char *format, ...);
 #endif
 
 		//! メッセージ出力用ブラウザ初期化関数
@@ -698,7 +692,7 @@ namespace FK {
 		 *
 		 *	\sa setPutStrMode(), putString(), printf()
 		 */
-		static void				clearBrowser(void);
+		static void clearBrowser(void);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS
@@ -726,7 +720,7 @@ namespace FK {
 		 *
 		 *	\sa fk_DisplayLink, getOGLStereoMode()
 		 */
-		void	setOGLStereoMode(bool mode);
+		void setOGLStereoMode(bool mode);
 
 		//! 立体視モード取得関数
 		/*!
@@ -742,7 +736,7 @@ namespace FK {
 		 *
 		 *	\sa fk_DisplayLink, setOGLStereoMode()
 		 */
-		bool	getOGLStereoMode(void);
+		bool getOGLStereoMode(void);
 		///@}
 #endif
 
@@ -752,59 +746,59 @@ namespace FK {
 		
 	private:
 
-		fk_Image				snapBuffer;
+		fk_Image snapBuffer;
 
-		bool					winOpenFlag;
-		int						GLWinWSize;
-		int						GLWinHSize;
-		int						GLWinXPosition;
-		int						GLWinYPosition;
-		char					lastKey;
+		bool winOpenFlag;
+		int GLWinWSize;
+		int GLWinHSize;
+		int GLWinXPosition;
+		int GLWinYPosition;
+		char lastKey;
 
-		std::map<char, bool>			keyStatus;
-		std::map<fk_Key, bool>	specialKeyStatus;
-		std::map<fk_MouseButton, bool>	mouseStatus;
+		std::map<char, bool> keyStatus;
+		std::map<fk_Key, bool> specialKeyStatus;
+		std::map<fk_MouseButton, bool> mouseStatus;
 	
-		double					frameTime, prevTime;
-		double					frameInterval;
-		int						skipCount;
+		double frameTime, prevTime;
+		double frameInterval;
+		int skipCount;
 
-		fk_FrameController		fps_admin;
-		int						fps;
+		fk_FrameController fps_admin;
+		int fps;
 
-		bool					stereoMode;
+		bool stereoMode;
 
 
-		static Fl_Window		*putWin;
-		static Fl_Multi_Browser	*browser;
-		static fk_PutStrMode	putStrMode;
-		static std::ofstream	putStrOFS;
-		static int				winNum;
+		static Fl_Window *putWin;
+		static Fl_Multi_Browser *browser;
+		static fk_PutStrMode putStrMode;
+		static std::ofstream putStrOFS;
+		static int winNum;
 
-		static Fl_Window		*error_win;
-		static Fl_Multi_Browser	*err_browser;
+		static Fl_Window *error_win;
+		static Fl_Multi_Browser *err_browser;
 
-		bool					IsInsideWindow(void);
-		Fl_Group *				GetInhParentWindow(void);
-		void					PushPrevStatus(void);
+		bool IsInsideWindow(void);
+		Fl_Group * GetInhParentWindow(void);
+		void PushPrevStatus(void);
 	
-		void					draw();	// virtual Function from Fl_Gl_Window class
+		void draw(); // virtual Function from Fl_Gl_Window class
 
-		static void				PutBrowser(const std::string &);
+		static void PutBrowser(const std::string &);
 
 #ifdef WIN32
-		bool					SnapImageGDI(fk_Image *);
+	 bool SnapImageGDI(fk_Image *);
 #endif
-		static void				ErrorInit(void);
+		static void ErrorInit(void);
 
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphicsEngine		*engine;
+		fk_GraphicsEngine *engine;
 
-		void					drawScene(void);
-		void					drawSceneLeft(void);
-		void					drawSceneRight(void);
+		void drawScene(void);
+		void drawSceneLeft(void);
+		void drawSceneRight(void);
 #endif
 
 	};

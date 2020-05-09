@@ -25,60 +25,74 @@ namespace FK {
 
 
 	class fk_GlyphStatus {
+		class Member {
+		public:
+			FT_Face face;
+			FT_UInt index, code;
+			int ptsize, dpi, strength;
+
+			Member(void);
+		};
+			
 	private:
-		FT_Face		face;
-		FT_UInt		index, code;
-		int			ptsize, dpi, strength;
+		unique_ptr<Member> _m;
 
 	public:
 		fk_GlyphStatus(void);
 		fk_GlyphStatus(const fk_GlyphStatus &);
 		~fk_GlyphStatus();
 
-		bool				operator ==(const fk_GlyphStatus &) const;
-		bool				operator >(const fk_GlyphStatus &) const;
-		bool				operator <(const fk_GlyphStatus &) const;
-		fk_GlyphStatus &	operator =(const fk_GlyphStatus &);
+		bool operator ==(const fk_GlyphStatus &) const;
+		bool operator >(const fk_GlyphStatus &) const;
+		bool operator <(const fk_GlyphStatus &) const;
+		fk_GlyphStatus & operator =(const fk_GlyphStatus &);
 
-		void		Init(void);
-		void		Set(FT_Face, FT_UInt, int, int, int);
-		FT_UInt		GetIndex(void) const;
-		FT_UInt		GetCode(void) const;
+		void Init(void);
+		void Set(FT_Face, FT_UInt, int, int, int);
+		FT_UInt GetIndex(void) const;
+		FT_UInt GetCode(void) const;
 	};
 
 	class fk_FTGlyph {
 	public:
-		fk_GlyphStatus			status;
-		FT_Pos					xOffset;
-		FT_BBox					bbox;
+		fk_GlyphStatus status;
+		FT_Pos xOffset;
+		FT_BBox bbox;
 
 		fk_FTGlyph(void);
 		~fk_FTGlyph();
 
-		void		Init(void);
+		void Init(void);
 	};
 
 	class fk_FontServer {
+		class Member {
+		public:
+			FT_Library library;
+			map<string, FT_Face> faceArray;
+
+			Member(void);
+		};
+			
 	private:
-		FT_Library				library;
-		map<string, FT_Face>	faceArray;
+		unique_ptr<Member> _m;
 
 	public:
 		fk_FontServer(void);
 		~fk_FontServer();
 
-		FT_Face					GetFace(string);
+		FT_Face GetFace(string);
 	};
 
 	class fk_GlyphCache {
 	public:
-		FT_BBox					bbox;
-		fk_GlyphBuffer			*buffer;
+		FT_BBox bbox;
+		fk_GlyphBuffer buffer;
 	};
 
 	class fk_GlyphServer {
 	private:
-		map<fk_GlyphStatus, fk_GlyphCache *>	glyphArray;
+		map<fk_GlyphStatus, unique_ptr<fk_GlyphCache>> glyphArray;
 
 	public:
 		fk_GlyphServer(void);
@@ -102,20 +116,26 @@ namespace FK {
 
 using namespace FK;
 
-fk_GlyphStatus::fk_GlyphStatus(void)
+fk_GlyphStatus::Member::Member(void) :
+	face(nullptr), index(0), code(0), ptsize(0), dpi(0), strength(1)
+{
+	return;
+}
+
+fk_GlyphStatus::fk_GlyphStatus(void) : _m(make_unique<Member>())
 {
 	Init();
 	return;
 }
 
-fk_GlyphStatus::fk_GlyphStatus(const fk_GlyphStatus &argStatus)
+fk_GlyphStatus::fk_GlyphStatus(const fk_GlyphStatus &argStatus) : _m(make_unique<Member>())
 {
-	face = argStatus.face;
-	index = argStatus.index;
-	code = argStatus.code;
-	strength = argStatus.strength;
-	ptsize = argStatus.ptsize;
-	dpi = argStatus.dpi;
+	_m->face = argStatus._m->face;
+	_m->index = argStatus._m->index;
+	_m->code = argStatus._m->code;
+	_m->strength = argStatus._m->strength;
+	_m->ptsize = argStatus._m->ptsize;
+	_m->dpi = argStatus._m->dpi;
 }
 
 fk_GlyphStatus::~fk_GlyphStatus()
@@ -125,12 +145,12 @@ fk_GlyphStatus::~fk_GlyphStatus()
 
 bool fk_GlyphStatus::operator ==(const fk_GlyphStatus &argStatus) const
 {
-	if(face == argStatus.face &&
-	   index == argStatus.index &&
-	   code == argStatus.code &&
-	   strength == argStatus.strength &&
-	   ptsize == argStatus.ptsize &&
-	   dpi == argStatus.dpi) {
+	if(_m->face == argStatus._m->face &&
+	   _m->index == argStatus._m->index &&
+	   _m->code == argStatus._m->code &&
+	   _m->strength == argStatus._m->strength &&
+	   _m->ptsize == argStatus._m->ptsize &&
+	   _m->dpi == argStatus._m->dpi) {
 		return true;
 	}
 
@@ -139,46 +159,46 @@ bool fk_GlyphStatus::operator ==(const fk_GlyphStatus &argStatus) const
 
 bool fk_GlyphStatus::operator >(const fk_GlyphStatus &argStatus) const
 {
-	if(index > argStatus.index) return true;
-	if(index < argStatus.index) return false;
-	if(code > argStatus.code) return true;
-	if(code < argStatus.code) return false;
-	if(face > argStatus.face) return true;
-	if(face < argStatus.face) return false;
-	if(strength > argStatus.strength) return true;
-	if(strength < argStatus.strength) return false;
-	if(ptsize > argStatus.ptsize) return true;
-	if(ptsize < argStatus.ptsize) return false;
-	if(dpi > argStatus.dpi) return true;
+	if(_m->index > argStatus._m->index) return true;
+	if(_m->index < argStatus._m->index) return false;
+	if(_m->code > argStatus._m->code) return true;
+	if(_m->code < argStatus._m->code) return false;
+	if(_m->face > argStatus._m->face) return true;
+	if(_m->face < argStatus._m->face) return false;
+	if(_m->strength > argStatus._m->strength) return true;
+	if(_m->strength < argStatus._m->strength) return false;
+	if(_m->ptsize > argStatus._m->ptsize) return true;
+	if(_m->ptsize < argStatus._m->ptsize) return false;
+	if(_m->dpi > argStatus._m->dpi) return true;
 
 	return false;
 }
 
 bool fk_GlyphStatus::operator <(const fk_GlyphStatus &argStatus) const
 {
-	if(index < argStatus.index) return true;
-	if(index > argStatus.index) return false;
-	if(code < argStatus.code) return true;
-	if(code > argStatus.code) return false;
-	if(face < argStatus.face) return true;
-	if(face > argStatus.face) return false;
-	if(strength < argStatus.strength) return true;
-	if(strength > argStatus.strength) return false;
-	if(ptsize < argStatus.ptsize) return true;
-	if(ptsize > argStatus.ptsize) return false;
-	if(dpi < argStatus.dpi) return true;
+	if(_m->index < argStatus._m->index) return true;
+	if(_m->index > argStatus._m->index) return false;
+	if(_m->code < argStatus._m->code) return true;
+	if(_m->code > argStatus._m->code) return false;
+	if(_m->face < argStatus._m->face) return true;
+	if(_m->face > argStatus._m->face) return false;
+	if(_m->strength < argStatus._m->strength) return true;
+	if(_m->strength > argStatus._m->strength) return false;
+	if(_m->ptsize < argStatus._m->ptsize) return true;
+	if(_m->ptsize > argStatus._m->ptsize) return false;
+	if(_m->dpi < argStatus._m->dpi) return true;
 
 	return false;
 }
 
 fk_GlyphStatus & fk_GlyphStatus::operator =(const fk_GlyphStatus &argStatus)
 {
-	face = argStatus.face;
-	index = argStatus.index;
-	code = argStatus.code;
-	strength = argStatus.strength;
-	ptsize = argStatus.ptsize;
-	dpi = argStatus.dpi;
+	_m->face = argStatus._m->face;
+	_m->index = argStatus._m->index;
+	_m->code = argStatus._m->code;
+	_m->strength = argStatus._m->strength;
+	_m->ptsize = argStatus._m->ptsize;
+	_m->dpi = argStatus._m->dpi;
 
 	return *this;
 }
@@ -192,16 +212,16 @@ void fk_GlyphStatus::Init(void)
 void fk_GlyphStatus::Set(FT_Face argFace, FT_UInt argCode,
 						 int argPTSize, int argDPI, int argStrength)
 {
-	face = argFace;
-	code = argCode;
-	strength = argStrength;
-	ptsize = argPTSize;
-	dpi = argDPI;
+	_m->face = argFace;
+	_m->code = argCode;
+	_m->strength = argStrength;
+	_m->ptsize = argPTSize;
+	_m->dpi = argDPI;
 
 	if(argCode != 0) {
-		index = FT_Get_Char_Index(face, code);
+		_m->index = FT_Get_Char_Index(_m->face, _m->code);
 	} else {
-		index = 0;
+		_m->index = 0;
 	}
 
 	return;
@@ -209,12 +229,12 @@ void fk_GlyphStatus::Set(FT_Face argFace, FT_UInt argCode,
 
 FT_UInt fk_GlyphStatus::GetIndex(void) const
 {
-	return index;
+	return _m->index;
 }
 
 FT_UInt fk_GlyphStatus::GetCode(void) const
 {
-	return code;
+	return _m->code;
 }
 
 fk_FTGlyph::fk_FTGlyph(void)
@@ -230,43 +250,47 @@ fk_FTGlyph::~fk_FTGlyph()
 void fk_FTGlyph::Init(void)
 {
 	status.Init();
-
 	return;
 }
 
-fk_FontServer::fk_FontServer(void)
+fk_FontServer::Member::Member(void)
 {
-	FT_Init_FreeType(&library);
+	return;
+}
+
+fk_FontServer::fk_FontServer(void) : _m(make_unique<Member>())
+{
+	FT_Init_FreeType(&_m->library);
 	return;
 }
 
 fk_FontServer::~fk_FontServer()
 {
-	for(auto p = faceArray.begin(); p != faceArray.end(); ++p) {
+	for(auto p = _m->faceArray.begin(); p != _m->faceArray.end(); ++p) {
 		FT_Done_Face(p->second);
 	}
-	FT_Done_FreeType(library);
+	FT_Done_FreeType(_m->library);
 	return;
 }
 
 FT_Face fk_FontServer::GetFace(string argName)
 {
-	FT_Face		face;
-	FT_Error	error;
+	FT_Face face;
+	FT_Error error;
 
-	auto p = faceArray.find(argName);
-	if(p == faceArray.end()) {
-		error = FT_New_Face(library, argName.c_str(), 0, &face);
+	auto p = _m->faceArray.find(argName);
+	if(p == _m->faceArray.end()) {
+		error = FT_New_Face(_m->library, argName.c_str(), 0, &face);
 
 		if(error) {
 			return nullptr;
 		}
 
-		faceArray[argName] = face;
+		_m->faceArray[argName] = face;
 		return face;
 	}
 
-	return faceArray[argName];
+	return _m->faceArray[argName];
 }
 
 fk_FTFace::fk_FTFace(void)
@@ -293,6 +317,7 @@ fk_GlyphServer::~fk_GlyphServer()
 
 void fk_GlyphServer::Clear(void)
 {
+	/*
 	fk_GlyphCache	*tmpCache;
 
 	for(auto p = glyphArray.begin(); p != glyphArray.end(); ++p) {
@@ -300,6 +325,7 @@ void fk_GlyphServer::Clear(void)
 		delete tmpCache->buffer;
 		delete tmpCache;
 	}
+	*/
 
 	glyphArray.clear();
 	return;
@@ -308,20 +334,19 @@ void fk_GlyphServer::Clear(void)
 void fk_GlyphServer::MakeCache(const fk_GlyphStatus &argStatus,
 							   const FT_BBox &argBBox)
 {
-	fk_GlyphCache		*cache;
+	unique_ptr<fk_GlyphCache> cache;
 
 	if(IsArive(argStatus) == true) return;
-	cache = new fk_GlyphCache;
+	cache = make_unique<fk_GlyphCache>();
 	cache->bbox = argBBox;
-	cache->buffer = new fk_GlyphBuffer;
-	glyphArray[argStatus] = cache;
+	glyphArray[argStatus] = move(cache);
 	return;
 }
 
 fk_GlyphBuffer * fk_GlyphServer::GetBuffer(const fk_GlyphStatus &argStatus)
 {
 	if(IsArive(argStatus) == false) return nullptr;
-	return glyphArray[argStatus]->buffer;
+	return &(glyphArray[argStatus]->buffer);
 }
 
 FT_BBox * fk_GlyphServer::GetBBox(const fk_GlyphStatus &argStatus)
@@ -381,13 +406,13 @@ fk_TextImage::fk_TextImage(void)
 	alignMode = fk_TextAlign::LEFT;
 	sendingMode = fk_TextSendingMode::ALL;
 
-	face = new fk_FTFace;
+	face = make_unique<fk_FTFace>();
 	return;
 }
 
 fk_TextImage::~fk_TextImage()
 {
-	delete face;
+	//delete face;
 	ClearCharImages();
 
 	return;
@@ -683,9 +708,11 @@ bool fk_TextImage::loadUniStr(fk_UniStr *argStr)
 
 void fk_TextImage::ClearCharImages(void)
 {
+	/*
 	for(_st i = 0; i < charImages.size(); i++) {
 		delete charImages[i];
 	}
+	*/
 
 	charImages.clear();
 	return;
@@ -828,7 +855,7 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 	_st				pixel, setVal;
 	fk_FTGlyph		*glyph;
 	fk_Rect			charRect, imageRect;
-	fk_Image		*charImage;
+	unique_ptr<fk_Image> charImage;
 	fk_Dimension	orgImageSize;
 	fk_Dimension	posOffset;
 
@@ -856,7 +883,7 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 			imageRect.h += abs(shadowOffset.h);
 		}
 		
-		charImage = new fk_Image(imageRect.w, imageRect.h);
+		charImage = make_unique<fk_Image>(imageRect.w, imageRect.h);
 		charImage->fillColor(argFBScale[0], argFBScale[1],
 							 argFBScale[2], argFBScale[3]);
 
@@ -931,7 +958,7 @@ void fk_TextImage::DumpRasterMap(int argUpper,
 		}
 
 		charArray.push_back(charRect);
-		charImages.push_back(charImage);
+		charImages.push_back(move(charImage));
 	}
 
 	return;
@@ -1171,7 +1198,7 @@ void fk_TextImage::CopyCharImage(int argID)
 {
 	_st		id = _st(argID);
 
-	copyImage(charImages[id], charArray[id].x, charArray[id].y);
+	copyImage(charImages[id].get(), charArray[id].x, charArray[id].y);
 	return;
 }
 

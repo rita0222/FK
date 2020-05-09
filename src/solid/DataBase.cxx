@@ -26,7 +26,7 @@ fk_DataBase::Member::Member(void)
 	lAdmin.Init(1);
 }
 
-fk_DataBase::fk_DataBase(void)
+fk_DataBase::fk_DataBase(void) : _m(make_unique<Member>())
 {
 	AllClear();
 }

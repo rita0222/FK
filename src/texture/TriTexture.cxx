@@ -6,12 +6,22 @@
 using namespace std;
 using namespace FK;
 
-vector<GLuint> fk_TriTexture::faceIndex = {0, 1, 2};
-GLuint fk_TriTexture::faceIBO = 0;
-bool fk_TriTexture::faceIndexFlg = false;
+vector<GLuint> fk_TriTexture::_s_faceIndex = {0, 1, 2};
+GLuint fk_TriTexture::_s_faceIBO = 0;
+bool fk_TriTexture::_s_faceIndexFlg = false;
 
-fk_TriTexture::fk_TriTexture(fk_Image *argImage)
-	: fk_Texture(argImage)
+fk_TriTexture::Member::Member(void)
+{
+	vertexPosition.setDim(3);
+	vertexPosition.resize(3);
+	vertexNormal.setDim(3);
+	vertexNormal.resize(3);
+	return;
+}
+
+fk_TriTexture::fk_TriTexture(fk_Image *argImage) :
+	fk_Texture(argImage),
+	_m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::TRITEXTURE);
 	GetFaceSize = []() { return 1; };
@@ -22,27 +32,22 @@ fk_TriTexture::fk_TriTexture(fk_Image *argImage)
 	};
 
 	FaceIBOSetup = []() {
-		if(faceIBO == 0) {
-			faceIBO = GenBuffer();
-			faceIndexFlg = true;
+		if(_s_faceIBO == 0) {
+			_s_faceIBO = GenBuffer();
+			_s_faceIndexFlg = true;
 		}
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, faceIBO);
-		if(faceIndexFlg == true) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _s_faceIBO);
+		if(_s_faceIndexFlg == true) {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 						 GLsizei(3*sizeof(GLuint)),
-						 faceIndex.data(), GL_STATIC_DRAW);
-			faceIndexFlg = false;
+						 _s_faceIndex.data(), GL_STATIC_DRAW);
+			_s_faceIndexFlg = false;
 		}
 	};
 
-	vertexPosition.setDim(3);
-	vertexPosition.resize(3);
-	setShaderAttribute(vertexName, 3, vertexPosition.getP());
-
-	vertexNormal.setDim(3);
-	vertexNormal.resize(3);
-	setShaderAttribute(normalName, 3, vertexNormal.getP());
+	setShaderAttribute(vertexName, 3, _m->vertexPosition.getP());
+	setShaderAttribute(normalName, 3, _m->vertexNormal.getP());
 
 	_m_texCoord->setDim(2);
 	_m_texCoord->resize(3);
@@ -73,7 +78,7 @@ bool fk_TriTexture::setVertexPos(int argID,
 		return false;
 	}
 
-	pos[argID].set(argX, argY, argZ);
+	_m->pos[argID].set(argX, argY, argZ);
 	PosUpdate();
 	NormUpdate();
 	return true;
@@ -86,7 +91,7 @@ bool fk_TriTexture::setVertexPos(int argID, fk_Vector argPos)
 		return false;
 	}
 
-	pos[argID] = argPos;
+	_m->pos[argID] = argPos;
 	PosUpdate();
 	NormUpdate();
 	return true;
@@ -105,7 +110,7 @@ bool fk_TriTexture::setTextureCoord(int argID, double argS, double argT)
 		return false;
 	}
 
-	triTexCoord[argID].set(argS, argT);
+	_m->triTexCoord[argID].set(argS, argT);
 	TexCoordUpdate();
 	return true;
 }
@@ -124,7 +129,7 @@ bool fk_TriTexture::setTextureCoord(int argID, fk_TexCoord argCoord)
 		return false;
 	}
 
-	triTexCoord[argID].set(argCoord.x, argCoord.y);
+	_m->triTexCoord[argID].set(argCoord.x, argCoord.y);
 
 	TexCoordUpdate();
 	return true;
@@ -139,7 +144,7 @@ fk_Vector fk_TriTexture::getVertexPos(int argID)
 		return dummy;
 	}
 
-	return pos[argID];
+	return _m->pos[argID];
 }
 
 fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
@@ -151,21 +156,21 @@ fk_TexCoord fk_TriTexture::getTextureCoord(int argID)
 		return dummy;
 	}
 
-	return triTexCoord[argID];
+	return _m->triTexCoord[argID];
 }
 
 void fk_TriTexture::PosUpdate(void)
 {
-	for(int i = 0; i < 3; ++i) vertexPosition.set(i, pos[i]);
+	for(int i = 0; i < 3; ++i) _m->vertexPosition.set(i, _m->pos[i]);
 	modifyAttribute(vertexName);
 }
 
 void fk_TriTexture::NormUpdate(void)
 {
 	fk_Vector		norm;
-	norm = (pos[1] - pos[0]) ^ (pos[2] - pos[0]);
+	norm = (_m->pos[1] - _m->pos[0]) ^ (_m->pos[2] - _m->pos[0]);
 	norm.normalize();
-	for(int i = 0; i < 3; ++i) vertexNormal.set(i, norm);
+	for(int i = 0; i < 3; ++i) _m->vertexNormal.set(i, norm);
 	modifyAttribute(normalName);
 }
 	
@@ -183,7 +188,7 @@ void fk_TriTexture::TexCoordUpdate(void)
 	double wScale = static_cast<double>(imageSize->w)/static_cast<double>(bufSize->w);
 	double hScale = static_cast<double>(imageSize->h)/static_cast<double>(bufSize->h);
 	for(int i = 0; i < 3; ++i) {
-		_m_texCoord->set(i, triTexCoord[i].x * wScale, triTexCoord[i].y * hScale);
+		_m_texCoord->set(i, _m->triTexCoord[i].x * wScale, _m->triTexCoord[i].y * hScale);
 	}
 
 	modifyAttribute(texCoordName);
