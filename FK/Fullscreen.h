@@ -24,6 +24,30 @@ namespace FK {
 	 *	\sa fk_Window
 	 */
 	class fk_FullscreenController {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+#if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
+		class windowstate {
+		public:
+			HWND hWnd;
+			WINDOWPLACEMENT WindowPlacement;
+		};
+
+		class Member {
+		public:
+			
+			Fl_Window	*pFlWnd;
+			fk_Window	*pFkWnd;
+			HWND		hFlWnd;
+			int			nWndX, nWndY, nWndW, nWndH;
+			int			fscW, fscH;
+			bool		mode;
+
+			Member(void);
+		};
+#endif
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_FullscreenController(void);
@@ -37,7 +61,7 @@ namespace FK {
 		 *	\param[in] fl_win	Fl_Window のポインタ
 		 *	\param[in] fk_win	fk_Window のポインタ
 		 */
-		void	init(Fl_Window *fl_win, fk_Window *fk_win);
+		void init(Fl_Window *fl_win, fk_Window *fk_win);
 
 		//! フルスクリーンモード取得関数
 		/*!
@@ -45,7 +69,7 @@ namespace FK {
 		 *
 		 *	\return フルスクリーンなら true を、ウィンドウなら false を返します。
 		 */
-		bool	isFullscreen(void);
+		bool isFullscreen(void);
 
 		//! フルスクリーン化関数
 		/*!
@@ -53,55 +77,24 @@ namespace FK {
 		 *
 		 *	\return 成功したら true を、失敗したら false を返します。
 		 */
-		bool	changeToFullscreen(void);
+		bool changeToFullscreen(void);
 
 		//! ウィンドウ化関数
 		/*!
 		 *	ウィンドウに戻します。
 		 */
-		void	changeToWindow(void);
+		void changeToWindow(void);
 
         ////////// ウインドウ保存関係 //////////
         constexpr static int MAX_NAMELENGTH = 512;
         constexpr static int MAX_WINDOWNUMBER = 128;
     
     private:
-
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
-
-
-		enum class fk_FullscreenMode {
-			SCMODE_FULLSCREEN,				// フルスクリーンモード
-			SCMODE_WINDOW					// ウインドウモード
-		};
-
-		Fl_Window	*pFlWnd;
-		fk_Window	*pFkWnd;
-		HWND		hFlWnd;
-		int			nWndX, nWndY, nWndW, nWndH;
-		int			fscW, fscH;
-		bool		mode;
-
-		BOOL		SaveWindowPosition(void);
-		BOOL		LoadWindowPosition(void);
-		BOOL		ChangeScreen(HWND, int, int, int);
-
+		std::unique_ptr<Member> _m;
 #endif //WIN32
 
 	};
-
-#if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
-#ifndef FK_DOXYGEN_USER_PROCESS
-
-	//! ウインドウ状態を保持する構造体
-	struct windowstate {
-		HWND hWnd;
-		WINDOWPLACEMENT WindowPlacement;
-	};
-
-#endif //!FK_DOXYGEN_USER_PROCESS
-#endif //WIN32
-
 }
 #endif //!__FK_FULLSCREEN_HEADER__
 

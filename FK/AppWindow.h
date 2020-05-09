@@ -32,7 +32,7 @@ namespace FK {
 	class fk_AppWindow {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		class fk_AWData {
+		class Member {
 		public:
 			std::shared_ptr<Fl_Window> mainWin;
 			std::unique_ptr<fk_Window> drawWin;
@@ -55,7 +55,7 @@ namespace FK {
 			int fps;
 			bool tbFlag, childMode;
 
-			fk_AWData(void);
+			Member(void);
 		};
 
 #endif
@@ -1389,7 +1389,7 @@ namespace FK {
 #endif
 
 	private:
-		std::unique_ptr<fk_AWData> data;
+		std::unique_ptr<Member> _m;
 
 		void ToggleScreen(void);
 	};

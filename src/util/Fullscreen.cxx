@@ -69,11 +69,16 @@ BOOL CALLBACK EnumWindowsLoadFunc(HWND hWnd, LPARAM lParam)
 	return TRUE;
 }
 
-// プライベートコンストラクタ
-fk_FullscreenController::fk_FullscreenController() :
+fk_FullscreenController::Member::Member(void) :
 	pFlWnd(nullptr), pFkWnd(nullptr), hFlWnd(nullptr),
 	nWndX(0), nWndY(0), nWndW(0), nWndH(0),
 	fscW(0), fscH(0), mode(true)
+{
+	return;
+}
+
+// プライベートコンストラクタ
+fk_FullscreenController::fk_FullscreenController() : _m(make_unique<Member>())
 {
 	return;
 }
@@ -176,10 +181,10 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 void fk_FullscreenController::init(Fl_Window *p_main_win, fk_Window *p_draw_win)
 {
 	// ポインタ受け取り
-	pFlWnd = p_main_win;		// Fl_Window操作用にポインタを取得
-	hFlWnd = fl_xid(pFlWnd);	// 解像度変更用にウィンドウハンドルを取得
-	pFkWnd = p_draw_win;
-	mode = false;
+	_m->pFlWnd = p_main_win;		// Fl_Window操作用にポインタを取得
+	_m->hFlWnd = fl_xid(pFlWnd);	// 解像度変更用にウィンドウハンドルを取得
+	_m->pFkWnd = p_draw_win;
+	_m->mode = false;
 
 	return;
 }
@@ -249,32 +254,36 @@ bool fk_FullscreenController::changeByD3D(bool argMode)
 // モードチェック
 bool fk_FullscreenController::isFullscreen()
 {
-	return mode;
+	return _m->mode;
 }
 
 // フルスクリーン化
 bool fk_FullscreenController::changeToFullscreen()
 {
-	if(mode == false) {
+	if(_m->mode == false) {
 		// ウィンドウサイズ保存
 		SaveWindowPosition();
-		nWndX = pFlWnd->x();	nWndY = pFlWnd->y();
-		nWndW = pFkWnd->w();	nWndH = pFkWnd->h();
+		_m->nWndX = _m->pFlWnd->x();
+		_m->nWndY = _m->pFlWnd->y();
+		_m->nWndW = _m->pFkWnd->w();
+		_m->nWndH = _m->pFkWnd->h();
+
 		// 解像度変更
-		pFlWnd->fullscreen();	// Fl_Windowのフルスクリーン(ラベルバー消去)
-		if(ChangeScreen(hFlWnd, int(fk_FullscreenMode::SCMODE_FULLSCREEN), nWndW, nWndH) == TRUE) {
-			pFlWnd->resize(0, 0, fscW, fscH);	// リサイズ
-			pFlWnd->color(FL_BLACK);
-			pFkWnd->resizeWindow((fscW-nWndW)/2, (fscH-nWndH)/2, nWndW, nWndH);
-			mode = true;
+		_m->pFlWnd->fullscreen();	// Fl_Windowのフルスクリーン(ラベルバー消去)
+		if(ChangeScreen(_m->hFlWnd, int(fk_FullscreenMode::SCMODE_FULLSCREEN),
+						_m->nWndW, _m->nWndH) == TRUE) {
+			_m->pFlWnd->resize(0, 0, fscW, fscH);	// リサイズ
+			_m->pFlWnd->color(FL_BLACK);
+			_m->pFkWnd->resizeWindow((_m->fscW - _m->nWndW)/2,
+									 (_m->fscH - _m->nWndH)/2,
+									 _m->nWndW, _m->nWndH);
+			_m->mode = true;
 
 			return true;
 		} else {
-			pFlWnd->fullscreen_off(nWndX, nWndY, nWndW, nWndH);
+			_m->pFlWnd->fullscreen_off(_m->nWndX, _m->nWndY, _m->nWndW, _m->nWndH);
 			LoadWindowPosition();
-			MessageBox(hFlWnd, "この環境ではフルスクリーン化できませんでした。\n"
-				"画面のプロパティを確認するか、ウィンドウモードでプレイしてください。", "フルスクリーン化失敗", 0);
-
+			MessageBox(_m->hFlWnd, "FullScreen Failed", "FullScreen Failed", 0);
 			return false;
 		}
 	} else {
