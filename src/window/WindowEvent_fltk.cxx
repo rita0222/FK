@@ -15,15 +15,15 @@ using namespace FK;
 
 void fk_Window::PushPrevStatus(void)
 {
-	for(auto ite1 = keyStatus.begin(); ite1 != keyStatus.end(); ++ite1) {
+	for(auto ite1 = _m->keyStatus.begin(); ite1 != _m->keyStatus.end(); ++ite1) {
 		ite1->second = getKeyStatus(ite1->first, false);
 	}
 
-	for(auto ite2 = specialKeyStatus.begin(); ite2 != specialKeyStatus.end(); ++ite2) {
+	for(auto ite2 = _m->specialKeyStatus.begin(); ite2 != _m->specialKeyStatus.end(); ++ite2) {
 		ite2->second = getSpecialKeyStatus(ite2->first, false);
 	}
 
-	for(auto ite3 = mouseStatus.begin(); ite3 != mouseStatus.end(); ++ite3) {
+	for(auto ite3 = _m->mouseStatus.begin(); ite3 != _m->mouseStatus.end(); ++ite3) {
 		ite3->second = getMouseStatus(ite3->first, false);
 	}
 	return;
@@ -45,10 +45,10 @@ int fk_Window::drawWindow(bool argDrawMode)
 
 	if(argDrawMode == true) {
 		PushPrevStatus();
-		if(fps != 0) {
-			fps_admin.timeRegular();
+		if(_m->fps != 0) {
+			_m->fps_admin.timeRegular();
 		}
-		if(fps_admin.getDrawFlag() || fps == 0) {
+		if(_m->fps_admin.getDrawFlag() || _m->fps == 0) {
 			redraw();
 		}
 	}
@@ -58,16 +58,16 @@ int fk_Window::drawWindow(bool argDrawMode)
 
 bool fk_Window::winOpenStatus(void)
 {
-	return winOpenFlag;
+	return _m->winOpenFlag;
 }
 
 void fk_Window::resizeWindow(int argX, int argY, int argW, int argH)
 {
-	GLWinXPosition = argX;
-	GLWinYPosition = argY;
-	GLWinWSize = argW;
-	GLWinHSize = argH;
-	engine->ResizeWindow(argW, argH);
+	_m->GLWinXPosition = argX;
+	_m->GLWinYPosition = argY;
+	_m->GLWinWSize = argW;
+	_m->GLWinHSize = argH;
+	_m_engine->ResizeWindow(argW, argH);
 	resize(argX, argY, argW, argH);
 
 	return;
@@ -87,7 +87,7 @@ bool fk_Window::getKeyStatus(char argKey, bool argInsideFlag)
 #endif
 
 	if(Fl::get_key(argKey) != 0) {
-		if(keyStatus.find(argKey) == keyStatus.end()) keyStatus[argKey] = false;
+		if(_m->keyStatus.find(argKey) == _m->keyStatus.end()) _m->keyStatus[argKey] = false;
 		return true;
 	}
 	return false;
@@ -106,11 +106,11 @@ bool fk_Window::getKeyStatus(char argKey, fk_Switch argStatus, bool argInsideFla
 		return !(tmpStatus);
 		
 	  case fk_Switch::UP:
-		if(keyStatus[argKey] == true && tmpStatus == false) return true;
+		if(_m->keyStatus[argKey] == true && tmpStatus == false) return true;
 		return false;
 
 	  case fk_Switch::DOWN:
-		if(keyStatus[argKey] == false && tmpStatus == true) return true;
+		if(_m->keyStatus[argKey] == false && tmpStatus == true) return true;
 		return false;
 
 	  case fk_Switch::PRESS:
@@ -124,8 +124,8 @@ bool fk_Window::getKeyStatus(char argKey, fk_Switch argStatus, bool argInsideFla
 	
 bool fk_Window::getSpecialKeyStatus(fk_Key argKey, bool argInsideFlag)
 {
-	if(specialKeyStatus.find(argKey) == specialKeyStatus.end()) {
-		specialKeyStatus[argKey] = false;
+	if(_m->specialKeyStatus.find(argKey) == _m->specialKeyStatus.end()) {
+		_m->specialKeyStatus[argKey] = false;
 	}
 
 	if(argInsideFlag == true && IsInsideWindow() == false) {
@@ -250,11 +250,11 @@ bool fk_Window::getSpecialKeyStatus(fk_Key argKey, fk_Switch argStatus,
 		return !(tmpStatus);
 		
 	  case fk_Switch::UP:
-		if(specialKeyStatus[argKey] == true && tmpStatus == false) return true;
+		if(_m->specialKeyStatus[argKey] == true && tmpStatus == false) return true;
 		return false;
 
 	  case fk_Switch::DOWN:
-		if(specialKeyStatus[argKey] == false && tmpStatus == true) return true;
+		if(_m->specialKeyStatus[argKey] == false && tmpStatus == true) return true;
 		return false;
 
 	  case fk_Switch::PRESS:
@@ -269,19 +269,19 @@ bool fk_Window::getSpecialKeyStatus(fk_Key argKey, fk_Switch argStatus,
 
 char fk_Window::getLastKey(void)
 {
-	Fl_Group	*mainWin = GetInhParentWindow();
+	Fl_Group *mainWin = GetInhParentWindow();
 
 	if(Fl::focus() == mainWin) {
-		lastKey = char(Fl::event_key());
+		_m->lastKey = char(Fl::event_key());
 	}
 
-	return lastKey;
+	return _m->lastKey;
 }
 
 tuple<int, int> fk_Window::getMousePosition(bool argInsideFlag)
 {
 	if(argInsideFlag == true && IsInsideWindow() == false) return {-1, -1};
-	return {Fl::event_x() - GLWinXPosition, Fl::event_y() - GLWinYPosition};
+	return {Fl::event_x() - _m->GLWinXPosition, Fl::event_y() - _m->GLWinYPosition};
 }
 
 #ifndef FK_OLD_NONSUPPORT
@@ -319,8 +319,8 @@ bool fk_Window::IsInsideWindow(void)
 	posY = Fl::event_y_root() - mainWin->y();
 #endif
 
-	if(posX < GLWinXPosition || posX >= GLWinXPosition + GLWinWSize ||
-	   posY < GLWinYPosition || posY >= GLWinYPosition + GLWinHSize) {
+	if(posX < _m->GLWinXPosition || posX >= _m->GLWinXPosition + _m->GLWinWSize ||
+	   posY < _m->GLWinYPosition || posY >= _m->GLWinYPosition + _m->GLWinHSize) {
 		return false;
 	}
 
@@ -329,8 +329,8 @@ bool fk_Window::IsInsideWindow(void)
 
 bool fk_Window::getMouseStatus(fk_MouseButton argButton, bool argInsideFlag)
 {
-	if(mouseStatus.find(argButton) == mouseStatus.end()) {
-		mouseStatus[argButton] = false;
+	if(_m->mouseStatus.find(argButton) == _m->mouseStatus.end()) {
+		_m->mouseStatus[argButton] = false;
 	}
 
 	if(argInsideFlag == true && IsInsideWindow() == false) {
@@ -368,11 +368,11 @@ bool fk_Window::getMouseStatus(fk_MouseButton argButton,
 		return !(tmpStatus);
 		
 	  case fk_Switch::UP:
-		if(mouseStatus[argButton] == true && tmpStatus == false) return true;
+		if(_m->mouseStatus[argButton] == true && tmpStatus == false) return true;
 		return false;
 
 	  case fk_Switch::DOWN:
-		if(mouseStatus[argButton] == false && tmpStatus == true) return true;
+		if(_m->mouseStatus[argButton] == false && tmpStatus == true) return true;
 		return false;
 
 	  case fk_Switch::PRESS:
@@ -395,12 +395,12 @@ int fk_Window::getMouseWheelStatus(void)
 void fk_Window::setFPS(int argFPS)
 {
 	if(argFPS <= 0) {
-		fps = 0;
-		fps_admin.setFrameSkipMode(false);
+		_m->fps = 0;
+		_m->fps_admin.setFrameSkipMode(false);
 	} else {
-		fps = argFPS;
-		fps_admin.setFrameSkipMode(true);
-		fps_admin.setFPS(argFPS);
+		_m->fps = argFPS;
+		_m->fps_admin.setFrameSkipMode(true);
+		_m->fps_admin.setFPS(argFPS);
 	}
 }
 

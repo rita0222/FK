@@ -14,6 +14,7 @@ fk_GraphEdge * MakeEdge(fk_Graph *argGraph, bool argMode,
 
 int main(int, char **)
 {
+	fk_Material::initDefault();
 	constexpr int SIZE = 40;
 	constexpr double HALF = double(SIZE-1)/2.0;
 	unique_ptr<fk_AppWindow> window(new fk_AppWindow());

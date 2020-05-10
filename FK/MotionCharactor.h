@@ -42,6 +42,34 @@ namespace FK {
 
 	class fk_Performer {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			std::vector<std::unique_ptr<fk_Model>> jointModel;
+			std::vector<std::weak_ptr<fk_Shape>> mesh;
+			std::vector<std::unique_ptr<fk_Model>> objModel;
+			std::vector<fk_Material> matPalette;
+			std::vector<int> matTable;
+			std::vector<std::weak_ptr<fk_Image>> texImage;
+			std::vector<std::string> texName;
+			std::vector<int> texTable;
+			std::string mqoName;
+			int objNum;
+			std::vector<std::string> objName;
+			std::map<int, int> parentTable;
+			bool parentConnect;
+			std::vector<std::vector<fk_PerformerMotion>> keyFrameData;
+			std::vector<int> nowFrame, maxFrame;
+			std::deque<bool> visibleInfo;
+			fk_Draw draw_mode;
+			int prevPlayMotionID, loopCnt;
+			fk_Model absParent;
+
+			Member(void);
+		};
+
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_Performer(void);
@@ -283,37 +311,12 @@ namespace FK {
 		void setAsCamera(fk_Scene *);
 		void setDrawMode(bool);
 		void setMarkerShape(fk_Shape *);
-
 		void SetFinalizeMode(void);
 #endif
 
 	private:
-		std::vector<fk_Model *>			jointModel;
-		std::vector<fk_Shape *>			mesh;
-		std::vector<fk_Model *>			objModel;
-
-		std::vector<fk_Material>		matPalette;
-		std::vector<int>				matTable;
-		std::vector<fk_Image *>			texImage;
-		std::vector<std::string>		texName;
-		std::vector<int>				texTable;
-
-		std::string						mqoName;
-		int								objNum;
-		std::vector<std::string>		objName;
-		std::map<int, int>				parentTable;
-		bool							parentConnect;
-
-		std::vector<std::vector<fk_PerformerMotion> >	keyFrameData;
-		std::vector<int>								nowFrame, maxFrame;
-
-		std::deque<bool>	visibleInfo;
-		fk_Draw				draw_mode;
-
-		int			prevPlayMotionID, loopCnt;
-
-		fk_Model	absParent;
-
+		std::unique_ptr<Member> _m;
+		
 		void init(void);
 		bool EnumObjectName(const std::string &);
 
@@ -322,10 +325,18 @@ namespace FK {
 		// スケール対応版
 		bool LoadMotionDataEulerScale(const std::string &);
 
-		static std::map<std::string, fk_Shape *>		shapeCache;
-		static std::map<std::string, fk_Image *>		imageCache;
-		static std::map<fk_BaseObject *, int>			countCache;
-		static std::map<fk_BaseObject *, std::string>	reverseCache;
+		bool IsPNG(std::string);
+		bool ReadPNG(fk_Image *, std::string);
+		bool IsJPG(std::string);
+		bool ReadJPG(fk_Image *, std::string);
+		bool ReadBMP(fk_Image *, std::string);
+
+		bool AlphaChannel(fk_Image *, std::string);
+
+		static std::map<std::string, std::shared_ptr<fk_Shape>> _s_shapeCache;
+		static std::map<std::string, std::shared_ptr<fk_Image>> _s_imageCache;
+		//static std::map<fk_BaseObject *, int> _s_countCache;
+		//static std::map<fk_BaseObject *, std::string> _s_reverseCache;
 	};
 
 	using fkut_Performer = fk_Performer;

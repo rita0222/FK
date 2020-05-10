@@ -1,19 +1,19 @@
 ﻿#define FK_DEF_SIZETYPE
 #include <FK/MotionCharactor.h>
 #include <FK/Error.H>
+#include <regex>
 
 using namespace std;
 using namespace FK;
 
-map<string, fk_Shape *>			fk_Performer::shapeCache;
-map<string, fk_Image *>			fk_Performer::imageCache;
-map<fk_BaseObject *, int>		fk_Performer::countCache;
-map<fk_BaseObject *, string>	fk_Performer::reverseCache;
+map<string, shared_ptr<fk_Shape>> fk_Performer::_s_shapeCache;
+map<string, shared_ptr<fk_Image>> fk_Performer::_s_imageCache;
+//map<fk_BaseObject *, int> fk_Performer::countCache;
 
 static vector<string> fk_StrSplit(const string &argStr, const string &argToken)
 {
-	vector<string>		retStrArray;
-	string::size_type	curPos = 0, nextPos = 0;
+	vector<string> retStrArray;
+	string::size_type curPos = 0, nextPos = 0;
 
 	while(nextPos != string::npos) {
 		nextPos = argStr.find(argToken, curPos);
@@ -24,150 +24,121 @@ static vector<string> fk_StrSplit(const string &argStr, const string &argToken)
 	return retStrArray;
 }
 
-fk_Performer::fk_Performer(void)
+fk_Performer::Member::Member(void)
+{
+	return;
+}
+
+fk_Performer::fk_Performer(void) : _m(make_unique<Member>())
 {
 	init();
-
 	return;
 }
 
 fk_Performer::~fk_Performer(void)
 {
-	init();
+	return;
 }
 
 bool fk_Performer::cloneCharactor(fk_Performer *argOrg)
 {
 	init();
 
-	mesh          = argOrg->mesh;
-	for(_st i = 0; i < mesh.size(); i++) {
-		countCache[mesh[i]]++;
-	}
-	matPalette    = argOrg->matPalette;
-	matTable      = argOrg->matTable;
-	texImage      = argOrg->texImage;
-	for(_st i = 0; i < texImage.size(); i++) {
-		countCache[texImage[i]]++;
-	}
-	texName       = argOrg->texName;
-	texTable      = argOrg->texTable;
-	mqoName       = argOrg->mqoName;
-	objNum        = argOrg->objNum;
-	objName       = argOrg->objName;
-	parentTable   = argOrg->parentTable;
-	parentConnect = argOrg->parentConnect;
+	_m->mesh = argOrg->_m->mesh;
+	_m->matPalette = argOrg->_m->matPalette;
+	_m->matTable = argOrg->_m->matTable;
+	_m->texImage = argOrg->_m->texImage;
+	_m->texName = argOrg->_m->texName;
+	_m->texTable = argOrg->_m->texTable;
+	_m->mqoName = argOrg->_m->mqoName;
+	_m->objNum = argOrg->_m->objNum;
+	_m->objName = argOrg->_m->objName;
+	_m->parentTable = argOrg->_m->parentTable;
+	_m->parentConnect = argOrg->_m->parentConnect;
 
-	keyFrameData  = argOrg->keyFrameData;
-	nowFrame      = argOrg->nowFrame;
-	maxFrame      = argOrg->maxFrame;
-	visibleInfo   = argOrg->visibleInfo;
-	draw_mode     = argOrg->draw_mode;
+	_m->keyFrameData  = argOrg->_m->keyFrameData;
+	_m->nowFrame = argOrg->_m->nowFrame;
+	_m->maxFrame = argOrg->_m->maxFrame;
+	_m->visibleInfo = argOrg->_m->visibleInfo;
+	_m->draw_mode = argOrg->_m->draw_mode;
 
-	prevPlayMotionID = argOrg->prevPlayMotionID;
-	loopCnt          = argOrg->loopCnt;
+	_m->prevPlayMotionID = argOrg->_m->prevPlayMotionID;
+	_m->loopCnt = argOrg->_m->loopCnt;
 
-	jointModel.resize(_st(objNum));
-	objModel.resize(_st(objNum));
-	for(_st i = 0; i < _st(objNum); i++) {
-		jointModel[i] = new fk_Model;
-		objModel[i] = new fk_Model;
+	_m->jointModel.clear();
+	_m->objModel.clear();
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		_m->jointModel.push_back(make_unique<fk_Model>());
+		_m->objModel.push_back(make_unique<fk_Model>());
+		fk_Model *jointModel = _m->jointModel.back().get();
+		fk_Model *objModel = _m->objModel.back().get();
 		if(i > 0) {
-			objModel[i]->setShape(mesh[i-1]);
-			objModel[i]->setMaterial(matPalette[_st(matTable[i-1])]);
-			objModel[i]->setSmoothMode(true);
+			objModel->setShape(_m->mesh[i-1].lock().get());
+			objModel->setMaterial(_m->matPalette[_st(_m->matTable[i-1])]);
+			objModel->setSmoothMode(true);
 		}
-		objModel[i]->glMoveTo(argOrg->objModel[i]->getPosition());
-		objModel[i]->glAngle(argOrg->objModel[i]->getAngle());
-		objModel[i]->setScale(argOrg->objModel[i]->getScale());
-		objModel[i]->setScale(argOrg->objModel[i]->getScale(fk_Axis::X),
-								argOrg->objModel[i]->getScale(fk_Axis::Y),
-								argOrg->objModel[i]->getScale(fk_Axis::Z));
-		jointModel[i]->glMoveTo(argOrg->jointModel[i]->getPosition());
-		jointModel[i]->glAngle(argOrg->jointModel[i]->getAngle());
-		jointModel[i]->setScale(argOrg->jointModel[i]->getScale());
-		jointModel[i]->setScale(argOrg->jointModel[i]->getScale(fk_Axis::X),
-								argOrg->jointModel[i]->getScale(fk_Axis::Y),
-								argOrg->jointModel[i]->getScale(fk_Axis::Z));
+		objModel->glMoveTo(argOrg->_m->objModel[i]->getPosition());
+		objModel->glAngle(argOrg->_m->objModel[i]->getAngle());
+		objModel->setScale(argOrg->_m->objModel[i]->getScale());
+		objModel->setScale(argOrg->_m->objModel[i]->getScale(fk_Axis::X),
+						   argOrg->_m->objModel[i]->getScale(fk_Axis::Y),
+						   argOrg->_m->objModel[i]->getScale(fk_Axis::Z));
+		jointModel->glMoveTo(argOrg->_m->jointModel[i]->getPosition());
+		jointModel->glAngle(argOrg->_m->jointModel[i]->getAngle());
+		jointModel->setScale(argOrg->_m->jointModel[i]->getScale());
+		jointModel->setScale(argOrg->_m->jointModel[i]->getScale(fk_Axis::X),
+							 argOrg->_m->jointModel[i]->getScale(fk_Axis::Y),
+							 argOrg->_m->jointModel[i]->getScale(fk_Axis::Z));
 	}
-	if(parentConnect) {
-		for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
-			jointModel[_st(ite->first)]->setParent(jointModel[_st(ite->second)], false);
+	if(_m->parentConnect) {
+		for(auto ite = _m->parentTable.begin(); ite != _m->parentTable.end(); ite++) {
+			fk_Model *child = _m->jointModel[_st(ite->first)].get();
+			fk_Model *parent = _m->jointModel[_st(ite->second)].get();
+			child->setParent(parent, false);
 		}
-		for(_st i = 0; i < _st(objNum); i++) {
-			objModel[i]->setParent(jointModel[i], false);
+		for(_st i = 0; i < _st(_m->objNum); i++) {
+			_m->objModel[i]->setParent(_m->jointModel[i].get(), false);
 		}
-		jointModel[0]->setParent(&absParent, false);
+		_m->jointModel[0]->setParent(&_m->absParent, false);
 	}
-	absParent.glMoveTo(argOrg->absParent.getPosition());
-	absParent.glAngle(argOrg->absParent.getAngle());
-	absParent.setScale(argOrg->absParent.getScale());
-	absParent.setScale(argOrg->absParent.getScale(fk_Axis::X),
-						argOrg->absParent.getScale(fk_Axis::Y),
-						argOrg->absParent.getScale(fk_Axis::Z));
+	_m->absParent.glMoveTo(argOrg->_m->absParent.getPosition());
+	_m->absParent.glAngle(argOrg->_m->absParent.getAngle());
+	_m->absParent.setScale(argOrg->_m->absParent.getScale());
+	_m->absParent.setScale(argOrg->_m->absParent.getScale(fk_Axis::X),
+						   argOrg->_m->absParent.getScale(fk_Axis::Y),
+						   argOrg->_m->absParent.getScale(fk_Axis::Z));
 
 	return true;
 }
 
 void fk_Performer::init()
 {
-	for(_st i = 0; i < objModel.size(); i++) {
-		delete objModel[i];
-	}
-	objModel.clear();
-	for(_st i = 0; i < jointModel.size(); i++) {
-		delete jointModel[i];
-	}
-	jointModel.clear();
+	_m->objModel.clear();
+	_m->jointModel.clear();
+	_m->mesh.clear();
+	_m->texImage.clear();
 
-	for(_st i = 0; i < mesh.size(); i++) {
-		countCache[mesh[i]]--;
-		if(countCache[mesh[i]] == 0) {
-			if(mesh[i]->getObjectType() == fk_Type::IFSTEXTURE) {
-				delete (fk_IFSTexture *)mesh[i];
-			} else if(mesh[i]->getObjectType() == fk_Type::INDEXFACESET) {
-				delete (fk_IndexFaceSet *)mesh[i];
-			} else {
-				delete mesh[i];
-			}
-			shapeCache.erase(reverseCache.find(mesh[i])->second);
-			reverseCache.erase(mesh[i]);
-			countCache.erase(mesh[i]);
-		}
-	}
-	mesh.clear();
-	for(unsigned int i = 0; i < texImage.size(); i++) {
-		countCache[texImage[i]]--;
-		if(countCache[texImage[i]] == 0) {
-			delete texImage[i];
-			imageCache.erase(reverseCache.find(texImage[i])->second);
-			reverseCache.erase(texImage[i]);
-			countCache.erase(texImage[i]);
-		}
-	}
-	texImage.clear();
+	_m->objName.clear();
+	_m->texName.clear();
+	_m->texTable.clear();
+	_m->matTable.clear();
+	_m->matPalette.clear();
 
-	objName.clear();
-	texName.clear();
-	texTable.clear();
-	matTable.clear();
-	matPalette.clear();
+	_m->parentTable.clear();
+	_m->keyFrameData.clear();
 
-	parentTable.clear();
-	keyFrameData.clear();
+	_m->mqoName.clear();
+	_m->objNum = 0;
+	_m->parentConnect = false;
 
-	mqoName.clear();
-	objNum = 0;
-	parentConnect = false;
-
-	visibleInfo.clear();
+	_m->visibleInfo.clear();
 
 	// モーション複数化対応
-	nowFrame.clear();
-	maxFrame.clear();
+	_m->nowFrame.clear();
+	_m->maxFrame.clear();
 
-	prevPlayMotionID = 0;
-	loopCnt = 0;
+	_m->prevPlayMotionID = 0;
+	_m->loopCnt = 0;
 
 	return;
 }
@@ -175,47 +146,45 @@ void fk_Performer::init()
 // MQO ファイルからオブジェクト名を列挙する
 bool fk_Performer::EnumObjectName(const string &argFileName)
 {
-	ifstream			in_file(argFileName.c_str());
-	vector<string>		readBuf(1), lineStr;
-	string::size_type	openPos, closePos;
-	_st					i = 0, j = 0, k = 0;
-	fk_Material			tmpMat;
-	fk_Color			tmpCol;
-	float				tmpParam[5];
-	bool				tmpFlag;
+	ifstream in_file(argFileName);
 
 	if(!in_file.is_open()) return false;
 
-	while(getline(in_file, readBuf.at(i))) {
-		i++;
+	vector<string> readBuf(1);
+	for(_st i = 0; getline(in_file, readBuf.at(i)); ++i) {
 		readBuf.push_back("");
 	}
 
 	// マテリアル情報の抽出
-	for(i = 0; i < readBuf.size(); i++) {
+	for(_st i = 0; i < readBuf.size(); i++) {
 		if(readBuf[i].find("Material") != string::npos) {
 			i++;
 			while(readBuf[i].find("}") == string::npos) {
-				lineStr = fk_StrSplit(readBuf[i], " ");
-				for(j = 0; j < lineStr.size(); j++) {
+				vector<string> lineStr = fk_StrSplit(readBuf[i], " ");
+				for(_st j = 0; j < lineStr.size(); j++) {
 					if(lineStr[j].find("col(") == string::npos) continue;
 					// base color
-					tmpCol.set(atof(lineStr[j].substr(4, 5).c_str()),
-						atof(lineStr[j+1].c_str()),
-						atof(lineStr[j+2].c_str()),
-						atof(lineStr[j+3].substr(0, 5).c_str())
+					fk_Color tmpCol;
+					tmpCol.set(stof(lineStr[j].substr(4, 5)),
+							   stof(lineStr[j+1]),
+							   stof(lineStr[j+2]),
+							   stof(lineStr[j+3].substr(0, 5))
 					);
+
+					float tmpParam[5];
 					// dif
-					tmpParam[0] = (float)atof(lineStr[j+4].substr(4, 5).c_str());
+					tmpParam[0] = stof(lineStr[j+4].substr(4, 5));
 					// amb
-					tmpParam[1] = (float)atof(lineStr[j+5].substr(4, 5).c_str());
+					tmpParam[1] = stof(lineStr[j+5].substr(4, 5));
 					// emi
-					tmpParam[2] = (float)atof(lineStr[j+6].substr(4, 5).c_str());
+					tmpParam[2] = stof(lineStr[j+6].substr(4, 5));
 					// spe
-					tmpParam[3] = (float)atof(lineStr[j+7].substr(4, 5).c_str());
+					tmpParam[3] = stof(lineStr[j+7].substr(4, 5));
 					// power
-					tmpParam[4] = (float)atof(lineStr[j+8].substr(6, 4).c_str());
+					tmpParam[4] = stof(lineStr[j+8].substr(6, 4));
 					// set
+					fk_Material tmpMat;
+
 					tmpMat.setDiffuse(tmpCol.getR()*tmpParam[0],
 									  tmpCol.getG()*tmpParam[0],
 									  tmpCol.getB()*tmpParam[0]);
@@ -230,29 +199,29 @@ bool fk_Performer::EnumObjectName(const string &argFileName)
 									   tmpCol.getB()*tmpParam[3]);
 					tmpMat.setShininess(tmpParam[4]);
 
-					matPalette.push_back(tmpMat);
+					_m->matPalette.push_back(tmpMat);
 
 					if(j+9 >= lineStr.size()) {
-						texTable.push_back(-1);
+						_m->texTable.push_back(-1);
 						break;
 					}
 
-					openPos = lineStr[j+9].find("tex(");
+					auto openPos = lineStr[j+9].find("tex(");
 					if(openPos == string::npos) break;
-					closePos = lineStr[j+9].find_last_of('\"');
+					auto closePos = lineStr[j+9].find_last_of('\"');
 					if(closePos == string::npos) break;
 
-					tmpFlag = false;
-					for(k = 0; k < texName.size(); k++) {
-						if(texName[k] == lineStr[j+9].substr(openPos+5, closePos-openPos-5)) {
-							texTable.push_back(int(k));
+					bool tmpFlag = false;
+					for(_st k = 0; k < _m->texName.size(); k++) {
+						if(_m->texName[k] == lineStr[j+9].substr(openPos+5, closePos-openPos-5)) {
+							_m->texTable.push_back(int(k));
 							tmpFlag = true;
 							break;
 						}
 					}
 					if(!tmpFlag) {
-						texName.push_back(lineStr[j+9].substr(openPos+5, closePos-openPos-5));
-						texTable.push_back(int(texName.size()-1));
+						_m->texName.push_back(lineStr[j+9].substr(openPos+5, closePos-openPos-5));
+						_m->texTable.push_back(int(_m->texName.size()-1));
 					}
 				}
 				i++;
@@ -262,13 +231,13 @@ bool fk_Performer::EnumObjectName(const string &argFileName)
 	}
 
 	// オブジェクト名の列挙]
-	objName.push_back("<base>");
-	for(i = 0; i < readBuf.size(); i++) {
-		openPos = readBuf[i].find("Object \"");
+	_m->objName.push_back("<base>");
+	for(_st i = 0; i < readBuf.size(); i++) {
+		auto openPos = readBuf[i].find("Object \"");
 		if(openPos != string::npos) {
-			closePos = readBuf[i].find_last_of('\"');
+			auto closePos = readBuf[i].find_last_of('\"');
 			if(closePos == string::npos) return false;
-			objName.push_back(readBuf[i].substr(openPos+8, closePos-openPos-8));
+			_m->objName.push_back(readBuf[i].substr(openPos+8, closePos-openPos-8));
 			while(true) {
 				i++;
 				// マテリアル指定の抽出
@@ -278,8 +247,9 @@ bool fk_Performer::EnumObjectName(const string &argFileName)
 
 					if(tmpPos == string::npos) return false;
 
-					string	intStr = readBuf[i].substr(readBuf[i].find("M(")+2, tmpPos-readBuf[i].find("M(")-2);
-					matTable.push_back(atoi(intStr.c_str()));
+					string intStr = readBuf[i].substr(readBuf[i].find("M(")+2,
+													  tmpPos-readBuf[i].find("M(")-2);
+					_m->matTable.push_back(stoi(intStr));
 					break;
 				}
 			}
@@ -289,12 +259,69 @@ bool fk_Performer::EnumObjectName(const string &argFileName)
 	return true;
 }
 
+bool fk_Performer::IsPNG(string argName)
+{
+	return (argName.rfind(".png") != string::npos ||
+			argName.rfind(".PNG") != string::npos ||
+			argName.rfind(".Png") != string::npos);
+}
+
+bool fk_Performer::ReadPNG(fk_Image *argImage, string argName)
+{
+	if(!argImage->readPNG(argName)) {
+		Error::Put("Texture File(" + argName + ") Read Error.");
+		init();
+		return false;
+	}
+	return true;
+}
+
+bool fk_Performer::IsJPG(string argName)
+{
+	return (argName.rfind(".jpg") != string::npos ||
+			argName.rfind(".JPG") != string::npos ||
+			argName.rfind(".Jpg") != string::npos ||
+			argName.rfind(".jpeg") != string::npos ||
+			argName.rfind(".JPEG") != string::npos ||
+			argName.rfind(".Jpeg") != string::npos);
+}
+
+bool fk_Performer::ReadJPG(fk_Image *argImage, string argName)
+{
+	if(!argImage->readJPG(argName)) {
+		Error::Put("Texture File(" + argName + ") Read Error.");
+		init();
+		return false;
+	}
+	return true;
+}
+
+bool fk_Performer::ReadBMP(fk_Image *argImage, string argName)
+{
+	if(!argImage->readBMP(argName)) {
+		Error::Put("Texture File(" + argName + ") Read Error.");
+		init();
+		return false;
+	}
+	return true;
+}
+
+bool fk_Performer::AlphaChannel(fk_Image *argImage, string argName)
+{
+	fk_Image alphaChannel;
+
+	if(!alphaChannel.readBMP(argName.substr(0, argName.size() - 4) + "_a.bmp")) return false;
+	for(int y = 0; y < alphaChannel.getHeight(); y++) {
+		for(int x = 0; x < alphaChannel.getWidth(); x++) {
+			argImage->setA(x, y, alphaChannel.getR(x, y));
+		}
+	}
+	return true;
+}
+
 // MQO ファイルから形状とテクスチャを読み込む
 bool fk_Performer::loadObjectData(const string &argFileName)
 {
-	string		texPath, putStr;
-	fk_Image	alphaChannel;
-
 	init();
 
 	// オブジェクトの読み込み
@@ -303,107 +330,102 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 		init();
 		return false;
 	}
-	objNum = int(objName.size());
+	_m->objNum = int(_m->objName.size());
 
-	jointModel.resize(_st(objNum));
-	objModel.resize(_st(objNum));
-	mesh.resize(_st(objNum)-1);
-	texImage.resize(texName.size());
+	_m->jointModel.clear();
+	_m->objModel.clear();
+	_m->mesh.clear();
+	_m->texImage.clear();
 
-	texPath = argFileName.substr(0, argFileName.find_last_of('/')+1);
-	mqoName = argFileName.substr(argFileName.find_last_of('/')+1, string::npos);
+	string texPath = argFileName.substr(0, argFileName.find_last_of('/')+1);
+	_m->mqoName = argFileName.substr(argFileName.find_last_of('/')+1, string::npos);
 
-	visibleInfo.resize(_st(objNum));
+	_m->visibleInfo.resize(_st(_m->objNum));
 
 	// テクスチャロード
-	for(unsigned int i = 0; i < texName.size(); i++) {
-		if(imageCache.count(texPath+texName[i]) > 0) {
-			texImage[i] = imageCache[texPath+texName[i]];
-			countCache[texImage[i]]++;
-		} else {
-			texImage[i] = new fk_Image;
-			imageCache[texPath+texName[i]] = texImage[i];
-			reverseCache[texImage[i]] = texPath+texName[i];
-			countCache[texImage[i]] = 1;
+	for(_st i = 0; i < _m->texName.size(); i++) {
+		string fileName = texPath + _m->texName[i];
+
+		// まだキャッシュ中にデータがない
+		if(_s_imageCache.find(fileName) == _s_imageCache.end()) {
+			shared_ptr<fk_Image> ptr(new fk_Image);
+			_s_imageCache.emplace(fileName, ptr);
+			//reverseCache[texImage[i]] = texPath+_m->texName[i];
+			//countCache[texImage[i]] = 1;
+			fk_Image *image = _s_imageCache[texPath + _m->texName[i]].get();
 
 			// PNG 対応
-			if(texName[i].rfind(".png") != string::npos ||
-			   texName[i].rfind(".PNG") != string::npos ||
-			   texName[i].rfind(".Png") != string::npos) {
-				if(!texImage[i]->readPNG(texPath+texName[i])) {
-					putStr = "Texture File(" + texPath + texName[i] + ") Read Error.";
-					Error::Put(putStr);
-					init();
-					return false;
-				}
-			} else if(texName[i].rfind(".jpg") != string::npos ||
-					  texName[i].rfind(".JPG") != string::npos ||
-					  texName[i].rfind(".Jpg") != string::npos ||
-					  texName[i].rfind(".jpeg") != string::npos ||
-					  texName[i].rfind(".JPEG") != string::npos ||
-					  texName[i].rfind(".Jpeg") != string::npos) {
-				if(!texImage[i]->readJPG(texPath+texName[i])) {
-					putStr = "Texture File(" + texPath + texName[i] + ") Read Error.";
-					Error::Put(putStr);
-					init();
-					return false;
-				}
-			} else if(texImage[i]->readBMP(texPath+texName[i])) {
-				if(alphaChannel.readBMP(texPath+texName[i].substr(0, texName[i].size()-4)+"_a.bmp")) {
-					for(int y = 0; y < alphaChannel.getHeight(); y++) {
-						for(int x = 0; x < alphaChannel.getWidth(); x++) {
-							texImage[i]->setA(x, y, alphaChannel.getR(x, y));
-						}
-					}
-				}
+			if(IsPNG(fileName)) {
+				if(!ReadPNG(image, fileName)) return false;
+			} else if(IsJPG(fileName)) {
+				if(!ReadJPG(image, fileName)) return false;
+			} else if(image->readBMP(fileName)) {
+				AlphaChannel(image, fileName);
 			} else {
-				putStr = "Texture File(" + texPath + texName[i] + ") Read Error.";
-				Error::Put(putStr);
+				Error::Put("Texture File(" + fileName + ") Read Error.");
 				init();
 				return false;
 			}
 		}
+		_m->texImage.push_back(_s_imageCache[fileName]);
+		
 	}
 
 	// 形状ロード
-	for(_st i = 0; i < _st(objNum); i++) {
-		jointModel[i] = new fk_Model;
-		objModel[i] = new fk_Model;
-		if(i > 0) {
-			if(shapeCache.count(argFileName+objName[i]) > 0) {
-				mesh[i-1] = shapeCache[argFileName+objName[i]];
-				countCache[mesh[i-1]]++;
-			} else {
-				if(texTable[_st(matTable[i-1])] != -1) {
-					mesh[i-1] = new fk_IFSTexture;
-					((fk_IFSTexture *)mesh[i-1])->setImage(texImage[_st(texTable[_st(matTable[i-1])])]);
-					((fk_IFSTexture *)mesh[i-1])->setTexRendMode(fk_TexRendMode::SMOOTH);
-
-					if(!((fk_IFSTexture *)mesh[i-1])->readMQOFile(argFileName, objName[i])) {
-						Error::Put("MQO File Read Error.");
-						init();
-						return false;
-					}
-				} else {
-					mesh[i-1] = new fk_IndexFaceSet;
-					if(!((fk_IndexFaceSet *)mesh[i-1])->readMQOFile(argFileName, objName[i])) {
-						Error::Put("MQO File Read Error.");
-						init();
-						return false;
-					}
-				}
-				shapeCache[argFileName+objName[i]] = mesh[i-1];
-				reverseCache[mesh[i-1]] = argFileName+objName[i];
-				countCache[mesh[i-1]] = 1;
-			}
-
-			objModel[i]->setShape(mesh[i-1]);
-			objModel[i]->setMaterial(matPalette[_st(matTable[i-1])]);
-			objModel[i]->setSmoothMode(true);
-
-			parentTable[int(i)] = 0;
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		_m->jointModel.push_back(make_unique<fk_Model>());
+		_m->objModel.push_back(make_unique<fk_Model>());
+		if(i == 0) {
+			_m->visibleInfo[0] = true;
+			continue;
 		}
-		visibleInfo[i] = true;
+
+		string objName = argFileName + _m->objName[i];
+		fk_Model *objModel = _m->objModel.back().get();
+
+		if(_s_shapeCache.find(objName) != _s_shapeCache.end()) {
+			_m->mesh.push_back(_s_shapeCache[objName]);
+			//countCache[mesh[i-1]]++;
+
+		} else {
+			int mTable = _m->texTable[_st(_m->matTable[i-1])];
+			if(mTable != -1) {
+				shared_ptr<fk_Shape> ptr(new fk_IFSTexture);
+				_s_shapeCache.emplace(objName, ptr);
+				fk_IFSTexture *ifsTex =
+					dynamic_cast<fk_IFSTexture *>(_s_shapeCache[objName].get());
+
+				fk_Image *image = _m->texImage[_st(mTable)].lock().get();
+				ifsTex->setImage(image);
+				ifsTex->setTexRendMode(fk_TexRendMode::SMOOTH);
+				if(ifsTex->readMQOFile(argFileName, _m->objName[i]) == false) {
+					Error::Put("MQO File Read Error.");
+					init();
+					return false;
+				}
+			} else {
+				shared_ptr<fk_Shape> ptr(new fk_IndexFaceSet);
+				_s_shapeCache.emplace(objName, ptr);
+				fk_IndexFaceSet *ifSet =
+					dynamic_cast<fk_IndexFaceSet *>(_s_shapeCache[objName].get());
+					
+				if(ifSet->readMQOFile(argFileName, _m->objName[i]) == false) {
+					Error::Put("MQO File Read Error.");
+					init();
+					return false;
+				}
+			}
+			_m->mesh.push_back(_s_shapeCache[objName]);
+			//reverseCache[mesh[i-1]] = argFileName + _m->objName[i];
+			//countCache[mesh[i-1]] = 1;
+		}
+
+		objModel->setShape(_m->mesh[i-1].lock().get());
+		objModel->setMaterial(_m->matPalette[_st(_m->matTable[i-1])]);
+		objModel->setSmoothMode(true);
+
+		_m->parentTable[int(i)] = 0;
+		_m->visibleInfo[i] = true;
 	}
 
 	return true;
@@ -412,15 +434,13 @@ bool fk_Performer::loadObjectData(const string &argFileName)
 // FKC ファイルから親子関係と接続位置情報を読み込む
 bool fk_Performer::loadJointData(const string &argFileName)
 {
-	ifstream			in_file(argFileName.c_str());
-	string				lineStr;
-	vector<string>		arraySplit, readBuf(1);
-	_st					objIndex = 0;
+	ifstream in_file(argFileName);
 
 	// オープン正否判定
 	if(!in_file.is_open()) return false;
 
 	// ヘッダチェック
+	string lineStr;
 	if(!getline(in_file, lineStr)) return false;
 	if(lineStr.find("FKC_HEADER_0.2") == string::npos) return false;
 
@@ -429,14 +449,16 @@ bool fk_Performer::loadJointData(const string &argFileName)
 		if(!getline(in_file, lineStr)) return false;
 	} while(lineStr.find("[ENUM PARENT TABLE BEGIN]") == string::npos);
 
+	vector<string> arraySplit;
+
 	// 親子関係読み込み
-	parentTable.clear();
+	_m->parentTable.clear();
 	while(true) {
 		getline(in_file, lineStr);
 		if(lineStr.find("[ENUM PARENT TABLE END]") != string::npos) break;
 		arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 2) return false;
-		parentTable[atoi(arraySplit[0].c_str())] = atoi(arraySplit[1].c_str());
+		_m->parentTable[stoi(arraySplit[0])] = stoi(arraySplit[1]);
 	}
 
 	// 接続位置情報探索
@@ -445,16 +467,17 @@ bool fk_Performer::loadJointData(const string &argFileName)
 	} while(lineStr.find("[ENUM JOINT POSITION BEGIN]") == string::npos);
 
 	// 接続位置情報読み込み
+	_st objIndex = 0;
 	while(true) {
 		getline(in_file, lineStr);
 		if(lineStr.find("[ENUM JOINT POSITION END]") != string::npos) break;
 		arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 3) return false;
-		jointModel[_st(objIndex)]->glMoveTo(atof(arraySplit[0].c_str()),
-										   atof(arraySplit[1].c_str()),
-										   atof(arraySplit[2].c_str()));
+		_m->jointModel[_st(objIndex)]->glMoveTo(stof(arraySplit[0]),
+												stof(arraySplit[1]),
+												stof(arraySplit[2]));
 		objIndex++;
-		if(objIndex >= _st(objNum)) break;
+		if(objIndex >= _st(_m->objNum)) break;
 	}
 
 	jointToPoser();
@@ -465,20 +488,16 @@ bool fk_Performer::loadJointData(const string &argFileName)
 // FKM ファイルからモーションデータを読み込む
 bool fk_Performer::loadMotionData(const string &argFileName)
 {
-	ifstream			in_file(argFileName.c_str());
-	string				lineStr;
-	vector<string>		arraySplit, readBuf(1);
-	_st					objIndex = 0;
+	ifstream in_file(argFileName);
 
 	// モーション複数化対応
-	int	totalFrame = 0;
-	vector<fk_PerformerMotion>	tmpMotionArray;
-	tmpMotionArray.resize(_st(objNum));
+	vector<fk_PerformerMotion> tmpMotionArray(_st(_m->objNum));
 
 	// オープン正否判定
 	if(!in_file.is_open()) return false;
 
 	// ヘッダチェック
+	string lineStr;
 	if(!getline(in_file, lineStr)) return false;
 	if(lineStr.find("FKM_HEADER_0.31") != string::npos) {
 		in_file.close();
@@ -500,17 +519,17 @@ bool fk_Performer::loadMotionData(const string &argFileName)
 	while(true) {
 		getline(in_file, lineStr);
 		if(lineStr.find("[PARENT OBJECT KEYFRAME DATA END]") != string::npos) break;
-		arraySplit = fk_StrSplit(lineStr, ",");
+		vector<string> arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 9) return false;
 		tmpMotionArray[0].pushKeyFrame(
-			fk_Quaternion(atof(arraySplit[0].c_str()),
-						  atof(arraySplit[1].c_str()),
-						  atof(arraySplit[2].c_str()),
-						  atof(arraySplit[3].c_str())),
-			fk_Vector(atof(arraySplit[4].c_str()),
-					  atof(arraySplit[5].c_str()),
-					  atof(arraySplit[6].c_str())),
-			atoi(arraySplit[7].c_str()), (fk_MotionInterType)atoi(arraySplit[8].c_str())
+			fk_Quaternion(stof(arraySplit[0]),
+						  stof(arraySplit[1]),
+						  stof(arraySplit[2]),
+						  stof(arraySplit[3])),
+			fk_Vector(stof(arraySplit[4]),
+					  stof(arraySplit[5]),
+					  stof(arraySplit[6])),
+			stoi(arraySplit[7]), (fk_MotionInterType)stoi(arraySplit[8])
 		);
 	}
 
@@ -520,42 +539,42 @@ bool fk_Performer::loadMotionData(const string &argFileName)
 	} while(lineStr.find("[CHILD OBJECT KEYFRAME DATA BEGIN]") == string::npos);
 
 	// 子オブジェクトキーフレーム読み込み
+	_st objIndex = 0;
 	while(true) {
 		getline(in_file, lineStr);
 		if(lineStr.find("[CHILD OBJECT KEYFRAME DATA END]") != string::npos) break;
 		if(lineStr.find("BEGIN") != string::npos) {
 			objIndex++;
-			if(objIndex >= _st(objNum)) break;
+			if(objIndex >= _st(_m->objNum)) break;
 			tmpMotionArray[objIndex].init();
 			continue;
 		} else if(lineStr.find("END") != string::npos) {
 			continue;
 		}
-		arraySplit = fk_StrSplit(lineStr, ",");
+		vector<string> arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 9) return false;
 		tmpMotionArray[objIndex].pushKeyFrame(
-			fk_Quaternion(atof(arraySplit[0].c_str()),
-						  atof(arraySplit[1].c_str()),
-						  atof(arraySplit[2].c_str()),
-						  atof(arraySplit[3].c_str())),
-			fk_Vector(atof(arraySplit[4].c_str()),
-					  atof(arraySplit[5].c_str()),
-					  atof(arraySplit[6].c_str())),
-			atoi(arraySplit[7].c_str()),
-			(fk_MotionInterType)atoi(arraySplit[8].c_str())
+			fk_Quaternion(stof(arraySplit[0]),
+						  stof(arraySplit[1]),
+						  stof(arraySplit[2]),
+						  stof(arraySplit[3])),
+			fk_Vector(stof(arraySplit[4]),
+					  stof(arraySplit[5]),
+					  stof(arraySplit[6])),
+			stoi(arraySplit[7]),
+			(fk_MotionInterType)stoi(arraySplit[8])
 		);
 	}
 
 	// モーション複数化対応
-	keyFrameData.push_back(tmpMotionArray);
-	nowFrame.push_back(0);
-	totalFrame = 0;
-	for(_st i = 0; i < _st(objNum); i++) {
-		if(totalFrame < keyFrameData[keyFrameData.size()-1][i].getTotalFrameNum()) {
-			totalFrame =  keyFrameData[keyFrameData.size()-1][i].getTotalFrameNum();
-		}
+	_m->keyFrameData.push_back(tmpMotionArray);
+	_m->nowFrame.push_back(0);
+	int totalFrame = 0;
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		int curFrame = _m->keyFrameData.back().at(i).getTotalFrameNum();
+		if(totalFrame < curFrame) totalFrame = curFrame;
 	}
-	maxFrame.push_back(totalFrame);
+	_m->maxFrame.push_back(totalFrame);
 
 	return true;
 }
@@ -563,16 +582,11 @@ bool fk_Performer::loadMotionData(const string &argFileName)
 // FKM ファイルからモーションデータを読み込む(オイラー角版)
 bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 {
-	ifstream			in_file(argFileName.c_str());
-	string				lineStr;
-	vector<string>		arraySplit;
-	_st					objIndex = 0;
-	fk_Quaternion		tmpQ;
+	ifstream in_file(argFileName);
 
 	// モーション複数化対応
-	int	totalFrame = 0;
-	vector<fk_PerformerMotion>	tmpMotionArray;
-	tmpMotionArray.resize(_st(objNum));
+	//int	totalFrame = 0;
+	vector<fk_PerformerMotion>	tmpMotionArray(_st(_m->objNum));
 
 	// オープン正否判定
 	if(!in_file.is_open()) {
@@ -581,6 +595,7 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 	}
 
 	// ヘッダチェック
+	string lineStr;
 	if(!getline(in_file, lineStr)) {
 		Error::Put("ファイルが途中で終わっています。");
 		return false;
@@ -598,6 +613,7 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 		}
 	} while(lineStr.find("[PARENT OBJECT KEYFRAME DATA BEGIN]") == string::npos);
 
+	fk_Quaternion tmpQ;
 	// 親オブジェクトキーフレーム読み込み
 	tmpMotionArray[0].init();
 	while(true) {
@@ -606,16 +622,22 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 			return false;
 		}
 		if(lineStr.find("[PARENT OBJECT KEYFRAME DATA END]") != string::npos) break;
-		arraySplit = fk_StrSplit(lineStr, ",");
+		vector<string> arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 8) {
 			Error::Put("データの形式が想定と異なります。");
 			return false;
 		}
-		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
+		tmpQ.makeEuler(stof(arraySplit[0]),
+					   stof(arraySplit[1]),
+					   stof(arraySplit[2]));
+
 		tmpMotionArray[0].pushKeyFrame(
 			tmpQ,
-			fk_Vector(atof(arraySplit[3].c_str()), atof(arraySplit[4].c_str()), atof(arraySplit[5].c_str())),
-			atoi(arraySplit[6].c_str()), (fk_MotionInterType)atoi(arraySplit[7].c_str())
+			fk_Vector(stof(arraySplit[3]),
+					  stof(arraySplit[4]),
+					  stof(arraySplit[5])),
+			stoi(arraySplit[6]),
+			fk_MotionInterType(stoi(arraySplit[7]))
 		);
 	}
 
@@ -628,6 +650,7 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 	} while(lineStr.find("[CHILD OBJECT KEYFRAME DATA BEGIN]") == string::npos);
 
 	// 子オブジェクトキーフレーム読み込み
+	_st objIndex = 0;
 	while(true) {
 		if(!getline(in_file, lineStr)) {
 			Error::Put("ファイルが途中で終わっています。");
@@ -636,35 +659,39 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 		if(lineStr.find("[CHILD OBJECT KEYFRAME DATA END]") != string::npos) break;
 		if(lineStr.find("BEGIN") != string::npos) {
 			objIndex++;
-			if(objIndex >= _st(objNum)) break;
+			if(objIndex >= _st(_m->objNum)) break;
 			tmpMotionArray[objIndex].init();
 			continue;
 		} else if(lineStr.find("END") != string::npos) {
 			continue;
 		}
-		arraySplit = fk_StrSplit(lineStr, ",");
+		vector<string> arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 8) {
 			Error::Put("データの形式が想定と異なります。");
 			return false;
 		}
-		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
+		tmpQ.makeEuler(stof(arraySplit[0]),
+					   stof(arraySplit[1]),
+					   stof(arraySplit[2]));
 		tmpMotionArray[objIndex].pushKeyFrame(
 			tmpQ,
-			fk_Vector(atof(arraySplit[3].c_str()), atof(arraySplit[4].c_str()), atof(arraySplit[5].c_str())),
-			atoi(arraySplit[6].c_str()), (fk_MotionInterType)atoi(arraySplit[7].c_str())
+			fk_Vector(stof(arraySplit[3]),
+					  stof(arraySplit[4]),
+					  stof(arraySplit[5])),
+			stoi(arraySplit[6]),
+			fk_MotionInterType(stoi(arraySplit[7]))
 		);
 	}
 
 	// モーション複数化対応
-	keyFrameData.push_back(tmpMotionArray);
-	nowFrame.push_back(0);
-	totalFrame = 0;
-	for(_st i = 0; i < _st(objNum); i++) {
-		if(totalFrame < keyFrameData[keyFrameData.size()-1][i].getTotalFrameNum()) {
-			totalFrame =  keyFrameData[keyFrameData.size()-1][i].getTotalFrameNum();
-		}
+	_m->keyFrameData.push_back(tmpMotionArray);
+	_m->nowFrame.push_back(0);
+	int totalFrame = 0;
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		int curFrame = _m->keyFrameData.back().at(i).getTotalFrameNum();
+		if(totalFrame < curFrame) totalFrame = curFrame;
 	}
-	maxFrame.push_back(totalFrame);
+	_m->maxFrame.push_back(totalFrame);
 
 	return true;
 }
@@ -672,16 +699,17 @@ bool fk_Performer::LoadMotionDataEuler(const string &argFileName)
 // FKM ファイルからモーションデータを読み込む(スケール対応版)
 bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 {
-	ifstream			in_file(argFileName.c_str());
+	ifstream			in_file(argFileName);
+	/*
 	string				lineStr;
 	vector<string>		arraySplit;
 	_st					objIndex = 0;
 	fk_Quaternion		tmpQ;
+	*/
 
 	// モーション複数化対応
-	int	totalFrame = 0;
-	vector<fk_PerformerMotion>	tmpMotionArray;
-	tmpMotionArray.resize(_st(objNum));
+	//int	totalFrame = 0;
+	vector<fk_PerformerMotion> tmpMotionArray(_st(_m->objNum));
 
 	// オープン正否判定
 	if(!in_file.is_open()) {
@@ -690,6 +718,7 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 	}
 
 	// ヘッダチェック
+	string lineStr;
 	if(!getline(in_file, lineStr)) {
 		Error::Put("ファイルが途中で終わっています。");
 		return false;
@@ -707,6 +736,8 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 		}
 	} while(lineStr.find("[PARENT OBJECT KEYFRAME DATA BEGIN]") == string::npos);
 
+	fk_Quaternion tmpQ;
+
 	// 親オブジェクトキーフレーム読み込み
 	tmpMotionArray[0].init();
 	while(true) {
@@ -715,17 +746,24 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 			return false;
 		}
 		if(lineStr.find("[PARENT OBJECT KEYFRAME DATA END]") != string::npos) break;
-		arraySplit = fk_StrSplit(lineStr, ",");
+		vector<string> arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 11) {
 			Error::Put("データの形式が想定と異なります。");
 			return false;
 		}
-		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
+		tmpQ.makeEuler(stof(arraySplit[0]),
+					   stof(arraySplit[1]),
+					   stof(arraySplit[2]));
 		tmpMotionArray[0].pushKeyFrame(
 			tmpQ,
-			fk_Vector(atof(arraySplit[3].c_str()), atof(arraySplit[4].c_str()), atof(arraySplit[5].c_str())),
-			fk_Vector(atof(arraySplit[8].c_str()), atof(arraySplit[9].c_str()), atof(arraySplit[10].c_str())),
-			atoi(arraySplit[6].c_str()), (fk_MotionInterType)atoi(arraySplit[7].c_str())
+			fk_Vector(stof(arraySplit[3]),
+					  stof(arraySplit[4]),
+					  stof(arraySplit[5])),
+			fk_Vector(stof(arraySplit[8]),
+					  stof(arraySplit[9]),
+					  stof(arraySplit[10])),
+			stoi(arraySplit[6]),
+			(fk_MotionInterType)stoi(arraySplit[7])
 		);
 	}
 
@@ -738,6 +776,7 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 	} while(lineStr.find("[CHILD OBJECT KEYFRAME DATA BEGIN]") == string::npos);
 
 	// 子オブジェクトキーフレーム読み込み
+	_st objIndex = 0;
 	while(true) {
 		if(!getline(in_file, lineStr)) {
 			Error::Put("ファイルが途中で終わっています。");
@@ -746,44 +785,43 @@ bool fk_Performer::LoadMotionDataEulerScale(const string &argFileName)
 		if(lineStr.find("[CHILD OBJECT KEYFRAME DATA END]") != string::npos) break;
 		if(lineStr.find("BEGIN") != string::npos) {
 			objIndex++;
-			if(objIndex >= _st(objNum)) break;
+			if(objIndex >= _st(_m->objNum)) break;
 			tmpMotionArray[objIndex].init();
 			continue;
 		} else if(lineStr.find("END") != string::npos) {
 			continue;
 		}
-		arraySplit = fk_StrSplit(lineStr, ",");
+		vector<string> arraySplit = fk_StrSplit(lineStr, ",");
 		if(arraySplit.size() < 11) {
 			Error::Put("データの形式が想定と異なります。");
 			return false;
 		}
-		tmpQ.makeEuler(atof(arraySplit[0].c_str()), atof(arraySplit[1].c_str()), atof(arraySplit[2].c_str()));
+		tmpQ.makeEuler(stof(arraySplit[0]), stof(arraySplit[1]), stof(arraySplit[2]));
 		tmpMotionArray[objIndex].pushKeyFrame(
 			tmpQ,
-			fk_Vector(atof(arraySplit[3].c_str()), atof(arraySplit[4].c_str()), atof(arraySplit[5].c_str())),
-			fk_Vector(atof(arraySplit[8].c_str()), atof(arraySplit[9].c_str()), atof(arraySplit[10].c_str())),
-			atoi(arraySplit[6].c_str()), (fk_MotionInterType)atoi(arraySplit[7].c_str())
+			fk_Vector(stof(arraySplit[3]), stof(arraySplit[4]), stof(arraySplit[5])),
+			fk_Vector(stof(arraySplit[8]), stof(arraySplit[9]), stof(arraySplit[10])),
+			stoi(arraySplit[6]), fk_MotionInterType(stoi(arraySplit[7]))
 		);
 	}
 
 	// モーション複数化対応
-	keyFrameData.push_back(tmpMotionArray);
-	nowFrame.push_back(0);
-	totalFrame = 0;
-	for(_st i = 0; i < _st(objNum); i++) {
-		if(totalFrame < keyFrameData[keyFrameData.size()-1][i].getTotalFrameNum()) {
-			totalFrame =  keyFrameData[keyFrameData.size()-1][i].getTotalFrameNum();
-		}
+	_m->keyFrameData.push_back(tmpMotionArray);
+	_m->nowFrame.push_back(0);
+	int totalFrame = 0;
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		int curFrame = _m->keyFrameData.back().at(i).getTotalFrameNum();
+		if(totalFrame < curFrame) totalFrame = curFrame;
 	}
-	maxFrame.push_back(totalFrame);
+	_m->maxFrame.push_back(totalFrame);
 
 	return true;
 }
 
 void fk_Performer::entryScene(fk_Scene *argScene)
 {
-	for(_st i = 0; i < _st(objNum); i++) {
-		argScene->entryModel(objModel[i]);
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		argScene->entryModel(_m->objModel[i].get());
 	}
 
 	return;
@@ -791,8 +829,8 @@ void fk_Performer::entryScene(fk_Scene *argScene)
 
 void fk_Performer::removeScene(fk_Scene *argScene)
 {
-	for(_st i = 0; i < _st(objNum); i++) {
-		argScene->removeModel(objModel[i]);
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		argScene->removeModel(_m->objModel[i].get());
 	}
 
 	return;
@@ -802,16 +840,17 @@ void fk_Performer::removeScene(fk_Scene *argScene)
 void fk_Performer::setDrawMode(bool argMode)
 {
 	if(!argMode) {
-		draw_mode = fk_Draw::LINE;
-		for(_st i = 1; i < _st(objNum); i++) {
-			if(texTable[_st(matTable[i-1])] != -1) {
-				objModel[i]->setShape(((fk_IFSTexture *)mesh[i-1])->getIFS());
+		_m->draw_mode = fk_Draw::LINE;
+		for(_st i = 1; i < _st(_m->objNum); i++) {
+			if(_m->texTable[_st(_m->matTable[i-1])] != -1) {
+				fk_IFSTexture *ifsTex = dynamic_cast<fk_IFSTexture *>(_m->mesh[i-1].lock().get());
+				_m->objModel[i]->setShape(ifsTex->getIFS());
 			}
-			objModel[i]->setDrawMode(draw_mode);
+			_m->objModel[i]->setDrawMode(_m->draw_mode);
 		}
 	} else {
-		for(_st i = 1; i < _st(objNum); i++) {
-			objModel[i]->setShape(mesh[i-1]);
+		for(_st i = 1; i < _st(_m->objNum); i++) {
+			_m->objModel[i]->setShape(_m->mesh[i-1].lock().get());
 		}
 	}
 
@@ -820,147 +859,150 @@ void fk_Performer::setDrawMode(bool argMode)
 
 fk_Model * fk_Performer::getBaseModel(void)
 {
-	return &absParent;
+	return &_m->absParent;
 }
 
 int fk_Performer::getObjectNum(void)
 {
-	return objNum;
+	return _m->objNum;
 }
 
 fk_Model * fk_Performer::getObjectModel(int argID)
 {
-	if(argID < 0 || argID >= objNum) return nullptr;
-	return objModel[_st(argID)];
+	if(argID < 0 || argID >= _m->objNum) return nullptr;
+	return _m->objModel[_st(argID)].get();
 }
 
 fk_Model * fk_Performer::getJointModel(int argID)
 {
-	if(argID < 0 || argID >= objNum) return nullptr;
-	return jointModel[_st(argID)];
+	if(argID < 0 || argID >= _m->objNum) return nullptr;
+	return _m->jointModel[_st(argID)].get();
 }
 
 void fk_Performer::jointToPoser(void)
 {
-	if(parentConnect) return;
-	if(objNum == 0) return;
+	if(_m->parentConnect) return;
+	if(_m->objNum == 0) return;
 
-	for(auto ite = parentTable.begin(); ite != parentTable.end(); ite++) {
-		jointModel[_st(ite->first)]->setParent(jointModel[_st(ite->second)], true);
+	for(auto ite = _m->parentTable.begin(); ite != _m->parentTable.end(); ite++) {
+		fk_Model *parent = _m->jointModel[_st(ite->second)].get();
+		_m->jointModel[_st(ite->first)]->setParent(parent, true);
 	}
 
-	for(_st i = 0; i < _st(objNum); i++) {
-		objModel[i]->setParent(jointModel[i], true);
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		_m->objModel[i]->setParent(_m->jointModel[i].get(), true);
 	}
 
-	jointModel[0]->setParent(&absParent, false);
+	_m->jointModel[0]->setParent(&_m->absParent, false);
 
-	parentConnect = true;
+	_m->parentConnect = true;
 
 	return;
 }
 
 int fk_Performer::getNowFrame(int argMotionID)
 {
-	if(argMotionID < 0 || argMotionID >= int(keyFrameData.size())) return -1;
-	return nowFrame[_st(argMotionID)];
+	if(argMotionID < 0 || argMotionID >= int(_m->keyFrameData.size())) return -1;
+	return _m->nowFrame[_st(argMotionID)];
 }
 
 int fk_Performer::getTotalFrame(int argMotionID)
 {
-	if(argMotionID < 0 || argMotionID >= int(keyFrameData.size())) return -1;
-	return maxFrame[_st(argMotionID)];
+	if(argMotionID < 0 || argMotionID >= int(_m->keyFrameData.size())) return -1;
+	return _m->maxFrame[_st(argMotionID)];
 }
 
 void fk_Performer::setNowFrame(int argMotionID, int argFrame)
 {
-	if(argMotionID < 0 || argMotionID >= int(keyFrameData.size())) return;
-	if(argFrame < 0 || maxFrame[_st(argMotionID)] < argFrame) return;
-	nowFrame[_st(argMotionID)] = argFrame;
+	if(argMotionID < 0 || argMotionID >= int(_m->keyFrameData.size())) return;
+	if(argFrame < 0 || _m->maxFrame[_st(argMotionID)] < argFrame) return;
+	_m->nowFrame[_st(argMotionID)] = argFrame;
 }
 
 bool fk_Performer::isMotionFinished(int argMotionID)
 {
-	if(argMotionID < 0 || argMotionID >= int(keyFrameData.size())) return false;
-	if(nowFrame[_st(argMotionID)] >= maxFrame[_st(argMotionID)]) return true;
+	if(argMotionID < 0 || argMotionID >= int(_m->keyFrameData.size())) return false;
+	if(_m->nowFrame[_st(argMotionID)] >= _m->maxFrame[_st(argMotionID)]) return true;
 	else return false;
 }
 
 int fk_Performer::getLoopCount(void)
 {
-	return loopCnt;
+	return _m->loopCnt;
 }
 
 bool fk_Performer::playMotion(int argMotionID)
 {
-	_st		motionID = _st(argMotionID);
+	_st motionID = _st(argMotionID);
 
-	if(argMotionID < 0 || motionID >= keyFrameData.size()) return false;
+	if(argMotionID < 0 || motionID >= _m->keyFrameData.size()) return false;
 
 	// 長さのないモーションを再生しようとした場合
-	if(maxFrame[motionID] == 0) return false;
+	if(_m->maxFrame[motionID] == 0) return false;
 
 	// 前フレと違うモーションを再生する場合は最初から
-	if(prevPlayMotionID != argMotionID) {
-		nowFrame[_st(prevPlayMotionID)] = 0;
-		nowFrame[motionID] = 0;
-		loopCnt = 0;
+	if(_m->prevPlayMotionID != argMotionID) {
+		_m->nowFrame[_st(_m->prevPlayMotionID)] = 0;
+		_m->nowFrame[motionID] = 0;
+		_m->loopCnt = 0;
 	}
 
 	// ループ時の処理
-	if(nowFrame[motionID] > maxFrame[motionID]) {
-		nowFrame[motionID] = 0;
-		loopCnt++;
+	if(_m->nowFrame[motionID] > _m->maxFrame[motionID]) {
+		_m->nowFrame[motionID] = 0;
+		_m->loopCnt++;
 	}
 	// 再生
-	nowFrame[motionID]++;
+	_m->nowFrame[motionID]++;
 
-	for(_st i = 0; i < _st(objNum); i++) {
-		int ret = keyFrameData[motionID][i].setFrameState(nowFrame[motionID], jointModel[i]);
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		int ret = _m->keyFrameData[motionID][i].setFrameState(_m->nowFrame[motionID],
+															  _m->jointModel[i].get());
 		if(i == 0) continue;
 		if(ret == 1) {
-			if(!visibleInfo[i]) {
-				if(draw_mode == fk_Draw::LINE) {
-					objModel[i]->setDrawMode(draw_mode);
+			if(!_m->visibleInfo[i]) {
+				if(_m->draw_mode == fk_Draw::LINE) {
+					_m->objModel[i]->setDrawMode(_m->draw_mode);
 				} else {
-					objModel[i]->setShape(mesh[i-1]);
+					_m->objModel[i]->setShape(_m->mesh[i-1].lock().get());
 				}
 			}
-			visibleInfo[i] = true;
+			_m->visibleInfo[i] = true;
 		} else if(ret == -1) {
-			if(visibleInfo[i]) {
-				objModel[i]->setDrawMode(fk_Draw::NONE);
+			if(_m->visibleInfo[i]) {
+				_m->objModel[i]->setDrawMode(fk_Draw::NONE);
 			}
-			visibleInfo[i] = false;
+			_m->visibleInfo[i] = false;
 		}
 	}
-	prevPlayMotionID = argMotionID;
+	_m->prevPlayMotionID = argMotionID;
 
 	return true;
 }
 
 void fk_Performer::stillMotion(int argMotionID, int argFrame)
 {
-	if(argMotionID < 0 || argMotionID >= int(keyFrameData.size())) return;
-	if(argFrame < 0 || maxFrame[_st(argMotionID)] < argFrame) return;
+	if(argMotionID < 0 || argMotionID >= int(_m->keyFrameData.size())) return;
+	if(argFrame < 0 || _m->maxFrame[_st(argMotionID)] < argFrame) return;
 
-	for(_st i = 0; i < _st(objNum); i++) {
-		int ret = keyFrameData[_st(argMotionID)][i].setFrameState(argFrame, jointModel[i]);
+	for(_st i = 0; i < _st(_m->objNum); i++) {
+		int ret = _m->keyFrameData[_st(argMotionID)][i].setFrameState(argFrame,
+																	  _m->jointModel[i].get());
 		if(i == 0) continue;
 		if(ret == 1) {
-			if(!visibleInfo[i]) {
-				if(draw_mode == fk_Draw::LINE) {
-					objModel[i]->setDrawMode(draw_mode);
+			if(!_m->visibleInfo[i]) {
+				if(_m->draw_mode == fk_Draw::LINE) {
+					_m->objModel[i]->setDrawMode(_m->draw_mode);
 				} else {
-					objModel[i]->setShape(mesh[i-1]);
+					_m->objModel[i]->setShape(_m->mesh[i-1].lock().get());
 				}
 			}
-			visibleInfo[i] = true;
+			_m->visibleInfo[i] = true;
 		} else if(ret == -1) {
-			if(visibleInfo[i]) {
-				objModel[i]->setDrawMode(fk_Draw::NONE);
+			if(_m->visibleInfo[i]) {
+				_m->objModel[i]->setDrawMode(fk_Draw::NONE);
 			}
-			visibleInfo[i] = false;
+			_m->visibleInfo[i] = false;
 		}
 	}
 
@@ -971,24 +1013,25 @@ void fk_Performer::stillMotion(int argMotionID, int argFrame)
 void fk_Performer::setAsCamera(fk_Scene *argScn)
 {
 	init();
-	objNum = 2;
-	visibleInfo.resize(_st(objNum));
+	_m->objNum = 2;
+	_m->visibleInfo.resize(_st(_m->objNum));
 
-	jointModel.push_back(new fk_Model);
-	objModel.push_back(new fk_Model);
-	objName.push_back("<target>");
+	_m->jointModel.push_back(make_unique<fk_Model>());
+	_m->objModel.push_back(make_unique<fk_Model>());
+	_m->objName.push_back("<target>");
 
-	jointModel.push_back(new fk_Model);
-	objModel.push_back(new fk_Model);
-	objName.push_back("<camera>");
+	_m->jointModel.push_back(make_unique<fk_Model>());
+	_m->objModel.push_back(make_unique<fk_Model>());
+	_m->objName.push_back("<camera>");
 
-	mesh.push_back(nullptr);
+	shared_ptr<fk_Shape> ptr(nullptr);
+	_m->mesh.push_back(ptr);
 
-	parentTable[1] = 0;
+	_m->parentTable[1] = 0;
 
 	jointToPoser();
 
-	argScn->entryCamera(jointModel[1]);
+	argScn->entryCamera(_m->jointModel[1].get());
 
 	return;
 }
@@ -997,15 +1040,15 @@ void fk_Performer::SetFinalizeMode(void)
 {
 	_st i;
 
-	for(i = 0; i < jointModel.size(); i++) {
-		jointModel[i]->SetTreeDelMode(false);
+	for(i = 0; i < _m->jointModel.size(); i++) {
+		_m->jointModel[i]->SetTreeDelMode(false);
 	}
 
-	for(i = 0; i < objModel.size(); i++) {
-		objModel[i]->SetTreeDelMode(false);
+	for(i = 0; i < _m->objModel.size(); i++) {
+		_m->objModel[i]->SetTreeDelMode(false);
 	}
 
-	absParent.SetTreeDelMode(false);
+	_m->absParent.SetTreeDelMode(false);
 }
 
 /****************************************************************************

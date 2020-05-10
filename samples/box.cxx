@@ -6,6 +6,9 @@ using namespace std;
 
 int main(int, char *[])
 {
+	// マテリアルの初期化
+	fk_Material::initDefault();
+
 	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
 	unique_ptr<fk_Model> camera(new fk_Model());
 	unique_ptr<fk_Model> blockModel(new fk_Model());
@@ -14,12 +17,8 @@ int main(int, char *[])
 	vector< unique_ptr<fk_Line> > line(2);
 	unique_ptr<fk_Block> block(new fk_Block(50.0, 70.0, 40.0));
 
-
 	for(auto &m : lineModel) m.reset(new fk_Model());
 	for(auto &l : line) l.reset(new fk_Line());
-
-// マテリアルの初期化
-	fk_Material::initDefault();
 
 	// ウィンドウ設定
 	window->setSize(800, 800);

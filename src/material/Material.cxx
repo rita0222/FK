@@ -38,7 +38,7 @@ fk_Material::~fk_Material()
 void fk_Material::init(void)
 {
 	setAmbient(0.3, 0.3, 0.3);
-	setDiffuse(0.0, 0.0, 0.0);
+	setDiffuse(0.1, 0.1, 0.1);
 	setSpecular(1.0, 1.0, 1.0);
 	setShininess(30.0);
 }

@@ -36,6 +36,21 @@ namespace FK {
 	 */
 
 	class fk_GuideObject {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Line grid;
+			fk_Model gridModel[3];
+			fk_Line axis[3];
+			fk_Model axisModel[3];
+			int	num;
+			double scale;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		fk_GuideObject(void);
@@ -51,7 +66,7 @@ namespace FK {
 		 *
 		 *	\sa setGridWidth()
 		 */
-		void	setAxisWidth(double width);
+		void setAxisWidth(double width);
 
 		//! グリッド構成ライン幅設定関数
 		/*!
@@ -62,7 +77,7 @@ namespace FK {
 		 *
 		 *	\sa setAxisWidth()
 		 */
-		void	setGridWidth(double width);
+		void setGridWidth(double width);
 
 		//! グリッド間隔設定関数
 		/*!
@@ -73,7 +88,7 @@ namespace FK {
 		 *
 		 *	\sa setNum()
 		 */
-		void	setScale(double scale);
+		void setScale(double scale);
 
 		//! グリッド分割数設定関数
 		/*!
@@ -88,7 +103,7 @@ namespace FK {
 		 *
 		 *	\sa setScale()
 		 */
-		void	setNum(int num);
+		void setNum(int num);
 
 		//! 座標系ガイド適用モデル設定関数
 		/*!
@@ -99,7 +114,7 @@ namespace FK {
 		 *
 		 *	\sa entryScene()
 		 */
-		void	setParent(fk_Model *model);
+		void setParent(fk_Model *model);
 
 		//! シーン登録関数
 		/*!
@@ -118,12 +133,12 @@ namespace FK {
 		 *
 		 *	\sa removeScene()
 		 */
-		void	entryScene(fk_Scene *scene,
-						   fk_Guide mode =
-						   fk_Guide::AXIS_X |
-						   fk_Guide::AXIS_Y |
-						   fk_Guide::AXIS_Z |
-						   fk_Guide::GRID_XZ);
+		void entryScene(fk_Scene *scene,
+						fk_Guide mode =
+						fk_Guide::AXIS_X |
+						fk_Guide::AXIS_Y |
+						fk_Guide::AXIS_Z |
+						fk_Guide::GRID_XZ);
 
 		//! シーン登録解除関数
 		/*!
@@ -135,20 +150,15 @@ namespace FK {
 		 *
 		 *	\sa entryScene()
 		 */
-		void	removeScene(fk_Scene *scene, fk_Guide mode = fk_Guide::NO_GUIDE);
+		void removeScene(fk_Scene *scene, fk_Guide mode = fk_Guide::NO_GUIDE);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void	SetFinalizeMode(void);
+		void SetFinalizeMode(void);
 #endif
 
 	private:
-		fk_Line			grid;
-		fk_Model		gridModel[3];
-		fk_Line			axis[3];
-		fk_Model		axisModel[3];
 
-		int	num;
-		double scale;
+		std::unique_ptr<Member> _m;
 	};
 }
 #endif //!__FK_GUIDE_OBJECT_HEADER__

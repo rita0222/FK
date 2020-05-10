@@ -2,6 +2,7 @@
 #include <FK/Scene.h>
 
 using namespace FK;
+using namespace std;
 
 namespace FK {
 	
@@ -21,7 +22,7 @@ namespace FK {
 	}
 }
 
-fk_GuideObject::fk_GuideObject(void)
+fk_GuideObject::Member::Member(void)
 {
 	axis[0].pushLine(fk_Vector(0.0, 0.0, 0.0), fk_Vector(1.0, 0.0, 0.0));
 	axis[1].pushLine(fk_Vector(0.0, 0.0, 0.0), fk_Vector(0.0, 1.0, 0.0));
@@ -36,6 +37,12 @@ fk_GuideObject::fk_GuideObject(void)
 	gridModel[1].glAngle(0.0, fk_Math::PI*0.5, 0.0);
 	gridModel[2].glAngle(0.0, 0.0, fk_Math::PI*0.5);
 
+	return;
+}
+
+
+fk_GuideObject::fk_GuideObject(void) : _m(make_unique<Member>())
+{
 	setAxisWidth(4.0);
 	setGridWidth(1.0);
 	setScale(5.0);
@@ -46,12 +53,13 @@ fk_GuideObject::fk_GuideObject(void)
 
 fk_GuideObject::~fk_GuideObject(void)
 {
+	return;
 }
 
 void fk_GuideObject::setAxisWidth(double argWidth)
 {
 	for(int i = 0; i < 3; i++) {
-		axisModel[i].setWidth(argWidth);
+		_m->axisModel[i].setWidth(argWidth);
 	}
 
 	return;
@@ -60,7 +68,7 @@ void fk_GuideObject::setAxisWidth(double argWidth)
 void fk_GuideObject::setGridWidth(double argWidth)
 {
 	for(int i = 0; i < 3; i++) {
-		gridModel[i].setWidth(argWidth);
+		_m->gridModel[i].setWidth(argWidth);
 	}
 
 	return;
@@ -70,11 +78,11 @@ void fk_GuideObject::setScale(double argScale)
 {
 	if(argScale < fk_Math::EPS) return;
 
-	scale = argScale;
+	_m->scale = argScale;
 
 	for(int i = 0; i < 3; i++) {
-		if(num >= 2) axisModel[i].setScale(scale*(double)(num/2));
-		gridModel[i].setScale(scale);
+		if(_m->num >= 2) _m->axisModel[i].setScale(_m->scale*(double)(_m->num/2));
+		_m->gridModel[i].setScale(_m->scale);
 	}
 
 	return;
@@ -84,17 +92,17 @@ void fk_GuideObject::setNum(int argNum)
 {
 	if(argNum <= 0) return;
 
-	num = argNum;
+	_m->num = argNum;
 
-	grid.allClear();
-	double hn = double(num / 2);
-	for(int i = 0; i <= num; i++) {
-		grid.pushLine(fk_Vector(double(i) - hn, 0.0, hn), fk_Vector(double(i) - hn, 0.0, -hn));
-		grid.pushLine(fk_Vector(-hn, 0.0, hn - double(i)), fk_Vector(hn, 0.0, hn - double(i)));
+	_m->grid.allClear();
+	double hn = double(_m->num / 2);
+	for(int i = 0; i <= _m->num; i++) {
+		_m->grid.pushLine(fk_Vector(double(i) - hn, 0.0, hn), fk_Vector(double(i) - hn, 0.0, -hn));
+		_m->grid.pushLine(fk_Vector(-hn, 0.0, hn - double(i)), fk_Vector(hn, 0.0, hn - double(i)));
 	}
 
 	for(int i = 0; i < 3; i++) {
-		axisModel[i].setScale(scale*hn);
+		_m->axisModel[i].setScale(_m->scale*hn);
 	}
 
 	return;
@@ -103,64 +111,64 @@ void fk_GuideObject::setNum(int argNum)
 void fk_GuideObject::setParent(fk_Model *argModel)
 {
 	for(int i = 0; i < 3; i++) {
-		axisModel[i].setParent(argModel, false);
-		gridModel[i].setParent(argModel, false);
+		_m->axisModel[i].setParent(argModel, false);
+		_m->gridModel[i].setParent(argModel, false);
 	}
 
 	return;
 }
 
-void fk_GuideObject::entryScene(fk_Scene *scene, fk_Guide mode)
+void fk_GuideObject::entryScene(fk_Scene *argScene, fk_Guide argMode)
 {
-	if((mode & fk_Guide::AXIS_X) != fk_Guide::NO_GUIDE) {
-		scene->entryModel(&axisModel[0]);
+	if((argMode & fk_Guide::AXIS_X) != fk_Guide::NO_GUIDE) {
+		argScene->entryModel(&_m->axisModel[0]);
 	}
-	if((mode & fk_Guide::AXIS_Y) != fk_Guide::NO_GUIDE) {
-		scene->entryModel(&axisModel[1]);
+	if((argMode & fk_Guide::AXIS_Y) != fk_Guide::NO_GUIDE) {
+		argScene->entryModel(&_m->axisModel[1]);
 	}
-	if((mode & fk_Guide::AXIS_Z) != fk_Guide::NO_GUIDE) {
-		scene->entryModel(&axisModel[2]);
+	if((argMode & fk_Guide::AXIS_Z) != fk_Guide::NO_GUIDE) {
+		argScene->entryModel(&_m->axisModel[2]);
 	}
-	if((mode & fk_Guide::GRID_XZ) != fk_Guide::NO_GUIDE) {
-		scene->entryModel(&gridModel[0]);
+	if((argMode & fk_Guide::GRID_XZ) != fk_Guide::NO_GUIDE) {
+		argScene->entryModel(&_m->gridModel[0]);
 	}
-	if((mode & fk_Guide::GRID_XY) != fk_Guide::NO_GUIDE) {
-		scene->entryModel(&gridModel[1]);
+	if((argMode & fk_Guide::GRID_XY) != fk_Guide::NO_GUIDE) {
+		argScene->entryModel(&_m->gridModel[1]);
 	}
-	if((mode & fk_Guide::GRID_YZ) != fk_Guide::NO_GUIDE) {
-		scene->entryModel(&gridModel[2]);
+	if((argMode & fk_Guide::GRID_YZ) != fk_Guide::NO_GUIDE) {
+		argScene->entryModel(&_m->gridModel[2]);
 	}
 
 	return;
 }
 
-void fk_GuideObject::removeScene(fk_Scene *scene, fk_Guide mode)
+void fk_GuideObject::removeScene(fk_Scene *argScene, fk_Guide argMode)
 {
-	if((mode & fk_Guide::AXIS_X) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
-		scene->removeModel(&axisModel[0]);
+	if((argMode & fk_Guide::AXIS_X) != fk_Guide::NO_GUIDE || argMode == fk_Guide::NO_GUIDE) {
+		argScene->removeModel(&_m->axisModel[0]);
 	}
-	if((mode & fk_Guide::AXIS_Y) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
-		scene->removeModel(&axisModel[1]);
+	if((argMode & fk_Guide::AXIS_Y) != fk_Guide::NO_GUIDE || argMode == fk_Guide::NO_GUIDE) {
+		argScene->removeModel(&_m->axisModel[1]);
 	}
-	if((mode & fk_Guide::AXIS_Z) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
-		scene->removeModel(&axisModel[2]);
+	if((argMode & fk_Guide::AXIS_Z) != fk_Guide::NO_GUIDE || argMode == fk_Guide::NO_GUIDE) {
+		argScene->removeModel(&_m->axisModel[2]);
 	}
-	if((mode & fk_Guide::GRID_XZ) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
-		scene->removeModel(&gridModel[0]);
+	if((argMode & fk_Guide::GRID_XZ) != fk_Guide::NO_GUIDE || argMode == fk_Guide::NO_GUIDE) {
+		argScene->removeModel(&_m->gridModel[0]);
 	}
-	if((mode & fk_Guide::GRID_XY) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
-		scene->removeModel(&gridModel[1]);
+	if((argMode & fk_Guide::GRID_XY) != fk_Guide::NO_GUIDE || argMode == fk_Guide::NO_GUIDE) {
+		argScene->removeModel(&_m->gridModel[1]);
 	}
-	if((mode & fk_Guide::GRID_YZ) != fk_Guide::NO_GUIDE || mode == fk_Guide::NO_GUIDE) {
-		scene->removeModel(&gridModel[2]);
+	if((argMode & fk_Guide::GRID_YZ) != fk_Guide::NO_GUIDE || argMode == fk_Guide::NO_GUIDE) {
+		argScene->removeModel(&_m->gridModel[2]);
 	}
 }
 
 void fk_GuideObject::SetFinalizeMode(void)
 {
 	for(int i = 0; i < 3; i++) {
-		axisModel[i].SetTreeDelMode(false);
-		gridModel[i].SetTreeDelMode(false);
+		_m->axisModel[i].SetTreeDelMode(false);
+		_m->gridModel[i].SetTreeDelMode(false);
 	}
 }
 

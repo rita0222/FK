@@ -57,12 +57,11 @@ namespace FK {
 		int setFrameState(int, fk_Model *);	
 
 	private:
-		std::vector<fk_Quaternion>		qArray;
-		std::vector<int>				frameArray;
-		std::vector<fk_MotionInterType>	interTypeArray;
-
-		std::vector<fk_Vector>			basePosArray;
-		std::vector<fk_Vector>			scaleArray;
+		std::vector<fk_Quaternion> qArray;
+		std::vector<int> frameArray;
+		std::vector<fk_MotionInterType> interTypeArray;
+		std::vector<fk_Vector> basePosArray;
+		std::vector<fk_Vector> scaleArray;
 
 		fk_Vector		getInterVec(const fk_Vector &, const fk_Vector &,
 									double, fk_MotionInterType = fk_MotionInterType::LINEAR);

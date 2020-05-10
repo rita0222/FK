@@ -118,6 +118,30 @@ namespace FK {
 
 	class fk_Window : public Fl_Gl_Window {
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Image snapBuffer;
+			bool winOpenFlag;
+			int GLWinXPosition;
+			int GLWinYPosition;
+			int GLWinWSize;
+			int GLWinHSize;
+			char lastKey;
+			std::map<char, bool> keyStatus;
+			std::map<fk_Key, bool> specialKeyStatus;
+			std::map<fk_MouseButton, bool> mouseStatus;
+			double frameTime, prevTime;
+			double frameInterval;
+			int skipCount;
+			fk_FrameController fps_admin;
+			int fps;
+			bool stereoMode;
+
+			Member(int, int, int, int);
+		};
+#endif
+
 	public:
 
 		//! コンストラクタ
@@ -745,38 +769,16 @@ namespace FK {
 #endif
 		
 	private:
+		std::unique_ptr<Member> _m;
 
-		fk_Image snapBuffer;
+		static std::unique_ptr<Fl_Window> _s_putWin;
+		static std::unique_ptr<Fl_Multi_Browser> _s_browser;
+		static fk_PutStrMode _s_putStrMode;
+		static std::unique_ptr<std::ofstream> _s_putStrOFS;
+		static int _s_winNum;
 
-		bool winOpenFlag;
-		int GLWinWSize;
-		int GLWinHSize;
-		int GLWinXPosition;
-		int GLWinYPosition;
-		char lastKey;
-
-		std::map<char, bool> keyStatus;
-		std::map<fk_Key, bool> specialKeyStatus;
-		std::map<fk_MouseButton, bool> mouseStatus;
-	
-		double frameTime, prevTime;
-		double frameInterval;
-		int skipCount;
-
-		fk_FrameController fps_admin;
-		int fps;
-
-		bool stereoMode;
-
-
-		static Fl_Window *putWin;
-		static Fl_Multi_Browser *browser;
-		static fk_PutStrMode putStrMode;
-		static std::ofstream putStrOFS;
-		static int winNum;
-
-		static Fl_Window *error_win;
-		static Fl_Multi_Browser *err_browser;
+		static std::unique_ptr<Fl_Window> _s_error_win;
+		static std::unique_ptr<Fl_Multi_Browser> _s_err_browser;
 
 		bool IsInsideWindow(void);
 		Fl_Group * GetInhParentWindow(void);
@@ -794,7 +796,7 @@ namespace FK {
 	protected:
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		fk_GraphicsEngine *engine;
+		std::unique_ptr<fk_GraphicsEngine> _m_engine;
 
 		void drawScene(void);
 		void drawSceneLeft(void);
