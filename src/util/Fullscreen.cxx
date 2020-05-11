@@ -15,8 +15,21 @@ static LPDIRECT3D9			g_lpD3D = nullptr;
 static LPDIRECT3DDEVICE9	g_lpD3DDEV = nullptr;
 */
 
+class _WindowState {
+public:
+	HWND hWnd;
+	WINDOWPLACEMENT WindowPlacement;
+
+	_WindowState(void);
+};
+
+_WindowState::_WindowState(void)
+{
+	return;
+}
+
 // グローバル変数
-static struct fk_FullscreenController::WindowState WindowState[fk_FullscreenController::MAX_WINDOWNUMBER];
+static _WindowState WindowState[fk_FullscreenController::MAX_WINDOWNUMBER];
 static int iWindowNumber;					// 画面上のウインドウ数
 
 // ウインドウ位置保存のコールバック関数
@@ -148,18 +161,18 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 			}
 			if(just == -1) return FALSE;
 			EnumDisplaySettings(nullptr, just, &DeviceMode);
-			fscW = DeviceMode.dmPelsWidth;
-			fscH = DeviceMode.dmPelsHeight;
+			_m->fscW = DeviceMode.dmPelsWidth;
+			_m->fscH = DeviceMode.dmPelsHeight;
 			DeviceMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
 
 			// フルスクリーンに変更
 			if(ChangeDisplaySettings(&DeviceMode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
-				fscW = fscH = 0;
+				_m->fscW = _m->fscH = 0;
 				return FALSE;
 			}
 		} else {
-			fscW = nWidth;
-			fscH = nHeight;
+			_m->fscW = nWidth;
+			_m->fscH = nHeight;
 		}
 		// 常に最前面設定用
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0,
@@ -172,7 +185,7 @@ BOOL fk_FullscreenController::ChangeScreen(HWND hWnd, int iFlag, int nWidth, int
 		// 常に最前面設定を解除
 		SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
 			SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
-		fscW = fscH = 0;
+		_m->fscW = _m->fscH = 0;
 	}
 
 	return TRUE;
@@ -183,7 +196,7 @@ void fk_FullscreenController::init(Fl_Window *p_main_win, fk_Window *p_draw_win)
 {
 	// ポインタ受け取り
 	_m->pFlWnd = p_main_win;		// Fl_Window操作用にポインタを取得
-	_m->hFlWnd = fl_xid(pFlWnd);	// 解像度変更用にウィンドウハンドルを取得
+	_m->hFlWnd = fl_xid(_m->pFlWnd);	// 解像度変更用にウィンドウハンドルを取得
 	_m->pFkWnd = p_draw_win;
 	_m->mode = false;
 
@@ -273,7 +286,7 @@ bool fk_FullscreenController::changeToFullscreen()
 		_m->pFlWnd->fullscreen();	// Fl_Windowのフルスクリーン(ラベルバー消去)
 		if(ChangeScreen(_m->hFlWnd, int(fk_FullscreenMode::SCMODE_FULLSCREEN),
 						_m->nWndW, _m->nWndH) == TRUE) {
-			_m->pFlWnd->resize(0, 0, fscW, fscH);	// リサイズ
+			_m->pFlWnd->resize(0, 0, _m->fscW, _m->fscH);	// リサイズ
 			_m->pFlWnd->color(FL_BLACK);
 			_m->pFkWnd->resizeWindow((_m->fscW - _m->nWndW)/2,
 									 (_m->fscH - _m->nWndH)/2,
@@ -296,13 +309,13 @@ bool fk_FullscreenController::changeToFullscreen()
 // ウィンドウ化
 void fk_FullscreenController::changeToWindow()
 {
-	if(mode == true) {
-		pFlWnd->fullscreen_off(nWndX, nWndY, nWndW, nWndH);
-		pFkWnd->resizeWindow(0, 0, nWndW, nWndH);
-		ChangeScreen(hFlWnd, int(fk_FullscreenMode::SCMODE_WINDOW), nWndW, nWndH);
+	if(_m->mode == true) {
+		_m->pFlWnd->fullscreen_off(_m->nWndX, _m->nWndY, _m->nWndW, _m->nWndH);
+		_m->pFkWnd->resizeWindow(0, 0, _m->nWndW, _m->nWndH);
+		ChangeScreen(_m->hFlWnd, int(fk_FullscreenMode::SCMODE_WINDOW), _m->nWndW, _m->nWndH);
 		LoadWindowPosition();
 
-		mode = false;
+		_m->mode = false;
 	}
 
 	return;

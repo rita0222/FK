@@ -27,10 +27,6 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
-		struct WindowState {
-			HWND hWnd;
-			WINDOWPLACEMENT WindowPlacement;
-		};
 
 		class Member {
 		public:
@@ -44,6 +40,11 @@ namespace FK {
 
 			Member(void);
 		};
+
+        enum class fk_FullscreenMode {
+            SCMODE_FULLSCREEN,				// フルスクリーンモード
+            SCMODE_WINDOW					// ウインドウモード
+        };
 #endif
 #endif
 

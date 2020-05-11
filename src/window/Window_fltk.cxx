@@ -13,12 +13,12 @@ using namespace std;
 using namespace FK;
 
 unique_ptr<Fl_Window> fk_Window::_s_putWin;
-unique_ptr<Fl_Multi_Browser> fk_Window::_s_browser;
+Fl_Multi_Browser * fk_Window::_s_browser;
 fk_PutStrMode fk_Window::_s_putStrMode = fk_PutStrMode::BROWSER;
 unique_ptr<ofstream> fk_Window::_s_putStrOFS;
 int fk_Window::_s_winNum = 0;
 unique_ptr<Fl_Window> fk_Window::_s_error_win;
-unique_ptr<Fl_Multi_Browser> fk_Window::_s_err_browser;
+Fl_Multi_Browser * fk_Window::_s_err_browser;
 
 fk_Window::Member::Member(int argX, int argY, int argW, int argH)
 	: winOpenFlag(false),
@@ -58,7 +58,7 @@ fk_Window::~fk_Window()
 	_s_winNum--;
 	if(_s_winNum == 0) {
 		_s_putWin.reset();
-		_s_browser.reset();
+		_s_browser = nullptr;
 	}
 	return;
 }
@@ -202,7 +202,7 @@ bool fk_Window::snapImage(string argFName, fk_ImageType argType, fk_SnapProcMode
 	redraw();
 #ifdef WIN32
 	if(argMode == fk_SnapProcMode::WIN32_GDI) {
-		if(SnapImageGDI(&snapBuffer) == false) return false;
+		if(SnapImageGDI(&_m->snapBuffer) == false) return false;
 	}
 #else
 	argMode = fk_SnapProcMode::FRONT;
@@ -353,9 +353,9 @@ void fk_Window::PutBrowser(const string &argStr)
 
 	if(_s_putWin == nullptr) {
 		_s_putWin = make_unique<Fl_Window>(320, 520, "FK PutStr Window");
-		_s_browser = make_unique<Fl_Multi_Browser>(10, 10, 300, 500);
+		_s_browser = new Fl_Multi_Browser(10, 10, 300, 500);
 		_s_putWin->size_range(320, 520);
-		_s_putWin->resizable(_s_browser.get());
+		_s_putWin->resizable(_s_browser);
 		_s_putWin->end();
 		_s_putWin->show();
 	}
@@ -401,9 +401,9 @@ void fk_Window::ErrorInit(void)
 
 			if(_s_error_win == nullptr) {
 				_s_error_win = make_unique<Fl_Window>(320, 520, "FK Error Window");
-				_s_browser = make_unique<Fl_Multi_Browser>(10, 10, 300, 500);
+				_s_browser = new Fl_Multi_Browser(10, 10, 300, 500);
 				_s_error_win->size_range(320, 520);
-				_s_error_win->resizable(_s_browser.get());
+				_s_error_win->resizable(_s_browser);
 				_s_error_win->end();
 				_s_error_win->show();
 			}

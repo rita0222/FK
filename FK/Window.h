@@ -772,13 +772,13 @@ namespace FK {
 		std::unique_ptr<Member> _m;
 
 		static std::unique_ptr<Fl_Window> _s_putWin;
-		static std::unique_ptr<Fl_Multi_Browser> _s_browser;
+		static Fl_Multi_Browser * _s_browser;
 		static fk_PutStrMode _s_putStrMode;
 		static std::unique_ptr<std::ofstream> _s_putStrOFS;
 		static int _s_winNum;
 
 		static std::unique_ptr<Fl_Window> _s_error_win;
-		static std::unique_ptr<Fl_Multi_Browser> _s_err_browser;
+		static Fl_Multi_Browser * _s_err_browser;
 
 		bool IsInsideWindow(void);
 		Fl_Group * GetInhParentWindow(void);

@@ -66,7 +66,8 @@ const static fk_Switch stArray[3] = {
 };
 
 fk_AppWindow::Member::Member(void) :
-	ref_child(nullptr), ref_scene(&scene), ref_camera(&camera), tbFlag(false)
+	ref_child(nullptr), ref_scene(&scene), ref_camera(&camera),
+	fps(0), tbFlag(false), childMode(false)
 {
 	light.setShape(&lightShape);
 	light.setMaterial(WhiteLight);
