@@ -79,6 +79,51 @@ namespace FK {
 	 */
 
 	class fk_ShapeViewer : public fk_BaseObject {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Dimension fkWinSize;
+			fk_Dimension allWinSize;
+			fk_Dimension groupPos;
+			fk_Dimension mousePos;
+
+			int mouseX, mouseY;
+
+			// Window
+			std::unique_ptr<Fl_Window> mainWindow;
+			std::unique_ptr<fk_Window> viewWin;
+			int fps;
+			fk_FrameController fps_admin;
+
+			// GUI
+			std::unique_ptr<fk_GUI_> gui;
+
+			// flag
+			bool changeFlag;
+			bool lightFlag;
+			bool materialFlag;
+			bool moveFlag;
+			bool oldMoveFlag;
+			fk_Draw drawMode;
+			bool axisFlag;
+
+			// FK Object
+			fk_Model parentModel;
+			std::map<int, int> IDMap;
+			fk_Model lightModel[2], camera, axisModel;
+			fk_Solid localSolid;
+			fk_Line axisLine;
+			fk_Light light;
+			fk_Scene scene;
+			std::vector<std::unique_ptr<fk_Model>> modelArray;
+			std::vector<std::unique_ptr<fk_Material>> polyMaterial;
+			std::vector<std::unique_ptr<fk_Color>> edgeColor;
+			std::vector<std::unique_ptr<fk_Color>> vertexColor;
+
+			Member(void);
+		};
+#endif
+
 	public:
 		//! コンストラクタ
 		/*!
@@ -941,44 +986,7 @@ namespace FK {
 #endif
 
 	private:
-
-		fk_Dimension		fkWinSize;
-		fk_Dimension		allWinSize;
-		fk_Dimension		groupPos;
-		fk_Dimension		mousePos;
-
-		int					mouseX, mouseY;
-
-		// Window
-		Fl_Window			*mainWindow;
-		fk_Window			*viewWin;
-		int					fps;
-		fk_FrameController	fps_admin;
-
-		// GUI
-		fk_GUI_				*gui;
-
-		// flag
-		bool				changeFlag;
-		bool				lightFlag;
-		bool				materialFlag;
-		bool				moveFlag;
-		bool				oldMoveFlag;
-		fk_Draw				drawMode;
-		bool				axisFlag;
-
-		// FK Object
-		fk_Model						parentModel;
-		std::vector<fk_Model *>			modelArray;
-		std::map<int, int>				IDMap;
-		fk_Model						lightModel[2], camera, axisModel;
-		fk_Solid						localSolid;
-		fk_Line							axisLine;
-		fk_Light						light;
-		fk_Scene						scene;
-		std::vector<fk_Material *>		polyMaterial;
-		std::vector<fk_Color *>			edgeColor;
-		std::vector<fk_Color *>			vertexColor;
+		std::unique_ptr<Member> _m;
 
 		void				InitValue(void);
 		void				InitFlag(void);
