@@ -54,6 +54,14 @@ namespace FK {
 		//! コンストラクタ
 		fk_Material(void);
 
+#ifndef FK_DOXYGEN_USER_PROCESS
+		fk_Material(const fk_Color &,
+					const fk_Color &,
+					const fk_Color &,
+					float);
+#endif
+		
+
 		//! デストラクタ
 		virtual ~fk_Material();
 

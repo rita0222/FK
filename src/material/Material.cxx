@@ -30,6 +30,20 @@ fk_Material::fk_Material(const fk_Material &argMat) :
 	return;
 }
 
+fk_Material::fk_Material(const fk_Color &argAmbient,
+						 const fk_Color &argDiffuse,
+						 const fk_Color &argSpecular,
+						 float argShininess) :
+	fk_BaseObject(fk_Type::MATERIAL), _m(make_unique<Member>())
+{
+	_m->ambient = argAmbient;
+	_m->diffuse = argDiffuse;
+	_m->specular = argSpecular;
+	_m->shininess = argShininess;
+
+	return;
+}
+
 fk_Material::~fk_Material()
 {
 	return;
@@ -38,7 +52,7 @@ fk_Material::~fk_Material()
 void fk_Material::init(void)
 {
 	setAmbient(0.3, 0.3, 0.3);
-	setDiffuse(0.1, 0.1, 0.1);
+	setDiffuse(0.0, 0.0, 0.0);
 	setSpecular(1.0, 1.0, 1.0);
 	setShininess(30.0);
 }

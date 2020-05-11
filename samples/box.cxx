@@ -6,9 +6,6 @@ using namespace std;
 
 int main(int, char *[])
 {
-	// マテリアルの初期化
-	fk_Material::initDefault();
-
 	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
 	unique_ptr<fk_Model> camera(new fk_Model());
 	unique_ptr<fk_Model> blockModel(new fk_Model());

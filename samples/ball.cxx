@@ -190,9 +190,6 @@ int main(int, char *[])
 	win->setSize(800, 800);
 	win->setScene(scene.get());
 
-	// ### Material 初期化 ###
-	fk_Material::initDefault();
-
 	// ### VIEW POINT ###
 	// 上の方から見た視点
 	viewModel->glMoveTo(0.0, 400.0, 80.0);

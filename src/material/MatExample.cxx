@@ -4,12 +4,241 @@
 
 #include <FK/MatExample.h>
 
-using namespace FK::Material;
+using namespace FK;
 
 namespace FK {
+	namespace Material {
+		const fk_Color defAmb(0.3, 0.3, 0.3);
+		const fk_Color defDif(0.0, 0.0, 0.0);
+		const fk_Color defSpe(1.0, 1.0, 1.0);
+		constexpr double defShi = 30.0;
+
+		fk_Material LightCyan(fk_Color(0.1, 0.2, 0.2),
+							  fk_Color(0.0, 0.5, 0.5),
+							  fk_Color(0.2, 0.2, 0.2),
+							  60.0);
+	
+		fk_Material AshGray(fk_Color(0.2, 0.2, 0.2),
+							fk_Color(0.4, 0.4, 0.4),
+							fk_Color(0.01, 0.01, 0.01),
+							10.0);
+		
+		fk_Material BambooGreen(fk_Color(0.15, 0.28, 0.23),
+								fk_Color(0.23, 0.47, 0.19),
+								fk_Color(0.37, 0.68, 0.28),
+								20.0);
+
+		fk_Material Blue(defAmb,
+						 fk_Color(0.0, 0.0, 0.7),
+						 defSpe,
+						 defShi);
+
+		fk_Material Brown(fk_Color(0.2, 0.1, 0.0),
+						  fk_Color(0.35, 0.15, 0.0),
+						  defSpe,
+						  defShi);
+
+		fk_Material BurntTitan(fk_Color(0.1, 0.07, 0.07),
+							   fk_Color(0.44, 0.17, 0.1),
+							   fk_Color(0.6, 0.39, 0.1),
+							   16.0);
+
+		fk_Material Coral(fk_Color(0.5, 0.3, 0.4),
+						  fk_Color(0.9, 0.5, 0.7),
+						  defSpe,
+						  defShi);
+
+		fk_Material Cream(defAmb,
+						  fk_Color(0.8, 0.7, 0.6),
+						  defSpe,
+						  defShi);
+
+		fk_Material Cyan(defAmb,
+						 fk_Color(0.0, 0.6, 0.6),
+						 defSpe,
+						 defShi);
+
+		fk_Material DarkBlue(fk_Color(0.1, 0.1, 0.4),
+							 fk_Color(0.0, 0.0, 0.25),
+							 defSpe,
+							 defShi);
+
+		fk_Material DarkGreen(fk_Color(0.1, 0.4, 0.1),
+							  fk_Color(0.0, 0.2, 0.0),
+							  defSpe,
+							  defShi);
+
+		fk_Material DarkPurple(fk_Color(0.3, 0.1, 0.3),
+							   fk_Color(0.3, 0.0, 0.3),
+							   defSpe,
+							   defShi);
+
+		fk_Material DarkRed(fk_Color(0.2, 0.0, 0.0),
+							fk_Color(0.4, 0.0, 0.0),
+							defSpe,
+							defShi);
+
+		fk_Material DarkYellow(defAmb,
+							   fk_Color(0.4, 0.3, 0.0),
+							   defSpe,
+							   defShi);
+
+		fk_Material DimYellow(fk_Color(0.18, 0.14, 0.0),
+							  fk_Color(0.84, 0.86, 0.07),
+							  fk_Color(0.92, 0.82, 0.49),
+							  defShi);
+
+		fk_Material Flesh(defAmb,
+						  fk_Color(0.8, 0.6, 0.4),
+						  defSpe,
+						  defShi);
+
+		fk_Material GlossBlack(fk_Color(0.0, 0.0, 0.0),
+							   fk_Color(0.04, 0.04, 0.04),
+							   defSpe,
+							   defShi);
+
+		fk_Material GrassGreen(fk_Color(0.0, 0.1, 0.0),
+							   fk_Color(0.0, 0.7, 0.0),
+							   fk_Color(0.47, 0.98, 0.49),
+							   defShi);
+
+		fk_Material Gray1(defAmb,
+						  fk_Color(0.6, 0.6, 0.6),
+						  fk_Color(0.1, 0.1, 0.1),
+						  defShi);
+
+		fk_Material Gray2(defAmb,
+						  fk_Color(0.2, 0.2, 0.2),
+						  fk_Color(0.1, 0.1, 0.1),
+						  defShi);
+
+		fk_Material Green(defAmb,
+						  fk_Color(0.0, 0.5, 0.0),
+						  defSpe,
+						  defShi);
+
+		fk_Material HolidaySkyBlue(fk_Color(0.01, 0.22, 0.4),
+								   fk_Color(0.2, 0.66, 0.92),
+								   fk_Color(0.47, 0.74, 0.74),
+								   defShi);
+
+		fk_Material IridescentGreen(fk_Color(0.04, 0.11, 0.07),
+									fk_Color(0.09, 0.39, 0.18),
+									fk_Color(0.08, 0.67, 0.1),
+									14.0);
+
+		fk_Material Ivory(fk_Color(0.36, 0.28, 0.18),
+						  fk_Color(0.56, 0.52, 0.29),
+						  fk_Color(0.72, 0.45, 0.4),
+						  33.0);
+
+		fk_Material LavaRed(fk_Color(0.14, 0.0, 0.0),
+							fk_Color(0.62, 0.0, 0.0),
+							fk_Color(1.0, 0.46, 0.46),
+							18.0);
+
+		fk_Material LightBlue(defAmb,
+							  fk_Color(0.4, 0.4, 0.9),
+							  defSpe,
+							  defShi);
+
+		fk_Material LightGreen(defAmb,
+							   fk_Color(0.5, 0.7, 0.3),
+							   defSpe,
+							   defShi);
+
+		fk_Material LightViolet(defAmb,
+								fk_Color(0.5, 0.4, 0.9),
+								defSpe,
+								defShi);
+
+		fk_Material Lilac(fk_Color(0.21, 0.09, 0.23),
+						  fk_Color(0.64, 0.54, 0.6),
+						  fk_Color(0.4, 0.26, 0.37),
+						  15.0);
+
+		fk_Material MatBlack(fk_Color(0.0, 0.0, 0.0),
+							 fk_Color(0.0, 0.0, 0.0),
+							 fk_Color(0.0, 0.0, 0.0),
+							 defShi);
+
+		fk_Material Orange(defAmb,
+						   fk_Color(0.8, 0.3, 0.0),
+						   fk_Color(0.2, 0.2, 0.2),
+						   defShi);
+
+		fk_Material PaleBlue(defAmb,
+							 fk_Color(0.5, 0.7, 0.7),
+							 defSpe,
+							 defShi);
+
+		fk_Material PearWhite(fk_Color(0.32, 0.29, 0.18),
+							  fk_Color(0.64, 0.61, 0.5),
+							  fk_Color(0.4, 0.29, 0.17),
+							  15.0);
+
+		fk_Material Pink(fk_Color(0.6, 0.2, 0.3),
+						 fk_Color(0.9, 0.55, 0.55),
+						 defSpe,
+						 defShi);
+
+		fk_Material Purple(defAmb,
+						   fk_Color(0.7, 0.0, 0.7),
+						   defSpe,
+						   defShi);
+
+		fk_Material Raw(fk_Color(1.0, 1.0, 1.0),
+						fk_Color(0.0, 0.0, 0.0),
+						fk_Color(0.0, 0.0, 0.0),
+						0.0);
+
+		fk_Material Red(defAmb,
+						fk_Color(0.7, 0.0, 0.0),
+						defSpe,
+						defShi);
+
+		fk_Material TrueWhite(fk_Color(1.0, 1.0, 1.0),
+							  fk_Color(1.0, 1.0, 1.0),
+							  fk_Color(1.0, 1.0, 1.0),
+							  0.0);
+
+		fk_Material UltraMarine(fk_Color(0.01, 0.03, 0.21),
+								fk_Color(0.07, 0.12, 0.49),
+								fk_Color(0.53, 0.52, 0.91),
+								11.0);
+
+		fk_Material Violet(defAmb,
+						   fk_Color(0.4, 0.0, 0.8),
+						   defSpe,
+						   defShi);
+
+		fk_Material White(defAmb,
+						  fk_Color(1.0, 1.0, 1.0),
+						  fk_Color(0.1, 0.1, 0.1),
+						  defShi);
+
+		fk_Material WhiteLight(fk_Color(0.0, 0.0, 0.0),
+							   fk_Color(1.0, 1.0, 1.0),
+							   fk_Color(1.0, 1.0, 1.0),
+							   defShi);
+
+		fk_Material Yellow(defAmb,
+						   fk_Color(0.8, 0.6, 0.0),
+						   defSpe,
+						   defShi);
+	}
 
 	void fk_InitMaterial(void)
 	{
+		using namespace FK::Material;
+
+		LightCyan.init();
+		LightCyan.setAmbient(0.1f, 0.2f, 0.2f);
+		LightCyan.setDiffuse(0.0f, 0.5f, 0.5f);
+		LightCyan.setSpecular(0.2f, 0.2f, 0.2f);
+		LightCyan.setShininess(60.0f);
+
 		AshGray.init();
 		AshGray.setAmbient(0.2f, 0.2f, 0.2f);
 		AshGray.setDiffuse(0.4f, 0.4f, 0.4f);

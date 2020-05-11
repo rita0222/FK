@@ -195,7 +195,6 @@ void Boid::forward(bool argSMode, bool argAMode, bool argCMode)
 
 int main(int, char **)
 {
-	fk_Material::initDefault();
 	unique_ptr<fk_AppWindow> win(new fk_AppWindow());
 	unique_ptr<Boid> boid(new Boid(200));
 
