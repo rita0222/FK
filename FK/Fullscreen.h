@@ -27,8 +27,7 @@ namespace FK {
 
 #ifndef FK_DOXYGEN_USER_PROCESS
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
-		class windowstate {
-		public:
+		struct WindowState {
 			HWND hWnd;
 			WINDOWPLACEMENT WindowPlacement;
 		};
@@ -92,6 +91,11 @@ namespace FK {
     private:
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 		std::unique_ptr<Member> _m;
+
+        BOOL SaveWindowPosition();
+        BOOL LoadWindowPosition();
+        BOOL ChangeScreen(HWND, int, int, int);
+
 #endif //WIN32
 
 	};

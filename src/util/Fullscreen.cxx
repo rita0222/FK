@@ -4,6 +4,7 @@
 #include <FK/Fullscreen.h>
 
 using namespace FK;
+using namespace std;
 
 #if defined(WIN32) && !defined(_MINGW_) && !defined(FK_CLI_CODE)
 
@@ -15,8 +16,8 @@ static LPDIRECT3DDEVICE9	g_lpD3DDEV = nullptr;
 */
 
 // グローバル変数
-static windowstate	WindowState[fk_FullscreenController::MAX_WINDOWNUMBER];
-static int			iWindowNumber;					// 画面上のウインドウ数
+static struct fk_FullscreenController::WindowState WindowState[fk_FullscreenController::MAX_WINDOWNUMBER];
+static int iWindowNumber;					// 画面上のウインドウ数
 
 // ウインドウ位置保存のコールバック関数
 BOOL CALLBACK EnumWindowsSaveFunc(HWND hWnd, LPARAM lParam)
