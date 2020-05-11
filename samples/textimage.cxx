@@ -13,8 +13,6 @@ int main (int, char *[])
 	unique_ptr<fk_Model> strModel(new fk_Model());
 
 	fk_System::setcwd();
-	fk_Material::initDefault();
-
 #ifdef WIN32
 	str->convert("FK日本語", fk_StringCode::SJIS);
 #else

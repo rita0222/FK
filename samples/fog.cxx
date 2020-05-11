@@ -70,7 +70,6 @@ int main(int, char **)
 
 	fk_Color bgColor(0.5, 0.5, 0.5);
 
-	fk_Material::initDefault();
 	window->setSize(WIN_W, WIN_H);
 	window->setTrackBallMode(true);
 	window->showGuide();

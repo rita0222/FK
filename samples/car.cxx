@@ -271,8 +271,6 @@ void World::shadowSet(fk_Scene *argScene, fk_Vector argV)
 
 int main(int, char *[])
 {
-	fk_Material::initDefault();
-
 	unique_ptr<Car> carObj(new Car());
 	unique_ptr<World> worldObj(new World());
 	unique_ptr<Fl_Window> mainWindow(new Fl_Window(1240, 420, "MultiWindow Test"));

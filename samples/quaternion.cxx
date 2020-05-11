@@ -18,8 +18,6 @@ int main(int, char *[])
 	fk_Quaternion q1, q2, q;
 	unique_ptr<fk_Polyline> point(new fk_Polyline());
 
-	fk_Material::initDefault();
-
 	model->setShape(cone.get());
 	model->setMaterial(Material::Yellow);
 	model->glAngle(angle1);

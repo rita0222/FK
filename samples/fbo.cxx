@@ -104,7 +104,6 @@ int main(int, char **)
 	constexpr double SP_Y = double(WIN_H/2) - 10.0;
 
 	mainWindow->end();
-	fk_Material::initDefault();
 
 	// 照明の設定
 	lightModel->setShape(light.get());

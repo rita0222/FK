@@ -21,8 +21,6 @@ int main(int, char **)
 	
 	fk_Renderer		renderer(1024, 768);
 
-	fk_Material::initDefault();			 
-
 	lightModel.setShape(&light);
 	lightModel.setMaterial(Material::TrueWhite);
 	lightModel.glVec(0.0, 0.0, -1.0);

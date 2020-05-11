@@ -16,8 +16,6 @@ int main(int, char *[])
 	unique_ptr<fk_Window> fkWindow(new fk_Window(0, 0, 300, 300));
 
 	MainWindow->end();
-	fk_Material::initDefault();
-
 	MainWindow->size_range(320, 320);
 
 	// 照明の設定

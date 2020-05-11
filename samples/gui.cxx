@@ -277,7 +277,6 @@ int main(int, char *[])
 	mainWindow->end();
 
 	fk_System::setcwd();
-	fk_Material::initDefault();
 
 	// 光源の設定。今回は二つの平行光源
 	for(auto &m : lightModel) m.reset(new fk_Model());

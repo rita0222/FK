@@ -4,9 +4,6 @@ using namespace FK;
 
 int main(int, char **)
 {
-	// 色パレットの初期化
-	fk_Material::initDefault();			 
-
 	fk_Block		block(10.0, 20.0, 15.0);
 	fk_Model		model;
 	fk_AppWindow	window;
