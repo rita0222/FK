@@ -689,7 +689,7 @@ tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY
 bool fk_AppWindow::getProjectPosition(double argX, double argY,
 									  fk_Plane *argPlane, fk_Vector *argPos)
 {
-	return drawWin->getProjectPosition(argX, argY, argPlane, argPos);
+	return _m->drawWin->getProjectPosition(argX, argY, argPlane, argPos);
 }
 #endif
 
@@ -702,7 +702,7 @@ tuple<bool, fk_Vector> fk_AppWindow::getProjectPosition(double argX, double argY
 bool fk_AppWindow::getProjectPosition(double argX, double argY,
 									  double argDist, fk_Vector *argPos)
 {
-	return drawWin->getProjectPosition(argX, argY, argDist, argPos);
+	return _m->drawWin->getProjectPosition(argX, argY, argDist, argPos);
 }
 #endif
 
@@ -714,7 +714,7 @@ tuple<bool, fk_Vector> fk_AppWindow::getWindowPosition(fk_Vector &argPos_3D)
 #ifndef FK_OLD_NONSUPPORT
 bool fk_AppWindow::getWindowPosition(fk_Vector argPos_3D, fk_Vector *argPos_2D)
 {
-	return drawWin->getWindowPosition(argPos_3D, argPos_2D);
+	return _m->drawWin->getWindowPosition(argPos_3D, argPos_2D);
 }
 #endif
 
