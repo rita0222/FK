@@ -30,8 +30,30 @@ namespace FK {
 	 */
 
 	class fk_AppWindow {
-	public:
+		class Member {
+		public:
+			std::shared_ptr<Fl_Window> mainWin;
+			fk_Window *drawWin;
 
+			fk_AppWindow *ref_child;
+			fk_FrameController fps_admin;
+			fk_GuideObject guide;
+			std::unique_ptr<fk_TrackBall> tb;
+			fk_FullscreenController fsc;
+
+			fk_Scene scene;
+			fk_Scene *ref_scene;
+
+			fk_Light lightShape;
+			fk_Model camera, light;
+			fk_Model *ref_camera;
+			int fps;
+			bool tbFlag, childMode;
+
+			Member(void);
+		};
+
+	public:
 		//! コンストラクタ
 #ifdef FK_CLI_CODE
 #ifdef _WIN64
@@ -1361,25 +1383,7 @@ namespace FK {
 
 	private:
 		//friend class fk_ShaderBinder;
-
-		Fl_Window *mainWin;
-		fk_Window *drawWin;
-
-		fk_AppWindow *ref_child;
-		fk_FrameController fps_admin;
-		fk_GuideObject guide;
-		fk_TrackBall *tb;
-		fk_FullscreenController fsc;
-
-		fk_Scene scene;
-		fk_Scene *ref_scene;
-
-		fk_Light lightShape;
-		fk_Model camera, light;
-		fk_Model *ref_camera;
-
-		int fps;
-		bool tbFlag, childMode;
+		std::unique_ptr<Member> _m;
 
 		void ToggleScreen(void);
 	};
