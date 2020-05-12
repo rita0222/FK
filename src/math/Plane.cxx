@@ -15,10 +15,33 @@ fk_Plane::Member::Member(void) :
 	return;
 }
 
-fk_Plane::fk_Plane(void)
-	: fk_BaseObject(fk_Type::PLANE), _m(make_unique<Member>())
+fk_Plane::fk_Plane(void) :
+	fk_BaseObject(fk_Type::PLANE), _m(make_unique<Member>())
 {
 	return;
+}
+
+fk_Plane::fk_Plane(const fk_Plane &argPlane) :
+	fk_BaseObject(fk_Type::PLANE), _m(make_unique<Member>())
+{
+	_m->base = argPlane._m->base;
+	_m->uVec = argPlane._m->uVec;
+	_m->vVec = argPlane._m->vVec;
+	_m->dist = argPlane._m->dist;
+	_m->distFlag = argPlane._m->distFlag;
+
+	return;
+}
+
+fk_Plane & fk_Plane::operator =(const fk_Plane &argPlane)
+{
+	_m->base = argPlane._m->base;
+	_m->uVec = argPlane._m->uVec;
+	_m->vVec = argPlane._m->vVec;
+	_m->dist = argPlane._m->dist;
+	_m->distFlag = argPlane._m->distFlag;
+
+	return *this;
 }
 
 fk_Plane::~fk_Plane()

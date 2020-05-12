@@ -54,10 +54,12 @@ namespace FK {
 
 		//! コンストラクタ
 		fk_Plane(void);
+		fk_Plane(const fk_Plane &);
 
 		//! デストラクタ
 		virtual ~fk_Plane();
 
+		fk_Plane & operator =(const fk_Plane &);
 		//! 平面設定関数1
 		/*!
 		 *	平面上の1点と、平面の法線ベクトルを指定することにより、平面を設定します。
