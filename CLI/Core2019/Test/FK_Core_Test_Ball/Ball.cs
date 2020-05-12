@@ -147,7 +147,7 @@ namespace FK_CLI_Ball
 	{
 		static void Main(string[] args)
 		{
-			fk_Material.InitDefault();
+			//fk_Material.InitDefault();
             var win = new fk_AppWindow();
 			win.Size = new fk_Dimension(800, 800);
 			win.ClearModel(false); // デフォルト光源消去

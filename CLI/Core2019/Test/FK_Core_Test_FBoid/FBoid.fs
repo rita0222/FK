@@ -30,15 +30,12 @@ type Agent(argID:int) = class
 end;;
 
 type Boid(argNum) = class
-    do
-        fk_Material.InitDefault()
 
     let agent : Agent array = [|for i in 0 .. argNum - 1 -> new Agent(i)|]
     let cone = new fk_Cone(16, 0.4, 1.0)
     let AREASIZE = 15.0
     let paramA = 0.2
     let paramB = 0.02
-    let paramC = 0.01
     let paramLA = 3.0
     let paramLB = 5.0
     do
