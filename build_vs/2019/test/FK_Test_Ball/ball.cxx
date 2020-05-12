@@ -190,9 +190,6 @@ int main(int, char *[])
 	win->setSize(800, 800);
 	win->setScene(scene.get());
 
-	// ### Material 初期化 ###
-	fk_Material::initDefault();
-
 	// ### VIEW POINT ###
 	// 上の方から見た視点
 	viewModel->glMoveTo(0.0, 400.0, 80.0);
@@ -254,8 +251,8 @@ int main(int, char *[])
 
 	scene->setShadowMode(fk_ShadowMode::SOFT_NICE);
 	scene->setShadowVec(1.0, -1.0, 1.0);
-	scene->setShadowAreaSize(500.0);
-	scene->setShadowDistance(1000.0);
+	scene->setShadowAreaSize(800.0);
+	scene->setShadowDistance(800.0);
 	scene->setShadowResolution(1024);
 	scene->setShadowVisibility(1.0);
 	scene->setShadowBias(0.005);

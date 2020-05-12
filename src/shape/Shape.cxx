@@ -247,6 +247,7 @@ void fk_Shape::setShaderAttribute(string argName, int argDim,
 			_m->floatSelf.emplace(argName, make_unique<vector<float>>());
 		}
 		vector<float> *array = _m->floatSelf[argName].get();
+		array->resize(argValue->size());
 		copy(argValue->begin(), argValue->end(), array->begin());
 		_m->attrMapF[argName] = shapeAttrF(id, argDim, array);
 	} else {

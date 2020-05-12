@@ -8,7 +8,12 @@ using namespace FK;
 
 //fk_Line まだ未実装
 
-fk_BezSurface::fk_BezSurface(void)
+fk_BezSurface::Member::Member(void) : deg(3)
+{
+	return;
+}
+
+fk_BezSurface::fk_BezSurface(void) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::BEZSURFACE);
 	init();

@@ -1,5 +1,5 @@
 ﻿#include <FK/FK.h>
-#include <FL/Fl_Native_File_Chooser.H>
+#include <FL/Fl_File_Chooser.H>
 #include <memory>
 
 using namespace std;
@@ -7,31 +7,13 @@ using namespace FK;
 
 string imageFileSelect(void)
 {
-	unique_ptr<Fl_Native_File_Chooser> fc(new Fl_Native_File_Chooser());
-	string fileName;
-	string pathName;
-
-	pathName = fk_System::get_cwd();
-	fc->title("Image File Select");
-	fc->filter("*.bmp");
-	if(pathName.empty() == false) fc->directory(pathName.c_str());
-	fc->type(Fl_Native_File_Chooser::BROWSE_FILE);
-
-	switch(fc->show()) {
-
-	  case -1:
-		fl_alert("%s", fc->errmsg());
-		return fileName;
-
-	  case 1:
-		return fileName;
-
-	  default:
-		break;
-	}
-
-	fileName = fc->filename();
-	return fileName;
+	unique_ptr<Fl_File_Chooser> fc(new Fl_File_Chooser(fk_System::get_cwd().c_str(),
+													   "*.bmp",
+													   Fl_File_Chooser::SINGLE,
+													   "Image File Select"));
+	fc->show();
+	while(fc->visible()) Fl::wait();
+	return string(fc->value());
 }
 
 
