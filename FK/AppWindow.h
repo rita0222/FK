@@ -1360,7 +1360,7 @@ namespace FK {
 #endif
 
 	private:
-		friend class fk_ShaderBinder;
+		//friend class fk_ShaderBinder;
 
 		Fl_Window *mainWin;
 		fk_Window *drawWin;
