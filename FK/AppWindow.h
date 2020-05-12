@@ -33,7 +33,7 @@ namespace FK {
 		class Member {
 		public:
 			std::shared_ptr<Fl_Window> mainWin;
-			fk_Window *drawWin;
+			std::unique_ptr<fk_Window> drawWin;
 
 			fk_AppWindow *ref_child;
 			fk_FrameController fps_admin;

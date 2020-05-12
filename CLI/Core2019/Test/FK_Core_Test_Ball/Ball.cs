@@ -147,16 +147,15 @@ namespace FK_CLI_Ball
 	{
 		static void Main(string[] args)
 		{
-            fk_Material.InitDefault();
-
+			fk_Material.InitDefault();
             var win = new fk_AppWindow();
 			win.Size = new fk_Dimension(800, 800);
 			win.ClearModel(false); // デフォルト光源消去
 
 			win.ShadowMode = fk_ShadowMode.SOFT_NICE;
 			win.ShadowVec = new fk_Vector(1.0, -1.0, 1.0);
-			win.ShadowAreaSize = 500.0;
-			win.ShadowDistance = 1000.0;
+			win.ShadowAreaSize = 800.0;
+			win.ShadowDistance = 800.0;
 			win.ShadowResolution = 1024;
 			win.ShadowVisibility = 1.0;
 			win.ShadowBias = 0.005;

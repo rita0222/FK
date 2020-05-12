@@ -65,7 +65,9 @@ namespace FK_CLI
 		  *	\param[in]	mat	別の fk_Material 型インスタンス
 		  */
 		 fk_Material(fk_Material^ mat);
-
+#ifndef FK_DOXYGEN_USER_PROCESS	
+		 fk_Material(::FK::fk_Material *);
+#endif
 		 //! デストラクタ
 		 ~fk_Material();
 
@@ -185,7 +187,7 @@ namespace FK_CLI
 		 /*!
 		  * (0.2, 0.2, 0.2), (0.4, 0.4, 0.4), (0.01, 0.01, 0.01), (10.0)
 		  */
-		 static fk_Material^ AshGray;
+		 static fk_Material ^AshGray = gcnew fk_Material(&::FK::Material::AshGray);
 
 		 /*!
 		  * (0.15, 0.28, 0.23), (0.23, 0.47, 0.19), (0.37, 0.68, 0.28), (20.0)

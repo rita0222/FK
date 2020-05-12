@@ -89,13 +89,10 @@ fk_AppWindow::fk_AppWindow(void) : _m(make_unique<Member>())
 
 	_m->mainWin = make_shared<Fl_Window>(512, 512, "FKAPP Window");
 #ifdef FK_CLI_CODE
-#ifdef _WIN64
-	_m->drawWin = new InnerWindow(argCallbacks, 0, 0, 512, 512);
+	unique_ptr<InnerWindow> ptr(new InnerWindow(argCallbacks, 0, 0, 512, 512));
+	_m->drawWin = move(ptr);
 #else
-	_m->drawWin = new InnerWindow(argCallbacks, 0, 0, 512, 512);
-#endif // _WIN64
-#else
-	_m->drawWin = new fk_Window(0, 0, 512, 512);
+	_m->drawWin = make_unique<fk_Window>(0, 0, 512, 512);
 #endif // FK_CLI_CODE
 	_m->mainWin->end();
 
@@ -120,7 +117,7 @@ fk_AppWindow::fk_AppWindow(void) : _m(make_unique<Member>())
 	_m->camera.glFocus(0.0, 0.0, 0.0);
 	_m->camera.glUpvec(0.0, 1.0, 0.0);
 
-	_m->tb = make_unique<fk_TrackBall>(_m->drawWin, &_m->camera);
+	_m->tb = make_unique<fk_TrackBall>(_m->drawWin.get(), &_m->camera);
 
 	return;
 }
@@ -130,8 +127,8 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent) : _m(make_unique<Member>())
 	_m->mainWin = argParent._m->mainWin;
 	_m->mainWin->begin();
 	argParent._m->drawWin->resizeWindow(0, 0, _m->mainWin->w(), _m->mainWin->h()/2);
-	_m->drawWin = new fk_Window(0, _m->mainWin->h()/2,
-		_m->mainWin->w(), _m->mainWin->h()/2);
+	_m->drawWin = make_unique<fk_Window>(0, _m->mainWin->h() / 2,
+		_m->mainWin->w(), _m->mainWin->h() / 2);
 	_m->mainWin->end();
 
 	_m->light.setShape(&_m->lightShape);
@@ -155,7 +152,7 @@ fk_AppWindow::fk_AppWindow(fk_AppWindow &argParent) : _m(make_unique<Member>())
 	_m->camera.glFocus(0.0, 0.0, 0.0);
 	_m->camera.glUpvec(0.0, 1.0, 0.0);
 
-	_m->tb = make_unique<fk_TrackBall>(_m->drawWin, &_m->camera);
+	_m->tb = make_unique<fk_TrackBall>(_m->drawWin.get(), &_m->camera);
 	_m->childMode = true;
 	argParent._m->ref_child = this;
 
@@ -168,7 +165,7 @@ fk_AppWindow::~fk_AppWindow(void)
 	_m->mainWin->hide();
 
 	//delete _m->tb;
-	delete _m->drawWin;
+	//delete _m->drawWin;
 	//if(!_m->childMode) delete _m->mainWin;
 }
 
@@ -465,7 +462,7 @@ void fk_AppWindow::open(void)
 	_m->mainWin->show();
 	_m->drawWin->show();
 
-	_m->fsc.init(_m->mainWin.get(), _m->drawWin);
+	_m->fsc.init(_m->mainWin.get(), _m->drawWin.get());
 	Fl::check();
 
 	return;
@@ -865,7 +862,7 @@ fk_Color fk_AppWindow::getFogColor(void) const
 
 fk_Window * fk_AppWindow::GetDrawWin(void) const
 {
-	return _m->drawWin;
+	return _m->drawWin.get();
 }
 /****************************************************************************
  *
