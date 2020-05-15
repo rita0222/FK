@@ -4,6 +4,7 @@
 #include <list>
 #include <string>
 #include <iostream>
+#include <memory>
 
 namespace FK {
 
