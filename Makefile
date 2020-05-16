@@ -42,7 +42,7 @@ mac-all:
 	cd src; $(MAKE) mac-g
 
 linux:
-	cd src; $(MAKE) linux
+	cd src; cp Makefile_base Makefile; $(MAKE) mac TARGET=depend; $(MAKE) linux
 	cd samples; $(MAKE) linux
 
 document:
