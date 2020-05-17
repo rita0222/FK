@@ -2,9 +2,17 @@
 
 source ./vsenv.sh
 
-OUTPATH="./FK_Core19"
-INPATH="../../Core2019/FK_Core_DLL"
 COREDIR="netcoreapp3.1"
+OUTPATH="./FK_Core19"
+
+INPATH="../../Core2019/FK_Core_DLL"
+CORENAME="FK_Core.dll"
+
+AUDIOPATH="../../FK_Audio/bin"
+AUDIONAME="FK_Audio_Core.dll"
+
+FORMPATH="../../FK_FormHelper/bin"
+FORMNAME="FK_FormHelper_Core.dll"
 
 rm -rf $OUTPATH
 mkdir -p $OUTPATH/bin/x86
@@ -13,9 +21,15 @@ mkdir -p $OUTPATH/dll/x86
 mkdir -p $OUTPATH/dll/x64
 mkdir $OUTPATH/doc
 mkdir $OUTPATH/redist
-cp $INPATH/Win32/Release/$COREDIR/FK*.dll $OUTPATH/bin/x86
+
+cp $INPATH/Win32/Release/$COREDIR/$CORENAME $OUTPATH/bin/x86
+cp $AUDIOPATH/x86/Release/$COREDIR/$AUDIONAME $OUTPATH/bin/x86
+cp $FORMPATH/x86/Release/$COREDIR/$FORMNAME $OUTPATH/bin/x86
 cp $INPATH/Win32/Release/$COREDIR/Ijwhost.dll $OUTPATH/dll/x86
-cp $INPATH/x64/Release/$COREDIR/FK*.dll $OUTPATH/bin/x64
+
+cp $INPATH/x64/Release/$COREDIR/$CORENAME $OUTPATH/bin/x64
+cp $AUDIOPATH/x64/Release/$COREDIR/$AUDIONAME $OUTPATH/bin/x64
+cp $FORMPATH/x64/Release/$COREDIR/$FORMNAME $OUTPATH/bin/x64
 cp $INPATH/x64/Release/$COREDIR/Ijwhost.dll $OUTPATH/dll/x64
 
 cp ./doc/License.txt $OUTPATH/doc

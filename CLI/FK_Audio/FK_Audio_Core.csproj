@@ -5,6 +5,30 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Core2019\FK_Core.vcxproj" />
   </ItemGroup>
