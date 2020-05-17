@@ -76,7 +76,6 @@ namespace FK_Core_Test_Boid
 
 		public Boid(int argNum)
 		{
-			fk_Material.InitDefault();
 			cone = new fk_Cone(16, 0.4, 1.0);
 			if(argNum < 0) return;
 			agent = new Agent[argNum];

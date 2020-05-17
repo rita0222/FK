@@ -7,9 +7,6 @@ namespace FK_Core_Test_Box
 	{
 		static void Main(string[] args)
 		{
-            // マテリアル情報の初期化
-            //fk_Material.InitDefault();
-
             // ウィンドウ生成
             var win = new fk_AppWindow();
 

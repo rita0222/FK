@@ -90,8 +90,6 @@ namespace FK_Core_Test_GeomShader
             var posArray = new fk_Vector[4];
             var vecArray = new fk_Vector[4];
 
-            fk_Material.InitDefault();
-
             var window = WindowSetup();
             PointSetup(point, posArray, vecArray);
             ModelSetup(model, point);

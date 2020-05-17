@@ -11,7 +11,6 @@ namespace FK_Core_Test_BezSurface
             var model = new fk_Model();
             var surf = new fk_BezSurface();
 
-            fk_Material.InitDefault();
             window.Size = new fk_Dimension(800, 800);
             window.BGColor = new fk_Color(0.6, 0.7, 0.8);
             window.CameraPos = new fk_Vector(0.0, 0.0, 200.0);

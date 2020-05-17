@@ -65,8 +65,6 @@ namespace FK_Core_WinFormAppTest
             viewport2 = new fk_Viewport(panel2);
             viewport2.Scene = scene;
 
-            fk_Material.InitDefault();
-
             // 光源生成
             var light = new fk_Light();
             var lightModel = new fk_Model();

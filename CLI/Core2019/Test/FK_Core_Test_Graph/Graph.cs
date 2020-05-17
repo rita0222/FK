@@ -14,8 +14,6 @@ namespace FK_Core_Test_Graph
 
         static void Main(string[] args)
         {
-			fk_Material.InitDefault();
-
             const int SIZE = 40;
             const double HALF = (double)(SIZE - 1) / 2.0;
             var window = new fk_AppWindow();

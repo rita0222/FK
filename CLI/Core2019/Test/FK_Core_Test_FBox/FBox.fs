@@ -3,9 +3,6 @@ open FK_CLI
 
 module FK_Box =
 
-    // マテリアル情報の初期化
-    fk_Material.InitDefault()
-
     // ウィンドウ生成
     let win = new fk_AppWindow()
 

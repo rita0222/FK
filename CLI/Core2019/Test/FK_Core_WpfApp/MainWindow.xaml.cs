@@ -38,8 +38,6 @@ namespace FK_Core_WpfAppTest
             scene = new fk_Scene();
             viewport.Scene = scene;
 
-            fk_Material.InitDefault();
-
             // 光源生成
             var light = new fk_Light();
             var lightModel = new fk_Model();

@@ -19,7 +19,6 @@ namespace FK_Core_Test_IFSTex
 			var spModel = new fk_Model();
 			var ifsModel = new fk_Model();
 
-			fk_Material.InitDefault();
 			lightModel.Shape = new fk_Light();
 			lightModel.Material = fk_Material.TrueWhite;
 			lightModel.GlMoveTo(0.0, 0.0, 0.0);

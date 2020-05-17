@@ -21,9 +21,6 @@ namespace FK_Core_Test_Snap
             var model = new fk_Model();
             var window = new fk_AppWindow();
 
-            // 色パレットの初期化
-            fk_Material.InitDefault();
-
             // モデルに直方体を設定
             model.Shape = block;
 

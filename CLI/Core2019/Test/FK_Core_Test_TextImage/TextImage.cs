@@ -40,10 +40,7 @@ namespace FK_Core_Test_TextImage
         static void Main(string[] args)
 		{
 			// ウィンドウ生成
-
 			var win = new fk_AppWindow();
-			fk_Material.InitDefault();
-
             var strModel = TextImageSetup();
 			win.Entry(strModel); 
 			win.Open();

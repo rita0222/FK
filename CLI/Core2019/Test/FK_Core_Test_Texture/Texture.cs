@@ -43,7 +43,6 @@ namespace FK_Core_Test_Texture
 			tex.SetTextureCoord(3, 1, 0.5, 1.0);
 			tex.SetTextureCoord(3, 2, 1.0, 0.5);
 
-			fk_Material.InitDefault();
 			var viewer = new fk_ShapeViewer(600, 600);
 			viewer.Shape = tex;
 			viewer.SetMaterial(0, fk_Material.White);

@@ -12,7 +12,7 @@ fk_RBezCurve::Member::Member(void) :
 	return;
 }
 
-fk_RBezCurve::fk_RBezCurve(void)
+fk_RBezCurve::fk_RBezCurve(void) : _m(make_unique<Member>())
 {
 	SetObjectType(fk_Type::RBEZCURVE);
 	setCtrlSize(5);

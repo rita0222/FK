@@ -7,9 +7,6 @@ namespace FK_Core_Test_Audio
     {
         static void Main(string[] args)
         {
-            // マテリアル初期化
-            fk_Material.InitDefault();
-
             // ウィンドウの各種設定
             var win = new fk_AppWindow();
             WindowSetup(win);

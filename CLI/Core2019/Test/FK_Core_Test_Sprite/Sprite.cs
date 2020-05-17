@@ -8,8 +8,7 @@ namespace FK_Core_Test_Sprite
 		static void Main(string[] args)
 		{
 			var window = new fk_AppWindow();
-			fk_Material.InitDefault();
-			
+
             // 文字盤用変数の生成
 			var sprite = new fk_SpriteModel();
 

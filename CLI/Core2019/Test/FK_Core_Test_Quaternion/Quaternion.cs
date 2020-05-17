@@ -26,8 +26,6 @@ namespace FK_Core_Test_Quaternion
             // 角錐頂点の軌跡用
 			var point = new fk_Polyline();
 
-			fk_Material.InitDefault();
-
 			model.Shape = cone;
 			model.Material = fk_Material.Yellow;
 			model.GlAngle(angle1); // モデルのオイラー角を (0, 0, 0) に

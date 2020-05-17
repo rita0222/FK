@@ -114,8 +114,6 @@ namespace FK_Core_Test_Particle
 
         static void Main(string[] args)
 		{
-            fk_Material.InitDefault();
-
             // パーティクルセットの生成
             var particle = ParticleSetup();
 

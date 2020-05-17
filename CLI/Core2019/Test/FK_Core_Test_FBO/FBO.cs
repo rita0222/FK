@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using FK_CLI;
 
 namespace FK_Core_Test_FBO
@@ -50,9 +51,18 @@ namespace FK_Core_Test_FBO
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Which draw Edge or Depth ?");
+            Console.WriteLine("Edge : 1");
+            Console.WriteLine("Depth : 2");
+            Console.Write("? ");
+            var key = Console.ReadKey().Key;
+            int mode = 0;
+            if (key == ConsoleKey.D1) mode = 1;
+            if (key == ConsoleKey.D2) mode = 2;
             // 1: カラーバッファからのエッジ抽出
             // 2: デプスマップ
-            MODE = 1;
+
+            if (mode == 0) return;
 
             var mat = new fk_Material();
             var normalWindow = new fk_AppWindow();
@@ -73,8 +83,6 @@ namespace FK_Core_Test_FBO
             var edgeBinder = new fk_ShaderBinder();
             var depthBinder = new fk_ShaderBinder();
             int thresshold = 80;
-
-            fk_Material.InitDefault();
 
             // 照明の設定
             lightModel.Shape = light;
@@ -123,7 +131,7 @@ namespace FK_Core_Test_FBO
             edgeWindow.Scene = normalWindow.Scene;
             depthWindow.Scene = normalWindow.Scene;
 
-            if(MODE == 1)
+            if(mode == 1)
             {
                 edgeWindow.Open();
             } else
@@ -143,7 +151,7 @@ namespace FK_Core_Test_FBO
 
             while(normalWindow.Update())
             {
-                if (MODE == 1)
+                if (mode == 1)
                 {
                     if (edgeWindow.Update() == false) break;
                 } else

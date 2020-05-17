@@ -26,8 +26,6 @@ namespace FK_Core_Test_Gregory
             var model = new fk_Model[2];
             var surf = new fk_Gregory[2];
 
-            fk_Material.InitDefault();
-
             window.ClearModel();
             window.CameraModel = camera;
             window.Size = new fk_Dimension(800, 800);

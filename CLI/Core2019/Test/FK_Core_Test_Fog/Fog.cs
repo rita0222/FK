@@ -65,7 +65,6 @@ namespace FK_Core_Test_Shadow
             var window = new fk_AppWindow();
             var bgColor = new fk_Color(0.5, 0.5, 0.5);
 
-            fk_Material.InitDefault();
             window.Size = new fk_Dimension(800, 800);
             window.TrackBallMode = true;
             window.ShowGuide();

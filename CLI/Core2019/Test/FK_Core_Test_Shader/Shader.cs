@@ -109,8 +109,6 @@ namespace FK_Core_Test_Shader
 
         static void Main(string[] args)
         {
-            fk_Material.InitDefault();
-
             var window = SetupWindow();
             var lightModel = SetupLight(window);
 
