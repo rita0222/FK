@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>x64;x86</Platforms>
+    <Version>4.2.0</Version>
+  </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="FK_Core">
+      <HintPath>$(FK_CORE19_DIR)\bin\$(PlatformName)\FK_Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FK_Audio_Core">
+      <HintPath>$(FK_CORE19_DIR)\bin\$(PlatformName)\FK_Audio_Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /s /e /y /i &quot;$(ProjectDir)Resources\*.*&quot; &quot;$(TargetDir)&quot;&#xA;&#xD;&#xA;xcopy /s /e /y /i &quot;$(FK_CORE19_DIR)\dll\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
+</Project>
