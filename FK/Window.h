@@ -717,6 +717,9 @@ namespace FK {
 		 *	\sa setPutStrMode(), putString(), printf()
 		 */
 		static void clearBrowser(void);
+
+
+		static void fontInit(void);
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS

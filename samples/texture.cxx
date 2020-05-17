@@ -7,23 +7,30 @@ using namespace FK;
 
 string imageFileSelect(void)
 {
+	fk_Window::fontInit();
+
 	unique_ptr<Fl_File_Chooser> fc(new Fl_File_Chooser(fk_System::get_cwd().c_str(),
 													   "*.bmp",
 													   Fl_File_Chooser::SINGLE,
 													   "Image File Select"));
+	fc->textfont(0);
 	fc->show();
 	while(fc->visible()) Fl::wait();
+	if(fc->count() == 0) return string("");
 	return string(fc->value());
 }
-
 
 int main(int, char *[])
 {
 	unique_ptr<fk_MeshTexture> tex(new fk_MeshTexture());
-	string fileName;
 	unique_ptr<fk_Material> mat(new fk_Material());
 
-	fileName = imageFileSelect();
+	string fileName = imageFileSelect();
+
+	if(fileName.length() == 0) {
+		fl_alert("No Select Image File");
+		exit(2);
+	}
 
 	if(tex->readBMP(fileName) == false) {
 		fl_alert("Image File Read Error.");

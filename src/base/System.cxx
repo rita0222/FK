@@ -2,8 +2,8 @@
 #include <FK/System.h>
 #include <FK/Error.H>
 
-#if defined(_FREEBSD_) || defined(_MACOSX_)
-#if defined(_FREEBSD_) || defined(_MAC_GCC_)
+#if defined(_FREEBSD_) || defined(_LINUX_) || defined(_MACOSX_)
+#if defined(_FREEBSD_) || defined(_LINUX_) || defined(_MAC_GCC_) 
 
 #include <unistd.h>
 #include <sys/types.h>

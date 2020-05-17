@@ -8,6 +8,7 @@
 #include <FL/Fl_Multi_Browser.H>
 #include <FL/x.H>
 #include <FL/fl_ask.H>
+#include <FL/fl_draw.H>
 
 using namespace std;
 using namespace FK;
@@ -36,6 +37,7 @@ fk_Window::fk_Window(int argX, int argY, int argW, int argH, string argStr) :
 	_m(make_unique<Member>(argX, argY, argW, argH)),
 	_m_engine(make_unique<fk_GraphicsEngine>(true))
 {
+	if(_s_winNum == 0) fontInit();
 	_m_engine->Init(argW, argH);
 	_s_winNum++;
 
@@ -352,6 +354,7 @@ void fk_Window::PutBrowser(const string &argStr)
 	static const string space = "                ";
 
 	if(_s_putWin == nullptr) {
+		fontInit();
 		_s_putWin = make_unique<Fl_Window>(320, 520, "FK PutStr Window");
 		_s_browser = new Fl_Multi_Browser(10, 10, 300, 500);
 		_s_putWin->size_range(320, 520);
@@ -395,6 +398,7 @@ void fk_Window::ErrorInit(void)
 	Error::Browser *_browser = db->GetBrowser();
 
 	if(_browser == nullptr) {
+		fontInit();
 		_browser = db->MakeBrowser();
 		_browser->PutBrowser = [&](const string argStr) {
 			static const string space = "                ";
@@ -440,6 +444,15 @@ void fk_Window::ErrorInit(void)
 fk_GraphicsEngine * fk_Window::GetEngine(void)
 {
 	return _m_engine.get();
+}
+
+void fk_Window::fontInit(void)
+{
+#ifdef _LINUX_
+	Fl::set_font(0, "mono");
+	Fl::set_font(1, "mono");
+	fl_font(0, 36);
+#endif
 }
 
 /****************************************************************************

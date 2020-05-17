@@ -75,10 +75,6 @@ int main(int, char **)
 {
 	fk_System::setcwd();
 	Error::SetMode(Error::Mode::BROWSER_INTERACTIVE);
-#ifdef _LINUX_
-	Fl::set_font(0, "mono");
-	fl_font(0, 36);
-#endif
 
 	unique_ptr<fk_AppWindow> window(new fk_AppWindow());
 	unique_ptr<fk_Material> mat(new fk_Material());
