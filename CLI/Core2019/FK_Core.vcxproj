@@ -504,22 +504,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
+    <OutDir>$(SolutionDir)FK_Core_DLL\Base\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
+    <OutDir>$(SolutionDir)FK_Core_DLL\Base\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
+    <OutDir>$(SolutionDir)FK_Core_DLL\Base\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
+    <OutDir>$(SolutionDir)FK_Core_DLL\Base\$(Platform)\$(Configuration)\$(TargetFramework)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>

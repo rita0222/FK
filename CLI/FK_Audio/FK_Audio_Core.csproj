@@ -6,19 +6,19 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)FK_Core_DLL\Audio\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)FK_Core_DLL\Audio\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)FK_Core_DLL\Audio\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <OutputPath>$(SolutionDir)FK_Core_DLL\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)FK_Core_DLL\Audio\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
