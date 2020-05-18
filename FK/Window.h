@@ -718,8 +718,20 @@ namespace FK {
 		 */
 		static void clearBrowser(void);
 
-
+		//! フォント初期化関数
+		/*!
+		 *	この関数は、表示が適切となるようフォントの初期化を行います。
+		 *	なお、現バージョンではこの関数によって影響があるのは Linux 環境のみであり、
+		 *	Windows や Mac においては何も影響はありません。
+		 *
+		 *	\note
+		 *		本関数は static 関数なので、
+		 *		以下のように記述することでインスタンスの生成なしに利用することができます。
+		 *
+		 *			fk_Window::fontInit();
+		 */
 		static void fontInit(void);
+
 		///@}
 
 #ifndef FK_DOXYGEN_USER_PROCESS

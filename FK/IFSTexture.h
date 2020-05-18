@@ -150,7 +150,8 @@ namespace FK {
 		 *
 		 *	\sa readMQOData(), fk_IFSTexture::readMQOFile()
 		 */
-		bool readMQOFile(std::string fileName, std::string, int materialID = -1, bool contFlg = true);
+		bool readMQOFile(std::string fileName, std::string objName,
+						 int materialID = -1, bool contFlg = true);
 
 		//! MQOデータ入力関数
 		/*!
