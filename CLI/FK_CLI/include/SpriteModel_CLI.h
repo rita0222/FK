@@ -2,7 +2,7 @@
 
 #include <FK/SpriteModel.h>
 #include "Model_CLI.h"
-#include "Texture_CLI.h"
+#include "RectTexture_CLI.h"
 #include "TextImage_CLI.h"
 #include "Scene_CLI.h"
 
@@ -76,6 +76,28 @@ namespace FK_CLI
 			void set(fk_Image^);
 		}
 
+		//! テクスチャデータプロパティ
+		/*!
+		 *	内部データのテクスチャイン寸タンスの取得を行います。
+		 *
+		 *	\attention
+		 *		本メソッドで得たインスタンスの内部情報を変更した場合の挙動は保証されません。
+		 */
+		property fk_RectTexture^ Texture {
+			fk_RectTexture^ get();
+		}
+
+		//! テクスチャデータプロパティ
+		/*!
+		 *	内部データテクスチャのテクスチャモードを設定します。
+		 *
+		 *	\sa fk_Texture::TextureMode
+		 */
+		property fk_TexMode TextureMode {
+			fk_TexMode get();
+			void set(fk_TexMode);
+		}
+
 		//! 表示サイズプロパティ
 		/*!
 		 *	画像の表示サイズの参照・設定を行います。
@@ -112,7 +134,7 @@ namespace FK_CLI
 		 *	\return
 		 *		成功したら true を、失敗したら false を返します。
 		 */
-		bool			ReadBMP(String^ filename);
+		bool ReadBMP(String^ filename);
 
 		//! PNG画像読み込みメソッド
 		/*!
@@ -123,7 +145,7 @@ namespace FK_CLI
 		 *	\return
 		 *		成功したら true を、失敗したら false を返します。
 		 */
-		bool			ReadPNG(String^ filename);
+		bool ReadPNG(String^ filename);
 
 		//! JPEG(JPG)画像読み込みメソッド
 		/*!
@@ -134,7 +156,7 @@ namespace FK_CLI
 		 *	\return
 		 *		成功したら true を、失敗したら false を返します。
 		 */
-		bool			ReadJPG(String^ filename);
+		bool ReadJPG(String^ filename);
 
 		//! 画像位置指定メソッド
 		/*!
@@ -162,7 +184,7 @@ namespace FK_CLI
 		 *
 		 *	\sa Size, fk_Model::GlMoveTo()
 		 */
-		void			SetPositionLT(double x, double y);
+		void SetPositionLT(double x, double y);
 
 		//! 画像表示領域指定メソッド
 		/*!
@@ -177,7 +199,7 @@ namespace FK_CLI
 		 *
 		 *	\sa Size
 		 */
-		void			SetSpriteArea(double x, double y, double w, double h);
+		void SetSpriteArea(double x, double y, double w, double h);
 
 		//! 文字列描画用フォント設定メソッド
 		/*!
@@ -197,7 +219,7 @@ namespace FK_CLI
 		 *		ライセンス上再配布が禁止されているものがあります。
 		 *		プログラムの配布時には必ずライセンスの確認を行ってください。
 		 */
-		bool			InitFont(String^ fontFileName);
+		bool InitFont(String^ fontFileName);
 
 		//! 文字列表示メソッド
 		/*!
@@ -214,7 +236,7 @@ namespace FK_CLI
 		 *
 		 *	\sa InitFont(), DrawText(String^, bool)
 		 */
-		void			DrawText(String^ str);
+		void DrawText(String^ str);
 
 		//! 初期化設定付き文字列表示メソッド
 		/*!
@@ -236,7 +258,7 @@ namespace FK_CLI
 		 *
 		 *	\sa initFont(), drawText(const std::string, fk_StringCode)
 		 */
-		void			DrawText(String^ str, bool mode);
+		void DrawText(String^ str, bool mode);
 
 		//! 文字列消去メソッド
 		/*!
@@ -244,10 +266,10 @@ namespace FK_CLI
 		 *
 		 *	\sa DrawText(String^), DrawText(String^, bool)
 		 */
-		void			ClearText(void);
+		void ClearText(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void			MakePixelBase(fk_Dimension^ argWinSize, fk_Scene^ argScn);
+		void MakePixelBase(fk_Dimension^ argWinSize, fk_Scene^ argScn);
 #endif
 	};
 }

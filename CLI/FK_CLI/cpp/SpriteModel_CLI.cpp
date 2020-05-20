@@ -60,6 +60,53 @@ namespace FK_CLI {
 		return I;
 	}
 
+	fk_RectTexture ^fk_SpriteModel::Texture::get(void)
+	{
+		fk_RectTexture ^T = gcnew fk_RectTexture();
+		T->pBase = GetP()->getTexture();
+		T->dFlg = false;
+		return T;
+	}
+
+	void fk_SpriteModel::TextureMode::set(fk_TexMode argMode)
+	{
+		switch (argMode) {
+		case fk_TexMode::MODULATE:
+			GetP()->setTextureMode(::FK::fk_TexMode::MODULATE);
+			break;
+
+		case fk_TexMode::REPLACE:
+			GetP()->setTextureMode(::FK::fk_TexMode::REPLACE);
+			break;
+
+		case fk_TexMode::DECAL:
+			GetP()->setTextureMode(::FK::fk_TexMode::DECAL);
+			break;
+
+		default:
+			break;
+		}
+	}
+	fk_TexMode fk_SpriteModel::TextureMode::get(void)
+	{
+		switch (GetP()->getTextureMode()) {
+		case ::FK::fk_TexMode::MODULATE:
+			return fk_TexMode::MODULATE;
+
+		case ::FK::fk_TexMode::REPLACE:
+			return fk_TexMode::REPLACE;
+
+		case ::FK::fk_TexMode::DECAL:
+			return fk_TexMode::DECAL;
+
+		default:
+			break;
+		}
+		return fk_TexMode::MODULATE;
+	}
+
+
+
 	void fk_SpriteModel::Size::set(fk_TexCoord^ argC)
 	{
 		if(!argC) return;
