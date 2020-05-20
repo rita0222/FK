@@ -31,8 +31,31 @@ namespace FK {
 	 *	\sa fk_Window, fk_AppWindow
 	 */
 	class fk_TrackBall {
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_Window *fk_win;							// FKウィンドウ
+			fk_Model *camera;							// カメラ
+			fk_Vector lookPos;							// ３人称視点注視点
+			// 操作に使用するマウスボタン
+			//fk_MouseButton lookButton, moveButton;
+
+			// 画面外にカーソルが出た場合の判定の有無
+			bool overCheck;
+
+			// エコーの有無
+			//bool bEcho;
+
+			int nowX, nowY, oldX, oldY;				// ウィンドウ上座標
+			//int echoX, echoY;
+			bool lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
+
+			Member(fk_Window *, fk_Model *);
+		};
+#endif
 
 	public:
+		
 		//! コンストラクタ
 		/*!
 		 *	\param[in]	win		カメラ制御を行うウィンドウ
@@ -46,7 +69,7 @@ namespace FK {
 		 *
 		 *	\param[in]	camera	カメラ用モデル
 		 */
-		void		setCamera(fk_Model *camera);
+		void setCamera(fk_Model *camera);
 
 		//! カメラ設定有無参照関数
 		/*!
@@ -55,7 +78,7 @@ namespace FK {
 		 *	\return カメラが設定されている場合 true を、
 		 *		設定されていない場合 false を返します。
 		 */
-		bool		isSetCamera(void);
+		bool isSetCamera(void);
 
 		//! カメラ注視点変更関数
 		/*!
@@ -64,7 +87,7 @@ namespace FK {
 		 *	\param[in]	pos		注視点位置ベクトル
 		 */
 		
-		void		setLookTo(fk_Vector pos);
+		void setLookTo(fk_Vector pos);
 
 		//! 状態更新関数
 		/*!
@@ -72,31 +95,18 @@ namespace FK {
 		 *	基本的な本クラスの利用方法は、シーン再描画と共に本関数を呼ぶだけであり、
 		 *	他にすることはほとんどありません。
 		 */
-		void		update(void);
+		void update(void);
 
 	private:
-		void		ControlLookTo(void);
-		void		ControlLookToDist(void);
-		void		ControlLookToMove(void);
+		std::unique_ptr<Member> _m;
+		
+		static constexpr double DIVPOS = 10.0; // カーソル移動量
+		static constexpr double DIVLOOK = 200.0; // カーソル処理量比率指定
+		static constexpr double DIVDIST = 1.0; // ３人称視点制御カーソル移動量:処理量比率指定
 
-		fk_Window	*fk_win;							// FKウィンドウ
-		fk_Model	*camera;							// カメラ
-		fk_Vector	lookPos;							// ３人称視点注視点
-		// 操作に使用するマウスボタン
-		fk_MouseButton	lookButton, distButton[2], moveButton;
-
-		// 画面外にカーソルが出た場合の判定の有無
-		bool		overCheck;
-		// カーソル移動量:処理量比率指定
-		double		divPos, divLook;
-		// ３人称視点制御カーソル移動量:処理量比率指定
-		double		divDist;
-		// エコーの有無
-		bool		bEcho;
-
-		int			nowX, nowY, oldX, oldY;				// ウィンドウ上座標
-		int			echoX, echoY;
-		bool		lookClick, distClick, moveClick;	// 1ループ前のクリックを記憶
+		void ControlLookTo(void);
+		void ControlLookToDist(void);
+		void ControlLookToMove(void);
 	};
 
 	//using fkut_TrackBall = fk_TrackBall;

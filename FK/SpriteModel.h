@@ -34,6 +34,19 @@ namespace FK {
 	 */
 
 	class fk_SpriteModel : public fk_Model {
+
+#ifndef FK_DOXYGEN_USER_PROCESS
+		class Member {
+		public:
+			fk_RectTexture texShape;
+			fk_Material absMate;
+			fk_Model pixelBase;
+			fk_UniStr textStr;
+			bool fontReady;
+
+			Member(void);
+		};
+#endif
 	public:
 		//! 文字列描画設定用オブジェクト
 		/*!
@@ -43,7 +56,7 @@ namespace FK {
 		 *
 		 *	\sa fk_TextImage
 		 */
-		fk_TextImage	text;
+		fk_TextImage text;
 
 		//! コンストラクタ
 		fk_SpriteModel(void);
@@ -66,7 +79,7 @@ namespace FK {
 		 *
 		 *	\sa fk_Window, fk_Scene, fk_Model
 		 */
-		bool		entryFirst(fk_Window *win, fk_Scene *scene, fk_Model *camera = nullptr);
+		bool entryFirst(fk_Window *win, fk_Scene *scene, fk_Model *camera = nullptr);
 
 		//! Windows Bitmap (BMP)画像読み込み関数
 		/*!
@@ -77,7 +90,7 @@ namespace FK {
 		 *	\return
 		 *		成功したら true を、失敗したら false を返します。
 		 */
-		bool		readBMP(const std::string filename);
+		bool readBMP(const std::string filename);
 
 		//! PNG画像読み込み関数
 		/*!
@@ -88,7 +101,7 @@ namespace FK {
 		 *	\return
 		 *		成功したら true を、失敗したら false を返します。
 		 */
-		bool		readPNG(const std::string filename);
+		bool readPNG(const std::string filename);
 
 		//! JPEG(JPG)画像読み込み関数
 		/*!
@@ -99,7 +112,7 @@ namespace FK {
 		 *	\return
 		 *		成功したら true を、失敗したら false を返します。
 		 */
-		bool		readJPG(const std::string filename);
+		bool readJPG(const std::string filename);
 
 		//! 画像データセット関数1
 		/*!
@@ -107,7 +120,7 @@ namespace FK {
 		 *
 		 *	既に画像を読み込み済みの fk_Image をセットします。
 		 */
-		void		setImage(fk_Image *image);
+		void setImage(fk_Image *image);
 
 		//! 画像データセット関数2
 		/*!
@@ -115,7 +128,7 @@ namespace FK {
 		 *
 		 *	既に画像を読み込み済みの fk_Image をセットします。
 		 */
-		void		setImage(fk_Image &image);
+		void setImage(fk_Image &image);
 
 		//! 画像データ参照関数
 		/*!
@@ -128,7 +141,43 @@ namespace FK {
 		 *	\return
 		 *		画像データインスタンスのポインタ
 		 */
-		fk_Image *	getImage(void);
+		fk_Image * getImage(void);
+
+		//! テクスチャデータ参照関数
+		/*!
+		 *	内部テクスチャデータである fk_RectTexture 型インスタンスを参照します。
+		 *
+		 *	\note
+		 *		本関数によって得られたインスタンスのメンバ関数のうち、
+		 *		内部データの変更を伴う機能を用いた場合、
+		 *		fk_SpriteModel インスタンスの機能が正常に動作することは保証されません。
+		 *
+		 *	\return 内部テクスチャデータ
+		 *
+		 *	\sa setTextureMode(), getTextureMode(), getImage(), fk_RectTexture, fk_Texture
+		 */
+		fk_RectTexture * getTexture(void);
+
+		//! テクスチャモード設定関数
+		/*!
+		 *	内部テクスチャのテクスチャモードを設定します。
+		 *	テクスチャモードに関する詳細は fk_Texture::setTextureMode() を参照して下さい。
+		 *
+		 *	\parma[in]	mode	テクスチャモード
+		 *
+		 *	\sa getTexture(), getTextureMode(), getImage(), fk_Texture::setTextureMode()
+		 */
+		void setTextureMode(fk_TexMode mode);
+
+		//! テクスチャモード取得関数
+		/*!
+		 *	内部テクスチャのテクスチャモードを参照します。
+		 *
+		 *	\return	テクスチャモード
+		 *
+		 *	\sa setTextureMode(), getTexture()
+		 */
+		fk_TexMode getTextureMode(void);
 
 		//! 画像位置指定関数
 		/*!
@@ -156,7 +205,7 @@ namespace FK {
 		 *
 		 *	\sa setSpriteSize(), getSpriteSize(), fk_Model::glMoveTo()
 		 */
-		void		setPositionLT(double x, double y);
+		void setPositionLT(double x, double y);
 
 		//! 画像表示領域指定関数
 		/*!
@@ -171,7 +220,7 @@ namespace FK {
 		 *
 		 *	\sa getSpriteSize()
 		 */
-		void		setSpriteArea(double x, double y, double w, double h);
+		void setSpriteArea(double x, double y, double w, double h);
 
 		//! 表示サイズ設定関数
 		/*!
@@ -186,7 +235,7 @@ namespace FK {
 		 *
 		 *	\sa getSpriteSize(), setPositionLT(), setSpriteArea()
 		 */
-		void		setSpriteSize(double width = -1.0, double height = -1.0);
+		void setSpriteSize(double width = -1.0, double height = -1.0);
 
 		//! 表示サイズ取得関数
 		/*!
@@ -211,7 +260,7 @@ namespace FK {
 		 *
 		 *	\sa getSpriteSmoothMode()
 		 */
-		void		setSpriteSmoothMode(bool mode);
+		void setSpriteSmoothMode(bool mode);
 
 		//! 画像表示モード取得関数
 		/*!
@@ -222,7 +271,7 @@ namespace FK {
 		 *
 		 *	\sa setSpriteSmoothMode()
 		 */
-		bool		getSpriteSmoothMode(void);
+		bool getSpriteSmoothMode(void);
 
 		//! 文字列描画用フォント設定関数
 		/*!
@@ -242,7 +291,7 @@ namespace FK {
 		 *		ライセンス上再配布が禁止されているものがあります。
 		 *		プログラムの配布時には必ずライセンスの確認を行ってください。
 		 */
-		bool		initFont(const std::string fontFileName);
+		bool initFont(const std::string fontFileName);
 
 		//! 文字列表示関数
 		/*!
@@ -261,7 +310,7 @@ namespace FK {
 		 *
 		 *	\sa initFont(), drawText(const std::string, bool, fk_StringCode)
 		 */
-		void		drawText(const std::string str, fk_StringCode code = fk_StringCode::SJIS);
+		void drawText(const std::string str, fk_StringCode code = fk_StringCode::SJIS);
 
 		//! 初期化設定付き文字列表示関数
 		/*!
@@ -285,7 +334,7 @@ namespace FK {
 		 *
 		 *	\sa initFont(), drawText(const std::string, fk_StringCode)
 		 */
-		void		drawText(const std::string str, bool mode,
+		void drawText(const std::string str, bool mode,
 							 fk_StringCode code = fk_StringCode::SJIS);
 
 		//! 文字列消去関数
@@ -295,22 +344,16 @@ namespace FK {
 		 *	\sa drawText(const std::string, fk_StringCode),
 		 *		drawText(const std::string, bool, fk_StringCode)
 		 */
-		void		clearText(void);
+		void clearText(void);
 
 #ifndef FK_DOXYGEN_USER_PROCESS
-		void		MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *argScn);
-		void		SetFinalizeMode(void);
+		void MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *argScn);
+		void SetFinalizeMode(void);
 #endif
 
 	private:
-		fk_RectTexture	texShape;
-		fk_Material		absMate;
-		fk_Model		pixelBase;
-
-		fk_UniStr		textStr;
-		bool			fontReady;
-
-		static double	distPut;
+		std::unique_ptr<Member> _m;
+		static double distPut;
 	};
 }
 

@@ -5,18 +5,23 @@ using namespace FK;
 
 double fk_SpriteModel::distPut = 1.0;
 
-fk_SpriteModel::fk_SpriteModel(void) : fk_Model(), fontReady(false)
+fk_SpriteModel::Member::Member(void) : fontReady(false)
 {
-	setParent(&pixelBase);
+	return;
+}
 
-	texShape.setTextureMode(fk_TexMode::REPLACE);
-	texShape.setTexRendMode(fk_TexRendMode::SMOOTH);
-	setShape(&texShape);
+fk_SpriteModel::fk_SpriteModel(void) : fk_Model(), _m(make_unique<Member>())
+{
+	setParent(&(_m->pixelBase));
 
-	absMate.setAmbDiff(1.0, 1.0, 1.0);
-	absMate.setEmission(1.0, 1.0, 1.0);
-	absMate.setAlpha(1.0);
-	setMaterial(absMate);
+	_m->texShape.setTextureMode(fk_TexMode::REPLACE);
+	_m->texShape.setTexRendMode(fk_TexRendMode::SMOOTH);
+	setShape(&(_m->texShape));
+
+	_m->absMate.setAmbDiff(1.0, 1.0, 1.0);
+	_m->absMate.setEmission(1.0, 1.0, 1.0);
+	_m->absMate.setAlpha(1.0);
+	setMaterial(_m->absMate);
 
 	return;
 }
@@ -27,7 +32,7 @@ fk_SpriteModel::~fk_SpriteModel(void)
 
 bool fk_SpriteModel::entryFirst(fk_Window *argWin, fk_Scene *argScn, fk_Model *argCam)
 {
-	if(texShape.getImage()->getWidth() == 0) {
+	if(_m->texShape.getImage()->getWidth() == 0) {
 		argScn->removeModel(this);
 		argScn->removeOverlayModel(this);
 		return false;
@@ -43,17 +48,17 @@ bool fk_SpriteModel::entryFirst(fk_Window *argWin, fk_Scene *argScn, fk_Model *a
 
 void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *argScn)
 {
-	fk_Perspective	*pers = nullptr;
-	fk_Ortho		*orth = nullptr;
-	fk_Frustum		*frus = nullptr;
-	fk_ProjectBase	*proj = nullptr;
+	fk_Perspective *pers = nullptr;
+	fk_Ortho *orth = nullptr;
+	fk_Frustum *frus = nullptr;
+	fk_ProjectBase *proj = nullptr;
 
 	double	dW = static_cast<double>(argWinSize.w);
 	double	dH = static_cast<double>(argWinSize.h);
 	double	trueD = (dW < dH) ? dW : dH;
 
 	if(argScn->getCamera() == nullptr) return;
-	pixelBase.setParent(const_cast<fk_Model *>(argScn->getCamera()));
+	_m->pixelBase.setParent(const_cast<fk_Model *>(argScn->getCamera()));
 
 	proj = const_cast<fk_ProjectBase *>(argScn->getProjection());
 
@@ -62,15 +67,15 @@ void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *arg
 		double halfFovy = pers->getFovy()*0.5;
 		double nearPut = pers->getNear()+distPut;
 
-		pixelBase.glMoveTo(0.0, 0.0, -nearPut);
-		pixelBase.setScale((nearPut*tan(halfFovy)*2.0/trueD),
+		_m->pixelBase.glMoveTo(0.0, 0.0, -nearPut);
+		_m->pixelBase.setScale((nearPut*tan(halfFovy)*2.0/trueD),
 						   (nearPut*tan(halfFovy)*2.0/trueD), 1.0);
 
 	} else if(argScn->getProjection()->getMode() == fk_ProjectMode::ORTHO){
 		orth = dynamic_cast<fk_Ortho *>(proj);
 
-		pixelBase.glMoveTo(0.0, 0.0, -(orth->getNear()+distPut));
-		pixelBase.setScale((orth->getRight() - orth->getLeft())/trueD,
+		_m->pixelBase.glMoveTo(0.0, 0.0, -(orth->getNear()+distPut));
+		_m->pixelBase.setScale((orth->getRight() - orth->getLeft())/trueD,
 						   (orth->getTop() - orth->getBottom())/trueD, 1.0);
 
 	} else if(argScn->getProjection()->getMode() == fk_ProjectMode::FRUSTUM) {
@@ -87,11 +92,11 @@ void fk_SpriteModel::MakePixelBase(const fk_Dimension &argWinSize, fk_Scene *arg
 		regL *= nearPut;	regR *= nearPut;
 		regB *= nearPut;	regT *= nearPut;
 
-		pixelBase.glMoveTo((regR + regL)/2.0, (regT + regB)/2.0, -nearPut);
-		pixelBase.setScale((regR - regL)/dW, (regT - regB)/dH, 1.0);
+		_m->pixelBase.glMoveTo((regR + regL)/2.0, (regT + regB)/2.0, -nearPut);
+		_m->pixelBase.setScale((regR - regL)/dW, (regT - regB)/dH, 1.0);
 	}
 
-	pixelBase.glAngle(0.0, 0.0, 0.0);
+	_m->pixelBase.glAngle(0.0, 0.0, 0.0);
 
 	return;
 }
@@ -100,59 +105,59 @@ void fk_SpriteModel::setSpriteSize(double width, double height)
 {
 	if(width < 0.0) width = static_cast<double>(getImage()->getWidth());
 	if(height < 0.0) height = static_cast<double>(getImage()->getHeight());
-	texShape.setTextureSize(width, height);
+	_m->texShape.setTextureSize(width, height);
 	return;
 }
 
 fk_TexCoord	fk_SpriteModel::getSpriteSize(void)
 {
-	return texShape.getTextureSize();
+	return _m->texShape.getTextureSize();
 }
 
 bool fk_SpriteModel::readBMP(const string argFileName)
 {
-	if(!texShape.readBMP(argFileName)) return false;
+	if(!_m->texShape.readBMP(argFileName)) return false;
 	setSpriteSize();
 	return true;
 }
 
 bool fk_SpriteModel::readPNG(const string argFileName)
 {
-	if(!texShape.readPNG(argFileName)) return false;
+	if(!_m->texShape.readPNG(argFileName)) return false;
 	setSpriteSize();
 	return true;
 }
 
 bool fk_SpriteModel::readJPG(const string argFileName)
 {
-	if(!texShape.readJPG(argFileName)) return false;
+	if(!_m->texShape.readJPG(argFileName)) return false;
 	setSpriteSize();
 	return true;
 }
 
 void fk_SpriteModel::setImage(fk_Image *argImage)
 {
-	texShape.setImage(argImage);
+	_m->texShape.setImage(argImage);
 	setSpriteSize();
 	return;
 }
 
 void fk_SpriteModel::setImage(fk_Image &argImage)
 {
-	texShape.setImage(&argImage);
+	_m->texShape.setImage(&argImage);
 	setSpriteSize();
 	return;
 }
 
 fk_Image * fk_SpriteModel::getImage(void)
 {
-	return texShape.getImage();
+	return _m->texShape.getImage();
 }
 
 bool fk_SpriteModel::initFont(const string argFontFile)
 {
 	if(!text.initFont(argFontFile)) {
-		fontReady = false;
+		_m->fontReady = false;
 		return false;
 	}
 
@@ -164,14 +169,14 @@ bool fk_SpriteModel::initFont(const string argFontFile)
 
 	setImage(text);
 
-	fontReady = true;
+	_m->fontReady = true;
 	return true;
 }
 
 void fk_SpriteModel::clearText(void)
 {
-	textStr.clear();
-	text.loadUniStr(&textStr);
+	_m->textStr.clear();
+	text.loadUniStr(&(_m->textStr));
 	setImage(text);
 
 	return;
@@ -179,11 +184,11 @@ void fk_SpriteModel::clearText(void)
 
 void fk_SpriteModel::drawText(const string argStr, bool argFlag, fk_StringCode argCode)
 {
-	if(!fontReady) return;
+	if(!_m->fontReady) return;
 
-	if(argFlag) textStr.clear();
-	textStr.convert(argStr, argCode);
-	text.loadUniStr(&textStr);
+	if(argFlag) _m->textStr.clear();
+	_m->textStr.convert(argStr, argCode);
+	text.loadUniStr(&(_m->textStr));
 	setImage(text);
 
 	return;
@@ -196,13 +201,13 @@ void fk_SpriteModel::drawText(const string argStr, fk_StringCode argCode)
 
 void fk_SpriteModel::setSpriteSmoothMode(bool flag)
 {
-	if(flag) texShape.setTexRendMode(fk_TexRendMode::SMOOTH);
-	else texShape.setTexRendMode(fk_TexRendMode::NORMAL);
+	if(flag) _m->texShape.setTexRendMode(fk_TexRendMode::SMOOTH);
+	else _m->texShape.setTexRendMode(fk_TexRendMode::NORMAL);
 }
 
 bool fk_SpriteModel::getSpriteSmoothMode(void)
 {
-	if(texShape.getTexRendMode() == fk_TexRendMode::SMOOTH) return true;
+	if(_m->texShape.getTexRendMode() == fk_TexRendMode::SMOOTH) return true;
 	return false;
 }
 
@@ -216,7 +221,7 @@ void fk_SpriteModel::setSpriteArea(double left, double top, double width, double
 
 	lb.set(left/imgWidth, 1.0-(top+height)/imgHeight);
 	rt.set((left+width)/imgWidth, 1.0-top/imgHeight);
-	texShape.setTextureCoord(lb, rt);
+	_m->texShape.setTextureCoord(lb, rt);
 	setSpriteSize(fabs(width), fabs(height));
 
 	return;
@@ -230,8 +235,23 @@ void fk_SpriteModel::setPositionLT(double x, double y)
 
 void fk_SpriteModel::SetFinalizeMode(void)
 {
-	pixelBase.SetTreeDelMode(false);
+	_m->pixelBase.SetTreeDelMode(false);
 	SetTreeDelMode(false);
+}
+
+fk_RectTexture * fk_SpriteModel::getTexture(void)
+{
+	return &(_m->texShape);
+}
+
+void fk_SpriteModel::setTextureMode(fk_TexMode argMode)
+{
+	_m->texShape.setTextureMode(argMode);
+}
+
+fk_TexMode fk_SpriteModel::getTextureMode(void)
+{
+	return _m->texShape.getTextureMode();
 }
 
 /****************************************************************************
